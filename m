@@ -2,204 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8136B723446
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 03:03:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6866672344A
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 03:03:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233247AbjFFBDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 21:03:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47860 "EHLO
+        id S233521AbjFFBDc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 21:03:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232253AbjFFBDW (ORCPT
+        with ESMTP id S232320AbjFFBD3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 21:03:22 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20EA3100
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 18:03:21 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1b0201d9a9eso40433665ad.0
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 18:03:21 -0700 (PDT)
+        Mon, 5 Jun 2023 21:03:29 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8025100
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 18:03:27 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4f6255ad8aeso2626650e87.2
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 18:03:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686013400; x=1688605400;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=P+MUoCOufjL+jgfYX81aknXyDcs0G9ERx0AOhezKwvw=;
-        b=HLXWeH9ydbwyjK2QQ2/FJYVRGGXWTlX/tgfxpc7B/NTahljnX7/GOTEa83lr3MjpNk
-         /Ze73Ehjg/OgWeWM5bYdduqVL7QukbHTf3XYFzHvflh4+GWtFKGv3qM1LLgUa8JR9c19
-         wucBprADLLGkv4uaUW81HEmxDAjHVpP/iFMQQ=
+        d=linaro.org; s=google; t=1686013406; x=1688605406;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YnN2KSWEAcsL0KgGU3YeIDsKxrdFGwkgjxhL2T9yVZI=;
+        b=w2TNTae/FrkiR4gYwt77DevHY93LAKXVPniXJrer2ZBD65wYBJyk0ZsgtucKIn9bFp
+         fctTwqrIKAVSr1yBXe3hLass/ZG6AdJxM6JDh/5QJK3tV29zSvn4wyZak7PQ/wU8OLz/
+         DjxqM40jzYxyZLf48osnyzYRtxnWD8wrmuWFoTc3ygH8iEqxMgwvAIUd1pxdRkl5tJWg
+         Zd5RBVGv5+aPUHaVKRiecu6g7BuCmHXoZZMF1EqocknQInXdthstGdXzsgjAEFhUirou
+         5Q4cUFiAA0lJBe4QNTyNwKAeWtImLMZII3UPgAtUDs2pwZ721L7u1/s/nNasiVqKKp1F
+         ccZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686013400; x=1688605400;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20221208; t=1686013406; x=1688605406;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=P+MUoCOufjL+jgfYX81aknXyDcs0G9ERx0AOhezKwvw=;
-        b=BWWDGH7Rsm9YFX00x42LlEsbT4PBfskHnwLQE+a9bZiGRcJlKOjs29CCbzueMDxj5u
-         z45FHN/Xxjcr7pZBXn1jLMbs59nK6NScGknpxk9+AcnEV5VczuCmuT8CcQSC1+yxDcvj
-         qhnqwbFfV5P4nP/uqIeVfZYlNr8cpRx+N36RYEGTcl7CLLyShkgGc+te79cXkloc7ALh
-         LbfnP1HlbtZUrPX1d9JAnolIDGieG6Qt/53OL8LM1mxGZJaVm6kMiz6C0yodIwCv8Ni6
-         nTfe2dXfbqAQtMhhzRyMwdi4/RPo3s/pRACMq6RfxZdk+KOlK7gVLgGc6tot2cTu6rwh
-         suxg==
-X-Gm-Message-State: AC+VfDyLvOSv7ouw6gDqkkcSQ4zrZpscU+pdr0B0qctEQuZqmp9JSEPA
-        JNNSZ0HdSU6cFEOv8aiyuGB0lb+BJTG7FG1Zhko=
-X-Google-Smtp-Source: ACHHUZ6YVOiHbysOOAh2pnyOQ50zFHy6l3cr7qmte9qDKRcu8rilGyc0pA/1SxZkjc/xHX3RvgkpXw==
-X-Received: by 2002:a17:902:8343:b0:1b0:3ab6:5133 with SMTP id z3-20020a170902834300b001b03ab65133mr9426752pln.24.1686013400562;
-        Mon, 05 Jun 2023 18:03:20 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id q5-20020a170902c74500b001ac55a5e5eesm7204234plq.121.2023.06.05.18.03.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jun 2023 18:03:19 -0700 (PDT)
-Date:   Mon, 5 Jun 2023 18:03:19 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     Gregory Greenman <gregory.greenman@intel.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Haim Dreyfuss <haim.dreyfuss@intel.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2] wifi: iwlwifi: mvm: Fix -Warray-bounds bug in
- iwl_mvm_wait_d3_notif()
-Message-ID: <202306051758.CD86F1E638@keescook>
-References: <ZHpGN555FwAKGduH@work>
+        bh=YnN2KSWEAcsL0KgGU3YeIDsKxrdFGwkgjxhL2T9yVZI=;
+        b=fujGgvAdzLdE7AeaoJh0/d1ow+4drvQU0eCCXg5Cy9UDbTGYIyL01Cefzmf0RCfYTI
+         22QZhinPgocpaNo4VrYtnZMcLcrxEvb0nf0NCWWD+WYxjSd+dz11bBMVCpm9RknkTyKQ
+         r08uhCNAdp9LxeTB4LyBNfP7n5uw0VyZvEoprC3kqkJIxRR6IM3UMddXnJIG9Wl3TNW2
+         hGvtti4NcFJk3zTs2fjzkJtlGlTV166j6EiqKarLl/Qgs7E+KKzn92K9JN8H+C0KgCo0
+         batQWEjSkwvkEIzUxhPR/DHJzgZPQR45Hs29y96o9WhNxzAdNAjPyK8tpu/uz2I7Z50Q
+         m6sg==
+X-Gm-Message-State: AC+VfDzfsqQkUhNbWhzNGCQe6PiOQa02FkCbVuXcXOanMyu9i1UWEe41
+        L+F1/87axsAGKGzMDUK7/rD9fA==
+X-Google-Smtp-Source: ACHHUZ5OxUgxGY3fub4GIGumbXvIgJOuviHkP77MDuoYNvTiE11Yzqa3j9Xw6NKnrEN8HyQlugd3gA==
+X-Received: by 2002:a05:6512:942:b0:4f3:bb93:4c8b with SMTP id u2-20020a056512094200b004f3bb934c8bmr323449lft.19.1686013405886;
+        Mon, 05 Jun 2023 18:03:25 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id u8-20020ac25188000000b004f377f317d4sm1292070lfi.285.2023.06.05.18.03.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Jun 2023 18:03:25 -0700 (PDT)
+Message-ID: <48cc3d26-10fe-5b10-30b6-0772d62a2a53@linaro.org>
+Date:   Tue, 6 Jun 2023 04:03:24 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [Freedreno] [PATCH] drm/msm/dpu: re-introduce dpu core revision
+ to the catalog
+Content-Language: en-GB
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        quic_khsieh@quicinc.com, Rob Clark <robdclark@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, quic_jesszhan@quicinc.com,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        David Airlie <airlied@gmail.com>, Sean Paul <sean@poorly.run>
+References: <20230531005358.18090-1-quic_abhinavk@quicinc.com>
+ <CAA8EJpryw0h8TgpJ+SFJ7s0=LCjkQ6oqAjCKsm60dk_Q5e+wWA@mail.gmail.com>
+ <0af4df3d-8048-98cd-6c91-7cd553f4f65f@quicinc.com>
+ <98e4bda7-19e9-09b6-f008-383adada97cb@linaro.org>
+ <a0b7a9fc-eb3c-3b26-b11d-fe1fb47b2c51@quicinc.com>
+ <451b114c-05e1-541c-1d3e-26bb81a307c4@linaro.org>
+ <47fda908-d76f-65d5-e001-8773c5b160b9@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <47fda908-d76f-65d5-e001-8773c5b160b9@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZHpGN555FwAKGduH@work>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 02, 2023 at 01:42:47PM -0600, Gustavo A. R. Silva wrote:
-> kmemdup() at line 2735 is not duplicating enough memory for
-> notif->tid_tear_down and notif->station_id. As it only duplicates
-> 612 bytes: up to offsetofend(struct iwl_wowlan_info_notif,
-> received_beacons), this is the range of [0, 612) bytes.
+On 06/06/2023 03:55, Abhinav Kumar wrote:
 > 
-> 2735	notif = kmemdup(notif_v1,
-> 2736			offsetofend(struct iwl_wowlan_info_notif,
-> 2737				    received_beacons),
-> 2738			GFP_ATOMIC);
 > 
-> which evidently does not cover bytes 612 and 613 for members
-> tid_tear_down and station_id in struct iwl_wowlan_info_notif.
-> See below:
+> On 6/3/2023 7:21 PM, Dmitry Baryshkov wrote:
+>> On 31/05/2023 21:25, Abhinav Kumar wrote:
+>>>
+>>>
+>>> On 5/31/2023 3:07 AM, Dmitry Baryshkov wrote:
+>>>> On 31/05/2023 06:05, Abhinav Kumar wrote:
+>>>>>
+>>>>>
+>>>>> On 5/30/2023 7:53 PM, Dmitry Baryshkov wrote:
+>>>>>> On Wed, 31 May 2023 at 03:54, Abhinav Kumar 
+>>>>>> <quic_abhinavk@quicinc.com> wrote:
+>>>>>>>
+>>>>>>> With [1] dpu core revision was dropped in favor of using the
+>>>>>>> compatible string from the device tree to select the dpu catalog
+>>>>>>> being used in the device.
+>>>>>>>
+>>>>>>> This approach works well however also necessitates adding catalog
+>>>>>>> entries for small register level details as dpu capabilities and/or
+>>>>>>> features bloating the catalog unnecessarily. Examples include but
+>>>>>>> are not limited to data_compress, interrupt register set, widebus 
+>>>>>>> etc.
+>>>>>>>
+>>>>>>> Introduce the dpu core revision back as an entry to the catalog 
+>>>>>>> so that
+>>>>>>> we can just use dpu revision checks and enable those bits which
+>>>>>>> should be enabled unconditionally and not controlled by a catalog
+>>>>>>> and also simplify the changes to do something like:
+>>>>>>>
+>>>>>>> if (dpu_core_revision > xxxxx && dpu_core_revision < xxxxx)
+>>>>>>>          enable the bit;
+>>>>>>>
+>>>>>>> Also, add some of the useful macros back to be able to use dpu core
+>>>>>>> revision effectively.
+>>>>>>>
+>>>>>>> [1]: 
+>>>>>>> https://patchwork.freedesktop.org/patch/530891/?series=113910&rev=4
+>>>>>>>
+>>>>>>> Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+>>>>>>> ---
+>>>>>>>   .../msm/disp/dpu1/catalog/dpu_3_0_msm8998.h   |  1 +
+>>>>>>>   .../msm/disp/dpu1/catalog/dpu_4_0_sdm845.h    |  1 +
+>>>>>>>   .../msm/disp/dpu1/catalog/dpu_5_0_sm8150.h    |  1 +
+>>>>>>>   .../msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h   |  1 +
+>>>>>>>   .../msm/disp/dpu1/catalog/dpu_6_0_sm8250.h    |  1 +
+>>>>>>>   .../msm/disp/dpu1/catalog/dpu_6_2_sc7180.h    |  1 +
+>>>>>>>   .../msm/disp/dpu1/catalog/dpu_6_3_sm6115.h    |  1 +
+>>>>>>>   .../msm/disp/dpu1/catalog/dpu_6_5_qcm2290.h   |  1 +
+>>>>>>>   .../msm/disp/dpu1/catalog/dpu_7_0_sm8350.h    |  1 +
+>>>>>>>   .../msm/disp/dpu1/catalog/dpu_7_2_sc7280.h    |  1 +
+>>>>>>>   .../msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h  |  1 +
+>>>>>>>   .../msm/disp/dpu1/catalog/dpu_8_1_sm8450.h    |  1 +
+>>>>>>>   .../msm/disp/dpu1/catalog/dpu_9_0_sm8550.h    |  1 +
+>>>>>>>   .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h    | 31 
+>>>>>>> ++++++++++++++++++-
+>>>>>>>   14 files changed, 43 insertions(+), 1 deletion(-)
+>>>>>>>
+>>>>>>
+>>>>>> [skipped catalog changes]
+>>>>>>
+>>>>>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h 
+>>>>>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+>>>>>>> index 677048cc3b7d..cc4aa75a1219 100644
+>>>>>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+>>>>>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+>>>>>>> @@ -19,6 +19,33 @@
+>>>>>>>    */
+>>>>>>>   #define MAX_BLOCKS    12
+>>>>>>>
+>>>>>>> +#define DPU_HW_VER(MAJOR, MINOR, STEP)\
+>>>>>>> +                 ((((unsigned int)MAJOR & 0xF) << 28) |\
+>>>>>>> +                 ((MINOR & 0xFFF) << 16) |\
+>>>>>>> +                 (STEP & 0xFFFF))
+>>>>>>> +
+>>>>>>> +#define DPU_HW_MAJOR(rev)((rev) >> 28)
+>>>>>>> +#define DPU_HW_MINOR(rev)(((rev) >> 16) & 0xFFF)
+>>>>>>> +#define DPU_HW_STEP(rev)((rev) & 0xFFFF)
+>>>>>>> +#define DPU_HW_MAJOR_MINOR(rev)((rev) >> 16)
+>>>>>>> +
+>>>>>>> +#define IS_DPU_MAJOR_MINOR_SAME(rev1, rev2)   \
+>>>>>>> +(DPU_HW_MAJOR_MINOR((rev1)) == DPU_HW_MAJOR_MINOR((rev2)))
+>>>>>>> +
+>>>>>>> +#define DPU_HW_VER_300 DPU_HW_VER(3, 0, 0) /* 8998 v1.0 */
+>>>>>>> +#define DPU_HW_VER_400 DPU_HW_VER(4, 0, 0) /* sdm845 v1.0 */
+>>>>>>> +#define DPU_HW_VER_500 DPU_HW_VER(5, 0, 0) /* sm8150 v1.0 */
+>>>>>>> +#define DPU_HW_VER_510 DPU_HW_VER(5, 1, 1) /* sc8180 */
+>>>>>>> +#define DPU_HW_VER_600 DPU_HW_VER(6, 0, 0) /* sm8250 */
+>>>>>>> +#define DPU_HW_VER_620 DPU_HW_VER(6, 2, 0) /* sc7180 v1.0 */
+>>>>>>> +#define DPU_HW_VER_630 DPU_HW_VER(6, 3, 0) /* sm6115|sm4250 */
+>>>>>>> +#define DPU_HW_VER_650 DPU_HW_VER(6, 5, 0) /* qcm2290|sm4125 */
+>>>>>>> +#define DPU_HW_VER_700 DPU_HW_VER(7, 0, 0) /* sm8350 */
+>>>>>>> +#define DPU_HW_VER_720 DPU_HW_VER(7, 2, 0) /* sc7280 */
+>>>>>>> +#define DPU_HW_VER_800 DPU_HW_VER(8, 0, 0) /* sc8280xp */
+>>>>>>> +#define DPU_HW_VER_810 DPU_HW_VER(8, 1, 0) /* sm8450 */
+>>>>>>> +#define DPU_HW_VER_900 DPU_HW_VER(9, 0, 0) /* sm8550 */
+>>>>>>
+>>>>>> Instead of having defines for all SoCs (which can quickly become
+>>>>>> unmanageable) and can cause merge conflicts, I'd suggest inlining all
+>>>>>> the defines into respective catalog files.
+>>>>>>
+>>>>>
+>>>>> Sure, that can be done.
+>>>>>
+>>>>>> Also, I'm not sure that the "step" should be a part of the catalog. I
+>>>>>> know that this follows the hardware revision. However, please correct
+>>>>>> me if I'm wrong, different step levels are used for revisions of the
+>>>>>> same SoC. The original code that was reading the hw revision from the
+>>>>>> hardware register, listed both 5.0.0 and 5.0.1 for sm8150.
+>>>>>>
+>>>>>
+>>>>> This is one of the things i noticed while making this change.
+>>>>>
+>>>>> Before the catalog rework, we used to handle even steps as we used 
+>>>>> to read that from the register and match it with the mdss_cfg 
+>>>>> handler. But after the rework, we dont handle steps anymore. Yes, 
+>>>>> you are right that different step levels are used for the revisions 
+>>>>> of the same SOC and so with that, i dont expect or atleast am not 
+>>>>> aware of DPU differences between steps but I am not able to rule it 
+>>>>> out.
+>>>>>
+>>>>> So are you suggesting we drop step altogether and DPU_HW_VER() 
+>>>>> macro shall only handle major and minor versions? With the current 
+>>>>> chipsets I see, it should not make a difference . Its just that I 
+>>>>> am not sure if that will never happen.
+>>>>
+>>>> Yes. The goal of this rework would be to drop generic features and 
+>>>> to replace those checks with DPU-revision lookups. Correct?
+>>>
+>>> Yes thats right.
+>>>
+>>>> I think that from this perspective having to handle toe step 
+>>>> revision is a sign of an overkill. Having to handle the step 
+>>>> revision is a sign of paltform feature (or mis-feature) rather than 
+>>>> a generic DPU bit.
+>>>>
+>>>
+>>> Not entirely. Lets not forget that at the moment even dpu_perf_cfg is 
+>>> part of the catalog. Even if in terms of major HW blocks steps 
+>>> shouldnt change, there is absolutely no guarantee that perf data cannot.
+>>>
+>>> This is what is the sticking point for me which is holding me back 
+>>> against dropping step. Thoughts?
+>>
+>> We usually do not support ES versions of the chips, only the final 
+>> version. So supporting the perf data for earlier revisions is also not 
+>> required.
+>>
 > 
-> $ pahole -C iwl_wowlan_info_notif drivers/net/wireless/intel/iwlwifi/mvm/d3.o
-> struct iwl_wowlan_info_notif {
-> 	struct iwl_wowlan_gtk_status_v3 gtk[2];          /*     0   488 */
-> 	/* --- cacheline 7 boundary (448 bytes) was 40 bytes ago --- */
-> 	struct iwl_wowlan_igtk_status igtk[2];           /*   488    80 */
-> 	/* --- cacheline 8 boundary (512 bytes) was 56 bytes ago --- */
-> 	__le64                     replay_ctr;           /*   568     8 */
-> 	/* --- cacheline 9 boundary (576 bytes) --- */
-> 	__le16                     pattern_number;       /*   576     2 */
-> 	__le16                     reserved1;            /*   578     2 */
-> 	__le16                     qos_seq_ctr[8];       /*   580    16 */
-> 	__le32                     wakeup_reasons;       /*   596     4 */
-> 	__le32                     num_of_gtk_rekeys;    /*   600     4 */
-> 	__le32                     transmitted_ndps;     /*   604     4 */
-> 	__le32                     received_beacons;     /*   608     4 */
-> 	u8                         tid_tear_down;        /*   612     1 */
-> 	u8                         station_id;           /*   613     1 */
-> 	u8                         reserved2[2];         /*   614     2 */
+> ack, we will drop step in that case. and good to know about the ES 
+> versions.
 > 
-> 	/* size: 616, cachelines: 10, members: 13 */
-> 	/* last cacheline: 40 bytes */
-> };
+>>>
+>>>> In fact I suppose that even handling a minor revision would be an 
+>>>> overkill. Why don't we start with .dpu_major instead of .core_rev? 
+>>>> We can add .dpu_minor if/when required.
+>>>>
+>>>
+>>> No, unfortunately we cannot drop minor version for sure. I am seeing 
+>>> examples in downstream code where some of the features are available 
+>>> after a minor verion as well.
+>>
+>> Can you please give an example?
+>>
 > 
-> Therefore, when the following assignments take place, actually no memory
-> has been allocated for those objects:
-> 
-> 2743	notif->tid_tear_down = notif_v1->tid_tear_down;
-> 2744	notif->station_id = notif_v1->station_id;
-> 
-> Fix this by allocating space for the whole notif object and zero out the
-> remaining space in memory after member station_id.
-> 
-> This also fixes the following -Warray-bounds issues:
->  CC      drivers/net/wireless/intel/iwlwifi/mvm/d3.o
-> drivers/net/wireless/intel/iwlwifi/mvm/d3.c: In function ‘iwl_mvm_wait_d3_notif’:
-> drivers/net/wireless/intel/iwlwifi/mvm/d3.c:2743:30: warning: array subscript ‘struct iwl_wowlan_info_notif[0]’ is partly outside array bounds of ‘unsigned char[612]’ [-Warray-bounds=]
->  2743 |                         notif->tid_tear_down = notif_v1->tid_tear_down;
->       |
->                  from drivers/net/wireless/intel/iwlwifi/mvm/d3.c:7:
-> In function ‘kmemdup’,
->     inlined from ‘iwl_mvm_wait_d3_notif’ at drivers/net/wireless/intel/iwlwifi/mvm/d3.c:2735:12:
-> include/linux/fortify-string.h:765:16: note: object of size 612 allocated by ‘__real_kmemdup’
->   765 |         return __real_kmemdup(p, size, gfp);
->       |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/net/wireless/intel/iwlwifi/mvm/d3.c: In function ‘iwl_mvm_wait_d3_notif’:
-> drivers/net/wireless/intel/iwlwifi/mvm/d3.c:2744:30: warning: array subscript ‘struct iwl_wowlan_info_notif[0]’ is partly outside array bounds of ‘unsigned char[612]’ [-Warray-bounds=]
->  2744 |                         notif->station_id = notif_v1->station_id;
->       |                              ^~
-> In function ‘kmemdup’,
->     inlined from ‘iwl_mvm_wait_d3_notif’ at drivers/net/wireless/intel/iwlwifi/mvm/d3.c:2735:12:
-> include/linux/fortify-string.h:765:16: note: object of size 612 allocated by ‘__real_kmemdup’
->   765 |         return __real_kmemdup(p, size, gfp);
->       |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> Link: https://github.com/KSPP/linux/issues/306
-> Fixes: 905d50ddbc83 ("wifi: iwlwifi: mvm: support wowlan info notification version 2")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> Yes, watchdog timer, intf reset counter are available only after DPU HW 
+> version 8.1 (not major version 8).
 
-Nice catch!
+Hmm, IIRC, wd timer was available for ages. Was it moved together with 
+the introduction of MDSS_PERIPH_0_REMOVED?
 
-> ---
-> Changes in v2:
->  - Use sizeof(*notif), instead of sizeof(struct iwl_wowlan_info_notif).
->  - Fix typo in the changelog text s/bouds/bounds.
-> 
-> v1:
->  - Link: https://lore.kernel.org/linux-hardening/ZHpEjTmBys5cCOGZ@work/
-> 
->  drivers/net/wireless/intel/iwlwifi/mvm/d3.c | 8 ++------
->  1 file changed, 2 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/d3.c b/drivers/net/wireless/intel/iwlwifi/mvm/d3.c
-> index 37aa4676dc94..6d1007f24b4a 100644
-> --- a/drivers/net/wireless/intel/iwlwifi/mvm/d3.c
-> +++ b/drivers/net/wireless/intel/iwlwifi/mvm/d3.c
-> @@ -2732,17 +2732,13 @@ static bool iwl_mvm_wait_d3_notif(struct iwl_notif_wait_data *notif_wait,
->  		if (wowlan_info_ver < 2) {
->  			struct iwl_wowlan_info_notif_v1 *notif_v1 = (void *)pkt->data;
->  
-> -			notif = kmemdup(notif_v1,
-> -					offsetofend(struct iwl_wowlan_info_notif,
-> -						    received_beacons),
-> -					GFP_ATOMIC);
-> -
-> +			notif = kmemdup(notif_v1, sizeof(*notif), GFP_ATOMIC);
-
-The only question I have here is whether or not pkt->data actually
-contains sizeof(*notif)-many bytes? It seems the length isn't checked
-until after this area:
-
-                len = iwl_rx_packet_payload_len(pkt);
-
-So, perhaps this needs to be changed instead, and the length
-double-checked, etc. Perhaps a regular kzalloc + memcpy is needed to
-handle pkt->data not being large enough?
-
->  			if (!notif)
->  				return false;
->  
->  			notif->tid_tear_down = notif_v1->tid_tear_down;
->  			notif->station_id = notif_v1->station_id;
-> -
-> +			memset_after(notif, 0, station_id);
->  		} else {
->  			notif = (void *)pkt->data;
->  		}
-> -- 
-> 2.34.1
-> 
+But anyway, I see your point. Let's have major and minor. I'd probably 
+still ask for the separate major and minor fields, if you don't mind.
 
 -- 
-Kees Cook
+With best wishes
+Dmitry
+
