@@ -2,129 +2,463 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71A9F7247AB
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 17:25:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 556917247B1
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 17:27:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237600AbjFFPZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 11:25:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48174 "EHLO
+        id S233918AbjFFP1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 11:27:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237833AbjFFPZs (ORCPT
+        with ESMTP id S232817AbjFFP1Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 11:25:48 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A40BC10E0
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 08:25:31 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-30ae141785bso6185339f8f.3
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 08:25:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686065130; x=1688657130;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UiHvTF7p879q1ILr7hgDEXzbZvWSzHtMlq0hydh7W3k=;
-        b=CqIMA73fM0X3IVdH3xrjtP+g3e+zkRiMdnUsUvnFBKpynzb36zZj/Q+bhGUr5iGUi+
-         2f/rKH9jeIGnoHg24E29EQoN2Z/4rhf7B08qfHadmNnGhawsQLJ/SJZvjcqNQ3a3qt43
-         WoK+W/jAjnPSVRH2IR7cQWvmfbKK1cnDtTGaD7Q7zAqGjKJ18TdTieePA/+jjl2E6D1J
-         f0elddqgltusyNbJ9jTkxlpWOeea8kTO3FeVKjC65/uwOPQs6WTYM7ccgaG8U+PI8UCr
-         Z7/e6IbU7PuUJTnWCPJ4QO1foO7+jyBlp7EefArkfTmUZFvZDpXUnkB0CG/KP7/qQD+X
-         310Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686065130; x=1688657130;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UiHvTF7p879q1ILr7hgDEXzbZvWSzHtMlq0hydh7W3k=;
-        b=fw3OEQt+EXNgxBGXkvjtcc9PT9L5O1cDv+7JXSNSrCwo8+fabaw5+AraeyV+FACx0v
-         G0IFJDNRiX8YJvr76ZWBb+1963e1cFkn1wC4KIg9VTVzasp9/d+/pbF5+ISBXxtRmqzw
-         QFpjUkCEGvTKFWchMsANi+9MV6Qr8wiOFTLK53AJN3vquuJ8VoUgaZoXcvj/grfBLkIP
-         jHoSjdmr6Zk9RPnDoIMDO3Vovf3l71VVSDoUTBUJ7efPsTwkkNaFUe7aKsdDtinRM15P
-         h4J4BllouwsxnrgTpb4jzKVehqiyAso9yqGcw6Yr0oWOlzidYXWOAVAq6sCfRUSHqVw9
-         bAaA==
-X-Gm-Message-State: AC+VfDxe5RLssgE5le0ZiIydAZebFnbsqRGx9ptP9jSh8xhD52ro4VZC
-        J7tuP98pFfgJvd5XYr4aGlXWBA==
-X-Google-Smtp-Source: ACHHUZ6+uUbiLSg37Fr4lw5YxwQQe2ir3TXqeHmzYQuDDvgaNJQWbV2XhNoXOY1kXr0PgBb3MU6TFg==
-X-Received: by 2002:a5d:5186:0:b0:309:38af:d300 with SMTP id k6-20020a5d5186000000b0030938afd300mr2068482wrv.33.1686065130119;
-        Tue, 06 Jun 2023 08:25:30 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id b14-20020a5d40ce000000b002e5ff05765esm13085127wrq.73.2023.06.06.08.25.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 08:25:27 -0700 (PDT)
-Date:   Tue, 6 Jun 2023 18:25:24 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Franziska Naepelt <franziska.naepelt@googlemail.com>,
-        keyrings@vger.kernel.org, dhowells@redhat.com, dwmw2@infradead.org,
-        linux-kernel@vger.kernel.org,
-        Franziska Naepelt <franziska.naepelt@gmail.com>,
-        kernel test robot <lkp@intel.com>,
-        Linux SPDX Licenses <linux-spdx@vger.kernel.org>,
-        Linux Kernel Janitors <kernel-janitors@vger.kernel.org>
-Subject: Re: [PATCH v2] certs/extract-cert: Fix checkpatch issues
-Message-ID: <e44d03cf-9993-483c-b3d4-6185f5c028cc@kadam.mountain>
-References: <20230601190508.56610-1-franziska.naepelt@gmail.com>
- <20230602085902.59006-1-franziska.naepelt@gmail.com>
- <ZH8mhIrjyBvTF4oZ@debian.me>
- <e39efb7f-5d8f-4433-83b3-8eea8a6c0486@kadam.mountain>
- <CT5NH4XXIYQF.5XXJE6JA5FZP@suppilovahvero>
+        Tue, 6 Jun 2023 11:27:16 -0400
+Received: from finn.localdomain (finn.gateworks.com [108.161.129.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 215E0100;
+        Tue,  6 Jun 2023 08:27:14 -0700 (PDT)
+Received: from 068-189-091-139.biz.spectrum.com ([68.189.91.139] helo=tharvey.pdc.gateworks.com)
+        by finn.localdomain with esmtp (Exim 4.93)
+        (envelope-from <tharvey@gateworks.com>)
+        id 1q6YaE-0067mg-TF; Tue, 06 Jun 2023 15:26:55 +0000
+From:   Tim Harvey <tharvey@gateworks.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Li Yang <leoyang.li@nxp.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Tim Harvey <tharvey@gateworks.com>
+Subject: [PATCH v2] arm64: dts: imx8mp-venice-gw74xx: update to revB PCB
+Date:   Tue,  6 Jun 2023 08:26:52 -0700
+Message-Id: <20230606152652.1447659-1-tharvey@gateworks.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CT5NH4XXIYQF.5XXJE6JA5FZP@suppilovahvero>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 05:51:09PM +0300, Jarkko Sakkinen wrote:
-> On Tue Jun 6, 2023 at 4:38 PM EEST, Dan Carpenter wrote:
-> > On Tue, Jun 06, 2023 at 07:28:52PM +0700, Bagas Sanjaya wrote:
-> > > On Fri, Jun 02, 2023 at 10:59:02AM +0200, Franziska Naepelt wrote:
-> > > > The following issues are fixed:
-> > > > - WARNING: Missing or malformed SPDX-License-Identifier tag
-> > > > - ERROR: trailing statements should be on next line
-> > > > - WARNING: braces {} are not necessary for single statement blocks
-> > > > - ERROR: space required before the open parenthesis '('
-> > > > - ERROR: code indent should use tabs where possible
-> > > > - WARNING: please, no spaces at the start of a line
-> > > > - WARNING: Missing a blank line after declarations
-> > > 
-> > > Again, write the patch description in imperative mood (e.g. "Do foo").
-> > > 
-> >
-> > Why do you care about imperative tense?  Imperative tense doesn't
-> > matter.  What matters is that you can understand the issue and how it
-> > looks like to the user.  I was working with a group of foreign students
-> > and it was painful to see the contortions that they went through to make
-> > a commit message imperative.  It's like saying "Bake a cake", "Ok, now
-> > bake it while juggling."  The cake ends up worse.  And the commit
-> > message end up worse when we force nonsense rules like this.
-> 
-> How about a simple and stupid reason?
-> 
-> Usually I write commit message without caring about this. Then I rewrite
-> the commit message and 9/10 it gets shorter. Based on empirical
-> experience, imperative form has minimum amount of extra words.
-> 
+Update the imx8mp-venice-gw74xx for revB:
+ - add CAN1
+ - add TIS-TPM on SPI2
+ - add FAN controller
+ - fix PMIC I2C bus (revA PMIC I2C was non-functional so no need for
+   backward compatible option)
+ - M2 socket GPIO's moved
 
-I'm looking through the git log to see if it's true the imperative tense
-commit message are shorter and better and neither one of those things is
-obvious to me.
+Signed-off-by: Tim Harvey <tharvey@gateworks.com>
+---
+v2:
+ - fix fan-controller unit-address
+---
+ .../dts/freescale/imx8mp-venice-gw74xx.dts    | 261 +++++++++++-------
+ 1 file changed, 159 insertions(+), 102 deletions(-)
 
-This patch had an imperative subject already so it was already kind of
-imperative.  Does every sentence have to be imperative or can you just
-add a "Fix it." to the end?
-
-I don't want to belittle the challenges you face around the English
-language but I think students were less fluent than you are.  So maybe
-imperative tense works for you but it definitely made their commit
-messages far worse.
-
-regards,
-dan carpenter
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts b/arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts
+index eb51d648359b..764ff8b5c01b 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mp-venice-gw74xx.dts
+@@ -125,12 +125,22 @@ reg_usb2_vbus: regulator-usb2 {
+ 		regulator-max-microvolt = <5000000>;
+ 	};
+ 
++	reg_can1_stby: regulator-can1-stby {
++		compatible = "regulator-fixed";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_reg_can1>;
++		regulator-name = "can1_stby";
++		gpio = <&gpio3 19 GPIO_ACTIVE_LOW>;
++		regulator-min-microvolt = <3300000>;
++		regulator-max-microvolt = <3300000>;
++	};
++
+ 	reg_can2_stby: regulator-can2-stby {
+ 		compatible = "regulator-fixed";
+ 		pinctrl-names = "default";
+-		pinctrl-0 = <&pinctrl_reg_can>;
++		pinctrl-0 = <&pinctrl_reg_can2>;
+ 		regulator-name = "can2_stby";
+-		gpio = <&gpio3 19 GPIO_ACTIVE_LOW>;
++		gpio = <&gpio5 5 GPIO_ACTIVE_LOW>;
+ 		regulator-min-microvolt = <3300000>;
+ 		regulator-max-microvolt = <3300000>;
+ 	};
+@@ -164,6 +174,21 @@ &A53_3 {
+ 	cpu-supply = <&reg_arm>;
+ };
+ 
++&ecspi1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_spi1>;
++	cs-gpios = <&gpio5 9 GPIO_ACTIVE_LOW>;
++	status = "okay";
++
++	tpm@0 {
++		compatible = "tcg,tpm_tis-spi";
++		#address-cells = <0x1>;
++		#size-cells = <0x1>;
++		reg = <0x0>;
++		spi-max-frequency = <36000000>;
++	};
++};
++
+ /* off-board header */
+ &ecspi2 {
+ 	pinctrl-names = "default";
+@@ -204,6 +229,13 @@ fixed-link {
+ 	};
+ };
+ 
++&flexcan1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_flexcan1>;
++	xceiver-supply = <&reg_can1_stby>;
++	status = "okay";
++};
++
+ &flexcan2 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_flexcan2>;
+@@ -214,38 +246,38 @@ &flexcan2 {
+ &gpio1 {
+ 	gpio-line-names =
+ 		"", "", "", "", "", "", "", "",
+-		"", "", "dio0", "", "dio1", "", "", "",
++		"", "dio0", "", "dio1", "", "", "", "",
+ 		"", "", "", "", "", "", "", "",
+ 		"", "", "", "", "", "", "", "";
+ };
+ 
+ &gpio2 {
+ 	gpio-line-names =
+-		"", "", "", "", "", "", "", "",
+-		"", "", "", "", "", "", "pcie3_wdis#", "",
++		"", "", "", "", "", "", "m2_pin20", "",
++		"", "", "", "", "", "pcie1_wdis#", "pcie3_wdis#", "",
+ 		"", "", "pcie2_wdis#", "", "", "", "", "",
+ 		"", "", "", "", "", "", "", "";
+ };
+ 
+ &gpio3 {
+ 	gpio-line-names =
+-		"m2_gdis#", "", "", "", "", "", "", "m2_rst#",
++		"", "", "", "", "", "", "m2_rst", "",
++		"", "", "", "", "", "", "", "",
+ 		"", "", "", "", "", "", "", "",
+-		"m2_off#", "", "", "", "", "", "", "",
+ 		"", "", "", "", "", "", "", "";
+ };
+ 
+ &gpio4 {
+ 	gpio-line-names =
++		"", "", "m2_off#", "", "", "", "", "",
+ 		"", "", "", "", "", "", "", "",
+-		"", "", "", "", "", "", "", "",
+-		"", "", "", "", "m2_wdis#", "", "", "",
+-		"", "", "", "", "", "", "", "uart_rs485";
++		"", "", "m2_wdis#", "", "", "", "", "",
++		"", "", "", "", "", "", "", "rs485_en";
+ };
+ 
+ &gpio5 {
+ 	gpio-line-names =
+-		"uart_half", "uart_term", "", "", "", "", "", "",
++		"rs485_hd", "rs485_term", "", "", "", "", "", "",
+ 		"", "", "", "", "", "", "", "",
+ 		"", "", "", "", "", "", "", "",
+ 		"", "", "", "", "", "", "", "";
+@@ -286,6 +318,12 @@ channel@8 {
+ 				label = "vdd_bat";
+ 			};
+ 
++			channel@16 {
++				gw,mode = <4>;
++				reg = <0x16>;
++				label = "fan_tach";
++			};
++
+ 			channel@82 {
+ 				gw,mode = <2>;
+ 				reg = <0x82>;
+@@ -358,6 +396,11 @@ channel@a2 {
+ 				gw,voltage-divider-ohms = <10000 10000>;
+ 			};
+ 		};
++
++		fan-controller@a {
++			compatible = "gw,gsc-fan";
++			reg = <0x0a>;
++		};
+ 	};
+ 
+ 	gpio: gpio@23 {
+@@ -369,85 +412,6 @@ gpio: gpio@23 {
+ 		interrupts = <4>;
+ 	};
+ 
+-	pmic@25 {
+-		compatible = "nxp,pca9450c";
+-		reg = <0x25>;
+-		pinctrl-names = "default";
+-		pinctrl-0 = <&pinctrl_pmic>;
+-		interrupt-parent = <&gpio3>;
+-		interrupts = <7 IRQ_TYPE_LEVEL_LOW>;
+-
+-		regulators {
+-			BUCK1 {
+-				regulator-name = "BUCK1";
+-				regulator-min-microvolt = <720000>;
+-				regulator-max-microvolt = <1000000>;
+-				regulator-boot-on;
+-				regulator-always-on;
+-				regulator-ramp-delay = <3125>;
+-			};
+-
+-			reg_arm: BUCK2 {
+-				regulator-name = "BUCK2";
+-				regulator-min-microvolt = <720000>;
+-				regulator-max-microvolt = <1025000>;
+-				regulator-boot-on;
+-				regulator-always-on;
+-				regulator-ramp-delay = <3125>;
+-				nxp,dvs-run-voltage = <950000>;
+-				nxp,dvs-standby-voltage = <850000>;
+-			};
+-
+-			BUCK4 {
+-				regulator-name = "BUCK4";
+-				regulator-min-microvolt = <3000000>;
+-				regulator-max-microvolt = <3600000>;
+-				regulator-boot-on;
+-				regulator-always-on;
+-			};
+-
+-			BUCK5 {
+-				regulator-name = "BUCK5";
+-				regulator-min-microvolt = <1650000>;
+-				regulator-max-microvolt = <1950000>;
+-				regulator-boot-on;
+-				regulator-always-on;
+-			};
+-
+-			BUCK6 {
+-				regulator-name = "BUCK6";
+-				regulator-min-microvolt = <1045000>;
+-				regulator-max-microvolt = <1155000>;
+-				regulator-boot-on;
+-				regulator-always-on;
+-			};
+-
+-			LDO1 {
+-				regulator-name = "LDO1";
+-				regulator-min-microvolt = <1650000>;
+-				regulator-max-microvolt = <1950000>;
+-				regulator-boot-on;
+-				regulator-always-on;
+-			};
+-
+-			LDO3 {
+-				regulator-name = "LDO3";
+-				regulator-min-microvolt = <1710000>;
+-				regulator-max-microvolt = <1890000>;
+-				regulator-boot-on;
+-				regulator-always-on;
+-			};
+-
+-			LDO5 {
+-				regulator-name = "LDO5";
+-				regulator-min-microvolt = <1800000>;
+-				regulator-max-microvolt = <3300000>;
+-				regulator-boot-on;
+-				regulator-always-on;
+-			};
+-		};
+-	};
+-
+ 	eeprom@50 {
+ 		compatible = "atmel,24c02";
+ 		reg = <0x50>;
+@@ -559,7 +523,6 @@ fixed-link {
+ 	};
+ };
+ 
+-/* off-board header */
+ &i2c3 {
+ 	clock-frequency = <400000>;
+ 	pinctrl-names = "default", "gpio";
+@@ -568,6 +531,85 @@ &i2c3 {
+ 	scl-gpios = <&gpio5 18 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+ 	sda-gpios = <&gpio5 19 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+ 	status = "okay";
++
++	pmic@25 {
++		compatible = "nxp,pca9450c";
++		reg = <0x25>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_pmic>;
++		interrupt-parent = <&gpio3>;
++		interrupts = <7 IRQ_TYPE_LEVEL_LOW>;
++
++		regulators {
++			BUCK1 {
++				regulator-name = "BUCK1";
++				regulator-min-microvolt = <720000>;
++				regulator-max-microvolt = <1000000>;
++				regulator-boot-on;
++				regulator-always-on;
++				regulator-ramp-delay = <3125>;
++			};
++
++			reg_arm: BUCK2 {
++				regulator-name = "BUCK2";
++				regulator-min-microvolt = <720000>;
++				regulator-max-microvolt = <1025000>;
++				regulator-boot-on;
++				regulator-always-on;
++				regulator-ramp-delay = <3125>;
++				nxp,dvs-run-voltage = <950000>;
++				nxp,dvs-standby-voltage = <850000>;
++			};
++
++			BUCK4 {
++				regulator-name = "BUCK4";
++				regulator-min-microvolt = <3000000>;
++				regulator-max-microvolt = <3600000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			BUCK5 {
++				regulator-name = "BUCK5";
++				regulator-min-microvolt = <1650000>;
++				regulator-max-microvolt = <1950000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			BUCK6 {
++				regulator-name = "BUCK6";
++				regulator-min-microvolt = <1045000>;
++				regulator-max-microvolt = <1155000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			LDO1 {
++				regulator-name = "LDO1";
++				regulator-min-microvolt = <1650000>;
++				regulator-max-microvolt = <1950000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			LDO3 {
++				regulator-name = "LDO3";
++				regulator-min-microvolt = <1710000>;
++				regulator-max-microvolt = <1890000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			LDO5 {
++				regulator-name = "LDO5";
++				regulator-min-microvolt = <1800000>;
++				regulator-max-microvolt = <3300000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++		};
++	};
+ };
+ 
+ /* off-board header */
+@@ -726,12 +768,14 @@ pinctrl_hog: hoggrp {
+ 		fsl,pins = <
+ 			MX8MP_IOMUXC_GPIO1_IO09__GPIO1_IO09	0x40000040 /* DIO0 */
+ 			MX8MP_IOMUXC_GPIO1_IO11__GPIO1_IO11	0x40000040 /* DIO1 */
+-			MX8MP_IOMUXC_NAND_DQS__GPIO3_IO14	0x40000040 /* M2SKT_OFF# */
+-			MX8MP_IOMUXC_SD2_DATA3__GPIO2_IO18	0x40000150 /* PCIE2_WDIS# */
++			MX8MP_IOMUXC_SAI1_RXD0__GPIO4_IO02	0x40000040 /* M2SKT_OFF# */
++			MX8MP_IOMUXC_SAI1_TXD6__GPIO4_IO18	0x40000150 /* M2SKT_WDIS# */
++			MX8MP_IOMUXC_SD1_DATA4__GPIO2_IO06	0x40000040 /* M2SKT_PIN20 */
++			MX8MP_IOMUXC_SD1_STROBE__GPIO2_IO11	0x40000040 /* M2SKT_PIN22 */
++			MX8MP_IOMUXC_SD2_CLK__GPIO2_IO13	0x40000150 /* PCIE1_WDIS# */
+ 			MX8MP_IOMUXC_SD2_CMD__GPIO2_IO14	0x40000150 /* PCIE3_WDIS# */
++			MX8MP_IOMUXC_SD2_DATA3__GPIO2_IO18	0x40000150 /* PCIE2_WDIS# */
+ 			MX8MP_IOMUXC_NAND_DATA00__GPIO3_IO06	0x40000040 /* M2SKT_RST# */
+-			MX8MP_IOMUXC_SAI1_TXD6__GPIO4_IO18	0x40000150 /* M2SKT_WDIS# */
+-			MX8MP_IOMUXC_NAND_ALE__GPIO3_IO00	0x40000150 /* M2SKT_GDIS# */
+ 			MX8MP_IOMUXC_SAI3_TXD__GPIO5_IO01	0x40000104 /* UART_TERM */
+ 			MX8MP_IOMUXC_SAI3_TXFS__GPIO4_IO31	0x40000104 /* UART_RS485 */
+ 			MX8MP_IOMUXC_SAI3_TXC__GPIO5_IO00	0x40000104 /* UART_HALF */
+@@ -784,6 +828,13 @@ MX8MP_IOMUXC_SAI1_RXC__ENET1_1588_EVENT0_OUT	0x140
+ 		>;
+ 	};
+ 
++	pinctrl_flexcan1: flexcan1grp {
++		fsl,pins = <
++			MX8MP_IOMUXC_SPDIF_RX__CAN1_RX		0x154
++			MX8MP_IOMUXC_SPDIF_TX__CAN1_TX		0x154
++		>;
++	};
++
+ 	pinctrl_flexcan2: flexcan2grp {
+ 		fsl,pins = <
+ 			MX8MP_IOMUXC_SAI5_RXD3__CAN2_TX		0x154
+@@ -869,7 +920,7 @@ MX8MP_IOMUXC_SD2_DATA1__GPIO2_IO16	0x10
+ 
+ 	pinctrl_pcie0: pciegrp {
+ 		fsl,pins = <
+-			MX8MP_IOMUXC_SD2_DATA2__GPIO2_IO17	0x110
++			MX8MP_IOMUXC_SD2_DATA2__GPIO2_IO17	0x106
+ 		>;
+ 	};
+ 
+@@ -885,12 +936,18 @@ MX8MP_IOMUXC_GPIO1_IO12__GPIO1_IO12	0x140
+ 		>;
+ 	};
+ 
+-	pinctrl_reg_can: regcangrp {
++	pinctrl_reg_can1: regcan1grp {
+ 		fsl,pins = <
+ 			MX8MP_IOMUXC_SAI5_RXFS__GPIO3_IO19	0x154
+ 		>;
+ 	};
+ 
++	pinctrl_reg_can2: regcan2grp {
++		fsl,pins = <
++			MX8MP_IOMUXC_SPDIF_EXT_CLK__GPIO5_IO05	0x154
++		>;
++	};
++
+ 	pinctrl_reg_usb2: regusb2grp {
+ 		fsl,pins = <
+ 			MX8MP_IOMUXC_GPIO1_IO06__GPIO1_IO06	0x140
+@@ -903,12 +960,12 @@ MX8MP_IOMUXC_NAND_DATA03__GPIO3_IO09	0x110
+ 		>;
+ 	};
+ 
+-	pinctrl_sai2: sai2grp {
++	pinctrl_spi1: spi1grp {
+ 		fsl,pins = <
+-			MX8MP_IOMUXC_SAI2_TXFS__AUDIOMIX_SAI2_TX_SYNC	0xd6
+-			MX8MP_IOMUXC_SAI2_TXD0__AUDIOMIX_SAI2_TX_DATA00	0xd6
+-			MX8MP_IOMUXC_SAI2_TXC__AUDIOMIX_SAI2_TX_BCLK	0xd6
+-			MX8MP_IOMUXC_SAI2_MCLK__AUDIOMIX_SAI2_MCLK	0xd6
++			MX8MP_IOMUXC_ECSPI1_SCLK__ECSPI1_SCLK	0x82
++			MX8MP_IOMUXC_ECSPI1_MOSI__ECSPI1_MOSI	0x82
++			MX8MP_IOMUXC_ECSPI1_MISO__ECSPI1_MISO	0x82
++			MX8MP_IOMUXC_ECSPI1_SS0__GPIO5_IO09	0x140
+ 		>;
+ 	};
+ 
+-- 
+2.25.1
 
