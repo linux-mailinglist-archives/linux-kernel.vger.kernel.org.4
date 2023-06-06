@@ -2,102 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BCCF724965
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 18:42:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66AAE724967
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 18:42:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237683AbjFFQmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 12:42:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38594 "EHLO
+        id S238073AbjFFQmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 12:42:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233159AbjFFQl4 (ORCPT
+        with ESMTP id S233159AbjFFQmK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 12:41:56 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93C3392
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 09:41:55 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f6da07ff00so64593445e9.3
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 09:41:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686069714; x=1688661714;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UJVhSFzwvoXL05SwEZRGFG8BPsH7hzDQHLdfK0N4XEI=;
-        b=jKMO/zj8MTHMUyGzGIwHAMXxOmIVqnupiRJCkJli9mbhTU0IpdJFEbDGrDRo/71m2C
-         uM4dtMlMedubAfYBiDCvD3x6E0c3xfvAm/11BRDR+6yynRnTUWaUbz5yFZAObPz7Ov9L
-         rLKTwYLYqJ8i1J9zj66laViBXJM0zY4ahwF0G39Jx84REtgxXe9E41d8JdWuaXJWJ0T4
-         oPUh0XhpF+iBwnTFb0TZW0sMMTbjMmntxMkMn73mNQPpg6Fvoc4tWzH57beDh04eFBKY
-         S51Zjf7YLnKxC4mFGjI4lUGVANIeVGMHPBNR9AGH4rN8Y1Wnkrf7TRBILEYb1MFmB/p5
-         sZXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686069714; x=1688661714;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UJVhSFzwvoXL05SwEZRGFG8BPsH7hzDQHLdfK0N4XEI=;
-        b=Meze1icm9hmOPZVLaOmyHNWgzVjHPqwWrbYN32iJZ2m2CK4xmxvys89iFviUr8VZHO
-         vuEr2LTETr/2ql/DSkcXfNX8zVjVfBl6t98hFOGn1HPR36niiMdzWyR5O+ywnCICBgOz
-         B4bWwCJ/bWvx75edUD4w2Dy63+mNwZ14IUJcnM/6yavvIjViRHwza9Kha0lYkucJluKR
-         Uf/9mzQUoHeNqXp/Ztj6AoYCFDueWxVRddZhKhuGRdzo3vjAKdXcUX8Sc56duqQ5/GV3
-         Y3xQiicnEG0uoPqfBX9pVeJF8UdB2b2lLZVB/aTgbRRmHDVWXfE3ebUnRFuoH5UogmCg
-         suZg==
-X-Gm-Message-State: AC+VfDwaUjKIoOdprOg8wukSsmtnjanDJBpV7w0RKPTbEdszg/nCj6Hv
-        wCdvJUFGIrDtTC1sgGXnI2bq/Q==
-X-Google-Smtp-Source: ACHHUZ68Q3UxcFpcphCWiDRHpz1V6fxBIaMziwmeBQ/sCgLY/1mKB8AXKDG8EJbcYUMmVERBpEbrBQ==
-X-Received: by 2002:a1c:741a:0:b0:3f1:789d:ad32 with SMTP id p26-20020a1c741a000000b003f1789dad32mr3040046wmc.11.1686069714005;
-        Tue, 06 Jun 2023 09:41:54 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:d8fb:84d9:d402:6b22? ([2a05:6e02:1041:c10:d8fb:84d9:d402:6b22])
-        by smtp.googlemail.com with ESMTPSA id f18-20020a1cc912000000b003f4e3ed98ffsm14492860wmb.35.2023.06.06.09.41.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Jun 2023 09:41:53 -0700 (PDT)
-Message-ID: <0ddddee6-c01b-0989-6d49-c05568188c48@linaro.org>
-Date:   Tue, 6 Jun 2023 18:41:52 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 4/7] ACPI: thermal: Move acpi_thermal_driver definition
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Michal Wilczynski <michal.wilczynski@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-References: <2703629.mvXUDI8C0e@kreacher> <3761470.kQq0lBPeGt@kreacher>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <3761470.kQq0lBPeGt@kreacher>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 6 Jun 2023 12:42:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4642E62;
+        Tue,  6 Jun 2023 09:42:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D2D762B21;
+        Tue,  6 Jun 2023 16:42:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BD03C433D2;
+        Tue,  6 Jun 2023 16:42:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686069728;
+        bh=j1m4n2Ft+Okmau+IY+Kq7vY9Ls9xpmV6RhwDX07Oe10=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NpCebbSXqe7rCxSSKi8VxZhoONsd+ZPxJQO5KyAk/KNmGMx4Ry7ExyC1qrrnb1reG
+         t1hRLj2ewsrwNjDK0byKugqoA609VyqhKy0egcHCfF7GJQCpLAo7B7lctxt9rg3rqO
+         aQp3A3KGie33fnuSVMoBqRKtr7qi6fzuKDAooWe5R8GCeno4LmUseur0H4XFuG3ATd
+         yRuUXlFz0YNkWCuM0mnB0wIxSf0Dl+ftt98/HArJ0pocLJNMVvSf+40Plnxacp1jQ2
+         DXT52cJovReLE3bGtoPHQghBMwVpjUHufaWvb0Sm9Z+UX5ngbt4J0WfTC6fUzns9Tc
+         n4DgCVCk6alGQ==
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 06 Jun 2023 19:42:03 +0300
+Message-Id: <CT5PU1RV2X20.3AYQOV5CF0EIH@suppilovahvero>
+From:   "Jarkko Sakkinen" <jarkko@kernel.org>
+To:     "Lino Sanfilippo" <LinoSanfilippo@gmx.de>,
+        =?utf-8?q?P=C3=A9ter_Ujfalusi?= <peter.ujfalusi@linux.intel.com>,
+        "Lino Sanfilippo" <l.sanfilippo@kunbus.com>, <peterhuewe@gmx.de>,
+        <jgg@ziepe.ca>
+Cc:     <jsnitsel@redhat.com>, <hdegoede@redhat.com>,
+        <oe-lkp@lists.linux.dev>, <lkp@intel.com>, <peterz@infradead.org>,
+        <linux@mniewoehner.de>, <linux-integrity@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <lukas@wunner.de>,
+        <p.rosenberger@kunbus.com>
+Subject: Re: [PATCH 1/2] tpm, tpm_tis: Handle interrupt storm
+X-Mailer: aerc 0.15.2-33-gedd4752268b2
+References: <20230522143105.8617-1-LinoSanfilippo@gmx.de>
+ <CSTVVFNKUVJW.P69FKI6IF3ZN@suppilovahvero>
+ <da435e0d-5f22-fac7-bc10-96a0fd4c6d54@kunbus.com>
+ <a84c447f-cdfb-d33c-62cb-bb5d9aa8510b@linux.intel.com>
+ <3d350827-795e-8277-a209-1c1d33ca57fa@gmx.de>
+In-Reply-To: <3d350827-795e-8277-a209-1c1d33ca57fa@gmx.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/06/2023 14:15, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> Move the definition of the acpi_thermal_driver structure closer to the
-> initialization code that registes the driver, so some function forward
-> declarations can be dropped.
-> 
-> Also move the module information to the end of the file where it is
-> usually located.
-> 
-> No functional impact.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Mon May 29, 2023 at 4:15 PM EEST, Lino Sanfilippo wrote:
+> > Except that if the line got the spurious designation in core, the
+> > interrupt line will be disabled while the TPM driver will think that it
+> > is still using IRQ mode and will not switch to polling.
+>
+> In the case that an interrupt storm cant be detected (since there might n=
+ot even
+> be one) I am fine with adding a quirk.
 
-Reviewed-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Speaking of generic vs quirk (if storm can be detected): detection
+should be eager as ever possible. Too eager does not cause systems
+failing.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+This way I think we can converge to stability fast as possible.
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Then, later on, if a system where interrupts should work but the
+detection disables interrupts we can either make the fixed threshold
+less eager, or add a tuning parameter to sysfs.
 
+BR, Jarkko
