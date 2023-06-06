@@ -2,86 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66AAE724967
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 18:42:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6918472496B
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 18:43:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238073AbjFFQmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 12:42:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38746 "EHLO
+        id S237337AbjFFQnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 12:43:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233159AbjFFQmK (ORCPT
+        with ESMTP id S238394AbjFFQnP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 12:42:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4642E62;
-        Tue,  6 Jun 2023 09:42:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D2D762B21;
-        Tue,  6 Jun 2023 16:42:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BD03C433D2;
-        Tue,  6 Jun 2023 16:42:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686069728;
-        bh=j1m4n2Ft+Okmau+IY+Kq7vY9Ls9xpmV6RhwDX07Oe10=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NpCebbSXqe7rCxSSKi8VxZhoONsd+ZPxJQO5KyAk/KNmGMx4Ry7ExyC1qrrnb1reG
-         t1hRLj2ewsrwNjDK0byKugqoA609VyqhKy0egcHCfF7GJQCpLAo7B7lctxt9rg3rqO
-         aQp3A3KGie33fnuSVMoBqRKtr7qi6fzuKDAooWe5R8GCeno4LmUseur0H4XFuG3ATd
-         yRuUXlFz0YNkWCuM0mnB0wIxSf0Dl+ftt98/HArJ0pocLJNMVvSf+40Plnxacp1jQ2
-         DXT52cJovReLE3bGtoPHQghBMwVpjUHufaWvb0Sm9Z+UX5ngbt4J0WfTC6fUzns9Tc
-         n4DgCVCk6alGQ==
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 06 Jun 2023 19:42:03 +0300
-Message-Id: <CT5PU1RV2X20.3AYQOV5CF0EIH@suppilovahvero>
-From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Lino Sanfilippo" <LinoSanfilippo@gmx.de>,
-        =?utf-8?q?P=C3=A9ter_Ujfalusi?= <peter.ujfalusi@linux.intel.com>,
-        "Lino Sanfilippo" <l.sanfilippo@kunbus.com>, <peterhuewe@gmx.de>,
-        <jgg@ziepe.ca>
-Cc:     <jsnitsel@redhat.com>, <hdegoede@redhat.com>,
-        <oe-lkp@lists.linux.dev>, <lkp@intel.com>, <peterz@infradead.org>,
-        <linux@mniewoehner.de>, <linux-integrity@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <lukas@wunner.de>,
-        <p.rosenberger@kunbus.com>
-Subject: Re: [PATCH 1/2] tpm, tpm_tis: Handle interrupt storm
-X-Mailer: aerc 0.15.2-33-gedd4752268b2
-References: <20230522143105.8617-1-LinoSanfilippo@gmx.de>
- <CSTVVFNKUVJW.P69FKI6IF3ZN@suppilovahvero>
- <da435e0d-5f22-fac7-bc10-96a0fd4c6d54@kunbus.com>
- <a84c447f-cdfb-d33c-62cb-bb5d9aa8510b@linux.intel.com>
- <3d350827-795e-8277-a209-1c1d33ca57fa@gmx.de>
-In-Reply-To: <3d350827-795e-8277-a209-1c1d33ca57fa@gmx.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 6 Jun 2023 12:43:15 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C160110EA;
+        Tue,  6 Jun 2023 09:43:08 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4QbGSg50v1z6D8rj;
+        Wed,  7 Jun 2023 00:41:07 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Tue, 6 Jun
+ 2023 17:43:06 +0100
+Date:   Tue, 6 Jun 2023 17:43:05 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Yicong Yang <yangyicong@huawei.com>
+CC:     <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
+        <corbet@lwn.net>, <linux-kernel@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <alexander.shishkin@linux.intel.com>,
+        <helgaas@kernel.org>, <linux-pci@vger.kernel.org>,
+        <prime.zeng@huawei.com>, <linuxarm@huawei.com>,
+        <yangyicong@hisilicon.com>
+Subject: Re: [PATCH v4 5/5] hwtracing: hisi_ptt: Fix potential sleep in
+ atomic context
+Message-ID: <20230606174305.00005a10@Huawei.com>
+In-Reply-To: <20230606142244.10939-6-yangyicong@huawei.com>
+References: <20230606142244.10939-1-yangyicong@huawei.com>
+        <20230606142244.10939-6-yangyicong@huawei.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+MIME-Version: 1.0
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon May 29, 2023 at 4:15 PM EEST, Lino Sanfilippo wrote:
-> > Except that if the line got the spurious designation in core, the
-> > interrupt line will be disabled while the TPM driver will think that it
-> > is still using IRQ mode and will not switch to polling.
->
-> In the case that an interrupt storm cant be detected (since there might n=
-ot even
-> be one) I am fine with adding a quirk.
+On Tue, 6 Jun 2023 22:22:44 +0800
+Yicong Yang <yangyicong@huawei.com> wrote:
 
-Speaking of generic vs quirk (if storm can be detected): detection
-should be eager as ever possible. Too eager does not cause systems
-failing.
+> From: Yicong Yang <yangyicong@hisilicon.com>
+> 
+> We're using pci_irq_vector() to obtain the interrupt number and then
+> bind it to the CPU start perf under the protection of spinlock in
+> pmu::start(). pci_irq_vector() might sleep since [1] because it will
+> call msi_domain_get_virq() to get the MSI interrupt number and it
+> needs to acquire dev->msi.data->mutex. Getting a mutex will sleep on
+> contention. So use pci_irq_vector() in an atomic context is problematic.
+> 
+> This patch cached the interrupt number in the probe() and uses the
+> cached data instead to avoid potential sleep.
+> 
+> [1] commit 82ff8e6b78fc ("PCI/MSI: Use msi_get_virq() in pci_get_vector()")
+> Fixes: ff0de066b463 ("hwtracing: hisi_ptt: Add trace function support for HiSilicon PCIe Tune and Trace device")
+> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
 
-This way I think we can converge to stability fast as possible.
+LGTM
 
-Then, later on, if a system where interrupts should work but the
-detection disables interrupts we can either make the fixed threshold
-less eager, or add a tuning parameter to sysfs.
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-BR, Jarkko
