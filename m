@@ -2,217 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1230E72507F
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 01:04:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40DA3725081
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 01:07:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240173AbjFFXE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 19:04:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45958 "EHLO
+        id S240178AbjFFXHK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 19:07:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234392AbjFFXE0 (ORCPT
+        with ESMTP id S240177AbjFFXHI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 19:04:26 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B2251725
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 16:04:24 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2b1b6865c7cso57198101fa.3
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 16:04:24 -0700 (PDT)
+        Tue, 6 Jun 2023 19:07:08 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AC04E7E
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 16:07:07 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id d9443c01a7336-1b0427acfc3so24583855ad.0
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 16:07:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686092662; x=1688684662;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=BX36jW40IzH6+V8/Zm6XQYAycJ9Ld3LGaHQyXOj8PuE=;
-        b=oK+V6WlOxYmT5DHf2wZOEmcYGKgLPWugNd8GIMOhUCRcV0BqzRhLrph4+yM2ysgvU+
-         g2B1/A5hQonodSDusJByBH4ZAVL+Zz+x3k9+vqZRGskar/Xv4GDIABOYPnAU4V9aCRvB
-         Gdsvh5cuw/wY1C5v8VC6Z9Ndby0EwRkdKzXZEjZbLwauh7y8yFU7F62SwMvYpFs2r9MT
-         gx/SOc/7+EMIbbxHLBFCbiRa8VsJKB9xxyfrHi8pF+DOsj9WQRTU2i1YS2TFytO4K3IX
-         0QUNlBMJ89HTDrZ9jvui4XNyAlXRJNVC1wASYQy4dwmrnjgkWzbiDrAZo0L2zIZEDIMW
-         Xz3Q==
+        d=google.com; s=20221208; t=1686092827; x=1688684827;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=KDNeipcrG/FC01ibfxC2YJ7aaXE1cUL268eOBCkQVsw=;
+        b=M4fVxmszIMy2OeC29oPt4CNRr6vvBhxdssqEX54sx7F5yZY9AlT8PM6trIsIsNYh2m
+         zhS0OIGFWvNZ7CDdZM/l1mWk4Q3ogJHa5KGU77Mz+rkZxTuc9UNuOLvgPFry3K7rNfNL
+         CpT27bjhgzhhXRkfEw3hSK0DduoB8srC5cm4VK1POAZa/PSqcymJP3g72A1d5Ko0Hu5S
+         cgoEu4DfN5hLVcrJtsFfVQ/ehgnk68jH83wCB9j0FHjwIbLyY/E8bOBqRO4Mrey37mEJ
+         fXiDnGGij+Yg1ep/nBUwUuH38iLQJ7bOG7Ir77Li/WlIc+xIeQjXiLaTUhzRyo915FkG
+         /9hQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686092662; x=1688684662;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BX36jW40IzH6+V8/Zm6XQYAycJ9Ld3LGaHQyXOj8PuE=;
-        b=eHG25KoV7V4ktA1ndfq4aP4NBas8Uby0IE5QcptSFg2vYxHQ2J2p7kgLIBAvFnNZWS
-         salsoUtpMq/dzcJC4zQ8Twd0dzxlyBJEx0uiPRlQkVUg6TTh3K/AHrHF/gaNbF1uqH8W
-         cI1hGbZCHVPbqrAEgCwxsW/5xSeOz/ff3qLAzUEX9CqeD4WUoj1hidVX38qdCfgDXn/J
-         7msqxT1PJ8weJxeMftKHgij4Yy9dk6B9nnTukbFILusl+QaarTcglvE0IlffExyl8qmj
-         oOk3uR+YFQx/dIECbfRRGdlEzrA4yruPOnLGOEb7EhNVUDhU1z/gLxFRlGxYR4kes2tr
-         DdGg==
-X-Gm-Message-State: AC+VfDxaGsS2qafIu8YafS3fa+oVCV4qZSNz6zB5J1yCfHCbi4FOnZp5
-        +09ZjthkzIJm3uQ1fYxfMSNxydcKFTq1zdBFe+g=
-X-Google-Smtp-Source: ACHHUZ6EQzwHC/KXZudfaahcH/egh5V/t9i5eUSngtXc5jrH4LhhjUNaackdLPt9PSRjU6x/gQXVRQ==
-X-Received: by 2002:a2e:818f:0:b0:2ac:6858:45ba with SMTP id e15-20020a2e818f000000b002ac685845bamr1543688ljg.48.1686092662529;
-        Tue, 06 Jun 2023 16:04:22 -0700 (PDT)
-Received: from [192.168.1.101] (abyl150.neoplus.adsl.tpnet.pl. [83.9.31.150])
-        by smtp.gmail.com with ESMTPSA id e25-20020a2e8199000000b002adbf24212esm2052384ljg.49.2023.06.06.16.04.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 16:04:22 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Wed, 07 Jun 2023 01:04:19 +0200
-Subject: [PATCH v2] arm64: dts: qcom: qcm2290: Add CPU idle states
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230606-topic-qcm2290_idlestates-v2-1-580a5a2d28c9@linaro.org>
-X-B4-Tracking: v=1; b=H4sIAHK7f2QC/42NWw6CMBREt0L6bU2pWpQv92GI6eMCN6kttpVoC
- Hv3ygr8PDOZOQvLkBAya6uFJZgxYwwEclcxO+owAEdHzKSQB6GE4iVOaPnTPqS8iDs6D7noApm
- fDNXSiP5oFaO50Rm4STrYkQ7Cy3sKpwQ9vjffrSMeMZeYPpt+rn/pH6a55jV3rmkAeiHOCq4eg
- 05xH9PAunVdv9GMJLDWAAAA
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1686092661; l=3464;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=9nKmu31YD8GcSD2/6NbQ7qO/EwtCV6fy082gMFHlK5U=;
- b=wKP8/iEbDbsH4/RtM8CoEhKALhodBs3ASHW8Wx+4US6dv653eMVIW2uhT3l2wZEtVWr5DKFBj
- 8+pjviD33GgBUtazu7ddpyt1V0JBRi2tfLEFGmo/K0d7KVS3qYYBEsA
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1686092827; x=1688684827;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KDNeipcrG/FC01ibfxC2YJ7aaXE1cUL268eOBCkQVsw=;
+        b=W9/E/hI41nNwsoSkgyxfWFvCyYgB00HozFkqfHjcXsoyOCan8HDL1OxdVkbhAhNAAH
+         l1DnLHHJSkuQ/j45fYQ3oCC4wKAg+nVIE1eX1HLITzq7TvIENRjWJ5MquGEutA44BEoj
+         i9UuxkNYpf96thpFs/TZh2u0g/j/FwXWpOJogm4EU42FrtazeyjwRACfOGDwaK49UuBT
+         zt0LyKWKDrZ2MinDpJ6JiVjyfKEt59j0ZuP5GkLgit1BtYlZFzWICPzJtGtgEWKM8js5
+         lXsM1CPnpipd2eg1uAx79zF1AUst81fYy6U/vRIcfSIed+rZPVXBRcSnuX02qL4sdJJs
+         JnaA==
+X-Gm-Message-State: AC+VfDyYt+kUB86YHXTY4Skn1GzOXMMvMDFKQ3b0LwbZAeh99jS1PNJb
+        El1iAbAywMIZvjc5MfTk/hmRKCDJXeI=
+X-Google-Smtp-Source: ACHHUZ6MyZvh3yS8bT2DIMPSGFFuwQhSZQC19UmcZQYInC+ifOijVU3WZcP67LvKoo0B6Wr5MfPwihQIhg0=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:90a:bb18:b0:253:3eb4:c1f2 with SMTP id
+ u24-20020a17090abb1800b002533eb4c1f2mr945446pjr.5.1686092826879; Tue, 06 Jun
+ 2023 16:07:06 -0700 (PDT)
+Date:   Tue, 6 Jun 2023 16:07:05 -0700
+In-Reply-To: <CAL715WKtsC=93Nqr7QJZxspWzF04_CLqN3FUxUaqTHWFRUrwBA@mail.gmail.com>
+Mime-Version: 1.0
+References: <20230605004334.1930091-1-mizhang@google.com> <CALMp9eSQgcKd=SN4q2QRYbveKoayKzuYEQPM0Xu+FgQ_Mja8-g@mail.gmail.com>
+ <CAL715WJowYL=W40SWmtPoz1F9WVBFDG7TQwbsV2Bwf9-cS77=Q@mail.gmail.com>
+ <ZH4ofuj0qvKNO9Bz@google.com> <CAL715WKtsC=93Nqr7QJZxspWzF04_CLqN3FUxUaqTHWFRUrwBA@mail.gmail.com>
+Message-ID: <ZH+8GafaNLYPvTJI@google.com>
+Subject: Re: [PATCH] KVM: x86/mmu: Remove KVM MMU write lock when accessing indirect_shadow_pages
+From:   Sean Christopherson <seanjc@google.com>
+To:     Mingwei Zhang <mizhang@google.com>
+Cc:     Jim Mattson <jmattson@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ben Gardon <bgardon@google.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the (scarce) idle states for the individual CPUs, as well as the
-whole cluster. This enables deeper-than-WFI cpuidle
+On Tue, Jun 06, 2023, Mingwei Zhang wrote:
+> > > >
+> > > > I don't understand the need for READ_ONCE() here. That implies that
+> > > > there is something tricky going on, and I don't think that's the case.
+> > >
+> > > READ_ONCE() is just telling the compiler not to remove the read. Since
+> > > this is reading a global variable,  the compiler might just read a
+> > > previous copy if the value has already been read into a local
+> > > variable. But that is not the case here...
+> > >
+> > > Note I see there is another READ_ONCE for
+> > > kvm->arch.indirect_shadow_pages, so I am reusing the same thing.
+> >
+> > I agree with Jim, using READ_ONCE() doesn't make any sense.  I suspect it may have
+> > been a misguided attempt to force the memory read to be as close to the write_lock()
+> > as possible, e.g. to minimize the chance of a false negative.
+> 
+> Sean :) Your suggestion is the opposite with Jim. He is suggesting
+> doing nothing, but your suggestion is doing way more than READ_ONCE().
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
-Changes in v2:
-- Add missing BIT(24) ("last in power level")
-- Use the correct CPU low-power state (0x3 instead of 0x4)
-- Link to v1: https://lore.kernel.org/r/20230606-topic-qcm2290_idlestates-v1-1-dd77eef0086e@linaro.org
----
- arch/arm64/boot/dts/qcom/qcm2290.dtsi | 61 +++++++++++++++++++++++++++++++++++
- 1 file changed, 61 insertions(+)
+Not really.  Jim is asserting that the READ_ONCE() is pointless, and I completely
+agree.  I am also saying that I think there is a real memory ordering issue here,
+and that it was being papered over by the READ_ONCE() in kvm_mmu_pte_write().
 
-diff --git a/arch/arm64/boot/dts/qcom/qcm2290.dtsi b/arch/arm64/boot/dts/qcom/qcm2290.dtsi
-index b29bc4e4b837..0ed11e80e5e2 100644
---- a/arch/arm64/boot/dts/qcom/qcm2290.dtsi
-+++ b/arch/arm64/boot/dts/qcom/qcm2290.dtsi
-@@ -48,6 +48,8 @@ CPU0: cpu@0 {
- 			enable-method = "psci";
- 			next-level-cache = <&L2_0>;
- 			qcom,freq-domain = <&cpufreq_hw 0>;
-+			power-domains = <&CPU_PD0>;
-+			power-domain-names = "psci";
- 			L2_0: l2-cache {
- 				compatible = "cache";
- 				cache-level = <2>;
-@@ -65,6 +67,8 @@ CPU1: cpu@1 {
- 			enable-method = "psci";
- 			next-level-cache = <&L2_0>;
- 			qcom,freq-domain = <&cpufreq_hw 0>;
-+			power-domains = <&CPU_PD1>;
-+			power-domain-names = "psci";
- 		};
- 
- 		CPU2: cpu@2 {
-@@ -77,6 +81,8 @@ CPU2: cpu@2 {
- 			enable-method = "psci";
- 			next-level-cache = <&L2_0>;
- 			qcom,freq-domain = <&cpufreq_hw 0>;
-+			power-domains = <&CPU_PD2>;
-+			power-domain-names = "psci";
- 		};
- 
- 		CPU3: cpu@3 {
-@@ -89,6 +95,8 @@ CPU3: cpu@3 {
- 			enable-method = "psci";
- 			next-level-cache = <&L2_0>;
- 			qcom,freq-domain = <&cpufreq_hw 0>;
-+			power-domains = <&CPU_PD3>;
-+			power-domain-names = "psci";
- 		};
- 
- 		cpu-map {
-@@ -110,6 +118,30 @@ core3 {
- 				};
- 			};
- 		};
-+
-+		domain-idle-states {
-+			CLUSTER_SLEEP: cluster-sleep-0 {
-+				compatible = "domain-idle-state";
-+				arm,psci-suspend-param = <0x41000043>;
-+				entry-latency-us = <800>;
-+				exit-latency-us = <2118>;
-+				min-residency-us = <7376>;
-+			};
-+		};
-+
-+		idle-states {
-+			entry-method = "psci";
-+
-+			CPU_SLEEP: cpu-sleep-0 {
-+				compatible = "arm,idle-state";
-+				idle-state-name = "power-collapse";
-+				arm,psci-suspend-param = <0x40000003>;
-+				entry-latency-us = <290>;
-+				exit-latency-us = <376>;
-+				min-residency-us = <1182>;
-+				local-timer-stop;
-+			};
-+		};
- 	};
- 
- 	firmware {
-@@ -135,6 +167,35 @@ pmu {
- 	psci {
- 		compatible = "arm,psci-1.0";
- 		method = "smc";
-+
-+		CPU_PD0: power-domain-cpu0 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&CPU_SLEEP>;
-+		};
-+
-+		CPU_PD1: power-domain-cpu1 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&CPU_SLEEP>;
-+		};
-+
-+		CPU_PD2: power-domain-cpu2 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&CPU_SLEEP>;
-+		};
-+
-+		CPU_PD3: power-domain-cpu3 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&CPU_SLEEP>;
-+		};
-+
-+		CLUSTER_PD: power-domain-cpu-cluster {
-+			#power-domain-cells = <0>;
-+			domain-idle-states = <&CLUSTER_SLEEP>;
-+		};
- 	};
- 
- 	reserved_memory: reserved-memory {
+> > So I think this?
+> 
+> Hmm. I agree with both points above, but below, the change seems too
+> heavyweight. smp_wb() is a mfence(), i.e., serializing all
+> loads/stores before the instruction. Doing that for every shadow page
+> creation and destruction seems a lot.
 
----
-base-commit: 6db29e14f4fb7bce9eb5290288e71b05c2b0d118
-change-id: 20230606-topic-qcm2290_idlestates-5b6062b0f4c6
+No, the smp_*b() variants are just compiler barriers on x86.
 
-Best regards,
--- 
-Konrad Dybcio <konrad.dybcio@linaro.org>
+> In fact, the case that only matters is '0->1' which may potentially
+> confuse kvm_mmu_pte_write() when it reads 'indirect_shadow_count', but
+> the majority of the cases are 'X => X + 1' where X != 0. So, those
+> cases do not matter. So, if we want to add barriers, we only need it
+> for 0->1. Maybe creating a new variable and not blocking
+> account_shadow() and unaccount_shadow() is a better idea?
+> 
+> Regardless, the above problem is related to interactions among
+> account_shadow(), unaccount_shadow() and kvm_mmu_pte_write(). It has
+> nothing to do with the 'reexecute_instruction()', which is what this
+> patch is about. So, I think having a READ_ONCE() for
+> reexecute_instruction() should be good enough. What do you think.
 
+The reexecute_instruction() case should be fine without any fanciness, it's
+nothing more than a heuristic, i.e. neither a false positive nor a false negative
+will impact functional correctness, and nothing changes regardless of how many
+times the compiler reads the variable outside of mmu_lock.
+
+I was thinking that it would be better to have a single helper to locklessly
+access indirect_shadow_pages, but I agree that applying the barriers to
+reexecute_instruction() introduces a different kind of confusion.
+
+Want to post a v2 of yours without a READ_ONCE(), and I'll post a separate fix
+for the theoretical kvm_mmu_pte_write() race?  And then Paolo can tell me that
+there's no race and school me on lockless programming once more ;-)
