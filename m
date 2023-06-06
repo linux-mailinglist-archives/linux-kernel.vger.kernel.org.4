@@ -2,756 +2,447 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1C9A7234EB
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 04:00:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 709CC7234F5
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 04:03:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232117AbjFFCAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 22:00:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41392 "EHLO
+        id S232800AbjFFCDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 22:03:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230349AbjFFCAd (ORCPT
+        with ESMTP id S232823AbjFFCDD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 22:00:33 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C1DBBED;
-        Mon,  5 Jun 2023 19:00:29 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.86])
-        by gateway (Coremail) with SMTP id _____8Cxm_I8k35kplQAAA--.1269S3;
-        Tue, 06 Jun 2023 10:00:28 +0800 (CST)
-Received: from [10.20.42.86] (unknown [10.20.42.86])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxVeQ5k35k4ZsBAA--.7044S3;
-        Tue, 06 Jun 2023 10:00:26 +0800 (CST)
-Subject: Re: [PATCH v12 05/31] LoongArch: KVM: Add vcpu related header files
-To:     "bibo, mao" <maobibo@loongson.cn>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-References: <20230530015223.147755-1-zhaotianrui@loongson.cn>
- <20230530015223.147755-6-zhaotianrui@loongson.cn>
- <16806ed0-1155-c067-bc26-bc63a3b8dd2d@loongson.cn>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        loongarch@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
-        Mark Brown <broonie@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Xi Ruoyao <xry111@xry111.site>
-From:   Tianrui Zhao <zhaotianrui@loongson.cn>
-Message-ID: <4c676496-11cf-064c-a5ad-b806bb28dbb8@loongson.cn>
-Date:   Tue, 6 Jun 2023 10:00:25 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
-MIME-Version: 1.0
-In-Reply-To: <16806ed0-1155-c067-bc26-bc63a3b8dd2d@loongson.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Mon, 5 Jun 2023 22:03:03 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD621B4
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 19:03:00 -0700 (PDT)
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 355HiK1L017855;
+        Tue, 6 Jun 2023 02:02:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2023-03-30;
+ bh=U8eTMPAOS4VcDAv1qZx+CqBfWks7/7JFIN86J+iPpVY=;
+ b=WI98m3Cyy71wObafmZCAmot1KisDv5hdXXqu9b4cSMIhuK9g4LY2BxyYmBuZVbuNNDEg
+ AP1cA5CXE+lV+i0qIf5m16BrjfZDpB6AaSIret3Ha7LFbmbzDPryM62Ychz0c157ee9G
+ 3bkV9vFzlM8UmegbfE8PAm17habbIhmXy8xVOQ9PCsfoWgqpvgxYQJfHfhL5fSr+Ct6/
+ z6t1KtluPAldVpXqpDZDSczDVvEUvUHf6d/xl+p+P3jUxAwJcPRZ//lS4ag3HGORj+6U
+ kw9+6VHTq6FK81sPfc3h+D4yUs6XAB6/Ts3+sOewtLYTAw2jjCqGFP9lJhlCpEY637tg qA== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3qyx2c4da5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 06 Jun 2023 02:02:03 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 3561eXvE020110;
+        Tue, 6 Jun 2023 02:02:02 GMT
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2173.outbound.protection.outlook.com [104.47.59.173])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3r0tsx09ep-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 06 Jun 2023 02:02:02 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cUzKR8uHPNvpMH0EkYU2M6Bdgf+lNWHzeCiPxiBEVZuNLEtTsGrzGVYrAK3yLmNswDEhtEVUFcq2qyfjl7u8EUcK3ZkjQSbkSItrCuXMm8q+W3dQarJ2tMASUN7iTHorSaA7m/QbD5tswrlHgM5Uz6OMXztBJpTqYsa37AQVjPexQMVZ8efnUy7Osh+HZpm1est5qD7UnE4EYJ+EEEWXoVUR1797NeUdV7zk0ZfJhKFmyQ7d2r4PTWcmAkFzHiPH0cJ7Bh5YJrgUipXgZS6rNR+79rUSMbPVaZwzM2cyDiMljCnc9NvPffIvRgGcxLi4d9rnJJNOWTrwyavXlmOy/Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=U8eTMPAOS4VcDAv1qZx+CqBfWks7/7JFIN86J+iPpVY=;
+ b=l963YBa6vrgRuUtC3lQm57MqJrUtY8mvM4ggDBezLeROZf+6jJswbJnM/w6FAuUi6z9X13bylv/Jf75l/Mo5zWfHdeVV1MbYOj7qGbjf2RwKY6EtL5LXJUVp4Fz9Ty3dRLD6DuUHAu+OcQbdyeB6QBggTf1UOUhpvXMbn6KZ3YhFm1dlkJXwF7YsnMsnWmCeDx3qENlvIiY3plQ7/1Y5NoOpd7++Zyi1JOuIarZfXNGRpAygtMnIN5sw2s9b83oSo00OtyWXwTRkMCaW7ib5XTWyGHGwmmQtosXLlBvPQvRN9jFKn5gpKd/BKOwKiY5mbpcLyyEibZTf3HQ439ZIbw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=U8eTMPAOS4VcDAv1qZx+CqBfWks7/7JFIN86J+iPpVY=;
+ b=fvCfWN4/Cxwc5bHaJYLjPjQwS0JhGWRGbrhY/M8kc0SvwiI4a3LdA33NWzZzPOGFBWMHLKKGDsQyKLGw7X606x5J6fcQz0nGyAeTBP7Uh51jeubGGVdhyrpD9u0D8cJAOv+QUSVuW2irMftQomsBVs8sQqvJXSV1+nOAlKmCkY8=
+Received: from BYAPR10MB2438.namprd10.prod.outlook.com (2603:10b6:a02:aa::22)
+ by SA1PR10MB6318.namprd10.prod.outlook.com (2603:10b6:806:251::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.32; Tue, 6 Jun
+ 2023 02:02:00 +0000
+Received: from BYAPR10MB2438.namprd10.prod.outlook.com
+ ([fe80::df1e:af95:f443:470f]) by BYAPR10MB2438.namprd10.prod.outlook.com
+ ([fe80::df1e:af95:f443:470f%2]) with mapi id 15.20.6455.030; Tue, 6 Jun 2023
+ 02:01:59 +0000
+Message-ID: <f287334c-4054-525e-52ea-a0bbf077b653@oracle.com>
+Date:   Mon, 5 Jun 2023 19:01:56 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.2
+Subject: Re: [RFC v3 07/21] mm: PKRAM: introduce super block
+To:     Coiby Xu <coxu@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
+        hpa@zytor.com, dave.hansen@linux.intel.com, luto@kernel.org,
+        peterz@infradead.org, rppt@kernel.org, akpm@linux-foundation.org,
+        ebiederm@xmission.com, keescook@chromium.org, graf@amazon.com,
+        jason.zeng@intel.com, lei.l.li@intel.com,
+        steven.sistare@oracle.com, fam.zheng@bytedance.com,
+        mgalaxy@akamai.com, kexec@lists.infradead.org
+References: <1682554137-13938-1-git-send-email-anthony.yznaga@oracle.com>
+ <1682554137-13938-8-git-send-email-anthony.yznaga@oracle.com>
+ <upgf3qmqxn7xzbnwwt6nxau4ugqkq7szdaheewzbok27xwch4e@6tdnhkqspok4>
+Content-Language: en-US
+From:   Anthony Yznaga <anthony.yznaga@oracle.com>
+In-Reply-To: <upgf3qmqxn7xzbnwwt6nxau4ugqkq7szdaheewzbok27xwch4e@6tdnhkqspok4>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxVeQ5k35k4ZsBAA--.7044S3
-X-CM-SenderInfo: p2kd03xldq233l6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj9fXoWfXF4rKF1rKr48Cw47ZryxJFc_yoW5Wr17to
-        W3Ja1fGFs5Jw42yF4qga42qa4DZryYkFs8Zw45AryFv34UJas8Wr47JayrXr43Xryqga43
-        CFyIgas5ua4Fyws8l-sFpf9Il3svdjkaLaAFLSUrUUUUeb8apTn2vfkv8UJUUUU8wcxFpf
-        9Il3svdxBIdaVrn0xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3
-        UjIYCTnIWjp_UUUO07kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI
-        8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xG
-        Y2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14
-        v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAF
-        wI0_Gr1j6F4UJwAaw2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2
-        xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_
-        JF0_Jw1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwI
-        xGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAK
-        I48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrV
-        AFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCI
-        c40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267
-        AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_
-        Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUcbAwUU
-        UUU
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-ClientProxiedBy: BY3PR03CA0012.namprd03.prod.outlook.com
+ (2603:10b6:a03:39a::17) To BYAPR10MB2438.namprd10.prod.outlook.com
+ (2603:10b6:a02:aa::22)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR10MB2438:EE_|SA1PR10MB6318:EE_
+X-MS-Office365-Filtering-Correlation-Id: 466785d4-4a85-497c-1cbd-08db66320374
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: g0JXVTN3HqxBxZBg+6EwZrEi+mZGzIVtAzF6GMpKVgXTbd/RoTAPjwycZmJCtF5qD2o7byUfshozFQrEKnNRfLpT/vvdKrk/3SmCAldoc62NRa9jQU6ToKi2ZDPCeG7ZgORu+4yn70xdaUHIYJVCvMwDR6M3LFyBBjU2Sqo+PNP8g0St7mhRGYZ604kUd80672CmwDbWRZKWnISYX5qa5Qbil7UDvrIQXUyDfN6pvFW6PtA/ebBQV2cdwXpbXb2DYba2DlgVtwQyO625kk7xsEs8Ywfomd4GSw978OTPWR54GqXpu0WWuu1Lxs+cqQotkTSPrx4IzW8pPE6zV6v15tKFl3JFLUs4zw9NK9XITQNvYoAbVvvFHj/bPKAfQvOMsH1JxBZbTqll2NjnTnVoh7sZhyaIJS7YaQP0j0q06yEAsEaknG/BezQhCjKVZHqW8fQNZ3KeE+gqapv3kiMBL+QakEPoVbunrxR8VYh8cNbRsCWD1lj0Qi0r3FvB9Bvo0Ond2bIoRJtJpBBFLyJstBTda/qz5Yfctbuecs21I8nc8WDn0eOcc9mgAA1aIKPznvDRq9FDdDWXRgVi8uzp3HGuiTPEaQ/D7S87OlYF3fQP+HDJ3JszooqvmxXIR02E3ZjM3KjOFIWXxHiZeOi0wE25RRz53ibkuPIPjgdBqJazFLaMS3wkdmjgCIGhfY2K
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB2438.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(346002)(396003)(376002)(39860400002)(366004)(451199021)(6506007)(31686004)(53546011)(6512007)(26005)(186003)(2616005)(966005)(7416002)(83380400001)(6486002)(6666004)(36756003)(2906002)(8676002)(8936002)(44832011)(478600001)(38100700002)(6916009)(5660300002)(31696002)(19273905006)(86362001)(66476007)(66556008)(4326008)(316002)(41300700001)(66946007)(45980500001)(43740500002)(563064011)(134885004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Z2tvUHRKM3RVOWxiTnRqZ2RNVzFsY2pHVDJvOHF5WUxBNk5TTmw2d0RESlhr?=
+ =?utf-8?B?S01OYlJnWU9KNlBhR21scGVzWVZSeVAzWnliUHJMSFdic0p6R2tkTVJsU1l5?=
+ =?utf-8?B?QnVqc2M1ODgwZTk0eDJIOXpubzBkNGdwVjVXbU02OWZYbWZLWGN2SkRKc2Zx?=
+ =?utf-8?B?WkpWdTNqZTJFSlZUSVVaS1JUZlMrU2tlVUR0NXV6OW5ZTEgvb3RuQXF4SXI5?=
+ =?utf-8?B?WnVaOEVOczREL0pxMlZaTzNUQU12Q2V3L1NBeDBtUjduRFVqbEFBVUx2SG0y?=
+ =?utf-8?B?WE03eWVsREJObXJ3d0lmbzF6OFFVenRFUUVnait1SzBvMGRNZmJxMlhjNnB6?=
+ =?utf-8?B?b0k4TFJrRWVCNXZpOHBJcmFmNEM4UWxDNlRnS2dtYVpuSE9xMkJUUllwVk5z?=
+ =?utf-8?B?aFM0ZFZvbW4vTngzRHFqUTdqTWFpYnpLWUZPTDl4a01PMldjeDlweDFGWmtM?=
+ =?utf-8?B?ODZyTUdIc3NtbGhMYm1EaEdiQWZ3OVRRa3BNc1AxcnJ3bE9EOFZ2aDJibXB4?=
+ =?utf-8?B?U092UkZrbjNrRnR6RUZSSGxOTGdHMnJUQ0U0NHpNYmE5SHM3VTFSZDk4OWE2?=
+ =?utf-8?B?V0FkR0EwR3J5YTNiUXpYSnBsZTdvSDVYbGZoMWZrbEVmMi9hcTNLUStPVXFE?=
+ =?utf-8?B?U3NVcFM5Z2RtWlBockNKTmF4bEdLelcyQUQrRGljTE1Lbjh0VWYrWmNsVVMx?=
+ =?utf-8?B?UFplZFlSdjlrb0JXbTFFUFdqY0YrdnpSRmtmV05adC9Wc3pmdW5xd0ZpM1Ro?=
+ =?utf-8?B?TzRiQmVKcjV6dHZSQmE1Y1BjRFEwNVBVQlluZWJNdmI1S2dHMG9JTXpwVno2?=
+ =?utf-8?B?Qk13aldEd2J2Wk5TRVNGMzM2czlldmEwbmdIU1VselZ4Q0lFL0V4cUIxRzBY?=
+ =?utf-8?B?Rm5JY20rSjd4WXZJdHBLZkhVWGFLSUhpRVUyUDZ1ZVN2MXdCbUU2Yzc2R09o?=
+ =?utf-8?B?YTNPNzlIbU1UU2NudEJmUmc2U1B1Y0huUHBhRUpTNU1RdjBxMGJXT1FyZUsx?=
+ =?utf-8?B?NUFkZVpkU2gxbzFWUVQ5c3kwQXd3cjRsSGVDTEYwNThveC9XTk1VK1M0WTVZ?=
+ =?utf-8?B?TkNTU1psTnZ5WE1ORWVFWXFFTUs5WkIzb2ZJcE51Sk9uNCtXdk1hOUx4dHVu?=
+ =?utf-8?B?d2xieVk1VnhPRitoZUxpYTEvNlV6UkEvdk1vNUVueE11Q3VkcFYwMVhFZ1RC?=
+ =?utf-8?B?MlFmMlZXdDUxTk0wNlRERitjMElkckg0aDRveHkyRStjaVJuejFEb0hLVW1G?=
+ =?utf-8?B?TWVXYjlUTjUzWG5PdndZd3NncDJFd3FrVkpiM1RPSUpzSWxLVVd4R0Q4RWM4?=
+ =?utf-8?B?K2w2MkxZaGhrMXJCRFQ3U0RSRnN1cEd3anRkNnBwOU80eDk4cHFtcDhZZEk4?=
+ =?utf-8?B?TGxKTmdqL0VUZitLY1Zvd0Zhc2owaUt5TlBjZDlPRHcxNW1CUkhmMnJvYjRk?=
+ =?utf-8?B?Uk0rcERpUzBYYTQ5ZjUwK29KN0FPUzlpYWFGZDFtcDFETlZPWGdZOTB1ajRa?=
+ =?utf-8?B?RjJFVFVpTGN5NnZ0cEUrN3VpYnhxZ0sxVUQyYkFBMU9SSWNNWlZEcVZaUTN5?=
+ =?utf-8?B?TnpkZGR0Q09QNTJhOUxmZWxBeUtPK256UFF2WmpOS0RlVkdwUUxYWDZuR1cv?=
+ =?utf-8?B?SVNKZ1d3NVh6MGtBZllIbXRTY2J1N3N0MG1hV2VSSFRreDBESmRvbGo1MkVT?=
+ =?utf-8?B?NVBpOEF3Y2IxTS9sYkRFYlo4eTVGb3hrYk13TGNnUEdwU1pYdm56bHR4Y0p2?=
+ =?utf-8?B?bU04bjRTa3hkaXB6YkpIWHVqYkpkKzJwbW1BYWhqU1I1U0kycE5CWWxxZml0?=
+ =?utf-8?B?dzhFQmc0Zk9CUmJoWHRGeVhCcytYSWQ0QVFrdjEvTmszcTZXYlkxaEZuTStL?=
+ =?utf-8?B?NURub1J2UnI3QTVnMGNSWHJUSVJKbUE3YnRRWURkbktZcUZrcGJVa0JHTG85?=
+ =?utf-8?B?OXZ0UktINGVoNG80bExDa2Zxck03cFprL1BOUlhBaGRoS21wZVFEMFg3L0tV?=
+ =?utf-8?B?SEVIdVo1SFFQejFqcmRtS1RtYnVxVmRhR2ZHdHhRN1VvVFltdU4vR21aUW8y?=
+ =?utf-8?B?dW5vQXhSUnBTRWl3ZE9hekZpZkpiRGpzTHdQSE9IKzNIbEh0Q2dCK3Fzc0tx?=
+ =?utf-8?B?RWYwQ2RYSXQ2cS8zREZ0VFVVUWU3MDEvWXFLYW1teHRHdTlPZFMzaGFWNVFR?=
+ =?utf-8?B?RHc9PQ==?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?THpzeGVLWHpoWC95MllKc09BRFp3TEt5VWhITWxPcmxZU1RaOEg2U045Z044?=
+ =?utf-8?B?VWlPT0lFdFk2Y1lyRlpsWVZKZVloMHhhQTM5czMwczgvaW1BMnd1TXNVWGJB?=
+ =?utf-8?B?Ri9oQzJURU42RDZsNS9DZFNpWDhVcEI2dStHa0IzUHhKTi9QU3AySXVmQVN0?=
+ =?utf-8?B?NzlZOEZoaWN1TzRRWFRLelRIVHdJL25vUy9VdHpaNXdqaHU0MFo3cGRsWWlU?=
+ =?utf-8?B?VXk1YkRpZ1FTTFhoV1c1NmFyQmZqZWF5K1FtT3ZuT09CYlE0ZWszS2VSTnY2?=
+ =?utf-8?B?ZDNzM256RFZNQTN5SUk1ZzB6dTlmSWMvaEhMS05TSVBBdG50NVNKcGlwUVlq?=
+ =?utf-8?B?VGs4dy90Sm1XN0RTSGtSQWRCVkZuSDd4bnMwcEZQNEZhT2pLZ3dNNFcvSitQ?=
+ =?utf-8?B?K3RBZStQYTYvc2l2N1lsN0hLM0tBMjJ1d1pvenRodzRJcC85Z3A5Rk14RFYv?=
+ =?utf-8?B?Z3NzS05rM0xQWTU3Q1gwa3Q2aEduclE0bGZRS05LWGVFb0tqWDVJdWNtZ3F5?=
+ =?utf-8?B?a0IrdnNoNGdDcjZBaVM3YUJKbTdDYnp0WTBjWDRHZUluUGlFOEpWcGpnQ1dP?=
+ =?utf-8?B?aTJtZnloaWhMR2JGN3oyWlJiMmFYWFpZNmJvWGpnZFFTQUIxQnJQSjZVcTB6?=
+ =?utf-8?B?ZG9IYXFNVWtWTmxKR0hQZnd3OUNLVUo3cmh0WWk2ZTZodCtZK1BuV0hnRFZ0?=
+ =?utf-8?B?UmlaN1VuY0tSVzRyZ3duRUZ6aGM3aFkvdGRsRlJMczdrVFBiK2hMNW43MllR?=
+ =?utf-8?B?MjRlSGF6ZGh3cUVrMGk1M3RYMUdTMzQzNXlwVVdsUWU4eks5WHpUUG9jK2Jj?=
+ =?utf-8?B?ZURoT2ZrNkZ4dEpRMG1ZM0FMR2xRNXdpZCtNME9nL3NsMXN4QXVHOTdnK091?=
+ =?utf-8?B?RjVVcFFDbXo2Y0hCRThaUXk4eFE2NlhHekZnWXlQRFlwVW4wS2h5N0s1SjJw?=
+ =?utf-8?B?MThtMlFmSmN5cVhpRFZPbGxaa0xQcGJXdDdxckNRVE5nU2dzSTFITkxDNGk5?=
+ =?utf-8?B?eHZkNGx3amlkNnVIUWxqTjlNVVBRMWJ5WnFqZlZtQU5tdllzd25NS0NNcGVI?=
+ =?utf-8?B?VHpYdkhVSHJRK05wUmZiTXFNNVQrQ0xVdit4NGJJYUFDd216ZlBRMHM2L1dx?=
+ =?utf-8?B?YnlnQVhjb1E1eUJvdFJWdUdHamZiSlR3dzBETTFyUDVWZGZTUE5OejErMjE4?=
+ =?utf-8?B?Q21uRVBYd1AwUGRVY3hZcmxkWk1tN2hXSnVDMWFTTU1ua2U4SVRqZWl2bDBC?=
+ =?utf-8?B?bXNIazF1WkwwZ2dUdnpGS3ZSMFRaSEpkc2FDU20wZ0ZCaUJZdVpxVTU1eDBD?=
+ =?utf-8?B?d1RUVU9zYy9ONkRLckI2WmZEUGxJeHZLeFVBMUdLdjJieHhFQnJoL1dhalhR?=
+ =?utf-8?B?ZXdEZVhldGdFaTZIRzkrUzdlWVhPbVVRdE9SenhxTDhSOHhza0FKdWdhRjNa?=
+ =?utf-8?B?Y0hqMTRMS2NmQXYvRkE0Ri9IdUVkNWt2bk8xY3VXeFczTGZqcjdiUHphWTB3?=
+ =?utf-8?B?ZmVHajkwUjJQelFBUzZ3Y3FxNGxCSFpNYkcxWWV4TnI2Tk94UFoxNGFVbW5K?=
+ =?utf-8?B?UWZkR3JuOFBobGxBcDZLUU94TTcvZGNnT0xZQ01naExVcUpaZW8yb29BaWxD?=
+ =?utf-8?B?VUJhREJXVFlOdU82L2EweDBRcmRMdEZFbGV6clIxcFlyek4vMW5PUndWcG1p?=
+ =?utf-8?B?U3FZaUI0R2VyY2xWYVlRci8vVjBQUVhOK1JNVDFMb0FmUmsybzd5ZlhqNW5J?=
+ =?utf-8?Q?VU4z5V5xlnlbGTdkRrEvyuF4NAJhKeYfn96YJyy?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 466785d4-4a85-497c-1cbd-08db66320374
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB2438.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2023 02:01:59.7383
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: f3HKSnjZG+3moMgmDQmkBGgLZO7o2XL+srwlERhPJM/H8ee31SRxIX75Ej/lY1eKRjp/5a8mQX/b6Gy8i47JyoPCpek2LYrdYwaS3Mo/80U=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR10MB6318
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-05_35,2023-06-05_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=999
+ phishscore=0 suspectscore=0 adultscore=0 mlxscore=0 malwarescore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2306060017
+X-Proofpoint-ORIG-GUID: xfGtnFe5BAgga85BYe2G0wqdAjJilStX
+X-Proofpoint-GUID: xfGtnFe5BAgga85BYe2G0wqdAjJilStX
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Coiby,
 
-
-在 2023年06月05日 20:42, bibo, mao 写道:
+On 6/4/23 7:40 PM, Coiby Xu wrote:
+> Hi Anthony,
 >
-> 在 2023/5/30 09:51, Tianrui Zhao 写道:
->> Add LoongArch vcpu related header files, including vcpu csr
->> information, irq number defines, and some vcpu interfaces.
+> On Wed, Apr 26, 2023 at 05:08:43PM -0700, Anthony Yznaga wrote:
+>> The PKRAM super block is the starting point for restoring preserved
+>> memory. By providing the super block to the new kernel at boot time,
+>> preserved memory can be reserved and made available to be restored.
+>> To point the kernel to the location of the super block, one passes
+>> its pfn via the 'pkram' boot param. 
+>
+> I'm curious to ask how will the 'pkram' boot param be passed. It seems I
+> can't find the answer in this patch set.
+
+The pfn of the super block read from /sys/kernel/pkram is passed to
+
+the next kernel by adding the boot parameter, pkram=<super block pfn>.
+
+The next kernel picks it up through the early_param("pkram", 
+parse_pkram_sb_pfn)
+
+in this patch below.
+
+
+Anthony
+
+
+>
+>
+>> For that purpose, the pkram super
+>> block pfn is exported via /sys/kernel/pkram. If none is passed, any
+>> preserved memory will not be kept, and a new super block will be
+>> allocated.
 >>
->> Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
+>> Originally-by: Vladimir Davydov <vdavydov.dev@gmail.com>
+>> Signed-off-by: Anthony Yznaga <anthony.yznaga@oracle.com>
 >> ---
->>   arch/loongarch/include/asm/insn-def.h  |  56 +++++++
->>   arch/loongarch/include/asm/kvm_csr.h   | 214 +++++++++++++++++++++++++
->>   arch/loongarch/include/asm/kvm_vcpu.h  |  97 +++++++++++
->>   arch/loongarch/include/asm/loongarch.h |  37 ++++-
->>   arch/loongarch/kvm/trace.h             | 168 +++++++++++++++++++
->>   5 files changed, 567 insertions(+), 5 deletions(-)
->>   create mode 100644 arch/loongarch/include/asm/insn-def.h
->>   create mode 100644 arch/loongarch/include/asm/kvm_csr.h
->>   create mode 100644 arch/loongarch/include/asm/kvm_vcpu.h
->>   create mode 100644 arch/loongarch/kvm/trace.h
+>> mm/pkram.c | 102 
+>> +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++--
+>> 1 file changed, 100 insertions(+), 2 deletions(-)
 >>
->> diff --git a/arch/loongarch/include/asm/insn-def.h b/arch/loongarch/include/asm/insn-def.h
->> new file mode 100644
->> index 000000000000..ce51e3ff0d39
->> --- /dev/null
->> +++ b/arch/loongarch/include/asm/insn-def.h
->> @@ -0,0 +1,56 @@
->> +/* SPDX-License-Identifier: GPL-2.0-only */
->> +
->> +#ifndef __ASM_INSN_DEF_H
->> +#define __ASM_INSN_DEF_H
->> +
->> +#include <linux/stringify.h>
->> +#include <asm/gpr-num.h>
->> +#include <asm/asm.h>
->> +
->> +#define INSN_STR(x)		__stringify(x)
->> +#define CSR_RD_SHIFT		0
->> +#define CSR_RJ_SHIFT		5
->> +#define CSR_SIMM14_SHIFT	10
->> +#define CSR_OPCODE_SHIFT	24
->> +
->> +#define DEFINE_INSN_CSR							\
->> +	__DEFINE_ASM_GPR_NUMS						\
->> +"	.macro insn_csr, opcode, rj, rd, simm14\n"			\
->> +"	.4byte	((\\opcode << " INSN_STR(CSR_OPCODE_SHIFT) ") |"	\
->> +"		 (.L__gpr_num_\\rj << " INSN_STR(CSR_RJ_SHIFT) ") |"	\
->> +"		 (.L__gpr_num_\\rd << " INSN_STR(CSR_RD_SHIFT) ") |"	\
->> +"		 (\\simm14 << " INSN_STR(CSR_SIMM14_SHIFT) "))\n"	\
->> +"	.endm\n"
->> +
->> +#define UNDEFINE_INSN_CSR						\
->> +"	.purgem insn_csr\n"
->> +
->> +#define __INSN_CSR(opcode, rj, rd, simm14)				\
->> +	DEFINE_INSN_CSR							\
->> +	"insn_csr " opcode ", " rj ", " rd ", " simm14 "\n"		\
->> +	UNDEFINE_INSN_CSR
->> +
->> +
->> +#define INSN_CSR(opcode, rj, rd, simm14)				\
->> +	__INSN_CSR(LARCH_##opcode, LARCH_##rj, LARCH_##rd,		\
->> +		 LARCH_##simm14)
->> +
->> +#define __ASM_STR(x)		#x
->> +#define LARCH_OPCODE(v)		__ASM_STR(v)
->> +#define LARCH_SIMM14(v)		__ASM_STR(v)
->> +#define __LARCH_REG(v)		__ASM_STR(v)
->> +#define LARCH___RD(v)		__LARCH_REG(v)
->> +#define LARCH___RJ(v)		__LARCH_REG(v)
->> +#define LARCH_OPCODE_GCSR	LARCH_OPCODE(5)
->> +
->> +#define GCSR_read(csr, rd)						\
->> +	INSN_CSR(OPCODE_GCSR, __RJ(zero), __RD(rd), SIMM14(csr))
->> +
->> +#define GCSR_write(csr, rd)						\
->> +	INSN_CSR(OPCODE_GCSR, __RJ($r1), __RD(rd), SIMM14(csr))
->> +
->> +#define GCSR_xchg(csr, rj, rd)                                         \
->> +	INSN_CSR(OPCODE_GCSR, __RJ(rj), __RD(rd), SIMM14(csr))
->> +
->> +#endif /* __ASM_INSN_DEF_H */
->> +
->> diff --git a/arch/loongarch/include/asm/kvm_csr.h b/arch/loongarch/include/asm/kvm_csr.h
->> new file mode 100644
->> index 000000000000..fb2d0a5423cb
->> --- /dev/null
->> +++ b/arch/loongarch/include/asm/kvm_csr.h
->> @@ -0,0 +1,214 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +/*
->> + * Copyright (C) 2020-2023 Loongson Technology Corporation Limited
+>> diff --git a/mm/pkram.c b/mm/pkram.c
+>> index da166cb6afb7..c66b2ae4d520 100644
+>> --- a/mm/pkram.c
+>> +++ b/mm/pkram.c
+>> @@ -5,15 +5,18 @@
+>> #include <linux/init.h>
+>> #include <linux/io.h>
+>> #include <linux/kernel.h>
+>> +#include <linux/kobject.h>
+>> #include <linux/list.h>
+>> #include <linux/mm.h>
+>> #include <linux/module.h>
+>> #include <linux/mutex.h>
+>> #include <linux/notifier.h>
+>> +#include <linux/pfn.h>
+>> #include <linux/pkram.h>
+>> #include <linux/reboot.h>
+>> #include <linux/sched.h>
+>> #include <linux/string.h>
+>> +#include <linux/sysfs.h>
+>> #include <linux/types.h>
+>>
+>> #include "internal.h"
+>> @@ -82,12 +85,38 @@ struct pkram_node {
+>> #define PKRAM_ACCMODE_MASK    3
+>>
+>> /*
+>> + * The PKRAM super block contains data needed to restore the 
+>> preserved memory
+>> + * structure on boot. The pointer to it (pfn) should be passed via 
+>> the 'pkram'
+>> + * boot param if one wants to restore preserved data saved by the 
+>> previously
+>> + * executing kernel. For that purpose the kernel exports the pfn via
+>> + * /sys/kernel/pkram. If none is passed, preserved memory if any 
+>> will not be
+>> + * preserved and a new clean page will be allocated for the super 
+>> block.
+>> + *
+>> + * The structure occupies a memory page.
 >> + */
+>> +struct pkram_super_block {
+>> +    __u64    node_pfn;        /* first element of the node list */
+>> +};
 >> +
->> +#ifndef __ASM_LOONGARCH_KVM_CSR_H__
->> +#define __ASM_LOONGARCH_KVM_CSR_H__
->> +#include <asm/loongarch.h>
->> +#include <asm/kvm_vcpu.h>
->> +#include <linux/uaccess.h>
->> +#include <linux/kvm_host.h>
+>> +static unsigned long pkram_sb_pfn __initdata;
+>> +static struct pkram_super_block *pkram_sb;
 >> +
 >> +/*
->> + * Instructions will be available in binutils later
->> + * read val from guest csr register %[csr]
->> + * gcsrrd %[val], %[csr]
->> + */
->> +#define gcsr_read(csr)						\
->> +({								\
->> +	register unsigned long __v;				\
->> +	__asm__ __volatile__ (GCSR_read(csr, %0)		\
->> +				: "=r" (__v) :			\
->> +				: "memory");			\
->> +	__v;							\
->> +})
->> +
+>>  * For convenience sake PKRAM nodes are kept in an auxiliary 
+>> doubly-linked list
+>>  * connected through the lru field of the page struct.
+>>  */
+>> static LIST_HEAD(pkram_nodes);            /* linked through page::lru */
+>> static DEFINE_MUTEX(pkram_mutex);        /* serializes open/close */
+>>
 >> +/*
->> + * Instructions will be available in binutils later
->> + * write val to guest csr register %[csr]
->> + * gcsrwr %[val], %[csr]
+>> + * The PKRAM super block pfn, see above.
 >> + */
->> +#define gcsr_write(val, csr)					\
->> +({								\
->> +	register unsigned long __v = val;			\
->> +	__asm__ __volatile__ (GCSR_write(csr, %0)		\
->> +				: "+r" (__v) :			\
->> +				: "memory");			\
->> +})
->> +
->> +/*
->> + * Instructions will be available in binutils later
->> + * replace masked bits of guest csr register %[csr] with val
->> + * gcsrxchg %[val], %[mask], %[csr]
->> + */
->> +#define gcsr_xchg(val, mask, csr)				\
->> +({								\
->> +	register unsigned long __v = val;			\
->> +	__asm__ __volatile__ (GCSR_xchg(csr, %1, %0)		\
->> +				: "+r" (__v)			\
->> +				: "r"  (mask)			\
->> +				: "memory");			\
->> +	__v;							\
->> +})
->> +
->> +/* Guest CSRS read and write */
->> +#define read_gcsr_crmd()                gcsr_read(LOONGARCH_CSR_CRMD)
->> +#define write_gcsr_crmd(val)            gcsr_write(val, LOONGARCH_CSR_CRMD)
->> +#define read_gcsr_prmd()                gcsr_read(LOONGARCH_CSR_PRMD)
->> +#define write_gcsr_prmd(val)            gcsr_write(val, LOONGARCH_CSR_PRMD)
->> +#define read_gcsr_euen()                gcsr_read(LOONGARCH_CSR_EUEN)
->> +#define write_gcsr_euen(val)            gcsr_write(val, LOONGARCH_CSR_EUEN)
->> +#define read_gcsr_misc()                gcsr_read(LOONGARCH_CSR_MISC)
->> +#define write_gcsr_misc(val)            gcsr_write(val, LOONGARCH_CSR_MISC)
->> +#define read_gcsr_ecfg()                gcsr_read(LOONGARCH_CSR_ECFG)
->> +#define write_gcsr_ecfg(val)            gcsr_write(val, LOONGARCH_CSR_ECFG)
->> +#define read_gcsr_estat()               gcsr_read(LOONGARCH_CSR_ESTAT)
->> +#define write_gcsr_estat(val)           gcsr_write(val, LOONGARCH_CSR_ESTAT)
->> +#define read_gcsr_era()                 gcsr_read(LOONGARCH_CSR_ERA)
->> +#define write_gcsr_era(val)             gcsr_write(val, LOONGARCH_CSR_ERA)
->> +#define read_gcsr_badv()                gcsr_read(LOONGARCH_CSR_BADV)
->> +#define write_gcsr_badv(val)            gcsr_write(val, LOONGARCH_CSR_BADV)
->> +#define read_gcsr_badi()                gcsr_read(LOONGARCH_CSR_BADI)
->> +#define write_gcsr_badi(val)            gcsr_write(val, LOONGARCH_CSR_BADI)
->> +#define read_gcsr_eentry()              gcsr_read(LOONGARCH_CSR_EENTRY)
->> +#define write_gcsr_eentry(val)          gcsr_write(val, LOONGARCH_CSR_EENTRY)
->> +
->> +#define read_gcsr_tlbidx()              gcsr_read(LOONGARCH_CSR_TLBIDX)
->> +#define write_gcsr_tlbidx(val)          gcsr_write(val, LOONGARCH_CSR_TLBIDX)
->> +#define read_gcsr_tlbhi()               gcsr_read(LOONGARCH_CSR_TLBEHI)
->> +#define write_gcsr_tlbhi(val)           gcsr_write(val, LOONGARCH_CSR_TLBEHI)
->> +#define read_gcsr_tlblo0()              gcsr_read(LOONGARCH_CSR_TLBELO0)
->> +#define write_gcsr_tlblo0(val)          gcsr_write(val, LOONGARCH_CSR_TLBELO0)
->> +#define read_gcsr_tlblo1()              gcsr_read(LOONGARCH_CSR_TLBELO1)
->> +#define write_gcsr_tlblo1(val)          gcsr_write(val, LOONGARCH_CSR_TLBELO1)
->> +
->> +#define read_gcsr_asid()                gcsr_read(LOONGARCH_CSR_ASID)
->> +#define write_gcsr_asid(val)            gcsr_write(val, LOONGARCH_CSR_ASID)
->> +#define read_gcsr_pgdl()                gcsr_read(LOONGARCH_CSR_PGDL)
->> +#define write_gcsr_pgdl(val)            gcsr_write(val, LOONGARCH_CSR_PGDL)
->> +#define read_gcsr_pgdh()                gcsr_read(LOONGARCH_CSR_PGDH)
->> +#define write_gcsr_pgdh(val)            gcsr_write(val, LOONGARCH_CSR_PGDH)
->> +#define write_gcsr_pgd(val)             gcsr_write(val, LOONGARCH_CSR_PGD)
->> +#define read_gcsr_pgd()                 gcsr_read(LOONGARCH_CSR_PGD)
->> +#define read_gcsr_pwctl0()              gcsr_read(LOONGARCH_CSR_PWCTL0)
->> +#define write_gcsr_pwctl0(val)          gcsr_write(val, LOONGARCH_CSR_PWCTL0)
->> +#define read_gcsr_pwctl1()              gcsr_read(LOONGARCH_CSR_PWCTL1)
->> +#define write_gcsr_pwctl1(val)          gcsr_write(val, LOONGARCH_CSR_PWCTL1)
->> +#define read_gcsr_stlbpgsize()          gcsr_read(LOONGARCH_CSR_STLBPGSIZE)
->> +#define write_gcsr_stlbpgsize(val)      gcsr_write(val, LOONGARCH_CSR_STLBPGSIZE)
->> +#define read_gcsr_rvacfg()              gcsr_read(LOONGARCH_CSR_RVACFG)
->> +#define write_gcsr_rvacfg(val)          gcsr_write(val, LOONGARCH_CSR_RVACFG)
->> +
->> +#define read_gcsr_cpuid()               gcsr_read(LOONGARCH_CSR_CPUID)
->> +#define write_gcsr_cpuid(val)           gcsr_write(val, LOONGARCH_CSR_CPUID)
->> +#define read_gcsr_prcfg1()              gcsr_read(LOONGARCH_CSR_PRCFG1)
->> +#define write_gcsr_prcfg1(val)          gcsr_write(val, LOONGARCH_CSR_PRCFG1)
->> +#define read_gcsr_prcfg2()              gcsr_read(LOONGARCH_CSR_PRCFG2)
->> +#define write_gcsr_prcfg2(val)          gcsr_write(val, LOONGARCH_CSR_PRCFG2)
->> +#define read_gcsr_prcfg3()              gcsr_read(LOONGARCH_CSR_PRCFG3)
->> +#define write_gcsr_prcfg3(val)          gcsr_write(val, LOONGARCH_CSR_PRCFG3)
->> +
->> +#define read_gcsr_kscratch0()           gcsr_read(LOONGARCH_CSR_KS0)
->> +#define write_gcsr_kscratch0(val)       gcsr_write(val, LOONGARCH_CSR_KS0)
->> +#define read_gcsr_kscratch1()           gcsr_read(LOONGARCH_CSR_KS1)
->> +#define write_gcsr_kscratch1(val)       gcsr_write(val, LOONGARCH_CSR_KS1)
->> +#define read_gcsr_kscratch2()           gcsr_read(LOONGARCH_CSR_KS2)
->> +#define write_gcsr_kscratch2(val)       gcsr_write(val, LOONGARCH_CSR_KS2)
->> +#define read_gcsr_kscratch3()           gcsr_read(LOONGARCH_CSR_KS3)
->> +#define write_gcsr_kscratch3(val)       gcsr_write(val, LOONGARCH_CSR_KS3)
->> +#define read_gcsr_kscratch4()           gcsr_read(LOONGARCH_CSR_KS4)
->> +#define write_gcsr_kscratch4(val)       gcsr_write(val, LOONGARCH_CSR_KS4)
->> +#define read_gcsr_kscratch5()           gcsr_read(LOONGARCH_CSR_KS5)
->> +#define write_gcsr_kscratch5(val)       gcsr_write(val, LOONGARCH_CSR_KS5)
->> +#define read_gcsr_kscratch6()           gcsr_read(LOONGARCH_CSR_KS6)
->> +#define write_gcsr_kscratch6(val)       gcsr_write(val, LOONGARCH_CSR_KS6)
->> +#define read_gcsr_kscratch7()           gcsr_read(LOONGARCH_CSR_KS7)
->> +#define write_gcsr_kscratch7(val)       gcsr_write(val, LOONGARCH_CSR_KS7)
->> +
->> +#define read_gcsr_timerid()             gcsr_read(LOONGARCH_CSR_TMID)
->> +#define write_gcsr_timerid(val)         gcsr_write(val, LOONGARCH_CSR_TMID)
->> +#define read_gcsr_timercfg()            gcsr_read(LOONGARCH_CSR_TCFG)
->> +#define write_gcsr_timercfg(val)        gcsr_write(val, LOONGARCH_CSR_TCFG)
->> +#define read_gcsr_timertick()           gcsr_read(LOONGARCH_CSR_TVAL)
->> +#define write_gcsr_timertick(val)       gcsr_write(val, LOONGARCH_CSR_TVAL)
->> +#define read_gcsr_timeroffset()         gcsr_read(LOONGARCH_CSR_CNTC)
->> +#define write_gcsr_timeroffset(val)     gcsr_write(val, LOONGARCH_CSR_CNTC)
->> +
->> +#define read_gcsr_llbctl()              gcsr_read(LOONGARCH_CSR_LLBCTL)
->> +#define write_gcsr_llbctl(val)          gcsr_write(val, LOONGARCH_CSR_LLBCTL)
->> +
->> +#define read_gcsr_tlbrentry()           gcsr_read(LOONGARCH_CSR_TLBRENTRY)
->> +#define write_gcsr_tlbrentry(val)       gcsr_write(val, LOONGARCH_CSR_TLBRENTRY)
->> +#define read_gcsr_tlbrbadv()            gcsr_read(LOONGARCH_CSR_TLBRBADV)
->> +#define write_gcsr_tlbrbadv(val)        gcsr_write(val, LOONGARCH_CSR_TLBRBADV)
->> +#define read_gcsr_tlbrera()             gcsr_read(LOONGARCH_CSR_TLBRERA)
->> +#define write_gcsr_tlbrera(val)         gcsr_write(val, LOONGARCH_CSR_TLBRERA)
->> +#define read_gcsr_tlbrsave()            gcsr_read(LOONGARCH_CSR_TLBRSAVE)
->> +#define write_gcsr_tlbrsave(val)        gcsr_write(val, LOONGARCH_CSR_TLBRSAVE)
->> +#define read_gcsr_tlbrelo0()            gcsr_read(LOONGARCH_CSR_TLBRELO0)
->> +#define write_gcsr_tlbrelo0(val)        gcsr_write(val, LOONGARCH_CSR_TLBRELO0)
->> +#define read_gcsr_tlbrelo1()            gcsr_read(LOONGARCH_CSR_TLBRELO1)
->> +#define write_gcsr_tlbrelo1(val)        gcsr_write(val, LOONGARCH_CSR_TLBRELO1)
->> +#define read_gcsr_tlbrehi()             gcsr_read(LOONGARCH_CSR_TLBREHI)
->> +#define write_gcsr_tlbrehi(val)         gcsr_write(val, LOONGARCH_CSR_TLBREHI)
->> +#define read_gcsr_tlbrprmd()            gcsr_read(LOONGARCH_CSR_TLBRPRMD)
->> +#define write_gcsr_tlbrprmd(val)        gcsr_write(val, LOONGARCH_CSR_TLBRPRMD)
->> +
->> +#define read_gcsr_directwin0()          gcsr_read(LOONGARCH_CSR_DMWIN0)
->> +#define write_gcsr_directwin0(val)      gcsr_write(val, LOONGARCH_CSR_DMWIN0)
->> +#define read_gcsr_directwin1()          gcsr_read(LOONGARCH_CSR_DMWIN1)
->> +#define write_gcsr_directwin1(val)      gcsr_write(val, LOONGARCH_CSR_DMWIN1)
->> +#define read_gcsr_directwin2()          gcsr_read(LOONGARCH_CSR_DMWIN2)
->> +#define write_gcsr_directwin2(val)      gcsr_write(val, LOONGARCH_CSR_DMWIN2)
->> +#define read_gcsr_directwin3()          gcsr_read(LOONGARCH_CSR_DMWIN3)
->> +#define write_gcsr_directwin3(val)      gcsr_write(val, LOONGARCH_CSR_DMWIN3)
->> +
->> +#define __BUILD_GCSR_OP(name)   __BUILD_CSR_COMMON(gcsr_##name)
->> +
->> +__BUILD_GCSR_OP(llbctl)
->> +__BUILD_GCSR_OP(tlbidx)
->> +
->> +#define set_gcsr_estat(val)	\
->> +	gcsr_xchg(val, val, LOONGARCH_CSR_ESTAT)
->> +#define clear_gcsr_estat(val)	\
->> +	gcsr_xchg(~(val), val, LOONGARCH_CSR_ESTAT)
->> +
->> +#define kvm_read_hw_gcsr(id)		gcsr_read(id)
->> +#define kvm_write_hw_gcsr(csr, id, val)	gcsr_write(val, id)
->> +
->> +int _kvm_getcsr(struct kvm_vcpu *vcpu, unsigned int id, u64 *v);
->> +int _kvm_setcsr(struct kvm_vcpu *vcpu, unsigned int id, u64 v);
->> +
->> +int _kvm_emu_iocsr(larch_inst inst, struct kvm_run *run, struct kvm_vcpu *vcpu);
->> +
->> +#define kvm_save_hw_gcsr(csr, gid)	(csr->csrs[gid] = gcsr_read(gid))
->> +#define kvm_restore_hw_gcsr(csr, gid)	(gcsr_write(csr->csrs[gid], gid))
->> +
->> +static __always_inline unsigned long kvm_read_sw_gcsr(struct loongarch_csrs *csr, int gid)
+>> +static int __init parse_pkram_sb_pfn(char *arg)
 >> +{
->> +	return csr->csrs[gid];
+>> +    return kstrtoul(arg, 16, &pkram_sb_pfn);
+>> +}
+>> +early_param("pkram", parse_pkram_sb_pfn);
+>> +
+>> static inline struct page *pkram_alloc_page(gfp_t gfp_mask)
+>> {
+>>     return alloc_page(gfp_mask);
+>> @@ -270,6 +299,7 @@ static void pkram_stream_init(struct pkram_stream 
+>> *ps,
+>>  * @gfp_mask specifies the memory allocation mask to be used when 
+>> saving data.
+>>  *
+>>  * Error values:
+>> + *    %ENODEV: PKRAM not available
+>>  *    %ENAMETOOLONG: name len >= PKRAM_NAME_MAX
+>>  *    %ENOMEM: insufficient memory available
+>>  *    %EEXIST: node with specified name already exists
+>> @@ -285,6 +315,9 @@ int pkram_prepare_save(struct pkram_stream *ps, 
+>> const char *name, gfp_t gfp_mask
+>>     struct pkram_node *node;
+>>     int err = 0;
+>>
+>> +    if (!pkram_sb)
+>> +        return -ENODEV;
+>> +
+>>     if (strlen(name) >= PKRAM_NAME_MAX)
+>>         return -ENAMETOOLONG;
+>>
+>> @@ -404,6 +437,7 @@ void pkram_discard_save(struct pkram_stream *ps)
+>>  * Returns 0 on success, -errno on failure.
+>>  *
+>>  * Error values:
+>> + *    %ENODEV: PKRAM not available
+>>  *    %ENOENT: node with specified name does not exist
+>>  *    %EBUSY: save to required node has not finished yet
+>>  *
+>> @@ -414,6 +448,9 @@ int pkram_prepare_load(struct pkram_stream *ps, 
+>> const char *name)
+>>     struct pkram_node *node;
+>>     int err = 0;
+>>
+>> +    if (!pkram_sb)
+>> +        return -ENODEV;
+>> +
+>>     mutex_lock(&pkram_mutex);
+>>     node = pkram_find_node(name);
+>>     if (!node) {
+>> @@ -825,6 +862,13 @@ static void __pkram_reboot(void)
+>>         node->node_pfn = node_pfn;
+>>         node_pfn = page_to_pfn(page);
+>>     }
+>> +
+>> +    /*
+>> +     * Zero out pkram_sb completely since it may have been passed from
+>> +     * the previous boot.
+>> +     */
+>> +    memset(pkram_sb, 0, PAGE_SIZE);
+>> +    pkram_sb->node_pfn = node_pfn;
+>> }
+>>
+>> static int pkram_reboot(struct notifier_block *notifier,
+>> @@ -832,7 +876,8 @@ static int pkram_reboot(struct notifier_block 
+>> *notifier,
+>> {
+>>     if (val != SYS_RESTART)
+>>         return NOTIFY_DONE;
+>> -    __pkram_reboot();
+>> +    if (pkram_sb)
+>> +        __pkram_reboot();
+>>     return NOTIFY_OK;
+>> }
+>>
+>> @@ -840,9 +885,62 @@ static int pkram_reboot(struct notifier_block 
+>> *notifier,
+>>     .notifier_call = pkram_reboot,
+>> };
+>>
+>> +static ssize_t show_pkram_sb_pfn(struct kobject *kobj,
+>> +        struct kobj_attribute *attr, char *buf)
+>> +{
+>> +    unsigned long pfn = pkram_sb ? PFN_DOWN(__pa(pkram_sb)) : 0;
+>> +
+>> +    return sprintf(buf, "%lx\n", pfn);
 >> +}
 >> +
->> +static __always_inline void kvm_write_sw_gcsr(struct loongarch_csrs *csr,
->> +					      int gid, unsigned long val)
+>> +static struct kobj_attribute pkram_sb_pfn_attr =
+>> +    __ATTR(pkram, 0444, show_pkram_sb_pfn, NULL);
+>> +
+>> +static struct attribute *pkram_attrs[] = {
+>> +    &pkram_sb_pfn_attr.attr,
+>> +    NULL,
+>> +};
+>> +
+>> +static struct attribute_group pkram_attr_group = {
+>> +    .attrs = pkram_attrs,
+>> +};
+>> +
+>> +/* returns non-zero on success */
+>> +static int __init pkram_init_sb(void)
 >> +{
->> +	csr->csrs[gid] = val;
+>> +    unsigned long pfn;
+>> +    struct pkram_node *node;
+>> +
+>> +    if (!pkram_sb) {
+>> +        struct page *page;
+>> +
+>> +        page = pkram_alloc_page(GFP_KERNEL | __GFP_ZERO);
+>> +        if (!page) {
+>> +            pr_err("PKRAM: Failed to allocate super block\n");
+>> +            return 0;
+>> +        }
+>> +        pkram_sb = page_address(page);
+>> +    }
+>> +
+>> +    /*
+>> +     * Build auxiliary doubly-linked list of nodes connected through
+>> +     * page::lru for convenience sake.
+>> +     */
+>> +    pfn = pkram_sb->node_pfn;
+>> +    while (pfn) {
+>> +        node = pfn_to_kaddr(pfn);
+>> +        pkram_insert_node(node);
+>> +        pfn = node->node_pfn;
+>> +    }
+>> +    return 1;
 >> +}
 >> +
->> +static __always_inline void kvm_set_sw_gcsr(struct loongarch_csrs *csr,
->> +					    int gid, unsigned long val)
->> +{
->> +	csr->csrs[gid] |= val;
->> +}
->> +
->> +static __always_inline void kvm_change_sw_gcsr(struct loongarch_csrs *csr,
->> +					       int gid, unsigned long mask,
->> +					       unsigned long val)
->> +{
->> +	unsigned long _mask = mask;
->> +
->> +	csr->csrs[gid] &= ~_mask;
->> +	csr->csrs[gid] |= val & _mask;
->> +}
->> +#endif	/* __ASM_LOONGARCH_KVM_CSR_H__ */
->> diff --git a/arch/loongarch/include/asm/kvm_vcpu.h b/arch/loongarch/include/asm/kvm_vcpu.h
->> new file mode 100644
->> index 000000000000..74deaf55d22c
->> --- /dev/null
->> +++ b/arch/loongarch/include/asm/kvm_vcpu.h
->> @@ -0,0 +1,97 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +/*
->> + * Copyright (C) 2020-2023 Loongson Technology Corporation Limited
->> + */
->> +
->> +#ifndef __ASM_LOONGARCH_KVM_VCPU_H__
->> +#define __ASM_LOONGARCH_KVM_VCPU_H__
->> +
->> +#include <linux/kvm_host.h>
->> +#include <asm/loongarch.h>
->> +
->> +/* Controlled by 0x5 guest exst */
->> +#define CPU_SIP0			(_ULCAST_(1))
->> +#define CPU_SIP1			(_ULCAST_(1) << 1)
->> +#define CPU_PMU				(_ULCAST_(1) << 10)
->> +#define CPU_TIMER			(_ULCAST_(1) << 11)
->> +#define CPU_IPI				(_ULCAST_(1) << 12)
->> +
->> +/* Controlled by 0x52 guest exception VIP
->> + * aligned to exst bit 5~12
->> + */
->> +#define CPU_IP0				(_ULCAST_(1))
->> +#define CPU_IP1				(_ULCAST_(1) << 1)
->> +#define CPU_IP2				(_ULCAST_(1) << 2)
->> +#define CPU_IP3				(_ULCAST_(1) << 3)
->> +#define CPU_IP4				(_ULCAST_(1) << 4)
->> +#define CPU_IP5				(_ULCAST_(1) << 5)
->> +#define CPU_IP6				(_ULCAST_(1) << 6)
->> +#define CPU_IP7				(_ULCAST_(1) << 7)
->> +
->> +#define MNSEC_PER_SEC			(NSEC_PER_SEC >> 20)
->> +
->> +/* KVM_IRQ_LINE irq field index values */
->> +#define KVM_LOONGSON_IRQ_TYPE_SHIFT	24
->> +#define KVM_LOONGSON_IRQ_TYPE_MASK	0xff
->> +#define KVM_LOONGSON_IRQ_VCPU_SHIFT	16
->> +#define KVM_LOONGSON_IRQ_VCPU_MASK	0xff
->> +#define KVM_LOONGSON_IRQ_NUM_SHIFT	0
->> +#define KVM_LOONGSON_IRQ_NUM_MASK	0xffff
->> +
->> +/* Irq_type field */
->> +#define KVM_LOONGSON_IRQ_TYPE_CPU_IP	0
->> +#define KVM_LOONGSON_IRQ_TYPE_CPU_IO	1
->> +#define KVM_LOONGSON_IRQ_TYPE_HT	2
->> +#define KVM_LOONGSON_IRQ_TYPE_MSI	3
->> +#define KVM_LOONGSON_IRQ_TYPE_IOAPIC	4
->> +#define KVM_LOONGSON_IRQ_TYPE_ROUTE	5
->> +
->> +/* Out-of-kernel GIC cpu interrupt injection irq_number field */
->> +#define KVM_LOONGSON_IRQ_CPU_IRQ	0
->> +#define KVM_LOONGSON_IRQ_CPU_FIQ	1
->> +#define KVM_LOONGSON_CPU_IP_NUM		8
->> +
->> +typedef union loongarch_instruction  larch_inst;
->> +typedef int (*exit_handle_fn)(struct kvm_vcpu *);
->> +
->> +int  _kvm_emu_mmio_write(struct kvm_vcpu *vcpu, larch_inst inst);
->> +int  _kvm_emu_mmio_read(struct kvm_vcpu *vcpu, larch_inst inst);
->> +int  _kvm_complete_mmio_read(struct kvm_vcpu *vcpu, struct kvm_run *run);
->> +int  _kvm_complete_iocsr_read(struct kvm_vcpu *vcpu, struct kvm_run *run);
->> +int  _kvm_emu_idle(struct kvm_vcpu *vcpu);
->> +int  _kvm_handle_pv_hcall(struct kvm_vcpu *vcpu);
->> +int  _kvm_pending_timer(struct kvm_vcpu *vcpu);
->> +int  _kvm_handle_fault(struct kvm_vcpu *vcpu, int fault);
->> +void _kvm_deliver_intr(struct kvm_vcpu *vcpu);
->> +
->> +void kvm_own_fpu(struct kvm_vcpu *vcpu);
->> +void kvm_lose_fpu(struct kvm_vcpu *vcpu);
->> +void kvm_save_fpu(struct loongarch_fpu *fpu);
->> +void kvm_restore_fpu(struct loongarch_fpu *fpu);
->> +void kvm_restore_fcsr(struct loongarch_fpu *fpu);
->> +
->> +void kvm_acquire_timer(struct kvm_vcpu *vcpu);
->> +void kvm_reset_timer(struct kvm_vcpu *vcpu);
->> +enum hrtimer_restart kvm_count_timeout(struct kvm_vcpu *vcpu);
->> +void kvm_init_timer(struct kvm_vcpu *vcpu, unsigned long hz);
->> +void kvm_restore_timer(struct kvm_vcpu *vcpu);
->> +void kvm_save_timer(struct kvm_vcpu *vcpu);
->> +
->> +int kvm_vcpu_ioctl_interrupt(struct kvm_vcpu *vcpu,
->> +			struct kvm_loongarch_interrupt *irq);
->> +/*
->> + * Loongarch KVM guest interrupt handling
->> + */
->> +static inline void _kvm_queue_irq(struct kvm_vcpu *vcpu, unsigned int irq)
->> +{
->> +	set_bit(irq, &vcpu->arch.irq_pending);
->> +	clear_bit(irq, &vcpu->arch.irq_clear);
->> +}
->> +
->> +static inline void _kvm_dequeue_irq(struct kvm_vcpu *vcpu, unsigned int irq)
->> +{
->> +	clear_bit(irq, &vcpu->arch.irq_pending);
->> +	set_bit(irq, &vcpu->arch.irq_clear);
->> +}
->> +
->> +#endif /* __ASM_LOONGARCH_KVM_VCPU_H__ */
->> diff --git a/arch/loongarch/include/asm/loongarch.h b/arch/loongarch/include/asm/loongarch.h
->> index b3323ab5b78d..74eeae0bfdc8 100644
->> --- a/arch/loongarch/include/asm/loongarch.h
->> +++ b/arch/loongarch/include/asm/loongarch.h
->> @@ -11,6 +11,7 @@
->>   
->>   #ifndef __ASSEMBLY__
->>   #include <larchintrin.h>
->> +#include <asm/insn-def.h>
->>   
->>   /*
->>    * parse_r var, r - Helper assembler macro for parsing register names.
->> @@ -309,6 +310,7 @@ static __always_inline void iocsr_write64(u64 val, u32 reg)
->>   #define LOONGARCH_CSR_ECFG		0x4	/* Exception config */
->>   #define  CSR_ECFG_VS_SHIFT		16
->>   #define  CSR_ECFG_VS_WIDTH		3
->> +#define  CSR_ECFG_VS_SHIFT_END		(CSR_ECFG_VS_SHIFT + CSR_ECFG_VS_WIDTH - 1)
->>   #define  CSR_ECFG_VS			(_ULCAST_(0x7) << CSR_ECFG_VS_SHIFT)
->>   #define  CSR_ECFG_IM_SHIFT		0
->>   #define  CSR_ECFG_IM_WIDTH		14
->> @@ -397,13 +399,14 @@ static __always_inline void iocsr_write64(u64 val, u32 reg)
->>   #define  CSR_TLBLO1_V			(_ULCAST_(0x1) << CSR_TLBLO1_V_SHIFT)
->>   
->>   #define LOONGARCH_CSR_GTLBC		0x15	/* Guest TLB control */
->> -#define  CSR_GTLBC_RID_SHIFT		16
->> -#define  CSR_GTLBC_RID_WIDTH		8
->> -#define  CSR_GTLBC_RID			(_ULCAST_(0xff) << CSR_GTLBC_RID_SHIFT)
->> +#define  CSR_GTLBC_TGID_SHIFT		16
->> +#define  CSR_GTLBC_TGID_WIDTH		8
->> +#define  CSR_GTLBC_TGID_SHIFT_END	(CSR_GTLBC_TGID_SHIFT + CSR_GTLBC_TGID_WIDTH - 1)
->> +#define  CSR_GTLBC_TGID			(_ULCAST_(0xff) << CSR_GTLBC_TGID_SHIFT)
->>   #define  CSR_GTLBC_TOTI_SHIFT		13
->>   #define  CSR_GTLBC_TOTI			(_ULCAST_(0x1) << CSR_GTLBC_TOTI_SHIFT)
->> -#define  CSR_GTLBC_USERID_SHIFT		12
->> -#define  CSR_GTLBC_USERID		(_ULCAST_(0x1) << CSR_GTLBC_USERID_SHIFT)
->> +#define  CSR_GTLBC_USETGID_SHIFT	12
->> +#define  CSR_GTLBC_USETGID		(_ULCAST_(0x1) << CSR_GTLBC_USETGID_SHIFT)
->>   #define  CSR_GTLBC_GMTLBSZ_SHIFT	0
->>   #define  CSR_GTLBC_GMTLBSZ_WIDTH	6
->>   #define  CSR_GTLBC_GMTLBSZ		(_ULCAST_(0x3f) << CSR_GTLBC_GMTLBSZ_SHIFT)
->> @@ -555,6 +558,7 @@ static __always_inline void iocsr_write64(u64 val, u32 reg)
->>   #define LOONGARCH_CSR_GSTAT		0x50	/* Guest status */
->>   #define  CSR_GSTAT_GID_SHIFT		16
->>   #define  CSR_GSTAT_GID_WIDTH		8
->> +#define  CSR_GSTAT_GID_SHIFT_END	(CSR_GSTAT_GID_SHIFT + CSR_GSTAT_GID_WIDTH - 1)
->>   #define  CSR_GSTAT_GID			(_ULCAST_(0xff) << CSR_GSTAT_GID_SHIFT)
->>   #define  CSR_GSTAT_GIDBIT_SHIFT		4
->>   #define  CSR_GSTAT_GIDBIT_WIDTH		6
->> @@ -605,6 +609,12 @@ static __always_inline void iocsr_write64(u64 val, u32 reg)
->>   #define  CSR_GCFG_MATC_GUEST		(_ULCAST_(0x0) << CSR_GCFG_MATC_SHITF)
->>   #define  CSR_GCFG_MATC_ROOT		(_ULCAST_(0x1) << CSR_GCFG_MATC_SHITF)
->>   #define  CSR_GCFG_MATC_NEST		(_ULCAST_(0x2) << CSR_GCFG_MATC_SHITF)
->> +#define  CSR_GCFG_MATP_NEST_SHIFT	2
->> +#define  CSR_GCFG_MATP_NEST		(_ULCAST_(0x1) << CSR_GCFG_MATP_NEST_SHIFT)
->> +#define  CSR_GCFG_MATP_ROOT_SHIFT	1
->> +#define  CSR_GCFG_MATP_ROOT		(_ULCAST_(0x1) << CSR_GCFG_MATP_ROOT_SHIFT)
->> +#define  CSR_GCFG_MATP_GUEST_SHIFT	0
->> +#define  CSR_GCFG_MATP_GUEST		(_ULCAST_(0x1) << CSR_GCFG_MATP_GUEST_SHIFT)
->>   
->>   #define LOONGARCH_CSR_GINTC		0x52	/* Guest interrupt control */
->>   #define  CSR_GINTC_HC_SHIFT		16
->> @@ -1276,6 +1286,19 @@ static inline void write_csr_tlbrefill_pagesize(unsigned int size)
->>   #define write_csr_perfctrl3(val)	csr_write64(val, LOONGARCH_CSR_PERFCTRL3)
->>   #define write_csr_perfcntr3(val)	csr_write64(val, LOONGARCH_CSR_PERFCNTR3)
->>   
->> +/* Guest related CSRs */
->> +#define read_csr_gtlbc()		csr_read64(LOONGARCH_CSR_GTLBC)
->> +#define write_csr_gtlbc(val)		csr_write64(val, LOONGARCH_CSR_GTLBC)
->> +#define read_csr_trgp()			csr_read64(LOONGARCH_CSR_TRGP)
->> +#define read_csr_gcfg()			csr_read64(LOONGARCH_CSR_GCFG)
->> +#define write_csr_gcfg(val)		csr_write64(val, LOONGARCH_CSR_GCFG)
->> +#define read_csr_gstat()		csr_read64(LOONGARCH_CSR_GSTAT)
->> +#define write_csr_gstat(val)		csr_write64(val, LOONGARCH_CSR_GSTAT)
->> +#define read_csr_gintc()		csr_read64(LOONGARCH_CSR_GINTC)
->> +#define write_csr_gintc(val)		csr_write64(val, LOONGARCH_CSR_GINTC)
->> +#define read_csr_gcntc()		csr_read64(LOONGARCH_CSR_GCNTC)
->> +#define write_csr_gcntc(val)		csr_write64(val, LOONGARCH_CSR_GCNTC)
-> should we put csr register definiton about vm in asm/kvm_csr.h or asm/loongarch.h?
+>> static int __init pkram_init(void)
+>> {
+>> -    register_reboot_notifier(&pkram_reboot_notifier);
+>> +    if (pkram_init_sb()) {
+>> +        register_reboot_notifier(&pkram_reboot_notifier);
+>> +        sysfs_update_group(kernel_kobj, &pkram_attr_group);
+>> +    }
+>>     return 0;
+>> }
+>> module_init(pkram_init);
+>> -- 
+>> 1.9.4
+>>
+>>
+>> _______________________________________________
+>> kexec mailing list
+>> kexec@lists.infradead.org
+>> http://lists.infradead.org/mailman/listinfo/kexec
+>>
 >
-> Regards
-> Bibo, Mao
-Yes, and those macros already have been in asm/loongarch.h.
-
-Thanks
-Tianrui Zhao
->> +
->>   /*
->>    * Manipulate bits in a register.
->>    */
->> @@ -1322,6 +1345,10 @@ change_##name(unsigned long change, unsigned long val)		\
->>   __BUILD_CSR_OP(euen)
->>   __BUILD_CSR_OP(ecfg)
->>   __BUILD_CSR_OP(tlbidx)
->> +__BUILD_CSR_OP(gcfg)
->> +__BUILD_CSR_OP(gstat)
->> +__BUILD_CSR_OP(gtlbc)
->> +__BUILD_CSR_OP(gintc)
->>   
->>   #define set_csr_estat(val)	\
->>   	csr_xchg32(val, val, LOONGARCH_CSR_ESTAT)
->> diff --git a/arch/loongarch/kvm/trace.h b/arch/loongarch/kvm/trace.h
->> new file mode 100644
->> index 000000000000..17b28d94d569
->> --- /dev/null
->> +++ b/arch/loongarch/kvm/trace.h
->> @@ -0,0 +1,168 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +/*
->> + * Copyright (C) 2020-2023 Loongson Technology Corporation Limited
->> + */
->> +
->> +#if !defined(_TRACE_KVM_H) || defined(TRACE_HEADER_MULTI_READ)
->> +#define _TRACE_KVM_H
->> +
->> +#include <linux/tracepoint.h>
->> +#include <asm/kvm_csr.h>
->> +
->> +#undef	TRACE_SYSTEM
->> +#define TRACE_SYSTEM	kvm
->> +
->> +/*
->> + * Tracepoints for VM enters
->> + */
->> +DECLARE_EVENT_CLASS(kvm_transition,
->> +	TP_PROTO(struct kvm_vcpu *vcpu),
->> +	TP_ARGS(vcpu),
->> +	TP_STRUCT__entry(
->> +		__field(unsigned long, pc)
->> +	),
->> +
->> +	TP_fast_assign(
->> +		__entry->pc = vcpu->arch.pc;
->> +	),
->> +
->> +	TP_printk("PC: 0x%08lx",
->> +		  __entry->pc)
->> +);
->> +
->> +DEFINE_EVENT(kvm_transition, kvm_enter,
->> +	     TP_PROTO(struct kvm_vcpu *vcpu),
->> +	     TP_ARGS(vcpu));
->> +
->> +DEFINE_EVENT(kvm_transition, kvm_reenter,
->> +	     TP_PROTO(struct kvm_vcpu *vcpu),
->> +	     TP_ARGS(vcpu));
->> +
->> +DEFINE_EVENT(kvm_transition, kvm_out,
->> +	     TP_PROTO(struct kvm_vcpu *vcpu),
->> +	     TP_ARGS(vcpu));
->> +
->> +/* Further exit reasons */
->> +#define KVM_TRACE_EXIT_IDLE		64
->> +#define KVM_TRACE_EXIT_CACHE		65
->> +#define KVM_TRACE_EXIT_SIGNAL		66
->> +
->> +/* Tracepoints for VM exits */
->> +#define kvm_trace_symbol_exit_types			\
->> +	{ KVM_TRACE_EXIT_IDLE,		"IDLE" },	\
->> +	{ KVM_TRACE_EXIT_CACHE,		"CACHE" },	\
->> +	{ KVM_TRACE_EXIT_SIGNAL,	"Signal" }
->> +
->> +TRACE_EVENT(kvm_exit_gspr,
->> +	    TP_PROTO(struct kvm_vcpu *vcpu, unsigned int inst_word),
->> +	    TP_ARGS(vcpu, inst_word),
->> +	    TP_STRUCT__entry(
->> +			__field(unsigned int, inst_word)
->> +	    ),
->> +
->> +	    TP_fast_assign(
->> +			__entry->inst_word = inst_word;
->> +	    ),
->> +
->> +	    TP_printk("inst word: 0x%08x",
->> +		      __entry->inst_word)
->> +);
->> +
->> +
->> +DECLARE_EVENT_CLASS(kvm_exit,
->> +	    TP_PROTO(struct kvm_vcpu *vcpu, unsigned int reason),
->> +	    TP_ARGS(vcpu, reason),
->> +	    TP_STRUCT__entry(
->> +			__field(unsigned long, pc)
->> +			__field(unsigned int, reason)
->> +	    ),
->> +
->> +	    TP_fast_assign(
->> +			__entry->pc = vcpu->arch.pc;
->> +			__entry->reason = reason;
->> +	    ),
->> +
->> +	    TP_printk("[%s]PC: 0x%08lx",
->> +		      __print_symbolic(__entry->reason,
->> +				       kvm_trace_symbol_exit_types),
->> +		      __entry->pc)
->> +);
->> +
->> +DEFINE_EVENT(kvm_exit, kvm_exit_idle,
->> +	     TP_PROTO(struct kvm_vcpu *vcpu, unsigned int reason),
->> +	     TP_ARGS(vcpu, reason));
->> +
->> +DEFINE_EVENT(kvm_exit, kvm_exit_cache,
->> +	     TP_PROTO(struct kvm_vcpu *vcpu, unsigned int reason),
->> +	     TP_ARGS(vcpu, reason));
->> +
->> +DEFINE_EVENT(kvm_exit, kvm_exit,
->> +	     TP_PROTO(struct kvm_vcpu *vcpu, unsigned int reason),
->> +	     TP_ARGS(vcpu, reason));
->> +
->> +#define KVM_TRACE_AUX_RESTORE		0
->> +#define KVM_TRACE_AUX_SAVE		1
->> +#define KVM_TRACE_AUX_ENABLE		2
->> +#define KVM_TRACE_AUX_DISABLE		3
->> +#define KVM_TRACE_AUX_DISCARD		4
->> +
->> +#define KVM_TRACE_AUX_FPU		1
->> +
->> +#define kvm_trace_symbol_aux_op				\
->> +	{ KVM_TRACE_AUX_RESTORE,	"restore" },	\
->> +	{ KVM_TRACE_AUX_SAVE,		"save" },	\
->> +	{ KVM_TRACE_AUX_ENABLE,		"enable" },	\
->> +	{ KVM_TRACE_AUX_DISABLE,	"disable" },	\
->> +	{ KVM_TRACE_AUX_DISCARD,	"discard" }
->> +
->> +#define kvm_trace_symbol_aux_state			\
->> +	{ KVM_TRACE_AUX_FPU,     "FPU" }
->> +
->> +TRACE_EVENT(kvm_aux,
->> +	    TP_PROTO(struct kvm_vcpu *vcpu, unsigned int op,
->> +		     unsigned int state),
->> +	    TP_ARGS(vcpu, op, state),
->> +	    TP_STRUCT__entry(
->> +			__field(unsigned long, pc)
->> +			__field(u8, op)
->> +			__field(u8, state)
->> +	    ),
->> +
->> +	    TP_fast_assign(
->> +			__entry->pc = vcpu->arch.pc;
->> +			__entry->op = op;
->> +			__entry->state = state;
->> +	    ),
->> +
->> +	    TP_printk("%s %s PC: 0x%08lx",
->> +		      __print_symbolic(__entry->op,
->> +				       kvm_trace_symbol_aux_op),
->> +		      __print_symbolic(__entry->state,
->> +				       kvm_trace_symbol_aux_state),
->> +		      __entry->pc)
->> +);
->> +
->> +TRACE_EVENT(kvm_vpid_change,
->> +	    TP_PROTO(struct kvm_vcpu *vcpu, unsigned long vpid),
->> +	    TP_ARGS(vcpu, vpid),
->> +	    TP_STRUCT__entry(
->> +			__field(unsigned long, vpid)
->> +	    ),
->> +
->> +	    TP_fast_assign(
->> +			__entry->vpid = vpid;
->> +	    ),
->> +
->> +	    TP_printk("vpid: 0x%08lx",
->> +		      __entry->vpid)
->> +);
->> +
->> +#endif /* _TRACE_LOONGARCH64_KVM_H */
->> +
->> +#undef TRACE_INCLUDE_PATH
->> +#define TRACE_INCLUDE_PATH ../../arch/loongarch/kvm
->> +#undef TRACE_INCLUDE_FILE
->> +#define TRACE_INCLUDE_FILE trace
->> +
->> +/* This part must be outside protection */
->> +#include <trace/define_trace.h>
-
