@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5FB77234B5
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 03:46:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 032157234B8
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 03:46:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233903AbjFFBqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 21:46:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34302 "EHLO
+        id S233924AbjFFBqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 21:46:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231936AbjFFBqk (ORCPT
+        with ESMTP id S233923AbjFFBqv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 21:46:40 -0400
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 103ED122
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 18:46:34 -0700 (PDT)
-Received: by mail-oi1-x233.google.com with SMTP id 5614622812f47-38e04d1b2b4so4664485b6e.3
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 18:46:34 -0700 (PDT)
+        Mon, 5 Jun 2023 21:46:51 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEA9111A
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 18:46:43 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-565a6837a0bso60425417b3.3
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 18:46:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686015994; x=1688607994;
+        d=linaro.org; s=google; t=1686016003; x=1688608003;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=NHJPyi1JsC3Vo/PaVy4j4tciyUcnxXuwfsOVLcp8A6g=;
-        b=MCF+WWzjbXnKWEbD3Gdeq3VUle8nAvPahskZZWAl8ZfVixvSWyrcumuf3y3Ddm86w0
-         4NsZOhGrKX3CzLHFnw1DaMoZWImrliLTQUin1ntadzOWOSbHeqS0bx95oybgUtXW5pC+
-         EBBb2aOomr1YtT6ye/C8NCLeEqRizutEf3GnGSUvs9+44mtsEgZ7WbXZZEBUd0Nla9Xj
-         qY+hMWqicZgQxM7v8lxG94XQRDTxxBSCSE817GrEt0Oqdqyx3kdMszcn9qaqTp9yFgRg
-         ir1/bce4mHWA/+P2AVKC6ihpAMAOle0iXmid1moT82lVc8ujx+zuiRvMLfkmInq3EmGX
-         C/bw==
+        bh=hEUFNMzfqFzxFoJd7U1v/KQDElpKa5YtXy/vXslzPbA=;
+        b=LA9N6eC3cyCwTKRQ4W5MpfBUJWmmUbHbV+FJ03f8x/kD7xCpL9FrNObUCWAOHz0bIP
+         hg3+oDXGhm2PSAdyTZLnE4OalEdP94UHCw3+9v/6mI5ZJd6gCIFbuju0hUisUKKQGIZp
+         Pfm/MYWXvbmNQVEb+6yj9DBAKzpaNzrIul++AW9r3l60OYl80UttFvJrHTLz2n2RHnZj
+         a8DruiAPI5/ehkUzO1EDjl8DMkSVtJFUrOMRPsSXcCNymW6i1HWYV3cG8L8N22mmp92m
+         t/VbIvBeyojx5/Q7/IWIBvCu2XXGo7cmldR/YSFUNoFxfQ7528CYGxoWHXN1Feh6vylu
+         4FiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686015994; x=1688607994;
+        d=1e100.net; s=20221208; t=1686016003; x=1688608003;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=NHJPyi1JsC3Vo/PaVy4j4tciyUcnxXuwfsOVLcp8A6g=;
-        b=aN+xAGLEjr4Ysn9ngSuyxBLqnVUCEmSdU0iC9+Y1Xz6UBYI42Bs7hFWK915jDVLHYf
-         BycD+xgrbWoWpMjOmyXyMzlllbg8epQ+yOngz9B213oAaBaCDVc+6ZvVa6eyB9c/Glor
-         5tIarqH2366O0sRWYRWMFpe3GMv3hG0ASc324mwZ5/a1F4rMfOlq8O40+LsD0GGIed7/
-         tqWbOClrmRGoXqqaANKifym/jEC/6zweGLGSrOjlsF0XhGkCxA16NRuFbeFBBkCOlZIS
-         7j+VC+t3VhTTQOKzxkNBUmIiLaKu+Pq4PfITmLN3a0r3N+A1JkGvgu87VCL+PlSm51wO
-         Tong==
-X-Gm-Message-State: AC+VfDyTv+OswnJJPISfW3qBEDWH7uNqF3EiWINvUg/aUkfOWvW1wDEZ
-        myycwKsRFIgTTplYEJiMG5YhDg==
-X-Google-Smtp-Source: ACHHUZ7EnswLP2pN8wrYN5EjlP/TUpfrUKh/Oix7tgD+S1AK506T/27gWAsQb8em5veHLZXvIGpTCQ==
-X-Received: by 2002:a54:4185:0:b0:39a:b347:e603 with SMTP id 5-20020a544185000000b0039ab347e603mr431626oiy.55.1686015993899;
-        Mon, 05 Jun 2023 18:46:33 -0700 (PDT)
+        bh=hEUFNMzfqFzxFoJd7U1v/KQDElpKa5YtXy/vXslzPbA=;
+        b=ZxmX3TquqDJb9Lyxc2Lviyo/Q6mbTfZeUqfXKfM76HzpESL2bNLCOmBcV4qob5KHP1
+         plSlvNmZsW1UJMIcGkOW67W8PKdZwpWqSiH7Sgm9J9MSgtPEWmTwZsZmCQBiEuPnnxEi
+         cmhnQrhw9ZbkzmmPiks0cWPTiKapGG+XizquylE/J4l6933lbdlcpbnxHml9nFurG4BK
+         GFfiVkxEhpJqvyo5lGAuc+XEee+vYxO4ryST6GQa2maSQT7laTvmJRKduB0jfJNsaAWA
+         rx5OE22J6KKSCIooEcAPVHzvhIOkg0S35ksQpiSKyfk7giu5iVMgC1b9j8Piyc4+rX/x
+         2dsQ==
+X-Gm-Message-State: AC+VfDxvm//89ZzdE/Yb0sxMB6AY7kvOYLnZGY7zy+dBmIHBhsaC/g3d
+        hKUs+nNagH6M0ISLo2BaYTjiOQ==
+X-Google-Smtp-Source: ACHHUZ7maH3siosah4nPbJbjCHedUNuOhM+xAOF1/WJ25pQnl9KDQ8bh56nVXlW/wMvVZL77G0B1fQ==
+X-Received: by 2002:a81:4e58:0:b0:568:fdc2:5af7 with SMTP id c85-20020a814e58000000b00568fdc25af7mr288740ywb.50.1686016002707;
+        Mon, 05 Jun 2023 18:46:42 -0700 (PDT)
 Received: from leoy-huanghe.lan ([240e:389:8603:ad00:6600:a29f:6ab:1788])
-        by smtp.gmail.com with ESMTPSA id s10-20020a170902a50a00b001a64851087bsm7197805plq.272.2023.06.05.18.46.25
+        by smtp.gmail.com with ESMTPSA id s10-20020a170902a50a00b001a64851087bsm7197805plq.272.2023.06.05.18.46.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jun 2023 18:46:33 -0700 (PDT)
+        Mon, 05 Jun 2023 18:46:42 -0700 (PDT)
 From:   Leo Yan <leo.yan@linaro.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         John Garry <john.g.garry@oracle.com>,
@@ -79,9 +79,9 @@ To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         linux-perf-users@vger.kernel.org, linux-csky@vger.kernel.org,
         linux-riscv@lists.infradead.org
 Cc:     Leo Yan <leo.yan@linaro.org>
-Subject: [PATCH v2 1/6] perf parse-regs: Refactor arch register parsing functions
-Date:   Tue,  6 Jun 2023 09:45:54 +0800
-Message-Id: <20230606014559.21783-2-leo.yan@linaro.org>
+Subject: [PATCH v2 2/6] perf parse-regs: Introduce functions perf_arch_reg_{ip|sp}()
+Date:   Tue,  6 Jun 2023 09:45:55 +0800
+Message-Id: <20230606014559.21783-3-leo.yan@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230606014559.21783-1-leo.yan@linaro.org>
 References: <20230606014559.21783-1-leo.yan@linaro.org>
@@ -97,1657 +97,371 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Every architecture has a specific register parsing function for
-returning register name based on register index, to support cross
-analysis (e.g. we use perf x86 binary to parse Arm64's perf data), we
-build all these register parsing functions into the tool, this is why
-we place all related functions into util/perf_regs.c.
+The current code uses macros PERF_REG_IP and PERF_REG_SP for parsing
+registers and we build perf with these macros statically, which means it
+only can correctly analyze CPU registers for the native architecture and
+fails to support cross analysis (e.g. we build perf on x86 and cannot
+analyze Arm64's registers).
 
-Unfortunately, since util/perf_regs.c needs to include every arch's
-perf_regs.h, this easily introduces duplicated definitions coming from
-multiple headers, finally it's fragile for building and difficult for
-maintenance.
+We need to generalize util/perf_regs.c for support multi architectures,
+as a first step, this commit introduces new functions perf_arch_reg_ip()
+and perf_arch_reg_sp(), these two functions dynamically return IP and SP
+register index respectively according to the parameter "arch".
 
-We cannot simply move these register parsing functions into the
-corresponding 'arch' folder, the folder is only conditionally built
-based on the target architecture.
-
-Therefore, this commit creates a new folder util/perf-regs-arch/ and
-uses a dedicated source file to keep every architecture's register
-parsing function to avoid definition conflicts.
-
-This is only a refactoring, no functionality change is expected.
+Every architecture has its own functions (like __perf_reg_ip_arm64 and
+__perf_reg_sp_arm64), these architecture specific functions are defined
+in each arch source file under folder util/perf-regs-arch; at the end
+all of them are built into the tool for cross analysis.
 
 Signed-off-by: Leo Yan <leo.yan@linaro.org>
 ---
- tools/perf/util/Build                         |   1 +
- tools/perf/util/perf-regs-arch/Build          |   9 +
- .../util/perf-regs-arch/perf_regs_aarch64.c   |  86 +++
- .../perf/util/perf-regs-arch/perf_regs_arm.c  |  50 ++
- .../perf/util/perf-regs-arch/perf_regs_csky.c |  90 +++
- .../util/perf-regs-arch/perf_regs_loongarch.c |  81 ++
- .../perf/util/perf-regs-arch/perf_regs_mips.c |  77 ++
- .../util/perf-regs-arch/perf_regs_powerpc.c   | 135 ++++
- .../util/perf-regs-arch/perf_regs_riscv.c     |  82 ++
- .../perf/util/perf-regs-arch/perf_regs_s390.c |  86 +++
- .../perf/util/perf-regs-arch/perf_regs_x86.c  |  88 +++
- tools/perf/util/perf_regs.c                   | 716 ------------------
- tools/perf/util/perf_regs.h                   |   9 +
- 13 files changed, 794 insertions(+), 716 deletions(-)
- create mode 100644 tools/perf/util/perf-regs-arch/Build
- create mode 100644 tools/perf/util/perf-regs-arch/perf_regs_aarch64.c
- create mode 100644 tools/perf/util/perf-regs-arch/perf_regs_arm.c
- create mode 100644 tools/perf/util/perf-regs-arch/perf_regs_csky.c
- create mode 100644 tools/perf/util/perf-regs-arch/perf_regs_loongarch.c
- create mode 100644 tools/perf/util/perf-regs-arch/perf_regs_mips.c
- create mode 100644 tools/perf/util/perf-regs-arch/perf_regs_powerpc.c
- create mode 100644 tools/perf/util/perf-regs-arch/perf_regs_riscv.c
- create mode 100644 tools/perf/util/perf-regs-arch/perf_regs_s390.c
- create mode 100644 tools/perf/util/perf-regs-arch/perf_regs_x86.c
+ tools/perf/util/evsel.c                       |  6 ++-
+ .../util/perf-regs-arch/perf_regs_aarch64.c   | 10 ++++
+ .../perf/util/perf-regs-arch/perf_regs_arm.c  | 10 ++++
+ .../perf/util/perf-regs-arch/perf_regs_csky.c | 10 ++++
+ .../util/perf-regs-arch/perf_regs_loongarch.c | 10 ++++
+ .../perf/util/perf-regs-arch/perf_regs_mips.c | 10 ++++
+ .../util/perf-regs-arch/perf_regs_powerpc.c   | 10 ++++
+ .../util/perf-regs-arch/perf_regs_riscv.c     | 10 ++++
+ .../perf/util/perf-regs-arch/perf_regs_s390.c | 10 ++++
+ .../perf/util/perf-regs-arch/perf_regs_x86.c  | 10 ++++
+ tools/perf/util/perf_regs.c                   | 52 +++++++++++++++++++
+ tools/perf/util/perf_regs.h                   | 36 ++++++++++++-
+ 12 files changed, 180 insertions(+), 4 deletions(-)
 
-diff --git a/tools/perf/util/Build b/tools/perf/util/Build
-index 0d68be51a739..4e385f7a1196 100644
---- a/tools/perf/util/Build
-+++ b/tools/perf/util/Build
-@@ -26,6 +26,7 @@ perf-y += parse-events.o
- perf-y += print-events.o
- perf-y += tracepoint.o
- perf-y += perf_regs.o
-+perf-y += perf-regs-arch/
- perf-y += path.o
- perf-y += print_binary.o
- perf-y += rlimit.o
-diff --git a/tools/perf/util/perf-regs-arch/Build b/tools/perf/util/perf-regs-arch/Build
-new file mode 100644
-index 000000000000..d9d596d330a7
---- /dev/null
-+++ b/tools/perf/util/perf-regs-arch/Build
-@@ -0,0 +1,9 @@
-+perf-y += perf_regs_aarch64.o
-+perf-y += perf_regs_arm.o
-+perf-y += perf_regs_csky.o
-+perf-y += perf_regs_loongarch.o
-+perf-y += perf_regs_mips.o
-+perf-y += perf_regs_powerpc.o
-+perf-y += perf_regs_riscv.o
-+perf-y += perf_regs_s390.o
-+perf-y += perf_regs_x86.o
+diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
+index 46da3f0bb47e..dfba2bc79cfc 100644
+--- a/tools/perf/util/evsel.c
++++ b/tools/perf/util/evsel.c
+@@ -844,6 +844,7 @@ static void __evsel__config_callchain(struct evsel *evsel, struct record_opts *o
+ {
+ 	bool function = evsel__is_function_event(evsel);
+ 	struct perf_event_attr *attr = &evsel->core.attr;
++	const char *arch = perf_env__arch(evsel__env(evsel));
+ 
+ 	evsel__set_sample_bit(evsel, CALLCHAIN);
+ 
+@@ -876,8 +877,9 @@ static void __evsel__config_callchain(struct evsel *evsel, struct record_opts *o
+ 		if (!function) {
+ 			evsel__set_sample_bit(evsel, REGS_USER);
+ 			evsel__set_sample_bit(evsel, STACK_USER);
+-			if (opts->sample_user_regs && DWARF_MINIMAL_REGS != PERF_REGS_MASK) {
+-				attr->sample_regs_user |= DWARF_MINIMAL_REGS;
++			if (opts->sample_user_regs &&
++			    DWARF_MINIMAL_REGS(arch) != PERF_REGS_MASK) {
++				attr->sample_regs_user |= DWARF_MINIMAL_REGS(arch);
+ 				pr_warning("WARNING: The use of --call-graph=dwarf may require all the user registers, "
+ 					   "specifying a subset with --user-regs may render DWARF unwinding unreliable, "
+ 					   "so the minimal registers set (IP, SP) is explicitly forced.\n");
 diff --git a/tools/perf/util/perf-regs-arch/perf_regs_aarch64.c b/tools/perf/util/perf-regs-arch/perf_regs_aarch64.c
-new file mode 100644
-index 000000000000..c02c045af46e
---- /dev/null
+index c02c045af46e..696566c54768 100644
+--- a/tools/perf/util/perf-regs-arch/perf_regs_aarch64.c
 +++ b/tools/perf/util/perf-regs-arch/perf_regs_aarch64.c
-@@ -0,0 +1,86 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#ifdef HAVE_PERF_REGS_SUPPORT
-+
-+#include "../perf_regs.h"
-+#include "../../../arch/arm64/include/uapi/asm/perf_regs.h"
-+
-+const char *__perf_reg_name_arm64(int id)
+@@ -83,4 +83,14 @@ const char *__perf_reg_name_arm64(int id)
+ 	return NULL;
+ }
+ 
++uint64_t __perf_reg_ip_arm64(void)
 +{
-+	switch (id) {
-+	case PERF_REG_ARM64_X0:
-+		return "x0";
-+	case PERF_REG_ARM64_X1:
-+		return "x1";
-+	case PERF_REG_ARM64_X2:
-+		return "x2";
-+	case PERF_REG_ARM64_X3:
-+		return "x3";
-+	case PERF_REG_ARM64_X4:
-+		return "x4";
-+	case PERF_REG_ARM64_X5:
-+		return "x5";
-+	case PERF_REG_ARM64_X6:
-+		return "x6";
-+	case PERF_REG_ARM64_X7:
-+		return "x7";
-+	case PERF_REG_ARM64_X8:
-+		return "x8";
-+	case PERF_REG_ARM64_X9:
-+		return "x9";
-+	case PERF_REG_ARM64_X10:
-+		return "x10";
-+	case PERF_REG_ARM64_X11:
-+		return "x11";
-+	case PERF_REG_ARM64_X12:
-+		return "x12";
-+	case PERF_REG_ARM64_X13:
-+		return "x13";
-+	case PERF_REG_ARM64_X14:
-+		return "x14";
-+	case PERF_REG_ARM64_X15:
-+		return "x15";
-+	case PERF_REG_ARM64_X16:
-+		return "x16";
-+	case PERF_REG_ARM64_X17:
-+		return "x17";
-+	case PERF_REG_ARM64_X18:
-+		return "x18";
-+	case PERF_REG_ARM64_X19:
-+		return "x19";
-+	case PERF_REG_ARM64_X20:
-+		return "x20";
-+	case PERF_REG_ARM64_X21:
-+		return "x21";
-+	case PERF_REG_ARM64_X22:
-+		return "x22";
-+	case PERF_REG_ARM64_X23:
-+		return "x23";
-+	case PERF_REG_ARM64_X24:
-+		return "x24";
-+	case PERF_REG_ARM64_X25:
-+		return "x25";
-+	case PERF_REG_ARM64_X26:
-+		return "x26";
-+	case PERF_REG_ARM64_X27:
-+		return "x27";
-+	case PERF_REG_ARM64_X28:
-+		return "x28";
-+	case PERF_REG_ARM64_X29:
-+		return "x29";
-+	case PERF_REG_ARM64_SP:
-+		return "sp";
-+	case PERF_REG_ARM64_LR:
-+		return "lr";
-+	case PERF_REG_ARM64_PC:
-+		return "pc";
-+	case PERF_REG_ARM64_VG:
-+		return "vg";
-+	default:
-+		return NULL;
-+	}
-+
-+	return NULL;
++	return PERF_REG_ARM64_PC;
 +}
 +
-+#endif
++uint64_t __perf_reg_sp_arm64(void)
++{
++	return PERF_REG_ARM64_SP;
++}
++
+ #endif
 diff --git a/tools/perf/util/perf-regs-arch/perf_regs_arm.c b/tools/perf/util/perf-regs-arch/perf_regs_arm.c
-new file mode 100644
-index 000000000000..e8b0fcd72f34
---- /dev/null
+index e8b0fcd72f34..700fd07cd2aa 100644
+--- a/tools/perf/util/perf-regs-arch/perf_regs_arm.c
 +++ b/tools/perf/util/perf-regs-arch/perf_regs_arm.c
-@@ -0,0 +1,50 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#ifdef HAVE_PERF_REGS_SUPPORT
-+
-+#include "../perf_regs.h"
-+#include "../../../arch/arm/include/uapi/asm/perf_regs.h"
-+
-+const char *__perf_reg_name_arm(int id)
+@@ -47,4 +47,14 @@ const char *__perf_reg_name_arm(int id)
+ 	return NULL;
+ }
+ 
++uint64_t __perf_reg_ip_arm(void)
 +{
-+	switch (id) {
-+	case PERF_REG_ARM_R0:
-+		return "r0";
-+	case PERF_REG_ARM_R1:
-+		return "r1";
-+	case PERF_REG_ARM_R2:
-+		return "r2";
-+	case PERF_REG_ARM_R3:
-+		return "r3";
-+	case PERF_REG_ARM_R4:
-+		return "r4";
-+	case PERF_REG_ARM_R5:
-+		return "r5";
-+	case PERF_REG_ARM_R6:
-+		return "r6";
-+	case PERF_REG_ARM_R7:
-+		return "r7";
-+	case PERF_REG_ARM_R8:
-+		return "r8";
-+	case PERF_REG_ARM_R9:
-+		return "r9";
-+	case PERF_REG_ARM_R10:
-+		return "r10";
-+	case PERF_REG_ARM_FP:
-+		return "fp";
-+	case PERF_REG_ARM_IP:
-+		return "ip";
-+	case PERF_REG_ARM_SP:
-+		return "sp";
-+	case PERF_REG_ARM_LR:
-+		return "lr";
-+	case PERF_REG_ARM_PC:
-+		return "pc";
-+	default:
-+		return NULL;
-+	}
-+
-+	return NULL;
++	return PERF_REG_ARM_PC;
 +}
 +
-+#endif
++uint64_t __perf_reg_sp_arm(void)
++{
++	return PERF_REG_ARM_SP;
++}
++
+ #endif
 diff --git a/tools/perf/util/perf-regs-arch/perf_regs_csky.c b/tools/perf/util/perf-regs-arch/perf_regs_csky.c
-new file mode 100644
-index 000000000000..e343b1cef7ba
---- /dev/null
+index e343b1cef7ba..a2841094e096 100644
+--- a/tools/perf/util/perf-regs-arch/perf_regs_csky.c
 +++ b/tools/perf/util/perf-regs-arch/perf_regs_csky.c
-@@ -0,0 +1,90 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#ifdef HAVE_PERF_REGS_SUPPORT
-+
-+#include "../perf_regs.h"
-+#include "../../arch/csky/include/uapi/asm/perf_regs.h"
-+
-+const char *__perf_reg_name_csky(int id)
+@@ -87,4 +87,14 @@ const char *__perf_reg_name_csky(int id)
+ 	return NULL;
+ }
+ 
++uint64_t __perf_reg_ip_csky(void)
 +{
-+	switch (id) {
-+	case PERF_REG_CSKY_A0:
-+		return "a0";
-+	case PERF_REG_CSKY_A1:
-+		return "a1";
-+	case PERF_REG_CSKY_A2:
-+		return "a2";
-+	case PERF_REG_CSKY_A3:
-+		return "a3";
-+	case PERF_REG_CSKY_REGS0:
-+		return "regs0";
-+	case PERF_REG_CSKY_REGS1:
-+		return "regs1";
-+	case PERF_REG_CSKY_REGS2:
-+		return "regs2";
-+	case PERF_REG_CSKY_REGS3:
-+		return "regs3";
-+	case PERF_REG_CSKY_REGS4:
-+		return "regs4";
-+	case PERF_REG_CSKY_REGS5:
-+		return "regs5";
-+	case PERF_REG_CSKY_REGS6:
-+		return "regs6";
-+	case PERF_REG_CSKY_REGS7:
-+		return "regs7";
-+	case PERF_REG_CSKY_REGS8:
-+		return "regs8";
-+	case PERF_REG_CSKY_REGS9:
-+		return "regs9";
-+	case PERF_REG_CSKY_SP:
-+		return "sp";
-+	case PERF_REG_CSKY_LR:
-+		return "lr";
-+	case PERF_REG_CSKY_PC:
-+		return "pc";
-+#if defined(__CSKYABIV2__)
-+	case PERF_REG_CSKY_EXREGS0:
-+		return "exregs0";
-+	case PERF_REG_CSKY_EXREGS1:
-+		return "exregs1";
-+	case PERF_REG_CSKY_EXREGS2:
-+		return "exregs2";
-+	case PERF_REG_CSKY_EXREGS3:
-+		return "exregs3";
-+	case PERF_REG_CSKY_EXREGS4:
-+		return "exregs4";
-+	case PERF_REG_CSKY_EXREGS5:
-+		return "exregs5";
-+	case PERF_REG_CSKY_EXREGS6:
-+		return "exregs6";
-+	case PERF_REG_CSKY_EXREGS7:
-+		return "exregs7";
-+	case PERF_REG_CSKY_EXREGS8:
-+		return "exregs8";
-+	case PERF_REG_CSKY_EXREGS9:
-+		return "exregs9";
-+	case PERF_REG_CSKY_EXREGS10:
-+		return "exregs10";
-+	case PERF_REG_CSKY_EXREGS11:
-+		return "exregs11";
-+	case PERF_REG_CSKY_EXREGS12:
-+		return "exregs12";
-+	case PERF_REG_CSKY_EXREGS13:
-+		return "exregs13";
-+	case PERF_REG_CSKY_EXREGS14:
-+		return "exregs14";
-+	case PERF_REG_CSKY_TLS:
-+		return "tls";
-+	case PERF_REG_CSKY_HI:
-+		return "hi";
-+	case PERF_REG_CSKY_LO:
-+		return "lo";
-+#endif
-+	default:
-+		return NULL;
-+	}
-+
-+	return NULL;
++	return PERF_REG_CSKY_PC;
 +}
 +
-+#endif
++uint64_t __perf_reg_sp_csky(void)
++{
++	return PERF_REG_CSKY_SP;
++}
++
+ #endif
 diff --git a/tools/perf/util/perf-regs-arch/perf_regs_loongarch.c b/tools/perf/util/perf-regs-arch/perf_regs_loongarch.c
-new file mode 100644
-index 000000000000..6f937464067b
---- /dev/null
+index 6f937464067b..a9ba0f934123 100644
+--- a/tools/perf/util/perf-regs-arch/perf_regs_loongarch.c
 +++ b/tools/perf/util/perf-regs-arch/perf_regs_loongarch.c
-@@ -0,0 +1,81 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#ifdef HAVE_PERF_REGS_SUPPORT
-+
-+#include "../perf_regs.h"
-+#include "../../../arch/loongarch/include/uapi/asm/perf_regs.h"
-+
-+const char *__perf_reg_name_loongarch(int id)
+@@ -78,4 +78,14 @@ const char *__perf_reg_name_loongarch(int id)
+ 	return NULL;
+ }
+ 
++uint64_t __perf_reg_ip_loongarch(void)
 +{
-+	switch (id) {
-+	case PERF_REG_LOONGARCH_PC:
-+		return "PC";
-+	case PERF_REG_LOONGARCH_R1:
-+		return "%r1";
-+	case PERF_REG_LOONGARCH_R2:
-+		return "%r2";
-+	case PERF_REG_LOONGARCH_R3:
-+		return "%r3";
-+	case PERF_REG_LOONGARCH_R4:
-+		return "%r4";
-+	case PERF_REG_LOONGARCH_R5:
-+		return "%r5";
-+	case PERF_REG_LOONGARCH_R6:
-+		return "%r6";
-+	case PERF_REG_LOONGARCH_R7:
-+		return "%r7";
-+	case PERF_REG_LOONGARCH_R8:
-+		return "%r8";
-+	case PERF_REG_LOONGARCH_R9:
-+		return "%r9";
-+	case PERF_REG_LOONGARCH_R10:
-+		return "%r10";
-+	case PERF_REG_LOONGARCH_R11:
-+		return "%r11";
-+	case PERF_REG_LOONGARCH_R12:
-+		return "%r12";
-+	case PERF_REG_LOONGARCH_R13:
-+		return "%r13";
-+	case PERF_REG_LOONGARCH_R14:
-+		return "%r14";
-+	case PERF_REG_LOONGARCH_R15:
-+		return "%r15";
-+	case PERF_REG_LOONGARCH_R16:
-+		return "%r16";
-+	case PERF_REG_LOONGARCH_R17:
-+		return "%r17";
-+	case PERF_REG_LOONGARCH_R18:
-+		return "%r18";
-+	case PERF_REG_LOONGARCH_R19:
-+		return "%r19";
-+	case PERF_REG_LOONGARCH_R20:
-+		return "%r20";
-+	case PERF_REG_LOONGARCH_R21:
-+		return "%r21";
-+	case PERF_REG_LOONGARCH_R22:
-+		return "%r22";
-+	case PERF_REG_LOONGARCH_R23:
-+		return "%r23";
-+	case PERF_REG_LOONGARCH_R24:
-+		return "%r24";
-+	case PERF_REG_LOONGARCH_R25:
-+		return "%r25";
-+	case PERF_REG_LOONGARCH_R26:
-+		return "%r26";
-+	case PERF_REG_LOONGARCH_R27:
-+		return "%r27";
-+	case PERF_REG_LOONGARCH_R28:
-+		return "%r28";
-+	case PERF_REG_LOONGARCH_R29:
-+		return "%r29";
-+	case PERF_REG_LOONGARCH_R30:
-+		return "%r30";
-+	case PERF_REG_LOONGARCH_R31:
-+		return "%r31";
-+	default:
-+		break;
-+	}
-+	return NULL;
++	return PERF_REG_LOONGARCH_PC;
 +}
 +
-+#endif
++uint64_t __perf_reg_sp_loongarch(void)
++{
++	return PERF_REG_LOONGARCH_R3;
++}
++
+ #endif
 diff --git a/tools/perf/util/perf-regs-arch/perf_regs_mips.c b/tools/perf/util/perf-regs-arch/perf_regs_mips.c
-new file mode 100644
-index 000000000000..f48fbca2f947
---- /dev/null
+index f48fbca2f947..5a45830cfbf5 100644
+--- a/tools/perf/util/perf-regs-arch/perf_regs_mips.c
 +++ b/tools/perf/util/perf-regs-arch/perf_regs_mips.c
-@@ -0,0 +1,77 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#ifdef HAVE_PERF_REGS_SUPPORT
-+
-+#include "../perf_regs.h"
-+#include "../../../arch/mips/include/uapi/asm/perf_regs.h"
-+
-+const char *__perf_reg_name_mips(int id)
+@@ -74,4 +74,14 @@ const char *__perf_reg_name_mips(int id)
+ 	return NULL;
+ }
+ 
++uint64_t __perf_reg_ip_mips(void)
 +{
-+	switch (id) {
-+	case PERF_REG_MIPS_PC:
-+		return "PC";
-+	case PERF_REG_MIPS_R1:
-+		return "$1";
-+	case PERF_REG_MIPS_R2:
-+		return "$2";
-+	case PERF_REG_MIPS_R3:
-+		return "$3";
-+	case PERF_REG_MIPS_R4:
-+		return "$4";
-+	case PERF_REG_MIPS_R5:
-+		return "$5";
-+	case PERF_REG_MIPS_R6:
-+		return "$6";
-+	case PERF_REG_MIPS_R7:
-+		return "$7";
-+	case PERF_REG_MIPS_R8:
-+		return "$8";
-+	case PERF_REG_MIPS_R9:
-+		return "$9";
-+	case PERF_REG_MIPS_R10:
-+		return "$10";
-+	case PERF_REG_MIPS_R11:
-+		return "$11";
-+	case PERF_REG_MIPS_R12:
-+		return "$12";
-+	case PERF_REG_MIPS_R13:
-+		return "$13";
-+	case PERF_REG_MIPS_R14:
-+		return "$14";
-+	case PERF_REG_MIPS_R15:
-+		return "$15";
-+	case PERF_REG_MIPS_R16:
-+		return "$16";
-+	case PERF_REG_MIPS_R17:
-+		return "$17";
-+	case PERF_REG_MIPS_R18:
-+		return "$18";
-+	case PERF_REG_MIPS_R19:
-+		return "$19";
-+	case PERF_REG_MIPS_R20:
-+		return "$20";
-+	case PERF_REG_MIPS_R21:
-+		return "$21";
-+	case PERF_REG_MIPS_R22:
-+		return "$22";
-+	case PERF_REG_MIPS_R23:
-+		return "$23";
-+	case PERF_REG_MIPS_R24:
-+		return "$24";
-+	case PERF_REG_MIPS_R25:
-+		return "$25";
-+	case PERF_REG_MIPS_R28:
-+		return "$28";
-+	case PERF_REG_MIPS_R29:
-+		return "$29";
-+	case PERF_REG_MIPS_R30:
-+		return "$30";
-+	case PERF_REG_MIPS_R31:
-+		return "$31";
-+	default:
-+		break;
-+	}
-+	return NULL;
++	return PERF_REG_MIPS_PC;
 +}
 +
-+#endif
++uint64_t __perf_reg_sp_mips(void)
++{
++	return PERF_REG_MIPS_R29;
++}
++
+ #endif
 diff --git a/tools/perf/util/perf-regs-arch/perf_regs_powerpc.c b/tools/perf/util/perf-regs-arch/perf_regs_powerpc.c
-new file mode 100644
-index 000000000000..dda1b4b169fc
---- /dev/null
+index dda1b4b169fc..1f0d682db74a 100644
+--- a/tools/perf/util/perf-regs-arch/perf_regs_powerpc.c
 +++ b/tools/perf/util/perf-regs-arch/perf_regs_powerpc.c
-@@ -0,0 +1,135 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#ifdef HAVE_PERF_REGS_SUPPORT
-+
-+#include "../perf_regs.h"
-+#include "../../../arch/powerpc/include/uapi/asm/perf_regs.h"
-+
-+const char *__perf_reg_name_powerpc(int id)
+@@ -132,4 +132,14 @@ const char *__perf_reg_name_powerpc(int id)
+ 	return NULL;
+ }
+ 
++uint64_t __perf_reg_ip_powerpc(void)
 +{
-+	switch (id) {
-+	case PERF_REG_POWERPC_R0:
-+		return "r0";
-+	case PERF_REG_POWERPC_R1:
-+		return "r1";
-+	case PERF_REG_POWERPC_R2:
-+		return "r2";
-+	case PERF_REG_POWERPC_R3:
-+		return "r3";
-+	case PERF_REG_POWERPC_R4:
-+		return "r4";
-+	case PERF_REG_POWERPC_R5:
-+		return "r5";
-+	case PERF_REG_POWERPC_R6:
-+		return "r6";
-+	case PERF_REG_POWERPC_R7:
-+		return "r7";
-+	case PERF_REG_POWERPC_R8:
-+		return "r8";
-+	case PERF_REG_POWERPC_R9:
-+		return "r9";
-+	case PERF_REG_POWERPC_R10:
-+		return "r10";
-+	case PERF_REG_POWERPC_R11:
-+		return "r11";
-+	case PERF_REG_POWERPC_R12:
-+		return "r12";
-+	case PERF_REG_POWERPC_R13:
-+		return "r13";
-+	case PERF_REG_POWERPC_R14:
-+		return "r14";
-+	case PERF_REG_POWERPC_R15:
-+		return "r15";
-+	case PERF_REG_POWERPC_R16:
-+		return "r16";
-+	case PERF_REG_POWERPC_R17:
-+		return "r17";
-+	case PERF_REG_POWERPC_R18:
-+		return "r18";
-+	case PERF_REG_POWERPC_R19:
-+		return "r19";
-+	case PERF_REG_POWERPC_R20:
-+		return "r20";
-+	case PERF_REG_POWERPC_R21:
-+		return "r21";
-+	case PERF_REG_POWERPC_R22:
-+		return "r22";
-+	case PERF_REG_POWERPC_R23:
-+		return "r23";
-+	case PERF_REG_POWERPC_R24:
-+		return "r24";
-+	case PERF_REG_POWERPC_R25:
-+		return "r25";
-+	case PERF_REG_POWERPC_R26:
-+		return "r26";
-+	case PERF_REG_POWERPC_R27:
-+		return "r27";
-+	case PERF_REG_POWERPC_R28:
-+		return "r28";
-+	case PERF_REG_POWERPC_R29:
-+		return "r29";
-+	case PERF_REG_POWERPC_R30:
-+		return "r30";
-+	case PERF_REG_POWERPC_R31:
-+		return "r31";
-+	case PERF_REG_POWERPC_NIP:
-+		return "nip";
-+	case PERF_REG_POWERPC_MSR:
-+		return "msr";
-+	case PERF_REG_POWERPC_ORIG_R3:
-+		return "orig_r3";
-+	case PERF_REG_POWERPC_CTR:
-+		return "ctr";
-+	case PERF_REG_POWERPC_LINK:
-+		return "link";
-+	case PERF_REG_POWERPC_XER:
-+		return "xer";
-+	case PERF_REG_POWERPC_CCR:
-+		return "ccr";
-+	case PERF_REG_POWERPC_SOFTE:
-+		return "softe";
-+	case PERF_REG_POWERPC_TRAP:
-+		return "trap";
-+	case PERF_REG_POWERPC_DAR:
-+		return "dar";
-+	case PERF_REG_POWERPC_DSISR:
-+		return "dsisr";
-+	case PERF_REG_POWERPC_SIER:
-+		return "sier";
-+	case PERF_REG_POWERPC_MMCRA:
-+		return "mmcra";
-+	case PERF_REG_POWERPC_MMCR0:
-+		return "mmcr0";
-+	case PERF_REG_POWERPC_MMCR1:
-+		return "mmcr1";
-+	case PERF_REG_POWERPC_MMCR2:
-+		return "mmcr2";
-+	case PERF_REG_POWERPC_MMCR3:
-+		return "mmcr3";
-+	case PERF_REG_POWERPC_SIER2:
-+		return "sier2";
-+	case PERF_REG_POWERPC_SIER3:
-+		return "sier3";
-+	case PERF_REG_POWERPC_PMC1:
-+		return "pmc1";
-+	case PERF_REG_POWERPC_PMC2:
-+		return "pmc2";
-+	case PERF_REG_POWERPC_PMC3:
-+		return "pmc3";
-+	case PERF_REG_POWERPC_PMC4:
-+		return "pmc4";
-+	case PERF_REG_POWERPC_PMC5:
-+		return "pmc5";
-+	case PERF_REG_POWERPC_PMC6:
-+		return "pmc6";
-+	case PERF_REG_POWERPC_SDAR:
-+		return "sdar";
-+	case PERF_REG_POWERPC_SIAR:
-+		return "siar";
-+	default:
-+		break;
-+	}
-+	return NULL;
++	return PERF_REG_POWERPC_NIP;
 +}
 +
-+#endif
++uint64_t __perf_reg_sp_powerpc(void)
++{
++	return PERF_REG_POWERPC_R1;
++}
++
+ #endif
 diff --git a/tools/perf/util/perf-regs-arch/perf_regs_riscv.c b/tools/perf/util/perf-regs-arch/perf_regs_riscv.c
-new file mode 100644
-index 000000000000..c504b047cac2
---- /dev/null
+index c504b047cac2..e432630be4c5 100644
+--- a/tools/perf/util/perf-regs-arch/perf_regs_riscv.c
 +++ b/tools/perf/util/perf-regs-arch/perf_regs_riscv.c
-@@ -0,0 +1,82 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#ifdef HAVE_PERF_REGS_SUPPORT
-+
-+#include "../perf_regs.h"
-+#include "../../../arch/riscv/include/uapi/asm/perf_regs.h"
-+
-+const char *__perf_reg_name_riscv(int id)
+@@ -79,4 +79,14 @@ const char *__perf_reg_name_riscv(int id)
+ 	return NULL;
+ }
+ 
++uint64_t __perf_reg_ip_riscv(void)
 +{
-+	switch (id) {
-+	case PERF_REG_RISCV_PC:
-+		return "pc";
-+	case PERF_REG_RISCV_RA:
-+		return "ra";
-+	case PERF_REG_RISCV_SP:
-+		return "sp";
-+	case PERF_REG_RISCV_GP:
-+		return "gp";
-+	case PERF_REG_RISCV_TP:
-+		return "tp";
-+	case PERF_REG_RISCV_T0:
-+		return "t0";
-+	case PERF_REG_RISCV_T1:
-+		return "t1";
-+	case PERF_REG_RISCV_T2:
-+		return "t2";
-+	case PERF_REG_RISCV_S0:
-+		return "s0";
-+	case PERF_REG_RISCV_S1:
-+		return "s1";
-+	case PERF_REG_RISCV_A0:
-+		return "a0";
-+	case PERF_REG_RISCV_A1:
-+		return "a1";
-+	case PERF_REG_RISCV_A2:
-+		return "a2";
-+	case PERF_REG_RISCV_A3:
-+		return "a3";
-+	case PERF_REG_RISCV_A4:
-+		return "a4";
-+	case PERF_REG_RISCV_A5:
-+		return "a5";
-+	case PERF_REG_RISCV_A6:
-+		return "a6";
-+	case PERF_REG_RISCV_A7:
-+		return "a7";
-+	case PERF_REG_RISCV_S2:
-+		return "s2";
-+	case PERF_REG_RISCV_S3:
-+		return "s3";
-+	case PERF_REG_RISCV_S4:
-+		return "s4";
-+	case PERF_REG_RISCV_S5:
-+		return "s5";
-+	case PERF_REG_RISCV_S6:
-+		return "s6";
-+	case PERF_REG_RISCV_S7:
-+		return "s7";
-+	case PERF_REG_RISCV_S8:
-+		return "s8";
-+	case PERF_REG_RISCV_S9:
-+		return "s9";
-+	case PERF_REG_RISCV_S10:
-+		return "s10";
-+	case PERF_REG_RISCV_S11:
-+		return "s11";
-+	case PERF_REG_RISCV_T3:
-+		return "t3";
-+	case PERF_REG_RISCV_T4:
-+		return "t4";
-+	case PERF_REG_RISCV_T5:
-+		return "t5";
-+	case PERF_REG_RISCV_T6:
-+		return "t6";
-+	default:
-+		return NULL;
-+	}
-+
-+	return NULL;
++	return PERF_REG_RISCV_PC;
 +}
 +
-+#endif
++uint64_t __perf_reg_sp_riscv(void)
++{
++	return PERF_REG_RISCV_SP;
++}
++
+ #endif
 diff --git a/tools/perf/util/perf-regs-arch/perf_regs_s390.c b/tools/perf/util/perf-regs-arch/perf_regs_s390.c
-new file mode 100644
-index 000000000000..e71e2302394c
---- /dev/null
+index e71e2302394c..1c7a46db778c 100644
+--- a/tools/perf/util/perf-regs-arch/perf_regs_s390.c
 +++ b/tools/perf/util/perf-regs-arch/perf_regs_s390.c
-@@ -0,0 +1,86 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#ifdef HAVE_PERF_REGS_SUPPORT
-+
-+#include "../perf_regs.h"
-+#include "../../../arch/s390/include/uapi/asm/perf_regs.h"
-+
-+const char *__perf_reg_name_s390(int id)
+@@ -83,4 +83,14 @@ const char *__perf_reg_name_s390(int id)
+ 	return NULL;
+ }
+ 
++uint64_t __perf_reg_ip_s390(void)
 +{
-+	switch (id) {
-+	case PERF_REG_S390_R0:
-+		return "R0";
-+	case PERF_REG_S390_R1:
-+		return "R1";
-+	case PERF_REG_S390_R2:
-+		return "R2";
-+	case PERF_REG_S390_R3:
-+		return "R3";
-+	case PERF_REG_S390_R4:
-+		return "R4";
-+	case PERF_REG_S390_R5:
-+		return "R5";
-+	case PERF_REG_S390_R6:
-+		return "R6";
-+	case PERF_REG_S390_R7:
-+		return "R7";
-+	case PERF_REG_S390_R8:
-+		return "R8";
-+	case PERF_REG_S390_R9:
-+		return "R9";
-+	case PERF_REG_S390_R10:
-+		return "R10";
-+	case PERF_REG_S390_R11:
-+		return "R11";
-+	case PERF_REG_S390_R12:
-+		return "R12";
-+	case PERF_REG_S390_R13:
-+		return "R13";
-+	case PERF_REG_S390_R14:
-+		return "R14";
-+	case PERF_REG_S390_R15:
-+		return "R15";
-+	case PERF_REG_S390_FP0:
-+		return "FP0";
-+	case PERF_REG_S390_FP1:
-+		return "FP1";
-+	case PERF_REG_S390_FP2:
-+		return "FP2";
-+	case PERF_REG_S390_FP3:
-+		return "FP3";
-+	case PERF_REG_S390_FP4:
-+		return "FP4";
-+	case PERF_REG_S390_FP5:
-+		return "FP5";
-+	case PERF_REG_S390_FP6:
-+		return "FP6";
-+	case PERF_REG_S390_FP7:
-+		return "FP7";
-+	case PERF_REG_S390_FP8:
-+		return "FP8";
-+	case PERF_REG_S390_FP9:
-+		return "FP9";
-+	case PERF_REG_S390_FP10:
-+		return "FP10";
-+	case PERF_REG_S390_FP11:
-+		return "FP11";
-+	case PERF_REG_S390_FP12:
-+		return "FP12";
-+	case PERF_REG_S390_FP13:
-+		return "FP13";
-+	case PERF_REG_S390_FP14:
-+		return "FP14";
-+	case PERF_REG_S390_FP15:
-+		return "FP15";
-+	case PERF_REG_S390_MASK:
-+		return "MASK";
-+	case PERF_REG_S390_PC:
-+		return "PC";
-+	default:
-+		return NULL;
-+	}
-+
-+	return NULL;
++	return PERF_REG_S390_PC;
 +}
 +
-+#endif
++uint64_t __perf_reg_sp_s390(void)
++{
++	return PERF_REG_S390_R15;
++}
++
+ #endif
 diff --git a/tools/perf/util/perf-regs-arch/perf_regs_x86.c b/tools/perf/util/perf-regs-arch/perf_regs_x86.c
-new file mode 100644
-index 000000000000..eb5d249afa70
---- /dev/null
+index eb5d249afa70..873c620f0634 100644
+--- a/tools/perf/util/perf-regs-arch/perf_regs_x86.c
 +++ b/tools/perf/util/perf-regs-arch/perf_regs_x86.c
-@@ -0,0 +1,88 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#ifdef HAVE_PERF_REGS_SUPPORT
-+
-+#include "../perf_regs.h"
-+#include "../../../arch/x86/include/uapi/asm/perf_regs.h"
-+
-+const char *__perf_reg_name_x86(int id)
+@@ -85,4 +85,14 @@ const char *__perf_reg_name_x86(int id)
+ 	return NULL;
+ }
+ 
++uint64_t __perf_reg_ip_x86(void)
 +{
-+	switch (id) {
-+	case PERF_REG_X86_AX:
-+		return "AX";
-+	case PERF_REG_X86_BX:
-+		return "BX";
-+	case PERF_REG_X86_CX:
-+		return "CX";
-+	case PERF_REG_X86_DX:
-+		return "DX";
-+	case PERF_REG_X86_SI:
-+		return "SI";
-+	case PERF_REG_X86_DI:
-+		return "DI";
-+	case PERF_REG_X86_BP:
-+		return "BP";
-+	case PERF_REG_X86_SP:
-+		return "SP";
-+	case PERF_REG_X86_IP:
-+		return "IP";
-+	case PERF_REG_X86_FLAGS:
-+		return "FLAGS";
-+	case PERF_REG_X86_CS:
-+		return "CS";
-+	case PERF_REG_X86_SS:
-+		return "SS";
-+	case PERF_REG_X86_DS:
-+		return "DS";
-+	case PERF_REG_X86_ES:
-+		return "ES";
-+	case PERF_REG_X86_FS:
-+		return "FS";
-+	case PERF_REG_X86_GS:
-+		return "GS";
-+	case PERF_REG_X86_R8:
-+		return "R8";
-+	case PERF_REG_X86_R9:
-+		return "R9";
-+	case PERF_REG_X86_R10:
-+		return "R10";
-+	case PERF_REG_X86_R11:
-+		return "R11";
-+	case PERF_REG_X86_R12:
-+		return "R12";
-+	case PERF_REG_X86_R13:
-+		return "R13";
-+	case PERF_REG_X86_R14:
-+		return "R14";
-+	case PERF_REG_X86_R15:
-+		return "R15";
-+
-+#define XMM(x) \
-+	case PERF_REG_X86_XMM ## x:	\
-+	case PERF_REG_X86_XMM ## x + 1:	\
-+		return "XMM" #x;
-+	XMM(0)
-+	XMM(1)
-+	XMM(2)
-+	XMM(3)
-+	XMM(4)
-+	XMM(5)
-+	XMM(6)
-+	XMM(7)
-+	XMM(8)
-+	XMM(9)
-+	XMM(10)
-+	XMM(11)
-+	XMM(12)
-+	XMM(13)
-+	XMM(14)
-+	XMM(15)
-+#undef XMM
-+	default:
-+		return NULL;
-+	}
-+
-+	return NULL;
++	return PERF_REG_X86_IP;
 +}
 +
-+#endif
++uint64_t __perf_reg_sp_x86(void)
++{
++	return PERF_REG_X86_SP;
++}
++
+ #endif
 diff --git a/tools/perf/util/perf_regs.c b/tools/perf/util/perf_regs.c
-index 9bdbaa37f813..5af1b95c3d01 100644
+index 5af1b95c3d01..23584efd4886 100644
 --- a/tools/perf/util/perf_regs.c
 +++ b/tools/perf/util/perf_regs.c
-@@ -22,722 +22,6 @@ uint64_t __weak arch__user_reg_mask(void)
+@@ -3,6 +3,7 @@
+ #include <string.h>
+ #include "perf_regs.h"
+ #include "util/sample.h"
++#include "debug.h"
  
- #ifdef HAVE_PERF_REGS_SUPPORT
- 
--#define perf_event_arm_regs perf_event_arm64_regs
--#include "../../arch/arm64/include/uapi/asm/perf_regs.h"
--#undef perf_event_arm_regs
--
--#include "../../arch/arm/include/uapi/asm/perf_regs.h"
--#include "../../arch/csky/include/uapi/asm/perf_regs.h"
--#include "../../arch/loongarch/include/uapi/asm/perf_regs.h"
--#include "../../arch/mips/include/uapi/asm/perf_regs.h"
--#include "../../arch/powerpc/include/uapi/asm/perf_regs.h"
--#include "../../arch/riscv/include/uapi/asm/perf_regs.h"
--#include "../../arch/s390/include/uapi/asm/perf_regs.h"
--#include "../../arch/x86/include/uapi/asm/perf_regs.h"
--
--static const char *__perf_reg_name_arm64(int id)
--{
--	switch (id) {
--	case PERF_REG_ARM64_X0:
--		return "x0";
--	case PERF_REG_ARM64_X1:
--		return "x1";
--	case PERF_REG_ARM64_X2:
--		return "x2";
--	case PERF_REG_ARM64_X3:
--		return "x3";
--	case PERF_REG_ARM64_X4:
--		return "x4";
--	case PERF_REG_ARM64_X5:
--		return "x5";
--	case PERF_REG_ARM64_X6:
--		return "x6";
--	case PERF_REG_ARM64_X7:
--		return "x7";
--	case PERF_REG_ARM64_X8:
--		return "x8";
--	case PERF_REG_ARM64_X9:
--		return "x9";
--	case PERF_REG_ARM64_X10:
--		return "x10";
--	case PERF_REG_ARM64_X11:
--		return "x11";
--	case PERF_REG_ARM64_X12:
--		return "x12";
--	case PERF_REG_ARM64_X13:
--		return "x13";
--	case PERF_REG_ARM64_X14:
--		return "x14";
--	case PERF_REG_ARM64_X15:
--		return "x15";
--	case PERF_REG_ARM64_X16:
--		return "x16";
--	case PERF_REG_ARM64_X17:
--		return "x17";
--	case PERF_REG_ARM64_X18:
--		return "x18";
--	case PERF_REG_ARM64_X19:
--		return "x19";
--	case PERF_REG_ARM64_X20:
--		return "x20";
--	case PERF_REG_ARM64_X21:
--		return "x21";
--	case PERF_REG_ARM64_X22:
--		return "x22";
--	case PERF_REG_ARM64_X23:
--		return "x23";
--	case PERF_REG_ARM64_X24:
--		return "x24";
--	case PERF_REG_ARM64_X25:
--		return "x25";
--	case PERF_REG_ARM64_X26:
--		return "x26";
--	case PERF_REG_ARM64_X27:
--		return "x27";
--	case PERF_REG_ARM64_X28:
--		return "x28";
--	case PERF_REG_ARM64_X29:
--		return "x29";
--	case PERF_REG_ARM64_SP:
--		return "sp";
--	case PERF_REG_ARM64_LR:
--		return "lr";
--	case PERF_REG_ARM64_PC:
--		return "pc";
--	case PERF_REG_ARM64_VG:
--		return "vg";
--	default:
--		return NULL;
--	}
--
--	return NULL;
--}
--
--static const char *__perf_reg_name_arm(int id)
--{
--	switch (id) {
--	case PERF_REG_ARM_R0:
--		return "r0";
--	case PERF_REG_ARM_R1:
--		return "r1";
--	case PERF_REG_ARM_R2:
--		return "r2";
--	case PERF_REG_ARM_R3:
--		return "r3";
--	case PERF_REG_ARM_R4:
--		return "r4";
--	case PERF_REG_ARM_R5:
--		return "r5";
--	case PERF_REG_ARM_R6:
--		return "r6";
--	case PERF_REG_ARM_R7:
--		return "r7";
--	case PERF_REG_ARM_R8:
--		return "r8";
--	case PERF_REG_ARM_R9:
--		return "r9";
--	case PERF_REG_ARM_R10:
--		return "r10";
--	case PERF_REG_ARM_FP:
--		return "fp";
--	case PERF_REG_ARM_IP:
--		return "ip";
--	case PERF_REG_ARM_SP:
--		return "sp";
--	case PERF_REG_ARM_LR:
--		return "lr";
--	case PERF_REG_ARM_PC:
--		return "pc";
--	default:
--		return NULL;
--	}
--
--	return NULL;
--}
--
--static const char *__perf_reg_name_csky(int id)
--{
--	switch (id) {
--	case PERF_REG_CSKY_A0:
--		return "a0";
--	case PERF_REG_CSKY_A1:
--		return "a1";
--	case PERF_REG_CSKY_A2:
--		return "a2";
--	case PERF_REG_CSKY_A3:
--		return "a3";
--	case PERF_REG_CSKY_REGS0:
--		return "regs0";
--	case PERF_REG_CSKY_REGS1:
--		return "regs1";
--	case PERF_REG_CSKY_REGS2:
--		return "regs2";
--	case PERF_REG_CSKY_REGS3:
--		return "regs3";
--	case PERF_REG_CSKY_REGS4:
--		return "regs4";
--	case PERF_REG_CSKY_REGS5:
--		return "regs5";
--	case PERF_REG_CSKY_REGS6:
--		return "regs6";
--	case PERF_REG_CSKY_REGS7:
--		return "regs7";
--	case PERF_REG_CSKY_REGS8:
--		return "regs8";
--	case PERF_REG_CSKY_REGS9:
--		return "regs9";
--	case PERF_REG_CSKY_SP:
--		return "sp";
--	case PERF_REG_CSKY_LR:
--		return "lr";
--	case PERF_REG_CSKY_PC:
--		return "pc";
--#if defined(__CSKYABIV2__)
--	case PERF_REG_CSKY_EXREGS0:
--		return "exregs0";
--	case PERF_REG_CSKY_EXREGS1:
--		return "exregs1";
--	case PERF_REG_CSKY_EXREGS2:
--		return "exregs2";
--	case PERF_REG_CSKY_EXREGS3:
--		return "exregs3";
--	case PERF_REG_CSKY_EXREGS4:
--		return "exregs4";
--	case PERF_REG_CSKY_EXREGS5:
--		return "exregs5";
--	case PERF_REG_CSKY_EXREGS6:
--		return "exregs6";
--	case PERF_REG_CSKY_EXREGS7:
--		return "exregs7";
--	case PERF_REG_CSKY_EXREGS8:
--		return "exregs8";
--	case PERF_REG_CSKY_EXREGS9:
--		return "exregs9";
--	case PERF_REG_CSKY_EXREGS10:
--		return "exregs10";
--	case PERF_REG_CSKY_EXREGS11:
--		return "exregs11";
--	case PERF_REG_CSKY_EXREGS12:
--		return "exregs12";
--	case PERF_REG_CSKY_EXREGS13:
--		return "exregs13";
--	case PERF_REG_CSKY_EXREGS14:
--		return "exregs14";
--	case PERF_REG_CSKY_TLS:
--		return "tls";
--	case PERF_REG_CSKY_HI:
--		return "hi";
--	case PERF_REG_CSKY_LO:
--		return "lo";
--#endif
--	default:
--		return NULL;
--	}
--
--	return NULL;
--}
--
--static inline const char *__perf_reg_name_loongarch(int id)
--{
--	switch (id) {
--	case PERF_REG_LOONGARCH_PC:
--		return "PC";
--	case PERF_REG_LOONGARCH_R1:
--		return "%r1";
--	case PERF_REG_LOONGARCH_R2:
--		return "%r2";
--	case PERF_REG_LOONGARCH_R3:
--		return "%r3";
--	case PERF_REG_LOONGARCH_R4:
--		return "%r4";
--	case PERF_REG_LOONGARCH_R5:
--		return "%r5";
--	case PERF_REG_LOONGARCH_R6:
--		return "%r6";
--	case PERF_REG_LOONGARCH_R7:
--		return "%r7";
--	case PERF_REG_LOONGARCH_R8:
--		return "%r8";
--	case PERF_REG_LOONGARCH_R9:
--		return "%r9";
--	case PERF_REG_LOONGARCH_R10:
--		return "%r10";
--	case PERF_REG_LOONGARCH_R11:
--		return "%r11";
--	case PERF_REG_LOONGARCH_R12:
--		return "%r12";
--	case PERF_REG_LOONGARCH_R13:
--		return "%r13";
--	case PERF_REG_LOONGARCH_R14:
--		return "%r14";
--	case PERF_REG_LOONGARCH_R15:
--		return "%r15";
--	case PERF_REG_LOONGARCH_R16:
--		return "%r16";
--	case PERF_REG_LOONGARCH_R17:
--		return "%r17";
--	case PERF_REG_LOONGARCH_R18:
--		return "%r18";
--	case PERF_REG_LOONGARCH_R19:
--		return "%r19";
--	case PERF_REG_LOONGARCH_R20:
--		return "%r20";
--	case PERF_REG_LOONGARCH_R21:
--		return "%r21";
--	case PERF_REG_LOONGARCH_R22:
--		return "%r22";
--	case PERF_REG_LOONGARCH_R23:
--		return "%r23";
--	case PERF_REG_LOONGARCH_R24:
--		return "%r24";
--	case PERF_REG_LOONGARCH_R25:
--		return "%r25";
--	case PERF_REG_LOONGARCH_R26:
--		return "%r26";
--	case PERF_REG_LOONGARCH_R27:
--		return "%r27";
--	case PERF_REG_LOONGARCH_R28:
--		return "%r28";
--	case PERF_REG_LOONGARCH_R29:
--		return "%r29";
--	case PERF_REG_LOONGARCH_R30:
--		return "%r30";
--	case PERF_REG_LOONGARCH_R31:
--		return "%r31";
--	default:
--		break;
--	}
--	return NULL;
--}
--
--static const char *__perf_reg_name_mips(int id)
--{
--	switch (id) {
--	case PERF_REG_MIPS_PC:
--		return "PC";
--	case PERF_REG_MIPS_R1:
--		return "$1";
--	case PERF_REG_MIPS_R2:
--		return "$2";
--	case PERF_REG_MIPS_R3:
--		return "$3";
--	case PERF_REG_MIPS_R4:
--		return "$4";
--	case PERF_REG_MIPS_R5:
--		return "$5";
--	case PERF_REG_MIPS_R6:
--		return "$6";
--	case PERF_REG_MIPS_R7:
--		return "$7";
--	case PERF_REG_MIPS_R8:
--		return "$8";
--	case PERF_REG_MIPS_R9:
--		return "$9";
--	case PERF_REG_MIPS_R10:
--		return "$10";
--	case PERF_REG_MIPS_R11:
--		return "$11";
--	case PERF_REG_MIPS_R12:
--		return "$12";
--	case PERF_REG_MIPS_R13:
--		return "$13";
--	case PERF_REG_MIPS_R14:
--		return "$14";
--	case PERF_REG_MIPS_R15:
--		return "$15";
--	case PERF_REG_MIPS_R16:
--		return "$16";
--	case PERF_REG_MIPS_R17:
--		return "$17";
--	case PERF_REG_MIPS_R18:
--		return "$18";
--	case PERF_REG_MIPS_R19:
--		return "$19";
--	case PERF_REG_MIPS_R20:
--		return "$20";
--	case PERF_REG_MIPS_R21:
--		return "$21";
--	case PERF_REG_MIPS_R22:
--		return "$22";
--	case PERF_REG_MIPS_R23:
--		return "$23";
--	case PERF_REG_MIPS_R24:
--		return "$24";
--	case PERF_REG_MIPS_R25:
--		return "$25";
--	case PERF_REG_MIPS_R28:
--		return "$28";
--	case PERF_REG_MIPS_R29:
--		return "$29";
--	case PERF_REG_MIPS_R30:
--		return "$30";
--	case PERF_REG_MIPS_R31:
--		return "$31";
--	default:
--		break;
--	}
--	return NULL;
--}
--
--static const char *__perf_reg_name_powerpc(int id)
--{
--	switch (id) {
--	case PERF_REG_POWERPC_R0:
--		return "r0";
--	case PERF_REG_POWERPC_R1:
--		return "r1";
--	case PERF_REG_POWERPC_R2:
--		return "r2";
--	case PERF_REG_POWERPC_R3:
--		return "r3";
--	case PERF_REG_POWERPC_R4:
--		return "r4";
--	case PERF_REG_POWERPC_R5:
--		return "r5";
--	case PERF_REG_POWERPC_R6:
--		return "r6";
--	case PERF_REG_POWERPC_R7:
--		return "r7";
--	case PERF_REG_POWERPC_R8:
--		return "r8";
--	case PERF_REG_POWERPC_R9:
--		return "r9";
--	case PERF_REG_POWERPC_R10:
--		return "r10";
--	case PERF_REG_POWERPC_R11:
--		return "r11";
--	case PERF_REG_POWERPC_R12:
--		return "r12";
--	case PERF_REG_POWERPC_R13:
--		return "r13";
--	case PERF_REG_POWERPC_R14:
--		return "r14";
--	case PERF_REG_POWERPC_R15:
--		return "r15";
--	case PERF_REG_POWERPC_R16:
--		return "r16";
--	case PERF_REG_POWERPC_R17:
--		return "r17";
--	case PERF_REG_POWERPC_R18:
--		return "r18";
--	case PERF_REG_POWERPC_R19:
--		return "r19";
--	case PERF_REG_POWERPC_R20:
--		return "r20";
--	case PERF_REG_POWERPC_R21:
--		return "r21";
--	case PERF_REG_POWERPC_R22:
--		return "r22";
--	case PERF_REG_POWERPC_R23:
--		return "r23";
--	case PERF_REG_POWERPC_R24:
--		return "r24";
--	case PERF_REG_POWERPC_R25:
--		return "r25";
--	case PERF_REG_POWERPC_R26:
--		return "r26";
--	case PERF_REG_POWERPC_R27:
--		return "r27";
--	case PERF_REG_POWERPC_R28:
--		return "r28";
--	case PERF_REG_POWERPC_R29:
--		return "r29";
--	case PERF_REG_POWERPC_R30:
--		return "r30";
--	case PERF_REG_POWERPC_R31:
--		return "r31";
--	case PERF_REG_POWERPC_NIP:
--		return "nip";
--	case PERF_REG_POWERPC_MSR:
--		return "msr";
--	case PERF_REG_POWERPC_ORIG_R3:
--		return "orig_r3";
--	case PERF_REG_POWERPC_CTR:
--		return "ctr";
--	case PERF_REG_POWERPC_LINK:
--		return "link";
--	case PERF_REG_POWERPC_XER:
--		return "xer";
--	case PERF_REG_POWERPC_CCR:
--		return "ccr";
--	case PERF_REG_POWERPC_SOFTE:
--		return "softe";
--	case PERF_REG_POWERPC_TRAP:
--		return "trap";
--	case PERF_REG_POWERPC_DAR:
--		return "dar";
--	case PERF_REG_POWERPC_DSISR:
--		return "dsisr";
--	case PERF_REG_POWERPC_SIER:
--		return "sier";
--	case PERF_REG_POWERPC_MMCRA:
--		return "mmcra";
--	case PERF_REG_POWERPC_MMCR0:
--		return "mmcr0";
--	case PERF_REG_POWERPC_MMCR1:
--		return "mmcr1";
--	case PERF_REG_POWERPC_MMCR2:
--		return "mmcr2";
--	case PERF_REG_POWERPC_MMCR3:
--		return "mmcr3";
--	case PERF_REG_POWERPC_SIER2:
--		return "sier2";
--	case PERF_REG_POWERPC_SIER3:
--		return "sier3";
--	case PERF_REG_POWERPC_PMC1:
--		return "pmc1";
--	case PERF_REG_POWERPC_PMC2:
--		return "pmc2";
--	case PERF_REG_POWERPC_PMC3:
--		return "pmc3";
--	case PERF_REG_POWERPC_PMC4:
--		return "pmc4";
--	case PERF_REG_POWERPC_PMC5:
--		return "pmc5";
--	case PERF_REG_POWERPC_PMC6:
--		return "pmc6";
--	case PERF_REG_POWERPC_SDAR:
--		return "sdar";
--	case PERF_REG_POWERPC_SIAR:
--		return "siar";
--	default:
--		break;
--	}
--	return NULL;
--}
--
--static const char *__perf_reg_name_riscv(int id)
--{
--	switch (id) {
--	case PERF_REG_RISCV_PC:
--		return "pc";
--	case PERF_REG_RISCV_RA:
--		return "ra";
--	case PERF_REG_RISCV_SP:
--		return "sp";
--	case PERF_REG_RISCV_GP:
--		return "gp";
--	case PERF_REG_RISCV_TP:
--		return "tp";
--	case PERF_REG_RISCV_T0:
--		return "t0";
--	case PERF_REG_RISCV_T1:
--		return "t1";
--	case PERF_REG_RISCV_T2:
--		return "t2";
--	case PERF_REG_RISCV_S0:
--		return "s0";
--	case PERF_REG_RISCV_S1:
--		return "s1";
--	case PERF_REG_RISCV_A0:
--		return "a0";
--	case PERF_REG_RISCV_A1:
--		return "a1";
--	case PERF_REG_RISCV_A2:
--		return "a2";
--	case PERF_REG_RISCV_A3:
--		return "a3";
--	case PERF_REG_RISCV_A4:
--		return "a4";
--	case PERF_REG_RISCV_A5:
--		return "a5";
--	case PERF_REG_RISCV_A6:
--		return "a6";
--	case PERF_REG_RISCV_A7:
--		return "a7";
--	case PERF_REG_RISCV_S2:
--		return "s2";
--	case PERF_REG_RISCV_S3:
--		return "s3";
--	case PERF_REG_RISCV_S4:
--		return "s4";
--	case PERF_REG_RISCV_S5:
--		return "s5";
--	case PERF_REG_RISCV_S6:
--		return "s6";
--	case PERF_REG_RISCV_S7:
--		return "s7";
--	case PERF_REG_RISCV_S8:
--		return "s8";
--	case PERF_REG_RISCV_S9:
--		return "s9";
--	case PERF_REG_RISCV_S10:
--		return "s10";
--	case PERF_REG_RISCV_S11:
--		return "s11";
--	case PERF_REG_RISCV_T3:
--		return "t3";
--	case PERF_REG_RISCV_T4:
--		return "t4";
--	case PERF_REG_RISCV_T5:
--		return "t5";
--	case PERF_REG_RISCV_T6:
--		return "t6";
--	default:
--		return NULL;
--	}
--
--	return NULL;
--}
--
--static const char *__perf_reg_name_s390(int id)
--{
--	switch (id) {
--	case PERF_REG_S390_R0:
--		return "R0";
--	case PERF_REG_S390_R1:
--		return "R1";
--	case PERF_REG_S390_R2:
--		return "R2";
--	case PERF_REG_S390_R3:
--		return "R3";
--	case PERF_REG_S390_R4:
--		return "R4";
--	case PERF_REG_S390_R5:
--		return "R5";
--	case PERF_REG_S390_R6:
--		return "R6";
--	case PERF_REG_S390_R7:
--		return "R7";
--	case PERF_REG_S390_R8:
--		return "R8";
--	case PERF_REG_S390_R9:
--		return "R9";
--	case PERF_REG_S390_R10:
--		return "R10";
--	case PERF_REG_S390_R11:
--		return "R11";
--	case PERF_REG_S390_R12:
--		return "R12";
--	case PERF_REG_S390_R13:
--		return "R13";
--	case PERF_REG_S390_R14:
--		return "R14";
--	case PERF_REG_S390_R15:
--		return "R15";
--	case PERF_REG_S390_FP0:
--		return "FP0";
--	case PERF_REG_S390_FP1:
--		return "FP1";
--	case PERF_REG_S390_FP2:
--		return "FP2";
--	case PERF_REG_S390_FP3:
--		return "FP3";
--	case PERF_REG_S390_FP4:
--		return "FP4";
--	case PERF_REG_S390_FP5:
--		return "FP5";
--	case PERF_REG_S390_FP6:
--		return "FP6";
--	case PERF_REG_S390_FP7:
--		return "FP7";
--	case PERF_REG_S390_FP8:
--		return "FP8";
--	case PERF_REG_S390_FP9:
--		return "FP9";
--	case PERF_REG_S390_FP10:
--		return "FP10";
--	case PERF_REG_S390_FP11:
--		return "FP11";
--	case PERF_REG_S390_FP12:
--		return "FP12";
--	case PERF_REG_S390_FP13:
--		return "FP13";
--	case PERF_REG_S390_FP14:
--		return "FP14";
--	case PERF_REG_S390_FP15:
--		return "FP15";
--	case PERF_REG_S390_MASK:
--		return "MASK";
--	case PERF_REG_S390_PC:
--		return "PC";
--	default:
--		return NULL;
--	}
--
--	return NULL;
--}
--
--static const char *__perf_reg_name_x86(int id)
--{
--	switch (id) {
--	case PERF_REG_X86_AX:
--		return "AX";
--	case PERF_REG_X86_BX:
--		return "BX";
--	case PERF_REG_X86_CX:
--		return "CX";
--	case PERF_REG_X86_DX:
--		return "DX";
--	case PERF_REG_X86_SI:
--		return "SI";
--	case PERF_REG_X86_DI:
--		return "DI";
--	case PERF_REG_X86_BP:
--		return "BP";
--	case PERF_REG_X86_SP:
--		return "SP";
--	case PERF_REG_X86_IP:
--		return "IP";
--	case PERF_REG_X86_FLAGS:
--		return "FLAGS";
--	case PERF_REG_X86_CS:
--		return "CS";
--	case PERF_REG_X86_SS:
--		return "SS";
--	case PERF_REG_X86_DS:
--		return "DS";
--	case PERF_REG_X86_ES:
--		return "ES";
--	case PERF_REG_X86_FS:
--		return "FS";
--	case PERF_REG_X86_GS:
--		return "GS";
--	case PERF_REG_X86_R8:
--		return "R8";
--	case PERF_REG_X86_R9:
--		return "R9";
--	case PERF_REG_X86_R10:
--		return "R10";
--	case PERF_REG_X86_R11:
--		return "R11";
--	case PERF_REG_X86_R12:
--		return "R12";
--	case PERF_REG_X86_R13:
--		return "R13";
--	case PERF_REG_X86_R14:
--		return "R14";
--	case PERF_REG_X86_R15:
--		return "R15";
--
--#define XMM(x) \
--	case PERF_REG_X86_XMM ## x:	\
--	case PERF_REG_X86_XMM ## x + 1:	\
--		return "XMM" #x;
--	XMM(0)
--	XMM(1)
--	XMM(2)
--	XMM(3)
--	XMM(4)
--	XMM(5)
--	XMM(6)
--	XMM(7)
--	XMM(8)
--	XMM(9)
--	XMM(10)
--	XMM(11)
--	XMM(12)
--	XMM(13)
--	XMM(14)
--	XMM(15)
--#undef XMM
--	default:
--		return NULL;
--	}
--
--	return NULL;
--}
--
- const char *perf_reg_name(int id, const char *arch)
- {
- 	const char *reg_name = NULL;
+ int __weak arch_sdt_arg_parse_op(char *old_op __maybe_unused,
+ 				 char **new_op __maybe_unused)
+@@ -74,4 +75,55 @@ int perf_reg_value(u64 *valp, struct regs_dump *regs, int id)
+ 	*valp = regs->cache_regs[id];
+ 	return 0;
+ }
++
++uint64_t perf_arch_reg_ip(const char *arch)
++{
++	if (!strcmp(arch, "arm"))
++		return __perf_reg_ip_arm();
++	else if (!strcmp(arch, "arm64"))
++		return __perf_reg_ip_arm64();
++	else if (!strcmp(arch, "csky"))
++		return __perf_reg_ip_csky();
++	else if (!strcmp(arch, "loongarch"))
++		return __perf_reg_ip_loongarch();
++	else if (!strcmp(arch, "mips"))
++		return __perf_reg_ip_mips();
++	else if (!strcmp(arch, "powerpc"))
++		return __perf_reg_ip_powerpc();
++	else if (!strcmp(arch, "riscv"))
++		return __perf_reg_ip_riscv();
++	else if (!strcmp(arch, "s390"))
++		return __perf_reg_ip_s390();
++	else if (!strcmp(arch, "x86"))
++		return __perf_reg_ip_x86();
++
++	pr_err("Fail to find IP register for arch %s, returns 0\n", arch);
++	return 0;
++}
++
++uint64_t perf_arch_reg_sp(const char *arch)
++{
++	if (!strcmp(arch, "arm"))
++		return __perf_reg_sp_arm();
++	else if (!strcmp(arch, "arm64"))
++		return __perf_reg_sp_arm64();
++	else if (!strcmp(arch, "csky"))
++		return __perf_reg_sp_csky();
++	else if (!strcmp(arch, "loongarch"))
++		return __perf_reg_sp_loongarch();
++	else if (!strcmp(arch, "mips"))
++		return __perf_reg_sp_mips();
++	else if (!strcmp(arch, "powerpc"))
++		return __perf_reg_sp_powerpc();
++	else if (!strcmp(arch, "riscv"))
++		return __perf_reg_sp_riscv();
++	else if (!strcmp(arch, "s390"))
++		return __perf_reg_sp_s390();
++	else if (!strcmp(arch, "x86"))
++		return __perf_reg_sp_x86();
++
++	pr_err("Fail to find SP register for arch %s, returns 0\n", arch);
++	return 0;
++}
++
+ #endif
 diff --git a/tools/perf/util/perf_regs.h b/tools/perf/util/perf_regs.h
-index ce1127af05e4..6b19a2867171 100644
+index 6b19a2867171..790c1a26bbfe 100644
 --- a/tools/perf/util/perf_regs.h
 +++ b/tools/perf/util/perf_regs.h
-@@ -36,6 +36,15 @@ extern const struct sample_reg sample_reg_masks[];
+@@ -32,25 +32,46 @@ extern const struct sample_reg sample_reg_masks[];
+ 
+ #include <perf_regs.h>
+ 
+-#define DWARF_MINIMAL_REGS ((1ULL << PERF_REG_IP) | (1ULL << PERF_REG_SP))
++#define DWARF_MINIMAL_REGS(arch)	\
++	((1ULL << perf_arch_reg_ip(arch)) | (1ULL << perf_arch_reg_sp(arch)))
  
  const char *perf_reg_name(int id, const char *arch);
  int perf_reg_value(u64 *valp, struct regs_dump *regs, int id);
-+const char *__perf_reg_name_arm64(int id);
-+const char *__perf_reg_name_arm(int id);
-+const char *__perf_reg_name_csky(int id);
-+const char *__perf_reg_name_loongarch(int id);
-+const char *__perf_reg_name_mips(int id);
-+const char *__perf_reg_name_powerpc(int id);
-+const char *__perf_reg_name_riscv(int id);
-+const char *__perf_reg_name_s390(int id);
-+const char *__perf_reg_name_x86(int id);
++uint64_t perf_arch_reg_ip(const char *arch);
++uint64_t perf_arch_reg_sp(const char *arch);
+ const char *__perf_reg_name_arm64(int id);
++uint64_t __perf_reg_ip_arm64(void);
++uint64_t __perf_reg_sp_arm64(void);
+ const char *__perf_reg_name_arm(int id);
++uint64_t __perf_reg_ip_arm(void);
++uint64_t __perf_reg_sp_arm(void);
+ const char *__perf_reg_name_csky(int id);
++uint64_t __perf_reg_ip_csky(void);
++uint64_t __perf_reg_sp_csky(void);
+ const char *__perf_reg_name_loongarch(int id);
++uint64_t __perf_reg_ip_loongarch(void);
++uint64_t __perf_reg_sp_loongarch(void);
+ const char *__perf_reg_name_mips(int id);
++uint64_t __perf_reg_ip_mips(void);
++uint64_t __perf_reg_sp_mips(void);
+ const char *__perf_reg_name_powerpc(int id);
++uint64_t __perf_reg_ip_powerpc(void);
++uint64_t __perf_reg_sp_powerpc(void);
+ const char *__perf_reg_name_riscv(int id);
++uint64_t __perf_reg_ip_riscv(void);
++uint64_t __perf_reg_sp_riscv(void);
+ const char *__perf_reg_name_s390(int id);
++uint64_t __perf_reg_ip_s390(void);
++uint64_t __perf_reg_sp_s390(void);
+ const char *__perf_reg_name_x86(int id);
++uint64_t __perf_reg_ip_x86(void);
++uint64_t __perf_reg_sp_x86(void);
  
  #else
  #define PERF_REGS_MASK	0
+ #define PERF_REGS_MAX	0
+ 
+-#define DWARF_MINIMAL_REGS PERF_REGS_MASK
++#define DWARF_MINIMAL_REGS(arch)	PERF_REGS_MASK
+ 
+ static inline const char *perf_reg_name(int id __maybe_unused, const char *arch __maybe_unused)
+ {
+@@ -63,5 +84,16 @@ static inline int perf_reg_value(u64 *valp __maybe_unused,
+ {
+ 	return 0;
+ }
++
++static inline uint64_t perf_arch_reg_ip(const char *arch __maybe_unused)
++{
++	return 0;
++}
++
++static inline uint64_t perf_arch_reg_sp(const char *arch __maybe_unused)
++{
++	return 0;
++}
++
+ #endif /* HAVE_PERF_REGS_SUPPORT */
+ #endif /* __PERF_REGS_H */
 -- 
 2.34.1
 
