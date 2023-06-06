@@ -2,95 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83223723926
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 09:38:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0860F723931
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 09:40:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236228AbjFFHiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 03:38:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49200 "EHLO
+        id S236284AbjFFHkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 03:40:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233688AbjFFHiM (ORCPT
+        with ESMTP id S235936AbjFFHkC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 03:38:12 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D430711A
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 00:38:10 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q6RGY-000429-Kk; Tue, 06 Jun 2023 09:38:06 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q6RGW-005SAa-EX; Tue, 06 Jun 2023 09:38:04 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q6RGV-00BdDq-O8; Tue, 06 Jun 2023 09:38:03 +0200
-Date:   Tue, 6 Jun 2023 09:38:03 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     George Stark <gnstark@sberdevices.ru>
-Cc:     thierry.reding@gmail.com, neil.armstrong@linaro.org,
-        khilman@baylibre.com, jbrunet@baylibre.com,
-        martin.blumenstingl@googlemail.com, hkallweit1@gmail.com,
-        linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        kernel@sberdevices.ru, Dmitry Rokosov <ddrokosov@sberdevices.ru>
-Subject: Re: [PATCH] pwm: meson: compute cnt register value in proper way
-Message-ID: <20230606073803.xdzc4b5ulisb4etq@pengutronix.de>
-References: <20230602103211.2199283-1-gnstark@sberdevices.ru>
+        Tue, 6 Jun 2023 03:40:02 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CE93B118
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 00:39:58 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.41.186])
+        by gateway (Coremail) with SMTP id _____8CxLPDN4n5kcwkAAA--.298S3;
+        Tue, 06 Jun 2023 15:39:57 +0800 (CST)
+Received: from loongson-pc.loongson.cn (unknown [10.20.41.186])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxC8rM4n5kv_YBAA--.108S2;
+        Tue, 06 Jun 2023 15:39:56 +0800 (CST)
+From:   Hongliang Wang <wanghongliang@loongson.cn>
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>
+Cc:     linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+        loongson-kernel@lists.loongnix.cn,
+        wanghongliang <wanghongliang@loongson.cn>
+Subject: [PATCH v1] soc:loongson:add model and clock-frequency attribute parse.
+Date:   Tue,  6 Jun 2023 15:39:38 +0800
+Message-Id: <20230606073938.556-1-wanghongliang@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pob5pwp43u57lf6p"
-Content-Disposition: inline
-In-Reply-To: <20230602103211.2199283-1-gnstark@sberdevices.ru>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8BxC8rM4n5kv_YBAA--.108S2
+X-CM-SenderInfo: pzdqwxxrqjzxhdqjqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7Cw45Ww1xAr1xuw45ZFy7Jwc_yoW8ArWfpF
+        WkZFZ5Gr45GFn3u34rtry8ZryYyrn5Cr4Iga47KFW5CanrXrn8X3yjqFyq9ryxJayrXa4F
+        gr95uw4vqa15JagCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUkYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+        xVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27w
+        Aqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE
+        14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x
+        0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E
+        7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcV
+        C0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF
+        04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7
+        CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8zwZ7UUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: wanghongliang <wanghongliang@loongson.cn>
 
---pob5pwp43u57lf6p
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This patch add the parse of model and clock-frequency attribute,
+which come from the cpus device_node in device tree and show as
+Model Name and CPU MHz in /proc/cpuinfo.
 
-Hello,
+device tree:
 
-just a small note: This patch wasn't sent to the pwm mailing list and so
-is missing in our patchwork instance. I didn't follow the discussion,
-but please (and in your own interest) make sure to Cc:
-linux-pwm@vger.kernel.org for the next revision (or resend if the
-conclusion of the discussion is that the patch is fine).
+cpus {
+	...
+	model = "Loongson-LS2K1000";
 
-Best regards
-Uwe
+	cpu0: cpu@0 {
+		...
+		clock-frequency = <1000000000>;
+	};
+};
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+/proc/cpuinfo:
 
---pob5pwp43u57lf6p
-Content-Type: application/pgp-signature; name="signature.asc"
+Model Name              : Loongson-LS2K1000
+CPU MHz                 : 1000.00
 
------BEGIN PGP SIGNATURE-----
+Signed-off-by: wanghongliang <wanghongliang@loongson.cn>
+---
+ arch/loongarch/kernel/smp.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmR+4loACgkQj4D7WH0S
-/k53xwf/ZsSFSwI9yH9jFUwkiPcV8xE6bq5/9cMSntTT1UN/NyLFXpeccJ2o/KBp
-2AxzYRkKpFzCeq8RwkNsC8g/PBWDpdT61u7CdEp04kUJbqQDveK5Y56P0zOrquxJ
-r2fsjHLxQLP6HuOt0qeTVnAeWPRttgh5NjsDRQ0uWFSa9ZDX5O1V8un4V1cj4Thg
-lGaz2Vt+8VkSl9K9HViX8/E4OFhuf/Qkqy6kDUDllmq/NMYoBQZuSWl79VSKdbow
-+hbPl1215X/C/hbyKDfFzdlFpPpm7KWsbwTO6OqCjCYtvYgnf2VbHpeUXCnV2Qqj
-AhoY64uXfKzHqmMk/Nv1Fs5DSh0yQw==
-=WjHa
------END PGP SIGNATURE-----
+diff --git a/arch/loongarch/kernel/smp.c b/arch/loongarch/kernel/smp.c
+index ed167e244cda..8644fb9119ec 100644
+--- a/arch/loongarch/kernel/smp.c
++++ b/arch/loongarch/kernel/smp.c
+@@ -30,6 +30,7 @@
+ #include <asm/processor.h>
+ #include <asm/setup.h>
+ #include <asm/time.h>
++#include <asm/bootinfo.h>
+ 
+ int __cpu_number_map[NR_CPUS];   /* Map physical to logical */
+ EXPORT_SYMBOL(__cpu_number_map);
+@@ -186,6 +187,14 @@ static void __init fdt_smp_setup(void)
+ #ifdef CONFIG_OF
+ 	unsigned int cpu, cpuid;
+ 	struct device_node *node = NULL;
++	const void *prop = NULL;
++
++	node = of_find_node_by_path("/cpus");
++	if (node) {
++		prop = of_get_property(node, "model", NULL);
++		if (prop)
++			loongson_sysconf.cpuname = (const char *)prop;
++	}
+ 
+ 	for_each_of_cpu_node(node) {
+ 		if (!of_device_is_available(node))
+@@ -202,6 +211,10 @@ static void __init fdt_smp_setup(void)
+ 			cpu = cpumask_next_zero(-1, cpu_present_mask);
+ 		}
+ 
++		prop = of_get_property(node, "clock-frequency", NULL);
++		if (prop)
++			cpu_clock_freq = be32_to_cpup(prop);
++
+ 		num_processors++;
+ 		set_cpu_possible(cpu, true);
+ 		set_cpu_present(cpu, true);
+-- 
+2.31.1
 
---pob5pwp43u57lf6p--
