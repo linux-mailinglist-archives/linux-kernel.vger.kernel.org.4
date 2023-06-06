@@ -2,205 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13B63724D48
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 21:43:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75A85724D55
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 21:43:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239088AbjFFTma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 15:42:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33736 "EHLO
+        id S239370AbjFFTnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 15:43:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239403AbjFFTmS (ORCPT
+        with ESMTP id S239135AbjFFTmk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 15:42:18 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1503B10F2;
-        Tue,  6 Jun 2023 12:42:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686080536; x=1717616536;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=rTfcnLX6qFJYvlxnvR8lA09JO/nPrSlsu5B0AItwRiY=;
-  b=Ztx4bHhprrjD/Dh3kPsTl3OZUN9M0ZxO9nv2IbTecxXNHtOwkMraLuHR
-   AVuW3Ye2+vTZeZzxH6fFPNzLUqCOBd3h/eFUOmGd/bThsOSwoJvXnoMf4
-   3T7CcJoDiR16w4Wg8GWM4HGRmrDVrgnzHFzwROfkDvPNdHQUG/rZwfst1
-   OZ3LcypBtoVf3SBq89bWBn27yXUHprDDbTiC11m7XXFakaDzSs2En/SbO
-   942/zRU0CZZCchxAPmbcgucPjI4RqunvjUWkbGq7Op+hV848U4w6GhuaF
-   Yj6K+mg2MeN4oGTK3kCjHm1NU/9Cw524tDgoo/HkBNY+AXHezGw21hb7c
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="420330766"
-X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
-   d="scan'208";a="420330766"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 12:42:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="1039309526"
-X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
-   d="scan'208";a="1039309526"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by fmsmga005.fm.intel.com with ESMTP; 06 Jun 2023 12:42:15 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 6 Jun 2023 12:42:14 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 6 Jun 2023 12:42:14 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Tue, 6 Jun 2023 12:42:14 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.100)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Tue, 6 Jun 2023 12:42:13 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Az29imoZFkX8O3Z2z1zhAP2F3ITSoZVkYsQfG7pCOF5rdbnO04tJI8qbeplGFV/K0TAWD7LWJuPL97YSlMKMvuZ4dpgnp6CM8OP11HJNoXqzqUMTkT29UwrkaOs68nour9phTpH3Vaxf6EUnGrxw4oFGSwgLKpMhCGfO92vTB3BW8OPs5t2knaDyXfwcNuEilM5Oc0BBQMjSvKi6LFFH4/BGOJ1vGfv0JKhT3vDKEe5vM0sw6qgs36zdwIAzIfA0wnpDWDMcO8Hk34ZMyawV8IIDtSeNRvV9J14Psssjw93hYg9Fwbl3kkgwEud41jE02cJ9A0ehqIMBVJdED3vS0w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XAHneaml1k2F0biuGMSYsV7NeTZ/4WoAijkimNEa0VY=;
- b=n+AtVQ36GRM1J+xfUH/1VzDgTZE3gQt3RUamWsojVwFmGMFjce17TG0ooZ3uerpxf6Fe/iSK59UnzhJtzcG/6A/BSop93HT3lmaO/cO6OPxBJ625+/n9oJWfYcrYDV+C4hMTPAnjEAJkllHeAgIFEE1YC6+lqfPSm42vfMEHJMuqv3cp2NuHbxt2qtH3tN1YKd7C69cbqTExLNl4ExnibdkLVoItsv+mNMj2O8kLvVpM5Yd7+h70sTyyiLoDuQz1BkpzzqnoVYPKibZ2ky2yskVppj88utM6WQ/wFYOGjwpapNasPy7MbXqT7AwJkfatHJ+LHGkt2zKO5npR/o1NSw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM4PR11MB6117.namprd11.prod.outlook.com (2603:10b6:8:b3::19) by
- SA1PR11MB8574.namprd11.prod.outlook.com (2603:10b6:806:3b1::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.32; Tue, 6 Jun
- 2023 19:42:12 +0000
-Received: from DM4PR11MB6117.namprd11.prod.outlook.com
- ([fe80::9e4f:80cc:e0aa:6809]) by DM4PR11MB6117.namprd11.prod.outlook.com
- ([fe80::9e4f:80cc:e0aa:6809%2]) with mapi id 15.20.6477.016; Tue, 6 Jun 2023
- 19:42:11 +0000
-Date:   Tue, 6 Jun 2023 21:41:57 +0200
-From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To:     <wei.fang@nxp.com>
-CC:     <claudiu.manoil@nxp.com>, <vladimir.oltean@nxp.com>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net] net: enetc: correct the indexes of highest and 2nd
- highest TCs
-Message-ID: <ZH+MBdlRAybwqFo8@boxer>
-References: <20230606084618.1126471-1-wei.fang@nxp.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230606084618.1126471-1-wei.fang@nxp.com>
-X-ClientProxiedBy: FR3P281CA0080.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:1f::15) To DM4PR11MB6117.namprd11.prod.outlook.com
- (2603:10b6:8:b3::19)
+        Tue, 6 Jun 2023 15:42:40 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CDF810FB;
+        Tue,  6 Jun 2023 12:42:38 -0700 (PDT)
+Date:   Tue, 06 Jun 2023 19:42:35 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1686080556;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=i5R2sL6rKsk29qzEv5zQGnq6eOM/ZoNfbjetALpWF/A=;
+        b=ZGqLOq/6wFR4YOecZJuBk1Kt0Cyoj7YaDNUn5kH6Xi+gsMcihpBtvggfDsGvQoTF18PEkg
+        hXgkKSwOi9/WT4zbyOlZhDlRQtFKIfUvDhNDpECTyaszz6Vw3Nlzjr3IcYaXy1Jy0fRhRG
+        9Li5qaYeVnc+Di3+928FfnHNn3ia0Z/T2HsWGUq8QXz/C3AeyNGdjAs50ja75EgH5gow+E
+        C436OrBGHqRgg96g+fCLNijyQffe/NIojS16W0sQvKOQRtFtZYSCxX/Hf3DIRwTOn/et40
+        o/VXdwcnnO4O38+n/TupVFCAX6120gIXnEFjdkprKEHxG3VaCBR2T5JU5IAT0Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1686080556;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=i5R2sL6rKsk29qzEv5zQGnq6eOM/ZoNfbjetALpWF/A=;
+        b=KFxUMXXxu3vPCog24k9p3CA2msRAbtZlaSkT99NFPgcnSyLbLK0ZR+kZ1VJCn0z/ivFsT3
+        rZzd0k/FcBKsd4BQ==
+From:   "tip-bot2 for Dionna Glaze" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/cc] x86/efi: Safely enable unaccepted memory in UEFI
+Cc:     Dionna Glaze <dionnaglaze@google.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "Borislav Petkov (AMD)" <bp@alien8.de>,
+        Ard Biesheuvel <ardb@kernel.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: =?utf-8?q?=3C0d5f3d9a20b5cf361945b7ab1263c36586a78a42=2E16860?=
+ =?utf-8?q?63086=2Egit=2Ethomas=2Elendacky=40amd=2Ecom=3E?=
+References: =?utf-8?q?=3C0d5f3d9a20b5cf361945b7ab1263c36586a78a42=2E168606?=
+ =?utf-8?q?3086=2Egit=2Ethomas=2Elendacky=40amd=2Ecom=3E?=
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR11MB6117:EE_|SA1PR11MB8574:EE_
-X-MS-Office365-Filtering-Correlation-Id: 708726ff-5abb-4423-b67e-08db66c61f17
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: basAjrkYjWlW3W191LvhAFUCSV636Zs7xxfEINqq480j2ePJOIkGR9kNwhkS0OakXQp01AxCM9C07P+Eo3qLe16WBpt3fYvwrUIryAE8xFud9HL41ivQpb1kMGHks/mbqRnFYxCa1CjoOJBlqs/WT+alifZzesPxTKny9i85QPC7ujVAhsaqTfT1gVwwFzjuRFeWOgZtP1XbA0fHKjbJKRIhK/iajeewwtQTUkjoqFVRVH/woiJtY7HEH7TTKzBg92SHzTsZnuFYWVuzpDMlds2OpLt4RwYuW/WcFnSIvt7eycoNUL61j/ydwwQzfjuSluBkHIMoe+oj1GHEvdteNAYR6znDGNfLCDJaSvzqs9ErUxIwHPd9n8jYLTWOgBSg1tM/hFI6KvOBm+aLXqvdopWmVVzwK/NU7EsujG8wUixkIq+gEsqKaVwuU7iYsM8ADxaT2QRJzFh1/XykhhCivhDF0SX1Xj1y9SO4BIMBvyJYvHk0YD6GJ0L7BzM/Go16LjJIMGKGIabh/EmB9xYJP+zrXX/5lGxh8cY0PzYVPfSPHLqgq2UJBlg4SE9jSkZLRqr9quddjZYWznM7qpDxaECgy6okdoFJaxn8XbGRjdQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6117.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(136003)(346002)(396003)(366004)(376002)(39860400002)(451199021)(33716001)(6506007)(9686003)(26005)(186003)(6512007)(83380400001)(6666004)(6486002)(2906002)(8676002)(8936002)(44832011)(82960400001)(478600001)(6916009)(5660300002)(41300700001)(86362001)(38100700002)(66946007)(316002)(66556008)(66476007)(4326008)(67856001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?CFrs1Ls/jbGlp2182UPwCEDHV498T8/0DQcQ4/XK/AGkR7zKdgpDC+mLUSLb?=
- =?us-ascii?Q?+ipffilSniDvreU7H4TiDPpun9z1AVC1Oe7Rk3KsZdVuhAYWmJozTaokEDxZ?=
- =?us-ascii?Q?Et7cvvzx/FQdywzSd15Gh2PdS71BxE9n8LdN7YO5UN8XGe6vuHz8LARF5wvx?=
- =?us-ascii?Q?FqqFeCtpDtyOFUi05QcSlAoHIRo1TG5TWhUb074B6a2Hjjk641J1v3I3kQAo?=
- =?us-ascii?Q?JsUion/02zyagwTjb3jP8vigReQ0KTUPceyum5apNIQiR9Bm0mj8PfMXAxB6?=
- =?us-ascii?Q?c4ZyNp/35dvBb4RnD0RtFvlY049PyKzJ2BxJLwRLCYkt0T4mZ7OzFpXMYrx9?=
- =?us-ascii?Q?Kw8QGhkIMQ6QEMjf0a8YP4IE4LEG/o4KxsugwAMz1jk2MVKSW/OOL0pCDPlV?=
- =?us-ascii?Q?UtWSJaLZ7jH7As8ph5g1swDwUkxbhiBivw8n38hPMBvdDadG8faapsE9AaX8?=
- =?us-ascii?Q?EACRyBLWJ6aiAGAcZurVb5rIAKDV4GkkwdcZ2gLcC9+VmCDCRqQ/YXVDbzSB?=
- =?us-ascii?Q?y4/apActsl4ceEQArklMgw6g37znPL3vinQR1nD9UbXzE4Qf4PTkPeR+A+iG?=
- =?us-ascii?Q?7CJJ4E791eE4E/gUT21EcOQrbxa4tSm8lUyx2jItm7GFryG0erxV/sJ3ZpFw?=
- =?us-ascii?Q?KrDCJJULM8FfaNc/C5HC8fz8y63xRFaBeX7oD8GuPlZusp31K5eh7ydtASul?=
- =?us-ascii?Q?yXTUkTDa9K736fi2di9LzEYA2QNUYn38UwcYYgz64O7PQPLZCiLmjXGHnmXo?=
- =?us-ascii?Q?qjZ3mepi+sjKPm9qrWUDNJfyFxzKhYPi2GeWst5WvIbZIvyeqAdiba0sTzSL?=
- =?us-ascii?Q?aJLsjnpIvTf+JZXPTGqbvECXCrXXazNQpKXH8Tua1pUgrImVsSxEmz26SZmR?=
- =?us-ascii?Q?8weSzGLNvmCkZec79eaYb8Zr6WnM57kYA1p1ZRlfWi7G9iibbtnlE5y1y3y6?=
- =?us-ascii?Q?HJ2JKydA58X6ROBC1A9LV/GTulbm/TFdfF9UpuECnTz2KkGnZebWB5c4VgtU?=
- =?us-ascii?Q?vgyVZ0qLj1qnNfxSJEHUa/wA7Y0N220yGgz6tRuagv139SWYk6BMeARLdkY+?=
- =?us-ascii?Q?yCuzKDy3ZEJZsKIGtpgxa0VXquIi+BLyivUn4fcArtICJA1GsE6CpgyxWP5W?=
- =?us-ascii?Q?3eataacs9Svz0OVyWUuzUkeO9CeFcKZZ4s9wpIJ9clPEqw73P1aN003k3V5t?=
- =?us-ascii?Q?X49gEIWdhunF0gYe2WqmmK2kfPU7PebbKHMfPVorkIlZ1LQMiAg/yLEiasXO?=
- =?us-ascii?Q?yIHYVCd8EPFs6ijJhPRBhfH58ItANs89rSFvsdgvmCR+DuuPW/HlZ/JNEqdt?=
- =?us-ascii?Q?V4oyJLmHqqyv652cyGhoJTNmj7D1180g3uTEU0ziaDNdoA1SJVLc9fuFrlH2?=
- =?us-ascii?Q?vWIwehNYJSf2Vposfz6j7MMU7I0433AQy6Jp+2JO82NAw36IHUUTrPZf2jeu?=
- =?us-ascii?Q?ItCS3mBFZIIH2M0TGCU0BCU17z79olkRJiV14q3v3sVf2g6QcxwjM6xzObOi?=
- =?us-ascii?Q?n79m7pWXEW0dD6A0QJz4gR9PocuMZgfuNBZgWdVnlJ+WMup9+fA8+iphTcDq?=
- =?us-ascii?Q?n85CypjAtSZUP64qdlif/HA1E429fu9dJpiJcndbq4kcBfGmHOYROOBRcuY/?=
- =?us-ascii?Q?NvoCC712Q5m5qqGcQ0sh/R0=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 708726ff-5abb-4423-b67e-08db66c61f17
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6117.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2023 19:42:11.6682
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: xXvl3P5CdU7b5ZT+5uY6m6K5ngakgOJV8HiJWkh3XlJ994FVnNGv0GQyELipr4you9qrMDNqXfI7zNShk9OkE0+q9+6YpbS8gQp1WaqzBi8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB8574
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <168608055573.404.11417198471686782791.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 04:46:18PM +0800, wei.fang@nxp.com wrote:
-> From: Wei Fang <wei.fang@nxp.com>
+The following commit has been merged into the x86/cc branch of tip:
 
-if you are a sender then you could skip line above.
+Commit-ID:     c0461bd16666351f0de11578b1e02dcdae4db736
+Gitweb:        https://git.kernel.org/tip/c0461bd16666351f0de11578b1e02dcdae4db736
+Author:        Dionna Glaze <dionnaglaze@google.com>
+AuthorDate:    Tue, 06 Jun 2023 09:51:27 -05:00
+Committer:     Borislav Petkov (AMD) <bp@alien8.de>
+CommitterDate: Tue, 06 Jun 2023 18:32:59 +02:00
 
-> 
-> For ENETC hardware, the TCs are numbered from 0 to N-1, where N
-> is the number of TCs. Numerically higher TC has higher priority.
-> It's obvious that the highest priority TC index should be N-1 and
-> the 2nd highest priority TC index should be N-2.
-> However, the previous logic uses netdev_get_prio_tc_map() to get
-> the indexes of highest priority and 2nd highest priority TCs, it
-> does not make sense and is incorrect. It may get wrong indexes of
-> the two TCs and make the CBS unconfigurable. e.g.
-> $ tc qdisc add dev eno0 parent root handle 100: mqprio num_tc 6 \
-> 	map 0 0 1 1 2 3 4 5 queues 1@0 1@1 1@2 1@3 2@4 2@6 hw 1
-> $ tc qdisc replace dev eno0 parent 100:6 cbs idleslope 100000 \
-> 	sendslope -900000 hicredit 12 locredit -113 offload 1
-> $ Error: Specified device failed to setup cbs hardware offload.
->   ^^^^^
+x86/efi: Safely enable unaccepted memory in UEFI
 
-newlines between commit message and example output would improve
-readability. tc commands are awful to read by themselves :P
+The UEFI v2.9 specification includes a new memory type to be used in
+environments where the OS must accept memory that is provided from its
+host. Before the introduction of this memory type, all memory was
+accepted eagerly in the firmware. In order for the firmware to safely
+stop accepting memory on the OS's behalf, the OS must affirmatively
+indicate support to the firmware. This is only a problem for AMD
+SEV-SNP, since Linux has had support for it since 5.19. The other
+technology that can make use of unaccepted memory, Intel TDX, does not
+yet have Linux support, so it can strictly require unaccepted memory
+support as a dependency of CONFIG_TDX and not require communication with
+the firmware.
 
-Please describe in the commit message what is the actual fix.
+Enabling unaccepted memory requires calling a 0-argument enablement
+protocol before ExitBootServices. This call is only made if the kernel
+is compiled with UNACCEPTED_MEMORY=y
 
-> 
-> Fixes: c431047c4efe ("enetc: add support Credit Based Shaper(CBS) for hardware offload")
-> Signed-off-by: Wei Fang <wei.fang@nxp.com>
-> ---
->  drivers/net/ethernet/freescale/enetc/enetc_qos.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/freescale/enetc/enetc_qos.c b/drivers/net/ethernet/freescale/enetc/enetc_qos.c
-> index 83c27bbbc6ed..126007ab70f6 100644
-> --- a/drivers/net/ethernet/freescale/enetc/enetc_qos.c
-> +++ b/drivers/net/ethernet/freescale/enetc/enetc_qos.c
-> @@ -181,8 +181,8 @@ int enetc_setup_tc_cbs(struct net_device *ndev, void *type_data)
->  	int bw_sum = 0;
->  	u8 bw;
->  
-> -	prio_top = netdev_get_prio_tc_map(ndev, tc_nums - 1);
-> -	prio_next = netdev_get_prio_tc_map(ndev, tc_nums - 2);
-> +	prio_top = tc_nums - 1;
-> +	prio_next = tc_nums - 2;
->  
->  	/* Support highest prio and second prio tc in cbs mode */
->  	if (tc != prio_top && tc != prio_next)
-> -- 
-> 2.25.1
-> 
-> 
+This protocol will be removed after the end of life of the first LTS
+that includes it, in order to give firmware implementations an
+expiration date for it. When the protocol is removed, firmware will
+strictly infer that a SEV-SNP VM is running an OS that supports the
+unaccepted memory type. At the earliest convenience, when unaccepted
+memory support is added to Linux, SEV-SNP may take strict dependence in
+it. After the firmware removes support for the protocol, this should be
+reverted.
+
+  [tl: address some checkscript warnings]
+
+Signed-off-by: Dionna Glaze <dionnaglaze@google.com>
+Signed-off-by: Tom Lendacky <thomas.lendacky@amd.com>
+Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
+Link: https://lore.kernel.org/r/0d5f3d9a20b5cf361945b7ab1263c36586a78a42.1686063086.git.thomas.lendacky@amd.com
+---
+ drivers/firmware/efi/libstub/x86-stub.c | 36 ++++++++++++++++++++++++-
+ include/linux/efi.h                     |  3 ++-
+ 2 files changed, 39 insertions(+)
+
+diff --git a/drivers/firmware/efi/libstub/x86-stub.c b/drivers/firmware/efi/libstub/x86-stub.c
+index 3cc7faa..220be75 100644
+--- a/drivers/firmware/efi/libstub/x86-stub.c
++++ b/drivers/firmware/efi/libstub/x86-stub.c
+@@ -26,6 +26,17 @@ const efi_dxe_services_table_t *efi_dxe_table;
+ u32 image_offset __section(".data");
+ static efi_loaded_image_t *image = NULL;
+ 
++typedef union sev_memory_acceptance_protocol sev_memory_acceptance_protocol_t;
++union sev_memory_acceptance_protocol {
++	struct {
++		efi_status_t (__efiapi * allow_unaccepted_memory)(
++			sev_memory_acceptance_protocol_t *);
++	};
++	struct {
++		u32 allow_unaccepted_memory;
++	} mixed_mode;
++};
++
+ static efi_status_t
+ preserve_pci_rom_image(efi_pci_io_protocol_t *pci, struct pci_setup_rom **__rom)
+ {
+@@ -310,6 +321,29 @@ setup_memory_protection(unsigned long image_base, unsigned long image_size)
+ #endif
+ }
+ 
++static void setup_unaccepted_memory(void)
++{
++	efi_guid_t mem_acceptance_proto = OVMF_SEV_MEMORY_ACCEPTANCE_PROTOCOL_GUID;
++	sev_memory_acceptance_protocol_t *proto;
++	efi_status_t status;
++
++	if (!IS_ENABLED(CONFIG_UNACCEPTED_MEMORY))
++		return;
++
++	/*
++	 * Enable unaccepted memory before calling exit boot services in order
++	 * for the UEFI to not accept all memory on EBS.
++	 */
++	status = efi_bs_call(locate_protocol, &mem_acceptance_proto, NULL,
++			     (void **)&proto);
++	if (status != EFI_SUCCESS)
++		return;
++
++	status = efi_call_proto(proto, allow_unaccepted_memory);
++	if (status != EFI_SUCCESS)
++		efi_err("Memory acceptance protocol failed\n");
++}
++
+ static const efi_char16_t apple[] = L"Apple";
+ 
+ static void setup_quirks(struct boot_params *boot_params,
+@@ -908,6 +942,8 @@ asmlinkage unsigned long efi_main(efi_handle_t handle,
+ 
+ 	setup_quirks(boot_params, bzimage_addr, buffer_end - buffer_start);
+ 
++	setup_unaccepted_memory();
++
+ 	status = exit_boot(boot_params, handle);
+ 	if (status != EFI_SUCCESS) {
+ 		efi_err("exit_boot() failed!\n");
+diff --git a/include/linux/efi.h b/include/linux/efi.h
+index 67cb72d..18d83a6 100644
+--- a/include/linux/efi.h
++++ b/include/linux/efi.h
+@@ -437,6 +437,9 @@ void efi_native_runtime_setup(void);
+ #define DELLEMC_EFI_RCI2_TABLE_GUID		EFI_GUID(0x2d9f28a2, 0xa886, 0x456a,  0x97, 0xa8, 0xf1, 0x1e, 0xf2, 0x4f, 0xf4, 0x55)
+ #define AMD_SEV_MEM_ENCRYPT_GUID		EFI_GUID(0x0cf29b71, 0x9e51, 0x433a,  0xa3, 0xb7, 0x81, 0xf3, 0xab, 0x16, 0xb8, 0x75)
+ 
++/* OVMF protocol GUIDs */
++#define OVMF_SEV_MEMORY_ACCEPTANCE_PROTOCOL_GUID	EFI_GUID(0xc5a010fe, 0x38a7, 0x4531,  0x8a, 0x4a, 0x05, 0x00, 0xd2, 0xfd, 0x16, 0x49)
++
+ typedef struct {
+ 	efi_guid_t guid;
+ 	u64 table;
