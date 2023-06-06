@@ -2,148 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FF03723845
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 08:58:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DB8872384B
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 09:00:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235664AbjFFG6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 02:58:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54730 "EHLO
+        id S234891AbjFFHAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 03:00:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234048AbjFFG6I (ORCPT
+        with ESMTP id S235732AbjFFG74 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 02:58:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC501B8;
-        Mon,  5 Jun 2023 23:58:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 955726238B;
-        Tue,  6 Jun 2023 06:58:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03784C4339C;
-        Tue,  6 Jun 2023 06:58:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686034686;
-        bh=MpmJDRibyiGyOaFh28ezYkc4fANiyKweS1h9oBDPv+U=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=YWH7B92mkI0DT3kNPq6cTxAPrC/vu5gP59t1/UOoKZbWSGiq3UW2t0zfDbeOHgSPQ
-         1R0DLLIAQcZvkY5UM4D40gZ+cQLa4IksuQZ8lSREqGVMC1uruzvycChMrPU5rZ9+uQ
-         9bt7KgFkjRO5cZ6F1Xg416N/FuIIi3eqb5f3GIFOyaEVkdk0d3DfKKX8CoP0yJCoA5
-         LAPzraxU0palfk8x0itGlfbpHkhUXOaK6M391e7KFAvinfW/6QJsJcNQFo+Bh2tCTe
-         cSjmkr0sleEXbDI1h2AzyP8Ba9O/K8UXTr84JNzw77lM9npNivIvxQXOS1A/tjcKEs
-         E6RXrijYG2ONg==
-Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2b1b06af50eso50583841fa.1;
-        Mon, 05 Jun 2023 23:58:05 -0700 (PDT)
-X-Gm-Message-State: AC+VfDyNBzvzEOiJnISJj5T4kYuCHOJ+HWCuy5J2fChfX6RcfQfqgobp
-        bFBh+ZoMoNFz/YL1ytbWBJOA4iI444RZsOP597Q=
-X-Google-Smtp-Source: ACHHUZ7Vc/081XIKKuET5QOyy69OLOKWXtdVxq9it5tL4Z3SIPhBbx2gIkI9YA6N1wBkjG2hrFNY+dUB5XRcl3W1jKQ=
-X-Received: by 2002:a2e:9910:0:b0:2af:d2ef:49d4 with SMTP id
- v16-20020a2e9910000000b002afd2ef49d4mr884811lji.1.1686034683959; Mon, 05 Jun
- 2023 23:58:03 -0700 (PDT)
+        Tue, 6 Jun 2023 02:59:56 -0400
+Received: from first.geanix.com (first.geanix.com [116.203.34.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AB81E43;
+        Mon,  5 Jun 2023 23:59:52 -0700 (PDT)
+Received: from xps.geanix.com (unknown [87.54.11.140])
+        by first.geanix.com (Postfix) with ESMTPSA id D467D4E2838;
+        Tue,  6 Jun 2023 06:59:49 +0000 (UTC)
+Authentication-Results: ORIGINATING;
+        auth=pass smtp.auth=martin@geanix.com smtp.mailfrom=martin@geanix.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
+        t=1686034790; bh=PWNQ09ijoe1DVvYJBNyrmhSiGQflwUabh55Y0/h4L1c=;
+        h=From:To:Cc:Subject:Date;
+        b=f8lJ5bAdZwyI7auhIQ7ItkEZ4qysN5Dl+emu2B7RywGiKcr3FFMQWPvER1ZA6ScK7
+         2tnmbKnDC4/vRbcWkRmz6ShT3zFghuRUp/vVvrlQieZz53HFdVO/U5IodZsBQHxaeS
+         QMdeEw4GhEDmKcLejFIS3OK7LVxg/Ktc/i/6uqiMK7J4eSK+Eucv8TVLBuKuOyhGLW
+         XhI/n7LDvTcC0xsV/OGLZfJE6gAd3BZ+g0Q6oSJEyo9yDsSaaxmxzQWvv5BVHb3u2A
+         qMKeQEPbvZaUoXKmzN1nWqrbZQqztvBhga7Z+jgyaTuKRbIDVMUJkMOi6sw+V2ctXI
+         6DUSHPVs5Naeg==
+From:   =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <martin@geanix.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <mhu@rtx.dk>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <martin@geanix.com>,
+        linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] mmc: meson: move mmc_request_done() call to irq thread
+Date:   Tue,  6 Jun 2023 08:59:17 +0200
+Message-Id: <20230606065918.460866-1-martin@geanix.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-References: <20230526010748.1222-1-masahisa.kojima@linaro.org>
- <20230526010748.1222-4-masahisa.kojima@linaro.org> <0d3e0370-eb76-010f-3d30-9acc9b59645c@siemens.com>
- <CAFA6WYPnWJNPvhT2JDkO-qXRUaJoxBGZEvSfhxcRynV7=VSdQA@mail.gmail.com>
-In-Reply-To: <CAFA6WYPnWJNPvhT2JDkO-qXRUaJoxBGZEvSfhxcRynV7=VSdQA@mail.gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Tue, 6 Jun 2023 08:57:52 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXFM45PCTU--+CCed6Cq_N5XqDG6tTu6fnQTSCpW2BWA5A@mail.gmail.com>
-Message-ID: <CAMj1kXFM45PCTU--+CCed6Cq_N5XqDG6tTu6fnQTSCpW2BWA5A@mail.gmail.com>
-Subject: Re: [PATCH v5 3/3] efi: Add tee-based EFI variable driver
-To:     Sumit Garg <sumit.garg@linaro.org>
-Cc:     Jan Kiszka <jan.kiszka@siemens.com>,
-        Masahisa Kojima <masahisa.kojima@linaro.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-efi@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        "Su, Bao Cheng (RC-CN DF FA R&D)" <baocheng.su@siemens.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 6 Jun 2023 at 08:52, Sumit Garg <sumit.garg@linaro.org> wrote:
->
-> Hi Jan,
->
-> On Tue, 6 Jun 2023 at 12:09, Jan Kiszka <jan.kiszka@siemens.com> wrote:
-> >
-> > On 26.05.23 03:07, Masahisa Kojima wrote:
-> > > When the flash is not owned by the non-secure world, accessing the EFI
-> > > variables is straightforward and done via EFI Runtime Variable Services.
-> > > In this case, critical variables for system integrity and security
-> > > are normally stored in the dedicated secure storage and only accessible
-> > > from the secure world.
-> > >
-> > > On the other hand, the small embedded devices don't have the special
-> > > dedicated secure storage. The eMMC device with an RPMB partition is
-> > > becoming more common, we can use an RPMB partition to store the
-> > > EFI Variables.
-> > >
-> > > The eMMC device is typically owned by the non-secure world(linux in
-> > > this case). There is an existing solution utilizing eMMC RPMB partition
-> > > for EFI Variables, it is implemented by interacting with
-> > > TEE(OP-TEE in this case), StandaloneMM(as EFI Variable Service Pseudo TA),
-> > > eMMC driver and tee-supplicant. The last piece is the tee-based
-> > > variable access driver to interact with TEE and StandaloneMM.
-> > >
-> > > So let's add the kernel functions needed.
-> > >
-> > > This feature is implemented as a kernel module.
-> > > StMM PTA has TA_FLAG_DEVICE_ENUM_SUPP flag when registered to OP-TEE
-> > > so that this tee_stmm_efi module is probed after tee-supplicant starts,
-> > > since "SetVariable" EFI Runtime Variable Service requires to
-> > > interact with tee-supplicant.
-> > >
-> > > Acked-by: Sumit Garg <sumit.garg@linaro.org>
-> > > Co-developed-by: Ilias Apalodimas <ilias.apalodimas@linaro.org>
-> > > Signed-off-by: Ilias Apalodimas <ilias.apalodimas@linaro.org>
-> > > Signed-off-by: Masahisa Kojima <masahisa.kojima@linaro.org>
-> > > ---
-> > >  drivers/firmware/efi/Kconfig                 |  15 +
-> > >  drivers/firmware/efi/Makefile                |   1 +
-> > >  drivers/firmware/efi/stmm/mm_communication.h | 236 +++++++
-> > >  drivers/firmware/efi/stmm/tee_stmm_efi.c     | 638 +++++++++++++++++++
-> > >  4 files changed, 890 insertions(+)
-> > >  create mode 100644 drivers/firmware/efi/stmm/mm_communication.h
-> > >  create mode 100644 drivers/firmware/efi/stmm/tee_stmm_efi.c
-> > >
-...
-> >
-> > I think we have a probe ordering issue with this driver:
-> > efivarfs_fill_super() may be called before the TEE bus was probed, thus
-> > with the default efivar ops still registered. And that means
-> > efivar_supports_writes() will return false, and the fs declares itself
-> > as readonly. I've seen systemd mounting it r/o initialling, and you need
-> > to remount the fs to enable writability.
-> >
-> > Is there anything that could be done to re-order things reliably, probe
-> > the tee bus earlier etc.?
->
-> This driver has a dependency on user-space daemon: tee-supplicant to
-> be running for RPMB access. So once you start that daemon the
-> corresponding device will be enumerated on the TEE bus and this driver
-> probe will be invoked. So I would suggest you to load this daemon very
-> early in the boot process or better to make it a part of initramfs.
->
+From: Martin Hundebøll <mhu@rtx.dk>
 
-That is not the point, really.
+The call to mmc_request_done() can schedule, so it cannot be called from
+irq context. Wake the irq thread if it needs to be called, and call it
+from there instead.
 
-If this dependency exists, the code should be aware of that, and made
-to work correctly in spite of it. Requiring a module to be part of
-initramfs is not a reasonable fix.
+Fixes the following kernel bug, which appears when running an RT patched
+kernel on the AmLogic Meson AXG A113X SoC:
+[   11.111407] BUG: scheduling while atomic: kworker/0:1H/75/0x00010001
+[   11.111438] Modules linked in:
+[   11.111451] CPU: 0 PID: 75 Comm: kworker/0:1H Not tainted 6.4.0-rc3-rt2-rtx-00081-gfd07f41ed6b4-dirty #1
+[   11.111461] Hardware name: RTX AXG A113X Linux Platform Board (DT)
+[   11.111469] Workqueue: kblockd blk_mq_run_work_fn
+[   11.111492] Call trace:
+[   11.111497]  dump_backtrace+0xac/0xe8
+[   11.111510]  show_stack+0x18/0x28
+[   11.111518]  dump_stack_lvl+0x48/0x60
+[   11.111530]  dump_stack+0x18/0x24
+[   11.111537]  __schedule_bug+0x4c/0x68
+[   11.111548]  __schedule+0x80/0x574
+[   11.111558]  schedule_loop+0x2c/0x50
+[   11.111567]  schedule_rtlock+0x14/0x20
+[   11.111576]  rtlock_slowlock_locked+0x468/0x730
+[   11.111587]  rt_spin_lock+0x40/0x64
+[   11.111596]  __wake_up_common_lock+0x5c/0xc4
+[   11.111610]  __wake_up+0x18/0x24
+[   11.111620]  mmc_blk_mq_req_done+0x68/0x138
+[   11.111633]  mmc_request_done+0x104/0x118
+[   11.111644]  meson_mmc_request_done+0x38/0x48
+[   11.111654]  meson_mmc_irq+0x128/0x1f0
+[   11.111663]  __handle_irq_event_percpu+0x70/0x114
+[   11.111674]  handle_irq_event_percpu+0x18/0x4c
+[   11.111683]  handle_irq_event+0x80/0xb8
+[   11.111691]  handle_fasteoi_irq+0xa4/0x120
+[   11.111704]  handle_irq_desc+0x20/0x38
+[   11.111712]  generic_handle_domain_irq+0x1c/0x28
+[   11.111721]  gic_handle_irq+0x8c/0xa8
+[   11.111735]  call_on_irq_stack+0x24/0x4c
+[   11.111746]  do_interrupt_handler+0x88/0x94
+[   11.111757]  el1_interrupt+0x34/0x64
+[   11.111769]  el1h_64_irq_handler+0x18/0x24
+[   11.111779]  el1h_64_irq+0x64/0x68
+[   11.111786]  __add_wait_queue+0x0/0x4c
+[   11.111795]  mmc_blk_rw_wait+0x84/0x118
+[   11.111804]  mmc_blk_mq_issue_rq+0x5c4/0x654
+[   11.111814]  mmc_mq_queue_rq+0x194/0x214
+[   11.111822]  blk_mq_dispatch_rq_list+0x3ac/0x528
+[   11.111834]  __blk_mq_sched_dispatch_requests+0x340/0x4d0
+[   11.111847]  blk_mq_sched_dispatch_requests+0x38/0x70
+[   11.111858]  blk_mq_run_work_fn+0x3c/0x70
+[   11.111865]  process_one_work+0x17c/0x1f0
+[   11.111876]  worker_thread+0x1d4/0x26c
+[   11.111885]  kthread+0xe4/0xf4
+[   11.111894]  ret_from_fork+0x10/0x20
 
-IIUC, this also means that the efivar ops are updated while there is
-already a client. This seems less than ideal as well
+Fixes: 51c5d8447bd71b ("MMC: meson: initial support for GX platforms")
+Cc: stable@vger.kernel.org
+Signed-off-by: Martin Hundebøll <martin@geanix.com>
+---
+ drivers/mmc/host/meson-gx-mmc.c | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/mmc/host/meson-gx-mmc.c b/drivers/mmc/host/meson-gx-mmc.c
+index b8514d9d5e736..77b2c23084566 100644
+--- a/drivers/mmc/host/meson-gx-mmc.c
++++ b/drivers/mmc/host/meson-gx-mmc.c
+@@ -991,11 +991,8 @@ static irqreturn_t meson_mmc_irq(int irq, void *dev_id)
+ 
+ 		if (data && !cmd->error)
+ 			data->bytes_xfered = data->blksz * data->blocks;
+-		if (meson_mmc_bounce_buf_read(data) ||
+-		    meson_mmc_get_next_command(cmd))
+-			ret = IRQ_WAKE_THREAD;
+-		else
+-			ret = IRQ_HANDLED;
++
++		ret = IRQ_WAKE_THREAD;
+ 	}
+ 
+ out:
+@@ -1007,9 +1004,6 @@ static irqreturn_t meson_mmc_irq(int irq, void *dev_id)
+ 		writel(start, host->regs + SD_EMMC_START);
+ 	}
+ 
+-	if (ret == IRQ_HANDLED)
+-		meson_mmc_request_done(host->mmc, cmd->mrq);
+-
+ 	return ret;
+ }
+ 
+@@ -1040,6 +1034,13 @@ static irqreturn_t meson_mmc_irq_thread(int irq, void *dev_id)
+ 	if (WARN_ON(!cmd))
+ 		return IRQ_NONE;
+ 
++	if (!meson_mmc_bounce_buf_read(cmd->data) &&
++	    !meson_mmc_get_next_command(cmd)) {
++		meson_mmc_request_done(host->mmc, cmd->mrq);
++
++		return IRQ_HANDLED;
++	}
++
+ 	if (cmd->error) {
+ 		meson_mmc_wait_desc_stop(host);
+ 		meson_mmc_request_done(host->mmc, cmd->mrq);
+-- 
+2.40.1
+
