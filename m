@@ -2,152 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A074724CE4
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 21:16:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD938724CE8
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 21:17:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239511AbjFFTQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 15:16:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48582 "EHLO
+        id S236780AbjFFTRf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 15:17:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237630AbjFFTP5 (ORCPT
+        with ESMTP id S233921AbjFFTRb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 15:15:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9644C1992
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 12:15:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E8AFE63081
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 19:15:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B88AC433D2;
-        Tue,  6 Jun 2023 19:15:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686078934;
-        bh=oDfcC99H7vL4Ph3/RETkW7NPppuo29jYZmhGR4hW7I0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=qLQHN19tTxoYONb6oCJkxwQuZG5qvi1k/kmzTS8nY2Qnnop+MkOH/F0VGO/kG+uoZ
-         1MKE+8mupT15VCTjLwKtQ/H79M3caQp6/XF81haR4ldQLyDIFL06aiFRBPMAoNRNBm
-         J2jDR3p8o+nLTX8WvX4i3HGJWoa27GFG28O9x5LDjVPVuIdb9pH9q7dzmVnErDLta8
-         2HfNtBpfpqGOciYJKbeAjveHNmlJhfenGKvuJjVV7LnxiZBO/hPZZgAV6+so+ruIhC
-         EEiEEFCbEVayBxjoiyD9apGWvLvnsnL81IZtepc2PY6KgfkzsumWR0SWjdAplUL07K
-         Y6hcD0a26Q17Q==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 7136A40692; Tue,  6 Jun 2023 16:15:31 -0300 (-03)
-Date:   Tue, 6 Jun 2023 16:15:31 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ravi Bangoria <ravi.bangoria@linux.ibm.com>
-Cc:     Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [PATCH 1/1] perf script: Fix allocation of evsel->priv related to
- per-event dump files
-Message-ID: <ZH+F0wGAWV14zvMP@kernel.org>
+        Tue, 6 Jun 2023 15:17:31 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BA00101;
+        Tue,  6 Jun 2023 12:17:30 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 02CA560226;
+        Tue,  6 Jun 2023 21:17:27 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1686079047; bh=jNSA09J/c7o0xmn9ZYlEHNwBrSX+r+EnE4ht4ZumTKE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=sUJ5PjueDmmtfj+rBKb8C4JO07gAonT/bPqcUKrih7mmMknR02QVsPGQu2fwZjIaK
+         ovKpWvldMK7i9u4bHWJSbiFuhPmH9M498dEAflggiIeD1rnfYCBWAsORGdHm7h2aI0
+         9b5gB1zYFjXsZHI714m2DeMrq6e3I03YTFICUbcIQlKpJjRhbji3c6bCi97u6g/uI2
+         DHzotZ7pdyzZHilI7fe6lKMN6gIZSQI33h14/u9bsanrGxTaweWmbKb/26QphM1sUv
+         kJe/DQAB611BDFFcwnShbLlZjgXgQ8UFqqbhPeMbb5Kx13Jl/IOSEWldheBu9TP+jL
+         lsksNbP5tvywA==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id mb78sT88mhyA; Tue,  6 Jun 2023 21:17:24 +0200 (CEST)
+Received: from [192.168.1.6] (unknown [77.237.113.62])
+        by domac.alu.hr (Postfix) with ESMTPSA id 5151D60225;
+        Tue,  6 Jun 2023 21:17:24 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1686079044; bh=jNSA09J/c7o0xmn9ZYlEHNwBrSX+r+EnE4ht4ZumTKE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=lyAN4IZvHAqsUelelIvW9bA4vbgZi7KGpgp3TeZ2oOCxly3MLo4L0s9r8iiFyASNF
+         1l5/PeWrUdVZYz1Q/TgaAgU1wLuB7nxA90v4REJc0QBh/ZkTTte0EpTMnlntXFu42T
+         IKBa2v55GWkRNDDni4IJPyL219r/AFBHMXpaiF+gJsPKsrls8d2B8w5s8D0ieuRYje
+         Q8rn/3tDfrPSra121bTGScDVoxtDPugv+H3ePHZ/YvalL3NRChSY18phx4rmDnh5hf
+         HfqDCiWPsHS0SzmioS2R5uvHrW8D4M/ITr1Z6BCxnjmTKYi0lOczvX6qHmvYMubLmF
+         HH8d5nAfXsNOA==
+Message-ID: <174c6928-3498-8fb0-9f83-b01fa346a221@alu.unizg.hr>
+Date:   Tue, 6 Jun 2023 21:17:24 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: POSSIBLE BUG: selftests/net/fcnal-test.sh: [FAIL] in vrf "bind -
+ ns-B IPv6 LLA" test
+Content-Language: en-US
+To:     Guillaume Nault <gnault@redhat.com>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <b6191f90-ffca-dbca-7d06-88a9788def9c@alu.unizg.hr>
+ <ZHeN3bg28pGFFjJN@debian> <a379796a-5cd6-caa7-d11d-5ffa7419b90e@alu.unizg.hr>
+ <ZH84zGEODT97TEXG@debian> <60f78eaa-ace7-c27d-8e45-4777ecf3faa2@alu.unizg.hr>
+ <ZH8+jLjottBw2zuD@debian> <12c34bed-0885-3bb3-257f-3b2438ba206f@alu.unizg.hr>
+ <ZH+ADF0OOcmtUPw9@debian>
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <ZH+ADF0OOcmtUPw9@debian>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I'm carrying this in my perf-tools-next, please ack :-)
+On 6/6/23 20:50, Guillaume Nault wrote:
+> On Tue, Jun 06, 2023 at 04:28:02PM +0200, Mirsad Todorovac wrote:
+>> On 6/6/23 16:11, Guillaume Nault wrote:
+>>> On Tue, Jun 06, 2023 at 03:57:35PM +0200, Mirsad Todorovac wrote:
+>>>> +       if (oif) {
+>>>> +               rcu_read_lock();
+>>>> +               dev = dev_get_by_index_rcu(net, oif);
+>>>> +               rcu_read_unlock();
+>>>
+>>> You can't assume '*dev' is still valid after rcu_read_unlock() unless
+>>> you hold a reference on it.
+>>>
+>>>> +               rtnl_lock();
+>>>> +               mdev = netdev_master_upper_dev_get(dev);
+>>>> +               rtnl_unlock();
+>>>
+>>> Because of that, 'dev' might have already disappeared at the time
+>>> netdev_master_upper_dev_get() is called. So it may dereference an
+>>> invalid pointer here.
+>>
+>> Good point, thanks. I didn't expect those to change.
+>>
+>> This can be fixed, provided that RCU and RTNL locks can be nested:
+> 
+> Well, yes and no. You can call rcu_read_{lock,unlock}() while under the
+> rtnl protection, but not the other way around.
+> 
+>>          rcu_read_lock();
+>>          if (oif) {
+>>                  dev = dev_get_by_index_rcu(net, oif);
+>>                  rtnl_lock();
+>>                  mdev = netdev_master_upper_dev_get(dev);
+>>                  rtnl_unlock();
+>>          }
+> 
+> This is invalid: rtnl_lock() uses a mutex, so it can sleep and that's
+> forbidden inside an RCU critical section.
 
-- Arnaldo
+Obviously, that's bad. Mea culpa.
 
----
+>>          if (sk->sk_bound_dev_if) {
+>>                  bdev = dev_get_by_index_rcu(net, sk->sk_bound_dev_if);
+>>          }
+>>
+>>          addr_type = ipv6_addr_type(daddr);
+>>          if ((__ipv6_addr_needs_scope_id(addr_type) && !oif) ||
+>>              (addr_type & IPV6_ADDR_MAPPED) ||
+>>              (oif && sk->sk_bound_dev_if && oif != sk->sk_bound_dev_if &&
+>>                      !(mdev && sk->sk_bound_dev_if && bdev && mdev == bdev))) {
+>>                  rcu_read_unlock();
+>>                  return -EINVAL;
+>> 	}
+>>          rcu_read_unlock();
+>>
+>> But again this is still probably not race-free (bdev might also disappear before
+>> the mdev == bdev test), even if it passed fcnal-test.sh, there is much duplication
+>> of code, so your one-line solution is obviously by far better. :-)
+> 
+> The real problem is choosing the right function for getting the master
+> device. In particular netdev_master_upper_dev_get() was a bad choice.
+> It forces you to take the rtnl, which is unnatural here and obliges you
+> to add extra code, while all this shouldn't be necessary in the first
+> place.
 
-When printing output we may want to generate per event files, where the
---per-event-dump option should be used, creating perf.data.EVENT.dump
-files instead of printing to stdout.
+Thank you for the additional insight. I had poor luck with Googling on
+these.
 
-The callback thar processes event thus expects that evsel->priv->fp
-should point to either the per-event FILE descriptor or to stdout.
+I made a blunder after blunder. But it was insightful and brainstorming.
+Good exercise for my little grey cells.
 
-The a3af66f51bd0bca7 ("perf script: Fix crash because of missing
-evsel->priv") changeset fixed a case where evsel->priv wasn't setup,
-thus set to NULL, causing a segfault when trying to access
-evsel->priv->fp.
+However, learning without making any errors appears to be simply a lot
+of blunt memorising. :-/
 
-But it did it for the non --per-event-dump case by allocating a 'struct
-perf_evsel_script' just to set its ->fp to stdout.
+It's good to be in an environment when one can learn from errors.
 
-Since evsel->priv is only freed when --per-event-dump is used, we ended
-up with a memory leek, detected using ASAN.
+:-)
 
-Fix it by using the same method as perf_script__setup_per_event_dump(),
-and reuse that static 'struct perf_evsel_script'.
-
-Also check if evsel_script__new() failed.
-
-Fixes: a3af66f51bd0bca7 ("perf script: Fix crash because of missing evsel->priv")
-Reported-by: Ian Rogers <irogers@google.com>
-Cc: Adrian Hunter <adrian.hunter@intel.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Ravi Bangoria <ravi.bangoria@linux.ibm.com>
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
----
- tools/perf/builtin-script.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
-index 70549fc93b125394..b02ad386a55baf07 100644
---- a/tools/perf/builtin-script.c
-+++ b/tools/perf/builtin-script.c
-@@ -2410,6 +2410,9 @@ static int process_sample_event(struct perf_tool *tool,
- 	return ret;
- }
- 
-+// Used when scr->per_event_dump is not set
-+static struct evsel_script es_stdout;
-+
- static int process_attr(struct perf_tool *tool, union perf_event *event,
- 			struct evlist **pevlist)
- {
-@@ -2418,7 +2421,6 @@ static int process_attr(struct perf_tool *tool, union perf_event *event,
- 	struct evsel *evsel, *pos;
- 	u64 sample_type;
- 	int err;
--	static struct evsel_script *es;
- 
- 	err = perf_event__process_attr(tool, event, pevlist);
- 	if (err)
-@@ -2428,14 +2430,13 @@ static int process_attr(struct perf_tool *tool, union perf_event *event,
- 	evsel = evlist__last(*pevlist);
- 
- 	if (!evsel->priv) {
--		if (scr->per_event_dump) {
-+		if (scr->per_event_dump) { 
- 			evsel->priv = evsel_script__new(evsel, scr->session->data);
--		} else {
--			es = zalloc(sizeof(*es));
--			if (!es)
-+			if (!evsel->priv)
- 				return -ENOMEM;
--			es->fp = stdout;
--			evsel->priv = es;
-+		} else { // Replicate what is done in perf_script__setup_per_event_dump()
-+			es_stdout.fp = stdout;
-+			evsel->priv = &es_stdout;
- 		}
- 	}
- 
-@@ -2741,7 +2742,6 @@ static int perf_script__fopen_per_event_dump(struct perf_script *script)
- static int perf_script__setup_per_event_dump(struct perf_script *script)
- {
- 	struct evsel *evsel;
--	static struct evsel_script es_stdout;
- 
- 	if (script->per_event_dump)
- 		return perf_script__fopen_per_event_dump(script);
--- 
-2.37.1
-
+Regards,
+Mirsad
