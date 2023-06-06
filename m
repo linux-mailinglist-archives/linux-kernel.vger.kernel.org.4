@@ -2,177 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04CD67234E1
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 03:57:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE0C07234E9
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 04:00:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232545AbjFFB5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 21:57:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39970 "EHLO
+        id S232585AbjFFCAK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 22:00:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230472AbjFFB5O (ORCPT
+        with ESMTP id S231192AbjFFCAJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 21:57:14 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22ADDED
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 18:57:13 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-977c72b116fso408043866b.3
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 18:57:13 -0700 (PDT)
+        Mon, 5 Jun 2023 22:00:09 -0400
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E028ED;
+        Mon,  5 Jun 2023 19:00:07 -0700 (PDT)
+Received: by mail-il1-x12b.google.com with SMTP id e9e14a558f8ab-33b3fa03738so26709575ab.1;
+        Mon, 05 Jun 2023 19:00:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686016631; x=1688608631;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=n3lFS92Q9Y5Yi8hsvO0NMVnQb89Fjn5Ds6zHjO1KoiM=;
-        b=XwnjUL0D819GhF7PXeXG3s5ECh9TuPAPuEMw5o4AuT35JX4iqRtqM7nttZLcWbHp6w
-         hennia2JKWQLdKFRUuoHHN5OHXG97d1xw2rO/jMbjZ6z7bCRcwkmcKQCzz94DYqIjsxq
-         pPHRpSNHZUR+kMoQsqVB2AWk06+cecwJqSTSrpNjpz8SBZxh2PYVpkPmdDLM6ExQx4b4
-         Mzqo5Igu5UrMoe9l25HrbQm/e0j2cG4sOYLgOzy4dlmtbiH+To7U74GiK1e6iKe81r2i
-         4rEvZ3uJga+56DHyEC1FsVe69UNP2sLqgIc2SUJzZhCyOyVXjESYxG2dket9tNQOWRkt
-         iZ0g==
+        d=gmail.com; s=20221208; t=1686016807; x=1688608807;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=buSjiCTAYMu1VMj/taG1SQiIiNFmwa/mLZSh9IabKTI=;
+        b=nZYeYOXbSndNmToj71NLbEkueeLvBTg+cxhX1LrbYWy7CI+k3mZ0DIK3GJCn6+RXMT
+         hrttjwRNVQG2+Xp75ydUzGrhc8unJ3vgmhKaANP0buce8i3LFV1wJVeIfVfsIXDPeqs/
+         7RKRpPWiWJYqn3+rWGfORNk0TJlBlg6HIW+ZgH5Rf3bUe5bwV0InfHcuyR1IjV8on1H9
+         oWAb7iIuzZskORs4ozoVBR0QyNAUvmdctAazG48EmpLdZvltZMZ8JZ4yLYdZyJlRU2+B
+         XZZ8ZFQ7MA9/+a7Xma660N9ScUMQcX4PbTWXeCsEnWX3LN2+jZTqeXtjXo6BaiW/eUsX
+         UxPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686016631; x=1688608631;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=n3lFS92Q9Y5Yi8hsvO0NMVnQb89Fjn5Ds6zHjO1KoiM=;
-        b=GjRC9mZHf4afnfkd2em9xNCP1MV/paGdqTV1vRYmp8zADgRQAQ5EPQKkDK7lNhCvUd
-         LQxnJBaPFiMgwQFOz+g5ww/+xoVET4LkLG/UrQoPxg7kXKMHipPCpUsDCS3FtvKyfGJi
-         kFwTwxsZM9IqN3CZRBXzQEC4TJRVuZVkbnXhAcao+JLx4QCJlo4fh1PmrCapCOGwR0Qr
-         r5X8ZZByTqQLvfBQWrq6NI+wAmyna6tdUWYf1S8DEixaFV1eVTcEVFwBpUVgGNSOMHBC
-         7O6NPmt8eCm6jetRp+/Y9RXs+dkrbd/50prM/4dT7cDG1g5+p0Myanq+mfKexuAlSEqB
-         LnTA==
-X-Gm-Message-State: AC+VfDwecjkKcvouupyASqiTTtZKkIvZ/QnwiJ6urrTTtBrlOmb5hQDC
-        wsRGFU7xYuMJIuqBrIzQXviERLduTfYf9FiOVsIT8w==
-X-Google-Smtp-Source: ACHHUZ6xqMRWE4SYR80sxO6KPoi/so3r5fLMEFY6iz/vvQJrQO0nAuV9N3BrvHOrohVUpOxZ4uf4O/yFsotZiLcF8Sc=
-X-Received: by 2002:a17:907:6e0e:b0:978:6b18:e935 with SMTP id
- sd14-20020a1709076e0e00b009786b18e935mr605184ejc.23.1686016631437; Mon, 05
- Jun 2023 18:57:11 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686016807; x=1688608807;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=buSjiCTAYMu1VMj/taG1SQiIiNFmwa/mLZSh9IabKTI=;
+        b=UaP/WP0Hwz8KVq0J660uImA0YM30ZyLB3HpxuDFF03XL6A2HEEOeJ/53ntbQ89nvh1
+         YKXgGYyqS4/asgtU5GEb69IpbYKphLvsd/9jIYltFBf1WBH86b9OMiSAFowL+ExO7BAR
+         TCydEEo6S+LgFm/107XoH3PrW0z67BMmfeIxPGd2TDjp8lUKATR0fzyaqa4qofTjfieW
+         Xd98RHKolT0L9GwRY0Ho58UKw803BonuDSjM8VxuTbty3+BOUG/QXAi49Tp4L5GKdzI/
+         9yecL2ZMVaNb/oFj8/iVb/azhW22q4iDqPezPZ8ANx9wEkrJR+gM8sfBdnwuqgMe7gHz
+         jWHA==
+X-Gm-Message-State: AC+VfDyTyV/OlWhUAKEoDNpTwXGEKd9b3Sja5rRdQZkrY2oQLGm9R/Ru
+        hgOWA6jvF7kt25mY/Ddua0g=
+X-Google-Smtp-Source: ACHHUZ6HpjBXN77Wl2V0CL0HXxBJE6gN8QW0/beR1dgCj3Q6GilLf8tVmlWavSvbQ/Gc2+SReQMirQ==
+X-Received: by 2002:a92:d350:0:b0:328:8770:b9c2 with SMTP id a16-20020a92d350000000b003288770b9c2mr1051226ilh.14.1686016806863;
+        Mon, 05 Jun 2023 19:00:06 -0700 (PDT)
+Received: from debian.me (subs32-116-206-28-36.three.co.id. [116.206.28.36])
+        by smtp.gmail.com with ESMTPSA id a10-20020a62bd0a000000b0063b86aff031sm5749842pff.108.2023.06.05.19.00.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Jun 2023 19:00:06 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id ADE5A1069AF; Tue,  6 Jun 2023 09:00:02 +0700 (WIB)
+Date:   Tue, 6 Jun 2023 09:00:02 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
+        Lino Sanfilippo <l.sanfilippo@kunbus.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Sasha Levin <sashal@kernel.org>,
+        Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Linux Kernel Integrity <linux-integrity@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>
+Subject: Re: New kernel warning after updating from LTS 5.15.110 to 5.15.112
+ (and 5.15.113)
+Message-ID: <ZH6TIjXeXJVMvSKa@debian.me>
+References: <fe6f7aa0-56c2-3729-ce8c-0f2d943b33f4@alliedtelesis.co.nz>
+ <ZHQIFLWvrWUNMVxb@debian.me>
+ <6e470461-1a9b-ec51-bac5-f2beb1dc11c9@alliedtelesis.co.nz>
+ <2b09d2ed-0852-bbc9-b792-aad92235c7fa@gmail.com>
+ <03daca5c-e468-8889-4dc2-e625a664d571@alliedtelesis.co.nz>
+ <ec5245bd-3103-f0c7-d3ef-85aabb4d4712@alliedtelesis.co.nz>
 MIME-Version: 1.0
-References: <20230531022911.1168524-1-yosryahmed@google.com>
- <20230601155825.GF102494@cmpxchg.org> <CAJD7tkaFSfpTtB_ua_9QzR2voE1-hixv6RMJZd=WqpGmY93dSw@mail.gmail.com>
- <20230602164942.GA215355@cmpxchg.org> <CAJD7tkbp96S8MdrcH8y0V2G5Q-Zq6U4DAuweYhP-MjUWgcmjsQ@mail.gmail.com>
- <20230602183410.GB215355@cmpxchg.org> <CAJD7tka18Vw7HpA1gh6wWJcaCJ_U6jNfCC696pX=UkbiXKZMvQ@mail.gmail.com>
- <20230602202453.GA218605@cmpxchg.org>
-In-Reply-To: <20230602202453.GA218605@cmpxchg.org>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Mon, 5 Jun 2023 18:56:35 -0700
-Message-ID: <CAJD7tkZBxddm1c4f99KmY+VwKU3jbYBMaNuTtfpis7a1E6242Q@mail.gmail.com>
-Subject: Re: [PATCH] mm: zswap: multiple zpool support
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Minchan Kim <minchan@kernel.org>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Seth Jennings <sjenning@redhat.com>,
-        Dan Streetman <ddstreet@ieee.org>,
-        Vitaly Wool <vitaly.wool@konsulko.com>,
-        Nhat Pham <nphamcs@gmail.com>,
-        Domenico Cerasuolo <cerasuolodomenico@gmail.com>,
-        Yu Zhao <yuzhao@google.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="1I+UJ79Ezq1Yhtal"
+Content-Disposition: inline
+In-Reply-To: <ec5245bd-3103-f0c7-d3ef-85aabb4d4712@alliedtelesis.co.nz>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 2, 2023 at 1:24=E2=80=AFPM Johannes Weiner <hannes@cmpxchg.org>=
- wrote:
->
-> On Fri, Jun 02, 2023 at 12:14:28PM -0700, Yosry Ahmed wrote:
-> > On Fri, Jun 2, 2023 at 11:34=E2=80=AFAM Johannes Weiner <hannes@cmpxchg=
-.org> wrote:
-> > >
-> > > On Fri, Jun 02, 2023 at 09:59:20AM -0700, Yosry Ahmed wrote:
-> > > > On Fri, Jun 2, 2023 at 9:49=E2=80=AFAM Johannes Weiner <hannes@cmpx=
-chg.org> wrote:
-> > > > > Again, what about the zswap_tree.lock and swap_info_struct.lock?
-> > > > > They're the same scope unless you use multiple swap files. Would =
-it
-> > > > > make sense to tie pools to trees, so that using multiple swapfile=
-s for
-> > > > > concurrency purposes also implies this optimization?
-> > > >
-> > > > Yeah, using multiple swapfiles helps with those locks, but it doesn=
-'t
-> > > > help with the zpool lock.
-> > > >
-> > > > I am reluctant to take this path because I am trying to get rid of
-> > > > zswap's dependency on swapfiles to begin with, and have it act as i=
-ts
-> > > > own standalone swapping backend. If I am successful, then having on=
-e
-> > > > zpool per zswap_tree is just a temporary fix.
-> > >
-> > > What about making the pools per-cpu?
-> > >
-> > > This would scale nicely with the machine size. And we commonly deal
-> > > with for_each_cpu() loops and per-cpu data structures, so have good
-> > > developer intuition about what's reasonable to squeeze into those.
-> > >
-> > > It would eliminate the lock contention, for everybody, right away, an=
-d
-> > > without asking questions.
-> > >
-> > > It would open the door to all kinds of locking optimizations on top.
+
+--1I+UJ79Ezq1Yhtal
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, Jun 06, 2023 at 01:41:01AM +0000, Chris Packham wrote:
+>=20
+> On 2/06/23 16:19, Chris Packham wrote:
 > >
-> > The page can get swapped out on one cpu and swapped in on another, no?
+> > On 2/06/23 16:10, Bagas Sanjaya wrote:
+> >> On 5/29/23 09:37, Chris Packham wrote:
+> >>> On 29/05/23 14:04, Bagas Sanjaya wrote:
+> >>>> On Sun, May 28, 2023 at 11:42:50PM +0000, Chris Packham wrote:
+> >>>>> Hi,
+> >>>>>
+> >>>>> We have an embedded product with an Infineon SLM9670 TPM. After=20
+> >>>>> updating
+> >>>>> to a newer LTS kernel version we started seeing the following=20
+> >>>>> warning at
+> >>>>> boot.
+> >>>>>
+> >>>>> [=C2=A0=C2=A0=C2=A0 4.741025] ------------[ cut here ]------------
+> >>>>> [=C2=A0=C2=A0=C2=A0 4.749894] irq 38 handler tis_int_handler+0x0/0x=
+154 enabled=20
+> >>>>> interrupts
+> >>>>> [=C2=A0=C2=A0=C2=A0 4.756555] WARNING: CPU: 0 PID: 0 at kernel/irq/=
+handle.c:159
+> >>>>> __handle_irq_event_percpu+0xf4/0x180
+> >>>>> [=C2=A0=C2=A0=C2=A0 4.765557] Modules linked in:
+> >>>>> [=C2=A0=C2=A0=C2=A0 4.768626] CPU: 0 PID: 0 Comm: swapper/0 Not tai=
+nted 5.15.113 #1
+> >>>>> [=C2=A0=C2=A0=C2=A0 4.774747] Hardware name: Allied Telesis x250-18=
+XS (DT)
+> >>>>> [=C2=A0=C2=A0=C2=A0 4.780080] pstate: 60000005 (nZCv daif -PAN -UAO=
+ -TCO -DIT -SSBS
+> >>>>> BTYPE=3D--)
+> >>>>> [=C2=A0=C2=A0=C2=A0 4.787072] pc : __handle_irq_event_percpu+0xf4/0=
+x180
+> >>>>> [=C2=A0=C2=A0=C2=A0 4.792146] lr : __handle_irq_event_percpu+0xf4/0=
+x180
+> >>>>> [=C2=A0=C2=A0=C2=A0 4.797220] sp : ffff800008003e40
+> >>>>> [=C2=A0=C2=A0=C2=A0 4.800547] x29: ffff800008003e40 x28: ffff800009=
+3951c0 x27:
+> >>>>> ffff80000902a9b8
+> >>>>> [=C2=A0=C2=A0=C2=A0 4.807716] x26: ffff800008fe8d28 x25: ffff800009=
+4a62bd x24:
+> >>>>> ffff000001b92400
+> >>>>> [=C2=A0=C2=A0=C2=A0 4.814885] x23: 0000000000000026 x22: ffff800008=
+003ec4 x21:
+> >>>>> 0000000000000000
+> >>>>> [=C2=A0=C2=A0=C2=A0 4.822053] x20: 0000000000000001 x19: ffff000002=
+381200 x18:
+> >>>>> ffffffffffffffff
+> >>>>> [=C2=A0=C2=A0=C2=A0 4.829222] x17: ffff800076962000 x16: ffff800008=
+000000 x15:
+> >>>>> ffff800088003b57
+> >>>>> [=C2=A0=C2=A0=C2=A0 4.836390] x14: 0000000000000000 x13: ffff800009=
+3a5078 x12:
+> >>>>> 000000000000035d
+> >>>>> [=C2=A0=C2=A0=C2=A0 4.843558] x11: 000000000000011f x10: ffff800009=
+3a5078 x9 :
+> >>>>> ffff8000093a5078
+> >>>>> [=C2=A0=C2=A0=C2=A0 4.850727] x8 : 00000000ffffefff x7 : ffff800009=
+3fd078 x6 :
+> >>>>> ffff8000093fd078
+> >>>>> [=C2=A0=C2=A0=C2=A0 4.857895] x5 : 000000000000bff4 x4 : 0000000000=
+000000 x3 :
+> >>>>> 0000000000000000
+> >>>>> [=C2=A0=C2=A0=C2=A0 4.865062] x2 : 0000000000000000 x1 : 0000000000=
+000000 x0 :
+> >>>>> ffff8000093951c0
+> >>>>> [=C2=A0=C2=A0=C2=A0 4.872230] Call trace:
+> >>>>> [=C2=A0=C2=A0=C2=A0 4.874686]=C2=A0 __handle_irq_event_percpu+0xf4/=
+0x180
+> >>>>> [=C2=A0=C2=A0=C2=A0 4.879411]=C2=A0 handle_irq_event+0x64/0xec
+> >>>>> [=C2=A0=C2=A0=C2=A0 4.883264]=C2=A0 handle_level_irq+0xc0/0x1b0
+> >>>>> [=C2=A0=C2=A0=C2=A0 4.887202]=C2=A0 generic_handle_irq+0x30/0x50
+> >>>>> [=C2=A0=C2=A0=C2=A0 4.891229]=C2=A0 mvebu_gpio_irq_handler+0x11c/0x=
+2a0
+> >>>>> [=C2=A0=C2=A0=C2=A0 4.895780]=C2=A0 handle_domain_irq+0x60/0x90
+> >>>>> [=C2=A0=C2=A0=C2=A0 4.899720]=C2=A0 gic_handle_irq+0x4c/0xd0
+> >>>>> [=C2=A0=C2=A0=C2=A0 4.903398]=C2=A0 call_on_irq_stack+0x20/0x4c
+> >>>>> [=C2=A0=C2=A0=C2=A0 4.907338]=C2=A0 do_interrupt_handler+0x54/0x60
+> >>>>> [=C2=A0=C2=A0=C2=A0 4.911538]=C2=A0 el1_interrupt+0x30/0x80
+> >>>>> [=C2=A0=C2=A0=C2=A0 4.915130]=C2=A0 el1h_64_irq_handler+0x18/0x24
+> >>>>> [=C2=A0=C2=A0=C2=A0 4.919244]=C2=A0 el1h_64_irq+0x78/0x7c
+> >>>>> [=C2=A0=C2=A0=C2=A0 4.922659]=C2=A0 arch_cpu_idle+0x18/0x2c
+> >>>>> [=C2=A0=C2=A0=C2=A0 4.926249]=C2=A0 do_idle+0xc4/0x150
+> >>>>> [=C2=A0=C2=A0=C2=A0 4.929404]=C2=A0 cpu_startup_entry+0x28/0x60
+> >>>>> [=C2=A0=C2=A0=C2=A0 4.933343]=C2=A0 rest_init+0xe4/0xf4
+> >>>>> [=C2=A0=C2=A0=C2=A0 4.936584]=C2=A0 arch_call_rest_init+0x10/0x1c
+> >>>>> [=C2=A0=C2=A0=C2=A0 4.940699]=C2=A0 start_kernel+0x600/0x640
+> >>>>> [=C2=A0=C2=A0=C2=A0 4.944375]=C2=A0 __primary_switched+0xbc/0xc4
+> >>>>> [=C2=A0=C2=A0=C2=A0 4.948402] ---[ end trace 940193047b35b311 ]---
+> >>>>>
+> >>>>> Initially I dismissed this as a warning that would probably be=20
+> >>>>> cleaned
+> >>>>> up when we did more work on the TPM support for our product but we=
+=20
+> >>>>> also
+> >>>>> seem to be getting some new i2c issues and possibly a kernel stack
+> >>>>> corruption that we've conflated with this TPM warning.
+> >>>> Can you reproduce this issue on mainline? Can you also bisect to find
+> >>>> the culprit?
+> >>> No the error doesn't appear on a recent mainline kernel. I do still g=
+et
+> >>>
+> >>> tpm_tis_spi spi1.1: 2.0 TPM (device-id 0x1B, rev-id 22)
+> >>> tpm tpm0: [Firmware Bug]: TPM interrupt not working, polling instead
+> >>> tpm tpm0: A TPM error (256) occurred attempting the self test
+> >>>
+> >>> but I think I was getting that on v5.15.110
+> >>>
+> >> I repeat: Can you bisect between v5.15 and v5.15.112?
 > >
-> > We will need to store which zpool the page is stored in in its zswap
-> > entry, and potentially grab percpu locks from other cpus in the swap
-> > in path. The lock contention would probably be less, but certainly not
-> > eliminated.
+> > It's definitely between v5.15.110 and v5.15.112.
 > >
-> > Did I misunderstand?
->
-> Sorry, I should have been more precise.
->
-> I'm saying that using NR_CPUS pools, and replacing the hash with
-> smp_processor_id(), would accomplish your goal of pool concurrency.
-> But it would do so with a broadly-used, well-understood scaling
-> factor. We might not need a config option at all.
->
-> The lock would still be there, but contention would be reduced fairly
-> optimally (barring preemption) for store concurrency at least. Not
-> fully eliminated due to frees and compaction, though, yes.
+> > I'll do a proper bisect next week but I'm pretty sure it's related to=
+=20
+> > the "tpm, tpm_tis:" series. The problem can be worked around by=20
+> > removing the TPM interrupt from the device tree for the board.
+>=20
+> Bisecting between v5.15.110 and v5.15.112 points to
+>=20
+> 51162b05a44cb5d98fb0ae2519a860910a47fd4b is the first bad commit
 
-Yeah I think we can do that. I looked at the size of the zsmalloc pool
-as an example, and it seems to be less than 1K, so having one percpu
-seems okay.
+Thanks for the bisection.
 
-There are a few things that we will need to do:
-- Rework zswap_update_total_size(). We don't want to loop through all
-cpus on each load/store. We can be smarter about it and inc/dec the
-total zswap pool size each time we allocate or free a page in the
-driver. This might need some plumbing from the drivers to zswap (or
-passing a callback from zswap to the drivers).
+Lino, it looks like this regression is caused by (backported) commit of you=
+rs.
+Would you like to take a look on it?
 
-- Update zsmalloc such that all pool share kmem caches, instead of
-creating two kmem caches for zsmalloc percpu. This was a follow-up I
-had in mind for multiple zpools support anyway, but I guess it's more
-significant if we have NR_CPUS pools.
+Anyway, telling regzbot:
 
-I was nervous about increasing the size of struct zswap_entry to store
-the cpu/zpool where the entry resides, but I realized we can replace
-the pointer to zswap_pool in struct zswap_entry with a pointer to
-zpool, and add a zswap_pool pointer in struct zpool. This will
-actually trim down the common "entry->pool->zpool" to just
-"entry->zpool", and then we can replace any "entry->pool" with
-"entry->zpool->pool".
+#regzbot introduced: 51162b05a44cb5
 
-@Yu Zhao, any thoughts on this? The multiple zpools support was
-initially your idea (and did the initial implementation) -- so your
-input is very valuable here.
+--=20
+An old man doll... just what I always wanted! - Clara
 
->
-> I'm not proposing more than that at this point. I only wrote the last
-> line because already having per-cpu data structures might help with
-> fast path optimizations down the line, if contention is still an
-> issue. But unlikely. So it's not so important. Let's forget it.
+--1I+UJ79Ezq1Yhtal
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZH6THgAKCRD2uYlJVVFO
+o6M8AQC/AQl5Qg8MqMLvvmXd1ofCPvdrOv/MKTCm6CYi82fT0gD/fzETeBUkqb7c
+0tWduZktxuZReEFeucMiOOR4CsyBqAc=
+=GEY/
+-----END PGP SIGNATURE-----
+
+--1I+UJ79Ezq1Yhtal--
