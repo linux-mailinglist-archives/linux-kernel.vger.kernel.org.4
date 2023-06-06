@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A8D1724B47
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 20:23:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C57CE724B48
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 20:23:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238995AbjFFSXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 14:23:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40072 "EHLO
+        id S239000AbjFFSXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 14:23:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238639AbjFFSW7 (ORCPT
+        with ESMTP id S238747AbjFFSW7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 6 Jun 2023 14:22:59 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AC37170B;
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B36531711;
         Tue,  6 Jun 2023 11:22:42 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 356IMNLl044643;
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 356IMNGO022989;
         Tue, 6 Jun 2023 13:22:23 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
         s=ti-com-17Q1; t=1686075743;
-        bh=Lal+xNbZ0/gdLtgAjGYSiTiFJlFFnIFf6O90MOdw9tI=;
+        bh=JQkOCG94+40ncdAYyraVoynmOianmiiWpLMMz//9w40=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=mQ7hae7R+72WQwi8WvdAlCGQFWnfn64ks5nSjyBwc/KtUvGDEEJyhsDt6/zPxj+mm
-         Cu0KkkymIci1fdrn4Fy/+0XunnoTIKzmcDK9pvVri597nqybkC5pexUL879Lc57+7l
-         H8XGf4sgM0iOMOt9ul65+2ODiT79rjWhnuQlBvCY=
-Received: from DLEE111.ent.ti.com (dlee111.ent.ti.com [157.170.170.22])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 356IMNTb089007
+        b=Qxs2BqSJ/Fg95gxkAPpzWXRLELeTpdFJb6A+jFHSrSKo/lsR1ll9wNjZNHzGv/CIS
+         h1MHWZIjywBbVxmEU6pd3ltr54CDBmJ4N7njYGcbwrUcZUaWfa069+XcWMuHBZleKj
+         INFXoEsxSpZKvGyx/IEzHQSwBEsO1MrPlmyDXQ9E=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 356IMNgW094558
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
         Tue, 6 Jun 2023 13:22:23 -0500
-Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE111.ent.ti.com
- (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 6
  Jun 2023 13:22:22 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE101.ent.ti.com
- (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
  Frontend Transport; Tue, 6 Jun 2023 13:22:22 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 356IMMKt016541;
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 356IMMgt040842;
         Tue, 6 Jun 2023 13:22:22 -0500
 From:   Nishanth Menon <nm@ti.com>
 To:     Conor Dooley <conor+dt@kernel.org>,
@@ -49,9 +49,9 @@ CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
         Tero Kristo <kristo@kernel.org>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         Udit Kumar <u-kumar1@ti.com>, Nishanth Menon <nm@ti.com>
-Subject: [PATCH V2 01/14] arm64: dts: ti: k3-j721e-sk: Fixup reference to phandles array
-Date:   Tue, 6 Jun 2023 13:22:07 -0500
-Message-ID: <20230606182220.3661956-2-nm@ti.com>
+Subject: [PATCH V2 02/14] arm64: dts: ti: k3-j721e-som-p0/common-proc-board: Fixup reference to phandles array
+Date:   Tue, 6 Jun 2023 13:22:08 -0500
+Message-ID: <20230606182220.3661956-3-nm@ti.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230606182220.3661956-1-nm@ti.com>
 References: <20230606182220.3661956-1-nm@ti.com>
@@ -76,17 +76,27 @@ the rest of the usage.
 
 Signed-off-by: Nishanth Menon <nm@ti.com>
 ---
-No Changes since v1
-V1: https://lore.kernel.org/r/20230601152636.858553-2-nm@ti.com
+No Changes from V1
+V1: https://lore.kernel.org/r/20230601152636.858553-3-nm@ti.com
 
- arch/arm64/boot/dts/ti/k3-j721e-sk.dts | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+ .../boot/dts/ti/k3-j721e-common-proc-board.dts |  4 ++--
+ arch/arm64/boot/dts/ti/k3-j721e-som-p0.dtsi    | 18 +++++++++---------
+ 2 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/ti/k3-j721e-sk.dts b/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
-index f650a7fd66b4..1311211c391e 100644
---- a/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
-+++ b/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
-@@ -781,7 +781,7 @@ &tscadc1 {
+diff --git a/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
+index 7db0603125aa..03c575e353a0 100644
+--- a/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
++++ b/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dts
+@@ -24,7 +24,7 @@ gpio_keys: gpio-keys {
+ 		compatible = "gpio-keys";
+ 		autorepeat;
+ 		pinctrl-names = "default";
+-		pinctrl-0 = <&sw10_button_pins_default &sw11_button_pins_default>;
++		pinctrl-0 = <&sw10_button_pins_default>, <&sw11_button_pins_default>;
+ 
+ 		sw10: switch-10 {
+ 			label = "GPIO Key USER1";
+@@ -646,7 +646,7 @@ exp5: gpio@20 {
  
  &mcu_cpsw {
  	pinctrl-names = "default";
@@ -95,7 +105,11 @@ index f650a7fd66b4..1311211c391e 100644
  };
  
  &davinci_mdio {
-@@ -1008,55 +1008,55 @@ mbox_c71_0: mbox-c71-0 {
+diff --git a/arch/arm64/boot/dts/ti/k3-j721e-som-p0.dtsi b/arch/arm64/boot/dts/ti/k3-j721e-som-p0.dtsi
+index e289d5b44356..bc15de6ab8ac 100644
+--- a/arch/arm64/boot/dts/ti/k3-j721e-som-p0.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-j721e-som-p0.dtsi
+@@ -256,55 +256,55 @@ mbox_c71_0: mbox-c71-0 {
  };
  
  &mcu_r5fss0_core0 {
