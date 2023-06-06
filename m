@@ -2,127 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54493723ECE
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 12:02:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A08A7723ED1
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 12:02:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235861AbjFFKCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 06:02:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35852 "EHLO
+        id S232131AbjFFKCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 06:02:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231368AbjFFKCG (ORCPT
+        with ESMTP id S235716AbjFFKCO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 06:02:06 -0400
-Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6286E4F
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 03:02:04 -0700 (PDT)
-Received: by mail-vs1-xe35.google.com with SMTP id ada2fe7eead31-43b27330e51so1353645137.3
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 03:02:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1686045724; x=1688637724;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dzJNkn8MMIl6p+NtwjcktnBBMjRCL8LQ2CZu0WCe8WU=;
-        b=b85sowyfu9GgoGWXPnrK/lcStHgLLagfrqalY0vUzKMtrYo9gyfPBM1UjxVni55T2y
-         B+RsC04DSvoJbuwSLigKct5ootPwjTwK7C1WC/tE+1Bq/vjWTCdvlfEY0DKfuttps9MS
-         y1FZ0csfV4itg9QKmRfRt1WY/mjDL7+mw/5jQ780Jo2bOGr7v76Hf6lDCQmVRqC7ghbK
-         knW5L1r0WozAZnjg3sVFNEdvlhFCh3ieIyjXX7P7CgxVmgYc0HhX1F28/iIp51qH/cPi
-         OHqPwPaZbWmQtfSi0eZXHUL8ZMh/Ys8JjzJDw2WhZvGq7deGYKBGbJj/RYPXZZe0qCDT
-         tILg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686045724; x=1688637724;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dzJNkn8MMIl6p+NtwjcktnBBMjRCL8LQ2CZu0WCe8WU=;
-        b=a1/L0/WO9GMNPBFhVU5okXnKnE2q2V8UN4LVIi8+XQY5n1EwFewmIidtme8SeVC7l9
-         iNWYePwX2pSgHIWILAuLnme8XftMdn/og1m5G58oI6DU1SAj3WVOOJqRfYWI2GHo1lfo
-         FK9nPtbHhyxi34ZrLN0iP+co/KPxfIH/uLKanhU3kTuBwjPksCudiuFZleBqrb/d8di8
-         IM+6PsfnPHVawt29vjJRvpAqsXMlhbAizMI9Hg4gMjm5Yl4MnK2298U07KHs96XpQlHP
-         gXg8eP/Tf7H2gbWXHE7NHLqRocyvfLMbS62YV/D0nYOf8Ffi7ytoom7AbV7V4tL0Gowi
-         Kyrw==
-X-Gm-Message-State: AC+VfDzhnd6ux9bxltTSQX40iiRJEhYvcuFiNCIQJxTy4eO6Neu2aWaU
-        KuvzD8lmqjJaxChXqoO/NwKyqQM21CN/h7fy2X3clQ==
-X-Google-Smtp-Source: ACHHUZ59ux3Tv3PzL783aI5oC4KCKnUVsXc7kqBQ+9xVId0Qy7fLzd7keSb9xbnNWaejDUqqYnZWjUtZMZ+LzIfWAso=
-X-Received: by 2002:a05:6102:3a67:b0:43c:5432:1fae with SMTP id
- bf7-20020a0561023a6700b0043c54321faemr359451vsb.27.1686045724034; Tue, 06 Jun
- 2023 03:02:04 -0700 (PDT)
+        Tue, 6 Jun 2023 06:02:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C7CE78;
+        Tue,  6 Jun 2023 03:02:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EC2EB62598;
+        Tue,  6 Jun 2023 10:02:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BA03C433EF;
+        Tue,  6 Jun 2023 10:02:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1686045729;
+        bh=1IoFuwmoNSSKAwyxIlVTyvXm8uDl4GdCtAIidncLBB0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ye+qgjyDzSkgkebwek9jswghyGjYlglS9wXkb33X7e7Ie/Uv2rWxBZrqIFA8/5Q44
+         Qt0FxrJOYXfkdLJoMtiDhUHRvRdzxz6ZLxYeCw37b6LB/jQMGOb3jCer3xDknF4xfX
+         aeT8jODlrzBENDSIk9nb0283Ga10Q7tD2ugaLP7M=
+Date:   Tue, 6 Jun 2023 12:02:06 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Neel Chakraborty <neelchakrabortykernelwork@gmail.com>
+Cc:     b-liu@ti.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drivers: usb: musb: musb_gadget: fixed coding style
+ issues and removed unneeded code
+Message-ID: <2023060644-countdown-employer-2af9@gregkh>
+References: <20230606065921.997102-1-neelchakrabortykernelwork@gmail.com>
 MIME-Version: 1.0
-References: <20230606051323.17698-1-warthog618@gmail.com>
-In-Reply-To: <20230606051323.17698-1-warthog618@gmail.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Tue, 6 Jun 2023 12:01:53 +0200
-Message-ID: <CAMRc=MfdusMAqfjnQTi_-DdjeLHQzywpk=zpKaQjahy6_gds0Q@mail.gmail.com>
-Subject: Re: [PATCH] gpio-sim: fix memory corruption when adding named lines
- and unnamed hogs
-To:     Kent Gibson <warthog618@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linus.walleij@linaro.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230606065921.997102-1-neelchakrabortykernelwork@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 6, 2023 at 7:13=E2=80=AFAM Kent Gibson <warthog618@gmail.com> w=
-rote:
->
-> When constructing the sim, gpio-sim constructs an array of named lines,
-> sized based on the largest offset of any named line, and then initializes
-> that array with the names of all lines, including unnamed hogs with highe=
-r
-> offsets.  In doing so it writes NULLs beyond the extent of the array.
->
-> Add a check that only named lines are used to initialize the array.
->
-> Fixes: cb8c474e79be ("gpio: sim: new testing module")
-> Signed-off-by: Kent Gibson <warthog618@gmail.com>
+On Tue, Jun 06, 2023 at 12:29:21PM +0530, Neel Chakraborty wrote:
+> Fixed a few coding style issues
+> Removed the static int musb_gadget_vbus_session function as it was
+> doing nothing.
+> 
+> Signed-off-by: Neel Chakraborty <neelchakrabortykernelwork@gmail.com>
 > ---
->
-> After writing the comment above, and looking at the code again, it may be
-> clearer to instead check that the offset is within the bounds of the
-> array.  Or do both.  Consider that my review.
->
+>  drivers/usb/musb/musb_gadget.c | 38 +++++++++++-----------------------
+>  1 file changed, 12 insertions(+), 26 deletions(-)
+> 
 
-Like:
 
-if (line->offset <=3D max_offset)
-    line_names[line->offset] =3D line->name;
+Hi,
 
-? If so, then I agree it makes the purpose of the check clearer.
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-Bart
+You are receiving this message because of the following common error(s)
+as indicated below:
 
-> Cheers,
-> Kent.
->
->  drivers/gpio/gpio-sim.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/gpio/gpio-sim.c b/drivers/gpio/gpio-sim.c
-> index e5dfd636c63c..923e8ff53128 100644
-> --- a/drivers/gpio/gpio-sim.c
-> +++ b/drivers/gpio/gpio-sim.c
-> @@ -721,8 +721,10 @@ static char **gpio_sim_make_line_names(struct gpio_s=
-im_bank *bank,
->         if (!line_names)
->                 return ERR_PTR(-ENOMEM);
->
-> -       list_for_each_entry(line, &bank->line_list, siblings)
-> -               line_names[line->offset] =3D line->name;
-> +       list_for_each_entry(line, &bank->line_list, siblings) {
-> +               if (line->name)
-> +                       line_names[line->offset] =3D line->name;
-> +       }
->
->         return line_names;
->  }
-> --
-> 2.40.1
->
+- Your patch did many different things all at once, making it difficult
+  to review.  All Linux kernel patches need to only do one thing at a
+  time.  If you need to do multiple things (such as clean up all coding
+  style issues in a file/driver), do it in a sequence of patches, each
+  one doing only one thing.  This will make it easier to review the
+  patches to ensure that they are correct, and to help alleviate any
+  merge issues that larger patches can cause.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
