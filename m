@@ -2,114 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9355724069
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 13:04:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67776723590
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 05:01:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234500AbjFFLDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 07:03:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41484 "EHLO
+        id S234480AbjFFDBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 23:01:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236669AbjFFLDH (ORCPT
+        with ESMTP id S230215AbjFFDBc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 07:03:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2016319B3;
-        Tue,  6 Jun 2023 04:00:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 882826280D;
-        Tue,  6 Jun 2023 11:00:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7D95C433A1;
-        Tue,  6 Jun 2023 11:00:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686049219;
-        bh=FJZBvU9mZ929InzbREOPQybjQtP4GSxypUKiLaiGPYY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=f8YppWGM9pkCcQiw8BokRT2JY3X69vuGpmvJMhjP7v+Li0/uaE71ySscWjIpuV4RK
-         AhoN9TUo3jQwzL677mAtiESDt/zi+B7hK8acfqOVU7toT0lPBZ6ZTbE8rAC7Qru+7w
-         Wfffy+NLgnq8GzQJSBe8lBylVcGAbZdNjhFbKUdl1xQn9JD8FU9OQa0EZFg3/HeiJ5
-         j6BqlGeR+vNLo2nINfnlZ3o9q5CeXDbQGNeBFcsnEjUBInrraE3iVbxBLIfbcN8qtH
-         w0aeW0AUbZTwPHkcZEio7sxGoGumfZq9jkJi1Vc/KY9RusvNRYnDssU/50OOTXFz45
-         jE4m/lBQ2hP5g==
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2b1c30a1653so32320511fa.2;
-        Tue, 06 Jun 2023 04:00:18 -0700 (PDT)
-X-Gm-Message-State: AC+VfDwf+WejIx8A98qzFziX1i7ixfFrpJ1tUJMMD0ZtxtncUwIvlGgg
-        vVQ+Zp7RYCNatw36xwBVFIn9uGYLUEi30dG3MjQ=
-X-Google-Smtp-Source: ACHHUZ563CmkIVh5K78BzyBEHDhqyYmtPZjw56PYzfIh3cc6Z/kEJrshyqqwF2nJo0HFFVkgYROpAOqSLHtjsHRwShg=
-X-Received: by 2002:a2e:b16f:0:b0:2ad:99dd:de07 with SMTP id
- a15-20020a2eb16f000000b002ad99ddde07mr985836ljm.16.1686049216890; Tue, 06 Jun
- 2023 04:00:16 -0700 (PDT)
+        Mon, 5 Jun 2023 23:01:32 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF83312D;
+        Mon,  5 Jun 2023 20:01:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686020488; x=1717556488;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=P+ZEvriustMbFcwF6+B7XqFEaeqMxamVNmjqUFdX8LY=;
+  b=n1KloCo77n0lDfOCsctQ4OZ3ZLrQW4RL4Thvq+FrhtyCNYT45GvxJW3/
+   2w6YVSQhKkazcDdUKbpjYpiEYCwcvOC/U+7NxUOc5j0mu8nRejVy+2d1S
+   ZDhzqlJ3jUCsol/c3gEdk3iFhpL1C89EO546az+q+RNK9LqBliNi5TXCl
+   mTudqRlFZ96PpKcqJvuwlJinTUvG+GlA7hv9ydbu7xbde0Qvq3zH8uoDy
+   KBFdgZI8mM1aHnWTUltHkfJkn9BoYQ21g7i5bQlBfnMz5tZXxe7C4CDUj
+   72YAgVn4FUILzMdDYliCUctJuD+O/2cePUfOHwgUxARB4TaA9UdKvHN/9
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="420094285"
+X-IronPort-AV: E=Sophos;i="6.00,219,1681196400"; 
+   d="scan'208";a="420094285"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 20:01:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="883161344"
+X-IronPort-AV: E=Sophos;i="6.00,219,1681196400"; 
+   d="scan'208";a="883161344"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by orsmga005.jf.intel.com with ESMTP; 05 Jun 2023 20:01:26 -0700
+Date:   Tue, 6 Jun 2023 19:00:52 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Marco Pagani <marpagan@redhat.com>
+Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-fpga@vger.kernel.org
+Subject: Re: [RFC PATCH v6 3/4] fpga: add an initial KUnit suite for the FPGA
+ Region
+Message-ID: <ZH8R5APukuZVkIv5@yilunxu-OptiPlex-7050>
+References: <20230531095405.342080-1-marpagan@redhat.com>
+ <20230531095405.342080-4-marpagan@redhat.com>
+ <ZHuQc7WfN1zKOeTE@yilunxu-OptiPlex-7050>
+ <d1ef2f9a-f416-e7d6-7481-d81c1941702e@redhat.com>
 MIME-Version: 1.0
-References: <4d7e38ff5bbc496cb794b50e1c5c83bcd2317e69.camel@huaweicloud.com>
- <CAHk-=wj4S0t5RnJQmF_wYwv+oMTKggwdLnrA9D1uMNKq4H4byw@mail.gmail.com>
- <CAHk-=wgCUzRNTg4fC8DF=UFnznK0M=mNUBDcsnLt7D4+HP2_1Q@mail.gmail.com> <ZH2hgrV6po9dkxi+@gondor.apana.org.au>
-In-Reply-To: <ZH2hgrV6po9dkxi+@gondor.apana.org.au>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Tue, 6 Jun 2023 13:00:05 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXFvpcKVQ2askwh-ahDRyjtN8MerjDJJBBMiTBZ1CSfZ9w@mail.gmail.com>
-Message-ID: <CAMj1kXFvpcKVQ2askwh-ahDRyjtN8MerjDJJBBMiTBZ1CSfZ9w@mail.gmail.com>
-Subject: Re: [GIT PULL] Asymmetric keys fix for v6.4-rc5
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Roberto Sassu <roberto.sassu@huaweicloud.com>,
-        David Howells <dhowells@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Stefan Berger <stefanb@linux.ibm.com>, davem@davemloft.net,
-        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d1ef2f9a-f416-e7d6-7481-d81c1941702e@redhat.com>
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 5 Jun 2023 at 10:49, Herbert Xu <herbert@gondor.apana.org.au> wrote:
->
-> On Fri, Jun 02, 2023 at 08:02:23PM -0400, Linus Torvalds wrote:
+On 2023-06-05 at 18:58:56 +0200, Marco Pagani wrote:
+> 
+> 
+> On 2023-06-03 21:11, Xu Yilun wrote:
+> > On 2023-05-31 at 11:54:04 +0200, Marco Pagani wrote:
+> >> The suite tests the programming of an FPGA Region with a Bridge
+> >> and the function for finding a particular Region.
+> >>
+> >> Signed-off-by: Marco Pagani <marpagan@redhat.com>
+> >> ---
+> >>  drivers/fpga/tests/fpga-region-test.c | 186 ++++++++++++++++++++++++++
+> >>  1 file changed, 186 insertions(+)
+> >>  create mode 100644 drivers/fpga/tests/fpga-region-test.c
+> 
+> [...]
+> 
+>  
+> > Maybe better just put all tests in one module, and have unified
+> > fake_mgr_ops/mgr_stats/fake_bridge_ops/bridge_stats across all tests.
+> > 
+> > In previous thread, I said I'm good to the self-contained test module
+> > but I didn't actually follow the idea. Sorry for that.
+> > 
+> > The concern is why in this region test, the write_count and only the
+> > write_count is taken care of.
+> > 
+> > Although fpga_mgr_load() test covers all mgr_ops, but does that
+> > means these ops are still good for more complex case like
+> > fpga_region_program_fpga()? And there is no guarantee
+> > fpga_region_program_fpga() would always call mgr_ops the same way
+> > as fpga_mgr_load() in future.
+> > 
+> > Similar for fpga_bridge. Maybe a complete setup for fpga_region is
+> > still necessary.
+> 
+> I think that putting all tests in a single module (like in previous
+> versions) goes against the principles of unit testing, making the
+> code more similar to an integration test.
+> 
+> Unit tests should be focused on a single behavior. The programming
+> test case included in the Region's suite should test only the behavior
+> of the Region itself. Specifically, that fpga_region_program_fpga() calls
+> get_bridges(), to get and control bridges, and then the Manager for the
+> actual programming.
+> 
+> The programming sequence itself is outside the responsibilities of the
+> Region, and its correctness is already ensured by the Manager suite.
+> Similarly, the correctness of the Bridge's methods used by the Region
+> for getting and controlling multiple bridges is already ensured by the
+> Bridge test suite.
+> 
+> For this reason, the Manager and Bridge fakes used in the Region suite
+> implement only the minimal set of operations necessary to ensure the
+> correctness of the Region's behavior. If I used a "full" Manager (and
+> tested all mgr_ops), then the test case would have become an integration
+> test rather than a unit test for the Region.
+
+I agree with you about a unit test should focus on a single behavior. But
+I have concerns that each test suite uses different definitions of the
+same structure, mgr/bridge stats, mgr/bridge ops, mgr/bridge ctx. Even
+if we have full definitions for these structures to acommodate all
+tests, it doesn't break the principle of unit test, just ignore the fields
+and skip checks that you don't care. E.g. only checks mgr.write_count &
+bridge.enable_count for region test.
+
+And a single module simplifies the implementation.
+
+struct mgr_stats {
+	...
+};
+
+struct mgr_ctx {
+	struct fpga_image_info *img_info;
+	struct fpga_manager *mgr;
+	struct platform_device *pdev;
+	struct mgr_stats stats;
+};
+
+struct bridge_stats {
+	...
+};
+
+struct bridge_ctx {
+	struct fpga_bridge *bridge;
+	struct platform_device *pdev;
+	struct bridge_stats stats;
+};
+
+struct region_ctx {
+	struct mgr_ctx mgr_ctx;
+	struct bridge_ctx bridge_ctx;
+
+	struct fpga_region *region;
+	struct platform_device *region_pdev;
+};
+
+How do you think?
+
+Thanks,
+Yilun
+
+> > BTW: I like the way that fake drivers are removed. Looks much straight
+> > forward.
+> 
+> I appreciate that.
+>  
+> > Thanks,
+> > Yilun
 > >
-> > I absolutely abhor the crypto interfaces. They all seem designed for
-> > that "external DMA engine" case that seems so horrendously pointless
-> > and slow.  In practice so few of them are that, and we have all those
-> > optimized routines for doing it all on the CPU - but have in the
-> > meantime wasted all that time and effort into copying everything,
-> > turning simple buffers into sg-bufs etc etc. The amount of indirection
-> > and "set this state in the state machine" is just nasty, and this
-> > seems to all be a prime example of it all. With some of it then
-> > randomly going through some kthread too.
->
-> You're right.  Originally SG lists were used as the majority of
-> our input came from network packets, in the form of skb's.  They
-> are easily translated into SG lists.  This is still somewhat the
-> case for parts of the Crypto API (e.g., skcipher and ahash).
->
-> However, for akcipher the only user of the underlying API is the
-> file in question so I absolutely agree that forcing it to go through
-> an SG list is just wrong.
->
-> I'll change the underlying akcipher interface to take pointers
-> instead and hide the SG list stuff (along with the copying) inside
-> API.
->
-
-Could we do the same for the compression API? This is a major pain as
-well, and results (on my 128-core workstation) in 32 MiB permanently
-tied up in scratch buffers in the scomp-to-acomp adaptation layer
-because most of the underlying implementations are compression
-libraries operating on plain virtual addresses, and so the
-scatterlists needs to be copied into a buffer and back to perform the
-actual transformation.
-
-The only user user of the async compression interface is zswap, but it
-blocks on the completion so it is actually synchronous as well.
+> 
+> Thanks,
+> Marco
+> 
+> [...]
+> 
