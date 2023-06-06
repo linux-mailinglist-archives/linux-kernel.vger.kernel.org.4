@@ -2,447 +2,381 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 709CC7234F5
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 04:03:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAEFC7234EE
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 04:02:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232800AbjFFCDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 22:03:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42456 "EHLO
+        id S231967AbjFFCCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 22:02:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232823AbjFFCDD (ORCPT
+        with ESMTP id S230121AbjFFCCV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 22:03:03 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD621B4
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 19:03:00 -0700 (PDT)
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 355HiK1L017855;
-        Tue, 6 Jun 2023 02:02:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2023-03-30;
- bh=U8eTMPAOS4VcDAv1qZx+CqBfWks7/7JFIN86J+iPpVY=;
- b=WI98m3Cyy71wObafmZCAmot1KisDv5hdXXqu9b4cSMIhuK9g4LY2BxyYmBuZVbuNNDEg
- AP1cA5CXE+lV+i0qIf5m16BrjfZDpB6AaSIret3Ha7LFbmbzDPryM62Ychz0c157ee9G
- 3bkV9vFzlM8UmegbfE8PAm17habbIhmXy8xVOQ9PCsfoWgqpvgxYQJfHfhL5fSr+Ct6/
- z6t1KtluPAldVpXqpDZDSczDVvEUvUHf6d/xl+p+P3jUxAwJcPRZ//lS4ag3HGORj+6U
- kw9+6VHTq6FK81sPfc3h+D4yUs6XAB6/Ts3+sOewtLYTAw2jjCqGFP9lJhlCpEY637tg qA== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3qyx2c4da5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 06 Jun 2023 02:02:03 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 3561eXvE020110;
-        Tue, 6 Jun 2023 02:02:02 GMT
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2173.outbound.protection.outlook.com [104.47.59.173])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3r0tsx09ep-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 06 Jun 2023 02:02:02 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cUzKR8uHPNvpMH0EkYU2M6Bdgf+lNWHzeCiPxiBEVZuNLEtTsGrzGVYrAK3yLmNswDEhtEVUFcq2qyfjl7u8EUcK3ZkjQSbkSItrCuXMm8q+W3dQarJ2tMASUN7iTHorSaA7m/QbD5tswrlHgM5Uz6OMXztBJpTqYsa37AQVjPexQMVZ8efnUy7Osh+HZpm1est5qD7UnE4EYJ+EEEWXoVUR1797NeUdV7zk0ZfJhKFmyQ7d2r4PTWcmAkFzHiPH0cJ7Bh5YJrgUipXgZS6rNR+79rUSMbPVaZwzM2cyDiMljCnc9NvPffIvRgGcxLi4d9rnJJNOWTrwyavXlmOy/Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=U8eTMPAOS4VcDAv1qZx+CqBfWks7/7JFIN86J+iPpVY=;
- b=l963YBa6vrgRuUtC3lQm57MqJrUtY8mvM4ggDBezLeROZf+6jJswbJnM/w6FAuUi6z9X13bylv/Jf75l/Mo5zWfHdeVV1MbYOj7qGbjf2RwKY6EtL5LXJUVp4Fz9Ty3dRLD6DuUHAu+OcQbdyeB6QBggTf1UOUhpvXMbn6KZ3YhFm1dlkJXwF7YsnMsnWmCeDx3qENlvIiY3plQ7/1Y5NoOpd7++Zyi1JOuIarZfXNGRpAygtMnIN5sw2s9b83oSo00OtyWXwTRkMCaW7ib5XTWyGHGwmmQtosXLlBvPQvRN9jFKn5gpKd/BKOwKiY5mbpcLyyEibZTf3HQ439ZIbw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Mon, 5 Jun 2023 22:02:21 -0400
+Received: from mail-yw1-x1143.google.com (mail-yw1-x1143.google.com [IPv6:2607:f8b0:4864:20::1143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE2D610D;
+        Mon,  5 Jun 2023 19:02:19 -0700 (PDT)
+Received: by mail-yw1-x1143.google.com with SMTP id 00721157ae682-565eb83efe4so69919967b3.0;
+        Mon, 05 Jun 2023 19:02:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=U8eTMPAOS4VcDAv1qZx+CqBfWks7/7JFIN86J+iPpVY=;
- b=fvCfWN4/Cxwc5bHaJYLjPjQwS0JhGWRGbrhY/M8kc0SvwiI4a3LdA33NWzZzPOGFBWMHLKKGDsQyKLGw7X606x5J6fcQz0nGyAeTBP7Uh51jeubGGVdhyrpD9u0D8cJAOv+QUSVuW2irMftQomsBVs8sQqvJXSV1+nOAlKmCkY8=
-Received: from BYAPR10MB2438.namprd10.prod.outlook.com (2603:10b6:a02:aa::22)
- by SA1PR10MB6318.namprd10.prod.outlook.com (2603:10b6:806:251::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.32; Tue, 6 Jun
- 2023 02:02:00 +0000
-Received: from BYAPR10MB2438.namprd10.prod.outlook.com
- ([fe80::df1e:af95:f443:470f]) by BYAPR10MB2438.namprd10.prod.outlook.com
- ([fe80::df1e:af95:f443:470f%2]) with mapi id 15.20.6455.030; Tue, 6 Jun 2023
- 02:01:59 +0000
-Message-ID: <f287334c-4054-525e-52ea-a0bbf077b653@oracle.com>
-Date:   Mon, 5 Jun 2023 19:01:56 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.2
-Subject: Re: [RFC v3 07/21] mm: PKRAM: introduce super block
-To:     Coiby Xu <coxu@redhat.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
-        hpa@zytor.com, dave.hansen@linux.intel.com, luto@kernel.org,
-        peterz@infradead.org, rppt@kernel.org, akpm@linux-foundation.org,
-        ebiederm@xmission.com, keescook@chromium.org, graf@amazon.com,
-        jason.zeng@intel.com, lei.l.li@intel.com,
-        steven.sistare@oracle.com, fam.zheng@bytedance.com,
-        mgalaxy@akamai.com, kexec@lists.infradead.org
-References: <1682554137-13938-1-git-send-email-anthony.yznaga@oracle.com>
- <1682554137-13938-8-git-send-email-anthony.yznaga@oracle.com>
- <upgf3qmqxn7xzbnwwt6nxau4ugqkq7szdaheewzbok27xwch4e@6tdnhkqspok4>
-Content-Language: en-US
-From:   Anthony Yznaga <anthony.yznaga@oracle.com>
-In-Reply-To: <upgf3qmqxn7xzbnwwt6nxau4ugqkq7szdaheewzbok27xwch4e@6tdnhkqspok4>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: BY3PR03CA0012.namprd03.prod.outlook.com
- (2603:10b6:a03:39a::17) To BYAPR10MB2438.namprd10.prod.outlook.com
- (2603:10b6:a02:aa::22)
+        d=gmail.com; s=20221208; t=1686016939; x=1688608939;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kWfVVQJcb1xp23D9+IMCwX648I6qiBB8PURsrQl0yY0=;
+        b=BMd3c1M10ghywVlGIUjqbuKfW/rYVXSM+NQi7aZLNc3lceyG1QcmbAArrYAbG5eZMv
+         PVgmKF6g6ABophqbLMNCtVIurhZbFiM3GS6Tssp5f9HbLroF7rikJg7UAEgJOFpV4m7e
+         JjV3HXeLDB2HZOvupx2fACEKNkMOa40R6O8xwdRH96cPC0QIfmTMJCeTjJf50AyOrqHp
+         iF341PTW4JKOvB3r2i5q2mgw8Xf1lKQZn1IcYrB2UbZj8Wa2XcPsfgoupnSFtFEihMbO
+         fpwxMvhKF8sxlby4a95Whh3G1iQFt7RanIZFOD27hl36wp9W4AYc9p8eKxw2XdmEWYuO
+         j0Kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686016939; x=1688608939;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kWfVVQJcb1xp23D9+IMCwX648I6qiBB8PURsrQl0yY0=;
+        b=CYkeB7i7F3syKxs0kBKxC3l5ujf1L8SqDN46vm+laPn+ygC/FR1Jp7rzEESUj3MAhE
+         WL0XlkeBUgygR9BNQpWjyF+hDnRiloxC/pzSwxHeYgkX/dPLYegxEr9y28rwo7VTfIrB
+         DXc1w7dQCD1Esy8ol05NAEkmsX984Ldx18+TUAc9mb3s8JfQJD93zznZsXuqVbGIlQYf
+         JyJMBkXhkmcGojgOkgRFLQabEqyT53TO54x5RzmdCZ7YekBcaB6yu1baHJ5BK48lyyRf
+         pnlrKDX8b5VglEtIQb0MWf2f6kCMVpChUkPSmNZdPUNuptPj4pnBaAgYw3XEwD1m24TD
+         IlGg==
+X-Gm-Message-State: AC+VfDzlGIT9c/iE6NAuxsdzHi7E1ftJJtsmItKbFoHHskSioZYCe/ya
+        eyCtoEiSJ6AEfGnnfZFfqIG39a7iJnH6un2oYSk=
+X-Google-Smtp-Source: ACHHUZ4hbvkUU9RJmpJdKcfhhkJDyQycHwq3Y8zYPbjm3V/a04pSzTvP97u9Wg+FXkfo0mT8h/KhCiwQBEfrO0W3RBo=
+X-Received: by 2002:a0d:c0c3:0:b0:565:aa19:9fb8 with SMTP id
+ b186-20020a0dc0c3000000b00565aa199fb8mr506641ywd.19.1686016938803; Mon, 05
+ Jun 2023 19:02:18 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR10MB2438:EE_|SA1PR10MB6318:EE_
-X-MS-Office365-Filtering-Correlation-Id: 466785d4-4a85-497c-1cbd-08db66320374
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: g0JXVTN3HqxBxZBg+6EwZrEi+mZGzIVtAzF6GMpKVgXTbd/RoTAPjwycZmJCtF5qD2o7byUfshozFQrEKnNRfLpT/vvdKrk/3SmCAldoc62NRa9jQU6ToKi2ZDPCeG7ZgORu+4yn70xdaUHIYJVCvMwDR6M3LFyBBjU2Sqo+PNP8g0St7mhRGYZ604kUd80672CmwDbWRZKWnISYX5qa5Qbil7UDvrIQXUyDfN6pvFW6PtA/ebBQV2cdwXpbXb2DYba2DlgVtwQyO625kk7xsEs8Ywfomd4GSw978OTPWR54GqXpu0WWuu1Lxs+cqQotkTSPrx4IzW8pPE6zV6v15tKFl3JFLUs4zw9NK9XITQNvYoAbVvvFHj/bPKAfQvOMsH1JxBZbTqll2NjnTnVoh7sZhyaIJS7YaQP0j0q06yEAsEaknG/BezQhCjKVZHqW8fQNZ3KeE+gqapv3kiMBL+QakEPoVbunrxR8VYh8cNbRsCWD1lj0Qi0r3FvB9Bvo0Ond2bIoRJtJpBBFLyJstBTda/qz5Yfctbuecs21I8nc8WDn0eOcc9mgAA1aIKPznvDRq9FDdDWXRgVi8uzp3HGuiTPEaQ/D7S87OlYF3fQP+HDJ3JszooqvmxXIR02E3ZjM3KjOFIWXxHiZeOi0wE25RRz53ibkuPIPjgdBqJazFLaMS3wkdmjgCIGhfY2K
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB2438.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(346002)(396003)(376002)(39860400002)(366004)(451199021)(6506007)(31686004)(53546011)(6512007)(26005)(186003)(2616005)(966005)(7416002)(83380400001)(6486002)(6666004)(36756003)(2906002)(8676002)(8936002)(44832011)(478600001)(38100700002)(6916009)(5660300002)(31696002)(19273905006)(86362001)(66476007)(66556008)(4326008)(316002)(41300700001)(66946007)(45980500001)(43740500002)(563064011)(134885004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Z2tvUHRKM3RVOWxiTnRqZ2RNVzFsY2pHVDJvOHF5WUxBNk5TTmw2d0RESlhr?=
- =?utf-8?B?S01OYlJnWU9KNlBhR21scGVzWVZSeVAzWnliUHJMSFdic0p6R2tkTVJsU1l5?=
- =?utf-8?B?QnVqc2M1ODgwZTk0eDJIOXpubzBkNGdwVjVXbU02OWZYbWZLWGN2SkRKc2Zx?=
- =?utf-8?B?WkpWdTNqZTJFSlZUSVVaS1JUZlMrU2tlVUR0NXV6OW5ZTEgvb3RuQXF4SXI5?=
- =?utf-8?B?WnVaOEVOczREL0pxMlZaTzNUQU12Q2V3L1NBeDBtUjduRFVqbEFBVUx2SG0y?=
- =?utf-8?B?WE03eWVsREJObXJ3d0lmbzF6OFFVenRFUUVnait1SzBvMGRNZmJxMlhjNnB6?=
- =?utf-8?B?b0k4TFJrRWVCNXZpOHBJcmFmNEM4UWxDNlRnS2dtYVpuSE9xMkJUUllwVk5z?=
- =?utf-8?B?aFM0ZFZvbW4vTngzRHFqUTdqTWFpYnpLWUZPTDl4a01PMldjeDlweDFGWmtM?=
- =?utf-8?B?ODZyTUdIc3NtbGhMYm1EaEdiQWZ3OVRRa3BNc1AxcnJ3bE9EOFZ2aDJibXB4?=
- =?utf-8?B?U092UkZrbjNrRnR6RUZSSGxOTGdHMnJUQ0U0NHpNYmE5SHM3VTFSZDk4OWE2?=
- =?utf-8?B?V0FkR0EwR3J5YTNiUXpYSnBsZTdvSDVYbGZoMWZrbEVmMi9hcTNLUStPVXFE?=
- =?utf-8?B?U3NVcFM5Z2RtWlBockNKTmF4bEdLelcyQUQrRGljTE1Lbjh0VWYrWmNsVVMx?=
- =?utf-8?B?UFplZFlSdjlrb0JXbTFFUFdqY0YrdnpSRmtmV05adC9Wc3pmdW5xd0ZpM1Ro?=
- =?utf-8?B?TzRiQmVKcjV6dHZSQmE1Y1BjRFEwNVBVQlluZWJNdmI1S2dHMG9JTXpwVno2?=
- =?utf-8?B?Qk13aldEd2J2Wk5TRVNGMzM2czlldmEwbmdIU1VselZ4Q0lFL0V4cUIxRzBY?=
- =?utf-8?B?Rm5JY20rSjd4WXZJdHBLZkhVWGFLSUhpRVUyUDZ1ZVN2MXdCbUU2Yzc2R09o?=
- =?utf-8?B?YTNPNzlIbU1UU2NudEJmUmc2U1B1Y0huUHBhRUpTNU1RdjBxMGJXT1FyZUsx?=
- =?utf-8?B?NUFkZVpkU2gxbzFWUVQ5c3kwQXd3cjRsSGVDTEYwNThveC9XTk1VK1M0WTVZ?=
- =?utf-8?B?TkNTU1psTnZ5WE1ORWVFWXFFTUs5WkIzb2ZJcE51Sk9uNCtXdk1hOUx4dHVu?=
- =?utf-8?B?d2xieVk1VnhPRitoZUxpYTEvNlV6UkEvdk1vNUVueE11Q3VkcFYwMVhFZ1RC?=
- =?utf-8?B?MlFmMlZXdDUxTk0wNlRERitjMElkckg0aDRveHkyRStjaVJuejFEb0hLVW1G?=
- =?utf-8?B?TWVXYjlUTjUzWG5PdndZd3NncDJFd3FrVkpiM1RPSUpzSWxLVVd4R0Q4RWM4?=
- =?utf-8?B?K2w2MkxZaGhrMXJCRFQ3U0RSRnN1cEd3anRkNnBwOU80eDk4cHFtcDhZZEk4?=
- =?utf-8?B?TGxKTmdqL0VUZitLY1Zvd0Zhc2owaUt5TlBjZDlPRHcxNW1CUkhmMnJvYjRk?=
- =?utf-8?B?Uk0rcERpUzBYYTQ5ZjUwK29KN0FPUzlpYWFGZDFtcDFETlZPWGdZOTB1ajRa?=
- =?utf-8?B?RjJFVFVpTGN5NnZ0cEUrN3VpYnhxZ0sxVUQyYkFBMU9SSWNNWlZEcVZaUTN5?=
- =?utf-8?B?TnpkZGR0Q09QNTJhOUxmZWxBeUtPK256UFF2WmpOS0RlVkdwUUxYWDZuR1cv?=
- =?utf-8?B?SVNKZ1d3NVh6MGtBZllIbXRTY2J1N3N0MG1hV2VSSFRreDBESmRvbGo1MkVT?=
- =?utf-8?B?NVBpOEF3Y2IxTS9sYkRFYlo4eTVGb3hrYk13TGNnUEdwU1pYdm56bHR4Y0p2?=
- =?utf-8?B?bU04bjRTa3hkaXB6YkpIWHVqYkpkKzJwbW1BYWhqU1I1U0kycE5CWWxxZml0?=
- =?utf-8?B?dzhFQmc0Zk9CUmJoWHRGeVhCcytYSWQ0QVFrdjEvTmszcTZXYlkxaEZuTStL?=
- =?utf-8?B?NURub1J2UnI3QTVnMGNSWHJUSVJKbUE3YnRRWURkbktZcUZrcGJVa0JHTG85?=
- =?utf-8?B?OXZ0UktINGVoNG80bExDa2Zxck03cFprL1BOUlhBaGRoS21wZVFEMFg3L0tV?=
- =?utf-8?B?SEVIdVo1SFFQejFqcmRtS1RtYnVxVmRhR2ZHdHhRN1VvVFltdU4vR21aUW8y?=
- =?utf-8?B?dW5vQXhSUnBTRWl3ZE9hekZpZkpiRGpzTHdQSE9IKzNIbEh0Q2dCK3Fzc0tx?=
- =?utf-8?B?RWYwQ2RYSXQ2cS8zREZ0VFVVUWU3MDEvWXFLYW1teHRHdTlPZFMzaGFWNVFR?=
- =?utf-8?B?RHc9PQ==?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?THpzeGVLWHpoWC95MllKc09BRFp3TEt5VWhITWxPcmxZU1RaOEg2U045Z044?=
- =?utf-8?B?VWlPT0lFdFk2Y1lyRlpsWVZKZVloMHhhQTM5czMwczgvaW1BMnd1TXNVWGJB?=
- =?utf-8?B?Ri9oQzJURU42RDZsNS9DZFNpWDhVcEI2dStHa0IzUHhKTi9QU3AySXVmQVN0?=
- =?utf-8?B?NzlZOEZoaWN1TzRRWFRLelRIVHdJL25vUy9VdHpaNXdqaHU0MFo3cGRsWWlU?=
- =?utf-8?B?VXk1YkRpZ1FTTFhoV1c1NmFyQmZqZWF5K1FtT3ZuT09CYlE0ZWszS2VSTnY2?=
- =?utf-8?B?ZDNzM256RFZNQTN5SUk1ZzB6dTlmSWMvaEhMS05TSVBBdG50NVNKcGlwUVlq?=
- =?utf-8?B?VGs4dy90Sm1XN0RTSGtSQWRCVkZuSDd4bnMwcEZQNEZhT2pLZ3dNNFcvSitQ?=
- =?utf-8?B?K3RBZStQYTYvc2l2N1lsN0hLM0tBMjJ1d1pvenRodzRJcC85Z3A5Rk14RFYv?=
- =?utf-8?B?Z3NzS05rM0xQWTU3Q1gwa3Q2aEduclE0bGZRS05LWGVFb0tqWDVJdWNtZ3F5?=
- =?utf-8?B?a0IrdnNoNGdDcjZBaVM3YUJKbTdDYnp0WTBjWDRHZUluUGlFOEpWcGpnQ1dP?=
- =?utf-8?B?aTJtZnloaWhMR2JGN3oyWlJiMmFYWFpZNmJvWGpnZFFTQUIxQnJQSjZVcTB6?=
- =?utf-8?B?ZG9IYXFNVWtWTmxKR0hQZnd3OUNLVUo3cmh0WWk2ZTZodCtZK1BuV0hnRFZ0?=
- =?utf-8?B?UmlaN1VuY0tSVzRyZ3duRUZ6aGM3aFkvdGRsRlJMczdrVFBiK2hMNW43MllR?=
- =?utf-8?B?MjRlSGF6ZGh3cUVrMGk1M3RYMUdTMzQzNXlwVVdsUWU4eks5WHpUUG9jK2Jj?=
- =?utf-8?B?ZURoT2ZrNkZ4dEpRMG1ZM0FMR2xRNXdpZCtNME9nL3NsMXN4QXVHOTdnK091?=
- =?utf-8?B?RjVVcFFDbXo2Y0hCRThaUXk4eFE2NlhHekZnWXlQRFlwVW4wS2h5N0s1SjJw?=
- =?utf-8?B?MThtMlFmSmN5cVhpRFZPbGxaa0xQcGJXdDdxckNRVE5nU2dzSTFITkxDNGk5?=
- =?utf-8?B?eHZkNGx3amlkNnVIUWxqTjlNVVBRMWJ5WnFqZlZtQU5tdllzd25NS0NNcGVI?=
- =?utf-8?B?VHpYdkhVSHJRK05wUmZiTXFNNVQrQ0xVdit4NGJJYUFDd216ZlBRMHM2L1dx?=
- =?utf-8?B?YnlnQVhjb1E1eUJvdFJWdUdHamZiSlR3dzBETTFyUDVWZGZTUE5OejErMjE4?=
- =?utf-8?B?Q21uRVBYd1AwUGRVY3hZcmxkWk1tN2hXSnVDMWFTTU1ua2U4SVRqZWl2bDBC?=
- =?utf-8?B?bXNIazF1WkwwZ2dUdnpGS3ZSMFRaSEpkc2FDU20wZ0ZCaUJZdVpxVTU1eDBD?=
- =?utf-8?B?d1RUVU9zYy9ONkRLckI2WmZEUGxJeHZLeFVBMUdLdjJieHhFQnJoL1dhalhR?=
- =?utf-8?B?ZXdEZVhldGdFaTZIRzkrUzdlWVhPbVVRdE9SenhxTDhSOHhza0FKdWdhRjNa?=
- =?utf-8?B?Y0hqMTRMS2NmQXYvRkE0Ri9IdUVkNWt2bk8xY3VXeFczTGZqcjdiUHphWTB3?=
- =?utf-8?B?ZmVHajkwUjJQelFBUzZ3Y3FxNGxCSFpNYkcxWWV4TnI2Tk94UFoxNGFVbW5K?=
- =?utf-8?B?UWZkR3JuOFBobGxBcDZLUU94TTcvZGNnT0xZQ01naExVcUpaZW8yb29BaWxD?=
- =?utf-8?B?VUJhREJXVFlOdU82L2EweDBRcmRMdEZFbGV6clIxcFlyek4vMW5PUndWcG1p?=
- =?utf-8?B?U3FZaUI0R2VyY2xWYVlRci8vVjBQUVhOK1JNVDFMb0FmUmsybzd5ZlhqNW5J?=
- =?utf-8?Q?VU4z5V5xlnlbGTdkRrEvyuF4NAJhKeYfn96YJyy?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 466785d4-4a85-497c-1cbd-08db66320374
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB2438.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2023 02:01:59.7383
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: f3HKSnjZG+3moMgmDQmkBGgLZO7o2XL+srwlERhPJM/H8ee31SRxIX75Ej/lY1eKRjp/5a8mQX/b6Gy8i47JyoPCpek2LYrdYwaS3Mo/80U=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR10MB6318
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-05_35,2023-06-05_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=999
- phishscore=0 suspectscore=0 adultscore=0 mlxscore=0 malwarescore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2306060017
-X-Proofpoint-ORIG-GUID: xfGtnFe5BAgga85BYe2G0wqdAjJilStX
-X-Proofpoint-GUID: xfGtnFe5BAgga85BYe2G0wqdAjJilStX
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230602065958.2869555-1-imagedong@tencent.com>
+ <20230602065958.2869555-3-imagedong@tencent.com> <ZH5BPEi1UVviDvG7@krava>
+In-Reply-To: <ZH5BPEi1UVviDvG7@krava>
+From:   Menglong Dong <menglong8.dong@gmail.com>
+Date:   Tue, 6 Jun 2023 10:02:07 +0800
+Message-ID: <CADxym3bqToQrbuZ+fRydWVVVWpBEzQHy+1WNU-sSek01KPaguw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 2/5] bpf, x86: allow function arguments up to
+ 14 for TRACING
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     davem@davemloft.net, dsahern@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        mykolal@fb.com, shuah@kernel.org, benbjiang@tencent.com,
+        iii@linux.ibm.com, imagedong@tencent.com, xukuohai@huawei.com,
+        chantr4@gmail.com, zwisler@google.com, eddyz87@gmail.com,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Coiby,
-
-On 6/4/23 7:40 PM, Coiby Xu wrote:
-> Hi Anthony,
+On Tue, Jun 6, 2023 at 4:11=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> wrote=
+:
 >
-> On Wed, Apr 26, 2023 at 05:08:43PM -0700, Anthony Yznaga wrote:
->> The PKRAM super block is the starting point for restoring preserved
->> memory. By providing the super block to the new kernel at boot time,
->> preserved memory can be reserved and made available to be restored.
->> To point the kernel to the location of the super block, one passes
->> its pfn via the 'pkram' boot param. 
+> On Fri, Jun 02, 2023 at 02:59:55PM +0800, menglong8.dong@gmail.com wrote:
+> > From: Menglong Dong <imagedong@tencent.com>
+> >
+> > For now, the BPF program of type BPF_PROG_TYPE_TRACING can only be used
+> > on the kernel functions whose arguments count less than 6. This is not
+> > friendly at all, as too many functions have arguments count more than 6=
+.
+> >
+> > Therefore, let's enhance it by increasing the function arguments count
+> > allowed in arch_prepare_bpf_trampoline(), for now, only x86_64.
+> >
+> > For the case that we don't need to call origin function, which means
+> > without BPF_TRAMP_F_CALL_ORIG, we need only copy the function arguments
+> > that stored in the frame of the caller to current frame. The arguments
+> > of arg6-argN are stored in "$rbp + 0x18", we need copy them to
+> > "$rbp - regs_off + (6 * 8)".
+> >
+> > For the case with BPF_TRAMP_F_CALL_ORIG, we need prepare the arguments
+> > in stack before call origin function, which means we need alloc extra
+> > "8 * (arg_count - 6)" memory in the top of the stack. Note, there shoul=
+d
+> > not be any data be pushed to the stack before call the origin function.
+> > Then, we have to store rbx with 'mov' instead of 'push'.
+> >
+> > It works well for the FENTRY and FEXIT, I'm not sure if there are other
+> > complicated cases.
+> >
+> > Reviewed-by: Jiang Biao <benbjiang@tencent.com>
+> > Signed-off-by: Menglong Dong <imagedong@tencent.com>
+> > ---
+> > v2:
+> > - instead EMIT4 with EMIT3_off32 for "lea" to prevent overflow
 >
-> I'm curious to ask how will the 'pkram' boot param be passed. It seems I
-> can't find the answer in this patch set.
+> could you please describe in more details what's the problem with that?
+> you also changed that for 'sub rsp, stack_size'
+>
 
-The pfn of the super block read from /sys/kernel/pkram is passed to
+Sorry for the confusion. Take 'sub rsp, stack_size' for example,
+in the origin logic, which is:
 
-the next kernel by adding the boot parameter, pkram=<super block pfn>.
+  EMIT4(0x48, 0x83, 0xEC, stack_size)
 
-The next kernel picks it up through the early_param("pkram", 
-parse_pkram_sb_pfn)
+the imm in the instruction is a signed char. So the maximum
+of the imm is 127.
 
-in this patch below.
+However, now the stack_size is more than 127 if
+the count of the function arguments is more than 8.
 
+Therefore, I use:
 
-Anthony
+  EMIT3_off32(0x48, 0x81, 0xEC, stack_size)
 
+And the imm in this instruction is signed int.
 
+The same reason for "lea" instruction.
+
+Thanks!
+Menglong Dong
+
+> thanks
+> jirka
 >
 >
->> For that purpose, the pkram super
->> block pfn is exported via /sys/kernel/pkram. If none is passed, any
->> preserved memory will not be kept, and a new super block will be
->> allocated.
->>
->> Originally-by: Vladimir Davydov <vdavydov.dev@gmail.com>
->> Signed-off-by: Anthony Yznaga <anthony.yznaga@oracle.com>
->> ---
->> mm/pkram.c | 102 
->> +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++--
->> 1 file changed, 100 insertions(+), 2 deletions(-)
->>
->> diff --git a/mm/pkram.c b/mm/pkram.c
->> index da166cb6afb7..c66b2ae4d520 100644
->> --- a/mm/pkram.c
->> +++ b/mm/pkram.c
->> @@ -5,15 +5,18 @@
->> #include <linux/init.h>
->> #include <linux/io.h>
->> #include <linux/kernel.h>
->> +#include <linux/kobject.h>
->> #include <linux/list.h>
->> #include <linux/mm.h>
->> #include <linux/module.h>
->> #include <linux/mutex.h>
->> #include <linux/notifier.h>
->> +#include <linux/pfn.h>
->> #include <linux/pkram.h>
->> #include <linux/reboot.h>
->> #include <linux/sched.h>
->> #include <linux/string.h>
->> +#include <linux/sysfs.h>
->> #include <linux/types.h>
->>
->> #include "internal.h"
->> @@ -82,12 +85,38 @@ struct pkram_node {
->> #define PKRAM_ACCMODE_MASK    3
->>
->> /*
->> + * The PKRAM super block contains data needed to restore the 
->> preserved memory
->> + * structure on boot. The pointer to it (pfn) should be passed via 
->> the 'pkram'
->> + * boot param if one wants to restore preserved data saved by the 
->> previously
->> + * executing kernel. For that purpose the kernel exports the pfn via
->> + * /sys/kernel/pkram. If none is passed, preserved memory if any 
->> will not be
->> + * preserved and a new clean page will be allocated for the super 
->> block.
->> + *
->> + * The structure occupies a memory page.
->> + */
->> +struct pkram_super_block {
->> +    __u64    node_pfn;        /* first element of the node list */
->> +};
->> +
->> +static unsigned long pkram_sb_pfn __initdata;
->> +static struct pkram_super_block *pkram_sb;
->> +
->> +/*
->>  * For convenience sake PKRAM nodes are kept in an auxiliary 
->> doubly-linked list
->>  * connected through the lru field of the page struct.
->>  */
->> static LIST_HEAD(pkram_nodes);            /* linked through page::lru */
->> static DEFINE_MUTEX(pkram_mutex);        /* serializes open/close */
->>
->> +/*
->> + * The PKRAM super block pfn, see above.
->> + */
->> +static int __init parse_pkram_sb_pfn(char *arg)
->> +{
->> +    return kstrtoul(arg, 16, &pkram_sb_pfn);
->> +}
->> +early_param("pkram", parse_pkram_sb_pfn);
->> +
->> static inline struct page *pkram_alloc_page(gfp_t gfp_mask)
->> {
->>     return alloc_page(gfp_mask);
->> @@ -270,6 +299,7 @@ static void pkram_stream_init(struct pkram_stream 
->> *ps,
->>  * @gfp_mask specifies the memory allocation mask to be used when 
->> saving data.
->>  *
->>  * Error values:
->> + *    %ENODEV: PKRAM not available
->>  *    %ENAMETOOLONG: name len >= PKRAM_NAME_MAX
->>  *    %ENOMEM: insufficient memory available
->>  *    %EEXIST: node with specified name already exists
->> @@ -285,6 +315,9 @@ int pkram_prepare_save(struct pkram_stream *ps, 
->> const char *name, gfp_t gfp_mask
->>     struct pkram_node *node;
->>     int err = 0;
->>
->> +    if (!pkram_sb)
->> +        return -ENODEV;
->> +
->>     if (strlen(name) >= PKRAM_NAME_MAX)
->>         return -ENAMETOOLONG;
->>
->> @@ -404,6 +437,7 @@ void pkram_discard_save(struct pkram_stream *ps)
->>  * Returns 0 on success, -errno on failure.
->>  *
->>  * Error values:
->> + *    %ENODEV: PKRAM not available
->>  *    %ENOENT: node with specified name does not exist
->>  *    %EBUSY: save to required node has not finished yet
->>  *
->> @@ -414,6 +448,9 @@ int pkram_prepare_load(struct pkram_stream *ps, 
->> const char *name)
->>     struct pkram_node *node;
->>     int err = 0;
->>
->> +    if (!pkram_sb)
->> +        return -ENODEV;
->> +
->>     mutex_lock(&pkram_mutex);
->>     node = pkram_find_node(name);
->>     if (!node) {
->> @@ -825,6 +862,13 @@ static void __pkram_reboot(void)
->>         node->node_pfn = node_pfn;
->>         node_pfn = page_to_pfn(page);
->>     }
->> +
->> +    /*
->> +     * Zero out pkram_sb completely since it may have been passed from
->> +     * the previous boot.
->> +     */
->> +    memset(pkram_sb, 0, PAGE_SIZE);
->> +    pkram_sb->node_pfn = node_pfn;
->> }
->>
->> static int pkram_reboot(struct notifier_block *notifier,
->> @@ -832,7 +876,8 @@ static int pkram_reboot(struct notifier_block 
->> *notifier,
->> {
->>     if (val != SYS_RESTART)
->>         return NOTIFY_DONE;
->> -    __pkram_reboot();
->> +    if (pkram_sb)
->> +        __pkram_reboot();
->>     return NOTIFY_OK;
->> }
->>
->> @@ -840,9 +885,62 @@ static int pkram_reboot(struct notifier_block 
->> *notifier,
->>     .notifier_call = pkram_reboot,
->> };
->>
->> +static ssize_t show_pkram_sb_pfn(struct kobject *kobj,
->> +        struct kobj_attribute *attr, char *buf)
->> +{
->> +    unsigned long pfn = pkram_sb ? PFN_DOWN(__pa(pkram_sb)) : 0;
->> +
->> +    return sprintf(buf, "%lx\n", pfn);
->> +}
->> +
->> +static struct kobj_attribute pkram_sb_pfn_attr =
->> +    __ATTR(pkram, 0444, show_pkram_sb_pfn, NULL);
->> +
->> +static struct attribute *pkram_attrs[] = {
->> +    &pkram_sb_pfn_attr.attr,
->> +    NULL,
->> +};
->> +
->> +static struct attribute_group pkram_attr_group = {
->> +    .attrs = pkram_attrs,
->> +};
->> +
->> +/* returns non-zero on success */
->> +static int __init pkram_init_sb(void)
->> +{
->> +    unsigned long pfn;
->> +    struct pkram_node *node;
->> +
->> +    if (!pkram_sb) {
->> +        struct page *page;
->> +
->> +        page = pkram_alloc_page(GFP_KERNEL | __GFP_ZERO);
->> +        if (!page) {
->> +            pr_err("PKRAM: Failed to allocate super block\n");
->> +            return 0;
->> +        }
->> +        pkram_sb = page_address(page);
->> +    }
->> +
->> +    /*
->> +     * Build auxiliary doubly-linked list of nodes connected through
->> +     * page::lru for convenience sake.
->> +     */
->> +    pfn = pkram_sb->node_pfn;
->> +    while (pfn) {
->> +        node = pfn_to_kaddr(pfn);
->> +        pkram_insert_node(node);
->> +        pfn = node->node_pfn;
->> +    }
->> +    return 1;
->> +}
->> +
->> static int __init pkram_init(void)
->> {
->> -    register_reboot_notifier(&pkram_reboot_notifier);
->> +    if (pkram_init_sb()) {
->> +        register_reboot_notifier(&pkram_reboot_notifier);
->> +        sysfs_update_group(kernel_kobj, &pkram_attr_group);
->> +    }
->>     return 0;
->> }
->> module_init(pkram_init);
->> -- 
->> 1.9.4
->>
->>
->> _______________________________________________
->> kexec mailing list
->> kexec@lists.infradead.org
->> http://lists.infradead.org/mailman/listinfo/kexec
->>
->
+> > - make MAX_BPF_FUNC_ARGS as the maximum argument count
+> > ---
+> >  arch/x86/net/bpf_jit_comp.c | 96 +++++++++++++++++++++++++++++++------
+> >  1 file changed, 81 insertions(+), 15 deletions(-)
+> >
+> > diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+> > index 1056bbf55b17..0e247bb7d6f6 100644
+> > --- a/arch/x86/net/bpf_jit_comp.c
+> > +++ b/arch/x86/net/bpf_jit_comp.c
+> > @@ -1868,7 +1868,7 @@ static void save_regs(const struct btf_func_model=
+ *m, u8 **prog, int nr_regs,
+> >        * mov QWORD PTR [rbp-0x10],rdi
+> >        * mov QWORD PTR [rbp-0x8],rsi
+> >        */
+> > -     for (i =3D 0, j =3D 0; i < min(nr_regs, 6); i++) {
+> > +     for (i =3D 0, j =3D 0; i < min(nr_regs, MAX_BPF_FUNC_ARGS); i++) =
+{
+> >               /* The arg_size is at most 16 bytes, enforced by the veri=
+fier. */
+> >               arg_size =3D m->arg_size[j];
+> >               if (arg_size > 8) {
+> > @@ -1876,10 +1876,22 @@ static void save_regs(const struct btf_func_mod=
+el *m, u8 **prog, int nr_regs,
+> >                       next_same_struct =3D !next_same_struct;
+> >               }
+> >
+> > -             emit_stx(prog, bytes_to_bpf_size(arg_size),
+> > -                      BPF_REG_FP,
+> > -                      i =3D=3D 5 ? X86_REG_R9 : BPF_REG_1 + i,
+> > -                      -(stack_size - i * 8));
+> > +             if (i <=3D 5) {
+> > +                     /* store function arguments in regs */
+> > +                     emit_stx(prog, bytes_to_bpf_size(arg_size),
+> > +                              BPF_REG_FP,
+> > +                              i =3D=3D 5 ? X86_REG_R9 : BPF_REG_1 + i,
+> > +                              -(stack_size - i * 8));
+> > +             } else {
+> > +                     /* store function arguments in stack */
+> > +                     emit_ldx(prog, bytes_to_bpf_size(arg_size),
+> > +                              BPF_REG_0, BPF_REG_FP,
+> > +                              (i - 6) * 8 + 0x18);
+> > +                     emit_stx(prog, bytes_to_bpf_size(arg_size),
+> > +                              BPF_REG_FP,
+> > +                              BPF_REG_0,
+> > +                              -(stack_size - i * 8));
+> > +             }
+> >
+> >               j =3D next_same_struct ? j : j + 1;
+> >       }
+> > @@ -1913,6 +1925,41 @@ static void restore_regs(const struct btf_func_m=
+odel *m, u8 **prog, int nr_regs,
+> >       }
+> >  }
+> >
+> > +static void prepare_origin_stack(const struct btf_func_model *m, u8 **=
+prog,
+> > +                              int nr_regs, int stack_size)
+> > +{
+> > +     int i, j, arg_size;
+> > +     bool next_same_struct =3D false;
+> > +
+> > +     if (nr_regs <=3D 6)
+> > +             return;
+> > +
+> > +     /* Prepare the function arguments in stack before call origin
+> > +      * function. These arguments must be stored in the top of the
+> > +      * stack.
+> > +      */
+> > +     for (i =3D 0, j =3D 0; i < min(nr_regs, MAX_BPF_FUNC_ARGS); i++) =
+{
+> > +             /* The arg_size is at most 16 bytes, enforced by the veri=
+fier. */
+> > +             arg_size =3D m->arg_size[j];
+> > +             if (arg_size > 8) {
+> > +                     arg_size =3D 8;
+> > +                     next_same_struct =3D !next_same_struct;
+> > +             }
+> > +
+> > +             if (i > 5) {
+> > +                     emit_ldx(prog, bytes_to_bpf_size(arg_size),
+> > +                              BPF_REG_0, BPF_REG_FP,
+> > +                              (i - 6) * 8 + 0x18);
+> > +                     emit_stx(prog, bytes_to_bpf_size(arg_size),
+> > +                              BPF_REG_FP,
+> > +                              BPF_REG_0,
+> > +                              -(stack_size - (i - 6) * 8));
+> > +             }
+> > +
+> > +             j =3D next_same_struct ? j : j + 1;
+> > +     }
+> > +}
+> > +
+> >  static int invoke_bpf_prog(const struct btf_func_model *m, u8 **pprog,
+> >                          struct bpf_tramp_link *l, int stack_size,
+> >                          int run_ctx_off, bool save_ret)
+> > @@ -1938,7 +1985,7 @@ static int invoke_bpf_prog(const struct btf_func_=
+model *m, u8 **pprog,
+> >       /* arg1: mov rdi, progs[i] */
+> >       emit_mov_imm64(&prog, BPF_REG_1, (long) p >> 32, (u32) (long) p);
+> >       /* arg2: lea rsi, [rbp - ctx_cookie_off] */
+> > -     EMIT4(0x48, 0x8D, 0x75, -run_ctx_off);
+> > +     EMIT3_off32(0x48, 0x8D, 0xB5, -run_ctx_off);
+> >
+> >       if (emit_rsb_call(&prog, bpf_trampoline_enter(p), prog))
+> >               return -EINVAL;
+> > @@ -1954,7 +2001,7 @@ static int invoke_bpf_prog(const struct btf_func_=
+model *m, u8 **pprog,
+> >       emit_nops(&prog, 2);
+> >
+> >       /* arg1: lea rdi, [rbp - stack_size] */
+> > -     EMIT4(0x48, 0x8D, 0x7D, -stack_size);
+> > +     EMIT3_off32(0x48, 0x8D, 0xBD, -stack_size);
+> >       /* arg2: progs[i]->insnsi for interpreter */
+> >       if (!p->jited)
+> >               emit_mov_imm64(&prog, BPF_REG_2,
+> > @@ -1984,7 +2031,7 @@ static int invoke_bpf_prog(const struct btf_func_=
+model *m, u8 **pprog,
+> >       /* arg2: mov rsi, rbx <- start time in nsec */
+> >       emit_mov_reg(&prog, true, BPF_REG_2, BPF_REG_6);
+> >       /* arg3: lea rdx, [rbp - run_ctx_off] */
+> > -     EMIT4(0x48, 0x8D, 0x55, -run_ctx_off);
+> > +     EMIT3_off32(0x48, 0x8D, 0x95, -run_ctx_off);
+> >       if (emit_rsb_call(&prog, bpf_trampoline_exit(p), prog))
+> >               return -EINVAL;
+> >
+> > @@ -2136,7 +2183,7 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_=
+image *im, void *image, void *i
+> >                               void *func_addr)
+> >  {
+> >       int i, ret, nr_regs =3D m->nr_args, stack_size =3D 0;
+> > -     int regs_off, nregs_off, ip_off, run_ctx_off;
+> > +     int regs_off, nregs_off, ip_off, run_ctx_off, arg_stack_off, rbx_=
+off;
+> >       struct bpf_tramp_links *fentry =3D &tlinks[BPF_TRAMP_FENTRY];
+> >       struct bpf_tramp_links *fexit =3D &tlinks[BPF_TRAMP_FEXIT];
+> >       struct bpf_tramp_links *fmod_ret =3D &tlinks[BPF_TRAMP_MODIFY_RET=
+URN];
+> > @@ -2150,8 +2197,10 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp=
+_image *im, void *image, void *i
+> >               if (m->arg_flags[i] & BTF_FMODEL_STRUCT_ARG)
+> >                       nr_regs +=3D (m->arg_size[i] + 7) / 8 - 1;
+> >
+> > -     /* x86-64 supports up to 6 arguments. 7+ can be added in the futu=
+re */
+> > -     if (nr_regs > 6)
+> > +     /* x86-64 supports up to MAX_BPF_FUNC_ARGS arguments. 1-6
+> > +      * are passed through regs, the remains are through stack.
+> > +      */
+> > +     if (nr_regs > MAX_BPF_FUNC_ARGS)
+> >               return -ENOTSUPP;
+> >
+> >       /* Generated trampoline stack layout:
+> > @@ -2170,7 +2219,14 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp=
+_image *im, void *image, void *i
+> >        *
+> >        * RBP - ip_off    [ traced function ]  BPF_TRAMP_F_IP_ARG flag
+> >        *
+> > +      * RBP - rbx_off   [ rbx value       ]  always
+> > +      *
+> >        * RBP - run_ctx_off [ bpf_tramp_run_ctx ]
+> > +      *
+> > +      *                     [ stack_argN ]  BPF_TRAMP_F_CALL_ORIG
+> > +      *                     [ ...        ]
+> > +      *                     [ stack_arg2 ]
+> > +      * RBP - arg_stack_off [ stack_arg1 ]
+> >        */
+> >
+> >       /* room for return value of orig_call or fentry prog */
+> > @@ -2190,9 +2246,17 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp=
+_image *im, void *image, void *i
+> >
+> >       ip_off =3D stack_size;
+> >
+> > +     stack_size +=3D 8;
+> > +     rbx_off =3D stack_size;
+> > +
+> >       stack_size +=3D (sizeof(struct bpf_tramp_run_ctx) + 7) & ~0x7;
+> >       run_ctx_off =3D stack_size;
+> >
+> > +     if (nr_regs > 6 && (flags & BPF_TRAMP_F_CALL_ORIG))
+> > +             stack_size +=3D (nr_regs - 6) * 8;
+> > +
+> > +     arg_stack_off =3D stack_size;
+> > +
+> >       if (flags & BPF_TRAMP_F_SKIP_FRAME) {
+> >               /* skip patched call instruction and point orig_call to a=
+ctual
+> >                * body of the kernel function.
+> > @@ -2212,8 +2276,9 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_=
+image *im, void *image, void *i
+> >       x86_call_depth_emit_accounting(&prog, NULL);
+> >       EMIT1(0x55);             /* push rbp */
+> >       EMIT3(0x48, 0x89, 0xE5); /* mov rbp, rsp */
+> > -     EMIT4(0x48, 0x83, 0xEC, stack_size); /* sub rsp, stack_size */
+> > -     EMIT1(0x53);             /* push rbx */
+> > +     EMIT3_off32(0x48, 0x81, 0xEC, stack_size); /* sub rsp, stack_size=
+ */
+> > +     /* mov QWORD PTR [rbp - rbx_off], rbx */
+> > +     emit_stx(&prog, BPF_DW, BPF_REG_FP, BPF_REG_6, -rbx_off);
+> >
+> >       /* Store number of argument registers of the traced function:
+> >        *   mov rax, nr_regs
+> > @@ -2262,6 +2327,7 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_=
+image *im, void *image, void *i
+> >
+> >       if (flags & BPF_TRAMP_F_CALL_ORIG) {
+> >               restore_regs(m, &prog, nr_regs, regs_off);
+> > +             prepare_origin_stack(m, &prog, nr_regs, arg_stack_off);
+> >
+> >               if (flags & BPF_TRAMP_F_ORIG_STACK) {
+> >                       emit_ldx(&prog, BPF_DW, BPF_REG_0, BPF_REG_FP, 8)=
+;
+> > @@ -2321,14 +2387,14 @@ int arch_prepare_bpf_trampoline(struct bpf_tram=
+p_image *im, void *image, void *i
+> >       if (save_ret)
+> >               emit_ldx(&prog, BPF_DW, BPF_REG_0, BPF_REG_FP, -8);
+> >
+> > -     EMIT1(0x5B); /* pop rbx */
+> > +     emit_ldx(&prog, BPF_DW, BPF_REG_6, BPF_REG_FP, -rbx_off);
+> >       EMIT1(0xC9); /* leave */
+> >       if (flags & BPF_TRAMP_F_SKIP_FRAME)
+> >               /* skip our return address and return to parent */
+> >               EMIT4(0x48, 0x83, 0xC4, 8); /* add rsp, 8 */
+> >       emit_return(&prog, prog);
+> >       /* Make sure the trampoline generation logic doesn't overflow */
+> > -     if (WARN_ON_ONCE(prog > (u8 *)image_end - BPF_INSN_SAFETY)) {
+> > +     if (prog > (u8 *)image_end - BPF_INSN_SAFETY) {
+> >               ret =3D -EFAULT;
+> >               goto cleanup;
+> >       }
+> > --
+> > 2.40.1
+> >
