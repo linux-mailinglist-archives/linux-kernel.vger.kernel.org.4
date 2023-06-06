@@ -2,136 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E628B7241EF
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 14:19:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41D327241F3
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 14:20:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233867AbjFFMTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 08:19:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54670 "EHLO
+        id S235835AbjFFMUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 08:20:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230297AbjFFMTb (ORCPT
+        with ESMTP id S236086AbjFFMTt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 08:19:31 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D4F9E54;
-        Tue,  6 Jun 2023 05:19:30 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 8FBC55C00F9;
-        Tue,  6 Jun 2023 08:19:29 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Tue, 06 Jun 2023 08:19:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1686053969; x=
-        1686140369; bh=eMgbmfO4n2kZdbVnfADr60x6eK0Ld2t432qe3NAZMQ4=; b=j
-        HQpYMBWdPEngh7GTogG1JcK44zHd1xFfQKCr7pw8AlFmkjPrLOyN/GbO7Kwu2pnJ
-        7VFvwO8mAe5G1Ofx0T5jqZycNb5fn3XU+MG9jqgmfSppXoi+6ed4AgCc9HafMN6F
-        mrfmcnf0aLSOpBf8NZEsr12Fhj7Paz3N53O0fGsMz12xpBJhwU5hVN7oAusfb5YK
-        PrUmtDm+AsFwfy1+RnPi8HTzkQbEjTXJiVS3NGxSrrmVc/OLncvqDWIlYxq2Jfwk
-        VDHrQm8J86dvg6VAzxanW11lxLMuilF9P8tLUv8bZkCuZd59fUXk2540YhRkAgTY
-        DcyWhpv7OnuIsbShnJ5iQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1686053969; x=1686140369; bh=eMgbmfO4n2kZd
-        bVnfADr60x6eK0Ld2t432qe3NAZMQ4=; b=DFK3TMmuHfpcBYoyzfHZXn4gdyTZe
-        jGBw/bQOF0V+z/hcbx5eFli8UCiXay4dhrNYzheOVeESayrqgmYJo5GADrPPreW/
-        a0equVNAGjnXBqkwWGvI/e9+puX6yYZdMZmZMNMsVeHQwBRbfyLNkKLgrCeEMjzC
-        b/cGlVzJTDxagJsW4P4f3VCCvQIz8WZyPqjTG5UNAzu3kvVL3FeqyFE8rcIJj0/x
-        Lp4A4cMbKjY+j/EPEM3gUGV+DrX0UfEWR1pA7xZ7R0r89s3zHxDLcDqaMrywYjn2
-        UimK6pVZVsSHXd8uisqpwt912ZbQNtr5xAcvKfydpXo0rdqB9z1tYCCDA==
-X-ME-Sender: <xms:TyR_ZO7XS2oBalwSM2-4_8BBJg4gy5GyUL468ZtjWjti6O0j7EO10A>
-    <xme:TyR_ZH7gqCFisLS3bDXn_vMtJ4KLiOePP6l-XoTZU4R-UFZQYehSHkw1VGPjWbZAf
-    vgM4Qb86Tk2RajmV0g>
-X-ME-Received: <xmr:TyR_ZNchIT58FCO73qHovRvguaJ0HtwJPLk-ZzclOj0TP7JLo4kO9g819bqVaqoOXxKj_g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedtuddghedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
-    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
-    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
-    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:TyR_ZLL-mSHXZsiM6YHbXG1-WnBtxXG35XGD6an9v4Nh48wbhGfvZw>
-    <xmx:TyR_ZCIiwQ3MeWUmgvQTPPAXfF-0KYBRLIPMYniXIl8vYuz4V-VEqw>
-    <xmx:TyR_ZMywJNS0T3HS1qSR5DHj3JK5tuT26V_UxURC9ktFZOccV9pUuw>
-    <xmx:USR_ZBU0hQd1O33GKsta2A81sTlLWPCSKmKTS_cp8dS_ASohUPTO0w>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 6 Jun 2023 08:19:27 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 21F0810A6A4; Tue,  6 Jun 2023 15:19:24 +0300 (+03)
-Date:   Tue, 6 Jun 2023 15:19:24 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv13 5/9] efi: Add unaccepted memory support
-Message-ID: <20230606121924.wcjezcppuiofvnk6@box.shutemov.name>
-References: <20230601182543.19036-1-kirill.shutemov@linux.intel.com>
- <20230601182543.19036-6-kirill.shutemov@linux.intel.com>
- <20230605154333.GLZH4CpV3eXCCWCGxi@fat_crate.local>
- <20230605173303.k5yt535snxyk4ez3@box.shutemov.name>
- <20230605191225.GCZH4zmbtkWWRG4lzf@fat_crate.local>
+        Tue, 6 Jun 2023 08:19:49 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FD7EE67
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 05:19:46 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-9768fd99c0cso774548666b.0
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 05:19:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1686053984; x=1688645984;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XINeOMROcoKiU5lnuNf2dxDyn75tbOYyhZZuyc0/MtU=;
+        b=Ht1rRnGWAxNs+fy4VYwbA4YstgOHvi3EWTaNg5g5C22fNHBLKSBnG4HImDtoOf+/zn
+         J7DXGNJvF39X/5FeUmXzm5fXrzXHODgTb26c2Keg1LonvWDg5wHcAQ32xUutTLc/jv5P
+         jHpML4iPmD1KMvDoxSlQ9b6mOK6a8cKJDepSk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686053984; x=1688645984;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XINeOMROcoKiU5lnuNf2dxDyn75tbOYyhZZuyc0/MtU=;
+        b=QILd8EiWcGBGycrSs3YuYD+JuuXJqge1+YFPU3W5lno+ZhD9i7BLARcTRahODG7xWu
+         yXjqU9wZe6P4SZzFwQcDBUoce1R8x8BwCzW0I1agfZNqyz5fNpXZzZRDqWMGVd+VVFQm
+         Inbk+/JuhPJA4Z2tFcvPfkK+9A0tJDNzuafnYwPV0Z3M2GlsPzMmuap0ivg22bpJowyg
+         GoZkrvaMj8Ec/0hx8MOBJP+U6UXMEDnwb+cAQQnZ7fiNE0E6rIRp0cGx3sU0OCU5Gvyy
+         5UBpBKboxZrfVOp1MBVlq/ritt1Ls0j2b15WVbZ9wnMOHtAJ8gZT8P4cFBYVN2DPydXc
+         GlzA==
+X-Gm-Message-State: AC+VfDxdVrDuD+O1Bv9A5Oi5405KxOvd+IASGCGdcg3vQzlLvggLhm/j
+        iVqequAWDLwwFHpFqKO1shtV1bKbPN8uSlX4+1OTgyRs
+X-Google-Smtp-Source: ACHHUZ7aEd/FH4eloPoGqclqFKv884x4A9YkCyxtpdGv2JLv5dhq/iz4ZzKO2TVu5dnWBrPLKyFO9g==
+X-Received: by 2002:a17:907:96a1:b0:973:e5bf:281e with SMTP id hd33-20020a17090796a100b00973e5bf281emr9049965ejc.27.1686053984635;
+        Tue, 06 Jun 2023 05:19:44 -0700 (PDT)
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com. [209.85.208.44])
+        by smtp.gmail.com with ESMTPSA id l12-20020a170906a40c00b00971433ed5fesm5393312ejz.184.2023.06.06.05.19.44
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Jun 2023 05:19:44 -0700 (PDT)
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5147e441c33so12383769a12.0
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 05:19:44 -0700 (PDT)
+X-Received: by 2002:a05:6402:34c4:b0:516:5b18:a9f1 with SMTP id
+ w4-20020a05640234c400b005165b18a9f1mr6873421edc.0.1686053983752; Tue, 06 Jun
+ 2023 05:19:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230605191225.GCZH4zmbtkWWRG4lzf@fat_crate.local>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <nycvar.YFH.7.76.2306052334360.29760@cbobk.fhfr.pm>
+In-Reply-To: <nycvar.YFH.7.76.2306052334360.29760@cbobk.fhfr.pm>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 6 Jun 2023 05:19:26 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiMbF38KCNhPFiargenpSBoecSXTLQACKS2UMyo_Vu2ww@mail.gmail.com>
+Message-ID: <CAHk-=wiMbF38KCNhPFiargenpSBoecSXTLQACKS2UMyo_Vu2ww@mail.gmail.com>
+Subject: Re: [GIT PULL] HID regression fix
+To:     Jiri Kosina <jikos@kernel.org>
+Cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 05, 2023 at 09:12:25PM +0200, Borislav Petkov wrote:
-> So how about you explain that explicitly somewhere, perhaps in a comment
-> above accept_memory(), that the unaccepted range is not the whole memory
-> but only, well, what is unaccepted and the rest is implicitly accepted?
+On Mon, Jun 5, 2023 at 2:39=E2=80=AFPM Jiri Kosina <jikos@kernel.org> wrote=
+:
+>
+> - Final, confirmed fix for regression causing some devices connected via
+>   Logitech HID++ Unifying receiver take too long to initialize (Benjamin
+>   Tissoires)
 
-Does it look okay to you?
+Thanks.
 
-/*
- * accept_memory() -- Consult bitmap and accept the memory if needed.
- *
- * Only memory that explicitly marked as unaccepted in the bitmap requires
- * an action.
- *
- * No need to accept:
- *  - anything if the system has no unaccepted table;
- *  - memory that is below phys_base;
- *  - memory that is above the memory that addressable by the bitmap;
- */
+The 'don't use goto' looks good, but can we simplify things further?
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+In particular, this kind of loop is why "do { } while ()" exists.
+
+But also, testing "ret" in that end condition is all kinds of strange.
+It smells of Pascal loops, because Pascal didn't have any sane control
+flow (little known fact: in a rare show of self-reflection, "Pascal"
+was named to sound like the Finnish word "paska", meaning "shit").
+
+The *sane* thing to do is not to test "ret" in the loop condition, but
+just add the obvious control flow - so the code that wants to retry
+should just do 'continue' in that loop.
+
+Then the loop itself ends up being just
+
+        do {
+                ...
+        } while (--max_retries);
+
+and we don't need any fake initialization of 'ret'.
+
+Anyway, just a thought.
+
+It would also simplify things a lot if that function was split up so
+that you'd have that whole loop in a helper function. That way it
+could just use "return ret" or whatever, with the mutex_lock/unlock in
+the caller.
+
+Btw, it does look like the code is mixing two different kinds of
+return types in 'ret': regular Linux error numbers as negative
+numbers, but then possibly positive "HIDPP status" values that it gets
+from the report (ie
+
+        ret =3D response->rap.params[1];
+
+ends up being returned as a value, mixed with
+
+        ret =3D -ETIMEDOUT;
+
+so which is it? A negative error, or a positive HID report byte value? Or b=
+oth?
+
+             Linus
