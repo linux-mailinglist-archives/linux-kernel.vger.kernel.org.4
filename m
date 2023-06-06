@@ -2,149 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3173723C09
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 10:41:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D98A4723C0E
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 10:42:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237191AbjFFIk6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 04:40:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37198 "EHLO
+        id S237026AbjFFImQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 04:42:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237026AbjFFIkz (ORCPT
+        with ESMTP id S235151AbjFFImO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 04:40:55 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D3E7F4;
-        Tue,  6 Jun 2023 01:40:47 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-973f78329e3so919035866b.3;
-        Tue, 06 Jun 2023 01:40:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686040846; x=1688632846;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=cyJ5tDSZZP8etKKPv923PF92ppsCaio89dIjb2PYMe4=;
-        b=rBtWPmSdoicxYr9srl8qFvlifhG4ncOpiQ0k+oysrF2gKHOlEUJImacRwNQ8KLliw+
-         O2UE4hz78ZOqYrQNafFU7Cesy32D2iCONGiqqmC/kK9gTqqHrr+OI1xHhc9E0AHHGv9U
-         fBVmYY732dapdOHvfPXrlbLU6AD9w5uPIY19yJ1iYkJJtQkitigUv3GfvZ7apFoEsa74
-         X8TYvbVy7L7L7BVCtm2l4Oz0bt4xuQfqd9CbF5l5PlzHvToUmJcRxK4+t9nSKMW8TuZ7
-         /I+ANqkGyVYBR+uPj2IhlpX0tXAdJPFDEst1U4x2d0hoQiGmM2dW+ioy4Nbo8F2XCbM9
-         dOtw==
+        Tue, 6 Jun 2023 04:42:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 962AAEA
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 01:41:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686040893;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=6tQ35W6HLuuEXQ1QV6ZcMIzGfWPz5E/TpOyat14Si5U=;
+        b=K2VAOpmn0TwX0glJI7Kvp/j5X44kR5hyYO/ZiiY3+x7t8AkcBjfiNkSiaWtlfroQQB3qZi
+        s+qMpHpG3sDSlOYkWlVIwcc4h1iKLFZkTyIXDzbhwQPg/FNA+T8Me/+PMFcI6FL/X6bc+N
+        CIzQGESeiQGUUh9/e+2lwcIqYb0kUE4=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-128-WQ_1amZcO9-p_gVoOv0Kmg-1; Tue, 06 Jun 2023 04:41:32 -0400
+X-MC-Unique: WQ_1amZcO9-p_gVoOv0Kmg-1
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-97455ea1c14so361201966b.2
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 01:41:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686040846; x=1688632846;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cyJ5tDSZZP8etKKPv923PF92ppsCaio89dIjb2PYMe4=;
-        b=Ri3eNFNnrni/kr4z8pA9LIoPkPp8FbQEU2OA8XFEbYtj5bHegf57n9mPI8qHusyk7i
-         h1i1/OpgTscHkMIZeag25f+/pO3gvGmH1AbEBYojL+Z+HVaH9ulPX7xCGww58Tu5ybw2
-         9z3SFKXM5fP/aPlP72NyzGZP7GfViyO6Uz6yC7yYgawIDs+toGicA+U1kDeIluMGrmsV
-         h8P60fCVFXvF41yxCZoe16OlDJxLYvYCMdT1RWsI8lHbnqIK2n4aSBQWzTCpnrlzxMbu
-         bOq4VqUs2ORW3fNfiHTsfRrcdUzfRmJqDiUK4J2XNbL349KKhoASy/7+ygHjE3OJUT+Z
-         QdcQ==
-X-Gm-Message-State: AC+VfDwtOgbdivbxgQYvD9+tHxA6BEHgT2ZFh7T2DFabAXrKdwK/38lT
-        KYaQGSF4FTgQEq/1L6gPhLk=
-X-Google-Smtp-Source: ACHHUZ6pFnvGHkcMvgdY6pglmR751hr8lQG7zM/2O8y9sStd9w/m4NVvvDxsA5SPNqZM+PguT3Pnuw==
-X-Received: by 2002:a17:906:4fcb:b0:961:a67:28d with SMTP id i11-20020a1709064fcb00b009610a67028dmr2251830ejw.22.1686040845514;
-        Tue, 06 Jun 2023 01:40:45 -0700 (PDT)
-Received: from pc638.lan ([155.137.26.201])
-        by smtp.gmail.com with ESMTPSA id ca15-20020a170906a3cf00b00977c44188eesm4051149ejb.132.2023.06.06.01.40.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 01:40:45 -0700 (PDT)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc638.lan>
-Date:   Tue, 6 Jun 2023 10:40:43 +0200
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     Uladzislau Rezki <urezki@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Baoquan He <bhe@redhat.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Linux btrfs <linux-btrfs@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, a1bert@atlas.cz,
-        Forza <forza@tnonline.net>
-Subject: Re: [PATCH] mm/vmalloc: do not output a spurious warning when huge
- vmalloc() fails
-Message-ID: <ZH7xCy9QBmMLg9SQ@pc638.lan>
-References: <20230605201107.83298-1-lstoakes@gmail.com>
- <cd47d6ac-69ce-0315-dd45-2cb9dce57f36@suse.cz>
- <ZH7rfgeKzhmZzjA1@pc638.lan>
- <5062a28d-3c49-4510-8e0f-32afb8436a87@lucifer.local>
+        d=1e100.net; s=20221208; t=1686040891; x=1688632891;
+        h=content-transfer-encoding:content-language:cc:to:subject:from
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=6tQ35W6HLuuEXQ1QV6ZcMIzGfWPz5E/TpOyat14Si5U=;
+        b=YD4ZWf34A0E3XqLNjsq07mkU8fKB5ceS0WHUV0jVjm1W2f4w10uwQvtK4gO6J4WJ5+
+         LqkIWd8Ch+ksOMVyoG0/aQrDpcd/pLbWtaSOoD2J0X3QBOd/MUiixXGSM1eM3AuGxEfM
+         zwOoLnSrUZnEiZYcNtsHyceavAekkIkabWRnV+789ZYB3nvrG5Aha91xxuxN2V+RFNZh
+         /cfnBUSnjl97DrERC6woyjp+X26GKDUC1GsIWv58ZB68ruEo8zPVL8+9hrilOVPhqknv
+         HJ9gv1id4c13Mb4AQ/kJrfsEIEy5eXTN+pnmipAAtk2EtGp34K8M5QQMG8VvIJxTcRfY
+         Ueqw==
+X-Gm-Message-State: AC+VfDysQtVZ6dQpeKVYrDp/UZk2EoSwLk0iHOMY0PIz+0rNFY8Fvkry
+        mZnzyrrZdeACBIbdO7Ty/J4rjOTILRMw/ToEXK/c1UyQVlvWgmDtBOuLLVnOHjhd2/GaIOnMExC
+        T1OEhYDiKkPE3D/2UrTIPvpcEPk3onitw
+X-Received: by 2002:a17:907:1606:b0:973:91f7:508a with SMTP id hb6-20020a170907160600b0097391f7508amr1637457ejc.4.1686040891273;
+        Tue, 06 Jun 2023 01:41:31 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7eCTct8SXbWejRailHG0JSybcAu8U+jNTSaBUfomCUtGKIuBuzxz87cs44KUPwS3wT5KC4vg==
+X-Received: by 2002:a17:907:1606:b0:973:91f7:508a with SMTP id hb6-20020a170907160600b0097391f7508amr1637447ejc.4.1686040890960;
+        Tue, 06 Jun 2023 01:41:30 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id qc16-20020a170906d8b000b00965d294e633sm5278626ejb.58.2023.06.06.01.41.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Jun 2023 01:41:30 -0700 (PDT)
+Message-ID: <0614c271-1786-c032-a888-26c9f9ae5a70@redhat.com>
+Date:   Tue, 6 Jun 2023 10:41:29 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5062a28d-3c49-4510-8e0f-32afb8436a87@lucifer.local>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+From:   Hans de Goede <hdegoede@redhat.com>
+Subject: [GIT PULL] platform-drivers-x86 for 6.4-3
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        platform-driver-x86@vger.kernel.org,
+        =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Content-Language: en-US, nl
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 09:24:33AM +0100, Lorenzo Stoakes wrote:
-> On Tue, Jun 06, 2023 at 10:17:02AM +0200, Uladzislau Rezki wrote:
-> > On Tue, Jun 06, 2023 at 09:13:24AM +0200, Vlastimil Babka wrote:
-> > >
-> > > On 6/5/23 22:11, Lorenzo Stoakes wrote:
-> > > > In __vmalloc_area_node() we always warn_alloc() when an allocation
-> > > > performed by vm_area_alloc_pages() fails unless it was due to a pending
-> > > > fatal signal.
-> > > >
-> > > > However, huge page allocations instigated either by vmalloc_huge() or
-> > > > __vmalloc_node_range() (or a caller that invokes this like kvmalloc() or
-> > > > kvmalloc_node()) always falls back to order-0 allocations if the huge page
-> > > > allocation fails.
-> > > >
-> > > > This renders the warning useless and noisy, especially as all callers
-> > > > appear to be aware that this may fallback. This has already resulted in at
-> > > > least one bug report from a user who was confused by this (see link).
-> > > >
-> > > > Therefore, simply update the code to only output this warning for order-0
-> > > > pages when no fatal signal is pending.
-> > > >
-> > > > Link: https://bugzilla.suse.com/show_bug.cgi?id=1211410
-> > > > Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
-> > >
-> > > I think there are more reports of same thing from the btrfs context, that
-> > > appear to be a 6.3 regression
-> > >
-> > > https://bugzilla.kernel.org/show_bug.cgi?id=217466
-> > > Link: https://lore.kernel.org/all/efa04d56-cd7f-6620-bca7-1df89f49bf4b@gmail.com/
-> > >
-> > I had a look at that report. The btrfs complains due to the
-> > fact that a high-order page(1 << 9) can not be obtained. In the
-> > vmalloc code we do not fall to 0-order allocator if there is
-> > a request of getting a high-order.
-> 
-> This isn't true, we _do_ fallback to order-0 (this is the basis of my patch), in
-> __vmalloc_node_range():-
-> 
-> 	/* Allocate physical pages and map them into vmalloc space. */
-> 	ret = __vmalloc_area_node(area, gfp_mask, prot, shift, node);
-> 	if (!ret)
-> 		goto fail;
-> 
-> ...
-> 
-> fail:
-> 	if (shift > PAGE_SHIFT) {
-> 		shift = PAGE_SHIFT;
-> 		align = real_align;
-> 		size = real_size;
-> 		goto again;
-> 	}
-> 
-> With the order being derived from shift, and __vmalloc_area_node() only being
-> called from __vmalloc_node_range().
-> 
-Correct. It is done on an upper-layer whereas i checked the vm_area_alloc_pages() function.
-But as you mentioned, the refactoring has to be done as it looks a bit messy. 
+Hi Linus,
 
---
-Uladzislau Rezki
+Here is the third round of fixes for platform-drivers-x86 for 6.4.
+
+Nothing special to report just a few small fixes:
+
+ -  Various Microsoft Surface support fixes
+ -  1 fix for the INT3472 driver
+
+Regards,
+
+Hans
+
+
+The following changes since commit 3279decb2c3c8d58cb0b70ed5235c480735a36ee:
+
+  platform/x86/intel/ifs: Annotate work queue on stack so object debug does not complain (2023-05-23 12:55:16 +0200)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git tags/platform-drivers-x86-v6.4-4
+
+for you to fetch changes up to fb109fba728407fa4a84d659b5cb87cd8399d7b3:
+
+  platform/x86: int3472: Avoid crash in unregistering regulator gpio (2023-05-30 12:10:22 +0200)
+
+----------------------------------------------------------------
+platform-drivers-x86 for v6.4-4
+
+Highlights:
+ -  Various Microsoft Surface support fixes
+ -  1 fix for the INT3472 driver
+
+The following is an automated git shortlog grouped by driver:
+
+int3472:
+ -  Avoid crash in unregistering regulator gpio
+
+platform/surface:
+ -  aggregator_tabletsw: Add support for book mode in POS subsystem
+ -  aggregator_tabletsw: Add support for book mode in KIP subsystem
+ -  aggregator: Allow completion work-items to be executed in parallel
+ -  aggregator: Make to_ssam_device_driver() respect constness
+
+----------------------------------------------------------------
+Hao Yao (1):
+      platform/x86: int3472: Avoid crash in unregistering regulator gpio
+
+Maximilian Luz (4):
+      platform/surface: aggregator: Make to_ssam_device_driver() respect constness
+      platform/surface: aggregator: Allow completion work-items to be executed in parallel
+      platform/surface: aggregator_tabletsw: Add support for book mode in KIP subsystem
+      platform/surface: aggregator_tabletsw: Add support for book mode in POS subsystem
+
+ drivers/platform/surface/aggregator/controller.c       |  2 +-
+ drivers/platform/surface/surface_aggregator_tabletsw.c | 10 ++++++++++
+ drivers/platform/x86/intel/int3472/clk_and_regulator.c | 13 ++++++++-----
+ include/linux/surface_aggregator/device.h              |  6 +-----
+ 4 files changed, 20 insertions(+), 11 deletions(-)
+
