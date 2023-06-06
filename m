@@ -2,199 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3764A725086
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 01:13:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42C3772509E
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 01:15:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240195AbjFFXN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 19:13:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48240 "EHLO
+        id S240268AbjFFXPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 19:15:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234333AbjFFXN0 (ORCPT
+        with ESMTP id S240248AbjFFXPF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 19:13:26 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E1F10C3;
-        Tue,  6 Jun 2023 16:13:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686093205; x=1717629205;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nOLTJSibPiFMfr8fOq4c8i0FSHh1V58oiSrkFHPtWLI=;
-  b=iLR+ridN9UTiu4C3YV021jdMQ1d6CuojAykf9zk4byzVhZtN0a0Aczdv
-   pi+PJYLdvFO5MMac3boomigkldt8KsApo2QLawJ7Hoo2G5iQ3J9zMxy8Z
-   GUUxOn6ecOKLI+z9uOyL2IHVqjVkfWOV/5/kA9z4+9C2WKwIYlRQkCXf/
-   laCiHH6bx0YF+JqfjsOxAhiNPWmyAvmiTIPH16BmiBDk7oVRVAvG4XsYF
-   3OJnEfMuoUiP/3p4V7LxpsuGOXeeRUA7FBH1CROdsNxYKK4ozaT93UBk0
-   OHgbDxfat1LujvVIS0lY9JSACXNevtMAwfnk40vYVcWAM8/wAd5aY4ZC0
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="346430673"
-X-IronPort-AV: E=Sophos;i="6.00,222,1681196400"; 
-   d="scan'208";a="346430673"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 16:13:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="799063751"
-X-IronPort-AV: E=Sophos;i="6.00,222,1681196400"; 
-   d="scan'208";a="799063751"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 06 Jun 2023 16:13:19 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q6fra-0005qU-25;
-        Tue, 06 Jun 2023 23:13:18 +0000
-Date:   Wed, 7 Jun 2023 07:12:58 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Tommaso Merciai <tomm.merciai@gmail.com>
-Cc:     oe-kbuild-all@lists.linux.dev, jacopo.mondi@ideasonboard.com,
-        laurent.pinchart@ideasonboard.com, martin.hecht@avnet.eu,
-        michael.roeder@avnet.eu, linuxfancy@googlegroups.com,
-        Tommaso Merciai <tomm.merciai@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Gerald Loacker <gerald.loacker@wolfvision.net>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Mikhail Rudenko <mike.rudenko@gmail.com>,
-        Nicholas Roth <nicholas@rothemail.net>,
-        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/3] media: i2c: Add support for alvium camera
-Message-ID: <202306070716.28K0H9Jd-lkp@intel.com>
-References: <20230606155416.260941-4-tomm.merciai@gmail.com>
+        Tue, 6 Jun 2023 19:15:05 -0400
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF0CA1721
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 16:15:03 -0700 (PDT)
+Received: by mail-il1-x129.google.com with SMTP id e9e14a558f8ab-33bf12b5fb5so26535ab.1
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 16:15:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686093303; x=1688685303;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UJcTOjLSPVe3TW5IYKBe1nDoXetkbFhwDMWoyyExPes=;
+        b=Y0xNu0uVXUEDoZNQy33qvMfncNoIKrsaRa8xSVtYodHLeBpw6dh9VTy1yqAEeTL1cc
+         SvAeSKeS1xsHDK/JFD7qMhxRqJmRBFrfc6VbQGvzKEA7DMK9aGLkMVxYJphK0Sscmocx
+         1Pcpc46mEGmP/BRtiMfZkq7h1nGTdkleJGAyWo+5ZDDo5HNc2nosi6eiy/XyShwKmuFx
+         zMCcSAbAe/GJicYSRZPFCPcFMjoKX4XjNuzBZPRrexVAT1P4Fq5NQfbNFTI3hiaDXEE4
+         L4yyb/xN4o4zmb5wly3A1znMaJKLk17cGA6WH/AztH9tmmbIOhg3qa1eVYmEwaeZX7cQ
+         tmhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686093303; x=1688685303;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UJcTOjLSPVe3TW5IYKBe1nDoXetkbFhwDMWoyyExPes=;
+        b=be+R4AWXvtynWfFZTB5qkkui4sWfoSzBwnRyO+qwgIBsy4nvcG+EhK/NqeD4XGN1OB
+         OHIaaZVZJQupqw0oyuUdogSfX/AjIWGuxmRmEfwjChKexeoc6S34r5rJzWqfayKJKa9n
+         KYJL+7+AWR40AiFRl9T1ZjjKyn0DFZzkb2F5/LaSPcPVReIg370aNXyu2blJHpoLLz89
+         dAIVsS02+5gnEsEx8VeaIo9f9k4/nHy7ndS+fBjsvjstpsaTZxHN1u9R3CH47o62/d0Y
+         9xSB+xcXRKoST26zWnGyuh2usm2lgcbTZ1TBxPhDd+ZdtLwO9CS7cmajPGpTKdvQaTqH
+         2BdQ==
+X-Gm-Message-State: AC+VfDyXBYyrabwNpow6gJGgK5Q/NAcBGD1O3cQE5OZ6s2LBBabJ4UQL
+        0HmdvEaWRE8sA/yWKgYZL5ysWMJqoRNO6TWwoCawvg==
+X-Google-Smtp-Source: ACHHUZ4JfdFaMa+uvHR7Db+b/+Y2smU94LqDkKJVaRdVm92blluolykPMOC+66y2EnnqI/QJx9B5Ym68EM+jsbiIkFA=
+X-Received: by 2002:a05:6e02:194a:b0:331:a582:1c63 with SMTP id
+ x10-20020a056e02194a00b00331a5821c63mr30403ilu.3.1686093302838; Tue, 06 Jun
+ 2023 16:15:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230606155416.260941-4-tomm.merciai@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <ZH+F0wGAWV14zvMP@kernel.org>
+In-Reply-To: <ZH+F0wGAWV14zvMP@kernel.org>
+From:   Ian Rogers <irogers@google.com>
+Date:   Tue, 6 Jun 2023 16:14:51 -0700
+Message-ID: <CAP-5=fUNefbgzKNVDZJZvem0bm8cYhc4FPQzp+Ja7v9n6y5ufA@mail.gmail.com>
+Subject: Re: [PATCH 1/1] perf script: Fix allocation of evsel->priv related to
+ per-event dump files
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Ravi Bangoria <ravi.bangoria@linux.ibm.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tommaso,
+On Tue, Jun 6, 2023 at 12:15=E2=80=AFPM Arnaldo Carvalho de Melo
+<acme@kernel.org> wrote:
+>
+> I'm carrying this in my perf-tools-next, please ack :-)
+>
+> - Arnaldo
+>
+> ---
+>
+> When printing output we may want to generate per event files, where the
+> --per-event-dump option should be used, creating perf.data.EVENT.dump
+> files instead of printing to stdout.
+>
+> The callback thar processes event thus expects that evsel->priv->fp
+> should point to either the per-event FILE descriptor or to stdout.
+>
+> The a3af66f51bd0bca7 ("perf script: Fix crash because of missing
+> evsel->priv") changeset fixed a case where evsel->priv wasn't setup,
+> thus set to NULL, causing a segfault when trying to access
+> evsel->priv->fp.
+>
+> But it did it for the non --per-event-dump case by allocating a 'struct
+> perf_evsel_script' just to set its ->fp to stdout.
+>
+> Since evsel->priv is only freed when --per-event-dump is used, we ended
+> up with a memory leek, detected using ASAN.
 
-kernel test robot noticed the following build warnings:
+nit: s/leek/leak/
 
-[auto build test WARNING on media-tree/master]
-[also build test WARNING on robh/for-next linus/master v6.4-rc5 next-20230606]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>
+> Fix it by using the same method as perf_script__setup_per_event_dump(),
+> and reuse that static 'struct perf_evsel_script'.
+>
+> Also check if evsel_script__new() failed.
+>
+> Fixes: a3af66f51bd0bca7 ("perf script: Fix crash because of missing evsel=
+->priv")
+> Reported-by: Ian Rogers <irogers@google.com>
+> Cc: Adrian Hunter <adrian.hunter@intel.com>
+> Cc: Jiri Olsa <jolsa@kernel.org>
+> Cc: Namhyung Kim <namhyung@kernel.org>
+> Cc: Ravi Bangoria <ravi.bangoria@linux.ibm.com>
+> Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Tommaso-Merciai/dt-bindings-vendor-prefixes-Add-prefix-alliedvision/20230606-235632
-base:   git://linuxtv.org/media_tree.git master
-patch link:    https://lore.kernel.org/r/20230606155416.260941-4-tomm.merciai%40gmail.com
-patch subject: [PATCH v3 3/3] media: i2c: Add support for alvium camera
-config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20230607/202306070716.28K0H9Jd-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 12.3.0
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add media-tree git://linuxtv.org/media_tree.git
-        git fetch media-tree master
-        git checkout media-tree/master
-        b4 shazam https://lore.kernel.org/r/20230606155416.260941-4-tomm.merciai@gmail.com
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/media/i2c/
+Tested on top of my asan work:
+Tested-by: Ian Rogers <irogers@google.com>
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306070716.28K0H9Jd-lkp@intel.com/
+> ---
+>  tools/perf/builtin-script.c | 16 ++++++++--------
+>  1 file changed, 8 insertions(+), 8 deletions(-)
+>
+> diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
+> index 70549fc93b125394..b02ad386a55baf07 100644
+> --- a/tools/perf/builtin-script.c
+> +++ b/tools/perf/builtin-script.c
+> @@ -2410,6 +2410,9 @@ static int process_sample_event(struct perf_tool *t=
+ool,
+>         return ret;
+>  }
+>
+> +// Used when scr->per_event_dump is not set
+> +static struct evsel_script es_stdout;
+> +
+>  static int process_attr(struct perf_tool *tool, union perf_event *event,
+>                         struct evlist **pevlist)
+>  {
+> @@ -2418,7 +2421,6 @@ static int process_attr(struct perf_tool *tool, uni=
+on perf_event *event,
+>         struct evsel *evsel, *pos;
+>         u64 sample_type;
+>         int err;
+> -       static struct evsel_script *es;
+>
+>         err =3D perf_event__process_attr(tool, event, pevlist);
+>         if (err)
+> @@ -2428,14 +2430,13 @@ static int process_attr(struct perf_tool *tool, u=
+nion perf_event *event,
+>         evsel =3D evlist__last(*pevlist);
+>
+>         if (!evsel->priv) {
+> -               if (scr->per_event_dump) {
+> +               if (scr->per_event_dump) {
 
-All warnings (new ones prefixed by >>):
+nit: whitespace issue.
 
-   drivers/media/i2c/alvium-csi2.c: In function 'alvium_set_ctrl_white_balance':
->> drivers/media/i2c/alvium-csi2.c:2205:21: warning: variable 'blue_min' set but not used [-Wunused-but-set-variable]
-    2205 |                 u64 blue_min;
-         |                     ^~~~~~~~
->> drivers/media/i2c/alvium-csi2.c:2204:21: warning: variable 'blue_max' set but not used [-Wunused-but-set-variable]
-    2204 |                 u64 blue_max;
-         |                     ^~~~~~~~
->> drivers/media/i2c/alvium-csi2.c:2203:21: warning: variable 'red_min' set but not used [-Wunused-but-set-variable]
-    2203 |                 u64 red_min;
-         |                     ^~~~~~~
->> drivers/media/i2c/alvium-csi2.c:2202:21: warning: variable 'red_max' set but not used [-Wunused-but-set-variable]
-    2202 |                 u64 red_max;
-         |                     ^~~~~~~
-   drivers/media/i2c/alvium-csi2.c: In function 'alvium_set_frame_interval':
->> drivers/media/i2c/alvium-csi2.c:2574:29: warning: variable 'max_fr' set but not used [-Wunused-but-set-variable]
-    2574 |         u64 req_fr, min_fr, max_fr;
-         |                             ^~~~~~
->> drivers/media/i2c/alvium-csi2.c:2574:21: warning: variable 'min_fr' set but not used [-Wunused-but-set-variable]
-    2574 |         u64 req_fr, min_fr, max_fr;
-         |                     ^~~~~~
-   drivers/media/i2c/alvium-csi2.c: In function 'alvium_subdev_init':
->> drivers/media/i2c/alvium-csi2.c:3172:27: warning: variable 'crop' set but not used [-Wunused-but-set-variable]
-    3172 |         struct v4l2_rect *crop;
-         |                           ^~~~
->> drivers/media/i2c/alvium-csi2.c:3171:36: warning: variable 'fmt' set but not used [-Wunused-but-set-variable]
-    3171 |         struct v4l2_mbus_framefmt *fmt;
-         |                                    ^~~
-
-
-vim +/blue_min +2205 drivers/media/i2c/alvium-csi2.c
-
-  2186	
-  2187	static int alvium_set_ctrl_white_balance(struct alvium_dev *alvium,
-  2188					    bool awb)
-  2189	{
-  2190		struct alvium_ctrls *ctrls = &alvium->ctrls;
-  2191		int ret = 0;
-  2192	
-  2193		if (ctrls->auto_wb->is_new) {
-  2194			ret = alvium_set_awb(alvium, awb);
-  2195			if (ret)
-  2196				return ret;
-  2197		}
-  2198	
-  2199		if (!awb && ctrls->auto_wb->is_new) {
-  2200			u64 red = (u64)ctrls->red_balance->val;
-  2201			u64 blue = (u64)ctrls->blue_balance->val;
-> 2202			u64 red_max;
-> 2203			u64 red_min;
-> 2204			u64 blue_max;
-> 2205			u64 blue_min;
-  2206	
-  2207			ret = alvium_get_red_balance_ratio_params(alvium);
-  2208			if (ret)
-  2209				return ret;
-  2210	
-  2211			ret = alvium_get_blue_balance_ratio_params(alvium);
-  2212			if (ret)
-  2213				return ret;
-  2214	
-  2215			red_max = alvium->max_rbalance;
-  2216			red_min = alvium->min_rbalance;
-  2217			blue_max = alvium->max_bbalance;
-  2218			blue_min = alvium->min_rbalance;
-  2219	
-  2220			ret = alvium_set_red_balance_ratio(alvium, red);
-  2221			if (ret)
-  2222				return ret;
-  2223	
-  2224			ret = alvium_set_blue_balance_ratio(alvium, blue);
-  2225			if (ret)
-  2226				return ret;
-  2227		}
-  2228	
-  2229		return ret;
-  2230	}
-  2231	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>                         evsel->priv =3D evsel_script__new(evsel, scr->ses=
+sion->data);
+> -               } else {
+> -                       es =3D zalloc(sizeof(*es));
+> -                       if (!es)
+> +                       if (!evsel->priv)
+>                                 return -ENOMEM;
+> -                       es->fp =3D stdout;
+> -                       evsel->priv =3D es;
+> +               } else { // Replicate what is done in perf_script__setup_=
+per_event_dump()
+> +                       es_stdout.fp =3D stdout;
+> +                       evsel->priv =3D &es_stdout;
+>                 }
+>         }
+>
+> @@ -2741,7 +2742,6 @@ static int perf_script__fopen_per_event_dump(struct=
+ perf_script *script)
+>  static int perf_script__setup_per_event_dump(struct perf_script *script)
+>  {
+>         struct evsel *evsel;
+> -       static struct evsel_script es_stdout;
+>
+>         if (script->per_event_dump)
+>                 return perf_script__fopen_per_event_dump(script);
+> --
+> 2.37.1
+>
