@@ -2,133 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EBB9723CA9
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 11:12:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F6F5723CA6
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 11:12:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232496AbjFFJMi convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 6 Jun 2023 05:12:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54524 "EHLO
+        id S232468AbjFFJMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 05:12:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232299AbjFFJMT (ORCPT
+        with ESMTP id S230411AbjFFJMP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 05:12:19 -0400
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73210109;
-        Tue,  6 Jun 2023 02:12:18 -0700 (PDT)
-Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-bb131cd7c4aso5079199276.1;
-        Tue, 06 Jun 2023 02:12:18 -0700 (PDT)
+        Tue, 6 Jun 2023 05:12:15 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AD43197
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 02:12:14 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1b04706c974so50801285ad.2
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 02:12:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686042734; x=1688634734;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=33Fi3vxPpajECwlEk7e4drhNdlJkHqysepyRL3vjQ8k=;
+        b=IlaMjUX2DEWSf62zBCcuw3sQibn/by5NfD7SCt0RqJD+KB8TcuJ18M+bnqtdWaWu6u
+         iK26B/FnL9uq9zIbXeiGrrUp2yUuevhPXiQA2d0mTd0/e8xg+q8W0slYwwwWbu9Vbfij
+         jSO85lmr/pYGkyBjW0xBauNQhLNIy63rRVjavAociiYC2p/m3gZRBi4mYpq1C3mLArVp
+         kJsK+swdwSRCFQmGc1r7mybeBW2UhyomKrlRCwzIacgde2VHyS6Nhc/VIYHxisRkj454
+         GjkSCrovXZ+GsBOnQaT08XHHOL236QhQ3DwHtrLLGAqy/WTNRIhaQQZyV72YNzJ6pPwN
+         NxhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686042737; x=1688634737;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7+0vZf4sZHrRYSSyyJCG/B7w9fRCzQCnK8geH62rIys=;
-        b=FwImVrDiSVBQANbLm0hAHYnopHqJPxh/wCwjSp46Zegptd3UEkCuKmKbteP1tewvcY
-         eYz2aRioiNMSyxB4NOva6p0hOLi97yrhNj+sjpGeCdSV03A/Xh+Fp4UxrobTHaj/87NG
-         BwKbYG4ne2fBq1jr5WEI1/vjxxOm1m2XMjS4/llhB9lpx2Lgmwey3mnH8Z2ZVh1gAacX
-         G4NrggEKJ8ZtEUstUmqkImf8B6pl1eE2fB0vjK+OU8DmzOr/O49lVsEKwEcLfpHp8lMV
-         ll3LdDxKLnHcBcc2wo7ZntErQhkAoiu7ol+fIgBwTOqQjc6PreoHLOptk5++/vtw2mYh
-         21WQ==
-X-Gm-Message-State: AC+VfDzKUziE5Exdc2nkNKkfXl4UpyuOTNofMT3zTXb9W8U9KbmkWPVO
-        X2YlsHLPa77sgt6sf37XlVtm/i6FDyV3Eg==
-X-Google-Smtp-Source: ACHHUZ61EyzKVwKqO5mKTUirCtO75LMH+ISg8RCloqSTgVBNfwranCtzBi25B2ADNPv4MB/Nz+aNMw==
-X-Received: by 2002:a81:8686:0:b0:565:d517:e714 with SMTP id w128-20020a818686000000b00565d517e714mr1318567ywf.25.1686042737377;
-        Tue, 06 Jun 2023 02:12:17 -0700 (PDT)
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
-        by smtp.gmail.com with ESMTPSA id t205-20020a8183d6000000b0055a416529bbsm3893447ywf.24.2023.06.06.02.12.17
+        d=1e100.net; s=20221208; t=1686042734; x=1688634734;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=33Fi3vxPpajECwlEk7e4drhNdlJkHqysepyRL3vjQ8k=;
+        b=blOLTyiisZhRRDIoPt+vyYOAKskYt8tgLbQWBcT44frP+GbTyTKd+Y1czyMMZ1bgxH
+         s5gEUHdlKLi+ypuMDSyOJRHOGsADVqB4muinpErBm3qQXi1uHc22Hmxjh5EOyy0QJoNJ
+         i2JsmNzU0vbr0u3LsR410NCSarn7lN+WMjE9P1fVMxoG3iF/WD9zY88N3hi4l5eyyE8M
+         wdKcx9M6YxPZaw5bgtg9Fv94T+SHdeFPey9KZtvlm5lXpIq6iLSZ7k2eQ+Jy1Q2Rqo6X
+         SdTQf/4lpPZoLCOMlQy++pio8kLiYV2fTMbQikm8mjHbo8IDEU8HkuzEwmuyHJFDPGvn
+         gzgg==
+X-Gm-Message-State: AC+VfDy3iOXkASNACFrYQIEiut7V1+l87TRG/B74tnx+03D5DkwHTD8m
+        dvSC4ovOEdKaJ32UXiUu2st4iY9X8ITenQ==
+X-Google-Smtp-Source: ACHHUZ54UH5/TGSxl0D32cNUSfJOXlgchtr7h6tK2bzJH50CbEBIfIcQ9/fVSaut+FV/AFQi/bLWMA==
+X-Received: by 2002:a17:902:e5c4:b0:1ab:7fb:aac1 with SMTP id u4-20020a170902e5c400b001ab07fbaac1mr1848442plf.24.1686042733831;
+        Tue, 06 Jun 2023 02:12:13 -0700 (PDT)
+Received: from localhost (58-6-230-127.tpgi.com.au. [58.6.230.127])
+        by smtp.gmail.com with ESMTPSA id ik4-20020a170902ab0400b001b03a7a40e7sm8107255plb.19.2023.06.06.02.12.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Jun 2023 02:12:17 -0700 (PDT)
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-565aa2cc428so53258617b3.1;
-        Tue, 06 Jun 2023 02:12:17 -0700 (PDT)
-X-Received: by 2002:a81:4e0f:0:b0:55a:6f26:4fbf with SMTP id
- c15-20020a814e0f000000b0055a6f264fbfmr1179758ywb.35.1686042736916; Tue, 06
- Jun 2023 02:12:16 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230522105257.562cb1ec@canb.auug.org.au> <ZGr6aB9uJVnyfJQ9@gondor.apana.org.au>
- <20230523103637.20175fbc@canb.auug.org.au> <ZGwmAp5RPqAjVMCg@gondor.apana.org.au>
-In-Reply-To: <ZGwmAp5RPqAjVMCg@gondor.apana.org.au>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 6 Jun 2023 11:12:05 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdU5pBh8bk21Xrzk0Ocs7cAF+QTLn60uKOHa1z=TB6Lcuw@mail.gmail.com>
-Message-ID: <CAMuHMdU5pBh8bk21Xrzk0Ocs7cAF+QTLn60uKOHa1z=TB6Lcuw@mail.gmail.com>
-Subject: Re: [PATCH] crypto: starfive - Depend on AMBA_PL08X instead of
- selecting it
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Linux Crypto List <linux-crypto@vger.kernel.org>,
-        Huan Feng <huan.feng@starfivetech.com>,
-        Jia Jie Ho <jiajie.ho@starfivetech.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Tue, 06 Jun 2023 02:12:13 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 06 Jun 2023 19:12:08 +1000
+Message-Id: <CT5G9KKH2R25.3QSRZU8EQXUZU@wheely>
+Cc:     <linux-kernel@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH 2/4] powerpc/kuap: Avoid useless jump_label on empty
+ function
+From:   "Nicholas Piggin" <npiggin@gmail.com>
+To:     "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        "Michael Ellerman" <mpe@ellerman.id.au>
+X-Mailer: aerc 0.14.0
+References: <1a3c69e38349b687c6c65240d7c09a7817a797d8.1685963081.git.christophe.leroy@csgroup.eu> <c2c9660cc4441dc37c477ce5cf60707c971bd2a1.1685963081.git.christophe.leroy@csgroup.eu>
+In-Reply-To: <c2c9660cc4441dc37c477ce5cf60707c971bd2a1.1685963081.git.christophe.leroy@csgroup.eu>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Herbert,
-
-On Tue, May 23, 2023 at 4:40 AM Herbert Xu <herbert@gondor.apana.org.au> wrote:
-> On Tue, May 23, 2023 at 10:36:37AM +1000, Stephen Rothwell wrote:
-> > That did not fix it :-(
+On Mon Jun 5, 2023 at 9:04 PM AEST, Christophe Leroy wrote:
+> Disassembly of interrupt_enter_prepare() shows a pointless nop before the=
+ mftb
 >
-> OK, this patch should fix it:
+>   c000abf0 <interrupt_enter_prepare>:
+>   c000abf0:       81 23 00 84     lwz     r9,132(r3)
+>   c000abf4:       71 29 40 00     andi.   r9,r9,16384
+>   c000abf8:       41 82 00 28     beq-    c000ac20 <interrupt_enter_prepa=
+re+0x30>
+>   c000abfc: =3D=3D=3D>  60 00 00 00     nop	<=3D=3D=3D=3D
+>   c000ac00:       7d 0c 42 e6     mftb    r8
+>   c000ac04:       80 e2 00 08     lwz     r7,8(r2)
+>   c000ac08:       81 22 00 28     lwz     r9,40(r2)
+>   c000ac0c:       91 02 00 24     stw     r8,36(r2)
+>   c000ac10:       7d 29 38 50     subf    r9,r9,r7
+>   c000ac14:       7d 29 42 14     add     r9,r9,r8
+>   c000ac18:       91 22 00 08     stw     r9,8(r2)
+>   c000ac1c:       4e 80 00 20     blr
+>   c000ac20:       60 00 00 00     nop
+>   c000ac24:       7d 5a c2 a6     mfmd_ap r10
+>   c000ac28:       3d 20 de 00     lis     r9,-8704
+>   c000ac2c:       91 43 00 b0     stw     r10,176(r3)
+>   c000ac30:       7d 3a c3 a6     mtspr   794,r9
+>   c000ac34:       4e 80 00 20     blr
 >
-> ---8<---
-> A platform option like AMBA should never be selected by a driver.
-> Use a dependency instead.
-
-FTR:
-
-arch/arm/mach-s3c/Kconfig.s3c64xx=config S3C64XX_PL080
-arch/arm/mach-s3c/Kconfig.s3c64xx-      def_bool DMADEVICES
-arch/arm/mach-s3c/Kconfig.s3c64xx:      select AMBA_PL08X
-
+> That comes from the call to kuap_loc(), allthough __kuap_lock() is an emp=
+ty
+> function on the 8xx.
 >
-> Also remove the depenency on DMADEVICES because the driver builds
-> just fine without it.  Instead add a dependency on HAS_DMA for dma
-> mapping support.
+> To avoid that, only perform kuap_is_disabled() check when there is someth=
+ing
+> to do with __kuap_lock().
 >
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Reported-by: Conor Dooley <conor.dooley@microchip.com>
-> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
->
-> diff --git a/drivers/crypto/starfive/Kconfig b/drivers/crypto/starfive/Kconfig
-> index 908c162ba79a..59002abcc0ad 100644
-> --- a/drivers/crypto/starfive/Kconfig
-> +++ b/drivers/crypto/starfive/Kconfig
-> @@ -4,14 +4,13 @@
->
->  config CRYPTO_DEV_JH7110
->         tristate "StarFive JH7110 cryptographic engine driver"
-> -       depends on (SOC_STARFIVE || COMPILE_TEST) && DMADEVICES
-> +       depends on SOC_STARFIVE || AMBA_PL08X || COMPILE_TEST
-> +       depends on HAS_DMA
->         select CRYPTO_ENGINE
->         select CRYPTO_HMAC
->         select CRYPTO_SHA256
->         select CRYPTO_SHA512
->         select CRYPTO_SM3_GENERIC
-> -       select ARM_AMBA
-> -       select AMBA_PL08X
->         help
->           Support for StarFive JH7110 crypto hardware acceleration engine.
->           This module provides acceleration for public key algo,
+> Do the same with __kuap_save_and_lock() and __kuap_get_and_assert_locked(=
+).
 
-Gr{oetje,eeting}s,
+Too bad static branch nops can't be eliminated.
 
-                        Geert
+> diff --git a/arch/powerpc/include/asm/book3s/64/kup.h b/arch/powerpc/incl=
+ude/asm/book3s/64/kup.h
+> index 54cf46808157..1b0215ff3710 100644
+> --- a/arch/powerpc/include/asm/book3s/64/kup.h
+> +++ b/arch/powerpc/include/asm/book3s/64/kup.h
+> @@ -297,15 +297,7 @@ static inline unsigned long __kuap_get_and_assert_lo=
+cked(void)
+>  		WARN_ON_ONCE(amr !=3D AMR_KUAP_BLOCKED);
+>  	return amr;
+>  }
+> -
+> -/* Do nothing, book3s/64 does that in ASM */
+> -static inline void __kuap_lock(void)
+> -{
+> -}
+> -
+> -static inline void __kuap_save_and_lock(struct pt_regs *regs)
+> -{
+> -}
+> +#define __kuap_get_and_assert_locked __kuap_get_and_assert_locked
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Maybe leave in /* __kuap_lock notrequired, book3s/64 does that in ASM */
+? Seems okay though
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Reviewed-by: Nicholas Piggin <npiggin@gmail.com>
+
+Thanks,
+Nick
