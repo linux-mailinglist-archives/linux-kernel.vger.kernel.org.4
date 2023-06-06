@@ -2,165 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 894E8724CA4
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 21:13:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB2B6724CA7
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 21:13:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236239AbjFFTNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 15:13:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44750 "EHLO
+        id S238826AbjFFTNn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 15:13:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239256AbjFFTMt (ORCPT
+        with ESMTP id S239436AbjFFTNT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 15:12:49 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B210A1BC1
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 12:11:03 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8CxLPC4hH9kQ00AAA--.1207S3;
-        Wed, 07 Jun 2023 03:10:48 +0800 (CST)
-Received: from openarena.loongson.cn (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxCOW3hH9k7voCAA--.11776S2;
-        Wed, 07 Jun 2023 03:10:47 +0800 (CST)
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-To:     Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian Konig <christian.koenig@amd.com>,
-        Pan Xinhui <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Alvin Lee <Alvin.Lee2@amd.com>, Jun Lei <Jun.Lei@amd.com>,
-        Wenjing Liu <wenjing.liu@amd.com>,
-        Samson Tam <samson.tam@amd.com>,
-        Dillon Varone <Dillon.Varone@amd.com>,
-        Alan Liu <HaoPing.Liu@amd.com>
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/amdgpu: add error reporting code
-Date:   Wed,  7 Jun 2023 03:10:46 +0800
-Message-Id: <20230606191046.300194-1-suijingfeng@loongson.cn>
-X-Mailer: git-send-email 2.25.1
+        Tue, 6 Jun 2023 15:13:19 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D601BD7
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 12:12:15 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id 98e67ed59e1d1-2568caabfbfso3223395a91.3
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 12:12:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686078735; x=1688670735;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6V4VnQ+NwlTLpp1UfRmPdcygP5cp3PVVXwMSQln1Mw4=;
+        b=huHRTZhmyVde5umjaMPBXE9BqvehtfkERNX0+20lrgbb+8BZmowdyr2pLmm/hBeKqj
+         SXskEgPUvfeQg9JvqFPSuMluR8H4EJB7LzMVVw+tekJ49ehCm0xmpS2aHsvURYkf7hbQ
+         nHNrQOAeNuseR6C5I6RVw3E3+iSfhpG7uCpaWTEUkMhH338GO1B7+ejPK6h+8DWZDhfH
+         bKHBTGbLMVCH29lRdVlWC7QLN1boxnVeAk2gA9lRKEfS+Nsj+m3PqpbzYsRkul3tDm5M
+         r4Y/Pg2yjy2IgTq3EKGfiPj69z5p07fNLL1s+jJeFHBuKgUu1FbdkxQUuE5myqzXEmic
+         AzBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686078735; x=1688670735;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6V4VnQ+NwlTLpp1UfRmPdcygP5cp3PVVXwMSQln1Mw4=;
+        b=kedxGxn1WHUldLaEDPdd/UV33oBa9DozNQFobyl9EhimxnoGQ3A+YTP/f1zIJZfkwa
+         ssvUzvzdweeJqW82xIxbLy6M8lL4kN5uD/KtTSgo8l/9fvs9oSsB0lMCULF9QYT76wSW
+         wdzNgDNqjC8AuYJlMTT2Q0NDzXo7n93s5flr7hkSIoRcWbs5Mc15AaQNXd1+56BL/8sO
+         QszrKTjajFkuv6TtrbGF6HTJFaLS1rjBlZeni4O9Tu35UcicH35eqt/oaUTHOP9O6KnY
+         OhnQ65e5XdHsFJsScLT7zXPfC/1XQe2HGULV6TtfWXsq178+WnXPZ9munOl8KAnQiS08
+         tbqA==
+X-Gm-Message-State: AC+VfDyVHLGEc15UuHOoGULrMK48S/RV+dXz5Hk8nPlDzqyd/atMp00w
+        XN064d9adbGqOAHfucpSqNhRFdms4T03S/W9Dm/rqGSn
+X-Google-Smtp-Source: ACHHUZ6pvkagNmr77QJSeQrvFqP2Rtr4ViTDOCT+9jTlisEZtBeHczaWuWiySyEsKop2uTYJgopZX2Y4OrTW2NC4wAg=
+X-Received: by 2002:a17:90a:10c9:b0:259:6a29:ef1c with SMTP id
+ b9-20020a17090a10c900b002596a29ef1cmr1545385pje.5.1686078734710; Tue, 06 Jun
+ 2023 12:12:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxCOW3hH9k7voCAA--.11776S2
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj93XoWxXF4UtF1fGw1xur48tF4fZwc_yoW5Ar4xpw
-        4fGa1Y9rWUJwnIqrZxAay0qF1fAa4fKF40yry3Cw1Sva9rtr13tr48Cr1ay3y3JFZxWFyI
-        qFWDKa15uF12krcCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUBYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-        Gr0_Gr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
-        kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUtVWr
-        XwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI4
-        8JMxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j
-        6r4UMxCIbckI1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwV
-        AFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv2
-        0xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4
-        v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AK
-        xVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8EPfPUUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230602230552.350731-1-peterx@redhat.com> <20230602230552.350731-5-peterx@redhat.com>
+ <CAHbLzkp_tzN8SZVeWTKxtMAnFSzUvk2064KFg3quj=raOSHPrA@mail.gmail.com> <ZH41YzZ0DBoF8csH@x1n>
+In-Reply-To: <ZH41YzZ0DBoF8csH@x1n>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Tue, 6 Jun 2023 12:12:03 -0700
+Message-ID: <CAHbLzkq-dE4B5k+4KV5YtSJRXf+x61V8iBte6Z=Afbh=_oCJtw@mail.gmail.com>
+Subject: Re: [PATCH 4/4] mm: Make most walk page paths with
+ pmd_trans_unstable() to retry
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        David Hildenbrand <david@redhat.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Hugh Dickins <hughd@google.com>,
+        Mike Rapoport <rppt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
----
- drivers/gpu/drm/amd/display/dc/core/dc.c | 29 ++++++++++++++++--------
- 1 file changed, 20 insertions(+), 9 deletions(-)
+On Mon, Jun 5, 2023 at 12:20=E2=80=AFPM Peter Xu <peterx@redhat.com> wrote:
+>
+> On Mon, Jun 05, 2023 at 11:46:04AM -0700, Yang Shi wrote:
+> > On Fri, Jun 2, 2023 at 4:06=E2=80=AFPM Peter Xu <peterx@redhat.com> wro=
+te:
+> > >
+> > > For most of the page walk paths, logically it'll always be good to ha=
+ve the
+> > > pmd retries if hit pmd_trans_unstable() race.  We can treat it as non=
+e
+> > > pmd (per comment above pmd_trans_unstable()), but in most cases we're=
+ not
+> > > even treating that as a none pmd.  If to fix it anyway, a retry will =
+be the
+> > > most accurate.
+> > >
+> > > I've went over all the pmd_trans_unstable() special cases and this pa=
+tch
+> > > should cover all the rest places where we should retry properly with
+> > > unstable pmd.  With the newly introduced ACTION_AGAIN since 2020 we c=
+an
+> > > easily achieve that.
+> > >
+> > > These are the call sites that I think should be fixed with it:
+> > >
+> > > *** fs/proc/task_mmu.c:
+> > > smaps_pte_range[634]           if (pmd_trans_unstable(pmd))
+> > > clear_refs_pte_range[1194]     if (pmd_trans_unstable(pmd))
+> > > pagemap_pmd_range[1542]        if (pmd_trans_unstable(pmdp))
+> > > gather_pte_stats[1891]         if (pmd_trans_unstable(pmd))
+> > > *** mm/memcontrol.c:
+> > > mem_cgroup_count_precharge_pte_range[6024] if (pmd_trans_unstable(pmd=
+))
+> > > mem_cgroup_move_charge_pte_range[6244] if (pmd_trans_unstable(pmd))
+> > > *** mm/memory-failure.c:
+> > > hwpoison_pte_range[794]        if (pmd_trans_unstable(pmdp))
+> > > *** mm/mempolicy.c:
+> > > queue_folios_pte_range[517]    if (pmd_trans_unstable(pmd))
+> > > *** mm/madvise.c:
+> > > madvise_cold_or_pageout_pte_range[425] if (pmd_trans_unstable(pmd))
+> > > madvise_free_pte_range[625]    if (pmd_trans_unstable(pmd))
+> > >
+> > > IIUC most of them may or may not be a big issue even without a retry,
+> > > either because they're already not strict (smaps, pte_stats, MADV_COL=
+D,
+> > > .. it can mean e.g. the statistic may be inaccurate or one less 2M ch=
+unk to
+> > > cold worst case), but some of them could have functional error withou=
+t the
+> > > retry afaiu (e.g. pagemap, where we can have the output buffer shifte=
+d over
+> > > the unstable pmd range.. so IIUC the pagemap result can be wrong).
+> > >
+> > > While these call sites all look fine, and don't need any change:
+> > >
+> > > *** include/linux/pgtable.h:
+> > > pmd_devmap_trans_unstable[1418] return pmd_devmap(*pmd) || pmd_trans_=
+unstable(pmd);
+> > > *** mm/gup.c:
+> > > follow_pmd_mask[695]           if (pmd_trans_unstable(pmd))
+> > > *** mm/mapping_dirty_helpers.c:
+> > > wp_clean_pmd_entry[131]        if (!pmd_trans_unstable(&pmdval))
+> > > *** mm/memory.c:
+> > > do_anonymous_page[4060]        if (unlikely(pmd_trans_unstable(vmf->p=
+md)))
+> > > *** mm/migrate_device.c:
+> > > migrate_vma_insert_page[616]   if (unlikely(pmd_trans_unstable(pmdp))=
+)
+> > > *** mm/mincore.c:
+> > > mincore_pte_range[116]         if (pmd_trans_unstable(pmd)) {
+> > >
+> > > Signed-off-by: Peter Xu <peterx@redhat.com>
+> > > ---
+> > >  fs/proc/task_mmu.c  | 17 +++++++++++++----
+> > >  mm/madvise.c        |  8 ++++++--
+> > >  mm/memcontrol.c     |  8 ++++++--
+> > >  mm/memory-failure.c |  4 +++-
+> > >  mm/mempolicy.c      |  4 +++-
+> > >  5 files changed, 31 insertions(+), 10 deletions(-)
+> > >
+> > > diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+> > > index 6259dd432eeb..823eaba5c6bf 100644
+> > > --- a/fs/proc/task_mmu.c
+> > > +++ b/fs/proc/task_mmu.c
+> > > @@ -631,8 +631,11 @@ static int smaps_pte_range(pmd_t *pmd, unsigned =
+long addr, unsigned long end,
+> > >                 goto out;
+> > >         }
+> > >
+> > > -       if (pmd_trans_unstable(pmd))
+> > > +       if (pmd_trans_unstable(pmd)) {
+> > > +               walk->action =3D ACTION_AGAIN;
+> > >                 goto out;
+> > > +       }
+> > > +
+> > >         /*
+> > >          * The mmap_lock held all the way back in m_start() is what
+> > >          * keeps khugepaged out of here and from collapsing things
+> > > @@ -1191,8 +1194,10 @@ static int clear_refs_pte_range(pmd_t *pmd, un=
+signed long addr,
+> > >                 return 0;
+> > >         }
+> > >
+> > > -       if (pmd_trans_unstable(pmd))
+> > > +       if (pmd_trans_unstable(pmd)) {
+> > > +               walk->action =3D ACTION_AGAIN;
+> > >                 return 0;
+> > > +       }
+> > >
+> > >         pte =3D pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
+> > >         for (; addr !=3D end; pte++, addr +=3D PAGE_SIZE) {
+> > > @@ -1539,8 +1544,10 @@ static int pagemap_pmd_range(pmd_t *pmdp, unsi=
+gned long addr, unsigned long end,
+> > >                 return err;
+> > >         }
+> > >
+> > > -       if (pmd_trans_unstable(pmdp))
+> > > +       if (pmd_trans_unstable(pmdp)) {
+> > > +               walk->action =3D ACTION_AGAIN;
+> > >                 return 0;
+> >
+> > Had a quick look at the pagemap code, I agree with your analysis,
+> > "returning 0" may mess up pagemap, retry should be fine. But I'm
+> > wondering whether we should just fill in empty entries. Anyway I don't
+> > have a  strong opinion on this, just a little bit concerned by
+> > potential indefinite retry.
+>
+> Yes, none pte is still an option.  But if we're going to fix this anyway,
+> it seems better to fix it with the accurate new thing that poped up, and
+> it's even less change (just apply walk->action rather than doing random
+> stuff in different call sites).
+>
+> I see that you have worry on deadloop over this, so I hope to discuss
+> altogether here.
+>
+> Unlike normal checks, pmd_trans_unstable() check means something must hav=
+e
+> changed in the past very short period or it should just never if nothing
+> changed concurrently from under us, so it's not a "if (flag=3D=3Dtrue)" c=
+heck
+> which is even more likely to loop.
+>
+> If we see the places that I didn't touch, most of them suggested a retry =
+in
+> one form or another.  So if there's a worry this will also not the first
+> time to do a retry (and for such a "unstable" API, that's really the most
+> natural thing to do which is to retry until it's stable).
 
-diff --git a/drivers/gpu/drm/amd/display/dc/core/dc.c b/drivers/gpu/drm/amd/display/dc/core/dc.c
-index 52564b93f7eb..d33b78aa3e58 100644
---- a/drivers/gpu/drm/amd/display/dc/core/dc.c
-+++ b/drivers/gpu/drm/amd/display/dc/core/dc.c
-@@ -951,7 +951,7 @@ static bool dc_construct(struct dc *dc,
- 		goto fail;
- 	}
- 
--        dc_ctx = dc->ctx;
-+	dc_ctx = dc->ctx;
- 
- 	/* Resource should construct all asic specific resources.
- 	 * This should be the only place where we need to parse the asic id
-@@ -990,16 +990,21 @@ static bool dc_construct(struct dc *dc,
- 	}
- 
- 	dc->res_pool = dc_create_resource_pool(dc, init_params, dc_ctx->dce_version);
--	if (!dc->res_pool)
-+	if (!dc->res_pool) {
-+		dm_error("%s: failed to create resource pool\n", __func__);
- 		goto fail;
-+	}
- 
- 	/* set i2c speed if not done by the respective dcnxxx__resource.c */
- 	if (dc->caps.i2c_speed_in_khz_hdcp == 0)
- 		dc->caps.i2c_speed_in_khz_hdcp = dc->caps.i2c_speed_in_khz;
- 
- 	dc->clk_mgr = dc_clk_mgr_create(dc->ctx, dc->res_pool->pp_smu, dc->res_pool->dccg);
--	if (!dc->clk_mgr)
-+	if (!dc->clk_mgr) {
-+		dm_error("%s: failed to create clk manager\n", __func__);
- 		goto fail;
-+	}
-+
- #ifdef CONFIG_DRM_AMD_DC_FP
- 	dc->clk_mgr->force_smu_not_present = init_params->force_smu_not_present;
- 
-@@ -1022,14 +1027,18 @@ static bool dc_construct(struct dc *dc,
- 		goto fail;
- 	}
- 
--	if (!create_links(dc, init_params->num_virtual_links))
-+	if (!create_links(dc, init_params->num_virtual_links)) {
-+		dm_error("%s: failed to create links\n", __func__);
- 		goto fail;
-+	}
- 
- 	/* Create additional DIG link encoder objects if fewer than the platform
- 	 * supports were created during link construction.
- 	 */
--	if (!create_link_encoders(dc))
-+	if (!create_link_encoders(dc)) {
-+		dm_error("%s: failed to create link encoders\n", __func__);
- 		goto fail;
-+	}
- 
- 	dc_resource_state_construct(dc, dc->current_state);
- 
-@@ -1314,11 +1323,15 @@ struct dc *dc_create(const struct dc_init_data *init_params)
- 		return NULL;
- 
- 	if (init_params->dce_environment == DCE_ENV_VIRTUAL_HW) {
--		if (!dc_construct_ctx(dc, init_params))
-+		if (!dc_construct_ctx(dc, init_params)) {
-+			DC_LOG_ERROR("%s: dc construct failed\n", __func__);
- 			goto destruct_dc;
-+		}
- 	} else {
--		if (!dc_construct(dc, init_params))
-+		if (!dc_construct(dc, init_params)) {
-+			DC_LOG_ERROR("%s: dc construct failed\n", __func__);
- 			goto destruct_dc;
-+		}
- 
- 		full_pipe_count = dc->res_pool->pipe_count;
- 		if (dc->res_pool->underlay_pipe_index != NO_UNDERLAY_PIPE)
-@@ -1349,8 +1362,6 @@ struct dc *dc_create(const struct dc_init_data *init_params)
- 
- 	DC_LOG_DC("Display Core initialized\n");
- 
--
--
- 	return dc;
- 
- destruct_dc:
--- 
-2.25.1
+IIUC other than do_anonymous_page() suggests retry (retry page fault),
+others may not, for example:
+  - follow_pmd_mask: return -EBUSY
+  - wp_clean_pmd_entry: actually just retry for pmd_none case, but the
+pagewalk code does handle pmd_none by skipping it, so it basically
+just retry once
+  - min_core_pte_range: treated as unmapped range by calling
+__mincore_unmapped_range
 
+Anyway I really don't have a strong opinion on this. I may be just
+over-concerned. I just thought if nobody cares whether the result is
+accurate or not, why do we bother fixing those cases?
+
+>
+> So in general, it seems to me if we deadloop over pmd_trans_unstable() fo=
+r
+> whatever reason then something more wrong could have happened..
+>
+> Thanks,
+>
+> --
+> Peter Xu
+>
