@@ -2,159 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A522F724B89
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 20:38:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 986F3724B8C
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 20:38:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238010AbjFFSid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 14:38:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51682 "EHLO
+        id S238943AbjFFSiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 14:38:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237728AbjFFSi2 (ORCPT
+        with ESMTP id S238893AbjFFSit (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 14:38:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A48B5E8
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 11:37:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686076659;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BagLP1pdl2jLuypkWVwHAzF6SlgrIs6dDABtbPpb9hk=;
-        b=gsQqDQz30RS6JrWc+zUCx35R0E7pNyHQVRZj2Ecp4KlYEYB43eALfbx2+okb5uXbXKuFuE
-        JzD6NZ4ztFhA8SR4AtOgv1flgpW/WOSXsuMh2PtMZKgV03VHuQ/R4FwrquAXkR4toYzLE6
-        L6CoE8cLQzwMN99+LNPxIB61dqE5oNQ=
-Received: from mail-yw1-f200.google.com (mail-yw1-f200.google.com
- [209.85.128.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-597-XPn5emBBMsiVyNzYWg7WVA-1; Tue, 06 Jun 2023 14:37:38 -0400
-X-MC-Unique: XPn5emBBMsiVyNzYWg7WVA-1
-Received: by mail-yw1-f200.google.com with SMTP id 00721157ae682-56942442eb0so94833077b3.1
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 11:37:38 -0700 (PDT)
+        Tue, 6 Jun 2023 14:38:49 -0400
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65565125
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 11:38:48 -0700 (PDT)
+Received: by mail-qv1-xf35.google.com with SMTP id 6a1803df08f44-6260bb94363so37296666d6.0
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 11:38:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686076727; x=1688668727;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HwU+xSGrFSXiCAK1q09i+t8bSjZOmkBqLsisZ5TunnI=;
+        b=iZ2ce1/x6sLmBVEP7zPE9JWAO2ql1Bo6I3zbANCh2FpDSORTt81z928cOZYTL6RIA5
+         b39UL+xoL517/lYYY6twJudobbS2535ZyCpfuAe2OIGgfN6+ifmmDF8RLaY7eRKgs0EY
+         Qtit84Q/a0Dt/XXR23g1kOK3MZ16fttmFbEavZGUJNRGp/+5Sog4EzaEobfrG6gjblwe
+         h88BoglEyp3ocdaDpAaFprdDiTNd61coqFub6jYdREY043/gKKQpqZb6ufbk5/uCv0D/
+         wIKy8VgFmEd3qA9/7jM19CQujCT/UrHML2VaAhKPEnF6OoQH8HENBCLMKOPZGqhXr3MJ
+         cSTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686076658; x=1688668658;
+        d=1e100.net; s=20221208; t=1686076727; x=1688668727;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=BagLP1pdl2jLuypkWVwHAzF6SlgrIs6dDABtbPpb9hk=;
-        b=UAo1aeRg/gxn3BcXEN+L7y5u5habAzcM8YS8w6lxwT8tETLbalIc+DewqdlKXLAasQ
-         azfkqYcJrwWtwuv5uw4nPg929RD25KUeTuVXemQIdOscOYEPzJMWLsX3Ez1LVvf0zkpy
-         Kt4eUJt/tAZQalaUfX/tLjtyXdOA/Xe8RrllNDC0Py4235RvNuFmgpGc3LSXVbwMngoQ
-         sgVMDTZvx8WioEpvE9gLngrvuiiPZuDMipgoZidRQJ7PaAsX9xJlPVUeC6PMMo+Qsuv9
-         ERP0UGpzRC+uqvkEXl3cwizMSD3JuDKcfA2H72xVU20/AHKatXfgEhXMCRTmPLNJVwIp
-         gh9g==
-X-Gm-Message-State: AC+VfDxqzLUMEeHfY54L6KL60pDFoIWJbL9niJw/GRVQI17acNKvU3iF
-        CHg52CxiYbg6KS8txaw7nQJRzBLOYoVYqkIhCYVUfyKI7vgGToy14Dc3DFeqCLiXZwqu8WXYM6z
-        8zTR8Nb+yBwANioFZtVEAlRrhn0TWfzV/G2jYmqhl
-X-Received: by 2002:a81:7382:0:b0:568:f981:637d with SMTP id o124-20020a817382000000b00568f981637dmr3775414ywc.37.1686076658075;
-        Tue, 06 Jun 2023 11:37:38 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7re4FVFZTSXw0hMl7FSwnSL12EtIwUHuIPlxIP2pUQnRK71jUCqnCDz3KKQ+Huu9Ly1XlLpLXQJfYDMdJbE1Y=
-X-Received: by 2002:a81:7382:0:b0:568:f981:637d with SMTP id
- o124-20020a817382000000b00568f981637dmr3775388ywc.37.1686076657821; Tue, 06
- Jun 2023 11:37:37 -0700 (PDT)
+        bh=HwU+xSGrFSXiCAK1q09i+t8bSjZOmkBqLsisZ5TunnI=;
+        b=V7ASFN8xPcmMywj3Kcgv//MrMb6ju5gXXwWEpOeRV8Yzv7TaLckDTzF2QLO0+8/vJM
+         u4ELQ7mL2kbBBxBef9ricbfNgHPAmvcLC2KkTPykFRinLq6iVdLOvPSIZsda/O18XthD
+         dTYV2cWVAIYDL5Nd+2O7MZNNkdOwkdg3b4567VfnMHFW2adn9N8VpH3lLOIDenXzWCX3
+         m81K/AH4nB+wObz2pnTsCVN6Svf/Ht02RjblPOVDyAPDq6JR8cbPDDEp2m0XY6GcQ9FT
+         7wyylE6jXnNfNlHp12vjW1WCVsXNHu941Kz6ULT1X3hn42VAdRA/9Isne9TivW5DEF0D
+         8BWQ==
+X-Gm-Message-State: AC+VfDw/HuRLqlfrxHpKH6xkiRSZCl/W6L5fgPtY/6/CYm7CCGxu8PRN
+        USXxQ17W15gzClEUTmet6+1Wpubhy4feSiSEVoZuGA==
+X-Google-Smtp-Source: ACHHUZ6nzLPGnzZPboyCjfZB6dkHgwQ8o7cnJBZBAjEhvEwyZ8lAukKjmhYaxco0zZ6KKZvhESQvDxTx5qHEWEA7bLo=
+X-Received: by 2002:a05:6214:27c7:b0:621:54d:23e1 with SMTP id
+ ge7-20020a05621427c700b00621054d23e1mr512241qvb.14.1686076727359; Tue, 06 Jun
+ 2023 11:38:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230531082428.21763-1-hadess@hadess.net> <nycvar.YFH.7.76.2305311606160.29760@cbobk.fhfr.pm>
- <nycvar.YFH.7.76.2306031440380.29760@cbobk.fhfr.pm> <15bb2507-a145-7f1b-8e84-58aeb02484b9@leemhuis.info>
- <nycvar.YFH.7.76.2306061527080.29760@cbobk.fhfr.pm> <42b6e582-f642-7521-135a-449140984211@leemhuis.info>
-In-Reply-To: <42b6e582-f642-7521-135a-449140984211@leemhuis.info>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Tue, 6 Jun 2023 20:37:26 +0200
-Message-ID: <CAO-hwJL3RcfOxQvhqDFTwgfY=oAJqR5rsHmO5qDVwNUEh3K58Q@mail.gmail.com>
-Subject: Re: [PATCH] HID: logitech-hidpp: Handle timeout differently from busy
-To:     Linux regressions mailing list <regressions@lists.linux.dev>
-Cc:     Jiri Kosina <jikos@kernel.org>, Bastien Nocera <hadess@hadess.net>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Peter F . Patel-Schneider" <pfpschneider@gmail.com>,
-        =?UTF-8?Q?Filipe_La=C3=ADns?= <lains@riseup.net>,
-        Nestor Lopez Casado <nlopezcasad@logitech.com>,
-        Mark Lord <mlord@pobox.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20230606094159.1910369-1-masahiroy@kernel.org>
+ <CAKwvOdkfQiu-Y29xiOMERxnSy9aqN851AoogGYrnqdc4dcaHOA@mail.gmail.com> <CAK7LNASheifemHTT-cNputbMv7th+NT8XUBu2a9ZMcu5jZMe3g@mail.gmail.com>
+In-Reply-To: <CAK7LNASheifemHTT-cNputbMv7th+NT8XUBu2a9ZMcu5jZMe3g@mail.gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 6 Jun 2023 11:38:36 -0700
+Message-ID: <CAKwvOdmxCQbgKoTZXFLNFmq6MCdJGcJaiWp0mrXHQS46tQ8uvA@mail.gmail.com>
+Subject: Re: [PATCH] modpost: propagate W=1 build option to modpost
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 6, 2023 at 8:18=E2=80=AFPM Linux regression tracking (Thorsten
-Leemhuis) <regressions@leemhuis.info> wrote:
+On Tue, Jun 6, 2023 at 10:21=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.o=
+rg> wrote:
 >
->
->
-> On 06.06.23 15:27, Jiri Kosina wrote:
-> > On Mon, 5 Jun 2023, Linux regression tracking (Thorsten Leemhuis) wrote=
-:
+> On Wed, Jun 7, 2023 at 1:56=E2=80=AFAM Nick Desaulniers <ndesaulniers@goo=
+gle.com> wrote:
 > >
-> >>>>> If an attempt at contacting a receiver or a device fails because th=
-e
-> >>>>> receiver or device never responds, don't restart the communication,=
- only
-> >>>>> restart it if the receiver or device answers that it's busy, as ori=
-ginally
-> >>>>> intended.
-> >>>>>
-> >>>>> This was the behaviour on communication timeout before commit 586e8=
-fede795
-> >>>>> ("HID: logitech-hidpp: Retry commands when device is busy").
-> >>>>>
-> >>>>> This fixes some overly long waits in a critical path on boot, when
-> >>>>> checking whether the device is connected by getting its HID++ versi=
-on.
-> >>>>>
-> >>>>> Signed-off-by: Bastien Nocera <hadess@hadess.net>
-> >>>>> Suggested-by: Mark Lord <mlord@pobox.com>
-> >>>>> Fixes: 586e8fede795 ("HID: logitech-hidpp: Retry commands when devi=
-ce is busy")
-> >>>>> Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D217412
-> >>> [...]
-> >>>>
-> >>>> I have applied this even before getting confirmation from the report=
-ers in
-> >>>> bugzilla, as it's the right thing to do anyway.
-> >>>
-> >>> Unfortunately it doesn't seem to cure the reported issue (while rever=
-ting
-> >>> 586e8fede79 does):
-> >>
-> >> BTW, remind me again: was fixing this by reverting 586e8fede79 for now=
- a
-> >> option? I guess it's not, but if I'm wrong I wonder if that might at
-> >> this point be the best way forward.
+> > On Tue, Jun 6, 2023 at 2:42=E2=80=AFAM Masahiro Yamada <masahiroy@kerne=
+l.org> wrote:
+> > >
+> > > "No build warning" is a strong requirement these days, so you must fi=
+x
+> > > all issues before enabling a new warning flag.
+> > >
+> > > We often add a new warning to W=3D1 first so that the kbuild test rob=
+ot
+> > > blocks new breakages.
+> > >
+> > > This commit allows modpost to show extra warnings only when W=3D1
+> > > (or KBUILD_EXTRA_WARN=3D1) is given.
+> > >
+> > > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 > >
-> > This should now all be fixed by
+> > Patch seems fine, but without anyone reading extra_warn, I'm curious
+> > what new extra warnings you had in mind were?
+>
+>
+> This one.
+>
+> https://lore.kernel.org/linux-kbuild/CAK7LNAR0uMvf+k7LPXtMjigKFPeNu5m5EhA=
+kvk2RVRHkdjdbdg@mail.gmail.com/T/#m0f41f2c8fe843133ce8100088443491a51d496af
+
+Yeah, ok so we'll guard that warning on this extra_warn then? Seems fine.
+
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+
+>
+>
+> > > ---
+> > >
+> > >  scripts/Makefile.modpost | 1 +
+> > >  scripts/mod/modpost.c    | 7 ++++++-
+> > >  2 files changed, 7 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/scripts/Makefile.modpost b/scripts/Makefile.modpost
+> > > index 0980c58d8afc..074e27c0c140 100644
+> > > --- a/scripts/Makefile.modpost
+> > > +++ b/scripts/Makefile.modpost
+> > > @@ -47,6 +47,7 @@ modpost-args =3D                                   =
+                                             \
+> > >         $(if $(KBUILD_MODPOST_WARN),-w)                              =
+                   \
+> > >         $(if $(KBUILD_NSDEPS),-d $(MODULES_NSDEPS))                  =
+                   \
+> > >         $(if $(CONFIG_MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS)$(KBUILD=
+_NSDEPS),-N)       \
+> > > +       $(if $(findstring 1, $(KBUILD_EXTRA_WARN)),-W)               =
+                   \
+> > >         -o $@
+> > >
+> > >  modpost-deps :=3D $(MODPOST)
+> > > diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> > > index d10f5bdcb753..3ea5eb2b1029 100644
+> > > --- a/scripts/mod/modpost.c
+> > > +++ b/scripts/mod/modpost.c
+> > > @@ -42,6 +42,8 @@ static bool allow_missing_ns_imports;
+> > >
+> > >  static bool error_occurred;
+> > >
+> > > +static bool extra_warn;
+> > > +
+> > >  /*
+> > >   * Cut off the warnings when there are too many. This typically occu=
+rs when
+> > >   * vmlinux is missing. ('make modules' without building vmlinux.)
+> > > @@ -2199,7 +2201,7 @@ int main(int argc, char **argv)
+> > >         LIST_HEAD(dump_lists);
+> > >         struct dump_list *dl, *dl2;
+> > >
+> > > -       while ((opt =3D getopt(argc, argv, "ei:mnT:o:awENd:")) !=3D -=
+1) {
+> > > +       while ((opt =3D getopt(argc, argv, "ei:mnT:o:aWwENd:")) !=3D =
+-1) {
+> > >                 switch (opt) {
+> > >                 case 'e':
+> > >                         external_module =3D true;
+> > > @@ -2224,6 +2226,9 @@ int main(int argc, char **argv)
+> > >                 case 'T':
+> > >                         files_source =3D optarg;
+> > >                         break;
+> > > +               case 'W':
+> > > +                       extra_warn =3D true;
+> > > +                       break;
+> > >                 case 'w':
+> > >                         warn_unresolved =3D true;
+> > >                         break;
+> > > --
+> > > 2.39.2
+> > >
 > >
-> >     https://git.kernel.org/linus/7c28afd5512e371773dbb2bf95a31ed5625651=
-d9
+> >
+> > --
+> > Thanks,
+> > ~Nick Desaulniers
 >
-> Jiri, Benjamin, many many thx for working on this.
 >
-> Hmmm. No CC: <stable... tag.
 >
-> Should we ask Greg to pick this up for 6.3 now, or better wait a few
-> days? He currently already has 6199d23c91ce ("HID: logitech-hidpp:
-> Handle timeout differently from busy") in his queue for the next 6.3.y
-> release.
+> --
+> Best Regards
+> Masahiro Yamada
 
-Well, the Fixes: tag supposedly is enough to let the stable folks to
-pick it up. But you are right, let's Cc Greg for a quicker inclusion
-in the 6.3 tree.
 
-Greg, would you mind adding the commit above (7c28afd5512e37) onto the
-6.3 stable queue? Thanks!
 
-Cheers,
-Benjamin
-
->
-> Ciao, Thorsten
->
-> P.S.: If the answer is along the lines of "let's backport this quickly",
-> please consider directly CCing Greg.
->
-
+--=20
+Thanks,
+~Nick Desaulniers
