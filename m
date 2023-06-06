@@ -2,209 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3CF172509C
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 01:15:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3764A725086
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 01:13:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240338AbjFFXPc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 19:15:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49474 "EHLO
+        id S240195AbjFFXN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 19:13:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240278AbjFFXOz (ORCPT
+        with ESMTP id S234333AbjFFXN0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 19:14:55 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25C7419B0
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 16:14:51 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id af79cd13be357-75d4fb03100so430221485a.3
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 16:14:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1686093290; x=1688685290;
-        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ROcC2ZfyjeH1aEZUXxYoPFe2+Pi0XlWSLTaDtsSWdFo=;
-        b=X9UB9wKmSqRUchfp51LykZoGNamlKGl3mQkuLbwMeLCo6Ghpy4Uzg6JTXwk125vjRa
-         jd4U0SvFU/ZiXVw+uH/BQSIRROL/+KAQGNB7cMRD2oZ4LZev4mFhRMBiIDk6Za0qLLd5
-         wrWdwme7vRj7gVmaodE19FDfT8pfywj3dT/FA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686093290; x=1688685290;
-        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ROcC2ZfyjeH1aEZUXxYoPFe2+Pi0XlWSLTaDtsSWdFo=;
-        b=e+OY6GVtDmAEsY0QDLhx36oJViP8bi+I2EHg9c9ymhilTLqJhfpnw83GZBhpLR/pSj
-         Xzj9qa2620wBuWoKdhn0nHCdla4R7wN68K4l7FgKdezjTllL6zjF7biR8giwTeEjOAuv
-         1vKbe5IF6aMJ/cdnrtWbpfbVIzaZQHVwynvmbUMXcQon2DLapA6NPsACeZgO2qAHZKDR
-         NyLGSnYF4r8TLOa9kw6PYCqbpa8joX604/ECpuL9cRpFLwqZqXDyt+uU+tCicnVIV11G
-         l1KUdooIuNuVZ27QfD88B3VQ0WWve5e+iklZ/GBA+jIZP97HYZM9SRQ41LDJUWl/qeNb
-         cQVg==
-X-Gm-Message-State: AC+VfDxyan4oGx3PIqO4I9D2QHUzQ0szz4pZ2JuZISdqFtni4JcrOcmP
-        8MHD6w4GhLb6uwMiVNi6+pBP5g==
-X-Google-Smtp-Source: ACHHUZ44XxMNGgTbA4d1opz74UDPI4BLS6rZ6F6kRbaDfrRrAMQUO1Q5sJY5l8cle7NYLKgv098W2g==
-X-Received: by 2002:a05:620a:4495:b0:75b:23a1:362e with SMTP id x21-20020a05620a449500b0075b23a1362emr167782qkp.63.1686093290204;
-        Tue, 06 Jun 2023 16:14:50 -0700 (PDT)
-Received: from ubuntu-22.localdomain ([192.19.222.250])
-        by smtp.gmail.com with ESMTPSA id x9-20020ae9e909000000b0075b23e55640sm5221519qkf.123.2023.06.06.16.14.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 16:14:49 -0700 (PDT)
-From:   William Zhang <william.zhang@broadcom.com>
-To:     Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        Linux MTD List <linux-mtd@lists.infradead.org>
-Cc:     f.fainelli@gmail.com, rafal@milecki.pl, kursad.oney@broadcom.com,
-        joel.peshkin@broadcom.com, computersforpeace@gmail.com,
-        anand.gore@broadcom.com, dregan@mail.com, kamal.dasu@broadcom.com,
-        tomer.yacoby@broadcom.com, dan.beygelman@broadcom.com,
-        William Zhang <william.zhang@broadcom.com>,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-kernel@vger.kernel.org,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Kamal Dasu <kdasu.kdev@gmail.com>
-Subject: [PATCH 12/12] mtd: rawnand: brcmnand: Support write protection setting from dts
-Date:   Tue,  6 Jun 2023 16:12:52 -0700
-Message-Id: <20230606231252.94838-13-william.zhang@broadcom.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230606231252.94838-1-william.zhang@broadcom.com>
-References: <20230606231252.94838-1-william.zhang@broadcom.com>
+        Tue, 6 Jun 2023 19:13:26 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E1F10C3;
+        Tue,  6 Jun 2023 16:13:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686093205; x=1717629205;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nOLTJSibPiFMfr8fOq4c8i0FSHh1V58oiSrkFHPtWLI=;
+  b=iLR+ridN9UTiu4C3YV021jdMQ1d6CuojAykf9zk4byzVhZtN0a0Aczdv
+   pi+PJYLdvFO5MMac3boomigkldt8KsApo2QLawJ7Hoo2G5iQ3J9zMxy8Z
+   GUUxOn6ecOKLI+z9uOyL2IHVqjVkfWOV/5/kA9z4+9C2WKwIYlRQkCXf/
+   laCiHH6bx0YF+JqfjsOxAhiNPWmyAvmiTIPH16BmiBDk7oVRVAvG4XsYF
+   3OJnEfMuoUiP/3p4V7LxpsuGOXeeRUA7FBH1CROdsNxYKK4ozaT93UBk0
+   OHgbDxfat1LujvVIS0lY9JSACXNevtMAwfnk40vYVcWAM8/wAd5aY4ZC0
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="346430673"
+X-IronPort-AV: E=Sophos;i="6.00,222,1681196400"; 
+   d="scan'208";a="346430673"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 16:13:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="799063751"
+X-IronPort-AV: E=Sophos;i="6.00,222,1681196400"; 
+   d="scan'208";a="799063751"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 06 Jun 2023 16:13:19 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q6fra-0005qU-25;
+        Tue, 06 Jun 2023 23:13:18 +0000
+Date:   Wed, 7 Jun 2023 07:12:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Tommaso Merciai <tomm.merciai@gmail.com>
+Cc:     oe-kbuild-all@lists.linux.dev, jacopo.mondi@ideasonboard.com,
+        laurent.pinchart@ideasonboard.com, martin.hecht@avnet.eu,
+        michael.roeder@avnet.eu, linuxfancy@googlegroups.com,
+        Tommaso Merciai <tomm.merciai@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Gerald Loacker <gerald.loacker@wolfvision.net>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mikhail Rudenko <mike.rudenko@gmail.com>,
+        Nicholas Roth <nicholas@rothemail.net>,
+        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 3/3] media: i2c: Add support for alvium camera
+Message-ID: <202306070716.28K0H9Jd-lkp@intel.com>
+References: <20230606155416.260941-4-tomm.merciai@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000a3c85005fd7e2fc3"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230606155416.260941-4-tomm.merciai@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000a3c85005fd7e2fc3
-Content-Transfer-Encoding: 8bit
+Hi Tommaso,
 
-The write protection feature is controlled by the module parameter wp_on
-with default set to enabled. But not all the board use this feature
-especially in BCMBCA broadband board. And module parameter is not
-sufficient as different board can have different option.  Add a device
-tree property and allow this feature to be configured through the board
-dts on per board basis.
+kernel test robot noticed the following build warnings:
 
-Signed-off-by: William Zhang <william.zhang@broadcom.com>
-Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
-Reviewed-by: Kamal Dasu <kamal.dasu@broadcom.com>
+[auto build test WARNING on media-tree/master]
+[also build test WARNING on robh/for-next linus/master v6.4-rc5 next-20230606]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
----
+url:    https://github.com/intel-lab-lkp/linux/commits/Tommaso-Merciai/dt-bindings-vendor-prefixes-Add-prefix-alliedvision/20230606-235632
+base:   git://linuxtv.org/media_tree.git master
+patch link:    https://lore.kernel.org/r/20230606155416.260941-4-tomm.merciai%40gmail.com
+patch subject: [PATCH v3 3/3] media: i2c: Add support for alvium camera
+config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20230607/202306070716.28K0H9Jd-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 12.3.0
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add media-tree git://linuxtv.org/media_tree.git
+        git fetch media-tree master
+        git checkout media-tree/master
+        b4 shazam https://lore.kernel.org/r/20230606155416.260941-4-tomm.merciai@gmail.com
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/media/i2c/
 
- drivers/mtd/nand/raw/brcmnand/brcmnand.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306070716.28K0H9Jd-lkp@intel.com/
 
-diff --git a/drivers/mtd/nand/raw/brcmnand/brcmnand.c b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
-index 8c7cea36ac71..4fc23077a5b5 100644
---- a/drivers/mtd/nand/raw/brcmnand/brcmnand.c
-+++ b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
-@@ -3106,7 +3106,7 @@ int brcmnand_probe(struct platform_device *pdev, struct brcmnand_soc *soc)
- 	struct brcmnand_controller *ctrl;
- 	struct brcmnand_host *host;
- 	struct resource *res;
--	int ret;
-+	int ret, wp_dt;
- 
- 	if (dn && !of_match_node(brcmnand_of_match, dn))
- 		return -ENODEV;
-@@ -3243,6 +3243,12 @@ int brcmnand_probe(struct platform_device *pdev, struct brcmnand_soc *soc)
- 	/* Disable XOR addressing */
- 	brcmnand_rmw_reg(ctrl, BRCMNAND_CS_XOR, 0xff, 0, 0);
- 
-+	/* Not all boards support write protect (WP), check DT property */
-+	if (of_property_read_u32(dn, "brcm,nand-use-wp", &wp_dt) == 0) {
-+		if (wp_dt >= 0 && wp_dt <= 2)
-+			wp_on = wp_dt;
-+	}
-+
- 	if (ctrl->features & BRCMNAND_HAS_WP) {
- 		/* Permanently disable write protection */
- 		if (wp_on == 2)
+All warnings (new ones prefixed by >>):
+
+   drivers/media/i2c/alvium-csi2.c: In function 'alvium_set_ctrl_white_balance':
+>> drivers/media/i2c/alvium-csi2.c:2205:21: warning: variable 'blue_min' set but not used [-Wunused-but-set-variable]
+    2205 |                 u64 blue_min;
+         |                     ^~~~~~~~
+>> drivers/media/i2c/alvium-csi2.c:2204:21: warning: variable 'blue_max' set but not used [-Wunused-but-set-variable]
+    2204 |                 u64 blue_max;
+         |                     ^~~~~~~~
+>> drivers/media/i2c/alvium-csi2.c:2203:21: warning: variable 'red_min' set but not used [-Wunused-but-set-variable]
+    2203 |                 u64 red_min;
+         |                     ^~~~~~~
+>> drivers/media/i2c/alvium-csi2.c:2202:21: warning: variable 'red_max' set but not used [-Wunused-but-set-variable]
+    2202 |                 u64 red_max;
+         |                     ^~~~~~~
+   drivers/media/i2c/alvium-csi2.c: In function 'alvium_set_frame_interval':
+>> drivers/media/i2c/alvium-csi2.c:2574:29: warning: variable 'max_fr' set but not used [-Wunused-but-set-variable]
+    2574 |         u64 req_fr, min_fr, max_fr;
+         |                             ^~~~~~
+>> drivers/media/i2c/alvium-csi2.c:2574:21: warning: variable 'min_fr' set but not used [-Wunused-but-set-variable]
+    2574 |         u64 req_fr, min_fr, max_fr;
+         |                     ^~~~~~
+   drivers/media/i2c/alvium-csi2.c: In function 'alvium_subdev_init':
+>> drivers/media/i2c/alvium-csi2.c:3172:27: warning: variable 'crop' set but not used [-Wunused-but-set-variable]
+    3172 |         struct v4l2_rect *crop;
+         |                           ^~~~
+>> drivers/media/i2c/alvium-csi2.c:3171:36: warning: variable 'fmt' set but not used [-Wunused-but-set-variable]
+    3171 |         struct v4l2_mbus_framefmt *fmt;
+         |                                    ^~~
+
+
+vim +/blue_min +2205 drivers/media/i2c/alvium-csi2.c
+
+  2186	
+  2187	static int alvium_set_ctrl_white_balance(struct alvium_dev *alvium,
+  2188					    bool awb)
+  2189	{
+  2190		struct alvium_ctrls *ctrls = &alvium->ctrls;
+  2191		int ret = 0;
+  2192	
+  2193		if (ctrls->auto_wb->is_new) {
+  2194			ret = alvium_set_awb(alvium, awb);
+  2195			if (ret)
+  2196				return ret;
+  2197		}
+  2198	
+  2199		if (!awb && ctrls->auto_wb->is_new) {
+  2200			u64 red = (u64)ctrls->red_balance->val;
+  2201			u64 blue = (u64)ctrls->blue_balance->val;
+> 2202			u64 red_max;
+> 2203			u64 red_min;
+> 2204			u64 blue_max;
+> 2205			u64 blue_min;
+  2206	
+  2207			ret = alvium_get_red_balance_ratio_params(alvium);
+  2208			if (ret)
+  2209				return ret;
+  2210	
+  2211			ret = alvium_get_blue_balance_ratio_params(alvium);
+  2212			if (ret)
+  2213				return ret;
+  2214	
+  2215			red_max = alvium->max_rbalance;
+  2216			red_min = alvium->min_rbalance;
+  2217			blue_max = alvium->max_bbalance;
+  2218			blue_min = alvium->min_rbalance;
+  2219	
+  2220			ret = alvium_set_red_balance_ratio(alvium, red);
+  2221			if (ret)
+  2222				return ret;
+  2223	
+  2224			ret = alvium_set_blue_balance_ratio(alvium, blue);
+  2225			if (ret)
+  2226				return ret;
+  2227		}
+  2228	
+  2229		return ret;
+  2230	}
+  2231	
+
 -- 
-2.37.3
-
-
---000000000000a3c85005fd7e2fc3
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-YDZuuBJwnyCzevMoPtVYPharioL5H3BRnQi8YoTXH7/uRo33dewYFm474yFjwwnt82TFtveVZkVq
-6h4WIQ4wTcwFfET8zMkELnGzS5SHCl8sPD+lNxxJ1JDZYwIDAQABo4IB2zCCAdcwDgYDVR0PAQH/
-BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3VyZS5nbG9i
-YWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEGCCsGAQUF
-BzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAy
-MDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xv
-YmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6hjhodHRw
-Oi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNybDAlBgNV
-HREEHjAcgRp3aWxsaWFtLnpoYW5nQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAf
-BgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUq65GzwZxydFHjjYEU/9h
-xHhPWlwwDQYJKoZIhvcNAQELBQADggEBAA2hGG3JPAdGPH0ZdohGUCIVjKz+U+EFuIDbS6A/5jqX
-VhYAxZlzj7tSjUIM7G7IhyfqPC46GKJ/4x+Amz1Z6YxNGy71L68kYD6hIbBcA5AM42QBUufly6Oa
-/ppSz3WoflVyFFQ5YXniZ+eU+2/cdnYZg4aVUnFjimOF5o3NfMLzOkhQNxbaDjFUfUYD8hKmU6v4
-0vUBj8KZ9Gi1LIagLKUREn8jku0lcLsRbnJ5Ey5ScajC/FESPyYWasOW8j8/1EoJksmhbYGKNS6C
-urb/KlmDGfVrIRYDbL0ckhGQIP5c6L+kSQZ2sHnQK0e0WgIaZYxaPYeY5u0GLCOze+3vyRMxggJt
-MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
-VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwxuh2XG3FXRL1W
-JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIBe0fXMrnwLZKrNLKQ3mF/u/ZQ+S
-JWmEKPY0+fAFdsdkMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
-MDYwNjIzMTQ1MFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
-CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQB+9TkZUCvegzn7jF4qw35ngk/NGUw++1TOEUX2eoMZoChm
-C4M9uBVtsCRNUbwtpz8+6OOshNoMpgc3xnAk8BKW0K1CGKRxsIQvx3g56NVqsXrujODseH2fFlZ6
-iw8cyTiC6jZj/C2af6x9jGcq9Q2UVKQ2LwVF788313BPfvRs9GVpRvFhIqrGwCXQaWEL2Wqbm5aW
-IyPTxM4x6VoRmDA8/X8UpxElNpgTIklLu9lu/pneju9VCttjF4Xp3yJB35/APPtaIFsotmi6CTuc
-MchBEO3VngONMepmuJJu/zuNsrkymVhd1Iavz7ixS6Au/z5yNxUADkvt4geu6MTfJtbG
---000000000000a3c85005fd7e2fc3--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
