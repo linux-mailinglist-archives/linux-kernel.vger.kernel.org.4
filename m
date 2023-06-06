@@ -2,180 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5471C723587
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 04:57:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A317723585
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 04:57:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234433AbjFFC5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 22:57:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33048 "EHLO
+        id S234362AbjFFC5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 22:57:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbjFFC5O (ORCPT
+        with ESMTP id S229660AbjFFC5L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 22:57:14 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D57102;
-        Mon,  5 Jun 2023 19:57:13 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-30af56f5f52so4838705f8f.1;
-        Mon, 05 Jun 2023 19:57:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686020232; x=1688612232;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=SrvUy89BvIUPEyxGx6YhXaN1N8mQsZqXnnNriiDSvME=;
-        b=jztOKtGtWaW4lJiqwG6Jn63CphDAucHhmfhEZVF0n7eK3l+gqdPZGYnpr829f9Xl8C
-         GR5eyaw9zjC676MPXMWww+Y66mrXEUO60Cxsd25GVH7O1lNlPuRseon6E8dWu2g+lsKe
-         aCtXZkCuNn9z6vByVQqLzBwMCl51FkDI0t6Zn/R399eR2qoNedrfYpz1Qf2oJqZq0oZA
-         0OBkAXCQYc/3/RW0j68bWeaynUII842+Z+noRXH2cEQjojHjGSshoXrz67aYEg32R0HO
-         GCzKxCtKQaFMJdbKZQdvCZ2AsKR1SOOUQaa4p5e7vBygsfONGislCbjdzOVd7cbmG83A
-         ghGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686020232; x=1688612232;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SrvUy89BvIUPEyxGx6YhXaN1N8mQsZqXnnNriiDSvME=;
-        b=X2S1R/hVRGHbisc0Mkp30OH5T74V2aqfRTUTc2S8jFsheu3Laf65o8FQyBnbCP8q34
-         plDy3rR1/ulJrgyZq3msvrBxu6bevGdYghGF94N+/FoFdXLPQdYy5/l6hJ/iK7qrwdtz
-         gMZv0KNtU1xt6Vq5P3EaNglRY9Fb5Z8MLlTXWEP6ab+rS8YR6OYGYEQpfE7kubnyyxKF
-         JNgkf05f//cOGKRNZQP08vDGyU1zaC1aC41Z2y9Dma/yU3JhjOWhmvD1I8VvryHj1rek
-         cuzh/qPCTq4pxz0c7A1eoER6vi0szZ0ZSZuCJJI3Zj6T3EHkZb4uQwlYKkxmVEuS5LJ2
-         RtjQ==
-X-Gm-Message-State: AC+VfDzx1+q42JZcVZmjDWRZVjfuw9Cyge3RNNZErzqcMKoK65GWUIjn
-        62ZiYsG8A6FMli2kaLH93f8=
-X-Google-Smtp-Source: ACHHUZ7nGp/lJQb6dwofZStNfHBGcrDqqlqYtXbLcL+6qXMsnTiupV4dSOZgNCAnRUQk5m/hpSfB/Q==
-X-Received: by 2002:a5d:510c:0:b0:309:3af4:8c8c with SMTP id s12-20020a5d510c000000b003093af48c8cmr539800wrt.54.1686020231479;
-        Mon, 05 Jun 2023 19:57:11 -0700 (PDT)
-Received: from krava ([80.149.170.9])
-        by smtp.gmail.com with ESMTPSA id p18-20020a05600c205200b003f427687ba7sm12383930wmg.41.2023.06.05.19.56.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jun 2023 19:57:11 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Tue, 6 Jun 2023 04:56:38 +0200
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        James Clark <james.clark@arm.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>
-Subject: Re: [PATCH v2 1/4] perf build: Add ability to build with a generated
- vmlinux.h
-Message-ID: <ZH6gZgcwAbDrEiqX@krava>
-References: <20230605202712.1690876-1-irogers@google.com>
- <20230605202712.1690876-2-irogers@google.com>
+        Mon, 5 Jun 2023 22:57:11 -0400
+Received: from out-1.mta0.migadu.com (out-1.mta0.migadu.com [IPv6:2001:41d0:1004:224b::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E993102
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 19:57:08 -0700 (PDT)
+Date:   Mon, 5 Jun 2023 19:56:59 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1686020227;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hHraN3hVCqrmJmmPSWWTuJqPN0R81IdA9hVV/jS2Z0A=;
+        b=trn4mw3JuTr7EBl5wGrwvR/Ct5O4ZvVjVNTwDhjDBfcDV9kO1vxVvmXsBt951zKGGmIelG
+        Q0QHBL+CPaEpXVjcfoB93wadslMSoongpSClmoZYKSEUPe+luWsNhzu6+gAKVLEQtg7zSP
+        R/jXD+cKeHia3kebX1GigHBP9lI9Sik=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     Kirill Tkhai <tkhai@ya.ru>, akpm@linux-foundation.org,
+        vbabka@suse.cz, viro@zeniv.linux.org.uk, brauner@kernel.org,
+        djwong@kernel.org, hughd@google.com, paulmck@kernel.org,
+        muchun.song@linux.dev, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, zhengqi.arch@bytedance.com
+Subject: Re: [PATCH v2 3/3] fs: Use delayed shrinker unregistration
+Message-ID: <ZH6ge3yiGAotYRR9@P9FQF9L96D>
+References: <168599103578.70911.9402374667983518835.stgit@pro.pro>
+ <168599180526.70911.14606767590861123431.stgit@pro.pro>
+ <ZH6AA72wOd4HKTKE@P9FQF9L96D>
+ <ZH6K0McWBeCjaf16@dread.disaster.area>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230605202712.1690876-2-irogers@google.com>
+In-Reply-To: <ZH6K0McWBeCjaf16@dread.disaster.area>
+X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 05, 2023 at 01:27:09PM -0700, Ian Rogers wrote:
-> Commit a887466562b4 ("perf bpf skels: Stop using vmlinux.h generated
-> from BTF, use subset of used structs + CO-RE") made it so that
-> vmlinux.h was uncondtionally included from
-> tools/perf/util/vmlinux.h. This change reverts part of that change (so
-> that vmlinux.h is once again generated) and makes it so that the
-> vmlinux.h used at build time is selected from the VMLINUX_H
-> variable. By default the VMLINUX_H variable is set to the vmlinux.h
-> added in change a887466562b4, but if GEN_VMLINUX_H=1 is passed on the
-> build command line then the previous generation behavior kicks in.
+On Tue, Jun 06, 2023 at 11:24:32AM +1000, Dave Chinner wrote:
+> On Mon, Jun 05, 2023 at 05:38:27PM -0700, Roman Gushchin wrote:
+> > On Mon, Jun 05, 2023 at 10:03:25PM +0300, Kirill Tkhai wrote:
+> > > Kernel test robot reports -88.8% regression in stress-ng.ramfs.ops_per_sec
+> > > test case caused by commit: f95bdb700bc6 ("mm: vmscan: make global slab
+> > > shrink lockless"). Qi Zheng investigated that the reason is in long SRCU's
+> > > synchronize_srcu() occuring in unregister_shrinker().
+> > > 
+> > > This patch fixes the problem by using new unregistration interfaces,
+> > > which split unregister_shrinker() in two parts. First part actually only
+> > > notifies shrinker subsystem about the fact of unregistration and it prevents
+> > > future shrinker methods calls. The second part completes the unregistration
+> > > and it insures, that struct shrinker is not used during shrinker chain
+> > > iteration anymore, so shrinker memory may be freed. Since the long second
+> > > part is called from delayed work asynchronously, it hides synchronize_srcu()
+> > > delay from a user.
+> > > 
+> > > Signed-off-by: Kirill Tkhai <tkhai@ya.ru>
+> > > ---
+> > >  fs/super.c |    3 ++-
+> > >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/fs/super.c b/fs/super.c
+> > > index 8d8d68799b34..f3e4f205ec79 100644
+> > > --- a/fs/super.c
+> > > +++ b/fs/super.c
+> > > @@ -159,6 +159,7 @@ static void destroy_super_work(struct work_struct *work)
+> > >  							destroy_work);
+> > >  	int i;
+> > >  
+> > > +	unregister_shrinker_delayed_finalize(&s->s_shrink);
+> > >  	for (i = 0; i < SB_FREEZE_LEVELS; i++)
+> > >  		percpu_free_rwsem(&s->s_writers.rw_sem[i]);
+> > >  	kfree(s);
+> > > @@ -327,7 +328,7 @@ void deactivate_locked_super(struct super_block *s)
+> > >  {
+> > >  	struct file_system_type *fs = s->s_type;
+> > >  	if (atomic_dec_and_test(&s->s_active)) {
+> > > -		unregister_shrinker(&s->s_shrink);
+> > > +		unregister_shrinker_delayed_initiate(&s->s_shrink);
+> > 
+> > Hm, it makes the API more complex and easier to mess with. Like what will happen
+> > if the second part is never called? Or it's called without the first part being
+> > called first?
 > 
-> The build with GEN_VMLINUX_H=1 currently fails with:
-> ```
-> util/bpf_skel/lock_contention.bpf.c:419:8: error: redefinition of 'rq'
-> struct rq {};
->        ^
-> /tmp/perf/util/bpf_skel/.tmp/../vmlinux.h:45630:8: note: previous definition is here
-> struct rq {
->        ^
-> 1 error generated.
-> ```
-> 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> Acked-by: Andrii Nakryiko <andrii@kernel.org>
-> ---
->  tools/perf/Makefile.config                       |  4 ++++
->  tools/perf/Makefile.perf                         | 16 +++++++++++++++-
->  tools/perf/util/bpf_skel/.gitignore              |  1 +
->  tools/perf/util/bpf_skel/{ => vmlinux}/vmlinux.h |  0
->  4 files changed, 20 insertions(+), 1 deletion(-)
->  rename tools/perf/util/bpf_skel/{ => vmlinux}/vmlinux.h (100%)
+> Bad things.
 
-looks good, but I don't understand why you moved the vmlinux.h
+Agree.
 
-jirka
+> Also, it doesn't fix the three other unregister_shrinker() calls in
+> the XFS unmount path, nor the three in the ext4/mbcache/jbd2 unmount
+> path.
+> 
+> Those are just some of the unregister_shrinker() calls that have
+> dynamic contexts that would also need this same fix; I haven't
+> audited the 3 dozen other unregister_shrinker() calls around the
+> kernel to determine if any of them need similar treatment, too.
+> 
+> IOWs, this patchset is purely a band-aid to fix the reported
+> regression, not an actual fix for the underlying problems caused by
+> moving the shrinker infrastructure to SRCU protection.  This is why
+> I really want the SRCU changeover reverted.
+> 
+> Not only are the significant changes the API being necessary, it's
+> put the entire shrinker paths under a SRCU critical section. AIUI,
+> this means while the shrinkers are running the RCU grace period
+> cannot expire and no RCU freed memory will actually get freed until
+> the srcu read lock is dropped by the shrinker.
+> 
+> Given the superblock shrinkers are freeing dentry and inode objects
+> by RCU freeing, this is also a fairly significant change of
+> behaviour. i.e.  cond_resched() in the shrinker processing loops no
+> longer allows RCU grace periods to expire and have memory freed with
+> the shrinkers are running.
+> 
+> Are there problems this will cause? I don't know, but I'm pretty
+> sure they haven't even been considered until now....
+> 
+> > Isn't it possible to hide it from a user and call the second part from a work
+> > context automatically?
+> 
+> Nope, because it has to be done before the struct shrinker is freed.
+> Those are embedded into other structures rather than being
+> dynamically allocated objects.
 
-> 
-> diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-> index a794d9eca93d..08d4e7eaa721 100644
-> --- a/tools/perf/Makefile.config
-> +++ b/tools/perf/Makefile.config
-> @@ -680,6 +680,10 @@ ifdef BUILD_BPF_SKEL
->    CFLAGS += -DHAVE_BPF_SKEL
->  endif
->  
-> +ifndef GEN_VMLINUX_H
-> +  VMLINUX_H=$(src-perf)/util/bpf_skel/vmlinux/vmlinux.h
-> +endif
-> +
->  dwarf-post-unwind := 1
->  dwarf-post-unwind-text := BUG
->  
-> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-> index f48794816d82..f1840af195c0 100644
-> --- a/tools/perf/Makefile.perf
-> +++ b/tools/perf/Makefile.perf
-> @@ -1080,7 +1080,21 @@ $(BPFTOOL): | $(SKEL_TMP_OUT)
->  	$(Q)CFLAGS= $(MAKE) -C ../bpf/bpftool \
->  		OUTPUT=$(SKEL_TMP_OUT)/ bootstrap
->  
-> -$(SKEL_TMP_OUT)/%.bpf.o: util/bpf_skel/%.bpf.c $(LIBBPF) | $(SKEL_TMP_OUT)
-> +VMLINUX_BTF_PATHS ?= $(if $(O),$(O)/vmlinux)				\
-> +		     $(if $(KBUILD_OUTPUT),$(KBUILD_OUTPUT)/vmlinux)	\
-> +		     ../../vmlinux					\
-> +		     /sys/kernel/btf/vmlinux				\
-> +		     /boot/vmlinux-$(shell uname -r)
-> +VMLINUX_BTF ?= $(abspath $(firstword $(wildcard $(VMLINUX_BTF_PATHS))))
-> +
-> +$(SKEL_OUT)/vmlinux.h: $(VMLINUX_BTF) $(BPFTOOL)
-> +ifeq ($(VMLINUX_H),)
-> +	$(QUIET_GEN)$(BPFTOOL) btf dump file $< format c > $@
-> +else
-> +	$(Q)cp "$(VMLINUX_H)" $@
-> +endif
-> +
-> +$(SKEL_TMP_OUT)/%.bpf.o: util/bpf_skel/%.bpf.c $(LIBBPF) $(SKEL_OUT)/vmlinux.h | $(SKEL_TMP_OUT)
->  	$(QUIET_CLANG)$(CLANG) -g -O2 -target bpf -Wall -Werror $(BPF_INCLUDE) $(TOOLS_UAPI_INCLUDE) \
->  	  -c $(filter util/bpf_skel/%.bpf.c,$^) -o $@
->  
-> diff --git a/tools/perf/util/bpf_skel/.gitignore b/tools/perf/util/bpf_skel/.gitignore
-> index 7a1c832825de..cd01455e1b53 100644
-> --- a/tools/perf/util/bpf_skel/.gitignore
-> +++ b/tools/perf/util/bpf_skel/.gitignore
-> @@ -1,3 +1,4 @@
->  # SPDX-License-Identifier: GPL-2.0-only
->  .tmp
->  *.skel.h
-> +vmlinux.h
-> diff --git a/tools/perf/util/bpf_skel/vmlinux.h b/tools/perf/util/bpf_skel/vmlinux/vmlinux.h
-> similarity index 100%
-> rename from tools/perf/util/bpf_skel/vmlinux.h
-> rename to tools/perf/util/bpf_skel/vmlinux/vmlinux.h
-> -- 
-> 2.41.0.rc0.172.g3f132b7071-goog
-> 
+This part we might consider to revisit, if it helps to solve other problems.
+Having an extra memory allocation (or two) per mount-point doesn't look
+that expensive. Again, iff it helps with more important problems.
+
+Thanks!
