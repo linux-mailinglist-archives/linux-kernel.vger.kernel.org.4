@@ -2,98 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5747D723AA5
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 09:54:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBD90723AA9
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 09:54:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235077AbjFFHyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 03:54:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58136 "EHLO
+        id S235111AbjFFHyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 03:54:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231174AbjFFHx2 (ORCPT
+        with ESMTP id S235255AbjFFHx6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 03:53:28 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FB8910DE;
-        Tue,  6 Jun 2023 00:49:57 -0700 (PDT)
-Received: from [192.168.10.48] (unknown [119.152.150.198])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E9FA46602242;
-        Tue,  6 Jun 2023 08:49:53 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1686037796;
-        bh=usPMufmDzuBOCEzo23gPEz247KJx0Gj7Q/7CWBmyGBg=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=AfuYw65rewPWEzEcE2cn1a8WpAnJngEFkPjO/j2Z2N19zqvHa5LXIyBhg+ORY3Mfr
-         P3OXJuPYtlpS7QSs0+l6Gyw6ndruGDu2bfwLwm27JatkLAacYx1J0dQCuDvX1lE1pZ
-         VU5Tkq4GFhoOiMAk/5/hwuAjPxEwXdIiaqF1IPEiqymjLzLlOFfYucky1MxklhJdiN
-         b6XHGNnOEtCWkjvV9esaPWT9eldKyo2DA/YzjJhGOfrCPco5OVluLHDS7osFvNUF7q
-         6fQpaSynIgl6BKsMoGPPEbTxpN35wDxvXi2Vh5lM0Nnjxng9O/r3Sm4tcHR7xiW9tY
-         ND61zjbCfQ9qw==
-Message-ID: <08bf8e05-3c64-1f1b-d6d7-f542a7026c6f@collabora.com>
-Date:   Tue, 6 Jun 2023 12:49:49 +0500
+        Tue, 6 Jun 2023 03:53:58 -0400
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41D1D106
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 00:50:28 -0700 (PDT)
+X-GND-Sasl: miquel.raynal@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1686037827;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2KqMPztr7hiHXP+1Ynp2WQJHqpjlFJterm7Ue0Xb7a8=;
+        b=efYk/mp/GqY2gaRAM1u4E0/RnjrIyAEdu5r9KXTgGSS0a0rXNYb5NlcR40VTUAcAmmrl/A
+        ZMep28lJje1jervWCmxNuG/l8taN7DRFLDxix/hnfmxOjYo7SRS8+9mGXVD8D1jM94ln4r
+        GXdVHXlpQbmfwITCcqhtCU+Hgw/8SxyK1AOeBBulXhB4Fi9Wxc9S+TwrxJ3YyyQQMwm5Cf
+        doRidcuGQic8YBihUi3NKHDQ3oXCNdDaoWIEHaQ/pFIO76eO0i6HwA53t3dIuMKuCVwTef
+        F2wiU9KLNKV5x6E3BOj4iknEskYATxSRbYIVq06s/L3z44RAZEiZjY8XuykZyg==
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C751360003;
+        Tue,  6 Jun 2023 07:50:24 +0000 (UTC)
+Date:   Tue, 6 Jun 2023 09:50:23 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>
+Cc:     Liang Yang <liang.yang@amlogic.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
+        <linux-mtd@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1] mtd: rawnand: meson: check buffer length
+Message-ID: <20230606095023.26a056a3@xps-13>
+In-Reply-To: <e31be327-b351-3a94-b2d8-0867f29bb9ec@sberdevices.ru>
+References: <20230605191047.1820016-1-AVKrasnov@sberdevices.ru>
+        <20230606091607.7b7b6814@xps-13>
+        <e31be327-b351-3a94-b2d8-0867f29bb9ec@sberdevices.ru>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        David Hildenbrand <david@redhat.com>,
-        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 03/11] selftests/mm: fix "warning: expression which
- evaluates to zero..." in mlock2-tests.c
-Content-Language: en-US
-To:     John Hubbard <jhubbard@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20230606071637.267103-1-jhubbard@nvidia.com>
- <20230606071637.267103-4-jhubbard@nvidia.com>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <20230606071637.267103-4-jhubbard@nvidia.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/6/23 12:16 PM, John Hubbard wrote:
-> The stop variable is a char*, and the code was assigning a char value to
-> it. This was generating a warning when compiling with clang.
-> 
-> However, as both David and Peter pointed out, stop is not even used
-> after the problematic assignment to a char type. So just delete that
-> line entirely.
-> 
-> Reviewed-by: David Hildenbrand <david@redhat.com>
-> Reviewed-by: Peter Xu <peterx@redhat.com>
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-Tested-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Hi Arseniy,
 
-> ---
->  tools/testing/selftests/mm/mlock2-tests.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/mm/mlock2-tests.c b/tools/testing/selftests/mm/mlock2-tests.c
-> index 11b2301f3aa3..80cddc0de206 100644
-> --- a/tools/testing/selftests/mm/mlock2-tests.c
-> +++ b/tools/testing/selftests/mm/mlock2-tests.c
-> @@ -50,7 +50,6 @@ static int get_vm_area(unsigned long addr, struct vm_boundaries *area)
->  			printf("cannot parse /proc/self/maps\n");
->  			goto out;
->  		}
-> -		stop = '\0';
->  
->  		sscanf(line, "%lx", &start);
->  		sscanf(end_addr, "%lx", &end);
+avkrasnov@sberdevices.ru wrote on Tue, 6 Jun 2023 10:37:43 +0300:
 
--- 
-BR,
-Muhammad Usama Anjum
+> On 06.06.2023 10:16, Miquel Raynal wrote:
+> > Hi Arseniy,
+> >=20
+> > AVKrasnov@sberdevices.ru wrote on Mon, 5 Jun 2023 22:10:46 +0300:
+> >  =20
+> >> Meson NAND controller has limited buffer length, so check it before
+> >> command execution to avoid length trim. Also check MTD write size on
+> >> chip attach. =20
+> >=20
+> > Almost there :) =20
+>=20
+> Hello Miquel!
+>=20
+> You mean to rephrase it? :)
+
+Not at all, I meant: there is something to change in this file (see
+below) but the patch is close to be ready.
+
+>=20
+> Thanks, Arseniy
+>=20
+> >  =20
+> >>
+> >> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+> >> ---
+> >>  drivers/mtd/nand/raw/meson_nand.c | 22 +++++++++++++++++++---
+> >>  1 file changed, 19 insertions(+), 3 deletions(-)
+> >>
+> >> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/=
+meson_nand.c
+> >> index 074e14225c06..bfb5363cac23 100644
+> >> --- a/drivers/mtd/nand/raw/meson_nand.c
+> >> +++ b/drivers/mtd/nand/raw/meson_nand.c
+> >> @@ -108,6 +108,8 @@
+> >> =20
+> >>  #define PER_INFO_BYTE		8
+> >> =20
+> >> +#define NFC_CMD_RAW_LEN	GENMASK(13, 0)
+> >> +
+> >>  struct meson_nfc_nand_chip {
+> >>  	struct list_head node;
+> >>  	struct nand_chip nand;
+> >> @@ -280,7 +282,7 @@ static void meson_nfc_cmd_access(struct nand_chip =
+*nand, int raw, bool dir,
+> >> =20
+> >>  	if (raw) {
+> >>  		len =3D mtd->writesize + mtd->oobsize;
+> >> -		cmd =3D (len & GENMASK(13, 0)) | scrambler | DMA_DIR(dir);
+> >> +		cmd =3D len | scrambler | DMA_DIR(dir);
+> >>  		writel(cmd, nfc->reg_base + NFC_REG_CMD);
+> >>  		return;
+> >>  	}
+> >> @@ -544,7 +546,7 @@ static int meson_nfc_read_buf(struct nand_chip *na=
+nd, u8 *buf, int len)
+> >>  	if (ret)
+> >>  		goto out;
+> >> =20
+> >> -	cmd =3D NFC_CMD_N2M | (len & GENMASK(13, 0));
+> >> +	cmd =3D NFC_CMD_N2M | len;
+> >>  	writel(cmd, nfc->reg_base + NFC_REG_CMD);
+> >> =20
+> >>  	meson_nfc_drain_cmd(nfc);
+> >> @@ -568,7 +570,7 @@ static int meson_nfc_write_buf(struct nand_chip *n=
+and, u8 *buf, int len)
+> >>  	if (ret)
+> >>  		return ret;
+> >> =20
+> >> -	cmd =3D NFC_CMD_M2N | (len & GENMASK(13, 0));
+> >> +	cmd =3D NFC_CMD_M2N | len;
+> >>  	writel(cmd, nfc->reg_base + NFC_REG_CMD);
+> >> =20
+> >>  	meson_nfc_drain_cmd(nfc);
+> >> @@ -936,6 +938,9 @@ static int meson_nfc_exec_op(struct nand_chip *nan=
+d,
+> >>  			break;
+> >> =20
+> >>  		case NAND_OP_DATA_IN_INSTR:
+> >> +			if (instr->ctx.data.len > NFC_CMD_RAW_LEN)
+> >> +				return -EINVAL; =20
+> >=20
+> > You need to refuse the operation earlier. That's what the check_op
+> > boolean is about. Maybe you can take inspiration from anfc_check_op()
+> > in the arasan controller. =20
+>=20
+> Ok! Thanks!
+>=20
+> >  =20
+> >> +
+> >>  			buf =3D meson_nand_op_get_dma_safe_input_buf(instr);
+> >>  			if (!buf)
+> >>  				return -ENOMEM;
+> >> @@ -944,6 +949,9 @@ static int meson_nfc_exec_op(struct nand_chip *nan=
+d,
+> >>  			break;
+> >> =20
+> >>  		case NAND_OP_DATA_OUT_INSTR:
+> >> +			if (instr->ctx.data.len > NFC_CMD_RAW_LEN)
+> >> +				return -EINVAL; =20
+> >=20
+> > Same.
+> >  =20
+> >> +
+> >>  			buf =3D meson_nand_op_get_dma_safe_output_buf(instr);
+> >>  			if (!buf)
+> >>  				return -ENOMEM;
+> >> @@ -1181,6 +1189,7 @@ static int meson_nand_attach_chip(struct nand_ch=
+ip *nand)
+> >>  	struct meson_nfc_nand_chip *meson_chip =3D to_meson_nand(nand);
+> >>  	struct mtd_info *mtd =3D nand_to_mtd(nand);
+> >>  	int nsectors =3D mtd->writesize / 1024;
+> >> +	int raw_writesize;
+> >>  	int ret;
+> >> =20
+> >>  	if (!mtd->name) {
+> >> @@ -1192,6 +1201,13 @@ static int meson_nand_attach_chip(struct nand_c=
+hip *nand)
+> >>  			return -ENOMEM;
+> >>  	}
+> >> =20
+> >> +	raw_writesize =3D mtd->writesize + mtd->oobsize;
+> >> +	if (raw_writesize > NFC_CMD_RAW_LEN) {
+> >> +		dev_err(nfc->dev, "too big write size in raw mode: %d > %ld\n",
+> >> +			raw_writesize, NFC_CMD_RAW_LEN);
+> >> +		return -EINVAL;
+> >> +	}
+> >> +
+> >>  	if (nand->bbt_options & NAND_BBT_USE_FLASH)
+> >>  		nand->bbt_options |=3D NAND_BBT_NO_OOB;
+> >>   =20
+> >=20
+> >=20
+> > Thanks,
+> > Miqu=C3=A8l =20
+
+
+Thanks,
+Miqu=C3=A8l
