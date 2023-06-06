@@ -2,125 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0396C72346E
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 03:20:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 421F8723472
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 03:24:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233433AbjFFBUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 21:20:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52332 "EHLO
+        id S233614AbjFFBYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 21:24:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231439AbjFFBUd (ORCPT
+        with ESMTP id S231439AbjFFBYm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 21:20:33 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E1363F3;
-        Mon,  5 Jun 2023 18:20:31 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.170])
-        by gateway (Coremail) with SMTP id _____8AxB_HdiX5krkgAAA--.965S3;
-        Tue, 06 Jun 2023 09:20:29 +0800 (CST)
-Received: from [10.20.42.170] (unknown [10.20.42.170])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxFOTdiX5kf4QBAA--.6662S3;
-        Tue, 06 Jun 2023 09:20:29 +0800 (CST)
-Message-ID: <042430b3-5d4a-c0e8-26b5-b98cbf23146e@loongson.cn>
-Date:   Tue, 6 Jun 2023 09:20:29 +0800
+        Mon, 5 Jun 2023 21:24:42 -0400
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74A788F
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 18:24:37 -0700 (PDT)
+Received: by mail-oi1-x235.google.com with SMTP id 5614622812f47-390723f815fso3070885b6e.3
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 18:24:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1686014677; x=1688606677;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=FEO737aUec1lwK9pGviD1SIdvncYRmvXW6gxg/j13BM=;
+        b=O9ZFIh1Q61+tKTknsBCMtIRxeAkqIbO4BxvPoMGA4kqRsNG8NIGLudQ4gAEWlLWLnt
+         3k4xyS4YC+EcSEl5kwL9vLcvm14OLojC2SxqMP5bH4YQ0zR9MFmSVZT8z3/Nel8mifoc
+         gdNhBEuLUUSOUiam1VEsCdw15h7YEhmZFII3T7r0p9Q3F4Yqhb1rcirey7PpdTxIMxK5
+         RmQH+kCUOxejayky8B/YD2blSch3v+ncvWbFeZ0W0mtwVzve/fb6paZB4Gl9kTDjKzho
+         0+s8srRDttqYni1onJzPjOLoOAh36NjpLtTz+hVHIX4LP4L1yn2ox2kKIL2yxV3kEjM4
+         KaXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686014677; x=1688606677;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FEO737aUec1lwK9pGviD1SIdvncYRmvXW6gxg/j13BM=;
+        b=Jj85Sg9IbF5R0yLUhK4AajaWRWokGFRN++NISpTPDlIVpnAygrV6HHLdQIqIg3CkQ1
+         Yv7MFq0pqmMn0l1uakph8kM3GgCk6VA6jdZtw50zNNKxIq3cpA2T32D6aA2JW5j0Hvvu
+         7zFFZI8JYJuqlu00pqdhHAaRAxuWtJkdkxzMscOWsCbkm5Sasezf5JzZMzY1FARvsjMG
+         Q4YhFnpfxGqGIa7zJGQ3XmA0cn2zYglFIoyHBOZ4XLS6KuIIivwtFyvl3VLSZECPWNBM
+         vB4rY19HJ7Z5JjTH1XLuCMm5lNkluXmEivsRqLbavqyggRpLJ2xSIuXjgGf/rimoKQCW
+         pp3g==
+X-Gm-Message-State: AC+VfDwbcT1Ep+N98VrwNNnEmPSeKpaOPmJ+lixIjp9X5T8FVZRerigf
+        5eN9swatDssbOUJsWpr29VCVuw==
+X-Google-Smtp-Source: ACHHUZ64+rRg/QutfbvttESibwwvT1V7VA2ydXsz/+IAYaJjFQeY7U7IQY/GCjwxut9llPVB2GRiGg==
+X-Received: by 2002:a05:6359:3af:b0:129:c53e:eab with SMTP id eg47-20020a05635903af00b00129c53e0eabmr655510rwb.12.1686014676615;
+        Mon, 05 Jun 2023 18:24:36 -0700 (PDT)
+Received: from dread.disaster.area (pa49-179-79-151.pa.nsw.optusnet.com.au. [49.179.79.151])
+        by smtp.gmail.com with ESMTPSA id t8-20020a17090a3b4800b00246cc751c6bsm8817189pjf.46.2023.06.05.18.24.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Jun 2023 18:24:35 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.96)
+        (envelope-from <david@fromorbit.com>)
+        id 1q6LR2-008IwX-2D;
+        Tue, 06 Jun 2023 11:24:32 +1000
+Date:   Tue, 6 Jun 2023 11:24:32 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     Kirill Tkhai <tkhai@ya.ru>, akpm@linux-foundation.org,
+        vbabka@suse.cz, viro@zeniv.linux.org.uk, brauner@kernel.org,
+        djwong@kernel.org, hughd@google.com, paulmck@kernel.org,
+        muchun.song@linux.dev, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, zhengqi.arch@bytedance.com
+Subject: Re: [PATCH v2 3/3] fs: Use delayed shrinker unregistration
+Message-ID: <ZH6K0McWBeCjaf16@dread.disaster.area>
+References: <168599103578.70911.9402374667983518835.stgit@pro.pro>
+ <168599180526.70911.14606767590861123431.stgit@pro.pro>
+ <ZH6AA72wOd4HKTKE@P9FQF9L96D>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v12 17/31] LoongArch: KVM: Implement virtual machine tlb
- operations
-Content-Language: en-US
-To:     Tianrui Zhao <zhaotianrui@loongson.cn>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        loongarch@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
-        Mark Brown <broonie@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Xi Ruoyao <xry111@xry111.site>
-References: <20230530015223.147755-1-zhaotianrui@loongson.cn>
- <20230530015223.147755-18-zhaotianrui@loongson.cn>
-From:   "bibo, mao" <maobibo@loongson.cn>
-In-Reply-To: <20230530015223.147755-18-zhaotianrui@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxFOTdiX5kf4QBAA--.6662S3
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7tFyxAFW5Jw43ur15Zr1xtFc_yoW8Gw1rpF
-        yfuFs5Gr4fX3ZrG3sIqwn3WrnxZr4vkF17uFWfZa4rZrsrtr1kKFnakryDJFWrt3yrAF40
-        q3WFkr4jgF4UJ3gCm3ZEXasCq-sJn29KB7ZKAUJUUUUf529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUPFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-        Gr0_Gr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
-        kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUtVWr
-        XwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMx
-        k0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l
-        4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxV
-        WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI
-        7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
-        4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI
-        42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU4Xo7DUUUU
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZH6AA72wOd4HKTKE@P9FQF9L96D>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Bibo, Mao <maobibo@loongson.cn>
-
-在 2023/5/30 09:52, Tianrui Zhao 写道:
-> Implement LoongArch virtual machine tlb operations such as flush tlb by
-> specific gpa parameter and flush all of the virt machines tlb.
+On Mon, Jun 05, 2023 at 05:38:27PM -0700, Roman Gushchin wrote:
+> On Mon, Jun 05, 2023 at 10:03:25PM +0300, Kirill Tkhai wrote:
+> > Kernel test robot reports -88.8% regression in stress-ng.ramfs.ops_per_sec
+> > test case caused by commit: f95bdb700bc6 ("mm: vmscan: make global slab
+> > shrink lockless"). Qi Zheng investigated that the reason is in long SRCU's
+> > synchronize_srcu() occuring in unregister_shrinker().
+> > 
+> > This patch fixes the problem by using new unregistration interfaces,
+> > which split unregister_shrinker() in two parts. First part actually only
+> > notifies shrinker subsystem about the fact of unregistration and it prevents
+> > future shrinker methods calls. The second part completes the unregistration
+> > and it insures, that struct shrinker is not used during shrinker chain
+> > iteration anymore, so shrinker memory may be freed. Since the long second
+> > part is called from delayed work asynchronously, it hides synchronize_srcu()
+> > delay from a user.
+> > 
+> > Signed-off-by: Kirill Tkhai <tkhai@ya.ru>
+> > ---
+> >  fs/super.c |    3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/fs/super.c b/fs/super.c
+> > index 8d8d68799b34..f3e4f205ec79 100644
+> > --- a/fs/super.c
+> > +++ b/fs/super.c
+> > @@ -159,6 +159,7 @@ static void destroy_super_work(struct work_struct *work)
+> >  							destroy_work);
+> >  	int i;
+> >  
+> > +	unregister_shrinker_delayed_finalize(&s->s_shrink);
+> >  	for (i = 0; i < SB_FREEZE_LEVELS; i++)
+> >  		percpu_free_rwsem(&s->s_writers.rw_sem[i]);
+> >  	kfree(s);
+> > @@ -327,7 +328,7 @@ void deactivate_locked_super(struct super_block *s)
+> >  {
+> >  	struct file_system_type *fs = s->s_type;
+> >  	if (atomic_dec_and_test(&s->s_active)) {
+> > -		unregister_shrinker(&s->s_shrink);
+> > +		unregister_shrinker_delayed_initiate(&s->s_shrink);
 > 
-> Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
-> ---
->  arch/loongarch/kvm/tlb.c | 31 +++++++++++++++++++++++++++++++
->  1 file changed, 31 insertions(+)
->  create mode 100644 arch/loongarch/kvm/tlb.c
-> 
-> diff --git a/arch/loongarch/kvm/tlb.c b/arch/loongarch/kvm/tlb.c
-> new file mode 100644
-> index 000000000000..66e116cf2486
-> --- /dev/null
-> +++ b/arch/loongarch/kvm/tlb.c
-> @@ -0,0 +1,31 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2020-2023 Loongson Technology Corporation Limited
-> + */
-> +
-> +#include <linux/kvm_host.h>
-> +#include <asm/tlb.h>
-> +
-> +int kvm_flush_tlb_gpa(struct kvm_vcpu *vcpu, unsigned long gpa)
-> +{
-> +	preempt_disable();
-> +	gpa &= (PAGE_MASK << 1);
-> +	invtlb(INVTLB_GID_ADDR, read_csr_gstat() & CSR_GSTAT_GID, gpa);
-> +	preempt_enable();
-> +	return 0;
-> +}
-> +
-> +/**
-> + * kvm_flush_tlb_all() - Flush all root TLB entries for
-> + * guests.
-> + *
-> + * Invalidate all entries including GVA-->GPA and GPA-->HPA mappings.
-> + */
-> +void kvm_flush_tlb_all(void)
-> +{
-> +	unsigned long flags;
-> +
-> +	local_irq_save(flags);
-> +	invtlb_all(INVTLB_ALLGID, 0, 0);
-> +	local_irq_restore(flags);
-> +}
+> Hm, it makes the API more complex and easier to mess with. Like what will happen
+> if the second part is never called? Or it's called without the first part being
+> called first?
 
+Bad things.
+
+Also, it doesn't fix the three other unregister_shrinker() calls in
+the XFS unmount path, nor the three in the ext4/mbcache/jbd2 unmount
+path.
+
+Those are just some of the unregister_shrinker() calls that have
+dynamic contexts that would also need this same fix; I haven't
+audited the 3 dozen other unregister_shrinker() calls around the
+kernel to determine if any of them need similar treatment, too.
+
+IOWs, this patchset is purely a band-aid to fix the reported
+regression, not an actual fix for the underlying problems caused by
+moving the shrinker infrastructure to SRCU protection.  This is why
+I really want the SRCU changeover reverted.
+
+Not only are the significant changes the API being necessary, it's
+put the entire shrinker paths under a SRCU critical section. AIUI,
+this means while the shrinkers are running the RCU grace period
+cannot expire and no RCU freed memory will actually get freed until
+the srcu read lock is dropped by the shrinker.
+
+Given the superblock shrinkers are freeing dentry and inode objects
+by RCU freeing, this is also a fairly significant change of
+behaviour. i.e.  cond_resched() in the shrinker processing loops no
+longer allows RCU grace periods to expire and have memory freed with
+the shrinkers are running.
+
+Are there problems this will cause? I don't know, but I'm pretty
+sure they haven't even been considered until now....
+
+> Isn't it possible to hide it from a user and call the second part from a work
+> context automatically?
+
+Nope, because it has to be done before the struct shrinker is freed.
+Those are embedded into other structures rather than being
+dynamically allocated objects. Hence the synchronise_srcu() has to
+complete before the structure the shrinker is embedded in is freed.
+
+Now, this can be dealt with by having register_shrinker() return an
+allocated struct shrinker and the callers only keep a pointer, but
+that's an even bigger API change. But, IMO, it is an API change that
+should have been done before SRCU was introduced precisely because
+it allows decoupling of shrinker execution and completion from
+the owning structure.
+
+Then we can stop shrinker execution, wait for it to complete and
+prevent future execution in unregister_shrinker(), then punt the
+expensive shrinker list removal to background work where processing
+delays just don't matter for dead shrinker instances. It doesn't
+need SRCU at all...
+
+-Dave.
+-- 
+Dave Chinner
+david@fromorbit.com
