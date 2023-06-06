@@ -2,329 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C982D723A57
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 09:46:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63592723A61
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 09:48:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236626AbjFFHqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 03:46:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50826 "EHLO
+        id S236576AbjFFHsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 03:48:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237087AbjFFHpR (ORCPT
+        with ESMTP id S237342AbjFFHqJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 03:45:17 -0400
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8175E1986;
-        Tue,  6 Jun 2023 00:42:54 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=25;SR=0;TI=SMTPD_---0VkVSyE6_1686037368;
-Received: from localhost.localdomain(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VkVSyE6_1686037368)
-          by smtp.aliyun-inc.com;
-          Tue, 06 Jun 2023 15:42:49 +0800
-From:   Shuai Xue <xueshuai@linux.alibaba.com>
-To:     rafael@kernel.org, wangkefeng.wang@huawei.com,
-        tanxiaofei@huawei.com, mawupeng1@huawei.com, tony.luck@intel.com,
-        naoya.horiguchi@nec.com
-Cc:     linux-acpi@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, xueshuai@linux.alibaba.com,
-        justin.he@arm.com, akpm@linux-foundation.org, ardb@kernel.org,
-        ashish.kalra@amd.com, baolin.wang@linux.alibaba.com, bp@alien8.de,
-        cuibixuan@linux.alibaba.com, dave.hansen@linux.intel.com,
-        james.morse@arm.com, jarkko@kernel.org, lenb@kernel.org,
-        linmiaohe@huawei.com, lvying6@huawei.com, xiexiuqi@huawei.com,
-        zhuo.song@linux.alibaba.com
-Subject: [RESEND PATCH v7 2/2] ACPI: APEI: handle synchronous exceptions in task work
-Date:   Tue,  6 Jun 2023 15:42:38 +0800
-Message-Id: <20230606074238.97166-3-xueshuai@linux.alibaba.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230606074238.97166-1-xueshuai@linux.alibaba.com>
-References: <20230606074238.97166-1-xueshuai@linux.alibaba.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 6 Jun 2023 03:46:09 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D37922690;
+        Tue,  6 Jun 2023 00:43:38 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 1A32E5C01E9;
+        Tue,  6 Jun 2023 03:43:36 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 06 Jun 2023 03:43:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1686037416; x=1686123816; bh=Xb
+        C9/ZJsyIVmFJp4mGLTr8jvjCdL2TCK3DQawloAt4U=; b=l/AeFc8cnima6oFCpY
+        aTyO/Qw//gP2sp7798e6WT+nQqwl2hVaQoxpqeJK8dfpjGaRJQDEHEgCAHulsl3Z
+        zurlYPSqa8nO67JRO3bDttgaWpBTan9RLR1M/ezlrzrgvsjqc4SoIn1heCiMFZWL
+        GcSnnMd44J02UMx0H+ImIrk1r3BDeB6eDsY7zmjVFL74n6M/rF2X3F4KYgrsqsOR
+        kyF6ZbO3yG84T8tIdCEPfJ74R/V5RBQm0fQE9vm8EHvEdCyFz7hgs1p5F/UHPpZh
+        AS9ZObaecw7mcs0aPij31+q+0FbpQ+UroSaLpKmSmcn6dcOsDJ+PYdPtHsK4gjdY
+        WUhQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1686037416; x=1686123816; bh=XbC9/ZJsyIVmF
+        Jp4mGLTr8jvjCdL2TCK3DQawloAt4U=; b=aMSMJng5E85P/3QnS0KURaeEEFCFu
+        Ohi1LRcfthTAXYU2kKgiF1uUkLUH1q7+vLzIgcqnDjt4ddJ4LzdZqabxCWUD/AiT
+        HELNUYrMZuox3rP779Al1ynm0VRPnm2TZ4D2lm38qWszH9aLtsKlYz1GbmpmemMs
+        +rOX2p9QQsJAgLD2Di3/zUvm0S29LhuMOhhhIRzS8BCn6n1bC6DdqONUZQYHPMgS
+        gzKDUGNHmvsXExgY7LF7q6QCTAEU9i+TaibGtDeqp1LAj4BT6paTjKlMZwgakjm8
+        FZmPjqH+wRRJc/T4bf8EGXqNMIZmzADQFHaqiP4nycv3Yjn+gQ7FtI+5A==
+X-ME-Sender: <xms:p-N-ZJugtFdtRiuKtI3ValUKAbguK-s-IgrHMGT1R3CfCM4dH5n9lA>
+    <xme:p-N-ZCfADWH3BlB_8LhKXTImzG_5xQ8NpYk2pa4pXjHmPQUUKI_3ynTN0_vlEX2vL
+    1xaglzg_QvLSac5ya8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedttddguddvudcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:p-N-ZMwy0prrz-AL-tx_9FEGK6xtqM9qzxodLRFIupOrCzsTMReKPg>
+    <xmx:p-N-ZANVFsa_gGvZJ5OifJqu44cF0xAnlMCC5d670gJX1_Y7hZiEnQ>
+    <xmx:p-N-ZJ-o6pz_tOd6IgKIhpIWBC_-8xfimrdCjaoacGl3XCNxGlAeBA>
+    <xmx:qON-ZEYDrkZDzz1HzvOh013I0H8XfARvcDa5-kybIAuzzHzK50vRfQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id D196BB60086; Tue,  6 Jun 2023 03:43:35 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-447-ge2460e13b3-fm-20230525.001-ge2460e13
+Mime-Version: 1.0
+Message-Id: <d1c83340-af4c-4780-a101-b9d22b47379c@app.fastmail.com>
+In-Reply-To: <ca162c288c3eeda309c33049711b5272eb80f8e2.1685780412.git.falcon@tinylab.org>
+References: <cover.1685780412.git.falcon@tinylab.org>
+ <ca162c288c3eeda309c33049711b5272eb80f8e2.1685780412.git.falcon@tinylab.org>
+Date:   Tue, 06 Jun 2023 09:43:15 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Zhangjin Wu" <falcon@tinylab.org>, "Willy Tarreau" <w@1wt.eu>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+Subject: Re: [PATCH v3 3/3] selftests/nolibc: riscv: customize makefile for rv32
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hardware errors could be signaled by synchronous interrupt, e.g.  when an
-error is detected by a background scrubber, or signaled by synchronous
-exception, e.g. when an uncorrected error is consumed. Both synchronous and
-asynchronous error are queued and handled by a dedicated kthread in
-workqueue.
+On Sat, Jun 3, 2023, at 11:05, Zhangjin Wu wrote:
+> Both riscv64 and riscv32 have:
+>
+> * the same ARCH value, it is riscv
+> * the same arch/riscv source code tree
+>
+> The only differences are:
+>
+> * riscv64 uses defconfig, riscv32 uses rv32_defconfig
+> * riscv64 uses qemu-system-riscv64, riscv32 uses qemu-system-riscv32
+> * riscv32 has different compiler options (-march= and -mabi=)
+>
+> So, riscv32 can share most of the settings with riscv64, there is no
+> need to add it as a whole new architecture but just need a flag to
+> record and reflect the difference.
+>
+> The 32bit mips and loongarch may be able to use the same method, so,
+> let's use a meaningful flag: CONFIG_32BIT. If required in the future,
+> this flag can also be automatically loaded from
+> include/config/auto.conf.
 
-commit 7f17b4a121d0 ("ACPI: APEI: Kick the memory_failure() queue for
-synchronous errors") keep track of whether memory_failure() work was
-queued, and make task_work pending to flush out the workqueue so that the
-work for synchronous error is processed before returning to user-space.
-The trick ensures that the corrupted page is unmapped and poisoned. And
-after returning to user-space, the task starts at current instruction which
-triggering a page fault in which kernel will send SIGBUS to current process
-due to VM_FAULT_HWPOISON.
+If we use a CONFIG_* symbol, I think it should be the other way
+round, for consistency with the kernel, which uses CONFIG_64BIT
+on all architectures, but only uses CONFIG_32BIT on mips, loongarch
+powerpc and riscv.
 
-However, the memory failure recovery for hwpoison-aware mechanisms does not
-work as expected. For example, hwpoison-aware user-space processes like
-QEMU register their customized SIGBUS handler and enable early kill mode by
-seting PF_MCE_EARLY at initialization. Then the kernel will directy notify
-the process by sending a SIGBUS signal in memory failure with wrong
-si_code: the actual user-space process accessing the corrupt memory
-location, but its memory failure work is handled in a kthread context, so
-it will send SIGBUS with BUS_MCEERR_AO si_code to the actual user-space
-process instead of BUS_MCEERR_AR in kill_proc().
 
-To this end, separate synchronous and asynchronous error handling into
-different paths like X86 platform does:
+>  # kernel image names by architecture
+>  IMAGE_i386       = arch/x86/boot/bzImage
+>  IMAGE_x86_64     = arch/x86/boot/bzImage
+> @@ -34,7 +40,7 @@ DEFCONFIG_x86        = defconfig
+>  DEFCONFIG_arm64      = defconfig
+>  DEFCONFIG_arm        = multi_v7_defconfig
+>  DEFCONFIG_mips       = malta_defconfig
+> -DEFCONFIG_riscv      = defconfig
+> +DEFCONFIG_riscv      = $(if $(CONFIG_32BIT),rv32_defconfig,defconfig)
+>  DEFCONFIG_s390       = defconfig
+>  DEFCONFIG_loongarch  = defconfig
+>  DEFCONFIG            = $(DEFCONFIG_$(ARCH))
 
-- valid synchronous errors: queue a task_work to synchronously send SIGBUS
-  before ret_to_user.
-- valid asynchronous errors: queue a work into workqueue to asynchronously
-  handle memory failure.
-- abnormal branches such as invalid PA, unexpected severity, no memory
-  failure config support, invalid GUID section, OOM, etc.
+This feels slightly odd, as we otherwise have a fixed defconfig
+per target, so doing
 
-Then for valid synchronous errors, the current context in memory failure is
-exactly belongs to the task consuming poison data and it will send SIBBUS
-with proper si_code.
+DEFCONFIG_riscv      = defconfig
+DEFCONFIG_riscv64    = defconfig
+DEFCONFIG_riscv32    = rv32_defconfig
 
-Fixes: 7f17b4a121d0 ("ACPI: APEI: Kick the memory_failure() queue for synchronous errors")
-Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
-Tested-by: Ma Wupeng <mawupeng1@huawei.com>
-Reviewed-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-Reviewed-by: Xiaofei Tan <tanxiaofei@huawei.com>
-Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
----
- arch/x86/kernel/cpu/mce/core.c |  9 +---
- drivers/acpi/apei/ghes.c       | 84 +++++++++++++++++++++-------------
- include/acpi/ghes.h            |  3 --
- mm/memory-failure.c            | 17 ++-----
- 4 files changed, 56 insertions(+), 57 deletions(-)
+would seem more consistent with how x86 is handled, and would
+probably be more easily extensible if we want to also make
+this work with other sub-targets like mipseb, armv5 or ppc32
+in the future.
 
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 2eec60f50057..2ebaaa494ac4 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -1311,17 +1311,10 @@ static void kill_me_maybe(struct callback_head *cb)
- 		return;
- 	}
- 
--	/*
--	 * -EHWPOISON from memory_failure() means that it already sent SIGBUS
--	 * to the current process with the proper error info,
--	 * -EOPNOTSUPP means hwpoison_filter() filtered the error event,
--	 *
--	 * In both cases, no further processing is required.
--	 */
- 	if (ret == -EHWPOISON || ret == -EOPNOTSUPP)
- 		return;
- 
--	pr_err("Memory error not recovered");
-+	pr_err("Sending SIGBUS to current task due to memory error not recovered");
- 	kill_me_now(cb);
- }
- 
-diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
-index c479b85899f5..b41d4e462b36 100644
---- a/drivers/acpi/apei/ghes.c
-+++ b/drivers/acpi/apei/ghes.c
-@@ -452,28 +452,41 @@ static void ghes_clear_estatus(struct ghes *ghes,
- }
- 
- /*
-- * Called as task_work before returning to user-space.
-- * Ensure any queued work has been done before we return to the context that
-- * triggered the notification.
-+ * struct sync_task_work - for synchronous RAS event
-+ *
-+ * @twork:                callback_head for task work
-+ * @pfn:                  page frame number of corrupted page
-+ * @flags:                fine tune action taken
-+ *
-+ * Structure to pass task work to be handled before
-+ * ret_to_user via task_work_add().
-  */
--static void ghes_kick_task_work(struct callback_head *head)
-+struct sync_task_work {
-+	struct callback_head twork;
-+	u64 pfn;
-+	int flags;
-+};
-+
-+static void memory_failure_cb(struct callback_head *twork)
- {
--	struct acpi_hest_generic_status *estatus;
--	struct ghes_estatus_node *estatus_node;
--	u32 node_len;
-+	int ret;
-+	struct sync_task_work *twcb =
-+		container_of(twork, struct sync_task_work, twork);
- 
--	estatus_node = container_of(head, struct ghes_estatus_node, task_work);
--	if (IS_ENABLED(CONFIG_ACPI_APEI_MEMORY_FAILURE))
--		memory_failure_queue_kick(estatus_node->task_work_cpu);
-+	ret = memory_failure(twcb->pfn, twcb->flags);
-+	kfree(twcb);
- 
--	estatus = GHES_ESTATUS_FROM_NODE(estatus_node);
--	node_len = GHES_ESTATUS_NODE_LEN(cper_estatus_len(estatus));
--	gen_pool_free(ghes_estatus_pool, (unsigned long)estatus_node, node_len);
-+	if (!ret || ret == -EHWPOISON || ret == -EOPNOTSUPP)
-+		return;
-+
-+	pr_err("Sending SIGBUS to current task due to memory error not recovered");
-+	force_sig(SIGBUS);
- }
- 
- static bool ghes_do_memory_failure(u64 physical_addr, int flags)
- {
- 	unsigned long pfn;
-+	struct sync_task_work *twcb;
- 
- 	if (!IS_ENABLED(CONFIG_ACPI_APEI_MEMORY_FAILURE))
- 		return false;
-@@ -486,6 +499,18 @@ static bool ghes_do_memory_failure(u64 physical_addr, int flags)
- 		return false;
- 	}
- 
-+	if (flags == MF_ACTION_REQUIRED && current->mm) {
-+		twcb = kmalloc(sizeof(*twcb), GFP_ATOMIC);
-+		if (!twcb)
-+			return false;
-+
-+		twcb->pfn = pfn;
-+		twcb->flags = flags;
-+		init_task_work(&twcb->twork, memory_failure_cb);
-+		task_work_add(current, &twcb->twork, TWA_RESUME);
-+		return true;
-+	}
-+
- 	memory_failure_queue(pfn, flags);
- 	return true;
- }
-@@ -654,7 +679,7 @@ static void ghes_defer_non_standard_event(struct acpi_hest_generic_data *gdata,
- 	schedule_work(&entry->work);
- }
- 
--static bool ghes_do_proc(struct ghes *ghes,
-+static void ghes_do_proc(struct ghes *ghes,
- 			 const struct acpi_hest_generic_status *estatus)
- {
- 	int sev, sec_sev;
-@@ -698,7 +723,14 @@ static bool ghes_do_proc(struct ghes *ghes,
- 		}
- 	}
- 
--	return queued;
-+	/*
-+	 * If no memory failure work is queued for abnormal synchronous
-+	 * errors, do a force kill.
-+	 */
-+	if (sync && !queued) {
-+		pr_err("Sending SIGBUS to current task due to memory error not recovered");
-+		force_sig(SIGBUS);
-+	}
- }
- 
- static void __ghes_print_estatus(const char *pfx,
-@@ -1000,9 +1032,7 @@ static void ghes_proc_in_irq(struct irq_work *irq_work)
- 	struct ghes_estatus_node *estatus_node;
- 	struct acpi_hest_generic *generic;
- 	struct acpi_hest_generic_status *estatus;
--	bool task_work_pending;
- 	u32 len, node_len;
--	int ret;
- 
- 	llnode = llist_del_all(&ghes_estatus_llist);
- 	/*
-@@ -1017,25 +1047,16 @@ static void ghes_proc_in_irq(struct irq_work *irq_work)
- 		estatus = GHES_ESTATUS_FROM_NODE(estatus_node);
- 		len = cper_estatus_len(estatus);
- 		node_len = GHES_ESTATUS_NODE_LEN(len);
--		task_work_pending = ghes_do_proc(estatus_node->ghes, estatus);
-+
-+		ghes_do_proc(estatus_node->ghes, estatus);
-+
- 		if (!ghes_estatus_cached(estatus)) {
- 			generic = estatus_node->generic;
- 			if (ghes_print_estatus(NULL, generic, estatus))
- 				ghes_estatus_cache_add(generic, estatus);
- 		}
--
--		if (task_work_pending && current->mm) {
--			estatus_node->task_work.func = ghes_kick_task_work;
--			estatus_node->task_work_cpu = smp_processor_id();
--			ret = task_work_add(current, &estatus_node->task_work,
--					    TWA_RESUME);
--			if (ret)
--				estatus_node->task_work.func = NULL;
--		}
--
--		if (!estatus_node->task_work.func)
--			gen_pool_free(ghes_estatus_pool,
--				      (unsigned long)estatus_node, node_len);
-+		gen_pool_free(ghes_estatus_pool, (unsigned long)estatus_node,
-+			      node_len);
- 
- 		llnode = next;
- 	}
-@@ -1096,7 +1117,6 @@ static int ghes_in_nmi_queue_one_entry(struct ghes *ghes,
- 
- 	estatus_node->ghes = ghes;
- 	estatus_node->generic = ghes->generic;
--	estatus_node->task_work.func = NULL;
- 	estatus = GHES_ESTATUS_FROM_NODE(estatus_node);
- 
- 	if (__ghes_read_estatus(estatus, buf_paddr, fixmap_idx, len)) {
-diff --git a/include/acpi/ghes.h b/include/acpi/ghes.h
-index 3c8bba9f1114..e5e0c308d27f 100644
---- a/include/acpi/ghes.h
-+++ b/include/acpi/ghes.h
-@@ -35,9 +35,6 @@ struct ghes_estatus_node {
- 	struct llist_node llnode;
- 	struct acpi_hest_generic *generic;
- 	struct ghes *ghes;
--
--	int task_work_cpu;
--	struct callback_head task_work;
- };
- 
- struct ghes_estatus_cache {
-diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index 5b663eca1f29..50e9583051ed 100644
---- a/mm/memory-failure.c
-+++ b/mm/memory-failure.c
-@@ -2134,7 +2134,9 @@ static DEFINE_MUTEX(mf_mutex);
-  *
-  * Return: 0 for successfully handled the memory error,
-  *         -EOPNOTSUPP for hwpoison_filter() filtered the error event,
-- *         < 0(except -EOPNOTSUPP) on failure.
-+ *         -EHWPOISON for already sent SIGBUS to the current process with
-+ *         the proper error info,
-+ *         other negative error code on failure.
-  */
- int memory_failure(unsigned long pfn, int flags)
- {
-@@ -2416,19 +2418,6 @@ static void memory_failure_work_func(struct work_struct *work)
- 	}
- }
- 
--/*
-- * Process memory_failure work queued on the specified CPU.
-- * Used to avoid return-to-userspace racing with the memory_failure workqueue.
-- */
--void memory_failure_queue_kick(int cpu)
--{
--	struct memory_failure_cpu *mf_cpu;
--
--	mf_cpu = &per_cpu(memory_failure_cpu, cpu);
--	cancel_work_sync(&mf_cpu->work);
--	memory_failure_work_func(&mf_cpu->work);
--}
--
- static int __init memory_failure_init(void)
- {
- 	struct memory_failure_cpu *mf_cpu;
--- 
-2.20.1.12.g72788fdb
-
+     Arnd
