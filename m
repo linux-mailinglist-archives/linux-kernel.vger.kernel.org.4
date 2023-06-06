@@ -2,166 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39D8A72436E
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 14:58:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A799572420B
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 14:27:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237947AbjFFM6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 08:58:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57202 "EHLO
+        id S236341AbjFFM12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 08:27:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237937AbjFFM6a (ORCPT
+        with ESMTP id S229835AbjFFM10 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 08:58:30 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53A5D19A7;
-        Tue,  6 Jun 2023 05:58:12 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 878A65FD3B;
-        Tue,  6 Jun 2023 15:58:09 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1686056289;
-        bh=MsK3KfXvwDDXjdR1K4Z8iNkLw2j81KfAr/Pv963g5nQ=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=XNGmWbqE+gcreM/m4zW6J26BakoZSNJ1Y7UnfbIw9z7G7YKoi3DATkZhYe9+KvPhu
-         2P49UFRlrhrMN3fYX07Kg/T5p0K3mKhKsP0lqRGUqyojcU5dZ09UD1PAjgVc0NXULC
-         6v3OhljNuIVARIzWLw3iEWTOV/heqky8m96JjJ7qhcIHDGNqfpOU7z+iX5dONzI1Qj
-         zmI7xXpn0q65u1eqAYev0GayO4N3HSDbh1B/yW1vuDMF0aF/RM5JKmNQ6ArbAU/Cu8
-         zejU5845t2Wd6JOK7opluSy32o+vwyy+cVeKN/XUwki515icEi47bCOAjdLHrRmGGz
-         Jy2kLeaMttHuQ==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Tue,  6 Jun 2023 15:58:07 +0300 (MSK)
-Message-ID: <02c7e2b4-9087-fc73-bd57-0d4c12bbe203@sberdevices.ru>
-Date:   Tue, 6 Jun 2023 15:53:51 +0300
+        Tue, 6 Jun 2023 08:27:26 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ABA210C3
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 05:27:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686054445; x=1717590445;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=b4k9x25/7qcaY8sBpX9kyB98GRPI8/m37GY4183rlNc=;
+  b=SCmyGn10V7dabYRBqr1C/eoHZ8KzUfqbOB23qFOgJ7HjAIv8xqE9cxbX
+   aQWlZTeUC29vylvaYAQE6Fpqk4jaA8stWt27y3seWt+lYAK5Sj9TcfhwE
+   u22klB+I1GVMH86myhdtNBtuPLkf3ztmgDxtdgoOvbt7BYLFJOAKyi8es
+   Ey6DIR21vExz9koyCuLfwP8IX2RzdNE5qA/XxFV1bWBB4vZls34c1DKlh
+   fzYDg1ZFlxEEqNEdw6rwBnccy4Q8yMBV96U9QoaGfF3z5bWTj15NWe4GQ
+   vzMpNL8tccwjozYVtA4/8osp6Op+bAJl5PGOuGwGpYVLBJD96NVkTg8DU
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="422479137"
+X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
+   d="scan'208";a="422479137"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 05:27:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="1039156958"
+X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
+   d="scan'208";a="1039156958"
+Received: from linux-pnp-server-20.sh.intel.com ([10.239.146.185])
+  by fmsmga005.fm.intel.com with ESMTP; 06 Jun 2023 05:27:22 -0700
+From:   Yu Ma <yu.ma@intel.com>
+To:     akpm@linux-foundation.org, tim.c.chen@intel.com
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        dave.hansen@intel.com, dan.j.williams@intel.com,
+        shakeelb@google.com, Liam.Howlett@Oracle.com, pan.deng@intel.com,
+        tianyou.li@intel.com, lipeng.zhu@intel.com,
+        tim.c.chen@linux.intel.com, yu.ma@intel.com
+Subject: [PATCH] percpu-internal/pcpu_chunk: Re-layout pcpu_chunk structure to reduce false sharing
+Date:   Tue,  6 Jun 2023 08:54:04 -0400
+Message-Id: <20230606125404.95256-1-yu.ma@intel.com>
+X-Mailer: git-send-email 2.39.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v1] meson saradc: fix clock divider mask length
-Content-Language: en-US
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-CC:     "jic23@kernel.org" <jic23@kernel.org>,
-        Dmitry Rokosov <DDRokosov@sberdevices.ru>,
-        "lars@metafoo.de" <lars@metafoo.de>,
-        "neil.armstrong@linaro.org" <neil.armstrong@linaro.org>,
-        "khilman@baylibre.com" <khilman@baylibre.com>,
-        "jbrunet@baylibre.com" <jbrunet@baylibre.com>,
-        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
-        "nuno.sa@analog.com" <nuno.sa@analog.com>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-amlogic@lists.infradead.org" 
-        <linux-amlogic@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>, Vyacheslav <adeep@lexina.in>
-References: <20230515210545.2100161-1-gnstark@sberdevices.ru>
- <CAFBinCCc+t7Ks6fqz38cVrufPRFdxFgC9Qp+JhcM1KfD6pupTg@mail.gmail.com>
- <a52335ea-6545-8ca6-d318-38b7ffc64368@lexina.in>
- <CAFBinCDmkGnD5o_rV6K73De2XmHDxRYveDwNAy3iA+Kwr5sdqg@mail.gmail.com>
- <6910550a-b025-0d97-0b39-bc89b235541e@sberdevices.ru>
- <CAFBinCCk6OziOxt2AY1A25C=9_pibhHsDK0wJNZ_AyHMd=z6SQ@mail.gmail.com>
- <dcb05f27-4c6d-0544-ff0d-288a6848ccaf@sberdevices.ru>
- <CAFBinCCnAVveiYEOSq=KkBq0kRJti7eWgfRxqiTkQWe9i8mTzA@mail.gmail.com>
-From:   George Stark <gnstark@sberdevices.ru>
-In-Reply-To: <CAFBinCCnAVveiYEOSq=KkBq0kRJti7eWgfRxqiTkQWe9i8mTzA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/06/06 11:10:00 #21443593
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+When running UnixBench/Execl throughput case, false sharing is observed
+due to frequent read on base_addr and write on free_bytes, chunk_md.
 
-On 6/5/23 23:18, Martin Blumenstingl wrote:
-> Hi George,
->
-> On Thu, Jun 1, 2023 at 10:56 PM George Stark <gnstark@sberdevices.ru> wrote:
-> [...]
->> Here the test I promised:
->> Question: what's the real size of clock divder field in SAR_ADC_REG3 register in saradc in meson8 socs?
->> The current kernel code says 5 bits
->> The datasheet says 6 bit
->>
->> The parent clock of adc clock is 24Mhz
->> I can check it here by:
->>
->> # cat /sys/kernel/debug/clk/clk_summary
->>    xtal                                 4        4        1    24000000          0     0  50000         Y
->>       c1108680.adc#adc_div              1        1        0      1142858         0     0  50000         Y
->>          c1108680.adc#adc_en            1        1        0      1142858         0     0  50000         Y
->>
->> for divider width 5bit min adc clock is 24Mhz / 32 =  750KHZ
->> for divider width 6bit min adc clock is 24Mhz / 64 =  375KHz
->>
->> I suppose that the lower adc clock rate the higher measurement time
->> so I need to get measurement time at both clk freqs and the times differ so
->> 6bit divider is really applied
->>
->> I performed test at Odroid-C1, kernel 6.2-rc8
->> Two kernel patches must be applied:
->>
->> the topic starter patch and the helper patch at the end of the letter
->> In the helper patch I turn on CLOCK_ALLOW_WRITE_DEBUGFS to change clock rate from she shell
->> and use ktime_get_raw_ts64 to measure measurement time
->>
->> So the the test itself:
->> cat /sys/devices/platform/soc/c1100000.cbus/c1108680.adc/iio:device0/in_voltage3_raw
->> [ 1781.226309] ==== freq: 1142858 time 42408000
->>
->> # echo 750000 > /sys/kernel/debug/clk/c1108680.adc#adc_en/clk_rate
->> # cat /sys/devices/platform/soc/c1100000.cbus/c1108680.adc/iio:device0/in_voltage3_raw
->> [ 1790.728656] ==== freq: 750000 time 49173000
->>
->> # echo 375000 > /sys/kernel/debug/clk/c1108680.adc#adc_en/clk_rate
->> # cat /sys/devices/platform/soc/c1100000.cbus/c1108680.adc/iio:device0/in_voltage3_raw
->> [ 1816.955477] ==== freq: 375000 time 68245000
->>
->> # cat /sys/kernel/debug/clk/clk_summary
->>    xtal                                 4        4        1    24000000          0     0  50000         Y
->>       c1108680.adc#adc_div              1        1        0      375000          0     0  50000         Y
->>          c1108680.adc#adc_en            1        1        0      375000          0     0  50000         Y
-> These results looks excellent - thanks for sharing the test results!
-> Could you please check one last thing:
-> $ grep -i adc /sys/kernel/debug/meson-clk-msr/measure_summary
-> It should confirm that the clock rate is 375kHz (or close to it, SoC
-> internal clock measurement is not 100% precise)
-Hello Martin
+UnixBench/Execl represents a class of workload where bash scripts
+are spawned frequently to do some short jobs. It will do system call on
+execl frequently, and execl will call mm_init to initialize mm_struct
+of the process. mm_init will call __percpu_counter_init for
+percpu_counters initialization. Then pcpu_alloc is called to read
+the base_addr of pcpu_chunk for memory allocation. Inside pcpu_alloc,
+it will call pcpu_alloc_area  to allocate memory from a specified chunk.
+This function will update "free_bytes" and "chunk_md" to record the
+rest free bytes and other meta data for this chunk. Correspondingly,
+pcpu_free_area will also update these 2 members when free memory.
+Call trace from perf is as below:
++   57.15%  0.01%  execl   [kernel.kallsyms] [k] __percpu_counter_init
++   57.13%  0.91%  execl   [kernel.kallsyms] [k] pcpu_alloc
+-   55.27% 54.51%  execl   [kernel.kallsyms] [k] osq_lock
+   - 53.54% 0x654278696e552f34
+        main
+        __execve
+        entry_SYSCALL_64_after_hwframe
+        do_syscall_64
+        __x64_sys_execve
+        do_execveat_common.isra.47
+        alloc_bprm
+        mm_init
+        __percpu_counter_init
+        pcpu_alloc
+      - __mutex_lock.isra.17
 
-Looks like it works as expected:
-# grep -i adc /sys/kernel/debug/meson-clk-msr/measure_summary
-   sar_adc                 1140625    +/-3125Hz
-# echo 375000 > /sys/kernel/debug/clk/c1108680.adc#adc_en/clk_rate
-# grep -i adc /sys/kernel/debug/meson-clk-msr/measure_summary
-  sar_adc                  371875    +/-3125Hz
+In current pcpu_chunk layout, ‘base_addr’ is in the same cache line
+with ‘free_bytes’ and ‘chunk_md’, and ‘base_addr’ is at the 
+last 8 bytes. This patch moves ‘bound_map’ up to ‘base_addr’,
+to let ‘base_addr’ locate in a new cacheline.
 
-So I'm re-sending the patch with fixed commit message
+With this change, on Intel Sapphire Rapids 112C/224T platform,
+based on v6.4-rc4, the 160 parallel score improves by 24%.
 
+Reviewed-by: Tim Chen <tim.c.chen@linux.intel.com>
+Signed-off-by: Yu Ma <yu.ma@intel.com>
+---
+ mm/percpu-internal.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/mm/percpu-internal.h b/mm/percpu-internal.h
+index f9847c131998..981eeb2ad0a9 100644
+--- a/mm/percpu-internal.h
++++ b/mm/percpu-internal.h
+@@ -41,10 +41,10 @@ struct pcpu_chunk {
+ 	struct list_head	list;		/* linked to pcpu_slot lists */
+ 	int			free_bytes;	/* free bytes in the chunk */
+ 	struct pcpu_block_md	chunk_md;
++	unsigned long		*bound_map;	/* boundary map */
+ 	void			*base_addr;	/* base address of this chunk */
+ 
+ 	unsigned long		*alloc_map;	/* allocation map */
+-	unsigned long		*bound_map;	/* boundary map */
+ 	struct pcpu_block_md	*md_blocks;	/* metadata blocks */
+ 
+ 	void			*data;		/* chunk data */
 -- 
-Best regards
-George
-
->
-> Once we have that confirmation: can you please re-send the patch with
-> the description updated so it's clear which SoC generations are
-> affected and by stating that the fix was tested on a Meson8b Odroid-C1
-> board.
->
->
-> Thank you and best regards,
-> Martin
+2.39.3
 
