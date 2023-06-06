@@ -2,257 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84EFA7236C7
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 07:26:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF7FA7236D6
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 07:31:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231648AbjFFF0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 01:26:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45556 "EHLO
+        id S232083AbjFFFbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 01:31:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbjFFF0I (ORCPT
+        with ESMTP id S230121AbjFFFbQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 01:26:08 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6883F18E
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 22:26:07 -0700 (PDT)
+        Tue, 6 Jun 2023 01:31:16 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2373D1B1;
+        Mon,  5 Jun 2023 22:31:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686029167; x=1717565167;
-  h=date:from:to:cc:subject:message-id;
-  bh=qAA3GTj4TAqY8iA8i0nc5kh+c+daZDYkRO2Uj57p8d8=;
-  b=kAdHv9xmp99Ndpi3mJfJ9u32QO6NZOLZAAPzwCEvlmLNNQFQWQ1y9MjF
-   MgqdxOIo518Kwwh+e+87Xdges7BL8R+Etw6AOwFk5N4SZSEZ1tOQkcATf
-   n2NX5B8ZWFnd5diQgx4E80cHWYTHaskIsIz//J+BDIFNILAZNXRpzvGqI
-   YIvDaTHGE7RPNaMLlxRqdpoAgq36XFDlYDseffRfgjMXaRFnzrcRZckaN
-   YQA3ZnrT8FxtGCG7CIi6y/ZadpabvqZ1sTlnbPR7A44jyyGJrbfmA16Hh
-   UdNzw1ePuBvMlVKOQpc4S7Qxb6Of2GaXTSacXkpfp1o82TkgByE+9wW1W
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="355418161"
+  t=1686029475; x=1717565475;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=6XLjfDvI/7YAdozf3uM1i/r0+n9p2mhEWmLgE3TeBTE=;
+  b=Y1RFvSLW7KU5W4uSutDP/m3JIbucumr4fdzRCnVmUOIxkrAh8tufKG5U
+   xsTuD7wzeKlZPmv2CJyWAuZxw8y9c+a5aO9b0Bp3d3yaQrevw/X/ublf4
+   R8AD/+EwfC7aSrgC2QbRZGieq3KY1yZMqA+Fp+Xp1p3MYfN+dNZxvbqbT
+   JIXZWA2lGzbKQoWE1R40L8Yo3tLNQ3im+fP0aSRCo50MOIFYhWBDCW9vJ
+   +eEY+/cKCyjzjDHuObzNIGoUoU1SB9eJDgkDU/Iotn7RHZfTigEGUijo+
+   Bh0Mk8VflrTxquF4/6pl+VaFOrTg3G/5SCLFElSoVDy89o029Ary4wWpz
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="420115709"
 X-IronPort-AV: E=Sophos;i="6.00,219,1681196400"; 
-   d="scan'208";a="355418161"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 22:26:01 -0700
+   d="scan'208";a="420115709"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 22:31:14 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="703029400"
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="798687338"
 X-IronPort-AV: E=Sophos;i="6.00,219,1681196400"; 
-   d="scan'208";a="703029400"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 05 Jun 2023 22:25:58 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q6PCf-0004sw-27;
-        Tue, 06 Jun 2023 05:25:57 +0000
-Date:   Tue, 06 Jun 2023 13:25:23 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- a82b4db121875930b23c97a2f2a7c623f0562bef
-Message-ID: <20230606052523.fP3yY%lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+   d="scan'208";a="798687338"
+Received: from danwu1-mobl.ccr.corp.intel.com (HELO [10.238.6.21]) ([10.238.6.21])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 22:31:11 -0700
+Message-ID: <2710f9c8-cddc-1441-f2b6-7d0616880f1d@intel.com>
+Date:   Tue, 6 Jun 2023 13:31:04 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v14 031/113] KVM: x86/mmu: Replace hardcoded value 0 for
+ the initial value for SPTE
+Content-Language: en-US
+To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
+        erdemaktas@google.com, Sean Christopherson <seanjc@google.com>,
+        Sagi Shahar <sagis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Zhi Wang <zhi.wang.linux@gmail.com>, chen.bo@intel.com,
+        Sean Christopherson <sean.j.christopherson@intel.com>
+References: <cover.1685333727.git.isaku.yamahata@intel.com>
+ <8b4f21e2fada944d041ffee0f27d527e0e447cbb.1685333727.git.isaku.yamahata@intel.com>
+From:   "Wu, Dan1" <dan1.wu@intel.com>
+In-Reply-To: <8b4f21e2fada944d041ffee0f27d527e0e447cbb.1685333727.git.isaku.yamahata@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: a82b4db121875930b23c97a2f2a7c623f0562bef  Merge ras/core into tip/master
 
-elapsed time: 883m
+On 5/29/2023 12:19 PM, isaku.yamahata@intel.com wrote:
+> From: Isaku Yamahata <isaku.yamahata@intel.com>
+>
+> The TDX support will need the "suppress #VE" bit (bit 63) set as the
+> initial value for SPTE.  To reduce code change size, introduce a new macro
+> SHADOW_NONPRESENT_VALUE for the initial value for the shadow page table
+> entry (SPTE) and replace hard-coded value 0 for it.  Initialize shadow page
+> tables with their value.
+>
+> The plan is to unconditionally set the "suppress #VE" bit for both AMD and
+> Intel as: 1) AMD hardware uses the bit 63 as NX for present SPTE and
+> ignored for non-present SPTE; 2) for conventional VMX guests, KVM never
+> enables the "EPT-violation #VE" in VMCS control and "suppress #VE" bit is
+> ignored by hardware.
+>
+> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> ---
+>   arch/x86/kvm/mmu/mmu.c         | 20 +++++++++++++++-----
+>   arch/x86/kvm/mmu/paging_tmpl.h |  2 +-
+>   arch/x86/kvm/mmu/spte.h        |  2 ++
+>   arch/x86/kvm/mmu/tdp_mmu.c     | 14 +++++++-------
+>   4 files changed, 25 insertions(+), 13 deletions(-)
+>
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index dc2b9a2f717c..1b6fd4434e96 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -576,9 +576,9 @@ static u64 mmu_spte_clear_track_bits(struct kvm *kvm, u64 *sptep)
+>   
+>   	if (!is_shadow_present_pte(old_spte) ||
+>   	    !spte_has_volatile_bits(old_spte))
+> -		__update_clear_spte_fast(sptep, 0ull);
+> +		__update_clear_spte_fast(sptep, SHADOW_NONPRESENT_VALUE);
+>   	else
+> -		old_spte = __update_clear_spte_slow(sptep, 0ull);
+> +		old_spte = __update_clear_spte_slow(sptep, SHADOW_NONPRESENT_VALUE);
+>   
+>   	if (!is_shadow_present_pte(old_spte))
+>   		return old_spte;
+> @@ -612,7 +612,7 @@ static u64 mmu_spte_clear_track_bits(struct kvm *kvm, u64 *sptep)
+>    */
+>   static void mmu_spte_clear_no_track(u64 *sptep)
+>   {
+> -	__update_clear_spte_fast(sptep, 0ull);
+> +	__update_clear_spte_fast(sptep, SHADOW_NONPRESENT_VALUE);
+>   }
+>   
+>   static u64 mmu_spte_get_lockless(u64 *sptep)
+> @@ -1969,7 +1969,8 @@ static bool kvm_sync_page_check(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp)
+>   
+>   static int kvm_sync_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp, int i)
+>   {
+> -	if (!sp->spt[i])
+> +	/* sp->spt[i] has initial value of shadow page table allocation */
+> +	if (sp->spt[i] != SHADOW_NONPRESENT_VALUE)
 
-configs tested: 180
-configs skipped: 17
+this condition should be "sp->spt[i] == SHADOW_NONPRESENT_VALUE"?
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+I found this cause the bug of  "guest launch failure with EPT disable".
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha        buildonly-randconfig-r001-20230605   gcc  
-alpha        buildonly-randconfig-r004-20230605   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r004-20230605   gcc  
-alpha                randconfig-r016-20230605   gcc  
-arc                              allyesconfig   gcc  
-arc          buildonly-randconfig-r002-20230605   gcc  
-arc          buildonly-randconfig-r006-20230605   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r014-20230606   gcc  
-arc                  randconfig-r015-20230605   gcc  
-arc                  randconfig-r026-20230605   gcc  
-arc                  randconfig-r043-20230605   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm          buildonly-randconfig-r006-20230605   clang
-arm                                 defconfig   gcc  
-arm                  randconfig-r032-20230605   gcc  
-arm                  randconfig-r036-20230605   gcc  
-arm                  randconfig-r046-20230605   clang
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r006-20230605   clang
-arm64                randconfig-r013-20230605   gcc  
-arm64                randconfig-r016-20230605   gcc  
-csky         buildonly-randconfig-r005-20230605   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r001-20230605   gcc  
-csky                 randconfig-r024-20230605   gcc  
-csky                 randconfig-r025-20230605   gcc  
-csky                 randconfig-r031-20230605   gcc  
-csky                 randconfig-r032-20230605   gcc  
-csky                 randconfig-r034-20230605   gcc  
-hexagon              randconfig-r004-20230605   clang
-hexagon              randconfig-r025-20230605   clang
-hexagon              randconfig-r041-20230605   clang
-hexagon              randconfig-r045-20230605   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i001-20230605   clang
-i386                 randconfig-i002-20230605   clang
-i386                 randconfig-i003-20230605   clang
-i386                 randconfig-i004-20230605   clang
-i386                 randconfig-i005-20230605   clang
-i386                 randconfig-i006-20230605   clang
-i386                 randconfig-i011-20230605   gcc  
-i386                 randconfig-i012-20230605   gcc  
-i386                 randconfig-i013-20230605   gcc  
-i386                 randconfig-i014-20230605   gcc  
-i386                 randconfig-i015-20230605   gcc  
-i386                 randconfig-i016-20230605   gcc  
-i386                 randconfig-i051-20230605   clang
-i386                 randconfig-i052-20230605   clang
-i386                 randconfig-i053-20230605   clang
-i386                 randconfig-i054-20230605   clang
-i386                 randconfig-i055-20230605   clang
-i386                 randconfig-i056-20230605   clang
-i386                 randconfig-i061-20230605   clang
-i386                 randconfig-i062-20230605   clang
-i386                 randconfig-i063-20230605   clang
-i386                 randconfig-i064-20230605   clang
-i386                 randconfig-i065-20230605   clang
-i386                 randconfig-i066-20230605   clang
-i386                 randconfig-r011-20230605   gcc  
-i386                 randconfig-r021-20230605   gcc  
-i386                 randconfig-r022-20230605   gcc  
-i386                 randconfig-r025-20230605   gcc  
-i386                 randconfig-r026-20230605   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r012-20230605   gcc  
-loongarch            randconfig-r023-20230605   gcc  
-m68k                             allmodconfig   gcc  
-m68k         buildonly-randconfig-r001-20230605   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r001-20230605   gcc  
-m68k                 randconfig-r021-20230605   gcc  
-m68k                 randconfig-r023-20230605   gcc  
-microblaze   buildonly-randconfig-r004-20230605   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                 randconfig-r003-20230605   gcc  
-mips                 randconfig-r016-20230606   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r011-20230606   gcc  
-nios2                randconfig-r016-20230605   gcc  
-openrisc     buildonly-randconfig-r001-20230605   gcc  
-openrisc     buildonly-randconfig-r003-20230605   gcc  
-openrisc     buildonly-randconfig-r005-20230605   gcc  
-openrisc             randconfig-r006-20230605   gcc  
-openrisc             randconfig-r023-20230605   gcc  
-openrisc             randconfig-r024-20230605   gcc  
-parisc       buildonly-randconfig-r004-20230605   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r002-20230605   gcc  
-parisc               randconfig-r012-20230605   gcc  
-parisc               randconfig-r014-20230605   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc      buildonly-randconfig-r002-20230605   gcc  
-powerpc      buildonly-randconfig-r003-20230605   gcc  
-powerpc              randconfig-r013-20230605   gcc  
-powerpc              randconfig-r013-20230606   clang
-powerpc              randconfig-r014-20230605   gcc  
-powerpc              randconfig-r015-20230605   gcc  
-powerpc              randconfig-r035-20230605   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r002-20230605   clang
-riscv                randconfig-r006-20230605   clang
-riscv                randconfig-r015-20230605   gcc  
-riscv                randconfig-r042-20230605   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r016-20230605   gcc  
-s390                 randconfig-r022-20230605   gcc  
-s390                 randconfig-r035-20230605   clang
-s390                 randconfig-r044-20230605   gcc  
-sh                               allmodconfig   gcc  
-sh           buildonly-randconfig-r005-20230605   gcc  
-sh                   randconfig-r013-20230605   gcc  
-sh                   randconfig-r025-20230605   gcc  
-sh                   randconfig-r034-20230605   gcc  
-sparc        buildonly-randconfig-r002-20230605   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r004-20230605   gcc  
-sparc                randconfig-r021-20230605   gcc  
-sparc                randconfig-r022-20230605   gcc  
-sparc                randconfig-r025-20230605   gcc  
-sparc                randconfig-r035-20230605   gcc  
-sparc64      buildonly-randconfig-r003-20230605   gcc  
-sparc64      buildonly-randconfig-r006-20230605   gcc  
-sparc64              randconfig-r003-20230605   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230605   clang
-x86_64               randconfig-a002-20230605   clang
-x86_64               randconfig-a003-20230605   clang
-x86_64               randconfig-a004-20230605   clang
-x86_64               randconfig-a005-20230605   clang
-x86_64               randconfig-a006-20230605   clang
-x86_64               randconfig-a011-20230605   gcc  
-x86_64               randconfig-a012-20230605   gcc  
-x86_64               randconfig-a013-20230605   gcc  
-x86_64               randconfig-a014-20230605   gcc  
-x86_64               randconfig-a015-20230605   gcc  
-x86_64               randconfig-a016-20230605   gcc  
-x86_64               randconfig-r005-20230605   clang
-x86_64               randconfig-r015-20230606   clang
-x86_64               randconfig-r024-20230605   gcc  
-x86_64               randconfig-r031-20230605   clang
-x86_64               randconfig-x051-20230605   gcc  
-x86_64               randconfig-x052-20230605   gcc  
-x86_64               randconfig-x053-20230605   gcc  
-x86_64               randconfig-x054-20230605   gcc  
-x86_64               randconfig-x055-20230605   gcc  
-x86_64               randconfig-x056-20230605   gcc  
-x86_64               randconfig-x061-20230605   gcc  
-x86_64               randconfig-x062-20230605   gcc  
-x86_64               randconfig-x063-20230605   gcc  
-x86_64               randconfig-x064-20230605   gcc  
-x86_64               randconfig-x065-20230605   gcc  
-x86_64               randconfig-x066-20230605   gcc  
-x86_64                               rhel-8.3   gcc  
-xtensa       buildonly-randconfig-r005-20230605   gcc  
-xtensa               randconfig-r011-20230605   gcc  
-xtensa               randconfig-r012-20230605   gcc  
-xtensa               randconfig-r012-20230606   gcc  
-xtensa               randconfig-r015-20230605   gcc  
-xtensa               randconfig-r023-20230605   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>   		return 0;
+>   
+>   	return vcpu->arch.mmu->sync_spte(vcpu, sp, i);
+> @@ -6120,7 +6121,16 @@ int kvm_mmu_create(struct kvm_vcpu *vcpu)
+>   	vcpu->arch.mmu_page_header_cache.kmem_cache = mmu_page_header_cache;
+>   	vcpu->arch.mmu_page_header_cache.gfp_zero = __GFP_ZERO;
+>   
+> -	vcpu->arch.mmu_shadow_page_cache.gfp_zero = __GFP_ZERO;
+> +	/*
+> +	 * When X86_64, initial SEPT entries are initialized with
+> +	 * SHADOW_NONPRESENT_VALUE.  Otherwise zeroed.  See
+> +	 * mmu_memory_cache_alloc_obj().
+> +	 */
+> +	if (IS_ENABLED(CONFIG_X86_64))
+> +		vcpu->arch.mmu_shadow_page_cache.init_value =
+> +			SHADOW_NONPRESENT_VALUE;
+> +	if (!vcpu->arch.mmu_shadow_page_cache.init_value)
+> +		vcpu->arch.mmu_shadow_page_cache.gfp_zero = __GFP_ZERO;
+>   
+>   	vcpu->arch.mmu = &vcpu->arch.root_mmu;
+>   	vcpu->arch.walk_mmu = &vcpu->arch.root_mmu;
+> diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
+> index 0662e0278e70..ef8124bd2f11 100644
+> --- a/arch/x86/kvm/mmu/paging_tmpl.h
+> +++ b/arch/x86/kvm/mmu/paging_tmpl.h
+> @@ -892,7 +892,7 @@ static int FNAME(sync_spte)(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp, int
+>   	gpa_t pte_gpa;
+>   	gfn_t gfn;
+>   
+> -	if (WARN_ON_ONCE(!sp->spt[i]))
+> +	if (WARN_ON_ONCE(sp->spt[i] == SHADOW_NONPRESENT_VALUE))
+>   		return 0;
+>   
+>   	first_pte_gpa = FNAME(get_level1_sp_gpa)(sp);
+> diff --git a/arch/x86/kvm/mmu/spte.h b/arch/x86/kvm/mmu/spte.h
+> index 1279db2eab44..a99eb7d4ae5d 100644
+> --- a/arch/x86/kvm/mmu/spte.h
+> +++ b/arch/x86/kvm/mmu/spte.h
+> @@ -148,6 +148,8 @@ static_assert(MMIO_SPTE_GEN_LOW_BITS == 8 && MMIO_SPTE_GEN_HIGH_BITS == 11);
+>   
+>   #define MMIO_SPTE_GEN_MASK		GENMASK_ULL(MMIO_SPTE_GEN_LOW_BITS + MMIO_SPTE_GEN_HIGH_BITS - 1, 0)
+>   
+> +#define SHADOW_NONPRESENT_VALUE	0ULL
+> +
+>   extern u64 __read_mostly shadow_host_writable_mask;
+>   extern u64 __read_mostly shadow_mmu_writable_mask;
+>   extern u64 __read_mostly shadow_nx_mask;
+> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+> index 3000ef6d79ea..ddd995885dd3 100644
+> --- a/arch/x86/kvm/mmu/tdp_mmu.c
+> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
+> @@ -627,7 +627,7 @@ static inline int tdp_mmu_zap_spte_atomic(struct kvm *kvm,
+>   	 * here since the SPTE is going from non-present to non-present.  Use
+>   	 * the raw write helper to avoid an unnecessary check on volatile bits.
+>   	 */
+> -	__kvm_tdp_mmu_write_spte(iter->sptep, 0);
+> +	__kvm_tdp_mmu_write_spte(iter->sptep, SHADOW_NONPRESENT_VALUE);
+>   
+>   	return 0;
+>   }
+> @@ -764,8 +764,8 @@ static void __tdp_mmu_zap_root(struct kvm *kvm, struct kvm_mmu_page *root,
+>   			continue;
+>   
+>   		if (!shared)
+> -			tdp_mmu_iter_set_spte(kvm, &iter, 0);
+> -		else if (tdp_mmu_set_spte_atomic(kvm, &iter, 0))
+> +			tdp_mmu_iter_set_spte(kvm, &iter, SHADOW_NONPRESENT_VALUE);
+> +		else if (tdp_mmu_set_spte_atomic(kvm, &iter, SHADOW_NONPRESENT_VALUE))
+>   			goto retry;
+>   	}
+>   }
+> @@ -821,8 +821,8 @@ bool kvm_tdp_mmu_zap_sp(struct kvm *kvm, struct kvm_mmu_page *sp)
+>   	if (WARN_ON_ONCE(!is_shadow_present_pte(old_spte)))
+>   		return false;
+>   
+> -	tdp_mmu_set_spte(kvm, kvm_mmu_page_as_id(sp), sp->ptep, old_spte, 0,
+> -			 sp->gfn, sp->role.level + 1);
+> +	tdp_mmu_set_spte(kvm, kvm_mmu_page_as_id(sp), sp->ptep, old_spte,
+> +			 SHADOW_NONPRESENT_VALUE, sp->gfn, sp->role.level + 1);
+>   
+>   	return true;
+>   }
+> @@ -856,7 +856,7 @@ static bool tdp_mmu_zap_leafs(struct kvm *kvm, struct kvm_mmu_page *root,
+>   		    !is_last_spte(iter.old_spte, iter.level))
+>   			continue;
+>   
+> -		tdp_mmu_iter_set_spte(kvm, &iter, 0);
+> +		tdp_mmu_iter_set_spte(kvm, &iter, SHADOW_NONPRESENT_VALUE);
+>   		flush = true;
+>   	}
+>   
+> @@ -1250,7 +1250,7 @@ static bool set_spte_gfn(struct kvm *kvm, struct tdp_iter *iter,
+>   	 * invariant that the PFN of a present * leaf SPTE can never change.
+>   	 * See handle_changed_spte().
+>   	 */
+> -	tdp_mmu_iter_set_spte(kvm, iter, 0);
+> +	tdp_mmu_iter_set_spte(kvm, iter, SHADOW_NONPRESENT_VALUE);
+>   
+>   	if (!pte_write(range->pte)) {
+>   		new_spte = kvm_mmu_changed_pte_notifier_make_spte(iter->old_spte,
