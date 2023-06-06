@@ -2,199 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 913417241D9
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 14:15:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 215477244F2
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 15:53:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233368AbjFFMPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 08:15:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52416 "EHLO
+        id S238098AbjFFNxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 09:53:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233166AbjFFMPa (ORCPT
+        with ESMTP id S237466AbjFFNxD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 08:15:30 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58BAEE7E
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 05:15:28 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 79D6D5FD2E;
-        Tue,  6 Jun 2023 15:15:25 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1686053725;
-        bh=asBvAU17m6rnCMyFdShPaT0xZQytlFc892eOr2H0XMo=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=iOtjm/dPA7D6QCGBOA61CSi5MTMql/ez72A+JOQhmDZOcNVgHG/gvqp+QHPrRWFye
-         61JMm5v+J8l2fP4NdVVq9K+8+8Lq/1ey20YDs8dFtLoy7cl3VKlh4SJysT+qIzOKJK
-         t47oKMrkVObaTllrsjEAsAriO7kqehIoHCbW7kQwdFgfK+NovR7uCC72hqqg5PnKgd
-         kpCoQiiPMHyQ6AB2WdJowrQSYrh/kdj2c9U5pTTwwqIL1Q3RXbNukx1XpHJVTd7LCv
-         XBo+oi3BqubKDihOSQa21qD/mdIuQiozKnIYvN08tEivQA/Qbz6a/qkDTeJ05mF9fU
-         VkVPFI+uVvTcQ==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Tue,  6 Jun 2023 15:15:24 +0300 (MSK)
-Message-ID: <78f8ac23-ee01-6bb1-7275-58380a28425b@sberdevices.ru>
-Date:   Tue, 6 Jun 2023 15:10:27 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH v5 2/6] mtd: rawnand: meson: wait for command in
- polling mode
-Content-Language: en-US
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-CC:     Liang Yang <liang.yang@amlogic.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
-        <linux-mtd@lists.infradead.org>,
+        Tue, 6 Jun 2023 09:53:03 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C53A183;
+        Tue,  6 Jun 2023 06:53:01 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 356CAu3G070791;
+        Tue, 6 Jun 2023 07:10:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1686053456;
+        bh=2vdLTd9jB9uLP9Eo374O+cBAshyPuNPO8VuZO8gC4no=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=eKknT4Ub2xPBgY6EYd9C10IJq77dLoHlXtujFQesWK33/754IAsN3IMFBcb1Y9QAt
+         lI/Lg0fBJasyDOsRMpBFtSSg989CGXa9dYaQdvonyGU2QSKOQhINEetzT9RRwCi1hw
+         eXXnmUduze4bfdV04umWZ+jdtK7UpHY0GEgGEf14=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 356CAuOq006708
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 6 Jun 2023 07:10:56 -0500
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 6
+ Jun 2023 07:10:56 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 6 Jun 2023 07:10:56 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 356CAtv9002537;
+        Tue, 6 Jun 2023 07:10:55 -0500
+Date:   Tue, 6 Jun 2023 07:10:55 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Udit Kumar <u-kumar1@ti.com>
+CC:     <vigneshr@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-References: <20230601061850.3907800-1-AVKrasnov@sberdevices.ru>
- <20230601061850.3907800-3-AVKrasnov@sberdevices.ru>
- <20230601100751.41c3ff0b@xps-13>
- <9e106d50-2524-c999-48b1-a20760238aaf@sberdevices.ru>
- <20230605110546.6cb00a8d@xps-13>
- <2a755783-1d56-9842-2eee-b5ab41152c81@amlogic.com>
- <163e0684-caff-77d0-1eaf-9a58290c200d@amlogic.com>
- <5c98362c-1808-d7d2-bff8-c2f2f3ae0e89@sberdevices.ru>
- <20230606141145.59e96064@xps-13>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-In-Reply-To: <20230606141145.59e96064@xps-13>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/06/06 07:40:00 #21442908
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <conor+dt@kernel.org>, <m-chawdhry@ti.com>, <n-francis@ti.com>
+Subject: Re: [PATCH v3 3/5] arm64: dts: ti: k3-j7200-common-proc-board: Add
+ uart pin mux in main_pmx0
+Message-ID: <20230606121055.gii7tl6ccu4dlpxp@sanctity>
+References: <20230604045525.1889083-1-u-kumar1@ti.com>
+ <20230604045525.1889083-4-u-kumar1@ti.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230604045525.1889083-4-u-kumar1@ti.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 06.06.2023 15:11, Miquel Raynal wrote:
-> Hi Arseniy,
+On 10:25-20230604, Udit Kumar wrote:
+> Add main uart0 pin mux into common board file and it's
+> reference to main_uart0 node.
 > 
-> avkrasnov@sberdevices.ru wrote on Tue, 6 Jun 2023 14:49:19 +0300:
-> 
->> On 05.06.2023 16:30, Liang Yang wrote:
->>>
->>>
->>> On 2023/6/5 21:19, Liang Yang wrote:  
->>>> Hi Miquel and Arseniy,
->>>>
->>>>
->>>> On 2023/6/5 17:05, Miquel Raynal wrote:  
->>>>> [ EXTERNAL EMAIL ]
->>>>>
->>>>> Hi Arseniy,
->>>>>  
->>>>>>>> @@ -1412,6 +1419,8 @@ static int meson_nfc_probe(struct platform_device *pdev)
->>>>>>>>             return ret;
->>>>>>>>     }
->>>>>>>>
->>>>>>>> +  nfc->use_polling = of_property_read_bool(dev->of_node, "polling");  
->>>>>>>
->>>>>>> This is a problem. You cannot add a polling property like that.
->>>>>>>
->>>>>>> There is already a nand-rb property which is supposed to carry how are
->>>>>>> wired the RB lines. I don't see any in-tree users of the compatibles, I
->>>>>>> don't know how acceptable it is to consider using soft fallback when
->>>>>>> this property is missing, otherwise take the values of the rb lines
->>>>>>> provided in the DT and user hardware control, but I would definitely
->>>>>>> prefer that.  
->>>>>>
->>>>>> I see. So i need to implement processing of this property here? And if it
->>>>>> is missed -> use software waiting. I think interesting thing will be that:
->>>>>>
->>>>>> 1) Even with support of this property here, I really don't know how to pass
->>>>>>     RB values to this controller - I just have define for RB command and that's
->>>>>>     it. I found that this property is an array of u32 - IIUC each element is
->>>>>>     RB pin per chip. May be i need to dive into the old vendor's driver to find
->>>>>>     how to use RB values (although this driver uses software waiting so I'm not
->>>>>>     sure that I'll find something in it).  
->>>>>
->>>>> Liang, can you please give use the relevant information here? How do we
->>>>> target RB0 and RB1? It seems like you use the CS as only information
->>>>> like if the RB lines where hardwired internally to a CS. Can we invert
->>>>> the lines with a specific configuration?  
->>>>
->>>> Controllor has only one external RB pinmux (NAND_RB0). all the RB pins
->>>> of different CEs need to be bound into one wire and connect with
->>>> NAND_RB0 if want to use controller polling rb. the current operating
->>>> CE of NAND is decided to "chip_select", of course controller internally has different nfc commands to regconize which Ce's RB signal is polling.
->>>>
->>>> <&nand_pins> in dts/yaml should include the NAND_RB0 if hardware connects, or use software polling here.
->>>>
->>>> @Arseniy, sorry, i don't travel all the informations yet. but why don't you use the new RB_INT command with irq that i provided in another thread. the new RB_INT command doesn't depend on the physical RB wires, it also send the READ status command(0x70) and wait for the irq wake up completion.  
->>>
->>> Use "nand-rb" in dts to decide old RB_INT(physical RB wires is needed) or new RB_INT(no physical RB wires). the new RB_INT command decides the RB0 or RB1 by the previous command with ce args.
->>>   
->>>>  
->>>>> Arseniy, if the answer to my above question is no, then you should
->>>>> expect the nand-rb and reg arrays to be identical. If they are not,
->>>>> then you can return -EINVAL.
->>>>>
->>>>> If the nand-rb property is missing, then fallback to software wait.
->>>>>  
->>>>>> 2) I can't test RB mode - I don't have such device :(
->>>>>>
->>>>>> Also for example in arasan-nand-controller.c parsed 'nand-rb' values are used
->>>>>> in controller specific register for waiting (I guess Meson controller has something
->>>>>> like that, but I don't have doc). While in marvell_nand.c it looks like that they parse
->>>>>> 'nand-rb' property, but never use it.  
->>>>>
->>>>> Yes, the logic around the second RB line (taking care of CS1/CS3) is
->>>>> slightly broken or at least badly documented, and thus should not be
->>>>> used.
->>>>>  
->>>>>>> In any case you'll need a dt-binding update which must be acked by
->>>>>>> dt-binding maintainers.  
->>>>>>
->>>>>> You mean to add this property desc to Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yaml ?  
->>>>>
->>>>> Yes. In a dedicated patch. Something along the lines:
->>>>>
->>>>>          nand-rb: true
->>>>>
->>>>> inside the nand chip object should be fine. And flag the change as a
->>>>> fix because we should have used and parsed this property since the
->>>>> beginning.  
->>
->> Miquel,
->>
->> Small remark, do we really need to add this 'nand-rb' to the chip object, as Liang said,
->> that there is only one RB wire (e.g. only one or nothing)? Maybe for Meson I can add it to the
->> meson controller structure?
-> 
-> You only need a boolean in the controller structure, I guess.
+> Signed-off-by: Udit Kumar <u-kumar1@ti.com>
+> ---
+>  arch/arm64/boot/dts/ti/k3-j7200-common-proc-board.dts | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
 
-Got it!
-
-Thanks, Arseniy
+We could squash this with patch #5 for uart pinmuxes - there are a few more missing
 
 > 
->>
->> Thanks, Arseniy
->>
->>>>>
->>>>> Thanks,
->>>>> Miquèl  
+> diff --git a/arch/arm64/boot/dts/ti/k3-j7200-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j7200-common-proc-board.dts
+> index 0cc0e1dc40c5..02d2e4b36b18 100644
+> --- a/arch/arm64/boot/dts/ti/k3-j7200-common-proc-board.dts
+> +++ b/arch/arm64/boot/dts/ti/k3-j7200-common-proc-board.dts
+> @@ -113,6 +113,15 @@ J721E_IOPAD(0xd8, PIN_INPUT_PULLUP, 0) /* (W2) I2C0_SDA */
+>  		>;
+>  	};
+>  
+> +	main_uart0_pins_default: main_uart0_pins_default {
+> +		pinctrl-single,pins = <
+> +			J721E_IOPAD(0xb0, PIN_INPUT, 0) /* (T16) UART0_RXD */
+> +			J721E_IOPAD(0xb4, PIN_OUTPUT, 0) /* (T17) UART0_TXD */
+> +			J721E_IOPAD(0xc0, PIN_INPUT, 2) /* (W3) SPI0_CS0.UART0_CTSn */
+> +			J721E_IOPAD(0xc4, PIN_OUTPUT, 2) /* (U5) SPI0_CS1.UART0_RTSn */
+> +		>;
+> +	};
+> +
+>  	main_i2c1_pins_default: main-i2c1-pins-default {
+>  		pinctrl-single,pins = <
+>  			J721E_IOPAD(0xdc, PIN_INPUT_PULLUP, 3) /* (U3) ECAP0_IN_APWM_OUT.I2C1_SCL */
+> @@ -162,6 +171,8 @@ &main_uart0 {
+>  	status = "okay";
+>  	/* Shared with ATF on this platform */
+>  	power-domains = <&k3_pds 146 TI_SCI_PD_SHARED>;
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&main_uart0_pins_default>;
+>  };
+>  
+>  &main_uart1 {
+> -- 
+> 2.34.1
 > 
-> 
-> Thanks,
-> Miquèl
+
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
