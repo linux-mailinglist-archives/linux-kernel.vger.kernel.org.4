@@ -2,76 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E0F47249A8
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 18:59:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 405DD7249B0
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 19:01:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238348AbjFFQ7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 12:59:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47888 "EHLO
+        id S237291AbjFFRBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 13:01:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238326AbjFFQ7L (ORCPT
+        with ESMTP id S233267AbjFFRBh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 12:59:11 -0400
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FCF9E6B
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 09:59:10 -0700 (PDT)
-Received: by mail-ot1-x32a.google.com with SMTP id 46e09a7af769-6af7593ed5fso2956196a34.0
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 09:59:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20221208.gappssmtp.com; s=20221208; t=1686070749; x=1688662749;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yQmOWCPShTey+INULM70m4JM3+cpB6VfrKxNpQFvEmA=;
-        b=kT7VCg0Z9RQXkKBr50UPE0CyETCzvLg8blLKiRF0K5rGL6hsBuzstadznudTAfcfEu
-         jbJW1z3malS0cRFPe09UYXMAiOHJYKI1cSB4g470s1yP7fPAyvGCKI7uszTvaBYn9TXn
-         iEuPvUIYFR6CLEDzCSk7gx8GdQhJKcgjE/9qK5Zh0A9B8JauD6EmIUw45vkB9SPiuh9r
-         OKxVDBNXusHcXHfEhUq7lt/1v6LdhtmmPqSDXcJl8k7QF7kr86fqEacbFK/FRaTHbtAq
-         DHhNwX9NQ+YRwxndPhnl93Kqzw6Atb3Q1IHw4rNNp1C4ZbDWqhyc9cULTj38MDiCmn12
-         bpig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686070749; x=1688662749;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yQmOWCPShTey+INULM70m4JM3+cpB6VfrKxNpQFvEmA=;
-        b=TRZAHYjMob9QYUU5AIpPdXC3ZUoVJHq2lRu/qr8vvfBv4yWcYvNUczWZ7EIad3eY9J
-         jgXrbX8f8ji1NRFODkhuCevc00lHw6SIq7iNaWYQUbMhjHY7Yr8laYbcbHlfZeqtKHJu
-         wGewGLsTi2eimOQRDxNiaBb7sOaMIDh8mdsOHzTMd1eyOQTD8KS0MXJheiaTOGeLkrlq
-         AnLITGSQfPJcuclEJ0ajes95Hy3OGSzgr9u6E/jXmCs4XW1xoPEw9OOXyeeQum101dZO
-         uyEDvbhHBn+uOSvt5AEH2QjkZORXTLaviFr6R/59Q8t2x6bdtyaD8QXWQwEJlx29BNF8
-         Xq0w==
-X-Gm-Message-State: AC+VfDzFLUwKT1tVY/Ax0+On9EEOxtmswzoemhIePCvK6i+WT7Q8CGw8
-        Bj2JsNmF9FWjz3au8cotxsC2lg==
-X-Google-Smtp-Source: ACHHUZ6FYTab5Lg2xV9YOubMZ4IQx6jzQMIMMnLnA7DYUjuLkl4ZXIOW8Iy/UVTVaK1aEchHCl66CA==
-X-Received: by 2002:a9d:67c1:0:b0:6b2:9bdd:69e with SMTP id c1-20020a9d67c1000000b006b29bdd069emr897388otn.0.1686070749418;
-        Tue, 06 Jun 2023 09:59:09 -0700 (PDT)
-Received: from ?IPV6:2804:14d:5c5e:44fb:9148:dfc3:4a0d:3b4e? ([2804:14d:5c5e:44fb:9148:dfc3:4a0d:3b4e])
-        by smtp.gmail.com with ESMTPSA id r6-20020a9d7506000000b006af9d8af435sm4490187otk.50.2023.06.06.09.59.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Jun 2023 09:59:08 -0700 (PDT)
-Message-ID: <81cd0ecb-29a6-d748-8962-dc741a02e691@mojatatu.com>
-Date:   Tue, 6 Jun 2023 13:59:04 -0300
+        Tue, 6 Jun 2023 13:01:37 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10948E6B;
+        Tue,  6 Jun 2023 10:01:35 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 19C075C012D;
+        Tue,  6 Jun 2023 13:01:33 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Tue, 06 Jun 2023 13:01:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        invisiblethingslab.com; h=cc:cc:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1686070893; x=1686157293; bh=l2EzN6E/qocsYv3o8wJqF7HDny4dm9MwaMQ
+        5WBtXj4Q=; b=ZADMKl3MnlVwGXHqpt8eGbGaF8puWI4iVmYboN61PHb5av+UeP/
+        Mwcs8RsetL/Ia1TD3XjbeOVyX1XtQDmaenLSZv1k7n7V1YkeHHiC8e1SJJDsF1uw
+        z+iMJ25KJxfOkmKN30YtM/UuLgeI859JUNhHCWvTsG+ZrTje3ObKDlToP1VaiGLn
+        JIKypbEJ+w1d+sAz60ZP170xoGwtqPgI6yIr4K1GTGftVa6dqC6OTRPaU5vqYjYQ
+        a1AZG7vWO16iD8L9QQvURJuLbkqLyi60yG+ghLCzdYIQN3F5Tcn00OVxO8NogdOd
+        SzYbivZrzph0bf4589ArZksnRFEFjVbf/Lg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1686070893; x=1686157293; bh=l2EzN6E/qocsY
+        v3o8wJqF7HDny4dm9MwaMQ5WBtXj4Q=; b=eiiOaOKtqq5GhqSypOjJmRkmI4fKP
+        Z09ALho2siegC6nBwRb6eOJeFL+U1zmRVQj3ABZ0jn41SZ5R4XVv4XruydlJ/2gx
+        fHOpVgzqtkEd7kk+nLRbTsbSzLbZpbi/vWof52KNRn7+OvPI8OWOtwJI7dvjoPG/
+        pzj/Dn4SWtBsnVvUA26m26Eya9slFNCIHumJBzOlkzuna3OlAnYQ5PAc4t7BcjWj
+        lFzcnWHMWvQ5OOXhVvpgiS0iv7jTFCczZPIUuLm7yIANApgwu96x+HX+d3+zieqy
+        Rl9v0VEvKT1RyayBe9p4m9RIMs6igKPUBNQUY6sMYlBD+UTEA9JcX/6Zg==
+X-ME-Sender: <xms:a2Z_ZAWpQed-F1Rq8M57HU6BNvRoFM9TPwzr3RY-q3crE2xsPWlIzg>
+    <xme:a2Z_ZEmRYeNXKD01xmCSSiOV3skS_x8dVqTu6_-qRv1DHPn7ZSDWy5KJVZN5TA-bD
+    0-cMTfme4y2C8w>
+X-ME-Received: <xmr:a2Z_ZEbKvq29I-9GutIe_25UN5PkfaWTdN0eXKPnRXHr4wHsQmzVGAUE3xk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedtuddguddtlecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehgtderredttdejnecuhfhrohhmpeffvghm
+    ihcuofgrrhhivgcuqfgsvghnohhurhcuoeguvghmihesihhnvhhishhisghlvghthhhinh
+    hgshhlrggsrdgtohhmqeenucggtffrrghtthgvrhhnpedvjeetgeekhfetudfhgfetffeg
+    fffguddvgffhffeifeeikeektdehgeetheffleenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpeguvghmihesihhnvhhishhisghlvghthhhinhhg
+    shhlrggsrdgtohhm
+X-ME-Proxy: <xmx:a2Z_ZPVvYtX4NM-79g7DVuGNFvi3TqziTCvFMV6f152Nokz7N0TrjQ>
+    <xmx:a2Z_ZKmNnzPaKH5oPSBnNxVPgMC6SivDnaYg1nmGO0MdVNwRkoKwJw>
+    <xmx:a2Z_ZEfD5_pUCg9jce7fGwlO3jU0942-qvYTAM01zBHl9VNe2WhpnA>
+    <xmx:bWZ_ZIZZr1wY8mOjIoKzsVLl53G6HUnb2iXQ4YAYwPxGNbRxTpG4lw>
+Feedback-ID: iac594737:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 6 Jun 2023 13:01:31 -0400 (EDT)
+Date:   Tue, 6 Jun 2023 13:01:20 -0400
+From:   Demi Marie Obenour <demi@invisiblethingslab.com>
+To:     Roger Pau =?utf-8?B?TW9ubsOp?= <roger.pau@citrix.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com,
+        Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= 
+        <marmarek@invisiblethingslab.com>, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org
+Subject: Re: [PATCH v2 13/16] xen-blkback: Implement diskseq checks
+Message-ID: <ZH9mZGbM32CDmKGF@itl-email>
+References: <20230530203116.2008-1-demi@invisiblethingslab.com>
+ <20230530203116.2008-14-demi@invisiblethingslab.com>
+ <ZH7tizoYl8YVFN9B@Air-de-Roger>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] net/sched: Set the flushing flags to false to prevent an
- infinite loop
-Content-Language: en-US
-To:     renmingshuai <renmingshuai@huawei.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jhs@mojatatu.com,
-        xiyou.wangcong@gmail.com, jiri@resnulli.us, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
-Cc:     liaichun@huawei.com, caowangbao@huawei.com, yanan@huawei.com,
-        liubo335@huawei.com
-References: <20230606144511.1520657-1-renmingshuai@huawei.com>
-From:   Pedro Tammela <pctammela@mojatatu.com>
-In-Reply-To: <20230606144511.1520657-1-renmingshuai@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="gvaHE6UC2pWo4unn"
+Content-Disposition: inline
+In-Reply-To: <ZH7tizoYl8YVFN9B@Air-de-Roger>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,103 +92,235 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/06/2023 11:45, renmingshuai wrote:
-> When a new chain is added by using tc, one soft lockup alarm will be
->   generated after delete the prio 0 filter of the chain. To reproduce
->   the problem, perform the following steps:
-> (1) tc qdisc add dev eth0 root handle 1: htb default 1
-> (2) tc chain add dev eth0
-> (3) tc filter del dev eth0 chain 0 parent 1: prio 0
-> (4) tc filter add dev eth0 chain 0 parent 1:
 
-This seems like it could be added to tdc or 3 and 4 must be run in parallel?
+--gvaHE6UC2pWo4unn
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 6 Jun 2023 13:01:20 -0400
+From: Demi Marie Obenour <demi@invisiblethingslab.com>
+To: Roger Pau =?utf-8?B?TW9ubsOp?= <roger.pau@citrix.com>
+Cc: Jens Axboe <axboe@kernel.dk>, Alasdair Kergon <agk@redhat.com>,
+	Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com,
+	Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>,
+	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+	xen-devel@lists.xenproject.org
+Subject: Re: [PATCH v2 13/16] xen-blkback: Implement diskseq checks
 
-> 
-> 
-> The refcnt of the chain added by step 2 is equal to 1. After step 3,
->   the flushing flag of the chain is set to true in the tcf_chain_flush()
->   called by tc_del_tfilter() because the prio is 0. In this case, if
->   we add a new filter to this chain, it will never succeed and try again
->   and again because the refresh flash is always true and refcnt is 1.
->   A soft lock alarm is generated 20 seconds later.
-> The stack is show as below:
-> 
-> Kernel panic - not syncing: softlockup: hung tasks
-> CPU: 2 PID: 3321861 Comm: tc Kdump: loaded Tainted: G
-> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996)
-> Call Trace:
->   <IRQ>
->   dump_stack+0x57/0x6e
->   panic+0x196/0x3ec
->   watchdog_timer_fn.cold+0x16/0x5c
->   __run_hrtimer+0x5e/0x190
->   __hrtimer_run_queues+0x8a/0xe0
->   hrtimer_interrupt+0x110/0x2c0
->   ? irqtime_account_irq+0x49/0xf0
->   __sysvec_apic_timer_interrupt+0x5f/0xe0
->   asm_call_irq_on_stack+0x12/0x20
->   </IRQ>
->   sysvec_apic_timer_interrupt+0x72/0x80
->   asm_sysvec_apic_timer_interrupt+0x12/0x20
-> RIP: 0010:mutex_lock+0x24/0x70
-> RSP: 0018:ffffa836004ab9a8 EFLAGS: 00000246
-> RAX: 0000000000000000 RBX: ffff95bb02d76700 RCX: 0000000000000000
-> RDX: ffff95bb27462100 RSI: 0000000000000000 RDI: ffff95ba5b527000
-> RBP: ffff95ba5b527000 R08: 0000000000000001 R09: ffffa836004abbb8
-> R10: 000000000000000f R11: 0000000000000000 R12: 0000000000000000
-> R13: ffff95ba5b527000 R14: ffffa836004abbb8 R15: 0000000000000001
->   __tcf_chain_put+0x27/0x200
->   tc_new_tfilter+0x5e8/0x810
->   ? tc_setup_cb_add+0x210/0x210
->   rtnetlink_rcv_msg+0x2e3/0x380
->   ? rtnl_calcit.isra.0+0x120/0x120
->   netlink_rcv_skb+0x50/0x100
->   netlink_unicast+0x12d/0x1d0
->   netlink_sendmsg+0x286/0x490
->   sock_sendmsg+0x62/0x70
->   ____sys_sendmsg+0x24c/0x2c0
->   ? import_iovec+0x17/0x20
->   ? sendmsg_copy_msghdr+0x80/0xa0
->   ___sys_sendmsg+0x75/0xc0
->   ? do_fault_around+0x118/0x160
->   ? do_read_fault+0x68/0xf0
->   ? __handle_mm_fault+0x3f9/0x6f0
->   __sys_sendmsg+0x59/0xa0
->   do_syscall_64+0x33/0x40
->   entry_SYSCALL_64_after_hwframe+0x61/0xc6
-> RIP: 0033:0x7f96705b8247
-> RSP: 002b:00007ffe552e9dc8 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f96705b8247
-> RDX: 0000000000000000 RSI: 00007ffe552e9e40 RDI: 0000000000000003
-> RBP: 0000000000000001 R08: 0000000000000001 R09: 0000558113f678b0
-> R10: 00007f967069ab00 R11: 0000000000000246 R12: 00000000647ea089
-> R13: 00007ffe552e9f30 R14: 0000000000000001 R15: 0000558113175f00
-> 
-> To avoid this case, set chain->flushing to be false if the chain->refcnt
->   is 1 after flushing the chain when prio is 0.
-> 
-> Fixes: 726d061286ce ("net: sched: prevent insertion of new classifiers during chain flush")
-> Signed-off-by: Ren Mingshuai <renmingshuai@huawei.com>
-> ---
->   net/sched/cls_api.c | 7 +++++++
->   1 file changed, 7 insertions(+)
-> 
-> diff --git a/net/sched/cls_api.c b/net/sched/cls_api.c
-> index 2621550bfddc..68be55d75831 100644
-> --- a/net/sched/cls_api.c
-> +++ b/net/sched/cls_api.c
-> @@ -2442,6 +2442,13 @@ static int tc_del_tfilter(struct sk_buff *skb, struct nlmsghdr *n,
->   		tfilter_notify_chain(net, skb, block, q, parent, n,
->   				     chain, RTM_DELTFILTER, extack);
->   		tcf_chain_flush(chain, rtnl_held);
-> +		/* Set the flushing flags to false to prevent an infinite loop
-> +		 * when a new filter is added.
-> +		 */
-> +		mutex_lock(&chain->filter_chain_lock);
-> +		if (chain->refcnt == 1)
-> +			chain->flushing = false;
-> +		mutex_unlock(&chain->filter_chain_lock);
->   		err = 0;
->   		goto errout;
->   	}
+On Tue, Jun 06, 2023 at 10:25:47AM +0200, Roger Pau Monn=C3=A9 wrote:
+> On Tue, May 30, 2023 at 04:31:13PM -0400, Demi Marie Obenour wrote:
+> > This allows specifying a disk sequence number in XenStore.  If it does
+> > not match the disk sequence number of the underlying device, the device
+> > will not be exported and a warning will be logged.  Userspace can use
+> > this to eliminate race conditions due to major/minor number reuse.
+> > Old kernels do not support the new syntax, but a later patch will allow
+> > userspace to discover that the new syntax is supported.
+> >=20
+> > Signed-off-by: Demi Marie Obenour <demi@invisiblethingslab.com>
+> > ---
+> >  drivers/block/xen-blkback/xenbus.c | 112 +++++++++++++++++++++++------
+> >  1 file changed, 89 insertions(+), 23 deletions(-)
+> >=20
+> > diff --git a/drivers/block/xen-blkback/xenbus.c b/drivers/block/xen-blk=
+back/xenbus.c
+> > index 4807af1d58059394d7a992335dabaf2bc3901721..9c3eb148fbd802c74e626c3=
+d7bcd69dcb09bd921 100644
+> > --- a/drivers/block/xen-blkback/xenbus.c
+> > +++ b/drivers/block/xen-blkback/xenbus.c
+> > @@ -24,6 +24,7 @@ struct backend_info {
+> >  	struct xenbus_watch	backend_watch;
+> >  	unsigned		major;
+> >  	unsigned		minor;
+> > +	unsigned long long	diskseq;
+>=20
+> Since diskseq is declared as u64 in gendisk, better use the same type
+> here too?
 
+simple_strtoull() returns an unsigned long long, and C permits unsigned
+long long to be larger than 64 bits.
+
+> >  	char			*mode;
+> >  };
+> > =20
+> > @@ -479,7 +480,7 @@ static void xen_vbd_free(struct xen_vbd *vbd)
+> > =20
+> >  static int xen_vbd_create(struct xen_blkif *blkif, blkif_vdev_t handle,
+> >  			  unsigned major, unsigned minor, int readonly,
+> > -			  int cdrom)
+> > +			  bool cdrom, u64 diskseq)
+> >  {
+> >  	struct xen_vbd *vbd;
+> >  	struct block_device *bdev;
+> > @@ -507,6 +508,26 @@ static int xen_vbd_create(struct xen_blkif *blkif,=
+ blkif_vdev_t handle,
+> >  		xen_vbd_free(vbd);
+> >  		return -ENOENT;
+> >  	}
+> > +
+> > +	if (diskseq) {
+> > +		struct gendisk *disk =3D bdev->bd_disk;
+>=20
+> const.
+>=20
+> > +
+> > +		if (unlikely(disk =3D=3D NULL)) {
+> > +			pr_err("%s: device %08x has no gendisk\n",
+> > +			       __func__, vbd->pdevice);
+> > +			xen_vbd_free(vbd);
+> > +			return -EFAULT;
+>=20
+> ENODEV or ENOENT might be more accurate IMO.
+
+I will drop it, as this turns out to be unreachable code.
+
+> > +		}
+> > +
+> > +		if (unlikely(disk->diskseq !=3D diskseq)) {
+> > +			pr_warn("%s: device %08x has incorrect sequence "
+> > +				"number 0x%llx (expected 0x%llx)\n",
+>=20
+> I prefer %#llx, and likely pr_err like above.  Also I think it's now
+> preferred to not split printed lines, so that `grep "has incorrect
+> sequence number" ...` can find the instance.
+
+Ah, so _that_ is why I got a warning from checkpatch!
+
+> > +				__func__, vbd->pdevice, disk->diskseq, diskseq);
+> > +			xen_vbd_free(vbd);
+> > +			return -ENODEV;
+> > +		}
+> > +	}
+> > +
+> >  	vbd->size =3D vbd_sz(vbd);
+> > =20
+> >  	if (cdrom || disk_to_cdi(vbd->bdev->bd_disk))
+> > @@ -707,6 +728,9 @@ static void backend_changed(struct xenbus_watch *wa=
+tch,
+> >  	int cdrom =3D 0;
+> >  	unsigned long handle;
+> >  	char *device_type;
+> > +	char *diskseq_str =3D NULL;
+>=20
+> const, and I think there's no need to init to NULL.
+>=20
+> > +	int diskseq_len;
+>=20
+> unsigned int
+>=20
+> > +	unsigned long long diskseq;
+>=20
+> u64
+>=20
+> > =20
+> >  	pr_debug("%s %p %d\n", __func__, dev, dev->otherend_id);
+> > =20
+> > @@ -725,10 +749,46 @@ static void backend_changed(struct xenbus_watch *=
+watch,
+> >  		return;
+> >  	}
+> > =20
+> > -	if (be->major | be->minor) {
+> > -		if (be->major !=3D major || be->minor !=3D minor)
+> > -			pr_warn("changing physical device (from %x:%x to %x:%x) not support=
+ed.\n",
+> > -				be->major, be->minor, major, minor);
+> > +	diskseq_str =3D xenbus_read(XBT_NIL, dev->nodename, "diskseq", &disks=
+eq_len);
+> > +	if (IS_ERR(diskseq_str)) {
+> > +		int err =3D PTR_ERR(diskseq_str);
+> > +		diskseq_str =3D NULL;
+> > +
+> > +		/*
+> > +		 * If this does not exist, it means legacy userspace that does not
+> > +		 * support diskseq.
+> > +		 */
+> > +		if (unlikely(!XENBUS_EXIST_ERR(err))) {
+> > +			xenbus_dev_fatal(dev, err, "reading diskseq");
+> > +			return;
+> > +		}
+> > +		diskseq =3D 0;
+> > +	} else if (diskseq_len <=3D 0) {
+> > +		xenbus_dev_fatal(dev, -EFAULT, "diskseq must not be empty");
+> > +		goto fail;
+> > +	} else if (diskseq_len > 16) {
+> > +		xenbus_dev_fatal(dev, -ERANGE, "diskseq too long: got %d but limit i=
+s 16",
+> > +				 diskseq_len);
+> > +		goto fail;
+> > +	} else if (diskseq_str[0] =3D=3D '0') {
+> > +		xenbus_dev_fatal(dev, -ERANGE, "diskseq must not start with '0'");
+> > +		goto fail;
+> > +	} else {
+> > +		char *diskseq_end;
+> > +		diskseq =3D simple_strtoull(diskseq_str, &diskseq_end, 16);
+> > +		if (diskseq_end !=3D diskseq_str + diskseq_len) {
+> > +			xenbus_dev_fatal(dev, -EINVAL, "invalid diskseq");
+> > +			goto fail;
+> > +		}
+> > +		kfree(diskseq_str);
+> > +		diskseq_str =3D NULL;
+> > +	}
+>=20
+> Won't it be simpler to use xenbus_scanf() with %llx formatter?
+
+xenbus_scanf() doesn=E2=80=99t check for overflow and accepts lots of junk =
+it
+really should not.  Should this be fixed in xenbus_scanf()?
+
+> Also, we might want to fetch "physical-device" and "diskseq" inside
+> the same xenstore transaction.
+
+Should the rest of the xenstore reads be included in the same
+transaction?
+
+> Also, you tie this logic to the "physical-device" watch, which
+> strictly implies that the "diskseq" node must be written to xenstore
+> before the "physical-device" node.  This seems fragile, but I don't
+> see much better optiono since the "diskseq" is optional.
+
+What about including the diskseq in the "physical-device" node?  Perhaps
+use diskseq@major:minor syntax?
+
+> The node and its behaviour should be documented in blkif.h.
+
+Indeed so.
+
+> > +	if (be->major | be->minor | be->diskseq) {
+> > +		if (be->major !=3D major || be->minor !=3D minor || be->diskseq !=3D=
+ diskseq)
+> > +			pr_warn("changing physical device (from %x:%x:%llx to %x:%x:%llx)"
+> > +				" not supported.\n",
+> > +				be->major, be->minor, be->diskseq, major, minor, diskseq);
+> >  		return;
+>=20
+> You are leaking diskseq_str here, and in all the error cases between
+> here and up to the call to xen_vbd_create().
+
+I will fix this by moving the diskseq reading code into its own
+function.
+--=20
+Sincerely,
+Demi Marie Obenour (she/her/hers)
+Invisible Things Lab
+
+--gvaHE6UC2pWo4unn
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEdodNnxM2uiJZBxxxsoi1X/+cIsEFAmR/ZmUACgkQsoi1X/+c
+IsFcXw/+O0uik5rd4boydxFX99UjfrkGiog1pfbmuhUxgisJFIPtkNnbz2S66pb5
+h2wD5k3BZC+Sl/Mbt4LKpKbRM9qJWhhGZZjNG7n0GTBw08k9WJP2QhlJVLkqwtWt
+Fg+JyZACmla53o0nlhrvMZGAtNN0f/4S3z2ary6h6AqNRl5nIAso9E7qEMkaZ/aW
+EMGGdy5gWhAUUfFeo7pG7LlgPUPZHLZ0EdpqOuVW37B3w3DbeRuX1abRgQwpBZcC
+1bx6MY1y59+K5tri4ONQHSDriBH8z0hcHLUTYNaGCBCWiC+19zY+njahy9gAEit+
+YjoiTevhLSn+UtxPB6Fi/233LEQySlGyS90McFx+3fMnkc32sOoxxI3drAxWUDCB
+iKY4VMgvdUrCi6zN+IWITMDCRsQzidLs5rUPPj14Lf6w7R7wKaxTvMZBlcbbQBBU
+PKUo2homKpex3/Qxw7/c5DyZ0M/oPEuJyp/lmHmEDXDMqInF9PI+A8ukSaFOzE96
+jCBO8ay7vpXZG5jEx9FRF/T8JGmYnL6F/cu5P+o8t2vxNg0fe9w5Jg0o3zjEkraC
+Qxu9cpr4/44ySNx7cB7fUXMkw4+Ubbe0UrFcyX9NvKtaB8F5H+tptCHyGJ0hQa36
+6Z9EKHUoChcUGKMLAJ1GUI383RpDqbzdOS5FS97X/HlIc7B9S4Q=
+=ln1g
+-----END PGP SIGNATURE-----
+
+--gvaHE6UC2pWo4unn--
