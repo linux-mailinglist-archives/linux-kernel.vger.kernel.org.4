@@ -2,293 +2,1155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C668D72452B
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:02:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27995724606
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:31:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238003AbjFFOCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 10:02:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44808 "EHLO
+        id S237838AbjFFObn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 10:31:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237495AbjFFOCG (ORCPT
+        with ESMTP id S237813AbjFFObk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 10:02:06 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2089.outbound.protection.outlook.com [40.107.95.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7693810C8
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 07:01:54 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=K6XA4BZotAMrmfzajWi40Vsz0BBST4cgb/GNqL1RN171ww5dx3xNhv8TGLCbMIl9SlxAwst/LGRLrACuAZX9h8qyKw7/ASqKGPrVBukv+YET+FWanYK5liNMd/fE1pXVdZq99mIl64oRqb9OpAvX2wCQGJvCWpdCF0FPeTiGtjUhnS7cDA5v2eapS3cOSdDQzLCfcQLMeqVZuN6uSLPrkJtwY/Dpe1qRaOG0yXcWnXQhSVazKkSz/Slau7ICM6uFo5rGKiShSSV9FR2/o0sCkByDRuGia4bcCO9sv3fN4bsFgwo0v5Abiun2mujlL7+mBoeGBZkwwIkTxH+B2C/iCw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/b5FhXGpaGNul65XGoeMFn/vzzd3c1hxdgchBGq/aUE=;
- b=aH9vNbtey/eJr39y5WHfyLRW2N7m0RIhbt64cWOToDoxYJYO5zPCZtxq1qnn3z6DnK2aftn+kkidFs/DqWosddFll0dhPm3oJ3/9ueqSbX8peayasIayN76ToXz0qCa/1UzLzofP3wy/Ptb38hIv0a6O96Bucg2EkFinbnZCB+bwNK+8u9SugJBuRjQRVsSVWSDpKXvVFSENdH24MkGc6OH63g5VhdugMkGLsuYzLTHaUWRfwd4insG52oljsoFWVStim3a/FHeVdgquVVEjNXgyVqT9f1BBhYfzbyx6WfVyZeewnDA6kth7IVdD0nljUPncuIb6BtIiSs7VxPsiXg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/b5FhXGpaGNul65XGoeMFn/vzzd3c1hxdgchBGq/aUE=;
- b=SJLlVsTz2UgkkHEYLVEyJAXtLc0XLp40x/WMdbvbXu4l2HDN8nNVSqbYgkAyWkNGagnY/OuflyEo7dEueA3PYtMgecvZXHCyhu4UKyigsQCCC3h6r5UGF6sEua7yoKWUkaMSr8w+IRnW+jbVXLPVz2F+ilAbcJChwK0XsNOnDdc=
-Received: from CY5PR13CA0052.namprd13.prod.outlook.com (2603:10b6:930:11::34)
- by SN7PR12MB6689.namprd12.prod.outlook.com (2603:10b6:806:273::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.31; Tue, 6 Jun
- 2023 14:01:52 +0000
-Received: from CY4PEPF0000EDD5.namprd03.prod.outlook.com
- (2603:10b6:930:11:cafe::1a) by CY5PR13CA0052.outlook.office365.com
- (2603:10b6:930:11::34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.19 via Frontend
- Transport; Tue, 6 Jun 2023 14:01:52 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CY4PEPF0000EDD5.mail.protection.outlook.com (10.167.241.209) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6477.13 via Frontend Transport; Tue, 6 Jun 2023 14:01:51 +0000
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 6 Jun
- 2023 09:01:49 -0500
-Received: from xhdipdslab59.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
- Transport; Tue, 6 Jun 2023 09:01:47 -0500
-From:   Abhijit Gangurde <abhijit.gangurde@amd.com>
-To:     <nikhil.agarwal@amd.com>, <Nipun.Gupta@amd.com>,
-        <gregkh@linuxfoundation.org>, <geert@linux-m68k.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <git@amd.com>, <michal.simek@amd.com>,
-        Abhijit Gangurde <abhijit.gangurde@amd.com>
-Subject: [PATCH v3] cdx: Rename MCDI_LOGGING to CDX_MCDI_LOGGING
-Date:   Tue, 6 Jun 2023 19:31:37 +0530
-Message-ID: <20230606140137.1216731-1-abhijit.gangurde@amd.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 6 Jun 2023 10:31:40 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31F58E43
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 07:31:36 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f61530506aso62907365e9.1
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 07:31:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1686061894; x=1688653894;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=rk+ZKOcf79K1jM4Aaec5K6JmYfvQYCg54gyGrNQwV0Q=;
+        b=t6olKjf35q9qtf1AH7m3QECNqhjOYcxnWoMYb4IcC9Wdyo7sIwWNntD2yf8fB7hxOH
+         oHwOzk06IfIsDO5Oc8+/xUz/A8KSVImQq+qjQvZLNQy9thRruWZJhAOmCR+ZUqasXfbE
+         0eY5AdDiFRPq21WAusHDlBKr+5jD1EEWFi6jhsUnvV/iDzw5F1NbsUo5b/8F/TCMjsDI
+         BQ2Q9xyqUsh/WlqXVNcAhBS2YNIas+1x1UeFrTiu5Ul6q8GW/ehlAAb2bFwpnXOA18Vv
+         vNrewjfU8Pn0oVtCdrdcClieIYPLII/aKvou/qI2GQyfdyoPl+nH5ivr2RhpYmnjsvM7
+         T+bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686061894; x=1688653894;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rk+ZKOcf79K1jM4Aaec5K6JmYfvQYCg54gyGrNQwV0Q=;
+        b=jyN8d9DHVBGVQ0hhjUt2H5szNhC8tZtPgwi7I2RhAMAOj6ViJBM89+6LM81pwuEuSL
+         Vn+UyzBhv/DtuzYJZMxuOLawbwVN8GF+ydqB6vSXqpgejBbplJkItHolsiWP/smMitRX
+         hTFlATFM9at1qZlqyBHa8URUN6fTnyDlugrhFf8qXx8eG4xno1sChCGUv+TfkjIDjCUl
+         u4l3HbxKC0+CZ9cZs3qbSIDgrH7LhGjq142V4+/PaFB/pV4pKkHTUHiREyee71xQ5DBa
+         TxwclfhT3x7u9QHI5eITGjAnZ31LmjKHAuIgypY5PT4LkGrBHHAuywBgCFA/VEE514u/
+         Vo2A==
+X-Gm-Message-State: AC+VfDyKErV5ssB8r+jBU/aSFmh3IheSuSqKAWdv5QSSsHEsH/06BC+0
+        Y3t3MXOMtBiOnaY6curg8ViFPQ==
+X-Google-Smtp-Source: ACHHUZ4dkwM+srRtkFvdXO74zCmxj/Pd5bTApCEgxbMqVjNrJ9/9Z5Ml6M4N8R/ZvtWY1ENtB7RSOA==
+X-Received: by 2002:adf:e44e:0:b0:307:8651:258e with SMTP id t14-20020adfe44e000000b003078651258emr2358819wrm.21.1686061894502;
+        Tue, 06 Jun 2023 07:31:34 -0700 (PDT)
+Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id e10-20020a5d500a000000b0030ae4350212sm12748876wrt.66.2023.06.06.07.31.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Jun 2023 07:31:34 -0700 (PDT)
+References: <20230517070215.28463-1-yu.tu@amlogic.com>
+ <20230517070215.28463-4-yu.tu@amlogic.com>
+User-agent: mu4e 1.8.13; emacs 28.2
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Yu Tu <yu.tu@amlogic.com>, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     kelvin.zhang@amlogic.com, qi.duan@amlogic.com
+Subject: Re: [PATCH V9 3/4] clk: meson: S4: add support for Amlogic S4 SoC
+ PLL clock driver
+Date:   Tue, 06 Jun 2023 16:02:37 +0200
+In-reply-to: <20230517070215.28463-4-yu.tu@amlogic.com>
+Message-ID: <1j5y804q7u.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000EDD5:EE_|SN7PR12MB6689:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3f567363-ef0d-4e57-4f86-08db6696941c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: kKGp9g/vD97w8fC+M1PwCMaG+k0CJV1JWuoknKPHdpWRXLJnLKYOzyXJ+jYxgLs7BFucfSyYVnEwn7Vv7kYKpbqxmr0bLwCx3s+I0Y0hNI0suVOqQkJRuLTmO3EV9qBbPZJBkc0OqJ1nd5+iMcSJsS5/IPagNDedoyroWgVSJtKMzHz/juFIWOUS0Oho7bSbBL/aBKAP2bfTDGAU47BBP8k78aRiztC0TfxAuSyRH3qYRDRuCeLZqdbpFim2zwjNivax5ANcj6doxKVWTqpHkr15ocMYiDMr0eHkClsaxk7sfICLw/238hfsj3QBnIPcaM/DWlNKOUphR6nzDGcJoNGFKRlFS+IiNsGBkbu5L5GnimX8Z17hzrdTzE+FIv0rI3r9HR2EbEzNW/XC8KcpMlYeQBfWd8SuD+dCf+A9mrkJjDg1dODfweNX5FI22ZucF3K4JIBlNqxGZuvrOQwX53c0xa7XYF274Aq3/NlzdL9NRI3oBvJVqr3TKm6v4biHcwLkyqhg8mlMJBRk5nXia7rF6xpqtValkTWnDSVhgMibHCBxQcVmvi/evCeS0f9LjAGSTVvlHCtjzGd/UJavW7gkTB2t3pclFkxs+nKRXe2dqb1L26d0N1zuxmd62soEZdrj9IvVMpszSlOFfaVNs8HnMyYg2xylzbJdXcHF4k4czMJ6FOKQr6uu6UO56wdmZE48FNfgSggxej9994/mhoY9vXwzK1Eizz56Cktvo1rHD8npakIFEzy5wo0krzJxUTUgiKHCOom0B0O297vPUaa28zJlKjLow/J3LUs6J7HV8bISch+4/Jncpbf0WCe9
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(136003)(376002)(39860400002)(451199021)(40470700004)(36840700001)(46966006)(2616005)(8936002)(966005)(8676002)(186003)(41300700001)(2906002)(5660300002)(26005)(44832011)(1076003)(47076005)(83380400001)(426003)(336012)(40480700001)(36860700001)(40460700003)(478600001)(110136005)(316002)(54906003)(6666004)(81166007)(356005)(82740400003)(82310400005)(86362001)(70586007)(36756003)(70206006)(4326008)(2101003)(36900700001)(309714004);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2023 14:01:51.8130
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3f567363-ef0d-4e57-4f86-08db6696941c
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000EDD5.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6689
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MCDI_LOGGING is too generic considering other MCDI users
-SFC_MCDI_LOGGING and SFC_SIENA_MCDI_LOGGING. Rename it to
-CDX_MCDI_LOGGING makes it more domain specific.
 
-Also, move CONFIG_CDX_MCDI_LOGGING to header file.
+On Wed 17 May 2023 at 15:02, Yu Tu <yu.tu@amlogic.com> wrote:
 
-Fixes: eb96b740192b ("cdx: add MCDI protocol interface for firmware interaction")
-Signed-off-by: Abhijit Gangurde <abhijit.gangurde@amd.com>
-Suggested-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Closes: https://lore.kernel.org/lkml/CAMuHMdWTCdQagFFANygMgA8D0sWaoGxWv2AjibC3vwSd0UxuRw@mail.gmail.com/
----
- Changes v2->v3:
- - Dropped sysfs entry changes from v2
+> Add the S4 PLL clock controller driver in the s4 SoC family.
+>
+> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
+> ---
+>  drivers/clk/meson/Kconfig  |  13 +
+>  drivers/clk/meson/Makefile |   1 +
+>  drivers/clk/meson/s4-pll.c | 907 +++++++++++++++++++++++++++++++++++++
+>  drivers/clk/meson/s4-pll.h |  87 ++++
+>  4 files changed, 1008 insertions(+)
+>  create mode 100644 drivers/clk/meson/s4-pll.c
+>  create mode 100644 drivers/clk/meson/s4-pll.h
+>
+> diff --git a/drivers/clk/meson/Kconfig b/drivers/clk/meson/Kconfig
+> index fc002c155bc3..a663c90a3f3b 100644
+> --- a/drivers/clk/meson/Kconfig
+> +++ b/drivers/clk/meson/Kconfig
+> @@ -115,4 +115,17 @@ config COMMON_CLK_G12A
+>  	help
+>  	  Support for the clock controller on Amlogic S905D2, S905X2 and S905Y2
+>  	  devices, aka g12a. Say Y if you want peripherals to work.
+> +
+> +config COMMON_CLK_S4_PLL
+> +	tristate "S4 SoC PLL clock controllers support"
+> +	depends on ARM64
+> +	default y
+> +	select COMMON_CLK_MESON_MPLL
+> +	select COMMON_CLK_MESON_PLL
+> +	select COMMON_CLK_MESON_REGMAP
+> +	help
+> +	  Support for the pll clock controller on Amlogic S805X2 and S905Y4 devices,
+> +	  aka s4. Amlogic S805X2 and S905Y4 devices include AQ222 and AQ229.
+> +	  Say Y if you want the board to work, because plls are the parent of most
+> +	  peripherals.
+>  endmenu
+> diff --git a/drivers/clk/meson/Makefile b/drivers/clk/meson/Makefile
+> index 6eca2a406ee3..376f49cc13f1 100644
+> --- a/drivers/clk/meson/Makefile
+> +++ b/drivers/clk/meson/Makefile
+> @@ -19,3 +19,4 @@ obj-$(CONFIG_COMMON_CLK_AXG_AUDIO) += axg-audio.o
+>  obj-$(CONFIG_COMMON_CLK_GXBB) += gxbb.o gxbb-aoclk.o
+>  obj-$(CONFIG_COMMON_CLK_G12A) += g12a.o g12a-aoclk.o
+>  obj-$(CONFIG_COMMON_CLK_MESON8B) += meson8b.o meson8-ddr.o
+> +obj-$(CONFIG_COMMON_CLK_S4_PLL) += s4-pll.o
+> diff --git a/drivers/clk/meson/s4-pll.c b/drivers/clk/meson/s4-pll.c
+> new file mode 100644
+> index 000000000000..c70a33586bcd
+> --- /dev/null
+> +++ b/drivers/clk/meson/s4-pll.c
+> @@ -0,0 +1,907 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Amlogic Meson-S4 PLL Clock Controller Driver
+> + *
+> + * Copyright (c) 2021 Amlogic, inc.
+> + * Author: Yu Tu <yu.tu@amlogic.com>
+> + */
+> +
+> +#include <linux/clk-provider.h>
+> +#include <linux/of_device.h>
+> +#include <linux/platform_device.h>
+> +
+> +#include "clk-mpll.h"
+> +#include "clk-pll.h"
+> +#include "clk-regmap.h"
+> +#include "s4-pll.h"
+> +
+> +static DEFINE_SPINLOCK(meson_clk_lock);
+> +
+> +static struct clk_regmap s4_fixed_pll_dco = {
+> +	.data = &(struct meson_clk_pll_data){
+> +		.en = {
+> +			.reg_off = ANACTRL_FIXPLL_CTRL0,
+> +			.shift   = 28,
+> +			.width   = 1,
+> +		},
+> +		.m = {
+> +			.reg_off = ANACTRL_FIXPLL_CTRL0,
+> +			.shift   = 0,
+> +			.width   = 8,
+> +		},
+> +		.n = {
+> +			.reg_off = ANACTRL_FIXPLL_CTRL0,
+> +			.shift   = 10,
+> +			.width   = 5,
+> +		},
+> +		.frac = {
+> +			.reg_off = ANACTRL_FIXPLL_CTRL1,
+> +			.shift   = 0,
+> +			.width   = 17,
+> +		},
+> +		.l = {
+> +			.reg_off = ANACTRL_FIXPLL_CTRL0,
+> +			.shift   = 31,
+> +			.width   = 1,
+> +		},
+> +		.rst = {
+> +			.reg_off = ANACTRL_FIXPLL_CTRL0,
+> +			.shift   = 29,
+> +			.width   = 1,
+> +		},
+> +	},
+> +	.hw.init = &(struct clk_init_data){
+> +		.name = "fixed_pll_dco",
+> +		/*
+> +		 * This clock is a fixed value (4GHz) that is initialized by ROMcode.
 
- Changes v1->v2:
- - Moved CONFIG_CDX_MCDI_LOGGING flag to header file
- - Added sysfs entry to enable/disable mcdi logging
+Really, isn't it the bl2 doing that ?
 
- drivers/cdx/controller/Kconfig |  2 +-
- drivers/cdx/controller/mcdi.c  | 41 ++++++++++++----------------------
- drivers/cdx/controller/mcdi.h  |  7 ++++--
- 3 files changed, 20 insertions(+), 30 deletions(-)
+> +		 * This clock won't ever change at runtime.
+> +		 * The chip design determines that this clock cannot be changed after
+> +		 * initialization. To prevent system crash caused by changing
+> +		 * fixed related register in kernel phase. This register is not
+> +		 * writable in the kernel phase.
+> +		 * So we use ro_ops.
+> +		 */
 
-diff --git a/drivers/cdx/controller/Kconfig b/drivers/cdx/controller/Kconfig
-index c3e3b9ff8dfe..e7014e9819ea 100644
---- a/drivers/cdx/controller/Kconfig
-+++ b/drivers/cdx/controller/Kconfig
-@@ -18,7 +18,7 @@ config CDX_CONTROLLER
- 
- 	  If unsure, say N.
- 
--config MCDI_LOGGING
-+config CDX_MCDI_LOGGING
- 	bool "MCDI Logging for the CDX controller"
- 	depends on CDX_CONTROLLER
- 	help
-diff --git a/drivers/cdx/controller/mcdi.c b/drivers/cdx/controller/mcdi.c
-index a211a2ca762e..5a2d1fd46478 100644
---- a/drivers/cdx/controller/mcdi.c
-+++ b/drivers/cdx/controller/mcdi.c
-@@ -31,9 +31,7 @@ struct cdx_mcdi_copy_buffer {
- 	struct cdx_dword buffer[DIV_ROUND_UP(MCDI_CTL_SDU_LEN_MAX, 4)];
- };
- 
--#ifdef CONFIG_MCDI_LOGGING
- #define LOG_LINE_MAX		(1024 - 32)
--#endif
- 
- static void cdx_mcdi_cancel_cmd(struct cdx_mcdi *cdx, struct cdx_mcdi_cmd *cmd);
- static void cdx_mcdi_wait_for_cleanup(struct cdx_mcdi *cdx);
-@@ -118,12 +116,14 @@ int cdx_mcdi_init(struct cdx_mcdi *cdx)
- 
- 	mcdi = cdx_mcdi_if(cdx);
- 	mcdi->cdx = cdx;
-+	mcdi->logging_enabled = !!CDX_MCDI_LOGGING;
-+
-+	if (mcdi->logging_enabled) {
-+		mcdi->logging_buffer = kmalloc(LOG_LINE_MAX, GFP_KERNEL);
-+		if (!mcdi->logging_buffer)
-+			goto fail2;
-+	}
- 
--#ifdef CONFIG_MCDI_LOGGING
--	mcdi->logging_buffer = kmalloc(LOG_LINE_MAX, GFP_KERNEL);
--	if (!mcdi->logging_buffer)
--		goto fail2;
--#endif
- 	mcdi->workqueue = alloc_ordered_workqueue("mcdi_wq", 0);
- 	if (!mcdi->workqueue)
- 		goto fail3;
-@@ -136,10 +136,8 @@ int cdx_mcdi_init(struct cdx_mcdi *cdx)
- 
- 	return 0;
- fail3:
--#ifdef CONFIG_MCDI_LOGGING
- 	kfree(mcdi->logging_buffer);
- fail2:
--#endif
- 	kfree(cdx->mcdi);
- 	cdx->mcdi = NULL;
- fail:
-@@ -155,10 +153,7 @@ void cdx_mcdi_finish(struct cdx_mcdi *cdx)
- 		return;
- 
- 	cdx_mcdi_wait_for_cleanup(cdx);
--
--#ifdef CONFIG_MCDI_LOGGING
- 	kfree(mcdi->logging_buffer);
--#endif
- 
- 	destroy_workqueue(mcdi->workqueue);
- 	kfree(cdx->mcdi);
-@@ -246,15 +241,9 @@ static void cdx_mcdi_send_request(struct cdx_mcdi *cdx,
- 	size_t hdr_len;
- 	bool not_epoch;
- 	u32 xflags;
--#ifdef CONFIG_MCDI_LOGGING
--	char *buf;
--#endif
- 
- 	if (!mcdi)
- 		return;
--#ifdef CONFIG_MCDI_LOGGING
--	buf = mcdi->logging_buffer; /* page-sized */
--#endif
- 
- 	mcdi->prev_seq = cmd->seq;
- 	mcdi->seq_held_by[cmd->seq] = cmd;
-@@ -281,10 +270,10 @@ static void cdx_mcdi_send_request(struct cdx_mcdi *cdx,
- 			     MC_CMD_V2_EXTN_IN_MCDI_MESSAGE_TYPE_PLATFORM);
- 	hdr_len = 8;
- 
--#ifdef CONFIG_MCDI_LOGGING
--	if (!WARN_ON_ONCE(!buf)) {
-+	if (mcdi->logging_enabled) {
- 		const struct cdx_dword *frags[] = { hdr, inbuf };
- 		const size_t frag_len[] = { hdr_len, round_up(inlen, 4) };
-+		char *log = mcdi->logging_buffer;
- 		int bytes = 0;
- 		int i, j;
- 
-@@ -300,18 +289,18 @@ static void cdx_mcdi_send_request(struct cdx_mcdi *cdx,
- 				 * The string before that is just over 70 bytes.
- 				 */
- 				if ((bytes + 75) > LOG_LINE_MAX) {
--					pr_info("MCDI RPC REQ:%s \\\n", buf);
-+					pr_info("MCDI RPC REQ:%s \\\n", log);
- 					bytes = 0;
- 				}
--				bytes += snprintf(buf + bytes,
-+				bytes += snprintf(log + bytes,
- 						  LOG_LINE_MAX - bytes, " %08x",
- 						  le32_to_cpu(frag[i].cdx_u32));
- 			}
- 		}
- 
--		pr_info("MCDI RPC REQ:%s\n", buf);
-+		pr_info("MCDI RPC REQ:%s\n", log);
- 	}
--#endif
-+
- 	hdr[0].cdx_u32 |= (__force __le32)(cdx_mcdi_payload_csum(hdr, hdr_len, inbuf, inlen) <<
- 			 MCDI_HEADER_XFLAGS_LBN);
- 	cdx->mcdi_ops->mcdi_request(cdx, hdr, hdr_len, inbuf, inlen);
-@@ -700,8 +689,7 @@ static bool cdx_mcdi_complete_cmd(struct cdx_mcdi_iface *mcdi,
- 		resp_data_len = 0;
- 	}
- 
--#ifdef CONFIG_MCDI_LOGGING
--	if (!WARN_ON_ONCE(!mcdi->logging_buffer)) {
-+	if (mcdi->logging_enabled) {
- 		char *log = mcdi->logging_buffer;
- 		int i, bytes = 0;
- 		size_t rlen;
-@@ -721,7 +709,6 @@ static bool cdx_mcdi_complete_cmd(struct cdx_mcdi_iface *mcdi,
- 
- 		pr_info("MCDI RPC RESP:%s\n", log);
- 	}
--#endif
- 
- 	if (error && resp_data_len == 0) {
- 		/* MC rebooted during command */
-diff --git a/drivers/cdx/controller/mcdi.h b/drivers/cdx/controller/mcdi.h
-index 0bfbeab04e43..f9d90dfa19dd 100644
---- a/drivers/cdx/controller/mcdi.h
-+++ b/drivers/cdx/controller/mcdi.h
-@@ -22,6 +22,11 @@
- #define CDX_WARN_ON_PARANOID(x) do {} while (0)
- #endif
- 
-+#ifdef CONFIG_CDX_MCDI_LOGGING
-+#define CDX_MCDI_LOGGING	1
-+#else
-+#define CDX_MCDI_LOGGING	0
-+#endif
- /**
-  * enum cdx_mcdi_mode - MCDI transaction mode
-  * @MCDI_MODE_EVENTS: wait for an mcdi response callback.
-@@ -170,10 +175,8 @@ struct cdx_mcdi_iface {
- 	enum cdx_mcdi_mode mode;
- 	u8 prev_seq;
- 	bool new_epoch;
--#ifdef CONFIG_MCDI_LOGGING
- 	bool logging_enabled;
- 	char *logging_buffer;
--#endif
- };
- 
- /**
--- 
-2.25.1
+This explanation is good but we don't need mutliple copy/paste or
+"please refer" for the same thing. That is very verbose (I think I
+already commented on this previously)
+
+Just make one comment block, that clearly explain your intent and that
+it applies to the fixed_pll group
+
+> +		.ops = &meson_clk_pll_ro_ops,
+> +		.parent_data = (const struct clk_parent_data []) {
+> +			{ .fw_name = "xtal", }
+> +		},
+> +		.num_parents = 1,
+> +	},
+> +};
+> +
+> +static struct clk_regmap s4_fixed_pll = {
+> +	.data = &(struct clk_regmap_div_data){
+> +		.offset = ANACTRL_FIXPLL_CTRL0,
+> +		.shift = 16,
+> +		.width = 2,
+> +		.flags = CLK_DIVIDER_POWER_OF_TWO,
+> +	},
+> +	.hw.init = &(struct clk_init_data){
+> +		.name = "fixed_pll",
+> +		/*
+> +		 * This clock is a fixed value (2GHz) that is initialized by ROMcode.
+> +		 * For more information, please refer to s4_fixed_pll_dco.
+> +		 */
+> +		.ops = &clk_regmap_divider_ro_ops,
+> +		.parent_hws = (const struct clk_hw *[]) {
+> +			&s4_fixed_pll_dco.hw
+> +		},
+> +		.num_parents = 1,
+> +		/*
+> +		 * This clock won't ever change at runtime so
+> +		 * CLK_SET_RATE_PARENT is not required
+> +		 */
+> +	},
+> +};
+> +
+> +static struct clk_fixed_factor s4_fclk_div2_div = {
+> +	.mult = 1,
+> +	.div = 2,
+> +	.hw.init = &(struct clk_init_data){
+> +		.name = "fclk_div2_div",
+> +		.ops = &clk_fixed_factor_ops,
+> +		.parent_hws = (const struct clk_hw *[]) { &s4_fixed_pll.hw },
+> +		.num_parents = 1,
+> +	},
+> +};
+> +
+> +static struct clk_regmap s4_fclk_div2 = {
+> +	.data = &(struct clk_regmap_gate_data){
+> +		.offset = ANACTRL_FIXPLL_CTRL1,
+> +		.bit_idx = 24,
+> +	},
+> +	.hw.init = &(struct clk_init_data){
+> +		.name = "fclk_div2",
+> +		/*
+> +		 * This clock is a fixed value (1GHz) that is initialized by ROMcode.
+> +		 * For more information, please refer to s4_fixed_pll_dco.
+> +		 */
+> +		.ops = &clk_regmap_gate_ro_ops,
+> +		.parent_hws = (const struct clk_hw *[]) {
+> +			&s4_fclk_div2_div.hw
+> +		},
+> +		.num_parents = 1,
+> +	},
+> +};
+> +
+> +static struct clk_fixed_factor s4_fclk_div3_div = {
+> +	.mult = 1,
+> +	.div = 3,
+> +	.hw.init = &(struct clk_init_data){
+> +		.name = "fclk_div3_div",
+> +		.ops = &clk_fixed_factor_ops,
+> +		.parent_hws = (const struct clk_hw *[]) { &s4_fixed_pll.hw },
+> +		.num_parents = 1,
+> +	},
+> +};
+> +
+> +static struct clk_regmap s4_fclk_div3 = {
+> +	.data = &(struct clk_regmap_gate_data){
+> +		.offset = ANACTRL_FIXPLL_CTRL1,
+> +		.bit_idx = 20,
+> +	},
+> +	.hw.init = &(struct clk_init_data){
+> +		.name = "fclk_div3",
+> +		/*
+> +		 * For more information, please refer to s4_fixed_pll_dco.
+> +		 */
+> +		.ops = &clk_regmap_gate_ro_ops,
+> +		.parent_hws = (const struct clk_hw *[]) {
+> +			&s4_fclk_div3_div.hw
+> +		},
+> +		.num_parents = 1,
+> +	},
+> +};
+> +
+> +static struct clk_fixed_factor s4_fclk_div4_div = {
+> +	.mult = 1,
+> +	.div = 4,
+> +	.hw.init = &(struct clk_init_data){
+> +		.name = "fclk_div4_div",
+> +		.ops = &clk_fixed_factor_ops,
+> +		.parent_hws = (const struct clk_hw *[]) { &s4_fixed_pll.hw },
+> +		.num_parents = 1,
+> +	},
+> +};
+> +
+> +static struct clk_regmap s4_fclk_div4 = {
+> +	.data = &(struct clk_regmap_gate_data){
+> +		.offset = ANACTRL_FIXPLL_CTRL1,
+> +		.bit_idx = 21,
+> +	},
+> +	.hw.init = &(struct clk_init_data){
+> +		.name = "fclk_div4",
+> +		/*
+> +		 * For more information, please refer to s4_fixed_pll_dco.
+> +		 */
+
+While div2 and div3 got an explanation from previous SoCs, they others -
+like div4/div7/etc ... - have been able to cope with rw ops so far.
+
+Why is the S4 different for all these clocks ?
+
+Requiring RO ops (or fishy clock flags) is usually a sign that a clock
+is used without an appropriate driver.
+
+> +		.ops = &clk_regmap_gate_ro_ops,
+> +		.parent_hws = (const struct clk_hw *[]) {
+> +			&s4_fclk_div4_div.hw
+> +		},
+> +		.num_parents = 1,
+> +	},
+> +};
+> +
+> +static struct clk_fixed_factor s4_fclk_div5_div = {
+> +	.mult = 1,
+> +	.div = 5,
+> +	.hw.init = &(struct clk_init_data){
+> +		.name = "fclk_div5_div",
+> +		.ops = &clk_fixed_factor_ops,
+> +		.parent_hws = (const struct clk_hw *[]) { &s4_fixed_pll.hw },
+> +		.num_parents = 1,
+> +	},
+> +};
+> +
+> +static struct clk_regmap s4_fclk_div5 = {
+> +	.data = &(struct clk_regmap_gate_data){
+> +		.offset = ANACTRL_FIXPLL_CTRL1,
+> +		.bit_idx = 22,
+> +	},
+> +	.hw.init = &(struct clk_init_data){
+> +		.name = "fclk_div5",
+> +		/*
+> +		 * For more information, please refer to s4_fixed_pll_dco.
+> +		 */
+> +		.ops = &clk_regmap_gate_ro_ops,
+> +		.parent_hws = (const struct clk_hw *[]) {
+> +			&s4_fclk_div5_div.hw
+> +		},
+> +		.num_parents = 1,
+> +	},
+> +};
+> +
+> +static struct clk_fixed_factor s4_fclk_div7_div = {
+> +	.mult = 1,
+> +	.div = 7,
+> +	.hw.init = &(struct clk_init_data){
+> +		.name = "fclk_div7_div",
+> +		.ops = &clk_fixed_factor_ops,
+> +		.parent_hws = (const struct clk_hw *[]) { &s4_fixed_pll.hw },
+> +		.num_parents = 1,
+> +	},
+> +};
+> +
+> +static struct clk_regmap s4_fclk_div7 = {
+> +	.data = &(struct clk_regmap_gate_data){
+> +		.offset = ANACTRL_FIXPLL_CTRL1,
+> +		.bit_idx = 23,
+> +	},
+> +	.hw.init = &(struct clk_init_data){
+> +		.name = "fclk_div7",
+> +		/*
+> +		 * For more information, please refer to s4_fixed_pll_dco.
+> +		 */
+> +		.ops = &clk_regmap_gate_ro_ops,
+> +		.parent_hws = (const struct clk_hw *[]) {
+> +			&s4_fclk_div7_div.hw
+> +		},
+> +		.num_parents = 1,
+> +	},
+> +};
+> +
+> +static struct clk_fixed_factor s4_fclk_div2p5_div = {
+> +	.mult = 2,
+> +	.div = 5,
+> +	.hw.init = &(struct clk_init_data){
+> +		.name = "fclk_div2p5_div",
+> +		.ops = &clk_fixed_factor_ops,
+> +		.parent_hws = (const struct clk_hw *[]) {
+> +			&s4_fixed_pll.hw
+> +		},
+> +		.num_parents = 1,
+> +	},
+> +};
+> +
+> +static struct clk_regmap s4_fclk_div2p5 = {
+> +	.data = &(struct clk_regmap_gate_data){
+> +		.offset = ANACTRL_FIXPLL_CTRL1,
+> +		.bit_idx = 25,
+> +	},
+> +	.hw.init = &(struct clk_init_data){
+> +		.name = "fclk_div2p5",
+> +		/*
+> +		 * For more information, please refer to s4_fixed_pll_dco.
+> +		 */
+> +		.ops = &clk_regmap_gate_ro_ops,
+> +		.parent_hws = (const struct clk_hw *[]) {
+> +			&s4_fclk_div2p5_div.hw
+> +		},
+> +		.num_parents = 1,
+> +	},
+> +};
+> +
+> +static const struct pll_mult_range s4_gp0_pll_mult_range = {
+> +	.min = 125,
+> +	.max = 250,
+> +};
+> +
+> +/*
+> + * Internal gp0 pll emulation configuration parameters
+> + */
+> +static const struct reg_sequence s4_gp0_init_regs[] = {
+> +	{ .reg = ANACTRL_GP0PLL_CTRL1,	.def = 0x00000000 },
+> +	{ .reg = ANACTRL_GP0PLL_CTRL2,	.def = 0x00000000 },
+> +	{ .reg = ANACTRL_GP0PLL_CTRL3,	.def = 0x48681c00 },
+> +	{ .reg = ANACTRL_GP0PLL_CTRL4,	.def = 0x88770290 },
+> +	{ .reg = ANACTRL_GP0PLL_CTRL5,	.def = 0x39272000 },
+> +	{ .reg = ANACTRL_GP0PLL_CTRL6,	.def = 0x56540000 }
+> +};
+> +
+> +static struct clk_regmap s4_gp0_pll_dco = {
+> +	.data = &(struct meson_clk_pll_data){
+> +		.en = {
+> +			.reg_off = ANACTRL_GP0PLL_CTRL0,
+> +			.shift   = 28,
+> +			.width   = 1,
+> +		},
+> +		.m = {
+> +			.reg_off = ANACTRL_GP0PLL_CTRL0,
+> +			.shift   = 0,
+> +			.width   = 8,
+> +		},
+> +		.n = {
+> +			.reg_off = ANACTRL_GP0PLL_CTRL0,
+> +			.shift   = 10,
+> +			.width   = 5,
+> +		},
+> +		.frac = {
+> +			.reg_off = ANACTRL_GP0PLL_CTRL1,
+> +			.shift   = 0,
+> +			.width   = 17,
+> +		},
+> +		.l = {
+> +			.reg_off = ANACTRL_GP0PLL_CTRL0,
+> +			.shift   = 31,
+> +			.width   = 1,
+> +		},
+> +		.rst = {
+> +			.reg_off = ANACTRL_GP0PLL_CTRL0,
+> +			.shift   = 29,
+> +			.width   = 1,
+> +		},
+> +		.range = &s4_gp0_pll_mult_range,
+> +		.init_regs = s4_gp0_init_regs,
+> +		.init_count = ARRAY_SIZE(s4_gp0_init_regs),
+> +	},
+> +	.hw.init = &(struct clk_init_data){
+> +		.name = "gp0_pll_dco",
+> +		.ops = &meson_clk_pll_ops,
+> +		.parent_data = (const struct clk_parent_data []) {
+> +			{ .fw_name = "xtal", }
+> +		},
+> +		.num_parents = 1,
+> +	},
+> +};
+> +
+> +static struct clk_regmap s4_gp0_pll = {
+> +	.data = &(struct clk_regmap_div_data){
+> +		.offset = ANACTRL_GP0PLL_CTRL0,
+> +		.shift = 16,
+> +		.width = 3,
+> +		.flags = (CLK_DIVIDER_POWER_OF_TWO |
+> +			  CLK_DIVIDER_ROUND_CLOSEST),
+> +	},
+> +	.hw.init = &(struct clk_init_data){
+> +		.name = "gp0_pll",
+> +		.ops = &clk_regmap_divider_ops,
+> +		.parent_hws = (const struct clk_hw *[]) {
+> +			&s4_gp0_pll_dco.hw
+> +		},
+> +		.num_parents = 1,
+> +		.flags = CLK_SET_RATE_PARENT,
+> +	},
+> +};
+> +
+> +/*
+> + * Internal hifi pll emulation configuration parameters
+> + */
+> +static const struct reg_sequence s4_hifi_init_regs[] = {
+> +	{ .reg = ANACTRL_HIFIPLL_CTRL1,	.def = 0x00010e56 },
+> +	{ .reg = ANACTRL_HIFIPLL_CTRL2,	.def = 0x00000000 },
+> +	{ .reg = ANACTRL_HIFIPLL_CTRL3,	.def = 0x6a285c00 },
+> +	{ .reg = ANACTRL_HIFIPLL_CTRL4,	.def = 0x65771290 },
+> +	{ .reg = ANACTRL_HIFIPLL_CTRL5,	.def = 0x39272000 },
+> +	{ .reg = ANACTRL_HIFIPLL_CTRL6,	.def = 0x56540000 }
+> +};
+> +
+> +static struct clk_regmap s4_hifi_pll_dco = {
+> +	.data = &(struct meson_clk_pll_data){
+> +		.en = {
+> +			.reg_off = ANACTRL_HIFIPLL_CTRL0,
+> +			.shift   = 28,
+> +			.width   = 1,
+> +		},
+> +		.m = {
+> +			.reg_off = ANACTRL_HIFIPLL_CTRL0,
+> +			.shift   = 0,
+> +			.width   = 8,
+> +		},
+> +		.n = {
+> +			.reg_off = ANACTRL_HIFIPLL_CTRL0,
+> +			.shift   = 10,
+> +			.width   = 5,
+> +		},
+> +		.frac = {
+> +			.reg_off = ANACTRL_HIFIPLL_CTRL1,
+> +			.shift   = 0,
+> +			.width   = 17,
+> +		},
+> +		.l = {
+> +			.reg_off = ANACTRL_HIFIPLL_CTRL0,
+> +			.shift   = 31,
+> +			.width   = 1,
+> +		},
+> +		.rst = {
+> +			.reg_off = ANACTRL_HIFIPLL_CTRL0,
+> +			.shift   = 29,
+> +			.width   = 1,
+> +		},
+> +		.range = &s4_gp0_pll_mult_range,
+> +		.init_regs = s4_hifi_init_regs,
+> +		.init_count = ARRAY_SIZE(s4_hifi_init_regs),
+> +		.flags = CLK_MESON_PLL_ROUND_CLOSEST,
+> +	},
+> +	.hw.init = &(struct clk_init_data){
+> +		.name = "hifi_pll_dco",
+> +		.ops = &meson_clk_pll_ops,
+> +		.parent_data = (const struct clk_parent_data []) {
+> +			{ .fw_name = "xtal", }
+> +		},
+> +		.num_parents = 1,
+> +	},
+> +};
+> +
+> +static struct clk_regmap s4_hifi_pll = {
+> +	.data = &(struct clk_regmap_div_data){
+> +		.offset = ANACTRL_HIFIPLL_CTRL0,
+> +		.shift = 16,
+> +		.width = 2,
+> +		.flags = (CLK_DIVIDER_POWER_OF_TWO |
+> +			  CLK_DIVIDER_ROUND_CLOSEST),
+> +	},
+> +	.hw.init = &(struct clk_init_data){
+> +		.name = "hifi_pll",
+> +		.ops = &clk_regmap_divider_ops,
+> +		.parent_hws = (const struct clk_hw *[]) {
+> +			&s4_hifi_pll_dco.hw
+> +		},
+> +		.num_parents = 1,
+> +		.flags = CLK_SET_RATE_PARENT,
+> +	},
+> +};
+> +
+> +static struct clk_regmap s4_hdmi_pll_dco = {
+> +	.data = &(struct meson_clk_pll_data){
+> +		.en = {
+> +			.reg_off = ANACTRL_HDMIPLL_CTRL0,
+> +			.shift   = 28,
+> +			.width   = 1,
+> +		},
+> +		.m = {
+> +			.reg_off = ANACTRL_HDMIPLL_CTRL0,
+> +			.shift   = 0,
+> +			.width   = 8,
+> +		},
+> +		.n = {
+> +			.reg_off = ANACTRL_HDMIPLL_CTRL0,
+> +			.shift   = 10,
+> +			.width   = 5,
+> +		},
+> +		.frac = {
+> +			.reg_off = ANACTRL_HDMIPLL_CTRL1,
+> +			.shift   = 0,
+> +			.width   = 17,
+> +		},
+> +		.l = {
+> +			.reg_off = ANACTRL_HDMIPLL_CTRL0,
+> +			.shift   = 31,
+> +			.width   = 1,
+> +		},
+> +		.rst = {
+> +			.reg_off = ANACTRL_HDMIPLL_CTRL0,
+> +			.shift   = 29,
+> +			.width   = 1,
+> +		},
+> +		.range = &s4_gp0_pll_mult_range,
+> +	},
+> +	.hw.init = &(struct clk_init_data){
+> +		.name = "hdmi_pll_dco",
+> +		.ops = &meson_clk_pll_ops,
+> +		.parent_data = (const struct clk_parent_data []) {
+> +			{ .fw_name = "xtal", }
+> +		},
+> +		.num_parents = 1,
+> +	},
+> +};
+> +
+> +static struct clk_regmap s4_hdmi_pll_od = {
+> +	.data = &(struct clk_regmap_div_data){
+> +		.offset = ANACTRL_HDMIPLL_CTRL0,
+> +		.shift = 16,
+> +		.width = 4,
+> +		.flags = CLK_DIVIDER_POWER_OF_TWO,
+> +	},
+> +	.hw.init = &(struct clk_init_data){
+> +		.name = "hdmi_pll_od",
+> +		.ops = &clk_regmap_divider_ops,
+> +		.parent_hws = (const struct clk_hw *[]) {
+> +			&s4_hdmi_pll_dco.hw
+> +		},
+> +		.num_parents = 1,
+> +		.flags = CLK_SET_RATE_PARENT,
+> +	},
+> +};
+> +
+> +static struct clk_regmap s4_hdmi_pll = {
+> +	.data = &(struct clk_regmap_div_data){
+> +		.offset = ANACTRL_HDMIPLL_CTRL0,
+> +		.shift = 20,
+> +		.width = 2,
+> +		.flags = CLK_DIVIDER_POWER_OF_TWO,
+> +	},
+> +	.hw.init = &(struct clk_init_data){
+> +		.name = "hdmi_pll",
+> +		.ops = &clk_regmap_divider_ops,
+> +		.parent_hws = (const struct clk_hw *[]) {
+> +			&s4_hdmi_pll_od.hw
+> +		},
+> +		.num_parents = 1,
+> +		.flags = CLK_SET_RATE_PARENT,
+> +	},
+> +};
+> +
+> +static struct clk_fixed_factor s4_mpll_50m_div = {
+> +	.mult = 1,
+> +	.div = 80,
+> +	.hw.init = &(struct clk_init_data){
+> +		.name = "mpll_50m_div",
+> +		.ops = &clk_fixed_factor_ops,
+> +		.parent_hws = (const struct clk_hw *[]) {
+> +			&s4_fixed_pll_dco.hw
+> +		},
+> +		.num_parents = 1,
+> +	},
+> +};
+> +
+> +static struct clk_regmap s4_mpll_50m = {
+> +	.data = &(struct clk_regmap_mux_data){
+> +		.offset = ANACTRL_FIXPLL_CTRL3,
+> +		.mask = 0x1,
+> +		.shift = 5,
+> +	},
+> +	.hw.init = &(struct clk_init_data){
+> +		.name = "mpll_50m",
+> +		.ops = &clk_regmap_mux_ro_ops,
+> +		.parent_data = (const struct clk_parent_data []) {
+> +			{ .fw_name = "xtal", },
+> +			{ .hw = &s4_mpll_50m_div.hw },
+> +		},
+> +		.num_parents = 2,
+> +	},
+> +};
+> +
+> +static struct clk_fixed_factor s4_mpll_prediv = {
+> +	.mult = 1,
+> +	.div = 2,
+> +	.hw.init = &(struct clk_init_data){
+> +		.name = "mpll_prediv",
+> +		.ops = &clk_fixed_factor_ops,
+> +		.parent_hws = (const struct clk_hw *[]) {
+> +			&s4_fixed_pll_dco.hw
+> +		},
+> +		.num_parents = 1,
+> +	},
+> +};
+> +
+> +static const struct reg_sequence s4_mpll0_init_regs[] = {
+> +	{ .reg = ANACTRL_MPLL_CTRL2, .def = 0x40000033 }
+> +};
+> +
+> +static struct clk_regmap s4_mpll0_div = {
+> +	.data = &(struct meson_clk_mpll_data){
+> +		.sdm = {
+> +			.reg_off = ANACTRL_MPLL_CTRL1,
+> +			.shift   = 0,
+> +			.width   = 14,
+> +		},
+> +		.sdm_en = {
+> +			.reg_off = ANACTRL_MPLL_CTRL1,
+> +			.shift   = 30,
+> +			.width	 = 1,
+> +		},
+> +		.n2 = {
+> +			.reg_off = ANACTRL_MPLL_CTRL1,
+> +			.shift   = 20,
+> +			.width   = 9,
+> +		},
+> +		.ssen = {
+> +			.reg_off = ANACTRL_MPLL_CTRL1,
+> +			.shift   = 29,
+> +			.width	 = 1,
+> +		},
+> +		.lock = &meson_clk_lock,
+> +		.init_regs = s4_mpll0_init_regs,
+> +		.init_count = ARRAY_SIZE(s4_mpll0_init_regs),
+> +	},
+> +	.hw.init = &(struct clk_init_data){
+> +		.name = "mpll0_div",
+> +		.ops = &meson_clk_mpll_ops,
+> +		.parent_hws = (const struct clk_hw *[]) {
+> +			&s4_mpll_prediv.hw
+> +		},
+> +		.num_parents = 1,
+> +	},
+> +};
+> +
+> +static struct clk_regmap s4_mpll0 = {
+> +	.data = &(struct clk_regmap_gate_data){
+> +		.offset = ANACTRL_MPLL_CTRL1,
+> +		.bit_idx = 31,
+> +	},
+> +	.hw.init = &(struct clk_init_data){
+> +		.name = "mpll0",
+> +		.ops = &clk_regmap_gate_ops,
+> +		.parent_hws = (const struct clk_hw *[]) { &s4_mpll0_div.hw },
+> +		.num_parents = 1,
+> +		.flags = CLK_SET_RATE_PARENT,
+> +	},
+> +};
+> +
+> +static const struct reg_sequence s4_mpll1_init_regs[] = {
+> +	{ .reg = ANACTRL_MPLL_CTRL4,	.def = 0x40000033 }
+> +};
+> +
+> +static struct clk_regmap s4_mpll1_div = {
+> +	.data = &(struct meson_clk_mpll_data){
+> +		.sdm = {
+> +			.reg_off = ANACTRL_MPLL_CTRL3,
+> +			.shift   = 0,
+> +			.width   = 14,
+> +		},
+> +		.sdm_en = {
+> +			.reg_off = ANACTRL_MPLL_CTRL3,
+> +			.shift   = 30,
+> +			.width	 = 1,
+> +		},
+> +		.n2 = {
+> +			.reg_off = ANACTRL_MPLL_CTRL3,
+> +			.shift   = 20,
+> +			.width   = 9,
+> +		},
+> +		.ssen = {
+> +			.reg_off = ANACTRL_MPLL_CTRL3,
+> +			.shift   = 29,
+> +			.width	 = 1,
+> +		},
+> +		.lock = &meson_clk_lock,
+> +		.init_regs = s4_mpll1_init_regs,
+> +		.init_count = ARRAY_SIZE(s4_mpll1_init_regs),
+> +	},
+> +	.hw.init = &(struct clk_init_data){
+> +		.name = "mpll1_div",
+> +		.ops = &meson_clk_mpll_ops,
+> +		.parent_hws = (const struct clk_hw *[]) {
+> +			&s4_mpll_prediv.hw
+> +		},
+> +		.num_parents = 1,
+> +	},
+> +};
+> +
+> +static struct clk_regmap s4_mpll1 = {
+> +	.data = &(struct clk_regmap_gate_data){
+> +		.offset = ANACTRL_MPLL_CTRL3,
+> +		.bit_idx = 31,
+> +	},
+> +	.hw.init = &(struct clk_init_data){
+> +		.name = "mpll1",
+> +		.ops = &clk_regmap_gate_ops,
+> +		.parent_hws = (const struct clk_hw *[]) { &s4_mpll1_div.hw },
+> +		.num_parents = 1,
+> +		.flags = CLK_SET_RATE_PARENT,
+> +	},
+> +};
+> +
+> +static const struct reg_sequence s4_mpll2_init_regs[] = {
+> +	{ .reg = ANACTRL_MPLL_CTRL6, .def = 0x40000033 }
+> +};
+> +
+> +static struct clk_regmap s4_mpll2_div = {
+> +	.data = &(struct meson_clk_mpll_data){
+> +		.sdm = {
+> +			.reg_off = ANACTRL_MPLL_CTRL5,
+> +			.shift   = 0,
+> +			.width   = 14,
+> +		},
+> +		.sdm_en = {
+> +			.reg_off = ANACTRL_MPLL_CTRL5,
+> +			.shift   = 30,
+> +			.width	 = 1,
+> +		},
+> +		.n2 = {
+> +			.reg_off = ANACTRL_MPLL_CTRL5,
+> +			.shift   = 20,
+> +			.width   = 9,
+> +		},
+> +		.ssen = {
+> +			.reg_off = ANACTRL_MPLL_CTRL5,
+> +			.shift   = 29,
+> +			.width	 = 1,
+> +		},
+> +		.lock = &meson_clk_lock,
+> +		.init_regs = s4_mpll2_init_regs,
+> +		.init_count = ARRAY_SIZE(s4_mpll2_init_regs),
+> +	},
+> +	.hw.init = &(struct clk_init_data){
+> +		.name = "mpll2_div",
+> +		.ops = &meson_clk_mpll_ops,
+> +		.parent_hws = (const struct clk_hw *[]) {
+> +			&s4_mpll_prediv.hw
+> +		},
+> +		.num_parents = 1,
+> +	},
+> +};
+> +
+> +static struct clk_regmap s4_mpll2 = {
+> +	.data = &(struct clk_regmap_gate_data){
+> +		.offset = ANACTRL_MPLL_CTRL5,
+> +		.bit_idx = 31,
+> +	},
+> +	.hw.init = &(struct clk_init_data){
+> +		.name = "mpll2",
+> +		.ops = &clk_regmap_gate_ops,
+> +		.parent_hws = (const struct clk_hw *[]) { &s4_mpll2_div.hw },
+> +		.num_parents = 1,
+> +		.flags = CLK_SET_RATE_PARENT,
+> +	},
+> +};
+> +
+> +static const struct reg_sequence s4_mpll3_init_regs[] = {
+> +	{ .reg = ANACTRL_MPLL_CTRL8, .def = 0x40000033 }
+> +};
+> +
+> +static struct clk_regmap s4_mpll3_div = {
+> +	.data = &(struct meson_clk_mpll_data){
+> +		.sdm = {
+> +			.reg_off = ANACTRL_MPLL_CTRL7,
+> +			.shift   = 0,
+> +			.width   = 14,
+> +		},
+> +		.sdm_en = {
+> +			.reg_off = ANACTRL_MPLL_CTRL7,
+> +			.shift   = 30,
+> +			.width	 = 1,
+> +		},
+> +		.n2 = {
+> +			.reg_off = ANACTRL_MPLL_CTRL7,
+> +			.shift   = 20,
+> +			.width   = 9,
+> +		},
+> +		.ssen = {
+> +			.reg_off = ANACTRL_MPLL_CTRL7,
+> +			.shift   = 29,
+> +			.width	 = 1,
+> +		},
+> +		.lock = &meson_clk_lock,
+> +		.init_regs = s4_mpll3_init_regs,
+> +		.init_count = ARRAY_SIZE(s4_mpll3_init_regs),
+> +	},
+> +	.hw.init = &(struct clk_init_data){
+> +		.name = "mpll3_div",
+> +		.ops = &meson_clk_mpll_ops,
+> +		.parent_hws = (const struct clk_hw *[]) {
+> +			&s4_mpll_prediv.hw
+> +		},
+> +		.num_parents = 1,
+> +	},
+> +};
+> +
+> +static struct clk_regmap s4_mpll3 = {
+> +	.data = &(struct clk_regmap_gate_data){
+> +		.offset = ANACTRL_MPLL_CTRL7,
+> +		.bit_idx = 31,
+> +	},
+> +	.hw.init = &(struct clk_init_data){
+> +		.name = "mpll3",
+> +		.ops = &clk_regmap_gate_ops,
+> +		.parent_hws = (const struct clk_hw *[]) { &s4_mpll3_div.hw },
+> +		.num_parents = 1,
+> +		.flags = CLK_SET_RATE_PARENT,
+> +	},
+> +};
+> +
+> +/* Array of all clocks provided by this provider */
+> +static struct clk_hw_onecell_data s4_pll_hw_onecell_data = {
+> +	.hws = {
+> +		[CLKID_FIXED_PLL_DCO]		= &s4_fixed_pll_dco.hw,
+> +		[CLKID_FIXED_PLL]		= &s4_fixed_pll.hw,
+> +		[CLKID_FCLK_DIV2_DIV]		= &s4_fclk_div2_div.hw,
+> +		[CLKID_FCLK_DIV2]		= &s4_fclk_div2.hw,
+> +		[CLKID_FCLK_DIV3_DIV]		= &s4_fclk_div3_div.hw,
+> +		[CLKID_FCLK_DIV3]		= &s4_fclk_div3.hw,
+> +		[CLKID_FCLK_DIV4_DIV]		= &s4_fclk_div4_div.hw,
+> +		[CLKID_FCLK_DIV4]		= &s4_fclk_div4.hw,
+> +		[CLKID_FCLK_DIV5_DIV]		= &s4_fclk_div5_div.hw,
+> +		[CLKID_FCLK_DIV5]		= &s4_fclk_div5.hw,
+> +		[CLKID_FCLK_DIV7_DIV]		= &s4_fclk_div7_div.hw,
+> +		[CLKID_FCLK_DIV7]		= &s4_fclk_div7.hw,
+> +		[CLKID_FCLK_DIV2P5_DIV]		= &s4_fclk_div2p5_div.hw,
+> +		[CLKID_FCLK_DIV2P5]		= &s4_fclk_div2p5.hw,
+> +		[CLKID_GP0_PLL_DCO]		= &s4_gp0_pll_dco.hw,
+> +		[CLKID_GP0_PLL]			= &s4_gp0_pll.hw,
+> +		[CLKID_HIFI_PLL_DCO]		= &s4_hifi_pll_dco.hw,
+> +		[CLKID_HIFI_PLL]		= &s4_hifi_pll.hw,
+> +		[CLKID_HDMI_PLL_DCO]		= &s4_hdmi_pll_dco.hw,
+> +		[CLKID_HDMI_PLL_OD]		= &s4_hdmi_pll_od.hw,
+> +		[CLKID_HDMI_PLL]		= &s4_hdmi_pll.hw,
+> +		[CLKID_MPLL_50M_DIV]		= &s4_mpll_50m_div.hw,
+> +		[CLKID_MPLL_50M]		= &s4_mpll_50m.hw,
+> +		[CLKID_MPLL_PREDIV]		= &s4_mpll_prediv.hw,
+> +		[CLKID_MPLL0_DIV]		= &s4_mpll0_div.hw,
+> +		[CLKID_MPLL0]			= &s4_mpll0.hw,
+> +		[CLKID_MPLL1_DIV]		= &s4_mpll1_div.hw,
+> +		[CLKID_MPLL1]			= &s4_mpll1.hw,
+> +		[CLKID_MPLL2_DIV]		= &s4_mpll2_div.hw,
+> +		[CLKID_MPLL2]			= &s4_mpll2.hw,
+> +		[CLKID_MPLL3_DIV]		= &s4_mpll3_div.hw,
+> +		[CLKID_MPLL3]			= &s4_mpll3.hw,
+> +		[NR_PLL_CLKS]			= NULL
+> +	},
+> +	.num = NR_PLL_CLKS,
+> +};
+> +
+> +static struct clk_regmap *const s4_pll_clk_regmaps[] = {
+> +	&s4_fixed_pll_dco,
+> +	&s4_fixed_pll,
+> +	&s4_fclk_div2,
+> +	&s4_fclk_div3,
+> +	&s4_fclk_div4,
+> +	&s4_fclk_div5,
+> +	&s4_fclk_div7,
+> +	&s4_fclk_div2p5,
+> +	&s4_gp0_pll_dco,
+> +	&s4_gp0_pll,
+> +	&s4_hifi_pll_dco,
+> +	&s4_hifi_pll,
+> +	&s4_hdmi_pll_dco,
+> +	&s4_hdmi_pll_od,
+> +	&s4_hdmi_pll,
+> +	&s4_mpll_50m,
+> +	&s4_mpll0_div,
+> +	&s4_mpll0,
+> +	&s4_mpll1_div,
+> +	&s4_mpll1,
+> +	&s4_mpll2_div,
+> +	&s4_mpll2,
+> +	&s4_mpll3_div,
+> +	&s4_mpll3,
+> +};
+> +
+> +static const struct reg_sequence s4_init_regs[] = {
+> +	{ .reg = ANACTRL_MPLL_CTRL0,	.def = 0x00000543 },
+> +};
+> +
+> +static struct regmap_config clkc_regmap_config = {
+> +	.reg_bits       = 32,
+> +	.val_bits       = 32,
+> +	.reg_stride     = 4,
+> +};
+> +
+> +static int meson_s4_pll_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct regmap *regmap;
+> +	void __iomem *base;
+> +	int ret, i;
+> +
+> +	base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(base))
+> +		return PTR_ERR(base);
+> +
+> +	regmap = devm_regmap_init_mmio(dev, base, &clkc_regmap_config);
+> +	if (IS_ERR(regmap))
+> +		return PTR_ERR(regmap);
+> +
+> +	ret = regmap_multi_reg_write(regmap, s4_init_regs, ARRAY_SIZE(s4_init_regs));
+> +	if (ret) {
+> +		dev_err(dev, "Failed to init registers\n");
+> +		return ret;
+> +	}
+> +
+> +	/* Populate regmap for the regmap backed clocks */
+> +	for (i = 0; i < ARRAY_SIZE(s4_pll_clk_regmaps); i++)
+> +		s4_pll_clk_regmaps[i]->map = regmap;
+> +
+> +	for (i = 0; i < s4_pll_hw_onecell_data.num; i++) {
+> +		/* array might be sparse */
+> +		if (!s4_pll_hw_onecell_data.hws[i])
+> +			continue;
+> +
+> +		ret = devm_clk_hw_register(dev, s4_pll_hw_onecell_data.hws[i]);
+> +		if (ret) {
+> +			dev_err(dev, "Clock registration failed\n");
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	return devm_of_clk_add_hw_provider(dev, of_clk_hw_onecell_get,
+> +					   &s4_pll_hw_onecell_data);
+> +}
+> +
+> +static const struct of_device_id clkc_match_table[] = {
+> +	{
+> +		.compatible = "amlogic,s4-pll-clkc",
+> +	},
+> +	{}
+> +};
+> +
+> +static struct platform_driver s4_driver = {
+> +	.probe		= meson_s4_pll_probe,
+> +	.driver		= {
+> +		.name	= "s4-pll-clkc",
+> +		.of_match_table = clkc_match_table,
+> +	},
+> +};
+> +
+> +module_platform_driver(s4_driver);
+> +MODULE_LICENSE("GPL");
+> diff --git a/drivers/clk/meson/s4-pll.h b/drivers/clk/meson/s4-pll.h
+> new file mode 100644
+> index 000000000000..021d9f8b2b30
+> --- /dev/null
+> +++ b/drivers/clk/meson/s4-pll.h
+> @@ -0,0 +1,87 @@
+> +/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
+> +/*
+> + * Copyright (c) 2021 Amlogic, inc.
+> + * Author: Yu Tu <yu.tu@amlogic.com>
+> + */
+> +
+> +#ifndef __MESON_S4_PLL_H__
+> +#define __MESON_S4_PLL_H__
+> +
+> +/* ANA_CTRL - Registers */
+> +
+> +#define ANACTRL_FIXPLL_CTRL0                       0x040
+> +#define ANACTRL_FIXPLL_CTRL1                       0x044
+> +#define ANACTRL_FIXPLL_CTRL2                       0x048
+> +#define ANACTRL_FIXPLL_CTRL3                       0x04c
+> +#define ANACTRL_FIXPLL_CTRL4                       0x050
+> +#define ANACTRL_FIXPLL_CTRL5                       0x054
+> +#define ANACTRL_FIXPLL_CTRL6                       0x058
+> +#define ANACTRL_FIXPLL_STS                         0x05c
+> +#define ANACTRL_GP0PLL_CTRL0                       0x080
+> +#define ANACTRL_GP0PLL_CTRL1                       0x084
+> +#define ANACTRL_GP0PLL_CTRL2                       0x088
+> +#define ANACTRL_GP0PLL_CTRL3                       0x08c
+> +#define ANACTRL_GP0PLL_CTRL4                       0x090
+> +#define ANACTRL_GP0PLL_CTRL5                       0x094
+> +#define ANACTRL_GP0PLL_CTRL6                       0x098
+> +#define ANACTRL_GP0PLL_STS                         0x09c
+> +#define ANACTRL_HIFIPLL_CTRL0                      0x100
+> +#define ANACTRL_HIFIPLL_CTRL1                      0x104
+> +#define ANACTRL_HIFIPLL_CTRL2                      0x108
+> +#define ANACTRL_HIFIPLL_CTRL3                      0x10c
+> +#define ANACTRL_HIFIPLL_CTRL4                      0x110
+> +#define ANACTRL_HIFIPLL_CTRL5                      0x114
+> +#define ANACTRL_HIFIPLL_CTRL6                      0x118
+> +#define ANACTRL_HIFIPLL_STS                        0x11c
+> +#define ANACTRL_MPLL_CTRL0                         0x180
+> +#define ANACTRL_MPLL_CTRL1                         0x184
+> +#define ANACTRL_MPLL_CTRL2                         0x188
+> +#define ANACTRL_MPLL_CTRL3                         0x18c
+> +#define ANACTRL_MPLL_CTRL4                         0x190
+> +#define ANACTRL_MPLL_CTRL5                         0x194
+> +#define ANACTRL_MPLL_CTRL6                         0x198
+> +#define ANACTRL_MPLL_CTRL7                         0x19c
+> +#define ANACTRL_MPLL_CTRL8                         0x1a0
+> +#define ANACTRL_MPLL_STS                           0x1a4
+> +#define ANACTRL_HDMIPLL_CTRL0                      0x1c0
+> +#define ANACTRL_HDMIPLL_CTRL1                      0x1c4
+> +#define ANACTRL_HDMIPLL_CTRL2                      0x1c8
+> +#define ANACTRL_HDMIPLL_CTRL3                      0x1cc
+> +#define ANACTRL_HDMIPLL_CTRL4                      0x1d0
+> +#define ANACTRL_HDMIPLL_CTRL5                      0x1d4
+> +#define ANACTRL_HDMIPLL_CTRL6                      0x1d8
+> +#define ANACTRL_HDMIPLL_STS                        0x1dc
+> +#define ANACTRL_HDMIPLL_VLOCK                      0x1e4
+> +
+> +/*
+> + * CLKID index values
+> + *
+> + * These indices are entirely contrived and do not map onto the hardware.
+> + * It has now been decided to expose everything by default in the DT header:
+> + * include/dt-bindings/clock/amlogic,s4-pll-clkc.h. Only the clocks ids we don't
+> + * want to expose, such as the internal muxes and dividers of composite clocks,
+> + * will remain defined here.
+> + */
+> +#define CLKID_FIXED_PLL_DCO		0
+> +#define CLKID_FCLK_DIV2_DIV		2
+> +#define CLKID_FCLK_DIV3_DIV		4
+> +#define CLKID_FCLK_DIV4_DIV		6
+> +#define CLKID_FCLK_DIV5_DIV		8
+> +#define CLKID_FCLK_DIV7_DIV		10
+> +#define CLKID_FCLK_DIV2P5_DIV		12
+> +#define CLKID_GP0_PLL_DCO		14
+> +#define CLKID_HIFI_PLL_DCO		16
+> +#define CLKID_HDMI_PLL_DCO		18
+> +#define CLKID_HDMI_PLL_OD		19
+> +#define CLKID_MPLL_50M_DIV		21
+> +#define CLKID_MPLL_PREDIV		23
+> +#define CLKID_MPLL0_DIV			24
+> +#define CLKID_MPLL1_DIV			26
+> +#define CLKID_MPLL2_DIV			28
+> +#define CLKID_MPLL3_DIV			30
+> +
+> +#define NR_PLL_CLKS			32
+> +/* include the CLKIDs that have been made part of the DT binding */
+> +#include <dt-bindings/clock/amlogic,s4-pll-clkc.h>
+> +
+> +#endif /* __MESON_S4_PLL_H__ */
 
