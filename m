@@ -2,90 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C8B5723F1E
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 12:17:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D480723F22
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 12:17:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234787AbjFFKR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 06:17:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43564 "EHLO
+        id S232193AbjFFKRy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 06:17:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbjFFKR1 (ORCPT
+        with ESMTP id S235089AbjFFKRv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 06:17:27 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4049FEA;
-        Tue,  6 Jun 2023 03:17:26 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Qb5xb5bzMz6J7K1;
-        Tue,  6 Jun 2023 18:17:07 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Tue, 6 Jun
- 2023 11:17:24 +0100
-Date:   Tue, 6 Jun 2023 11:17:23 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Yicong Yang <yangyicong@huawei.com>
-CC:     <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
-        <corbet@lwn.net>, <linux-kernel@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <alexander.shishkin@linux.intel.com>,
-        <helgaas@kernel.org>, <linux-pci@vger.kernel.org>,
-        <prime.zeng@huawei.com>, <linuxarm@huawei.com>
-Subject: Re: [PATCH v3 4/4] hwtracing: hisi_ptt: Advertise
- PERF_PMU_CAP_NO_EXCLUDE for PTT PMU
-Message-ID: <20230606111723.000022d9@Huawei.com>
-In-Reply-To: <20230523093228.48149-5-yangyicong@huawei.com>
-References: <20230523093228.48149-1-yangyicong@huawei.com>
-        <20230523093228.48149-5-yangyicong@huawei.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Tue, 6 Jun 2023 06:17:51 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA17E64
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 03:17:49 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id DDE92601D6;
+        Tue,  6 Jun 2023 12:17:46 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1686046666; bh=65Q7dqLywf8Wf4YU9FBt+xQ5U+E+fTHuEmhCLrDjpfE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=RMJqu9NsLPbhEfo9h5ZK+fWDK8oXqpJBnRCXula/JNqhodiJTEny+eh82Jf7qrbXo
+         tN+2NF1YOqsemQojIdgcBxbpaW6QewVnxgbPHymPmT3MOas+4l2LcR4Wb0kt/N3q8L
+         ZfT8wlqfujfRt30YbyhBBEWl5EvHzM2gKjIUVO79/I/DwwG6Y3iehjrj7yZQtkNxjT
+         SDs6N8QlyZotDjyCpSmu+9QPAthvfpLQVRtI+bzN1ExJud9Ovv0L9312te7aQjBjuV
+         +lOKxI/skqK+GN0eleyRWQzUQ2GrHSQOdi9sbNkJTUoxr0jShBjlVDeayQIBt9S77u
+         orLt6ocvDmPOQ==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id H0UHvYNJieeU; Tue,  6 Jun 2023 12:17:44 +0200 (CEST)
+Received: from [193.198.186.200] (pc-mtodorov.slava.alu.hr [193.198.186.200])
+        by domac.alu.hr (Postfix) with ESMTPSA id 6462C601D0;
+        Tue,  6 Jun 2023 12:17:44 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1686046664; bh=65Q7dqLywf8Wf4YU9FBt+xQ5U+E+fTHuEmhCLrDjpfE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=TMThnddjbf4eYACeVGxZf2GdXzVwjviV1+usqzx6FvYcUtQqbUoutQRCArxHkaidE
+         /hHLQR0uRMEkQ1OyuIxZRstx+G1uGsHzv8bQdy4XeZ2VCZPbZtab8wZdm3KJyRlvkj
+         s/fYOdzu8KVUz4f8XLbKwEVZcqojyAF27TL5r+P/oHfL1zYT+wBTc2saUXhKPNls3i
+         4YI39ubX9cf5Ux7pu3pHIZrHth9YqdJa8EV9c7agKcKb9HRf5SSw0pCEsY7ebJY0TW
+         WyyowQuLfoksCwNDHGQZdHWTsuhnp71meyfZ34ZvV3bsyD2gOIHYWY7EtKtW+eFY3g
+         8t9eF+4AKU6+A==
+Message-ID: <b77284cc-06e7-69c1-1eaa-b3980ba7db71@alu.unizg.hr>
+Date:   Tue, 6 Jun 2023 12:17:39 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml100002.china.huawei.com (7.191.160.241) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 1/1] test_firmware: return ENOMEM instead of ENOSPC on
+ failed memory allocation
+Content-Language: en-US, hr
+To:     Dan Carpenter <dan.carpenter@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, Dan Carpenter <error27@gmail.com>,
+        Takashi Iwai <tiwai@suse.de>,
+        Kees Cook <keescook@chromium.org>,
+        "Luis R. Rodriguez" <mcgrof@ruslug.rutgers.edu>,
+        Scott Branden <sbranden@broadcom.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Brian Norris <briannorris@chromium.org>
+References: <20230606070808.9300-1-mirsad.todorovac@alu.unizg.hr>
+ <ba21003b-1440-464c-b251-0e3c2759d07e@kadam.mountain>
+From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <ba21003b-1440-464c-b251-0e3c2759d07e@kadam.mountain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 23 May 2023 17:32:28 +0800
-Yicong Yang <yangyicong@huawei.com> wrote:
-
-> From: Yicong Yang <yangyicong@hisilicon.com>
+On 6/6/23 09:14, Dan Carpenter wrote:
+> On Tue, Jun 06, 2023 at 09:08:10AM +0200, Mirsad Goran Todorovac wrote:
+>> In a couple of situations like
+>>
+>> 	name = kstrndup(buf, count, GFP_KERNEL);
+>> 	if (!name)
+>> 		return -ENOSPC;
+>>
+>> the error is not actually "No space left on device", but "Out of memory".
+>>
+>> It is semantically correct to return -ENOMEM in all failed kstrndup()
+>> and kzalloc() cases in this driver, as it is not a problem with disk
+>> space, but with kernel memory allocator failing allocation.
+>>
+>> The semantically correct should be:
+>>
+>>          name = kstrndup(buf, count, GFP_KERNEL);
+>>          if (!name)
+>>                  return -ENOMEM;
+>>
+>> Cc: Dan Carpenter <error27@gmail.com>
+>> Cc: Takashi Iwai <tiwai@suse.de>
+>> Cc: Kees Cook <keescook@chromium.org>
+>> Cc: "Luis R. Rodriguez" <mcgrof@ruslug.rutgers.edu>
+>> Cc: Scott Branden <sbranden@broadcom.com>
+>> Cc: Hans de Goede <hdegoede@redhat.com>
+>> Cc: Brian Norris <briannorris@chromium.org>
+>> Fixes: c92316bf8e948 ("test_firmware: add batched firmware tests")
+>> Fixes: 0a8adf584759c ("test: add firmware_class loader test")
+>> Fixes: 548193cba2a7d ("test_firmware: add support for firmware_request_platform")
+>> Fixes: eb910947c82f9 ("test: firmware_class: add asynchronous request trigger")
+>> Fixes: 061132d2b9c95 ("test_firmware: add test custom fallback trigger")
+>> Fixes: 7feebfa487b92 ("test_firmware: add support for request_firmware_into_buf")
+>> Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+>> ---
 > 
-> The PTT trace collects PCIe TLP headers from the PCIe link and don't
-> have the ability to exclude certain context. It doesn't support itrace
-> as well. So only advertise PERF_PMU_CAP_NO_EXCLUDE. This will greatly
-> save the storage of final data. Tested tracing idle link for ~15s,
-> without this patch we'll collect ~28.682MB data for context related
-> information and with this patch it reduced to ~0.226MB.
+> Thanks!
+
+Thank you for reviewing the patch at such a short notice.
+Though it is merely a code consistency fix.
+
+Best regards,
+Mirsad Todorovac
+
+> Reviewed-by: Dan Carpenter <dan.carpenter@linaro.org>
 > 
-> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
-Interesting - I didn't know about this flag.
+> regards,
+> dan carpenter
 
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+-- 
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
 
-> ---
->  drivers/hwtracing/ptt/hisi_ptt.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwtracing/ptt/hisi_ptt.c b/drivers/hwtracing/ptt/hisi_ptt.c
-> index 65f4288a1915..b9917db849bf 100644
-> --- a/drivers/hwtracing/ptt/hisi_ptt.c
-> +++ b/drivers/hwtracing/ptt/hisi_ptt.c
-> @@ -1210,7 +1210,7 @@ static int hisi_ptt_register_pmu(struct hisi_ptt *hisi_ptt)
->  
->  	hisi_ptt->hisi_ptt_pmu = (struct pmu) {
->  		.module		= THIS_MODULE,
-> -		.capabilities	= PERF_PMU_CAP_EXCLUSIVE | PERF_PMU_CAP_ITRACE,
-> +		.capabilities	= PERF_PMU_CAP_NO_EXCLUDE,
->  		.task_ctx_nr	= perf_sw_context,
->  		.attr_groups	= hisi_ptt_pmu_groups,
->  		.event_init	= hisi_ptt_pmu_event_init,
-
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
