@@ -2,208 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A86A9724D9F
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 21:59:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ECAC724D9A
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 21:58:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239621AbjFFT7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 15:59:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42920 "EHLO
+        id S239611AbjFFT6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 15:58:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239217AbjFFT73 (ORCPT
+        with ESMTP id S234125AbjFFT6l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 15:59:29 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DFDF10F0
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 12:59:27 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id BDEFB5FD0C;
-        Tue,  6 Jun 2023 22:59:25 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1686081565;
-        bh=HsbilSNXGprd3byyDOvNssmOWdlSZHdBWqrnSufFSSw=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=ZZU7Z6raDP6idx0UdSOQZRgPB1iO0AILrTTyExr92YK5bHZfxEpVbtSiu4qliHENJ
-         hmGzSGX2dnvidjfQyZhyDZkfIqciZLiliur0qlw+FpyIZrMPGmaY3JFscc0Yue3NZc
-         cO1rVDziwSPv7p50EkhIWA7jl+j9CeE/U3hGfzb9xpRcMiWeKQBb4Jb8xr9i+nr4yx
-         cvcD/P3/c313g/4NMHlEyjT8c1j6ozzvvCJI8Je4gj3pahH+Ca2k1p/qZom5fwS2vp
-         JJxYUUc0bl3pZJY/T2vZiPjGz5HVFqf1qELQlqx3JivNkzkYBVHxY/iRLfiPFRyJ9V
-         c4GC7fklO9sAg==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Tue,  6 Jun 2023 22:59:25 +0300 (MSK)
-Message-ID: <2ed06841-6c9f-46c9-2d2d-2daffb0a9010@sberdevices.ru>
-Date:   Tue, 6 Jun 2023 22:54:32 +0300
+        Tue, 6 Jun 2023 15:58:41 -0400
+Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FB2583;
+        Tue,  6 Jun 2023 12:58:40 -0700 (PDT)
+Received: by mail-oo1-xc2b.google.com with SMTP id 006d021491bc7-55554c33bf3so4788563eaf.2;
+        Tue, 06 Jun 2023 12:58:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686081519; x=1688673519;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9fzXlbPINbB7MLh0jxJ+Y5UChf2gkHO8C34dmKugRUg=;
+        b=S03UnzPuSlaqndpGm3fYnzSEuVrAJXVaDyv5zhRB0i5qOf5lMwHRzbOjDYKhZQ3YSo
+         K6JFXzTmnc5Eo0jMOnKFw9HQej3OKTiE/yaKVmk6JZ6cXrcoQ9HDNrj6Ulu/ThSN+8zH
+         XELNofQ9A4CjY/LWiTTYEyPJ0ej0qw0h/zran7xqQiuRfvTLultwGtjYlcq8sS4ed+sK
+         8hQjSnUD1/E3QK+CRaXt8pS2dKD7rK+nMC/dWUUVKcU5y9DBDO6YlOV/O/PkkLmBRN4X
+         sBGC4cB3XiFMOmPvIfiknCyFlxijBSnkSJdGYSFYSDsdnyHBdclop9rTWD/UjH1tKS26
+         2GMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686081519; x=1688673519;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9fzXlbPINbB7MLh0jxJ+Y5UChf2gkHO8C34dmKugRUg=;
+        b=I65QxiSV57kpPiSj8434muByZR8CMhPa9Vq8u5Sc0fvz9vLTxJCVhY9PlUCGVYSU3L
+         AAOEx0kIYNTi5l8QNmLjx7IHHzUCPTqaDDw3s5Yuu+ZJjS9VnNOGQ5/Bno0WWFlrGaIW
+         urDJ0Ga0JLsF0cCJ2MRG3dBD3/ZhHK9ZV6rGGBa3rJ5L3l/hr8ST/XJCx4A0/zvpUsIp
+         sg6hz80cRgVZq8mRRrtOmdpTSC9DsOtLfSSljoSm6QPDFGiqBekQyGeZH3MHJuy6YNOi
+         ttzjMUj31vQcfqzHs+N+IcvZPjdrtkLIItgyt7u9Z8gwXxBWH9MbGyvSL0Vsqsy5Z5Fu
+         YCww==
+X-Gm-Message-State: AC+VfDwjwgF87b5TgvqcxsCq0K6CYkzfmxyWqG2ej8O+D+CSjUuaNavV
+        VFCjdoo450es5MJPrfM49+A=
+X-Google-Smtp-Source: ACHHUZ42dMHLfPyqDY8aY4eB6lc3Uaa0wqGPVYy7FN7kzsPrKQYtfFllGNzJqCzN0j4iAu3TvEb9ZA==
+X-Received: by 2002:a05:6359:2a0:b0:129:cc43:2ebd with SMTP id ek32-20020a05635902a000b00129cc432ebdmr929433rwb.23.1686081519068;
+        Tue, 06 Jun 2023 12:58:39 -0700 (PDT)
+Received: from localhost (dhcp-72-235-13-41.hawaiiantel.net. [72.235.13.41])
+        by smtp.gmail.com with ESMTPSA id fe19-20020a056a002f1300b0065055ad5754sm7196408pfb.64.2023.06.06.12.58.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Jun 2023 12:58:38 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 6 Jun 2023 09:58:37 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Mrunal Patel <mpatel@redhat.com>,
+        Ryan Phillips <rphillips@redhat.com>,
+        Brent Rowsell <browsell@redhat.com>,
+        Peter Hunt <pehunt@redhat.com>, Phil Auld <pauld@redhat.com>
+Subject: Re: [RFC PATCH 0/5] cgroup/cpuset: A new "isolcpus" paritition
+Message-ID: <ZH-P7X_yjnVfhy7b@slm.duckdns.org>
+References: <deb7b684-3d7c-b3ae-7b36-5b7ba2dd8001@redhat.com>
+ <ZFUo5IYAIwTEKR4_@slm.duckdns.org>
+ <759603dd-7538-54ad-e63d-bb827b618ae3@redhat.com>
+ <405b2805-538c-790b-5bf8-e90d3660f116@redhat.com>
+ <ZGvHUjOCjwat91Gq@slm.duckdns.org>
+ <18793f4a-fd39-2e71-0b77-856afb01547b@redhat.com>
+ <ZH4jfmypOXGJPu0D@slm.duckdns.org>
+ <be64a569-4388-9dd9-3e06-36d716a54f6c@redhat.com>
+ <ZH5FNc6wjlGPsaaO@slm.duckdns.org>
+ <a2220c9f-7a8d-da82-ecc0-b39f3807408c@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v1] mtd: rawnand: meson: waiting w/o wired ready/busy pin
-Content-Language: en-US
-To:     Liang Yang <liang.yang@amlogic.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-CC:     <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
-        <linux-mtd@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-References: <20230606195128.83432-1-AVKrasnov@sberdevices.ru>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-In-Reply-To: <20230606195128.83432-1-AVKrasnov@sberdevices.ru>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/06/06 14:43:00 #21444531
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a2220c9f-7a8d-da82-ecc0-b39f3807408c@redhat.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello, Waiman.
 
+On Mon, Jun 05, 2023 at 10:47:08PM -0400, Waiman Long wrote:
+...
+> I had a different idea on the semantics of the cpuset.cpus.exclusive at the
+> beginning. My original thinking is that it was the actual exclusive CPUs
+> that are allocated to the cgroup. Now if we treat this as a hint of what
+> exclusive CPUs should be used and it becomes valid only if the cgroup can
 
-On 06.06.2023 22:51, Arseniy Krasnov wrote:
-> If there is no wired ready/busy pin, classic way to wait for command
-> completion is to use function 'nand_soft_waitrdy()'. Meson NAND has
-> special command which allows to wait for NAND_STATUS_READY bit without
-> reading status in a software loop (as 'nand_soft_waitrdy()' does). To
-> use it send this command along with NAND_CMD_STATUS, then wait for an
-> interrupt, and after interrupt send NAND_CMD_READ0. So this feature
-> allows to use interrupt driven waiting without wired ready/busy pin.
+I wouldn't call it a hint. It's still hard allocation of the CPUs to the
+cgroups that own them. Setting up a partition requires exclusive CPUs and
+thus would depend on exclusive allocations set up accordingly.
+
+> become a valid partition. I can see it as a value that can be hierarchically
+> set throughout the whole cpuset hierarchy.
 > 
-> Suggested-by: Liang Yang <liang.yang@amlogic.com>
-> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-> ---
->  drivers/mtd/nand/raw/meson_nand.c | 58 ++++++++++++++++++++++++++++++-
->  1 file changed, 57 insertions(+), 1 deletion(-)
+> So a transition to a valid partition is possible iff
 > 
-> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
-> index 074e14225c06..f4c5309a9527 100644
-> --- a/drivers/mtd/nand/raw/meson_nand.c
-> +++ b/drivers/mtd/nand/raw/meson_nand.c
-> @@ -38,6 +38,7 @@
->  #define NFC_CMD_SCRAMBLER_DISABLE	0
->  #define NFC_CMD_SHORTMODE_DISABLE	0
->  #define NFC_CMD_RB_INT		BIT(14)
-> +#define NFC_CMD_RB_INT_NO_PIN	((0xb << 10) | BIT(18) | BIT(16))
->  
->  #define NFC_CMD_GET_SIZE(x)	(((x) >> 22) & GENMASK(4, 0))
->  
-> @@ -94,6 +95,7 @@
->  
->  /* nand flash controller delay 3 ns */
->  #define NFC_DEFAULT_DELAY	3000
-> +#define NFC_NO_RB_PIN_DELAY	5
->  
->  #define ROW_ADDER(page, index)	(((page) >> (8 * (index))) & 0xff)
->  #define MAX_CYCLE_ADDRS		5
-> @@ -179,6 +181,7 @@ struct meson_nfc {
->  	u32 info_bytes;
->  
->  	unsigned long assigned_cs;
-> +	bool no_rb_pin;
->  };
->  
->  enum {
-> @@ -392,7 +395,41 @@ static void meson_nfc_set_data_oob(struct nand_chip *nand,
->  	}
->  }
->  
-> -static int meson_nfc_queue_rb(struct meson_nfc *nfc, int timeout_ms)
-> +static int meson_nfc_wait_no_rb_pin(struct meson_nfc *nfc, int timeout_ms)
-> +{
-> +	u32 cmd, cfg;
-> +
-> +	meson_nfc_cmd_idle(nfc, nfc->timing.twb);
-> +	meson_nfc_drain_cmd(nfc);
-> +	meson_nfc_wait_cmd_finish(nfc, CMD_FIFO_EMPTY_TIMEOUT);
-> +
-> +	cfg = readl(nfc->reg_base + NFC_REG_CFG);
-> +	cfg |= NFC_RB_IRQ_EN;
-> +	writel(cfg, nfc->reg_base + NFC_REG_CFG);
-> +
-> +	reinit_completion(&nfc->completion);
-> +	cmd = nfc->param.chip_select | NFC_CMD_CLE | NAND_CMD_STATUS;
-> +	writel(cmd, nfc->reg_base + NFC_REG_CMD);
-> +	meson_nfc_cmd_idle(nfc, NFC_NO_RB_PIN_DELAY);
+> 1) cpuset.cpus.exclusive is a subset of cpuset.cpus and is a subset of
+> cpuset.cpus.exclusive of all its ancestors.
 
-^^^
+Yes.
 
-> +
-> +	/* use the max erase time as the maximum clock for waiting R/B */
-> +	cmd = NFC_CMD_RB | NFC_CMD_RB_INT_NO_PIN | nfc->timing.tbers_max;
-> +	writel(cmd, nfc->reg_base + NFC_REG_CMD);
-> +	meson_nfc_cmd_idle(nfc, NFC_NO_RB_PIN_DELAY);
+> 2) If its parent is not a partition root, none of the CPUs in
+> cpuset.cpus.exclusive are currently allocated to other partitions. This the
 
-^^^
-Liang, I've implemented "new RB_INT" way instead of 'nand_soft_waitrdy()'. There were two numbers
-2 and 5 in 'meson_nfc_cmd_idle()' as time argument (here and above). I've replaced both with
-define of 5 == NFC_NO_RB_PIN_DELAY. Is it correct? 2 and 5 were from doc?
+Not just that, the CPUs aren't available to cgroups which don't have them
+set in the .exclusive file. IOW, if a CPU is in cpus.exclusive of some
+cgroups, it shouldn't appear in cpus.effective of cgroups which don't have
+the CPU in their cpus.exclusive.
 
-Thanks, Arseniy
+So, .exclusive explicitly establishes exclusive ownership of CPUs and
+partitions depend on that with an implicit "turn CPUs exclusive" behavior in
+case the parent is a partition root for backward compatibility.
 
-> +
-> +	if (!wait_for_completion_timeout(&nfc->completion,
-> +					 msecs_to_jiffies(timeout_ms)))
-> +		return -ETIMEDOUT;
-> +
-> +	cmd = nfc->param.chip_select | NFC_CMD_CLE | NAND_CMD_READ0;
-> +	writel(cmd, nfc->reg_base + NFC_REG_CMD);
-> +	meson_nfc_drain_cmd(nfc);
-> +	meson_nfc_wait_cmd_finish(nfc, CMD_FIFO_EMPTY_TIMEOUT);
-> +
-> +	return 0;
-> +}
-> +
-> +static int meson_nfc_wait_rb_pin(struct meson_nfc *nfc, int timeout_ms)
->  {
->  	u32 cmd, cfg;
->  	int ret = 0;
-> @@ -420,6 +457,23 @@ static int meson_nfc_queue_rb(struct meson_nfc *nfc, int timeout_ms)
->  	return ret;
->  }
->  
-> +static int meson_nfc_queue_rb(struct meson_nfc *nfc, int timeout_ms)
-> +{
-> +	if (nfc->no_rb_pin) {
-> +		/* This mode is used when there is no wired R/B pin.
-> +		 * It works like 'nand_soft_waitrdy()', but instead of
-> +		 * polling NAND_CMD_STATUS bit in the software loop,
-> +		 * it will wait for interrupt - controllers checks IO
-> +		 * bus and when it detects NAND_CMD_STATUS on it, it
-> +		 * raises interrupt. After interrupt, NAND_CMD_READ0 is
-> +		 * sent as terminator of the ready waiting procedure.
-> +		 */
-> +		return meson_nfc_wait_no_rb_pin(nfc, timeout_ms);
-> +	} else {
-> +		return meson_nfc_wait_rb_pin(nfc, timeout_ms);
-> +	}
-> +}
-> +
->  static void meson_nfc_set_user_byte(struct nand_chip *nand, u8 *oob_buf)
->  {
->  	struct meson_nfc_nand_chip *meson_chip = to_meson_nand(nand);
-> @@ -1412,6 +1466,8 @@ static int meson_nfc_probe(struct platform_device *pdev)
->  		return ret;
->  	}
->  
-> +	nfc->no_rb_pin = !of_property_read_bool(dev->of_node, "nand-rb");
-> +
->  	writel(0, nfc->reg_base + NFC_REG_CFG);
->  	ret = devm_request_irq(dev, irq, meson_nfc_irq, 0, dev_name(dev), nfc);
->  	if (ret) {
+> same remote partition concept in my v2 patch. If its parent is a partition
+> root, part of its exclusive CPUs will be distributed to this child partition
+> like the current behavior of cpuset partition.
+
+Yes, similar in a sense. Please do away with the "once .reserve is used, the
+behavior is switched" part. Instead, it can be sth like "if the parent is a
+partition root, cpuset implicitly tries to set all CPUs in its cpus file in
+its cpus.exclusive file" so that user-visible behavior stays unchanged
+depending on past history.
+
+Thanks.
+
+-- 
+tejun
