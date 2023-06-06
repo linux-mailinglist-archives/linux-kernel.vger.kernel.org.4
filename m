@@ -2,134 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3C79724BC1
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 20:50:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B2DC724BC7
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 20:51:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238883AbjFFSut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 14:50:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59546 "EHLO
+        id S238038AbjFFSvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 14:51:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233251AbjFFSus (ORCPT
+        with ESMTP id S237689AbjFFSvn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 14:50:48 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5536EA
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 11:50:46 -0700 (PDT)
-Received: from mail-yw1-f197.google.com (mail-yw1-f197.google.com [209.85.128.197])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 6E3543F15B
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 18:50:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1686077445;
-        bh=ZBMK+DdZXFCRFi5Z/MVobjT4mwItd0TF7QfSBIyRNYM=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=mHf/l9DVLNuZu8eEjcBx5Qm56t7Mik+HTIDZh41XKRBqWrk2qf2lQoJxtv09ia2tm
-         FBPHLtePOZiu24f01Bos9p6SM05WH/0RsW0PPEwUFtoMA1EPAZKH59agGFdMOGu9Dq
-         bi+iQlPEa6IH15VeC3B4HLxsi+CtYErz6Z7NXxCfRIWXSBuH7y8zg+m0739DBhvqRs
-         WSleRgNOG/gZznhjfBU79X+79qFycVUE3NMDyupUF81e8NRQZIgqTho8H4wa2HSV/I
-         oMlW+ee9AmJaR4qYlAyXD+XeY339s3l4eGJD4dkBNkG7NgwXNuAQo7nxaScUpVP9vU
-         QwYS6D/EkPQLQ==
-Received: by mail-yw1-f197.google.com with SMTP id 00721157ae682-565a1788f3fso105693047b3.0
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 11:50:45 -0700 (PDT)
+        Tue, 6 Jun 2023 14:51:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5740310F9
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 11:50:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686077457;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0XFw6gcEgy9jlNj5A7rUaw0iqCQdUHsprsfL2vsu2qk=;
+        b=DF0r9Wo6bcGImvxr86aRoXPRJ5kq2Z1+9a9KRJMdzHqBtiKYQFjQwSKKJQ1vuFSwOYhl8p
+        uXSgpIXc7CDnTUdgBuuV4UIMI/AermhuvfKb/D65eZHgrjRhvMZlmnlm602gMkvr+8ynGo
+        isbzbfFesaDhM3z50m80HRrWuGpb/+I=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-17-GFx7b5j_P5OjPhub_6-FSg-1; Tue, 06 Jun 2023 14:50:56 -0400
+X-MC-Unique: GFx7b5j_P5OjPhub_6-FSg-1
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-3f739cc1aafso15433075e9.1
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 11:50:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686077443; x=1688669443;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZBMK+DdZXFCRFi5Z/MVobjT4mwItd0TF7QfSBIyRNYM=;
-        b=WxP+KgjwfoBkcAgKonNdosddUcaovmGLSuTvZg1Z8qaHGYj8lZ7SSe2VZ1UuSCjI7I
-         zXHK6a7eOEgKuC8JoVY147pZaKMAqN6keZCuClQ+qQh7Ncvr+k+Ksn58rDhKONMsknMS
-         lTZKVlenMhi5Zm10XSz2fG1i5ytmlVINrBtcMfrIQ9A1EO8HkcDeuOtZUx+H8GNNOXko
-         WLZUe6qcgJ92IzLhbABL/DrOFbVnSms7YOfSSXHvcVRzlvxdz6kAd8RZEW/d8KalNuDc
-         ms0pDiFWTWN5Sj/3rUeBWH3QnCbHljOas/+/qF+Ol8H8fhufkE/a+qVs8YUzqUZKxEyw
-         cHog==
-X-Gm-Message-State: AC+VfDyfXV7cfvxkeYvwt8IR8DTkh5lT5NFCP95azpasIJyyBQb+13Jo
-        YB88LPAt2/ABjYR4ivN2Rp6KMDmerw1A3K7MG5JYRdIM0PIvOngpXnIzLM+7ORbqk0K3Hh8mC0s
-        N0kbuW59kohVPjA+Vb12JtksbY3Q1+HgAA50kS8EFY1pVTHpJXG/qWHo+FfLb1tDheagw
-X-Received: by 2002:a0d:df93:0:b0:567:2891:a2ec with SMTP id i141-20020a0ddf93000000b005672891a2ecmr2847085ywe.22.1686077443442;
-        Tue, 06 Jun 2023 11:50:43 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7eG8FXdCtl3Jo2AHE6KMXFNu+4hALAAsTlXcmSnAR6Is4KRsx+SE5FovsuMWhsnejikrGXFCTSV6j866OLXwU=
-X-Received: by 2002:a0d:df93:0:b0:567:2891:a2ec with SMTP id
- i141-20020a0ddf93000000b005672891a2ecmr2847070ywe.22.1686077443171; Tue, 06
- Jun 2023 11:50:43 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686077455; x=1688669455;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0XFw6gcEgy9jlNj5A7rUaw0iqCQdUHsprsfL2vsu2qk=;
+        b=RJB/UJCjsrNrmFsFG12GKPX8uTrSVUSbEnzl8dRGn+XExZQqcxKuchjFBjn4RQO+BA
+         0sxZPteOiylHUeRjVsXHEyP5pnYtYl6Kb+9T0PLZPdabrIXaVY2ysHPhC+OUCqeZ9BV5
+         FQhqBSAIb228WubOUajtd5EDLI17GVEGQoqeIiL16RaiAIlUzh18oJOgA1PNOtrRr4S/
+         QhMkM8LtSB/fGB5qwlA7QBxhDteG/hAiyCQOB9n8VAG6eC/QFuTrZ1eMIJjkLWGYVfl8
+         K7zu/BjDcvVXxrvZHHa88ChV2AQ700zaavvMXLqrviBIneudDxFcT22TRSxn2FVE3WsJ
+         cNiA==
+X-Gm-Message-State: AC+VfDxOJrjyazXZoRQJa627a+UcCByCl7ZYr7zeJkn8LCxY8hM/2RSh
+        bjqmv9ncPk2LsuZxpO943V5mJbPVPwFZmY7hd6Ni3SWIhv4XUaQ8X88Mhd0loVHhkqOSXxq98i6
+        R1lwjjakBl2JplMogFUowW4bs
+X-Received: by 2002:a05:600c:2190:b0:3f7:e605:287c with SMTP id e16-20020a05600c219000b003f7e605287cmr2516523wme.40.1686077455345;
+        Tue, 06 Jun 2023 11:50:55 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4mno06Udc08ZqmQp5/iVohovKPWT68QmgpRONctzItJSjsWoMjSAoeJkseeOB3fP+Kwpr5oQ==
+X-Received: by 2002:a05:600c:2190:b0:3f7:e605:287c with SMTP id e16-20020a05600c219000b003f7e605287cmr2516512wme.40.1686077455004;
+        Tue, 06 Jun 2023 11:50:55 -0700 (PDT)
+Received: from debian (2a01cb058d652b00fa0f162c47a2f35b.ipv6.abo.wanadoo.fr. [2a01:cb05:8d65:2b00:fa0f:162c:47a2:f35b])
+        by smtp.gmail.com with ESMTPSA id m14-20020a7bcb8e000000b003f7ba52eeccsm7293471wmi.7.2023.06.06.11.50.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Jun 2023 11:50:54 -0700 (PDT)
+Date:   Tue, 6 Jun 2023 20:50:52 +0200
+From:   Guillaume Nault <gnault@redhat.com>
+To:     Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: POSSIBLE BUG: selftests/net/fcnal-test.sh: [FAIL] in vrf "bind -
+ ns-B IPv6 LLA" test
+Message-ID: <ZH+ADF0OOcmtUPw9@debian>
+References: <b6191f90-ffca-dbca-7d06-88a9788def9c@alu.unizg.hr>
+ <ZHeN3bg28pGFFjJN@debian>
+ <a379796a-5cd6-caa7-d11d-5ffa7419b90e@alu.unizg.hr>
+ <ZH84zGEODT97TEXG@debian>
+ <60f78eaa-ace7-c27d-8e45-4777ecf3faa2@alu.unizg.hr>
+ <ZH8+jLjottBw2zuD@debian>
+ <12c34bed-0885-3bb3-257f-3b2438ba206f@alu.unizg.hr>
 MIME-Version: 1.0
-References: <20230503064344.45825-1-aleksandr.mikhalitsyn@canonical.com> <CAHC9VhTx+6f8riuGOG40HZoaYx3F8Kf3Hm7Eb5k3-An91eMWgg@mail.gmail.com>
-In-Reply-To: <CAHC9VhTx+6f8riuGOG40HZoaYx3F8Kf3Hm7Eb5k3-An91eMWgg@mail.gmail.com>
-From:   Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Date:   Tue, 6 Jun 2023 20:50:32 +0200
-Message-ID: <CAEivzxcVQoA9rN06BtHJzyHCaN60RG1-cyGEEw-P+dp-tCB=QA@mail.gmail.com>
-Subject: Re: [PATCH v2] LSM: SafeSetID: fix UID printed instead of GID
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     mortonm@chromium.org, penguin-kernel@i-love.sakura.ne.jp,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <12c34bed-0885-3bb3-257f-3b2438ba206f@alu.unizg.hr>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 18, 2023 at 8:59=E2=80=AFPM Paul Moore <paul@paul-moore.com> wr=
-ote:
->
-> On Wed, May 3, 2023 at 2:44=E2=80=AFAM Alexander Mikhalitsyn
-> <aleksandr.mikhalitsyn@canonical.com> wrote:
-> >
-> > pr_warn message clearly says that GID should be printed,
-> > but we have UID there. Let's fix that.
-> >
-> > Found accidentaly during the work on isolated user namespaces.
-> >
-> > Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.c=
-om>
-> > ---
-> > v2: __kuid_val -> __kgid_val
-> > ---
-> >  security/safesetid/lsm.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> I'm assuming you're going to pick this up Micah?
->
-> Reviewed-by: Paul Moore <paul@paul-moore.com>
+On Tue, Jun 06, 2023 at 04:28:02PM +0200, Mirsad Todorovac wrote:
+> On 6/6/23 16:11, Guillaume Nault wrote:
+> > On Tue, Jun 06, 2023 at 03:57:35PM +0200, Mirsad Todorovac wrote:
+> > > +       if (oif) {
+> > > +               rcu_read_lock();
+> > > +               dev = dev_get_by_index_rcu(net, oif);
+> > > +               rcu_read_unlock();
+> > 
+> > You can't assume '*dev' is still valid after rcu_read_unlock() unless
+> > you hold a reference on it.
+> > 
+> > > +               rtnl_lock();
+> > > +               mdev = netdev_master_upper_dev_get(dev);
+> > > +               rtnl_unlock();
+> > 
+> > Because of that, 'dev' might have already disappeared at the time
+> > netdev_master_upper_dev_get() is called. So it may dereference an
+> > invalid pointer here.
+> 
+> Good point, thanks. I didn't expect those to change.
+> 
+> This can be fixed, provided that RCU and RTNL locks can be nested:
 
-Dear Paul!
+Well, yes and no. You can call rcu_read_{lock,unlock}() while under the
+rtnl protection, but not the other way around.
 
-Thanks for your review!
+>         rcu_read_lock();
+>         if (oif) {
+>                 dev = dev_get_by_index_rcu(net, oif);
+>                 rtnl_lock();
+>                 mdev = netdev_master_upper_dev_get(dev);
+>                 rtnl_unlock();
+>         }
 
-Gentle ping to Micah Morton :-)
+This is invalid: rtnl_lock() uses a mutex, so it can sleep and that's
+forbidden inside an RCU critical section.
 
-Kind regards,
-Alex
+>         if (sk->sk_bound_dev_if) {
+>                 bdev = dev_get_by_index_rcu(net, sk->sk_bound_dev_if);
+>         }
+> 
+>         addr_type = ipv6_addr_type(daddr);
+>         if ((__ipv6_addr_needs_scope_id(addr_type) && !oif) ||
+>             (addr_type & IPV6_ADDR_MAPPED) ||
+>             (oif && sk->sk_bound_dev_if && oif != sk->sk_bound_dev_if &&
+>                     !(mdev && sk->sk_bound_dev_if && bdev && mdev == bdev))) {
+>                 rcu_read_unlock();
+>                 return -EINVAL;
+> 	}
+>         rcu_read_unlock();
+> 
+> But again this is still probably not race-free (bdev might also disappear before
+> the mdev == bdev test), even if it passed fcnal-test.sh, there is much duplication
+> of code, so your one-line solution is obviously by far better. :-)
 
->
-> > diff --git a/security/safesetid/lsm.c b/security/safesetid/lsm.c
-> > index e806739f7868..5be5894aa0ea 100644
-> > --- a/security/safesetid/lsm.c
-> > +++ b/security/safesetid/lsm.c
-> > @@ -131,7 +131,7 @@ static int safesetid_security_capable(const struct =
-cred *cred,
-> >                  * set*gid() (e.g. setting up userns gid mappings).
-> >                  */
-> >                 pr_warn("Operation requires CAP_SETGID, which is not av=
-ailable to GID %u for operations besides approved set*gid transitions\n",
-> > -                       __kuid_val(cred->uid));
-> > +                       __kgid_val(cred->gid));
-> >                 return -EPERM;
-> >         default:
-> >                 /* Error, the only capabilities were checking for is CA=
-P_SETUID/GID */
-> > --
-> > 2.34.1
->
-> --
-> paul-moore.com
+The real problem is choosing the right function for getting the master
+device. In particular netdev_master_upper_dev_get() was a bad choice.
+It forces you to take the rtnl, which is unnatural here and obliges you
+to add extra code, while all this shouldn't be necessary in the first
+place.
+
+> Much obliged.
+> 
+> Best regards,
+> Mirsad
+
