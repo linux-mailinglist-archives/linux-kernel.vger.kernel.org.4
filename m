@@ -2,67 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFFC2724A1C
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 19:22:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0A8F724A26
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 19:25:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238717AbjFFRWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 13:22:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33554 "EHLO
+        id S238736AbjFFRZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 13:25:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238727AbjFFRWU (ORCPT
+        with ESMTP id S231470AbjFFRZV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 13:22:20 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66BBD1703
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 10:22:16 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id 41be03b00d2f7-53f06f7cc74so3455746a12.1
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 10:22:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686072136; x=1688664136;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mRpAkL7dAZj37Xfm4jemHK02mHerX93Wk1k4AInL4jM=;
-        b=RwZkWCk7kdV86E5yWrMaMCVoVT+BSkAzKG8Bsg+fP3JPmhNI5gLndL89s48ZjrZAC1
-         fkRkYJJrH3GKGrEL0Tt4MRw+H64kU1/aDvwlIKwPN4cnpcYgQnKOlIrpBaKYLe5SwRWl
-         OBVGplsQUh9tGhp/Pp6fXpiu4GCnI5+k7Q1EebsGUYjf+ETDgUSttBTnIOkabhuALJWg
-         9kvN/hy8ZGB5XhuMRtnZ31dEPSX7s/hKySTXEsZJN5voqCDBEX5Zv/MZsTF/Xs6bMVTH
-         dh3wfvnO2ClN5qH14Wd9oBGxvoWES7Nl5HvJLHT7znyUFYyUtsaKwne687J45rLlOgZt
-         fXAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686072136; x=1688664136;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mRpAkL7dAZj37Xfm4jemHK02mHerX93Wk1k4AInL4jM=;
-        b=OPks5CY2/p3WmqKIixAMdKCcoudGYoZ2KlwFx/EWG22NNcoUcBKwNod82rtATP0Q8Z
-         uDIawWJzpfifD6iDX+SkpI76E4bZm6Xk9fcRjx5UbX61dkUscBMAg1+WJaLBRD5ktML1
-         tV0fzZG0RaMOMAjTFZmpKn/dEFbzPy7fZON/KTnQFXQzaMfYAhqg6qIvuXiae9GWTUpY
-         iSNfhMylEvU0SFKD9aA7PHdjZZSPjHxGlVAHXdBN/N3sUfqB26wLHqN4Vr7PcBd4AXWP
-         BmERfoA6kWFcN+ACtCkd9PHDEBHp3Ac8sON4B36sSNL5ydVg4Lp8K1U+zxRBGDNH24UY
-         /mcQ==
-X-Gm-Message-State: AC+VfDwMtq3xV+0vMwThUdD2wBmsErorCGsOIShwENFOP6bzOzz6cjSX
-        cEVv7McyKqI8iku9swWEo0mWVFjxZ8o=
-X-Google-Smtp-Source: ACHHUZ5CdTWpaz9pAirrwFFOkiNuHjSMrxxHITHdSJZQnqUWOhi1md3VO+FsZQFTjgBjAEQXf6cw2hKbbqw=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a65:5848:0:b0:53f:b200:6b57 with SMTP id
- s8-20020a655848000000b0053fb2006b57mr903490pgr.3.1686072135778; Tue, 06 Jun
- 2023 10:22:15 -0700 (PDT)
-Date:   Tue, 6 Jun 2023 10:22:14 -0700
-In-Reply-To: <87wn0hnxh7.fsf@nvidia.com>
-Mime-Version: 1.0
-References: <20230602011518.787006-1-seanjc@google.com> <20230602011518.787006-2-seanjc@google.com>
- <87wn0hnxh7.fsf@nvidia.com>
-Message-ID: <ZH9rRnU8h+gDZZuB@google.com>
-Subject: Re: [PATCH 1/3] KVM: VMX: Retry APIC-access page reload if
- invalidation is in-progress
-From:   Sean Christopherson <seanjc@google.com>
-To:     Alistair Popple <apopple@nvidia.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@nvidia.com>,
-        Robin Murphy <robin.murphy@arm.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        Tue, 6 Jun 2023 13:25:21 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F35E42;
+        Tue,  6 Jun 2023 10:25:20 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 356HPBsT032729;
+        Tue, 6 Jun 2023 12:25:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1686072311;
+        bh=WtY6LblahE/joq91g99eyQWj4duOr1M1WEmEUEPrxIw=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=rQLvCliDEAh3b8HOfSZIkM7zDIjGlUDCcGr4qSVLwdn8kKU2ZEYZKNRgTTBI184Kc
+         nHT3eVnoVoY7niRBrvMVdF2iLiGgt1SjrSIjeWkLTCij9eHPG8Qb/wWFvMq/DJFxsI
+         3N0Op/KFsg2yiSfxh2z5woxc3+Wcv+2shyaHpAyE=
+Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 356HPBGM049268
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 6 Jun 2023 12:25:11 -0500
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 6
+ Jun 2023 12:25:10 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 6 Jun 2023 12:25:10 -0500
+Received: from uda0132425.dhcp.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 356HP7eU108772;
+        Tue, 6 Jun 2023 12:25:08 -0500
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, Nishanth Menon <nm@ti.com>
+CC:     Vignesh Raghavendra <vigneshr@ti.com>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Tero Kristo <kristo@kernel.org>,
+        Jan Kiszka <jan.kiszka@siemens.com>
+Subject: Re: [PATCH 0/7] arm64: dts: ti: k3-am65: Cleanups and minor additions
+Date:   Tue, 6 Jun 2023 22:55:01 +0530
+Message-ID: <168607229292.2083722.2030065242930574931.b4-ty@ti.com>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230419225913.663448-1-nm@ti.com>
+References: <20230419225913.663448-1-nm@ti.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,16 +68,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 06, 2023, Alistair Popple wrote:
-> 
-> Thanks for doing this. I'm not overly familiar with KVM implementation
-> but am familiar with mmu notifiers so read through the KVM usage. Looks
-> like KVM is sort of doing something similar to what mmu_interval_notifiers
-> do and I wonder if some of that could be shared.
+Hi Nishanth Menon,
 
-They're very, very similar.  At a glance, KVM likely could be moved over to the
-common interval tree implementation, but it would require a substantial amount of
-work in KVM, and various extensions to the mmu notifiers too.  I definitely wouldn't
-be opposed to converging KVM if someone wants to put in the effort, but at the same
-time I wouldn't recommend that anyone actually do the work as the ROI is likely
-very low.
+On Wed, 19 Apr 2023 17:59:06 -0500, Nishanth Menon wrote:
+> This is a result of looking to cleanup u-boot and realizing there are
+> pieces missing in kernel that need to be pushed out.
+> 
+> So, minor cleanups and adding a few missing pieces.
+> 
+> Bootlog: https://gist.github.com/nmenon/f4dc43aef616dfcb3d38701cc074ff6d
+> 
+> [...]
+
+I have applied the following to branch ti-k3-dts-next on [1].
+Thank you!
+
+[1/7] arm64: dts: ti: k3-am654-base-board: Add missing pinmux wkup_uart, mcu_uart and mcu_i2c
+      commit: 3ae28642a110485f71091f0a631492e78b396b2b
+[2/7] arm64: dts: ti: k3-am654-base-board: Rename regulator node name
+      commit: ec1b54824f022a7e65d858abbe74f5d7effc9817
+[3/7] arm64: dts: ti: k3-am654-base-board: Add VTT GPIO regulator for DDR
+      commit: 5292f504827c56406975b463eda1270d144cf06f
+[4/7] arm64: dts: ti: k3-am654-base-board: Add missing PMIC
+      commit: 282621ed6e790ccf7288c4c0aadbb34f1fe25c11
+[5/7] arm64: dts: ti: k3-am654-base-board: Add board detect eeprom
+      commit: 895e2f4f9852e54c0e6d16ddea9882b9b2065eae
+[6/7] arm64: dts: ti: k3-am654-base-board: Add aliases
+      commit: 692e8888a84357232574caba74f60ceea7364016
+[7/7] arm64: dts: ti: k3-am65: Drop aliases
+      commit: ffc449e016e269ce4d19e648bae584f8e5afd59f
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent up the chain during
+the next merge window (or sooner if it is a relevant bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
+--
+Vignesh
+
