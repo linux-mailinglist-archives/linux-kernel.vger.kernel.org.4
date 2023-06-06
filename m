@@ -2,170 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B28EC724946
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 18:36:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 527FB724949
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 18:37:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238080AbjFFQgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 12:36:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35700 "EHLO
+        id S238186AbjFFQhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 12:37:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233462AbjFFQgC (ORCPT
+        with ESMTP id S238106AbjFFQhD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 12:36:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4816010F0;
-        Tue,  6 Jun 2023 09:35:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C9C7962EBA;
-        Tue,  6 Jun 2023 16:35:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE57AC433D2;
-        Tue,  6 Jun 2023 16:35:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686069357;
-        bh=UiUeBltjJqUnA4y3M9itPA6HsvIdpRts5NmmQokGATE=;
-        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-        b=dCY05hHixhZdAExvh1G0YsHT3PMeEKX6gJtslAafeBH1A3ZfzH80+hevDsIQeWQ1A
-         hZX6zdDoQ/3Qr+eN5Mmh7OceoMrzuWR/tPcUv0BotAh8cPhvifts9rmRsyGbucAfn9
-         UrnKHewcSb8kMbc4jbIDnpshao29dnxTVkcMv/cbNc3hy5S6ke0UFxq6RBiJxtDlvv
-         +BLfoi8WWIrUQ8p4VtqwW4I5OdROAiGuRVHPSicfaDVVSh6dJhzGbBqsQpqpXSpbVO
-         zuLCVZ/621xCZMmmmRkv5LyWaLdzB/rm9RaNRy14xh6txoiZPhIRtdSWoBIDJFMF1/
-         GkmYm3KSuOy8Q==
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 06 Jun 2023 19:35:51 +0300
-Message-Id: <CT5PPAX7Z73M.14969LB3CRYXC@suppilovahvero>
-Cc:     "Lino Sanfilippo" <l.sanfilippo@kunbus.com>,
-        "Lino Sanfilippo" <LinoSanfilippo@gmx.de>, <peterhuewe@gmx.de>,
-        <jgg@ziepe.ca>, <hdegoede@redhat.com>, <oe-lkp@lists.linux.dev>,
-        <lkp@intel.com>, <peterz@infradead.org>, <linux@mniewoehner.de>,
-        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <lukas@wunner.de>, <p.rosenberger@kunbus.com>
-Subject: Re: [PATCH 1/2] tpm, tpm_tis: Handle interrupt storm
-From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Jerry Snitselaar" <jsnitsel@redhat.com>,
-        =?utf-8?q?P=C3=A9ter_Ujfalusi?= <peter.ujfalusi@linux.intel.com>
-X-Mailer: aerc 0.15.2-33-gedd4752268b2
-References: <20230522143105.8617-1-LinoSanfilippo@gmx.de>
- <CSTVVFNKUVJW.P69FKI6IF3ZN@suppilovahvero>
- <da435e0d-5f22-fac7-bc10-96a0fd4c6d54@kunbus.com>
- <a84c447f-cdfb-d33c-62cb-bb5d9aa8510b@linux.intel.com>
- <xkp3zaclvqx6pv4qh4wv7jttqby4lp2atsrareb63ofi7sy2qp@hfugy3pyac4o>
-In-Reply-To: <xkp3zaclvqx6pv4qh4wv7jttqby4lp2atsrareb63ofi7sy2qp@hfugy3pyac4o>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 6 Jun 2023 12:37:03 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EEC5E60;
+        Tue,  6 Jun 2023 09:37:01 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (om126253223039.31.openmobile.ne.jp [126.253.223.39])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2F4F0283;
+        Tue,  6 Jun 2023 18:36:32 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1686069394;
+        bh=mIN2yt0zcJ6bRzfCdL2PKquhnpwr1YRPgjxLXylXsKo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jjaK0/jjSOSRMeHfLvhGxZb63kuxTMpVU5GNuT7Wvlxzukm/6hkImiy0Wgf0zYrEP
+         n1oqnTIBcoNxaiWBaKFhTtHLzXjdtLjzTxP/ekbSvHyO5pLC0kqLyvYh8G4aRyKbiL
+         Pe5y4/sIfabYgiwL5oOJQqboDn0m3k0JRx1ZjeXc=
+Date:   Tue, 6 Jun 2023 19:36:56 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Tommaso Merciai <tomm.merciai@gmail.com>
+Cc:     jacopo.mondi@ideasonboard.com, martin.hecht@avnet.eu,
+        michael.roeder@avnet.eu, linuxfancy@googlegroups.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Gerald Loacker <gerald.loacker@wolfvision.net>,
+        Mikhail Rudenko <mike.rudenko@gmail.com>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Nicholas Roth <nicholas@rothemail.net>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/3] media: dt-bindings: alvium: add document YAML
+ binding
+Message-ID: <20230606163656.GI25679@pendragon.ideasonboard.com>
+References: <20230606155416.260941-1-tomm.merciai@gmail.com>
+ <20230606155416.260941-3-tomm.merciai@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230606155416.260941-3-tomm.merciai@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue May 30, 2023 at 8:56 PM EEST, Jerry Snitselaar wrote:
-> On Mon, May 29, 2023 at 09:46:08AM +0300, P=C3=A9ter Ujfalusi wrote:
-> > Hi Lino,
-> >=20
-> > On 23/05/2023 23:46, Lino Sanfilippo wrote:
-> > >> On the other hand any new functionality is objectively a maintanance
-> > >> burden of some measure (applies to any functionality). So how do we =
-know
-> > >> that taking this change is less of a maintenance burden than just ad=
-d
-> > >> new table entries, as they come up?
-> > >>
-> > >=20
-> > > Initially this set was created as a response to this 0-day bug report=
- which you asked me
-> > > to have a look at:
-> > >=20
-> > > https://lore.kernel.org/linux-integrity/d80b180a569a9f068d3a2614f062c=
-fa3a78af5a6.camel@kernel.org/
-> > >=20
-> > > My hope was that it could also avoid some of (existing or future) DMI=
- entries. But even if it does not
-> > > (e.g. the problem P=C3=A9ter Ujfalusi reported with the UPX-i11 canno=
-t be fixed by this patch set and thus
-> > > needs the DMI quirk) we may at least avoid more bug reports due to in=
-terrupt storms once
-> > > 6.4 is released.=20
-> >=20
-> > I'm surprised that there is a need for a storm detection in the first
-> > place... Do we have something else on the same IRQ line on the affected
-> > devices which might have a bug or no driver at all?
-> > It is hard to believe that a TPM (Trusted Platform Module) is integrate=
-d
-> > so poorly ;)
-> >=20
-> > But put that aside: I think the storm detection is good given that ther=
-e
-> > is no other way to know which machine have sloppy TPM integration.
-> > There are machines where this happens, so it is a know integration
-> > issue, right?
-> >=20
-> > My only 'nitpick' is with the printk level to be used.
-> > The ERR level is not correct as we know the issue and we handle it, so
-> > all is under control.
-> > If we want to add these machines to the quirk list then WARN is a good
-> > level to gain attention but I'm not sure if a user will know how to get
-> > the machine in the quirk (where to file a bug).
-> > If we only want the quirk to be used for machines like UPX-i11 which
-> > simply just have broken (likely floating) IRQ line then the WARN is too
-> > high level, INFO or even DBG would be appropriate as you are not going
-> > to update the quirk, it is just handled under the hood (which is a grea=
-t
-> > thing, but on the other hand you will have the storm never the less and
-> > that is not a nice thing).
-> >=20
-> > It is a matter on how this is going to be handled in a long term. Add
-> > quirk for all the known machines with either stormy or plain broken IRQ
-> > line or handle the stormy ones and quirk the broken ones only.
-> >=20
-> > >>> Detect an interrupt storm by counting the number of unhandled inter=
-rupts
-> > >>> within a 10 ms time interval. In case that more than 1000 were unha=
-ndled
-> > >>> deactivate interrupts, deregister the handler and fall back to poll=
-ing.
-> > >>
-> > >> I know it can be sometimes hard to evaluate but can you try to expla=
-in
-> > >> how you came up to the 10 ms sampling period and 1000 interrupt
-> > >> threshold? I just don't like abritrary numbers.
-> > >=20
-> > > At least the 100 ms is not plucked out of thin air but its the same t=
-ime period
-> > > that the generic code in note_interrupt() uses - I assume for a good =
-reason.
-> > > Not only this number but the whole irq storm detection logic is taken=
- from=20
-> > > there:=20
-> > >=20
-> > >>
-> > >>> This equals the implementation that handles interrupt storms in
-> > >>> note_interrupt() by means of timestamps and counters in struct irq_=
-desc.
-> > >> The number of 1000 unhandled interrupts is still far below the 99900
-> > used in
-> > > note_interrupt() but IMHO enough to indicate that there is something =
-seriously
-> > > wrong with interrupt processing and it is probably saver to fall back=
- to polling.
-> >=20
-> > Except that if the line got the spurious designation in core, the
-> > interrupt line will be disabled while the TPM driver will think that it
-> > is still using IRQ mode and will not switch to polling.
-> >=20
-> > A storm of 1000 is better than a storm of 99900 for sure but quirking
-> > these would be the desired final solution. imho
->
-> If that is the case, then output could probably be sent to the console
-> detailing the dmi info needed to update the table.
+Hi Tommaso,
 
-+1
+Thank you for the patch.
 
-Good idea.
+On Tue, Jun 06, 2023 at 05:54:03PM +0200, Tommaso Merciai wrote:
+> Add documentation of device tree in YAML schema for the ALVIUM
+> Camera from Allied Vision Inc.
+> 
+> References:
+>  - https://www.alliedvision.com/en/products/embedded-vision-solutions
+> 
+> Signed-off-by: Tommaso Merciai <tomm.merciai@gmail.com>
+> ---
+> Changes since v1:
+>  - Fixed build error as suggested by RHerring bot
+> 
+> Changes since v2:
+>  - Fixed License as suggested by KKozlowski/CDooley
+>  - Removed rotation property as suggested by CDooley/LPinchart
+>  - Fixed example node name as suggested by CDooley
+>  - Fixed title as suggested by LPinchart
+>  - Fixed compatible name as suggested by LPinchart
+>  - Removed clock as suggested by LPinchart
+>  - Removed gpios not as suggested by LPinchart
+>  - Renamed property name streamon-delay into alliedvision,lp2hs-delay-us
+>  - Fixed vendor prefix, unit append as suggested by KKozlowski
+>  - Fixed data-lanes
+>  - Fixed blank space + example indentation (from 6 -> 4 space) as suggested by KKozlowski
+>  - Dropped status into example  as suggested by KKozlowski
+>  - Added vcc-ext-in supply as suggested by LPinchart
+>  - Dropped pinctrl into example as suggested by LPinchart
+> 
+>  .../media/i2c/alliedvision,alvium-csi2.yaml   | 93 +++++++++++++++++++
+>  1 file changed, 93 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/i2c/alliedvision,alvium-csi2.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/media/i2c/alliedvision,alvium-csi2.yaml b/Documentation/devicetree/bindings/media/i2c/alliedvision,alvium-csi2.yaml
+> new file mode 100644
+> index 000000000000..191534e2f7bd
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/i2c/alliedvision,alvium-csi2.yaml
+> @@ -0,0 +1,93 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/i2c/alliedvision,alvium.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Allied Vision Alvium Camera
+> +
+> +maintainers:
+> +  - Tommaso Merciai <tomm.merciai@gmail.com>
+> +  - Martin Hecht <martin.hecht@avnet.eu>
+> +
+> +allOf:
+> +  - $ref: /schemas/media/video-interface-devices.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: alliedvision,alvium-csi2
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  vcc-ext-in-supply:
+> +    description:
+> +      Definition of the regulator used as interface power supply.
 
-BR, Jarkko
+      The regulator that supplies power to the VCC_EXT_IN pins.
+
+> +
+> +  alliedvision,lp2hs-delay-us:
+> +    maxItems: 1
+> +    description:
+> +      Low power to high speed delay time in microseconds.
+
+You can drop "in microseconds", that's implied by the suffix.
+
+> +      The purpose of this property is force a DPhy reset for the period
+> +      described by the microseconds on the property, before it starts
+> +      streaming. To be clear, with that value bigger than 0 the Alvium
+> +      forces a dphy-reset on all lanes for that period. That means all
+> +      lanes go up into low power state. This may help a csi2 rx ip to
+> +      reset if that IP can't deal with a continous clock.
+
+I'd like to propose what I think is a clearer version:
+
+    description: |
+      Low power to high speed delay time.
+
+      If the value is larger than 0, the camera forces a reset of all
+      D-PHY lanes for the duration specified by this property. All lanes
+      will transition to the low-power state and back to the high-speed
+      state after the delay. Otherwise the lanes will transition to and
+      remain in the high-speed state immediately after power on.
+
+      This is meant to help CSI-2 receivers synchronizing their D-PHY
+      RX.
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+> +
+> +  port:
+> +    description: Digital Output Port
+> +    $ref: /schemas/graph.yaml#/$defs/port-base
+> +    additionalProperties: false
+> +
+> +    properties:
+> +      endpoint:
+> +        $ref: /schemas/media/video-interfaces.yaml#
+> +        unevaluatedProperties: false
+> +
+> +        properties:
+> +          link-frequencies: true
+> +
+> +          data-lanes:
+> +            minItems: 1
+> +            items:
+> +              - const: 1
+> +              - const: 2
+> +              - const: 3
+> +              - const: 4
+> +
+> +        required:
+> +          - data-lanes
+> +          - link-frequencies
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - vcc-ext-in-supply
+> +  - port
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        alvium: camera@3c {
+> +            compatible = "alliedvision,alvium-csi2";
+> +            reg = <0x3c>;
+> +            vcc-ext-in-supply = <&reg_vcc_ext_in>;
+> +            alliedvision,lp2hs-delay-us = <20>;
+> +
+> +            port {
+> +                alvium_out: endpoint {
+> +                    remote-endpoint = <&mipi_csi_0_in>;
+> +                    data-lanes = <1 2 3 4>;
+> +                    link-frequencies = /bits/ 64 <681250000>;
+> +                };
+> +            };
+> +        };
+> +    };
+> +
+> +...
+
+-- 
+Regards,
+
+Laurent Pinchart
