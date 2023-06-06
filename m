@@ -2,112 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5DDB7248C8
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 18:17:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C0E07248D5
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 18:19:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238300AbjFFQRM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 12:17:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52404 "EHLO
+        id S233277AbjFFQTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 12:19:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237598AbjFFQRE (ORCPT
+        with ESMTP id S233549AbjFFQTQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 12:17:04 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 537CF198D;
-        Tue,  6 Jun 2023 09:16:47 -0700 (PDT)
-Received: from zn.tnic (pd9530d32.dip0.t-ipconnect.de [217.83.13.50])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 6 Jun 2023 12:19:16 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA3EB10F7
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 09:19:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686068355; x=1717604355;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=U4b+1goI0to0eyH7X0X8IORTd4oXQSsOoP6CweXb0G4=;
+  b=Kt1G1a0yaOmVxQ4jnxOsGcl6JNNvp31kq28PMVAl56hQcDVEH7htRVE7
+   czhBuFZkVcDf1Op965awzdyx1fNPpES1g5m4y/sQuUgX/K0pvf6MoMKPd
+   WgJ7e0YaiRVgchiHuaENDMcBJY6xMtJ/z9bJHcbKuXlHuN9gs7XcZ6Fqt
+   NIYOubdz4fWS6LoVHSnHfOQOBUDsgcd5Y8hTXyZ7LLW8LvVS+aVCfPojO
+   HjrQDXIDcnTN6uQqjTxubcV58TEMBAxvSvZwd7/xuo7pmaGRvggY5Bnoo
+   Ie4pLqL/QaoZ6dfM3lelyB4VjxYzEYpkwVuQOqAQsjGbM9JQ8wK3nJjM+
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="354221490"
+X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
+   d="scan'208";a="354221490"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 09:16:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="703221733"
+X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
+   d="scan'208";a="703221733"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga007.jf.intel.com with ESMTP; 06 Jun 2023 09:16:32 -0700
+Received: from [10.212.191.33] (kliang2-mobl1.ccr.corp.intel.com [10.212.191.33])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C7CFA1EC064A;
-        Tue,  6 Jun 2023 18:16:10 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1686068170;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EzBNPsFl2Dhg5+mFLreu4S8+80Y4hLppeh74KxkxTV0=;
-        b=kL9MUkQiC0UGBSPHskdsYSS8Sun5ZP40wjnMuRf4XqVC/ucpHdpbaETCgZabPrrU+59aBo
-        IL6BwpRYVz4LW5nsrG15WxB3B4g9sY3o2A1RUIHqcQTmMN3NpnTO7tP8nJE8PLdeezhCcd
-        Mj5M018TevNsx4gJequl4dGcYnpPqys=
-Date:   Tue, 6 Jun 2023 18:16:06 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv14 0/9] mm, x86/cc, efi: Implement support for unaccepted
- memory
-Message-ID: <20230606161606.GDZH9bxhrGnFkaLl2A@fat_crate.local>
-References: <20230606142637.5171-1-kirill.shutemov@linux.intel.com>
+        by linux.intel.com (Postfix) with ESMTPS id C2417580377;
+        Tue,  6 Jun 2023 09:16:30 -0700 (PDT)
+Message-ID: <3c187521-0686-1204-7b3e-e8f183c50938@linux.intel.com>
+Date:   Tue, 6 Jun 2023 12:16:29 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230606142637.5171-1-kirill.shutemov@linux.intel.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH V2 1/6] perf/x86/intel: Add Grand Ridge and Sierra Forest
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     mingo@redhat.com, acme@kernel.org, linux-kernel@vger.kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org, irogers@google.com,
+        adrian.hunter@intel.com, ak@linux.intel.com, eranian@google.com,
+        alexey.v.bayduraev@linux.intel.com, tinghao.zhang@intel.com
+References: <20230522113040.2329924-1-kan.liang@linux.intel.com>
+ <2b2e7308-edeb-2977-596a-f638d19174d6@linux.intel.com>
+ <20230606132432.GD905437@hirez.programming.kicks-ass.net>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <20230606132432.GD905437@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 05:26:28PM +0300, Kirill A. Shutemov wrote:
-> v14:
->  - Fix error handling in arch_accept_memory() (Tom);
->  - Address Borislav's feedback:
->    + code restructure;
->    + added/adjusted comments;
 
-In file included from arch/x86/coco/tdx/tdx-shared.c:1:
-./arch/x86/include/asm/tdx.h: In function ‘tdx_kvm_hypercall’:
-./arch/x86/include/asm/tdx.h:70:17: error: ‘ENODEV’ undeclared (first use in this function)
-   70 |         return -ENODEV;
-      |                 ^~~~~~
-./arch/x86/include/asm/tdx.h:70:17: note: each undeclared identifier is reported only once for each function it appears in
-make[4]: *** [scripts/Makefile.build:252: arch/x86/coco/tdx/tdx-shared.o] Error 1
-make[3]: *** [scripts/Makefile.build:494: arch/x86/coco/tdx] Error 2
-make[2]: *** [scripts/Makefile.build:494: arch/x86/coco] Error 2
-make[2]: *** Waiting for unfinished jobs....
-make[1]: *** [scripts/Makefile.build:494: arch/x86] Error 2
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:2026: .] Error 2
 
-Not enough build tests ran?
+On 2023-06-06 9:24 a.m., Peter Zijlstra wrote:
+> On Tue, Jun 06, 2023 at 08:42:42AM -0400, Liang, Kan wrote:
+>> Hi Peter,
+>>
+>> On 2023-05-22 7:30 a.m., kan.liang@linux.intel.com wrote:
+>>> From: Kan Liang <kan.liang@linux.intel.com>
+>>>
+>>> The Grand Ridge and Sierra Forest are successors to Snow Ridge. They
+>>> both have Crestmont core. From the core PMU's perspective, they are
+>>> similar to the e-core of MTL. The only difference is the LBR event
+>>> logging feature, which will be implemented in the following patches.
+>>>
+>>> Create a non-hybrid PMU setup for Grand Ridge and Sierra Forest.
+>>>
+>>> Reviewed-by: Andi Kleen <ak@linux.intel.com>
+>>> Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+>>> ---
+>>>
+>>
+>>
+>> Gentle ping.
+>>
+>> Do you have any comments for the patch set?
+>>
+>> The patch set based on the perf/core branch which doesn't
+>> include the latest fix, 90befef5a9e8 ("perf/x86: Fix missing sample size
+>> update on AMD BRS").
+>> https://lore.kernel.org/lkml/2f09023a-cccb-35df-da0a-d245ee5238be@linux.intel.com/
+>>
+>> Should I rebase it on the perf/urgent and send the V3?
+>>
+> 
+> I can pull urgent into perf/core, but:
 
-$ grep INTEL_TDX_GUEST .config
-CONFIG_INTEL_TDX_GUEST=y
-$ grep KVM_GUEST .config
-$
+Thanks.
 
-Why does that tdx_kvm_hypercall() thing even depend on CONFIG_KVM_GUEST?
+> 
+>>> +	case INTEL_FAM6_GRANDRIDGE:
+>>> +	case INTEL_FAM6_SIERRAFOREST_X:
+>                         ^^^^^^^^^^^^^^^
+> 
+> Those are just plain wrong; please fix up the intel-family.h thing like
+> suggested earlier in this thread.
+>> And Tony, please no more of that platform name nonsense.. we want uarch
+> names for a reason, so that enums like the above become something
+> sensible like:
+> 
+> 	case INTEL_FAM6_ATOM_CRESTMONT:
+> 	case INTEL_FAM6_ATOM_CRESTMONT_X:
+> 
+> and now it's super obvious why they're grouped.
+> 
+>>> +		pr_cont("Crestmont events, ");
 
--- 
-Regards/Gruss,
-    Boris.
+The Sierra Forest should not be a platform name. I think it's the code
+name of the processor.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+The problem is that the uarch name doesn't work for the hybrid, since it
+has different uarchs in the same processors. To make the naming rules
+consistent among big core, atom, and hybrid, maybe we should use the
+code name of the processor in intel-family.h.
+
+I will propose a patch to update the rules of using the processor name.
+I think we may want to have further discussion there.
+
+Thanks,
+Kan
