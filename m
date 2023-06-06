@@ -2,69 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F094724018
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 12:50:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F5F972401E
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 12:51:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231536AbjFFKuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 06:50:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34384 "EHLO
+        id S237468AbjFFKvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 06:51:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbjFFKuE (ORCPT
+        with ESMTP id S237312AbjFFKum (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 06:50:04 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C5F11995;
-        Tue,  6 Jun 2023 03:48:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686048517; x=1717584517;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=XyN+KIiSuE6e1s6MFnXdI244hBkU0NrA3+Zkh0IR9wY=;
-  b=iJIhFD1pvaw8x/oEjwE/Kwk9T+a9fG1gvwtDO3a9mrcJixm/zSl1eJQ9
-   VrR0QKabk4SW4ujVhwOGAA2Hi3jefX8mf97GlWBe87UfgzZ+X+2WkquHH
-   OkX6FWxPidErhKr+VI+u8CLfH8MrOtM/NJg9umYmuvHm+COKYh0FEmzU6
-   DkvJTC6pZsVbAyhidz7YOC7gbD5FVH1xD+Ll+klolltqo7Rna4mIogUQ3
-   KcYDL3o7e9x4NHKtnGWKXB0LWXWouUFU43AoScIXVf+UWFXioRFq8Mq/t
-   egdOi77wGpmx2zXfKDYknJVEP9/kwrGnPKgtKLPcIvZLhvHxIBHEtTIC5
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="356642053"
-X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
-   d="scan'208";a="356642053"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 03:48:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="712164833"
-X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
-   d="scan'208";a="712164833"
-Received: from vkkalava-mobl1.amr.corp.intel.com ([10.249.42.194])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 03:48:22 -0700
-Date:   Tue, 6 Jun 2023 13:48:19 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-cc:     Chen-Yu Tsai <wenst@chromium.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Tony Lindgren <tony@atomide.com>
-Subject: Re: [PATCH] serial: 8250_mtk: Simplify clock sequencing and runtime
- PM
-In-Reply-To: <2023060608-bucket-footsore-9e43@gregkh>
-Message-ID: <b831965-c588-cca7-a861-2a525041c8f3@linux.intel.com>
-References: <20230606091747.2031168-1-wenst@chromium.org> <58949bbd-1506-90a0-7154-e6e57d8ddf70@collabora.com> <CAGXv+5GRBOWFMw+BmkSpczHcm_R6=mvL2GSKnWWyhpng1xw21w@mail.gmail.com> <61ec34d0-6cc2-951e-c990-fdfd57381d7@linux.intel.com>
- <2023060608-bucket-footsore-9e43@gregkh>
+        Tue, 6 Jun 2023 06:50:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEC441BD9;
+        Tue,  6 Jun 2023 03:49:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2238061166;
+        Tue,  6 Jun 2023 10:49:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0F17C433EF;
+        Tue,  6 Jun 2023 10:48:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686048540;
+        bh=mGpW1sYk4BoYaNj1ZpTyd3YRrRDOS8mnJVJiFOEwmKw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=qv1MfK/M4gv2aPifqyhB4dWawUg2cphvBuUqMDtbzTNBOZHhEd5LWCj9PxyDWmS4P
+         FimSA2qNOW5pn5hL3P2qbIx3j3rYGg2fGlWdWdK03R4JLZzI17Lffoq0wlvyqK1h6b
+         6IDnivFRgQyl37mv4FqnDiZ48XQywVsMJqUerhVmtKpTvfVBN0C8q6YUlWTF082eR7
+         rqGvA2Ah/PWnoo/eG7tKUC7n56T0IJ7+8EDZfbCTUu4lnfZgJG3c82pwVSKoZdBDdv
+         r5fGBv6PXHO3hdI9Yqxt/IXxR+MVuPoqLg4k8rExtqCJ+GW6rnNYrXPf/VL8dN0n67
+         vZ6EVWR8DjfGw==
+Message-ID: <903bf7c5-1665-4602-a7ba-f4a0741e720f@kernel.org>
+Date:   Tue, 6 Jun 2023 13:48:52 +0300
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323329-1863769213-1686048085=:2339"
-Content-ID: <7bd0d48-77b6-a9a2-8f9-e3d0ed9752ce@linux.intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Subject: Re: [PATCH] PCI: qcom-ep: Add ICC bandwidth voting support
+Content-Language: en-US
+To:     Krishna chaitanya chundru <quic_krichai@quicinc.com>,
+        manivannan.sadhasivam@linaro.org
+Cc:     quic_vbadigan@quicinc.com, quic_ramkri@quicinc.com,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "open list:PCIE ENDPOINT DRIVER FOR QUALCOMM" 
+        <linux-pci@vger.kernel.org>,
+        "open list:PCIE ENDPOINT DRIVER FOR QUALCOMM" 
+        <linux-arm-msm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <1686030570-5439-1-git-send-email-quic_krichai@quicinc.com>
+From:   Georgi Djakov <djakov@kernel.org>
+In-Reply-To: <1686030570-5439-1-git-send-email-quic_krichai@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,99 +65,166 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Hi Krishna,
 
---8323329-1863769213-1686048085=:2339
-Content-Type: text/plain; CHARSET=UTF-8
-Content-Transfer-Encoding: 8BIT
-Content-ID: <142fbc7c-385f-24bc-4383-c4af99d03515@linux.intel.com>
+Thanks for the patch!
 
-On Tue, 6 Jun 2023, Greg Kroah-Hartman wrote:
-
-> On Tue, Jun 06, 2023 at 01:21:55PM +0300, Ilpo Järvinen wrote:
-> > On Tue, 6 Jun 2023, Chen-Yu Tsai wrote:
-> > 
-> > > On Tue, Jun 6, 2023 at 5:36 PM AngeloGioacchino Del Regno
-> > > <angelogioacchino.delregno@collabora.com> wrote:
-> > > >
-> > > > Il 06/06/23 11:17, Chen-Yu Tsai ha scritto:
-> > > > > The 8250_mtk driver's runtime PM support has some issues:
-> > > > >
-> > > > > - The bus clock is enabled (through runtime PM callback) later than a
-> > > > >    register write
-> > > > > - runtime PM resume callback directly called in probe, but no
-> > > > >    pm_runtime_set_active() call is present
-> > > > > - UART PM function calls the callbacks directly, _and_ calls runtime
-> > > > >    PM API
-> > > > > - runtime PM callbacks try to do reference counting, adding yet another
-> > > > >    count between runtime PM and clocks
-> > > > >
-> > > > > This fragile setup worked in a way, but broke recently with runtime PM
-> > > > > support added to the serial core. The system would hang when the UART
-> > > > > console was probed and brought up.
-> > > > >
-> > > > > Tony provided some potential fixes [1][2], though they were still a bit
-> > > > > complicated. The 8250_dw driver, which the 8250_mtk driver might have
-> > > > > been based on, has a similar structure but simpler runtime PM usage.
-> > > > >
-> > > > > Simplify clock sequencing and runtime PM support in the 8250_mtk driver.
-> > > > > Specifically, the clock is acquired enabled and assumed to be active,
-> > > > > unless toggled through runtime PM suspend/resume. Reference counting is
-> > > > > removed and left to the runtime PM core. The serial pm function now
-> > > > > only calls the runtime PM API.
-> > > > >
-> > > > > [1] https://lore.kernel.org/linux-serial/20230602092701.GP14287@atomide.com/
-> > > > > [2] https://lore.kernel.org/linux-serial/20230605061511.GW14287@atomide.com/
-> > > > >
-> > > > > Fixes: 84a9582fd203 ("serial: core: Start managing serial controllers to enable runtime PM")
-> > > > > Suggested-by: Tony Lindgren <tony@atomide.com>
-> > > > > Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
-> > > >
-> > > > You're both cleaning this up and solving a critical issue and I 
-> > > > completely agree about doing that.
-> > > >
-> > > > I can imagine what actually fixes the driver, but still, is it 
-> > > > possible to split this commit in two?
-> > > > One that solves the issue, one that performs the much needed cleanups.
-> > > >
-> > > > If it's not possible, then we can leave this commit as it is... and if the problem
-> > > > about splitting is the Fixes tag... well, we don't forcefully need it: after all,
-> > > > issues started arising after runtime PM support for 8250 landed and before that the
-> > > > driver technically worked, even though it was fragile.
-> > > 
-> > > The pure fix would look like what Tony posted [1]. However it would add stuff
-> > > that isn't strictly needed after the cleanup. Doing it in one patch results
-> > > in less churn. Think of it another way: it's a nice cleanup that just so
-> > > happens to fix a regression.
-> > > 
-> > > As for the fixes tag, it's there so other people potentially doing backports
-> > > of the 8250 runtime PM work can spot this followup fix.
-> > 
-> > Tony's patch is recent enough to not have progressed beyond tty-next so 
-> > fixing it shouldn't really require paying that much attention to stable 
-> > rules wrt. Fixes tag and minimality.
-> > 
-> > As the target currently is tty-next, a cleanup which also happens to fix 
-> > the issue seems perfectly fine.
+On 6.06.23 8:49, Krishna chaitanya chundru wrote:
+> Add support to vote for ICC bandwidth based up on the link
+> speed and width.
 > 
-> The Fixes: tag is relevant here, please don't dissuade people from using
-> them.
+> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+> ---
+>   drivers/pci/controller/dwc/pcie-qcom-ep.c | 73 +++++++++++++++++++++++++++++++
+>   1 file changed, 73 insertions(+)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-qcom-ep.c b/drivers/pci/controller/dwc/pcie-qcom-ep.c
+> index 19b3283..79e7559 100644
+> --- a/drivers/pci/controller/dwc/pcie-qcom-ep.c
+> +++ b/drivers/pci/controller/dwc/pcie-qcom-ep.c
+> @@ -17,6 +17,7 @@
+>   #include <linux/phy/pcie.h>
+>   #include <linux/phy/phy.h>
+>   #include <linux/platform_device.h>
+> +#include <linux/interconnect.h>
+>   #include <linux/pm_domain.h>
+>   #include <linux/regmap.h>
+>   #include <linux/reset.h>
+> @@ -28,6 +29,7 @@
+>   #define PARF_SYS_CTRL				0x00
+>   #define PARF_DB_CTRL				0x10
+>   #define PARF_PM_CTRL				0x20
+> +#define PARF_PM_STTS				0x24
+>   #define PARF_MHI_CLOCK_RESET_CTRL		0x174
+>   #define PARF_MHI_BASE_ADDR_LOWER		0x178
+>   #define PARF_MHI_BASE_ADDR_UPPER		0x17c
+> @@ -128,6 +130,9 @@
+>   /* DBI register fields */
+>   #define DBI_CON_STATUS_POWER_STATE_MASK		GENMASK(1, 0)
+>   
+> +#define DBI_LINKCTRLSTATUS			0x80
+> +#define DBI_LINKCTRKSTATUS_SHIFT	16
+> +
+>   #define XMLH_LINK_UP				0x400
+>   #define CORE_RESET_TIME_US_MIN			1000
+>   #define CORE_RESET_TIME_US_MAX			1005
+> @@ -187,6 +192,8 @@ struct qcom_pcie_ep {
+>   	enum qcom_pcie_ep_link_status link_status;
+>   	int global_irq;
+>   	int perst_irq;
+> +
+> +	struct icc_path *icc;
+>   };
+>   
+>   static int qcom_pcie_ep_core_reset(struct qcom_pcie_ep *pcie_ep)
+> @@ -253,9 +260,56 @@ static void qcom_pcie_dw_stop_link(struct dw_pcie *pci)
+>   	disable_irq(pcie_ep->perst_irq);
+>   }
+>   
+> +static void qcom_pcie_icc_update(struct qcom_pcie_ep *pcie_ep)
+> +{
+> +	struct dw_pcie *pci = &pcie_ep->pci;
+> +	u32 val, bw;
+> +	int speed, width;
+> +	int ret;
+> +
+> +	if (!pcie_ep->icc)
+> +		return;
+> +
+> +	val = dw_pcie_readl_dbi(pci, DBI_LINKCTRLSTATUS);
+> +	val = val >> DBI_LINKCTRKSTATUS_SHIFT;
+> +
+> +	speed = FIELD_GET(PCI_EXP_LNKSTA_CLS, val);
+> +	width = FIELD_GET(PCI_EXP_LNKSTA_NLW, val);
+> +
+> +	/*
+> +	 * ICC needs avg bw in KBps.
+> +	 *
+> +	 * For example for 2Gbps the avg BW = 2x1000x1000x1000/8*1000 = 250000
+> +	 */
+> +	switch (speed) {
+> +	case 1:
+> +		bw = 250000;	/* avg bw for GEN1 per lane: 2Gbps, peak bw: no vote */
+> +		break;
+> +	case 2:
+> +		bw = 500000;	/* avg bw for GEN2 per lane: 4Gbps, peak bw no vote */
+> +		break;
+> +	case 3:
+> +		bw = 1000000;	/* avg bw for GEN3 per lane: 8Gbps, peak bw no vote */
+> +		break;
+> +	default:
+> +		WARN_ON_ONCE(1);
+> +		fallthrough;
+> +	case 4:
+> +		bw = 2000000;	/* avg bw for GEN4 per lane: 16Gbps, peak bw no vote */
+> +		break;
+> +	}
+> +
+> +	ret = icc_set_bw(pcie_ep->icc, width * bw, 0);
 
-Not including Fixes tag was definitely among the things I tried to 
-say.
+Here you should use a non-zero value for peak bandwidth. You can use the average value also as peak. 
+There are some existing macros like GBps_to_icc(). Please use them.
 
-What I meant was that this patch, given the current time frame, 
-likely gets included within the same "next cycle". So it fixes the issue 
-even before the commit it fixes ends up into any rc not to speak of 
-stables. As such, stable kernel rules don't seem relevant.
+> +	if (ret) {
+> +		dev_err(pci->dev, "failed to set interconnect bandwidth: %d\n",
+> +			ret);
+> +	}
+> +}
+> +
+>   static int qcom_pcie_enable_resources(struct qcom_pcie_ep *pcie_ep)
+>   {
+>   	int ret;
+> +	struct dw_pcie *pci = &pcie_ep->pci;
+>   
+>   	ret = clk_bulk_prepare_enable(pcie_ep->num_clks, pcie_ep->clks);
+>   	if (ret)
+> @@ -277,6 +331,20 @@ static int qcom_pcie_enable_resources(struct qcom_pcie_ep *pcie_ep)
+>   	if (ret)
+>   		goto err_phy_exit;
+>   
+> +	/*
+> +	 * Some Qualcomm platforms require interconnect bandwidth constraints
+> +	 * to be set before enabling interconnect clocks.
+> +	 *
+> +	 * Set an initial average bandwidth corresponding to single-lane Gen 1
+> +	 * for the pcie to mem path.
+> +	 */
+> +	ret = icc_set_bw(pcie_ep->icc, 250000, 0); /* avg bw: 2Gbps, peak bw: no vote */
 
-So creating a "fix patch" with extra stuff just for the sake of it and 
-then removing the extra stuff away in the cleanup change seems unnecessary 
-to me as the cleanup itself would fix the same issue. I'm not even sure if 
-it's proper to call this change a cleanup, it just takes a different 
-avenue to fix the problem by removing some complexity from old.
+Ditto.
 
--- 
- i.
---8323329-1863769213-1686048085=:2339--
+> +	if (ret) {
+> +		dev_err(pci->dev, "failed to set interconnect bandwidth: %d\n",
+> +			ret);
+> +		goto err_phy_exit;
+> +	}
+> +
+>   	return 0;
+>   
+>   err_phy_exit:
+> @@ -550,6 +618,10 @@ static int qcom_pcie_ep_get_resources(struct platform_device *pdev,
+>   	if (IS_ERR(pcie_ep->phy))
+>   		ret = PTR_ERR(pcie_ep->phy);
+>   
+> +	pcie_ep->icc = devm_of_icc_get(dev, "pci");
+
+Is this "pci" path documented in the bindings?
+
+Thanks,
+Georgi
+
+> +	if (IS_ERR(pcie_ep->icc))
+> +		ret = PTR_ERR(pcie_ep->icc);
+> +
+>   	return ret;
+>   }
+>   
+> @@ -572,6 +644,7 @@ static irqreturn_t qcom_pcie_ep_global_irq_thread(int irq, void *data)
+>   	} else if (FIELD_GET(PARF_INT_ALL_BME, status)) {
+>   		dev_dbg(dev, "Received BME event. Link is enabled!\n");
+>   		pcie_ep->link_status = QCOM_PCIE_EP_LINK_ENABLED;
+> +		qcom_pcie_icc_update(pcie_ep);
+>   	} else if (FIELD_GET(PARF_INT_ALL_PM_TURNOFF, status)) {
+>   		dev_dbg(dev, "Received PM Turn-off event! Entering L23\n");
+>   		val = readl_relaxed(pcie_ep->parf + PARF_PM_CTRL);
+
