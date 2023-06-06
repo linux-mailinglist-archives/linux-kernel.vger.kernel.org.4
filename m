@@ -2,150 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2A04724D3E
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 21:41:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B04C0724D3B
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 21:40:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238032AbjFFTkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 15:40:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60374 "EHLO
+        id S234034AbjFFTjs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 15:39:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237519AbjFFTkW (ORCPT
+        with ESMTP id S233980AbjFFTje (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 15:40:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E8110D7
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 12:39:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686080377;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JwoXBtrJnmo+pBf7jYnvlWnPa+tCBA8O3lKlFGoTwY8=;
-        b=Bm9K8c3US0dyHrDSx9t+9VTwL/V/CFp/leE1rv//v/lN8e3lHsptDRbmZJUQ03LesXIj1s
-        Ul8zJ3zen3aeaDpzt2c69HDystk9RVq8dmCs4evafSdZeLOpR5OJtsH696ODO8KcA9r9eE
-        T4L9oxaaTDVdR7mEjyPdqR4jLIrjmqo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-672-evnAV1KsO8-Q6sc1uO10KA-1; Tue, 06 Jun 2023 15:39:34 -0400
-X-MC-Unique: evnAV1KsO8-Q6sc1uO10KA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 42EE3801224;
-        Tue,  6 Jun 2023 19:39:34 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.224.112])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 2F0FB140E954;
-        Tue,  6 Jun 2023 19:39:30 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Tue,  6 Jun 2023 21:39:11 +0200 (CEST)
-Date:   Tue, 6 Jun 2023 21:39:07 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     Mike Christie <michael.christie@oracle.com>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>, linux@leemhuis.info,
-        nicolas.dichtel@6wind.com, axboe@kernel.dk,
-        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, mst@redhat.com,
-        sgarzare@redhat.com, jasowang@redhat.com, stefanha@redhat.com,
-        brauner@kernel.org
-Subject: Re: [CFT][PATCH v3] fork, vhost: Use CLONE_THREAD to fix freezer/ps
- regression
-Message-ID: <20230606193907.GB18866@redhat.com>
-References: <20230601183232.8384-1-michael.christie@oracle.com>
- <20230602192254.GD555@redhat.com>
- <87r0qt18qq.fsf_-_@email.froward.int.ebiederm.org>
- <ae250076-7d55-c407-1066-86b37014c69c@oracle.com>
- <20230605151037.GE32275@redhat.com>
- <03c07f48-8922-f563-560c-f0d4cc3e1279@oracle.com>
- <20230606121643.GD7542@redhat.com>
- <39f5913c-e658-e476-0378-62236bb4ed49@oracle.com>
+        Tue, 6 Jun 2023 15:39:34 -0400
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD10F10D7
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 12:39:32 -0700 (PDT)
+Received: by mail-io1-xd31.google.com with SMTP id ca18e2360f4ac-77479a531abso43772739f.1
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 12:39:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1686080372; x=1688672372;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bchEnBbzFEQ715Mm1+e6mTqO4zV/mMGdnFuk7zRzgTk=;
+        b=NQLjeQ7GvFieMLE4xVj7sBdkTcKdCB9tsgBg4N9XYBrFgf0Z7qrNuGyvtZkA+BjXrZ
+         5uq5Jy2+oVpzn9eoiWu5D5FyPVYPTh3ipZ/jf2EDIiFB6faO1IK2B0UDOhoO5wGouoYv
+         aAcYifCJnQoaK8bjsa/X7IFm8BZFNMLI5vUHQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686080372; x=1688672372;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bchEnBbzFEQ715Mm1+e6mTqO4zV/mMGdnFuk7zRzgTk=;
+        b=fO9fbnwtVmjN0TUcQ+X3CJU13yO3iLAeMUifsPlTgv05QUqwpd8SVc4k6+QJJW5Mv0
+         GLTrGDTamOkRCh4bPaPB4IyQw/beDCmbZvIX3NgZbc4ONkkNlQ/U2MZHRQYdcoQblGkq
+         cUx03U54gQXTW5krO3M5yT9sr4oCPgIw8duQTobwkUFtk/MEZ/Glf3aiEvEYj36CieeT
+         q0yWdCKYlikeKpRRsiAyjZVq4H+HAl/YID7i9Hjj3JBrUGrqQtOR7T98KM8hzyUYGAWZ
+         lYyzXGsOIB0a7hgn230alCsO2WiCiafIvSDbaXJ7DKEWQXn5aGtZAAXXRFtiGf4WchOy
+         VnJw==
+X-Gm-Message-State: AC+VfDzqWEqQQPSC6e5ccdJYL6e8Kt1Q9x0ojnu/Kb9lNS+M2hBIntSt
+        96CnBieuyEWrcUCYbV1V/BN/xOz5wlk6EeCQHE8=
+X-Google-Smtp-Source: ACHHUZ4fm1hlUrAtwDI6ZLu+qeUfIJuXfPPOCsRO0UOH0yDoBzq37HoVLoSrYvi3SpOIiRRZPHMYYQ==
+X-Received: by 2002:a05:6602:2d96:b0:777:b51c:6058 with SMTP id k22-20020a0566022d9600b00777b51c6058mr2582851iow.2.1686080372192;
+        Tue, 06 Jun 2023 12:39:32 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id h15-20020a02c4cf000000b0040fae3b49e5sm3083987jaj.124.2023.06.06.12.39.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Jun 2023 12:39:31 -0700 (PDT)
+Message-ID: <1514ff05-9049-25d7-77cb-04db04e441b0@linuxfoundation.org>
+Date:   Tue, 6 Jun 2023 13:39:30 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <39f5913c-e658-e476-0378-62236bb4ed49@oracle.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] selftests: prctl: Add new prctl test for PR_SET_NAME
+Content-Language: en-US
+To:     Osama Muhammad <osmtendev@gmail.com>, shuah@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        ivan.orlov0322@gmail.com, Shuah Khan <skhan@linuxfoundation.org>
+References: <20230606175515.12855-1-osmtendev@gmail.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20230606175515.12855-1-osmtendev@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/06, Mike Christie wrote:
->
-> On 6/6/23 7:16 AM, Oleg Nesterov wrote:
-> > On 06/05, Mike Christie wrote:
-> >
-> >> So it works like if we were using a kthread still:
-> >>
-> >> 1. Userapce thread0 opens /dev/vhost-$something.
-> >> 2. thread0 does VHOST_SET_OWNER ioctl. This calls vhost_task_create() to
-> >> create the task_struct which runs the vhost_worker() function which handles
-> >> the work->fns.
-> >> 3. If userspace now does a SIGKILL or just exits without doing a close() on
-> >> /dev/vhost-$something, then when thread0 does exit_files() that will do the
-> >> fput that does vhost-$something's file_operations->release.
-> >
-> > So, at least in this simple case vhost_worker() can just exit after SIGKILL,
-> > and thread0 can flush the outstanding commands when it calls vhost_dev_flush()
-> > rather than wait for vhost_worker().
-> >
-> > Right?
->
-> With the current code, the answer is no. We would hang like I mentioned here:
->
-> https://lore.kernel.org/lkml/ae250076-7d55-c407-1066-86b37014c69c@oracle.com/
+On 6/6/23 11:55, Osama Muhammad wrote:
+> This patch will add the new test, which covers the prctl call
+> PR_SET_NAME command. The test tries to give a name using the PR_SET_NAME
+> call and then confirm it that it changed correctly by using  PR_GET_NAME.
+> It also tries to rename it with empty name.In the test PR_GET_NAME is
+> tested by passing null pointer to it and check its behaviour.
+> 
+> Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
+> ---
+>   tools/testing/selftests/prctl/Makefile        |  2 +-
+>   .../selftests/prctl/set-process-name.c        | 61 +++++++++++++++++++
+>   2 files changed, 62 insertions(+), 1 deletion(-)
+>   create mode 100644 tools/testing/selftests/prctl/set-process-name.c
+> 
+> diff --git a/tools/testing/selftests/prctl/Makefile b/tools/testing/selftests/prctl/Makefile
+> index c058b81ee..cfc35d29f 100644
+> --- a/tools/testing/selftests/prctl/Makefile
+> +++ b/tools/testing/selftests/prctl/Makefile
+> @@ -5,7 +5,7 @@ ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
+>   
+>   ifeq ($(ARCH),x86)
+>   TEST_PROGS := disable-tsc-ctxt-sw-stress-test disable-tsc-on-off-stress-test \
+> -		disable-tsc-test set-anon-vma-name-test
+> +		disable-tsc-test set-anon-vma-name-test set-process-name
+>   all: $(TEST_PROGS)
+>   
+>   include ../lib.mk
+> diff --git a/tools/testing/selftests/prctl/set-process-name.c b/tools/testing/selftests/prctl/set-process-name.c
+> new file mode 100644
+> index 000000000..12c5ed9a5
+> --- /dev/null
+> +++ b/tools/testing/selftests/prctl/set-process-name.c
+> @@ -0,0 +1,61 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * This test covers the PR_SET_NAME functionality of prctl calls
+> + */
+> +
+> +#include <errno.h>
+> +#include <sys/prctl.h>
+> +#include <string.h>
+> +
+> +#include "../kselftest_harness.h"
+> +
+> +#define CHANGE_NAME "changename"
+> +#define EMPTY_NAME ""
+> +
+> +int set_name(char *name)
+> +{
+> +	int res;
+> +
+> +	res = prctl(PR_SET_NAME, name, NULL, NULL, NULL);
+> +
+> +	if (res < 0)
+> +		return -errno;
+> +	return res;
+> +}
+> +
+> +int check_is_name_correct(char *check_name)
+> +{
+> +	char name[16];
 
-If only I could fully understand this email ;)
+Use TASK_COMM_LEN here instead of 16.
 
-Could you spell to explain why this can't work (again, in this simple case) ?
+> +	int res;
+> +
+> +	res = prctl(PR_GET_NAME, name, NULL, NULL, NULL);
+> +
+> +	if (res < 0)
+> +		return -errno;
+> +
+> +	return !strcmp(name, check_name);
+> +}
+> +
+> +int check_null_pointer(char *check_name)
+> +{
+> +	char *name = NULL;
+> +	int res;
+> +
+> +	res = prctl(PR_GET_NAME, name, NULL, NULL, NULL);
+> +
+> +	return res;
+> +}
+> +
+> +TEST(rename_process) {
+> +
+> +	EXPECT_GE(set_name(CHANGE_NAME), 0);
+> +	EXPECT_TRUE(check_is_name_correct(CHANGE_NAME));
+> +
+> +	EXPECT_GE(set_name(EMPTY_NAME), 0);
+> +	EXPECT_TRUE(check_is_name_correct(EMPTY_NAME));
+> +
+> +	EXPECT_GE(set_name(CHANGE_NAME), 0);
+> +	EXPECT_LT(check_null_pointer(CHANGE_NAME), 0);
+> +}
+> +
+> +TEST_HARNESS_MAIN
 
-My current (and I know, very poor) understanding is that .release() should
-roughly do the following:
+Otherwise looks good.
 
-	1. Ensure that vhost_work_queue() can't add the new callbacks
-
-	2. Call vhost_dev_flush() to ensure that worker->work_list is empty
-
-	3. Call vhost_task_stop()
-
-so why this sequence can't work if we turn vhost_dev_flush() into something like
-
-	void vhost_dev_flush(struct vhost_dev *dev)
-	{
-		struct vhost_flush_struct flush;
-
-		if (dev->worker) {
-			// this assumes that vhost_task_create() uses CLONE_THREAD
-			if (same_thread_group(current, dev->worker->vtsk->task)) {
-				... run the pending callbacks ...
-				return;
-			}
-
-
-			// this is what we currently have
-
-			init_completion(&flush.wait_event);
-			vhost_work_init(&flush.work, vhost_flush_work);
-
-			vhost_work_queue(dev, &flush.work);
-			wait_for_completion(&flush.wait_event);
-		}
-	}
-
-?
-
-Mike, I am just trying to understand what exactly vhost_worker() should do.
-
-> We need to add code like I mentioned in that reply because we don't have a
-> way to call into the layers below us to flush those commands.
-
-This tells me nothing, but this is my fault, not yours. Again, again, I know
-nothing about drivers/vhost.
-
-Oleg.
-
+thanks,
+-- Shuah
