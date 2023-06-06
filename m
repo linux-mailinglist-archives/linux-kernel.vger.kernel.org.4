@@ -2,133 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5564724215
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 14:29:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F1AB72421B
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 14:30:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236860AbjFFM3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 08:29:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59744 "EHLO
+        id S234742AbjFFM3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 08:29:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbjFFM26 (ORCPT
+        with ESMTP id S229835AbjFFM3p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 08:28:58 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A4610C6;
-        Tue,  6 Jun 2023 05:28:57 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id 98e67ed59e1d1-256712e2be3so5215523a91.2;
-        Tue, 06 Jun 2023 05:28:57 -0700 (PDT)
+        Tue, 6 Jun 2023 08:29:45 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB64E10C3
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 05:29:42 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-9768fd99c0cso776892366b.0
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 05:29:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686054537; x=1688646537;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jbiTAIYeS++2LppYqgSVrfeOsxiqOUBI8osgLm56Dv0=;
-        b=FnE/Zamn77Vig5Yr2oqA5unkxfY5m6dJ56sq36UqQwKjl6qVm7ITyij6rcc4e/Xfk4
-         mvYnf6OnND+mFNhZ7GoyPesjK0uKogvOjjwyKFiccKwO68VslhSHPk2cENpqhCaUMSNf
-         volx8teW26nHO5vIXBfJJgrvtzfdvFuc8OtwiFRgYuu2SXYO5QH13GRnzBWwg8iW5pcS
-         3JDVCCgzDjIPhWLDH+I3+cmDAnJIYa9GTsoKE+MIlEgepraHSLYjE4d3bIT4pUpwpBaS
-         zhfLXHzxI8VWcwNT6/a3xVwlw1wf9QmszrLfMZRmQ91JIxBgC0qnqEgcy2Q2uxV0BIXW
-         Ymkw==
+        d=linaro.org; s=google; t=1686054581; x=1688646581;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=W8bjNW006lIGeXXTvLEmyObQQvWZdXaKzwPi+Kg6QFQ=;
+        b=UANglB0IvH5VFytUBHWTDZr279hkDNYZk3bE/mwXdOIJ7a/USJf7JT6YT4ZlctCbJz
+         V/CbT4QIfMBx0oNExmEx1Ij/xUHn56+RkvgHEiSouvLIELitNpRnb5fRv0rMNDjc1Tl9
+         VAvbPCj1O0oSo0ZGenpnc5S4sJqXEJRcvB8sFoTDPCzSxoZeUCbdUtsJsDa/2bwXg7jA
+         P2PQuYDoNqPZK+24zDTYSUgGI1WwS8Ve0VcxUmYlJxuMPrkj99Y2nJGjz03w/F8E24E6
+         QKioE5gtAQLwV3ugVZNCGApZ5NfE5ijPrYUvWsWcW4mDYXftPpr+P8qKUyusJwJNk1V6
+         GW8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686054537; x=1688646537;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jbiTAIYeS++2LppYqgSVrfeOsxiqOUBI8osgLm56Dv0=;
-        b=QkdOGLXDlHHfquf0HG88dOuWrqZ27kUP+U5lJcWzLVw0sSiKGTzhLgWDvYUdpY1ckQ
-         ZHt3wpUzRJVE6jUmVKcLyCtNGXPUeP6XLNNrSEf3O4OI+7cGGB+T8s2I8M63MX5WGRWs
-         1BE4RDoZU1a+GPkSoP66osood5NaW+3X+6xXTjQv2TF4J1sivAqQ0xEm5qASQ0cJyJxh
-         0ADIMyJENI8U0Z4Dj2Kv3oCy9Kt1F9GifvwZBZ5o7mLm6qxmAee4bClfsCebehQy3mFr
-         dxT6wL3OstqKC6f79R/3ckz10xX+Ybw7HdNd0GyZUg9LHAJYI+PIFyPAiw5WzQQaGBAo
-         brhQ==
-X-Gm-Message-State: AC+VfDxOmilegN2llgkHhQrj7TqQlaMrHsGS+MtSkwG/7qaI3kIcdtZL
-        mrqqGQEffHnBN3XotEqhbP8=
-X-Google-Smtp-Source: ACHHUZ5sC3Omwc1R9R2oXPq0XI1qpnOev0hSECau3himiunIJyVu8ZNRdiH50H85OmdAZCN1CkxmDA==
-X-Received: by 2002:a17:90a:ac10:b0:24e:4b1c:74d2 with SMTP id o16-20020a17090aac1000b0024e4b1c74d2mr1989660pjq.32.1686054536842;
-        Tue, 06 Jun 2023 05:28:56 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-93.three.co.id. [180.214.232.93])
-        by smtp.gmail.com with ESMTPSA id 8-20020a17090a018800b002565d52a781sm10003076pjc.40.2023.06.06.05.28.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 05:28:56 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 16921106A3A; Tue,  6 Jun 2023 19:28:53 +0700 (WIB)
-Date:   Tue, 6 Jun 2023 19:28:52 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Franziska Naepelt <franziska.naepelt@googlemail.com>,
-        keyrings@vger.kernel.org
-Cc:     dhowells@redhat.com, dwmw2@infradead.org,
-        linux-kernel@vger.kernel.org,
-        Franziska Naepelt <franziska.naepelt@gmail.com>,
-        kernel test robot <lkp@intel.com>,
-        Linux SPDX Licenses <linux-spdx@vger.kernel.org>,
-        Linux Kernel Janitors <kernel-janitors@vger.kernel.org>
-Subject: Re: [PATCH v2] certs/extract-cert: Fix checkpatch issues
-Message-ID: <ZH8mhIrjyBvTF4oZ@debian.me>
-References: <20230601190508.56610-1-franziska.naepelt@gmail.com>
- <20230602085902.59006-1-franziska.naepelt@gmail.com>
+        d=1e100.net; s=20221208; t=1686054581; x=1688646581;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=W8bjNW006lIGeXXTvLEmyObQQvWZdXaKzwPi+Kg6QFQ=;
+        b=a6PXbJPM/nWU7L7zG94+YWLgZa1X+WbAPTOqceW+Al0ww6h4Nd+OiuSB0KC+58LKNT
+         tIOmn8RJn4vnagqM1gAU6/u+hMuyXyDmHlPnJuYmcQC7aiNC2iWJG6GFbpj9HSY0zonM
+         Vj9PzTZshxdf/3GIWEh/F5PjH/QQZM6RmOrig1q0poiuQQM8cnYJQM3KwTtKkDYdzusU
+         4fTCo6DztK1/jsvI4Y2S+bIfEDGYMhV7jnRv3vlVtyX/E82qkkU7LLkQFISBALaWnrKu
+         UBv8YNUUUFGUdLUWgWNzU48Gjr2YizHayoKnMGz9FfMerBapzWP11iG7J+itWYyzj/Zm
+         p/aA==
+X-Gm-Message-State: AC+VfDxt1KiPkX6/wyu4Q0q1w+1+TRmn1z5jNvJqQZtm+MzTVu38ETD9
+        qpJFZHGzDXJU8tUykd4Yn1q5FQ==
+X-Google-Smtp-Source: ACHHUZ74gCkWdqGt68D2uqIK/FVkMqv6PEjoxCaeOaRCVaW8otYDttPJwhpDSCZcZtZGFkgL/JjU6Q==
+X-Received: by 2002:a17:907:70a:b0:94e:bf3e:638 with SMTP id xb10-20020a170907070a00b0094ebf3e0638mr2152290ejb.11.1686054581099;
+        Tue, 06 Jun 2023 05:29:41 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id l4-20020a170906644400b0095707b7dd04sm5421948ejn.42.2023.06.06.05.29.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Jun 2023 05:29:40 -0700 (PDT)
+Message-ID: <ba853327-9faf-3b2f-6e4a-e674c8b75b8f@linaro.org>
+Date:   Tue, 6 Jun 2023 14:29:38 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="+OePT+3E67BsBt+t"
-Content-Disposition: inline
-In-Reply-To: <20230602085902.59006-1-franziska.naepelt@gmail.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v2 1/3] ASoC: dt-bindings: stm32: document audio of graph
+ port for i2s
+To:     Olivier Moysan <olivier.moysan@foss.st.com>,
+        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230606115605.1633595-1-olivier.moysan@foss.st.com>
+ <20230606115605.1633595-2-olivier.moysan@foss.st.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230606115605.1633595-2-olivier.moysan@foss.st.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 06/06/2023 13:56, Olivier Moysan wrote:
+> When linking the STM32 I2S to another DAI component, according
+> to audio graph cards bindings, an OF graph port property is expected
+> in the node. Document the port property.
+> 
+> Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+> ---
 
---+OePT+3E67BsBt+t
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jun 02, 2023 at 10:59:02AM +0200, Franziska Naepelt wrote:
-> The following issues are fixed:
-> - WARNING: Missing or malformed SPDX-License-Identifier tag
-> - ERROR: trailing statements should be on next line
-> - WARNING: braces {} are not necessary for single statement blocks
-> - ERROR: space required before the open parenthesis '('
-> - ERROR: code indent should use tabs where possible
-> - WARNING: please, no spaces at the start of a line
-> - WARNING: Missing a blank line after declarations
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Again, write the patch description in imperative mood (e.g. "Do foo").
+Best regards,
+Krzysztof
 
-> +// SPDX-License-Identifier: LGPL-2.1
->  /* Extract X.509 certificate in DER form from PKCS#11 or PEM.
->   *
->   * Copyright =C2=A9 2014-2015 Red Hat, Inc. All Rights Reserved.
-
-Nope.
-
-The license boilerplate says LGPL 2.1 or any later version, so the
-corresponding SPDX tag should have been:
-
-```
-// SPDX-License-Identifier: LGPL-2.1-or-later
-```
-
-And please also delete the boilerplate and separate this SPDX conversion
-into its own patch.
-
-Thanks.
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---+OePT+3E67BsBt+t
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZH8mhAAKCRD2uYlJVVFO
-o+2GAQDDLgr8oszJB+8rAWiEsN6nJLAcdRgzDbzCRdRvu/jzkQD/YhWHhyg4B6BZ
-V1cTo1nnDJXZBlVj3cbYz+7f9fVqZgo=
-=87Gb
------END PGP SIGNATURE-----
-
---+OePT+3E67BsBt+t--
