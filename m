@@ -2,87 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF3E6723558
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 04:36:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9714272355E
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 04:38:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234200AbjFFCgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 22:36:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55398 "EHLO
+        id S234217AbjFFCiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 22:38:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230491AbjFFCgF (ORCPT
+        with ESMTP id S230491AbjFFCh6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 22:36:05 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 892FE10F;
-        Mon,  5 Jun 2023 19:36:02 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3561T5Ai030278;
-        Tue, 6 Jun 2023 02:35:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=GiWqvRplUBqz81yvhvsQ/7VkhivcUU/95z6tZmK38Gs=;
- b=ioLsF4XM+KiCZCvPxV+sEaplaQJK9FUp5Pckn2+MtiTeQ+cwBo6hy/GhbWilV0vnnqxH
- HDSSJtTWEuH/rZZU/VX5nZRSGkSTxzgyFl+OXArEBUkZlLPD73mipThS+KKPeoTtxHkh
- FXQPGfzxZSxu6YnrT0qMmuoXXxEvGRK0HnVc2dHp0sLVsJqLy5LfOZSStojsxOAaMUVo
- +6Hg4byrHEuAqhjzryqBrhlTtk0JVbNtnwnTTHMcxdpKls7yqtGCTWbFwTSsIYU54+Ii
- WDlUtpQDpkKWK0oP733afIVYVVvFQcv4XrgwwB3fnPrrMBaJVMzMy+MaKyt9f75ZCWzv OQ== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r1e9bspuc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 06 Jun 2023 02:35:55 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3562ZsMs026104
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 6 Jun 2023 02:35:54 GMT
-Received: from [10.110.26.43] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 5 Jun 2023
- 19:35:51 -0700
-Message-ID: <804363cf-f6cf-71a6-be8f-5fc00eea3154@quicinc.com>
-Date:   Mon, 5 Jun 2023 19:35:49 -0700
+        Mon, 5 Jun 2023 22:37:58 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8F88A116;
+        Mon,  5 Jun 2023 19:37:56 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.170])
+        by gateway (Coremail) with SMTP id _____8Axe_IDnH5kzlcAAA--.1365S3;
+        Tue, 06 Jun 2023 10:37:55 +0800 (CST)
+Received: from [10.20.42.170] (unknown [10.20.42.170])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxReQAnH5kg6UBAA--.7521S3;
+        Tue, 06 Jun 2023 10:37:52 +0800 (CST)
+Message-ID: <1102ca21-fdc7-cb06-d241-79b2e3627144@loongson.cn>
+Date:   Tue, 6 Jun 2023 10:37:52 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [Freedreno] [PATCH] drm/msm/dpu: re-introduce dpu core revision
- to the catalog
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v12 29/31] LoongArch: KVM: Enable kvm config and add the
+ makefile
 Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     Sean Paul <sean@poorly.run>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <quic_khsieh@quicinc.com>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        <quic_jesszhan@quicinc.com>, <freedreno@lists.freedesktop.org>
-References: <20230531005358.18090-1-quic_abhinavk@quicinc.com>
- <CAA8EJpryw0h8TgpJ+SFJ7s0=LCjkQ6oqAjCKsm60dk_Q5e+wWA@mail.gmail.com>
- <0af4df3d-8048-98cd-6c91-7cd553f4f65f@quicinc.com>
- <98e4bda7-19e9-09b6-f008-383adada97cb@linaro.org>
- <a0b7a9fc-eb3c-3b26-b11d-fe1fb47b2c51@quicinc.com>
- <451b114c-05e1-541c-1d3e-26bb81a307c4@linaro.org>
- <47fda908-d76f-65d5-e001-8773c5b160b9@quicinc.com>
- <48cc3d26-10fe-5b10-30b6-0772d62a2a53@linaro.org>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <48cc3d26-10fe-5b10-30b6-0772d62a2a53@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Tianrui Zhao <zhaotianrui@loongson.cn>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        loongarch@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
+        Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Xi Ruoyao <xry111@xry111.site>,
+        kernel test robot <lkp@intel.com>
+References: <20230530015223.147755-1-zhaotianrui@loongson.cn>
+ <20230530015223.147755-30-zhaotianrui@loongson.cn>
+From:   "bibo, mao" <maobibo@loongson.cn>
+In-Reply-To: <20230530015223.147755-30-zhaotianrui@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: ixGmaxNfORdJQBy9tqgiXKs_G0EMQoX1
-X-Proofpoint-ORIG-GUID: ixGmaxNfORdJQBy9tqgiXKs_G0EMQoX1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-05_35,2023-06-05_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 mlxscore=0
- malwarescore=0 impostorscore=0 priorityscore=1501 mlxlogscore=999
- adultscore=0 clxscore=1015 spamscore=0 bulkscore=0 phishscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2306060022
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+X-CM-TRANSID: AQAAf8CxReQAnH5kg6UBAA--.7521S3
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBj93XoWxZFWfJryrurWrtF1DGw4xZrc_yoWrWF4kpr
+        yxCr95Gr4xWFn3J393t34kWrs0kF97KFW3W3W3Za48Cr9rZ34kur18tr9rZFyDA395JrW0
+        gF1rGa1aga1UJwcCm3ZEXasCq-sJn29KB7ZKAUJUUUUD529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUPlb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+        xVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
+        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
+        tVWrXwAv7VC2z280aVAFwI0_Gr1j6F4UJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64
+        vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0E
+        wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F4
+        0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFyl
+        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxV
+        AFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4U
+        JVWxJr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07
+        j09a9UUUUU=
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,203 +76,137 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Reviewed-by: Bibo, Mao <maobibo@loongson.cn>
 
-
-On 6/5/2023 6:03 PM, Dmitry Baryshkov wrote:
-> On 06/06/2023 03:55, Abhinav Kumar wrote:
->>
->>
->> On 6/3/2023 7:21 PM, Dmitry Baryshkov wrote:
->>> On 31/05/2023 21:25, Abhinav Kumar wrote:
->>>>
->>>>
->>>> On 5/31/2023 3:07 AM, Dmitry Baryshkov wrote:
->>>>> On 31/05/2023 06:05, Abhinav Kumar wrote:
->>>>>>
->>>>>>
->>>>>> On 5/30/2023 7:53 PM, Dmitry Baryshkov wrote:
->>>>>>> On Wed, 31 May 2023 at 03:54, Abhinav Kumar 
->>>>>>> <quic_abhinavk@quicinc.com> wrote:
->>>>>>>>
->>>>>>>> With [1] dpu core revision was dropped in favor of using the
->>>>>>>> compatible string from the device tree to select the dpu catalog
->>>>>>>> being used in the device.
->>>>>>>>
->>>>>>>> This approach works well however also necessitates adding catalog
->>>>>>>> entries for small register level details as dpu capabilities and/or
->>>>>>>> features bloating the catalog unnecessarily. Examples include but
->>>>>>>> are not limited to data_compress, interrupt register set, 
->>>>>>>> widebus etc.
->>>>>>>>
->>>>>>>> Introduce the dpu core revision back as an entry to the catalog 
->>>>>>>> so that
->>>>>>>> we can just use dpu revision checks and enable those bits which
->>>>>>>> should be enabled unconditionally and not controlled by a catalog
->>>>>>>> and also simplify the changes to do something like:
->>>>>>>>
->>>>>>>> if (dpu_core_revision > xxxxx && dpu_core_revision < xxxxx)
->>>>>>>>          enable the bit;
->>>>>>>>
->>>>>>>> Also, add some of the useful macros back to be able to use dpu core
->>>>>>>> revision effectively.
->>>>>>>>
->>>>>>>> [1]: 
->>>>>>>> https://patchwork.freedesktop.org/patch/530891/?series=113910&rev=4
->>>>>>>>
->>>>>>>> Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
->>>>>>>> ---
->>>>>>>>   .../msm/disp/dpu1/catalog/dpu_3_0_msm8998.h   |  1 +
->>>>>>>>   .../msm/disp/dpu1/catalog/dpu_4_0_sdm845.h    |  1 +
->>>>>>>>   .../msm/disp/dpu1/catalog/dpu_5_0_sm8150.h    |  1 +
->>>>>>>>   .../msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h   |  1 +
->>>>>>>>   .../msm/disp/dpu1/catalog/dpu_6_0_sm8250.h    |  1 +
->>>>>>>>   .../msm/disp/dpu1/catalog/dpu_6_2_sc7180.h    |  1 +
->>>>>>>>   .../msm/disp/dpu1/catalog/dpu_6_3_sm6115.h    |  1 +
->>>>>>>>   .../msm/disp/dpu1/catalog/dpu_6_5_qcm2290.h   |  1 +
->>>>>>>>   .../msm/disp/dpu1/catalog/dpu_7_0_sm8350.h    |  1 +
->>>>>>>>   .../msm/disp/dpu1/catalog/dpu_7_2_sc7280.h    |  1 +
->>>>>>>>   .../msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h  |  1 +
->>>>>>>>   .../msm/disp/dpu1/catalog/dpu_8_1_sm8450.h    |  1 +
->>>>>>>>   .../msm/disp/dpu1/catalog/dpu_9_0_sm8550.h    |  1 +
->>>>>>>>   .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h    | 31 
->>>>>>>> ++++++++++++++++++-
->>>>>>>>   14 files changed, 43 insertions(+), 1 deletion(-)
->>>>>>>>
->>>>>>>
->>>>>>> [skipped catalog changes]
->>>>>>>
->>>>>>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h 
->>>>>>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
->>>>>>>> index 677048cc3b7d..cc4aa75a1219 100644
->>>>>>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
->>>>>>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
->>>>>>>> @@ -19,6 +19,33 @@
->>>>>>>>    */
->>>>>>>>   #define MAX_BLOCKS    12
->>>>>>>>
->>>>>>>> +#define DPU_HW_VER(MAJOR, MINOR, STEP)\
->>>>>>>> +                 ((((unsigned int)MAJOR & 0xF) << 28) |\
->>>>>>>> +                 ((MINOR & 0xFFF) << 16) |\
->>>>>>>> +                 (STEP & 0xFFFF))
->>>>>>>> +
->>>>>>>> +#define DPU_HW_MAJOR(rev)((rev) >> 28)
->>>>>>>> +#define DPU_HW_MINOR(rev)(((rev) >> 16) & 0xFFF)
->>>>>>>> +#define DPU_HW_STEP(rev)((rev) & 0xFFFF)
->>>>>>>> +#define DPU_HW_MAJOR_MINOR(rev)((rev) >> 16)
->>>>>>>> +
->>>>>>>> +#define IS_DPU_MAJOR_MINOR_SAME(rev1, rev2)   \
->>>>>>>> +(DPU_HW_MAJOR_MINOR((rev1)) == DPU_HW_MAJOR_MINOR((rev2)))
->>>>>>>> +
->>>>>>>> +#define DPU_HW_VER_300 DPU_HW_VER(3, 0, 0) /* 8998 v1.0 */
->>>>>>>> +#define DPU_HW_VER_400 DPU_HW_VER(4, 0, 0) /* sdm845 v1.0 */
->>>>>>>> +#define DPU_HW_VER_500 DPU_HW_VER(5, 0, 0) /* sm8150 v1.0 */
->>>>>>>> +#define DPU_HW_VER_510 DPU_HW_VER(5, 1, 1) /* sc8180 */
->>>>>>>> +#define DPU_HW_VER_600 DPU_HW_VER(6, 0, 0) /* sm8250 */
->>>>>>>> +#define DPU_HW_VER_620 DPU_HW_VER(6, 2, 0) /* sc7180 v1.0 */
->>>>>>>> +#define DPU_HW_VER_630 DPU_HW_VER(6, 3, 0) /* sm6115|sm4250 */
->>>>>>>> +#define DPU_HW_VER_650 DPU_HW_VER(6, 5, 0) /* qcm2290|sm4125 */
->>>>>>>> +#define DPU_HW_VER_700 DPU_HW_VER(7, 0, 0) /* sm8350 */
->>>>>>>> +#define DPU_HW_VER_720 DPU_HW_VER(7, 2, 0) /* sc7280 */
->>>>>>>> +#define DPU_HW_VER_800 DPU_HW_VER(8, 0, 0) /* sc8280xp */
->>>>>>>> +#define DPU_HW_VER_810 DPU_HW_VER(8, 1, 0) /* sm8450 */
->>>>>>>> +#define DPU_HW_VER_900 DPU_HW_VER(9, 0, 0) /* sm8550 */
->>>>>>>
->>>>>>> Instead of having defines for all SoCs (which can quickly become
->>>>>>> unmanageable) and can cause merge conflicts, I'd suggest inlining 
->>>>>>> all
->>>>>>> the defines into respective catalog files.
->>>>>>>
->>>>>>
->>>>>> Sure, that can be done.
->>>>>>
->>>>>>> Also, I'm not sure that the "step" should be a part of the 
->>>>>>> catalog. I
->>>>>>> know that this follows the hardware revision. However, please 
->>>>>>> correct
->>>>>>> me if I'm wrong, different step levels are used for revisions of the
->>>>>>> same SoC. The original code that was reading the hw revision from 
->>>>>>> the
->>>>>>> hardware register, listed both 5.0.0 and 5.0.1 for sm8150.
->>>>>>>
->>>>>>
->>>>>> This is one of the things i noticed while making this change.
->>>>>>
->>>>>> Before the catalog rework, we used to handle even steps as we used 
->>>>>> to read that from the register and match it with the mdss_cfg 
->>>>>> handler. But after the rework, we dont handle steps anymore. Yes, 
->>>>>> you are right that different step levels are used for the 
->>>>>> revisions of the same SOC and so with that, i dont expect or 
->>>>>> atleast am not aware of DPU differences between steps but I am not 
->>>>>> able to rule it out.
->>>>>>
->>>>>> So are you suggesting we drop step altogether and DPU_HW_VER() 
->>>>>> macro shall only handle major and minor versions? With the current 
->>>>>> chipsets I see, it should not make a difference . Its just that I 
->>>>>> am not sure if that will never happen.
->>>>>
->>>>> Yes. The goal of this rework would be to drop generic features and 
->>>>> to replace those checks with DPU-revision lookups. Correct?
->>>>
->>>> Yes thats right.
->>>>
->>>>> I think that from this perspective having to handle toe step 
->>>>> revision is a sign of an overkill. Having to handle the step 
->>>>> revision is a sign of paltform feature (or mis-feature) rather than 
->>>>> a generic DPU bit.
->>>>>
->>>>
->>>> Not entirely. Lets not forget that at the moment even dpu_perf_cfg 
->>>> is part of the catalog. Even if in terms of major HW blocks steps 
->>>> shouldnt change, there is absolutely no guarantee that perf data 
->>>> cannot.
->>>>
->>>> This is what is the sticking point for me which is holding me back 
->>>> against dropping step. Thoughts?
->>>
->>> We usually do not support ES versions of the chips, only the final 
->>> version. So supporting the perf data for earlier revisions is also 
->>> not required.
->>>
->>
->> ack, we will drop step in that case. and good to know about the ES 
->> versions.
->>
->>>>
->>>>> In fact I suppose that even handling a minor revision would be an 
->>>>> overkill. Why don't we start with .dpu_major instead of .core_rev? 
->>>>> We can add .dpu_minor if/when required.
->>>>>
->>>>
->>>> No, unfortunately we cannot drop minor version for sure. I am seeing 
->>>> examples in downstream code where some of the features are available 
->>>> after a minor verion as well.
->>>
->>> Can you please give an example?
->>>
->>
->> Yes, watchdog timer, intf reset counter are available only after DPU 
->> HW version 8.1 (not major version 8).
+在 2023/5/30 09:52, Tianrui Zhao 写道:
+> Enable LoongArch kvm config and add the makefile to support build kvm
+> module.
 > 
-> Hmm, IIRC, wd timer was available for ages. Was it moved together with 
-> the introduction of MDSS_PERIPH_0_REMOVED?
+> Reported-by: kernel test robot <lkp@intel.com>
+> Link: https://lore.kernel.org/oe-kbuild-all/202304131526.iXfLaVZc-lkp@intel.com/
+> Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
+> ---
+>  arch/loongarch/Kbuild                      |  1 +
+>  arch/loongarch/Kconfig                     |  2 ++
+>  arch/loongarch/configs/loongson3_defconfig |  2 ++
+>  arch/loongarch/kvm/Kconfig                 | 38 ++++++++++++++++++++++
+>  arch/loongarch/kvm/Makefile                | 22 +++++++++++++
+>  5 files changed, 65 insertions(+)
+>  create mode 100644 arch/loongarch/kvm/Kconfig
+>  create mode 100644 arch/loongarch/kvm/Makefile
 > 
+> diff --git a/arch/loongarch/Kbuild b/arch/loongarch/Kbuild
+> index b01f5cdb27e0..40be8a1696f9 100644
+> --- a/arch/loongarch/Kbuild
+> +++ b/arch/loongarch/Kbuild
+> @@ -2,6 +2,7 @@ obj-y += kernel/
+>  obj-y += mm/
+>  obj-y += net/
+>  obj-y += vdso/
+> +obj-y += kvm/
+>  
+>  # for cleaning
+>  subdir- += boot
+> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+> index d38b066fc931..16ddf4f6f9bd 100644
+> --- a/arch/loongarch/Kconfig
+> +++ b/arch/loongarch/Kconfig
+> @@ -113,6 +113,7 @@ config LOONGARCH
+>  	select HAVE_KPROBES
+>  	select HAVE_KPROBES_ON_FTRACE
+>  	select HAVE_KRETPROBES
+> +	select HAVE_KVM
+>  	select HAVE_MOD_ARCH_SPECIFIC
+>  	select HAVE_NMI
+>  	select HAVE_PCI
+> @@ -604,3 +605,4 @@ source "drivers/acpi/Kconfig"
+>  endmenu
+>  
+>  source "drivers/firmware/Kconfig"
+> +source "arch/loongarch/kvm/Kconfig"
+> diff --git a/arch/loongarch/configs/loongson3_defconfig b/arch/loongarch/configs/loongson3_defconfig
+> index 6cd26dd3c134..3c0cbe6ad08f 100644
+> --- a/arch/loongarch/configs/loongson3_defconfig
+> +++ b/arch/loongarch/configs/loongson3_defconfig
+> @@ -63,6 +63,8 @@ CONFIG_EFI_ZBOOT=y
+>  CONFIG_EFI_GENERIC_STUB_INITRD_CMDLINE_LOADER=y
+>  CONFIG_EFI_CAPSULE_LOADER=m
+>  CONFIG_EFI_TEST=m
+> +CONFIG_VIRTUALIZATION=y
+> +CONFIG_KVM=m
+>  CONFIG_MODULES=y
+>  CONFIG_MODULE_FORCE_LOAD=y
+>  CONFIG_MODULE_UNLOAD=y
+> diff --git a/arch/loongarch/kvm/Kconfig b/arch/loongarch/kvm/Kconfig
+> new file mode 100644
+> index 000000000000..8a999b4c0232
+> --- /dev/null
+> +++ b/arch/loongarch/kvm/Kconfig
+> @@ -0,0 +1,38 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +#
+> +# KVM configuration
+> +#
+> +
+> +source "virt/kvm/Kconfig"
+> +
+> +menuconfig VIRTUALIZATION
+> +	bool "Virtualization"
+> +	help
+> +	  Say Y here to get to see options for using your Linux host to run
+> +	  other operating systems inside virtual machines (guests).
+> +	  This option alone does not add any kernel code.
+> +
+> +	  If you say N, all options in this submenu will be skipped and
+> +	  disabled.
+> +
+> +if VIRTUALIZATION
+> +
+> +config KVM
+> +	tristate "Kernel-based Virtual Machine (KVM) support"
+> +	depends on HAVE_KVM
+> +	select MMU_NOTIFIER
+> +	select ANON_INODES
+> +	select PREEMPT_NOTIFIERS
+> +	select KVM_MMIO
+> +	select KVM_GENERIC_DIRTYLOG_READ_PROTECT
+> +	select HAVE_KVM_VCPU_ASYNC_IOCTL
+> +	select HAVE_KVM_EVENTFD
+> +	select SRCU
+> +	help
+> +	  Support hosting virtualized guest machines using hardware
+> +	  virtualization extensions. You will need a fairly processor
+> +	  equipped with virtualization extensions.
+> +
+> +	  If unsure, say N.
+> +
+> +endif # VIRTUALIZATION
+> diff --git a/arch/loongarch/kvm/Makefile b/arch/loongarch/kvm/Makefile
+> new file mode 100644
+> index 000000000000..2335e873a6ef
+> --- /dev/null
+> +++ b/arch/loongarch/kvm/Makefile
+> @@ -0,0 +1,22 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +#
+> +# Makefile for LOONGARCH KVM support
+> +#
+> +
+> +ccflags-y += -I $(srctree)/$(src)
+> +
+> +include $(srctree)/virt/kvm/Makefile.kvm
+> +
+> +obj-$(CONFIG_KVM) += kvm.o
+> +
+> +kvm-y += main.o
+> +kvm-y += vm.o
+> +kvm-y += vmid.o
+> +kvm-y += tlb.o
+> +kvm-y += mmu.o
+> +kvm-y += vcpu.o
+> +kvm-y += exit.o
+> +kvm-y += interrupt.o
+> +kvm-y += timer.o
+> +kvm-y += switch.o
+> +kvm-y += csr_ops.o
 
-I am not sure of the timeline but its certainly tied to 8.1.
-
-> But anyway, I see your point. Let's have major and minor. I'd probably 
-> still ask for the separate major and minor fields, if you don't mind.
-> 
-
-hmmm so something like this?
-
-+#define DPU_HW_VER_300 DPU_HW_VER(3, 0) /* 8998 v1.0 */
-
-const struct dpu_mdss_cfg dpu_msm8998_cfg = {
-.......
-.dpu_major_rev = DPU_HW_MAJOR(DPU_HW_VER_300),
-.dpu_minor_rev = DPU_HW_MINOR(DPU_HW_VER_300)
-.......
-}
-
-But may I ask why? Since the manor/minor version macros handle this 
-nicely for us.
