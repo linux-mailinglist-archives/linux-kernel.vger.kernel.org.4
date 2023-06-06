@@ -2,136 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFB5E72498C
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 18:55:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27E3A724997
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 18:57:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238319AbjFFQyp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 12:54:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45288 "EHLO
+        id S238149AbjFFQ5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 12:57:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238168AbjFFQya (ORCPT
+        with ESMTP id S237730AbjFFQ4m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 12:54:30 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42E6010EB
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 09:54:29 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-565d6824f2dso93877207b3.0
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 09:54:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686070468; x=1688662468;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vWfghhT+K/VvYdIHsaVVRXfigb3NJPqkB0cgBd8gNOA=;
-        b=iEDqIHuxrXw0gIUvL9P7CFRGySn8VWahksHLrzLIsF04F3kpysyg/ZXXPgX1/Oq0Cg
-         uNZwWVM0lmG1i9F7IvLGtcvDZxah8CCzeFmyYd8JeZI2cirpwt8HxgWG6YNxcZ/oyeHa
-         Shr68eC/Tvns2OgiaZBrBLT4BmA8I7jF4xpC5y8+kZuzzOkVQcp5L55EaqRj+XlgqlfZ
-         Gv17+BTmWt1BakRBdxSu5TYg8+VYNMtb+aPTYbMhfPJ/FZ2xN1jI3sKNVB31LT/1zIzf
-         AT1jmu9pwQeIqWTDkhnxgRX4LBjvB9V3rKWEN9NGRmT9IyKYu0qddHc/5qvolsBdo1QK
-         u8Ow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686070468; x=1688662468;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vWfghhT+K/VvYdIHsaVVRXfigb3NJPqkB0cgBd8gNOA=;
-        b=Bm+ziV8ubC3yr11e41z1grvG0BETsllcZxOrAv1kBdjTIDD+EY1rHTWlw5APjD2lbV
-         M5bp2G7sICmPASfLunJ7Sv02TF79fMsDuVq9oz4G2dKsuC/ASrZr80WQE6VVfq/JFopw
-         zvdjN0xWW/jBNvAQOZPu4xyTrzpWCwGFK+C7M7Zk9GN2Y8sTeMACayEdHXUO04/yxsKL
-         Pcth+PkojIcYqt6O+c0Q/1KhluTAlovTzgvkDlg0DZHLZLDl4GcPQ8hjFFdDHJNM1jnF
-         jS6/byqbN7Xfh72WoLQYCPpVwDN8wqpiuhdsFGguOp82ZiwGCpn1Oa+eb67X4p1SpSEf
-         nQiw==
-X-Gm-Message-State: AC+VfDwuOr2omDxhiTz0GgrM9wWFjE1rP4INGCzLe14jQruZQSfJ7xHR
-        3wKofGwjVa3AnuC8hqO9UOtScxIxEls=
-X-Google-Smtp-Source: ACHHUZ735NOAxJ3G3HjCYdRPxFLDWLMm4QKxC+twRQjzhCgzbcYWiG6wj9pxN63ErpW9hCrFilnr+ZskZ6M=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:d208:0:b0:564:c5fd:6d98 with SMTP id
- x8-20020a81d208000000b00564c5fd6d98mr1286497ywi.10.1686070468519; Tue, 06 Jun
- 2023 09:54:28 -0700 (PDT)
-Date:   Tue, 6 Jun 2023 09:54:26 -0700
-In-Reply-To: <ZHQdlSY2tsdGyCPs@chao-email>
-Mime-Version: 1.0
-References: <20230506030435.80262-1-chao.gao@intel.com> <b472b58d-0469-8a55-985c-1d966ce66419@intel.com>
- <ZGZhW/x5OWPmx1qD@google.com> <ZHQdlSY2tsdGyCPs@chao-email>
-Message-ID: <ZH9kwlg2Ac9IER7Y@google.com>
-Subject: Re: [PATCH] KVM: x86: Track supported ARCH_CAPABILITIES in kvm_caps
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Gao <chao.gao@intel.com>
-Cc:     Xiaoyao Li <xiaoyao.li@intel.com>, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        Jim Mattson <jmattson@google.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 6 Jun 2023 12:56:42 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92CB610F0;
+        Tue,  6 Jun 2023 09:56:40 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 356Arf6s025511;
+        Tue, 6 Jun 2023 16:56:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=seP5KvSteYNKsZd6TSSGt+lcTlRlXQMHEzpjqzHhvfQ=;
+ b=h4m9FfTQCgsWeW3D89WjLBoPMKFzjmzXvhRZIM1tXCj1Y1QJjN/vTCTlTYEZRxBu55oM
+ OIjJcSgmdpbsNbJlRI/Lkb3db9swMBQWtGSDfQXY2qMIih/IJIIsI/am+jIIo+sfmyo3
+ Du1Kfr3o1Yw05ejrtYG8WYi6Rqw2f4IaDxGVPUNwfDR6OTMgj4YxBE66xvsZrYSxrQvW
+ JGwwJp52xfBbZQWCnoCUMPsNSK/2n6FbcmcC7e8OavWX/Rlb1d/gvN5m3Nu5NDs4zJ8X
+ kuPGnq1LGGo41vgmwo4hj4aoNT89FJXM+AeNiLVFC3BwVxeFFxQzkPe6Q4KdnWN95758 GQ== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r1uvv1r3e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Jun 2023 16:56:38 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 356Gu6Te024721
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 6 Jun 2023 16:56:06 GMT
+Received: from ekangupt-linux.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Tue, 6 Jun 2023 09:56:01 -0700
+From:   Ekansh Gupta <quic_ekangupt@quicinc.com>
+To:     <srinivas.kandagatla@linaro.org>, <linux-arm-msm@vger.kernel.org>
+CC:     Ekansh Gupta <quic_ekangupt@quicinc.com>,
+        <ekangupt@qti.qualcomm.com>, <gregkh@linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>, <bkumar@qti.qualcomm.com>,
+        <fastrpc.upstream@qti.qualcomm.com>
+Subject: [PATCH v1] misc: fastrpc: Collect driver-remote processor transaction logs
+Date:   Tue, 6 Jun 2023 22:25:55 +0530
+Message-ID: <1686070555-11154-1-git-send-email-quic_ekangupt@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: Vm4RVySWaBisWMzXTof339pgMq0xK9oC
+X-Proofpoint-GUID: Vm4RVySWaBisWMzXTof339pgMq0xK9oC
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-06_12,2023-06-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
+ priorityscore=1501 malwarescore=0 impostorscore=0 lowpriorityscore=0
+ suspectscore=0 spamscore=0 clxscore=1015 mlxscore=0 mlxlogscore=999
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2306060146
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 29, 2023, Chao Gao wrote:
-> On Thu, May 18, 2023 at 10:33:15AM -0700, Sean Christopherson wrote:
-> >FWIW, this trainwreck is another reason why I'm not going to look at the proposed
-> >"Intel IA32_SPEC_CTRL Virtualization" crud until external forces dictate that I
-> >do so.  I have zero confidence that a paravirt interface defined by hardware
-> >vendors to fiddle with mitigations will be sane, flexible, and extensible.
-> 
-> Hi Sean,
-> 
-> Just to confirm we are on the same page:
-> 
-> "Intel IA32_SPEC_CTRL Virtualization" series consists of 3 parts:
-> 
-> 1. Expose BHI_CTRL, RRSBA_CTRL to guests. They are hardware mitigations to
->    disable BHI and RRSBA behaviors and can be used by both guest/host.
-> 
-> 2. Enable IA32_SPEC_CTRL Virtualization which is a VMX feature. This is for KVM
->    to effectively lock some bits of IA32_SPEC_CTRL MSR when guests are running.
-> 
-> 3. Implement the paravirt interface (the virtual MSRs) for guests to report
->    software mitigations in-use. KVM can utilize such information to enable
->    hardware mitigations for guests transparently to address software mitigation
->    effectiveness issues caused by CPU microarchitecture changes (RRSBA behavior,
->    size of branch history table).
-> 
-> As per my understanding, your concerns are primarily focused on #3, the
-> paravirt interface, rather than the entire series. Am I correct in assuming that
-> you do not oppose #1 and #2?
+Add changes to collect driver-remote processor rpmsg transaction
+logs. These logs will carry payload information for the rpmsg message
+instance. These logs are channel specific and are collected in
+channel context structure.
 
-Yes, correct.  I definitely recommend posting #1 and #2 separately from the
-paravirt interface, I ignored the entire series without realizing there is real
-hardware support in there.
+These rpmsg transaction logs can help in improving debugability as
+all requests from processes are getting captured in channel context
+structure.
 
-> You previously mentioned that the paravirt interface was not common [1], and
-> this time, you expressed an expectation for the interface to be "sane, flexible,
-> and extensible." To ensure clarity, I want to confirm my interpretation of
-> your expectations:
-> 
-> 1. The interface should not be tied to a specific CPU vendor but instead be
->    beneficial for Intel and AMD (and even ARM, and potentially others).
-> 
-> 2. The interface should have the capability to solve other issues (e.g,
->    coordinate mitigations in guest/host to address other perf/function issues),
->    not limited to software mitigation effectiveness on Intel CPUs.
-> 3. The interface should be extendable by VMMs rather than relying on hardware
->    vendors rolling out new spec. This enables VMM developers to propose new
->    ideas to coordinate mitigations in guest/host.
+Signed-off-by: Ekansh Gupta <quic_ekangupt@quicinc.com>
+---
+ drivers/misc/fastrpc.c | 88 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 88 insertions(+)
 
-Ya, that's more or less my opinion.  Even more than allowing VMM developers to
-extend/define the interface, I want the definition of the interace to be a
-community/collaborative effort.  LKML has active representatives from all of the
-major (known) hypervisors, so it shouldn't be *that* hard to figure out a way to
-make the interface community driven.
+diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
+index 30d4d04..6447cee 100644
+--- a/drivers/misc/fastrpc.c
++++ b/drivers/misc/fastrpc.c
+@@ -104,6 +104,9 @@
+ 
+ #define miscdev_to_fdevice(d) container_of(d, struct fastrpc_device, miscdev)
+ 
++/* Length of glink transaction history to store */
++#define GLINK_MSG_HISTORY_LEN	(128)
++
+ static const char *domains[FASTRPC_DEV_MAX] = { "adsp", "mdsp",
+ 						"sdsp", "cdsp"};
+ struct fastrpc_phy_page {
+@@ -181,6 +184,28 @@ struct fastrpc_invoke_rsp {
+ 	int retval;		/* invoke return value */
+ };
+ 
++struct fastrpc_tx_msg {
++	struct fastrpc_msg msg;	/* Msg sent to remote subsystem */
++	int rpmsg_send_err;	/* rpmsg error */
++	s64 ns;			/* Timestamp (in ns) of msg */
++};
++
++struct fastrpc_rx_msg {
++	struct fastrpc_invoke_rsp rsp;	/* Response from remote subsystem */
++	s64 ns;		/* Timestamp (in ns) of response */
++};
++
++struct fastrpc_rpmsg_log {
++	u32 tx_index;	/* Current index of 'tx_msgs' array */
++	u32 rx_index;	/* Current index of 'rx_msgs' array */
++	/* Rolling history of messages sent to remote subsystem */
++	struct fastrpc_tx_msg tx_msgs[GLINK_MSG_HISTORY_LEN];
++	/* Rolling history of responses from remote subsystem */
++	struct fastrpc_rx_msg rx_msgs[GLINK_MSG_HISTORY_LEN];
++	spinlock_t tx_lock;
++	spinlock_t rx_lock;
++};
++
+ struct fastrpc_buf_overlap {
+ 	u64 start;
+ 	u64 end;
+@@ -277,6 +302,7 @@ struct fastrpc_channel_ctx {
+ 	struct fastrpc_device *fdevice;
+ 	struct fastrpc_buf *remote_heap;
+ 	struct list_head invoke_interrupted_mmaps;
++	struct fastrpc_rpmsg_log gmsg_log[FASTRPC_DEV_MAX];
+ 	bool secure;
+ 	bool unsigned_support;
+ 	u64 dma_mask;
+@@ -1097,6 +1123,64 @@ static int fastrpc_put_args(struct fastrpc_invoke_ctx *ctx,
+ 	return 0;
+ }
+ 
++static s64 get_timestamp_in_ns(void)
++{
++	s64 ns = 0;
++	struct timespec64 ts;
++
++	ktime_get_real_ts64(&ts);
++	ns = timespec64_to_ns(&ts);
++	return ns;
++}
++
++static void fastrpc_update_txmsg_buf(struct fastrpc_channel_ctx *chan,
++				struct fastrpc_msg *msg, int rpmsg_send_err, s64 ns)
++{
++	unsigned long flags = 0;
++	u32 tx_index = 0;
++	struct fastrpc_tx_msg *tx_msg = NULL;
++
++	spin_lock_irqsave(&(chan->gmsg_log[chan->domain_id].tx_lock), flags);
++
++	tx_index = chan->gmsg_log[chan->domain_id].tx_index;
++	tx_msg = &(chan->gmsg_log[chan->domain_id].tx_msgs[tx_index]);
++
++	memcpy(&tx_msg->msg, msg, sizeof(struct fastrpc_msg));
++	tx_msg->rpmsg_send_err = rpmsg_send_err;
++	tx_msg->ns = ns;
++
++	tx_index++;
++	chan->gmsg_log[chan->domain_id].tx_index =
++		(tx_index > (GLINK_MSG_HISTORY_LEN - 1)) ? 0 : tx_index;
++
++	spin_unlock_irqrestore(&(chan->gmsg_log[chan->domain_id].tx_lock), flags);
++}
++
++static void fastrpc_update_rxmsg_buf(struct fastrpc_channel_ctx *chan,
++							u64 ctx, int retval, s64 ns)
++{
++	unsigned long flags = 0;
++	u32 rx_index = 0;
++	struct fastrpc_rx_msg *rx_msg = NULL;
++	struct fastrpc_invoke_rsp *rsp = NULL;
++
++	spin_lock_irqsave(&(chan->gmsg_log[chan->domain_id].rx_lock), flags);
++
++	rx_index = chan->gmsg_log[chan->domain_id].rx_index;
++	rx_msg = &(chan->gmsg_log[chan->domain_id].rx_msgs[rx_index]);
++	rsp = &rx_msg->rsp;
++
++	rsp->ctx = ctx;
++	rsp->retval = retval;
++	rx_msg->ns = ns;
++
++	rx_index++;
++	chan->gmsg_log[chan->domain_id].rx_index =
++		(rx_index > (GLINK_MSG_HISTORY_LEN - 1)) ? 0 : rx_index;
++
++	spin_unlock_irqrestore(&(chan->gmsg_log[chan->domain_id].rx_lock), flags);
++}
++
+ static int fastrpc_invoke_send(struct fastrpc_session_ctx *sctx,
+ 			       struct fastrpc_invoke_ctx *ctx,
+ 			       u32 kernel, uint32_t handle)
+@@ -1124,6 +1208,7 @@ static int fastrpc_invoke_send(struct fastrpc_session_ctx *sctx,
+ 
+ 	if (ret)
+ 		fastrpc_context_put(ctx);
++	fastrpc_update_txmsg_buf(cctx, msg, ret, get_timestamp_in_ns());
+ 
+ 	return ret;
+ 
+@@ -2323,6 +2408,8 @@ static int fastrpc_rpmsg_probe(struct rpmsg_device *rpdev)
+ 	INIT_LIST_HEAD(&data->users);
+ 	INIT_LIST_HEAD(&data->invoke_interrupted_mmaps);
+ 	spin_lock_init(&data->lock);
++	spin_lock_init(&(data->gmsg_log[data->domain_id].tx_lock));
++	spin_lock_init(&(data->gmsg_log[data->domain_id].rx_lock));
+ 	idr_init(&data->ctx_idr);
+ 	data->domain_id = domain_id;
+ 	data->rpdev = rpdev;
+@@ -2398,6 +2485,7 @@ static int fastrpc_rpmsg_callback(struct rpmsg_device *rpdev, void *data,
+ 
+ 	if (len < sizeof(*rsp))
+ 		return -EINVAL;
++	fastrpc_update_rxmsg_buf(cctx, rsp->ctx, rsp->retval, get_timestamp_in_ns());
+ 
+ 	ctxid = ((rsp->ctx & FASTRPC_CTXID_MASK) >> 4);
+ 
+-- 
+2.7.4
 
-Note that it doesn't necessarily have to be VMM developers, e.g. many of the
-people that are intimately familiar with the mitigations aren't virtualization
-folks.
-
-> Please let me know if I missed any key points or if any of the above statements
-> do not align with your expectations. 
-> 
-> [1]: https://lore.kernel.org/all/Y6Sin1bmLN10yvMw@google.com/ 
