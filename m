@@ -2,50 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A1B3724EB3
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 23:20:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2465724EB6
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 23:21:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237924AbjFFVT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 17:19:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39416 "EHLO
+        id S233480AbjFFVVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 17:21:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233897AbjFFVT5 (ORCPT
+        with ESMTP id S232511AbjFFVU7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 17:19:57 -0400
+        Tue, 6 Jun 2023 17:20:59 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25B8090;
-        Tue,  6 Jun 2023 14:19:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FB9290;
+        Tue,  6 Jun 2023 14:20:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AFB8660A08;
-        Tue,  6 Jun 2023 21:19:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42BF2C433D2;
-        Tue,  6 Jun 2023 21:19:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B6FB9630A3;
+        Tue,  6 Jun 2023 21:20:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEF86C433EF;
+        Tue,  6 Jun 2023 21:20:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686086395;
-        bh=XB3OSpbt1Wh7qOLjklztn/3tjGEC8OOxzcGdAsjKhU8=;
-        h=Date:From:To:Subject:References:In-Reply-To:From;
-        b=skZ3JQeZPawyXL/3jZXjyrgpq9ClQ5e1b/Jb+xxwgBmu6I2XqWPXwyq3eVKyTf99E
-         c6sBbLN7n94a0CQ0hlWFdgj0gpkvn+D9iSgysYcCCklrQC4448hLDGAsn9MMDRC0Yw
-         jLwkejHFACurfREO2C8U644GlNLOEV+GpH0wJyIpLaS9OeUHOIwkUYE5eTEcf8QdTw
-         ffEyLbEogWtlwmt5cb+HGDbnQJBtg2Ni6yFfGPFtPOfbx+PV+rVxKtKfC+Tb7VG3dm
-         QvCbJz7oYY3PlDwlRZkfXnzfk2TU7Og+pAcO9rSM6GkC9khT0ZR7vYXCyrRdjCVxz2
-         zJpalMvN1ak9w==
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Wed, 07 Jun 2023 00:19:52 +0300
-Message-Id: <CT5VQRBK8CNQ.3CG1NPROERNSX@suppilovahvero>
-From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Alexander Steffen" <Alexander.Steffen@infineon.com>,
-        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 4/4] tpm_tis: Resend command to recover from data
- transfer errors
-X-Mailer: aerc 0.14.0
-References: <20230605175959.2131-1-Alexander.Steffen@infineon.com>
- <20230605175959.2131-5-Alexander.Steffen@infineon.com>
-In-Reply-To: <20230605175959.2131-5-Alexander.Steffen@infineon.com>
+        s=k20201202; t=1686086457;
+        bh=SMx52lFPf27vu0KyU8uhOx7LbHTgU23iSKhOJg7H1Rw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YGFSCUnukUAohbGw/ft5J6qsy1/Luyj5RedqH0y2vfrAC3sLg2kPghe2w3EZXZqsv
+         MF8FXjfov6bljVxcbznrYR8/JghyU3thqVtVtNj8sagMRhDeJVlCt+42d8tZFiyfRC
+         GZw4MwT3bkzVO8xGYHR+U6Bj4Cbq83HXdTTLANYMas758IM+uZmcqKWZQDGRuyHWjI
+         +95YbczGwBCm8tKvF6svkNZgI0AVAY4dsnUt91nkxezSekcivSMvRi4gAY8hKkJBzt
+         MHWk9dAWPCZtYdS+sw1GSBwJ+f5h/S/r7tEtu+RzOjJ7TdBcyfKKcOn3HLHZjFn8rm
+         zOkYgBWdl0YmQ==
+Date:   Tue, 6 Jun 2023 23:20:53 +0200
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     Robert Hancock <robert.hancock@calian.com>
+Cc:     "michal.simek@amd.com" <michal.simek@amd.com>,
+        "shubhraj@xilinx.com" <shubhraj@xilinx.com>,
+        "marex@denx.de" <marex@denx.de>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "wsa@kernel.org" <wsa@kernel.org>
+Subject: Re: [PATCH] i2c: xiic: Don't try to handle more interrupt events
+ after error
+Message-ID: <20230606212053.bwpoxyost4fkpati@intel.intel>
+References: <20230606182558.1301413-1-robert.hancock@calian.com>
+ <20230606192453.zjzz4kt76kus5hr5@intel.intel>
+ <c763371c710c9952154496026610e2ff583c173a.camel@calian.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c763371c710c9952154496026610e2ff583c173a.camel@calian.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -56,50 +64,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon Jun 5, 2023 at 8:59 PM EEST, Alexander Steffen wrote:
-> Similar to the transmission of TPM responses, also the transmission of TP=
-M
-> commands may become corrupted. Instead of aborting when detecting such
-> issues, try resending the command again.
->
-> Signed-off-by: Alexander Steffen <Alexander.Steffen@infineon.com>
-> ---
->  drivers/char/tpm/tpm_tis_core.c | 14 +++++++++++---
->  1 file changed, 11 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_c=
-ore.c
-> index a08768e55803..47073cc79b51 100644
-> --- a/drivers/char/tpm/tpm_tis_core.c
-> +++ b/drivers/char/tpm/tpm_tis_core.c
-> @@ -535,10 +535,18 @@ static int tpm_tis_send_main(struct tpm_chip *chip,=
- const u8 *buf, size_t len)
->  	int rc;
->  	u32 ordinal;
->  	unsigned long dur;
-> +	unsigned int try;
-> =20
-> -	rc =3D tpm_tis_send_data(chip, buf, len);
-> -	if (rc < 0)
-> -		return rc;
-> +	for (try =3D 0; try < TPM_RETRY; try++) {
-> +		rc =3D tpm_tis_send_data(chip, buf, len);
-> +		if (rc >=3D 0) {
-> +			/* Data transfer done successfully */
-> +			break;
-> +		} else if (rc !=3D -EIO) {
-> +			/* Data transfer failed, not recoverable */
-> +			return rc;
-> +		}
+Hi Robert,
 
-Remove curly braces from the two statements above.
+On Tue, Jun 06, 2023 at 07:40:15PM +0000, Robert Hancock wrote:
+> On Tue, 2023-06-06 at 21:24 +0200, Andi Shyti wrote:
+> > Hi Robert,
+> > 
+> > On Tue, Jun 06, 2023 at 12:25:58PM -0600, Robert Hancock wrote:
+> > > In xiic_process, it is possible that error events such as
+> > > arbitration
+> > > lost or TX error can be raised in conjunction with other interrupt
+> > > flags
+> > > such as TX FIFO empty or bus not busy. Error events result in the
+> > > controller being reset and the error returned to the calling
+> > > request,
+> > > but the function could potentially try to keep handling the other
+> > > events, such as by writing more messages into the TX FIFO. Since
+> > > the
+> > > transaction has already failed, this is not helpful and will just
+> > > cause
+> > > issues.
+> > 
+> > what kind of issues?
+> > 
+> 
+> The one I ran into is what I alluded to further down, where that
+> WARN_ON was triggering repeatedly, which ended up flooding the kernel
+> log and causing the device's watchdog timer to timeout. I'm not sure
+> what other forms of havoc might ensue, other than "nothing good"..
+> 
+> > > This problem has been present ever since:
+> > > 
+> > > commit 7f9906bd7f72 ("i2c: xiic: Service all interrupts in isr")
+> > > 
+> > > which allowed non-error events to be handled after errors, but
+> > > became
+> > > more obvious after:
+> > > 
+> > > commit 743e227a8959 ("i2c: xiic: Defer xiic_wakeup() and
+> > > __xiic_start_xfer() in xiic_process()")
+> > > 
+> > > which reworked the code to add a WARN_ON which triggers if both the
+> > > xfer_more and wakeup_req flags were set, since this combination is
+> > > not supposed to happen, but was occurring in this scenario.
+> > > 
+> > > Skip further interrupt handling after error flags are detected to
+> > > avoid
+> > > this problem.
+> > > 
+> > > Fixes: 7f9906bd7f72 ("i2c: xiic: Service all interrupts in isr")
+> > > Signed-off-by: Robert Hancock <robert.hancock@calian.com>
+> > 
+> > please add:
+> > 
+> > Cc: <stable@vger.kernel.org> # v4.3+
+> > 
+> 
+> Can add for a v2 - although with the Fixes tag it would most likely be
+> picked up for stable anyway..
 
-> +	}
-> =20
->  	/* go and do it */
->  	rc =3D tpm_tis_write8(priv, TPM_STS(priv->locality), TPM_STS_GO);
-> --=20
-> 2.34.1
+It's just a courtesy to stable maintainers :)
 
+> > > ---
+> > >  drivers/i2c/busses/i2c-xiic.c | 2 ++
+> > >  1 file changed, 2 insertions(+)
+> > > 
+> > > diff --git a/drivers/i2c/busses/i2c-xiic.c
+> > > b/drivers/i2c/busses/i2c-xiic.c
+> > > index 8a3d9817cb41..ee6edc963dea 100644
+> > > --- a/drivers/i2c/busses/i2c-xiic.c
+> > > +++ b/drivers/i2c/busses/i2c-xiic.c
+> > > @@ -721,6 +721,8 @@ static irqreturn_t xiic_process(int irq, void
+> > > *dev_id)
+> > >                       wakeup_req = 1;
+> > >                       wakeup_code = STATE_ERROR;
+> > >               }
+> > > +             /* don't try to handle other events */
+> > > +             goto out;
+> > 
+> > why don't we have goto's after every irq evaluation but only
+> > here? Do the issues you mentioned happen olny in this particular
+> > error case?
+> > 
+> 
+> As far as I can tell, yes. For example you could legitimately have
+> XIIC_INTR_TX_EMPTY_MASK and XIIC_INTR_BNB_MASK both being handled. The
+> error case is special as we end up resetting the controller, so it
+> doesn't make sense to try to continue with the rest of the transaction
+> while also completing it with an error.
 
-BR, Jarkko
+I think the patch is correct and I will ack it:
+
+Acked-by: Andi Shyti <andi.shyti@kernel.org> 
+
+I think, though, that this needs a proper fix and testing, in
+order to cover all the possible combinations. The scenario you
+highlighted is indeed one, but not only, potential situation that
+could arise.
+
+Can I just ask you to write a bit more in the comment to 
+highlight the possible failure?
+
+Thanks a lot,
+Andi
+
+> > Thanks,
+> > Andi
+> > 
+> > >       }
+> > >       if (pend & XIIC_INTR_RX_FULL_MASK) {
+> > >               /* Receive register/FIFO is full */
+> > > --
+> > > 2.40.1
+> > > 
+> 
+> -- 
+> Robert Hancock <robert.hancock@calian.com>
