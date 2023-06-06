@@ -2,55 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC9B8723B30
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 10:18:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D751723B31
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 10:19:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236027AbjFFISw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 04:18:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46244 "EHLO
+        id S235951AbjFFIS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 04:18:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235951AbjFFISo (ORCPT
+        with ESMTP id S235987AbjFFISq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 04:18:44 -0400
+        Tue, 6 Jun 2023 04:18:46 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B8211B
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 01:18:43 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5117518E;
+        Tue,  6 Jun 2023 01:18:44 -0700 (PDT)
+Date:   Tue, 06 Jun 2023 08:18:42 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686039522;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        s=2020; t=1686039523;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=/XO+0lafkbbOTc9Ohf6++LJZTGdV+3DEsv3tuzHhunU=;
-        b=mLuRIdTDj0aXz1KvPIejSWap+ruiLHpHURi275tdQ0BS7UD2Q8lKq2WqyZ3kzWdaKMn34j
-        hysepywR0O7hqUqfkVBaCeZSyNhNx5+8a6xRx6EMwQxQGWrY1vgfJA94mWCBVSdIn9szu6
-        0SKjwMGLEUjKz3ly3OkENVAIyOLBLxcYshXJ+tcYSUYfoGEECv73vThN9b8YbHdSe0HHJJ
-        AfaYvj9098f6/C5mlbyyWA5Pp360tbl222Ic75ifxY29KrfT8/Xaq5miRucBZNbPJS+RzF
-        0A532SMFaomnz5IvZ7LIk64RTR3NAVmAOMTpcBx6Cp92fkVUup3VdtwSXO+n3g==
+        bh=loGpNdhbZ2dJUcxifiO+fpK1K/ID5CqdSLfcmB+jq1I=;
+        b=GgogaaHTQPfiKBzoSVKpwHt3PCTaE/7QDSKf/NQVSKnZo/uN5n+xYflJUIMTAGQaMW05Ej
+        2i4F9QugWfvxYQZneN7kJHa2SCrAN9h7NKv6gw6DwuApmM8eb+mDz4ohBFjw9DKtxtO9a3
+        Ulyl5+N/zRRD1TQ+N/f3fuG+qwIv/h/B6eb7OBSH02dNbh9YoVIxu3jgToVo3OY2mIuL+0
+        0Mzn0s0UlC6d/3Fqb9elHsDTn2ayQ024kKNSWCEY0bHxdlsGYmEUwBsvGLoiW9SUqAPBtT
+        JjkVWb+g+KjOUdDnKi3/KXoWXnNptQ6iXtSdO74WdandLCUWhCgElA7l6gtxNg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686039522;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        s=2020e; t=1686039523;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=/XO+0lafkbbOTc9Ohf6++LJZTGdV+3DEsv3tuzHhunU=;
-        b=CslhaFWMsiGYcFLEKNe+FIRm5f/g5NjHAqy6Yb0DWMhlUj8acBkLj20XC7o6lyk6RbbfJt
-        rGLbdon+VIZdd8Cw==
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>
-Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn
-Subject: Re: [PATCH v4 1/2] selftests/clone3: Fix broken test under
- !CONFIG_TIME_NS
-In-Reply-To: <1685968410-5412-2-git-send-email-yangtiezhu@loongson.cn>
-References: <1685968410-5412-1-git-send-email-yangtiezhu@loongson.cn>
- <1685968410-5412-2-git-send-email-yangtiezhu@loongson.cn>
-Date:   Tue, 06 Jun 2023 10:18:41 +0200
-Message-ID: <87jzwh3swu.ffs@tglx>
+        bh=loGpNdhbZ2dJUcxifiO+fpK1K/ID5CqdSLfcmB+jq1I=;
+        b=vzW2RcWE4SkiQ8S83SYsZJcIrtz/4zjo+CoCkV4ye+G6ARa5tSvSk1f/LjWyUGyiHPxbET
+        Afzvs7Qlu19CFvDA==
+From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: perf/core] perf: Re-instate the linear PMU search
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20230605101401.GL38236@hirez.programming.kicks-ass.net>
+References: <20230605101401.GL38236@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain
+Message-ID: <168603952210.404.6172864840237247274.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
@@ -61,100 +67,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 05 2023 at 20:33, Tiezhu Yang wrote:
-> When execute the following command to test clone3 on LoongArch:
->
->   # cd tools/testing/selftests/clone3 && make && ./clone3
->
-> we can see the following error info:
->
->   # [5719] Trying clone3() with flags 0x80 (size 0)
->   # Invalid argument - Failed to create new process
->   # [5719] clone3() with flags says: -22 expected 0
->   not ok 18 [5719] Result (-22) is different than expected (0)
->
-> This is because if CONFIG_TIME_NS is not set, but the flag
-> CLONE_NEWTIME (0x80) is used to clone a time namespace, it
-> will return -EINVAL in copy_time_ns().
->
-> Here is the related code in include/linux/time_namespace.h:
->
->   #ifdef CONFIG_TIME_NS
->   ...
->   struct time_namespace *copy_time_ns(unsigned long flags,
-> 				      struct user_namespace *user_ns,
-> 				      struct time_namespace *old_ns);
->   ...
->   #else
->   ...
->   static inline
->   struct time_namespace *copy_time_ns(unsigned long flags,
-> 				      struct user_namespace *user_ns,
-> 				      struct time_namespace *old_ns)
->   {
-> 	  if (flags & CLONE_NEWTIME)
-> 		  return ERR_PTR(-EINVAL);
->
-> 	  return old_ns;
->   }
->   ...
->   #endif
+The following commit has been merged into the perf/core branch of tip:
 
-There is really no point in copying that code into the changelog. The
-textual explanation that it returns -EINVAL is good enough.
+Commit-ID:     228020b490eda9133c9cb6f59a5ee1278d8c463f
+Gitweb:        https://git.kernel.org/tip/228020b490eda9133c9cb6f59a5ee1278d8c463f
+Author:        Peter Zijlstra <peterz@infradead.org>
+AuthorDate:    Mon, 05 Jun 2023 12:14:01 +02:00
+Committer:     Peter Zijlstra <peterz@infradead.org>
+CommitterDate: Tue, 06 Jun 2023 10:09:21 +02:00
 
-> Here is the complete call stack:
->
->   clone3()
->     kernel_clone()
->       copy_process()
->         copy_namespaces()
->           create_new_namespaces()
->             copy_time_ns()
->               clone_time_ns()
+perf: Re-instate the linear PMU search
 
-Uninteresting too.
+Full revert of commit 9551fbb64d09 ("perf/core: Remove pmu linear
+searching code").
 
-> If kernel does not support CONFIG_TIME_NS, /proc/self/ns/time
-> will be not exist, and then we should skip clone3() test with
-> CLONE_NEWTIME.
+Some architectures (notably arm/arm64) still relied on the linear
+search in order to find the PMU that consumes
+PERF_TYPE_{HARDWARE,HW_CACHE,RAW}.
 
-Correct.
+This will need a more thorought audit and cleanup.
 
-> With this patch under !CONFIG_TIME_NS:
->
->   # cd tools/testing/selftests/clone3 && make && ./clone3
->   ...
->   # Time namespaces are not supported
->   ok 18 # SKIP Skipping clone3() with CLONE_NEWTIME
->   # Totals: pass:17 fail:0 xfail:0 xpass:0 skip:1 error:0
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Reported-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Acked-by: Mark Rutland <mark.rutland@arm.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lkml.kernel.org/r/20230605101401.GL38236@hirez.programming.kicks-ass.net
+---
+ kernel/events/core.c | 37 ++++++++++++++++++++++++-------------
+ 1 file changed, 24 insertions(+), 13 deletions(-)
 
-> Fixes: 515bddf0ec41 ("selftests/clone3: test clone3 with CLONE_NEWTIME")
-> Suggested-by: Thomas Gleixner <tglx@linutronix.de>
-> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
-> ---
->  tools/testing/selftests/clone3/clone3.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/clone3/clone3.c b/tools/testing/selftests/clone3/clone3.c
-> index e495f89..c721f8a 100644
-> --- a/tools/testing/selftests/clone3/clone3.c
-> +++ b/tools/testing/selftests/clone3/clone3.c
-> @@ -196,7 +196,12 @@ int main(int argc, char *argv[])
->  			CLONE3_ARGS_NO_TEST);
->  
->  	/* Do a clone3() in a new time namespace */
-> -	test_clone3(CLONE_NEWTIME, 0, 0, CLONE3_ARGS_NO_TEST);
-> +	if (access("/proc/self/ns/time", F_OK) == 0) {
-> +		test_clone3(CLONE_NEWTIME, 0, 0, CLONE3_ARGS_NO_TEST);
-> +	} else {
-> +		ksft_print_msg("Time namespaces are not supported\n");
-> +		ksft_test_result_skip("Skipping clone3() with CLONE_NEWTIME\n");
-> +	}
-
-Patch looks good otherwise.
-
-Thanks,
-
-        tglx
-
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index 231b187..c01bbe9 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -11630,27 +11630,38 @@ static struct pmu *perf_init_event(struct perf_event *event)
+ 	}
+ 
+ again:
+-	ret = -ENOENT;
+ 	rcu_read_lock();
+ 	pmu = idr_find(&pmu_idr, type);
+ 	rcu_read_unlock();
+-	if (!pmu)
+-		goto fail;
++	if (pmu) {
++		if (event->attr.type != type && type != PERF_TYPE_RAW &&
++		    !(pmu->capabilities & PERF_PMU_CAP_EXTENDED_HW_TYPE))
++			goto fail;
+ 
+-	if (event->attr.type != type && type != PERF_TYPE_RAW &&
+-	    !(pmu->capabilities & PERF_PMU_CAP_EXTENDED_HW_TYPE))
+-		goto fail;
++		ret = perf_try_init_event(pmu, event);
++		if (ret == -ENOENT && event->attr.type != type && !extended_type) {
++			type = event->attr.type;
++			goto again;
++		}
+ 
+-	ret = perf_try_init_event(pmu, event);
+-	if (ret == -ENOENT && event->attr.type != type && !extended_type) {
+-		type = event->attr.type;
+-		goto again;
++		if (ret)
++			pmu = ERR_PTR(ret);
++
++		goto unlock;
+ 	}
+ 
+-fail:
+-	if (ret)
+-		pmu = ERR_PTR(ret);
++	list_for_each_entry_rcu(pmu, &pmus, entry, lockdep_is_held(&pmus_srcu)) {
++		ret = perf_try_init_event(pmu, event);
++		if (!ret)
++			goto unlock;
+ 
++		if (ret != -ENOENT) {
++			pmu = ERR_PTR(ret);
++			goto unlock;
++		}
++	}
++fail:
++	pmu = ERR_PTR(-ENOENT);
+ unlock:
+ 	srcu_read_unlock(&pmus_srcu, idx);
+ 
