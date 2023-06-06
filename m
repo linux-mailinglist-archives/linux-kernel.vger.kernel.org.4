@@ -2,103 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 899BF72462E
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:33:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29DC0724628
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:33:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237231AbjFFOdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 10:33:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37346 "EHLO
+        id S237991AbjFFOdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 10:33:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233147AbjFFOdf (ORCPT
+        with ESMTP id S238038AbjFFOdK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 10:33:35 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 263B11735
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 07:33:20 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-30e407daab5so2591678f8f.0
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 07:33:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686061998; x=1688653998;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=etnk6Bmfi+NsN3fMwvpGFNhakv5CYAq3q2C18ogo/QU=;
-        b=r4mkCO7+F6PcaG6L5pBrXztZOCfvv1CoQeSFQeqwGopyq+CzI6qbgEWC9fduxPiiDh
-         XtDOudYSaQOmT9xXbvpe5i2hAmAHMQs4lRIgF7PUe4jBfFxNVi2pSpYkKlRGMC9rFSxJ
-         pJNj+4DrSg8ccP5n8R1teUhl3oAOJrlv/CWchMr3Ci7DzyCFvKTYsfp9/3dwz4mVfPXF
-         GjZGe9iXmZWDii8Hk7qOo0dE4uC3SdnUvdpmAXQuKmbavca6BPxcvyZMjhAdRqb+KDJf
-         lIQ3GWa+pfASHBYSLsxeZgq+e/FxNza4y3b088Upx0E/OnrlxgsJ8L0WlVovnl7HOVcs
-         nJPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686061998; x=1688653998;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=etnk6Bmfi+NsN3fMwvpGFNhakv5CYAq3q2C18ogo/QU=;
-        b=OaI+8pN5gOWqVOjbnmAXcBDynUzc3jE4rsf29Nvmx8ikVFuaO+3hIXG0C3UteL5pD4
-         p1TOVX5FhS1fmkqtWwxD9D35HS2pZf4jZ32HOwPxS1z3ODXdexVQUpDvKfpVQEtfkspD
-         d+G5K72Rca5ySL9efLuRf8TZk/ZVvEDsl7tVijwCGCVIlbG9C3d5Bl8zXwMwuChk7dIY
-         VcVaJEL91l/y3Unk7z9o5Ui8+ed7CviHCsp9S8DcmaXmRfq1EYSjbVljYn6BbQCKgRTM
-         QMjcUWUWXBFjqC4XF8BDTFGUkKN2l2M7oOn2MkPdcsEJecI6HStBGxdxHUJvWiRfCl2d
-         ekAg==
-X-Gm-Message-State: AC+VfDzDaaclwhTUswtA+z3JdJmmNIxIG5EZGuu6brbsNHzAw6khlopz
-        3Csn7oCr8T6VrHGCG77wbI4=
-X-Google-Smtp-Source: ACHHUZ5KiIY5KwxOSxBzH2UQUnhP4/a60rnf7iCrHG1wFajmhi2f/DobS0/OOkSxpTE7+N6FDx414A==
-X-Received: by 2002:a5d:4bd0:0:b0:306:3945:65e9 with SMTP id l16-20020a5d4bd0000000b00306394565e9mr2211778wrt.3.1686061998296;
-        Tue, 06 Jun 2023 07:33:18 -0700 (PDT)
-Received: from odroidc2.enunes.eu (ip-78-45-66-209.bb.vodafone.cz. [78.45.66.209])
-        by smtp.gmail.com with ESMTPSA id n16-20020a1c7210000000b003f736e28cd6sm8902642wmc.4.2023.06.06.07.33.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 07:33:17 -0700 (PDT)
-From:   Erico Nunes <nunes.erico@gmail.com>
-To:     yuq825@gmail.com, dri-devel@lists.freedesktop.org,
-        lima@lists.freedesktop.org
-Cc:     airlied@gmail.com, daniel@ffwll.ch, luben.tuikov@amd.com,
-        christian.koenig@amd.com, linux-kernel@vger.kernel.org,
-        Erico Nunes <nunes.erico@gmail.com>
-Subject: [PATCH] drm/lima: fix sched context destroy
-Date:   Tue,  6 Jun 2023 16:32:47 +0200
-Message-Id: <20230606143247.433018-1-nunes.erico@gmail.com>
-X-Mailer: git-send-email 2.40.1
+        Tue, 6 Jun 2023 10:33:10 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA964E6C;
+        Tue,  6 Jun 2023 07:33:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=+6wSVTqC9hZ5yHI/YY+rD+TrYLWp05DjiD+d7o8/gMY=; b=yc5efNVbf19ymsAUUBaBnelebW
+        JyPWfx8REfOqdg5mC0LbkgJmSxIHCLoHZnt1fwAd9Fb5fhMIGrRHRZGK7fy3cJf+WE/4st62wQM5+
+        MOqXIOAFOBxT38GvyJnHWLcDmysjFpSEIAyjGe6F8rMIWrlnXnjUn3lVmLnvaoJ9sISul+HRAvj5j
+        /EXmlgr4td587HKgTQSC5TzgBkjUYp6hQx9Be3A/FhskmJuqzh0lH+r38Q8PX4/x+6ZhjZQuOmIix
+        3Lp2CsuH/l5Plxbdh2M5eVjziM82JUbkWg/dif1UHsooLS370KkCj/ULsxrD+gEltO5MmN0TtMOXe
+        KumfUCXg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:53228)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1q6Xk2-0005rf-Rf; Tue, 06 Jun 2023 15:32:58 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1q6Xjx-0007Dl-Vz; Tue, 06 Jun 2023 15:32:54 +0100
+Date:   Tue, 6 Jun 2023 15:32:53 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Maxime Chevallier <maxime.chevallier@bootlin.com>
+Cc:     davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alexis.lothore@bootlin.com,
+        thomas.petazzoni@bootlin.com, Andrew Lunn <andrew@lunn.ch>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Simon Horman <simon.horman@corigine.com>
+Subject: Re: [PATCH net-next v2 0/3] Followup fixes for the dwmac and altera
+ lynx conversion
+Message-ID: <ZH9DlUqwm3YsNPu6@shell.armlinux.org.uk>
+References: <20230606142144.308675-1-maxime.chevallier@bootlin.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230606142144.308675-1-maxime.chevallier@bootlin.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The drm sched entity must be flushed before finishing, to account for
-jobs potentially still in flight at that time.
-Lima did not do this flush until now, so switch the destroy call to the
-drm_sched_entity_destroy() wrapper which will take care of that.
+On Tue, Jun 06, 2023 at 04:21:41PM +0200, Maxime Chevallier wrote:
+> Following the TSE PCS removal and port of altera_tse and dwmac_socfpga,
+> this series fixes some issues that slipped through the cracks.
+> 
+> Patch 1 fixes an unitialized struct in altera_tse
+> 
+> Patch 2 uses the correct Kconfig option for altera_tse
+> 
+> Patch 3 makes the Lynx PCS specific to dwmac_socfpga. This patch was
+> originally written by Russell, my modifications just moves the
+> #include<linux/pcs-lynx.h> around, to use it only in dwmac_socfpga.
 
-This fixes a regression on lima which started since the rework in
-commit 2fdb8a8f07c2 ("drm/scheduler: rework entity flush, kill and fini")
-where some specific types of applications may hang indefinitely.
+Hi Maxime,
 
-Fixes: 2fdb8a8f07c2 ("drm/scheduler: rework entity flush, kill and fini")
-Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
----
- drivers/gpu/drm/lima/lima_sched.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I'm sorry, but I think you need an extra patch added to this series.
+Looking at include/linux/mdio/mdio-regmap.h, that defines:
 
-diff --git a/drivers/gpu/drm/lima/lima_sched.c b/drivers/gpu/drm/lima/lima_sched.c
-index ff003403fbbc..ffd91a5ee299 100644
---- a/drivers/gpu/drm/lima/lima_sched.c
-+++ b/drivers/gpu/drm/lima/lima_sched.c
-@@ -165,7 +165,7 @@ int lima_sched_context_init(struct lima_sched_pipe *pipe,
- void lima_sched_context_fini(struct lima_sched_pipe *pipe,
- 			     struct lima_sched_context *context)
- {
--	drm_sched_entity_fini(&context->base);
-+	drm_sched_entity_destroy(&context->base);
- }
- 
- struct dma_fence *lima_sched_context_queue_task(struct lima_sched_task *task)
+struct mdio_regmap_config {
+        struct device *parent;
+        struct regmap *regmap;
+        char name[MII_BUS_ID_SIZE];
+        u8 valid_addr;
+        bool autoscan;
+};
+
+In dwmac-socfpga.c, you have:
+
+                struct mdio_regmap_config mrc;
+
+                mrc.regmap = pcs_regmap;
+                mrc.parent = &pdev->dev;
+                mrc.valid_addr = 0x0;
+
+                snprintf(mrc.name, MII_BUS_ID_SIZE, "%s-pcs-mii", ndev->name);
+
+So that's a tick for parent, tick for regmap, tick for name, tick
+for valid_addr, but... autoscan is left uninitialised.
+devm_mdio_regmap_register() reads this, and uses it to decide
+how to set mii->phy_mask, which will be randomly ~0 or ~BIT(0)
+depending on the value of mrc.autoscan.
+
+Other than that, the series looks good. Thanks.
+
 -- 
-2.40.1
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
