@@ -2,103 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D21B723E33
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 11:49:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53785723E34
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 11:49:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236896AbjFFJtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 05:49:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53796 "EHLO
+        id S236921AbjFFJtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 05:49:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237572AbjFFJsr (ORCPT
+        with ESMTP id S237540AbjFFJtB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 05:48:47 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED5DFE73
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 02:48:33 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-30e4eec95c8so388027f8f.3
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 02:48:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686044912; x=1688636912;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=s/OX2oP8YZaGEVBQ6cH5rJxVRniqBzCLdpv0TF2IIbE=;
-        b=Cw6pOzihmkYF8h33rai75/+GXFTJtKHokyyjx8kKNgiGctxzj1IaZyVZhA8I+ceaPc
-         v5mn+gRwjcB6nEvs+CW9ACkBNeY0COhYRJsO4nP4NBo0dvLD9gJZug9S4OcbESL6SMT+
-         GOgwXlGceKShwgp0wGoHM3z0kjcx5tRUy9Q+3+2T80gGhdPRKe/jEr/3xgSIpk9KjqgA
-         u/5dPK31yy0vdLuyi00rTrKfpUvfCZjTt6ybg4JcTiiu/HB86Kss7DbSBoPPdAIbRXzH
-         PTMaXEFab/tDu1cblKGhTpZu/jQlWsGDClb7vC7uIxDn85qPz+H4EZT9efHUt3tY4SG9
-         8I0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686044912; x=1688636912;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=s/OX2oP8YZaGEVBQ6cH5rJxVRniqBzCLdpv0TF2IIbE=;
-        b=iuzvEVoLZ1B2WH2jy8Mpgmqxy+XsginGuZRTvZFhIB2RqjeFvRseb/XiHn7O6IX+tE
-         88xJbeBSTnz0wWSSx1SjzvinaeLwlt8deBYlNKQ2hJHt09cdanQLpFvXpifYZVU0qemf
-         6b2XQkkJv7QEWszcxT+ZDkyE0TselE2w2REYYttt4Zt9FPdpHO93scGMk07f7s9FvTvI
-         M7FYDm1Z5c6By40HgfF5Ndaptu+cn2tg3YEjMVR+Wbot1TXmwwlR4RYPLUztYoTBVOVg
-         vQoksL4vJoDqKIJuQ0zz5ILunEK1igLtJlzVRP9q3KMRneVxRuMjWKhC/yUxNshHasnX
-         Z05Q==
-X-Gm-Message-State: AC+VfDx5Rxq6DVVvfpc6Sog8Sg+mNyAeOa0zsMknPzJHTvcYpWqeaV5i
-        MRWvBuxF7al88tAzWL2kyb8GUA==
-X-Google-Smtp-Source: ACHHUZ7IBxiyJzVQU8c4azyK+pahsRosjuqLcfM+qc1zx7YHDvmeg/So6+h8vb2cHh/DpIJYCvWZ6A==
-X-Received: by 2002:a5d:534a:0:b0:307:a36b:e7b1 with SMTP id t10-20020a5d534a000000b00307a36be7b1mr1654311wrv.5.1686044912446;
-        Tue, 06 Jun 2023 02:48:32 -0700 (PDT)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id y20-20020a05600c365400b003f60fb2addbsm17089178wmq.44.2023.06.06.02.48.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 02:48:31 -0700 (PDT)
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?utf-8?q?Rafa=C5=82_Mi=C5=82ecki?= <zajec5@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Michael Walle <michael@walle.cc>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?utf-8?q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>
-In-Reply-To: <20230327141611.25131-1-zajec5@gmail.com>
-References: <20230327141611.25131-1-zajec5@gmail.com>
-Subject: Re: [PATCH V6 0/3] nvmem: add fixed cells layout
-Message-Id: <168604491026.228888.3615401302386007929.b4-ty@linaro.org>
-Date:   Tue, 06 Jun 2023 10:48:30 +0100
+        Tue, 6 Jun 2023 05:49:01 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4EA010C0;
+        Tue,  6 Jun 2023 02:48:58 -0700 (PDT)
+Date:   Tue, 6 Jun 2023 11:48:55 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1686044936;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KSa4OY9dsWXX7LG19K4ps06QwMPn/kJbzHoa0LvQ/dI=;
+        b=kD6EPcw8dfX8tpFG4VG8J3fP0j3U6yVTftzZul3WT4zmlELTbQOT5cnUQvQlKUhdLh8Hbg
+        t2OO5xKtxJTTdTicNTD8UGPPkCzPzIQvZKnNI8YEii8e8jLBYMpAcQQV+n8ePSaC7/g5D2
+        trt7kdkXsSUDhsQjZt7B5In/yPv4E1/WFQQq53FoxYk+IhBPgegvZdsYLz1bXSNbS4TPeo
+        gGWXdfdr+d/HxR0UacwZmwpBVqmk5tGfRLL22eTzC/T+ETyO6b8TMD1fUgtM5ELXmA6ahr
+        bJ6XpGSE1SNRCHxt1iVHrY4297Kn3R/jdmvng2cLleiSojDUFJQtA4W8M5qvQw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1686044936;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KSa4OY9dsWXX7LG19K4ps06QwMPn/kJbzHoa0LvQ/dI=;
+        b=CAkW+0ZxzgX8EbTa5o4RZs12jtVQjzM2EIG7LLHwHbFe93r/jfHiMwkAhjXeMdJrnwnkyz
+        r7nurGx2ELrFK0Ag==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>,
+        stable-rt <stable-rt@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Carsten Emde <C.Emde@osadl.org>,
+        Daniel Wagner <daniel.wagner@suse.com>,
+        Tom Zanussi <tom.zanussi@linux.intel.com>,
+        Clark Williams <williams@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Pavel Machek <pavel@denx.de>,
+        Jeff Brady <jeffreyjbrady@gmail.com>
+Subject: Re: [ANNOUNCE] 5.10.180-rt88
+Message-ID: <20230606094855.v8zhk78I@linutronix.de>
+References: <ZHZSlJFnTK1IpXeg@uudg.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ZHZSlJFnTK1IpXeg@uudg.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2023-05-30 16:46:28 [-0300], Luis Claudio R. Goncalves wrote:
+> Hello RT-list!
+Hi,
 
-On Mon, 27 Mar 2023 16:16:08 +0200, Rafał Miłecki wrote:
-> From: Rafał Miłecki <rafal@milecki.pl>
-> 
-> NVMEM bindings received a new feature recently: layouts. They allow
-> defining NVMEM device content in a separated DT node named
-> "nvmem-layout". That improvement results in cleaner and more generic
-> bindings.
-> 
-> [...]
+> Support for deferred printing was removed in v5.10-rc1-rt1 by commit
+> 9153e3c5cb0c9 ("printk: remove deferred printing").
 
-Applied, thanks!
+Sorry for not getting back to earlier, where you proposed the change.
 
-[1/3] dt-bindings: nvmem: layouts: add fixed-layout
-      commit: 4d0c9ce1a7a26947269a15fad622f1ffb6698627
-[2/3] dt-bindings: nvmem: convert base example to use NVMEM fixed cells layout
-      commit: 75dd9c7a421a239be6e7bd48e6b3a1474500fe98
-[3/3] nvmem: core: add support for fixed cells *layout*
-      commit: ac1c0d15aedc0863031bc8d678d5f96ab11d3a41
+> diff --git a/include/linux/printk.h b/include/linux/printk.h
+> index 83c7734e98025..92e0656841128 100644
+> --- a/include/linux/printk.h
+> +++ b/include/linux/printk.h
+> @@ -609,7 +609,7 @@ static inline void print_hex_dump_debug(const char *prefix_str, int prefix_type,
+>  #define print_hex_dump_bytes(prefix_str, prefix_type, buf, len)	\
+>  	print_hex_dump_debug(prefix_str, prefix_type, 16, 1, buf, len, true)
+>  
+> -#ifdef CONFIG_PRINTK
+> +#if defined(CONFIG_PRINTK) && !defined(CONFIG_PREEMPT_RT)
+>  extern void __printk_safe_enter(void);
+>  extern void __printk_safe_exit(void);
 
-Best regards,
--- 
-Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+This needs to go entirely. The "new" printk code does not need this safe
+functions also for !RT.
 
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 5f1c50a6bebc5..7e65e3ef16e3a 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -6057,7 +6057,6 @@ static void __build_all_zonelists(void *data)
+>  	 * tty_insert_flip_string_and_push_buffer() on other CPU might be
+>  	 * calling kmalloc(GFP_ATOMIC | __GFP_NOWARN) with port->lock held.
+>  	 */
+> -	printk_deferred_enter();
+
+That is okay. However the commit, that introduced this
+	a992c387b4118 ("mm/page_alloc: fix potential deadlock on zonelist_update_seq seqlock")
+
+also added a local_irq_safe a little higher up and it has to go, too.
+The code as-is should produce warnings once it enters this path.
+
+>  	write_seqlock(&zonelist_update_seq);
+>  
+>  #ifdef CONFIG_NUMA
+
+Sebastian
