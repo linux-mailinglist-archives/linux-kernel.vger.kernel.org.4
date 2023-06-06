@@ -2,136 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39BE27245D4
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:24:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B11C77245BD
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:23:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237829AbjFFOYf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 10:24:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58290 "EHLO
+        id S236254AbjFFOXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 10:23:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237664AbjFFOYW (ORCPT
+        with ESMTP id S231935AbjFFOX3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 10:24:22 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C24F10E9;
-        Tue,  6 Jun 2023 07:24:18 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QbCMD1gwczLqNp;
-        Tue,  6 Jun 2023 22:21:12 +0800 (CST)
-Received: from localhost.localdomain (10.50.163.32) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 6 Jun 2023 22:24:13 +0800
-From:   Yicong Yang <yangyicong@huawei.com>
-To:     <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
-        <jonathan.cameron@huawei.com>, <corbet@lwn.net>,
-        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>
-CC:     <alexander.shishkin@linux.intel.com>, <helgaas@kernel.org>,
-        <linux-pci@vger.kernel.org>, <prime.zeng@huawei.com>,
-        <linuxarm@huawei.com>, <yangyicong@hisilicon.com>
-Subject: [PATCH v4 5/5] hwtracing: hisi_ptt: Fix potential sleep in atomic context
-Date:   Tue, 6 Jun 2023 22:22:44 +0800
-Message-ID: <20230606142244.10939-6-yangyicong@huawei.com>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20230606142244.10939-1-yangyicong@huawei.com>
-References: <20230606142244.10939-1-yangyicong@huawei.com>
+        Tue, 6 Jun 2023 10:23:29 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1A2C12D
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 07:23:28 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (om126253223039.31.openmobile.ne.jp [126.253.223.39])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9D474AB;
+        Tue,  6 Jun 2023 16:23:00 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1686061381;
+        bh=YbDeXSKvlYrPDuVjoEXfSOcgxqvkuTEKb+shnMCLRcQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LdzSXeOcf/AwXD3bdRm2zumc5KLQd9EWT0jRnwyCUy04sFkOi7izmLbgzZRwUt5gO
+         SquS0ij0b03+U5J7Aa3fgSTzkx8oXd1sgW94d6QjhelnhOR1RyZ6NXHoLx7A1g1ppv
+         IrvK0TGKCrl38eEzmpEZuZTddd47u4ZHOlVOPWog=
+Date:   Tue, 6 Jun 2023 17:23:22 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Siddh Raman Pant <code@siddh.me>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Suraj Upadhyay <usuraj35@gmail.com>
+Subject: Re: [PATCH v9 3/8] drm: Remove usage of deprecated DRM_INFO
+Message-ID: <20230606142322.GB5197@pendragon.ideasonboard.com>
+References: <cover.1686047727.git.code@siddh.me>
+ <52c8eb0f241a9d67ce5b7e6fc64dc397e735ccd8.1686047727.git.code@siddh.me>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.50.163.32]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <52c8eb0f241a9d67ce5b7e6fc64dc397e735ccd8.1686047727.git.code@siddh.me>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yicong Yang <yangyicong@hisilicon.com>
+Hi Siddh,
 
-We're using pci_irq_vector() to obtain the interrupt number and then
-bind it to the CPU start perf under the protection of spinlock in
-pmu::start(). pci_irq_vector() might sleep since [1] because it will
-call msi_domain_get_virq() to get the MSI interrupt number and it
-needs to acquire dev->msi.data->mutex. Getting a mutex will sleep on
-contention. So use pci_irq_vector() in an atomic context is problematic.
+Thank you for the patch.
 
-This patch cached the interrupt number in the probe() and uses the
-cached data instead to avoid potential sleep.
+On Tue, Jun 06, 2023 at 04:15:17PM +0530, Siddh Raman Pant wrote:
+> drm_print.h says DRM_INFO is deprecated in favor of drm_info().
+> 
+> Signed-off-by: Siddh Raman Pant <code@siddh.me>
+> ---
+>  drivers/gpu/drm/drm_client_modeset.c | 2 +-
+>  drivers/gpu/drm/drm_connector.c      | 7 ++++---
+>  drivers/gpu/drm/drm_drv.c            | 2 +-
+>  drivers/gpu/drm/drm_pci.c            | 2 +-
 
-[1] commit 82ff8e6b78fc ("PCI/MSI: Use msi_get_virq() in pci_get_vector()")
-Fixes: ff0de066b463 ("hwtracing: hisi_ptt: Add trace function support for HiSilicon PCIe Tune and Trace device")
-Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
----
- drivers/hwtracing/ptt/hisi_ptt.c | 12 +++++-------
- drivers/hwtracing/ptt/hisi_ptt.h |  2 ++
- 2 files changed, 7 insertions(+), 7 deletions(-)
+Any plan to remove it from drivers as well ? If not you should mention
+in the commit message (probably in the subject line itself) that you're
+only addressing the DRM core.
 
-diff --git a/drivers/hwtracing/ptt/hisi_ptt.c b/drivers/hwtracing/ptt/hisi_ptt.c
-index ff2c16efe5b1..d78d71b6764f 100644
---- a/drivers/hwtracing/ptt/hisi_ptt.c
-+++ b/drivers/hwtracing/ptt/hisi_ptt.c
-@@ -341,13 +341,13 @@ static int hisi_ptt_register_irq(struct hisi_ptt *hisi_ptt)
- 	if (ret < 0)
- 		return ret;
- 
--	ret = devm_request_threaded_irq(&pdev->dev,
--					pci_irq_vector(pdev, HISI_PTT_TRACE_DMA_IRQ),
-+	hisi_ptt->trace_irq = pci_irq_vector(pdev, HISI_PTT_TRACE_DMA_IRQ);
-+	ret = devm_request_threaded_irq(&pdev->dev, hisi_ptt->trace_irq,
- 					NULL, hisi_ptt_isr, 0,
- 					DRV_NAME, hisi_ptt);
- 	if (ret) {
- 		pci_err(pdev, "failed to request irq %d, ret = %d\n",
--			pci_irq_vector(pdev, HISI_PTT_TRACE_DMA_IRQ), ret);
-+			hisi_ptt->trace_irq, ret);
- 		return ret;
- 	}
- 
-@@ -1096,8 +1096,7 @@ static void hisi_ptt_pmu_start(struct perf_event *event, int flags)
- 	 * core in event_function_local(). If CPU passed is offline we'll fail
- 	 * here, just log it since we can do nothing here.
- 	 */
--	ret = irq_set_affinity(pci_irq_vector(hisi_ptt->pdev, HISI_PTT_TRACE_DMA_IRQ),
--					      cpumask_of(cpu));
-+	ret = irq_set_affinity(hisi_ptt->trace_irq, cpumask_of(cpu));
- 	if (ret)
- 		dev_warn(dev, "failed to set the affinity of trace interrupt\n");
- 
-@@ -1392,8 +1391,7 @@ static int hisi_ptt_cpu_teardown(unsigned int cpu, struct hlist_node *node)
- 	 * Also make sure the interrupt bind to the migrated CPU as well. Warn
- 	 * the user on failure here.
- 	 */
--	if (irq_set_affinity(pci_irq_vector(hisi_ptt->pdev, HISI_PTT_TRACE_DMA_IRQ),
--					    cpumask_of(target)))
-+	if (irq_set_affinity(hisi_ptt->trace_irq, cpumask_of(target)))
- 		dev_warn(dev, "failed to set the affinity of trace interrupt\n");
- 
- 	hisi_ptt->trace_ctrl.on_cpu = target;
-diff --git a/drivers/hwtracing/ptt/hisi_ptt.h b/drivers/hwtracing/ptt/hisi_ptt.h
-index 164012dba4ec..e17f045d7e72 100644
---- a/drivers/hwtracing/ptt/hisi_ptt.h
-+++ b/drivers/hwtracing/ptt/hisi_ptt.h
-@@ -201,6 +201,7 @@ struct hisi_ptt_pmu_buf {
-  * @pdev:         pci_dev of this PTT device
-  * @tune_lock:    lock to serialize the tune process
-  * @pmu_lock:     lock to serialize the perf process
-+ * @trace_irq:    interrupt number used by trace
-  * @upper_bdf:    the upper BDF range of the PCI devices managed by this PTT device
-  * @lower_bdf:    the lower BDF range of the PCI devices managed by this PTT device
-  * @port_filters: the filter list of root ports
-@@ -221,6 +222,7 @@ struct hisi_ptt {
- 	struct pci_dev *pdev;
- 	struct mutex tune_lock;
- 	spinlock_t pmu_lock;
-+	int trace_irq;
- 	u32 upper_bdf;
- 	u32 lower_bdf;
- 
+Same comment for further patches in this series.
+
+>  4 files changed, 7 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/drm_client_modeset.c b/drivers/gpu/drm/drm_client_modeset.c
+> index 1b12a3c201a3..ae19734974b5 100644
+> --- a/drivers/gpu/drm/drm_client_modeset.c
+> +++ b/drivers/gpu/drm/drm_client_modeset.c
+> @@ -331,7 +331,7 @@ static bool drm_client_target_cloned(struct drm_device *dev,
+>  		DRM_DEBUG_KMS("can clone using 1024x768\n");
+>  		return true;
+>  	}
+> -	DRM_INFO("kms: can't enable cloning when we probably wanted to.\n");
+> +	drm_info(dev, "kms: can't enable cloning when we probably wanted to.\n");
+>  	return false;
+>  }
+>  
+> diff --git a/drivers/gpu/drm/drm_connector.c b/drivers/gpu/drm/drm_connector.c
+> index 48df7a5ea503..dca8dd4ab93f 100644
+> --- a/drivers/gpu/drm/drm_connector.c
+> +++ b/drivers/gpu/drm/drm_connector.c
+> @@ -168,13 +168,14 @@ static void drm_connector_get_cmdline_mode(struct drm_connector *connector)
+>  		return;
+>  
+>  	if (mode->force) {
+> -		DRM_INFO("forcing %s connector %s\n", connector->name,
+> -			 drm_get_connector_force_name(mode->force));
+> +		drm_info(connector->dev, "forcing %s connector %s\n",
+> +			 connector->name, drm_get_connector_force_name(mode->force));
+>  		connector->force = mode->force;
+>  	}
+>  
+>  	if (mode->panel_orientation != DRM_MODE_PANEL_ORIENTATION_UNKNOWN) {
+> -		DRM_INFO("cmdline forces connector %s panel_orientation to %d\n",
+> +		drm_info(connector->dev,
+> +			 "cmdline forces connector %s panel_orientation to %d\n",
+>  			 connector->name, mode->panel_orientation);
+>  		drm_connector_set_panel_orientation(connector,
+>  						    mode->panel_orientation);
+> diff --git a/drivers/gpu/drm/drm_drv.c b/drivers/gpu/drm/drm_drv.c
+> index 12687dd9e1ac..02eaa4c9344d 100644
+> --- a/drivers/gpu/drm/drm_drv.c
+> +++ b/drivers/gpu/drm/drm_drv.c
+> @@ -943,7 +943,7 @@ int drm_dev_register(struct drm_device *dev, unsigned long flags)
+>  	if (drm_core_check_feature(dev, DRIVER_MODESET))
+>  		drm_modeset_register_all(dev);
+>  
+> -	DRM_INFO("Initialized %s %d.%d.%d %s for %s on minor %d\n",
+> +	drm_info(dev, "Initialized %s %d.%d.%d %s for %s on minor %d\n",
+>  		 driver->name, driver->major, driver->minor,
+>  		 driver->patchlevel, driver->date,
+>  		 dev->dev ? dev_name(dev->dev) : "virtual device",
+> diff --git a/drivers/gpu/drm/drm_pci.c b/drivers/gpu/drm/drm_pci.c
+> index 39d35fc3a43b..7dfb837d1325 100644
+> --- a/drivers/gpu/drm/drm_pci.c
+> +++ b/drivers/gpu/drm/drm_pci.c
+> @@ -262,7 +262,7 @@ void drm_legacy_pci_exit(const struct drm_driver *driver,
+>  		}
+>  		mutex_unlock(&legacy_dev_list_lock);
+>  	}
+> -	DRM_INFO("Module unloaded\n");
+> +	drm_info(NULL, "Module unloaded\n");
+>  }
+>  EXPORT_SYMBOL(drm_legacy_pci_exit);
+>  
+
 -- 
-2.24.0
+Regards,
 
+Laurent Pinchart
