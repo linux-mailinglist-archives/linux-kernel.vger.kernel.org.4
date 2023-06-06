@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 849EA7241B4
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 14:09:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CBE87241B7
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 14:09:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236753AbjFFMJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 08:09:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46186 "EHLO
+        id S236838AbjFFMJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 08:09:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236838AbjFFMJh (ORCPT
+        with ESMTP id S237396AbjFFMJu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 08:09:37 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87D8610D9
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 05:09:33 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5689bcc5f56so89535757b3.2
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 05:09:33 -0700 (PDT)
+        Tue, 6 Jun 2023 08:09:50 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F28CB10E5
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 05:09:40 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-565d1b86a63so100114427b3.0
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 05:09:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686053372; x=1688645372;
+        d=google.com; s=20221208; t=1686053380; x=1688645380;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0tYLIcPaSiiyZHuB/nJJEFPBa3OnAACeS9baH6iUupo=;
-        b=22Yh0QrehWwX8i9ZY6o2wrXkvcH70GK73SeCmuwBZwKKIBgf4Y/t35VFAUZIJ/leF9
-         ConLKIZYFWTFR9V/OVafYZ02wvG46i5Vcp14Qf81Xm5C2Hs2dD7L/2ySTOOyN1a8I9os
-         4KkwnWaTT0rZuSQh804kQxJBizMU3MoLg1EUBgrAqB0y5FsizZiprrl0hrnBZdZijww+
-         D5N9/JQY4pwY47dUeXjE6rWyX9nbabwmJ92YYT9x/UhrcwjJqa7OCH1M1+uppz53YBcW
-         j19D9te7IclkE5OlyAyd0o1t6I3Pab7vT1wTIv76Y26ZCgau5H3C7rRmBE3W4ahxmoaC
-         L1DA==
+        bh=hRUuglN2mFNqzu8aGhjOdpRI6fbxHMR7AUFnYMKbqRg=;
+        b=kFD8qk5nz8nEkhEGuavEr1Filv5HOrp6syWncQpUGLaJi3DYvQwXC5BFVUTs6ShZMw
+         h2Y95axOqxnM9XTmFJ6HM/LFDny8rzY6qFSMC/+3xIlGp/7hPbzW7cKJtEwfD1qJdZ7/
+         zyK5eZGzR/IklUms3hb6ynufw6ajbdu3QxaJ7Jfuq+CZShyStZGF4+K+2RlTw70PAT9j
+         KenSIraTK1+dvYOx1AWhSiCb+EOCSpPRtSBeuDYUWj3jT31ikuHdVpsQd4VxIg0AQeVX
+         Rc82mEmNmqsBHLrx5rXhOEoFNFvIeWbCvbY6ADIAislq33tv4hCanDFstI6fN4sCfrsT
+         hQAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686053372; x=1688645372;
+        d=1e100.net; s=20221208; t=1686053380; x=1688645380;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0tYLIcPaSiiyZHuB/nJJEFPBa3OnAACeS9baH6iUupo=;
-        b=gbpWfTucgySQ8fBZrRGRVcSnxpjPR5YRH08aewKp5bonvq1ISUlTmqkX+9Pxh+qLm3
-         Fje+BFB4lh5hxfSszPGVjn9HeIxrKlos+Y/Et5e1i/caNt6H3tZfVMxANnwe149/lauq
-         aYx2QaYuRSRDWz2sw8Mg/9dcjeNkv0l6DgNaz39Db7LQGZcLqW6r6X/NYNmWBW/8um3A
-         fz6DPRPNwmhtuVR9VLqE2XkJ3SxCCxDRcej3FgGdPI5nf7LzmoBr/cHbd/HseCvq1eRw
-         J0astplu/72Na2xsNR2CWA4QoTUA893YVCzr2q9nXGBuPTPFOQzCJsNM3UVwGFU1V5hT
-         xxxA==
-X-Gm-Message-State: AC+VfDwiInYTg3lFHo++oxIDs+rXEMJbiJNjAXd3ZqfJaowh3DcMIRMl
-        Y/glvyBphl8ji4UGtQIoefxajdcrlOLL
-X-Google-Smtp-Source: ACHHUZ5p0pzhcVx3L9ve0S1GT3stb9FRLoqqHMUTFR2YglDAkPr5FcqBbOdhuAE/cItzugQg9zWvZoV8vR6i
+        bh=hRUuglN2mFNqzu8aGhjOdpRI6fbxHMR7AUFnYMKbqRg=;
+        b=cPrn5wYv4P5hwyJFs5ExsLYtfysZ0xglkXgX10gWeHDY1/UTFDtPKNOWIzHML3NKrr
+         RyJJJL0ji6Wh6MLS9A5vBLFPUSp6MOJSVh1rxpKcY7QsyRi93WCK/HwNVEzUZ/104gtX
+         zeK9xzem3DQ2Upo66BBL+NrvaJXN8sliejjPPbZZkxF2ymKctuBNM+FAc9WRL75L2kmo
+         Y8egpiPD48G4k98IrCgktE8FdYxTEY8nEMKTVxbDPQdtmj73AWi7d0ZBcoMsVGhxcG8X
+         zqrrx01aqapqItNd4++D/0MXX50z8KIn5p9Ya4YtUyjpb01JnwpjHq2Zs/xCxwY9TOaK
+         cqfQ==
+X-Gm-Message-State: AC+VfDwURdB/sUl+mrLPxBzklGoYf5r+eBjmrClEHMnB1R0KTUHOh6Ql
+        xDF4FYlWWC9I6zh0tWFUum+UwXDcTtfz
+X-Google-Smtp-Source: ACHHUZ548G9N8HPAkr+f/occvz3qoizKM4Via0ZKMso3g/f4jIYftDXWFivpLcTLw0OV/yYIOtXOKOVjnR3G
 X-Received: from mshavit.ntc.corp.google.com ([2401:fa00:95:20c:a615:63d5:b54e:6919])
- (user=mshavit job=sendgmr) by 2002:a81:8d4d:0:b0:561:81b:7369 with SMTP id
- w13-20020a818d4d000000b00561081b7369mr949415ywj.8.1686053372788; Tue, 06 Jun
- 2023 05:09:32 -0700 (PDT)
-Date:   Tue,  6 Jun 2023 20:07:38 +0800
+ (user=mshavit job=sendgmr) by 2002:a81:a7c3:0:b0:568:ee83:d87d with SMTP id
+ e186-20020a81a7c3000000b00568ee83d87dmr903702ywh.5.1686053380117; Tue, 06 Jun
+ 2023 05:09:40 -0700 (PDT)
+Date:   Tue,  6 Jun 2023 20:07:39 +0800
 In-Reply-To: <20230606120854.4170244-1-mshavit@google.com>
 Mime-Version: 1.0
 References: <20230606120854.4170244-1-mshavit@google.com>
 X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Message-ID: <20230606120854.4170244-3-mshavit@google.com>
-Subject: [PATCH v2 02/18] iommu/arm-smmu-v3: Add smmu_s1_cfg to smmu_master
+Message-ID: <20230606120854.4170244-4-mshavit@google.com>
+Subject: [PATCH v2 03/18] iommu/arm-smmu-v3: Refactor write_strtab_ent
 From:   Michael Shavit <mshavit@google.com>
 To:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
         Joerg Roedel <joro@8bytes.org>
@@ -71,116 +71,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Except for Nested domains, arm_smmu_master will own the STEs that are
-inserted into the arm_smmu_device's STE table.
+Explicity keep track of the s1_cfg and s2_cfg that are attached to a
+master in arm_smmu_master, regardless of whether they are owned by
+arm_smmu_master, arm_smmu_domain or userspace.
 
 Signed-off-by: Michael Shavit <mshavit@google.com>
 ---
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 28 +++++++++++++--------
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h |  1 +
- 2 files changed, 18 insertions(+), 11 deletions(-)
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 37 +++++++++------------
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h |  2 ++
+ 2 files changed, 17 insertions(+), 22 deletions(-)
 
 diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-index beff04b897718..023769f5ca79a 100644
+index 023769f5ca79a..d79c6ef5d6ed4 100644
 --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
 +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-@@ -1126,15 +1126,16 @@ int arm_smmu_write_ctx_desc(struct arm_smmu_domain *smmu_domain, int ssid,
- 	return 0;
- }
- 
--static int arm_smmu_alloc_cd_tables(struct arm_smmu_domain *smmu_domain)
-+static int arm_smmu_init_s1_cfg(struct arm_smmu_master *master,
-+				struct arm_smmu_s1_cfg *cfg)
- {
- 	int ret;
- 	size_t l1size;
- 	size_t max_contexts;
--	struct arm_smmu_device *smmu = smmu_domain->smmu;
--	struct arm_smmu_s1_cfg *cfg = &smmu_domain->s1_cfg;
+@@ -1269,10 +1269,9 @@ static void arm_smmu_write_strtab_ent(struct arm_smmu_master *master, u32 sid,
+ 	 */
+ 	u64 val = le64_to_cpu(dst[0]);
+ 	bool ste_live = false;
+-	struct arm_smmu_device *smmu = NULL;
 +	struct arm_smmu_device *smmu = master->smmu;
- 	struct arm_smmu_ctx_desc_cfg *cdcfg = &cfg->cdcfg;
+ 	struct arm_smmu_s1_cfg *s1_cfg = NULL;
+ 	struct arm_smmu_s2_cfg *s2_cfg = NULL;
+-	struct arm_smmu_domain *smmu_domain = NULL;
+ 	struct arm_smmu_cmdq_ent prefetch_cmd = {
+ 		.opcode		= CMDQ_OP_PREFETCH_CFG,
+ 		.prefetch	= {
+@@ -1280,24 +1279,10 @@ static void arm_smmu_write_strtab_ent(struct arm_smmu_master *master, u32 sid,
+ 		},
+ 	};
  
-+	cfg->s1cdmax = master->ssid_bits;
- 	max_contexts = 1 << cfg->s1cdmax;
+-	if (master) {
+-		smmu_domain = master->domain;
+-		smmu = master->smmu;
+-	}
+-
+-	if (smmu_domain) {
+-		switch (smmu_domain->stage) {
+-		case ARM_SMMU_DOMAIN_S1:
+-			s1_cfg = &smmu_domain->s1_cfg;
+-			break;
+-		case ARM_SMMU_DOMAIN_S2:
+-		case ARM_SMMU_DOMAIN_NESTED:
+-			s2_cfg = &smmu_domain->s2_cfg;
+-			break;
+-		default:
+-			break;
+-		}
+-	}
++	if (master->s1_cfg)
++		s1_cfg = master->s1_cfg;
++	else if (master->s2_cfg)
++		s2_cfg = master->s2_cfg;
  
- 	if (!(smmu->features & ARM_SMMU_FEAT_2_LVL_CDTAB) ||
-@@ -1175,12 +1176,11 @@ static int arm_smmu_alloc_cd_tables(struct arm_smmu_domain *smmu_domain)
- 	return ret;
+ 	if (val & STRTAB_STE_0_V) {
+ 		switch (FIELD_GET(STRTAB_STE_0_CFG, val)) {
+@@ -1319,8 +1304,8 @@ static void arm_smmu_write_strtab_ent(struct arm_smmu_master *master, u32 sid,
+ 	val = STRTAB_STE_0_V;
+ 
+ 	/* Bypass/fault */
+-	if (!smmu_domain || !(s1_cfg || s2_cfg)) {
+-		if (!smmu_domain && disable_bypass)
++	if (!(s1_cfg || s2_cfg)) {
++		if (disable_bypass)
+ 			val |= FIELD_PREP(STRTAB_STE_0_CFG, STRTAB_STE_0_CFG_ABORT);
+ 		else
+ 			val |= FIELD_PREP(STRTAB_STE_0_CFG, STRTAB_STE_0_CFG_BYPASS);
+@@ -2401,6 +2386,8 @@ static void arm_smmu_detach_dev(struct arm_smmu_master *master)
+ 
+ 	master->domain = NULL;
+ 	master->ats_enabled = false;
++	master->s1_cfg = NULL;
++	master->s2_cfg = NULL;
+ 	arm_smmu_install_ste_for_dev(master);
  }
  
--static void arm_smmu_free_cd_tables(struct arm_smmu_domain *smmu_domain)
-+static void arm_smmu_free_cd_tables(struct arm_smmu_device *smmu,
-+				    struct arm_smmu_ctx_desc_cfg *cdcfg)
- {
- 	int i;
- 	size_t size, l1size;
--	struct arm_smmu_device *smmu = smmu_domain->smmu;
--	struct arm_smmu_ctx_desc_cfg *cdcfg = &smmu_domain->s1_cfg.cdcfg;
+@@ -2454,6 +2441,12 @@ static int arm_smmu_attach_dev(struct iommu_domain *domain, struct device *dev)
+ 	}
  
- 	if (cdcfg->l1_desc) {
- 		size = CTXDESC_L2_ENTRIES * (CTXDESC_CD_DWORDS << 3);
-@@ -2076,7 +2076,7 @@ static void arm_smmu_domain_free(struct iommu_domain *domain)
- 		/* Prevent SVA from touching the CD while we're freeing it */
- 		mutex_lock(&arm_smmu_asid_lock);
- 		if (cfg->cdcfg.cdtab)
--			arm_smmu_free_cd_tables(smmu_domain);
-+			arm_smmu_free_cd_tables(smmu, &cfg->cdcfg);
- 		arm_smmu_free_asid(&smmu_domain->cd);
- 		mutex_unlock(&arm_smmu_asid_lock);
- 	} else {
-@@ -2108,11 +2108,9 @@ static int arm_smmu_domain_finalise_s1(struct arm_smmu_domain *smmu_domain,
- 	if (ret)
- 		goto out_unlock;
- 
--	cfg->s1cdmax = master->ssid_bits;
--
- 	smmu_domain->stall_enabled = master->stall_enabled;
- 
--	ret = arm_smmu_alloc_cd_tables(smmu_domain);
-+	ret = arm_smmu_init_s1_cfg(master, cfg);
- 	if (ret)
- 		goto out_free_asid;
- 
-@@ -2140,7 +2138,7 @@ static int arm_smmu_domain_finalise_s1(struct arm_smmu_domain *smmu_domain,
- 	return 0;
- 
- out_free_cd_tables:
--	arm_smmu_free_cd_tables(smmu_domain);
-+	arm_smmu_free_cd_tables(smmu, &cfg->cdcfg);
- out_free_asid:
- 	arm_smmu_free_asid(cd);
- out_unlock:
-@@ -2704,6 +2702,13 @@ static struct iommu_device *arm_smmu_probe_device(struct device *dev)
- 	    smmu->features & ARM_SMMU_FEAT_STALL_FORCE)
- 		master->stall_enabled = true;
- 
-+	ret = arm_smmu_init_s1_cfg(master, &master->owned_s1_cfg);
-+	if (ret) {
-+		arm_smmu_disable_pasid(master);
-+		arm_smmu_remove_master(master);
-+		goto err_free_master;
+ 	master->domain = smmu_domain;
++	if (smmu_domain->stage == ARM_SMMU_DOMAIN_S1) {
++		master->s1_cfg = &smmu_domain->s1_cfg;
++	} else if (smmu_domain->stage == ARM_SMMU_DOMAIN_S2 ||
++		   smmu_domain->stage == ARM_SMMU_DOMAIN_NESTED) {
++		master->s2_cfg = &smmu_domain->s2_cfg;
 +	}
-+
- 	return &smmu->iommu;
  
- err_free_master:
-@@ -2719,6 +2724,7 @@ static void arm_smmu_release_device(struct device *dev)
- 	if (WARN_ON(arm_smmu_master_sva_enabled(master)))
- 		iopf_queue_remove_device(master->smmu->evtq.iopf, dev);
- 	arm_smmu_detach_dev(master);
-+	arm_smmu_free_cd_tables(master->smmu, &master->owned_s1_cfg.cdcfg);
- 	arm_smmu_disable_pasid(master);
- 	arm_smmu_remove_master(master);
- 	kfree(master);
+ 	/*
+ 	 * The SMMU does not support enabling ATS with bypass. When the STE is
 diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
-index 68d519f21dbd8..053cc14c23969 100644
+index 053cc14c23969..3c614fbe2b8b9 100644
 --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
 +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
-@@ -688,6 +688,7 @@ struct arm_smmu_master {
- 	struct arm_smmu_domain		*domain;
+@@ -689,6 +689,8 @@ struct arm_smmu_master {
  	struct list_head		domain_head;
  	struct arm_smmu_stream		*streams;
-+	struct arm_smmu_s1_cfg		owned_s1_cfg;
+ 	struct arm_smmu_s1_cfg		owned_s1_cfg;
++	struct arm_smmu_s1_cfg		*s1_cfg;
++	struct arm_smmu_s2_cfg		*s2_cfg;
  	unsigned int			num_streams;
  	bool				ats_enabled;
  	bool				stall_enabled;
