@@ -2,100 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82ED3724A4F
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 19:32:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE350724A52
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 19:33:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238402AbjFFRcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 13:32:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39824 "EHLO
+        id S237216AbjFFRdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 13:33:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238431AbjFFRce (ORCPT
+        with ESMTP id S233418AbjFFRdR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 13:32:34 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12D619BB;
-        Tue,  6 Jun 2023 10:32:15 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 356HW86V011929;
-        Tue, 6 Jun 2023 12:32:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1686072728;
-        bh=Pmmtr5kE/2WIyrPRla4X9Xf7ooGWHcGEtH8GBca0038=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=Gz3Wypd2FcFKyF97cedgue7RauwlaihssjzNHFECkCjh8i8nUScWlNOk7vHHfzPI7
-         rEZRWMGLh5+stpvGKL8MAxXVAs3iKPcTELo/rb68T3scBHZFj3f/h3rh55KwPnwsOc
-         bX+6bo+RCxu4dquRa90HXlTCut+mLeGsUgVN8X38=
-Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 356HW8W7060656
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 6 Jun 2023 12:32:08 -0500
-Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 6
- Jun 2023 12:32:08 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 6 Jun 2023 12:32:08 -0500
-Received: from [10.249.138.31] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 356HW5mT032554;
-        Tue, 6 Jun 2023 12:32:06 -0500
-Message-ID: <83a8f3c0-5938-7a0b-dc99-6409ff0dd09c@ti.com>
-Date:   Tue, 6 Jun 2023 23:02:04 +0530
+        Tue, 6 Jun 2023 13:33:17 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C156010FF;
+        Tue,  6 Jun 2023 10:33:16 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2b1c910ee19so33334361fa.3;
+        Tue, 06 Jun 2023 10:33:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686072795; x=1688664795;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=7NXKJbFz1nKDKoVlMVlm8aQEKkrV2KIiDCqPS9XhHh0=;
+        b=ZEw9yUBSxHAopkpmwxzN8xEPjxgsPjv8z8etXX4uAkXqVTLnc7Zqs/nbxm4evTnPYx
+         J+Omm0ydUBktRZTLrKqs9LiCkqeCWU3jPapWRXrILrv6PEaGJwrcLIhICnoq+JZQwdgm
+         /2NLcUAAIqvEWVR7j+Sc6GZ9DSpn2l2kgBErJV+71vHOi9nZ7Z1AQNPoBTF4C/uA54l/
+         WXZRJxlt38eemJkwDbL0qh1xoe/YdOtJc9APQDAKIouLkX+FzxMMXPv2xuMAyB/wo75h
+         rLAQg4TkRrW68a7bN187GZBhQmMZjeHy/zG3Uahh8nok66OL4MBimuetJyEB0L2cxtMg
+         1Fpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686072795; x=1688664795;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7NXKJbFz1nKDKoVlMVlm8aQEKkrV2KIiDCqPS9XhHh0=;
+        b=MqjeHcthCvAecb8OYQVCg40FlRlF5WGjtFQ/nGTlk9fnbBXVrLq1ZQA8VrE0SaKphS
+         IBiR7WutCgwFvCM85R4iHovXcEVHMTimTdYfLY0Imkfrceiw6ordLIuSgebVKFK2o0h2
+         K54aCa9qJLYPc5mzflW75ksP44vJjqTztMo88yChgB7Ag6Ig1kAP9oBOr9K0UNdFjJqp
+         kMUMKt5ApJkCqKORHoMsV65sR5zmlqciXLx8zQaMajpsTcZg/anTG+VG2tpud3j49MuN
+         4ZihUxT2ZBz9vAAtmdk6pnk9xyqRXmI5kfBvS8v3oivhAkHxpDHG41pZmhCmAoUQcNXi
+         zUKQ==
+X-Gm-Message-State: AC+VfDzAgAbyJYSrAuTAzvb/CnRGSen8XS3sw/eoMrvxoXuUcc6BCtZY
+        eHtEw3OtXPDfM6PoBtUA2os=
+X-Google-Smtp-Source: ACHHUZ6E4u1pwCQ4bGQbdToV6BQJplhi2ZNf72qvhp2dQ5/aVBqJv5anArQ6qcFH9gKG5ZLw8DKUBw==
+X-Received: by 2002:a2e:994e:0:b0:2b1:eb62:ffc8 with SMTP id r14-20020a2e994e000000b002b1eb62ffc8mr1448240ljj.6.1686072794884;
+        Tue, 06 Jun 2023 10:33:14 -0700 (PDT)
+Received: from mobilestation ([95.79.140.35])
+        by smtp.gmail.com with ESMTPSA id d14-20020a2e96ce000000b002a8a5afb87csm1941338ljj.20.2023.06.06.10.33.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Jun 2023 10:33:14 -0700 (PDT)
+Date:   Tue, 6 Jun 2023 20:33:12 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Abe Kohandel <abe.kohandel@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH 0/2] spi: dw: Add compatible for Intel Mount Evans SoC
+Message-ID: <20230606173312.wfrowqc7irecow2s@mobilestation>
+References: <20230606145402.474866-1-abe.kohandel@intel.com>
+ <168606867693.49694.16483038401822255147.b4-ty@kernel.org>
+ <20230606164040.s3ozznrkcclozugx@mobilestation>
+ <7696b01e-c388-45f2-9694-e427dde84b2b@sirena.org.uk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 0/3] arm64: dts: ti: k3-am62a: Add timers, wdt and fixup
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, Nishanth Menon <nm@ti.com>
-CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Tero Kristo <kristo@kernel.org>, Bryan Brattlof <bb@ti.com>
-References: <20230418012717.1230882-1-nm@ti.com>
- <168607161908.2072651.15533240609144219974.b4-ty@ti.com>
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-In-Reply-To: <168607161908.2072651.15533240609144219974.b4-ty@ti.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7696b01e-c388-45f2-9694-e427dde84b2b@sirena.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 06/06/23 10:51 pm, Vignesh Raghavendra wrote:
-> Hi Nishanth Menon,
+On Tue, Jun 06, 2023 at 05:47:40PM +0100, Mark Brown wrote:
+> On Tue, Jun 06, 2023 at 07:40:40PM +0300, Serge Semin wrote:
 > 
-> On Mon, 17 Apr 2023 20:27:14 -0500, Nishanth Menon wrote:
->> This is a series that adds wdt, timers to am62ax support, and adds the
->> missing description for uart1 and wkup_uart that is used by firmware.
->>
->> Nishanth Menon (3):
->>   arm64: dts: ti: k3-am62a: Add general purpose timers
->>   arm64: dts: ti: k3-am62a: Add watchdog nodes
->>   arm64: dts: ti: k3-am62a7-evm: Describe main_uart1 and wkup_uart
->>
->> [...]
+> > Mark, next time please wait at least for a few days before applying.
+> > Give me a chance to review.)
 > 
-> I have applied the following to branch ti-k3-dts-next on [1].
-> Thank you!
+> It's a trivial quirk for a platform, it seemed more hassle to wait TBH.
 > 
-> [1/3] arm64: dts: ti: k3-am62a: Add general purpose timers
->       commit: 68dd81a75192248a2c29650d21da495069c74ffa
-> [2/3] arm64: dts: ti: k3-am62a: Add watchdog nodes
->       commit: 804702e4c2aa5eae4611e9389833631a6b22e913
-> [3/3] arm64: dts: ti: k3-am62a7-evm: Describe main_uart1 and wkup_uart
->       (no commit info)
+> > * In this case I have had a question regarding the in-code comment
+> > which may have been needed to be fixed a bit.
 > 
 
-I ended up picking up [0] for 3/3 instead:
+> That can always be fixed incrementally if there's issues.
 
-[0] https://lore.kernel.org/r/20230425221708.549675-1-bb@ti.com
+Ok. I've sent my comment in that regards. Let's see what the author
+responds.
+
+-Serge(y)
