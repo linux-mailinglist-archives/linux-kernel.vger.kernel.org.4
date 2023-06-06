@@ -2,102 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61E54724067
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 13:04:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00454724078
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 13:05:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233072AbjFFLDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 07:03:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39308 "EHLO
+        id S235613AbjFFLEj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 07:04:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236195AbjFFLC7 (ORCPT
+        with ESMTP id S236236AbjFFLDM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 07:02:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92101E5D
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 03:59:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686049163;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fjDXftYp5RUrNR1VA3ZUFoVwqX6agK4RoTjNejwdF8o=;
-        b=FRsDr+5Eptr8P1kgJOhUfTSel/CEWm9jL2jVR0IQDsthMKw6wU65P33Wr4EEolXwKw9Cd0
-        a//bsU/JMG/EnK/eGigJPDI/o7TjM5jKwZxqJO4Y7rttmuayLGjO3hETHboL7iPP4Pre6q
-        7E2Fs8fCFrVIWK0QY4nFe6wR5v33xYk=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-414-FafI5_48OamKukWoINKHQg-1; Tue, 06 Jun 2023 06:59:21 -0400
-X-MC-Unique: FafI5_48OamKukWoINKHQg-1
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-3f8654d47b4so5567861cf.1
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 03:59:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686049161; x=1688641161;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fjDXftYp5RUrNR1VA3ZUFoVwqX6agK4RoTjNejwdF8o=;
-        b=cd0+nz8K7RmFZhlLXaRbexJ2Fc4wDbZ1GGhPJSK2bPaW46NQ1Xmu0UKPKrOXyDt5Pf
-         g+FeP4fZbwmLQfDRRkFrBLbBwC7wnTwQMjATFlflOIh71kcb3xjEvFh6qKP4+sjgx1hB
-         kPbM3mARrEibbwoH/Jwic059Vaq29MR82rW18noMGrxXlOCpNeFSoE+TtxUIJ4uN+KfQ
-         s44a5MZr9E/FlWrIYyX9Gzth16sOQVNGCc4fePfQ3GozTj5zqKhdReHTEu8DpyBiNgwt
-         HVwgLpS8TJlCyo08PEwjYoqrDd7xn6kC7aiz1K2mjH7jS7d9Ot/TXSi2Hv9ypU5VtgIr
-         SwZQ==
-X-Gm-Message-State: AC+VfDy8U+2/JBN80jCXcOwiXbUwlBYwhRY5pKCaN/oIdFhkVNog9RFk
-        qK5lYnTaEQo1FJRld6a0OEpsjCyWoVP2tIa2YEwAoyHAXcBzNV+NYwvjG0QejqEJNC+Vu7E00Mc
-        yOrHQvgudkT34wfGZT98DMpP6
-X-Received: by 2002:ad4:594d:0:b0:625:aa49:a48b with SMTP id eo13-20020ad4594d000000b00625aa49a48bmr1681306qvb.6.1686049161487;
-        Tue, 06 Jun 2023 03:59:21 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4860n1BYkfmXe2BunU1XbdTSEOrGqg2bogsqCCVtENchpUXVgVq2DDqvRz5QYJ0/KLaTL0Bg==
-X-Received: by 2002:ad4:594d:0:b0:625:aa49:a48b with SMTP id eo13-20020ad4594d000000b00625aa49a48bmr1681293qvb.6.1686049161203;
-        Tue, 06 Jun 2023 03:59:21 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-114-89.dyn.eolo.it. [146.241.114.89])
-        by smtp.gmail.com with ESMTPSA id ep12-20020a05621418ec00b0061b731bf3c2sm5255180qvb.80.2023.06.06.03.59.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 03:59:20 -0700 (PDT)
-Message-ID: <bedca9be6c496bbe9e124eda7ce13cf15bf7ca54.camel@redhat.com>
-Subject: Re: [PATCH net] lib: cpu_rmap: Fix potential use-after-free in
- irq_cpu_rmap_release()
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Ben Hutchings <ben@decadent.org.uk>, netdev@vger.kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
-        Eli Cohen <elic@nvidia.com>, jacob.e.keller@intel.com,
-        saeedm@nvidia.com
-Date:   Tue, 06 Jun 2023 12:59:17 +0200
-In-Reply-To: <ZHo0vwquhOy3FaXc@decadent.org.uk>
-References: <ZHo0vwquhOy3FaXc@decadent.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Tue, 6 Jun 2023 07:03:12 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A59B1BC0;
+        Tue,  6 Jun 2023 04:00:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686049231; x=1717585231;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=3b3vmHcNenRMEV+YtNGwUxporwj/nTLjEg7K71x0dfQ=;
+  b=AcRdxOI+9OebY+UyY0Q/mUlWqU3+9MNwRzRFfYEikRRnqDf6aK6XfxMh
+   E161QxvJJ0SmtkHicbucZ1ZOzInRnZjnE+KXu22hZcULNpLyDEgtclyfo
+   mBc9rXdRJaQ7/g93RU8Y4CsWsfKPG9HQ4o91lV8LBCMiGP3+x7OgFUTVe
+   cMcy+oi1UTGiydlQa0exKeItvuqgnK7q5bLl8gVVAWqY4dSkE/Vg4wfLy
+   Z3rWZxx4+M0R/YotpWOMR7AFgoHvKcZ6WmV00zwaivls0I52G/Jhf/Okk
+   QaU7uIk9Q6rdjXEhTBZVRy/zyEFYZxhkTnkzXi5VWR1vvyQ2Z4twhPQNV
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="384944988"
+X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
+   d="scan'208";a="384944988"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 04:00:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="703119390"
+X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
+   d="scan'208";a="703119390"
+Received: from yuguen-mobl2.ger.corp.intel.com (HELO intel.com) ([10.252.57.68])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 04:00:08 -0700
+Date:   Tue, 6 Jun 2023 13:00:02 +0200
+From:   Andi Shyti <andi.shyti@linux.intel.com>
+To:     Sui Jingfeng <15330273260@189.cn>
+Cc:     Sui Jingfeng <suijingfeng@loongson.cn>,
+        Andi Shyti <andi.shyti@linux.intel.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian Konig <christian.koenig@amd.com>,
+        Pan Xinhui <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Hawking Zhang <Hawking.Zhang@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Lijo Lazar <lijo.lazar@amd.com>,
+        YiPeng Chai <YiPeng.Chai@amd.com>,
+        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
+        Somalapuram Amaranath <Amaranath.Somalapuram@amd.com>,
+        Bokun Zhang <Bokun.Zhang@amd.com>,
+        Ville Syrjala <ville.syrjala@linux.intel.com>,
+        Li Yi <liyi@loongson.cn>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        Abhishek Sahu <abhsahu@nvidia.com>,
+        Yi Liu <yi.l.liu@intel.com>, kvm@vger.kernel.org,
+        nouveau@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        loongson-kernel@lists.loongnix.cn, amd-gfx@lists.freedesktop.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [Intel-gfx] [PATCH v2 1/2] vgaarb: various coding style and
+ comments fix
+Message-ID: <ZH8RslOfwIVf527x@ashyti-mobl2.lan>
+References: <20230604205831.3357596-1-15330273260@189.cn>
+ <ZH5epG6rfTOWT6CS@ashyti-mobl2.lan>
+ <f9e67fe9-a93b-75ab-1fdb-87d3783fe5fc@loongson.cn>
+ <680cea2e-7984-5f26-c440-46047f4733fa@189.cn>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <680cea2e-7984-5f26-c440-46047f4733fa@189.cn>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Sui,
 
-On Fri, 2023-06-02 at 20:28 +0200, Ben Hutchings wrote:
-> irq_cpu_rmap_release() calls cpu_rmap_put(), which may free the rmap.
-> So we need to clear the pointer to our glue structure in rmap before
-> doing that, not after.
->=20
-> Fixes: 4e0473f1060a ("lib: cpu_rmap: Avoid use after free on rmap->obj ..=
-.")
-> Signed-off-by: Ben Hutchings <ben@decadent.org.uk>
+On Tue, Jun 06, 2023 at 06:27:05PM +0800, Sui Jingfeng wrote:
+> Hi,
+> 
+> On 2023/6/6 10:06, Sui Jingfeng wrote:
+> > Originally, I also want to express the opinion.
+> 
+> 
+> Originally,  I want to express the same opinion as you told me.
+> 
+> Because vga_iostate_to_str() function is taking unsigned int parameter.
+> 
+> so, I think, using 'unsigned int *' type as the third parameter
+> vga_str_to_iostate() function is more suitable.
+> 
+> 
+> But this patch is too trivial, so I smash them into one patch.
 
-The patch LGTM, but please include the full blamed commit title into
-the fixes tag. A new version will be needed.
+it does not matter. Please keep patches separated. A trivial
+patch can be ignored, however lots of trivial patches in a bigger
+series might be appreciated.
 
-Also add Jacob and Saeed to the cc-list
+Have fun!
 
-Thanks,
-
-Paolo
-
+Andi
