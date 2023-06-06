@@ -2,110 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D06272468F
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:42:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D3A5724693
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:43:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238092AbjFFOmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 10:42:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41340 "EHLO
+        id S238414AbjFFOnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 10:43:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237908AbjFFOmX (ORCPT
+        with ESMTP id S238379AbjFFOm6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 10:42:23 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C15C2719
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 07:40:20 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (om126253223039.31.openmobile.ne.jp [126.253.223.39])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 23665AB;
-        Tue,  6 Jun 2023 16:39:13 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1686062355;
-        bh=qyqmnSxwDwLrbxk8+vjpFN2vWJrjzLzmUBFrL48Rkfw=;
+        Tue, 6 Jun 2023 10:42:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C2530CB;
+        Tue,  6 Jun 2023 07:41:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9FF2861261;
+        Tue,  6 Jun 2023 14:40:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 749F4C433D2;
+        Tue,  6 Jun 2023 14:40:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686062405;
+        bh=ghbtpfgzEXDZlStE43dHNyo9glR2yfvAKES2S5iqao0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=O4smJqs5dEKcDVHCfkFXhvvZxlZ37wGv8k7loP11UwO+eQEJjJv11rrjS/a9/JlDD
-         L+RlpZsRVK8FkPZhlAJ+QiL+70D/6XtzH0RHbEBLfnJtZ8Itfu8ZfPf+Dzo+HFjYwZ
-         qJvMdz7dyCVBQtyMGYZRL8EHzvAurt88+U0VvGZw=
-Date:   Tue, 6 Jun 2023 17:39:37 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Siddh Raman Pant <code@siddh.me>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Suraj Upadhyay <usuraj35@gmail.com>
-Subject: Re: [PATCH v9 4/8] drm: Remove usage of deprecated DRM_NOTE
-Message-ID: <20230606143937.GD5197@pendragon.ideasonboard.com>
-References: <cover.1686047727.git.code@siddh.me>
- <91d957dd92b41dda42da912397df195e3565866a.1686047727.git.code@siddh.me>
+        b=h9bki2IIyHiObYwlt0XmTTgUGm8+InDcRMFw+o9s5a89DTT5WIBZFbGXQBjF2yGjr
+         dUfmvE1sb5uGpA9/T+SZji32Q9ia4LFIrIiX1iLyMdVMtLK3tOL/B3DqGzWKI8nEr4
+         ABFEy56A3uRC3y9xb0KUyOBtuxFH+K0ZI+2JL4sptX/J8sqviCqB1xTeR0o/kgDord
+         tA+jZBs1UZgpOjeTEwP44O+9CrEpxUSQ+nVE2bi5+oe9pifrnVJsEeSkAZ5Ef40GJU
+         dB+JysfYjL/5rR+DIUyFi2USlyfiZrvu+i8Ypfk85+3d9EZEWenb2kNvViqPkV5QGB
+         FGuJhiyyW69TQ==
+Date:   Tue, 6 Jun 2023 15:39:59 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Alvin =?utf-8?Q?=C5=A0ipraga?= <ALSI@bang-olufsen.dk>
+Cc:     Alvin =?utf-8?Q?=C5=A0ipraga?= <alvin@pqrs.dk>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/4] ASoC: dt-bindings: document new symmetric-clock-role
+ flag
+Message-ID: <9ea5a0be-606e-4c65-914f-c249d3f1b513@sirena.org.uk>
+References: <20230602090322.1876359-1-alvin@pqrs.dk>
+ <20230602090322.1876359-2-alvin@pqrs.dk>
+ <3fe93662-82b0-4834-b6c3-473669c66210@sirena.org.uk>
+ <7csvw25vhyal2jsznb3jykuijxqpk7bzyguxvl7cyitosgga2w@pxmkce22cm3d>
+ <91b6d02a-25d5-4835-942e-3f8072bd8897@sirena.org.uk>
+ <aesymtpx5bkfkvlbt2d6o3gn4zjzsbyiwxiuqziohgovy7oaoo@kt2n6v7kmuw7>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="GvMNWsvRI2cx5zFa"
 Content-Disposition: inline
-In-Reply-To: <91d957dd92b41dda42da912397df195e3565866a.1686047727.git.code@siddh.me>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <aesymtpx5bkfkvlbt2d6o3gn4zjzsbyiwxiuqziohgovy7oaoo@kt2n6v7kmuw7>
+X-Cookie: Keep out of the sunlight.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Siddh,
 
-Thank you for the patch.
+--GvMNWsvRI2cx5zFa
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 06, 2023 at 04:15:18PM +0530, Siddh Raman Pant wrote:
-> drm_print.h says DRM_NOTE is deprecated in favor of drm_notice().
-> 
-> Signed-off-by: Siddh Raman Pant <code@siddh.me>
+On Fri, Jun 02, 2023 at 12:42:49PM +0000, Alvin =C5=A0ipraga wrote:
 
-With the commit message fixed as mentioned in the review of an earlier
-patch in this series,
+> Yes I see what you mean. On my platform the clock source is actually desc=
+ribed
+> by the common clock framework, so I would want to use that. If it were a
+> component driver then it would most likely be a codec that is part of the
+> dai-link anyway. So what about having two struct clk pointers in struct
+> snd_soc_dai?
+>=20
+>     struct snd_soc_dai {
+>         /* ... */
+>         struct clk *bitclock_provider;
+>         struct clk *frameclock_provider;
+>         /* ... */
+>     };
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+> If non-NULL I could then have the ASoC core enable/disable the clocks on =
+demand?
+> I would say in hw_params/hw_free, albeit that runs after set_fmt.
 
-> ---
->  drivers/gpu/drm/drm_displayid.c         | 2 +-
->  drivers/gpu/drm/drm_kms_helper_common.c | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/drm_displayid.c b/drivers/gpu/drm/drm_displayid.c
-> index 9edc111be7ee..27ffeee09e4f 100644
-> --- a/drivers/gpu/drm/drm_displayid.c
-> +++ b/drivers/gpu/drm/drm_displayid.c
-> @@ -42,7 +42,7 @@ validate_displayid(const u8 *displayid, int length, int idx)
->  	for (i = 0; i < dispid_length; i++)
->  		csum += displayid[idx + i];
->  	if (csum) {
-> -		DRM_NOTE("DisplayID checksum invalid, remainder is %d\n", csum);
-> +		drm_notice(NULL, "DisplayID checksum invalid, remainder is %d\n", csum);
->  		return ERR_PTR(-EINVAL);
->  	}
->  
-> diff --git a/drivers/gpu/drm/drm_kms_helper_common.c b/drivers/gpu/drm/drm_kms_helper_common.c
-> index 0bf0fc1abf54..7a41373b67dc 100644
-> --- a/drivers/gpu/drm/drm_kms_helper_common.c
-> +++ b/drivers/gpu/drm/drm_kms_helper_common.c
-> @@ -41,7 +41,7 @@ MODULE_LICENSE("GPL and additional rights");
->  /* Backward compatibility for drm_kms_helper.edid_firmware */
->  static int edid_firmware_set(const char *val, const struct kernel_param *kp)
->  {
-> -	DRM_NOTE("drm_kms_helper.edid_firmware is deprecated, please use drm.edid_firmware instead.\n");
-> +	drm_notice(NULL, "drm_kms_helper.edid_firmware is deprecated, please use drm.edid_firmware instead.\n");
->  
->  	return __drm_set_edid_firmware_path(val);
->  }
+hw_params() can be called repeatedly so that's not a good fit but
+broadly yes.
 
--- 
-Regards,
+> Having said that, I see ASoC doesn't really use the CCF much... am I way =
+off?
 
-Laurent Pinchart
+Ideally we'd be representing more of the clocking via the clock
+framework but at present yes.
+
+> I don't think it's feasible to modify every component driver to explicitly
+> handle this and then ignore any CBP_CFP bits set in its call to set_fmt -=
+ this
+> is why I want help from the ASoC core.
+
+Sure, but that's not going to impact the DT bindings.  All these things
+are driven from the machine driver.
+
+> > If simple-card can't be made to work that's fine, it's deprecated
+> > anyway.
+
+> Ah OK, I didn't know that. Right now I'm using graph-card2, that's not
+> deprecated, right?
+
+Yes, audio-graph-card replaces simple-card.
+
+--GvMNWsvRI2cx5zFa
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmR/RT4ACgkQJNaLcl1U
+h9AOGAf9EegtL3c4zrX74J8pQRZd4hNb4Sdz7YOKInPb59JgB7ox9bswVlvLt+d4
+BrkL3O10PUppYenoCq91zVnJV7QCXrJNwmt2PxxoAEm2QODPTgDGYF7qqIYVFqqZ
+DFeRW8iIXBl5H5pzm3ubN1JnnUBTBoN1HklWggVlPm6QDVMJlPa5DtmGtgXfICin
+bF7AZl/jmdRkl419mnCVn8IqnbxtxBkMdOfll8Mhl5m37708v/GBSJuu9NuMucYT
+qqPl8DAzGmFux4oQWugYZJo8xsjaHNOLbb+i3Lv1tXeW24BrM/G/o2tzXNs5NGl5
+RecfVJxwWf7elqqloUovb6ii2Be/HA==
+=EUDa
+-----END PGP SIGNATURE-----
+
+--GvMNWsvRI2cx5zFa--
