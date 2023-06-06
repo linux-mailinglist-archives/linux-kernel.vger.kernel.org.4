@@ -2,71 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69CE57234AE
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 03:43:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2F4D7234B1
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 03:45:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233892AbjFFBnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 21:43:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32860 "EHLO
+        id S232185AbjFFBpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 21:45:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231534AbjFFBnD (ORCPT
+        with ESMTP id S229663AbjFFBpH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 21:43:03 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 63DC0E8;
-        Mon,  5 Jun 2023 18:43:02 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.170])
-        by gateway (Coremail) with SMTP id _____8AxhfAlj35kF04AAA--.916S3;
-        Tue, 06 Jun 2023 09:43:01 +0800 (CST)
-Received: from [10.20.42.170] (unknown [10.20.42.170])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Ax6OQkj35kB5YBAA--.7263S3;
-        Tue, 06 Jun 2023 09:43:00 +0800 (CST)
-Message-ID: <f143968f-0c37-6cc6-f7ec-eed96be868a3@loongson.cn>
-Date:   Tue, 6 Jun 2023 09:43:00 +0800
+        Mon, 5 Jun 2023 21:45:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9662E10D
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 18:44:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686015859;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=h6c7qR5QQL6O5muxAxTGbpH+uE3aElnAVDLZ6FGcR/0=;
+        b=ZHpOLWesA6x+vFxNHqH/mMTaat+8G9WiAqw6+fscur+VXTKKRbSwlQy625NDYo+FfRdqZf
+        tZUtT/C7jE4k+rD9L4b4RiwHSfoWsq4wyJOi/kxBOC74xIwA7o0MxZHKaGi0R617i2PjKL
+        68jSX3zn6dNqzsKd6lpwLH7knU5Mc38=
+Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
+ [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-621-VkLWyYFGNtCRi2qywq4cuA-1; Mon, 05 Jun 2023 21:44:18 -0400
+X-MC-Unique: VkLWyYFGNtCRi2qywq4cuA-1
+Received: by mail-lf1-f71.google.com with SMTP id 2adb3069b0e04-4f624a4ea72so1296852e87.2
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 18:44:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686015856; x=1688607856;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=h6c7qR5QQL6O5muxAxTGbpH+uE3aElnAVDLZ6FGcR/0=;
+        b=ghMmJw5Qudm00Ab3giBHHOjZIUMFBT6dmMosQZ/zSEYJiDx9KcgcRRZ7ctRAv+8Jz8
+         maYfC9cn9ITvZ1e3AQnnQILYf8JIsKfrKjsFGOYX6zuENKvb2q1Ddr7FeExfXHakfH9X
+         r26XxuJCNKDqSFWajfBQH3/Gl2s5+kRxi7XoqfEBUp7POLQnJ237KkvZou2H+ah4lliX
+         cFJUKU2JyASR9uwdUKCwkuMglTmlFz1Gi3vlITy42/zJD4OxWq3yLRyQwzjC5PHbqSC4
+         eSdMv0ThpcvPMNxzxW44tw9/x2HF/SkA7ZwG9/BvpAgEH2BEtbzDNnPMFaVsr+WJFRvO
+         u6tw==
+X-Gm-Message-State: AC+VfDxgnb4+OOKgpGivNqzR9ReibdzaThfTuDPRr7dE0TeHJFWePJ6Q
+        hhuD10oe/N3yAe/MRIk8YSqAJg85g4Pz5IMUHouhZbpUgqi+H7+8jvhvkepxdChJ1UqkKeZ5MxJ
+        obZ3RPfRPOih8sXKzNbafIaz2nVJq46XaElr7Hhnl
+X-Received: by 2002:a19:f811:0:b0:4f6:392:6917 with SMTP id a17-20020a19f811000000b004f603926917mr409089lff.34.1686015856763;
+        Mon, 05 Jun 2023 18:44:16 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4LdqhwRhX6mWyAhRtL4quj5OgTJ37m/xJNaUVO3cTyp8wh7GV96jSwFQyT4Y3Rw2vO3pQ6Kflt1z/JonqWEvw=
+X-Received: by 2002:a19:f811:0:b0:4f6:392:6917 with SMTP id
+ a17-20020a19f811000000b004f603926917mr409084lff.34.1686015856464; Mon, 05 Jun
+ 2023 18:44:16 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v12 26/31] LoongArch: KVM: Implement kvm exception vector
-Content-Language: en-US
-To:     Tianrui Zhao <zhaotianrui@loongson.cn>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        loongarch@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
-        Mark Brown <broonie@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Xi Ruoyao <xry111@xry111.site>
-References: <20230530015223.147755-1-zhaotianrui@loongson.cn>
- <20230530015223.147755-27-zhaotianrui@loongson.cn>
-From:   "bibo, mao" <maobibo@loongson.cn>
-In-Reply-To: <20230530015223.147755-27-zhaotianrui@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Ax6OQkj35kB5YBAA--.7263S3
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7tFy3AFy8Gw17Zw4kCFW5XFc_yoW8tr4DpF
-        yfCwnIkr48W3W2vFyak3WqgrnxCayxKr17urs7G343uw4qqryrt3ykK397tF45KrWkZF1x
-        Za4DJr15uF4UG3cCm3ZEXasCq-sJn29KB7ZKAUJUUUUf529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUPGb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAF
-        wI0_Gr1j6F4UJwAaw2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2
-        xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_
-        ZF0_GryDMcIj6I8E87Iv67AKxVWxJVW8Jr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcV
-        AKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4
-        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
-        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Ar0_tr1lIxAIcVC0I7IYx2IY6xkF7I
-        0E14v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
-        Cr0_Gr1UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvj
-        xUxNeODUUUU
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20230605195925.51625-1-brett.creeley@amd.com>
+In-Reply-To: <20230605195925.51625-1-brett.creeley@amd.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Tue, 6 Jun 2023 09:44:05 +0800
+Message-ID: <CACGkMEvbWLZHeGww5_39BDkuKE1_L5YGAF6Wxq0u1cXPgdgf5g@mail.gmail.com>
+Subject: Re: [PATCH net] virtio_net: use control_buf for coalesce params
+To:     Brett Creeley <brett.creeley@amd.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        alvaro.karsz@solid-run.com, pabeni@redhat.com, kuba@kernel.org,
+        edumazet@google.com, davem@davemloft.net,
+        xuanzhuo@linux.alibaba.com, mst@redhat.com, shannon.nelson@amd.com,
+        allen.hubbe@amd.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,71 +79,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Bibo, Mao <maobibo@loongson.cn>
-
-在 2023/5/30 09:52, Tianrui Zhao 写道:
-> Implement kvm exception vector, using _kvm_fault_tables array to save
-> the handle function pointer and it is used when vcpu handle exit.
-> 
-> Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
+On Tue, Jun 6, 2023 at 3:59=E2=80=AFAM Brett Creeley <brett.creeley@amd.com=
+> wrote:
+>
+> Commit 699b045a8e43 ("net: virtio_net: notifications coalescing
+> support") added coalescing command support for virtio_net. However,
+> the coalesce commands are using buffers on the stack, which is causing
+> the device to see DMA errors. There should also be a complaint from
+> check_for_stack() in debug_dma_map_xyz(). Fix this by adding and using
+> coalesce params from the control_buf struct, which aligns with other
+> commands.
+>
+> Fixes: 699b045a8e43 ("net: virtio_net: notifications coalescing support")
+> Reviewed-by: Shannon Nelson <shannon.nelson@amd.com>
+> Signed-off-by: Allen Hubbe <allen.hubbe@amd.com>
+> Signed-off-by: Brett Creeley <brett.creeley@amd.com>
 > ---
->  arch/loongarch/kvm/exit.c | 48 +++++++++++++++++++++++++++++++++++++++
->  1 file changed, 48 insertions(+)
-> 
-> diff --git a/arch/loongarch/kvm/exit.c b/arch/loongarch/kvm/exit.c
-> index 10f9922a7e76..625045fc95c8 100644
-> --- a/arch/loongarch/kvm/exit.c
-> +++ b/arch/loongarch/kvm/exit.c
-> @@ -657,3 +657,51 @@ static int _kvm_handle_fpu_disabled(struct kvm_vcpu *vcpu)
->  	kvm_own_fpu(vcpu);
->  	return RESUME_GUEST;
->  }
-> +
-> +/*
-> + * Loongarch KVM callback handling for not implemented guest exiting
-> + */
-> +static int _kvm_fault_ni(struct kvm_vcpu *vcpu)
-> +{
-> +	unsigned long estat, badv;
-> +	unsigned int exccode, inst;
-> +
-> +	/*
-> +	 *  Fetch the instruction.
-> +	 */
-> +	badv = vcpu->arch.badv;
-> +	estat = vcpu->arch.host_estat;
-> +	exccode = (estat & CSR_ESTAT_EXC) >> CSR_ESTAT_EXC_SHIFT;
-> +	inst = vcpu->arch.badi;
-> +	kvm_err("Exccode: %d PC=%#lx inst=0x%08x BadVaddr=%#lx estat=%#lx\n",
-> +			exccode, vcpu->arch.pc, inst, badv, read_gcsr_estat());
-> +	kvm_arch_vcpu_dump_regs(vcpu);
-> +	vcpu->run->exit_reason = KVM_EXIT_INTERNAL_ERROR;
-> +
-> +	return RESUME_HOST;
-> +}
-> +
-> +static exit_handle_fn _kvm_fault_tables[EXCCODE_INT_START] = {
-> +	[EXCCODE_TLBL]		= _kvm_handle_read_fault,
-> +	[EXCCODE_TLBI]		= _kvm_handle_read_fault,
-> +	[EXCCODE_TLBNR]		= _kvm_handle_read_fault,
-> +	[EXCCODE_TLBNX]		= _kvm_handle_read_fault,
-> +	[EXCCODE_TLBS]		= _kvm_handle_write_fault,
-> +	[EXCCODE_TLBM]		= _kvm_handle_write_fault,
-> +	[EXCCODE_FPDIS]		= _kvm_handle_fpu_disabled,
-> +	[EXCCODE_GSPR]		= _kvm_handle_gspr,
-> +};
-> +
-> +int _kvm_handle_fault(struct kvm_vcpu *vcpu, int fault)
-> +{
-> +	return _kvm_fault_tables[fault](vcpu);
-> +}
-> +
-> +void _kvm_init_fault(void)
-> +{
-> +	int i;
-> +
-> +	for (i = 0; i < EXCCODE_INT_START; i++)
-> +		if (!_kvm_fault_tables[i])
-> +			_kvm_fault_tables[i] = _kvm_fault_ni;
-> +}
+>  drivers/net/virtio_net.c | 16 ++++++++--------
+
+The patch is needed for -stable I think.
+
+Acked-by: Jason Wang <jasowang@redhat.com>
+
+Thanks
+
+>  1 file changed, 8 insertions(+), 8 deletions(-)
+>
+> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> index 56ca1d270304..486b5849033d 100644
+> --- a/drivers/net/virtio_net.c
+> +++ b/drivers/net/virtio_net.c
+> @@ -205,6 +205,8 @@ struct control_buf {
+>         __virtio16 vid;
+>         __virtio64 offloads;
+>         struct virtio_net_ctrl_rss rss;
+> +       struct virtio_net_ctrl_coal_tx coal_tx;
+> +       struct virtio_net_ctrl_coal_rx coal_rx;
+>  };
+>
+>  struct virtnet_info {
+> @@ -2934,12 +2936,10 @@ static int virtnet_send_notf_coal_cmds(struct vir=
+tnet_info *vi,
+>                                        struct ethtool_coalesce *ec)
+>  {
+>         struct scatterlist sgs_tx, sgs_rx;
+> -       struct virtio_net_ctrl_coal_tx coal_tx;
+> -       struct virtio_net_ctrl_coal_rx coal_rx;
+>
+> -       coal_tx.tx_usecs =3D cpu_to_le32(ec->tx_coalesce_usecs);
+> -       coal_tx.tx_max_packets =3D cpu_to_le32(ec->tx_max_coalesced_frame=
+s);
+> -       sg_init_one(&sgs_tx, &coal_tx, sizeof(coal_tx));
+> +       vi->ctrl->coal_tx.tx_usecs =3D cpu_to_le32(ec->tx_coalesce_usecs)=
+;
+> +       vi->ctrl->coal_tx.tx_max_packets =3D cpu_to_le32(ec->tx_max_coale=
+sced_frames);
+> +       sg_init_one(&sgs_tx, &vi->ctrl->coal_tx, sizeof(vi->ctrl->coal_tx=
+));
+>
+>         if (!virtnet_send_command(vi, VIRTIO_NET_CTRL_NOTF_COAL,
+>                                   VIRTIO_NET_CTRL_NOTF_COAL_TX_SET,
+> @@ -2950,9 +2950,9 @@ static int virtnet_send_notf_coal_cmds(struct virtn=
+et_info *vi,
+>         vi->tx_usecs =3D ec->tx_coalesce_usecs;
+>         vi->tx_max_packets =3D ec->tx_max_coalesced_frames;
+>
+> -       coal_rx.rx_usecs =3D cpu_to_le32(ec->rx_coalesce_usecs);
+> -       coal_rx.rx_max_packets =3D cpu_to_le32(ec->rx_max_coalesced_frame=
+s);
+> -       sg_init_one(&sgs_rx, &coal_rx, sizeof(coal_rx));
+> +       vi->ctrl->coal_rx.rx_usecs =3D cpu_to_le32(ec->rx_coalesce_usecs)=
+;
+> +       vi->ctrl->coal_rx.rx_max_packets =3D cpu_to_le32(ec->rx_max_coale=
+sced_frames);
+> +       sg_init_one(&sgs_rx, &vi->ctrl->coal_rx, sizeof(vi->ctrl->coal_rx=
+));
+>
+>         if (!virtnet_send_command(vi, VIRTIO_NET_CTRL_NOTF_COAL,
+>                                   VIRTIO_NET_CTRL_NOTF_COAL_RX_SET,
+> --
+> 2.17.1
+>
 
