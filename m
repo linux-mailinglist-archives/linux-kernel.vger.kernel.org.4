@@ -2,168 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D72272375F
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 08:14:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DEEA72376A
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 08:18:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234783AbjFFGOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 02:14:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59790 "EHLO
+        id S232014AbjFFGSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 02:18:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234675AbjFFGOk (ORCPT
+        with ESMTP id S229618AbjFFGSF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 02:14:40 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13DDA106
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 23:14:38 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-5149390b20aso8559736a12.3
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 23:14:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686032076; x=1688624076;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=c9/ke8vQiyBtX+dMh7jOybxE1aXL3oACs0/tXuO+L4U=;
-        b=eWY5hKNC6JKDtcg4koedkUquXkdz4Qm7ioMxMxeSjG40XG3NTMTnzK7wOpWQfTHpZM
-         3UipQrboWk2BEtNpxv9nzlw7CkPmQzMREcltPyxNq7b+1A48GKNiLAYrDYMQDD2CxpgU
-         jKFLfBUWdm1nlGtj5XilnON1j3BW3L0Vfde6K1BcsaaJAHUoDPUCrwiygj+BBINUFoQG
-         +mfNC3eVh7aFzeMtwa4CM0CjLBCegI8dvl1QgNKPSF62tBw2cUrpCPzE92UTSO/rWrSD
-         vKVw291npS8n956cbRw5LDbVtiwsemu4h3S1VOup36wy3m1ZJpmQpb1Djcf4XRP2IgbL
-         Tq5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686032076; x=1688624076;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=c9/ke8vQiyBtX+dMh7jOybxE1aXL3oACs0/tXuO+L4U=;
-        b=KkK2X5KOWOhgHnwc9/mcx40cEdanIXtR3OmLFeSNuGXkCSHxvDhhO7WntnVYx3wagf
-         31iR9t5B2Bip3IqmG4BXY9ap4BYmsfWQQd8NPzjRxT2IPIevanf0blBo7jZBSRY5Ijwl
-         GcwL4F+Vq5uVi4DnjieBzxkHpSJyCM/rj+YMLGc78haiV13I9amJ5msHLLX79A1UrWoY
-         S+xgpEDdiaatJs3ZMRPPaMRaYek2wVQja67Lh9WYj2GiiYjwWy424fNvHC2SX+2JuFpj
-         ldKxXmeGYVGdWmKQ/l1w0Vm44OeZvzXXFrmQLBH96kJyUFtkmOgyiPuRkUjAajfVixhd
-         /bsw==
-X-Gm-Message-State: AC+VfDxPMsi1PSoHY5l6qJ3bcHeeclQ8u61/W/xxm10J20H+I/iUyzIv
-        zun6Y6/VE08Upjd1vvoAHf3abA==
-X-Google-Smtp-Source: ACHHUZ64Z9lKKWilVnf6tdOypQFOM3iC4izULYvUu+KGcG0PYJwTnO62ZR0THx9JxKoLkPlyBtVhVA==
-X-Received: by 2002:aa7:d3c3:0:b0:516:4394:244f with SMTP id o3-20020aa7d3c3000000b005164394244fmr954905edr.12.1686032076496;
-        Mon, 05 Jun 2023 23:14:36 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id s25-20020aa7c559000000b005163c39645bsm4672584edr.51.2023.06.05.23.14.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Jun 2023 23:14:36 -0700 (PDT)
-Message-ID: <d187eafb-4a80-9479-d063-3a01b47d8efa@linaro.org>
-Date:   Tue, 6 Jun 2023 08:14:33 +0200
+        Tue, 6 Jun 2023 02:18:05 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB92F187;
+        Mon,  5 Jun 2023 23:18:04 -0700 (PDT)
+Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3566H60N032011;
+        Tue, 6 Jun 2023 06:18:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=vZKW3V+0ehn9Nx7MGBRdIeAM1+u3OGaDAoTtyJ/yuDI=;
+ b=o0l3PEtn0TRbo3Px0JDtLBBOwKHe+ibG4peS64A/M/dEMRy5zZ8L6QFBBuSXeu2PvryH
+ JXBOMaSkEpp/jRBC9o/IZA6lU+S5bEJ01G+gS3J4sr5HUpmrgpG1QAPKoopOWirA4JP7
+ VECUjABgspl6ZOWIT/SbON7RkiSyUeqqNRCxQfo+Mx2VSP3JQb1bH9vgU3Ygf35BrdyL
+ neYXaxqvoNbchZSo4Liyf3rOXTcWXmzWiX4d1je6WlvwhyUzJrYtuKpr5kO9w1IeMKJP
+ 6o2icMZapJvd1aL9zYKsPWCyRwdoqjp1Ow5staf/gxuDI1flEXp0GAcidwnfH4k/v1tc 6g== 
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r1ycyg0ej-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Jun 2023 06:18:01 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3560fmP3032090;
+        Tue, 6 Jun 2023 06:17:59 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3qyxdfhde5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Jun 2023 06:17:58 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3566HuDV45613512
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 6 Jun 2023 06:17:56 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 92EBE2004B;
+        Tue,  6 Jun 2023 06:17:56 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1D5AB20040;
+        Tue,  6 Jun 2023 06:17:56 +0000 (GMT)
+Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
+        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Tue,  6 Jun 2023 06:17:56 +0000 (GMT)
+Received: from bgray-lenovo-p15.ozlabs.ibm.com (haven.au.ibm.com [9.192.254.114])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 7F39D600E2;
+        Tue,  6 Jun 2023 16:17:54 +1000 (AEST)
+From:   Benjamin Gray <bgray@linux.ibm.com>
+To:     masahiroy@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        Benjamin Gray <bgray@linux.ibm.com>,
+        Andrew Donnellan <ajd@linux.ibm.com>
+Subject: [PATCH v2] initramfs: Encode dependency on KBUILD_BUILD_TIMESTAMP
+Date:   Tue,  6 Jun 2023 16:17:41 +1000
+Message-Id: <20230606061741.69755-1-bgray@linux.ibm.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH V2 01/13] dt-bindings: remoteproc: qcom: Add support for
- multipd model
-Content-Language: en-US
-To:     Manikanta Mylavarapu <quic_mmanikan@quicinc.com>,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, jassisinghbrar@gmail.com,
-        mathieu.poirier@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, quic_eberman@quicinc.com, quic_mojha@quicinc.com,
-        kvalo@kernel.org, loic.poulain@linaro.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Cc:     quic_srichara@quicinc.com, quic_sjaganat@quicinc.com,
-        quic_kathirav@quicinc.com, quic_anusha@quicinc.com,
-        quic_poovendh@quicinc.com, quic_varada@quicinc.com,
-        quic_devipriy@quicinc.com
-References: <20230521222852.5740-1-quic_mmanikan@quicinc.com>
- <20230521222852.5740-2-quic_mmanikan@quicinc.com>
- <7940c743-815f-f864-d015-43d7e916ecfa@linaro.org>
- <a1456f62-d0a7-d5ec-b379-db1b6035c89c@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <a1456f62-d0a7-d5ec-b379-db1b6035c89c@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: fh-NLYIatZnQMwJJ_2tsz0NikhP-9Q76
+X-Proofpoint-ORIG-GUID: fh-NLYIatZnQMwJJ_2tsz0NikhP-9Q76
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-06_03,2023-06-05_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
+ mlxlogscore=999 lowpriorityscore=0 suspectscore=0 bulkscore=0 phishscore=0
+ impostorscore=0 malwarescore=0 clxscore=1011 spamscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2306060051
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/06/2023 14:02, Manikanta Mylavarapu wrote:
->>> +  memory-region:
->>> +    items:
->>> +      - description: Q6 pd reserved region
->>> +
->>> +  glink-edge:
->>> +    $ref: /schemas/remoteproc/qcom,glink-edge.yaml#
->>> +    description:
->>> +      Qualcomm G-Link subnode which represents communication edge, channels
->>> +      and devices related to the Modem.
->>> +
->>> +patternProperties:
->>> +  "^pd-1|pd-2|pd-3":
->>> +    type: object
->>> +    description:
->>> +      In Multipd model, WCSS pd depends on Q6 pd i.e Q6 pd should be up before
->>> +      WCSS. It can be achieved by keeping wcss pd node as subnode of Q6
->>> +      device node.
->>
->> That's not enough. Your description does not say what is this, why you
->> have two protection domains for same compatible. What's more, it a bit
->> deviates from hardware description.
->>
-> WCSS means 'wireless connectivity sub system', in simple words it's a
-> wifi radio block.
-> 
-> IPQ5018 SOC has both internal (AHB) wifi radio/WCSS and external (PCIE)
-> wifi radio/WCSS. In Q6, Root protection domain will provide services to
-> both internal (AHB) and external (PCIE) wifi radio's protection domain.
-> So we have two protection domains for IPQ5018, one is for internal(AHB) 
-> and other is for external(PCIE) wifi radio.
+gen_initramfs.sh has an internal dependency on KBUILD_BUILD_TIMESTAMP
+for generating file mtimes that is not exposed to make, so changing
+KBUILD_BUILD_TIMESTAMP will not trigger a rebuild of the archive.
 
-So it is now in email, but not in the code...
-> 
->>> +
->>> +    properties:
->>> +      compatible:
->>> +        enum:
->>> +          - qcom,ipq5018-wcss-ahb-mpd
->>> +          - qcom,ipq9574-wcss-ahb-mpd
->>> +          - qcom,ipq5018-wcss-pcie-mpd
->>
->> Keep rather alphabetical order (so both 5018 together).
->>
->> I also do not understand these at all. Why adding bus type to
->> compatible? This rarely is allowed (unless it is PCIe controller within
->> soc).
->>
-> IPQ5018 SOC has in-built PCIE controller. Here QDSP6 will bring up
-> external(PCIE) and internal (AHB) wifi radio's. To separate AHB, PCIE 
-> radio's properties, i have added bus type to compatible.
+Declare the mtime date as a new parameter to gen_initramfs.sh to encode
+KBUILD_BUILD_TIMESTAMP in the shell command, thereby making make aware
+of the dependency.
 
-It's the same device - WCSS - right? We do not create multiple nodes and
-compatibles for the same devices. Bus suffixes are almost never parts of
-compatibles.
+It will rebuild if KBUILD_BUILD_TIMESTAMP changes or is newly set/unset.
+It will _not_ rebuild if KBUILD_BUILD_TIMESTAMP is unset before and
+after. This should be fine for anyone who doesn't care about setting
+specific build times in the first place.
 
+Reviewed-by: Andrew Donnellan <ajd@linux.ibm.com>
+Tested-by: Andrew Donnellan <ajd@linux.ibm.com>
+Signed-off-by: Benjamin Gray <bgray@linux.ibm.com>
 
->>
->> Drop.
->>
->>> +
->>> +unevaluatedProperties: false
->>
->> This changed... why?
->>
->>
-> 'unevaluatedProperties' is similar to 'additionalProperties' except
-> that it recognize properties declared in subschemas as well.
+---
 
-You don't have to explain me what are unevaluatedProperties or
-additionalProperties. Let's assume that I know them. What you should
-explain is why you changed it. Where is the reference to other schema?
+v2: Remove redundant comment, quote argument to shell script
+---
+ usr/Makefile         |  1 +
+ usr/gen_initramfs.sh | 16 +++++++++-------
+ 2 files changed, 10 insertions(+), 7 deletions(-)
 
-
-Best regards,
-Krzysztof
+diff --git a/usr/Makefile b/usr/Makefile
+index 59d9e8b07a01..f8e1ad19e05c 100644
+--- a/usr/Makefile
++++ b/usr/Makefile
+@@ -64,6 +64,7 @@ quiet_cmd_initfs = GEN     $@
+ 	$(CONFIG_SHELL) $< -o $@ -l $(obj)/.initramfs_data.cpio.d \
+ 	$(if $(CONFIG_INITRAMFS_ROOT_UID), -u $(CONFIG_INITRAMFS_ROOT_UID)) \
+ 	$(if $(CONFIG_INITRAMFS_ROOT_GID), -g $(CONFIG_INITRAMFS_ROOT_GID)) \
++	$(if $(KBUILD_BUILD_TIMESTAMP), -d "$(KBUILD_BUILD_TIMESTAMP)") \
+ 	$(ramfs-input)
+ 
+ # We rebuild initramfs_data.cpio if:
+diff --git a/usr/gen_initramfs.sh b/usr/gen_initramfs.sh
+index 63476bb70b41..14b5782f961a 100755
+--- a/usr/gen_initramfs.sh
++++ b/usr/gen_initramfs.sh
+@@ -23,6 +23,7 @@ $0 [-o <file>] [-l <dep_list>] [-u <uid>] [-g <gid>] {-d | <cpio_source>} ...
+ 	-g <gid>       Group ID to map to group ID 0 (root).
+ 		       <gid> is only meaningful if <cpio_source> is a
+ 		       directory.  "squash" forces all files to gid 0.
++	-d <date>      Use date for all file mtime values
+ 	<cpio_source>  File list or directory for cpio archive.
+ 		       If <cpio_source> is a .cpio file it will be used
+ 		       as direct input to initramfs.
+@@ -190,6 +191,7 @@ prog=$0
+ root_uid=0
+ root_gid=0
+ dep_list=
++timestamp=
+ cpio_list=$(mktemp ${TMPDIR:-/tmp}/cpiolist.XXXXXX)
+ output="/dev/stdout"
+ 
+@@ -218,6 +220,13 @@ while [ $# -gt 0 ]; do
+ 			[ "$root_gid" = "-1" ] && root_gid=$(id -g || echo 0)
+ 			shift
+ 			;;
++		"-d")	# date for file mtimes
++			timestamp="$(date -d"$1" +%s || :)"
++			if test -n "$timestamp"; then
++				timestamp="-t $timestamp"
++			fi
++			shift
++			;;
+ 		"-h")
+ 			usage
+ 			exit 0
+@@ -237,11 +246,4 @@ done
+ 
+ # If output_file is set we will generate cpio archive
+ # we are careful to delete tmp files
+-timestamp=
+-if test -n "$KBUILD_BUILD_TIMESTAMP"; then
+-	timestamp="$(date -d"$KBUILD_BUILD_TIMESTAMP" +%s || :)"
+-	if test -n "$timestamp"; then
+-		timestamp="-t $timestamp"
+-	fi
+-fi
+ usr/gen_init_cpio $timestamp $cpio_list > $output
+-- 
+2.40.1
 
