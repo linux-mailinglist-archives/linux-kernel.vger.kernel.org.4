@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 807E7723719
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 08:04:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1D7372371A
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 08:04:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234638AbjFFGEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 02:04:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53148 "EHLO
+        id S234167AbjFFGEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 02:04:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234050AbjFFGDj (ORCPT
+        with ESMTP id S233999AbjFFGDj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 6 Jun 2023 02:03:39 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2052.outbound.protection.outlook.com [40.107.244.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EAD0E5D
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2083.outbound.protection.outlook.com [40.107.243.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C03E6E5E
         for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 23:03:31 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=guEDIWGq7PfZ7aYVp4aC3H0DnUd6YbktbqpxIndfS/v/twgIWalrAMHPShAu5ofN5l2kVmMx6/JLAjF5anYQC1ez72nLQjni4pcjBS7zFBQW1HiiXAZr9OnZRV67YC1IHz9QEL+nu3abPSVRjfTzhmqeHwsK8pyUFrWsDEwCszqNKPZneIForJGKj/tB6orMwkhm/Wt7KL6MPkm2KMBmgLSBq7y/H5txdzMcRek/aZ3iilTxx2Rr6EEvJj26kYCU9XMhFMLF/GM7ff2doayWtr4N3o4sC/lE1VXlZRhF+MirVFWAin6JjfFI6HtCFcwbBO26UHll7Ccq9IKpSmZVXQ==
+ b=W37iaPuE4/AUUlmPVAf7IXQ03gNcsptkU49U0kJ/GN7NnUhr6+ayJ0uicOh7hiqOiXU8tq0jxrucNkxvzkvwDV5mR5ODHnVK6O1jU2LkgvRR97Nr7fmX1cM1wywgI9HpVwlmi5mlzdE+TVPR0SPTx5QkKJ9nHVVyhdgUIOTLh+CzKMgvg50bxBPD2hK9ICQuXN23u+kVViEkL6qNUTTk+/3mUJUMDsO7A/x1dZTIz5yq369JrdysMl9ZE2zr5pArE68H09mXZahaDVxtgLCH3er6ndvIHqnce6tI1008FD0VYuRWODoB7Zy33tyIXKeFfHOsYzMWzQ/PVCy+Ean2rA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zGoQxjYqHo1ec0cAyGhnXY0fduMTxAF72NonLHDnHFg=;
- b=YU3Rm/lpmIg8ORPeMTpXLAuPqGfqYVYANmY8V6RFjm58m1LLYrBgO0rzmTEylf9PkDmA0BlYT7brNWa5/sAPZmpHGNI/4RKbe0bWyw5agBR6QtBVnQmi7dLDXVH6BYNN0Kr0rzTjUepoiUm9kal6uDeKxT4PSO43LwL3/MCJS4/wftqIiJJYYD7CsQNkYjqcNbtYA7xivtvMFlG0c9XuFysbPF/iV9rocHiV76Rqa1ebtLa5Z7j+cQZJmwedp8ZDz7AonpP3aed1cvuChHrRsx9RonVAw4mowA1H90A5FHzyfvw66eAc5p5vD1f9C19+DMMkSRyGOENlzKErKJg5lg==
+ bh=lJPO76LeVbRLT6xdNfAEfol9vXoNWf/MqxjxFnE4yls=;
+ b=UCIFglv1UF5hZxnj84kq+ZYaBesH75Vj6nM6knsPNhMLdVI+3E57P69Qyx4P+iZvy7YOzTrgFcG5adCvnxyo0njxN5H0s2BIZg4GO8Ue3yML0skQhjsvOLZqqOIV8uxs99T1BOibasKPwP+S/JISAGDyoxU4xPjLv4XH7j9pWnrKSo9Z52LyPKnM5Vg9JFg28sMOTs6ioCJ0MPgR5Stx6Ry66puKtXdSnmUm8ILRxZ+5PEuqT/LNKIIPlWlGYinZCmvH489HYDxVCdg9VmwF0fGPEBPW3JMjYjAAb/DgozQAH5SAAvwd9yxOj1jNWlihZ2pZvhxPC5z8bWya35MQNg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zGoQxjYqHo1ec0cAyGhnXY0fduMTxAF72NonLHDnHFg=;
- b=NsV30WCzTChyEIjvW2JkWe08qJ8vrTP9oHV8YGFpWscwpP+aY6NNFdZ+R4+r2fXSs6u9M44zStM7jgjIxM2657D0b+yXz0EN4FA4Ow22UEgcdh3+5a3/th3JcDQlMzDsj1F+l3OUpl51NNtAtZJrZ/hP5twBhsLsJg63PwPnLUM=
-Received: from DM6PR02CA0037.namprd02.prod.outlook.com (2603:10b6:5:177::14)
- by BL1PR12MB5921.namprd12.prod.outlook.com (2603:10b6:208:398::5) with
+ bh=lJPO76LeVbRLT6xdNfAEfol9vXoNWf/MqxjxFnE4yls=;
+ b=2+gvkwMMQU5wVAetx7WjCouJjEZjSQA8ZPSCGPIhPr323nwZ8T2GDtEXNgtMm4didI7+Bgus4XLeLFj9d61BlQ/Lp5SWi5OlbDNEbPlK0yNJ4nn+WfTkrXQaxKyhrB4TaPbm5ecUxgacz9+4X/23ZEoPq3TuADNqCMTixp3mgic=
+Received: from DM6PR07CA0087.namprd07.prod.outlook.com (2603:10b6:5:337::20)
+ by SJ2PR12MB8829.namprd12.prod.outlook.com (2603:10b6:a03:4d0::7) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Tue, 6 Jun
- 2023 06:03:28 +0000
-Received: from CY4PEPF0000EDD7.namprd03.prod.outlook.com
- (2603:10b6:5:177:cafe::87) by DM6PR02CA0037.outlook.office365.com
- (2603:10b6:5:177::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.32; Tue, 6 Jun
+ 2023 06:03:29 +0000
+Received: from CY4PEPF0000EDD3.namprd03.prod.outlook.com
+ (2603:10b6:5:337:cafe::ab) by DM6PR07CA0087.outlook.office365.com
+ (2603:10b6:5:337::20) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33 via Frontend
  Transport; Tue, 6 Jun 2023 06:03:28 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
@@ -47,16 +47,20 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CY4PEPF0000EDD7.mail.protection.outlook.com (10.167.241.211) with Microsoft
+ CY4PEPF0000EDD3.mail.protection.outlook.com (10.167.241.207) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.20.6477.13 via Frontend Transport; Tue, 6 Jun 2023 06:03:28 +0000
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB04.amd.com
+Received: from SATLEXMB08.amd.com (10.181.40.132) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 6 Jun
- 2023 01:03:22 -0500
+ 2023 01:03:27 -0500
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB08.amd.com
+ (10.181.40.132) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 5 Jun
+ 2023 23:03:27 -0700
 Received: from vijendar-X570-GAMING-X.amd.com (10.180.168.240) by
  SATLEXMB03.amd.com (10.181.40.144) with Microsoft SMTP Server id 15.1.2375.34
- via Frontend Transport; Tue, 6 Jun 2023 01:03:18 -0500
+ via Frontend Transport; Tue, 6 Jun 2023 01:03:23 -0500
 From:   Vijendar Mukunda <Vijendar.Mukunda@amd.com>
 To:     <broonie@kernel.org>
 CC:     <alsa-devel@alsa-project.org>,
@@ -68,10 +72,11 @@ CC:     <alsa-devel@alsa-project.org>,
         Liam Girdwood <lgirdwood@gmail.com>,
         Jaroslav Kysela <perex@perex.cz>,
         Takashi Iwai <tiwai@suse.com>,
+        Syed Saba Kareem <Syed.SabaKareem@amd.com>,
         open list <linux-kernel@vger.kernel.org>
-Subject: [PATCH V3 6/9] ASoC: amd: ps: add pm ops support for SoundWire dma driver
-Date:   Tue, 6 Jun 2023 11:37:21 +0530
-Message-ID: <20230606060724.2038680-7-Vijendar.Mukunda@amd.com>
+Subject: [PATCH V3 7/9] ASoC: amd: ps: enable SoundWire dma driver build
+Date:   Tue, 6 Jun 2023 11:37:22 +0530
+Message-ID: <20230606060724.2038680-8-Vijendar.Mukunda@amd.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230606060724.2038680-1-Vijendar.Mukunda@amd.com>
 References: <20230606060724.2038680-1-Vijendar.Mukunda@amd.com>
@@ -80,23 +85,23 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000EDD7:EE_|BL1PR12MB5921:EE_
-X-MS-Office365-Filtering-Correlation-Id: fb1080bf-1d84-43dd-1a20-08db6653bf53
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000EDD3:EE_|SJ2PR12MB8829:EE_
+X-MS-Office365-Filtering-Correlation-Id: 99b13bec-ad8c-4cf4-82bc-08db6653bf92
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: CpU4ibb16Ule96QkXyYlzjCCxel4B8N7Q3CeejJ+gyxwbq0/RxgnmeQnIIT6R463NjAFJ0w5edZYwlF7ycsLJyvkG7Eu8C9A4780hiNRfijJik9MQ5WYDZAk2Z+CFzD+c97CyrXgbT2q1/M6nHEByDGDuZ7H9bQ/hC6Q2y1hVXWj0S6Uop36NwsWJZr3E5MXDir5jmftEgByar85+ix1mJGIeOHpeKdnPk+L6UzkEQBFPaWjhBCqUVB6CfeSXkGvPl7GqluB1K6YwHpbuNi+IlJnisA/avtfCaK1eVY06qTssGxuIQ0IJ4JTt2YkZyrYDqP7rKy3lfcmVvBfdF/DlyJ6EDU1rKHM5s+ab4w89gYFqSGFMoBplpDJtPLCOnCt9jjaK6oBDcfetkV4D/DzXh3CibMOmhErhcNHnNtogmEiP4HEJfcW5YLaCQQCT6mCk3/pU33i7iLePhwR/YQQVcFkcNyCLhtgnMWK+5FeSKGlWnf2jJHwVoOF4UBdqMfQCyJ6fAyWXjYyJVJcruuyV07HLIS5YnL6FIOlWcnmpfogN6J//skj5sHT1FOjTZ3LisnWwMVGir3+ITFBD/RMiSmFFYSVrYueChHjnlkuHthp9z/GVDhFcewVfn3S6yXpADSuV0webi5fDB5kF7KMskMbqnwV8OpiMv/lNpzqTmRSHTkKfo9FaNzoex9FnEPrWVvQuA6McQva9Gfd2n23ufFYG3oJFfnvkvMrCvAnZqAWtSgmrXQqNJK5Wms/benV6Pd16sZxftzlcqYacyxY8Q==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(376002)(396003)(39860400002)(451199021)(46966006)(40470700004)(36840700001)(54906003)(40460700003)(40480700001)(478600001)(6916009)(8936002)(8676002)(2906002)(36756003)(86362001)(5660300002)(82310400005)(4326008)(81166007)(316002)(70206006)(70586007)(356005)(82740400003)(2616005)(41300700001)(1076003)(26005)(36860700001)(47076005)(83380400001)(186003)(7696005)(6666004)(336012)(426003)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: QuvxfK9gkBuPpZhKJAhsV+mhSgsEWrMfqvVUdwZcjIcULjCBVK32e0HMBXEiUOnLPvkiB7gJiVDfoD2b7VC5PERGx+CQ49qHIIAGwKcrXnULSnVWoLO0SVJgyO0K7aYzN0u6ehuim2JD+8zxuw6JfjHJezVdk5JKvEiGiU06qgsNQMDsbtVID6YhWANvqoMhaE8vbftqJHM0mA/Bf2BikwFWVraan1E0SnuRBzTv+Fved8BXyGEB1ToUVV3YIfFTmTG/mTDMyhb1NFVEcawiBxkJsoewgSTsATnCTv3hydSqVR4v63C2Y7lrBsAgBCzZT56vTdG/lrsNur1RuGtTEK/mxDIPbfSwBD8yMAUysWxtYeH2JulsyjCrYTgQnynFF9VrO+VfSrfn4J1QUmQtoL+XKglUU3IlhU5ja0lUBK9fmhs7sVBXUuwb5YKx0zptS53RX8xCsD17UdtYJm9Tm/XgWeLgR0HbDhvpMfIphTuEAoeH4jWYDMuAOM+Mx+2tBOPvAnNf2q/b+Ajcd/lfma95CHUj06e9e1EHRU9HRMAgjOG2i9CxV/2o3J7IXi1Q8b6FCEsiRWX0JLloUG6IhkFgIgAlfgdI/quPHw/nw7zcnz47eOUsOzaFf2smuuKTC9fBGGQRTAWgb7THj5JFohon3anfp1mdOO7nQEL7fTM5zP38NmzxpB3vO8JUCYAVWE7pUHlXjLa7iGP1mT1fnMKcnfN+pZGDnbNDbKcXeNEqQDREDEohmRM4t/92v4X2QyUg4oBpSnTaS7oqYB//VA==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(136003)(346002)(376002)(451199021)(40470700004)(46966006)(36840700001)(40460700003)(426003)(336012)(4744005)(2906002)(47076005)(2616005)(36756003)(82310400005)(86362001)(356005)(81166007)(82740400003)(36860700001)(40480700001)(7696005)(41300700001)(316002)(5660300002)(8936002)(8676002)(54906003)(478600001)(70206006)(4326008)(70586007)(26005)(1076003)(6916009)(186003)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2023 06:03:28.0332
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2023 06:03:28.4488
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: fb1080bf-1d84-43dd-1a20-08db6653bf53
+X-MS-Exchange-CrossTenant-Network-Message-Id: 99b13bec-ad8c-4cf4-82bc-08db6653bf92
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000EDD7.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000EDD3.namprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5921
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8829
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
@@ -108,144 +113,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support pm ops support for SoundWire dma driver.
+Enable SoundWire dma driver build for PS platform.
 
 Signed-off-by: Vijendar Mukunda <Vijendar.Mukunda@amd.com>
 ---
- sound/soc/amd/ps/ps-sdw-dma.c | 98 ++++++++++++++++++++++++++++++++++-
- 1 file changed, 96 insertions(+), 2 deletions(-)
+ sound/soc/amd/ps/Makefile | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/sound/soc/amd/ps/ps-sdw-dma.c b/sound/soc/amd/ps/ps-sdw-dma.c
-index 06d847c6a50e..118f4c3674ab 100644
---- a/sound/soc/amd/ps/ps-sdw-dma.c
-+++ b/sound/soc/amd/ps/ps-sdw-dma.c
-@@ -12,6 +12,7 @@
- #include <sound/pcm_params.h>
- #include <sound/soc.h>
- #include <sound/soc-dai.h>
-+#include <linux/pm_runtime.h>
- #include <linux/soundwire/sdw_amd.h>
- #include "acp63.h"
+diff --git a/sound/soc/amd/ps/Makefile b/sound/soc/amd/ps/Makefile
+index 383973a12f6a..f2a5eaf2fa4d 100644
+--- a/sound/soc/amd/ps/Makefile
++++ b/sound/soc/amd/ps/Makefile
+@@ -3,7 +3,9 @@
+ snd-pci-ps-objs := pci-ps.o
+ snd-ps-pdm-dma-objs := ps-pdm-dma.o
+ snd-soc-ps-mach-objs := ps-mach.o
++snd-ps-sdw-dma-objs := ps-sdw-dma.o
  
-@@ -102,6 +103,29 @@ static const struct snd_pcm_hardware acp63_sdw_hardware_capture = {
- 	.periods_max = SDW_CAPTURE_MAX_NUM_PERIODS,
- };
- 
-+static void acp63_enable_disable_sdw_dma_interrupts(void __iomem *acp_base, bool enable)
-+{
-+	u32 ext_intr_cntl, ext_intr_cntl1;
-+	u32 irq_mask = ACP_SDW_DMA_IRQ_MASK;
-+	u32 irq_mask1 = ACP_P1_SDW_DMA_IRQ_MASK;
-+
-+	if (enable) {
-+		ext_intr_cntl = readl(acp_base + ACP_EXTERNAL_INTR_CNTL);
-+		ext_intr_cntl |= irq_mask;
-+		writel(ext_intr_cntl, acp_base + ACP_EXTERNAL_INTR_CNTL);
-+		ext_intr_cntl1 = readl(acp_base + ACP_EXTERNAL_INTR_CNTL1);
-+		ext_intr_cntl1 |= irq_mask1;
-+		writel(ext_intr_cntl1, acp_base + ACP_EXTERNAL_INTR_CNTL1);
-+	} else {
-+		ext_intr_cntl = readl(acp_base + ACP_EXTERNAL_INTR_CNTL);
-+		ext_intr_cntl &= ~irq_mask;
-+		writel(ext_intr_cntl, acp_base + ACP_EXTERNAL_INTR_CNTL);
-+		ext_intr_cntl1 = readl(acp_base + ACP_EXTERNAL_INTR_CNTL1);
-+		ext_intr_cntl1 &= ~irq_mask1;
-+		writel(ext_intr_cntl1, acp_base + ACP_EXTERNAL_INTR_CNTL1);
-+	}
-+}
-+
- static void acp63_config_dma(struct acp_sdw_dma_stream *stream, void __iomem *acp_base,
- 			     u32 stream_id)
- {
-@@ -464,16 +488,86 @@ static int acp63_sdw_platform_probe(struct platform_device *pdev)
- 	status = devm_snd_soc_register_component(&pdev->dev,
- 						 &acp63_sdw_component,
- 						 NULL, 0);
--	if (status)
-+	if (status) {
- 		dev_err(&pdev->dev, "Fail to register sdw dma component\n");
-+		return status;
-+	}
-+	pm_runtime_set_autosuspend_delay(&pdev->dev, ACP_SUSPEND_DELAY_MS);
-+	pm_runtime_use_autosuspend(&pdev->dev);
-+	pm_runtime_mark_last_busy(&pdev->dev);
-+	pm_runtime_set_active(&pdev->dev);
-+	pm_runtime_enable(&pdev->dev);
-+	return 0;
-+}
- 
--	return status;
-+static int acp63_sdw_platform_remove(struct platform_device *pdev)
-+{
-+	pm_runtime_disable(&pdev->dev);
-+	return 0;
- }
- 
-+static int acp_restore_sdw_dma_config(struct sdw_dma_dev_data *sdw_data)
-+{
-+	struct acp_sdw_dma_stream *stream;
-+	struct snd_pcm_substream *substream;
-+	struct snd_pcm_runtime *runtime;
-+	u32 period_bytes, buf_size, water_mark_size_reg;
-+	u32 stream_count;
-+	int index, instance, ret;
-+
-+	for (instance = 0; instance < AMD_SDW_MAX_MANAGERS; instance++) {
-+		if (instance == ACP_SDW0)
-+			stream_count = ACP63_SDW0_DMA_MAX_STREAMS;
-+		else
-+			stream_count = ACP63_SDW1_DMA_MAX_STREAMS;
-+
-+		for (index = 0; index < stream_count; index++) {
-+			if (instance == ACP_SDW0) {
-+				substream = sdw_data->sdw0_dma_stream[index];
-+				water_mark_size_reg =
-+						sdw0_dma_ring_buf_reg[index].water_mark_size_reg;
-+			} else {
-+				substream = sdw_data->sdw1_dma_stream[index];
-+				water_mark_size_reg =
-+						sdw1_dma_ring_buf_reg[index].water_mark_size_reg;
-+			}
-+
-+			if (substream && substream->runtime) {
-+				runtime = substream->runtime;
-+				stream = runtime->private_data;
-+				period_bytes = frames_to_bytes(runtime, runtime->period_size);
-+				buf_size = frames_to_bytes(runtime, runtime->buffer_size);
-+				acp63_config_dma(stream, sdw_data->acp_base, index);
-+				ret = acp63_configure_sdw_ringbuffer(sdw_data->acp_base, index,
-+								     buf_size, instance);
-+				if (ret)
-+					return ret;
-+				writel(period_bytes, sdw_data->acp_base + water_mark_size_reg);
-+			}
-+		}
-+	}
-+	acp63_enable_disable_sdw_dma_interrupts(sdw_data->acp_base, true);
-+	return 0;
-+}
-+
-+static int __maybe_unused acp63_sdw_pcm_resume(struct device *dev)
-+{
-+	struct sdw_dma_dev_data *sdw_data;
-+
-+	sdw_data = dev_get_drvdata(dev);
-+	return acp_restore_sdw_dma_config(sdw_data);
-+}
-+
-+static const struct dev_pm_ops acp63_pm_ops = {
-+	SET_SYSTEM_SLEEP_PM_OPS(NULL, acp63_sdw_pcm_resume)
-+};
-+
- static struct platform_driver acp63_sdw_dma_driver = {
- 	.probe = acp63_sdw_platform_probe,
-+	.remove = acp63_sdw_platform_remove,
- 	.driver = {
- 		.name = "amd_ps_sdw_dma",
-+		.pm = &acp63_pm_ops,
- 	},
- };
- 
+ obj-$(CONFIG_SND_SOC_AMD_PS) += snd-pci-ps.o
+ obj-$(CONFIG_SND_SOC_AMD_PS) += snd-ps-pdm-dma.o
++obj-$(CONFIG_SND_SOC_AMD_PS) += snd-ps-sdw-dma.o
+ obj-$(CONFIG_SND_SOC_AMD_PS_MACH)   += snd-soc-ps-mach.o
 -- 
 2.34.1
 
