@@ -2,142 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0221472350C
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 04:06:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4986723515
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 04:12:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233672AbjFFCGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 22:06:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44674 "EHLO
+        id S231764AbjFFCMB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 22:12:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233152AbjFFCGc (ORCPT
+        with ESMTP id S230121AbjFFCL7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 22:06:32 -0400
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3277E44;
-        Mon,  5 Jun 2023 19:06:26 -0700 (PDT)
-Received: by mail-qv1-xf30.google.com with SMTP id 6a1803df08f44-62614a1dd47so41111576d6.2;
-        Mon, 05 Jun 2023 19:06:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686017186; x=1688609186;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fHxYxgoeO4Fz6rNQej/wSf+qvSfbEPqyAolfpowpldM=;
-        b=acthjTFnSNF5zKRRlhGw+vu3sBJkQfXpmpXAoiZAvL7d24CZE6ZABgRhPubR/9PFEU
-         bM3XFVjFd+D8kAZrZs7FwT4ohc3FMIDX1HcpQm8G+1XhEY90fk+RYl2XPyTMNrWGt/UT
-         dOCFIn0mguhJ4RgtpFXtp6JsxXig1i41Z09BWYzkjB9kabDK/K2KA8VgVB+aD+qNcG2N
-         cDjIs98Mnbc7YvvyGXtQZ8SttnUO0QJLWVkTTu4Tn7HSxf7K022xiC3UUy60PEyhy732
-         hWNRKp6OLIYnq9iSZIbDk5MyDtr3YbSo0LHulc+HB3YEgGGJeu8oGFWGsZq+TvwahBXP
-         X6Ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686017186; x=1688609186;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=fHxYxgoeO4Fz6rNQej/wSf+qvSfbEPqyAolfpowpldM=;
-        b=RiuqxPlY7eYlFtKXWLhsPMdTfsX9ilLPlHr13na2WgaZTcEqQ9o8JNmAc5DVjh9jlC
-         kV631bo3o5n9SHiXRRgrz1VeNBS9odywlc9YJt9HnVLWd8B2GKb7e7S7WI54HFmeSKce
-         5wRfTSswaKTvhgKe8d2mEdgayYAexyYzH586XBTxENbIgZ+Xgyprw5sempWkd9jQ/vCp
-         8GtdIxlf50DxrgiB3raXhFJ1xt789YIAtRzm+jlOGbSiq8B/8ZRbNfyj35TYG1FY4P0P
-         pCIUd90iiei4tQjC8sfki57Wyo0uoGkUcZ76BhjqTKaMNuhIaW8wb712bBCypBQqXEIY
-         4e0Q==
-X-Gm-Message-State: AC+VfDxEgoTap+YEJJLTBbHtJfHyVR97lXogq4KTT6c3O7eAV/GF6f28
-        NXMp4oZ4b3gSqcNyY4/MtYYCrE6mSE3JGQ==
-X-Google-Smtp-Source: ACHHUZ40R/7DwONJjQlPcqGT36cqBtgKGygl2J4alUiZu16uhr29ahIhA1q8+RczUQBCu26cwcVQvA==
-X-Received: by 2002:a05:6214:f25:b0:623:a5d0:1daf with SMTP id iw5-20020a0562140f2500b00623a5d01dafmr767371qvb.48.1686017185826;
-        Mon, 05 Jun 2023 19:06:25 -0700 (PDT)
-Received: from localhost ([2600:4040:2007:9800:ab:4faa:880f:7b91])
-        by smtp.gmail.com with ESMTPSA id v6-20020ad45286000000b006257e64474asm5022256qvr.113.2023.06.05.19.06.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Jun 2023 19:06:25 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Mon, 05 Jun 2023 22:06:23 -0400
-Message-Id: <CT577LF6NJLX.3OVACDQO6WGDE@Latitude-E6420>
-From:   "Rudraksha Gupta" <guptarud@gmail.com>
-To:     "Rob Herring" <robh@kernel.org>
-Cc:     "Kishon Vijay Abraham I" <kishon@kernel.org>,
-        <linux-phy@lists.infradead.org>, "Olof Johansson" <olof@lixom.net>,
-        "Vinod Koul" <vkoul@kernel.org>, "Arnd Bergmann" <arnd@arndb.de>,
-        <soc@kernel.org>, <devicetree@vger.kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Bjorn Andersson" <andersson@kernel.org>,
-        "Conor Dooley" <conor+dt@kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
-        "Andy Gross" <agross@kernel.org>, <linux-arm-msm@vger.kernel.org>
-Subject: Re: [PATCH v3 2/4] dt-bindings: phy: qcom,usb-hs-phy: Add
- compatible
-X-Mailer: aerc 0.8.2
-References: <20230604063032.365775-1-guptarud@gmail.com>
- <20230604063032.365775-3-guptarud@gmail.com>
- <168586340547.3052749.2763112173580157119.robh@kernel.org>
-In-Reply-To: <168586340547.3052749.2763112173580157119.robh@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 5 Jun 2023 22:11:59 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1691F7;
+        Mon,  5 Jun 2023 19:11:58 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QZv9k4WYTz4f3pBY;
+        Tue,  6 Jun 2023 10:11:54 +0800 (CST)
+Received: from ubuntu1804.huawei.com (unknown [10.67.174.102])
+        by APP3 (Coremail) with SMTP id _Ch0CgDHrQvolX5kx5PMKA--.45351S2;
+        Tue, 06 Jun 2023 10:11:53 +0800 (CST)
+From:   Ruiqi Gong <gongruiqi@huaweicloud.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Stanislav Fomichev <sdf@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Wang Weiyang <wangweiyang2@huawei.com>,
+        Xiu Jianfeng <xiujianfeng@huawei.com>, gongruiqi1@huawei.com
+Subject: [PATCH RESEND] bpf: cleanup unused function declaration
+Date:   Tue,  6 Jun 2023 10:10:47 +0800
+Message-Id: <20230606021047.170667-1-gongruiqi@huaweicloud.com>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: _Ch0CgDHrQvolX5kx5PMKA--.45351S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrZw1xJw1xKr43Xw45AF18Zrb_yoWDAFgEv3
+        4Fvr1xGr4rWrWxAw1jqF92qrn09w18JryfuF95WrZ3A3Z8Aw4Fkw1xC3srX3s7W3WDXFZx
+        Kan7X3W3Jr1agjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb28YFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
+        Y4v20xvaj40_JFC_Wr1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x02
+        67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IY
+        c2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
+        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF
+        0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0x
+        vE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UQzVbUUUUU=
+X-CM-SenderInfo: pjrqw2pxltxq5kxd4v5lfo033gof0z/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun Jun 4, 2023 at 3:23 AM EDT, Rob Herring wrote:
->
-> On Sun, 04 Jun 2023 02:30:19 -0400, Rudraksha Gupta wrote:
-> > Adds qcom,usb-hs-phy-msm8960 compatible
-> >=20
-> > Signed-off-by: Rudraksha Gupta <guptarud@gmail.com>
-> > ---
-> >  Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml | 5 ++++-
-> >  1 file changed, 4 insertions(+), 1 deletion(-)
-> >=20
->
-> My bot found errors running 'make DT_CHECKER_FLAGS=3D-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
->
-> yamllint warnings/errors:
->
-> dtschema/dtc warnings/errors:
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/p=
-hy/qcom,usb-hs-phy.example.dtb: phy: resets: [[4294967295, 10], [1, 0]] is =
-too long
-> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicet=
-ree/bindings/phy/qcom,usb-hs-phy.yaml
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/p=
-hy/qcom,usb-hs-phy.example.dtb: phy: reset-names:0: 'por' was expected
-> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicet=
-ree/bindings/phy/qcom,usb-hs-phy.yaml
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/p=
-hy/qcom,usb-hs-phy.example.dtb: phy: reset-names: ['phy', 'por'] is too lon=
-g
-> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicet=
-ree/bindings/phy/qcom,usb-hs-phy.yaml
->
-> doc reference errors (make refcheckdocs):
->
-> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/202306=
-04063032.365775-3-guptarud@gmail.com
->
-> The base for the series is generally the latest rc1. A different dependen=
-cy
-> should be noted in *this* patch.
-I see. Why is it off the latest rc1 and not off the latest commit?
+All usage and the definition of `bpf_prog_free_linfo()` has been removed
+in commit e16301fbe183 ("bpf: Simplify freeing logic in linfo and
+jited_linfo"). Clean up its declaration in the header file.
 
->
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> date:
->
-> pip3 install dtschema --upgrade
->
-> Please check and re-submit after running the above command yourself. Note
-> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-> your schema. However, it must be unset to test all examples with your sch=
-ema.
-Thanks. I didn't see these errors as I was only looking for expressatt
-binding errors.
+Signed-off-by: Ruiqi Gong <gongruiqi@huaweicloud.com>
+Acked-by: Stanislav Fomichev <sdf@google.com>
+Link: https://lore.kernel.org/all/20230602030842.279262-1-gongruiqi@huaweicloud.com/
+---
+
+Resend: formatted from bpf-next/master.
+
+ include/linux/filter.h | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index bbce89937..f69114083 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -874,7 +874,6 @@ void bpf_prog_free(struct bpf_prog *fp);
+ 
+ bool bpf_opcode_in_insntable(u8 code);
+ 
+-void bpf_prog_free_linfo(struct bpf_prog *prog);
+ void bpf_prog_fill_jited_linfo(struct bpf_prog *prog,
+ 			       const u32 *insn_to_jit_off);
+ int bpf_prog_alloc_jited_linfo(struct bpf_prog *prog);
+-- 
+2.17.1
+
