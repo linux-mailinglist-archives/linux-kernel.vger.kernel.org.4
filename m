@@ -2,182 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CDEE724E5C
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 22:57:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97E04724E5F
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 22:58:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233632AbjFFU5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 16:57:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58740 "EHLO
+        id S239062AbjFFU6c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 16:58:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231706AbjFFU5j (ORCPT
+        with ESMTP id S231706AbjFFU63 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 16:57:39 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D3EBD1707;
-        Tue,  6 Jun 2023 13:57:37 -0700 (PDT)
-Received: from W11-BEAU-MD.localdomain (unknown [76.135.27.212])
-        by linux.microsoft.com (Postfix) with ESMTPSA id E580820BE492;
-        Tue,  6 Jun 2023 13:57:36 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E580820BE492
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1686085057;
-        bh=0ETLWs8Ceu9GxJZiRavPxUta0//U9m1gAOQEZ5ERUwU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=L8o1R6hOw20Q2OWIIrmyxakKURspNvlCCiRArHQP/p4Lbia0vbpaHE0XIODGn0J7a
-         qrJJbcbRtKDznCwU5ka91xEZMOmRPqe6/rIaCfxPTn9CT/zkyXE2iA6Ltz7AWuqx+a
-         MUkr3uiaEvsb+g67+0KFrI9OqGW8WzTVYC6H97fk=
-Date:   Tue, 6 Jun 2023 13:57:30 -0700
-From:   Beau Belgrave <beaub@linux.microsoft.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-trace-kernel@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        David Vernet <void@manifault.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        dthaler@microsoft.com, brauner@kernel.org, hch@infradead.orgl,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH] tracing/user_events: Run BPF program if attached
-Message-ID: <20230606205730.GA163@W11-BEAU-MD.localdomain>
-References: <20230508163751.841-1-beaub@linux.microsoft.com>
- <CAADnVQLYL-ZaP_2vViaktw0G4UKkmpOK2q4ZXBa+f=M7cC25Rg@mail.gmail.com>
- <20230509130111.62d587f1@rorschach.local.home>
- <20230509163050.127d5123@rorschach.local.home>
- <20230515165707.hv65ekwp2djkjj5i@MacBook-Pro-8.local>
- <20230515192407.GA85@W11-BEAU-MD.localdomain>
- <20230517003628.aqqlvmzffj7fzzoj@MacBook-Pro-8.local>
- <20230606225741.a9d8003a22451db96545b5a8@kernel.org>
- <CAEf4BzbhvBTQ2c1ENk2pVXdQ=SrXwTFXVjpopTANZsdn1EEeMA@mail.gmail.com>
+        Tue, 6 Jun 2023 16:58:29 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A33811707
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 13:58:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686085108; x=1717621108;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=P6rV6zh1DLRXX4p8uNL4qGR98w5JZ4Rkqc41z5Xvt6U=;
+  b=Vt7QdEVJ/1fqh6is68hBydbeVPCiLp/01J/2B5hFzMMcWRymp6mdvpB5
+   bintbYeY+inYn6IRva2+6KsGfQvkVE/4NWdWUXKrGOW+Y/IF6s8dK7V5a
+   3h+UFqvH1WlnFEHurdqpZ688PDofk2hXbWCfAf7PVTJy+wgBlhAmLE++v
+   iZcLHdfIEn4+DfeBNe2E7H3sJv6IPx5nqrx/h+OxVJijkISBSESbV2UgI
+   zBvaDHs0TpkZbTCh3LUc1S6FVc2MEWj1D5XC13uCDSYTaZrNbD3DCufY3
+   vSluxkCiTOY8ixHWtC+ax52bJhu3om1W5WSDB90H5inyjeFgHyXfPYBKx
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="360121179"
+X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
+   d="scan'208";a="360121179"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 13:58:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="799013151"
+X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
+   d="scan'208";a="799013151"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 06 Jun 2023 13:58:14 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q6dkr-0005jz-12;
+        Tue, 06 Jun 2023 20:58:13 +0000
+Date:   Wed, 7 Jun 2023 04:57:42 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        Miroslav Benes <mbenes@suse.cz>
+Subject: [tip:objtool/core 8/12] vmlinux.o: warning: objtool:
+ rust_begin_unwind+0x5c: rust_helper_BUG() is missing a __noreturn annotation
+Message-ID: <202306070408.EFxuDoRs-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEf4BzbhvBTQ2c1ENk2pVXdQ=SrXwTFXVjpopTANZsdn1EEeMA@mail.gmail.com>
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 09:57:14AM -0700, Andrii Nakryiko wrote:
-> On Tue, Jun 6, 2023 at 6:57 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> >
-> > Hi,
-> >
-> > On Tue, 16 May 2023 17:36:28 -0700
-> > Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
-> >
-> > > BPF progs have three ways to access kernel tracepoints:
-> > > 1. traditional tracepoint
-> >
-> > This is the trace_events, which is used by ftrace, right?
-> >
-> > > 2. raw tracepoint
-> > > 3. raw tracepoint with BTF
-> > >
-> > > 1 was added first and now rarely used (only by old tools), since it's slow.
-> > > 2 was added later to address performance concerns.
-> > > 3 was added after BTF was introduced to provide accurate types.
-> > >
-> > > 3 is the only one that bpf community recommends and is the one that is used most often.
-> > >
-> > > As far as I know trace_events were never connected to bpf.
-> > > Unless somebody sneaked the code in without us seeing it.
-> >
-> > With this design, I understand that you may not want to connect BPF
-> > directly to user_events. It needs a different model.
-> >
-> > >
-> > > I think you're trying to model user_events+bpf as 1.
-> > > Which means that you'll be repeating the same mistakes.
-> >
-> > The user_events is completely different from the traceppoint and
-> > must have no BTF with it.
-> > Also, all information must be sent in the user-written data packet.
-> > (No data structure, event if there is a structure, it must be fully
-> > contained in the packet.)
-> >
-> > For the tracepoint, there is a function call with some values or
-> > pointers of data structure. So it is meaningful to skip using the
-> > traceevent (which converts all pointers to actual field values of
-> > the data structure and store it to ftrace buffer) because most of
-> > the values can be ignored in the BPF prog.
-> >
-> > However, for the user_events, the data is just passed from the
-> > user as a data packet, and BPF prog can access to the data packet
-> > (to avoid accessing malicious data, data validator can not be
-> > skipped). So this seems like 1. but actually you can access to
-> > the validated data on perf buffer. Maybe we can allow BPF to
-> > hook the write syscall and access user-space data, but it may
-> > not safe. I think this is the safest way to do that.
-> 
-> I'm trying to understand why we need a new kernel concept for all
-> this. It looks like we are just creating a poor man's
-> publisher/subscriber solution in the kernel, but mostly intend to use
-> it from user-space? Why not just use Unix domain sockets for this,
-> though? Use SOCK_SEQPACKET, put "event data" into a single packet
-> that's guaranteed to not be broken up. Expose this to other processes
-> through named pipes, if necessary.
-> 
-> Sorry if it's naive questions, but it's not clear what problem
-> user_events are solving and why we need a new thing and can't use
-> existing kernel primitives?
-> 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git objtool/core
+head:   ff9a6459bbec06df7da2545020d7383aba13b3fb
+commit: fedb724c3db5490234ddde0103811c28c2fedae0 [8/12] objtool: Detect missing __noreturn annotations
+config: x86_64-randconfig-a012-20230606 (https://download.01.org/0day-ci/archive/20230607/202306070408.EFxuDoRs-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=fedb724c3db5490234ddde0103811c28c2fedae0
+        git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
+        git fetch --no-tags tip objtool/core
+        git checkout fedb724c3db5490234ddde0103811c28c2fedae0
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-There's a number of reasons why we did not do as you suggest.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306070408.EFxuDoRs-lkp@intel.com/
 
-The first reason is we want to only take the write() syscall cost when
-events are wanting to be monitored. This is done at a per-trace_event
-level and is not at a per-process level. user_events gives us the
-ability to know cheaply when an event is or is not to be written. It
-does this by setting/clearing a bit in each process when the trace_event
-classes register function is invoked to attach/detach perf or ftrace.
-By using a bit instead of bytes, we also have the ability to share
-tracing out to the kernel as well as any local user tracer in the
-future, this work was started by Mathieu Desnoyers via libside [1].
+All warnings (new ones prefixed by >>):
 
-The second reason is we have found user based buffers to be unreliable
-when either the user process is crashing or has a corruption bug. By
-having the data buffers reside within the kernel, we prevent this from
-happening. If the kernel panics, we can also pull events out of the
-perf_event buffers via GDB to understand what our user processes were
-doing before the time of the panic.
+>> vmlinux.o: warning: objtool: rust_begin_unwind+0x5c: rust_helper_BUG() is missing a __noreturn annotation
 
-The third reason is we want to make use of all the features that perf,
-ftrace, and eBPF have. We do not want to have to re-write all of those
-features. The main things are being able to filter upon event payloads
-and aggregate them together. We also selectively turn on and off stack
-walking for some events (not all). Perf lets us selectively do this on a
-per-event basis in addition to grabbing raw stack data to enable
-unwinding via DWARF instructions. When we monitor events via
-perf/ftrace, we can find each offset and type for the fields within the
-event. We need to know these to properly decode events and analyze them.
-Tracefs gives a us a single place to see all of these events and
-efficiently decode them, including a stable event ID. We would have to
-replicate all of that work in userspace in addition to the other
-features we rely upon.
 
-The fourth reason is related to the third, we have a lot of existing
-diagnostics that rely upon and setup perf ring buffers. We want the user
-and kernel diagnostics to land in the same buffers with the same
-timestamps so we can see a full picture of what is going on.
+objdump-func vmlinux.o rust_begin_unwind:
+0000 00000000000b9e69 <rust_begin_unwind>:
+0000    b9e69:	48 83 ec 48          	sub    $0x48,%rsp
+0004    b9e6d:	48 89 e0             	mov    %rsp,%rax
+0007    b9e70:	48 89 38             	mov    %rdi,(%rax)
+000a    b9e73:	48 8d 4c 24 08       	lea    0x8(%rsp),%rcx
+000f    b9e78:	48 89 01             	mov    %rax,(%rcx)
+0012    b9e7b:	48 c7 41 08 00 00 00 00 	movq   $0x0,0x8(%rcx)	b9e7f: R_X86_64_32S	_RNvXsR_NtCs3yuwAp0waWO_4core3fmtRNtNtNtB7_5panic10panic_info9PanicInfoNtB5_7Display3fmtCsfATHBUcknU9_6kernel
+001a    b9e83:	48 8d 54 24 18       	lea    0x18(%rsp),%rdx
+001f    b9e88:	48 c7 02 00 00 00 00 	movq   $0x0,(%rdx)	b9e8b: R_X86_64_32S	.rodata+0x137d8
+0026    b9e8f:	48 c7 42 08 02 00 00 00 	movq   $0x2,0x8(%rdx)
+002e    b9e97:	48 c7 42 10 00 00 00 00 	movq   $0x0,0x10(%rdx)
+0036    b9e9f:	48 89 4a 20          	mov    %rcx,0x20(%rdx)
+003a    b9ea3:	48 c7 42 28 01 00 00 00 	movq   $0x1,0x28(%rdx)
+0042    b9eab:	48 c7 c7 00 00 00 00 	mov    $0x0,%rdi	b9eae: R_X86_64_32S	_RNvNtNtCsfATHBUcknU9_6kernel5print14format_strings5EMERG
+0049    b9eb2:	48 c7 c6 00 00 00 00 	mov    $0x0,%rsi	b9eb5: R_X86_64_32S	.rodata+0x13568
+0050    b9eb9:	31 c0                	xor    %eax,%eax
+0052    b9ebb:	e8 00 00 00 00       	call   b9ec0 <rust_begin_unwind+0x57>	b9ebc: R_X86_64_PLT32	_printk-0x4
+0057    b9ec0:	e8 00 00 00 00       	call   b9ec5 <rust_begin_unwind+0x5c>	b9ec1: R_X86_64_PLT32	rust_helper_BUG-0x4
+005c    b9ec5:	eb fe                	jmp    b9ec5 <rust_begin_unwind+0x5c>
 
-Thanks,
--Beau
-
-1. https://github.com/compudj/libside
-
-> 
-> >
-> > Thank you,
-> >
-> > --
-> > Masami Hiramatsu (Google) <mhiramat@kernel.org>
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
