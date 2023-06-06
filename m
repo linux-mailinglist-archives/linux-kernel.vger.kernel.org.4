@@ -2,144 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D9DA723A7C
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 09:51:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5126E723A84
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 09:52:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235825AbjFFHvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 03:51:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58114 "EHLO
+        id S236120AbjFFHv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 03:51:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237506AbjFFHu6 (ORCPT
+        with ESMTP id S237497AbjFFHu5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 03:50:58 -0400
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46A2D30DF
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 00:47:18 -0700 (PDT)
-Received: by mail-ot1-x32f.google.com with SMTP id 46e09a7af769-6b160f3f185so1715487a34.0
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 00:47:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686037629; x=1688629629;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=MlFTV010nZQAE6a30Glk0hPHQmKZoo0vKsFtf+4D2Uk=;
-        b=HIGV/CmWz7y7WrCFPo3V41nbzrubjgc5bQ1J/hcSntZSJCUYc1H0PYn7ddavlOfLhC
-         HNlTNIZxixuQufsN1uIHgSQVKtGbcbp7WnHO4qCF8ea3ryQlbTmrc6BFh1UsgsDQUdPp
-         akoLeV4s/a/XYd+z0Zn2o/xjqN3V5ZJsKeMrM4Z0wUcPTNdH2qsRHqqpk+d3sxotNQhi
-         AMmEnODQR85S9AwfSyP7QZkbxToObBv2U/o7sQL8M/5XGGbjJZfEQ44zTjQsvZcjLc/w
-         75gldNdlLGjy7/h5kwdDffrpxgzvYKTgfUr0sC5qmXe65ZU1TLyBFnQKGO4xw0fNtPu3
-         GNvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686037629; x=1688629629;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MlFTV010nZQAE6a30Glk0hPHQmKZoo0vKsFtf+4D2Uk=;
-        b=YisFdExy6aUBo2imP0A4TxP21orwenii8Nk8bhTrbm/wh81RfSQqGIt/Lxg3ZNmyKd
-         nyXtcOdKzbjFBd0wyX0BoZbJkRN34VQ7pqkOHqV7rECOCbVQscEqwyF5kKLa4mThaEvX
-         G5G971DaW3f6BG5chQldMLHGgFsTwAPVmxHUErMwHPZXXGLtnogPVfx/9COWYur4ENFy
-         390gsfeVM9dOpQ8vlhx77b940r1cjTH9yUToqwslnp32sGrJKAJwQwnBLML3MwoTRc6e
-         5GY3anLFIBJl9X+ElmMHqThJVAKxRDJV6wTUpdgk8jC5fnb3Tb2dcSX4YljszdaaZOvY
-         1S/w==
-X-Gm-Message-State: AC+VfDyXojDiVQ2kbdQYtWDlQb2suGPoQVUGOXF6nwCx8KfyuFHd4mq0
-        myMxQWlCvmK36HE4MPat7OV1
-X-Google-Smtp-Source: ACHHUZ7LAgd37C5kKnCNBQWTGKJbGCJ5fd/gl0zPmNmKxpAwVLpglV/5zNTs1pfze7+ZOctzhxe41g==
-X-Received: by 2002:a05:6358:c027:b0:129:c886:9603 with SMTP id ez39-20020a056358c02700b00129c8869603mr931501rwb.11.1686037628588;
-        Tue, 06 Jun 2023 00:47:08 -0700 (PDT)
-Received: from localhost.localdomain ([117.202.186.178])
-        by smtp.gmail.com with ESMTPSA id k16-20020a63d110000000b00528b78ddbcesm6927063pgg.70.2023.06.06.00.47.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 00:47:08 -0700 (PDT)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     lpieralisi@kernel.org, kw@linux.com
-Cc:     kishon@kernel.org, bhelgaas@google.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH] PCI: endpoint: epf-mhi: Fix the outbound window offset handling
-Date:   Tue,  6 Jun 2023 13:16:57 +0530
-Message-Id: <20230606074657.31622-1-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
+        Tue, 6 Jun 2023 03:50:57 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B52A30D8;
+        Tue,  6 Jun 2023 00:47:16 -0700 (PDT)
+Received: from [192.168.10.48] (unknown [119.152.150.198])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 20A026602242;
+        Tue,  6 Jun 2023 08:47:00 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686037623;
+        bh=GfoUoLYLzdTif97190CNZHOIFaRq93HJHWohOIQjbMI=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=bJGcc4TTRsfeRoS8/MtJUS3/uQogg/+4uHZZ2yDYhcbcbvSUiruWb7k5nGISJnmnt
+         eG8I4VNH35NScO0UTSZwQc5d4fkIAEI63Lyn5qy7xYcRC+b/ro452KOMeW2rGZdm74
+         mCiGQuWOyA7blTC+cNZsHyLaEMoErml9f8pMpIK32uMkJvS+IdZU0WAtKfhwvG0msT
+         g9CFmLEmwL7HdxbNAxmsIpIV0OffP1fXVPYYeLdVJBFey3iybW/pPRKw4/Tu2lYzIl
+         AF3UA8SkuL54PveepDsoaArwFJFu3y2ugb+x3EO9kUtZG/Bm1gaq7pnSA+goAW/4nk
+         K3+1bida8F2wA==
+Message-ID: <7867afce-0eec-d01c-fbcb-82936f405981@collabora.com>
+Date:   Tue, 6 Jun 2023 12:46:57 +0500
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        David Hildenbrand <david@redhat.com>,
+        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 01/11] selftests/mm: fix uffd-stress unused function
+ warning
+Content-Language: en-US
+To:     John Hubbard <jhubbard@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20230606071637.267103-1-jhubbard@nvidia.com>
+ <20230606071637.267103-2-jhubbard@nvidia.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <20230606071637.267103-2-jhubbard@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-__pci_epf_mhi_alloc_map() allocates and maps the PCI outbound window memory
-to endpoint local memory. For taking care of alignment restrictions, the
-caller needs to specify the address alignment offset. Currently, this
-offset is not added to the allocated physical and virtual addresses before
-returning from the function.
+On 6/6/23 12:16 PM, John Hubbard wrote:
+> uffd_minor_feature() was unused. Remove it in order to fix the
+> associated clang build warning.
+> 
+> Reviewed-by: David Hildenbrand <david@redhat.com>
+> Reviewed-by: Peter Xu <peterx@redhat.com>
+> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+Tested-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 
-But __pci_epf_mhi_unmap_free() function substracts the offset before
-unmapping and freeing the memory, leading to incorrect unmap and free.
+> ---
+>  tools/testing/selftests/mm/uffd-stress.c | 10 ----------
+>  1 file changed, 10 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mm/uffd-stress.c b/tools/testing/selftests/mm/uffd-stress.c
+> index f1ad9eef1c3a..995ff13e74c7 100644
+> --- a/tools/testing/selftests/mm/uffd-stress.c
+> +++ b/tools/testing/selftests/mm/uffd-stress.c
+> @@ -88,16 +88,6 @@ static void uffd_stats_reset(struct uffd_args *args, unsigned long n_cpus)
+>  	}
+>  }
+>  
+> -static inline uint64_t uffd_minor_feature(void)
+> -{
+> -	if (test_type == TEST_HUGETLB && map_shared)
+> -		return UFFD_FEATURE_MINOR_HUGETLBFS;
+> -	else if (test_type == TEST_SHMEM)
+> -		return UFFD_FEATURE_MINOR_SHMEM;
+> -	else
+> -		return 0;
+> -}
+> -
+>  static void *locking_thread(void *arg)
+>  {
+>  	unsigned long cpu = (unsigned long) arg;
 
-Fix this issue by adding the offset to physical and virtual addresses in
-__pci_epf_mhi_alloc_map() itself. This also removes the need to add the
-offset while doing memcpy in iatu_{read/write}.
-
-Fixes: fd0fda1ef61a ("PCI: endpoint: Add PCI Endpoint function driver for MHI bus")
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
- drivers/pci/endpoint/functions/pci-epf-mhi.c | 17 ++++++-----------
- 1 file changed, 6 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/pci/endpoint/functions/pci-epf-mhi.c b/drivers/pci/endpoint/functions/pci-epf-mhi.c
-index f5bbaded49d4..18e46ee446c2 100644
---- a/drivers/pci/endpoint/functions/pci-epf-mhi.c
-+++ b/drivers/pci/endpoint/functions/pci-epf-mhi.c
-@@ -148,6 +148,9 @@ static int __pci_epf_mhi_alloc_map(struct mhi_ep_cntrl *mhi_cntrl, u64 pci_addr,
- 		return ret;
- 	}
- 
-+	*paddr = *paddr + offset;
-+	*vaddr = *vaddr + offset;
-+
- 	return 0;
- }
- 
-@@ -158,17 +161,9 @@ static int pci_epf_mhi_alloc_map(struct mhi_ep_cntrl *mhi_cntrl, u64 pci_addr,
- 	struct pci_epf_mhi *epf_mhi = to_epf_mhi(mhi_cntrl);
- 	struct pci_epc *epc = epf_mhi->epf->epc;
- 	size_t offset = pci_addr & (epc->mem->window.page_size - 1);
--	int ret;
- 
--	ret = __pci_epf_mhi_alloc_map(mhi_cntrl, pci_addr, paddr, vaddr,
-+	return __pci_epf_mhi_alloc_map(mhi_cntrl, pci_addr, paddr, vaddr,
- 				      offset, size);
--	if (ret)
--		return ret;
--
--	*paddr = *paddr + offset;
--	*vaddr = *vaddr + offset;
--
--	return 0;
- }
- 
- static void __pci_epf_mhi_unmap_free(struct mhi_ep_cntrl *mhi_cntrl,
-@@ -230,7 +225,7 @@ static int pci_epf_mhi_iatu_read(struct mhi_ep_cntrl *mhi_cntrl, u64 from,
- 		return ret;
- 	}
- 
--	memcpy_fromio(to, tre_buf + offset, size);
-+	memcpy_fromio(to, tre_buf, size);
- 
- 	__pci_epf_mhi_unmap_free(mhi_cntrl, from, tre_phys, tre_buf, offset,
- 				 size);
-@@ -258,7 +253,7 @@ static int pci_epf_mhi_iatu_write(struct mhi_ep_cntrl *mhi_cntrl,
- 		return ret;
- 	}
- 
--	memcpy_toio(tre_buf + offset, from, size);
-+	memcpy_toio(tre_buf, from, size);
- 
- 	__pci_epf_mhi_unmap_free(mhi_cntrl, to, tre_phys, tre_buf, offset,
- 				 size);
 -- 
-2.25.1
-
+BR,
+Muhammad Usama Anjum
