@@ -2,95 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89569723C3C
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 10:53:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60B45723C40
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 10:53:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237303AbjFFIxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 04:53:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43442 "EHLO
+        id S237309AbjFFIxz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 04:53:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232587AbjFFIw7 (ORCPT
+        with ESMTP id S237306AbjFFIxx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 04:52:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EC468F;
-        Tue,  6 Jun 2023 01:52:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 96BC16255A;
-        Tue,  6 Jun 2023 08:52:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57954C433EF;
-        Tue,  6 Jun 2023 08:52:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686041578;
-        bh=X/JIUXUe2IkAlocYqunb8oWKBdUtN9T7H11lqNuTCMM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Cy95tkdeuGaOCO5TagvbVLFZBJKlFdUYOjwcXK8cVL3xTktbt4UlQJRlhQxvjI1mU
-         0sKmeS7cKOFH401WHFqcSj1sPQnTd+egQ5lcjGDanws8VcBeFGqTJF3IIJoiFxdeZ1
-         ufqn9LXNQrLjMfmHRa5kKH1FvDXOpkGM07NxNBzIlAdGn9CvtOPdcuroHNeTq/s/Rp
-         BizNMfgE4giWVqisQudJ+p1b2lonYJ5d4OJynwVpmi/5ZzUnQt6yTAmCeRWnHq5m9A
-         Iw9mkXnB4DOvLZfKnPc/c9cErMau761ZcC7CSxazglQWMeTU6/VoU8nVgqRlm2JqWO
-         Ps6eVBi8Yugkg==
-From:   Christian Brauner <brauner@kernel.org>
-To:     Siddh Raman Pant <code@siddh.me>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        David Disseldorp <ddiss@suse.de>,
-        Nick Alcock <nick.alcock@oracle.com>,
-        David Howells <dhowells@redhat.com>
-Subject: Re: [PATCH v5] kernel/watch_queue: NULL the dangling *pipe, and use it for clear check
-Date:   Tue,  6 Jun 2023 10:52:49 +0200
-Message-Id: <20230606-getaucht-groschen-b2f1be714351@brauner>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230605143616.640517-1-code@siddh.me>
-References: <20230605143616.640517-1-code@siddh.me>
+        Tue, 6 Jun 2023 04:53:53 -0400
+Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58FE2F7
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 01:53:52 -0700 (PDT)
+Received: by mail-vs1-xe34.google.com with SMTP id ada2fe7eead31-43b87490a27so417322137.0
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 01:53:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686041631; x=1688633631;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=DkYmQSdDH/7swAFbB+hh/UI/hl2M4IPq1cAE0sbjhj8=;
+        b=BY9mJRXU5Uw4Wc3BYKAAcw5wT0xCZwCwxzc+YVOR57ZSjyQlIbSzuSe0xA1iDXYAaR
+         u8t2ptPstyGfvNyzGy06ScIUbo+zrCIVC4wykhuQN2Pf9I5RIgMro6FdbXrsPuhehf16
+         Ywke/gcYvszx5dlgXkDjLNQFN3lZeN7CRrVqsK1yVBrHKZGJKaXOMHXfDXSWsJEh/Gzy
+         ukJ1x6Nu0Ds5xfktQ0KwztbGpIN8VgQeFvm1hZJ847GGPel4Oa42tiiPOaoRd1u8wSi7
+         wAVRi9P6gK4zUQgIqYd0fSEt/+hjvZ4JYldH1sMs0GtIU7U/8s9N4p2RfLhUYRDuKGHO
+         2h3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686041631; x=1688633631;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DkYmQSdDH/7swAFbB+hh/UI/hl2M4IPq1cAE0sbjhj8=;
+        b=BVROTSTrySRHwH6BDg6akINURiAhmQb/S7HBgCqxZV6Vo54anNm13Xa6xchPzmlcUZ
+         4a17bWRufHPml6lw7AvINQxVEeUo5LY+nBcqjXCW3+HcWKbJYFdRtngLJbQx0vSmk9f2
+         0Ezs7wZiGreAQEJYfDhWQ0dVPqLYdN30OvPIU2ONOLnbrqXUUK29PQex6sQObEX/hgO2
+         jHhJeWoi6vKLG7ULhQP26y9L6fX0ETEEajSU0jDHEYO+GbS/AVs3Tzd73hwBQR1ZZ1JE
+         16EJtzPAuRh/rwFoU75emwlKWUOzJcUnpouXp1BeRcSu90iQPvNKCy4S1uHszzlK8q5k
+         hCUg==
+X-Gm-Message-State: AC+VfDyk/pGJ5TH7lTHUImVmb56YWUSAJYcSUEcJtG0eElR05Wcx02sc
+        ow+/EIvbopN+Duw5Y1o2qdlMEofB8pAzi7LvcinXpWV799vYz+Nm9cI=
+X-Google-Smtp-Source: ACHHUZ6oosJ/AGBnPC00r6QaUMmoCBOhY+Q8RI7xPxjgWlVuISrs9TDVAfbGhiRpcu/E3MP9rBkDqdCkWA7eX9GNUpo=
+X-Received: by 2002:a05:6102:410:b0:43b:1b47:670 with SMTP id
+ d16-20020a056102041000b0043b1b470670mr889033vsq.20.1686041630760; Tue, 06 Jun
+ 2023 01:53:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1176; i=brauner@kernel.org; h=from:subject:message-id; bh=X/JIUXUe2IkAlocYqunb8oWKBdUtN9T7H11lqNuTCMM=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaTUfb6xo2jtlmO73U4yNT3dKpy5eZaHqQ1vrKzNzQWx3ts7 6ktaOkpZGMS4GGTFFFkc2k3C5ZbzVGw2ytSAmcPKBDKEgYtTACYiE8HIsGJfZrftln2bNvseYXbwNF 0a/U3wl6hG3qzJBzO/3JIqsWP4K6nYdLZn843qrQlrQq8afjrV1HEg36q2oazFUtZ0aj0bEwA=
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CA+G9fYv0a-XxXfG6bNuPZGT=fzjtEfRGEYwk3n6M1WhEHUPo9g@mail.gmail.com>
+In-Reply-To: <CA+G9fYv0a-XxXfG6bNuPZGT=fzjtEfRGEYwk3n6M1WhEHUPo9g@mail.gmail.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 6 Jun 2023 14:23:39 +0530
+Message-ID: <CA+G9fYueN0xti1SDtYVZstPt104sUj06GfOzyqDNrd3s3xXBkA@mail.gmail.com>
+Subject: Re: arm: shmobile_defconfig: ld.lld: error: undefined symbol: lynx_pcs_destroy
+To:     open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Netdev <netdev@vger.kernel.org>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        maxime.chevallier@bootlin.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 05 Jun 2023 20:06:16 +0530, Siddh Raman Pant wrote:
-> NULL the dangling pipe reference while clearing watch_queue.
-> 
-> If not done, a reference to a freed pipe remains in the watch_queue,
-> as this function is called before freeing a pipe in free_pipe_info()
-> (see line 834 of fs/pipe.c).
-> 
-> The sole use of wqueue->defunct is for checking if the watch queue has
-> been cleared, but wqueue->pipe is also NULLed while clearing.
-> 
-> [...]
++ netdev
 
-Massaged the commit message a bit and applied David's Ack as requested.
 
----
 
-Applied to the vfs.misc branch of the vfs/vfs.git tree.
-Patches in the vfs.misc branch should appear in linux-next soon.
+On Tue, 6 Jun 2023 at 14:17, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+>
+> Following build regressions found while building arm shmobile_defconfig on
+> Linux next-20230606.
+>
+> Regressions found on arm:
+>
+>  - build/clang-16-shmobile_defconfig
+>  - build/gcc-8-shmobile_defconfig
+>  - build/gcc-12-shmobile_defconfig
+>  - build/clang-nightly-shmobile_defconfig
 
-Please report any outstanding bugs that were missed during review in a
-new review to the original patch series allowing us to drop it.
+And mips defconfig builds failed.
+Regressions found on mips:
 
-It's encouraged to provide Acked-bys and Reviewed-bys even though the
-patch has now been applied. If possible patch trailers will be updated.
+  - build/clang-16-defconfig
+  - build/gcc-12-defconfig
+  - build/gcc-8-defconfig
+  - build/clang-nightly-defconfig
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-branch: vfs.misc
 
-[1/1] kernel/watch_queue: NULL the dangling *pipe, and use it for clear check
-      https://git.kernel.org/vfs/vfs/c/ae33d3de5ff5
+
+>
+> ld.lld: error: undefined symbol: lynx_pcs_destroy
+> >>> referenced by stmmac_mdio.c
+> >>>               drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.o:(stmmac_mdio_unregister) in archive vmlinux.a
+> make[2]: *** [scripts/Makefile.vmlinux:35: vmlinux] Error 1
+>
+>
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>
+> links,
+> - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230606/testrun/17347517/suite/build/test/gcc-12-shmobile_defconfig/history/
+> - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230606/testrun/17347562/suite/build/test/clang-16-shmobile_defconfig/log
+>
+> --
+> Linaro LKFT
+> https://lkft.linaro.org
