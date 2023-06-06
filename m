@@ -2,232 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC8F47236F3
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 07:50:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40B40723712
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 08:01:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231636AbjFFFuB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 01:50:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50490 "EHLO
+        id S232635AbjFFGA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 02:00:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231670AbjFFFt7 (ORCPT
+        with ESMTP id S229693AbjFFGA4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 01:49:59 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77EDF9E;
-        Mon,  5 Jun 2023 22:49:58 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3561Jvq2007753;
-        Tue, 6 Jun 2023 05:49:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id; s=qcppdkim1;
- bh=aQ6KnwOt1mwRRlCCHY+UFOi0CAj60uT8JU+m6VHJT9I=;
- b=Xu44K9su7X2iH4DmyKH+Lu6InkbauADcpZSlksSjsLeD8/F936yL5xjM4SNchIaTiZW6
- 9vhu8Ydx04eGWEAHw9/nUcKYQGtK4g7ro7jpvI4fpkFWPYhVym/I6dBtWFPJr2Rt8Av7
- vflwolp4VIsJXXmZtyMh5jnXAlbSa6JO0/AlVLhjgkNokIf6QZBzDSAoEmUpUvjsYWVT
- 9w13oIkyxhRTngI4LymJ1rcRZRuwO6anaHdwR32ZvZhuSXECxjwGih2EcGzdmLDQDPw2
- Mj3u9B0PI3iMELW5ZIv22YOdzFYmrP9dUswHpHzbmPTY+gWMTF6QiEBJnxkc/xsena3J YA== 
-Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r1d4et5vx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 06 Jun 2023 05:49:45 +0000
-Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 3565nef8022823;
-        Tue, 6 Jun 2023 05:49:40 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3qyxkka702-1;
-        Tue, 06 Jun 2023 05:49:40 +0000
-Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3565neGi022817;
-        Tue, 6 Jun 2023 05:49:40 GMT
-Received: from hu-sgudaval-hyd.qualcomm.com (hu-krichai-hyd.qualcomm.com [10.213.110.112])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3565ndPT022816;
-        Tue, 06 Jun 2023 05:49:40 +0000
-Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 4058933)
-        id 2CD50376D; Tue,  6 Jun 2023 11:19:39 +0530 (+0530)
-From:   Krishna chaitanya chundru <quic_krichai@quicinc.com>
-To:     manivannan.sadhasivam@linaro.org
-Cc:     quic_vbadigan@quicinc.com, quic_ramkri@quicinc.com,
-        Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-pci@vger.kernel.org (open list:PCIE ENDPOINT DRIVER FOR QUALCOMM),
-        linux-arm-msm@vger.kernel.org (open list:PCIE ENDPOINT DRIVER FOR
-        QUALCOMM), linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] PCI: qcom-ep: Add ICC bandwidth voting support
-Date:   Tue,  6 Jun 2023 11:19:29 +0530
-Message-Id: <1686030570-5439-1-git-send-email-quic_krichai@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 1DPZgL_PPjqpcx1wvrIyr-YKE5TnYmq_
-X-Proofpoint-GUID: 1DPZgL_PPjqpcx1wvrIyr-YKE5TnYmq_
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-06_03,2023-06-05_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
- clxscore=1011 priorityscore=1501 malwarescore=0 mlxscore=0
- lowpriorityscore=0 adultscore=0 impostorscore=0 spamscore=0
- mlxlogscore=964 suspectscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2304280000 definitions=main-2306060049
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 6 Jun 2023 02:00:56 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2061.outbound.protection.outlook.com [40.107.93.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7BC811B;
+        Mon,  5 Jun 2023 23:00:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=N6S+AAhkP4AFOfQrWm72UHGt/ZbrKVtXR/2Z8ZspencfJKMK6a+V1CHAW++dFnoasQm1H833qO1uKLFQcJH364TtAZCwPF+7ewwZnghOnYWU19HGyJHP+LlErd7HKwSEG+3R456fp37bEd2vPWuyjX2m++lLJ7B+JVGH70iT7IiFBy6HNDAq7beN76A1EA+T6dSPFKBHseV25ZaV2h0km9MRH7kf3Sdaove90wVyCfe80wpr26hzpCHufNZbxxg7qx3sAAk+CSuijpkMlGSIsaX0EzdDby6FW3vefDMfApRyJzaaoaYzrD0WkEG0ASPw/XFNMedx9kZLny8Ir63S4Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eaQIe6F6uD7CL4fyYjzh+i3viPVKI/oRSGoWzMHr/Vs=;
+ b=lBSMC7TY6RiL85WwTxRs0Xh+hLM0G+hJ5+gxxf11ZpelGPHwGGwkUjCSauByPDxHnHBTB27N6kI4d54Aw+DB1HTa3saPhxA1MQf5EwCl+ZRkm8/C+uX48XO7id6ccimdgx+Aoyg/zxkuV2s+uS/VFZgh2MMM03ooD8HGgNVR0O+a36+ui2GhQbTKR4R7osOu91KCjhqkHE/hjwyZRvLhVwlj2iIMDnFFpPJ9j7kR0qhpsrD1yFPYI/PT1lZw2zjZpN6TcBWgX3V1fw32P2GQIlD5HuX5W4nJUBnmoW/4uxezN2FF06+DjFtHymw7PQ4bOw6/D1ZEmZp3Sfb4R4k83g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eaQIe6F6uD7CL4fyYjzh+i3viPVKI/oRSGoWzMHr/Vs=;
+ b=VRyIPeaeypZ7hFYo5J/qwYbFQjUNUN8+jH40jghT8f3bXsmfP4vYOXis5Z3PG5db/uZKPCC8d/FatE0tPPNywm4xVjoxaTYh+hP/jmhE24XG0SuRGqt7O4jai1nCJErt3hKopRDXKj5AFIsYTNqYLl122eDY3lr3rLDprYJYbsA=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM6PR12MB2810.namprd12.prod.outlook.com (2603:10b6:5:41::21) by
+ SA1PR12MB6970.namprd12.prod.outlook.com (2603:10b6:806:24d::5) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6455.32; Tue, 6 Jun 2023 06:00:51 +0000
+Received: from DM6PR12MB2810.namprd12.prod.outlook.com
+ ([fe80::2a9c:fc67:a9fd:bea5]) by DM6PR12MB2810.namprd12.prod.outlook.com
+ ([fe80::2a9c:fc67:a9fd:bea5%6]) with mapi id 15.20.6455.030; Tue, 6 Jun 2023
+ 06:00:51 +0000
+Message-ID: <54fa0a4f-9b3e-50d7-57cb-e0d2d39b7761@amd.com>
+Date:   Tue, 6 Jun 2023 08:00:32 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+From:   "Gupta, Pankaj" <pankaj.gupta@amd.com>
+Subject: Re: [RFC PATCH V6 01/14] x86/sev: Add a #HV exception handler
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>
+Cc:     Tianyu Lan <ltykernel@gmail.com>, luto@kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        seanjc@google.com, pbonzini@redhat.com, jgross@suse.com,
+        tiala@microsoft.com, kirill@shutemov.name,
+        jiangshan.ljs@antgroup.com, ashish.kalra@amd.com,
+        srutherford@google.com, akpm@linux-foundation.org,
+        anshuman.khandual@arm.com, pawan.kumar.gupta@linux.intel.com,
+        adrian.hunter@intel.com, daniel.sneddon@linux.intel.com,
+        alexander.shishkin@linux.intel.com, sandipan.das@amd.com,
+        ray.huang@amd.com, brijesh.singh@amd.com, michael.roth@amd.com,
+        venu.busireddy@oracle.com, sterritt@google.com,
+        tony.luck@intel.com, samitolvanen@google.com, fenghua.yu@intel.com,
+        pangupta@amd.com, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-arch@vger.kernel.org
+References: <20230515165917.1306922-1-ltykernel@gmail.com>
+ <20230515165917.1306922-2-ltykernel@gmail.com>
+ <20230516093010.GC2587705@hirez.programming.kicks-ass.net>
+ <d43c14d9-a149-860c-71d6-e5c62b7c356f@amd.com>
+ <20230530143504.GA200197@hirez.programming.kicks-ass.net>
+ <0f0ab135-cdd0-0691-e0c1-42645671fe15@amd.com>
+ <20230530185232.GA211927@hirez.programming.kicks-ass.net>
+Content-Language: en-US
+In-Reply-To: <20230530185232.GA211927@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR2P281CA0147.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:98::12) To DM6PR12MB2810.namprd12.prod.outlook.com
+ (2603:10b6:5:41::21)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR12MB2810:EE_|SA1PR12MB6970:EE_
+X-MS-Office365-Filtering-Correlation-Id: 07e64908-2c13-4cdd-2955-08db66536194
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: b/O/9ULZuEB+3/s4KKiRU0fEbEuC/hqjWusGuS9MK8aq4F4OnzQ3m21+H03m4qazPD70SVNkdStHilaufCxvA8AMw6x6CV9DREp4Iyxa35XeQZWknK+K0SF/i2EBIxP6qDOIKkDT5ip1tra3pUEU1zK+hdozGz8BR3yva3Nrb3t2aQY6JMkgBqXc1LHS3cVliucaV6YeOoD5DzmBQ9AazR6gDPP50Dx2U+uyLjMYRLU9h/zXKC4jgA0JBNi6/8544TjFlrUpbPSXHOk2RS/BKUd92hzUuD8FZ5T7Mz9UP5l7mPTpyB/knF6Q19O+z7YuKklF0PhDRXXkeAJ1fCcu4xdPVrWdM6uLQ1SZFsEFMhQLjydohaZg3cjD64v8VO8i3iRq7pdNk/0cwQsddCPnIyxYd2UNr3+J5lAHQxgJMZnxIeskmlEbqsCkxz1t8iftgp1OLQglx3qAPMaaHUYOzKfl+izRD4guCOfeDyw1ZCnlmCOor5Du54Thbp6vwXndz9uR7cmznH9PqB9+a13ovZNSMB15iMGmjq74bWMehC8cMKgvdJ8bOkkXUEN2GnTaBrT6JssOb5ONDNloER6PGJt1sm6eaSx1sbfjGbgzO+g3oJp1dJe6N1ZGdsjCD6xg3AfT7x7EBYhrH00ibttANw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB2810.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(366004)(346002)(396003)(136003)(376002)(451199021)(478600001)(2906002)(6486002)(36756003)(6666004)(2616005)(83380400001)(6506007)(6512007)(86362001)(31696002)(38100700002)(26005)(186003)(5660300002)(316002)(31686004)(7416002)(7406005)(8676002)(8936002)(66946007)(4326008)(66556008)(6636002)(66476007)(110136005)(41300700001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TzJvTHdMdjBBMytRUVBpSlBldHdSeWZBTVVJdzYwekw0Rnl4a0NObGlSZXdQ?=
+ =?utf-8?B?a0U3YVROb245bU5hM3pDbHE4WGVBZ3JqYWd1YjRVQTR3Tjh6MFJDOGs2S0ZP?=
+ =?utf-8?B?NmJCR1RYcmp4a1lWRzFKOFhLSWNJTGNTeW05YU5sMGljQXNWUnhFWE5RWUdJ?=
+ =?utf-8?B?bEI3TWJrVjV2d3BGYzcxQ1hKaS92dzZHZ2RSd1g5aEIzMFVYb1BGc0ZWL0Nx?=
+ =?utf-8?B?blFqVjFCWjdmZm1UQVhUSFhOWVZBNUphRTJmeDBvRXNhNDFheG9BUElkSGpq?=
+ =?utf-8?B?QzlaQ044ZUoyekduLzVQSHZVS0k5YkEzSFdXZkVlTG1iVm12Uko0ZE5kTjRj?=
+ =?utf-8?B?MHhZZkRLWG51WTY5TDlZdUpsdmtUayt0MXl0dUxLQi8xUzdzVUxvaGhtVE9O?=
+ =?utf-8?B?WjNLVjF2MkVSaEh6Z3NIRThHdENsODNjbkJjczQ4NW13ZjZGTU9DclFUZEg1?=
+ =?utf-8?B?VEVrcS8rU09EUy9UN3R3QUc1SnNiUGl0UTFkZDdOUy9mWnYwY3RIanVzaFc2?=
+ =?utf-8?B?R3QvMkhMQmdxOEE2R2hkTGlsZGRJQzdLckljM3Naa2NmU21PNk5obm9KWDI2?=
+ =?utf-8?B?dDdBM2JMZTh0bVR6WG1USjdNZktRY2lZckdIemdTVzhSU2M4U2tna0c5Mld2?=
+ =?utf-8?B?VTBBOXZVVWg1Tk0xWGp2NHRUd2ZwSHNUZkt1T1pOZ0p0K1Z4RGpzbVlNc3Vi?=
+ =?utf-8?B?a2hHSEJpQnNicEZHNGV4bDY4dzRKamdQRUpRVEpZMWxmcFpPYmcrVmJCT1Bn?=
+ =?utf-8?B?NWlCSFFtR3VVU1V1cnZmTnRlUVdyemJoZXZDcitGb2ZtNnVENW5NU0k4OG53?=
+ =?utf-8?B?MTZva1loUHM1aC9SQWdNc1dSeTFjMjVWY3diWUNhQUNseVQ1MC9JT0xveG52?=
+ =?utf-8?B?cThmTll2YS85WEJJQkZpRldTSG90WGh5Z3VLWUZnYXhJenkrMldDalEralh2?=
+ =?utf-8?B?UUlUNVNwUkZueWluVTBCblI4cUNvMkhjWENsOWlITU1KaFNkRk5YcXB0Tm1q?=
+ =?utf-8?B?ZmFNR0pwUE1xcDBQTjY2VzNTM0h2RmdFNHh0WDBwdmFkNkUyVldCRUNibDMr?=
+ =?utf-8?B?T0dHaTBla2Q5Z1dkMmVFRSs1OU9WaWdEa0dGYytIOUpXM3pVR1V1WjYyaG5Z?=
+ =?utf-8?B?OVVndmdxUVRvYWVDMCsxdEwyUUpQeWF2S1NMUmNPZWhPcWlMMklSVjdDZmNx?=
+ =?utf-8?B?TmY0cFcrUTlnWk9iNWpCWm1ITVMzUngrdXRjakN3d0xSZU5BVkUwdlFXbXBh?=
+ =?utf-8?B?bEJyZHZ0TVhMMmdLcUtWV2tiZlg1Qjc0MjdGYTZ0aFNCSkUxSkxwa1VHeDNT?=
+ =?utf-8?B?R0hmOHl0SzN6V1doOFJ6T3dSL25QRWNmYVpWZ2FTN0dMNTh1MWE5dFZUcUZn?=
+ =?utf-8?B?NlpMMDJ6MFIyQ1J6VnlZanFiY2VVampCWVUyTVE4dm5KN1lOZldqZ2ErSUx2?=
+ =?utf-8?B?L055aG5sT1cyRkZwMmllRm5DRWJ5VlVMVEtOZmJjUE1YVTh6eTlKcTFHNXZ6?=
+ =?utf-8?B?WHFBNDZKUEdkeGMrdTdlbDdmekxMUWFvb2Qrdk56eWw3cmJCeUh3L2s3ZmQ5?=
+ =?utf-8?B?cGNTdXY5NWxoL2p6dGlMUUVWUU9xYTJGS0JSQndSQWxPUnlvSmFzOFRBK01n?=
+ =?utf-8?B?eXM5V1dISmMvaVRHa0V4OFh3SFNRSklzcFRUdlByblVqTURJSzR6SzJETEhm?=
+ =?utf-8?B?SnJ4QjN1bjV5Rzg1NEl6bll6R1MwbWcvazJPVlhtcC8wUFNMeVZVRFBpd2Ex?=
+ =?utf-8?B?d0RuU09meGVRZzV3T1BXME9zYlN2cGtmb3daNWVmWUFsSnhPYUlVcVF4UGd2?=
+ =?utf-8?B?Kyt5OGVuQUtRSWhlYVdocU8xNkFWazVhL1RhN3F2azZSaXdML01EUnFEY2FJ?=
+ =?utf-8?B?QUkyOXJ5VUVaYXB5UWpVL1pWMVZGWEFySDBFRmo2VFRPMFpQeDdtcFZIVVNt?=
+ =?utf-8?B?NEYwNkZGdlFRTXF0a2xkY1IyNHdwSVh0cEUzeWV3cGU4VWtCSUhvNUhLNWtl?=
+ =?utf-8?B?cUp5OTA3bG1EdGN5QXdOK0RMaWc5cm5xbFJCQkNHNWJyei8wQjNCSW13NFNM?=
+ =?utf-8?B?R01KaXpiRGkvU3VRZVQ4cGpsRUg5ejBuY29tMlRiZFdFRkJqdlF1V25RckpD?=
+ =?utf-8?Q?82HzRgbAibPsOAMsIwwPEE1Mj?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 07e64908-2c13-4cdd-2955-08db66536194
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB2810.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2023 06:00:51.0983
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 0LAgusRfzToqpamc/H1DSZYae6jjyjpzmHzw+vaXZ2C0/4DGe/w2nMk+Jwm/rnilMOwjG/R0ayLUtNIHal9JFQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB6970
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support to vote for ICC bandwidth based up on the link
-speed and width.
 
-Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
----
- drivers/pci/controller/dwc/pcie-qcom-ep.c | 73 +++++++++++++++++++++++++++++++
- 1 file changed, 73 insertions(+)
+>> That should really say that a nested #HV should never be raised by the
+>> hypervisor, but if it is, then the guest should detect that and
+>> self-terminate knowing that the hypervisor is possibly being malicious.
+> 
+> I've yet to see code that can do that reliably.
 
-diff --git a/drivers/pci/controller/dwc/pcie-qcom-ep.c b/drivers/pci/controller/dwc/pcie-qcom-ep.c
-index 19b3283..79e7559 100644
---- a/drivers/pci/controller/dwc/pcie-qcom-ep.c
-+++ b/drivers/pci/controller/dwc/pcie-qcom-ep.c
-@@ -17,6 +17,7 @@
- #include <linux/phy/pcie.h>
- #include <linux/phy/phy.h>
- #include <linux/platform_device.h>
-+#include <linux/interconnect.h>
- #include <linux/pm_domain.h>
- #include <linux/regmap.h>
- #include <linux/reset.h>
-@@ -28,6 +29,7 @@
- #define PARF_SYS_CTRL				0x00
- #define PARF_DB_CTRL				0x10
- #define PARF_PM_CTRL				0x20
-+#define PARF_PM_STTS				0x24
- #define PARF_MHI_CLOCK_RESET_CTRL		0x174
- #define PARF_MHI_BASE_ADDR_LOWER		0x178
- #define PARF_MHI_BASE_ADDR_UPPER		0x17c
-@@ -128,6 +130,9 @@
- /* DBI register fields */
- #define DBI_CON_STATUS_POWER_STATE_MASK		GENMASK(1, 0)
- 
-+#define DBI_LINKCTRLSTATUS			0x80
-+#define DBI_LINKCTRKSTATUS_SHIFT	16
-+
- #define XMLH_LINK_UP				0x400
- #define CORE_RESET_TIME_US_MIN			1000
- #define CORE_RESET_TIME_US_MAX			1005
-@@ -187,6 +192,8 @@ struct qcom_pcie_ep {
- 	enum qcom_pcie_ep_link_status link_status;
- 	int global_irq;
- 	int perst_irq;
-+
-+	struct icc_path *icc;
- };
- 
- static int qcom_pcie_ep_core_reset(struct qcom_pcie_ep *pcie_ep)
-@@ -253,9 +260,56 @@ static void qcom_pcie_dw_stop_link(struct dw_pcie *pci)
- 	disable_irq(pcie_ep->perst_irq);
- }
- 
-+static void qcom_pcie_icc_update(struct qcom_pcie_ep *pcie_ep)
-+{
-+	struct dw_pcie *pci = &pcie_ep->pci;
-+	u32 val, bw;
-+	int speed, width;
-+	int ret;
-+
-+	if (!pcie_ep->icc)
-+		return;
-+
-+	val = dw_pcie_readl_dbi(pci, DBI_LINKCTRLSTATUS);
-+	val = val >> DBI_LINKCTRKSTATUS_SHIFT;
-+
-+	speed = FIELD_GET(PCI_EXP_LNKSTA_CLS, val);
-+	width = FIELD_GET(PCI_EXP_LNKSTA_NLW, val);
-+
-+	/*
-+	 * ICC needs avg bw in KBps.
-+	 *
-+	 * For example for 2Gbps the avg BW = 2x1000x1000x1000/8*1000 = 250000
-+	 */
-+	switch (speed) {
-+	case 1:
-+		bw = 250000;	/* avg bw for GEN1 per lane: 2Gbps, peak bw: no vote */
-+		break;
-+	case 2:
-+		bw = 500000;	/* avg bw for GEN2 per lane: 4Gbps, peak bw no vote */
-+		break;
-+	case 3:
-+		bw = 1000000;	/* avg bw for GEN3 per lane: 8Gbps, peak bw no vote */
-+		break;
-+	default:
-+		WARN_ON_ONCE(1);
-+		fallthrough;
-+	case 4:
-+		bw = 2000000;	/* avg bw for GEN4 per lane: 16Gbps, peak bw no vote */
-+		break;
-+	}
-+
-+	ret = icc_set_bw(pcie_ep->icc, width * bw, 0);
-+	if (ret) {
-+		dev_err(pci->dev, "failed to set interconnect bandwidth: %d\n",
-+			ret);
-+	}
-+}
-+
- static int qcom_pcie_enable_resources(struct qcom_pcie_ep *pcie_ep)
- {
- 	int ret;
-+	struct dw_pcie *pci = &pcie_ep->pci;
- 
- 	ret = clk_bulk_prepare_enable(pcie_ep->num_clks, pcie_ep->clks);
- 	if (ret)
-@@ -277,6 +331,20 @@ static int qcom_pcie_enable_resources(struct qcom_pcie_ep *pcie_ep)
- 	if (ret)
- 		goto err_phy_exit;
- 
-+	/*
-+	 * Some Qualcomm platforms require interconnect bandwidth constraints
-+	 * to be set before enabling interconnect clocks.
-+	 *
-+	 * Set an initial average bandwidth corresponding to single-lane Gen 1
-+	 * for the pcie to mem path.
-+	 */
-+	ret = icc_set_bw(pcie_ep->icc, 250000, 0); /* avg bw: 2Gbps, peak bw: no vote */
-+	if (ret) {
-+		dev_err(pci->dev, "failed to set interconnect bandwidth: %d\n",
-+			ret);
-+		goto err_phy_exit;
-+	}
-+
- 	return 0;
- 
- err_phy_exit:
-@@ -550,6 +618,10 @@ static int qcom_pcie_ep_get_resources(struct platform_device *pdev,
- 	if (IS_ERR(pcie_ep->phy))
- 		ret = PTR_ERR(pcie_ep->phy);
- 
-+	pcie_ep->icc = devm_of_icc_get(dev, "pci");
-+	if (IS_ERR(pcie_ep->icc))
-+		ret = PTR_ERR(pcie_ep->icc);
-+
- 	return ret;
- }
- 
-@@ -572,6 +644,7 @@ static irqreturn_t qcom_pcie_ep_global_irq_thread(int irq, void *data)
- 	} else if (FIELD_GET(PARF_INT_ALL_BME, status)) {
- 		dev_dbg(dev, "Received BME event. Link is enabled!\n");
- 		pcie_ep->link_status = QCOM_PCIE_EP_LINK_ENABLED;
-+		qcom_pcie_icc_update(pcie_ep);
- 	} else if (FIELD_GET(PARF_INT_ALL_PM_TURNOFF, status)) {
- 		dev_dbg(dev, "Received PM Turn-off event! Entering L23\n");
- 		val = readl_relaxed(pcie_ep->parf + PARF_PM_CTRL);
--- 
-2.7.4
+- Currently, we are detecting the direct nested #HV with below check and
+   guest self terminate.
+
+   <snip>
+	if (get_stack_info_noinstr(stack, current, &info) &&
+	    (info.type == (STACK_TYPE_EXCEPTION + ESTACK_HV) ||
+	     info.type == (STACK_TYPE_EXCEPTION + ESTACK_HV2)))
+		panic("Nested #HV exception, HV IST corrupted, stack
+                 type = %d\n", info.type);
+   </snip>
+
+- Thinking about below solution to detect the nested
+   #HV reliably:
+
+   -- Make reliable IST stack switching for #VC -> #HV -> #VC case
+      (similar to done in __sev_es_ist_enter/__sev_es_ist_exit for NMI
+      IST stack).
+
+   -- In addition to this, we can make nested #HV detection (with another
+      exception type) more reliable with refcounting (percpu?).
+
+Need your inputs before I implement this solution. Or any other idea in 
+software you have in mind?
+
+Thanks,
+Pankaj
 
