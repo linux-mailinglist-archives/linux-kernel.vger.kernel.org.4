@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0D7F724709
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:57:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00C1B724707
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:57:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238553AbjFFO5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 10:57:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60006 "EHLO
+        id S233565AbjFFO5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 10:57:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238488AbjFFO4w (ORCPT
+        with ESMTP id S238491AbjFFO4w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 6 Jun 2023 10:56:52 -0400
 Received: from www530.your-server.de (www530.your-server.de [188.40.30.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAF0A1705;
-        Tue,  6 Jun 2023 07:56:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59E9F1707;
+        Tue,  6 Jun 2023 07:56:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=geanix.com;
         s=default2211; h=Content-Transfer-Encoding:MIME-Version:References:
         In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
         Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
         Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=ZNcuLhScoFLTrYmEtBLsGb9AliqwkZhWEKZ79KXaSYo=; b=Zi6nOzii95u8pkZlnSFAvSVpKA
-        m2pf8FvNLjVKUSgYbJbnKEoZPkHLMaZT+8Jfrvvg7Y0gUrsMyMy1zyeE/Cv9kJ7OQvTl8BhUQx/0U
-        K5o0t7zvnt+y3BsPvtXTtkL3zH0Alto5foD8s+KN9Vskg+X841b/CeT4ohgITSF41CR0ZHJWKusu3
-        3pXdo0nOli/FJ571Iy7QAkWdUXkcUh6Uj7g2cAAHi/ZN4QxSgIW2lLvA+RKFSv5t1/cOt1tasmcpp
-        9q1Od2bYx0P3tfSq+kZmevI5cZg7ft0PEkdUmTnkhv58030WpBMmFKP4FlEi0l+rLFAG5ZGy8lK9o
-        1oj1q5NA==;
+        bh=IHC41y3LgS8ynZWRUyo4kJuRV/JGlD0ZzhWOJdndh/4=; b=VGUVRSn3qWKOBDar5et3pJbmQa
+        jf/VFOmgX3YSsCNUwxG5gwV+OmEXTuMfRUAy/NRBF65YUOUB5ZhWBKLCInxZvb97QgMRnXvOeLOpk
+        rpolUMxnk58Y/5/nKHGbdnOqpg30HFMAYMprgu2MqHBX06DGrcH954KL8vGlSNempqxaVN/JOs7R6
+        KtrCeGl50vau7n5iyW7Km/EC0r2p+ZNtYUadYkQ4j3Rw2cwX6MmR0/z1ta+amiTBBiiy9Ht1QWSkP
+        kcfaNB3TyyTigfrmKvS50KSZcXUKjcK2BpzhLxjTauugMw8VE44NY3gcUpdyQK3bCU6WnJrVnPg0Q
+        UKHW2pxg==;
 Received: from sslproxy05.your-server.de ([78.46.172.2])
         by www530.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <sean@geanix.com>)
-        id 1q6Y6i-000Pn1-Nl; Tue, 06 Jun 2023 16:56:24 +0200
+        id 1q6Y6j-000Pn6-DG; Tue, 06 Jun 2023 16:56:25 +0200
 Received: from [185.17.218.86] (helo=zen..)
         by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <sean@geanix.com>)
-        id 1q6Y6i-0006D0-7R; Tue, 06 Jun 2023 16:56:24 +0200
+        id 1q6Y6i-0006D0-RS; Tue, 06 Jun 2023 16:56:24 +0200
 From:   Sean Nyekjaer <sean@geanix.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -46,9 +46,9 @@ Cc:     Sean Nyekjaer <sean@geanix.com>, dantuguf14105@gmail.com,
         devicetree@vger.kernel.org,
         linux-stm32@st-md-mailman.stormreply.com,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 2/5] ARM: dts: stm32: Add alternate pinmux for ldtc pins
-Date:   Tue,  6 Jun 2023 16:55:51 +0200
-Message-Id: <20230606145555.2155664-2-sean@geanix.com>
+Subject: [RFC PATCH 3/5] ARM: dts: stm32: Add alternate pinmux for can pins
+Date:   Tue,  6 Jun 2023 16:55:52 +0200
+Message-Id: <20230606145555.2155664-3-sean@geanix.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230606145555.2155664-1-sean@geanix.com>
 References: <20230606145555.2155664-1-sean@geanix.com>
@@ -58,108 +58,52 @@ X-Authenticated-Sender: sean@geanix.com
 X-Virus-Scanned: Clear (ClamAV 0.103.8/26930/Tue Jun  6 09:25:07 2023)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add another mux option for ltdc pins, this is used on Octavo OSD32MP1-RED
-board.
+Add another mux option for can pins, this is used on Octavo OSD32MP1-RED board.
 
 Signed-off-by: Sean Nyekjaer <sean@geanix.com>
 ---
- arch/arm/boot/dts/stm32mp15-pinctrl.dtsi | 75 ++++++++++++++++++++++++
- 1 file changed, 75 insertions(+)
+ arch/arm/boot/dts/stm32mp15-pinctrl.dtsi | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
 diff --git a/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi b/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi
-index d79f89f37bc7..422db6dd466c 100644
+index 422db6dd466c..537908a20efb 100644
 --- a/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi
 +++ b/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi
-@@ -979,6 +979,81 @@ pins {
+@@ -1144,6 +1144,26 @@ pins {
  		};
  	};
  
-+	ltdc_pins_e: ltdc-4 {
++	m_can1_pins_d: m-can1-3 {
 +		pins1 {
-+			pinmux = <STM32_PINMUX('H',  2, AF14)>, /* LTDC_R0 */
-+				 <STM32_PINMUX('H',  3, AF14)>, /* LTDC_R1 */
-+				 <STM32_PINMUX('H',  8, AF14)>, /* LTDC_R2 */
-+				 <STM32_PINMUX('H',  9, AF14)>, /* LTDC_R3 */
-+				 <STM32_PINMUX('H', 10, AF14)>, /* LTDC_R4 */
-+				 <STM32_PINMUX('C',  0, AF14)>, /* LTDC_R5 */
-+				 <STM32_PINMUX('H', 12, AF14)>, /* LTDC_R6 */
-+				 <STM32_PINMUX('E', 15, AF14)>, /* LTDC_R7 */
-+				 <STM32_PINMUX('E', 14, AF13)>, /* LTDC_G0 */
-+				 <STM32_PINMUX('E',  6, AF14)>, /* LTDC_G1 */
-+				 <STM32_PINMUX('H', 13, AF14)>, /* LTDC_G2 */
-+				 <STM32_PINMUX('H', 14, AF14)>, /* LTDC_G3 */
-+				 <STM32_PINMUX('H',  4, AF14)>, /* LTDC_G4 */
-+				 <STM32_PINMUX('I',  0, AF14)>, /* LTDC_G5 */
-+				 <STM32_PINMUX('I',  1, AF14)>, /* LTDC_G6 */
-+				 <STM32_PINMUX('I',  2, AF14)>, /* LTDC_G7 */
-+				 <STM32_PINMUX('D',  9, AF14)>, /* LTDC_B0 */
-+				 <STM32_PINMUX('G', 12, AF14)>, /* LTDC_B1 */
-+				 <STM32_PINMUX('G', 10, AF14)>, /* LTDC_B2 */
-+				 <STM32_PINMUX('D', 10, AF14)>, /* LTDC_B3 */
-+				 <STM32_PINMUX('E', 12, AF14)>, /* LTDC_B4 */
-+				 <STM32_PINMUX('A',  3, AF14)>, /* LTDC_B5 */
-+				 <STM32_PINMUX('B',  8, AF14)>, /* LTDC_B6 */
-+				 <STM32_PINMUX('D',  8, AF14)>, /* LTDC_B7 */
-+				 <STM32_PINMUX('F', 10, AF14)>, /* LTDC_DE */
-+				 <STM32_PINMUX('I',  9, AF14)>, /* LTDC_VSYNC */
-+				 <STM32_PINMUX('I', 10, AF14)>; /* LTDC_HSYNC */
-+			bias-disable;
-+			drive-push-pull;
-+			slew-rate = <0>;
-+		};
-+
-+		pins2 {
-+			pinmux = <STM32_PINMUX('G', 7, AF14)>; /* LTDC_CLK */
-+			bias-disable;
-+			drive-push-pull;
++			pinmux = <STM32_PINMUX('D', 1, AF9)>; /* CAN1_TX */
 +			slew-rate = <1>;
++			drive-push-pull;
++			bias-disable;
++		};
++		pins2 {
++			pinmux = <STM32_PINMUX('D', 0, AF9)>; /* CAN1_RX */
++			bias-disable;
 +		};
 +	};
 +
-+	ltdc_sleep_pins_e: ltdc-sleep-4 {
++	m_can1_sleep_pins_d: m_can1-sleep-3 {
 +		pins {
-+			pinmux = <STM32_PINMUX('H',  2, ANALOG)>, /* LTDC_R0 */
-+				 <STM32_PINMUX('H',  3, ANALOG)>, /* LTDC_R1 */
-+				 <STM32_PINMUX('H',  8, ANALOG)>, /* LTDC_R2 */
-+				 <STM32_PINMUX('H',  9, ANALOG)>, /* LTDC_R3 */
-+				 <STM32_PINMUX('H', 10, ANALOG)>, /* LTDC_R4 */
-+				 <STM32_PINMUX('C',  0, ANALOG)>, /* LTDC_R5 */
-+				 <STM32_PINMUX('H', 12, ANALOG)>, /* LTDC_R6 */
-+				 <STM32_PINMUX('E', 15, ANALOG)>, /* LTDC_R7 */
-+				 <STM32_PINMUX('D',  9, ANALOG)>, /* LTDC_B0 */
-+				 <STM32_PINMUX('G', 12, ANALOG)>, /* LTDC_B1 */
-+				 <STM32_PINMUX('G', 10, ANALOG)>, /* LTDC_B2 */
-+				 <STM32_PINMUX('D', 10, ANALOG)>, /* LTDC_B3 */
-+				 <STM32_PINMUX('E', 12, ANALOG)>, /* LTDC_B4 */
-+				 <STM32_PINMUX('A',  3, ANALOG)>, /* LTDC_B5 */
-+				 <STM32_PINMUX('B',  8, ANALOG)>, /* LTDC_B6 */
-+				 <STM32_PINMUX('D',  8, ANALOG)>, /* LTDC_B7 */
-+				 <STM32_PINMUX('E', 14, ANALOG)>, /* LTDC_G0 */
-+				 <STM32_PINMUX('E',  6, ANALOG)>, /* LTDC_G1 */
-+				 <STM32_PINMUX('H', 13, ANALOG)>, /* LTDC_G2 */
-+				 <STM32_PINMUX('H', 14, ANALOG)>, /* LTDC_G3 */
-+				 <STM32_PINMUX('H',  4, ANALOG)>, /* LTDC_G4 */
-+				 <STM32_PINMUX('I',  0, ANALOG)>, /* LTDC_G5 */
-+				 <STM32_PINMUX('I',  1, ANALOG)>, /* LTDC_G6 */
-+				 <STM32_PINMUX('I',  2, ANALOG)>, /* LTDC_G7 */
-+				 <STM32_PINMUX('F', 10, ANALOG)>, /* LTDC_DE */
-+				 <STM32_PINMUX('I',  9, ANALOG)>, /* LTDC_VSYNC */
-+				 <STM32_PINMUX('I', 10, ANALOG)>, /* LTDC_HSYNC */
-+				 <STM32_PINMUX('G',  7, ANALOG)>; /* LTDC_CLK */
++			pinmux = <STM32_PINMUX('D', 1, ANALOG)>, /* CAN1_TX */
++				 <STM32_PINMUX('D', 0, ANALOG)>; /* CAN1_RX */
 +		};
 +	};
 +
- 	mco1_pins_a: mco1-0 {
- 		pins {
- 			pinmux = <STM32_PINMUX('A', 13, AF2)>; /* MCO1 */
+ 	m_can2_pins_a: m-can2-0 {
+ 		pins1 {
+ 			pinmux = <STM32_PINMUX('B', 13, AF9)>; /* CAN2_TX */
 -- 
 2.40.0
 
