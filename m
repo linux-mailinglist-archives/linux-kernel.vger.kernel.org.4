@@ -2,176 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5338A7246CA
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:51:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C2B27246CF
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:51:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237856AbjFFOvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 10:51:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52956 "EHLO
+        id S235435AbjFFOve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 10:51:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237305AbjFFOuw (ORCPT
+        with ESMTP id S238469AbjFFOvM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 10:50:52 -0400
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2135.outbound.protection.outlook.com [40.107.7.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1268199B
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 07:50:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gjUBGcmxyM8x+wzSUVy4YHPOdigi8x9El9xcVHS3d12HCKHmBmLNaNohRyAL9nZnFsLuKmWOJ+Phsutjv+V8FxwjOOUV/h8XgTh//rBX2NSmfQYY5Bx+60iflQ6HUzKDSSlGLtC6av1hN7vnK7gzVrKBpVJUWjGHPoh98KCglLyQ8BeSfDG/5u60RLUrTPJWW9Er2PybjbsXvuBsSY9ujewH+k/GEKU/kyHVOdvGrXFvVw8TWASdQJL6a/F3RrVvQyNuVc/NHHaOMcUj0hyEWYTPW+j6JifNMn9bPRuIunmD0JnrlZbY7+9hbusfSr9TQcAHRn07V2EdYNTOBoUqaQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6ZlVWnisYOFTVdYWWm+WV7htGQUaCU1GcXk0MpQWdHk=;
- b=HUIX5hNflhf+jWJAxchpa7UDg30edMEbFwaAI0q8PnUZW1I0+xSE7ugEZxd7EOzXgOyLe3HRPNtpagUIEK7IIGwAHgNc9g3PoLDsRuk1jJD6XpjahvhgxXxcx2OiQd/EN5ovYuBMAaTT/CZ4SLePvnZpE2+CwonsEtScnA2GooPZkMsfnEpZSbczCFIekP31MVg6e22/iVNacXs8El7jMp36+Iz0JSn6CTCazdMB71rbEW0etkPUnpm34AEZs1varEWpRbmyLJMpP0x4tyUTnam5R9xL88UiNJroombkIKwqOqzcV7zw9r+pphnuJIDsSIYsGOhxUG8mWibdp206OQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=habana.ai; dmarc=pass action=none header.from=habana.ai;
- dkim=pass header.d=habana.ai; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=habana.ai;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6ZlVWnisYOFTVdYWWm+WV7htGQUaCU1GcXk0MpQWdHk=;
- b=Vrvitf38+TdENHKgr4hbOxrvYwKdxszJdbrwWQcvpKW22pELBcTo/Wzt+lARv+6MSiyflleJ0Ufb3Y6uuOajayPH/NrdvEFJDjQgJy2droXUACC1PmGH5VDPye40KNwFYwlcM1RKIgiiN9nHBo0QOxB31MDCB4MUYSmOEvyTdf/6BNW2JxAmzSxqNXjwCb/2w/M1l6IiPdNvnylhZdgDgkAUJnfg+YtBdi7bJAiBVjjx3p35hat7EOnjQljxoDYq2RXwO4z4/EU/Wuf0ZIQ1IeBI9LaKNMstJpw65vSOCTpCqJTIwnM1x37iopN3bs1jlYxcN09UUegjh7eCIOeh/g==
-Received: from AM9PR02MB7706.eurprd02.prod.outlook.com (2603:10a6:20b:43d::23)
- by PAWPR02MB9149.eurprd02.prod.outlook.com (2603:10a6:102:33d::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.32; Tue, 6 Jun
- 2023 14:50:21 +0000
-Received: from AM9PR02MB7706.eurprd02.prod.outlook.com
- ([fe80::73e3:88a8:1bd4:7bde]) by AM9PR02MB7706.eurprd02.prod.outlook.com
- ([fe80::73e3:88a8:1bd4:7bde%7]) with mapi id 15.20.6455.030; Tue, 6 Jun 2023
- 14:50:21 +0000
-From:   Moti Haimovski <mhaimovski@habana.ai>
-To:     Conor Dooley <conor.dooley@microchip.com>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "david.m.ertman@intel.com" <david.m.ertman@intel.com>,
-        "ogabbay@kernel.org" <ogabbay@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v1] make AUXILIARY_BUS config selection clearer
-Thread-Topic: [PATCH v1] make AUXILIARY_BUS config selection clearer
-Thread-Index: AQHZmHvOlQ30/AODak+XP1A3z091Ua99ygkAgAAJxlA=
-Date:   Tue, 6 Jun 2023 14:50:21 +0000
-Message-ID: <AM9PR02MB7706888212798FE0CC8213D6D152A@AM9PR02MB7706.eurprd02.prod.outlook.com>
-References: <20230606133528.197335-1-mhaimovski@habana.ai>
- <20230606-aspirate-evident-00b27a98a718@wendy>
-In-Reply-To: <20230606-aspirate-evident-00b27a98a718@wendy>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=habana.ai;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AM9PR02MB7706:EE_|PAWPR02MB9149:EE_
-x-ms-office365-filtering-correlation-id: 39100906-5690-4522-9d9a-08db669d5a44
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: cURQPXFxpg1hCC0SwC8JQZaf+VH6CeCDqJH07/bdcKdBceSXbphY7AIpbbCq1A6Ws6DVOQuuR083o8YZu//l3PmSLyM7QOUWbrYPzmLLeeSsnb4dn2fmNy2qNTTHjiITdnniLl6yXBIHUHxRIhrLGtDlE2mGiQbj5lf51C41LcDEo85Divsm1kzpt6C9NUYroT2olimsAyKgwpS6J/JiGddQWKFmWEAUng2dVhlEthrKS+bw8hbHpgmOXGVHAjYjt+sFyIaqEaNJAqjTvo6uu5cv4DR30qJ6hv8Foznnvtxw7fBs7Q+cPO+qmOuNNw/TUVxeFjKixVyp8x45csLvtlM6Fxg+Yeu5PPM9QnPsx1pu6HR4kkr6vvrDo2B1aYKn/sJNoQWtHoNwCbjCeafi+gI2O1ko4SrosG+Pfu5yOf1WBnHZXc/S1x02Kd3bICK8ykUeVuNXABkfWFhLe7Gk1m613OEAVFraIRSLQaC7B6vDXlw7uZ6Aq8E2nsAZlq83zy7xQo2AlP/Ge5p2jSJ6FyFZEsiZAg7tnVSSZqdNcDLxzM1lpI+sMMR4u+SDFjOHyA429WDutdcJYGwo4SGHbvMXwS7lG/OMaaDix/MmhFCXJhLxRnlKtRxOoGYGCMXg
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR02MB7706.eurprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39850400004)(376002)(366004)(136003)(346002)(396003)(451199021)(71200400001)(7696005)(64756008)(66476007)(66446008)(2906002)(122000001)(82960400001)(76116006)(66556008)(66946007)(8676002)(54906003)(8936002)(38100700002)(5660300002)(38070700005)(52536014)(86362001)(478600001)(4326008)(316002)(6916009)(33656002)(55016003)(41300700001)(9686003)(6506007)(26005)(53546011)(186003)(83380400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bXNmWFJ4dEVmMVpjajRFYUFOK3Qwa0tNZnBJb1psZ0FwVG0yTTdWK3BsM3Bs?=
- =?utf-8?B?WHkrQk54Z2szSHZ0S2VPVWdzQTA4SHZTSE1lRDROTU1XVlAxc3oxNXBpL0xI?=
- =?utf-8?B?QWVBSDRQM2NRN3JyY3E1MFJWNTJ3UXFOa2FMUUVvaXZ2cTJBNW92aXcyQXZX?=
- =?utf-8?B?aUd4K2xIZTFBMnFIa0RsYnlYRmZpaUl3ckdqNGk5RlpiMDhIanR4ZmwzT3Y0?=
- =?utf-8?B?eFJMdGwrd0t6aDBJUktHSnZtZUlRODVxVGhtSGp1K3FtWjc2OFR5N08zQ3Ju?=
- =?utf-8?B?aXQ0bmIrQ1RMOEo3dXNuUjVOSVFCVnRNZ0FkT3cvc1JqMTU3ejNkZlZISkwx?=
- =?utf-8?B?bTRWNUFqMWpqbzBuZklkRHpUR3E5WDM5d1ZYaC9EQTU3Zkl5TEZURFcvRE5x?=
- =?utf-8?B?a0Q4QVlKVmkyVVBmV0tSVmZoMjQ4R3piZ0g4emJqM29QUlo4UHJwblR6bFRD?=
- =?utf-8?B?NFpWYVhnbTVERm41TjRaWkNJcXZZa21uTlBuOTE1N3VSQytSTmlhQnhOeC84?=
- =?utf-8?B?OUpVUHZUTjNJczZkRFhGUDBmbUZteXpYOHhrNnRKWkVVRUtZVmpZUWovVWo4?=
- =?utf-8?B?R1E5WjlFUGIwSFNEeWFpdng1Y055Q2h3SU9paVl0aXFFMkFrSnZGS0VrV2tD?=
- =?utf-8?B?WHFNOVdIejlQQS9zZGcxTFFIbW94Rm9Pc1JmVUc3YlpMbjB0L0tuRmVtbjgx?=
- =?utf-8?B?S2M1NlJ3MXkxaFhjS0NUYVA2ZW41MlorL1dncWFnOXpRZzFMVE1jclRYcVlU?=
- =?utf-8?B?QTNCVW1hZitlOUZYUEJmVDBXVXNFWVNCT0lEa0ZjV21rK2xMY3hFTzJVeTVE?=
- =?utf-8?B?QVh5RGZ4RGVhU2J1bjZFSTFCY011Yzlmc1hBeFJReFlIRnhjaEN3YWlOZytJ?=
- =?utf-8?B?aXovbnhiT05kQUJuNnV1RGRYZS9FdHRzbkVjZ29DenlWNUR3enNIb0ZPWnp2?=
- =?utf-8?B?UWJkdUc5Smc5WmEzV0NSV0FuK1lSRHE1MXJ5Uk14RzJwQmJBTzdQSVNYa3JS?=
- =?utf-8?B?UGdxR3lsTXFJcWFOYkRpODVMNWc3K0M0ZnhGaUxuU3BHWnJmb2F5OXdOdkNx?=
- =?utf-8?B?ek9vQ0taNzZnK0p0S1d3NHZyTXN1NzV3WXpDSFFHdlFSUTh0MndMOHJVNUQr?=
- =?utf-8?B?eXAxZjh1ZVF4VEJSZ0xDOUY0VTBZRW9DaUkzMHIrOTRuV0ZQRzhvUEpqaFVw?=
- =?utf-8?B?U052VVJSUlozSGtCeC9ud2k3dlQyMmQ5RlRFNFNUNGlPK2RraENQMlV2V0N2?=
- =?utf-8?B?T1BCY3ZQRXNPWG5hNWFZdUFSVWRMZDB4ajNmMlNQY2cxRWx3N2M5WHVIeWJT?=
- =?utf-8?B?UkZZc2tWZ1A1SmJZcVFlMC8vdjhNazdaNFYyRTA1OWF2eTU3bGZSc3NwRTdw?=
- =?utf-8?B?djRmRWZvWnhocFlHbjNxdXV5SkQ1SVFsQ1F1cGhmanJpaXJSV3ZpajM1LzBT?=
- =?utf-8?B?WWtvczJqRXV3M3dQQ2RpcUFkTlNvMXVqMHd2NDNmRWc3eTNKOWJnSHBWOWZI?=
- =?utf-8?B?a0NZQmh0NGFvd0dGZ0hQMVhNU3VwVEdRUjVjcG5UZTE5OWk5SmZLYWhSOW5E?=
- =?utf-8?B?RDlkbXhUSDJ1N3pyV3FrVmduWWR4dUprRWREU0VxcDZaVDNia1A3UGVIcnN3?=
- =?utf-8?B?bkFmUmw1V0V1SUcrWDdyVlNFVWNpOHlwRk9wNU1qblZTQWlKcFk4bFFuV1Nm?=
- =?utf-8?B?Z0s1aFZsNWIrOVJKd0dWaTJGOTc0c2VKU0kvckwxa1Nwd01FUmZxY3VYQUl4?=
- =?utf-8?B?TEE3bWszU0hweHU5NS8xOTV1Z2E3YXJxV2EwOXZ6R0c4RUFBT1ptTGFvSFRM?=
- =?utf-8?B?bmFVN0wxeWxraStuRUxPSkgwM25tUTRKN0gvZ1RjNlR5Uy9wU3JqTkhweG1a?=
- =?utf-8?B?QVlTV1dqU1FjYXpWeGw2WWtYcXp6K0RXMzBKYStkaGthTGpraHhwVythaEZa?=
- =?utf-8?B?RUVRT2NIYi9WSlF0cDJpc3crY2FUMzhBSEtWTzR5RldHOHJndFNNQW84TjM3?=
- =?utf-8?B?enhmQTFhZHFVaG5rYTBvQS9JL0JoR1BIcmliYXl1VXhjOHhpcCtMS2p4MXhi?=
- =?utf-8?B?aHlMMDlYclB2aWp2enR2SFpwajJ3OHNOc2lZcmIvNTFlRjExa3hrV3ZhMnJt?=
- =?utf-8?Q?Wa5sbhqFqOQ5eVEnhX7LEiP3X?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Tue, 6 Jun 2023 10:51:12 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47581E40
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 07:51:07 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-976a0a1a92bso703790566b.1
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 07:51:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1686063065; x=1688655065;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rC8oBsqNuPxohD+DGyl4xevpH9uCNiaZarZVNVCDbPg=;
+        b=fMaiVQA10s3i1QFhqZNhRfReLnFy/LaYHR6gZqEulY/1xrdMsHgrcOrXdvoReusPRN
+         1fzcxfcmsPYdycWJh+Hr/ArqnHo0S7OGYh+MA3c+j5s9xyrR4e2TFK45OHEqswpPGzyX
+         x/qy6zBgHJgxAMgmHIfhyAy24CWlvbo9RqbnE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686063065; x=1688655065;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rC8oBsqNuPxohD+DGyl4xevpH9uCNiaZarZVNVCDbPg=;
+        b=inzDzRm8zQrExyTpgJLyNNY8Cdyr9Tl34s2UcWSTXDSkIs2mVfA9H2wYkmz86lUqcP
+         2y3bvanvxRxpNqgn02NsyZC35QvaCquFBTCYrGPRO/FU4huC4TS8W0sddSaTP9+AA2Uj
+         5FwTABgM4WkW52ADBGXfYpMMtU7+35FVt+NRfGPPMnUOzYkO/B6qIEox7EYMznPbc3nn
+         2RnjWmzzBJK+0MKHbA0HnL//1Wv9VnfHzNS9vYACxOjU5wZEMeZ1rs8mFqmgT595um1y
+         p6GfVLP9cY0AnU7n7d9pvHsuAIdezjU9zFxYrjNv5hXlcARWpmHHaQ89Zk105lcIEUZK
+         Y/aw==
+X-Gm-Message-State: AC+VfDypjArN1pRsCAOb7Oj1+yX0GK5L2a3XzhMtsLoZVdPq7Xh6cPN5
+        M/RYy7zEgoBzgsclf0rFRFKDfici5XoTZhUrDbTD5o3O
+X-Google-Smtp-Source: ACHHUZ5EAyX4YrrAEB0u0yrIJ8bKC5psKnePFR+jvlBak3GQ3WxUNPkVbiNz57QkBkHZ4JTlJ247yw==
+X-Received: by 2002:a17:907:72d3:b0:961:69a2:c8d6 with SMTP id du19-20020a17090772d300b0096169a2c8d6mr3052096ejc.69.1686063065568;
+        Tue, 06 Jun 2023 07:51:05 -0700 (PDT)
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com. [209.85.208.51])
+        by smtp.gmail.com with ESMTPSA id w17-20020a1709060a1100b009655eb8be26sm5687253ejf.73.2023.06.06.07.51.04
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Jun 2023 07:51:04 -0700 (PDT)
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-51493ec65d8so9474643a12.2
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 07:51:04 -0700 (PDT)
+X-Received: by 2002:a05:6402:1613:b0:506:8dba:bd71 with SMTP id
+ f19-20020a056402161300b005068dbabd71mr2048087edv.27.1686063064287; Tue, 06
+ Jun 2023 07:51:04 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: habana.ai
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM9PR02MB7706.eurprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 39100906-5690-4522-9d9a-08db669d5a44
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Jun 2023 14:50:21.2786
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 0d4d4539-213c-4ed8-a251-dc9766ba127a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: iH7ubzx/6WCxY2/j2M2i+0xe/Mn8V/LRi84rhftWfeZTOQoKLR705sqS9zjOVeXPliwY4ORpGebnekrSbWNs+g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAWPR02MB9149
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230526205204.861311518@infradead.org> <CAHk-=wg2RHZKTN29Gr7MhgYfaNtzz58wry9jCNP75LAmQ9t8-A@mail.gmail.com>
+ <20230530092342.GA149947@hirez.programming.kicks-ass.net> <20230606094251.GA907347@hirez.programming.kicks-ass.net>
+ <CAHk-=wi-RyoUhbChiVaJZoZXheAwnJ7OO=Gxe85BkPAd93TwDA@mail.gmail.com> <20230606134005.GE905437@hirez.programming.kicks-ass.net>
+In-Reply-To: <20230606134005.GE905437@hirez.programming.kicks-ass.net>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 6 Jun 2023 07:50:47 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgQ5m+SnWTYGHu0JgYXTk2dkGF+msX=ARfYoo3t1_fX9g@mail.gmail.com>
+Message-ID: <CAHk-=wgQ5m+SnWTYGHu0JgYXTk2dkGF+msX=ARfYoo3t1_fX9g@mail.gmail.com>
+Subject: Re: [PATCH v2 0/2] Lock and Pointer guards
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     keescook@chromium.org, gregkh@linuxfoundation.org,
+        pbonzini@redhat.com, linux-kernel@vger.kernel.org,
+        ojeda@kernel.org, ndesaulniers@google.com, mingo@redhat.com,
+        will@kernel.org, longman@redhat.com, boqun.feng@gmail.com,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
+        joel@joelfernandes.org, josh@joshtriplett.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        rcu@vger.kernel.org, tj@kernel.org, tglx@linutronix.de,
+        linux-toolchains@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgQ29ub3IsDQogTm90aW5nIGlzIHdyb25nIHdpdGggdGhlIGRyaXZlcnMg8J+Yig0KDQpJJ3Zl
-IHN0dW1ibGVkIHRoYXQgaXNzdWUgd2hlbiB0cnlpbmcgdG8gZmlndXJlLW91dCBob3cgdG8gbWFu
-aXB1bGF0ZSB0aGUgYXV4aWxpYXJ5LWJ1cyBzZWxlY3Rpb24NClZpYSAibWFrZSBtZW51Y29uZmln
-Ig0KVGhlIGlzc3VlIGlzIHRoYXQgd2l0aCB0aGUgY3VycmVudCBLY29uZmlnIHdoZW4geW91IHJ1
-biAiIG1ha2UgbWVudWNvbmZpZyIgYW5kIGVudGVyIHRoZQ0KRGV2aWNlIERyaXZlcnMgLS0tPiAg
-ICAgR2VuZXJpYyBEcml2ZXIgT3B0aW9ucyAtLS0+ICAgU3ViLW1lbnUgdGhlbiB0aGVyZSBpcyBu
-byBtZW50aW9uaW5nIG9mDQogdGhlIEF1eGlsaWFyeSBidXMgYWx0aG91Z2ggaXQgaXMgdGhlIGZp
-cnN0IGVudHJ5IGluIGRyaXZlcnMvYmFzZS9LY29uZmlnIHRoYXQgdGhpcyBtZW51IGlzIHByZXNl
-bnRpbmcuDQpTbywgdGhlIHVzZXIgaGFzIG5vIGlkZWEgdGhhdCB0aGlzIG9wdGlvbiBleGlzdHMg
-YW5kIG5vIHdheSB0byBtYW5pcHVsYXRlIGl0IHZpYSBtZW5jb25maWcuDQpNeSBjb21taXQgbWFr
-ZXMgdGhpcyBvcHRpb24gInZpc2libGUiIGJ5IGFkZGluZyB0aGUgc2hvcnQgZGVzY3JpcHRpb24g
-aW4gdGhlICJib29sIiBsaW5lDQphbmQgLCB3aGlsZSBhdCBpdCwgYWRkaW5nIGEgc2hvcnQgZGVz
-Y3JpcHRpb24gZm9yIHRoZSBzYWtlIG9mIGZ1dHVyZSBnZW5lcmF0aW9ucy4NCk5vIGZ1bmN0aW9u
-YWxpdHkgbm9yIGRlZmF1bHQgdmFsdWVzIHdlcmUgYWx0ZXJlZC4NCg0KSG9wZSB0aGlzIGFuc3dl
-cnMgeW91ciBxdWVzdGlvbg0KIE1vdGkgSA0KDQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0t
-DQo+IEZyb206IENvbm9yIERvb2xleSA8Y29ub3IuZG9vbGV5QG1pY3JvY2hpcC5jb20+DQo+IFNl
-bnQ6IFR1ZXNkYXksIDYgSnVuZSAyMDIzIDE2OjQ4DQo+IFRvOiBNb3RpIEhhaW1vdnNraSA8bWhh
-aW1vdnNraUBoYWJhbmEuYWk+DQo+IENjOiBncmVna2hAbGludXhmb3VuZGF0aW9uLm9yZzsgZGF2
-aWQubS5lcnRtYW5AaW50ZWwuY29tOw0KPiBvZ2FiYmF5QGtlcm5lbC5vcmc7IGxpbnV4LWtlcm5l
-bEB2Z2VyLmtlcm5lbC5vcmcNCj4gU3ViamVjdDogUmU6IFtQQVRDSCB2MV0gbWFrZSBBVVhJTElB
-UllfQlVTIGNvbmZpZyBzZWxlY3Rpb24gY2xlYXJlcg0KPiANCj4gSGV5IE1vdGksDQo+IA0KPiBP
-biBUdWUsIEp1biAwNiwgMjAyMyBhdCAwNDozNToyOFBNICswMzAwLCBNb3RpIEhhaW1vdnNraSB3
-cm90ZToNCj4gPiBBZGQgYSBkaXNwbGF5IHN0cmluZyBhbmQgYSBoZWxwIHNlY3Rpb24gdG8gdGhl
-IGNvbmZpZyBBVVhJTElBUllfQlVTDQo+ID4gc2VjdGlvbiB1bmRlciB0aGUgIkdlbmVyaWMgRHJp
-dmVyIE9wdGlvbnMiIG1lbnUgaW4gb3JkZXIgdG8gbWFrZSBpdHMNCj4gPiBzZWxlY3Rpb24gY2xl
-YXJlci4NCj4gDQo+IEkgYW0gYSB3ZWUgYml0IGNvbmZ1c2VkLCBzaW5jZSBpdCBpcyBub3QgZXhw
-bGljaXRseSBtZW50aW9uZWQgaGVyZSwgd2h5IGlzIHRoaXMNCj4gbm93IGdvaW5nIHRvIGJlIHVz
-ZXIgdmlzaWJsZS9zZWxlY3RhYmxlPyBXaGF0IHdhcyB3cm9uZyB3aXRoIHRoZSBkcml2ZXJzDQo+
-IHRoYXQgbmVlZGVkIGl0IHNlbGVjdGluZyBpdD8NCj4gDQo+IFRoYW5rcywNCj4gQ29ub3IuDQo+
-IA0KPiA+DQo+ID4gU2lnbmVkLW9mZi1ieTogTW90aSBIYWltb3Zza2kgPG1oYWltb3Zza2lAaGFi
-YW5hLmFpPg0KPiA+IC0tLQ0KPiA+ICBkcml2ZXJzL2Jhc2UvS2NvbmZpZyB8IDExICsrKysrKysr
-KystDQo+ID4gIDEgZmlsZSBjaGFuZ2VkLCAxMCBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0p
-DQo+ID4NCj4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9iYXNlL0tjb25maWcgYi9kcml2ZXJzL2Jh
-c2UvS2NvbmZpZyBpbmRleA0KPiA+IDZmMDRiODMxYTVjMC4uZTFjYWFjMWQ5YTU4IDEwMDY0NA0K
-PiA+IC0tLSBhL2RyaXZlcnMvYmFzZS9LY29uZmlnDQo+ID4gKysrIGIvZHJpdmVycy9iYXNlL0tj
-b25maWcNCj4gPiBAQCAtMiw3ICsyLDE2IEBADQo+ID4gIG1lbnUgIkdlbmVyaWMgRHJpdmVyIE9w
-dGlvbnMiDQo+ID4NCj4gPiAgY29uZmlnIEFVWElMSUFSWV9CVVMNCj4gPiAtCWJvb2wNCj4gPiAr
-CWJvb2wgIlN1cHBvcnQgZm9yIGF1eGlsaWFyeSBidXMiDQo+ID4gKwloZWxwDQo+ID4gKwkgIFRo
-ZSBhdXhpbGlhcnkgYnVzIGRyaXZlciBwcm92aWRlcyBhIHdheSB0byBleHBvcnQgYW4gaW50ZXJm
-YWNlDQo+ID4gKwkgIGZvciBhbm90aGVyIHN1YnN5c3RlbSB0byBkcml2ZSwgaW1wbGVtZW50IGEg
-Y29tbW9uIGludGVyc2VjdGlvbg0KPiA+ICsJICBvZiBmdW5jdGlvbmFsaXR5IG9yIHNwbGl0IGEg
-ZnVuY3Rpb24gaW50byBjaGlsZC1kZXZpY2VzDQo+ID4gKwkgIHJlcHJlc2VudGluZyBzdWItZG9t
-YWlucyBvZiBmdW5jdGlvbmFsaXR5IHdoZXJlIGVhY2ggYXV4aWxpYXJ5DQo+ID4gKwkgIGRldmlj
-ZSByZXByZXNlbnRzIGEgcGFydCBvZiBpdHMgcGFyZW50IGZ1bmN0aW9uYWxpdHkgKHVzdWFsbHkp
-DQo+ID4gKwkgIGRyaXZlbiBieSBhbm90aGVyIGRyaXZlci4NCj4gPiArDQo+ID4gKwkgIElmIHVu
-c3VyZSwgc2F5IFkuDQo+ID4NCj4gPiAgY29uZmlnIFVFVkVOVF9IRUxQRVINCj4gPiAgCWJvb2wg
-IlN1cHBvcnQgZm9yIHVldmVudCBoZWxwZXIiDQo+ID4gLS0NCj4gPiAyLjI1LjENCj4gPg0K
+On Tue, Jun 6, 2023 at 6:40=E2=80=AFAM Peter Zijlstra <peterz@infradead.org=
+> wrote:
+>
+> I know the name from C++ where it is std::lock_guard<> (well, back when
+> I still did C++ it wasn't std, but whatever), and Rust seems to have
+> std::sync::MutexGuard<>.
+>
+> But if that's the sole objection left, lets have a bike-shed party and
+> pick a colour :-)
+>
+> 'shield' 'sentry' 'sentinel' 'keeper' 'custodian' 'warden' ?
+
+I feel like you seem entirely too fixated on locking.
+
+That's not even _remotely_ the most interesting case, I think.
+
+For the common locking patterns , maybe "guard" makes sense as part of
+the name, but it damn well shouldn't be about any "ptr_guard" or
+whatever.
+
+I think it should be some trivial
+
+        mutex_scope(mymytex) {
+                ..
+        }
+
+and yes, in that case scoping makes tons of sense and might even be
+required, because you do want to visually see the scope of the
+locking.
+
+I'm not seeing the point of "guard" in that name either, but I don't
+think the above is the complex case for naming, for use, or for
+syntax.
+
+In contrast, I think reference counting and allocations are the much
+more interesting one, and the case where you are also more likely to
+have multiple consecutive ones, and where it's likely less about "this
+region is protected" and much more about the RAII patterns and
+resources that you just want cleanup for.
+
+So that's why I had that "auto_release" name - to make it clear that
+it's about the *cleanup*, not about some "guarded region". See my
+argument?
+
+The locking cases can probably be handled with just a couple of macros
+(mutex, rcu, maybe spinlock?) and I would violently argue that the
+locking cases will have to have unconditional cleanup (ie if you
+*ever* have the situation where some path is supposed to be able to
+return with the lock held and no cleanup, then you should simply not
+use the "mutex_scope()" kind of helper AT ALL).
+
+So locking is, I feel, almost uninteresting. There are only a few
+cases, and only trivial patterns for it, because anything non-trivial
+had better be done very explicitly, and very much visibly by hand.
+
+But look at the cases where we currently use "goto exit" kind of code,
+or have duplicated cleanups because we do "cleanup(x); return -ERRNO"
+kinds of patterns.
+
+Some of them are locking, yes. But a lot of them are more generic "do
+this before returning" kinds of things: freeing (possibly complex)
+data structures, uncharging statistcs, or even things like writing
+results back to user space.
+
+And, unlike locking, those often (but not always) end up having the
+"don't do this in the single success case" situation, so that you need
+to have some way to show "ok, don't release it after all". Yes, that
+ends up in practice likely being setting that special pointer to NULL,
+but I think we need to have a much better syntax for it to show that
+"now we're *not* doing the auto-release".
+
+So it's that more complex case that I
+
+ (a) don't think "guard" makes any sense for at all
+
+ (b) think it's where the bigger payoffs are
+
+ (c) think that generally are not "nested" (you release the resources
+you've allocated, but you don't "nest" the allocations - they are just
+serial.
+
+ (d) think that the syntax could be pretty nasty, because the cleanup
+is not just a trivial fixed "unlock" function
+
+Just as an example of something that has a bit of everything, look at
+kernel/cpu.c and the _cpu_down() function in particular, which has
+that "goto out" to do all the cleanup.
+
+That looks like a perfect case for having some nice "associate the
+cleanup with the initialization" RAII patterns, but while it does have
+one lock (cpus_write_lock/unlock()), even that one is abstracted away
+so that it may be a no-op, and might be a percpu rwlock, and so having
+to create a special macro for that would be more work than is worth
+it.
+
+Because what I *don't* want to happen is that people create some
+one-time-use "helper" macro infrastructure to use this all. Again,
+that cpus_write_lock/unlock is a good example of this.
+
+End result: to avoid having crazy indentation, and crazy one-time
+helper inline functions or whatever, I think you'd really want some
+fairly generic model for
+
+  "I am doing X, and I want to to Y as a cleanup when you exit the function=
+"
+
+where both X and Y can be *fairly* complicated things. They might be
+as simple (and reasonably common) as "fd =3D fdget(f)" and "fdput(fd)",
+but what about the one-offs like that cpus_write_lock/unlock pattern?
+
+That one only happens in two places (_cpu_down() and _cpu_up()), and
+maybe the answer is "we can't reasonably do it for that, because the
+complexity is not worth it".
+
+But maybe we *can*.
+
+For example, this is likely the only realistic *good* case for the
+horrible "nested function" thing that gcc supports. In my "look, we
+could clean up a 'struct fd' example from last week, I made it do
+something like this:
+
+    /* Trivial "getfd()" wrapper */
+    static inline void release_fd(struct fd *fd)
+    { fdput(*fd); }
+
+    #define auto_getfd(name, n) \
+        auto_release_name(struct fd, name, fdget(n), release_fd)
+
+but it would possibly be much more generic, and much more useful, if
+that "release_fd()" function was generated by the macro as a local
+nested inline function.
+
+End result: you could use any arbitrary local cleanup code.
+
+So you could have something like
+
+  #define RAII(type, var, init, exit) \
+        __RAII(type, var, init, exit, __UNIQUE_ID(fn)
+
+  #define __RAII(type, var, init, exit, exitname) \
+        void exitname(type *p) { exit } \
+        type var __attribute__((__cleanup__(exitname))) =3D (init)
+
+and do all of the above with
+
+    RAII(struct fd, fd, fdget(f), fdput(fd));
+
+because that macro would literally expand to create a (uniquely named)
+nested function that then contains that "fdput(fd)".
+
+I dunno. The syntax looks pretty bad, and I'm not even convinced clang
+supports nested functions, so the above may not be an option.
+
+But wouldn't it be nice to just be able to declare that arbitrary
+cleanup in-place?
+
+Then the lock cases would really just be trivial helper wrappers. And
+you can use "guard" there if you want, but I feel it makes absolutely
+*no* sense in the generic case. There is absolutely nothng that is
+being "guarded" by having an automatic cleanup of some random
+variable.
+
+              Linus
