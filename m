@@ -2,163 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD74E723518
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 04:13:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C28A472351B
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 04:14:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233318AbjFFCNg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 22:13:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47490 "EHLO
+        id S233750AbjFFCOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 22:14:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230121AbjFFCNd (ORCPT
+        with ESMTP id S231836AbjFFCOC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 22:13:33 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 226F010A;
-        Mon,  5 Jun 2023 19:13:31 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.86])
-        by gateway (Coremail) with SMTP id _____8AxxvBKln5kyVUAAA--.982S3;
-        Tue, 06 Jun 2023 10:13:30 +0800 (CST)
-Received: from [10.20.42.86] (unknown [10.20.42.86])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxReRIln5kBZ8BAA--.7390S3;
-        Tue, 06 Jun 2023 10:13:29 +0800 (CST)
-Subject: Re: [PATCH v12 08/31] LoongArch: KVM: Implement vcpu handle exit
- interface
-To:     "bibo, mao" <maobibo@loongson.cn>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-References: <20230530015223.147755-1-zhaotianrui@loongson.cn>
- <20230530015223.147755-9-zhaotianrui@loongson.cn>
- <d28f48e3-95d2-111f-e938-348d68402a57@loongson.cn>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        loongarch@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
-        Mark Brown <broonie@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Xi Ruoyao <xry111@xry111.site>
-From:   Tianrui Zhao <zhaotianrui@loongson.cn>
-Message-ID: <3fe89bb1-a39c-1da2-b527-4175dfb68752@loongson.cn>
-Date:   Tue, 6 Jun 2023 10:13:28 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Mon, 5 Jun 2023 22:14:02 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85EBC11D;
+        Mon,  5 Jun 2023 19:13:53 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id 41be03b00d2f7-5429d91efc2so549757a12.0;
+        Mon, 05 Jun 2023 19:13:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686017633; x=1688609633;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GK3SH+ZRgMM3hnQg2lJiFOx+Ehf48Mzwt4h/2p4dLtA=;
+        b=od6j8MHiM34MxiAmu/7VpTdynYLAAW+dMGjCcMBFWgPNRZKANQ64sDInmd3TM8FHX+
+         +aHwrfDrm9mPt/VGJRnjKe7u2zonavLCUhZbuVWdov5BnAQ7TbpmNLsHx7UIOLtu9edy
+         Wj80xJuJFpWQYKsb6uYiZRiCuS3I/vgYSoofBRhbc0rgfxnxO2XEwBaMaXVhhz81jQZv
+         ZEXgNe1cu/QI77ritG/hM3R2Ict2mRyzes1QZ4MFg5m8rSPpzv4D7DdRHG79h22eczGN
+         FTAHrig4R6hA5Fwu+fRuQHGm5n6E0ie0drKGfFmTIr+4dQ1zuhOX2bSxC5+JF+babEI/
+         XL+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686017633; x=1688609633;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GK3SH+ZRgMM3hnQg2lJiFOx+Ehf48Mzwt4h/2p4dLtA=;
+        b=Z1Tbr5dbaYKWS0nwpqHtzpLDK6/DnJyFUP0kJtia9gJDh1mAkFfSScQnNXOKpGanyb
+         kvt4E1PqyXZo7o7j6A87ywCnYpQW9ZN4X1Z8cb4qJ1KVOg8HsvedbMyYJs18ZSiabT3v
+         YAbIeAV1ITSTEQ9K+/ljRwmeoGd4h0wt+T8xovmWnXgPknPjl5TM2CboxVuCrTBIqvux
+         pzHuT7Ly2ooD0lVVc/S4PDupGf4xVhpJSXtDEE0DBqDLKxK8gN1O3VHUyYLyF/IEK4kk
+         /X8M0fDgx3KWnHzlJYrlDCCspQDxYlUwb3lS9AdqToTKe8LtZuE17v2l90eTvhG+jix0
+         NSOw==
+X-Gm-Message-State: AC+VfDyVbRF8DmNx5wxOECP4FDaMo0MQ+nY4xpm4ELq5mpFixflqu2j6
+        1y1yU6BF3YgGkg91Y53NwJg=
+X-Google-Smtp-Source: ACHHUZ4AgqcoZQHQ9vBMlx5Pm4Vzq8IAyRRH9N50lXIEBRai3htmt99Xy8nuKv0x0CXxVsC5A/sbjg==
+X-Received: by 2002:a17:902:e751:b0:1ae:1364:6086 with SMTP id p17-20020a170902e75100b001ae13646086mr923553plf.2.1686017632804;
+        Mon, 05 Jun 2023 19:13:52 -0700 (PDT)
+Received: from [127.0.0.1] ([2404:c140:1f03::caf2])
+        by smtp.gmail.com with ESMTPSA id u10-20020a170902e80a00b001aadd0d7364sm7225788plg.83.2023.06.05.19.13.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Jun 2023 19:13:52 -0700 (PDT)
+Message-ID: <1626a8b8-ae7a-a110-44a1-24c8f600822a@gmail.com>
+Date:   Tue, 6 Jun 2023 10:13:44 +0800
 MIME-Version: 1.0
-In-Reply-To: <d28f48e3-95d2-111f-e938-348d68402a57@loongson.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxReRIln5kBZ8BAA--.7390S3
-X-CM-SenderInfo: p2kd03xldq233l6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj93XoW7Aw4UtFWxCFW8Zw15tF15ZFc_yoW5JF43pr
-        WkCFn8Ww4rJry7Gw13tws0qrnIqr97Kr1I9ry3Way2yrsFy34rtry8KrZxCFy5ur1FqF1x
-        ZF1rGrn8uFs0yagCm3ZEXasCq-sJn29KB7ZKAUJUUUU3529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUPSb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAF
-        wI0_Gr1j6F4UJwAaw2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2
-        xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_
-        Jw0_WrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwI
-        xGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAK
-        I48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrV
-        AFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCI
-        c40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26ryj6F1UMIIF0xvE2Ix0cI8IcVCY1x0267
-        AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_
-        Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8_gA5
-        UUUUU==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH net] net: sched: fix possible refcount leak in
+ tc_chain_tmplt_add()
+To:     Simon Horman <simon.horman@corigine.com>
+Cc:     jhs@mojatatu.com, xiyou.wangcong@gmail.com, jiri@resnulli.us,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230605070158.48403-1-hbh25y@gmail.com>
+ <ZH3Vju3D3KCKAkCO@corigine.com>
+Content-Language: en-US
+From:   Hangyu Hua <hbh25y@gmail.com>
+In-Reply-To: <ZH3Vju3D3KCKAkCO@corigine.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 5/6/2023 20:31, Simon Horman wrote:
+> On Mon, Jun 05, 2023 at 03:01:58PM +0800, Hangyu Hua wrote:
+>> try_module_get can be called in tcf_proto_lookup_ops. So if ops don't
+>> implement the corresponding function we should call module_put to drop
+>> the refcount.
+> 
+> Hi Hangyu Hua,
+> 
+> Is this correct even if try_module_get() is
+> not called via tcf_proto_lookup_ops() ?
+> 
 
+tcf_proto_lookup_ops will return error if try_module_get() is not called 
+in tcf_proto_lookup_ops(). I am not sure what you mean?
 
-在 2023年06月05日 21:03, bibo, mao 写道:
->
-> 在 2023/5/30 09:52, Tianrui Zhao 写道:
->> Implement vcpu handle exit interface, getting the exit code by ESTAT
->> register and using kvm exception vector to handle it.
->>
->> Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
+Thanks,
+Hangyu
+
+>> Fixes: 9f407f1768d3 ("net: sched: introduce chain templates")
+>> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
 >> ---
->>   arch/loongarch/kvm/vcpu.c | 46 +++++++++++++++++++++++++++++++++++++++
->>   1 file changed, 46 insertions(+)
+>>   net/sched/cls_api.c | 1 +
+>>   1 file changed, 1 insertion(+)
 >>
->> diff --git a/arch/loongarch/kvm/vcpu.c b/arch/loongarch/kvm/vcpu.c
->> index eca8b96a3e6e..ddea480fa5b0 100644
->> --- a/arch/loongarch/kvm/vcpu.c
->> +++ b/arch/loongarch/kvm/vcpu.c
->> @@ -55,6 +55,52 @@ static void kvm_pre_enter_guest(struct kvm_vcpu *vcpu)
->>   	vcpu->arch.aux_inuse &= ~KVM_LARCH_CSR;
->>   }
+>> diff --git a/net/sched/cls_api.c b/net/sched/cls_api.c
+>> index 2621550bfddc..92bfb892e638 100644
+>> --- a/net/sched/cls_api.c
+>> +++ b/net/sched/cls_api.c
+>> @@ -2952,6 +2952,7 @@ static int tc_chain_tmplt_add(struct tcf_chain *chain, struct net *net,
+>>   		return PTR_ERR(ops);
+>>   	if (!ops->tmplt_create || !ops->tmplt_destroy || !ops->tmplt_dump) {
+>>   		NL_SET_ERR_MSG(extack, "Chain templates are not supported with specified classifier");
+>> +		module_put(ops->owner);
+>>   		return -EOPNOTSUPP;
+>>   	}
 >>   
->> +/*
->> + * Return 1 for resume guest and "<= 0" for resume host.
->> + */
->> +static int _kvm_handle_exit(struct kvm_run *run, struct kvm_vcpu *vcpu)
->> +{
->> +	unsigned long exst = vcpu->arch.host_estat;
->> +	u32 intr = exst & 0x1fff; /* ignore NMI */
->> +	u32 exccode = (exst & CSR_ESTAT_EXC) >> CSR_ESTAT_EXC_SHIFT;
->> +	int ret = RESUME_GUEST;
->> +
->> +	vcpu->mode = OUTSIDE_GUEST_MODE;
->> +
->> +	/* Set a default exit reason */
->> +	run->exit_reason = KVM_EXIT_UNKNOWN;
->> +	run->ready_for_interrupt_injection = 1;
-> Is ready_for_interrupt_injection used in qemu or kvm for LoongArch?
-We do not handle ready_for_interrupt_injection when vcpu exit in 
-qemu/kvm, and I will remove it.
-
-Thanks
-Tianrui Zhao
->
->> +
->> +	local_irq_enable();
->> +	guest_state_exit_irqoff();
->> +
->> +	trace_kvm_exit(vcpu, exccode);
->> +	if (exccode) {
->> +		ret = _kvm_handle_fault(vcpu, exccode);
->> +	} else {
->> +		WARN(!intr, "suspicious vm exiting");
-> how about comments like this?
->    WARN(!intr, "vm exiting with suspicious irq \n")
->
-> Regards
-> Bibo, Mao
-Thanks, this comment should contain more information, I will fix it.
-
-Thanks
-Tianrui Zhao
->> +		++vcpu->stat.int_exits;
->> +	}
->> +
->> +	cond_resched();
->> +	local_irq_disable();
->> +
->> +	if (ret == RESUME_HOST)
->> +		return ret;
->> +
->> +	/* Only check for signals if not already exiting to userspace */
->> +	if (signal_pending(current)) {
->> +		vcpu->run->exit_reason = KVM_EXIT_INTR;
->> +		++vcpu->stat.signal_exits;
->> +		return -EINTR;
->> +	}
->> +
->> +	kvm_pre_enter_guest(vcpu);
->> +	trace_kvm_reenter(vcpu);
->> +	guest_state_enter_irqoff();
->> +	return RESUME_GUEST;
->> +}
->> +
->>   int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
->>   {
->>   	unsigned long timer_hz;
-
+>> -- 
+>> 2.34.1
+>>
+>>
