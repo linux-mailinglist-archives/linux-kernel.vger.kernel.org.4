@@ -2,152 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 776AB7250E1
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 01:38:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C9D27250E5
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 01:40:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240250AbjFFXiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 19:38:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60404 "EHLO
+        id S239897AbjFFXks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 19:40:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240360AbjFFXi2 (ORCPT
+        with ESMTP id S239503AbjFFXko (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 19:38:28 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C38A1726;
-        Tue,  6 Jun 2023 16:38:21 -0700 (PDT)
-Date:   Tue, 06 Jun 2023 23:38:19 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686094700;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=UZMBFT2ZGkoR+A8EYCo4fXYymX1TmQr8ltryd3paVwU=;
-        b=fToi/f/ckXUNlDzDb1qezuVMh5W0AbZFFsrUji9AKA3SYyy4xbf8g+q+HN4YyQe9Yg+KK6
-        UH0Um0MSUMgekW2kCKgNdpDw4ORiUjjZ8PcUbd7M3dgmhl6a+rGtUuqwTB2CbI4cjTPimm
-        a3/rLwIZX+eTMO6frf9gF9UIti7CV8evticVz3Lji9pjqn0eljRJ2up9d400AjTqV+8UUm
-        CGSfU2ACpSco+vokpl2jtla52Kcvp3dcczyjzG930x8TbOe4g5y+BnbdBQBM6YeIhJNh8l
-        R3C1J8iCBpbsjQ6bfi8AjVmBUs3aIeLQU1wnU+kCU4wimIw+JzyQ4L//eNkXoA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686094700;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=UZMBFT2ZGkoR+A8EYCo4fXYymX1TmQr8ltryd3paVwU=;
-        b=9nx+aI+k7kcC2Dmt5A1kPtN593UgKIb3pBJoaKxg34nY4HbJs/0iKlCyTitXnc5zZt9mHp
-        aNtpYJm5Gzv9lTCw==
-From:   "tip-bot2 for Kirill A. Shutemov" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/tdx] x86/mm: Allow guest.enc_status_change_prepare() to fail
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tue, 6 Jun 2023 19:40:44 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C577D10F1
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 16:40:42 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-565a1788f3fso111025457b3.0
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 16:40:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686094842; x=1688686842;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ub7lhejOg/lDdTY+htbdM3tFIdBZH/I/WvN3Xdx1uV0=;
+        b=x3+7d7dOxbuMsgi4YuWRxiMypQc2TrTU2D9YB3UiXYC+EUc7Y9pseC434rQBLcpXAL
+         GdebpzGU+Ppi+3pg/sPm2opKG0AIj3TpKgdafc0t7y19pnJwnX6lnXEW0+OoUhdwqDwE
+         Z4ysfR37q5DV4NBHLSUb535QOnfJ37VpXUT0s/YKbyEmYt6p3WurjeOIxM5TXMaanlts
+         Dbq1Z9rC6GiKn/Ofl3HttKVh+kDIVJTeUF0OknTzUCQHCr+pmySor7NykqACcPQcQ0xy
+         DY4ddSj00fmaOy6VUmaFhckuswO05xoX5292LnCzhz9+pCxJfgV+HS3Cr0N3cRaGlaIo
+         JIXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686094842; x=1688686842;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Ub7lhejOg/lDdTY+htbdM3tFIdBZH/I/WvN3Xdx1uV0=;
+        b=Zdi0V8RoaPpS6Uk3i+Ur+HwrVdBS1981k8aL71PofV/8zdtUJRwRq+/pw6cddoE2bZ
+         9yI+FW9mTTdRcCesFZVAsHY8dJ1U9q50RAaNo410rEmR6BI2brj3jfOGKM93ZW+P4aku
+         fsshR8iNW8GS2g4QFnTDLb7GEq8bLuDoIsYMq0hIDXXsWmLkebHVwnduFwcqNoqlMogy
+         O/fQmb0cFBD4Bwcqia8zmsao27Wf7t4owi4pTBOjwgzYj6gtvwpdKnn7YXCKCq9llOrM
+         QT0OT1qwN/iRl/0TgZhGlyHE2C8CMZNL+9Uivwa32XXgY+QnjlTJNmNLo/E1/AB8JNtg
+         T6rA==
+X-Gm-Message-State: AC+VfDwTsoZih/QIDwu2rVPg1tdhIjpYXsdZOT+trWsx4+Us34X9sp/m
+        ePpFlRr8B3JBvd24PKgCt33QbFsqQLI=
+X-Google-Smtp-Source: ACHHUZ4t4b8ZaKk9b7bDtFeK18uGx3qsOG0WbmPPzW7N60k5P+UvNaqfyxvCrb9uJeLbM2s4DI7dL+WqIoo=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a81:d007:0:b0:568:a244:d8e5 with SMTP id
+ v7-20020a81d007000000b00568a244d8e5mr1898740ywi.9.1686094841928; Tue, 06 Jun
+ 2023 16:40:41 -0700 (PDT)
+Date:   Tue, 6 Jun 2023 16:40:40 -0700
+In-Reply-To: <8AE71A62-1BE3-4D6F-B57C-B5FCEA93169F@nutanix.com>
+Mime-Version: 1.0
+References: <20230530200152.18961-1-jon@nutanix.com> <2a6502e3-ba87-0355-af09-825e8467b81f@intel.com>
+ <F4AFC5EE-9967-4117-BA85-ED82C106575C@nutanix.com> <ZHd2P6D142rCByrm@google.com>
+ <E17EFDD7-C54A-4532-B1D3-D567557FC54B@nutanix.com> <ZHermsSGQBcDD07R@google.com>
+ <CBFC095A-10D1-4925-9F28-DEDEBBB38EF8@nutanix.com> <8AE71A62-1BE3-4D6F-B57C-B5FCEA93169F@nutanix.com>
+Message-ID: <ZH/D+JP2OGFtCUBy@google.com>
+Subject: Re: [PATCH] x86/fpu/xstate: clear XSAVE features if DISABLED_MASK set
+From:   Sean Christopherson <seanjc@google.com>
+To:     Jon Kohler <jon@nutanix.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-MIME-Version: 1.0
-Message-ID: <168609469953.404.12091382332231450052.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+        "x86@kernel.org" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Chang S. Bae" <chang.seok.bae@intel.com>,
+        Kyle Huey <me@kylehuey.com>,
+        "neelnatu@google.com" <neelnatu@google.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/tdx branch of tip:
+On Mon, Jun 05, 2023, Jon Kohler wrote:
+> > On May 31, 2023, at 5:09 PM, Jon Kohler <jon@nutanix.com> wrote:
+> >> The CPUID bits that enumerate support for a feature are independent fr=
+om the CPUID
+> >> bits that enumerate what XCR0 bits are supported, i.e. what features c=
+an be saved
+> >> and restored via XSAVE/XRSTOR.
+> >>=20
+> >> KVM does mostly account for host XCR0, but in a very ad hoc way.  E.g.=
+ MPX is
+> >> handled by manually checking host XCR0.
+> >>=20
+> >> 	if (kvm_mpx_supported())
+> >> 		kvm_cpu_cap_check_and_set(X86_FEATURE_MPX);
+> >>=20
+> >> PKU manually checks too, but indirectly by looking at whether or not t=
+he kernel
+> >> has enabled CR4.OSPKE.
+> >>=20
+> >> 	if (!tdp_enabled || !boot_cpu_has(X86_FEATURE_OSPKE))
+> >> 		kvm_cpu_cap_clear(X86_FEATURE_PKU);
+> >>=20
+> >> But unless I'm missing something, the various AVX and AMX bits rely so=
+lely on
+> >> boot_cpu_data, i.e. would break if someone added CONFIG_X86_AVX or CON=
+FIG_X86_AMX.
+> >=20
+> > What if we simply moved static unsigned short xsave_cpuid_features[] =
+=E2=80=A6 into
+> > xstate.h, which is already included in arch/x86/kvm/cpuid.c, and do
+> > something similar to what I=E2=80=99m proposing in this patch already
+> >=20
+> > This would future proof such breakages I=E2=80=99d imagine?
+> >=20
+> > void kvm_set_cpu_caps(void)
+> > {
+> > ...
+> >    /*
+> >     * Clear CPUID for XSAVE features that are disabled.
+> >     */
+> >    for (i =3D 0; i < ARRAY_SIZE(xsave_cpuid_features); i++) {
+> >        unsigned short cid =3D xsave_cpuid_features[i];
+> >=20
+> >        /* Careful: X86_FEATURE_FPU is 0! */
+> >        if ((i !=3D XFEATURE_FP && !cid) || !boot_cpu_has(cid) ||
+> >            !cpu_feature_enabled(cid))
+> >            kvm_cpu_cap_clear(cid);
+> >    }
+> > =E2=80=A6
+> > }
+> >=20
+>=20
+> Sean - following up on this rough idea code above, wanted to validate tha=
+t
+> this was the direction you were thinking of having kvm_set_cpu_caps() cle=
+ar
+> caps when a particular xsave feature was disabled?
 
-Commit-ID:     3f6819dd192ef4f0c568ec3e9d6d408b3fa1ad3d
-Gitweb:        https://git.kernel.org/tip/3f6819dd192ef4f0c568ec3e9d6d408b3fa1ad3d
-Author:        Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-AuthorDate:    Tue, 06 Jun 2023 12:56:20 +03:00
-Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Tue, 06 Jun 2023 11:07:01 -07:00
+Ya, more or or less.  But for KVM, that should be kvm_cpu_cap_has(), not bo=
+ot_cpu_has().
+And then I think KVM could actually WARN on a feature being disabled, i.e. =
+put up
+a tripwire to detect if things change in the future and the kernel lets the=
+ user
+disable a feature that KVM wants to expose to a guest.
 
-x86/mm: Allow guest.enc_status_change_prepare() to fail
+Side topic, I find the "cid" nomenclature super confusing, and the establis=
+hed
+name in KVM is x86_feature.
 
-TDX code is going to provide guest.enc_status_change_prepare() that is
-able to fail. TDX will use the call to convert the GPA range from shared
-to private. This operation can fail.
+Something like this?
 
-Add a way to return an error from the callback.
+	for (i =3D 0; i < ARRAY_SIZE(xsave_cpuid_features); i++) {
+		unsigned int x86_feature =3D xsave_cpuid_features[i];
 
-Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Reviewed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-Link: https://lore.kernel.org/all/20230606095622.1939-2-kirill.shutemov%40linux.intel.com
----
- arch/x86/include/asm/x86_init.h | 2 +-
- arch/x86/kernel/x86_init.c      | 2 +-
- arch/x86/mm/mem_encrypt_amd.c   | 4 +++-
- arch/x86/mm/pat/set_memory.c    | 3 ++-
- 4 files changed, 7 insertions(+), 4 deletions(-)
+		if (i !=3D XFEATURE_FP && !x86_feature)
+			continue;
 
-diff --git a/arch/x86/include/asm/x86_init.h b/arch/x86/include/asm/x86_init.h
-index 88085f3..1ca9701 100644
---- a/arch/x86/include/asm/x86_init.h
-+++ b/arch/x86/include/asm/x86_init.h
-@@ -150,7 +150,7 @@ struct x86_init_acpi {
-  * @enc_cache_flush_required	Returns true if a cache flush is needed before changing page encryption status
-  */
- struct x86_guest {
--	void (*enc_status_change_prepare)(unsigned long vaddr, int npages, bool enc);
-+	bool (*enc_status_change_prepare)(unsigned long vaddr, int npages, bool enc);
- 	bool (*enc_status_change_finish)(unsigned long vaddr, int npages, bool enc);
- 	bool (*enc_tlb_flush_required)(bool enc);
- 	bool (*enc_cache_flush_required)(void);
-diff --git a/arch/x86/kernel/x86_init.c b/arch/x86/kernel/x86_init.c
-index d82f4fa..f230d4d 100644
---- a/arch/x86/kernel/x86_init.c
-+++ b/arch/x86/kernel/x86_init.c
-@@ -130,7 +130,7 @@ struct x86_cpuinit_ops x86_cpuinit = {
- 
- static void default_nmi_init(void) { };
- 
--static void enc_status_change_prepare_noop(unsigned long vaddr, int npages, bool enc) { }
-+static bool enc_status_change_prepare_noop(unsigned long vaddr, int npages, bool enc) { return true; }
- static bool enc_status_change_finish_noop(unsigned long vaddr, int npages, bool enc) { return false; }
- static bool enc_tlb_flush_required_noop(bool enc) { return false; }
- static bool enc_cache_flush_required_noop(void) { return false; }
-diff --git a/arch/x86/mm/mem_encrypt_amd.c b/arch/x86/mm/mem_encrypt_amd.c
-index e0b51c0..4f95c44 100644
---- a/arch/x86/mm/mem_encrypt_amd.c
-+++ b/arch/x86/mm/mem_encrypt_amd.c
-@@ -319,7 +319,7 @@ static void enc_dec_hypercall(unsigned long vaddr, int npages, bool enc)
- #endif
- }
- 
--static void amd_enc_status_change_prepare(unsigned long vaddr, int npages, bool enc)
-+static bool amd_enc_status_change_prepare(unsigned long vaddr, int npages, bool enc)
- {
- 	/*
- 	 * To maintain the security guarantees of SEV-SNP guests, make sure
-@@ -327,6 +327,8 @@ static void amd_enc_status_change_prepare(unsigned long vaddr, int npages, bool 
- 	 */
- 	if (cc_platform_has(CC_ATTR_GUEST_SEV_SNP) && !enc)
- 		snp_set_memory_shared(vaddr, npages);
-+
-+	return true;
- }
- 
- /* Return true unconditionally: return value doesn't matter for the SEV side */
-diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
-index 7159cf7..b8f48eb 100644
---- a/arch/x86/mm/pat/set_memory.c
-+++ b/arch/x86/mm/pat/set_memory.c
-@@ -2151,7 +2151,8 @@ static int __set_memory_enc_pgtable(unsigned long addr, int numpages, bool enc)
- 		cpa_flush(&cpa, x86_platform.guest.enc_cache_flush_required());
- 
- 	/* Notify hypervisor that we are about to set/clr encryption attribute. */
--	x86_platform.guest.enc_status_change_prepare(addr, numpages, enc);
-+	if (!x86_platform.guest.enc_status_change_prepare(addr, numpages, enc))
-+		return -EIO;
- 
- 	ret = __change_page_attr_set_clr(&cpa, 1);
- 
+		if (!kvm_cpu_cap_has(x86_feature))
+			continue;
+
+		if (WARN_ON_ONCE(!cpu_feature_enabled(x86_feature)))
+			kvm_cpu_cap_clear(x86_feature);
+	}
