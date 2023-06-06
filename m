@@ -2,76 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81E1A723E1C
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 11:46:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE638723E26
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 11:47:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236562AbjFFJqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 05:46:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52402 "EHLO
+        id S237101AbjFFJrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 05:47:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236400AbjFFJqo (ORCPT
+        with ESMTP id S236722AbjFFJrf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 05:46:44 -0400
-Received: from fgw20-7.mail.saunalahti.fi (fgw20-7.mail.saunalahti.fi [62.142.5.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50BCAE4F
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 02:46:39 -0700 (PDT)
-Received: from localhost (88-113-26-95.elisa-laajakaista.fi [88.113.26.95])
-        by fgw20.mail.saunalahti.fi (Halon) with ESMTP
-        id 074bd606-044f-11ee-b3cf-005056bd6ce9;
-        Tue, 06 Jun 2023 12:46:37 +0300 (EEST)
-From:   andy.shevchenko@gmail.com
-Date:   Tue, 6 Jun 2023 12:46:36 +0300
-To:     andy.shevchenko@gmail.com
-Cc:     Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        oe-kbuild-all@lists.linux.dev, linus.walleij@linaro.org,
-        brgl@bgdev.pl, palmer@dabbelt.com, paul.walmsley@sifive.com,
-        linux-gpio@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] gpio: ath79: Add missing check for platform_get_irq
-Message-ID: <ZH8AfLRa2ShXKm4M@surfacebook>
-References: <20230606031841.38665-1-jiasheng@iscas.ac.cn>
- <ZH78McKA5nKU1Wg8@surfacebook>
+        Tue, 6 Jun 2023 05:47:35 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ABFD83
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 02:47:33 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3569kvk3041536;
+        Tue, 6 Jun 2023 04:46:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1686044817;
+        bh=/CpVUW5KJqV8jUtMerYvOT4MMkJcqj7gtawJjpNIJBk=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=ivvb35jAW2dVixTnUeGGWBgwNAKYlhtFXguYCiZvJhdjUVlLsDihMrmHOjGpjW1wd
+         mTuLgLRJBTSm7onzz+B/K8dW8ZEUbB7t5reT9L0OUjvXYCbUecKwhmfaIPXv13FPD7
+         ZL21jMIoMA1+vYCAO+XGfsJ93QiRj22FNzfgo1sY=
+Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3569kvZB018974
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 6 Jun 2023 04:46:57 -0500
+Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 6
+ Jun 2023 04:46:56 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 6 Jun 2023 04:46:56 -0500
+Received: from [172.24.218.160] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3569koec009877;
+        Tue, 6 Jun 2023 04:46:51 -0500
+Message-ID: <1b31f36c-b1ba-43b5-9285-0f50384a78cf@ti.com>
+Date:   Tue, 6 Jun 2023 15:16:49 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZH78McKA5nKU1Wg8@surfacebook>
-X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v7 0/8] drm/tidss: Use new connector model for tidss
+Content-Language: en-US
+To:     <neil.armstrong@linaro.org>, Tomi Valkeinen <tomba@kernel.org>,
+        Jyri Sarha <jyri.sarha@iki.fi>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Robert Foss <rfoss@kernel.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Swapnil Jakhade <sjakhade@cadence.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Francesco Dolcini <francesco@dolcini.it>
+CC:     DRI Development List <dri-devel@lists.freedesktop.org>,
+        Linux Kernel List <linux-kernel@vger.kernel.org>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rahul T R <r-ravikumar@ti.com>,
+        Devarsh Thakkar <devarsht@ti.com>,
+        Jayesh Choudhary <j-choudhary@ti.com>
+References: <20230606082142.23760-1-a-bhatia1@ti.com>
+ <1f284e9d-5a1e-9fca-ceb0-478a413ae4ef@linaro.org>
+From:   Aradhya Bhatia <a-bhatia1@ti.com>
+In-Reply-To: <1f284e9d-5a1e-9fca-ceb0-478a413ae4ef@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tue, Jun 06, 2023 at 12:28:17PM +0300, andy.shevchenko@gmail.com kirjoitti:
-> Tue, Jun 06, 2023 at 11:18:41AM +0800, Jiasheng Jiang kirjoitti:
+Hi Neil,
+
+Thank you for reviewing the previous patches!
+
+On 06-Jun-23 14:37, Neil Armstrong wrote:
+> Hi,
 > 
-> Is this v4?
+> On 06/06/2023 10:21, Aradhya Bhatia wrote:
+>> Hi all,
+>>
+>> I have picked up this long standing series from Nikhil Devshatwar[1].
+>>
+>> This series moves the tidss to using new connectoe model, where the SoC
+>> driver (tidss) creates the connector and all the bridges are attached
+>> with the flag DRM_BRIDGE_ATTACH_NO_CONNECTOR. It also now creates bridge
+>> to support format negotiation and and 'simple' encoder to expose it to
+>> the userspace.
+>>
+>> Since the bridges do not create the connector, the bus_format and
+>> bus_flag is set via atomic hooks.
+>>
+>> Support format negotiations in the tfp410, sii902x and mhdp-8546 bridge
+>> drivers as a first step before moving the connector model.
+>>
+>> These patches were tested on AM625-SK EVM, AM625 SoC based BeaglePlay,
+>> and J721E-SK. Display support for AM625 SoC has not been added upstream
+>> and is a WIP. To test this series on AM625 based platforms, basic
+>> display support patches, (for driver + devicetree), can be found in
+>> the "next_AttachNoConn-v2" branch on my github fork[2].
 > 
-> > Add the missing check for platform_get_irq() and return error
-> > if it fails.
-> > The returned error code will be dealed with in
-> > module_platform_driver(ath79_gpio_driver) and the driver will not
-> > be registered.
+> I can apply all bridge patches right now so only the tidss change remain,
+> is that ok for you ?
 > 
-> No, this functional change and has not to be for the fixes unless _this_ is the
-> regression you are fixing. Did the driver work before at some point as after
-> this change?
 
-To be more clear, answer to the following questions:
-1) does driver work with wrong DT configuration?
-2a) if yes, does it make sense, i.e. the hardware functioning usefully?
-2b) if yes, can we guarantee there are no broken configurations in the wild?
+While the bridge patches and the tidss patch can be separately built
+without any issue, the tidss functionality will break if only the bridge
+patches get picked up, and not the tidss.
 
-Depending on the answers correct your code and/or commit message.
-
-> Otherwise you have to _justify_ that this functional change won't break
-> existing setups (with broked IRQ in Device Tree, for example).
-
--- 
-With Best Regards,
-Andy Shevchenko
+Would it be possible for you to pick all the patches together once Tomi
+acks the tidss patch?
 
 
+Regards
+Aradhya
+
+> 
+>>
+>> Thanks,
+>> Aradhya
+>>
+>> [1]: https://patchwork.freedesktop.org/series/82765/#rev5
+>> [2]: https://github.com/aradhya07/linux-ab/tree/next_AttachNoConn-v2
+>>
+>> Change Log:
+>> V6 -> V7
+>>    - Rebase and cosmetic changes.
+>>    - Drop the output format check condition for mhdp8546 and hence,
+>>      drop Tomi Valkeinen's R-b tag.
+>>    - Added tags wherever suggested.
+>>
+>> V5 -> V6
+>>    - Rebase and cosmetic changes
+>>    - Dropped the output format check condition for tfp410 and hence,
+>>      dropped Tomi Valkeinen's and Laurent Pinchart's R-b tags.
+>>    - Based on Boris Brezillon's comments: dropped patches 5 and 6 from
+>>      the series and instead created a single patch that,
+>>        1. Creates tidss bridge for format negotiation.
+>>        2. Creates 'simple' encoder for userspace exposure.
+>>        3. Creates a tidss connector.
+>>        4. Attaches the next-bridge to encoder with the
+>>           DRM_BRIDGE_ATTACH_NO_CONNECTOR flag.
+>>    - Add format negotiation support for sii902x driver.
+>>
+>> Previous versions:
+>> V1 to V6: https://patchwork.freedesktop.org/series/82765/
+>>
+>> Aradhya Bhatia (3):
+>>    drm/bridge: sii902x: Support format negotiation hooks
+>>    drm/bridge: sii902x: Set input_bus_flags in atomic_check
+>>    drm/tidss: Update encoder/bridge chain connect model
+>>
+>> Nikhil Devshatwar (5):
+>>    drm/bridge: tfp410: Support format negotiation hooks
+>>    drm/bridge: tfp410: Set input_bus_flags in atomic_check
+>>    drm/bridge: mhdp8546: Add minimal format negotiation
+>>    drm/bridge: mhdp8546: Set input_bus_flags from atomic_check
+>>    drm/bridge: cdns-mhdp8546: Fix the interrupt enable/disable
+>>
+>>   .../drm/bridge/cadence/cdns-mhdp8546-core.c   |  77 ++++++----
+>>   .../drm/bridge/cadence/cdns-mhdp8546-core.h   |   2 +-
+>>   .../drm/bridge/cadence/cdns-mhdp8546-j721e.c  |   9 +-
+>>   .../drm/bridge/cadence/cdns-mhdp8546-j721e.h  |   2 +-
+>>   drivers/gpu/drm/bridge/sii902x.c              |  40 +++++
+>>   drivers/gpu/drm/bridge/ti-tfp410.c            |  43 ++++++
+>>   drivers/gpu/drm/tidss/tidss_encoder.c         | 140 +++++++++++-------
+>>   drivers/gpu/drm/tidss/tidss_encoder.h         |   5 +-
+>>   drivers/gpu/drm/tidss/tidss_kms.c             |  12 +-
+>>   9 files changed, 235 insertions(+), 95 deletions(-)
+>>
+> 
