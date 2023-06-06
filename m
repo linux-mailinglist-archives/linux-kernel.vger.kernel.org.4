@@ -2,123 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B5D8723AAE
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 09:54:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02046723AB7
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 09:55:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235816AbjFFHyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 03:54:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58116 "EHLO
+        id S236060AbjFFHzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 03:55:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235265AbjFFHyA (ORCPT
+        with ESMTP id S236155AbjFFHyF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 03:54:00 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DBD9B1;
-        Tue,  6 Jun 2023 00:51:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=nx4txqD66c1X0oZzcTp+6FZymBThmwnZeIP6QWdOgio=; b=sD99Pp9fnIO40tawhiF8x6JyUE
-        tZQyQtKsGsC5Sah5ppe2vJHqxuJxRbe8xplNQRzBvLN3uKWGJveRvJLa4coQyO2nRH2MMuwIM+b7f
-        2c1nnLjrTJCjZxW0QmQKrp3nnNjChCEC9aGUEIFwlzGQHnioIbq46kcASwTjvsrK5O9SRDXMOy7Ju
-        2YXT18hPFgehW89zHQ9Z4mwkcQTutyGWYHW4QRkhFCShScuzlGFGTXNTjx9esB2Q9/rjzBoDhdrwn
-        fx9kTbuv2JsZEIx/LvudW/q6E0ln8lxFkm4vPAsgFDnvGuE/2mBXpU+ptx+B4/rgoXNvdSpW6LgRB
-        xkwmnl6Q==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1q6RSX-00Cu1T-S8; Tue, 06 Jun 2023 07:50:30 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 14B2D300129;
-        Tue,  6 Jun 2023 09:50:27 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id EC07B205EA3F7; Tue,  6 Jun 2023 09:50:26 +0200 (CEST)
-Date:   Tue, 6 Jun 2023 09:50:26 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Gupta, Pankaj" <pankaj.gupta@amd.com>
-Cc:     Tom Lendacky <thomas.lendacky@amd.com>,
-        Tianyu Lan <ltykernel@gmail.com>, luto@kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        seanjc@google.com, pbonzini@redhat.com, jgross@suse.com,
-        tiala@microsoft.com, kirill@shutemov.name,
-        jiangshan.ljs@antgroup.com, ashish.kalra@amd.com,
-        srutherford@google.com, akpm@linux-foundation.org,
-        anshuman.khandual@arm.com, pawan.kumar.gupta@linux.intel.com,
-        adrian.hunter@intel.com, daniel.sneddon@linux.intel.com,
-        alexander.shishkin@linux.intel.com, sandipan.das@amd.com,
-        ray.huang@amd.com, brijesh.singh@amd.com, michael.roth@amd.com,
-        venu.busireddy@oracle.com, sterritt@google.com,
-        tony.luck@intel.com, samitolvanen@google.com, fenghua.yu@intel.com,
-        pangupta@amd.com, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: Re: [RFC PATCH V6 01/14] x86/sev: Add a #HV exception handler
-Message-ID: <20230606075026.GA905437@hirez.programming.kicks-ass.net>
-References: <20230515165917.1306922-1-ltykernel@gmail.com>
- <20230515165917.1306922-2-ltykernel@gmail.com>
- <20230516093010.GC2587705@hirez.programming.kicks-ass.net>
- <d43c14d9-a149-860c-71d6-e5c62b7c356f@amd.com>
- <20230530143504.GA200197@hirez.programming.kicks-ass.net>
- <0f0ab135-cdd0-0691-e0c1-42645671fe15@amd.com>
- <20230530185232.GA211927@hirez.programming.kicks-ass.net>
- <54fa0a4f-9b3e-50d7-57cb-e0d2d39b7761@amd.com>
+        Tue, 6 Jun 2023 03:54:05 -0400
+Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2290171E
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 00:51:45 -0700 (PDT)
+Received: by mail-ua1-x92e.google.com with SMTP id a1e0cc1a2514c-7870821d9a1so3968294241.1
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 00:51:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686037904; x=1688629904;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=qEb8brDaVgEf6xNJnniCPIjPebxe7oNg6yfvYJTINhE=;
+        b=zN1OwuYLYtfiOXTEJ1n9kDh922zCa5AkwC7gHObCBmiHZik39QnJ+ROITrspCVlzuT
+         YCJfrvXNBqRFXIHfImLkzYi2qMdfRttx2ZEF3U2DRyvMIR/P8VXcWTXHAn5WxnLbwXH4
+         /eTDKXJTmtViURLDpFr+hmoH+P47MsCb/pRFZJCMC3fkl3J7QqOl58m+RTX/CGThRxZJ
+         IenCUv/YXAvAZ4xMO5Mz7aaM3Hz8uSkAPvgD0bLuPJmvHeRsHdlguS0XJZm1koQM0oR0
+         ZxYCGdzSm3eWZ/hYQVuOt1890nf2Kgm+TKQgs+bnZmVFtAE1BcGwnTsv84wSKMAhPS+r
+         CPWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686037904; x=1688629904;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qEb8brDaVgEf6xNJnniCPIjPebxe7oNg6yfvYJTINhE=;
+        b=giAicVDlM5fY1RU2A6zXypB0M5FPVMkeJ2A8jHAyDTr7ufFvoU16Z+yXEFZVBmFeTJ
+         59Eo90SgHHIUAXP7xccwG3wH67sdtGXPxmrwdLgDVkmAtnwG/c9V3T4BrDiHoZes8RVD
+         FSrhh2+mp0AmmH9oA1hEXd62Toqw+QKcqLhb5tor1CQXbJkYn7S7E8z+PFTlnh69TOmA
+         BDX+mnjp2G3kA6lj9YIMtew4y8y6U/QruFAx+8tBV2+2sVVCTU7f8o8O1+f2PUHedKDN
+         8TDaHPN4+Q1HLCirHtkhgIMoMBtMEZ3EtX4frJzWHtOvVD/oZy5mSJlHkJ0VEJW83ENM
+         tKLg==
+X-Gm-Message-State: AC+VfDypGpM8r6c4+YAYqqiTYJ+yk5JmSyipoa7QMMUPlqNV1rvSpjK3
+        KcCvF9r06Uu/4zfcp4MWHrcnqC3GZoQeX8d9PS26nQ==
+X-Google-Smtp-Source: ACHHUZ7KvWctFlyoIZEP7ZNjUZQJG5qt/dW7yUAl1wU6fao7ISI+t/dotyHHlAYIJ8EkqA7yYwNMsCjKcRb/X0+++F0=
+X-Received: by 2002:a05:6102:3110:b0:436:4f07:fbe with SMTP id
+ e16-20020a056102311000b004364f070fbemr775393vsh.15.1686037904296; Tue, 06 Jun
+ 2023 00:51:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <54fa0a4f-9b3e-50d7-57cb-e0d2d39b7761@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230526010748.1222-1-masahisa.kojima@linaro.org>
+ <20230526010748.1222-4-masahisa.kojima@linaro.org> <0d3e0370-eb76-010f-3d30-9acc9b59645c@siemens.com>
+ <CAFA6WYPnWJNPvhT2JDkO-qXRUaJoxBGZEvSfhxcRynV7=VSdQA@mail.gmail.com> <CAMj1kXFM45PCTU--+CCed6Cq_N5XqDG6tTu6fnQTSCpW2BWA5A@mail.gmail.com>
+In-Reply-To: <CAMj1kXFM45PCTU--+CCed6Cq_N5XqDG6tTu6fnQTSCpW2BWA5A@mail.gmail.com>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Tue, 6 Jun 2023 13:21:33 +0530
+Message-ID: <CAFA6WYNjn=7tKy2nZ6JuxWMDVzW+Yyxj8F6Kob-2ebEkCjUB4A@mail.gmail.com>
+Subject: Re: [PATCH v5 3/3] efi: Add tee-based EFI variable driver
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Jan Kiszka <jan.kiszka@siemens.com>,
+        Masahisa Kojima <masahisa.kojima@linaro.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-efi@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        "Su, Bao Cheng (RC-CN DF FA R&D)" <baocheng.su@siemens.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 08:00:32AM +0200, Gupta, Pankaj wrote:
-> 
-> > > That should really say that a nested #HV should never be raised by the
-> > > hypervisor, but if it is, then the guest should detect that and
-> > > self-terminate knowing that the hypervisor is possibly being malicious.
-> > 
-> > I've yet to see code that can do that reliably.
-> 
-> - Currently, we are detecting the direct nested #HV with below check and
->   guest self terminate.
-> 
->   <snip>
-> 	if (get_stack_info_noinstr(stack, current, &info) &&
-> 	    (info.type == (STACK_TYPE_EXCEPTION + ESTACK_HV) ||
-> 	     info.type == (STACK_TYPE_EXCEPTION + ESTACK_HV2)))
-> 		panic("Nested #HV exception, HV IST corrupted, stack
->                 type = %d\n", info.type);
->   </snip>
-> 
-> - Thinking about below solution to detect the nested
->   #HV reliably:
-> 
->   -- Make reliable IST stack switching for #VC -> #HV -> #VC case
->      (similar to done in __sev_es_ist_enter/__sev_es_ist_exit for NMI
->      IST stack).
+On Tue, 6 Jun 2023 at 12:28, Ard Biesheuvel <ardb@kernel.org> wrote:
+>
+> On Tue, 6 Jun 2023 at 08:52, Sumit Garg <sumit.garg@linaro.org> wrote:
+> >
+> > Hi Jan,
+> >
+> > On Tue, 6 Jun 2023 at 12:09, Jan Kiszka <jan.kiszka@siemens.com> wrote:
+> > >
+> > > On 26.05.23 03:07, Masahisa Kojima wrote:
+> > > > When the flash is not owned by the non-secure world, accessing the EFI
+> > > > variables is straightforward and done via EFI Runtime Variable Services.
+> > > > In this case, critical variables for system integrity and security
+> > > > are normally stored in the dedicated secure storage and only accessible
+> > > > from the secure world.
+> > > >
+> > > > On the other hand, the small embedded devices don't have the special
+> > > > dedicated secure storage. The eMMC device with an RPMB partition is
+> > > > becoming more common, we can use an RPMB partition to store the
+> > > > EFI Variables.
+> > > >
+> > > > The eMMC device is typically owned by the non-secure world(linux in
+> > > > this case). There is an existing solution utilizing eMMC RPMB partition
+> > > > for EFI Variables, it is implemented by interacting with
+> > > > TEE(OP-TEE in this case), StandaloneMM(as EFI Variable Service Pseudo TA),
+> > > > eMMC driver and tee-supplicant. The last piece is the tee-based
+> > > > variable access driver to interact with TEE and StandaloneMM.
+> > > >
+> > > > So let's add the kernel functions needed.
+> > > >
+> > > > This feature is implemented as a kernel module.
+> > > > StMM PTA has TA_FLAG_DEVICE_ENUM_SUPP flag when registered to OP-TEE
+> > > > so that this tee_stmm_efi module is probed after tee-supplicant starts,
+> > > > since "SetVariable" EFI Runtime Variable Service requires to
+> > > > interact with tee-supplicant.
+> > > >
+> > > > Acked-by: Sumit Garg <sumit.garg@linaro.org>
+> > > > Co-developed-by: Ilias Apalodimas <ilias.apalodimas@linaro.org>
+> > > > Signed-off-by: Ilias Apalodimas <ilias.apalodimas@linaro.org>
+> > > > Signed-off-by: Masahisa Kojima <masahisa.kojima@linaro.org>
+> > > > ---
+> > > >  drivers/firmware/efi/Kconfig                 |  15 +
+> > > >  drivers/firmware/efi/Makefile                |   1 +
+> > > >  drivers/firmware/efi/stmm/mm_communication.h | 236 +++++++
+> > > >  drivers/firmware/efi/stmm/tee_stmm_efi.c     | 638 +++++++++++++++++++
+> > > >  4 files changed, 890 insertions(+)
+> > > >  create mode 100644 drivers/firmware/efi/stmm/mm_communication.h
+> > > >  create mode 100644 drivers/firmware/efi/stmm/tee_stmm_efi.c
+> > > >
+> ...
+> > >
+> > > I think we have a probe ordering issue with this driver:
+> > > efivarfs_fill_super() may be called before the TEE bus was probed, thus
+> > > with the default efivar ops still registered. And that means
+> > > efivar_supports_writes() will return false, and the fs declares itself
+> > > as readonly. I've seen systemd mounting it r/o initialling, and you need
+> > > to remount the fs to enable writability.
+> > >
+> > > Is there anything that could be done to re-order things reliably, probe
+> > > the tee bus earlier etc.?
+> >
+> > This driver has a dependency on user-space daemon: tee-supplicant to
+> > be running for RPMB access. So once you start that daemon the
+> > corresponding device will be enumerated on the TEE bus and this driver
+> > probe will be invoked. So I would suggest you to load this daemon very
+> > early in the boot process or better to make it a part of initramfs.
+> >
+>
+> That is not the point, really.
+>
+> If this dependency exists, the code should be aware of that, and made
+> to work correctly in spite of it. Requiring a module to be part of
+> initramfs is not a reasonable fix.
 
-I'm not convinced any of that is actually correct; there is a *huge*
-window between NMI hitting and calling __sev_es_ist_enter(), idem on the
-exit side.
+I am not sure if I followed you here. Until we have the tee-stmm-efi
+module loaded we won't get corresponding EFI operations registered.
+The key here is that the underlying OP-TEE device won't be available
+until tee-supplicant (see enumeration with PTA_CMD_GET_DEVICES_SUPP)
+is running.
 
->   -- In addition to this, we can make nested #HV detection (with another
->      exception type) more reliable with refcounting (percpu?).
+Do you have any better ideas regarding how this should be handled?
 
-There is also #DB and the MOVSS shadow.
+>
+> IIUC, this also means that the efivar ops are updated while there is
+> already a client. This seems less than ideal as well
 
-And no, I don't think any of that is what you'd call 'robust'. This is
-what I call a trainwreck :/
+That's true. An ideal situation would be to allow in-kernel RPMB
+access APIs for OP-TEE or other kernel drivers to use. With that we
+should be able to remove this tee-supplicant dependency. I hope you
+are already aware about the earlier efforts to add the RPMB subsystem
+to the kernel. But with these real world use-cases emerging like EFI
+variables and fTPM, we should be able to convince corresponding
+subsystem maintainers.
 
-And I'm more than willing to say no until the hardware is more sane.
-
-Supervisor Shadow Stack support is in the same boat, that's on hold
-until FRED makes things workable.
+-Sumit
