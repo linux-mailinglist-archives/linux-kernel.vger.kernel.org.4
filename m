@@ -2,72 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5689F724BA5
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 20:45:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFA43724BA7
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 20:45:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239063AbjFFSpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 14:45:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54940 "EHLO
+        id S238957AbjFFSp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 14:45:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238906AbjFFSpQ (ORCPT
+        with ESMTP id S233789AbjFFSp2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 14:45:16 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97629101
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 11:45:15 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id d9443c01a7336-1b0314f0aadso38964415ad.0
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 11:45:15 -0700 (PDT)
+        Tue, 6 Jun 2023 14:45:28 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B259E101;
+        Tue,  6 Jun 2023 11:45:27 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id 98e67ed59e1d1-2565c66f73fso952963a91.0;
+        Tue, 06 Jun 2023 11:45:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686077115; x=1688669115;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Cq1bDTjZKQu+8FokSAcd9i/aEeyRO+1V7yxU6QcDPDg=;
-        b=SyQHi7u1uXQBjZVKJZN8e+jiLgy7KNnOamKu5YqvFnqqdbxz/rNypLYRdIIfE4dElN
-         Zqyihiljdoq2kKIYbI4lbxrOqROU4pQHCeoxinn2lDSeR66K2IZuPg/euOFjngLZQCPl
-         88MTYPnpV/vEv9sWX0mq6WSnoOQKFu0jxDqRliufQvJRZd9T43QR/paYL+fUvAEhyLgQ
-         +yvG4ANvxz80w0p48/95PiutNn2xR9aFlyFYzaQ1RZTnqD7PkcnMBGCmxf2gW4bYVDE3
-         L6VoP6/SC7bbV6V5R8/lX/ChtAZ/SyjZBRrFMVljEPFIyOKw+59ZmzeeI8UaX0UNhuts
-         47Vw==
+        d=gmail.com; s=20221208; t=1686077127; x=1688669127;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ihp/RsQ3eH+JwS8DEasH6zQrmC0PRAWpOlivpEAgI9A=;
+        b=nYM3Li/wDWaBDuujrOjeHmZFnojX1AKzmqpT9QqMUC9IQZz6ArpT5hOc5u8jYYsoAl
+         Ie4fjBC8sAM0b3UKR+lcoeQnDFVUWUX1FXxph+sZgk390OmQ+42O7pRgVswSP7WBerLy
+         Dw5Nbm4mQR6SIFl7+Q2OkmhoJnpRcXFEGHZ7Z/aGCiqvooUWf4YieQvLIdwq3w77zEOb
+         DHZm8GBzyzO/9C/RGzbNLFtrXIwnrpdwTdBj2e7Bo6NONb8jcPo9thrHBYQl7V3R8w3j
+         vdT2MgfBj7VSYHLWIuhzNS4GPqDhy6IUHkK0qzmBgipDsPNK1vjEBsuwR1UFvfuFq4Eu
+         wZWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686077115; x=1688669115;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Cq1bDTjZKQu+8FokSAcd9i/aEeyRO+1V7yxU6QcDPDg=;
-        b=Je6hSOCuAT8TYYxqzRUSJupj9QNDLwfl6cGWDhxA8FxxGSU+D/poLMEYJ4SvLyGqDG
-         NqKysXi28+JNvvcS07zwr9lqw/QX53Q8tGM8tWlxV1qoPZDGYFtYKMSvPE7Dn711s+wy
-         Nt4b4qcHl3NZOk+lY37d62PXMgJ3h9c8877dWjtFZu6w7JLGMXoJRnfeHIwhsf8vLj8C
-         Mghd1fMECseg7ZQVsirhSDsXGQ63pv7lw2eLuztSu/Hlj7WPSLfpBVWjwYEo++DfMuFK
-         9dJt242EwaMKnb0sEJWJVs1jm/Ct3gmJQw2YhYPFVPQ0VWhwUM0ZI65C6xekdPAnu7d5
-         7YGA==
-X-Gm-Message-State: AC+VfDxwwNIiNYJfvwjvcUL6v3MjFTv7FQDrElJwMyVjQegXc82sDPNj
-        CHaPP0cDaFg/IG7jO+y3ERvWc1f6pdU=
-X-Google-Smtp-Source: ACHHUZ7qJdL+b/Aomd4mSjTHuAlTbzUL4WoI3pCH7py3TtKtgN+tt+YQ5NLnyn6J6BUMbtskU5LT8+TWn70=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:eb4d:b0:1a6:8a07:960a with SMTP id
- i13-20020a170902eb4d00b001a68a07960amr2129137pli.0.1686077115103; Tue, 06 Jun
- 2023 11:45:15 -0700 (PDT)
-Date:   Tue, 6 Jun 2023 11:45:13 -0700
-In-Reply-To: <20230522161249.800829-2-aleksandr.mikhalitsyn@canonical.com>
-Mime-Version: 1.0
-References: <20230522161249.800829-1-aleksandr.mikhalitsyn@canonical.com> <20230522161249.800829-2-aleksandr.mikhalitsyn@canonical.com>
-Message-ID: <ZH9+ufGL9SGfmmnc@google.com>
-Subject: Re: [PATCH v2 1/2] KVM: SVM: free sev_*asid_bitmap init if SEV init fails
-From:   Sean Christopherson <seanjc@google.com>
-To:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Cc:     pbonzini@redhat.com,
-        "=?iso-8859-1?Q?St=E9phane?= Graber" <stgraber@ubuntu.com>,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
-Content-Type: text/plain; charset="iso-8859-1"
+        d=1e100.net; s=20221208; t=1686077127; x=1688669127;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ihp/RsQ3eH+JwS8DEasH6zQrmC0PRAWpOlivpEAgI9A=;
+        b=TDC5BOgjDg+n3CRN8YnwWbRqaYaF6IEsR5Eo+HuhDlFPsO5QCyBJImJlb+o/sBfpEU
+         x6KauQThiEtzVXjni179EbgmWipQP/rGVNpE0J28lZWgAIHXM3sL/LhMD9Iukcbm/B8F
+         mbpj28n57qSVFvGhft+QUFf+wOdk6cTQx4iTGqOYfhdhrx3gDHerg0WSIpV0j90eCjhf
+         hybFZVHjeIwDtxtTiP9aieA2Fds5N6LrAi+K6wG+ETFCfl4uUDZm6dkklSNJ4jFC4KZL
+         gmlSVStdFRUb649e8IdwSM2YtNP/EzhGjS41fub/MQFs+v+rqE9VZDlkGAHge+4HSU2n
+         gBSA==
+X-Gm-Message-State: AC+VfDymY4mh3LBGmSsNvF0+wGvy9P+dJu501MlqPe+2OCw+UFIh/P/x
+        Y0Cn4ZKKtWl3jvmRsHupBYqn7lStTHvtxaxySlc=
+X-Google-Smtp-Source: ACHHUZ72XUN60eCtHhAYDOIFOd1G1P4dz2CahNpmPahNZZj4FV428arsa43zuqJ1XRCFGTQIm09OsHfT0A177A+v3dY=
+X-Received: by 2002:a17:90b:4a48:b0:255:54c4:9a75 with SMTP id
+ lb8-20020a17090b4a4800b0025554c49a75mr3394449pjb.2.1686077126938; Tue, 06 Jun
+ 2023 11:45:26 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230506195325.876871-1-aford173@gmail.com>
+In-Reply-To: <20230506195325.876871-1-aford173@gmail.com>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Tue, 6 Jun 2023 15:45:15 -0300
+Message-ID: <CAOMZO5AwixYybR1am=V4m1AnTkum+0Wn0xegU_y6Po9Y--G0mA@mail.gmail.com>
+Subject: Re: [PATCH] clk: imx: composite-8m: Add imx8m_divider_determine_rate
+To:     Adam Ford <aford173@gmail.com>
+Cc:     linux-clk@vger.kernel.org, aford@beaconembedded.com,
+        Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,101 +78,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023, Alexander Mikhalitsyn wrote:
-> If misc_cg_set_capacity() fails for some reason then we have
-> a memleak for sev_reclaim_asid_bitmap/sev_asid_bitmap. It's
-> not a case right now, because misc_cg_set_capacity() just can't
-> fail and check inside it is always successful.
->=20
-> But let's fix that for code consistency.
->=20
-> Cc: Sean Christopherson <seanjc@google.com>
-> Cc: Paolo Bonzini <pbonzini@redhat.com>
-> Cc: St=EF=BF=BDphane Graber <stgraber@ubuntu.com>
-> Cc: kvm@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com=
+On Sat, May 6, 2023 at 4:53=E2=80=AFPM Adam Ford <aford173@gmail.com> wrote=
+:
 >
-> ---
->  arch/x86/kvm/svm/sev.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
->=20
-> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-> index 69ae5e1b3120..cc832a8d1bca 100644
-> --- a/arch/x86/kvm/svm/sev.c
-> +++ b/arch/x86/kvm/svm/sev.c
-> @@ -2216,8 +2216,13 @@ void __init sev_hardware_setup(void)
->  	}
-> =20
->  	sev_asid_count =3D max_sev_asid - min_sev_asid + 1;
-> -	if (misc_cg_set_capacity(MISC_CG_RES_SEV, sev_asid_count))
-> +	if (misc_cg_set_capacity(MISC_CG_RES_SEV, sev_asid_count)) {
-> +		bitmap_free(sev_reclaim_asid_bitmap);
-> +		sev_reclaim_asid_bitmap =3D NULL;
-> +		bitmap_free(sev_asid_bitmap);
-> +		sev_asid_bitmap =3D NULL;
->  		goto out;
-> +	}
+> Currently, certain clocks are derrived as a divider from their
+> parent clock.  For some clocks, even when CLK_SET_RATE_PARENT
+> is set, the parent clock is not properly set which can lead
+> to some relatively inaccurate clock values.
+>
+> Unlike imx/clk-composite-93 and imx/clk-divider-gate, it
+> cannot rely on calling a standard determine_rate function,
+> because the 8m composite clocks have a pre-divider and
+> post-divider. Because of this, a custom determine_rate
+> function is necessary to determine the maximum clock
+> division which is equivalent to pre-divider * the
+> post-divider.
+>
+> With this added, the system can attempt to adjust the parent rate
+> when the proper flags are set which can lead to a more precise clock
+> value.
+>
+> On the imx8mplus, no clock changes are present.
+> On the Mini and Nano, this can help achieve more accurate
+> lcdif clocks. When trying to get a pixel clock of 31.500MHz
+> on an imx8m Nano, the clocks divided the 594MHz down, but
+> left the parent rate untouched which caused a calulation error.
+>
+> Before:
+> video_pll              594000000
+>   video_pll_bypass     594000000
+>     video_pll_out      594000000
+>       disp_pixel       31263158
+>         disp_pixel_clk 31263158
+>
+> Variance =3D -236842 Hz
+>
+> After this patch:
+> video_pll               31500000
+>   video_pll_bypass      31500000
+>     video_pll_out       31500000
+>       disp_pixel        31500000
+>         disp_pixel_clk  31500000
+>
+> Variance =3D 0 Hz
+>
+> All other clocks rates and parent were the same.
+> Similar results on imx8mm were found.
+>
+> Fixes: 690dccc4a0bf ("Revert "clk: imx: composite-8m: Add support to dete=
+rmine_rate"")
+> Signed-off-by: Adam Ford <aford173@gmail.com>
 
-Blech, didn't look close enough at v1.  I think I'd rather yell and continu=
-e on.
-If misc_cg_set_capacity() were to fail, debugging would be unnecessarily pa=
-inful,
-and at least as things stand today, there's nothing userspace can do to rem=
-edy
-the problem except by manually disabling SEV and/or SEV-ES.
+This works fine on my imx8mm-evk, so:
 
----
-From: Sean Christopherson <seanjc@google.com>
-Date: Tue, 6 Jun 2023 11:34:28 -0700
-Subject: [PATCH] KVM: SVM: WARN, but continue, if misc_cg_set_capacity() fa=
-ils
-
-WARN and continue if misc_cg_set_capacity() fails, as the only scenario
-in which it can fail is if the specified resource is invalid, which should
-never happen when CONFIG_KVM_AMD_SEV=3Dy.  Deliberately not bailing "fixes"
-a theoretical bug where KVM would leak the ASID bitmaps on failure, which
-again can't happen.
-
-If the impossible should happen, the end result is effectively the same
-with respect to SEV and SEV-ES (they are unusable), while continuing on
-has the advantage of letting KVM load, i.e. userspace can still run
-non-SEV guests.
-
-Reported-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/svm/sev.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
-
-diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-index d65578d8784d..07756b7348ae 100644
---- a/arch/x86/kvm/svm/sev.c
-+++ b/arch/x86/kvm/svm/sev.c
-@@ -2216,9 +2216,7 @@ void __init sev_hardware_setup(void)
- 	}
-=20
- 	sev_asid_count =3D max_sev_asid - min_sev_asid + 1;
--	if (misc_cg_set_capacity(MISC_CG_RES_SEV, sev_asid_count))
--		goto out;
--
-+	WARN_ON_ONCE(misc_cg_set_capacity(MISC_CG_RES_SEV, sev_asid_count));
- 	sev_supported =3D true;
-=20
- 	/* SEV-ES support requested? */
-@@ -2243,9 +2241,7 @@ void __init sev_hardware_setup(void)
- 		goto out;
-=20
- 	sev_es_asid_count =3D min_sev_asid - 1;
--	if (misc_cg_set_capacity(MISC_CG_RES_SEV_ES, sev_es_asid_count))
--		goto out;
--
-+	WARN_ON_ONCE(misc_cg_set_capacity(MISC_CG_RES_SEV_ES, sev_es_asid_count))=
-;
- 	sev_es_supported =3D true;
-=20
- out:
-
-base-commit: 6d1bc9754b04075d938b47cf7f7800814b8911a7
---=20
-
+Tested-by: Fabio Estevam <festevam@gmail.com>
