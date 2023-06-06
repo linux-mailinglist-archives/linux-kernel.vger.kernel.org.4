@@ -2,191 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0C8A7236EF
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 07:46:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC8F47236F3
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 07:50:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232392AbjFFFql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 01:46:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49804 "EHLO
+        id S231636AbjFFFuB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 01:50:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229880AbjFFFqk (ORCPT
+        with ESMTP id S231670AbjFFFt7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 01:46:40 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 173F21B1;
-        Mon,  5 Jun 2023 22:46:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686030399; x=1717566399;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=nPOuXXwIr5OTZuwL4SX8aNK62+y3XWaZrVrkWLU4C2k=;
-  b=Aea6vhlaWbXSA7rsvPyVybMpzcEeiTfb9ppkg9+2gx0J5Fe3vynKf71H
-   JMHNQ9cAUwIw/N8ghvll1mW61HuNM+JC9VKsEja3mt0BA6dnWwbseOnJO
-   fzKuA8GTmvIriVbF3n0sQ1Y/r5yc7KuikO4f3b1g2sY30295s17HJoLPn
-   ov2ULu2vfsJsXS8Wm++rVjDinjF2VGsdgLS+6BDSkYmcfGTwxSRyi8cWq
-   2StE6pxxNOyihKmiXoHPBypHhNzjxWhJnbZWzGuff7jjB2yZqP+NduntV
-   sfK7XtEZaxwY0PMg0qajT6TGEmJYFInLRTp1GTiJblRgxQLLuzgDZZIUa
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="346167784"
-X-IronPort-AV: E=Sophos;i="6.00,219,1681196400"; 
-   d="scan'208";a="346167784"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 22:46:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="853267274"
-X-IronPort-AV: E=Sophos;i="6.00,219,1681196400"; 
-   d="scan'208";a="853267274"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga001.fm.intel.com with ESMTP; 05 Jun 2023 22:46:37 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 5 Jun 2023 22:46:37 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Mon, 5 Jun 2023 22:46:37 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.176)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Mon, 5 Jun 2023 22:46:36 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CdyGZfQGfVMfjRzvwllWO8fjx1Or2fRhcgJkEoStwOqMOxI/BkI80tfKlksLc2MLSoqhjfKyW7cejiQ19Y387nXyATS5+S3uWcORKFNuN686hM0pDiNtW/vfZ5NPoNw4T5XY3vwo3FDy7pZPbWLg5BaJoUW2+f+7Xtg2+IvsiRK6TD2D+uXkQ+nTaKKEI62Xjn+ddhW6jWX/ldmPvUQanIMTHf296mMP8FRWcWa6t14BCawxhPDF3/ITeSyw7MZoH22rYTSTaWwNR3ACA360siv6PHJa7Gcqt1bIgtE9h5udJkGS0MWTNVeSzEZPxLNxT77vCZrl2S3vkRqfP4PQ2w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=azczIjWrUyj9MC0fNae/Xvod4OriqCagc2r6cstgavQ=;
- b=eQf49+GWppFy0p0nGo3aQuOhm4+Q+btAmasRpLe4WJghezqVM6EJBcHEMxzb3/Z7uH8w538bCmUEI0QGbJ2or3ABqZbsBAbTJjhuDLjTFa04CEc/uFQQWMX3bF3MSTnaZiEEY7QSCMt3JSyNe78w/Dw7RmGKTHuyeg/k1Pw5yz23mxUJV1sNER8pfwYilm07KhnctNCm61kVty9U2ugYn2N2jakSjwJbbGNt93wuEhX1irtQSCO8o+cXhtRE2ABepYHl97dC84gTgPIsKCugTN/RJvSY2jXni5rGxZruBisWDA2y0YdU9XEmWPvLIOu/B24/8CIB3VI3TF25M51rww==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from SA1PR11MB6734.namprd11.prod.outlook.com (2603:10b6:806:25d::22)
- by CO1PR11MB5009.namprd11.prod.outlook.com (2603:10b6:303:9e::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Tue, 6 Jun
- 2023 05:46:33 +0000
-Received: from SA1PR11MB6734.namprd11.prod.outlook.com
- ([fe80::3d38:3229:72d:88a4]) by SA1PR11MB6734.namprd11.prod.outlook.com
- ([fe80::3d38:3229:72d:88a4%3]) with mapi id 15.20.6455.030; Tue, 6 Jun 2023
- 05:46:33 +0000
-From:   "Li, Xin3" <xin3.li@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
-CC:     "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "jiangshanlai@gmail.com" <jiangshanlai@gmail.com>,
-        "Kang, Shan" <shan.kang@intel.com>
-Subject: RE: [PATCH v8 04/33] x86/traps: add
- install_system_interrupt_handler()
-Thread-Topic: [PATCH v8 04/33] x86/traps: add
- install_system_interrupt_handler()
-Thread-Index: AQHZa4hMKbfML9J2EE2n9O+e9+6txa98QHyAgAFcNPA=
-Date:   Tue, 6 Jun 2023 05:46:32 +0000
-Message-ID: <SA1PR11MB6734F829654B94EA23FE0994A852A@SA1PR11MB6734.namprd11.prod.outlook.com>
-References: <20230410081438.1750-1-xin3.li@intel.com>
- <20230410081438.1750-5-xin3.li@intel.com> <87y1ky70ce.ffs@tglx>
-In-Reply-To: <87y1ky70ce.ffs@tglx>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA1PR11MB6734:EE_|CO1PR11MB5009:EE_
-x-ms-office365-filtering-correlation-id: 20a5271b-a85a-4da0-9d44-08db6651623b
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ++i5WnquFlrk1b0tY2weXjmogNcNRsjOaHdGWUabyCaykd8ckuu1wb5NHOEHxD91gqkxF1jRKw2Oydvbu3GzLhOJBcYgUJJ27xxGZ0RGciFFPXzDPlj1vJ2yRTIiPPHhR+cw1c5QBlJFnqkPfUyhugGCh5aU/qw+6lCwOY36SP5PMJtQf2T2RaSMJbm1jIkLg/Hjf8CVPmEaoeJRYJuTq4lPpqJLETquZ3tgJS6DMGu7ACnOi7XkeT56ZjkulFfhvM2EO2/Ah4kvympgEVZTNYzfc5h77nzwpPYkyyk1HhRvzl1I1r71KOyMUUXtdJ6oVoaqdDOdNtIkAs+sb/v+erIKuHBaJWDGWKQTW9Rhkn/53iO8ntsDppFZsSJcdVyRzCInkq5WqyzXgDlqMzQF+TAT8tROP85/34DypAKaOQcWVUStPhJSQlhUjFKHjO9uuokXLJDiGH9RPJfBm7IPsd+L30MsZyTWuIU3Tf6EDJT5+I4iBXSBFU9l9dEmd1sCL/mcoBS2/po2NuwU1KntCTp4Kg2it90x5dywXmazGLemq0og4S1lY3O0Pf9U6Zr4IO/iI00aD22F5PEK8BGyupZsU1YW79E6e9o2wkbNYIZQfFlboE3QfU8wj6AXFjWU
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6734.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(346002)(39860400002)(376002)(136003)(366004)(451199021)(71200400001)(26005)(110136005)(66556008)(64756008)(66476007)(66446008)(76116006)(66946007)(82960400001)(38100700002)(4326008)(122000001)(478600001)(7696005)(9686003)(2906002)(4744005)(6506007)(41300700001)(38070700005)(7416002)(55016003)(316002)(33656002)(8936002)(8676002)(54906003)(186003)(5660300002)(86362001)(52536014);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?vRrutTzHzMX2TzSTSyjad8Ck2WCfL0Y9pNKOfmKK3jsmdqWDKPO59Bqzm6Ro?=
- =?us-ascii?Q?/JcMbEqEFahHHJgckE/C2+fGz6yCwHkyBBMep5CAeweLkic7xW2Cf0bC4/CB?=
- =?us-ascii?Q?Wp196miyGVOd6n2CXnOLW5120fVRBABujYVuZ/f2Je7AH0f6wnn1aF9Tnjah?=
- =?us-ascii?Q?p0kJpDCHncvxMdRyG0a8TVnwzdcXbWJQIKUjK7T02JO8ECsV0/GM2+Ybdgvf?=
- =?us-ascii?Q?ZDjdEOA3Lsbu+cvoRkhvg+mRyjab+UN4ssAy5uD4i0QDk79EZJ4wWi8sYiGg?=
- =?us-ascii?Q?XAnsXrJA/ZDJ0Q8W3SuOJzGDqglats9j1CiJSy8LJW8NS3+f3lVD3A222UB0?=
- =?us-ascii?Q?sEwusMTt99dh7AFnLfRKb2u4sVl3M2l0/WoBWAQrsC4zHCDdhas3hmYhxjIU?=
- =?us-ascii?Q?tg1gDgiFMO+piA4I7nR3z9ooYpRd1WDxypyDSTWQCxVmiKB4Kjd6csoAcBrr?=
- =?us-ascii?Q?DkLyuwGrF3xvMQG6hCpatsOLJUhp9nUWfb/0zISIel3Jx60WrpLNUrGo59tW?=
- =?us-ascii?Q?JI5r/AQW9wDZLxiPNkLPgNoqM+GtLCpBKG2KHP6rLrZj6WKQnHDXuUXp6DBv?=
- =?us-ascii?Q?s7lwXl4RVrImkmy33G+q9hK5TtfbD1BriAxN9wvYggbSmNrNPWckC9/wXoYD?=
- =?us-ascii?Q?fRVSQPtQfbOqyHxUlptQs0bivAc+1tPOCnoY7dTMWLxY6zBxlNM1geXAFxaA?=
- =?us-ascii?Q?Arcc2rsy014TMdRLq47XTXqNXoDJFHSqvUvrgc4r8vRe+XfgvNebUpNVsh9E?=
- =?us-ascii?Q?puGtg7rJeCDE90BKzQZ7R+m7VKB6fJP2oN4qF1rNNKpKBHLunrSqp7OuXuEA?=
- =?us-ascii?Q?hDhlhYKnXt/FZeRhomXzAZv6dXZTGPtD2ZIiVRiz0RdYJjXYSS3ihfu0oWWM?=
- =?us-ascii?Q?h5cb0IWVWyuxLSOXFz2MZp6819dF4XkDMh7v5k6AYDiakmuwd1r8nAxRoGB8?=
- =?us-ascii?Q?ztyN462dYUUE1vGqeB4JuwlTjaoha8dTxmhzdC2zhCk6UeuOkHCcYBFO8dX6?=
- =?us-ascii?Q?cozPijcRvKVaR8Ti8Yr15aiZYA/09LSfCG96vxUflK2E5uSh6U5YgQQmEh7f?=
- =?us-ascii?Q?6lT3QSloOfSOo1suPXxl0U+SJLHgCun76CXG0/yTKnyEsv2MZ4D3kshiBzJJ?=
- =?us-ascii?Q?RPMsl4TR6GdlOeMVsmefLSJkEvdXM3si5SK0vPsny8DWOJ2AtVot3ZbLWgo8?=
- =?us-ascii?Q?QiN9N+9SCTAvPOhhzzs4Yqg9A+ms2aof5AGFJxGUqg5IFxmeXq9f7L1P56v7?=
- =?us-ascii?Q?/MfzYU5XPnlY1zwnenNwSPBEMJZxbeZM/JXgPfYQTk/vMkJTADajB/DdaHOU?=
- =?us-ascii?Q?25gG5BhCpEKneysZK7QKyC1Ry1TasFZ2y4W8GLBCpro8NQrS/luUlHjjSmLK?=
- =?us-ascii?Q?0+uM9Y5ijbqRDcq5YE8d7h9y8zqqH9f7tVnXqqGETed5gHnd5RI8sicJmsiw?=
- =?us-ascii?Q?xCx/myQXwEXWJFKqwD00uiiMbfzTWQsXLCArHtJcn4jhZ0giUpo1w2IQRibY?=
- =?us-ascii?Q?JsVvjUrgsp+xBvDoLU8+dHs2MBiVLg3vNJ3a+AY5f7uUX3d1IVQ6XhcFdNjT?=
- =?us-ascii?Q?WOJp+NjUhmfP0Yba32I=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6734.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 20a5271b-a85a-4da0-9d44-08db6651623b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Jun 2023 05:46:32.9404
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: mwgsBRsW5sCU4YCWtWUcsGbG6vm9PlhbWh45dq9j5WX3gU9NTNI2SRAgwJ54a/QVAKvbr90BE1hSE2WPtd/ecg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB5009
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 6 Jun 2023 01:49:59 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77EDF9E;
+        Mon,  5 Jun 2023 22:49:58 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3561Jvq2007753;
+        Tue, 6 Jun 2023 05:49:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=aQ6KnwOt1mwRRlCCHY+UFOi0CAj60uT8JU+m6VHJT9I=;
+ b=Xu44K9su7X2iH4DmyKH+Lu6InkbauADcpZSlksSjsLeD8/F936yL5xjM4SNchIaTiZW6
+ 9vhu8Ydx04eGWEAHw9/nUcKYQGtK4g7ro7jpvI4fpkFWPYhVym/I6dBtWFPJr2Rt8Av7
+ vflwolp4VIsJXXmZtyMh5jnXAlbSa6JO0/AlVLhjgkNokIf6QZBzDSAoEmUpUvjsYWVT
+ 9w13oIkyxhRTngI4LymJ1rcRZRuwO6anaHdwR32ZvZhuSXECxjwGih2EcGzdmLDQDPw2
+ Mj3u9B0PI3iMELW5ZIv22YOdzFYmrP9dUswHpHzbmPTY+gWMTF6QiEBJnxkc/xsena3J YA== 
+Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r1d4et5vx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Jun 2023 05:49:45 +0000
+Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 3565nef8022823;
+        Tue, 6 Jun 2023 05:49:40 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3qyxkka702-1;
+        Tue, 06 Jun 2023 05:49:40 +0000
+Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3565neGi022817;
+        Tue, 6 Jun 2023 05:49:40 GMT
+Received: from hu-sgudaval-hyd.qualcomm.com (hu-krichai-hyd.qualcomm.com [10.213.110.112])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3565ndPT022816;
+        Tue, 06 Jun 2023 05:49:40 +0000
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 4058933)
+        id 2CD50376D; Tue,  6 Jun 2023 11:19:39 +0530 (+0530)
+From:   Krishna chaitanya chundru <quic_krichai@quicinc.com>
+To:     manivannan.sadhasivam@linaro.org
+Cc:     quic_vbadigan@quicinc.com, quic_ramkri@quicinc.com,
+        Krishna chaitanya chundru <quic_krichai@quicinc.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-pci@vger.kernel.org (open list:PCIE ENDPOINT DRIVER FOR QUALCOMM),
+        linux-arm-msm@vger.kernel.org (open list:PCIE ENDPOINT DRIVER FOR
+        QUALCOMM), linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] PCI: qcom-ep: Add ICC bandwidth voting support
+Date:   Tue,  6 Jun 2023 11:19:29 +0530
+Message-Id: <1686030570-5439-1-git-send-email-quic_krichai@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 1DPZgL_PPjqpcx1wvrIyr-YKE5TnYmq_
+X-Proofpoint-GUID: 1DPZgL_PPjqpcx1wvrIyr-YKE5TnYmq_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-06_03,2023-06-05_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
+ clxscore=1011 priorityscore=1501 malwarescore=0 mlxscore=0
+ lowpriorityscore=0 adultscore=0 impostorscore=0 spamscore=0
+ mlxlogscore=964 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2304280000 definitions=main-2306060049
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> #ifdef CONFIG_X86_64
-> static inline void sysvec_setup_fred(unsigned int vector, void (*func)(st=
-ruct
-> pt_regs*)) {
->         ...
-> }
-> #else
-> static inline void sysvec_setup_fred(unsigned int vector, void (*func)(st=
-ruct
-> pt_regs*)) { } #endif
->=20
-> #define sysvec_install(vector, func) {                                  \
->         sysvec_setup_fred(vector, func);                                \
->         alloc_intr_gate(vector, asm_##func);                            \
-> }
->=20
-> -	alloc_intr_gate(HYPERVISOR_CALLBACK_VECTOR,
-> asm_sysvec_xen_hvm_callback);
-> +	sysvec_install(HYPERVISOR_CALLBACK_VECTOR,
-> sysvec_xen_hvm_callback);
+Add support to vote for ICC bandwidth based up on the link
+speed and width.
 
-This is a better way, and I will do so in the next iteration.
+Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+---
+ drivers/pci/controller/dwc/pcie-qcom-ep.c | 73 +++++++++++++++++++++++++++++++
+ 1 file changed, 73 insertions(+)
 
-Thanks!
-Xin
+diff --git a/drivers/pci/controller/dwc/pcie-qcom-ep.c b/drivers/pci/controller/dwc/pcie-qcom-ep.c
+index 19b3283..79e7559 100644
+--- a/drivers/pci/controller/dwc/pcie-qcom-ep.c
++++ b/drivers/pci/controller/dwc/pcie-qcom-ep.c
+@@ -17,6 +17,7 @@
+ #include <linux/phy/pcie.h>
+ #include <linux/phy/phy.h>
+ #include <linux/platform_device.h>
++#include <linux/interconnect.h>
+ #include <linux/pm_domain.h>
+ #include <linux/regmap.h>
+ #include <linux/reset.h>
+@@ -28,6 +29,7 @@
+ #define PARF_SYS_CTRL				0x00
+ #define PARF_DB_CTRL				0x10
+ #define PARF_PM_CTRL				0x20
++#define PARF_PM_STTS				0x24
+ #define PARF_MHI_CLOCK_RESET_CTRL		0x174
+ #define PARF_MHI_BASE_ADDR_LOWER		0x178
+ #define PARF_MHI_BASE_ADDR_UPPER		0x17c
+@@ -128,6 +130,9 @@
+ /* DBI register fields */
+ #define DBI_CON_STATUS_POWER_STATE_MASK		GENMASK(1, 0)
+ 
++#define DBI_LINKCTRLSTATUS			0x80
++#define DBI_LINKCTRKSTATUS_SHIFT	16
++
+ #define XMLH_LINK_UP				0x400
+ #define CORE_RESET_TIME_US_MIN			1000
+ #define CORE_RESET_TIME_US_MAX			1005
+@@ -187,6 +192,8 @@ struct qcom_pcie_ep {
+ 	enum qcom_pcie_ep_link_status link_status;
+ 	int global_irq;
+ 	int perst_irq;
++
++	struct icc_path *icc;
+ };
+ 
+ static int qcom_pcie_ep_core_reset(struct qcom_pcie_ep *pcie_ep)
+@@ -253,9 +260,56 @@ static void qcom_pcie_dw_stop_link(struct dw_pcie *pci)
+ 	disable_irq(pcie_ep->perst_irq);
+ }
+ 
++static void qcom_pcie_icc_update(struct qcom_pcie_ep *pcie_ep)
++{
++	struct dw_pcie *pci = &pcie_ep->pci;
++	u32 val, bw;
++	int speed, width;
++	int ret;
++
++	if (!pcie_ep->icc)
++		return;
++
++	val = dw_pcie_readl_dbi(pci, DBI_LINKCTRLSTATUS);
++	val = val >> DBI_LINKCTRKSTATUS_SHIFT;
++
++	speed = FIELD_GET(PCI_EXP_LNKSTA_CLS, val);
++	width = FIELD_GET(PCI_EXP_LNKSTA_NLW, val);
++
++	/*
++	 * ICC needs avg bw in KBps.
++	 *
++	 * For example for 2Gbps the avg BW = 2x1000x1000x1000/8*1000 = 250000
++	 */
++	switch (speed) {
++	case 1:
++		bw = 250000;	/* avg bw for GEN1 per lane: 2Gbps, peak bw: no vote */
++		break;
++	case 2:
++		bw = 500000;	/* avg bw for GEN2 per lane: 4Gbps, peak bw no vote */
++		break;
++	case 3:
++		bw = 1000000;	/* avg bw for GEN3 per lane: 8Gbps, peak bw no vote */
++		break;
++	default:
++		WARN_ON_ONCE(1);
++		fallthrough;
++	case 4:
++		bw = 2000000;	/* avg bw for GEN4 per lane: 16Gbps, peak bw no vote */
++		break;
++	}
++
++	ret = icc_set_bw(pcie_ep->icc, width * bw, 0);
++	if (ret) {
++		dev_err(pci->dev, "failed to set interconnect bandwidth: %d\n",
++			ret);
++	}
++}
++
+ static int qcom_pcie_enable_resources(struct qcom_pcie_ep *pcie_ep)
+ {
+ 	int ret;
++	struct dw_pcie *pci = &pcie_ep->pci;
+ 
+ 	ret = clk_bulk_prepare_enable(pcie_ep->num_clks, pcie_ep->clks);
+ 	if (ret)
+@@ -277,6 +331,20 @@ static int qcom_pcie_enable_resources(struct qcom_pcie_ep *pcie_ep)
+ 	if (ret)
+ 		goto err_phy_exit;
+ 
++	/*
++	 * Some Qualcomm platforms require interconnect bandwidth constraints
++	 * to be set before enabling interconnect clocks.
++	 *
++	 * Set an initial average bandwidth corresponding to single-lane Gen 1
++	 * for the pcie to mem path.
++	 */
++	ret = icc_set_bw(pcie_ep->icc, 250000, 0); /* avg bw: 2Gbps, peak bw: no vote */
++	if (ret) {
++		dev_err(pci->dev, "failed to set interconnect bandwidth: %d\n",
++			ret);
++		goto err_phy_exit;
++	}
++
+ 	return 0;
+ 
+ err_phy_exit:
+@@ -550,6 +618,10 @@ static int qcom_pcie_ep_get_resources(struct platform_device *pdev,
+ 	if (IS_ERR(pcie_ep->phy))
+ 		ret = PTR_ERR(pcie_ep->phy);
+ 
++	pcie_ep->icc = devm_of_icc_get(dev, "pci");
++	if (IS_ERR(pcie_ep->icc))
++		ret = PTR_ERR(pcie_ep->icc);
++
+ 	return ret;
+ }
+ 
+@@ -572,6 +644,7 @@ static irqreturn_t qcom_pcie_ep_global_irq_thread(int irq, void *data)
+ 	} else if (FIELD_GET(PARF_INT_ALL_BME, status)) {
+ 		dev_dbg(dev, "Received BME event. Link is enabled!\n");
+ 		pcie_ep->link_status = QCOM_PCIE_EP_LINK_ENABLED;
++		qcom_pcie_icc_update(pcie_ep);
+ 	} else if (FIELD_GET(PARF_INT_ALL_PM_TURNOFF, status)) {
+ 		dev_dbg(dev, "Received PM Turn-off event! Entering L23\n");
+ 		val = readl_relaxed(pcie_ep->parf + PARF_PM_CTRL);
+-- 
+2.7.4
+
