@@ -2,239 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9D29724E06
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 22:26:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73434724E1D
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 22:27:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239460AbjFFU0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 16:26:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51524 "EHLO
+        id S239604AbjFFU1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 16:27:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238484AbjFFU0P (ORCPT
+        with ESMTP id S239515AbjFFU0u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 16:26:15 -0400
-Received: from smtp-fw-52005.amazon.com (smtp-fw-52005.amazon.com [52.119.213.156])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46532E5B;
-        Tue,  6 Jun 2023 13:26:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1686083174; x=1717619174;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=v1GnwDotzgDvCEpzlZKh4p4TBu2ATvhr3nGE68dLeoo=;
-  b=paFie8CHAlrxv3FQ5M+vHccY6qYPMv/s9UuFUhl5EBr5hCga5zGJbKyb
-   xFxC0oOLD3UwxldolqgxbxFqrAUlY1OvpJk0jYn+Uu4Ii4FAy81p6yKDE
-   Z6rPnKaZ8YsnJt4jQr48ozEL7geojwCja0o85lohaPT0ljs76+0WSj6UA
-   Q=;
-X-IronPort-AV: E=Sophos;i="6.00,221,1681171200"; 
-   d="scan'208";a="585996238"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1d-m6i4x-153b24bc.us-east-1.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-52005.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 20:26:11 +0000
-Received: from EX19MTAUWC002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1d-m6i4x-153b24bc.us-east-1.amazon.com (Postfix) with ESMTPS id DA565C3B8B;
-        Tue,  6 Jun 2023 20:26:08 +0000 (UTC)
-Received: from EX19MTAUWA001.ant.amazon.com (10.250.64.204) by
- EX19MTAUWC002.ant.amazon.com (10.250.64.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Tue, 6 Jun 2023 20:26:08 +0000
-Received: from dev-dsk-luizcap-1d-37beaf15.us-east-1.amazon.com (10.39.210.33)
- by mail-relay.amazon.com (10.250.64.204) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Tue, 6 Jun 2023 20:26:08 +0000
-Received: by dev-dsk-luizcap-1d-37beaf15.us-east-1.amazon.com (Postfix, from userid 23276196)
-        id E63A223; Tue,  6 Jun 2023 20:26:07 +0000 (UTC)
-Date:   Tue, 6 Jun 2023 20:26:07 +0000
-From:   Luiz Capitulino <luizcap@amazon.com>
-To:     Sean Christopherson <seanjc@google.com>
-CC:     Paolo Bonzini <pbonzini@redhat.com>, <kvm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Li RongQing <lirongqing@baidu.com>,
-        Yong He <zhuangel570@gmail.com>,
-        Robert Hoo <robert.hoo.linux@gmail.com>,
-        Kai Huang <kai.huang@intel.com>
-Subject: Re: [PATCH] KVM: x86/mmu: Add "never" option to allow sticky
- disabling of nx_huge_pages
-Message-ID: <20230606202557.GA71782@dev-dsk-luizcap-1d-37beaf15.us-east-1.amazon.com>
-References: <20230602005859.784190-1-seanjc@google.com>
+        Tue, 6 Jun 2023 16:26:50 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.164])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C78B0;
+        Tue,  6 Jun 2023 13:26:35 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1686083193; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=Gs+J12EncTVtxIWLeg/NHtjR3DE5Ea3zVH+suiZPMjU05IVcwbzmiwBCI9a+1aY4Iq
+    yOP+txfCgZIBYFifmzwS0xz+kUEa1hgFcEDgwicnuv/9RLEPeF311wO1lJsaF97NaAlN
+    dxvDMDgf1q1xnKnGjRIUJ05lA3OiPt50Ay7psbf+ngHxjaOp8ectEglQCZAv50Opsiyd
+    eEb9sQHZr58G63ojVcnCzszEkLVYbgjBAvUrkFNCLxdERqlNTKvqZybXGbK0yXROm6X+
+    rYEvS0WAeICgi7TqV+Vy+upkuzbgE/kpxWNRiaUj/fSQb7epRWinY3X3UI3ZE1A4Bvyv
+    ubiA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1686083193;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=iDJzI5oKdv+thU5hp010LolTdr7zN3lfCn9865pYEj8=;
+    b=r69BNV9Oy4qgdz2a0deQGXKBoFzmXArHqJRGyrWwp1sHcVnZD2Nb7URp9BBOnCuxd4
+    vMLSn6KKGHfq01ihMFPqbaaHyJ2WoL0W0C6KLPuzmefiu9xOcX0MaUytjpMBBfjKTiao
+    U3ErQ+QzyOdEKer4rfgOiUJuGWwLtJrlFqJCobTbGeESmHkVaj9w14ClXlN7i6+5/JTV
+    tJCSc/cuAFe9wckibFzU67tW0DBTYJfpJCUCOeW0s0UYmTKgNWqH5NhyPDYBFJQZ2MTd
+    PNfnnzgUbf9gmReulcMHo2KE9ypXFYOABiR7417PhcdGXlDoIs9oqrOAJ2wS3iy/wmxr
+    d97Q==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1686083193;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=iDJzI5oKdv+thU5hp010LolTdr7zN3lfCn9865pYEj8=;
+    b=C9lnzINgMG6Nrop+aMVa2FkmSkgBdFlVsKC/zuNsOd68VisjU6zt32PSIoDYvqwczB
+    lWIK0v71BctpQgyq4kxoP4DlGAJrBWh6DfVBkfAVPZv12PZBZf7MLWE6tQq0rqPX0lmi
+    UaPAaE7+JrbP0sw3/5INW/IP1SjgZ/yx/MhvpRtwdwTZzn2hWDexf4s4YJLNcgrrgeBk
+    gojYBLyerxTANuwc1boFi5KB9L+GIdO1/hDENi4Eoer4yHKWEYfebVT9JBmwr57/XlnT
+    fwU5yLU0EvCf+9FIyQi0SpViSM49lxknQRVrYU1wZbtC0l2d/CZ8YMfrNAmm4jC27MAQ
+    pAkQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1686083193;
+    s=strato-dkim-0003; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=iDJzI5oKdv+thU5hp010LolTdr7zN3lfCn9865pYEj8=;
+    b=EfTYZKHPEfDUJlSINg07z/9Dudv4iY1nbNqCyyvVWUB4i1ccPEe/u/gGkdC7O1XgvS
+    G2dyTkAwBkBTgq2W/ZDA==
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4paA8Z+J1A=="
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 49.5.3 DYNA|AUTH)
+    with ESMTPSA id Z82ec2z56KQXFqu
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Tue, 6 Jun 2023 22:26:33 +0200 (CEST)
+Date:   Tue, 6 Jun 2023 22:26:27 +0200
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: dts: qcom: qcm2290: Add CPU idle states
+Message-ID: <ZH-Wcxy3aev9hjBU@gerhold.net>
+References: <20230606-topic-qcm2290_idlestates-v1-1-dd77eef0086e@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230602005859.784190-1-seanjc@google.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230606-topic-qcm2290_idlestates-v1-1-dd77eef0086e@linaro.org>
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 01, 2023 at 05:58:59PM -0700, Sean Christopherson wrote:
-> Add a "never" option to the nx_huge_pages module param to allow userspace
-> to do a one-way hard disabling of the mitigation, and don't create the
-> per-VM recovery threads when the mitigation is hard disabled.  Letting
-> userspace pinky swear that userspace doesn't want to enable NX mitigation
-> (without reloading KVM) allows certain use cases to avoid the latency
-> problems associated with spawning a kthread for each VM.
+On Tue, Jun 06, 2023 at 06:15:28PM +0200, Konrad Dybcio wrote:
+> Add the (scarce) idle states for the individual CPUs, as well as the
+> whole cluster. This enables deeper-than-WFI cpuidle
 > 
-> E.g. in FaaS use cases, the guest kernel is trusted and the host may
-> create 100+ VMs per logical CPU, which can result in 100ms+ latencies when
-> a burst of VMs is created.
-
-Tested-by: Luiz Capitulino <luizcap@amazon.com>
-
-Without this patch I can see the 100ms+ latencies on KVM_CREATE_VM even
-with a single VM.
-
-Just run a VM with with strace -T and grep for KVM_CREATE_VM. When using
-kvmtool I get (latency in seconds - kernel HEAD is a4d7d70112):
-
-  ioctl(3, KVM_CREATE_VM, 0)              = 4 <0.023567>
-  
-  ioctl(3, KVM_CREATE_VM, 0)              = 4 <0.076709>
-  
-  ioctl(3, KVM_CREATE_VM, 0)              = 4 <0.109109>
-
-With this patch and nx_huge_page=never:
-
-  ioctl(3, KVM_CREATE_VM, 0)              = 4 <0.000518>
-  
-  ioctl(3, KVM_CREATE_VM, 0)              = 4 <0.000495>
-  
-  ioctl(3, KVM_CREATE_VM, 0)              = 4 <0.000513>
-
-Now, I debugged down the single VM case before seeing this patch and it
-can be avoided by building the kernel with CONFIG_CGROUP_FAVOR_DYNMODS=y
-or mounting the cgroup v2 mount point with the favordynmods mount option.
-
-This is because the high latency is coming from a call to
-cgroup_attach_task_all() in:
-
-kvm_vm_worker_thread()
-  cgroup_attach_task_all()
-    percpu_down_write(&cgroup_threadgroup_rwsem)
-      /* calls synchronize_rcu() */
-
-This happens while kvm_vm_create_worker_thread() is waiting on a completion.
-See commit 6a010a49b63a for more information.
-
-This patch is preferable because the favordynmods solution has a trade-off.
-However, why don't we make nx_huge_pages=never the default behavior if the
-CPU is not vulnerable? If there are concerns about not being able to restart
-the worker thread, then maybe we could make this a .config option?
-
-- Luiz
-
-
-> 
-> Reported-by: Li RongQing <lirongqing@baidu.com>
-> Closes: https://lore.kernel.org/all/1679555884-32544-1-git-send-email-lirongqing@baidu.com
-> Cc: Yong He <zhuangel570@gmail.com>
-> Cc: Robert Hoo <robert.hoo.linux@gmail.com>
-> Cc: Kai Huang <kai.huang@intel.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 > ---
->  arch/x86/kvm/mmu/mmu.c | 41 ++++++++++++++++++++++++++++++++++++-----
->  1 file changed, 36 insertions(+), 5 deletions(-)
+>  arch/arm64/boot/dts/qcom/qcm2290.dtsi | 61 +++++++++++++++++++++++++++++++++++
+>  1 file changed, 61 insertions(+)
 > 
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index c8961f45e3b1..2ed38916b904 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -58,6 +58,8 @@
+> diff --git a/arch/arm64/boot/dts/qcom/qcm2290.dtsi b/arch/arm64/boot/dts/qcom/qcm2290.dtsi
+> index b29bc4e4b837..a8a1ce58c0b7 100644
+> --- a/arch/arm64/boot/dts/qcom/qcm2290.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/qcm2290.dtsi
+> @@ -48,6 +48,8 @@ CPU0: cpu@0 {
+>  			enable-method = "psci";
+>  			next-level-cache = <&L2_0>;
+>  			qcom,freq-domain = <&cpufreq_hw 0>;
+> +			power-domains = <&CPU_PD0>;
+> +			power-domain-names = "psci";
+>  			L2_0: l2-cache {
+>  				compatible = "cache";
+>  				cache-level = <2>;
+> @@ -65,6 +67,8 @@ CPU1: cpu@1 {
+>  			enable-method = "psci";
+>  			next-level-cache = <&L2_0>;
+>  			qcom,freq-domain = <&cpufreq_hw 0>;
+> +			power-domains = <&CPU_PD1>;
+> +			power-domain-names = "psci";
+>  		};
 >  
->  extern bool itlb_multihit_kvm_mitigation;
+>  		CPU2: cpu@2 {
+> @@ -77,6 +81,8 @@ CPU2: cpu@2 {
+>  			enable-method = "psci";
+>  			next-level-cache = <&L2_0>;
+>  			qcom,freq-domain = <&cpufreq_hw 0>;
+> +			power-domains = <&CPU_PD2>;
+> +			power-domain-names = "psci";
+>  		};
 >  
-> +static bool nx_hugepage_mitigation_hard_disabled;
+>  		CPU3: cpu@3 {
+> @@ -89,6 +95,8 @@ CPU3: cpu@3 {
+>  			enable-method = "psci";
+>  			next-level-cache = <&L2_0>;
+>  			qcom,freq-domain = <&cpufreq_hw 0>;
+> +			power-domains = <&CPU_PD3>;
+> +			power-domain-names = "psci";
+>  		};
+>  
+>  		cpu-map {
+> @@ -110,6 +118,30 @@ core3 {
+>  				};
+>  			};
+>  		};
 > +
->  int __read_mostly nx_huge_pages = -1;
->  static uint __read_mostly nx_huge_pages_recovery_period_ms;
->  #ifdef CONFIG_PREEMPT_RT
-> @@ -67,12 +69,13 @@ static uint __read_mostly nx_huge_pages_recovery_ratio = 0;
->  static uint __read_mostly nx_huge_pages_recovery_ratio = 60;
->  #endif
->  
-> +static int get_nx_huge_pages(char *buffer, const struct kernel_param *kp);
->  static int set_nx_huge_pages(const char *val, const struct kernel_param *kp);
->  static int set_nx_huge_pages_recovery_param(const char *val, const struct kernel_param *kp);
->  
->  static const struct kernel_param_ops nx_huge_pages_ops = {
->  	.set = set_nx_huge_pages,
-> -	.get = param_get_bool,
-> +	.get = get_nx_huge_pages,
->  };
->  
->  static const struct kernel_param_ops nx_huge_pages_recovery_param_ops = {
-> @@ -6844,6 +6847,14 @@ static void mmu_destroy_caches(void)
->  	kmem_cache_destroy(mmu_page_header_cache);
->  }
->  
-> +static int get_nx_huge_pages(char *buffer, const struct kernel_param *kp)
-> +{
-> +	if (nx_hugepage_mitigation_hard_disabled)
-> +		return sprintf(buffer, "never\n");
-> +
-> +	return param_get_bool(buffer, kp);
-> +}
-> +
->  static bool get_nx_auto_mode(void)
->  {
->  	/* Return true when CPU has the bug, and mitigations are ON */
-> @@ -6860,15 +6871,29 @@ static int set_nx_huge_pages(const char *val, const struct kernel_param *kp)
->  	bool old_val = nx_huge_pages;
->  	bool new_val;
->  
-> +	if (nx_hugepage_mitigation_hard_disabled)
-> +		return -EPERM;
-> +
->  	/* In "auto" mode deploy workaround only if CPU has the bug. */
-> -	if (sysfs_streq(val, "off"))
-> +	if (sysfs_streq(val, "off")) {
->  		new_val = 0;
-> -	else if (sysfs_streq(val, "force"))
-> +	} else if (sysfs_streq(val, "force")) {
->  		new_val = 1;
-> -	else if (sysfs_streq(val, "auto"))
-> +	} else if (sysfs_streq(val, "auto")) {
->  		new_val = get_nx_auto_mode();
-> -	else if (kstrtobool(val, &new_val) < 0)
-> +	} else if (sysfs_streq(val, "never")) {
-> +		new_val = 0;
-> +
-> +		mutex_lock(&kvm_lock);
-> +		if (!list_empty(&vm_list)) {
-> +			mutex_unlock(&kvm_lock);
-> +			return -EBUSY;
-> +		}
-> +		nx_hugepage_mitigation_hard_disabled = true;
-> +		mutex_unlock(&kvm_lock);
-> +	} else if (kstrtobool(val, &new_val) < 0) {
->  		return -EINVAL;
-> +	}
->  
->  	__set_nx_huge_pages(new_val);
->  
-> @@ -7006,6 +7031,9 @@ static int set_nx_huge_pages_recovery_param(const char *val, const struct kernel
->  	uint old_period, new_period;
->  	int err;
->  
-> +	if (nx_hugepage_mitigation_hard_disabled)
-> +		return -EPERM;
-> +
->  	was_recovery_enabled = calc_nx_huge_pages_recovery_period(&old_period);
->  
->  	err = param_set_uint(val, kp);
-> @@ -7161,6 +7189,9 @@ int kvm_mmu_post_init_vm(struct kvm *kvm)
->  {
->  	int err;
->  
-> +	if (nx_hugepage_mitigation_hard_disabled)
-> +		return 0;
-> +
->  	err = kvm_vm_create_worker_thread(kvm, kvm_nx_huge_page_recovery_worker, 0,
->  					  "kvm-nx-lpage-recovery",
->  					  &kvm->arch.nx_huge_page_recovery_thread);
-> 
-> base-commit: 39428f6ea9eace95011681628717062ff7f5eb5f
-> -- 
-> 2.41.0.rc2.161.g9c6817b8e7-goog
-> 
+> +		domain-idle-states {
+> +			CLUSTER_SLEEP: cluster-sleep-0 {
+> +				compatible = "domain-idle-state";
+> +				arm,psci-suspend-param = <0x40000044>;
+
+Are you sure this is correct? Based on lpm-levels/scuba-pm downstream
+I would expect:
+
+ - That the CPU mode part (last digit) is equal to the deepest per-CPU
+   state (0x3) and only the cluster mode part (digit before) changes
+ - That you pass the "last in power level" needed for OSI in << 24
+
+Some of the numbers in sm6115.dtsi also look suspicious if you want to
+recheck those...
+
+Thanks,
+Stephan
