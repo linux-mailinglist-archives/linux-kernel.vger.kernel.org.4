@@ -2,242 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4E497235F4
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 05:55:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BD227235FA
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 05:58:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231428AbjFFDy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 23:54:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49672 "EHLO
+        id S232326AbjFFD6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 23:58:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232326AbjFFDyw (ORCPT
+        with ESMTP id S231391AbjFFD6Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 23:54:52 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D45B7187
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 20:54:50 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id 41be03b00d2f7-53fbb3a013dso5204862a12.1
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 20:54:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686023690; x=1688615690;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Zl0xSYFVXihxlFwU2GI1A7DmXGMBSodJ+vcgxYeTY0Q=;
-        b=c6TZBnZm4tjQlimIKuxQRIpQb8QaOyqNIC3Ybs3R1I6QmAUHBdQ6VrOpRmH5sJzlHl
-         yNmYpXjlJeKbgoxlirqPmoAAXwNKYE025hH6CtoReVgEIf39AnRgPxBYn8s75U2Dz/3p
-         LMG/pkrnhM1SXB7U+oq9nukDzv5jxXZm9PchQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686023690; x=1688615690;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Zl0xSYFVXihxlFwU2GI1A7DmXGMBSodJ+vcgxYeTY0Q=;
-        b=MvCy50558dFDtPNZ7T4NgwaLmkr4TBASExYtXTkE5PPy2NVOuxo/I61B21LKOhdtyN
-         BRhIO3YtppEiOmH9EY02wmhH7fzpl9EjSHznSk073yfetrde0Ul8v7sc0bMyM7tNWM5D
-         xnj/i9/+qzcSJ4rhq8+KgalrYdpisYdAJDs+3e+IwF+5D9qzj1Ive/tLPBJCc2SjhbP1
-         Q7JniqWgI58o+UufTxvgTTdakkJnqSIXLaOZuZW/UXYFdNjdnzyCrSs3m/KyvbQ6PwHC
-         0GgbCJTzYeRkh45DkDE4BKZ5KF5OuVingYGatFejCFNYpZT4NFC61bx0wlmcPjDMJnox
-         SoPQ==
-X-Gm-Message-State: AC+VfDxP7uZmixQSbaVGoWtxV6P/7cn8YvA3QO0j4QwP68YaU9nTqmwa
-        HV9x8uhbv/OzlXbeXfaOHH6MGw==
-X-Google-Smtp-Source: ACHHUZ7/CrXntbChZr3gqIpdTn+xlRnOrx/HP0LFPjZRwolM/ohxcYZ6OUGoLPPIj8t4jX8e+O5LZQ==
-X-Received: by 2002:a05:6a20:d806:b0:101:73a9:1683 with SMTP id iv6-20020a056a20d80600b0010173a91683mr1218950pzb.33.1686023690390;
-        Mon, 05 Jun 2023 20:54:50 -0700 (PDT)
-Received: from grundler-glapstation.lan ([70.134.62.80])
-        by smtp.gmail.com with ESMTPSA id e11-20020a17090301cb00b001ac5b0a959bsm7346636plh.24.2023.06.05.20.54.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jun 2023 20:54:50 -0700 (PDT)
-From:   Grant Grundler <grundler@chromium.org>
-To:     Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
-        "Oliver O \ 'Halloran" <oohall@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Cc:     Rajat Khandelwal <rajat.khandelwal@linux.intel.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rajat Jain <rajatja@chromium.org>,
-        Grant Grundler <grundler@chromium.org>
-Subject: [PATCHv3 pci-next 2/2] PCI/AER: Rate limit the reporting of the correctable errors
-Date:   Mon,  5 Jun 2023 20:54:42 -0700
-Message-ID: <20230606035442.2886343-2-grundler@chromium.org>
-X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-In-Reply-To: <20230606035442.2886343-1-grundler@chromium.org>
-References: <20230606035442.2886343-1-grundler@chromium.org>
+        Mon, 5 Jun 2023 23:58:16 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74D9C12D;
+        Mon,  5 Jun 2023 20:58:14 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QZxXL6H6Hz4f3nKR;
+        Tue,  6 Jun 2023 11:58:10 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP4 (Coremail) with SMTP id gCh0CgD3X7PSrn5kHOotLA--.51186S3;
+        Tue, 06 Jun 2023 11:58:11 +0800 (CST)
+Subject: Re: [PATCH -next v2] block: fix blktrace debugfs entries leak
+To:     Christoph Hellwig <hch@lst.de>, Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        yangerkun@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
+References: <20230531092606.3037560-1-yukuai1@huaweicloud.com>
+ <20230531124404.GA27412@lst.de>
+ <509bcea6-21f6-3f64-01c3-02215955283d@huaweicloud.com>
+ <20230601061858.GA24071@lst.de>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <386257b1-3060-62f4-c050-2069ae35b82c@huaweicloud.com>
+Date:   Tue, 6 Jun 2023 11:58:09 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
+In-Reply-To: <20230601061858.GA24071@lst.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: gCh0CgD3X7PSrn5kHOotLA--.51186S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7KF4DWryrWw4rJr1xZr1DKFg_yoW8Gr47pa
+        9Fvan0gr4UXr43Ka4xZw18u34S9ayfAFW5Krn5KryrCFs8Jry3XFW2gF1qvFy3Zas8GFW3
+        Xa40vryDGw10grUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkK14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
+        IcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
+        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
+        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
+        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_
+        Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbU
+        UUUUU==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+Hi, Christoph
 
-There are many instances where correctable errors tend to inundate
-the message buffer. We observe such instances during thunderbolt PCIe
-tunneling.
+在 2023/06/01 14:18, Christoph Hellwig 写道:
+> On Thu, Jun 01, 2023 at 09:50:22AM +0800, Yu Kuai wrote:
+>> Hi, Christoph
+>>
+>> 在 2023/05/31 20:44, Christoph Hellwig 写道:
+>>> I like where this is going, but did you check that this doesn't
+>>> introduce a potential crash with the current /dev/sg based blktrace?
+>>
+>> I just start to look at how /dev/sg is created and destroyed, however,
+>> I'm confused here, do you mean that the added blk_trace_shutdown() here
+>> might cause that /dev/sg blktrace to access freed momory or NULL
+>> pointer?
+> 
+> Yes.  Given that __blk_trace_remove clears out q->blk_trace and
+> frees the blk trace structure I'm worried about that.
+> 
 
-It's true that they are mitigated by the hardware and are non-fatal
-but we shouldn't be spamming the logs with such correctable errors as it
-confuses other kernel developers less familiar with PCI errors, support
-staff, and users who happen to look at the logs, hence rate limit them.
+sg ioctl call blktrace apis blk_trace_setup/startstop/remove(), and
+these apis are all protected by 'q->debugfs_mutex', and they're safe
+to call at anytime as long as request_queue is not released.
 
-A typical example log inside an HP TBT4 dock:
-[54912.661142] pcieport 0000:00:07.0: AER: Multiple Corrected error received: 0000:2b:00.0
-[54912.661194] igc 0000:2b:00.0: PCIe Bus Error: severity=Corrected, type=Data Link Layer, (Transmitter ID)
-[54912.661203] igc 0000:2b:00.0:   device [8086:5502] error status/mask=00001100/00002000
-[54912.661211] igc 0000:2b:00.0:    [ 8] Rollover
-[54912.661219] igc 0000:2b:00.0:    [12] Timeout
-[54982.838760] pcieport 0000:00:07.0: AER: Corrected error received: 0000:2b:00.0
-[54982.838798] igc 0000:2b:00.0: PCIe Bus Error: severity=Corrected, type=Data Link Layer, (Transmitter ID)
-[54982.838808] igc 0000:2b:00.0:   device [8086:5502] error status/mask=00001000/00002000
-[54982.838817] igc 0000:2b:00.0:    [12] Timeout
+And I found that it's true sg can still enable blktrace through ioctl
+after the related scsi device gendisk is released, I'm thinking about
+following possible solution:
 
-This gets repeated continuously, thus inundating the buffer.
+sg_device_destroy() is called at last, when all openers close and the
+related device is deleted, so, I think we can get a queue reference
+while initializing /dev/sg, and then remove blktrace and put queue
+reference from sg_device_destroy().
 
-Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-Signed-off-by: Grant Grundler <grundler@chromium.org>
----
- drivers/pci/pcie/aer.c | 80 +++++++++++++++++++++++++++---------------
- 1 file changed, 51 insertions(+), 29 deletions(-)
+Any suggestions?
 
-diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
-index d7bfc6070ddb..830f5a1261c9 100644
---- a/drivers/pci/pcie/aer.c
-+++ b/drivers/pci/pcie/aer.c
-@@ -686,26 +686,36 @@ static void __aer_print_error(struct pci_dev *dev,
- 			      struct aer_err_info *info)
- {
- 	const char **strings;
-+	char aer_msg[512];
- 	unsigned long status = info->status & ~info->mask;
--	const char *level, *errmsg;
- 	int i;
- 
--	if (info->severity == AER_CORRECTABLE) {
--		strings = aer_correctable_error_string;
--		level = KERN_INFO;
--	} else {
--		strings = aer_uncorrectable_error_string;
--		level = KERN_ERR;
--	}
-+	memset(aer_msg, 0, sizeof(*aer_msg));
-+	snprintf(aer_msg, sizeof(*aer_msg), "aer_status: 0x%08x, aer_mask: 0x%08x\n",
-+			info->status, info->mask);
-+
-+	strings = (info->severity == AER_CORRECTABLE) ?
-+		aer_correctable_error_string : aer_uncorrectable_error_string;
- 
- 	for_each_set_bit(i, &status, 32) {
--		errmsg = strings[i];
-+		const char *errmsg = strings[i];
-+		char bitmsg[64];
-+		memset(bitmsg, 0, sizeof(*bitmsg));
-+
- 		if (!errmsg)
- 			errmsg = "Unknown Error Bit";
- 
--		pci_printk(level, dev, "   [%2d] %-22s%s\n", i, errmsg,
--				info->first_error == i ? " (First)" : "");
-+		snprintf(bitmsg, sizeof(*bitmsg), "   [%2d] %-22s%s\n", i, errmsg,
-+			    info->first_error == i ? " (First)" : "");
-+
-+		strlcat(aer_msg, bitmsg, sizeof(*aer_msg));
- 	}
-+
-+	if (info->severity == AER_CORRECTABLE)
-+		pci_info_ratelimited(dev, "%s", aer_msg);
-+	else
-+		pci_err(dev, "%s", aer_msg):
-+
- 	pci_dev_aer_stats_incr(dev, info);
- }
- 
-@@ -713,7 +723,6 @@ void aer_print_error(struct pci_dev *dev, struct aer_err_info *info)
- {
- 	int layer, agent;
- 	int id = ((dev->bus->number << 8) | dev->devfn);
--	const char *level;
- 
- 	if (!info->status) {
- 		pci_err(dev, "PCIe Bus Error: severity=%s, type=Inaccessible, (Unregistered Agent ID)\n",
-@@ -724,14 +733,19 @@ void aer_print_error(struct pci_dev *dev, struct aer_err_info *info)
- 	layer = AER_GET_LAYER_ERROR(info->severity, info->status);
- 	agent = AER_GET_AGENT(info->severity, info->status);
- 
--	level = (info->severity == AER_CORRECTABLE) ? KERN_INFO : KERN_ERR;
--
--	pci_printk(level, dev, "PCIe Bus Error: severity=%s, type=%s, (%s)\n",
--		   aer_error_severity_string[info->severity],
--		   aer_error_layer[layer], aer_agent_string[agent]);
--
--	pci_printk(level, dev, "  device [%04x:%04x] error status/mask=%08x/%08x\n",
--		   dev->vendor, dev->device, info->status, info->mask);
-+	if (info->severity == AER_CORRECTABLE) {
-+		pci_info_ratelimited(dev, "PCIe Bus Error: severity=%s, type=%s, (%s)\n"
-+				"  device [%04x:%04x] error status/mask=%08x/%08x\n",
-+				     aer_error_severity_string[info->severity],
-+				     aer_error_layer[layer], aer_agent_string[agent],
-+				     dev->vendor, dev->device, info->status, info->mask);
-+	} else {
-+		pci_err(dev, "PCIe Bus Error: severity=%s, type=%s, (%s)\n",
-+			"  device [%04x:%04x] error status/mask=%08x/%08x\n",
-+			aer_error_severity_string[info->severity],
-+			aer_error_layer[layer], aer_agent_string[agent],
-+			dev->vendor, dev->device, info->status, info->mask);
-+	}
- 
- 	__aer_print_error(dev, info);
- 
-@@ -751,11 +765,19 @@ static void aer_print_port_info(struct pci_dev *dev, struct aer_err_info *info)
- 	u8 bus = info->id >> 8;
- 	u8 devfn = info->id & 0xff;
- 
--	pci_info(dev, "%s%s error received: %04x:%02x:%02x.%d\n",
--		 info->multi_error_valid ? "Multiple " : "",
--		 aer_error_severity_string[info->severity],
--		 pci_domain_nr(dev->bus), bus, PCI_SLOT(devfn),
--		 PCI_FUNC(devfn));
-+	if (info->severity == AER_CORRECTABLE)
-+		pci_info_ratelimited(dev, "%s%s error received: %04x:%02x:%02x.%d\n",
-+				     info->multi_error_valid ? "Multiple " : "",
-+				     aer_error_severity_string[info->severity],
-+				     pci_domain_nr(dev->bus), bus, PCI_SLOT(devfn),
-+				     PCI_FUNC(devfn));
-+	else
-+		pci_info(dev, "%s%s error received: %04x:%02x:%02x.%d\n",
-+			 info->multi_error_valid ? "Multiple " : "",
-+			 aer_error_severity_string[info->severity],
-+			 pci_domain_nr(dev->bus), bus, PCI_SLOT(devfn),
-+			 PCI_FUNC(devfn));
-+
- }
- 
- #ifdef CONFIG_ACPI_APEI_PCIEAER
-@@ -798,7 +820,7 @@ void cper_print_aer(struct pci_dev *dev, int aer_severity,
- 	info.first_error = PCI_ERR_CAP_FEP(aer->cap_control);
- 
- 	if (aer_severity == AER_CORRECTABLE)
--		pci_info(dev, "aer_status: 0x%08x, aer_mask: 0x%08x\n", status, mask);
-+		pci_info_ratelimited(dev, "aer_status: 0x%08x, aer_mask: 0x%08x\n", status, mask);
- 	else
- 		pci_err(dev, "aer_status: 0x%08x, aer_mask: 0x%08x\n", status, mask);
- 
-@@ -808,9 +830,9 @@ void cper_print_aer(struct pci_dev *dev, int aer_severity,
- 		pci_info(dev, "aer_layer=%s, aer_agent=%s\n",
- 			aer_error_layer[layer], aer_agent_string[agent]);
- 	} else {
--		pci_err(dev, "aer_layer=%s, aer_agent=%s\n",
--			aer_error_layer[layer], aer_agent_string[agent]);
--		pci_err(dev, "aer_uncor_severity: 0x%08x\n",
-+		pci_err(dev, "aer_layer=%s, aer_agent=%s,"
-+			" aer_uncor_severity=0x%08x\n",
-+			aer_error_layer[layer], aer_agent_string[agent],
- 			aer->uncor_severity);
- 	}
- 
--- 
-2.41.0.rc0.172.g3f132b7071-goog
+Thanks,
+Kuai
 
