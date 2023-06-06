@@ -2,168 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADE6372500F
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 00:42:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 496FF725013
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 00:45:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239952AbjFFWms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 18:42:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36660 "EHLO
+        id S239965AbjFFWpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 18:45:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234076AbjFFWmq (ORCPT
+        with ESMTP id S234076AbjFFWpa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 18:42:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6553811A
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 15:42:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EC043638A5
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 22:42:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6F22C433EF;
-        Tue,  6 Jun 2023 22:42:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686091364;
-        bh=+n808blosC/qLl1eZ4095f2Bmo/aBhslqGveoyXYm2Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eFY/e0XpVlocWZkoUScoOR7yNC7lgB+fnWMjacweQWFGKIXr09adD5f6NZHXIEfXi
-         Qx1/AUEvMwilU3+jU2whAbqlRzBQgGXcCWhVwbHw3qtxFZQ1aRwsCVhxBWQyQAwifF
-         MxTXAYkX+FExjudRnmA1Dv8CxIJDiHPspu6gmqpbkKFFw+iOD7ApqXpyRPFU3bbygH
-         osSzhDQD37uKhoQ9/E3TE6DMbhGiSNKosQWO8U9msnsRC6FJoSL5p1HUaHwkvlmb1F
-         C+3lBR78LwEemt+xquwrghiJ3qSGROCWTvDgxtwOnDYUcm+wLbWmCvbOk8G26gjvB5
-         WE7NdINyXKK8A==
-Date:   Tue, 6 Jun 2023 15:42:42 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        lkft-triage@lists.linaro.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: Re: powerpc: clang: arch/powerpc/kernel/exceptions-64s.S:2976:
- Error: junk at end of line: `0b01010'
-Message-ID: <20230606224242.GA3590526@dev-arch.thelio-3990X>
-References: <CA+G9fYs=koW9WardsTtora+nMgLR3raHz-LSLr58tgX4T5Mxag@mail.gmail.com>
- <20230606153150.GA128872@dev-arch.thelio-3990X>
+        Tue, 6 Jun 2023 18:45:30 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF5659E;
+        Tue,  6 Jun 2023 15:45:28 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id C11845C0160;
+        Tue,  6 Jun 2023 18:45:25 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Tue, 06 Jun 2023 18:45:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1686091525; x=1686177925; bh=qT
+        sN8/KZ+hN9RAJDnxfB3SZQWIHqrMFhBdUFAir94Tw=; b=miMofI46PbgaIrZEQ8
+        YUGXmwXuTak8KWvsNI/wC8uMkkXTFwoJpJdpCc1pnmljcGVXje82ygNzL+P8j+0/
+        t8FxcIZrrAt37cYg/mw5ZYRBREtMsPNhP05vsXKhREGHxdoFrDxpQJqSJtwdG/hV
+        bKbfEs4365VH0/JQq+OIDY8yVM/ZAqcapLZrbGepnYjw1Gr32TkQTZiMgOSsDV8x
+        VlVIc2bamEPJA96wZpwBomGGzi52r1lr5GOjLOpTUIU1mIXZt44jHxO+d4m8rF9k
+        /pmkYBECloyM265SfCjfviU+MaQScUvu+uq7yOjbgE5pRZuWiv3gQYaQNnbs9rAz
+        hikA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1686091525; x=1686177925; bh=qTsN8/KZ+hN9R
+        AJDnxfB3SZQWIHqrMFhBdUFAir94Tw=; b=k/XVMEUKlLAKq89cCRF9i/x3eT6Zc
+        icvEJHvxEoeLzw7zexlz4GR++fYseCZEz0FGtl3GGaGgPYUYb32vWXnPLegs1r95
+        VPeLf4zPpS1KBamKHE3h75AxZPEpbH6BWz1h/Qg01cI1cGSheLB6ol/DDxgiPWJx
+        1LJsMSO9lLjAEabHvgSdtYGtq+OT3J531+1bcmQxz5izNa8qpRQzv0v8P3xLxcw0
+        pzvkaFxCLGVLoe5VSHjdctPhgP254aF0Ankv/6aTJ8pz4Vz3G411Mf2ZXncpidU+
+        GCANz72GE+kVtnSIPRi7vTxtIFZq2KldmHj+kUQ7HxHmEX/pv2p3srp7Q==
+X-ME-Sender: <xms:Bbd_ZNx_7L-KGaDXf2sGVsD784baLVYEqLWLcwE-siaT3cmJcj2YCw>
+    <xme:Bbd_ZNQ0WCGtjCDvfLn4otw6dRQWxapJfmNR4eJ30VAfGddUVsyeiuRgnGshh0ycc
+    8PfWrkSpTOndcrYCCU>
+X-ME-Received: <xmr:Bbd_ZHVO1fR7HXuHAGB4N74Izhyqd9dgryMOOhcxwK7jgSRbBpZsG9KuQZ00i6wM2ghaCYoeVgiwFTH4PzEq6gdckSw5ijt2V8sLoVY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedtvddgudefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkjghfgggtsehgtderredttddvnecuhfhrohhmpefnuhhkvgcu
+    lfhonhgvshcuoehluhhkvgeslhhjohhnvghsrdguvghvqeenucggtffrrghtthgvrhhnpe
+    eghfejudffteejleehleegfedtkefhtdetueegueekhfelteelgfelieeuuefgteenucff
+    ohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrg
+    hrrghmpehmrghilhhfrhhomheplhhukhgvsehljhhonhgvshdruggvvh
+X-ME-Proxy: <xmx:Bbd_ZPjxDvI9QUOOqrRWA9scTKQGnN0MZ-S-rAYYZN6tXBjCHaqigw>
+    <xmx:Bbd_ZPCapdpHQFLoHQWkI8LzHc0B9aWVac3YOA3C6Y8OzS16VrQdUA>
+    <xmx:Bbd_ZII03VeZ87qW5f1JQvx00WmUT7gKAtEbw2F3l5uCRXEyFvheNA>
+    <xmx:Bbd_ZBCcSIrvyJfKM52i8wXP4kg8LLMroYist_02fj8Y7xzpCHvObw>
+Feedback-ID: i5ec1447f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 6 Jun 2023 18:45:20 -0400 (EDT)
+From:   Luke Jones <luke@ljones.dev>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     platform-driver-x86@vger.kernel.org,
+        =?utf-8?B?QmFybmFiw6FzIFDFkWN6ZQ==?= <pobrn@protonmail.com>,
+        Ilpo =?ISO-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        linux-kernel@vger.kernel.org, acpi4asus-user@lists.sourceforge.net,
+        corentin.chary@gmail.com, markgross@kernel.org, jdelvare@suse.com,
+        linux@roeck-us.net
+Subject: Re: [PATCH v2 0/1] platform/x86: asus-wmi: add support for ASUS screenpad
+Date:   Wed, 07 Jun 2023 10:45:15 +1200
+Message-ID: <5946924.lOV4Wx5bFT@fedora>
+In-Reply-To: <ffdd2d13-975e-1c74-0d2b-132ba461a3ee@redhat.com>
+References: <20230505043013.2622603-1-luke@ljones.dev>
+ <06314c8dc4adeb69cd7801f9621c831f75a37c89.camel@ljones.dev>
+ <ffdd2d13-975e-1c74-0d2b-132ba461a3ee@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230606153150.GA128872@dev-arch.thelio-3990X>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="nextPart4841190.31r3eYUQgx";
+ micalg="pgp-sha256"; protocol="application/pgp-signature"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 08:31:50AM -0700, Nathan Chancellor wrote:
-> Hi Naresh,
-> 
-> On Tue, Jun 06, 2023 at 01:57:46PM +0530, Naresh Kamboju wrote:
-> > Linux next-20230606 powerpc build failed.
-> > 
-> > Regressions found on powerpc:
-> > 
-> >  - build/clang-16-maple_defconfig
-> >  - build/clang-nightly-maple_defconfig
-> >  - build/clang-16-defconfig
-> >  - build/clang-nightly-defconfig
-> >  - build/clang-nightly-cell_defconfig
-> >  - build/clang-16-cell_defconfig
-> > 
-> > Boot:
-> > =====
-> > make --silent --keep-going --jobs=8
-> > O=/home/tuxbuild/.cache/tuxmake/builds/1/build ARCH=powerpc
-> >  CROSS_COMPILE=powerpc64le-linux-gnu-
-> >  HOSTCC=clang
-> >  CC=clang
-> >  LLVM=1
-> >  LLVM_IAS=0
-> >  LD=powerpc64le-linux-gnu-ld
-> > 
-> > arch/powerpc/kernel/exceptions-64s.S: Assembler messages:
-> > arch/powerpc/kernel/exceptions-64s.S:2976: Error: junk at end of line: `0b01010'
-> > arch/powerpc/kernel/exceptions-64s.S:2996: Error: junk at end of line: `0b01010'
-> > arch/powerpc/kernel/exceptions-64s.S:3011: Error: junk at end of line: `0b01010'
-> > arch/powerpc/kernel/exceptions-64s.S:3029: Error: junk at end of line: `0b01010'
-> > arch/powerpc/kernel/exceptions-64s.S:3049: Error: junk at end of line: `0b01010'
-> > arch/powerpc/kernel/exceptions-64s.S:3096: Error: junk at end of line: `0b01010'
-> > clang: error: assembler command failed with exit code 1 (use -v to see
-> > invocation)
-> > make[4]: *** [scripts/Makefile.build:374: arch/powerpc/kernel/head_64.o] Error 1
-> > arch/powerpc/kernel/entry_64.S: Assembler messages:
-> > arch/powerpc/kernel/entry_64.S:174: Error: junk at end of line: `0b01010'
-> > clang: error: assembler command failed with exit code 1 (use -v to see
-> > invocation)
-> > make[4]: *** [scripts/Makefile.build:374:
-> > arch/powerpc/kernel/entry_64.o] Error 1
-> > make[4]: Target 'arch/powerpc/kernel/' not remade because of errors.
-> > make[3]: *** [scripts/Makefile.build:494: arch/powerpc/kernel] Error 2
-> > arch/powerpc/lib/copyuser_power7.S: Assembler messages:
-> > arch/powerpc/lib/copyuser_power7.S:305: Error: junk at end of line: `0b01000'
-> > arch/powerpc/lib/copyuser_power7.S:306: Error: junk at end of line: `0b01010'
-> > arch/powerpc/lib/copyuser_power7.S:308: Error: junk at end of line: `0b01000'
-> > arch/powerpc/lib/copyuser_power7.S:309: Error: junk at end of line: `0b01010'
-> > arch/powerpc/lib/copyuser_power7.S:311: Error: junk at end of line: `0b01010'
-> > clang: error: assembler command failed with exit code 1 (use -v to see
-> > invocation)
-> > make[4]: *** [scripts/Makefile.build:374:
-> > arch/powerpc/lib/copyuser_power7.o] Error 1
-> > arch/powerpc/lib/copypage_power7.S: Assembler messages:
-> > arch/powerpc/lib/copypage_power7.S:34: Error: junk at end of line: `0b01000'
-> > arch/powerpc/lib/copypage_power7.S:35: Error: junk at end of line: `0b01010'
-> > arch/powerpc/lib/copypage_power7.S:37: Error: junk at end of line: `0b01000'
-> > arch/powerpc/lib/copypage_power7.S:38: Error: junk at end of line: `0b01010'
-> > arch/powerpc/lib/copypage_power7.S:40: Error: junk at end of line: `0b01010'
-> > clang: error: assembler command failed with exit code 1 (use -v to see
-> > invocation)
-> > make[4]: *** [scripts/Makefile.build:374:
-> > arch/powerpc/lib/copypage_power7.o] Error 1
-> > arch/powerpc/lib/memcpy_power7.S: Assembler messages:
-> > arch/powerpc/lib/memcpy_power7.S:250: Error: junk at end of line: `0b01000'
-> > arch/powerpc/lib/memcpy_power7.S:251: Error: junk at end of line: `0b01010'
-> > arch/powerpc/lib/memcpy_power7.S:252: Error: junk at end of line: `0b01000'
-> > arch/powerpc/lib/memcpy_power7.S:253: Error: junk at end of line: `0b01010'
-> > arch/powerpc/lib/memcpy_power7.S:255: Error: junk at end of line: `0b01010'
-> > clang: error: assembler command failed with exit code 1 (use -v to see
-> > invocation)
-> > make[4]: *** [scripts/Makefile.build:374:
-> > arch/powerpc/lib/memcpy_power7.o] Error 1
-> > 
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> 
-> Thank you for the report, this is caused by the move of CLANG_FLAGS from
-> KBUILD_{A,C}FLAGS to KBUILD_CPPFLAGS, as as-option does not contain
-> KBUILD_CPPFLAGS, so we fail to pass necessary flags to the assembler.
-> The following diff resolves this particular issue for me, can you test
-> it to make sure it works for you?  I will write up a changelog and sent
-> along a formal patch later today.
+--nextPart4841190.31r3eYUQgx
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"; protected-headers="v1"
+From: Luke Jones <luke@ljones.dev>
+To: Hans de Goede <hdegoede@redhat.com>
+Date: Wed, 07 Jun 2023 10:45:15 +1200
+Message-ID: <5946924.lOV4Wx5bFT@fedora>
+In-Reply-To: <ffdd2d13-975e-1c74-0d2b-132ba461a3ee@redhat.com>
+MIME-Version: 1.0
 
-I have now sent [1] to address this, please consider providing a tag
-there assuming it passes all of your tests.
+**snip**
+> >> Question 2:
+> >> 
+> >> If you turn the second screen off through drm/kms, using the desktop
+> >> environments monitor config panel does this also turn off the
+> >> backlight ?
+> > 
+> > The screen is dark but there is still some backlight coming out of it.
+> > I think this means I need to add a small pre-off to the patch to ensure
+> > backlight is fully off when display is turned off.
+> 
+> I'm afraid that this is not going to be easy to fix at the kernel level,
+> we first need to tie backlight control to drm-connectors as I proposed
+> (and plan to implement when I can make time):
+> 
+> https://lore.kernel.org/dri-devel/b61d3eeb-6213-afac-2e70-7b9791c86d2e@redha
+> t.com/
+> 
+> Once that is in place we can simply make the drm-code call out to
+> the backlight driver and have it turn the backlight off when disabling
+> the output through the drm/kms interface.
 
-[1]: https://lore.kernel.org/20230606-fix-as-option-after-clang_flags-move-v1-1-a7f7b23a35e3@kernel.org/
+Okay cool. But until then I can set the screenpad to turn brightness off when 
+it does the call to:
+err = asus_wmi_set_devstate(ASUS_WMI_DEVID_SCREENPAD_POWER, 0, NULL);
+here I can also do before that call:
+err = asus_wmi_set_devstate(ASUS_WMI_DEVID_SCREENPAD_LIGHT,ctrl_param, NULL);
+
+Then when the patch you mention is done this can be removed.
+
+**snip** 
+> > I would like to go with the backlight patch as it seems more likely I
+> > can adjust this without breaking userspace if required in future. The
+> > WMI controls behave as expected to.
+> 
+> Ok, lets go with the v2 which adds /sys/class/backlight support then.
+> 
+> I must warn you though if this does turn out to cause issues I'll have
+> no choice but to revert it.
+> 
+> I must admit I've lost track a bit of the state of v2 during this
+> discussion.  Can I pick up v2 as is, or were there (other) remarks
+> which need addressing and should I expect a v3 ?
+
+There will be a V3. I don't anticipate any issues at all with this, and some 
+folks have been using this patch with Gnome and KDE since V2 was submitted.
+
+> 
+> ####### Switch to (off-topic) GPU mux discussion ########
+**snip**
+> >> I think the best thing to do here is to just use EFI on machines like
+> >> this. That or put grub in text mode so that it makes BIOS calls to
+> >> display text. Using GRUB_TERMINAL_OUTPUT=gfxterm combined with
+> >> classic BIOS booting will make grub try to directly drive the gfx
+> >> card itself and I'm not surprised that it gets that wrong in this
+> >> case.
+> >> Note I think that just using EFI is prefered over switching grub to
+> >> GRUB_TERMINAL_OUTPUT=console. I would expect
+> >> GRUB_TERMINAL_OUTPUT=console to also work but I'm not sure. I don't
+> >> think that the classic BIOS boot stuff is still tested by laptop
+> >> vendors and esp. not tested with non standard BIOS settings ...
+> > 
+> > The grub gfx mode is GRUB_TERMINAL_OUTPUT="console", fedora default in
+> > all cases here. Grub itself shows fine when the MUX mode is in dgpu
+> > mode (aka, internal display connected to dgpu).
+> 
+> Ah ok, so I misunderstood and the problem only happens *after* grub?
+> 
+> Have I understood that correctly?
+> 
+> And this is on Fedora with the nvidia binary driver ?
+> 
+> The problem then likely is that the nvidia binary driver is not in
+> the initrd (which is by design since it may need to be rebuild on
+> a driver update while the kernel is kept at the same version,
+> so the initrd won't be rebuild).
+
+That was indeed the issue. It also creates new problems for when a user wants 
+to use iGPU only via the plain (and frankly not adequate or good) method of 
+simply removing the dGPU from the device tree.
+
+Currently I maintain the supergfxd tool which is a lot more advanced than the 
+other gpu switchers around, and I expose both the above method, and also PCI 
+hotplug, and the ASUS WMI method (which I now think is used by other vendors 
+also). Hotplug and Asus method can force the device off, and it can't be 
+brought back by a PCI rescan - but to do so safely the Nvidia drivers must be 
+unused and unloaded. I guess I'll need to tweak the boot process of supergfxd 
+and block things until this is done.
+
+Maybe we can move this to a new topic, because there looks to be a few things 
+to discuss in relation to hybrid laptops, and specifically Nvidia with MUX, 
+and Advanced Optimus.
 
 Cheers,
-Nathan
+Luke.
 
-> diff --git a/scripts/Makefile.compiler b/scripts/Makefile.compiler
-> index 437013f8def3..e31f18625fcf 100644
-> --- a/scripts/Makefile.compiler
-> +++ b/scripts/Makefile.compiler
-> @@ -32,7 +32,7 @@ try-run = $(shell set -e;		\
->  # Usage: aflags-y += $(call as-option,-Wa$(comma)-isa=foo,)
->  
->  as-option = $(call try-run,\
-> -	$(CC) -Werror $(KBUILD_AFLAGS) $(1) -c -x assembler-with-cpp /dev/null -o "$$TMP",$(1),$(2))
-> +	$(CC) -Werror $(KBUILD_CPPFLAGS) $(KBUILD_AFLAGS) $(1) -c -x assembler-with-cpp /dev/null -o "$$TMP",$(1),$(2))
->  
->  # as-instr
->  # Usage: aflags-y += $(call as-instr,instr,option1,option2)
-> 
+
+
+--nextPart4841190.31r3eYUQgx
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part.
+Content-Transfer-Encoding: 7Bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCAAdFiEEWREWzoOl5TYvoo5xMJobe61BDbQFAmR/tvsACgkQMJobe61B
+DbQgEQgAkTzdVjHJNUI25x6De+haJeiIwi84h1Rs8eKq26ACisldeo0PwbNFG2kS
+TTtnunNh5WTULem8wVbof1+zVcmf0euyQERPRulnx8CteGOhOEmAEq/pGHTIAYvV
+uKEDLKb1BoNBGwT4fRGflgqbD5p54TCoszYeL3AxDVyg7ttcbu60pmyBdyj7PnqS
+i7yUWYIKIAzX6fIUCue/ZjgTq55u3SGf7VBFp4SkrJG8FbZk6QE3TYy+ro4rGzyR
+vCg5NoYeGzLLyZ9iblj+lV3HluwCN6pFXrZmEXJDGd5XTCKsyQyG6xK165sTBti5
+dCCqkIt9x8rnppiWDsisg38Z3Eb90g==
+=RmpV
+-----END PGP SIGNATURE-----
+
+--nextPart4841190.31r3eYUQgx--
+
+
+
