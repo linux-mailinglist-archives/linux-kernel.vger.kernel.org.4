@@ -2,111 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EE46724E82
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 23:08:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49967724E84
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 23:09:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239678AbjFFVIw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 17:08:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34274 "EHLO
+        id S233764AbjFFVJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 17:09:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237575AbjFFVIr (ORCPT
+        with ESMTP id S237456AbjFFVJ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 17:08:47 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF6E19A2;
-        Tue,  6 Jun 2023 14:08:41 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-30c2bd52f82so6693613f8f.3;
-        Tue, 06 Jun 2023 14:08:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686085719; x=1688677719;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BJ+tI/3uLBG3Hm6G+QtfUFEyGE7CCKdik+X8IMe59lQ=;
-        b=q+BgJN8G10a0ZuOuN0UDx5Ro+/Sh5n3Z0AV4viAqhr6Es2Jx8P6aWMqFo1i2Tyb4jB
-         eUZya8GS6kaJfF30rSFT/CtGWc8jazWug8LN24Yp7JWYmsjMDsZYyrwesFZP7TPaBvHn
-         fHKP+9FGUPXlUziO0G6Dpcx1DlAH0mjGGq8ppUlMV4sN+PM1cx3SjokfuL7m7uXpibWh
-         pZoVDrnrklHh/fO842OC6731MdoQBNLNy2r6wFpsnsKmoCO+YyrQcEAG8pYVHTZ0yKEF
-         zZHOyiAS3zuhP6I16UGDb5YcEtyZQL1/Hd2GsFhnVR0me3SUrY5W3cO+pnD0ncaUfC/A
-         LqEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686085719; x=1688677719;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BJ+tI/3uLBG3Hm6G+QtfUFEyGE7CCKdik+X8IMe59lQ=;
-        b=X4I6kfO5xw4D6wKwIk7FPzzaocQQvb2d2ZC+ILKr2kUbLLoZTuD3ZB1xNHNzhZQT8p
-         ve2ItZXP4U1lAcL5GJdveE1RvYhmHGjS7yTRGi6X8mJ7NH9lPUpWPgjBj9cTQ93qcKT1
-         PfMn6ihO5/aSTMK0dJV9/78ecL6fnGJVOv/Tp81YdjIxpZrOg/KJcKvIUH992jJ/PqEQ
-         JCCEkWx6732kkiq1WILJEfuO8/5FhvGxylVvLsOSlBeceNbXkfB6YXAarGQzANiPbBhJ
-         aA1EU3UqEo+ibO1yOO/dTnzLuCR8UJJRqr2AylefNxw3Uwa/GU+tGNIO9wdf7UknlkXe
-         nikA==
-X-Gm-Message-State: AC+VfDyjJktjPK/+7KWtHFvXIXxA2uTQHoBlPpb411cNyeGctqxd0bu2
-        xOvQfLACzSSSVZg81AeaImC3An95gaG7mSjFi2k=
-X-Google-Smtp-Source: ACHHUZ4xNaei4fJzTIQY4dmaevGm8MrT4Rb+z6/77A7OQ1Z4Wj5ccHIIgM9iRtQPNnRd1aFz5BXBANFG8PfPzmhAYVQ=
-X-Received: by 2002:a05:6000:1952:b0:309:49e6:d1af with SMTP id
- e18-20020a056000195200b0030949e6d1afmr2609981wry.2.1686085719138; Tue, 06 Jun
- 2023 14:08:39 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230606182410.3976487-1-azeemshaikh38@gmail.com> <1833651082.3690424.1686084717406.JavaMail.zimbra@nod.at>
-In-Reply-To: <1833651082.3690424.1686084717406.JavaMail.zimbra@nod.at>
-From:   Azeem Shaikh <azeemshaikh38@gmail.com>
-Date:   Tue, 6 Jun 2023 17:08:27 -0400
-Message-ID: <CADmuW3WzC61-si1j61kzwfx5EcsvSt4QBaY9VHiybBRWAN3yyA@mail.gmail.com>
-Subject: Re: [PATCH v2] uml: Replace strlcpy with strscpy
-To:     Richard Weinberger <richard@nod.at>
-Cc:     Maxim Krasnyansky <maxk@qti.qualcomm.com>,
-        anton ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-hardening <linux-hardening@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+        Tue, 6 Jun 2023 17:09:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA6401726;
+        Tue,  6 Jun 2023 14:09:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 60AC6603F7;
+        Tue,  6 Jun 2023 21:09:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED7DFC433D2;
+        Tue,  6 Jun 2023 21:09:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686085764;
+        bh=jJ24bU4cqwTsoJWPLU9u777uw4xa5To44lSGGC0UhkQ=;
+        h=Date:From:To:Subject:References:In-Reply-To:From;
+        b=QEQrXdO8LmQp68hdmH6ZnOCffUwHZ4+8dg1hWcp7x5KO9kv9nIFHWlwcLjrHvPxZy
+         kVu+s75vSgVsoWEHbWLn+SUMHvXY4PaRMgFhOUhcD2ZKVdjtUPMkuJDGCbnJA/nq5Y
+         b41OEU5yJQZRsSeQxa8c68P8MibrzDCaXvxVuGsmzUmB9SszFRw5Qju2TOItTEGYJK
+         40kcdoHg00hVZWuR2Bqg0JkHdJ4iLoQ02icRISl5aj/1Kh3MRmYVeiZkvBPe4mphEP
+         M3LIZpzZZiMGuNcFZHrU4zJsU0nTS+ZmdCBM2+xT2v5k1dTFsiLKLgKZgAMOcdiYSF
+         giHzrmKcjdHIQ==
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Date:   Wed, 07 Jun 2023 00:09:21 +0300
+Message-Id: <CT5VIPKR029R.Z1XFDV427X1V@suppilovahvero>
+From:   "Jarkko Sakkinen" <jarkko@kernel.org>
+To:     "Alexander Steffen" <Alexander.Steffen@infineon.com>,
+        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 1/4] tpm_tis: Explicitly check for error code
+X-Mailer: aerc 0.14.0
+References: <20230605175959.2131-1-Alexander.Steffen@infineon.com>
+ <20230605175959.2131-2-Alexander.Steffen@infineon.com>
+In-Reply-To: <20230605175959.2131-2-Alexander.Steffen@infineon.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 6, 2023 at 4:51=E2=80=AFPM Richard Weinberger <richard@nod.at> =
-wrote:
+On Mon Jun 5, 2023 at 8:59 PM EEST, Alexander Steffen wrote:
+> recv_data either returns the number of received bytes, or a negative valu=
+e
+> representing an error code. Adding the return value directly to the total
+> number of received bytes therefore looks a little weird, since it might a=
+dd
+> a negative error code to a sum of bytes.
 >
-> ----- Urspr=C3=BCngliche Mail -----
-> > Von: "Azeem Shaikh" <azeemshaikh38@gmail.com>
-> > strlcpy() reads the entire source buffer first.
-> > This read may exceed the destination size limit.
-> > This is both inefficient and can lead to linear read
-> > overflows if a source string is not NUL-terminated [1].
-> > In an effort to remove strlcpy() completely [2], replace
-> > strlcpy() here with strscpy().
-> > No return values were used, so direct replacement is safe.
-> >
-> > [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strl=
-cpy
-> > [2] https://github.com/KSPP/linux/issues/89
-> >
-> > Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Closes:
-> > https://lore.kernel.org/oe-kbuild-all/202305311135.zGMT1gYR-lkp@intel.c=
-om/
+> The following check for size < expected usually makes the function return
+> ETIME in that case, so it does not cause too many problems in practice. B=
+ut
+> to make the code look cleaner and because the caller might still be
+> interested in the original error code, explicitly check for the presence =
+of
+> an error code and pass that through.
 >
-> Are you sure Reported-by and Closes make sense?
-> AFAIK the report was only on your first patch and nothing against upstrea=
-m.
-> So stating this in the updated patch is in vain.
 
-I left the metadata in only for the sake of posterity. If it's not
-helpful, I'm ok with removing it.
+Cc: stable@vger.kernel.org
+Fixes: cb5354253af2 ("[PATCH] tpm: spacing cleanups 2")
 
-> Other than that,
-> Acked-by: Richard Weinberger <richard@nod.at>
+> Signed-off-by: Alexander Steffen <Alexander.Steffen@infineon.com>
+> ---
+>  drivers/char/tpm/tpm_tis_core.c | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_c=
+ore.c
+> index 558144fa707a..aaaa136044ae 100644
+> --- a/drivers/char/tpm/tpm_tis_core.c
+> +++ b/drivers/char/tpm/tpm_tis_core.c
+> @@ -363,8 +363,13 @@ static int tpm_tis_recv(struct tpm_chip *chip, u8 *b=
+uf, size_t count)
+>  		goto out;
+>  	}
+> =20
+> -	size +=3D recv_data(chip, &buf[TPM_HEADER_SIZE],
+> -			  expected - TPM_HEADER_SIZE);
+> +	rc =3D recv_data(chip, &buf[TPM_HEADER_SIZE],
+> +		       expected - TPM_HEADER_SIZE);
+> +	if (rc < 0) {
+> +		size =3D rc;
+> +		goto out;
+> +	}
+> +	size +=3D rc;
+>  	if (size < expected) {
+>  		dev_err(&chip->dev, "Unable to read remainder of result\n");
+>  		size =3D -ETIME;
+> --=20
+> 2.34.1
 
-Thanks!
+BR, Jarkko
