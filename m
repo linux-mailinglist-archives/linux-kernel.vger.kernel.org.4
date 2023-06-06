@@ -2,131 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72CC2723C24
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 10:48:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF37E723C27
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 10:48:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236026AbjFFIsg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 04:48:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41372 "EHLO
+        id S237264AbjFFIsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 04:48:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231659AbjFFIsd (ORCPT
+        with ESMTP id S237258AbjFFIsv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 04:48:33 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DBB6E8
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 01:48:29 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id D47D81FD63;
-        Tue,  6 Jun 2023 08:48:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1686041302; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uzifdbB9a65Ly0G3HQ1gDE5VXMzSADFqEAtU4sEv7kM=;
-        b=giUmbODmna+vEGLAKAtlSKl6s+82si34njLk3JkeDYm0UXDA17+8bGXYeb+gO65R4BIE8K
-        Z8L6efq7pmK4nYPtR9Ltm/A3UhdvWBbBHbyK60aj8+QZpahsmXrj87F6iW5k3eq8ad4cVW
-        VLL5x06cRIROEeDURg3HET3VvUO7sTI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1686041302;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uzifdbB9a65Ly0G3HQ1gDE5VXMzSADFqEAtU4sEv7kM=;
-        b=JEeJiwIKT4nnDDq+tUejJ4DgkdMMwpIS1ufoFlyZYZaRsVyuv+3yQdSMbHd0rjSXt6QKkd
-        qu8Zm8+hPkf7R5Ag==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B12B613776;
-        Tue,  6 Jun 2023 08:48:22 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id G92LKtbyfmS7PAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Tue, 06 Jun 2023 08:48:22 +0000
-Message-ID: <b05aba56-cdf0-1a8f-c2cc-3dbfcf801c53@suse.cz>
-Date:   Tue, 6 Jun 2023 10:48:22 +0200
+        Tue, 6 Jun 2023 04:48:51 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D857100
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 01:48:49 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-51458187be1so8906640a12.2
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 01:48:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686041328; x=1688633328;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hEQ4HPULxJqLeCH0M0TT69ZvT5utSd01v7nSaj1PvbU=;
+        b=A9gNWmcYIIRYaDF807Oc872JCxo8NSUJuIf4qlKishgVQMwiQuZ4iRC0aq7QqO6b3k
+         sP2IwTl6dmvYZQqpEOpHJxjKJ8B81I7rmi064X5aoWTYnpFmiIUQLYcFwJFoXlByTcpr
+         Ha8eZaxcilxZtJb7NOWtvf0AgHCHYtHbuSlj3VN7Lbe+ShKekdgPznj62a2sF3Fwliox
+         3H9xrV5WwQz6dYWCrGWFRcXmUcNDCQ/aI70zTMITc0hbNLZwoBgglp7MRlske0JhD7XQ
+         ahtMLwHaw+z1e7gTCt0tkOhcJGRHa4vFFPYWo1s+Qv1YB6x7QY2fl5HfarICQ6/Qa5zO
+         DrBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686041328; x=1688633328;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hEQ4HPULxJqLeCH0M0TT69ZvT5utSd01v7nSaj1PvbU=;
+        b=dZaO54Hg0JhEgUnjcWLHeeJb5tfrRoD4bA5nE3sqVwiOPk8Ts0dYOfRuBZ9A7sgmHY
+         9tWKSoV7vUbtPjnsWLJH/uQ9rd8WVIekBYP+NmGT57IV7JQY7Uwdk36+95fOzvoTxQU8
+         b2HL07aTphuagaE1yVRUQEtFXWZOTrYCj9lnXIkIQQWIcTL407LhpfAmCOBWVJWU3AUX
+         xUheAMJXK/rHVgQvs8Izm+HS8qb7BpFGq/IT2qq7kogmPpLErWap3C8kirXwkxLPR9m1
+         +9n6JaErS++v+vvgEzEWBoVdxWipVNiZ2EU8UpMdSpUwXrlWVVHJP2NKk8sMlyJEZynA
+         pCHw==
+X-Gm-Message-State: AC+VfDyN6ewFtUeyclJG/2I/NiPpdr+D7Tu+p7hAP5wvbjJEGBqrVnw6
+        zOyMqpNZlzm0UqU8IcHekNrMGFzza4lNj1h7I8zpKQ==
+X-Google-Smtp-Source: ACHHUZ6EgOGCiNQhxd/unjp+HDUP7doEpWuo3o4zdAJNkkBfLrPpOX9anpQ0M/lpmLuAEHlh/YUhkw==
+X-Received: by 2002:a17:907:6d04:b0:973:946d:36b2 with SMTP id sa4-20020a1709076d0400b00973946d36b2mr1483816ejc.56.1686041328098;
+        Tue, 06 Jun 2023 01:48:48 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id l14-20020a1709060e0e00b009745eddf997sm5307905eji.198.2023.06.06.01.48.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Jun 2023 01:48:47 -0700 (PDT)
+Message-ID: <859da276-959d-b1e8-52e2-45e02f65c3ce@linaro.org>
+Date:   Tue, 6 Jun 2023 10:48:45 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.2
-Subject: Re: [PATCH] mm/slab_common: reduce an if statement in create_cache()
+Subject: Re: [PATCH v4 1/2] dt-bindings: clock: fixed-clock: Add nvmem support
 Content-Language: en-US
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20230606065543.1324-1-thunder.leizhen@huawei.com>
- <ZH7ktMtP8ho2/SFT@debian-BULLSEYE-live-builder-AMD64>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <ZH7ktMtP8ho2/SFT@debian-BULLSEYE-live-builder-AMD64>
+To:     Mike Looijmans <mike.looijmans@topic.nl>,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org
+Cc:     Conor Dooley <conor+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org
+References: <1b153bce-a66a-45ee-a5c6-963ea6fb1c82.949ef384-8293-46b8-903f-40a477c056ae.2d27bfea-4746-444c-89f4-e5d35cb7de66@emailsignatures365.codetwo.com>
+ <20230605140149.16841-1-mike.looijmans@topic.nl>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230605140149.16841-1-mike.looijmans@topic.nl>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/6/23 09:48, Hyeonggon Yoo wrote:
-> On Tue, Jun 06, 2023 at 02:55:43PM +0800, Zhen Lei wrote:
->> Move the 'out:' statement block out of the successful path to avoid
->> redundant check on 'err'. The value of 'err' is always zero on success
->> and negative on failure.
->> 
->> No functional changes, no performance improvements, just a little more
->> readability.
->> 
->> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
->> ---
->>  mm/slab_common.c | 6 ++----
->>  1 file changed, 2 insertions(+), 4 deletions(-)
->> 
->> diff --git a/mm/slab_common.c b/mm/slab_common.c
->> index 607249785c077e9..f6fe35105774944 100644
->> --- a/mm/slab_common.c
->> +++ b/mm/slab_common.c
->> @@ -236,14 +236,12 @@ static struct kmem_cache *create_cache(const char *name,
->>  
->>  	s->refcount = 1;
->>  	list_add(&s->list, &slab_caches);
->> -out:
->> -	if (err)
->> -		return ERR_PTR(err);
->>  	return s;
->>  
->>  out_free_cache:
->>  	kmem_cache_free(kmem_cache, s);
->> -	goto out;
->> +out:
->> +	return ERR_PTR(err);
->>  }
->>  
->>  /**
+On 05/06/2023 16:01, Mike Looijmans wrote:
+> Add bindings for a fixed-rate clock that retrieves its rate from an
+> NVMEM provider. This allows to store clock settings in EEPROM or EFUSE
+> or similar device.
 > 
-> Hi Zhen,
-> nice cleanup!
+> Component shortages lead to boards being shipped with different clock
+> crystals, based on what was available at the time. The clock frequency
+> was written to EEPROM at production time. Systems can adapt to a wide
+> range of input frequencies using the clock framework, but this required
+> us to patch the devicetree at runtime or use some custom driver. This
+> provides a more generic solution.
 > 
-> Looks correct to me,
-> Reviewed-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+> Signed-off-by: Mike Looijmans <mike.looijmans@topic.nl>
+> 
 
-Thanks, added to slab/for-6.5/cleanup
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
->> -- 
->> 2.25.1
->> 
-> 
+Best regards,
+Krzysztof
 
