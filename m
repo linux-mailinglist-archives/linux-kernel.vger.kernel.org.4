@@ -2,136 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D4A2723F17
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 12:16:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4F49723F46
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 12:22:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234772AbjFFKQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 06:16:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43176 "EHLO
+        id S231273AbjFFKWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 06:22:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232817AbjFFKQl (ORCPT
+        with ESMTP id S236071AbjFFKWV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 06:16:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A440E47;
-        Tue,  6 Jun 2023 03:16:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 986FB6305D;
-        Tue,  6 Jun 2023 10:16:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16CCDC433EF;
-        Tue,  6 Jun 2023 10:16:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686046599;
-        bh=K3mQNwoT9j+uKtNH0+N5SGAruipqVMe0nyrOVYu8zmA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ex2boOSbFX9F8vILoj2ER6OMGqZieI/qXxa+Cl88F6P5WueebucHT8gXYMljU/UwF
-         W4Vwtw16CB66Ckf8CUcEwiMgsp0Rl7Zp+sWmc7WhCTWF54CsHU5is7Yegd2qZ+FcpB
-         7HYr90xDXGc4Q+jlXpM3iwKf1+z1TAE79jym8dBpk7/sIwryEOoaJwZE+mZ+/dgO9Q
-         jbUZZ/yVspF9cToZ4ExktC3lUSHmqXSahqJcQT5b1PfE/IsSC9GrwIVg8JzQsfRBlA
-         +FWytBECVY5td4H8LIUSl6ZWwnci/X0OdWg6sGet7yNw0Tt3OFZ9/6khP83arPzxeP
-         mpCOpEPlPas8A==
-Date:   Tue, 6 Jun 2023 13:16:08 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Helge Deller <deller@gmx.de>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Song Liu <song@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mm@kvack.org, linux-modules@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-        netdev@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH 00/13] mm: jit/text allocator
-Message-ID: <20230606101608.GC52412@kernel.org>
-References: <20230601101257.530867-1-rppt@kernel.org>
- <ZHjDU/mxE+cugpLj@FVFF77S0Q05N.cambridge.arm.com>
- <ZHjgIH3aX9dCvVZc@moria.home.lan>
- <ZHm3zUUbwqlsZBBF@FVFF77S0Q05N>
- <20230605092040.GB3460@kernel.org>
- <ZH20XkD74prrdN4u@FVFF77S0Q05N>
+        Tue, 6 Jun 2023 06:22:21 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A7310F1
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 03:22:10 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id CF6835FD1B;
+        Tue,  6 Jun 2023 13:22:07 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1686046927;
+        bh=DTBB8jOO77vAsxmiB/i7I8AL4Y5HWSjjJbkLXHcxMxY=;
+        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
+        b=IWy/fUlAKarZIURZ2S8lVHBjPYVcItMkVqJahSnQb8MZcKSTbqACk4UPLrXx7FLzK
+         J0p9mFLwW2hBU0f6GZtZVCdFtjHg828gCqRRoirrS+t0QYzxSRpci5x7JCfVKjuzHA
+         So1aAl8dxz3LeFi1zf+uG1htVtaH//OLvWj0Rey8YY10jyeuZbVawWeShdRFEmEWMp
+         X8enaFbnsAvtOSwXflXLqPlqEL22+y5reYcffxPIU0JcXYOJQkN/cxviSV5sW97+ou
+         3ItNT1+TMqwFXNxHvA8050B5bWXpIR5LKaBatPFLF4RRR7kkDHuBUmecooP4/OxRyh
+         s/WEctiWRU/ow==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Tue,  6 Jun 2023 13:22:06 +0300 (MSK)
+From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+To:     Liang Yang <liang.yang@amlogic.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+CC:     <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
+        Arseniy Krasnov <AVKrasnov@sberdevices.ru>,
+        <linux-mtd@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] mtd: rawnand: meson: check buffer length
+Date:   Tue, 6 Jun 2023 13:16:43 +0300
+Message-ID: <20230606101644.3297859-1-AVKrasnov@sberdevices.ru>
+X-Mailer: git-send-email 2.35.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZH20XkD74prrdN4u@FVFF77S0Q05N>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/06/06 07:40:00 #21442908
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 05, 2023 at 11:09:34AM +0100, Mark Rutland wrote:
-> On Mon, Jun 05, 2023 at 12:20:40PM +0300, Mike Rapoport wrote:
-> > On Fri, Jun 02, 2023 at 10:35:09AM +0100, Mark Rutland wrote:
-> >
-> > It sill can be achieved with a single jit_alloc_arch_params(), just by
-> > adding enum jit_type parameter to jit_text_alloc().
-> 
-> That feels backwards to me; it centralizes a bunch of information about
-> distinct users to be able to shove that into a static array, when the callsites
-> can pass that information. 
+Meson NAND controller has limited buffer length, so check it before
+command execution to avoid length trim. Also check MTD write size on
+chip attach.
 
-The goal was not to shove everything into an array, but centralize
-architecture requirements for code allocations. The callsites don't have
-that information per se, they get it from the arch code, so having this
-information in a single place per arch is better than spreading
-MODULE_START, KPROBES_START etc all over.
+Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+---
+ drivers/mtd/nand/raw/meson_nand.c | 47 +++++++++++++++++++++++++++----
+ 1 file changed, 42 insertions(+), 5 deletions(-)
 
-I'd agree though that having types for jit_text_alloc is ugly and this
-should be handled differently.
+diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
+index 23a73268421b..db6b18753071 100644
+--- a/drivers/mtd/nand/raw/meson_nand.c
++++ b/drivers/mtd/nand/raw/meson_nand.c
+@@ -111,6 +111,8 @@
  
-> What's *actually* common after separating out the ranges? Is it just the
-> permissions?
-
-On x86 everything, on arm64 apparently just the permissions.
-
-I've started to summarize what are the restrictions for code placement for
-modules, kprobes and bpf on different architectures, that's roughly what
-I've got so far:
-
-* x86 and s390 need everything within modules address space because of
-PC-relative
-* arm, arm64, loongarch, sparc64, riscv64, some of mips and
-powerpc32 configurations require a dedicated modules address space; the
-rest just use vmalloc address space
-* all architectures that support kprobes except x86 and s390 don't use
-relative jumps, so they don't care where kprobes insn_page will live
-* not sure yet about BPF. Looks like on arm and arm64 it does not use
-relative jumps, so it can be anywhere, didn't dig enough about the others.
-
-> If we want this to be able to share allocations and so on, why can't we do this
-> like a kmem_cache, and have the callsite pass a pointer to the allocator data?
-> That would make it easy for callsites to share an allocator or use a distinct
-> one.
-
-This maybe something worth exploring.
+ #define PER_INFO_BYTE		8
  
-> Thanks,
-> Mark.
-
++#define NFC_CMD_RAW_LEN	GENMASK(13, 0)
++
+ struct meson_nfc_nand_chip {
+ 	struct list_head node;
+ 	struct nand_chip nand;
+@@ -284,7 +286,7 @@ static void meson_nfc_cmd_access(struct nand_chip *nand, int raw, bool dir,
+ 
+ 	if (raw) {
+ 		len = mtd->writesize + mtd->oobsize;
+-		cmd = (len & GENMASK(13, 0)) | scrambler | DMA_DIR(dir);
++		cmd = len | scrambler | DMA_DIR(dir);
+ 		writel(cmd, nfc->reg_base + NFC_REG_CMD);
+ 		return;
+ 	}
+@@ -573,7 +575,7 @@ static int meson_nfc_read_buf(struct nand_chip *nand, u8 *buf, int len)
+ 	if (ret)
+ 		goto out;
+ 
+-	cmd = NFC_CMD_N2M | (len & GENMASK(13, 0));
++	cmd = NFC_CMD_N2M | len;
+ 	writel(cmd, nfc->reg_base + NFC_REG_CMD);
+ 
+ 	meson_nfc_drain_cmd(nfc);
+@@ -597,7 +599,7 @@ static int meson_nfc_write_buf(struct nand_chip *nand, u8 *buf, int len)
+ 	if (ret)
+ 		return ret;
+ 
+-	cmd = NFC_CMD_M2N | (len & GENMASK(13, 0));
++	cmd = NFC_CMD_M2N | len;
+ 	writel(cmd, nfc->reg_base + NFC_REG_CMD);
+ 
+ 	meson_nfc_drain_cmd(nfc);
+@@ -1007,6 +1009,31 @@ meson_nand_op_put_dma_safe_output_buf(const struct nand_op_instr *instr,
+ 		kfree(buf);
+ }
+ 
++static int meson_nfc_check_op(struct nand_chip *chip,
++			      const struct nand_operation *op)
++{
++	int op_id;
++
++	for (op_id = 0; op_id < op->ninstrs; op_id++) {
++		const struct nand_op_instr *instr;
++
++		instr = &op->instrs[op_id];
++
++		switch (instr->type) {
++		case NAND_OP_DATA_IN_INSTR:
++		case NAND_OP_DATA_OUT_INSTR:
++			if (instr->ctx.data.len > NFC_CMD_RAW_LEN)
++				return -ENOTSUPP;
++
++			break;
++		default:
++			break;
++		}
++	}
++
++	return 0;
++}
++
+ static int meson_nfc_exec_op(struct nand_chip *nand,
+ 			     const struct nand_operation *op, bool check_only)
+ {
+@@ -1015,10 +1042,12 @@ static int meson_nfc_exec_op(struct nand_chip *nand,
+ 	const struct nand_op_instr *instr = NULL;
+ 	void *buf;
+ 	u32 op_id, delay_idle, cmd;
++	int err;
+ 	int i;
+ 
+-	if (check_only)
+-		return 0;
++	err = meson_nfc_check_op(nand, op);
++	if (err || check_only)
++		return err;
+ 
+ 	meson_nfc_select_chip(nand, op->cs);
+ 	for (op_id = 0; op_id < op->ninstrs; op_id++) {
+@@ -1293,6 +1322,7 @@ static int meson_nand_attach_chip(struct nand_chip *nand)
+ 	struct meson_nfc_nand_chip *meson_chip = to_meson_nand(nand);
+ 	struct mtd_info *mtd = nand_to_mtd(nand);
+ 	int nsectors = mtd->writesize / 1024;
++	int raw_writesize;
+ 	int ret;
+ 
+ 	if (!mtd->name) {
+@@ -1304,6 +1334,13 @@ static int meson_nand_attach_chip(struct nand_chip *nand)
+ 			return -ENOMEM;
+ 	}
+ 
++	raw_writesize = mtd->writesize + mtd->oobsize;
++	if (raw_writesize > NFC_CMD_RAW_LEN) {
++		dev_err(nfc->dev, "too big write size in raw mode: %d > %ld\n",
++			raw_writesize, NFC_CMD_RAW_LEN);
++		return -EINVAL;
++	}
++
+ 	if (nand->bbt_options & NAND_BBT_USE_FLASH)
+ 		nand->bbt_options |= NAND_BBT_NO_OOB;
+ 
 -- 
-Sincerely yours,
-Mike.
+2.35.0
+
