@@ -2,100 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8104D724723
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 17:00:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2677D72471E
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 17:00:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234744AbjFFPA4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 11:00:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36482 "EHLO
+        id S237813AbjFFPAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 11:00:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237570AbjFFPAw (ORCPT
+        with ESMTP id S238773AbjFFPAF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 11:00:52 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5254F199A;
-        Tue,  6 Jun 2023 08:00:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686063632; x=1717599632;
-  h=date:from:to:subject:message-id:references:mime-version:
-   in-reply-to;
-  bh=Wlt2kIy2P85sLJKYJcYLugIw7E4/N60edZHtxt3m85U=;
-  b=GRl5JEmaL42TojDnT2ogGotMuBqFe2i+QXkA5R9q2NaqeVo2eLzKrx/w
-   WLr6dr2+veTEFt/AdiAfJypKIaw0yOIaJ6Uk6uIw5vRnE4HKgdZO21fxx
-   nOKg91idLQ8Jh2s/sLRTbrEyWRlB1z5wd1nfiQq1Rqd+ym+vfal0e8EfB
-   2LyNEJt+iUD/JKzznCqUidNs/jv2zsQSRxKE5iZOAVaWi7gJSWOl2C8yR
-   ja08Qabfk3HjLeuyCB5BJ0WjdYA9Efzgt+6p8u07urMAzV5YxWTN4c0IT
-   IyiY64WMD2oOC6DfuqMbUjeNonhYQfAaqrLd7EcdHVxKLtHMLBbffiPDp
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="337052481"
-X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
-   d="scan'208";a="337052481"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 07:58:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="955791278"
-X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
-   d="scan'208";a="955791278"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga006.fm.intel.com with ESMTP; 06 Jun 2023 07:58:37 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1q6Y8q-001gP3-1g;
-        Tue, 06 Jun 2023 17:58:36 +0300
-Date:   Tue, 6 Jun 2023 17:58:36 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jens Axboe <axboe@kernel.dk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/9] pktdvd: Clean up the driver
-Message-ID: <ZH9JnPAL8x2GPSV3@smile.fi.intel.com>
-References: <20230310164549.22133-1-andriy.shevchenko@linux.intel.com>
+        Tue, 6 Jun 2023 11:00:05 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DCDE1998;
+        Tue,  6 Jun 2023 07:59:41 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-543c6a2aa07so1127757a12.0;
+        Tue, 06 Jun 2023 07:59:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686063580; x=1688655580;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Wqe+EMfTqwgCzibqmrP4x167w3kg6AGKeWhHsuYgmqo=;
+        b=c89hhqFN81vIg5IN2rpZKauKAqHYf+KMSB7oh1dAt0i49A3ucUMkyTzxUCrj2WWs+g
+         /LU3Xr/oSOgiCs+CzGUU8pWhEpDacm5mxkJpE/5clGHyANc/lNkJmfLq/aJVfdcjT8UL
+         eBL06dgnIyAp6shIXHNvUuno3W6Sk3jssjkHEmrtsXS0ehGnvMz9fE+mUbSyT7V/DtJ8
+         YEYyGAmkm7jdPB+ETVRV6oGB43zryHGlxwY1MiyEjreIcHwBO4xpm30cOGoi+5sxuVuw
+         QGY0ItDFmMr8lVYp12VI5cDd1e62KrSFDl9FQbjPsohnlfnzU1oGnGODof+74Twn0KQQ
+         vCow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686063580; x=1688655580;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Wqe+EMfTqwgCzibqmrP4x167w3kg6AGKeWhHsuYgmqo=;
+        b=M9kchvmXuRXWO1Gxhd25eSlmsJXMaMrjGVZ+OetUuvuG48I/yum5fa3dNUL5GuIc7d
+         IiDZBu2zwMNrcXGE39FjCqvq4+ljf1rTav8g+uid4woRfooEu4aGWuROT4ypKRIbygvB
+         yVrrqpT74A+csxzdKl6X0xx1nNj8KWUNVUop/JCnzS/NILJP/SUZG9OqAojnQ+01pRrg
+         jxyZvJAouoARrfLkoc4d2EPJ2aAeZpF4pqBqhICKiRz/qNwgtAJGPImgighx6AvHISzI
+         jUye4hD4q5iHvVfdl1Jj6hZSrtOE1mYZUD9LuilTPqT0ZzfbByb5OM4XEIZNUmWtoarl
+         A8gg==
+X-Gm-Message-State: AC+VfDyrHqMrqGKRIgM2qCyzU4+338HeZ9FSiaSaNODBtwiJ7gHa9XoY
+        dZxZU+VXZ62f1dJZ2zSM9N2qng/EvGbONO+WStk=
+X-Google-Smtp-Source: ACHHUZ7R3wIBiwS3qmIDAIVJhRLmDVW+rENmgn5tSeT1A0bMQm4kGe5M15s7kly86oJcM/F8JJJXG4R4/1qAqmUxppw=
+X-Received: by 2002:a05:6a20:3d83:b0:117:a2f3:3c93 with SMTP id
+ s3-20020a056a203d8300b00117a2f33c93mr14207pzi.2.1686063579863; Tue, 06 Jun
+ 2023 07:59:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230310164549.22133-1-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230524153311.3625329-1-dhowells@redhat.com> <20230524153311.3625329-5-dhowells@redhat.com>
+ <a819dd80-54cc-695f-f142-e3d42ce815a7@huawei.com> <f7919c2c9e1cb6218a0b0f55ddaa9a34f7d2b9a7.camel@gmail.com>
+ <1841913.1686039913@warthog.procyon.org.uk>
+In-Reply-To: <1841913.1686039913@warthog.procyon.org.uk>
+From:   Alexander Duyck <alexander.duyck@gmail.com>
+Date:   Tue, 6 Jun 2023 07:59:02 -0700
+Message-ID: <CAKgT0Ud=ZWVnpwqbLqGovjPM2VR_V1-Ak=meveqnG01tGWTTeA@mail.gmail.com>
+Subject: Re: [PATCH net-next 04/12] mm: Make the page_frag_cache allocator use
+ multipage folios
+To:     David Howells <dhowells@redhat.com>
+Cc:     Yunsheng Lin <linyunsheng@huawei.com>, netdev@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Jeroen de Borst <jeroendb@google.com>,
+        Catherine Sullivan <csully@google.com>,
+        Shailend Chand <shailend@google.com>,
+        Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-nvme@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 06:45:40PM +0200, Andy Shevchenko wrote:
-> Some cleanups to the recently resurrected driver.
+On Tue, Jun 6, 2023 at 1:25=E2=80=AFAM David Howells <dhowells@redhat.com> =
+wrote:
+>
+> Alexander H Duyck <alexander.duyck@gmail.com> wrote:
+>
+> > Also I have some concerns about going from page to folio as it seems
+> > like the folio_alloc setups the transparent hugepage destructor instead
+> > of using the compound page destructor. I would think that would slow
+> > down most users as it looks like there is a spinlock that is taken in
+> > the hugepage destructor that isn't there in the compound page
+> > destructor.
+>
+> Note that this code is going to have to move to folios[*] at some point.
+> "Old-style" compound pages are going to go away, I believe.  Matthew Wilc=
+ox
+> and the mm folks are on a drive towards simplifying memory management,
+> formalising chunks larger than a single page - with the ultimate aim of
+> reducing the page struct to a single, typed pointer.
 
-Anybody to pick this up, please?
+I'm not against making the move, but as others have pointed out this
+is getting into unrelated things. One of those being the fact that to
+transition to using folios we don't need to get rid of the use of the
+virtual address. The idea behind using the virtual address here is
+that we can avoid a bunch of address translation overhead since we
+only need to use the folio if we are going to allocate, retire, or
+recycle a page/folio. If we are using an order 3 page that shouldn't
+be very often.
 
-> v2:
-> - added tags (Greg)
-> 
-> Andy Shevchenko (9):
->   pktcdvd: Get rid of custom printing macros
->   pktcdvd: replace sscanf() by kstrtoul()
->   pktcdvd: use sysfs_emit() to instead of scnprintf()
->   pktcdvd: Get rid of pkt_seq_show() forward declaration
->   pktcdvd: Drop redundant castings for sector_t
->   pktcdvd: Use DEFINE_SHOW_ATTRIBUTE() to simplify code
->   pktcdvd: Use put_unaligned_be16() and get_unaligned_be16()
->   pktcdvd: Get rid of redundant 'else'
->   pktcdvd: Sort headers
-> 
->  drivers/block/pktcdvd.c      | 525 +++++++++++++++++------------------
->  include/linux/pktcdvd.h      |   1 -
->  include/uapi/linux/pktcdvd.h |   1 +
->  3 files changed, 257 insertions(+), 270 deletions(-)
-> 
-> -- 
-> 2.39.1
-> 
+> So, take, for example, a folio: As I understand it, this will no longer
+> overlay struct page, but rather will become a single, dynamically-allocat=
+ed
+> struct that covers a pow-of-2 number of pages.  A contiguous subset of pa=
+ge
+> structs will point at it.
+>
+> However, rather than using a folio, we could define a "page fragment" mem=
+ory
+> type.  Rather than having all the flags and fields to be found in struct
+> folio, it could have just the set to be found in page_frag_cache.
 
--- 
-With Best Regards,
-Andy Shevchenko
+I don't think we need a new memory type. For the most part the page
+fragment code is really more a subset of something like a
+__get_free_pages where the requester provides the size, is just given
+a virtual address, and we shouldn't need to be allocating a new page
+as often as ideally the allocations are 2K or less in size.
 
+Also one thing I would want to avoid is adding complexity to the
+freeing path. The general idea with page frags is that they are meant
+to be lightweight in terms of freeing as well. So just as they are
+similar to __get_free_pages in terms of allocation the freeing is
+meant to be similar to free_pages.
 
+> David
+>
+> [*] It will be possible to have some other type than "folio".  See "struc=
+t
+> slab" in mm/slab.h for example.  struct slab corresponds to a set of page=
+s
+> and, in the future, a number of struct pages will point at it.
+
+I want to avoid getting anywhere near the complexity of a slab
+allocator. The whole point of this was to keep it simple so that
+drivers could use it and get decent performance. When I had
+implemented it in the Intel drivers back in the day this approach was
+essentially just a reference count/page offset hack that allowed us to
+split a page in 2 and use the pages as a sort of mobius strip within
+the ring buffer.
