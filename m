@@ -2,139 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAC8C7241F8
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 14:22:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06E767241F6
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 14:21:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236087AbjFFMWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 08:22:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56108 "EHLO
+        id S232364AbjFFMVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 08:21:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230297AbjFFMWU (ORCPT
+        with ESMTP id S230297AbjFFMVC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 08:22:20 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89F93E7D
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 05:22:18 -0700 (PDT)
-Received: from dggpemm500011.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Qb8h12yhdz1c0Lj;
-        Tue,  6 Jun 2023 20:20:33 +0800 (CST)
-Received: from huawei.com (10.175.127.227) by dggpemm500011.china.huawei.com
- (7.185.36.110) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Tue, 6 Jun
- 2023 20:22:14 +0800
-From:   Li Lingfeng <lilingfeng3@huawei.com>
-To:     <dm-devel@redhat.com>
-CC:     <agk@redhat.com>, <snitzer@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <houtao1@huawei.com>,
-        <yi.zhang@huawei.com>, <yukuai3@huawei.com>,
-        <lilingfeng3@huawei.com>
-Subject: [PATCH] dm thin: check fail_io before using data_sm
-Date:   Tue, 6 Jun 2023 20:20:24 +0800
-Message-ID: <20230606122024.1965040-1-lilingfeng3@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Tue, 6 Jun 2023 08:21:02 -0400
+Received: from muru.com (muru.com [72.249.23.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DE0F3E54;
+        Tue,  6 Jun 2023 05:21:01 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id 303FA80AE;
+        Tue,  6 Jun 2023 12:21:01 +0000 (UTC)
+Date:   Tue, 6 Jun 2023 15:20:59 +0300
+From:   Tony Lindgren <tony@atomide.com>
+To:     Chen-Yu Tsai <wenst@chromium.org>
+Cc:     John Ogness <john.ogness@linutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Dhruva Gole <d-gole@ti.com>,
+        Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
+        Johan Hovold <johan@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-omap@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v12 1/1] serial: core: Start managing serial controllers
+ to enable runtime PM
+Message-ID: <20230606122059.GC14287@atomide.com>
+References: <20230602083335.GA181647@google.com>
+ <87a5xii33r.fsf@jogness.linutronix.de>
+ <20230603054139.GR14287@atomide.com>
+ <20230603063533.GS14287@atomide.com>
+ <20230605061511.GW14287@atomide.com>
+ <CAGXv+5Fbx7eTxP0ep6DV+jyronAWxYvu2M-g=MjHGRhjSXUc=w@mail.gmail.com>
+ <20230605122447.GY14287@atomide.com>
+ <CAGXv+5HwL+R5QpO3pHGQd9qAxu2pCMDjYvdni1HjiC8eEE38mg@mail.gmail.com>
+ <20230605131803.GA14287@atomide.com>
+ <CAGXv+5GR9TEaNrj4B21H2iukS2kWW=rtoWkoVnWewVsrbcG0Hw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500011.china.huawei.com (7.185.36.110)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGXv+5GR9TEaNrj4B21H2iukS2kWW=rtoWkoVnWewVsrbcG0Hw@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We should check pmd->fail_io before using pmd->data_sm since pmd->data_sm
-may be destroyed by other processes.
+* Chen-Yu Tsai <wenst@chromium.org> [230606 09:17]:
+> I ended up following 8250_dw's design, which seemed less convoluted.
+> The original code was waaay too convoluted.
 
-       P1(kworker)                             P2(message)
-do_worker
- process_prepared
-  process_prepared_discard_passdown_pt2
-   dm_pool_dec_data_range
-                                    pool_message
-                                     commit
-                                      dm_pool_commit_metadata
-                                        ↓
-                                       // commit failed
-                                      metadata_operation_failed
-                                       abort_transaction
-                                        dm_pool_abort_metadata
-                                         dm_block_manager_create
-                                           ↓
-                                          // create failed
-                                         __destroy_persistent_data_objects
-                                          dm_sm_destroy(pmd->data_sm)
-                                            ↓
-                                           // free data_sm
-    dm_sm_dec_blocks
-      ↓
-     // try to access pmd->data_sm --> UAF
+OK that looks good to me thanks. Good to hear you got it sorted out.
 
-As shown above, if dm_pool_commit_metadata() and dm_block_manager_create()
-fail in pool_message process, kworker may trigger UAF.
+The 8250_dw style runtime PM is a good solution for simple cases. Where
+it won't work are SoCs where runtime PM calls need to propagate up the
+bus hierarchy. For example, 8250_omap needs runtime PM calls for the
+interconnect and power domain to get register access working.
 
-Signed-off-by: Li Lingfeng <lilingfeng3@huawei.com>
----
- drivers/md/dm-thin-metadata.c | 20 ++++++++++++--------
- 1 file changed, 12 insertions(+), 8 deletions(-)
+> BTW, the Bluetooth breakage seems like a different problem.
 
-diff --git a/drivers/md/dm-thin-metadata.c b/drivers/md/dm-thin-metadata.c
-index 9f5cb52c5763..b9461faa9f0d 100644
---- a/drivers/md/dm-thin-metadata.c
-+++ b/drivers/md/dm-thin-metadata.c
-@@ -1756,13 +1756,15 @@ int dm_thin_remove_range(struct dm_thin_device *td,
- 
- int dm_pool_block_is_shared(struct dm_pool_metadata *pmd, dm_block_t b, bool *result)
- {
--	int r;
-+	int r = -EINVAL;
- 	uint32_t ref_count;
- 
- 	down_read(&pmd->root_lock);
--	r = dm_sm_get_count(pmd->data_sm, b, &ref_count);
--	if (!r)
--		*result = (ref_count > 1);
-+	if (!pmd->fail_io) {
-+		r = dm_sm_get_count(pmd->data_sm, b, &ref_count);
-+		if (!r)
-+			*result = (ref_count > 1);
-+	}
- 	up_read(&pmd->root_lock);
- 
- 	return r;
-@@ -1770,10 +1772,11 @@ int dm_pool_block_is_shared(struct dm_pool_metadata *pmd, dm_block_t b, bool *re
- 
- int dm_pool_inc_data_range(struct dm_pool_metadata *pmd, dm_block_t b, dm_block_t e)
- {
--	int r = 0;
-+	int r = -EINVAL;
- 
- 	pmd_write_lock(pmd);
--	r = dm_sm_inc_blocks(pmd->data_sm, b, e);
-+	if (!pmd->fail_io)
-+		r = dm_sm_inc_blocks(pmd->data_sm, b, e);
- 	pmd_write_unlock(pmd);
- 
- 	return r;
-@@ -1781,10 +1784,11 @@ int dm_pool_inc_data_range(struct dm_pool_metadata *pmd, dm_block_t b, dm_block_
- 
- int dm_pool_dec_data_range(struct dm_pool_metadata *pmd, dm_block_t b, dm_block_t e)
- {
--	int r = 0;
-+	int r = -EINVAL;
- 
- 	pmd_write_lock(pmd);
--	r = dm_sm_dec_blocks(pmd->data_sm, b, e);
-+	if (!pmd->fail_io)
-+		r = dm_sm_dec_blocks(pmd->data_sm, b, e);
- 	pmd_write_unlock(pmd);
- 
- 	return r;
--- 
-2.31.1
+OK seems like we're good to go then :)
 
+Regards,
+
+Tony
