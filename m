@@ -2,70 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 891CD723462
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 03:13:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47EFD72346A
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 03:18:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232431AbjFFBNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 21:13:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50302 "EHLO
+        id S232755AbjFFBSx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 21:18:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229698AbjFFBNV (ORCPT
+        with ESMTP id S231439AbjFFBSq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 21:13:21 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 79CF5F3;
-        Mon,  5 Jun 2023 18:13:19 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.170])
-        by gateway (Coremail) with SMTP id _____8CxaPEtiH5kKUgAAA--.1166S3;
-        Tue, 06 Jun 2023 09:13:17 +0800 (CST)
-Received: from [10.20.42.170] (unknown [10.20.42.170])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bx+OQsiH5kKYEBAA--.6897S3;
-        Tue, 06 Jun 2023 09:13:16 +0800 (CST)
-Message-ID: <cf630105-aa83-730e-2cb5-2e33d364a212@loongson.cn>
-Date:   Tue, 6 Jun 2023 09:13:16 +0800
+        Mon, 5 Jun 2023 21:18:46 -0400
+Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AF12F9;
+        Mon,  5 Jun 2023 18:18:45 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4QZt0J4bSdz4f3l21;
+        Tue,  6 Jun 2023 09:18:40 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.104.67])
+        by APP4 (Coremail) with SMTP id gCh0CgBnHbFwiX5kEj8lLA--.60639S4;
+        Tue, 06 Jun 2023 09:18:42 +0800 (CST)
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+To:     hch@lst.de, axboe@kernel.dk, yukuai3@huawei.com
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yukuai1@huaweicloud.com, yi.zhang@huawei.com, yangerkun@huawei.com
+Subject: [PATCH -next] blk-ioc: fix recursive spin_lock/unlock_irq() in ioc_clear_queue()
+Date:   Tue,  6 Jun 2023 09:14:38 +0800
+Message-Id: <20230606011438.3743440-1-yukuai1@huaweicloud.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v12 16/31] LoongArch: KVM: Implement update VM id function
-Content-Language: en-US
-To:     Tianrui Zhao <zhaotianrui@loongson.cn>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        loongarch@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
-        Mark Brown <broonie@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Xi Ruoyao <xry111@xry111.site>
-References: <20230530015223.147755-1-zhaotianrui@loongson.cn>
- <20230530015223.147755-17-zhaotianrui@loongson.cn>
-From:   "bibo, mao" <maobibo@loongson.cn>
-In-Reply-To: <20230530015223.147755-17-zhaotianrui@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Bx+OQsiH5kKYEBAA--.6897S3
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7tFy3ur18CrW8Gry3Zr1UurX_yoW8KFyUpF
-        WxCwn3Gr4fXr17A3sxtw1FqFn093ykKF12qa47J3WFyr17t3s8CrWkKrWDAFyxJr1rJr1I
-        qF1YyF4jkr1DA3cCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUPYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-        Gr0_Gr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
-        kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWU
-        twAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMx
-        k0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l
-        4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxV
-        WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI
-        7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
-        1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
-        42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07jeq2NUUUUU=
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-CM-TRANSID: gCh0CgBnHbFwiX5kEj8lLA--.60639S4
+X-Coremail-Antispam: 1UD129KBjvJXoWruF1DZryxJFW8ArWfGr45Wrg_yoW8Jr4Dpr
+        1IgrZ8tw10vr4xXF4DKw1kZr4xua90gws7Aws3Xr4fA342vrnIgF10krsFqF1FvFsrJFZ0
+        vrsrJa95Ar1UC3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUyG14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1l42xK82IYc2Ij64vI
+        r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
+        xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0
+        cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8V
+        AvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7Cj
+        xVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,86 +58,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Bibo, Mao <maobibo@loongson.cn>
+From: Yu Kuai <yukuai3@huawei.com>
 
-在 2023/5/30 09:52, Tianrui Zhao 写道:
-> Implement kvm check vmid and update vmid, the vmid should be checked before
-> vcpu enter guest.
-> 
-> Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
-> ---
->  arch/loongarch/kvm/vmid.c | 64 +++++++++++++++++++++++++++++++++++++++
->  1 file changed, 64 insertions(+)
->  create mode 100644 arch/loongarch/kvm/vmid.c
-> 
-> diff --git a/arch/loongarch/kvm/vmid.c b/arch/loongarch/kvm/vmid.c
-> new file mode 100644
-> index 000000000000..6fef81b28a48
-> --- /dev/null
-> +++ b/arch/loongarch/kvm/vmid.c
-> @@ -0,0 +1,64 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2020-2023 Loongson Technology Corporation Limited
-> + */
-> +
-> +#include <linux/kvm_host.h>
-> +#include "trace.h"
-> +
-> +static void _kvm_update_vpid(struct kvm_vcpu *vcpu, int cpu)
-> +{
-> +	struct kvm_context *context;
-> +	unsigned long vpid;
-> +
-> +	context = per_cpu_ptr(vcpu->kvm->arch.vmcs, cpu);
-> +	vpid = context->vpid_cache + 1;
-> +	if (!(vpid & vpid_mask)) {
-> +		/* finish round of 64 bit loop */
-> +		if (unlikely(!vpid))
-> +			vpid = vpid_mask + 1;
-> +
-> +		/* vpid 0 reserved for root */
-> +		++vpid;
-> +
-> +		/* start new vpid cycle */
-> +		kvm_flush_tlb_all();
-> +	}
-> +
-> +	context->vpid_cache = vpid;
-> +	vcpu->arch.vpid = vpid;
-> +}
-> +
-> +void _kvm_check_vmid(struct kvm_vcpu *vcpu, int cpu)
-> +{
-> +	struct kvm_context *context;
-> +	bool migrated;
-> +	unsigned long ver, old, vpid;
-> +
-> +	/*
-> +	 * Are we entering guest context on a different CPU to last time?
-> +	 * If so, the vCPU's guest TLB state on this CPU may be stale.
-> +	 */
-> +	context = per_cpu_ptr(vcpu->kvm->arch.vmcs, cpu);
-> +	migrated = (vcpu->arch.last_exec_cpu != cpu);
-> +	vcpu->arch.last_exec_cpu = cpu;
-> +
-> +	/*
-> +	 * Check if our vpid is of an older version
-> +	 *
-> +	 * We also discard the stored vpid if we've executed on
-> +	 * another CPU, as the guest mappings may have changed without
-> +	 * hypervisor knowledge.
-> +	 */
-> +	ver = vcpu->arch.vpid & ~vpid_mask;
-> +	old = context->vpid_cache  & ~vpid_mask;
-> +	if (migrated || (ver != old)) {
-> +		_kvm_update_vpid(vcpu, cpu);
-> +		trace_kvm_vpid_change(vcpu, vcpu->arch.vpid);
-> +	}
-> +
-> +	/* Restore GSTAT(0x50).vpid */
-> +	vpid = (vcpu->arch.vpid & vpid_mask)
-> +		<< CSR_GSTAT_GID_SHIFT;
-> +	change_csr_gstat(vpid_mask << CSR_GSTAT_GID_SHIFT, vpid);
-> +}
+Recursive spin_lock/unlock_irq() is not safe, because spin_unlock_irq()
+will enable irq unconditionally:
+
+spin_lock_irq	queue_lock	-> disable irq
+spin_lock_irq	ioc->lock
+spin_unlock_irq ioc->lock	-> enable irq
+/*
+ * AA dead lock will be triggered if current context is preempted by irq,
+ * and irq try to hold queue_lock again.
+ */
+spin_unlock_irq queue_lock
+
+Fix this problem by using spin_lock/unlock() directly for 'ioc->lock'.
+
+Fixes: 5a0ac57c48aa ("blk-ioc: protect ioc_destroy_icq() by 'queue_lock'")
+Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+---
+ block/blk-ioc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/block/blk-ioc.c b/block/blk-ioc.c
+index d5db92e62c43..25dd4db11121 100644
+--- a/block/blk-ioc.c
++++ b/block/blk-ioc.c
+@@ -179,9 +179,9 @@ void ioc_clear_queue(struct request_queue *q)
+ 		 * Other context won't hold ioc lock to wait for queue_lock, see
+ 		 * details in ioc_release_fn().
+ 		 */
+-		spin_lock_irq(&icq->ioc->lock);
++		spin_lock(&icq->ioc->lock);
+ 		ioc_destroy_icq(icq);
+-		spin_unlock_irq(&icq->ioc->lock);
++		spin_unlock(&icq->ioc->lock);
+ 	}
+ 	spin_unlock_irq(&q->queue_lock);
+ }
+-- 
+2.39.2
 
