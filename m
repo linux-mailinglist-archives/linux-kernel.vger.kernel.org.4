@@ -2,147 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1367F723FD9
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 12:42:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84C09723FDA
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 12:42:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236905AbjFFKmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 06:42:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60122 "EHLO
+        id S231440AbjFFKmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 06:42:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236809AbjFFKmE (ORCPT
+        with ESMTP id S232550AbjFFKmG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 06:42:04 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 386A210E4;
-        Tue,  6 Jun 2023 03:40:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=klQyBW+EVKyIsuT8ceA9jlZizSQdtGWXnKsVgnySEDY=; b=1wRvIU8G2nMubJPt48iYnhphbU
-        oLCH8nh/13RTGHFFwP7K6gwZaqtDKdgmLWdPv/74wb3h9ol5FOyxlQg1ccufhr2/W3sqfuUy3AMGy
-        v7nJ9MzUaHsJKBjp2cbtx9InKPFdsK2xykpcJd3/RZIdzPg2e5INlWndR0cZsCHM2IBXCShrXQT/U
-        NYc7dsi/EMLIa/VOIFm3K0RR0BIjtGMYjjzEhDU4Kkg0BeGsde6DLUk3hAZ7gnMWjySiqajqdwVbL
-        9Sl+Mz8IhzhJN12Ts6fS+M1zbLXcWzA3rKqoPStfJ4ipkipgkzZte4KxhR4QTz+788oaG/2s+J6vc
-        oj6TGoTg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:57734)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1q6U6u-0005VC-6o; Tue, 06 Jun 2023 11:40:20 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1q6U6r-00074o-Pr; Tue, 06 Jun 2023 11:40:17 +0100
-Date:   Tue, 6 Jun 2023 11:40:17 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Maxime Chevallier <maxime.chevallier@bootlin.com>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>, davem@davemloft.net,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alexis.lothore@bootlin.com, thomas.petazzoni@bootlin.com,
-        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Simon Horman <simon.horman@corigine.com>
-Subject: Re: [PATCH net-next 1/2] net: stmmac: Add PCS_LYNX as a dependency
- for the whole driver
-Message-ID: <ZH8NEW3bDwAoACfg@shell.armlinux.org.uk>
-References: <20230606064914.134945-1-maxime.chevallier@bootlin.com>
- <20230606064914.134945-2-maxime.chevallier@bootlin.com>
- <889297a0-88c3-90df-7752-efa00184859@linux-m68k.org>
- <ZH78uGBfeHjI4Cdn@shell.armlinux.org.uk>
- <20230606121311.3cc5aa78@pc-7.home>
- <ZH8JxF+TNuX0C1vC@shell.armlinux.org.uk>
- <ZH8LxGIvHd+B1eNm@shell.armlinux.org.uk>
+        Tue, 6 Jun 2023 06:42:06 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D750210F1;
+        Tue,  6 Jun 2023 03:40:28 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1q6U71-0001kW-84; Tue, 06 Jun 2023 12:40:27 +0200
+Message-ID: <5cae4b60-a303-5cf6-9d30-8a723d417467@leemhuis.info>
+Date:   Tue, 6 Jun 2023 12:40:25 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZH8LxGIvHd+B1eNm@shell.armlinux.org.uk>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: Webcam LED control regression
+Content-Language: en-US, de-DE
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+References: <468a36ec-c3ac-cb47-e12f-5906239ae3cd@spahan.ch>
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Cc:     linux-media@vger.kernel.org, Poncho <poncho@spahan.ch>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Linux kernel regressions list <regressions@lists.linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <468a36ec-c3ac-cb47-e12f-5906239ae3cd@spahan.ch>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1686048028;fd235b51;
+X-HE-SMSGID: 1q6U71-0001kW-84
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 11:34:44AM +0100, Russell King (Oracle) wrote:
-> > diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> > index fa07b0d50b46..1801f8cc8413 100644
-> > --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> > +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> > @@ -940,9 +940,6 @@ static struct phylink_pcs *stmmac_mac_select_pcs(struct phylink_config *config,
-> >  	if (priv->hw->xpcs)
-> >  		return &priv->hw->xpcs->pcs;
-> >  
-> > -	if (priv->hw->lynx_pcs)
-> > -		return priv->hw->lynx_pcs;
-> > -
+CCing a few people and lists that should be aware of this and might be
+able to help.
+
+On 05.06.23 18:39, Poncho wrote:
+> With kernel 6.3, the LED of my C922 Pro Stream Webcam is no longer
+> controllable.
 > 
-> This hunk is completely wrong... but I guess you spotted that anyway.
+> With kernel 6.1 v4l2-ctl --all returns:
+> 
+>> led1_mode 0x0a046d05 (menu)   : min=0 max=3 default=0 value=0 (Off)
+>>     0: Off
+>>     1: On
+>>     2: Blink
+>>     3: Auto
+> 
+> 
+> 
+> but with kernel 6.3 I get:
+> 
+>> led1_mode 0x0a046d05 (menu)   : min=4 max=4 default=0 value=0
+>>     4:
 
-Replacement...
+Thanks for the report.
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c
-index e399fccbafe5..239c7e9ed41d 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c
-@@ -494,6 +494,17 @@ static int socfpga_dwmac_probe(struct platform_device *pdev)
- 	return ret;
- }
- 
-+static void socfpga_dwmac_remove(struct platform_device *pdev)
-+{
-+	struct net_device *ndev = platform_get_drvdata(pdev);
-+	struct stmmac_priv *priv = netdev_priv(ndev);
-+	struct phylink_pcs *pcs = priv->hw->lynx_pcs;
-+
-+	stmmac_pltfr_remove(pdev);
-+
-+	lynx_pcs_destroy(pcs);
-+}
-+
- #ifdef CONFIG_PM_SLEEP
- static int socfpga_dwmac_resume(struct device *dev)
- {
-@@ -565,7 +576,7 @@ MODULE_DEVICE_TABLE(of, socfpga_dwmac_match);
- 
- static struct platform_driver socfpga_dwmac_driver = {
- 	.probe  = socfpga_dwmac_probe,
--	.remove_new = stmmac_pltfr_remove,
-+	.remove_new = socfpga_dwmac_remove,
- 	.driver = {
- 		.name           = "socfpga-dwmac",
- 		.pm		= &socfpga_dwmac_pm_ops,
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c
-index c784a6731f08..3db1cb0fd160 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c
-@@ -665,9 +665,6 @@ int stmmac_mdio_unregister(struct net_device *ndev)
- 	if (priv->hw->xpcs)
- 		xpcs_destroy(priv->hw->xpcs);
- 
--	if (priv->hw->lynx_pcs)
--		lynx_pcs_destroy(priv->hw->lynx_pcs);
--
- 	mdiobus_unregister(priv->mii);
- 	priv->mii->priv = NULL;
- 	mdiobus_free(priv->mii);
+FWIW, maybe one of those people that I CCed has an idea what's wrong. If
+none of them brings one to the table withing the next two or three days,
+you likely have to perform a bisection to find the change that broke
+thing for you.
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+For the rest of this mail:
+
+[TLDR: I'm adding this report to the list of tracked Linux kernel
+regressions; the text you find below is based on a few templates
+paragraphs you might have encountered already in similar form.
+See link in footer if these mails annoy you.]
+
+> Full output bellow:
+> 
+>> Driver Info:
+>>     Driver name      : uvcvideo
+>>     Card type        : C922 Pro Stream Webcam
+>>     Bus info         : usb-0000:00:14.0-9
+>>     Driver version   : 6.3.5
+>>     Capabilities     : 0x84a00001
+>>         Video Capture
+>>         Metadata Capture
+>>         Streaming
+>>         Extended Pix Format
+>>         Device Capabilities
+>>     Device Caps      : 0x04200001
+>>         Video Capture
+>>         Streaming
+>>         Extended Pix Format
+>> Media Driver Info:
+>>     Driver name      : uvcvideo
+>>     Model            : C922 Pro Stream Webcam
+>>     Serial           : 6E8DF1BF
+>>     Bus info         : usb-0000:00:14.0-9
+>>     Media version    : 6.3.5
+>>     Hardware revision: 0x00000016 (22)
+>>     Driver version   : 6.3.5
+>> Interface Info:
+>>     ID               : 0x03000002
+>>     Type             : V4L Video
+>> Entity Info:
+>>     ID               : 0x00000001 (1)
+>>     Name             : C922 Pro Stream Webcam
+>>     Function         : V4L2 I/O
+>>     Flags            : default
+>>     Pad 0x01000007   : 0: Sink
+>>       Link 0x0200001f: from remote pad 0x100000a of entity 'Processing
+>> 3' (Video Pixel Formatter): Data, Enabled, Immutable
+>> Priority: 2
+>> Video input : 0 (Camera 1: ok)
+>> Format Video Capture:
+>>     Width/Height      : 160/90
+>>     Pixel Format      : 'YUYV' (YUYV 4:2:2)
+>>     Field             : None
+>>     Bytes per Line    : 320
+>>     Size Image        : 28800
+>>     Colorspace        : sRGB
+>>     Transfer Function : Rec. 709
+>>     YCbCr/HSV Encoding: ITU-R 601
+>>     Quantization      : Default (maps to Limited Range)
+>>     Flags             : Crop Capability Video Capture:
+>>     Bounds      : Left 0, Top 0, Width 160, Height 90
+>>     Default     : Left 0, Top 0, Width 160, Height 90
+>>     Pixel Aspect: 1/1
+>> Selection Video Capture: crop_default, Left 0, Top 0, Width 160,
+>> Height 90, Flags: Selection Video Capture: crop_bounds, Left 0, Top 0,
+>> Width 160, Height 90, Flags: Streaming Parameters Video Capture:
+>>     Capabilities     : timeperframe
+>>     Frames per second: 30.000 (30/1)
+>>     Read buffers     : 0
+>>
+>> User Controls
+>>
+>>                      brightness 0x00980900 (int)    : min=0 max=255
+>> step=1 default=128 value=128
+>>                        contrast 0x00980901 (int)    : min=0 max=255
+>> step=1 default=128 value=128
+>>                      saturation 0x00980902 (int)    : min=0 max=255
+>> step=1 default=128 value=128
+>>         white_balance_automatic 0x0098090c (bool)   : default=1 value=1
+>>                            gain 0x00980913 (int)    : min=0 max=255
+>> step=1 default=0 value=0
+>>            power_line_frequency 0x00980918 (menu)   : min=0 max=2
+>> default=2 value=2 (60 Hz)
+>>                 0: Disabled
+>>                 1: 50 Hz
+>>                 2: 60 Hz
+>>       white_balance_temperature 0x0098091a (int)    : min=2000
+>> max=6500 step=1 default=4000 value=4000 flags=inactive
+>>                       sharpness 0x0098091b (int)    : min=0 max=255
+>> step=1 default=128 value=128
+>>          backlight_compensation 0x0098091c (int)    : min=0 max=1
+>> step=1 default=0 value=0
+>>
+>> Camera Controls
+>>
+>>                   auto_exposure 0x009a0901 (menu)   : min=0 max=3
+>> default=3 value=3 (Aperture Priority Mode)
+>>                 1: Manual Mode
+>>                 3: Aperture Priority Mode
+>>          exposure_time_absolute 0x009a0902 (int)    : min=3 max=2047
+>> step=1 default=250 value=250 flags=inactive
+>>      exposure_dynamic_framerate 0x009a0903 (bool)   : default=0 value=1
+>>                    pan_absolute 0x009a0908 (int)    : min=-36000
+>> max=36000 step=3600 default=0 value=0
+>>                   tilt_absolute 0x009a0909 (int)    : min=-36000
+>> max=36000 step=3600 default=0 value=0
+>>                  focus_absolute 0x009a090a (int)    : min=0 max=250
+>> step=5 default=0 value=0 flags=inactive
+>>      focus_automatic_continuous 0x009a090c (bool)   : default=1 value=1
+>>                   zoom_absolute 0x009a090d (int)    : min=100 max=500
+>> step=1 default=100 value=100
+>>                       led1_mode 0x0a046d05 (menu)   : min=4 max=4
+>> default=0 value=0
+>>                 4:                  led1_frequency 0x0a046d06 (int)   
+>> : min=0 max=255 step=1 default=0 value=255
+
+To be sure the issue doesn't fall through the cracks unnoticed, I'm
+adding it to regzbot, the Linux kernel regression tracking bot:
+
+#regzbot ^introduced v6.1..v6.3
+#regzbot title media: uvcvideo: Webcam LED control regression
+#regzbot ignore-activity
+
+This isn't a regression? This issue or a fix for it are already
+discussed somewhere else? It was fixed already? You want to clarify when
+the regression started to happen? Or point out I got the title or
+something else totally wrong? Then just reply and tell me -- ideally
+while also telling regzbot about it, as explained by the page listed in
+the footer of this mail.
+
+Developers: When fixing the issue, remember to add 'Link:' tags pointing
+to the report (the parent of this mail). See page linked in footer for
+details.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+That page also explains what to do if mails like this annoy you.
