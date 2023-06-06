@@ -2,81 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BE8C7249C0
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 19:06:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 726F97249BE
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 19:05:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238468AbjFFRGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 13:06:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50406 "EHLO
+        id S238394AbjFFRFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 13:05:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238389AbjFFRF6 (ORCPT
+        with ESMTP id S231824AbjFFRFt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 13:05:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2713710F3
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 10:05:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686071115;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Klr9ojsS6vgNV/bJIZFbnwpXw/q2jytqsbFFwKeEH40=;
-        b=TumWP/hn7nP2erYG6v0qca7GJOUqYhAZlmM8JCIHy7a2jHREYphzchT0eUgQt+Vwe5u9iO
-        mAitw6mGn26K538u+6C5mgyOIfp3zKHfrtx/Ur4+Esi4Zg3v5+QeNDX5Qw/LP9P3qfJQsW
-        FnpO9XleFMJtmG+zo/cfL6gc28ypWtM=
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com
- [209.85.166.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-425-gyFCTY55P_iFI9hBloEgBw-1; Tue, 06 Jun 2023 13:05:13 -0400
-X-MC-Unique: gyFCTY55P_iFI9hBloEgBw-1
-Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-33b7c0bfa55so50794245ab.2
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 10:05:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686071112; x=1688663112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Klr9ojsS6vgNV/bJIZFbnwpXw/q2jytqsbFFwKeEH40=;
-        b=GVU2KNVZyyUdvAsf4h1QgcSDGgWGXI3GKLZOVSKW+olDbHrN+faRF/LP/374mIQKdt
-         yhnYmTzcfU21P/i32SUkhIPUDAL4qIKFXzRDua3vam2jz0AhqbPDPbdHJeMOi4Rh8jwn
-         1SzdYMMyHeU7oMaXQIlJX1Cu3/BNFX2j7ijKsFFiglPM5XQAC0W0Us8bFiEV/1S3BJ2V
-         mKqMZqC2osx0A2mznIN/S1SJF1U3sOJKWgJliwJhtADINitZipGGOOtOpt9Bl+1E/N6A
-         LuFygTIW5ElVod7jYI/zP3PVQgusLyjRpntMw4P/b/YvaeIS9nVqZf28RX8+LRUanh54
-         zWnQ==
-X-Gm-Message-State: AC+VfDyTJik6JEXMnH4HpwX7QRXLRo2L2q16jT3Wo717PGSOgEkVGCTi
-        lxiwbCZhmedpWluKq0FXrBxmPJ+rji6Xu3eQEmisMjzVQLoEFuScsv9ywYZ9ntQ0P9o1AsGUXT+
-        KlDnMqYMAWXj/DwQ0rWfbw7zE27xI5eN7
-X-Received: by 2002:a92:dc8b:0:b0:335:c544:a1a7 with SMTP id c11-20020a92dc8b000000b00335c544a1a7mr2871905iln.0.1686071112397;
-        Tue, 06 Jun 2023 10:05:12 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5yq6k08lcp3LSMa8oKyF/fjsPILIefcMLDuqKrnu3BgvX/2jpbtzwjN8wvkImSfQ4fBctN/A==
-X-Received: by 2002:a92:dc8b:0:b0:335:c544:a1a7 with SMTP id c11-20020a92dc8b000000b00335c544a1a7mr2871886iln.0.1686071112145;
-        Tue, 06 Jun 2023 10:05:12 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id z11-20020a92d6cb000000b0033bea7559ffsm3112615ilp.53.2023.06.06.10.05.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 10:05:11 -0700 (PDT)
-Date:   Tue, 6 Jun 2023 11:05:10 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     ankita@nvidia.com, aniketa@nvidia.com, cjia@nvidia.com,
-        kwankhede@nvidia.com, targupta@nvidia.com, vsethi@nvidia.com,
-        acurrid@nvidia.com, apopple@nvidia.com, jhubbard@nvidia.com,
-        danw@nvidia.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/1] vfio/nvgpu: Add vfio pci variant module for
- grace hopper
-Message-ID: <20230606110510.0f87952c.alex.williamson@redhat.com>
-In-Reply-To: <ZH9RfXhbuED2IUgJ@nvidia.com>
-References: <20230606025320.22647-1-ankita@nvidia.com>
-        <20230606083238.48ea50e9.alex.williamson@redhat.com>
-        <ZH9RfXhbuED2IUgJ@nvidia.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
+        Tue, 6 Jun 2023 13:05:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB37A139
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 10:05:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6FB7C6347B
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 17:05:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8ECFC433D2;
+        Tue,  6 Jun 2023 17:05:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686071145;
+        bh=E4BlTngwvDMSZ0w+4SJayJf9tqejAv0EQEYzZuNR2TE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ddgsE8md+BWCQZG4KHegYN1kamvLw9x7y7I9K+lSSMf+1a4evAmY50+XyeAWA+XQy
+         F/U1ToU/owPhyEGHuGLWG3Z5O51zOhvLucfIppb6T0I58B3J/pEdGI5IaU4xsE+bRR
+         22Qapt/1/w8ir8ae4sd11lBxJ8WOTCRhgZzTjr+L91+Q6dxgmaRecP/CdWKPBwSdt9
+         kZAhxbq3N1CdJ89NKufBFdWqNT9cO14P15xcd2HYZQi8yZm2y7L2dkPJ+Pyeheq/CI
+         tP29+H/Xalku3h9qLYqEQ0JgGI8OXr0YkztQxmbBWDUjQ0fBrCRZaiA+wlE+CDrgv4
+         dJH4xbDS7DxsA==
+Received: from 152.5.30.93.rev.sfr.net ([93.30.5.152] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1q6a7r-003Gm6-8S;
+        Tue, 06 Jun 2023 18:05:43 +0100
+Date:   Tue, 06 Jun 2023 18:05:42 +0100
+Message-ID: <87jzwgo715.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     James Gowans <jgowans@amazon.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        <linux-kernel@vger.kernel.org>, Liao Chang <liaochang1@huawei.com>,
+        KarimAllah Raslan <karahmed@amazon.com>,
+        Yipeng Zou <zouyipeng@huawei.com>,
+        Zhang Jianhua <chris.zjh@huawei.com>
+Subject: Re: [PATCH v3 2/2] genirq: fasteoi supports resend on concurrent invoke
+In-Reply-To: <20230605155723.2628097-2-jgowans@amazon.com>
+References: <20230605155723.2628097-1-jgowans@amazon.com>
+        <20230605155723.2628097-2-jgowans@amazon.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-SA-Exim-Connect-IP: 93.30.5.152
+X-SA-Exim-Rcpt-To: jgowans@amazon.com, tglx@linutronix.de, linux-kernel@vger.kernel.org, liaochang1@huawei.com, karahmed@amazon.com, zouyipeng@huawei.com, chris.zjh@huawei.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,104 +70,201 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 6 Jun 2023 12:32:13 -0300
-Jason Gunthorpe <jgg@nvidia.com> wrote:
-
-> On Tue, Jun 06, 2023 at 08:32:38AM -0600, Alex Williamson wrote:
-> > On Mon, 5 Jun 2023 19:53:20 -0700
-> > <ankita@nvidia.com> wrote:
-> >   
-> > > From: Ankit Agrawal <ankita@nvidia.com>
-> > > 
-> > > NVIDIA's upcoming Grace Hopper Superchip provides a PCI-like device
-> > > for the on-chip GPU that is the logical OS representation of the
-> > > internal proprietary cache coherent interconnect.
-> > > 
-> > > This representation has a number of limitations compared to a real PCI
-> > > device, in particular, it does not model the coherent GPU memory
-> > > aperture as a PCI config space BAR, and PCI doesn't know anything
-> > > about cacheable memory types.
-> > > 
-> > > Provide a VFIO PCI variant driver that adapts the unique PCI
-> > > representation into a more standard PCI representation facing
-> > > userspace. The GPU memory aperture is obtained from ACPI using
-> > > device_property_read_u64(), according to the FW specification,
-> > > and exported to userspace as a separate VFIO_REGION. Since the device
-> > > implements only one 64-bit BAR (BAR0), the GPU memory aperture is mapped
-> > > to the next available PCI BAR (BAR2). Qemu will then naturally generate a
-> > > PCI device in the VM with two 64-bit BARs (where the cacheable aperture
-> > > reported in BAR2).
-> > > 
-> > > Since this memory region is actually cache coherent with the CPU, the
-> > > VFIO variant driver will mmap it into VMA using a cacheable mapping. The
-> > > mapping is done using remap_pfn_range().
-> > > 
-> > > PCI BAR are aligned to the power-of-2, but the actual memory on the
-> > > device may not. The physical address from the last device PFN up to the
-> > > next power-of-2 aligned PA thus is mapped to a dummy PFN through
-> > > vm_operations fault.  
-> > 
-> > As noted in the QEMU series, this all suggests to me that we should
-> > simply expose a device specific region for this coherent memory which
-> > QEMU can then choose to expose to the VM as a BAR, or not.    
+On Mon, 05 Jun 2023 16:57:23 +0100,
+James Gowans <jgowans@amazon.com> wrote:
 > 
-> It doesn't expose as a BAR on bare metal due to a HW limitation. When
-> we look toward VFIO CXL devices I would expect them to have proper
-> BARs and not this ACPI hack.
+> ... and enable that functionality for GIC-v3 only.
+
+nit: drop the multi-line subject.
+
+>
+> Update the generic handle_fasteoi_irq to cater for the case when the
+> next interrupt comes in while the previous handler is still running.
+> Currently when that happens the irq_may_run() early out causes the next
+> IRQ to be lost. Support marking the interrupt as pending when that
+> happens so that the interrupt can be resent just before
+> handle_fasteoi_irq returns.  This is largely inspired by
+> handle_edge_irq.
 > 
-> So the approach is to compartmentalize the hack to the bare metal
-> kernel driver and let the ABI and qemu parts be closer to what CXL
-> will eventually need.
+> Generally it should not be possible for the next interrupt to arrive
+> while the previous handler is still running: the CPU will not preempt an
+> interrupt with another from the same source or same priority. However,
+> there is a race: if the interrupt affinity is changed while the previous
+> handler is running, then the next interrupt can arrive at a different
+> CPU while the previous handler is still running. In that case there will
+> be a concurrent invoke and the early out will be taken.
 > 
-> > It's clearly not a BAR on bare metal, so if we need to go to all the
-> > trouble to create ACPI tables to further define the coherent memory
-> > space,  
+> For example:
 > 
-> The ACPI tables shouldn't relate to the "BAR", they are needed to
-> overcome the NUMA problems in the kernel in the same way real device
-> FW does.
+>            CPU 0             |          CPU 1
+> -----------------------------|-----------------------------
+> interrupt start              |
+>   handle_fasteoi_irq         | set_affinity(CPU 1)
+>     handler                  |
+>     ...                      | interrupt start
+>     ...                      |   handle_fasteoi_irq -> early out
+>   handle_fasteoi_irq return  | interrupt end
+> interrupt end                |
 > 
-> > what's the benefit of pretending that it's a PCI BAR?  ie. Why should a
-> > VM view this as a BAR rather than follow the same semantics as bare
-> > metal?  
+> This issue was observed specifically on an arm64 system with a GIC-v3
+> handling MSIs via LPI; GIC-v3 uses the handle_fasteoi_irq handler. The
+> issue is that the GIC-v3's physical LPIs do not have a global active
+> state. If LPIs had an active state, then it would not be able to be
+> retriggered until the first CPU had issued a deactivation. Without this
+> global active state, when the affinity is change the next interrupt can
+> be triggered on the new CPU while the old CPU is still running the
+> handler from the previous interrupt.
 > 
-> Primarily it is a heck of a lot simpler in qemu and better aligned
-> with where things are going.
-
-It actually seems more complicated this way.  We're masquerading this
-region as a BAR, but then QEMU needs to know based on device IDs that
-it's really not a BAR, it has special size properties, mapping
-attributes, error handling, etc.  Maybe we should have taken the hint
-that it's not affected by the PCI config space memory enable bit that a
-BAR region is not the right way for vfio to compose the device.
-
-It's really beside the point whether you want QEMU to expose the memory
-region to the VM as a BAR, but the more I see how this works the more
-it makes sense to me that this should be a device specific region that
-is the trigger for QEMU to setup these special properties.  It is
-trivial for QEMU to expose a region as a BAR and then it can manage the
-size issues for mapping, keeping things like an overflow page out of
-the kernel.
-
-> > We can then have a discussion whether this even needs to be a variant
-> > driver versus a vfio-pci quirk if this device specific region is the
-> > only feature provided (ie. is migration in the future for this
-> > driver?).    
+> Implementation notes:
 > 
-> There is alot more here, go back to the original v1 posting to see it
-> all. This is way too much to be just a quirk.
+> It is believed that it's NOT necessary to mask the interrupt in
+> handle_fasteoi_irq() the way that handle_edge_irq() does. This is
+> because handle_edge_irq() caters for controllers which are too simple to
+> gate interrupts from the same source, so the kernel explicitly masks the
+> interrupt if it re-occurs [0].
+> 
+> The resend on concurrent invoke logic is gated by a flag which the
+> interrupt controller can set if it's susceptible to this problem. It is
+> not desirable to resend unconditionally: a wake up source for example
+> has no need to be re-sent.
+> 
+> [0] https://lore.kernel.org/all/bf94a380-fadd-8c38-cc51-4b54711d84b3@huawei.com/
+> 
+> Suggested-by: Liao Chang <liaochang1@huawei.com>
+> Suggested-by: Marc Zyngier <maz@kernel.org>
+> Signed-off-by: James Gowans <jgowans@amazon.com>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: KarimAllah Raslan <karahmed@amazon.com>
+> Cc: Yipeng Zou <zouyipeng@huawei.com>
+> Cc: Zhang Jianhua <chris.zjh@huawei.com>
+> ---
+>  drivers/irqchip/irq-gic-v3-its.c |  2 ++
+>  include/linux/irq.h              | 13 +++++++++++++
+>  kernel/irq/chip.c                | 16 +++++++++++++++-
+>  kernel/irq/debugfs.c             |  2 ++
+>  4 files changed, 32 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
+> index 586271b8aa39..d9becfe696f0 100644
+> --- a/drivers/irqchip/irq-gic-v3-its.c
+> +++ b/drivers/irqchip/irq-gic-v3-its.c
+> @@ -3574,6 +3574,7 @@ static int its_irq_domain_alloc(struct irq_domain *domain, unsigned int virq,
+>  		irqd = irq_get_irq_data(virq + i);
+>  		irqd_set_single_target(irqd);
+>  		irqd_set_affinity_on_activate(irqd);
+> +		irqd_set_resend_when_in_progress(irqd);
+>  		pr_debug("ID:%d pID:%d vID:%d\n",
+>  			 (int)(hwirq + i - its_dev->event_map.lpi_base),
+>  			 (int)(hwirq + i), virq + i);
+> @@ -4512,6 +4513,7 @@ static int its_vpe_irq_domain_alloc(struct irq_domain *domain, unsigned int virq
+>  		irq_domain_set_hwirq_and_chip(domain, virq + i, i,
+>  					      irqchip, vm->vpes[i]);
+>  		set_bit(i, bitmap);
+> +		irqd_set_resend_when_in_progress(irq_get_irq_data(virq + i));
+>  	}
+>  
+>  	if (err) {
+> diff --git a/include/linux/irq.h b/include/linux/irq.h
+> index b1b28affb32a..b76cc90faebd 100644
+> --- a/include/linux/irq.h
+> +++ b/include/linux/irq.h
+> @@ -223,6 +223,8 @@ struct irq_data {
+>   *				  irq_chip::irq_set_affinity() when deactivated.
+>   * IRQD_IRQ_ENABLED_ON_SUSPEND	- Interrupt is enabled on suspend by irq pm if
+>   *				  irqchip have flag IRQCHIP_ENABLE_WAKEUP_ON_SUSPEND set.
+> + * RQD_RESEND_WHEN_IN_PROGRESS	- Interrupt may fire when already in progress in which
+> + *				  case it must be resent at the next available opportunity.
+>   */
+>  enum {
+>  	IRQD_TRIGGER_MASK		= 0xf,
+> @@ -249,6 +251,7 @@ enum {
+>  	IRQD_HANDLE_ENFORCE_IRQCTX	= (1 << 28),
+>  	IRQD_AFFINITY_ON_ACTIVATE	= (1 << 29),
+>  	IRQD_IRQ_ENABLED_ON_SUSPEND	= (1 << 30),
+> +	IRQD_RESEND_WHEN_IN_PROGRESS    = (1 << 31),
 
-I'm not privy to a v1, the earliest I see is this (v3):
+Make this unsigned, as it otherwise has the potential to sign-extend
+and lead to "fun to debug" issues.
 
-https://lore.kernel.org/all/20230405180134.16932-1-ankita@nvidia.com/
+>  };
+>  
+>  #define __irqd_to_state(d) ACCESS_PRIVATE((d)->common, state_use_accessors)
+> @@ -448,6 +451,16 @@ static inline bool irqd_affinity_on_activate(struct irq_data *d)
+>  	return __irqd_to_state(d) & IRQD_AFFINITY_ON_ACTIVATE;
+>  }
+>  
+> +static inline void irqd_set_resend_when_in_progress(struct irq_data *d)
+> +{
+> +	__irqd_to_state(d) |= IRQD_RESEND_WHEN_IN_PROGRESS;
+> +}
+> +
+> +static inline bool irqd_needs_resend_when_in_progress(struct irq_data *d)
+> +{
+> +	return __irqd_to_state(d) & IRQD_RESEND_WHEN_IN_PROGRESS;
+> +}
+> +
+>  #undef __irqd_to_state
+>  
+>  static inline irq_hw_number_t irqd_to_hwirq(struct irq_data *d)
+> diff --git a/kernel/irq/chip.c b/kernel/irq/chip.c
+> index 49e7bc871fec..a531692ca62f 100644
+> --- a/kernel/irq/chip.c
+> +++ b/kernel/irq/chip.c
+> @@ -692,8 +692,16 @@ void handle_fasteoi_irq(struct irq_desc *desc)
+>  
+>  	raw_spin_lock(&desc->lock);
+>  
+> -	if (!irq_may_run(desc))
+> +	/*
+> +	 * When an affinity change races with IRQ delivery, the next interrupt
 
-That outlines that we have a proprietary interconnect exposing cache
-coherent memory which requires use of special mapping attributes vs a
-standard PCI BAR and participates in ECC.  All of which seems like it
-would be easier to setup in QEMU if the vfio-pci representation of the
-device didn't masquerade this regions as a standard BAR.  In fact it
-also reminds me of NVlink2 coherent RAM on POWER machines that was
-similarly handled as device specific regions.  Thanks,
+The race is with the IRQ *handling*.
 
-Alex
+> +	 * can arrive on the new CPU before the original CPU has completed
+> +	 * handling the previous one - it may need to be resent.
+> +	 */
+> +	if (!irq_may_run(desc)) {
+> +		if (irqd_needs_resend_when_in_progress(&desc->irq_data))
+> +			desc->istate |= IRQS_PENDING;
+>  		goto out;
+> +	}
+>  
+>  	desc->istate &= ~(IRQS_REPLAY | IRQS_WAITING);
+>  
+> @@ -715,6 +723,12 @@ void handle_fasteoi_irq(struct irq_desc *desc)
+>  
+>  	cond_unmask_eoi_irq(desc, chip);
+>  
+> +	/*
+> +	 * When the race described above happens this will resend the interrupt.
+> +	 */
+> +	if (unlikely(desc->istate & IRQS_PENDING))
+> +		check_irq_resend(desc, false);
+> +
+>  	raw_spin_unlock(&desc->lock);
+>  	return;
+>  out:
+> diff --git a/kernel/irq/debugfs.c b/kernel/irq/debugfs.c
+> index bbcaac64038e..5971a66be034 100644
+> --- a/kernel/irq/debugfs.c
+> +++ b/kernel/irq/debugfs.c
+> @@ -133,6 +133,8 @@ static const struct irq_bit_descr irqdata_states[] = {
+>  	BIT_MASK_DESCR(IRQD_HANDLE_ENFORCE_IRQCTX),
+>  
+>  	BIT_MASK_DESCR(IRQD_IRQ_ENABLED_ON_SUSPEND),
+> +
+> +	BIT_MASK_DESCR(IRQD_RESEND_WHEN_IN_PROGRESS),
+>  };
+>  
+>  static const struct irq_bit_descr irqdesc_states[] = {
 
+If you respin this series shortly (*with* a cover letter, please),
+I'll queue it so that it can simmer in -next for a bit.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
