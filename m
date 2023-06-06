@@ -2,159 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9207F7246B2
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:47:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8BB47246B7
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:47:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238428AbjFFOrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 10:47:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47578 "EHLO
+        id S238332AbjFFOrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 10:47:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237683AbjFFOq7 (ORCPT
+        with ESMTP id S237799AbjFFOrU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 10:46:59 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EA431738
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 07:45:54 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-9745d99cfccso827336966b.1
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 07:45:54 -0700 (PDT)
+        Tue, 6 Jun 2023 10:47:20 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70B0F268E;
+        Tue,  6 Jun 2023 07:46:17 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id 3f1490d57ef6-ba829e17aacso7723462276.0;
+        Tue, 06 Jun 2023 07:46:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686062751; x=1688654751;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5FgbnJ1bsRAIXrOhPmDZJCKyCj6maHTABysFsvbytiA=;
-        b=y5SEgGrEZ1EWMk6ghPUJcBoGitQg140Z/oPAVDHLRQVqV1KAWix9C6wh6mkelZhwio
-         xx7XYztdidH6DG3+jmKpHUivQ5KbvCK7HW4DOiuDB0KlOS5L4bdDFThI8+65q6Meq1w7
-         sHbSFQjvwkTRQGzkjIEfBCcj9K8G2C9rjO/9fnA3RZd2BgvSSx3myxb633Ir+BLnGyv5
-         OcCViL9Nl78rWhhYu1sjCCYT+YsyTbTxbuI9zmxdJ6s713POvQHxw7LECypHRTEVQrok
-         bSbNGoabg4EBXKovEUOxkEZK3oS+THMGLQh84chdVMtssXFvbiGrr94K6cbj2kpzu6J7
-         EFyA==
+        d=gmail.com; s=20221208; t=1686062773; x=1688654773;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uxHl+ipU+ZDLZfzTOn/c27PgH2beIB/6BgFtv/UvuGs=;
+        b=Dh1PzSTUKHit9jeQYeJ2K2O09l0hxiYqBOueqmDoSZt/bG08R357RJyV6olMuQj7KM
+         ExSoMYeX6pozMxl8Xc0B2/As9/Pci9XZvfsrwJBjU5gvpC+aQJ8y7ZsfAOokw9va80Jq
+         fc3F6E6WaRStkX2UvOGUvjoDIOTX+Y431Vr9pt2A6qMzoulT8flLAk8gHfS5I3hm+D7F
+         CBWBCLE4lBUwgMPhxbqhlEZzf9zxlqbTok6unq60A8/f1/vgO+bkATJDz5Qe3GSht3bc
+         9cls+ydoZz6LYCNd4P+r/kb2Zfdqt8hkLmo6c7hmKJzUH2p3OgMqMGVm6PI5bqWhqnLp
+         AQ0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686062751; x=1688654751;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5FgbnJ1bsRAIXrOhPmDZJCKyCj6maHTABysFsvbytiA=;
-        b=Tm0EOGYF9DDVDiQtLVT1ne9tFaC3pkOGk16fvw60SYAwKa54q2pC96/NwhPOnYfT5w
-         UDW5tHzVUbtSbhuQ5YRfAPY3zkePd6Iax771qmxi8xydRT/rYdIgrh2nprN6vIlwuD8x
-         enBQ6QF23LLrb+meR6ACM++oesiok9A4UoOZeX6DJ8vWoRpVU4G7s5Uk8kvj8n+Sxs7V
-         +qtKwkBsPZuXXMrdJzAkiLLtP5U4r6HUqnKjUP8reWU6KRDVx2SVKAZ8JnIPS2BvSj4p
-         3GAehrcZ2/NwWbATISCTHOQicxr070iHFVmGwHj5CO3+gYu3Zrq2Ql3exVXIOCXM0P62
-         QejQ==
-X-Gm-Message-State: AC+VfDxu20FR5gTdPbfgHYDfwHjdDqwV6KaqepcjbVptN9LaVe6KVsnj
-        iL2n5yHk5dMSQ0ymrjVZbyttKA==
-X-Google-Smtp-Source: ACHHUZ7U1PHE+8ZZ1Zs/foB9JcDKRRh8swEoEqzslsBVlhlTq+oksNt09fcoF7V3Gc3jS0KgO8S4Lg==
-X-Received: by 2002:a17:907:6e09:b0:94f:29f0:edc0 with SMTP id sd9-20020a1709076e0900b0094f29f0edc0mr2992682ejc.44.1686062751527;
-        Tue, 06 Jun 2023 07:45:51 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id c26-20020aa7df1a000000b0051560edc8d4sm5118555edy.45.2023.06.06.07.45.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Jun 2023 07:45:51 -0700 (PDT)
-Message-ID: <dfe2c108-0268-c4d0-226e-b3d2bc8c3369@linaro.org>
-Date:   Tue, 6 Jun 2023 16:45:47 +0200
+        d=1e100.net; s=20221208; t=1686062773; x=1688654773;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uxHl+ipU+ZDLZfzTOn/c27PgH2beIB/6BgFtv/UvuGs=;
+        b=aJCyvoUMnjD2lEH5U8uoRpUYCb98IfxByI8PHWQ+3ZtgizgsHyP6vRqxkA+zPR4yIb
+         UnKODxeuzTAIsPwI6N/QPbEq5P3bQHku0cwh3uRvVN2U0Gw96LK+dT9J32f35/+UEhOj
+         V6vtRjKhBfvlGGlE0XDG1Zi1jh1AcUhauUoPVO6xsuA7AdZSdRzsJaPzXEBv7PQfUJLM
+         EpSSiVTR3ZH9v3Pb8MxhwNQWoRfND2FcVgeHxr9tdmdOvxcmcV/jhHnWErpnb4Z541w6
+         j63pYgE9F9ZtIERZWsH/TIa2fmqC8eRxU5GJgiFBG5J1/Z2+YY7WJ5fZw9m8MIx1uuB/
+         yKnA==
+X-Gm-Message-State: AC+VfDwlkFE9fmEBxSkhSK+Mrl/Dtj+iE5CMNvV59EMNcwwKuoF1fXta
+        AFlp8HcSi29ZSO798QlbA5SoxqpPEJe+6QIDbI4=
+X-Google-Smtp-Source: ACHHUZ6r28OgpTb4skzaYajMiLnd9SU4e6H84abqyT5Y6x8WBSY+gkL9EdR/1lqQ6bZQtV5X2hnvyNQC46h4RtKHE6k=
+X-Received: by 2002:a81:6a87:0:b0:568:fe3a:46b3 with SMTP id
+ f129-20020a816a87000000b00568fe3a46b3mr2547087ywc.28.1686062772654; Tue, 06
+ Jun 2023 07:46:12 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v3 3/3] drm/panel-fannal-c3004: Add fannal c3004 DSI panel
-Content-Language: en-US
-To:     Paulo Pavacic <pavacic.p@gmail.com>, neil.armstrong@linaro.org,
-        sam@ravnborg.org, airlied@gmail.com, daniel@ffwll.ch,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230606140757.818705-1-pavacic.p@gmail.com>
- <20230606140757.818705-4-pavacic.p@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230606140757.818705-4-pavacic.p@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230503090708.2524310-1-nmi@metaspace.dk> <da7b815d-3da8-38e5-9b25-b9cfb6878293@acm.org>
+ <87jzxot0jk.fsf@metaspace.dk> <b9a1c1b2-3baa-2cad-31ae-8b14e4ee5709@acm.org>
+ <ZFP+8apHunCCMmOZ@kbusch-mbp.dhcp.thefacebook.com> <e7bc2155-613b-8904-9942-2e9615b0dc63@kernel.dk>
+ <87ttvkaevf.fsf@metaspace.dk>
+In-Reply-To: <87ttvkaevf.fsf@metaspace.dk>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Tue, 6 Jun 2023 16:46:01 +0200
+Message-ID: <CANiq72kMgh8qKzmLUokvRt=LbZY+vNVU481=-b-kKamupaxajw@mail.gmail.com>
+Subject: Re: [RFC PATCH 00/11] Rust null block driver
+To:     "Andreas Hindborg (Samsung)" <nmi@metaspace.dk>
+Cc:     Jens Axboe <axboe@kernel.dk>, Keith Busch <kbusch@kernel.org>,
+        Christoph Hellwig <hch@lst.de>, Ming Lei <ming.lei@redhat.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Damien Le Moal <Damien.LeMoal@wdc.com>,
+        Hannes Reinecke <hare@suse.de>, rust-for-linux@vger.kernel.org,
+        linux-block@vger.kernel.org, Matthew Wilcox <willy@infradead.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        open list <linux-kernel@vger.kernel.org>, gost.dev@samsung.com,
+        =?UTF-8?Q?Matias_Bj=C3=B8rling?= <Matias.Bjorling@wdc.com>,
+        Niklas Cassel <Niklas.Cassel@wdc.com>,
+        Johannes Thumshirn <Johannes.Thumshirn@wdc.com>,
+        Guillaume Tucker <guillaume.tucker@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/06/2023 16:07, Paulo Pavacic wrote:
-> Fannal C3004 is a 480x800 display made by fannal that requires
-> DCS initialization sequences.
-> 
-> Signed-off-by: Paulo Pavacic <pavacic.p@gmail.com>
-> ---
-> v4 changelog:
->  - formatting and style changes
+On Tue, Jun 6, 2023 at 3:40=E2=80=AFPM Andreas Hindborg (Samsung)
+<nmi@metaspace.dk> wrote:
+>
+>    Samsung will provide resources to support this CI effort. Through this=
+ effort
+>    I will aim to minimize any inconvenience for maintainers.
 
-Are you sure? I see other changes - removal of some code, handling
-errors and GPIO.
+This is great.
 
->  - change community room
+>    We also have Rust support in Intel 0-day CI, although only compile tes=
+ts for
+>    now.
 
-What does it mean? Where is this change in this patch?
+In addition, we also have initial Rust support in KernelCI (including
+`linux-next` [1], `rust-next` and the old `rust` branch), which could
+be expanded upon, especially with more resources (Cc'ing Guillaume).
 
-...
+Moreover, our plan is to replicate the simple CI we originally had for
+the `rust` branch (which included QEMU boot tests under a matrix of
+several archs/configs/compilers) to our `rust-next`, `rust-fixes` and
+`rust-dev` branches, in order to complement the other CIs and to get
+some early smoke testing (especially for `rust-dev`).
 
-> +
-> +static const struct drm_panel_funcs fannal_panel_funcs = {
-> +	.prepare = fannal_panel_prepare,
-> +	.unprepare = fannal_panel_unprepare,
-> +	.enable = fannal_panel_enable,
-> +	.disable = fannal_panel_disable,
-> +	.get_modes = fannal_panel_get_modes,
-> +};
-> +
-> +static int fannal_panel_probe(struct mipi_dsi_device *dsi)
-> +{
-> +	struct device *dev = &dsi->dev;
-> +	struct fannal_panel_data *panel_data;
-> +	int ret;
-> +
-> +	panel_data = devm_kzalloc(&dsi->dev, sizeof(*panel_data), GFP_KERNEL);
-> +
+[1] https://github.com/kernelci/kernelci-core/blob/65b0900438e0ed20e7efe0ad=
+a681ab212dc8c774/config/core/build-configs.yaml#L1152-L1197
 
-Drop blank line.
-
-> +	if (!panel_data)
-> +		return -ENOMEM;
-> +
-> +	panel_data->reset =
-
-You have wrong wrapping here. devm_gpiod_get_optional() goes after =.
-
-> +		devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_LOW);
-> +
-
-Drop blank line.
-
-> +	if (IS_ERR(panel_data->reset)) {
-> +		return dev_err_probe(
-> +			dev, PTR_ERR(panel_data->reset),
-> +			"error: probe: get reset GPIO: (%d) Check the fdt\n",
-> +			ret);
-> +	}
-> +
-> +	mipi_dsi_set_drvdata(dsi, panel_data);
-> +
-> +	dsi->format = MIPI_DSI_FMT_RGB888;
-> +	dsi->mode_flags = MIPI_DSI_CLOCK_NON_CONTINUOUS |
-> +			  MIPI_DSI_MODE_VSYNC_FLUSH | MIPI_DSI_MODE_VIDEO_HSE |
-> +			  MIPI_DSI_MODE_NO_EOT_PACKET |
-> +			  MIPI_DSI_MODE_VIDEO_SYNC_PULSE | MIPI_DSI_MODE_VIDEO;
-> +	dsi->lanes = 2;
-> +
-> +	gpiod_set_value_cansleep(panel_data->reset, 1);
-> +
-> +	drm_panel_init(&panel_data->panel, dev, &fannal_panel_funcs,
-> +		       DRM_MODE_CONNECTOR_DSI);
-> +	dev_set_drvdata(dev, panel_data);
-> +
-> +	drm_panel_add(&panel_data->panel);
-> +
-
-
-Best regards,
-Krzysztof
-
+Cheers,
+Miguel
