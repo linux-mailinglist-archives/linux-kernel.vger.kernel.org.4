@@ -2,137 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B72C2724D77
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 21:46:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14C85724D7B
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 21:47:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239016AbjFFTqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 15:46:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34758 "EHLO
+        id S237181AbjFFTrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 15:47:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239621AbjFFTqP (ORCPT
+        with ESMTP id S239626AbjFFTrU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 15:46:15 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C42041FF2;
-        Tue,  6 Jun 2023 12:45:33 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 356JXltd004648;
-        Tue, 6 Jun 2023 19:44:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=OgaSg+Ke0XSNUg8dd95ErabtjWzkLmBmb0ap50xQEuU=;
- b=XAsCQ80Iw22/mhlx3vFj9ztzLkLZZCrFm3BbkotSbqojnGRzhpgVAaQ57XKTq/TYEQmc
- lC5E2WkuYrCtbJihtzp7Q+b+vMbKLDuEKU96z99KKutSEwzQyJtdxDTlM8Lx0rOxJiWS
- OJFsBFsQCcAQy9W2ee64vDZ0K7Qezr44yXSZew1JrSuqEVJ788Kk+G8PbYkmm57u/hNS
- Dg7Viza3qSjv9Z7/9X6Ft6JpZbvWFig8sRfOrbvuyRwiRNHq1tPJDP3r/jBye3xrcicn
- iAmz4JJ5untSJ9/qe0VjakgmlmPhgCNdl3Lj3d6o/wFuBD71yZglFO6xyLpVD4rLk1QO QA== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r2a6y83vw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 06 Jun 2023 19:44:54 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 356JiqPH010442
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 6 Jun 2023 19:44:53 GMT
-Received: from [10.134.71.70] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 6 Jun 2023
- 12:44:52 -0700
-Message-ID: <51403425-caba-0d38-531a-3e8134cceb50@quicinc.com>
-Date:   Tue, 6 Jun 2023 12:44:51 -0700
+        Tue, 6 Jun 2023 15:47:20 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9CB11FEB;
+        Tue,  6 Jun 2023 12:46:37 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id 98e67ed59e1d1-256766a1c43so2932568a91.1;
+        Tue, 06 Jun 2023 12:46:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686080797; x=1688672797;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yc73F63LtY0R3e3jd8aXo3gZg8F1PNW5E1lmdjRfGIw=;
+        b=hN8GRjG/znPgtKtttYBsMmV9UxnG2Wz6olapQ1TKb9pgE6iWFqkxjLqkjj9Qj8x2Vn
+         CQVXqppCsf29UF9YV0jlXkdaOQzIqnGuJeDQurXYtKeC1jQ6zz3UZheq33bN6O3NFvku
+         gOgfd7b42+0sAuUwp/DG4UMS3jWhZTjWiIJKNv5EAqtVrFuMY6iV6maNfBK2MaJB0/lL
+         LfLlxaF+3eG1WYhHDXjz/NFOCX663fAaK0VdmVVFggqXCVkmTvArZMIHsxDQAddNbadr
+         z67f+Qa2RcNVvJ/Wxq4v7/NaQmdwDCPKIaLDwPx8Wge1Hdq6Bk432nH8eXjN1JFaHMlO
+         w7LA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686080797; x=1688672797;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yc73F63LtY0R3e3jd8aXo3gZg8F1PNW5E1lmdjRfGIw=;
+        b=Y8JAz8k1obLs3pOGjJmYV82o/g/9joUM/fWH5P7AbiqzfnKmjZUoHYokulzdnsob6C
+         FGMJYfU5BnZhP7jhCstTcqrCnwTtKIWnir0n6HT1K8Fw0DBU0+/RA3RIdSQA4Q4Q6Lj+
+         ULSGOBDDIjuPWyCv12C+KDynpMB4u8tv1D958xviQA1wKR+IXmkjJTfEpbTTcxSf90W1
+         jBNjB3LseqWNtEP2+nmDuTs1k0nswsTaxGOWL8OnUBYHWikQR1Z+KEgp9hTyfhu9xwUn
+         MsH6FL3Wajwwt8gCVvDAqGxb+eBYc93AYxohawv/eMBevK5yRE3eJYnc2OBpU2COCYwc
+         WmdA==
+X-Gm-Message-State: AC+VfDxjm8Z5vDa0JtaisQUPvv6gWH5714CKkOKwNYnpJ4Dgd1aOdD4d
+        2dAybnHGnRuEQFK7BrxzRAi89blgucE=
+X-Google-Smtp-Source: ACHHUZ6SKvBYBzApfnEcdlEgSg4bIwA7p9LYrDeqqZzbciXr9vBHNV4hoNhYvgtR+6JQ4NNFaCs6bw==
+X-Received: by 2002:a17:902:e74e:b0:1b0:74f5:beee with SMTP id p14-20020a170902e74e00b001b074f5beeemr2001106plf.34.1686080796913;
+        Tue, 06 Jun 2023 12:46:36 -0700 (PDT)
+Received: from localhost (dhcp-72-235-13-41.hawaiiantel.net. [72.235.13.41])
+        by smtp.gmail.com with ESMTPSA id t22-20020a1709028c9600b001b24857d1f2sm355479plo.188.2023.06.06.12.46.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Jun 2023 12:46:36 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 6 Jun 2023 09:46:35 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, Josef Bacik <josef@toxicpanda.com>,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ming Lei <ming.lei@redhat.com>
+Subject: Re: [PATCH] blk-cgroup: Reinit blkg_iostat_set after clearing in
+ blkcg_reset_stats()
+Message-ID: <ZH-NG5VFl3dpln7A@slm.duckdns.org>
+References: <20230606180724.2455066-1-longman@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [Freedreno] [PATCH v3 5/7] drm/msm/dsi: Add configuration for
- MSM8226
-Content-Language: en-US
-To:     Luca Weiss <luca@z3ntu.xyz>,
-        <~postmarketos/upstreaming@lists.sr.ht>,
-        <phone-devel@vger.kernel.org>, Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-CC:     <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>
-References: <20230308-msm8226-mdp-v3-0-b6284145d67a@z3ntu.xyz>
- <20230308-msm8226-mdp-v3-5-b6284145d67a@z3ntu.xyz>
-From:   Jeykumar Sankaran <quic_jeykumar@quicinc.com>
-In-Reply-To: <20230308-msm8226-mdp-v3-5-b6284145d67a@z3ntu.xyz>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: XjkoyKXwzTD-WjQ1YWqu1h1RGTgvrxXn
-X-Proofpoint-ORIG-GUID: XjkoyKXwzTD-WjQ1YWqu1h1RGTgvrxXn
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-06_14,2023-06-06_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 phishscore=0
- clxscore=1015 suspectscore=0 adultscore=0 spamscore=0 bulkscore=0
- mlxscore=0 priorityscore=1501 lowpriorityscore=0 malwarescore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306060167
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230606180724.2455066-1-longman@redhat.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jun 06, 2023 at 02:07:24PM -0400, Waiman Long wrote:
+> When blkg_alloc() is called to allocate a blkcg_gq structure
+> with the associated blkg_iostat_set's, there are 2 fields within
+> blkg_iostat_set that requires proper initialization - blkg & sync.
+> The former field was introduced by commit 3b8cc6298724 ("blk-cgroup:
+> Optimize blkcg_rstat_flush()") while the later one was introduced by
+> commit f73316482977 ("blk-cgroup: reimplement basic IO stats using
+> cgroup rstat").
+> 
+> Unfortunately those fields in the blkg_iostat_set's are not properly
+> re-initialized when they are cleared in v1's blkcg_reset_stats(). This
+> can lead to a kernel panic due to NULL pointer access of the blkg
+> pointer. The missing initialization of sync is less problematic and
+> can be a problem in a debug kernel due to missing lockdep initialization.
+> 
+> Fix these problems by re-initializing them after memory clearing.
+> 
+> Fixes: 3b8cc6298724 ("blk-cgroup: Optimize blkcg_rstat_flush()")
+> Fixes: f73316482977 ("blk-cgroup: reimplement basic IO stats using cgroup rstat")
+> Signed-off-by: Waiman Long <longman@redhat.com>
 
+Acked-by: Tejun Heo <tj@kernel.org>
 
-On 6/1/2023 10:00 AM, Luca Weiss wrote:
-> Add the config for the v1.0.2 DSI found on MSM8226. We can reuse
-> existing bits from other revisions that are identical for v1.0.2.
-> 
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> ---
->   drivers/gpu/drm/msm/dsi/dsi_cfg.c | 2 ++
->   drivers/gpu/drm/msm/dsi/dsi_cfg.h | 1 +
->   2 files changed, 3 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/msm/dsi/dsi_cfg.c b/drivers/gpu/drm/msm/dsi/dsi_cfg.c
-> index 29ccd755cc2e..8a5fb6df7210 100644
-> --- a/drivers/gpu/drm/msm/dsi/dsi_cfg.c
-> +++ b/drivers/gpu/drm/msm/dsi/dsi_cfg.c
-> @@ -245,6 +245,8 @@ static const struct msm_dsi_cfg_handler dsi_cfg_handlers[] = {
->   		&apq8064_dsi_cfg, &msm_dsi_v2_host_ops},
->   	{MSM_DSI_VER_MAJOR_6G, MSM_DSI_6G_VER_MINOR_V1_0,
->   		&msm8974_apq8084_dsi_cfg, &msm_dsi_6g_host_ops},
-> +	{MSM_DSI_VER_MAJOR_6G, MSM_DSI_6G_VER_MINOR_V1_0_2,
-> +		&msm8974_apq8084_dsi_cfg, &msm_dsi_6g_host_ops},
->   	{MSM_DSI_VER_MAJOR_6G, MSM_DSI_6G_VER_MINOR_V1_1,
->   		&msm8974_apq8084_dsi_cfg, &msm_dsi_6g_host_ops},
->   	{MSM_DSI_VER_MAJOR_6G, MSM_DSI_6G_VER_MINOR_V1_1_1,
-> diff --git a/drivers/gpu/drm/msm/dsi/dsi_cfg.h b/drivers/gpu/drm/msm/dsi/dsi_cfg.h
-> index 91bdaf50bb1a..43f0dd74edb6 100644
-> --- a/drivers/gpu/drm/msm/dsi/dsi_cfg.h
-> +++ b/drivers/gpu/drm/msm/dsi/dsi_cfg.h
-> @@ -11,6 +11,7 @@
->   #define MSM_DSI_VER_MAJOR_V2	0x02
->   #define MSM_DSI_VER_MAJOR_6G	0x03
->   #define MSM_DSI_6G_VER_MINOR_V1_0	0x10000000
-> +#define MSM_DSI_6G_VER_MINOR_V1_0_2	0x10000002
->   #define MSM_DSI_6G_VER_MINOR_V1_1	0x10010000
->   #define MSM_DSI_6G_VER_MINOR_V1_1_1	0x10010001
->   #define MSM_DSI_6G_VER_MINOR_V1_2	0x10020000
-> 
-Reviewed-by: Jeykumar Sankaran <quic_jeykumar@quicinc.com>
+Thanks.
+
+-- 
+tejun
