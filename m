@@ -2,146 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97088723B19
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 10:14:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAE21723B32
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 10:19:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235404AbjFFIOk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 04:14:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43700 "EHLO
+        id S236283AbjFFITB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 04:19:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235343AbjFFIOi (ORCPT
+        with ESMTP id S236108AbjFFISr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 04:14:38 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38010196
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 01:14:37 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-30d5931d17aso2527552f8f.3
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 01:14:37 -0700 (PDT)
+        Tue, 6 Jun 2023 04:18:47 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F27E4B
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 01:18:45 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-30ae141785bso5717967f8f.3
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 01:18:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686039275; x=1688631275;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wqPSXg+U3/mqumv4DLK+ARpYMO1ucj61S84Jur+Gv2g=;
-        b=TTPlictXVmZ5tqtY4akUrDhkVQeIud6WSXHw/bU1EDNwRXbrMsN957b54Cvne9yOV1
-         IrC91M+HfOjLR2JGN/V6f2mvuzH4DjY/ibzm3OYtmMTUb2JEhScV3v/cgcQTbGLSpSad
-         V1DG9sRo1nYrTDyxOUJAFFkWhfhVd3k36NujJmHCQB2RyO518CJf9CHewxp90CaUmt1f
-         3pDG44OiBBV2zOH+ucE6Cw5AZi8u106tvRIoEFKskFwlfYC3RUPEZqzzuWf4BSbb3CvI
-         lHzCE7eG315aIanRfUMuRqvcpvtpJxbkUAXfIQTp6pF1MjEHZDvpc9aC/bMM6jcswFNM
-         NORw==
+        d=linaro.org; s=google; t=1686039524; x=1688631524;
+        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=r1ogFYOCyCFggyVGMppR34+8UlfrkJd0gNAyYus2c7g=;
+        b=GaG1+A/1fqB4K0sbQ53AXMdJkSekcvvdxU93FR0Sl4ZGcV9BC4YC12z984o5xqeIg5
+         wph71hndT/zbGpnrzvhxtJF+EGGdYGwnJ2xPdlRWVAs/rYBKj+97rqjEhYmGkQO9MKJk
+         seJY5gu0yPutMel+ZkqF+QmP4JdVFKcwrLdRkn+CipWJpfwAP9siotUlyUwgSJaXnZoA
+         x6ut+oNptwIz5G6D77TRLkYrrly8eFrnTyzTrdGVTD3u3XfH9U5lwRCzDzvbXcGxkk5P
+         5KqHgpiSgdUJPCRWP5NaGPOO134PrNqn//fEebmipori8S8WYYue8qHd2zUpbw3i4Oa+
+         vzhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686039275; x=1688631275;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wqPSXg+U3/mqumv4DLK+ARpYMO1ucj61S84Jur+Gv2g=;
-        b=VO2Fnm8ckiV+sJx6Mt4uceXx3W5vkq+PsngxQKHmSt55J4j9VRt88XJufAqv81oPoC
-         V4KKv9JQJPn9ytTu4xIBhqxtHqQ7EdgL8OBLuQ8sJLjqBpO7NZMK03kpjwizAQzAXSgF
-         2Z9Dg7LFMdbMHtkUTpoHcO4nUPMz9fcgf9TL1hBgknSHFcizX7mCFW4pWAvuUU1UVZ2Y
-         DF7uQtkzpdipj/4+d6BItkTL0t2VHgeguyNUJPBdyvr0YnZyP75dS63I4tn1cW6ijOXi
-         JCC4h8gRAKN3y/TfcT5ZI3xpkOk70jz/IxHQyWNzgmSBmOyZ9DkpnbvzxUKltqwDEeGV
-         Yawg==
-X-Gm-Message-State: AC+VfDwTQgxEE2KZUlq05Y09jRTdekmTVpsP387MzodzbMprOLSFgPzR
-        mJCYPYHTLK+JVzdkvJmdggmGBxpU87iB2V3wFyueoRtm8zBtpqaA+xw=
-X-Google-Smtp-Source: ACHHUZ6VImNGGQl2NaxY9/WnzShy/0LQDDx4D6J0k26DamuInCHztTXzBb18rk47JEmCH5DzticzJurf3qgSJn3LYSY=
-X-Received: by 2002:adf:e38d:0:b0:2cd:bc79:5432 with SMTP id
- e13-20020adfe38d000000b002cdbc795432mr1296543wrm.25.1686039275555; Tue, 06
- Jun 2023 01:14:35 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686039524; x=1688631524;
+        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=r1ogFYOCyCFggyVGMppR34+8UlfrkJd0gNAyYus2c7g=;
+        b=kbkIQBAsiSvWkWOvUnT9s8bpHgaLl66dEZBEwNs3poBNjU8gLtbspm/OdN21Bqi1HE
+         zHJuPTQN6rbz30Gf29Csx2WW5N2b769XGc33o+ePv0SKIveICdqvI+Fm1NTx3RgpFs9p
+         2tbYE/e/EFerxTRlxRkJsx825py9KfFWi6jefdCXGf/ipGYP9N/3HO0GYJlpLLWqBsSB
+         4ubLrEa6YlM3t8nZAr/bYq21HpMzjm2sIHzS/2XrEBTGQC2ngeVjeA4PD5YoWiHe4LB+
+         JqIuL0YkP3ahlj2behRxTqgdJauXLLqfRqUzbMRZhOhGHR1UWWXS4CPZehuMKEkLKVd/
+         lF3g==
+X-Gm-Message-State: AC+VfDzT0VLnVedze0AQaY1iPSbUWorGxGRTUoHrnECHDdmI9ycROoRP
+        eZKtPz0CpLN/ne0sEQIBsNWRBg==
+X-Google-Smtp-Source: ACHHUZ4co9T62EMNnO0BuoPuXsJlGg091sebkcpWwQ08ejOZgq+8Q/rhKN06jYlX3r6Sqsuq8KBhaA==
+X-Received: by 2002:a5d:40cd:0:b0:30a:eac4:26a0 with SMTP id b13-20020a5d40cd000000b0030aeac426a0mr1150739wrq.18.1686039524012;
+        Tue, 06 Jun 2023 01:18:44 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id m25-20020a7bca59000000b003f7e62d38d4sm4263267wml.25.2023.06.06.01.18.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Jun 2023 01:18:42 -0700 (PDT)
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+X-Google-Original-From: Dan Carpenter <dan.carpenter@oracle.com>
+Date:   Tue, 6 Jun 2023 11:15:46 +0300
+To:     Michal Simek <michal.simek@amd.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: [PATCH] clocksource/drivers/timer-cadence-ttc: fix a signedness bug
+ in probe()
+Message-ID: <ZH7rMgjh+z3TUKGu@moroto>
 MIME-Version: 1.0
-References: <20230526192210.3146896-1-bhupesh.sharma@linaro.org>
- <20230526192210.3146896-2-bhupesh.sharma@linaro.org> <CAH=2Ntx+4F+ZP_Y+=e4p9rdTRQV8FHaepJCyqVFtWUPjDehoNg@mail.gmail.com>
-In-Reply-To: <CAH=2Ntx+4F+ZP_Y+=e4p9rdTRQV8FHaepJCyqVFtWUPjDehoNg@mail.gmail.com>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Date:   Tue, 6 Jun 2023 13:44:23 +0530
-Message-ID: <CAH=2NtzAmza2f89dPx_7yiaUU9g5hNervg1pjQvRakadDph2Ew@mail.gmail.com>
-Subject: Re: [PATCH v8 01/11] dt-bindings: dma: Add support for SM6115 and
- QCM2290 SoCs
-To:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org
-Cc:     agross@kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, andersson@kernel.org,
-        bhupesh.linux@gmail.com, krzysztof.kozlowski@linaro.org,
-        robh+dt@kernel.org, konrad.dybcio@linaro.org,
-        vladimir.zapolskiy@linaro.org, rfoss@kernel.org,
-        neil.armstrong@linaro.org, djakov@kernel.org, stephan@gerhold.net,
-        Rob Herring <robh@kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Linux Kernel Functional Testing <lkft@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 29 May 2023 at 11:43, Bhupesh Sharma <bhupesh.sharma@linaro.org> wrote:
->
-> Hi Vinod,
->
-> > On Sat, 27 May 2023 at 00:52, Bhupesh Sharma <bhupesh.sharma@linaro.org> wrote:
-> >
-> > Add new compatible for BAM DMA engine version v1.7.4 which is
-> > found on Qualcomm SM6115 and QCM2290 SoCs. Since its very similar
-> > to v1.7.0 used on SM8150 like SoCs, mark the comptible scheme
-> > accordingly.
-> >
-> > While at it, also update qcom,bam-dma bindings to add comments
-> > which describe the BAM DMA versions used in SM8150 and SM8250 SoCs.
-> > This provides an easy reference for identifying the actual BAM DMA
-> > version available on Qualcomm SoCs.
-> >
-> > Acked-by: Rob Herring <robh@kernel.org>
-> > Tested-by: Anders Roxell <anders.roxell@linaro.org>
-> > Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> > ---
-> >  .../devicetree/bindings/dma/qcom,bam-dma.yaml | 20 ++++++++++++-------
-> >  1 file changed, 13 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml b/Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml
-> > index f1ddcf672261..c663b6102f50 100644
-> > --- a/Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml
-> > +++ b/Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml
-> > @@ -15,13 +15,19 @@ allOf:
-> >
-> >  properties:
-> >    compatible:
-> > -    enum:
-> > -        # APQ8064, IPQ8064 and MSM8960
-> > -      - qcom,bam-v1.3.0
-> > -        # MSM8974, APQ8074 and APQ8084
-> > -      - qcom,bam-v1.4.0
-> > -        # MSM8916 and SDM845
-> > -      - qcom,bam-v1.7.0
-> > +    oneOf:
-> > +      - enum:
-> > +          # APQ8064, IPQ8064 and MSM8960
-> > +          - qcom,bam-v1.3.0
-> > +          # MSM8974, APQ8074 and APQ8084
-> > +          - qcom,bam-v1.4.0
-> > +          # MSM8916, SDM630
-> > +          - qcom,bam-v1.7.0
-> > +      - items:
-> > +          - enum:
-> > +              # SDM845, SM6115, SM8150, SM8250 and QCM2290
-> > +              - qcom,bam-v1.7.4
-> > +          - const: qcom,bam-v1.7.0
-> >
-> >    clocks:
-> >      maxItems: 1
-> > --
-> > 2.38.1
->
-> Bjorn has applied the dts patches from this series to his tree.
-> As suggested by him, can you please pick patches [PATCH 1/11] and
-> [PATCH 2/11] from this series via the 'dmaengine' tree.
->
-> Seems some Cc fields got messed up while sending the patchset, so
-> Cc'ing the dmaengine list again.
+Make the "irq" variable signed so the error handling can work.
 
-Ping. Any updates on these two patches?
+Fixes: e932900a3279 ("arm: zynq: Use standard timer binding")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+---
+From static analysis.  Untested.  Presumably if probe fails the system
+is unbootable so I didn't bother looking at the resource leaks.
 
-Thanks.
+drivers/clocksource/timer-cadence-ttc.c:377 ttc_setup_clocksource() warn: 'clk' from clk_prepare_enable() not released on lines: 370.
+drivers/clocksource/timer-cadence-ttc.c:466 ttc_setup_clockevent() warn: 'clk' from clk_prepare_enable() not released on lines: 466.
+drivers/clocksource/timer-cadence-ttc.c:529 ttc_timer_probe() warn: 'irq' from irq_of_parse_and_map() not released on lines: 508,516,521,525.
+drivers/clocksource/timer-cadence-ttc.c:529 ttc_timer_probe() warn: 'timer_baseaddr' from of_iomap() not released on lines: 498,508,516,521,525.
+---
+ drivers/clocksource/timer-cadence-ttc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/clocksource/timer-cadence-ttc.c b/drivers/clocksource/timer-cadence-ttc.c
+index 4efd0cf3b602d..8ba1f5c2d7992 100644
+--- a/drivers/clocksource/timer-cadence-ttc.c
++++ b/drivers/clocksource/timer-cadence-ttc.c
+@@ -468,13 +468,13 @@ static int __init ttc_setup_clockevent(struct clk *clk,
+ 
+ static int __init ttc_timer_probe(struct platform_device *pdev)
+ {
+-	unsigned int irq;
+ 	void __iomem *timer_baseaddr;
+ 	struct clk *clk_cs, *clk_ce;
+ 	static int initialized;
+ 	int clksel, ret;
+ 	u32 timer_width = 16;
+ 	struct device_node *timer = pdev->dev.of_node;
++	int irq;
+ 
+ 	if (initialized)
+ 		return 0;
+-- 
+2.30.2
+
