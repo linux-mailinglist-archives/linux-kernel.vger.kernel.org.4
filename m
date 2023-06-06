@@ -2,53 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F21EC7244B2
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 15:42:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CC5A7244B6
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 15:43:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235566AbjFFNmv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 09:42:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33484 "EHLO
+        id S237901AbjFFNnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 09:43:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232371AbjFFNmt (ORCPT
+        with ESMTP id S231259AbjFFNnl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 09:42:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 389A9E6B;
-        Tue,  6 Jun 2023 06:42:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C847161AE4;
-        Tue,  6 Jun 2023 13:42:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87D69C433EF;
-        Tue,  6 Jun 2023 13:42:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686058967;
-        bh=U3h883flvEqS2X1clqH4TWWLP/40FL+WE/MAXYrRcIs=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=RT4Poi/FKBXFHXZbkEflbrtpDU7xwQq43Cyho27XMxZtrJ6nwUGLwOiJ14V66N/6o
-         aQ/qvtgaL1WIwtAlayzsuqYY/ki08wD6wlOhG8b+gZgEHBUYQrk+S84lj9G7t6UG40
-         BCIaN6WqMVHwvOh+6AaRW/e2ONpZzC9auCHpRTXsUJ2m87E4GoT7XDFah+d3v9VB7b
-         1AV1QYHZW14nxr2nYqP6tu/4fI+T5JLKfumi8/XePna7WV0tYucwqId17Tv1e1ljKd
-         B+ufRw2u7WQaw3VPJp70Q6yR2O0+7zz8NYx3K/h1nOV7L27M65z7XsHOjxW8Xmwbhs
-         SHMP6ejCV8HFA==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Dan Carpenter <dan.carpenter@linaro.org>
-Cc:     oe-kbuild@lists.linux.dev, Felix Fietkau <nbd@nbd.name>,
-        lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org
-Subject: Re: drivers/net/wireless/mediatek/mt76/mt76x02_util.c:475 mt76x02_set_key() warn: variable dereferenced before check 'key' (see line 415)
-References: <2f121202-5846-44a9-8b83-e2ba1fa671d0@kadam.mountain>
-Date:   Tue, 06 Jun 2023 16:42:43 +0300
-In-Reply-To: <2f121202-5846-44a9-8b83-e2ba1fa671d0@kadam.mountain> (Dan
-        Carpenter's message of "Tue, 6 Jun 2023 08:38:37 +0300")
-Message-ID: <87mt1ciu5o.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Tue, 6 Jun 2023 09:43:41 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDEE610C0;
+        Tue,  6 Jun 2023 06:43:40 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id 3f1490d57ef6-bad102ce9eeso6869495276.0;
+        Tue, 06 Jun 2023 06:43:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686059020; x=1688651020;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=O9EwgLTm3uk2N6CWlYnbzgRJMZwF8wSB6ctMqYZN5fM=;
+        b=ScyjYBSHXfb6/G7Id3dmt1S5h6e8i8rKdofIgjnD2Qa5IMUdF5Od5tAfZkT0BDw/ES
+         Ig2zpA1UMe2J8Ps674PaT6EtdQWv9Z9HI7UMu02v3qkHff1PKtcowCwR958P6f3U1a+D
+         AwlEykPiUgTAYa5ybNJ8sjozYvEhC1+UCIghB85LLNto4j9NZ3/1iBwF1I+89tyLItw8
+         L6mA1C39XxDzE1+vns4IHMmJ7H83uT2sHhmisGmIZx/OWT7c2wBv5C3BqSmgt5G2hlDe
+         2C1bD3LE0XlJ+qdwuTIbJyBs+U4CvTieUMeqh4BfyPDH4UI4cczC8wQVlTRdJB3vTVbS
+         p8Ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686059020; x=1688651020;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=O9EwgLTm3uk2N6CWlYnbzgRJMZwF8wSB6ctMqYZN5fM=;
+        b=I6xhb0lxLufSdsUOKo9r/H79yM0DS/BrwhuZK3ujw0/Bb50MkOesHh5wBsLEABRM1o
+         K3RS5/DAJShzzYMAxLg3R3WdWmSeYQuRU6KBFC00wNRJvXgslFf87B3ykQ/jrPmTKh1I
+         fTVc3zUBJJ4L1gQdadvbWWnDnTW40zbJAWEoJQKkoB8YtYtIgR9ErP112PWWaY5fsSZX
+         /CQoAxCMGIjlWPaSItR+j2T4/qa/U37+ay3bkLr3HnR6OtdItTllzXDadiA2rrzf1EoP
+         girdRtSZjJ3QNql7HVKQjRruJOp7WiBKlZMu9hl3RBPPTl8dyzWb4M2JrbRcqTvwdjpd
+         eD2Q==
+X-Gm-Message-State: AC+VfDzOjCjK12HvZDzo3fWykwWHQT2HxlOmYFwXMdjF+n+895blOgjf
+        8txRYW04Utwn67bXc68JaaU=
+X-Google-Smtp-Source: ACHHUZ5RT6ZZel6x4+GVU8gSGVs0pY79fFr4EWUV/L6R7oWo3J99yAHMnBn7Py5vtQQfbLHfMsMGGQ==
+X-Received: by 2002:a25:b003:0:b0:bac:b8bd:65e2 with SMTP id q3-20020a25b003000000b00bacb8bd65e2mr1872806ybf.37.1686059019825;
+        Tue, 06 Jun 2023 06:43:39 -0700 (PDT)
+Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:1a:efea::75b])
+        by smtp.gmail.com with ESMTPSA id v11-20020a17090a778b00b0025954958e06sm3671187pjk.18.2023.06.06.06.43.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Jun 2023 06:43:39 -0700 (PDT)
+Message-ID: <693ff56a-9870-9eb0-c4c8-84b4451667cd@gmail.com>
+Date:   Tue, 6 Jun 2023 21:43:29 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 1/9] x86/hyperv: Add sev-snp enlightened guest static key
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     Tianyu Lan <tiala@microsoft.com>, linux-arch@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, daniel.lezcano@linaro.org, arnd@arndb.de,
+        michael.h.kelley@microsoft.com
+References: <20230601151624.1757616-1-ltykernel@gmail.com>
+ <20230601151624.1757616-2-ltykernel@gmail.com> <874jnmkt4p.fsf@redhat.com>
+From:   Tianyu Lan <ltykernel@gmail.com>
+In-Reply-To: <874jnmkt4p.fsf@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,145 +80,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adding linux-wireless, top posting so that the whole report is included.
 
-Dan Carpenter <dan.carpenter@linaro.org> writes:
 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   f8dba31b0a826e691949cd4fdfa5c30defaac8c5
-> commit: e6db67fa871dee37d22701daba806bfcd4d9df49 wifi: mt76: ignore
-> key disable commands
-> config: riscv-randconfig-m031-20230605
-> (https://download.01.org/0day-ci/archive/20230606/202306060332.WbIToDHL-lkp@intel.com/config)
-> compiler: riscv64-linux-gcc (GCC) 12.3.0
->
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-> | Closes: https://lore.kernel.org/r/202306060332.WbIToDHL-lkp@intel.com/
->
-> smatch warnings:
-> drivers/net/wireless/mediatek/mt76/mt76x02_util.c:475
-> mt76x02_set_key() warn: variable dereferenced before check 'key' (see
-> line 415)
->
-> vim +/key +475 drivers/net/wireless/mediatek/mt76/mt76x02_util.c
->
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04 407 int
-> mt76x02_set_key(struct ieee80211_hw *hw, enum set_key_cmd cmd,
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04 408 struct ieee80211_vif
-> *vif, struct ieee80211_sta *sta,
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04 409 struct
-> ieee80211_key_conf *key)
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  410  {
-> d87cf75f111183 Lorenzo Bianconi 2018-10-07 411 struct mt76x02_dev *dev
-> = hw->priv;
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04 412 struct mt76x02_vif
-> *mvif = (struct mt76x02_vif *)vif->drv_priv;
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  413  	struct mt76x02_sta *msta;
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  414  	struct mt76_wcid *wcid;
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04 @415  	int idx = key->keyidx;
->
-> "key" is dereferenced here
->
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  416  	int ret;
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  417  
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04 418 /* fall back to sw
-> encryption for unsupported ciphers */
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  419  	switch (key->cipher) {
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  420  	case WLAN_CIPHER_SUITE_WEP40:
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  421  	case WLAN_CIPHER_SUITE_WEP104:
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  422  	case WLAN_CIPHER_SUITE_TKIP:
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  423  	case WLAN_CIPHER_SUITE_CCMP:
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  424  		break;
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  425  	default:
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  426  		return -EOPNOTSUPP;
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  427  	}
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  428  
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  429  	/*
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04 430 * The hardware does
-> not support per-STA RX GTK, fall back
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  431  	 * to software mode for these.
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  432  	 */
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04 433 if ((vif->type ==
-> NL80211_IFTYPE_ADHOC ||
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04 434 vif->type ==
-> NL80211_IFTYPE_MESH_POINT) &&
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04 435 (key->cipher ==
-> WLAN_CIPHER_SUITE_TKIP ||
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04 436 key->cipher ==
-> WLAN_CIPHER_SUITE_CCMP) &&
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04 437 !(key->flags &
-> IEEE80211_KEY_FLAG_PAIRWISE))
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  438  		return -EOPNOTSUPP;
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  439  
-> b98558e2529986 Stanislaw Gruszka 2019-03-19  440  	/*
-> b98558e2529986 Stanislaw Gruszka 2019-03-19 441 * In USB AP mode,
-> broadcast/multicast frames are setup in beacon
-> b98558e2529986 Stanislaw Gruszka 2019-03-19 442 * data registers and
-> sent via HW beacons engine, they require to
-> b98558e2529986 Stanislaw Gruszka 2019-03-19  443  	 * be already encrypted.
-> b98558e2529986 Stanislaw Gruszka 2019-03-19  444  	 */
-> 61c51a74a4e586 Lorenzo Bianconi  2019-10-29  445  	if (mt76_is_usb(&dev->mt76) &&
-> b98558e2529986 Stanislaw Gruszka 2019-03-19 446 vif->type ==
-> NL80211_IFTYPE_AP &&
-> b98558e2529986 Stanislaw Gruszka 2019-03-19 447 !(key->flags &
-> IEEE80211_KEY_FLAG_PAIRWISE))
-> b98558e2529986 Stanislaw Gruszka 2019-03-19  448  		return -EOPNOTSUPP;
-> b98558e2529986 Stanislaw Gruszka 2019-03-19  449  
-> 4b36cc6b390f18 David Bauer 2021-02-07 450 /* MT76x0 GTK offloading
-> does not work with more than one VIF */
-> 4b36cc6b390f18 David Bauer 2021-02-07 451 if (is_mt76x0(dev) &&
-> !(key->flags & IEEE80211_KEY_FLAG_PAIRWISE))
-> 4b36cc6b390f18 David Bauer       2021-02-07  452  		return -EOPNOTSUPP;
-> 4b36cc6b390f18 David Bauer       2021-02-07  453  
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04 454 msta = sta ? (struct
-> mt76x02_sta *)sta->drv_priv : NULL;
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04 455 wcid = msta ?
-> &msta->wcid : &mvif->group_wcid;
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  456  
-> e6db67fa871dee Felix Fietkau     2023-03-30  457  	if (cmd != SET_KEY) {
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04 458 if (idx ==
-> wcid->hw_key_idx) {
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04 459 wcid->hw_key_idx = -1;
-> f2f6a47b504b8f Felix Fietkau 2019-01-25 460 wcid->sw_iv = false;
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  461  		}
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  462  
-> e6db67fa871dee Felix Fietkau     2023-03-30  463  		return 0;
-> e6db67fa871dee Felix Fietkau     2023-03-30  464  	}
-> e6db67fa871dee Felix Fietkau     2023-03-30  465  
-> e6db67fa871dee Felix Fietkau     2023-03-30  466  	key->hw_key_idx = wcid->idx;
-> e6db67fa871dee Felix Fietkau     2023-03-30  467  	wcid->hw_key_idx = idx;
-> e6db67fa871dee Felix Fietkau 2023-03-30 468 if (key->flags &
-> IEEE80211_KEY_FLAG_RX_MGMT) {
-> e6db67fa871dee Felix Fietkau 2023-03-30 469 key->flags |=
-> IEEE80211_KEY_FLAG_SW_MGMT_TX;
-> e6db67fa871dee Felix Fietkau     2023-03-30  470  		wcid->sw_iv = true;
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  471  	}
-> d87cf75f111183 Lorenzo Bianconi 2018-10-07 472
-> mt76_wcid_key_setup(&dev->mt76, wcid, key);
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  473  
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  474  	if (!msta) {
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04 @475 if (key ||
-> wcid->hw_key_idx == idx) {
->
-> This NULL check is too late.
->
-> 8d66af49a3db9a Lorenzo Bianconi 2018-10-07 476 ret =
-> mt76x02_mac_wcid_set_key(dev, wcid->idx, key);
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  477  			if (ret)
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04 478 return ret;
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  479  		}
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  480  
-> 8d66af49a3db9a Lorenzo Bianconi 2018-10-07 481 return
-> mt76x02_mac_shared_key_setup(dev, mvif->idx, idx, key);
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  482  	}
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  483  
-> 8d66af49a3db9a Lorenzo Bianconi 2018-10-07 484 return
-> mt76x02_mac_wcid_set_key(dev, msta->wcid.idx, key);
-> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  485  }
+On 6/5/2023 8:09 PM, Vitaly Kuznetsov wrote:
+>> --- a/arch/x86/kernel/cpu/mshyperv.c
+>> +++ b/arch/x86/kernel/cpu/mshyperv.c
+>> @@ -402,8 +402,12 @@ static void __init ms_hyperv_init_platform(void)
+>>   		pr_info("Hyper-V: Isolation Config: Group A 0x%x, Group B 0x%x\n",
+>>   			ms_hyperv.isolation_config_a, ms_hyperv.isolation_config_b);
+>>   
+>> -		if (hv_get_isolation_type() == HV_ISOLATION_TYPE_SNP)
+>> +
+>> +		if (cc_platform_has(CC_ATTR_GUEST_SEV_SNP)) {
+>> +			static_branch_enable(&isolation_type_en_snp);
+>> +		} else if (hv_get_isolation_type() == HV_ISOLATION_TYPE_SNP) {
+>>   			static_branch_enable(&isolation_type_snp);
+> Nitpick: In case 'isolation_type_snp' and 'isolation_type_en_snp' are
+> mutually exclusive, I'd suggest we rename the former: it is quite
+> un-intuitive that for an enlightened SNP guest '&isolation_type_snp' is
+> NOT enabled. E.g. we can use
+> 
+> 'isol_type_snp_paravisor'
+> and
+> 'isol_type_snp_enlightened'
+> 
+> (I also don't like 'isolation_type_en_snp' name as 'en' normally stands
+> for 'enabled')
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+Hi Vitaly:
+	Thanks for your review. Agree. Will rename them.
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+> 
+>> --- a/include/asm-generic/mshyperv.h
+>> +++ b/include/asm-generic/mshyperv.h
+>> @@ -36,15 +36,21 @@ struct ms_hyperv_info {
+>>   	u32 nested_features;
+>>   	u32 max_vp_index;
+>>   	u32 max_lp_index;
+>> -	u32 isolation_config_a;
+>> +	union {
+>> +		u32 isolation_config_a;
+>> +		struct {
+>> +			u32 paravisor_present : 1;
+>> +			u32 reserved1 : 31;
+>> +		};
+>> +	};
+>>   	union {
+>>   		u32 isolation_config_b;
+>>   		struct {
+>>   			u32 cvm_type : 4;
+>> -			u32 reserved1 : 1;
+>> +			u32 reserved2 : 1;
+>>   			u32 shared_gpa_boundary_active : 1;
+>>   			u32 shared_gpa_boundary_bits : 6;
+>> -			u32 reserved2 : 20;
+>> +			u32 reserved3 : 20;
+> Maybe use 'reserved_a1', 'reserved_b1', 'reserved_b2',... to avoid the
+> need to rename in the future when more bits from isolation_config_a get
+> used?
+> 
+
+Good suggestion. will update.
