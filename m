@@ -2,369 +2,355 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BC2D724DA8
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 22:03:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1512724DAD
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 22:09:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239639AbjFFUDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 16:03:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43872 "EHLO
+        id S239660AbjFFUJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 16:09:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234164AbjFFUDg (ORCPT
+        with ESMTP id S234163AbjFFUJH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 16:03:36 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BD1810F3;
-        Tue,  6 Jun 2023 13:03:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686081815; x=1717617815;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Q/P4uBMum54OsguSow/2pgghi0WtoiS74sGhM9dzFnU=;
-  b=h2dBE1tOcPaxyu8H5iqJh8fW0IHbMMChv2BovRVakuo7J2U+lWHBqwro
-   Rsyevmukw4LtKAjk/8lRo/+tpjHdjB8nt7XhKMJ1KeSYDHvr6cK5kmH/m
-   PWwmW7IpI90ihny4AH+LGR9O9RnFgpWMVPbslOY0esLYrs9lSWILXM7Y6
-   PEsRX9HndGaf9sRc2pIiyoEEsuWi4tel0gtBLnS4gqooTh9ISmHfIVy2r
-   TSNdNYa1lVvzt8Fb79uQnqh8kyaIntCcYy6qsDYKyWBMc9EHZpaIxqbqF
-   QYGh8bC8DqzCirtUUpEkOLRlrrylSQFrag9P5rqKuP6aPLeG4+yt94U4A
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="355641837"
-X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
-   d="scan'208";a="355641837"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 13:03:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="709201251"
-X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
-   d="scan'208";a="709201251"
-Received: from aschofie-mobl2.amr.corp.intel.com (HELO aschofie-mobl2) ([10.251.25.226])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 13:03:33 -0700
-Date:   Tue, 6 Jun 2023 13:03:32 -0700
-From:   Alison Schofield <alison.schofield@intel.com>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Dave Jiang <dave.jiang@intel.com>, x86@kernel.org,
-        linux-cxl@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] x86/numa: Introduce numa_fill_memblks()
-Message-ID: <ZH+RFGZqAoSEIHqT@aschofie-mobl2>
-References: <cover.1684448934.git.alison.schofield@intel.com>
- <e365f4dfa7fa974118eb4e59aebc7cc423cf19a1.1684448934.git.alison.schofield@intel.com>
- <647bd26937a11_142af829499@dwillia2-xfh.jf.intel.com.notmuch>
+        Tue, 6 Jun 2023 16:09:07 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12BBB10F3;
+        Tue,  6 Jun 2023 13:09:06 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1686082144;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dKfeNRDWpLHUEEC01i9Rlsx18vHA0whT8VRGD7XtedM=;
+        b=xLBE8261NbfQa21cZUhMzi4zbsJZJpSuXjRrLztVj9Eo9+RaVlRlHYAG3+Wt81IgfFP9gO
+        RjPvWQZZA/B2ZoDu5plQstMi9yqH+ZM+LdIs64WVmb2E9NFY/Q79mZ2IRvBV1iK6KuntJF
+        IteSC6RFbrrFH9lnLMKS2uXCYIJHqG1K6aj/JvbOVLZ2vvYd+JpCyBZDv0qMiPzWVN2h24
+        FoABQpRJbPNRSw7UWEZKryMgPtOLdZ9lRqTSBP7rmc5DwHkyYs+0Pbg0yNXDI3sOEXiayj
+        p1LPEb2/6jIwLYjxYbiWp3vAxu6kRgQXWiF/JYu7PS08TWeEsBCyl0BRgzzr2g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1686082144;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dKfeNRDWpLHUEEC01i9Rlsx18vHA0whT8VRGD7XtedM=;
+        b=ZOzeXIJdsqhx4kcEoZWhZeQ+p2mmum1y7Ixvn0vCSKKuP8V/s2NuKBC2tvxNDRRbPbW5YY
+        gS5bN76qyyKR5nAw==
+To:     "H. Peter Anvin" <hpa@zytor.com>, Xin Li <xin3.li@intel.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org
+Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        peterz@infradead.org, andrew.cooper3@citrix.com, seanjc@google.com,
+        pbonzini@redhat.com, ravi.v.shankar@intel.com,
+        jiangshanlai@gmail.com, shan.kang@intel.com
+Subject: Re: [PATCH v8 01/33] x86/traps: let common_interrupt() handle
+ IRQ_MOVE_CLEANUP_VECTOR
+In-Reply-To: <70ef07f1-e3b7-7c4e-01ac-11f159a87a6b@zytor.com>
+References: <20230410081438.1750-1-xin3.li@intel.com>
+ <20230410081438.1750-2-xin3.li@intel.com> <87leh08e1h.ffs@tglx>
+ <87edmp6doh.ffs@tglx> <70ef07f1-e3b7-7c4e-01ac-11f159a87a6b@zytor.com>
+Date:   Tue, 06 Jun 2023 22:09:03 +0200
+Message-ID: <877csgl5eo.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <647bd26937a11_142af829499@dwillia2-xfh.jf.intel.com.notmuch>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 03, 2023 at 04:53:13PM -0700, Dan Williams wrote:
-> alison.schofield@ wrote:
-> > From: Alison Schofield <alison.schofield@intel.com>
-> > 
-> > numa_fill_memblks() fills in the gaps in numa_meminfo memblks
-> > over an HPA address range.
-> > 
-> > The initial use case is the ACPI driver that needs to extend
-> > SRAT defined proximity domains to an entire CXL CFMWS Window[1].
-> 
-> I feel like this demands more explanation because the "need" is not
-> apparent. In fact its a Linux policy choice not a requirement. The next
-> patch has some of this, but this story is needed earlier for someone
-> that reads this patch first. Something like:
-> 
+On Mon, Jun 05 2023 at 10:09, H. Peter Anvin wrote:
+> On 6/5/23 10:07, Thomas Gleixner wrote:
+>> There is zero reason for this to be an IPI. This can be delegated to a
+>> worker or whatever delayed mechanism.
+>> 
+> As we discussed offline, I agree that this is a better solution (and 
+> should be a separate changeset before the FRED one.)
 
-Hi Dan,
+The untested below should do the trick. Wants to be split in several
+patches, but you get the idea.
 
-Thanks for the review :)
+Thanks,
 
-Sure, I can add the story below to make the 'need' for this function
-more apparent, as well as s/needs/want so as not to conflate need with
-requirement.
+        tglx
+---
+Subject: x86/vector: Get rid of IRQ_MOVE_CLEANUP_VECTOR
+From: Thomas Gleixner <tglx@linutronix.de>
 
-> ---
-> 
-> The CFWMS is an ACPI data structure that indicates *potential* locations
-> where CXL memory can be placed. It is the playground where the CXL
-> driver has free reign to establish regions.  That space can be populated
-> by BIOS created regions, or driver created regions, after hotplug or
-> other reconfiguration.
-> 
-> When the BIOS creates a region in a CXL Window it additionally describes
-> that subset of the Window range in the other typical ACPI tables SRAT,
-> SLIT, and HMAT. The rationale for the BIOS not pre-describing the entire
-> CXL Window in SRAT, SLIT, and HMAT is that it can not predict the
-> future. I.e. there is nothing stopping higher or lower performance
-> devices being placed in the same Window. Compare that to ACPI memory
-> hotplug that just onlines additional capacity in the proximity domain
-> with little freedom for dynamic performance differentiation.
-> 
-> That leaves the OS with a choice, should unpopulated window capacity
-> match the proximity domain of an existing region, or should it allocate
-> a new one? This patch takes the simple position of minimizing proximity
-> domain proliferation and reuse any proximity domain intersection for the
-> entire Window. If the Window has no intersections then allocate a new
-> proximity domain. Note that SRAT, SLIT and HMAT information can be
-> enumerated dynamically in a standard way from device provided data.
-> Think of CXL as the end of ACPI needing to describe memory attributes,
-> CXL offers a standard discovery model for performance attributes, but
-> Linux still needs to interoperate with the old regime.
-> 
-> ---
-> 
-> > 
-> > The APCI driver expects to use numa_fill_memblks() while parsing
-> 
-> s/APCI/ACPI/
-> 
-> Again, the ACPI code does not have any expectation, this is pure OS
-> policy decision about how to handle undescribed memory.
-> 
+No point to waste a vector for cleaning up the leftovers of a moved
+interrupt. Aside of that this must be the lowest priority of all vectors
+which makes FRED systems utilizing vectors 0x10-0x1f more complicated
+than necessary.
 
-The intent was to show the pending use case, perhaps 'wants to' use
-this function to enact a purely OS policy decision!
+Schedule a timer instead.
 
+Not-Yet-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+---
+ arch/x86/include/asm/hw_irq.h       |    4 -
+ arch/x86/include/asm/idtentry.h     |    1 
+ arch/x86/include/asm/irq_vectors.h  |    7 ---
+ arch/x86/kernel/apic/vector.c       |   83 ++++++++++++++++++++++++++----------
+ arch/x86/kernel/idt.c               |    1 
+ arch/x86/platform/uv/uv_irq.c       |    2 
+ drivers/iommu/amd/iommu.c           |    2 
+ drivers/iommu/hyperv-iommu.c        |    4 -
+ drivers/iommu/intel/irq_remapping.c |    2 
+ 9 files changed, 68 insertions(+), 38 deletions(-)
 
-> > the CFMWS. Extending the memblks created during SRAT parsing, to
-> > cover the entire CFMWS Window, is desirable because everything in
-> > a CFMWS Window is expected to be of a similar performance class.
-> > 
-> > Requires CONFIG_NUMA_KEEP_MEMINFO.
-> 
-> Not sure this adds anything to the description.
-> 
-> > 
-> > [1] A CXL CFMWS Window represents a contiguous CXL memory resource,
-> > aka an HPA range. The CFMWS (CXL Fixed Memory Window Structure) is
-> > part of the ACPI CEDT (CXL Early Discovery Table).
-> > 
-> > Signed-off-by: Alison Schofield <alison.schofield@intel.com>
-> > ---
-> >  arch/x86/include/asm/sparsemem.h |  2 +
-> >  arch/x86/mm/numa.c               | 82 ++++++++++++++++++++++++++++++++
-> >  include/linux/numa.h             |  7 +++
-> >  3 files changed, 91 insertions(+)
-> > 
-> > diff --git a/arch/x86/include/asm/sparsemem.h b/arch/x86/include/asm/sparsemem.h
-> > index 64df897c0ee3..1be13b2dfe8b 100644
-> > --- a/arch/x86/include/asm/sparsemem.h
-> > +++ b/arch/x86/include/asm/sparsemem.h
-> > @@ -37,6 +37,8 @@ extern int phys_to_target_node(phys_addr_t start);
-> >  #define phys_to_target_node phys_to_target_node
-> >  extern int memory_add_physaddr_to_nid(u64 start);
-> >  #define memory_add_physaddr_to_nid memory_add_physaddr_to_nid
-> > +extern int numa_fill_memblks(u64 start, u64 end);
-> > +#define numa_fill_memblks numa_fill_memblks
-> 
-> What is this for? The other defines are due to being an arch-specific
-> API and the #define is how the arch declares that it has a local version
-> to replace the generic one.
-
-That define, along with the numa.h change below, are to support builds of
-CONFIG_ARM64 and CONFIG_LOONGARCH, both include the caller acpi_parse_cfmws(),
-of numa_fill_memblks().
-
-> 
-> >  #endif
-> >  #endif /* __ASSEMBLY__ */
-> >  
-> > diff --git a/arch/x86/mm/numa.c b/arch/x86/mm/numa.c
-> > index 2aadb2019b4f..6c8f9cff71da 100644
-> > --- a/arch/x86/mm/numa.c
-> > +++ b/arch/x86/mm/numa.c
-> > @@ -11,6 +11,7 @@
-> >  #include <linux/nodemask.h>
-> >  #include <linux/sched.h>
-> >  #include <linux/topology.h>
-> > +#include <linux/sort.h>
-> >  
-> >  #include <asm/e820/api.h>
-> >  #include <asm/proto.h>
-> > @@ -961,4 +962,85 @@ int memory_add_physaddr_to_nid(u64 start)
-> >  	return nid;
-> >  }
-> >  EXPORT_SYMBOL_GPL(memory_add_physaddr_to_nid);
-> > +
-> > +static int __init cmp_memblk(const void *a, const void *b)
-> > +{
-> > +	const struct numa_memblk *ma = *(const struct numa_memblk **)a;
-> > +	const struct numa_memblk *mb = *(const struct numa_memblk **)b;
-> > +
-> > +	if (ma->start != mb->start)
-> > +		return (ma->start < mb->start) ? -1 : 1;
-> > +
-> > +	if (ma->end != mb->end)
-> > +		return (ma->end < mb->end) ? -1 : 1;
-> 
-> Why is this sorting by start and end? I can maybe guess, but a comment
-> would help a future intrepid reader.
-
-Sure, can add comment. It compares ends only if starts are the same.
-It's putting the list in order for numa_fill_memblks() to walk and
-fill.
-
-> 
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static struct numa_memblk *numa_memblk_list[NR_NODE_MEMBLKS] __initdata;
-> > +
-> > +/**
-> > + * numa_fill_memblks - Fill gaps in numa_meminfo memblks
-> > + * @start: address to begin fill
-> > + * @end: address to end fill
-> > + *
-> > + * Find and extend numa_meminfo memblks to cover the @start/@end
-> > + * HPA address range, following these rules:
-> > + * 1. The first memblk must start at @start
-> > + * 2. The last memblk must end at @end
-> 
-> Why these requirements? I worry this is too strict because of the
-> existence of numa_cleanup_meminfo() which indicates that Linux has seen
-> quite messy firmware tables, or otherwise needs to cleanup after the
-> "numa=fake=" command line option. Is it not enough to just check for any
-> intersection?
-
-Yes, it would be enough to just check for intersection, and not
-force the alignment. Will change code to reflect.
-
-> 
-> > + * 3. Fill the gaps between memblks by extending numa_memblk.end
-> > + * Result: All addresses in start/end range are included in
-> > + *	   numa_meminfo.
-> > + *
-> > + * RETURNS:
-> > + * 0		  : Success. numa_meminfo fully describes start/end
-> > + * NUMA_NO_MEMBLK : No memblk exists in start/end range
-> 
-> This probably wants to clarify whether @end is inclusive or exclusive.
-
-It's exclusive and I'll add comment.
-
-> 
-> > + */
-> > +
-> > +int __init numa_fill_memblks(u64 start, u64 end)
-> > +{
-> > +	struct numa_meminfo *mi = &numa_meminfo;
-> > +	struct numa_memblk **blk = &numa_memblk_list[0];
-> > +	int count = 0;
-> > +
-> > +	for (int i = 0; i < mi->nr_blks; i++) {
-> > +		struct numa_memblk *bi = &mi->blk[i];
-> > +
-> > +		if (start <= bi->start && end >= bi->end) {
-> 
-> Maybe a comment about what this is doing? This is looking for to see if
-> any CXL window completely overlaps any SRAT entry?
-
-Based on your first comment about messy tables, I can see the need to
-expand the search to include any intersection. Will do.
-
->    
-> > +			blk[count] = &mi->blk[i];
-> > +			count++;
-> > +		}
-> > +	}
-> > +	if (!count)
-> > +		return NUMA_NO_MEMBLK;
-> > +
-> > +	if (count == 1) {
-> > +		blk[0]->start = start;
-> > +		blk[0]->end = end;
-> > +		return 0;
-> 
-> So this is updating numa_meminfo in place?
-
-Yes.
-
-> 
-> > +	}
-> > +
-> > +	sort(&blk[0], count, sizeof(blk[0]), cmp_memblk, NULL);
-> > +	blk[0]->start = start;
-> > +	blk[count - 1]->end = end;
-> > +
-> > +	for (int i = 0, j = 1; j < count; i++, j++) {
-> > +		/* Overlaps OK. sort() put the lesser end first */
-> > +		if (blk[i]->start == blk[j]->start)
-> > +			continue;
-> > +
-> > +		/* No gap */
-> > +		if (blk[i]->end == blk[j]->start)
-> > +			continue;
-> > +
-> > +		/* Fill the gap */
-> > +		if (blk[i]->end < blk[j]->start) {
-> > +			blk[i]->end = blk[j]->start;
-> > +			continue;
-> > +		}
-> 
-> This looks clever to sort an array of pointers into the existing
-> numa_meminfo, I think it needs some comments to explain the cleverness,
-> but I am not seeing anything glaringly wrong about the approach.
-> 
-
-I'll add comments on all the above.
-
-
-> > +	}
-> > +	return 0;
-> > +}
-> > +EXPORT_SYMBOL_GPL(numa_fill_memblks);
-> > +
-> >  #endif
-> > diff --git a/include/linux/numa.h b/include/linux/numa.h
-> > index 59df211d051f..0f512c0aba54 100644
-> > --- a/include/linux/numa.h
-> > +++ b/include/linux/numa.h
-> > @@ -12,6 +12,7 @@
-> >  #define MAX_NUMNODES    (1 << NODES_SHIFT)
-> >  
-> >  #define	NUMA_NO_NODE	(-1)
-> > +#define	NUMA_NO_MEMBLK	(-1)
-> >  
-> >  /* optionally keep NUMA memory info available post init */
-> >  #ifdef CONFIG_NUMA_KEEP_MEMINFO
-> > @@ -43,6 +44,12 @@ static inline int phys_to_target_node(u64 start)
-> >  	return 0;
-> >  }
-> >  #endif
-> > +#ifndef numa_fill_memblks
-> > +static inline int __init numa_fill_memblks(u64 start, u64 end)
-> > +{
-> > +	return NUMA_NO_MEMBLK;
-> > +}
-> > +#endif
-> 
-> Why does linux/numa.h need to care about this x86-specific init routine?
-> 
-
-This is how I got ARM64 and LOONGARCH to build.
-
-
-> >  #else /* !CONFIG_NUMA */
-> >  static inline int numa_map_to_online_node(int node)
-> >  {
-> > -- 
-> > 2.37.3
-> > 
-> 
-> 
+--- a/arch/x86/include/asm/hw_irq.h
++++ b/arch/x86/include/asm/hw_irq.h
+@@ -97,10 +97,10 @@ extern struct irq_cfg *irqd_cfg(struct i
+ extern void lock_vector_lock(void);
+ extern void unlock_vector_lock(void);
+ #ifdef CONFIG_SMP
+-extern void send_cleanup_vector(struct irq_cfg *);
++extern void vector_schedule_cleanup(struct irq_cfg *);
+ extern void irq_complete_move(struct irq_cfg *cfg);
+ #else
+-static inline void send_cleanup_vector(struct irq_cfg *c) { }
++static inline void vector_schedule_cleanup(struct irq_cfg *c) { }
+ static inline void irq_complete_move(struct irq_cfg *c) { }
+ #endif
+ 
+--- a/arch/x86/include/asm/idtentry.h
++++ b/arch/x86/include/asm/idtentry.h
+@@ -648,7 +648,6 @@ DECLARE_IDTENTRY_SYSVEC(X86_PLATFORM_IPI
+ 
+ #ifdef CONFIG_SMP
+ DECLARE_IDTENTRY(RESCHEDULE_VECTOR,			sysvec_reschedule_ipi);
+-DECLARE_IDTENTRY_SYSVEC(IRQ_MOVE_CLEANUP_VECTOR,	sysvec_irq_move_cleanup);
+ DECLARE_IDTENTRY_SYSVEC(REBOOT_VECTOR,			sysvec_reboot);
+ DECLARE_IDTENTRY_SYSVEC(CALL_FUNCTION_SINGLE_VECTOR,	sysvec_call_function_single);
+ DECLARE_IDTENTRY_SYSVEC(CALL_FUNCTION_VECTOR,		sysvec_call_function);
+--- a/arch/x86/include/asm/irq_vectors.h
++++ b/arch/x86/include/asm/irq_vectors.h
+@@ -35,13 +35,6 @@
+  */
+ #define FIRST_EXTERNAL_VECTOR		0x20
+ 
+-/*
+- * Reserve the lowest usable vector (and hence lowest priority)  0x20 for
+- * triggering cleanup after irq migration. 0x21-0x2f will still be used
+- * for device interrupts.
+- */
+-#define IRQ_MOVE_CLEANUP_VECTOR		FIRST_EXTERNAL_VECTOR
+-
+ #define IA32_SYSCALL_VECTOR		0x80
+ 
+ /*
+--- a/arch/x86/kernel/apic/vector.c
++++ b/arch/x86/kernel/apic/vector.c
+@@ -44,7 +44,18 @@ static cpumask_var_t vector_searchmask;
+ static struct irq_chip lapic_controller;
+ static struct irq_matrix *vector_matrix;
+ #ifdef CONFIG_SMP
+-static DEFINE_PER_CPU(struct hlist_head, cleanup_list);
++
++static void vector_cleanup_callback(struct timer_list *tmr);
++
++struct vector_cleanup {
++	struct hlist_head	head;
++	struct timer_list	timer;
++};
++
++static DEFINE_PER_CPU(struct vector_cleanup, vector_cleanup) = {
++	.head	= HLIST_HEAD_INIT,
++	.timer	= __TIMER_INITIALIZER(vector_cleanup_callback, TIMER_PINNED),
++};
+ #endif
+ 
+ void lock_vector_lock(void)
+@@ -843,8 +854,12 @@ void lapic_online(void)
+ 
+ void lapic_offline(void)
+ {
++	struct vector_cleanup *cl = this_cpu_ptr(&vector_cleanup);
++
+ 	lock_vector_lock();
+ 	irq_matrix_offline(vector_matrix);
++	WARN_ON_ONCE(try_to_del_timer_sync(&cl->timer) < 0);
++	WARN_ON_ONCE(!hlist_empty(&cl->head));
+ 	unlock_vector_lock();
+ }
+ 
+@@ -934,62 +949,86 @@ static void free_moved_vector(struct api
+ 	apicd->move_in_progress = 0;
+ }
+ 
+-DEFINE_IDTENTRY_SYSVEC(sysvec_irq_move_cleanup)
++static void vector_cleanup_callback(struct timer_list *tmr)
+ {
+-	struct hlist_head *clhead = this_cpu_ptr(&cleanup_list);
++	struct vector_cleanup *cl = container_of(tmr, typeof(*cl), timer);
+ 	struct apic_chip_data *apicd;
+ 	struct hlist_node *tmp;
++	bool rearm = false;
+ 
+-	ack_APIC_irq();
+ 	/* Prevent vectors vanishing under us */
+-	raw_spin_lock(&vector_lock);
++	raw_spin_lock_irq(&vector_lock);
+ 
+-	hlist_for_each_entry_safe(apicd, tmp, clhead, clist) {
++	hlist_for_each_entry_safe(apicd, tmp, &cl->head, clist) {
+ 		unsigned int irr, vector = apicd->prev_vector;
+ 
+ 		/*
+ 		 * Paranoia: Check if the vector that needs to be cleaned
+-		 * up is registered at the APICs IRR. If so, then this is
+-		 * not the best time to clean it up. Clean it up in the
+-		 * next attempt by sending another IRQ_MOVE_CLEANUP_VECTOR
+-		 * to this CPU. IRQ_MOVE_CLEANUP_VECTOR is the lowest
+-		 * priority external vector, so on return from this
+-		 * interrupt the device interrupt will happen first.
++		 * up is registered at the APICs IRR. That's clearly a
++		 * hardware issue if the vector arrived on the old target
++		 * _after_ interrupts were disabled above. Keep @apicd
++		 * on the list and schedule the timer again to give the CPU
++		 * a chance to handle the pending interrupt.
+ 		 */
+ 		irr = apic_read(APIC_IRR + (vector / 32 * 0x10));
+ 		if (irr & (1U << (vector % 32))) {
+-			apic->send_IPI_self(IRQ_MOVE_CLEANUP_VECTOR);
++			pr_warn_once("Moved interrupt pending in old target APIC %u\n", apicd->irq);
++			rearm = true;
+ 			continue;
+ 		}
+ 		free_moved_vector(apicd);
+ 	}
+ 
+-	raw_spin_unlock(&vector_lock);
++	/*
++	 * Must happen under vector_lock to make the timer_pending() check
++	 * in __vector_schedule_cleanup() race free against the rearm here.
++	 */
++	if (rearm)
++		mod_timer(tmr, jiffies + 1);
++
++	raw_spin_unlock_irq(&vector_lock);
+ }
+ 
+-static void __send_cleanup_vector(struct apic_chip_data *apicd)
++static void __vector_schedule_cleanup(struct apic_chip_data *apicd)
+ {
+-	unsigned int cpu;
++	unsigned int cpu = apicd->prev_cpu;
+ 
+ 	raw_spin_lock(&vector_lock);
+ 	apicd->move_in_progress = 0;
+-	cpu = apicd->prev_cpu;
+ 	if (cpu_online(cpu)) {
+-		hlist_add_head(&apicd->clist, per_cpu_ptr(&cleanup_list, cpu));
+-		apic->send_IPI(cpu, IRQ_MOVE_CLEANUP_VECTOR);
++		struct vector_cleanup *cl = per_cpu_ptr(&vector_cleanup, cpu);
++
++		/*
++		 * The lockless timer_pending() check is safe here. If it
++		 * returns true, then the callback will observe this new
++		 * apic data in the hlist as everything is serialized by
++		 * vector lock.
++		 *
++		 * If it returns false then the timer is either not armed
++		 * or the other CPU executes the callback, which again
++		 * would be blocked on vector lock. Rearming it in the
++		 * latter case makes it fire for nothing.
++		 *
++		 * This is also safe against the callback rearming the timer
++		 * because that's serialized via vector lock too.
++		 */
++		if (!timer_pending(&cl->timer)) {
++			cl->timer.expires = jiffies + 1;
++			add_timer_on(&cl->timer, cpu);
++		}
+ 	} else {
+ 		apicd->prev_vector = 0;
+ 	}
+ 	raw_spin_unlock(&vector_lock);
+ }
+ 
+-void send_cleanup_vector(struct irq_cfg *cfg)
++void vector_schedule_cleanup(struct irq_cfg *cfg)
+ {
+ 	struct apic_chip_data *apicd;
+ 
+ 	apicd = container_of(cfg, struct apic_chip_data, hw_irq_cfg);
+ 	if (apicd->move_in_progress)
+-		__send_cleanup_vector(apicd);
++		__vector_schedule_cleanup(apicd);
+ }
+ 
+ void irq_complete_move(struct irq_cfg *cfg)
+@@ -1007,7 +1046,7 @@ void irq_complete_move(struct irq_cfg *c
+ 	 * on the same CPU.
+ 	 */
+ 	if (apicd->cpu == smp_processor_id())
+-		__send_cleanup_vector(apicd);
++		__vector_schedule_cleanup(apicd);
+ }
+ 
+ /*
+--- a/arch/x86/kernel/idt.c
++++ b/arch/x86/kernel/idt.c
+@@ -131,7 +131,6 @@ static const __initconst struct idt_data
+ 	INTG(RESCHEDULE_VECTOR,			asm_sysvec_reschedule_ipi),
+ 	INTG(CALL_FUNCTION_VECTOR,		asm_sysvec_call_function),
+ 	INTG(CALL_FUNCTION_SINGLE_VECTOR,	asm_sysvec_call_function_single),
+-	INTG(IRQ_MOVE_CLEANUP_VECTOR,		asm_sysvec_irq_move_cleanup),
+ 	INTG(REBOOT_VECTOR,			asm_sysvec_reboot),
+ #endif
+ 
+--- a/arch/x86/platform/uv/uv_irq.c
++++ b/arch/x86/platform/uv/uv_irq.c
+@@ -58,7 +58,7 @@ uv_set_irq_affinity(struct irq_data *dat
+ 	ret = parent->chip->irq_set_affinity(parent, mask, force);
+ 	if (ret >= 0) {
+ 		uv_program_mmr(cfg, data->chip_data);
+-		send_cleanup_vector(cfg);
++		vector_schedule_cleanup(cfg);
+ 	}
+ 
+ 	return ret;
+--- a/drivers/iommu/amd/iommu.c
++++ b/drivers/iommu/amd/iommu.c
+@@ -3639,7 +3639,7 @@ static int amd_ir_set_affinity(struct ir
+ 	 * at the new destination. So, time to cleanup the previous
+ 	 * vector allocation.
+ 	 */
+-	send_cleanup_vector(cfg);
++	vector_schedule_cleanup(cfg);
+ 
+ 	return IRQ_SET_MASK_OK_DONE;
+ }
+--- a/drivers/iommu/hyperv-iommu.c
++++ b/drivers/iommu/hyperv-iommu.c
+@@ -51,7 +51,7 @@ static int hyperv_ir_set_affinity(struct
+ 	if (ret < 0 || ret == IRQ_SET_MASK_OK_DONE)
+ 		return ret;
+ 
+-	send_cleanup_vector(cfg);
++	vector_schedule_cleanup(cfg);
+ 
+ 	return 0;
+ }
+@@ -257,7 +257,7 @@ static int hyperv_root_ir_set_affinity(s
+ 	if (ret < 0 || ret == IRQ_SET_MASK_OK_DONE)
+ 		return ret;
+ 
+-	send_cleanup_vector(cfg);
++	vector_schedule_cleanup(cfg);
+ 
+ 	return 0;
+ }
+--- a/drivers/iommu/intel/irq_remapping.c
++++ b/drivers/iommu/intel/irq_remapping.c
+@@ -1180,7 +1180,7 @@ intel_ir_set_affinity(struct irq_data *d
+ 	 * at the new destination. So, time to cleanup the previous
+ 	 * vector allocation.
+ 	 */
+-	send_cleanup_vector(cfg);
++	vector_schedule_cleanup(cfg);
+ 
+ 	return IRQ_SET_MASK_OK_DONE;
+ }
