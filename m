@@ -2,102 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C838724571
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:14:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6D39724555
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:09:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237656AbjFFOOI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 10:14:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52262 "EHLO
+        id S237526AbjFFOJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 10:09:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232718AbjFFOOG (ORCPT
+        with ESMTP id S237778AbjFFOIn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 10:14:06 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0798A6;
-        Tue,  6 Jun 2023 07:14:05 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 66A381FD76;
-        Tue,  6 Jun 2023 14:14:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1686060844;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=v+fE+p+3UhAy5b8jQdixuYCW4EqmLwbeYafiuZSgPwY=;
-        b=uO6pZ+e/J4mikdtwr14P7262oxXyqPoq5g/O7G0Gb4DzfEErgmOol8LfHud1VepoR3dzkX
-        9OScMH8kPAx4PhVVL6n2a4f7UFCmz97IEhoVE32SfGWIZ/DUtpDLgSP233QbljWQ2dbcql
-        eX5nNeynTJ6PByiVy+1xu2wa1GCkvMo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1686060844;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=v+fE+p+3UhAy5b8jQdixuYCW4EqmLwbeYafiuZSgPwY=;
-        b=iav13bkcUTvxafxR826yHTm8Ff1lXAPcDFAu5jW9Hb4MBBrSlwCsNAGqTq/t8dU7XjD4Mg
-        PFcuHFW9RDrkhqBw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 33EA513519;
-        Tue,  6 Jun 2023 14:14:04 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id N/voCyw/f2TjdQAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Tue, 06 Jun 2023 14:14:04 +0000
-Date:   Tue, 6 Jun 2023 16:07:49 +0200
-From:   David Sterba <dsterba@suse.cz>
-To:     syzbot <syzbot+5e466383663438b99b44@syzkaller.appspotmail.com>
-Cc:     chris@chrisdown.name, clm@fb.com, dsterba@suse.com,
-        josef@toxicpanda.com, linux-btrfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [btrfs?] kernel BUG in btrfs_exclop_balance (2)
-Message-ID: <20230606140749.GH25292@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-References: <000000000000725cab05f55f1bb0@google.com>
- <000000000000e7582c05fafc8901@google.com>
+        Tue, 6 Jun 2023 10:08:43 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55819139;
+        Tue,  6 Jun 2023 07:08:42 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f60e536250so52198825e9.1;
+        Tue, 06 Jun 2023 07:08:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686060521; x=1688652521;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nEguAEjaUZuH5f9mkKjoRfJYtn4sBJWyZOqN3ONfKgg=;
+        b=npYbs7JmwiQxzf9JlCFyhzW3qC4071I8viVqb+RtLUeKPAtNxQJpqYmyaY1InCiqWl
+         MWOLREhVsDEYz83h0p+CJOcso4Dez5Ozwh8tadFN9MVEaoMgzcu4JvOiQERV+jcXdBBM
+         m5W1EufUJAqZrHdRFADnN8xcVW+3XDphd6f53xPN4oN0iBA3V706PF4sEqFNWVB2C/O1
+         zlIWLNBYQlg0491dnHGA8HcEoWmAboZfcJyYn/5dep/5qbGtO3z1mjiUjPciFnoxCtw2
+         iUO/EZDyKCCYiqnYQMAvIXDLQsA4hFMwl4IFyRN0y2hwXA4F1AG0iEfDrYiFmUouqpTA
+         gkcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686060521; x=1688652521;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nEguAEjaUZuH5f9mkKjoRfJYtn4sBJWyZOqN3ONfKgg=;
+        b=EYZ5KDAM5v3Y41ZHBlUQCMcwK7br+hI70W/CyGXnUHi2iHAVkv7er/Jfo4zuBK4dM6
+         c/HP5OTzTcUGVzcIepAfg7xUBl8y5hIpROB7PpR/SIFdQ5K+POL57AlsWC1XMWXCFC34
+         UV1YmGkVSAHTlJxBMFv+vPWPBVNGTOUTKDZtzZn4weWX40uhxmbFRojTxnPfWonobhfe
+         njgyAqwgayKVS+7NHzikxs3mgQ4hUIGN+57hqUXTlylcvXgcSVjRN6sJWoKDBCN2oEqx
+         bPGmFzUT2fyEaegAF2phnRImTBLuueY0mnPZVb69p348iJepSjyr4Pvg64vxMcGh/WtH
+         upIQ==
+X-Gm-Message-State: AC+VfDy2mbyQLXDQkNP6qZFYk00CSTrB6vyi/xH55tPJnH4Mz5W/1kyX
+        g88rEW69aa+4POCA75F5XCA=
+X-Google-Smtp-Source: ACHHUZ6ENEiuQm4TEr/naGDnZLYWe7o/zzetEiafiqwV4/DSy/+2om7JMLlc1VzI0GYenJlJ+fb6/A==
+X-Received: by 2002:adf:e752:0:b0:30e:5364:bf04 with SMTP id c18-20020adfe752000000b0030e5364bf04mr727730wrn.27.1686060520520;
+        Tue, 06 Jun 2023 07:08:40 -0700 (PDT)
+Received: from fedora.. ([212.15.177.3])
+        by smtp.gmail.com with ESMTPSA id g7-20020a5d5407000000b0030903371ef9sm12694315wrv.22.2023.06.06.07.08.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Jun 2023 07:08:21 -0700 (PDT)
+From:   Paulo Pavacic <pavacic.p@gmail.com>
+To:     neil.armstrong@linaro.org, sam@ravnborg.org, airlied@gmail.com,
+        daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Paulo Pavacic <pavacic.p@gmail.com>
+Subject: [PATCH v3 0/3] drm/panel: add fannal c3004 panel
+Date:   Tue,  6 Jun 2023 16:07:54 +0200
+Message-Id: <20230606140757.818705-1-pavacic.p@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <000000000000e7582c05fafc8901@google.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SORTED_RECIPS,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 05, 2023 at 06:43:55PM -0700, syzbot wrote:
-> syzbot has found a reproducer for the following issue on:
-> 
-> HEAD commit:    7163a2111f6c Merge tag 'acpi-6.4-rc1-3' of git://git.kerne..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=175bb84c280000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=73a06f6ef2d5b492
-> dashboard link: https://syzkaller.appspot.com/bug?extid=5e466383663438b99b44
-> compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12048338280000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11ff7314280000
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/01051811f2fe/disk-7163a211.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/a26c68e4c8a6/vmlinux-7163a211.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/17380fb8dad4/bzImage-7163a211.xz
-> mounted in repro: https://storage.googleapis.com/syzbot-assets/b30a249e8609/mount_0.gz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+5e466383663438b99b44@syzkaller.appspotmail.com
+Fannal C3004 is a 2 lane MIPI DSI 480x800 panel which requires initialization with DSI DCS
+commands. After few initialization commands delay is required.
 
-#syz fix: btrfs: fix assertion of exclop condition when starting balance
+Paulo Pavacic (3):
+  dt-bindings: add fannal vendor prefix
+  dt-bindings: display: panel: add fannal,c3004
+  drm/panel-fannal-c3004: Add fannal c3004 DSI panel
 
-> assertion failed: fs_info->exclusive_operation == BTRFS_EXCLOP_BALANCE_PAUSED, in fs/btrfs/ioctl.c:463
+ .../bindings/display/panel/fannal,c3004.yaml  |  78 +++++
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ MAINTAINERS                                   |   7 +
+ drivers/gpu/drm/panel/Kconfig                 |  11 +
+ drivers/gpu/drm/panel/Makefile                |   1 +
+ drivers/gpu/drm/panel/panel-fannal-c3004.c    | 318 ++++++++++++++++++
+ 6 files changed, 417 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/display/panel/fannal,c3004.yaml
+ create mode 100644 drivers/gpu/drm/panel/panel-fannal-c3004.c
 
-Likely the same problem as https://syzkaller.appspot.com/bug?extid=afdee14f9fd3d20448e7
+-- 
+2.40.1
+
