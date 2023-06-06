@@ -2,78 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45E6C72478C
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 17:22:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45FBB724791
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 17:23:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238591AbjFFPWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 11:22:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46626 "EHLO
+        id S234788AbjFFPX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 11:23:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236749AbjFFPWt (ORCPT
+        with ESMTP id S236749AbjFFPX1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 11:22:49 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2136F10C3;
-        Tue,  6 Jun 2023 08:22:46 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id 98e67ed59e1d1-2568befcf1dso4681371a91.0;
-        Tue, 06 Jun 2023 08:22:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686064965; x=1688656965;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LmaCuege5jcXpMt1yPmHuonlSYuQ/J3P4tHEQgu7hXs=;
-        b=D00s8QkE3O4a/XWumVhxg1vg5T1HUl9fRpcfJMNTdgmiZR8yYZ18BIH3X2TNZt/GFF
-         k5ZDJkndMBgNAJAYXQrnlb9wBH+AP3ekaFE2U+NmkLNcHLDPlGVl2AbMv9bLidi1RX20
-         fdiPBCrkanbV5HPnDmP1JWCiCzFrWUvCAnj0m85b7uNa7wLb2ROYngSaDpfdjNzSwkZo
-         eszdQ215NgScNfRNKWbMFHqe3PD2eWJ6toKy88NFs6m+w/SLgDrUs3DSSHMEiFISayrm
-         suzzGUjFV1ZxDCyTYM57m5bPD8uOz5bUTS51HZ8APSIzYi626pidPtpxRQxZCV4gBRpS
-         1Y/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686064965; x=1688656965;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=LmaCuege5jcXpMt1yPmHuonlSYuQ/J3P4tHEQgu7hXs=;
-        b=W4Y4YMajCzZ0uJ5LngGVLgGfb1hItcvhAfx/NvFPX73yAZDvo8LtXIsDCxtGKg7Sp8
-         fwH4/l0OScaCAWPmqRtOFQPF2eeJl6mvzJVtRnXdy5WAwmd3joRvUs5H3uZND3H3fZey
-         TYWv4JWWf9Zn0emcpUhI0TGJAYbTIdBRiq5dkZGbi3KNNaQFXaOqbWHStFpF1UTj6+EG
-         0I+2kn4CHhlnCqhwYwmmCTCBvgV53pO4KJQWekTpmMvI/4fQ4lAinSkATulpJGv0kobT
-         F6//Wkx09Fw5gQDbmXT59x42nzcw2MaksLiIgQD+tFKvzcvgsLxBr6608GSTjJY3XwYP
-         EcjQ==
-X-Gm-Message-State: AC+VfDzsp3Ual7vCV2z2Z05paCbX52B93hNVj7/0/q7SrXQSR3DFs1Vi
-        5DWTkfmlCuC0oXcGrEdLZLU=
-X-Google-Smtp-Source: ACHHUZ5Cepsp06TGWRhEUYycczrG90O+uPl1R+8lafski2iDoWml/Xh3dGP7HAXYEtuuHxQik7r2gQ==
-X-Received: by 2002:a17:90a:7ac5:b0:259:b67:2a7d with SMTP id b5-20020a17090a7ac500b002590b672a7dmr3141338pjl.7.1686064965406;
-        Tue, 06 Jun 2023 08:22:45 -0700 (PDT)
-Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:1a:efea::75b])
-        by smtp.gmail.com with ESMTPSA id d7-20020a17090ad3c700b002529f2e570esm7785761pjw.28.2023.06.06.08.22.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Jun 2023 08:22:45 -0700 (PDT)
-Message-ID: <4103a70f-cc09-a966-3efa-5ab9273f5c55@gmail.com>
-Date:   Tue, 6 Jun 2023 23:22:38 +0800
+        Tue, 6 Jun 2023 11:23:27 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BC13E54;
+        Tue,  6 Jun 2023 08:23:26 -0700 (PDT)
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 356FHlBt028747;
+        Tue, 6 Jun 2023 15:23:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=Pa3m1KrmUeV95wXnp/2hiFUe+laFDeJzwuUt+Le47b0=;
+ b=WkMCU9bWkww7plhfRaDUDszhr49MyIYP71gEFvzIOzEuYEFpZ5wnH3z6B+DIwBQHC4Rg
+ DipNJ/E2UJG1ANFc3LTJcTKjAp5SKUNcBG/f7c/fOxjcxt7yvoxHlD84xBtCbp2MNRys
+ alkloN5sOA57Wh+NpsxCWFi25RBcAgiZE0fxwXrWt3KKTglDv4LycfBG6OEQ1sU485IC
+ y1NfZQC9Z0ZRiEmQC8WZkWV2VoSkp6P1ckvpmeagwe8RbgsREc5f173zMYeWT0A+e7Wa
+ 9s7JyU3yHkMTEfnv6OWyQqecBDb55jOb3sTMgZfOXBKkqqka9y3EkUS11u+4VXBdlakr 9A== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r27ap04sq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Jun 2023 15:23:24 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 356BsGXA021647;
+        Tue, 6 Jun 2023 15:23:22 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3qyxku21uf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Jun 2023 15:23:22 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 356FNJgd36569590
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 6 Jun 2023 15:23:19 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 279CF20043;
+        Tue,  6 Jun 2023 15:23:19 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9CAA620040;
+        Tue,  6 Jun 2023 15:23:18 +0000 (GMT)
+Received: from [9.171.79.116] (unknown [9.171.79.116])
+        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Tue,  6 Jun 2023 15:23:18 +0000 (GMT)
+Message-ID: <3dcdd1de-50d9-1b75-dee6-8f7eee2dbe14@linux.ibm.com>
+Date:   Tue, 6 Jun 2023 17:23:18 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 3/9] x86/hyperv: Mark Hyper-V vp assist page unencrypted
- in SEV-SNP enlightened guest
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kys@microsoft.com,
-        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        daniel.lezcano@linaro.org, arnd@arndb.de,
-        michael.h.kelley@microsoft.com
-Cc:     Tianyu Lan <tiala@microsoft.com>, linux-arch@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230601151624.1757616-1-ltykernel@gmail.com>
- <20230601151624.1757616-4-ltykernel@gmail.com> <873536ksye.fsf@redhat.com>
-From:   Tianyu Lan <ltykernel@gmail.com>
-In-Reply-To: <873536ksye.fsf@redhat.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3 6/6] s390/uv: Update query for secret-UVCs
+Content-Language: en-US
+To:     Steffen Eiden <seiden@linux.ibm.com>, kvm@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Viktor Mihajlovski <mihajlov@linux.ibm.com>
+Cc:     Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Nico Boehr <nrb@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Hendrik Brueckner <brueckner@linux.ibm.com>
+References: <20230606113736.2934503-1-seiden@linux.ibm.com>
+ <20230606113736.2934503-7-seiden@linux.ibm.com>
+From:   Janosch Frank <frankja@linux.ibm.com>
+In-Reply-To: <20230606113736.2934503-7-seiden@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: b85OGtKE7nsylhmI-NFH4pQouDtk1-KQ
+X-Proofpoint-ORIG-GUID: b85OGtKE7nsylhmI-NFH4pQouDtk1-KQ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-06_10,2023-06-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
+ spamscore=0 mlxlogscore=999 suspectscore=0 bulkscore=0 mlxscore=0
+ clxscore=1015 priorityscore=1501 phishscore=0 lowpriorityscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2306060128
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,31 +93,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/5/2023 8:13 PM, Vitaly Kuznetsov wrote:
->> @@ -113,6 +114,11 @@ static int hv_cpu_init(unsigned int cpu)
->>   
->>   	}
->>   	if (!WARN_ON(!(*hvp))) {
->> +		if (hv_isolation_type_en_snp()) {
->> +			WARN_ON_ONCE(set_memory_decrypted((unsigned long)(*hvp), 1));
->> +			memset(*hvp, 0, PAGE_SIZE);
->> +		}
-> Why do we need to set the page as decrypted here and not when we
-> allocate the page (a few lines above)?
-
-If Linux root partition boots in the SEV-SNP guest, the page still needs 
-to be decrypted.
-
-> And why do we need to clear it
-> _after_  we made it decrypted? In case we care about not leaking the
-> stale content to the hypervisor, we should've cleared it_before_, but
-> the bigger problem I see is that memset() is problemmatic e.g. for KVM
-> which uses enlightened VMCS. You put a CPU offline and then back online
-> and this path will be taken. Clearing VP assist page will likely brake
-> things. (AFAIU SEV-SNP Hyper-V guests don't expose SVM yet so the
-> problem is likely theoretical only, but still).
+On 6/6/23 13:37, Steffen Eiden wrote:
+> Update the query struct such that secret-UVC related
+> information can be parsed.
+> Add sysfs files for these new values.
 > 
+> 'supp_add_secret_req_ver' notes the supported versions for the
+> Add Secret UVC. Bit 0 indicates that version 0x100 is supported,
+> bit 1 indicates 0x200, and so on.
+> 
+> 'supp_add_secret_pcf' notes the supported plaintext flags for
+> the Add Secret UVC.
+> 
+> 'supp_secret_types' notes the supported types of secrets.
+> Bit 0 indicates secret type 1, bit 1 indicates type 2, and so on.
+> 
+> 'max_secrets' notes the maximum amount of secrets the secret store can
+> store per pv guest.
+> 
+> Signed-off-by: Steffen Eiden <seiden@linux.ibm.com>
+> ---
+>   arch/s390/boot/uv.c        |  4 ++++
+>   arch/s390/include/asm/uv.h | 13 +++++++++++--
+>   arch/s390/kernel/uv.c      | 40 ++++++++++++++++++++++++++++++++++++++
+>   3 files changed, 55 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/s390/boot/uv.c b/arch/s390/boot/uv.c
+> index 0a077c0a2056..323b5cae3cf1 100644
+> --- a/arch/s390/boot/uv.c
+> +++ b/arch/s390/boot/uv.c
+> @@ -47,6 +47,10 @@ void uv_query_info(void)
+>   		uv_info.conf_dump_finalize_len = uvcb.conf_dump_finalize_len;
+>   		uv_info.supp_att_req_hdr_ver = uvcb.supp_att_req_hdr_ver;
+>   		uv_info.supp_att_pflags = uvcb.supp_att_pflags;
+> +		uv_info.supp_add_secret_req_ver = uvcb.supp_add_secret_req_ver;
+> +		uv_info.supp_add_secret_pcf = uvcb.supp_add_secret_pcf;
+> +		uv_info.supp_secret_types = uvcb.supp_secret_types;
+> +		uv_info.max_secrets = uvcb.max_num_secrets;
+>   	}
+>   
+>   #ifdef CONFIG_PROTECTED_VIRTUALIZATION_GUEST
+> diff --git a/arch/s390/include/asm/uv.h b/arch/s390/include/asm/uv.h
+> index 3203ffbdde6b..d71eb9b887d3 100644
+> --- a/arch/s390/include/asm/uv.h
+> +++ b/arch/s390/include/asm/uv.h
+> @@ -123,7 +123,7 @@ struct uv_cb_qui {
+>   	u32 reserved70[3];			/* 0x0070 */
+>   	u32 max_num_sec_conf;			/* 0x007c */
+>   	u64 max_guest_stor_addr;		/* 0x0080 */
+> -	u8  reserved88[158 - 136];		/* 0x0088 */
+> +	u8  reserved88[0x9e - 0x88];		/* 0x0088 */
+>   	u16 max_guest_cpu_id;			/* 0x009e */
+>   	u64 uv_feature_indications;		/* 0x00a0 */
+>   	u64 reserveda8;				/* 0x00a8 */
+> @@ -135,7 +135,12 @@ struct uv_cb_qui {
+>   	u64 reservedd8;				/* 0x00d8 */
+>   	u64 supp_att_req_hdr_ver;		/* 0x00e0 */
+>   	u64 supp_att_pflags;			/* 0x00e8 */
+> -	u8 reservedf0[256 - 240];		/* 0x00f0 */
+> +	u64 reservedf0;				/* 0x00f0 */
+> +	u64 supp_add_secret_req_ver;		/* 0x00f8 */
+> +	u64 supp_add_secret_pcf;		/* 0x0100 */
+> +	u64 supp_secret_types;			/* 0x0180 */
+> +	u16 max_num_secrets;			/* 0x0110 */
 
-The page will be made dirt by hardware after decrypting operation and so 
-memset the page after that.
-
+Now I know where you got the "num" from
