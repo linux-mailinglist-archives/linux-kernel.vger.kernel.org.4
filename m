@@ -2,213 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84C09723FDA
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 12:42:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5013723FDF
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 12:43:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231440AbjFFKmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 06:42:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60134 "EHLO
+        id S234654AbjFFKnI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 06:43:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232550AbjFFKmG (ORCPT
+        with ESMTP id S237194AbjFFKmV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 06:42:06 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D750210F1;
-        Tue,  6 Jun 2023 03:40:28 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1q6U71-0001kW-84; Tue, 06 Jun 2023 12:40:27 +0200
-Message-ID: <5cae4b60-a303-5cf6-9d30-8a723d417467@leemhuis.info>
-Date:   Tue, 6 Jun 2023 12:40:25 +0200
+        Tue, 6 Jun 2023 06:42:21 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06E251BDB
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 03:40:49 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-977c88c9021so466200666b.3
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 03:40:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686048047; x=1688640047;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HLj774D+pz6YB3btZ/z2RD1vhvv9nZxLfJinEPA2x5A=;
+        b=hP+B6dClgEY2Qbo3BxxHoolPl488Dk1P3+SkvYr9cN+giOYMeF/zUD6ZhUh/kt3R+S
+         bXreUkYm0xrr1Ap2pmeeNBLYwwplyQ6MT6YVZFqMzSuCgmmQ6OIcnBsvhgUie0AcR9ti
+         MWN2bfGRoQX2TINwDhPtmOpCOvU3AcaBWiq4yOzV2Vvs53JMuAC3t3vox5iLXDj9/Dua
+         64YjbSwjbrfArANmaKVqTOPb+FKqU3DlhSLLX4vYoJVVJvx32Wkvj4j2SwK0fuqug82M
+         aSPKLni2klECNNnM3MTppAoY/5Q/2qVnnwIRocgbzjCXYDyG22RSLY+HIgGLsVZC14M9
+         ws3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686048047; x=1688640047;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HLj774D+pz6YB3btZ/z2RD1vhvv9nZxLfJinEPA2x5A=;
+        b=PZIN2hEhso17FWTz5SJpRFlKBHHpINssHg0ZArjA5NxfyRc2XIrcxMGb1ssK9wFnsL
+         Z/2iKeamabmPhys4b0ztOuWaRAVQh6hO92sDXmyENMJ3MIbzUK7oah+cR4CKqc/omJg3
+         PH9FyRCwfBoVvNcTvvI5Qrk5mAWPv4tilcJj3kI0LEX94warayKsoENg6pf1P7s54fjx
+         81So3vvFcZ3KJGiA8iiv6jr7PQBxl/S7vdIn0G1XtSWvD66g6fIO6RtEX4gcyUZ57TeG
+         zfum2UcTO4cpJ3jFumdEqV38mcjEnrgDCdnRW6EBcBtxdBzvsgcYpg6BSIHikPl2OXTF
+         b9/g==
+X-Gm-Message-State: AC+VfDyQT1JT8fl0uRaVf2pAiMxtowZhKsfaRcsPbXjifTCEmFrQj7SH
+        07FuFIYkcpDEn4hCRj8wY4R87g==
+X-Google-Smtp-Source: ACHHUZ7C1r42ySwDtx7lw0ifHfagwC8YL/zV9fl+XnaVQwq9v2QbktwuXbmkZ3A92llvOeCemuSEvw==
+X-Received: by 2002:a17:907:3f24:b0:974:1c99:7d3 with SMTP id hq36-20020a1709073f2400b009741c9907d3mr2303998ejc.25.1686048047487;
+        Tue, 06 Jun 2023 03:40:47 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id gr24-20020a170906e2d800b0096f5b48fe43sm5431043ejb.47.2023.06.06.03.40.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Jun 2023 03:40:47 -0700 (PDT)
+Message-ID: <d0b2cdc5-12fd-9a19-b38c-0653b4147c2b@linaro.org>
+Date:   Tue, 6 Jun 2023 12:40:45 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: Webcam LED control regression
-Content-Language: en-US, de-DE
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-References: <468a36ec-c3ac-cb47-e12f-5906239ae3cd@spahan.ch>
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Cc:     linux-media@vger.kernel.org, Poncho <poncho@spahan.ch>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linux kernel regressions list <regressions@lists.linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <468a36ec-c3ac-cb47-e12f-5906239ae3cd@spahan.ch>
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v8 3/3] dt-bindings: mtd: marvell-nand: Convert to YAML DT
+ scheme
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
+        "richard@nod.at" <richard@nod.at>,
+        "vigneshr@ti.com" <vigneshr@ti.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "conor+dt@kernel.org" <conor+dt@kernel.org>,
+        "andrew@lunn.ch" <andrew@lunn.ch>,
+        "gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
+        "sebastian.hesselbarth@gmail.com" <sebastian.hesselbarth@gmail.com>,
+        "conor@kernel.org" <conor@kernel.org>,
+        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "enachman@marvell.com" <enachman@marvell.com>,
+        Vadym Kochan <vadym.kochan@plvision.eu>
+References: <20230531234923.2307013-1-chris.packham@alliedtelesis.co.nz>
+ <20230531234923.2307013-4-chris.packham@alliedtelesis.co.nz>
+ <a23dd485-a3d9-e31f-be3e-0ab293fcfc4a@linaro.org>
+ <785368df-1881-e62e-6172-d902cee814a8@alliedtelesis.co.nz>
+ <eaf9d7cf-c9f5-a5d5-67af-c43761c3c6cf@linaro.org>
+ <4ea0b16e-0cec-00db-c598-e0364a7edef8@alliedtelesis.co.nz>
+ <9fc57052-5049-ed50-ca95-cfd1d0420dd9@alliedtelesis.co.nz>
+ <20230606094855.1ab005eb@xps-13>
+ <845924ba-d9bf-d0ec-e1f2-f721366f43c0@linaro.org>
+ <20230606122812.411b223a@xps-13>
+ <e0d14527-8147-5e8b-6a43-ee043e0d0f8b@linaro.org>
+In-Reply-To: <e0d14527-8147-5e8b-6a43-ee043e0d0f8b@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1686048028;fd235b51;
-X-HE-SMSGID: 1q6U71-0001kW-84
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CCing a few people and lists that should be aware of this and might be
-able to help.
-
-On 05.06.23 18:39, Poncho wrote:
-> With kernel 6.3, the LED of my C922 Pro Stream Webcam is no longer
-> controllable.
-> 
-> With kernel 6.1 v4l2-ctl --all returns:
-> 
->> led1_mode 0x0a046d05 (menu)   : min=0 max=3 default=0 value=0 (Off)
->>     0: Off
->>     1: On
->>     2: Blink
->>     3: Auto
-> 
-> 
-> 
-> but with kernel 6.3 I get:
-> 
->> led1_mode 0x0a046d05 (menu)   : min=4 max=4 default=0 value=0
->>     4:
-
-Thanks for the report.
-
-FWIW, maybe one of those people that I CCed has an idea what's wrong. If
-none of them brings one to the table withing the next two or three days,
-you likely have to perform a bisection to find the change that broke
-thing for you.
-
-For the rest of this mail:
-
-[TLDR: I'm adding this report to the list of tracked Linux kernel
-regressions; the text you find below is based on a few templates
-paragraphs you might have encountered already in similar form.
-See link in footer if these mails annoy you.]
-
-> Full output bellow:
-> 
->> Driver Info:
->>     Driver name      : uvcvideo
->>     Card type        : C922 Pro Stream Webcam
->>     Bus info         : usb-0000:00:14.0-9
->>     Driver version   : 6.3.5
->>     Capabilities     : 0x84a00001
->>         Video Capture
->>         Metadata Capture
->>         Streaming
->>         Extended Pix Format
->>         Device Capabilities
->>     Device Caps      : 0x04200001
->>         Video Capture
->>         Streaming
->>         Extended Pix Format
->> Media Driver Info:
->>     Driver name      : uvcvideo
->>     Model            : C922 Pro Stream Webcam
->>     Serial           : 6E8DF1BF
->>     Bus info         : usb-0000:00:14.0-9
->>     Media version    : 6.3.5
->>     Hardware revision: 0x00000016 (22)
->>     Driver version   : 6.3.5
->> Interface Info:
->>     ID               : 0x03000002
->>     Type             : V4L Video
->> Entity Info:
->>     ID               : 0x00000001 (1)
->>     Name             : C922 Pro Stream Webcam
->>     Function         : V4L2 I/O
->>     Flags            : default
->>     Pad 0x01000007   : 0: Sink
->>       Link 0x0200001f: from remote pad 0x100000a of entity 'Processing
->> 3' (Video Pixel Formatter): Data, Enabled, Immutable
->> Priority: 2
->> Video input : 0 (Camera 1: ok)
->> Format Video Capture:
->>     Width/Height      : 160/90
->>     Pixel Format      : 'YUYV' (YUYV 4:2:2)
->>     Field             : None
->>     Bytes per Line    : 320
->>     Size Image        : 28800
->>     Colorspace        : sRGB
->>     Transfer Function : Rec. 709
->>     YCbCr/HSV Encoding: ITU-R 601
->>     Quantization      : Default (maps to Limited Range)
->>     Flags             : Crop Capability Video Capture:
->>     Bounds      : Left 0, Top 0, Width 160, Height 90
->>     Default     : Left 0, Top 0, Width 160, Height 90
->>     Pixel Aspect: 1/1
->> Selection Video Capture: crop_default, Left 0, Top 0, Width 160,
->> Height 90, Flags: Selection Video Capture: crop_bounds, Left 0, Top 0,
->> Width 160, Height 90, Flags: Streaming Parameters Video Capture:
->>     Capabilities     : timeperframe
->>     Frames per second: 30.000 (30/1)
->>     Read buffers     : 0
+On 06/06/2023 12:37, Krzysztof Kozlowski wrote:
+> On 06/06/2023 12:28, Miquel Raynal wrote:
+>> Hi Krzysztof,
 >>
->> User Controls
+>> krzysztof.kozlowski@linaro.org wrote on Tue, 6 Jun 2023 10:44:34 +0200:
 >>
->>                      brightness 0x00980900 (int)    : min=0 max=255
->> step=1 default=128 value=128
->>                        contrast 0x00980901 (int)    : min=0 max=255
->> step=1 default=128 value=128
->>                      saturation 0x00980902 (int)    : min=0 max=255
->> step=1 default=128 value=128
->>         white_balance_automatic 0x0098090c (bool)   : default=1 value=1
->>                            gain 0x00980913 (int)    : min=0 max=255
->> step=1 default=0 value=0
->>            power_line_frequency 0x00980918 (menu)   : min=0 max=2
->> default=2 value=2 (60 Hz)
->>                 0: Disabled
->>                 1: 50 Hz
->>                 2: 60 Hz
->>       white_balance_temperature 0x0098091a (int)    : min=2000
->> max=6500 step=1 default=4000 value=4000 flags=inactive
->>                       sharpness 0x0098091b (int)    : min=0 max=255
->> step=1 default=128 value=128
->>          backlight_compensation 0x0098091c (int)    : min=0 max=1
->> step=1 default=0 value=0
+>>> On 06/06/2023 09:48, Miquel Raynal wrote:
+>>>>>>>>>> +          it (otherwise it is harmless).
+>>>>>>>>>> +        $ref: /schemas/types.yaml#/definitions/flag
+>>>>>>>>>> +        deprecated: true
+>>>>>>>>>> +
+>>>>>>>>>> +    additionalProperties: false    
+>>>>>>>>> unevaluatedProperties: false    
+>>>>>>>> It was hiding by '"^nand@[0-3]$":'. Should I move it here?    
+>>>>>>> You cannot have both additionalProps and unevaluatedProps at the same
+>>>>>>> time, so we do not talk about same thing or this was never working?    
+>>>>>>
+>>>>>> Hmm, I'm a little confused then. At various times I've been told to 
+>>>>>> put 'additionalProperties: false' or 'unevaluatedProperties: false' 
+>>>>>> (although never at the same time). I'm not sure when to use one or the 
+>>>>>> other.
+>>>>>>
+>>>>>> From what I've been able to glean 'additionalProperties: true' 
+>>>>>> indicates that the node is expected to have child nodes defined in a 
+>>>>>> different schema so I would have thought 'additionalProperties: false' 
+>>>>>> would be appropriate for a schema covering a leaf node. 
+>>>>>> 'unevaluatedProperties: false' seems to enable stricter checking which 
+>>>>>> makes sense when all the properties are described in the schema.    
+>>>>>
+>>>>> So I think this might be the problem. If I look at qcom,nandc.yaml or 
+>>>>> ingenic,nand.yaml which both have a partitions property in their 
+>>>>> example. Neither have 'unevaluatedProperties: false' on the nand@... 
+>>>>> subnode. If I add it sure enough I start getting complaints about the 
+>>>>> 'partitions' node being unexpected.  
+>>>>
+>>>> Sorry if that was unclear, I think the whole logic around the yaml
+>>>> files is to progressively constrain the descriptions, schema after
+>>>> schema. IOW, in the marvell binding you should set
+>>>> unevaluatedProperties: false for the NAND controller. What is inside
+>>>> (NAND chips, partition container, partition parsers, "mtd" properties,
+>>>> etc) will be handled by other files. Of course you can constrain a bit
+>>>> what can/cannot be used inside these subnodes, but I think you don't
+>>>> need to set unevaluatedProperties in these subnodes (the NAND chip in
+>>>> this case, or even the partitions) because you already reference
+>>>> nand-controller.yaml which references nand-chip.yaml, mtd.yaml,
+>>>> partitions.yaml, etc. *they* will make the generic checks and hopefully
+>>>> apply stricter checks, when deemed relevant.  
+>>>
+>>> No, neither nand-controller.yaml nor nand-chip.yaml limit the properties
+>>> in this context, so each device schema must have unevaluatedProperties:
+>>> false, for which I asked few emails ago.
 >>
->> Camera Controls
+>> The controller description shall be guarded by unevaluatedProperties:
+>> false, we agree. Do you mean the nand chip description in each nand
+>> controller binding should also include it at its own level? Because
+>> that is not what we enforced so far IIRC. I am totally fine doing so
+>> starting from now on if this is a new requirement (which makes sense).
 >>
->>                   auto_exposure 0x009a0901 (menu)   : min=0 max=3
->> default=3 value=3 (Aperture Priority Mode)
->>                 1: Manual Mode
->>                 3: Aperture Priority Mode
->>          exposure_time_absolute 0x009a0902 (int)    : min=3 max=2047
->> step=1 default=250 value=250 flags=inactive
->>      exposure_dynamic_framerate 0x009a0903 (bool)   : default=0 value=1
->>                    pan_absolute 0x009a0908 (int)    : min=-36000
->> max=36000 step=3600 default=0 value=0
->>                   tilt_absolute 0x009a0909 (int)    : min=-36000
->> max=36000 step=3600 default=0 value=0
->>                  focus_absolute 0x009a090a (int)    : min=0 max=250
->> step=5 default=0 value=0 flags=inactive
->>      focus_automatic_continuous 0x009a090c (bool)   : default=1 value=1
->>                   zoom_absolute 0x009a090d (int)    : min=100 max=500
->> step=1 default=100 value=100
->>                       led1_mode 0x0a046d05 (menu)   : min=4 max=4
->> default=0 value=0
->>                 4:                  led1_frequency 0x0a046d06 (int)   
->> : min=0 max=255 step=1 default=0 value=255
+>> If yes, then it means we would need to list *all* the nand
+>> chip properties in each schema, which clearly involves a lot of
+>> duplication as you would need to define all types of partitions,
+>> partition parsers, generic properties, etc in order for the examples to
+>> pass all the checks. Only the properties like pinctrl-* would not need
+>> to be listed I guess.
+> 
+> Yes, this is what should be done. Each node should have either
 
-To be sure the issue doesn't fall through the cracks unnoticed, I'm
-adding it to regzbot, the Linux kernel regression tracking bot:
+Eh, no, I responded in wrong part of message. My yes was for:
 
-#regzbot ^introduced v6.1..v6.3
-#regzbot title media: uvcvideo: Webcam LED control regression
-#regzbot ignore-activity
+" Do you mean the nand chip description in each nand
+controller binding should also include it at its own level?"
 
-This isn't a regression? This issue or a fix for it are already
-discussed somewhere else? It was fixed already? You want to clarify when
-the regression started to happen? Or point out I got the title or
-something else totally wrong? Then just reply and tell me -- ideally
-while also telling regzbot about it, as explained by the page listed in
-the footer of this mail.
+Now for actual paragraph:
 
-Developers: When fixing the issue, remember to add 'Link:' tags pointing
-to the report (the parent of this mail). See page linked in footer for
-details.
+"If yes, then it means we would need to list *all* the nand chip
+properties in each schema,"
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-That page also explains what to do if mails like this annoy you.
+No, why? I don't understand. Use the same pattern as all other bindings,
+this is not special. Absolutely all have the same behavior, e.g.
+mentioned leds. You finish with unevaluatedProps and you're done, which
+is what I wrote here long, long time ago.
+
+Best regards,
+Krzysztof
+
