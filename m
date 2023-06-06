@@ -2,255 +2,309 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C616F723DC2
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 11:36:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24659723DC1
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 11:35:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235488AbjFFJgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 05:36:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42756 "EHLO
+        id S237490AbjFFJfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 05:35:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232994AbjFFJfr (ORCPT
+        with ESMTP id S237741AbjFFJfa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 05:35:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C20D310E4
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 02:35:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686044105;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=czvn6qht8d+SNDHj1nJ3XRHNi7ght7JwKJF60fFVSnQ=;
-        b=KoUaj3H/P8EJpKyxRRdrXezl36LWrsTChDUydVQaSG7iALs62Df05y6hvINxscyZtKO4tX
-        iP+9YzgBQtcrxlxkFmVlrT0a69BLRj+hcISGN45HUMWcwWnntfTe4LeX29v+FpGh4xpNqW
-        1Esq1eEHPf4w0XBaJ3aGLf7ou4ITBkk=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-619-9g8db735PYqhzfknbAoB6w-1; Tue, 06 Jun 2023 05:35:03 -0400
-X-MC-Unique: 9g8db735PYqhzfknbAoB6w-1
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-9715654aba1so642236166b.0
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 02:35:02 -0700 (PDT)
+        Tue, 6 Jun 2023 05:35:30 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65ED3E6D
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 02:35:29 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id 5614622812f47-39a50fcc719so4024449b6e.2
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 02:35:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686044128; x=1688636128;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wWQiXuIRb46Lzjnlp2OWrFgW8Gqy2tURjcQ9J82M55w=;
+        b=OPCxTmlTxf6teYDR6rwJlRL1rX1Rv3Lz4uuaJAMXwwowD5mwY/djSulAFjKP0PY4Dl
+         gB55UCf89Anw/UEmcQM0vcVftbCn5uN1EXecvF/lFEzk+PYoBIMxSMHODn6Oyka1mKQJ
+         KTTpRYMiNW0jAAeLSwkie6zD1IQmwJJHvVtYaWipA4a9z8au405BLJ0u6A+crsG1TZba
+         7b1Wp0bBlbAXE9Sd8Y50RJSSwlYFHAyJORr6IpRGH/CBq8eH9qcyO8ZhMONENoRAVryq
+         2f9ftLrl5M42p60uCXre/gvOx7+3qyoxxirvl9F7RERnJbikG3v6cNyDqQ+6sISUhYhN
+         G9zw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686044102; x=1688636102;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=czvn6qht8d+SNDHj1nJ3XRHNi7ght7JwKJF60fFVSnQ=;
-        b=GXsOSLOLmi27D374jyX2PsScNDWjZDBlyU1Yxcxi1/kCctXOZ6p94ywQaS8FO3mb0u
-         i1rbyz83TuYoEWt8PQnvZfPr/V3AI+bXE6C94HsKoHG47QgD0lKsnmD1O271ETuUw9aV
-         +CJzyQGisFF7MyCdxs7GfsJDFdbCtDDUH2gvtSNr+AsX6pfOgLol/K1UICqfG2zqNs9F
-         832KEl1ClU+zH3aGdCVe5H1Mdl2KQzDfwKPUfEm/bfIWXMgube6qgFdx6VdNdk2YVBqi
-         QtGqXL+96JznkeOXwc+E1rWbdbDUyK073y+ZXteMcER/woKkPBiZQVxT54yW07ehmXXF
-         UzdA==
-X-Gm-Message-State: AC+VfDyd3Z+rGM1dyhN78drzHf37Z6kAFJOk3kQSCSr3bN61P0uO5OSj
-        Luvby2mSxbTdIFFRCF5E96DOLi1zS/LVKxEpFD6nQXyozd88dmvMfpWVwej7aI8xnI5uzocsFie
-        hVMLDe3pPuAk4djAqAxuWSWgK
-X-Received: by 2002:a17:907:1c20:b0:978:666e:3bf with SMTP id nc32-20020a1709071c2000b00978666e03bfmr1605023ejc.35.1686044102091;
-        Tue, 06 Jun 2023 02:35:02 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7J4hvKU8/d0J1npKRJdWpuES6Liy1rBeTtGAT64PROYlQ5vM7eDeKW2x/5F31w4GheAKb/Hw==
-X-Received: by 2002:a17:907:1c20:b0:978:666e:3bf with SMTP id nc32-20020a1709071c2000b00978666e03bfmr1605009ejc.35.1686044101731;
-        Tue, 06 Jun 2023 02:35:01 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id c8-20020a170906924800b00977cc473b41sm3422739ejx.142.2023.06.06.02.35.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Jun 2023 02:35:01 -0700 (PDT)
-Message-ID: <9698d2f0-9c9a-95c0-7659-d699b631afe4@redhat.com>
-Date:   Tue, 6 Jun 2023 11:35:00 +0200
+        d=1e100.net; s=20221208; t=1686044128; x=1688636128;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wWQiXuIRb46Lzjnlp2OWrFgW8Gqy2tURjcQ9J82M55w=;
+        b=VPzUkorkJfLj2EezxF5YkpJx6qk58kJKfQ8+saqIrGfETsGPFriymZ7WVVtcC5nwSF
+         ick/NyXuTf7E9OqhxLzAvPNxCXxKlACgDCuCJ2fFnX+ISu/M9Hh24dwO/ayXwMYdtfpf
+         7PZZGOOgi+hzAqh7dj9OQUvVy0ZBWJeKCHZp/CkQ+B6hMymO4Ci4N713qiOsp/3MvC9h
+         6kMTRC2q6RlZZGNnn4X31ZdQQZFtovQIErg+OM1Te0QQSdkjUlidgBGR8nyyaLmiDXY1
+         PmMydXqcptRzRsvg0C3fzISPMwiOcRPhxpiHY4G+9WRT5CnguV0vDYPARCs10E80jaFk
+         D7Sw==
+X-Gm-Message-State: AC+VfDx55PygaZoF/JrmMtWFCxo2vJPsm16OlS1NKRp4gDAydTw3C4jJ
+        K1uB5y49/9owZPVgThuz5UOFZQCvAhU2CormXfUgLBZbhwGFkQ==
+X-Google-Smtp-Source: ACHHUZ6JSA+qKyoJHk2sSeuPtQ7PrnpRCYmhI1jJcYIVfxsAPpXxHyZC2TmasRF5HML9S8+c6uLLh3pLtf6juKw5Wf4=
+X-Received: by 2002:a05:6808:3a1:b0:383:e7c8:4000 with SMTP id
+ n1-20020a05680803a100b00383e7c84000mr1621122oie.13.1686044128540; Tue, 06 Jun
+ 2023 02:35:28 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2] platform/x86: hp-wmi: Add thermal profile for Victus
- 16-d1xxx
-Content-Language: en-US, nl
-To:     SungHwan Jung <onenowy@gmail.com>,
-        Mark Gross <markgross@kernel.org>
-Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230604173023.4675-1-onenowy@gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230604173023.4675-1-onenowy@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230605085419.44383-1-cerasuolodomenico@gmail.com>
+ <20230605085419.44383-2-cerasuolodomenico@gmail.com> <CAJD7tka+_-MZDwbyt8vewvgRzRNg9jpFL7pxfu4ruceGpCkqCw@mail.gmail.com>
+In-Reply-To: <CAJD7tka+_-MZDwbyt8vewvgRzRNg9jpFL7pxfu4ruceGpCkqCw@mail.gmail.com>
+From:   Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+Date:   Tue, 6 Jun 2023 11:35:17 +0200
+Message-ID: <CA+CLi1ikS52d+ztjMbT56bMD0Cqnb2H0WimXgOJw72hznymmEg@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/7] mm: zswap: add pool shrinking mechanism
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     vitaly.wool@konsulko.com, minchan@kernel.org,
+        senozhatsky@chromium.org, linux-mm@kvack.org, ddstreet@ieee.org,
+        sjenning@redhat.com, nphamcs@gmail.com, hannes@cmpxchg.org,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, Jun 6, 2023 at 4:19=E2=80=AFAM Yosry Ahmed <yosryahmed@google.com> =
+wrote:
+>
+> Hi Domenico,
+>
+> On Mon, Jun 5, 2023 at 1:54=E2=80=AFAM Domenico Cerasuolo
+> <cerasuolodomenico@gmail.com> wrote:
+> >
+> > Each zpool driver (zbud, z3fold and zsmalloc) implements its own shrink
+> > function, which is called from zpool_shrink. However, with this commit,
+> > a unified shrink function is added to zswap. The ultimate goal is to
+> > eliminate the need for zpool_shrink once all zpool implementations have
+> > dropped their shrink code.
+> >
+> > To ensure the functionality of each commit, this change focuses solely
+> > on adding the mechanism itself. No modifications are made to
+> > the backends, meaning that functionally, there are no immediate changes=
+.
+> > The zswap mechanism will only come into effect once the backends have
+> > removed their shrink code. The subsequent commits will address the
+> > modifications needed in the backends.
+> >
+> > Signed-off-by: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+> > ---
+> >  mm/zswap.c | 83 ++++++++++++++++++++++++++++++++++++++++++++++++++----
+> >  1 file changed, 78 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/mm/zswap.c b/mm/zswap.c
+> > index bcb82e09eb64..80d7780bf066 100644
+> > --- a/mm/zswap.c
+> > +++ b/mm/zswap.c
+> > @@ -159,6 +159,8 @@ struct zswap_pool {
+> >         struct work_struct shrink_work;
+> >         struct hlist_node node;
+> >         char tfm_name[CRYPTO_MAX_ALG_NAME];
+> > +       struct list_head lru;
+> > +       spinlock_t lock;
+>
+> If this lock is only protecting the lru then I believe it's better to
+> call in lru_lock to make it explicit.
 
-On 6/4/23 19:30, SungHwan Jung wrote:
-> This patch includes Platform Profile support (performance, balanced, quiet)
-> for Victus 16-d1xxx (8A25).
-> 
-> Signed-off-by: SungHwan Jung <onenowy@gmail.com>
+Hi Yosry,
 
-Thank you for your patch, I've applied this patch to my review-hans 
-branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+thanks for the input, it makes sense to call it lru_lock, will update.
 
-Note it will show up in my review-hans branch once I've pushed my
-local branch there, which might take a while.
+>
+> >  };
+> >
+> >  /*
+> > @@ -176,10 +178,12 @@ struct zswap_pool {
+> >   *            be held while changing the refcount.  Since the lock mus=
+t
+> >   *            be held, there is no reason to also make refcount atomic=
+.
+> >   * length - the length in bytes of the compressed page data.  Needed d=
+uring
+> > - *          decompression. For a same value filled page length is 0.
+> > + *          decompression. For a same value filled page length is 0, a=
+nd both
+> > + *          pool and lru are invalid and must be ignored.
+> >   * pool - the zswap_pool the entry's data is in
+> >   * handle - zpool allocation handle that stores the compressed page da=
+ta
+> >   * value - value of the same-value filled pages which have same conten=
+t
+> > + * lru - handle to the pool's lru used to evict pages.
+> >   */
+> >  struct zswap_entry {
+> >         struct rb_node rbnode;
+> > @@ -192,6 +196,7 @@ struct zswap_entry {
+> >                 unsigned long value;
+> >         };
+> >         struct obj_cgroup *objcg;
+> > +       struct list_head lru;
+> >  };
+> >
+> >  struct zswap_header {
+> > @@ -364,6 +369,9 @@ static void zswap_free_entry(struct zswap_entry *en=
+try)
+> >         if (!entry->length)
+> >                 atomic_dec(&zswap_same_filled_pages);
+> >         else {
+> > +               spin_lock(&entry->pool->lock);
+> > +               list_del_init(&entry->lru);
+> > +               spin_unlock(&entry->pool->lock);
+>
+> I think we should document the lock ordering somewhere (tree lock ->
+> lru lock), otherwise we may run into an ABBA deadlock down the road.
 
-Once I've run some tests on this branch the patches there will be
-added to the platform-drivers-x86/for-next branch and eventually
-will be included in the pdx86 pull-request to Linus for the next
-merge-window.
+Will update in the next iteration.
 
-Regards,
-
-Hans
-
-
-
-
-> 
-> ---
-> changes in v2 : clean up code
-> ---
->  drivers/platform/x86/hp/hp-wmi.c | 96 +++++++++++++++++++++++++++++++-
->  1 file changed, 95 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/platform/x86/hp/hp-wmi.c b/drivers/platform/x86/hp/hp-wmi.c
-> index 6364ae262..04c05c6b0 100644
-> --- a/drivers/platform/x86/hp/hp-wmi.c
-> +++ b/drivers/platform/x86/hp/hp-wmi.c
-> @@ -66,6 +66,11 @@ static const char *const omen_thermal_profile_force_v0_boards[] = {
->  	"8607", "8746", "8747", "8749", "874A", "8748"
->  };
->  
-> +/* DMI Board names of Victus laptops */
-> +static const char * const victus_thermal_profile_boards[] = {
-> +	"8A25"
-> +};
-> +
->  enum hp_wmi_radio {
->  	HPWMI_WIFI	= 0x0,
->  	HPWMI_BLUETOOTH	= 0x1,
-> @@ -176,6 +181,12 @@ enum hp_thermal_profile_omen_v1 {
->  	HP_OMEN_V1_THERMAL_PROFILE_COOL		= 0x50,
->  };
->  
-> +enum hp_thermal_profile_victus {
-> +	HP_VICTUS_THERMAL_PROFILE_DEFAULT		= 0x00,
-> +	HP_VICTUS_THERMAL_PROFILE_PERFORMANCE		= 0x01,
-> +	HP_VICTUS_THERMAL_PROFILE_QUIET			= 0x03,
-> +};
-> +
->  enum hp_thermal_profile {
->  	HP_THERMAL_PROFILE_PERFORMANCE	= 0x00,
->  	HP_THERMAL_PROFILE_DEFAULT		= 0x01,
-> @@ -1246,6 +1257,70 @@ static int hp_wmi_platform_profile_set(struct platform_profile_handler *pprof,
->  	return 0;
->  }
->  
-> +static bool is_victus_thermal_profile(void)
-> +{
-> +	const char *board_name = dmi_get_system_info(DMI_BOARD_NAME);
-> +
-> +	if (!board_name)
-> +		return false;
-> +
-> +	return match_string(victus_thermal_profile_boards,
-> +			    ARRAY_SIZE(victus_thermal_profile_boards),
-> +			    board_name) >= 0;
-> +}
-> +
-> +static int platform_profile_victus_get(struct platform_profile_handler *pprof,
-> +				     enum platform_profile_option *profile)
-> +{
-> +	int tp;
-> +
-> +	tp = omen_thermal_profile_get();
-> +	if (tp < 0)
-> +		return tp;
-> +
-> +	switch (tp) {
-> +	case HP_VICTUS_THERMAL_PROFILE_PERFORMANCE:
-> +		*profile = PLATFORM_PROFILE_PERFORMANCE;
-> +		break;
-> +	case HP_VICTUS_THERMAL_PROFILE_DEFAULT:
-> +		*profile = PLATFORM_PROFILE_BALANCED;
-> +		break;
-> +	case HP_VICTUS_THERMAL_PROFILE_QUIET:
-> +		*profile = PLATFORM_PROFILE_QUIET;
-> +		break;
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int platform_profile_victus_set(struct platform_profile_handler *pprof,
-> +				     enum platform_profile_option profile)
-> +{
-> +	int err, tp;
-> +
-> +	switch (profile) {
-> +	case PLATFORM_PROFILE_PERFORMANCE:
-> +		tp = HP_VICTUS_THERMAL_PROFILE_PERFORMANCE;
-> +		break;
-> +	case PLATFORM_PROFILE_BALANCED:
-> +		tp = HP_VICTUS_THERMAL_PROFILE_DEFAULT;
-> +		break;
-> +	case PLATFORM_PROFILE_QUIET:
-> +		tp = HP_VICTUS_THERMAL_PROFILE_QUIET;
-> +		break;
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	err = omen_thermal_profile_set(tp);
-> +	if (err < 0)
-> +		return err;
-> +
-> +	return 0;
-> +}
-> +
->  static int thermal_profile_setup(void)
->  {
->  	int err, tp;
-> @@ -1266,6 +1341,25 @@ static int thermal_profile_setup(void)
->  
->  		platform_profile_handler.profile_get = platform_profile_omen_get;
->  		platform_profile_handler.profile_set = platform_profile_omen_set;
-> +
-> +		set_bit(PLATFORM_PROFILE_COOL, platform_profile_handler.choices);
-> +	} else if (is_victus_thermal_profile()) {
-> +		tp = omen_thermal_profile_get();
-> +		if (tp < 0)
-> +			return tp;
-> +
-> +		/*
-> +		 * call thermal profile write command to ensure that the
-> +		 * firmware correctly sets the OEM variables
-> +		 */
-> +		err = omen_thermal_profile_set(tp);
-> +		if (err < 0)
-> +			return err;
-> +
-> +		platform_profile_handler.profile_get = platform_profile_victus_get;
-> +		platform_profile_handler.profile_set = platform_profile_victus_set;
-> +
-> +		set_bit(PLATFORM_PROFILE_QUIET, platform_profile_handler.choices);
->  	} else {
->  		tp = thermal_profile_get();
->  
-> @@ -1284,9 +1378,9 @@ static int thermal_profile_setup(void)
->  		platform_profile_handler.profile_set = hp_wmi_platform_profile_set;
->  
->  		set_bit(PLATFORM_PROFILE_QUIET, platform_profile_handler.choices);
-> +		set_bit(PLATFORM_PROFILE_COOL, platform_profile_handler.choices);
->  	}
->  
-> -	set_bit(PLATFORM_PROFILE_COOL, platform_profile_handler.choices);
->  	set_bit(PLATFORM_PROFILE_BALANCED, platform_profile_handler.choices);
->  	set_bit(PLATFORM_PROFILE_PERFORMANCE, platform_profile_handler.choices);
->  
-
+>
+> >                 zpool_free(entry->pool->zpool, entry->handle);
+> >                 zswap_pool_put(entry->pool);
+> >         }
+> > @@ -584,14 +592,65 @@ static struct zswap_pool *zswap_pool_find_get(cha=
+r *type, char *compressor)
+> >         return NULL;
+> >  }
+> >
+> > +static int zswap_shrink(struct zswap_pool *pool)
+> > +{
+> > +       struct zswap_entry *lru_entry, *tree_entry =3D NULL;
+> > +       struct zswap_header *zhdr;
+> > +       struct zswap_tree *tree;
+> > +       swp_entry_t swpentry;
+> > +       int ret;
+> > +
+> > +       /* get a reclaimable entry from LRU */
+> > +       spin_lock(&pool->lock);
+> > +       if (list_empty(&pool->lru)) {
+> > +               spin_unlock(&pool->lock);
+> > +               return -EINVAL;
+> > +       }
+> > +       lru_entry =3D list_last_entry(&pool->lru, struct zswap_entry, l=
+ru);
+> > +       list_del_init(&lru_entry->lru);
+> > +       zhdr =3D zpool_map_handle(pool->zpool, lru_entry->handle, ZPOOL=
+_MM_RO);
+> > +       tree =3D zswap_trees[swp_type(zhdr->swpentry)];
+> > +       zpool_unmap_handle(pool->zpool, lru_entry->handle);
+> > +       swpentry =3D zhdr->swpentry;
+> > +       spin_unlock(&pool->lock);
+> > +
+> > +       /* hold a reference from tree so it won't be freed during write=
+back */
+> > +       spin_lock(&tree->lock);
+> > +       tree_entry =3D zswap_entry_find_get(&tree->rbroot, swp_offset(s=
+wpentry));
+> > +       if (tree_entry !=3D lru_entry) {
+> > +               if (tree_entry)
+> > +                       zswap_entry_put(tree, tree_entry);
+> > +               spin_unlock(&tree->lock);
+> > +               return -EAGAIN;
+> > +       }
+> > +       spin_unlock(&tree->lock);
+> > +
+> > +       ret =3D zswap_writeback_entry(pool->zpool, lru_entry->handle);
+> > +
+> > +       spin_lock(&tree->lock);
+> > +       if (ret) {
+> > +               spin_lock(&pool->lock);
+> > +               list_move(&lru_entry->lru, &pool->lru);
+> > +               spin_unlock(&pool->lock);
+> > +       }
+> > +       zswap_entry_put(tree, tree_entry);
+> > +       spin_unlock(&tree->lock);
+> > +
+> > +       return ret ? -EAGAIN : 0;
+> > +}
+> > +
+> >  static void shrink_worker(struct work_struct *w)
+> >  {
+> >         struct zswap_pool *pool =3D container_of(w, typeof(*pool),
+> >                                                 shrink_work);
+> >         int ret, failures =3D 0;
+> >
+> > +       /* zpool_evictable will be removed once all 3 backends have mig=
+rated*/
+> >         do {
+> > -               ret =3D zpool_shrink(pool->zpool, 1, NULL);
+> > +               if (zpool_evictable(pool->zpool))
+> > +                       ret =3D zpool_shrink(pool->zpool, 1, NULL);
+> > +               else
+> > +                       ret =3D zswap_shrink(pool);
+> >                 if (ret) {
+> >                         zswap_reject_reclaim_fail++;
+> >                         if (ret !=3D -EAGAIN)
+> > @@ -655,6 +714,8 @@ static struct zswap_pool *zswap_pool_create(char *t=
+ype, char *compressor)
+> >          */
+> >         kref_init(&pool->kref);
+> >         INIT_LIST_HEAD(&pool->list);
+> > +       INIT_LIST_HEAD(&pool->lru);
+> > +       spin_lock_init(&pool->lock);
+> >         INIT_WORK(&pool->shrink_work, shrink_worker);
+> >
+> >         zswap_pool_debug("created", pool);
+> > @@ -1270,7 +1331,7 @@ static int zswap_frontswap_store(unsigned type, p=
+goff_t offset,
+> >         }
+> >
+> >         /* store */
+> > -       hlen =3D zpool_evictable(entry->pool->zpool) ? sizeof(zhdr) : 0=
+;
+> > +       hlen =3D sizeof(zhdr);
+> >         gfp =3D __GFP_NORETRY | __GFP_NOWARN | __GFP_KSWAPD_RECLAIM;
+> >         if (zpool_malloc_support_movable(entry->pool->zpool))
+> >                 gfp |=3D __GFP_HIGHMEM | __GFP_MOVABLE;
+> > @@ -1313,6 +1374,13 @@ static int zswap_frontswap_store(unsigned type, =
+pgoff_t offset,
+> >                         zswap_entry_put(tree, dupentry);
+> >                 }
+> >         } while (ret =3D=3D -EEXIST);
+> > +       INIT_LIST_HEAD(&entry->lru);
+> > +       /* zpool_evictable will be removed once all 3 backends have mig=
+rated*/
+> > +       if (entry->length && !zpool_evictable(entry->pool->zpool)) {
+> > +               spin_lock(&entry->pool->lock);
+> > +               list_add(&entry->lru, &entry->pool->lru);
+> > +               spin_unlock(&entry->pool->lock);
+> > +       }
+> >         spin_unlock(&tree->lock);
+> >
+> >         /* update stats */
+> > @@ -1384,8 +1452,7 @@ static int zswap_frontswap_load(unsigned type, pg=
+off_t offset,
+> >         /* decompress */
+> >         dlen =3D PAGE_SIZE;
+> >         src =3D zpool_map_handle(entry->pool->zpool, entry->handle, ZPO=
+OL_MM_RO);
+> > -       if (zpool_evictable(entry->pool->zpool))
+> > -               src +=3D sizeof(struct zswap_header);
+> > +       src +=3D sizeof(struct zswap_header);
+> >
+> >         if (!zpool_can_sleep_mapped(entry->pool->zpool)) {
+> >                 memcpy(tmp, src, entry->length);
+> > @@ -1415,6 +1482,12 @@ static int zswap_frontswap_load(unsigned type, p=
+goff_t offset,
+> >  freeentry:
+> >         spin_lock(&tree->lock);
+> >         zswap_entry_put(tree, entry);
+> > +       /* zpool_evictable will be removed once all 3 backends have mig=
+rated*/
+> > +       if (entry->length && !zpool_evictable(entry->pool->zpool)) {
+> > +               spin_lock(&entry->pool->lock);
+> > +               list_move(&entry->lru, &entry->pool->lru);
+> > +               spin_unlock(&entry->pool->lock);
+> > +       }
+> >         spin_unlock(&tree->lock);
+> >
+> >         return ret;
+> > --
+> > 2.34.1
+> >
