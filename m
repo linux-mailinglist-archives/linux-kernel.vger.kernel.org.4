@@ -2,118 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFAEB724BF8
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 20:58:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F34F9724BFB
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 21:00:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238525AbjFFS6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 14:58:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36214 "EHLO
+        id S239177AbjFFTAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 15:00:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231895AbjFFS6B (ORCPT
+        with ESMTP id S231895AbjFFTAS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 14:58:01 -0400
-Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [IPv6:2001:4b7a:2000:18::169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9952110F0
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 11:57:58 -0700 (PDT)
-Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 5DD383F79F;
-        Tue,  6 Jun 2023 20:57:53 +0200 (CEST)
-Date:   Tue, 6 Jun 2023 20:57:51 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
-Cc:     robdclark@gmail.com, sean@poorly.run, swboyd@chromium.org,
-        dianders@chromium.org, vkoul@kernel.org, daniel@ffwll.ch,
-        airlied@gmail.com, agross@kernel.org, dmitry.baryshkov@linaro.org,
-        andersson@kernel.org, quic_abhinavk@quicinc.com,
-        quic_jesszhan@quicinc.com, quic_sbillaka@quicinc.com,
-        freedreno@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v16] drm/msm/dpu: add DSC blocks to the catalog of
- MSM8998 and SC8180X
-Message-ID: <xf7hp4ywo7cgdvsjhkmtghdmbzhmufyainrfnllelbxx7lz5g4@faamkbvjpjts>
-References: <1686076299-11504-1-git-send-email-quic_khsieh@quicinc.com>
+        Tue, 6 Jun 2023 15:00:18 -0400
+Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C7459E;
+        Tue,  6 Jun 2023 12:00:15 -0700 (PDT)
+Received: by mail.hallyn.com (Postfix, from userid 1001)
+        id 8A751F2D; Tue,  6 Jun 2023 14:00:13 -0500 (CDT)
+Date:   Tue, 6 Jun 2023 14:00:13 -0500
+From:   "Serge E. Hallyn" <serge@hallyn.com>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Christian =?iso-8859-1?Q?G=F6ttsche?= <cgzones@googlemail.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>, selinux@vger.kernel.org,
+        John Johansen <john.johansen@canonical.com>,
+        James Morris <jmorris@namei.org>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Dave Chinner <dchinner@redhat.com>,
+        Nathan Lynch <nathanl@linux.ibm.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Micah Morton <mortonm@chromium.org>,
+        Frederick Lawler <fred@cloudflare.com>,
+        =?iso-8859-1?Q?G=FCnther?= Noack <gnoack3000@gmail.com>,
+        linux-kernel@vger.kernel.org, apparmor@lists.ubuntu.com,
+        linux-security-module@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH v4 1/9] capability: introduce new capable flag NODENYAUDIT
+Message-ID: <20230606190013.GA640488@mail.hallyn.com>
+References: <20230511142535.732324-1-cgzones@googlemail.com>
+ <20230531140734.GA515872@mail.hallyn.com>
+ <20230531140847.GB515872@mail.hallyn.com>
+ <CAJ2a_DesiD+LU-aWOEWRkyc0rcmZ0Za5i6-rZX-kHP2GzQyuFg@mail.gmail.com>
+ <CAHC9VhQBuQ+yE1wmEYA4UcVwnRFXoyu9_4Qw5LWszUrkm_ornw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1686076299-11504-1-git-send-email-quic_khsieh@quicinc.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHC9VhQBuQ+yE1wmEYA4UcVwnRFXoyu9_4Qw5LWszUrkm_ornw@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-06-06 11:31:39, Kuogee Hsieh wrote:
-> From: Abhinav Kumar <quic_abhinavk@quicinc.com>
+On Wed, May 31, 2023 at 06:13:55PM -0400, Paul Moore wrote:
+> On Wed, May 31, 2023 at 2:34 PM Christian Göttsche
+> <cgzones@googlemail.com> wrote:
+> > On Wed, 31 May 2023 at 16:08, Serge E. Hallyn <serge@hallyn.com> wrote:
+> > >
+> > > On Wed, May 31, 2023 at 09:07:34AM -0500, Serge E. Hallyn wrote:
+> > > > On Thu, May 11, 2023 at 04:25:24PM +0200, Christian Göttsche wrote:
+> > > > > Introduce a new capable flag, CAP_OPT_NODENYAUDIT, to not generate
+> > > > > an audit event if the requested capability is not granted.  This will be
+> > > > > used in a new capable_any() functionality to reduce the number of
+> > > > > necessary capable calls.
+> > > > >
+> > > > > Handle the flag accordingly in AppArmor and SELinux.
+> > > > >
+> > > > > Suggested-by: Paul Moore <paul@paul-moore.com>
+> > > > > Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
+> > > >
+> > > > Reviewed-by: Serge Hallyn <serge@hallyn.com>
+> > >
+> > > Sorry, obviously I should have removed this, until the comment below was
+> > > answered :)
+> > >
+> > > > > ---
+> > > > >  include/linux/security.h       |  2 ++
+> > > > >  security/apparmor/capability.c |  8 +++++---
+> > > > >  security/selinux/hooks.c       | 14 ++++++++------
+> > > > >  3 files changed, 15 insertions(+), 9 deletions(-)
+> > > > >
+> > > > > diff --git a/include/linux/security.h b/include/linux/security.h
+> > > > > index e2734e9e44d5..629c775ec297 100644
+> > > > > --- a/include/linux/security.h
+> > > > > +++ b/include/linux/security.h
+> > > > > @@ -67,6 +67,8 @@ struct watch_notification;
+> > > > >  #define CAP_OPT_NOAUDIT BIT(1)
+> > > > >  /* If capable is being called by a setid function */
+> > > > >  #define CAP_OPT_INSETID BIT(2)
+> > > > > +/* If capable should audit the security request for authorized requests only */
+> > > > > +#define CAP_OPT_NODENYAUDIT BIT(3)
+> > > > >
+> > > > >  /* LSM Agnostic defines for security_sb_set_mnt_opts() flags */
+> > > > >  #define SECURITY_LSM_NATIVE_LABELS 1
+> > > > > diff --git a/security/apparmor/capability.c b/security/apparmor/capability.c
+> > > > > index 326a51838ef2..98120dd62ca7 100644
+> > > > > --- a/security/apparmor/capability.c
+> > > > > +++ b/security/apparmor/capability.c
+> > > > > @@ -108,7 +108,8 @@ static int audit_caps(struct common_audit_data *sa, struct aa_profile *profile,
+> > > > >   * profile_capable - test if profile allows use of capability @cap
+> > > > >   * @profile: profile being enforced    (NOT NULL, NOT unconfined)
+> > > > >   * @cap: capability to test if allowed
+> > > > > - * @opts: CAP_OPT_NOAUDIT bit determines whether audit record is generated
+> > > > > + * @opts: CAP_OPT_NOAUDIT/CAP_OPT_NODENYAUDIT bit determines whether audit
+> > > > > + * record is generated
+> > > > >   * @sa: audit data (MAY BE NULL indicating no auditing)
+> > > > >   *
+> > > > >   * Returns: 0 if allowed else -EPERM
+> > > > > @@ -126,7 +127,7 @@ static int profile_capable(struct aa_profile *profile, int cap,
+> > > > >     else
+> > > > >             error = -EPERM;
+> > > > >
+> > > > > -   if (opts & CAP_OPT_NOAUDIT) {
+> > > > > +   if ((opts & CAP_OPT_NOAUDIT) || ((opts & CAP_OPT_NODENYAUDIT) && error)) {
+> > > > >             if (!COMPLAIN_MODE(profile))
+> > > > >                     return error;
+> > > > >             /* audit the cap request in complain mode but note that it
+> > > > > @@ -142,7 +143,8 @@ static int profile_capable(struct aa_profile *profile, int cap,
+> > > > >   * aa_capable - test permission to use capability
+> > > > >   * @label: label being tested for capability (NOT NULL)
+> > > > >   * @cap: capability to be tested
+> > > > > - * @opts: CAP_OPT_NOAUDIT bit determines whether audit record is generated
+> > > > > + * @opts: CAP_OPT_NOAUDIT/CAP_OPT_NODENYAUDIT bit determines whether audit
+> > > > > + * record is generated
+> > > > >   *
+> > > > >   * Look up capability in profile capability set.
+> > > > >   *
+> > > > > diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+> > > > > index 79b4890e9936..0730edf2f5f1 100644
+> > > > > --- a/security/selinux/hooks.c
+> > > > > +++ b/security/selinux/hooks.c
+> > > > > @@ -1571,7 +1571,7 @@ static int cred_has_capability(const struct cred *cred,
+> > > > >     u16 sclass;
+> > > > >     u32 sid = cred_sid(cred);
+> > > > >     u32 av = CAP_TO_MASK(cap);
+> > > > > -   int rc;
+> > > > > +   int rc, rc2;
+> > > > >
+> > > > >     ad.type = LSM_AUDIT_DATA_CAP;
+> > > > >     ad.u.cap = cap;
+> > > > > @@ -1590,11 +1590,13 @@ static int cred_has_capability(const struct cred *cred,
+> > > > >     }
+> > > > >
+> > > > >     rc = avc_has_perm_noaudit(sid, sid, sclass, av, 0, &avd);
+> > > > > -   if (!(opts & CAP_OPT_NOAUDIT)) {
+> > > > > -           int rc2 = avc_audit(sid, sid, sclass, av, &avd, rc, &ad);
+> > > > > -           if (rc2)
+> > > > > -                   return rc2;
+> > > > > -   }
+> > > > > +   if ((opts & CAP_OPT_NOAUDIT) || ((opts & CAP_OPT_NODENYAUDIT) && rc))
+> > > > > +           return rc;
+> > > >
+> > > > Hm, if the caller passes only CAP_OPT_NODENYAUDIT, and rc == 0, then
+> > > > you will audit the allow.  Is that what you want, or did you want, or
+> > > > did you want CAP_OPT_NODENYAUDIT to imply CAP_OPT_NOAUDIT?
+> > > >
+> >
+> > The new option should cause to issue an audit event if (and only if)
+> > the requested capability is in effect for the current task. If the
+> > task does not have the capability no audit event should be issued.
+> >
+> > The new option should not imply CAP_OPT_NOAUDIT since we want an audit
+> > event in the case the capability is in effect.
+> >
+> > I admit the naming is a bit confusing as CAP_OPT_NODENYAUDIT as well
+> > as the commit description contains a double negation (while the inline
+> > comment for the macro definition does not).
+> >
+> > Do you prefer naming the constant CAP_OPT_ALLOWAUDIT or CAP_OPT_AUDIT_ON_ALLOW?
 > 
-> Some platforms have DSC blocks which have not been declared in the catalog.
-> Complete DSC 1.1 support for all platforms by adding the missing blocks to
-> MSM8998 and SC8180X.
+> I think we need a different name, although I'm struggling to think of
+> something ... I don't think ALLOWAUDIT is right, as I believe it
+> implies that it is needed to "allow" auditing to take place for the
+> operation.  AUDIT_ON_ALLOW is better, but it still seems like it would
+> be required if you wanted to generate audit records on a successful
+> operation, which isn't correct.  I think we need to focus on the idea
+> that the flag blocks auditing for denials.
+> 
+> CAP_OPT_NOAUDITDENY is pretty much what you have, but in my mind the
+> NOAUDITDENY shares enough with the existing NOAUDIT flag that it makes
+> a bit more sense.
+> 
+> I honestly don't know.  However, whatever you pick, make sure you
+> update patch 2/X so that the name of ns_capable_nodenyaudit() is kept
+> close to the flag's name.
 
-Still a NACK, as pointed out in v15 both the title and this commit
-description point to SC8180X but that catalog entry is not touched at
-all anymore after rebasing on top of f5abecfe339e4 ("drm/msm/dpu: enable
-DSPP and DSC on sc8180x").
+(Sorry for the late response.  I still need to fix my filters)
 
-- Marijn
+Is CAP_OPT_NOAUDIT_ONDENY or CAP_OPT_AUDIT_ONLY_ONALLOW too long? :)
 
-> 
-> Changes in v9:
-> -- add MSM8998 and SC8180x to commit title
-> 
-> Changes in v10:
-> -- fix grammar at commit text
-> 
-> Changes in v12:
-> -- fix "titil" with "title" at changes in v9
-> 
-> Changes in v14:
-> -- "dsc" tp "DSC" at commit title
-> 
-> Changes in v15:
-> -- fix merge conflicts at dpu_5_1_sc8180x.h
-> 
-> Changes in v16
-> -- fix cherry-pick error by deleting both redundant .dsc and .dsc_count
->    assignment from dpu_5_1_sc8180x.h
-> 
-> Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
-> ---
->  drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
-> index 3c732a0..7d0d0e7 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
-> @@ -126,6 +126,11 @@ static const struct dpu_pingpong_cfg msm8998_pp[] = {
->  			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 15)),
->  };
->  
-> +static const struct dpu_dsc_cfg msm8998_dsc[] = {
-> +	DSC_BLK("dsc_0", DSC_0, 0x80000, 0),
-> +	DSC_BLK("dsc_1", DSC_1, 0x80400, 0),
-> +};
-> +
->  static const struct dpu_dspp_cfg msm8998_dspp[] = {
->  	DSPP_BLK("dspp_0", DSPP_0, 0x54000, DSPP_SC7180_MASK,
->  		 &msm8998_dspp_sblk),
-> @@ -199,6 +204,8 @@ const struct dpu_mdss_cfg dpu_msm8998_cfg = {
->  	.dspp = msm8998_dspp,
->  	.pingpong_count = ARRAY_SIZE(msm8998_pp),
->  	.pingpong = msm8998_pp,
-> +	.dsc_count = ARRAY_SIZE(msm8998_dsc),
-> +	.dsc = msm8998_dsc,
->  	.intf_count = ARRAY_SIZE(msm8998_intf),
->  	.intf = msm8998_intf,
->  	.vbif_count = ARRAY_SIZE(msm8998_vbif),
-> -- 
-> 2.7.4
-> 
+Anyway, Christian, I leave the final choice to you, then please feel
+free to add my Reviewed-by.
+
+thanks,
+-serge
