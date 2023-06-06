@@ -2,40 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1D3A724B84
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 20:37:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4F90724B85
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 20:37:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238724AbjFFShE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 14:37:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51002 "EHLO
+        id S238629AbjFFShY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 14:37:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238346AbjFFShC (ORCPT
+        with ESMTP id S237728AbjFFShW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 14:37:02 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE88D11B;
-        Tue,  6 Jun 2023 11:36:57 -0700 (PDT)
-Date:   Tue, 6 Jun 2023 20:36:53 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-        t=1686076615; bh=OjRLqwrxR3FBsWW4XS2Cc09XFAFldwpVvvt9U+Wh0WI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jUN+GWhoyrtMbFAKRDwmRGykG90E96Ekg0Tfu8T7zUUwutFn9MeQJuZ2SLG3d6UDe
-         +LU5lzDLMfsmeBrCSWiGWbK7znlbqv0VHMFVPcppLKCCZ7dUOSXSU4kyKVpwZro48S
-         5oCiYmxg1TZDtAe01th4fdo17Nc0/TM9939V4HoQ=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Zhangjin Wu <falcon@tinylab.org>, w@1wt.eu
-Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 4/4] tools/nolibc: sys.h: apply __syscall() helper
-Message-ID: <7e76f099-4198-421c-8157-430201970c4c@t-8ch.de>
-References: <cover.1686036862.git.falcon@tinylab.org>
- <ee86e33d9f0031da5932b0de798f188535308dd7.1686036862.git.falcon@tinylab.org>
+        Tue, 6 Jun 2023 14:37:22 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A963E8
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 11:37:21 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id E6C2F5C01F5;
+        Tue,  6 Jun 2023 14:37:20 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Tue, 06 Jun 2023 14:37:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1686076640; x=
+        1686163040; bh=qNOCEgxMB7pIxtXQBqOz7su+7qTpoyeO5gMs+si+Gg0=; b=O
+        e4ZsRW6iVpjbhERzX1UNjYYmJCM3yNzrlbc/Mqm/fgtCVavQ27KOVLZPDHIfPQVt
+        gUmEUMUO+nhr1+gK+vswfOIgkdkJdSuO5SSYroAQU+XxJ/kW5x3+dApmVkpxcVS5
+        zDMiwy4gna60+aiQ8m/PAhnUbMrIO2nFI+OX72q3xRZIbcTr83FEh6tGIoPxiCOl
+        oagGYKTtQugL2otxicQr4RVZirDHIOpM+Sg2turkDV6eM+30tHvMrUGxJMCbPmvJ
+        AchejnfC7+I/6fosYCA8w5hCDf9RyVm9m81PBZ+IVICmr8ufvvuDiTlA5dKH89TF
+        trqzSiLxkx99iD4vaQ8+g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1686076640; x=1686163040; bh=qNOCEgxMB7pIx
+        tXQBqOz7su+7qTpoyeO5gMs+si+Gg0=; b=ZiEpH+rjON5QD10p6KlAGSQa0CioJ
+        3jSbFTLUzTrFO/qZwCmFvycmoxKo/OQfOFUdrPiP8QaSCmObUHpd7weWuhqD7Uz5
+        h3T0dwU9AGX4b4QlryS/lPM+rONHPpuJfThwYD8w2GLomvLOlazG/B2ZJM3rVsxj
+        9R8+yFdtb2usH6aKksTMneVwGSQD/P/LlwdK/AzcCxFrLBL1pDqBAntU6JzJQysV
+        OvY9bGAwt2T/Qe7MMeiuaenQ+/h7vIXdhTNUiyfIoeUQ7c8UrFSedt9sQSn0WKBB
+        kAtfG0dZjxeL3r8ZdBb+91skOYQW55iSCjvY6aCkVmSxPaWSmpRZW9/5g==
+X-ME-Sender: <xms:4Hx_ZPWnQPzTTC0iHuwySndkSwHFC6csNYsjolzgkhTqBdbI0EvmUw>
+    <xme:4Hx_ZHm9PxINpzqUgBWXbyiUujO5tBSAr4S5DJSVrbbHuXUDizR29Aig5-2iKBvlY
+    tqBGcjdascMDr-t9S8>
+X-ME-Received: <xmr:4Hx_ZLa6SprNOAe2q7j3vwc2d_Zd4-unPmO9TfHgE2GwLe6iIyXr5K0wrHekvcfkwFvUsg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedtuddguddvlecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttddttddttddvnecuhfhrohhmpedfmfhi
+    rhhilhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrd
+    hnrghmvgeqnecuggftrfgrthhtvghrnhephfeigefhtdefhedtfedthefghedutddvueeh
+    tedttdehjeeukeejgeeuiedvkedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
+    hmpehmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
+X-ME-Proxy: <xmx:4Hx_ZKVvPA4okQpLp8iw9-22OVgyCQNn8Xw-s8mj7kadnLYP0gKNTA>
+    <xmx:4Hx_ZJmLaZpsXDr1CD7t_G0EVHUj_ghUQ1NWN_0-sspURHK7l3opNA>
+    <xmx:4Hx_ZHeCTnK6hassXKkLU1_SziivHKeUVuIMLdQgo80OLdz7ucLthw>
+    <xmx:4Hx_ZCc2njkEmdLRsDcqaUaNuhnczemTucjvjcMT4IVwQNJDHWfreA>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 6 Jun 2023 14:37:20 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 98CCA10CFD2; Tue,  6 Jun 2023 21:37:18 +0300 (+03)
+Date:   Tue, 6 Jun 2023 21:37:18 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        decui@microsoft.com, rick.p.edgecombe@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, seanjc@google.com,
+        thomas.lendacky@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv3 2/3] x86/tdx: Fix race between set_memory_encrypted()
+ and load_unaligned_zeropad()
+Message-ID: <20230606183718.i3iqwbk7gdomiq5s@box.shutemov.name>
+References: <20230606095622.1939-1-kirill.shutemov@linux.intel.com>
+ <20230606095622.1939-3-kirill.shutemov@linux.intel.com>
+ <f7f82377-6127-79e3-07d8-def490c4e35c@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ee86e33d9f0031da5932b0de798f188535308dd7.1686036862.git.falcon@tinylab.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+In-Reply-To: <f7f82377-6127-79e3-07d8-def490c4e35c@intel.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -44,67 +94,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zhangjin,
-
-On 2023-06-06 16:17:38+0800, Zhangjin Wu wrote:
-> Use __syscall() helper to shrink 252 lines of code.
+On Tue, Jun 06, 2023 at 11:14:29AM -0700, Dave Hansen wrote:
+> On 6/6/23 02:56, Kirill A. Shutemov wrote:
+> > load_unaligned_zeropad() can touch memory that is not owned by the
+> > caller, but just happened to next after the owned memory.
+> > This load_unaligned_zeropad() behaviour makes it important when kernel
+> > asks VMM to convert a GPA from shared to private or back. Kernel must
+> > never have a page mapped into direct mapping (and aliases) as private
+> > when the GPA is already converted to shared or when GPA is not yet
+> > converted to private.
+> > 
+> > load_unaligned_zeropad() can touch memory that is not owned by the
+> > caller, but just happens to be next after the owned memory. This
+> > load_unaligned_zeropad() behavior makes it important when the kernel
+> > asks VMM to convert a GPA from shared to private or back. The kernel
+> > must never have a page mapped into direct mapping (and aliases) as
+> > private when the GPA is already converted to shared or when the GPA is
+> > not yet converted to private.
 > 
->     $ git show HEAD^:tools/include/nolibc/sys.h | wc -l
->     1425
->     $ git show HEAD:tools/include/nolibc/sys.h | wc -l
->     1173
->     $ echo "1425-1173" | bc -l
->     252
+> Heh, that must be really important info to have it in the changelog twice!
 > 
-> Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-> ---
->  tools/include/nolibc/sys.h | 336 +++++--------------------------------
->  1 file changed, 42 insertions(+), 294 deletions(-)
-> 
-> diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-> index f6e3168b3e50..0cfc5157845a 100644
-> --- a/tools/include/nolibc/sys.h
-> +++ b/tools/include/nolibc/sys.h
-> @@ -108,13 +108,7 @@ int sys_chdir(const char *path)
->  static __attribute__((unused))
->  int chdir(const char *path)
->  {
-> -	int ret = sys_chdir(path);
-> -
-> -	if (ret < 0) {
-> -		SET_ERRNO(-ret);
-> -		ret = -1;
-> -	}
-> -	return ret;
-> +	return __syscall(chdir, path);
+> I'll fix it up when I apply it.
 
-To be honest I'm still not a big fan of the __syscall macro.
-It's a bit too magic for too little gain.
+Ouch. Please fix the comment in the code too.
 
-The commit message argues that the patches make the code shorter.
-
-However doing 
-
-__sysret(sys_chdir(path));
-
-instead of
-
-__syscall(chdir, path);
-
-is only three characters longer and the same amout of lines.
-
-Otherwise we would have syscall() _syscall() and __syscall() each doing
-different things.
-
-And __syscall does not behave like a regular function.
-
-The rest of the patchset looks great.
-
-Maybe Willy can break the tie?
-
-
-Thomas
-
-
-Note: If we figure out a way to build syscall() without macros I would
-like that also :-)
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
