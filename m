@@ -2,59 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE5A6723E2B
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 11:48:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 238E8723E32
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 11:48:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237254AbjFFJsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 05:48:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53778 "EHLO
+        id S237127AbjFFJs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 05:48:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236904AbjFFJsM (ORCPT
+        with ESMTP id S237446AbjFFJsg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 05:48:12 -0400
-Received: from fgw22-7.mail.saunalahti.fi (fgw22-7.mail.saunalahti.fi [62.142.5.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2830E78
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 02:48:04 -0700 (PDT)
-Received: from localhost (88-113-26-95.elisa-laajakaista.fi [88.113.26.95])
-        by fgw22.mail.saunalahti.fi (Halon) with ESMTP
-        id 3a7ec564-044f-11ee-a9de-005056bdf889;
-        Tue, 06 Jun 2023 12:48:02 +0300 (EEST)
-From:   andy.shevchenko@gmail.com
-Date:   Tue, 6 Jun 2023 12:48:02 +0300
-To:     Prathamesh Shete <pshete@nvidia.com>
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, linux-tegra@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        smangipudi@nvidia.com, Manish Bhardwaj <mbhardwaj@nvidia.com>
-Subject: Re: [PATCH] gpio: tegra186: Check PMC driver status before any
- request
-Message-ID: <ZH8A0nmXrEyY0zu1@surfacebook>
-References: <20230606071717.8088-1-pshete@nvidia.com>
+        Tue, 6 Jun 2023 05:48:36 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF29310C8
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 02:48:30 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3f623adec61so60422395e9.0
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 02:48:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686044909; x=1688636909;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=nH9IXy+8mmr6fEKUjeAVrm6OrEN2ynlfCA5RHInWD/g=;
+        b=zTebeQ5VTcDvGTHY8x8b4YFkkkxmVmwYcyWt+L7EqJFGAHB/Aw1MfV7XdsSJl6g9ZS
+         QFf+cyBsG0jZnG1q00buj8TnKt9PPwmSiGAaRdGFuesUi9uJ/Y+aM2HUrXuUNIsTI3H5
+         jDDgU0U6C2pxVmhDBjeJWneb40ID2C93V/65PzPwfn2kB0zYEQKHlntsA/i2hDxGA1eT
+         dPNTIt61dgFsE0BY6JSQHu2gGkQaU2nwxThexB+KzF9hxx6h4o0skGMdD9NKSpOkD/83
+         FZ3ZUGG4kVAUkJBc6KeTnhzadR6SS3GVnBtqB+Jklyb7EXkx3xCFCB2Bp6fzZRAL1lF0
+         YfFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686044909; x=1688636909;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nH9IXy+8mmr6fEKUjeAVrm6OrEN2ynlfCA5RHInWD/g=;
+        b=eAunhoNMXmvFYXlnXP39VVbBLD4jSJ61oOuqHAptBUoM0Eqcd/502T3iUYU2W4GSKJ
+         FZNLJIavIAa+trvfs7Tt9cW9Dsc9y1a138h+PQAxLJuzt/xm+eDF9+7pUEn8+W8ORA2j
+         avjMwYQ4ynCnp1h6Xw5dOs/o+5r1m/aG073vKNZ2OKPewsOzxvkXot0t8usWe4fMUehp
+         1qtWE/PGIDWSwcoCN7ORHVEiN8mieeRkjQKtVLbeGLHoioTZhwF38yZTOWaYesH5AXw5
+         hEOPBalHdMz+tC88lwkRbGh6Spga6jmJ5ARzfh0P5I9sXfUPAozekKc1DArTwM1uYhbm
+         cL6w==
+X-Gm-Message-State: AC+VfDzvD/ruppMaVTz05GHj3Fplvl/ewDHe2AvImfpM9MjWoJ0bXQZd
+        51VrV08rISjwPS837vPA9ik/7g==
+X-Google-Smtp-Source: ACHHUZ5DwtWDzMb4zpcw1FeB4iY7eNE3ZKctzKba19fFKs6cvdR5J0xK2HTz6GvoD4cnjwuXPljVOw==
+X-Received: by 2002:a7b:cb92:0:b0:3f7:29c4:8fbd with SMTP id m18-20020a7bcb92000000b003f729c48fbdmr1620359wmi.27.1686044909090;
+        Tue, 06 Jun 2023 02:48:29 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:4973:1165:b171:fa69? ([2a01:e0a:982:cbb0:4973:1165:b171:fa69])
+        by smtp.gmail.com with ESMTPSA id y20-20020a05600c365400b003f60a446fe5sm13553200wmq.29.2023.06.06.02.48.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Jun 2023 02:48:28 -0700 (PDT)
+Message-ID: <42151d11-12d9-c165-0d4b-a0af80b683c3@linaro.org>
+Date:   Tue, 6 Jun 2023 11:48:27 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230606071717.8088-1-pshete@nvidia.com>
-X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+From:   neil.armstrong@linaro.org
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH v7 0/8] drm/tidss: Use new connector model for tidss
+Content-Language: en-US
+To:     Aradhya Bhatia <a-bhatia1@ti.com>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Jyri Sarha <jyri.sarha@iki.fi>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Robert Foss <rfoss@kernel.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Swapnil Jakhade <sjakhade@cadence.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Francesco Dolcini <francesco@dolcini.it>
+Cc:     DRI Development List <dri-devel@lists.freedesktop.org>,
+        Linux Kernel List <linux-kernel@vger.kernel.org>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rahul T R <r-ravikumar@ti.com>,
+        Devarsh Thakkar <devarsht@ti.com>,
+        Jayesh Choudhary <j-choudhary@ti.com>
+References: <20230606082142.23760-1-a-bhatia1@ti.com>
+ <1f284e9d-5a1e-9fca-ceb0-478a413ae4ef@linaro.org>
+ <1b31f36c-b1ba-43b5-9285-0f50384a78cf@ti.com>
+Organization: Linaro Developer Services
+In-Reply-To: <1b31f36c-b1ba-43b5-9285-0f50384a78cf@ti.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tue, Jun 06, 2023 at 12:47:17PM +0530, Prathamesh Shete kirjoitti:
-> This patch fixes the issue where even if PMC driver status is
-> disabled still we are trying to look up for the IRQ domain
-> that PMC driver would've registered if it had been enabled.
+On 06/06/2023 11:46, Aradhya Bhatia wrote:
+> Hi Neil,
+> 
+> Thank you for reviewing the previous patches!
+> 
+> On 06-Jun-23 14:37, Neil Armstrong wrote:
+>> Hi,
+>>
+>> On 06/06/2023 10:21, Aradhya Bhatia wrote:
+>>> Hi all,
+>>>
+>>> I have picked up this long standing series from Nikhil Devshatwar[1].
+>>>
+>>> This series moves the tidss to using new connectoe model, where the SoC
+>>> driver (tidss) creates the connector and all the bridges are attached
+>>> with the flag DRM_BRIDGE_ATTACH_NO_CONNECTOR. It also now creates bridge
+>>> to support format negotiation and and 'simple' encoder to expose it to
+>>> the userspace.
+>>>
+>>> Since the bridges do not create the connector, the bus_format and
+>>> bus_flag is set via atomic hooks.
+>>>
+>>> Support format negotiations in the tfp410, sii902x and mhdp-8546 bridge
+>>> drivers as a first step before moving the connector model.
+>>>
+>>> These patches were tested on AM625-SK EVM, AM625 SoC based BeaglePlay,
+>>> and J721E-SK. Display support for AM625 SoC has not been added upstream
+>>> and is a WIP. To test this series on AM625 based platforms, basic
+>>> display support patches, (for driver + devicetree), can be found in
+>>> the "next_AttachNoConn-v2" branch on my github fork[2].
+>>
+>> I can apply all bridge patches right now so only the tidss change remain,
+>> is that ok for you ?
+>>
+> 
+> While the bridge patches and the tidss patch can be separately built
+> without any issue, the tidss functionality will break if only the bridge
+> patches get picked up, and not the tidss.
+> 
+> Would it be possible for you to pick all the patches together once Tomi
+> acks the tidss patch?
 
--ENOPARSE.
+Sure
 
-Also mind grammar punctuation.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+Neil
+> 
+> 
+> Regards
+> Aradhya
+> 
+>>
+>>>
+>>> Thanks,
+>>> Aradhya
+>>>
+>>> [1]: https://patchwork.freedesktop.org/series/82765/#rev5
+>>> [2]: https://github.com/aradhya07/linux-ab/tree/next_AttachNoConn-v2
+>>>
+>>> Change Log:
+>>> V6 -> V7
+>>>     - Rebase and cosmetic changes.
+>>>     - Drop the output format check condition for mhdp8546 and hence,
+>>>       drop Tomi Valkeinen's R-b tag.
+>>>     - Added tags wherever suggested.
+>>>
+>>> V5 -> V6
+>>>     - Rebase and cosmetic changes
+>>>     - Dropped the output format check condition for tfp410 and hence,
+>>>       dropped Tomi Valkeinen's and Laurent Pinchart's R-b tags.
+>>>     - Based on Boris Brezillon's comments: dropped patches 5 and 6 from
+>>>       the series and instead created a single patch that,
+>>>         1. Creates tidss bridge for format negotiation.
+>>>         2. Creates 'simple' encoder for userspace exposure.
+>>>         3. Creates a tidss connector.
+>>>         4. Attaches the next-bridge to encoder with the
+>>>            DRM_BRIDGE_ATTACH_NO_CONNECTOR flag.
+>>>     - Add format negotiation support for sii902x driver.
+>>>
+>>> Previous versions:
+>>> V1 to V6: https://patchwork.freedesktop.org/series/82765/
+>>>
+>>> Aradhya Bhatia (3):
+>>>     drm/bridge: sii902x: Support format negotiation hooks
+>>>     drm/bridge: sii902x: Set input_bus_flags in atomic_check
+>>>     drm/tidss: Update encoder/bridge chain connect model
+>>>
+>>> Nikhil Devshatwar (5):
+>>>     drm/bridge: tfp410: Support format negotiation hooks
+>>>     drm/bridge: tfp410: Set input_bus_flags in atomic_check
+>>>     drm/bridge: mhdp8546: Add minimal format negotiation
+>>>     drm/bridge: mhdp8546: Set input_bus_flags from atomic_check
+>>>     drm/bridge: cdns-mhdp8546: Fix the interrupt enable/disable
+>>>
+>>>    .../drm/bridge/cadence/cdns-mhdp8546-core.c   |  77 ++++++----
+>>>    .../drm/bridge/cadence/cdns-mhdp8546-core.h   |   2 +-
+>>>    .../drm/bridge/cadence/cdns-mhdp8546-j721e.c  |   9 +-
+>>>    .../drm/bridge/cadence/cdns-mhdp8546-j721e.h  |   2 +-
+>>>    drivers/gpu/drm/bridge/sii902x.c              |  40 +++++
+>>>    drivers/gpu/drm/bridge/ti-tfp410.c            |  43 ++++++
+>>>    drivers/gpu/drm/tidss/tidss_encoder.c         | 140 +++++++++++-------
+>>>    drivers/gpu/drm/tidss/tidss_encoder.h         |   5 +-
+>>>    drivers/gpu/drm/tidss/tidss_kms.c             |  12 +-
+>>>    9 files changed, 235 insertions(+), 95 deletions(-)
+>>>
+>>
 
