@@ -2,95 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35A55724830
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 17:48:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACF5F724837
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 17:50:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237603AbjFFPsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 11:48:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35652 "EHLO
+        id S237840AbjFFPuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 11:50:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232951AbjFFPsG (ORCPT
+        with ESMTP id S237913AbjFFPuJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 11:48:06 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3A0EE43;
-        Tue,  6 Jun 2023 08:48:05 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id 3f1490d57ef6-bad3013ed55so882540276.0;
-        Tue, 06 Jun 2023 08:48:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686066485; x=1688658485;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/ONGiTjryN6GD7x+xFKYju8C2z5nIeGtvGOioZNnU/U=;
-        b=hi2WPoWy60JbpwaFsVjN9zNp6WFQGls7ERGpIzbNziF9isQjZtZXfa47yVs9LbQ97C
-         m83n589RduXbDEgwo5bsvbc+YxZZDH7rbAiJtWEX6F33Bq/AAFLTbm/gZhOnq2S9Udc1
-         rnLD1pTFNtfrXOudkX/Zt40rJiUHVCefa0HlXsmDUq6jNtV13XrWzhZsEGVQ49h+R3C8
-         +8nvP0zD30tsX2iVVYXh/0CTj1Fj8Yw28A+f12C9P3oMAl/Kne51zypE7fLZsKUUfTQ2
-         wv+0WYfpdUOeDGHJcNq83Wj6Y4ttgbDfXYFlJcVhfA5LEUqrEwZ9N7stEvt9Va2yhsoG
-         UEBg==
+        Tue, 6 Jun 2023 11:50:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 812E510D2
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 08:49:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686066561;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=sHW62n9UHGko3VJYRUlg4WSO9igiZ1RT0fE8QaKfMYc=;
+        b=VN8iDBjW6Xxr98AEHGnj+vD0sj/AlOtD00aUhK7KKdi8RxXS+L+fVAVwMuDAkk6U3wy8d/
+        6LUlt7wasvGRMyJ2yENo3g8NIeYTiAWwQ0dzK6CX+S7ntQE56OeVWUude4yVg7hxdZWrJp
+        ula0Er0IoK/SX9txMjX6diP6HQeX7pE=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-107-DpaFSkLzOJq4ZWeCjTCjRw-1; Tue, 06 Jun 2023 11:49:20 -0400
+X-MC-Unique: DpaFSkLzOJq4ZWeCjTCjRw-1
+Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-6262e6c3b44so68650566d6.0
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 08:49:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686066485; x=1688658485;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/ONGiTjryN6GD7x+xFKYju8C2z5nIeGtvGOioZNnU/U=;
-        b=Hz6cmWmEachVd4Fq+KqbZQTmo2OjnXkOHaNo1EVHZhpaaXWzsHpkXPVcvdxa5TykU+
-         1bNSC5yJB08ApBpA1DGHG/fqtmQynkMT/7S/5HJ8nsl70Ueu+wq1wQlBa7wyp8paeWpj
-         sxsufZdLkHMvxam6tB6oYNG5z9zfU447WyChm+Y3D3mOHhQ9Gbx/Ir9AiT2qv8MlyVHU
-         Zx+M1KLDr20HOSo+YjTFN0M3STvXRVIfRebNa01kGSHCKSQm9PvW38tbR57ew/PXV8UX
-         YtEFqKmhfuulh0+mT0vKOmjzH9dzv+ZY3X/E2ZuNNL6WoXygnzN8TQ0YLi7dit2LfcL4
-         AwCg==
-X-Gm-Message-State: AC+VfDyeLS9SoLm75SiDKCxgD8aqCEXRx3Z3aNLMXDfnDp/JmhTwyPLI
-        SVY0zIZCubu2rK1gjVsPDjnJPwghPQKMdQDDrn4=
-X-Google-Smtp-Source: ACHHUZ5p6OEn2LB+FAVJnyEqVA+2Boc+8078eohVh6Hf0DHjLFeF+msH9EZ1kDDBR7xuh6HNC1IPBbwlZt7YsaCnojc=
-X-Received: by 2002:a81:4c57:0:b0:567:7dc3:2618 with SMTP id
- z84-20020a814c57000000b005677dc32618mr2611220ywa.1.1686066484784; Tue, 06 Jun
- 2023 08:48:04 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686066560; x=1688658560;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sHW62n9UHGko3VJYRUlg4WSO9igiZ1RT0fE8QaKfMYc=;
+        b=fyPun3EzLnzSAALcTb0yipFAqllTfioJYBmYcOZLpk9fiq0BoTVXBbQiuquctwq523
+         V8lWwdmJCjpc1IDK+mENgbEZsQ5w5ZmlnrKzi3c2+wjTrJ1QWfd46ZsiufiHOmIH25BM
+         hQtaPA04MUKyOEEvmDahMolca/CZKXIWHS/LFd6ckwGHHksb5v/O5WWs2tAWPO6YPydF
+         gjAR2faPHMu4kFmEsw0Yp+G5599qLWj4ImLrgiDHOjKpwl/DCKbfu5v3Ajj7o/VGryYH
+         KvQuda+TBcOSNILqkRzsv9VTFEDqpZBc7smEZPa+Di+GWcxSApbs8ZRnf3uD/yLn2YZu
+         Fi6Q==
+X-Gm-Message-State: AC+VfDwuwjfoc+QON0IYbytVnR2pQxB8A3G1WL3lYo8yAtgxCbrlsCx/
+        jEs/sOn9IP3zCCqET7ppzJHmFOmsFUIC41aSTN5+PJVVTIFIVVrirK590VUSiMyY3+s2tGDsqST
+        DJm86dNhfPjqMpQ+Y7CQHUhqX+MH6CuhT9xbYiRw1IE9Bmm48PB4riiWqIBDdk7psKIrVaW4sQ0
+        h0xvaznKMI
+X-Received: by 2002:a05:6214:c4a:b0:623:9218:58e5 with SMTP id r10-20020a0562140c4a00b00623921858e5mr3046802qvj.39.1686066559997;
+        Tue, 06 Jun 2023 08:49:19 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ50JQIIoil5JiSTdmsb+6pApFtKxP9ntyQPRWklH9ZkQzBpZua8a7/GwPPddH+uoWxcHSKrVQ==
+X-Received: by 2002:a05:6214:c4a:b0:623:9218:58e5 with SMTP id r10-20020a0562140c4a00b00623921858e5mr3046767qvj.39.1686066559718;
+        Tue, 06 Jun 2023 08:49:19 -0700 (PDT)
+Received: from fedora (g2.ign.cz. [91.219.240.8])
+        by smtp.gmail.com with ESMTPSA id u5-20020a0cc485000000b006263c531f61sm5428989qvi.24.2023.06.06.08.49.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Jun 2023 08:49:19 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Tianyu Lan <ltykernel@gmail.com>, kys@microsoft.com,
+        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        daniel.lezcano@linaro.org, arnd@arndb.de,
+        michael.h.kelley@microsoft.com
+Cc:     Tianyu Lan <tiala@microsoft.com>, linux-arch@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/9] x86/hyperv: Mark Hyper-V vp assist page unencrypted
+ in SEV-SNP enlightened guest
+In-Reply-To: <4103a70f-cc09-a966-3efa-5ab9273f5c55@gmail.com>
+References: <20230601151624.1757616-1-ltykernel@gmail.com>
+ <20230601151624.1757616-4-ltykernel@gmail.com> <873536ksye.fsf@redhat.com>
+ <4103a70f-cc09-a966-3efa-5ab9273f5c55@gmail.com>
+Date:   Tue, 06 Jun 2023 17:49:15 +0200
+Message-ID: <87o7lsk2v8.fsf@redhat.com>
 MIME-Version: 1.0
-References: <CAPnZJGDWUT0D7cT_kWa6W9u8MHwhG8ZbGpn=uY4zYRWJkzZzjA@mail.gmail.com>
- <CAJfpeguZX5pF8-UNsSfJmMhpgeUFT5XyG_rDzMD-4pB+MjkhZA@mail.gmail.com>
-In-Reply-To: <CAJfpeguZX5pF8-UNsSfJmMhpgeUFT5XyG_rDzMD-4pB+MjkhZA@mail.gmail.com>
-From:   Askar Safin <safinaskar@gmail.com>
-Date:   Tue, 6 Jun 2023 18:47:28 +0300
-Message-ID: <CAPnZJGDsoq5wjPFjhCU4xLvrCA4x5jT-E6B7BMMid_M57PKOCA@mail.gmail.com>
-Subject: Re: [PATCH 0/6] vfs: provide automatic kernel freeze / resume
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bernd Schubert <bernd.schubert@fastmail.fm>,
-        linux-pm@vger.kernel.org,
-        fuse-devel <fuse-devel@lists.sourceforge.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks a lot for the answer
+Tianyu Lan <ltykernel@gmail.com> writes:
 
-On Tue, Jun 6, 2023 at 5:38=E2=80=AFPM Miklos Szeredi <miklos@szeredi.hu> w=
-rote:
->  - if requests are stuck (e.g. network is down) then the requester
-> process can't be frozen and suspend will still fail
+> On 6/5/2023 8:13 PM, Vitaly Kuznetsov wrote:
+>>> @@ -113,6 +114,11 @@ static int hv_cpu_init(unsigned int cpu)
+>>>   
+>>>   	}
+>>>   	if (!WARN_ON(!(*hvp))) {
+>>> +		if (hv_isolation_type_en_snp()) {
+>>> +			WARN_ON_ONCE(set_memory_decrypted((unsigned long)(*hvp), 1));
+>>> +			memset(*hvp, 0, PAGE_SIZE);
+>>> +		}
+>> Why do we need to set the page as decrypted here and not when we
+>> allocate the page (a few lines above)?
+>
+> If Linux root partition boots in the SEV-SNP guest, the page still needs 
+> to be decrypted.
+>
 
-Unfortunately, this is exactly the problem I sometimes face. If
-network is up, then suspend works normally. But if network is down
-(and I'm trying to access sshfs filesystem in that moment), then
-suspend doesn't work.
+I'd suggest we add a flag to indicate that VP assist page was actually
+set (on the first invocation of hv_cpu_init() for guest partitions and
+all invocations for root partition) and only call
+set_memory_decrypted()/memset() then: that would both help with the
+potential issue with KVM using enlightened vmcs and avoid the unneeded
+hypercall.
 
-So, it seems your solution is not for me
+-- 
+Vitaly
 
-> Solution to both these are probably non-kernel: impacted servers need
-> to receive notification from systemd when suspend is starting and act
-> accordingly.
-Okay, I will probably forward this to sshfs devs
-
---=20
-Askar Safin
