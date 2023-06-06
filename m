@@ -2,70 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 100CD72451F
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:00:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5BBB724524
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:01:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237561AbjFFOAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 10:00:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43284 "EHLO
+        id S237741AbjFFOBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 10:01:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237461AbjFFOAS (ORCPT
+        with ESMTP id S237742AbjFFOBC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 10:00:18 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B9910CB;
-        Tue,  6 Jun 2023 07:00:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686060016; x=1717596016;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=0Z2hFQUSlOeh6Fizk5wKOQ7R2MUTlRwgXY3AHyOVcgE=;
-  b=Fcgg83ycxnTN2XCfgjWu8ftr7AqVn9NYfpC2uOxYZ4LvnheyminPdxeI
-   qsw3imf5n8HxL8+jyFvbFyIAJtkJcoU00SeoOddrrzg5WuQ4Jq8LuP6E9
-   JoZJK113TxGi9fmQL3BftT15TBaCp0zVG0bTa4mnEKLdVjokHjmqvq53T
-   H1sH0aHEKhv0oktPHvH9JlrIpIofhTS3Ext1jctiRujGsjIxzkV2DwC4d
-   JT8l9VtpOdwuHSdDqT1Z6hcyUtiWVTEZJdehpU7BT9RgAwaBrzfG2mxqF
-   RLAetviTkks/xEuFYFfPJ52CpR3uFyRNw/Z6Y2mwEC8vU9ykjT6WZpYcD
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="336302715"
-X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
-   d="scan'208";a="336302715"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 07:00:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="742158866"
-X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
-   d="scan'208";a="742158866"
-Received: from kumarr2-mobl1.amr.corp.intel.com (HELO [10.212.218.68]) ([10.212.218.68])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 07:00:15 -0700
-Message-ID: <a2da8af2-41a9-a0cf-dbe9-7f0a14bf05fe@linux.intel.com>
-Date:   Tue, 6 Jun 2023 07:00:14 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.11.0
-Subject: Re: [PATCH v11 02/20] x86/virt/tdx: Detect TDX during kernel boot
-Content-Language: en-US
-To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     linux-mm@kvack.org, dave.hansen@intel.com,
-        kirill.shutemov@linux.intel.com, tony.luck@intel.com,
-        peterz@infradead.org, tglx@linutronix.de, seanjc@google.com,
-        pbonzini@redhat.com, david@redhat.com, dan.j.williams@intel.com,
-        rafael.j.wysocki@intel.com, ying.huang@intel.com,
-        reinette.chatre@intel.com, len.brown@intel.com, ak@linux.intel.com,
-        isaku.yamahata@intel.com, chao.gao@intel.com, bagasdotme@gmail.com,
-        sagis@google.com, imammedo@redhat.com
-References: <cover.1685887183.git.kai.huang@intel.com>
- <af4e428ab1245e9441031438e606c14472daf927.1685887183.git.kai.huang@intel.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <af4e428ab1245e9441031438e606c14472daf927.1685887183.git.kai.huang@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        Tue, 6 Jun 2023 10:01:02 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13C8198A
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 07:00:44 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-ba87bd29e9dso7153620276.3
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 07:00:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686060043; x=1688652043;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=S6bABvrmsSInWb8fnuh4ITkDJEvWLg0D4R3//Td0SQE=;
+        b=kEgWoJ49N2whPXRJaq/b8YUNnuy53VuV4VogxQBdtVGh7K6G2usK2oAdAsNXkCEyVj
+         MNZF1nOPM0Zw0jMJziXYNV8bNHqxGz2Dxo990m13oURN+iYndqqrVQ/i4ZnLgPXtzhiL
+         54HwrLuHd8Wgi9mcroDbDvi7VsZop9AkynLKTIsoAChiyBp/Z/eA6/SdGJSXNyZnySV+
+         NE8oJitgXuLzbzPYX+BlJhZy4VWABtlvzYPRWiisKqLOjtRlwko27m8LgY6C09gIcMsG
+         okHpEkKiYa8ETBqpurh2HSOXb5fI7TwXwAuIbRIOx/YvixnOnYukV0YmpuFP2cAxCItP
+         LHEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686060043; x=1688652043;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=S6bABvrmsSInWb8fnuh4ITkDJEvWLg0D4R3//Td0SQE=;
+        b=S7lZRDSsyI//UpYMgk9xWYrk5PkQhtpqJeUubEHwVTVk/MplI3dkRpN2uMHNYjfSNz
+         y97N7SRMe90Oxf7mPOxX4xk6yDguV5nWZNOtYrUwtZf16HQ+lzOuuLdivsrhv/pRt8Fs
+         qio97HBPHW8ik18Cruz9H8fVf3wLtv5DWOErHf+ac0vPs/3A2h6hLh575B5ab2AVePKe
+         cYpdLjIGyg2aS1JJnGiDJmBt5tMr5Fgl3DA/HuquxAybOAnjXWzcCCJi8osz34UCIqZO
+         hw9065fVV528l8+5CCWlTyvGO+k5HmkfS4J9bsdDtccHuN8koGWG90T6ur1D5lB+mSIs
+         Cjeg==
+X-Gm-Message-State: AC+VfDw0LlC3wS1tqKHl9kZoSS7H9tG2Etyn59OquQmezWNBhT2c7/tO
+        cnw8jBfvgHrKYwrWrsDm0zGcDic1/vFZN51KMBnKEKgNdT5ErK7iTT6MQ0J/gkY9SwAjhVeuV7I
+        kshZHNTlRuEo7xJTq5kf+TDzgWBtNbVLiJ7yzQMfXj/765I0B+5ALLsVD6pzZ1w==
+X-Google-Smtp-Source: ACHHUZ52QT/eB8BKHEzn6E94GeOQS/r0FOgsbZh9T/CpgqQyCi2PdRDg7H6Yi8ImeRi6e7th9vZJykg=
+X-Received: from ptf16.nyc.corp.google.com ([2620:0:1003:314:f52a:f978:3766:4700])
+ (user=ptf job=sendgmr) by 2002:a25:e6d6:0:b0:ba7:5d7a:b50d with SMTP id
+ d205-20020a25e6d6000000b00ba75d7ab50dmr1144964ybh.10.1686060043589; Tue, 06
+ Jun 2023 07:00:43 -0700 (PDT)
+Date:   Tue,  6 Jun 2023 10:00:36 -0400
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
+Message-ID: <20230606140041.3244713-1-ptf@google.com>
+Subject: [PATCH] r8169: Disable multicast filter for RTL_GIGA_MAC_VER_46
+From:   Patrick Thompson <ptf@google.com>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Patrick Thompson <ptf@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        nic_swsd@realtek.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,299 +72,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-HI,
+MAC_VER_46 ethernet adapters fail to detect IPv6 multicast packets
+unless allmulti is enabled. Add exception for VER_46 in the same way
+VER_35 has an exception.
 
-On 6/4/23 7:27 AM, Kai Huang wrote:
-> Intel Trust Domain Extensions (TDX) protects guest VMs from malicious
-> host and certain physical attacks.  A CPU-attested software module
-> called 'the TDX module' runs inside a new isolated memory range as a
-> trusted hypervisor to manage and run protected VMs.
-> 
-> Pre-TDX Intel hardware has support for a memory encryption architecture
-> called MKTME.  The memory encryption hardware underpinning MKTME is also
-> used for Intel TDX.  TDX ends up "stealing" some of the physical address
-> space from the MKTME architecture for crypto-protection to VMs.  The
-> BIOS is responsible for partitioning the "KeyID" space between legacy
-> MKTME and TDX.  The KeyIDs reserved for TDX are called 'TDX private
-> KeyIDs' or 'TDX KeyIDs' for short.
-> 
-> TDX doesn't trust the BIOS.  During machine boot, TDX verifies the TDX
-> private KeyIDs are consistently and correctly programmed by the BIOS
-> across all CPU packages before it enables TDX on any CPU core.  A valid
-> TDX private KeyID range on BSP indicates TDX has been enabled by the
-> BIOS, otherwise the BIOS is buggy.
-> 
-> The TDX module is expected to be loaded by the BIOS when it enables TDX,
-> but the kernel needs to properly initialize it before it can be used to
-> create and run any TDX guests.  The TDX module will be initialized by
-> the KVM subsystem when KVM wants to use TDX.
-> 
-> Add a new early_initcall(tdx_init) to detect the TDX by detecting TDX
-> private KeyIDs.  Also add a function to report whether TDX is enabled by
-> the BIOS.  Similar to AMD SME, kexec() will use it to determine whether
-> cache flush is needed.
-> 
-> The TDX module itself requires one TDX KeyID as the 'TDX global KeyID'
-> to protect its metadata.  Each TDX guest also needs a TDX KeyID for its
-> own protection.  Just use the first TDX KeyID as the global KeyID and
-> leave the rest for TDX guests.  If no TDX KeyID is left for TDX guests,
-> disable TDX as initializing the TDX module alone is useless.
-> 
-> To start to support TDX, create a new arch/x86/virt/vmx/tdx/tdx.c for
-> TDX host kernel support.  Add a new Kconfig option CONFIG_INTEL_TDX_HOST
-> to opt-in TDX host kernel support (to distinguish with TDX guest kernel
-> support).  So far only KVM uses TDX.  Make the new config option depend
-> on KVM_INTEL.
-> 
-> Signed-off-by: Kai Huang <kai.huang@intel.com>
-> Reviewed-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> ---
-> 
-> v10 -> v11 (David):
->  - "host kernel" -> "the host kernel"
->  - "protected VM" -> "confidential VM".
->  - Moved setting tdx_global_keyid to the end of tdx_init().
-> 
-> v9 -> v10:
->  - No change.
-> 
-> v8 -> v9:
->  - Moved MSR macro from local tdx.h to <asm/msr-index.h> (Dave).
->  - Moved reserving the TDX global KeyID from later patch to here.
->  - Changed 'tdx_keyid_start' and 'nr_tdx_keyids' to
->    'tdx_guest_keyid_start' and 'tdx_nr_guest_keyids' to represent KeyIDs
->    can be used by guest. (Dave)
->  - Slight changelog update according to above changes.
-> 
-> v7 -> v8: (address Dave's comments)
->  - Improved changelog:
->     - "KVM user" -> "The TDX module will be initialized by KVM when ..."
->     - Changed "tdx_int" part to "Just say what this patch is doing"
->     - Fixed the last sentence of "kexec()" paragraph
->   - detect_tdx() -> record_keyid_partitioning()
->   - Improved how to calculate tdx_keyid_start.
->   - tdx_keyid_num -> nr_tdx_keyids.
->   - Improved dmesg printing.
->   - Add comment to clear_tdx().
-> 
-> v6 -> v7:
->  - No change.
-> 
-> v5 -> v6:
->  - Removed SEAMRR detection to make code simpler.
->  - Removed the 'default N' in the KVM_TDX_HOST Kconfig (Kirill).
->  - Changed to use 'obj-y' in arch/x86/virt/vmx/tdx/Makefile (Kirill).
-> 
-> 
-> ---
->  arch/x86/Kconfig                 | 12 +++++
->  arch/x86/Makefile                |  2 +
->  arch/x86/include/asm/msr-index.h |  3 ++
->  arch/x86/include/asm/tdx.h       |  7 +++
->  arch/x86/virt/Makefile           |  2 +
->  arch/x86/virt/vmx/Makefile       |  2 +
->  arch/x86/virt/vmx/tdx/Makefile   |  2 +
->  arch/x86/virt/vmx/tdx/tdx.c      | 92 ++++++++++++++++++++++++++++++++
->  8 files changed, 122 insertions(+)
->  create mode 100644 arch/x86/virt/Makefile
->  create mode 100644 arch/x86/virt/vmx/Makefile
->  create mode 100644 arch/x86/virt/vmx/tdx/Makefile
->  create mode 100644 arch/x86/virt/vmx/tdx/tdx.c
-> 
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index 53bab123a8ee..191587f75810 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -1952,6 +1952,18 @@ config X86_SGX
->  
->  	  If unsure, say N.
->  
-> +config INTEL_TDX_HOST
-> +	bool "Intel Trust Domain Extensions (TDX) host support"
-> +	depends on CPU_SUP_INTEL
-> +	depends on X86_64
-> +	depends on KVM_INTEL
-> +	help
-> +	  Intel Trust Domain Extensions (TDX) protects guest VMs from malicious
-> +	  host and certain physical attacks.  This option enables necessary TDX
-> +	  support in the host kernel to run confidential VMs.
-> +
-> +	  If unsure, say N.
-> +
->  config EFI
->  	bool "EFI runtime service support"
->  	depends on ACPI
-> diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-> index b39975977c03..ec0e71d8fa30 100644
-> --- a/arch/x86/Makefile
-> +++ b/arch/x86/Makefile
-> @@ -252,6 +252,8 @@ archheaders:
->  
->  libs-y  += arch/x86/lib/
->  
-> +core-y += arch/x86/virt/
-> +
->  # drivers-y are linked after core-y
->  drivers-$(CONFIG_MATH_EMULATION) += arch/x86/math-emu/
->  drivers-$(CONFIG_PCI)            += arch/x86/pci/
-> diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-> index 3aedae61af4f..6d8f15b1552c 100644
-> --- a/arch/x86/include/asm/msr-index.h
-> +++ b/arch/x86/include/asm/msr-index.h
-> @@ -523,6 +523,9 @@
->  #define MSR_RELOAD_PMC0			0x000014c1
->  #define MSR_RELOAD_FIXED_CTR0		0x00001309
->  
-> +/* KeyID partitioning between MKTME and TDX */
-> +#define MSR_IA32_MKTME_KEYID_PARTITIONING	0x00000087
-> +
->  /*
->   * AMD64 MSRs. Not complete. See the architecture manual for a more
->   * complete list.
-> diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
-> index 25fd6070dc0b..4dfe2e794411 100644
-> --- a/arch/x86/include/asm/tdx.h
-> +++ b/arch/x86/include/asm/tdx.h
-> @@ -94,5 +94,12 @@ static inline long tdx_kvm_hypercall(unsigned int nr, unsigned long p1,
->  	return -ENODEV;
->  }
->  #endif /* CONFIG_INTEL_TDX_GUEST && CONFIG_KVM_GUEST */
-> +
-> +#ifdef CONFIG_INTEL_TDX_HOST
-> +bool platform_tdx_enabled(void);
-> +#else	/* !CONFIG_INTEL_TDX_HOST */
-> +static inline bool platform_tdx_enabled(void) { return false; }
-> +#endif	/* CONFIG_INTEL_TDX_HOST */
-> +
->  #endif /* !__ASSEMBLY__ */
->  #endif /* _ASM_X86_TDX_H */
-> diff --git a/arch/x86/virt/Makefile b/arch/x86/virt/Makefile
-> new file mode 100644
-> index 000000000000..1e36502cd738
-> --- /dev/null
-> +++ b/arch/x86/virt/Makefile
-> @@ -0,0 +1,2 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +obj-y	+= vmx/
-> diff --git a/arch/x86/virt/vmx/Makefile b/arch/x86/virt/vmx/Makefile
-> new file mode 100644
-> index 000000000000..feebda21d793
-> --- /dev/null
-> +++ b/arch/x86/virt/vmx/Makefile
-> @@ -0,0 +1,2 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +obj-$(CONFIG_INTEL_TDX_HOST)	+= tdx/
-> diff --git a/arch/x86/virt/vmx/tdx/Makefile b/arch/x86/virt/vmx/tdx/Makefile
-> new file mode 100644
-> index 000000000000..93ca8b73e1f1
-> --- /dev/null
-> +++ b/arch/x86/virt/vmx/tdx/Makefile
-> @@ -0,0 +1,2 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +obj-y += tdx.o
-> diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
-> new file mode 100644
-> index 000000000000..2d91e7120c90
-> --- /dev/null
-> +++ b/arch/x86/virt/vmx/tdx/tdx.c
-> @@ -0,0 +1,92 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright(c) 2023 Intel Corporation.
-> + *
-> + * Intel Trusted Domain Extensions (TDX) support
-> + */
-> +
-> +#define pr_fmt(fmt)	"tdx: " fmt
-> +
-> +#include <linux/types.h>
-> +#include <linux/cache.h>
-> +#include <linux/init.h>
-> +#include <linux/errno.h>
-> +#include <linux/printk.h>
-> +#include <asm/msr-index.h>
-> +#include <asm/msr.h>
-> +#include <asm/tdx.h>
-> +
-> +static u32 tdx_global_keyid __ro_after_init;
-> +static u32 tdx_guest_keyid_start __ro_after_init;
-> +static u32 tdx_nr_guest_keyids __ro_after_init;
-> +
-> +static int __init record_keyid_partitioning(u32 *tdx_keyid_start,
-> +					    u32 *nr_tdx_keyids)
-> +{
-> +	u32 _nr_mktme_keyids, _tdx_keyid_start, _nr_tdx_keyids;
-> +	int ret;
-> +
-> +	/*
-> +	 * IA32_MKTME_KEYID_PARTIONING:
-> +	 *   Bit [31:0]:	Number of MKTME KeyIDs.
-> +	 *   Bit [63:32]:	Number of TDX private KeyIDs.
-> +	 */
-> +	ret = rdmsr_safe(MSR_IA32_MKTME_KEYID_PARTITIONING, &_nr_mktme_keyids,
-> +			&_nr_tdx_keyids);
-> +	if (ret)
-> +		return -ENODEV;
-> +
-> +	if (!_nr_tdx_keyids)
-> +		return -ENODEV;
-> +
-> +	/* TDX KeyIDs start after the last MKTME KeyID. */
-> +	_tdx_keyid_start = _nr_mktme_keyids + 1;
-> +
-> +	*tdx_keyid_start = _tdx_keyid_start;
-> +	*nr_tdx_keyids = _nr_tdx_keyids;
-> +
-> +	return 0;
-> +}
-> +
-> +static int __init tdx_init(void)
-> +{
-> +	u32 tdx_keyid_start, nr_tdx_keyids;
-> +	int err;
-> +
-> +	err = record_keyid_partitioning(&tdx_keyid_start, &nr_tdx_keyids);
-> +	if (err)
-> +		return err;
-> +
-> +	pr_info("BIOS enabled: private KeyID range [%u, %u)\n",
-> +			tdx_keyid_start, tdx_keyid_start + nr_tdx_keyids);
-> +
-> +	/*
-> +	 * The TDX module itself requires one 'global KeyID' to protect
-> +	 * its metadata.  If there's only one TDX KeyID, there won't be
-> +	 * any left for TDX guests thus there's no point to enable TDX
-> +	 * at all.
-> +	 */
-> +	if (nr_tdx_keyids < 2) {
-> +		pr_info("initialization failed: too few private KeyIDs available.\n");
-> +		goto no_tdx;
+Signed-off-by: Patrick Thompson <ptf@google.com>
+---
 
-I think you can return -ENODEV directly here. Maybe this goto is added to adapt to next
-patches. But for this patch, I don't think you need it.
+ drivers/net/ethernet/realtek/r8169_main.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-> +	}
-> +
-> +	/*
-> +	 * Just use the first TDX KeyID as the 'global KeyID' and
-> +	 * leave the rest for TDX guests.
-> +	 */
-> +	tdx_global_keyid = tdx_keyid_start;
-> +	tdx_guest_keyid_start = ++tdx_keyid_start;
-> +	tdx_nr_guest_keyids = --nr_tdx_keyids;
-> +
-> +	return 0;
-> +no_tdx:
-> +	return -ENODEV;
-> +}
-> +early_initcall(tdx_init);
-> +
-> +/* Return whether the BIOS has enabled TDX */
-> +bool platform_tdx_enabled(void)
-> +{
-> +	return !!tdx_global_keyid;
-> +}
-
+diff --git a/drivers/net/ethernet/realtek/r8169_main.c b/drivers/net/ethernet/realtek/r8169_main.c
+index 4b19803a7dd01..96245e96ee507 100644
+--- a/drivers/net/ethernet/realtek/r8169_main.c
++++ b/drivers/net/ethernet/realtek/r8169_main.c
+@@ -2583,7 +2583,8 @@ static void rtl_set_rx_mode(struct net_device *dev)
+ 		rx_mode |= AcceptAllPhys;
+ 	} else if (netdev_mc_count(dev) > MC_FILTER_LIMIT ||
+ 		   dev->flags & IFF_ALLMULTI ||
+-		   tp->mac_version == RTL_GIGA_MAC_VER_35) {
++		   tp->mac_version == RTL_GIGA_MAC_VER_35 ||
++		   tp->mac_version == RTL_GIGA_MAC_VER_46) {
+ 		/* accept all multicasts */
+ 	} else if (netdev_mc_empty(dev)) {
+ 		rx_mode &= ~AcceptMulticast;
 -- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+2.41.0.rc0.172.g3f132b7071-goog
+
