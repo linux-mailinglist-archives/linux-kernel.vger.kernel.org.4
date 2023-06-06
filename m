@@ -2,168 +2,272 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26551724494
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 15:38:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76E7372449A
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 15:38:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237710AbjFFNiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 09:38:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58144 "EHLO
+        id S237486AbjFFNia (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 09:38:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236082AbjFFNiA (ORCPT
+        with ESMTP id S232932AbjFFNi2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 09:38:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B33D12D;
-        Tue,  6 Jun 2023 06:37:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BC49762B4D;
-        Tue,  6 Jun 2023 13:37:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E865C433EF;
-        Tue,  6 Jun 2023 13:37:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686058678;
-        bh=rwRJU4dA7H36UcTPEUz7Yplp6r5Exdcdk93rtl/HYAU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=d/R/Q/nlfdcQMmHuOjZt9MdJfBYy5S1FIlzopQx4ZikGL0Tzkw7SFV4VurBbma8UL
-         pkTTSDTfaI8MwHwcDaX401wEZzg5Op0yLdIzbwhPzwuKRbe/l9c1iDNQUw0n7wgIAF
-         0IxOfWUWmuH2BfevMH64WnRQwixQx1YLkPPXZQZ8OL4LuQnHigzV6DWs1q4+8J4Syo
-         OQ0CXrXkecT9iMHLTYJ1fI74G65qhwFn5nAmZnSs8O7cd8vXWxbPqYlpGyZfojqoMy
-         2g9VA0Gv0Y/6uQQe+XD9Jc6CTBDxpHGFloJiTsqkxrynJUChHV6E8EXAWCHg7FH6Di
-         5k2rVgzIHEUTQ==
-Date:   Tue, 6 Jun 2023 22:37:52 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Beau Belgrave <beaub@linux.microsoft.com>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-trace-kernel@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        David Vernet <void@manifault.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Dave Thaler <dthaler@microsoft.com>,
-        Christoph Hellwig <hch@infradead.org>
-Subject: Re: [PATCH] tracing/user_events: Run BPF program if attached
-Message-Id: <20230606223752.65dd725c04b11346b45e0546@kernel.org>
-In-Reply-To: <20230601162921.GA152@W11-BEAU-MD.localdomain>
-References: <20230509163050.127d5123@rorschach.local.home>
-        <20230515165707.hv65ekwp2djkjj5i@MacBook-Pro-8.local>
-        <20230515192407.GA85@W11-BEAU-MD.localdomain>
-        <20230517003628.aqqlvmzffj7fzzoj@MacBook-Pro-8.local>
-        <20230516212658.2f5cc2c6@gandalf.local.home>
-        <20230517165028.GA71@W11-BEAU-MD.localdomain>
-        <CAADnVQK3-NBLSVRVsgArUEjqsuY2S_8mWsWmLEAtTzo+U49CKQ@mail.gmail.com>
-        <20230601-urenkel-holzofen-cd9403b9cadd@brauner>
-        <20230601152414.GA71@W11-BEAU-MD.localdomain>
-        <20230601-legten-festplatten-fe053c6f16a4@brauner>
-        <20230601162921.GA152@W11-BEAU-MD.localdomain>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 6 Jun 2023 09:38:28 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EA05E6E;
+        Tue,  6 Jun 2023 06:38:27 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-974604c1394so123544566b.0;
+        Tue, 06 Jun 2023 06:38:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686058706; x=1688650706;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xdfK41i9ogLoXuG8nVzwi1HHjDuvaM8RBF4uVZdQ5zA=;
+        b=OlPD8dk9OEttqxELJsG49IBnkoTCNh1dHC47S0ZDvxh9e4LslctJojKXJUo2f6gmfC
+         cnphpW6rIEEohgVN0mVADJRBCtGmTIRmRPJTI7+CT+Z/KGDnsB+SYz4NUJ4w78QdXNFk
+         tYE/q60GU2shTjlubbovKZy6l7yly8S6azBaaIN1IvPUsDzq50ZSS54hqvsgID9Dj2Al
+         KcXM3/JGEP3NkRWctQ/deI0ez6pRhByvGh5lHTFBFxh6JjnqcnwyGw5oyuaBJ+DlIely
+         nsBAJYi/9u5Pek5BWdciSipWARH8dEtHB1v/hPI77podyYKPYhTIziVgYFS5zE2lU+OU
+         KqBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686058706; x=1688650706;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xdfK41i9ogLoXuG8nVzwi1HHjDuvaM8RBF4uVZdQ5zA=;
+        b=F9OTiW8N2Y0n28PO6/uksOHaSHVmF6EbORuX0LC7SGk71XcYWkJamh/L2TmtJkUTJE
+         YSl1uTiogZaGnkc5Imytv5rkOnT7aPHrnmaiQOFUAkCdNqh3bKLALbLPMIwPmRxvfHsZ
+         zJfmG9JAEbX+E7YD69GaK+9PwOpXO0NnHJxxzp2siIHH0PV1hPMIIeuR8+eWkxh4iqf0
+         Bm72MmimCGVgr9sqT7r7DACcqcHzmzSip0+OZwSavt/BUM8bxtXpHlRqICpMnwlAhIMK
+         LG1iwhEaj3mtyMVQlVl9VTcJZr5ryZob7DLT9FJMbtNoUuaoIrP0Lk1ynBBLQSlKbZtD
+         kOeQ==
+X-Gm-Message-State: AC+VfDwlKID/KXdQllQ38aMevkwlDjR8WxTX2LTyK1br/KcN5IKeM1Vu
+        cDj2CBecCM4VgB+hRoujVCmNtSQfsnnpsPLK
+X-Google-Smtp-Source: ACHHUZ41ZZ2VXhAaUdYwSB5wGyF7c81EUR7ZLJfUyTPiowT7O8K6TKnNodrKJG7p9iRsM6qwCSpRug==
+X-Received: by 2002:a17:906:748d:b0:977:c853:fba6 with SMTP id e13-20020a170906748d00b00977c853fba6mr2109890ejl.2.1686058705522;
+        Tue, 06 Jun 2023 06:38:25 -0700 (PDT)
+Received: from ivan-HLYL-WXX9.. ([178.160.196.94])
+        by smtp.gmail.com with ESMTPSA id m8-20020a1709066d0800b00977d7ccd9fdsm2837775ejr.95.2023.06.06.06.38.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Jun 2023 06:38:25 -0700 (PDT)
+From:   Ivan Orlov <ivan.orlov0322@gmail.com>
+To:     perex@perex.cz, tiwai@suse.com, corbet@lwn.net, broonie@kernel.org,
+        skhan@linuxfoundation.org
+Cc:     Ivan Orlov <ivan.orlov0322@gmail.com>, alsa-devel@alsa-project.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, gregkh@linuxfoundation.org,
+        himadrispandya@gmail.com,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Subject: [PATCH v3 1/3] docs: sound: add 'pcmtest' driver documentation
+Date:   Tue,  6 Jun 2023 17:38:05 +0400
+Message-Id: <20230606133807.14089-1-ivan.orlov0322@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Beau,
+Add documentation for the new Virtual PCM Test Driver. It covers all
+possible usage cases: errors and delay injections, random and
+pattern-based data generation, playback and ioctl redefinition
+functionalities testing.
 
-On Thu, 1 Jun 2023 09:29:21 -0700
-Beau Belgrave <beaub@linux.microsoft.com> wrote:
+We have a lot of different virtual media drivers, which can be used for
+testing of the userspace applications and media subsystem middle layer.
+However, all of them are aimed at testing the video functionality and
+simulating the video devices. For audio devices we have only snd-dummy
+module, which is good in simulating the correct behavior of an ALSA device.
+I decided to write a tool, which would help to test the userspace ALSA
+programs (and the PCM middle layer as well) under unusual circumstances
+to figure out how they would behave. So I came up with this Virtual PCM
+Test Driver.
 
-> > > These are stubs to integrate namespace support. I've been working on a
-> > > series that adds a tracing namespace support similiar to the IMA
-> > > namespace work [1]. That series is ending up taking more time than I
-> > 
-> > Look, this is all well and nice but you've integrated user events with
-> > tracefs. This is currently a single-instance global filesystem. So what
-> > you're effectively implying is that you're namespacing tracefs by
-> > hanging it off of struct user namespace making it mountable by
-> > unprivileged users. Or what's the plan?
-> > 
-> 
-> We don't have plans for unprivileged users currently. I think that is a
-> great goal and requires a proper tracing namespace, which we currently
-> don't have. I've done some thinking on this, but I would like to hear
-> your thoughts and others on how to do this properly. We do talk about
-> this in the tracefs meetings (those might be out of your time zone
-> unfortunately).
-> 
-> > That alone is massive work with _wild_ security implications. My
-> > appetite for exposing more stuff under user namespaces is very low given
-> > the amount of CVEs we've had over the years.
-> > 
-> 
-> Ok, I based that approach on the feedback given in LPC 2022 - Containers
-> and Checkpoint/Retore MC [1]. I believe you gave feedback to use user
-> namespaces to provide the encapsulation that was required :)
+This new Virtual PCM Test Driver has several features which can be useful
+during the userspace ALSA applications testing/fuzzing, or testing/fuzzing
+of the PCM middle layer. Not all of them can be implemented using the
+existing virtual drivers (like dummy or loopback). Here is what can this
+driver do:
 
-Even with the user namespace, I think we still need to provide separate
-"eventname-space" for each application, since it may depend on the context
-who and where it is launched. I think the easiest solution is (perhaps)
-providing a PID-based new groups for each instance (the PID-prefix or 
-suffix will be hidden from the application).
-I think it may not good to allow unprivileged user processes to detect
-the registered event name each other by default.
+- Simulate both capture and playback processes
+- Check the playback stream for containing the looped pattern
+- Generate random or pattern-based capture data
+- Inject delays into the playback and capturing processes
+- Inject errors during the PCM callbacks
 
-> 
-> > > anticipated.
-> > 
-> > Yet you were confident enough to leave the namespacing stubs for this
-> > functionality in the code. ;)
-> > 
-> > What is the overall goal here? Letting arbitrary unprivileged containers
-> > define their own custom user event type by mounting tracefs inside
-> > unprivileged containers? If so, what security story is going to
-> > guarantee that writing arbitrary tracepoints from random unprivileged
-> > containers is safe?
-> > 
-> 
-> Unprivileged containers is not a goal, however, having a per-pod
-> user_event system name, such as user_event_<pod_name>, would be ideal
-> for certain diagnostic scenarios, such as monitoring the entire pod.
+Also, this driver can check the playback stream for containing the
+predefined pattern, which is used in the corresponding selftest to check
+the PCM middle layer data transferring functionality. Additionally, this
+driver redefines the default RESET ioctl, and the selftest covers this PCM
+API functionality as well.
 
-That can be done in the user-space tools, not in the kernel.
+The driver supports both interleaved and non-interleaved access modes, and
+have separate pattern buffers for each channel. The driver supports up to
+4 channels and up to 8 substreams.
 
-> When you have a lot of containers, you also want to limit how many
-> tracepoints each container can create, even if they are given access to
-> the tracefs file. The per-group can limit how many events/tracepoints
-> that container can go create, since we currently only have 16-bit
-> identifiers for trace_event's we need to be cautious we don't run out.
+Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
+---
+V1 -> V2:
 
-I agree, we need to have a knob to limit it to avoid DoS attack.
+- Rename the driver from from 'valsa' to 'pcmtest'.
+- Implement support for interleaved and non-interleaved access modes
+- Add support for 8 substreams and 4 channels
+- Extend supported formats
+- Extend and rewrite in C the selftest for the driver
 
-> user_events in general has tracepoint validators to ensure the payloads
-> coming in are "safe" from what the kernel might do with them, such as
-> filtering out data.
+V2 -> V3:
 
-[...]
-> > > changing the system name of user_events on a per-namespace basis.
-> > 
-> > What is the "system name" and how does it protect against namespaces
-> > messing with each other?
-> 
-> trace_events in the tracing facility require both a system name and an
-> event name. IE: sched/sched_waking, sched is the system name,
-> sched_waking is the event name. For user_events in the root group, the
-> system name is "user_events". When groups are introduced, the system
-> name can be "user_events_<GUID>" for example.
+- Add separate pattern buffers for each channel
+- Speed up the capture data generation when using interleaved access mode
+- Extend the corresponding selftest to cover the multiple channels
+capturing and playback functionalities when using interleaved access mode.
+- Fix documentation issues
 
-So my suggestion is using PID in root pid namespace instead of GUID
-by default.
+ Documentation/sound/cards/index.rst   |   1 +
+ Documentation/sound/cards/pcmtest.rst | 120 ++++++++++++++++++++++++++
+ 2 files changed, 121 insertions(+)
+ create mode 100644 Documentation/sound/cards/pcmtest.rst
 
-Thank you,
-
-
+diff --git a/Documentation/sound/cards/index.rst b/Documentation/sound/cards/index.rst
+index c016f8c3b88b..49c1f2f688f8 100644
+--- a/Documentation/sound/cards/index.rst
++++ b/Documentation/sound/cards/index.rst
+@@ -17,3 +17,4 @@ Card-Specific Information
+    hdspm
+    serial-u16550
+    img-spdif-in
++   pcmtest
+diff --git a/Documentation/sound/cards/pcmtest.rst b/Documentation/sound/cards/pcmtest.rst
+new file mode 100644
+index 000000000000..e163522f3205
+--- /dev/null
++++ b/Documentation/sound/cards/pcmtest.rst
+@@ -0,0 +1,120 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++The Virtual PCM Test Driver
++===========================
++
++The Virtual PCM Test Driver emulates a generic PCM device, and can be used for
++testing/fuzzing of the userspace ALSA applications, as well as for testing/fuzzing of
++the PCM middle layer. Additionally, it can be used for simulating hard to reproduce
++problems with PCM devices.
++
++What can this driver do?
++~~~~~~~~~~~~~~~~~~~~~~~~
++
++At this moment the driver can do the following things:
++	* Simulate both capture and playback processes
++	* Generate random or pattern-based capturing data
++	* Inject delays into the playback and capturing processes
++	* Inject errors during the PCM callbacks
++
++It supports up to 8 substreams and 4 channels. Also it supports both interleaved and
++non-interleaved access modes.
++
++Also, this driver can check the playback stream for containing the predefined pattern,
++which is used in the corresponding selftest (alsa/pcmtest-test.sh) to check the PCM middle
++layer data transferring functionality. Additionally, this driver redefines the default
++RESET ioctl, and the selftest covers this PCM API functionality as well.
++
++Configuration
++-------------
++
++The driver has several parameters besides the common ALSA module parameters:
++
++	* fill_mode (bool) - Buffer fill mode (see below)
++	* inject_delay (int)
++	* inject_hwpars_err (bool)
++	* inject_prepare_err (bool)
++	* inject_trigger_err (bool)
++
++
++Capture Data Generation
++-----------------------
++
++The driver has two modes of data generation: the first (0 in the fill_mode parameter)
++means random data generation, the second (1 in the fill_mode) - pattern-based
++data generation. Let's look at the second mode.
++
++First of all, you may want to specify the pattern for data generation. You can do it
++by writing the pattern to the debugfs file. There are pattern buffer debugfs entries
++for each channel, as well as entries which contain the pattern buffer length.
++
++	* /sys/kernel/debug/pcmtest/fill_pattern[0-3]
++	* /sys/kernel/debug/pcmtest/fill_pattern[0-3]_len
++
++To set the pattern for the channel 0 you can execute the following command:
++
++.. code-block:: bash
++
++	echo -n mycoolpattern > /sys/kernel/debug/pcmtest/fill_pattern0
++
++Then, after every capture action performed on the 'pcmtest' device the buffer for the
++channel 0 will contain 'mycoolpatternmycoolpatternmycoolpatternmy...'.
++
++The pattern itself can be up to 4096 bytes long.
++
++Delay injection
++---------------
++
++The driver has 'inject_delay' parameter, which has very self-descriptive name and
++can be used for time delay/speedup simulations. The parameter has integer type, and
++it means the delay added between module's internal timer ticks.
++
++If the 'inject_delay' value is positive, the buffer will be filled slower, if it is
++negative - faster. You can try it yourself by starting a recording in any
++audiorecording application (like Audacity) and selecting the 'pcmtest' device as a
++source.
++
++This parameter can be also used for generating a huge amount of sound data in a very
++short period of time (with the negative 'inject_delay' value).
++
++Errors injection
++----------------
++
++This module can be used for injecting errors into the PCM communication process. This
++action can help you to figure out how the userspace ALSA program behaves under unusual
++circumstances.
++
++For example, you can make all 'hw_params' PCM callback calls return EBUSY error by
++writing '1' to the 'inject_hwpars_err' module parameter:
++
++.. code-block:: bash
++
++	echo 1 > /sys/module/snd_pcmtest/parameters/inject_hwpars_err
++
++Errors can be injected into the following PCM callbacks:
++
++	* hw_params (EBUSY)
++	* prepare (EINVAL)
++	* trigger (EINVAL)
++
++Playback test
++-------------
++
++This driver can be also used for the playback functionality testing - every time you
++write the playback data to the 'pcmtest' PCM device and close it, the driver checks the
++buffer for containing the looped pattern (which is specified in the fill_pattern
++debugfs file for each channel). If the playback buffer content represents the looped
++pattern, 'pc_test' debugfs entry is set into '1'. Otherwise, the driver sets it to '0'.
++
++ioctl redefinition test
++-----------------------
++
++The driver redefines the 'reset' ioctl, which is default for all PCM devices. To test
++this functionality, we can trigger the reset ioctl and check the 'ioctl_test' debugfs
++entry:
++
++.. code-block:: bash
++
++	cat /sys/kernel/debug/pcmtest/ioctl_test
++
++If the ioctl is triggered successfully, this file will contain '1', and '0' otherwise.
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+2.34.1
+
