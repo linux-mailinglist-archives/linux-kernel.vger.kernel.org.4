@@ -2,131 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1099772410A
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 13:36:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D0D1724111
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 13:37:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230467AbjFFLgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 07:36:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58280 "EHLO
+        id S236725AbjFFLhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 07:37:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235498AbjFFLgt (ORCPT
+        with ESMTP id S232921AbjFFLho (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 07:36:49 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C428F196;
-        Tue,  6 Jun 2023 04:36:48 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id 5614622812f47-39c503bc770so306517b6e.0;
-        Tue, 06 Jun 2023 04:36:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686051408; x=1688643408;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=R92KuS7gawSx2LWw+ooVWTPC6JkJv9bdowpbo01HVAw=;
-        b=KWM8ThY/M3uM372kffwhthc6oRXcuseLvAve9vjPRRuzhSZxcV1WgKQCyntbH7Esu7
-         cZlAzbtguAWGAxejMBdHHv7Ibvu3VWnpXyGRw51hrlfbOSnejVz5vCPbsh/1WI68Tp91
-         +2zdkEy/aDO0dcopt49vPZlstLrxUbp3PTlfEZTa6+LPHMdIllJ4PoXLh07CjiT7nuQ8
-         zvPy+HIydi7yjsqanQcMr/fRwI8lILVvDkxnyN3ALPKafYzdFFsXqpoREvA2TTNqZd8Q
-         qPXyI1Qq9XWu8GIrE7whBTX+FxVv/27CHPmeIfnsdcKICNNIHkymjVSYNnEZNgQMLg8X
-         E+xA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686051408; x=1688643408;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=R92KuS7gawSx2LWw+ooVWTPC6JkJv9bdowpbo01HVAw=;
-        b=V5w5nPzymjIZOVSOF9Cwjg4LjVkKPXDyEP+xAa+sRAnzh3fipUAf1Rm/bPV0vpRAzO
-         j+XgWfnPX33SIZcsiQdt+rWHDSUl9thhVznhypkSF1tTo+e+L7sBaJf27YEiyzg5Z1oR
-         xE6Vpl5eizeopF6jMplH6q7tiKx/CXLBnhUvRAGfGToLfJku45C0PkZL8biAy7MVh+AP
-         HwEsP2wR2S7ncBlR1blrF07Dmpiu74wwIMpBB8iCFn+5X3k+WUyOKbdPyYQw0w/rYR3N
-         UcpBhbOrfyvaUAsmLSN9IPSkclx0Zam+O5Qmt7hJwR3lhwK53cRQWxMknrQdA4GM/XHV
-         zsJA==
-X-Gm-Message-State: AC+VfDxlULC5abDy8BDp/keCUxy3OCjOF305h0DbpOIoklTtBIPOqvHp
-        X5e3LKc/3//j5dkcxLkxlHzoTEhOnv4=
-X-Google-Smtp-Source: ACHHUZ6076hhAKQCiN1ZGGrVzz/fYBz/bp2CAfqnll20uGWpIG1MlOWX50Uveq2xE2o3dLht+3Ugsw==
-X-Received: by 2002:aca:130c:0:b0:396:3b9b:d217 with SMTP id e12-20020aca130c000000b003963b9bd217mr2133146oii.18.1686051407914;
-        Tue, 06 Jun 2023 04:36:47 -0700 (PDT)
-Received: from debian.me (subs09a-223-255-225-71.three.co.id. [223.255.225.71])
-        by smtp.gmail.com with ESMTPSA id g12-20020a63e60c000000b00502ecc282e2sm7244378pgh.5.2023.06.06.04.36.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 04:36:47 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id BD9E2106A3A; Tue,  6 Jun 2023 18:36:43 +0700 (WIB)
-Date:   Tue, 6 Jun 2023 18:36:43 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Franziska Naepelt <franziska.naepelt@googlemail.com>,
-        linux-crypto@vger.kernel.org
-Cc:     herbert@gondor.apana.org.au, davem@davemloft.net,
+        Tue, 6 Jun 2023 07:37:44 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C9AE9;
+        Tue,  6 Jun 2023 04:37:43 -0700 (PDT)
+Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 356BMipU017525;
+        Tue, 6 Jun 2023 11:37:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=hT2L6wqUoRwijI9uennQgGxrS1wlHDxNGpQqXVQ+BSs=;
+ b=edrkFXScUoE3724+bYUb5jpkp6QRgaZk3+6wodmqPOQLBIHqZdJ4YdGFq52dmK58zt8L
+ ohNRBxwRwjjbKpsEdbvwHBcqx7tghqMfGzHWY6mwi/pxxifp7v8u0zDmTUy+dULRopnG
+ SqjeBe2UVE5MOW9e4b2gtmW+8WvHoTGTiXFXLEvXwYdZBuK6dWWdtMpYxSPH3dL0xlfY
+ doFKrXQUVPacma7oYsmkKDNJdnAZIZq/dRPlNwiYJA53NagwkSR9fdPT9D4j2v/gTcDC
+ 97Rs6/YQmEUkuK4MzxsVAJQx7ozwK0RmVDVxjivkjVAR90L9QSqQKwBqlmTDqLcH9dwn Sw== 
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r23v9rb1v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Jun 2023 11:37:42 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3562ePnw012571;
+        Tue, 6 Jun 2023 11:37:41 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+        by ppma02fra.de.ibm.com (PPS) with ESMTPS id 3qyxdf9gjv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Jun 2023 11:37:40 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 356BbbaG57147656
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 6 Jun 2023 11:37:37 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1A49120043;
+        Tue,  6 Jun 2023 11:37:37 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CE4B620040;
+        Tue,  6 Jun 2023 11:37:36 +0000 (GMT)
+Received: from a46lp73.lnxne.boe (unknown [9.152.108.100])
+        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Tue,  6 Jun 2023 11:37:36 +0000 (GMT)
+From:   Steffen Eiden <seiden@linux.ibm.com>
+To:     kvm@vger.kernel.org, linux-s390@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        Franziska Naepelt <franziska.naepelt@gmail.com>,
-        Linux SPDX Licenses <linux-spdx@vger.kernel.org>,
-        Linux Kernel Janitors <kernel-janitors@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>
-Subject: Re: [PATCH] crypto: frcypt Fix checkpatch warnings
-Message-ID: <ZH8aS-rMMKaxRD50@debian.me>
-References: <20230606111042.96855-1-franziska.naepelt@gmail.com>
+        Viktor Mihajlovski <mihajlov@linux.ibm.com>
+Cc:     Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Nico Boehr <nrb@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Hendrik Brueckner <brueckner@linux.ibm.com>
+Subject: [PATCH v3 0/6] s390/uvdevice: Expose secret UVCs
+Date:   Tue,  6 Jun 2023 13:37:30 +0200
+Message-Id: <20230606113736.2934503-1-seiden@linux.ibm.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dC9uVHJs6Xkabe7S"
-Content-Disposition: inline
-In-Reply-To: <20230606111042.96855-1-franziska.naepelt@gmail.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 5ouws-yezvrMu1Tipw997mGhrEqGnioi
+X-Proofpoint-GUID: 5ouws-yezvrMu1Tipw997mGhrEqGnioi
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-06_07,2023-06-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ malwarescore=0 clxscore=1015 mlxscore=0 mlxlogscore=982 lowpriorityscore=0
+ adultscore=0 phishscore=0 suspectscore=0 priorityscore=1501 spamscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2306060093
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+IBM Secure Execution guests may want to inject secrets into the Ultravisor(UV).
+Also they should be able to know which secrets the UV possesses and prevent the
+further addition of more secrets.
 
---dC9uVHJs6Xkabe7S
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Therefore, add three new Ultravisor-Calls and expose them via the uvdevice: Add
+Secret, List Secrets, and Lock Secrets.  The uvdevice still acts as the
+messenger only and does not inspect or modify the requests. Only some sanity
+checks are made to prevent the kernel from corruption.
+Also add a new IOCTL to get information about the supported UV-calls of the
+uvdevice.  As userspace wants to know which secrets, types, etc. are supported
+expose the corresponding UV Query info data to userspace via sysfs.
 
-[Also Cc: linux-spdx list and original author mentioned in the license
-boilerplate]
+The series contains:
+  * A new info IOCTL, giving information about the capabilities of the uvdevice and UV
+  * 3 patches adding new Ultravisor-Calls and expose them to userspace
+  * A patch replacing scnprintf with sysfs_emit in arch/s390/kernel/uv.c
+  * A patch with an Ultravisor Query Info update for the new secret related information
 
-On Tue, Jun 06, 2023 at 01:10:42PM +0200, Franziska Naepelt wrote:
-> The following checkpatch warnings have been fixed:
-> - WARNING: Missing or malformed SPDX-License-Identifier tag
-> - WARNING: Block comments use a trailing */ on a separate line
+Changes for v3:
+  * misc nits from Janosch
 
-Two different logical changes in a patch - please break them into a
-2-patch series, with each patch do one job. And please write the patch
-description in imperative mood instead (e.g. "Do foo").
+Changes for v2:
+  * use __set_bit instead of the atomic set_bit (Heiko)
+  * add a patch for replacing scnprintf with sysfs_emit in arch/s390/kernel/uv.c (Heiko)
+  * use scnprintf instead of sysfs_emit for the new sysfs entries in the last patch (Heiko)
+  * use hex values in struct definitions (Claudio)
 
-> +// SPDX-License-Identifier: GPL-2.0-or-later
->  /* FCrypt encryption algorithm
->   *
->   * Copyright (C) 2006 Red Hat, Inc. All Rights Reserved.
+Steffen
 
-NAK!
+Steffen Eiden (6):
+  s390/uvdevice: Add info IOCTL
+  s390/uvdevice: Add 'Add Secret' UVC
+  s390/uvdevice: Add 'List Secrets' UVC
+  s390/uvdevice: Add 'Lock Secret Store' UVC
+  s390/uv: replace scnprintf with sysfs_emit
+  s390/uv: Update query for secret-UVCs
 
-There is also BSD 3-clause boilerplate (from original code that fcrypt.c
-is based on). Thus, the proper SPDX tag should have been:
+ arch/s390/boot/uv.c                   |   4 +
+ arch/s390/include/asm/uv.h            |  32 +++-
+ arch/s390/include/uapi/asm/uvdevice.h |  53 +++++-
+ arch/s390/kernel/uv.c                 |  94 +++++++----
+ drivers/s390/char/uvdevice.c          | 225 +++++++++++++++++++++++++-
+ 5 files changed, 368 insertions(+), 40 deletions(-)
 
-```
-// SPDX-License-Identifier: GPL-2.0-or-later AND BSD-3-Clause
-```
+-- 
+2.40.1
 
-And please also delete the boilerplate.
-
-Thanks.
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---dC9uVHJs6Xkabe7S
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZH8aSAAKCRD2uYlJVVFO
-o+5nAQDtfVmY2eW2DPOLirsfAmVGuQiWkV0+NL/MsYP9RNXafwD/ZPj7b2dzkhai
-PZb6kQJeq9muOKeXuk5Bf4e3ZxhizAI=
-=p0tN
------END PGP SIGNATURE-----
-
---dC9uVHJs6Xkabe7S--
