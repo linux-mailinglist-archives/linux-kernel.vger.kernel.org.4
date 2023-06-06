@@ -2,210 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BDB9723EDE
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 12:05:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDB91723EDB
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 12:04:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236098AbjFFKEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 06:04:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37798 "EHLO
+        id S232626AbjFFKE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 06:04:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbjFFKEh (ORCPT
+        with ESMTP id S229507AbjFFKEV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 06:04:37 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAAA8E55
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 03:04:33 -0700 (PDT)
-X-QQ-mid: bizesmtp91t1686045843tio9k4gs
-Received: from [192.168.1.114] ( [58.240.82.166])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 06 Jun 2023 18:04:01 +0800 (CST)
-X-QQ-SSF: 00200000000000807000000A0000000
-X-QQ-FEAT: RmDZc/K2LPHC/eGOPxqIE8cwxJTymxechOOq2757qIg196A5sM4WkttXpqIOh
-        hZFGT0u8YfRTzj4Lg8Zv/JcbNk6EBRQ8ARrRQGFi8nbFsbm6dANGUvVq7/YeqmYJQ4YnmYK
-        CBanlcHDGhbx64KRKIZh/NkxAuV5IZlH4rg+QbH9B5N+0eSD1TXDfvKLCb4ttaBnuPK5snr
-        ERtiS6P55/iXD5PK+H4taEYx39yHdShUFcNBPSKycXMF4ujRn6ALLrWzFW1qVYNDruxYEDX
-        9QZAc9UCyKscbjd4USdW5jhnylwPmSf5Np/30WQINsVk4cdB6R18LwU+bz5fi98jT8GJoKG
-        xImyi+V0/vQ6zcrlnAV9RwI2nAvnEZrdXAstVxFHlrXhz1YYplYNHXSXEJ4MNQXwABirBfd
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 10253589702890628571
-Message-ID: <BF85472AD8E99564+e8e07a01-81e5-c9b7-48f4-5b66b83120ee@tinylab.org>
-Date:   Tue, 6 Jun 2023 18:04:01 +0800
+        Tue, 6 Jun 2023 06:04:21 -0400
+Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38866F3
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 03:04:20 -0700 (PDT)
+Received: by mail-ua1-x92d.google.com with SMTP id a1e0cc1a2514c-78a230a687aso721366241.2
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 03:04:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1686045859; x=1688637859;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KmF0HRjkj/ixrMO32qTd6MR/LIHFeaXxncI6n5YLT8o=;
+        b=R0fD8KNGQlFcsBAkbsGeTcSPZRQ75sePEgaumFIgths5NRJvW3jCgtmyqkNU1aghs5
+         vidRpIa51YvKmrncUU6XGGs7Y1HUnXtcRSF5RwZycjo4LkjKkEFi+eOgM2q5JwSId4ww
+         1lytQ1wJ0uZZBCVY5EKezct51s5fyHSywbM30=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686045859; x=1688637859;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KmF0HRjkj/ixrMO32qTd6MR/LIHFeaXxncI6n5YLT8o=;
+        b=OxeRCdcY1BnyfZZyBusbXTnZpZHiYjxECZWQGOt3kkV17ShAYZcaHrbD6MkgcfyW8h
+         ZxZ77O6d1liLKknM+2bu4ZTmcLOiTFjoP0vDu8BJ4HzUtDoW7N9qPoSfuJzLltJxUa5a
+         QZIUKm/L5YWXG6bm3zp8y+yFYyM31DeE4xdQLWUQAoBYati/GsJXU8HT6O7qWp1/dl8/
+         WYmT/z+PIetwxDrdNZtQ3wl6KGAtWnFPui3/P2JXmBmAR+dR/l+u0M1Hf6b9N5XuUdGF
+         Gr9svMn8xzW6nJcO87sa+q+GIJl6BD4uOzRi+nbM151O7fnhISvx70X9v5XHdRiOy1Vf
+         TTBA==
+X-Gm-Message-State: AC+VfDxKhwu8+AaqoSHD7LvE8rSb/C1TBWMI1LWzICi5L+3sZJae0S9B
+        dMlGqpqTGnSI97EGB3w/x8qJQlXo+5NXQy1y4ouWyQ==
+X-Google-Smtp-Source: ACHHUZ5U6NN5JuVT6xugTHtgq3mvsUusg/3/3ptFMfIWWDkXrgFBqm9fxalqfCc6jesVBuUuUOTJKEK5VLi8XTfccYs=
+X-Received: by 2002:a67:f649:0:b0:434:6958:cdc6 with SMTP id
+ u9-20020a67f649000000b004346958cdc6mr789597vso.19.1686045859248; Tue, 06 Jun
+ 2023 03:04:19 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: Bug report: kernel paniced while booting
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc:     robh <robh@kernel.org>, ajones <ajones@ventanamicro.com>,
-        anup <anup@brainfault.org>, palmer <palmer@rivosinc.com>,
-        "jeeheng.sia" <jeeheng.sia@starfivetech.com>,
-        "leyfoon.tan" <leyfoon.tan@starfivetech.com>,
-        "mason.huo" <mason.huo@starfivetech.com>,
-        "paul.walmsley" <paul.walmsley@sifive.com>,
-        "conor.dooley" <conor.dooley@microchip.com>,
-        guoren <guoren@kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <tencent_7C3B580B47C1B17C16488EC1@qq.com>
- <CAHVXubjm5ax5KYTV_G=GUUH0KJK=v6_jO09XF1T4AzzUTr0CSg@mail.gmail.com>
-From:   Song Shuai <songshuaishuai@tinylab.org>
-In-Reply-To: <CAHVXubjm5ax5KYTV_G=GUUH0KJK=v6_jO09XF1T4AzzUTr0CSg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-3
-X-Spam-Status: No, score=0.3 required=5.0 tests=BAYES_00,FORGED_MUA_MOZILLA,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20230606091747.2031168-1-wenst@chromium.org> <58949bbd-1506-90a0-7154-e6e57d8ddf70@collabora.com>
+In-Reply-To: <58949bbd-1506-90a0-7154-e6e57d8ddf70@collabora.com>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Tue, 6 Jun 2023 18:04:08 +0800
+Message-ID: <CAGXv+5GRBOWFMw+BmkSpczHcm_R6=mvL2GSKnWWyhpng1xw21w@mail.gmail.com>
+Subject: Re: [PATCH] serial: 8250_mtk: Simplify clock sequencing and runtime PM
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        John Ogness <john.ogness@linutronix.de>,
+        linux-serial@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Tony Lindgren <tony@atomide.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jun 6, 2023 at 5:36=E2=80=AFPM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>
+> Il 06/06/23 11:17, Chen-Yu Tsai ha scritto:
+> > The 8250_mtk driver's runtime PM support has some issues:
+> >
+> > - The bus clock is enabled (through runtime PM callback) later than a
+> >    register write
+> > - runtime PM resume callback directly called in probe, but no
+> >    pm_runtime_set_active() call is present
+> > - UART PM function calls the callbacks directly, _and_ calls runtime
+> >    PM API
+> > - runtime PM callbacks try to do reference counting, adding yet another
+> >    count between runtime PM and clocks
+> >
+> > This fragile setup worked in a way, but broke recently with runtime PM
+> > support added to the serial core. The system would hang when the UART
+> > console was probed and brought up.
+> >
+> > Tony provided some potential fixes [1][2], though they were still a bit
+> > complicated. The 8250_dw driver, which the 8250_mtk driver might have
+> > been based on, has a similar structure but simpler runtime PM usage.
+> >
+> > Simplify clock sequencing and runtime PM support in the 8250_mtk driver=
+.
+> > Specifically, the clock is acquired enabled and assumed to be active,
+> > unless toggled through runtime PM suspend/resume. Reference counting is
+> > removed and left to the runtime PM core. The serial pm function now
+> > only calls the runtime PM API.
+> >
+> > [1] https://lore.kernel.org/linux-serial/20230602092701.GP14287@atomide=
+.com/
+> > [2] https://lore.kernel.org/linux-serial/20230605061511.GW14287@atomide=
+.com/
+> >
+> > Fixes: 84a9582fd203 ("serial: core: Start managing serial controllers t=
+o enable runtime PM")
+> > Suggested-by: Tony Lindgren <tony@atomide.com>
+> > Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+>
+> You're both cleaning this up and solving a critical issue and I completel=
+y agree
+> about doing that.
+>
+> I can imagine what actually fixes the driver, but still, is it possible t=
+o split
+> this commit in two?
+> One that solves the issue, one that performs the much needed cleanups.
+>
+> If it's not possible, then we can leave this commit as it is... and if th=
+e problem
+> about splitting is the Fixes tag... well, we don't forcefully need it: af=
+ter all,
+> issues started arising after runtime PM support for 8250 landed and befor=
+e that the
+> driver technically worked, even though it was fragile.
 
+The pure fix would look like what Tony posted [1]. However it would add stu=
+ff
+that isn't strictly needed after the cleanup. Doing it in one patch results
+in less churn. Think of it another way: it's a nice cleanup that just so
+happens to fix a regression.
 
-在 2023/6/5 22:25, Alexandre Ghiti 写道:
-> Hi Song,
-> 
-> On Mon, Jun 5, 2023 at 12:52 PM Song Shuai <songshuaishuai@tinylab.org> wrote:
->>
->> Description of problem:
->>
->> Booting Linux With RiscVVirtQemu edk2 firmware, a Store/AMO page fault was trapped to trigger a kernel panic.
->> The entire log has been posted at this link : https://termbin.com/nga4.
->>
->> You can reproduce it with the following step :
->>
->> 1. prepare the environment with
->>     - Qemu-virt:  v8.0.0 (with OpenSbi v1.2)
->>     - edk2 : at commit (2bc8545883 "UefiCpuPkg/CpuPageTableLib: Reduce the number of random tests")
->>     - Linux : v6.4-rc1 and later version
->>
->> 2. start the Qemu virt board
->>
->> ```sh
->> $ cat ~/8_riscv/start_latest.sh
->> #!/bin/bash
->> /home/song/8_riscv/3_acpi/qemu/ooo/usr/local/bin/qemu-system-riscv64 \
->>          -s -nographic -drive file=/home/song/8_riscv/3_acpi/Build_virt/RiscVVirtQemu/RELEASE_GCC5/FV/RISCV_VIRT.fd,if=pflash,format=raw,unit=1 \
->>          -machine virt,acpi=off -smp 2 -m 2G \
->>          -kernel /home/song/9_linux/linux/00_rv_def/arch/riscv/boot/Image \
->>          -initrd /home/song/8_riscv/3_acpi/buildroot/output/images/rootfs.ext2 \
->>          -append "root=/dev/ram ro console=ttyS0 earlycon=uart8250,mmio,0x10000000 efi=debug loglevel=8 memblock=debug" ## also panic by memtest
->> ```
->> 3. Then you will encounter the kernel panic logged in the above link
->>
->> Other Information:
->>
->> 1. -------
->>
->> This report is not identical to my prior report -- "kernel paniced when system hibernates" [1], but both of them
->> are closely related with the commit (3335068f8721 "riscv: Use PUD/P4D/PGD pages for the linear mapping").
->>
->> With this commit, hibernation is trapped with "access fault" while accessing the PMP-protected regions (mmode_resv0@80000000)
->> from OpenSbi (BTW, hibernation is marked as nonportable by Conor[2]).
->>
->> In this report, efi_init handoffs the memory mapping from Boot Services to memblock where reserves mmode_resv0@80000000,
->> so there is no "access fault" but "page fault".
->>
->> And reverting commit 3335068f8721 indeed fixed this panic.
->>
->> 2. -------
->>
->> As the gdb-pt-dump [3] tool shows, the PTE which covered the fault virtual address had the appropriate permission to store.
->> Is there another way to trigger the "Store/AMO page fault"? Or the creation of linear mapping in commit 3335068f8721 did something wrong?
->>
->> ```
->> (gdb) p/x $satp
->> $1 = 0xa000000000081708
->> (gdb) pt -satp 0xa000000000081708
->>               Address :     Length   Permissions
->>    0xff1bfffffea39000 :     0x1000 | W:1 X:0 R:1 S:1
->>    0xff1bfffffebf9000 :     0x1000 | W:1 X:0 R:1 S:1
->>    0xff1bfffffec00000 :   0x400000 | W:1 X:0 R:1 S:1
->>    0xff60000000000000 :   0x1c0000 | W:1 X:0 R:1 S:1
->>    0xff60000000200000 :   0xa00000 | W:0 X:0 R:1 S:1
->>    0xff60000000c00000 : 0x7f000000 | W:1 X:0 R:1 S:1  // badaddr: ff6000007fdb1000
->>    0xff6000007fdc0000 :    0x3d000 | W:1 X:0 R:1 S:1
->>    0xff6000007ffbf000 :     0x1000 | W:1 X:0 R:1 S:1
->>    0xffffffff80000000 :   0xc00000 | W:0 X:1 R:1 S:1
->>    0xffffffff80c00000 :   0xa00000 | W:1 X:0 R:1 S:1
->>
->> ```
->>
->> 3. ------
->>
->> You can also reproduce similar panic by appending "memtest" in kernel cmdline.
->> I have posted the memtest boot log at this link: https://termbin.com/1twl.
->>
->> Please correct me if I'm wrong.
->>
->> [1]: https://lore.kernel.org/linux-riscv/CAAYs2=gQvkhTeioMmqRDVGjdtNF_vhB+vm_1dHJxPNi75YDQ_Q@mail.gmail.com/
->> [2]: https://lore.kernel.org/linux-riscv/20230526-astride-detonator-9ae120051159@wendy/
->> [3]: https://github.com/martinradev/gdb-pt-dump
-> 
-> Thanks for the thorough report, really appreciated.
-> 
-> So there are multiple issues here:
-> 
-> - the first one is that the memory region for opensbi is marked as not
-> cacheable in the efi memory map, and then this region is not mapped in
-> the linear mapping:
-> [    0.000000] efi:   0x000080000000-0x00008003ffff [Reserved    |   |
->   |  |  |  |  |  |  |  |   |  |  |  |UC]
-> 
-> - the second one (that I feel a bit ashamed of...) is that I did not
-> check the alignment of the virtual address when choosing the map size
-> in best_map_size() and then we end up trying to map a physical region
-> aligned on 2MB that is actually not aligned on 2MB virtually because
-> the opensbi region is not mapped at all.
-> 
-The issue 2 should be the root cause of this panic.
+As for the fixes tag, it's there so other people potentially doing backport=
+s
+of the 8250 runtime PM work can spot this followup fix.
 
-Here is my understanding of the necessity of the 2M-aligned VA for 
-linear PMD mapping. Please correct me if I'm wrong.
+ChenYu
 
-I logged the `create_linear_mapping_range()` function.
+[1] https://lore.kernel.org/linux-serial/20230605061511.GW14287@atomide.com=
+/
 
-```
-song # lowmem region: [0x0000000081800000 -- 0x00000000ffe3d000], va: 
-0xff6000007fbc0000, pa: 0x00000000ffc00000, map_size: 200000 ,pg: e7
-song # lowmem region: [0x0000000081800000 -- 0x00000000ffe3d000], va: 
-0xff6000007fdc0000, pa: 0x00000000ffe00000, map_size: 1000 ,pg: e7
-```
-
-The PA `0x00000000ffc00000` of this PMD mapping is aligned with PMD_SIZE 
-but VA `0xff6000007fbc0000` is not.
-After the `pmd_index()`, this 2M PA region is actually mapping the 
-effective VA region `[0xff6000007fa00000,0xff6000007fc00000)`,
-and any access of VA hole between the end of the effective VA region and 
-the start VA of the next 4K mapping (`0xff6000007fdc0000`) will fault.
-
-In this report, the memtest fault VA (`0xff6000007fc00000`) and the 
-booting fault VA (`ff6000007fdb1000`) lie right in the VA hole.
-
-When reverting the commit 3335068f8721, the kernel load address is 
-always offseted by PMD_SIZE, kernel_map.va_pa_offset and
-MIN_MEMBLOCK_ADDR follow it. So the linear PMD mapping will always take 
-2M-aligned VA. That's why this reverting works.
-
-> - the possible third one is that we should not map the linear mapping
-> using 4K pages, this would be slow in my opinion, and I think we
-> should waste a bit of memory to align va and pa on a 2MB boundary.
-I also noticed this one.
-> 
-> So I'll fix the second issue, and possibly the third one, and if no
-Thanks for your attention to this report, looking for your fixup.
-> one looks into why the opensbi region is mapped in UC, I'll take a
-> look at edk2.
-> 
-> Sorry for that,
-> 
-> Alex
-> 
-
--- 
-Song Shuai
-Thanks
-
+> Thanks,
+> Angelo
+>
+> > ---
+> >   drivers/tty/serial/8250/8250_mtk.c | 50 ++++++-----------------------=
+-
+> >   1 file changed, 10 insertions(+), 40 deletions(-)
+> >
+> > diff --git a/drivers/tty/serial/8250/8250_mtk.c b/drivers/tty/serial/82=
+50/8250_mtk.c
+> > index aa8e98164d68..74da5676ce67 100644
+> > --- a/drivers/tty/serial/8250/8250_mtk.c
+> > +++ b/drivers/tty/serial/8250/8250_mtk.c
+> > @@ -431,12 +431,7 @@ static int __maybe_unused mtk8250_runtime_suspend(=
+struct device *dev)
+> >       while
+> >               (serial_in(up, MTK_UART_DEBUG0));
+> >
+> > -     if (data->clk_count =3D=3D 0U) {
+> > -             dev_dbg(dev, "%s clock count is 0\n", __func__);
+> > -     } else {
+> > -             clk_disable_unprepare(data->bus_clk);
+> > -             data->clk_count--;
+> > -     }
+> > +     clk_disable_unprepare(data->bus_clk);
+> >
+> >       return 0;
+> >   }
+> > @@ -444,19 +439,8 @@ static int __maybe_unused mtk8250_runtime_suspend(=
+struct device *dev)
+> >   static int __maybe_unused mtk8250_runtime_resume(struct device *dev)
+> >   {
+> >       struct mtk8250_data *data =3D dev_get_drvdata(dev);
+> > -     int err;
+> >
+> > -     if (data->clk_count > 0U) {
+> > -             dev_dbg(dev, "%s clock count is %d\n", __func__,
+> > -                     data->clk_count);
+> > -     } else {
+> > -             err =3D clk_prepare_enable(data->bus_clk);
+> > -             if (err) {
+> > -                     dev_warn(dev, "Can't enable bus clock\n");
+> > -                     return err;
+> > -             }
+> > -             data->clk_count++;
+> > -     }
+> > +     clk_prepare_enable(data->bus_clk);
+> >
+> >       return 0;
+> >   }
+> > @@ -465,14 +449,12 @@ static void
+> >   mtk8250_do_pm(struct uart_port *port, unsigned int state, unsigned in=
+t old)
+> >   {
+> >       if (!state)
+> > -             if (!mtk8250_runtime_resume(port->dev))
+> > -                     pm_runtime_get_sync(port->dev);
+> > +             pm_runtime_get_sync(port->dev);
+> >
+> >       serial8250_do_pm(port, state, old);
+> >
+> >       if (state)
+> > -             if (!pm_runtime_put_sync_suspend(port->dev))
+> > -                     mtk8250_runtime_suspend(port->dev);
+> > +             pm_runtime_put_sync_suspend(port->dev);
+> >   }
+> >
+> >   #ifdef CONFIG_SERIAL_8250_DMA
+> > @@ -504,7 +486,7 @@ static int mtk8250_probe_of(struct platform_device =
+*pdev, struct uart_port *p,
+> >               return 0;
+> >       }
+> >
+> > -     data->bus_clk =3D devm_clk_get(&pdev->dev, "bus");
+> > +     data->bus_clk =3D devm_clk_get_enabled(&pdev->dev, "bus");
+> >       if (IS_ERR(data->bus_clk))
+> >               return PTR_ERR(data->bus_clk);
+> >
+> > @@ -587,25 +569,16 @@ static int mtk8250_probe(struct platform_device *=
+pdev)
+> >
+> >       platform_set_drvdata(pdev, data);
+> >
+> > -     pm_runtime_enable(&pdev->dev);
+> > -     err =3D mtk8250_runtime_resume(&pdev->dev);
+> > -     if (err)
+> > -             goto err_pm_disable;
+> > -
+> >       data->line =3D serial8250_register_8250_port(&uart);
+> > -     if (data->line < 0) {
+> > -             err =3D data->line;
+> > -             goto err_pm_disable;
+> > -     }
+> > +     if (data->line < 0)
+> > +             return data->line;
+> >
+> >       data->rx_wakeup_irq =3D platform_get_irq_optional(pdev, 1);
+> >
+> > -     return 0;
+> > -
+> > -err_pm_disable:
+> > -     pm_runtime_disable(&pdev->dev);
+> > +     pm_runtime_set_active(&pdev->dev);
+> > +     pm_runtime_enable(&pdev->dev);
+> >
+> > -     return err;
+> > +     return 0;
+> >   }
+> >
+> >   static int mtk8250_remove(struct platform_device *pdev)
+> > @@ -619,9 +592,6 @@ static int mtk8250_remove(struct platform_device *p=
+dev)
+> >       pm_runtime_disable(&pdev->dev);
+> >       pm_runtime_put_noidle(&pdev->dev);
+> >
+> > -     if (!pm_runtime_status_suspended(&pdev->dev))
+> > -             mtk8250_runtime_suspend(&pdev->dev);
+> > -
+> >       return 0;
+> >   }
+> >
+>
+>
