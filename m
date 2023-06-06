@@ -2,114 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4696723FF8
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 12:46:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EB9F72400C
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 12:48:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237253AbjFFKq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 06:46:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60272 "EHLO
+        id S237399AbjFFKsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 06:48:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234915AbjFFKqT (ORCPT
+        with ESMTP id S237103AbjFFKre (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 06:46:19 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72BFF18E;
-        Tue,  6 Jun 2023 03:44:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=ioAQcLHmFe5lShDUAfyfXBw7PEQ13xYiSgOqhDs0xDo=; b=bk5CItPE2XxteW8CONPDrQoKne
-        Njhw4e9GGxXqsJaMSzMU0RuGa/1oG3eKoMLeT1jYmUQ1iqQy4uEul+HXWDSWhoQIKMQlvj4fClfDW
-        vHEXJifq3ecdxI38YesU/kxoJCCBteV0d1dCIG+j/sUF/QhMhEeL+YcXaBH3jRK5Zh5aCi9AuiKo1
-        +//ZpfzNX0GT30XCVQhcRonJaKddPG9kgbdttsolWGkcgjBzC3lO9BQ2OZvjxzLIj7StI95tebPz4
-        g8m8MquDOFiU1aQ29l7IIYZsjao+XxKXlbz9r0BhbnqMwMsDcAqi8XevXq8SGTHr7O+UZ3Qpi/QQF
-        5e4K2lsg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:48520)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1q6UAd-0005Vy-Pi; Tue, 06 Jun 2023 11:44:11 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1q6UAa-000751-Ly; Tue, 06 Jun 2023 11:44:08 +0100
-Date:   Tue, 6 Jun 2023 11:44:08 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
-        davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alexis.lothore@bootlin.com,
-        thomas.petazzoni@bootlin.com, Andrew Lunn <andrew@lunn.ch>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Simon Horman <simon.horman@corigine.com>
-Subject: Re: [PATCH net-next 1/2] net: stmmac: Add PCS_LYNX as a dependency
- for the whole driver
-Message-ID: <ZH8N+GtRFcDV4eaI@shell.armlinux.org.uk>
-References: <20230606064914.134945-1-maxime.chevallier@bootlin.com>
- <20230606064914.134945-2-maxime.chevallier@bootlin.com>
- <889297a0-88c3-90df-7752-efa00184859@linux-m68k.org>
- <ZH78uGBfeHjI4Cdn@shell.armlinux.org.uk>
- <20230606121311.3cc5aa78@pc-7.home>
- <ZH8JxF+TNuX0C1vC@shell.armlinux.org.uk>
- <CAMuHMdWnqmwT_rEe5G4e+yZYAeTQxjjE=Xqq7R6No9SAF16sdg@mail.gmail.com>
+        Tue, 6 Jun 2023 06:47:34 -0400
+Received: from sender-of-o51.zoho.in (sender-of-o51.zoho.in [103.117.158.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7027710F4
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 03:46:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1686048329; cv=none; 
+        d=zohomail.in; s=zohoarc; 
+        b=SUUJfvwmR9ZlVVx6ic7ppJLDJSStuAva/Hg3kKZvJT/mzsF2pPGNNlnZR8VI6TIC5LLtDO18gcTb4W5+KtTa8LgasYY13PlbxVCjll3hX7Zjf10okfYO0owOn5mBSL5MD1xXOLCDD/zsjZMV6JwDyMtCXS2gT+xhmN93PcXJHBo=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
+        t=1686048329; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=R+uSifvcAIIkng6MgMYsizI9IW7hNDMBBna1u/nd3iQ=; 
+        b=P6YshQCYFzSFPZrEsoiu+iLnzvzu1mxwut+2RZFBbfbcuG+FSrZtiFEAGy4z6EFkfmtP9iovw8eO3yEBhL+BxPOwYZ/wMZ5YxSpYBNp0b8M6knGwKZsqyya9BKkX/15P0Trj+hYpzpmwmIaFHPgmVYEH9u1wqqqXK1GrLhOH9vk=
+ARC-Authentication-Results: i=1; mx.zohomail.in;
+        dkim=pass  header.i=siddh.me;
+        spf=pass  smtp.mailfrom=code@siddh.me;
+        dmarc=pass header.from=<code@siddh.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1686048329;
+        s=zmail; d=siddh.me; i=code@siddh.me;
+        h=From:From:To:To:Cc:Cc:Message-ID:Subject:Subject:Date:Date:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
+        bh=R+uSifvcAIIkng6MgMYsizI9IW7hNDMBBna1u/nd3iQ=;
+        b=BkEFf37VA2yFvCaLj3Q61WB5hjInoxrlo5/Z6uiZvT8y7G9CP5uaKLDpgFIPVw7k
+        VEir34gmhvH/lR67T4KAtgPEt2bMJ/LpLRBQ03D4lQytF2sqr3i7BJ79HM8ftGGhH9n
+        SXEsKdfQsEcsB9v/YKGXxhe4HMdWbZUeAfWfDMSk=
+Received: from kampyooter.. (122.176.141.156 [122.176.141.156]) by mx.zoho.in
+        with SMTPS id 168604832769234.06864649041506; Tue, 6 Jun 2023 16:15:27 +0530 (IST)
+From:   Siddh Raman Pant <code@siddh.me>
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Suraj Upadhyay <usuraj35@gmail.com>
+Message-ID: <cover.1686047727.git.code@siddh.me>
+Subject: [PATCH v9 0/8] drm: Remove usage of deprecated DRM_* macros
+Date:   Tue,  6 Jun 2023 16:15:14 +0530
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdWnqmwT_rEe5G4e+yZYAeTQxjjE=Xqq7R6No9SAF16sdg@mail.gmail.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-ZohoMailClient: External
+Content-Type: text/plain; charset=utf8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 12:35:23PM +0200, Geert Uytterhoeven wrote:
-> Hi Russell,
-> 
-> > diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> > index fa07b0d50b46..1801f8cc8413 100644
-> > --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> > +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> > @@ -940,9 +940,6 @@ static struct phylink_pcs *stmmac_mac_select_pcs(struct phylink_config *config,
-> >         if (priv->hw->xpcs)
-> >                 return &priv->hw->xpcs->pcs;
-> >
-> > -       if (priv->hw->lynx_pcs)
-> > -               return priv->hw->lynx_pcs;
-> > -
-> >         return NULL;
-> >  }
-> 
-> I think the above hunk is wrong, and should be replaced by a removal
-> of the call to lynx_pcs_destroy()?
+This patchset aims to remove usages of deprecated DRM_* macros from the
+files residing in drivers/gpu/drm root.
 
-Indeed, and wrong file too. Thanks for spotting, I think we spotted
-the mistake at almost the same time. Replacement patch sent.
+In process, I found out that NULL as first argument of drm_dbg_* wasn't
+working, but it was listed as the alternative in deprecation comment,
+so I fixed that before removing usages of DRM_DEBUG_* macros.
 
-It'd be good to have the patch thoroughly reviewed to make sure I
-haven't missed anything else, bearing in mind that I don't know this
-driver inside out and don't have the hardware.
+Courtesy discussion on v1, I added support for NULL in drm_()* macros too.
 
-Thanks.
+Courtesy discussion on v7, I removed generic macro stuff meant to accomodat=
+e
+stuff like mipi_dsi_host, and instead reverted a commit which used the
+drm_err() macro incorrectly by passing mipi_dsi_host.
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+This patchset should be applied in order as changes might be dependent.
+
+Please review and let me know if any errors are there, and hopefully
+this gets accepted.
+
+---
+
+v8 -> v9 (today):
+- Rebased to drm-misc-next.
+
+v7 -> v8 (28 Feb 2023):
+- Reverted 1040e424353f ("drm: mipi-dsi: Convert logging to drm_* functions=
+.")
+  which used drm_err macro incorrectly by passing mipi_dsi_host.
+- Thus, removed _Generic and allow only drm_device.
+
+v6 -> v7 (26 Feb 2023):
+- Rebased to drm-misc-next, accounting for the merger of last 3 patches
+  in the previous series (4665280990fa, fc2602b553c8, 7bd224b6625a),
+  and 7428ff70a18 ("drm: initialize accel framework").
+
+v5 -> v6 (09 Jan 2023):
+- Move drm_device to default case in _Generic as it is the default behaviou=
+r.
+- Fix incorrect const drm_device handling in _Generic.
+- Minor positioning / comment changes.
+
+v4 -> v5 (07 Jan 2023):
+- Make separate function instead of using boolean in _Generic (sravn on IRC=
+).
+- Also, simplified the Generic macro, and renamed the function and macro.
+
+v3 -> v4 (05 Jan 2023):
+- Fix commit message for DRM_NOTE erroneously mentioning DRM_INFO.
+- Rebased to drm-misc-next, as 723dad977acd added drm_dbg_core() to some
+  files.
+- Move Generic out to a separate macro __drm_get_dev_ptr, so that interface
+  of drm_dbg_*() is also same as other drm_*() macros.
+- Fix comment in __drm_get_dev_ptr (now ___drm_get_dev_ptr) to use correct
+  name.
+
+v2 -> v3 (26 Dec 2022):
+- Added support for NULL in __drm_printk and thus by extension to drm_()*.
+- Thus, converted dropped pr_()* changes to drm_*(NULL, ...).
+- Rebased to drm-misc-next and resulting appropriate changes.
+
+v1 (20 Dec 2022) -> v2 (22 Dec 2022):
+- Removed conversions to pr_*() in DRM_INFO, DRM_NOTE, and DRM_ERROR change=
+s.
+- Due to above, DRM_NOTE usage cannot be removed and the patch is dropped.
+- DRY: NULL support is now achieved by way of a separate function.
+
+Siddh Raman Pant (8):
+  Revert "drm: mipi-dsi: Convert logging to drm_* functions."
+  drm/print: Fix and add support for NULL as first argument in drm_*
+    macros
+  drm: Remove usage of deprecated DRM_INFO
+  drm: Remove usage of deprecated DRM_NOTE
+  drm: Remove usage of deprecated DRM_ERROR
+  drm: Remove usage of deprecated DRM_DEBUG
+  drm: Remove usage of deprecated DRM_DEBUG_DRIVER
+  drm: Remove usage of deprecated DRM_DEBUG_KMS
+
+ drivers/gpu/drm/drm_agpsupport.c        |   4 +-
+ drivers/gpu/drm/drm_bridge.c            |   8 +-
+ drivers/gpu/drm/drm_bufs.c              | 122 ++++++++++++------------
+ drivers/gpu/drm/drm_client_modeset.c    | 118 +++++++++++++----------
+ drivers/gpu/drm/drm_color_mgmt.c        |   4 +-
+ drivers/gpu/drm/drm_connector.c         |  28 +++---
+ drivers/gpu/drm/drm_context.c           |  18 ++--
+ drivers/gpu/drm/drm_crtc.c              |  36 ++++---
+ drivers/gpu/drm/drm_crtc_helper.c       |  62 ++++++------
+ drivers/gpu/drm/drm_debugfs_crc.c       |   8 +-
+ drivers/gpu/drm/drm_displayid.c         |   6 +-
+ drivers/gpu/drm/drm_dma.c               |  10 +-
+ drivers/gpu/drm/drm_drv.c               |  28 +++---
+ drivers/gpu/drm/drm_edid.c              |  17 ++--
+ drivers/gpu/drm/drm_flip_work.c         |   2 +-
+ drivers/gpu/drm/drm_framebuffer.c       |   3 +-
+ drivers/gpu/drm/drm_gem.c               |   7 +-
+ drivers/gpu/drm/drm_gem_dma_helper.c    |   2 +-
+ drivers/gpu/drm/drm_hashtab.c           |  10 +-
+ drivers/gpu/drm/drm_irq.c               |   4 +-
+ drivers/gpu/drm/drm_kms_helper_common.c |   2 +-
+ drivers/gpu/drm/drm_lease.c             |   4 +-
+ drivers/gpu/drm/drm_legacy_misc.c       |   4 +-
+ drivers/gpu/drm/drm_lock.c              |  36 +++----
+ drivers/gpu/drm/drm_mipi_dbi.c          |  19 ++--
+ drivers/gpu/drm/drm_mipi_dsi.c          |  15 +--
+ drivers/gpu/drm/drm_mm.c                |   8 +-
+ drivers/gpu/drm/drm_mode_config.c       |   2 +-
+ drivers/gpu/drm/drm_mode_object.c       |   6 +-
+ drivers/gpu/drm/drm_modes.c             |  36 +++----
+ drivers/gpu/drm/drm_modeset_helper.c    |   2 +-
+ drivers/gpu/drm/drm_pci.c               |  14 +--
+ drivers/gpu/drm/drm_plane.c             |  46 ++++-----
+ drivers/gpu/drm/drm_probe_helper.c      |  39 ++++----
+ drivers/gpu/drm/drm_rect.c              |   4 +-
+ drivers/gpu/drm/drm_scatter.c           |  19 ++--
+ drivers/gpu/drm/drm_syncobj.c           |   2 +-
+ drivers/gpu/drm/drm_sysfs.c             |  22 ++---
+ drivers/gpu/drm/drm_vm.c                |  45 +++++----
+ include/drm/drm_print.h                 |  81 ++++++++++------
+ 40 files changed, 480 insertions(+), 423 deletions(-)
+
+--=20
+2.39.2
+
+
