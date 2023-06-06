@@ -2,97 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 107057245AB
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:21:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BF0B7245B4
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:22:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237029AbjFFOVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 10:21:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55894 "EHLO
+        id S237514AbjFFOV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 10:21:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230110AbjFFOVg (ORCPT
+        with ESMTP id S236597AbjFFOVz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 10:21:36 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B2D4E42;
-        Tue,  6 Jun 2023 07:21:34 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-650bacd6250so3446501b3a.2;
-        Tue, 06 Jun 2023 07:21:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686061294; x=1688653294;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/3Sf9Lt8+hPPrJoTY+fUete8obKMH8fejefWmlC9/FI=;
-        b=UeUAidqFx7rBO2nxxi6L4GJYE7X9615zb4+r6m3hckKh2WOIYsl3N5nNtPp62pBFEx
-         Pd+aqX8KxsTdiwmHh68Wmx5JJ2HL6eDGXpNYMUC2uNV5JtZ0AuzD92PKXICRKJnrovlh
-         gethZVUjr4D492UTirZc9Rhwcovrp8nTAwIT6xOpH5kAmnNCJhtA0yNl85H8PQEjFL5y
-         27AQR6dRFTipnLsyg3axjyF6QzK1wNzzqncQVmcbN+9FYCxJJPhYooe1mLDF1oCsfw6x
-         2nANiYI+oY9r+YWc/pbHEQUMFJlDT1mHUyXJPRsfL0otvcbLvtyz+2IE/QmYku8tJciE
-         NBrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686061294; x=1688653294;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=/3Sf9Lt8+hPPrJoTY+fUete8obKMH8fejefWmlC9/FI=;
-        b=WS2EDsl4dqvJUJK7gpHXexY0WuLTYDoaPDKYXk+my0pm74TVok9DqgRXzGs1DX+Fk8
-         reWPDVy1sbV4bHk3NIO1/wCRIaKIiZbykTBMle/XrzDWvMchbm5XMVbG7dqEXQ6xJLMm
-         QohVLQVB7mhlft+OCsKSVpy5L4XHZaBKvQdAz6TyzZKyKX74vgJ3TXPPirkUuMxz1Bon
-         WAByox16bDmBnqlE0bhkINFgpcZqx479np6F2mXX6RoXFLr4T4RUJ1WBtofIqTfx7ay8
-         DvBslsCEgo67tVm94u/nOrpD2/rxqxFeYpUJ7Eq0OK0N3PxKcVToe3DYbLYcLXUz4xGm
-         7SxQ==
-X-Gm-Message-State: AC+VfDwg5GqW7uZZLLGxYAX2nnKl5VQKXSPAAzWYkOHQMuxTQEY25wfa
-        Qm6dfj8z3xdiRFvg2YUChaZQs6ey9M4=
-X-Google-Smtp-Source: ACHHUZ6mooz2yFQ70Hcr1ZYa+GqnscXOcgPouYNj0XAbEP91ME7qTM0ohd1oUr5OWTLtBVL8dX7c/A==
-X-Received: by 2002:a05:6a20:840b:b0:10f:f672:6e88 with SMTP id c11-20020a056a20840b00b0010ff6726e88mr1908527pzd.4.1686061293543;
-        Tue, 06 Jun 2023 07:21:33 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-65.three.co.id. [180.214.232.65])
-        by smtp.gmail.com with ESMTPSA id f21-20020aa782d5000000b00640defda6d2sm6899035pfn.207.2023.06.06.07.21.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Jun 2023 07:21:33 -0700 (PDT)
-Message-ID: <e6047201-7cf1-ecc4-ca68-490142f6f40b@gmail.com>
-Date:   Tue, 6 Jun 2023 21:21:23 +0700
+        Tue, 6 Jun 2023 10:21:55 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B94F10DE;
+        Tue,  6 Jun 2023 07:21:49 -0700 (PDT)
+X-GND-Sasl: maxime.chevallier@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1686061307;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=0t7vCoDVyHCVRpFFeRRHKOJSt4buQfDPbfcgodci2/g=;
+        b=Otets2FxZ6YC88+Kr8E458uM6KI2S7033D4zHHmnZL5Hxe9rKBOhhd+zAM13BXEE/EkA5x
+        8r8+XAhryxr3Swo2NHKuvmO/XKHWtOn5Fj+T21kxDfrWi9JyVLDI044iMe1lMLxhPc/57x
+        msBDKmYXFW3M1OmkhJdGSEHk/sjr1ajbHl5vZHBgJBkgcbdKmeki0EsDJ3ewjVUesGsGHW
+        vP8cFmRUH21u0XqWbYQQQx22/21u5JdFhWh048WANhHtWS36j9RlncVqXyou9Px93Toxl0
+        RA5J0VgUHinnIPEbX6e/Ey0KHUjyu9vdg+1Impu53Lo3axJCd4mIBMr0CHCmuQ==
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+X-GND-Sasl: maxime.chevallier@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7FD25C0013;
+        Tue,  6 Jun 2023 14:21:45 +0000 (UTC)
+From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
+To:     davem@davemloft.net
+Cc:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alexis.lothore@bootlin.com, thomas.petazzoni@bootlin.com,
+        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Simon Horman <simon.horman@corigine.com>
+Subject: [PATCH net-next v2 0/3] Followup fixes for the dwmac and altera lynx conversion
+Date:   Tue,  6 Jun 2023 16:21:41 +0200
+Message-Id: <20230606142144.308675-1-maxime.chevallier@bootlin.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Content-Language: en-US
-To:     Linux Documentation <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: Stock image illustration (licensing)
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Following the TSE PCS removal and port of altera_tse and dwmac_socfpga,
+this series fixes some issues that slipped through the cracks.
 
-Imagine that there is a new Linux kernel contributor, contributing
-documentation patches. As it is the habit from her company, she adds
-stock images from various sources (which may or may not be related
-to the doc), e.g. freepik or pexels [1], as illustration.
+Patch 1 fixes an unitialized struct in altera_tse
 
-However, on the source file, the image requires attribution. Yet,
-the attribution instruction doesn't mention image license (she
-attributes as "Illustration of foo by bar on pexels"), hence
-all rights reserved. Can that stock image be added to the kernel
-docs (which is licensed under GPL)?
+Patch 2 uses the correct Kconfig option for altera_tse
 
-PS: none is lawyer here.
+Patch 3 makes the Lynx PCS specific to dwmac_socfpga. This patch was
+originally written by Russell, my modifications just moves the
+#include<linux/pcs-lynx.h> around, to use it only in dwmac_socfpga.
 
-Thanks.
+Maxime Chevallier (3):
+  net: altera-tse: Initialize the regmap_config struct before using it
+  net: altera_tse: Use the correct Kconfig option for the PCS_LYNX
+    depenency
+  net: stmmac: make the pcs_lynx cleanup sequence specific to
+    dwmac_socfpga
 
-[1]: https://www.freepik.com/free-photo/young-man-chatting-via-net-book-during-work-break-coffee-shop-male-sitting-front-open-laptop-computer-with-blank-copy-space-screen-your-text-message-advertising-content_34485193.htm
+ drivers/net/ethernet/altera/Kconfig               |  2 +-
+ drivers/net/ethernet/altera/altera_tse_main.c     |  1 +
+ drivers/net/ethernet/stmicro/stmmac/common.h      |  1 -
+ .../net/ethernet/stmicro/stmmac/dwmac-socfpga.c   | 15 ++++++++++++++-
+ drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c |  3 ---
+ 5 files changed, 16 insertions(+), 6 deletions(-)
 
 -- 
-An old man doll... just what I always wanted! - Clara
+2.40.1
+
