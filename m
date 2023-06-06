@@ -2,221 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F130724546
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:08:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C838724571
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:14:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237645AbjFFOID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 10:08:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47914 "EHLO
+        id S237656AbjFFOOI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 10:14:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237737AbjFFOHo (ORCPT
+        with ESMTP id S232718AbjFFOOG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 10:07:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3145BE73;
-        Tue,  6 Jun 2023 07:07:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 6 Jun 2023 10:14:06 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0798A6;
+        Tue,  6 Jun 2023 07:14:05 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B362361037;
-        Tue,  6 Jun 2023 14:07:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA459C433EF;
-        Tue,  6 Jun 2023 14:07:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686060462;
-        bh=/cjnqgLXCTKkrpyefUhq8rK2+8zhEpKZXJGamvtzO/I=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=bw22lLWBew1T5WloK8h7uPoGCQAg77zWr3HaQzP2W5FL6HbonzqZ51eIAUQPDFQil
-         aHM/waSJh/xQkEp34Bgx9ihcKbgqPugwmP94sPk40T9sb8axLhSdeF7JNr6CWGkaBY
-         /xD4ZvTxVp58rTR0fHj/xPnj83ct7qWM4oTkB+jYc/kYcrpWkjGD4SH9m5HltJ/Lcj
-         UTytrycOk3Mr/aAgaOcFwW0aREwdGGGKvBImiiL0ziOOAKvpdEvbYkDhN8e/xOFQaj
-         f35Hvv0qm35AHlwvwRBiJb/AsLJAc6AITvwFgAoIU6FGcVrTM/ZufpA1mqkJHO149I
-         777JLolgQJPLQ==
-Date:   Tue, 6 Jun 2023 23:07:37 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org, Andi Kleen <ak@linux.intel.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>
-Subject: Re: [PATCH v2 2/2] perf annotate: Remove x86 instructions with
- suffix
-Message-Id: <20230606230737.9f42d22a89e0d9e48f655cc1@kernel.org>
-In-Reply-To: <20230524205054.3087004-2-namhyung@kernel.org>
-References: <20230524205054.3087004-1-namhyung@kernel.org>
-        <20230524205054.3087004-2-namhyung@kernel.org>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 66A381FD76;
+        Tue,  6 Jun 2023 14:14:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1686060844;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=v+fE+p+3UhAy5b8jQdixuYCW4EqmLwbeYafiuZSgPwY=;
+        b=uO6pZ+e/J4mikdtwr14P7262oxXyqPoq5g/O7G0Gb4DzfEErgmOol8LfHud1VepoR3dzkX
+        9OScMH8kPAx4PhVVL6n2a4f7UFCmz97IEhoVE32SfGWIZ/DUtpDLgSP233QbljWQ2dbcql
+        eX5nNeynTJ6PByiVy+1xu2wa1GCkvMo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1686060844;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=v+fE+p+3UhAy5b8jQdixuYCW4EqmLwbeYafiuZSgPwY=;
+        b=iav13bkcUTvxafxR826yHTm8Ff1lXAPcDFAu5jW9Hb4MBBrSlwCsNAGqTq/t8dU7XjD4Mg
+        PFcuHFW9RDrkhqBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 33EA513519;
+        Tue,  6 Jun 2023 14:14:04 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id N/voCyw/f2TjdQAAMHmgww
+        (envelope-from <dsterba@suse.cz>); Tue, 06 Jun 2023 14:14:04 +0000
+Date:   Tue, 6 Jun 2023 16:07:49 +0200
+From:   David Sterba <dsterba@suse.cz>
+To:     syzbot <syzbot+5e466383663438b99b44@syzkaller.appspotmail.com>
+Cc:     chris@chrisdown.name, clm@fb.com, dsterba@suse.com,
+        josef@toxicpanda.com, linux-btrfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [btrfs?] kernel BUG in btrfs_exclop_balance (2)
+Message-ID: <20230606140749.GH25292@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+References: <000000000000725cab05f55f1bb0@google.com>
+ <000000000000e7582c05fafc8901@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <000000000000e7582c05fafc8901@google.com>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 24 May 2023 13:50:54 -0700
-Namhyung Kim <namhyung@kernel.org> wrote:
-
-> Now the suffix is handled in the general code.  Let's get rid of them.
+On Fri, May 05, 2023 at 06:43:55PM -0700, syzbot wrote:
+> syzbot has found a reproducer for the following issue on:
 > 
-
-Looks good to me.
-
-Reviewed-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-
-
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> ---
->  tools/perf/arch/x86/annotate/instructions.c | 52 ++++-----------------
->  1 file changed, 10 insertions(+), 42 deletions(-)
+> HEAD commit:    7163a2111f6c Merge tag 'acpi-6.4-rc1-3' of git://git.kerne..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=175bb84c280000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=73a06f6ef2d5b492
+> dashboard link: https://syzkaller.appspot.com/bug?extid=5e466383663438b99b44
+> compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12048338280000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11ff7314280000
 > 
-> diff --git a/tools/perf/arch/x86/annotate/instructions.c b/tools/perf/arch/x86/annotate/instructions.c
-> index 5c7bec25fee4..5f4ac4fc7fcf 100644
-> --- a/tools/perf/arch/x86/annotate/instructions.c
-> +++ b/tools/perf/arch/x86/annotate/instructions.c
-> @@ -1,48 +1,37 @@
->  // SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * x86 instruction nmemonic table to parse disasm lines for annotate.
-> + * This table is searched twice - one for exact match and another for
-> + * match without a size suffix (b, w, l, q) in case of AT&T syntax.
-> + *
-> + * So this table should not have entries with the suffix unless it's
-> + * a complete different instruction than ones without the suffix.
-> + */
->  static struct ins x86__instructions[] = {
->  	{ .name = "adc",	.ops = &mov_ops,  },
-> -	{ .name = "adcb",	.ops = &mov_ops,  },
-> -	{ .name = "adcl",	.ops = &mov_ops,  },
->  	{ .name = "add",	.ops = &mov_ops,  },
-> -	{ .name = "addl",	.ops = &mov_ops,  },
-> -	{ .name = "addq",	.ops = &mov_ops,  },
->  	{ .name = "addsd",	.ops = &mov_ops,  },
-> -	{ .name = "addw",	.ops = &mov_ops,  },
->  	{ .name = "and",	.ops = &mov_ops,  },
-> -	{ .name = "andb",	.ops = &mov_ops,  },
-> -	{ .name = "andl",	.ops = &mov_ops,  },
->  	{ .name = "andpd",	.ops = &mov_ops,  },
->  	{ .name = "andps",	.ops = &mov_ops,  },
-> -	{ .name = "andq",	.ops = &mov_ops,  },
-> -	{ .name = "andw",	.ops = &mov_ops,  },
->  	{ .name = "bsr",	.ops = &mov_ops,  },
->  	{ .name = "bt",		.ops = &mov_ops,  },
->  	{ .name = "btr",	.ops = &mov_ops,  },
->  	{ .name = "bts",	.ops = &mov_ops,  },
-> -	{ .name = "btsq",	.ops = &mov_ops,  },
->  	{ .name = "call",	.ops = &call_ops, },
-> -	{ .name = "callq",	.ops = &call_ops, },
->  	{ .name = "cmovbe",	.ops = &mov_ops,  },
->  	{ .name = "cmove",	.ops = &mov_ops,  },
->  	{ .name = "cmovae",	.ops = &mov_ops,  },
->  	{ .name = "cmp",	.ops = &mov_ops,  },
-> -	{ .name = "cmpb",	.ops = &mov_ops,  },
-> -	{ .name = "cmpl",	.ops = &mov_ops,  },
-> -	{ .name = "cmpq",	.ops = &mov_ops,  },
-> -	{ .name = "cmpw",	.ops = &mov_ops,  },
->  	{ .name = "cmpxch",	.ops = &mov_ops,  },
->  	{ .name = "cmpxchg",	.ops = &mov_ops,  },
->  	{ .name = "cs",		.ops = &mov_ops,  },
->  	{ .name = "dec",	.ops = &dec_ops,  },
-> -	{ .name = "decl",	.ops = &dec_ops,  },
-> -	{ .name = "decq",	.ops = &dec_ops,  },
->  	{ .name = "divsd",	.ops = &mov_ops,  },
->  	{ .name = "divss",	.ops = &mov_ops,  },
->  	{ .name = "gs",		.ops = &mov_ops,  },
->  	{ .name = "imul",	.ops = &mov_ops,  },
->  	{ .name = "inc",	.ops = &dec_ops,  },
-> -	{ .name = "incl",	.ops = &dec_ops,  },
-> -	{ .name = "incq",	.ops = &dec_ops,  },
->  	{ .name = "ja",		.ops = &jump_ops, },
->  	{ .name = "jae",	.ops = &jump_ops, },
->  	{ .name = "jb",		.ops = &jump_ops, },
-> @@ -56,7 +45,6 @@ static struct ins x86__instructions[] = {
->  	{ .name = "jl",		.ops = &jump_ops, },
->  	{ .name = "jle",	.ops = &jump_ops, },
->  	{ .name = "jmp",	.ops = &jump_ops, },
-> -	{ .name = "jmpq",	.ops = &jump_ops, },
->  	{ .name = "jna",	.ops = &jump_ops, },
->  	{ .name = "jnae",	.ops = &jump_ops, },
->  	{ .name = "jnb",	.ops = &jump_ops, },
-> @@ -83,49 +71,31 @@ static struct ins x86__instructions[] = {
->  	{ .name = "mov",	.ops = &mov_ops,  },
->  	{ .name = "movapd",	.ops = &mov_ops,  },
->  	{ .name = "movaps",	.ops = &mov_ops,  },
-> -	{ .name = "movb",	.ops = &mov_ops,  },
->  	{ .name = "movdqa",	.ops = &mov_ops,  },
->  	{ .name = "movdqu",	.ops = &mov_ops,  },
-> -	{ .name = "movl",	.ops = &mov_ops,  },
-> -	{ .name = "movq",	.ops = &mov_ops,  },
->  	{ .name = "movsd",	.ops = &mov_ops,  },
->  	{ .name = "movslq",	.ops = &mov_ops,  },
->  	{ .name = "movss",	.ops = &mov_ops,  },
->  	{ .name = "movupd",	.ops = &mov_ops,  },
->  	{ .name = "movups",	.ops = &mov_ops,  },
-> -	{ .name = "movw",	.ops = &mov_ops,  },
->  	{ .name = "movzbl",	.ops = &mov_ops,  },
->  	{ .name = "movzwl",	.ops = &mov_ops,  },
->  	{ .name = "mulsd",	.ops = &mov_ops,  },
->  	{ .name = "mulss",	.ops = &mov_ops,  },
->  	{ .name = "nop",	.ops = &nop_ops,  },
-> -	{ .name = "nopl",	.ops = &nop_ops,  },
-> -	{ .name = "nopw",	.ops = &nop_ops,  },
->  	{ .name = "or",		.ops = &mov_ops,  },
-> -	{ .name = "orb",	.ops = &mov_ops,  },
-> -	{ .name = "orl",	.ops = &mov_ops,  },
->  	{ .name = "orps",	.ops = &mov_ops,  },
-> -	{ .name = "orq",	.ops = &mov_ops,  },
->  	{ .name = "pand",	.ops = &mov_ops,  },
->  	{ .name = "paddq",	.ops = &mov_ops,  },
->  	{ .name = "pcmpeqb",	.ops = &mov_ops,  },
->  	{ .name = "por",	.ops = &mov_ops,  },
-> -	{ .name = "rclb",	.ops = &mov_ops,  },
-> -	{ .name = "rcll",	.ops = &mov_ops,  },
-> +	{ .name = "rcl",	.ops = &mov_ops,  },
->  	{ .name = "ret",	.ops = &ret_ops,  },
-> -	{ .name = "retq",	.ops = &ret_ops,  },
->  	{ .name = "sbb",	.ops = &mov_ops,  },
-> -	{ .name = "sbbl",	.ops = &mov_ops,  },
->  	{ .name = "sete",	.ops = &mov_ops,  },
->  	{ .name = "sub",	.ops = &mov_ops,  },
-> -	{ .name = "subl",	.ops = &mov_ops,  },
-> -	{ .name = "subq",	.ops = &mov_ops,  },
->  	{ .name = "subsd",	.ops = &mov_ops,  },
-> -	{ .name = "subw",	.ops = &mov_ops,  },
->  	{ .name = "test",	.ops = &mov_ops,  },
-> -	{ .name = "testb",	.ops = &mov_ops,  },
-> -	{ .name = "testl",	.ops = &mov_ops,  },
-> -	{ .name = "testq",	.ops = &mov_ops,  },
->  	{ .name = "tzcnt",	.ops = &mov_ops,  },
->  	{ .name = "ucomisd",	.ops = &mov_ops,  },
->  	{ .name = "ucomiss",	.ops = &mov_ops,  },
-> @@ -139,11 +109,9 @@ static struct ins x86__instructions[] = {
->  	{ .name = "vsubsd",	.ops = &mov_ops,  },
->  	{ .name = "vucomisd",	.ops = &mov_ops,  },
->  	{ .name = "xadd",	.ops = &mov_ops,  },
-> -	{ .name = "xbeginl",	.ops = &jump_ops, },
-> -	{ .name = "xbeginq",	.ops = &jump_ops, },
-> +	{ .name = "xbegin",	.ops = &jump_ops, },
->  	{ .name = "xchg",	.ops = &mov_ops,  },
->  	{ .name = "xor",	.ops = &mov_ops, },
-> -	{ .name = "xorb",	.ops = &mov_ops, },
->  	{ .name = "xorpd",	.ops = &mov_ops, },
->  	{ .name = "xorps",	.ops = &mov_ops, },
->  };
-> -- 
-> 2.41.0.rc0.172.g3f132b7071-goog
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/01051811f2fe/disk-7163a211.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/a26c68e4c8a6/vmlinux-7163a211.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/17380fb8dad4/bzImage-7163a211.xz
+> mounted in repro: https://storage.googleapis.com/syzbot-assets/b30a249e8609/mount_0.gz
 > 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+5e466383663438b99b44@syzkaller.appspotmail.com
 
+#syz fix: btrfs: fix assertion of exclop condition when starting balance
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> assertion failed: fs_info->exclusive_operation == BTRFS_EXCLOP_BALANCE_PAUSED, in fs/btrfs/ioctl.c:463
+
+Likely the same problem as https://syzkaller.appspot.com/bug?extid=afdee14f9fd3d20448e7
