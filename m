@@ -2,179 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9806D724EC9
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 23:28:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F703724EC5
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 23:26:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239718AbjFFV2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 17:28:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42890 "EHLO
+        id S239701AbjFFV0H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 17:26:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234271AbjFFV2a (ORCPT
+        with ESMTP id S238613AbjFFV0D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 17:28:30 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B86710FB
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 14:28:29 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-64d18d772bdso7340593b3a.3
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 14:28:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686086908; x=1688678908;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=2sxRgoat8T+i5BlkEmmYkTauekQlW2JTibKZA6oBH7A=;
-        b=KOlMnU2csedCuB+1N3G5sryayb2bGRmTmpeKSm7Db0/Yce0WZlnRrfipyKn3YaL9YB
-         Gh9Mg52A/JXAKuTUNb0GJxYurFksnJ6ReX19vi5D1ZG1vz5L4RkBT9q4cU5a8eQVWG1w
-         4Ajg7TegZnd7DSSTzd8BjqIPevIDAyAmqOz5o=
+        Tue, 6 Jun 2023 17:26:03 -0400
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D9761703
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 14:26:03 -0700 (PDT)
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-53404873a19so3459584a12.3
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 14:26:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686086908; x=1688678908;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2sxRgoat8T+i5BlkEmmYkTauekQlW2JTibKZA6oBH7A=;
-        b=fQsu7JKRUs44fGSWDejbJuj1GyjsBAg7y8DgZngr6MpJGJf+WR2Khbti3fMTZrkr9F
-         mh+6ZwaDsSBMOh2wB5cSVXkMIfftTWV7SSYh9mrPMmmfbVHLZ04V8I5uxm5q3+ggwwOt
-         A2+KPW8vLD7ZwPeBPkiX1R6/2EdNNEsTgiPLMbAGS2ZbtAuztLfDTXc+yOKKAI5VSwl/
-         OLrrMQRBVRW9YIvg1Zu1Yj4xsCv5R//AXL7444qhEwNHd/HDHyAVbKYA0QY+gZEoSM8h
-         i5CMCMeIw1rolXsjZ5JOHQcXesSUBhiAlEZSXnE/bBN6s8oVfXmplMC08gKcbJTC+ky/
-         2n9Q==
-X-Gm-Message-State: AC+VfDz4BsH+gDXCDjDJimYIP2Hhw2/PX7Q2jP3v/ZBiiOT4SCKKKjxi
-        avhw1JFGLKmZFNQkpUVepGFvEvgJXL3dlFBwQPo=
-X-Google-Smtp-Source: ACHHUZ6eVUGZvSc9BvXgHjP7hdptxeL7cYFm1fPWsO5lOhIXnPYN0sjI0aNLWvnZWtY+hKL8M+USsg==
-X-Received: by 2002:a05:6a00:1585:b0:652:c336:e63e with SMTP id u5-20020a056a00158500b00652c336e63emr4458187pfk.31.1686086908535;
-        Tue, 06 Jun 2023 14:28:28 -0700 (PDT)
-Received: from ballway1.c.googlers.com.com (97.173.125.34.bc.googleusercontent.com. [34.125.173.97])
-        by smtp.gmail.com with ESMTPSA id m3-20020aa78a03000000b005a8173829d5sm7283325pfa.66.2023.06.06.14.28.27
+        d=1e100.net; s=20221208; t=1686086762; x=1688678762;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zC4QoBDS/PVcd+xuGELUqjLK2nruU3LnP3t1Jluqdlw=;
+        b=is6Lqv6XZpAvGIxIG3JcNVC4C9OfiuXU27JTYhYoysYh3Kghs9hvkIF9FQVIBy9wu5
+         f4kV4dF1ML6/sFhv6bSbrobZQYO1MFzwMb2rtTB1PyLhp6oIDzwdEVXFpZybr82qI6dY
+         qdhqVNqVGZQajM0JuApr6W1h9QIxm6pB4TP+Vqr8ZjJTk3JAa2BFaWugdYDXwrM04/hs
+         yC1BAMtjuRqQ+/q4ZpFbfGSIT0Nhwj0qhCShhEGR7GwD92W29VOOISkyZCm/50oUBGWW
+         IB2ioSrOFcEuXgmOpHbSAQDlwnxiQf2myNuvBx1ZbCFLCcUKvAnB0aR4JctrkxIBYjc4
+         IaXw==
+X-Gm-Message-State: AC+VfDz9Png6CZZSIhZga5xqkhuxeDUvmPIj2yA0pYsqG5GLsYX0+vH1
+        A1piSGfaubDWujB4g8oevtE=
+X-Google-Smtp-Source: ACHHUZ5KL2dkTrDBHB5xFhsizQ21blEeXqp67Pe2LQdYDiY/iIvys/JkvRO5W6BkaVZJEHCTVOZdKQ==
+X-Received: by 2002:a05:6a20:9191:b0:113:fe95:da8c with SMTP id v17-20020a056a20919100b00113fe95da8cmr712667pzd.14.1686086762296;
+        Tue, 06 Jun 2023 14:26:02 -0700 (PDT)
+Received: from V92F7Y9K0C.corp.robot.car ([199.73.127.2])
+        by smtp.gmail.com with ESMTPSA id 12-20020a170902c24c00b001afebec96basm8992514plg.148.2023.06.06.14.26.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 14:28:28 -0700 (PDT)
-From:   Allen Ballway <ballway@chromium.org>
-To:     jani.nikula@linux.intel.com
-Cc:     arun.r.murthy@intel.com, dri-devel@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Allen Ballway <ballway@chromium.org>
-Subject: [PATCH] drm/i915/quirk: Add quirk for devices that cannot be dimmed
-Date:   Tue,  6 Jun 2023 21:25:13 +0000
-Message-ID: <20230606211901.1.I06e778109090b5dc85c44da7b742d185aa6adb59@changeid>
-X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+        Tue, 06 Jun 2023 14:26:01 -0700 (PDT)
+Date:   Tue, 6 Jun 2023 14:25:56 -0700
+From:   Dennis Zhou <dennis@kernel.org>
+To:     "Liam R. Howlett" <Liam.Howlett@oracle.com>
+Cc:     Yu Ma <yu.ma@intel.com>, akpm@linux-foundation.org,
+        tim.c.chen@intel.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, dave.hansen@intel.com,
+        dan.j.williams@intel.com, shakeelb@google.com, pan.deng@intel.com,
+        tianyou.li@intel.com, lipeng.zhu@intel.com,
+        tim.c.chen@linux.intel.com
+Subject: Re: [PATCH] percpu-internal/pcpu_chunk: Re-layout pcpu_chunk
+ structure to reduce false sharing
+Message-ID: <ZH-kZA5kRmWjcrTI@V92F7Y9K0C.corp.robot.car>
+References: <20230606125404.95256-1-yu.ma@intel.com>
+ <20230606192127.w66indpq74ec6eyt@revolver>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230606192127.w66indpq74ec6eyt@revolver>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Cybernet T10C cannot be dimmed without the backlight strobing. Create a
-new quirk to lock the minimum brightness to the highest supported value.
-This aligns the device with its behavior on Windows, which will not
-lower the brightness below maximum.
+Hello,
 
-Signed-off-by: Allen Ballway <ballway@chromium.org>
----
+On Tue, Jun 06, 2023 at 03:21:27PM -0400, Liam R. Howlett wrote:
+> * Yu Ma <yu.ma@intel.com> [230606 08:27]:
+> > When running UnixBench/Execl throughput case, false sharing is observed
+> > due to frequent read on base_addr and write on free_bytes, chunk_md.
+> > 
+> > UnixBench/Execl represents a class of workload where bash scripts
+> > are spawned frequently to do some short jobs. It will do system call on
+> > execl frequently, and execl will call mm_init to initialize mm_struct
+> > of the process. mm_init will call __percpu_counter_init for
+> > percpu_counters initialization. Then pcpu_alloc is called to read
+> > the base_addr of pcpu_chunk for memory allocation. Inside pcpu_alloc,
+> > it will call pcpu_alloc_area  to allocate memory from a specified chunk.
+> > This function will update "free_bytes" and "chunk_md" to record the
+> > rest free bytes and other meta data for this chunk. Correspondingly,
+> > pcpu_free_area will also update these 2 members when free memory.
+> > Call trace from perf is as below:
+> > +   57.15%  0.01%  execl   [kernel.kallsyms] [k] __percpu_counter_init
+> > +   57.13%  0.91%  execl   [kernel.kallsyms] [k] pcpu_alloc
+> > -   55.27% 54.51%  execl   [kernel.kallsyms] [k] osq_lock
+> >    - 53.54% 0x654278696e552f34
+> >         main
+> >         __execve
+> >         entry_SYSCALL_64_after_hwframe
+> >         do_syscall_64
+> >         __x64_sys_execve
+> >         do_execveat_common.isra.47
+> >         alloc_bprm
+> >         mm_init
+> >         __percpu_counter_init
+> >         pcpu_alloc
+> >       - __mutex_lock.isra.17
+> > 
+> > In current pcpu_chunk layout, ‘base_addr’ is in the same cache line
+> > with ‘free_bytes’ and ‘chunk_md’, and ‘base_addr’ is at the 
+> > last 8 bytes. This patch moves ‘bound_map’ up to ‘base_addr’,
+> > to let ‘base_addr’ locate in a new cacheline.
+> > 
+> > With this change, on Intel Sapphire Rapids 112C/224T platform,
+> > based on v6.4-rc4, the 160 parallel score improves by 24%.
+> 
+> Can we have a comment somewhere around this structure to avoid someone
+> reverting this change by accident?
+> 
 
- .../gpu/drm/i915/display/intel_backlight.c    |  6 +++++
- drivers/gpu/drm/i915/display/intel_quirks.c   | 27 +++++++++++++++++++
- drivers/gpu/drm/i915/display/intel_quirks.h   |  1 +
- 3 files changed, 34 insertions(+)
+I agree with Liam. It was only recently percpu was added to the
+mm_struct so this wasn't originally on the hot path. It's probably worth
+reshuffling around pcpu_chunk because as you point out base_addr is
+read_only after init. There in general aren't that many of these structs
+on any particular host, so its probably good to just annotate with
+____cacheline_aligned_in_smp and potentially reshuffle around a few
+other variables.
 
-diff --git a/drivers/gpu/drm/i915/display/intel_backlight.c b/drivers/gpu/drm/i915/display/intel_backlight.c
-index 2e8f17c045222..863a33245a3d7 100644
---- a/drivers/gpu/drm/i915/display/intel_backlight.c
-+++ b/drivers/gpu/drm/i915/display/intel_backlight.c
-@@ -1192,6 +1192,11 @@ static u32 get_backlight_min_vbt(struct intel_connector *connector)
+Another optimization here is a batch allocation which hasn't been done
+yet (allocate essentially an array of percpu variables all at once, but
+allow for their lifetimes to be independent).
 
- 	drm_WARN_ON(&i915->drm, panel->backlight.pwm_level_max == 0);
+PS - I know I'm not super active, but please cc me on percpu changes.
 
-+	if (intel_has_quirk(i915, QUIRK_NO_DIM)) {
-+		/* Cannot dim backlight, set minimum to hightest value */
-+		return panel->backlight.pwm_level_max - 1;
-+	}
-+
- 	/*
- 	 * XXX: If the vbt value is 255, it makes min equal to max, which leads
- 	 * to problems. There are such machines out there. Either our
-@@ -1206,6 +1211,7 @@ static u32 get_backlight_min_vbt(struct intel_connector *connector)
- 			    connector->panel.vbt.backlight.min_brightness, min);
- 	}
+Thanks,
+Dennis
 
-+
- 	/* vbt value is a coefficient in range [0..255] */
- 	return scale(min, 0, 255, 0, panel->backlight.pwm_level_max);
- }
-diff --git a/drivers/gpu/drm/i915/display/intel_quirks.c b/drivers/gpu/drm/i915/display/intel_quirks.c
-index a280448df771a..910c95840a539 100644
---- a/drivers/gpu/drm/i915/display/intel_quirks.c
-+++ b/drivers/gpu/drm/i915/display/intel_quirks.c
-@@ -65,6 +65,12 @@ static void quirk_no_pps_backlight_power_hook(struct drm_i915_private *i915)
- 	drm_info(&i915->drm, "Applying no pps backlight power quirk\n");
- }
-
-+static void quirk_no_dim(struct drm_i915_private *i915)
-+{
-+	intel_set_quirk(i915, QUIRK_NO_DIM);
-+	drm_info(&i915->drm, "Applying no dim quirk\n");
-+}
-+
- struct intel_quirk {
- 	int device;
- 	int subsystem_vendor;
-@@ -90,6 +96,12 @@ static int intel_dmi_no_pps_backlight(const struct dmi_system_id *id)
- 	return 1;
- }
-
-+static int intel_dmi_no_dim(const struct dmi_system_id *id)
-+{
-+	DRM_INFO("No dimming allowed on %s\n", id->ident);
-+	return 1;
-+}
-+
- static const struct intel_dmi_quirk intel_dmi_quirks[] = {
- 	{
- 		.dmi_id_list = &(const struct dmi_system_id[]) {
-@@ -136,6 +148,20 @@ static const struct intel_dmi_quirk intel_dmi_quirks[] = {
- 		},
- 		.hook = quirk_no_pps_backlight_power_hook,
- 	},
-+	{
-+		.dmi_id_list = &(const struct dmi_system_id[]) {
-+			{
-+				.callback = intel_dmi_no_dim,
-+				.ident = "Cybernet T10C Tablet",
-+				.matches = {DMI_EXACT_MATCH(DMI_BOARD_VENDOR,
-+							    "Cybernet Manufacturing Inc."),
-+					    DMI_EXACT_MATCH(DMI_BOARD_NAME, "T10C Tablet"),
-+				},
-+			},
-+			{ }
-+		},
-+		.hook = quirk_no_dim,
-+	},
- };
-
- static struct intel_quirk intel_quirks[] = {
-@@ -218,6 +244,7 @@ void intel_init_quirks(struct drm_i915_private *i915)
- 		     q->subsystem_device == PCI_ANY_ID))
- 			q->hook(i915);
- 	}
-+
- 	for (i = 0; i < ARRAY_SIZE(intel_dmi_quirks); i++) {
- 		if (dmi_check_system(*intel_dmi_quirks[i].dmi_id_list) != 0)
- 			intel_dmi_quirks[i].hook(i915);
-diff --git a/drivers/gpu/drm/i915/display/intel_quirks.h b/drivers/gpu/drm/i915/display/intel_quirks.h
-index 10a4d163149fd..b41c7bbf0a5e3 100644
---- a/drivers/gpu/drm/i915/display/intel_quirks.h
-+++ b/drivers/gpu/drm/i915/display/intel_quirks.h
-@@ -17,6 +17,7 @@ enum intel_quirk_id {
- 	QUIRK_INVERT_BRIGHTNESS,
- 	QUIRK_LVDS_SSC_DISABLE,
- 	QUIRK_NO_PPS_BACKLIGHT_POWER_HOOK,
-+	QUIRK_NO_DIM,
- };
-
- void intel_init_quirks(struct drm_i915_private *i915);
---
-2.41.0.162.gfafddb0af9-goog
-
+> > 
+> > Reviewed-by: Tim Chen <tim.c.chen@linux.intel.com>
+> > Signed-off-by: Yu Ma <yu.ma@intel.com>
+> > ---
+> >  mm/percpu-internal.h | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/mm/percpu-internal.h b/mm/percpu-internal.h
+> > index f9847c131998..981eeb2ad0a9 100644
+> > --- a/mm/percpu-internal.h
+> > +++ b/mm/percpu-internal.h
+> > @@ -41,10 +41,10 @@ struct pcpu_chunk {
+> >  	struct list_head	list;		/* linked to pcpu_slot lists */
+> >  	int			free_bytes;	/* free bytes in the chunk */
+> >  	struct pcpu_block_md	chunk_md;
+> > +	unsigned long		*bound_map;	/* boundary map */
+> >  	void			*base_addr;	/* base address of this chunk */
+> >  
+> >  	unsigned long		*alloc_map;	/* allocation map */
+> > -	unsigned long		*bound_map;	/* boundary map */
+> >  	struct pcpu_block_md	*md_blocks;	/* metadata blocks */
+> >  
+> >  	void			*data;		/* chunk data */
+> > -- 
+> > 2.39.3
+> > 
+> 
