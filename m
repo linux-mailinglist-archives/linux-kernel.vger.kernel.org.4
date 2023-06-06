@@ -2,255 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D852C723430
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 02:55:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB03E723435
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 02:57:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231425AbjFFAzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 20:55:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45970 "EHLO
+        id S233094AbjFFA5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 20:57:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231220AbjFFAzt (ORCPT
+        with ESMTP id S231339AbjFFA5b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 20:55:49 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AD9C103;
-        Mon,  5 Jun 2023 17:55:48 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3560F2jI021690;
-        Tue, 6 Jun 2023 00:55:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=Y9ovafu6tH0fAVaxzC8dLrx6KI/szPztr89oczeALVU=;
- b=pSBJompNViR/RgiNx2MJKGNbRt2NtY8VC3NvS5zzy/aPuInyB6vbiroRhkZaZYbjixqN
- zqP4s4yteIGtII9vOBSItxih4gybCfTQVdDmUZ5MRYBkE+LBOEkiDXHtJCz4XfGVV0OX
- EIigenbVs/vLzw+rrMKF/c8Y4+/t6RQoSQm4OmwM7UlhrfANWhuwCOlskqHLOmXXKMzh
- oRl2gkrzj1/PJsIgTzgTyGwsYt9zvhU8eRgiAbiOQDSAwhHK9tBmp+0C1JeMIb6Hp5QM
- hM2u2dMaYkhnNBE26ZlCwfAV/Gg2mfNtxlF4xkLoK0QjAei7XZhlCt0gmWLNFtuNZ67N oQ== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qyw46d0sh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 06 Jun 2023 00:55:41 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3560teMj012619
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 6 Jun 2023 00:55:40 GMT
-Received: from [10.110.26.43] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 5 Jun 2023
- 17:55:36 -0700
-Message-ID: <47fda908-d76f-65d5-e001-8773c5b160b9@quicinc.com>
-Date:   Mon, 5 Jun 2023 17:55:35 -0700
+        Mon, 5 Jun 2023 20:57:31 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1DF9102
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 17:57:27 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id e9e14a558f8ab-33b36a9fdf8so22085875ab.2
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 17:57:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1686013047; x=1688605047;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=dz3G9DrzQ6+mY/mhrhS6QSFdwnoHXrH6ZP5uaXRobUo=;
+        b=Mm37RoKCFb+0pGbQDq6T9q+3UxrvLEeRenMwfTAap0hK3aUgvMwDG4QFzddtwQq4ac
+         0YMZsCByZJrdieXXZR4TS44peQbPRcGhUzLEPa9T3O9yMiQlOMPQLcMDyRx9boqtbRUL
+         MCJ7Wz0J3Zol4alRhgvN4o00F5+c5x9NE/vl0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686013047; x=1688605047;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dz3G9DrzQ6+mY/mhrhS6QSFdwnoHXrH6ZP5uaXRobUo=;
+        b=fI0l+kiAJlNkj4jD/9dleDkcdjvBK7q3Ke4aEg6/3s2+t9K/V4K/HSPd7z8Qr3s/v1
+         YtacRoMvAPHuQQyhOjOZ0gjBfanXkBHX6d1lSgrtPYkusviOv1HTH+lgNBFW0xkWCZn3
+         gKq1adip4pXFtibqCphv+eEEHhlh0yJCYKmzJkPbSgoNJOHSB54+2uIL2eZTP7nH6MwM
+         Alaffw/JxuAEB9JM/zeW3NgnuN9DA5UuWUp65gyyo+QtLoKMbIX3pvR3Y3/JoTHNxZDz
+         QEGTTEl7piLRa1kHW0aSQrfjI6FbXPFu6tuQWrLWMxhGSHOVk9hv+P61ua6/J1vIKZFs
+         GTzQ==
+X-Gm-Message-State: AC+VfDxyObrZbqLR98Hl9rRkBSzfP34KYgihtcMQqiqzuW5wvntTgZb8
+        oPj6kgS8HN+BmS+UkKjJGbX3Ox6yK2F/V2+GniE=
+X-Google-Smtp-Source: ACHHUZ5oRmFixNfzhceLZm8pkBWDrdW+zW0x/OHIPkB5L7tYB8mCUGPqBkXLBmyTaEqPBFVUKwKPXA==
+X-Received: by 2002:a92:2802:0:b0:33a:56d6:d9a7 with SMTP id l2-20020a922802000000b0033a56d6d9a7mr816596ilf.19.1686013047345;
+        Mon, 05 Jun 2023 17:57:27 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id f25-20020aa782d9000000b0064d74808738sm5641884pfn.214.2023.06.05.17.57.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Jun 2023 17:57:26 -0700 (PDT)
+Date:   Mon, 5 Jun 2023 17:57:25 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        chenhuacai@kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V1] kthread: Unify kernel_thread() and user_mode_thread()
+Message-ID: <202306051755.051BDBABB@keescook>
+References: <20230603015302.1768127-1-chenhuacai@loongson.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [Freedreno] [PATCH] drm/msm/dpu: re-introduce dpu core revision
- to the catalog
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <quic_khsieh@quicinc.com>, Rob Clark <robdclark@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, <quic_jesszhan@quicinc.com>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        David Airlie <airlied@gmail.com>, Sean Paul <sean@poorly.run>
-References: <20230531005358.18090-1-quic_abhinavk@quicinc.com>
- <CAA8EJpryw0h8TgpJ+SFJ7s0=LCjkQ6oqAjCKsm60dk_Q5e+wWA@mail.gmail.com>
- <0af4df3d-8048-98cd-6c91-7cd553f4f65f@quicinc.com>
- <98e4bda7-19e9-09b6-f008-383adada97cb@linaro.org>
- <a0b7a9fc-eb3c-3b26-b11d-fe1fb47b2c51@quicinc.com>
- <451b114c-05e1-541c-1d3e-26bb81a307c4@linaro.org>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <451b114c-05e1-541c-1d3e-26bb81a307c4@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: NsPOcADCC5s2IPaW72G9fLJ6b2uAEF0R
-X-Proofpoint-GUID: NsPOcADCC5s2IPaW72G9fLJ6b2uAEF0R
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-05_35,2023-06-05_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- impostorscore=0 mlxlogscore=999 mlxscore=0 phishscore=0 priorityscore=1501
- lowpriorityscore=0 spamscore=0 bulkscore=0 malwarescore=0 clxscore=1015
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2306060006
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230603015302.1768127-1-chenhuacai@loongson.cn>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/3/2023 7:21 PM, Dmitry Baryshkov wrote:
-> On 31/05/2023 21:25, Abhinav Kumar wrote:
->>
->>
->> On 5/31/2023 3:07 AM, Dmitry Baryshkov wrote:
->>> On 31/05/2023 06:05, Abhinav Kumar wrote:
->>>>
->>>>
->>>> On 5/30/2023 7:53 PM, Dmitry Baryshkov wrote:
->>>>> On Wed, 31 May 2023 at 03:54, Abhinav Kumar 
->>>>> <quic_abhinavk@quicinc.com> wrote:
->>>>>>
->>>>>> With [1] dpu core revision was dropped in favor of using the
->>>>>> compatible string from the device tree to select the dpu catalog
->>>>>> being used in the device.
->>>>>>
->>>>>> This approach works well however also necessitates adding catalog
->>>>>> entries for small register level details as dpu capabilities and/or
->>>>>> features bloating the catalog unnecessarily. Examples include but
->>>>>> are not limited to data_compress, interrupt register set, widebus 
->>>>>> etc.
->>>>>>
->>>>>> Introduce the dpu core revision back as an entry to the catalog so 
->>>>>> that
->>>>>> we can just use dpu revision checks and enable those bits which
->>>>>> should be enabled unconditionally and not controlled by a catalog
->>>>>> and also simplify the changes to do something like:
->>>>>>
->>>>>> if (dpu_core_revision > xxxxx && dpu_core_revision < xxxxx)
->>>>>>          enable the bit;
->>>>>>
->>>>>> Also, add some of the useful macros back to be able to use dpu core
->>>>>> revision effectively.
->>>>>>
->>>>>> [1]: 
->>>>>> https://patchwork.freedesktop.org/patch/530891/?series=113910&rev=4
->>>>>>
->>>>>> Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
->>>>>> ---
->>>>>>   .../msm/disp/dpu1/catalog/dpu_3_0_msm8998.h   |  1 +
->>>>>>   .../msm/disp/dpu1/catalog/dpu_4_0_sdm845.h    |  1 +
->>>>>>   .../msm/disp/dpu1/catalog/dpu_5_0_sm8150.h    |  1 +
->>>>>>   .../msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h   |  1 +
->>>>>>   .../msm/disp/dpu1/catalog/dpu_6_0_sm8250.h    |  1 +
->>>>>>   .../msm/disp/dpu1/catalog/dpu_6_2_sc7180.h    |  1 +
->>>>>>   .../msm/disp/dpu1/catalog/dpu_6_3_sm6115.h    |  1 +
->>>>>>   .../msm/disp/dpu1/catalog/dpu_6_5_qcm2290.h   |  1 +
->>>>>>   .../msm/disp/dpu1/catalog/dpu_7_0_sm8350.h    |  1 +
->>>>>>   .../msm/disp/dpu1/catalog/dpu_7_2_sc7280.h    |  1 +
->>>>>>   .../msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h  |  1 +
->>>>>>   .../msm/disp/dpu1/catalog/dpu_8_1_sm8450.h    |  1 +
->>>>>>   .../msm/disp/dpu1/catalog/dpu_9_0_sm8550.h    |  1 +
->>>>>>   .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h    | 31 
->>>>>> ++++++++++++++++++-
->>>>>>   14 files changed, 43 insertions(+), 1 deletion(-)
->>>>>>
->>>>>
->>>>> [skipped catalog changes]
->>>>>
->>>>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h 
->>>>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
->>>>>> index 677048cc3b7d..cc4aa75a1219 100644
->>>>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
->>>>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
->>>>>> @@ -19,6 +19,33 @@
->>>>>>    */
->>>>>>   #define MAX_BLOCKS    12
->>>>>>
->>>>>> +#define DPU_HW_VER(MAJOR, MINOR, STEP)\
->>>>>> +                 ((((unsigned int)MAJOR & 0xF) << 28) |\
->>>>>> +                 ((MINOR & 0xFFF) << 16) |\
->>>>>> +                 (STEP & 0xFFFF))
->>>>>> +
->>>>>> +#define DPU_HW_MAJOR(rev)((rev) >> 28)
->>>>>> +#define DPU_HW_MINOR(rev)(((rev) >> 16) & 0xFFF)
->>>>>> +#define DPU_HW_STEP(rev)((rev) & 0xFFFF)
->>>>>> +#define DPU_HW_MAJOR_MINOR(rev)((rev) >> 16)
->>>>>> +
->>>>>> +#define IS_DPU_MAJOR_MINOR_SAME(rev1, rev2)   \
->>>>>> +(DPU_HW_MAJOR_MINOR((rev1)) == DPU_HW_MAJOR_MINOR((rev2)))
->>>>>> +
->>>>>> +#define DPU_HW_VER_300 DPU_HW_VER(3, 0, 0) /* 8998 v1.0 */
->>>>>> +#define DPU_HW_VER_400 DPU_HW_VER(4, 0, 0) /* sdm845 v1.0 */
->>>>>> +#define DPU_HW_VER_500 DPU_HW_VER(5, 0, 0) /* sm8150 v1.0 */
->>>>>> +#define DPU_HW_VER_510 DPU_HW_VER(5, 1, 1) /* sc8180 */
->>>>>> +#define DPU_HW_VER_600 DPU_HW_VER(6, 0, 0) /* sm8250 */
->>>>>> +#define DPU_HW_VER_620 DPU_HW_VER(6, 2, 0) /* sc7180 v1.0 */
->>>>>> +#define DPU_HW_VER_630 DPU_HW_VER(6, 3, 0) /* sm6115|sm4250 */
->>>>>> +#define DPU_HW_VER_650 DPU_HW_VER(6, 5, 0) /* qcm2290|sm4125 */
->>>>>> +#define DPU_HW_VER_700 DPU_HW_VER(7, 0, 0) /* sm8350 */
->>>>>> +#define DPU_HW_VER_720 DPU_HW_VER(7, 2, 0) /* sc7280 */
->>>>>> +#define DPU_HW_VER_800 DPU_HW_VER(8, 0, 0) /* sc8280xp */
->>>>>> +#define DPU_HW_VER_810 DPU_HW_VER(8, 1, 0) /* sm8450 */
->>>>>> +#define DPU_HW_VER_900 DPU_HW_VER(9, 0, 0) /* sm8550 */
->>>>>
->>>>> Instead of having defines for all SoCs (which can quickly become
->>>>> unmanageable) and can cause merge conflicts, I'd suggest inlining all
->>>>> the defines into respective catalog files.
->>>>>
->>>>
->>>> Sure, that can be done.
->>>>
->>>>> Also, I'm not sure that the "step" should be a part of the catalog. I
->>>>> know that this follows the hardware revision. However, please correct
->>>>> me if I'm wrong, different step levels are used for revisions of the
->>>>> same SoC. The original code that was reading the hw revision from the
->>>>> hardware register, listed both 5.0.0 and 5.0.1 for sm8150.
->>>>>
->>>>
->>>> This is one of the things i noticed while making this change.
->>>>
->>>> Before the catalog rework, we used to handle even steps as we used 
->>>> to read that from the register and match it with the mdss_cfg 
->>>> handler. But after the rework, we dont handle steps anymore. Yes, 
->>>> you are right that different step levels are used for the revisions 
->>>> of the same SOC and so with that, i dont expect or atleast am not 
->>>> aware of DPU differences between steps but I am not able to rule it 
->>>> out.
->>>>
->>>> So are you suggesting we drop step altogether and DPU_HW_VER() macro 
->>>> shall only handle major and minor versions? With the current 
->>>> chipsets I see, it should not make a difference . Its just that I am 
->>>> not sure if that will never happen.
->>>
->>> Yes. The goal of this rework would be to drop generic features and to 
->>> replace those checks with DPU-revision lookups. Correct?
->>
->> Yes thats right.
->>
->>> I think that from this perspective having to handle toe step revision 
->>> is a sign of an overkill. Having to handle the step revision is a 
->>> sign of paltform feature (or mis-feature) rather than a generic DPU bit.
->>>
->>
->> Not entirely. Lets not forget that at the moment even dpu_perf_cfg is 
->> part of the catalog. Even if in terms of major HW blocks steps 
->> shouldnt change, there is absolutely no guarantee that perf data cannot.
->>
->> This is what is the sticking point for me which is holding me back 
->> against dropping step. Thoughts?
+On Sat, Jun 03, 2023 at 09:53:02AM +0800, Huacai Chen wrote:
+> Commit 343f4c49f2438d8 ("kthread: Don't allocate kthread_struct for init
+> and umh") introduces a new function user_mode_thread() for init and umh.
 > 
-> We usually do not support ES versions of the chips, only the final 
-> version. So supporting the perf data for earlier revisions is also not 
-> required.
+> init and umh are different from typical kernel threads since the don't
+> need a "kthread" struct and they will finally become user processes by
+> calling kernel_execve(), but on the other hand, they are also different
+> from typical user mode threads (they have no "mm" structs at creation
+> time, which is traditionally used to distinguish a user thread and a
+> kernel thread).
 > 
-
-ack, we will drop step in that case. and good to know about the ES versions.
-
->>
->>> In fact I suppose that even handling a minor revision would be an 
->>> overkill. Why don't we start with .dpu_major instead of .core_rev? We 
->>> can add .dpu_minor if/when required.
->>>
->>
->> No, unfortunately we cannot drop minor version for sure. I am seeing 
->> examples in downstream code where some of the features are available 
->> after a minor verion as well.
+> So I think it is reasonable to treat init and umh as "special kernel
+> threads". Then let's unify the kernel_thread() and user_mode_thread()
+> to kernel_thread() again, and add a new 'user' parameter for init and
+> umh.
 > 
-> Can you please give an example?
+> This also makes code simpler. 
 > 
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> ---
+> RFC -> V1: Update commit message and change "user" from int to bool.
+> 
+>  include/linux/sched/task.h |  3 +--
+>  init/main.c                |  4 ++--
+>  kernel/fork.c              | 20 ++------------------
+>  kernel/kthread.c           |  2 +-
+>  kernel/umh.c               |  6 +++---
+>  5 files changed, 9 insertions(+), 26 deletions(-)
+> 
+> diff --git a/include/linux/sched/task.h b/include/linux/sched/task.h
+> index 537cbf9a2ade..02eb953bc809 100644
+> --- a/include/linux/sched/task.h
+> +++ b/include/linux/sched/task.h
+> @@ -98,8 +98,7 @@ struct task_struct *copy_process(struct pid *pid, int trace, int node,
+>  struct task_struct *create_io_thread(int (*fn)(void *), void *arg, int node);
+>  struct task_struct *fork_idle(int);
+>  extern pid_t kernel_thread(int (*fn)(void *), void *arg, const char *name,
+> -			    unsigned long flags);
+> -extern pid_t user_mode_thread(int (*fn)(void *), void *arg, unsigned long flags);
+> +			    unsigned long flags, bool user);
 
-Yes, watchdog timer, intf reset counter are available only after DPU HW 
-version 8.1 (not major version 8).
+Please make this an enum not a bool, otherwise it's not obvious when
+reading calling code what it means.
+
+>  extern long kernel_wait4(pid_t, int __user *, int, struct rusage *);
+>  int kernel_wait(pid_t pid, int *stat);
+>  
+> diff --git a/init/main.c b/init/main.c
+> index af50044deed5..469cebbd35e0 100644
+> --- a/init/main.c
+> +++ b/init/main.c
+> @@ -697,7 +697,7 @@ noinline void __ref __noreturn rest_init(void)
+>  	 * the init task will end up wanting to create kthreads, which, if
+>  	 * we schedule it before we create kthreadd, will OOPS.
+>  	 */
+> -	pid = user_mode_thread(kernel_init, NULL, CLONE_FS);
+> +	pid = kernel_thread(kernel_init, NULL, NULL, CLONE_FS, true);
+
+i.e. instead of "true", if this said USER_MODE_THREAD, it would be
+easier to under.
+
+>  	/*
+>  	 * Pin init on the boot CPU. Task migration is not properly working
+>  	 * until sched_init_smp() has been run. It will set the allowed
+> @@ -710,7 +710,7 @@ noinline void __ref __noreturn rest_init(void)
+>  	rcu_read_unlock();
+>  
+>  	numa_default_policy();
+> -	pid = kernel_thread(kthreadd, NULL, NULL, CLONE_FS | CLONE_FILES);
+> +	pid = kernel_thread(kthreadd, NULL, NULL, CLONE_FS | CLONE_FILES, false);
+
+And similarly, KERNEL_THREAD instead of "false".
+
+-Kees
+
+-- 
+Kees Cook
