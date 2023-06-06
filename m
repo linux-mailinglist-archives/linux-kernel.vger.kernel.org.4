@@ -2,80 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B265B7244C1
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 15:47:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF05E7244CB
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 15:48:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237933AbjFFNrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 09:47:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35026 "EHLO
+        id S237970AbjFFNsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 09:48:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231726AbjFFNrg (ORCPT
+        with ESMTP id S237735AbjFFNsT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 09:47:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 570BBE7E
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 06:46:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686059217;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ptXauuCBD1PCG9ib1NA3tuS4we6SP4trE10C7/jO/rU=;
-        b=eqCblrl0J9j80Oyb+oMbj32WEjWaDJ4fWAGmpijXhDnWz63bWQVXWouyFW9VU1hUMfTSSX
-        Lh5s0g3+vy24TFhwCTG/EQaegPcXHI3gHigMMjbVsuupoJHENaLxY+aoNeiP4lzQ0ZWIr6
-        0Q4ggqv3W93MLEvU2lb14Za5xffkz0A=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-556-CR65h7WEMiyZwRTf7gBQCw-1; Tue, 06 Jun 2023 09:46:56 -0400
-X-MC-Unique: CR65h7WEMiyZwRTf7gBQCw-1
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3f7ebe8523eso2589465e9.1
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 06:46:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686059215; x=1688651215;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ptXauuCBD1PCG9ib1NA3tuS4we6SP4trE10C7/jO/rU=;
-        b=MJztaGglDRGRrmqUJNfPYIOuHVpI9M6osdJoZwa+T15rDmQ1vCNPTHAM8ABnL9C9Wp
-         B+epc1nDhk1r+sEr0znHpZiCYrnM3EyJdfGNC8GjLUlu225hY/aPsn7Eu5x9Rl5+b0LE
-         nzIfWtesbDQAxAZR+F1GmXd1NFL2OXrprl52GgrCZ3Yz9RwPhU0rhSHCGz4mer8qgJ+x
-         yQIh9m6VGzUcpSgiJ0iytE+CC71aCmsc1/VlDglRimjcTtbBLewCpfmKcVFIyTL53ejt
-         uRsdtWhm93yXtfeyF4+T/TcE2iB36E3JRGZ+f+F93MzlhFZsGSn16zSFISJeRnbok85/
-         MO5g==
-X-Gm-Message-State: AC+VfDzdRtc1/l02ZsFvLFXVxhcP0lV3D6wMwubQ7cxn8s4Xme8EuLZi
-        dddkHZ1mWJxNlBmIzkyyrNXabF13A+AzeOXQURBJVftGbeacwlQ3TlTj2HTJMsf6iXmVGz+M11d
-        GtqTEIFLSBoDMHZsYmN5ZmzlF
-X-Received: by 2002:a05:600c:210:b0:3f7:2d7d:c673 with SMTP id 16-20020a05600c021000b003f72d7dc673mr2418139wmi.14.1686059215080;
-        Tue, 06 Jun 2023 06:46:55 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4y42arS3sf+JMJGfQY8U+MTu6mCEmQV2avTDbCSIXEM+noeWVrgY9hMz5LISuQwGh0nAEYYA==
-X-Received: by 2002:a05:600c:210:b0:3f7:2d7d:c673 with SMTP id 16-20020a05600c021000b003f72d7dc673mr2418122wmi.14.1686059214733;
-        Tue, 06 Jun 2023 06:46:54 -0700 (PDT)
-Received: from debian (2a01cb058d652b00fa0f162c47a2f35b.ipv6.abo.wanadoo.fr. [2a01:cb05:8d65:2b00:fa0f:162c:47a2:f35b])
-        by smtp.gmail.com with ESMTPSA id l12-20020a5d4bcc000000b0030e5482bd8esm251173wrt.90.2023.06.06.06.46.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 06:46:54 -0700 (PDT)
-Date:   Tue, 6 Jun 2023 15:46:52 +0200
-From:   Guillaume Nault <gnault@redhat.com>
-To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: POSSIBLE BUG: selftests/net/fcnal-test.sh: [FAIL] in vrf "bind -
- ns-B IPv6 LLA" test
-Message-ID: <ZH84zGEODT97TEXG@debian>
-References: <b6191f90-ffca-dbca-7d06-88a9788def9c@alu.unizg.hr>
- <ZHeN3bg28pGFFjJN@debian>
- <a379796a-5cd6-caa7-d11d-5ffa7419b90e@alu.unizg.hr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a379796a-5cd6-caa7-d11d-5ffa7419b90e@alu.unizg.hr>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Tue, 6 Jun 2023 09:48:19 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7995810E9;
+        Tue,  6 Jun 2023 06:48:15 -0700 (PDT)
+Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 356DgXe6013539;
+        Tue, 6 Jun 2023 13:47:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=AHT+Ybg9/fl/7/tz6S1ei6dQZWzC6NTRq9JOTSx1ssQ=;
+ b=SP1rJSv3V0SbcR6Zm8GKdwI2GUhF0nofkzPRFvtvQnffhzUvF/sszeqFW+Msf0DjwQsW
+ sL2But2wRG2LeCtHDLII+4bKyR1Qxo3RN3N2wyBg50+Lq6QrwCO7PVwC0FVPIITMMQzY
+ CfysJtMNGFHxzkBj3Gwc5oOTAonWWSYDqlHJ9a4/CnrCvrGTEwWgVnFGrV4Dn0YQ+YIO
+ mBKulY8S2vLdrYVDYpRdvwOkkZ2TB7XWctd50Dtf1/4I/WdOhP3gP7BdhC08Elhrn/xL
+ uppMCXCiUuedflCDDmOwkFYsNx8e+eNqGS6tJRKt/PFuPz9Hjo3uzKbfGAHZIRBBuhZ7 aw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r25wt850p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Jun 2023 13:47:46 +0000
+Received: from m0353728.ppops.net (m0353728.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 356Dh8f6016320;
+        Tue, 6 Jun 2023 13:47:46 GMT
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r25wt8500-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Jun 2023 13:47:45 +0000
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 356DZSZA026530;
+        Tue, 6 Jun 2023 13:47:44 GMT
+Received: from smtprelay03.wdc07v.mail.ibm.com ([9.208.129.113])
+        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3qyxfs6yca-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Jun 2023 13:47:44 +0000
+Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
+        by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 356Dlh5g65732910
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 6 Jun 2023 13:47:43 GMT
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3E4CB58063;
+        Tue,  6 Jun 2023 13:47:43 +0000 (GMT)
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BB8325803F;
+        Tue,  6 Jun 2023 13:47:42 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.156.200])
+        by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Tue,  6 Jun 2023 13:47:42 +0000 (GMT)
+Message-ID: <2592f1111059c175c3414cf80f3685bc6105ffa6.camel@linux.ibm.com>
+Subject: Re: [PATCH 1/2] evm: Fix build warnings
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Tue, 06 Jun 2023 09:47:42 -0400
+In-Reply-To: <20230606074113.2120632-1-roberto.sassu@huaweicloud.com>
+References: <20230606074113.2120632-1-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: oe9-NcpB1keSb98RVh2xj7N1oQDonZzy
+X-Proofpoint-ORIG-GUID: J4idjPa3Dgxso7issXgUto3v8Vw4eFkt
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-06_08,2023-06-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 bulkscore=0
+ lowpriorityscore=0 clxscore=1015 priorityscore=1501 mlxlogscore=932
+ spamscore=0 impostorscore=0 mlxscore=0 phishscore=0 suspectscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2306060115
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,85 +96,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 08:24:54AM +0200, Mirsad Goran Todorovac wrote:
-> On 5/31/23 20:11, Guillaume Nault wrote:
-> > I believe this condition should be relaxed to allow the case where
-> > ->sk_bound_dev_if is oif's master device (and maybe there are other
-> > VRF cases to also consider).
+On Tue, 2023-06-06 at 09:41 +0200, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
 > 
-> I've tried something like this, but something makes the kernel stuck
-> here:
+> Fix build warnings (function parameters description) for
+> evm_read_protected_xattrs(), evm_set_key() and evm_verifyxattr().
 > 
-> TEST: ping out, blocked by route - ns-B loopback IPv6                         [ OK ]
-> TEST: ping out, device bind, blocked by route - ns-B loopback IPv6            [ OK ]
-> TEST: ping in, blocked by route - ns-A loopback IPv6                          [ OK ]
-> TEST: ping out, unreachable route - ns-B loopback IPv6                        [ OK ]
-> TEST: ping out, device bind, unreachable route - ns-B loopback IPv6           [ OK ]
-> 
-> #################################################################
-> With VRF
-> 
-> [hanged process and kernel won't shutdown]
-> 
-> The code is:
-> 
-> ---
->  net/ipv6/ping.c | 12 +++++++++++-
->  1 file changed, 11 insertions(+), 1 deletion(-)
-> 
-> diff --git a/net/ipv6/ping.c b/net/ipv6/ping.c
-> index c4835dbdfcff..81293e902293 100644
-> --- a/net/ipv6/ping.c
-> +++ b/net/ipv6/ping.c
-> @@ -73,6 +73,9 @@ static int ping_v6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
->         struct rt6_info *rt;
->         struct pingfakehdr pfh;
->         struct ipcm6_cookie ipc6;
-> +       struct net *net = sock_net(sk);
-> +       struct net_device *dev = NULL;
-> +       struct net_device *mdev = NULL;
->         err = ping_common_sendmsg(AF_INET6, msg, len, &user_icmph,
->                                   sizeof(user_icmph));
-> @@ -111,10 +114,17 @@ static int ping_v6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
->         else if (!oif)
->                 oif = np->ucast_oif;
-> +       if (oif) {
-> +               dev = dev_get_by_index(net, oif);
-> +               mdev = netdev_master_upper_dev_get(dev);
-> +       }
-> +
->         addr_type = ipv6_addr_type(daddr);
->         if ((__ipv6_addr_needs_scope_id(addr_type) && !oif) ||
->             (addr_type & IPV6_ADDR_MAPPED) ||
-> -           (oif && sk->sk_bound_dev_if && oif != sk->sk_bound_dev_if))
-> +           (oif && sk->sk_bound_dev_if && oif != sk->sk_bound_dev_if &&
-> +                   !(mdev && sk->sk_bound_dev_if &&
-> +                             mdev != dev_get_by_index(net, sk->sk_bound_dev_if))))
->                 return -EINVAL;
->         ipcm6_init_sk(&ipc6, np);
-> 
-> I am obviously doing something very stupid.
+> Fixes: 7626676320f3 ("evm: provide a function to set the EVM key from the kernel")
+> Fixes: 8314b6732ae4 ("ima: Define new template fields xattrnames, xattrlengths and xattrvalues")
+> Fixes: 2960e6cb5f7c ("evm: additional parameter to pass integrity cache entry 'iint'")
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 
-The problem is that dev_get_by_index() holds a reference on 'dev' which
-your code never releases. Also netdev_master_upper_dev_get() needs rtnl
-protection. These should have generated some kernel oops.
+Thanks, Roberto.  This patch and 2/2 are now queued in next-integrity.
 
-You can try this instead:
-
--------- >8 --------
-
-diff --git a/net/ipv6/ping.c b/net/ipv6/ping.c
-index c4835dbdfcff..f804c11e2146 100644
---- a/net/ipv6/ping.c
-+++ b/net/ipv6/ping.c
-@@ -114,7 +114,8 @@ static int ping_v6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
- 	addr_type = ipv6_addr_type(daddr);
- 	if ((__ipv6_addr_needs_scope_id(addr_type) && !oif) ||
- 	    (addr_type & IPV6_ADDR_MAPPED) ||
--	    (oif && sk->sk_bound_dev_if && oif != sk->sk_bound_dev_if))
-+	    (oif && sk->sk_bound_dev_if && oif != sk->sk_bound_dev_if &&
-+	     l3mdev_master_ifindex_by_index(sock_net(sk), oif) != sk->sk_bound_dev_if))
- 		return -EINVAL;
- 
- 	ipcm6_init_sk(&ipc6, np);
+-- 
+Mimi
 
