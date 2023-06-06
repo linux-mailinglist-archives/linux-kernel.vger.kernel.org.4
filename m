@@ -2,123 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 804E17246E3
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:53:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFD0B7246E2
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:53:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238482AbjFFOxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 10:53:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57284 "EHLO
+        id S238415AbjFFOxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 10:53:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238457AbjFFOx1 (ORCPT
+        with ESMTP id S238486AbjFFOxQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 10:53:27 -0400
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8848A1990;
-        Tue,  6 Jun 2023 07:53:04 -0700 (PDT)
-X-GND-Sasl: maxime.chevallier@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1686063182;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1nWvmzDxkh9OccWxqcWuPVSP3S+KkgZMKouYOFSnOoQ=;
-        b=KFIa1Sv7Y5D32xjDjhpnj6Nlqa0AtFJiHuZf8TBvJaks65m+1dEDAA87gyJBSYEoVH6Oof
-        2xd2Wy64nbhjuFVFxSaeyWo0So5Bgza8Lcby8GKbLVBg0mnFlOkBJp0L8M0AKEpVpuDEgk
-        DNjY2yeR422Qi6LMQ+jTIYkYqw24UR+gzxk1xIyrgkb2m+MFctG7JytTp6sox8KuQp4VHM
-        XQSs67Zh6T513xz8mgp1vk0PisRHfSayVYiRx6m/KuJW9u+TPJTBqeIzkyBj45vPrKUe5U
-        BI+WAyHMOv5RJdHS+3am7TpkKKVKS6kesr/kkVpWMJIVXVaokQHu2n9qwzcn9w==
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-X-GND-Sasl: maxime.chevallier@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id EF9A440003;
-        Tue,  6 Jun 2023 14:52:58 +0000 (UTC)
-Date:   Tue, 6 Jun 2023 16:52:52 +0200
-From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alexis.lothore@bootlin.com,
-        thomas.petazzoni@bootlin.com, Andrew Lunn <andrew@lunn.ch>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Simon Horman <simon.horman@corigine.com>
-Subject: Re: [PATCH net-next v2 0/3] Followup fixes for the dwmac and altera
- lynx conversion
-Message-ID: <20230606165252.34a1593c@pc-7.home>
-In-Reply-To: <ZH9DlUqwm3YsNPu6@shell.armlinux.org.uk>
-References: <20230606142144.308675-1-maxime.chevallier@bootlin.com>
-        <ZH9DlUqwm3YsNPu6@shell.armlinux.org.uk>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
+        Tue, 6 Jun 2023 10:53:16 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0150310FD
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 07:52:59 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-51494659d49so9412118a12.3
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 07:52:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686063178; x=1688655178;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=u5ad6JXLk8Vr2MVJ4NS6+T1cVzx+vCj7pnVSCbPfkOQ=;
+        b=w+/EaiSGG1gFHNOiK9N2KDXlNnMC/7ygzTOAFYXzJoq6d6IuqJV01LInWdbFFzhsVd
+         aPS751MS7FLPmqE+QA/UjYyw8zRO8qECpMzpIj+HJQHYJqtP9LuUFRKZXySIeNMqrb97
+         OtcJW4B7h/WpsdWp/uYHiVlfSY9MnsNNojtByOoncanNksT06f1mKGDAU37eSpllzsay
+         LBj810VVvlxAJ6yppAN6fWyYTbpD/tt2zL0HRerGNPYiPsRrLBfiksdTk3yo+tGEUvuy
+         RtUZHnlIUXNq5zxnvwAt849PLAC1zdnij5T0Tgsr2QPdXyCE+tEN39Dtj8/aon6i8Rlg
+         kRuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686063178; x=1688655178;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=u5ad6JXLk8Vr2MVJ4NS6+T1cVzx+vCj7pnVSCbPfkOQ=;
+        b=N8WBRDKCqIjkBk/yO9nqns8BVU2zyn6Ygd84+yalRrQsFl8KnSq+D2V1VXhDhkwPyX
+         DDfgwI4qoFub9q7l4TwP8ISuwfl/jkKGtBQf/sRPQ/WZOY5ZnEgexB5RAndv+xYK41dG
+         Mt4l4NreMOF7nMNOvJul5f8NL+w5GFGz21TgqRUkfz7V2UPvhrLqStzv2dz6Obe2q1O1
+         VoTim7VhKPMt83N+ZilPkJCaIhbfwgOw6QPrkGSVQdEt5D26HUq4zkgJZh6DUfx/9b6q
+         KoikhU2K8rQ9oj3S6BwdzS1O6ImA/HMOxXQdaLWLfwTv7rWkQkH6iFWj6ac1gDBcP6Xm
+         md3A==
+X-Gm-Message-State: AC+VfDzjb9ANQCnGw5AmxevMbeS++2chjQYradm3W+kCoeyxcS2FDA2N
+        JLfrCDDVf9u4z0/RsY1J7/AJtA==
+X-Google-Smtp-Source: ACHHUZ6H9SD5QM7GvGVtTOd3pnoU68t2Wz9JRqAqNViSKuX/OUaFmQEOy6IamN5jjA+DEumYdeotwg==
+X-Received: by 2002:aa7:da43:0:b0:514:9d2f:10be with SMTP id w3-20020aa7da43000000b005149d2f10bemr2050200eds.18.1686063178502;
+        Tue, 06 Jun 2023 07:52:58 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id n2-20020aa7c682000000b00514b3a2008esm5136125edq.2.2023.06.06.07.52.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Jun 2023 07:52:57 -0700 (PDT)
+Message-ID: <10fa8759-a1c5-6592-e0be-98574fb635c3@linaro.org>
+Date:   Tue, 6 Jun 2023 16:52:55 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v2 3/3] drm/panel-fannal-c3003: Add fannal c3004 DSI panel
+Content-Language: en-US
+To:     Paulo Pavacic <pavacic.p@gmail.com>
+Cc:     neil.armstrong@linaro.org, sam@ravnborg.org, airlied@gmail.com,
+        daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20230605153539.497602-1-pavacic.p@gmail.com>
+ <20230605153539.497602-4-pavacic.p@gmail.com>
+ <4bb22e77-b3f0-be07-5e8a-442c3aa3fd48@linaro.org>
+ <CAO9szn05edU_HZHVnREMZcwm6TbBa4psABoqSqLWghFc=KbV7w@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAO9szn05edU_HZHVnREMZcwm6TbBa4psABoqSqLWghFc=KbV7w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Russell,
+On 06/06/2023 09:36, Paulo Pavacic wrote:
+>>> +
+>>> +     if (IS_ERR(panel_data->reset)) {
+>>> +             ret = PTR_ERR(panel_data->reset);
+>>> +             dev_err(dev,
+>>> +                     "error: probe: get reset GPIO: (%d) Check the fdt\n",
+>>> +                     ret);
+>>
+>> return dev_err_probe
+>>
+>>> +             return ret;
+>>> +     }
+>>> +
+>>> +     mipi_dsi_set_drvdata(dsi, panel_data);
+>>> +
+>>> +     dsi->format = MIPI_DSI_FMT_RGB888;
+>>> +     dsi->mode_flags = MIPI_DSI_CLOCK_NON_CONTINUOUS |
+>>> +                       MIPI_DSI_MODE_VSYNC_FLUSH | MIPI_DSI_MODE_VIDEO_HSE |
+>>> +                       MIPI_DSI_MODE_NO_EOT_PACKET |
+>>> +                       MIPI_DSI_MODE_VIDEO_SYNC_PULSE | MIPI_DSI_MODE_VIDEO;
+>>> +     dsi->lanes = 2;
+>>> +
+>>> +     gpiod_set_value_cansleep(panel_data->reset, 1);
+>>
+>> So you leave the panel in reset state?
+> yes
 
-On Tue, 6 Jun 2023 15:32:53 +0100
-"Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
+Then why do you initialize GPIO to bring it out of reset and them
+immediately put into reset back? Just keep it in reset.
 
-> On Tue, Jun 06, 2023 at 04:21:41PM +0200, Maxime Chevallier wrote:
-> > Following the TSE PCS removal and port of altera_tse and dwmac_socfpga,
-> > this series fixes some issues that slipped through the cracks.
-> > 
-> > Patch 1 fixes an unitialized struct in altera_tse
-> > 
-> > Patch 2 uses the correct Kconfig option for altera_tse
-> > 
-> > Patch 3 makes the Lynx PCS specific to dwmac_socfpga. This patch was
-> > originally written by Russell, my modifications just moves the
-> > #include<linux/pcs-lynx.h> around, to use it only in dwmac_socfpga.  
-> 
-> Hi Maxime,
-> 
-> I'm sorry, but I think you need an extra patch added to this series.
+Best regards,
+Krzysztof
 
-Gosh you're right... The same this also goes for altera_tse... 
-
-> Other than that, the series looks good. Thanks.
-
-I'll followup shortly then. Nice catch !
-
-Thanks,
-
-Maxime
