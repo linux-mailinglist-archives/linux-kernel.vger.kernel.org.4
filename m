@@ -2,111 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A4F77237C0
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 08:33:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 314937237C6
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 08:35:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233417AbjFFGdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 02:33:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42340 "EHLO
+        id S234066AbjFFGfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 02:35:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232402AbjFFGdl (ORCPT
+        with ESMTP id S234231AbjFFGeq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 02:33:41 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B8A9123;
-        Mon,  5 Jun 2023 23:33:36 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3565kBw0021598;
-        Tue, 6 Jun 2023 06:33:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=wGNR35vj0lPMC8yPcOx3emygX/jN2PAWABJ3cTjLVpo=;
- b=UVzTF3a2IdxFbtx67yd9Fd8UKRt9dqqF9WJ1lPFog6lZ/7pe+MV4TT5SIf2G5fwzgL5o
- MXor21wmZzTj7v68wBCdMqs0hji001dMxESeUegDli/u9JRGvDIYi8gEhrEeTJGdmSzB
- x2WuWlePQ4608qwkDvcGUqjbXzYcfjIC6YrFKmLk4LCs7V5VBxlEsLH6Pzb8uRyEASGq
- nXL3uVA3+oxJ6OM0TJP+jUJWMaGot32cfeFpMZs3mZNiLNlovfx5e+DWFcgfmagfd0j4
- s226Mttgnr+ByiBgePKjmM48WN9LI/cHOohQERRNl9GUgjbfdMU43bU53AUKt4HTLqQ2 1w== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r1xxr040m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 06 Jun 2023 06:33:11 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3566X99S020873
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 6 Jun 2023 06:33:09 GMT
-Received: from [10.214.66.58] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 5 Jun 2023
- 23:33:03 -0700
-Message-ID: <3cd1d957-007e-d5d2-a33d-6b826916c892@quicinc.com>
-Date:   Tue, 6 Jun 2023 12:03:00 +0530
+        Tue, 6 Jun 2023 02:34:46 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B87C123;
+        Mon,  5 Jun 2023 23:34:37 -0700 (PDT)
+X-QQ-mid: bizesmtp68t1686033262tl7dkkqk
+Received: from linux-lab-host.localdomain ( [61.141.77.49])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 06 Jun 2023 14:34:21 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: /+iK7ZpVlLSPinLeQ9zsx66cqhGI6AjnH+oBn23Uhpa6VHM/NSh9KAGG0KU+3
+        v7OGvDL7Trzyyqyu/XhqvEtxyVAXBYpoCrTvJk6T5vojDLz/svaeIkrwZmF05+KI0gKLUvu
+        6XO0bkPxU0Yq30vmK/im5xjAfi8/vY+IdwTfn0aENDR4YPUbGTMu9ORdR6GUiszt3O1lZOI
+        /YmZt7j8wUUDVHRjo+1DOHEf616JrEZwr7RcBZGSkLYcNjFpMu3L7G30luAcrcIRoJTmF07
+        sbceNMhBIzm2RKjBeQ5wm9lkJZB2m5/LE4D3gucfe74XO88h9RmR4uskA4uyHD8TVF7k7Ra
+        T/meyYMAs3/q2vIb4Xo6TF1f1oNpcirsRRTSjhEJclBGRTEXyI=
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 2133803625882830366
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu, arnd@arndb.de
+Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        thomas@t-8ch.de
+Subject: Re: [PATCH v3 0/3] nolibc: add part2 of support for rv32
+Date:   Tue,  6 Jun 2023 14:34:21 +0800
+Message-Id: <20230606063421.355411-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <ZH65QKQ1dlY+HsK7@1wt.eu>
+References: <ZH65QKQ1dlY+HsK7@1wt.eu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH v2 08/10] arm64: dts: qcom: Add QUPv3 UART console node
- for SDX75
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <rafael@kernel.org>, <viresh.kumar@linaro.org>,
-        <tglx@linutronix.de>, <maz@kernel.org>, <will@kernel.org>,
-        <robin.murphy@arm.com>, <joro@8bytes.org>, <mani@kernel.org>,
-        <robimarko@gmail.com>
-CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <iommu@lists.linux.dev>
-References: <1685982557-28326-1-git-send-email-quic_rohiagar@quicinc.com>
- <1685982557-28326-9-git-send-email-quic_rohiagar@quicinc.com>
- <7a6544b0-5c8d-8b61-71e8-32f59e93c2d4@linaro.org>
-From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
-In-Reply-To: <7a6544b0-5c8d-8b61-71e8-32f59e93c2d4@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: omBu5-ParGuCgWQyZRV6y31HxOW8NBcS
-X-Proofpoint-ORIG-GUID: omBu5-ParGuCgWQyZRV6y31HxOW8NBcS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-06_03,2023-06-05_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 suspectscore=0 phishscore=0 impostorscore=0
- mlxlogscore=791 spamscore=0 mlxscore=0 adultscore=0 priorityscore=1501
- bulkscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2306060055
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Willy, Thomas, Arnd
 
-On 6/6/2023 11:36 AM, Krzysztof Kozlowski wrote:
-> On 05/06/2023 18:29, Rohit Agarwal wrote:
->> Add the debug uart console node in devicetree.
->>
->> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
->> ---
->>   arch/arm64/boot/dts/qcom/sdx75.dtsi | 49 +++++++++++++++++++++++++++++++++++++
->>   1 file changed, 49 insertions(+)
-> GCC and UART are parts of basic DTSI and do not make sense on their own.
-> Otherwise, what exactly boots on your "basic DTSI" commit if you do not
-> have any clocks and serial console?
-Ok Will club all the additional patches into the same base dtsi patch.
+> Hi Zhangjin,
+> 
+> On Tue, Jun 06, 2023 at 12:25:35PM +0800, Zhangjin Wu wrote:
+> > The first two convert all compile failures to a return of -ENOSYS, if you do
+> > like it, welcome your Reviewed-by. These two are required by the coming new
+> > time64 syscalls for rv32, because they depends on how we cope with the
+> > unsupported syscalls, returning -ENOSYS is really better than simply fail the
+> > compiling.
+> 
+> I had a look now and I can sya that I like this. Initially the supported
+> syscalls were so restricted that it was not even imaginable to accept to
+> build without any of them, but now that we're completing the list, some
+> of them are less critical and I don't see why we'd fail to build just
+> because one is missing. So yeah, a big +1 for -ENOSYS.
+>
 
-Thanks,
-Rohit.
->
-> Best regards,
-> Krzysztof
->
+Cool, I will prepare the new patchsets on them, welcome your new branch
+with both of them, of course, still weclome Reviewed-by from Arnd and Thomas.
+
+> > The third one is not that urgent, because some important syscalls are
+> > still missing for rv32. It is added here only for compile test.
+> 
+> I personally have no opinion on this one. I can't judge whether it will
+> make things easier or more complicated at this point. It seems to me
+> that for now it's just avoiding one extra line at the expense of some
+> $(if) on several lines. Maybe it could help add more such archs, or
+> maybe it can make them more complicated to debug, I don't know. I'm
+> interested in others' opinions as well.
+
+As I explained why we did it in current way in this reply [1], Thomas had no
+more questions on it, so I think Thomas was happy with it now and I got his
+only left suggestion is that may be this patch should be applied after the
+missing 64bit syscalls being added for there are several important test
+failures currently, for me, it is ok before or after.
+
+Thomas, welcome your Reviewed-by on the makefile patch itself If you are really
+happy with it now, thanks very much ;-)
+
+Willy, I will send the v2 syscalls helpers (also required by the coming 64bit
+syscalls) and some other patches (mainly for test with faster kernel build)
+about selftests/nolibc later, because we have not enough time for v6.5 test,
+so, I suggest we can create new branch for v6.6 and my new patchsets will be
+for v6.6.
+
+Best regards,
+Zhangjin
+
+---
+
+[1]: https://lore.kernel.org/linux-riscv/20230526092029.149351-1-falcon@tinylab.org/
+
+> 
+> Thanks,
+> Willy
