@@ -2,107 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D501724A6E
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 19:40:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B2A7724A70
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 19:40:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238433AbjFFRkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 13:40:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44792 "EHLO
+        id S238601AbjFFRkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 13:40:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238712AbjFFRjz (ORCPT
+        with ESMTP id S238525AbjFFRke (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 13:39:55 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 471F210F8
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 10:39:53 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-6537d2a8c20so3015572b3a.2
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 10:39:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686073192; x=1688665192;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=FC01jxOBSLY7ZKXPg/UOaGu8vDRxRyeIgOBpQX22Jyc=;
-        b=CAbk5mQi2P1KsDiLqmuh5rlEyijisBivA760hzTefSWQWlpw7TJLIzVvN5RklboRtr
-         14WgBjG8JrA44rskY7oEjPRK+eM720JDUaRgRt/RHP1BfaikiT8inDBh8px4ddQV7PHV
-         1FTrHIHe8fZ6jEvpRMymIi0PuyUvITmn4VgPfRYcYhqcn8H9/cDqPBOqAUuC7nZmtDXv
-         7IV48/6OP5xb9YYNkDdmfpTuHeEnAIPtcHxLWkSHAoDuAweACUKWYIfA8MdYTysegZR9
-         DiIzTKvdjwbzK9qpMp1ZUm1MwVspB91+FcsCnX3iYNDvOy17uBwn9Xu4H2NS+KVWsbqg
-         oTgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686073192; x=1688665192;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FC01jxOBSLY7ZKXPg/UOaGu8vDRxRyeIgOBpQX22Jyc=;
-        b=l30zxAZuPogR7hULSlRMZHS/p55j24cJTITMV7g6lGfd1RVP2ic/LmrgbznuhiaKhW
-         4wCvmKinP6GJYWSmo0S35qEhhMVgnTAVRSobdTALvs3B3FrJYpuxnJftvj7QR/Br3l1R
-         24FRUKmVn+UVkH9NrALmcy975Wrjq119SH00LL78vdYFGQ/OAav+43ZlxzLyqRaQk6jZ
-         qg0Kbv3O8eYcir5Bj+XcUUpIoDtwuDS7HCEtrFbDXWJgeOgg7W2IB8lAnaTH5mg0qVfe
-         F1YJRNJTJG+1WF0Ib9aayfPVBFskT60gkjJaAEpbpddaibJL9C2OOqfZYnE10R1H/hDU
-         zwqA==
-X-Gm-Message-State: AC+VfDzBYAIczCyiO7hDWM/hvclu/QM3pzKUNnRi5pRRfZaxlQ1UTrkq
-        nM9gjL/PapmSnoNadC+RjPucp8T0IH0=
-X-Google-Smtp-Source: ACHHUZ67KIg/Mm9NMPhjTlayFjlenoLJPI4NEBi4xLY/i14s1DBOxzAioMCWtn7d/RPKGoOH81NjfQ==
-X-Received: by 2002:a05:6a20:3d93:b0:10c:34af:a469 with SMTP id s19-20020a056a203d9300b0010c34afa469mr425310pzi.16.1686073192178;
-        Tue, 06 Jun 2023 10:39:52 -0700 (PDT)
-Received: from daehojeong-desktop.mtv.corp.google.com ([2620:15c:211:201:72aa:6329:65da:3ad3])
-        by smtp.gmail.com with ESMTPSA id l6-20020a170902d34600b001ae7fad1598sm8818368plk.29.2023.06.06.10.39.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 10:39:51 -0700 (PDT)
-From:   Daeho Jeong <daeho43@gmail.com>
-To:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, kernel-team@android.com
-Cc:     Daeho Jeong <daehojeong@google.com>
-Subject: [PATCH] f2fs-tools: fix wrong write pointer check for non-zoned areas
-Date:   Tue,  6 Jun 2023 10:39:48 -0700
-Message-ID: <20230606173948.3390215-1-daeho43@gmail.com>
-X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
+        Tue, 6 Jun 2023 13:40:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D60E210FB;
+        Tue,  6 Jun 2023 10:40:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6AA7E6358E;
+        Tue,  6 Jun 2023 17:40:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B479C433D2;
+        Tue,  6 Jun 2023 17:40:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1686073232;
+        bh=WYxf/3Q3ln0EtcKEcOkqpMWLUxAkgN2J4JRyFAg4gyU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Z2OGSHabkH8afvGv/EumlxXeAVNv+x5MZ4PVmZaqjZDL/ijODNqxg5uBc2nEqjbr1
+         i6uwthT90fO7vOPsB+7kyT+Q+adJGxu+1LWS+r/zIRhvF+tsoI45+60eZoPzVT8iYR
+         parKj/ck55/+vPfMQUK8XmQzyQzKUH4uxoWfqwHk=
+Date:   Tue, 6 Jun 2023 19:40:30 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jeremi Piotrowski <jpiotrowski@linux.microsoft.com>
+Cc:     linux-kernel@vger.kernel.org, dpark@linux.microsoft.com,
+        t-lo@linux.microsoft.com, stable@vger.kernel.org
+Subject: Re: soft lockup on Ampere Altra on v6.1.30
+Message-ID: <2023060606-shininess-rosy-7533@gregkh>
+References: <20230606144752.GA31904@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230606144752.GA31904@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daeho Jeong <daehojeong@google.com>
+On Tue, Jun 06, 2023 at 07:47:52AM -0700, Jeremi Piotrowski wrote:
+> We're currently trying to update the kernel in our distro (Flatcar) from
+> v5.15.x to v6.1.x. When testing on Equinix Metal Ampere instances
+> (c3.large.arm64) we now get a soft lockup about a minute after boot.
+> 
+> Has anyone else seen this? The splat looks like this, full dmesg is at [1]
+> (trying without the attachement this time as LKML detects my mail as spam :/)
 
-Do not check F2FS_ZONED_HM for the whole device. We need to do this for
-each area of devices.
+You might have better luck asking on the ARM lists, the stable@ list is
+for patches to add or other fixes, not generic failures like this one.
 
-Signed-off-by: Daeho Jeong <daehojeong@google.com>
----
- fsck/mount.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Also, why not take a working 6.1.x kernel for this platform (which I
+know they are out there) and comparing it to yours?
 
-diff --git a/fsck/mount.c b/fsck/mount.c
-index 851a62b..0ebbfcf 100644
---- a/fsck/mount.c
-+++ b/fsck/mount.c
-@@ -2868,9 +2868,6 @@ static bool write_pointer_at_zone_start(struct f2fs_sb_info *sbi,
- 	int log_sectors_per_block = sbi->log_blocksize - SECTOR_SHIFT;
- 	int ret, j;
- 
--	if (c.zoned_model != F2FS_ZONED_HM)
--		return true;
--
- 	for (j = 0; j < MAX_DEVICES; j++) {
- 		if (!c.devices[j].path)
- 			break;
-@@ -2882,6 +2879,9 @@ static bool write_pointer_at_zone_start(struct f2fs_sb_info *sbi,
- 	if (j >= MAX_DEVICES)
- 		return false;
- 
-+	if (c.devices[j].zoned_model != F2FS_ZONED_HM)
-+		return true;
-+
- 	sector = (block - c.devices[j].start_blkaddr) << log_sectors_per_block;
- 	ret = f2fs_report_zone(j, sector, &blkz);
- 	if (ret)
--- 
-2.41.0.rc0.172.g3f132b7071-goog
+Good luck!
 
+greg k-h
