@@ -2,68 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6C8B724999
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 18:57:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E328472499B
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 18:57:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238465AbjFFQ5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 12:57:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46550 "EHLO
+        id S238194AbjFFQ5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 12:57:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238376AbjFFQ5B (ORCPT
+        with ESMTP id S237469AbjFFQ5e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 12:57:01 -0400
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6627C1719
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 09:56:50 -0700 (PDT)
-Received: by mail-qv1-xf32.google.com with SMTP id 6a1803df08f44-6261d4ea5f0so45179166d6.0
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 09:56:50 -0700 (PDT)
+        Tue, 6 Jun 2023 12:57:34 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0988610F7;
+        Tue,  6 Jun 2023 09:57:28 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-51491b87565so9707525a12.1;
+        Tue, 06 Jun 2023 09:57:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686070609; x=1688662609;
+        d=gmail.com; s=20221208; t=1686070646; x=1688662646;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OVZDR6gfdCmd9+4Bn/JqJd8OBwkKX9TkLiOz9hszTFY=;
-        b=OFDuQPlOQxWlFMhQ3A1HCQXuj3de5XoNnyweZsvgahZemKh6kMWhGcw6iYrxEtpPtT
-         WuLidGqIcr3MX0F4aP5Dx0hWwG5fAgfOTfekoCNIFj1YqLVTVEB0q1docoY/pl5t8RSs
-         BUFViy9oj6HfzvRh0HTIgmkiBOlCpcmnaAVDpygF+hcZrNUGEpSx7R9k0nMYDD9CTrph
-         IcopmGJTLZh7dvPfl8q5yuUBFiJzACW2lHjEUH3FD5gDudb+4WCsyjdYT3JKT4dy7aVM
-         eVOn+ckpEI+lnXaNZFbqAe/sOcxYM2CEACAviggRtwu7RMf5zCFwQIWA5+VVQVlaMADP
-         pJLg==
+        bh=azHlI+5GippCBf+WKiWbax8dCCkxyDQeSHE9lPulApk=;
+        b=cAdIexgYX7eMxZwDXRGZe6tFBNMeVXsn0iXgO7qEVBR31xLVNNXiUzs+rU1ujxr8+l
+         xc2Siv7O0EeBu6KrkLJKiO75GANZYLZ0rdsS9Hsq2CSTR7TT6A9skn20Q/E1uz6smdur
+         g8oZYkLJKo+2f4lFyEW4vkdj49eWdnMwCHaw93vVTXKLVwtJ9aeF/NmBdaIoPhPheFWG
+         +1cj1hCTogVby16q+SKIJrWJiLwZBOJ0G6So/rsCSj0Ua8D4r806OgKG83NUqfq2hS8F
+         u0uMiEAjb533nPaOswu5r7Bn5Fu7GaKAgXiNezXmlwz9OJpYKzORIGvMH6rXFT6kYJv9
+         S8tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686070609; x=1688662609;
+        d=1e100.net; s=20221208; t=1686070646; x=1688662646;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=OVZDR6gfdCmd9+4Bn/JqJd8OBwkKX9TkLiOz9hszTFY=;
-        b=lDrArSYqHrHhrMBjdohcyjkXeR+/9N8mHiz6HbOZeXGx8TqhdJxpTCCxlZ7LLpAr5H
-         8yatdlyEgim0XO1/S+p0MJCWVLw8W6Btkc7A7gABjCfOZ3sCyGkVlmhbdYMIrXiv9tEI
-         MpvqkirmMzhvagw3mUx1Ydw9+XdMqTheqJFoSCEbXHRaca4ruSTmE/G5iR8wmmu9CF6I
-         PmZgcQSFcTzzA1O8ZIEHS6G+Cn4n+47EUiKNi8FJFbi7ZHrbs6Jlxg56pMAHAk0uhrWn
-         MFuqu/xDwtX+GUZPUAR4QsraE8AuVAC7fvjQ5c1u61eT9KqMjvpsYxnFRQHNhpLlNsr1
-         nRmA==
-X-Gm-Message-State: AC+VfDzjLRaWErCIEg7BF2GOYWgo4r8QtTt2ejDXtUgAi6JEA6KrS9LM
-        PB6DEcKJ5awbi67xkbfUuKjkMFyCrEiG0vvd6dIEPnVza265FMKGaRk=
-X-Google-Smtp-Source: ACHHUZ5d7mXf5uBLlKESniRxg4nBcTSg4GLECRbAPybDHAF72hwBmaQxg5JcYnit0FtEaoAjZiQ6wmPrlC384cinj4s=
-X-Received: by 2002:a05:6214:528d:b0:623:8bb3:ad5c with SMTP id
- kj13-20020a056214528d00b006238bb3ad5cmr258734qvb.1.1686070609210; Tue, 06 Jun
- 2023 09:56:49 -0700 (PDT)
+        bh=azHlI+5GippCBf+WKiWbax8dCCkxyDQeSHE9lPulApk=;
+        b=XLOiHfsm4YJt8d30oFv6lEy3GOjMu7KLr3KnSU2lUJ6nuQ/63vmIf/P0tXeUajxg1d
+         XUHkYvK4fpYZGgWThRu+VvgOuMWrvT9xGSr4sls+kW3nyi16oCeq6v+SzwSWyNv+/h26
+         OKdYuhXdNnNlDA94UQKSuT1T2q22Z23om2ZkllJPHP4GVIGj8J/X1FcovWYUe6KSdgF0
+         DOShNVeRQHzN5iZ7PkzQPO/XqRVo4ROLga43fuFcsov1KdtE3DIa0T/Os55vr3n5kesF
+         AwEGVFxX0TOYc8izkSDa/lQCs91uI1ldhVuyqTtP46xhfZFKTExtlHxZ5edw4XJrcdZy
+         NNXg==
+X-Gm-Message-State: AC+VfDwCnyw1vQ0vL5y8bAYth0qGtueV0L12ykhJTgGystErR0AIBG/s
+        pOJ5Nmlv6GUGVQBvzdr0Ao9mYTO2XcBOSDC+N+A=
+X-Google-Smtp-Source: ACHHUZ64KAAOfaapxB1O5y4diCyCaL/i6oJvY6ppizyMVQcI2dZbltNucxts1w4q7XRdRBeu3lz6OS6aANGrLihG8Lo=
+X-Received: by 2002:a05:6402:1647:b0:510:b636:4073 with SMTP id
+ s7-20020a056402164700b00510b6364073mr2293592edx.3.1686070646336; Tue, 06 Jun
+ 2023 09:57:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230606094159.1910369-1-masahiroy@kernel.org>
-In-Reply-To: <20230606094159.1910369-1-masahiroy@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 6 Jun 2023 09:56:38 -0700
-Message-ID: <CAKwvOdkfQiu-Y29xiOMERxnSy9aqN851AoogGYrnqdc4dcaHOA@mail.gmail.com>
-Subject: Re: [PATCH] modpost: propagate W=1 build option to modpost
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>
+References: <20230508163751.841-1-beaub@linux.microsoft.com>
+ <CAADnVQLYL-ZaP_2vViaktw0G4UKkmpOK2q4ZXBa+f=M7cC25Rg@mail.gmail.com>
+ <20230509130111.62d587f1@rorschach.local.home> <20230509163050.127d5123@rorschach.local.home>
+ <20230515165707.hv65ekwp2djkjj5i@MacBook-Pro-8.local> <20230515192407.GA85@W11-BEAU-MD.localdomain>
+ <20230517003628.aqqlvmzffj7fzzoj@MacBook-Pro-8.local> <20230606225741.a9d8003a22451db96545b5a8@kernel.org>
+In-Reply-To: <20230606225741.a9d8003a22451db96545b5a8@kernel.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 6 Jun 2023 09:57:14 -0700
+Message-ID: <CAEf4BzbhvBTQ2c1ENk2pVXdQ=SrXwTFXVjpopTANZsdn1EEeMA@mail.gmail.com>
+Subject: Re: [PATCH] tracing/user_events: Run BPF program if attached
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Beau Belgrave <beaub@linux.microsoft.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-trace-kernel@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        David Vernet <void@manifault.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        dthaler@microsoft.com, brauner@kernel.org, hch@infradead.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,85 +82,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 6, 2023 at 2:42=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.or=
+On Tue, Jun 6, 2023 at 6:57=E2=80=AFAM Masami Hiramatsu <mhiramat@kernel.or=
 g> wrote:
 >
-> "No build warning" is a strong requirement these days, so you must fix
-> all issues before enabling a new warning flag.
+> Hi,
 >
-> We often add a new warning to W=3D1 first so that the kbuild test robot
-> blocks new breakages.
+> On Tue, 16 May 2023 17:36:28 -0700
+> Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
 >
-> This commit allows modpost to show extra warnings only when W=3D1
-> (or KBUILD_EXTRA_WARN=3D1) is given.
+> > BPF progs have three ways to access kernel tracepoints:
+> > 1. traditional tracepoint
 >
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> This is the trace_events, which is used by ftrace, right?
+>
+> > 2. raw tracepoint
+> > 3. raw tracepoint with BTF
+> >
+> > 1 was added first and now rarely used (only by old tools), since it's s=
+low.
+> > 2 was added later to address performance concerns.
+> > 3 was added after BTF was introduced to provide accurate types.
+> >
+> > 3 is the only one that bpf community recommends and is the one that is =
+used most often.
+> >
+> > As far as I know trace_events were never connected to bpf.
+> > Unless somebody sneaked the code in without us seeing it.
+>
+> With this design, I understand that you may not want to connect BPF
+> directly to user_events. It needs a different model.
+>
+> >
+> > I think you're trying to model user_events+bpf as 1.
+> > Which means that you'll be repeating the same mistakes.
+>
+> The user_events is completely different from the traceppoint and
+> must have no BTF with it.
+> Also, all information must be sent in the user-written data packet.
+> (No data structure, event if there is a structure, it must be fully
+> contained in the packet.)
+>
+> For the tracepoint, there is a function call with some values or
+> pointers of data structure. So it is meaningful to skip using the
+> traceevent (which converts all pointers to actual field values of
+> the data structure and store it to ftrace buffer) because most of
+> the values can be ignored in the BPF prog.
+>
+> However, for the user_events, the data is just passed from the
+> user as a data packet, and BPF prog can access to the data packet
+> (to avoid accessing malicious data, data validator can not be
+> skipped). So this seems like 1. but actually you can access to
+> the validated data on perf buffer. Maybe we can allow BPF to
+> hook the write syscall and access user-space data, but it may
+> not safe. I think this is the safest way to do that.
 
-Patch seems fine, but without anyone reading extra_warn, I'm curious
-what new extra warnings you had in mind were?
+I'm trying to understand why we need a new kernel concept for all
+this. It looks like we are just creating a poor man's
+publisher/subscriber solution in the kernel, but mostly intend to use
+it from user-space? Why not just use Unix domain sockets for this,
+though? Use SOCK_SEQPACKET, put "event data" into a single packet
+that's guaranteed to not be broken up. Expose this to other processes
+through named pipes, if necessary.
 
-> ---
+Sorry if it's naive questions, but it's not clear what problem
+user_events are solving and why we need a new thing and can't use
+existing kernel primitives?
+
+
 >
->  scripts/Makefile.modpost | 1 +
->  scripts/mod/modpost.c    | 7 ++++++-
->  2 files changed, 7 insertions(+), 1 deletion(-)
+> Thank you,
 >
-> diff --git a/scripts/Makefile.modpost b/scripts/Makefile.modpost
-> index 0980c58d8afc..074e27c0c140 100644
-> --- a/scripts/Makefile.modpost
-> +++ b/scripts/Makefile.modpost
-> @@ -47,6 +47,7 @@ modpost-args =3D                                       =
-                                         \
->         $(if $(KBUILD_MODPOST_WARN),-w)                                  =
-               \
->         $(if $(KBUILD_NSDEPS),-d $(MODULES_NSDEPS))                      =
-               \
->         $(if $(CONFIG_MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS)$(KBUILD_NSD=
-EPS),-N)       \
-> +       $(if $(findstring 1, $(KBUILD_EXTRA_WARN)),-W)                   =
-               \
->         -o $@
->
->  modpost-deps :=3D $(MODPOST)
-> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> index d10f5bdcb753..3ea5eb2b1029 100644
-> --- a/scripts/mod/modpost.c
-> +++ b/scripts/mod/modpost.c
-> @@ -42,6 +42,8 @@ static bool allow_missing_ns_imports;
->
->  static bool error_occurred;
->
-> +static bool extra_warn;
-> +
->  /*
->   * Cut off the warnings when there are too many. This typically occurs w=
-hen
->   * vmlinux is missing. ('make modules' without building vmlinux.)
-> @@ -2199,7 +2201,7 @@ int main(int argc, char **argv)
->         LIST_HEAD(dump_lists);
->         struct dump_list *dl, *dl2;
->
-> -       while ((opt =3D getopt(argc, argv, "ei:mnT:o:awENd:")) !=3D -1) {
-> +       while ((opt =3D getopt(argc, argv, "ei:mnT:o:aWwENd:")) !=3D -1) =
-{
->                 switch (opt) {
->                 case 'e':
->                         external_module =3D true;
-> @@ -2224,6 +2226,9 @@ int main(int argc, char **argv)
->                 case 'T':
->                         files_source =3D optarg;
->                         break;
-> +               case 'W':
-> +                       extra_warn =3D true;
-> +                       break;
->                 case 'w':
->                         warn_unresolved =3D true;
->                         break;
 > --
-> 2.39.2
->
-
-
---=20
-Thanks,
-~Nick Desaulniers
+> Masami Hiramatsu (Google) <mhiramat@kernel.org>
