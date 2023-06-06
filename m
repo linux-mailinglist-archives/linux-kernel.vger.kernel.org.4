@@ -2,118 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC31A723FBC
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 12:36:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77102723FC4
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 12:38:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235297AbjFFKgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 06:36:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57010 "EHLO
+        id S235632AbjFFKiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 06:38:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237230AbjFFKgL (ORCPT
+        with ESMTP id S236775AbjFFKhO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 06:36:11 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14EB4E67;
-        Tue,  6 Jun 2023 03:35:53 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Qb6Jw5wDQz67j66;
-        Tue,  6 Jun 2023 18:33:52 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Tue, 6 Jun
- 2023 11:35:50 +0100
-Date:   Tue, 6 Jun 2023 11:35:50 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     "Paller, Kim Seer" <KimSeer.Paller@analog.com>
-CC:     Jonathan Cameron <jic23@kernel.org>,
-        "lars@metafoo.de" <lars@metafoo.de>,
-        "krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 2/2] iio: adc: max14001: New driver
-Message-ID: <20230606113550.00003634@Huawei.com>
-In-Reply-To: <f62be66979db433eac86f32cc8587892@analog.com>
-References: <20230605130755.92642-1-kimseer.paller@analog.com>
-        <20230605130755.92642-3-kimseer.paller@analog.com>
-        <20230605202413.5eb0c0f3@jic23-huawei>
-        <f62be66979db433eac86f32cc8587892@analog.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Tue, 6 Jun 2023 06:37:14 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E761710F0
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 03:36:26 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-51480d3e161so8598706a12.3
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 03:36:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=szeredi.hu; s=google; t=1686047785; x=1688639785;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=qd8uKMFm81vYRFqw2LDxc+4LQWMvwJ/7wVX2rL8bDEE=;
+        b=FLE32HTMQXTPXIMgRym716RCPA5ZfaA426svAlixR6NT+JFwFi3wq9dhD5MTfGgcdS
+         ydtKJDvXeYGZsCfd+Tpk4F1Ps9V0Sum8jeyo/vtelPtEMQ7X+FOslAzStxiS/F1qBha6
+         7lhn3d9cM9dPtUfsVDGrEjsK1NUJDrPtoRc7k=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686047785; x=1688639785;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qd8uKMFm81vYRFqw2LDxc+4LQWMvwJ/7wVX2rL8bDEE=;
+        b=ZgAayKYePBpQyHhd+JwywVpCnnI2mtDla09G6gp6MeKuH6sxjdrtwzZJzCOHHs2HSw
+         Pn0mKkTJPRGX5J8RaIrZbKEzEGDGU7Fg3XgjYk4pdFCdaeyIQukulrlQ9E6aECLD79F3
+         BqwtaGjNtpcN/jrBU42aKzrbZ5vtlNuk3SQHZUJnpPYfiX42FX8GC4kipBHXJ7j8vKew
+         l+Rf1O7zwLJmuG2zlojHMGpIkbCRRo08EVSEpGelLZbrwz+4xjNeKJfcZKsugyoHD7Ic
+         yjuijitPi5rAF4nYc6liZgYveOa2QBuHneY630wCYPyDyIqOXVYhQ+3WByli5YN8kgqU
+         uFmQ==
+X-Gm-Message-State: AC+VfDx4mnGKHz8Q+nq2sDo+TGSh2vp5RLoWOZN6WH8APJ2Mh2cpUVYO
+        7LZc7rcxxS2Yhy1ZyIeIjBq2EXImClHxApuaIidzqA==
+X-Google-Smtp-Source: ACHHUZ4DMm4EvB7MjP9b43pG7ppWOQ0n/9PE9z9PAfZkfaEzPc7VW24qLvfbEvgkodbFEfEf9pxMeDTJbxgOCc0lIso=
+X-Received: by 2002:a17:907:2d13:b0:974:1e0e:9bd2 with SMTP id
+ gs19-20020a1709072d1300b009741e0e9bd2mr2417597ejc.14.1686047785487; Tue, 06
+ Jun 2023 03:36:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml100004.china.huawei.com (7.191.162.219) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <amir73il@gmail.com> <20230506150911.1983249-1-gwj1235@yeah.net>
+In-Reply-To: <20230506150911.1983249-1-gwj1235@yeah.net>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Tue, 6 Jun 2023 12:36:14 +0200
+Message-ID: <CAJfpegs8HOreFpdVoBq9J5TLxOOPTXQ8BGa17Zg=JvejZdbzng@mail.gmail.com>
+Subject: Re: [PATCH v2] overlayfs: clean error handling
+To:     wenjun93 <gwj0511@gmail.com>
+Cc:     linux-unionfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        wenjun93 <gwj1235@yeah.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, 6 May 2023 at 17:09, wenjun93 <gwj0511@gmail.com> wrote:
+>
+> Remove PTR_ERR from unused code path and
+> assign error value where it exactly happens.
+> This cleans the code and also helps to reduce
+> the possibility of incorrect err settings
+> when it's set globally and is forgotten to be
+> overwrite in custom development.
+>
+> Signed-off-by: wenjun93 <gwj1235@yeah.net>
 
+Nack.
 
-> >   
-> > > +	struct mutex		lock;
-> > > +	struct regmap		*regmap;
-> > > +	int			vref_mv;
-> > > +	/*
-> > > +	 * DMA (thus cache coherency maintenance) requires the
-> > > +	 * transfer buffers to live in their own cache lines.  
-> > 
-> > You are looking at an old kernel I guess - we fixed all of these - and
-> > introduced IIO_DMA_MINALIGN for __aligned(IIO_DMA_MINALIGN) to
-> > make it easier to fix any such problems in future.
-> > 
-> > Upshot is that ___cacheline_aligned aligns to the l1 cacheline length.
-> > Some fun systems (such as the big servers I use in my dayjob) have higher
-> > cacheline sizes for their larger / further from CPU caches.
-> > One group of SoCs out there is known to both do non coherent DMA and
-> > have a larger line size for the bit relevant to that than ___cacheline_aligned
-> > gives you. So on that rare platform this is currently broken.  
-> 
-> It's good to know. Given this information, is there anything specific that I 
-> need to change in the code or implementation related to 
-> the ___cacheline_aligned part?
+This is a regularly used pattern across the kernel to unclutter error handling.
 
-Replace it with __aligned(IIO_DMA_MINALIGN) as has hopefully now been done
-in all upstream drivers.
+If you find a concrete bug, please submit a fix for that.
 
-> >   
-
-> > > +}
-> > > +
-> > > +static int max14001_reg_update(struct max14001_state *st,
-> > > +				unsigned int reg_addr,
-> > > +				unsigned int mask,
-> > > +				unsigned int val)
-> > > +{
-> > > +	int ret;
-> > > +
-> > > +	/* Enable SPI Registers Write */
-> > > +	ret = max14001_write(st, MAX14001_WEN,  
-> > MAX14001_WRITE_WEN);
-> > 
-> > Mixing regmap and non regmap rather defeats the point of having a standard
-> > interface.  Use regmap_read and regmap_write throughout or not at all.  
-> 
-> I found it difficult to implement the regmap interface due to the timing diagram 
-> requirements. The chip select needs to be changed between transfers, which, 
-> as far as I know, does not work with regmap. Perhaps, I will consider sticking 
-> to the non-regmap approach.
-
-That may be sensible if there are odd requirements or just call regmap_write()
-which will call your max14001_write() anyway and opencode the timing
-requirements etc by multiple remap calls.  Obviously benefits of regmap reduced
-though so may not be worth bothering unless it is worth using the caching or similar.
-
-Jonathan
-
-
-
+Thanks,
+Miklos
