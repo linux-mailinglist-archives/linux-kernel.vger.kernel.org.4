@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 149BB7243BC
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 15:08:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 083487243BB
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 15:08:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238029AbjFFNIF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 09:08:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36690 "EHLO
+        id S238018AbjFFNIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 09:08:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237896AbjFFNIA (ORCPT
+        with ESMTP id S238007AbjFFNIA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 6 Jun 2023 09:08:00 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D075C170A;
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 52C3710EC;
         Tue,  6 Jun 2023 06:07:28 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Qb9f76BC7zLpwx;
-        Tue,  6 Jun 2023 21:03:59 +0800 (CST)
-Received: from huawei.com (10.175.104.170) by canpemm500002.china.huawei.com
- (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Tue, 6 Jun
- 2023 21:07:01 +0800
-From:   Miaohe Lin <linmiaohe@huawei.com>
-To:     <tj@kernel.org>, <lizefan.x@bytedance.com>, <hannes@cmpxchg.org>
-CC:     <cgroups@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linmiaohe@huawei.com>
-Subject: [PATCH] cgroup-v1: tweak the output format of cgroupstats
-Date:   Tue, 6 Jun 2023 21:06:49 +0800
-Message-ID: <20230606130649.485821-1-linmiaohe@huawei.com>
-X-Mailer: git-send-email 2.23.0
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7D50BC14;
+        Tue,  6 Jun 2023 06:07:52 -0700 (PDT)
+Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 331323F793;
+        Tue,  6 Jun 2023 06:07:05 -0700 (PDT)
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org,
+        Cristian Marussi <cristian.marussi@arm.com>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>, james.quinlan@broadcom.com,
+        Jonathan.Cameron@Huawei.com, f.fainelli@gmail.com,
+        vincent.guittot@linaro.org, tarek.el-sherbiny@arm.com,
+        nicola.mazzucato@arm.com, souvik.chakravarty@arm.com,
+        wleavitt@marvell.com, wbartczak@marvell.com
+Subject: Re: [PATCH v3 0/3] Add SCMI v3.2 Powercap disable support
+Date:   Tue,  6 Jun 2023 14:07:00 +0100
+Message-Id: <168605677582.2818698.14748743125850879874.b4-ty@arm.com>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230531152039.2363181-1-cristian.marussi@arm.com>
+References: <20230531152039.2363181-1-cristian.marussi@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.104.170]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,44 +48,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The output of /proc/cgroups is somewhat awful now. For example, it may
-look like below:
+On Wed, 31 May 2023 16:20:36 +0100, Cristian Marussi wrote:
+> Upcoming SCMI v3.2 specification (publicly available as BETA at [1])
+> introduces support to disable powercapping as a whole on the desired
+> zones.
+> 
+> This small series at first add the needed support to the core SCMI Powercap
+> protocol, exposing a couple more enable/disable protocol operations, and
+> then wires such new ops in the related Powercap framework helpers.
+> 
+> [...]
 
-subsys_name	hierarchy	num_cgroups	enabled
-cpuset	7	95	1
-...
-perf_event	6	1	1
-...
-files	10	1	1
+Applied to sudeep.holla/linux (for-next/scmi/updates), thanks!
 
-Tweak the output format of cgroup stats to make it look better. After
-patch applied, it will look like below:
-
-subsys_name	hierarchy	num_cgroups	enabled
-cpuset      	11       	73         	1
-...
-perf_event  	10       	1          	1
-...
-files       	7        	1          	1
-
-Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
----
- kernel/cgroup/cgroup-v1.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/kernel/cgroup/cgroup-v1.c b/kernel/cgroup/cgroup-v1.c
-index aeef06c465ef..916871babeea 100644
---- a/kernel/cgroup/cgroup-v1.c
-+++ b/kernel/cgroup/cgroup-v1.c
-@@ -677,7 +677,7 @@ int proc_cgroupstats_show(struct seq_file *m, void *v)
- 	 */
- 
- 	for_each_subsys(ss, i)
--		seq_printf(m, "%s\t%d\t%d\t%d\n",
-+		seq_printf(m, "%-12s\t%-9d\t%-11d\t%-7d\n",
- 			   ss->legacy_name, ss->root->hierarchy_id,
- 			   atomic_read(&ss->root->nr_cgrps),
- 			   cgroup_ssid_enabled(i));
--- 
-2.27.0
+[1/3] firmware: arm_scmi: Refactor powercap get/set helpers
+      https://git.kernel.org/sudeep.holla/c/4e1a53b4030e
+[2/3] firmware: arm_scmi: Add Powercap protocol enable support
+      https://git.kernel.org/sudeep.holla/c/758cd5fc13b2
+[3/3] powercap: arm_scmi: Add support for disabling powercaps on a zone
+      https://git.kernel.org/sudeep.holla/c/aaffb4cacd4c
+--
+Regards,
+Sudeep
 
