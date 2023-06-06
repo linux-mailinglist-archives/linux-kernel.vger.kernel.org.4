@@ -2,82 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDA0B723ACB
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 09:59:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71061723AD7
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 10:00:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230121AbjFFH7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 03:59:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35992 "EHLO
+        id S235953AbjFFIAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 04:00:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234697AbjFFH6c (ORCPT
+        with ESMTP id S237050AbjFFIAN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 03:58:32 -0400
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9962F1FF9
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 00:55:54 -0700 (PDT)
-X-GND-Sasl: miquel.raynal@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1686038152;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hUxPIpvbFeVKFbvXsT93sPgr2hxk0tuN/r+2D9z+hgY=;
-        b=AZi1yqEmOO7yWD2SfDQF1XWxP6bA5kqUoPmcUIUcaDYS5cRVLDzw6bhralT+2uJ80VxdsW
-        ACkxqmFJACimzyvoR5syFfe3vTex/B0sCKDAvmDS/luHOZA2gJrDHwTQqPNGezAF+CK24q
-        3OSlmaYhAEGW0tV5L/v+t7qhuIusIwmju08CdVB5NbFZGQ/nP+U7W+FkXE7Y0G0o2tfZUV
-        TvyXWwxUOVEz0uPXLE84HO6dorN5sMbIR5SI5kHXsHCTFcdSs80sKB5oeRTArmf8TbReDg
-        fQrlEXY1PJwX7EWuT0LMR0EbSfYVPNEAtCxbGxNEZCnMeatm6fHTdfgreDzJig==
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 99A97C0009;
-        Tue,  6 Jun 2023 07:55:49 +0000 (UTC)
-Date:   Tue, 6 Jun 2023 09:55:48 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>
-Cc:     Liang Yang <liang.yang@amlogic.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
-        <linux-mtd@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH v5 2/6] mtd: rawnand: meson: wait for command in
- polling mode
-Message-ID: <20230606095548.6257b271@xps-13>
-In-Reply-To: <19eeb588-f909-8aad-b68c-bcfea8f2e926@sberdevices.ru>
-References: <20230601061850.3907800-1-AVKrasnov@sberdevices.ru>
-        <20230601061850.3907800-3-AVKrasnov@sberdevices.ru>
-        <20230601100751.41c3ff0b@xps-13>
-        <9e106d50-2524-c999-48b1-a20760238aaf@sberdevices.ru>
-        <20230605110546.6cb00a8d@xps-13>
-        <2a755783-1d56-9842-2eee-b5ab41152c81@amlogic.com>
-        <163e0684-caff-77d0-1eaf-9a58290c200d@amlogic.com>
-        <c316961d-6021-1cb4-9ff4-22fe9ca5a18a@sberdevices.ru>
-        <20230606090344.3aca96c8@xps-13>
-        <19eeb588-f909-8aad-b68c-bcfea8f2e926@sberdevices.ru>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Tue, 6 Jun 2023 04:00:13 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3929B2D4E;
+        Tue,  6 Jun 2023 00:57:42 -0700 (PDT)
+Received: from [192.168.10.48] (unknown [119.152.150.198])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id ED6636600359;
+        Tue,  6 Jun 2023 08:56:50 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686038213;
+        bh=IwGH7O6yfy2pLElm5a7Z4qnsrbwSCuHpRSxYI2fRk0c=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=h7mZ87VWxltGhn4xDgLOGheOC2AlbsLZa9LzJrZ90HEK5lTkylQDoR1X+bPH2ZpDB
+         E2uSYT5gXfLbzvNuwTG6hd2mg9DUll9UShRrUKkRu5MvDnfeEycK2WYTOq3BIzfQvz
+         lX/eZhjfi7/cqqtwhh7mUiumavsuqdT86T7MfW4qGcuhv8MEL5Xv/AQGok0HpK54Kc
+         HYN91AHAmhkAj2tDAAWAIfVpp5RZjqL4012JPJPwRqCSpXKoouvb4rkyEPqbHkvaBa
+         9+mI1tYsh3N0+FIazeXt2r0HYm8WfPGIQk/pwl5Gt8UWFwyAKyDyvBxlOnsCIkE32M
+         IsHrBS1CNsBxQ==
+Message-ID: <41fa2d6e-9655-32c6-fb48-d7a1495c8bd4@collabora.com>
+Date:   Tue, 6 Jun 2023 12:56:47 +0500
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        David Hildenbrand <david@redhat.com>,
+        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 09/11] selftests/mm: move certain uffd*() routines from
+ vm_util.c to uffd-common.c
+Content-Language: en-US
+To:     John Hubbard <jhubbard@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20230606071637.267103-1-jhubbard@nvidia.com>
+ <20230606071637.267103-10-jhubbard@nvidia.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <20230606071637.267103-10-jhubbard@nvidia.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -86,173 +64,197 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arseniy,
+On 6/6/23 12:16 PM, John Hubbard wrote:
+> There are only three uffd*() routines that are used outside of the uffd
+> selftests. Leave these in vm_util.c, where they are available to any mm
+> selftest program:
+> 
+>     uffd_register()
+>     uffd_unregister()
+>     uffd_register_with_ioctls().
+> 
+> A few other uffd*() routines, however, are only used by the uffd-focused
+> tests found in uffd-stress.c and uffd-unit-tests.c. Move those routines
+> into uffd-common.c.
+> 
+> Cc: Peter Xu <peterx@redhat.com>
+> Acked-by: David Hildenbrand <david@redhat.com>
+> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+Tested-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 
-avkrasnov@sberdevices.ru wrote on Tue, 6 Jun 2023 10:40:21 +0300:
+> ---
+>  tools/testing/selftests/mm/uffd-common.c | 59 ++++++++++++++++++++++++
+>  tools/testing/selftests/mm/uffd-common.h |  5 ++
+>  tools/testing/selftests/mm/vm_util.c     | 59 ------------------------
+>  tools/testing/selftests/mm/vm_util.h     |  4 --
+>  4 files changed, 64 insertions(+), 63 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mm/uffd-common.c b/tools/testing/selftests/mm/uffd-common.c
+> index 61c6250adf93..ba20d7504022 100644
+> --- a/tools/testing/selftests/mm/uffd-common.c
+> +++ b/tools/testing/selftests/mm/uffd-common.c
+> @@ -616,3 +616,62 @@ int copy_page(int ufd, unsigned long offset, bool wp)
+>  {
+>  	return __copy_page(ufd, offset, false, wp);
+>  }
+> +
+> +int uffd_open_dev(unsigned int flags)
+> +{
+> +	int fd, uffd;
+> +
+> +	fd = open("/dev/userfaultfd", O_RDWR | O_CLOEXEC);
+> +	if (fd < 0)
+> +		return fd;
+> +	uffd = ioctl(fd, USERFAULTFD_IOC_NEW, flags);
+> +	close(fd);
+> +
+> +	return uffd;
+> +}
+> +
+> +int uffd_open_sys(unsigned int flags)
+> +{
+> +#ifdef __NR_userfaultfd
+> +	return syscall(__NR_userfaultfd, flags);
+> +#else
+> +	return -1;
+> +#endif
+> +}
+> +
+> +int uffd_open(unsigned int flags)
+> +{
+> +	int uffd = uffd_open_sys(flags);
+> +
+> +	if (uffd < 0)
+> +		uffd = uffd_open_dev(flags);
+> +
+> +	return uffd;
+> +}
+> +
+> +int uffd_get_features(uint64_t *features)
+> +{
+> +	struct uffdio_api uffdio_api = { .api = UFFD_API, .features = 0 };
+> +	/*
+> +	 * This should by default work in most kernels; the feature list
+> +	 * will be the same no matter what we pass in here.
+> +	 */
+> +	int fd = uffd_open(UFFD_USER_MODE_ONLY);
+> +
+> +	if (fd < 0)
+> +		/* Maybe the kernel is older than user-only mode? */
+> +		fd = uffd_open(0);
+> +
+> +	if (fd < 0)
+> +		return fd;
+> +
+> +	if (ioctl(fd, UFFDIO_API, &uffdio_api)) {
+> +		close(fd);
+> +		return -errno;
+> +	}
+> +
+> +	*features = uffdio_api.features;
+> +	close(fd);
+> +
+> +	return 0;
+> +}
+> diff --git a/tools/testing/selftests/mm/uffd-common.h b/tools/testing/selftests/mm/uffd-common.h
+> index 6068f2346b86..197f5262fe0d 100644
+> --- a/tools/testing/selftests/mm/uffd-common.h
+> +++ b/tools/testing/selftests/mm/uffd-common.h
+> @@ -110,6 +110,11 @@ int __copy_page(int ufd, unsigned long offset, bool retry, bool wp);
+>  int copy_page(int ufd, unsigned long offset, bool wp);
+>  void *uffd_poll_thread(void *arg);
+>  
+> +int uffd_open_dev(unsigned int flags);
+> +int uffd_open_sys(unsigned int flags);
+> +int uffd_open(unsigned int flags);
+> +int uffd_get_features(uint64_t *features);
+> +
+>  #define TEST_ANON	1
+>  #define TEST_HUGETLB	2
+>  #define TEST_SHMEM	3
+> diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
+> index 9b06a5034808..681277615839 100644
+> --- a/tools/testing/selftests/mm/vm_util.c
+> +++ b/tools/testing/selftests/mm/vm_util.c
+> @@ -242,62 +242,3 @@ int uffd_unregister(int uffd, void *addr, uint64_t len)
+>  
+>  	return ret;
+>  }
+> -
+> -int uffd_open_dev(unsigned int flags)
+> -{
+> -	int fd, uffd;
+> -
+> -	fd = open("/dev/userfaultfd", O_RDWR | O_CLOEXEC);
+> -	if (fd < 0)
+> -		return fd;
+> -	uffd = ioctl(fd, USERFAULTFD_IOC_NEW, flags);
+> -	close(fd);
+> -
+> -	return uffd;
+> -}
+> -
+> -int uffd_open_sys(unsigned int flags)
+> -{
+> -#ifdef __NR_userfaultfd
+> -	return syscall(__NR_userfaultfd, flags);
+> -#else
+> -	return -1;
+> -#endif
+> -}
+> -
+> -int uffd_open(unsigned int flags)
+> -{
+> -	int uffd = uffd_open_sys(flags);
+> -
+> -	if (uffd < 0)
+> -		uffd = uffd_open_dev(flags);
+> -
+> -	return uffd;
+> -}
+> -
+> -int uffd_get_features(uint64_t *features)
+> -{
+> -	struct uffdio_api uffdio_api = { .api = UFFD_API, .features = 0 };
+> -	/*
+> -	 * This should by default work in most kernels; the feature list
+> -	 * will be the same no matter what we pass in here.
+> -	 */
+> -	int fd = uffd_open(UFFD_USER_MODE_ONLY);
+> -
+> -	if (fd < 0)
+> -		/* Maybe the kernel is older than user-only mode? */
+> -		fd = uffd_open(0);
+> -
+> -	if (fd < 0)
+> -		return fd;
+> -
+> -	if (ioctl(fd, UFFDIO_API, &uffdio_api)) {
+> -		close(fd);
+> -		return -errno;
+> -	}
+> -
+> -	*features = uffdio_api.features;
+> -	close(fd);
+> -
+> -	return 0;
+> -}
+> diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
+> index 07f39ed2efba..c2d4ff798b91 100644
+> --- a/tools/testing/selftests/mm/vm_util.h
+> +++ b/tools/testing/selftests/mm/vm_util.h
+> @@ -48,10 +48,6 @@ unsigned long default_huge_page_size(void);
+>  int uffd_register(int uffd, void *addr, uint64_t len,
+>  		  bool miss, bool wp, bool minor);
+>  int uffd_unregister(int uffd, void *addr, uint64_t len);
+> -int uffd_open_dev(unsigned int flags);
+> -int uffd_open_sys(unsigned int flags);
+> -int uffd_open(unsigned int flags);
+> -int uffd_get_features(uint64_t *features);
+>  int uffd_register_with_ioctls(int uffd, void *addr, uint64_t len,
+>  			      bool miss, bool wp, bool minor, uint64_t *ioctls);
+>  
 
-> On 06.06.2023 10:03, Miquel Raynal wrote:
-> > Hi Arseniy,
-> >=20
-> > avkrasnov@sberdevices.ru wrote on Mon, 5 Jun 2023 19:58:02 +0300:
-> >  =20
-> >> On 05.06.2023 16:30, Liang Yang wrote: =20
-> >>>
-> >>>
-> >>> On 2023/6/5 21:19, Liang Yang wrote:   =20
-> >>>> Hi Miquel and Arseniy,
-> >>>>
-> >>>>
-> >>>> On 2023/6/5 17:05, Miquel Raynal wrote:   =20
-> >>>>> [ EXTERNAL EMAIL ]
-> >>>>>
-> >>>>> Hi Arseniy,
-> >>>>>   =20
-> >>>>>>>> @@ -1412,6 +1419,8 @@ static int meson_nfc_probe(struct platform=
-_device *pdev)
-> >>>>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 return ret;
-> >>>>>>>> =C2=A0=C2=A0=C2=A0 }
-> >>>>>>>>
-> >>>>>>>> +=C2=A0 nfc->use_polling =3D of_property_read_bool(dev->of_node,=
- "polling");   =20
-> >>>>>>>
-> >>>>>>> This is a problem. You cannot add a polling property like that.
-> >>>>>>>
-> >>>>>>> There is already a nand-rb property which is supposed to carry ho=
-w are
-> >>>>>>> wired the RB lines. I don't see any in-tree users of the compatib=
-les, I
-> >>>>>>> don't know how acceptable it is to consider using soft fallback w=
-hen
-> >>>>>>> this property is missing, otherwise take the values of the rb lin=
-es
-> >>>>>>> provided in the DT and user hardware control, but I would definit=
-ely
-> >>>>>>> prefer that.   =20
-> >>>>>>
-> >>>>>> I see. So i need to implement processing of this property here? An=
-d if it
-> >>>>>> is missed -> use software waiting. I think interesting thing will =
-be that:
-> >>>>>>
-> >>>>>> 1) Even with support of this property here, I really don't know ho=
-w to pass
-> >>>>>> =C2=A0=C2=A0=C2=A0 RB values to this controller - I just have defi=
-ne for RB command and that's
-> >>>>>> =C2=A0=C2=A0=C2=A0 it. I found that this property is an array of u=
-32 - IIUC each element is
-> >>>>>> =C2=A0=C2=A0=C2=A0 RB pin per chip. May be i need to dive into the=
- old vendor's driver to find
-> >>>>>> =C2=A0=C2=A0=C2=A0 how to use RB values (although this driver uses=
- software waiting so I'm not
-> >>>>>> =C2=A0=C2=A0=C2=A0 sure that I'll find something in it).   =20
-> >>>>>
-> >>>>> Liang, can you please give use the relevant information here? How d=
-o we
-> >>>>> target RB0 and RB1? It seems like you use the CS as only information
-> >>>>> like if the RB lines where hardwired internally to a CS. Can we inv=
-ert
-> >>>>> the lines with a specific configuration?   =20
-> >>>>
-> >>>> Controllor has only one external RB pinmux (NAND_RB0). all the RB pi=
-ns
-> >>>> of different CEs need to be bound into one wire and connect with
-> >>>> NAND_RB0 if want to use controller polling rb. the current operating
-> >>>> CE of NAND is decided to "chip_select", of course controller interna=
-lly has different nfc commands to regconize which Ce's RB signal is polling.
-> >>>>
-> >>>> <&nand_pins> in dts/yaml should include the NAND_RB0 if hardware con=
-nects, or use software polling here.
-> >>>>
-> >>>> @Arseniy, sorry, i don't travel all the informations yet. but why do=
-n't you use the new RB_INT command with irq that i provided in another thre=
-ad. the new RB_INT command doesn't depend on the physical RB wires, it also=
- send the READ status command(0x70) and wait for the irq wake up completion=
-.   =20
-> >>
-> >> Technically no problem! I can use new RB_INT instead of 'nand_soft_wai=
-trdy()' as software fallback, and currently
-> >> implemented RB_INT as interrupt driven way. What do You think Miquel ?
-> >> =20
-> >>>
-> >>> Use "nand-rb" in dts to decide old RB_INT(physical RB wires is needed=
-) or new RB_INT(no physical RB wires). the new RB_INT command decides the R=
-B0 or RB1 by the previous command with ce args.
-> >>>    =20
-> >>
-> >> So I can implement "nand-rb" in dts as boolean value - "false" or miss=
-ing means use "no physical RB wires", "true" - means use "physical RB wires=
-" ? =20
-> >=20
-> > As long as it works and does not contain any extremely strange READ0 or
-> > READ_STATUS in the middle of nothing, I'm fine, take the simplest
-> > approach which will work for all. =20
->=20
-> "extremetely strange READ0" is method which uses STATUS, interrupt, READ0=
-? This method was
-> described by Liang.
-
-It needs to be very well contained in dedicated helpers and documented.
-You choose what is easier for you (Liang's method or
-nand_soft_waitrdy()), but I don't want to see spurious READ0 or
-READ_STATUS calls inside read/write_page helpers like before.
-
-> And You mean to use the following logic:
-> if ("nand-rb" =3D=3D true)
->     use RB_INT which requires wire
-> else
->     use 'nand_soft_waitrdy()'
->=20
-> ?
->=20
-> Thanks, Arseniy
->=20
-> >  =20
-> >>
-> >> Thanks, Arseniy
-> >> =20
-> >>>>   =20
-> >>>>> Arseniy, if the answer to my above question is no, then you should
-> >>>>> expect the nand-rb and reg arrays to be identical. If they are not,
-> >>>>> then you can return -EINVAL.
-> >>>>>
-> >>>>> If the nand-rb property is missing, then fallback to software wait.
-> >>>>>   =20
-> >>>>>> 2) I can't test RB mode - I don't have such device :(
-> >>>>>>
-> >>>>>> Also for example in arasan-nand-controller.c parsed 'nand-rb' valu=
-es are used
-> >>>>>> in controller specific register for waiting (I guess Meson control=
-ler has something
-> >>>>>> like that, but I don't have doc). While in marvell_nand.c it looks=
- like that they parse
-> >>>>>> 'nand-rb' property, but never use it.   =20
-> >>>>>
-> >>>>> Yes, the logic around the second RB line (taking care of CS1/CS3) is
-> >>>>> slightly broken or at least badly documented, and thus should not be
-> >>>>> used.
-> >>>>>   =20
-> >>>>>>> In any case you'll need a dt-binding update which must be acked by
-> >>>>>>> dt-binding maintainers.   =20
-> >>>>>>
-> >>>>>> You mean to add this property desc to Documentation/devicetree/bin=
-dings/mtd/amlogic,meson-nand.yaml ?   =20
-> >>>>>
-> >>>>> Yes. In a dedicated patch. Something along the lines:
-> >>>>>
-> >>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 nand-rb: true
-> >>>>>
-> >>>>> inside the nand chip object should be fine. And flag the change as a
-> >>>>> fix because we should have used and parsed this property since the
-> >>>>> beginning.
-> >>>>>
-> >>>>> Thanks,
-> >>>>> Miqu=C3=A8l   =20
-> >=20
-> >=20
-> > Thanks,
-> > Miqu=C3=A8l =20
-
-
-Thanks,
-Miqu=C3=A8l
+-- 
+BR,
+Muhammad Usama Anjum
