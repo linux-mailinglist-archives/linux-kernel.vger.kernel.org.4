@@ -2,198 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 088CA7247F7
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 17:39:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7560C7247FB
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 17:40:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236322AbjFFPj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 11:39:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57630 "EHLO
+        id S237643AbjFFPj5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 11:39:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233143AbjFFPj0 (ORCPT
+        with ESMTP id S238009AbjFFPjp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 11:39:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31FA1100
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 08:39:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B2ABB62AD8
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 15:39:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13140C433A0
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 15:39:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686065964;
-        bh=ovUux+gNZ6WkiYRvYoozBQRwom9AqZCGCUzsFPEjJWc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=rUx0U2s4MssWRmGdM+grxj/QNy6gaLkS91hFr71N99INNbwD3FprmUkm/4CgIur5H
-         3DripYqFRhg+imLMn1vAkFGBue8Ckr3efA9zRgpEM3mMoPWZHkkMkMVtjGMvxqKnNK
-         VLgNIKOpq1zT273ikM+DjVfo8zkI1+6KJ3eMIzLrF8ruVPW8wJ/4rFCcPPJpk76egI
-         V84K3r2yZEtdxoukJHfMB7y8xftqMeyIldl9HkL92bNWdLfzez9jPZDs77d4z3C4Dz
-         7/iSZlIJnQPHCrug7cVnb2GcG0M7EoKckw+ShIUg3b/T0uxspLW+smq0oYP3vYK+xH
-         2lm70QJ3iIhhw==
-Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-2b1bdfe51f8so39824691fa.0
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 08:39:23 -0700 (PDT)
-X-Gm-Message-State: AC+VfDymEaE4WzxzQ+4fUM6ic9Fuwa29c8mZOPAJjeWK/uOtHhtg+3Qp
-        lXx8sWsYbk5vEIHDSaiZ4Ir1g1kM5/+XdVlYdQ8=
-X-Google-Smtp-Source: ACHHUZ7e7+hApTXimnjkd0SmnT/bYyxIY+uQub2q4K9KPxUu4KpyHpywzkgVbCGqJHdwKsogZ1q45/oZP5yOA7t9XlI=
-X-Received: by 2002:a05:651c:2318:b0:2b1:c149:6e6b with SMTP id
- bi24-20020a05651c231800b002b1c1496e6bmr2808812ljb.15.1686065961995; Tue, 06
- Jun 2023 08:39:21 -0700 (PDT)
+        Tue, 6 Jun 2023 11:39:45 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E16610D2
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 08:39:44 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id 3f1490d57ef6-ba829e17aacso7800737276.0
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 08:39:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mojatatu-com.20221208.gappssmtp.com; s=20221208; t=1686065983; x=1688657983;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=elTBqfUhPXSPyDwW3mi+yRAT2Okd4Dn54wk2+xqX2uE=;
+        b=rtwZNt1EG2rvaIQ3g0XQOeXafgz9lj2O4EZGXPm8k2SAGvhSVzmpija/Byq7Ikvzyv
+         RabBusq0CTYp1R7MXvDA0x0MfddvGSvaHyuBPRomUw4Eg1auAAYHujXW+hJtMPDBwQEg
+         +dgYzjo50cwXSBqu+bYfmD1WFBdOY9mouOrrylGfg2z9yWS3AcLG4ed4u5fRB1I//PaY
+         AKQTsUu7jCLe/Z5mrAkQO8rrWsh5OmMZHvgUm1BrUPVc/dqp/nWkVaedAHhVhF6BJjeT
+         ZfmUk+mWccMp3GQGUHoH+24iU+prN9i/ho5ep5PG5sGrnMwRyk3rH2vpaBdJSpPVNWjS
+         QlKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686065983; x=1688657983;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=elTBqfUhPXSPyDwW3mi+yRAT2Okd4Dn54wk2+xqX2uE=;
+        b=DjPE0rpBboUJYNpCFRDMslaeCAH2pqz7vKc+NmSqbEFcCM+MSyLP7v1nZ1OeaZoJAt
+         vMRWWbpHbxEzuhDipkKrEKjx6urbBNMW60ylxGoEPEuoM5A1h7+lRTXRhZ+ixm/p+kRr
+         GYzB8e+jmitv7/E9825xifZPmbCSV8Ih9DzCkFpPQ9nKwdIu2OWlo2lZWCpbyqexuqwH
+         Ubn6j/BBFvGmbs29K63mPtkK3W60v1fqf//YSgl+xGu6uaEuelHu7rzAWFiwUEqXIkLW
+         3uFVUEm0j4yAteeUrs/QdBcBFAXc2JaiY898wvVB6ZV+FCdvx9BYh+lRvyoQWkQTPOpt
+         8xoQ==
+X-Gm-Message-State: AC+VfDyPQbkVLKED5bl31WFt8V20bKFHvn7BGLwxbdhC9uCzF6bSvF9o
+        gyxY4rXpjlUBysbDhNa0MeCM/P7Jp6OoE2POdPiuQQ==
+X-Google-Smtp-Source: ACHHUZ6AbldddbAsOhtAOSD4tHHYX3Z/CCZtQcDWqnC9xbTaFKB8pD7G4yqlPp6lz2sDL0oyfz8R4u+lgk8ScfFX0JE=
+X-Received: by 2002:a0d:df93:0:b0:567:2891:a2ec with SMTP id
+ i141-20020a0ddf93000000b005672891a2ecmr2323430ywe.22.1686065983484; Tue, 06
+ Jun 2023 08:39:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230606142637.5171-1-kirill.shutemov@linux.intel.com>
- <cover.1686063086.git.thomas.lendacky@amd.com> <0d5f3d9a20b5cf361945b7ab1263c36586a78a42.1686063086.git.thomas.lendacky@amd.com>
-In-Reply-To: <0d5f3d9a20b5cf361945b7ab1263c36586a78a42.1686063086.git.thomas.lendacky@amd.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Tue, 6 Jun 2023 17:39:10 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXEiS26Ax884Ta7Gfknu_VDaY=fjVScGq93sfS6GO3kHyQ@mail.gmail.com>
-Message-ID: <CAMj1kXEiS26Ax884Ta7Gfknu_VDaY=fjVScGq93sfS6GO3kHyQ@mail.gmail.com>
-Subject: Re: [PATCH v9 6/6] x86/efi: Safely enable unaccepted memory in UEFI
-To:     Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Dionna Glaze <dionnaglaze@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Min M. Xu" <min.m.xu@intel.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Jiewen Yao <jiewen.yao@intel.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+References: <20230602103750.2290132-1-vladimir.oltean@nxp.com>
+ <CAM0EoMnqscw=OfWzyEKV10qFW5+EFMd5JWZxPSPCod3TvqpnuQ@mail.gmail.com> <20230605165353.tnjrwa7gbcp4qhim@skbuf>
+In-Reply-To: <20230605165353.tnjrwa7gbcp4qhim@skbuf>
+From:   Jamal Hadi Salim <jhs@mojatatu.com>
+Date:   Tue, 6 Jun 2023 11:39:32 -0400
+Message-ID: <CAM0EoM=qG9sDjM=F6D=i=h3dKXwQXAt1wui8W_EXDJi2tijRnw@mail.gmail.com>
+Subject: Re: [PATCH RESEND net-next 0/5] Improve the taprio qdisc's
+ relationship with its children
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        linux-kernel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        Muhammad Husaini Zulkifli <muhammad.husaini.zulkifli@intel.com>,
+        Peilin Ye <yepeilin.cs@gmail.com>,
+        Pedro Tammela <pctammela@mojatatu.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 6 Jun 2023 at 16:52, Tom Lendacky <thomas.lendacky@amd.com> wrote:
->
-> From: Dionna Glaze <dionnaglaze@google.com>
->
-> The UEFI v2.9 specification includes a new memory type to be used in
-> environments where the OS must accept memory that is provided from its
-> host. Before the introduction of this memory type, all memory was
-> accepted eagerly in the firmware. In order for the firmware to safely
-> stop accepting memory on the OS's behalf, the OS must affirmatively
-> indicate support to the firmware. This is only a problem for AMD
-> SEV-SNP, since Linux has had support for it since 5.19. The other
-> technology that can make use of unaccepted memory, Intel TDX, does not
-> yet have Linux support, so it can strictly require unaccepted memory
-> support as a dependency of CONFIG_TDX and not require communication with
-> the firmware.
->
-> Enabling unaccepted memory requires calling a 0-argument enablement
-> protocol before ExitBootServices. This call is only made if the kernel
-> is compiled with UNACCEPTED_MEMORY=y
->
-> This protocol will be removed after the end of life of the first LTS
-> that includes it, in order to give firmware implementations an
-> expiration date for it. When the protocol is removed, firmware will
-> strictly infer that a SEV-SNP VM is running an OS that supports the
-> unaccepted memory type. At the earliest convenience, when unaccepted
-> memory support is added to Linux, SEV-SNP may take strict dependence in
-> it. After the firmware removes support for the protocol, this patch
-> should be reverted.
->
->   [tl: address some checkscript warnings]
->
-> Signed-off-by: Dionna Glaze <dionnaglaze@google.com>
-> Signed-off-by: Tom Lendacky <thomas.lendacky@amd.com>
+Hi Vladimir,
 
-Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
+On Mon, Jun 5, 2023 at 12:53=E2=80=AFPM Vladimir Oltean <vladimir.oltean@nx=
+p.com> wrote:
+>
+> Hi Jamal,
+>
+> On Mon, Jun 05, 2023 at 11:44:17AM -0400, Jamal Hadi Salim wrote:
+> > I havent been following - but if you show me sample intended tc
+> > configs for both s/w and hardware offloads i can comment.
+>
+> There is not much difference in usage between the 2 modes. IMO the softwa=
+re
+> data path logic is only a simulation for demonstrative purposes of what t=
+he
+> shaper is intended to do. If hardware offload is available, it is always
+> preferable. Otherwise, I'm not sure if anyone uses the pure software
+> scheduling mode (also without txtime assist) for a real life use case.
+>
 
-> ---
->  drivers/firmware/efi/libstub/x86-stub.c | 36 +++++++++++++++++++++++++
->  include/linux/efi.h                     |  3 +++
->  2 files changed, 39 insertions(+)
+Thanks for the sample. Understood on the software twin being useful
+for simulation (our standard rule is you need to have a software twin)
+- it is great you conform to that.
+
+I took a cursory glance at the existing kernel code in order to get
+better context (I will make more time later). Essentially this qdisc
+is classful and is capable of hardware offload. Initial comments are
+unrelated to the patchset (all this Klingon DCB thingy configuration
+like a flag 0x2 is still magic to me).
+
+1)Just some details become confusing in regards to offload vs not; F.e
+class grafting (taprio_graft()) is de/activating the device but that
+seems only needed for offload. Would it not be better to have those
+separate and call graft_offload vs graft_software, etc? We really need
+to create a generic document on how someone would write code for
+qdiscs for consistency (I started working on one but never completed
+it - if there is a volunteer i would be happy to work with one to
+complete it).
+2) It seems like in mqprio this qdisc can only be root qdisc (like
+mqprio) and you dont want to replace the children with other types of
+qdiscs i.e the children are always pfifo? i.e is it possible or
+intended for example to replace 8001:x with bfifo etc? or even change
+the pfifo queue size, etc?
+3) Offload intention seems really to be bypassing enqueue() and going
+straigth to the driver xmit() for a specific DMA ring that the skb is
+mapped to. Except for the case where the driver says it's busy and
+refuses to stash the skb in ring in which case you have to requeue to
+the appropriate child qdisc/class. I am not sure how that would work
+here - mqprio gets away with it by not defining any of the
+en/de/requeue() callbacks - but likely it will be the lack of requeue
+that makes it work.
+
+ I will read the other thread you pointed to when i get a moment.
+
+cheers,
+jamal
+
+> I was working with something like this for testing the code paths affecte=
+d
+> by these changes:
 >
-> diff --git a/drivers/firmware/efi/libstub/x86-stub.c b/drivers/firmware/efi/libstub/x86-stub.c
-> index 8d17cee8b98e..e2193dbe1f66 100644
-> --- a/drivers/firmware/efi/libstub/x86-stub.c
-> +++ b/drivers/firmware/efi/libstub/x86-stub.c
-> @@ -26,6 +26,17 @@ const efi_dxe_services_table_t *efi_dxe_table;
->  u32 image_offset __section(".data");
->  static efi_loaded_image_t *image = NULL;
+> #!/bin/bash
 >
-> +typedef union sev_memory_acceptance_protocol sev_memory_acceptance_protocol_t;
-> +union sev_memory_acceptance_protocol {
-> +       struct {
-> +               efi_status_t (__efiapi * allow_unaccepted_memory)(
-> +                       sev_memory_acceptance_protocol_t *);
-> +       };
-> +       struct {
-> +               u32 allow_unaccepted_memory;
-> +       } mixed_mode;
-> +};
-> +
->  static efi_status_t
->  preserve_pci_rom_image(efi_pci_io_protocol_t *pci, struct pci_setup_rom **__rom)
->  {
-> @@ -310,6 +321,29 @@ setup_memory_protection(unsigned long image_base, unsigned long image_size)
->  #endif
->  }
+> add_taprio()
+> {
+>         local offload=3D$1
+>         local extra_flags
 >
-> +static void setup_unaccepted_memory(void)
-> +{
-> +       efi_guid_t mem_acceptance_proto = OVMF_SEV_MEMORY_ACCEPTANCE_PROTOCOL_GUID;
-> +       sev_memory_acceptance_protocol_t *proto;
-> +       efi_status_t status;
-> +
-> +       if (!IS_ENABLED(CONFIG_UNACCEPTED_MEMORY))
-> +               return;
-> +
-> +       /*
-> +        * Enable unaccepted memory before calling exit boot services in order
-> +        * for the UEFI to not accept all memory on EBS.
-> +        */
-> +       status = efi_bs_call(locate_protocol, &mem_acceptance_proto, NULL,
-> +                            (void **)&proto);
-> +       if (status != EFI_SUCCESS)
-> +               return;
-> +
-> +       status = efi_call_proto(proto, allow_unaccepted_memory);
-> +       if (status != EFI_SUCCESS)
-> +               efi_err("Memory acceptance protocol failed\n");
-> +}
-> +
->  static const efi_char16_t apple[] = L"Apple";
+>         case $offload in
+>         true)
+>                 extra_flags=3D"flags 0x2"
+>                 ;;
+>         false)
+>                 extra_flags=3D"clockid CLOCK_TAI"
+>                 ;;
+>         esac
 >
->  static void setup_quirks(struct boot_params *boot_params,
-> @@ -908,6 +942,8 @@ asmlinkage unsigned long efi_main(efi_handle_t handle,
+>         tc qdisc replace dev eno0 handle 8001: parent root stab overhead =
+24 taprio \
+>                 num_tc 8 \
+>                 map 0 1 2 3 4 5 6 7 \
+>                 queues 1@0 1@1 1@2 1@3 1@4 1@5 1@6 1@7 \
+>                 max-sdu 0 0 0 0 0 200 0 0 \
+>                 base-time 200 \
+>                 sched-entry S 80 20000 \
+>                 sched-entry S a0 20000 \
+>                 sched-entry S 5f 60000 \
+>                 $extra_flags
+> }
 >
->         setup_quirks(boot_params, bzimage_addr, buffer_end - buffer_start);
+> add_cbs()
+> {
+>         local offload=3D$1
+>         local extra_flags
 >
-> +       setup_unaccepted_memory();
-> +
->         status = exit_boot(boot_params, handle);
->         if (status != EFI_SUCCESS) {
->                 efi_err("exit_boot() failed!\n");
-> diff --git a/include/linux/efi.h b/include/linux/efi.h
-> index 9864f9c00da2..8c5abcf70a05 100644
-> --- a/include/linux/efi.h
-> +++ b/include/linux/efi.h
-> @@ -437,6 +437,9 @@ void efi_native_runtime_setup(void);
->  #define DELLEMC_EFI_RCI2_TABLE_GUID            EFI_GUID(0x2d9f28a2, 0xa886, 0x456a,  0x97, 0xa8, 0xf1, 0x1e, 0xf2, 0x4f, 0xf4, 0x55)
->  #define AMD_SEV_MEM_ENCRYPT_GUID               EFI_GUID(0x0cf29b71, 0x9e51, 0x433a,  0xa3, 0xb7, 0x81, 0xf3, 0xab, 0x16, 0xb8, 0x75)
+>         case $offload in
+>         true)
+>                 extra_flags=3D"offload 1"
+>                 ;;
+>         false)
+>                 extra_flags=3D""
+>                 ;;
+>         esac
 >
-> +/* OVMF protocol GUIDs */
-> +#define OVMF_SEV_MEMORY_ACCEPTANCE_PROTOCOL_GUID       EFI_GUID(0xc5a010fe, 0x38a7, 0x4531,  0x8a, 0x4a, 0x05, 0x00, 0xd2, 0xfd, 0x16, 0x49)
-> +
->  typedef struct {
->         efi_guid_t guid;
->         u64 table;
-> --
-> 2.40.1
+>         max_frame_size=3D1500
+>         data_rate_kbps=3D20000
+>         port_transmit_rate_kbps=3D1000000
+>         idleslope=3D$data_rate_kbps
+>         sendslope=3D$(($idleslope - $port_transmit_rate_kbps))
+>         locredit=3D$(($max_frame_size * $sendslope / $port_transmit_rate_=
+kbps))
+>         hicredit=3D$(($max_frame_size * $idleslope / $port_transmit_rate_=
+kbps))
+>         tc qdisc replace dev eno0 parent 8001:8 cbs \
+>                 idleslope $idleslope \
+>                 sendslope $sendslope \
+>                 hicredit $hicredit \
+>                 locredit $locredit \
+>                 $extra_flags
+> }
 >
+> # this should always fail
+> add_second_taprio()
+> {
+>         tc qdisc replace dev eno0 parent 8001:7 taprio \
+>                 num_tc 8 \
+>                 map 0 1 2 3 4 5 6 7 \
+>                 queues 1@0 1@1 1@2 1@3 1@4 1@5 1@6 1@7 \
+>                 max-sdu 0 0 0 0 0 200 0 0 \
+>                 base-time 200 \
+>                 sched-entry S 80 20000 \
+>                 sched-entry S a0 20000 \
+>                 sched-entry S 5f 60000 \
+>                 clockid CLOCK_TAI
+> }
+>
+> ip link set eno0 up
+>
+> echo "Offload:"
+> add_taprio true
+> add_cbs true
+> add_second_taprio
+> mausezahn eno0 -t ip -b 00:04:9f:05:f6:27 -c 100 -p 60
+> sleep 5
+> tc -s class show dev eno0
+> tc qdisc del dev eno0 root
+>
+> echo "Software:"
+> add_taprio false
+> add_cbs false
+> add_second_taprio
+> mausezahn eno0 -t ip -b 00:04:9f:05:f6:27 -c 100 -p 60
+> sleep 5
+> tc -s class show dev eno0
+> tc qdisc del dev eno0 root
+>
+> > In my cursory look i assumed you wanted to go along the path of mqprio
+> > where nothing much happens in the s/w datapath other than requeues
+> > when the tx hardware path is busy (notice it is missing an
+> > enqueue/deque ops). In that case the hardware selection is essentially
+> > of a DMA ring based on skb tags. It seems you took it up a notch by
+> > infact having a choice of whether to have pure s/w or offload path.
+>
+> Yes. Actually the original taprio design always had the enqueue()/dequeue=
+()
+> ops involved in the data path, then commit 13511704f8d7 ("net: taprio
+> offload: enforce qdisc to netdev queue mapping") retrofitted the mqprio
+> model when using the "flags 0x2" argument.
+
+
+> If you have time to read, the discussion behind that redesign was here:
+> https://lore.kernel.org/netdev/20210511171829.17181-1-yannick.vignon@oss.=
+nxp.com/
