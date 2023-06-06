@@ -2,109 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB4DF7240D7
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 13:28:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 482BC7240DB
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 13:30:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235701AbjFFL2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 07:28:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53790 "EHLO
+        id S235977AbjFFLaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 07:30:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232912AbjFFL2c (ORCPT
+        with ESMTP id S232912AbjFFLaS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 07:28:32 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A43F4
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 04:28:31 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-977c88c9021so474254966b.3
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 04:28:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686050910; x=1688642910;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=utFeka+9yLICmbetZMFezs6Zq+yNbOQcRunr7yjZBJQ=;
-        b=Qdhs0Hl2+JaE3/asNnbSTqPp+raEcB3hNpariCCxePYPH3jQL/cmWUP5KxdBCjhSR8
-         YNFZeP+hdKbQYlOoDbrfKuPSLaK5iqm3HerePEuC1fJ+Di40rOfG5hSZzMCtixTBqSWU
-         yhoD2ZIWh6kH5qEv1+0RbidtMiQoIwdZyYsQ3G+GfBMjgzmWINoCGBszGT4o2ZgbwHEu
-         /l4y62c+X1D1y5hCITw+Qpx9R2iSkz3Oh+Bwt+IUleXEeIkZRNbGOj3bnMZeynuI2dTK
-         bSJthP70JAglhPW5mujPg0R1dofyGmeD4lwMLK6nqQEcbe8JLgc0yrLhuD0uxuxCcOll
-         BcYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686050910; x=1688642910;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=utFeka+9yLICmbetZMFezs6Zq+yNbOQcRunr7yjZBJQ=;
-        b=g5ezp0SYdZ3rGP+E3bBCf0I8ircw+Qh5Lxvp9pS+R7IxyqtPr6MThSKnCLTd+9/lLF
-         oNK/ZbFX5PrvYBvIQvucfLxJrYIAJxygrlSGFlORDmcff972Fmhz+B8PYnEaWUmcwmly
-         LX04Z/eE4EG5tTiimBSH+ObPYDZRz6kMoNj1WDw27FrhEtKH23Fg/brw3l/MLw4ZWjqo
-         5AArp7Mma46K9X6ycMwZYgTBu+CWqptIP/+IfaArhQtip3xc6YBNYKlkPVI3H7947DNh
-         LqgIp92+LJusS5w9bCOROsgMSp/QbDGT38RgAkejRuTXpN+eRF44fVNNpgENm56OSebj
-         mfKw==
-X-Gm-Message-State: AC+VfDxo79XQN7am3d3ZRprbKm1dp1bMbGyte44mQDwpmVDC/syoqbhJ
-        bDH0yWhw7z3z3Miom9rPET5MWA==
-X-Google-Smtp-Source: ACHHUZ4btnhep2dxOX+EtQzTSaJyfXbSiLkcT4PdQhg9liSwnoIRQowJatIOkGMVy3mo17MPq2w+sA==
-X-Received: by 2002:a17:906:fe0d:b0:96f:1f79:c0a6 with SMTP id wy13-20020a170906fe0d00b0096f1f79c0a6mr2058936ejb.70.1686050909851;
-        Tue, 06 Jun 2023 04:28:29 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id m19-20020a170906235300b00967a18df1easm5454195eja.117.2023.06.06.04.28.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Jun 2023 04:28:29 -0700 (PDT)
-Message-ID: <d4970017-86b5-884f-fe67-6fede30469b4@linaro.org>
-Date:   Tue, 6 Jun 2023 13:28:27 +0200
+        Tue, 6 Jun 2023 07:30:18 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 208FDB1
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 04:30:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686051017; x=1717587017;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=W0yn6ZzdxjW94gO1XpT+ulvVzj+3KSLXCjaqro+pinc=;
+  b=leAv7qzoo+s3ifh0qq0OPDtoQYmfNL9cwoelRlj/6KwHp4hs5aEvxy7g
+   BEX/MRhT4yc8YElqeTgzvT/tlaxa34VFG0qmvP0L140/6FKC78R5LE2BD
+   Wjm9mvyTNRxwifSyLeERjZgVzaGPKO1g1elaoXhc3fKn+8NwkqSTz0aeA
+   FQb1xO0n/j7LodLlW8O/f0NROutnULwtzBW7ZdFthep7nHfx8gdFTOpN8
+   bj+7MvbzV6JUi7w9LhsP7vPN8jymMVivngbondoTQSXzDn00uzHaghviu
+   1Mo3NMv6ZcB1dLZkWYHEDp269s1fGAaSPosN9K0xZDXIkJPJ03fRfWAyt
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="341281298"
+X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
+   d="scan'208";a="341281298"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 04:30:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="778954162"
+X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
+   d="scan'208";a="778954162"
+Received: from abobyr-mobl1.ccr.corp.intel.com (HELO localhost) ([10.252.59.4])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 04:30:11 -0700
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Siddh Raman Pant <code@siddh.me>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Suraj Upadhyay <usuraj35@gmail.com>
+Subject: Re: [PATCH v9 0/8] drm: Remove usage of deprecated DRM_* macros
+In-Reply-To: <cover.1686047727.git.code@siddh.me>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <cover.1686047727.git.code@siddh.me>
+Date:   Tue, 06 Jun 2023 14:30:05 +0300
+Message-ID: <87sfb4u8ua.fsf@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 1/2] dt-bindings: arm: qcom: document MI04.1 board based
- on IPQ5332 family
-Content-Language: en-US
-To:     Hariharan K <quic_harihk@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     quic_srichara@quicinc.com, quic_sjaganat@quicinc.com,
-        quic_kathirav@quicinc.com, quic_arajkuma@quicinc.com,
-        quic_anusha@quicinc.com
-References: <20230606095732.12884-1-quic_harihk@quicinc.com>
- <20230606095732.12884-2-quic_harihk@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230606095732.12884-2-quic_harihk@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/06/2023 11:57, Hariharan K wrote:
-> Document the MI04.1 (Reference Design Platform 446) board based on IPQ5332
-> family of SoCs.
-> 
-> Signed-off-by: Hariharan K <quic_harihk@quicinc.com>
+On Tue, 06 Jun 2023, Siddh Raman Pant <code@siddh.me> wrote:
+> This patchset aims to remove usages of deprecated DRM_* macros from the
+> files residing in drivers/gpu/drm root.
+>
+> In process, I found out that NULL as first argument of drm_dbg_* wasn't
+> working, but it was listed as the alternative in deprecation comment,
+> so I fixed that before removing usages of DRM_DEBUG_* macros.
+>
+> Courtesy discussion on v1, I added support for NULL in drm_()* macros too.
+>
+> Courtesy discussion on v7, I removed generic macro stuff meant to accomodate
+> stuff like mipi_dsi_host, and instead reverted a commit which used the
+> drm_err() macro incorrectly by passing mipi_dsi_host.
+>
+> This patchset should be applied in order as changes might be dependent.
+>
+> Please review and let me know if any errors are there, and hopefully
+> this gets accepted.
+
+FWIW,
+
+Acked-by: Jani Nikula <jani.nikula@intel.com>
+
+>
 > ---
->  Documentation/devicetree/bindings/arm/qcom.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
-> index 8302d1ee280d..165a815337f7 100644
-> --- a/Documentation/devicetree/bindings/arm/qcom.yaml
-> +++ b/Documentation/devicetree/bindings/arm/qcom.yaml
-> @@ -93,6 +93,7 @@ description: |
->          ap-mi01.2
->          ap-mi01.3
->          ap-mi01.6
-> +        ap-mi04.1
+>
+> v8 -> v9 (today):
+> - Rebased to drm-misc-next.
+>
+> v7 -> v8 (28 Feb 2023):
+> - Reverted 1040e424353f ("drm: mipi-dsi: Convert logging to drm_* functions.")
+>   which used drm_err macro incorrectly by passing mipi_dsi_host.
+> - Thus, removed _Generic and allow only drm_device.
+>
+> v6 -> v7 (26 Feb 2023):
+> - Rebased to drm-misc-next, accounting for the merger of last 3 patches
+>   in the previous series (4665280990fa, fc2602b553c8, 7bd224b6625a),
+>   and 7428ff70a18 ("drm: initialize accel framework").
+>
+> v5 -> v6 (09 Jan 2023):
+> - Move drm_device to default case in _Generic as it is the default behaviour.
+> - Fix incorrect const drm_device handling in _Generic.
+> - Minor positioning / comment changes.
+>
+> v4 -> v5 (07 Jan 2023):
+> - Make separate function instead of using boolean in _Generic (sravn on IRC).
+> - Also, simplified the Generic macro, and renamed the function and macro.
+>
+> v3 -> v4 (05 Jan 2023):
+> - Fix commit message for DRM_NOTE erroneously mentioning DRM_INFO.
+> - Rebased to drm-misc-next, as 723dad977acd added drm_dbg_core() to some
+>   files.
+> - Move Generic out to a separate macro __drm_get_dev_ptr, so that interface
+>   of drm_dbg_*() is also same as other drm_*() macros.
+> - Fix comment in __drm_get_dev_ptr (now ___drm_get_dev_ptr) to use correct
+>   name.
+>
+> v2 -> v3 (26 Dec 2022):
+> - Added support for NULL in __drm_printk and thus by extension to drm_()*.
+> - Thus, converted dropped pr_()* changes to drm_*(NULL, ...).
+> - Rebased to drm-misc-next and resulting appropriate changes.
+>
+> v1 (20 Dec 2022) -> v2 (22 Dec 2022):
+> - Removed conversions to pr_*() in DRM_INFO, DRM_NOTE, and DRM_ERROR changes.
+> - Due to above, DRM_NOTE usage cannot be removed and the patch is dropped.
+> - DRY: NULL support is now achieved by way of a separate function.
+>
+> Siddh Raman Pant (8):
+>   Revert "drm: mipi-dsi: Convert logging to drm_* functions."
+>   drm/print: Fix and add support for NULL as first argument in drm_*
+>     macros
+>   drm: Remove usage of deprecated DRM_INFO
+>   drm: Remove usage of deprecated DRM_NOTE
+>   drm: Remove usage of deprecated DRM_ERROR
+>   drm: Remove usage of deprecated DRM_DEBUG
+>   drm: Remove usage of deprecated DRM_DEBUG_DRIVER
+>   drm: Remove usage of deprecated DRM_DEBUG_KMS
+>
+>  drivers/gpu/drm/drm_agpsupport.c        |   4 +-
+>  drivers/gpu/drm/drm_bridge.c            |   8 +-
+>  drivers/gpu/drm/drm_bufs.c              | 122 ++++++++++++------------
+>  drivers/gpu/drm/drm_client_modeset.c    | 118 +++++++++++++----------
+>  drivers/gpu/drm/drm_color_mgmt.c        |   4 +-
+>  drivers/gpu/drm/drm_connector.c         |  28 +++---
+>  drivers/gpu/drm/drm_context.c           |  18 ++--
+>  drivers/gpu/drm/drm_crtc.c              |  36 ++++---
+>  drivers/gpu/drm/drm_crtc_helper.c       |  62 ++++++------
+>  drivers/gpu/drm/drm_debugfs_crc.c       |   8 +-
+>  drivers/gpu/drm/drm_displayid.c         |   6 +-
+>  drivers/gpu/drm/drm_dma.c               |  10 +-
+>  drivers/gpu/drm/drm_drv.c               |  28 +++---
+>  drivers/gpu/drm/drm_edid.c              |  17 ++--
+>  drivers/gpu/drm/drm_flip_work.c         |   2 +-
+>  drivers/gpu/drm/drm_framebuffer.c       |   3 +-
+>  drivers/gpu/drm/drm_gem.c               |   7 +-
+>  drivers/gpu/drm/drm_gem_dma_helper.c    |   2 +-
+>  drivers/gpu/drm/drm_hashtab.c           |  10 +-
+>  drivers/gpu/drm/drm_irq.c               |   4 +-
+>  drivers/gpu/drm/drm_kms_helper_common.c |   2 +-
+>  drivers/gpu/drm/drm_lease.c             |   4 +-
+>  drivers/gpu/drm/drm_legacy_misc.c       |   4 +-
+>  drivers/gpu/drm/drm_lock.c              |  36 +++----
+>  drivers/gpu/drm/drm_mipi_dbi.c          |  19 ++--
+>  drivers/gpu/drm/drm_mipi_dsi.c          |  15 +--
+>  drivers/gpu/drm/drm_mm.c                |   8 +-
+>  drivers/gpu/drm/drm_mode_config.c       |   2 +-
+>  drivers/gpu/drm/drm_mode_object.c       |   6 +-
+>  drivers/gpu/drm/drm_modes.c             |  36 +++----
+>  drivers/gpu/drm/drm_modeset_helper.c    |   2 +-
+>  drivers/gpu/drm/drm_pci.c               |  14 +--
+>  drivers/gpu/drm/drm_plane.c             |  46 ++++-----
+>  drivers/gpu/drm/drm_probe_helper.c      |  39 ++++----
+>  drivers/gpu/drm/drm_rect.c              |   4 +-
+>  drivers/gpu/drm/drm_scatter.c           |  19 ++--
+>  drivers/gpu/drm/drm_syncobj.c           |   2 +-
+>  drivers/gpu/drm/drm_sysfs.c             |  22 ++---
+>  drivers/gpu/drm/drm_vm.c                |  45 +++++----
+>  include/drm/drm_print.h                 |  81 ++++++++++------
+>  40 files changed, 480 insertions(+), 423 deletions(-)
 
-I think we need to stop adding them here... This was supposed to be
-limited list for Qualcomm bootloader. Are you sure Qualcomm bootloader
-requires such names with versions?
-
-Best regards,
-Krzysztof
-
+-- 
+Jani Nikula, Intel Open Source Graphics Center
