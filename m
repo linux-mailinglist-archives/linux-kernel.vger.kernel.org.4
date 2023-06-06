@@ -2,205 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A405A724375
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 14:59:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38EE6724376
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 14:59:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237717AbjFFM72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 08:59:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56728 "EHLO
+        id S237877AbjFFM7a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 08:59:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230499AbjFFM7T (ORCPT
+        with ESMTP id S235961AbjFFM7U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 08:59:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E525310C7
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 05:58:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686056295;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Tue, 6 Jun 2023 08:59:20 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E84410F4
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 05:58:49 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 4D16B1FD69;
+        Tue,  6 Jun 2023 12:58:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1686056328; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=dtuylhemCFrocIQz72z/IvBRItNMZNPZwOBB6roSRDM=;
-        b=VMQ+Roar/LRQZyjUSGQq/wpJkzdCHsZ2NNzjluy+ipew6O43Gnuiwoud+Mxmsaeyi3pzyx
-        agTH1wyUPHIU3HmWNv70mQJHLBekU0brpjSN+UjoRSRR43IaAntHiZLXVwjRhtqs4lNYjD
-        lgpgjm6NgZcVfdcfOLGHjkBvEzIOwGs=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-611-tmugchH6OJ-PYVehtJctbQ-1; Tue, 06 Jun 2023 08:58:12 -0400
-X-MC-Unique: tmugchH6OJ-PYVehtJctbQ-1
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3f41a04a297so29789185e9.3
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 05:58:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686056291; x=1688648291;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dtuylhemCFrocIQz72z/IvBRItNMZNPZwOBB6roSRDM=;
-        b=ZVL7S1mjNOXLFu6813Z+22zaQ4Ov16ul7p4DGPnmLiVbNHbJ8Nt2OsphvCG6hXzz9O
-         QB9jhGK+583kQ4YV+exqyzrqHIATwB7h3gp22DLzrdfiNsGoNyTS+tzpcPe3uT0gxGTE
-         wo9k0XvJEJaRz6RytVGvXYvXhMI8Mxl0MH7pcitO6/3wImGqXXREA4/XNUGDyLr16g5Q
-         frgTqlpwMYOKH8pPHRthEBj2HplbURfJzirP6CnAGbGTH8jGYaLZcwJ8bInIvcJbXi0I
-         5531d4tL3qG1fx9VLcSw9gl2fQjtJ93hqojnYxqV8Mh9oCaBTql9HI69uamzBFFkZzLa
-         2slw==
-X-Gm-Message-State: AC+VfDzBi1kUbsSoEslJ+3yxdAOpFWZpie5Heu2TQC4wp3ZkStWIMizm
-        +f40YPvF4Vj7ZX1clYEl0LQkhgbJ+bPrK1SPgF3JN6VbDUGjX82iHxHio00p1NcHbOjTZrvqeOY
-        RWCCDojiZHDkTSjHslXGnWmFx
-X-Received: by 2002:a05:600c:3797:b0:3f4:2492:a91f with SMTP id o23-20020a05600c379700b003f42492a91fmr1985694wmr.27.1686056291606;
-        Tue, 06 Jun 2023 05:58:11 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7iSPeYaUH/YZk+7SBXsnFurRNoLRH/Yr/5f9n7h0h6HrxGNUlFSlQiPwqzijjD8yGHRwJDSg==
-X-Received: by 2002:a05:600c:3797:b0:3f4:2492:a91f with SMTP id o23-20020a05600c379700b003f42492a91fmr1985683wmr.27.1686056291295;
-        Tue, 06 Jun 2023 05:58:11 -0700 (PDT)
-Received: from redhat.com ([2.55.41.2])
-        by smtp.gmail.com with ESMTPSA id q25-20020a7bce99000000b003eddc6aa5fasm17487714wmj.39.2023.06.06.05.58.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 05:58:10 -0700 (PDT)
-Date:   Tue, 6 Jun 2023 08:58:06 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     Stefano Garzarella <sgarzare@redhat.com>,
-        Shannon Nelson <shannon.nelson@amd.com>,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
-        Tiwei Bie <tiwei.bie@intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] vhost-vdpa: filter VIRTIO_F_RING_PACKED feature
-Message-ID: <20230606085643-mutt-send-email-mst@kernel.org>
-References: <20230605110644.151211-1-sgarzare@redhat.com>
- <20230605084104-mutt-send-email-mst@kernel.org>
- <24fjdwp44hovz3d3qkzftmvjie45er3g3boac7aezpvzbwvuol@lmo47ydvnqau>
- <20230605085840-mutt-send-email-mst@kernel.org>
- <gi2hngx3ndsgz5d2rpqjywdmou5vxhd7xgi5z2lbachr7yoos4@kpifz37oz2et>
- <20230605095404-mutt-send-email-mst@kernel.org>
- <32ejjuvhvcicv7wjuetkv34qtlpa657n4zlow4eq3fsi2twozk@iqnd2t5tw2an>
- <CACGkMEu3PqQ99UoKF5NHgVADD3q=BF6jhLiyumeT4S1QCqN1tw@mail.gmail.com>
+        bh=OK2MXuNECGDPqZjzgWmkfkpBDGL9oo5X3x657WZQzkQ=;
+        b=Sb/NBavrX9jHmuTQFxeQ9qYdZQf/zHtquhKvhHK82pROP9omA0OTf6E4kQFM8wn5toWyj9
+        r0/TztDOFtsKu2cLASCiAqCJBSpnwLMbAV7yt/uTjfTlaPZWEohD+m7G8yo/3XTv9/lO0+
+        BeVPi9sopC3bakb3uRu1cG8bX0VCnS4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1686056328;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=OK2MXuNECGDPqZjzgWmkfkpBDGL9oo5X3x657WZQzkQ=;
+        b=97PTe0rkr3N5KOuUb6FflHjPTeTP08novX++g7/NvE1daNX2Qm8eXZOXEHo+uPp2rNFZ9M
+        lwwwLHpMyA7f76Cw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 31ECB13776;
+        Tue,  6 Jun 2023 12:58:48 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id JcFqC4gtf2TuSwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 06 Jun 2023 12:58:48 +0000
+Message-ID: <1296cd8a-fd28-98fe-b132-c168d46e3202@suse.cz>
+Date:   Tue, 6 Jun 2023 14:58:47 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACGkMEu3PqQ99UoKF5NHgVADD3q=BF6jhLiyumeT4S1QCqN1tw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 2/5] mm: compaction: simplify should_compact_retry()
+Content-Language: en-US
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com
+References: <20230519123959.77335-1-hannes@cmpxchg.org>
+ <20230519123959.77335-3-hannes@cmpxchg.org>
+ <1c3c9305-a678-279e-f015-7aed544ab3c8@suse.cz>
+ <20230529163805.GA84971@cmpxchg.org> <20230602144705.GB161817@cmpxchg.org>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20230602144705.GB161817@cmpxchg.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 09:29:22AM +0800, Jason Wang wrote:
-> On Mon, Jun 5, 2023 at 10:58 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
-> >
-> > On Mon, Jun 05, 2023 at 09:54:57AM -0400, Michael S. Tsirkin wrote:
-> > >On Mon, Jun 05, 2023 at 03:30:35PM +0200, Stefano Garzarella wrote:
-> > >> On Mon, Jun 05, 2023 at 09:00:25AM -0400, Michael S. Tsirkin wrote:
-> > >> > On Mon, Jun 05, 2023 at 02:54:20PM +0200, Stefano Garzarella wrote:
-> > >> > > On Mon, Jun 05, 2023 at 08:41:54AM -0400, Michael S. Tsirkin wrote:
-> > >> > > > On Mon, Jun 05, 2023 at 01:06:44PM +0200, Stefano Garzarella wrote:
-> > >> > > > > vhost-vdpa IOCTLs (eg. VHOST_GET_VRING_BASE, VHOST_SET_VRING_BASE)
-> > >> > > > > don't support packed virtqueue well yet, so let's filter the
-> > >> > > > > VIRTIO_F_RING_PACKED feature for now in vhost_vdpa_get_features().
-> > >> > > > >
-> > >> > > > > This way, even if the device supports it, we don't risk it being
-> > >> > > > > negotiated, then the VMM is unable to set the vring state properly.
-> > >> > > > >
-> > >> > > > > Fixes: 4c8cf31885f6 ("vhost: introduce vDPA-based backend")
-> > >> > > > > Cc: stable@vger.kernel.org
-> > >> > > > > Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
-> > >> > > > > ---
-> > >> > > > >
-> > >> > > > > Notes:
-> > >> > > > >     This patch should be applied before the "[PATCH v2 0/3] vhost_vdpa:
-> > >> > > > >     better PACKED support" series [1] and backported in stable branches.
-> > >> > > > >
-> > >> > > > >     We can revert it when we are sure that everything is working with
-> > >> > > > >     packed virtqueues.
-> > >> > > > >
-> > >> > > > >     Thanks,
-> > >> > > > >     Stefano
-> > >> > > > >
-> > >> > > > >     [1] https://lore.kernel.org/virtualization/20230424225031.18947-1-shannon.nelson@amd.com/
-> > >> > > >
-> > >> > > > I'm a bit lost here. So why am I merging "better PACKED support" then?
-> > >> > >
-> > >> > > To really support packed virtqueue with vhost-vdpa, at that point we would
-> > >> > > also have to revert this patch.
-> > >> > >
-> > >> > > I wasn't sure if you wanted to queue the series for this merge window.
-> > >> > > In that case do you think it is better to send this patch only for stable
-> > >> > > branches?
-> > >> > > > Does this patch make them a NOP?
-> > >> > >
-> > >> > > Yep, after applying the "better PACKED support" series and being
-> > >> > > sure that
-> > >> > > the IOCTLs of vhost-vdpa support packed virtqueue, we should revert this
-> > >> > > patch.
-> > >> > >
-> > >> > > Let me know if you prefer a different approach.
-> > >> > >
-> > >> > > I'm concerned that QEMU uses vhost-vdpa IOCTLs thinking that the kernel
-> > >> > > interprets them the right way, when it does not.
-> > >> > >
-> > >> > > Thanks,
-> > >> > > Stefano
-> > >> > >
-> > >> >
-> > >> > If this fixes a bug can you add Fixes tags to each of them? Then it's ok
-> > >> > to merge in this window. Probably easier than the elaborate
-> > >> > mask/unmask dance.
-> > >>
-> > >> CCing Shannon (the original author of the "better PACKED support"
-> > >> series).
-> > >>
-> > >> IIUC Shannon is going to send a v3 of that series to fix the
-> > >> documentation, so Shannon can you also add the Fixes tags?
-> > >>
-> > >> Thanks,
-> > >> Stefano
-> > >
-> > >Well this is in my tree already. Just reply with
-> > >Fixes: <>
-> > >to each and I will add these tags.
-> >
-> > I tried, but it is not easy since we added the support for packed
-> > virtqueue in vdpa and vhost incrementally.
-> >
-> > Initially I was thinking of adding the same tag used here:
-> >
-> > Fixes: 4c8cf31885f6 ("vhost: introduce vDPA-based backend")
-> >
-> > Then I discovered that vq_state wasn't there, so I was thinking of
-> >
-> > Fixes: 530a5678bc00 ("vdpa: support packed virtqueue for set/get_vq_state()")
-> >
-> > So we would have to backport quite a few patches into the stable branches.
-> > I don't know if it's worth it...
-> >
-> > I still think it is better to disable packed in the stable branches,
-> > otherwise I have to make a list of all the patches we need.
-> >
-> > Any other ideas?
+On 6/2/23 16:47, Johannes Weiner wrote:
+> On Mon, May 29, 2023 at 12:38:07PM -0400, Johannes Weiner wrote:
+>> On Mon, May 29, 2023 at 03:03:52PM +0200, Vlastimil Babka wrote:
+>> > I think you simplified this part too much, so now once it runs out of
+>> > retries, it will return false, while previously it would increase the priority.
 > 
-> AFAIK, except for vp_vdpa, pds seems to be the first parent that
-> supports packed virtqueue. Users should not notice anything wrong if
-> they don't use packed virtqueue. And the problem of vp_vdpa + packed
-> virtqueue came since the day0 of vp_vdpa. It seems fine to do nothing
-> I guess.
+> Here is the delta fix. If this looks good to everybody, can you please
+> fold this into the patch you have in tree? Thanks!
 > 
-> Thanks
+> ---
+> From 4b9429f9ef04fcb7bb5ffae0db8ea113b26d097b Mon Sep 17 00:00:00 2001
+> From: Johannes Weiner <hannes@cmpxchg.org>
+> Date: Fri, 2 Jun 2023 16:02:37 +0200
+> Subject: [PATCH] mm: compaction: simplify should_compact_retry() fix
+> 
+> Vlastimil points out an unintended change. Previously when hitting
+> max_retries we'd bump the priority level and restart the loop. Now we
+> bail out and fail instead. Restore the original behavior.
+> 
+> Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
 
+For the 2/5 +fix
 
-I have a question though, what if down the road there
-is a new feature that needs more changes? It will be
-broken too just like PACKED no?
-Shouldn't vdpa have an allowlist of features it knows how
-to support?
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
 
-> >
-> > Thanks,
-> > Stefano
-> >
-> >
+> ---
+>  mm/page_alloc.c | 24 +++++++++++++-----------
+>  1 file changed, 13 insertions(+), 11 deletions(-)
+> 
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 72660e924b95..e7d7db36582b 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -3768,6 +3768,15 @@ should_compact_retry(struct alloc_context *ac, int order, int alloc_flags,
+>  	if (fatal_signal_pending(current))
+>  		return false;
+>  
+> +	/*
+> +	 * Compaction was skipped due to a lack of free order-0
+> +	 * migration targets. Continue if reclaim can help.
+> +	 */
+> +	if (compact_result == COMPACT_SKIPPED) {
+> +		ret = compaction_zonelist_suitable(ac, order, alloc_flags);
+> +		goto out;
+> +	}
+> +
+>  	/*
+>  	 * Compaction managed to coalesce some page blocks, but the
+>  	 * allocation failed presumably due to a race. Retry some.
+> @@ -3785,17 +3794,10 @@ should_compact_retry(struct alloc_context *ac, int order, int alloc_flags,
+>  		if (order > PAGE_ALLOC_COSTLY_ORDER)
+>  			max_retries /= 4;
+>  
+> -		ret = ++(*compaction_retries) <= max_retries;
+> -		goto out;
+> -	}
+> -
+> -	/*
+> -	 * Compaction was skipped due to a lack of free order-0
+> -	 * migration targets. Continue if reclaim can help.
+> -	 */
+> -	if (compact_result == COMPACT_SKIPPED) {
+> -		ret = compaction_zonelist_suitable(ac, order, alloc_flags);
+> -		goto out;
+> +		if (++(*compaction_retries) <= max_retries) {
+> +			ret = true;
+> +			goto out;
+> +		}
+>  	}
+>  
+>  	/*
 
