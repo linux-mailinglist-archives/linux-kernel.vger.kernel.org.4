@@ -2,182 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 352B1723F5A
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 12:26:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC89E723F63
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 12:27:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234997AbjFFK0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 06:26:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49050 "EHLO
+        id S235919AbjFFK1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 06:27:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232883AbjFFK0W (ORCPT
+        with ESMTP id S231826AbjFFK1R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 06:26:22 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E9B0E6E;
-        Tue,  6 Jun 2023 03:26:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=PP+oq9SiF87lBNI6tats4jiuMD4acRFhfDstaMQqkVg=; b=O86TfGr/JsGqU9JoWtD9rq4e0D
-        WdU4OjJMOzATtHlzH3FDupVbiJ7nUkC6KSBCwa4M4K7GjTf37SSjKRKR+Eu4lKU/3EIZpxcNP+pO4
-        JUCBx/hIz8FEY4gK+0vjBTzKwYzLC7gLew9VzYmYD9Rkh3BDb3JtitiGfZJqOPXvckqLFA8KGl3Gq
-        I0hbxK3KLdfmiU6nLTIpOJn/bxOYBrW72lk2fo1evKo9BAshGWcmIgreYmGUZ2kSkEDrBX7Kf3Tyd
-        dXMg6lTpW6nZwIZuRxXI2DNKE8/sp52vLFUBDIdzxXjdoYZu80iFbbrSyUTIcLHz5q+HgNvugkSOY
-        H4JCJOIw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:41340)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1q6TtH-0005Sx-DX; Tue, 06 Jun 2023 11:26:15 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1q6TtE-00073O-Cm; Tue, 06 Jun 2023 11:26:12 +0100
-Date:   Tue, 6 Jun 2023 11:26:12 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Maxime Chevallier <maxime.chevallier@bootlin.com>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>, davem@davemloft.net,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alexis.lothore@bootlin.com, thomas.petazzoni@bootlin.com,
-        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Simon Horman <simon.horman@corigine.com>
-Subject: Re: [PATCH net-next 1/2] net: stmmac: Add PCS_LYNX as a dependency
- for the whole driver
-Message-ID: <ZH8JxF+TNuX0C1vC@shell.armlinux.org.uk>
-References: <20230606064914.134945-1-maxime.chevallier@bootlin.com>
- <20230606064914.134945-2-maxime.chevallier@bootlin.com>
- <889297a0-88c3-90df-7752-efa00184859@linux-m68k.org>
- <ZH78uGBfeHjI4Cdn@shell.armlinux.org.uk>
- <20230606121311.3cc5aa78@pc-7.home>
+        Tue, 6 Jun 2023 06:27:17 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AAA16E5B;
+        Tue,  6 Jun 2023 03:27:15 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.43:56328.1404265272
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
+        by 189.cn (HERMES) with SMTP id EFA0E1002A9;
+        Tue,  6 Jun 2023 18:27:10 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-75648544bd-7vx9t with ESMTP id b5e6b79af1f8443dafae01c9526be680 for suijingfeng@loongson.cn;
+        Tue, 06 Jun 2023 18:27:14 CST
+X-Transaction-ID: b5e6b79af1f8443dafae01c9526be680
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <680cea2e-7984-5f26-c440-46047f4733fa@189.cn>
+Date:   Tue, 6 Jun 2023 18:27:05 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230606121311.3cc5aa78@pc-7.home>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [Intel-gfx] [PATCH v2 1/2] vgaarb: various coding style and
+ comments fix
+To:     Sui Jingfeng <suijingfeng@loongson.cn>,
+        Andi Shyti <andi.shyti@linux.intel.com>
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
+        Christian Konig <christian.koenig@amd.com>,
+        Pan Xinhui <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Hawking Zhang <Hawking.Zhang@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Lijo Lazar <lijo.lazar@amd.com>,
+        YiPeng Chai <YiPeng.Chai@amd.com>,
+        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
+        Somalapuram Amaranath <Amaranath.Somalapuram@amd.com>,
+        Bokun Zhang <Bokun.Zhang@amd.com>,
+        Ville Syrjala <ville.syrjala@linux.intel.com>,
+        Li Yi <liyi@loongson.cn>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        Abhishek Sahu <abhsahu@nvidia.com>,
+        Yi Liu <yi.l.liu@intel.com>, kvm@vger.kernel.org,
+        nouveau@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        loongson-kernel@lists.loongnix.cn, amd-gfx@lists.freedesktop.org,
+        linux-pci@vger.kernel.org
+References: <20230604205831.3357596-1-15330273260@189.cn>
+ <ZH5epG6rfTOWT6CS@ashyti-mobl2.lan>
+ <f9e67fe9-a93b-75ab-1fdb-87d3783fe5fc@loongson.cn>
+Content-Language: en-US
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <f9e67fe9-a93b-75ab-1fdb-87d3783fe5fc@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 12:13:11PM +0200, Maxime Chevallier wrote:
-> Hello Geert, Russell,
-> 
-> On Tue, 6 Jun 2023 10:30:32 +0100
-> "Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
-> 
-> > On Tue, Jun 06, 2023 at 10:29:20AM +0200, Geert Uytterhoeven wrote:
-> > > 	Hi Maxime,
-> > > 
-> > > On Tue, 6 Jun 2023, Maxime Chevallier wrote:  
-> > > > Although pcs_lynx is only used on dwmac_socfpga for now, the cleanup
-> > > > path is in the generic driver, and triggers build issues for other
-> > > > stmmac variants. Make sure we build pcs_lynx in all cases too, as for
-> > > > XPCS.  
-> > > 
-> > > That seems suboptimal to me, as it needlesly increases kernel size for
-> > > people who do not use dwmac_socfpga.  Hence I made an alternative patch:
-> > > https://lore.kernel/org/7b36ac43778b41831debd5c30b5b37d268512195.1686039915.git.geert+renesas@glider.be  
-> > 
-> > A better solution would be to re-architect the removal code so that
-> > whatever creates the PCS is also responsible for removing it.
-> > 
-> > Also, dwmac_socfpga nees to be reorganised anyway, because it calls
-> > stmmac_dvr_probe() which then goes on to call register_netdev(),
-> > publishing the network device, and then after stmmac_dvr_probe(),
-> > further device setup is done. As the basic driver probe flow should
-> > be setup and then publish, the existing code structure violates that.
-> > 
-> 
-> I agree that this solution is definitely suboptimal, I wanted mostly to get it
-> fixed quickly as this breaks other stmmac variants.
-> 
-> Do we still go on with the current patch (as Geert's has issues) and then
-> consider reworking dwmac_socfpga ?
+Hi,
 
-As Geert himself mentioned, passed on from Arnd:
-  As pointed out by Arnd, this doesn't work when PCS_LYNX is a loadable
-  module and STMMAC is built-in:
-  https://lore.kernel.org/r/11bd37e9-c62e-46ba-9456-8e3b353df28f@app.fastmail.com
+On 2023/6/6 10:06, Sui Jingfeng wrote:
+> Originally, I also want to express the opinion. 
 
-So Geert's solution will just get rid of the build error, but leave the
-Lynx PCS undestroyed. I take Geert's comment as a self-nack on his
-proposed patch.
 
-The changes are only in net-next at the moment, and we're at -rc5.
-There's probably about 2.5 weeks to get this sorted before the merge
-window opens.
+Originally,  I want to express the same opinion as you told me.
 
-So, we currently have your suggestion. Here's mine as an immediate
-fix. This doesn't address all the points I've raised, but should
-resolve the immediate issue.
+Because vga_iostate_to_str() function is taking unsigned int parameter.
 
-Untested since I don't have the hardware... (the test build is
-running):
+so, I think, using 'unsigned int *' type as the third parameter 
+vga_str_to_iostate() function is more suitable.
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c
-index e399fccbafe5..239c7e9ed41d 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c
-@@ -494,6 +494,17 @@ static int socfpga_dwmac_probe(struct platform_device *pdev)
- 	return ret;
- }
- 
-+static void socfpga_dwmac_remove(struct platform_device *pdev)
-+{
-+	struct net_device *ndev = platform_get_drvdata(pdev);
-+	struct stmmac_priv *priv = netdev_priv(ndev);
-+	struct phylink_pcs *pcs = priv->hw->lynx_pcs;
-+
-+	stmmac_pltfr_remove(pdev);
-+
-+	lynx_pcs_destroy(pcs);
-+}
-+
- #ifdef CONFIG_PM_SLEEP
- static int socfpga_dwmac_resume(struct device *dev)
- {
-@@ -565,7 +576,7 @@ MODULE_DEVICE_TABLE(of, socfpga_dwmac_match);
- 
- static struct platform_driver socfpga_dwmac_driver = {
- 	.probe  = socfpga_dwmac_probe,
--	.remove_new = stmmac_pltfr_remove,
-+	.remove_new = socfpga_dwmac_remove,
- 	.driver = {
- 		.name           = "socfpga-dwmac",
- 		.pm		= &socfpga_dwmac_pm_ops,
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index fa07b0d50b46..1801f8cc8413 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -940,9 +940,6 @@ static struct phylink_pcs *stmmac_mac_select_pcs(struct phylink_config *config,
- 	if (priv->hw->xpcs)
- 		return &priv->hw->xpcs->pcs;
- 
--	if (priv->hw->lynx_pcs)
--		return priv->hw->lynx_pcs;
--
- 	return NULL;
- }
- 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+
+But this patch is too trivial, so I smash them into one patch.
+
