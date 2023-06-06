@@ -2,114 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3006C724C00
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 21:01:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69D4D724C02
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 21:01:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239182AbjFFTBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 15:01:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37446 "EHLO
+        id S235078AbjFFTB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 15:01:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238964AbjFFTBJ (ORCPT
+        with ESMTP id S239184AbjFFTBZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 15:01:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0601495
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 12:01:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E9FD635B5
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 19:01:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB594C433EF;
-        Tue,  6 Jun 2023 19:01:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686078063;
-        bh=8VSP6X5HdznLbwQMYErzABqaXfaxZIW755OS+DXUrX0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=Jc5KjSXvQdpp345q2PX36NiZZ/vb4vcpz8ysOTPRNM4mjZFJ+oos/O2ps7jrZTvBP
-         jSAA9yYobIgs5OmhViLvRkVIjz8izi3zcTYQmRpPjXq0doKpN/v8x+3BsmgyVluN3+
-         EQgXHGed04Uqq1hXXJxrtwG4B/Z1i4OoECdfdZJwDePA/m0k6UfKk9BKcv4YhNzO3T
-         DTp2/96VG1pKXwRvWVfOzey0hlwagGlcRRCmloZY5/g2HyVZ0cNHQy9VouEHgYhW1H
-         nJS+P0Nn89MlC8i/xA73J/6+toJBfuuL8Wgs9ZHartLOISG4nVRblkmQtEjKMSVJaJ
-         CnqJT76hZA9YA==
-Date:   Tue, 6 Jun 2023 14:01:02 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Sui Jingfeng <suijingfeng@loongson.cn>
-Cc:     Sui Jingfeng <15330273260@189.cn>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, etnaviv@lists.freedesktop.org,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH v7 7/7] drm/etnaviv: add support for the dma coherent
- device
-Message-ID: <20230606190102.GA1134540@bhelgaas>
+        Tue, 6 Jun 2023 15:01:25 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B129E
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 12:01:24 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 356J1GY3031797;
+        Tue, 6 Jun 2023 14:01:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1686078076;
+        bh=hKdR7e+OzXTJnZChozDBi/L+xAXs7vDfz/QSwg8b+NI=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=zAcDOL6ICnmEVe5FOmpvEraqOoaR6PSwgCKm6tQcHkvXvLQN36bJVTK8cU5k5EaWF
+         OzTGWJ52PUzsA2TZTXXZyZ6OUkevylc4nkaXVxNLgIm3Dam/DDIIGJPr5xV0pKC/EW
+         ZVJxhy7DQQ4l49ItBIrOLBAJnV2ulA1WwpKVrqZE=
+Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 356J1GTj070896
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 6 Jun 2023 14:01:16 -0500
+Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 6
+ Jun 2023 14:01:16 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 6 Jun 2023 14:01:16 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 356J1Gmn053316;
+        Tue, 6 Jun 2023 14:01:16 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     <ssantosh@kernel.org>, Osama Muhammad <osmtendev@gmail.com>
+CC:     Nishanth Menon <nm@ti.com>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] wkup_m3_ipc.c: Fix error checking for debugfs_create_dir
+Date:   Tue, 6 Jun 2023 14:01:15 -0500
+Message-ID: <168607806409.3673808.12259234036575511379.b4-ty@ti.com>
+X-Mailer: git-send-email 2.40.0
+In-Reply-To: <20230517172431.13507-1-osmtendev@gmail.com>
+References: <20230517172431.13507-1-osmtendev@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <234586a0-995c-b4c4-3b7b-35afeea1a797@loongson.cn>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 02:43:27AM +0800, Sui Jingfeng wrote:
-> On 2023/6/7 00:56, Bjorn Helgaas wrote:
-> > On Sat, Jun 03, 2023 at 06:59:43PM +0800, Sui Jingfeng wrote:
-> > > From: Sui Jingfeng <suijingfeng@loongson.cn>
-> > > 
-> > > Loongson CPUs maintain cache coherency by hardware, which means that the
-> > > data in the CPU cache is identical to the data in main system memory. As
-> > > for the peripheral device, most of Loongson chips chose to define the
-> > > peripherals as DMA coherent by default, device drivers do not need to
-> > > maintain the coherency between a processor and an I/O device manually.
-> > ...
+Hi Osama Muhammad,
 
-> > I guess the only way to discover this coherency attribute is via the
-> > DT "vivante,gc" property?  Seems a little weird but I'm really not a
-> > DT person.
+On Wed, 17 May 2023 22:24:31 +0500, Osama Muhammad wrote:
+> This patch fixes the error checking in wkup_m3_ipc.c in
+> debugfs_create_dir. The correct way to check if an error occurred
+> is 'IS_ERR' inline function.
 > 
-> I'm not sure it is *only*, but it is very convenient to achieve such a thing
-> with DT.
-
-I don't know if this is a property of the PCI device, or a property of
-the system as a whole.  I asked because PCI devices should be
-self-describing (the Device/Vendor ID should be enough to identify the
-correct driver, and the driver should know how to learn anything else
-it needs to know about the device from PCI config space) and should
-not require extra DT properties. 
-
-But if this is a CPU or system property, you probably have to use a
-firmware interface like DT or ACPI.
-
-> > > +++ b/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
-> > > @@ -8,6 +8,7 @@
-> > >   #include <linux/delay.h>
-> > >   #include <linux/dma-fence.h>
-> > >   #include <linux/dma-mapping.h>
-> > > +#include <linux/dma-map-ops.h>
-> >
-> > It looks like this #include might not be needed?
 > 
-> No, the dev_is_dma_coherent() function is declared and defined in
-> dma-map-ops.h.  if remove it, gcc will complain:
-> 
-> drivers/gpu/drm/etnaviv/etnaviv_drv.c: In function
-> ‘etnaviv_is_dma_coherent’:
-> drivers/gpu/drm/etnaviv/etnaviv_drv.c:56:14: error: implicit declaration of
-> function ‘dev_is_dma_coherent’; did you mean ‘etnaviv_is_dma_coherent’?
-> [-Werror=implicit-function-declaration]
->    56 |   coherent = dev_is_dma_coherent(dev);
->       |              ^~~~~~~~~~~~~~~~~~~
 
-Of course, but that warning is for etnaviv_drv.c, not for
-etnaviv_gpu.c.  So etnaviv_drv.c needs to include dma-map-ops.h, but I
-don't think etnaviv_gpu.c does.  I removed this #include from
-etnaviv_gpu.c and it still built without errors.
+I have applied the following to branch ti-next on [1].
+Thank you!
 
-> > You're only adding a
-> > new reference to priv->dma_coherent, which looks like it was added to
-> > etnaviv_drv.h.
+[1/1] wkup_m3_ipc.c: Fix error checking for debugfs_create_dir
+      commit: b11403c93b7cddc8916b132a395b1524c02447a3
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent up the chain during
+the next merge window (or sooner if it is a relevant bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+[1] git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+
