@@ -2,161 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13EF672409C
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 13:14:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BC5F7240A5
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 13:16:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232926AbjFFLO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 07:14:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47408 "EHLO
+        id S231826AbjFFLQG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 07:16:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232900AbjFFLOZ (ORCPT
+        with ESMTP id S229803AbjFFLP4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 07:14:25 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E70D18E
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 04:14:23 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-977c72b116fso475967966b.3
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 04:14:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686050062; x=1688642062;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lZSmA8DY0eTLKSTs9zFUI42k53ST/DbB3g3jLk/VVH4=;
-        b=rCaOS62Yrkxmzf8yxhctHVMGqbGEnvBbPAPUum2pPYYLMqQ16bKL7AcLgocA1/0Lec
-         jcBSGmJ/YMduP30NT0m33MVzOgohuUQxM22FbiVRT5+KBSqpeZb01zlIiD3amv5cewKF
-         HNo+uOfiN1lOJjmKumu1r2ABFRFtTazGXI2OuBTMl+vMoUPy18+pcQaQqlJIqc21no4D
-         /mdFcxLbSIpqfM5gL7K9RQn+KNyU5KP6wBOdpgTwtAbx+P1IETZi341c4Vortt5X5Y5O
-         mcNJu2XF/X1JpLT+dzDDJ997Db+0z1jgnPOQMrsTh1CVNRugZGQf4L7oxpcDky4jH8iI
-         3jtw==
+        Tue, 6 Jun 2023 07:15:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C9B718E
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 04:15:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686050106;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6nOtaiNjzF/2l30khHz4vnxWHOiGMg6bW5+m2iJbioI=;
+        b=SodU1De44BmTh8R4OoQmxYLF2p0yCGJVkmps04XMUqyj2ZCnWq3C+UFfsIPJyAaJ1yG/KL
+        OivtShQXlUvl5hlTMH8yKZP1+KihUuBOndbGiZQJ3Tlz46PZk6qVJYVJhG6YzNwOEoFx+l
+        bJDBtbrPwYuwm+VJ6zMmbHWhn9LX2Fc=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-138-ErCrE8ftOqmEMj4v6WCXBQ-1; Tue, 06 Jun 2023 07:15:05 -0400
+X-MC-Unique: ErCrE8ftOqmEMj4v6WCXBQ-1
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-75eb82ada06so50523485a.1
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 04:15:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686050062; x=1688642062;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lZSmA8DY0eTLKSTs9zFUI42k53ST/DbB3g3jLk/VVH4=;
-        b=j//mA2l2HlmmcR+05Yb72h2GKDfE6/577Dt+7RcWH/SLhjnAEJ3VB5DeJHZRluE3gY
-         gJHJQc3PcCSvk6/lmdspZ7nr9PJ7QitdXqLVHQcmsiXarf52+FAQzEW3V+s3w+TS/DY/
-         LCsshqId87F7giJo0r6gJDUgzmn2PvxQJNnIFydmKznItiMrEwI0tK3utVMz7nBT/TUh
-         LvAteVr/ltEd81BZRDekJDqxCHcHwUteIyXYm7QpBtAWBMiAw2VFmEuoqFSXvbboWCvT
-         KE/hT9CPgcQ5+0XVsxy1et85Isjl6ZqQUACypv/i/o1gNJ6sgqb8/pu9b0yr0QNUm/tj
-         eicw==
-X-Gm-Message-State: AC+VfDyi6z5RzXg5DeuRJg2gT0EIYHVelG7uxQkR2le+z355M9ZeCn6f
-        mCgOwdgQQwLjs1QNYlyvFwy/cg==
-X-Google-Smtp-Source: ACHHUZ7Te2mWiSqGZNgHvL+5bOOq01EPLyHtb7WGfPbOM1p4qruYTL10yBMBpLJ3aF5t8VoUPsjUQQ==
-X-Received: by 2002:a17:907:3f8f:b0:969:f54c:dee2 with SMTP id hr15-20020a1709073f8f00b00969f54cdee2mr2171446ejc.26.1686050062111;
-        Tue, 06 Jun 2023 04:14:22 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id o18-20020a170906601200b0096f71ace804sm5463236ejj.99.2023.06.06.04.14.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Jun 2023 04:14:21 -0700 (PDT)
-Message-ID: <49a33caf-e310-fcfb-7786-6731dcc747f5@linaro.org>
-Date:   Tue, 6 Jun 2023 13:14:19 +0200
+        d=1e100.net; s=20221208; t=1686050104; x=1688642104;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6nOtaiNjzF/2l30khHz4vnxWHOiGMg6bW5+m2iJbioI=;
+        b=Qn/JMmNvS79af6XvSL1oD1dpLXmoPNuZ9LYeNiQ6QyZiwoQRfCg0ISSoQzqoG4KQTR
+         AO5sfckyV5Dtl+vVeyaiDs2kzqLt72r0V5DcN3ccISK/QDlp9/KlSK3jo/Il/sGK/tF4
+         xPrWs3wpOXAoeE5CCQlkT46ddVWGIwUwm4+c1tIh44PkwQZItj7BxW7DBjZWI5N6yOBT
+         4uEX0R1O2zUkuxzE7yLHnMwtZu4m5muNl+Z8Jcuz4czi0Bh80WyvpELFcU8Yjn6Wu1xg
+         2lvX/lYsFs/LuA4tDj7X7n1Jx8CFpO04fgta9pyOWYXDZe3JoS9Jz4wmD0fzYTOVWnrN
+         qetA==
+X-Gm-Message-State: AC+VfDxEQLrJPIBOGOkg4fflFjYMhbAmQC51Oy33vDQducXsOlt/do77
+        tJhG1KpZHQknGOs77NmQ6taYY9zwP7HXSJb+7i9Q7QDBOzyurs18sHJvcCeCSs8FerFLugWKEGe
+        O7dNxC4brCpf0WqCp0fKadXet
+X-Received: by 2002:a05:620a:6185:b0:75b:23a1:69e7 with SMTP id or5-20020a05620a618500b0075b23a169e7mr1655417qkn.7.1686050104804;
+        Tue, 06 Jun 2023 04:15:04 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6tP19Lhtynb9dSrzqdwWnladOfHbnmEns3mricCewylxpVi4WpSIaM1grItcgS6vd5GoRInw==
+X-Received: by 2002:a05:620a:6185:b0:75b:23a1:69e7 with SMTP id or5-20020a05620a618500b0075b23a169e7mr1655392qkn.7.1686050104521;
+        Tue, 06 Jun 2023 04:15:04 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-114-89.dyn.eolo.it. [146.241.114.89])
+        by smtp.gmail.com with ESMTPSA id s15-20020a05620a16af00b00746b2ca65edsm4815385qkj.75.2023.06.06.04.15.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Jun 2023 04:15:04 -0700 (PDT)
+Message-ID: <c39cfc3f3113ebc30f08ea87781e9a81b0153d94.camel@redhat.com>
+Subject: Re: [PATCH] net: liquidio: fix mixed module-builtin object
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>, netdev@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Derek Chickles <dchickles@marvell.com>,
+        Satanand Burla <sburla@marvell.com>,
+        Felix Manlunas <fmanlunas@marvell.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Nick Terrell <terrelln@fb.com>
+Date:   Tue, 06 Jun 2023 13:15:00 +0200
+In-Reply-To: <20230604043213.901341-1-masahiroy@kernel.org>
+References: <20230604043213.901341-1-masahiroy@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v8 3/3] dt-bindings: mtd: marvell-nand: Convert to YAML DT
- scheme
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
-        "richard@nod.at" <richard@nod.at>,
-        "vigneshr@ti.com" <vigneshr@ti.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "conor+dt@kernel.org" <conor+dt@kernel.org>,
-        "andrew@lunn.ch" <andrew@lunn.ch>,
-        "gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
-        "sebastian.hesselbarth@gmail.com" <sebastian.hesselbarth@gmail.com>,
-        "conor@kernel.org" <conor@kernel.org>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "enachman@marvell.com" <enachman@marvell.com>,
-        Vadym Kochan <vadym.kochan@plvision.eu>
-References: <20230531234923.2307013-1-chris.packham@alliedtelesis.co.nz>
- <20230531234923.2307013-4-chris.packham@alliedtelesis.co.nz>
- <a23dd485-a3d9-e31f-be3e-0ab293fcfc4a@linaro.org>
- <785368df-1881-e62e-6172-d902cee814a8@alliedtelesis.co.nz>
- <eaf9d7cf-c9f5-a5d5-67af-c43761c3c6cf@linaro.org>
- <4ea0b16e-0cec-00db-c598-e0364a7edef8@alliedtelesis.co.nz>
- <9fc57052-5049-ed50-ca95-cfd1d0420dd9@alliedtelesis.co.nz>
- <20230606094855.1ab005eb@xps-13>
- <845924ba-d9bf-d0ec-e1f2-f721366f43c0@linaro.org>
- <20230606122812.411b223a@xps-13>
- <e0d14527-8147-5e8b-6a43-ee043e0d0f8b@linaro.org>
- <d0b2cdc5-12fd-9a19-b38c-0653b4147c2b@linaro.org>
- <20230606125724.126a4685@xps-13> <20230606130719.5350174c@xps-13>
- <037f5455-35c1-e13d-814c-16317a2a15f3@linaro.org>
-In-Reply-To: <037f5455-35c1-e13d-814c-16317a2a15f3@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/06/2023 13:11, Krzysztof Kozlowski wrote:
->>> If yes, please ignore the series sent aside, I will work on it again
->>> and send a v2.
->>
->> Actually I already see a problem, let's the ingenic,nand.yaml example.
->> The goal, IIUC, is to do:
->>
->>  patternProperties:
->>    "^nand@[a-f0-9]$":
->>      type: object
->> +    $ref: nand-chip.yaml
->>      properties:
->>
->>        ...
->>
->> +    unevaluatedProperties: false
->>
->> The example in this file uses a property, nand-on-flash-bbt, which is
->> described inside nand-controller.yaml instead of nand-chip.yaml.
->> Indeed, the former actually describes many properties which are a bit
->> more controller related than chip related. With the above description,
->> the example fails because nand-on-flash-bbt is not allowed (it is not
->> listed in nand-chip.yaml).
->>
->> How would you proceed in this case?
->>
->> Maybe I could move all the NAND chip properties which are somehow
->> related to NAND controllers (and defined in nand-controller.yaml) in a
->> dedicated file and reference it from nand-chip.yaml? Any other idea is
->> welcome.
-> 
-> Yes, this would work and seems reasonable. 
+Hi,
 
-Actually, since nand-chip is used by both SPI and NAND, then I think
-better would be to create separate file - nand-only-chip.yaml (name to
-be discussed):
+On Sun, 2023-06-04 at 13:32 +0900, Masahiro Yamada wrote:
+> With CONFIG_LIQUIDIO=3Dm and CONFIG_LIQUIDIO_VF=3Dy (or vice versa),
+> $(common-objs) are linked to a module and also to vmlinux even though
+> the expected CFLAGS are different between builtins and modules.
+>=20
+> This is the same situation as fixed by commit 637a642f5ca5 ("zstd:
+> Fixing mixed module-builtin objects").
+>=20
+> Introduce the new module, liquidio-core, to provide the common functions
+> to liquidio and liquidio-vf.
+>=20
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 
-nand-controller.yaml:
-  "^nand@[a-f0-9]$":
-    $ref: nand-only-chip.yaml
+This does not build with allmodconfig:
 
-nand-only-chip.yaml:
-  $ref: nand-chip.yaml
-  all nand-controller-chip properties follow
+ERROR: modpost: "lio_get_state_string" [drivers/net/ethernet/cavium/liquidi=
+o/liquidio.ko] undefined!
+ERROR: modpost: "lio_get_state_string" [drivers/net/ethernet/cavium/liquidi=
+o/liquidio_vf.ko] undefined!
 
+Please, when you repost include the 'net-next' tag into the subj.
 
+Thanks!
 
-> Other way could be to add
-> unevaluatedProperties:false on this level (so after ref:nand-chip.yaml)
-> in nand-controller.yaml. This however would not allow any new properties
-> to be defined in device bindings.
-
-Best regards,
-Krzysztof
+Paolo
 
