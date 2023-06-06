@@ -2,173 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80B14724603
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:31:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF1C672460A
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:32:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237655AbjFFObe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 10:31:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36124 "EHLO
+        id S237926AbjFFOcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 10:32:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232951AbjFFObb (ORCPT
+        with ESMTP id S232596AbjFFOcN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 10:31:31 -0400
-Received: from smtp.dudau.co.uk (dliviu.plus.com [80.229.23.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F03CF186;
-        Tue,  6 Jun 2023 07:31:29 -0700 (PDT)
-Received: from mail.dudau.co.uk (bart.dudau.co.uk [192.168.14.2])
-        by smtp.dudau.co.uk (Postfix) with SMTP id 92CF241D13A6;
-        Tue,  6 Jun 2023 15:31:27 +0100 (BST)
-Received: by mail.dudau.co.uk (sSMTP sendmail emulation); Tue, 06 Jun 2023 15:31:27 +0100
-Date:   Tue, 6 Jun 2023 15:31:27 +0100
-From:   Liviu Dudau <liviu@dudau.co.uk>
-To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Conor Dooley <conor+dt@kernel.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] mips: dts: ralink: Add support for TP-Link HC220
- G5 v1 board
-Message-ID: <ZH9DP+QdwRu/uS2D@bart.dudau.co.uk>
-References: <20230605150114.601102-1-liviu@dudau.co.uk>
- <20230605150114.601102-2-liviu@dudau.co.uk>
- <552b4604-d1b3-0052-62aa-424944c5ecb1@arinc9.com>
- <ZH5NJsbY6ZLXYJYz@bart.dudau.co.uk>
- <43c95286-a3f4-6c68-c59c-0c86bbb74928@arinc9.com>
+        Tue, 6 Jun 2023 10:32:13 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C25A810F4
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 07:32:03 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f6d7abe9a4so53991415e9.2
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 07:32:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686061922; x=1688653922;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=f3FWgbLaTsMXyxlnHqLG8/53dcD+IHDf7oHMhEF25Eo=;
+        b=XZzIrRVuLoimzz/NSHevNJnbsurxaneyPqFlR86WSk4yp9MEhtiAEydMWldCXWiZuN
+         x3Tcf/1eGdlJXm0dU+WN42Kedj0XQEJnF21iyQ1rFDHd11xl+MdQotjeTFRR1GnOuhWf
+         ez0CokClYUCEgJvUTBtkLfpmy0p7vaOKwFdhNE7ki4eM6F1uYFTsRSAmy1zyB9D0QPjp
+         uBqDJR8VMBwOlTktEXsLAkK0oWSAabxqFRpo3PTXZPRFiCgqRZcbkwAp5ZSIwOFTikfJ
+         WZCHlBbdYs78gBm5ly5M+6AaLxhP1feeEbU+X35HKRsN18jFUQ5vszbB7iU8AHros0qi
+         +I3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686061922; x=1688653922;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=f3FWgbLaTsMXyxlnHqLG8/53dcD+IHDf7oHMhEF25Eo=;
+        b=V+GN7KBJgImSYnvEVMsnw/HPq4ZsJ5n7kaX6sNbECeZ5uRDj7gUhbJ0xsL3WYRQbDm
+         0zVNDtbM92Szy0VkkfcOSQf+3drFLJOp5WFVC9xbknwiSWCZZCb+tDpV+sczUAnvjMbw
+         wJlRhCe340CE43E/m/AUUAc4WbdWm54oZqfd5v5TwMt5NycnpxPgcj5itgUy1bv7JzTn
+         dKH97w7EBz/YYXOUB4A3b5lM3DM3oQuzRFNK+XPPD3N8e7eVObVoP8fW3AiP+xNP2i0c
+         7muYCz4TCY/V/DY7nxrbDAxmsmahG8/a5UPiujn4Y+QZddsHp68fwiA3ILWj3rkdM5AX
+         I95g==
+X-Gm-Message-State: AC+VfDzsChyY+7vyyT9kYrR/efm5aBKqrf25cNwpluXMpkNLJGGHT3Q3
+        3XUi4ctJkNe/4y+NKj08VXREVcQMXiIvwgmcB55eyGqI
+X-Google-Smtp-Source: ACHHUZ6IJLZ6iGkLQ8I2sRoB41wz0InmXh+lWBUEREnX0XqvTRvivEZWkXmcdQ8LwJFs8/dZk+vQAw==
+X-Received: by 2002:a1c:f206:0:b0:3f6:f4b:38bd with SMTP id s6-20020a1cf206000000b003f60f4b38bdmr2346928wmc.8.1686061922174;
+        Tue, 06 Jun 2023 07:32:02 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
+        by smtp.gmail.com with ESMTPSA id fc14-20020a05600c524e00b003f61177faffsm3883600wmb.0.2023.06.06.07.32.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Jun 2023 07:32:01 -0700 (PDT)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [PATCH RFC 0/4] input: touchscreen: add initial support for Goodix
+ Berlin touchscreen IC
+Date:   Tue, 06 Jun 2023 16:31:55 +0200
+Message-Id: <20230606-topic-goodix-berlin-upstream-initial-v1-0-4a0741b8aefd@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <43c95286-a3f4-6c68-c59c-0c86bbb74928@arinc9.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAFtDf2QC/x2NQQrCMBAAv1L27EKsUqtXwQd4FQ+bdNsuxCRsU
+ imU/t3gceYws0FmFc5wazZQ/kqWGCocDw24mcLEKENlaE17Mp3psMQkDqcYB1nRsnoJuKRclOm
+ DEqQIebR0vXDPrh/PDmrKUma0SsHNNRYW76tMyqOs//cLno87vPf9B/IuzqOQAAAA
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bastien Nocera <hadess@hadess.net>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Henrik Rydberg <rydberg@bitmath.org>
+Cc:     linux-input@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1884;
+ i=neil.armstrong@linaro.org; h=from:subject:message-id;
+ bh=HpTYvEajINY4Y1VMwHDbzKbegLEdvB2suIe1KsahLI8=;
+ b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBkf0NfJoMrxdtP6eAK0YQ+0WEhVaRSveQFFXUN5K88
+ a5CFuFqJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZH9DXwAKCRB33NvayMhJ0avPD/
+ 9WqTj1r1nreA4R7Q5h2H1dPOCO/bsyB1ANjAkK0TGBAn/I37s9vggSviGHMFGzQr0Ko0jjErdVNpZS
+ 2+TYTfAqPLYfXCeTbTcxFfAoYlzubyiZQKOFinIYyJ0D9NiAohh+V9TmpHCYdpwfC0xUGZURDE36RJ
+ bl/PbaHZBneGgyT9VKsli69Oi6HiKXdteoQPG5EUVxzKWh4D8SsG93YMdONDHRYcpNBP7nIFTNuZxc
+ 1wnrFdqq61MlfKzWzBmKXMhGzeGQhAxr7c7KBOsbYzFqmQ+dZTEHweoAN5U7b4wZrF88/3TWDrAU8n
+ cBxx0l5GBAvpJaDFwkK90Wxcz2jWvWW85b16DWtrKrkpsji8DCHQCHTCtPAAqBkQ1h2HemIukG7edI
+ YKrkj3LHoDZLkWq/t2kPH46azM960ZIX8DnfjZ5ZTA8PdrWBRYAk4iyoPXvyRmUQwHELfSwmCZ8jv6
+ gZ7NTor8sE82/9A/6RC7L/Z9Ledjv0XjCK3Tl53Mx2JYrdvSQWG0G8eV2SBVSmzeqcPxC0vSXrm9Gt
+ ecderG6nppwMUI735pLaCH3/aR0ydsU4+3uYk2UuRIPtHVZXKX4dJAGngec+xCMrrCkvsMEUYQlmDR
+ HmIyWH9MeuHz9xVd/KD6G+IXEOK/JJRI+IkBMLlNWd4JEmuWSmthDqPxpMbA==
+X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
+ fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 08:24:48AM +0300, Arınç ÜNAL wrote:
-> On 6.06.2023 00:01, Liviu Dudau wrote:
-> > On Mon, Jun 05, 2023 at 07:35:44PM +0300, Arınç ÜNAL wrote:
-> > > On 5.06.2023 18:01, Liviu Dudau wrote:
-> > > > This WiFi AP is based on a MT7621 SoC with 128MiB RAM, 128MiB NAND,
-> > > > a MT7603 2.4GHz WiFi and a MT7613 5GHz WiFi chips integrated on the board,
-> > > > connected to the main SoC over PCIe.
-> > > > 
-> > > > The device uses NMBM over NAND, which is not currently supported in the
-> > > > mainline, so NAND node is skipped in this revision.
-> > > > 
-> > > > Signed-off-by: Liviu Dudau <liviu@dudau.co.uk>
-> > > > ---
-> > > >    arch/mips/boot/dts/ralink/Makefile            |  3 +-
-> > > >    .../dts/ralink/mt7621-tplink-hc220-g5-v1.dts  | 92 +++++++++++++++++++
-> > > >    2 files changed, 94 insertions(+), 1 deletion(-)
-> > > >    create mode 100644 arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dts
-> > > > 
-> > > > diff --git a/arch/mips/boot/dts/ralink/Makefile b/arch/mips/boot/dts/ralink/Makefile
-> > > > index 11732b8c8163a..d27d7e8c700fe 100644
-> > > > --- a/arch/mips/boot/dts/ralink/Makefile
-> > > > +++ b/arch/mips/boot/dts/ralink/Makefile
-> > > > @@ -8,6 +8,7 @@ dtb-$(CONFIG_DTB_VOCORE2)	+= vocore2.dtb
-> > > >    dtb-$(CONFIG_SOC_MT7621) += \
-> > > >    	mt7621-gnubee-gb-pc1.dtb \
-> > > > -	mt7621-gnubee-gb-pc2.dtb
-> > > > +	mt7621-gnubee-gb-pc2.dtb \
-> > > > +	mt7621-tplink-hc220-g5-v1.dtb
-> > > >    obj-$(CONFIG_BUILTIN_DTB)	+= $(addsuffix .o, $(dtb-y))
-> > > > diff --git a/arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dts b/arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dts
-> > > > new file mode 100644
-> > > > index 0000000000000..859aaa1c1bc2b
-> > > > --- /dev/null
-> > > > +++ b/arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dts
-> > > > @@ -0,0 +1,92 @@
-> > > > +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > > +/dts-v1/;
-> > > > +
-> > > > +#include "mt7621.dtsi"
-> > > > +
-> > > > +#include <dt-bindings/gpio/gpio.h>
-> > > > +#include <dt-bindings/input/input.h>
-> > > > +#include <dt-bindings/leds/common.h>
-> > > > +
-> > > > +/ {
-> > > > +	compatible = "tplink,hc220-g5-v1", "mediatek,mt7621-soc";
-> > > > +	model = "TP-Link HC220 G5 v1";
-> > > > +
-> > > > +	memory@0 {
-> > > > +		device_type = "memory";
-> > > > +		reg = <0x00000000 0x8000000>;
-> > > 
-> > > Please use 8 digit addressing for the memory start and size offsets:
-> > > 
-> > > 0x00000000 0x08000000
-> > 
-> > Will do.
-> > 
-> > > 
-> > > > +	};
-> > > > +
-> > > > +	chosen {
-> > > > +		bootargs = "earlycon console=ttyS0,115200";
-> > > > +	};
-> > > > +
-> > > > +	gpio-keys {
-> > > > +		compatible = "gpio-keys";
-> > > > +
-> > > > +		key-reset {
-> > > > +			label = "reset";
-> > > > +			gpios = <&gpio 8 GPIO_ACTIVE_LOW>;
-> > > > +			linux,code = <KEY_RESTART>;
-> > > > +		};
-> > > > +
-> > > > +		key-wps {
-> > > > +			label = "wps";
-> > > > +			gpios = <&gpio 16 GPIO_ACTIVE_LOW>;
-> > > > +			linux,code = <KEY_WPS_BUTTON>;
-> > > > +		};
-> > > > +	};
-> > > > +
-> > > > +	leds {
-> > > > +		compatible = "gpio-leds";
-> > > > +
-> > > > +		red {
-> > > 
-> > > Usually the led name would point to the component the LED is used for.
-> > 
-> > These are "generic" LEDs controlled from the userspace. The original firmware
-> > uses GREEN for normal operations, RED for faults and BLUE for when WPS is
-> > enabled. I'm not sure if there are any standard bindings that I can use here.
-> 
-> Looking at:
-> 
-> https://www.kernel.org/doc/html/latest/leds/leds-class.html#led-device-naming
-> 
-> You could use red:fault, green:power, and blue:wps. For node names,
-> led-fault, led-power, and led-wps.
+These touchscreen ICs support SPI, I2C and I3C interface, up to
+10 finger touch, stylus and gestures events.
 
-Without making any changes in the device tree, because of the use of 'function' property,
-I get this:
+This initial driver is derived from the Goodix goodix_ts_berlin
+available at [1] and [2] and only supports the GT9916 IC
+present on the Qualcomm SM8550 MTP & QRD touch panel.
 
-# ls -al /sys/class/leds/
-drwxr-xr-x    2 root     root             0 Jun  6 14:24 .
-drwxr-xr-x   37 root     root             0 Jan  1  1970 ..
-lrwxrwxrwx    1 root     root             0 Jun  6 14:24 blue:wps -> ../../devices/platform/leds/leds/blue:wps
-lrwxrwxrwx    1 root     root             0 Jun  6 14:24 green:power -> ../../devices/platform/leds/leds/green:power
-lrwxrwxrwx    1 root     root             0 Jun  6 14:24 red:fault -> ../../devices/platform/leds/leds/red:fault
+The current implementation only supports BerlinD, aka GT9916.
 
-May I suggest that I change only the node names and not add a label, keeping the 'function' property instead?
+Support for advanced features like:
+- Firmware & config update
+- Stylus events
+- Gestures events
+- Previous revisions support (BerlinA or BerlinB)
+is not included in current version.
+
+The current support will work with currently flashed firmware
+and config, and bail out if firmware or config aren't flashed yet.
+
+[1] https://github.com/goodix/goodix_ts_berlin
+[2] https://git.codelinaro.org/clo/la/platform/vendor/opensource/touch-drivers
+
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+Neil Armstrong (4):
+      dt-bindings: input: document Goodix Berlin Touchscreen IC
+      input: touchscreen: add core support for Goodix Berlin Touchscreen IC
+      input: touchscreen: add I2C support for Goodix Berlin Touchscreen IC
+      input: touchscreen: add SPI support for Goodix Berlin Touchscreen IC
+
+ .../bindings/input/touchscreen/goodix-berlin.yaml  |  81 ++
+ drivers/input/touchscreen/Kconfig                  |  33 +
+ drivers/input/touchscreen/Makefile                 |   3 +
+ drivers/input/touchscreen/goodix_berlin.h          | 228 +++++
+ drivers/input/touchscreen/goodix_berlin_core.c     | 935 +++++++++++++++++++++
+ drivers/input/touchscreen/goodix_berlin_i2c.c      |  76 ++
+ drivers/input/touchscreen/goodix_berlin_spi.c      | 183 ++++
+ 7 files changed, 1539 insertions(+)
+---
+base-commit: 6db29e14f4fb7bce9eb5290288e71b05c2b0d118
+change-id: 20230606-topic-goodix-berlin-upstream-initial-ba97e8ec8f4c
 
 Best regards,
-Liviu
-
-> 
-> Arınç
-
 -- 
-Everyone who uses computers frequently has had, from time to time,
-a mad desire to attack the precocious abacus with an axe.
-       	   	      	     	  -- John D. Clark, Ignition!
+Neil Armstrong <neil.armstrong@linaro.org>
+
