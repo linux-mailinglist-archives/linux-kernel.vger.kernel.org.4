@@ -2,179 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A686B723502
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 04:06:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E622B723508
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 04:06:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233369AbjFFCGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 22:06:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44364 "EHLO
+        id S233502AbjFFCG3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 22:06:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231649AbjFFCGT (ORCPT
+        with ESMTP id S229681AbjFFCGX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 22:06:19 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1AF311B
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 19:06:17 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id 98e67ed59e1d1-25665d2a8bdso2562669a91.0
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 19:06:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686017177; x=1688609177;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wW68YijPC5M/xCRpMcVO/BAMrMv1lIZeTHggFsWAt3k=;
-        b=Pq4XeiWh+lt9vOCi+qa+rwki0ALN2wovdTXzj/yfLh6mcIwEK7tz36PZoeODDyeVyY
-         5IVp7VF/3+bVlNhLh2I7bkMRtoDtKdajzIvABZzoFoCc9uCwlxxYum5WqcBFBiiju6uS
-         F7l7pXUDcT9DfV1rSZCb7VWPwbTuKycuoiDcHXKBI8UEY/6xomtSIYdGiGazzXXrLsKC
-         jpXLlWOzarRebIxCt0posCCgYb45rxxubvH69KwTVk4t/Tkbzu6qArecsLw4rGb00r6j
-         Xs9Pm1NTUfG4IQvYUGLGpmT7setkDeEtLQnWWfFYikIw4WfJ58bknXw3awJTrF4O8eet
-         Gc6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686017177; x=1688609177;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wW68YijPC5M/xCRpMcVO/BAMrMv1lIZeTHggFsWAt3k=;
-        b=aUE88S0E8faqBEgS5kNGoHtVswiAcDESScxFlfzdkrfrhaBDNjWgMYKRzyKdSC+IT3
-         FEl/67jbpBY2YyWZOMT4eR5SLhQ9UqiP1GuDpc0SHBLf50AjCc7owwtIIG2pJNcyky2/
-         IJ1FTKei7InvhRrvMmINsvLj66kv3WakdJK7CYxfwsXMQkAl098vbvkaFAoUUjmsZMZc
-         +Z9uS2AF5JM1FLlZmEl7oX6d5Csy7Tw5Zh5pS7YBNskYY/9pjw3CIorqcuTzcqUm/cB8
-         Haw6UiK7/GbnmC1kwbMjICLpDL987rFiAK+QaKvWIFzStn+oTgkdQI9+b1V2QvleGyu6
-         c9mA==
-X-Gm-Message-State: AC+VfDz6qSng1ZiHf1fc2i8MhjGFwx5bS4ldVrUSmQGj56mhea4n22hN
-        ve1V8BLCJe5FxhQWNURo/MgqW/HpuFFD10OLyewDkw==
-X-Google-Smtp-Source: ACHHUZ7KiGCkrKfrTiI8e3B0XsDL6OBdSXWbPBmvfSKZ8Xi7N2zKyEhVQXjxnnhXYn1HPOsTnC3vANQxkzd4E01FlJY=
-X-Received: by 2002:a17:90b:2353:b0:256:f86:fa6e with SMTP id
- ms19-20020a17090b235300b002560f86fa6emr214511pjb.48.1686017177023; Mon, 05
- Jun 2023 19:06:17 -0700 (PDT)
+        Mon, 5 Jun 2023 22:06:23 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4CC6A114;
+        Mon,  5 Jun 2023 19:06:20 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.43])
+        by gateway (Coremail) with SMTP id _____8Dx9vCblH5kS1UAAA--.1029S3;
+        Tue, 06 Jun 2023 10:06:19 +0800 (CST)
+Received: from [10.20.42.43] (unknown [10.20.42.43])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxZuSXlH5kIp0BAA--.7051S3;
+        Tue, 06 Jun 2023 10:06:17 +0800 (CST)
+Message-ID: <f9e67fe9-a93b-75ab-1fdb-87d3783fe5fc@loongson.cn>
+Date:   Tue, 6 Jun 2023 10:06:15 +0800
 MIME-Version: 1.0
-References: <20230605060524.1178164-1-yangcong5@huaqin.corp-partner.google.com>
- <20230605060524.1178164-2-yangcong5@huaqin.corp-partner.google.com> <20230605-anyway-grab-f7a35aa199fb@spud>
-In-Reply-To: <20230605-anyway-grab-f7a35aa199fb@spud>
-From:   cong yang <yangcong5@huaqin.corp-partner.google.com>
-Date:   Tue, 6 Jun 2023 10:06:05 +0800
-Message-ID: <CAHwB_NK_j1SJ1BBkVqafFM_+fWSyvwjCpMmHQxjLjnz_KHR=KA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: input: touchscreen: Add ilitek 9882T
- touchscreen chip
-To:     Conor Dooley <conor@kernel.org>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, dmitry.torokhov@gmail.com, jikos@kernel.org,
-        benjamin.tissoires@redhat.com, dianders@chromium.org,
-        hsinyi@google.com, linux-input@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [Intel-gfx] [PATCH v2 1/2] vgaarb: various coding style and
+ comments fix
+To:     Andi Shyti <andi.shyti@linux.intel.com>,
+        Sui Jingfeng <15330273260@189.cn>
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
+        Christian Konig <christian.koenig@amd.com>,
+        Pan Xinhui <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Hawking Zhang <Hawking.Zhang@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Lijo Lazar <lijo.lazar@amd.com>,
+        YiPeng Chai <YiPeng.Chai@amd.com>,
+        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
+        Somalapuram Amaranath <Amaranath.Somalapuram@amd.com>,
+        Bokun Zhang <Bokun.Zhang@amd.com>,
+        Ville Syrjala <ville.syrjala@linux.intel.com>,
+        Li Yi <liyi@loongson.cn>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        Abhishek Sahu <abhsahu@nvidia.com>,
+        Yi Liu <yi.l.liu@intel.com>, kvm@vger.kernel.org,
+        nouveau@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        loongson-kernel@lists.loongnix.cn, amd-gfx@lists.freedesktop.org,
+        linux-pci@vger.kernel.org
+References: <20230604205831.3357596-1-15330273260@189.cn>
+ <ZH5epG6rfTOWT6CS@ashyti-mobl2.lan>
+Content-Language: en-US
+From:   Sui Jingfeng <suijingfeng@loongson.cn>
+Organization: Loongson
+In-Reply-To: <ZH5epG6rfTOWT6CS@ashyti-mobl2.lan>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8AxZuSXlH5kIp0BAA--.7051S3
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBj93XoWxXFWkWw4DZFyfKFWDAw47Awc_yoW5XryDpF
+        Zakas5Cw4kJrs7ZFy2qF4UJF1ruws3JFy7ArZIk3s7AF13J348JFsxCrZ8Z3y3XryfuF40
+        vr4UWr1DGayDZagCm3ZEXasCq-sJn29KB7ZKAUJUUUUJ529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUPqb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAF
+        wI0_Gr1j6F4UJwAaw2AFwI0_Jw0_GFyle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2
+        xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_
+        Jw0_WrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwI
+        xGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14v26rWY6Fy7MxAIw28IcxkI7VAK
+        I48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r1q6r43MI8I3I0E5I8CrV
+        AFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWrXVW8Jr1l
+        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxV
+        AFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j
+        6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07bUzu
+        AUUUUU=
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,Conor,
+Hi,
 
-On Mon, Jun 5, 2023 at 6:20=E2=80=AFPM Conor Dooley <conor@kernel.org> wrot=
-e:
+On 2023/6/6 06:16, Andi Shyti wrote:
+> Hi Sui,
 >
-> Hey Cong Yang,
->
-> On Mon, Jun 05, 2023 at 02:05:23PM +0800, Cong Yang wrote:
-> > Add an ilitek touch screen chip ili9882t.
->
-> Could you add a comment here mentioning the relationship between these
-> chips?
+> On Mon, Jun 05, 2023 at 04:58:30AM +0800, Sui Jingfeng wrote:
+>> From: Sui Jingfeng <suijingfeng@loongson.cn>
+>>
+>> To keep consistent with vga_iostate_to_str() function, the third argument
+>> of vga_str_to_iostate() function should be 'unsigned int *'.
+> I think the real reason is not to keep consistent with
+> vga_iostate_to_str() but because vga_str_to_iostate() is actually
+> only taking "unsigned int *" parameters.
 
-Okay, I will add in V3 version.
+Yes, right.
 
-> On Mon, Jun 05, 2023 at 02:05:23PM +0800, Cong Yang wrote:
->
-> > Signed-off-by: Cong Yang <yangcong5@huaqin.corp-partner.google.com>
-> > ---
-> >  .../bindings/input/elan,ekth6915.yaml         | 23 ++++++++++++++++---
-> >  1 file changed, 20 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/Documentation/devicetree/bindings/input/elan,ekth6915.yaml=
- b/Documentation/devicetree/bindings/input/elan,ekth6915.yaml
-> > index 05e6f2df604c..f0e7ffdce605 100644
-> > --- a/Documentation/devicetree/bindings/input/elan,ekth6915.yaml
-> > +++ b/Documentation/devicetree/bindings/input/elan,ekth6915.yaml
-> > @@ -15,11 +15,14 @@ description:
-> >
-> >  properties:
-> >    compatible:
-> > -    items:
-> > -      - const: elan,ekth6915
-> > +    enum:
-> > +      - elan,ekth6915
-> > +      - ilitek,ili9882t
-> >
-> >    reg:
-> > -    const: 0x10
-> > +    enum:
-> > +      - 0x10
-> > +      - 0x41
->
-> Is 0x10 only valid for the elan,ekth6915 & 0x41 for the ilitek one?
-> If so, please add some enforcement of the values based on the
-> compatible.
-
-I don't think 0x10 is the only address for ekth6915,(nor is 0x41 the
-only address for ili9882t). It depends on the hardware design.
-
->
-> >
-> >    interrupts:
-> >      maxItems: 1
-> > @@ -29,11 +32,13 @@ properties:
-> >
->
->
-> >    vcc33-supply:
-> >      description: The 3.3V supply to the touchscreen.
-> > +                 If using ili9882t then this supply will not be needed=
-.
-> >
-> >    vccio-supply:
-> >      description:
-> >        The IO supply to the touchscreen. Need not be specified if this =
-is the
-> >        same as the 3.3V supply.
-> > +      If using ili9882t, the IO supply is required.
->
-> There's no need for these sort of comments, you can rely on the required
-> sections to describe these relationships.
-
-Got it ,thanks.
+my expression is not completely correct, I will update it at next version.
 
 
+I think, we have the same opinion.
+
+Originally, I also want to express the opinion.
+
+Because, it make no sense to  interpret the return value
+
+(VGA_RSRC_LEGACY_IO | VGA_RSRC_LEGACY_MEM) as int type.
+
+
+IO state should be should be donate by a unsigned type.
+
+vga_iostate_to_str() also receive unsigned type.
+
+static const char *vga_iostate_to_str(unsigned int iostate)
+
+>> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+>> ---
+>>   drivers/pci/vgaarb.c   | 29 +++++++++++++++--------------
+>>   include/linux/vgaarb.h |  8 +++-----
+>>   2 files changed, 18 insertions(+), 19 deletions(-)
+>>
+>> diff --git a/drivers/pci/vgaarb.c b/drivers/pci/vgaarb.c
+>> index 5a696078b382..e40e6e5e5f03 100644
+>> --- a/drivers/pci/vgaarb.c
+>> +++ b/drivers/pci/vgaarb.c
+>> @@ -61,7 +61,6 @@ static bool vga_arbiter_used;
+>>   static DEFINE_SPINLOCK(vga_lock);
+>>   static DECLARE_WAIT_QUEUE_HEAD(vga_wait_queue);
+>>   
+>> -
+> drop this change
+
+OK,
+
+This is a double blank line.
+
+Originally, I intend to accumulate all tiny fix, commit together.
+
+As they are trivial.
+
+Now, Should I split this patch,
+
+then this patch set will contain two trivial patch ?
+
+>>   static const char *vga_iostate_to_str(unsigned int iostate)
+>>   {
+>>   	/* Ignore VGA_RSRC_IO and VGA_RSRC_MEM */
+>> @@ -77,10 +76,12 @@ static const char *vga_iostate_to_str(unsigned int iostate)
+>>   	return "none";
+>>   }
+>>   
+>> -static int vga_str_to_iostate(char *buf, int str_size, int *io_state)
+>> +static int vga_str_to_iostate(char *buf, int str_size, unsigned int *io_state)
+> this is OK, it's actually what you are describing in the commit
+> log, but...
 >
-> Cheers,
-> Conor.
->
-> >
-> >  required:
-> >    - compatible
-> > @@ -41,6 +46,18 @@ required:
-> >    - interrupts
-> >    - vcc33-supply
-> >
-> > +if:
-> > +  properties:
-> > +    compatible:
-> > +      contains:
-> > +        const: ilitek,ili9882t
-> > +then:
-> > +  required:
-> > +    - compatible
-> > +    - reg
-> > +    - interrupts
-> > +    - vccio-supply
-> > +
-> >  additionalProperties: false
-> >
-> >  examples:
-> > --
-> > 2.25.1
+>>   {
+>> -	/* we could in theory hand out locks on IO and mem
+>> -	 * separately to userspace but it can cause deadlocks */
+>> +	/*
+>> +	 * we could in theory hand out locks on IO and mem
+>> +	 * separately to userspace but it can cause deadlocks
+>> +	 */
+> ... all the rest needs to go on different patches as it doesn't
+> have anything to do with what you describe.
+
+OK,
+
+I will wait a few days for more reviews,
+
+I process them together,   also avoid version grow too fast.
+
+Thanks.
+
+> Andi
+
+-- 
+Jingfeng
+
