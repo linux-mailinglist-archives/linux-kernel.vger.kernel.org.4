@@ -2,94 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6934E7240C8
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 13:24:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E40B57240C5
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 13:24:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235371AbjFFLY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 07:24:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51884 "EHLO
+        id S235227AbjFFLYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 07:24:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235346AbjFFLYZ (ORCPT
+        with ESMTP id S231766AbjFFLX6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 07:24:25 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4629DB1
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 04:24:25 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-5144a9c11c7so5488448a12.2
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 04:24:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686050665; x=1688642665;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=FgtVUQsPT8FJ5Vzbv9hHerc/vSp2iW4yB4BuCz1QsuE=;
-        b=X9RKkocOwQQoXx0VhPNaN13xx38hrB1NL9Qeas968kTz934dCgNjjeIhg99fKEbPlb
-         6cM/KOKzsUfPb/s03X4tqWqB/5EHRv4Qtxon8t49Py46hNyOc6jTx8gubOEDmNr4p5LS
-         7ESoZVLBN+pXUqw8wkLUQ5X06HCb+u/qJj2wfvtwUzR5PPU7GpLH2BY5wqRlIj/wCJ+k
-         G4hi49Wz7WTezp5wicGgKGR/svUC6jVvkkHKoeYgvtbdFOUdDe/Al43wEHKuF1XO3LzM
-         QikbIswGFiXSLgmPhQrYCQe/tbkTr2481wbJwS+N+L124uX3OpvY4KGFOXmWnRedsVGR
-         JtxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686050665; x=1688642665;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FgtVUQsPT8FJ5Vzbv9hHerc/vSp2iW4yB4BuCz1QsuE=;
-        b=PYJEiUWjaGCBCY9zc74temIK2uC1xcBAxYZqCOwXsaZM00KsDwTk5NDSMTuQ0zsCJQ
-         8v7THbv4rrATMRkWNqxaYOOPFJv6SKZfvcdkRBDcEq+NJQI/dUybsVxsPUk44nhRhc5s
-         vF5pa7XoE/DsTf3TnGCLMwaJ0kazv/6vyv0bIr6HR9EY9QQYyVLkgjNvcqL8nI9Te9CX
-         lf96ZgIQe17L4HQsVTN1G1U0rS3FjgB+sh30xBrgV1NHvwGw0x3Ujh597dZYZFLVmUGy
-         4cqfAbBDOq+4qQvEPoaXsyX2Og1okb8p+t+rBi9jf8NtjZHAQ2Y/fssya+foPTGJRkMD
-         z1Vw==
-X-Gm-Message-State: AC+VfDw+qnoVzyfZtNrMYrSDl2gXgkKJMOAKrSKADdrdmtzwSuaWgmb5
-        Jgf06lLMVuK0vSGwH8KBFNU=
-X-Google-Smtp-Source: ACHHUZ4l+g/FfCRp1i0AIdVqCX+QDTMhIRcwBujXABvXRV46+Mu668a9Mk+dBLjqeQ3tEYia9IofNA==
-X-Received: by 2002:a17:902:d487:b0:1af:d812:d27 with SMTP id c7-20020a170902d48700b001afd8120d27mr2295462plg.9.1686050664759;
-        Tue, 06 Jun 2023 04:24:24 -0700 (PDT)
-Received: from devbox.. ([103.165.115.136])
-        by smtp.gmail.com with ESMTPSA id ja22-20020a170902efd600b001b008b3dee2sm8271740plb.287.2023.06.06.04.24.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 04:24:24 -0700 (PDT)
-From:   Neel Chakraborty <neelchakrabortykernelwork@gmail.com>
-To:     martyn@welchs.me.uk
-Cc:     manohar.vanga@gmail.com, gregkh@linuxfoundation.org, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        Neel Chakraborty <neelchakrabortykernelwork@gmail.com>
-Subject: [PATCH 001/001] drivers/staging/vme_user/vme.c: Fixed alignment issues
-Date:   Tue,  6 Jun 2023 16:53:22 +0530
-Message-Id: <20230606112321.1022783-1-neelchakrabortykernelwork@gmail.com>
-X-Mailer: git-send-email 2.40.1
+        Tue, 6 Jun 2023 07:23:58 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E39DEE52;
+        Tue,  6 Jun 2023 04:23:55 -0700 (PDT)
+Received: from dggpemm500006.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Qb7Ng6q2bz1c0Fy;
+        Tue,  6 Jun 2023 19:22:11 +0800 (CST)
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 6 Jun 2023 19:23:52 +0800
+Subject: Re: [PATCH v4 1/3] kallsyms: move kallsyms_show_value() out of
+ kallsyms.c
+To:     Maninder Singh <maninder1.s@samsung.com>, <ast@kernel.org>,
+        <daniel@iogearbox.net>, <john.fastabend@gmail.com>,
+        <andrii@kernel.org>, <martin.lau@linux.dev>, <song@kernel.org>,
+        <yhs@fb.com>, <kpsingh@kernel.org>, <sdf@google.com>,
+        <haoluo@google.com>, <jolsa@kernel.org>, <mcgrof@kernel.org>,
+        <boqun.feng@gmail.com>, <vincenzopalazzodev@gmail.com>,
+        <ojeda@kernel.org>, <jgross@suse.com>, <brauner@kernel.org>,
+        <michael.christie@oracle.com>, <samitolvanen@google.com>,
+        <glider@google.com>, <peterz@infradead.org>,
+        <keescook@chromium.org>, <stephen.s.brennan@oracle.com>,
+        <alan.maguire@oracle.com>, <pmladek@suse.com>
+CC:     <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+        Onkarnath <onkarnath.1@samsung.com>
+References: <CGME20230606042812epcas5p262df978931619b2d62e493d08147e120@epcas5p2.samsung.com>
+ <20230606042802.508954-1-maninder1.s@samsung.com>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <df9f7a12-0542-97bb-b6c1-fdf0a21f815e@huawei.com>
+Date:   Tue, 6 Jun 2023 19:23:52 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230606042802.508954-1-maninder1.s@samsung.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Made alignment match open parenthesis.
 
-Signed-off-by: Neel Chakraborty <neelchakrabortykernelwork@gmail.com>
----
- drivers/staging/vme_user/vme.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/staging/vme_user/vme.c b/drivers/staging/vme_user/vme.c
-index b5555683a069..8a9efb4a00a3 100644
---- a/drivers/staging/vme_user/vme.c
-+++ b/drivers/staging/vme_user/vme.c
-@@ -79,7 +79,7 @@ static struct vme_bridge *find_bridge(struct vme_resource *resource)
-  * Return: Virtual address of allocation on success, NULL on failure.
-  */
- void *vme_alloc_consistent(struct vme_resource *resource, size_t size,
--	dma_addr_t *dma)
-+			   dma_addr_t *dma)
- {
- 	struct vme_bridge *bridge;
- 
+On 2023/6/6 12:28, Maninder Singh wrote:
+> function kallsyms_show_value() is used by other parts
+> like modules_open(), kprobes_read() etc. which can work in case of
+> !KALLSYMS also.
+> 
+> e.g. as of now lsmod do not show module address if KALLSYMS is disabled.
+> since kallsyms_show_value() defination is not present, it returns false
+> in !KALLSYMS.
+> 
+> / # lsmod
+> test 12288 0 - Live 0x0000000000000000 (O)
+> 
+> So kallsyms_show_value() can be made generic
+> without dependency on KALLSYMS.
+> 
+> Thus moving out function to a new file ksyms_common.c.
+> 
+> With this patch code is just moved to new file
+> and no functional change.
+> 
+> Co-developed-by: Onkarnath <onkarnath.1@samsung.com>
+> Signed-off-by: Onkarnath <onkarnath.1@samsung.com>
+> Signed-off-by: Maninder Singh <maninder1.s@samsung.com>
+> ---
+> earlier conversations:(then it has dependancy on other change, but that
+> was stashed from linux-next, now it can be pushed)
+> https://lore.kernel.org/lkml/202205111525.92B1C597@keescook/T/
+> https://lkml.org/lkml/2022/4/13/47
+> v1 -> v2: separate out bpf and kallsyms change
+> v2 -> v3: make kallsym changes in2 patches, non functional and
+> functional change
+> v3 -> v4: patch order changed, file name changed form knosyms -> ksyms_common
+> and copyright header modified.
+> 
+>  kernel/Makefile       |  2 +-
+>  kernel/kallsyms.c     | 35 ---------------------------------
+>  kernel/ksyms_common.c | 45 +++++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 46 insertions(+), 36 deletions(-)
+>  create mode 100644 kernel/ksyms_common.c
+> 
+> diff --git a/kernel/Makefile b/kernel/Makefile
+> index f9e3fd9195d9..3947122d618b 100644
+> --- a/kernel/Makefile
+> +++ b/kernel/Makefile
+> @@ -10,7 +10,7 @@ obj-y     = fork.o exec_domain.o panic.o \
+>  	    extable.o params.o \
+>  	    kthread.o sys_ni.o nsproxy.o \
+>  	    notifier.o ksysfs.o cred.o reboot.o \
+> -	    async.o range.o smpboot.o ucount.o regset.o
+> +	    async.o range.o smpboot.o ucount.o regset.o ksyms_common.o
+>  
+>  obj-$(CONFIG_USERMODE_DRIVER) += usermode_driver.o
+>  obj-$(CONFIG_MULTIUSER) += groups.o
+> diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+> index 8193e947aa10..0f82c3d5a57d 100644
+> --- a/kernel/kallsyms.c
+> +++ b/kernel/kallsyms.c
+> @@ -907,41 +907,6 @@ late_initcall(bpf_ksym_iter_register);
+>  
+>  #endif /* CONFIG_BPF_SYSCALL */
+>  
+> -static inline int kallsyms_for_perf(void)
+> -{
+> -#ifdef CONFIG_PERF_EVENTS
+> -	extern int sysctl_perf_event_paranoid;
+> -	if (sysctl_perf_event_paranoid <= 1)
+> -		return 1;
+> -#endif
+> -	return 0;
+> -}
+> -
+> -/*
+> - * We show kallsyms information even to normal users if we've enabled
+> - * kernel profiling and are explicitly not paranoid (so kptr_restrict
+> - * is clear, and sysctl_perf_event_paranoid isn't set).
+> - *
+> - * Otherwise, require CAP_SYSLOG (assuming kptr_restrict isn't set to
+> - * block even that).
+> - */
+> -bool kallsyms_show_value(const struct cred *cred)
+> -{
+> -	switch (kptr_restrict) {
+> -	case 0:
+> -		if (kallsyms_for_perf())
+> -			return true;
+> -		fallthrough;
+> -	case 1:
+> -		if (security_capable(cred, &init_user_ns, CAP_SYSLOG,
+> -				     CAP_OPT_NOAUDIT) == 0)
+> -			return true;
+> -		fallthrough;
+> -	default:
+> -		return false;
+> -	}
+> -}
+> -
+>  static int kallsyms_open(struct inode *inode, struct file *file)
+>  {
+>  	/*
+> diff --git a/kernel/ksyms_common.c b/kernel/ksyms_common.c
+> new file mode 100644
+> index 000000000000..e776f12f0f5a
+> --- /dev/null
+> +++ b/kernel/ksyms_common.c
+> @@ -0,0 +1,45 @@
+> +// SPDX-License-Identifier: GPL-2.0
+
+Keep it the same as kernel/kallsyms.c. GPL-2.0-only
+
+Sorry, I didn't think of that last time.
+Otherwise,
+
+Reviewed-by: Zhen Lei <thunder.leizhen@huawei.com>
+
+> +/*
+> + * ksyms_common.c: A split of kernel/kallsyms.c
+> + * Contains a few generic function definations independent of config KALLSYMS.
+> + */
+> +#include <linux/kallsyms.h>
+> +#include <linux/security.h>
+> +
+> +#ifdef CONFIG_KALLSYMS
+> +static inline int kallsyms_for_perf(void)
+> +{
+> +#ifdef CONFIG_PERF_EVENTS
+> +	extern int sysctl_perf_event_paranoid;
+> +
+> +	if (sysctl_perf_event_paranoid <= 1)
+> +		return 1;
+> +#endif
+> +	return 0;
+> +}
+> +
+> +/*
+> + * We show kallsyms information even to normal users if we've enabled
+> + * kernel profiling and are explicitly not paranoid (so kptr_restrict
+> + * is clear, and sysctl_perf_event_paranoid isn't set).
+> + *
+> + * Otherwise, require CAP_SYSLOG (assuming kptr_restrict isn't set to
+> + * block even that).
+> + */
+> +bool kallsyms_show_value(const struct cred *cred)
+> +{
+> +	switch (kptr_restrict) {
+> +	case 0:
+> +		if (kallsyms_for_perf())
+> +			return true;
+> +		fallthrough;
+> +	case 1:
+> +		if (security_capable(cred, &init_user_ns, CAP_SYSLOG,
+> +				     CAP_OPT_NOAUDIT) == 0)
+> +			return true;
+> +		fallthrough;
+> +	default:
+> +		return false;
+> +	}
+> +}
+> +#endif
+> 
+
 -- 
-2.40.1
-
+Regards,
+  Zhen Lei
