@@ -2,63 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D549E72488E
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 18:11:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B3D4724897
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 18:12:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236858AbjFFQLM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 12:11:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46912 "EHLO
+        id S237543AbjFFQMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 12:12:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229866AbjFFQLK (ORCPT
+        with ESMTP id S237337AbjFFQMh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 12:11:10 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73B7210F4
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 09:11:08 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Tue, 6 Jun 2023 12:12:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09D80E8;
+        Tue,  6 Jun 2023 09:12:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 2F99721986;
-        Tue,  6 Jun 2023 16:11:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1686067867; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WA9TCdUcv82zThgquwL+JZWAlge/m1Sa+GLhYtCy31g=;
-        b=DJ1uaamvWwQ10PlsUbgAkqk2om67RcLino90aEHDji+yvPsDGYc+EQwplnGaXEWbtAQrHX
-        QFcQqNA5A87e4SmXvEonv0R6TutBO0UP0u5LV3KfdhmWGA5QhxXRKBDpXp6tn9jDXNNz0J
-        xM65UNdm+ItaH8Yf2Oq6sIqtVxmvcJg=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 11F6213519;
-        Tue,  6 Jun 2023 16:11:07 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id iR8bAptaf2SuNAAAMHmgww
-        (envelope-from <mhocko@suse.com>); Tue, 06 Jun 2023 16:11:07 +0000
-Date:   Tue, 6 Jun 2023 18:11:06 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Baoquan He <bhe@redhat.com>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH] mm/vmalloc: do not output a spurious warning when huge
- vmalloc() fails
-Message-ID: <ZH9amtJ7XuAuck4U@dhcp22.suse.cz>
-References: <20230605201107.83298-1-lstoakes@gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 919E862D99;
+        Tue,  6 Jun 2023 16:12:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE4A9C433D2;
+        Tue,  6 Jun 2023 16:12:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686067956;
+        bh=NzTyqwK+gbG+XiS2KsPh2vX4Tmt6XxOCACaA21wsJRY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=HQFKOk4w0f+omkGtP5ehv47JO+C2MKUi590vake2J1F6hmuQQOauUVaLlZilR1t7y
+         6dWY+NNMMquHEamZervuU06G10gorAjIyjYA3rYhclIre5sBERr1E5cyAXTooTpTxX
+         Xm6KzWcdlugr5nXOkWyn8DLwCO0ZkbZctUBPrMDp3Wz9vbjF9sWHZIS6Mkv9s/hfKH
+         uJPHzzREwIomy+GdW+989uaVgSWfxGtSBh77jplXVcp8j2FpLr4nJp21eFF5nmQ88E
+         CF9nXwTqeQ7aCl7khnbQ4D6V9n/I6EegQnzFVla8obrfcfyKPjkrEEnmDEP6/0N5GT
+         7LXMpTS2uoGdA==
+From:   Daniel Bristot de Oliveira <bristot@kernel.org>
+To:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-doc@vger.kernel.org, Juri Lelli <juri.lelli@redhat.com>,
+        William White <chwhite@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: [PATCH V3 00/11] rtla improvements
+Date:   Tue,  6 Jun 2023 18:12:14 +0200
+Message-Id: <cover.1686066600.git.bristot@kernel.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230605201107.83298-1-lstoakes@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,68 +56,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 05-06-23 21:11:07, Lorenzo Stoakes wrote:
-> In __vmalloc_area_node() we always warn_alloc() when an allocation
-> performed by vm_area_alloc_pages() fails unless it was due to a pending
-> fatal signal.
-> 
-> However, huge page allocations instigated either by vmalloc_huge() or
-> __vmalloc_node_range() (or a caller that invokes this like kvmalloc() or
-> kvmalloc_node()) always falls back to order-0 allocations if the huge page
-> allocation fails.
-> 
-> This renders the warning useless and noisy, especially as all callers
-> appear to be aware that this may fallback. This has already resulted in at
-> least one bug report from a user who was confused by this (see link).
-> 
-> Therefore, simply update the code to only output this warning for order-0
-> pages when no fatal signal is pending.
+This is a series of improvements for rtla, mainly as a result of our
+daily usage of the tool debugging problems at red hat.
 
-The way how high order allocations are grafted in is just horrendous.
-Sigh.
- 
-> Link: https://bugzilla.suse.com/show_bug.cgi?id=1211410
-> Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
+The cgroup support and house keeping options are from our usage
+of the tool debugging containers.
 
-Acked-by: Michal Hocko <mhocko@suse.com>
-Thanks!
+The auto-analysis overhead reduction is needed when we go to
+large boxes - but it is really hand in practice, as it gives an idea
+of the problem without having to look at the trace.
 
-> ---
->  mm/vmalloc.c | 17 +++++++++++++----
->  1 file changed, 13 insertions(+), 4 deletions(-)
-> 
-> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> index ab606a80f475..e563f40ad379 100644
-> --- a/mm/vmalloc.c
-> +++ b/mm/vmalloc.c
-> @@ -3149,11 +3149,20 @@ static void *__vmalloc_area_node(struct vm_struct *area, gfp_t gfp_mask,
->  	 * allocation request, free them via vfree() if any.
->  	 */
->  	if (area->nr_pages != nr_small_pages) {
-> -		/* vm_area_alloc_pages() can also fail due to a fatal signal */
-> -		if (!fatal_signal_pending(current))
-> +		/*
-> +		 * vm_area_alloc_pages() can fail due to insufficient memory but
-> +		 * also:-
-> +		 *
-> +		 * - a pending fatal signal
-> +		 * - insufficient huge page-order pages
-> +		 *
-> +		 * Since we always retry allocations at order-0 in the huge page
-> +		 * case a warning for either is spurious.
-> +		 */
-> +		if (!fatal_signal_pending(current) && page_order == 0)
->  			warn_alloc(gfp_mask, NULL,
-> -				"vmalloc error: size %lu, page order %u, failed to allocate pages",
-> -				area->nr_pages * PAGE_SIZE, page_order);
-> +				"vmalloc error: size %lu, failed to allocate pages",
-> +				area->nr_pages * PAGE_SIZE);
->  		goto fail;
->  	}
->  
-> -- 
-> 2.40.1
+Running hwnoise 100 % of CPU time might cause some systems
+to slow down too much. Reduce its utilization to 75% by default to
+avoid problems for people using it for the first time.
+
+Finally, it adds support for running timerlat user-space threads,
+and to collect the additional field via rtla timerlat top/hist.
+
+Changes from V2:
+  - Add timerlat hist -u option
+  - Link: https://lore.kernel.org/lkml/cover.1684863094.git.bristot@kernel.org/
+Changes from V1:
+  - Add the user-space thread support to rtla timerlat top
+  - Link: https://lore.kernel.org/lkml/cover.1683827510.git.bristot@kernel.org/
+
+Daniel Bristot de Oliveira (11):
+  rtla: Add -C cgroup support
+  rtla: Add --house-keeping option
+  rtla: Change monitored_cpus from char * to cpu_set_t
+  rtla: Automatically move rtla to a house-keeping cpu
+  rtla/timerlat: Give timerlat auto analysis its own instance
+  rtla/timerlat_hist: Add auto-analysis support
+  rtla: Start the tracers after creating all instances
+  rtla/hwnoise: Reduce runtime to 75%
+  rtla: Add timerlat user-space support for timerlat top
+  rtla: Add timerlat user-space support for
+  Documentation: Add tools/rtla timerlat -u option documentation
+
+ Documentation/tools/rtla/common_options.rst   |   8 +
+ .../tools/rtla/common_timerlat_aa.rst         |   7 -
+ .../tools/rtla/common_timerlat_options.rst    |   7 +
+ .../tools/rtla/rtla-timerlat-hist.rst         |   7 +-
+ .../tools/rtla/rtla-timerlat-top.rst          |   7 +
+ tools/tracing/rtla/src/osnoise.c              |  65 ++++
+ tools/tracing/rtla/src/osnoise.h              |   5 +
+ tools/tracing/rtla/src/osnoise_hist.c         |  90 ++++-
+ tools/tracing/rtla/src/osnoise_top.c          |  83 ++++-
+ tools/tracing/rtla/src/timerlat_aa.c          |  35 +-
+ tools/tracing/rtla/src/timerlat_aa.h          |   5 +-
+ tools/tracing/rtla/src/timerlat_hist.c        | 262 ++++++++++++--
+ tools/tracing/rtla/src/timerlat_top.c         | 229 +++++++++++--
+ tools/tracing/rtla/src/timerlat_u.c           | 224 ++++++++++++
+ tools/tracing/rtla/src/timerlat_u.h           |  18 +
+ tools/tracing/rtla/src/utils.c                | 324 +++++++++++++++++-
+ tools/tracing/rtla/src/utils.h                |   7 +
+ 17 files changed, 1277 insertions(+), 106 deletions(-)
+ create mode 100644 tools/tracing/rtla/src/timerlat_u.c
+ create mode 100644 tools/tracing/rtla/src/timerlat_u.h
 
 -- 
-Michal Hocko
-SUSE Labs
+2.38.1
+
