@@ -2,130 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B76272447F
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 15:33:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5263D72447E
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 15:33:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237828AbjFFNds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 09:33:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55412 "EHLO
+        id S237721AbjFFNdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 09:33:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237737AbjFFNdp (ORCPT
+        with ESMTP id S230110AbjFFNde (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 09:33:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 677EF90
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 06:32:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686058375;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=4K8gWe/vXeGXdiuXcKDCaSMYee+Pu+IXT6rwjSGTxTs=;
-        b=En5P2UWbSozakoqGFul0ojN5kBBMD2zeZrbC3PTVA65z9hRRG5khVkHIGt41mjdffoFtzt
-        CTXap1xtemue4Tjddh/H8S9mXCS+EWSfZnxfuFtp1uXw6YHg0Ezw2nzWzmiFYtlyWQWaD5
-        64piAY+MxNU0YvOSUhMi1s1fGTVlL5c=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-668-JbQHYiBjNJysPpkkV8bNYw-1; Tue, 06 Jun 2023 09:32:52 -0400
-X-MC-Unique: JbQHYiBjNJysPpkkV8bNYw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DFAE3858F14;
-        Tue,  6 Jun 2023 13:32:51 +0000 (UTC)
-Received: from localhost (unknown [10.22.34.38])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 499429E93;
-        Tue,  6 Jun 2023 13:32:51 +0000 (UTC)
-Date:   Tue, 6 Jun 2023 10:32:50 -0300
-From:   "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>,
-        stable-rt <stable-rt@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Carsten Emde <C.Emde@osadl.org>,
-        Daniel Wagner <daniel.wagner@suse.com>,
-        Tom Zanussi <tom.zanussi@linux.intel.com>,
-        Clark Williams <williams@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Pavel Machek <pavel@denx.de>,
-        Jeff Brady <jeffreyjbrady@gmail.com>
-Subject: Re: [ANNOUNCE] 5.10.180-rt88
-Message-ID: <ZH81gpWRD+KxZlGO@uudg.org>
-References: <ZHZSlJFnTK1IpXeg@uudg.org>
- <20230606094855.v8zhk78I@linutronix.de>
+        Tue, 6 Jun 2023 09:33:34 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2269A12F
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 06:33:31 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.43])
+        by gateway (Coremail) with SMTP id _____8Cx+empNX9kRDIAAA--.419S3;
+        Tue, 06 Jun 2023 21:33:29 +0800 (CST)
+Received: from openarena.loongson.cn (unknown [10.20.42.43])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxZuSoNX9k_3UCAA--.10047S2;
+        Tue, 06 Jun 2023 21:33:28 +0800 (CST)
+From:   Sui Jingfeng <suijingfeng@loongson.cn>
+To:     Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian Konig <christian.koenig@amd.com>,
+        Pan Xinhui <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/amdgpu: display/Kconfig: replace leading spaces with tab
+Date:   Tue,  6 Jun 2023 21:33:28 +0800
+Message-Id: <20230606133328.148490-1-suijingfeng@loongson.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230606094855.v8zhk78I@linutronix.de>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8AxZuSoNX9k_3UCAA--.10047S2
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBj93XoWrKF45Ww4rAF1xKryDWr1UCFX_yoW8JrWkpw
+        s8G3ZxurWUGF1Sq39xA3WxWFy5Ga97JFWUKrWDG3sxZa4UAF4j9rZ5KFW5Ka4UXF97A3Wr
+        JFn5GF42vF1vk3cCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUkYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v2
+        6F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
+        02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAF
+        wI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7V
+        AKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCj
+        r7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6x
+        IIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAI
+        w20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x
+        0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8vApUUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 11:48:55AM +0200, Sebastian Andrzej Siewior wrote:
-> On 2023-05-30 16:46:28 [-0300], Luis Claudio R. Goncalves wrote:
-> > Hello RT-list!
-> Hi,
-> 
-> > Support for deferred printing was removed in v5.10-rc1-rt1 by commit
-> > 9153e3c5cb0c9 ("printk: remove deferred printing").
-> 
-> Sorry for not getting back to earlier, where you proposed the change.
+This patch replace the leading spaces with tab, make them keep aligned with
+the rest of the config options. No functional change.
 
-No problems at all. I will create an rt-only release with the changes you
-mentioned and then restart testing with 5.10.181 and 5.10.182with these
-changes.
+Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+---
+ drivers/gpu/drm/amd/display/Kconfig | 17 +++++++----------
+ 1 file changed, 7 insertions(+), 10 deletions(-)
 
-Thank you again!
-
-Luis
+diff --git a/drivers/gpu/drm/amd/display/Kconfig b/drivers/gpu/drm/amd/display/Kconfig
+index 2d8e55e29637..04ccfc70d583 100644
+--- a/drivers/gpu/drm/amd/display/Kconfig
++++ b/drivers/gpu/drm/amd/display/Kconfig
+@@ -42,16 +42,13 @@ config DEBUG_KERNEL_DC
+ 	  Choose this option if you want to hit kdgb_break in assert.
  
-> > diff --git a/include/linux/printk.h b/include/linux/printk.h
-> > index 83c7734e98025..92e0656841128 100644
-> > --- a/include/linux/printk.h
-> > +++ b/include/linux/printk.h
-> > @@ -609,7 +609,7 @@ static inline void print_hex_dump_debug(const char *prefix_str, int prefix_type,
-> >  #define print_hex_dump_bytes(prefix_str, prefix_type, buf, len)	\
-> >  	print_hex_dump_debug(prefix_str, prefix_type, 16, 1, buf, len, true)
-> >  
-> > -#ifdef CONFIG_PRINTK
-> > +#if defined(CONFIG_PRINTK) && !defined(CONFIG_PREEMPT_RT)
-> >  extern void __printk_safe_enter(void);
-> >  extern void __printk_safe_exit(void);
-> 
-> This needs to go entirely. The "new" printk code does not need this safe
-> functions also for !RT.
-> 
-> > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> > index 5f1c50a6bebc5..7e65e3ef16e3a 100644
-> > --- a/mm/page_alloc.c
-> > +++ b/mm/page_alloc.c
-> > @@ -6057,7 +6057,6 @@ static void __build_all_zonelists(void *data)
-> >  	 * tty_insert_flip_string_and_push_buffer() on other CPU might be
-> >  	 * calling kmalloc(GFP_ATOMIC | __GFP_NOWARN) with port->lock held.
-> >  	 */
-> > -	printk_deferred_enter();
-> 
-> That is okay. However the commit, that introduced this
-> 	a992c387b4118 ("mm/page_alloc: fix potential deadlock on zonelist_update_seq seqlock")
-> 
-> also added a local_irq_safe a little higher up and it has to go, too.
-> The code as-is should produce warnings once it enters this path.
-> 
-> >  	write_seqlock(&zonelist_update_seq);
-> >  
-> >  #ifdef CONFIG_NUMA
-> 
-> Sebastian
-> 
----end quoted text---
+ config DRM_AMD_SECURE_DISPLAY
+-        bool "Enable secure display support"
+-        depends on DEBUG_FS
+-        depends on DRM_AMD_DC_FP
+-        help
+-            Choose this option if you want to
+-            support secure display
+-
+-            This option enables the calculation
+-            of crc of specific region via debugfs.
+-            Cooperate with specific DMCU FW.
++	bool "Enable secure display support"
++	depends on DEBUG_FS
++	depends on DRM_AMD_DC_FP
++	help
++	  Choose this option if you want to support secure display
+ 
++	  This option enables the calculation of crc of specific region via
++	  debugfs. Cooperate with specific DMCU FW.
+ 
+ endmenu
+-- 
+2.25.1
 
