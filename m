@@ -2,130 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7EF6724859
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 17:56:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78BD472485B
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 17:57:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237159AbjFFP4o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 11:56:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39746 "EHLO
+        id S238170AbjFFP5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 11:57:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232248AbjFFP4l (ORCPT
+        with ESMTP id S231599AbjFFP46 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 11:56:41 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1EB10DE;
-        Tue,  6 Jun 2023 08:56:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=oOb0UwEClDB1Qka6QaDlB5BDDx21uX4az9r2VZIY7OQ=; b=BOBCO+KbEgtJzTxxohFX4kdX1q
-        ru624IM0vblq9lILI68ln+63XaMu7FWQQVQvXyGT9Qils+x/Gn6fQMCLAQQ5W/QbxH3rihsst8tuM
-        066hB/VKkgSoosdojJTBfm2cXVAMCsEIBmMMqs/fcRYRidPXMza3YHUtpXSKW3bmeUMdcH7LPFnZq
-        M7hztsaUzrAcJ7/uppDAvexWWC1qGWa5X4icoYEDuh0YTpA8XE03/oPeJGjwQCTfff6IxRGqFNKnN
-        Yiq7razeyv43PNPkwdQe1r/yR6/GbmteYKUKkYxxtd1V0/pUh2X3XJ/YXeut3cUK/PYj+wt5DY9nA
-        KZ0DMYNg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56672)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1q6Z2t-00061Z-AQ; Tue, 06 Jun 2023 16:56:31 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1q6Z2p-0007HB-53; Tue, 06 Jun 2023 16:56:27 +0100
-Date:   Tue, 6 Jun 2023 16:56:27 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Maxime Chevallier <maxime.chevallier@bootlin.com>
-Cc:     davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alexis.lothore@bootlin.com,
-        thomas.petazzoni@bootlin.com, Andrew Lunn <andrew@lunn.ch>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Simon Horman <simon.horman@corigine.com>
-Subject: Re: [PATCH net-next v3 0/5] Followup fixes for the dwmac and altera
- lynx conversion
-Message-ID: <ZH9XK5yEGyoDMIs/@shell.armlinux.org.uk>
-References: <20230606152501.328789-1-maxime.chevallier@bootlin.com>
+        Tue, 6 Jun 2023 11:56:58 -0400
+Received: from out-11.mta1.migadu.com (out-11.mta1.migadu.com [95.215.58.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D32F418E
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 08:56:56 -0700 (PDT)
+Date:   Tue, 6 Jun 2023 08:56:37 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1686067014;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=t9OZf8j81I9AZgH2DCCUhuThQp0x0TuPvmq+4JGIqS0=;
+        b=IpfG83BysHXCa6f1d0xw5bdcAdkTXutwLnsAT+Tv0BHSJZEPTe2OpuJlgrkt2Tx72u4XxA
+        qti49tINLUjZrog754JQvlLuSjDvsD3eJT0FVRRS+8/3G1l1yV7N4F/elu4yPRTEStIEGp
+        z82nmqfVbJ0KZnjEJvzPYbE9g59Sr9Y=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     Kirill Tkhai <tkhai@ya.ru>, akpm@linux-foundation.org,
+        vbabka@suse.cz, viro@zeniv.linux.org.uk, brauner@kernel.org,
+        djwong@kernel.org, hughd@google.com, paulmck@kernel.org,
+        muchun.song@linux.dev, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, zhengqi.arch@bytedance.com
+Subject: Re: [PATCH v2 3/3] fs: Use delayed shrinker unregistration
+Message-ID: <ZH9XNUGTW3+sEANc@P9FQF9L96D.corp.robot.car>
+References: <168599103578.70911.9402374667983518835.stgit@pro.pro>
+ <168599180526.70911.14606767590861123431.stgit@pro.pro>
+ <ZH6AA72wOd4HKTKE@P9FQF9L96D>
+ <ZH6K0McWBeCjaf16@dread.disaster.area>
+ <ZH6ge3yiGAotYRR9@P9FQF9L96D>
+ <ZH7XfD/pBcWzhHcc@dread.disaster.area>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230606152501.328789-1-maxime.chevallier@bootlin.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ZH7XfD/pBcWzhHcc@dread.disaster.area>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 05:24:56PM +0200, Maxime Chevallier wrote:
-> Hello everyone,
+On Tue, Jun 06, 2023 at 04:51:40PM +1000, Dave Chinner wrote:
+> On Mon, Jun 05, 2023 at 07:56:59PM -0700, Roman Gushchin wrote:
+> > On Tue, Jun 06, 2023 at 11:24:32AM +1000, Dave Chinner wrote:
+> > > On Mon, Jun 05, 2023 at 05:38:27PM -0700, Roman Gushchin wrote:
+> > > > Isn't it possible to hide it from a user and call the second part from a work
+> > > > context automatically?
+> > > 
+> > > Nope, because it has to be done before the struct shrinker is freed.
+> > > Those are embedded into other structures rather than being
+> > > dynamically allocated objects.
+> > 
+> > This part we might consider to revisit, if it helps to solve other problems.
+> > Having an extra memory allocation (or two) per mount-point doesn't look
+> > that expensive. Again, iff it helps with more important problems.
 > 
-> Here's another version of the cleanup series for the TSE PCS replacement
-> by PCS Lynx. It includes Kconfig fixups, some missing initialisations
-> and a slight rework suggested by Russell for the dwmac cleanup sequence.
+> Ah, I guess if you're concerned about memory allocation overhead
+> during register_shrinker() calls then you really aren't familiar
+> with what register_shrinker() does on memcg and numa aware
+> shrinkers?
 
-Thanks, this is getting there, but now you've now made me read
-altera_tse.c, and it suffers the same issue that dwmac-socfpga.c does:
+What a nice way to agree with an idea :)
 
-        ret = register_netdev(ndev);
-...
-        priv->pcs = lynx_pcs_create_mdiodev(pcs_bus, 0);
-...
-        priv->phylink = phylink_create(&priv->phylink_config,
+> 
+> Let's ignore the fact that we could roll the shrinker structure
+> allocation into the existing shrinker->nr_deferred array allocation
+> (so it's effectively a zero cost modification), and just look at
+> what a memcg enabled shrinker must initialise if it expands the
+> shrinker info array because the index returned from idr_alloc()
+> is larger than the current array:
+> 
+> 	for each memcg {
+> 		for_each_node {
+> 			info = kvmalloc_node();
+> 			rcu_assign_pointer(memcg->nodeinfo[nid]->shrinker_info, info);
+> 		}
+> 	}
+> 
+> Hmmmm?
+> 
+> So, there really isn't any additional cost, it completely decouples
+> the shrinker infrastructure from the subsystem shrinker
+> implementations, it enables the shrinker to control infrastructure
+> teardown independently of the subsystem that registered the
+> shrinker, and it still gives guarantees that the shrinker is never
+> run after unregister_shrinker() completes. What's not to like?
 
-This means you're publishing before you've finished setup - which is
-a racy thing to do, especially if the driver is a module.
-
-Let's think about what could happen. register_netdev() adds the network
-device to the net layer and publishes it to userspace. Userspace notices
-a new network interface and configures it, causing tse_open() to be
-called. However, priv->phylink has not yet been initialised.
-
-tse_open() then does:
-
-        ret = phylink_of_phy_connect(priv->phylink, priv->device->of_node, 0);
-
-and phylink_of_phy_connect() attempts to dereference it's first
-argument, resulting in a NULL pointer dereference. Even if that doesn't
-get you, then:
-
-        phylink_start(priv->phylink);
-
-will.
-
-Golden rule: setup everything you need first, and only once that's
-complete, publish. If you publish before you've completed setup, then
-you're giving permission for other stuff to immediately start making
-use of what you've published, which may occur before the remainder of
-the initialisation has completed.
-
-Lastly, remember that phylink_start() can result in the link coming up
-_immediately_ (that means mac_link_up() could be called before it's
-returned), so I would hope that the Altera TSE driver is prepared
-for that to happen before napi, queues, and rx dma are ready.
-
-Not saying that there's anything wrong with this series (there isn't),
-merely that there's more issues that ought to be resolved.
+Yep, this sounds like a good idea.
 
 Thanks.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
