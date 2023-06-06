@@ -2,228 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF7DD7250AC
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 01:20:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EA477250AE
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 01:20:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240314AbjFFXTv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 19:19:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49280 "EHLO
+        id S239819AbjFFXUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 19:20:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240308AbjFFXTZ (ORCPT
+        with ESMTP id S240321AbjFFXT1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 19:19:25 -0400
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2159F1FF0
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 16:18:25 -0700 (PDT)
-Received: by mail-il1-x136.google.com with SMTP id e9e14a558f8ab-33dea7d5424so27275ab.1
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 16:18:25 -0700 (PDT)
+        Tue, 6 Jun 2023 19:19:27 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF982102
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 16:18:51 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-565ba2c7554so66762377b3.3
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 16:18:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686093504; x=1688685504;
+        d=google.com; s=20221208; t=1686093530; x=1688685530;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LusODyImi6kShYo7SZgAczgtmkpNpRiKl/lmOqpWzfY=;
-        b=bHLLRfURdxNvPqhE2bfaZQ8ll3eh6shs0txawB+xbLvB7SA+cWOK7VhX0QUN79LyYI
-         lCnTvE7jFUQoWSifn5m0Lys+Y0Dm/RZ9FHkfeJl+BM6/6+5ayQbUXgmiqg3xQhBVEa/J
-         d0iTjx6j5/szWelj86ck4UuNSFm3gb6L9AsDhijZu7qcK84dWa0Ab2F4oTHIwI9iN2Qs
-         cGTtqyfmHiTrw87RP+8KCCyCWVQVRpK3VGKy96HHt6qMgFQd9ABAhrjTCMAUWrHtRSw0
-         FED1Gj5DnAAcqhYaqiWxyvoLJMBl4bZjrI4SY1fRdAO+QCPEfM6xrRse1TkgacsnkBMw
-         Y0/Q==
+        bh=9wMQpL8mT6QlCCs1bXrVw+rZK5wYXsmA2UlxqlGl7R0=;
+        b=KLfXcWyrdR+obKSMHxp4g6iQaKYQlgTEDHnSvEqd1pr5TquZGqzxtQH7J0TtNrk9t9
+         wSC1wIZPg1Y7kJBFH4wCkk9fmF7+dRl1AhQA8+s1UdIRvrXCNBFeFfckgm6QE4lMZlE8
+         7xNxP+/xT9Hodt7l6CLuplh42dj7XGAVN8qoGAIItLVvIYl74Jluk/rJcWCGzFOFH7Qe
+         8cayTUAf71/QVjLKPsLixZFvLBnERD2oXEEAhfHTSKgOqENgOdwRbKjgDfgTex6odnGp
+         KPnHV5HqHjwMLZniSQpKrASM337DwMbF4olR9iDRllw+6epc1QMpo8+70hdqIY8c9Kcy
+         4R+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686093504; x=1688685504;
+        d=1e100.net; s=20221208; t=1686093530; x=1688685530;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LusODyImi6kShYo7SZgAczgtmkpNpRiKl/lmOqpWzfY=;
-        b=bDUkt0oecsgntxAcVBbGuhsfDs4MTyZ2lkIrDpUE2wIjfV2RD6I3EA6QlvLl+d4Hqt
-         J0MJUOrSsupGPFsVvYAIUsKprqKXbunHBq/IqAEPIwUuxYPTP1d2tRvv/HzYIRsXTzLT
-         6gGXCaMj+WlpYfI08WjokHyCJE3O9TNwdPNPbQtcDGFW++9FaD29mZbbx0Iii9+G5n27
-         Qr3+v+0xZqCI1Tiewhli2P4e3CPHVluHT3xrSshrzYkPFQCU84jqyd5fCY0LANKpYRMZ
-         rLf4HTLWCakcX0XZMuNkOD1NbQnO9eHqWcJ2+9JPsDo+w+dbE1wT8/U3324kM1lk/teb
-         Aifg==
-X-Gm-Message-State: AC+VfDz4d3zvaiC+GLeisui+YuRsfrbSw+HDgaDxm6eI/t/Fkm0P9FgY
-        rGlgAiO0c9QHdyF2whoSuUYtH54jrAjY8FNovr5szQ==
-X-Google-Smtp-Source: ACHHUZ7jN0OEqtUnQoxqE/pZb1cT4FFdk/SorQIEprthyAmFz43w0VOL5ChrKbF0ApvtiecmOAmx0rjnyMt4BE2Js3E=
-X-Received: by 2002:a05:6e02:214a:b0:33b:cea:ce70 with SMTP id
- d10-20020a056e02214a00b0033b0ceace70mr26326ilv.25.1686093504340; Tue, 06 Jun
- 2023 16:18:24 -0700 (PDT)
+        bh=9wMQpL8mT6QlCCs1bXrVw+rZK5wYXsmA2UlxqlGl7R0=;
+        b=haOI8TPtprpMBfOa43M8MEmplEdq6n/fq72DNVrmCeDT1eM64zQde91i5JqHz+c+Ra
+         Bl+IxiLZbR+3mhrJXxTRXM7pya4fttDNqgiPx/dbOpcFg57pOHzwl8yWPfeiBRi2/aih
+         xpBEbOzC1HGGmWS/0Y8XHl1ZpXto1YIEgNkCVaMASM03u05Ml3/Sax4qkzPiI5UDeJZN
+         rK4ViKX2YXM7bNsVducCafYOszbMB5P/sITSOx8xAYyB58YRt9k2S5s9K41mzQxFftNc
+         /CsNEXARjrDrRuU3qpinckeA+yxmAugMNy2beaqLg3mqvjxe0fOihgbnvCLqTrkU9o06
+         tSzg==
+X-Gm-Message-State: AC+VfDz3kqhzETIZ5luX1q6dqk96xC/EtRBVHE0g8hSsI1+DmDjyYUWR
+        SNwlQCknqPG5ph057/gAlD33phORT9Pt0dA8X8f2lw==
+X-Google-Smtp-Source: ACHHUZ4fHV4VNm6Tfuv+XZiih6LcClaZx9DkWIWYCsJ5GbObBBmqd3RvGzBQucPMEtOuwSefaUouhx1Rv5K7nhN0pVo=
+X-Received: by 2002:a25:ad66:0:b0:b99:53e9:ba97 with SMTP id
+ l38-20020a25ad66000000b00b9953e9ba97mr3440908ybe.43.1686093530541; Tue, 06
+ Jun 2023 16:18:50 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230605202712.1690876-1-irogers@google.com> <20230605202712.1690876-2-irogers@google.com>
- <ZH6gZgcwAbDrEiqX@krava> <CAP-5=fWgQDrgDJ_UFuo_G5NaCzR5vWrRyvQ-_qpvFP0p0q18+w@mail.gmail.com>
- <ZH91mGxFpDPcCFKY@kernel.org>
-In-Reply-To: <ZH91mGxFpDPcCFKY@kernel.org>
-From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 6 Jun 2023 16:18:13 -0700
-Message-ID: <CAP-5=fUscgwO-G0FSZeM6SyPZVe=Kg+t-s+2txjUrc_qbP+cDg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] perf build: Add ability to build with a generated vmlinux.h
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Jiri Olsa <olsajiri@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        James Clark <james.clark@arm.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>
+References: <CA+EESO4uO84SSnBhArH4HvLNhaUQ5nZKNKXqxRCyjniNVjp0Aw@mail.gmail.com>
+ <ZC8BgFSFC3cDcAcS@x1n> <27ac2f51-e2bf-7645-7a76-0684248a5902@redhat.com>
+ <ZDbVMk0trT5UaqaA@x1n> <3059388f-1604-c326-c66f-c2e0f9bb6cbf@redhat.com>
+ <ZDghhTH2KtCeAwcZ@x1n> <6403a950-7367-0b00-8cd5-2f0a32dac953@suse.cz>
+In-Reply-To: <6403a950-7367-0b00-8cd5-2f0a32dac953@suse.cz>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Tue, 6 Jun 2023 16:18:39 -0700
+Message-ID: <CAJuCfpFddcMRH8pNOE816ZrQr5qvrccxFjJqNj5JRPWkv+u=uA@mail.gmail.com>
+Subject: Re: RFC for new feature to move pages from one vma to another without split
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
+        Lokesh Gidra <lokeshgidra@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Brian Geffon <bgeffon@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Nicolas Geoffray <ngeoffray@google.com>,
+        Jared Duke <jdduke@google.com>,
+        android-mm <android-mm@google.com>,
+        Blake Caldwell <blake.caldwell@colorado.edu>,
+        Mike Rapoport <rppt@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 6, 2023 at 11:06=E2=80=AFAM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
+On Tue, Jun 6, 2023 at 1:15=E2=80=AFPM Vlastimil Babka <vbabka@suse.cz> wro=
+te:
 >
-> Em Mon, Jun 05, 2023 at 09:25:54PM -0700, Ian Rogers escreveu:
-> > On Mon, Jun 5, 2023 at 7:57=E2=80=AFPM Jiri Olsa <olsajiri@gmail.com> w=
-rote:
-> > >
-> > > On Mon, Jun 05, 2023 at 01:27:09PM -0700, Ian Rogers wrote:
-> > > > Commit a887466562b4 ("perf bpf skels: Stop using vmlinux.h generate=
-d
-> > > > from BTF, use subset of used structs + CO-RE") made it so that
-> > > > vmlinux.h was uncondtionally included from
-> > > > tools/perf/util/vmlinux.h. This change reverts part of that change =
-(so
-> > > > that vmlinux.h is once again generated) and makes it so that the
-> > > > vmlinux.h used at build time is selected from the VMLINUX_H
-> > > > variable. By default the VMLINUX_H variable is set to the vmlinux.h
-> > > > added in change a887466562b4, but if GEN_VMLINUX_H=3D1 is passed on=
- the
-> > > > build command line then the previous generation behavior kicks in.
-> > > >
-> > > > The build with GEN_VMLINUX_H=3D1 currently fails with:
-> > > > ```
-> > > > util/bpf_skel/lock_contention.bpf.c:419:8: error: redefinition of '=
-rq'
-> > > > struct rq {};
-> > > >        ^
-> > > > /tmp/perf/util/bpf_skel/.tmp/../vmlinux.h:45630:8: note: previous d=
-efinition is here
-> > > > struct rq {
-> > > >        ^
-> > > > 1 error generated.
-> > > > ```
-> > > >
-> > > > Signed-off-by: Ian Rogers <irogers@google.com>
-> > > > Acked-by: Andrii Nakryiko <andrii@kernel.org>
-> > > > ---
-> > > >  tools/perf/Makefile.config                       |  4 ++++
-> > > >  tools/perf/Makefile.perf                         | 16 ++++++++++++=
-+++-
-> > > >  tools/perf/util/bpf_skel/.gitignore              |  1 +
-> > > >  tools/perf/util/bpf_skel/{ =3D> vmlinux}/vmlinux.h |  0
-> > > >  4 files changed, 20 insertions(+), 1 deletion(-)
-> > > >  rename tools/perf/util/bpf_skel/{ =3D> vmlinux}/vmlinux.h (100%)
-> > >
-> > > looks good, but I don't understand why you moved the vmlinux.h
-> > >
-> > > jirka
+> On 4/13/23 17:36, Peter Xu wrote:
+> > On Thu, Apr 13, 2023 at 10:10:44AM +0200, David Hildenbrand wrote:
+> >> So instead, we consider the whole address space as a virtual, anon fil=
+e,
+> >> starting at offset 0. The pgoff of a VMA is then simply the offset in =
+that
+> >> virtual file (easily computed from the start of the VMA), and VMA merg=
+ing is
+> >> just the same as for an ordinary file.
 > >
-> > Dumb reason, as headers in the same directory take priority, I had to
-> > move the vmlinux.h out of the directory with the C code for skeletons
-> > so that it could be selected via a -I.
+> > Interesting point, thanks!
 >
-> Can this be in a separate patch, i.e. moving vmlinux to a separate
-> directory? I was going to cherry pick the 'struct rq' fix but then it
-> touches the vmlinux/vmlinux.h file that is in this first patch that has
-> review comments.
+> FYI, I've advised a master thesis exploring how to update page->index dur=
+ing
+> mremap() to keep things mergeable:
+>
+> https://dspace.cuni.cz/bitstream/handle/20.500.11956/176288/120426800.pdf
+>
+> I think the last RFC posting was:
+> https://lore.kernel.org/all/20220516125405.1675-1-matenajakub@gmail.com/
+>
+> It was really tricky for the general case. Maybe it would be more feasibl=
+e
+> for the limited case Lokesh describes, if we could be sure the pages that
+> are moved aren't mapped anywhere else.
 
-I think the comments were more of a question of why the move?
-Hopefully I answered that, the move is necessary to defeat the include
-path order preferring files in the same directory. We need the move,
-we could vary the directory name.
-
-Thanks,
-Ian
-
-> - Arnaldo
->
-> > Thanks,
-> > Ian
-> >
-> > > >
-> > > > diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.confi=
-g
-> > > > index a794d9eca93d..08d4e7eaa721 100644
-> > > > --- a/tools/perf/Makefile.config
-> > > > +++ b/tools/perf/Makefile.config
-> > > > @@ -680,6 +680,10 @@ ifdef BUILD_BPF_SKEL
-> > > >    CFLAGS +=3D -DHAVE_BPF_SKEL
-> > > >  endif
-> > > >
-> > > > +ifndef GEN_VMLINUX_H
-> > > > +  VMLINUX_H=3D$(src-perf)/util/bpf_skel/vmlinux/vmlinux.h
-> > > > +endif
-> > > > +
-> > > >  dwarf-post-unwind :=3D 1
-> > > >  dwarf-post-unwind-text :=3D BUG
-> > > >
-> > > > diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-> > > > index f48794816d82..f1840af195c0 100644
-> > > > --- a/tools/perf/Makefile.perf
-> > > > +++ b/tools/perf/Makefile.perf
-> > > > @@ -1080,7 +1080,21 @@ $(BPFTOOL): | $(SKEL_TMP_OUT)
-> > > >       $(Q)CFLAGS=3D $(MAKE) -C ../bpf/bpftool \
-> > > >               OUTPUT=3D$(SKEL_TMP_OUT)/ bootstrap
-> > > >
-> > > > -$(SKEL_TMP_OUT)/%.bpf.o: util/bpf_skel/%.bpf.c $(LIBBPF) | $(SKEL_=
-TMP_OUT)
-> > > > +VMLINUX_BTF_PATHS ?=3D $(if $(O),$(O)/vmlinux)                    =
-     \
-> > > > +                  $(if $(KBUILD_OUTPUT),$(KBUILD_OUTPUT)/vmlinux) =
-   \
-> > > > +                  ../../vmlinux                                   =
-   \
-> > > > +                  /sys/kernel/btf/vmlinux                         =
-   \
-> > > > +                  /boot/vmlinux-$(shell uname -r)
-> > > > +VMLINUX_BTF ?=3D $(abspath $(firstword $(wildcard $(VMLINUX_BTF_PA=
-THS))))
-> > > > +
-> > > > +$(SKEL_OUT)/vmlinux.h: $(VMLINUX_BTF) $(BPFTOOL)
-> > > > +ifeq ($(VMLINUX_H),)
-> > > > +     $(QUIET_GEN)$(BPFTOOL) btf dump file $< format c > $@
-> > > > +else
-> > > > +     $(Q)cp "$(VMLINUX_H)" $@
-> > > > +endif
-> > > > +
-> > > > +$(SKEL_TMP_OUT)/%.bpf.o: util/bpf_skel/%.bpf.c $(LIBBPF) $(SKEL_OU=
-T)/vmlinux.h | $(SKEL_TMP_OUT)
-> > > >       $(QUIET_CLANG)$(CLANG) -g -O2 -target bpf -Wall -Werror $(BPF=
-_INCLUDE) $(TOOLS_UAPI_INCLUDE) \
-> > > >         -c $(filter util/bpf_skel/%.bpf.c,$^) -o $@
-> > > >
-> > > > diff --git a/tools/perf/util/bpf_skel/.gitignore b/tools/perf/util/=
-bpf_skel/.gitignore
-> > > > index 7a1c832825de..cd01455e1b53 100644
-> > > > --- a/tools/perf/util/bpf_skel/.gitignore
-> > > > +++ b/tools/perf/util/bpf_skel/.gitignore
-> > > > @@ -1,3 +1,4 @@
-> > > >  # SPDX-License-Identifier: GPL-2.0-only
-> > > >  .tmp
-> > > >  *.skel.h
-> > > > +vmlinux.h
-> > > > diff --git a/tools/perf/util/bpf_skel/vmlinux.h b/tools/perf/util/b=
-pf_skel/vmlinux/vmlinux.h
-> > > > similarity index 100%
-> > > > rename from tools/perf/util/bpf_skel/vmlinux.h
-> > > > rename to tools/perf/util/bpf_skel/vmlinux/vmlinux.h
-> > > > --
-> > > > 2.41.0.rc0.172.g3f132b7071-goog
-> > > >
->
-> --
->
-> - Arnaldo
+Lokesh asked me to pick up this work and prepare patches for
+upstreaming. I'll start working on them after I finish with per-vma
+lock support for swap and userfaultd (targeting later this week).
+Thanks for all the input folks!
