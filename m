@@ -2,85 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5BAC723EF9
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 12:10:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4554E723F01
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 12:12:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236274AbjFFKKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 06:10:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39952 "EHLO
+        id S234984AbjFFKMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 06:12:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237197AbjFFKKE (ORCPT
+        with ESMTP id S233195AbjFFKMB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 06:10:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17A0FE42
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 03:09:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686046158;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=iCQQ1LZ3gBqjk1nNTdvMqD1fo9eGMxkBs1BPtbczoAU=;
-        b=CMzI+gQAyItCHDIMjj9NsirIK23I57OXEt5I0alg3zLUGAoLX9v78ZP6SkzKq5m6gqW32P
-        nVZLIBeyJOF2mpfuKxgN2PFQQnDYixMr6H2Utzr8ER5wglpS9UlDHiYqkdmXQN6tx3qnVc
-        bu/I08NvQlmXr1uOq0uvChWDQEmfpuE=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-439-z-lEInIYMhGv98882hjmrw-1; Tue, 06 Jun 2023 06:09:17 -0400
-X-MC-Unique: z-lEInIYMhGv98882hjmrw-1
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3f7eb415010so2008635e9.0
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 03:09:17 -0700 (PDT)
+        Tue, 6 Jun 2023 06:12:01 -0400
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C96196;
+        Tue,  6 Jun 2023 03:11:59 -0700 (PDT)
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-3f7a8089709so22427265e9.1;
+        Tue, 06 Jun 2023 03:11:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686046156; x=1688638156;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iCQQ1LZ3gBqjk1nNTdvMqD1fo9eGMxkBs1BPtbczoAU=;
-        b=Mu1LrGvEvtcSizxbGmBW3TtedDXin4+e/8XSlAhUHNf75gEUAvBuESbMfijnIlZRQT
-         HELGFRbj4+ScLP6+hArXPS7LbUuAzcaVEsK80Qjv1KsazMQgfV6kNC4XQPaSfuL2KF1u
-         ltQlQ4RyNEJs6Uw/sZumoQUU2032156HckE/82T1ZMq/oBUxmP0961LFMIE2gt7KUen9
-         nVvfZZHJE2Vj3xKPv8T4Ss24uyXzz0APjs2ZdbyZPJI6pwN5v2B0lN9RVWF3gxZtGhdn
-         TlHNmH5f2eNk2e1cOzGZZB4TogKwovABiWyRRmb5f71pl2oF7KRjkPDCUgIGaJJz7qx+
-         HMgg==
-X-Gm-Message-State: AC+VfDweDguX0I7ROI3Uf9yaf5Gfo41virUEuzQolg6HtBrK6a+IqQj2
-        fn70B7HyvfHblJkQhPgUsZwLobb7OHbn9/GsEbdHy+MK/4lm6uv0BhU6h5EPzp3/PDkE92FxVrK
-        fsQZoFvRaUT8VejEdon4NQLYT
-X-Received: by 2002:a05:600c:3797:b0:3f7:9b05:928e with SMTP id o23-20020a05600c379700b003f79b05928emr1391399wmr.0.1686046156247;
-        Tue, 06 Jun 2023 03:09:16 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ52QSnNnJkRGc6Nqh1PipbVz5Hr4kx9RIOGdzDonWM60PuLaRTr//cxK7weQ3RmRxLry7a9hQ==
-X-Received: by 2002:a05:600c:3797:b0:3f7:9b05:928e with SMTP id o23-20020a05600c379700b003f79b05928emr1391380wmr.0.1686046155959;
-        Tue, 06 Jun 2023 03:09:15 -0700 (PDT)
-Received: from sgarzare-redhat (93-44-29-47.ip95.fastwebnet.it. [93.44.29.47])
-        by smtp.gmail.com with ESMTPSA id f4-20020adff8c4000000b00307a83ea722sm12052625wrq.58.2023.06.06.03.09.12
+        d=1e100.net; s=20221208; t=1686046318; x=1688638318;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PjZD64nD9uDw2ysYWjBEluXV8UBaLP33LjAprrSBmFs=;
+        b=e26A0YwrFbBuZYyZFRc/EKk6+KmfM3WVuxfPJAoj3p1pVup17RaiYZo1f6cxIiDsO/
+         yaaM9yqUXsAyiQ3a5XyBvoCqVoZaB2TdKehR2na3U2fdJ9CYw4BjDolM7GRPD4uqNw8y
+         Go8WZpYgZ+QclFKRPuKCDoRxQMaCQ6luL4NfllCdR24vKRdx6waJB9YoR//cobyilsX4
+         agj8G0H/OvVVZ4u6DKE/bNRR7bRrzLGpvVKlZuEKiUwwZZzBf8GhJO6ily3SFAglFX6H
+         vcYJKl3mXGnRdpc8ioRqHyQH3WinnQwrREGKWHqqIZLgGxBMg/DnJfOJN5+FqOrKX4Ku
+         jZVA==
+X-Gm-Message-State: AC+VfDwmaCkWkWJYyWKBNZ9eBBONEMNNoJU0aL5jtmFr5PcL511//V4z
+        1gUYSnvpoBZJxbdTRFaPfVI=
+X-Google-Smtp-Source: ACHHUZ5VuRy6tj2/a+/ZVk3bcFIrCucyH/hLYU0AvfurxedS1PxfbUZxr/R70tGP9osBH0Iu3y7fBA==
+X-Received: by 2002:a05:600c:114c:b0:3f7:6bd9:2819 with SMTP id z12-20020a05600c114c00b003f76bd92819mr1701438wmz.29.1686046317704;
+        Tue, 06 Jun 2023 03:11:57 -0700 (PDT)
+Received: from gmail.com (fwdproxy-cln-006.fbsv.net. [2a03:2880:31ff:6::face:b00c])
+        by smtp.gmail.com with ESMTPSA id z19-20020a7bc7d3000000b003f7ead9be7fsm1323903wmk.38.2023.06.06.03.11.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 03:09:15 -0700 (PDT)
-Date:   Tue, 6 Jun 2023 12:09:11 +0200
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Shannon Nelson <shannon.nelson@amd.com>,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        Jason Wang <jasowang@redhat.com>,
-        Eugenio =?utf-8?B?UMOpcmV6?= <eperezma@redhat.com>,
-        Tiwei Bie <tiwei.bie@intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] vhost-vdpa: filter VIRTIO_F_RING_PACKED feature
-Message-ID: <kpcujul6foyvw66qhy3wck5bzgedka2gzzixupnaog7byr4h45@6ddbvcy32db4>
-References: <20230605110644.151211-1-sgarzare@redhat.com>
- <20230605084104-mutt-send-email-mst@kernel.org>
- <24fjdwp44hovz3d3qkzftmvjie45er3g3boac7aezpvzbwvuol@lmo47ydvnqau>
- <20230605085840-mutt-send-email-mst@kernel.org>
- <gi2hngx3ndsgz5d2rpqjywdmou5vxhd7xgi5z2lbachr7yoos4@kpifz37oz2et>
- <20230605095404-mutt-send-email-mst@kernel.org>
- <32ejjuvhvcicv7wjuetkv34qtlpa657n4zlow4eq3fsi2twozk@iqnd2t5tw2an>
- <20230605173958-mutt-send-email-mst@kernel.org>
+        Tue, 06 Jun 2023 03:11:57 -0700 (PDT)
+Date:   Tue, 6 Jun 2023 03:11:55 -0700
+From:   Breno Leitao <leitao@debian.org>
+To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc:     Remi Denis-Courmont <courmisch@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexander Aring <alex.aring@gmail.com>,
+        Stefan Schmidt <stefan@datenfreihafen.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        David Ahern <dsahern@kernel.org>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Mat Martineau <martineau@kernel.org>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Xin Long <lucien.xin@gmail.com>, axboe@kernel.dk,
+        asml.silence@gmail.com, leit@fb.com, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, dccp@vger.kernel.org,
+        linux-wpan@vger.kernel.org, mptcp@lists.linux.dev,
+        linux-sctp@vger.kernel.org
+Subject: Re: [PATCH net-next v5] net: ioctl: Use kernel memory on protocol
+ ioctl callbacks
+Message-ID: <ZH8Ga15IFIUUA7j8@gmail.com>
+References: <20230602163044.1820619-1-leitao@debian.org>
+ <CAF=yD-Kk9mVWPZN50NUu8uGwEbySNS-WzvJ=1HTTcVsA6OOuvA@mail.gmail.com>
+ <ZHxEX0TlXX7VV9kX@gmail.com>
+ <CAF=yD-LvTDmWp+wAqwuQ7vKLT0hAHcQjV9Ef2rEag5J4cSZrkA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230605173958-mutt-send-email-mst@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAF=yD-LvTDmWp+wAqwuQ7vKLT0hAHcQjV9Ef2rEag5J4cSZrkA@mail.gmail.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,FSL_HELO_FAKE,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,106 +81,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 05, 2023 at 05:44:50PM -0400, Michael S. Tsirkin wrote:
->On Mon, Jun 05, 2023 at 04:56:37PM +0200, Stefano Garzarella wrote:
->> On Mon, Jun 05, 2023 at 09:54:57AM -0400, Michael S. Tsirkin wrote:
->> > On Mon, Jun 05, 2023 at 03:30:35PM +0200, Stefano Garzarella wrote:
->> > > On Mon, Jun 05, 2023 at 09:00:25AM -0400, Michael S. Tsirkin wrote:
->> > > > On Mon, Jun 05, 2023 at 02:54:20PM +0200, Stefano Garzarella wrote:
->> > > > > On Mon, Jun 05, 2023 at 08:41:54AM -0400, Michael S. Tsirkin wrote:
->> > > > > > On Mon, Jun 05, 2023 at 01:06:44PM +0200, Stefano Garzarella wrote:
->> > > > > > > vhost-vdpa IOCTLs (eg. VHOST_GET_VRING_BASE, VHOST_SET_VRING_BASE)
->> > > > > > > don't support packed virtqueue well yet, so let's filter the
->> > > > > > > VIRTIO_F_RING_PACKED feature for now in vhost_vdpa_get_features().
->> > > > > > >
->> > > > > > > This way, even if the device supports it, we don't risk it being
->> > > > > > > negotiated, then the VMM is unable to set the vring state properly.
->> > > > > > >
->> > > > > > > Fixes: 4c8cf31885f6 ("vhost: introduce vDPA-based backend")
->> > > > > > > Cc: stable@vger.kernel.org
->> > > > > > > Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
->> > > > > > > ---
->> > > > > > >
->> > > > > > > Notes:
->> > > > > > >     This patch should be applied before the "[PATCH v2 0/3] vhost_vdpa:
->> > > > > > >     better PACKED support" series [1] and backported in stable branches.
->> > > > > > >
->> > > > > > >     We can revert it when we are sure that everything is working with
->> > > > > > >     packed virtqueues.
->> > > > > > >
->> > > > > > >     Thanks,
->> > > > > > >     Stefano
->> > > > > > >
->> > > > > > >     [1] https://lore.kernel.org/virtualization/20230424225031.18947-1-shannon.nelson@amd.com/
->> > > > > >
->> > > > > > I'm a bit lost here. So why am I merging "better PACKED support" then?
->> > > > >
->> > > > > To really support packed virtqueue with vhost-vdpa, at that point we would
->> > > > > also have to revert this patch.
->> > > > >
->> > > > > I wasn't sure if you wanted to queue the series for this merge window.
->> > > > > In that case do you think it is better to send this patch only for stable
->> > > > > branches?
->> > > > > > Does this patch make them a NOP?
->> > > > >
->> > > > > Yep, after applying the "better PACKED support" series and being
->> > > > > sure that
->> > > > > the IOCTLs of vhost-vdpa support packed virtqueue, we should revert this
->> > > > > patch.
->> > > > >
->> > > > > Let me know if you prefer a different approach.
->> > > > >
->> > > > > I'm concerned that QEMU uses vhost-vdpa IOCTLs thinking that the kernel
->> > > > > interprets them the right way, when it does not.
->> > > > >
->> > > > > Thanks,
->> > > > > Stefano
->> > > > >
->> > > >
->> > > > If this fixes a bug can you add Fixes tags to each of them? Then it's ok
->> > > > to merge in this window. Probably easier than the elaborate
->> > > > mask/unmask dance.
->> > >
->> > > CCing Shannon (the original author of the "better PACKED support"
->> > > series).
->> > >
->> > > IIUC Shannon is going to send a v3 of that series to fix the
->> > > documentation, so Shannon can you also add the Fixes tags?
->> > >
->> > > Thanks,
->> > > Stefano
->> >
->> > Well this is in my tree already. Just reply with
->> > Fixes: <>
->> > to each and I will add these tags.
->>
->> I tried, but it is not easy since we added the support for packed virtqueue
->> in vdpa and vhost incrementally.
->>
->> Initially I was thinking of adding the same tag used here:
->>
->> Fixes: 4c8cf31885f6 ("vhost: introduce vDPA-based backend")
->>
->> Then I discovered that vq_state wasn't there, so I was thinking of
->>
->> Fixes: 530a5678bc00 ("vdpa: support packed virtqueue for set/get_vq_state()")
->>
->> So we would have to backport quite a few patches into the stable branches.
->> I don't know if it's worth it...
->>
->> I still think it is better to disable packed in the stable branches,
->> otherwise I have to make a list of all the patches we need.
->>
->> Any other ideas?
->>
->> Thanks,
->> Stefano
->
->OK so. You want me to apply this one now, and fixes in the next
->kernel?
+On Sun, Jun 04, 2023 at 11:17:56AM +0200, Willem de Bruijn wrote:
+> > On Sat, Jun 03, 2023 at 10:21:50AM +0200, Willem de Bruijn wrote:
+> > > On Fri, Jun 2, 2023 at 6:31 PM Breno Leitao <leitao@debian.org> wrote:
+> > > > Signed-off-by: Breno Leitao <leitao@debian.org>
+> > >
+> > > Please check the checkpatch output
+> > >
+> > > https://patchwork.hopto.org/static/nipa/753609/13265673/checkpatch/stdout
+> >
+> > I am checking my current checkpatch before sending the patch, but I am
+> > not seeing the problems above.
+> >
+> > My tree is at 44c026a73be8038 ("Linux 6.4-rc3"), and I am not able to
+> > reproduce the problems above.
+> >
+> >         $ scripts/checkpatch.pl v5/v5-0001-net-ioctl-Use-kernel-memory-on-protocol-ioctl-cal.patch
+> >         total: 0 errors, 0 warnings, 0 checks, 806 lines checked
+> >         v5/v5-0001-net-ioctl-Use-kernel-memory-on-protocol-ioctl-cal.patch has no obvious style problems and is ready for submission.
+> >
+> > Let me investigate what options I am missing when running checkpatch.
+> 
+> The reference is to the checkpatch as referenced by patchwork:
+> 
+> https://patchwork.kernel.org/project/netdevbpf/patch/20230602163044.1820619-1-leitao@debian.org/
+> 
+> The 80 character limit is a soft limit. But also note the CHECK
+> statements on whitespace.
 
-Yep, it seems to me the least risky approach.
+Right. In order to enable the "CHECK" statments, we need to pass the
+"--subjective" parameter to checpatch.pl
 
-Thanks,
-Stefano
+That said, I am able to reproduce the same output now, using the
+following command line:
 
+	$ scripts/checkpatch.pl --subjective --max-line-length=80
+
+> > > > +/* A wrapper around sock ioctls, which copies the data from userspace
+> > > > + * (depending on the protocol/ioctl), and copies back the result to userspace.
+> > > > + * The main motivation for this function is to pass kernel memory to the
+> > > > + * protocol ioctl callbacks, instead of userspace memory.
+> > > > + */
+> > > > +int sk_ioctl(struct sock *sk, unsigned int cmd, void __user *arg)
+> > > > +{
+> > > > +       int rc = 1;
+> > > > +
+> > > > +       if (sk_is_ipmr(sk))
+> > > > +               rc = ipmr_sk_ioctl(sk, cmd, arg);
+> > > > +       else if (sk_is_icmpv6(sk))
+> > > > +               rc = ip6mr_sk_ioctl(sk, cmd, arg);
+> > > > +       else if (sk_is_phonet(sk))
+> > > > +               rc = phonet_sk_ioctl(sk, cmd, arg);
+> > >
+> > > Does this handle all phonet ioctl cases correctly?
+> > >
+> > > Notably pn_socket_ioctl has a SIOCPNGETOBJECT that reads and writes a u16.
+> >
+> > We are not touching  "struct proto_ops" in this patch at all.  And
+> > pn_socket_ioctl() is part of "struct proto_ops".
+> >
+> >         const struct proto_ops phonet_stream_ops = {
+> >                   ...
+> >                   .ioctl          = pn_socket_ioctl,
+> >         }
+> >
+> > That said, all the "struct proto_ops" ioctl calls backs continue to use
+> > "unsigned long arg" with userspace information, at least for now.
+> 
+> Ok. Perhaps good to call out in the commit message that this does not
+> convert all protocol ioctl callbacks.
+
+Sure, let me send a V6 with this information in the patch summary.
