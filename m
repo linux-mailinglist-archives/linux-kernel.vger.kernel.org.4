@@ -2,197 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68F95723FB0
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 12:35:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFB90723FB5
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 12:35:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236848AbjFFKfb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 06:35:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55786 "EHLO
+        id S236880AbjFFKfn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 06:35:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237082AbjFFKfF (ORCPT
+        with ESMTP id S237304AbjFFKfT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 06:35:05 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0356D10E2;
-        Tue,  6 Jun 2023 03:34:47 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 02A8B2F4;
-        Tue,  6 Jun 2023 03:35:32 -0700 (PDT)
-Received: from [10.163.44.166] (unknown [10.163.44.166])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EF9B23F587;
-        Tue,  6 Jun 2023 03:34:34 -0700 (PDT)
-Message-ID: <ba396c30-6719-1dfb-77c2-9f7e1715b57c@arm.com>
-Date:   Tue, 6 Jun 2023 16:04:25 +0530
+        Tue, 6 Jun 2023 06:35:19 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B88210C7
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 03:35:00 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3565N8jI006095;
+        Tue, 6 Jun 2023 05:34:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=hXdwTd2fuvfqZGo4qjG52aP1P7Vq04LCvv+OwS612IE=;
+ b=fBMSNFtJUc9buHpvW7rUEdq2+dYBhDToUW7y7qtVlNkPi1GejLaJwV/oJZtYMHdw/e8O
+ oGft8w9S16cRe1tOEBW4fxT3K9eXybKqTTUyYRfmSdIPls2mF18CtnIsqbtjWnIRGI8n
+ C9S3PFrItTrNatYDSLHjp87GyACejKKZUrmue8mplzm/bu3mkIzOwtLCng7yHLD8zU00
+ d6UbWfibOPiSSD+xLjyw5739yQUH6n8IynMMT14+5SnHq947A5gfn3O/Ej9cd2o7UXqI
+ M2RoM2Y14calt7dAw9RIAZbW3lrSVqzhIkj0rlwPgnUhU2pejb8A6OY+CA2W2lhVFgGB Hw== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3r02x1asf3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Jun 2023 05:34:46 -0500
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Tue, 6 Jun
+ 2023 11:34:44 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Tue, 6 Jun 2023 11:34:44 +0100
+Received: from sbinding-cirrus-dsktp2.ad.cirrus.com (unknown [198.90.238.36])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id B086A11AA;
+        Tue,  6 Jun 2023 10:34:43 +0000 (UTC)
+From:   Stefan Binding <sbinding@opensource.cirrus.com>
+To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
+        <patches@opensource.cirrus.com>,
+        Stefan Binding <sbinding@opensource.cirrus.com>
+Subject: [PATCH v3 0/3] Fixes and cleanup for CS35L41 HDA
+Date:   Tue, 6 Jun 2023 11:34:33 +0100
+Message-ID: <20230606103436.455348-1-sbinding@opensource.cirrus.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH V11 05/10] arm64/perf: Add branch stack support in ARMV8
- PMU
-Content-Language: en-US
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        will@kernel.org, catalin.marinas@arm.com,
-        Mark Brown <broonie@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-perf-users@vger.kernel.org
-References: <20230531040428.501523-1-anshuman.khandual@arm.com>
- <20230531040428.501523-6-anshuman.khandual@arm.com>
- <ZH3PCqYt/UzoiVx3@FVFF77S0Q05N>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <ZH3PCqYt/UzoiVx3@FVFF77S0Q05N>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: fmIDXws0Go9KkKXY2aB700fzg5SDoh1M
+X-Proofpoint-GUID: fmIDXws0Go9KkKXY2aB700fzg5SDoh1M
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Several minor issues were found during additional testing and
+static analysis. These patches fix these minor issues.
 
+CHANGES SINCE V2:
+Patch 3:
+- Add missing break
 
-On 6/5/23 17:35, Mark Rutland wrote:
-> On Wed, May 31, 2023 at 09:34:23AM +0530, Anshuman Khandual wrote:
->> This enables support for branch stack sampling event in ARMV8 PMU, checking
->> has_branch_stack() on the event inside 'struct arm_pmu' callbacks. Although
->> these branch stack helpers armv8pmu_branch_XXXXX() are just dummy functions
->> for now. While here, this also defines arm_pmu's sched_task() callback with
->> armv8pmu_sched_task(), which resets the branch record buffer on a sched_in.
-> 
-> This generally looks good, but I have a few comments below.
-> 
-> [...]
-> 
->> +static inline bool armv8pmu_branch_valid(struct perf_event *event)
->> +{
->> +	WARN_ON_ONCE(!has_branch_stack(event));
->> +	return false;
->> +}
-> 
-> IIUC this is for validating the attr, so could we please name this
-> armv8pmu_branch_attr_valid() ?
+CHANGES SINCE V1:
+Patch 2:
+- Removed unnecessary cast
 
-Sure, will change the name and updated call sites.
+Stefan Binding (3):
+  ALSA: hda: cs35l41: Clean up Firmware Load Controls
+  ALSA: hda: cs35l41: Fix endian conversions
+  ALSA: hda/realtek: Delete cs35l41 component master during free
 
-> 
-> [...]
-> 
->> +static int branch_records_alloc(struct arm_pmu *armpmu)
->> +{
->> +	struct pmu_hw_events *events;
->> +	int cpu;
->> +
->> +	for_each_possible_cpu(cpu) {
->> +		events = per_cpu_ptr(armpmu->hw_events, cpu);
->> +		events->branches = kzalloc(sizeof(struct branch_records), GFP_KERNEL);
->> +		if (!events->branches)
->> +			return -ENOMEM;
->> +	}
->> +	return 0;
-> 
-> This leaks memory if any allocation fails, and the next patch replaces this
-> code entirely.
+ sound/pci/hda/cs35l41_hda.c   | 32 ++++++++++++++------------------
+ sound/pci/hda/patch_realtek.c |  3 +++
+ 2 files changed, 17 insertions(+), 18 deletions(-)
 
-Okay.
+-- 
+2.34.1
 
-> 
-> Please add this once in a working state. Either use the percpu allocation
-> trick in the next patch from the start, or have this kzalloc() with a
-> corresponding kfree() in an error path.
-
-I will change branch_records_alloc() as suggested in the next patch's thread
-and fold those changes here in this patch.
-
-> 
->>  }
->>  
->>  static int armv8pmu_probe_pmu(struct arm_pmu *cpu_pmu)
->> @@ -1145,12 +1162,24 @@ static int armv8pmu_probe_pmu(struct arm_pmu *cpu_pmu)
->>  	};
->>  	int ret;
->>  
->> +	ret = armv8pmu_private_alloc(cpu_pmu);
->> +	if (ret)
->> +		return ret;
->> +
->>  	ret = smp_call_function_any(&cpu_pmu->supported_cpus,
->>  				    __armv8pmu_probe_pmu,
->>  				    &probe, 1);
->>  	if (ret)
->>  		return ret;
->>  
->> +	if (arm_pmu_branch_stack_supported(cpu_pmu)) {
->> +		ret = branch_records_alloc(cpu_pmu);
->> +		if (ret)
->> +			return ret;
->> +	} else {
->> +		armv8pmu_private_free(cpu_pmu);
->> +	}
-> 
-> I see from the next patch that "private" is four ints, so please just add that
-> to struct arm_pmu under an ifdef CONFIG_ARM64_BRBE. That'll simplify this, and
-> if we end up needing more space in future we can consider factoring it out.
-
-struct arm_pmu {
-	........................................
-        /* Implementation specific attributes */
-        void            *private;
-}
-
-private pointer here creates an abstraction for given pmu implementation
-to hide attribute details without making it known to core arm pmu layer.
-Although adding ifdef CONFIG_ARM64_BRBE solves the problem as mentioned
-above, it does break that abstraction. Currently arm_pmu layer is aware
-about 'branch records' but not about BRBE in particular which the driver
-adds later on. I suggest we should not break that abstraction.
-
-Instead a global 'static struct brbe_hw_attr' in drivers/perf/arm_brbe.c
-can be initialized into arm_pmu->private during armv8pmu_branch_probe(),
-which will also solve the allocation-free problem. Also similar helpers
-armv8pmu_task_ctx_alloc()/free() could be defined to manage task context
-cache i.e arm_pmu->pmu.task_ctx_cache independently.
-
-But now armv8pmu_task_ctx_alloc() can be called after pmu probe confirms
-to have arm_pmu->has_branch_stack.
-
-> 
->> +
->>  	return probe.present ? 0 : -ENODEV;
->>  }
-> 
-> It also seems odd to ceck probe.present *after* checking
-> arm_pmu_branch_stack_supported().
-
-I will reorganize as suggested below.
-
-> 
-> With the allocation removed I think this can be written more clearly as:
-> 
-> | static int armv8pmu_probe_pmu(struct arm_pmu *cpu_pmu)
-> | {
-> |         struct armv8pmu_probe_info probe = {
-> |                 .pmu = cpu_pmu,
-> |                 .present = false,
-> |         };   
-> |         int ret; 
-> | 
-> |         ret = smp_call_function_any(&cpu_pmu->supported_cpus,
-> |                                     __armv8pmu_probe_pmu,
-> |                                     &probe, 1);
-> |         if (ret)
-> |                 return ret; > | 
-> |         if (!probe.present)
-> |                 return -ENODEV;
-> | 
-> |         if (arm_pmu_branch_stack_supported(cpu_pmu))
-> |                 ret = branch_records_alloc(cpu_pmu);
-> |              
-> |         return ret; 
-> | }
