@@ -2,101 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA1AB723C18
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 10:45:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88F0D723C1B
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 10:46:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237246AbjFFIpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 04:45:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39788 "EHLO
+        id S237249AbjFFIqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 04:46:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231545AbjFFIpp (ORCPT
+        with ESMTP id S231545AbjFFIqQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 04:45:45 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 21F6FEA;
-        Tue,  6 Jun 2023 01:45:42 -0700 (PDT)
-Received: from loongson.cn (unknown [10.2.9.158])
-        by gateway (Coremail) with SMTP id _____8BxHPA08n5k1g0AAA--.408S3;
-        Tue, 06 Jun 2023 16:45:40 +0800 (CST)
-Received: from kvm-1-158.loongson.cn (unknown [10.2.9.158])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxTMoz8n5kzAkCAA--.301S2;
-        Tue, 06 Jun 2023 16:45:39 +0800 (CST)
-From:   Bibo Mao <maobibo@loongson.cn>
-To:     Bjorn Helgaas <bhelgaas@google.com>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Will Deacon <will@kernel.org>, loongarch@lists.linux.dev,
-        loongson-kernel@lists.loongnix.cn
-Subject: [PATCH v3] PCI: Align pci memory space base address with page size
-Date:   Tue,  6 Jun 2023 16:45:39 +0800
-Message-Id: <20230606084539.1694441-1-maobibo@loongson.cn>
-X-Mailer: git-send-email 2.27.0
+        Tue, 6 Jun 2023 04:46:16 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4660FFA
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 01:46:15 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-976a0a1a92bso635405366b.1
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 01:46:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686041174; x=1688633174;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zhXwQM1axbZVP2R8OTg/nTjRF7LjBSXFyA1Pe1rgXwU=;
+        b=rz3hnPVFfhJzaBCsj7KdnoW0gEFzBX+E4PmxU2fSGOXzX9Z736UZEzGJVbPU95rVXF
+         yWbhRTdZQWTQUmRR6Al75izbMAIlNO/eI3RTB4MKzlhjY+6DitK2Ozp8ne9ElMAv8GKr
+         Nqbb1sS5lku0wui9HJAOnwLD4DfDzzj2cM2j8VFtnMU/n90z0lAy1JNUb/KpNHxwz6cr
+         cpCjh2bApJio4b/SQcgC5OixLa4idbENmrjA/k/8P+SxNnORYDSp6z3CCyhLWbBxpU9q
+         MuDzunhAflP9gXTmwyPVs7k1gj01Z6Vth9HXUd9tAWbAIaJ0NFsaL3l2aIuDZb6VuQAM
+         6f9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686041174; x=1688633174;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zhXwQM1axbZVP2R8OTg/nTjRF7LjBSXFyA1Pe1rgXwU=;
+        b=Nf91nFwRXq5DtOlraX8wpK/xd60o3tBKzqqgfCdhYyqJNMmChWPDkroEwwWoR8Q0JA
+         fDIIJzOASnGEMLEiwhzVqwnnKhLj3fNsUwFrZgGdfpa/YBS+omSyc+3piMwCpibBTuIh
+         m6GE/B6+Sz/MxwYcUcTpmX7mpodwDt7A2DXGckfD66ADZpL+YU2zTl0JoXFVLe1Xq/fo
+         PW0wSGp8zKmtHuE6rl9TXegc7xFU5glnItWGIcEudk5tY0u/Ih8ojuwe6SjlI71DuxIS
+         bjz/9TyZ3LBJe9Lc4IB+JODBvFC5VK750fJqNGt6Jp7fpS6tvWG+bjBtoRArf5A6fuPx
+         VYEw==
+X-Gm-Message-State: AC+VfDzUlgJSK58GJB2eoYn+I+dCxkDN+oBzeVaD03dSjDZB8fBTMCI8
+        1RKt68y8JQ4pU2iINKd8ziDjeQ==
+X-Google-Smtp-Source: ACHHUZ6XPMkYalRlyNWE2pAPL43aV20Dl8/aCIgapDRm3k9iQeuNZMX/aNkFgm3+1GqDSzEW+qa8mg==
+X-Received: by 2002:a17:907:9496:b0:970:19a2:7303 with SMTP id dm22-20020a170907949600b0097019a27303mr1672203ejc.19.1686041173683;
+        Tue, 06 Jun 2023 01:46:13 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id e4-20020a170906504400b0095342bfb701sm5455841ejk.16.2023.06.06.01.46.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Jun 2023 01:46:13 -0700 (PDT)
+Message-ID: <2c3fa1f1-1859-0914-b39f-05f1f4186179@linaro.org>
+Date:   Tue, 6 Jun 2023 10:46:11 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxTMoz8n5kzAkCAA--.301S2
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7AF15tFy7CrWfZFWrGr45Jwc_yoW8Xr13pF
-        W7AanrCry8Gr13Gw4vqw1kuF4fWa1v93yYyrWfAasag3ZrCas2yr1UAFy5Zry8ur47GF1U
-        XFs8tr1fZFWrXagCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUU9Ib4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-        xVWxJr0_GcWln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
-        xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y
-        6r17McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
-        vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_
-        Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
-        AY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAI
-        cVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42
-        IY6I8E87Iv67AKxVW8Jr0_Cr1UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnI
-        WIevJa73UjIFyTuYvjxU2MKZDUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v4 2/4] dt-bindings: phy: qcom,usb-hs-phy: Add compatible
+Content-Language: en-US
+To:     Rudraksha Gupta <guptarud@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230606040529.122433-1-guptarud@gmail.com>
+ <20230606040529.122433-3-guptarud@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230606040529.122433-3-guptarud@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some PCI devices have only 4K memory space size, it is normal in general
-machines and aligned with page size. However some architectures which
-support different page size, default page size on LoongArch is 16K, and
-ARM64 supports page size varying from 4K to 64K. On machines where larger
-page size is use, memory space region of two different pci devices may be
-in one page. It is not safe with mmu protection, also VFIO pci device
-driver requires base address of pci memory space page aligned, so that it
-can be memory mapped to qemu user space when it is passed-through to vm.
+On 06/06/2023 06:05, Rudraksha Gupta wrote:
+> Adds qcom,usb-hs-phy-msm8960 compatible
+> 
+> Signed-off-by: Rudraksha Gupta <guptarud@gmail.com>
+> ---
+>  Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml
+> index aa97478dd016..bdeffb52340b 100644
+> --- a/Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml
+> +++ b/Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml
+> @@ -13,7 +13,9 @@ if:
+>    properties:
+>      compatible:
+>        contains:
+> -        const: qcom,usb-hs-phy-apq8064
+> +        anyOf:
 
-It consumes more pci memory resource with page size alignment requirement,
-it should not be a problem on 64 bit system.
-
-Signed-off-by: Bibo Mao <maobibo@loongson.cn>
----
- drivers/pci/setup-res.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/drivers/pci/setup-res.c b/drivers/pci/setup-res.c
-index 967f9a758923..55440ae0128d 100644
---- a/drivers/pci/setup-res.c
-+++ b/drivers/pci/setup-res.c
-@@ -339,6 +339,14 @@ int pci_assign_resource(struct pci_dev *dev, int resno)
- 		return -EINVAL;
- 	}
- 
-+#ifdef CONFIG_64BIT
-+	/*
-+	 * force minimum page alignment for vfio pci usage
-+	 * supposing there is enough pci memory resource on 64bit system
-+	 */
-+	if (res->flags & IORESOURCE_MEM)
-+		align = max_t(resource_size_t, PAGE_SIZE, align);
-+#endif
- 	size = resource_size(res);
- 	ret = _pci_assign_resource(dev, resno, size, align);
- 
--- 
-2.27.0
+Look at existing bindings how this is done. This should be enum.
+Best regards,
+Krzysztof
 
