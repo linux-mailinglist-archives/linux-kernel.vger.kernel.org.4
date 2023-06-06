@@ -2,67 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1608A724BA3
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 20:45:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5689F724BA5
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 20:45:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238929AbjFFSpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 14:45:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54892 "EHLO
+        id S239063AbjFFSpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 14:45:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238887AbjFFSpK (ORCPT
+        with ESMTP id S238906AbjFFSpQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 14:45:10 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2340B170E
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 11:45:08 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-565bd368e19so66857517b3.1
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 11:45:08 -0700 (PDT)
+        Tue, 6 Jun 2023 14:45:16 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97629101
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 11:45:15 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id d9443c01a7336-1b0314f0aadso38964415ad.0
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 11:45:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686077107; x=1688669107;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0f2HXwtzZPOu2SMs3B1mSn7YTNWPbzVJ1Q8BJIRe3iQ=;
-        b=A83iW40wCu/ek1ytLlTmsLhXBj6U+rOa1+tNlTUyFXHdLTSHpOxNJEZdlaEs4eDrTy
-         wQ5+SeaERA498ZJRC3fNAX6yBRgALkT/6PEUYCUm8baZ3JtoDqFtoxHMTtNGbAJWN6BB
-         tXFQHR8yvXw6omV8rL4HRbVIr4XWMcCXzZyzqqxeFQ1frfH166Bo0KTqliVTZzysmv25
-         2KEQMebNF+8GNvhfgeBcJ4phUzq4icwOP63DiSUsEPjrPZfsY8GjbOhysiCFlST/+jgN
-         xSL1xbO73eHT5aKWvF9+miiRrdye8izuSAyPoDo0sKNHeXlAY7Xa14EoSaz3c5xI1pVy
-         ELgw==
+        d=google.com; s=20221208; t=1686077115; x=1688669115;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Cq1bDTjZKQu+8FokSAcd9i/aEeyRO+1V7yxU6QcDPDg=;
+        b=SyQHi7u1uXQBjZVKJZN8e+jiLgy7KNnOamKu5YqvFnqqdbxz/rNypLYRdIIfE4dElN
+         Zqyihiljdoq2kKIYbI4lbxrOqROU4pQHCeoxinn2lDSeR66K2IZuPg/euOFjngLZQCPl
+         88MTYPnpV/vEv9sWX0mq6WSnoOQKFu0jxDqRliufQvJRZd9T43QR/paYL+fUvAEhyLgQ
+         +yvG4ANvxz80w0p48/95PiutNn2xR9aFlyFYzaQ1RZTnqD7PkcnMBGCmxf2gW4bYVDE3
+         L6VoP6/SC7bbV6V5R8/lX/ChtAZ/SyjZBRrFMVljEPFIyOKw+59ZmzeeI8UaX0UNhuts
+         47Vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686077107; x=1688669107;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0f2HXwtzZPOu2SMs3B1mSn7YTNWPbzVJ1Q8BJIRe3iQ=;
-        b=PVM0ollQzO47+OdPmeRWm7u5RkAZeUpOaYTcE5sKJuQR+YyY9lk+uPVeiQeO8LnY5G
-         E2D+Bf9Q1e960vHYtDl1c7iI0WBJzZfShysyruihqwWMM7xrCWzCh2/1X0lP6hFDQADY
-         xuN6MHwjTVpmXKdhHS1zyhKGxUp6U4TnJ9ipWeF/7CP6+cREDngWGirI7ohAc3LGwiQ/
-         ahRCl2H8wOCJYWz7A0DYlMV4++ECXWv4rc9kAv9JkwsnOIe3ia7f6QkdBCEajfhxe6Qe
-         Eand/9YfJ/pp2rYKIq3oC67OI5uBO4Ej2Q27rg97R++wPfVuMgif8kW0UAtHXhcQoPiu
-         CCxw==
-X-Gm-Message-State: AC+VfDzbXHdt3WBGEs9mfhvf/C+vGB1tUWE19alPzgjOp34LRP1SN+0E
-        1bA5olPX7tI9R1rHmklbnhOcvdVHB7F4GtJ0fCkOOy+M9ToRmMBJ
-X-Google-Smtp-Source: ACHHUZ4+MgtBI155SVVj6TAoJSeiCWrPjWPUuzvphCBEewj1WdM4RRkNxKwQUZ/tRptVbz6GgSROWt5q331IR/Tg1/A=
-X-Received: by 2002:a81:5c03:0:b0:561:baee:ee8 with SMTP id
- q3-20020a815c03000000b00561baee0ee8mr3344440ywb.32.1686077107326; Tue, 06 Jun
- 2023 11:45:07 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230602162258.63853-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20230602162258.63853-1-andriy.shevchenko@linux.intel.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 6 Jun 2023 20:44:55 +0200
-Message-ID: <CACRpkdZFwHm--KYxf+NnynPgKz_VJpzZnptTVmFpNxauZ3Pbtg@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] gpiolib: Do not unexport GPIO on freeing
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Content-Type: text/plain; charset="UTF-8"
+        d=1e100.net; s=20221208; t=1686077115; x=1688669115;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Cq1bDTjZKQu+8FokSAcd9i/aEeyRO+1V7yxU6QcDPDg=;
+        b=Je6hSOCuAT8TYYxqzRUSJupj9QNDLwfl6cGWDhxA8FxxGSU+D/poLMEYJ4SvLyGqDG
+         NqKysXi28+JNvvcS07zwr9lqw/QX53Q8tGM8tWlxV1qoPZDGYFtYKMSvPE7Dn711s+wy
+         Nt4b4qcHl3NZOk+lY37d62PXMgJ3h9c8877dWjtFZu6w7JLGMXoJRnfeHIwhsf8vLj8C
+         Mghd1fMECseg7ZQVsirhSDsXGQ63pv7lw2eLuztSu/Hlj7WPSLfpBVWjwYEo++DfMuFK
+         9dJt242EwaMKnb0sEJWJVs1jm/Ct3gmJQw2YhYPFVPQ0VWhwUM0ZI65C6xekdPAnu7d5
+         7YGA==
+X-Gm-Message-State: AC+VfDxwwNIiNYJfvwjvcUL6v3MjFTv7FQDrElJwMyVjQegXc82sDPNj
+        CHaPP0cDaFg/IG7jO+y3ERvWc1f6pdU=
+X-Google-Smtp-Source: ACHHUZ7qJdL+b/Aomd4mSjTHuAlTbzUL4WoI3pCH7py3TtKtgN+tt+YQ5NLnyn6J6BUMbtskU5LT8+TWn70=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:902:eb4d:b0:1a6:8a07:960a with SMTP id
+ i13-20020a170902eb4d00b001a68a07960amr2129137pli.0.1686077115103; Tue, 06 Jun
+ 2023 11:45:15 -0700 (PDT)
+Date:   Tue, 6 Jun 2023 11:45:13 -0700
+In-Reply-To: <20230522161249.800829-2-aleksandr.mikhalitsyn@canonical.com>
+Mime-Version: 1.0
+References: <20230522161249.800829-1-aleksandr.mikhalitsyn@canonical.com> <20230522161249.800829-2-aleksandr.mikhalitsyn@canonical.com>
+Message-ID: <ZH9+ufGL9SGfmmnc@google.com>
+Subject: Re: [PATCH v2 1/2] KVM: SVM: free sev_*asid_bitmap init if SEV init fails
+From:   Sean Christopherson <seanjc@google.com>
+To:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Cc:     pbonzini@redhat.com,
+        "=?iso-8859-1?Q?St=E9phane?= Graber" <stgraber@ubuntu.com>,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,21 +75,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 2, 2023 at 6:22=E2=80=AFPM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
-
-> Since the legacy exporting is gone with 2f804aca4832 ("gpiolib:
-> Kill unused GPIOF_EXPORT and Co") there is no need to unexport
-> GPIO on freeing. Remove that call.
+On Mon, May 22, 2023, Alexander Mikhalitsyn wrote:
+> If misc_cg_set_capacity() fails for some reason then we have
+> a memleak for sev_reclaim_asid_bitmap/sev_asid_bitmap. It's
+> not a case right now, because misc_cg_set_capacity() just can't
+> fail and check inside it is always successful.
+>=20
+> But let's fix that for code consistency.
+>=20
+> Cc: Sean Christopherson <seanjc@google.com>
+> Cc: Paolo Bonzini <pbonzini@redhat.com>
+> Cc: St=EF=BF=BDphane Graber <stgraber@ubuntu.com>
+> Cc: kvm@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com=
 >
-> Note, the other users of this functionality do that explicitly,
-> except one SH boardfile which doesn't free GPIO anyways, so it
-> is safe to drop the call.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  arch/x86/kvm/svm/sev.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+> index 69ae5e1b3120..cc832a8d1bca 100644
+> --- a/arch/x86/kvm/svm/sev.c
+> +++ b/arch/x86/kvm/svm/sev.c
+> @@ -2216,8 +2216,13 @@ void __init sev_hardware_setup(void)
+>  	}
+> =20
+>  	sev_asid_count =3D max_sev_asid - min_sev_asid + 1;
+> -	if (misc_cg_set_capacity(MISC_CG_RES_SEV, sev_asid_count))
+> +	if (misc_cg_set_capacity(MISC_CG_RES_SEV, sev_asid_count)) {
+> +		bitmap_free(sev_reclaim_asid_bitmap);
+> +		sev_reclaim_asid_bitmap =3D NULL;
+> +		bitmap_free(sev_asid_bitmap);
+> +		sev_asid_bitmap =3D NULL;
+>  		goto out;
+> +	}
 
-Makes sense!
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Blech, didn't look close enough at v1.  I think I'd rather yell and continu=
+e on.
+If misc_cg_set_capacity() were to fail, debugging would be unnecessarily pa=
+inful,
+and at least as things stand today, there's nothing userspace can do to rem=
+edy
+the problem except by manually disabling SEV and/or SEV-ES.
 
-Yours,
-Linus Walleij
+---
+From: Sean Christopherson <seanjc@google.com>
+Date: Tue, 6 Jun 2023 11:34:28 -0700
+Subject: [PATCH] KVM: SVM: WARN, but continue, if misc_cg_set_capacity() fa=
+ils
+
+WARN and continue if misc_cg_set_capacity() fails, as the only scenario
+in which it can fail is if the specified resource is invalid, which should
+never happen when CONFIG_KVM_AMD_SEV=3Dy.  Deliberately not bailing "fixes"
+a theoretical bug where KVM would leak the ASID bitmaps on failure, which
+again can't happen.
+
+If the impossible should happen, the end result is effectively the same
+with respect to SEV and SEV-ES (they are unusable), while continuing on
+has the advantage of letting KVM load, i.e. userspace can still run
+non-SEV guests.
+
+Reported-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/kvm/svm/sev.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
+
+diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+index d65578d8784d..07756b7348ae 100644
+--- a/arch/x86/kvm/svm/sev.c
++++ b/arch/x86/kvm/svm/sev.c
+@@ -2216,9 +2216,7 @@ void __init sev_hardware_setup(void)
+ 	}
+=20
+ 	sev_asid_count =3D max_sev_asid - min_sev_asid + 1;
+-	if (misc_cg_set_capacity(MISC_CG_RES_SEV, sev_asid_count))
+-		goto out;
+-
++	WARN_ON_ONCE(misc_cg_set_capacity(MISC_CG_RES_SEV, sev_asid_count));
+ 	sev_supported =3D true;
+=20
+ 	/* SEV-ES support requested? */
+@@ -2243,9 +2241,7 @@ void __init sev_hardware_setup(void)
+ 		goto out;
+=20
+ 	sev_es_asid_count =3D min_sev_asid - 1;
+-	if (misc_cg_set_capacity(MISC_CG_RES_SEV_ES, sev_es_asid_count))
+-		goto out;
+-
++	WARN_ON_ONCE(misc_cg_set_capacity(MISC_CG_RES_SEV_ES, sev_es_asid_count))=
+;
+ 	sev_es_supported =3D true;
+=20
+ out:
+
+base-commit: 6d1bc9754b04075d938b47cf7f7800814b8911a7
+--=20
+
