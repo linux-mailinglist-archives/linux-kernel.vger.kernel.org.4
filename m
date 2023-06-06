@@ -2,155 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B208F724D2E
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 21:38:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2A04724D3E
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 21:41:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239238AbjFFThl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 15:37:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59624 "EHLO
+        id S238032AbjFFTkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 15:40:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239072AbjFFThi (ORCPT
+        with ESMTP id S237519AbjFFTkW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 15:37:38 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4826F10FB;
-        Tue,  6 Jun 2023 12:37:36 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 097CB5C00D2;
-        Tue,  6 Jun 2023 15:37:33 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Tue, 06 Jun 2023 15:37:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rath.org; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-        1686080253; x=1686166653; bh=NTnXhnoqb0BYacM6NQK+0UgwTN4rdTNC2WS
-        g2wWyOQw=; b=KDIpHOMO3ve/dRhLkpSiLam6SZCCPR8zvN+r5nqpK5JWykfWjw8
-        zgz+gTbTElyRHDsJLTllZf3Gp8wOniUlGeZc5QYi4EjqTDtxB9utSq8f7Z/hcOaY
-        UJ5WQvRdtCYeXQVQREGnGiiH2y/XJRacUqii72ahOrXeYGKU4H+1BM7YZJUd6JZ/
-        SKsy8+T3Wunmbtb0nmPqD3z+AXSRoX3jtrV3LUBAAjBsY/BwCYy6qSxlAncyMMjU
-        BN2vKrzh6eny1u17h8nObe/jgEqMKg+rCnP2FR+8qxq/vGQ4t8B4ZYaKlKTcRsnc
-        oVJPjW/mzigfvTZUfASYsfAIuIUx8DNa08g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1686080253; x=1686166653; bh=NTnXhnoqb0BYacM6NQK+0UgwTN4rdTNC2WS
-        g2wWyOQw=; b=Pb7xpZTKp0qAtM9JJOAb8bDSiEVJaAvb2rmLl1qNaLPSROmUQzQ
-        XXGI2+4BuMf+9d9WVbBa23h74PBRLGGfWMoE5AMTluWIlJuCCTiWjWy+pP8OvEEj
-        hapxarEYOo+8B8fqeviRm+B42MMT9YTjiH5a5HtvHVS7XPElA6gFPSuTGtF7fQYy
-        L9Pm5jqbT9QLRrLfhUMB8JPsM3LsBGFeFau44gsolpFuksJKAWhrsiPexz+jcSqW
-        9bQaiwXUsYTpQHvf+nfypW3z8y7Cxrmd5wfW9+9MGH4Gci55Deeg6lOCAyInjssG
-        Uzbu3Iq/OeR86rCP/UZRUIYBDL97JsFVjyw==
-X-ME-Sender: <xms:_Ip_ZAmmcBfcnoh1bDe0awhgOzNSdUfBxNlGVNsKJIsIsnsTkBf-jg>
-    <xme:_Ip_ZP3jZFYU_rzpGvy29ko9eSxcjIPoH0oz48kx2v9L-FAEGPapITLgxXmHqYVmZ
-    _3zNcBs9v3VOvo7>
-X-ME-Received: <xmr:_Ip_ZOq4ZvjZZDykLNtDtMEYrtIkjl9g96VpoKyhX7i4P5pzI28ARYgeK59yMaJ_KtBNfpfmwd4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedtuddgudegudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefhvfevufhfffgjkfgfgggtgfesthhqtddttderjeenucfhrhhomheppfhi
-    khholhgruhhsucftrghthhcuoefpihhkohhlrghushesrhgrthhhrdhorhhgqeenucggtf
-    frrghtthgvrhhnpeetheettdduieelvdfhteeglefhudffteejieetjeelhfetuedvvddu
-    fffggeeuudenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuih
-    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomheppfhikhholhgruhhssehrrghthhdr
-    ohhrgh
-X-ME-Proxy: <xmx:_Ip_ZMljerb6om3cPvdvgtHeErbQn8yn0spTowK87euy8qbj343xfg>
-    <xmx:_Ip_ZO3WUi--80yqPPIDFvQhHs_Rc5JoC25V-kkNE7S7K3zurolmCw>
-    <xmx:_Ip_ZDsNwbzhP3ksuL8lVdKV1N00UdWtLA7crbgiItry2Ugwf7u5RA>
-    <xmx:_Yp_ZMwIBP5Xw60godatwahAtZQ6qj15HiNVBfCZkSsVlW-nboBBtw>
-Feedback-ID: i53a843ae:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 6 Jun 2023 15:37:32 -0400 (EDT)
-Received: from vostro.rath.org (vostro [192.168.12.4])
-        by ebox.rath.org (Postfix) with ESMTPS id A43A09D9;
-        Tue,  6 Jun 2023 19:37:30 +0000 (UTC)
-Received: by vostro.rath.org (Postfix, from userid 1000)
-        id B37FAD0251; Tue,  6 Jun 2023 21:37:29 +0200 (CEST)
-From:   Nikolaus Rath <Nikolaus@rath.org>
-To:     Miklos Szeredi via fuse-devel <fuse-devel@lists.sourceforge.net>
-Cc:     Askar Safin <safinaskar@gmail.com>,
-        Miklos Szeredi <miklos@szeredi.hu>, linux-pm@vger.kernel.org,
-        Bernd Schubert <bernd.schubert@fastmail.fm>,
-        linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [fuse-devel] [PATCH 0/6] vfs: provide automatic kernel freeze /
- resume
-References: <CAPnZJGDWUT0D7cT_kWa6W9u8MHwhG8ZbGpn=uY4zYRWJkzZzjA@mail.gmail.com>
-        <CAJfpeguZX5pF8-UNsSfJmMhpgeUFT5XyG_rDzMD-4pB+MjkhZA@mail.gmail.com>
-Mail-Copies-To: never
-Mail-Followup-To: Miklos Szeredi via fuse-devel
-        <fuse-devel@lists.sourceforge.net>, Askar Safin
-        <safinaskar@gmail.com>, Miklos Szeredi <miklos@szeredi.hu>,
-        linux-pm@vger.kernel.org, Bernd Schubert <bernd.schubert@fastmail.fm>,
-        linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>,
-        linux-fsdevel@vger.kernel.org
-Date:   Tue, 06 Jun 2023 20:37:29 +0100
-In-Reply-To: <CAJfpeguZX5pF8-UNsSfJmMhpgeUFT5XyG_rDzMD-4pB+MjkhZA@mail.gmail.com>
-        (Miklos Szeredi via fuse-devel's message of "Tue, 6 Jun 2023 16:37:51
-        +0200")
-Message-ID: <871qiopekm.fsf@vostro.rath.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Tue, 6 Jun 2023 15:40:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E8110D7
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 12:39:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686080377;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JwoXBtrJnmo+pBf7jYnvlWnPa+tCBA8O3lKlFGoTwY8=;
+        b=Bm9K8c3US0dyHrDSx9t+9VTwL/V/CFp/leE1rv//v/lN8e3lHsptDRbmZJUQ03LesXIj1s
+        Ul8zJ3zen3aeaDpzt2c69HDystk9RVq8dmCs4evafSdZeLOpR5OJtsH696ODO8KcA9r9eE
+        T4L9oxaaTDVdR7mEjyPdqR4jLIrjmqo=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-672-evnAV1KsO8-Q6sc1uO10KA-1; Tue, 06 Jun 2023 15:39:34 -0400
+X-MC-Unique: evnAV1KsO8-Q6sc1uO10KA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 42EE3801224;
+        Tue,  6 Jun 2023 19:39:34 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.224.112])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 2F0FB140E954;
+        Tue,  6 Jun 2023 19:39:30 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Tue,  6 Jun 2023 21:39:11 +0200 (CEST)
+Date:   Tue, 6 Jun 2023 21:39:07 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     Mike Christie <michael.christie@oracle.com>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>, linux@leemhuis.info,
+        nicolas.dichtel@6wind.com, axboe@kernel.dk,
+        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, mst@redhat.com,
+        sgarzare@redhat.com, jasowang@redhat.com, stefanha@redhat.com,
+        brauner@kernel.org
+Subject: Re: [CFT][PATCH v3] fork, vhost: Use CLONE_THREAD to fix freezer/ps
+ regression
+Message-ID: <20230606193907.GB18866@redhat.com>
+References: <20230601183232.8384-1-michael.christie@oracle.com>
+ <20230602192254.GD555@redhat.com>
+ <87r0qt18qq.fsf_-_@email.froward.int.ebiederm.org>
+ <ae250076-7d55-c407-1066-86b37014c69c@oracle.com>
+ <20230605151037.GE32275@redhat.com>
+ <03c07f48-8922-f563-560c-f0d4cc3e1279@oracle.com>
+ <20230606121643.GD7542@redhat.com>
+ <39f5913c-e658-e476-0378-62236bb4ed49@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <39f5913c-e658-e476-0378-62236bb4ed49@oracle.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Jun 06 2023, Miklos Szeredi via fuse-devel <fuse-devel@lists.sourceforge=
-.net> wrote:
-> On Sun, 14 May 2023 at 00:04, Askar Safin <safinaskar@gmail.com> wrote:
->>
->> Will this patch fix a long-standing fuse vs suspend bug? (
->> https://bugzilla.kernel.org/show_bug.cgi?id=3D34932 )
+On 06/06, Mike Christie wrote:
 >
-> No.
+> On 6/6/23 7:16 AM, Oleg Nesterov wrote:
+> > On 06/05, Mike Christie wrote:
+> >
+> >> So it works like if we were using a kthread still:
+> >>
+> >> 1. Userapce thread0 opens /dev/vhost-$something.
+> >> 2. thread0 does VHOST_SET_OWNER ioctl. This calls vhost_task_create() to
+> >> create the task_struct which runs the vhost_worker() function which handles
+> >> the work->fns.
+> >> 3. If userspace now does a SIGKILL or just exits without doing a close() on
+> >> /dev/vhost-$something, then when thread0 does exit_files() that will do the
+> >> fput that does vhost-$something's file_operations->release.
+> >
+> > So, at least in this simple case vhost_worker() can just exit after SIGKILL,
+> > and thread0 can flush the outstanding commands when it calls vhost_dev_flush()
+> > rather than wait for vhost_worker().
+> >
+> > Right?
 >
-> The solution to the fuse issue is to freeze processes that initiate
-> fuse requests *before* freezing processes that serve fuse requests.
+> With the current code, the answer is no. We would hang like I mentioned here:
 >
-> The problem is finding out which is which.  This can be complicated by
-> the fact that a process could be both serving requests *and*
-> initiating them (even without knowing).
->
-> The best idea so far is to let fuse servers set a process flag
-> (PF_FREEZE_LATE) that is inherited across fork/clone.
+> https://lore.kernel.org/lkml/ae250076-7d55-c407-1066-86b37014c69c@oracle.com/
 
-Is that the same as what userspace calls PR_SET_IO_FLUSHER? From
-prctl(2):
+If only I could fully understand this email ;)
 
-   PR_SET_IO_FLUSHER (since Linux 5.6)
-          If a user process is involved in the block layer or filesystem I/=
-O  path,  and
-          can allocate memory while processing I/O requests it must set arg=
-2 to 1.  This
-          will put the process in the IO_FLUSHER state, which allows it  sp=
-ecial  treat=E2=80=90
-          ment  to make progress when allocating memory. [..]
+Could you spell to explain why this can't work (again, in this simple case) ?
 
-          The calling process must have the CAP_SYS_RESOURCE capability.[..=
-.]
+My current (and I know, very poor) understanding is that .release() should
+roughly do the following:
 
-          Examples  of  IO_FLUSHER  applications are FUSE daemons, SCSI dev=
-ice emulation
-          daemons, and daemons that perform error handling like multipath p=
-ath  recovery
-          applications.
-=20=20=20=20=20=20=20=20=20=20
+	1. Ensure that vhost_work_queue() can't add the new callbacks
 
-To me this sounds like it captures the relevant information (process is
-involved in filesystem I/O) rather than just a preferred behavior (flush
-late) and may thus be a better choice...
+	2. Call vhost_dev_flush() to ensure that worker->work_list is empty
 
-Best,
--Nikolaus
+	3. Call vhost_task_stop()
+
+so why this sequence can't work if we turn vhost_dev_flush() into something like
+
+	void vhost_dev_flush(struct vhost_dev *dev)
+	{
+		struct vhost_flush_struct flush;
+
+		if (dev->worker) {
+			// this assumes that vhost_task_create() uses CLONE_THREAD
+			if (same_thread_group(current, dev->worker->vtsk->task)) {
+				... run the pending callbacks ...
+				return;
+			}
+
+
+			// this is what we currently have
+
+			init_completion(&flush.wait_event);
+			vhost_work_init(&flush.work, vhost_flush_work);
+
+			vhost_work_queue(dev, &flush.work);
+			wait_for_completion(&flush.wait_event);
+		}
+	}
+
+?
+
+Mike, I am just trying to understand what exactly vhost_worker() should do.
+
+> We need to add code like I mentioned in that reply because we don't have a
+> way to call into the layers below us to flush those commands.
+
+This tells me nothing, but this is my fault, not yours. Again, again, I know
+nothing about drivers/vhost.
+
+Oleg.
+
