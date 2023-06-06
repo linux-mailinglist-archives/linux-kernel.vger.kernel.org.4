@@ -2,64 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BD227235FA
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 05:58:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E71BF7235FE
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 06:00:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232326AbjFFD6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 23:58:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50786 "EHLO
+        id S233543AbjFFEAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 00:00:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231391AbjFFD6Q (ORCPT
+        with ESMTP id S229544AbjFFD75 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 23:58:16 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74D9C12D;
-        Mon,  5 Jun 2023 20:58:14 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QZxXL6H6Hz4f3nKR;
-        Tue,  6 Jun 2023 11:58:10 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgD3X7PSrn5kHOotLA--.51186S3;
-        Tue, 06 Jun 2023 11:58:11 +0800 (CST)
-Subject: Re: [PATCH -next v2] block: fix blktrace debugfs entries leak
-To:     Christoph Hellwig <hch@lst.de>, Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        yangerkun@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-References: <20230531092606.3037560-1-yukuai1@huaweicloud.com>
- <20230531124404.GA27412@lst.de>
- <509bcea6-21f6-3f64-01c3-02215955283d@huaweicloud.com>
- <20230601061858.GA24071@lst.de>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <386257b1-3060-62f4-c050-2069ae35b82c@huaweicloud.com>
-Date:   Tue, 6 Jun 2023 11:58:09 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Mon, 5 Jun 2023 23:59:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4DAC12B;
+        Mon,  5 Jun 2023 20:59:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C47661B07;
+        Tue,  6 Jun 2023 03:59:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 596DFC433EF;
+        Tue,  6 Jun 2023 03:59:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686023995;
+        bh=4v9Hl20weE7nC2/iU8oUb/lX3uVDkp+nEUVQFcnotdA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SfT0MQEV2bRNh1BET2wefpRfLKV9rfymlMzZlS46qmu2j90VIwguR51wXBCXvZ0T/
+         CtRZmAJ36hSnVSi45ap6tk/n130KFrAPabz5XevRkAXVbOyAdhgRi/qXjun5ELPqQr
+         vIsakfnM/Vl3QqvMTNdeiZRZNfDPNZ5W9X2nUGgYYaCqGeRNt3B+YO8IQrrfv0rSZf
+         2xqHg2CT0Iznr63U0yFi4nMEGVObwR+2G0eFwQU1XdaEUXGji1DB07QAxC0N+pH8vl
+         aLzbCYvkLNqigbUYdLdFeoIgz1ppICYwLmraqy67Y+0ZLYJCRnFRXr1Vcw5zMlfwu5
+         X9x5sMhq676ZQ==
+Date:   Mon, 5 Jun 2023 20:59:53 -0700
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Andrew Cooper <andrew.cooper3@citrix.com>
+Cc:     Jon Kohler <jon@nutanix.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        "kvm @ vger . kernel . org" <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] KVM: VMX: remove LFENCE in vmx_spec_ctrl_restore_host()
+Message-ID: <20230606035953.fssnnwkk2nd2jmqm@treble>
+References: <20230531150112.76156-1-jon@nutanix.com>
+ <20230531231820.trrs2uugc24gegj4@treble>
+ <F4BEBCAF-CBFC-4C3E-8B01-2ED84CF2E13A@nutanix.com>
+ <20230601004202.63yulqs73kuh3ep6@treble>
+ <846dd0c5-d431-e20e-fdb3-a4a26b6a22ca@citrix.com>
+ <20230601012323.36te7hfv366danpf@desk>
+ <20230601042345.52s5337uz62p6aow@treble>
+ <21D1D290-7DE9-4864-A05B-A36779D9DC26@nutanix.com>
+ <20230605163552.hi5kvh5wijegmus6@treble>
+ <790725a7-cde8-addb-c2e4-91827f70215e@citrix.com>
 MIME-Version: 1.0
-In-Reply-To: <20230601061858.GA24071@lst.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgD3X7PSrn5kHOotLA--.51186S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7KF4DWryrWw4rJr1xZr1DKFg_yoW8Gr47pa
-        9Fvan0gr4UXr43Ka4xZw18u34S9ayfAFW5Krn5KryrCFs8Jry3XFW2gF1qvFy3Zas8GFW3
-        Xa40vryDGw10grUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkK14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
-        IcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
-        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
-        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
-        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_
-        Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbU
-        UUUUU==
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <790725a7-cde8-addb-c2e4-91827f70215e@citrix.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,40 +73,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Christoph
+On Tue, Jun 06, 2023 at 01:20:52AM +0100, Andrew Cooper wrote:
 
-在 2023/06/01 14:18, Christoph Hellwig 写道:
-> On Thu, Jun 01, 2023 at 09:50:22AM +0800, Yu Kuai wrote:
->> Hi, Christoph
->>
->> 在 2023/05/31 20:44, Christoph Hellwig 写道:
->>> I like where this is going, but did you check that this doesn't
->>> introduce a potential crash with the current /dev/sg based blktrace?
->>
->> I just start to look at how /dev/sg is created and destroyed, however,
->> I'm confused here, do you mean that the added blk_trace_shutdown() here
->> might cause that /dev/sg blktrace to access freed momory or NULL
->> pointer?
-> 
-> Yes.  Given that __blk_trace_remove clears out q->blk_trace and
-> frees the blk trace structure I'm worried about that.
-> 
+<clip very useful summary which belongs in git somewhere>
 
-sg ioctl call blktrace apis blk_trace_setup/startstop/remove(), and
-these apis are all protected by 'q->debugfs_mutex', and they're safe
-to call at anytime as long as request_queue is not released.
+> But, the safety of vmx_spec_ctrl_restore_host() in the first place
+> depends on the early return never ever becoming a conditional,
 
-And I found that it's true sg can still enable blktrace through ioctl
-after the related scsi device gendisk is released, I'm thinking about
-following possible solution:
+Good point.  And that would be easier to overlook in C.
 
-sg_device_destroy() is called at last, when all openers close and the
-related device is deleted, so, I think we can get a queue reference
-while initializing /dev/sg, and then remove blktrace and put queue
-reference from sg_device_destroy().
+> and the compiler never emitting a call to memcpy()/memset()/whatever
+> behind your back - something which is not prohibited by noinstr.
 
-Any suggestions?
+Au contraire, objtool has checking for that:
 
-Thanks,
-Kuai
+	if (state->noinstr && state->instr <= 0 &&
+	    !noinstr_call_dest(file, insn, insn_call_dest(insn))) {
+		WARN_INSN(insn, "call to %s() leaves .noinstr.text section", call_dest_name(insn));
+		return 1;
+	}
 
+Regardless, despite being the person who wrote this thing in C to begin
+with, I believe asm really is a better fit due to the delicate and
+precise nature of the mitigations.
+
+-- 
+Josh
