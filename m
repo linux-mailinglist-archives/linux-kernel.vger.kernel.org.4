@@ -2,141 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F6F5723CA6
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 11:12:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55401723CA5
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 11:12:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232468AbjFFJMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 05:12:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54508 "EHLO
+        id S232225AbjFFJMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 05:12:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230411AbjFFJMP (ORCPT
+        with ESMTP id S229913AbjFFJMO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 05:12:15 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AD43197
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 02:12:14 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1b04706c974so50801285ad.2
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 02:12:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686042734; x=1688634734;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=33Fi3vxPpajECwlEk7e4drhNdlJkHqysepyRL3vjQ8k=;
-        b=IlaMjUX2DEWSf62zBCcuw3sQibn/by5NfD7SCt0RqJD+KB8TcuJ18M+bnqtdWaWu6u
-         iK26B/FnL9uq9zIbXeiGrrUp2yUuevhPXiQA2d0mTd0/e8xg+q8W0slYwwwWbu9Vbfij
-         jSO85lmr/pYGkyBjW0xBauNQhLNIy63rRVjavAociiYC2p/m3gZRBi4mYpq1C3mLArVp
-         kJsK+swdwSRCFQmGc1r7mybeBW2UhyomKrlRCwzIacgde2VHyS6Nhc/VIYHxisRkj454
-         GjkSCrovXZ+GsBOnQaT08XHHOL236QhQ3DwHtrLLGAqy/WTNRIhaQQZyV72YNzJ6pPwN
-         NxhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686042734; x=1688634734;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=33Fi3vxPpajECwlEk7e4drhNdlJkHqysepyRL3vjQ8k=;
-        b=blOLTyiisZhRRDIoPt+vyYOAKskYt8tgLbQWBcT44frP+GbTyTKd+Y1czyMMZ1bgxH
-         s5gEUHdlKLi+ypuMDSyOJRHOGsADVqB4muinpErBm3qQXi1uHc22Hmxjh5EOyy0QJoNJ
-         i2JsmNzU0vbr0u3LsR410NCSarn7lN+WMjE9P1fVMxoG3iF/WD9zY88N3hi4l5eyyE8M
-         wdKcx9M6YxPZaw5bgtg9Fv94T+SHdeFPey9KZtvlm5lXpIq6iLSZ7k2eQ+Jy1Q2Rqo6X
-         SdTQf/4lpPZoLCOMlQy++pio8kLiYV2fTMbQikm8mjHbo8IDEU8HkuzEwmuyHJFDPGvn
-         gzgg==
-X-Gm-Message-State: AC+VfDy3iOXkASNACFrYQIEiut7V1+l87TRG/B74tnx+03D5DkwHTD8m
-        dvSC4ovOEdKaJ32UXiUu2st4iY9X8ITenQ==
-X-Google-Smtp-Source: ACHHUZ54UH5/TGSxl0D32cNUSfJOXlgchtr7h6tK2bzJH50CbEBIfIcQ9/fVSaut+FV/AFQi/bLWMA==
-X-Received: by 2002:a17:902:e5c4:b0:1ab:7fb:aac1 with SMTP id u4-20020a170902e5c400b001ab07fbaac1mr1848442plf.24.1686042733831;
-        Tue, 06 Jun 2023 02:12:13 -0700 (PDT)
-Received: from localhost (58-6-230-127.tpgi.com.au. [58.6.230.127])
-        by smtp.gmail.com with ESMTPSA id ik4-20020a170902ab0400b001b03a7a40e7sm8107255plb.19.2023.06.06.02.12.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Jun 2023 02:12:13 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 06 Jun 2023 19:12:08 +1000
-Message-Id: <CT5G9KKH2R25.3QSRZU8EQXUZU@wheely>
-Cc:     <linux-kernel@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: [PATCH 2/4] powerpc/kuap: Avoid useless jump_label on empty
- function
-From:   "Nicholas Piggin" <npiggin@gmail.com>
-To:     "Christophe Leroy" <christophe.leroy@csgroup.eu>,
-        "Michael Ellerman" <mpe@ellerman.id.au>
-X-Mailer: aerc 0.14.0
-References: <1a3c69e38349b687c6c65240d7c09a7817a797d8.1685963081.git.christophe.leroy@csgroup.eu> <c2c9660cc4441dc37c477ce5cf60707c971bd2a1.1685963081.git.christophe.leroy@csgroup.eu>
-In-Reply-To: <c2c9660cc4441dc37c477ce5cf60707c971bd2a1.1685963081.git.christophe.leroy@csgroup.eu>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 6 Jun 2023 05:12:14 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ADB70FA;
+        Tue,  6 Jun 2023 02:12:12 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.86])
+        by gateway (Coremail) with SMTP id _____8Cx_epq+H5ktQ8AAA--.367S3;
+        Tue, 06 Jun 2023 17:12:10 +0800 (CST)
+Received: from [10.20.42.86] (unknown [10.20.42.86])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bx+ORo+H5kMhECAA--.9044S3;
+        Tue, 06 Jun 2023 17:12:09 +0800 (CST)
+Subject: Re: [PATCH v12 09/31] LoongArch: KVM: Implement vcpu get, vcpu set
+ registers
+To:     Youling Tang <tangyouling@loongson.cn>
+References: <20230530015223.147755-1-zhaotianrui@loongson.cn>
+ <20230530015223.147755-10-zhaotianrui@loongson.cn>
+ <4bb703e2-3255-f6c1-5451-ef16c6f0f52a@loongson.cn>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        loongarch@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
+        Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oliver Upton <oliver.upton@linux.dev>, maobibo@loongson.cn,
+        Xi Ruoyao <xry111@xry111.site>
+From:   Tianrui Zhao <zhaotianrui@loongson.cn>
+Message-ID: <f67ccb6d-df9a-e35a-ac2e-7ec8aabd5cc5@loongson.cn>
+Date:   Tue, 6 Jun 2023 17:12:08 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
+MIME-Version: 1.0
+In-Reply-To: <4bb703e2-3255-f6c1-5451-ef16c6f0f52a@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Bx+ORo+H5kMhECAA--.9044S3
+X-CM-SenderInfo: p2kd03xldq233l6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBj93XoWxArykXF1rXr17tw1ruF47Jrc_yoW5XrykpF
+        1UC3Z5Ka10gry7AF1fXan8Cr13Cr93Kry2g3W3Ca4qyFy7KryjyFyF9r9xGF97tFW5Ar10
+        va4UXas29Fs8J3gCm3ZEXasCq-sJn29KB7ZKAUJUUUU3529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUPSb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+        xVWxJr0_GcWln4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
+        xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r12
+        6r1DMcIj6I8E87Iv67AKxVWxJVW8Jr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
+        8JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vI
+        r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67
+        AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIY
+        rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14
+        v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWxJVW8
+        Jr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8oGQD
+        UUUUU==
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon Jun 5, 2023 at 9:04 PM AEST, Christophe Leroy wrote:
-> Disassembly of interrupt_enter_prepare() shows a pointless nop before the=
- mftb
+
+
+在 2023年06月06日 14:41, Youling Tang 写道:
 >
->   c000abf0 <interrupt_enter_prepare>:
->   c000abf0:       81 23 00 84     lwz     r9,132(r3)
->   c000abf4:       71 29 40 00     andi.   r9,r9,16384
->   c000abf8:       41 82 00 28     beq-    c000ac20 <interrupt_enter_prepa=
-re+0x30>
->   c000abfc: =3D=3D=3D>  60 00 00 00     nop	<=3D=3D=3D=3D
->   c000ac00:       7d 0c 42 e6     mftb    r8
->   c000ac04:       80 e2 00 08     lwz     r7,8(r2)
->   c000ac08:       81 22 00 28     lwz     r9,40(r2)
->   c000ac0c:       91 02 00 24     stw     r8,36(r2)
->   c000ac10:       7d 29 38 50     subf    r9,r9,r7
->   c000ac14:       7d 29 42 14     add     r9,r9,r8
->   c000ac18:       91 22 00 08     stw     r9,8(r2)
->   c000ac1c:       4e 80 00 20     blr
->   c000ac20:       60 00 00 00     nop
->   c000ac24:       7d 5a c2 a6     mfmd_ap r10
->   c000ac28:       3d 20 de 00     lis     r9,-8704
->   c000ac2c:       91 43 00 b0     stw     r10,176(r3)
->   c000ac30:       7d 3a c3 a6     mtspr   794,r9
->   c000ac34:       4e 80 00 20     blr
 >
-> That comes from the call to kuap_loc(), allthough __kuap_lock() is an emp=
-ty
-> function on the 8xx.
+> On 05/30/2023 09:52 AM, Tianrui Zhao wrote:
+>> Implement LoongArch vcpu get registers and set registers operations, it
+>> is called when user space use the ioctl interface to get or set regs.
+>>
+>> Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
+>> ---
+>>  arch/loongarch/kvm/csr_ops.S |  76 +++++++++++++
+>>  arch/loongarch/kvm/vcpu.c    | 206 +++++++++++++++++++++++++++++++++++
+>>  2 files changed, 282 insertions(+)
+>>  create mode 100644 arch/loongarch/kvm/csr_ops.S
+>>
+>> diff --git a/arch/loongarch/kvm/csr_ops.S b/arch/loongarch/kvm/csr_ops.S
+>> new file mode 100644
+>> index 000000000000..962b96d8291a
+>> --- /dev/null
+>> +++ b/arch/loongarch/kvm/csr_ops.S
+>> @@ -0,0 +1,76 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +/*
+>> + * Copyright (C) 2020-2023 Loongson Technology Corporation Limited
+>> + */
+>> +
+>> +#include <asm/regdef.h>
+>> +#include <linux/linkage.h>
+>> +    .text
+>> +    .section        .text
+>> +    .cfi_sections   .debug_frame
+>> +/*
+>> + * we have splited hw gcsr into three parts, so we can
+>> + * calculate the code offset by gcsrid and jump here to
+>> + * run the gcsrwr instruction.
+>> + */
+>> +SYM_FUNC_START(set_hw_gcsr)
+>> +    addi.d      t0,   a0,   0
+>> +    addi.w      t1,   zero, 96
+>> +    bltu        t1,   t0,   1f
+>> +    la.pcrel    t0,   10f
+>> +    alsl.d      t0,   a0,   t0, 3
+>> +    jirl        zero, t0,   0
+> jr t0
+Thanks, I will fix those instructions.
+
+Thanks
+Tianrui Zhao
 >
-> To avoid that, only perform kuap_is_disabled() check when there is someth=
-ing
-> to do with __kuap_lock().
+>> +1:
+>> +    addi.w      t1,   a0,   -128
+>> +    addi.w      t2,   zero, 15
+>> +    bltu        t2,   t1,   2f
+>> +    la.pcrel    t0,   11f
+>> +    alsl.d      t0,   t1,   t0, 3
+>> +    jirl        zero, t0,   0
+> jr t0
 >
-> Do the same with __kuap_save_and_lock() and __kuap_get_and_assert_locked(=
-).
+>> +2:
+>> +    addi.w      t1,   a0,   -384
+>> +    addi.w      t2,   zero, 3
+>> +    bltu        t2,   t1,   3f
+>> +    la.pcrel    t0,   12f
+>> +    alsl.d      t0,   t1,   t0, 3
+>> +    jirl        zero, t0,   0
+> jr t0
+>
+>> +3:
+>> +    addi.w      a0,   zero, -1
+>> +    jirl        zero, ra,   0
+> jr ra
+>
+>> +/*
+>> + * write guest csr
+>> + * 0x05000000 | (LOONGARCH_CSR_XXX << 10) | 1 << 5 | a1
+>> + * range from 0x0(KVM_CSR_CRMD) to 0x60 (KVM_CSR_LLBCTL)
+>> + */
+>> +10:
+>> +    csrnum = 0
+>> +    .rept 0x61
+>> +        .word 0x05000020 | csrnum << 10 | 5
+>> +        jirl zero, ra, 0
+> ditto.
+>> +        csrnum = csrnum + 1
+>> +    .endr
+>> +/*
+>> + * write guest csr
+>> + * 0x05000000 | (LOONGARCH_CSR_XXX << 10) | 1<<5 | a1
+>> + * range from 0x80 (KVM_CSR_IMPCTL1) to 0x8f (KVM_CSR_TLBRPRMD)
+>> + */
+>> +11:
+>> +    csrnum = 0x80
+>> +    .rept 0x10
+>> +        .word 0x05000020 | csrnum << 10 | 5
+>> +        jirl zero, ra, 0
+> ditto.
+>> +        csrnum = csrnum + 1
+>> +    .endr
+>> +/*
+>> + * write guest csr
+>> + * 0x05000000 | (LOONGARCH_CSR_XXX << 10) | 1<<5 | a1
+>> + * range from 0x180(KVM_CSR_DMWIN0) to 0x183(KVM_CSR_DMWIN3)
+>> + */
+>> +12:
+>> +    csrnum = 0x180
+>> +    .rept 0x4
+>> +        .word 0x05000020 | csrnum << 10 | 5
+>> +        jirl zero, ra, 0
+> ditto.
+>
+> Thanks,
+> Youling
+>> +        csrnum = csrnum + 1
+>> +    .endr
+>> +SYM_FUNC_END(set_hw_gcsr)
 
-Too bad static branch nops can't be eliminated.
-
-> diff --git a/arch/powerpc/include/asm/book3s/64/kup.h b/arch/powerpc/incl=
-ude/asm/book3s/64/kup.h
-> index 54cf46808157..1b0215ff3710 100644
-> --- a/arch/powerpc/include/asm/book3s/64/kup.h
-> +++ b/arch/powerpc/include/asm/book3s/64/kup.h
-> @@ -297,15 +297,7 @@ static inline unsigned long __kuap_get_and_assert_lo=
-cked(void)
->  		WARN_ON_ONCE(amr !=3D AMR_KUAP_BLOCKED);
->  	return amr;
->  }
-> -
-> -/* Do nothing, book3s/64 does that in ASM */
-> -static inline void __kuap_lock(void)
-> -{
-> -}
-> -
-> -static inline void __kuap_save_and_lock(struct pt_regs *regs)
-> -{
-> -}
-> +#define __kuap_get_and_assert_locked __kuap_get_and_assert_locked
-
-Maybe leave in /* __kuap_lock notrequired, book3s/64 does that in ASM */
-? Seems okay though
-
-Reviewed-by: Nicholas Piggin <npiggin@gmail.com>
-
-Thanks,
-Nick
