@@ -2,70 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A417A7241E5
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 14:18:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFF887241E3
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 14:17:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233884AbjFFMSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 08:18:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53240 "EHLO
+        id S235004AbjFFMRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 08:17:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232007AbjFFMSF (ORCPT
+        with ESMTP id S232007AbjFFMRk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 08:18:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B919E54
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 05:17:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686053840;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=74VXFziIGlb0EFirVt9UAam6d4dNRVT+zKk4op/B4kY=;
-        b=hp9ZSm3sAX2xGSJUAB1Pd76jrMx2h0n7lheCLVM6m5NJXWHB0VHgI8cUhYy2NuLFYHbMcE
-        HxQU4EsStf2FSRiannPCECej9jyFUC/NUN5rubEJX+Jh1RuRqUZLx+tSpo7hcFYJ1Uv9NP
-        Qm6e+gIdyzePB7XfMgJSlAVGWFlnX8Q=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-557-LwxI2Q6ANXKrf3btlqee9g-1; Tue, 06 Jun 2023 08:17:16 -0400
-X-MC-Unique: LwxI2Q6ANXKrf3btlqee9g-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4C23938149A4;
-        Tue,  6 Jun 2023 12:17:16 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.226.222])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 9295E40CFD46;
-        Tue,  6 Jun 2023 12:17:07 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Tue,  6 Jun 2023 14:16:53 +0200 (CEST)
-Date:   Tue, 6 Jun 2023 14:16:44 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     Mike Christie <michael.christie@oracle.com>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>, linux@leemhuis.info,
-        nicolas.dichtel@6wind.com, axboe@kernel.dk,
-        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, mst@redhat.com,
-        sgarzare@redhat.com, jasowang@redhat.com, stefanha@redhat.com,
-        brauner@kernel.org
-Subject: Re: [CFT][PATCH v3] fork, vhost: Use CLONE_THREAD to fix freezer/ps
- regression
-Message-ID: <20230606121643.GD7542@redhat.com>
-References: <20230601183232.8384-1-michael.christie@oracle.com>
- <20230602192254.GD555@redhat.com>
- <87r0qt18qq.fsf_-_@email.froward.int.ebiederm.org>
- <ae250076-7d55-c407-1066-86b37014c69c@oracle.com>
- <20230605151037.GE32275@redhat.com>
- <03c07f48-8922-f563-560c-f0d4cc3e1279@oracle.com>
+        Tue, 6 Jun 2023 08:17:40 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7721810C6;
+        Tue,  6 Jun 2023 05:17:38 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 356C969x001512;
+        Tue, 6 Jun 2023 12:17:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=a8k/dkT0TMDAnkhyrTRJpIwfMV02l5tv1/fp1KJcMbg=;
+ b=ZppjgWJw5LeVYSvMoaK8UDF9PL6CAoh3zl78VRf4fivSobQy3FnsRZdEz7YAiPsgbpDf
+ w5TTmr7IT+LxNO0OLI62694ybg5BxVQsh0dbcWEfs2rOPxz/TFFanZjXSu1ip8a0KIaP
+ MS2maD6MpMb55JaEPJzQYZryuzT04nk0absenajUQRO1+Ern5s39zXwuKBBGS1/C16hJ
+ cIRsyq8VXVwr2UFFVrEflBu5aJdzM28n19WFrTtjBDWtRs8/7Vu7GXm2Kc3i7gtii3AH
+ ZidJnt7eJRWWwCs6Mn6vhW1l7Lk2BUklLLVoCY8cAdvrBk+XjcOQ1PXny1e9H/HNXa/6 0w== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r23bmg5k4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Jun 2023 12:17:32 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 356CHV9c030082
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 6 Jun 2023 12:17:31 GMT
+Received: from [10.216.9.253] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 6 Jun 2023
+ 05:17:23 -0700
+Message-ID: <0cd9b63b-1cb0-6a35-df43-c4c92f53d5af@quicinc.com>
+Date:   Tue, 6 Jun 2023 17:47:19 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <03c07f48-8922-f563-560c-f0d4cc3e1279@oracle.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH V2 06/13] clk: qcom: ipq5018: remove q6 bring up clocks
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <jassisinghbrar@gmail.com>, <mathieu.poirier@linaro.org>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <quic_eberman@quicinc.com>, <quic_mojha@quicinc.com>,
+        <kvalo@kernel.org>, <loic.poulain@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>
+CC:     <quic_srichara@quicinc.com>, <quic_sjaganat@quicinc.com>,
+        <quic_kathirav@quicinc.com>, <quic_anusha@quicinc.com>,
+        <quic_poovendh@quicinc.com>, <quic_varada@quicinc.com>,
+        <quic_devipriy@quicinc.com>
+References: <20230521222852.5740-1-quic_mmanikan@quicinc.com>
+ <20230521222852.5740-7-quic_mmanikan@quicinc.com>
+ <46944bf1-3a07-0db7-2702-f6b7d54b611a@linaro.org>
+From:   Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
+In-Reply-To: <46944bf1-3a07-0db7-2702-f6b7d54b611a@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: t0Wld0ntit0c2HiEQ3rWg-f7JLJHx1nO
+X-Proofpoint-ORIG-GUID: t0Wld0ntit0c2HiEQ3rWg-f7JLJHx1nO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-06_08,2023-06-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1015
+ mlxscore=0 bulkscore=0 phishscore=0 priorityscore=1501 spamscore=0
+ lowpriorityscore=0 adultscore=0 suspectscore=0 malwarescore=0
+ mlxlogscore=771 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2306060103
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,45 +93,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/05, Mike Christie wrote:
->
-> On 6/5/23 10:10 AM, Oleg Nesterov wrote:
-> > On 06/03, michael.christie@oracle.com wrote:
-> >>
-> >> On 6/2/23 11:15 PM, Eric W. Biederman wrote:
-> >> The problem is that as part of the flush the drivers/vhost/scsi.c code
-> >> will wait for outstanding commands, because we can't free the device and
-> >> it's resources before the commands complete or we will hit the accessing
-> >> freed memory bug.
-> >
-> > ignoring send-fd/clone issues, can we assume that the final fput/release
-> > should always come from vhost_worker's sub-thread (which shares mm/etc) ?
->
-> I think I'm misunderstanding the sub-thread term.
->
-> - Is it the task_struct's context that we did the
-> kernel/vhost_taskc.c:vhost_task_create() from? Below it would be the
-> thread we did VHOST_SET_OWNER from.
 
-Yes,
 
-> So it works like if we were using a kthread still:
->
-> 1. Userapce thread0 opens /dev/vhost-$something.
-> 2. thread0 does VHOST_SET_OWNER ioctl. This calls vhost_task_create() to
-> create the task_struct which runs the vhost_worker() function which handles
-> the work->fns.
-> 3. If userspace now does a SIGKILL or just exits without doing a close() on
-> /dev/vhost-$something, then when thread0 does exit_files() that will do the
-> fput that does vhost-$something's file_operations->release.
+On 5/30/2023 4:33 PM, Krzysztof Kozlowski wrote:
+> On 22/05/2023 00:28, Manikanta Mylavarapu wrote:
+>> Since Q6 firmware takes care of it's bring up clocks
+>> in multipd model, remove from gcc driver.
+>>
+>> Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
+>> ---
+>>   drivers/clk/qcom/gcc-ipq5018.c | 414 ---------------------------------
+>>   1 file changed, 414 deletions(-)
+>>
+> 
+> So here is explanation - your patchset is not bisectable.
+> 
+> What's more, I really wonder now why these clocks were added if firmware
+> handles them?
+> 
+> Best regards,
+> Krzysztof
+> 
 
-So, at least in this simple case vhost_worker() can just exit after SIGKILL,
-and thread0 can flush the outstanding commands when it calls vhost_dev_flush()
-rather than wait for vhost_worker().
+I will drop this patch now.
+It will be taken care in basic IPQ5018 patchset series.
 
-Right?
-
-not that I think this can help in the general case ...
-
-Oleg.
-
+Thanks & Regards,
+Manikanta.
