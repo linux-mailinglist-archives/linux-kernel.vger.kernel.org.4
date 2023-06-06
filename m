@@ -2,83 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43F7E724B02
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 20:15:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BBCD724AFF
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 20:14:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238253AbjFFSOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 14:14:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34204 "EHLO
+        id S233818AbjFFSOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 14:14:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237353AbjFFSOg (ORCPT
+        with ESMTP id S232042AbjFFSOe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 14:14:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E534610DF
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 11:13:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686075233;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7uLli3yz1DYI1/D8uLJjLkh+ys9q2UvcidB0MAb3VgM=;
-        b=bz00p86B1FtUAEThPIbfmT4Nfs/QKWAXJYs3LkekWhWukiH2+4/LyhYP7KQ9DDDsN3XSCw
-        +B+ifnJsD0dYBeXA9QCTGqZjXqqE7iRIH9bWl7gxkl2dLe712YHefZmWcjxeeek7Brb7YD
-        I5MN60hTPgjqCx5fLQmqMP5hbHHGyrc=
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com
- [209.85.166.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-596-vUQ99C67P1-SyJjevdpajw-1; Tue, 06 Jun 2023 14:13:52 -0400
-X-MC-Unique: vUQ99C67P1-SyJjevdpajw-1
-Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-77a1f4e92cdso39023939f.1
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 11:13:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686075231; x=1688667231;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7uLli3yz1DYI1/D8uLJjLkh+ys9q2UvcidB0MAb3VgM=;
-        b=VGF9QdPRqMDNeq9a8DjLYXNWpdQUJrHNLGKQkGtdrSGJA3IqcTTdmPJgv7wLWgobz3
-         VwNpr4shIfYSM14JdhhVVtc5jEKdbIVR7df3x1+3JUwH0quJuMgTnAmz+28kYRidDLZ2
-         1uPp4QGEIWWyGjw2wKa857hS3WyvWHaNgtQ1KwMo5qj8EpNxNHMSfrGBLyzgE187jayt
-         5mo8113lEN1GKW4FJbf17tmS4o2iDKMs3Z8iEgaOKCha0idmNnmdZKKpRqsEPxqznr3R
-         s3RW0PLCL4vOLzvxh/unOLLQgALK6IJgzd1MisTPVHDIHtYoM1w8rrAmm/SfkGxGZZx+
-         LcqA==
-X-Gm-Message-State: AC+VfDyPyeYIre7wqqdvwBi+ZGqiTx7CPC+tX4duGbOvc9E6iWBwx/Sb
-        Ul9GhXnPg6iNmfdC0JwMXpR5XJ+2ohPryX5TjaiUKRHryIPEmxcU2osYMs2SYmdOKizKCxVxT1O
-        1io0mzJvXCLynuw7BGC4U7qs5
-X-Received: by 2002:a05:6e02:128c:b0:331:85fa:74c5 with SMTP id y12-20020a056e02128c00b0033185fa74c5mr2620084ilq.1.1686075231122;
-        Tue, 06 Jun 2023 11:13:51 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7k+blw9vPOLpvg+3qppUSS4w3PTeZqEhsRV5Mhqk3Ou+cjFTQOKYmh9jBA+88W34/P7aBrLg==
-X-Received: by 2002:a05:6e02:128c:b0:331:85fa:74c5 with SMTP id y12-20020a056e02128c00b0033185fa74c5mr2620069ilq.1.1686075230879;
-        Tue, 06 Jun 2023 11:13:50 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id a22-20020a056638019600b0041abd81975bsm2931075jaq.153.2023.06.06.11.13.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 11:13:50 -0700 (PDT)
-Date:   Tue, 6 Jun 2023 12:13:48 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     ankita@nvidia.com, aniketa@nvidia.com, cjia@nvidia.com,
-        kwankhede@nvidia.com, targupta@nvidia.com, vsethi@nvidia.com,
-        acurrid@nvidia.com, apopple@nvidia.com, jhubbard@nvidia.com,
-        danw@nvidia.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/1] vfio/nvgpu: Add vfio pci variant module for
- grace hopper
-Message-ID: <20230606121348.670229ff.alex.williamson@redhat.com>
-In-Reply-To: <ZH9p+giEs6bCYfw8@nvidia.com>
-References: <20230606025320.22647-1-ankita@nvidia.com>
-        <20230606083238.48ea50e9.alex.williamson@redhat.com>
-        <ZH9RfXhbuED2IUgJ@nvidia.com>
-        <20230606110510.0f87952c.alex.williamson@redhat.com>
-        <ZH9p+giEs6bCYfw8@nvidia.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+        Tue, 6 Jun 2023 14:14:34 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC751B5
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 11:14:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686075270; x=1717611270;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Okqhg8qh5B88CrP2Vdkx5lOdo06NqA+suoyiSSguqTg=;
+  b=FSeHEdI8jAyQ5mR8bx1Rep7A2kMdKf7BYkTfskydj9XK85pxGjUx8Gsi
+   uxiHc7rQKg89a8EtUIx1a8iS+7CQe1dU4s4hnmFnucqdRRPClqNlBYQE6
+   ZTwsBufTgy2DGhNJ8+DTpDwuHVTY6fksT7DkKGRWn5JdMELV3szr+b/Ra
+   WnOb9IeiPafg8nIA07sebNse0GCIXJXfXMtN1tLbQNf/U+8oUPgiWpVDA
+   NAWt7I9lt92d31xCmAdyEgD42N4KyKHsk8yjaXnQDVsBUMVN9hXey20SG
+   +f9AjIE25AHgIx/yxI3bGrDH+L/dilLQ+0qayHL8rXtYXwihKSGM72y9x
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="346366578"
+X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
+   d="scan'208";a="346366578"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 11:14:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="686637427"
+X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
+   d="scan'208";a="686637427"
+Received: from hganapat-mobl1.amr.corp.intel.com (HELO [10.212.191.102]) ([10.212.191.102])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 11:14:29 -0700
+Message-ID: <f7f82377-6127-79e3-07d8-def490c4e35c@intel.com>
+Date:   Tue, 6 Jun 2023 11:14:29 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCHv3 2/3] x86/tdx: Fix race between set_memory_encrypted()
+ and load_unaligned_zeropad()
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de
+Cc:     decui@microsoft.com, rick.p.edgecombe@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, seanjc@google.com,
+        thomas.lendacky@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230606095622.1939-1-kirill.shutemov@linux.intel.com>
+ <20230606095622.1939-3-kirill.shutemov@linux.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20230606095622.1939-3-kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,72 +70,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 6 Jun 2023 14:16:42 -0300
-Jason Gunthorpe <jgg@nvidia.com> wrote:
-
-> On Tue, Jun 06, 2023 at 11:05:10AM -0600, Alex Williamson wrote:
+On 6/6/23 02:56, Kirill A. Shutemov wrote:
+> load_unaligned_zeropad() can touch memory that is not owned by the
+> caller, but just happened to next after the owned memory.
+> This load_unaligned_zeropad() behaviour makes it important when kernel
+> asks VMM to convert a GPA from shared to private or back. Kernel must
+> never have a page mapped into direct mapping (and aliases) as private
+> when the GPA is already converted to shared or when GPA is not yet
+> converted to private.
 > 
-> > It actually seems more complicated this way.  We're masquerading this
-> > region as a BAR, but then QEMU needs to know based on device IDs that
-> > it's really not a BAR, it has special size properties, mapping
-> > attributes, error handling, etc.    
-> 
-> This seems like something has gone wrong then. ie the SIGUBS error
-> handling stuff should be totally generic in the qemu side. Mapping
-> attributes are set by the kernel, qemu shouldn't know, doesn't need to
-> know.
+> load_unaligned_zeropad() can touch memory that is not owned by the
+> caller, but just happens to be next after the owned memory. This
+> load_unaligned_zeropad() behavior makes it important when the kernel
+> asks VMM to convert a GPA from shared to private or back. The kernel
+> must never have a page mapped into direct mapping (and aliases) as
+> private when the GPA is already converted to shared or when the GPA is
+> not yet converted to private.
 
-You asked me to look at the v1 posting to see why there's so much more
-going on here than a quirk.  That's what I read from the first public
-posting, a coherent memory region masqueraded as a BAR which requires
-different memory mapping and participates in ECC.  I agree that the
-actual mapping is done by the kernel, but it doesn't really make a
-difference if that's a vfio-pci variant driver providing a different
-mmap callback for a BAR region or a device specific region handler.
+Heh, that must be really important info to have it in the changelog twice!
 
-> The size issue is going to a be a problem in future anyhow, I expect
-> some new standards coming to support non-power-two sizes and they will
-> want to map to PCI devices in VMs still.
-
-Ok, but a PCI BAR has specific constraints and a non-power-of-2 BAR is
-not software compatible with those constraints.  That's obviously not
-to say that a new capability couldn't expose arbitrary resources sizes
-on a PCI-like device though.  I don't see how a non-power-of-2 BAR at
-this stage helps or fits within any spec, which is exactly what's
-being proposed through this BAR masquerade.
- 
-> It seems OK to me if qemu can do this generically for any "BAR"
-> region, at least creating an entire "nvidia only" code path just for
-> non power 2 BAR sizing seems like a bad ABI choice.
-
-Have you looked at Ankit's QEMU series?  It's entirely NVIDIA-only code
-paths.  Also nothing here precludes that shared code in QEMU might
-expose some known arbitrary sized regions as a BAR, or whatever spec
-defined thing allows that in the future.  It would only be a slight
-modification in the QEMU code to key on the presence of a device
-specific region rather than PCI vendor and device IDs, to then register
-that region as a PCI BAR and proceed with all this NVIDIA specific
-PXM/SRAT setup. IMO it makes a lot more sense to create memory-only
-NUMA nodes based on a device specific region than it does a PCI BAR.
-
-> > I'm not privy to a v1, the earliest I see is this (v3):
-> > 
-> > https://lore.kernel.org/all/20230405180134.16932-1-ankita@nvidia.com/
-> > 
-> > That outlines that we have a proprietary interconnect exposing cache
-> > coherent memory which requires use of special mapping attributes vs a
-> > standard PCI BAR and participates in ECC.  All of which seems like it
-> > would be easier to setup in QEMU if the vfio-pci representation of the
-> > device didn't masquerade this regions as a standard BAR.  In fact it
-> > also reminds me of NVlink2 coherent RAM on POWER machines that was
-> > similarly handled as device specific regions.    
-> 
-> It wasn't so good on POWER and if some of that stuff has been done
-> more generally we would have been further ahead here..
-
-Specifics?  Nothing here explained why masquerading the coherent memory
-as a BAR in the vfio-pci ABI is anything more than a hack that QEMU
-could assemble on its own with a device specific region.  Thanks,
-
-Alex
-
+I'll fix it up when I apply it.
