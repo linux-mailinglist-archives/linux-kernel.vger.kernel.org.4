@@ -2,91 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B025D723C8A
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 11:07:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78286723C94
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 11:09:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbjFFJHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 05:07:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52116 "EHLO
+        id S230302AbjFFJJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 05:09:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbjFFJH3 (ORCPT
+        with ESMTP id S230208AbjFFJJT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 05:07:29 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4461109
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 02:07:27 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-30c5e5226bdso3926700f8f.2
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 02:07:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686042446; x=1688634446;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=H7PV2fMN/fTvttTs59n+e74sqhlZtVJ8rgHwz2ZXCaA=;
-        b=P9A0HFv67bS758BpN2s6TX8VNUdx6wqZc/0mTm/40VSiq5v1NQWYKhQZ4AHwMguj5r
-         Oe6Cwayv3Vo+VZvLifB8yQsCCWOdTe3Q7znlWsHkUrOVSknhVr8qt7MV+dBI7KqCSC+q
-         yWK7McIpvm8VQARio/ql1iLPVRYLVN1eDAHpv6Szu1G4jx3yG6Z4mDTFJnsX16TDxwKN
-         qWwbZwx3o2Zu4ZRdQzwyfoHUY+OKBwbD4uj0YQUHkl1z6I3Pn3pcEoMBmxKzLKqCWZlq
-         SVfGE2y1NeAGTUkYKTx13nmdPkrr0ENBmSpevQvwWezKgztxM1jYnn+ymHLW2eQyCnLx
-         01KQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686042446; x=1688634446;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=H7PV2fMN/fTvttTs59n+e74sqhlZtVJ8rgHwz2ZXCaA=;
-        b=TX74MsEc5Lf2qk8hm78jtfbD2tjCJcev/AI03AWYiyJmaj2Kp5pbGqHJkqWV82GT8M
-         LJDns75cdbKZ4T7p7ixjXwNObz9FwnIM7D9pa8PDaDGggnEVDi5Ron1Q2mqCLslZK96l
-         +eZXvHNOPG221n8aThM9Yp3aE738wlZ2StCGHU2mTWwwQoUxFyv9chcFzOyBNVVX8URq
-         zjnL3mFvGyaqHdfTqEIGcX8eN4JmMy/WWoTDbr8p1cW6vsyuvAonR0zewRUIQV50XFBM
-         09TYbm/eAK1dZwgAlzgC33xosxcWqsaJ9B8wj02Gj5Rm+KfjuDJiF9/G7dSkkUIp3k5n
-         z1Pw==
-X-Gm-Message-State: AC+VfDxrOfEb1jYYdyl2chqHgy2eTn+N9ZDuRi03hm3ZsyJLGoMDoTLU
-        3B92TVcoymW0RonvTSTw50gfMg==
-X-Google-Smtp-Source: ACHHUZ6qNElORhBlV6A1b+J91L8ZdZTHYYENEcDfaw/boFMld0U+i/QwpfPKiUcbftXel1RuW35rqw==
-X-Received: by 2002:adf:e4c4:0:b0:30a:d8df:6800 with SMTP id v4-20020adfe4c4000000b0030ad8df6800mr1194608wrm.33.1686042446300;
-        Tue, 06 Jun 2023 02:07:26 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:4973:1165:b171:fa69? ([2a01:e0a:982:cbb0:4973:1165:b171:fa69])
-        by smtp.gmail.com with ESMTPSA id v10-20020a1cf70a000000b003f41bb52834sm16908761wmh.38.2023.06.06.02.07.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Jun 2023 02:07:25 -0700 (PDT)
-Message-ID: <1f284e9d-5a1e-9fca-ceb0-478a413ae4ef@linaro.org>
-Date:   Tue, 6 Jun 2023 11:07:24 +0200
+        Tue, 6 Jun 2023 05:09:19 -0400
+Received: from sender-of-o51.zoho.in (sender-of-o51.zoho.in [103.117.158.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01671100;
+        Tue,  6 Jun 2023 02:09:08 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1686042506; cv=none; 
+        d=zohomail.in; s=zohoarc; 
+        b=YtpdOb/AzYZrYY3GpszrkqzLl0bfDd9HahfTMQCufVTElUpLJnoB0d2tp34gduW59lNYm1Ws6jrB0qGhovEkywGHlxwuMf5s9kYrIGkUJMYsVz9/mpJCMAuTVgum+zswcsJyjXgN+UvKQSdGQbb0Hbv388uW7H+Z8QuQEfZikxA=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
+        t=1686042506; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=wxe0GhnNp19oT1s2yGlZCmuUW7SIjjh4ZIOmxejbeuU=; 
+        b=R/RMZwuD/5aBWoNCbMu6Np/n+EoL33pJ5gNwTLunPlhhv3OAAHqFRFcejZAdeUn5hBHssGHK8X7BmbdtO2nvLrFCfYK1hxkEm0yJUIEMnDCPAeDozImOqzgmXHMX8KuHYLyTNQXHJawMDUEzohYl12PWtqYa1OgIR71RD9iXjew=
+ARC-Authentication-Results: i=1; mx.zohomail.in;
+        dkim=pass  header.i=siddh.me;
+        spf=pass  smtp.mailfrom=code@siddh.me;
+        dmarc=pass header.from=<code@siddh.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1686042506;
+        s=zmail; d=siddh.me; i=code@siddh.me;
+        h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=wxe0GhnNp19oT1s2yGlZCmuUW7SIjjh4ZIOmxejbeuU=;
+        b=QCnKJAgafRpGLe0HKNNopHvk0tMxdBrhp1Q9u2fr5O40qI5ssScT8gkjgRLtH6BB
+        5Qztp/wX7W0sUWRSk4j9u6qTS1zii33rBA1OOTTsQrGItQ2NJ5MqGLpiUgcXYnV+OMq
+        Wgkro9qNw2bwvtCnVXKEOxEEecUn+z393imBo4rs=
+Received: from mail.zoho.in by mx.zoho.in
+        with SMTP id 1686042494469601.5259406750127; Tue, 6 Jun 2023 14:38:14 +0530 (IST)
+Date:   Tue, 06 Jun 2023 14:38:14 +0530
+From:   Siddh Raman Pant <code@siddh.me>
+To:     "Christian Brauner" <brauner@kernel.org>
+Cc:     "linux-fsdevel" <linux-fsdevel@vger.kernel.org>,
+        "linux-kernel" <linux-kernel@vger.kernel.org>,
+        "stable" <stable@vger.kernel.org>,
+        "Randy Dunlap" <rdunlap@infradead.org>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        "David Disseldorp" <ddiss@suse.de>,
+        "Nick Alcock" <nick.alcock@oracle.com>,
+        "David Howells" <dhowells@redhat.com>
+Message-ID: <1888ff6c5f5.42ebd67876277.4429544209877292620@siddh.me>
+In-Reply-To: <20230606-getaucht-groschen-b2f1be714351@brauner>
+References: <20230605143616.640517-1-code@siddh.me> <20230606-getaucht-groschen-b2f1be714351@brauner>
+Subject: Re: [PATCH v5] kernel/watch_queue: NULL the dangling *pipe, and use
+ it for clear check
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v7 0/8] drm/tidss: Use new connector model for tidss
-Content-Language: en-US
-To:     Aradhya Bhatia <a-bhatia1@ti.com>,
-        Tomi Valkeinen <tomba@kernel.org>,
-        Jyri Sarha <jyri.sarha@iki.fi>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Robert Foss <rfoss@kernel.org>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Swapnil Jakhade <sjakhade@cadence.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Francesco Dolcini <francesco@dolcini.it>
-Cc:     DRI Development List <dri-devel@lists.freedesktop.org>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rahul T R <r-ravikumar@ti.com>,
-        Devarsh Thakkar <devarsht@ti.com>,
-        Jayesh Choudhary <j-choudhary@ti.com>
-References: <20230606082142.23760-1-a-bhatia1@ti.com>
-Organization: Linaro Developer Services
-In-Reply-To: <20230606082142.23760-1-a-bhatia1@ti.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Importance: Medium
+User-Agent: Zoho Mail
+X-Mailer: Zoho Mail
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -95,86 +68,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, 06 Jun 2023 14:22:49 +0530, Christian Brauner wrote:
+> Massaged the commit message a bit and applied David's Ack as requested.
+> 
+> ---
+> 
+> Applied to the vfs.misc branch of the vfs/vfs.git tree.
+> Patches in the vfs.misc branch should appear in linux-next soon.
 
-On 06/06/2023 10:21, Aradhya Bhatia wrote:
-> Hi all,
-> 
-> I have picked up this long standing series from Nikhil Devshatwar[1].
-> 
-> This series moves the tidss to using new connectoe model, where the SoC
-> driver (tidss) creates the connector and all the bridges are attached
-> with the flag DRM_BRIDGE_ATTACH_NO_CONNECTOR. It also now creates bridge
-> to support format negotiation and and 'simple' encoder to expose it to
-> the userspace.
-> 
-> Since the bridges do not create the connector, the bus_format and
-> bus_flag is set via atomic hooks.
-> 
-> Support format negotiations in the tfp410, sii902x and mhdp-8546 bridge
-> drivers as a first step before moving the connector model.
-> 
-> These patches were tested on AM625-SK EVM, AM625 SoC based BeaglePlay,
-> and J721E-SK. Display support for AM625 SoC has not been added upstream
-> and is a WIP. To test this series on AM625 based platforms, basic
-> display support patches, (for driver + devicetree), can be found in
-> the "next_AttachNoConn-v2" branch on my github fork[2].
-
-I can apply all bridge patches right now so only the tidss change remain,
-is that ok for you ?
-
-
-> 
-> Thanks,
-> Aradhya
-> 
-> [1]: https://patchwork.freedesktop.org/series/82765/#rev5
-> [2]: https://github.com/aradhya07/linux-ab/tree/next_AttachNoConn-v2
-> 
-> Change Log:
-> V6 -> V7
->    - Rebase and cosmetic changes.
->    - Drop the output format check condition for mhdp8546 and hence,
->      drop Tomi Valkeinen's R-b tag.
->    - Added tags wherever suggested.
-> 
-> V5 -> V6
->    - Rebase and cosmetic changes
->    - Dropped the output format check condition for tfp410 and hence,
->      dropped Tomi Valkeinen's and Laurent Pinchart's R-b tags.
->    - Based on Boris Brezillon's comments: dropped patches 5 and 6 from
->      the series and instead created a single patch that,
->        1. Creates tidss bridge for format negotiation.
->        2. Creates 'simple' encoder for userspace exposure.
->        3. Creates a tidss connector.
->        4. Attaches the next-bridge to encoder with the
->           DRM_BRIDGE_ATTACH_NO_CONNECTOR flag.
->    - Add format negotiation support for sii902x driver.
-> 
-> Previous versions:
-> V1 to V6: https://patchwork.freedesktop.org/series/82765/
-> 
-> Aradhya Bhatia (3):
->    drm/bridge: sii902x: Support format negotiation hooks
->    drm/bridge: sii902x: Set input_bus_flags in atomic_check
->    drm/tidss: Update encoder/bridge chain connect model
-> 
-> Nikhil Devshatwar (5):
->    drm/bridge: tfp410: Support format negotiation hooks
->    drm/bridge: tfp410: Set input_bus_flags in atomic_check
->    drm/bridge: mhdp8546: Add minimal format negotiation
->    drm/bridge: mhdp8546: Set input_bus_flags from atomic_check
->    drm/bridge: cdns-mhdp8546: Fix the interrupt enable/disable
-> 
->   .../drm/bridge/cadence/cdns-mhdp8546-core.c   |  77 ++++++----
->   .../drm/bridge/cadence/cdns-mhdp8546-core.h   |   2 +-
->   .../drm/bridge/cadence/cdns-mhdp8546-j721e.c  |   9 +-
->   .../drm/bridge/cadence/cdns-mhdp8546-j721e.h  |   2 +-
->   drivers/gpu/drm/bridge/sii902x.c              |  40 +++++
->   drivers/gpu/drm/bridge/ti-tfp410.c            |  43 ++++++
->   drivers/gpu/drm/tidss/tidss_encoder.c         | 140 +++++++++++-------
->   drivers/gpu/drm/tidss/tidss_encoder.h         |   5 +-
->   drivers/gpu/drm/tidss/tidss_kms.c             |  12 +-
->   9 files changed, 235 insertions(+), 95 deletions(-)
-> 
-
+Thank you!
+-- Siddh
