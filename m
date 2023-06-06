@@ -2,93 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAC3572434D
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 14:56:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8306C72434E
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 14:56:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237841AbjFFM4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 08:56:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54890 "EHLO
+        id S237855AbjFFM4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 08:56:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235747AbjFFM4H (ORCPT
+        with ESMTP id S237825AbjFFM4H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 6 Jun 2023 08:56:07 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C489C1707
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 05:55:39 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-9745ba45cd1so769077166b.1
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 05:55:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1686056138; x=1688648138;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=K+8gN3mys4shi44Ntk5Z6kfGgYi/MZwn+Sx3ui4XedQ=;
-        b=OLAHYPmDOSe6if7yJwf04ybBcGlviwBtqBERr5r7W4MQ4N46P1fx3JBdDDChpEQdPi
-         2XEyBQd7iU7bpaf9Vtg5TNLIPVQhys6rdoQgHDmnoQvWvriIXCHTp2HsMdYVJSMQxtjv
-         ituIyTaWknNba6m3JAz5dZQ5KIgIYVzqg7368=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686056138; x=1688648138;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=K+8gN3mys4shi44Ntk5Z6kfGgYi/MZwn+Sx3ui4XedQ=;
-        b=cj9olqUAocrYMp16sfgtDMwx1NBCXaNb/oT4dZmG/HhctQuyby5saiDHNi00OzgwT9
-         SdQtElagDmmNDFl+MggLfC2KXz8BLEKuqpz23GAw5DgIcY0w1hgFURkVrai6o1+//5/v
-         7pAs1a/1b5s8lG3iTDdX1WwX+ngGn4P5k3YE4OxUWaKiLktjdiyH+GWCqytS/RJVTljG
-         3ljs5mz2a5ZsdEOiKS9FTRBWaN2qdDXojmzOnxVTQK/1QiiFZlkL0XZOXyIwuYBrmhK3
-         OwuqgbaGCGUPk6owU4zGxdeW7bUbaZjDLjqDVRG2+U5K5WS369mhtxv1e22iFDVKjGK0
-         s4Qw==
-X-Gm-Message-State: AC+VfDzXa6DofZYcbXGHcdrULetFdifk7lYGSGdRMFSwVCej6d8FT7bl
-        YDcP+SlbivQftIo7KLkgEo8zBMBuCaml9vQeFE5XruR2
-X-Google-Smtp-Source: ACHHUZ7WvZATJ19ZcTUg3PF4bn9mus5dKOINU0zWMsyXMUB6rX5aRaar1wEH/98mm8Xlk9GLZ1bHvw==
-X-Received: by 2002:a17:906:6a0b:b0:970:1b2d:45bf with SMTP id qw11-20020a1709066a0b00b009701b2d45bfmr2555870ejc.61.1686056137807;
-        Tue, 06 Jun 2023 05:55:37 -0700 (PDT)
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com. [209.85.208.45])
-        by smtp.gmail.com with ESMTPSA id d13-20020a05640208cd00b0051643d71ce9sm4506144edz.26.2023.06.06.05.55.37
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Jun 2023 05:55:37 -0700 (PDT)
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-51492ae66a4so8510668a12.1
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 05:55:37 -0700 (PDT)
-X-Received: by 2002:aa7:de9a:0:b0:510:ee0f:1eab with SMTP id
- j26-20020aa7de9a000000b00510ee0f1eabmr1797750edv.41.1686056136935; Tue, 06
- Jun 2023 05:55:36 -0700 (PDT)
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75FBE10C7
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 05:55:42 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (om126253223039.31.openmobile.ne.jp [126.253.223.39])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 42FC2AB;
+        Tue,  6 Jun 2023 14:55:13 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1686056115;
+        bh=v1ebWPm9f57kmCy8NGOr72XyV35bqnA9olqTFoX1h0E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uTxjqppgykua5g3f+sz22G5bMh0HeRARGlDCvYnIF4hdA+sUbKd1dk3zAzAQZuBpl
+         gA+wZDiERLVn8ntmn8KAdjlbkjFyaT6ISRs+4BnWIZ8l8zS9Vr0YZDS1oDJw7KDGPE
+         W0frUSEwX/86rVESPsLMihBDetS6UsmhRJrOwQNk=
+Date:   Tue, 6 Jun 2023 15:55:37 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Siddh Raman Pant <code@siddh.me>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Suraj Upadhyay <usuraj35@gmail.com>
+Subject: Re: [PATCH v9 1/8] Revert "drm: mipi-dsi: Convert logging to drm_*
+ functions."
+Message-ID: <20230606125537.GC25774@pendragon.ideasonboard.com>
+References: <cover.1686047727.git.code@siddh.me>
+ <bff523677c65a4a6b1c06152b154cf5651f51d68.1686047727.git.code@siddh.me>
 MIME-Version: 1.0
-References: <20230606124800.1151665-1-agruenba@redhat.com>
-In-Reply-To: <20230606124800.1151665-1-agruenba@redhat.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 6 Jun 2023 05:55:19 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wi_P4tOWCbZYo11u5vbB+tTxCSGwKC9m71y-QdbZP8zKA@mail.gmail.com>
-Message-ID: <CAHk-=wi_P4tOWCbZYo11u5vbB+tTxCSGwKC9m71y-QdbZP8zKA@mail.gmail.com>
-Subject: Re: [GIT PULL] gfs2 fix
-To:     Andreas Gruenbacher <agruenba@redhat.com>
-Cc:     cluster-devel@redhat.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <bff523677c65a4a6b1c06152b154cf5651f51d68.1686047727.git.code@siddh.me>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 6, 2023 at 5:48=E2=80=AFAM Andreas Gruenbacher <agruenba@redhat=
-.com> wrote:
->
-> - Don't get stuck writing page onto itself under direct I/O.
+Hi Siddh,
 
-Btw, is there a test for this DIO case?
+Thank you for the patch.
 
-We've had the deadlock issue on t page lock (or for inode locks or
-whatever) for normal IO when faulting in the same page that is written
-to, and we have as pattern for solving that and I think there are
-filesystem tests that trigger this.
+On Tue, Jun 06, 2023 at 04:15:15PM +0530, Siddh Raman Pant wrote:
+> This reverts commit 1040e424353f5f4d39f6f3aa8723eb3bd6ea6446.
+> 
+> It used an incorrect way to use drm_* functions. Only drm_device ptrs
+> should be passed, but the mentioned commit passed mipi_dsi_host ptr.
+> It worked by accident due to macro magic.
+> 
+> Reported-by: Jani Nikula <jani.nikula@linux.intel.com>
+> Reviewed-by: Jani Nikula <jani.nikula@intel.com>
+> Signed-off-by: Siddh Raman Pant <code@siddh.me>
 
-But the DIO pattern is a bit different, with the whole "invalidate
-page cache: issue, and the fact that you send this patch now (rather
-than years ago) makes me wonder about test coverage for this all?
+Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
 
-                Linus
+Any chance we could prevent this from happening by turning the macros
+into inline functions ?
+
+> ---
+>  drivers/gpu/drm/drm_mipi_dsi.c | 15 ++++++++-------
+>  1 file changed, 8 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/drm_mipi_dsi.c b/drivers/gpu/drm/drm_mipi_dsi.c
+> index 3fd6c733ff4e..a37af4edf394 100644
+> --- a/drivers/gpu/drm/drm_mipi_dsi.c
+> +++ b/drivers/gpu/drm/drm_mipi_dsi.c
+> @@ -33,7 +33,6 @@
+>  
+>  #include <drm/display/drm_dsc.h>
+>  #include <drm/drm_mipi_dsi.h>
+> -#include <drm/drm_print.h>
+>  
+>  #include <video/mipi_display.h>
+>  
+> @@ -156,18 +155,19 @@ static int mipi_dsi_device_add(struct mipi_dsi_device *dsi)
+>  static struct mipi_dsi_device *
+>  of_mipi_dsi_device_add(struct mipi_dsi_host *host, struct device_node *node)
+>  {
+> +	struct device *dev = host->dev;
+>  	struct mipi_dsi_device_info info = { };
+>  	int ret;
+>  	u32 reg;
+>  
+>  	if (of_alias_from_compatible(node, info.type, sizeof(info.type)) < 0) {
+> -		drm_err(host, "modalias failure on %pOF\n", node);
+> +		dev_err(dev, "modalias failure on %pOF\n", node);
+>  		return ERR_PTR(-EINVAL);
+>  	}
+>  
+>  	ret = of_property_read_u32(node, "reg", &reg);
+>  	if (ret) {
+> -		drm_err(host, "device node %pOF has no valid reg property: %d\n",
+> +		dev_err(dev, "device node %pOF has no valid reg property: %d\n",
+>  			node, ret);
+>  		return ERR_PTR(-EINVAL);
+>  	}
+> @@ -202,21 +202,22 @@ mipi_dsi_device_register_full(struct mipi_dsi_host *host,
+>  			      const struct mipi_dsi_device_info *info)
+>  {
+>  	struct mipi_dsi_device *dsi;
+> +	struct device *dev = host->dev;
+>  	int ret;
+>  
+>  	if (!info) {
+> -		drm_err(host, "invalid mipi_dsi_device_info pointer\n");
+> +		dev_err(dev, "invalid mipi_dsi_device_info pointer\n");
+>  		return ERR_PTR(-EINVAL);
+>  	}
+>  
+>  	if (info->channel > 3) {
+> -		drm_err(host, "invalid virtual channel: %u\n", info->channel);
+> +		dev_err(dev, "invalid virtual channel: %u\n", info->channel);
+>  		return ERR_PTR(-EINVAL);
+>  	}
+>  
+>  	dsi = mipi_dsi_device_alloc(host);
+>  	if (IS_ERR(dsi)) {
+> -		drm_err(host, "failed to allocate DSI device %ld\n",
+> +		dev_err(dev, "failed to allocate DSI device %ld\n",
+>  			PTR_ERR(dsi));
+>  		return dsi;
+>  	}
+> @@ -227,7 +228,7 @@ mipi_dsi_device_register_full(struct mipi_dsi_host *host,
+>  
+>  	ret = mipi_dsi_device_add(dsi);
+>  	if (ret) {
+> -		drm_err(host, "failed to add DSI device %d\n", ret);
+> +		dev_err(dev, "failed to add DSI device %d\n", ret);
+>  		kfree(dsi);
+>  		return ERR_PTR(ret);
+>  	}
+> 
+
+-- 
+Regards,
+
+Laurent Pinchart
