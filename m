@@ -2,157 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D881724C06
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 21:02:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C91E7724C40
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 21:05:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239194AbjFFTCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 15:02:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38056 "EHLO
+        id S239014AbjFFTFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 15:05:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238931AbjFFTCH (ORCPT
+        with ESMTP id S239227AbjFFTEY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 15:02:07 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A14B810D5;
-        Tue,  6 Jun 2023 12:02:05 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id 41be03b00d2f7-543d32eed7cso882733a12.2;
-        Tue, 06 Jun 2023 12:02:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686078125; x=1688670125;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zorJynEf8LptTjq6m+OnDgS8VLEV9nuJA4KmkfWWNG8=;
-        b=ZbWuK61Uqo6PeYq7Bqzwio2drMqyWcH/IU2N3d6E16gOmNN2z9maqpqUr81gt9atwP
-         vdudEdOr0jhihTNZUDVlJQjuSBMz94I61e+oo1aIW89fVgXImvD2DCoyDJXX3cz2+2n8
-         I+KPuiETAaL501bjYz9VWmKCeHdEAHt/BjEp5h38jH5883WJNBSvNiKuGMmywKjoN9nS
-         uw7O6OA4b1EjZBklW/AE3WzHARGy0G2W4jo7WTfPTPjP5hqOnnothhFXW5AyYSiL3cXN
-         pd76lvwLfWHKylBmGefA1n1ikkBl09LCeqYGKqWyIrmNd813dBqT7RktiglAZdo/i8fs
-         /tGg==
+        Tue, 6 Jun 2023 15:04:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B52101
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 12:03:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686078218;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bmPwhcLQLS6QAOJhnaZRrlptzdg2mUtfNMjjPY6LfS8=;
+        b=AFuQrzjWZt9DInEY1lFNe2Dkl2jWUeOnZvEx5qHaeGepugKSmH3uiA6RXeZM6tL2ddVh48
+        DmlcdnHCQCHqUaJaJTJi4xa7fyWwzBuf0roPU+B8OJVu5y5PjQqcZGmW0Z02eAWTJ5Qn2d
+        evCVBAC6WjTzbhU7/EYtMPaLsJ+bbMg=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-221-EnKZds2HNkKzgAAM0aaO7w-1; Tue, 06 Jun 2023 15:03:37 -0400
+X-MC-Unique: EnKZds2HNkKzgAAM0aaO7w-1
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-75b147a2548so130958785a.1
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 12:03:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686078125; x=1688670125;
+        d=1e100.net; s=20221208; t=1686078216; x=1688670216;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zorJynEf8LptTjq6m+OnDgS8VLEV9nuJA4KmkfWWNG8=;
-        b=G5x3vSqnTEjK2W4s23NaFjI0iHXVMkCWqIoL1AwAI64Zmqx885nNOOpU8DMomAvsJg
-         +U+AHHd7FmjvlNtaa9gHP6FPJ3Gd29tgz66/00TsSLaJWHjEpHREF1XsCh3iEKuR5zm5
-         61l2RkJZhCCf6Ypd76GSwKGW/Pmb1TnQitQO+c8QrNYj9WuZj6QzHA/jgSrWbM/Vv2+9
-         5xLxxbSlgm75yjp+ZRK4zTPlAmUuTUOzcG1d2Gf/e5H6LZHk8VdXHH+sBYnrq18FArEu
-         rOASW68azrdI3GmAg33DuPG5lSo9oQxGQ9X532wEa+alAmhHVmFAuSwJidO3z3TJaJCp
-         IUpA==
-X-Gm-Message-State: AC+VfDwiVyKXprF+hBlwQj30bWJz/AOaz99dh8iR0bwv/yl/1MCIJaZO
-        2KPb/OMMt8STlGB+ZIoQwlM=
-X-Google-Smtp-Source: ACHHUZ6Qk17vBLxhsvAUdKKB6ZljlKIyCDj81ro9Z7d7yrElU6XmjFTVfl6sjofEU7M+iFnoUn1mJA==
-X-Received: by 2002:a17:903:1110:b0:1a6:74f6:fa92 with SMTP id n16-20020a170903111000b001a674f6fa92mr1952737plh.19.1686078124951;
-        Tue, 06 Jun 2023 12:02:04 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:f59e:5ad5:28cc:2003])
-        by smtp.gmail.com with ESMTPSA id c1-20020a170903234100b00199193e5ea1sm8899234plh.61.2023.06.06.12.02.03
+        bh=bmPwhcLQLS6QAOJhnaZRrlptzdg2mUtfNMjjPY6LfS8=;
+        b=ARc3L2qIBS9UPxj9i7DN76YB8LM7hQZHNukqyG78+12PfrRPQRzkPJpNZToP4oR6XD
+         f6fOcH5WiIOC4fGJcGNuyJWtrysQVE/pyBlQ3l7VF/DeVFRDOJlD5JBh7Ka/38xPpaJF
+         e0dv5nUIc6e/I1dXY5xqSYsVnjlhOpJ9FRWsUx4Ag2r4JitpZsn1Muei7PAvAwIMmBvp
+         QioHRlxkg3dFZvDvFuU4EATSFMdJcWHId8oIryy6PFQ6HcW9TD1zIXv2SbTiOIDAHwaH
+         XU/vMOh8TwPzv0QayH63vZ7lCZ7WZ6AiLZxwtPurnVx9tEH7eNfafrJZ2ASaHg1w65TG
+         Fykg==
+X-Gm-Message-State: AC+VfDw17alNPiAfM2ZBhbcPTF1CrmzzZ9zxDW+kN/DiumiCF+uAErrj
+        rIaVutA0avAq7fplZnS8kJn9zMTTs6AxS8pg1GsSudK0GNITACcD1KEz8RUpL2J99zDyqDikMuT
+        VQUqqTrVrBXLo4yGqq9m3RFH7
+X-Received: by 2002:a05:620a:2b92:b0:75b:23a1:69f0 with SMTP id dz18-20020a05620a2b9200b0075b23a169f0mr3107605qkb.7.1686078216680;
+        Tue, 06 Jun 2023 12:03:36 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5C5YMccZA+iUS9RAssWOgobvDgS7+Te3WrU+7dZkM3FviCtXVqQlWbzikNWhoOiLhOPK8t2g==
+X-Received: by 2002:a05:620a:2b92:b0:75b:23a1:69f0 with SMTP id dz18-20020a05620a2b9200b0075b23a169f0mr3107557qkb.7.1686078216403;
+        Tue, 06 Jun 2023 12:03:36 -0700 (PDT)
+Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
+        by smtp.gmail.com with ESMTPSA id d14-20020a05620a166e00b0074636e35405sm5100311qko.65.2023.06.06.12.03.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 12:02:04 -0700 (PDT)
-Date:   Tue, 6 Jun 2023 12:02:01 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        Henrik Rydberg <rydberg@bitmath.org>,
-        linux-input@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC 0/4] input: touchscreen: add initial support for
- Goodix Berlin touchscreen IC
-Message-ID: <ZH+CqXOFt6WsdZ8L@google.com>
-References: <20230606-topic-goodix-berlin-upstream-initial-v1-0-4a0741b8aefd@linaro.org>
- <f5f20de8-851a-fe20-4664-62b6de14ebd7@redhat.com>
- <2677ae8c-59d3-b658-dc3f-918838ac0fb6@linaro.org>
- <ZH9+ndrF0RIgFhnI@google.com>
- <665c9aa5-ef70-65ce-7d9c-4b3b93874934@linaro.org>
+        Tue, 06 Jun 2023 12:03:35 -0700 (PDT)
+Date:   Tue, 6 Jun 2023 15:03:31 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Hugh Dickins <hughd@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Price <steven.price@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Zack Rusin <zackr@vmware.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Jann Horn <jannh@google.com>,
+        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH 05/12] powerpc: add pte_free_defer() for pgtables sharing
+ page
+Message-ID: <ZH+DAxLhIYpTlIFc@x1n>
+References: <35e983f5-7ed3-b310-d949-9ae8b130cdab@google.com>
+ <28eb289f-ea2c-8eb9-63bb-9f7d7b9ccc11@google.com>
+ <ZHSwWgLWaEd+zi/g@casper.infradead.org>
+ <ZHn6n5eVTsr4Wl8x@ziepe.ca>
+ <4df4909f-f5dd-6f94-9792-8f2949f542b3@google.com>
+ <ZH95oobIqN0WO5MK@ziepe.ca>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <665c9aa5-ef70-65ce-7d9c-4b3b93874934@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FSL_HELO_FAKE,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ZH95oobIqN0WO5MK@ziepe.ca>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 08:55:35PM +0200, Neil Armstrong wrote:
-> Hi Dmitry,
+On Tue, Jun 06, 2023 at 03:23:30PM -0300, Jason Gunthorpe wrote:
+> On Mon, Jun 05, 2023 at 08:40:01PM -0700, Hugh Dickins wrote:
 > 
-> On 06/06/2023 20:44, Dmitry Torokhov wrote:
-> > On Tue, Jun 06, 2023 at 08:12:04PM +0200, Neil Armstrong wrote:
-> > > Hi,
-> > > 
-> > > On 06/06/2023 17:31, Hans de Goede wrote:
-> > > > Hi Neil,
-> > > > 
-> > > > On 6/6/23 16:31, Neil Armstrong wrote:
-> > > > > These touchscreen ICs support SPI, I2C and I3C interface, up to
-> > > > > 10 finger touch, stylus and gestures events.
-> > > > > 
-> > > > > This initial driver is derived from the Goodix goodix_ts_berlin
-> > > > > available at [1] and [2] and only supports the GT9916 IC
-> > > > > present on the Qualcomm SM8550 MTP & QRD touch panel.
-> > > > > 
-> > > > > The current implementation only supports BerlinD, aka GT9916.
-> > > > > 
-> > > > > Support for advanced features like:
-> > > > > - Firmware & config update
-> > > > > - Stylus events
-> > > > > - Gestures events
-> > > > > - Previous revisions support (BerlinA or BerlinB)
-> > > > > is not included in current version.
-> > > > > 
-> > > > > The current support will work with currently flashed firmware
-> > > > > and config, and bail out if firmware or config aren't flashed yet.
-> > > > 
-> > > > What I'm missing here / in the commit msg of
-> > > > "input: touchscreen: add core support for Goodix Berlin Touchscreen IC"
-> > > > 
-> > > > is an explanation why this is a new driver instead of adding
-> > > > support to the existing goodix.c code.
-> > > > 
-> > > > I assume you have good reasons for this, but it would be good
-> > > > if you can write the reasons for this down.
-> > > 
-> > > Sure, should I write it down here and/or update the commit message in a new revision ?
-> > > 
-> > > Anyway, here's the reasons:
-> > > - globally the event handling "looks like" the current goodix.c, but again the offsets
-> > > are again different and none of the register address are the same, and unlike the current
-> > > support all registers are provided by the "ic_info" structure
-> > > - while with the current code it *could* be possible to merge it, with a lot of changes,
-> > > the firmware management looks really different, and it would be really hard to merge.
-> > > 
-> > > But I may be wrong, and may be misleaded by the goodix driver structure (even if it
-> > > went through a really heavy cleaning process).
-> > > 
-> > > Globally it seems they tried to match the "event handling" process of the previous
-> > > generations, but the firmware interface is completely different.
-> > 
-> > It is not unprecedented for drivers to share event processing and
-> > implement several ways/generations of firmware update mechanisms.
+> > diff --git a/arch/powerpc/mm/pgtable-frag.c b/arch/powerpc/mm/pgtable-frag.c
+> > index 20652daa1d7e..e4f58c5fc2ac 100644
+> > --- a/arch/powerpc/mm/pgtable-frag.c
+> > +++ b/arch/powerpc/mm/pgtable-frag.c
+> > @@ -120,3 +120,54 @@ void pte_fragment_free(unsigned long *table, int kernel)
+> >  		__free_page(page);
+> >  	}
+> >  }
+> > +
+> > +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+> > +#define PTE_FREE_DEFERRED 0x10000 /* beyond any PTE_FRAG_NR */
+> > +
+> > +static void pte_free_now(struct rcu_head *head)
+> > +{
+> > +	struct page *page;
+> > +	int refcount;
+> > +
+> > +	page = container_of(head, struct page, rcu_head);
+> > +	refcount = atomic_sub_return(PTE_FREE_DEFERRED - 1,
+> > +				     &page->pt_frag_refcount);
+> > +	if (refcount < PTE_FREE_DEFERRED) {
+> > +		pte_fragment_free((unsigned long *)page_address(page), 0);
+> > +		return;
+> > +	}
 > 
-> Thanks for your reply, I'm perfectly aware of that, this is why I posted
-> this as RFC.
+> From what I can tell power doesn't recycle the sub fragment into any
+> kind of free list. It just waits for the last fragment to be unused
+> and then frees the whole page.
 > 
-> If the event handling is vaguely similar, I'm not sure it's worth refactoring the
-> current driver since I do not have the old and current IC datasheet nor
-> HW to check for current support non-regression.
+> So why not simply go into pte_fragment_free() and do the call_rcu directly:
 > 
-> What I'm sure is that not a single register address, flag or struct is even close
-> to the current upstream defined ones.
+> 	BUG_ON(atomic_read(&page->pt_frag_refcount) <= 0);
+> 	if (atomic_dec_and_test(&page->pt_frag_refcount)) {
+> 		if (!kernel)
+> 			pgtable_pte_page_dtor(page);
+> 		call_rcu(&page->rcu_head, free_page_rcu)
 
-OK, it looks like Hans' preference is also to have a separate driver, so
-let's keep them separate.
-
-Thanks.
+We need to be careful on the lock being freed in pgtable_pte_page_dtor(),
+in Hugh's series IIUC we need the spinlock being there for the rcu section
+alongside the page itself.  So even if to do so we'll need to also rcu call 
+pgtable_pte_page_dtor() when needed.
 
 -- 
-Dmitry
+Peter Xu
+
