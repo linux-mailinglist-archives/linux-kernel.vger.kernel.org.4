@@ -2,74 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D43BF724AD6
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 20:08:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FCCB724ADF
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 20:08:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237853AbjFFSIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 14:08:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57004 "EHLO
+        id S238091AbjFFSIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 14:08:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238897AbjFFSHx (ORCPT
+        with ESMTP id S238257AbjFFSIr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 14:07:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC3B31702;
-        Tue,  6 Jun 2023 11:07:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 604CD63677;
-        Tue,  6 Jun 2023 18:07:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17E34C433EF;
-        Tue,  6 Jun 2023 18:07:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686074869;
-        bh=+g7AH2Cprbi9FFx9hvRKBw23s6nCP3oe6Nu3HsJbAdw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jF9Ece+gc3Z3hCwaxXvycaYKX1a8RvkNq2LwhQK8lXeuwErIWMoSjRfZLELHNYUnn
-         rhtfPvPPGdjwz32yX1WDCR2+YFjPqKYQXxgP8ckTudg86unWuRJLv3lVONtMkgU2Jg
-         FDyYjKb2vKMwhTFv2RpAJxtzInCaUNkbturfD/FJ5q1i78vqsl0ECB57VW2VpSPAQS
-         pRTBlCdu80t6krhiwYulgYYo1cJU+CTqzgJuOzb0z4nQ6GIw/fk0RZKBn0d/fKNkk1
-         FvVvy3M9SVo1XBfp0fcGuoe57ZJCa5zFKsa7kte/hT5hDCqde5PLQ+qaw8gJzX5LQs
-         rLcuvJBkmI9ew==
-Date:   Tue, 6 Jun 2023 19:07:42 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Tommaso Merciai <tomm.merciai@gmail.com>,
-        jacopo.mondi@ideasonboard.com, martin.hecht@avnet.eu,
-        michael.roeder@avnet.eu, linuxfancy@googlegroups.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Gerald Loacker <gerald.loacker@wolfvision.net>,
-        Mikhail Rudenko <mike.rudenko@gmail.com>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Nicholas Roth <nicholas@rothemail.net>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] media: dt-bindings: alvium: add document YAML
- binding
-Message-ID: <20230606-jaundice-womankind-7e583789fb7a@spud>
-References: <20230606155416.260941-1-tomm.merciai@gmail.com>
- <20230606155416.260941-3-tomm.merciai@gmail.com>
- <20230606163656.GI25679@pendragon.ideasonboard.com>
+        Tue, 6 Jun 2023 14:08:47 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7E3B10F8;
+        Tue,  6 Jun 2023 11:08:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=OrkYgbRcR8dMZ/9FqFYNlN0/B5YWJQDyiL7vTaDE328=; b=vUmMuu9PmqNqTlLjlSfOr+MRnv
+        YOVOro3cFUJRZZ6vxULcsPAhAG2+rD86+ar3HpA/xEz9Ldz9rA6INwGm3tWYMgXJMmVyq+iYl9mVj
+        heGQCpsAk4DI2qyWcuzaw1923giSGT1p0rlwfZrPQfkWwAheXNbLsRnsnwuFHM8mt+pT8AmHBuUWL
+        aWlTFxHpHoWEnbONi3+FlKC1ECUE4wkDfbGzPXRyygu2kQpbijMN2NiJAGA1aXtTxzMHUgXlaqNKc
+        Bg+jAeNPHFEFZSZhnrv8eldrtJGXR33HQSBUGOc6vhTHqU2DIJkUl8JgNXPJ1Jxt6SrMapDXJbQSR
+        /KLx4xAQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1q6b6I-00DOYP-2y; Tue, 06 Jun 2023 18:08:10 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6B0B9300129;
+        Tue,  6 Jun 2023 20:08:06 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 4A5AB2019EC9F; Tue,  6 Jun 2023 20:08:06 +0200 (CEST)
+Date:   Tue, 6 Jun 2023 20:08:06 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     keescook@chromium.org, gregkh@linuxfoundation.org,
+        pbonzini@redhat.com, linux-kernel@vger.kernel.org,
+        ojeda@kernel.org, ndesaulniers@google.com, mingo@redhat.com,
+        will@kernel.org, longman@redhat.com, boqun.feng@gmail.com,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
+        joel@joelfernandes.org, josh@joshtriplett.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        rcu@vger.kernel.org, tj@kernel.org, tglx@linutronix.de,
+        linux-toolchains@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] Lock and Pointer guards
+Message-ID: <20230606180806.GA942082@hirez.programming.kicks-ass.net>
+References: <20230526205204.861311518@infradead.org>
+ <CAHk-=wg2RHZKTN29Gr7MhgYfaNtzz58wry9jCNP75LAmQ9t8-A@mail.gmail.com>
+ <20230530092342.GA149947@hirez.programming.kicks-ass.net>
+ <20230606094251.GA907347@hirez.programming.kicks-ass.net>
+ <CAHk-=wi-RyoUhbChiVaJZoZXheAwnJ7OO=Gxe85BkPAd93TwDA@mail.gmail.com>
+ <20230606134005.GE905437@hirez.programming.kicks-ass.net>
+ <CAHk-=wgQ5m+SnWTYGHu0JgYXTk2dkGF+msX=ARfYoo3t1_fX9g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="+RoPVQsdZoEGL6As"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230606163656.GI25679@pendragon.ideasonboard.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <CAHk-=wgQ5m+SnWTYGHu0JgYXTk2dkGF+msX=ARfYoo3t1_fX9g@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,61 +74,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jun 06, 2023 at 07:50:47AM -0700, Linus Torvalds wrote:
+> I feel like you seem entirely too fixated on locking.
 
---+RoPVQsdZoEGL6As
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+It's what I started out with... but it's certainly not everything.
 
-Hey Laurent, Tommaso,
+The thing I have removes pretty much all the error gotos from
+sched/core.c and events/core.c and while locking is ofcourse a fair
+amount of that there's significant non-locking usage.
 
-On Tue, Jun 06, 2023 at 07:36:56PM +0300, Laurent Pinchart wrote:
-> On Tue, Jun 06, 2023 at 05:54:03PM +0200, Tommaso Merciai wrote:
+>  (c) think that generally are not "nested" (you release the resources
+> you've allocated, but you don't "nest" the allocations - they are just
+> serial.
+> 
+>  (d) think that the syntax could be pretty nasty, because the cleanup
+> is not just a trivial fixed "unlock" function
 
-> > +  alliedvision,lp2hs-delay-us:
-> > +    maxItems: 1
-> > +    description:
-> > +      Low power to high speed delay time in microseconds.
->=20
-> You can drop "in microseconds", that's implied by the suffix.
->=20
-> > +      The purpose of this property is force a DPhy reset for the period
-> > +      described by the microseconds on the property, before it starts
-> > +      streaming. To be clear, with that value bigger than 0 the Alvium
-> > +      forces a dphy-reset on all lanes for that period. That means all
-> > +      lanes go up into low power state. This may help a csi2 rx ip to
-> > +      reset if that IP can't deal with a continous clock.
->=20
-> I'd like to propose what I think is a clearer version:
->=20
->     description: |
->       Low power to high speed delay time.
->=20
->       If the value is larger than 0, the camera forces a reset of all
->       D-PHY lanes for the duration specified by this property. All lanes
->       will transition to the low-power state and back to the high-speed
->       state after the delay. Otherwise the lanes will transition to and
->       remain in the high-speed state immediately after power on.
->=20
->       This is meant to help CSI-2 receivers synchronizing their D-PHY
->       RX.
+So I'm not sure you've seen the actual convertions I've done, but yes,
+there's lots of those.
 
-Question about the property.
-Why not make it have a minimum value of 1 and drop the special-case
-behaviour for zero?
+I've just used the guard naming because locks is what I started out
+with.
 
-Cheers,
-Conor.
++	ptr_guard(kfree, alloc) = kzalloc(event->read_size, GFP_KERNEL);
++	if (!alloc)
+ 		return -ENOMEM;
 
---+RoPVQsdZoEGL6As
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+ 	event = perf_event_alloc(&attr, cpu, task, group_leader, NULL,
+ 				 NULL, NULL, cgroup_fd);
++	if (IS_ERR(event))
++		return PTR_ERR(event);
++
++	ptr_guard(free_event, event_guard) = event;
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZH917gAKCRB4tDGHoIJi
-0ihzAQCALlESrN9lQINq5At4m8i/cKUpv33zVdz16wSfgQJyrAD/ffwmWbpPLax3
-TT8InwBknLiZT8TQTt34eMlSoorRlAA=
-=0a/j
------END PGP SIGNATURE-----
 
---+RoPVQsdZoEGL6As--
++	ptr_guard(put_task, p) = find_get_task(pid);
++	if (!p)
++		return -ESRCH;
+
+
+So it does all that... you just hate the naming -- surely we can fix
+that.
+
+
+Would it all be less offensive if I did: s/guard/cleanup/ on the whole
+thing? Then we'd have things like:
+
+
+DEFINE_PTR_CLEANUP(put_task, struct task_struct *,
+		   if (_C) put_task_struct(_C))
+
+	ptr_cleanup(put_task, p) = find_get_task(pid);
+	if (!p)
+		return -ESRCH;
+
+
+DEFINE_PTR_CLEANUP(free_event, struct perf_event *,
+		   if (!IS_ERR_OR_NULL(_C)) free_event(_C))
+
+	ptr_cleanup(free_event, event) = perf_event_alloc(...);
+	if (IS_ERR(event))
+		return PTR_ERR(event);
+
+
+DEFINE_PTR_CLEANUP(kfree, void *, kfree(_C))
+
+	ptr_cleanup(kfree, foo) = kzalloc(...);
+	if (!foo)
+		return -ENOMEM;
+
+
+But do we then continue with:
+
+DEFINE_CLEANUP(mutex, struct mutex *, mutex_lock(_C), mutex_unlock(_C))
+
+	cleanup(mutex, &my_mutex);
+
+
+	scoped_cleanup (mutex, &my_mutex) {
+		...
+	}
+
+etc..? or do we keep guard() there, but based internally on
+ptr_cleanup() with the cleanup_## naming.
