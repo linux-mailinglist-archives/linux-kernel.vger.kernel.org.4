@@ -2,145 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ECAC724D9A
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 21:58:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0915E724D9D
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 21:59:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239611AbjFFT6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 15:58:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42328 "EHLO
+        id S239634AbjFFT66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 15:58:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234125AbjFFT6l (ORCPT
+        with ESMTP id S239617AbjFFT6y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 15:58:41 -0400
-Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FB2583;
-        Tue,  6 Jun 2023 12:58:40 -0700 (PDT)
-Received: by mail-oo1-xc2b.google.com with SMTP id 006d021491bc7-55554c33bf3so4788563eaf.2;
-        Tue, 06 Jun 2023 12:58:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686081519; x=1688673519;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9fzXlbPINbB7MLh0jxJ+Y5UChf2gkHO8C34dmKugRUg=;
-        b=S03UnzPuSlaqndpGm3fYnzSEuVrAJXVaDyv5zhRB0i5qOf5lMwHRzbOjDYKhZQ3YSo
-         K6JFXzTmnc5Eo0jMOnKFw9HQej3OKTiE/yaKVmk6JZ6cXrcoQ9HDNrj6Ulu/ThSN+8zH
-         XELNofQ9A4CjY/LWiTTYEyPJ0ej0qw0h/zran7xqQiuRfvTLultwGtjYlcq8sS4ed+sK
-         8hQjSnUD1/E3QK+CRaXt8pS2dKD7rK+nMC/dWUUVKcU5y9DBDO6YlOV/O/PkkLmBRN4X
-         sBGC4cB3XiFMOmPvIfiknCyFlxijBSnkSJdGYSFYSDsdnyHBdclop9rTWD/UjH1tKS26
-         2GMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686081519; x=1688673519;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9fzXlbPINbB7MLh0jxJ+Y5UChf2gkHO8C34dmKugRUg=;
-        b=I65QxiSV57kpPiSj8434muByZR8CMhPa9Vq8u5Sc0fvz9vLTxJCVhY9PlUCGVYSU3L
-         AAOEx0kIYNTi5l8QNmLjx7IHHzUCPTqaDDw3s5Yuu+ZJjS9VnNOGQ5/Bno0WWFlrGaIW
-         urDJ0Ga0JLsF0cCJ2MRG3dBD3/ZhHK9ZV6rGGBa3rJ5L3l/hr8ST/XJCx4A0/zvpUsIp
-         sg6hz80cRgVZq8mRRrtOmdpTSC9DsOtLfSSljoSm6QPDFGiqBekQyGeZH3MHJuy6YNOi
-         ttzjMUj31vQcfqzHs+N+IcvZPjdrtkLIItgyt7u9Z8gwXxBWH9MbGyvSL0Vsqsy5Z5Fu
-         YCww==
-X-Gm-Message-State: AC+VfDwjwgF87b5TgvqcxsCq0K6CYkzfmxyWqG2ej8O+D+CSjUuaNavV
-        VFCjdoo450es5MJPrfM49+A=
-X-Google-Smtp-Source: ACHHUZ42dMHLfPyqDY8aY4eB6lc3Uaa0wqGPVYy7FN7kzsPrKQYtfFllGNzJqCzN0j4iAu3TvEb9ZA==
-X-Received: by 2002:a05:6359:2a0:b0:129:cc43:2ebd with SMTP id ek32-20020a05635902a000b00129cc432ebdmr929433rwb.23.1686081519068;
-        Tue, 06 Jun 2023 12:58:39 -0700 (PDT)
-Received: from localhost (dhcp-72-235-13-41.hawaiiantel.net. [72.235.13.41])
-        by smtp.gmail.com with ESMTPSA id fe19-20020a056a002f1300b0065055ad5754sm7196408pfb.64.2023.06.06.12.58.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 12:58:38 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 6 Jun 2023 09:58:37 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Mrunal Patel <mpatel@redhat.com>,
-        Ryan Phillips <rphillips@redhat.com>,
-        Brent Rowsell <browsell@redhat.com>,
-        Peter Hunt <pehunt@redhat.com>, Phil Auld <pauld@redhat.com>
-Subject: Re: [RFC PATCH 0/5] cgroup/cpuset: A new "isolcpus" paritition
-Message-ID: <ZH-P7X_yjnVfhy7b@slm.duckdns.org>
-References: <deb7b684-3d7c-b3ae-7b36-5b7ba2dd8001@redhat.com>
- <ZFUo5IYAIwTEKR4_@slm.duckdns.org>
- <759603dd-7538-54ad-e63d-bb827b618ae3@redhat.com>
- <405b2805-538c-790b-5bf8-e90d3660f116@redhat.com>
- <ZGvHUjOCjwat91Gq@slm.duckdns.org>
- <18793f4a-fd39-2e71-0b77-856afb01547b@redhat.com>
- <ZH4jfmypOXGJPu0D@slm.duckdns.org>
- <be64a569-4388-9dd9-3e06-36d716a54f6c@redhat.com>
- <ZH5FNc6wjlGPsaaO@slm.duckdns.org>
- <a2220c9f-7a8d-da82-ecc0-b39f3807408c@redhat.com>
+        Tue, 6 Jun 2023 15:58:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4C721715;
+        Tue,  6 Jun 2023 12:58:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 65CC5637C6;
+        Tue,  6 Jun 2023 19:58:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 792F3C433D2;
+        Tue,  6 Jun 2023 19:58:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686081529;
+        bh=/t6PMs1ae1Hb/cw1vXCpNAE0c2/e78MXFIPoLtaur5w=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=C15aBS/oHLFLtGBs/1r7ELULfaMLrV6M6TG0zdECTZrK7EmrYn6+pPz0h+SUnjk/v
+         N7PkbV3Q/CN+YV5kRR2FK5Xm8FtFdWUz370xckU1VX9rgdg3aHUdne0htPOyCJpvT9
+         /MqpDpY3jZ4TLxkY6vLrC38FwaMBgp4ZiEXxQjrtLY+a2qgMGVz1yB114qSPv8uY9k
+         MaDaje/OZyIyHymB9l2D/fkgwYgG5+uX6FWUe1VrSDke7MwV7gnaDOiDibP8FFWMT7
+         IkA2pp0gFx1CnGW+9OkwXJAUksDRSrX2qp7lpW8G0q6Snp8SGphZ9vGmlf7S38jez6
+         JSPPVa+9ED3tg==
+Date:   Tue, 6 Jun 2023 14:58:47 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "Limonciello, Mario" <mario.limonciello@amd.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org
+Subject: Re: [PATCH v2] PCI: Call _REG when saving/restoring PCI state
+Message-ID: <20230606195847.GA1142401@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <a2220c9f-7a8d-da82-ecc0-b39f3807408c@redhat.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <48a843d5-ed4f-e4c5-782c-b246b81142e0@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, Waiman.
-
-On Mon, Jun 05, 2023 at 10:47:08PM -0400, Waiman Long wrote:
-...
-> I had a different idea on the semantics of the cpuset.cpus.exclusive at the
-> beginning. My original thinking is that it was the actual exclusive CPUs
-> that are allocated to the cgroup. Now if we treat this as a hint of what
-> exclusive CPUs should be used and it becomes valid only if the cgroup can
-
-I wouldn't call it a hint. It's still hard allocation of the CPUs to the
-cgroups that own them. Setting up a partition requires exclusive CPUs and
-thus would depend on exclusive allocations set up accordingly.
-
-> become a valid partition. I can see it as a value that can be hierarchically
-> set throughout the whole cpuset hierarchy.
+On Tue, Jun 06, 2023 at 02:40:45PM -0500, Limonciello, Mario wrote:
+> On 6/6/2023 2:23 PM, Bjorn Helgaas wrote:
+> > On Tue, Jun 06, 2023 at 11:23:21AM -0500, Mario Limonciello wrote:
+> > > ASMedia PCIe GPIO controllers fail functional tests after returning from
+> > > suspend (S3 or s2idle). This is because the BIOS checks whether the
+> > > OSPM has called the `_REG` method to determine whether it can interact with
+> > > the OperationRegion assigned to the device.
+> > > 
+> > > As described in 6.5.4 in the APCI spec, `_REG` is used to inform the AML
+> > > code on the availability of an operation region.
+> > > 
+> > > To fix this issue, call acpi_evaluate_reg() when saving and restoring the
+> > > state of PCI devices.
+> > > 
+> > > Link: https://uefi.org/htmlspecs/ACPI_Spec_6_4_html/06_Device_Configuration/Device_Configuration.html#reg-region
+> > > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> > > ---
+> > > v1->v2:
+> > >   * Handle case of no CONFIG_ACPI
+> > >   * Rename function
+> > >   * Update commit message
+> > >   * Move ACPI calling code into pci-acpi.c instead
+> > >   * Cite the ACPI spec
+> >
+> > Thanks for the spec reference (s/APCI/ACPI/ and add the revision if
+> > you rev this (r6.5 is the latest, AFAIK) if you rev this).
+> > 
+> > I don't see text in that section that connects S3 with _REG.  If it's
+> > there, you might have to quote the relevant sentence or two in the
+> > commit log.
+>
+> I don't think there is anything the spec connecting this
+> with S3.  At least from my perspective S3 is the reason
+> this was exposed but there is a deficiency that exists
+> that _REG is not being called by Linux.
 > 
-> So a transition to a valid partition is possible iff
+> I intend to re-word the commit message something to the
+> effect of explaining what _REG does and why _REG should be
+> called, along with citations.
 > 
-> 1) cpuset.cpus.exclusive is a subset of cpuset.cpus and is a subset of
-> cpuset.cpus.exclusive of all its ancestors.
+> Then in another paragraph "Fixing this resolves an issue ...".
+> 
+> > You mentioned _REG being sort of a mutex to synchronize OSPM vs
+> > platform access; if there's spec language to that effect, let's cite
+> > it.
+>
+> That sentence I included was cited from the spec.
 
-Yes.
+If it's necessary to justify the commit, include the citation in the
+commit log.
 
-> 2) If its parent is not a partition root, none of the CPUs in
-> cpuset.cpus.exclusive are currently allocated to other partitions. This the
+> > Ideally we should have been able to read the PCI and ACPI specs and
+> > implement this without tripping over problem on this particular
+> > hardware.  I'm looking for the text that enables that "clean-room"
+> > implementation.  If the spec doesn't have that text, it's either a
+> > hole in the spec or a BIOS defect that depends on something the spec
+> > doesn't require.
+> 
+> IMO both the spec and BIOS are correct, it's a Linux
+> issue that _REG wasn't used.
 
-Not just that, the CPUs aren't available to cgroups which don't have them
-set in the .exclusive file. IOW, if a CPU is in cpus.exclusive of some
-cgroups, it shouldn't appear in cpus.effective of cgroups which don't have
-the CPU in their cpus.exclusive.
+What tells Linux that _REG needs to be used here?  If there's nothing
+that tells Linux to use _REG here, I claim it's a BIOS defect.  I'm
+happy to be convinced otherwise; the way to convince me is to point to
+the spec.
 
-So, .exclusive explicitly establishes exclusive ownership of CPUs and
-partitions depend on that with an implicit "turn CPUs exclusive" behavior in
-case the parent is a partition root for backward compatibility.
+If it's a BIOS defect, it's fine to work around it, but we need to
+understand that, own up to it, and make the exact requirements very
+clear.  Otherwise we're likely to break this in the future because
+future developers and maintainers will rely on the specs.
 
-> same remote partition concept in my v2 patch. If its parent is a partition
-> root, part of its exclusive CPUs will be distributed to this child partition
-> like the current behavior of cpuset partition.
+> > Doing this in pci_save_state() still seems wrong to me.  For example,
+> > e1000_probe() calls pci_save_state(), but this is not part of suspend.
+> > IIUC, this patch will disconnect the opregion when we probe an e1000
+> > NIC.  Is that what you intend?
+>
+> Thanks for pointing this one out.  I was narrowly focused
+> on callers in PCI core.  This was a caller I wasn't
+> aware of; I agree it doesn't make sense.
+> 
+> I think pci_set_power_state() might be another good
+> candidate to use.  What do you think of this?
 
-Yes, similar in a sense. Please do away with the "once .reserve is used, the
-behavior is switched" part. Instead, it can be sth like "if the parent is a
-partition root, cpuset implicitly tries to set all CPUs in its cpus file in
-its cpus.exclusive file" so that user-visible behavior stays unchanged
-depending on past history.
+I can't suggest a call site because (1) I'm not a power management
+person, and (2) I don't think we have a clear statement of when it is
+required.  This must be expressed in terms of PCI power state
+transitions, or at least something discoverable from a pci_dev, not
+"s2idle" or even "S3" because those are meaningless in the PCI
+context.
 
-Thanks.
-
--- 
-tejun
+Bjorn
