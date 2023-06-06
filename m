@@ -2,159 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 937D4723C6A
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 10:59:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9E61723C66
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 10:59:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236974AbjFFI7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 04:59:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48328 "EHLO
+        id S231304AbjFFI7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 04:59:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230499AbjFFI7l (ORCPT
+        with ESMTP id S236220AbjFFI7N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 04:59:41 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74E1818E
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 01:59:39 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-bad97da58adso7375905276.1
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 01:59:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686041978; x=1688633978;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=N6kW28rRS95PBT40ZyGvD53ULubXonpBS0T08hlvYzY=;
-        b=dPR7PAcBEbq14AyijUdKPeY9aopH5oxf/XU5xNmYSoOyjYqERl9cm3yey7nh0m1wiS
-         1fQw4PTKPUr1LJE40ZZd38eOjy07GYhYSuKlqSPiw9DGP2NV1Aew+xNyenr+gJKvfyEv
-         Y673QHzNp/7uVnjx13QJvFKmESHWi+kGU/7hSOalAPdHTdKRkE5GkH2WPHuEeLevB7hY
-         fg6S/VW2ocpOzz2HcK6UtqUmuV68T5KMZHULgMQU8YeFJ/522xFXPPa4x+MmRNG7uo3B
-         Ir72yEqU5vuJXbw10qlB+t+kNprQd5pxm7t7+R4QcijkqpA6eNRyCE7+kDOarN9nzyr+
-         ZNiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686041978; x=1688633978;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=N6kW28rRS95PBT40ZyGvD53ULubXonpBS0T08hlvYzY=;
-        b=J+cJmtPnb3NgcxxAQGPKnli+3AWHAMCENishhA5YsvFAZxaC+bO9R7EXj4S0FRMv+a
-         B4lgjZQWjkcOSeDSrtF1J6jgRx4aKCK8cj21J+X74oxHDcyzrhn7LBRkJ6dAlUJAx2hW
-         05K6d93FR8IfTHkrtbZFF85gsDLtfGyW0qSRvvppFp5gZMQcRQwJaH9oKXn0g4zFFrti
-         4YMj/G51B1EQxFPQhvbWjRCWTDbR1ErjZvPZPyy6H+iV1y9FpgWz9+UdRpUo5Hy1riem
-         jUAYBli8nmVvWcJmFZTm3V0mLHrqhd9TJRc+b3IkRtqTR5lXnxlldap8wXTowQezvUFn
-         qZUA==
-X-Gm-Message-State: AC+VfDxvWeC7EL7TLhdC5pFBFih0F/F5t/Af4v1rpSUcX7+z/vMJc8Ex
-        mlb21JCNd/yM8+zzG4t97aX25ke4RbY=
-X-Google-Smtp-Source: ACHHUZ6AeR7qesANdIDtp2lhgxb5Ewp8VMikOiupHZ9Q+qMTh31yK+rF2gXmNDrRFS8peWohfho2dQ==
-X-Received: by 2002:a25:c382:0:b0:bb3:b0ab:d626 with SMTP id t124-20020a25c382000000b00bb3b0abd626mr485746ybf.31.1686041978611;
-        Tue, 06 Jun 2023 01:59:38 -0700 (PDT)
-Received: from localhost ([203.221.142.9])
-        by smtp.gmail.com with ESMTPSA id o1-20020a17090ab88100b0024dfbac9e2fsm9010107pjr.21.2023.06.06.01.59.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Jun 2023 01:59:37 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+        Tue, 6 Jun 2023 04:59:13 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FBE9E4F;
+        Tue,  6 Jun 2023 01:59:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686041948; x=1717577948;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=limbG5hl1dQq2+wq2ALBEtyvWKHjn7Ti97S5CXBnQc8=;
+  b=Ie8n1O4+im9qJ5advayUb+5HxIwHC9WL2aDrPkTHYV38cVh+NJ71P+Ph
+   ldmKhuiddhsbPQBZYO9Bq5uwARBtQhLt51kSTXaANcpJopzZAQxunhCo0
+   H3QCwyG4LWwtykByolpZTG+fKNw9yqNvPforFgQCM9keAH+JzEYD9fIUz
+   JdjGl/S6nOLljQHAH+FUnS+jsvDOH7aUcP6aaRMvLFbebCwxi+qTKfSQB
+   5Bj8X5meB0sScHfJTY+RRgKC9VJAy6+VpnAuDniKg90nhOvp1Q9aXVkDq
+   jVEeso+6BOEVr7VUnpebzTrdoY1S5NNTn6WVrUOyOh0MHgGV0+QLcmbDZ
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="359063509"
+X-IronPort-AV: E=Sophos;i="6.00,219,1681196400"; 
+   d="scan'208";a="359063509"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 01:59:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="853328684"
+X-IronPort-AV: E=Sophos;i="6.00,219,1681196400"; 
+   d="scan'208";a="853328684"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.56.224])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 01:59:02 -0700
+Message-ID: <c47301df-a408-767a-a1ba-ec848a3cc588@intel.com>
+Date:   Tue, 6 Jun 2023 11:58:57 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.11.2
+Subject: Re: [PATCH v4] mmc: mtk-sd: reduce CIT for better performance
+Content-Language: en-US
+To:     Wenbin Mei <wenbin.mei@mediatek.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Chaotian Jing <chaotian.jing@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Ritesh Harjani <riteshh@codeaurora.org>,
+        Asutosh Das <asutoshd@codeaurora.org>,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230605121442.23622-1-wenbin.mei@mediatek.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20230605121442.23622-1-wenbin.mei@mediatek.com>
 Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 06 Jun 2023 18:58:46 +1000
-Message-Id: <CT5FZBY14ZM4.OYXBJNXQU9A2@wheely>
-Cc:     <linux-kernel@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: [PATCH] powerpc/signal32: Force inlining of
- __unsafe_save_user_regs() and save_tm_user_regs_unsafe()
-From:   "Nicholas Piggin" <npiggin@gmail.com>
-To:     "Christophe Leroy" <christophe.leroy@csgroup.eu>,
-        "Michael Ellerman" <mpe@ellerman.id.au>
-X-Mailer: aerc 0.14.0
-References: <7e469c8f01860a69c1ada3ca6a5e2aa65f0f74b2.1685955220.git.christophe.leroy@csgroup.eu>
-In-Reply-To: <7e469c8f01860a69c1ada3ca6a5e2aa65f0f74b2.1685955220.git.christophe.leroy@csgroup.eu>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon Jun 5, 2023 at 6:58 PM AEST, Christophe Leroy wrote:
-> Looking at generated code for handle_signal32() shows calls to a
-> function called __unsafe_save_user_regs.constprop.0 while user access
-> is open.
->
-> And that __unsafe_save_user_regs.constprop.0 function has two nops at
-> the begining, allowing it to be traced, which is unexpected during
-> user access open window.
->
-> The solution could be to mark __unsafe_save_user_regs() no trace, but
-> to be on the safe side the most efficient is to flag it __always_inline
-> as already done for function __unsafe_restore_general_regs(). The
-> function is relatively small and only called twice, so the size
-> increase will remain in the noise.
->
-> Do the same with save_tm_user_regs_unsafe() as it may suffer the
-> same issue.
-
-Could you put a comment so someone doesn't uninline it later? Marking
-it notrace as well would be sufficient for a comment, if that works.
-
-Thanks,
-Nick
-
->
-> Fixes: ef75e7318294 ("powerpc/signal32: Transform save_user_regs() and sa=
-ve_tm_user_regs() in 'unsafe' version")
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+On 5/06/23 15:14, Wenbin Mei wrote:
+> CQHCI_SSC1 indicates to CQE the polling period to use when using periodic
+> SEND_QUEUE_STATUS(CMD13) polling.
+> Since MSDC CQE uses msdc_hclk as ITCFVAL, so driver should use hclk
+> frequency to get the actual time.
+> The default value 0x1000 that corresponds to 150us for MediaTek SoCs, let's
+> decrease it to 0x40 that corresponds to 2.35us, which can improve the
+> performance of some eMMC devices.
+> 
+> Signed-off-by: Wenbin Mei <wenbin.mei@mediatek.com>
 > ---
->  arch/powerpc/kernel/signal_32.c | 15 +++++++++------
->  1 file changed, 9 insertions(+), 6 deletions(-)
->
-> diff --git a/arch/powerpc/kernel/signal_32.c b/arch/powerpc/kernel/signal=
-_32.c
-> index c114c7f25645..7a718ed32b27 100644
-> --- a/arch/powerpc/kernel/signal_32.c
-> +++ b/arch/powerpc/kernel/signal_32.c
-> @@ -264,8 +264,9 @@ static void prepare_save_user_regs(int ctx_has_vsx_re=
-gion)
->  #endif
+>  drivers/mmc/host/cqhci.h  |  1 +
+>  drivers/mmc/host/mtk-sd.c | 45 +++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 46 insertions(+)
+> 
+> diff --git a/drivers/mmc/host/cqhci.h b/drivers/mmc/host/cqhci.h
+> index ba9387ed90eb..292b89ebd978 100644
+> --- a/drivers/mmc/host/cqhci.h
+> +++ b/drivers/mmc/host/cqhci.h
+> @@ -23,6 +23,7 @@
+>  /* capabilities */
+>  #define CQHCI_CAP			0x04
+>  #define CQHCI_CAP_CS			0x10000000 /* Crypto Support */
+> +#define CQHCI_CAP_ITCFMUL(x)		(((x) & GENMASK(15, 12)) >> 12)
+
+Let's not open code FIELD_GET, perhaps
+
+#define CQHCI_CAP_ITCFMUL		GENMASK(15, 12)
+
+#define CQHCI_ITCFMUL(x)		FIELD_GET(CQHCI_CAP_ITCFMUL,(x))
+
+>  
+>  /* configuration */
+>  #define CQHCI_CFG			0x08
+> diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
+> index edade0e54a0c..9f540973caff 100644
+> --- a/drivers/mmc/host/mtk-sd.c
+> +++ b/drivers/mmc/host/mtk-sd.c
+> @@ -473,6 +473,7 @@ struct msdc_host {
+>  	struct msdc_tune_para def_tune_para; /* default tune setting */
+>  	struct msdc_tune_para saved_tune_para; /* tune result of CMD21/CMD19 */
+>  	struct cqhci_host *cq_host;
+> +	u32 cq_ssc1_time;
+>  };
+>  
+>  static const struct mtk_mmc_compatible mt2701_compat = {
+> @@ -2450,9 +2451,48 @@ static void msdc_hs400_enhanced_strobe(struct mmc_host *mmc,
+>  	}
 >  }
-> =20
-> -static int __unsafe_save_user_regs(struct pt_regs *regs, struct mcontext=
- __user *frame,
-> -				   struct mcontext __user *tm_frame, int ctx_has_vsx_region)
-> +static __always_inline int
-> +__unsafe_save_user_regs(struct pt_regs *regs, struct mcontext __user *fr=
-ame,
-> +			struct mcontext __user *tm_frame, int ctx_has_vsx_region)
+>  
+> +static void msdc_cqe_cit_cal(struct msdc_host *host, u64 timer_ns)
+> +{
+> +	struct mmc_host *mmc = mmc_from_priv(host);
+> +	struct cqhci_host *cq_host = mmc->cqe_private;
+> +	u8 itcfmul;
+> +	u64 hclk_freq;
+> +	u64 value;
+> +
+> +	/* Since MSDC CQE uses msdc_hclk as ITCFVAL, so driver should use hclk
+> +	 * frequency to get the actual time for CIT.
+> +	 */
+> +	hclk_freq = clk_get_rate(host->h_clk);
+> +	itcfmul = CQHCI_CAP_ITCFMUL(cqhci_readl(cq_host, CQHCI_CAP));
+> +	switch (itcfmul) {
+> +	case 0x0:
+> +		do_div(hclk_freq, 1000);
+> +		break;
+> +	case 0x1:
+> +		do_div(hclk_freq, 100);
+> +		break;
+> +	case 0x2:
+> +		do_div(hclk_freq, 10);
+> +		break;
+> +	case 0x3:
+> +		break;
+> +	case 0x4:
+> +		hclk_freq = hclk_freq * 10;
+> +		break;
+> +	default:
+> +		host->cq_ssc1_time = 0x40;
+> +		return;
+> +	}
+> +
+> +	value = hclk_freq * timer_ns;
+> +	do_div(value, 1000000000);
+> +	host->cq_ssc1_time = value;
+> +}
+> +
+>  static void msdc_cqe_enable(struct mmc_host *mmc)
 >  {
->  	unsigned long msr =3D regs->msr;
-> =20
-> @@ -364,8 +365,9 @@ static void prepare_save_tm_user_regs(void)
->  		current->thread.ckvrsave =3D mfspr(SPRN_VRSAVE);
+>  	struct msdc_host *host = mmc_priv(mmc);
+> +	struct cqhci_host *cq_host = mmc->cqe_private;
+>  
+>  	/* enable cmdq irq */
+>  	writel(MSDC_INT_CMDQ, host->base + MSDC_INTEN);
+> @@ -2462,6 +2502,9 @@ static void msdc_cqe_enable(struct mmc_host *mmc)
+>  	msdc_set_busy_timeout(host, 20 * 1000000000ULL, 0);
+>  	/* default read data timeout 1s */
+>  	msdc_set_timeout(host, 1000000000ULL, 0);
+> +
+> +	/* Set the send status command idle timer */
+> +	cqhci_writel(cq_host, host->cq_ssc1_time, CQHCI_SSC1);
+
+What about Send Status Command Block Counter (CBC) bits 19:16 ?
+
 >  }
-> =20
-> -static int save_tm_user_regs_unsafe(struct pt_regs *regs, struct mcontex=
-t __user *frame,
-> -				    struct mcontext __user *tm_frame, unsigned long msr)
-> +static __always_inline int
-> +save_tm_user_regs_unsafe(struct pt_regs *regs, struct mcontext __user *f=
-rame,
-> +			 struct mcontext __user *tm_frame, unsigned long msr)
->  {
->  	/* Save both sets of general registers */
->  	unsafe_save_general_regs(&current->thread.ckpt_regs, frame, failed);
-> @@ -444,8 +446,9 @@ static int save_tm_user_regs_unsafe(struct pt_regs *r=
-egs, struct mcontext __user
->  #else
->  static void prepare_save_tm_user_regs(void) { }
-> =20
-> -static int save_tm_user_regs_unsafe(struct pt_regs *regs, struct mcontex=
-t __user *frame,
-> -				    struct mcontext __user *tm_frame, unsigned long msr)
-> +static __always_inline int
-> +save_tm_user_regs_unsafe(struct pt_regs *regs, struct mcontext __user *f=
-rame,
-> +			 struct mcontext __user *tm_frame, unsigned long msr)
->  {
->  	return 0;
->  }
-> --=20
-> 2.40.1
+>  
+>  static void msdc_cqe_disable(struct mmc_host *mmc, bool recovery)
+> @@ -2803,6 +2846,8 @@ static int msdc_drv_probe(struct platform_device *pdev)
+>  		/* cqhci 16bit length */
+>  		/* 0 size, means 65536 so we don't have to -1 here */
+>  		mmc->max_seg_size = 64 * 1024;
+> +		/* Reduce CIT to 0x40 that corresponds to 2.35us */
+> +		msdc_cqe_cit_cal(host, 2350);
+>  	}
+>  
+>  	ret = devm_request_irq(&pdev->dev, host->irq, msdc_irq,
 
