@@ -2,23 +2,23 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CA3A724EA2
+	by mail.lfdr.de (Postfix) with ESMTP id 58E3B724EA3
 	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 23:16:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239505AbjFFVQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 17:16:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37328 "EHLO
+        id S239692AbjFFVQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 17:16:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238517AbjFFVQI (ORCPT
+        with ESMTP id S238677AbjFFVQK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 17:16:08 -0400
+        Tue, 6 Jun 2023 17:16:10 -0400
 Received: from smtp.dudau.co.uk (dliviu.plus.com [80.229.23.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B473E1725;
-        Tue,  6 Jun 2023 14:16:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B9E69173A;
+        Tue,  6 Jun 2023 14:16:06 -0700 (PDT)
 Received: from mail.dudau.co.uk (bart.dudau.co.uk [192.168.14.2])
-        by smtp.dudau.co.uk (Postfix) with SMTP id 034C941D13A7;
-        Tue,  6 Jun 2023 22:16:04 +0100 (BST)
-Received: by mail.dudau.co.uk (sSMTP sendmail emulation); Tue, 06 Jun 2023 22:16:04 +0100
+        by smtp.dudau.co.uk (Postfix) with SMTP id 0B4AA41D13AD;
+        Tue,  6 Jun 2023 22:16:05 +0100 (BST)
+Received: by mail.dudau.co.uk (sSMTP sendmail emulation); Tue, 06 Jun 2023 22:16:05 +0100
 From:   Liviu Dudau <liviu@dudau.co.uk>
 To:     =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>
 Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
@@ -28,11 +28,10 @@ Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
         Conor Dooley <conor+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Liviu Dudau <liviu@dudau.co.uk>,
-        Conor Dooley <conor.dooley@microchip.com>
-Subject: [PATCH v4 1/2] dt-bindings: mips: Add bindings for TP-Link HC220 G5 v1 board
-Date:   Tue,  6 Jun 2023 22:15:59 +0100
-Message-Id: <20230606211600.1601694-2-liviu@dudau.co.uk>
+        devicetree@vger.kernel.org, Liviu Dudau <liviu@dudau.co.uk>
+Subject: [PATCH v4 2/2] mips: dts: ralink: Add support for TP-Link HC220 G5 v1 board
+Date:   Tue,  6 Jun 2023 22:16:00 +0100
+Message-Id: <20230606211600.1601694-3-liviu@dudau.co.uk>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230606211600.1601694-1-liviu@dudau.co.uk>
 References: <20230606211600.1601694-1-liviu@dudau.co.uk>
@@ -47,28 +46,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add bindings for the compatible string used for the TP-Link's
-HC220 G5 V1 board, a wireless AP based on MT7621.
+This WiFi AP is based on a MT7621 SoC with 128MiB RAM, 128MiB NAND,
+a MT7603 2.4GHz WiFi and a MT7613 5GHz WiFi chips integrated on the board,
+connected to the main SoC over PCIe.
+
+The device uses NMBM over NAND, which is not currently supported in the
+mainline, so NAND node is skipped in this revision.
 
 Signed-off-by: Liviu Dudau <liviu@dudau.co.uk>
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
-Acked-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
 ---
- Documentation/devicetree/bindings/mips/ralink.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ arch/mips/boot/dts/ralink/Makefile            |  3 +-
+ .../dts/ralink/mt7621-tplink-hc220-g5-v1.dts  | 84 +++++++++++++++++++
+ 2 files changed, 86 insertions(+), 1 deletion(-)
+ create mode 100644 arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dts
 
-diff --git a/Documentation/devicetree/bindings/mips/ralink.yaml b/Documentation/devicetree/bindings/mips/ralink.yaml
-index 704b5b5951271..53c1f66353770 100644
---- a/Documentation/devicetree/bindings/mips/ralink.yaml
-+++ b/Documentation/devicetree/bindings/mips/ralink.yaml
-@@ -80,6 +80,7 @@ properties:
-           - enum:
-               - gnubee,gb-pc1
-               - gnubee,gb-pc2
-+              - tplink,hc220-g5-v1
-           - const: mediatek,mt7621-soc
+diff --git a/arch/mips/boot/dts/ralink/Makefile b/arch/mips/boot/dts/ralink/Makefile
+index 11732b8c8163a..d27d7e8c700fe 100644
+--- a/arch/mips/boot/dts/ralink/Makefile
++++ b/arch/mips/boot/dts/ralink/Makefile
+@@ -8,6 +8,7 @@ dtb-$(CONFIG_DTB_VOCORE2)	+= vocore2.dtb
  
- additionalProperties: true
+ dtb-$(CONFIG_SOC_MT7621) += \
+ 	mt7621-gnubee-gb-pc1.dtb \
+-	mt7621-gnubee-gb-pc2.dtb
++	mt7621-gnubee-gb-pc2.dtb \
++	mt7621-tplink-hc220-g5-v1.dtb
+ 
+ obj-$(CONFIG_BUILTIN_DTB)	+= $(addsuffix .o, $(dtb-y))
+diff --git a/arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dts b/arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dts
+new file mode 100644
+index 0000000000000..2d2eadc6b95f3
+--- /dev/null
++++ b/arch/mips/boot/dts/ralink/mt7621-tplink-hc220-g5-v1.dts
+@@ -0,0 +1,84 @@
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++/dts-v1/;
++
++#include "mt7621.dtsi"
++
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/input/input.h>
++#include <dt-bindings/leds/common.h>
++
++/ {
++	compatible = "tplink,hc220-g5-v1", "mediatek,mt7621-soc";
++	model = "TP-Link HC220 G5 v1";
++
++	memory@0 {
++		device_type = "memory";
++		reg = <0x00000000 0x08000000>;
++	};
++
++	chosen {
++		bootargs = "earlycon console=ttyS0,115200";
++	};
++
++	gpio-keys {
++		compatible = "gpio-keys";
++
++		key-reset {
++			label = "reset";
++			gpios = <&gpio 8 GPIO_ACTIVE_LOW>;
++			linux,code = <KEY_RESTART>;
++		};
++
++		key-wps {
++			label = "wps";
++			gpios = <&gpio 16 GPIO_ACTIVE_LOW>;
++			linux,code = <KEY_WPS_BUTTON>;
++		};
++	};
++
++	leds {
++		compatible = "gpio-leds";
++
++		led-fault {
++			color = <LED_COLOR_ID_RED>;
++			function = LED_FUNCTION_FAULT;
++			gpios = <&gpio 13 GPIO_ACTIVE_HIGH>;
++		};
++
++		led-power {
++			color = <LED_COLOR_ID_GREEN>;
++			function = LED_FUNCTION_POWER;
++			gpios = <&gpio 14 GPIO_ACTIVE_HIGH>;
++			linux,default-trigger = "default-on";
++		};
++
++		led-wps {
++			color = <LED_COLOR_ID_BLUE>;
++			function = LED_FUNCTION_WPS;
++			gpios = <&gpio 15 GPIO_ACTIVE_HIGH>;
++		};
++	};
++};
++
++&pcie {
++	status = "okay";
++};
++
++&switch0 {
++	ports {
++		port@0 {
++			status = "okay";
++			label = "lan2";
++		};
++
++		port@1 {
++			status = "okay";
++			label = "lan1";
++		};
++
++		port@2 {
++			status = "okay";
++			label = "wan";
++		};
++	};
++};
 -- 
 2.40.1
 
