@@ -2,144 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D06472379F
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 08:26:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0BB77237A4
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 08:27:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232490AbjFFG0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 02:26:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38742 "EHLO
+        id S235406AbjFFG1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 02:27:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235290AbjFFGZs (ORCPT
+        with ESMTP id S234856AbjFFG0m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 02:25:48 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA1A61738;
-        Mon,  5 Jun 2023 23:24:31 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3566O1c9116622;
-        Tue, 6 Jun 2023 01:24:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1686032641;
-        bh=1oF8jYUUOFXRvok3JCIbs1nq6NypvZAwnqD3d/2He+U=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To;
-        b=g30x9dBF1zC36PjMPwA0ig95TppWAlatcYk4tDbenNbbuWS3jWW4jQ7KTMM7kEj9g
-         V+l4yCgwT8rrQ5YV2dqJF/3ld+/ubIBJf2y+3kWIodN44kBfNYjrc34FvBJo8L7u8Q
-         qdnOTPPspSzjNxvgUTM1U2V/4HoMf4v+nZPL23nU=
-Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3566O1ex060770
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 6 Jun 2023 01:24:01 -0500
-Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 6
- Jun 2023 01:24:01 -0500
-Received: from DLEE105.ent.ti.com ([fe80::d8b7:9c27:242c:8236]) by
- DLEE105.ent.ti.com ([fe80::d8b7:9c27:242c:8236%17]) with mapi id
- 15.01.2507.023; Tue, 6 Jun 2023 01:24:01 -0500
-From:   "Raja, M Sinthu" <sinthu.raja@ti.com>
-To:     "Menon, Nishanth" <nm@ti.com>, Conor Dooley <conor+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tero Kristo <kristo@kernel.org>,
-        "Raghavendra, Vignesh" <vigneshr@ti.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "Kumar, Udit" <u-kumar1@ti.com>, "Yadav, Nitin" <n-yadav@ti.com>,
-        "Francis, Neha" <n-francis@ti.com>
-Subject: Re: [PATCH 4/6] arm64: dts: ti: k3-am68-sk-som: Enable wakeup_i2c0
- and eeprom
-Thread-Topic: [PATCH 4/6] arm64: dts: ti: k3-am68-sk-som: Enable wakeup_i2c0
- and eeprom
-Thread-Index: AQHZlWftKL498kU7mk6eWjSIJ3iMGa99U6jD
-Date:   Tue, 6 Jun 2023 06:24:01 +0000
-Message-ID: <3eb70e7f2aed4d7893714c9f5ddc70c1@ti.com>
-References: <20230602153554.1571128-1-nm@ti.com>,<20230602153554.1571128-5-nm@ti.com>
-In-Reply-To: <20230602153554.1571128-5-nm@ti.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.250.134.136]
-x-exclaimer-md-config: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 6 Jun 2023 02:26:42 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DA2810D3;
+        Mon,  5 Jun 2023 23:25:32 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 96391601A8;
+        Tue,  6 Jun 2023 08:25:29 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1686032729; bh=rjPsMuGvKZwQ0U+WkOYb2CanbJCvdc78Dm+dRdNT2KU=;
+        h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
+        b=BhtJLtJYjBLaKm3E8xnID9Kmz6Ourd86jqyCoonDdTgWgJ5dGz1BUrEdv7DJpe32e
+         vDKLEi4pk0Nd/cJSVJy08L+xkSkMIbquAMj25pHMQbaYg7TE+JplU1kXZ1onfb7vxA
+         pp4paEut2OGFTIBu26jFKn97J0PuLH1Ms9RfN/HbuZGkhhSVADr71Johk6pWH4sJUH
+         eO0hCeMulqcC0Flj7gR0dtnxcmRcPvmNrHho9e/cXMg8jvTBM+uolxBFEQ1dLg26cP
+         gjdIPugRWPxVDX9RtGGDpk3JEl6ese60uve6NbTH4ZGFcWj6QREJHC81zAEFqnkpXq
+         rYqtzAlEYbLEg==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id hvSNORR0uzKf; Tue,  6 Jun 2023 08:25:27 +0200 (CEST)
+Received: from [192.168.1.6] (unknown [77.237.113.62])
+        by domac.alu.hr (Postfix) with ESMTPSA id 68353601A7;
+        Tue,  6 Jun 2023 08:24:59 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1686032727; bh=rjPsMuGvKZwQ0U+WkOYb2CanbJCvdc78Dm+dRdNT2KU=;
+        h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
+        b=aC0wknAHsqPblClIELwQ8CrmFLBikkJqUz03jCU0JPdiRjQJ1aop+CIjeXh++ASy2
+         I6KJczErPI7HLRI+bfOk3qKU+3u3DIRKKARK+hz8IakUS5pQW74nKqVmeOSbCowXi5
+         39PA2ZO3BVLvYcNOQRxLwGvjgR/xS/YS2+LTYcfyg2BlngsKSaUh8fEBQXGJYSz+So
+         wBlqjSpYuQ2vNVDfK7d2lITVuwJBtr4vMuS8ztgOq+N7Rq4HBCCogu95FO5PU6Tkqa
+         /w9Y9TZWn5I9YA60bLKmzNhlekpnixy+GJyQcRPhkZ4xLxWQXCtQDMcenrvffkhXxO
+         Mmh7Co1UJKJ/w==
+Message-ID: <a379796a-5cd6-caa7-d11d-5ffa7419b90e@alu.unizg.hr>
+Date:   Tue, 6 Jun 2023 08:24:54 +0200
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+Subject: Re: POSSIBLE BUG: selftests/net/fcnal-test.sh: [FAIL] in vrf "bind -
+ ns-B IPv6 LLA" test
+To:     Guillaume Nault <gnault@redhat.com>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <b6191f90-ffca-dbca-7d06-88a9788def9c@alu.unizg.hr>
+ <ZHeN3bg28pGFFjJN@debian>
+Content-Language: en-US
+In-Reply-To: <ZHeN3bg28pGFFjJN@debian>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Nishanth,
+On 5/31/23 20:11, Guillaume Nault wrote:
+> On Wed, May 24, 2023 at 02:17:09PM +0200, Mirsad Todorovac wrote:
+>> Hi,
+> 
+> Hi Mirsad,
+> 
+>> The very recent 6.4-rc3 kernel build with AlmaLinux 8.7 on LENOVO 10TX000VCR
+>> desktop box fails one test:
+>>
+>> [root@host net]# ./fcnal-test.sh
+>> [...]
+>> TEST: ping out, vrf device+address bind - ns-B loopback IPv6                  [ OK ]
+>> TEST: ping out, vrf device+address bind - ns-B IPv6 LLA                       [FAIL]
+>> TEST: ping in - ns-A IPv6                                                     [ OK ]
+>> [...]
+>> Tests passed: 887
+>> Tests failed:   1
+>> [root@host net]#
+> 
+> This test also fails on -net. The problem is specific to ping sockets
+> (same test passes with raw sockets). I believe this test has always
+> failed since fcnal-test.sh started using net.ipv4.ping_group_range
+> (commit e71b7f1f44d3 ("selftests: add ping test with ping_group_range
+> tuned")).
+> 
+> The executed command is:
+> 
+> ip netns exec ns-A ip vrf exec red /usr/bin/ping6 -c1 -w1 -I 2001:db8:3::1 fe80::a846:b5ff:fe4c:da4e%eth1
+> 
+> So ping6 is executed inside VRF 'red' and sets .sin6_scope_id to 'eth1'
+> (which is a slave device of VRF 'red'). Therefore, we have
+> sk->sk_bound_dev_if == 'red' and .sin6_scope_id == 'eth1'. This fails
+> because ping_v6_sendmsg() expects them to be equal:
+> 
+> static int ping_v6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
+> {
+> ...
+>                  if (__ipv6_addr_needs_scope_id(ipv6_addr_type(daddr)))
+>                          oif = u->sin6_scope_id;
+> ...
+>          if ((__ipv6_addr_needs_scope_id(addr_type) && !oif) ||
+>              (addr_type & IPV6_ADDR_MAPPED) ||
+>              (oif && sk->sk_bound_dev_if && oif != sk->sk_bound_dev_if)) <-- oif='eth1', but ->sk_bound_dev_if='red'
+>                  return -EINVAL;
+> ...
+> }
+> 
+> I believe this condition should be relaxed to allow the case where
+> ->sk_bound_dev_if is oif's master device (and maybe there are other
+> VRF cases to also consider).
 
+I've tried something like this, but something makes the kernel stuck
+here:
 
+TEST: ping out, blocked by route - ns-B loopback IPv6                         [ OK ]
+TEST: ping out, device bind, blocked by route - ns-B loopback IPv6            [ OK ]
+TEST: ping in, blocked by route - ns-A loopback IPv6                          [ OK ]
+TEST: ping out, unreachable route - ns-B loopback IPv6                        [ OK ]
+TEST: ping out, device bind, unreachable route - ns-B loopback IPv6           [ OK ]
 
+#################################################################
+With VRF
 
-From: Menon, Nishanth
-Sent: Friday, June 2, 2023 9:05 PM
-To: Conor Dooley; Krzysztof Kozlowski; Rob Herring; Tero Kristo; Raghavendr=
-a, Vignesh
-Cc: linux-kernel@vger.kernel.org; devicetree@vger.kernel.org; linux-arm-ker=
-nel@lists.infradead.org; Menon, Nishanth; Kumar, Udit; Yadav, Nitin; Franci=
-s, Neha; Raja, M Sinthu
-Subject: [PATCH 4/6] arm64: dts: ti: k3-am68-sk-som: Enable wakeup_i2c0 and=
- eeprom
-=A0  =20
-Enable wakeup_i2c. While at it, describe the board detection eeprom
-present on the board.
+[hanged process and kernel won't shutdown]
 
-Signed-off-by: Nishanth Menon <nm@ti.com>
+The code is:
+
 ---
-new patch
+  net/ipv6/ping.c | 12 +++++++++++-
+  1 file changed, 11 insertions(+), 1 deletion(-)
 
-=A0arch/arm64/boot/dts/ti/k3-am68-sk-som.dtsi | 22 ++++++++++++++++++++++
-=A01 file changed, 22 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/ti/k3-am68-sk-som.dtsi b/arch/arm64/boot/d=
-ts/ti/k3-am68-sk-som.dtsi
-index e92431250729..e2c80fff7478 100644
---- a/arch/arm64/boot/dts/ti/k3-am68-sk-som.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am68-sk-som.dtsi
-@@ -27,3 +27,25 @@ secure_ddr: optee@9e800000 {
-=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 };
-=A0=A0=A0=A0=A0=A0=A0=A0 };
-=A0};
+diff --git a/net/ipv6/ping.c b/net/ipv6/ping.c
+index c4835dbdfcff..81293e902293 100644
+--- a/net/ipv6/ping.c
++++ b/net/ipv6/ping.c
+@@ -73,6 +73,9 @@ static int ping_v6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
+         struct rt6_info *rt;
+         struct pingfakehdr pfh;
+         struct ipcm6_cookie ipc6;
++       struct net *net = sock_net(sk);
++       struct net_device *dev = NULL;
++       struct net_device *mdev = NULL;
+  
+         err = ping_common_sendmsg(AF_INET6, msg, len, &user_icmph,
+                                   sizeof(user_icmph));
+@@ -111,10 +114,17 @@ static int ping_v6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
+         else if (!oif)
+                 oif = np->ucast_oif;
+  
++       if (oif) {
++               dev = dev_get_by_index(net, oif);
++               mdev = netdev_master_upper_dev_get(dev);
++       }
 +
-+&wkup_pmx2 {
-+=A0=A0=A0=A0=A0=A0 wkup_i2c0_pins_default: wkup-i2c0-pins-default {
-+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 pinctrl-single,pins =3D <
-+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 J721S2_=
-WKUP_IOPAD(0x098, PIN_INPUT, 0) /* (H24) WKUP_I2C0_SCL */
-+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 J721S2_=
-WKUP_IOPAD(0x09c, PIN_INPUT, 0) /* (H27) WKUP_I2C0_SDA */
-+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 >;
-+=A0=A0=A0=A0=A0=A0 };
-+};
-+
-+&wkup_i2c0 {
-+=A0=A0=A0=A0=A0=A0 status =3D "okay";
-+=A0=A0=A0=A0=A0=A0 pinctrl-names =3D "default";
-+=A0=A0=A0=A0=A0=A0 pinctrl-0 =3D <&wkup_i2c0_pins_default>;
-+=A0=A0=A0=A0=A0=A0 clock-frequency =3D <400000>;
-+
-+=A0=A0=A0=A0=A0=A0 eeprom@51 {
-+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 /* AT24C512C-MAHM-T */
-+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 compatible =3D "atmel,24c512";
-+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 reg =3D <0x51>;
-+=A0=A0=A0=A0=A0=A0 };
-+};
+         addr_type = ipv6_addr_type(daddr);
+         if ((__ipv6_addr_needs_scope_id(addr_type) && !oif) ||
+             (addr_type & IPV6_ADDR_MAPPED) ||
+-           (oif && sk->sk_bound_dev_if && oif != sk->sk_bound_dev_if))
++           (oif && sk->sk_bound_dev_if && oif != sk->sk_bound_dev_if &&
++                   !(mdev && sk->sk_bound_dev_if &&
++                             mdev != dev_get_by_index(net, sk->sk_bound_dev_if))))
+                 return -EINVAL;
+  
+         ipcm6_init_sk(&ipc6, np);
 
-LGTM
+I am obviously doing something very stupid.
 
-Reviewed-by: Sinthu Raja <sinthu.raja@ti.com>
-
---=20
-2.40.0
-
-    =
+Regards,
+Mirsad
