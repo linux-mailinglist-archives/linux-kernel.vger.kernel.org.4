@@ -2,69 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64955724804
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 17:41:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 100CD72451F
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:00:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238200AbjFFPku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 11:40:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58200 "EHLO
+        id S237561AbjFFOAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 10:00:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238287AbjFFPkU (ORCPT
+        with ESMTP id S237461AbjFFOAS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 11:40:20 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E1AC139
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 08:40:19 -0700 (PDT)
+        Tue, 6 Jun 2023 10:00:18 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B9910CB;
+        Tue,  6 Jun 2023 07:00:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686066019; x=1717602019;
+  t=1686060016; x=1717596016;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=+Yd7V++zdvA2vEUkR1sYRPT7hNptU858SN5zGbFEXrY=;
-  b=apAOSI+2yF4UhOOnMyLxUYPWwUyDVl3V927vBXZfsGNZGE6RB7JMsLna
-   IZDM6BfMNxMORXYIiVR0ZpHGYzuh4bWJXSo3ZuX5zWcYFHIqVNA89v5l5
-   ZXcwh8I8tIF2xb7As8h9pQBFnfFnxnDQwK7sPr9nM9TSUoe2XPgMg8gro
-   4ZnaCWsGH429wVWamfwMng2hZ9thLXxw25H4mj6WxveGfbyFGA3A8GeGb
-   ztVk99BB88UXsRwWdvUNfQfl0ZLHws/tl68pjaZOjM3Xsg0yGSyJgFMal
-   ZIslqMwL3xj2/1tOQ0kSsncBRBRqJdrkMK7SUYAA6FfvQv395JbsyhhLg
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="422550127"
+  bh=0Z2hFQUSlOeh6Fizk5wKOQ7R2MUTlRwgXY3AHyOVcgE=;
+  b=Fcgg83ycxnTN2XCfgjWu8ftr7AqVn9NYfpC2uOxYZ4LvnheyminPdxeI
+   qsw3imf5n8HxL8+jyFvbFyIAJtkJcoU00SeoOddrrzg5WuQ4Jq8LuP6E9
+   JoZJK113TxGi9fmQL3BftT15TBaCp0zVG0bTa4mnEKLdVjokHjmqvq53T
+   H1sH0aHEKhv0oktPHvH9JlrIpIofhTS3Ext1jctiRujGsjIxzkV2DwC4d
+   JT8l9VtpOdwuHSdDqT1Z6hcyUtiWVTEZJdehpU7BT9RgAwaBrzfG2mxqF
+   RLAetviTkks/xEuFYFfPJ52CpR3uFyRNw/Z6Y2mwEC8vU9ykjT6WZpYcD
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="336302715"
 X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
-   d="scan'208";a="422550127"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 08:39:08 -0700
+   d="scan'208";a="336302715"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 07:00:16 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="955816512"
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="742158866"
 X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
-   d="scan'208";a="955816512"
-Received: from pdonvalk-mobl2.amr.corp.intel.com (HELO [10.255.231.168]) ([10.255.231.168])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 08:39:06 -0700
-Message-ID: <00aeb130-b3d0-ebab-51da-4e590eef8c7b@linux.intel.com>
-Date:   Tue, 6 Jun 2023 09:00:12 -0500
+   d="scan'208";a="742158866"
+Received: from kumarr2-mobl1.amr.corp.intel.com (HELO [10.212.218.68]) ([10.212.218.68])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 07:00:15 -0700
+Message-ID: <a2da8af2-41a9-a0cf-dbe9-7f0a14bf05fe@linux.intel.com>
+Date:   Tue, 6 Jun 2023 07:00:14 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Firefox/102.0 Thunderbird/102.11.0
-Subject: Re: [PATCH V3 1/9] ASoC: amd: ps: create platform devices based on
- acp config
-To:     Vijendar Mukunda <Vijendar.Mukunda@amd.com>, broonie@kernel.org
-Cc:     alsa-devel@alsa-project.org, Basavaraj.Hiregoudar@amd.com,
-        Sunil-kumar.Dommati@amd.com, Mastan.Katragadda@amd.com,
-        Arungopal.kondaveeti@amd.com, mario.limonciello@amd.com,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Syed Saba Kareem <Syed.SabaKareem@amd.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230606060724.2038680-1-Vijendar.Mukunda@amd.com>
- <20230606060724.2038680-2-Vijendar.Mukunda@amd.com>
+Subject: Re: [PATCH v11 02/20] x86/virt/tdx: Detect TDX during kernel boot
 Content-Language: en-US
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20230606060724.2038680-2-Vijendar.Mukunda@amd.com>
+To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     linux-mm@kvack.org, dave.hansen@intel.com,
+        kirill.shutemov@linux.intel.com, tony.luck@intel.com,
+        peterz@infradead.org, tglx@linutronix.de, seanjc@google.com,
+        pbonzini@redhat.com, david@redhat.com, dan.j.williams@intel.com,
+        rafael.j.wysocki@intel.com, ying.huang@intel.com,
+        reinette.chatre@intel.com, len.brown@intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, chao.gao@intel.com, bagasdotme@gmail.com,
+        sagis@google.com, imammedo@redhat.com
+References: <cover.1685887183.git.kai.huang@intel.com>
+ <af4e428ab1245e9441031438e606c14472daf927.1685887183.git.kai.huang@intel.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <af4e428ab1245e9441031438e606c14472daf927.1685887183.git.kai.huang@intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,183 +73,299 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+HI,
 
-
-
-> +/**
-> + * acp_pdev_mask corresponds to platform device mask based on audio endpoint combinations.
-> + * acp_pdev_mask will be calculated based on ACPI Scan under ACP PCI device and
-> + * ACP PIN Configuration.
-> + * Based acp_pdev_mask, platform devices will be created.
-> + * Below are possible platform device combinations.
-> + * 1) ACP PDM Controller, dmic-codec, machine driver platform device node
-> + * 2) ACP PDM Controller , dmic-codec, SW0 SoundWire manager instance, platform device for
-> + *    SoundWire DMA driver
-> + * 3) SW0, SW1 SoundWire manager instances, platform device for SoundWire DMA driver
-> + * 4) ACP PDM Controller, dmic-codec, SDW0, SDW1 manager instances, platform device for
-> + *    SoundWire DMA driver
-> + * ACP63_PDM_DEV_MASK corresponds to platform device mask for ACP PDM controller.
-> + * ACP63_SDW_DEV_MASK corresponds to platform device mask for SDW manager instances.
-> + * ACP63_SDW_PDM_DEV_MASK corresponds to platform device mask for ACP PDM + SDW manager combination
-> + */
-> +enum acp_pdev_mask {
-> +	ACP63_PDM_DEV_MASK = 1,
-> +	ACP63_SDW_DEV_MASK,
-> +	ACP63_SDW_PDM_DEV_MASK,
-> +};
-
-This does not look like a mask, the definitions prevent bit-wise
-operations from happening.
-
-Either use BIT(0), BIT(1), BIT(2) or GENMASK(1, 0), or demote this to a
-regular enum (e.g. pdev_config or something)
-
+On 6/4/23 7:27 AM, Kai Huang wrote:
+> Intel Trust Domain Extensions (TDX) protects guest VMs from malicious
+> host and certain physical attacks.  A CPU-attested software module
+> called 'the TDX module' runs inside a new isolated memory range as a
+> trusted hypervisor to manage and run protected VMs.
+> 
+> Pre-TDX Intel hardware has support for a memory encryption architecture
+> called MKTME.  The memory encryption hardware underpinning MKTME is also
+> used for Intel TDX.  TDX ends up "stealing" some of the physical address
+> space from the MKTME architecture for crypto-protection to VMs.  The
+> BIOS is responsible for partitioning the "KeyID" space between legacy
+> MKTME and TDX.  The KeyIDs reserved for TDX are called 'TDX private
+> KeyIDs' or 'TDX KeyIDs' for short.
+> 
+> TDX doesn't trust the BIOS.  During machine boot, TDX verifies the TDX
+> private KeyIDs are consistently and correctly programmed by the BIOS
+> across all CPU packages before it enables TDX on any CPU core.  A valid
+> TDX private KeyID range on BSP indicates TDX has been enabled by the
+> BIOS, otherwise the BIOS is buggy.
+> 
+> The TDX module is expected to be loaded by the BIOS when it enables TDX,
+> but the kernel needs to properly initialize it before it can be used to
+> create and run any TDX guests.  The TDX module will be initialized by
+> the KVM subsystem when KVM wants to use TDX.
+> 
+> Add a new early_initcall(tdx_init) to detect the TDX by detecting TDX
+> private KeyIDs.  Also add a function to report whether TDX is enabled by
+> the BIOS.  Similar to AMD SME, kexec() will use it to determine whether
+> cache flush is needed.
+> 
+> The TDX module itself requires one TDX KeyID as the 'TDX global KeyID'
+> to protect its metadata.  Each TDX guest also needs a TDX KeyID for its
+> own protection.  Just use the first TDX KeyID as the global KeyID and
+> leave the rest for TDX guests.  If no TDX KeyID is left for TDX guests,
+> disable TDX as initializing the TDX module alone is useless.
+> 
+> To start to support TDX, create a new arch/x86/virt/vmx/tdx/tdx.c for
+> TDX host kernel support.  Add a new Kconfig option CONFIG_INTEL_TDX_HOST
+> to opt-in TDX host kernel support (to distinguish with TDX guest kernel
+> support).  So far only KVM uses TDX.  Make the new config option depend
+> on KVM_INTEL.
+> 
+> Signed-off-by: Kai Huang <kai.huang@intel.com>
+> Reviewed-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> ---
+> 
+> v10 -> v11 (David):
+>  - "host kernel" -> "the host kernel"
+>  - "protected VM" -> "confidential VM".
+>  - Moved setting tdx_global_keyid to the end of tdx_init().
+> 
+> v9 -> v10:
+>  - No change.
+> 
+> v8 -> v9:
+>  - Moved MSR macro from local tdx.h to <asm/msr-index.h> (Dave).
+>  - Moved reserving the TDX global KeyID from later patch to here.
+>  - Changed 'tdx_keyid_start' and 'nr_tdx_keyids' to
+>    'tdx_guest_keyid_start' and 'tdx_nr_guest_keyids' to represent KeyIDs
+>    can be used by guest. (Dave)
+>  - Slight changelog update according to above changes.
+> 
+> v7 -> v8: (address Dave's comments)
+>  - Improved changelog:
+>     - "KVM user" -> "The TDX module will be initialized by KVM when ..."
+>     - Changed "tdx_int" part to "Just say what this patch is doing"
+>     - Fixed the last sentence of "kexec()" paragraph
+>   - detect_tdx() -> record_keyid_partitioning()
+>   - Improved how to calculate tdx_keyid_start.
+>   - tdx_keyid_num -> nr_tdx_keyids.
+>   - Improved dmesg printing.
+>   - Add comment to clear_tdx().
+> 
+> v6 -> v7:
+>  - No change.
+> 
+> v5 -> v6:
+>  - Removed SEAMRR detection to make code simpler.
+>  - Removed the 'default N' in the KVM_TDX_HOST Kconfig (Kirill).
+>  - Changed to use 'obj-y' in arch/x86/virt/vmx/tdx/Makefile (Kirill).
+> 
+> 
+> ---
+>  arch/x86/Kconfig                 | 12 +++++
+>  arch/x86/Makefile                |  2 +
+>  arch/x86/include/asm/msr-index.h |  3 ++
+>  arch/x86/include/asm/tdx.h       |  7 +++
+>  arch/x86/virt/Makefile           |  2 +
+>  arch/x86/virt/vmx/Makefile       |  2 +
+>  arch/x86/virt/vmx/tdx/Makefile   |  2 +
+>  arch/x86/virt/vmx/tdx/tdx.c      | 92 ++++++++++++++++++++++++++++++++
+>  8 files changed, 122 insertions(+)
+>  create mode 100644 arch/x86/virt/Makefile
+>  create mode 100644 arch/x86/virt/vmx/Makefile
+>  create mode 100644 arch/x86/virt/vmx/tdx/Makefile
+>  create mode 100644 arch/x86/virt/vmx/tdx/tdx.c
+> 
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index 53bab123a8ee..191587f75810 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -1952,6 +1952,18 @@ config X86_SGX
+>  
+>  	  If unsure, say N.
+>  
+> +config INTEL_TDX_HOST
+> +	bool "Intel Trust Domain Extensions (TDX) host support"
+> +	depends on CPU_SUP_INTEL
+> +	depends on X86_64
+> +	depends on KVM_INTEL
+> +	help
+> +	  Intel Trust Domain Extensions (TDX) protects guest VMs from malicious
+> +	  host and certain physical attacks.  This option enables necessary TDX
+> +	  support in the host kernel to run confidential VMs.
 > +
->  struct pdm_stream_instance {
->  	u16 num_pages;
->  	u16 channels;
-> @@ -95,14 +144,38 @@ struct pdm_dev_data {
->  	struct snd_pcm_substream *capture_stream;
->  };
->  
-> +/**
-> + * struct acp63_dev_data - acp pci driver context
-> + * @acp63_base: acp mmio base
-> + * @res: resource
-> + * @pdev: array of child platform device node structures
-> + * @acp_lock: used to protect acp common registers
-> + * @sdw_fw_node: SoundWire controller fw node handle
-> + * @pdev_mask: platform device mask
-> + * @pdev_count: platform devices count
-> + * @pdm_dev_index: pdm platform device index
-> + * @sdw_manager_count: SoundWire manager instance count
-> + * @sdw0_dev_index: SoundWire Manager-0 platform device index
-> + * @sdw1_dev_index: SoundWire Manager-1 platform device index
-> + * @sdw_dma_dev_index: SoundWire DMA controller platform device index
-> + * @acp_reset: flag set to true when bus reset is applied across all
-> + * the active SoundWire manager instances
-> + */
+> +	  If unsure, say N.
 > +
->  struct acp63_dev_data {
->  	void __iomem *acp63_base;
->  	struct resource *res;
->  	struct platform_device *pdev[ACP63_DEVS];
->  	struct mutex acp_lock; /* protect shared registers */
-> +	struct fwnode_handle *sdw_fw_node;
->  	u16 pdev_mask;
->  	u16 pdev_count;
->  	u16 pdm_dev_index;
-> +	u8 sdw_manager_count;
-> +	u16 sdw0_dev_index;
-> +	u16 sdw1_dev_index;
-> +	u16 sdw_dma_dev_index;
-> +	bool acp_reset;
->  };
+>  config EFI
+>  	bool "EFI runtime service support"
+>  	depends on ACPI
+> diff --git a/arch/x86/Makefile b/arch/x86/Makefile
+> index b39975977c03..ec0e71d8fa30 100644
+> --- a/arch/x86/Makefile
+> +++ b/arch/x86/Makefile
+> @@ -252,6 +252,8 @@ archheaders:
 >  
->  int snd_amd_acp_find_config(struct pci_dev *pci);
-> diff --git a/sound/soc/amd/ps/pci-ps.c b/sound/soc/amd/ps/pci-ps.c
-> index 54752d6040d6..816c22e7f1ab 100644
-> --- a/sound/soc/amd/ps/pci-ps.c
-> +++ b/sound/soc/amd/ps/pci-ps.c
-> @@ -6,6 +6,7 @@
->   */
+>  libs-y  += arch/x86/lib/
 >  
->  #include <linux/pci.h>
-> +#include <linux/bitops.h>
->  #include <linux/module.h>
->  #include <linux/io.h>
->  #include <linux/delay.h>
-> @@ -15,6 +16,7 @@
->  #include <sound/pcm_params.h>
->  #include <linux/pm_runtime.h>
->  #include <linux/iopoll.h>
-> +#include <linux/soundwire/sdw_amd.h>
+> +core-y += arch/x86/virt/
+> +
+>  # drivers-y are linked after core-y
+>  drivers-$(CONFIG_MATH_EMULATION) += arch/x86/math-emu/
+>  drivers-$(CONFIG_PCI)            += arch/x86/pci/
+> diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
+> index 3aedae61af4f..6d8f15b1552c 100644
+> --- a/arch/x86/include/asm/msr-index.h
+> +++ b/arch/x86/include/asm/msr-index.h
+> @@ -523,6 +523,9 @@
+>  #define MSR_RELOAD_PMC0			0x000014c1
+>  #define MSR_RELOAD_FIXED_CTR0		0x00001309
 >  
->  #include "acp63.h"
->  
-> @@ -119,37 +121,162 @@ static irqreturn_t acp63_irq_handler(int irq, void *dev_id)
->  	return IRQ_NONE;
+> +/* KeyID partitioning between MKTME and TDX */
+> +#define MSR_IA32_MKTME_KEYID_PARTITIONING	0x00000087
+> +
+>  /*
+>   * AMD64 MSRs. Not complete. See the architecture manual for a more
+>   * complete list.
+> diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
+> index 25fd6070dc0b..4dfe2e794411 100644
+> --- a/arch/x86/include/asm/tdx.h
+> +++ b/arch/x86/include/asm/tdx.h
+> @@ -94,5 +94,12 @@ static inline long tdx_kvm_hypercall(unsigned int nr, unsigned long p1,
+>  	return -ENODEV;
 >  }
->  
-> -static void get_acp63_device_config(u32 config, struct pci_dev *pci,
-> -				    struct acp63_dev_data *acp_data)
-> +static int sdw_amd_scan_controller(struct device *dev)
+>  #endif /* CONFIG_INTEL_TDX_GUEST && CONFIG_KVM_GUEST */
+> +
+> +#ifdef CONFIG_INTEL_TDX_HOST
+> +bool platform_tdx_enabled(void);
+> +#else	/* !CONFIG_INTEL_TDX_HOST */
+> +static inline bool platform_tdx_enabled(void) { return false; }
+> +#endif	/* CONFIG_INTEL_TDX_HOST */
+> +
+>  #endif /* !__ASSEMBLY__ */
+>  #endif /* _ASM_X86_TDX_H */
+> diff --git a/arch/x86/virt/Makefile b/arch/x86/virt/Makefile
+> new file mode 100644
+> index 000000000000..1e36502cd738
+> --- /dev/null
+> +++ b/arch/x86/virt/Makefile
+> @@ -0,0 +1,2 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +obj-y	+= vmx/
+> diff --git a/arch/x86/virt/vmx/Makefile b/arch/x86/virt/vmx/Makefile
+> new file mode 100644
+> index 000000000000..feebda21d793
+> --- /dev/null
+> +++ b/arch/x86/virt/vmx/Makefile
+> @@ -0,0 +1,2 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +obj-$(CONFIG_INTEL_TDX_HOST)	+= tdx/
+> diff --git a/arch/x86/virt/vmx/tdx/Makefile b/arch/x86/virt/vmx/tdx/Makefile
+> new file mode 100644
+> index 000000000000..93ca8b73e1f1
+> --- /dev/null
+> +++ b/arch/x86/virt/vmx/tdx/Makefile
+> @@ -0,0 +1,2 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +obj-y += tdx.o
+> diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
+> new file mode 100644
+> index 000000000000..2d91e7120c90
+> --- /dev/null
+> +++ b/arch/x86/virt/vmx/tdx/tdx.c
+> @@ -0,0 +1,92 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright(c) 2023 Intel Corporation.
+> + *
+> + * Intel Trusted Domain Extensions (TDX) support
+> + */
+> +
+> +#define pr_fmt(fmt)	"tdx: " fmt
+> +
+> +#include <linux/types.h>
+> +#include <linux/cache.h>
+> +#include <linux/init.h>
+> +#include <linux/errno.h>
+> +#include <linux/printk.h>
+> +#include <asm/msr-index.h>
+> +#include <asm/msr.h>
+> +#include <asm/tdx.h>
+> +
+> +static u32 tdx_global_keyid __ro_after_init;
+> +static u32 tdx_guest_keyid_start __ro_after_init;
+> +static u32 tdx_nr_guest_keyids __ro_after_init;
+> +
+> +static int __init record_keyid_partitioning(u32 *tdx_keyid_start,
+> +					    u32 *nr_tdx_keyids)
 > +{
-> +	struct acp63_dev_data *acp_data;
-> +	struct fwnode_handle *link;
-> +	char name[32];
-> +	u32 sdw_manager_bitmap;
-> +	u8 count = 0;
-> +	u32 acp_sdw_power_mode = 0;
-> +	int index;
+> +	u32 _nr_mktme_keyids, _tdx_keyid_start, _nr_tdx_keyids;
 > +	int ret;
 > +
-> +	acp_data = dev_get_drvdata(dev);
-> +	acp_data->acp_reset = true;
-> +	/* Found controller, find links supported */
-> +	ret = fwnode_property_read_u32_array((acp_data->sdw_fw_node), "mipi-sdw-manager-list",
-> +					     &sdw_manager_bitmap, 1);
-
-IIRC this is only defined in the DisCo 2.0 spec, previous editions had a
-'mipi-master-count'. A comment would not hurt to point to the minimal
-DisCo spec version.
-
+> +	/*
+> +	 * IA32_MKTME_KEYID_PARTIONING:
+> +	 *   Bit [31:0]:	Number of MKTME KeyIDs.
+> +	 *   Bit [63:32]:	Number of TDX private KeyIDs.
+> +	 */
+> +	ret = rdmsr_safe(MSR_IA32_MKTME_KEYID_PARTITIONING, &_nr_mktme_keyids,
+> +			&_nr_tdx_keyids);
+> +	if (ret)
+> +		return -ENODEV;
 > +
-> +	if (ret) {
-> +		dev_err(dev, "Failed to read mipi-sdw-manager-list: %d\n", ret);
-> +		return -EINVAL;
-> +	}
-> +	count = hweight32(sdw_manager_bitmap);
-> +	/* Check count is within bounds */
-> +	if (count > AMD_SDW_MAX_MANAGERS) {
-> +		dev_err(dev, "Manager count %d exceeds max %d\n", count, AMD_SDW_MAX_MANAGERS);
-> +		return -EINVAL;
-> +	}
+> +	if (!_nr_tdx_keyids)
+> +		return -ENODEV;
 > +
-> +	if (!count) {
-> +		dev_dbg(dev, "No SoundWire Managers detected\n");
-> +		return -EINVAL;
-> +	}
-> +	dev_dbg(dev, "ACPI reports %d SoundWire Manager devices\n", count);
-> +	acp_data->sdw_manager_count = count;
-> +	for (index = 0; index < count; index++) {
-> +		snprintf(name, sizeof(name), "mipi-sdw-link-%d-subproperties", index);
-> +		link = fwnode_get_named_child_node(acp_data->sdw_fw_node, name);
-> +		if (!link) {
-> +			dev_err(dev, "Manager node %s not found\n", name);
-> +			return -EIO;
-> +		}
+> +	/* TDX KeyIDs start after the last MKTME KeyID. */
+> +	_tdx_keyid_start = _nr_mktme_keyids + 1;
 > +
-> +		ret = fwnode_property_read_u32(link, "amd-sdw-power-mode", &acp_sdw_power_mode);
-> +		if (ret)
-> +			return ret;
-> +		/*
-> +		 * when SoundWire configuration is selected from acp pin config,
-> +		 * based on manager instances count, acp init/de-init sequence should be
-> +		 * executed as part of PM ops only when Bus reset is applied for the active
-> +		 * SoundWire manager instances.
-> +		 */
-> +		if (acp_sdw_power_mode != AMD_SDW_POWER_OFF_MODE) {
-> +			acp_data->acp_reset = false;
-> +			return 0;
-> +		}
-> +	}
+> +	*tdx_keyid_start = _tdx_keyid_start;
+> +	*nr_tdx_keyids = _nr_tdx_keyids;
+> +
 > +	return 0;
 > +}
 > +
-> +static int get_acp63_device_config(u32 config, struct pci_dev *pci, struct acp63_dev_data *acp_data)
->  {
->  	struct acpi_device *dmic_dev;
-> +	struct acpi_device *sdw_dev;
->  	const union acpi_object *obj;
->  	bool is_dmic_dev = false;
-> +	bool is_sdw_dev = false;
-> +	int ret;
->  
->  	dmic_dev = acpi_find_child_device(ACPI_COMPANION(&pci->dev), ACP63_DMIC_ADDR, 0);
->  	if (dmic_dev) {
-> +		/* is_dmic_dev flag will be set when ACP PDM controller device exists */
->  		if (!acpi_dev_get_property(dmic_dev, "acp-audio-device-type",
+> +static int __init tdx_init(void)
+> +{
+> +	u32 tdx_keyid_start, nr_tdx_keyids;
+> +	int err;
+> +
+> +	err = record_keyid_partitioning(&tdx_keyid_start, &nr_tdx_keyids);
+> +	if (err)
+> +		return err;
+> +
+> +	pr_info("BIOS enabled: private KeyID range [%u, %u)\n",
+> +			tdx_keyid_start, tdx_keyid_start + nr_tdx_keyids);
+> +
+> +	/*
+> +	 * The TDX module itself requires one 'global KeyID' to protect
+> +	 * its metadata.  If there's only one TDX KeyID, there won't be
+> +	 * any left for TDX guests thus there's no point to enable TDX
+> +	 * at all.
+> +	 */
+> +	if (nr_tdx_keyids < 2) {
+> +		pr_info("initialization failed: too few private KeyIDs available.\n");
+> +		goto no_tdx;
 
-usually properties start with the 'mipi-' or 'vendor-' prefix. Is there
-a missing 'amd-' here or is 'acp-' unique enough?
+I think you can return -ENODEV directly here. Maybe this goto is added to adapt to next
+patches. But for this patch, I don't think you need it.
+
+> +	}
+> +
+> +	/*
+> +	 * Just use the first TDX KeyID as the 'global KeyID' and
+> +	 * leave the rest for TDX guests.
+> +	 */
+> +	tdx_global_keyid = tdx_keyid_start;
+> +	tdx_guest_keyid_start = ++tdx_keyid_start;
+> +	tdx_nr_guest_keyids = --nr_tdx_keyids;
+> +
+> +	return 0;
+> +no_tdx:
+> +	return -ENODEV;
+> +}
+> +early_initcall(tdx_init);
+> +
+> +/* Return whether the BIOS has enabled TDX */
+> +bool platform_tdx_enabled(void)
+> +{
+> +	return !!tdx_global_keyid;
+> +}
+
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
