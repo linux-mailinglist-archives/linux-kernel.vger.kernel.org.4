@@ -2,91 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BBCD724AFF
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 20:14:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ED75724B03
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 20:15:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233818AbjFFSOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 14:14:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34284 "EHLO
+        id S237677AbjFFSP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 14:15:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232042AbjFFSOe (ORCPT
+        with ESMTP id S238939AbjFFSO5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 14:14:34 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC751B5
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 11:14:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686075270; x=1717611270;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Okqhg8qh5B88CrP2Vdkx5lOdo06NqA+suoyiSSguqTg=;
-  b=FSeHEdI8jAyQ5mR8bx1Rep7A2kMdKf7BYkTfskydj9XK85pxGjUx8Gsi
-   uxiHc7rQKg89a8EtUIx1a8iS+7CQe1dU4s4hnmFnucqdRRPClqNlBYQE6
-   ZTwsBufTgy2DGhNJ8+DTpDwuHVTY6fksT7DkKGRWn5JdMELV3szr+b/Ra
-   WnOb9IeiPafg8nIA07sebNse0GCIXJXfXMtN1tLbQNf/U+8oUPgiWpVDA
-   NAWt7I9lt92d31xCmAdyEgD42N4KyKHsk8yjaXnQDVsBUMVN9hXey20SG
-   +f9AjIE25AHgIx/yxI3bGrDH+L/dilLQ+0qayHL8rXtYXwihKSGM72y9x
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="346366578"
-X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
-   d="scan'208";a="346366578"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 11:14:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="686637427"
-X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
-   d="scan'208";a="686637427"
-Received: from hganapat-mobl1.amr.corp.intel.com (HELO [10.212.191.102]) ([10.212.191.102])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 11:14:29 -0700
-Message-ID: <f7f82377-6127-79e3-07d8-def490c4e35c@intel.com>
-Date:   Tue, 6 Jun 2023 11:14:29 -0700
+        Tue, 6 Jun 2023 14:14:57 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFF421981;
+        Tue,  6 Jun 2023 11:14:51 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 9A9015C013C;
+        Tue,  6 Jun 2023 14:14:49 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Tue, 06 Jun 2023 14:14:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-transfer-encoding:content-type:content-type
+        :date:date:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to;
+         s=fm3; t=1686075289; x=1686161689; bh=hPyHPz1cEzFaFzAfFQsbhREfE
+        QLxVSzdwxLuf3WmlCE=; b=lh5DWpHxDd9X6FAW4ow+Ir/EA5g1xtObhqmHTg38L
+        yz9KreysaW6DxZwF4EfoEdOiKAPXcFQ5/b2x3yZEamg7kCwU4cnG3LQ0GCKyPHX1
+        jiMfSlRNpAP35bIqq6m4Fo7aLzUmnSUnZyxI/7AWx5AWiQXhId4UeMA2V/YyNW8X
+        IeleujKYyBs0VmEgF3Fn2dUWDuXWxzoT1eunEci9BmkpRRiJ2b2dBUVDeP4jrFUU
+        h1vy+k9nRoztCSa1c5Izwegt1R2tIUQh3BSLJkPzFx1EyjYr4p4viIeR8tmN6UKt
+        J+eeYJB4c6rjQT2ATmOZXfnVUn1CrPGmc7Zi6PnZDFKSA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1686075289; x=1686161689; bh=hPyHPz1cEzFaFzAfFQsbhREfEQLxVSzdwxL
+        uf3WmlCE=; b=e5D47AQ9v2sUHMq/yFuIXeXuG2fFGcxTLxASN5v9rpiikOQH2AX
+        JeoeyHiLzG/qVelvp3Cs/vnDgKDjEiqbNOpCDxjGIvumZGJtsW7pZGqtjXS+JiEy
+        NqFHKh294Xt+dpskYiarbDZYzYuIAucr6qDI8m3JyiC9gQCBp4nTMvbFDBQs1TlJ
+        gc/ColaWEkNEsji6Lp7ueBRoLAKi1gn2JIx64hXz15yYTubzSns/r4ztjeni2D1D
+        bNBF0/+K/xhi1rTtJKOP7HEv5KFeQ5DeTVZeWwMHePYXynUDal0q1wr9j6V839G2
+        4UG/zoaBfznDtyww8+OuHSqh27j6XweBaqA==
+X-ME-Sender: <xms:mHd_ZHnu3Fo1x5XmG3RU2b1R4YG_rlDYo-YqYfEiybWJo0HI7nDqyw>
+    <xme:mHd_ZK1b1Dvh3pdnKPyS3S8scwsftZupJFET5nhtoCbe5eN3tF4ZGzNKqkW7vIZgA
+    MPrODNV7tbyhh4AwTc>
+X-ME-Received: <xmr:mHd_ZNrOpMSL6fpg0Js0c5AWxntaK10eHIV7xhaTaofGJXfyxWFsS4YEjEOIp1Wy8OzleA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedtuddguddvhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtugfgjgesthektddttddtjeenucfhrhhomhepfdfm
+    ihhrihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovh
+    drnhgrmhgvqeenucggtffrrghtthgvrhhnpeelteeftdeggefgtddttedtgfehveeitdfg
+    heeuieefveffkeeiueeuueegvdffveenucffohhmrghinhepkhgvrhhnvghlrdhorhhgne
+    cuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepkhhirhhi
+    lhhlsehshhhuthgvmhhovhdrnhgrmhgv
+X-ME-Proxy: <xmx:mHd_ZPla381_ATPL6zAQK2BZDoAkSud4-bdz1M3ULW5KLCXaoHXeGQ>
+    <xmx:mHd_ZF02pVuxXVjS6c-9ThGN6vaIjXHFN9pJ2Eac-OK8QLBMTAAbiw>
+    <xmx:mHd_ZOtP0rh1J4g0Rpb7UdD_VUnnZppbqAFILj3mE5Dx3hMftJQxDA>
+    <xmx:mXd_ZIBCQNju7qkcD7otPDbqXBqaliTvsxTMMDw9GSJ213DxgfcsDA>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 6 Jun 2023 14:14:48 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 8A4F110CFD2; Tue,  6 Jun 2023 21:14:44 +0300 (+03)
+Date:   Tue, 6 Jun 2023 21:14:44 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv14 0/9] mm, x86/cc, efi: Implement support for unaccepted
+ memory
+Message-ID: <20230606181444.2rxorg6gaeasgugx@box.shutemov.name>
+References: <20230606142637.5171-1-kirill.shutemov@linux.intel.com>
+ <20230606161606.GDZH9bxhrGnFkaLl2A@fat_crate.local>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCHv3 2/3] x86/tdx: Fix race between set_memory_encrypted()
- and load_unaligned_zeropad()
-Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de
-Cc:     decui@microsoft.com, rick.p.edgecombe@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, seanjc@google.com,
-        thomas.lendacky@amd.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230606095622.1939-1-kirill.shutemov@linux.intel.com>
- <20230606095622.1939-3-kirill.shutemov@linux.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20230606095622.1939-3-kirill.shutemov@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230606161606.GDZH9bxhrGnFkaLl2A@fat_crate.local>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/6/23 02:56, Kirill A. Shutemov wrote:
-> load_unaligned_zeropad() can touch memory that is not owned by the
-> caller, but just happened to next after the owned memory.
-> This load_unaligned_zeropad() behaviour makes it important when kernel
-> asks VMM to convert a GPA from shared to private or back. Kernel must
-> never have a page mapped into direct mapping (and aliases) as private
-> when the GPA is already converted to shared or when GPA is not yet
-> converted to private.
+On Tue, Jun 06, 2023 at 06:16:06PM +0200, Borislav Petkov wrote:
+> On Tue, Jun 06, 2023 at 05:26:28PM +0300, Kirill A. Shutemov wrote:
+> > v14:
+> >  - Fix error handling in arch_accept_memory() (Tom);
+> >  - Address Borislav's feedback:
+> >    + code restructure;
+> >    + added/adjusted comments;
 > 
-> load_unaligned_zeropad() can touch memory that is not owned by the
-> caller, but just happens to be next after the owned memory. This
-> load_unaligned_zeropad() behavior makes it important when the kernel
-> asks VMM to convert a GPA from shared to private or back. The kernel
-> must never have a page mapped into direct mapping (and aliases) as
-> private when the GPA is already converted to shared or when the GPA is
-> not yet converted to private.
+> In file included from arch/x86/coco/tdx/tdx-shared.c:1:
+> ./arch/x86/include/asm/tdx.h: In function ‘tdx_kvm_hypercall’:
+> ./arch/x86/include/asm/tdx.h:70:17: error: ‘ENODEV’ undeclared (first use in this function)
+>    70 |         return -ENODEV;
+>       |                 ^~~~~~
+> ./arch/x86/include/asm/tdx.h:70:17: note: each undeclared identifier is reported only once for each function it appears in
+> make[4]: *** [scripts/Makefile.build:252: arch/x86/coco/tdx/tdx-shared.o] Error 1
+> make[3]: *** [scripts/Makefile.build:494: arch/x86/coco/tdx] Error 2
+> make[2]: *** [scripts/Makefile.build:494: arch/x86/coco] Error 2
+> make[2]: *** Waiting for unfinished jobs....
+> make[1]: *** [scripts/Makefile.build:494: arch/x86] Error 2
+> make[1]: *** Waiting for unfinished jobs....
+> make: *** [Makefile:2026: .] Error 2
+> 
+> Not enough build tests ran?
 
-Heh, that must be really important info to have it in the changelog twice!
+Hm. I've got a lot of reports from 0day, but never this one.
 
-I'll fix it up when I apply it.
+Kai has posted patch that fixes it already:
+
+https://lore.kernel.org/all/20230606034000.380270-1-kai.huang@intel.com/
+
+> $ grep INTEL_TDX_GUEST .config
+> CONFIG_INTEL_TDX_GUEST=y
+> $ grep KVM_GUEST .config
+> $
+> 
+> Why does that tdx_kvm_hypercall() thing even depend on CONFIG_KVM_GUEST?
+
+Because nobody uses it otherwise. For instance, Hyper-V guest will no need
+this KVM glue.
+
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
