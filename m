@@ -2,94 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2677D72471E
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 17:00:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52A51724806
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 17:41:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237813AbjFFPAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 11:00:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32956 "EHLO
+        id S238489AbjFFPky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 11:40:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238773AbjFFPAF (ORCPT
+        with ESMTP id S238634AbjFFPk3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 11:00:05 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DCDE1998;
-        Tue,  6 Jun 2023 07:59:41 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-543c6a2aa07so1127757a12.0;
-        Tue, 06 Jun 2023 07:59:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686063580; x=1688655580;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Wqe+EMfTqwgCzibqmrP4x167w3kg6AGKeWhHsuYgmqo=;
-        b=c89hhqFN81vIg5IN2rpZKauKAqHYf+KMSB7oh1dAt0i49A3ucUMkyTzxUCrj2WWs+g
-         /LU3Xr/oSOgiCs+CzGUU8pWhEpDacm5mxkJpE/5clGHyANc/lNkJmfLq/aJVfdcjT8UL
-         eBL06dgnIyAp6shIXHNvUuno3W6Sk3jssjkHEmrtsXS0ehGnvMz9fE+mUbSyT7V/DtJ8
-         YEYyGAmkm7jdPB+ETVRV6oGB43zryHGlxwY1MiyEjreIcHwBO4xpm30cOGoi+5sxuVuw
-         QGY0ItDFmMr8lVYp12VI5cDd1e62KrSFDl9FQbjPsohnlfnzU1oGnGODof+74Twn0KQQ
-         vCow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686063580; x=1688655580;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Wqe+EMfTqwgCzibqmrP4x167w3kg6AGKeWhHsuYgmqo=;
-        b=M9kchvmXuRXWO1Gxhd25eSlmsJXMaMrjGVZ+OetUuvuG48I/yum5fa3dNUL5GuIc7d
-         IiDZBu2zwMNrcXGE39FjCqvq4+ljf1rTav8g+uid4woRfooEu4aGWuROT4ypKRIbygvB
-         yVrrqpT74A+csxzdKl6X0xx1nNj8KWUNVUop/JCnzS/NILJP/SUZG9OqAojnQ+01pRrg
-         jxyZvJAouoARrfLkoc4d2EPJ2aAeZpF4pqBqhICKiRz/qNwgtAJGPImgighx6AvHISzI
-         jUye4hD4q5iHvVfdl1Jj6hZSrtOE1mYZUD9LuilTPqT0ZzfbByb5OM4XEIZNUmWtoarl
-         A8gg==
-X-Gm-Message-State: AC+VfDyrHqMrqGKRIgM2qCyzU4+338HeZ9FSiaSaNODBtwiJ7gHa9XoY
-        dZxZU+VXZ62f1dJZ2zSM9N2qng/EvGbONO+WStk=
-X-Google-Smtp-Source: ACHHUZ7R3wIBiwS3qmIDAIVJhRLmDVW+rENmgn5tSeT1A0bMQm4kGe5M15s7kly86oJcM/F8JJJXG4R4/1qAqmUxppw=
-X-Received: by 2002:a05:6a20:3d83:b0:117:a2f3:3c93 with SMTP id
- s3-20020a056a203d8300b00117a2f33c93mr14207pzi.2.1686063579863; Tue, 06 Jun
- 2023 07:59:39 -0700 (PDT)
+        Tue, 6 Jun 2023 11:40:29 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3420810D2
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 08:40:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686066027; x=1717602027;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=YetqiMtBgg9iuZtDtv2kPhnSL2iH8CyOWdyD+KWIne8=;
+  b=SLhcDrZxSLrcN/sQzD7IRtEF706XK6oh3rFt5CuQuM91kUiBSkUxrYkY
+   SoDmVknecaLK4JkmMDXBBEbDm/XSG421e0zw/DUyELttdPPStj51yX+ns
+   gTaKzblt9KVd0rESU4YR082fsOLeS0EoedFZKXV46aHeAL/SNIkwOywbo
+   mL5O1K6Lk1QnfuekcKOPAKTfmVs3qPiXEYrjIUjijWD/o3xYRmUlI7Z7c
+   P8bsWuBvSgiHFGCI5M4M6FvI8RIaSvatEAKZoZa9DkE9ugU83TkVTNgam
+   EkW6tMr2+9mLyE9wsNWzAsIfqWbP2vOt9bY40gZwex6+MRu41HYtTS0ro
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="422550188"
+X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
+   d="scan'208";a="422550188"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 08:39:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="955816519"
+X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
+   d="scan'208";a="955816519"
+Received: from pdonvalk-mobl2.amr.corp.intel.com (HELO [10.255.231.168]) ([10.255.231.168])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 08:39:11 -0700
+Message-ID: <6c44969f-4d25-7b71-cd35-cd7087e083e4@linux.intel.com>
+Date:   Tue, 6 Jun 2023 09:59:43 -0500
 MIME-Version: 1.0
-References: <20230524153311.3625329-1-dhowells@redhat.com> <20230524153311.3625329-5-dhowells@redhat.com>
- <a819dd80-54cc-695f-f142-e3d42ce815a7@huawei.com> <f7919c2c9e1cb6218a0b0f55ddaa9a34f7d2b9a7.camel@gmail.com>
- <1841913.1686039913@warthog.procyon.org.uk>
-In-Reply-To: <1841913.1686039913@warthog.procyon.org.uk>
-From:   Alexander Duyck <alexander.duyck@gmail.com>
-Date:   Tue, 6 Jun 2023 07:59:02 -0700
-Message-ID: <CAKgT0Ud=ZWVnpwqbLqGovjPM2VR_V1-Ak=meveqnG01tGWTTeA@mail.gmail.com>
-Subject: Re: [PATCH net-next 04/12] mm: Make the page_frag_cache allocator use
- multipage folios
-To:     David Howells <dhowells@redhat.com>
-Cc:     Yunsheng Lin <linyunsheng@huawei.com>, netdev@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Jeroen de Borst <jeroendb@google.com>,
-        Catherine Sullivan <csully@google.com>,
-        Shailend Chand <shailend@google.com>,
-        Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-nvme@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.11.0
+Subject: Re: [PATCH V3 5/9] ASoC: amd: ps: add support for SoundWire DMA
+ interrupts
+Content-Language: en-US
+To:     Vijendar Mukunda <Vijendar.Mukunda@amd.com>, broonie@kernel.org
+Cc:     alsa-devel@alsa-project.org, Basavaraj.Hiregoudar@amd.com,
+        Sunil-kumar.Dommati@amd.com, Mastan.Katragadda@amd.com,
+        Arungopal.kondaveeti@amd.com, mario.limonciello@amd.com,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Syed Saba Kareem <Syed.SabaKareem@amd.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230606060724.2038680-1-Vijendar.Mukunda@amd.com>
+ <20230606060724.2038680-6-Vijendar.Mukunda@amd.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20230606060724.2038680-6-Vijendar.Mukunda@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,70 +72,168 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 6, 2023 at 1:25=E2=80=AFAM David Howells <dhowells@redhat.com> =
-wrote:
->
-> Alexander H Duyck <alexander.duyck@gmail.com> wrote:
->
-> > Also I have some concerns about going from page to folio as it seems
-> > like the folio_alloc setups the transparent hugepage destructor instead
-> > of using the compound page destructor. I would think that would slow
-> > down most users as it looks like there is a spinlock that is taken in
-> > the hugepage destructor that isn't there in the compound page
-> > destructor.
->
-> Note that this code is going to have to move to folios[*] at some point.
-> "Old-style" compound pages are going to go away, I believe.  Matthew Wilc=
-ox
-> and the mm folks are on a drive towards simplifying memory management,
-> formalising chunks larger than a single page - with the ultimate aim of
-> reducing the page struct to a single, typed pointer.
 
-I'm not against making the move, but as others have pointed out this
-is getting into unrelated things. One of those being the fact that to
-transition to using folios we don't need to get rid of the use of the
-virtual address. The idea behind using the virtual address here is
-that we can avoid a bunch of address translation overhead since we
-only need to use the folio if we are going to allocate, retire, or
-recycle a page/folio. If we are using an order 3 page that shouldn't
-be very often.
+> +enum amd_sdw0_channel {
+> +	ACP_SDW0_AUDIO0_TX = 0,
+> +	ACP_SDW0_AUDIO1_TX,
+> +	ACP_SDW0_AUDIO2_TX,
+> +	ACP_SDW0_AUDIO0_RX,
+> +	ACP_SDW0_AUDIO1_RX,
+> +	ACP_SDW0_AUDIO2_RX,
+> +};
+> +
+> +enum amd_sdw1_channel {
+> +	ACP_SDW1_AUDIO1_TX,
+> +	ACP_SDW1_AUDIO1_RX,
 
-> So, take, for example, a folio: As I understand it, this will no longer
-> overlay struct page, but rather will become a single, dynamically-allocat=
-ed
-> struct that covers a pow-of-2 number of pages.  A contiguous subset of pa=
-ge
-> structs will point at it.
->
-> However, rather than using a folio, we could define a "page fragment" mem=
-ory
-> type.  Rather than having all the flags and fields to be found in struct
-> folio, it could have just the set to be found in page_frag_cache.
+any specify reason why SDW0 starts with AUDIO0 and SDW1 with AUDIO1?
 
-I don't think we need a new memory type. For the most part the page
-fragment code is really more a subset of something like a
-__get_free_pages where the requester provides the size, is just given
-a virtual address, and we shouldn't need to be allocating a new page
-as often as ideally the allocations are 2K or less in size.
+> +};
+> +
+>  struct pdm_stream_instance {
+>  	u16 num_pages;
+>  	u16 channels;
+> @@ -239,6 +253,8 @@ struct sdw_dma_ring_buf_reg {
+>   * @sdw0_dev_index: SoundWire Manager-0 platform device index
+>   * @sdw1_dev_index: SoundWire Manager-1 platform device index
+>   * @sdw_dma_dev_index: SoundWire DMA controller platform device index
+> + * @sdw0-dma_intr_stat: DMA interrupt status array for SoundWire manager-SW0 instance
+> + * @sdw_dma_intr_stat: DMA interrupt status array for SoundWire manager-SW1 instance
+>   * @acp_reset: flag set to true when bus reset is applied across all
+>   * the active SoundWire manager instances
+>   */
+> @@ -256,6 +272,8 @@ struct acp63_dev_data {
+>  	u16 sdw0_dev_index;
+>  	u16 sdw1_dev_index;
+>  	u16 sdw_dma_dev_index;
+> +	u16 sdw0_dma_intr_stat[ACP63_SDW0_DMA_MAX_STREAMS];
+> +	u16 sdw1_dma_intr_stat[ACP63_SDW1_DMA_MAX_STREAMS];
+>  	bool acp_reset;
+>  };
+>  
+> diff --git a/sound/soc/amd/ps/pci-ps.c b/sound/soc/amd/ps/pci-ps.c
+> index 17e29a3e1c21..daf54fe9cafd 100644
+> --- a/sound/soc/amd/ps/pci-ps.c
+> +++ b/sound/soc/amd/ps/pci-ps.c
+> @@ -99,14 +99,44 @@ static int acp63_deinit(void __iomem *acp_base, struct device *dev)
+>  	return 0;
+>  }
+>  
+> +static irqreturn_t acp63_irq_thread(int irq, void *context)
+> +{
+> +	struct sdw_dma_dev_data *sdw_dma_data;
+> +	struct acp63_dev_data *adata = context;
+> +	u32 stream_index;
+> +	u16 pdev_index;
+> +
+> +	pdev_index = adata->sdw_dma_dev_index;
+> +	sdw_dma_data = dev_get_drvdata(&adata->pdev[pdev_index]->dev);
+> +
+> +	for (stream_index = 0; stream_index < ACP63_SDW0_DMA_MAX_STREAMS; stream_index++) {
+> +		if (adata->sdw0_dma_intr_stat[stream_index]) {
+> +			if (sdw_dma_data->sdw0_dma_stream[stream_index])
 
-Also one thing I would want to avoid is adding complexity to the
-freeing path. The general idea with page frags is that they are meant
-to be lightweight in terms of freeing as well. So just as they are
-similar to __get_free_pages in terms of allocation the freeing is
-meant to be similar to free_pages.
+can this test be false?
 
-> David
->
-> [*] It will be possible to have some other type than "folio".  See "struc=
-t
-> slab" in mm/slab.h for example.  struct slab corresponds to a set of page=
-s
-> and, in the future, a number of struct pages will point at it.
+> +				snd_pcm_period_elapsed(sdw_dma_data->sdw0_dma_stream[stream_index]);
+> +			adata->sdw0_dma_intr_stat[stream_index] = 0;
+> +		}
+> +	}
+> +	for (stream_index = 0; stream_index < ACP63_SDW1_DMA_MAX_STREAMS; stream_index++) {
+> +		if (adata->sdw1_dma_intr_stat[stream_index]) {
+> +			if (sdw_dma_data->sdw1_dma_stream[stream_index])
 
-I want to avoid getting anywhere near the complexity of a slab
-allocator. The whole point of this was to keep it simple so that
-drivers could use it and get decent performance. When I had
-implemented it in the Intel drivers back in the day this approach was
-essentially just a reference count/page offset hack that allowed us to
-split a page in 2 and use the pages as a sort of mobius strip within
-the ring buffer.
+can this test be false?
+
+> +				snd_pcm_period_elapsed(sdw_dma_data->sdw1_dma_stream[stream_index]);
+> +			adata->sdw1_dma_intr_stat[stream_index] = 0;
+> +		}
+> +	}
+> +	return IRQ_HANDLED;
+> +}
+> +
+>  static irqreturn_t acp63_irq_handler(int irq, void *dev_id)
+>  {
+>  	struct acp63_dev_data *adata;
+>  	struct pdm_dev_data *ps_pdm_data;
+>  	struct amd_sdw_manager *amd_manager;
+>  	u32 ext_intr_stat, ext_intr_stat1;
+> +	u32 stream_id = 0;
+>  	u16 irq_flag = 0;
+> +	u16 sdw_dma_irq_flag = 0;
+>  	u16 pdev_index;
+> +	u16 index;
+>  
+>  	adata = dev_id;
+>  	if (!adata)
+> @@ -153,6 +183,56 @@ static irqreturn_t acp63_irq_handler(int irq, void *dev_id)
+>  			snd_pcm_period_elapsed(ps_pdm_data->capture_stream);
+>  		irq_flag = 1;
+>  	}
+> +	if (ext_intr_stat & ACP_SDW_DMA_IRQ_MASK) {
+> +		for (index = ACP_AUDIO2_RX_THRESHOLD; index <= ACP_AUDIO0_TX_THRESHOLD; index++) {
+> +			if (ext_intr_stat & BIT(index)) {
+> +				writel(BIT(index), adata->acp63_base + ACP_EXTERNAL_INTR_STAT);
+> +				switch (index) {
+> +				case ACP_AUDIO0_TX_THRESHOLD:
+> +					stream_id = ACP_SDW0_AUDIO0_TX;
+> +					break;
+> +				case ACP_AUDIO1_TX_THRESHOLD:
+> +					stream_id = ACP_SDW0_AUDIO1_TX;
+> +					break;
+> +				case ACP_AUDIO2_TX_THRESHOLD:
+> +					stream_id = ACP_SDW0_AUDIO2_TX;
+> +					break;
+> +				case ACP_AUDIO0_RX_THRESHOLD:
+> +					stream_id = ACP_SDW0_AUDIO0_RX;
+> +					break;
+> +				case ACP_AUDIO1_RX_THRESHOLD:
+> +					stream_id = ACP_SDW0_AUDIO1_RX;
+> +					break;
+> +				case ACP_AUDIO2_RX_THRESHOLD:
+> +					stream_id = ACP_SDW0_AUDIO2_RX;
+> +					break;
+> +				}
+> +
+> +				adata->sdw0_dma_intr_stat[stream_id] = 1;
+> +				sdw_dma_irq_flag = 1;
+> +			}
+> +		}
+> +	}
+> +
+> +	/* SDW1 BT RX */
+> +	if (ext_intr_stat1 & ACP_P1_AUDIO1_RX_THRESHOLD) {
+> +		writel(ACP_P1_AUDIO1_RX_THRESHOLD,
+> +		       adata->acp63_base + ACP_EXTERNAL_INTR_STAT1);
+> +		adata->sdw1_dma_intr_stat[ACP_SDW1_AUDIO1_RX] = 1;
+> +		sdw_dma_irq_flag = 1;
+> +	}
+> +
+> +	/* SDW1 BT TX*/
+
+keep spaces before */
+
+> +	if (ext_intr_stat1 & ACP_P1_AUDIO1_TX_THRESHOLD) {
+> +		writel(ACP_P1_AUDIO1_TX_THRESHOLD,
+> +		       adata->acp63_base + ACP_EXTERNAL_INTR_STAT1);
+> +		adata->sdw1_dma_intr_stat[ACP_SDW1_AUDIO1_TX] = 1;
+> +		sdw_dma_irq_flag = 1;
+> +	}
+> +
+> +	if (sdw_dma_irq_flag)
+> +		return IRQ_WAKE_THREAD;
+> +
+>  	if (irq_flag)
+>  		return IRQ_HANDLED;
+>  	else
+> @@ -544,8 +624,8 @@ static int snd_acp63_probe(struct pci_dev *pci,
+>  	ret = acp63_init(adata->acp63_base, &pci->dev);
+>  	if (ret)
+>  		goto release_regions;
+> -	ret = devm_request_irq(&pci->dev, pci->irq, acp63_irq_handler,
+> -			       irqflags, "ACP_PCI_IRQ", adata);
+> +	ret = devm_request_threaded_irq(&pci->dev, pci->irq, acp63_irq_handler,
+> +					acp63_irq_thread, irqflags, "ACP_PCI_IRQ", adata);
+>  	if (ret) {
+>  		dev_err(&pci->dev, "ACP PCI IRQ request failed\n");
+>  		goto de_init;
