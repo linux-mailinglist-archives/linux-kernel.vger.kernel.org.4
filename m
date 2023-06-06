@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93579724688
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:41:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3142E724689
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:41:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238406AbjFFOli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 10:41:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42256 "EHLO
+        id S238381AbjFFOlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 10:41:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238348AbjFFOkq (ORCPT
+        with ESMTP id S238354AbjFFOk4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 10:40:46 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C27301BCB
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 07:39:10 -0700 (PDT)
-Message-ID: <20230606142033.104268005@linutronix.de>
+        Tue, 6 Jun 2023 10:40:56 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A80911BD5
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 07:39:11 -0700 (PDT)
+Message-ID: <20230606142033.172901153@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686062298;
+        s=2020; t=1686062299;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=SKWTs7mKb9Ib3ce5RFjSWFvKB4MXfu0NjoxHJuv9oio=;
-        b=IATYFsnS0gO/sbdPVKjHqcBUnjyvM8CNZDC17HGay7W1U6Amt/e/X2eEeS/IpQqcqi5FQd
-        fSTsFDp3mMmGe2BSfdTfWrotDoOZrOFzIwWh49VAPLpdJcJnHnYqoWwURvhBVa8hMDCCyu
-        nTaKbRO5vGAX9SwyZRvJSL6UrcJuc5lJCd4jpUspxAqrm9oIxPjsoNUIZd0Lo6cCyT8Cfl
-        1Ydw0gw83gEeb/zO0h2Vr400N8OpOd01pjzlFLLEcHqZmJauCOddS6Im/3192QkO6N/FYW
-        ngi/62P2zi6/091XQa5xV94bhrG4Dtap26uQmuixdKwlUfh85CpHdiz2lDaMzA==
+         references:references; bh=jyhJ/3GMU7sDY6xXeRfAzgG/VNBQy0NUgflCvHfEUKI=;
+        b=XJilMgHM4dy9cG9v0F6jyIRHdq6ACnil9FvydviHNHu7inyWZ/fx45hSDqAuNz94cKj0vE
+        enpsGWuvD3DGfZjgYaBI9R5lV3TBjwSQBJSg3GiXnc0Vx2kerYmC2qYG9PtBsJpcYQr6Fk
+        Cps1voMigj6U4UKBV49hXW8apAh3Rif3C51aPFhWeWN3QL6VHUFsRqJSDO35WHmrAs/T1B
+        NHOAQPuPSYEhLjGCN5STeqRPp/dMAVHUq4nIFZstODIQzMNo1Tk1UE/XThfM1krMGuMf4h
+        VNCJcelb2WbxdzWdxlwPI0NN+W0g/+bmtFU2GoqPO17U5T50yBUNo+xNRCN58g==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686062298;
+        s=2020e; t=1686062299;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=SKWTs7mKb9Ib3ce5RFjSWFvKB4MXfu0NjoxHJuv9oio=;
-        b=mu8ZLkR72aeYjlFHJHr7VBzPy3g6BhNtw2qEPd8eUo696YIlNoe6HtSw1TOW4NS10lyqg9
-        s1Sc1HgVcuCPAOBg==
+         references:references; bh=jyhJ/3GMU7sDY6xXeRfAzgG/VNBQy0NUgflCvHfEUKI=;
+        b=RLxZMsOTpnVTE7P8NlmT+H5U2JMs2DASwAD18xvfifkr75/k6ysGl+21VdvBYKC+2+U4/e
+        8OuAtFyJ3UcNJkCw==
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     Frederic Weisbecker <frederic@kernel.org>,
@@ -43,11 +43,11 @@ Cc:     Frederic Weisbecker <frederic@kernel.org>,
         Stephen Boyd <sboyd@kernel.org>,
         Eric Biederman <ebiederm@xmission.com>,
         Oleg Nesterov <oleg@redhat.com>
-Subject: [patch 37/45] signal: Cleanup unused posix-timer leftovers
+Subject: [patch 38/45] signal: Add task argument to flush_sigqueue_mask()
 References: <20230606132949.068951363@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date:   Tue,  6 Jun 2023 16:38:17 +0200 (CEST)
+Date:   Tue,  6 Jun 2023 16:38:19 +0200 (CEST)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
@@ -58,102 +58,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove the leftovers of sigqueue preallocation as it's not longer used.
+To prepare for handling posix timer signals on sigaction(SIG_IGN) properly,
+add a task argument to flush_sigqueue_mask() and fixup all call sites.
+
+This argument will be used in a later step to enqueue posix timers on an
+ignored list, so their signal can be requeued when SIG_IGN is lifted later
+on.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 ---
- include/linux/sched/signal.h |    2 --
- kernel/signal.c              |   43 +++++++------------------------------------
- 2 files changed, 7 insertions(+), 38 deletions(-)
+ kernel/signal.c |   19 +++++++++----------
+ 1 file changed, 9 insertions(+), 10 deletions(-)
 
---- a/include/linux/sched/signal.h
-+++ b/include/linux/sched/signal.h
-@@ -346,8 +346,6 @@ extern void force_fatal_sig(int);
- extern void force_exit_sig(int);
- extern int send_sig(int, struct task_struct *, int);
- extern int zap_other_threads(struct task_struct *p);
--extern struct sigqueue *sigqueue_alloc(void);
--extern void sigqueue_free(struct sigqueue *);
- extern int do_sigaction(int, struct k_sigaction *, struct k_sigaction *);
- 
- static inline void clear_notify_signal(void)
 --- a/kernel/signal.c
 +++ b/kernel/signal.c
-@@ -446,8 +446,8 @@ static void __sigqueue_init(struct sigqu
-  * - this may be called without locks if and only if t == current, otherwise an
-  *   appropriate lock must be held to stop the target task from exiting
+@@ -727,11 +727,10 @@ void signal_wake_up_state(struct task_st
+ 
+ /*
+  * Remove signals in mask from the pending set and queue.
+- * Returns 1 if any signals were found.
+  *
+  * All callers must be holding the siglock.
   */
--static struct sigqueue *__sigqueue_alloc(int sig, struct task_struct *t, gfp_t gfp_flags,
--					 int override_rlimit, const unsigned int sigqueue_flags)
-+static struct sigqueue *sigqueue_alloc(int sig, struct task_struct *t, gfp_t gfp_flags,
-+				       int override_rlimit)
+-static void flush_sigqueue_mask(sigset_t *mask, struct sigpending *s)
++static void flush_sigqueue_mask(sigset_t *mask, struct sigpending *s, struct task_struct *ptmr_tsk)
  {
- 	struct ucounts *ucounts = sig_get_ucounts(t, sig, override_rlimit);
- 	struct sigqueue *q;
-@@ -461,14 +461,16 @@ static struct sigqueue *__sigqueue_alloc
- 		return NULL;
+ 	struct sigqueue *q, *n;
+ 	sigset_t m;
+@@ -869,18 +868,18 @@ static bool prepare_signal(int sig, stru
+ 		 * This is a stop signal.  Remove SIGCONT from all queues.
+ 		 */
+ 		siginitset(&flush, sigmask(SIGCONT));
+-		flush_sigqueue_mask(&flush, &signal->shared_pending);
++		flush_sigqueue_mask(&flush, &signal->shared_pending, NULL);
+ 		for_each_thread(p, t)
+-			flush_sigqueue_mask(&flush, &t->pending);
++			flush_sigqueue_mask(&flush, &t->pending, NULL);
+ 	} else if (sig == SIGCONT) {
+ 		unsigned int why;
+ 		/*
+ 		 * Remove all stop signals from all queues, wake all threads.
+ 		 */
+ 		siginitset(&flush, SIG_KERNEL_STOP_MASK);
+-		flush_sigqueue_mask(&flush, &signal->shared_pending);
++		flush_sigqueue_mask(&flush, &signal->shared_pending, NULL);
+ 		for_each_thread(p, t) {
+-			flush_sigqueue_mask(&flush, &t->pending);
++			flush_sigqueue_mask(&flush, &t->pending, NULL);
+ 			task_clear_jobctl_pending(t, JOBCTL_STOP_PENDING);
+ 			if (likely(!(t->ptrace & PT_SEIZED))) {
+ 				t->jobctl &= ~JOBCTL_STOPPED;
+@@ -4097,8 +4096,8 @@ void kernel_sigaction(int sig, __sighand
+ 		sigemptyset(&mask);
+ 		sigaddset(&mask, sig);
+ 
+-		flush_sigqueue_mask(&mask, &current->signal->shared_pending);
+-		flush_sigqueue_mask(&mask, &current->pending);
++		flush_sigqueue_mask(&mask, &current->signal->shared_pending, NULL);
++		flush_sigqueue_mask(&mask, &current->pending, NULL);
+ 		recalc_sigpending();
+ 	}
+ 	spin_unlock_irq(&current->sighand->siglock);
+@@ -4165,9 +4164,9 @@ int do_sigaction(int sig, struct k_sigac
+ 		if (sig_handler_ignored(sig_handler(p, sig), sig)) {
+ 			sigemptyset(&mask);
+ 			sigaddset(&mask, sig);
+-			flush_sigqueue_mask(&mask, &p->signal->shared_pending);
++			flush_sigqueue_mask(&mask, &p->signal->shared_pending, NULL);
+ 			for_each_thread(p, t)
+-				flush_sigqueue_mask(&mask, &t->pending);
++				flush_sigqueue_mask(&mask, &t->pending, NULL);
+ 		}
  	}
  
--	__sigqueue_init(q, ucounts, sigqueue_flags);
-+	__sigqueue_init(q, ucounts, 0);
- 	return q;
- }
- 
- static void __sigqueue_free(struct sigqueue *q)
- {
--	if (q->flags & SIGQUEUE_PREALLOC)
-+	if (q->flags & SIGQUEUE_PREALLOC) {
-+		posixtimer_sigqueue_putref(q);
- 		return;
-+	}
- 	if (q->ucounts) {
- 		dec_rlimit_put_ucounts(q->ucounts, UCOUNT_RLIMIT_SIGPENDING);
- 		q->ucounts = NULL;
-@@ -1069,7 +1071,7 @@ static int __send_signal_locked(int sig,
- 	else
- 		override_rlimit = 0;
- 
--	q = __sigqueue_alloc(sig, t, GFP_ATOMIC, override_rlimit, 0);
-+	q = sigqueue_alloc(sig, t, GFP_ATOMIC, override_rlimit);
- 
- 	if (q) {
- 		list_add_tail(&q->list, &pending->list);
-@@ -1917,37 +1919,6 @@ bool posixtimer_init_sigqueue(struct sig
- 	return true;
- }
- 
--struct sigqueue *sigqueue_alloc(void)
--{
--	return __sigqueue_alloc(-1, current, GFP_KERNEL, 0, SIGQUEUE_PREALLOC);
--}
--
--void sigqueue_free(struct sigqueue *q)
--{
--	spinlock_t *lock = &current->sighand->siglock;
--	unsigned long flags;
--
--	if (WARN_ON_ONCE(!(q->flags & SIGQUEUE_PREALLOC)))
--		return;
--	/*
--	 * We must hold ->siglock while testing q->list
--	 * to serialize with collect_signal() or with
--	 * __exit_signal()->flush_sigqueue().
--	 */
--	spin_lock_irqsave(lock, flags);
--	q->flags &= ~SIGQUEUE_PREALLOC;
--	/*
--	 * If it is queued it will be freed when dequeued,
--	 * like the "regular" sigqueue.
--	 */
--	if (!list_empty(&q->list))
--		q = NULL;
--	spin_unlock_irqrestore(lock, flags);
--
--	if (q)
--		__sigqueue_free(q);
--}
--
- static void posixtimer_queue_sigqueue(struct sigqueue *q, struct task_struct *t, enum pid_type type)
- {
- 	struct sigpending *pending;
 
