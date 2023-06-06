@@ -2,57 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5480B7249B6
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 19:04:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3A847249BA
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 19:04:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237732AbjFFRD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 13:03:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49696 "EHLO
+        id S238368AbjFFREs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 13:04:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233340AbjFFRDy (ORCPT
+        with ESMTP id S231824AbjFFREq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 13:03:54 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BF40310C2
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 10:03:52 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 864612F4;
-        Tue,  6 Jun 2023 10:04:37 -0700 (PDT)
-Received: from [10.1.196.47] (eglon.cambridge.arm.com [10.1.196.47])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5C1233F663;
-        Tue,  6 Jun 2023 10:03:49 -0700 (PDT)
-Message-ID: <7ff7fcf9-725b-fb3d-43f3-b80a1df3a001@arm.com>
-Date:   Tue, 6 Jun 2023 18:03:43 +0100
+        Tue, 6 Jun 2023 13:04:46 -0400
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0171139
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 10:04:45 -0700 (PDT)
+Received: by mail-ot1-x32e.google.com with SMTP id 46e09a7af769-6af74ca9f4aso5904523a34.3
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 10:04:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686071085; x=1688663085;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fNlN5GtDgKPNlWQWYPrqc7sZzQ5di7/0ZMJCpdEzxF4=;
+        b=OQib3uJJapjTVAKDiAYUg0Us2w1EOIiueE8Es8TRMEsjK8ojjcQLx/ux6YNlQyWt+0
+         miCbnvINWBaxLLVw3F8dNa5zY2xKoDToktA1FAnF5EWcH98zClhxoKYDS480LaRA6jPZ
+         d0/59SNOiS9sQ4FS88bkSAcpX/c5fnXJLarzuWip7Pj5lR5qxh2ahNXJSW8uathcCmP9
+         Kt185dRhkzXV+XiaOZtW2iQetAIpKdqpdbH0zmM4hy6LH0f6q8cuflLXbbDojPNqOrlI
+         EwOENfaIGxdmfx+kSRx1NDSurfXiNnUapB+yEj3J8wGg2vX5015H+U+C8JtBTg1WKiWy
+         gQFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686071085; x=1688663085;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fNlN5GtDgKPNlWQWYPrqc7sZzQ5di7/0ZMJCpdEzxF4=;
+        b=NhvCP9PwerFAC3Bw+PaMbjKm5MdvpHdeVeemZmH/zibVEI7r+lZQ5ooIJYC5cGyByy
+         EsEygj7FQz54C0LR7BB0v5G0dyBo3LysQ1NuvVrjsOkGW24VJAEa0tkehN0rw0PVy/Ji
+         Ddv/9qdZNKAJB6jOUSJ919lSez+3IQ34XWFCYJ6fmC/eUFX7DEWqm3EcMFtRN3Se5c0L
+         d91V77+8SIYbQUWNR5din3STNBnyx/6MxG0M6jvpnzWdxRlCjNTP4tbJ4+KBSm5SB5ho
+         WQ/0vkm1IkbRjKQMkiACSUiJK3H6d399UXeW5EY0Wc8mzN3KUANQtZgIYyk3Ug192Kt5
+         TzfA==
+X-Gm-Message-State: AC+VfDyAKsW0P6rug8ZJdutbAQJ7G3vwyAAZ/WkQXj3sjDksGWfmo4gq
+        sR+Hy+Er+1YsxupgwSYi+DOEuvxBN+XnNjyMAXbL8g==
+X-Google-Smtp-Source: ACHHUZ6eSbBSq31Pj92QtB9+CuuoSz1DZ0/pX0OX+xNECugxvdKmm2rwO+JwvnYaWPHSu4qZgjij+Xe/6GdeLzb2jXo=
+X-Received: by 2002:a05:6359:692:b0:125:83a6:caa5 with SMTP id
+ ei18-20020a056359069200b0012583a6caa5mr432294rwb.3.1686071084761; Tue, 06 Jun
+ 2023 10:04:44 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v4 12/24] x86/resctrl: Make resctrl_arch_rmid_read() retry
- when it is interrupted
-Content-Language: en-GB
-To:     Peter Newman <peternewman@google.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        H Peter Anvin <hpa@zytor.com>,
-        Babu Moger <Babu.Moger@amd.com>,
-        shameerali.kolothum.thodi@huawei.com,
-        D Scott Phillips OS <scott@os.amperecomputing.com>,
-        carl@os.amperecomputing.com, lcherian@marvell.com,
-        bobo.shaobowang@huawei.com, tan.shaopeng@fujitsu.com,
-        xingxin.hx@openanolis.org, baolin.wang@linux.alibaba.com,
-        Jamie Iles <quic_jiles@quicinc.com>,
-        Xin Hao <xhao@linux.alibaba.com>, dfustini@baylibre.com
-References: <20230525180209.19497-1-james.morse@arm.com>
- <20230525180209.19497-13-james.morse@arm.com>
- <CALPaoCjLjngabG32m4X8sSwK-bbZ28oL6BVKSn_dFnDwPzkDkg@mail.gmail.com>
-From:   James Morse <james.morse@arm.com>
-In-Reply-To: <CALPaoCjLjngabG32m4X8sSwK-bbZ28oL6BVKSn_dFnDwPzkDkg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20230601024900.22902-1-zhoufeng.zf@bytedance.com>
+ <5bc1ac0d-cea8-19e5-785a-cd72140d8cdb@linux.dev> <20881602-9afc-96b7-3d58-51c31e3f50b7@bytedance.com>
+ <d7be9d22-c6aa-da2a-77fc-9638ad1e0f15@linux.dev> <2d138e12-9273-46e6-c219-96c665f38f0f@bytedance.com>
+In-Reply-To: <2d138e12-9273-46e6-c219-96c665f38f0f@bytedance.com>
+From:   Stanislav Fomichev <sdf@google.com>
+Date:   Tue, 6 Jun 2023 10:04:33 -0700
+Message-ID: <CAKH8qBtxNuwvawZ3v1-eK0RovPHu5AtYpays29TjxE2s-2RHpQ@mail.gmail.com>
+Subject: Re: Re: [PATCH bpf-next] bpf: getsockopt hook to get optval without
+ checking kernel retval
+To:     Feng Zhou <zhoufeng.zf@bytedance.com>
+Cc:     Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yangzhenze@bytedance.com,
+        wangdongdong.6@bytedance.com, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, haoluo@google.com,
+        jolsa@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,86 +77,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peter,
+On Mon, Jun 5, 2023 at 8:20=E2=80=AFPM Feng Zhou <zhoufeng.zf@bytedance.com=
+> wrote:
+>
+> =E5=9C=A8 2023/6/1 23:50, Martin KaFai Lau =E5=86=99=E9=81=93:
+> > On 5/31/23 11:05 PM, Feng Zhou wrote:
+> >> =E5=9C=A8 2023/6/1 13:37, Martin KaFai Lau =E5=86=99=E9=81=93:
+> >>> On 5/31/23 7:49 PM, Feng zhou wrote:
+> >>>> From: Feng Zhou <zhoufeng.zf@bytedance.com>
+> >>>>
+> >>>> Remove the judgment on retval and pass bpf ctx by default. The
+> >>>> advantage of this is that it is more flexible. Bpf getsockopt can
+> >>>> support the new optname without using the module to call the
+> >>>> nf_register_sockopt to register.
+> >>>>
+> >>>> Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
+> >>>> ---
+> >>>>   kernel/bpf/cgroup.c | 35 +++++++++++++----------------------
+> >>>>   1 file changed, 13 insertions(+), 22 deletions(-)
+> >>>>
+> >>>> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+> >>>> index 5b2741aa0d9b..ebad5442d8bb 100644
+> >>>> --- a/kernel/bpf/cgroup.c
+> >>>> +++ b/kernel/bpf/cgroup.c
+> >>>> @@ -1896,30 +1896,21 @@ int
+> >>>> __cgroup_bpf_run_filter_getsockopt(struct sock *sk, int level,
+> >>>>       if (max_optlen < 0)
+> >>>>           return max_optlen;
+> >>>> -    if (!retval) {
+> >>>> -        /* If kernel getsockopt finished successfully,
+> >>>> -         * copy whatever was returned to the user back
+> >>>> -         * into our temporary buffer. Set optlen to the
+> >>>> -         * one that kernel returned as well to let
+> >>>> -         * BPF programs inspect the value.
+> >>>> -         */
+> >>>> -
+> >>>> -        if (get_user(ctx.optlen, optlen)) {
+> >>>> -            ret =3D -EFAULT;
+> >>>> -            goto out;
+> >>>> -        }
+> >>>> +    if (get_user(ctx.optlen, optlen)) {
+> >>>> +        ret =3D -EFAULT;
+> >>>> +        goto out;
+> >>>> +    }
+> >>>> -        if (ctx.optlen < 0) {
+> >>>> -            ret =3D -EFAULT;
+> >>>> -            goto out;
+> >>>> -        }
+> >>>> -        orig_optlen =3D ctx.optlen;
+> >>>> +    if (ctx.optlen < 0) {
+> >>>> +        ret =3D -EFAULT;
+> >>>> +        goto out;
+> >>>> +    }
+> >>>> +    orig_optlen =3D ctx.optlen;
+> >>>> -        if (copy_from_user(ctx.optval, optval,
+> >>>> -                   min(ctx.optlen, max_optlen)) !=3D 0) {
+> >>>> -            ret =3D -EFAULT;
+> >>>> -            goto out;
+> >>>> -        }
+> >>>> +    if (copy_from_user(ctx.optval, optval,
+> >>>> +                min(ctx.optlen, max_optlen)) !=3D 0) {
+> >>> What is in optval that is useful to copy from if the kernel didn't
+> >>> handle the optname?
+> >>
+> >> For example, if the user customizes a new optname, it will not be
+> >> processed if the kernel does not support it. Then the data stored in
+> >> optval is the data put
+> >
+> >
+> >
+> >> by the user. If this part can be seen by bpf prog, the user can
+> >> implement processing logic of the custom optname through bpf prog.
+> >
+> > This part does not make sense. It is a (get)sockopt. Why the bpf prog
+> > should expect anything useful in the original __user optval? Other than
+> > unnecessary copy for other common cases, it looks like a bad api, so
+> > consider it a NAK.
+> >
+> >>
+> >>>
+> >>> and there is no selftest also.
+> >>>
+> >>
+> >> Yes, if remove this restriction, everyone thinks it's ok, I'll add it
+> >> in the next version.
+> >>
+> >>>> +        ret =3D -EFAULT;
+> >>>> +        goto out;
+> >>>>       }
+> >>>>       lock_sock(sk);
+> >>>
+> >>
+> >
+>
+> According to my understanding, users will have such requirements,
+> customize an optname, which is not available in the kernel. All logic is
+> completed in bpf prog, and bpf prog needs to obtain the user data passed
+> in by the system call, and then return the data required by the user
+> according to this data.
+>
+> For optname not in the kernel, the error code is
+> #define ENOPROTOOPT 92/* Protocol not available */
+> Whether to consider the way of judging with error codes,
+> If (! retval | | retval =3D=3D -ENOPROTOOPT)
 
-On 06/06/2023 09:49, Peter Newman wrote:
-> On Thu, May 25, 2023 at 8:03 PM James Morse <james.morse@arm.com> wrote:
->> +interrupted:
->> +       am = get_arch_mbm_state(hw_dom, rmid, eventid);
->> +       if (am)
->> +               start_msr_val = atomic64_read(&am->prev_msr);
->> +
->>         ret = __rmid_read(rmid, eventid, &msr_val);
->>         if (ret)
->>                 return ret;
->>
->>         am = get_arch_mbm_state(hw_dom, rmid, eventid);
->>         if (am) {
->> -               am->chunks += mbm_overflow_count(am->prev_msr, msr_val,
->> -                                                hw_res->mbm_width);
->> -               chunks = get_corrected_mbm_count(rmid, am->chunks);
->> -               am->prev_msr = msr_val;
->> +               old_msr_val = atomic64_cmpxchg(&am->prev_msr, start_msr_val,
->> +                                              msr_val);
->> +               if (old_msr_val != start_msr_val)
->> +                       goto interrupted;
->> +
->> +               chunks = mbm_overflow_count(start_msr_val, msr_val,
->> +                                           hw_res->mbm_width);
->> +               atomic64_add(chunks, &am->chunks);
->> +
->> +               chunks = get_corrected_mbm_count(rmid,
->> +                                                atomic64_read(&am->chunks));
->>         } else {
->>                 chunks = msr_val;
->>         }
-> 
-> It looks like if __rmid_read() is interrupted by an occupancy counter
-> read between writing QM_EVTSEL and reading QM_CTR, it will not perform
-> any update to am->prev_msr, and the interrupted read will return the
-> same counter value as in the interrupting read.
-
-Yup, that's a problem. I was only looking at the mbm state in memory, not the CPU register.
-I think the fix is to read back QM_EVTSEL after reading QM_CTR. I'll do this in
-__rmid_read() to avoid returning -EINTR. It creates two retry loops which is annoying, but
-making the window larger means you're more likely to see false positives.
-
-----------------------------%<----------------------------
-diff --git a/arch/x86/kernel/cpu/resctrl/monitor.c b/arch/x86/kernel/cpu/resctrl
-/monitor.c
-index e24390d2e661..aeba035bb680 100644
---- a/arch/x86/kernel/cpu/resctrl/monitor.c
-+++ b/arch/x86/kernel/cpu/resctrl/monitor.c
-@@ -101,6 +101,7 @@ static inline u64 get_corrected_mbm_count(u32 rmid, unsigned
- long val)
-
- static int __rmid_read(u32 rmid, enum resctrl_event_id eventid, u64 *val)
- {
-+       u32 _rmid, _eventid;
-        u64 msr_val;
-
-        /*
-@@ -110,9 +111,15 @@ static int __rmid_read(u32 rmid, enum resctrl_event_id eventid, u64 *val)
-         * IA32_QM_CTR.data (bits 61:0) reports the monitored data.
-         * IA32_QM_CTR.Error (bit 63) and IA32_QM_CTR.Unavailable (bit 62)
-         * are error bits.
-+        * QM_EVTSEL is re-read to detect if this function was interrupted by
-+        * another call, meaning the QM_CTR value may belong to a different
-+        * event.
-         */
--       wrmsr(MSR_IA32_QM_EVTSEL, eventid, rmid);
--       rdmsrl(MSR_IA32_QM_CTR, msr_val);
-+       do {
-+               wrmsr(MSR_IA32_QM_EVTSEL, eventid, rmid);
-+               rdmsrl(MSR_IA32_QM_CTR, msr_val);
-+               rdmsr(MSR_IA32_QM_EVTSEL, _eventid, _rmid);
-+       } while (eventid != _eventid || rmid != _rmid);
-
-        if (msr_val & RMID_VAL_ERROR)
-                return -EIO;
-----------------------------%<----------------------------
-
-
-Thanks!
-
-James
+I'm also failing to see what you're trying to do here. You can already
+implement custom optnames via getsockopt, so what's missing?
+If you need to pass some data from the userspace to the hook, then
+setsockopt hook will serve you better.
+getsockopt is about reading something from the kernel/bpf; ignoring
+initial user buffer value is somewhat implied here.
