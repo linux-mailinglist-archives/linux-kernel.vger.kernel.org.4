@@ -2,175 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2944723D95
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 11:33:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBE2C723D8F
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 11:33:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232519AbjFFJdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 05:33:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43406 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236967AbjFFJdC (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S236247AbjFFJdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 6 Jun 2023 05:33:02 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B8D310D5;
-        Tue,  6 Jun 2023 02:32:39 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3569LshB027493;
-        Tue, 6 Jun 2023 09:32:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=WbGyQ5R6yurqK0VL5BRQAmWw7gi95WfOOoc+/brGK+g=;
- b=h6jJ6iUvCYXp/VYHnIndDg1TqeImj8hG+YaYZ3jEczD2Logk93eF/+GF7Un4woIWbVLB
- uKCuLUaBGhUl4JBoxUEDsXb6HSJeZZQUtstnMDmVGvmWli52Jl89x9efDCYgubclNLAJ
- Coif2Guk8lr/Trw/2K3b6gMiI04lKrMam0Bfoo9RDSLUStcOlC/zocpPPTtJa13Re0rm
- vBRyyT8w7r//J5S2EwpvnkjUgpBiqMZuuib5ELv51NJ/ej/RJTft5dCoC45uoD4FaZPB
- zIBI0bib0gi/PfmFJnbvHAfJHnc9MgmUzEA9ACu8EWeLzGQpcqoX5NXGk5/mxJLzUvQc jw== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r1d4etm6c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 06 Jun 2023 09:32:17 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3569WGPg001882
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 6 Jun 2023 09:32:16 GMT
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Tue, 6 Jun 2023 02:32:10 -0700
-Date:   Tue, 6 Jun 2023 15:02:06 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-CC:     Rohit Agarwal <quic_rohiagar@quicinc.com>, <agross@kernel.org>,
-        <andersson@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <rafael@kernel.org>, <viresh.kumar@linaro.org>,
-        <tglx@linutronix.de>, <maz@kernel.org>, <will@kernel.org>,
-        <robin.murphy@arm.com>, <joro@8bytes.org>, <mani@kernel.org>,
-        <robimarko@gmail.com>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <iommu@lists.linux.dev>
-Subject: Re: [PATCH v2 10/10] arm64: dts: qcom: Add the support of cpufreq on
- SDX75
-Message-ID: <20230606093206.GA3255667@hu-pkondeti-hyd.qualcomm.com>
-References: <1685982557-28326-1-git-send-email-quic_rohiagar@quicinc.com>
- <1685982557-28326-11-git-send-email-quic_rohiagar@quicinc.com>
- <c4f34ad1-bea7-c5cf-dca8-9ededeafa4b4@linaro.org>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42726 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230456AbjFFJck (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 6 Jun 2023 05:32:40 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14183E69
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 02:32:24 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2b1b2ca09b9so49260381fa.1
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 02:32:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686043942; x=1688635942;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Fu+vX86GlZTe1uH6YYdDVRRF9k+jJOeF++qGe0rXU7E=;
+        b=Sp942XLutsbJGRwO05zi6YC50mZg24y+R/2/XXT6y/SGyhQacT8xsra1KxvK49VzZ5
+         Tm63YZwd8p2fKSOZ2f782uziW6KGL77zpcfBUqYXb1dSrTGYFGfRc3vg9MpSD7dX/GNu
+         ncYfkGPk7mqLfwjzYWus46T1sCu9sAos8NP4lsh6Z7YKm/ixoXXYbZLkuJwwNUwfgPMZ
+         x15zy+ON9IcDIYajEJevk9hDG13yGVHZx2TP1fqzk8TR+WeoXdytluTwmTj1/urlOTcf
+         M/JMuX9hFMB+yUNwYBYJJmgndlm10uSNdbE9syYd75crvlMKaJDd73phauOJmTINAFGN
+         nvZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686043942; x=1688635942;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Fu+vX86GlZTe1uH6YYdDVRRF9k+jJOeF++qGe0rXU7E=;
+        b=LGHPPLktGlGf/djMlUVKa8vccWtBXTU/8QYY8YU9MAC9guwVlBbIIm3Lj/eIWCrq8X
+         b78Iuy2neDhg2XXikQ3Su1xdNMGbb3Pfw9RRCvSmnjYM2cL+lQJ40I0IVPGC4D1hAHuS
+         mV80MD5af++8BocqSocBUvxS8PUbYXzDlnxH/8HsYEiu9UeXkmVN+i3qh1wDy9DDaMIl
+         hN2yuupYwwaTfhZ4uNFBnwORCli1WNO0OlGmcFhzgABkKZ0dAZlaGgOLnP/NKlh+uCJg
+         fiHGV/aLgu9bAw/0UVh8S0sobPkLCJz71eO9riX9Oi5tjTtERwpMcnPFK28DuCkc6UlO
+         vfuA==
+X-Gm-Message-State: AC+VfDzHXbL21VOMvVzcaCff4UOZQzQN1HdyMup5yOdEH/t3fbJX05sf
+        CrMvw1IDNjzJiZaNLmDJ3Tv5ZA==
+X-Google-Smtp-Source: ACHHUZ6cNLID/KMuAbWWIvg1VV8xKQioIFy6SqTRFqnRVb1g5POe1m/0jvDxgek/tnd2k6tRITBDAA==
+X-Received: by 2002:a2e:980b:0:b0:2b1:d210:10c9 with SMTP id a11-20020a2e980b000000b002b1d21010c9mr1205504ljj.43.1686043942246;
+        Tue, 06 Jun 2023 02:32:22 -0700 (PDT)
+Received: from [192.168.178.106] ([185.176.222.176])
+        by smtp.gmail.com with ESMTPSA id f14-20020a2e9e8e000000b002ad9057fd00sm1798652ljk.85.2023.06.06.02.32.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Jun 2023 02:32:21 -0700 (PDT)
+Message-ID: <858eacff-c97d-6504-06c8-d7586055e142@linaro.org>
+Date:   Tue, 6 Jun 2023 10:32:20 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <c4f34ad1-bea7-c5cf-dca8-9ededeafa4b4@linaro.org>
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: -RL8ItFWMdLA1RPKMQn4zlrij96SzO16
-X-Proofpoint-GUID: -RL8ItFWMdLA1RPKMQn4zlrij96SzO16
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-06_06,2023-06-05_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
- clxscore=1011 priorityscore=1501 malwarescore=0 mlxscore=0
- lowpriorityscore=0 adultscore=0 impostorscore=0 spamscore=0
- mlxlogscore=999 suspectscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2304280000 definitions=main-2306060080
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH] arm64: dts: qcom: Split sdm845-db845c to add headless
+ support
+Content-Language: en-US
+To:     Amit Pundir <amit.pundir@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+References: <20230605094710.2037879-1-amit.pundir@linaro.org>
+From:   Caleb Connolly <caleb.connolly@linaro.org>
+In-Reply-To: <20230605094710.2037879-1-amit.pundir@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 05, 2023 at 08:21:39PM +0200, Konrad Dybcio wrote:
-> 
-> 
-> On 5.06.2023 18:29, Rohit Agarwal wrote:
-> > Add the support of cpufreq to enable the cpufreq scaling
-> > on SDX75 SoC. Also add CPU specific information to build
-> > energy model for EAS.
-> > 
-> > Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
-> > ---
-> >  arch/arm64/boot/dts/qcom/sdx75.dtsi | 30 ++++++++++++++++++++++++++++++
-> >  1 file changed, 30 insertions(+)
-> > 
-> > diff --git a/arch/arm64/boot/dts/qcom/sdx75.dtsi b/arch/arm64/boot/dts/qcom/sdx75.dtsi
-> > index 47170ae..e1887a4 100644
-> > --- a/arch/arm64/boot/dts/qcom/sdx75.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/sdx75.dtsi
-> > @@ -47,10 +47,14 @@
-> >  			device_type = "cpu";
-> >  			compatible = "arm,cortex-a55";
-> >  			reg = <0x0 0x0>;
-> > +			clocks = <&cpufreq_hw 0>;
-> >  			enable-method = "psci";
-> >  			power-domains = <&CPU_PD0>;
-> >  			power-domain-names = "psci";
-> >  			next-level-cache = <&L2_0>;
-> > +			qcom,freq-domain = <&cpufreq_hw 0>;
-> > +			capacity-dmips-mhz = <1024>;
-> > +			dynamic-power-coefficient = <100>;
-> >  			L2_0: l2-cache {
-> >  				compatible = "cache";
-> >  				next-level-cache = <&L3_0>;
-> > @@ -64,10 +68,14 @@
-> >  			device_type = "cpu";
-> >  			compatible = "arm,cortex-a55";
-> >  			reg = <0x0 0x100>;
-> > +			clocks = <&cpufreq_hw 0>;
-> >  			enable-method = "psci";
-> >  			power-domains = <&CPU_PD1>;
-> >  			power-domain-names = "psci";
-> >  			next-level-cache = <&L2_100>;
-> > +			qcom,freq-domain = <&cpufreq_hw 0>;
-> > +			capacity-dmips-mhz = <1024>;
-> > +			dynamic-power-coefficient = <100>;
-> >  			L2_100: l2-cache {
-> >  				compatible = "cache";
-> >  				next-level-cache = <&L3_0>;
-> > @@ -78,10 +86,14 @@
-> >  			device_type = "cpu";
-> >  			compatible = "arm,cortex-a55";
-> >  			reg = <0x0 0x200>;
-> > +			clocks = <&cpufreq_hw 0>;
-> >  			enable-method = "psci";
-> >  			power-domains = <&CPU_PD2>;
-> >  			power-domain-names = "psci";
-> >  			next-level-cache = <&L2_200>;
-> > +			qcom,freq-domain = <&cpufreq_hw 0>;
-> > +			capacity-dmips-mhz = <1024>;
-> > +			dynamic-power-coefficient = <100>;
-> >  			L2_200: l2-cache {
-> >  				compatible = "cache";
-> >  				next-level-cache = <&L3_0>;
-> > @@ -92,10 +104,14 @@
-> >  			device_type = "cpu";
-> >  			compatible = "arm,cortex-a55";
-> >  			reg = <0x0 0x300>;
-> > +			clocks = <&cpufreq_hw 0>;
-> >  			enable-method = "psci";
-> >  			power-domains = <&CPU_PD3>;
-> >  			power-domain-names = "psci";
-> >  			next-level-cache = <&L2_300>;
-> > +			qcom,freq-domain = <&cpufreq_hw 0>;
-> > +			capacity-dmips-mhz = <1024>;
-> That sounds a bit bogus.. Thinking about it, it sounds bogus on most
-> platforms we have support for! I guess SM8250 big cores aren't *really*
-> equally as powerful..
-> 
 
-These are relative values on a given CPU. If a b.L SoC has 2 LITTLE CPUs
-and 2 big CPUs. The LITTLE CPU capacity is relative to big CPU capacity
-i.e 1024. Thats the reason for SM8250 having capacity-dmips-mhz as 448
-for LITTLE CPUs (0-3) and 1024 as Big CPUs.
 
-Since SDx75 has all similar capacity CPUs, setting 1024 or for that
-matter any value is good enough.
+On 05/06/2023 10:47, Amit Pundir wrote:
+> This is a follow-up of the upstream discussion,
+> https://lore.kernel.org/linux-kernel/20230124182857.1524912-1-amit.pundir@linaro.org/T/#u,
+> around adding a reserved memory region in sdm845-db845c
+> for the framebuffer memory (the splash region set up by
+> the bootloader) but the general opinion was to avoid
+> adding that reserved memory for the headless DB845c
+> usecase.
+> 
+> So this patch splits the sdm845-db845c into a common dtsi,
+> a new sdm845-db845-headless DT, which disables the mdss
+> display subsystem, and a new sdm845-db845c DT with an
+> additional reserved-memory region for the framebuffer.
 
-Thanks,
-Pavan
+The bootloader always sets up this memory region, it's defined in XBL. 
+If someone is building a product based on db845c SoM they would need to 
+modify XBL to free up this memory, at that point I think a new DT would 
+make sense.
+
+Given that we only found that this was missing because the kernel 
+randomly allocated memory there and it broke things, marking the region 
+as reserved is a fix, not reserving it is a bug.
+
+The original patch makes sense, imo this region should go in sdm845.dtsi 
+as almost all devices utilise this.
+
+I have a pair of patches [1][2] to fix this on sdm845 and sdm850, but I 
+haven't sent them yet as there doesn't seem to be a consensus on this. 
+Would this be ok with everyone given the above?
+
+[1]: 
+https://gitlab.com/sdm845-mainline/linux/-/commit/784f04850b56238c63c30dfea400c7a9ea8fda97
+[2]: 
+https://gitlab.com/sdm845-mainline/linux/-/commit/52f7ac40c6524be0edad5f4416ed76dbf3298dab
+> 
+> The default sdm845-db845c.dtb remains pretty much the same
+> (with an exception of additional reserved-memory region),
+> while others can use sdm845-db845c-headless.dtb for their
+> headless systems.
+> 
+> Signed-off-by: Amit Pundir <amit.pundir@linaro.org>
