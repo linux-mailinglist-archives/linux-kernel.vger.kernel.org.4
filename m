@@ -2,109 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28DBB724822
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 17:46:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87F2D724821
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 17:46:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237896AbjFFPqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 11:46:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34164 "EHLO
+        id S237422AbjFFPqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 11:46:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237551AbjFFPqP (ORCPT
+        with ESMTP id S237300AbjFFPqC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 11:46:15 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A3F410CB
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 08:46:10 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-977c89c47bdso591858166b.2
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 08:46:09 -0700 (PDT)
+        Tue, 6 Jun 2023 11:46:02 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4026139
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 08:45:59 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-30aef0b8837so5136615f8f.1
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 08:45:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1686066368; x=1688658368;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1UOet92MpBdONuA5jgW7v4DmIoemYaVmbXnKM9EiZ2I=;
-        b=GMqqXC7kD2aFZAL+Xqxn3hVYBW9rs8u24yj/MxEls44TnbxkDLKZmMVBkOZM46oKuj
-         RwPcoDFo7Hhe38Nj1RxdYDlR99f1QSsX29lcby12JtMX/hSnika4+pI9WtiT34mEEHGN
-         kyLdMVso1Ps0GNFhhn8dvZdhrM2C1Rlgr9MOg=
+        d=linaro.org; s=google; t=1686066358; x=1688658358;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wZb/LSRaeuM9YR+LBFnjbnz/LjYgZUSzBf+uR9nUwOw=;
+        b=gM/eyy+g6O2zLXUltAl7IUBbKy2ELlu1RI8hraHzLB4zLWa+TLuj29a2+uEZTfOzVx
+         DjtX/N8CNwMpzVLJntNEzKP8zaA5xLfhN2H3/vK8VuK1eERgiLedGKfJ6lok9mRnglx2
+         OScSFSb1DTDq1x+nBdNgRUr5uyqv368YsyiOmP5xhAsou0Ed137d4xFX6ZtkIJIVbVh8
+         p5D3mlB8IGvIx3HqozmWLDXYF0lCgrhl8IUJT3/PFImw3yXYbudcYe/E6WNF7nfbvQQH
+         F0WTkLS60XMt0R/AHZpigMNNanU6NaauczY/yK+LddXFenx0hc9x+n8H2flCkZFAhmj7
+         9DmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686066368; x=1688658368;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1UOet92MpBdONuA5jgW7v4DmIoemYaVmbXnKM9EiZ2I=;
-        b=E1wteSHNV/QoLuO4nEPXH76NN6OBN1I7aoDb3Fl6p7DnY+/HM3oyb5PJcODNV6Nu2N
-         rIBLMjKQBfORFn2rqA87Ol9VaypAHswnEcPf96uQ679rYT9Cl6GiUHPqFr/Wbhs/KF7b
-         f6ElT7PjRM+hIHPelkQ/pNz2drYWVexKpO7sw/OpZ8mRneCeggP3N1hrd1PMWzYcUNwz
-         +C/ajSM5A4bWpiP7IYCc91EI4BcnsbNXn3cI7bqkeyMtiY8Qi1cx1WsyN7DdFN5LvpL6
-         +unAK5alE0TDwMJ7seWnAKLReNQywSKY039HkHrAth91GYb4MInNfGfAg35OSPDqThG+
-         p1AQ==
-X-Gm-Message-State: AC+VfDzsPIcgzn9ziA3Y2/f44WNKW1yVLFj+d/elWMMs9RzqcvgSSujQ
-        XbyLmsg2fZbiwHZDhFyNGjiPBEnkB6SHqTMLXHfB8UyV
-X-Google-Smtp-Source: ACHHUZ5x76ODsZr3fKtJaH+3t4rW8q1t4aogO0eOtVeEnVwWbvryfs1/0UMY5Y3M9yDzXC1ruQnYhA==
-X-Received: by 2002:a17:907:8a08:b0:973:ad8f:ef9b with SMTP id sc8-20020a1709078a0800b00973ad8fef9bmr3140250ejc.5.1686066368384;
-        Tue, 06 Jun 2023 08:46:08 -0700 (PDT)
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com. [209.85.208.43])
-        by smtp.gmail.com with ESMTPSA id bv26-20020a170906b1da00b0096f78953b77sm5780875ejb.147.2023.06.06.08.46.06
-        for <linux-kernel@vger.kernel.org>
+        d=1e100.net; s=20221208; t=1686066358; x=1688658358;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wZb/LSRaeuM9YR+LBFnjbnz/LjYgZUSzBf+uR9nUwOw=;
+        b=fRdunl95HnHQSYf+phVLEYy4LiRcgTagUANykPV3qzybzOvDVULE0i3acK5jrfKP/Q
+         aGuGe0mizr1gcd3ClBf0U0e1jyQzsYF6nMB7dkiAFAb/OKGgnWKzbKd9hGFBhyRyWLM6
+         p2UQQXjK/kQ2uSeEt9WdAQC0E0S8r7OoY1x2WxyRZFL/tOaxxo+WJYejt3MYA4rqEreI
+         +AXxSiwQWuQ3D42HJqNUyCm0dO7KbI/1u5vvXwduYgaInqLWz7HqKw7pLS9Ix0fyUiLy
+         KOAyFiemKWyXxXdUmKYLUnaeC66PgP8979VXrJXK1SWZ4Ckd3R4fv/mrWfTZHT8V1qAJ
+         +eMQ==
+X-Gm-Message-State: AC+VfDxsmT2CeIf+8br4S7fcRdJVt4xKpQiQLBHLCXPnk0l1SfZD8Cc9
+        suaUcWR4+D6/MHY7nW4VI7qY+w==
+X-Google-Smtp-Source: ACHHUZ6k8PVvRfUwRe2aKfxo+yMvfbbG3AjKPaHsOSeVMITlhxclCBf7qRlKhlne+LUdWTC7qgQYug==
+X-Received: by 2002:a5d:4a12:0:b0:30e:4515:1529 with SMTP id m18-20020a5d4a12000000b0030e45151529mr2208242wrq.37.1686066358254;
+        Tue, 06 Jun 2023 08:45:58 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:d8fb:84d9:d402:6b22? ([2a05:6e02:1041:c10:d8fb:84d9:d402:6b22])
+        by smtp.googlemail.com with ESMTPSA id f9-20020a056000036900b0030c2e3c7fb3sm12860673wrf.101.2023.06.06.08.45.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Jun 2023 08:46:07 -0700 (PDT)
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-51458187be1so9688333a12.2
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 08:46:06 -0700 (PDT)
-X-Received: by 2002:a17:906:7950:b0:974:1c90:b3d3 with SMTP id
- l16-20020a170906795000b009741c90b3d3mr3220341ejo.12.1686066366310; Tue, 06
- Jun 2023 08:46:06 -0700 (PDT)
+        Tue, 06 Jun 2023 08:45:57 -0700 (PDT)
+Message-ID: <6f2a63a1-1cc2-03e9-c983-8cb117923fb9@linaro.org>
+Date:   Tue, 6 Jun 2023 17:45:57 +0200
 MIME-Version: 1.0
-References: <20230526205204.861311518@infradead.org> <CAHk-=wg2RHZKTN29Gr7MhgYfaNtzz58wry9jCNP75LAmQ9t8-A@mail.gmail.com>
- <20230530092342.GA149947@hirez.programming.kicks-ass.net> <20230606094251.GA907347@hirez.programming.kicks-ass.net>
- <202306060829.C2FD998CF@keescook>
-In-Reply-To: <202306060829.C2FD998CF@keescook>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 6 Jun 2023 08:45:49 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wh=vs298o0gewFH725pQAYQ57CAQzj05FOx_VZubZ3jiA@mail.gmail.com>
-Message-ID: <CAHk-=wh=vs298o0gewFH725pQAYQ57CAQzj05FOx_VZubZ3jiA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/2] Lock and Pointer guards
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>, gregkh@linuxfoundation.org,
-        pbonzini@redhat.com, linux-kernel@vger.kernel.org,
-        ojeda@kernel.org, ndesaulniers@google.com, mingo@redhat.com,
-        will@kernel.org, longman@redhat.com, boqun.feng@gmail.com,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-        joel@joelfernandes.org, josh@joshtriplett.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-        rcu@vger.kernel.org, tj@kernel.org, tglx@linutronix.de,
-        linux-toolchains@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 2/7] ACPI: thermal: Drop redundant
+ ACPI_TRIPS_REFRESH_DEVICES symbol
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Michal Wilczynski <michal.wilczynski@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+References: <2703629.mvXUDI8C0e@kreacher> <13298027.uLZWGnKmhe@kreacher>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <13298027.uLZWGnKmhe@kreacher>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 6, 2023 at 8:31=E2=80=AFAM Kees Cook <keescook@chromium.org> wr=
-ote:
->
-> nit: Linus's example was "(void *)8" (instead of 1) because we've had
-> issues in the past with alignment warnings on archs that are sensitive
-> to it. (e.g. see the __is_constexpr() macro which is doing NULL/!NULL
-> comparisons.)
+On 04/06/2023 14:13, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Drop the ACPI_TRIPS_REFRESH_DEVICES symbol which is redundant, because
+> ACPI_TRIPS_DEVICES can be used directly instead of it without any
+> drawbacks and rename the ACPI_TRIPS_REFRESH_THRESHOLDS to
+> ACPI_TRIPS_THRESHOLDS to make the code a bit more consistent.
+> 
+> While at it, fix up some formatting white space used in the symbol
+> definitions.
+> 
+> No functional impact.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Reviewed-by: Michal Wilczynski <michal.wilczynski@intel.com>
 
-Note that I don't think we ever saw such a warning, it was just a
-theoretical observation that depending on type, the compiler might
-warn about known mis-aligned pointer bits.
+Reviewed-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-So I'm not sure the 1-vs-8 actually matters. We do other things that
-assume that low bits in a pointer are retained and valid, even if in
-theory the C type system might have issues with it.
+> ---
+> 
+> v1 -> v2: Added R-by from Michal.
+> 
+> ---
+>   drivers/acpi/thermal.c |   13 ++++++-------
+>   1 file changed, 6 insertions(+), 7 deletions(-)
+> 
+> Index: linux-pm/drivers/acpi/thermal.c
+> ===================================================================
+> --- linux-pm.orig/drivers/acpi/thermal.c
+> +++ linux-pm/drivers/acpi/thermal.c
+> @@ -238,12 +238,11 @@ static int acpi_thermal_set_cooling_mode
+>   #define ACPI_TRIPS_ACTIVE	BIT(3)
+>   #define ACPI_TRIPS_DEVICES	BIT(4)
+>   
+> -#define ACPI_TRIPS_REFRESH_THRESHOLDS	(ACPI_TRIPS_PASSIVE | ACPI_TRIPS_ACTIVE)
+> -#define ACPI_TRIPS_REFRESH_DEVICES	ACPI_TRIPS_DEVICES
+> +#define ACPI_TRIPS_THRESHOLDS	(ACPI_TRIPS_PASSIVE | ACPI_TRIPS_ACTIVE)
+>   
+> -#define ACPI_TRIPS_INIT      (ACPI_TRIPS_CRITICAL | ACPI_TRIPS_HOT |	\
+> -			      ACPI_TRIPS_PASSIVE | ACPI_TRIPS_ACTIVE |	\
+> -			      ACPI_TRIPS_DEVICES)
+> +#define ACPI_TRIPS_INIT		(ACPI_TRIPS_CRITICAL | ACPI_TRIPS_HOT | \
+> +				 ACPI_TRIPS_PASSIVE | ACPI_TRIPS_ACTIVE | \
+> +				 ACPI_TRIPS_DEVICES)
+>   
+>   /*
+>    * This exception is thrown out in two cases:
+> @@ -906,13 +905,13 @@ static void acpi_thermal_notify(struct a
+>   		acpi_queue_thermal_check(tz);
+>   		break;
+>   	case ACPI_THERMAL_NOTIFY_THRESHOLDS:
+> -		acpi_thermal_trips_update(tz, ACPI_TRIPS_REFRESH_THRESHOLDS);
+> +		acpi_thermal_trips_update(tz, ACPI_TRIPS_THRESHOLDS);
+>   		acpi_queue_thermal_check(tz);
+>   		acpi_bus_generate_netlink_event(device->pnp.device_class,
+>   						dev_name(&device->dev), event, 0);
+>   		break;
+>   	case ACPI_THERMAL_NOTIFY_DEVICES:
+> -		acpi_thermal_trips_update(tz, ACPI_TRIPS_REFRESH_DEVICES);
+> +		acpi_thermal_trips_update(tz, ACPI_TRIPS_DEVICES);
+>   		acpi_queue_thermal_check(tz);
+>   		acpi_bus_generate_netlink_event(device->pnp.device_class,
+>   						dev_name(&device->dev), event, 0);
+> 
+> 
+> 
 
-But maybe I mis-remember - if you did get an actual warning, maybe we
-should document that warning just to keep the memory alive.
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-            Linus
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
