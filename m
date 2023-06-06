@@ -2,119 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCAC6723783
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 08:21:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC3D372377D
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 08:21:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232540AbjFFGVc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 02:21:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32882 "EHLO
+        id S234690AbjFFGVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 02:21:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234154AbjFFGVE (ORCPT
+        with ESMTP id S234114AbjFFGUv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 02:21:04 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 580C710DE
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 23:20:48 -0700 (PDT)
-Received: from kwepemm600020.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Qb0dN4mG3zLqVB;
-        Tue,  6 Jun 2023 14:17:44 +0800 (CST)
-Received: from localhost.localdomain (10.175.112.125) by
- kwepemm600020.china.huawei.com (7.193.23.147) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 6 Jun 2023 14:20:45 +0800
-From:   Peng Zhang <zhangpeng362@huawei.com>
-To:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <akpm@linux-foundation.org>, <willy@infradead.org>,
-        <mike.kravetz@oracle.com>, <muchun.song@linux.dev>,
-        <sidhartha.kumar@oracle.com>
-CC:     <vishal.moola@gmail.com>, <wangkefeng.wang@huawei.com>,
-        <sunnanyong@huawei.com>, ZhangPeng <zhangpeng362@huawei.com>
-Subject: [PATCH v2 3/3] mm/hugetlb: Use a folio in hugetlb_fault()
-Date:   Tue, 6 Jun 2023 14:20:13 +0800
-Message-ID: <20230606062013.2947002-4-zhangpeng362@huawei.com>
+        Tue, 6 Jun 2023 02:20:51 -0400
+Received: from mail-il1-f194.google.com (mail-il1-f194.google.com [209.85.166.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 464CCE5C;
+        Mon,  5 Jun 2023 23:20:34 -0700 (PDT)
+Received: by mail-il1-f194.google.com with SMTP id e9e14a558f8ab-33b1da9a8acso27489975ab.3;
+        Mon, 05 Jun 2023 23:20:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686032433; x=1688624433;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5Qt0TZdpZFts0TaM3xOskSanCMvu3uxtIMS0vk4fZs4=;
+        b=Vqkqx+sPUmhcCTxuMJTEKjgVZ63gd95xTE70vE4vGJyLJjl6u2u6+1IoNEuw0YyQlb
+         CjBW78mZ4YADhLChdeS87s4wNWvJgye1j4uIOFUO+lH4es0EIIN0Bw5IiYPxGbYPnLx5
+         5i6+v1ru81ljppViNzJ9YRizaX/wxRwcA+pM1Qnit1KR7soQ06vRPoA28MfkpoBCJ+ki
+         y7LexDrEQexaHsAAgtuu39GAfAF6z1BanuAejKOZKfHhfpooDTJVIQXLgFai2NZlQXZc
+         BCcoq5d3U2C4BqeiXWLfOM+kqB6NaCwcPrLflr613jTo2uvWh3KPJOkcbd/9Z5Id317W
+         b02A==
+X-Gm-Message-State: AC+VfDwFoKallIgeG+xNTpAV/eAxwUxyMYM8Gl+1FDe9nzMD23mrrufV
+        9xEVLi7PoEVsanmjzcdzog==
+X-Google-Smtp-Source: ACHHUZ6xNkFciwwaRIuqEw1lf4XuDHonXqDVaCQK2K5088245x20eei0bMvul3JDj9mzmYCjEfNM2w==
+X-Received: by 2002:a92:c505:0:b0:338:f770:ccc3 with SMTP id r5-20020a92c505000000b00338f770ccc3mr1743804ilg.21.1686032433406;
+        Mon, 05 Jun 2023 23:20:33 -0700 (PDT)
+Received: from localhost.localdomain ([116.128.244.169])
+        by smtp.gmail.com with ESMTPSA id w7-20020a634907000000b0052c3f0ae381sm4960841pga.78.2023.06.05.23.20.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Jun 2023 23:20:32 -0700 (PDT)
+From:   sunliming <sunliming@kylinos.cn>
+To:     mhiramat@kernel.org, beaub@linux.microsoft.com,
+        rostedt@goodmis.org, shuah@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kelulanainsley@gmail.com,
+        sunliming <sunliming@kylinos.cn>
+Subject: [PATCH v3 0/4] tracing/user_events: Add empty arguments events
+Date:   Tue,  6 Jun 2023 14:20:23 +0800
+Message-Id: <20230606062027.1008398-1-sunliming@kylinos.cn>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230606062013.2947002-1-zhangpeng362@huawei.com>
-References: <20230606062013.2947002-1-zhangpeng362@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.112.125]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600020.china.huawei.com (7.193.23.147)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ZhangPeng <zhangpeng362@huawei.com>
+This series patches fix the incorrect trace record for empty arguments
+events and add correspondent selftests.
 
-We can replace seven implicit calls to compound_head() with one by using
-folio.
+V3:
+  Improve modification descriptions to maintain consistent formatting
 
-Signed-off-by: ZhangPeng <zhangpeng362@huawei.com>
----
- mm/hugetlb.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+v2:
+  Change "i->count" to "i->count !=0 " to prevent compiler optimization
+  Add correspondent selftests
 
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index e58f8001fd92..e34329e25abe 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -6062,7 +6062,7 @@ vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
- 	vm_fault_t ret;
- 	u32 hash;
- 	pgoff_t idx;
--	struct page *page = NULL;
-+	struct folio *folio = NULL;
- 	struct folio *pagecache_folio = NULL;
- 	struct hstate *h = hstate_vma(vma);
- 	struct address_space *mapping;
-@@ -6181,14 +6181,14 @@ vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
- 	 * pagecache_folio, so here we need take the former one
- 	 * when page != pagecache_folio or !pagecache_folio.
- 	 */
--	page = pte_page(entry);
--	if (page_folio(page) != pagecache_folio)
--		if (!trylock_page(page)) {
-+	folio = page_folio(pte_page(entry));
-+	if (folio != pagecache_folio)
-+		if (!folio_trylock(folio)) {
- 			need_wait_lock = 1;
- 			goto out_ptl;
- 		}
- 
--	get_page(page);
-+	folio_get(folio);
- 
- 	if (flags & (FAULT_FLAG_WRITE|FAULT_FLAG_UNSHARE)) {
- 		if (!huge_pte_write(entry)) {
-@@ -6204,9 +6204,9 @@ vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
- 						flags & FAULT_FLAG_WRITE))
- 		update_mmu_cache(vma, haddr, ptep);
- out_put_page:
--	if (page_folio(page) != pagecache_folio)
--		unlock_page(page);
--	put_page(page);
-+	if (folio != pagecache_folio)
-+		folio_unlock(folio);
-+	folio_put(folio);
- out_ptl:
- 	spin_unlock(ptl);
- 
-@@ -6225,7 +6225,7 @@ vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
- 	 * here without taking refcount.
- 	 */
- 	if (need_wait_lock)
--		wait_on_page_locked(page);
-+		folio_wait_locked(folio);
- 	return ret;
- }
- 
+sunliming (4):
+  tracing/user_events: Fix the incorrect trace record for empty
+    arguments events
+  selftests/user_events: Add ftrace self-test for empty arguments events
+  selftests/user_events: Clear the events after perf self-test
+  selftests/user_events: Add perf self-test for empty arguments events
+
+ kernel/trace/trace_events_user.c              |  4 +-
+ .../selftests/user_events/ftrace_test.c       | 33 ++++++++
+ .../testing/selftests/user_events/perf_test.c | 82 +++++++++++++++++++
+ 3 files changed, 117 insertions(+), 2 deletions(-)
+
 -- 
 2.25.1
 
