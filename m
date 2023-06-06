@@ -2,69 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC74B724258
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 14:38:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4CCB72425E
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 14:39:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237589AbjFFMig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 08:38:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38114 "EHLO
+        id S237592AbjFFMjQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 08:39:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236529AbjFFMic (ORCPT
+        with ESMTP id S236424AbjFFMjM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 08:38:32 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB1B810C3;
-        Tue,  6 Jun 2023 05:38:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686055110; x=1717591110;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=H/iH/hJMR3hBdZN5X97g2WPo8WuAVbo2nUSQSiOHU6s=;
-  b=nxAl6eEkM0osgc4vsR9f1X6K/l6B8w9IVVnSAShDkD3KMWDEBTVa/32l
-   qT479vaobQqZsy6SZZW0knkxNFF3aWpHP+conA8Prp6hsYoX5aVVkhEt+
-   DkinxDtA3yGbMkigxPWKtTb8voKa1JMwbBQaPGJqQgxuc1BtIA3sxUbhU
-   lpBb24hptoy+3S3vHc6Oq+t9SopOg29X8f7Qox421TDtrwyR4ePNCElaG
-   vCWOBlglOq0Yjt9m9lbLQPwB1CtcU91rI/EMqe4K9EPl6VjbbNOY1OiE5
-   OJAnaS1sadRswXrx30qAybrzTl93UvvHxbeeHwLlwo2OIsqpejO+pS2h6
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="420200541"
-X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
-   d="scan'208";a="420200541"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 05:38:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="703144717"
-X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
-   d="scan'208";a="703144717"
-Received: from rgraefe-mobl1.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.58.173])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 05:38:24 -0700
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 5AB7D10A6A4; Tue,  6 Jun 2023 15:38:21 +0300 (+03)
-Date:   Tue, 6 Jun 2023 15:38:21 +0300
-From:   kirill.shutemov@linux.intel.com
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-mm@kvack.org, dave.hansen@intel.com, tony.luck@intel.com,
-        peterz@infradead.org, tglx@linutronix.de, seanjc@google.com,
-        pbonzini@redhat.com, david@redhat.com, dan.j.williams@intel.com,
-        rafael.j.wysocki@intel.com, ying.huang@intel.com,
-        reinette.chatre@intel.com, len.brown@intel.com, ak@linux.intel.com,
-        isaku.yamahata@intel.com, chao.gao@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, bagasdotme@gmail.com,
-        sagis@google.com, imammedo@redhat.com
-Subject: Re: [PATCH v11 04/20] x86/cpu: Detect TDX partial write machine
- check erratum
-Message-ID: <20230606123821.exit7gyxs42dxotz@box.shutemov.name>
-References: <cover.1685887183.git.kai.huang@intel.com>
- <86f2a8814240f4bbe850f6a09fc9d0b934979d1b.1685887183.git.kai.huang@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <86f2a8814240f4bbe850f6a09fc9d0b934979d1b.1685887183.git.kai.huang@intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        Tue, 6 Jun 2023 08:39:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ED4910C7;
+        Tue,  6 Jun 2023 05:38:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F956631F3;
+        Tue,  6 Jun 2023 12:38:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 282FEC433D2;
+        Tue,  6 Jun 2023 12:38:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686055134;
+        bh=GoKJVxcYM3YHiySYtc2j/jW2j5w+mMQPpCOboxsRxPU=;
+        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+        b=lGSHh/YDw8plsHo5wOZlj1EQxELfL3PTQh/WV07BbL0uFWdlM0JEF46/CcGnwVQ/K
+         LqYJt6fZrlaXq7IH+yBgXQ7rtwgN5KISl+/h+Fb26wxGcc2CmF9oxWQNVOVTrBElf3
+         RU6Run6x5zS9vvMTkbM6oBaNGSl8Ssm/HUiDQAa9SjhnBJRWyo9oCSJKHAH/P4Jlh9
+         kaBLG/8GZiVyzzo4/q7QaBXiIuv2BABcu42KuLVmbg7knjYQQpr6HGJOIUlAXouNyD
+         E+xVSuCF4hCrZD/oHpfKU47NhWwRZoMie/6uiozSzsALHCfNOCtx92aEqRbd79IcQM
+         rpQ/HisXAdQ7A==
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 06 Jun 2023 15:38:50 +0300
+Message-Id: <CT5KNU3BZ71L.2S88IEDDT5AD9@suppilovahvero>
+Cc:     <dhowells@redhat.com>, <dwmw2@infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Franziska Naepelt" <franziska.naepelt@gmail.com>,
+        "kernel test robot" <lkp@intel.com>
+Subject: Re: [PATCH v2] certs/extract-cert: Fix checkpatch issues
+From:   "Jarkko Sakkinen" <jarkko@kernel.org>
+To:     "Franziska Naepelt" <franziska.naepelt@googlemail.com>,
+        <keyrings@vger.kernel.org>
+X-Mailer: aerc 0.15.2-33-gedd4752268b2
+References: <20230601190508.56610-1-franziska.naepelt@gmail.com>
+ <20230602085902.59006-1-franziska.naepelt@gmail.com>
+In-Reply-To: <20230602085902.59006-1-franziska.naepelt@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,90 +59,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 05, 2023 at 02:27:17AM +1200, Kai Huang wrote:
-> TDX memory has integrity and confidentiality protections.  Violations of
-> this integrity protection are supposed to only affect TDX operations and
-> are never supposed to affect the host kernel itself.  In other words,
-> the host kernel should never, itself, see machine checks induced by the
-> TDX integrity hardware.
-> 
-> Alas, the first few generations of TDX hardware have an erratum.  A
-> "partial" write to a TDX private memory cacheline will silently "poison"
-> the line.  Subsequent reads will consume the poison and generate a
-> machine check.  According to the TDX hardware spec, neither of these
-> things should have happened.
-> 
-> Virtually all kernel memory accesses operations happen in full
-> cachelines.  In practice, writing a "byte" of memory usually reads a 64
-> byte cacheline of memory, modifies it, then writes the whole line back.
-> Those operations do not trigger this problem.
-> 
-> This problem is triggered by "partial" writes where a write transaction
-> of less than cacheline lands at the memory controller.  The CPU does
-> these via non-temporal write instructions (like MOVNTI), or through
-> UC/WC memory mappings.  The issue can also be triggered away from the
-> CPU by devices doing partial writes via DMA.
-> 
-> With this erratum, there are additional things need to be done around
-> machine check handler and kexec(), etc.  Similar to other CPU bugs, use
-> a CPU bug bit to indicate this erratum, and detect this erratum during
-> early boot.  Note this bug reflects the hardware thus it is detected
-> regardless of whether the kernel is built with TDX support or not.
-> 
-> Signed-off-by: Kai Huang <kai.huang@intel.com>
+On Fri Jun 2, 2023 at 11:59 AM EEST, Franziska Naepelt wrote:
+> The following issues are fixed:
+> - WARNING: Missing or malformed SPDX-License-Identifier tag
+> - ERROR: trailing statements should be on next line
+> - WARNING: braces {} are not necessary for single statement blocks
+> - ERROR: space required before the open parenthesis '('
+> - ERROR: code indent should use tabs where possible
+> - WARNING: please, no spaces at the start of a line
+> - WARNING: Missing a blank line after declarations
+>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202306021040.UTvXfH5J-lkp@i=
+ntel.com/
+> Closes: https://lore.kernel.org/oe-kbuild-all/202306021102.zQU95cMI-lkp@i=
+ntel.com/
+>
+
+Remove the empty line.
+
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Franziska Naepelt <franziska.naepelt@gmail.com>
+
+Fixes tag?
+
 > ---
-> 
-> v10 -> v11:
->  - New patch
-> 
+> v2:
+>  - revert noreturn changes to fix build issues
 > ---
->  arch/x86/include/asm/cpufeatures.h |  1 +
->  arch/x86/kernel/cpu/intel.c        | 21 +++++++++++++++++++++
->  2 files changed, 22 insertions(+)
-> 
-> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-> index cb8ca46213be..dc8701f8d88b 100644
-> --- a/arch/x86/include/asm/cpufeatures.h
-> +++ b/arch/x86/include/asm/cpufeatures.h
-> @@ -483,5 +483,6 @@
->  #define X86_BUG_RETBLEED		X86_BUG(27) /* CPU is affected by RETBleed */
->  #define X86_BUG_EIBRS_PBRSB		X86_BUG(28) /* EIBRS is vulnerable to Post Barrier RSB Predictions */
->  #define X86_BUG_SMT_RSB			X86_BUG(29) /* CPU is vulnerable to Cross-Thread Return Address Predictions */
-> +#define X86_BUG_TDX_PW_MCE		X86_BUG(30) /* CPU may incur #MC if non-TD software does partial write to TDX private memory */
->  
->  #endif /* _ASM_X86_CPUFEATURES_H */
-> diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
-> index 1c4639588ff9..251b333e53d2 100644
-> --- a/arch/x86/kernel/cpu/intel.c
-> +++ b/arch/x86/kernel/cpu/intel.c
-> @@ -1552,3 +1552,24 @@ u8 get_this_hybrid_cpu_type(void)
->  
->  	return cpuid_eax(0x0000001a) >> X86_HYBRID_CPU_TYPE_ID_SHIFT;
+>  certs/extract-cert.c | 10 +++++++---
+>  1 file changed, 7 insertions(+), 3 deletions(-)
+>
+> diff --git a/certs/extract-cert.c b/certs/extract-cert.c
+> index 70e9ec89d87d..96c0728bf4d1 100644
+> --- a/certs/extract-cert.c
+> +++ b/certs/extract-cert.c
+> @@ -1,3 +1,4 @@
+> +// SPDX-License-Identifier: LGPL-2.1
+>  /* Extract X.509 certificate in DER form from PKCS#11 or PEM.
+>   *
+>   * Copyright =C2=A9 2014-2015 Red Hat, Inc. All Rights Reserved.
+> @@ -63,7 +64,8 @@ static void drain_openssl_errors(void)
+>
+>  	if (ERR_peek_error() =3D=3D 0)
+>  		return;
+> -	while (ERR_get_error_line(&file, &line)) {}
+> +	while (ERR_get_error_line(&file, &line))
+> +		;
 >  }
+>
+>  #define ERR(cond, fmt, ...)				\
+> @@ -73,7 +75,7 @@ static void drain_openssl_errors(void)
+>  		if (__cond) {				\
+>  			err(1, fmt, ## __VA_ARGS__);	\
+>  		}					\
+> -	} while(0)
+> +	} while (0)
+>
+>  static const char *key_pass;
+>  static BIO *wb;
+> @@ -107,7 +109,7 @@ int main(int argc, char **argv)
+>  	if (verbose_env && strchr(verbose_env, '1'))
+>  		verbose =3D true;
+>
+> -        key_pass =3D getenv("KBUILD_SIGN_PIN");
+> +	key_pass =3D getenv("KBUILD_SIGN_PIN");
+>
+>  	if (argc !=3D 3)
+>  		format();
+> @@ -118,6 +120,7 @@ int main(int argc, char **argv)
+>  	if (!cert_src[0]) {
+>  		/* Invoked with no input; create empty file */
+>  		FILE *f =3D fopen(cert_dst, "wb");
 > +
-> +/*
-> + * These CPUs have an erratum.  A partial write from non-TD
-> + * software (e.g. via MOVNTI variants or UC/WC mapping) to TDX
-> + * private memory poisons that memory, and a subsequent read of
-> + * that memory triggers #MC.
-> + */
-> +static const struct x86_cpu_id tdx_pw_mce_cpu_ids[] __initconst = {
-> +	X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X, NULL),
-> +	X86_MATCH_INTEL_FAM6_MODEL(EMERALDRAPIDS_X, NULL),
-> +	{ }
-> +};
+>  		ERR(!f, "%s", cert_dst);
+>  		fclose(f);
+>  		exit(0);
+> @@ -155,6 +158,7 @@ int main(int argc, char **argv)
+>  			x509 =3D PEM_read_bio_X509(b, NULL, NULL, NULL);
+>  			if (wb && !x509) {
+>  				unsigned long err =3D ERR_peek_last_error();
 > +
-> +static int __init tdx_erratum_detect(void)
-> +{
-> +	if (x86_match_cpu(tdx_pw_mce_cpu_ids))
-> +		setup_force_cpu_bug(X86_BUG_TDX_PW_MCE);
-> +
-> +	return 0;
-> +}
-> +early_initcall(tdx_erratum_detect);
+>  				if (ERR_GET_LIB(err) =3D=3D ERR_LIB_PEM &&
+>  				    ERR_GET_REASON(err) =3D=3D PEM_R_NO_START_LINE) {
+>  					ERR_clear_error();
+>
+> base-commit: 7877cb91f1081754a1487c144d85dc0d2e2e7fc4
+> --
+> 2.39.2 (Apple Git-143)
 
-Initcall? Don't we already have a codepath to call it directly?
-Maybe cpu_set_bug_bits()?
+IMHO should be split to separate commits with fixes tags for
+trackability sake.
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+My guess is that fixes tag is missing because this commit is
+bundling a pile of stuff.
+
+BR, Jarkko
