@@ -2,205 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF592723484
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 03:32:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F4A272348B
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 03:33:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233393AbjFFBcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 21:32:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55762 "EHLO
+        id S233169AbjFFBdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 21:33:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230349AbjFFBcM (ORCPT
+        with ESMTP id S230349AbjFFBdo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 21:32:12 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B070DC;
-        Mon,  5 Jun 2023 18:32:10 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4f624daccd1so2742078e87.0;
-        Mon, 05 Jun 2023 18:32:10 -0700 (PDT)
+        Mon, 5 Jun 2023 21:33:44 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1474D8F;
+        Mon,  5 Jun 2023 18:33:42 -0700 (PDT)
+X-UUID: 27d5fcbc040a11eeb20a276fd37b9834-20230606
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=MIME-Version:Content-Transfer-Encoding:Content-ID:Content-Type:In-Reply-To:References:Message-ID:Date:Subject:CC:To:From; bh=+D6/H4rLOKfQSuFRxLN/u0Z+9UAYJMMD3vGkL9nqvkI=;
+        b=ddSUvbyesv+qH3YnNHlqqmWEFl9/r+BUcL5N1HcZJrG0HhuVqMq670dQBHa6G8wFaNNWS6NG/i3Yg7A4QYhya5CXfWb8iGdAAuUemFxYNUl8PjTlhpVvF/TPKSkO+flmks4XKI6fNZktD8PdKZqGinxmR1q1taPqGSKo5LA0CqE=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.25,REQID:b5440c81-3d1e-4dcd-8355-97c2141421d3,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:28,RULE:Release_Ham,ACTIO
+        N:release,TS:23
+X-CID-INFO: VERSION:1.1.25,REQID:b5440c81-3d1e-4dcd-8355-97c2141421d3,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:28,RULE:Release_Ham,ACTION:
+        release,TS:23
+X-CID-META: VersionHash:d5b0ae3,CLOUDID:cda4aa3d-7aa7-41f3-a6bd-0433bee822f3,B
+        ulkID:230605212233LMPA4YL0,BulkQuantity:25,Recheck:0,SF:38|17|19|102,TC:ni
+        l,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:40|20,QS:nil,BEC:nil,COL:0,O
+        SI:0,OSA:0,AV:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-UUID: 27d5fcbc040a11eeb20a276fd37b9834-20230606
+Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw02.mediatek.com
+        (envelope-from <wenbin.mei@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 644183639; Tue, 06 Jun 2023 09:33:35 +0800
+Received: from mtkmbs10n1.mediatek.inc (172.21.101.34) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Tue, 6 Jun 2023 09:33:34 +0800
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (172.21.101.237)
+ by mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Tue, 6 Jun 2023 09:33:34 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Z1qRNuuFrDNWAEKSGZ4nt4kvLsxuOYWW/3cziuFgdG/M9j6tqH5tUfe1VqbZXTRHGHIkXWHhNxvJhGR5oreUppr9JtbelPsXhzG1kWr0lIZpnEqYd9kcFkxCfzfoAH5Gbn7/S7vjFYCg047oI3gZHhudkzuNHbea4kCFP03rGE96qVA5Ms6cm46t0Fr44EzFCo8xvKKKQw0NBQGole2NnXAeLIUuWOhtMkZ5rooxCLfdnYZ7TgmeSrqjjMwK/egdDl6XA4XKLpMWMrhTKZm/c+v6cFar2v3Vr+m5lO+hN3lDhJQkIl7bYC6c4fPMhqUJ8Sv0xGE7TC14gFlGMZNaeQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+D6/H4rLOKfQSuFRxLN/u0Z+9UAYJMMD3vGkL9nqvkI=;
+ b=g7S/MsYp8SrNlTChi2MRvRMKd6+tPeEFJ3hYsdHG4uJ/d8Qnr9GoNj8kABoKbAc1nL6Drph5noLTu2+ulakskqQLqz7mlBBwwkQdi4BEftNVlUgeMQ+8bcMZxwd3fIQEkIHGSzA//A4lhQlYFqyw7QCgoZOp+p5/nZ+tk3DvAe9Ae8/wRu/MtRDhZcQyOdon0PcqEzew+alxUW9x8YINqt7fmAz0Hxr3xM6EF0bg/yP/RrW+HjcJ4D6HejWX7usLhJnJsJyjW2oL6nn9BhL/pNa3PpfQtxexfzKzPclU0n+gsRQPAr97YC+OBcFgYvpAJJTAYPF9M0w4DUh080H9OQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=mediatek.com; dmarc=pass action=none header.from=mediatek.com;
+ dkim=pass header.d=mediatek.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686015129; x=1688607129;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nKXeYLBgNZsLD/+IxPwyyN63h/BVDg7LwOnNrEDBze0=;
-        b=seM8DoJuA+l2/qluDMFHOqVY2TU0LJEsce5E3zY3BfHXHqYaAoQIn0CcRJVxEiYkeX
-         ueig2x+BcON7b3hxf82SBc6l8PbMtq4dUUcKED2ECulGGEw8YTmbReZY5raJxynbLWYH
-         J9JeYjQuOEvrKBuDThQR39KCrrrmOCQSwS492duLcJ/KfwdyKnVK2MqZaLe2qCpWlreh
-         ATkJkwBLHbj51yPzGh1iKBuit1jUH4WrNFzJ8d/tHdPVOvbrSvBkuBk5fBD/5hjx7tZB
-         hvNmbxkl4kAJgOqDogjNztOz6Dw1NyYjYumFZpe26RxkMpJWsTkFj25n9Bjoa3LU72b6
-         okpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686015129; x=1688607129;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nKXeYLBgNZsLD/+IxPwyyN63h/BVDg7LwOnNrEDBze0=;
-        b=kjLxcs+WiVJ4dyorV4B7lzSHbAoY6fRqHbjjxckuXrK3oQp8eSok6pW0Uz3uGe9mtP
-         qjN5+QApp/K+6WPTbmLM7momAYHvtiKgKIfNisiZmjC3Go4BejfiBsdSeiKqV1LLULEM
-         Q0c1wzqMr+RZfFHYemargTdqZFNLjK3g8YlGrxoL+MIqTZA+9DEExhrMZicH9rcLaIi7
-         bbfd0kAAauhXG9PjKKoCO5TYEAEBTdWDDcobBOWZvkIQswzRZoyHpxc2ESKh8WHnadJ8
-         qk1JugnZyhauyKwihYzy5J14WSFmXHwB1bntLqGUJuNLn8+DXgqI9T0uM8CEQ4HrDK21
-         +cqg==
-X-Gm-Message-State: AC+VfDwj9PTr0O+75yhITU9cfaaaxNeKZUi0mmFGMsUxpdYTpN4DgCyJ
-        b8MQskKdrJx69XC502zxX+j2ROPEBbAyCip10b4=
-X-Google-Smtp-Source: ACHHUZ4CSyaN+1CA8HNujlJTstB9XfEYJXvLicNt50Ql/A2r+8dDz8Zj9rIXpCiTUQYHEpEA2sDAUBbj+rGoJvM5mI4=
-X-Received: by 2002:a2e:7219:0:b0:2b1:c389:c424 with SMTP id
- n25-20020a2e7219000000b002b1c389c424mr648772ljc.12.1686015128552; Mon, 05 Jun
- 2023 18:32:08 -0700 (PDT)
+ d=mediateko365.onmicrosoft.com; s=selector2-mediateko365-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+D6/H4rLOKfQSuFRxLN/u0Z+9UAYJMMD3vGkL9nqvkI=;
+ b=chP9eR4G4wf1qBFItTkmb9rKCTKl+vQ/v3JasSDSSOjcfBo4+zzL+EP/aFDnEOyGk0intUJMXdMpy6hGmhhk1n8wkVFoYVzqyJzuGO6kOcaZYU6cH5xOPVa//slMh7IDNmJ+9NhKcpFRsKlejyytzcecchCHZ+f3Oh7LRhlOZ5Q=
+Received: from SG2PR03MB6279.apcprd03.prod.outlook.com (2603:1096:4:17d::11)
+ by SEYPR03MB7296.apcprd03.prod.outlook.com (2603:1096:101:14a::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Tue, 6 Jun
+ 2023 01:33:32 +0000
+Received: from SG2PR03MB6279.apcprd03.prod.outlook.com
+ ([fe80::e205:4140:7b24:3147]) by SG2PR03MB6279.apcprd03.prod.outlook.com
+ ([fe80::e205:4140:7b24:3147%9]) with mapi id 15.20.6455.030; Tue, 6 Jun 2023
+ 01:33:32 +0000
+From:   =?utf-8?B?V2VuYmluIE1laSAo5qKF5paH5b2sKQ==?= 
+        <Wenbin.Mei@mediatek.com>
+To:     "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+        "amergnat@baylibre.com" <amergnat@baylibre.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "riteshh@codeaurora.org" <riteshh@codeaurora.org>,
+        =?utf-8?B?Q2hhb3RpYW4gSmluZyAo5LqV5pyd5aSpKQ==?= 
+        <Chaotian.Jing@mediatek.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "angelogioacchino.delregno@collabora.com" 
+        <angelogioacchino.delregno@collabora.com>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>
+Subject: Re: [PATCH v4] mmc: mtk-sd: reduce CIT for better performance
+Thread-Topic: [PATCH v4] mmc: mtk-sd: reduce CIT for better performance
+Thread-Index: AQHZl6dRPPunsFP83kqJ9kXlEUngRq98ON6AgADFoIA=
+Date:   Tue, 6 Jun 2023 01:33:31 +0000
+Message-ID: <e88977a984d8ebf8eab8947d6a9308c7f2f3a533.camel@mediatek.com>
+References: <20230605121442.23622-1-wenbin.mei@mediatek.com>
+         <0e7cc4cf-68da-207d-03b5-f9bd065f7940@baylibre.com>
+In-Reply-To: <0e7cc4cf-68da-207d-03b5-f9bd065f7940@baylibre.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=mediatek.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SG2PR03MB6279:EE_|SEYPR03MB7296:EE_
+x-ms-office365-filtering-correlation-id: e73535a3-635d-4f84-fe96-08db662e09b1
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: R7ngBowE+ZzUgVZl3bzckjlk1o21L1NYa7dHVTMOP6G/00cyXeBlCeUyWHLB355Zmv++g2H9LKHaSLXg/kiZ7cnI3Uyip0730xAv7VjjTqD4vNEvJCx5jBbZAA6F7LDOcEylLl9IUJgyD3gW4xtjg4YvKLvZRDtE3NUeAAAlomnavHpz2VFIjhkqXM02YKSEC8QvZAukEituPf/OqMio1fbGKN/Zk/0l9PCvDnnOVnGeCA5lje1U9QCAEkZBrdC40G28NeZJ4xdungKfDcDRvvqqIxCN8sh6jPbz7xxmPEW5rxJWgP2Vyri26Ez+wMAYb8sLg/6YeOoGFhj49rvj2yMZHLsL561lQxHldHeoXlS007hyxr18aKM9+/i8SwJ/H9aBc2BDFXLNPZw2F1qPh1+7bmgO4Krj7klZwF+UETz4kThw+eb7lIOkE/ZbgJtxYZLBlHVHziE8MCcuHZA5j6vfEkG1JrpggJL5RgnGIyv33ZQjXr2wKIn2VH2XTcec8Jc/+evzIIjvpfypnvSpFxmLAYiyr4lCCYxfkqE4w+RQozAfB4rceq4bJsn00qCBpsSteab/qne4rZNLKOuT60FULd3RZYE3aXY+lo8JySD4xWBiJ5TE0ZQO6IMPqz5A
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR03MB6279.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(376002)(39860400002)(366004)(136003)(451199021)(8676002)(8936002)(5660300002)(2906002)(4744005)(316002)(7416002)(76116006)(66446008)(66556008)(64756008)(66476007)(66946007)(4326008)(41300700001)(110136005)(91956017)(6486002)(54906003)(71200400001)(6506007)(53546011)(6512007)(26005)(186003)(36756003)(2616005)(478600001)(83380400001)(122000001)(38100700002)(85182001)(38070700005)(86362001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?cmloNE1OaDlUU2FYQXlGL0xoc3RlTUZySTBuZC9vNVh1UDFacXIxYUd6Wis4?=
+ =?utf-8?B?SUFIYjBub25QMHNnUVQzRzNTRzBacFdKeGhuV0NlcmV4eTdvUGJhQ3dEOXhx?=
+ =?utf-8?B?eDRHWHBCVis2TFNzYW9kdTMwOGY1WGdyMjhhRVBjcVdCSVNrRGE3UmViNkht?=
+ =?utf-8?B?K2NUc25QWG50MlZWNjlxU3NRRDZHeTIrRmo5K0FVYk5MOTk2WEV1K29QSHYz?=
+ =?utf-8?B?SnJtVGFKcnVWNk1nSSt0LzNQTlFrOVpnNGhJUUt0OGlZWFRqTW1RUFlZVXpW?=
+ =?utf-8?B?ZWZKNk1uWUQ1Z2dGdG0yWU9YOE52K2dxejhsRHIveXdncE95WlBKQ0JxZUFF?=
+ =?utf-8?B?eDZMZnRzQ1I0emtRaDIzUHlUZnRLZ1lFUTVCSzhjVldvNkpzWlk2WHZtYWxw?=
+ =?utf-8?B?RTVIRG9QcFZVT0lLQkZJOUZWSHdXZlVSSE5aa0lPK01rRjM1emk3NkxxZjBi?=
+ =?utf-8?B?WURDOGtoWkNaZFdtRmZQQU9lWHNJWDFnZlAyRzgxaThMbTNPak9VR2c1Ly9L?=
+ =?utf-8?B?M2l2d05VMDN4cm00aHp0WFRuMlhDc0dUR2Q5TE5xd254WHdlNjVXNlJZZjBj?=
+ =?utf-8?B?eEcxZHo1MWtLYTVqYloxYVpoY2ZVOExkaXRab0R1bzZZUWdsWEpZbWhzL0pD?=
+ =?utf-8?B?NDVJNXh4WDEwSlVaMEUxbHozdXkwOTcrZGVKNXp2TisvMDVkSnd6ZU9wOVpY?=
+ =?utf-8?B?b090VVh3Y2JzTU5tUEpYbE05MGRhR2psVzRyNzI5TERVcEpUeE1QcmhTNTJO?=
+ =?utf-8?B?dTdPSnU1NkpYREpRT0p5NUNBbmg4Q2EvVmE5eUJCcFZyWVBsMCtlVXI3NkJC?=
+ =?utf-8?B?ZmpzL005QlRXNDNFeFZIaEp2RTRraS9pSmtldmhueHpuUzZjMUtNWVhEdEFY?=
+ =?utf-8?B?MFRHSEc4RmN0WG9LTXdUTUVNUjFxRlRPYXlra2ZleU1RL3lUZU1YSjFsQkM1?=
+ =?utf-8?B?OVIxRjhQdis4V2l2SWtvN3ZCNkkyZ3d6WVBWRFV1anNOa0UramZnaFdDcURD?=
+ =?utf-8?B?aDJYVmVFdFBRQkJpVmhzV0YyWmd6b0JpYU0vNE1RV2JaT2paWDNWYzU3eXFy?=
+ =?utf-8?B?bjM4bUtKRzlrZVdndjQ0emdJWnhhU0ZoZ3RzNjNWaktpVG9zY3pZYUVIVVM0?=
+ =?utf-8?B?QmMzK1ZrdGkxVjRad0NrbFlmT2Y4WHYrSEQ2NVhFOHV5L2NkTTMyRWNoU0xL?=
+ =?utf-8?B?Ykg2KzhXSXU1UzBjZW9XTDZxZHNkZ3c0TzNRMnFnZitNQlowRDRkdnRGdDBR?=
+ =?utf-8?B?U09PZ1lSTE9Hd2FkWGFBcGxOSmdmeDVORTc2NzRURXNUVTByUnIxZ1VRa1hH?=
+ =?utf-8?B?SnJBbSt1UGVZK21Gd2JCdlVWd21iK25seFlRRVlCcUxHa0tRZFQzWFRoYlBN?=
+ =?utf-8?B?eWk2RlNQMUlMTjBlUktJTTl0TzFwa1pUYVJ2cmlUU1Y3NWtWR0FIQU9VOWdU?=
+ =?utf-8?B?cGJ1cUJLcTZISWovb3JHNjJqN1FsbkpqZCtoREEzSHNLbU43Q2IyV1JNMEtw?=
+ =?utf-8?B?RXA4TUJRd2FuTkdWdnBqVktOc3daQ2tpb20zendnOFZMNll2R3loWGEvM3B6?=
+ =?utf-8?B?NzY3b05aU1NaLy9NK2V6V1FkRXduMVdSeFIwSlZ2ZDlFcnNjTkpQUzVpd3pI?=
+ =?utf-8?B?S1dmL1JsaG5USFN0eWdMaWdpRnlxL05kbGduSTF0WXJqZW1raTZGSmZwSUZy?=
+ =?utf-8?B?Tm5RMW84SWFFRDRNQnNIY0RWa2RDdXM3VE5NZnpCa2ZlS0RrUE56bjI3b210?=
+ =?utf-8?B?TXg0RE52d2xXaFRDVnRNWlk1QVhPbU45bnBXdk1oWTN4aVUvNkZKREd4ais2?=
+ =?utf-8?B?allZRFhMMFMzMFNnemlVc1dFR3doWE1ZNHorMlpHZ21OMHV4LzJnNHhDdk45?=
+ =?utf-8?B?cStkUzFjSml1RmZVeVlKczZaSTVGOVF3T1BvQ3JJZHFpTkRuYWptbUxHTC80?=
+ =?utf-8?B?YTlTaWE2ckxmYitMdHIwdXEvc212QXhTdHZGblRreHBsMFFZQU9YQVVSTWlM?=
+ =?utf-8?B?RmVFUmhXVzFMN3o5YWY3dkdMZHZHVUpBbDc2ckxISWpNek1sTVhpWHRZdDZ2?=
+ =?utf-8?B?Q0VMd1RTNi84MFQ3WWdQeHBPeExVVXZkdEx6VHl5L21Td2tRNFZjUzJtYXFE?=
+ =?utf-8?B?SVZGVWlDOUNpTFdYSVNNQ0ZaT3J2Mm8zZWJpSjVoY1ZyTGRFV3pzREs3R3Ni?=
+ =?utf-8?B?cUE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <56526C5811BB7844BB74C91C28DC1481@apcprd03.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20230605164955.GA1977@templeofstupid.com> <CAADnVQK7PQxj5jjfUu9sO524yLMPqE6vmzcipno1WYoeu0q-Gw@mail.gmail.com>
- <20230606004139.GE1977@templeofstupid.com>
-In-Reply-To: <20230606004139.GE1977@templeofstupid.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Mon, 5 Jun 2023 18:31:57 -0700
-Message-ID: <CAADnVQLhqCVRcPuJ8JEZfd5ii+-TsSs4+AsJC0sbjwPMv7LX_Q@mail.gmail.com>
-Subject: Re: [PATCH bpf] bpf: search_bpf_extables should search subprogram extables
-To:     Krister Johansen <kjlx@templeofstupid.com>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, LKML <linux-kernel@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        stable <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SG2PR03MB6279.apcprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e73535a3-635d-4f84-fe96-08db662e09b1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Jun 2023 01:33:31.9967
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a7687ede-7a6b-4ef6-bace-642f677fbe31
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: qgZ+HMSU2xSBmWpYMNEyN+qhveLN02xFbs5ev7ZbFjOd3YQSgTA80KD+Ug5wJQmLuj9eaDr9JZ8/TrgeeVg3JQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR03MB7296
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 5, 2023 at 5:46=E2=80=AFPM Krister Johansen <kjlx@templeofstupi=
-d.com> wrote:
->
-> On Mon, Jun 05, 2023 at 04:30:29PM -0700, Alexei Starovoitov wrote:
-> > On Mon, Jun 5, 2023 at 9:50=E2=80=AFAM Krister Johansen <kjlx@templeofs=
-tupid.com> wrote:
-> > > +                       if (!aux->func[i]->aux->num_exentries ||
-> > > +                           aux->func[i]->aux->extable =3D=3D NULL)
-> > > +                               continue;
-> > > +                       e =3D search_extable(aux->func[i]->aux->extab=
-le,
-> > > +                           aux->func[i]->aux->num_exentries, addr);
-> > > +               }
-> > > +       }
-> >
-> > something odd here.
-> > We do bpf_prog_kallsyms_add(func[i]); for each subprog.
-> > So bpf_prog_ksym_find() in search_bpf_extables()
-> > should be finding ksym and extable of the subprog
-> > and not the main prog.
-> > The bug is probably elsewhere.
->
-> I have a kdump (or more) of this bug so if there's additional state
-> you'd like me to share, let me know.
-
-Please convert the test into selftest.
-Then everyone will be able to reproduce easily
-and it will serve us later to make sure we don't regress.
-
-> With your comments in mind, I took
-> another look at the ksym fields in the aux structs.  I have this in the
-> main program:
->
->   ksym =3D {
->     start =3D 18446744072638420852,
->     end =3D 18446744072638423040,
->     name =3D <...>
->     lnode =3D {
->       next =3D 0xffff88d9c1065168,
->       prev =3D 0xffff88da91609168
->     },
->     tnode =3D {
->       node =3D {{
->           __rb_parent_color =3D 18446613068361611640,
->           rb_right =3D 0xffff88da91609178,
->           rb_left =3D 0xffff88d9f0c5a578
->         }, {
->           __rb_parent_color =3D 18446613068361611664,
->           rb_right =3D 0xffff88da91609190,
->           rb_left =3D 0xffff88d9f0c5a590
->         }}
->     },
->     prog =3D true
->   },
->
-> and this in the func[0] subprogram:
->
->   ksym =3D {
->     start =3D 18446744072638420852,
->     end =3D 18446744072638423040,
->     name =3D <...>
->     lnode =3D {
->       next =3D 0xffff88da91609168,
->       prev =3D 0xffffffff981f8990 <bpf_kallsyms>
->     },
->     tnode =3D {
->       node =3D {{
->           __rb_parent_color =3D 18446613068361606520,
->           rb_right =3D 0x0,
->           rb_left =3D 0x0
->         }, {
->           __rb_parent_color =3D 18446613068361606544,
->           rb_right =3D 0x0,
->           rb_left =3D 0x0
->         }}
->     },
->     prog =3D true
->   },
->
-> That sure looks like func[0] is a leaf in the rbtree and the main
-> program is an intermediate node with leaves.  If that's the case, then
-> bpf_prog_ksym_find may have found the main program instead of the
-> subprogram.  In that case, do you think it's better to skip the main
-> program's call to bpf_prog_ksym_set_addr() if it has subprograms instead
-> of searching for subprograms if the main program is found?
-
-I see.
-Looks like we're doing double bpf_prog_kallsyms_add().
-First in in jit_subprogs():
-        for (i =3D 0; i < env->subprog_cnt; i++) {
-                bpf_prog_lock_ro(func[i]);
-                bpf_prog_kallsyms_add(func[i]);
-        }
-and then again:
-bpf_prog_kallsyms_add(prog);
-in bpf_prog_load().
-
-because func[0] is the main prog.
-
-We are also doing double bpf_prog_lock_ro() for main prog,
-but that's not causing harm.
-
-The fix is probably just this:
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 1e38584d497c..89266dac9c12 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -17633,7 +17633,7 @@ static int jit_subprogs(struct bpf_verifier_env *en=
-v)
-        /* finally lock prog and jit images for all functions and
-         * populate kallsysm
-         */
--       for (i =3D 0; i < env->subprog_cnt; i++) {
-+       for (i =3D 1; i < env->subprog_cnt; i++) {
-                bpf_prog_lock_ro(func[i]);
-                bpf_prog_kallsyms_add(func[i]);
-        }
+T24gTW9uLCAyMDIzLTA2LTA1IGF0IDE1OjQ2ICswMjAwLCBBbGV4YW5kcmUgTWVyZ25hdCB3cm90
+ZToNCj4gIAkgDQo+IEV4dGVybmFsIGVtYWlsIDogUGxlYXNlIGRvIG5vdCBjbGljayBsaW5rcyBv
+ciBvcGVuIGF0dGFjaG1lbnRzIHVudGlsDQo+IHlvdSBoYXZlIHZlcmlmaWVkIHRoZSBzZW5kZXIg
+b3IgdGhlIGNvbnRlbnQuDQo+ICBPbiAwNS8wNi8yMDIzIDE0OjE0LCBXZW5iaW4gTWVpIHdyb3Rl
+Og0KPiA+IENRSENJX1NTQzEgaW5kaWNhdGVzIHRvIENRRSB0aGUgcG9sbGluZyBwZXJpb2QgdG8g
+dXNlIHdoZW4gdXNpbmcNCj4gcGVyaW9kaWMNCj4gPiBTRU5EX1FVRVVFX1NUQVRVUyhDTUQxMykg
+cG9sbGluZy4NCj4gPiBTaW5jZSBNU0RDIENRRSB1c2VzIG1zZGNfaGNsayBhcyBJVENGVkFMLCBz
+byBkcml2ZXIgc2hvdWxkIHVzZSBoY2xrDQo+ID4gZnJlcXVlbmN5IHRvIGdldCB0aGUgYWN0dWFs
+IHRpbWUuDQo+ID4gVGhlIGRlZmF1bHQgdmFsdWUgMHgxMDAwIHRoYXQgY29ycmVzcG9uZHMgdG8g
+MTUwdXMgZm9yIE1lZGlhVGVrDQo+IFNvQ3MsIGxldCdzDQo+ID4gZGVjcmVhc2UgaXQgdG8gMHg0
+MCB0aGF0IGNvcnJlc3BvbmRzIHRvIDIuMzV1cywgd2hpY2ggY2FuIGltcHJvdmUNCj4gdGhlDQo+
+ID4gcGVyZm9ybWFuY2Ugb2Ygc29tZSBlTU1DIGRldmljZXMuDQo+IA0KPiBIaSwNCj4gDQo+IC0g
+Q2FuIHlvdSBhZGQgdGhlIHZlcnNpb24gY2hhbmdlIGxvZyBhbmQgdGhlIGxpbmsgdG8gdGhlIHBy
+ZXZpb3VzDQo+IHBhdGNoIHZlcnNpb24gKGF0IGxlYXN0KSBwbGVhc2UgPw0KPiANCj4gLSBPbiB3
+aGljaCBib2FyZChzKSBkaWQgeW91IHRlc3QgdGhpcyBwYXRjaCBwbGVhc2UgPw0KPiANClRoYW5r
+cyBmb3IgeW91ciByZW1pbmRlci4NCkkgd2lsbCBhZGQgdGhlIHZlcnNpb24gY2hhbmdlIGxvZyBh
+bmQgdGhlIGxpbmsuDQoNCldlIHRlc3QgdGhpcyBwYXRjaCBvbiBvdXIgZGVtbyBib2FyZC4NCg0K
+QmVnYXJkcywNCldlbmJpbg0KPiAtLSANCj4gUmVnYXJkcywNCj4gQWxleGFuZHJlDQo+IA0K
