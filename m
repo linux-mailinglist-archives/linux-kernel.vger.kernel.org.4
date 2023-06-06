@@ -2,125 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D52B72468E
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:42:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D06272468F
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:42:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238407AbjFFOme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 10:42:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42356 "EHLO
+        id S238092AbjFFOmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 10:42:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238340AbjFFOmT (ORCPT
+        with ESMTP id S237908AbjFFOmX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 10:42:19 -0400
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4756E1FE0;
-        Tue,  6 Jun 2023 07:40:16 -0700 (PDT)
-Received: by mail-qv1-xf34.google.com with SMTP id 6a1803df08f44-6260e8a1424so43329276d6.2;
-        Tue, 06 Jun 2023 07:40:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686062379; x=1688654379;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lvZ4XsTsTufzOmDccsqLlYK7JaxQyIdNHpPkr+8WCVU=;
-        b=dbsKKzlSqCxKNp0/8WqjVhH0METcILEAuzsthzhm/cPsREUocAj7XviIGDyr3X0a/R
-         3mwLkv0bs09MK66ezSojrCwgtaGqClR/TWa4ba8m+VdPuaJsG4a48TreBWjRqKRDb78g
-         dWWAHowWoODwiV983zWmKsrqLxWsKOwS3PEr831YQX00EhiHGYdz7Q7BjLJ9D6g0tSX8
-         smWJGLG09JprEpKEN1AE0oAmIk2XO2t8DLOSyNDb9jVvZrqbbnecERzh6rMDawRxJ5jf
-         047Hn+K5ixMP8ou6gMxuBqiODDshPfYOqfM7WUSJ0G/tODZIZA5Ry8w4ijazb/U1eS9H
-         cI6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686062379; x=1688654379;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lvZ4XsTsTufzOmDccsqLlYK7JaxQyIdNHpPkr+8WCVU=;
-        b=ZTv5emT4vZ7u0hrUdNQRtNjj+su37t7WXcTK/h5X7YApJIlui86pz8KwB1TpGNmh5N
-         MnDfUTTLmAhT4y+cwCIgIUjaa1DUtmbgassPVRjcA87nJXl2N1mo6HpCrdQSO1b7ZwQk
-         UVTU99DJbM1r0u4SuKo2CBivtOir7jX5rRgfxp4Q9SUjbMB5R4wQ/pkuAljC5Nk2fdrp
-         vBqwrGvohX2phDrgt1mSZXWu5qFbWZLBuMF91LhiWX6faZP3zfx+r/0hamSL/YQNdluG
-         8KwwuCL4gCN5QSHpOH28S1A10F04KgPb6KY80EYYs9K9QQZd33aToN+1y1UEwwsy3aFo
-         7Q5Q==
-X-Gm-Message-State: AC+VfDwzJPWdBSjm+RwBeHkjVYXRm+fztyjC38pPyaWzXSoCTSE4G0A2
-        XJn8ZPBR/C/hRnAOqPxe7d6wgbmO3iw3caNgHBU=
-X-Google-Smtp-Source: ACHHUZ7oc/MKr57w4wxuuavVhcIsODwhsyxixYvZ2V/E5O5qvmNSSbMjRVQoesIRP/0hf+v6UteQHJdPwgPVkoddCsc=
-X-Received: by 2002:a05:6214:401:b0:626:2870:7dee with SMTP id
- z1-20020a056214040100b0062628707deemr2664588qvx.42.1686062378686; Tue, 06 Jun
- 2023 07:39:38 -0700 (PDT)
+        Tue, 6 Jun 2023 10:42:23 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C15C2719
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 07:40:20 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (om126253223039.31.openmobile.ne.jp [126.253.223.39])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 23665AB;
+        Tue,  6 Jun 2023 16:39:13 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1686062355;
+        bh=qyqmnSxwDwLrbxk8+vjpFN2vWJrjzLzmUBFrL48Rkfw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=O4smJqs5dEKcDVHCfkFXhvvZxlZ37wGv8k7loP11UwO+eQEJjJv11rrjS/a9/JlDD
+         L+RlpZsRVK8FkPZhlAJ+QiL+70D/6XtzH0RHbEBLfnJtZ8Itfu8ZfPf+Dzo+HFjYwZ
+         qJvMdz7dyCVBQtyMGYZRL8EHzvAurt88+U0VvGZw=
+Date:   Tue, 6 Jun 2023 17:39:37 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Siddh Raman Pant <code@siddh.me>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Suraj Upadhyay <usuraj35@gmail.com>
+Subject: Re: [PATCH v9 4/8] drm: Remove usage of deprecated DRM_NOTE
+Message-ID: <20230606143937.GD5197@pendragon.ideasonboard.com>
+References: <cover.1686047727.git.code@siddh.me>
+ <91d957dd92b41dda42da912397df195e3565866a.1686047727.git.code@siddh.me>
 MIME-Version: 1.0
-References: <1685277277-12209-1-git-send-email-wellslutw@gmail.com> <9ace5c4c-5e17-4207-5a02-6a47ba0aee22@web.de>
-In-Reply-To: <9ace5c4c-5e17-4207-5a02-6a47ba0aee22@web.de>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 6 Jun 2023 17:39:02 +0300
-Message-ID: <CAHp75VeMKtHfVVtH+xGSYrt+SSVgVkhCs29jVqfnnoihvhSj4w@mail.gmail.com>
-Subject: Re: [PATCH] pinctrl: sunplus: Delete an unnecessary check before
- kfree() in sppctl_dt_node_to_map()
-To:     Markus Elfring <Markus.Elfring@web.de>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     kernel-janitors@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Dvorkin Dmitry <dvorkin@tibbo.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Wells Lu <wellslutw@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>, cocci@inria.fr,
-        Wells Lu <wells.lu@sunplus.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <91d957dd92b41dda42da912397df195e3565866a.1686047727.git.code@siddh.me>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 6, 2023 at 4:26=E2=80=AFPM Markus Elfring <Markus.Elfring@web.d=
-e> wrote:
->
-> From: Markus Elfring <elfring@users.sourceforge.net>
-> Date: Tue, 6 Jun 2023 15:00:18 +0200
+Hi Siddh,
 
-You need to utilize what MAINTAINERS file has.
+Thank you for the patch.
 
-> It can be known that the function =E2=80=9Ckfree=E2=80=9D performs a null=
- pointer check
-> for its input parameter.
-> It is therefore not needed to repeat such a check before its call.
->
-> Thus remove a redundant pointer check.
+On Tue, Jun 06, 2023 at 04:15:18PM +0530, Siddh Raman Pant wrote:
+> drm_print.h says DRM_NOTE is deprecated in favor of drm_notice().
+> 
+> Signed-off-by: Siddh Raman Pant <code@siddh.me>
 
-Seems reasonable to me.
-FWIW,
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+With the commit message fixed as mentioned in the review of an earlier
+patch in this series,
 
-> Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
+Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+
 > ---
->  drivers/pinctrl/sunplus/sppctl.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/drivers/pinctrl/sunplus/sppctl.c b/drivers/pinctrl/sunplus/s=
-ppctl.c
-> index e91ce5b5d559..150996949ede 100644
-> --- a/drivers/pinctrl/sunplus/sppctl.c
-> +++ b/drivers/pinctrl/sunplus/sppctl.c
-> @@ -971,8 +971,7 @@ static int sppctl_dt_node_to_map(struct pinctrl_dev *=
-pctldev, struct device_node
->
->  sppctl_map_err:
->         for (i =3D 0; i < (*num_maps); i++)
-> -               if (((*map)[i].type =3D=3D PIN_MAP_TYPE_CONFIGS_PIN) &&
-> -                   (*map)[i].data.configs.configs)
-> +               if ((*map)[i].type =3D=3D PIN_MAP_TYPE_CONFIGS_PIN)
->                         kfree((*map)[i].data.configs.configs);
->         kfree(*map);
->         of_node_put(parent);
-> --
-> 2.40.1
->
+>  drivers/gpu/drm/drm_displayid.c         | 2 +-
+>  drivers/gpu/drm/drm_kms_helper_common.c | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/drm_displayid.c b/drivers/gpu/drm/drm_displayid.c
+> index 9edc111be7ee..27ffeee09e4f 100644
+> --- a/drivers/gpu/drm/drm_displayid.c
+> +++ b/drivers/gpu/drm/drm_displayid.c
+> @@ -42,7 +42,7 @@ validate_displayid(const u8 *displayid, int length, int idx)
+>  	for (i = 0; i < dispid_length; i++)
+>  		csum += displayid[idx + i];
+>  	if (csum) {
+> -		DRM_NOTE("DisplayID checksum invalid, remainder is %d\n", csum);
+> +		drm_notice(NULL, "DisplayID checksum invalid, remainder is %d\n", csum);
+>  		return ERR_PTR(-EINVAL);
+>  	}
+>  
+> diff --git a/drivers/gpu/drm/drm_kms_helper_common.c b/drivers/gpu/drm/drm_kms_helper_common.c
+> index 0bf0fc1abf54..7a41373b67dc 100644
+> --- a/drivers/gpu/drm/drm_kms_helper_common.c
+> +++ b/drivers/gpu/drm/drm_kms_helper_common.c
+> @@ -41,7 +41,7 @@ MODULE_LICENSE("GPL and additional rights");
+>  /* Backward compatibility for drm_kms_helper.edid_firmware */
+>  static int edid_firmware_set(const char *val, const struct kernel_param *kp)
+>  {
+> -	DRM_NOTE("drm_kms_helper.edid_firmware is deprecated, please use drm.edid_firmware instead.\n");
+> +	drm_notice(NULL, "drm_kms_helper.edid_firmware is deprecated, please use drm.edid_firmware instead.\n");
+>  
+>  	return __drm_set_edid_firmware_path(val);
+>  }
 
+-- 
+Regards,
 
---=20
-With Best Regards,
-Andy Shevchenko
+Laurent Pinchart
