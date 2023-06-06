@@ -2,183 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0BB77237A4
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 08:27:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3D7B7237A8
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 08:27:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235406AbjFFG1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 02:27:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39184 "EHLO
+        id S231374AbjFFG1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 02:27:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234856AbjFFG0m (ORCPT
+        with ESMTP id S230121AbjFFG0o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 02:26:42 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DA2810D3;
-        Mon,  5 Jun 2023 23:25:32 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 96391601A8;
-        Tue,  6 Jun 2023 08:25:29 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1686032729; bh=rjPsMuGvKZwQ0U+WkOYb2CanbJCvdc78Dm+dRdNT2KU=;
-        h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
-        b=BhtJLtJYjBLaKm3E8xnID9Kmz6Ourd86jqyCoonDdTgWgJ5dGz1BUrEdv7DJpe32e
-         vDKLEi4pk0Nd/cJSVJy08L+xkSkMIbquAMj25pHMQbaYg7TE+JplU1kXZ1onfb7vxA
-         pp4paEut2OGFTIBu26jFKn97J0PuLH1Ms9RfN/HbuZGkhhSVADr71Johk6pWH4sJUH
-         eO0hCeMulqcC0Flj7gR0dtnxcmRcPvmNrHho9e/cXMg8jvTBM+uolxBFEQ1dLg26cP
-         gjdIPugRWPxVDX9RtGGDpk3JEl6ese60uve6NbTH4ZGFcWj6QREJHC81zAEFqnkpXq
-         rYqtzAlEYbLEg==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id hvSNORR0uzKf; Tue,  6 Jun 2023 08:25:27 +0200 (CEST)
-Received: from [192.168.1.6] (unknown [77.237.113.62])
-        by domac.alu.hr (Postfix) with ESMTPSA id 68353601A7;
-        Tue,  6 Jun 2023 08:24:59 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1686032727; bh=rjPsMuGvKZwQ0U+WkOYb2CanbJCvdc78Dm+dRdNT2KU=;
-        h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
-        b=aC0wknAHsqPblClIELwQ8CrmFLBikkJqUz03jCU0JPdiRjQJ1aop+CIjeXh++ASy2
-         I6KJczErPI7HLRI+bfOk3qKU+3u3DIRKKARK+hz8IakUS5pQW74nKqVmeOSbCowXi5
-         39PA2ZO3BVLvYcNOQRxLwGvjgR/xS/YS2+LTYcfyg2BlngsKSaUh8fEBQXGJYSz+So
-         wBlqjSpYuQ2vNVDfK7d2lITVuwJBtr4vMuS8ztgOq+N7Rq4HBCCogu95FO5PU6Tkqa
-         /w9Y9TZWn5I9YA60bLKmzNhlekpnixy+GJyQcRPhkZ4xLxWQXCtQDMcenrvffkhXxO
-         Mmh7Co1UJKJ/w==
-Message-ID: <a379796a-5cd6-caa7-d11d-5ffa7419b90e@alu.unizg.hr>
-Date:   Tue, 6 Jun 2023 08:24:54 +0200
+        Tue, 6 Jun 2023 02:26:44 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9727F1BD8
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 23:25:34 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-9745d99cfccso734766466b.1
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 23:25:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686032733; x=1688624733;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AmuejoJeHN8EldA6gQK9in2sBXKsFxRHE2nxemHliVA=;
+        b=H2t73c/MUrxYkiy6d/FXdt7ZLMZLAIM5COmSQl9zxydRjd6AepsMfAOtmnHik0Guc+
+         rc9lNjHORqxoWdA7OblI2Oh8ysIHBtk/ekXpSqOxhz9AwPM37E/EpwXMc9Rg2PAQ0fWP
+         dt8sAQHbxrtWkt5rhaxxi3jikHAuLmpn1aEneZArnesqQ0udnbFF6+87Po4UVUFNEFo8
+         JMb8FWrTp3MozQX+jopYovc9bd5nsUv0X2c8cZVL4drEWsc6hMgTRZrMZRQ6xAsdo+eq
+         K9rJ66YB4yXOi2TFheMJ2yMNzloMpPx4EduS9AltjqxXW9OuLTeY5I/LqvOyTVl/v6Lh
+         TxmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686032733; x=1688624733;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AmuejoJeHN8EldA6gQK9in2sBXKsFxRHE2nxemHliVA=;
+        b=VoIwR6gahzj6ftIAZDX5hEaRuHnsPO2jhoSrTJTbHXKp8EwP/B4vO1etSGSQr+ZsiV
+         aTLACkE0rHi+bG675hcnYPS9jFGHhO9SXCf8mVj1SeHXBw4m2drujXCefd6c64P6iWiI
+         2Qd2yfgxd/sGqv6f52A91qN6weLiFzmVFZDbfxRT8WAyVzJyYm3/KTOYk64izgIBiPtz
+         0yzRgNX/uHu74U4yLzlKBoa2la/MltXXSKgyTjL+oiGvektxKgyBvP9/qMkamgjFqzS8
+         A9RNBHF3GZJ3Bv+GjoyoQM9MdXK829/nVmGkA1Wv7bBw6GS+J10sdr/GM1FmiO6N2p0C
+         ZU/g==
+X-Gm-Message-State: AC+VfDwN82Vg+WYZl869vWH2CX8ahIsy2yK1MGjyl0ZC9LmY4ut4rZiv
+        7PyvxH+Zh3kKXxCxPwce4HXzZA==
+X-Google-Smtp-Source: ACHHUZ5L6idkzO3bEQLABFvgweINi4eaoibE5pbJn7hFTY2jsvzdv0qJjx8fzYBbg9thOKHgpDVh3A==
+X-Received: by 2002:a17:907:80c:b0:974:218d:c048 with SMTP id wv12-20020a170907080c00b00974218dc048mr1441420ejb.26.1686032732482;
+        Mon, 05 Jun 2023 23:25:32 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id d10-20020a170906640a00b00965e1be3002sm5157877ejm.166.2023.06.05.23.25.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Jun 2023 23:25:32 -0700 (PDT)
+Message-ID: <d2313558-c25d-ed58-c508-dac574183d08@linaro.org>
+Date:   Tue, 6 Jun 2023 08:25:30 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Subject: Re: POSSIBLE BUG: selftests/net/fcnal-test.sh: [FAIL] in vrf "bind -
- ns-B IPv6 LLA" test
-To:     Guillaume Nault <gnault@redhat.com>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <b6191f90-ffca-dbca-7d06-88a9788def9c@alu.unizg.hr>
- <ZHeN3bg28pGFFjJN@debian>
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 01/14] dt-bindings soc: qcom: smd-rpm: Fix sort order
 Content-Language: en-US
-In-Reply-To: <ZHeN3bg28pGFFjJN@debian>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Stephan Gerhold <stephan@gerhold.net>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org
+References: <20230531-rpm-rproc-v1-0-e0a3b6de1f14@gerhold.net>
+ <20230531-rpm-rproc-v1-1-e0a3b6de1f14@gerhold.net>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230531-rpm-rproc-v1-1-e0a3b6de1f14@gerhold.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/31/23 20:11, Guillaume Nault wrote:
-> On Wed, May 24, 2023 at 02:17:09PM +0200, Mirsad Todorovac wrote:
->> Hi,
+On 05/06/2023 09:08, Stephan Gerhold wrote:
+> Some of the enum entries are not properly ordered, fix that.
 > 
-> Hi Mirsad,
-> 
->> The very recent 6.4-rc3 kernel build with AlmaLinux 8.7 on LENOVO 10TX000VCR
->> desktop box fails one test:
->>
->> [root@host net]# ./fcnal-test.sh
->> [...]
->> TEST: ping out, vrf device+address bind - ns-B loopback IPv6                  [ OK ]
->> TEST: ping out, vrf device+address bind - ns-B IPv6 LLA                       [FAIL]
->> TEST: ping in - ns-A IPv6                                                     [ OK ]
->> [...]
->> Tests passed: 887
->> Tests failed:   1
->> [root@host net]#
-> 
-> This test also fails on -net. The problem is specific to ping sockets
-> (same test passes with raw sockets). I believe this test has always
-> failed since fcnal-test.sh started using net.ipv4.ping_group_range
-> (commit e71b7f1f44d3 ("selftests: add ping test with ping_group_range
-> tuned")).
-> 
-> The executed command is:
-> 
-> ip netns exec ns-A ip vrf exec red /usr/bin/ping6 -c1 -w1 -I 2001:db8:3::1 fe80::a846:b5ff:fe4c:da4e%eth1
-> 
-> So ping6 is executed inside VRF 'red' and sets .sin6_scope_id to 'eth1'
-> (which is a slave device of VRF 'red'). Therefore, we have
-> sk->sk_bound_dev_if == 'red' and .sin6_scope_id == 'eth1'. This fails
-> because ping_v6_sendmsg() expects them to be equal:
-> 
-> static int ping_v6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
-> {
-> ...
->                  if (__ipv6_addr_needs_scope_id(ipv6_addr_type(daddr)))
->                          oif = u->sin6_scope_id;
-> ...
->          if ((__ipv6_addr_needs_scope_id(addr_type) && !oif) ||
->              (addr_type & IPV6_ADDR_MAPPED) ||
->              (oif && sk->sk_bound_dev_if && oif != sk->sk_bound_dev_if)) <-- oif='eth1', but ->sk_bound_dev_if='red'
->                  return -EINVAL;
-> ...
-> }
-> 
-> I believe this condition should be relaxed to allow the case where
-> ->sk_bound_dev_if is oif's master device (and maybe there are other
-> VRF cases to also consider).
+> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
+> ---
+>  Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 
-I've tried something like this, but something makes the kernel stuck
-here:
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-TEST: ping out, blocked by route - ns-B loopback IPv6                         [ OK ]
-TEST: ping out, device bind, blocked by route - ns-B loopback IPv6            [ OK ]
-TEST: ping in, blocked by route - ns-A loopback IPv6                          [ OK ]
-TEST: ping out, unreachable route - ns-B loopback IPv6                        [ OK ]
-TEST: ping out, device bind, unreachable route - ns-B loopback IPv6           [ OK ]
+Best regards,
+Krzysztof
 
-#################################################################
-With VRF
-
-[hanged process and kernel won't shutdown]
-
-The code is:
-
----
-  net/ipv6/ping.c | 12 +++++++++++-
-  1 file changed, 11 insertions(+), 1 deletion(-)
-
-diff --git a/net/ipv6/ping.c b/net/ipv6/ping.c
-index c4835dbdfcff..81293e902293 100644
---- a/net/ipv6/ping.c
-+++ b/net/ipv6/ping.c
-@@ -73,6 +73,9 @@ static int ping_v6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
-         struct rt6_info *rt;
-         struct pingfakehdr pfh;
-         struct ipcm6_cookie ipc6;
-+       struct net *net = sock_net(sk);
-+       struct net_device *dev = NULL;
-+       struct net_device *mdev = NULL;
-  
-         err = ping_common_sendmsg(AF_INET6, msg, len, &user_icmph,
-                                   sizeof(user_icmph));
-@@ -111,10 +114,17 @@ static int ping_v6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
-         else if (!oif)
-                 oif = np->ucast_oif;
-  
-+       if (oif) {
-+               dev = dev_get_by_index(net, oif);
-+               mdev = netdev_master_upper_dev_get(dev);
-+       }
-+
-         addr_type = ipv6_addr_type(daddr);
-         if ((__ipv6_addr_needs_scope_id(addr_type) && !oif) ||
-             (addr_type & IPV6_ADDR_MAPPED) ||
--           (oif && sk->sk_bound_dev_if && oif != sk->sk_bound_dev_if))
-+           (oif && sk->sk_bound_dev_if && oif != sk->sk_bound_dev_if &&
-+                   !(mdev && sk->sk_bound_dev_if &&
-+                             mdev != dev_get_by_index(net, sk->sk_bound_dev_if))))
-                 return -EINVAL;
-  
-         ipcm6_init_sk(&ipc6, np);
-
-I am obviously doing something very stupid.
-
-Regards,
-Mirsad
