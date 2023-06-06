@@ -2,173 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E47C3723827
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 08:50:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EDCC723830
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 08:51:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235538AbjFFGux (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 02:50:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51774 "EHLO
+        id S235561AbjFFGvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 02:51:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235559AbjFFGut (ORCPT
+        with ESMTP id S233072AbjFFGvo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 02:50:49 -0400
-Received: from mail-io1-f80.google.com (mail-io1-f80.google.com [209.85.166.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52A9CE52
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 23:50:45 -0700 (PDT)
-Received: by mail-io1-f80.google.com with SMTP id ca18e2360f4ac-777b8c9cc4aso125631039f.3
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 23:50:45 -0700 (PDT)
+        Tue, 6 Jun 2023 02:51:44 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9C44C7
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 23:51:43 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-651f2f38634so5302923b3a.0
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 23:51:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1686034303; x=1688626303;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=uzrUn3TJn9oHZTuuml4d9wxIwzfuVemXzrEhOgGgfqc=;
+        b=Mol2lFfO3T5qt9ASa5cDKUGoDR391wKygoARbFbUOt06c38QAlReGPGuhhdywFHin+
+         ye9WDTddzUqRpVTLEinDAx6UNqTHEaIrT8SLnNxGYiXkp/CBNYxMV0z/PDMX+1j5U3Jd
+         WxwFYOsx8ce70hx4WC8WefuW6A5LqsRrlsQ9PPVWMe5ODehqdXe2Jj5Ef2gipg/Ob5P2
+         v26JxTIdLG1DyfdXner2agtMonw6uWNulLZaEtr+b7yOG72BhrDD8wBjWcym0KhriKiG
+         sp98K5E8yYiUS3P2h5aBHr3+yVz/l/cQzyDhbHJYzbnxsdc94+6W1CHdGy3yrVdEV+ba
+         qpPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686034244; x=1688626244;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=du6lXZ2wzVmR8xlGtgqR3/tnDRrX5BVyGhvfJnhAl34=;
-        b=UqMfR2zzAAxZyqPJMvdIQL9q60kQmTwXagDttJxKDAFgFwijNByPWXjQ8y4rSIbFrK
-         AqrmZwgN8Obx54BOUWbeIYzwM09Bh2CYEQVXKcSzm0NqjiIfoQsJl+rjA8LoegitGZQB
-         v950iBxzC0wEQN/3hb59dnoAKeP+N9Z0vXnfjjWpvxcO6HpIeSdruEX5pYEqq49+kIqF
-         djwLcr8tyU7Ku2ZjK77cfbdPESY1OxG9MQ9PqG6cWhlyA7jMB2ymblwZVNnlLF/BxLMw
-         UFr0s+aTxQYbThNhMKRwPSZjUZRwQHD3M4J0GaXbCMZSb7K1LESFUhvySG+riR2ikbft
-         aVQw==
-X-Gm-Message-State: AC+VfDxZYY7ZF4nDfpMYGIsCj5SLOrxAB1fh8CaH4kfUn76QFgN6eFjY
-        KgTS4WVRHfWne/Rpu6zvkEiopz9Ml6sxO8tIUkMgnT0TdZ9n
-X-Google-Smtp-Source: ACHHUZ6gj+X4ALzjVGuQygsdQoFoWzMtU0sCM5HDfKP7m6h4x17kc5wiNq4kqfXEsZemszHyJiNA3RJe1eL1rymwYTIUzxJzM/mP
+        d=1e100.net; s=20221208; t=1686034303; x=1688626303;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uzrUn3TJn9oHZTuuml4d9wxIwzfuVemXzrEhOgGgfqc=;
+        b=crq7rnLwLC6vap47ivsDvZutyTK5lp+RydgWLy1LzNlAwVjcYhNvxirOiyhZ9F9XIu
+         llEjk7YjE8FqFsQwci38mOI8uu7xHCtRJmlHS4G7z/mmf+NiwGyt9uVN2DE9skhPJCjW
+         8yCVmJi7BqGUMYYv13gZ/uZouU+lEU40Mqp9l26JfJycchblfQM+k8WNRBtaA73c4I/7
+         RXgydSEKjKoEnKf2I8RupMPJn224CibE2NCwFfvBfZJag0kOFBUn4ON2GYyCAHwGhEl1
+         7cBSH+Aa9qSWJ73ChOxT1XB01AqKUQX8Xb+5gFg+y/bBZgblWsTHCV8Uz0gxQvmF3UZv
+         qDjA==
+X-Gm-Message-State: AC+VfDyrKQvKtCqQcef7YDaibPCfdl5cUdyBvjGapz7nmUr/QrEiysxm
+        xahwB0S7a/pAS8Ua2wNeFkXCdA==
+X-Google-Smtp-Source: ACHHUZ7x3NSPqUc0MTztC3yNbXyqO3LPo4HDdDohroIB2GxY1bF8kqh0D++Jt31Y34GGHHc8wE6CTg==
+X-Received: by 2002:a05:6a21:9986:b0:10f:7e62:3806 with SMTP id ve6-20020a056a21998600b0010f7e623806mr2043000pzb.22.1686034303169;
+        Mon, 05 Jun 2023 23:51:43 -0700 (PDT)
+Received: from dread.disaster.area (pa49-179-79-151.pa.nsw.optusnet.com.au. [49.179.79.151])
+        by smtp.gmail.com with ESMTPSA id 19-20020a630e53000000b00513973a7014sm6543861pgo.12.2023.06.05.23.51.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Jun 2023 23:51:42 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.96)
+        (envelope-from <david@fromorbit.com>)
+        id 1q6QXc-008OVH-0F;
+        Tue, 06 Jun 2023 16:51:40 +1000
+Date:   Tue, 6 Jun 2023 16:51:40 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     Kirill Tkhai <tkhai@ya.ru>, akpm@linux-foundation.org,
+        vbabka@suse.cz, viro@zeniv.linux.org.uk, brauner@kernel.org,
+        djwong@kernel.org, hughd@google.com, paulmck@kernel.org,
+        muchun.song@linux.dev, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, zhengqi.arch@bytedance.com
+Subject: Re: [PATCH v2 3/3] fs: Use delayed shrinker unregistration
+Message-ID: <ZH7XfD/pBcWzhHcc@dread.disaster.area>
+References: <168599103578.70911.9402374667983518835.stgit@pro.pro>
+ <168599180526.70911.14606767590861123431.stgit@pro.pro>
+ <ZH6AA72wOd4HKTKE@P9FQF9L96D>
+ <ZH6K0McWBeCjaf16@dread.disaster.area>
+ <ZH6ge3yiGAotYRR9@P9FQF9L96D>
 MIME-Version: 1.0
-X-Received: by 2002:a5e:c10b:0:b0:777:b315:f4fc with SMTP id
- v11-20020a5ec10b000000b00777b315f4fcmr680599iol.2.1686034244669; Mon, 05 Jun
- 2023 23:50:44 -0700 (PDT)
-Date:   Mon, 05 Jun 2023 23:50:44 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000003b9a8105fd7070b6@google.com>
-Subject: [syzbot] [block?] kernel BUG in truncate_inode_pages_range (2)
-From:   syzbot <syzbot+0c073c3b52d621befda9@syzkaller.appspotmail.com>
-To:     axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZH6ge3yiGAotYRR9@P9FQF9L96D>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Mon, Jun 05, 2023 at 07:56:59PM -0700, Roman Gushchin wrote:
+> On Tue, Jun 06, 2023 at 11:24:32AM +1000, Dave Chinner wrote:
+> > On Mon, Jun 05, 2023 at 05:38:27PM -0700, Roman Gushchin wrote:
+> > > Isn't it possible to hide it from a user and call the second part from a work
+> > > context automatically?
+> > 
+> > Nope, because it has to be done before the struct shrinker is freed.
+> > Those are embedded into other structures rather than being
+> > dynamically allocated objects.
+> 
+> This part we might consider to revisit, if it helps to solve other problems.
+> Having an extra memory allocation (or two) per mount-point doesn't look
+> that expensive. Again, iff it helps with more important problems.
 
-syzbot found the following issue on:
+Ah, I guess if you're concerned about memory allocation overhead
+during register_shrinker() calls then you really aren't familiar
+with what register_shrinker() does on memcg and numa aware
+shrinkers? 
 
-HEAD commit:    1874a42a7d74 Merge tag 'firewire-fixes-6.4-rc4' of git://g..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=11001fcd280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=162cf2103e4a7453
-dashboard link: https://syzkaller.appspot.com/bug?extid=0c073c3b52d621befda9
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+Let's ignore the fact that we could roll the shrinker structure
+allocation into the existing shrinker->nr_deferred array allocation
+(so it's effectively a zero cost modification), and just look at
+what a memcg enabled shrinker must initialise if it expands the
+shrinker info array because the index returned from idr_alloc()
+is larger than the current array:
 
-Unfortunately, I don't have any reproducer for this issue yet.
+	for each memcg {
+		for_each_node {
+			info = kvmalloc_node();
+			rcu_assign_pointer(memcg->nodeinfo[nid]->shrinker_info, info);
+		}
+	}
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/367f7f99ae3f/disk-1874a42a.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/9366557db826/vmlinux-1874a42a.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/36e357c7b00e/bzImage-1874a42a.xz
+Hmmmm?
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+0c073c3b52d621befda9@syzkaller.appspotmail.com
+So, there really isn't any additional cost, it completely decouples
+the shrinker infrastructure from the subsystem shrinker
+implementations, it enables the shrinker to control infrastructure
+teardown independently of the subsystem that registered the
+shrinker, and it still gives guarantees that the shrinker is never
+run after unregister_shrinker() completes. What's not to like?
 
- tlb_batch_pages_flush mm/mmu_gather.c:97 [inline]
- tlb_flush_mmu_free mm/mmu_gather.c:292 [inline]
- tlb_flush_mmu+0x100/0x210 mm/mmu_gather.c:299
- tlb_finish_mmu+0xd4/0x1f0 mm/mmu_gather.c:391
- exit_mmap+0x3da/0xaf0 mm/mmap.c:3123
- __mmput+0x115/0x3c0 kernel/fork.c:1351
- exit_mm+0x227/0x310 kernel/exit.c:564
- do_exit+0x612/0x2290 kernel/exit.c:858
- do_group_exit+0x206/0x2c0 kernel/exit.c:1021
- get_signal+0x1701/0x17e0 kernel/signal.c:2874
- arch_do_signal_or_restart+0x91/0x670 arch/x86/kernel/signal.c:306
- exit_to_user_mode_loop+0x6a/0x100 kernel/entry/common.c:168
- exit_to_user_mode_prepare+0xb1/0x140 kernel/entry/common.c:204
- __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
- syscall_exit_to_user_mode+0x64/0x280 kernel/entry/common.c:297
- do_syscall_64+0x4d/0xc0 arch/x86/entry/common.c:86
-------------[ cut here ]------------
-kernel BUG at mm/truncate.c:423!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 1 PID: 10158 Comm: syz-executor.3 Not tainted 6.4.0-rc4-syzkaller-00099-g1874a42a7d74 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
-RIP: 0010:truncate_inode_pages_range+0xf82/0x11b0 mm/truncate.c:423
-Code: 00 00 48 c7 c7 70 1b fd 8c 48 89 da e8 d7 a0 ab 02 e9 40 f7 ff ff e8 6d 38 ca ff 4c 89 e7 48 c7 c6 c0 08 f3 8a e8 7e ec 09 00 <0f> 0b e8 27 f9 ed 08 e8 52 38 ca ff 4c 89 ff 48 c7 c6 00 08 f3 8a
-RSP: 0018:ffffc90015d97600 EFLAGS: 00010246
-RAX: 2457790b5b1cdd00 RBX: 0000000000000005 RCX: ffffc90015d97403
-RDX: 0000000000000001 RSI: ffffffff8aea9fa0 RDI: ffffffff8b384540
-RBP: ffffc90015d97880 R08: dffffc0000000000 R09: fffffbfff1cab94e
-R10: 0000000000000000 R11: dffffc0000000001 R12: ffffea0000a6dfc0
-R13: ffffc90015d976f0 R14: ffffc90015d97788 R15: 0000000000000006
-FS:  00007f5529bfe700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f1849dc9000 CR3: 000000001e9ca000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- kill_bdev block/bdev.c:76 [inline]
- set_blocksize+0x318/0x390 block/bdev.c:152
- sb_set_blocksize+0x48/0x100 block/bdev.c:161
- udf_load_vrs+0xe8/0x1100 fs/udf/super.c:1947
- udf_fill_super+0x95d/0x23a0 fs/udf/super.c:2151
- mount_bdev+0x2d0/0x3f0 fs/super.c:1380
- legacy_get_tree+0xef/0x190 fs/fs_context.c:610
- vfs_get_tree+0x8c/0x270 fs/super.c:1510
- do_new_mount+0x28f/0xae0 fs/namespace.c:3039
- do_mount fs/namespace.c:3382 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount+0x2d9/0x3c0 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f552b08d69a
-Code: 48 c7 c2 b8 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 b8 04 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f5529bfdf88 EFLAGS: 00000202 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 0000000000000c10 RCX: 00007f552b08d69a
-RDX: 0000000020000180 RSI: 0000000020000000 RDI: 00007f5529bfdfe0
-RBP: 00007f5529bfe020 R08: 00007f5529bfe020 R09: 00000000020180c8
-R10: 00000000020180c8 R11: 0000000000000202 R12: 0000000020000180
-R13: 0000000020000000 R14: 00007f5529bfdfe0 R15: 0000000020002440
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:truncate_inode_pages_range+0xf82/0x11b0 mm/truncate.c:423
-Code: 00 00 48 c7 c7 70 1b fd 8c 48 89 da e8 d7 a0 ab 02 e9 40 f7 ff ff e8 6d 38 ca ff 4c 89 e7 48 c7 c6 c0 08 f3 8a e8 7e ec 09 00 <0f> 0b e8 27 f9 ed 08 e8 52 38 ca ff 4c 89 ff 48 c7 c6 00 08 f3 8a
-RSP: 0018:ffffc90015d97600 EFLAGS: 00010246
-RAX: 2457790b5b1cdd00 RBX: 0000000000000005 RCX: ffffc90015d97403
-RDX: 0000000000000001 RSI: ffffffff8aea9fa0 RDI: ffffffff8b384540
-RBP: ffffc90015d97880 R08: dffffc0000000000 R09: fffffbfff1cab94e
-R10: 0000000000000000 R11: dffffc0000000001 R12: ffffea0000a6dfc0
-R13: ffffc90015d976f0 R14: ffffc90015d97788 R15: 0000000000000006
-FS:  00007f5529bfe700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f05f87ad988 CR3: 000000001e9ca000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Cheers,
 
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+Dave.
+-- 
+Dave Chinner
+david@fromorbit.com
