@@ -2,202 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8202E723BD5
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 10:32:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AC3E723BEE
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 10:35:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236794AbjFFIcg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 04:32:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57886 "EHLO
+        id S236955AbjFFIfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 04:35:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237163AbjFFIcD (ORCPT
+        with ESMTP id S237088AbjFFIel (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 04:32:03 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBB1F10D3
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 01:31:34 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f70fc4682aso50333285e9.1
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 01:31:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686040233; x=1688632233;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nwUjQvbewj5SnzEYimDrTgn7H3O6EHtl4JsnBhWTTfY=;
-        b=kC/lU5IQeT3R/QxIqpNTWFK5Axd73FzhQcdkQGS1cniNUMLr21NaAarDSyGUao2uAj
-         bVVx6IrjrjDQj/O0W8frv+3/P3rVtg0qYE29TGTsZzcVRdhhyzrFB9RmgDNGCMiVtLEU
-         3PHydvSyHsRe5svAA3bh5akniJaRQkc6SmGVRFvC/PhEpTs/fHPd/YIAm69QP2t0Yb6Z
-         F8FVo30McV/QxiwN3oik08YQLiFhXksohVB0MekBp2nngduXZqKRkafwXpBMdGI1ePLK
-         fm+BoaSeHD7RzFTH7uI2UNwT6qJ3g26gNKIeFSaygUMWD/ajdPKLZKy0ABpgRR/D9IGi
-         fL3w==
+        Tue, 6 Jun 2023 04:34:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89CB010E9
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 01:33:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686040332;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IdoGUsAWfHDr2wQyL6tJs6W/yiY+jfIRUSQEw3HixAk=;
+        b=ZYHxLwbH6Eo3CiTYgzkeM767ZyZe4epmS1Rk4bE763FLqC+cMbQfJrKTYIeUoh+zTXJ1//
+        esSaycNAyjHwuVdJVKwr/q3zMivNemUaEfecmZcI2lpqXiQ/MzeU1QscYdqFc4fYzm/dbf
+        RF2R7buoHKiHGbX+FN3D+W/uiti2B2o=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-381-VAaI4qp4Ps-YACnvumIhvQ-1; Tue, 06 Jun 2023 04:32:11 -0400
+X-MC-Unique: VAaI4qp4Ps-YACnvumIhvQ-1
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3f602cec801so12057445e9.1
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 01:32:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686040233; x=1688632233;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nwUjQvbewj5SnzEYimDrTgn7H3O6EHtl4JsnBhWTTfY=;
-        b=G+OPndoA34OkqDMBWTGCDjmdfTzmw0Y52wVBaSKWok2D5r5MHfcJSYun7fvCA8gsQf
-         tftLDRxf7kHnHE7iBf/qk622VYLtBTpOQkcZ+TNxBGq3gHdhqBYVBrBQ1F+Ufg4RhmxX
-         d14HvQ/46QjOiMNkSYcfoXC8p+D2SSNU4yj7IKFQJiyxEXYzilQ0PGZxStqcqoM6m08T
-         I1mIgu6io3oc0toXGX4PPNERavPZehJM3lFUgIE2PWumHeSvJ2SXkMo7FjwozhABajzl
-         pTgzr2+EJqQobJ5ENf3H/FHoeHu58qHTMHfVLGmoqHDXc6+0T4wJ2cpYNeqhOHo/dxs0
-         x1yw==
-X-Gm-Message-State: AC+VfDxfauTBSJscNQ/lU2lp5LldBqEeOlsaUSfJcuLmKJK5AMhqXxE1
-        c71B3o9BUJYyBRydBa9ScgQOtw==
-X-Google-Smtp-Source: ACHHUZ5OiHJejRzlhAsHC0pei/h3QehCOVlov2VGDV/AQXo7e9Znzxx2615UdXNJBkZZb+3hv3ltvA==
-X-Received: by 2002:a05:600c:2190:b0:3f7:e605:287c with SMTP id e16-20020a05600c219000b003f7e605287cmr1219833wme.40.1686040232727;
-        Tue, 06 Jun 2023 01:30:32 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id c1-20020a5d4cc1000000b002fda1b12a0bsm11948553wrt.2.2023.06.06.01.30.30
+        d=1e100.net; s=20221208; t=1686040330; x=1688632330;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IdoGUsAWfHDr2wQyL6tJs6W/yiY+jfIRUSQEw3HixAk=;
+        b=mFb+l1DrHhu+Vf/HEUR404DoDOaqegUZVzVtMZIxtyCL5kMWp0w+PEKcjysPTwRBYr
+         x3cwxy4NeYsgXBScx6Y2p9PRr3dmBm8JlgX6k8qPwM2M1+zUmn5TYROamwJk1EaXc1lp
+         gtgGj+lTG3zKStm2pGaZySxLTRe/G5m3HB0ApdRHryRdklKYJUvMP4PM2F++kfYbq4N6
+         QCcWThuqu2Q4+GQJYaWlzgblGu1zq+YRdDO1N07M6CKP/i+ermZQGh7ooZmxXvo63djv
+         M51unEsBEqwpcKQRtb6ImA1Bqg2MWZfIuNhlK4VYoHjqZGRvcGrELWvXVbyIGZmZD0hS
+         9Bqw==
+X-Gm-Message-State: AC+VfDxLt6Bcg2a36HAfgR9e1Voh9WjhTfOE+8iSjgLgWwivnUTyTab9
+        /aXKfCv/BzAeTn7bHWipXSv2jJvfEu3oQDnCZJXNEO7cRGvyvRB+5G5sb2I3CtDyp5mCBW92+h3
+        /wKtMyQHbVNZ2w2FC7InRuK71
+X-Received: by 2002:a05:600c:1551:b0:3f1:7490:e595 with SMTP id f17-20020a05600c155100b003f17490e595mr1691951wmg.2.1686040330273;
+        Tue, 06 Jun 2023 01:32:10 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5mpfcPs5jilgFaHL8M4M0PoskD/r9L0dayDg39w3cIqXFW0pL1ZX8Qj4pnjveyA/vuspDHPQ==
+X-Received: by 2002:a05:600c:1551:b0:3f1:7490:e595 with SMTP id f17-20020a05600c155100b003f17490e595mr1691926wmg.2.1686040330004;
+        Tue, 06 Jun 2023 01:32:10 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-114-89.dyn.eolo.it. [146.241.114.89])
+        by smtp.gmail.com with ESMTPSA id v10-20020a1cf70a000000b003f41bb52834sm16803885wmh.38.2023.06.06.01.32.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 01:30:31 -0700 (PDT)
-Date:   Tue, 6 Jun 2023 11:30:27 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     Andy Whitcroft <apw@canonical.com>, Joe Perches <joe@perches.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Sasha Levin <sashal@kernel.org>, Tom Gall <tom.gall@linaro.org>
-Subject: [PATCH] checkpatch: check for missing Fixes tags
-Message-ID: <ZH7uo6ph8nhidxcV@moroto>
+        Tue, 06 Jun 2023 01:32:09 -0700 (PDT)
+Message-ID: <649f4d8d5e96b3c8e39ab56487888fe86e543066.camel@redhat.com>
+Subject: Re: [PATCH net-next v2 08/10] crypto: af_alg: Support
+ MSG_SPLICE_PAGES
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     David Howells <dhowells@redhat.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-crypto@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Date:   Tue, 06 Jun 2023 10:32:08 +0200
+In-Reply-To: <822308.1685619312@warthog.procyon.org.uk>
+References: <bd2750e52b47af1782233e254114eb8d627f1073.camel@redhat.com>
+         <20230530141635.136968-1-dhowells@redhat.com>
+         <20230530141635.136968-9-dhowells@redhat.com>
+         <822308.1685619312@warthog.procyon.org.uk>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This check looks for common words that probably indicate a patch
-is a fix.  For now the regex is:
+On Thu, 2023-06-01 at 12:35 +0100, David Howells wrote:
+> Paolo Abeni <pabeni@redhat.com> wrote:
+>=20
+> > > +	if ((msg->msg_flags & MSG_SPLICE_PAGES) &&
+> > > +	    !iov_iter_is_bvec(&msg->msg_iter))
+> > > +		return -EINVAL;
+> > > +
+> > ...
+> > It looks like the above expect/supports only ITER_BVEC iterators, what
+> > about adding a WARN_ON_ONCE(<other iov type>)?
+>=20
+> Meh.  I relaxed that requirement as I'm now using tools to extract stuff =
+from
+> any iterator (extract_iter_to_sg() in this case) rather than walking the
+> bvec[] directly.  I forgot to remove the check from af_alg.  I can add an
+> extra patch to remove it.  Also, it probably doesn't matter for AF_ALG si=
+nce
+> that's only likely to be called from userspace, either directly (which wi=
+ll
+> not set MSG_SPLICE_PAGES) or via splice (which will pass a BVEC).  Intern=
+al
+> kernel code will use crypto API directly.
 
-	(BUG: KASAN|Call Trace:|syzkaller|stable\@)
+Thank you for the clarification, I got lost a bit. The patch LGTM as
+is.
 
-Why are stable patches encouraged to have a fixes tag?  Some people mark
-their stable patches as "# 5.10" etc.  This is not as useful as a Fixes
-tag.  The Fixes tag helps in review.  It helps people to not cherry-pick
-buggy patches without also cherry-picking the fix.
+>=20
+> > Also, I'm keeping this series a bit more in pw to allow Herbert or
+> > others to have a look.
 
-Also if a bug affects the 5.7 kernel some people will round it up to
-5.10+ because 5.7 is not supported on kernel.org.  It's possible the Bad
-Binder bug was caused by this sort of gap where companies outside of
-kernel.org are supporting different kernels from kernel.org?
+@Herbert, the series LGTM, I think we should apply it. If you have any
+concerns, please voice them soon!
 
-Should it be counted as a Fix when a patch just silences harmless
-WARN_ON() stack trace.  Yes.  Definitely.
+Thanks,
 
-Is silencing compiler warnings a fix?  It seems unfair to the original
-authors, but we use -Werror now, and warnings break the build so let's
-just add Fixes tags for those.  I tell people that silencing static
-checker warnings is not a fix but the rules on this vary by subsystem.
-
-Is fixing a minor LTP issue (Linux Test Project) a fix?  Probably?  It's
-hard to know what to do if the LTP test has technically always been
-broken.
-
-One clear false positive from this check is when a patch updated the
-debug output and the commit message included before and after Call
-Traces.  Sometimes you should just ignore checkpatch.
-
-Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
----
-I tested this by looking at the latest 500 commits in linux-next.
-93 commits had Fixes tags.  Out of the remaining 407 commits then this
-warning said that 9 of them should have had Fixes tags.
-
-Of course the big rule change here is encouraging all stable@kernel.org
-patches to add a Fix.  If everyone followed this checkpatch rule then
-instead of 65% of stable patches having a Fixes tag it would be 75%.
-(The stable tree includes a lot of other patches besides Fixes like
-Stable-dep: patches etc, so it should never be 100%).
-
- scripts/checkpatch.pl | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
-
-diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-index 30b0b4fdb3bf..4e68de51e480 100755
---- a/scripts/checkpatch.pl
-+++ b/scripts/checkpatch.pl
-@@ -28,6 +28,7 @@ my %verbose_messages = ();
- my %verbose_emitted = ();
- my $tree = 1;
- my $chk_signoff = 1;
-+my $chk_fixes_tag = 1;
- my $chk_patch = 1;
- my $tst_only;
- my $emacs = 0;
-@@ -86,6 +87,7 @@ Options:
-   -v, --verbose              verbose mode
-   --no-tree                  run without a kernel tree
-   --no-signoff               do not check for 'Signed-off-by' line
-+  --no-fixes-tag             do not check for 'Fixes:' tag
-   --patch                    treat FILE as patchfile (default)
-   --emacs                    emacs compile window format
-   --terse                    one line per report
-@@ -293,6 +295,7 @@ GetOptions(
- 	'v|verbose!'	=> \$verbose,
- 	'tree!'		=> \$tree,
- 	'signoff!'	=> \$chk_signoff,
-+	'fixes-tag!'	=> \$chk_fixes_tag,
- 	'patch!'	=> \$chk_patch,
- 	'emacs!'	=> \$emacs,
- 	'terse!'	=> \$terse,
-@@ -1254,6 +1257,7 @@ sub git_commit_info {
- }
- 
- $chk_signoff = 0 if ($file);
-+$chk_fixes_tag = 0 if ($file);
- 
- my @rawlines = ();
- my @lines = ();
-@@ -2633,6 +2637,8 @@ sub process {
- 
- 	our $clean = 1;
- 	my $signoff = 0;
-+	my $fixes_tag = 0;
-+	my $needs_fixes_tag = 0;
- 	my $author = '';
- 	my $authorsignoff = 0;
- 	my $author_sob = '';
-@@ -3186,6 +3192,12 @@ sub process {
- 			}
- 		}
- 
-+# These indicate a bug fix
-+		if (!$in_header_lines &&
-+			$line =~ /(BUG: KASAN|Call Trace:|syzkaller|stable\@)/) {
-+			$needs_fixes_tag++;
-+		}
-+
- 
- # Check Fixes: styles is correct
- 		if (!$in_header_lines &&
-@@ -3198,6 +3210,7 @@ sub process {
- 			my $id_length = 1;
- 			my $id_case = 1;
- 			my $title_has_quotes = 0;
-+			$fixes_tag++;
- 
- 			if ($line =~ /(\s*fixes:?)\s+([0-9a-f]{5,})\s+($balanced_parens)/i) {
- 				my $tag = $1;
-@@ -7636,6 +7649,12 @@ sub process {
- 		ERROR("NOT_UNIFIED_DIFF",
- 		      "Does not appear to be a unified-diff format patch\n");
- 	}
-+	if ($is_patch && $has_commit_log && $chk_fixes_tag) {
-+		if ($needs_fixes_tag && $fixes_tag == 0) {
-+			ERROR("MISSING_FIXES_TAG",
-+			"This looks like a fix but there is no Fixes: tag\n");
-+		}
-+	}
- 	if ($is_patch && $has_commit_log && $chk_signoff) {
- 		if ($signoff == 0) {
- 			ERROR("MISSING_SIGN_OFF",
--- 
-2.39.2
+Paolo
 
