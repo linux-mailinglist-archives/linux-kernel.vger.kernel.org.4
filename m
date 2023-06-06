@@ -2,51 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AF2D7248B9
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 18:14:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D464E7248BC
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 18:15:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238352AbjFFQO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 12:14:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48602 "EHLO
+        id S238256AbjFFQPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 12:15:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238619AbjFFQOF (ORCPT
+        with ESMTP id S238786AbjFFQPI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 12:14:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D94A19A6;
-        Tue,  6 Jun 2023 09:13:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 229F2634D8;
-        Tue,  6 Jun 2023 16:13:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5333FC433D2;
-        Tue,  6 Jun 2023 16:13:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686068028;
-        bh=ghZ+tnxDosTZrXGYSxg541zgJK7ETaxCTSN08O1niI0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=r7Jz8JwumHZdRSf4R/A0MYzdMmH3cqxqEgk0rAu2kybQlS7SAz3YABYMPpiOsf66y
-         nT5FVEurwHcBce4ARRCQwXGdsZeCcYoeuXZZFXchx2ugsJkfOcOPL1DKCzmML8ka9S
-         mIxR+BwNiaoAYYOEQagnu72TsHZhrCNESeUAjw3kUtUvLGFaIDmBn+DDp6+b3UWgjo
-         itczrt7fShrlNWo8T1qCiBP9eQyJ7hz2eyST0MBpRE0smaMr171B9J7ebv6xeWsUlr
-         Yljgc7VHQcO8+Uv1d0QG8KeRdWbWD4d5M3ZR5BtmXTGbhomCt/Bs5JBhh88N0USffx
-         Y28iaH08wRwMQ==
-Date:   Tue, 6 Jun 2023 11:13:46 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Sui Jingfeng <suijingfeng@loongson.cn>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] linux/pci.h: add a dummy implement for pci_clear_master()
-Message-ID: <20230606161346.GA1127246@bhelgaas>
+        Tue, 6 Jun 2023 12:15:08 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05E3B171D;
+        Tue,  6 Jun 2023 09:14:46 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 356GE5mW017818;
+        Tue, 6 Jun 2023 11:14:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1686068045;
+        bh=tuU32LklBH8dW6dbR4WurG95lMJn3vkymx1ct1ZvLhQ=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=lHA3UUBq8gVgKtU7fAGesFD+Q81j8toC9I/hDh4v/0tnWEEW6VDmyLaDdptUPoqR6
+         SuZnw/+pwtas0qfsCw62G7mPrlgs6i8aLFtiVA+ClFtWzpdrxHEl8aZ0X0wqBR9C+8
+         3wBlDTPzy2Vx0crkbwdlCsvQRHYaBz8SI7PjtOO4=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 356GE5EO119375
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 6 Jun 2023 11:14:05 -0500
+Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 6
+ Jun 2023 11:14:05 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 6 Jun 2023 11:14:05 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 356GE5wf009200;
+        Tue, 6 Jun 2023 11:14:05 -0500
+Date:   Tue, 6 Jun 2023 11:14:04 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Tero Kristo <kristo@kernel.org>
+Subject: Re: [PATCH 0/2] arm64: dts: ti: k3-j721e: dtbs_check warnings fixups
+Message-ID: <20230606161404.e35m5snkytpfxvxt@emoticon>
+References: <20230424154841.353631-1-nm@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20230530101655.2275731-1-suijingfeng@loongson.cn>
+In-Reply-To: <20230424154841.353631-1-nm@ti.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,74 +66,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 30, 2023 at 06:16:55PM +0800, Sui Jingfeng wrote:
-> As some arch(m68k for example) doesn't have config_pci enabled, drivers[1]
-> call pci_clear_master() without config_pci guard can not built.
+On 10:48-20230424, Nishanth Menon wrote:
+> Hi,
 > 
->    drivers/gpu/drm/etnaviv/etnaviv_pci_drv.c:
->    In function 'etnaviv_gpu_pci_fini':
-> >> drivers/gpu/drm/etnaviv/etnaviv_pci_drv.c:32:9:
->    error: implicit declaration of function 'pci_clear_master';
->    did you mean 'pci_set_master'? [-Werror=implicit-function-declaration]
->       32 |         pci_clear_master(pdev);
->          |         ^~~~~~~~~~~~~~~~
->          |         pci_set_master
->    cc1: some warnings being treated as errors
+> Minor series of two patches to fixup the pending dtbs_check warnings in
+> j721e.
 > 
-> [1] https://patchwork.freedesktop.org/patch/539977/?series=118522&rev=1
+> Nishanth Menon (2):
+>   arm64: dts: ti: k3-j721e-mcu-wakeup: Switch to
+>     "ti,j721e-system-controller" compatible
+>   arm64: dts: ti: k3-j721e-mcu-wakeup: Fix fss node name
 > 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202305301659.4guSLavL-lkp@intel.com/
-> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
-
-I applied this to pci/misc for v6.5, with commit log as below.
-
-But I suspect that it might make your life easier if you include it
-with your etnaviv series.  You may be able to avoid adding the
-CONFIG_DRM_ETNAVIV_PCI_DRIVER symbol.
-
-If so, feel free to include this patch in that series with my ack:
-
-Acked-by: Bjorn Helgaas <bhelgaas@google.com>
-
-If you do include it in your series, please use the commit log below
-and let me know so I can drop it from my queue.
-
-Bjorn
-
-
-  Author: Sui Jingfeng <suijingfeng@loongson.cn>
-  Date:   Wed May 31 18:27:44 2023 +0800
-
-    PCI: Add pci_clear_master() stub for non-CONFIG_PCI
-    
-    Add a pci_clear_master() stub when CONFIG_PCI is not set so drivers that
-    support both PCI and platform devices don't need #ifdefs or extra Kconfig
-    symbols for the PCI parts.
-    
-    [bhelgaas: commit log]
-    Fixes: 6a479079c072 ("PCI: Add pci_clear_master() as opposite of pci_set_master()")
-    Link: https://lore.kernel.org/r/20230531102744.2354313-1-suijingfeng@loongson.cn
-    Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
-    Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-    Acked-by: Bjorn Helgaas <bhelgaas@google.com>
-
-> ---
->  include/linux/pci.h | 1 +
->  1 file changed, 1 insertion(+)
+>  arch/arm64/boot/dts/ti/k3-j721e-mcu-wakeup.dtsi | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/include/linux/pci.h b/include/linux/pci.h
-> index d0c19ff0c958..71c85380676c 100644
-> --- a/include/linux/pci.h
-> +++ b/include/linux/pci.h
-> @@ -1904,6 +1904,7 @@ static inline int pci_dev_present(const struct pci_device_id *ids)
->  #define pci_dev_put(dev)	do { } while (0)
->  
->  static inline void pci_set_master(struct pci_dev *dev) { }
-> +static inline void pci_clear_master(struct pci_dev *dev) { }
->  static inline int pci_enable_device(struct pci_dev *dev) { return -EIO; }
->  static inline void pci_disable_device(struct pci_dev *dev) { }
->  static inline int pcim_enable_device(struct pci_dev *pdev) { return -EIO; }
 > -- 
-> 2.25.1
+> 2.40.0
 > 
+As discussed in https://lore.kernel.org/all/20230605205220.rjmcsi5tjn4auqa7@arose/
+
+Lets drop this series, once the dependent patches are merged, we can
+switch to bus in the next kernel rev.
+
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
