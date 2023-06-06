@@ -2,150 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55C61724D6F
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 21:45:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9A36724D76
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 21:46:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239637AbjFFTpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 15:45:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34674 "EHLO
+        id S239652AbjFFTq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 15:46:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239166AbjFFTpF (ORCPT
+        with ESMTP id S239617AbjFFTqN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 15:45:05 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2059.outbound.protection.outlook.com [40.107.244.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D900B2134;
-        Tue,  6 Jun 2023 12:44:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=P8S2yfE1N66eB57k9hwfEMtzCakBEPy2xNyX+YcsLS+pWBCm6PvW6mpU3k62raZONFL/5XDo/5B2B7BXCoq+Fjdkizr/rDF3c6slf7Vt9JFIEAgxRNSnqxAbSrgR0Xdyowdr9JK2fPoBiblgwzDQRYnn9Wr60o3AYMv+zPJRzCb+6Vfaip6Su7iu6HV3d+kItVihKgrv8sMAbg5kFyF9rdIvysj+8p8xWgpEDE1kVbEGUYWs5YGom4TeBp7IC+rwCFSNH6Ot7gPOfUtmMRw5vATf3OpNBRPbeQNHY+rbgoe8ZAlxPx2pWjTEYRluD++0nc37xk5eTTyMOHy+9SbqlQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NzwLM7tqhc9OKLlV9fUwWpLi98qt50iX+1TF65zsujg=;
- b=ZtbgeU2h2/2q4MIAgV5/j32H4ZDPLzGAeu5sDqEO55stGfDvp3LNZxx+dMg3aSaFsXYayCo+gfoBJzlkPQ/MAtJRi4hITvEJ1s9A2vSQrFL+xFlgSNm+DYIf8d+zJi49joaei5guFQ1VMQBx4JgWuMQRHENsrVDIE3AxUIHBC3tj/JfucbF7aUwlN/Epd3eDuvRhlSA2gvPqgA8A9MYnBaUN1IVPsFAb4Khkx1Ko50gYkibKvjs2xvIslqRiUyJYcotl7n2k83qyRlgIU5rCBURYuw0UiLF3ug6pkBhbAxm1LZK12a5zabNr12/Cap5daZukvmYRpwfltdRkQ4QdQA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NzwLM7tqhc9OKLlV9fUwWpLi98qt50iX+1TF65zsujg=;
- b=Z6WdesgTKAHbaURcYnsN1mzhXb4GBuyJwelEoOj3L7ZDRoV6ANcCGjAlBMmfO2oJamtt09ncdcK394cGx+13eGU8dc6V+l6xdQkcsFVetblZOw9EiV2VLNhBvPLtSYE85MeFYBA8P9+ONpfAzIGB3b+lfgjDuBAIBttUPomp3jm21ZDlPifQ1b+DdSVTeV8OYpknBIF4HL4bPVrlhc7QQgw6TIL487blQbfk3ornGg2BMQF8yudqiarzQpT+nnGISF5vYAX88JjPk0KiFmHDIR0dySYLXyvkTh6t+1MXYC//+XF/3boUGZQY9aRhd9S/0bQxKpFF59gYvmtno1oyHg==
-Received: from BYAPR11CA0049.namprd11.prod.outlook.com (2603:10b6:a03:80::26)
- by DS0PR12MB7874.namprd12.prod.outlook.com (2603:10b6:8:141::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.28; Tue, 6 Jun
- 2023 19:44:04 +0000
-Received: from DM6NAM11FT011.eop-nam11.prod.protection.outlook.com
- (2603:10b6:a03:80:cafe::17) by BYAPR11CA0049.outlook.office365.com
- (2603:10b6:a03:80::26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.36 via Frontend
- Transport; Tue, 6 Jun 2023 19:44:03 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- DM6NAM11FT011.mail.protection.outlook.com (10.13.172.108) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6455.33 via Frontend Transport; Tue, 6 Jun 2023 19:44:03 +0000
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Tue, 6 Jun 2023
- 12:43:47 -0700
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail202.nvidia.com
- (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Tue, 6 Jun 2023
- 12:43:46 -0700
-Received: from Asurada-Nvidia (10.127.8.11) by mail.nvidia.com (10.129.68.9)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37 via Frontend
- Transport; Tue, 6 Jun 2023 12:43:45 -0700
-Date:   Tue, 6 Jun 2023 12:43:44 -0700
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-CC:     "Tian, Kevin" <kevin.tian@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>
-Subject: Re: [PATCH v2 01/11] iommu: Add new iommu op to create domains owned
- by userspace
-Message-ID: <ZH+McCPS14Wc25JL@Asurada-Nvidia>
-References: <20230511143844.22693-1-yi.l.liu@intel.com>
- <20230511143844.22693-2-yi.l.liu@intel.com>
- <BL1PR11MB5271B553140BB729AF4389AB8C7C9@BL1PR11MB5271.namprd11.prod.outlook.com>
- <ZGfDrRDI50oGih2r@Asurada-Nvidia>
- <BN9PR11MB52766A760580E6FBB995A33F8C419@BN9PR11MB5276.namprd11.prod.outlook.com>
- <ZG2fVj41GgosR1dk@Asurada-Nvidia>
- <BN9PR11MB5276F1410A11ED631CE6824F8C419@BN9PR11MB5276.namprd11.prod.outlook.com>
- <ZG681VohNlw2vvLD@Asurada-Nvidia>
- <ZH897AGywGVbt51Z@nvidia.com>
+        Tue, 6 Jun 2023 15:46:13 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 235441FEB;
+        Tue,  6 Jun 2023 12:45:31 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 356Jb4JW018493;
+        Tue, 6 Jun 2023 19:44:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=7Ib3pRB2zdQ1NMCX/TsQx6PlX7XSN7yv8pkLwJ5z4Os=;
+ b=mLLJUk4di1xJmSivr1//dz/KTnmNwMu1EjGVpGwpu5tY1FJEO5fjyVP1MI2yGyboSgyw
+ kTxqjLE8aV6T0+80R872JsGO2nlx2nox+CuWvhPrfeM9bl37BUgcJ3C79LYMenOrdILg
+ Am7BrD7HKh/6fdf2yZpDrKXwAf/urSyP0y2hjbzf8aDSdlMdmA+DhLtLeKlioUqG5VOh
+ V/oy3i4Ktx4JXFzy8sHwP5F/WB0OC/uraEA3Loa1kzHaDu52Ox6ZeqZVbCu/tDQDcGhv
+ CB0LjfLiGcLNQUDql6e5OKABqmE6I+Q0FmkcM9AtXg22dem+eiYgqJrsuLYDvKMu7H4S fA== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r2a9u83g3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Jun 2023 19:44:41 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 356Jielf018343
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 6 Jun 2023 19:44:40 GMT
+Received: from [10.134.71.70] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 6 Jun 2023
+ 12:44:39 -0700
+Message-ID: <576a2645-4e06-2ad2-475a-39451fae4bf7@quicinc.com>
+Date:   Tue, 6 Jun 2023 12:44:39 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <ZH897AGywGVbt51Z@nvidia.com>
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT011:EE_|DS0PR12MB7874:EE_
-X-MS-Office365-Filtering-Correlation-Id: de3576b0-930e-4642-5b42-08db66c661d6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: EBhlW+md1V6cTSKeaRdIj/WeTxh3jBMlTYGXtKGEKNqu5ab7zqXE1fJ+yu4DqDzugc2luV3qgsoJ8fraPJBb9Bamkro7RAz6phG0fLGGg3p1YWuOlIw52c0FwtB69J14uP1xlhAT4Cvue2vPF8QnNeOFFh1Qqljt1VG++JWa054g5nHdkiVi8Y/Bxhs7qKtLI2dGUjggJHGKOWf/sMkoBJnEVbYWE2Yyw89PUx6d47fsKST/sZR946dOwVzfkBVc54v90Kd3eSi6RrN1zdxJkU930sFjGx6MvFD4yl46Ks0dCN5JL+evfoii6sAGV0WmDXwrNamIduk4sGEHaNGFyKdQE5N65dxjZPR1/SnqZVGWme1YtGO1OaRt+XS7D7Z1JIpamROJdt486c79QolREqnq2Cw4iuKwozP5d6ZO6sF/fysTJhtbhJ/LQpKAN32EzFNvSVbjhXA8L3Oj3keXNAVLA+XQUSQaV3vTQswDw4Qx7O36MwjzO+XGOfL3ShfLDc9uFBgzQ6viokc13kmPOmhAmyZoHKkYquj1a01gOoDJlXqb9e0kcBM9ff9ORfSsN8DA1yJnQ8LrcxY4EOYbRdX+At9t/GsOH/XF4bH2g2xQtD3fVVgl2wYfjetZKJEQfZddveaJiWeiiLsAsxC2LWMwCf9iYKO+pfmnjC9lyim0jGcgCdFCchuXCIxE/rN25o8miVfeneqScG6lJe0K2XIi1sSLnqVFhtLHlVPyM/McFVRBrpcpqpGkG8P1kYos9Iafb22Fg5tyRb1Qfyrdmw==
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(136003)(39860400002)(396003)(451199021)(36840700001)(46966006)(40470700004)(7416002)(6862004)(5660300002)(8676002)(8936002)(4326008)(41300700001)(4744005)(2906002)(70206006)(6636002)(70586007)(316002)(54906003)(26005)(426003)(336012)(9686003)(186003)(66899021)(47076005)(36860700001)(356005)(33716001)(478600001)(7636003)(82740400003)(40460700003)(82310400005)(55016003)(40480700001)(86362001)(67856001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2023 19:44:03.2646
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: de3576b0-930e-4642-5b42-08db66c661d6
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT011.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7874
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [Freedreno] [PATCH v3 4/7] drm/msm/mdp5: Add MDP5 configuration
+ for MSM8226
+To:     Luca Weiss <luca@z3ntu.xyz>,
+        <~postmarketos/upstreaming@lists.sr.ht>,
+        <phone-devel@vger.kernel.org>, Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+CC:     <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>
+References: <20230308-msm8226-mdp-v3-0-b6284145d67a@z3ntu.xyz>
+ <20230308-msm8226-mdp-v3-4-b6284145d67a@z3ntu.xyz>
+Content-Language: en-US
+From:   Jeykumar Sankaran <quic_jeykumar@quicinc.com>
+In-Reply-To: <20230308-msm8226-mdp-v3-4-b6284145d67a@z3ntu.xyz>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: yy4Lw2zr9MujSmW7W8XpVZudq2N4Cnnf
+X-Proofpoint-GUID: yy4Lw2zr9MujSmW7W8XpVZudq2N4Cnnf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-06_14,2023-06-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 impostorscore=0 adultscore=0 clxscore=1011 bulkscore=0
+ priorityscore=1501 phishscore=0 mlxscore=0 mlxlogscore=999 spamscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306060167
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 11:08:44AM -0300, Jason Gunthorpe wrote:
-> On Wed, May 24, 2023 at 06:41:41PM -0700, Nicolin Chen wrote:
+
+
+On 6/1/2023 10:00 AM, Luca Weiss wrote:
+> Add the required config for the v1.1 MDP5 found on MSM8226.
 > 
-> > Upon a quick check, I think we could. Though it'd be slightly
-> > mismatched with the domain_alloc op, it should be fine since
-> > iommufd is likely to be the only caller.
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> ---
+>   drivers/gpu/drm/msm/disp/mdp5/mdp5_cfg.c | 82 ++++++++++++++++++++++++++++++++
+>   1 file changed, 82 insertions(+)
 > 
-> Ideally the main op would return ERR_PTR too
-
-Yea. It just seems to be a bit painful to change it for that.
-
-Worth a big series?
-
-Thanks
-Nic
+> diff --git a/drivers/gpu/drm/msm/disp/mdp5/mdp5_cfg.c b/drivers/gpu/drm/msm/disp/mdp5/mdp5_cfg.c
+> index 2eec2d78f32a..694d54341337 100644
+> --- a/drivers/gpu/drm/msm/disp/mdp5/mdp5_cfg.c
+> +++ b/drivers/gpu/drm/msm/disp/mdp5/mdp5_cfg.c
+> @@ -103,6 +103,87 @@ static const struct mdp5_cfg_hw msm8x74v1_config = {
+>   	.max_clk = 200000000,
+>   };
+>   
+> +static const struct mdp5_cfg_hw msm8x26_config = {
+> +	.name = "msm8x26",
+> +	.mdp = {
+> +		.count = 1,
+> +		.caps = MDP_CAP_SMP |
+> +			0,
+> +	},
+> +	.smp = {
+> +		.mmb_count = 7,
+> +		.mmb_size = 4096,
+> +		.clients = {
+> +			[SSPP_VIG0] =  1,
+> +			[SSPP_DMA0] = 4,
+> +			[SSPP_RGB0] = 7,
+> +		},
+> +	},
+> +	.ctl = {
+> +		.count = 2,
+> +		.base = { 0x00500, 0x00600 },
+> +		.flush_hw_mask = 0x0003ffff,
+> +	},
+> +	.pipe_vig = {
+> +		.count = 1,
+> +		.base = { 0x01100 },
+> +		.caps = MDP_PIPE_CAP_HFLIP |
+> +			MDP_PIPE_CAP_VFLIP |
+> +			MDP_PIPE_CAP_SCALE |
+> +			MDP_PIPE_CAP_CSC   |
+> +			0,
+> +	},
+> +	.pipe_rgb = {
+> +		.count = 1,
+> +		.base = { 0x01d00 },
+> +		.caps = MDP_PIPE_CAP_HFLIP |
+> +			MDP_PIPE_CAP_VFLIP |
+> +			MDP_PIPE_CAP_SCALE |
+> +			0,
+> +	},
+> +	.pipe_dma = {
+> +		.count = 1,
+> +		.base = { 0x02900 },
+> +		.caps = MDP_PIPE_CAP_HFLIP |
+> +			MDP_PIPE_CAP_VFLIP |
+> +			0,
+> +	},
+> +	.lm = {
+> +		.count = 2,
+> +		.base = { 0x03100, 0x03d00 },
+> +		.instances = {
+> +				{ .id = 0, .pp = 0, .dspp = 0,
+> +				  .caps = MDP_LM_CAP_DISPLAY, },
+> +				{ .id = 1, .pp = -1, .dspp = -1,
+> +				  .caps = MDP_LM_CAP_WB },
+> +			     },
+> +		.nb_stages = 2,
+> +		.max_width = 2048,
+> +		.max_height = 0xFFFF,
+> +	},
+> +	.dspp = {
+> +		.count = 1,
+> +		.base = { 0x04500 },
+> +	},
+> +	.pp = {
+> +		.count = 1,
+> +		.base = { 0x21a00 },
+> +	},
+> +	.intf = {
+> +		.base = { 0x00000, 0x21200 },
+> +		.connect = {
+> +			[0] = INTF_DISABLED,
+> +			[1] = INTF_DSI,
+> +		},
+> +	},
+> +	.perf = {
+> +		.ab_inefficiency = 100,
+> +		.ib_inefficiency = 200,
+> +		.clk_inefficiency = 125
+> +	},
+> +	.max_clk = 200000000,
+> +};
+> +
+>   static const struct mdp5_cfg_hw msm8x74v2_config = {
+>   	.name = "msm8x74",
+>   	.mdp = {
+> @@ -1236,6 +1317,7 @@ static const struct mdp5_cfg_hw sdm660_config = {
+>   
+>   static const struct mdp5_cfg_handler cfg_handlers_v1[] = {
+>   	{ .revision = 0, .config = { .hw = &msm8x74v1_config } },
+> +	{ .revision = 1, .config = { .hw = &msm8x26_config } },
+>   	{ .revision = 2, .config = { .hw = &msm8x74v2_config } },
+>   	{ .revision = 3, .config = { .hw = &apq8084_config } },
+>   	{ .revision = 6, .config = { .hw = &msm8x16_config } },
+> 
+Reviewed-by: Jeykumar Sankaran <quic_jeykumar@quicinc.com>
