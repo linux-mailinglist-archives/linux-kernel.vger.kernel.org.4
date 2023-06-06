@@ -2,99 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 804ED723C20
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 10:47:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72CC2723C24
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 10:48:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237252AbjFFIrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 04:47:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40882 "EHLO
+        id S236026AbjFFIsg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 04:48:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232579AbjFFIrg (ORCPT
+        with ESMTP id S231659AbjFFIsd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 04:47:36 -0400
-Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C937BF4
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 01:47:34 -0700 (PDT)
-Received: by mail-vs1-xe30.google.com with SMTP id ada2fe7eead31-437e6ffa660so1409329137.1
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 01:47:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686041253; x=1688633253;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=vPzItteNtao+YX2FbM8/rysut6Tk9dQVilNxpZkVgzA=;
-        b=HqUxxfmVhiaWGaexE8Xb1vP01EV/Lr1DGPmtIdT/oBaFSMrbzSA7bF/zS/DxG9BuiG
-         8QbFSBEf3oCN5lKHUG1csB+Sr36Gx33Lv3Diww2h1/D7x4wzV8PDILnJ8Njv5q5SgUtE
-         QmthRiRoUkOMd3QuGZhioNaoVZ3gQmPvYvCzHYe5h5sUt0NcWWAAJf3P8SSgpkQXJXZG
-         Qcq3eTnyjNV5SqzR3DhRcmVBkFyXsuZv2dWaol7/L1ztTI69xU1+8ZMtSj6vYVXEv9C/
-         xYSaaOh/Ck1gGxQJpSvz4DlDUgiG76Fe9oWhgIF7K8Pq+wZAEme6yh9ZUL32OgDPSQc+
-         oeFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686041253; x=1688633253;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vPzItteNtao+YX2FbM8/rysut6Tk9dQVilNxpZkVgzA=;
-        b=at+yeSRr4MaVuhnLlh4F4awXYvauMbKr6QelqND5nhPSjF7VAaEyVTJ/Se9ODZlLta
-         rQdtUknE2q/pHbRhgSiClUNdtFx8N+FiCZ0WqcLaZFWBSNwsUNRGw+YnDXi6yUzt6/nA
-         ZoI7IbVdK6R3sHlgyut0lhc1GthFFCU92Uvubj708qEy5GhmrL6YOFhdAjW7uZHdN7Op
-         jjyhU/9gqzDeIZ1QGq4tbwuPt7k/cxbpyLJvPAxqMrNatvgKpsr4yuxSY26X2is1x7Uy
-         AZdyDpaL2Ai78cn4t7iG9Zcjm73bmCmefuHkM1xPdt53DvUCDl+PA6GecI7VgJy2gAKG
-         rWmw==
-X-Gm-Message-State: AC+VfDzw8Xo2IUoPJAojWGGGAjNY+cuHGciaZsacWHqo7cFieFgKy4tZ
-        ec1H5K6/Di7oIhiXeaF0RRqdnnZ8IsiWkejllVt6t5L2N+pkK3KfzGk=
-X-Google-Smtp-Source: ACHHUZ6M0VbEpBR3xvgxWdprNCWe6vkpORlSkghO/R13HK9fvMgepkWPezLh27ZmsCxT/zpLB1TsiWPrzkHhpbGn7WI=
-X-Received: by 2002:a67:ec86:0:b0:426:20a8:a5b0 with SMTP id
- h6-20020a67ec86000000b0042620a8a5b0mr778337vsp.13.1686041253410; Tue, 06 Jun
- 2023 01:47:33 -0700 (PDT)
+        Tue, 6 Jun 2023 04:48:33 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DBB6E8
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 01:48:29 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id D47D81FD63;
+        Tue,  6 Jun 2023 08:48:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1686041302; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uzifdbB9a65Ly0G3HQ1gDE5VXMzSADFqEAtU4sEv7kM=;
+        b=giUmbODmna+vEGLAKAtlSKl6s+82si34njLk3JkeDYm0UXDA17+8bGXYeb+gO65R4BIE8K
+        Z8L6efq7pmK4nYPtR9Ltm/A3UhdvWBbBHbyK60aj8+QZpahsmXrj87F6iW5k3eq8ad4cVW
+        VLL5x06cRIROEeDURg3HET3VvUO7sTI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1686041302;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uzifdbB9a65Ly0G3HQ1gDE5VXMzSADFqEAtU4sEv7kM=;
+        b=JEeJiwIKT4nnDDq+tUejJ4DgkdMMwpIS1ufoFlyZYZaRsVyuv+3yQdSMbHd0rjSXt6QKkd
+        qu8Zm8+hPkf7R5Ag==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B12B613776;
+        Tue,  6 Jun 2023 08:48:22 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id G92LKtbyfmS7PAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 06 Jun 2023 08:48:22 +0000
+Message-ID: <b05aba56-cdf0-1a8f-c2cc-3dbfcf801c53@suse.cz>
+Date:   Tue, 6 Jun 2023 10:48:22 +0200
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 6 Jun 2023 14:17:22 +0530
-Message-ID: <CA+G9fYv0a-XxXfG6bNuPZGT=fzjtEfRGEYwk3n6M1WhEHUPo9g@mail.gmail.com>
-Subject: arm: shmobile_defconfig: ld.lld: error: undefined symbol: lynx_pcs_destroy
-To:     open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH] mm/slab_common: reduce an if statement in create_cache()
+Content-Language: en-US
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Zhen Lei <thunder.leizhen@huawei.com>
+Cc:     Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20230606065543.1324-1-thunder.leizhen@huawei.com>
+ <ZH7ktMtP8ho2/SFT@debian-BULLSEYE-live-builder-AMD64>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <ZH7ktMtP8ho2/SFT@debian-BULLSEYE-live-builder-AMD64>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Following build regressions found while building arm shmobile_defconfig on
-Linux next-20230606.
+On 6/6/23 09:48, Hyeonggon Yoo wrote:
+> On Tue, Jun 06, 2023 at 02:55:43PM +0800, Zhen Lei wrote:
+>> Move the 'out:' statement block out of the successful path to avoid
+>> redundant check on 'err'. The value of 'err' is always zero on success
+>> and negative on failure.
+>> 
+>> No functional changes, no performance improvements, just a little more
+>> readability.
+>> 
+>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+>> ---
+>>  mm/slab_common.c | 6 ++----
+>>  1 file changed, 2 insertions(+), 4 deletions(-)
+>> 
+>> diff --git a/mm/slab_common.c b/mm/slab_common.c
+>> index 607249785c077e9..f6fe35105774944 100644
+>> --- a/mm/slab_common.c
+>> +++ b/mm/slab_common.c
+>> @@ -236,14 +236,12 @@ static struct kmem_cache *create_cache(const char *name,
+>>  
+>>  	s->refcount = 1;
+>>  	list_add(&s->list, &slab_caches);
+>> -out:
+>> -	if (err)
+>> -		return ERR_PTR(err);
+>>  	return s;
+>>  
+>>  out_free_cache:
+>>  	kmem_cache_free(kmem_cache, s);
+>> -	goto out;
+>> +out:
+>> +	return ERR_PTR(err);
+>>  }
+>>  
+>>  /**
+> 
+> Hi Zhen,
+> nice cleanup!
+> 
+> Looks correct to me,
+> Reviewed-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
 
-Regressions found on arm:
+Thanks, added to slab/for-6.5/cleanup
 
- - build/clang-16-shmobile_defconfig
- - build/gcc-8-shmobile_defconfig
- - build/gcc-12-shmobile_defconfig
- - build/clang-nightly-shmobile_defconfig
+>> -- 
+>> 2.25.1
+>> 
+> 
 
-
-ld.lld: error: undefined symbol: lynx_pcs_destroy
->>> referenced by stmmac_mdio.c
->>>               drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.o:(stmmac_mdio_unregister) in archive vmlinux.a
-make[2]: *** [scripts/Makefile.vmlinux:35: vmlinux] Error 1
-
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-links,
-- https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230606/testrun/17347517/suite/build/test/gcc-12-shmobile_defconfig/history/
-- https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230606/testrun/17347562/suite/build/test/clang-16-shmobile_defconfig/log
-
---
-Linaro LKFT
-https://lkft.linaro.org
