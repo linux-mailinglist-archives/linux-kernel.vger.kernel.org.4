@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B09F0725088
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 01:13:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A607872508A
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 01:14:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240200AbjFFXNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 19:13:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48442 "EHLO
+        id S240208AbjFFXOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 19:14:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234333AbjFFXNs (ORCPT
+        with ESMTP id S240201AbjFFXN7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 19:13:48 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC9671721
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 16:13:45 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id af79cd13be357-75b14216386so624995085a.0
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 16:13:45 -0700 (PDT)
+        Tue, 6 Jun 2023 19:13:59 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC1210C6
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 16:13:57 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id af79cd13be357-75ea05150b3so255301285a.0
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 16:13:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1686093225; x=1688685225;
-        h=mime-version:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=HY4q/q0iXilcEFe8TpiYgTYnOYhsmIy9HGSebLJTKdI=;
-        b=J8IfmAtGA3G5TyRwNZsfbxwXqJJOn84aKYpYSLD1Zo+vrPn4nS/Dpiep1B57QrIzPq
-         TNxk7TFHMH2WyBCRZxvTm0f4MUmIlQUt+nLx29+bChOAEWqBHwRF0azIS+6n1onM2Y+l
-         6g73okDquo+3wqWNaW5Dn4yUrxOIrFZLZw3Ps=
+        d=broadcom.com; s=google; t=1686093236; x=1688685236;
+        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y5bwj1z7HnH+2QnddyqopBsaPUZmUyRMoGGaHHRmdoU=;
+        b=dQBs8m7JPeeygMxsKuUzm5VTwp2Blozhsgvsj5I0blRCBSX019vDn85e/CcelOU6UL
+         HdZGzTb619CcUd2vImvQN5v+d1BglGdha7l6TXEY5GyUk2Wy5Rgs+KUIiRFjbLRhkxpY
+         7DpyydIyATqNXHfRXjDYc+CMKrU0rs6yEV9d4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686093225; x=1688685225;
-        h=mime-version:message-id:date:subject:cc:to:from:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HY4q/q0iXilcEFe8TpiYgTYnOYhsmIy9HGSebLJTKdI=;
-        b=kcKFhoEXuFZPrM6C3fXkcGz8z6bS/OoH9TEHjDTjuKtOIqk0p0pqgjsYLTy2DxeO6d
-         Qnw8ZbpTx4wyCte77WdeVpea35+JcrYe0G2ixgq5numT2WFKhCEs+DTTf0oCybyXy43o
-         lqziZ4r0O7ByIzZkLg4GwMnsE0p7PmO/OgnLjEKKBAlIH/dlxENvN1+ZR6uIEsbo/+MW
-         mGtjWac+5+222fPZk8pIP/3rjmjxyM+CBByNe14b8dZEQwS9KUsnYnydsCXzMRiah9Z8
-         92JO8cYLX6CvsM4Ombt8g9hMgjNbE0cEc6NKD7kxiCbpvAKbXng7ewkzvZ8pZNEt9Fkg
-         d7UQ==
-X-Gm-Message-State: AC+VfDyOuJUH28nQcCwe+vF6rYu+XDCPeLFupIxUWvKHqIc1W66DpHDL
-        o1sr95KUabIM2xXYsSO1dEIb+A==
-X-Google-Smtp-Source: ACHHUZ43OmZrqC0li3r2pNNxSLgWrqzTFhqAfxpZDaYMPvylBGUNiBd8Rj9qtGgH3W2DZvL0ACrNsQ==
-X-Received: by 2002:a05:620a:27c9:b0:75d:4682:125b with SMTP id i9-20020a05620a27c900b0075d4682125bmr190369qkp.33.1686093224900;
-        Tue, 06 Jun 2023 16:13:44 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686093236; x=1688685236;
+        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y5bwj1z7HnH+2QnddyqopBsaPUZmUyRMoGGaHHRmdoU=;
+        b=R6SjrK1jNs9eAnUenJqU1saxg1hOzrWJUNHnwrS/VopaPJsxqZTyOw7sJqGV6DjDDg
+         K2Z0U9dzh1wmXSbuBYsoWjTkTO1ogmzGNSsuoB8X8RBvgGWN+RVIn0vtu5HLVnqMiXHy
+         r3wkferNIZ1nuBztSPw0w0SeT8hY/+GSbOUBeCFaxdmT2qsWo0923iI1qQ73GCfjcEhS
+         cXRGdn8j+97W653Yw9kFxXtlaFEbXMNOVgkIMCK51bLWvDD7SBnLxfKSQrL2bXT8D3iJ
+         5lmTGhFFLB1dQ8eI+FcrJ58x8J8Qlpu68jZRHpM8oRsolTMVDQSaFcPhjM6bcVGQ6Rle
+         FhJQ==
+X-Gm-Message-State: AC+VfDyI14TB/ExFjhrUQ0s0GrpHLtV7jbbz7sNhnUA6rJcFvhrTHHie
+        44+3QYGoTBjynpW7uzow9Xb6qQ==
+X-Google-Smtp-Source: ACHHUZ5GrEI5xMXNYA+bW3RPq1G+ysrSDy8dyOlAho90ciEB+xEd4Dw1bEDef0O3NRz7Y8g87xVi3g==
+X-Received: by 2002:a05:620a:843:b0:75e:cda3:16ab with SMTP id u3-20020a05620a084300b0075ecda316abmr181956qku.33.1686093236614;
+        Tue, 06 Jun 2023 16:13:56 -0700 (PDT)
 Received: from ubuntu-22.localdomain ([192.19.222.250])
-        by smtp.gmail.com with ESMTPSA id x9-20020ae9e909000000b0075b23e55640sm5221519qkf.123.2023.06.06.16.13.40
+        by smtp.gmail.com with ESMTPSA id x9-20020ae9e909000000b0075b23e55640sm5221519qkf.123.2023.06.06.16.13.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 16:13:42 -0700 (PDT)
+        Tue, 06 Jun 2023 16:13:55 -0700 (PDT)
 From:   William Zhang <william.zhang@broadcom.com>
 To:     Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
         Linux MTD List <linux-mtd@lists.infradead.org>
@@ -53,100 +53,89 @@ Cc:     f.fainelli@gmail.com, rafal@milecki.pl, kursad.oney@broadcom.com,
         anand.gore@broadcom.com, dregan@mail.com, kamal.dasu@broadcom.com,
         tomer.yacoby@broadcom.com, dan.beygelman@broadcom.com,
         William Zhang <william.zhang@broadcom.com>,
-        devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
         Vignesh Raghavendra <vigneshr@ti.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
         Richard Weinberger <richard@nod.at>,
-        linux-arm-kernel@lists.infradead.org,
         Boris Brezillon <bbrezillon@kernel.org>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>
-Subject: [PATCH 00/12] mtd: rawnand: brcmnand: driver and doc updates
-Date:   Tue,  6 Jun 2023 16:12:40 -0700
-Message-Id: <20230606231252.94838-1-william.zhang@broadcom.com>
+        Kamal Dasu <kdasu.kdev@gmail.com>
+Subject: [PATCH 01/12] mtd: rawnand: brcmnand: Fix ECC level field setting for v7.2 controller
+Date:   Tue,  6 Jun 2023 16:12:41 -0700
+Message-Id: <20230606231252.94838-2-william.zhang@broadcom.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230606231252.94838-1-william.zhang@broadcom.com>
+References: <20230606231252.94838-1-william.zhang@broadcom.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000bf172e05fd7e2bf3"
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIME_NO_TEXT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+        boundary="00000000000071e35f05fd7e2ca4"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000bf172e05fd7e2bf3
+--00000000000071e35f05fd7e2ca4
 Content-Transfer-Encoding: 8bit
 
-This patch series include the accumulative updates and fixes for the
-brcmnand driver. The device tree document is also updated accordingly
-with the new properties needed by the driver.
+v7.2 controller has different ECC level field size and shift in the acc
+control register than its predecessor and successor controller. It needs
+to be set specifically.
 
+Fixes: decba6d47869 ("mtd: brcmnand: Add v7.2 controller support")
+Signed-off-by: William Zhang <william.zhang@broadcom.com>
+Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
+---
 
-William Zhang (12):
-  mtd: rawnand: brcmnand: Fix ECC level field setting for v7.2 controller
-  mtd: rawnand: brcmnand: Fix potential false time out warning
-  mtd: rawnand: brcmnand: Fix crash during the panic_write
-  mtd: rawnand: brcmnand: Fix potential out-of-bounds access in oob write
-  dt-bindings: mtd: brcmnand: Updates for bcmbca SoCs
-  ARM: dts: broadcom: bcmbca: Add NAND controller node
-  arm64: dts: broadcom: bcmbca: Add NAND controller node
-  mtd: rawnand: brcmnand: Rename bcm63138 nand driver
-  mtd: rawnand: brcmnand: Add new compatible string
-  mtd: rawnand: brcmnand: Add BCMBCA read data bus interface
-  mtd: rawnand: brcmnand: Add support for getting ecc setting from strap
-  mtd: rawnand: brcmnand: Support write protection setting from dts
+ drivers/mtd/nand/raw/brcmnand/brcmnand.c | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
- .../bindings/mtd/brcm,brcmnand.yaml           |  64 ++++---
- arch/arm/boot/dts/bcm47622.dtsi               |  17 ++
- arch/arm/boot/dts/bcm63138.dtsi               |  12 +-
- arch/arm/boot/dts/bcm63148.dtsi               |  17 ++
- arch/arm/boot/dts/bcm63178.dtsi               |  17 ++
- arch/arm/boot/dts/bcm6756.dtsi                |  17 ++
- arch/arm/boot/dts/bcm6846.dtsi                |  17 ++
- arch/arm/boot/dts/bcm6855.dtsi                |  17 ++
- arch/arm/boot/dts/bcm6878.dtsi                |  17 ++
- arch/arm/boot/dts/bcm947622.dts               |   4 +
- arch/arm/boot/dts/bcm963138.dts               |   4 +
- arch/arm/boot/dts/bcm963138dvt.dts            |  12 +-
- arch/arm/boot/dts/bcm963148.dts               |   4 +
- arch/arm/boot/dts/bcm963178.dts               |   4 +
- arch/arm/boot/dts/bcm96756.dts                |   4 +
- arch/arm/boot/dts/bcm96846.dts                |   4 +
- arch/arm/boot/dts/bcm96855.dts                |   4 +
- arch/arm/boot/dts/bcm96878.dts                |   4 +
- .../boot/dts/broadcom/bcmbca/bcm4908.dtsi     |   5 +-
- .../boot/dts/broadcom/bcmbca/bcm4912.dtsi     |  17 ++
- .../boot/dts/broadcom/bcmbca/bcm63146.dtsi    |  17 ++
- .../boot/dts/broadcom/bcmbca/bcm63158.dtsi    |  17 ++
- .../boot/dts/broadcom/bcmbca/bcm6813.dtsi     |  17 ++
- .../boot/dts/broadcom/bcmbca/bcm6856.dtsi     |  17 ++
- .../boot/dts/broadcom/bcmbca/bcm6858.dtsi     |  17 ++
- .../boot/dts/broadcom/bcmbca/bcm94912.dts     |   4 +
- .../boot/dts/broadcom/bcmbca/bcm963146.dts    |   4 +
- .../boot/dts/broadcom/bcmbca/bcm963158.dts    |   4 +
- .../boot/dts/broadcom/bcmbca/bcm96813.dts     |   4 +
- .../boot/dts/broadcom/bcmbca/bcm96856.dts     |   4 +
- .../boot/dts/broadcom/bcmbca/bcm96858.dts     |   4 +
- drivers/mtd/nand/raw/brcmnand/Makefile        |   2 +-
- drivers/mtd/nand/raw/brcmnand/bcm63138_nand.c | 101 -----------
- drivers/mtd/nand/raw/brcmnand/bcmbca_nand.c   | 138 +++++++++++++++
- drivers/mtd/nand/raw/brcmnand/brcmnand.c      | 166 ++++++++++++++----
- drivers/mtd/nand/raw/brcmnand/brcmnand.h      |   2 +
- 36 files changed, 615 insertions(+), 164 deletions(-)
- delete mode 100644 drivers/mtd/nand/raw/brcmnand/bcm63138_nand.c
- create mode 100644 drivers/mtd/nand/raw/brcmnand/bcmbca_nand.c
-
+diff --git a/drivers/mtd/nand/raw/brcmnand/brcmnand.c b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
+index 2e9c2e2d9c9f..b2cde1082b3b 100644
+--- a/drivers/mtd/nand/raw/brcmnand/brcmnand.c
++++ b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
+@@ -977,12 +977,20 @@ static inline u32 brcmnand_ecc_level_mask(struct brcmnand_controller *ctrl)
+ 	mask <<= NAND_ACC_CONTROL_ECC_SHIFT;
+ 
+ 	/* v7.2 includes additional ECC levels */
+-	if (ctrl->nand_version >= 0x0702)
++	if (ctrl->nand_version == 0x0702)
+ 		mask |= 0x7 << NAND_ACC_CONTROL_ECC_EXT_SHIFT;
+ 
+ 	return mask;
+ }
+ 
++static inline int brcmnand_ecc_level_shift(struct brcmnand_controller *ctrl)
++{
++	if (ctrl->nand_version == 0x0702)
++		return NAND_ACC_CONTROL_ECC_EXT_SHIFT;
++	else
++		return NAND_ACC_CONTROL_ECC_SHIFT;
++}
++
+ static void brcmnand_set_ecc_enabled(struct brcmnand_host *host, int en)
+ {
+ 	struct brcmnand_controller *ctrl = host->ctrl;
+@@ -992,8 +1000,8 @@ static void brcmnand_set_ecc_enabled(struct brcmnand_host *host, int en)
+ 
+ 	if (en) {
+ 		acc_control |= ecc_flags; /* enable RD/WR ECC */
+-		acc_control |= host->hwcfg.ecc_level
+-			       << NAND_ACC_CONTROL_ECC_SHIFT;
++		acc_control &= ~brcmnand_ecc_level_mask(ctrl);
++		acc_control |= host->hwcfg.ecc_level << brcmnand_ecc_level_shift(ctrl);
+ 	} else {
+ 		acc_control &= ~ecc_flags; /* disable RD/WR ECC */
+ 		acc_control &= ~brcmnand_ecc_level_mask(ctrl);
 -- 
 2.37.3
 
 
---000000000000bf172e05fd7e2bf3
+--00000000000071e35f05fd7e2ca4
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -217,13 +206,13 @@ VhYAxZlzj7tSjUIM7G7IhyfqPC46GKJ/4x+Amz1Z6YxNGy71L68kYD6hIbBcA5AM42QBUufly6Oa
 urb/KlmDGfVrIRYDbL0ckhGQIP5c6L+kSQZ2sHnQK0e0WgIaZYxaPYeY5u0GLCOze+3vyRMxggJt
 MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
 VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwxuh2XG3FXRL1W
-JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIBZgG5AsXWNQcPQBW4IngVI5oDEP
-yvhjILsnM10ht1U4MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
-MDYwNjIzMTM0NVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
+JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIFpz+eeKhakuaLxF0Egpf7fM7M8T
+wz5tfolZwASxwrn4MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
+MDYwNjIzMTM1NlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
 CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQAZgyYF8qTX1x12oVBIG4uU5DCGJVm6lCXZLLXrJctdVawI
-jA+LXA9cAKKZActKD7w+fxFkbPZvzzWtTpNvXO8PSL6pxhaDO2RhYfqA4II2PSXheMXPBBtiouCJ
-TLyOE6q0oXYOIGifpMkLXncVcZzi2/vcTG6F1dtzIWrj2u73Kgia8UT2qefWWEaEBohbeHTDZBmf
-YHCGnMIX1zigMjm4b/KJEZSGytml5iD0rKIVFua8lF0hxTWEok7cdfCngVLqRmmZmwlGd4PCVagm
-0DFRi0B0qQ/5q0XY9x88jYIhnSTotwboY3Ju7o0gZmCErkWD8yb2f72rnnU1tEgAQWUu
---000000000000bf172e05fd7e2bf3--
+AwQCATANBgkqhkiG9w0BAQEFAASCAQA/MSV8iNqeIOQBumEdEMftQZCr1WH/tKqnzzifevcW/SYY
+b95Jww8tOXAL/Cmu7MjijLD4PaO0FWOdL4ReNTISEeOGu6qEWz2rmM+OvagU7RzI3fObmNUGS+QX
+j3tFqXbmEseu+OMQzgewFyPLi+X1V7BcNpA4EQW3e3G/aXCy5rjLVKWt0Glf5YCvypZze6JlZI2z
+rR7YaKXvGEPdbSLHbhNy+tALMNFTw8d4Ojdmw4cGqHA8P7EG25fvw8olzJhIsnRDDgknNZrl6sBV
+N8RHMuSp1Y07blP/xRdgz0m6mmSPWW6JW4wenHYM1ssBpfRojeK73pTYmR1gUfodcwoL
+--00000000000071e35f05fd7e2ca4--
