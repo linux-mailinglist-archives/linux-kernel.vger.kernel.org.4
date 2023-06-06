@@ -2,90 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 599DB7250AA
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 01:19:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF7DD7250AC
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 01:20:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240348AbjFFXT3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 19:19:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49368 "EHLO
+        id S240314AbjFFXTv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 19:19:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240322AbjFFXTP (ORCPT
+        with ESMTP id S240308AbjFFXTZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 19:19:15 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F88B2135
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 16:17:17 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-33b3fa2d560so360935ab.0
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 16:17:17 -0700 (PDT)
+        Tue, 6 Jun 2023 19:19:25 -0400
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2159F1FF0
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 16:18:25 -0700 (PDT)
+Received: by mail-il1-x136.google.com with SMTP id e9e14a558f8ab-33dea7d5424so27275ab.1
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 16:18:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686093504; x=1688685504;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LusODyImi6kShYo7SZgAczgtmkpNpRiKl/lmOqpWzfY=;
+        b=bHLLRfURdxNvPqhE2bfaZQ8ll3eh6shs0txawB+xbLvB7SA+cWOK7VhX0QUN79LyYI
+         lCnTvE7jFUQoWSifn5m0Lys+Y0Dm/RZ9FHkfeJl+BM6/6+5ayQbUXgmiqg3xQhBVEa/J
+         d0iTjx6j5/szWelj86ck4UuNSFm3gb6L9AsDhijZu7qcK84dWa0Ab2F4oTHIwI9iN2Qs
+         cGTtqyfmHiTrw87RP+8KCCyCWVQVRpK3VGKy96HHt6qMgFQd9ABAhrjTCMAUWrHtRSw0
+         FED1Gj5DnAAcqhYaqiWxyvoLJMBl4bZjrI4SY1fRdAO+QCPEfM6xrRse1TkgacsnkBMw
+         Y0/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686093436; x=1688685436;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0gzetqF4co6FWHEhTM5VpTIkwaEg4GSiT9101R+Jmjk=;
-        b=NZ34IyqRFXORmputAJBBVUWT8vbDhU7fmR3dST/Ko8Qni/u80Teq01ve4dO0FHOK2p
-         c636fqHvnn+dhaq5NLv/3AemM49eWAjWbkx8Sr0assoMBGJJFQulDBFC61oD/u6sFSnL
-         Kw1k9vbu7DZJPs+d5b75n//DuISVAjVUIbOqMU+7WvqcL3e5SBI96eq2hcua1xYsXN9y
-         2AwZRcZUNxHqveMDqWpUnPJpxRW++nYJjDTU0ZDrN7k4/wwuWvMeGD4nCbc6xXpeKF+C
-         P8rft6ezlk97ZSyEqiDWEWaf2BCTR19NThexHnNNrzOznDVIFmmaY5XrIFMQZloxz/Sh
-         XVDA==
-X-Gm-Message-State: AC+VfDxbyxaD17Ro1bVSpK55hNh5AaScK2Up/hBJtIrF/L1dooHeA81c
-        1sRPlB5gIUFaETTbghAtCzYh28N9UmcZQ1I/k4E2DRJehhTzXTs=
-X-Google-Smtp-Source: ACHHUZ6sBWIcq0dkj2mb27oRC+5PEo9TLYrxrhjA+8/j+fAfcV85seiRWX52xVNE+g+SmJnJhzF0pGwLwcZalTI7wAA4ZtBMyXrl
+        d=1e100.net; s=20221208; t=1686093504; x=1688685504;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LusODyImi6kShYo7SZgAczgtmkpNpRiKl/lmOqpWzfY=;
+        b=bDUkt0oecsgntxAcVBbGuhsfDs4MTyZ2lkIrDpUE2wIjfV2RD6I3EA6QlvLl+d4Hqt
+         J0MJUOrSsupGPFsVvYAIUsKprqKXbunHBq/IqAEPIwUuxYPTP1d2tRvv/HzYIRsXTzLT
+         6gGXCaMj+WlpYfI08WjokHyCJE3O9TNwdPNPbQtcDGFW++9FaD29mZbbx0Iii9+G5n27
+         Qr3+v+0xZqCI1Tiewhli2P4e3CPHVluHT3xrSshrzYkPFQCU84jqyd5fCY0LANKpYRMZ
+         rLf4HTLWCakcX0XZMuNkOD1NbQnO9eHqWcJ2+9JPsDo+w+dbE1wT8/U3324kM1lk/teb
+         Aifg==
+X-Gm-Message-State: AC+VfDz4d3zvaiC+GLeisui+YuRsfrbSw+HDgaDxm6eI/t/Fkm0P9FgY
+        rGlgAiO0c9QHdyF2whoSuUYtH54jrAjY8FNovr5szQ==
+X-Google-Smtp-Source: ACHHUZ7jN0OEqtUnQoxqE/pZb1cT4FFdk/SorQIEprthyAmFz43w0VOL5ChrKbF0ApvtiecmOAmx0rjnyMt4BE2Js3E=
+X-Received: by 2002:a05:6e02:214a:b0:33b:cea:ce70 with SMTP id
+ d10-20020a056e02214a00b0033b0ceace70mr26326ilv.25.1686093504340; Tue, 06 Jun
+ 2023 16:18:24 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a92:2904:0:b0:326:534c:9d47 with SMTP id
- l4-20020a922904000000b00326534c9d47mr1820955ilg.0.1686093436381; Tue, 06 Jun
- 2023 16:17:16 -0700 (PDT)
-Date:   Tue, 06 Jun 2023 16:17:16 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000055739a05fd7e3817@google.com>
-Subject: [syzbot] Monthly nfc report (Jun 2023)
-From:   syzbot <syzbot+list0d0a037334a93d5b8b84@syzkaller.appspotmail.com>
-To:     linux-kernel@vger.kernel.org, linux-nfc@lists.01.org,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <20230605202712.1690876-1-irogers@google.com> <20230605202712.1690876-2-irogers@google.com>
+ <ZH6gZgcwAbDrEiqX@krava> <CAP-5=fWgQDrgDJ_UFuo_G5NaCzR5vWrRyvQ-_qpvFP0p0q18+w@mail.gmail.com>
+ <ZH91mGxFpDPcCFKY@kernel.org>
+In-Reply-To: <ZH91mGxFpDPcCFKY@kernel.org>
+From:   Ian Rogers <irogers@google.com>
+Date:   Tue, 6 Jun 2023 16:18:13 -0700
+Message-ID: <CAP-5=fUscgwO-G0FSZeM6SyPZVe=Kg+t-s+2txjUrc_qbP+cDg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] perf build: Add ability to build with a generated vmlinux.h
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Jiri Olsa <olsajiri@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        James Clark <james.clark@arm.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello nfc maintainers/developers,
+On Tue, Jun 6, 2023 at 11:06=E2=80=AFAM Arnaldo Carvalho de Melo
+<acme@kernel.org> wrote:
+>
+> Em Mon, Jun 05, 2023 at 09:25:54PM -0700, Ian Rogers escreveu:
+> > On Mon, Jun 5, 2023 at 7:57=E2=80=AFPM Jiri Olsa <olsajiri@gmail.com> w=
+rote:
+> > >
+> > > On Mon, Jun 05, 2023 at 01:27:09PM -0700, Ian Rogers wrote:
+> > > > Commit a887466562b4 ("perf bpf skels: Stop using vmlinux.h generate=
+d
+> > > > from BTF, use subset of used structs + CO-RE") made it so that
+> > > > vmlinux.h was uncondtionally included from
+> > > > tools/perf/util/vmlinux.h. This change reverts part of that change =
+(so
+> > > > that vmlinux.h is once again generated) and makes it so that the
+> > > > vmlinux.h used at build time is selected from the VMLINUX_H
+> > > > variable. By default the VMLINUX_H variable is set to the vmlinux.h
+> > > > added in change a887466562b4, but if GEN_VMLINUX_H=3D1 is passed on=
+ the
+> > > > build command line then the previous generation behavior kicks in.
+> > > >
+> > > > The build with GEN_VMLINUX_H=3D1 currently fails with:
+> > > > ```
+> > > > util/bpf_skel/lock_contention.bpf.c:419:8: error: redefinition of '=
+rq'
+> > > > struct rq {};
+> > > >        ^
+> > > > /tmp/perf/util/bpf_skel/.tmp/../vmlinux.h:45630:8: note: previous d=
+efinition is here
+> > > > struct rq {
+> > > >        ^
+> > > > 1 error generated.
+> > > > ```
+> > > >
+> > > > Signed-off-by: Ian Rogers <irogers@google.com>
+> > > > Acked-by: Andrii Nakryiko <andrii@kernel.org>
+> > > > ---
+> > > >  tools/perf/Makefile.config                       |  4 ++++
+> > > >  tools/perf/Makefile.perf                         | 16 ++++++++++++=
++++-
+> > > >  tools/perf/util/bpf_skel/.gitignore              |  1 +
+> > > >  tools/perf/util/bpf_skel/{ =3D> vmlinux}/vmlinux.h |  0
+> > > >  4 files changed, 20 insertions(+), 1 deletion(-)
+> > > >  rename tools/perf/util/bpf_skel/{ =3D> vmlinux}/vmlinux.h (100%)
+> > >
+> > > looks good, but I don't understand why you moved the vmlinux.h
+> > >
+> > > jirka
+> >
+> > Dumb reason, as headers in the same directory take priority, I had to
+> > move the vmlinux.h out of the directory with the C code for skeletons
+> > so that it could be selected via a -I.
+>
+> Can this be in a separate patch, i.e. moving vmlinux to a separate
+> directory? I was going to cherry pick the 'struct rq' fix but then it
+> touches the vmlinux/vmlinux.h file that is in this first patch that has
+> review comments.
 
-This is a 31-day syzbot report for the nfc subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/nfc
+I think the comments were more of a question of why the move?
+Hopefully I answered that, the move is necessary to defeat the include
+path order preferring files in the same directory. We need the move,
+we could vary the directory name.
 
-During the period, 0 new issues were detected and 0 were fixed.
-In total, 8 issues are still open and 17 have been fixed so far.
+Thanks,
+Ian
 
-Some of the still happening issues:
-
-Ref Crashes Repro Title
-<1> 87      Yes   BUG: corrupted list in nfc_llcp_unregister_device
-                  https://syzkaller.appspot.com/bug?extid=81232c4a81a886e2b580
-<2> 60      Yes   INFO: task hung in nfc_rfkill_set_block
-                  https://syzkaller.appspot.com/bug?extid=3e3c2f8ca188e30b1427
-<3> 59      Yes   BUG: corrupted list in nfc_llcp_register_device
-                  https://syzkaller.appspot.com/bug?extid=c1d0a03d305972dbbe14
-<4> 53      Yes   KASAN: use-after-free Read in nfc_llcp_find_local
-                  https://syzkaller.appspot.com/bug?extid=e7ac69e6a5d806180b40
-<5> 16      Yes   BUG: corrupted list in nfc_llcp_local_put
-                  https://syzkaller.appspot.com/bug?extid=ecb2ae7b1add2a4120de
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-To disable reminders for individual bugs, reply with the following command:
-#syz set <Ref> no-reminders
-
-To change bug's subsystems, reply with:
-#syz set <Ref> subsystems: new-subsystem
-
-You may send multiple commands in a single email message.
+> - Arnaldo
+>
+> > Thanks,
+> > Ian
+> >
+> > > >
+> > > > diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.confi=
+g
+> > > > index a794d9eca93d..08d4e7eaa721 100644
+> > > > --- a/tools/perf/Makefile.config
+> > > > +++ b/tools/perf/Makefile.config
+> > > > @@ -680,6 +680,10 @@ ifdef BUILD_BPF_SKEL
+> > > >    CFLAGS +=3D -DHAVE_BPF_SKEL
+> > > >  endif
+> > > >
+> > > > +ifndef GEN_VMLINUX_H
+> > > > +  VMLINUX_H=3D$(src-perf)/util/bpf_skel/vmlinux/vmlinux.h
+> > > > +endif
+> > > > +
+> > > >  dwarf-post-unwind :=3D 1
+> > > >  dwarf-post-unwind-text :=3D BUG
+> > > >
+> > > > diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+> > > > index f48794816d82..f1840af195c0 100644
+> > > > --- a/tools/perf/Makefile.perf
+> > > > +++ b/tools/perf/Makefile.perf
+> > > > @@ -1080,7 +1080,21 @@ $(BPFTOOL): | $(SKEL_TMP_OUT)
+> > > >       $(Q)CFLAGS=3D $(MAKE) -C ../bpf/bpftool \
+> > > >               OUTPUT=3D$(SKEL_TMP_OUT)/ bootstrap
+> > > >
+> > > > -$(SKEL_TMP_OUT)/%.bpf.o: util/bpf_skel/%.bpf.c $(LIBBPF) | $(SKEL_=
+TMP_OUT)
+> > > > +VMLINUX_BTF_PATHS ?=3D $(if $(O),$(O)/vmlinux)                    =
+     \
+> > > > +                  $(if $(KBUILD_OUTPUT),$(KBUILD_OUTPUT)/vmlinux) =
+   \
+> > > > +                  ../../vmlinux                                   =
+   \
+> > > > +                  /sys/kernel/btf/vmlinux                         =
+   \
+> > > > +                  /boot/vmlinux-$(shell uname -r)
+> > > > +VMLINUX_BTF ?=3D $(abspath $(firstword $(wildcard $(VMLINUX_BTF_PA=
+THS))))
+> > > > +
+> > > > +$(SKEL_OUT)/vmlinux.h: $(VMLINUX_BTF) $(BPFTOOL)
+> > > > +ifeq ($(VMLINUX_H),)
+> > > > +     $(QUIET_GEN)$(BPFTOOL) btf dump file $< format c > $@
+> > > > +else
+> > > > +     $(Q)cp "$(VMLINUX_H)" $@
+> > > > +endif
+> > > > +
+> > > > +$(SKEL_TMP_OUT)/%.bpf.o: util/bpf_skel/%.bpf.c $(LIBBPF) $(SKEL_OU=
+T)/vmlinux.h | $(SKEL_TMP_OUT)
+> > > >       $(QUIET_CLANG)$(CLANG) -g -O2 -target bpf -Wall -Werror $(BPF=
+_INCLUDE) $(TOOLS_UAPI_INCLUDE) \
+> > > >         -c $(filter util/bpf_skel/%.bpf.c,$^) -o $@
+> > > >
+> > > > diff --git a/tools/perf/util/bpf_skel/.gitignore b/tools/perf/util/=
+bpf_skel/.gitignore
+> > > > index 7a1c832825de..cd01455e1b53 100644
+> > > > --- a/tools/perf/util/bpf_skel/.gitignore
+> > > > +++ b/tools/perf/util/bpf_skel/.gitignore
+> > > > @@ -1,3 +1,4 @@
+> > > >  # SPDX-License-Identifier: GPL-2.0-only
+> > > >  .tmp
+> > > >  *.skel.h
+> > > > +vmlinux.h
+> > > > diff --git a/tools/perf/util/bpf_skel/vmlinux.h b/tools/perf/util/b=
+pf_skel/vmlinux/vmlinux.h
+> > > > similarity index 100%
+> > > > rename from tools/perf/util/bpf_skel/vmlinux.h
+> > > > rename to tools/perf/util/bpf_skel/vmlinux/vmlinux.h
+> > > > --
+> > > > 2.41.0.rc0.172.g3f132b7071-goog
+> > > >
+>
+> --
+>
+> - Arnaldo
