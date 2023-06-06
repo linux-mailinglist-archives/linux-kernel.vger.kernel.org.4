@@ -2,201 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E622B723508
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 04:06:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0221472350C
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 04:06:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233502AbjFFCG3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 22:06:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44464 "EHLO
+        id S233672AbjFFCGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 22:06:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbjFFCGX (ORCPT
+        with ESMTP id S233152AbjFFCGc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 22:06:23 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4CC6A114;
-        Mon,  5 Jun 2023 19:06:20 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8Dx9vCblH5kS1UAAA--.1029S3;
-        Tue, 06 Jun 2023 10:06:19 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxZuSXlH5kIp0BAA--.7051S3;
-        Tue, 06 Jun 2023 10:06:17 +0800 (CST)
-Message-ID: <f9e67fe9-a93b-75ab-1fdb-87d3783fe5fc@loongson.cn>
-Date:   Tue, 6 Jun 2023 10:06:15 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [Intel-gfx] [PATCH v2 1/2] vgaarb: various coding style and
- comments fix
-To:     Andi Shyti <andi.shyti@linux.intel.com>,
-        Sui Jingfeng <15330273260@189.cn>
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        Christian Konig <christian.koenig@amd.com>,
-        Pan Xinhui <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Hawking Zhang <Hawking.Zhang@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Lijo Lazar <lijo.lazar@amd.com>,
-        YiPeng Chai <YiPeng.Chai@amd.com>,
-        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        Somalapuram Amaranath <Amaranath.Somalapuram@amd.com>,
-        Bokun Zhang <Bokun.Zhang@amd.com>,
-        Ville Syrjala <ville.syrjala@linux.intel.com>,
-        Li Yi <liyi@loongson.cn>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        Abhishek Sahu <abhsahu@nvidia.com>,
-        Yi Liu <yi.l.liu@intel.com>, kvm@vger.kernel.org,
-        nouveau@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        loongson-kernel@lists.loongnix.cn, amd-gfx@lists.freedesktop.org,
-        linux-pci@vger.kernel.org
-References: <20230604205831.3357596-1-15330273260@189.cn>
- <ZH5epG6rfTOWT6CS@ashyti-mobl2.lan>
-Content-Language: en-US
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-Organization: Loongson
-In-Reply-To: <ZH5epG6rfTOWT6CS@ashyti-mobl2.lan>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxZuSXlH5kIp0BAA--.7051S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj93XoWxXFWkWw4DZFyfKFWDAw47Awc_yoW5XryDpF
-        Zakas5Cw4kJrs7ZFy2qF4UJF1ruws3JFy7ArZIk3s7AF13J348JFsxCrZ8Z3y3XryfuF40
-        vr4UWr1DGayDZagCm3ZEXasCq-sJn29KB7ZKAUJUUUUJ529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUPqb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAF
-        wI0_Gr1j6F4UJwAaw2AFwI0_Jw0_GFyle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2
-        xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_
-        Jw0_WrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwI
-        xGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14v26rWY6Fy7MxAIw28IcxkI7VAK
-        I48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r1q6r43MI8I3I0E5I8CrV
-        AFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWrXVW8Jr1l
-        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxV
-        AFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j
-        6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07bUzu
-        AUUUUU=
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 5 Jun 2023 22:06:32 -0400
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3277E44;
+        Mon,  5 Jun 2023 19:06:26 -0700 (PDT)
+Received: by mail-qv1-xf30.google.com with SMTP id 6a1803df08f44-62614a1dd47so41111576d6.2;
+        Mon, 05 Jun 2023 19:06:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686017186; x=1688609186;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fHxYxgoeO4Fz6rNQej/wSf+qvSfbEPqyAolfpowpldM=;
+        b=acthjTFnSNF5zKRRlhGw+vu3sBJkQfXpmpXAoiZAvL7d24CZE6ZABgRhPubR/9PFEU
+         bM3XFVjFd+D8kAZrZs7FwT4ohc3FMIDX1HcpQm8G+1XhEY90fk+RYl2XPyTMNrWGt/UT
+         dOCFIn0mguhJ4RgtpFXtp6JsxXig1i41Z09BWYzkjB9kabDK/K2KA8VgVB+aD+qNcG2N
+         cDjIs98Mnbc7YvvyGXtQZ8SttnUO0QJLWVkTTu4Tn7HSxf7K022xiC3UUy60PEyhy732
+         hWNRKp6OLIYnq9iSZIbDk5MyDtr3YbSo0LHulc+HB3YEgGGJeu8oGFWGsZq+TvwahBXP
+         X6Ng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686017186; x=1688609186;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=fHxYxgoeO4Fz6rNQej/wSf+qvSfbEPqyAolfpowpldM=;
+        b=RiuqxPlY7eYlFtKXWLhsPMdTfsX9ilLPlHr13na2WgaZTcEqQ9o8JNmAc5DVjh9jlC
+         kV631bo3o5n9SHiXRRgrz1VeNBS9odywlc9YJt9HnVLWd8B2GKb7e7S7WI54HFmeSKce
+         5wRfTSswaKTvhgKe8d2mEdgayYAexyYzH586XBTxENbIgZ+Xgyprw5sempWkd9jQ/vCp
+         8GtdIxlf50DxrgiB3raXhFJ1xt789YIAtRzm+jlOGbSiq8B/8ZRbNfyj35TYG1FY4P0P
+         pCIUd90iiei4tQjC8sfki57Wyo0uoGkUcZ76BhjqTKaMNuhIaW8wb712bBCypBQqXEIY
+         4e0Q==
+X-Gm-Message-State: AC+VfDxEgoTap+YEJJLTBbHtJfHyVR97lXogq4KTT6c3O7eAV/GF6f28
+        NXMp4oZ4b3gSqcNyY4/MtYYCrE6mSE3JGQ==
+X-Google-Smtp-Source: ACHHUZ40R/7DwONJjQlPcqGT36cqBtgKGygl2J4alUiZu16uhr29ahIhA1q8+RczUQBCu26cwcVQvA==
+X-Received: by 2002:a05:6214:f25:b0:623:a5d0:1daf with SMTP id iw5-20020a0562140f2500b00623a5d01dafmr767371qvb.48.1686017185826;
+        Mon, 05 Jun 2023 19:06:25 -0700 (PDT)
+Received: from localhost ([2600:4040:2007:9800:ab:4faa:880f:7b91])
+        by smtp.gmail.com with ESMTPSA id v6-20020ad45286000000b006257e64474asm5022256qvr.113.2023.06.05.19.06.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Jun 2023 19:06:25 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Mon, 05 Jun 2023 22:06:23 -0400
+Message-Id: <CT577LF6NJLX.3OVACDQO6WGDE@Latitude-E6420>
+From:   "Rudraksha Gupta" <guptarud@gmail.com>
+To:     "Rob Herring" <robh@kernel.org>
+Cc:     "Kishon Vijay Abraham I" <kishon@kernel.org>,
+        <linux-phy@lists.infradead.org>, "Olof Johansson" <olof@lixom.net>,
+        "Vinod Koul" <vkoul@kernel.org>, "Arnd Bergmann" <arnd@arndb.de>,
+        <soc@kernel.org>, <devicetree@vger.kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        "Conor Dooley" <conor+dt@kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        "Andy Gross" <agross@kernel.org>, <linux-arm-msm@vger.kernel.org>
+Subject: Re: [PATCH v3 2/4] dt-bindings: phy: qcom,usb-hs-phy: Add
+ compatible
+X-Mailer: aerc 0.8.2
+References: <20230604063032.365775-1-guptarud@gmail.com>
+ <20230604063032.365775-3-guptarud@gmail.com>
+ <168586340547.3052749.2763112173580157119.robh@kernel.org>
+In-Reply-To: <168586340547.3052749.2763112173580157119.robh@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 2023/6/6 06:16, Andi Shyti wrote:
-> Hi Sui,
+On Sun Jun 4, 2023 at 3:23 AM EDT, Rob Herring wrote:
 >
-> On Mon, Jun 05, 2023 at 04:58:30AM +0800, Sui Jingfeng wrote:
->> From: Sui Jingfeng <suijingfeng@loongson.cn>
->>
->> To keep consistent with vga_iostate_to_str() function, the third argument
->> of vga_str_to_iostate() function should be 'unsigned int *'.
-> I think the real reason is not to keep consistent with
-> vga_iostate_to_str() but because vga_str_to_iostate() is actually
-> only taking "unsigned int *" parameters.
-
-Yes, right.
-
-my expression is not completely correct, I will update it at next version.
-
-
-I think, we have the same opinion.
-
-Originally, I also want to express the opinion.
-
-Because, it make no sense to  interpret the return value
-
-(VGA_RSRC_LEGACY_IO | VGA_RSRC_LEGACY_MEM) as int type.
-
-
-IO state should be should be donate by a unsigned type.
-
-vga_iostate_to_str() also receive unsigned type.
-
-static const char *vga_iostate_to_str(unsigned int iostate)
-
->> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
->> ---
->>   drivers/pci/vgaarb.c   | 29 +++++++++++++++--------------
->>   include/linux/vgaarb.h |  8 +++-----
->>   2 files changed, 18 insertions(+), 19 deletions(-)
->>
->> diff --git a/drivers/pci/vgaarb.c b/drivers/pci/vgaarb.c
->> index 5a696078b382..e40e6e5e5f03 100644
->> --- a/drivers/pci/vgaarb.c
->> +++ b/drivers/pci/vgaarb.c
->> @@ -61,7 +61,6 @@ static bool vga_arbiter_used;
->>   static DEFINE_SPINLOCK(vga_lock);
->>   static DECLARE_WAIT_QUEUE_HEAD(vga_wait_queue);
->>   
->> -
-> drop this change
-
-OK,
-
-This is a double blank line.
-
-Originally, I intend to accumulate all tiny fix, commit together.
-
-As they are trivial.
-
-Now, Should I split this patch,
-
-then this patch set will contain two trivial patch ?
-
->>   static const char *vga_iostate_to_str(unsigned int iostate)
->>   {
->>   	/* Ignore VGA_RSRC_IO and VGA_RSRC_MEM */
->> @@ -77,10 +76,12 @@ static const char *vga_iostate_to_str(unsigned int iostate)
->>   	return "none";
->>   }
->>   
->> -static int vga_str_to_iostate(char *buf, int str_size, int *io_state)
->> +static int vga_str_to_iostate(char *buf, int str_size, unsigned int *io_state)
-> this is OK, it's actually what you are describing in the commit
-> log, but...
+> On Sun, 04 Jun 2023 02:30:19 -0400, Rudraksha Gupta wrote:
+> > Adds qcom,usb-hs-phy-msm8960 compatible
+> >=20
+> > Signed-off-by: Rudraksha Gupta <guptarud@gmail.com>
+> > ---
+> >  Documentation/devicetree/bindings/phy/qcom,usb-hs-phy.yaml | 5 ++++-
+> >  1 file changed, 4 insertions(+), 1 deletion(-)
+> >=20
 >
->>   {
->> -	/* we could in theory hand out locks on IO and mem
->> -	 * separately to userspace but it can cause deadlocks */
->> +	/*
->> +	 * we could in theory hand out locks on IO and mem
->> +	 * separately to userspace but it can cause deadlocks
->> +	 */
-> ... all the rest needs to go on different patches as it doesn't
-> have anything to do with what you describe.
+> My bot found errors running 'make DT_CHECKER_FLAGS=3D-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+>
+> yamllint warnings/errors:
+>
+> dtschema/dtc warnings/errors:
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/p=
+hy/qcom,usb-hs-phy.example.dtb: phy: resets: [[4294967295, 10], [1, 0]] is =
+too long
+> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicet=
+ree/bindings/phy/qcom,usb-hs-phy.yaml
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/p=
+hy/qcom,usb-hs-phy.example.dtb: phy: reset-names:0: 'por' was expected
+> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicet=
+ree/bindings/phy/qcom,usb-hs-phy.yaml
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/p=
+hy/qcom,usb-hs-phy.example.dtb: phy: reset-names: ['phy', 'por'] is too lon=
+g
+> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicet=
+ree/bindings/phy/qcom,usb-hs-phy.yaml
+>
+> doc reference errors (make refcheckdocs):
+>
+> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/202306=
+04063032.365775-3-guptarud@gmail.com
+>
+> The base for the series is generally the latest rc1. A different dependen=
+cy
+> should be noted in *this* patch.
+I see. Why is it off the latest rc1 and not off the latest commit?
 
-OK,
-
-I will wait a few days for more reviews,
-
-I process them together,   also avoid version grow too fast.
-
-Thanks.
-
-> Andi
-
--- 
-Jingfeng
-
+>
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> date:
+>
+> pip3 install dtschema --upgrade
+>
+> Please check and re-submit after running the above command yourself. Note
+> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+> your schema. However, it must be unset to test all examples with your sch=
+ema.
+Thanks. I didn't see these errors as I was only looking for expressatt
+binding errors.
