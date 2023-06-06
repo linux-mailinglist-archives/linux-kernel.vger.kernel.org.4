@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BDA5724B36
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 20:23:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44743724B41
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 20:23:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238769AbjFFSXA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 14:23:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39970 "EHLO
+        id S238878AbjFFSXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 14:23:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238388AbjFFSWy (ORCPT
+        with ESMTP id S238675AbjFFSWz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 14:22:54 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D0B6173E;
-        Tue,  6 Jun 2023 11:22:37 -0700 (PDT)
+        Tue, 6 Jun 2023 14:22:55 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F345C171D;
+        Tue,  6 Jun 2023 11:22:38 -0700 (PDT)
 Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 356IMNn2044663;
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 356IMN9j019429;
         Tue, 6 Jun 2023 13:22:23 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
         s=ti-com-17Q1; t=1686075743;
-        bh=25lLrrRsiiLHlCW2gRgXhNcrJdbMedYGUJc9EzcxVUE=;
+        bh=8k2Hbccg5gLiZyCtwC1B2A23afcA/wrylH4a9mhv3Wg=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=cwaXOVv2/9eh7hFafcdhXWX/a+kl1K0CzZqHV3c62qq5jxJOAbMg8ZHfXVPEWQRDX
-         bpZ+4NO0elq6urpxJNplulXNChtlESXQhooeP17ZeoG587G33r1f0J4BwpPV3yDaLP
-         U5dLKTL+Cq5Osz93s0gBhgcn2ywn9rd+i12xRa1E=
-Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 356IMNVc089025
+        b=mTNUym9h2qpnJIGlGoeThe1dviM7SIp4EDwUyA5Y6v62Sy15j6V4jCc1DAzaDHUeB
+         oLfzkO+PR+7Q/QGq1fgbGgiL8XxmNXLB2mkMdYaVZnfs+HRCiIKyCCODcRO2VzLt9l
+         hHLSQQYdd1y6OeONiuQaiHM9fxcwmiWfTLLsZPIw=
+Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 356IMNpa089026
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
         Tue, 6 Jun 2023 13:22:23 -0500
-Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 6
  Jun 2023 13:22:23 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
  Frontend Transport; Tue, 6 Jun 2023 13:22:23 -0500
 Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 356IMNgu112783;
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 356IMNh7040855;
         Tue, 6 Jun 2023 13:22:23 -0500
 From:   Nishanth Menon <nm@ti.com>
 To:     Conor Dooley <conor+dt@kernel.org>,
@@ -49,9 +49,9 @@ CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
         Tero Kristo <kristo@kernel.org>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         Udit Kumar <u-kumar1@ti.com>, Nishanth Menon <nm@ti.com>
-Subject: [PATCH V2 10/14] arm64: dts: ti: k3-am64-evm: Fixup reference to phandles array
-Date:   Tue, 6 Jun 2023 13:22:16 -0500
-Message-ID: <20230606182220.3661956-11-nm@ti.com>
+Subject: [PATCH V2 11/14] arm64: dts: ti: k3-am64-sk: Fixup reference to phandles array
+Date:   Tue, 6 Jun 2023 13:22:17 -0500
+Message-ID: <20230606182220.3661956-12-nm@ti.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230606182220.3661956-1-nm@ti.com>
 References: <20230606182220.3661956-1-nm@ti.com>
@@ -76,17 +76,17 @@ the rest of the usage.
 
 Signed-off-by: Nishanth Menon <nm@ti.com>
 ---
-Changes since v1:
+Changes Since v1:
 * formatting change
-V1: https://lore.kernel.org/r/20230601152636.858553-9-nm@ti.com
- arch/arm64/boot/dts/ti/k3-am642-evm.dts | 11 +++++------
+V1: https://lore.kernel.org/r/20230601152636.858553-10-nm@ti.com
+ arch/arm64/boot/dts/ti/k3-am642-sk.dts | 11 +++++------
  1 file changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/ti/k3-am642-evm.dts b/arch/arm64/boot/dts/ti/k3-am642-evm.dts
-index 39feea78a084..150f23915bf4 100644
---- a/arch/arm64/boot/dts/ti/k3-am642-evm.dts
-+++ b/arch/arm64/boot/dts/ti/k3-am642-evm.dts
-@@ -425,8 +425,7 @@ &usb0 {
+diff --git a/arch/arm64/boot/dts/ti/k3-am642-sk.dts b/arch/arm64/boot/dts/ti/k3-am642-sk.dts
+index 2e2d40da360a..9cbe1e1a7be1 100644
+--- a/arch/arm64/boot/dts/ti/k3-am642-sk.dts
++++ b/arch/arm64/boot/dts/ti/k3-am642-sk.dts
+@@ -439,8 +439,7 @@ &usb0 {
  
  &cpsw3g {
  	pinctrl-names = "default";
@@ -96,7 +96,7 @@ index 39feea78a084..150f23915bf4 100644
  };
  
  &cpsw_port1 {
-@@ -518,25 +517,25 @@ &mailbox0_cluster7 {
+@@ -537,25 +536,25 @@ &mailbox0_cluster7 {
  };
  
  &main_r5fss0_core0 {
