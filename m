@@ -2,220 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B0B072468A
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:42:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D52B72468E
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:42:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238276AbjFFOl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 10:41:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42068 "EHLO
+        id S238407AbjFFOme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 10:42:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238264AbjFFOlb (ORCPT
+        with ESMTP id S238340AbjFFOmT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 10:41:31 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82261170F
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 07:39:25 -0700 (PDT)
-Message-ID: <20230606142033.552409135@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686062310;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=nJRKWItHXWzejPb3W+5S3exZgj7E4NSZUyd430XhqCY=;
-        b=mrU8sqCrn+7K5DAa7KyiaclT2cu1WFJxS9ck94DJpJt1eUDVdDcA1fYPWAnyQFamwfS/HC
-        Gpak+zdw939IwtgcWduZb6bqN7FHZhnYejDlNgyWtsFeguHp8ZPl6aaFGD6Y1INMfFRySI
-        ffwbT360ct3HKA2j2EUHzhwadvU1GksVv6JEDhDCN0kcdC4ZhPC63FtKz/R+9sBpwFIv8i
-        hEYOD8SnRFPkDZWM9Yv5WF+SYKbeajRMAVIORQvm13OOe9/qgQN+us2/FhVvNT20N2W8g9
-        XuMBrwUKbljR5tmWey+T8pNtnzBZg/ythb1eNvAIjc/3gNdjTiahhlt0ll9aHA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686062310;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=nJRKWItHXWzejPb3W+5S3exZgj7E4NSZUyd430XhqCY=;
-        b=67v7msoLNJB90fR2k7RuTb3wOWWZ8Z5Ef9sRYGHJay27sXrmhHV299B+LzdYRMEZ+/2eYW
-        RByXcYSwhRAMa6Aw==
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Frederic Weisbecker <frederic@kernel.org>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        John Stultz <jstultz@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Oleg Nesterov <oleg@redhat.com>
-Subject: [patch 45/45] alarmtimers: Remove return value from alarm functions
-References: <20230606132949.068951363@linutronix.de>
+        Tue, 6 Jun 2023 10:42:19 -0400
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4756E1FE0;
+        Tue,  6 Jun 2023 07:40:16 -0700 (PDT)
+Received: by mail-qv1-xf34.google.com with SMTP id 6a1803df08f44-6260e8a1424so43329276d6.2;
+        Tue, 06 Jun 2023 07:40:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686062379; x=1688654379;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lvZ4XsTsTufzOmDccsqLlYK7JaxQyIdNHpPkr+8WCVU=;
+        b=dbsKKzlSqCxKNp0/8WqjVhH0METcILEAuzsthzhm/cPsREUocAj7XviIGDyr3X0a/R
+         3mwLkv0bs09MK66ezSojrCwgtaGqClR/TWa4ba8m+VdPuaJsG4a48TreBWjRqKRDb78g
+         dWWAHowWoODwiV983zWmKsrqLxWsKOwS3PEr831YQX00EhiHGYdz7Q7BjLJ9D6g0tSX8
+         smWJGLG09JprEpKEN1AE0oAmIk2XO2t8DLOSyNDb9jVvZrqbbnecERzh6rMDawRxJ5jf
+         047Hn+K5ixMP8ou6gMxuBqiODDshPfYOqfM7WUSJ0G/tODZIZA5Ry8w4ijazb/U1eS9H
+         cI6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686062379; x=1688654379;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lvZ4XsTsTufzOmDccsqLlYK7JaxQyIdNHpPkr+8WCVU=;
+        b=ZTv5emT4vZ7u0hrUdNQRtNjj+su37t7WXcTK/h5X7YApJIlui86pz8KwB1TpGNmh5N
+         MnDfUTTLmAhT4y+cwCIgIUjaa1DUtmbgassPVRjcA87nJXl2N1mo6HpCrdQSO1b7ZwQk
+         UVTU99DJbM1r0u4SuKo2CBivtOir7jX5rRgfxp4Q9SUjbMB5R4wQ/pkuAljC5Nk2fdrp
+         vBqwrGvohX2phDrgt1mSZXWu5qFbWZLBuMF91LhiWX6faZP3zfx+r/0hamSL/YQNdluG
+         8KwwuCL4gCN5QSHpOH28S1A10F04KgPb6KY80EYYs9K9QQZd33aToN+1y1UEwwsy3aFo
+         7Q5Q==
+X-Gm-Message-State: AC+VfDwzJPWdBSjm+RwBeHkjVYXRm+fztyjC38pPyaWzXSoCTSE4G0A2
+        XJn8ZPBR/C/hRnAOqPxe7d6wgbmO3iw3caNgHBU=
+X-Google-Smtp-Source: ACHHUZ7oc/MKr57w4wxuuavVhcIsODwhsyxixYvZ2V/E5O5qvmNSSbMjRVQoesIRP/0hf+v6UteQHJdPwgPVkoddCsc=
+X-Received: by 2002:a05:6214:401:b0:626:2870:7dee with SMTP id
+ z1-20020a056214040100b0062628707deemr2664588qvx.42.1686062378686; Tue, 06 Jun
+ 2023 07:39:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue,  6 Jun 2023 16:38:30 +0200 (CEST)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1685277277-12209-1-git-send-email-wellslutw@gmail.com> <9ace5c4c-5e17-4207-5a02-6a47ba0aee22@web.de>
+In-Reply-To: <9ace5c4c-5e17-4207-5a02-6a47ba0aee22@web.de>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 6 Jun 2023 17:39:02 +0300
+Message-ID: <CAHp75VeMKtHfVVtH+xGSYrt+SSVgVkhCs29jVqfnnoihvhSj4w@mail.gmail.com>
+Subject: Re: [PATCH] pinctrl: sunplus: Delete an unnecessary check before
+ kfree() in sppctl_dt_node_to_map()
+To:     Markus Elfring <Markus.Elfring@web.de>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     kernel-janitors@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Dvorkin Dmitry <dvorkin@tibbo.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Wells Lu <wellslutw@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>, cocci@inria.fr,
+        Wells Lu <wells.lu@sunplus.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that the SIG_IGN problem is solved in the core code, the alarmtimer
-callbacks do not require a return value anymore.
+On Tue, Jun 6, 2023 at 4:26=E2=80=AFPM Markus Elfring <Markus.Elfring@web.d=
+e> wrote:
+>
+> From: Markus Elfring <elfring@users.sourceforge.net>
+> Date: Tue, 6 Jun 2023 15:00:18 +0200
 
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
----
- drivers/power/supply/charger-manager.c |    3 +--
- fs/timerfd.c                           |    4 +---
- include/linux/alarmtimer.h             |   10 ++--------
- kernel/time/alarmtimer.c               |   16 +++++-----------
- net/netfilter/xt_IDLETIMER.c           |    4 +---
- 5 files changed, 10 insertions(+), 27 deletions(-)
+You need to utilize what MAINTAINERS file has.
 
---- a/drivers/power/supply/charger-manager.c
-+++ b/drivers/power/supply/charger-manager.c
-@@ -1412,10 +1412,9 @@ static inline struct charger_desc *cm_ge
- 	return dev_get_platdata(&pdev->dev);
- }
- 
--static enum alarmtimer_restart cm_timer_func(struct alarm *alarm, ktime_t now)
-+static void cm_timer_func(struct alarm *alarm, ktime_t now)
- {
- 	cm_timer_set = false;
--	return ALARMTIMER_NORESTART;
- }
- 
- static int charger_manager_probe(struct platform_device *pdev)
---- a/fs/timerfd.c
-+++ b/fs/timerfd.c
-@@ -79,13 +79,11 @@ static enum hrtimer_restart timerfd_tmrp
- 	return HRTIMER_NORESTART;
- }
- 
--static enum alarmtimer_restart timerfd_alarmproc(struct alarm *alarm,
--	ktime_t now)
-+static void timerfd_alarmproc(struct alarm *alarm, ktime_t now)
- {
- 	struct timerfd_ctx *ctx = container_of(alarm, struct timerfd_ctx,
- 					       t.alarm);
- 	timerfd_triggered(ctx);
--	return ALARMTIMER_NORESTART;
- }
- 
- /*
---- a/include/linux/alarmtimer.h
-+++ b/include/linux/alarmtimer.h
-@@ -20,12 +20,6 @@ enum alarmtimer_type {
- 	ALARM_BOOTTIME_FREEZER,
- };
- 
--enum alarmtimer_restart {
--	ALARMTIMER_NORESTART,
--	ALARMTIMER_RESTART,
--};
--
--
- #define ALARMTIMER_STATE_INACTIVE	0x00
- #define ALARMTIMER_STATE_ENQUEUED	0x01
- 
-@@ -42,14 +36,14 @@ enum alarmtimer_restart {
- struct alarm {
- 	struct timerqueue_node	node;
- 	struct hrtimer		timer;
--	enum alarmtimer_restart	(*function)(struct alarm *, ktime_t now);
-+	void			(*function)(struct alarm *, ktime_t now);
- 	enum alarmtimer_type	type;
- 	int			state;
- 	void			*data;
- };
- 
- void alarm_init(struct alarm *alarm, enum alarmtimer_type type,
--		enum alarmtimer_restart (*function)(struct alarm *, ktime_t));
-+		void (*function)(struct alarm *, ktime_t));
- void alarm_start(struct alarm *alarm, ktime_t start);
- void alarm_start_relative(struct alarm *alarm, ktime_t start);
- void alarm_restart(struct alarm *alarm);
---- a/kernel/time/alarmtimer.c
-+++ b/kernel/time/alarmtimer.c
-@@ -312,7 +312,7 @@ static int alarmtimer_resume(struct devi
- 
- static void
- __alarm_init(struct alarm *alarm, enum alarmtimer_type type,
--	     enum alarmtimer_restart (*function)(struct alarm *, ktime_t))
-+	     void (*function)(struct alarm *, ktime_t))
- {
- 	timerqueue_init(&alarm->node);
- 	alarm->timer.function = alarmtimer_fired;
-@@ -328,7 +328,7 @@ static void
-  * @function: callback that is run when the alarm fires
-  */
- void alarm_init(struct alarm *alarm, enum alarmtimer_type type,
--		enum alarmtimer_restart (*function)(struct alarm *, ktime_t))
-+		void (*function)(struct alarm *, ktime_t))
- {
- 	hrtimer_init(&alarm->timer, alarm_bases[type].base_clockid,
- 		     HRTIMER_MODE_ABS);
-@@ -521,7 +521,7 @@ static enum alarmtimer_type clock2alarm(
-  *
-  * Return: whether the timer is to be restarted
-  */
--static enum alarmtimer_restart alarm_handle_timer(struct alarm *alarm, ktime_t now)
-+static void alarm_handle_timer(struct alarm *alarm, ktime_t now)
- {
- 	struct k_itimer *ptr = container_of(alarm, struct k_itimer, it.alarm.alarmtimer);
- 	unsigned long flags;
-@@ -529,8 +529,6 @@ static enum alarmtimer_restart alarm_han
- 	spin_lock_irqsave(&ptr->it_lock, flags);
- 	posix_timer_queue_signal(ptr);
- 	spin_unlock_irqrestore(&ptr->it_lock, flags);
--
--	return ALARMTIMER_NORESTART;
- }
- 
- /**
-@@ -691,18 +689,14 @@ static int alarm_timer_create(struct k_i
-  * @now: time at the timer expiration
-  *
-  * Wakes up the task that set the alarmtimer
-- *
-- * Return: ALARMTIMER_NORESTART
-  */
--static enum alarmtimer_restart alarmtimer_nsleep_wakeup(struct alarm *alarm,
--								ktime_t now)
-+static void alarmtimer_nsleep_wakeup(struct alarm *alarm, ktime_t now)
- {
- 	struct task_struct *task = (struct task_struct *)alarm->data;
- 
- 	alarm->data = NULL;
- 	if (task)
- 		wake_up_process(task);
--	return ALARMTIMER_NORESTART;
- }
- 
- /**
-@@ -754,7 +748,7 @@ static int alarmtimer_do_nsleep(struct a
- 
- static void
- alarm_init_on_stack(struct alarm *alarm, enum alarmtimer_type type,
--		    enum alarmtimer_restart (*function)(struct alarm *, ktime_t))
-+		    void (*function)(struct alarm *, ktime_t))
- {
- 	hrtimer_init_on_stack(&alarm->timer, alarm_bases[type].base_clockid,
- 			      HRTIMER_MODE_ABS);
---- a/net/netfilter/xt_IDLETIMER.c
-+++ b/net/netfilter/xt_IDLETIMER.c
-@@ -107,14 +107,12 @@ static void idletimer_tg_expired(struct
- 	schedule_work(&timer->work);
- }
- 
--static enum alarmtimer_restart idletimer_tg_alarmproc(struct alarm *alarm,
--							  ktime_t now)
-+static void idletimer_tg_alarmproc(struct alarm *alarm, ktime_t now)
- {
- 	struct idletimer_tg *timer = alarm->data;
- 
- 	pr_debug("alarm %s expired\n", timer->attr.attr.name);
- 	schedule_work(&timer->work);
--	return ALARMTIMER_NORESTART;
- }
- 
- static int idletimer_check_sysfs_name(const char *name, unsigned int size)
+> It can be known that the function =E2=80=9Ckfree=E2=80=9D performs a null=
+ pointer check
+> for its input parameter.
+> It is therefore not needed to repeat such a check before its call.
+>
+> Thus remove a redundant pointer check.
 
+Seems reasonable to me.
+FWIW,
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+
+> Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
+> ---
+>  drivers/pinctrl/sunplus/sppctl.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>
+> diff --git a/drivers/pinctrl/sunplus/sppctl.c b/drivers/pinctrl/sunplus/s=
+ppctl.c
+> index e91ce5b5d559..150996949ede 100644
+> --- a/drivers/pinctrl/sunplus/sppctl.c
+> +++ b/drivers/pinctrl/sunplus/sppctl.c
+> @@ -971,8 +971,7 @@ static int sppctl_dt_node_to_map(struct pinctrl_dev *=
+pctldev, struct device_node
+>
+>  sppctl_map_err:
+>         for (i =3D 0; i < (*num_maps); i++)
+> -               if (((*map)[i].type =3D=3D PIN_MAP_TYPE_CONFIGS_PIN) &&
+> -                   (*map)[i].data.configs.configs)
+> +               if ((*map)[i].type =3D=3D PIN_MAP_TYPE_CONFIGS_PIN)
+>                         kfree((*map)[i].data.configs.configs);
+>         kfree(*map);
+>         of_node_put(parent);
+> --
+> 2.40.1
+>
+
+
+--=20
+With Best Regards,
+Andy Shevchenko
