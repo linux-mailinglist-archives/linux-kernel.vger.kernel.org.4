@@ -2,163 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D01E723E24
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 11:47:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26299723E29
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 11:48:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236836AbjFFJrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 05:47:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52964 "EHLO
+        id S236811AbjFFJsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 05:48:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236349AbjFFJrW (ORCPT
+        with ESMTP id S236896AbjFFJr6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 05:47:22 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D1490;
-        Tue,  6 Jun 2023 02:47:20 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Qb5DX683Xz67cTX;
-        Tue,  6 Jun 2023 17:45:00 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Tue, 6 Jun
- 2023 10:47:10 +0100
-Date:   Tue, 6 Jun 2023 10:47:09 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Yicong Yang <yangyicong@huawei.com>
-CC:     <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
-        <corbet@lwn.net>, <linux-kernel@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <alexander.shishkin@linux.intel.com>,
-        <helgaas@kernel.org>, <linux-pci@vger.kernel.org>,
-        <prime.zeng@huawei.com>, <linuxarm@huawei.com>
-Subject: Re: [PATCH v3 1/4] hwtracing: hisi_ptt: Factor out filter
- allocation and release operation
-Message-ID: <20230606104709.00000047@Huawei.com>
-In-Reply-To: <20230523093228.48149-2-yangyicong@huawei.com>
-References: <20230523093228.48149-1-yangyicong@huawei.com>
-        <20230523093228.48149-2-yangyicong@huawei.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Tue, 6 Jun 2023 05:47:58 -0400
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 725E610E7;
+        Tue,  6 Jun 2023 02:47:48 -0700 (PDT)
+X-GND-Sasl: miquel.raynal@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1686044866;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ApW14yUphjoVxJ8OfyJdmz2zYwhytsITbf5DWcM7pbA=;
+        b=dg+sYQGnLW0QH4rB/42gLxiZpgIs4N4MWvuVIdXz5PKjRuujNIMthpmHOKMJKu9Utmjou6
+        Md0BouvLY6nH6sPN4Mg77MHfCkpjKLozxV2XfUCDJPRRTZVIpF5TtXoimeOG8d50bTi5uL
+        bDvoCdz2E55HOi5d1fjbXXS4Ty7iOOMK8vgf/ripk51upIbWRXGVA/P2irt7h4mw1DGYHe
+        qV7js6mvf9pzNfsVQaie4v8vuWFiRo80orhoUiOLw0uKslu4UcvFGS4eLxV1zxEdc/fwim
+        +XmP8wZpcXTpfn8uLzennrhF31RV+YxKsKOVhK/s3JkOasCoFVvDhnu1jCtu8Q==
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 787262000D;
+        Tue,  6 Jun 2023 09:47:44 +0000 (UTC)
+Date:   Tue, 6 Jun 2023 11:47:43 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Alexander Aring <aahringo@redhat.com>
+Cc:     Simon Horman <simon.horman@corigine.com>,
+        Stefan Schmidt <stefan@datenfreihafen.org>,
+        linux-wpan@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Alexander Aring <alex.aring@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH net-next v1 1/1] ieee802154: ca8210: Remove stray
+ gpiod_unexport() call
+Message-ID: <20230606114743.30f7567e@xps-13>
+In-Reply-To: <CAK-6q+hkL8cStdSPnZF_D1CtLvJZ=P16TJ8BCGpkGwrbh8uN3A@mail.gmail.com>
+References: <20230528140938.34034-1-andriy.shevchenko@linux.intel.com>
+        <ZHWo3LHLunOkXaqW@corigine.com>
+        <ZH3srm+8PnZ1rJm9@smile.fi.intel.com>
+        <CAK-6q+hkL8cStdSPnZF_D1CtLvJZ=P16TJ8BCGpkGwrbh8uN3A@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 23 May 2023 17:32:25 +0800
-Yicong Yang <yangyicong@huawei.com> wrote:
 
-> From: Yicong Yang <yangyicong@hisilicon.com>
-> 
-> Factor out the allocation and release of filters. This will make it easier
-> to extend and manage the function of the filter.
-> 
-> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+aahringo@redhat.com wrote on Tue, 6 Jun 2023 05:33:47 -0400:
 
-Straight forward refactor. LGTM
+> Hi,
+>=20
+> On Mon, Jun 5, 2023 at 10:12=E2=80=AFAM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> >
+> > On Tue, May 30, 2023 at 09:42:20AM +0200, Simon Horman wrote: =20
+> > > On Sun, May 28, 2023 at 05:09:38PM +0300, Andy Shevchenko wrote: =20
+> > > > There is no gpiod_export() and gpiod_unexport() looks pretty much s=
+tray.
+> > > > The gpiod_export() and gpiod_unexport() shouldn't be used in the co=
+de,
+> > > > GPIO sysfs is deprecated. That said, simply drop the stray call.
+> > > >
+> > > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com> =
+=20
+> > >
+> > > Reviewed-by: Simon Horman <simon.horman@corigine.com> =20
+> >
+> > Thank you!
+> > Can this be applied now? =20
+>=20
+> ping, Miquel? :)
 
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> ---
->  drivers/hwtracing/ptt/hisi_ptt.c | 63 ++++++++++++++++++++------------
->  1 file changed, 39 insertions(+), 24 deletions(-)
-> 
-> diff --git a/drivers/hwtracing/ptt/hisi_ptt.c b/drivers/hwtracing/ptt/hisi_ptt.c
-> index 30f1525639b5..548cfef51ace 100644
-> --- a/drivers/hwtracing/ptt/hisi_ptt.c
-> +++ b/drivers/hwtracing/ptt/hisi_ptt.c
-> @@ -354,6 +354,39 @@ static int hisi_ptt_register_irq(struct hisi_ptt *hisi_ptt)
->  	return 0;
->  }
->  
-> +static void hisi_ptt_del_free_filter(struct hisi_ptt *hisi_ptt,
-> +				      struct hisi_ptt_filter_desc *filter)
-> +{
-> +	list_del(&filter->list);
-> +	kfree(filter);
-> +}
-> +
-> +static struct hisi_ptt_filter_desc *
-> +hisi_ptt_alloc_add_filter(struct hisi_ptt *hisi_ptt, struct pci_dev *pdev)
-> +{
-> +	struct hisi_ptt_filter_desc *filter;
-> +
-> +	filter = kzalloc(sizeof(*filter), GFP_KERNEL);
-> +	if (!filter) {
-> +		pci_err(hisi_ptt->pdev, "failed to add filter for %s\n",
-> +			pci_name(pdev));
-> +		return NULL;
-> +	}
-> +
-> +	filter->devid = PCI_DEVID(pdev->bus->number, pdev->devfn);
-> +	filter->is_port = pci_pcie_type(pdev) == PCI_EXP_TYPE_ROOT_PORT;
-> +	if (filter->is_port) {
-> +		list_add_tail(&filter->list, &hisi_ptt->port_filters);
-> +
-> +		/* Update the available port mask */
-> +		hisi_ptt->port_mask |= hisi_ptt_get_filter_val(filter->devid, true);
-> +	} else {
-> +		list_add_tail(&filter->list, &hisi_ptt->req_filters);
-> +	}
-> +
-> +	return filter;
-> +}
-> +
->  static int hisi_ptt_init_filters(struct pci_dev *pdev, void *data)
->  {
->  	struct pci_dev *root_port = pcie_find_root_port(pdev);
-> @@ -374,23 +407,9 @@ static int hisi_ptt_init_filters(struct pci_dev *pdev, void *data)
->  	 * should be partial initialized and users would know which filter fails
->  	 * through the log. Other functions of PTT device are still available.
->  	 */
-> -	filter = kzalloc(sizeof(*filter), GFP_KERNEL);
-> -	if (!filter) {
-> -		pci_err(hisi_ptt->pdev, "failed to add filter %s\n", pci_name(pdev));
-> +	filter = hisi_ptt_alloc_add_filter(hisi_ptt, pdev);
-> +	if (!filter)
->  		return -ENOMEM;
-> -	}
-> -
-> -	filter->devid = PCI_DEVID(pdev->bus->number, pdev->devfn);
-> -
-> -	if (pci_pcie_type(pdev) == PCI_EXP_TYPE_ROOT_PORT) {
-> -		filter->is_port = true;
-> -		list_add_tail(&filter->list, &hisi_ptt->port_filters);
-> -
-> -		/* Update the available port mask */
-> -		hisi_ptt->port_mask |= hisi_ptt_get_filter_val(filter->devid, true);
-> -	} else {
-> -		list_add_tail(&filter->list, &hisi_ptt->req_filters);
-> -	}
->  
->  	return 0;
->  }
-> @@ -400,15 +419,11 @@ static void hisi_ptt_release_filters(void *data)
->  	struct hisi_ptt_filter_desc *filter, *tmp;
->  	struct hisi_ptt *hisi_ptt = data;
->  
-> -	list_for_each_entry_safe(filter, tmp, &hisi_ptt->req_filters, list) {
-> -		list_del(&filter->list);
-> -		kfree(filter);
-> -	}
-> +	list_for_each_entry_safe(filter, tmp, &hisi_ptt->req_filters, list)
-> +		hisi_ptt_del_free_filter(hisi_ptt, filter);
->  
-> -	list_for_each_entry_safe(filter, tmp, &hisi_ptt->port_filters, list) {
-> -		list_del(&filter->list);
-> -		kfree(filter);
-> -	}
-> +	list_for_each_entry_safe(filter, tmp, &hisi_ptt->port_filters, list)
-> +		hisi_ptt_del_free_filter(hisi_ptt, filter);
->  }
->  
->  static int hisi_ptt_config_trace_buf(struct hisi_ptt *hisi_ptt)
+I already applied it locally, but I am trying to fix my "thanks for
+patch" routine to not tell you it was applied on the mtd tree :-p
 
+Cheers,
+Miqu=C3=A8l
