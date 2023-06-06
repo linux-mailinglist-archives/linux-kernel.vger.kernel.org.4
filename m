@@ -2,357 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3704724C9B
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 21:11:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 894E8724CA4
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 21:13:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239517AbjFFTL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 15:11:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45078 "EHLO
+        id S236239AbjFFTNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 15:13:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240095AbjFFTLE (ORCPT
+        with ESMTP id S239256AbjFFTMt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 15:11:04 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E8C2712
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 12:09:04 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4f624daccd1so3814491e87.0
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 12:09:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686078542; x=1688670542;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=t9wNtGVe5uNodwdHLyCXdbUp2XDGTrdArpaiEQ98OZ0=;
-        b=VHsU0FdY5/IxaOlSfK9kAU0HnEJ4C3v2AzPTGZQLKgB30rzwQ/7Sp4oAzndFDee1Kw
-         SNIGaaCAP0jhHZllaQatDujNQpo6oM/dOmFvFVOkJiGkegZY3rn6eHqIldmFuB29vrwO
-         qNWzyYTGLt0RGY+gC33SSEbNy30x/2g44rLiQXxvk1VOGF+BXniE4q9RLPAnANwTos+R
-         0VzL/QSx0Ii+mt7Xc4/GpXPQlrwbEAKIitFUtSluzEIhvZOxHnsb3N4WiDd1ZZHtDXZD
-         AxTdl2A/oUCsLnkcd3aAEs+QwCJYCHcNOZeBnN86ZrdAG/ddtuFOL61L+c8yC/ESWzTw
-         +w6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686078542; x=1688670542;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=t9wNtGVe5uNodwdHLyCXdbUp2XDGTrdArpaiEQ98OZ0=;
-        b=BBkCn33skZNJlgI65e65gJwweDV9hTMm/qI/XERDCINSLscJrZP2flPYgf98FUEpT1
-         2FOzx4kwtFG0ybDDrnzZjQC7anmHl4QRL0cYiOWLG8DdYBOHDFGadSIzeQxJaF4JWArk
-         T56cdtz8cTMt+t7Uuql36eIJahHgDCLlBi9WJevnBHsBAUcnE/s8jNFb5EH7HPJ7aMPy
-         hA6wMmXh0vo1sVcJZZlRlKv945JVkUXWysfXv63lgJ3jqh4E7Z7VPB7VeHEEX3U7jeCG
-         Rfm3+PjMZ2EcxHA1Yht2wc1IDKRr7acmV6PteOdE+UGUvR1O5vZ5rLKk6QuLo5hgtyjJ
-         ocmA==
-X-Gm-Message-State: AC+VfDzcy1aR2RjfOttXT2hcFBoU5rmD4m50pzCV44xsxGau8vef8nuy
-        dDnPx2K40aZISYpt4uup1Ufq9p4g/Muj131UJu8=
-X-Google-Smtp-Source: ACHHUZ4j8BRy/segC3SzGOJCjor3/0qvNwm84emP6Q2bAToFm7B9ORnQ2JBm0Qx+jRN6rLYuBd042g==
-X-Received: by 2002:a2e:86c8:0:b0:2b1:bd11:a71a with SMTP id n8-20020a2e86c8000000b002b1bd11a71amr1537007ljj.17.1686078542614;
-        Tue, 06 Jun 2023 12:09:02 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id e24-20020a2e8198000000b00295a96a0f6csm1909720ljg.102.2023.06.06.12.09.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Jun 2023 12:09:01 -0700 (PDT)
-Message-ID: <ee4ae0a3-ff6f-37d1-5829-2a55d3c2904f@linaro.org>
-Date:   Tue, 6 Jun 2023 22:09:01 +0300
+        Tue, 6 Jun 2023 15:12:49 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B210A1BC1
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 12:11:03 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.43])
+        by gateway (Coremail) with SMTP id _____8CxLPC4hH9kQ00AAA--.1207S3;
+        Wed, 07 Jun 2023 03:10:48 +0800 (CST)
+Received: from openarena.loongson.cn (unknown [10.20.42.43])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxCOW3hH9k7voCAA--.11776S2;
+        Wed, 07 Jun 2023 03:10:47 +0800 (CST)
+From:   Sui Jingfeng <suijingfeng@loongson.cn>
+To:     Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian Konig <christian.koenig@amd.com>,
+        Pan Xinhui <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Alvin Lee <Alvin.Lee2@amd.com>, Jun Lei <Jun.Lei@amd.com>,
+        Wenjing Liu <wenjing.liu@amd.com>,
+        Samson Tam <samson.tam@amd.com>,
+        Dillon Varone <Dillon.Varone@amd.com>,
+        Alan Liu <HaoPing.Liu@amd.com>
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/amdgpu: add error reporting code
+Date:   Wed,  7 Jun 2023 03:10:46 +0800
+Message-Id: <20230606191046.300194-1-suijingfeng@loongson.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [Freedreno] [PATCH] drm/msm/dpu: re-introduce dpu core revision
- to the catalog
-Content-Language: en-GB
-To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc:     Sean Paul <sean@poorly.run>, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        quic_khsieh@quicinc.com,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        quic_jesszhan@quicinc.com, freedreno@lists.freedesktop.org
-References: <20230531005358.18090-1-quic_abhinavk@quicinc.com>
- <CAA8EJpryw0h8TgpJ+SFJ7s0=LCjkQ6oqAjCKsm60dk_Q5e+wWA@mail.gmail.com>
- <0af4df3d-8048-98cd-6c91-7cd553f4f65f@quicinc.com>
- <98e4bda7-19e9-09b6-f008-383adada97cb@linaro.org>
- <a0b7a9fc-eb3c-3b26-b11d-fe1fb47b2c51@quicinc.com>
- <451b114c-05e1-541c-1d3e-26bb81a307c4@linaro.org>
- <47fda908-d76f-65d5-e001-8773c5b160b9@quicinc.com>
- <48cc3d26-10fe-5b10-30b6-0772d62a2a53@linaro.org>
- <804363cf-f6cf-71a6-be8f-5fc00eea3154@quicinc.com>
- <CAA8EJprDSd79AXQvqW+=0xvTrTMCTL+CJ2E6Rhjro3g3E9UWog@mail.gmail.com>
- <b605d666-8b79-67c2-f16e-1e45c01287c2@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <b605d666-8b79-67c2-f16e-1e45c01287c2@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8CxCOW3hH9k7voCAA--.11776S2
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBj93XoWxXF4UtF1fGw1xur48tF4fZwc_yoW5Ar4xpw
+        4fGa1Y9rWUJwnIqrZxAay0qF1fAa4fKF40yry3Cw1Sva9rtr13tr48Cr1ay3y3JFZxWFyI
+        qFWDKa15uF12krcCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUBYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+        Gr0_Gr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
+        kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUtVWr
+        XwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI4
+        8JMxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j
+        6r4UMxCIbckI1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwV
+        AFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv2
+        0xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4
+        v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AK
+        xVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8EPfPUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/06/2023 20:51, Abhinav Kumar wrote:
-> 
-> 
-> On 6/6/2023 4:14 AM, Dmitry Baryshkov wrote:
->> On Tue, 6 Jun 2023 at 05:35, Abhinav Kumar <quic_abhinavk@quicinc.com> 
->> wrote:
->>>
->>>
->>>
->>> On 6/5/2023 6:03 PM, Dmitry Baryshkov wrote:
->>>> On 06/06/2023 03:55, Abhinav Kumar wrote:
->>>>>
->>>>>
->>>>> On 6/3/2023 7:21 PM, Dmitry Baryshkov wrote:
->>>>>> On 31/05/2023 21:25, Abhinav Kumar wrote:
->>>>>>>
->>>>>>>
->>>>>>> On 5/31/2023 3:07 AM, Dmitry Baryshkov wrote:
->>>>>>>> On 31/05/2023 06:05, Abhinav Kumar wrote:
->>>>>>>>>
->>>>>>>>>
->>>>>>>>> On 5/30/2023 7:53 PM, Dmitry Baryshkov wrote:
->>>>>>>>>> On Wed, 31 May 2023 at 03:54, Abhinav Kumar
->>>>>>>>>> <quic_abhinavk@quicinc.com> wrote:
->>>>>>>>>>>
->>>>>>>>>>> With [1] dpu core revision was dropped in favor of using the
->>>>>>>>>>> compatible string from the device tree to select the dpu catalog
->>>>>>>>>>> being used in the device.
->>>>>>>>>>>
->>>>>>>>>>> This approach works well however also necessitates adding 
->>>>>>>>>>> catalog
->>>>>>>>>>> entries for small register level details as dpu capabilities 
->>>>>>>>>>> and/or
->>>>>>>>>>> features bloating the catalog unnecessarily. Examples include 
->>>>>>>>>>> but
->>>>>>>>>>> are not limited to data_compress, interrupt register set,
->>>>>>>>>>> widebus etc.
->>>>>>>>>>>
->>>>>>>>>>> Introduce the dpu core revision back as an entry to the catalog
->>>>>>>>>>> so that
->>>>>>>>>>> we can just use dpu revision checks and enable those bits which
->>>>>>>>>>> should be enabled unconditionally and not controlled by a 
->>>>>>>>>>> catalog
->>>>>>>>>>> and also simplify the changes to do something like:
->>>>>>>>>>>
->>>>>>>>>>> if (dpu_core_revision > xxxxx && dpu_core_revision < xxxxx)
->>>>>>>>>>>           enable the bit;
->>>>>>>>>>>
->>>>>>>>>>> Also, add some of the useful macros back to be able to use 
->>>>>>>>>>> dpu core
->>>>>>>>>>> revision effectively.
->>>>>>>>>>>
->>>>>>>>>>> [1]:
->>>>>>>>>>> https://patchwork.freedesktop.org/patch/530891/?series=113910&rev=4
->>>>>>>>>>>
->>>>>>>>>>> Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
->>>>>>>>>>> ---
->>>>>>>>>>>    .../msm/disp/dpu1/catalog/dpu_3_0_msm8998.h   |  1 +
->>>>>>>>>>>    .../msm/disp/dpu1/catalog/dpu_4_0_sdm845.h    |  1 +
->>>>>>>>>>>    .../msm/disp/dpu1/catalog/dpu_5_0_sm8150.h    |  1 +
->>>>>>>>>>>    .../msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h   |  1 +
->>>>>>>>>>>    .../msm/disp/dpu1/catalog/dpu_6_0_sm8250.h    |  1 +
->>>>>>>>>>>    .../msm/disp/dpu1/catalog/dpu_6_2_sc7180.h    |  1 +
->>>>>>>>>>>    .../msm/disp/dpu1/catalog/dpu_6_3_sm6115.h    |  1 +
->>>>>>>>>>>    .../msm/disp/dpu1/catalog/dpu_6_5_qcm2290.h   |  1 +
->>>>>>>>>>>    .../msm/disp/dpu1/catalog/dpu_7_0_sm8350.h    |  1 +
->>>>>>>>>>>    .../msm/disp/dpu1/catalog/dpu_7_2_sc7280.h    |  1 +
->>>>>>>>>>>    .../msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h  |  1 +
->>>>>>>>>>>    .../msm/disp/dpu1/catalog/dpu_8_1_sm8450.h    |  1 +
->>>>>>>>>>>    .../msm/disp/dpu1/catalog/dpu_9_0_sm8550.h    |  1 +
->>>>>>>>>>>    .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h    | 31
->>>>>>>>>>> ++++++++++++++++++-
->>>>>>>>>>>    14 files changed, 43 insertions(+), 1 deletion(-)
->>>>>>>>>>>
->>>>>>>>>>
->>>>>>>>>> [skipped catalog changes]
->>>>>>>>>>
->>>>>>>>>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
->>>>>>>>>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
->>>>>>>>>>> index 677048cc3b7d..cc4aa75a1219 100644
->>>>>>>>>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
->>>>>>>>>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
->>>>>>>>>>> @@ -19,6 +19,33 @@
->>>>>>>>>>>     */
->>>>>>>>>>>    #define MAX_BLOCKS    12
->>>>>>>>>>>
->>>>>>>>>>> +#define DPU_HW_VER(MAJOR, MINOR, STEP)\
->>>>>>>>>>> +                 ((((unsigned int)MAJOR & 0xF) << 28) |\
->>>>>>>>>>> +                 ((MINOR & 0xFFF) << 16) |\
->>>>>>>>>>> +                 (STEP & 0xFFFF))
->>>>>>>>>>> +
->>>>>>>>>>> +#define DPU_HW_MAJOR(rev)((rev) >> 28)
->>>>>>>>>>> +#define DPU_HW_MINOR(rev)(((rev) >> 16) & 0xFFF)
->>>>>>>>>>> +#define DPU_HW_STEP(rev)((rev) & 0xFFFF)
->>>>>>>>>>> +#define DPU_HW_MAJOR_MINOR(rev)((rev) >> 16)
->>>>>>>>>>> +
->>>>>>>>>>> +#define IS_DPU_MAJOR_MINOR_SAME(rev1, rev2)   \
->>>>>>>>>>> +(DPU_HW_MAJOR_MINOR((rev1)) == DPU_HW_MAJOR_MINOR((rev2)))
->>>>>>>>>>> +
->>>>>>>>>>> +#define DPU_HW_VER_300 DPU_HW_VER(3, 0, 0) /* 8998 v1.0 */
->>>>>>>>>>> +#define DPU_HW_VER_400 DPU_HW_VER(4, 0, 0) /* sdm845 v1.0 */
->>>>>>>>>>> +#define DPU_HW_VER_500 DPU_HW_VER(5, 0, 0) /* sm8150 v1.0 */
->>>>>>>>>>> +#define DPU_HW_VER_510 DPU_HW_VER(5, 1, 1) /* sc8180 */
->>>>>>>>>>> +#define DPU_HW_VER_600 DPU_HW_VER(6, 0, 0) /* sm8250 */
->>>>>>>>>>> +#define DPU_HW_VER_620 DPU_HW_VER(6, 2, 0) /* sc7180 v1.0 */
->>>>>>>>>>> +#define DPU_HW_VER_630 DPU_HW_VER(6, 3, 0) /* sm6115|sm4250 */
->>>>>>>>>>> +#define DPU_HW_VER_650 DPU_HW_VER(6, 5, 0) /* qcm2290|sm4125 */
->>>>>>>>>>> +#define DPU_HW_VER_700 DPU_HW_VER(7, 0, 0) /* sm8350 */
->>>>>>>>>>> +#define DPU_HW_VER_720 DPU_HW_VER(7, 2, 0) /* sc7280 */
->>>>>>>>>>> +#define DPU_HW_VER_800 DPU_HW_VER(8, 0, 0) /* sc8280xp */
->>>>>>>>>>> +#define DPU_HW_VER_810 DPU_HW_VER(8, 1, 0) /* sm8450 */
->>>>>>>>>>> +#define DPU_HW_VER_900 DPU_HW_VER(9, 0, 0) /* sm8550 */
->>>>>>>>>>
->>>>>>>>>> Instead of having defines for all SoCs (which can quickly become
->>>>>>>>>> unmanageable) and can cause merge conflicts, I'd suggest inlining
->>>>>>>>>> all
->>>>>>>>>> the defines into respective catalog files.
->>>>>>>>>>
->>>>>>>>>
->>>>>>>>> Sure, that can be done.
->>>>>>>>>
->>>>>>>>>> Also, I'm not sure that the "step" should be a part of the
->>>>>>>>>> catalog. I
->>>>>>>>>> know that this follows the hardware revision. However, please
->>>>>>>>>> correct
->>>>>>>>>> me if I'm wrong, different step levels are used for revisions 
->>>>>>>>>> of the
->>>>>>>>>> same SoC. The original code that was reading the hw revision from
->>>>>>>>>> the
->>>>>>>>>> hardware register, listed both 5.0.0 and 5.0.1 for sm8150.
->>>>>>>>>>
->>>>>>>>>
->>>>>>>>> This is one of the things i noticed while making this change.
->>>>>>>>>
->>>>>>>>> Before the catalog rework, we used to handle even steps as we used
->>>>>>>>> to read that from the register and match it with the mdss_cfg
->>>>>>>>> handler. But after the rework, we dont handle steps anymore. Yes,
->>>>>>>>> you are right that different step levels are used for the
->>>>>>>>> revisions of the same SOC and so with that, i dont expect or
->>>>>>>>> atleast am not aware of DPU differences between steps but I am not
->>>>>>>>> able to rule it out.
->>>>>>>>>
->>>>>>>>> So are you suggesting we drop step altogether and DPU_HW_VER()
->>>>>>>>> macro shall only handle major and minor versions? With the current
->>>>>>>>> chipsets I see, it should not make a difference . Its just that I
->>>>>>>>> am not sure if that will never happen.
->>>>>>>>
->>>>>>>> Yes. The goal of this rework would be to drop generic features and
->>>>>>>> to replace those checks with DPU-revision lookups. Correct?
->>>>>>>
->>>>>>> Yes thats right.
->>>>>>>
->>>>>>>> I think that from this perspective having to handle toe step
->>>>>>>> revision is a sign of an overkill. Having to handle the step
->>>>>>>> revision is a sign of paltform feature (or mis-feature) rather than
->>>>>>>> a generic DPU bit.
->>>>>>>>
->>>>>>>
->>>>>>> Not entirely. Lets not forget that at the moment even dpu_perf_cfg
->>>>>>> is part of the catalog. Even if in terms of major HW blocks steps
->>>>>>> shouldnt change, there is absolutely no guarantee that perf data
->>>>>>> cannot.
->>>>>>>
->>>>>>> This is what is the sticking point for me which is holding me back
->>>>>>> against dropping step. Thoughts?
->>>>>>
->>>>>> We usually do not support ES versions of the chips, only the final
->>>>>> version. So supporting the perf data for earlier revisions is also
->>>>>> not required.
->>>>>>
->>>>>
->>>>> ack, we will drop step in that case. and good to know about the ES
->>>>> versions.
->>>>>
->>>>>>>
->>>>>>>> In fact I suppose that even handling a minor revision would be an
->>>>>>>> overkill. Why don't we start with .dpu_major instead of .core_rev?
->>>>>>>> We can add .dpu_minor if/when required.
->>>>>>>>
->>>>>>>
->>>>>>> No, unfortunately we cannot drop minor version for sure. I am seeing
->>>>>>> examples in downstream code where some of the features are available
->>>>>>> after a minor verion as well.
->>>>>>
->>>>>> Can you please give an example?
->>>>>>
->>>>>
->>>>> Yes, watchdog timer, intf reset counter are available only after DPU
->>>>> HW version 8.1 (not major version 8).
->>>>
->>>> Hmm, IIRC, wd timer was available for ages. Was it moved together with
->>>> the introduction of MDSS_PERIPH_0_REMOVED?
->>>>
->>>
->>> I am not sure of the timeline but its certainly tied to 8.1.
->>>
->>>> But anyway, I see your point. Let's have major and minor. I'd probably
->>>> still ask for the separate major and minor fields, if you don't mind.
->>>>
->>>
->>> hmmm so something like this?
->>>
->>> +#define DPU_HW_VER_300 DPU_HW_VER(3, 0) /* 8998 v1.0 */
->>>
->>> const struct dpu_mdss_cfg dpu_msm8998_cfg = {
->>> .......
->>> .dpu_major_rev = DPU_HW_MAJOR(DPU_HW_VER_300),
->>> .dpu_minor_rev = DPU_HW_MINOR(DPU_HW_VER_300)
->>
->> Just:
->>
->> const struct dpu_mdss_cfg dpu_msm8998_cfg = {
->>      .dpu_major_rev = 3,
->>      .dpu_minor_rev = 0,
->>      /* .... */
->> };
->>
->> We do not need a single enumeration of all the versions. It can easily
->> become a source of merge conflicts.
->>
-> 
-> The issue with this approch is then the DPU_HW_VER_xxx macros become 
-> redundant but we should keep them. Because in the code, its much more 
-> readable to have
-> 
-> if (core_rev > DPU_HW_MAJOR(DPU_HW_VER_xxx))
->      then enable feature;
-> 
-> But now we will have to do
-> 
-> if (dpu_major_rev > xxx && dpu_minor_ver > yyy)
->      then enable feature;
-> 
-> /// probably folks will question this xxx and yyy as to what it means.
+Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+---
+ drivers/gpu/drm/amd/display/dc/core/dc.c | 29 ++++++++++++++++--------
+ 1 file changed, 20 insertions(+), 9 deletions(-)
 
-The first approach is less readable. It will require anybody to check, 
-what is the major/minor of the mentioned XXX platform. In the second 
-case we know exactly what we are looking for. E.g. we have new INTF 
-interrupt addresses since 7.0. We have MDP_TOP_PERIPH0_REMOVED since 8.0 
-(or 8.1?) We have PP_TE until 5.0 (not included) and INTF_TE since 5.0.
-
-Having DPU_HW_VER_foo, I'd have to look up each time, what is the HW 
-revision of sm8350, sc8280xp, sm8150, etc.
-
-> 
-> Can you please explain the single enumeration a bit more?
-> 
-> I thought we are going to move each revision to its separate file to 
-> avoid the conflicts as you suggested earlier in the comments. Isnt that 
-> enough?
-
-This way you wouldn't be able to check against them in other modules.
-
-> 
->>> .......
->>> }
->>>
->>> But may I ask why? Since the manor/minor version macros handle this
->>> nicely for us.
->>
->>
->>
-
+diff --git a/drivers/gpu/drm/amd/display/dc/core/dc.c b/drivers/gpu/drm/amd/display/dc/core/dc.c
+index 52564b93f7eb..d33b78aa3e58 100644
+--- a/drivers/gpu/drm/amd/display/dc/core/dc.c
++++ b/drivers/gpu/drm/amd/display/dc/core/dc.c
+@@ -951,7 +951,7 @@ static bool dc_construct(struct dc *dc,
+ 		goto fail;
+ 	}
+ 
+-        dc_ctx = dc->ctx;
++	dc_ctx = dc->ctx;
+ 
+ 	/* Resource should construct all asic specific resources.
+ 	 * This should be the only place where we need to parse the asic id
+@@ -990,16 +990,21 @@ static bool dc_construct(struct dc *dc,
+ 	}
+ 
+ 	dc->res_pool = dc_create_resource_pool(dc, init_params, dc_ctx->dce_version);
+-	if (!dc->res_pool)
++	if (!dc->res_pool) {
++		dm_error("%s: failed to create resource pool\n", __func__);
+ 		goto fail;
++	}
+ 
+ 	/* set i2c speed if not done by the respective dcnxxx__resource.c */
+ 	if (dc->caps.i2c_speed_in_khz_hdcp == 0)
+ 		dc->caps.i2c_speed_in_khz_hdcp = dc->caps.i2c_speed_in_khz;
+ 
+ 	dc->clk_mgr = dc_clk_mgr_create(dc->ctx, dc->res_pool->pp_smu, dc->res_pool->dccg);
+-	if (!dc->clk_mgr)
++	if (!dc->clk_mgr) {
++		dm_error("%s: failed to create clk manager\n", __func__);
+ 		goto fail;
++	}
++
+ #ifdef CONFIG_DRM_AMD_DC_FP
+ 	dc->clk_mgr->force_smu_not_present = init_params->force_smu_not_present;
+ 
+@@ -1022,14 +1027,18 @@ static bool dc_construct(struct dc *dc,
+ 		goto fail;
+ 	}
+ 
+-	if (!create_links(dc, init_params->num_virtual_links))
++	if (!create_links(dc, init_params->num_virtual_links)) {
++		dm_error("%s: failed to create links\n", __func__);
+ 		goto fail;
++	}
+ 
+ 	/* Create additional DIG link encoder objects if fewer than the platform
+ 	 * supports were created during link construction.
+ 	 */
+-	if (!create_link_encoders(dc))
++	if (!create_link_encoders(dc)) {
++		dm_error("%s: failed to create link encoders\n", __func__);
+ 		goto fail;
++	}
+ 
+ 	dc_resource_state_construct(dc, dc->current_state);
+ 
+@@ -1314,11 +1323,15 @@ struct dc *dc_create(const struct dc_init_data *init_params)
+ 		return NULL;
+ 
+ 	if (init_params->dce_environment == DCE_ENV_VIRTUAL_HW) {
+-		if (!dc_construct_ctx(dc, init_params))
++		if (!dc_construct_ctx(dc, init_params)) {
++			DC_LOG_ERROR("%s: dc construct failed\n", __func__);
+ 			goto destruct_dc;
++		}
+ 	} else {
+-		if (!dc_construct(dc, init_params))
++		if (!dc_construct(dc, init_params)) {
++			DC_LOG_ERROR("%s: dc construct failed\n", __func__);
+ 			goto destruct_dc;
++		}
+ 
+ 		full_pipe_count = dc->res_pool->pipe_count;
+ 		if (dc->res_pool->underlay_pipe_index != NO_UNDERLAY_PIPE)
+@@ -1349,8 +1362,6 @@ struct dc *dc_create(const struct dc_init_data *init_params)
+ 
+ 	DC_LOG_DC("Display Core initialized\n");
+ 
+-
+-
+ 	return dc;
+ 
+ destruct_dc:
 -- 
-With best wishes
-Dmitry
+2.25.1
 
