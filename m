@@ -2,124 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 731BF724AD0
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 20:07:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 092D0724ADC
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 20:08:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238884AbjFFSHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 14:07:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56788 "EHLO
+        id S237961AbjFFSId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 14:08:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238872AbjFFSHo (ORCPT
+        with ESMTP id S231366AbjFFSIb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 14:07:44 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E63210DB;
-        Tue,  6 Jun 2023 11:07:42 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-977d4a1cf0eso429979866b.1;
-        Tue, 06 Jun 2023 11:07:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20221208; t=1686074861; x=1688666861;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vcodIvnCDuCUHJZrEIIAkw7Oo5izqF9wl/3fm5lPRac=;
-        b=sESGsiiUo2nUkaTrr6tzzaTd0fR5rL5+v5Oc60br+8qcb+VOhXLy2UQD9y74S1Y+0L
-         xOuhrIzh1TBUbRd22H4pC1J+cpQNjV+fcIoKGCV5ZpVnOwC4GLEAgB/ESCSqppFOZKSZ
-         4Rn2rPnS8Ctdwyd74sfjznhyF/C7VqvVFvQ5D43BM6CjRNCujY7VrfOdx1DwgUri2d96
-         nkA8pALJz99heItc4Qegs9YW8EacL3okF1yncoF9NCO0KMM4lp5/WZoNs8UWQiBqQTO6
-         MU8ovRMsii9Hxk4siU9NzdQuz55QIreIQ+2tL5Q79sWYL750sE4rchHABCD4MdKUjNny
-         Fsxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686074861; x=1688666861;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vcodIvnCDuCUHJZrEIIAkw7Oo5izqF9wl/3fm5lPRac=;
-        b=hpH/aG2KoAT0KUkfBXbSuSnuiWpxJhGO1LnQfQkceCZc//718VN2O9b9TZkah5Czu8
-         8W8cnP/cuR9es4tZHeE/jtp71DrsIP32Umy5gaUQNC5kjfxcwgpt/kc/JBk4hAaiFJMu
-         IomvK+qdCyRvXhCH3bhvjpRNjvFdtmpbbOWANc6WXZMiEP3y+X1BNa9ozVYUL1RxKOHZ
-         1iTlEXoWOr4+WX9AbWqYzRr0QVsBIR2chxWsIRJvm/2Ar8L00aiJAozV4JtAJL1fAws2
-         Nd2QlYYbH3qVuvuq7xoXyZyeW3NopnZag6zEZcBz/nJ3/5lWiC0AgO1qZsLO0Zgd9MCY
-         U3SA==
-X-Gm-Message-State: AC+VfDzIYNH/+v3UUecA0ci73DcRItvlmnCy8QVv03S1Zge608/jTdg3
-        4763XVt3SqKs9R7aTNt5IHM=
-X-Google-Smtp-Source: ACHHUZ6QX2jKCXf6SjHD6DzXP8qqlg3jtAGK+Y81rGXrgN5+6xC+N2KThPN5PNlBOtYHKpiz6xNzHg==
-X-Received: by 2002:a17:907:5c3:b0:92b:3c78:91fa with SMTP id wg3-20020a17090705c300b0092b3c7891famr2922694ejb.28.1686074860629;
-        Tue, 06 Jun 2023 11:07:40 -0700 (PDT)
-Received: from localhost.localdomain ([2a02:810a:9640:26a8:7ce9:cf23:e2e1:1e2e])
-        by smtp.gmail.com with ESMTPSA id qc16-20020a170906d8b000b00965d294e633sm5840686ejb.58.2023.06.06.11.07.39
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 06 Jun 2023 11:07:40 -0700 (PDT)
-From:   Franziska Naepelt <franziska.naepelt@googlemail.com>
-X-Google-Original-From: Franziska Naepelt <franziska.naepelt@gmail.com>
-To:     bagasdotme@gmail.com
-Cc:     davem@davemloft.net, franziska.naepelt@gmail.com,
-        franziska.naepelt@googlemail.com, herbert@gondor.apana.org.au,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        martin.petersen@oracle.com, tim.c.chen@linux.intel.com
-Subject: [PATCH v2] crypto: crct10dif_common Add SPDX-License-Identifier tag
-Date:   Tue,  6 Jun 2023 20:07:13 +0200
-Message-Id: <20230606180713.99460-1-franziska.naepelt@gmail.com>
-X-Mailer: git-send-email 2.39.2 (Apple Git-143)
-In-Reply-To: <ZH8ntoGLJHQpZriL@debian.me>
-References: <ZH8ntoGLJHQpZriL@debian.me>
+        Tue, 6 Jun 2023 14:08:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 321161706
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 11:07:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686074860;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=KCHea5uxb09v02T7QiZVlUPaNE7poMAC7MU6JVuAUYE=;
+        b=gyUwt/QTT5y/fbTwpIX3ABFbvR56ggxczE4YHd97kqBcAb9gTk1kD2fJOr4Y9SlFgyp9WJ
+        9U2kBZkOV2ISZlQZ5r8hQlACtSGyMyisjsLGsT1qrrKTnJtbyppyRHlGbPE0dz9ckIkTdD
+        pCNnjgygWFHIAG430p/HEItAqBlQevI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-30-OAh2WxHKOXOizHjU1T6MHQ-1; Tue, 06 Jun 2023 14:07:37 -0400
+X-MC-Unique: OAh2WxHKOXOizHjU1T6MHQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AACF6800BFF;
+        Tue,  6 Jun 2023 18:07:36 +0000 (UTC)
+Received: from llong.com (unknown [10.22.34.1])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2ADFC2166B25;
+        Tue,  6 Jun 2023 18:07:36 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Tejun Heo <tj@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        Josef Bacik <josef@toxicpanda.com>
+Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ming Lei <ming.lei@redhat.com>,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH] blk-cgroup: Reinit blkg_iostat_set after clearing in blkcg_reset_stats()
+Date:   Tue,  6 Jun 2023 14:07:24 -0400
+Message-Id: <20230606180724.2455066-1-longman@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the following checkpatch warning:
-- WARNING: Missing or malformed SPDX-License-Identifier tag
+When blkg_alloc() is called to allocate a blkcg_gq structure
+with the associated blkg_iostat_set's, there are 2 fields within
+blkg_iostat_set that requires proper initialization - blkg & sync.
+The former field was introduced by commit 3b8cc6298724 ("blk-cgroup:
+Optimize blkcg_rstat_flush()") while the later one was introduced by
+commit f73316482977 ("blk-cgroup: reimplement basic IO stats using
+cgroup rstat").
 
-Signed-off-by: Franziska Naepelt <franziska.naepelt@gmail.com>
----
-v2:
- - Remove GPL license boilerplate
----
- crypto/crct10dif_common.c | 16 +---------------
- 1 file changed, 1 insertion(+), 15 deletions(-)
+Unfortunately those fields in the blkg_iostat_set's are not properly
+re-initialized when they are cleared in v1's blkcg_reset_stats(). This
+can lead to a kernel panic due to NULL pointer access of the blkg
+pointer. The missing initialization of sync is less problematic and
+can be a problem in a debug kernel due to missing lockdep initialization.
 
-diff --git a/crypto/crct10dif_common.c b/crypto/crct10dif_common.c
-index b2fab366f518..28a0cdde9449 100644
---- a/crypto/crct10dif_common.c
-+++ b/crypto/crct10dif_common.c
-@@ -1,3 +1,4 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
- /*
-  * Cryptographic API.
-  *
-@@ -7,21 +8,6 @@
-  * Written by Martin K. Petersen <martin.petersen@oracle.com>
-  * Copyright (C) 2013 Intel Corporation
-  * Author: Tim Chen <tim.c.chen@linux.intel.com>
-- *
-- * This program is free software; you can redistribute it and/or modify it
-- * under the terms of the GNU General Public License as published by the Free
-- * Software Foundation; either version 2 of the License, or (at your option)
-- * any later version.
-- *
-- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
-- * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
-- * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-- * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-- * SOFTWARE.
-- *
-  */
+Fix these problems by re-initializing them after memory clearing.
+
+Fixes: 3b8cc6298724 ("blk-cgroup: Optimize blkcg_rstat_flush()")
+Fixes: f73316482977 ("blk-cgroup: reimplement basic IO stats using cgroup rstat")
+Signed-off-by: Waiman Long <longman@redhat.com>
+---
+ block/blk-cgroup.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/block/blk-cgroup.c b/block/blk-cgroup.c
+index 90c2efc3767f..48084321e3e0 100644
+--- a/block/blk-cgroup.c
++++ b/block/blk-cgroup.c
+@@ -636,8 +636,13 @@ static int blkcg_reset_stats(struct cgroup_subsys_state *css,
+ 			struct blkg_iostat_set *bis =
+ 				per_cpu_ptr(blkg->iostat_cpu, cpu);
+ 			memset(bis, 0, sizeof(*bis));
++
++			/* Re-initialize the cleared blkg_iostat_set */
++			u64_stats_init(&bis->sync);
++			bis->blkg = blkg;
+ 		}
+ 		memset(&blkg->iostat, 0, sizeof(blkg->iostat));
++		u64_stats_init(&blkg->iostat.sync);
  
- #include <linux/crc-t10dif.h>
-
-base-commit: 9561de3a55bed6bdd44a12820ba81ec416e705a7
+ 		for (i = 0; i < BLKCG_MAX_POLS; i++) {
+ 			struct blkcg_policy *pol = blkcg_policy[i];
 -- 
-2.39.2 (Apple Git-143)
+2.31.1
 
