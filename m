@@ -2,66 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D474723681
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 06:59:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EC70723688
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 07:00:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234180AbjFFE7b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 00:59:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38378 "EHLO
+        id S234239AbjFFFAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 01:00:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbjFFE72 (ORCPT
+        with ESMTP id S232645AbjFFFAl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 00:59:28 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85940196;
-        Mon,  5 Jun 2023 21:59:27 -0700 (PDT)
+        Tue, 6 Jun 2023 01:00:41 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0F63196;
+        Mon,  5 Jun 2023 22:00:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686027567; x=1717563567;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7YqIXOEFk6+LSNMwIOYXhRVCF5tOS5Mo1Nr0nwPD3FU=;
-  b=ZJqWpqQMpMOIRNo2bansYhzGHkwC5D4wRSJcKUeIrpY8XNVGr9cT/epx
-   Xd/kqU3F0r5ew0Ooa8JhU1RQH32xNp45hUWqVTBJwi+uTJmyEJsfMMGRx
-   G8V7IW7FZSTr/ze4DbEx+vilt0xAIZu75wPSxXXmK7Vvk5H231GOjwAM5
-   NJnxNxoVtc8tsrWWLBD40GOMdHiHU06oDNQh3t+YCqErEDTFrQ1xLfvGO
-   7h/4LpBxwwqM1RQzQYQ9evOSOzmVv2Sn3OR6U4yn0N2iFMUBgT6xNpzxs
-   f3upuuc+6diH3sLl43bU9hP49asi8RZr4kGtxPCtNK0toWvf9XHuJl3/u
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="336920624"
+  t=1686027639; x=1717563639;
+  h=message-id:date:mime-version:subject:from:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=eIUAsbJdL5hO7Ybe0uE+3+sTJNj411vUQzur9r3Syv4=;
+  b=KAwnYhTFIE3OhhbVDlC05KI3s4/jwZB5qXCZeEUWfKwik+bO23LqlMx9
+   ww2vkvBg2JeyxZ400HAi3v4j/frM92Lm0UY5k2mP6rBdnCtysuq/UPxEX
+   WRT/Yioe0BguUtWOTzURxzsQ7eT+Mai8Iof5W7g62pGKkt3Em0JUFz25Z
+   FgxFGMQ0aabx5GwgpFSY8YCtuU/Uc5opXdF9rWI+ZW5fKvRjvMTu4obqa
+   YvFPN1Q4J3bYyHwbVM7xWXdWP7t1RMMETfXsdPrIuLrqAmM8M7zdy1kHz
+   7Lv+IOdwY7XhSID0zMvcKTZ3KOYIQkVu6nnwovAFOlv0M0yMHug90yUUP
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="359017134"
 X-IronPort-AV: E=Sophos;i="6.00,219,1681196400"; 
-   d="scan'208";a="336920624"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 21:59:27 -0700
+   d="scan'208";a="359017134"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 22:00:39 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="712056414"
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="708923710"
 X-IronPort-AV: E=Sophos;i="6.00,219,1681196400"; 
-   d="scan'208";a="712056414"
-Received: from yy-desk-7060.sh.intel.com (HELO localhost) ([10.239.159.76])
-  by fmsmga007.fm.intel.com with ESMTP; 05 Jun 2023 21:59:24 -0700
-Date:   Tue, 6 Jun 2023 12:59:23 +0800
-From:   Yuan Yao <yuan.yao@linux.intel.com>
-To:     isaku.yamahata@intel.com
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
-        erdemaktas@google.com, Sean Christopherson <seanjc@google.com>,
-        Sagi Shahar <sagis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Zhi Wang <zhi.wang.linux@gmail.com>, chen.bo@intel.com,
-        Sean Christopherson <sean.j.christopherson@intel.com>
-Subject: Re: [PATCH v14 031/113] KVM: x86/mmu: Replace hardcoded value 0 for
- the initial value for SPTE
-Message-ID: <20230606045923.ol5kjhagiimqksmn@yy-desk-7060>
-References: <cover.1685333727.git.isaku.yamahata@intel.com>
- <8b4f21e2fada944d041ffee0f27d527e0e447cbb.1685333727.git.isaku.yamahata@intel.com>
+   d="scan'208";a="708923710"
+Received: from cutzinge-mobl2.amr.corp.intel.com (HELO [10.0.2.15]) ([10.252.56.224])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 22:00:37 -0700
+Message-ID: <afe1c05a-2b77-c3d8-aacf-b4c7bebb8bf8@intel.com>
+Date:   Tue, 6 Jun 2023 08:00:33 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8b4f21e2fada944d041ffee0f27d527e0e447cbb.1685333727.git.isaku.yamahata@intel.com>
-User-Agent: NeoMutt/20171215
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.11.2
+Subject: Re: [PATCH V3 0/1] perf tools: Allow config terms with breakpoints
+From:   Adrian Hunter <adrian.hunter@intel.com>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org
+References: <20230525082902.25332-1-adrian.hunter@intel.com>
+Content-Language: en-US
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20230525082902.25332-1-adrian.hunter@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,166 +68,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 28, 2023 at 09:19:13PM -0700, isaku.yamahata@intel.com wrote:
-> From: Isaku Yamahata <isaku.yamahata@intel.com>
->
-> The TDX support will need the "suppress #VE" bit (bit 63) set as the
-> initial value for SPTE.  To reduce code change size, introduce a new macro
-> SHADOW_NONPRESENT_VALUE for the initial value for the shadow page table
-> entry (SPTE) and replace hard-coded value 0 for it.  Initialize shadow page
-> tables with their value.
->
-> The plan is to unconditionally set the "suppress #VE" bit for both AMD and
-> Intel as: 1) AMD hardware uses the bit 63 as NX for present SPTE and
-> ignored for non-present SPTE; 2) for conventional VMX guests, KVM never
-> enables the "EPT-violation #VE" in VMCS control and "suppress #VE" bit is
-> ignored by hardware.
->
-> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> ---
->  arch/x86/kvm/mmu/mmu.c         | 20 +++++++++++++++-----
->  arch/x86/kvm/mmu/paging_tmpl.h |  2 +-
->  arch/x86/kvm/mmu/spte.h        |  2 ++
->  arch/x86/kvm/mmu/tdp_mmu.c     | 14 +++++++-------
->  4 files changed, 25 insertions(+), 13 deletions(-)
->
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index dc2b9a2f717c..1b6fd4434e96 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -576,9 +576,9 @@ static u64 mmu_spte_clear_track_bits(struct kvm *kvm, u64 *sptep)
->
->  	if (!is_shadow_present_pte(old_spte) ||
->  	    !spte_has_volatile_bits(old_spte))
-> -		__update_clear_spte_fast(sptep, 0ull);
-> +		__update_clear_spte_fast(sptep, SHADOW_NONPRESENT_VALUE);
->  	else
-> -		old_spte = __update_clear_spte_slow(sptep, 0ull);
-> +		old_spte = __update_clear_spte_slow(sptep, SHADOW_NONPRESENT_VALUE);
->
->  	if (!is_shadow_present_pte(old_spte))
->  		return old_spte;
-> @@ -612,7 +612,7 @@ static u64 mmu_spte_clear_track_bits(struct kvm *kvm, u64 *sptep)
->   */
->  static void mmu_spte_clear_no_track(u64 *sptep)
->  {
-> -	__update_clear_spte_fast(sptep, 0ull);
-> +	__update_clear_spte_fast(sptep, SHADOW_NONPRESENT_VALUE);
->  }
->
->  static u64 mmu_spte_get_lockless(u64 *sptep)
-> @@ -1969,7 +1969,8 @@ static bool kvm_sync_page_check(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp)
->
->  static int kvm_sync_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp, int i)
->  {
-> -	if (!sp->spt[i])
-> +	/* sp->spt[i] has initial value of shadow page table allocation */
-> +	if (sp->spt[i] != SHADOW_NONPRESENT_VALUE)
+On 25/05/23 11:29, Adrian Hunter wrote:
+> Hi
+> 
+> Here is a patch (V3) to the event parser for breakpoint events.
+> I am not that familiar with flex / bison, but it seemed to
+> need trailing context to stop the mem event colon and slash
+> delimiters from getting mixed up with delimiters for config
+> terms or event modifiers.  Please look closely at that.
+> 
+> 
+> Changes in V3:
+> 
+>       Add Ian's Reviewed-by
+>       Re-base
 
-This should be "sp->spt[i] == SHADOW_NONPRESENT_VALUE" ? Looks all present spt[i]
-are skipped without sync for shadow paging.
+Still applies.  Any more comments?
 
->  		return 0;
->
->  	return vcpu->arch.mmu->sync_spte(vcpu, sp, i);
-> @@ -6120,7 +6121,16 @@ int kvm_mmu_create(struct kvm_vcpu *vcpu)
->  	vcpu->arch.mmu_page_header_cache.kmem_cache = mmu_page_header_cache;
->  	vcpu->arch.mmu_page_header_cache.gfp_zero = __GFP_ZERO;
->
-> -	vcpu->arch.mmu_shadow_page_cache.gfp_zero = __GFP_ZERO;
-> +	/*
-> +	 * When X86_64, initial SEPT entries are initialized with
-> +	 * SHADOW_NONPRESENT_VALUE.  Otherwise zeroed.  See
-> +	 * mmu_memory_cache_alloc_obj().
-> +	 */
-> +	if (IS_ENABLED(CONFIG_X86_64))
-> +		vcpu->arch.mmu_shadow_page_cache.init_value =
-> +			SHADOW_NONPRESENT_VALUE;
-> +	if (!vcpu->arch.mmu_shadow_page_cache.init_value)
-> +		vcpu->arch.mmu_shadow_page_cache.gfp_zero = __GFP_ZERO;
->
->  	vcpu->arch.mmu = &vcpu->arch.root_mmu;
->  	vcpu->arch.walk_mmu = &vcpu->arch.root_mmu;
-> diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
-> index 0662e0278e70..ef8124bd2f11 100644
-> --- a/arch/x86/kvm/mmu/paging_tmpl.h
-> +++ b/arch/x86/kvm/mmu/paging_tmpl.h
-> @@ -892,7 +892,7 @@ static int FNAME(sync_spte)(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp, int
->  	gpa_t pte_gpa;
->  	gfn_t gfn;
->
-> -	if (WARN_ON_ONCE(!sp->spt[i]))
-> +	if (WARN_ON_ONCE(sp->spt[i] == SHADOW_NONPRESENT_VALUE))
->  		return 0;
->
->  	first_pte_gpa = FNAME(get_level1_sp_gpa)(sp);
-> diff --git a/arch/x86/kvm/mmu/spte.h b/arch/x86/kvm/mmu/spte.h
-> index 1279db2eab44..a99eb7d4ae5d 100644
-> --- a/arch/x86/kvm/mmu/spte.h
-> +++ b/arch/x86/kvm/mmu/spte.h
-> @@ -148,6 +148,8 @@ static_assert(MMIO_SPTE_GEN_LOW_BITS == 8 && MMIO_SPTE_GEN_HIGH_BITS == 11);
->
->  #define MMIO_SPTE_GEN_MASK		GENMASK_ULL(MMIO_SPTE_GEN_LOW_BITS + MMIO_SPTE_GEN_HIGH_BITS - 1, 0)
->
-> +#define SHADOW_NONPRESENT_VALUE	0ULL
-> +
->  extern u64 __read_mostly shadow_host_writable_mask;
->  extern u64 __read_mostly shadow_mmu_writable_mask;
->  extern u64 __read_mostly shadow_nx_mask;
-> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> index 3000ef6d79ea..ddd995885dd3 100644
-> --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> @@ -627,7 +627,7 @@ static inline int tdp_mmu_zap_spte_atomic(struct kvm *kvm,
->  	 * here since the SPTE is going from non-present to non-present.  Use
->  	 * the raw write helper to avoid an unnecessary check on volatile bits.
->  	 */
-> -	__kvm_tdp_mmu_write_spte(iter->sptep, 0);
-> +	__kvm_tdp_mmu_write_spte(iter->sptep, SHADOW_NONPRESENT_VALUE);
->
->  	return 0;
->  }
-> @@ -764,8 +764,8 @@ static void __tdp_mmu_zap_root(struct kvm *kvm, struct kvm_mmu_page *root,
->  			continue;
->
->  		if (!shared)
-> -			tdp_mmu_iter_set_spte(kvm, &iter, 0);
-> -		else if (tdp_mmu_set_spte_atomic(kvm, &iter, 0))
-> +			tdp_mmu_iter_set_spte(kvm, &iter, SHADOW_NONPRESENT_VALUE);
-> +		else if (tdp_mmu_set_spte_atomic(kvm, &iter, SHADOW_NONPRESENT_VALUE))
->  			goto retry;
->  	}
->  }
-> @@ -821,8 +821,8 @@ bool kvm_tdp_mmu_zap_sp(struct kvm *kvm, struct kvm_mmu_page *sp)
->  	if (WARN_ON_ONCE(!is_shadow_present_pte(old_spte)))
->  		return false;
->
-> -	tdp_mmu_set_spte(kvm, kvm_mmu_page_as_id(sp), sp->ptep, old_spte, 0,
-> -			 sp->gfn, sp->role.level + 1);
-> +	tdp_mmu_set_spte(kvm, kvm_mmu_page_as_id(sp), sp->ptep, old_spte,
-> +			 SHADOW_NONPRESENT_VALUE, sp->gfn, sp->role.level + 1);
->
->  	return true;
->  }
-> @@ -856,7 +856,7 @@ static bool tdp_mmu_zap_leafs(struct kvm *kvm, struct kvm_mmu_page *root,
->  		    !is_last_spte(iter.old_spte, iter.level))
->  			continue;
->
-> -		tdp_mmu_iter_set_spte(kvm, &iter, 0);
-> +		tdp_mmu_iter_set_spte(kvm, &iter, SHADOW_NONPRESENT_VALUE);
->  		flush = true;
->  	}
->
-> @@ -1250,7 +1250,7 @@ static bool set_spte_gfn(struct kvm *kvm, struct tdp_iter *iter,
->  	 * invariant that the PFN of a present * leaf SPTE can never change.
->  	 * See handle_changed_spte().
->  	 */
-> -	tdp_mmu_iter_set_spte(kvm, iter, 0);
-> +	tdp_mmu_iter_set_spte(kvm, iter, SHADOW_NONPRESENT_VALUE);
->
->  	if (!pte_write(range->pte)) {
->  		new_spte = kvm_mmu_changed_pte_notifier_make_spte(iter->old_spte,
-> --
-> 2.25.1
->
+> 
+> Changes in V2:
+> 
+>       Add comments to tools/perf/util/parse-events.l
+>       Add a test for 2 mem events back to back with config terms
+> 
+> 
+> Adrian Hunter (1):
+>       perf tools: Allow config terms with breakpoints
+> 
+>  tools/perf/tests/parse-events.c | 157 ++++++++++++++++++++++++++++++++++++++++
+>  tools/perf/util/parse-events.c  |  23 +++++-
+>  tools/perf/util/parse-events.h  |   6 +-
+>  tools/perf/util/parse-events.l  |  23 +++++-
+>  tools/perf/util/parse-events.y  |  42 ++++++-----
+>  5 files changed, 224 insertions(+), 27 deletions(-)
+> 
+> 
+> Regards
+> Adrian
+
