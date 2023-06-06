@@ -2,143 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BE57724434
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 15:20:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C95C3724431
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 15:19:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238138AbjFFNUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 09:20:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47528 "EHLO
+        id S238129AbjFFNTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 09:19:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238349AbjFFNUE (ORCPT
+        with ESMTP id S235590AbjFFNTc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 09:20:04 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFD88126;
-        Tue,  6 Jun 2023 06:20:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=bOhJdpV+N76h1R0HV0En0Yvx5H3tbVSO6kPEgHFAnxI=; b=Id0Z7UFiOxF+fvDn9K3Pf7MPru
-        VGmMYzWYhTR0sLrVm5XzlG+3N8z8M4G+B8jdt55BqvGpRWHAJwesO2f7TVZQQip+ayH0Gc6pXRf2m
-        Sdm0pg6BXS4GXcYpiKXqyz78x9b3fu6uJfyhPELsxvgb+uHXtg7eI1FY+iecu2lGYIDSrx7GJQKye
-        a37q7ElCkHjHTfM6A19s67vVKD8i01BThzKCeXr7krxisKSMOuIS5hC2Omj4EIRomGU+1wD/sNBZL
-        xDKjrxVeric6OSUW6MjK3uMK1mtDavlyBCDiGqNUQhr5sdT5JDjUdz4/nejY9k9CE84dn85nTRyFf
-        duKixrNQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1q6WaX-0046Rl-2j;
-        Tue, 06 Jun 2023 13:19:05 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 974F4300188;
-        Tue,  6 Jun 2023 15:18:59 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 72FED20D72195; Tue,  6 Jun 2023 15:18:59 +0200 (CEST)
-Date:   Tue, 6 Jun 2023 15:18:59 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Yicong Yang <yangyicong@huawei.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, gregkh@linuxfoundation.org,
-        yangyicong@hisilicon.com, linuxarm@huawei.com,
-        Dan Williams <dan.j.williams@intel.com>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>,
-        Jiucheng Xu <jiucheng.xu@amlogic.com>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Robert Richter <rric@kernel.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Anup Patel <anup@brainfault.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Frank Li <Frank.li@nxp.com>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, linux-fpga@vger.kernel.org,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Liang Kan <kan.liang@linux.intel.com>
-Subject: Re: [PATCH 01/32] perf: Allow a PMU to have a parent
-Message-ID: <20230606131859.GC905437@hirez.programming.kicks-ass.net>
-References: <20230404134225.13408-1-Jonathan.Cameron@huawei.com>
- <20230404134225.13408-2-Jonathan.Cameron@huawei.com>
- <61f8e489-ae76-38d6-2da0-43cf3c17853d@huawei.com>
- <20230406111607.00007be5@Huawei.com>
- <20230406124040.GD392176@hirez.programming.kicks-ass.net>
- <20230406174445.0000235c@Huawei.com>
- <20230406194938.GB405948@hirez.programming.kicks-ass.net>
- <ZH8vUKt+iCF4M70d@FVFF77S0Q05N.cambridge.arm.com>
+        Tue, 6 Jun 2023 09:19:32 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02C21126;
+        Tue,  6 Jun 2023 06:19:32 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1b04706c974so52656185ad.2;
+        Tue, 06 Jun 2023 06:19:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686057571; x=1688649571;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+J0YyEG+Bc29nQ2RIHEkbLv3QWk8xBsAd1vdT8IvS7g=;
+        b=Ec4yMwnyrZjdH/+gIXXH/c8NWhC0USVFjAN4xFs3QCzZXrho2aZMH2pc7xn6MNsBV4
+         oHHNnYV5JbsDFuBqO/HJiUH3srguDl3NLu4nbGdkNqLbccRJHvGHnQ6kjAcg2vYtlXla
+         bm13S/yN/uIAhqOM7MSv6yfic5pDHuonX7MbIEbmVIaoCgddBtTy4Zh2Z8Vnm0kCbHZn
+         +QMbYfeNvioTnv0eTEI+AVX49dKc8mYRwCWefRxeHHRY1+QPzXnSMeoX0v+JybbexJsY
+         xQWJPZo2c3UY2V/i9Cku8C+HlnRE0DWWtWapuHk3MXouGrC+dxK0kkdjiaFJXy/fm+b5
+         iRRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686057571; x=1688649571;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+J0YyEG+Bc29nQ2RIHEkbLv3QWk8xBsAd1vdT8IvS7g=;
+        b=UWykpg4sjQqiSvqBloi6Q9uOWnDIC/mWn78a/fU8UyhbHUNAJ/D/jMr8ZVQn+Aytz4
+         N+qLXzOngVRpLtWn7MBLtPsbQefZBQN45TFuOsIVxok/G3MOT6ts1JCpTSKjlXh0vs3l
+         bokqc6sG23fNmvYX9A47vQK6hNmO26jImcsp3Mcqbb8al/eMqsYoNEemcrYEoUyH8VZ6
+         YAVJHq4DOwT+2joT5UyD0Ziv6nkQfU0GEFlzAAaf60ETGr7PIWqyh98dkSyr5thhFHB3
+         c6kb+BaALYJwVHXoKl2g+4quTviqoKSSGm7eIn3rn6vpVBnDCshtIXSorG5vgwtyT6K2
+         VPhg==
+X-Gm-Message-State: AC+VfDy35K35arX7Tutn0wDSPOzjvUK0752Zv6eXm+1KZp6U0Qv9k+J/
+        3ik0w4q7JvtL8uNDbXVPykQ=
+X-Google-Smtp-Source: ACHHUZ7ZZfaFDdXqM05a0itePPSLYv0CvztkAVEuUDRYYwe01/8+sXJpFV38aXfaT6/onULzozX3SA==
+X-Received: by 2002:a17:902:e742:b0:1ad:cb4b:1d50 with SMTP id p2-20020a170902e74200b001adcb4b1d50mr2723294plf.43.1686057571118;
+        Tue, 06 Jun 2023 06:19:31 -0700 (PDT)
+Received: from localhost ([192.55.54.50])
+        by smtp.gmail.com with ESMTPSA id r2-20020a1709028bc200b001afd6647a77sm8496482plo.155.2023.06.06.06.19.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Jun 2023 06:19:30 -0700 (PDT)
+Date:   Tue, 6 Jun 2023 06:19:29 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Yuan Yao <yuan.yao@linux.intel.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
+        Sean Christopherson <seanjc@google.com>,
+        Sagi Shahar <sagis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Zhi Wang <zhi.wang.linux@gmail.com>, chen.bo@intel.com,
+        Sean Christopherson <sean.j.christopherson@intel.com>
+Subject: Re: [PATCH v14 031/113] KVM: x86/mmu: Replace hardcoded value 0 for
+ the initial value for SPTE
+Message-ID: <20230606131929.GA2403361@ls.amr.corp.intel.com>
+References: <cover.1685333727.git.isaku.yamahata@intel.com>
+ <8b4f21e2fada944d041ffee0f27d527e0e447cbb.1685333727.git.isaku.yamahata@intel.com>
+ <20230606045923.ol5kjhagiimqksmn@yy-desk-7060>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZH8vUKt+iCF4M70d@FVFF77S0Q05N.cambridge.arm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230606045923.ol5kjhagiimqksmn@yy-desk-7060>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 02:06:24PM +0100, Mark Rutland wrote:
-> On Thu, Apr 06, 2023 at 09:49:38PM +0200, Peter Zijlstra wrote:
-> > On Thu, Apr 06, 2023 at 05:44:45PM +0100, Jonathan Cameron wrote:
-> > > On Thu, 6 Apr 2023 14:40:40 +0200
-> > > Peter Zijlstra <peterz@infradead.org> wrote:
-> > > 
-> > > > On Thu, Apr 06, 2023 at 11:16:07AM +0100, Jonathan Cameron wrote:
-> > > > 
-> > > > > In the long run I agree it would be good.  Short term there are more instances of
-> > > > > struct pmu that don't have parents than those that do (even after this series).
-> > > > > We need to figure out what to do about those before adding checks on it being
-> > > > > set.  
-> > > > 
-> > > > Right, I don't think you've touched *any* of the x86 PMUs for example,
-> > > > and getting everybody that boots an x86 kernel a warning isn't going to
-> > > > go over well :-)
-> > > > 
-> > > 
-> > > It was tempting :) "Warning: Parentless PMU: try a different architecture."
-> > 
-> > Haha!
-> > 
-> > > I'd love some inputs on what the x86 PMU devices parents should be?
-> > > CPU counters in general tend to just spin out of deep in the architecture code.
-> > 
-> > For the 'simple' ones I suppose we can use the CPU device.
+On Tue, Jun 06, 2023 at 12:59:23PM +0800,
+Yuan Yao <yuan.yao@linux.intel.com> wrote:
+
+> On Sun, May 28, 2023 at 09:19:13PM -0700, isaku.yamahata@intel.com wrote:
+> > From: Isaku Yamahata <isaku.yamahata@intel.com>
+> >
+> > The TDX support will need the "suppress #VE" bit (bit 63) set as the
+> > initial value for SPTE.  To reduce code change size, introduce a new macro
+> > SHADOW_NONPRESENT_VALUE for the initial value for the shadow page table
+> > entry (SPTE) and replace hard-coded value 0 for it.  Initialize shadow page
+> > tables with their value.
+> >
+> > The plan is to unconditionally set the "suppress #VE" bit for both AMD and
+> > Intel as: 1) AMD hardware uses the bit 63 as NX for present SPTE and
+> > ignored for non-present SPTE; 2) for conventional VMX guests, KVM never
+> > enables the "EPT-violation #VE" in VMCS control and "suppress #VE" bit is
+> > ignored by hardware.
+> >
+> > Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+> > Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> > ---
+> >  arch/x86/kvm/mmu/mmu.c         | 20 +++++++++++++++-----
+> >  arch/x86/kvm/mmu/paging_tmpl.h |  2 +-
+> >  arch/x86/kvm/mmu/spte.h        |  2 ++
+> >  arch/x86/kvm/mmu/tdp_mmu.c     | 14 +++++++-------
+> >  4 files changed, 25 insertions(+), 13 deletions(-)
+> >
+> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > index dc2b9a2f717c..1b6fd4434e96 100644
+> > --- a/arch/x86/kvm/mmu/mmu.c
+> > +++ b/arch/x86/kvm/mmu/mmu.c
+> > @@ -576,9 +576,9 @@ static u64 mmu_spte_clear_track_bits(struct kvm *kvm, u64 *sptep)
+> >
+> >  	if (!is_shadow_present_pte(old_spte) ||
+> >  	    !spte_has_volatile_bits(old_spte))
+> > -		__update_clear_spte_fast(sptep, 0ull);
+> > +		__update_clear_spte_fast(sptep, SHADOW_NONPRESENT_VALUE);
+> >  	else
+> > -		old_spte = __update_clear_spte_slow(sptep, 0ull);
+> > +		old_spte = __update_clear_spte_slow(sptep, SHADOW_NONPRESENT_VALUE);
+> >
+> >  	if (!is_shadow_present_pte(old_spte))
+> >  		return old_spte;
+> > @@ -612,7 +612,7 @@ static u64 mmu_spte_clear_track_bits(struct kvm *kvm, u64 *sptep)
+> >   */
+> >  static void mmu_spte_clear_no_track(u64 *sptep)
+> >  {
+> > -	__update_clear_spte_fast(sptep, 0ull);
+> > +	__update_clear_spte_fast(sptep, SHADOW_NONPRESENT_VALUE);
+> >  }
+> >
+> >  static u64 mmu_spte_get_lockless(u64 *sptep)
+> > @@ -1969,7 +1969,8 @@ static bool kvm_sync_page_check(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp)
+> >
+> >  static int kvm_sync_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp, int i)
+> >  {
+> > -	if (!sp->spt[i])
+> > +	/* sp->spt[i] has initial value of shadow page table allocation */
+> > +	if (sp->spt[i] != SHADOW_NONPRESENT_VALUE)
 > 
-> Uh, *which* CPU device? Do we have a container device for all CPUs?
+> This should be "sp->spt[i] == SHADOW_NONPRESENT_VALUE" ? Looks all present spt[i]
+> are skipped without sync for shadow paging.
 
-drivers/base/cpu.c:per_cpu(cpu_sys_devices, cpu) for whatever the core
-pmu is for that cpu ?
+Oop, you're right. Will fix it.
 
-> > > My overall favorite is an l2 cache related PMU that is spun up in
-> > > arch/arm/kernel/irq.c init_IRQ()
-> 
-> That's an artifact of the L2 cache controller driver getting initialized there;
-> ideally we'd have a device for the L2 cache itself (which presumably should
-> hang off an aggregate CPU device).
-
-/sys/devices/system/cpu/cpuN/cache/indexM
-
-has a struct device somewhere in
-drivers/base/cacheinfo.c:ci_index_dev or somesuch.
-
-> > Yeah, we're going to have a ton of them as well. Some of them are PCI
-> > devices and have a clear parent, others, not so much :/
-> 
-> In a number of places the only thing we have is the PMU driver, and we don't
-> have a driver (or device) for the HW block it's a part of. Largely that's
-> interconnect PMUs; we could create container devices there.
-
-Dont they have a PCI device? But yeah, some are going to be a wee bit
-challenging.
+Thanks,
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>
