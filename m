@@ -2,309 +2,573 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24659723DC1
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 11:35:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC973723DD3
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 11:37:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237490AbjFFJfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 05:35:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45578 "EHLO
+        id S236374AbjFFJhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 05:37:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237741AbjFFJfa (ORCPT
+        with ESMTP id S234899AbjFFJgc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 05:35:30 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65ED3E6D
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 02:35:29 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id 5614622812f47-39a50fcc719so4024449b6e.2
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 02:35:29 -0700 (PDT)
+        Tue, 6 Jun 2023 05:36:32 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A58851729
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 02:36:09 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f61735676fso4844943e87.2
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 02:36:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686044128; x=1688636128;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wWQiXuIRb46Lzjnlp2OWrFgW8Gqy2tURjcQ9J82M55w=;
-        b=OPCxTmlTxf6teYDR6rwJlRL1rX1Rv3Lz4uuaJAMXwwowD5mwY/djSulAFjKP0PY4Dl
-         gB55UCf89Anw/UEmcQM0vcVftbCn5uN1EXecvF/lFEzk+PYoBIMxSMHODn6Oyka1mKQJ
-         KTTpRYMiNW0jAAeLSwkie6zD1IQmwJJHvVtYaWipA4a9z8au405BLJ0u6A+crsG1TZba
-         7b1Wp0bBlbAXE9Sd8Y50RJSSwlYFHAyJORr6IpRGH/CBq8eH9qcyO8ZhMONENoRAVryq
-         2f9ftLrl5M42p60uCXre/gvOx7+3qyoxxirvl9F7RERnJbikG3v6cNyDqQ+6sISUhYhN
-         G9zw==
+        d=linaro.org; s=google; t=1686044168; x=1688636168;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wI77b8dKVIPc0LoLKEwqmLiJenQtNYwL1kdD353mnWg=;
+        b=SiaJNZsm8FDz04ys69dscsmkkle4UANl4I1c6qobSn5koVPDTj2lHPa7D0yYmQJNj8
+         Zk5cznWzFhF5SbxAEg/tE1JR83FpB4sSvl7+WtmmrcInAfaxCj3onNGLI3fekThcF2rD
+         WKNa4JWkEJNOUWppku5zNdpKGxhv3MUpdGHpq4YX/DtHJAURVvUIkndBP2LJ0I8ArLaL
+         tqfy62EEh1gg6hUgW7SaUR2bFV2hvmBuOeevXSWbNyjB5Xg3mBXLmn1cXE7wChggvUBQ
+         lu8qkcOqagiN7/BX/K/94W+QyiAUmKoUBg7tDO12V7R8TDpbBvRYVvIqtz5LPornQI8o
+         PmLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686044128; x=1688636128;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wWQiXuIRb46Lzjnlp2OWrFgW8Gqy2tURjcQ9J82M55w=;
-        b=VPzUkorkJfLj2EezxF5YkpJx6qk58kJKfQ8+saqIrGfETsGPFriymZ7WVVtcC5nwSF
-         ick/NyXuTf7E9OqhxLzAvPNxCXxKlACgDCuCJ2fFnX+ISu/M9Hh24dwO/ayXwMYdtfpf
-         7PZZGOOgi+hzAqh7dj9OQUvVy0ZBWJeKCHZp/CkQ+B6hMymO4Ci4N713qiOsp/3MvC9h
-         6kMTRC2q6RlZZGNnn4X31ZdQQZFtovQIErg+OM1Te0QQSdkjUlidgBGR8nyyaLmiDXY1
-         PmMydXqcptRzRsvg0C3fzISPMwiOcRPhxpiHY4G+9WRT5CnguV0vDYPARCs10E80jaFk
-         D7Sw==
-X-Gm-Message-State: AC+VfDx55PygaZoF/JrmMtWFCxo2vJPsm16OlS1NKRp4gDAydTw3C4jJ
-        K1uB5y49/9owZPVgThuz5UOFZQCvAhU2CormXfUgLBZbhwGFkQ==
-X-Google-Smtp-Source: ACHHUZ6JSA+qKyoJHk2sSeuPtQ7PrnpRCYmhI1jJcYIVfxsAPpXxHyZC2TmasRF5HML9S8+c6uLLh3pLtf6juKw5Wf4=
-X-Received: by 2002:a05:6808:3a1:b0:383:e7c8:4000 with SMTP id
- n1-20020a05680803a100b00383e7c84000mr1621122oie.13.1686044128540; Tue, 06 Jun
- 2023 02:35:28 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686044168; x=1688636168;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wI77b8dKVIPc0LoLKEwqmLiJenQtNYwL1kdD353mnWg=;
+        b=C2/oKMEbwlxEqEzXfrNEraV7SXleOQGMW+NhBP5gVTT5hcylWuF9XMY6JUDr4WuLRu
+         BGBNP+W6+18kaMWvR7W50E7xxytTjqfRcff+75YeSXmSbAsvMySxeVJAGh+QRe5Mlnhc
+         ILKpYdfHmQqUE194YL/vDolZie7Ce06/Tpt1i3JEXu4IBUhXNtP+O4RK55Z/eyn21n5n
+         Vjd6L7ZHIT+wLFGM1k0/iE6B6d5kVAlg0qa57DAdhdeF7p0/hWt5fclKX/o2p8teg9Bh
+         jw7m+QbkTK7jpT4Nwwxu5OUoZ218Twf7FXVF4QQMEyBXaRuiir9KY8wSSRJ6O9kow42y
+         JlmA==
+X-Gm-Message-State: AC+VfDy4sIRtupFo8UGB2HhO1fCXOtVXfqqDGxamqKFXUqyOEOrp6wa5
+        DtD25B0yJ8OPnSS/cEkLfEq2YA==
+X-Google-Smtp-Source: ACHHUZ72FgoWiSSP1eqC5+DB82xax6sIafgP8IexY/mHUO2P+jP24yy/ie/axpvqxrAHcAQCHsFOxw==
+X-Received: by 2002:a05:6512:20f:b0:4f4:b13a:d683 with SMTP id a15-20020a056512020f00b004f4b13ad683mr684608lfo.69.1686044167784;
+        Tue, 06 Jun 2023 02:36:07 -0700 (PDT)
+Received: from [192.168.1.101] (abyl150.neoplus.adsl.tpnet.pl. [83.9.31.150])
+        by smtp.gmail.com with ESMTPSA id v11-20020a2e924b000000b002a8e8c776e9sm1780374ljg.56.2023.06.06.02.36.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Jun 2023 02:36:07 -0700 (PDT)
+Message-ID: <1a74a7e5-f20d-39de-bb8f-4371f10a612c@linaro.org>
+Date:   Tue, 6 Jun 2023 11:36:04 +0200
 MIME-Version: 1.0
-References: <20230605085419.44383-1-cerasuolodomenico@gmail.com>
- <20230605085419.44383-2-cerasuolodomenico@gmail.com> <CAJD7tka+_-MZDwbyt8vewvgRzRNg9jpFL7pxfu4ruceGpCkqCw@mail.gmail.com>
-In-Reply-To: <CAJD7tka+_-MZDwbyt8vewvgRzRNg9jpFL7pxfu4ruceGpCkqCw@mail.gmail.com>
-From:   Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-Date:   Tue, 6 Jun 2023 11:35:17 +0200
-Message-ID: <CA+CLi1ikS52d+ztjMbT56bMD0Cqnb2H0WimXgOJw72hznymmEg@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/7] mm: zswap: add pool shrinking mechanism
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     vitaly.wool@konsulko.com, minchan@kernel.org,
-        senozhatsky@chromium.org, linux-mm@kvack.org, ddstreet@ieee.org,
-        sjenning@redhat.com, nphamcs@gmail.com, hannes@cmpxchg.org,
-        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v2 06/10] arm64: dts: qcom: Add SDX75 platform and IDP
+ board support
+Content-Language: en-US
+To:     Rohit Agarwal <quic_rohiagar@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        rafael@kernel.org, viresh.kumar@linaro.org, tglx@linutronix.de,
+        maz@kernel.org, will@kernel.org, robin.murphy@arm.com,
+        joro@8bytes.org, mani@kernel.org, robimarko@gmail.com
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev
+References: <1685982557-28326-1-git-send-email-quic_rohiagar@quicinc.com>
+ <1685982557-28326-7-git-send-email-quic_rohiagar@quicinc.com>
+ <fc579cdb-4594-bdc9-18f0-e16ab89e8eaf@linaro.org>
+ <f2885b05-e6e7-6576-a0de-6f930cfd539f@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <f2885b05-e6e7-6576-a0de-6f930cfd539f@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 6, 2023 at 4:19=E2=80=AFAM Yosry Ahmed <yosryahmed@google.com> =
-wrote:
->
-> Hi Domenico,
->
-> On Mon, Jun 5, 2023 at 1:54=E2=80=AFAM Domenico Cerasuolo
-> <cerasuolodomenico@gmail.com> wrote:
-> >
-> > Each zpool driver (zbud, z3fold and zsmalloc) implements its own shrink
-> > function, which is called from zpool_shrink. However, with this commit,
-> > a unified shrink function is added to zswap. The ultimate goal is to
-> > eliminate the need for zpool_shrink once all zpool implementations have
-> > dropped their shrink code.
-> >
-> > To ensure the functionality of each commit, this change focuses solely
-> > on adding the mechanism itself. No modifications are made to
-> > the backends, meaning that functionally, there are no immediate changes=
-.
-> > The zswap mechanism will only come into effect once the backends have
-> > removed their shrink code. The subsequent commits will address the
-> > modifications needed in the backends.
-> >
-> > Signed-off-by: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-> > ---
-> >  mm/zswap.c | 83 ++++++++++++++++++++++++++++++++++++++++++++++++++----
-> >  1 file changed, 78 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/mm/zswap.c b/mm/zswap.c
-> > index bcb82e09eb64..80d7780bf066 100644
-> > --- a/mm/zswap.c
-> > +++ b/mm/zswap.c
-> > @@ -159,6 +159,8 @@ struct zswap_pool {
-> >         struct work_struct shrink_work;
-> >         struct hlist_node node;
-> >         char tfm_name[CRYPTO_MAX_ALG_NAME];
-> > +       struct list_head lru;
-> > +       spinlock_t lock;
->
-> If this lock is only protecting the lru then I believe it's better to
-> call in lru_lock to make it explicit.
 
-Hi Yosry,
 
-thanks for the input, it makes sense to call it lru_lock, will update.
+On 6.06.2023 10:04, Rohit Agarwal wrote:
+> 
+> On 6/5/2023 11:45 PM, Konrad Dybcio wrote:
+>>
+>> On 5.06.2023 18:29, Rohit Agarwal wrote:
+>>> Add basic devicetree support for SDX75 platform and IDP board from
+>>> Qualcomm. The SDX75 platform features an ARM Cortex A55 CPU which forms
+>>> the Application Processor Sub System (APSS) along with standard Qualcomm
+>>> peripherals like GCC, TLMM, UART, QPIC, and BAM etc... Also, there
+>>> exists the networking parts such as IPA, MHI, PCIE-EP, EMAC, and Modem
+>>> etc..
+>>>
+>>> This commit adds basic devicetree support.
+>> You just said that in the first sentence! :P
+> Sorry :')
+>>
+>>> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
+>>> ---
+>>>   arch/arm64/boot/dts/qcom/Makefile      |   1 +
+>>>   arch/arm64/boot/dts/qcom/sdx75-idp.dts |  18 ++
+>>>   arch/arm64/boot/dts/qcom/sdx75.dtsi    | 533 +++++++++++++++++++++++++++++++++
+>>>   3 files changed, 552 insertions(+)
+>>>   create mode 100644 arch/arm64/boot/dts/qcom/sdx75-idp.dts
+>>>   create mode 100644 arch/arm64/boot/dts/qcom/sdx75.dtsi
+>>>
+>>> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+>>> index d42c595..4fd5a18 100644
+>>> --- a/arch/arm64/boot/dts/qcom/Makefile
+>>> +++ b/arch/arm64/boot/dts/qcom/Makefile
+>>> @@ -173,6 +173,7 @@ dtb-$(CONFIG_ARCH_QCOM)    += sdm845-xiaomi-polaris.dtb
+>>>   dtb-$(CONFIG_ARCH_QCOM)    += sdm845-shift-axolotl.dtb
+>>>   dtb-$(CONFIG_ARCH_QCOM)    += sdm850-lenovo-yoga-c630.dtb
+>>>   dtb-$(CONFIG_ARCH_QCOM)    += sdm850-samsung-w737.dtb
+>>> +dtb-$(CONFIG_ARCH_QCOM)    += sdx75-idp.dtb
+>>>   dtb-$(CONFIG_ARCH_QCOM)    += sm4250-oneplus-billie2.dtb
+>>>   dtb-$(CONFIG_ARCH_QCOM)    += sm6115p-lenovo-j606f.dtb
+>>>   dtb-$(CONFIG_ARCH_QCOM)    += sm6125-sony-xperia-seine-pdx201.dtb
+>>> diff --git a/arch/arm64/boot/dts/qcom/sdx75-idp.dts b/arch/arm64/boot/dts/qcom/sdx75-idp.dts
+>>> new file mode 100644
+>>> index 0000000..1e08f25
+>>> --- /dev/null
+>>> +++ b/arch/arm64/boot/dts/qcom/sdx75-idp.dts
+>>> @@ -0,0 +1,18 @@
+>>> +// SPDX-License-Identifier: BSD-3-Clause
+>>> +/*
+>>> + * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+>>> + */
+>>> +
+>>> +/dts-v1/;
+>>> +
+>>> +#include "sdx75.dtsi"
+>>> +
+>>> +/ {
+>>> +    model = "Qualcomm Technologies, Inc. SDX75 IDP";
+>>> +    compatible = "qcom,sdx75-idp", "qcom,sdx75";
+>>> +
+>> Stray newline
+>>
+>>> +};
+>>> +
+>>> +&tlmm {
+>>> +    gpio-reserved-ranges = <110 6>;
+>>> +};
+>>> diff --git a/arch/arm64/boot/dts/qcom/sdx75.dtsi b/arch/arm64/boot/dts/qcom/sdx75.dtsi
+>>> new file mode 100644
+>>> index 0000000..3d1646b
+>>> --- /dev/null
+>>> +++ b/arch/arm64/boot/dts/qcom/sdx75.dtsi
+>>> @@ -0,0 +1,533 @@
+>>> +// SPDX-License-Identifier: BSD-3-Clause
+>>> +/*
+>>> + * SDX75 SoC device tree source
+>>> + *
+>>> + * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+>>> + *
+>>> + */
+>>> +
+>>> +#include <dt-bindings/clock/qcom,rpmh.h>
+>>> +#include <dt-bindings/interrupt-controller/arm-gic.h>
+>>> +#include <dt-bindings/soc/qcom,rpmh-rsc.h>
+>>> +
+>>> +/ {
+>>> +    #address-cells = <2>;
+>>> +    #size-cells = <2>;
+>>> +    interrupt-parent = <&intc>;
+>>> +
+>>> +    chosen: chosen { };
+>>> +
+>>> +    memory@80000000 {
+>> Please sort the top-level nodes alphabetically
+>>
+>>> +        device_type = "memory";
+>>> +        reg = <0 0x80000000 0 0>;
+>> Please use 0x0 for consistency
+> Sure, Will make everywhere this as 0x0
+>>
+>>> +    };
+>>> +
+>>> +    clocks { };
+>>> +
+>>> +    cpus {
+>>> +        #address-cells = <2>;
+>>> +        #size-cells = <0>;
+>>> +
+>>> +        CPU0: cpu@0 {
+>>> +            device_type = "cpu";
+>>> +            compatible = "arm,cortex-a55";
+>>> +            reg = <0x0 0x0>;
+>>> +            enable-method = "psci";
+>>> +            power-domains = <&CPU_PD0>;
+>>> +            power-domain-names = "psci";
+>>> +            next-level-cache = <&L2_0>;
+>> Missing newline before subnode
+>>
+>>> +            L2_0: l2-cache {
+>>> +                compatible = "cache";
+>>> +                next-level-cache = <&L3_0>;
+>>> +                L3_0: l3-cache {
+>>> +                    compatible = "cache";
+>>> +                };
+>>> +            };
+>>> +        };
+>> [...]
+>>
+>>> +        CLUSTER_PD: power-domain-cpu-cluster0 {
+>>> +            #power-domain-cells = <0>;
+>>> +            domain-idle-states = <&CLUSTER_SLEEP_0 &CX_RET &CLUSTER_SLEEP_1>;
+>> Shouldn't CX_RET be the last one?
+> Here seems to an issue with the naming that I added. CLUSTER_SLEEP_1 should actually be APPS_SLEEP
+> which is deeper than CX_RET.
+> So will update the names in the next.
+Are you sure?
 
->
-> >  };
-> >
-> >  /*
-> > @@ -176,10 +178,12 @@ struct zswap_pool {
-> >   *            be held while changing the refcount.  Since the lock mus=
-t
-> >   *            be held, there is no reason to also make refcount atomic=
-.
-> >   * length - the length in bytes of the compressed page data.  Needed d=
-uring
-> > - *          decompression. For a same value filled page length is 0.
-> > + *          decompression. For a same value filled page length is 0, a=
-nd both
-> > + *          pool and lru are invalid and must be ignored.
-> >   * pool - the zswap_pool the entry's data is in
-> >   * handle - zpool allocation handle that stores the compressed page da=
-ta
-> >   * value - value of the same-value filled pages which have same conten=
-t
-> > + * lru - handle to the pool's lru used to evict pages.
-> >   */
-> >  struct zswap_entry {
-> >         struct rb_node rbnode;
-> > @@ -192,6 +196,7 @@ struct zswap_entry {
-> >                 unsigned long value;
-> >         };
-> >         struct obj_cgroup *objcg;
-> > +       struct list_head lru;
-> >  };
-> >
-> >  struct zswap_header {
-> > @@ -364,6 +369,9 @@ static void zswap_free_entry(struct zswap_entry *en=
-try)
-> >         if (!entry->length)
-> >                 atomic_dec(&zswap_same_filled_pages);
-> >         else {
-> > +               spin_lock(&entry->pool->lock);
-> > +               list_del_init(&entry->lru);
-> > +               spin_unlock(&entry->pool->lock);
->
-> I think we should document the lock ordering somewhere (tree lock ->
-> lru lock), otherwise we may run into an ABBA deadlock down the road.
+Both the PSCI params and longer latency/residency times suggest
+the reverse!
 
-Will update in the next iteration.
-
->
-> >                 zpool_free(entry->pool->zpool, entry->handle);
-> >                 zswap_pool_put(entry->pool);
-> >         }
-> > @@ -584,14 +592,65 @@ static struct zswap_pool *zswap_pool_find_get(cha=
-r *type, char *compressor)
-> >         return NULL;
-> >  }
-> >
-> > +static int zswap_shrink(struct zswap_pool *pool)
-> > +{
-> > +       struct zswap_entry *lru_entry, *tree_entry =3D NULL;
-> > +       struct zswap_header *zhdr;
-> > +       struct zswap_tree *tree;
-> > +       swp_entry_t swpentry;
-> > +       int ret;
-> > +
-> > +       /* get a reclaimable entry from LRU */
-> > +       spin_lock(&pool->lock);
-> > +       if (list_empty(&pool->lru)) {
-> > +               spin_unlock(&pool->lock);
-> > +               return -EINVAL;
-> > +       }
-> > +       lru_entry =3D list_last_entry(&pool->lru, struct zswap_entry, l=
-ru);
-> > +       list_del_init(&lru_entry->lru);
-> > +       zhdr =3D zpool_map_handle(pool->zpool, lru_entry->handle, ZPOOL=
-_MM_RO);
-> > +       tree =3D zswap_trees[swp_type(zhdr->swpentry)];
-> > +       zpool_unmap_handle(pool->zpool, lru_entry->handle);
-> > +       swpentry =3D zhdr->swpentry;
-> > +       spin_unlock(&pool->lock);
-> > +
-> > +       /* hold a reference from tree so it won't be freed during write=
-back */
-> > +       spin_lock(&tree->lock);
-> > +       tree_entry =3D zswap_entry_find_get(&tree->rbroot, swp_offset(s=
-wpentry));
-> > +       if (tree_entry !=3D lru_entry) {
-> > +               if (tree_entry)
-> > +                       zswap_entry_put(tree, tree_entry);
-> > +               spin_unlock(&tree->lock);
-> > +               return -EAGAIN;
-> > +       }
-> > +       spin_unlock(&tree->lock);
-> > +
-> > +       ret =3D zswap_writeback_entry(pool->zpool, lru_entry->handle);
-> > +
-> > +       spin_lock(&tree->lock);
-> > +       if (ret) {
-> > +               spin_lock(&pool->lock);
-> > +               list_move(&lru_entry->lru, &pool->lru);
-> > +               spin_unlock(&pool->lock);
-> > +       }
-> > +       zswap_entry_put(tree, tree_entry);
-> > +       spin_unlock(&tree->lock);
-> > +
-> > +       return ret ? -EAGAIN : 0;
-> > +}
-> > +
-> >  static void shrink_worker(struct work_struct *w)
-> >  {
-> >         struct zswap_pool *pool =3D container_of(w, typeof(*pool),
-> >                                                 shrink_work);
-> >         int ret, failures =3D 0;
-> >
-> > +       /* zpool_evictable will be removed once all 3 backends have mig=
-rated*/
-> >         do {
-> > -               ret =3D zpool_shrink(pool->zpool, 1, NULL);
-> > +               if (zpool_evictable(pool->zpool))
-> > +                       ret =3D zpool_shrink(pool->zpool, 1, NULL);
-> > +               else
-> > +                       ret =3D zswap_shrink(pool);
-> >                 if (ret) {
-> >                         zswap_reject_reclaim_fail++;
-> >                         if (ret !=3D -EAGAIN)
-> > @@ -655,6 +714,8 @@ static struct zswap_pool *zswap_pool_create(char *t=
-ype, char *compressor)
-> >          */
-> >         kref_init(&pool->kref);
-> >         INIT_LIST_HEAD(&pool->list);
-> > +       INIT_LIST_HEAD(&pool->lru);
-> > +       spin_lock_init(&pool->lock);
-> >         INIT_WORK(&pool->shrink_work, shrink_worker);
-> >
-> >         zswap_pool_debug("created", pool);
-> > @@ -1270,7 +1331,7 @@ static int zswap_frontswap_store(unsigned type, p=
-goff_t offset,
-> >         }
-> >
-> >         /* store */
-> > -       hlen =3D zpool_evictable(entry->pool->zpool) ? sizeof(zhdr) : 0=
-;
-> > +       hlen =3D sizeof(zhdr);
-> >         gfp =3D __GFP_NORETRY | __GFP_NOWARN | __GFP_KSWAPD_RECLAIM;
-> >         if (zpool_malloc_support_movable(entry->pool->zpool))
-> >                 gfp |=3D __GFP_HIGHMEM | __GFP_MOVABLE;
-> > @@ -1313,6 +1374,13 @@ static int zswap_frontswap_store(unsigned type, =
-pgoff_t offset,
-> >                         zswap_entry_put(tree, dupentry);
-> >                 }
-> >         } while (ret =3D=3D -EEXIST);
-> > +       INIT_LIST_HEAD(&entry->lru);
-> > +       /* zpool_evictable will be removed once all 3 backends have mig=
-rated*/
-> > +       if (entry->length && !zpool_evictable(entry->pool->zpool)) {
-> > +               spin_lock(&entry->pool->lock);
-> > +               list_add(&entry->lru, &entry->pool->lru);
-> > +               spin_unlock(&entry->pool->lock);
-> > +       }
-> >         spin_unlock(&tree->lock);
-> >
-> >         /* update stats */
-> > @@ -1384,8 +1452,7 @@ static int zswap_frontswap_load(unsigned type, pg=
-off_t offset,
-> >         /* decompress */
-> >         dlen =3D PAGE_SIZE;
-> >         src =3D zpool_map_handle(entry->pool->zpool, entry->handle, ZPO=
-OL_MM_RO);
-> > -       if (zpool_evictable(entry->pool->zpool))
-> > -               src +=3D sizeof(struct zswap_header);
-> > +       src +=3D sizeof(struct zswap_header);
-> >
-> >         if (!zpool_can_sleep_mapped(entry->pool->zpool)) {
-> >                 memcpy(tmp, src, entry->length);
-> > @@ -1415,6 +1482,12 @@ static int zswap_frontswap_load(unsigned type, p=
-goff_t offset,
-> >  freeentry:
-> >         spin_lock(&tree->lock);
-> >         zswap_entry_put(tree, entry);
-> > +       /* zpool_evictable will be removed once all 3 backends have mig=
-rated*/
-> > +       if (entry->length && !zpool_evictable(entry->pool->zpool)) {
-> > +               spin_lock(&entry->pool->lock);
-> > +               list_move(&entry->lru, &entry->pool->lru);
-> > +               spin_unlock(&entry->pool->lock);
-> > +       }
-> >         spin_unlock(&tree->lock);
-> >
-> >         return ret;
-> > --
-> > 2.34.1
-> >
+Konrad
+> 
+> Thanks for pointing out.
+> Rohit.
+>>
+>> Konrad
+>>> +        };
+>>> +    };
+>>> +
+>>> +    firmware {
+>>> +        scm: scm {
+>>> +            compatible = "qcom,scm-sdx75", "qcom,scm";
+>>> +        };
+>>> +    };
+>>> +
+>>> +    pmu {
+>>> +        compatible = "arm,armv8-pmuv3";
+>>> +        interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH>;
+>>> +    };
+>>> +
+>>> +    reserved-memory {
+>>> +        #address-cells = <2>;
+>>> +        #size-cells = <2>;
+>>> +        ranges;
+>>> +
+>>> +        gunyah_hyp_mem: gunyah-hyp@80000000 {
+>>> +            reg = <0x0 0x80000000 0x0 0x800000>;
+>>> +            no-map;
+>>> +        };
+>>> +
+>>> +        hyp_elf_package_mem: hyp-elf-package@80800000 {
+>>> +            reg = <0x0 0x80800000 0x0 0x200000>;
+>>> +            no-map;
+>>> +        };
+>>> +
+>>> +        access_control_db_mem: access-control-db@81380000 {
+>>> +            reg = <0x0 0x81380000 0x0 0x80000>;
+>>> +            no-map;
+>>> +        };
+>>> +
+>>> +        qteetz_mem: qteetz@814e0000 {
+>>> +            reg = <0x0 0x814e0000 0x0 0x2a0000>;
+>>> +            no-map;
+>>> +        };
+>>> +
+>>> +        trusted_apps_mem: trusted-apps@81780000 {
+>>> +            reg = <0x0 0x81780000 0x0 0xa00000>;
+>>> +            no-map;
+>>> +        };
+>>> +
+>>> +        xbl_ramdump_mem: xbl-ramdump@87a00000 {
+>>> +            reg = <0x0 0x87a00000 0x0 0x1c0000>;
+>>> +            no-map;
+>>> +        };
+>>> +
+>>> +        cpucp_fw_mem: cpucp-fw@87c00000 {
+>>> +            reg = <0x0 0x87c00000 0x0 0x100000>;
+>>> +            no-map;
+>>> +        };
+>>> +
+>>> +        xbl_dtlog_mem: xbl-dtlog@87d00000 {
+>>> +            reg = <0x0 0x87d00000 0x0 0x40000>;
+>>> +            no-map;
+>>> +        };
+>>> +
+>>> +        xbl_sc_mem: xbl-sc@87d40000 {
+>>> +            reg = <0x0 0x87d40000 0x0 0x40000>;
+>>> +            no-map;
+>>> +        };
+>>> +
+>>> +        modem_efs_shared_mem: modem-efs-shared@87d80000 {
+>>> +            reg = <0x0 0x87d80000 0x0 0x10000>;
+>>> +            no-map;
+>>> +        };
+>>> +
+>>> +        aop_image_mem: aop-image@87e00000 {
+>>> +            reg = <0x0 0x87e00000 0x0 0x20000>;
+>>> +            no-map;
+>>> +        };
+>>> +
+>>> +        smem_mem: smem@87e20000 {
+>>> +            reg = <0x0 0x87e20000 0x0 0xc0000>;
+>>> +            no-map;
+>>> +        };
+>>> +
+>>> +        aop_cmd_db_mem: aop-cmd-db@87ee0000 {
+>>> +            compatible = "qcom,cmd-db";
+>>> +            reg = <0x0 0x87ee0000 0x0 0x20000>;
+>>> +            no-map;
+>>> +        };
+>>> +
+>>> +        aop_config_mem: aop-config@87f00000 {
+>>> +            reg = <0x0 0x87f00000 0x0 0x20000>;
+>>> +            no-map;
+>>> +        };
+>>> +
+>>> +        ipa_fw_mem: ipa-fw@87f20000 {
+>>> +            reg = <0x0 0x87f20000 0x0 0x10000>;
+>>> +            no-map;
+>>> +        };
+>>> +
+>>> +        secdata_mem: secdata@87f30000 {
+>>> +            reg = <0x0 0x87f30000 0x0 0x1000>;
+>>> +            no-map;
+>>> +        };
+>>> +
+>>> +        tme_crashdump_mem: tme-crashdump@87f31000 {
+>>> +            reg = <0x0 0x87f31000 0x0 0x40000>;
+>>> +            no-map;
+>>> +        };
+>>> +
+>>> +        tme_log_mem: tme-log@87f71000 {
+>>> +            reg = <0x0 0x87f71000 0x0 0x4000>;
+>>> +            no-map;
+>>> +        };
+>>> +
+>>> +        uefi_log_mem: uefi-log@87f75000 {
+>>> +            reg = <0x0 0x87f75000 0x0 0x10000>;
+>>> +            no-map;
+>>> +        };
+>>> +
+>>> +        qdss_mem: qdss@88800000 {
+>>> +            reg = <0x0 0x88800000 0x0 0x300000>;
+>>> +            no-map;
+>>> +        };
+>>> +
+>>> +        audio_heap_mem: audio-heap@88b00000 {
+>>> +            compatible = "shared-dma-pool";
+>>> +            reg = <0x0 0x88b00000 0x0 0x400000>;
+>>> +            no-map;
+>>> +        };
+>>> +
+>>> +        mpss_dsmharq_mem: mpss-dsmharq@88f00000 {
+>>> +            reg = <0x0 0x88f00000 0x0 0x5080000>;
+>>> +            no-map;
+>>> +        };
+>>> +
+>>> +        q6_mpss_dtb_mem: q6-mpss-dtb@8df80000 {
+>>> +            reg = <0x0 0x8df80000 0x0 0x80000>;
+>>> +            no-map;
+>>> +        };
+>>> +
+>>> +        mpssadsp_mem: mpssadsp@8e000000 {
+>>> +            reg = <0x0 0x8e000000 0x0 0xf400000>;
+>>> +            no-map;
+>>> +        };
+>>> +
+>>> +        gunyah_trace_buffer_mem: gunyah-trace-buffer@bdb00000 {
+>>> +            reg = <0x0 0xbdb00000 0x0 0x2000000>;
+>>> +            no-map;
+>>> +        };
+>>> +
+>>> +        smmu_debug_buf_mem: smmu-debug-buf@bfb00000 {
+>>> +            reg = <0x0 0xbfb00000 0x0 0x100000>;
+>>> +            no-map;
+>>> +        };
+>>> +
+>>> +        hyp_smmu_s2_pt_mem: hyp-smmu-s2-pt@bfc00000 {
+>>> +            reg = <0x0 0xbfc00000 0x0 0x400000>;
+>>> +            no-map;
+>>> +        };
+>>> +    };
+>>> +
+>>> +    smem: qcom,smem {
+>>> +        compatible = "qcom,smem";
+>>> +        memory-region = <&smem_mem>;
+>>> +        hwlocks = <&tcsr_mutex 3>;
+>>> +    };
+>>> +
+>>> +    soc: soc {
+>>> +        compatible = "simple-bus";
+>>> +        #address-cells = <2>;
+>>> +        #size-cells = <2>;
+>>> +        ranges = <0 0 0 0 0x10 0>;
+>>> +        dma-ranges = <0 0 0 0 0x10 0>;
+>>> +
+>>> +        tcsr_mutex: hwlock@1f40000 {
+>>> +            compatible = "qcom,tcsr-mutex";
+>>> +            reg = <0x0 0x01f40000 0x0 0x40000>;
+>>> +            #hwlock-cells = <1>;
+>>> +        };
+>>> +
+>>> +        pdc: interrupt-controller@b220000 {
+>>> +            compatible = "qcom,sdx75-pdc", "qcom,pdc";
+>>> +            reg = <0x0 0xb220000 0x0 0x30000>,
+>>> +                  <0x0 0x174000f0 0x0 0x64>;
+>>> +            qcom,pdc-ranges = <0 147 52>,
+>>> +                      <52 266 32>,
+>>> +                      <84 500 59>;
+>>> +            #interrupt-cells = <2>;
+>>> +            interrupt-parent = <&intc>;
+>>> +            interrupt-controller;
+>>> +        };
+>>> +
+>>> +        tlmm: pinctrl@f000000 {
+>>> +            compatible = "qcom,sdx75-tlmm";
+>>> +            reg = <0x0 0x0f000000 0x0 0x400000>;
+>>> +            interrupts = <GIC_SPI 212 IRQ_TYPE_LEVEL_HIGH>;
+>>> +            gpio-controller;
+>>> +            #gpio-cells = <2>;
+>>> +            gpio-ranges = <&tlmm 0 0 133>;
+>>> +            interrupt-controller;
+>>> +            #interrupt-cells = <2>;
+>>> +            wakeup-parent = <&pdc>;
+>>> +        };
+>>> +
+>>> +        apps_smmu: iommu@15000000 {
+>>> +            compatible = "qcom,sdx75-smmu-500", "arm,mmu-500";
+>>> +            reg = <0x0 0x15000000 0x0 0x40000>;
+>>> +            #iommu-cells = <2>;
+>>> +            #global-interrupts = <2>;
+>>> +            dma-coherent;
+>>> +            interrupts = <GIC_SPI 65 IRQ_TYPE_LEVEL_HIGH>,
+>>> +                     <GIC_SPI 68 IRQ_TYPE_LEVEL_HIGH>,
+>>> +                     <GIC_SPI 69 IRQ_TYPE_LEVEL_HIGH>,
+>>> +                     <GIC_SPI 70 IRQ_TYPE_LEVEL_HIGH>,
+>>> +                     <GIC_SPI 71 IRQ_TYPE_LEVEL_HIGH>,
+>>> +                     <GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>,
+>>> +                     <GIC_SPI 73 IRQ_TYPE_LEVEL_HIGH>,
+>>> +                     <GIC_SPI 94 IRQ_TYPE_LEVEL_HIGH>,
+>>> +                     <GIC_SPI 95 IRQ_TYPE_LEVEL_HIGH>,
+>>> +                     <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>,
+>>> +                     <GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>,
+>>> +                     <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>,
+>>> +                     <GIC_SPI 99 IRQ_TYPE_LEVEL_HIGH>,
+>>> +                     <GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH>,
+>>> +                     <GIC_SPI 101 IRQ_TYPE_LEVEL_HIGH>,
+>>> +                     <GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>,
+>>> +                     <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>,
+>>> +                     <GIC_SPI 104 IRQ_TYPE_LEVEL_HIGH>,
+>>> +                     <GIC_SPI 105 IRQ_TYPE_LEVEL_HIGH>,
+>>> +                     <GIC_SPI 106 IRQ_TYPE_LEVEL_HIGH>,
+>>> +                     <GIC_SPI 107 IRQ_TYPE_LEVEL_HIGH>,
+>>> +                     <GIC_SPI 108 IRQ_TYPE_LEVEL_HIGH>,
+>>> +                     <GIC_SPI 109 IRQ_TYPE_LEVEL_HIGH>,
+>>> +                     <GIC_SPI 110 IRQ_TYPE_LEVEL_HIGH>,
+>>> +                     <GIC_SPI 298 IRQ_TYPE_LEVEL_HIGH>,
+>>> +                     <GIC_SPI 299 IRQ_TYPE_LEVEL_HIGH>,
+>>> +                     <GIC_SPI 300 IRQ_TYPE_LEVEL_HIGH>,
+>>> +                     <GIC_SPI 301 IRQ_TYPE_LEVEL_HIGH>,
+>>> +                     <GIC_SPI 302 IRQ_TYPE_LEVEL_HIGH>,
+>>> +                     <GIC_SPI 303 IRQ_TYPE_LEVEL_HIGH>,
+>>> +                     <GIC_SPI 304 IRQ_TYPE_LEVEL_HIGH>,
+>>> +                     <GIC_SPI 305 IRQ_TYPE_LEVEL_HIGH>,
+>>> +                     <GIC_SPI 306 IRQ_TYPE_LEVEL_HIGH>;
+>>> +        };
+>>> +
+>>> +        intc: interrupt-controller@17200000 {
+>>> +            compatible = "arm,gic-v3";
+>>> +            #interrupt-cells = <3>;
+>>> +            interrupt-controller;
+>>> +            #redistributor-regions = <1>;
+>>> +            redistributor-stride = <0x0 0x20000>;
+>>> +            reg = <0x0 0x17200000 0x0 0x10000>,
+>>> +                  <0x0 0x17260000 0x0 0x80000>;
+>>> +            interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
+>>> +        };
+>>> +
+>>> +        timer@17420000 {
+>>> +            compatible = "arm,armv7-timer-mem";
+>>> +            reg = <0x0 0x17420000 0x0 0x1000>;
+>>> +            #address-cells = <1>;
+>>> +            #size-cells = <1>;
+>>> +            ranges = <0 0 0 0x20000000>;
+>>> +
+>>> +            frame@17421000 {
+>>> +                reg = <0x17421000 0x1000>,
+>>> +                      <0x17422000 0x1000>;
+>>> +                frame-number = <0>;
+>>> +                interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
+>>> +                         <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>;
+>>> +            };
+>>> +
+>>> +            frame@17423000 {
+>>> +                reg = <0x17423000 0x1000>;
+>>> +                frame-number = <1>;
+>>> +                interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
+>>> +                status = "disabled";
+>>> +            };
+>>> +
+>>> +            frame@17425000 {
+>>> +                reg = <0x17425000 0x1000>;
+>>> +                frame-number = <2>;
+>>> +                interrupts = <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>;
+>>> +                status = "disabled";
+>>> +            };
+>>> +
+>>> +            frame@17427000 {
+>>> +                reg = <0x17427000 0x1000>;
+>>> +                frame-number = <3>;
+>>> +                interrupts = <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
+>>> +                status = "disabled";
+>>> +            };
+>>> +
+>>> +            frame@17429000 {
+>>> +                reg = <0x17429000 0x1000>;
+>>> +                frame-number = <4>;
+>>> +                interrupts = <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>;
+>>> +                status = "disabled";
+>>> +            };
+>>> +
+>>> +            frame@1742b000 {
+>>> +                reg = <0x1742b000 0x1000>;
+>>> +                frame-number = <5>;
+>>> +                interrupts = <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>;
+>>> +                status = "disabled";
+>>> +            };
+>>> +
+>>> +            frame@1742d000 {
+>>> +                reg = <0x1742d000 0x1000>;
+>>> +                frame-number = <6>;
+>>> +                interrupts = <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>;
+>>> +                status = "disabled";
+>>> +            };
+>>> +        };
+>>> +
+>>> +        apps_rsc: rsc@17a00000 {
+>>> +            label = "apps_rsc";
+>>> +            compatible = "qcom,rpmh-rsc";
+>>> +            reg = <0x0 0x17a00000 0x0 0x10000>,
+>>> +                  <0x0 0x17a10000 0x0 0x10000>,
+>>> +                  <0x0 0x17a20000 0x0 0x10000>;
+>>> +            reg-names = "drv-0", "drv-1", "drv-2";
+>>> +            interrupts = <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>,
+>>> +                     <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>,
+>>> +                     <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>;
+>>> +
+>>> +            power-domains = <&CLUSTER_PD>;
+>>> +            qcom,tcs-offset = <0xd00>;
+>>> +            qcom,drv-id = <2>;
+>>> +            qcom,tcs-config = <ACTIVE_TCS    3>,
+>>> +                      <SLEEP_TCS     2>,
+>>> +                      <WAKE_TCS      2>,
+>>> +                      <CONTROL_TCS   0>;
+>>> +
+>>> +            apps_bcm_voter: bcm_voter {
+>>> +                compatible = "qcom,bcm-voter";
+>>> +            };
+>>> +        };
+>>> +    };
+>>> +
+>>> +    timer {
+>>> +        compatible = "arm,armv8-timer";
+>>> +        interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
+>>> +                 <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
+>>> +                 <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
+>>> +                 <GIC_PPI 12 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>;
+>>> +    };
+>>> +};
