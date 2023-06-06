@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C33047241C1
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 14:11:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7D047241C2
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 14:11:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237437AbjFFMLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 08:11:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47682 "EHLO
+        id S237428AbjFFMLG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 08:11:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237401AbjFFMK5 (ORCPT
+        with ESMTP id S237435AbjFFMLD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 08:10:57 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D007E10C0
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 05:10:31 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-565a336caa0so97995387b3.1
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 05:10:31 -0700 (PDT)
+        Tue, 6 Jun 2023 08:11:03 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E030510D7
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 05:10:38 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-bb0d11a56abso8022769276.2
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 05:10:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686053430; x=1688645430;
+        d=google.com; s=20221208; t=1686053437; x=1688645437;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=83dlZFDhtSz2rg2AR6ggZ2Mh/ASzqdpRvSd02rbzaCk=;
-        b=IoFA55ulrjtnJDTW5pbuUTS9XeM0qmUYpaAJ3OnF3fjh404oOtNySp8WzgeTzaaiiO
-         mVRlBZ2obwVwh4OUFmiQJt7UUnDxoDMkllhaIBQAmBhFfw48M+MKZQjL4e//71A1xQ+M
-         ZQe0Lx0j/uNjanZ997DNS7XHK7FjkoWOzElSxea08x+rZug6VZyihB4gEnokoKygwiFy
-         oohF6tU936F+ATOKuIyJj4FuSck9QyYVTKPs6mJWVCMGD4SJTG4PI7zHHboXxVFaZsG2
-         nDS7Gx45dkGyCy6J2pqiwfXPIBXnbTfVR9nkfcP+mnZCb8QJyIFTWcKIELfCjtVWDZgK
-         oB0A==
+        bh=0QGlHe+zKTAk3+6sKXLWwU9ZaaAOqSw/Vt2fUhgy2WA=;
+        b=bS4nn54XlFs3QFnaLf26ObLJelQ97e9PnCVNdve77ggjCR3JfNlgF6+o8d1vUqjrUM
+         wvbXSNOisrmhnBwK5+9Sazm5rU2Zgirf/L3AYbVVxxno+05JhYVLwDDz3CWGUB4CgacW
+         7FI2dvkLiNurNExQW8FFZfErrWB4Og5cGkpTlMRWPQdtpgidl8RlYM87aELCqrHicqXT
+         zpsqKEpKie2x+xoq6gnaxrUin3F+7UedVAY8bBpVCRRrbKzzvtt973F6bc+QBgFcfs/w
+         A85oh7tf3LR1d+Jaic4iI6vwBIZt8daoHhctT54OQIG6Li3F73eKCdyQ6LRcKn5ogmAj
+         Q1uA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686053430; x=1688645430;
+        d=1e100.net; s=20221208; t=1686053437; x=1688645437;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=83dlZFDhtSz2rg2AR6ggZ2Mh/ASzqdpRvSd02rbzaCk=;
-        b=Ic9OWiyZlycETbO/O3xrXiErgSR6jf5HCBtoiKJb46n5VG58EDG88EnIpykPstMFV6
-         6+eWb0JS7poGaV/fcBd7gz82dfeIf2BURJBXjb5ibvn8gp+llTyciAzZI7wT78kVV/TO
-         lMlM5dtYBAsqfv+jJ2Pq4t8yn6lQErE0qresx12JSjSUYp+3QUuYO8wxaIMArNEwuo1t
-         PjJywnebVsNaaRUnK7tHYlOrnmgYQ/3aV8kTpRSH3Bi6e6UQX2YTR+x5dfK/J9McwH1n
-         9bq0djzs3CQH7yPjRrlgMsBU7dDLOxJ0vSTmcGTu4uoqR1EWm/SSHdlCVyICnJpXWc7A
-         bjHA==
-X-Gm-Message-State: AC+VfDxq28RCZ7rgEYXjtT/eYShbsu5G1gRlYgL+ces6bzdGF9k61zN2
-        LYiqTbl4xD+8lXWP/1TeyBS5eVDNjWYJ
-X-Google-Smtp-Source: ACHHUZ64pvQvCxVufeRzNt0VKrbwAwJNjh5MfrOYdfJtgOmahfaQ951Oi+PY3aJvHU4m52siOi/iL4Zbsjnl
+        bh=0QGlHe+zKTAk3+6sKXLWwU9ZaaAOqSw/Vt2fUhgy2WA=;
+        b=MplL335TpQ0qF/qDC/l0N8slRnPEr0obs4N+1t90ZxyA9ZIU9E30t0DOahkPPCikJc
+         /1zVX82QxtAElXXOoqZm+2vAuDMGCXGxxBRPfn68XIbCSl8BvPsrUqW11tcQ7zRnls/g
+         16VALtjttr+kU1CfVUEpmWeU+MLHtwEn4o4FbbZGFuglRQIbAPDwr8LZNkD3u3RJwl+1
+         N6ReDlJUNPrRV2QtjrjUy0P8JcpjlqOcWziPfFsDG/9mWyD9ON5ucOq4LVmBD7LV2H+e
+         gg2OvO6/u7FZQ2RSKr+lJtTzNPf/87R0j92G/eGQazsNebNSNcGd7hCc8DEkufsmWoOy
+         JrKQ==
+X-Gm-Message-State: AC+VfDwCV2waSH1Xk8e4JunktFZvsMDYmND5if60Lg2dRjtJrxPcGkqa
+        bMe8OV5BW/e6uhmCg120T24ycwDaaxNK
+X-Google-Smtp-Source: ACHHUZ6jnEzs4FzKbc1eucPM21c1GLeALy+/7ZK+Ce8gDScxpZwrM/NUIO/Lv/HW4xE6mHRkm8wTRbjilPxN
 X-Received: from mshavit.ntc.corp.google.com ([2401:fa00:95:20c:a615:63d5:b54e:6919])
- (user=mshavit job=sendgmr) by 2002:a81:b289:0:b0:562:837:122f with SMTP id
- q131-20020a81b289000000b005620837122fmr942001ywh.9.1686053430214; Tue, 06 Jun
- 2023 05:10:30 -0700 (PDT)
-Date:   Tue,  6 Jun 2023 20:07:46 +0800
+ (user=mshavit job=sendgmr) by 2002:a05:6902:703:b0:bac:f608:7113 with SMTP id
+ k3-20020a056902070300b00bacf6087113mr1100722ybt.4.1686053437004; Tue, 06 Jun
+ 2023 05:10:37 -0700 (PDT)
+Date:   Tue,  6 Jun 2023 20:07:47 +0800
 In-Reply-To: <20230606120854.4170244-1-mshavit@google.com>
 Mime-Version: 1.0
 References: <20230606120854.4170244-1-mshavit@google.com>
 X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Message-ID: <20230606120854.4170244-11-mshavit@google.com>
-Subject: [PATCH v2 10/18] iommu/arm-smmu-v3-sva: Remove bond refcount
+Message-ID: <20230606120854.4170244-12-mshavit@google.com>
+Subject: [PATCH v2 11/18] iommu/arm-smmu-v3-sva: Clean unused iommu_sva
 From:   Michael Shavit <mshavit@google.com>
 To:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
         Joerg Roedel <joro@8bytes.org>
@@ -71,58 +71,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The iommu-sva framework checks if a bond between a device and mm already
-exists and handles refcounting at the iommu_domain level.
-__arm_smmu_sva_bind is therefore only called once for a device/mm pair.
+The __arm_smmu_sva_bind function returned an unused iommu_sva handle
+that can be removed.
 
 Signed-off-by: Michael Shavit <mshavit@google.com>
 ---
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c | 12 +-----------
- 1 file changed, 1 insertion(+), 11 deletions(-)
+ .../iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c    | 18 ++++++------------
+ 1 file changed, 6 insertions(+), 12 deletions(-)
 
 diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
-index d07c08b53c5cf..20301d0a2c0b0 100644
+index 20301d0a2c0b0..650c9c9ad52f1 100644
 --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
 +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
-@@ -29,7 +29,6 @@ struct arm_smmu_bond {
+@@ -25,7 +25,6 @@ struct arm_smmu_mmu_notifier {
+ #define mn_to_smmu(mn) container_of(mn, struct arm_smmu_mmu_notifier, mn)
+ 
+ struct arm_smmu_bond {
+-	struct iommu_sva		sva;
  	struct mm_struct		*mm;
  	struct arm_smmu_mmu_notifier	*smmu_mn;
  	struct list_head		list;
--	refcount_t			refs;
- };
+@@ -364,8 +363,7 @@ static void arm_smmu_mmu_notifier_put(struct arm_smmu_mmu_notifier *smmu_mn)
+ 	arm_smmu_free_shared_cd(cd);
+ }
  
- #define sva_to_bond(handle) \
-@@ -377,21 +376,12 @@ __arm_smmu_sva_bind(struct device *dev, struct mm_struct *mm)
+-static struct iommu_sva *
+-__arm_smmu_sva_bind(struct device *dev, struct mm_struct *mm)
++static int __arm_smmu_sva_bind(struct device *dev, struct mm_struct *mm)
+ {
+ 	int ret;
+ 	struct arm_smmu_bond *bond;
+@@ -374,14 +372,13 @@ __arm_smmu_sva_bind(struct device *dev, struct mm_struct *mm)
+ 	struct arm_smmu_domain *smmu_domain = to_smmu_domain(domain);
+ 
  	if (!master || !master->sva_enabled)
- 		return ERR_PTR(-ENODEV);
+-		return ERR_PTR(-ENODEV);
++		return -ENODEV;
  
--	/* If bind() was already called for this {dev, mm} pair, reuse it. */
--	list_for_each_entry(bond, &master->bonds, list) {
--		if (bond->mm == mm) {
--			refcount_inc(&bond->refs);
--			return &bond->sva;
--		}
--	}
--
  	bond = kzalloc(sizeof(*bond), GFP_KERNEL);
  	if (!bond)
- 		return ERR_PTR(-ENOMEM);
+-		return ERR_PTR(-ENOMEM);
++		return -ENOMEM;
  
  	bond->mm = mm;
- 	bond->sva.dev = dev;
--	refcount_set(&bond->refs, 1);
+-	bond->sva.dev = dev;
  
  	bond->smmu_mn = arm_smmu_mmu_notifier_get(smmu_domain, mm);
  	if (IS_ERR(bond->smmu_mn)) {
-@@ -570,7 +560,7 @@ void arm_smmu_sva_remove_dev_pasid(struct iommu_domain *domain,
- 		}
+@@ -390,11 +387,11 @@ __arm_smmu_sva_bind(struct device *dev, struct mm_struct *mm)
  	}
  
--	if (!WARN_ON(!bond) && refcount_dec_and_test(&bond->refs)) {
-+	if (!WARN_ON(!bond)) {
- 		list_del(&bond->list);
- 		arm_smmu_mmu_notifier_put(bond->smmu_mn);
- 		kfree(bond);
+ 	list_add(&bond->list, &master->bonds);
+-	return &bond->sva;
++	return 0;
+ 
+ err_free_bond:
+ 	kfree(bond);
+-	return ERR_PTR(ret);
++	return ret;
+ }
+ 
+ bool arm_smmu_sva_supported(struct arm_smmu_device *smmu)
+@@ -572,13 +569,10 @@ static int arm_smmu_sva_set_dev_pasid(struct iommu_domain *domain,
+ 				      struct device *dev, ioasid_t id)
+ {
+ 	int ret = 0;
+-	struct iommu_sva *handle;
+ 	struct mm_struct *mm = domain->mm;
+ 
+ 	mutex_lock(&sva_lock);
+-	handle = __arm_smmu_sva_bind(dev, mm);
+-	if (IS_ERR(handle))
+-		ret = PTR_ERR(handle);
++	ret = __arm_smmu_sva_bind(dev, mm);
+ 	mutex_unlock(&sva_lock);
+ 
+ 	return ret;
 -- 
 2.41.0.rc0.172.g3f132b7071-goog
 
