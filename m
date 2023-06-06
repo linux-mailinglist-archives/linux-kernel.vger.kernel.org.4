@@ -2,77 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 263CC7233F6
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 02:08:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C677C7233FB
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 02:09:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232967AbjFFAID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 20:08:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35766 "EHLO
+        id S232495AbjFFAJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 20:09:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230328AbjFFAIC (ORCPT
+        with ESMTP id S230328AbjFFAJU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 20:08:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BAB0FD;
-        Mon,  5 Jun 2023 17:08:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 17B1F62607;
-        Tue,  6 Jun 2023 00:08:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61402C433EF;
-        Tue,  6 Jun 2023 00:08:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686010080;
-        bh=wpeSJUE5QEvFvZzvYO7sZqyorFppcAZOUTc84L3tFCI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=BG/FmoU//ibDu795ITfA6MsApJDi1/9mSw7ndJ/XWisFIdggLUH37f5fO0jqCByyE
-         e9q0oQCM4jeK81z1vgjcPNjK649lljorBFq6H1To/0RFYfHlB02BG2kUH8oK9M4InV
-         ra9upkMWHGVYdGcf7TfpjdwAmRq4M+VabGfo4xJmhh/cn8vdAM+UxIkZ87R3F9d2vY
-         /LI2hhYwtMI13AtP5PR9/EkRZI/7R8AU9mjoQfozjWT2IJbEBeoUh7jGbQL3QubxTQ
-         YshfQvVxcZ7yX6uOueglZX/CNwvB3ncbzBeEjNyA4UiryYF1Sx0G2jUi0vTUJvusLF
-         cVLkp1eayBJew==
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-4effb818c37so6836990e87.3;
-        Mon, 05 Jun 2023 17:08:00 -0700 (PDT)
-X-Gm-Message-State: AC+VfDxL2o8ZDcsIFcjLt9Skzt/KgvBcKMkvILIvpOR+C8TH4/zsaWwl
-        VqQ7oHsKXus27V06vOOP4Xf0nPRAEtM1A/90S6Q=
-X-Google-Smtp-Source: ACHHUZ4ZVGiL4jJdnFd4wLN6tDyvtSbWfHE1VBy/hxyNjsO5/GhsdlLQUzqS8cYUSOneZdzV9tZDOc6rm6XPDWR4khs=
-X-Received: by 2002:a19:c512:0:b0:4ec:9ef9:e3d with SMTP id
- w18-20020a19c512000000b004ec9ef90e3dmr245870lfe.26.1686010078423; Mon, 05 Jun
- 2023 17:07:58 -0700 (PDT)
+        Mon, 5 Jun 2023 20:09:20 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46E9FFA;
+        Mon,  5 Jun 2023 17:09:18 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-654f8b56807so2809326b3a.1;
+        Mon, 05 Jun 2023 17:09:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686010158; x=1688602158;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Z84IZvmzWip89Eeas0z1NQsVyFYK452XIFdNItStgJo=;
+        b=hrqPYRMhlf3i8gMrJ2AXc9LXwaaiJbiN9/s2TQXdJBJ80dtZzCntUtMbGD2yPaR5t5
+         69JVQjlA6r1ljlN6bELt0TBdxnRRM5Qd38lMvlwgZl3QW2RcW8IKKaMk9TI9vHddTgf0
+         zWD5mwak9jULNMU8vsOsHm3u3WdT4TsJ7yIj8yNPECuaKt4x8XSYr0GoUBgMmHdf1MLw
+         sfdoULkhA9K/77al/u3iWAO4LxhuwtSxgJWqZyjLUn4wFOt0+Q7XPZ9OM9pTDsfrHgmU
+         gtIxFiWJyF/Cbg4jEBFUi2UoSQBYmOzRMzPIWY0nKZK+LtC4TqdUOZnq6RqFg6/7PBfS
+         OzNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686010158; x=1688602158;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Z84IZvmzWip89Eeas0z1NQsVyFYK452XIFdNItStgJo=;
+        b=T8RzcR88rc/U6LZmeoRYq0G14f/HBeuTkzTVWtavgj9LZs3Y0WL1fC4nTtNvDT7ikB
+         vtXkSe18O0VF07oshLRuLj93hCMekYuOg7wUBKz4K43MTmcFnpCmMjGbfTxBp/kLuv2k
+         imGww3wR9sY1qSR7rJ/5IfvhFSC3HqeGIA/Z3EzsiEWQf5Lc51vELSxJVEY3i1tSWUQf
+         pq3U5jHU4eKaFblw/DOX7nNLBkvhzFs+Y+pf4FY8E42tGLqqjstLVBe9L+bmStgDcHwX
+         5n9rdjku/u0105NVgWrmwjLIg1LjGxTbfDIxtmCqqzfQXcfNHjcN+F+4lePDk6eBG2Po
+         3H9g==
+X-Gm-Message-State: AC+VfDxH761OxAe+Az1rS1RgKN7OxdSh0jMqBtvmv6S/5n1KatKisPWB
+        WH/Ly5CJD8bfaHHXYbXKltXL+w419w0=
+X-Google-Smtp-Source: ACHHUZ4J0kaXrsmCfj5YsGenu5P3xx5lgX4AqWKOx6ZSv3+F0vXh8bd+gjZiBDMlgN8LucBN8KtSFg==
+X-Received: by 2002:a05:6a20:7487:b0:10b:3b0d:b05c with SMTP id p7-20020a056a20748700b0010b3b0db05cmr773322pzd.28.1686010157419;
+        Mon, 05 Jun 2023 17:09:17 -0700 (PDT)
+Received: from localhost (dhcp-72-235-13-41.hawaiiantel.net. [72.235.13.41])
+        by smtp.gmail.com with ESMTPSA id x7-20020aa793a7000000b006475f831838sm5741516pff.30.2023.06.05.17.09.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Jun 2023 17:09:16 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 5 Jun 2023 14:09:15 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Dan Schatzberg <schatzberg.dan@gmail.com>
+Cc:     Chris Down <chris@chrisdown.name>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "open list:CONTROL GROUP (CGROUP)" <cgroups@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] Documentation: Clarify usage of memory limits
+Message-ID: <ZH55K79CaSD6Zya1@slm.duckdns.org>
+References: <20230601183820.3839891-1-schatzberg.dan@gmail.com>
 MIME-Version: 1.0
-References: <20230602091839.743798-1-linan666@huaweicloud.com>
-In-Reply-To: <20230602091839.743798-1-linan666@huaweicloud.com>
-From:   Song Liu <song@kernel.org>
-Date:   Mon, 5 Jun 2023 17:07:46 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW4y5AafocO9imHOVbTteiWMdPFh0QrS6KmFMsMvHCvvtw@mail.gmail.com>
-Message-ID: <CAPhsuW4y5AafocO9imHOVbTteiWMdPFh0QrS6KmFMsMvHCvvtw@mail.gmail.com>
-Subject: Re: [PATCH v7 0/2] raid10 bugfix
-To:     linan666@huaweicloud.com
-Cc:     neilb@suse.de, linux-raid@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linan122@huawei.com,
-        yukuai3@huawei.com, yi.zhang@huawei.com, houtao1@huawei.com,
-        yangerkun@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230601183820.3839891-1-schatzberg.dan@gmail.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 2, 2023 at 2:22=E2=80=AFAM <linan666@huaweicloud.com> wrote:
->
-> From: Li Nan <linan122@huawei.com>
->
-> Changes in v7:
->  - in patch 1, change "fail" to "fails".
+Hello,
 
-Applied v7 to md-next.
+On Thu, Jun 01, 2023 at 11:38:19AM -0700, Dan Schatzberg wrote:
+> The existing documentation refers to memory.high as the "main mechanism
+> to control memory usage." This seems incorrect to me - memory.high can
+> result in reclaim pressure which simply leads to stalls unless some
+> external component observes and actions on it (e.g. systemd-oomd can be
+> used for this purpose). While this is feasible, users are unaware of
+> this interaction and are led to believe that memory.high alone is an
+> effective mechanism for limiting memory.
+> 
+> The documentation should recommend the use of memory.max as the
+> effective way to enforce memory limits - it triggers reclaim and results
+> in OOM kills by itself.
+> 
+> Signed-off-by: Dan Schatzberg <schatzberg.dan@gmail.com>
 
-Thanks,
-Song
+Applied to cgroup/for-6.4-fixes. Please see below for a comment tho.
+
+> @@ -1213,23 +1213,25 @@ PAGE_SIZE multiple when read back.
+>  	A read-write single value file which exists on non-root
+>  	cgroups.  The default is "max".
+>  
+> -	Memory usage throttle limit.  This is the main mechanism to
+> -	control memory usage of a cgroup.  If a cgroup's usage goes
+> +	Memory usage throttle limit.  If a cgroup's usage goes
+>  	over the high boundary, the processes of the cgroup are
+>  	throttled and put under heavy reclaim pressure.
+>  
+>  	Going over the high limit never invokes the OOM killer and
+> -	under extreme conditions the limit may be breached.
+> +	under extreme conditions the limit may be breached. The high
+> +	limit should be used in scenarios where an external process
+> +	monitors the limited cgroup to alleviate heavy reclaim
+> +	pressure.
+
+I think it'd be helpful to provide pointers to oomd and systemd's
+implementation of it here.
+
+Thanks.
+
+-- 
+tejun
