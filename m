@@ -2,287 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ADEA72470C
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:57:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 389F1724710
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:57:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238495AbjFFO52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 10:57:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60642 "EHLO
+        id S237550AbjFFO5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 10:57:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238480AbjFFO4y (ORCPT
+        with ESMTP id S237330AbjFFO5A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 10:56:54 -0400
-Received: from www530.your-server.de (www530.your-server.de [188.40.30.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61894171A;
-        Tue,  6 Jun 2023 07:56:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=geanix.com;
-        s=default2211; h=Content-Transfer-Encoding:MIME-Version:References:
-        In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=AV7MzxzZr2GBXIiX0TdJFVKGNknQAdd6lMi5dYJy4qw=; b=T9lhbkUhi4zV3uB8HW5lQ8ai6D
-        +yROmOKYuQOGB9gewq61IYu5iwXt+uuc7I069UcTl77XgcqnMorEWA9neCyTiLJpGCTozWos8NenC
-        ljrb6d9+gONyrjAN1CiIKXtld2LTtpM6Mu/zJ1xDv3B/TwyukkUZiwYc4EWQfFRs68R1gVoEQO7lj
-        7GGT9TGZE4hOYEyD0sPDN1XrMqj4xeToisktD8idceC2AdQzpWPSZb1FlOVXgnwSj4vKtZAayICkZ
-        /ibaJi5fvMDC4afaXsfH7qAcbwTYQsdNebe/C+9lN99XTH49rvT9hhJYmeP96mKAtVVn6i+Ljt4r/
-        2Xu31kww==;
-Received: from sslproxy05.your-server.de ([78.46.172.2])
-        by www530.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <sean@geanix.com>)
-        id 1q6Y6l-000Pnj-3k; Tue, 06 Jun 2023 16:56:27 +0200
-Received: from [185.17.218.86] (helo=zen..)
-        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sean@geanix.com>)
-        id 1q6Y6k-0006D0-Iq; Tue, 06 Jun 2023 16:56:26 +0200
-From:   Sean Nyekjaer <sean@geanix.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc:     Sean Nyekjaer <sean@geanix.com>, dantuguf14105@gmail.com,
-        devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 5/5] ARM: dts: stm32: Add Octavo OSD32MP1-RED board
-Date:   Tue,  6 Jun 2023 16:55:54 +0200
-Message-Id: <20230606145555.2155664-5-sean@geanix.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230606145555.2155664-1-sean@geanix.com>
-References: <20230606145555.2155664-1-sean@geanix.com>
+        Tue, 6 Jun 2023 10:57:00 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E2B71722
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 07:56:38 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-977ed383b8aso267584266b.3
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 07:56:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686063397; x=1688655397;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mynbaLKp576BHmSfRlc0g7QtomnRapZLg6iYg51c7rM=;
+        b=HZFfeto2Hpkc8haUjf586/zizHwIWfxy54etAJ8opWaDiMrtkcozh2lhBj2GJ5Csqp
+         s380xukhPMxOUdUMrzVqiGBEmqz9peeNS9eCFS1CqT1EH1sPedvXMsU23QTDY9qV0ZbQ
+         OIpfZd4BHw7WI0mD8CD9zAi16IywuEYet6eN6X+nNTZu896ay/a57WTBwC/1762uZfQq
+         p8GY+HAi6gzLIw9YAB6suWiJ2KNp8Y9T5HaFDvVIGlk/s83l0Xy6pdHP10ykOoTodOVr
+         Z2H8aKyl9FDoK11m3xIMZiqkkRYIPWL6m/1rRmm5frE7Bxcskqxk5XEZ5D7IaxbGOJTl
+         p7oA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686063397; x=1688655397;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mynbaLKp576BHmSfRlc0g7QtomnRapZLg6iYg51c7rM=;
+        b=jkxK/+ZrfLeOfzH8vED8D6niE8gMsECTV250p6q5Uu37XjA0DSLdFZj2cBznX7kQnf
+         nAVnXWwRvYcnxFG67OEpKSoq+lI674wtuLHlqd9UP67nGkOrlCQQIsqPXaarCjKLc6Rg
+         yUzISRwxyfDJRLEAtUHrLnwZlGKC+cRi9EYHjE6tWyJvpHWtNjhBnZ1UvvGrOneLqFvm
+         qhyJJPlThJe9sDBrw9bopnDKtVWtRgGR2qoVDDZvx5NFCvH550Sbw8BROHjPh6AUHEaO
+         YAKnZ1bUqngqeJfne7prE3PHLoLnGCgwqh/oQDpgoPHWX0cwEH2+sO+P2ryaKrzNRoPE
+         X5Gg==
+X-Gm-Message-State: AC+VfDyA4PQOOEoQTJ+gCciGCH/uBHyFP/J/W+RgfK0p8bvN0cSxZ/O+
+        edCZWOdcoOpOglZqfmwt5nA=
+X-Google-Smtp-Source: ACHHUZ4w1k23VEPCguV/eGyv90uhN0XUS6iHP2BMNwDcQ+wNM6n1ovfNYeFanG6cupnjFpvDRoSh5Q==
+X-Received: by 2002:a17:907:7da4:b0:974:1c98:d38e with SMTP id oz36-20020a1709077da400b009741c98d38emr2902003ejc.2.1686063396590;
+        Tue, 06 Jun 2023 07:56:36 -0700 (PDT)
+Received: from lelloman-5950.homenet.telecomitalia.it (host-82-53-214-132.retail.telecomitalia.it. [82.53.214.132])
+        by smtp.gmail.com with ESMTPSA id t15-20020a1709063e4f00b00965c529f103sm5619618eji.86.2023.06.06.07.56.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Jun 2023 07:56:36 -0700 (PDT)
+From:   Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+To:     vitaly.wool@konsulko.com, minchan@kernel.org,
+        senozhatsky@chromium.org, yosryahmed@google.com, linux-mm@kvack.org
+Cc:     ddstreet@ieee.org, sjenning@redhat.com, nphamcs@gmail.com,
+        hannes@cmpxchg.org, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, kernel-team@meta.com,
+        Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+Subject: [RFC PATCH v2 0/7] mm: zswap: move writeback LRU from zpool to zswap
+Date:   Tue,  6 Jun 2023 16:56:04 +0200
+Message-Id: <20230606145611.704392-1-cerasuolodomenico@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: sean@geanix.com
-X-Virus-Scanned: Clear (ClamAV 0.103.8/26930/Tue Jun  6 09:25:07 2023)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the Octavo OSD32MP1-RED development board.
+This series aims to improve the zswap reclaim mechanism by reorganizing
+the LRU management. In the current implementation, the LRU is maintained
+within each zpool driver, resulting in duplicated code across the three
+drivers. The proposed change consists in moving the LRU management from
+the individual implementations up to the zswap layer.
 
-General features:
- - STM32MP157C
- - 512MB DDR3
- - CAN-FD
- - HDMI
- - USB-C OTG
- - UART
+The primary objective of this refactoring effort is to simplify the
+codebase. By unifying the reclaim loop and consolidating LRU handling
+within zswap, we can eliminate redundant code and improve
+maintainability. Additionally, this change enables the reclamation of
+stored pages in their actual LRU order. Presently, the zpool drivers
+link backing pages in an LRU, causing compressed pages with different
+LRU positions to be written back simultaneously.
 
-Signed-off-by: Sean Nyekjaer <sean@geanix.com>
----
+The series consists of several patches. The first patch implements the
+LRU and the reclaim loop in zswap, but it is not used yet because all
+three driver implementations are marked as zpool_evictable.
+The following three commits modify each zpool driver to be not
+zpool_evictable, allowing the use of the reclaim loop in zswap.
+As the drivers removed their shrink functions, the zpool interface is
+then trimmed by removing zpool_evictable, zpool_ops, and zpool_shrink.
+Finally, the code in zswap is further cleaned up by simplifying the
+writeback function and removing the now unnecessary zswap_header.
 
-This is made with great inspiration from Neeraj Dantu's work:
-https://raw.githubusercontent.com/octavosystems/OSD32MP1-RED-Device-tree/main/linux-v5.10-r0/stm32mp157c-osd32mp1-red.dts
+Based on mm-stable + commit 399ab221f3ff
+("mm: zswap: shrink until can accept") currently in mm-unstable.
 
-So what copyright is needed here?
-And author?
+V2:
+- fixed lru list init/del/del_init (Johannes)
+- renamed pool.lock to lru_lock and added lock ordering comment (Yosry)
+- trimmed zsmalloc even more (Johannes | Nhat)
+- moved ref drop out of writeback function  (Johannes)
 
-Still need to test ethernet and HDMI, thats why I have done this a RFC.
+Domenico Cerasuolo (7):
+  mm: zswap: add pool shrinking mechanism
+  mm: zswap: remove page reclaim logic from zbud
+  mm: zswap: remove page reclaim logic from z3fold
+  mm: zswap: remove page reclaim logic from zsmalloc
+  mm: zswap: remove shrink from zpool interface
+  mm: zswap: simplify writeback function
+  mm: zswap: remove zswap_header
 
- .../arm/boot/dts/stm32mp157c-osd32mp1-red.dts | 186 ++++++++++++++++++
- 1 file changed, 186 insertions(+)
- create mode 100644 arch/arm/boot/dts/stm32mp157c-osd32mp1-red.dts
+ include/linux/zpool.h |  19 +-
+ mm/z3fold.c           | 249 +-------------------------
+ mm/zbud.c             | 167 +-----------------
+ mm/zpool.c            |  48 +----
+ mm/zsmalloc.c         | 396 ++----------------------------------------
+ mm/zswap.c            | 186 +++++++++++---------
+ 6 files changed, 130 insertions(+), 935 deletions(-)
 
-diff --git a/arch/arm/boot/dts/stm32mp157c-osd32mp1-red.dts b/arch/arm/boot/dts/stm32mp157c-osd32mp1-red.dts
-new file mode 100644
-index 000000000000..dd4e2668878c
---- /dev/null
-+++ b/arch/arm/boot/dts/stm32mp157c-osd32mp1-red.dts
-@@ -0,0 +1,186 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
-+/*
-+ * Copyright (C) ?? - All Rights Reserved
-+ * Author: ???
-+ */
-+
-+/dts-v1/;
-+
-+#include "stm32mp157.dtsi"
-+#include "stm32mp15xc.dtsi"
-+#include "stm32mp15xx-osd32mp1.dtsi"
-+
-+/ {
-+	model = "Octavo OSD32MP1 RED board";
-+	compatible = "octavo,stm32mp157c-osd32mp1-red", "st,stm32mp157";
-+
-+	aliases {
-+		serial0 = &uart4;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	memory@c0000000 {
-+		device_type = "memory";
-+		reg = <0xc0000000 0x20000000>;
-+	};
-+
-+	led {
-+		compatible = "gpio-leds";
-+
-+		blue {
-+			label = "heartbeat";
-+			gpios = <&gpiod 11 GPIO_ACTIVE_HIGH>;
-+			linux,default-trigger = "heartbeat";
-+			default-state = "off";
-+		};
-+	};
-+};
-+
-+&ethernet0 {
-+	status = "okay";
-+	pinctrl-0 = <&ethernet0_rgmii_pins_a>;
-+	pinctrl-1 = <&ethernet0_rgmii_sleep_pins_a>;
-+	pinctrl-names = "default", "sleep";
-+	phy-mode = "rgmii-id";
-+	max-speed = <1000>;
-+	phy-handle = <&phy0>;
-+	st,eth-clk-sel;
-+
-+	mdio0 {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		compatible = "snps,dwmac-mdio";
-+		phy0: ethernet-phy@0 {
-+			reg = <3>;
-+		};
-+	};
-+};
-+
-+
-+&i2s2{
-+	clocks = <&rcc SPI2>, <&rcc SPI2_K>, <&rcc CK_PER>, <&rcc PLL3_R>;
-+	clock-names = "pclk", "i2sclk", "x8k", "x11k";
-+	pinctrl-names = "default", "sleep";
-+	pinctrl-0 = <&i2s2_pins_b>;
-+	pinctrl-1 = <&i2s2_sleep_pins_b>;
-+	status = "okay";
-+
-+	i2s2_port: port {
-+		i2s2_endpoint: endpoint {
-+			remote-endpoint = <&sii9022_tx_endpoint>;
-+			format = "i2s";
-+			mclk-fs = <256>;
-+		};
-+	};
-+};
-+
-+&iwdg2 {
-+	timeout-sec = <32>;
-+	status = "okay";
-+};
-+
-+&ltdc{
-+	status = "okay";
-+
-+	port {
-+		ltdc_ep0_out: endpoint@0 {
-+			reg = <0>;
-+			remote-endpoint = <&sii9022_in>;
-+		};
-+	};
-+};
-+
-+&i2c1{
-+	pinctrl-names = "default", "sleep";
-+	pinctrl-0 = <&i2c1_pins_a>;
-+	pinctrl-1 = <&i2c1_sleep_pins_a>;
-+	status = "okay";
-+	i2c-scl-rising-time-ns = <100>;
-+	i2c-scl-falling-time-ns = <7>;
-+	/delete-property/dmas;
-+	/delete-property/dma-names;
-+
-+	hdmi-transmitter@39 {
-+		compatible = "sil,sii9022";
-+		reg = <0x39>;
-+		reset-gpios = <&gpiog 0 GPIO_ACTIVE_LOW>;
-+		interrupts = <1 IRQ_TYPE_EDGE_FALLING>;
-+		interrupt-parent = <&gpiog>;
-+		pinctrl-names = "default", "sleep";
-+		pinctrl-0 = <&ltdc_pins_e>;
-+		pinctrl-1 = <&ltdc_sleep_pins_e>;
-+		status = "okay";
-+
-+		ports {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			port@0 {
-+				reg = <0>;
-+				sii9022_in: endpoint {
-+					remote-endpoint = <&ltdc_ep0_out>;
-+				};
-+			};
-+
-+			port@1 {
-+				reg = <1>;
-+				sii9022_tx_endpoint: endpoint {
-+					remote-endpoint = <&i2s2_endpoint>;
-+				};
-+			};
-+		};
-+	};
-+};
-+
-+&tamp {
-+	status = "okay";
-+};
-+
-+&sdmmc1 {
-+	pinctrl-names = "default", "opendrain", "sleep";
-+	pinctrl-0 = <&sdmmc1_b4_pins_a>;
-+	pinctrl-1 = <&sdmmc1_b4_od_pins_a>;
-+	pinctrl-2 = <&sdmmc1_b4_sleep_pins_a>;
-+	cd-gpios = <&gpioe 7 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
-+	disable-wp;
-+	st,neg-edge;
-+	bus-width = <4>;
-+	vmmc-supply = <&v3v3>;
-+	status = "okay";
-+};
-+
-+&sdmmc2 {
-+	pinctrl-names = "default", "opendrain", "sleep";
-+	pinctrl-0 = <&sdmmc2_b4_pins_a &sdmmc2_d47_pins_d>;
-+	pinctrl-1 = <&sdmmc2_b4_od_pins_a>;
-+	pinctrl-2 = <&sdmmc2_b4_sleep_pins_a &sdmmc2_d47_sleep_pins_d>;
-+	non-removable;
-+	no-sd;
-+	no-sdio;
-+	st,neg-edge;
-+	bus-width = <8>;
-+	vmmc-supply = <&v3v3>;
-+	vqmmc-supply = <&vdd>;
-+	mmc-ddr-3_3v;
-+	status = "okay";
-+};
-+
-+&uart4 {
-+	pinctrl-names = "default", "sleep", "idle";
-+	pinctrl-0 = <&uart4_pins_a>;
-+	pinctrl-1 = <&uart4_sleep_pins_a>;
-+	pinctrl-2 = <&uart4_idle_pins_a>;
-+	/delete-property/dmas;
-+	/delete-property/dma-names;
-+	status = "okay";
-+};
-+
-+&m_can1 {
-+	pinctrl-names = "default", "sleep";
-+	pinctrl-0 = <&m_can1_pins_d>;
-+	pinctrl-1 = <&m_can1_sleep_pins_d>;
-+	status = "okay";
-+};
 -- 
-2.40.0
+2.34.1
 
