@@ -2,199 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 489C5723F76
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 12:30:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9562C723F7A
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 12:30:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234585AbjFFKaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 06:30:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51644 "EHLO
+        id S234029AbjFFKag convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 6 Jun 2023 06:30:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236530AbjFFK3t (ORCPT
+        with ESMTP id S236548AbjFFKaQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 06:29:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5DD9E8;
-        Tue,  6 Jun 2023 03:29:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 531E8623A8;
-        Tue,  6 Jun 2023 10:29:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11864C433D2;
-        Tue,  6 Jun 2023 10:29:44 +0000 (UTC)
-Message-ID: <1fd2e387-4f9c-b016-3d7a-f03c6bffc8f6@xs4all.nl>
-Date:   Tue, 6 Jun 2023 12:29:43 +0200
+        Tue, 6 Jun 2023 06:30:16 -0400
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A90A10C4;
+        Tue,  6 Jun 2023 03:30:14 -0700 (PDT)
+Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-bacfc573647so6610996276.1;
+        Tue, 06 Jun 2023 03:30:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686047414; x=1688639414;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=M37GgvWJac+ezE60S1jjJkXuBuA94LzOcGnWhPva6Xo=;
+        b=c7fb746mWD+9lG95gEIrNQIDHsgBK3tdVZLMRyFMKQoTTFPt7XkHgTuZ57iaW5LJ+h
+         ZiSif0UO6Bcnh76TY2outzXQbztNfLlMPU6cf7WQzP8C/tpsqJpttyDbFRGxjf0JeTyP
+         GZz+G6or0wYLqn1lLqA3R072JWhzMuvJeDUNKTTHt2uMRWyZ2iJ3jnNzH/UaiMHUbSMj
+         e0oDN06b1ppO2hCxm3LVAww7wsqrxYM7f4BrzCjCAA8nLaOMgPprYUPndGP972OKvyCE
+         0/w0GcDmFIowvE8iogxpFLHxmxQaUaoVOxiAyUth6vIHl1TOC6WF61YgZgRhuGYTuDsT
+         csfQ==
+X-Gm-Message-State: AC+VfDzxjrhyAAFDNW4hVnKb3ttnu+DgS93pedrA2ZBhYonqntp4sGFW
+        ++NruZdzFT2ifTU/d2Ckoi2zFU9jO3LUKw==
+X-Google-Smtp-Source: ACHHUZ4VIRTe2RtHNxMHWgdDLyBjdwB+R7JihWfg0hnFU2BZYxaSmgeEDhhLZlyP/Vyool5sa9mSCg==
+X-Received: by 2002:a5b:6cb:0:b0:b9e:8a8b:b073 with SMTP id r11-20020a5b06cb000000b00b9e8a8bb073mr1508479ybq.39.1686047413986;
+        Tue, 06 Jun 2023 03:30:13 -0700 (PDT)
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
+        by smtp.gmail.com with ESMTPSA id 194-20020a2503cb000000b00ba8c2f3e1a4sm3144590ybd.56.2023.06.06.03.30.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Jun 2023 03:30:11 -0700 (PDT)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-566586b180fso64494187b3.0;
+        Tue, 06 Jun 2023 03:30:11 -0700 (PDT)
+X-Received: by 2002:a81:8484:0:b0:568:bd5c:2f6b with SMTP id
+ u126-20020a818484000000b00568bd5c2f6bmr1809215ywf.39.1686047410733; Tue, 06
+ Jun 2023 03:30:10 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH RFC v2 6/6] media: v4l2-ctrls: add controls for individual
- zoom lenses
-Content-Language: en-US
-To:     Michael Riesch <michael.riesch@wolfvision.net>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     libcamera-devel@lists.libcamera.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Matthias Fend <Matthias.Fend@wolfvision.net>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230406-feature-controls-lens-v2-0-faa8ad2bc404@wolfvision.net>
- <20230406-feature-controls-lens-v2-6-faa8ad2bc404@wolfvision.net>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <20230406-feature-controls-lens-v2-6-faa8ad2bc404@wolfvision.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230111212241.7456-1-pauk.denis@gmail.com>
+In-Reply-To: <20230111212241.7456-1-pauk.denis@gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 6 Jun 2023 12:29:59 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXGO17cKKvwA5sZQ+WBPzdMvghZkvv1gWvQ00X-N+EF9A@mail.gmail.com>
+Message-ID: <CAMuHMdXGO17cKKvwA5sZQ+WBPzdMvghZkvv1gWvQ00X-N+EF9A@mail.gmail.com>
+Subject: Re: [PATCH v4 1/2] hwmon: (nct6775) Directly call ASUS ACPI WMI method
+To:     Denis Pauk <pauk.denis@gmail.com>
+Cc:     ahmad@khalifa.ws, chunkeey@gmail.com, greg@krypto.org,
+        hubert.banas@gmail.com, igor@svelig.com, jaap.dehaan@freenet.de,
+        jdelvare@suse.com, jeroen@beerstra.org, jonfarr87@gmail.com,
+        jwp@redhat.com, kdudka@redhat.com, kernel@melin.net,
+        kpietrzak@disroot.org, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux@roeck-us.net, me@rebtoor.com,
+        metalcaedes@gmail.com, michael@theoddone.net,
+        mikhail.v.gavrilov@gmail.com, mundanedefoliation@gmail.com,
+        nephartyz@gmail.com, oleksandr@natalenko.name, pehlm@pekholm.org,
+        renedis@hotmail.com, robert@swiecki.net,
+        sahan.h.fernando@gmail.com, sebastian.arnhold@posteo.de,
+        sst@poczta.fm, to.eivind@gmail.com, torvic9@mailbox.org,
+        linux-riscv <linux-riscv@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/04/2023 11:45, Michael Riesch wrote:
-> A zoom lens group may consist of several lenses, and in a calibration
-> context it may be necessary to position the lenses individually. Add a
-> tuple of V4L2_CID_LENS_CALIB_ZOOMx_{ABSOLUTE,CURRENT,STATUS} controls
-> for each individual lens, where x = {1...5}.
-> 
-> Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
-> ---
->  .../userspace-api/media/v4l/ext-ctrls-camera.rst   | 30 ++++++++++++++++++++++
->  drivers/media/v4l2-core/v4l2-ctrls-defs.c          | 25 ++++++++++++++++++
->  include/uapi/linux/v4l2-controls.h                 | 18 +++++++++++++
->  3 files changed, 73 insertions(+)
-> 
-> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
-> index 8b54a0f3a617..21391f076971 100644
-> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
-> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
-> @@ -332,6 +332,36 @@ enum v4l2_auto_focus_range -
->      * - ``V4L2_LENS_CALIB_FAILED``
->        - Lens calibration procedure has failed.
->  
-> +``V4L2_CID_LENS_CALIB_ZOOM{1...5}_ABSOLUTE`` (integer)
-> +    Set the absolute position of the individual lens of the zoom lens group.
-> +    Most likely, this is done in a calibration context. The unit is
-> +    driver-specific.
-> +
-> +``V4L2_CID_LENS_CALIB_ZOOM{1...5}_CURRENT`` (integer)
-> +    The current absolute position of the individual lens of the zoom lens group.
-> +    Most likely, this is done in a calibration context. The unit is
-> +    driver-specific. This is a read-only control.
-> +
-> +``V4L2_CID_LENS_CALIB_ZOOM{1...5}_STATUS`` (bitmask)
-> +    The current status of the individual lens of the zoom lens group.
-> +    Most likely, this is done in a calibration context. The possible flags are
-> +    described in the table below. This is a read-only control.
+Hi Denis,
 
-Wouldn't it be better to have this as an array control? That way the number of
-lenses is set by the driver and can be easily read by userspace.
+On Wed, Jan 11, 2023 at 10:24 PM Denis Pauk <pauk.denis@gmail.com> wrote:
+> New ASUS B650/B660/X670 boards firmware have not exposed WMI monitoring
+> GUID  and entrypoint method WMBD could be implemented for different device
+> UID.
+>
+> Implement the direct call to entrypoint method for monitoring the device
+> UID of B550/X570 boards.
+>
+> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=204807
+> Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
+> Co-developed-by: Ahmad Khalifa <ahmad@khalifa.ws>
+> Signed-off-by: Ahmad Khalifa <ahmad@khalifa.ws>
 
-> +
-> +.. tabularcolumns:: |p{6.8cm}|p{10.7cm}|
-> +
-> +.. flat-table::
-> +    :header-rows:  0
-> +    :stub-columns: 0
-> +
-> +    * - ``V4L2_LENS_STATUS_IDLE``
-> +      - Zoom lens is at rest.
-> +    * - ``V4L2_LENS_STATUS_BUSY``
-> +      - Zoom lens is moving.
-> +    * - ``V4L2_LENS_STATUS_FAILED``
-> +      - Zoom lens has failed to reach its target position. The driver will
-> +	not transition from this state until another action is performed by an
-> +	application.
-> +
->  ``V4L2_CID_IRIS_ABSOLUTE (integer)``
->      This control sets the camera's aperture to the specified value. The
->      unit is undefined. Larger values open the iris wider, smaller values
-> diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-> index faddfecba6d9..8a78cffcd3e8 100644
-> --- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-> +++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-> @@ -1052,6 +1052,21 @@ const char *v4l2_ctrl_get_name(u32 id)
->  	case V4L2_CID_ZOOM_SPEED:		return "Zoom, Speed";
->  	case V4L2_CID_LENS_CALIB_CONTROL:	return "Lens Calibration, Control";
->  	case V4L2_CID_LENS_CALIB_STATUS:	return "Lens Calibration, Status";
-> +	case V4L2_CID_LENS_CALIB_ZOOM1_ABSOLUTE:	return "Zoom1, Absolute";
-> +	case V4L2_CID_LENS_CALIB_ZOOM2_ABSOLUTE:	return "Zoom2, Absolute";
-> +	case V4L2_CID_LENS_CALIB_ZOOM3_ABSOLUTE:	return "Zoom3, Absolute";
-> +	case V4L2_CID_LENS_CALIB_ZOOM4_ABSOLUTE:	return "Zoom4, Absolute";
-> +	case V4L2_CID_LENS_CALIB_ZOOM5_ABSOLUTE:	return "Zoom5, Absolute";
-> +	case V4L2_CID_LENS_CALIB_ZOOM1_CURRENT:	return "Zoom1, Current";
-> +	case V4L2_CID_LENS_CALIB_ZOOM2_CURRENT:	return "Zoom1, Current";
-> +	case V4L2_CID_LENS_CALIB_ZOOM3_CURRENT:	return "Zoom1, Current";
-> +	case V4L2_CID_LENS_CALIB_ZOOM4_CURRENT:	return "Zoom1, Current";
-> +	case V4L2_CID_LENS_CALIB_ZOOM5_CURRENT:	return "Zoom1, Current";
+Thanks for your patch, which is now commit c3b3747d02f571da ("hwmon:
+(nct6775) Directly call ASUS ACPI WMI method") in  v6.3-rc1.
 
-You forget to update the number, it's all Zoom1 here.
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -1516,7 +1516,7 @@ config SENSORS_NCT6775_CORE
+>  config SENSORS_NCT6775
+>         tristate "Platform driver for Nuvoton NCT6775F and compatibles"
+>         depends on !PPC
+> -       depends on ACPI_WMI || ACPI_WMI=n
+> +       depends on ACPI || ACPI=n
+>         select HWMON_VID
+>         select SENSORS_NCT6775_CORE
+>         help
 
-> +	case V4L2_CID_LENS_CALIB_ZOOM1_STATUS:	return "Zoom1, Status";
-> +	case V4L2_CID_LENS_CALIB_ZOOM2_STATUS:	return "Zoom2, Status";
-> +	case V4L2_CID_LENS_CALIB_ZOOM3_STATUS:	return "Zoom3, Status";
-> +	case V4L2_CID_LENS_CALIB_ZOOM4_STATUS:	return "Zoom4, Status";
-> +	case V4L2_CID_LENS_CALIB_ZOOM5_STATUS:	return "Zoom5, Status";
->  
->  	/* FM Radio Modulator controls */
->  	/* Keep the order of the 'case's the same as in v4l2-controls.h! */
-> @@ -1607,6 +1622,16 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
->  	case V4L2_CID_ZOOM_CURRENT:
->  	case V4L2_CID_ZOOM_STATUS:
->  	case V4L2_CID_LENS_CALIB_STATUS:
-> +	case V4L2_CID_LENS_CALIB_ZOOM1_CURRENT:
-> +	case V4L2_CID_LENS_CALIB_ZOOM2_CURRENT:
-> +	case V4L2_CID_LENS_CALIB_ZOOM3_CURRENT:
-> +	case V4L2_CID_LENS_CALIB_ZOOM4_CURRENT:
-> +	case V4L2_CID_LENS_CALIB_ZOOM5_CURRENT:
-> +	case V4L2_CID_LENS_CALIB_ZOOM1_STATUS:
-> +	case V4L2_CID_LENS_CALIB_ZOOM2_STATUS:
-> +	case V4L2_CID_LENS_CALIB_ZOOM3_STATUS:
-> +	case V4L2_CID_LENS_CALIB_ZOOM4_STATUS:
-> +	case V4L2_CID_LENS_CALIB_ZOOM5_STATUS:
->  		*flags |= V4L2_CTRL_FLAG_READ_ONLY | V4L2_CTRL_FLAG_VOLATILE;
+The recent patches to add support for ACPI on RISC-V caused me to
+see a question about this driver again when running "make oldconfig",
+and I had a closer look at the driver...
+Unless I am missing something, this is a really dangerous driver which
+just bangs blindly into I/O space without doing any platform checks,
+which could cause a crash or system lock-up?
 
-Same issue as for patch 3 w.r.t. VOLATILE.
+Does the SENSORS_NCT6775 symbol need a better platform dependenc
+than !PPC?
 
->  		break;
->  	case V4L2_CID_FLASH_STROBE_STATUS:
-> diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-> index 24c0eb5f4d29..7c49c0ba23d4 100644
-> --- a/include/uapi/linux/v4l2-controls.h
-> +++ b/include/uapi/linux/v4l2-controls.h
-> @@ -1016,6 +1016,24 @@ enum v4l2_auto_focus_range {
->  
->  #define V4L2_CID_LENS_CALIB_STATUS		(V4L2_CID_CAMERA_CLASS_BASE+44)
->  
-> +#define V4L2_CID_LENS_CALIB_ZOOM1_ABSOLUTE	(V4L2_CID_CAMERA_CLASS_BASE+45)
-> +#define V4L2_CID_LENS_CALIB_ZOOM2_ABSOLUTE	(V4L2_CID_CAMERA_CLASS_BASE+46)
-> +#define V4L2_CID_LENS_CALIB_ZOOM3_ABSOLUTE	(V4L2_CID_CAMERA_CLASS_BASE+47)
-> +#define V4L2_CID_LENS_CALIB_ZOOM4_ABSOLUTE	(V4L2_CID_CAMERA_CLASS_BASE+48)
-> +#define V4L2_CID_LENS_CALIB_ZOOM5_ABSOLUTE	(V4L2_CID_CAMERA_CLASS_BASE+49)
-> +
-> +#define V4L2_CID_LENS_CALIB_ZOOM1_CURRENT	(V4L2_CID_CAMERA_CLASS_BASE+50)
-> +#define V4L2_CID_LENS_CALIB_ZOOM2_CURRENT	(V4L2_CID_CAMERA_CLASS_BASE+51)
-> +#define V4L2_CID_LENS_CALIB_ZOOM3_CURRENT	(V4L2_CID_CAMERA_CLASS_BASE+52)
-> +#define V4L2_CID_LENS_CALIB_ZOOM4_CURRENT	(V4L2_CID_CAMERA_CLASS_BASE+53)
-> +#define V4L2_CID_LENS_CALIB_ZOOM5_CURRENT	(V4L2_CID_CAMERA_CLASS_BASE+54)
-> +
-> +#define V4L2_CID_LENS_CALIB_ZOOM1_STATUS	(V4L2_CID_CAMERA_CLASS_BASE+55)
-> +#define V4L2_CID_LENS_CALIB_ZOOM2_STATUS	(V4L2_CID_CAMERA_CLASS_BASE+56)
-> +#define V4L2_CID_LENS_CALIB_ZOOM3_STATUS	(V4L2_CID_CAMERA_CLASS_BASE+57)
-> +#define V4L2_CID_LENS_CALIB_ZOOM4_STATUS	(V4L2_CID_CAMERA_CLASS_BASE+58)
-> +#define V4L2_CID_LENS_CALIB_ZOOM5_STATUS	(V4L2_CID_CAMERA_CLASS_BASE+59)
-> +
->  /* FM Modulator class control IDs */
->  
->  #define V4L2_CID_FM_TX_CLASS_BASE		(V4L2_CTRL_CLASS_FM_TX | 0x900)
-> 
+Gr{oetje,eeting}s,
 
-Disclaimer: I do not have enough domain knowledge to comment on if this is the
-right solution or not. I can only comment on the control framework specifics.
+                        Geert
 
-Regards,
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-	Hans
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
