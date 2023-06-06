@@ -2,47 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96E2A7245CF
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:24:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D46A7245BB
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:22:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237863AbjFFOYc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 10:24:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58292 "EHLO
+        id S233197AbjFFOWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 10:22:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237551AbjFFOYU (ORCPT
+        with ESMTP id S237300AbjFFOWq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 10:24:20 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BBB1E42;
-        Tue,  6 Jun 2023 07:24:18 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QbCN04f0QztQVt;
-        Tue,  6 Jun 2023 22:21:52 +0800 (CST)
-Received: from localhost.localdomain (10.50.163.32) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 6 Jun 2023 22:24:13 +0800
-From:   Yicong Yang <yangyicong@huawei.com>
-To:     <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
-        <jonathan.cameron@huawei.com>, <corbet@lwn.net>,
-        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>
-CC:     <alexander.shishkin@linux.intel.com>, <helgaas@kernel.org>,
-        <linux-pci@vger.kernel.org>, <prime.zeng@huawei.com>,
-        <linuxarm@huawei.com>, <yangyicong@hisilicon.com>
-Subject: [PATCH v4 4/5] hwtracing: hisi_ptt: Advertise PERF_PMU_CAP_NO_EXCLUDE for PTT PMU
-Date:   Tue, 6 Jun 2023 22:22:43 +0800
-Message-ID: <20230606142244.10939-5-yangyicong@huawei.com>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20230606142244.10939-1-yangyicong@huawei.com>
-References: <20230606142244.10939-1-yangyicong@huawei.com>
+        Tue, 6 Jun 2023 10:22:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6789310C6;
+        Tue,  6 Jun 2023 07:22:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0037061DB8;
+        Tue,  6 Jun 2023 14:22:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77C2BC433EF;
+        Tue,  6 Jun 2023 14:22:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686061364;
+        bh=8njdyfIkRN8M1oyMKTTfWNf9Bc9CabdxuFYIfsE5sL8=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=eKSff40uFZqf3p5zk0WlMInJJbGL77vveD5/uMc3sqkZZ/QWK0M7SnnUutao2RT52
+         L4/2/zPKwzrt1Bygmv8NMaIsu9rll4rDe4aYsdU6eqsj95k9jDyDPeBo6mvVQqhzFA
+         fH18yAfFwUIsxHNlBRT2Bggk3XNeM+GHYNC8baFe6hffyEXg2rBkfnJYgm2SbOP/Qb
+         QE6HTf2wZcnn2GbJZxpXzf+J9Na1oa5a3JazFObAv6mCjZlWL15TXjsAKbysmFuDd1
+         S/X0leaqSylY9T6U139GXMDOe6DQHF0JMf4Qi3OFJrxwmA9Ho84s457tC6/8Y+l6W7
+         x5PudHyaAclRw==
+From:   Mark Brown <broonie@kernel.org>
+To:     lakshmi.sai.krishna.potthuri@xilinx.com,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20230606093859.27818-1-jiasheng@iscas.ac.cn>
+References: <20230606093859.27818-1-jiasheng@iscas.ac.cn>
+Subject: Re: [PATCH] spi: cadence-quadspi: Add missing check for
+ dma_set_mask
+Message-Id: <168606136320.36405.16704224342130118084.b4-ty@kernel.org>
+Date:   Tue, 06 Jun 2023 15:22:43 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.50.163.32]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-bfdf5
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -51,34 +56,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yicong Yang <yangyicong@hisilicon.com>
+On Tue, 06 Jun 2023 17:38:59 +0800, Jiasheng Jiang wrote:
+> Add check for dma_set_mask() and return the error if it fails.
+> 
+> 
 
-The PTT trace collects PCIe TLP headers from the PCIe link and don't
-have the ability to exclude certain context. It doesn't support itrace
-as well. So only advertise PERF_PMU_CAP_NO_EXCLUDE. This will greatly
-save the storage of final data. Tested tracing idle link for ~15s,
-without this patch we'll collect ~28.682MB data for context related
-information and with this patch it reduced to ~0.226MB.
+Applied to
 
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
----
- drivers/hwtracing/ptt/hisi_ptt.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-diff --git a/drivers/hwtracing/ptt/hisi_ptt.c b/drivers/hwtracing/ptt/hisi_ptt.c
-index 5c7e93e7705f..ff2c16efe5b1 100644
---- a/drivers/hwtracing/ptt/hisi_ptt.c
-+++ b/drivers/hwtracing/ptt/hisi_ptt.c
-@@ -1210,7 +1210,7 @@ static int hisi_ptt_register_pmu(struct hisi_ptt *hisi_ptt)
- 
- 	hisi_ptt->hisi_ptt_pmu = (struct pmu) {
- 		.module		= THIS_MODULE,
--		.capabilities	= PERF_PMU_CAP_EXCLUSIVE | PERF_PMU_CAP_ITRACE,
-+		.capabilities	= PERF_PMU_CAP_NO_EXCLUDE,
- 		.task_ctx_nr	= perf_sw_context,
- 		.attr_groups	= hisi_ptt_pmu_groups,
- 		.event_init	= hisi_ptt_pmu_event_init,
--- 
-2.24.0
+Thanks!
+
+[1/1] spi: cadence-quadspi: Add missing check for dma_set_mask
+      commit: 947c70a213769f60e9d5aca2bc88b50a1cfaf5a6
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
