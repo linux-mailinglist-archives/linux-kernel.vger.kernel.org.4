@@ -2,138 +2,287 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CEB6723C61
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 10:58:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5A9D723C64
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 10:59:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237207AbjFFI6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 04:58:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46714 "EHLO
+        id S236721AbjFFI7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 04:59:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231609AbjFFI6A (ORCPT
+        with ESMTP id S235189AbjFFI7A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 04:58:00 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2111.outbound.protection.outlook.com [40.107.244.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 415A1E8;
-        Tue,  6 Jun 2023 01:57:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BAg4/ksm0/dH8qy8uANhYvhDBn7EnKhzNKbb5stKZLiQq0IOwzQiyzurZschj/gOJoiFSIZ1Qhh84xGIGZCmwrXqijEnpiBTTxCMii9lCw68XHfVxYu3GNyTefr7q2wQBuVsbS7AWP1YDATlaGY4uxg070MRj/DDG3CzwnC0gmBR4qXJ3iAfSS0xC0/I5IjWGVkubw3o7KOTvSHAE8UR32lNuIt3p1ouQbVdeMHmyeeYQdYXwD+bLxIK3P7flathFMaCQseQTlc2jA86G0ZSDYXq+5ONAzyBEJATcHmQKlNRdBZ+97XkGJcCTKIWWCcvbEn2n83h4rHeBDANsSE5TQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=86WoxlMEncMyYRHb9J3Hwt/gPDJLV3PLH+4XNI1VUlA=;
- b=Q9jCp/YHeAeEb+oAAnkJDBBR/t34yMPwAc8omTJjsojB1ZPTuTHxUA5ALXwjrq2CuC6juYaOMFqm0cs8lsQlAM9buOoYt973OAMbObLPmuYlgxVerkJpCLXULzaDY1U7xsbK//ZI2281kuMd46tC3PvCkERkfBbcu+125QGEToGhdMxiVJxhODYYQYTlk5PotQaRJNygy/JVTU96YraBQCLX4u+csG3Mu9SBbIcwg4CDXRDEIpeoPSjYvoNeoznC0Ncfj7vN8VYe2vjLQdU4/dDUthRaKxU0DQI1xZjWCZc/N4SLxN2wgVW+lC0fkGH4NMcE6Dxxja/uKYusLID5bA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=86WoxlMEncMyYRHb9J3Hwt/gPDJLV3PLH+4XNI1VUlA=;
- b=vcfL5UzmTeLt+fHbMZaY/m87YQreu/8m1lLcICNtTIb8rXoP3Mi9sZYDv7Wh6dHXa4DNv40y4zrSyalYuhl5FgJ6hRcXz7UxTetuRvIzEV+DFLZTziz5mqHvua8rRbBu9CPRQpSLuyt+6UYDLlNUjc7GPUvLDrd1DFcOPFY0r20=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by SA1PR13MB4813.namprd13.prod.outlook.com (2603:10b6:806:1a5::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.32; Tue, 6 Jun
- 2023 08:57:57 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb8f:e482:76e0:fe6e]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb8f:e482:76e0:fe6e%4]) with mapi id 15.20.6455.030; Tue, 6 Jun 2023
- 08:57:57 +0000
-Date:   Tue, 6 Jun 2023 10:57:50 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Duan Muquan <duanmuquan@baidu.com>
-Cc:     davem@davemloft.net, dsahern@kernel.org, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] tcp: fix connection reset due to tw hashdance race.
-Message-ID: <ZH71DvVRewnmRdC9@corigine.com>
-References: <20230605035140.89106-1-duanmuquan@baidu.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230605035140.89106-1-duanmuquan@baidu.com>
-X-ClientProxiedBy: AM8P189CA0019.EURP189.PROD.OUTLOOK.COM
- (2603:10a6:20b:218::24) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Tue, 6 Jun 2023 04:59:00 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC7CE6F
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 01:58:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686041890;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AQST2b6YrtEOQE9e4aslcMdpne3NJ9evDrIjUqUNscM=;
+        b=S3o+0VSvce9JRrluKcokV7wmrrLjzKmMhlUxi3CD8vfEiaoF+TIPXT16YsnMsdj3l5mpBV
+        NnxTwVXJm4vrg6Obo8FFJndc7SR4cB46Q18PvN1N6sqlcxTTauwr2AixOgpiZuk4x6ihRn
+        hTTlhLAXJ6TsSgmOgeITN8y2BwkJtgI=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-300-Uv2lsas8ODCGdQXpfe_hZQ-1; Tue, 06 Jun 2023 04:58:09 -0400
+X-MC-Unique: Uv2lsas8ODCGdQXpfe_hZQ-1
+Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-9745f301bcfso326799266b.0
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 01:58:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686041888; x=1688633888;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AQST2b6YrtEOQE9e4aslcMdpne3NJ9evDrIjUqUNscM=;
+        b=PxV3UkRHvxVrtweFag/+uzk6ptqukIax6gMtvRiE+0aJ6eGq0CaPAYDc481sFGhuTV
+         kEmd9J8lPB8uvOyWghQcN+xMO0VRn06pzVGuUpl/QPg5ASMHhw3eXPqubV63MgS+mquQ
+         zYIHBwxDerFWjp6cyvYbwsr+D0ZV4wpXeBteGnAOJaGNbk2TifJbkzTXQSPdJgV1Dufe
+         zgYBFGc7nvyNfzJc3T9ffAVjGoOTy28pZPlbq7CRwpEn+NCPFTI3mCNCOG/tZF8jnCUQ
+         509wFy/82LtFmaAcG3twfQntmI+1mSXwTvPNHIRulDImyW9qLe2tbjyMTCMdSTPhydWu
+         xpBQ==
+X-Gm-Message-State: AC+VfDzCqEtA/jYUNctE8/tR8BxPgEoyb20E4Ts4mn/IdEkikrX6XDLU
+        xibLinO+BUVSg/etxVJZkt096pwLSstVPn6t0hrQCv7j+JD/kpLft7DcAbzNq/nHohdrteV2eyL
+        5GM0RxDFPa8KqTNuOMd6GK67b
+X-Received: by 2002:a17:906:9750:b0:973:edba:df30 with SMTP id o16-20020a170906975000b00973edbadf30mr2075503ejy.61.1686041888468;
+        Tue, 06 Jun 2023 01:58:08 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7MDzMA9108TD5iU7c26PIK3JtdzLGFrMjNae1OqX0U7wrIWJvVr0Xj+0ROKEWAz0azLZEAEQ==
+X-Received: by 2002:a17:906:9750:b0:973:edba:df30 with SMTP id o16-20020a170906975000b00973edbadf30mr2075479ejy.61.1686041888133;
+        Tue, 06 Jun 2023 01:58:08 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id jp25-20020a170906f75900b0096f675ce45csm5285337ejb.182.2023.06.06.01.58.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Jun 2023 01:58:07 -0700 (PDT)
+Message-ID: <ffdd2d13-975e-1c74-0d2b-132ba461a3ee@redhat.com>
+Date:   Tue, 6 Jun 2023 10:58:06 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SA1PR13MB4813:EE_
-X-MS-Office365-Filtering-Correlation-Id: dd1bade0-412b-413e-250a-08db666c1f2b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: a2/bdMxFOEFIp8mdIv/7vNjV1tzDsypei7/EW8vtujRxcxRqk5TyFRrxdSwFl7rEDIHDCZF0HV8qXw/AYt0JA8NDrUe4slW0I2tTwsZkFLir7+SMQ+CUc9c+8P0vMXYjyzbehOT7ODXK+bXmvXZZv/nAHwxIby1b+JGBNPvKRhphkhAHZwvT17GCQLyO0L1omBwgaSlDYM5PKYbW2vee75dkOzf9rC3QxiIFotN9dEzlp6QZ29namDar5B/4Br48HCKG0OG9BYoe8mLrvFltHCCYPp1MqZ46akd6cFx1nuXlFWw6n9zQBzZj0R+ZoDswUX9Jp/L5Z470Ia8rI0EhaMpAbswRymE0pEC91mEJ8/mbdMINu8RbVbP3nHUr8/pWHw++fhaVeT+vTnQC4gJksqUrfYoL0E7bWES6JNGntuzxLcOfSvyMlIEa4M31b1Y4suFVyj4lqTOpfDtRax8QEZrZFxrjDev7yYGBT0bGvn5r2HXi5+Wnliyjvc1DnPF/QvqKYUbPw6HVMUADfJsacaVxfAvRYZbr7OqlRv6H+aN4uZ7wj8GXEhkVKPoOtL8O
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39840400004)(366004)(376002)(396003)(136003)(346002)(451199021)(2906002)(478600001)(66946007)(6916009)(8936002)(316002)(4744005)(4326008)(8676002)(41300700001)(5660300002)(44832011)(66556008)(6666004)(6486002)(66476007)(6512007)(6506007)(38100700002)(2616005)(186003)(83380400001)(36756003)(86362001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ud08E3tZ0dAccYGGPs89DKdPlD8ykfXB5zkUeSgiK429do3ifjp7IBRDgGOn?=
- =?us-ascii?Q?KXMisZfMY6LLzSYzCiL056g1zT+YHDmBFUQA+AUlpWxcVFs07nivk/RgZtTd?=
- =?us-ascii?Q?/jCV7JqoxRyq8Ri2WciKf99tU5xvAH18O33OO4QqFV2wY5CZe5HQ1F08bs7i?=
- =?us-ascii?Q?YhJlpTOHRYclDY8XhGY6pPKyv5rnL7C9ctym6eEMxEeXNIW0gJhfkTdyz0aL?=
- =?us-ascii?Q?dsFazmpgDfOXsLrzbOfHNr09nSZeV7uiq4+H+qDp3VZoDCITHVPSe7lotKKA?=
- =?us-ascii?Q?AsDG3nnUczaXTVBB4cmcBOTZ97DTubtJPfH19DX4qLbSsHW2IzXmxMcTVRWM?=
- =?us-ascii?Q?0beWEZ+WgrpkfXRppX0YFMQtSowrdPGtMQ1EF947lZxPuNRnUjztQgOPWHF0?=
- =?us-ascii?Q?jV5XqVLFn/Ya0D56szxhMT7+Lq/QdBW6klwhuvBJUdKIw7HxoQTD6zTBCIHq?=
- =?us-ascii?Q?BzXvUOMib+jhopFBjt3jD6uZhEO0OzMnHkb+Ees7z1/i2jwz3uh2lkcizpsp?=
- =?us-ascii?Q?PK8/2p+1dQyQjG3lt/DhPffHBxuvnlqnE0GapEevaIZjCesUSqE8X1C+FMLD?=
- =?us-ascii?Q?3HfsSKX59RwxWcD3Lq6JjNf4jsDGyPZTv71/gl2CoaZ7uaWuNKBUeq/hLHC+?=
- =?us-ascii?Q?TF5V8U+dKqL/AG78hlgJ8LfqKw8B/7DN81krkcudGr4Lf0FIlLskAQXGSGGF?=
- =?us-ascii?Q?Cv61+aWUOaipaZOWhDJH0/9VlFqX68ELU0F/o4SBtkcIL1jGTqz6yDH23Qwh?=
- =?us-ascii?Q?c4bm7aSXhtceb07avcP5GC4urdVqKfmuKkk+/cDzx92/YySLCQPFgdHbv2pj?=
- =?us-ascii?Q?wY14eHN8N1Kl7Pysl0zDDMtl7rAMPPsWG1VBJBWdMzCO8Gh2le7bkRYYg4oq?=
- =?us-ascii?Q?geKn/BbLd32QADNcFldHUkwjRBZov8ufPnM7hPztXtXWigZKc54GTGYdqHVt?=
- =?us-ascii?Q?nY0ys3ZetFA09xHgeshOcyl8BojdVSDykFu+Vcl8Vxqaz/9El+OZARbU4gE6?=
- =?us-ascii?Q?jDMu8lT3DBBrk2jpQ0UyE3KtlWi8ooxN5klnk0NMJFAVWLr0t0lPKKtPRYvf?=
- =?us-ascii?Q?V/fntIXUuwfTDvO6ToweX0Si7M2Xc+LIn6D/1Hg0YHo1n5qBiQyfRdkj5rJG?=
- =?us-ascii?Q?d+A7/sjT99YvE7kTyX+hWSzyiOwhkp+oPpMqf6ttHW/BR+U3PvGD9qHccxIt?=
- =?us-ascii?Q?osF7naLrd6w0qy9Rt7u2f1yznjMBEoif15rlKZgnBJSHI3Vgm+N8ziqwOwNh?=
- =?us-ascii?Q?cBFDqomBg23Nb/yGDahVM7ue2eY+ELEDc6g1o0uo/C7cOMvRGq25RoB9iOeV?=
- =?us-ascii?Q?ed28usBb2h4xbdOnAePBJzRh5oI3e1VUY/NWFqHS40VXzbu1/TQ6tofzJ7FC?=
- =?us-ascii?Q?LRmN5kYoHhZATwKvXlGqCqLW/F5ASQPMHdd4sFLVvNfpbTcY1xgBU/fvFBmS?=
- =?us-ascii?Q?p5XwNxgfxZ7UQiUz1wwG1eEPQcDLvwrGi+bXeYvUvx2U4egS6rFje4+SNEvE?=
- =?us-ascii?Q?RoxVInKSO5AkiHGw5XQAWCGMN2oVLCZnPG5/dHODLFMmkZwPambVPiuCult4?=
- =?us-ascii?Q?d877fDxwUTPWrc7pBY726GaOQFC23PKULk/V4usnN9wZCfN/gPeCRPYUvbVW?=
- =?us-ascii?Q?Nbx3grT2wO/O2CCinV3WU0mJmddoRoTJQwg+5/haSMcnTbJwmra3kEvmFAON?=
- =?us-ascii?Q?XS/BIg=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: dd1bade0-412b-413e-250a-08db666c1f2b
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2023 08:57:57.0436
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BIzAhANTTjMgwWgvuNK0MA5MRxOTH8VQlvWrp+vysS8QTbHMDu8OXAnUWeNpzzzZZuftxNllC+lp4JEU3JzT2kz4L4Y+tDsaUI8iVLoVDOI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR13MB4813
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 0/1] platform/x86: asus-wmi: add support for ASUS
+ screenpad
+Content-Language: en-US, nl
+To:     Luke Jones <luke@ljones.dev>
+Cc:     platform-driver-x86@vger.kernel.org,
+        =?UTF-8?Q?Barnab=c3=a1s_P=c5=91cze?= <pobrn@protonmail.com>,
+        =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        linux-kernel@vger.kernel.org, acpi4asus-user@lists.sourceforge.net,
+        corentin.chary@gmail.com, markgross@kernel.org, jdelvare@suse.com,
+        linux@roeck-us.net
+References: <20230505043013.2622603-1-luke@ljones.dev>
+ <4be2cc57-59b9-24e2-fd10-f2af175ff518@redhat.com>
+ <02f28fe4-bca4-f9d7-a9be-0f1999662d62@redhat.com>
+ <FD1QUR.SO09CWU6HM4Q1@ljones.dev>
+ <ade1f0d1-0a6b-7eed-cc79-139e0036e562@redhat.com>
+ <06314c8dc4adeb69cd7801f9621c831f75a37c89.camel@ljones.dev>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <06314c8dc4adeb69cd7801f9621c831f75a37c89.camel@ljones.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 05, 2023 at 11:51:40AM +0800, Duan Muquan wrote:
+Hi Luke,
 
-...
+On 6/4/23 06:52, Luke Jones wrote:
+> On Thu, 2023-05-25 at 13:09 +0200, Hans de Goede wrote:
 
-> Brief of the scenario:
+<snip>
+
+>> Right, so I think we first need to better understand the interactions
+>> between the WMI calls you are making and the drm/kms interface.
+>>
+>> Question 1:
+>>
+>> If you turn the second screen off through WMI, does it get seen as
+>> disconnected by the drm/kms driver then. Or does the drm/kms driver
+>> just go on treating it as an extra connected display, still drawing
+>> now no longer visible content to it ?
 > 
-> 1. Server runs on CPU 0 and Client runs on CPU 1. Server closes
-> connection actively and sends a FIN to client. The lookback's driver
-> enqueues the FIN segment to backlog queue of CPU 0 via
-> loopback_xmit()->netif_rx(), one of the conditions for non-delay ack
-> meets in __tcp_ack_snd_check(), and the ACK is sent immediately.
+> It is most certainly viewed as disconnected.
+
+Ok, that is good.
+
+>> IOW does the desktop environment's monitor-config panel no longer
+>> show the extra display after disabling it through WMI?
 > 
-> 2. On loopback interface, the ACK is received and processed on CPU 0,
-> the 'dance' from original sock to tw sock will perfrom, tw sock will
+> That is correct, it is no-longer a connected and visible display
 
-Hi Duan Muquan,
+Ack.
 
-a minor nit from my side: perfrom -> perform
+>> The best way to check this is look under /sys/class/drm and find out
+>> which /sys/class/drm/card#-<conn-type>-# entry belongs to the extra
+>> panel. Step 1 check for all card#-<conn-type>-# entries
+>> where status returns connected, e.g. :
+>>
+>> [hans@shalem ~]$ cat /sys/class/drm/card1-DP-1/status 
+>> connected
+>>
+> 
+> On disable the status does change to:
+> cat /sys/class/drm/card1-DP-5/enabled
+> disabled
 
-> be inserted to ehash table, then the original sock will be removed.
+Ok, that is good.
 
-...
+
+>> Step 2: for the connected ones cat the modes, e.g.:
+>>
+>> [hans@shalem ~]$ cat /sys/class/drm/card1-DP-1/modes
+>> 1920x1080
+>> 1600x1200
+>> ...
+>>
+>> And find the one which matches with the resolution of the extra panel
+>> (the one which does not match with the resolution of the main panel).
+>>
+>> Then turn the extra panel of through WMI and cat the status attribute
+>> again. If that still reads connected then that means the desktop
+>> environment keeps seeing an extra display output which is not ideal.
+>> This will e.g. cause any windows which were on the extra panel to
+>> stay there, even though they are no longer visible.
+>>
+>>
+>> Question 2:
+>>
+>> If you turn the second screen off through drm/kms, using the desktop
+>> environments monitor config panel does this also turn off the
+>> backlight ?
+> 
+> The screen is dark but there is still some backlight coming out of it.
+> I think this means I need to add a small pre-off to the patch to ensure
+> backlight is fully off when display is turned off.
+
+I'm afraid that this is not going to be easy to fix at the kernel level,
+we first need to tie backlight control to drm-connectors as I proposed
+(and plan to implement when I can make time):
+
+https://lore.kernel.org/dri-devel/b61d3eeb-6213-afac-2e70-7b9791c86d2e@redhat.com/
+
+Once that is in place we can simply make the drm-code call out to
+the backlight driver and have it turn the backlight off when disabling
+the output through the drm/kms interface.
+
+>> After disabling the screen in the desktop environments monitor config
+>> check that the enabled attribute, e.g. cat /sys/class/drm/card1-DP-
+>> 1/enabled shows disabled and after verifying this look at the extra
+>> screen in a dark room, do you see any backlight bleed indicating the
+>> backlight is still  on?
+>>
+> 
+> Shows as disabled
+> 
+>>
+>> We really want the backlight on/off state and the drm-connector
+>> enabled state to match. My proposal from above will allow this once
+>> implemented. Until we can hook this all up nicely I think it might be
+>> better to just go with the custom sysfs attributes from your v1 patch
+>> rather then adding a /sys/class/backlight device for this.
+>>
+> 
+> I would like to go with the backlight patch as it seems more likely I
+> can adjust this without breaking userspace if required in future. The
+> WMI controls behave as expected to.
+
+Ok, lets go with the v2 which adds /sys/class/backlight support then.
+
+I must warn you though if this does turn out to cause issues I'll have
+no choice but to revert it.
+
+I must admit I've lost track a bit of the state of v2 during this
+discussion.  Can I pick up v2 as is, or were there (other) remarks
+which need addressing and should I expect a v3 ?
+
+####### Switch to (off-topic) GPU mux discussion ########
+
+>>> So I think now is probably a good time to raise a particular issue
+>>> I've encountered with the last two years: the display MUX.
+>>>
+>>> As I understand it now, there are two types of new MUX - the manual
+>>> switch, and the newer "Advanced Optimus" automatic switch. The
+>>> issues I have are with the manual switch since I've not encountered
+>>> the advanced optimus yet.
+>>>
+>>> When the switch is. uh. switched. the dgpu drives the internal
+>>> display, and I expect that since the display is now detected
+>>> through the dgpu, this is why the dgpu is kept awake to drive it.
+>>> But, the igpu is also still active, and because of this the initial
+>>> boot from grub to display-manager is a black screen including tty.
+>>> This means anyone with an encrypted drive will never see the prompt
+>>> and they believe they have a failed boot. I don't know what to do
+>>> about this?
+>>
+>> Is this with EFI booting or with classic BIOS boot? With EFI booting
+>> the EFIFB should be put on the right GPU by the firmware. So I
+>> suspect this is with classic BIOS boot?
+> 
+> No this is with EFI boot always. I'm not even sure these machines still
+> have the ability to boot oldschool bios style.
+
+Hmm, weird with EFI grub is just using the EFI text output protocol
+so what is happening here at the grub level is actually a bug in
+the firmware of the laptop(s)...
+
+>> I think the best thing to do here is to just use EFI on machines like
+>> this. That or put grub in text mode so that it makes BIOS calls to
+>> display text. Using GRUB_TERMINAL_OUTPUT=gfxterm combined with
+>> classic BIOS booting will make grub try to directly drive the gfx
+>> card itself and I'm not surprised that it gets that wrong in this
+>> case.
+>> Note I think that just using EFI is prefered over switching grub to
+>> GRUB_TERMINAL_OUTPUT=console. I would expect
+>> GRUB_TERMINAL_OUTPUT=console to also work but I'm not sure. I don't
+>> think that the classic BIOS boot stuff is still tested by laptop
+>> vendors and esp. not tested with non standard BIOS settings ...
+> 
+> The grub gfx mode is GRUB_TERMINAL_OUTPUT="console", fedora default in
+> all cases here. Grub itself shows fine when the MUX mode is in dgpu
+> mode (aka, internal display connected to dgpu).
+
+Ah ok, so I misunderstood and the problem only happens *after* grub?
+
+Have I understood that correctly?
+
+And this is on Fedora with the nvidia binary driver ?
+
+The problem then likely is that the nvidia binary driver is not in
+the initrd (which is by design since it may need to be rebuild on
+a driver update while the kernel is kept at the same version,
+so the initrd won't be rebuild).
+
+So during the initrd there then is no kms driver to drive the
+internal display.
+
+Normally plymouth falls back to using the efifb (through simpledrm)
+but that is after a pretty large timeout and I think this may not
+be happening here because plymouth maybe thinks there is a kms
+capable display connected to the iGPU for some reason
+(maybe the extra screenpad panel ?)
+
+As a workaround you can tell plymouth to use the simpledrm kms
+device as soon as it becomes available instead of waiting for
+a native kms driver. To do this add "plymouth.use-simpledrm" to
+the kernel commandline. I think that this will work around
+the problem.
+
+> P.S> I will go ahead with the screen patch as it looks like this
+> behaves as expected minus the need to turn off BL before turn off
+> display. I will submit revision later in the week.
+
+Ok, so that answers my question from above and I should wait for a v3 :)
+
+Regards,
+
+Hans
+
+
+
