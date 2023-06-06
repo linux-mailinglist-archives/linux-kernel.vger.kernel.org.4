@@ -2,89 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96805723911
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 09:32:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6256F723951
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 09:40:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236226AbjFFHcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 03:32:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46400 "EHLO
+        id S234636AbjFFHkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 03:40:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236148AbjFFHcN (ORCPT
+        with ESMTP id S236295AbjFFHkX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 03:32:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D446E11A;
-        Tue,  6 Jun 2023 00:32:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 68DEC62CB9;
-        Tue,  6 Jun 2023 07:32:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2644FC433EF;
-        Tue,  6 Jun 2023 07:32:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686036731;
-        bh=Ak0j0Hr5s4dVlzG32KaXySxXdetfo8cIUB4kqJq07T4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=L1KDGLqVhGh+sVvUI3ToDKAxdVULNnFXTvV3964C9ha3o5I1TeW1XCjyfgMd8J3ws
-         pxhfQRkKWRdwUnAR+kC2KXathXAHPKwvuX/WwwLQPHv9eqNloTqKJVQABzITZSIUFN
-         MGGa1LK4qUzA9RDzUVpGr8W9YIgF33mOgLtxwfT4y68r/YryJ6d3v8u2Xk9qag/1up
-         8Boecj0X0M4nZXMxMqF+jYcXOcFsUFAHs1zW67Yxhg3pBFmA4tEgbg/D4SdhwAJO8c
-         3JuH0kEblnlLPo5mQ30719Xryv0/vqp/UEynYcnttSDDCY7jPRy6t//Q6wp+sjqg/i
-         qZGutlyXFpO9w==
-From:   Chao Yu <chao@kernel.org>
-To:     Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>
-Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chao Yu <chao@kernel.org>
-Subject: [PATCH] ext4: fix to check return value of freeze_bdev() in ext4_shutdown()
-Date:   Tue,  6 Jun 2023 15:32:03 +0800
-Message-Id: <20230606073203.1310389-1-chao@kernel.org>
-X-Mailer: git-send-email 2.40.1
+        Tue, 6 Jun 2023 03:40:23 -0400
+Received: from mail.avm.de (mail.avm.de [212.42.244.119])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A90BD11D;
+        Tue,  6 Jun 2023 00:40:19 -0700 (PDT)
+Received: from mail-auth.avm.de (unknown [IPv6:2001:bf0:244:244::71])
+        by mail.avm.de (Postfix) with ESMTPS;
+        Tue,  6 Jun 2023 09:32:48 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=avm.de; s=mail;
+        t=1686036768; bh=i9NO6TkKcAwCqPNK63FYEHut/QprsL1wrn2QZZ0ttOQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=V9ANCosRO0HbiJYmvMJT0y6HG53IzA8fCKTEoUhGy6pkQJB+tDo0sOigybDbUATbs
+         wAomNPoCaeB/UrDNNxNpAuoJnZyIOxpVVlhE0ouvTSD5+SPUNVmjdzDzmzFxG2wia5
+         0RgSOj7smIGzjOjsZfzvl0xqSSfQQlnfUt0guVcE=
+Received: from buildd.core.avm.de (buildd-sv-01.avm.de [172.16.0.225])
+        by mail-auth.avm.de (Postfix) with ESMTPA id 70DA8822CB;
+        Tue,  6 Jun 2023 09:32:48 +0200 (CEST)
+Received: by buildd.core.avm.de (Postfix, from userid 1000)
+        id 654F7183D2F; Tue,  6 Jun 2023 09:32:48 +0200 (CEST)
+Date:   Tue, 6 Jun 2023 09:32:48 +0200
+From:   Nicolas Schier <n.schier@avm.de>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] scripts/kallsyms: constify long_options
+Message-ID: <ZH7hIDQcp8pDSpwJ@buildd.core.avm.de>
+References: <20230605120400.1775196-1-masahiroy@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230605120400.1775196-1-masahiroy@kernel.org>
+X-purgate-ID: 149429::1686036768-4DF54F04-5900B1F2/0/0
+X-purgate-type: clean
+X-purgate-size: 893
+X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
+X-purgate: This mail is considered clean (visit http://www.eleven.de for further information)
+X-purgate: clean
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-freeze_bdev() can fail due to a lot of reasons, it needs to check its
-reason before later process.
+On Mon, Jun 05, 2023 at 09:04:00PM +0900, Masahiro Yamada wrote:
+> getopt_long() does not modify this.
+> 
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
 
-Fixes: 783d94854499 ("ext4: add EXT4_IOC_GOINGDOWN ioctl")
-Signed-off-by: Chao Yu <chao@kernel.org>
----
- fs/ext4/ioctl.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+Reviewed-by: Nicolas Schier <n.schier@avm.de>
 
-diff --git a/fs/ext4/ioctl.c b/fs/ext4/ioctl.c
-index f9a430152063..55be1b8a6360 100644
---- a/fs/ext4/ioctl.c
-+++ b/fs/ext4/ioctl.c
-@@ -797,6 +797,7 @@ static int ext4_shutdown(struct super_block *sb, unsigned long arg)
- {
- 	struct ext4_sb_info *sbi = EXT4_SB(sb);
- 	__u32 flags;
-+	int ret;
- 
- 	if (!capable(CAP_SYS_ADMIN))
- 		return -EPERM;
-@@ -815,7 +816,9 @@ static int ext4_shutdown(struct super_block *sb, unsigned long arg)
- 
- 	switch (flags) {
- 	case EXT4_GOING_FLAGS_DEFAULT:
--		freeze_bdev(sb->s_bdev);
-+		ret = freeze_bdev(sb->s_bdev);
-+		if (ret)
-+			return ret;
- 		set_bit(EXT4_FLAGS_SHUTDOWN, &sbi->s_ext4_flags);
- 		thaw_bdev(sb->s_bdev);
- 		break;
--- 
-2.40.1
-
+> 
+>  scripts/kallsyms.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+> index 0d2db41177b2..8e97ac7b38a6 100644
+> --- a/scripts/kallsyms.c
+> +++ b/scripts/kallsyms.c
+> @@ -806,7 +806,7 @@ static void record_relative_base(void)
+>  int main(int argc, char **argv)
+>  {
+>  	while (1) {
+> -		static struct option long_options[] = {
+> +		static const struct option long_options[] = {
+>  			{"all-symbols",     no_argument, &all_symbols,     1},
+>  			{"absolute-percpu", no_argument, &absolute_percpu, 1},
+>  			{"base-relative",   no_argument, &base_relative,   1},
+> -- 
+> 2.39.2
+> 
