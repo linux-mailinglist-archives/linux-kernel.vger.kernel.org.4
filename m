@@ -2,155 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E328472499B
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 18:57:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E0F47249A8
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 18:59:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238194AbjFFQ5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 12:57:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46894 "EHLO
+        id S238348AbjFFQ7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 12:59:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237469AbjFFQ5e (ORCPT
+        with ESMTP id S238326AbjFFQ7L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 12:57:34 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0988610F7;
-        Tue,  6 Jun 2023 09:57:28 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-51491b87565so9707525a12.1;
-        Tue, 06 Jun 2023 09:57:27 -0700 (PDT)
+        Tue, 6 Jun 2023 12:59:11 -0400
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FCF9E6B
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 09:59:10 -0700 (PDT)
+Received: by mail-ot1-x32a.google.com with SMTP id 46e09a7af769-6af7593ed5fso2956196a34.0
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 09:59:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686070646; x=1688662646;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=azHlI+5GippCBf+WKiWbax8dCCkxyDQeSHE9lPulApk=;
-        b=cAdIexgYX7eMxZwDXRGZe6tFBNMeVXsn0iXgO7qEVBR31xLVNNXiUzs+rU1ujxr8+l
-         xc2Siv7O0EeBu6KrkLJKiO75GANZYLZ0rdsS9Hsq2CSTR7TT6A9skn20Q/E1uz6smdur
-         g8oZYkLJKo+2f4lFyEW4vkdj49eWdnMwCHaw93vVTXKLVwtJ9aeF/NmBdaIoPhPheFWG
-         +1cj1hCTogVby16q+SKIJrWJiLwZBOJ0G6So/rsCSj0Ua8D4r806OgKG83NUqfq2hS8F
-         u0uMiEAjb533nPaOswu5r7Bn5Fu7GaKAgXiNezXmlwz9OJpYKzORIGvMH6rXFT6kYJv9
-         S8tg==
+        d=mojatatu-com.20221208.gappssmtp.com; s=20221208; t=1686070749; x=1688662749;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yQmOWCPShTey+INULM70m4JM3+cpB6VfrKxNpQFvEmA=;
+        b=kT7VCg0Z9RQXkKBr50UPE0CyETCzvLg8blLKiRF0K5rGL6hsBuzstadznudTAfcfEu
+         jbJW1z3malS0cRFPe09UYXMAiOHJYKI1cSB4g470s1yP7fPAyvGCKI7uszTvaBYn9TXn
+         iEuPvUIYFR6CLEDzCSk7gx8GdQhJKcgjE/9qK5Zh0A9B8JauD6EmIUw45vkB9SPiuh9r
+         OKxVDBNXusHcXHfEhUq7lt/1v6LdhtmmPqSDXcJl8k7QF7kr86fqEacbFK/FRaTHbtAq
+         DHhNwX9NQ+YRwxndPhnl93Kqzw6Atb3Q1IHw4rNNp1C4ZbDWqhyc9cULTj38MDiCmn12
+         bpig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686070646; x=1688662646;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=azHlI+5GippCBf+WKiWbax8dCCkxyDQeSHE9lPulApk=;
-        b=XLOiHfsm4YJt8d30oFv6lEy3GOjMu7KLr3KnSU2lUJ6nuQ/63vmIf/P0tXeUajxg1d
-         XUHkYvK4fpYZGgWThRu+VvgOuMWrvT9xGSr4sls+kW3nyi16oCeq6v+SzwSWyNv+/h26
-         OKdYuhXdNnNlDA94UQKSuT1T2q22Z23om2ZkllJPHP4GVIGj8J/X1FcovWYUe6KSdgF0
-         DOShNVeRQHzN5iZ7PkzQPO/XqRVo4ROLga43fuFcsov1KdtE3DIa0T/Os55vr3n5kesF
-         AwEGVFxX0TOYc8izkSDa/lQCs91uI1ldhVuyqTtP46xhfZFKTExtlHxZ5edw4XJrcdZy
-         NNXg==
-X-Gm-Message-State: AC+VfDwCnyw1vQ0vL5y8bAYth0qGtueV0L12ykhJTgGystErR0AIBG/s
-        pOJ5Nmlv6GUGVQBvzdr0Ao9mYTO2XcBOSDC+N+A=
-X-Google-Smtp-Source: ACHHUZ64KAAOfaapxB1O5y4diCyCaL/i6oJvY6ppizyMVQcI2dZbltNucxts1w4q7XRdRBeu3lz6OS6aANGrLihG8Lo=
-X-Received: by 2002:a05:6402:1647:b0:510:b636:4073 with SMTP id
- s7-20020a056402164700b00510b6364073mr2293592edx.3.1686070646336; Tue, 06 Jun
- 2023 09:57:26 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686070749; x=1688662749;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yQmOWCPShTey+INULM70m4JM3+cpB6VfrKxNpQFvEmA=;
+        b=TRZAHYjMob9QYUU5AIpPdXC3ZUoVJHq2lRu/qr8vvfBv4yWcYvNUczWZ7EIad3eY9J
+         jgXrbX8f8ji1NRFODkhuCevc00lHw6SIq7iNaWYQUbMhjHY7Yr8laYbcbHlfZeqtKHJu
+         wGewGLsTi2eimOQRDxNiaBb7sOaMIDh8mdsOHzTMd1eyOQTD8KS0MXJheiaTOGeLkrlq
+         AnLITGSQfPJcuclEJ0ajes95Hy3OGSzgr9u6E/jXmCs4XW1xoPEw9OOXyeeQum101dZO
+         uyEDvbhHBn+uOSvt5AEH2QjkZORXTLaviFr6R/59Q8t2x6bdtyaD8QXWQwEJlx29BNF8
+         Xq0w==
+X-Gm-Message-State: AC+VfDzFLUwKT1tVY/Ax0+On9EEOxtmswzoemhIePCvK6i+WT7Q8CGw8
+        Bj2JsNmF9FWjz3au8cotxsC2lg==
+X-Google-Smtp-Source: ACHHUZ6FYTab5Lg2xV9YOubMZ4IQx6jzQMIMMnLnA7DYUjuLkl4ZXIOW8Iy/UVTVaK1aEchHCl66CA==
+X-Received: by 2002:a9d:67c1:0:b0:6b2:9bdd:69e with SMTP id c1-20020a9d67c1000000b006b29bdd069emr897388otn.0.1686070749418;
+        Tue, 06 Jun 2023 09:59:09 -0700 (PDT)
+Received: from ?IPV6:2804:14d:5c5e:44fb:9148:dfc3:4a0d:3b4e? ([2804:14d:5c5e:44fb:9148:dfc3:4a0d:3b4e])
+        by smtp.gmail.com with ESMTPSA id r6-20020a9d7506000000b006af9d8af435sm4490187otk.50.2023.06.06.09.59.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Jun 2023 09:59:08 -0700 (PDT)
+Message-ID: <81cd0ecb-29a6-d748-8962-dc741a02e691@mojatatu.com>
+Date:   Tue, 6 Jun 2023 13:59:04 -0300
 MIME-Version: 1.0
-References: <20230508163751.841-1-beaub@linux.microsoft.com>
- <CAADnVQLYL-ZaP_2vViaktw0G4UKkmpOK2q4ZXBa+f=M7cC25Rg@mail.gmail.com>
- <20230509130111.62d587f1@rorschach.local.home> <20230509163050.127d5123@rorschach.local.home>
- <20230515165707.hv65ekwp2djkjj5i@MacBook-Pro-8.local> <20230515192407.GA85@W11-BEAU-MD.localdomain>
- <20230517003628.aqqlvmzffj7fzzoj@MacBook-Pro-8.local> <20230606225741.a9d8003a22451db96545b5a8@kernel.org>
-In-Reply-To: <20230606225741.a9d8003a22451db96545b5a8@kernel.org>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 6 Jun 2023 09:57:14 -0700
-Message-ID: <CAEf4BzbhvBTQ2c1ENk2pVXdQ=SrXwTFXVjpopTANZsdn1EEeMA@mail.gmail.com>
-Subject: Re: [PATCH] tracing/user_events: Run BPF program if attached
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Beau Belgrave <beaub@linux.microsoft.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-trace-kernel@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        David Vernet <void@manifault.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        dthaler@microsoft.com, brauner@kernel.org, hch@infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] net/sched: Set the flushing flags to false to prevent an
+ infinite loop
+Content-Language: en-US
+To:     renmingshuai <renmingshuai@huawei.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jhs@mojatatu.com,
+        xiyou.wangcong@gmail.com, jiri@resnulli.us, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
+Cc:     liaichun@huawei.com, caowangbao@huawei.com, yanan@huawei.com,
+        liubo335@huawei.com
+References: <20230606144511.1520657-1-renmingshuai@huawei.com>
+From:   Pedro Tammela <pctammela@mojatatu.com>
+In-Reply-To: <20230606144511.1520657-1-renmingshuai@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 6, 2023 at 6:57=E2=80=AFAM Masami Hiramatsu <mhiramat@kernel.or=
-g> wrote:
->
-> Hi,
->
-> On Tue, 16 May 2023 17:36:28 -0700
-> Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
->
-> > BPF progs have three ways to access kernel tracepoints:
-> > 1. traditional tracepoint
->
-> This is the trace_events, which is used by ftrace, right?
->
-> > 2. raw tracepoint
-> > 3. raw tracepoint with BTF
-> >
-> > 1 was added first and now rarely used (only by old tools), since it's s=
-low.
-> > 2 was added later to address performance concerns.
-> > 3 was added after BTF was introduced to provide accurate types.
-> >
-> > 3 is the only one that bpf community recommends and is the one that is =
-used most often.
-> >
-> > As far as I know trace_events were never connected to bpf.
-> > Unless somebody sneaked the code in without us seeing it.
->
-> With this design, I understand that you may not want to connect BPF
-> directly to user_events. It needs a different model.
->
-> >
-> > I think you're trying to model user_events+bpf as 1.
-> > Which means that you'll be repeating the same mistakes.
->
-> The user_events is completely different from the traceppoint and
-> must have no BTF with it.
-> Also, all information must be sent in the user-written data packet.
-> (No data structure, event if there is a structure, it must be fully
-> contained in the packet.)
->
-> For the tracepoint, there is a function call with some values or
-> pointers of data structure. So it is meaningful to skip using the
-> traceevent (which converts all pointers to actual field values of
-> the data structure and store it to ftrace buffer) because most of
-> the values can be ignored in the BPF prog.
->
-> However, for the user_events, the data is just passed from the
-> user as a data packet, and BPF prog can access to the data packet
-> (to avoid accessing malicious data, data validator can not be
-> skipped). So this seems like 1. but actually you can access to
-> the validated data on perf buffer. Maybe we can allow BPF to
-> hook the write syscall and access user-space data, but it may
-> not safe. I think this is the safest way to do that.
+On 06/06/2023 11:45, renmingshuai wrote:
+> When a new chain is added by using tc, one soft lockup alarm will be
+>   generated after delete the prio 0 filter of the chain. To reproduce
+>   the problem, perform the following steps:
+> (1) tc qdisc add dev eth0 root handle 1: htb default 1
+> (2) tc chain add dev eth0
+> (3) tc filter del dev eth0 chain 0 parent 1: prio 0
+> (4) tc filter add dev eth0 chain 0 parent 1:
 
-I'm trying to understand why we need a new kernel concept for all
-this. It looks like we are just creating a poor man's
-publisher/subscriber solution in the kernel, but mostly intend to use
-it from user-space? Why not just use Unix domain sockets for this,
-though? Use SOCK_SEQPACKET, put "event data" into a single packet
-that's guaranteed to not be broken up. Expose this to other processes
-through named pipes, if necessary.
+This seems like it could be added to tdc or 3 and 4 must be run in parallel?
 
-Sorry if it's naive questions, but it's not clear what problem
-user_events are solving and why we need a new thing and can't use
-existing kernel primitives?
+> 
+> 
+> The refcnt of the chain added by step 2 is equal to 1. After step 3,
+>   the flushing flag of the chain is set to true in the tcf_chain_flush()
+>   called by tc_del_tfilter() because the prio is 0. In this case, if
+>   we add a new filter to this chain, it will never succeed and try again
+>   and again because the refresh flash is always true and refcnt is 1.
+>   A soft lock alarm is generated 20 seconds later.
+> The stack is show as below:
+> 
+> Kernel panic - not syncing: softlockup: hung tasks
+> CPU: 2 PID: 3321861 Comm: tc Kdump: loaded Tainted: G
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996)
+> Call Trace:
+>   <IRQ>
+>   dump_stack+0x57/0x6e
+>   panic+0x196/0x3ec
+>   watchdog_timer_fn.cold+0x16/0x5c
+>   __run_hrtimer+0x5e/0x190
+>   __hrtimer_run_queues+0x8a/0xe0
+>   hrtimer_interrupt+0x110/0x2c0
+>   ? irqtime_account_irq+0x49/0xf0
+>   __sysvec_apic_timer_interrupt+0x5f/0xe0
+>   asm_call_irq_on_stack+0x12/0x20
+>   </IRQ>
+>   sysvec_apic_timer_interrupt+0x72/0x80
+>   asm_sysvec_apic_timer_interrupt+0x12/0x20
+> RIP: 0010:mutex_lock+0x24/0x70
+> RSP: 0018:ffffa836004ab9a8 EFLAGS: 00000246
+> RAX: 0000000000000000 RBX: ffff95bb02d76700 RCX: 0000000000000000
+> RDX: ffff95bb27462100 RSI: 0000000000000000 RDI: ffff95ba5b527000
+> RBP: ffff95ba5b527000 R08: 0000000000000001 R09: ffffa836004abbb8
+> R10: 000000000000000f R11: 0000000000000000 R12: 0000000000000000
+> R13: ffff95ba5b527000 R14: ffffa836004abbb8 R15: 0000000000000001
+>   __tcf_chain_put+0x27/0x200
+>   tc_new_tfilter+0x5e8/0x810
+>   ? tc_setup_cb_add+0x210/0x210
+>   rtnetlink_rcv_msg+0x2e3/0x380
+>   ? rtnl_calcit.isra.0+0x120/0x120
+>   netlink_rcv_skb+0x50/0x100
+>   netlink_unicast+0x12d/0x1d0
+>   netlink_sendmsg+0x286/0x490
+>   sock_sendmsg+0x62/0x70
+>   ____sys_sendmsg+0x24c/0x2c0
+>   ? import_iovec+0x17/0x20
+>   ? sendmsg_copy_msghdr+0x80/0xa0
+>   ___sys_sendmsg+0x75/0xc0
+>   ? do_fault_around+0x118/0x160
+>   ? do_read_fault+0x68/0xf0
+>   ? __handle_mm_fault+0x3f9/0x6f0
+>   __sys_sendmsg+0x59/0xa0
+>   do_syscall_64+0x33/0x40
+>   entry_SYSCALL_64_after_hwframe+0x61/0xc6
+> RIP: 0033:0x7f96705b8247
+> RSP: 002b:00007ffe552e9dc8 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f96705b8247
+> RDX: 0000000000000000 RSI: 00007ffe552e9e40 RDI: 0000000000000003
+> RBP: 0000000000000001 R08: 0000000000000001 R09: 0000558113f678b0
+> R10: 00007f967069ab00 R11: 0000000000000246 R12: 00000000647ea089
+> R13: 00007ffe552e9f30 R14: 0000000000000001 R15: 0000558113175f00
+> 
+> To avoid this case, set chain->flushing to be false if the chain->refcnt
+>   is 1 after flushing the chain when prio is 0.
+> 
+> Fixes: 726d061286ce ("net: sched: prevent insertion of new classifiers during chain flush")
+> Signed-off-by: Ren Mingshuai <renmingshuai@huawei.com>
+> ---
+>   net/sched/cls_api.c | 7 +++++++
+>   1 file changed, 7 insertions(+)
+> 
+> diff --git a/net/sched/cls_api.c b/net/sched/cls_api.c
+> index 2621550bfddc..68be55d75831 100644
+> --- a/net/sched/cls_api.c
+> +++ b/net/sched/cls_api.c
+> @@ -2442,6 +2442,13 @@ static int tc_del_tfilter(struct sk_buff *skb, struct nlmsghdr *n,
+>   		tfilter_notify_chain(net, skb, block, q, parent, n,
+>   				     chain, RTM_DELTFILTER, extack);
+>   		tcf_chain_flush(chain, rtnl_held);
+> +		/* Set the flushing flags to false to prevent an infinite loop
+> +		 * when a new filter is added.
+> +		 */
+> +		mutex_lock(&chain->filter_chain_lock);
+> +		if (chain->refcnt == 1)
+> +			chain->flushing = false;
+> +		mutex_unlock(&chain->filter_chain_lock);
+>   		err = 0;
+>   		goto errout;
+>   	}
 
-
->
-> Thank you,
->
-> --
-> Masami Hiramatsu (Google) <mhiramat@kernel.org>
