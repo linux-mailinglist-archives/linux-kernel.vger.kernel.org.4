@@ -2,109 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF40F724B7E
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 20:34:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7CC8724B7F
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 20:34:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238880AbjFFSeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 14:34:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49130 "EHLO
+        id S233574AbjFFSex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 14:34:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233574AbjFFSd5 (ORCPT
+        with ESMTP id S238724AbjFFSev (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 14:33:57 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A28C01BCC;
-        Tue,  6 Jun 2023 11:33:26 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-3063433fa66so5616780f8f.3;
-        Tue, 06 Jun 2023 11:33:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686076404; x=1688668404;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8svzrQGUEtETEf2Gc4kOvl6Kj1C686jV3zJl9I41Yfg=;
-        b=psq7lUwSkBsj+yf4R0xiNE9E7Hj9VK328d/Zic7hPh315XwjsbK9b3Oc1d5rAGSde0
-         ppVJzOXmbVEi2HtzCooQfBWismtvmFIrwATUkh8fUagKL9pqQ5z28HI7b8JFY6/nQOZY
-         RPtjpQUpv12BQfzc3YWu5q4/L/Ifs4jIk4VX0/GO/tIjfqY0rIRe5ZAe0JtaAsOHEF7X
-         2x0Nine0BWYKULFo/+CrxUHliyCduz1kjYBLoVcoV4ny2Y3PRW1sDYs7UfMZQyIupz0q
-         YxC0vfealeD+BahHSnJLuIewyXcfZpOuzZEogfwq7MDvI2EERS1D7m+uqJXoDGMk2P3Y
-         f8zA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686076404; x=1688668404;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8svzrQGUEtETEf2Gc4kOvl6Kj1C686jV3zJl9I41Yfg=;
-        b=fCBuvubPmOxKGMtNNUcbnmKM7qTchsffjPiL3eozc+Q8VyAF4wm025TMJqnYkbJC6q
-         jWT5TMd9l/k0yXK6hoyCYYHl5lxHM0aP8CZ+c3RbImD05a/eRNjtRWz2goADYzIWv6Pc
-         Wm5U+eXExS7DsKqLIRSJmuaTi3dL81Or+dDMpoJxJNNhpLwh67Hzrj120ZT2kGfhg36e
-         aRbMWqEmsuGgQwzRAruClHBFNa2DCszDOGJnpR7PbvwIkPJ9AKa12YP1k2VRHog6MdL3
-         4nQVsIjnMS8Dc7qzvn9l7dJg73RETsvx8gU+NfnEceAK5F/lkmf6zeiAA5KwqlmEEwkr
-         I+cA==
-X-Gm-Message-State: AC+VfDz8Mqr4nVALbUgmRFkTYC68kf1HOugfKPZnfRckrJI7dDHycZcH
-        62AVI6YdEfRKnR/Iu8dJxTE=
-X-Google-Smtp-Source: ACHHUZ70oQJTONoOv+e8Ejv3f+oGhgElZo6FQh85YIeQDwsC1c9rks4LPF1YcUNvS1fnA0HtiBH2ZQ==
-X-Received: by 2002:adf:f212:0:b0:30d:5cce:3bb5 with SMTP id p18-20020adff212000000b0030d5cce3bb5mr2461590wro.60.1686076403503;
-        Tue, 06 Jun 2023 11:33:23 -0700 (PDT)
-Received: from localhost ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
-        by smtp.gmail.com with ESMTPSA id 4-20020a05600c248400b003f604793989sm18503641wms.18.2023.06.06.11.33.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 11:33:22 -0700 (PDT)
-Date:   Tue, 6 Jun 2023 19:33:22 +0100
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     "Liam R. Howlett" <Liam.Howlett@oracle.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Vlastimil Babka <vbabka@suse.cz>,
-        Jeff Xu <jeffxu@chromium.org>, stable@vger.kernel.org
-Subject: Re: [PATCH] mm/mprotect: Fix do_mprotect_pkey() limit check
-Message-ID: <acd340ca-e7e7-4cfa-adc3-8d1f6fcd76b6@lucifer.local>
-References: <20230606182912.586576-1-Liam.Howlett@oracle.com>
+        Tue, 6 Jun 2023 14:34:51 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D69D1707
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 11:34:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686076490; x=1717612490;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=RJjMtX6JV3KGQfsw82yer2ZuikypQbyMMcAY2zodLUg=;
+  b=Qff4uGquX3hTUzkFcZCUKiqdjDss1FuYrCTkevqFqOa3pj8UZY3pQhwq
+   /JYsKO7xFIuirN8BfO+jGORqwn1rkZmSQI9mZXttHOXppQHx7uStfisNV
+   7MIiUzZRCMdAya1WRKL8xkl2O6VV/OfKEDYW4foV+ORXxZWNvjrFFLh7v
+   AV5L6Ow7RtddiK0kRNHzuuyrZxBaMYephOycm+YeaPikEgKQkin1pZKCj
+   cPHA8aH9qCaf8sIw56drD1FFa9TE7TcsOMVdzWXXUk8O0FU+i3sPgFCLy
+   hdVq5ojaV7xVLIpx87B8nukLlMiC9AnDg10k6vfpORu05gQOvONt/jZvq
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="385082283"
+X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
+   d="scan'208";a="385082283"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 11:34:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="659636951"
+X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
+   d="scan'208";a="659636951"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga003.jf.intel.com with ESMTP; 06 Jun 2023 11:34:49 -0700
+Received: from [10.212.191.33] (kliang2-mobl1.ccr.corp.intel.com [10.212.191.33])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id 1C4C9580C9B;
+        Tue,  6 Jun 2023 11:34:48 -0700 (PDT)
+Message-ID: <ea1c56f9-fc93-ff1e-2102-757e7e9c0dd7@linux.intel.com>
+Date:   Tue, 6 Jun 2023 14:34:47 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230606182912.586576-1-Liam.Howlett@oracle.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH V2 1/6] perf/x86/intel: Add Grand Ridge and Sierra Forest
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     mingo@redhat.com, acme@kernel.org, linux-kernel@vger.kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org, irogers@google.com,
+        adrian.hunter@intel.com, ak@linux.intel.com, eranian@google.com,
+        alexey.v.bayduraev@linux.intel.com, tinghao.zhang@intel.com
+References: <20230522113040.2329924-1-kan.liang@linux.intel.com>
+ <2b2e7308-edeb-2977-596a-f638d19174d6@linux.intel.com>
+ <20230606132432.GD905437@hirez.programming.kicks-ass.net>
+ <3c187521-0686-1204-7b3e-e8f183c50938@linux.intel.com>
+ <20230606181757.GB942082@hirez.programming.kicks-ass.net>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <20230606181757.GB942082@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 02:29:12PM -0400, Liam R. Howlett wrote:
-> The return of do_mprotect_pkey() can still be incorrectly returned as
-> success if there is a gap that spans to or beyond the end address passed
-> in.  Update the check to ensure that the end address has indeed been
-> seen.
->
-> Link: https://lore.kernel.org/all/CABi2SkXjN+5iFoBhxk71t3cmunTk-s=rB4T7qo0UQRh17s49PQ@mail.gmail.com/
-> Fixes: 82f951340f25 ("mm/mprotect: fix do_mprotect_pkey() return on error")
-> Reported-by: Jeff Xu <jeffxu@chromium.org>
-> Cc: <stable@vger.kernel.org>
-> Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
-> ---
->  mm/mprotect.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/mm/mprotect.c b/mm/mprotect.c
-> index 92d3d3ca390a..c59e7561698c 100644
-> --- a/mm/mprotect.c
-> +++ b/mm/mprotect.c
-> @@ -867,7 +867,7 @@ static int do_mprotect_pkey(unsigned long start, size_t len,
->  	}
->  	tlb_finish_mmu(&tlb);
->
-> -	if (!error && vma_iter_end(&vmi) < end)
-> +	if (!error && tmp < end)
->  		error = -ENOMEM;
->
->  out:
-> --
-> 2.39.2
->
 
-As discussed via irc, was able to confirm locally this fixes the reported
-issue, so have a quick:-
 
-Reviewed-by: Lorenzo Stoakes <lstoakes@gmail.com>
+On 2023-06-06 2:17 p.m., Peter Zijlstra wrote:
+> On Tue, Jun 06, 2023 at 12:16:29PM -0400, Liang, Kan wrote:
+> 
+>>> names for a reason, so that enums like the above become something
+>>> sensible like:
+>>>
+>>> 	case INTEL_FAM6_ATOM_CRESTMONT:
+>>> 	case INTEL_FAM6_ATOM_CRESTMONT_X:
+>>>
+>>> and now it's super obvious why they're grouped.
+>>>
+>>>>> +		pr_cont("Crestmont events, ");
+>>
+>> The Sierra Forest should not be a platform name. I think it's the code
+>> name of the processor.
+>>
+>> The problem is that the uarch name doesn't work for the hybrid, since it
+>> has different uarchs in the same processors. To make the naming rules
+>> consistent among big core, atom, and hybrid, maybe we should use the
+>> code name of the processor in intel-family.h.
+> 
+> I obviously disagree; these are not hybrid and calling them both
+> CRESTMONT makes *far* more sense than the random gibberish they're
+> called now.
+> 
+> Yes, hybrid made a complete mess of things (in many ways), but we should
+> then not do the obvious correct thing for when we can.
+
+Besides hybrid, it seems there is a bigger problem for the big core.
+
+The big core uses the processor code name since Ice Lake. In the perf
+code, we also uses the processor code name for the big core.
+	pr_cont("Icelake events, ");
+
+Is it OK to leave the big core as is (using processor code name), but
+only change the name for Grand Ridge and Sierra Forest?
+
+Thanks,
+Kan
