@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77CDF7246D6
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:52:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61C5A7246D9
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:52:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238418AbjFFOwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 10:52:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55912 "EHLO
+        id S238397AbjFFOwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 10:52:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238419AbjFFOwB (ORCPT
+        with ESMTP id S237676AbjFFOwI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 10:52:01 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2058.outbound.protection.outlook.com [40.107.92.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7C131719
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 07:51:52 -0700 (PDT)
+        Tue, 6 Jun 2023 10:52:08 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2051.outbound.protection.outlook.com [40.107.244.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E26A710F4
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 07:52:01 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ihiab1lLw4hII/ZJdKmIeVa9XgS5/mKBx8znIgC0QY0xbbgoLQgz8+AzuC0LOF6CUekE0SjY7hA5onkEkoXqUCo6hNDCpa0V+0X7wo2i3cALvqFRtmRLNNjxdx2jL+5hS9pO3hDyVh/az1VvlRMFnAWzjUkLXzEbsWkVqwFOmAudYwJrft+LC2/jIVWR4egrTEOcOV9Jyqm172VGd7juYJvqi2HNCabKXVuWzUpVDtkWPO7ueOVwqE/QujW9ziStt+YA9TggT9eaYSXMDAfGznucShVqY4oTOGYmPStFFw0CE9szNDa6/+GMz7sOaNiTBSnrKYlLyFcRyvqX3ak3Fw==
+ b=C2N9lHAS3pkRjIW38Hcbd1rDqC1abhxrdqAO7ufmucn1306/gGa79AlFA6MYxpjB+CJrslWknBMIdyvkMgGRcQai673YT0s3ggRRO84Ko2vuArjHz5h/d15AQVBHAJ8Ll2MyEEMsWIdxpzRmp3TzaPBgdCUYNhU5nYYxQ4EukxKNuqW1Hxv/u9K6zav9nwJl14aXyUqmZcN9tuIVAC6XTS49U1k2dlb2Oi54H2R5Hg83+J3Bp3d5me0p7JEqj/UgU7EQjANEMl+OmMoawg9mj+IVeKFli3UhaO96b7m1cnwJQ+grHSHYiwuZfU5lR9Y+Dh+o9pkbtRkMcjXEwnC7eg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=T3BWNRDBjL5IO3E4gbxcdh48HaLOHpW9frVn6bWGU9Q=;
- b=TNUvHldIGCRtvjbs6+sCL/EGVjujXMOjTT6PPCd5NpX36Jv3c1unnztvXEn1YQrUqEwox6JVjdeaQSOtJPyjahRItdqjX/Oh6c08wqQxc3IHCubzi3VM2nREYGZK9EhSYVspU3q66XHkx/GtSMFgUbJXBsn/Jp/Vn8ezo6su8ZWttEWRzTZsNSSjnRagscRb52cPJT96pbvXVIdeLANAW21VnvEmvMNv2nXAPG/FVs8MTpK9OtS1yFCp6fwCT1N7tb+TYnr7uwyLgfEuM5aUAdhHB4hGFUXGuQiavGYKjAud0oluXaJ2dOth8KHcAz9Ubqhdzkab70jKNtFBHvTlEQ==
+ bh=si0Y0hViSqZXgGsXUM4bYNOJ+CCiV+oRKTAmQV4GmTU=;
+ b=gu8gaqjNi4Qp4rnvF/pdKy2lvuWqTnrRatYyZH6Ro0rE34qB5mCBw89/TmE1tjBN+P2bjE7c063OU7bHPkrEV3st2toqXUDCSwjHhCtVe9Zmu1iihoODFHrjYA+txXVMTaBWHflYADTUtUghb2Td7iFp3RW5Bz5868ddrvIs6GFdIJPbe+YL+vohPWF6cX3gUx+yEGDDOnYydjhvPf7CM2nfnGnZ5TEYAorFn41829Jgv6lMx1GGiGybFpv7qAPx2QiFnegfQJ8D7DDS7pSXFt3sUPJunZMgdsc8qRkUD6Szk4apUaiDSTJKJ8cbW766D++LaatWvOIl+mgTQ/fGrA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=T3BWNRDBjL5IO3E4gbxcdh48HaLOHpW9frVn6bWGU9Q=;
- b=bUz29HgwXfQvWmcaet+hlmNZniHTIaJ0xLuRm4pBmFM9x7Y1KfX/KO6fYJp8UroFWtPsI9hyXQI0h2ZQh3Rd7BNO2c7MbwARFI3BAjQeIfnMBWre9ad253Z4X/AO6JWoXgV6skWaZVUV+GD+F8vXUN7x0JaLT9PApn6ucwZmZm8=
-Received: from SJ0PR03CA0175.namprd03.prod.outlook.com (2603:10b6:a03:338::30)
- by MN2PR12MB4456.namprd12.prod.outlook.com (2603:10b6:208:266::15) with
+ bh=si0Y0hViSqZXgGsXUM4bYNOJ+CCiV+oRKTAmQV4GmTU=;
+ b=ehUJZovdPXqLyz9qYNZXjMUSwEY5/Kltsdd3yl0SicHh2DvRCL9x/FEEOGOOWhhZSNX4y/psewCZMsye25KCbaLnDiJCEA4Dh8AMhyWrInPOskgh3xtbMHPixAiJhUq+M+lvO0fEwmp0fypMJhw4FwiMbKNMIwUi/goU7fjglAc=
+Received: from MW4PR04CA0386.namprd04.prod.outlook.com (2603:10b6:303:81::31)
+ by MW6PR12MB9020.namprd12.prod.outlook.com (2603:10b6:303:240::6) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Tue, 6 Jun
- 2023 14:51:49 +0000
-Received: from CO1NAM11FT027.eop-nam11.prod.protection.outlook.com
- (2603:10b6:a03:338:cafe::72) by SJ0PR03CA0175.outlook.office365.com
- (2603:10b6:a03:338::30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33 via Frontend
- Transport; Tue, 6 Jun 2023 14:51:49 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.32; Tue, 6 Jun
+ 2023 14:51:59 +0000
+Received: from CO1NAM11FT006.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:81:cafe::14) by MW4PR04CA0386.outlook.office365.com
+ (2603:10b6:303:81::31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.19 via Frontend
+ Transport; Tue, 6 Jun 2023 14:51:59 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -47,13 +47,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT027.mail.protection.outlook.com (10.13.174.224) with Microsoft SMTP
+ CO1NAM11FT006.mail.protection.outlook.com (10.13.174.246) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6455.36 via Frontend Transport; Tue, 6 Jun 2023 14:51:49 +0000
+ 15.20.6455.33 via Frontend Transport; Tue, 6 Jun 2023 14:51:58 +0000
 Received: from tlendack-t1.amdoffice.net (10.180.168.240) by
  SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Tue, 6 Jun 2023 09:51:47 -0500
+ 15.1.2375.34; Tue, 6 Jun 2023 09:51:56 -0500
 From:   Tom Lendacky <thomas.lendacky@amd.com>
 To:     <linux-kernel@vger.kernel.org>, <x86@kernel.org>
 CC:     Thomas Gleixner <tglx@linutronix.de>,
@@ -66,9 +66,9 @@ CC:     Thomas Gleixner <tglx@linutronix.de>,
         Dionna Glaze <dionnaglaze@google.com>,
         Andy Lutomirski <luto@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>
-Subject: [PATCH v9 1/6] x86/sev: Fix calculation of end address based on number of pages
-Date:   Tue, 6 Jun 2023 09:51:22 -0500
-Message-ID: <6a6e4eea0e1414402bac747744984fa4e9c01bb6.1686063086.git.thomas.lendacky@amd.com>
+Subject: [PATCH v9 2/6] x86/sev: Put PSC struct on the stack in prep for unaccepted memory support
+Date:   Tue, 6 Jun 2023 09:51:23 -0500
+Message-ID: <938865ea7f5ad88d4daa846b97c9414723b5639a.1686063086.git.thomas.lendacky@amd.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <cover.1686063086.git.thomas.lendacky@amd.com>
 References: <20230606142637.5171-1-kirill.shutemov@linux.intel.com> <cover.1686063086.git.thomas.lendacky@amd.com>
@@ -80,23 +80,23 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT027:EE_|MN2PR12MB4456:EE_
-X-MS-Office365-Filtering-Correlation-Id: 06356530-4f1b-4b5b-966d-08db669d8ed1
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT006:EE_|MW6PR12MB9020:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3e9fa361-3a9f-4413-5025-08db669d9458
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: sIk5ngNJGGn10KaQ+1nM/MChgT0khBXhJq+9YZ4KpByjIbsF4mblajx0mU1wYckIXh6HnsT2aBg7qanRVsZ6rc+Zrtk00xWaMN4p1M6YZRFzXxYAxyKQQFgRHAlhEMdiK5GO1aGGEJolTYb+uVlJMuwYVfvYM9lKIU7itvWqN32q/OARUpoR1l72xw4a+jXXQeep3gz+zaema1UTqHcDoy/jBYR3/QSKTpqxXOoMoa3jqBMp6tTb10LedUj8MdRVlm0Ze3ZnvMD9as4uQPT+2OOc455O5gOFCsE/zJpUNBdKMenfkegzrktUSxxSZ7WjOvhzJcQNWvPsmXvh/RqQ/RbC8qHeaQ5H1jQVuUJloSKtNXx6BmpYX3mf2TpLUTzHZ4WaQyGohQlsGqdz4r4GtjVwe05DJpeeb4BNqpmDqBdw7G3ftd+M/0UfSuyu+EYRN1nUX2iEyGCInXc7EONQAhL6ygNlF7wWfy7IGIuyYRrbzTHq9qIrhvBal4G+p9yAMiGeK6u6LiWNf/oqIffb+P1co8cDgnOdjbbuoG4lZRlRLn8Sh6XiizliLySi9pLhisTi5OmXV6snKeJNuZWhpea/layrXRW4pCDTWQw052iMf58gD6EcQtGeAuQA2GPPbH/zrt+NKjAI0tVZnznipitymBmFgIugXpabRV+PjaEs8uRo9R1i1LRZ4Z1hXWoQ3C1kR5BHG8bWf4YJbxQ18SlGqu0aluinwRJa44eqNnua1YiBmnBHwj9l2ROagIK7iW/E2Eh1ZdSrb2tQEaICLQ==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(396003)(376002)(136003)(451199021)(36840700001)(46966006)(40470700004)(40480700001)(186003)(54906003)(70586007)(110136005)(81166007)(478600001)(82740400003)(356005)(8676002)(8936002)(4326008)(41300700001)(316002)(70206006)(2616005)(426003)(16526019)(336012)(36860700001)(83380400001)(47076005)(40460700003)(6666004)(26005)(86362001)(5660300002)(7416002)(2906002)(82310400005)(36756003)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: sq7LYwBA86WDWGPFP6F3vTNA9msSGUsWcnhQHltXWguctqvTR1jZD71gsJellpBwwRr3Kokjzl4YJ9iPhgnPKBu+ZDCcDkhqAIT4245c8brJugcDm1DaZ+/xd0jUGH9TaWvJVdsZ8q7EM6pGeyTkKsbqZm4JjWKjDp72GzdaYtajSGo2VirVLRhlpxAY7Uygsdp1s7kS/QttskIfl3+6VHZs/E9m0ZNTwY+zQL8hm4kwOqtUu4Dqkv6voenRMcn051hIiuOJYGQc+7vZ7YX9l4nD4TEaI+PSMODXw6leQVn8jTiLXcqKwkR8kCNeDqP3nD0qIQg/IgH07im8wUyJie6KVI+S/IeLlz18WW/3fO+DTcQC3RkClcquL46eV/JB7ezb6xI/0+MloTPLCPukgFWVzNlSEGFHDHDXDLKgVpvrfXGsOWxZ/MhlBHnAQ5PAvBwDE9rH0VPaGqQgFYhQRdgC8rByMG8ebRYbyie7l+zxVh37ej78A0xlMyPjSqkwQfHC21ydhojmzQS+K5m+KJLpIA+JjI5K9arUEHnSl1L/iAPnh4/3MKSAwdyFcrhIXIsvCVL+7iPlOFqk7/pvTnG1js42pyIsNQ8sZ2gnkG/+3bzdZ3x8+IJYHMHlvk5jcU7oP8XDd2cqYy0c+ZbipeYf0mri+40Vn7qhlY8UVhsYYdQ76FJ/G/k7IIhrdYjKRYkGZ3ZDYTtAwntSBgvjqbKUrAUGpx294uZMWF7KDxAN6OoQ5ZsG5j7qe1e1JnX4
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:ErrorRetry;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(376002)(136003)(346002)(451199021)(36840700001)(40470700004)(46966006)(40460700003)(83380400001)(186003)(47076005)(426003)(2906002)(336012)(2616005)(36756003)(86362001)(82310400005)(82740400003)(81166007)(40480700001)(356005)(36860700001)(966005)(316002)(41300700001)(6666004)(5660300002)(8936002)(8676002)(110136005)(54906003)(478600001)(4326008)(70206006)(70586007)(26005)(16526019)(7416002)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2023 14:51:49.3649
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2023 14:51:58.6209
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 06356530-4f1b-4b5b-966d-08db669d8ed1
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3e9fa361-3a9f-4413-5025-08db669d9458
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT027.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT006.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4456
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR12MB9020
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
@@ -108,125 +108,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When calculating an end address based on an unsigned int number of pages,
-any value greater than or equal to 0x100000 that is shift PAGE_SHIFT bits
-results in a 0 value, resulting in an invalid end address. Change the
-number of pages variable in various routines from an unsigned int to an
-unsigned long to calculate the end address correctly.
+In advance of providing support for unaccepted memory, switch from using
+kmalloc() for allocating the Page State Change (PSC) structure to using a
+local variable that lives on the stack. This is needed to avoid a possible
+recursive call into set_pages_state() if the kmalloc() call requires
+(more) memory to be accepted, which would result in a hang.
 
-Fixes: 5e5ccff60a29 ("x86/sev: Add helper for validating pages in early enc attribute changes")
-Fixes: dc3f3d2474b8 ("x86/mm: Validate memory when changing the C-bit")
+The current size of the PSC struct is 2,032 bytes. To make the struct more
+stack friendly, reduce the number of PSC entries from 253 down to 64,
+resulting in a size of 520 bytes. This is a nice compromise on struct size
+and total PSC requests while still allowing parallel PSC operations across
+vCPUs.
+
+If the reduction in PSC entries results in any kind of performance issue
+(that is not seen at the moment), use of a larger static PSC struct, with
+fallback to the smaller stack version, can be investigated.
+
+For more background info on this decision, see the subthread in the Link:
+tag below.
+
 Signed-off-by: Tom Lendacky <thomas.lendacky@amd.com>
+Link: https://lore.kernel.org/lkml/658c455c40e8950cb046dd885dd19dc1c52d060a.1659103274.git.thomas.lendacky@amd.com
 ---
- arch/x86/include/asm/sev.h | 16 ++++++++--------
- arch/x86/kernel/sev.c      | 14 +++++++-------
- 2 files changed, 15 insertions(+), 15 deletions(-)
+ arch/x86/include/asm/sev-common.h |  9 +++++++--
+ arch/x86/kernel/sev.c             | 10 ++--------
+ 2 files changed, 9 insertions(+), 10 deletions(-)
 
-diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
-index 13dc2a9d23c1..7ca5c9ec8b52 100644
---- a/arch/x86/include/asm/sev.h
-+++ b/arch/x86/include/asm/sev.h
-@@ -192,12 +192,12 @@ struct snp_guest_request_ioctl;
+diff --git a/arch/x86/include/asm/sev-common.h b/arch/x86/include/asm/sev-common.h
+index 0759af9b1acf..b463fcbd4b90 100644
+--- a/arch/x86/include/asm/sev-common.h
++++ b/arch/x86/include/asm/sev-common.h
+@@ -106,8 +106,13 @@ enum psc_op {
+ #define GHCB_HV_FT_SNP			BIT_ULL(0)
+ #define GHCB_HV_FT_SNP_AP_CREATION	BIT_ULL(1)
  
- void setup_ghcb(void);
- void __init early_snp_set_memory_private(unsigned long vaddr, unsigned long paddr,
--					 unsigned int npages);
-+					 unsigned long npages);
- void __init early_snp_set_memory_shared(unsigned long vaddr, unsigned long paddr,
--					unsigned int npages);
-+					unsigned long npages);
- void __init snp_prep_memory(unsigned long paddr, unsigned int sz, enum psc_op op);
--void snp_set_memory_shared(unsigned long vaddr, unsigned int npages);
--void snp_set_memory_private(unsigned long vaddr, unsigned int npages);
-+void snp_set_memory_shared(unsigned long vaddr, unsigned long npages);
-+void snp_set_memory_private(unsigned long vaddr, unsigned long npages);
- void snp_set_wakeup_secondary_cpu(void);
- bool snp_init(struct boot_params *bp);
- void __init __noreturn snp_abort(void);
-@@ -212,12 +212,12 @@ static inline int pvalidate(unsigned long vaddr, bool rmp_psize, bool validate)
- static inline int rmpadjust(unsigned long vaddr, bool rmp_psize, unsigned long attrs) { return 0; }
- static inline void setup_ghcb(void) { }
- static inline void __init
--early_snp_set_memory_private(unsigned long vaddr, unsigned long paddr, unsigned int npages) { }
-+early_snp_set_memory_private(unsigned long vaddr, unsigned long paddr, unsigned long npages) { }
- static inline void __init
--early_snp_set_memory_shared(unsigned long vaddr, unsigned long paddr, unsigned int npages) { }
-+early_snp_set_memory_shared(unsigned long vaddr, unsigned long paddr, unsigned long npages) { }
- static inline void __init snp_prep_memory(unsigned long paddr, unsigned int sz, enum psc_op op) { }
--static inline void snp_set_memory_shared(unsigned long vaddr, unsigned int npages) { }
--static inline void snp_set_memory_private(unsigned long vaddr, unsigned int npages) { }
-+static inline void snp_set_memory_shared(unsigned long vaddr, unsigned long npages) { }
-+static inline void snp_set_memory_private(unsigned long vaddr, unsigned long npages) { }
- static inline void snp_set_wakeup_secondary_cpu(void) { }
- static inline bool snp_init(struct boot_params *bp) { return false; }
- static inline void snp_abort(void) { }
+-/* SNP Page State Change NAE event */
+-#define VMGEXIT_PSC_MAX_ENTRY		253
++/*
++ * SNP Page State Change NAE event
++ *   The VMGEXIT_PSC_MAX_ENTRY determines the size of the PSC structure, which
++ *   is a local stack variable in set_pages_state(). Do not increase this value
++ *   without evaluating the impact to stack usage.
++ */
++#define VMGEXIT_PSC_MAX_ENTRY		64
+ 
+ struct psc_hdr {
+ 	u16 cur_entry;
 diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
-index b031244d6d2d..108bbae59c35 100644
+index 108bbae59c35..7b0144acd7bf 100644
 --- a/arch/x86/kernel/sev.c
 +++ b/arch/x86/kernel/sev.c
-@@ -645,7 +645,7 @@ static u64 __init get_jump_table_addr(void)
- 	return ret;
- }
- 
--static void pvalidate_pages(unsigned long vaddr, unsigned int npages, bool validate)
-+static void pvalidate_pages(unsigned long vaddr, unsigned long npages, bool validate)
- {
- 	unsigned long vaddr_end;
- 	int rc;
-@@ -662,7 +662,7 @@ static void pvalidate_pages(unsigned long vaddr, unsigned int npages, bool valid
- 	}
- }
- 
--static void __init early_set_pages_state(unsigned long paddr, unsigned int npages, enum psc_op op)
-+static void __init early_set_pages_state(unsigned long paddr, unsigned long npages, enum psc_op op)
- {
- 	unsigned long paddr_end;
- 	u64 val;
-@@ -701,7 +701,7 @@ static void __init early_set_pages_state(unsigned long paddr, unsigned int npage
- }
- 
- void __init early_snp_set_memory_private(unsigned long vaddr, unsigned long paddr,
--					 unsigned int npages)
-+					 unsigned long npages)
- {
- 	/*
- 	 * This can be invoked in early boot while running identity mapped, so
-@@ -723,7 +723,7 @@ void __init early_snp_set_memory_private(unsigned long vaddr, unsigned long padd
- }
- 
- void __init early_snp_set_memory_shared(unsigned long vaddr, unsigned long paddr,
--					unsigned int npages)
-+					unsigned long npages)
- {
- 	/*
- 	 * This can be invoked in early boot while running identity mapped, so
-@@ -879,7 +879,7 @@ static void __set_pages_state(struct snp_psc_desc *data, unsigned long vaddr,
- 		sev_es_terminate(SEV_TERM_SET_LINUX, GHCB_TERM_PSC);
- }
- 
--static void set_pages_state(unsigned long vaddr, unsigned int npages, int op)
-+static void set_pages_state(unsigned long vaddr, unsigned long npages, int op)
+@@ -882,11 +882,7 @@ static void __set_pages_state(struct snp_psc_desc *data, unsigned long vaddr,
+ static void set_pages_state(unsigned long vaddr, unsigned long npages, int op)
  {
  	unsigned long vaddr_end, next_vaddr;
- 	struct snp_psc_desc *desc;
-@@ -904,7 +904,7 @@ static void set_pages_state(unsigned long vaddr, unsigned int npages, int op)
- 	kfree(desc);
+-	struct snp_psc_desc *desc;
+-
+-	desc = kmalloc(sizeof(*desc), GFP_KERNEL_ACCOUNT);
+-	if (!desc)
+-		panic("SNP: failed to allocate memory for PSC descriptor\n");
++	struct snp_psc_desc desc;
+ 
+ 	vaddr = vaddr & PAGE_MASK;
+ 	vaddr_end = vaddr + (npages << PAGE_SHIFT);
+@@ -896,12 +892,10 @@ static void set_pages_state(unsigned long vaddr, unsigned long npages, int op)
+ 		next_vaddr = min_t(unsigned long, vaddr_end,
+ 				   (VMGEXIT_PSC_MAX_ENTRY * PAGE_SIZE) + vaddr);
+ 
+-		__set_pages_state(desc, vaddr, next_vaddr, op);
++		__set_pages_state(&desc, vaddr, next_vaddr, op);
+ 
+ 		vaddr = next_vaddr;
+ 	}
+-
+-	kfree(desc);
  }
  
--void snp_set_memory_shared(unsigned long vaddr, unsigned int npages)
-+void snp_set_memory_shared(unsigned long vaddr, unsigned long npages)
- {
- 	if (!cc_platform_has(CC_ATTR_GUEST_SEV_SNP))
- 		return;
-@@ -914,7 +914,7 @@ void snp_set_memory_shared(unsigned long vaddr, unsigned int npages)
- 	set_pages_state(vaddr, npages, SNP_PAGE_STATE_SHARED);
- }
- 
--void snp_set_memory_private(unsigned long vaddr, unsigned int npages)
-+void snp_set_memory_private(unsigned long vaddr, unsigned long npages)
- {
- 	if (!cc_platform_has(CC_ATTR_GUEST_SEV_SNP))
- 		return;
+ void snp_set_memory_shared(unsigned long vaddr, unsigned long npages)
 -- 
 2.40.1
 
