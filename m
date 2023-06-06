@@ -2,44 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E9787233F0
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 02:04:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 263CC7233F6
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 02:08:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232990AbjFFAEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 20:04:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34762 "EHLO
+        id S232967AbjFFAID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 20:08:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230376AbjFFAEn (ORCPT
+        with ESMTP id S230328AbjFFAIC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 20:04:43 -0400
-Received: from relay01.th.seeweb.it (relay01.th.seeweb.it [5.144.164.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B54FF7
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 17:04:40 -0700 (PDT)
-Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Mon, 5 Jun 2023 20:08:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BAB0FD;
+        Mon,  5 Jun 2023 17:08:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 3E8DB201D5;
-        Tue,  6 Jun 2023 02:04:36 +0200 (CEST)
-Date:   Tue, 6 Jun 2023 02:04:34 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
-Cc:     robdclark@gmail.com, sean@poorly.run, swboyd@chromium.org,
-        dianders@chromium.org, vkoul@kernel.org, daniel@ffwll.ch,
-        airlied@gmail.com, agross@kernel.org, dmitry.baryshkov@linaro.org,
-        andersson@kernel.org, quic_abhinavk@quicinc.com,
-        quic_jesszhan@quicinc.com, quic_sbillaka@quicinc.com,
-        freedreno@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v15] drm/msm/dpu: add DSC blocks to the catalog of
- MSM8998 and SC8180X
-Message-ID: <vuukfepyik4jmtotfwv2lgwvpysn5eijqkxabxtjottgnst2m4@tyy2sk2yhm7i>
-References: <1686009494-25127-1-git-send-email-quic_khsieh@quicinc.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 17B1F62607;
+        Tue,  6 Jun 2023 00:08:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61402C433EF;
+        Tue,  6 Jun 2023 00:08:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686010080;
+        bh=wpeSJUE5QEvFvZzvYO7sZqyorFppcAZOUTc84L3tFCI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=BG/FmoU//ibDu795ITfA6MsApJDi1/9mSw7ndJ/XWisFIdggLUH37f5fO0jqCByyE
+         e9q0oQCM4jeK81z1vgjcPNjK649lljorBFq6H1To/0RFYfHlB02BG2kUH8oK9M4InV
+         ra9upkMWHGVYdGcf7TfpjdwAmRq4M+VabGfo4xJmhh/cn8vdAM+UxIkZ87R3F9d2vY
+         /LI2hhYwtMI13AtP5PR9/EkRZI/7R8AU9mjoQfozjWT2IJbEBeoUh7jGbQL3QubxTQ
+         YshfQvVxcZ7yX6uOueglZX/CNwvB3ncbzBeEjNyA4UiryYF1Sx0G2jUi0vTUJvusLF
+         cVLkp1eayBJew==
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-4effb818c37so6836990e87.3;
+        Mon, 05 Jun 2023 17:08:00 -0700 (PDT)
+X-Gm-Message-State: AC+VfDxL2o8ZDcsIFcjLt9Skzt/KgvBcKMkvILIvpOR+C8TH4/zsaWwl
+        VqQ7oHsKXus27V06vOOP4Xf0nPRAEtM1A/90S6Q=
+X-Google-Smtp-Source: ACHHUZ4ZVGiL4jJdnFd4wLN6tDyvtSbWfHE1VBy/hxyNjsO5/GhsdlLQUzqS8cYUSOneZdzV9tZDOc6rm6XPDWR4khs=
+X-Received: by 2002:a19:c512:0:b0:4ec:9ef9:e3d with SMTP id
+ w18-20020a19c512000000b004ec9ef90e3dmr245870lfe.26.1686010078423; Mon, 05 Jun
+ 2023 17:07:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1686009494-25127-1-git-send-email-quic_khsieh@quicinc.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+References: <20230602091839.743798-1-linan666@huaweicloud.com>
+In-Reply-To: <20230602091839.743798-1-linan666@huaweicloud.com>
+From:   Song Liu <song@kernel.org>
+Date:   Mon, 5 Jun 2023 17:07:46 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW4y5AafocO9imHOVbTteiWMdPFh0QrS6KmFMsMvHCvvtw@mail.gmail.com>
+Message-ID: <CAPhsuW4y5AafocO9imHOVbTteiWMdPFh0QrS6KmFMsMvHCvvtw@mail.gmail.com>
+Subject: Re: [PATCH v7 0/2] raid10 bugfix
+To:     linan666@huaweicloud.com
+Cc:     neilb@suse.de, linux-raid@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linan122@huawei.com,
+        yukuai3@huawei.com, yi.zhang@huawei.com, houtao1@huawei.com,
+        yangerkun@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -48,83 +65,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SC8180 aleady has it?
+On Fri, Jun 2, 2023 at 2:22=E2=80=AFAM <linan666@huaweicloud.com> wrote:
+>
+> From: Li Nan <linan122@huawei.com>
+>
+> Changes in v7:
+>  - in patch 1, change "fail" to "fails".
 
-On 2023-06-05 16:58:14, Kuogee Hsieh wrote:
-> From: Abhinav Kumar <quic_abhinavk@quicinc.com>
-> 
-> Some platforms have DSC blocks which have not been declared in the catalog.
-> Complete DSC 1.1 support for all platforms by adding the missing blocks to
-> MSM8998 and SC8180X.
-> 
-> Changes in v9:
-> -- add MSM8998 and SC8180x to commit title
-> 
-> Changes in v10:
-> -- fix grammar at commit text
-> 
-> Changes in v12:
-> -- fix "titil" with "title" at changes in v9
-> 
-> Changes in v14:
-> -- "dsc" tp "DSC" at commit title
-> 
-> Changes in v15:
-> -- fix merge conflicts at dpu_5_1_sc8180x.h
-> 
-> Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
-> ---
->  drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h | 7 +++++++
->  drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h | 2 ++
->  2 files changed, 9 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
-> index 3c732a0..7d0d0e7 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
-> @@ -126,6 +126,11 @@ static const struct dpu_pingpong_cfg msm8998_pp[] = {
->  			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 15)),
->  };
->  
-> +static const struct dpu_dsc_cfg msm8998_dsc[] = {
-> +	DSC_BLK("dsc_0", DSC_0, 0x80000, 0),
-> +	DSC_BLK("dsc_1", DSC_1, 0x80400, 0),
-> +};
-> +
->  static const struct dpu_dspp_cfg msm8998_dspp[] = {
->  	DSPP_BLK("dspp_0", DSPP_0, 0x54000, DSPP_SC7180_MASK,
->  		 &msm8998_dspp_sblk),
-> @@ -199,6 +204,8 @@ const struct dpu_mdss_cfg dpu_msm8998_cfg = {
->  	.dspp = msm8998_dspp,
->  	.pingpong_count = ARRAY_SIZE(msm8998_pp),
->  	.pingpong = msm8998_pp,
-> +	.dsc_count = ARRAY_SIZE(msm8998_dsc),
-> +	.dsc = msm8998_dsc,
->  	.intf_count = ARRAY_SIZE(msm8998_intf),
->  	.intf = msm8998_intf,
->  	.vbif_count = ARRAY_SIZE(msm8998_vbif),
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
-> index 8ed2b263..b5c575c 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
-> @@ -230,6 +230,8 @@ const struct dpu_mdss_cfg dpu_sc8180x_cfg = {
->  	.dsc = sc8180x_dsc,
-    ^^^^^^^^^^^^^^^^^^
+Applied v7 to md-next.
 
->  	.pingpong_count = ARRAY_SIZE(sc8180x_pp),
->  	.pingpong = sc8180x_pp,
-> +	.dsc_count = ARRAY_SIZE(sc8180x_dsc),
-> +	.dsc = sc8180x_dsc,
-
-NAK.
-
-- Marijn
-
->  	.merge_3d_count = ARRAY_SIZE(sc8180x_merge_3d),
->  	.merge_3d = sc8180x_merge_3d,
->  	.intf_count = ARRAY_SIZE(sc8180x_intf),
-> -- 
-> 2.7.4
-> 
+Thanks,
+Song
