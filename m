@@ -2,144 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C0E07248D5
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 18:19:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B8FD7248D0
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 18:18:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233277AbjFFQTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 12:19:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52846 "EHLO
+        id S233283AbjFFQSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 12:18:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233549AbjFFQTQ (ORCPT
+        with ESMTP id S238525AbjFFQRb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 12:19:16 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA3EB10F7
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 09:19:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686068355; x=1717604355;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=U4b+1goI0to0eyH7X0X8IORTd4oXQSsOoP6CweXb0G4=;
-  b=Kt1G1a0yaOmVxQ4jnxOsGcl6JNNvp31kq28PMVAl56hQcDVEH7htRVE7
-   czhBuFZkVcDf1Op965awzdyx1fNPpES1g5m4y/sQuUgX/K0pvf6MoMKPd
-   WgJ7e0YaiRVgchiHuaENDMcBJY6xMtJ/z9bJHcbKuXlHuN9gs7XcZ6Fqt
-   NIYOubdz4fWS6LoVHSnHfOQOBUDsgcd5Y8hTXyZ7LLW8LvVS+aVCfPojO
-   HjrQDXIDcnTN6uQqjTxubcV58TEMBAxvSvZwd7/xuo7pmaGRvggY5Bnoo
-   Ie4pLqL/QaoZ6dfM3lelyB4VjxYzEYpkwVuQOqAQsjGbM9JQ8wK3nJjM+
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="354221490"
-X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
-   d="scan'208";a="354221490"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 09:16:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="703221733"
-X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
-   d="scan'208";a="703221733"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga007.jf.intel.com with ESMTP; 06 Jun 2023 09:16:32 -0700
-Received: from [10.212.191.33] (kliang2-mobl1.ccr.corp.intel.com [10.212.191.33])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id C2417580377;
-        Tue,  6 Jun 2023 09:16:30 -0700 (PDT)
-Message-ID: <3c187521-0686-1204-7b3e-e8f183c50938@linux.intel.com>
-Date:   Tue, 6 Jun 2023 12:16:29 -0400
+        Tue, 6 Jun 2023 12:17:31 -0400
+Received: from frasgout11.his.huawei.com (unknown [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6363F19B5;
+        Tue,  6 Jun 2023 09:17:17 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4QbFj23984z9v7g4;
+        Wed,  7 Jun 2023 00:06:46 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwBH+D7jW39k6f4OAw--.4034S2;
+        Tue, 06 Jun 2023 17:16:47 +0100 (CET)
+Message-ID: <a662955b402126c79cc287299a749d706406ff8f.camel@huaweicloud.com>
+Subject: Re: [PATCH v11 0/4] evm: Do HMAC of multiple per LSM xattrs for new
+ inodes
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>, dmitry.kasatkin@gmail.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        casey@schaufler-ca.com
+Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        bpf@vger.kernel.org, kpsingh@kernel.org, keescook@chromium.org,
+        nicolas.bouchinet@clip-os.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Tue, 06 Jun 2023 18:16:31 +0200
+In-Reply-To: <276a89395a11bf2c38fc2b24bdfd8a62f1430199.camel@linux.ibm.com>
+References: <20230603191518.1397490-1-roberto.sassu@huaweicloud.com>
+         <276a89395a11bf2c38fc2b24bdfd8a62f1430199.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH V2 1/6] perf/x86/intel: Add Grand Ridge and Sierra Forest
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     mingo@redhat.com, acme@kernel.org, linux-kernel@vger.kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, namhyung@kernel.org, irogers@google.com,
-        adrian.hunter@intel.com, ak@linux.intel.com, eranian@google.com,
-        alexey.v.bayduraev@linux.intel.com, tinghao.zhang@intel.com
-References: <20230522113040.2329924-1-kan.liang@linux.intel.com>
- <2b2e7308-edeb-2977-596a-f638d19174d6@linux.intel.com>
- <20230606132432.GD905437@hirez.programming.kicks-ass.net>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <20230606132432.GD905437@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: GxC2BwBH+D7jW39k6f4OAw--.4034S2
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYb7kC6x804xWl14x267AKxVW5JVWrJwAF
+        c2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII
+        0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xv
+        wVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjc
+        xK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG
+        64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r
+        1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kI
+        c2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
+        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkG
+        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Gr0_
+        Cr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07UZ18
+        PUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAABF1jj45LyAADs6
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023-06-06 9:24 a.m., Peter Zijlstra wrote:
-> On Tue, Jun 06, 2023 at 08:42:42AM -0400, Liang, Kan wrote:
->> Hi Peter,
->>
->> On 2023-05-22 7:30 a.m., kan.liang@linux.intel.com wrote:
->>> From: Kan Liang <kan.liang@linux.intel.com>
->>>
->>> The Grand Ridge and Sierra Forest are successors to Snow Ridge. They
->>> both have Crestmont core. From the core PMU's perspective, they are
->>> similar to the e-core of MTL. The only difference is the LBR event
->>> logging feature, which will be implemented in the following patches.
->>>
->>> Create a non-hybrid PMU setup for Grand Ridge and Sierra Forest.
->>>
->>> Reviewed-by: Andi Kleen <ak@linux.intel.com>
->>> Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
->>> ---
->>>
->>
->>
->> Gentle ping.
->>
->> Do you have any comments for the patch set?
->>
->> The patch set based on the perf/core branch which doesn't
->> include the latest fix, 90befef5a9e8 ("perf/x86: Fix missing sample size
->> update on AMD BRS").
->> https://lore.kernel.org/lkml/2f09023a-cccb-35df-da0a-d245ee5238be@linux.intel.com/
->>
->> Should I rebase it on the perf/urgent and send the V3?
->>
+On Tue, 2023-06-06 at 12:09 -0400, Mimi Zohar wrote:
+> Hi Roberto,
 > 
-> I can pull urgent into perf/core, but:
+> Based on which git repo/branch does this patch set apply?  In the
+> future please include the "--base" option.
 
-Thanks.
+Hi Mimi
 
-> 
->>> +	case INTEL_FAM6_GRANDRIDGE:
->>> +	case INTEL_FAM6_SIERRAFOREST_X:
->                         ^^^^^^^^^^^^^^^
-> 
-> Those are just plain wrong; please fix up the intel-family.h thing like
-> suggested earlier in this thread.
->> And Tony, please no more of that platform name nonsense.. we want uarch
-> names for a reason, so that enums like the above become something
-> sensible like:
-> 
-> 	case INTEL_FAM6_ATOM_CRESTMONT:
-> 	case INTEL_FAM6_ATOM_CRESTMONT_X:
-> 
-> and now it's super obvious why they're grouped.
-> 
->>> +		pr_cont("Crestmont events, ");
+yes, sorry, I forgot to add this information.
 
-The Sierra Forest should not be a platform name. I think it's the code
-name of the processor.
+It applies on:
 
-The problem is that the uarch name doesn't work for the hybrid, since it
-has different uarchs in the same processors. To make the naming rules
-consistent among big core, atom, and hybrid, maybe we should use the
-code name of the processor in intel-family.h.
+https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/lsm.git/log/?h=next
 
-I will propose a patch to update the rules of using the processor name.
-I think we may want to have further discussion there.
+plus:
 
-Thanks,
-Kan
+https://github.com/cschaufler/smack-next/commits/next
+
+Roberto
+
