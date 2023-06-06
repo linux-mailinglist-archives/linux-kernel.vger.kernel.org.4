@@ -2,66 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 994BC724721
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 17:00:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8104D724723
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 17:00:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233707AbjFFPAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 11:00:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60478 "EHLO
+        id S234744AbjFFPA4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 11:00:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237003AbjFFPAN (ORCPT
+        with ESMTP id S237570AbjFFPAw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 11:00:13 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F397B10D4;
-        Tue,  6 Jun 2023 07:59:47 -0700 (PDT)
+        Tue, 6 Jun 2023 11:00:52 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5254F199A;
+        Tue,  6 Jun 2023 08:00:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686063587; x=1717599587;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=M4igqU7hiOeVhMOHNl6mFZsrtA/dJjpfywViepYmzqc=;
-  b=lB8B2hTskR1DnarZx5y1aoGO8vBcdtRHwPKDaFByZ75u+Gk3ULk//UDG
-   bKiaBp9aw5XsDyMsze+VU4H5GvcC1rLwi0gos9NAD6ceCHDteYuOVu68z
-   v/dgdy3XC13GS873RWeprGzd8JBidrBZiUat6UrfKyHlT5nyBjbzDqWca
-   H2jwkUfhcKYvF75+ITD3boutXHbyEW56D1meAdZrkNDi27wEL+Poka9xC
-   RnZbwnGaLY4LkXvi6s5MwiaYG9NVtETdK12Uc1RACxqQayk+5pe3CxsqM
-   Wf5vljkQHhC0MjR/xPcZ9GKHZA8lvblhMJm3VHfoVVX322vjnrofwsK6g
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="336323500"
+  t=1686063632; x=1717599632;
+  h=date:from:to:subject:message-id:references:mime-version:
+   in-reply-to;
+  bh=Wlt2kIy2P85sLJKYJcYLugIw7E4/N60edZHtxt3m85U=;
+  b=GRl5JEmaL42TojDnT2ogGotMuBqFe2i+QXkA5R9q2NaqeVo2eLzKrx/w
+   WLr6dr2+veTEFt/AdiAfJypKIaw0yOIaJ6Uk6uIw5vRnE4HKgdZO21fxx
+   nOKg91idLQ8Jh2s/sLRTbrEyWRlB1z5wd1nfiQq1Rqd+ym+vfal0e8EfB
+   2LyNEJt+iUD/JKzznCqUidNs/jv2zsQSRxKE5iZOAVaWi7gJSWOl2C8yR
+   ja08Qabfk3HjLeuyCB5BJ0WjdYA9Efzgt+6p8u07urMAzV5YxWTN4c0IT
+   IyiY64WMD2oOC6DfuqMbUjeNonhYQfAaqrLd7EcdHVxKLtHMLBbffiPDp
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="337052481"
 X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
-   d="scan'208";a="336323500"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 07:57:57 -0700
+   d="scan'208";a="337052481"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 07:58:39 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="712237651"
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="955791278"
 X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
-   d="scan'208";a="712237651"
+   d="scan'208";a="955791278"
 Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga007.fm.intel.com with ESMTP; 06 Jun 2023 07:57:54 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 06 Jun 2023 07:58:37 -0700
 Received: from andy by smile.fi.intel.com with local (Exim 4.96)
         (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1q6Y89-001gOW-1Y;
-        Tue, 06 Jun 2023 17:57:53 +0300
-Date:   Tue, 6 Jun 2023 17:57:53 +0300
+        id 1q6Y8q-001gP3-1g;
+        Tue, 06 Jun 2023 17:58:36 +0300
+Date:   Tue, 6 Jun 2023 17:58:36 +0300
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Kent Gibson <warthog618@gmail.com>, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH] gpiolib: demote the hogging log messages to debug
-Message-ID: <ZH9JcR2gS6n67eHX@smile.fi.intel.com>
-References: <20230605125248.279921-1-brgl@bgdev.pl>
+To:     Jens Axboe <axboe@kernel.dk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/9] pktdvd: Clean up the driver
+Message-ID: <ZH9JnPAL8x2GPSV3@smile.fi.intel.com>
+References: <20230310164549.22133-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230605125248.279921-1-brgl@bgdev.pl>
+In-Reply-To: <20230310164549.22133-1-andriy.shevchenko@linux.intel.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,101 +66,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 05, 2023 at 02:52:48PM +0200, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> 
-> Drivers should be silent when they work correctly. There's no reason to
-> emit info messages when GPIO lines are hogged. Demote the message to
-> debug.
+On Fri, Mar 10, 2023 at 06:45:40PM +0200, Andy Shevchenko wrote:
+> Some cleanups to the recently resurrected driver.
 
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Anybody to pick this up, please?
 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> Suggested-by: Kent Gibson <warthog618@gmail.com>
-> ---
->  drivers/gpio/gpiolib.c |  2 +-
->  drivers/of/unittest.c  | 16 ++++++++--------
->  2 files changed, 9 insertions(+), 9 deletions(-)
+> v2:
+> - added tags (Greg)
 > 
-> diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-> index a7220e04a93e..e4515bda8915 100644
-> --- a/drivers/gpio/gpiolib.c
-> +++ b/drivers/gpio/gpiolib.c
-> @@ -4243,7 +4243,7 @@ int gpiod_hog(struct gpio_desc *desc, const char *name,
->  	/* Mark GPIO as hogged so it can be identified and removed later */
->  	set_bit(FLAG_IS_HOGGED, &desc->flags);
->  
-> -	gpiod_info(desc, "hogged as %s%s\n",
-> +	gpiod_dbg(desc, "hogged as %s%s\n",
->  		(dflags & GPIOD_FLAGS_BIT_DIR_OUT) ? "output" : "input",
->  		(dflags & GPIOD_FLAGS_BIT_DIR_OUT) ?
->  		  (dflags & GPIOD_FLAGS_BIT_DIR_VAL) ? "/high" : "/low" : "");
-> diff --git a/drivers/of/unittest.c b/drivers/of/unittest.c
-> index 2191c0136531..0060334a98a7 100644
-> --- a/drivers/of/unittest.c
-> +++ b/drivers/of/unittest.c
-> @@ -1849,19 +1849,19 @@ static void __init of_unittest_overlay_gpio(void)
->  	 * driver is registered
->  	 */
->  
-> -	EXPECT_BEGIN(KERN_INFO,
-> +	EXPECT_BEGIN(KERN_DEBUG,
->  		     "gpio-<<int>> (line-B-input): hogged as input\n");
->  
-> -	EXPECT_BEGIN(KERN_INFO,
-> +	EXPECT_BEGIN(KERN_DEBUG,
->  		     "gpio-<<int>> (line-A-input): hogged as input\n");
->  
->  	ret = platform_driver_register(&unittest_gpio_driver);
->  	if (unittest(ret == 0, "could not register unittest gpio driver\n"))
->  		return;
->  
-> -	EXPECT_END(KERN_INFO,
-> +	EXPECT_END(KERN_DEBUG,
->  		   "gpio-<<int>> (line-A-input): hogged as input\n");
-> -	EXPECT_END(KERN_INFO,
-> +	EXPECT_END(KERN_DEBUG,
->  		   "gpio-<<int>> (line-B-input): hogged as input\n");
->  
->  	unittest(probe_pass_count + 2 == unittest_gpio_probe_pass_count,
-> @@ -1888,7 +1888,7 @@ static void __init of_unittest_overlay_gpio(void)
->  	probe_pass_count = unittest_gpio_probe_pass_count;
->  	chip_request_count = unittest_gpio_chip_request_count;
->  
-> -	EXPECT_BEGIN(KERN_INFO,
-> +	EXPECT_BEGIN(KERN_DEBUG,
->  		     "gpio-<<int>> (line-D-input): hogged as input\n");
->  
->  	/* overlay_gpio_03 contains gpio node and child gpio hog node */
-> @@ -1896,7 +1896,7 @@ static void __init of_unittest_overlay_gpio(void)
->  	unittest(overlay_data_apply("overlay_gpio_03", NULL),
->  		 "Adding overlay 'overlay_gpio_03' failed\n");
->  
-> -	EXPECT_END(KERN_INFO,
-> +	EXPECT_END(KERN_DEBUG,
->  		   "gpio-<<int>> (line-D-input): hogged as input\n");
->  
->  	unittest(probe_pass_count + 1 == unittest_gpio_probe_pass_count,
-> @@ -1935,7 +1935,7 @@ static void __init of_unittest_overlay_gpio(void)
->  	 *   - processing gpio for overlay_gpio_04b
->  	 */
->  
-> -	EXPECT_BEGIN(KERN_INFO,
-> +	EXPECT_BEGIN(KERN_DEBUG,
->  		     "gpio-<<int>> (line-C-input): hogged as input\n");
->  
->  	/* overlay_gpio_04b contains child gpio hog node */
-> @@ -1943,7 +1943,7 @@ static void __init of_unittest_overlay_gpio(void)
->  	unittest(overlay_data_apply("overlay_gpio_04b", NULL),
->  		 "Adding overlay 'overlay_gpio_04b' failed\n");
->  
-> -	EXPECT_END(KERN_INFO,
-> +	EXPECT_END(KERN_DEBUG,
->  		   "gpio-<<int>> (line-C-input): hogged as input\n");
->  
->  	unittest(chip_request_count + 1 == unittest_gpio_chip_request_count,
+> Andy Shevchenko (9):
+>   pktcdvd: Get rid of custom printing macros
+>   pktcdvd: replace sscanf() by kstrtoul()
+>   pktcdvd: use sysfs_emit() to instead of scnprintf()
+>   pktcdvd: Get rid of pkt_seq_show() forward declaration
+>   pktcdvd: Drop redundant castings for sector_t
+>   pktcdvd: Use DEFINE_SHOW_ATTRIBUTE() to simplify code
+>   pktcdvd: Use put_unaligned_be16() and get_unaligned_be16()
+>   pktcdvd: Get rid of redundant 'else'
+>   pktcdvd: Sort headers
+> 
+>  drivers/block/pktcdvd.c      | 525 +++++++++++++++++------------------
+>  include/linux/pktcdvd.h      |   1 -
+>  include/uapi/linux/pktcdvd.h |   1 +
+>  3 files changed, 257 insertions(+), 270 deletions(-)
+> 
 > -- 
-> 2.39.2
+> 2.39.1
 > 
 
 -- 
