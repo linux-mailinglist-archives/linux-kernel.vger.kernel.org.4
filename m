@@ -2,74 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4736724D8A
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 21:54:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A86A9724D9F
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 21:59:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234213AbjFFTye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 15:54:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41160 "EHLO
+        id S239621AbjFFT7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 15:59:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234210AbjFFTyV (ORCPT
+        with ESMTP id S239217AbjFFT73 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 15:54:21 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 618AD10F0
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 12:54:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686081260; x=1717617260;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=IpgW2kKx9v9WenipgVcw+7ushaFee/ShsBpYaNYBoBI=;
-  b=gbuDVQfQ3ccBr0CPaELWWemX8lpmoePPxV5ue8ZV9vOGfyaSTLuDBrdz
-   M00ImtrRKypxY3rKVHV2whCkYeGMhbhnQWHez+eRcQRRCJ2qGWn30D0ZG
-   m43B4CESVER4SJzJs5mF023uC6WlS9Lorz9w/GauW5GjnAIIsVoaKuebW
-   /eNwpSE4thVJ9R3U7PaqoPthTclAyhsmeoitLdE+9dClSq7GmZ7OsNocd
-   34+GKWx0odvs3ISEXBjjYAoqmiDAfSVPBx9GfBz73vMETzCZMG8lUCiiT
-   PWS3p7+gmAPP1v8lbRleZZC0TQEwu/pVV8KbfpigST6zzEyk5M4ehYOJb
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="341435282"
-X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
-   d="scan'208";a="341435282"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 12:54:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="853563714"
-X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
-   d="scan'208";a="853563714"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga001.fm.intel.com with ESMTP; 06 Jun 2023 12:54:19 -0700
-Received: from [10.212.191.33] (kliang2-mobl1.ccr.corp.intel.com [10.212.191.33])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 7009C580377;
-        Tue,  6 Jun 2023 12:54:17 -0700 (PDT)
-Message-ID: <8088ef88-d440-fd7b-16c8-92690a656264@linux.intel.com>
-Date:   Tue, 6 Jun 2023 15:54:16 -0400
+        Tue, 6 Jun 2023 15:59:29 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DFDF10F0
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 12:59:27 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id BDEFB5FD0C;
+        Tue,  6 Jun 2023 22:59:25 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1686081565;
+        bh=HsbilSNXGprd3byyDOvNssmOWdlSZHdBWqrnSufFSSw=;
+        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+        b=ZZU7Z6raDP6idx0UdSOQZRgPB1iO0AILrTTyExr92YK5bHZfxEpVbtSiu4qliHENJ
+         hmGzSGX2dnvidjfQyZhyDZkfIqciZLiliur0qlw+FpyIZrMPGmaY3JFscc0Yue3NZc
+         cO1rVDziwSPv7p50EkhIWA7jl+j9CeE/U3hGfzb9xpRcMiWeKQBb4Jb8xr9i+nr4yx
+         cvcD/P3/c313g/4NMHlEyjT8c1j6ozzvvCJI8Je4gj3pahH+Ca2k1p/qZom5fwS2vp
+         JJxYUUc0bl3pZJY/T2vZiPjGz5HVFqf1qELQlqx3JivNkzkYBVHxY/iRLfiPFRyJ9V
+         c4GC7fklO9sAg==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Tue,  6 Jun 2023 22:59:25 +0300 (MSK)
+Message-ID: <2ed06841-6c9f-46c9-2d2d-2daffb0a9010@sberdevices.ru>
+Date:   Tue, 6 Jun 2023 22:54:32 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH V2 1/6] perf/x86/intel: Add Grand Ridge and Sierra Forest
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v1] mtd: rawnand: meson: waiting w/o wired ready/busy pin
 Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     mingo@redhat.com, acme@kernel.org, linux-kernel@vger.kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, namhyung@kernel.org, irogers@google.com,
-        adrian.hunter@intel.com, ak@linux.intel.com, eranian@google.com,
-        alexey.v.bayduraev@linux.intel.com, tinghao.zhang@intel.com
-References: <20230522113040.2329924-1-kan.liang@linux.intel.com>
- <2b2e7308-edeb-2977-596a-f638d19174d6@linux.intel.com>
- <20230606132432.GD905437@hirez.programming.kicks-ass.net>
- <3c187521-0686-1204-7b3e-e8f183c50938@linux.intel.com>
- <20230606181757.GB942082@hirez.programming.kicks-ass.net>
- <ea1c56f9-fc93-ff1e-2102-757e7e9c0dd7@linux.intel.com>
- <20230606193712.GY83892@hirez.programming.kicks-ass.net>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <20230606193712.GY83892@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
+To:     Liang Yang <liang.yang@amlogic.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+CC:     <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
+        <linux-mtd@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+References: <20230606195128.83432-1-AVKrasnov@sberdevices.ru>
+From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
+In-Reply-To: <20230606195128.83432-1-AVKrasnov@sberdevices.ru>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/06/06 14:43:00 #21444531
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,68 +77,133 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 2023-06-06 3:37 p.m., Peter Zijlstra wrote:
-> On Tue, Jun 06, 2023 at 02:34:47PM -0400, Liang, Kan wrote:
->>
->>
->> On 2023-06-06 2:17 p.m., Peter Zijlstra wrote:
->>> On Tue, Jun 06, 2023 at 12:16:29PM -0400, Liang, Kan wrote:
->>>
->>>>> names for a reason, so that enums like the above become something
->>>>> sensible like:
->>>>>
->>>>> 	case INTEL_FAM6_ATOM_CRESTMONT:
->>>>> 	case INTEL_FAM6_ATOM_CRESTMONT_X:
->>>>>
->>>>> and now it's super obvious why they're grouped.
->>>>>
->>>>>>> +		pr_cont("Crestmont events, ");
->>>>
->>>> The Sierra Forest should not be a platform name. I think it's the code
->>>> name of the processor.
->>>>
->>>> The problem is that the uarch name doesn't work for the hybrid, since it
->>>> has different uarchs in the same processors. To make the naming rules
->>>> consistent among big core, atom, and hybrid, maybe we should use the
->>>> code name of the processor in intel-family.h.
->>>
->>> I obviously disagree; these are not hybrid and calling them both
->>> CRESTMONT makes *far* more sense than the random gibberish they're
->>> called now.
->>>
->>> Yes, hybrid made a complete mess of things (in many ways), but we should
->>> then not do the obvious correct thing for when we can.
->>
->> Besides hybrid, it seems there is a bigger problem for the big core.
->>
->> The big core uses the processor code name since Ice Lake. In the perf
->> code, we also uses the processor code name for the big core.
->> 	pr_cont("Icelake events, ");
+On 06.06.2023 22:51, Arseniy Krasnov wrote:
+> If there is no wired ready/busy pin, classic way to wait for command
+> completion is to use function 'nand_soft_waitrdy()'. Meson NAND has
+> special command which allows to wait for NAND_STATUS_READY bit without
+> reading status in a software loop (as 'nand_soft_waitrdy()' does). To
+> use it send this command along with NAND_CMD_STATUS, then wait for an
+> interrupt, and after interrupt send NAND_CMD_READ0. So this feature
+> allows to use interrupt driven waiting without wired ready/busy pin.
 > 
-> Yeah, it's a mess :/ Ideally that would print "Sunny Cove", but I think
-> there's userspace looking at that string :-(
-
-Yes, for the existing names, we probably cannot change it. I will try to
-only use the micro-architecture name for the future platforms in perf.
-
+> Suggested-by: Liang Yang <liang.yang@amlogic.com>
+> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+> ---
+>  drivers/mtd/nand/raw/meson_nand.c | 58 ++++++++++++++++++++++++++++++-
+>  1 file changed, 57 insertions(+), 1 deletion(-)
 > 
->> Is it OK to leave the big core as is (using processor code name), but
->> only change the name for Grand Ridge and Sierra Forest?
-> 
-> Arguably we should also rename ALDERLAKE_N to ATOM_GRACEMONT
-> 
-> 
-> We should also do something about that whole hybrid init thing, the
-> meteorlake stuff is quite a mess as well. Perhaps we can add hybrid_pmu
-> next to intel_pmu to have a better start in life for x86_pmu.
->
+> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
+> index 074e14225c06..f4c5309a9527 100644
+> --- a/drivers/mtd/nand/raw/meson_nand.c
+> +++ b/drivers/mtd/nand/raw/meson_nand.c
+> @@ -38,6 +38,7 @@
+>  #define NFC_CMD_SCRAMBLER_DISABLE	0
+>  #define NFC_CMD_SHORTMODE_DISABLE	0
+>  #define NFC_CMD_RB_INT		BIT(14)
+> +#define NFC_CMD_RB_INT_NO_PIN	((0xb << 10) | BIT(18) | BIT(16))
+>  
+>  #define NFC_CMD_GET_SIZE(x)	(((x) >> 22) & GENMASK(4, 0))
+>  
+> @@ -94,6 +95,7 @@
+>  
+>  /* nand flash controller delay 3 ns */
+>  #define NFC_DEFAULT_DELAY	3000
+> +#define NFC_NO_RB_PIN_DELAY	5
+>  
+>  #define ROW_ADDER(page, index)	(((page) >> (8 * (index))) & 0xff)
+>  #define MAX_CYCLE_ADDRS		5
+> @@ -179,6 +181,7 @@ struct meson_nfc {
+>  	u32 info_bytes;
+>  
+>  	unsigned long assigned_cs;
+> +	bool no_rb_pin;
+>  };
+>  
+>  enum {
+> @@ -392,7 +395,41 @@ static void meson_nfc_set_data_oob(struct nand_chip *nand,
+>  	}
+>  }
+>  
+> -static int meson_nfc_queue_rb(struct meson_nfc *nfc, int timeout_ms)
+> +static int meson_nfc_wait_no_rb_pin(struct meson_nfc *nfc, int timeout_ms)
+> +{
+> +	u32 cmd, cfg;
+> +
+> +	meson_nfc_cmd_idle(nfc, nfc->timing.twb);
+> +	meson_nfc_drain_cmd(nfc);
+> +	meson_nfc_wait_cmd_finish(nfc, CMD_FIFO_EMPTY_TIMEOUT);
+> +
+> +	cfg = readl(nfc->reg_base + NFC_REG_CFG);
+> +	cfg |= NFC_RB_IRQ_EN;
+> +	writel(cfg, nfc->reg_base + NFC_REG_CFG);
+> +
+> +	reinit_completion(&nfc->completion);
+> +	cmd = nfc->param.chip_select | NFC_CMD_CLE | NAND_CMD_STATUS;
+> +	writel(cmd, nfc->reg_base + NFC_REG_CMD);
+> +	meson_nfc_cmd_idle(nfc, NFC_NO_RB_PIN_DELAY);
 
-I will think about it and try to clean up the hybrid init.
+^^^
 
-> Anyway, we should really try not to make a bigger mess and try and clean
-> up where we can.
+> +
+> +	/* use the max erase time as the maximum clock for waiting R/B */
+> +	cmd = NFC_CMD_RB | NFC_CMD_RB_INT_NO_PIN | nfc->timing.tbers_max;
+> +	writel(cmd, nfc->reg_base + NFC_REG_CMD);
+> +	meson_nfc_cmd_idle(nfc, NFC_NO_RB_PIN_DELAY);
 
-Sure.
+^^^
+Liang, I've implemented "new RB_INT" way instead of 'nand_soft_waitrdy()'. There were two numbers
+2 and 5 in 'meson_nfc_cmd_idle()' as time argument (here and above). I've replaced both with
+define of 5 == NFC_NO_RB_PIN_DELAY. Is it correct? 2 and 5 were from doc?
 
-Thanks,
-Kan
+Thanks, Arseniy
+
+> +
+> +	if (!wait_for_completion_timeout(&nfc->completion,
+> +					 msecs_to_jiffies(timeout_ms)))
+> +		return -ETIMEDOUT;
+> +
+> +	cmd = nfc->param.chip_select | NFC_CMD_CLE | NAND_CMD_READ0;
+> +	writel(cmd, nfc->reg_base + NFC_REG_CMD);
+> +	meson_nfc_drain_cmd(nfc);
+> +	meson_nfc_wait_cmd_finish(nfc, CMD_FIFO_EMPTY_TIMEOUT);
+> +
+> +	return 0;
+> +}
+> +
+> +static int meson_nfc_wait_rb_pin(struct meson_nfc *nfc, int timeout_ms)
+>  {
+>  	u32 cmd, cfg;
+>  	int ret = 0;
+> @@ -420,6 +457,23 @@ static int meson_nfc_queue_rb(struct meson_nfc *nfc, int timeout_ms)
+>  	return ret;
+>  }
+>  
+> +static int meson_nfc_queue_rb(struct meson_nfc *nfc, int timeout_ms)
+> +{
+> +	if (nfc->no_rb_pin) {
+> +		/* This mode is used when there is no wired R/B pin.
+> +		 * It works like 'nand_soft_waitrdy()', but instead of
+> +		 * polling NAND_CMD_STATUS bit in the software loop,
+> +		 * it will wait for interrupt - controllers checks IO
+> +		 * bus and when it detects NAND_CMD_STATUS on it, it
+> +		 * raises interrupt. After interrupt, NAND_CMD_READ0 is
+> +		 * sent as terminator of the ready waiting procedure.
+> +		 */
+> +		return meson_nfc_wait_no_rb_pin(nfc, timeout_ms);
+> +	} else {
+> +		return meson_nfc_wait_rb_pin(nfc, timeout_ms);
+> +	}
+> +}
+> +
+>  static void meson_nfc_set_user_byte(struct nand_chip *nand, u8 *oob_buf)
+>  {
+>  	struct meson_nfc_nand_chip *meson_chip = to_meson_nand(nand);
+> @@ -1412,6 +1466,8 @@ static int meson_nfc_probe(struct platform_device *pdev)
+>  		return ret;
+>  	}
+>  
+> +	nfc->no_rb_pin = !of_property_read_bool(dev->of_node, "nand-rb");
+> +
+>  	writel(0, nfc->reg_base + NFC_REG_CFG);
+>  	ret = devm_request_irq(dev, irq, meson_nfc_irq, 0, dev_name(dev), nfc);
+>  	if (ret) {
