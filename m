@@ -2,129 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00454724078
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 13:05:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9355724069
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 13:04:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235613AbjFFLEj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 07:04:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41686 "EHLO
+        id S234500AbjFFLDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 07:03:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236236AbjFFLDM (ORCPT
+        with ESMTP id S236669AbjFFLDH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 07:03:12 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A59B1BC0;
-        Tue,  6 Jun 2023 04:00:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686049231; x=1717585231;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=3b3vmHcNenRMEV+YtNGwUxporwj/nTLjEg7K71x0dfQ=;
-  b=AcRdxOI+9OebY+UyY0Q/mUlWqU3+9MNwRzRFfYEikRRnqDf6aK6XfxMh
-   E161QxvJJ0SmtkHicbucZ1ZOzInRnZjnE+KXu22hZcULNpLyDEgtclyfo
-   mBc9rXdRJaQ7/g93RU8Y4CsWsfKPG9HQ4o91lV8LBCMiGP3+x7OgFUTVe
-   cMcy+oi1UTGiydlQa0exKeItvuqgnK7q5bLl8gVVAWqY4dSkE/Vg4wfLy
-   Z3rWZxx4+M0R/YotpWOMR7AFgoHvKcZ6WmV00zwaivls0I52G/Jhf/Okk
-   QaU7uIk9Q6rdjXEhTBZVRy/zyEFYZxhkTnkzXi5VWR1vvyQ2Z4twhPQNV
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="384944988"
-X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
-   d="scan'208";a="384944988"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 04:00:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="703119390"
-X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
-   d="scan'208";a="703119390"
-Received: from yuguen-mobl2.ger.corp.intel.com (HELO intel.com) ([10.252.57.68])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 04:00:08 -0700
-Date:   Tue, 6 Jun 2023 13:00:02 +0200
-From:   Andi Shyti <andi.shyti@linux.intel.com>
-To:     Sui Jingfeng <15330273260@189.cn>
-Cc:     Sui Jingfeng <suijingfeng@loongson.cn>,
-        Andi Shyti <andi.shyti@linux.intel.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian Konig <christian.koenig@amd.com>,
-        Pan Xinhui <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Hawking Zhang <Hawking.Zhang@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Lijo Lazar <lijo.lazar@amd.com>,
-        YiPeng Chai <YiPeng.Chai@amd.com>,
-        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        Somalapuram Amaranath <Amaranath.Somalapuram@amd.com>,
-        Bokun Zhang <Bokun.Zhang@amd.com>,
-        Ville Syrjala <ville.syrjala@linux.intel.com>,
-        Li Yi <liyi@loongson.cn>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        Abhishek Sahu <abhsahu@nvidia.com>,
-        Yi Liu <yi.l.liu@intel.com>, kvm@vger.kernel.org,
-        nouveau@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        loongson-kernel@lists.loongnix.cn, amd-gfx@lists.freedesktop.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [Intel-gfx] [PATCH v2 1/2] vgaarb: various coding style and
- comments fix
-Message-ID: <ZH8RslOfwIVf527x@ashyti-mobl2.lan>
-References: <20230604205831.3357596-1-15330273260@189.cn>
- <ZH5epG6rfTOWT6CS@ashyti-mobl2.lan>
- <f9e67fe9-a93b-75ab-1fdb-87d3783fe5fc@loongson.cn>
- <680cea2e-7984-5f26-c440-46047f4733fa@189.cn>
+        Tue, 6 Jun 2023 07:03:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2016319B3;
+        Tue,  6 Jun 2023 04:00:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 882826280D;
+        Tue,  6 Jun 2023 11:00:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7D95C433A1;
+        Tue,  6 Jun 2023 11:00:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686049219;
+        bh=FJZBvU9mZ929InzbREOPQybjQtP4GSxypUKiLaiGPYY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=f8YppWGM9pkCcQiw8BokRT2JY3X69vuGpmvJMhjP7v+Li0/uaE71ySscWjIpuV4RK
+         AhoN9TUo3jQwzL677mAtiESDt/zi+B7hK8acfqOVU7toT0lPBZ6ZTbE8rAC7Qru+7w
+         Wfffy+NLgnq8GzQJSBe8lBylVcGAbZdNjhFbKUdl1xQn9JD8FU9OQa0EZFg3/HeiJ5
+         j6BqlGeR+vNLo2nINfnlZ3o9q5CeXDbQGNeBFcsnEjUBInrraE3iVbxBLIfbcN8qtH
+         w0aeW0AUbZTwPHkcZEio7sxGoGumfZq9jkJi1Vc/KY9RusvNRYnDssU/50OOTXFz45
+         jE4m/lBQ2hP5g==
+Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2b1c30a1653so32320511fa.2;
+        Tue, 06 Jun 2023 04:00:18 -0700 (PDT)
+X-Gm-Message-State: AC+VfDwf+WejIx8A98qzFziX1i7ixfFrpJ1tUJMMD0ZtxtncUwIvlGgg
+        vVQ+Zp7RYCNatw36xwBVFIn9uGYLUEi30dG3MjQ=
+X-Google-Smtp-Source: ACHHUZ563CmkIVh5K78BzyBEHDhqyYmtPZjw56PYzfIh3cc6Z/kEJrshyqqwF2nJo0HFFVkgYROpAOqSLHtjsHRwShg=
+X-Received: by 2002:a2e:b16f:0:b0:2ad:99dd:de07 with SMTP id
+ a15-20020a2eb16f000000b002ad99ddde07mr985836ljm.16.1686049216890; Tue, 06 Jun
+ 2023 04:00:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <680cea2e-7984-5f26-c440-46047f4733fa@189.cn>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <4d7e38ff5bbc496cb794b50e1c5c83bcd2317e69.camel@huaweicloud.com>
+ <CAHk-=wj4S0t5RnJQmF_wYwv+oMTKggwdLnrA9D1uMNKq4H4byw@mail.gmail.com>
+ <CAHk-=wgCUzRNTg4fC8DF=UFnznK0M=mNUBDcsnLt7D4+HP2_1Q@mail.gmail.com> <ZH2hgrV6po9dkxi+@gondor.apana.org.au>
+In-Reply-To: <ZH2hgrV6po9dkxi+@gondor.apana.org.au>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Tue, 6 Jun 2023 13:00:05 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXFvpcKVQ2askwh-ahDRyjtN8MerjDJJBBMiTBZ1CSfZ9w@mail.gmail.com>
+Message-ID: <CAMj1kXFvpcKVQ2askwh-ahDRyjtN8MerjDJJBBMiTBZ1CSfZ9w@mail.gmail.com>
+Subject: Re: [GIT PULL] Asymmetric keys fix for v6.4-rc5
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        David Howells <dhowells@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Stefan Berger <stefanb@linux.ibm.com>, davem@davemloft.net,
+        zohar@linux.ibm.com, dmitry.kasatkin@gmail.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sui,
+On Mon, 5 Jun 2023 at 10:49, Herbert Xu <herbert@gondor.apana.org.au> wrote:
+>
+> On Fri, Jun 02, 2023 at 08:02:23PM -0400, Linus Torvalds wrote:
+> >
+> > I absolutely abhor the crypto interfaces. They all seem designed for
+> > that "external DMA engine" case that seems so horrendously pointless
+> > and slow.  In practice so few of them are that, and we have all those
+> > optimized routines for doing it all on the CPU - but have in the
+> > meantime wasted all that time and effort into copying everything,
+> > turning simple buffers into sg-bufs etc etc. The amount of indirection
+> > and "set this state in the state machine" is just nasty, and this
+> > seems to all be a prime example of it all. With some of it then
+> > randomly going through some kthread too.
+>
+> You're right.  Originally SG lists were used as the majority of
+> our input came from network packets, in the form of skb's.  They
+> are easily translated into SG lists.  This is still somewhat the
+> case for parts of the Crypto API (e.g., skcipher and ahash).
+>
+> However, for akcipher the only user of the underlying API is the
+> file in question so I absolutely agree that forcing it to go through
+> an SG list is just wrong.
+>
+> I'll change the underlying akcipher interface to take pointers
+> instead and hide the SG list stuff (along with the copying) inside
+> API.
+>
 
-On Tue, Jun 06, 2023 at 06:27:05PM +0800, Sui Jingfeng wrote:
-> Hi,
-> 
-> On 2023/6/6 10:06, Sui Jingfeng wrote:
-> > Originally, I also want to express the opinion.
-> 
-> 
-> Originally,  I want to express the same opinion as you told me.
-> 
-> Because vga_iostate_to_str() function is taking unsigned int parameter.
-> 
-> so, I think, using 'unsigned int *' type as the third parameter
-> vga_str_to_iostate() function is more suitable.
-> 
-> 
-> But this patch is too trivial, so I smash them into one patch.
+Could we do the same for the compression API? This is a major pain as
+well, and results (on my 128-core workstation) in 32 MiB permanently
+tied up in scratch buffers in the scomp-to-acomp adaptation layer
+because most of the underlying implementations are compression
+libraries operating on plain virtual addresses, and so the
+scatterlists needs to be copied into a buffer and back to perform the
+actual transformation.
 
-it does not matter. Please keep patches separated. A trivial
-patch can be ignored, however lots of trivial patches in a bigger
-series might be appreciated.
-
-Have fun!
-
-Andi
+The only user user of the async compression interface is zswap, but it
+blocks on the completion so it is actually synchronous as well.
