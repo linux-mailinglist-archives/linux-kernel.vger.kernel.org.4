@@ -2,71 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FCCB724ADF
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 20:08:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76301724AEE
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 20:09:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238091AbjFFSIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 14:08:54 -0400
+        id S236661AbjFFSJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 14:09:37 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238257AbjFFSIr (ORCPT
+        with ESMTP id S238882AbjFFSJV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 14:08:47 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7E3B10F8;
-        Tue,  6 Jun 2023 11:08:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=OrkYgbRcR8dMZ/9FqFYNlN0/B5YWJQDyiL7vTaDE328=; b=vUmMuu9PmqNqTlLjlSfOr+MRnv
-        YOVOro3cFUJRZZ6vxULcsPAhAG2+rD86+ar3HpA/xEz9Ldz9rA6INwGm3tWYMgXJMmVyq+iYl9mVj
-        heGQCpsAk4DI2qyWcuzaw1923giSGT1p0rlwfZrPQfkWwAheXNbLsRnsnwuFHM8mt+pT8AmHBuUWL
-        aWlTFxHpHoWEnbONi3+FlKC1ECUE4wkDfbGzPXRyygu2kQpbijMN2NiJAGA1aXtTxzMHUgXlaqNKc
-        Bg+jAeNPHFEFZSZhnrv8eldrtJGXR33HQSBUGOc6vhTHqU2DIJkUl8JgNXPJ1Jxt6SrMapDXJbQSR
-        /KLx4xAQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1q6b6I-00DOYP-2y; Tue, 06 Jun 2023 18:08:10 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6B0B9300129;
-        Tue,  6 Jun 2023 20:08:06 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 4A5AB2019EC9F; Tue,  6 Jun 2023 20:08:06 +0200 (CEST)
-Date:   Tue, 6 Jun 2023 20:08:06 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     keescook@chromium.org, gregkh@linuxfoundation.org,
-        pbonzini@redhat.com, linux-kernel@vger.kernel.org,
-        ojeda@kernel.org, ndesaulniers@google.com, mingo@redhat.com,
-        will@kernel.org, longman@redhat.com, boqun.feng@gmail.com,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-        joel@joelfernandes.org, josh@joshtriplett.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-        rcu@vger.kernel.org, tj@kernel.org, tglx@linutronix.de,
-        linux-toolchains@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] Lock and Pointer guards
-Message-ID: <20230606180806.GA942082@hirez.programming.kicks-ass.net>
-References: <20230526205204.861311518@infradead.org>
- <CAHk-=wg2RHZKTN29Gr7MhgYfaNtzz58wry9jCNP75LAmQ9t8-A@mail.gmail.com>
- <20230530092342.GA149947@hirez.programming.kicks-ass.net>
- <20230606094251.GA907347@hirez.programming.kicks-ass.net>
- <CAHk-=wi-RyoUhbChiVaJZoZXheAwnJ7OO=Gxe85BkPAd93TwDA@mail.gmail.com>
- <20230606134005.GE905437@hirez.programming.kicks-ass.net>
- <CAHk-=wgQ5m+SnWTYGHu0JgYXTk2dkGF+msX=ARfYoo3t1_fX9g@mail.gmail.com>
+        Tue, 6 Jun 2023 14:09:21 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9F221706;
+        Tue,  6 Jun 2023 11:08:55 -0700 (PDT)
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 356I0DjB024605;
+        Tue, 6 Jun 2023 18:08:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=4+AYMDDlmTOIo1MH2O1tfigNhM2UoeatVCosaW1kfSw=;
+ b=ci66PH2oW6EAZZs+V+gg28ut6nPxJxLjF+o+m4blmyzfya8097oHqZrouftxkNXElUfR
+ v4LiTNA4r/lkOnMmKucS8XqtWrY1710Vww0OjlF2DPDAg/1dBWgEbitphxu9ZCcVuekd
+ rFLjWANoUHggW28eMemO88qHtuNuAjZWFZp7joIr/xAppIbWFqNBz5vAZNh7VKbXELTz
+ FsXzE3GD1QKMRsuFRRudakDj8p9E0NBQDBNQIp8Zm7xRYkcjIZrSuLYt1BXfGCCLD6OF
+ 19pvKKKaMqxd9mKCZOkyvBL4ZWXltzsN9Fl5qzjfYCNGPXSoUtg4xqPXHPxRPNjkh69y Mg== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r29pn893c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Jun 2023 18:08:50 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3563LRNA032236;
+        Tue, 6 Jun 2023 18:08:21 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3qyxmyj8x9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Jun 2023 18:08:21 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 356I8I6F42140316
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 6 Jun 2023 18:08:18 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1C2FF20043;
+        Tue,  6 Jun 2023 18:08:18 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A9B4520040;
+        Tue,  6 Jun 2023 18:08:17 +0000 (GMT)
+Received: from a46lp73.lnxne.boe (unknown [9.152.108.100])
+        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Tue,  6 Jun 2023 18:08:17 +0000 (GMT)
+From:   Steffen Eiden <seiden@linux.ibm.com>
+To:     kvm@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Viktor Mihajlovski <mihajlov@linux.ibm.com>
+Cc:     Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Nico Boehr <nrb@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Hendrik Brueckner <brueckner@linux.ibm.com>
+Subject: [PATCH v4 0/6] s390/uvdevice: Expose secret UVCs
+Date:   Tue,  6 Jun 2023 20:08:11 +0200
+Message-Id: <20230606180817.3019077-1-seiden@linux.ibm.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wgQ5m+SnWTYGHu0JgYXTk2dkGF+msX=ARfYoo3t1_fX9g@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 3M05lREvSir7L-JC2FxvRJ8N0HRM-qIn
+X-Proofpoint-GUID: 3M05lREvSir7L-JC2FxvRJ8N0HRM-qIn
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-06_13,2023-06-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ suspectscore=0 bulkscore=0 malwarescore=0 clxscore=1015 priorityscore=1501
+ adultscore=0 mlxscore=0 lowpriorityscore=0 mlxlogscore=983 spamscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2306060156
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,87 +87,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 07:50:47AM -0700, Linus Torvalds wrote:
-> I feel like you seem entirely too fixated on locking.
+IBM Secure Execution guests may want to inject secrets into the Ultravisor(UV).
+Also they should be able to know which secrets the UV possesses and prevent the
+further addition of more secrets.
 
-It's what I started out with... but it's certainly not everything.
+Therefore, add three new Ultravisor-Calls and expose them via the uvdevice: Add
+Secret, List Secrets, and Lock Secrets. The uvdevice still acts as the
+messenger only and does not inspect or modify the requests. Only some sanity
+checks are made to prevent the kernel from corruption.
+Also add a new IOCTL to get information about the supported UV-calls of the
+uvdevice. As userspace wants to know which secrets, types, etc. are supported
+expose the corresponding UV Query info data to userspace via sysfs.
 
-The thing I have removes pretty much all the error gotos from
-sched/core.c and events/core.c and while locking is ofcourse a fair
-amount of that there's significant non-locking usage.
+The series contains:
+  * A new info IOCTL, giving information about the capabilities of the uvdevice and UV
+  * 3 patches adding new Ultravisor-Calls and expose them to userspace
+  * A patch replacing scnprintf with sysfs_emit in arch/s390/kernel/uv.c
+  * A patch with an Ultravisor Query Info update for the new secret related information
 
->  (c) think that generally are not "nested" (you release the resources
-> you've allocated, but you don't "nest" the allocations - they are just
-> serial.
-> 
->  (d) think that the syntax could be pretty nasty, because the cleanup
-> is not just a trivial fixed "unlock" function
+Changes for v4:
+  * more nits from Janosch
 
-So I'm not sure you've seen the actual convertions I've done, but yes,
-there's lots of those.
+Changes for v3:
+  * misc nits from Janosch
 
-I've just used the guard naming because locks is what I started out
-with.
+Changes for v2:
+  * use __set_bit instead of the atomic set_bit (Heiko)
+  * add a patch for replacing scnprintf with sysfs_emit in arch/s390/kernel/uv.c (Heiko)
+  * use scnprintf instead of sysfs_emit for the new sysfs entries in the last patch (Heiko)
+  * use hex values in struct definitions (Claudio)
 
-+	ptr_guard(kfree, alloc) = kzalloc(event->read_size, GFP_KERNEL);
-+	if (!alloc)
- 		return -ENOMEM;
+Steffen
+Steffen Eiden (6):
+  s390/uvdevice: Add info IOCTL
+  s390/uvdevice: Add 'Add Secret' UVC
+  s390/uvdevice: Add 'List Secrets' UVC
+  s390/uvdevice: Add 'Lock Secret Store' UVC
+  s390/uv: replace scnprintf with sysfs_emit
+  s390/uv: Update query for secret-UVCs
 
+ arch/s390/boot/uv.c                   |   4 +
+ arch/s390/include/asm/uv.h            |  32 +++-
+ arch/s390/include/uapi/asm/uvdevice.h |  53 +++++-
+ arch/s390/kernel/uv.c                 |  98 +++++++----
+ drivers/s390/char/uvdevice.c          | 231 +++++++++++++++++++++++++-
+ 5 files changed, 376 insertions(+), 42 deletions(-)
 
- 	event = perf_event_alloc(&attr, cpu, task, group_leader, NULL,
- 				 NULL, NULL, cgroup_fd);
-+	if (IS_ERR(event))
-+		return PTR_ERR(event);
-+
-+	ptr_guard(free_event, event_guard) = event;
+-- 
+2.40.1
 
-
-+	ptr_guard(put_task, p) = find_get_task(pid);
-+	if (!p)
-+		return -ESRCH;
-
-
-So it does all that... you just hate the naming -- surely we can fix
-that.
-
-
-Would it all be less offensive if I did: s/guard/cleanup/ on the whole
-thing? Then we'd have things like:
-
-
-DEFINE_PTR_CLEANUP(put_task, struct task_struct *,
-		   if (_C) put_task_struct(_C))
-
-	ptr_cleanup(put_task, p) = find_get_task(pid);
-	if (!p)
-		return -ESRCH;
-
-
-DEFINE_PTR_CLEANUP(free_event, struct perf_event *,
-		   if (!IS_ERR_OR_NULL(_C)) free_event(_C))
-
-	ptr_cleanup(free_event, event) = perf_event_alloc(...);
-	if (IS_ERR(event))
-		return PTR_ERR(event);
-
-
-DEFINE_PTR_CLEANUP(kfree, void *, kfree(_C))
-
-	ptr_cleanup(kfree, foo) = kzalloc(...);
-	if (!foo)
-		return -ENOMEM;
-
-
-But do we then continue with:
-
-DEFINE_CLEANUP(mutex, struct mutex *, mutex_lock(_C), mutex_unlock(_C))
-
-	cleanup(mutex, &my_mutex);
-
-
-	scoped_cleanup (mutex, &my_mutex) {
-		...
-	}
-
-etc..? or do we keep guard() there, but based internally on
-ptr_cleanup() with the cleanup_## naming.
