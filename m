@@ -2,302 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DD5E72435F
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 14:58:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A405A724375
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 14:59:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237881AbjFFM6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 08:58:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56790 "EHLO
+        id S237717AbjFFM72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 08:59:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237880AbjFFM55 (ORCPT
+        with ESMTP id S230499AbjFFM7T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 08:57:57 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F22A0E77
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 05:57:21 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f3ba703b67so7484381e87.1
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 05:57:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686056240; x=1688648240;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3Zi9U7lw+Rmv5fPmQ5a1N7/KX1eblAqJrMCOPf7hQjU=;
-        b=Ol6t/0tlizL9LbWvuIlizRXEsWvJHOavhVSubv+9cokguHXRCIzHSvxtVhXQuPZ7Tk
-         x0hzioA03uGHg8SoWu5hsNK/Bi8u35Yl2u+gWdtplEcsZeBa89OKegUxgivnXr6RD4vG
-         Rgt7XNoTlUdgxQzpIHeTdC2re210sk1XUuxbgnuBMQIOZ3/PWF9rLS4CGrXpADcU9hvf
-         Dm8IZMag/OUv6B0Kie3vaMgA3xJGCkx3EAB7zr6hV0whyyMbt/JieeYR+iBieAkupnSl
-         r42l3GmXvL8vuXulD10ETlmMfaIpAxVTfdgLy7bBDIzQhy4odPLAwnMl5wFw8Yt3Hf2b
-         QMQg==
+        Tue, 6 Jun 2023 08:59:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E525310C7
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 05:58:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686056295;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dtuylhemCFrocIQz72z/IvBRItNMZNPZwOBB6roSRDM=;
+        b=VMQ+Roar/LRQZyjUSGQq/wpJkzdCHsZ2NNzjluy+ipew6O43Gnuiwoud+Mxmsaeyi3pzyx
+        agTH1wyUPHIU3HmWNv70mQJHLBekU0brpjSN+UjoRSRR43IaAntHiZLXVwjRhtqs4lNYjD
+        lgpgjm6NgZcVfdcfOLGHjkBvEzIOwGs=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-611-tmugchH6OJ-PYVehtJctbQ-1; Tue, 06 Jun 2023 08:58:12 -0400
+X-MC-Unique: tmugchH6OJ-PYVehtJctbQ-1
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3f41a04a297so29789185e9.3
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 05:58:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686056240; x=1688648240;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1686056291; x=1688648291;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3Zi9U7lw+Rmv5fPmQ5a1N7/KX1eblAqJrMCOPf7hQjU=;
-        b=ECQR2TV6ilRQ6/90ux10R/5FMCPMiENhAFEtfJ3/uKWda832ZeQ/F711xE8IjeNqJK
-         6xANVsTpk032rinjhYjTGrGUg0nESLyWb1K14zRDDY+kibtal/dCHNr3ygW5x+zZAWcp
-         HFkulYYpBlhegt+Ukgrmb2ykBgpIgl2QIoPEbxHeDVfx+E1ytT55SBDUFG67TAlzArd8
-         TpIGnu6tOC93Lw6QBfqh7kAO+NGUv4Mx3Rkx80jILpPlIuKsudLDfpI5royPgoza1NWb
-         Z70OGfhNCSST2iugOscxXnLaMRxi4RTFueyG2KMKBTkLBzY+qGEjjBoJ7LrJgwr/wd46
-         QNIQ==
-X-Gm-Message-State: AC+VfDyDy3WKJNTdY+3n3cevardxOax8kUB44ZMr2dC0kvqxkwK2Q3rD
-        vZQHwShPlFwnwqbB0woLLG4JMA==
-X-Google-Smtp-Source: ACHHUZ7mLqoIH/C3aDwfEn0ouGUAjY86F/ZLh417p6v5iPca9DuvSbjT9K74RGrPvR8UGvAZKlV3gA==
-X-Received: by 2002:ac2:5610:0:b0:4ee:e0c7:434d with SMTP id v16-20020ac25610000000b004eee0c7434dmr892033lfd.51.1686056240006;
-        Tue, 06 Jun 2023 05:57:20 -0700 (PDT)
-Received: from [192.168.1.101] (abyl150.neoplus.adsl.tpnet.pl. [83.9.31.150])
-        by smtp.gmail.com with ESMTPSA id q16-20020ac25290000000b004f25c29f64esm1452192lfm.176.2023.06.06.05.57.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Jun 2023 05:57:19 -0700 (PDT)
-Message-ID: <669d2745-c7fc-dff5-a6e6-c2c55b4428ee@linaro.org>
-Date:   Tue, 6 Jun 2023 14:57:18 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH V2 1/2] arm64: dts: qcom: ipq5332: enable GPIO based LEDs
- and Buttons
-Content-Language: en-US
-To:     Sridharan S N <quic_sridsn@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        bh=dtuylhemCFrocIQz72z/IvBRItNMZNPZwOBB6roSRDM=;
+        b=ZVL7S1mjNOXLFu6813Z+22zaQ4Ov16ul7p4DGPnmLiVbNHbJ8Nt2OsphvCG6hXzz9O
+         QB9jhGK+583kQ4YV+exqyzrqHIATwB7h3gp22DLzrdfiNsGoNyTS+tzpcPe3uT0gxGTE
+         wo9k0XvJEJaRz6RytVGvXYvXhMI8Mxl0MH7pcitO6/3wImGqXXREA4/XNUGDyLr16g5Q
+         frgTqlpwMYOKH8pPHRthEBj2HplbURfJzirP6CnAGbGTH8jGYaLZcwJ8bInIvcJbXi0I
+         5531d4tL3qG1fx9VLcSw9gl2fQjtJ93hqojnYxqV8Mh9oCaBTql9HI69uamzBFFkZzLa
+         2slw==
+X-Gm-Message-State: AC+VfDzBi1kUbsSoEslJ+3yxdAOpFWZpie5Heu2TQC4wp3ZkStWIMizm
+        +f40YPvF4Vj7ZX1clYEl0LQkhgbJ+bPrK1SPgF3JN6VbDUGjX82iHxHio00p1NcHbOjTZrvqeOY
+        RWCCDojiZHDkTSjHslXGnWmFx
+X-Received: by 2002:a05:600c:3797:b0:3f4:2492:a91f with SMTP id o23-20020a05600c379700b003f42492a91fmr1985694wmr.27.1686056291606;
+        Tue, 06 Jun 2023 05:58:11 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7iSPeYaUH/YZk+7SBXsnFurRNoLRH/Yr/5f9n7h0h6HrxGNUlFSlQiPwqzijjD8yGHRwJDSg==
+X-Received: by 2002:a05:600c:3797:b0:3f4:2492:a91f with SMTP id o23-20020a05600c379700b003f42492a91fmr1985683wmr.27.1686056291295;
+        Tue, 06 Jun 2023 05:58:11 -0700 (PDT)
+Received: from redhat.com ([2.55.41.2])
+        by smtp.gmail.com with ESMTPSA id q25-20020a7bce99000000b003eddc6aa5fasm17487714wmj.39.2023.06.06.05.58.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Jun 2023 05:58:10 -0700 (PDT)
+Date:   Tue, 6 Jun 2023 08:58:06 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     Stefano Garzarella <sgarzare@redhat.com>,
+        Shannon Nelson <shannon.nelson@amd.com>,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
+        Tiwei Bie <tiwei.bie@intel.com>, kvm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20230605052907.18837-1-quic_sridsn@quicinc.com>
- <20230605052907.18837-2-quic_sridsn@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230605052907.18837-2-quic_sridsn@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] vhost-vdpa: filter VIRTIO_F_RING_PACKED feature
+Message-ID: <20230606085643-mutt-send-email-mst@kernel.org>
+References: <20230605110644.151211-1-sgarzare@redhat.com>
+ <20230605084104-mutt-send-email-mst@kernel.org>
+ <24fjdwp44hovz3d3qkzftmvjie45er3g3boac7aezpvzbwvuol@lmo47ydvnqau>
+ <20230605085840-mutt-send-email-mst@kernel.org>
+ <gi2hngx3ndsgz5d2rpqjywdmou5vxhd7xgi5z2lbachr7yoos4@kpifz37oz2et>
+ <20230605095404-mutt-send-email-mst@kernel.org>
+ <32ejjuvhvcicv7wjuetkv34qtlpa657n4zlow4eq3fsi2twozk@iqnd2t5tw2an>
+ <CACGkMEu3PqQ99UoKF5NHgVADD3q=BF6jhLiyumeT4S1QCqN1tw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CACGkMEu3PqQ99UoKF5NHgVADD3q=BF6jhLiyumeT4S1QCqN1tw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 5.06.2023 07:29, Sridharan S N wrote:
-> Add support for wlan-2g LED on GPIO 36 and wps buttons on GPIO 35.
+On Tue, Jun 06, 2023 at 09:29:22AM +0800, Jason Wang wrote:
+> On Mon, Jun 5, 2023 at 10:58 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
+> >
+> > On Mon, Jun 05, 2023 at 09:54:57AM -0400, Michael S. Tsirkin wrote:
+> > >On Mon, Jun 05, 2023 at 03:30:35PM +0200, Stefano Garzarella wrote:
+> > >> On Mon, Jun 05, 2023 at 09:00:25AM -0400, Michael S. Tsirkin wrote:
+> > >> > On Mon, Jun 05, 2023 at 02:54:20PM +0200, Stefano Garzarella wrote:
+> > >> > > On Mon, Jun 05, 2023 at 08:41:54AM -0400, Michael S. Tsirkin wrote:
+> > >> > > > On Mon, Jun 05, 2023 at 01:06:44PM +0200, Stefano Garzarella wrote:
+> > >> > > > > vhost-vdpa IOCTLs (eg. VHOST_GET_VRING_BASE, VHOST_SET_VRING_BASE)
+> > >> > > > > don't support packed virtqueue well yet, so let's filter the
+> > >> > > > > VIRTIO_F_RING_PACKED feature for now in vhost_vdpa_get_features().
+> > >> > > > >
+> > >> > > > > This way, even if the device supports it, we don't risk it being
+> > >> > > > > negotiated, then the VMM is unable to set the vring state properly.
+> > >> > > > >
+> > >> > > > > Fixes: 4c8cf31885f6 ("vhost: introduce vDPA-based backend")
+> > >> > > > > Cc: stable@vger.kernel.org
+> > >> > > > > Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+> > >> > > > > ---
+> > >> > > > >
+> > >> > > > > Notes:
+> > >> > > > >     This patch should be applied before the "[PATCH v2 0/3] vhost_vdpa:
+> > >> > > > >     better PACKED support" series [1] and backported in stable branches.
+> > >> > > > >
+> > >> > > > >     We can revert it when we are sure that everything is working with
+> > >> > > > >     packed virtqueues.
+> > >> > > > >
+> > >> > > > >     Thanks,
+> > >> > > > >     Stefano
+> > >> > > > >
+> > >> > > > >     [1] https://lore.kernel.org/virtualization/20230424225031.18947-1-shannon.nelson@amd.com/
+> > >> > > >
+> > >> > > > I'm a bit lost here. So why am I merging "better PACKED support" then?
+> > >> > >
+> > >> > > To really support packed virtqueue with vhost-vdpa, at that point we would
+> > >> > > also have to revert this patch.
+> > >> > >
+> > >> > > I wasn't sure if you wanted to queue the series for this merge window.
+> > >> > > In that case do you think it is better to send this patch only for stable
+> > >> > > branches?
+> > >> > > > Does this patch make them a NOP?
+> > >> > >
+> > >> > > Yep, after applying the "better PACKED support" series and being
+> > >> > > sure that
+> > >> > > the IOCTLs of vhost-vdpa support packed virtqueue, we should revert this
+> > >> > > patch.
+> > >> > >
+> > >> > > Let me know if you prefer a different approach.
+> > >> > >
+> > >> > > I'm concerned that QEMU uses vhost-vdpa IOCTLs thinking that the kernel
+> > >> > > interprets them the right way, when it does not.
+> > >> > >
+> > >> > > Thanks,
+> > >> > > Stefano
+> > >> > >
+> > >> >
+> > >> > If this fixes a bug can you add Fixes tags to each of them? Then it's ok
+> > >> > to merge in this window. Probably easier than the elaborate
+> > >> > mask/unmask dance.
+> > >>
+> > >> CCing Shannon (the original author of the "better PACKED support"
+> > >> series).
+> > >>
+> > >> IIUC Shannon is going to send a v3 of that series to fix the
+> > >> documentation, so Shannon can you also add the Fixes tags?
+> > >>
+> > >> Thanks,
+> > >> Stefano
+> > >
+> > >Well this is in my tree already. Just reply with
+> > >Fixes: <>
+> > >to each and I will add these tags.
+> >
+> > I tried, but it is not easy since we added the support for packed
+> > virtqueue in vdpa and vhost incrementally.
+> >
+> > Initially I was thinking of adding the same tag used here:
+> >
+> > Fixes: 4c8cf31885f6 ("vhost: introduce vDPA-based backend")
+> >
+> > Then I discovered that vq_state wasn't there, so I was thinking of
+> >
+> > Fixes: 530a5678bc00 ("vdpa: support packed virtqueue for set/get_vq_state()")
+> >
+> > So we would have to backport quite a few patches into the stable branches.
+> > I don't know if it's worth it...
+> >
+> > I still think it is better to disable packed in the stable branches,
+> > otherwise I have to make a list of all the patches we need.
+> >
+> > Any other ideas?
 > 
-> Signed-off-by: Sridharan S N <quic_sridsn@quicinc.com>
-> ---
-> Changes in V2:
-> 	- Used the hypen in node name instead of underscore
-> 	- Dropped the status property
->  
->  arch/arm64/boot/dts/qcom/ipq5332-mi01.2.dts | 42 +++++++++++++++++++++
->  arch/arm64/boot/dts/qcom/ipq5332-rdp442.dts | 42 +++++++++++++++++++++
->  arch/arm64/boot/dts/qcom/ipq5332-rdp468.dts | 42 +++++++++++++++++++++
->  3 files changed, 126 insertions(+)
+> AFAIK, except for vp_vdpa, pds seems to be the first parent that
+> supports packed virtqueue. Users should not notice anything wrong if
+> they don't use packed virtqueue. And the problem of vp_vdpa + packed
+> virtqueue came since the day0 of vp_vdpa. It seems fine to do nothing
+> I guess.
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/ipq5332-mi01.2.dts b/arch/arm64/boot/dts/qcom/ipq5332-mi01.2.dts
-> index 3af1d5556950..5bd4ff3ad86b 100644
-> --- a/arch/arm64/boot/dts/qcom/ipq5332-mi01.2.dts
-> +++ b/arch/arm64/boot/dts/qcom/ipq5332-mi01.2.dts
-> @@ -7,6 +7,8 @@
->  
->  /dts-v1/;
->  
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/input/input.h>
->  #include "ipq5332.dtsi"
->  
->  / {
-> @@ -20,6 +22,32 @@
->  	chosen {
->  		stdout-path = "serial0";
->  	};
-> +
-> +	gpio-keys {
-> +		compatible = "gpio-keys";
-> +		pinctrl-0 = <&gpio_keys_default>;
-> +		pinctrl-names = "default";
-> +
-> +		button-wps {
-> +			label = "wps";
-> +			linux,code = <KEY_WPS_BUTTON>;
-> +			gpios = <&tlmm 35 GPIO_ACTIVE_LOW>;
-> +			linux,input-type = <1>;
-> +			debounce-interval = <60>;
-> +		};
-> +	};
-All of these changes seem very repetetive.. Are these devboards based
-on a common design? Maybe ipq5332-rdp-common.dtsi would be beneficial
-here?
+> Thanks
 
-Konrad
-> +
-> +	leds {
-> +		compatible = "gpio-leds";
-> +		pinctrl-0 = <&gpio_leds_default>;
-> +		pinctrl-names = "default";
-> +
-> +		led-0 {
-> +			gpios = <&tlmm 36 GPIO_ACTIVE_HIGH>;
-> +			linux,default-trigger = "phy0tx";
-> +			default-state = "off";
-> +		};
-> +	};
->  };
->  
->  &blsp1_uart0 {
-> @@ -57,6 +85,20 @@
->  /* PINCTRL */
->  
->  &tlmm {
-> +	gpio_keys_default: gpio-keys-default-state {
-> +		pins = "gpio35";
-> +		function = "gpio";
-> +		drive-strength = <8>;
-> +		bias-pull-up;
-> +	};
-> +
-> +	gpio_leds_default: gpio-leds-default-state {
-> +		pins = "gpio36";
-> +		function = "gpio";
-> +		drive-strength = <8>;
-> +		bias-pull-down;
-> +	};
-> +
->  	i2c_1_pins: i2c-1-state {
->  		pins = "gpio29", "gpio30";
->  		function = "blsp1_i2c0";
-> diff --git a/arch/arm64/boot/dts/qcom/ipq5332-rdp442.dts b/arch/arm64/boot/dts/qcom/ipq5332-rdp442.dts
-> index bcf3b31c20e3..36cbebb75c48 100644
-> --- a/arch/arm64/boot/dts/qcom/ipq5332-rdp442.dts
-> +++ b/arch/arm64/boot/dts/qcom/ipq5332-rdp442.dts
-> @@ -7,6 +7,8 @@
->  
->  /dts-v1/;
->  
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/input/input.h>
->  #include "ipq5332.dtsi"
->  
->  / {
-> @@ -20,6 +22,32 @@
->  	chosen {
->  		stdout-path = "serial0";
->  	};
-> +
-> +	gpio-keys {
-> +		compatible = "gpio-keys";
-> +		pinctrl-0 = <&gpio_keys_default>;
-> +		pinctrl-names = "default";
-> +
-> +		button-wps {
-> +			label = "wps";
-> +			linux,code = <KEY_WPS_BUTTON>;
-> +			gpios = <&tlmm 35 GPIO_ACTIVE_LOW>;
-> +			linux,input-type = <1>;
-> +			debounce-interval = <60>;
-> +		};
-> +	};
-> +
-> +	leds {
-> +		compatible = "gpio-leds";
-> +		pinctrl-0 = <&gpio_leds_default>;
-> +		pinctrl-names = "default";
-> +
-> +		led-0 {
-> +			gpios = <&tlmm 36 GPIO_ACTIVE_HIGH>;
-> +			linux,default-trigger = "phy0tx";
-> +			default-state = "off";
-> +		};
-> +	};
->  };
->  
->  &blsp1_uart0 {
-> @@ -71,6 +99,20 @@
->  /* PINCTRL */
->  
->  &tlmm {
-> +	gpio_keys_default: gpio-keys-default-state {
-> +		pins = "gpio35";
-> +		function = "gpio";
-> +		drive-strength = <8>;
-> +		bias-pull-up;
-> +	};
-> +
-> +	gpio_leds_default: gpio-leds-default-state {
-> +		pins = "gpio36";
-> +		function = "gpio";
-> +		drive-strength = <8>;
-> +		bias-pull-down;
-> +	};
-> +
->  	i2c_1_pins: i2c-1-state {
->  		pins = "gpio29", "gpio30";
->  		function = "blsp1_i2c0";
-> diff --git a/arch/arm64/boot/dts/qcom/ipq5332-rdp468.dts b/arch/arm64/boot/dts/qcom/ipq5332-rdp468.dts
-> index 3b6a5cb8bf07..2d27f48f00c0 100644
-> --- a/arch/arm64/boot/dts/qcom/ipq5332-rdp468.dts
-> +++ b/arch/arm64/boot/dts/qcom/ipq5332-rdp468.dts
-> @@ -7,6 +7,8 @@
->  
->  /dts-v1/;
->  
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/input/input.h>
->  #include "ipq5332.dtsi"
->  
->  / {
-> @@ -20,6 +22,32 @@
->  	chosen {
->  		stdout-path = "serial0";
->  	};
-> +
-> +	gpio-keys {
-> +		compatible = "gpio-keys";
-> +		pinctrl-0 = <&gpio_keys_default>;
-> +		pinctrl-names = "default";
-> +
-> +		button-wps {
-> +			label = "wps";
-> +			linux,code = <KEY_WPS_BUTTON>;
-> +			gpios = <&tlmm 35 GPIO_ACTIVE_LOW>;
-> +			linux,input-type = <1>;
-> +			debounce-interval = <60>;
-> +		};
-> +	};
-> +
-> +	leds {
-> +		compatible = "gpio-leds";
-> +		pinctrl-0 = <&gpio_leds_default>;
-> +		pinctrl-names = "default";
-> +
-> +		led-0 {
-> +			gpios = <&tlmm 36 GPIO_ACTIVE_HIGH>;
-> +			linux,default-trigger = "phy0tx";
-> +			default-state = "off";
-> +		};
-> +	};
->  };
->  
->  &blsp1_uart0 {
-> @@ -64,6 +92,20 @@
->  /* PINCTRL */
->  
->  &tlmm {
-> +	gpio_keys_default: gpio-keys-default-state {
-> +		pins = "gpio35";
-> +		function = "gpio";
-> +		drive-strength = <8>;
-> +		bias-pull-up;
-> +	};
-> +
-> +	gpio_leds_default: gpio-leds-default-state {
-> +		pins = "gpio36";
-> +		function = "gpio";
-> +		drive-strength = <8>;
-> +		bias-pull-down;
-> +	};
-> +
->  	sdc_default_state: sdc-default-state {
->  		clk-pins {
->  			pins = "gpio13";
+
+I have a question though, what if down the road there
+is a new feature that needs more changes? It will be
+broken too just like PACKED no?
+Shouldn't vdpa have an allowlist of features it knows how
+to support?
+
+> >
+> > Thanks,
+> > Stefano
+> >
+> >
+
