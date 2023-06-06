@@ -2,118 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B67D7247D2
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 17:34:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F0357247D9
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 17:35:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238243AbjFFPeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 11:34:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54096 "EHLO
+        id S237169AbjFFPfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 11:35:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237456AbjFFPeC (ORCPT
+        with ESMTP id S232228AbjFFPf2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 11:34:02 -0400
-Received: from finn.localdomain (finn.gateworks.com [108.161.129.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36AD1BD;
-        Tue,  6 Jun 2023 08:34:00 -0700 (PDT)
-Received: from 068-189-091-139.biz.spectrum.com ([68.189.91.139] helo=tharvey.pdc.gateworks.com)
-        by finn.localdomain with esmtp (Exim 4.93)
-        (envelope-from <tharvey@gateworks.com>)
-        id 1q6Ygz-0067nf-4z; Tue, 06 Jun 2023 15:33:53 +0000
-From:   Tim Harvey <tharvey@gateworks.com>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Li Yang <leoyang.li@nxp.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Tim Harvey <tharvey@gateworks.com>
-Subject: [PATCH] arm64: dts: imx8mm-venice-gw7901: add SDR50/SDR104 SDIO support for wifi
-Date:   Tue,  6 Jun 2023 08:33:51 -0700
-Message-Id: <20230606153351.1448596-1-tharvey@gateworks.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 6 Jun 2023 11:35:28 -0400
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7F8801BD;
+        Tue,  6 Jun 2023 08:35:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version:
+        Content-Type; bh=wSH7uzSKtpphX9UKHyr9xsRWMbdqP//1iixA0OAWzVY=;
+        b=ZMj8R9D7IcW14UTQgSz4uAd6PLera55NzwXWiYAExQHyssv8Z+4uFmtyY7+N5d
+        zk2CygpCIb1+UjBabdqz2rIPG8/u3w5ek1W7JAI6NHC29byKZHg20JhhYCGd9F24
+        PizkOzzSfofU8OG1Rq6l4MYhd4zFuT5d4jaSXsHA9w9BA=
+Received: from home.. (unknown [112.10.202.132])
+        by zwqz-smtp-mta-g5-2 (Coremail) with SMTP id _____wCnG_gjUn9k_bKuBg--.33498S2;
+        Tue, 06 Jun 2023 23:34:59 +0800 (CST)
+From:   "jixianghua@xfusion.com" <jxh218@163.com>
+To:     linux-cifs@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, sfrench@samba.org,
+        jixianghua@xfusion.com, jxh218@163.com
+Subject: [PATCH] smb: remove obsolete comment
+Date:   Tue,  6 Jun 2023 23:34:56 +0800
+Message-Id: <20230606153456.14454-1-jxh218@163.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-CM-TRANSID: _____wCnG_gjUn9k_bKuBg--.33498S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrtr45trykWFy8uF4fZF45Awb_yoWDJrb_CF
+        95ur4xX345Xay7KF1jkwnFvr1DZwnYvr1FkF4Sqa45uw4UXrsxA34vga1xXF1kC3Z8ur1r
+        WwnrKrZavF4fujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRXTm3JUUUUU==
+X-Originating-IP: [112.10.202.132]
+X-CM-SenderInfo: xm0kjiqy6rljoofrz/xtbB0wSGNVXlzblWKAAAse
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NAME_EMAIL_DIFF,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_BL,
+        RCVD_IN_MSPIKE_L4,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The GW7901 has a Murata LBEE5H 802.11abgnac / BT5 module based on the
-Cypress CYW43455 which supports SDR50/SDR104.
+From: 鑫华 <jixianghua@xfusion.com>
 
-Add dt pinctrl for the 100mhz and 200mhz states to support SDR50/SDR104.
+Because do_gettimeofday has been removed and replaced by ktime_get_real_ts64,
+So just remove the comment as it's not needed now.
 
-While at it add the dt node for the CYW43455 wifi for the brcmfmac
-driver.
-
-Signed-off-by: Tim Harvey <tharvey@gateworks.com>
+Signed-off-by: 鑫华 <jixianghua@xfusion.com>
 ---
- .../dts/freescale/imx8mm-venice-gw7901.dts    | 33 ++++++++++++++++++-
- 1 file changed, 32 insertions(+), 1 deletion(-)
+ fs/smb/client/transport.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7901.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7901.dts
-index d022b5807a24..bb78c99c4fb4 100644
---- a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7901.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7901.dts
-@@ -789,12 +789,21 @@ &usbotg2 {
- 
- /* SDIO WiFi */
- &usdhc1 {
--	pinctrl-names = "default";
-+	pinctrl-names = "default", "state_100mhz", "state_200mhz";
- 	pinctrl-0 = <&pinctrl_usdhc1>;
-+	pinctrl-1 = <&pinctrl_usdhc1_100mhz>;
-+	pinctrl-2 = <&pinctrl_usdhc1_200mhz>;
- 	bus-width = <4>;
- 	non-removable;
- 	vmmc-supply = <&reg_wifi>;
-+	#address-cells = <1>;
-+	#size-cells = <0>;
- 	status = "okay";
-+
-+	wifi@0 {
-+		compatible = "brcm,bcm43455-fmac";
-+		reg = <0>;
-+	};
- };
- 
- /* microSD */
-@@ -1054,6 +1063,28 @@ MX8MM_IOMUXC_SD1_DATA3_USDHC1_DATA3	0x1d0
- 		>;
- 	};
- 
-+	pinctrl_usdhc1_100mhz: usdhc1-100mhzgrp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_SD1_CLK_USDHC1_CLK		0x194
-+			MX8MM_IOMUXC_SD1_CMD_USDHC1_CMD		0x1d4
-+			MX8MM_IOMUXC_SD1_DATA0_USDHC1_DATA0	0x1d4
-+			MX8MM_IOMUXC_SD1_DATA1_USDHC1_DATA1	0x1d4
-+			MX8MM_IOMUXC_SD1_DATA2_USDHC1_DATA2	0x1d4
-+			MX8MM_IOMUXC_SD1_DATA3_USDHC1_DATA3	0x1d4
-+		>;
-+	};
-+
-+	pinctrl_usdhc1_200mhz: usdhc1-200mhzgrp {
-+		fsl,pins = <
-+			MX8MM_IOMUXC_SD1_CLK_USDHC1_CLK		0x196
-+			MX8MM_IOMUXC_SD1_CMD_USDHC1_CMD		0x1d6
-+			MX8MM_IOMUXC_SD1_DATA0_USDHC1_DATA0	0x1d6
-+			MX8MM_IOMUXC_SD1_DATA1_USDHC1_DATA1	0x1d6
-+			MX8MM_IOMUXC_SD1_DATA2_USDHC1_DATA2	0x1d6
-+			MX8MM_IOMUXC_SD1_DATA3_USDHC1_DATA3	0x1d6
-+		>;
-+	};
-+
- 	pinctrl_usdhc2: usdhc2grp {
- 		fsl,pins = <
- 			MX8MM_IOMUXC_SD2_CLK_USDHC2_CLK		0x190
+diff --git a/fs/smb/client/transport.c b/fs/smb/client/transport.c
+index 24bdd5f4d3bc..0474d0bba0a2 100644
+--- a/fs/smb/client/transport.c
++++ b/fs/smb/client/transport.c
+@@ -55,7 +55,7 @@ alloc_mid(const struct smb_hdr *smb_buffer, struct TCP_Server_Info *server)
+ 	temp->pid = current->pid;
+ 	temp->command = cpu_to_le16(smb_buffer->Command);
+ 	cifs_dbg(FYI, "For smb_command %d\n", smb_buffer->Command);
+-	/*	do_gettimeofday(&temp->when_sent);*/ /* easier to use jiffies */
++	/* easier to use jiffies */
+ 	/* when mid allocated can be before when sent */
+ 	temp->when_alloc = jiffies;
+ 	temp->server = server;
 -- 
-2.25.1
+2.34.1
 
