@@ -2,55 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63A3C7248B1
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 18:13:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4C0C72489E
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 18:12:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238565AbjFFQN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 12:13:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48304 "EHLO
+        id S237846AbjFFQMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 12:12:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237776AbjFFQN1 (ORCPT
+        with ESMTP id S237307AbjFFQMq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 12:13:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E9719BD;
-        Tue,  6 Jun 2023 09:13:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 6 Jun 2023 12:12:46 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36EA110D7;
+        Tue,  6 Jun 2023 09:12:45 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2DF4462DE6;
-        Tue,  6 Jun 2023 16:13:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CEEBC4339E;
-        Tue,  6 Jun 2023 16:13:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686067983;
-        bh=SNMZc0L/b6GLmVD1yPrxAZQaDWAwMEPVbWJyNUZPapU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ISrLLMAQMED7jumB7rUxj4NLoUAL1EUyBok+B70FXLeTV8RbWw2YEyhDwpUUt2W+8
-         BSxK7qj0Xsy1sBuOEiYEIDscWsMI8kOhRR5UpQ1uYg9B2NN7A3Omlc1BfNFBZY0dvi
-         4brp+zhcc4iOG+YQwY906r240v+Ox0bb7YrQqkZA2AgpiYnVG/xEO7OM3wnAUf3T1a
-         tC7uJTlisTSrjMOg93qS/eQVXTnpCtKJ4KNPzc+VxwQ0RwYF7suOc5KDTQFRGDOVrk
-         M4xRJ0dhiRl0bQyu6vIGQpuwUPKNMeKGpLwXJPqYVcPlyuNBp7fyJKxA9iF59EasAc
-         mSJfqaSQpNEEQ==
-From:   Daniel Bristot de Oliveira <bristot@kernel.org>
-To:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-doc@vger.kernel.org, Juri Lelli <juri.lelli@redhat.com>,
-        William White <chwhite@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Subject: [PATCH V3 11/11] Documentation: Add tools/rtla timerlat -u option documentation
-Date:   Tue,  6 Jun 2023 18:12:25 +0200
-Message-Id: <bf727c8ccb8f50792200ae620141e047edf4af7a.1686066600.git.bristot@kernel.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <cover.1686066600.git.bristot@kernel.org>
-References: <cover.1686066600.git.bristot@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        by smtp-out1.suse.de (Postfix) with ESMTPS id E05D921998;
+        Tue,  6 Jun 2023 16:12:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1686067963; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tDS8AHR+6l5pU0D3pqB/j9UJ3eqzXU7CXq0Fenh1CAE=;
+        b=OptcxMpQcKnCWmaZR2xro+4sgXmK9PuvO1jzEY0syZscIKVRr/nLOkwliN61O8845uNXi5
+        GT5dkptMzUzFqL2lXMw/QfdkFc7iFeTu+cXRsuOHegpiD36MwXwqpjseNeVsV28If0kpK3
+        SPLj+lUESLCfZj5Urxzl9XWDoTlLsiA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1686067963;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tDS8AHR+6l5pU0D3pqB/j9UJ3eqzXU7CXq0Fenh1CAE=;
+        b=tvPzVWUiurx4PtC5gkrfOcMaMPl2TYleMBtyaUPenBzIeoMg4O7lBsU99ycSSRTPFw9jjx
+        TePHsGARLn5i6aBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7700913519;
+        Tue,  6 Jun 2023 16:12:43 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Qf0zG/taf2RtNQAAMHmgww
+        (envelope-from <tiwai@suse.de>); Tue, 06 Jun 2023 16:12:43 +0000
+Date:   Tue, 06 Jun 2023 18:12:43 +0200
+Message-ID: <871qiofu2s.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Shenghao Ding <13916275206@139.com>, devicetree@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        lgirdwood@gmail.com, perex@perex.cz,
+        pierre-louis.bossart@linux.intel.com, kevin-lu@ti.com,
+        shenghao-ding@ti.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, x1077012@ti.com, peeyush@ti.com,
+        navada@ti.com, gentuser@gmail.com, Ryan_Chu@wistron.com,
+        Sam_Wu@wistron.com
+Subject: Re: [PATCH v4 5/6] ALSA: hda/tas2781: Add tas2781 HDA driver
+In-Reply-To: <65ef4914-dc0e-4f0f-a6f8-3016931488bd@sirena.org.uk>
+References: <20230527223613.11106-1-13916275206@139.com>
+        <874jnkfu98.wl-tiwai@suse.de>
+        <65ef4914-dc0e-4f0f-a6f8-3016931488bd@sirena.org.uk>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,32 +77,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the -u/--user-thread option documentation for timerlat top/hist.
+On Tue, 06 Jun 2023 18:10:13 +0200,
+Mark Brown wrote:
+> 
+> On Tue, Jun 06, 2023 at 06:08:51PM +0200, Takashi Iwai wrote:
+> > Shenghao Ding wrote:
+> 
+> > > +	//Lenovo devices
+> > > +	if ((subid == 0x387d) || (subid == 0x387e) || (subid == 0x3881)
+> > > +		|| (subid == 0x3884) || (subid == 0x3886) || (subid == 0x38a7)
+> > > +		|| (subid == 0x38a8) || (subid == 0x38ba) || (subid == 0x38bb)
+> > > +		|| (subid == 0x38be) || (subid == 0x38bf) || (subid == 0x38c3)
+> > > +		|| (subid == 0x38cb) || (subid == 0x38cd))
+> > > +		tas_priv->catlog_id = LENOVO;
+> > > +	else
+> > > +		tas_priv->catlog_id = OTHERS;
+> 
+> > Hmm, I don't like checking subid here, but we can live with it for
+> > now...
+> 
+> Might be more idiomatically/neatly written as a switch statement though.
 
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Daniel Bristot de Oliveira <bristot@kernel.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
----
- Documentation/tools/rtla/common_timerlat_options.rst | 7 +++++++
- 1 file changed, 7 insertions(+)
+Yes, it'll make it easier to add a new entry, too.
 
-diff --git a/Documentation/tools/rtla/common_timerlat_options.rst b/Documentation/tools/rtla/common_timerlat_options.rst
-index bacdea6de7a3..88506b397c2d 100644
---- a/Documentation/tools/rtla/common_timerlat_options.rst
-+++ b/Documentation/tools/rtla/common_timerlat_options.rst
-@@ -26,3 +26,10 @@
-         Set the /dev/cpu_dma_latency to *us*, aiming to bound exit from idle latencies.
-         *cyclictest* sets this value to *0* by default, use **--dma-latency** *0* to have
-         similar results.
-+
-+**-u**, **--user-threads**
-+
-+        Set timerlat to run without a workload, and then dispatches user-space workloads
-+        to wait on the timerlat_fd. Once the workload is awakes, it goes to sleep again
-+        adding so the measurement for the kernel-to-user and user-to-kernel to the tracer
-+        output.
--- 
-2.38.1
 
+thanks,
+
+Takashi
