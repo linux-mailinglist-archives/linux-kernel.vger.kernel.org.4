@@ -2,287 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5A9D723C64
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 10:59:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 937D4723C6A
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 10:59:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236721AbjFFI7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 04:59:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46966 "EHLO
+        id S236974AbjFFI7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 04:59:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235189AbjFFI7A (ORCPT
+        with ESMTP id S230499AbjFFI7l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 04:59:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC7CE6F
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 01:58:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686041890;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=AQST2b6YrtEOQE9e4aslcMdpne3NJ9evDrIjUqUNscM=;
-        b=S3o+0VSvce9JRrluKcokV7wmrrLjzKmMhlUxi3CD8vfEiaoF+TIPXT16YsnMsdj3l5mpBV
-        NnxTwVXJm4vrg6Obo8FFJndc7SR4cB46Q18PvN1N6sqlcxTTauwr2AixOgpiZuk4x6ihRn
-        hTTlhLAXJ6TsSgmOgeITN8y2BwkJtgI=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-300-Uv2lsas8ODCGdQXpfe_hZQ-1; Tue, 06 Jun 2023 04:58:09 -0400
-X-MC-Unique: Uv2lsas8ODCGdQXpfe_hZQ-1
-Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-9745f301bcfso326799266b.0
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 01:58:09 -0700 (PDT)
+        Tue, 6 Jun 2023 04:59:41 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74E1818E
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 01:59:39 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-bad97da58adso7375905276.1
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 01:59:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686041978; x=1688633978;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=N6kW28rRS95PBT40ZyGvD53ULubXonpBS0T08hlvYzY=;
+        b=dPR7PAcBEbq14AyijUdKPeY9aopH5oxf/XU5xNmYSoOyjYqERl9cm3yey7nh0m1wiS
+         1fQw4PTKPUr1LJE40ZZd38eOjy07GYhYSuKlqSPiw9DGP2NV1Aew+xNyenr+gJKvfyEv
+         Y673QHzNp/7uVnjx13QJvFKmESHWi+kGU/7hSOalAPdHTdKRkE5GkH2WPHuEeLevB7hY
+         fg6S/VW2ocpOzz2HcK6UtqUmuV68T5KMZHULgMQU8YeFJ/522xFXPPa4x+MmRNG7uo3B
+         Ir72yEqU5vuJXbw10qlB+t+kNprQd5pxm7t7+R4QcijkqpA6eNRyCE7+kDOarN9nzyr+
+         ZNiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686041888; x=1688633888;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AQST2b6YrtEOQE9e4aslcMdpne3NJ9evDrIjUqUNscM=;
-        b=PxV3UkRHvxVrtweFag/+uzk6ptqukIax6gMtvRiE+0aJ6eGq0CaPAYDc481sFGhuTV
-         kEmd9J8lPB8uvOyWghQcN+xMO0VRn06pzVGuUpl/QPg5ASMHhw3eXPqubV63MgS+mquQ
-         zYIHBwxDerFWjp6cyvYbwsr+D0ZV4wpXeBteGnAOJaGNbk2TifJbkzTXQSPdJgV1Dufe
-         zgYBFGc7nvyNfzJc3T9ffAVjGoOTy28pZPlbq7CRwpEn+NCPFTI3mCNCOG/tZF8jnCUQ
-         509wFy/82LtFmaAcG3twfQntmI+1mSXwTvPNHIRulDImyW9qLe2tbjyMTCMdSTPhydWu
-         xpBQ==
-X-Gm-Message-State: AC+VfDzCqEtA/jYUNctE8/tR8BxPgEoyb20E4Ts4mn/IdEkikrX6XDLU
-        xibLinO+BUVSg/etxVJZkt096pwLSstVPn6t0hrQCv7j+JD/kpLft7DcAbzNq/nHohdrteV2eyL
-        5GM0RxDFPa8KqTNuOMd6GK67b
-X-Received: by 2002:a17:906:9750:b0:973:edba:df30 with SMTP id o16-20020a170906975000b00973edbadf30mr2075503ejy.61.1686041888468;
-        Tue, 06 Jun 2023 01:58:08 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7MDzMA9108TD5iU7c26PIK3JtdzLGFrMjNae1OqX0U7wrIWJvVr0Xj+0ROKEWAz0azLZEAEQ==
-X-Received: by 2002:a17:906:9750:b0:973:edba:df30 with SMTP id o16-20020a170906975000b00973edbadf30mr2075479ejy.61.1686041888133;
-        Tue, 06 Jun 2023 01:58:08 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id jp25-20020a170906f75900b0096f675ce45csm5285337ejb.182.2023.06.06.01.58.07
+        d=1e100.net; s=20221208; t=1686041978; x=1688633978;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=N6kW28rRS95PBT40ZyGvD53ULubXonpBS0T08hlvYzY=;
+        b=J+cJmtPnb3NgcxxAQGPKnli+3AWHAMCENishhA5YsvFAZxaC+bO9R7EXj4S0FRMv+a
+         B4lgjZQWjkcOSeDSrtF1J6jgRx4aKCK8cj21J+X74oxHDcyzrhn7LBRkJ6dAlUJAx2hW
+         05K6d93FR8IfTHkrtbZFF85gsDLtfGyW0qSRvvppFp5gZMQcRQwJaH9oKXn0g4zFFrti
+         4YMj/G51B1EQxFPQhvbWjRCWTDbR1ErjZvPZPyy6H+iV1y9FpgWz9+UdRpUo5Hy1riem
+         jUAYBli8nmVvWcJmFZTm3V0mLHrqhd9TJRc+b3IkRtqTR5lXnxlldap8wXTowQezvUFn
+         qZUA==
+X-Gm-Message-State: AC+VfDxvWeC7EL7TLhdC5pFBFih0F/F5t/Af4v1rpSUcX7+z/vMJc8Ex
+        mlb21JCNd/yM8+zzG4t97aX25ke4RbY=
+X-Google-Smtp-Source: ACHHUZ6AeR7qesANdIDtp2lhgxb5Ewp8VMikOiupHZ9Q+qMTh31yK+rF2gXmNDrRFS8peWohfho2dQ==
+X-Received: by 2002:a25:c382:0:b0:bb3:b0ab:d626 with SMTP id t124-20020a25c382000000b00bb3b0abd626mr485746ybf.31.1686041978611;
+        Tue, 06 Jun 2023 01:59:38 -0700 (PDT)
+Received: from localhost ([203.221.142.9])
+        by smtp.gmail.com with ESMTPSA id o1-20020a17090ab88100b0024dfbac9e2fsm9010107pjr.21.2023.06.06.01.59.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Jun 2023 01:58:07 -0700 (PDT)
-Message-ID: <ffdd2d13-975e-1c74-0d2b-132ba461a3ee@redhat.com>
-Date:   Tue, 6 Jun 2023 10:58:06 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 0/1] platform/x86: asus-wmi: add support for ASUS
- screenpad
-Content-Language: en-US, nl
-To:     Luke Jones <luke@ljones.dev>
-Cc:     platform-driver-x86@vger.kernel.org,
-        =?UTF-8?Q?Barnab=c3=a1s_P=c5=91cze?= <pobrn@protonmail.com>,
-        =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        linux-kernel@vger.kernel.org, acpi4asus-user@lists.sourceforge.net,
-        corentin.chary@gmail.com, markgross@kernel.org, jdelvare@suse.com,
-        linux@roeck-us.net
-References: <20230505043013.2622603-1-luke@ljones.dev>
- <4be2cc57-59b9-24e2-fd10-f2af175ff518@redhat.com>
- <02f28fe4-bca4-f9d7-a9be-0f1999662d62@redhat.com>
- <FD1QUR.SO09CWU6HM4Q1@ljones.dev>
- <ade1f0d1-0a6b-7eed-cc79-139e0036e562@redhat.com>
- <06314c8dc4adeb69cd7801f9621c831f75a37c89.camel@ljones.dev>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <06314c8dc4adeb69cd7801f9621c831f75a37c89.camel@ljones.dev>
+        Tue, 06 Jun 2023 01:59:37 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Date:   Tue, 06 Jun 2023 18:58:46 +1000
+Message-Id: <CT5FZBY14ZM4.OYXBJNXQU9A2@wheely>
+Cc:     <linux-kernel@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH] powerpc/signal32: Force inlining of
+ __unsafe_save_user_regs() and save_tm_user_regs_unsafe()
+From:   "Nicholas Piggin" <npiggin@gmail.com>
+To:     "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        "Michael Ellerman" <mpe@ellerman.id.au>
+X-Mailer: aerc 0.14.0
+References: <7e469c8f01860a69c1ada3ca6a5e2aa65f0f74b2.1685955220.git.christophe.leroy@csgroup.eu>
+In-Reply-To: <7e469c8f01860a69c1ada3ca6a5e2aa65f0f74b2.1685955220.git.christophe.leroy@csgroup.eu>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Luke,
+On Mon Jun 5, 2023 at 6:58 PM AEST, Christophe Leroy wrote:
+> Looking at generated code for handle_signal32() shows calls to a
+> function called __unsafe_save_user_regs.constprop.0 while user access
+> is open.
+>
+> And that __unsafe_save_user_regs.constprop.0 function has two nops at
+> the begining, allowing it to be traced, which is unexpected during
+> user access open window.
+>
+> The solution could be to mark __unsafe_save_user_regs() no trace, but
+> to be on the safe side the most efficient is to flag it __always_inline
+> as already done for function __unsafe_restore_general_regs(). The
+> function is relatively small and only called twice, so the size
+> increase will remain in the noise.
+>
+> Do the same with save_tm_user_regs_unsafe() as it may suffer the
+> same issue.
 
-On 6/4/23 06:52, Luke Jones wrote:
-> On Thu, 2023-05-25 at 13:09 +0200, Hans de Goede wrote:
+Could you put a comment so someone doesn't uninline it later? Marking
+it notrace as well would be sufficient for a comment, if that works.
 
-<snip>
+Thanks,
+Nick
 
->> Right, so I think we first need to better understand the interactions
->> between the WMI calls you are making and the drm/kms interface.
->>
->> Question 1:
->>
->> If you turn the second screen off through WMI, does it get seen as
->> disconnected by the drm/kms driver then. Or does the drm/kms driver
->> just go on treating it as an extra connected display, still drawing
->> now no longer visible content to it ?
-> 
-> It is most certainly viewed as disconnected.
-
-Ok, that is good.
-
->> IOW does the desktop environment's monitor-config panel no longer
->> show the extra display after disabling it through WMI?
-> 
-> That is correct, it is no-longer a connected and visible display
-
-Ack.
-
->> The best way to check this is look under /sys/class/drm and find out
->> which /sys/class/drm/card#-<conn-type>-# entry belongs to the extra
->> panel. Step 1 check for all card#-<conn-type>-# entries
->> where status returns connected, e.g. :
->>
->> [hans@shalem ~]$ cat /sys/class/drm/card1-DP-1/status 
->> connected
->>
-> 
-> On disable the status does change to:
-> cat /sys/class/drm/card1-DP-5/enabled
-> disabled
-
-Ok, that is good.
-
-
->> Step 2: for the connected ones cat the modes, e.g.:
->>
->> [hans@shalem ~]$ cat /sys/class/drm/card1-DP-1/modes
->> 1920x1080
->> 1600x1200
->> ...
->>
->> And find the one which matches with the resolution of the extra panel
->> (the one which does not match with the resolution of the main panel).
->>
->> Then turn the extra panel of through WMI and cat the status attribute
->> again. If that still reads connected then that means the desktop
->> environment keeps seeing an extra display output which is not ideal.
->> This will e.g. cause any windows which were on the extra panel to
->> stay there, even though they are no longer visible.
->>
->>
->> Question 2:
->>
->> If you turn the second screen off through drm/kms, using the desktop
->> environments monitor config panel does this also turn off the
->> backlight ?
-> 
-> The screen is dark but there is still some backlight coming out of it.
-> I think this means I need to add a small pre-off to the patch to ensure
-> backlight is fully off when display is turned off.
-
-I'm afraid that this is not going to be easy to fix at the kernel level,
-we first need to tie backlight control to drm-connectors as I proposed
-(and plan to implement when I can make time):
-
-https://lore.kernel.org/dri-devel/b61d3eeb-6213-afac-2e70-7b9791c86d2e@redhat.com/
-
-Once that is in place we can simply make the drm-code call out to
-the backlight driver and have it turn the backlight off when disabling
-the output through the drm/kms interface.
-
->> After disabling the screen in the desktop environments monitor config
->> check that the enabled attribute, e.g. cat /sys/class/drm/card1-DP-
->> 1/enabled shows disabled and after verifying this look at the extra
->> screen in a dark room, do you see any backlight bleed indicating the
->> backlight is still  on?
->>
-> 
-> Shows as disabled
-> 
->>
->> We really want the backlight on/off state and the drm-connector
->> enabled state to match. My proposal from above will allow this once
->> implemented. Until we can hook this all up nicely I think it might be
->> better to just go with the custom sysfs attributes from your v1 patch
->> rather then adding a /sys/class/backlight device for this.
->>
-> 
-> I would like to go with the backlight patch as it seems more likely I
-> can adjust this without breaking userspace if required in future. The
-> WMI controls behave as expected to.
-
-Ok, lets go with the v2 which adds /sys/class/backlight support then.
-
-I must warn you though if this does turn out to cause issues I'll have
-no choice but to revert it.
-
-I must admit I've lost track a bit of the state of v2 during this
-discussion.  Can I pick up v2 as is, or were there (other) remarks
-which need addressing and should I expect a v3 ?
-
-####### Switch to (off-topic) GPU mux discussion ########
-
->>> So I think now is probably a good time to raise a particular issue
->>> I've encountered with the last two years: the display MUX.
->>>
->>> As I understand it now, there are two types of new MUX - the manual
->>> switch, and the newer "Advanced Optimus" automatic switch. The
->>> issues I have are with the manual switch since I've not encountered
->>> the advanced optimus yet.
->>>
->>> When the switch is. uh. switched. the dgpu drives the internal
->>> display, and I expect that since the display is now detected
->>> through the dgpu, this is why the dgpu is kept awake to drive it.
->>> But, the igpu is also still active, and because of this the initial
->>> boot from grub to display-manager is a black screen including tty.
->>> This means anyone with an encrypted drive will never see the prompt
->>> and they believe they have a failed boot. I don't know what to do
->>> about this?
->>
->> Is this with EFI booting or with classic BIOS boot? With EFI booting
->> the EFIFB should be put on the right GPU by the firmware. So I
->> suspect this is with classic BIOS boot?
-> 
-> No this is with EFI boot always. I'm not even sure these machines still
-> have the ability to boot oldschool bios style.
-
-Hmm, weird with EFI grub is just using the EFI text output protocol
-so what is happening here at the grub level is actually a bug in
-the firmware of the laptop(s)...
-
->> I think the best thing to do here is to just use EFI on machines like
->> this. That or put grub in text mode so that it makes BIOS calls to
->> display text. Using GRUB_TERMINAL_OUTPUT=gfxterm combined with
->> classic BIOS booting will make grub try to directly drive the gfx
->> card itself and I'm not surprised that it gets that wrong in this
->> case.
->> Note I think that just using EFI is prefered over switching grub to
->> GRUB_TERMINAL_OUTPUT=console. I would expect
->> GRUB_TERMINAL_OUTPUT=console to also work but I'm not sure. I don't
->> think that the classic BIOS boot stuff is still tested by laptop
->> vendors and esp. not tested with non standard BIOS settings ...
-> 
-> The grub gfx mode is GRUB_TERMINAL_OUTPUT="console", fedora default in
-> all cases here. Grub itself shows fine when the MUX mode is in dgpu
-> mode (aka, internal display connected to dgpu).
-
-Ah ok, so I misunderstood and the problem only happens *after* grub?
-
-Have I understood that correctly?
-
-And this is on Fedora with the nvidia binary driver ?
-
-The problem then likely is that the nvidia binary driver is not in
-the initrd (which is by design since it may need to be rebuild on
-a driver update while the kernel is kept at the same version,
-so the initrd won't be rebuild).
-
-So during the initrd there then is no kms driver to drive the
-internal display.
-
-Normally plymouth falls back to using the efifb (through simpledrm)
-but that is after a pretty large timeout and I think this may not
-be happening here because plymouth maybe thinks there is a kms
-capable display connected to the iGPU for some reason
-(maybe the extra screenpad panel ?)
-
-As a workaround you can tell plymouth to use the simpledrm kms
-device as soon as it becomes available instead of waiting for
-a native kms driver. To do this add "plymouth.use-simpledrm" to
-the kernel commandline. I think that this will work around
-the problem.
-
-> P.S> I will go ahead with the screen patch as it looks like this
-> behaves as expected minus the need to turn off BL before turn off
-> display. I will submit revision later in the week.
-
-Ok, so that answers my question from above and I should wait for a v3 :)
-
-Regards,
-
-Hans
-
-
+>
+> Fixes: ef75e7318294 ("powerpc/signal32: Transform save_user_regs() and sa=
+ve_tm_user_regs() in 'unsafe' version")
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> ---
+>  arch/powerpc/kernel/signal_32.c | 15 +++++++++------
+>  1 file changed, 9 insertions(+), 6 deletions(-)
+>
+> diff --git a/arch/powerpc/kernel/signal_32.c b/arch/powerpc/kernel/signal=
+_32.c
+> index c114c7f25645..7a718ed32b27 100644
+> --- a/arch/powerpc/kernel/signal_32.c
+> +++ b/arch/powerpc/kernel/signal_32.c
+> @@ -264,8 +264,9 @@ static void prepare_save_user_regs(int ctx_has_vsx_re=
+gion)
+>  #endif
+>  }
+> =20
+> -static int __unsafe_save_user_regs(struct pt_regs *regs, struct mcontext=
+ __user *frame,
+> -				   struct mcontext __user *tm_frame, int ctx_has_vsx_region)
+> +static __always_inline int
+> +__unsafe_save_user_regs(struct pt_regs *regs, struct mcontext __user *fr=
+ame,
+> +			struct mcontext __user *tm_frame, int ctx_has_vsx_region)
+>  {
+>  	unsigned long msr =3D regs->msr;
+> =20
+> @@ -364,8 +365,9 @@ static void prepare_save_tm_user_regs(void)
+>  		current->thread.ckvrsave =3D mfspr(SPRN_VRSAVE);
+>  }
+> =20
+> -static int save_tm_user_regs_unsafe(struct pt_regs *regs, struct mcontex=
+t __user *frame,
+> -				    struct mcontext __user *tm_frame, unsigned long msr)
+> +static __always_inline int
+> +save_tm_user_regs_unsafe(struct pt_regs *regs, struct mcontext __user *f=
+rame,
+> +			 struct mcontext __user *tm_frame, unsigned long msr)
+>  {
+>  	/* Save both sets of general registers */
+>  	unsafe_save_general_regs(&current->thread.ckpt_regs, frame, failed);
+> @@ -444,8 +446,9 @@ static int save_tm_user_regs_unsafe(struct pt_regs *r=
+egs, struct mcontext __user
+>  #else
+>  static void prepare_save_tm_user_regs(void) { }
+> =20
+> -static int save_tm_user_regs_unsafe(struct pt_regs *regs, struct mcontex=
+t __user *frame,
+> -				    struct mcontext __user *tm_frame, unsigned long msr)
+> +static __always_inline int
+> +save_tm_user_regs_unsafe(struct pt_regs *regs, struct mcontext __user *f=
+rame,
+> +			 struct mcontext __user *tm_frame, unsigned long msr)
+>  {
+>  	return 0;
+>  }
+> --=20
+> 2.40.1
 
