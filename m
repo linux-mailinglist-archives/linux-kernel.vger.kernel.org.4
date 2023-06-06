@@ -2,93 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 238E8723E32
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 11:48:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D21B723E33
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 11:49:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237127AbjFFJs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 05:48:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54204 "EHLO
+        id S236896AbjFFJtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 05:49:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237446AbjFFJsg (ORCPT
+        with ESMTP id S237572AbjFFJsr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 05:48:36 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF29310C8
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 02:48:30 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3f623adec61so60422395e9.0
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 02:48:30 -0700 (PDT)
+        Tue, 6 Jun 2023 05:48:47 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED5DFE73
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 02:48:33 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-30e4eec95c8so388027f8f.3
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 02:48:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686044909; x=1688636909;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=nH9IXy+8mmr6fEKUjeAVrm6OrEN2ynlfCA5RHInWD/g=;
-        b=zTebeQ5VTcDvGTHY8x8b4YFkkkxmVmwYcyWt+L7EqJFGAHB/Aw1MfV7XdsSJl6g9ZS
-         QFf+cyBsG0jZnG1q00buj8TnKt9PPwmSiGAaRdGFuesUi9uJ/Y+aM2HUrXuUNIsTI3H5
-         jDDgU0U6C2pxVmhDBjeJWneb40ID2C93V/65PzPwfn2kB0zYEQKHlntsA/i2hDxGA1eT
-         dPNTIt61dgFsE0BY6JSQHu2gGkQaU2nwxThexB+KzF9hxx6h4o0skGMdD9NKSpOkD/83
-         FZ3ZUGG4kVAUkJBc6KeTnhzadR6SS3GVnBtqB+Jklyb7EXkx3xCFCB2Bp6fzZRAL1lF0
-         YfFQ==
+        d=linaro.org; s=google; t=1686044912; x=1688636912;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=s/OX2oP8YZaGEVBQ6cH5rJxVRniqBzCLdpv0TF2IIbE=;
+        b=Cw6pOzihmkYF8h33rai75/+GXFTJtKHokyyjx8kKNgiGctxzj1IaZyVZhA8I+ceaPc
+         v5mn+gRwjcB6nEvs+CW9ACkBNeY0COhYRJsO4nP4NBo0dvLD9gJZug9S4OcbESL6SMT+
+         GOgwXlGceKShwgp0wGoHM3z0kjcx5tRUy9Q+3+2T80gGhdPRKe/jEr/3xgSIpk9KjqgA
+         u/5dPK31yy0vdLuyi00rTrKfpUvfCZjTt6ybg4JcTiiu/HB86Kss7DbSBoPPdAIbRXzH
+         PTMaXEFab/tDu1cblKGhTpZu/jQlWsGDClb7vC7uIxDn85qPz+H4EZT9efHUt3tY4SG9
+         8I0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686044909; x=1688636909;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nH9IXy+8mmr6fEKUjeAVrm6OrEN2ynlfCA5RHInWD/g=;
-        b=eAunhoNMXmvFYXlnXP39VVbBLD4jSJ61oOuqHAptBUoM0Eqcd/502T3iUYU2W4GSKJ
-         FZNLJIavIAa+trvfs7Tt9cW9Dsc9y1a138h+PQAxLJuzt/xm+eDF9+7pUEn8+W8ORA2j
-         avjMwYQ4ynCnp1h6Xw5dOs/o+5r1m/aG073vKNZ2OKPewsOzxvkXot0t8usWe4fMUehp
-         1qtWE/PGIDWSwcoCN7ORHVEiN8mieeRkjQKtVLbeGLHoioTZhwF38yZTOWaYesH5AXw5
-         hEOPBalHdMz+tC88lwkRbGh6Spga6jmJ5ARzfh0P5I9sXfUPAozekKc1DArTwM1uYhbm
-         cL6w==
-X-Gm-Message-State: AC+VfDzvD/ruppMaVTz05GHj3Fplvl/ewDHe2AvImfpM9MjWoJ0bXQZd
-        51VrV08rISjwPS837vPA9ik/7g==
-X-Google-Smtp-Source: ACHHUZ5DwtWDzMb4zpcw1FeB4iY7eNE3ZKctzKba19fFKs6cvdR5J0xK2HTz6GvoD4cnjwuXPljVOw==
-X-Received: by 2002:a7b:cb92:0:b0:3f7:29c4:8fbd with SMTP id m18-20020a7bcb92000000b003f729c48fbdmr1620359wmi.27.1686044909090;
-        Tue, 06 Jun 2023 02:48:29 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:4973:1165:b171:fa69? ([2a01:e0a:982:cbb0:4973:1165:b171:fa69])
-        by smtp.gmail.com with ESMTPSA id y20-20020a05600c365400b003f60a446fe5sm13553200wmq.29.2023.06.06.02.48.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Jun 2023 02:48:28 -0700 (PDT)
-Message-ID: <42151d11-12d9-c165-0d4b-a0af80b683c3@linaro.org>
-Date:   Tue, 6 Jun 2023 11:48:27 +0200
+        d=1e100.net; s=20221208; t=1686044912; x=1688636912;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=s/OX2oP8YZaGEVBQ6cH5rJxVRniqBzCLdpv0TF2IIbE=;
+        b=iuzvEVoLZ1B2WH2jy8Mpgmqxy+XsginGuZRTvZFhIB2RqjeFvRseb/XiHn7O6IX+tE
+         88xJbeBSTnz0wWSSx1SjzvinaeLwlt8deBYlNKQ2hJHt09cdanQLpFvXpifYZVU0qemf
+         6b2XQkkJv7QEWszcxT+ZDkyE0TselE2w2REYYttt4Zt9FPdpHO93scGMk07f7s9FvTvI
+         M7FYDm1Z5c6By40HgfF5Ndaptu+cn2tg3YEjMVR+Wbot1TXmwwlR4RYPLUztYoTBVOVg
+         vQoksL4vJoDqKIJuQ0zz5ILunEK1igLtJlzVRP9q3KMRneVxRuMjWKhC/yUxNshHasnX
+         Z05Q==
+X-Gm-Message-State: AC+VfDx5Rxq6DVVvfpc6Sog8Sg+mNyAeOa0zsMknPzJHTvcYpWqeaV5i
+        MRWvBuxF7al88tAzWL2kyb8GUA==
+X-Google-Smtp-Source: ACHHUZ7IBxiyJzVQU8c4azyK+pahsRosjuqLcfM+qc1zx7YHDvmeg/So6+h8vb2cHh/DpIJYCvWZ6A==
+X-Received: by 2002:a5d:534a:0:b0:307:a36b:e7b1 with SMTP id t10-20020a5d534a000000b00307a36be7b1mr1654311wrv.5.1686044912446;
+        Tue, 06 Jun 2023 02:48:32 -0700 (PDT)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.gmail.com with ESMTPSA id y20-20020a05600c365400b003f60fb2addbsm17089178wmq.44.2023.06.06.02.48.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Jun 2023 02:48:31 -0700 (PDT)
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        =?utf-8?q?Rafa=C5=82_Mi=C5=82ecki?= <zajec5@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Michael Walle <michael@walle.cc>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?utf-8?q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>
+In-Reply-To: <20230327141611.25131-1-zajec5@gmail.com>
+References: <20230327141611.25131-1-zajec5@gmail.com>
+Subject: Re: [PATCH V6 0/3] nvmem: add fixed cells layout
+Message-Id: <168604491026.228888.3615401302386007929.b4-ty@linaro.org>
+Date:   Tue, 06 Jun 2023 10:48:30 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-From:   neil.armstrong@linaro.org
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v7 0/8] drm/tidss: Use new connector model for tidss
-Content-Language: en-US
-To:     Aradhya Bhatia <a-bhatia1@ti.com>,
-        Tomi Valkeinen <tomba@kernel.org>,
-        Jyri Sarha <jyri.sarha@iki.fi>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Robert Foss <rfoss@kernel.org>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Swapnil Jakhade <sjakhade@cadence.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Francesco Dolcini <francesco@dolcini.it>
-Cc:     DRI Development List <dri-devel@lists.freedesktop.org>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rahul T R <r-ravikumar@ti.com>,
-        Devarsh Thakkar <devarsht@ti.com>,
-        Jayesh Choudhary <j-choudhary@ti.com>
-References: <20230606082142.23760-1-a-bhatia1@ti.com>
- <1f284e9d-5a1e-9fca-ceb0-478a413ae4ef@linaro.org>
- <1b31f36c-b1ba-43b5-9285-0f50384a78cf@ti.com>
-Organization: Linaro Developer Services
-In-Reply-To: <1b31f36c-b1ba-43b5-9285-0f50384a78cf@ti.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -97,109 +78,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/06/2023 11:46, Aradhya Bhatia wrote:
-> Hi Neil,
-> 
-> Thank you for reviewing the previous patches!
-> 
-> On 06-Jun-23 14:37, Neil Armstrong wrote:
->> Hi,
->>
->> On 06/06/2023 10:21, Aradhya Bhatia wrote:
->>> Hi all,
->>>
->>> I have picked up this long standing series from Nikhil Devshatwar[1].
->>>
->>> This series moves the tidss to using new connectoe model, where the SoC
->>> driver (tidss) creates the connector and all the bridges are attached
->>> with the flag DRM_BRIDGE_ATTACH_NO_CONNECTOR. It also now creates bridge
->>> to support format negotiation and and 'simple' encoder to expose it to
->>> the userspace.
->>>
->>> Since the bridges do not create the connector, the bus_format and
->>> bus_flag is set via atomic hooks.
->>>
->>> Support format negotiations in the tfp410, sii902x and mhdp-8546 bridge
->>> drivers as a first step before moving the connector model.
->>>
->>> These patches were tested on AM625-SK EVM, AM625 SoC based BeaglePlay,
->>> and J721E-SK. Display support for AM625 SoC has not been added upstream
->>> and is a WIP. To test this series on AM625 based platforms, basic
->>> display support patches, (for driver + devicetree), can be found in
->>> the "next_AttachNoConn-v2" branch on my github fork[2].
->>
->> I can apply all bridge patches right now so only the tidss change remain,
->> is that ok for you ?
->>
-> 
-> While the bridge patches and the tidss patch can be separately built
-> without any issue, the tidss functionality will break if only the bridge
-> patches get picked up, and not the tidss.
-> 
-> Would it be possible for you to pick all the patches together once Tomi
-> acks the tidss patch?
 
-Sure
+On Mon, 27 Mar 2023 16:16:08 +0200, Rafał Miłecki wrote:
+> From: Rafał Miłecki <rafal@milecki.pl>
+> 
+> NVMEM bindings received a new feature recently: layouts. They allow
+> defining NVMEM device content in a separated DT node named
+> "nvmem-layout". That improvement results in cleaner and more generic
+> bindings.
+> 
+> [...]
 
-Neil
-> 
-> 
-> Regards
-> Aradhya
-> 
->>
->>>
->>> Thanks,
->>> Aradhya
->>>
->>> [1]: https://patchwork.freedesktop.org/series/82765/#rev5
->>> [2]: https://github.com/aradhya07/linux-ab/tree/next_AttachNoConn-v2
->>>
->>> Change Log:
->>> V6 -> V7
->>>     - Rebase and cosmetic changes.
->>>     - Drop the output format check condition for mhdp8546 and hence,
->>>       drop Tomi Valkeinen's R-b tag.
->>>     - Added tags wherever suggested.
->>>
->>> V5 -> V6
->>>     - Rebase and cosmetic changes
->>>     - Dropped the output format check condition for tfp410 and hence,
->>>       dropped Tomi Valkeinen's and Laurent Pinchart's R-b tags.
->>>     - Based on Boris Brezillon's comments: dropped patches 5 and 6 from
->>>       the series and instead created a single patch that,
->>>         1. Creates tidss bridge for format negotiation.
->>>         2. Creates 'simple' encoder for userspace exposure.
->>>         3. Creates a tidss connector.
->>>         4. Attaches the next-bridge to encoder with the
->>>            DRM_BRIDGE_ATTACH_NO_CONNECTOR flag.
->>>     - Add format negotiation support for sii902x driver.
->>>
->>> Previous versions:
->>> V1 to V6: https://patchwork.freedesktop.org/series/82765/
->>>
->>> Aradhya Bhatia (3):
->>>     drm/bridge: sii902x: Support format negotiation hooks
->>>     drm/bridge: sii902x: Set input_bus_flags in atomic_check
->>>     drm/tidss: Update encoder/bridge chain connect model
->>>
->>> Nikhil Devshatwar (5):
->>>     drm/bridge: tfp410: Support format negotiation hooks
->>>     drm/bridge: tfp410: Set input_bus_flags in atomic_check
->>>     drm/bridge: mhdp8546: Add minimal format negotiation
->>>     drm/bridge: mhdp8546: Set input_bus_flags from atomic_check
->>>     drm/bridge: cdns-mhdp8546: Fix the interrupt enable/disable
->>>
->>>    .../drm/bridge/cadence/cdns-mhdp8546-core.c   |  77 ++++++----
->>>    .../drm/bridge/cadence/cdns-mhdp8546-core.h   |   2 +-
->>>    .../drm/bridge/cadence/cdns-mhdp8546-j721e.c  |   9 +-
->>>    .../drm/bridge/cadence/cdns-mhdp8546-j721e.h  |   2 +-
->>>    drivers/gpu/drm/bridge/sii902x.c              |  40 +++++
->>>    drivers/gpu/drm/bridge/ti-tfp410.c            |  43 ++++++
->>>    drivers/gpu/drm/tidss/tidss_encoder.c         | 140 +++++++++++-------
->>>    drivers/gpu/drm/tidss/tidss_encoder.h         |   5 +-
->>>    drivers/gpu/drm/tidss/tidss_kms.c             |  12 +-
->>>    9 files changed, 235 insertions(+), 95 deletions(-)
->>>
->>
+Applied, thanks!
+
+[1/3] dt-bindings: nvmem: layouts: add fixed-layout
+      commit: 4d0c9ce1a7a26947269a15fad622f1ffb6698627
+[2/3] dt-bindings: nvmem: convert base example to use NVMEM fixed cells layout
+      commit: 75dd9c7a421a239be6e7bd48e6b3a1474500fe98
+[3/3] nvmem: core: add support for fixed cells *layout*
+      commit: ac1c0d15aedc0863031bc8d678d5f96ab11d3a41
+
+Best regards,
+-- 
+Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 
