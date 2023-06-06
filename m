@@ -2,96 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8C18724694
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:43:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C87F724684
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:41:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238400AbjFFOnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 10:43:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46854 "EHLO
+        id S238370AbjFFOlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 10:41:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238107AbjFFOnA (ORCPT
+        with ESMTP id S238322AbjFFOjw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 10:43:00 -0400
-Received: from sender-of-o51.zoho.in (sender-of-o51.zoho.in [103.117.158.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC9AC30D3
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 07:41:04 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1686062339; cv=none; 
-        d=zohomail.in; s=zohoarc; 
-        b=NRMwi30fHFoOYPTsJxxPO8mtNBPqggM7ZYFYKYiH5T+3S+bO32/iCjvSCJohkvSusJJdGWPC1Fyo2/HpIEcNFiL7wMNQotTltfN0qLMi6y+AkmBR2k4waDePDO9X6ovrSXQ/IAFzyZL9Y3dzrIhjB5cjezOGaYX4qX0dOUzT/yA=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
-        t=1686062339; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=we4OKyiqxKpRZqTOEuovizJ9NsdFVjeQ9dA+yX7m0xQ=; 
-        b=LPvOJ7fM11E7ZXnz1BUNR76kulY0nl9otY5bAQBTEYnQqivKa3Dbi2e1R6tdNFKdvb+Q3/zKkWwME/KdSBFVzCx0MmHBTnXWNIBkCwwTufeT1Jvlcu4GQOTnDcb4AIYUhQGew1hDYN7BGWhvGbShzmv33iv/Ugh3I8IASrx6yJg=
-ARC-Authentication-Results: i=1; mx.zohomail.in;
-        dkim=pass  header.i=siddh.me;
-        spf=pass  smtp.mailfrom=code@siddh.me;
-        dmarc=pass header.from=<code@siddh.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1686062339;
-        s=zmail; d=siddh.me; i=code@siddh.me;
-        h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=we4OKyiqxKpRZqTOEuovizJ9NsdFVjeQ9dA+yX7m0xQ=;
-        b=dUxBTwoXq4sKuQ3aRnhHNUfBwypUh6wjQ00adzIIHni5kMVZ70/OS3OI3wg1Za7F
-        spU+vGtHHZjNRZ97GnFvE10tpGuKWuSkO33UycppjDjHO5J/8GRSDBS61MsPOGPIixj
-        3k8UAOVhTPTjJEefFpkhjQPRGCvzfXC5XtUQrhI8=
-Received: from mail.zoho.in by mx.zoho.in
-        with SMTP id 1686062307468507.0230860934555; Tue, 6 Jun 2023 20:08:27 +0530 (IST)
-Date:   Tue, 06 Jun 2023 20:08:27 +0530
-From:   Siddh Raman Pant <code@siddh.me>
-To:     "Laurent Pinchart" <laurent.pinchart@ideasonboard.com>
-Cc:     "Maarten Lankhorst" <maarten.lankhorst@linux.intel.com>,
-        "Maxime Ripard" <mripard@kernel.org>,
-        "Thomas Zimmermann" <tzimmermann@suse.de>,
-        "David Airlie" <airlied@gmail.com>,
-        "Daniel Vetter" <daniel@ffwll.ch>,
-        "Andrzej Hajda" <andrzej.hajda@intel.com>,
-        "Neil Armstrong" <neil.armstrong@linaro.org>,
-        "Robert Foss" <rfoss@kernel.org>,
-        "Jonas Karlman" <jonas@kwiboo.se>,
-        "Jernej Skrabec" <jernej.skrabec@gmail.com>,
-        "Jani Nikula" <jani.nikula@linux.intel.com>,
-        "dri-devel" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel" <linux-kernel@vger.kernel.org>,
-        "Suraj Upadhyay" <usuraj35@gmail.com>
-Message-ID: <1889125187d.5d36766d120183.6659725053490512400@siddh.me>
-In-Reply-To: <20230606142322.GB5197@pendragon.ideasonboard.com>
-References: <cover.1686047727.git.code@siddh.me>
- <52c8eb0f241a9d67ce5b7e6fc64dc397e735ccd8.1686047727.git.code@siddh.me> <20230606142322.GB5197@pendragon.ideasonboard.com>
-Subject: Re: [PATCH v9 3/8] drm: Remove usage of deprecated DRM_INFO
+        Tue, 6 Jun 2023 10:39:52 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE90C1996
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 07:38:35 -0700 (PDT)
+Message-ID: <20230606142033.497103352@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1686062309;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         references:references; bh=QX5B1K8+RZfszOFPTG8OurkUDJXHJzL25+Bw2kwFOks=;
+        b=vOQ16cEyHNDbLUGFYruJwYjN4q7pIkx1YIMSNjLezUFntAY4NfLKrNSAzGYShK+1bxxWsj
+        JdTJO0LI62p7/tTNapErdK+exa61vb0ceeby4gZNozm6CemlpY0qk0sD2sT7M+FiQU2Mgm
+        NbHtaH8AZaVsAQkk0f2bWrwKKme4v0bmelpc59kik23/kxjpHC1p+NgFHzWTUiH6xCoKRj
+        sTr9suQXRMCs1SfNb1Bc6nL3DFVt2lxu4oA/+8uGYxnOxiSrHpvnGEGVvgEpb/QB8QW0kb
+        fOTF+6Avu2+90TgxQBnR0zlbNgBF2TU00pkceF9D6xOU5bS7og20jyHSdMQKVQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1686062309;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         references:references; bh=QX5B1K8+RZfszOFPTG8OurkUDJXHJzL25+Bw2kwFOks=;
+        b=20weg5fGBIvVECqLe85GEUt4JCXeb060IkO4yfxADrXdfn7vxTPULxdLKN53UFqd5AC16g
+        BcxX0Gy8w4gmKuCA==
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        Anna-Maria Behnsen <anna-maria@linutronix.de>,
+        John Stultz <jstultz@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Oleg Nesterov <oleg@redhat.com>
+Subject: [patch 44/45] alarmtimers: Remove the throttle mechanism from
+ alarm_forward_now()
+References: <20230606132949.068951363@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-Importance: Medium
-User-Agent: Zoho Mail
-X-Mailer: Zoho Mail
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Date:   Tue,  6 Jun 2023 16:38:28 +0200 (CEST)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 06 Jun 2023 19:53:22 +0530, Laurent Pinchart wrote:
-> Hi Siddh,
-> 
-> Thank you for the patch.
+Now that ignored posix timer signals are requeued and the timers are
+rearmed on signal delivery the workaround to keep such timers alive and
+self rearm them is not longer required.
 
-Anytime :)
+Remove the unused alarm timer parts.
 
-> Any plan to remove it from drivers as well ? If not you should mention
-> in the commit message (probably in the subject line itself) that you're
-> only addressing the DRM core.
-> 
-> Same comment for further patches in this series.
-
-Yeah, this patch set aims to replace just in drm core (as mentioned in
-the cover).
-
-I thought "drm" would suffice since I did not specify a specific driver
-like i915. So the subject line should say "drm core: ..."?
-
-Thanks,
-Siddh
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+---
+ kernel/time/alarmtimer.c |   28 ++--------------------------
+ 1 file changed, 2 insertions(+), 26 deletions(-)
+--- a/kernel/time/alarmtimer.c
++++ b/kernel/time/alarmtimer.c
+@@ -458,35 +458,11 @@ u64 alarm_forward(struct alarm *alarm, k
+ }
+ EXPORT_SYMBOL_GPL(alarm_forward);
+ 
+-static u64 __alarm_forward_now(struct alarm *alarm, ktime_t interval, bool throttle)
++u64 alarm_forward_now(struct alarm *alarm, ktime_t interval)
+ {
+ 	struct alarm_base *base = &alarm_bases[alarm->type];
+-	ktime_t now = base->get_ktime();
+-
+-	if (IS_ENABLED(CONFIG_HIGH_RES_TIMERS) && throttle) {
+-		/*
+-		 * Same issue as with posix_timer_fn(). Timers which are
+-		 * periodic but the signal is ignored can starve the system
+-		 * with a very small interval. The real fix which was
+-		 * promised in the context of posix_timer_fn() never
+-		 * materialized, but someone should really work on it.
+-		 *
+-		 * To prevent DOS fake @now to be 1 jiffie out which keeps
+-		 * the overrun accounting correct but creates an
+-		 * inconsistency vs. timer_gettime(2).
+-		 */
+-		ktime_t kj = NSEC_PER_SEC / HZ;
+ 
+-		if (interval < kj)
+-			now = ktime_add(now, kj);
+-	}
+-
+-	return alarm_forward(alarm, now, interval);
+-}
+-
+-u64 alarm_forward_now(struct alarm *alarm, ktime_t interval)
+-{
+-	return __alarm_forward_now(alarm, interval, false);
++	return alarm_forward(alarm, base->get_ktime(), interval);
+ }
+ EXPORT_SYMBOL_GPL(alarm_forward_now);
+ 
 
