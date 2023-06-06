@@ -2,188 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3A847249BA
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 19:04:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BE8C7249C0
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 19:06:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238368AbjFFREs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 13:04:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50094 "EHLO
+        id S238468AbjFFRGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 13:06:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231824AbjFFREq (ORCPT
+        with ESMTP id S238389AbjFFRF6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 13:04:46 -0400
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0171139
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 10:04:45 -0700 (PDT)
-Received: by mail-ot1-x32e.google.com with SMTP id 46e09a7af769-6af74ca9f4aso5904523a34.3
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 10:04:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686071085; x=1688663085;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fNlN5GtDgKPNlWQWYPrqc7sZzQ5di7/0ZMJCpdEzxF4=;
-        b=OQib3uJJapjTVAKDiAYUg0Us2w1EOIiueE8Es8TRMEsjK8ojjcQLx/ux6YNlQyWt+0
-         miCbnvINWBaxLLVw3F8dNa5zY2xKoDToktA1FAnF5EWcH98zClhxoKYDS480LaRA6jPZ
-         d0/59SNOiS9sQ4FS88bkSAcpX/c5fnXJLarzuWip7Pj5lR5qxh2ahNXJSW8uathcCmP9
-         Kt185dRhkzXV+XiaOZtW2iQetAIpKdqpdbH0zmM4hy6LH0f6q8cuflLXbbDojPNqOrlI
-         EwOENfaIGxdmfx+kSRx1NDSurfXiNnUapB+yEj3J8wGg2vX5015H+U+C8JtBTg1WKiWy
-         gQFQ==
+        Tue, 6 Jun 2023 13:05:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2713710F3
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 10:05:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686071115;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Klr9ojsS6vgNV/bJIZFbnwpXw/q2jytqsbFFwKeEH40=;
+        b=TumWP/hn7nP2erYG6v0qca7GJOUqYhAZlmM8JCIHy7a2jHREYphzchT0eUgQt+Vwe5u9iO
+        mAitw6mGn26K538u+6C5mgyOIfp3zKHfrtx/Ur4+Esi4Zg3v5+QeNDX5Qw/LP9P3qfJQsW
+        FnpO9XleFMJtmG+zo/cfL6gc28ypWtM=
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com
+ [209.85.166.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-425-gyFCTY55P_iFI9hBloEgBw-1; Tue, 06 Jun 2023 13:05:13 -0400
+X-MC-Unique: gyFCTY55P_iFI9hBloEgBw-1
+Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-33b7c0bfa55so50794245ab.2
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 10:05:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686071085; x=1688663085;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1686071112; x=1688663112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=fNlN5GtDgKPNlWQWYPrqc7sZzQ5di7/0ZMJCpdEzxF4=;
-        b=NhvCP9PwerFAC3Bw+PaMbjKm5MdvpHdeVeemZmH/zibVEI7r+lZQ5ooIJYC5cGyByy
-         EsEygj7FQz54C0LR7BB0v5G0dyBo3LysQ1NuvVrjsOkGW24VJAEa0tkehN0rw0PVy/Ji
-         Ddv/9qdZNKAJB6jOUSJ919lSez+3IQ34XWFCYJ6fmC/eUFX7DEWqm3EcMFtRN3Se5c0L
-         d91V77+8SIYbQUWNR5din3STNBnyx/6MxG0M6jvpnzWdxRlCjNTP4tbJ4+KBSm5SB5ho
-         WQ/0vkm1IkbRjKQMkiACSUiJK3H6d399UXeW5EY0Wc8mzN3KUANQtZgIYyk3Ug192Kt5
-         TzfA==
-X-Gm-Message-State: AC+VfDyAKsW0P6rug8ZJdutbAQJ7G3vwyAAZ/WkQXj3sjDksGWfmo4gq
-        sR+Hy+Er+1YsxupgwSYi+DOEuvxBN+XnNjyMAXbL8g==
-X-Google-Smtp-Source: ACHHUZ6eSbBSq31Pj92QtB9+CuuoSz1DZ0/pX0OX+xNECugxvdKmm2rwO+JwvnYaWPHSu4qZgjij+Xe/6GdeLzb2jXo=
-X-Received: by 2002:a05:6359:692:b0:125:83a6:caa5 with SMTP id
- ei18-20020a056359069200b0012583a6caa5mr432294rwb.3.1686071084761; Tue, 06 Jun
- 2023 10:04:44 -0700 (PDT)
+        bh=Klr9ojsS6vgNV/bJIZFbnwpXw/q2jytqsbFFwKeEH40=;
+        b=GVU2KNVZyyUdvAsf4h1QgcSDGgWGXI3GKLZOVSKW+olDbHrN+faRF/LP/374mIQKdt
+         yhnYmTzcfU21P/i32SUkhIPUDAL4qIKFXzRDua3vam2jz0AhqbPDPbdHJeMOi4Rh8jwn
+         1SzdYMMyHeU7oMaXQIlJX1Cu3/BNFX2j7ijKsFFiglPM5XQAC0W0Us8bFiEV/1S3BJ2V
+         mKqMZqC2osx0A2mznIN/S1SJF1U3sOJKWgJliwJhtADINitZipGGOOtOpt9Bl+1E/N6A
+         LuFygTIW5ElVod7jYI/zP3PVQgusLyjRpntMw4P/b/YvaeIS9nVqZf28RX8+LRUanh54
+         zWnQ==
+X-Gm-Message-State: AC+VfDyTJik6JEXMnH4HpwX7QRXLRo2L2q16jT3Wo717PGSOgEkVGCTi
+        lxiwbCZhmedpWluKq0FXrBxmPJ+rji6Xu3eQEmisMjzVQLoEFuScsv9ywYZ9ntQ0P9o1AsGUXT+
+        KlDnMqYMAWXj/DwQ0rWfbw7zE27xI5eN7
+X-Received: by 2002:a92:dc8b:0:b0:335:c544:a1a7 with SMTP id c11-20020a92dc8b000000b00335c544a1a7mr2871905iln.0.1686071112397;
+        Tue, 06 Jun 2023 10:05:12 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5yq6k08lcp3LSMa8oKyF/fjsPILIefcMLDuqKrnu3BgvX/2jpbtzwjN8wvkImSfQ4fBctN/A==
+X-Received: by 2002:a92:dc8b:0:b0:335:c544:a1a7 with SMTP id c11-20020a92dc8b000000b00335c544a1a7mr2871886iln.0.1686071112145;
+        Tue, 06 Jun 2023 10:05:12 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id z11-20020a92d6cb000000b0033bea7559ffsm3112615ilp.53.2023.06.06.10.05.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Jun 2023 10:05:11 -0700 (PDT)
+Date:   Tue, 6 Jun 2023 11:05:10 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     ankita@nvidia.com, aniketa@nvidia.com, cjia@nvidia.com,
+        kwankhede@nvidia.com, targupta@nvidia.com, vsethi@nvidia.com,
+        acurrid@nvidia.com, apopple@nvidia.com, jhubbard@nvidia.com,
+        danw@nvidia.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/1] vfio/nvgpu: Add vfio pci variant module for
+ grace hopper
+Message-ID: <20230606110510.0f87952c.alex.williamson@redhat.com>
+In-Reply-To: <ZH9RfXhbuED2IUgJ@nvidia.com>
+References: <20230606025320.22647-1-ankita@nvidia.com>
+        <20230606083238.48ea50e9.alex.williamson@redhat.com>
+        <ZH9RfXhbuED2IUgJ@nvidia.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <20230601024900.22902-1-zhoufeng.zf@bytedance.com>
- <5bc1ac0d-cea8-19e5-785a-cd72140d8cdb@linux.dev> <20881602-9afc-96b7-3d58-51c31e3f50b7@bytedance.com>
- <d7be9d22-c6aa-da2a-77fc-9638ad1e0f15@linux.dev> <2d138e12-9273-46e6-c219-96c665f38f0f@bytedance.com>
-In-Reply-To: <2d138e12-9273-46e6-c219-96c665f38f0f@bytedance.com>
-From:   Stanislav Fomichev <sdf@google.com>
-Date:   Tue, 6 Jun 2023 10:04:33 -0700
-Message-ID: <CAKH8qBtxNuwvawZ3v1-eK0RovPHu5AtYpays29TjxE2s-2RHpQ@mail.gmail.com>
-Subject: Re: Re: [PATCH bpf-next] bpf: getsockopt hook to get optval without
- checking kernel retval
-To:     Feng Zhou <zhoufeng.zf@bytedance.com>
-Cc:     Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yangzhenze@bytedance.com,
-        wangdongdong.6@bytedance.com, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, haoluo@google.com,
-        jolsa@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 5, 2023 at 8:20=E2=80=AFPM Feng Zhou <zhoufeng.zf@bytedance.com=
-> wrote:
->
-> =E5=9C=A8 2023/6/1 23:50, Martin KaFai Lau =E5=86=99=E9=81=93:
-> > On 5/31/23 11:05 PM, Feng Zhou wrote:
-> >> =E5=9C=A8 2023/6/1 13:37, Martin KaFai Lau =E5=86=99=E9=81=93:
-> >>> On 5/31/23 7:49 PM, Feng zhou wrote:
-> >>>> From: Feng Zhou <zhoufeng.zf@bytedance.com>
-> >>>>
-> >>>> Remove the judgment on retval and pass bpf ctx by default. The
-> >>>> advantage of this is that it is more flexible. Bpf getsockopt can
-> >>>> support the new optname without using the module to call the
-> >>>> nf_register_sockopt to register.
-> >>>>
-> >>>> Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
-> >>>> ---
-> >>>>   kernel/bpf/cgroup.c | 35 +++++++++++++----------------------
-> >>>>   1 file changed, 13 insertions(+), 22 deletions(-)
-> >>>>
-> >>>> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-> >>>> index 5b2741aa0d9b..ebad5442d8bb 100644
-> >>>> --- a/kernel/bpf/cgroup.c
-> >>>> +++ b/kernel/bpf/cgroup.c
-> >>>> @@ -1896,30 +1896,21 @@ int
-> >>>> __cgroup_bpf_run_filter_getsockopt(struct sock *sk, int level,
-> >>>>       if (max_optlen < 0)
-> >>>>           return max_optlen;
-> >>>> -    if (!retval) {
-> >>>> -        /* If kernel getsockopt finished successfully,
-> >>>> -         * copy whatever was returned to the user back
-> >>>> -         * into our temporary buffer. Set optlen to the
-> >>>> -         * one that kernel returned as well to let
-> >>>> -         * BPF programs inspect the value.
-> >>>> -         */
-> >>>> -
-> >>>> -        if (get_user(ctx.optlen, optlen)) {
-> >>>> -            ret =3D -EFAULT;
-> >>>> -            goto out;
-> >>>> -        }
-> >>>> +    if (get_user(ctx.optlen, optlen)) {
-> >>>> +        ret =3D -EFAULT;
-> >>>> +        goto out;
-> >>>> +    }
-> >>>> -        if (ctx.optlen < 0) {
-> >>>> -            ret =3D -EFAULT;
-> >>>> -            goto out;
-> >>>> -        }
-> >>>> -        orig_optlen =3D ctx.optlen;
-> >>>> +    if (ctx.optlen < 0) {
-> >>>> +        ret =3D -EFAULT;
-> >>>> +        goto out;
-> >>>> +    }
-> >>>> +    orig_optlen =3D ctx.optlen;
-> >>>> -        if (copy_from_user(ctx.optval, optval,
-> >>>> -                   min(ctx.optlen, max_optlen)) !=3D 0) {
-> >>>> -            ret =3D -EFAULT;
-> >>>> -            goto out;
-> >>>> -        }
-> >>>> +    if (copy_from_user(ctx.optval, optval,
-> >>>> +                min(ctx.optlen, max_optlen)) !=3D 0) {
-> >>> What is in optval that is useful to copy from if the kernel didn't
-> >>> handle the optname?
-> >>
-> >> For example, if the user customizes a new optname, it will not be
-> >> processed if the kernel does not support it. Then the data stored in
-> >> optval is the data put
-> >
-> >
-> >
-> >> by the user. If this part can be seen by bpf prog, the user can
-> >> implement processing logic of the custom optname through bpf prog.
-> >
-> > This part does not make sense. It is a (get)sockopt. Why the bpf prog
-> > should expect anything useful in the original __user optval? Other than
-> > unnecessary copy for other common cases, it looks like a bad api, so
-> > consider it a NAK.
-> >
-> >>
-> >>>
-> >>> and there is no selftest also.
-> >>>
-> >>
-> >> Yes, if remove this restriction, everyone thinks it's ok, I'll add it
-> >> in the next version.
-> >>
-> >>>> +        ret =3D -EFAULT;
-> >>>> +        goto out;
-> >>>>       }
-> >>>>       lock_sock(sk);
-> >>>
-> >>
-> >
->
-> According to my understanding, users will have such requirements,
-> customize an optname, which is not available in the kernel. All logic is
-> completed in bpf prog, and bpf prog needs to obtain the user data passed
-> in by the system call, and then return the data required by the user
-> according to this data.
->
-> For optname not in the kernel, the error code is
-> #define ENOPROTOOPT 92/* Protocol not available */
-> Whether to consider the way of judging with error codes,
-> If (! retval | | retval =3D=3D -ENOPROTOOPT)
+On Tue, 6 Jun 2023 12:32:13 -0300
+Jason Gunthorpe <jgg@nvidia.com> wrote:
 
-I'm also failing to see what you're trying to do here. You can already
-implement custom optnames via getsockopt, so what's missing?
-If you need to pass some data from the userspace to the hook, then
-setsockopt hook will serve you better.
-getsockopt is about reading something from the kernel/bpf; ignoring
-initial user buffer value is somewhat implied here.
+> On Tue, Jun 06, 2023 at 08:32:38AM -0600, Alex Williamson wrote:
+> > On Mon, 5 Jun 2023 19:53:20 -0700
+> > <ankita@nvidia.com> wrote:
+> >   
+> > > From: Ankit Agrawal <ankita@nvidia.com>
+> > > 
+> > > NVIDIA's upcoming Grace Hopper Superchip provides a PCI-like device
+> > > for the on-chip GPU that is the logical OS representation of the
+> > > internal proprietary cache coherent interconnect.
+> > > 
+> > > This representation has a number of limitations compared to a real PCI
+> > > device, in particular, it does not model the coherent GPU memory
+> > > aperture as a PCI config space BAR, and PCI doesn't know anything
+> > > about cacheable memory types.
+> > > 
+> > > Provide a VFIO PCI variant driver that adapts the unique PCI
+> > > representation into a more standard PCI representation facing
+> > > userspace. The GPU memory aperture is obtained from ACPI using
+> > > device_property_read_u64(), according to the FW specification,
+> > > and exported to userspace as a separate VFIO_REGION. Since the device
+> > > implements only one 64-bit BAR (BAR0), the GPU memory aperture is mapped
+> > > to the next available PCI BAR (BAR2). Qemu will then naturally generate a
+> > > PCI device in the VM with two 64-bit BARs (where the cacheable aperture
+> > > reported in BAR2).
+> > > 
+> > > Since this memory region is actually cache coherent with the CPU, the
+> > > VFIO variant driver will mmap it into VMA using a cacheable mapping. The
+> > > mapping is done using remap_pfn_range().
+> > > 
+> > > PCI BAR are aligned to the power-of-2, but the actual memory on the
+> > > device may not. The physical address from the last device PFN up to the
+> > > next power-of-2 aligned PA thus is mapped to a dummy PFN through
+> > > vm_operations fault.  
+> > 
+> > As noted in the QEMU series, this all suggests to me that we should
+> > simply expose a device specific region for this coherent memory which
+> > QEMU can then choose to expose to the VM as a BAR, or not.    
+> 
+> It doesn't expose as a BAR on bare metal due to a HW limitation. When
+> we look toward VFIO CXL devices I would expect them to have proper
+> BARs and not this ACPI hack.
+> 
+> So the approach is to compartmentalize the hack to the bare metal
+> kernel driver and let the ABI and qemu parts be closer to what CXL
+> will eventually need.
+> 
+> > It's clearly not a BAR on bare metal, so if we need to go to all the
+> > trouble to create ACPI tables to further define the coherent memory
+> > space,  
+> 
+> The ACPI tables shouldn't relate to the "BAR", they are needed to
+> overcome the NUMA problems in the kernel in the same way real device
+> FW does.
+> 
+> > what's the benefit of pretending that it's a PCI BAR?  ie. Why should a
+> > VM view this as a BAR rather than follow the same semantics as bare
+> > metal?  
+> 
+> Primarily it is a heck of a lot simpler in qemu and better aligned
+> with where things are going.
+
+It actually seems more complicated this way.  We're masquerading this
+region as a BAR, but then QEMU needs to know based on device IDs that
+it's really not a BAR, it has special size properties, mapping
+attributes, error handling, etc.  Maybe we should have taken the hint
+that it's not affected by the PCI config space memory enable bit that a
+BAR region is not the right way for vfio to compose the device.
+
+It's really beside the point whether you want QEMU to expose the memory
+region to the VM as a BAR, but the more I see how this works the more
+it makes sense to me that this should be a device specific region that
+is the trigger for QEMU to setup these special properties.  It is
+trivial for QEMU to expose a region as a BAR and then it can manage the
+size issues for mapping, keeping things like an overflow page out of
+the kernel.
+
+> > We can then have a discussion whether this even needs to be a variant
+> > driver versus a vfio-pci quirk if this device specific region is the
+> > only feature provided (ie. is migration in the future for this
+> > driver?).    
+> 
+> There is alot more here, go back to the original v1 posting to see it
+> all. This is way too much to be just a quirk.
+
+I'm not privy to a v1, the earliest I see is this (v3):
+
+https://lore.kernel.org/all/20230405180134.16932-1-ankita@nvidia.com/
+
+That outlines that we have a proprietary interconnect exposing cache
+coherent memory which requires use of special mapping attributes vs a
+standard PCI BAR and participates in ECC.  All of which seems like it
+would be easier to setup in QEMU if the vfio-pci representation of the
+device didn't masquerade this regions as a standard BAR.  In fact it
+also reminds me of NVlink2 coherent RAM on POWER machines that was
+similarly handled as device specific regions.  Thanks,
+
+Alex
+
