@@ -2,83 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45958724A67
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 19:38:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60727724A6B
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 19:39:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238218AbjFFRih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 13:38:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43476 "EHLO
+        id S238389AbjFFRjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 13:39:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237905AbjFFRic (ORCPT
+        with ESMTP id S238346AbjFFRjR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 13:38:32 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 563D010DE;
-        Tue,  6 Jun 2023 10:38:31 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id B91B45C01D5;
-        Tue,  6 Jun 2023 13:38:30 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Tue, 06 Jun 2023 13:38:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1686073110; x=1686159510; bh=z0
-        7aqGgk2gNY0nVjmeEqLTPg7LkT0Cu/HRqUK3Vyzb0=; b=3nnUpd5RCQjMSYPS8q
-        afRoOos3u5wjohmf+Vre7sDLsouET/MIDHveotO9d74UZquRHxJ+pY3dXbOnEGan
-        n6HZuqauMdIFCz6UHFnvFt2pPbJ6ptC/WcRxIhCy3JTd234RImNUGsTItXUOt2iL
-        Cn9Ssyk8JgCSSHbCsr/REJ26vRLk+mgaPVpo4wjuX5DC15fDj4eppfDoK22axv+E
-        st5diAFvtylpJ6z1DZoPVfSm4zP2eGCOW4nxJHDPtfGuXIipbXm6+4Tt3D5Zg27c
-        6iLUcvFqDVUn5F7mJ2Zq8Ttc5rxoOYxDAQ7cPll0A7CgfDiklY+rqo0Wqf4g0G9i
-        qbQg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1686073110; x=1686159510; bh=z07aqGgk2gNY0
-        nVjmeEqLTPg7LkT0Cu/HRqUK3Vyzb0=; b=BkhxQXmeWW21qBv6PD47vxFGcZHVG
-        0PlYLlMcOp0FIt5dMFlsY4n2+Ck69eDSamhna2E85P8vQ5fQpDoYA5pFnn6mair3
-        Msmr2IMrMxZPGEEMCMkAqBq4MJxxHKV8tx01rKfMmulLsRpLTthQWopAKnZxVazA
-        ymdegCqvwEEbbzkrcf2Gevzp7dKAG1WNFxa4Pznt5WSEvNo7/h+8+JpOMEiWj2W8
-        OeAkZBfUF/iMUVO5RHHbncImhWOdFgIP63iOTapoYA3cefGJjtKzv8C0Jdia0bv7
-        qLGeXZlkhcOmZKsGbe0h8y4wwD7beAo+FXdrL9Mgj5RgmzXtUQZqmHbPw==
-X-ME-Sender: <xms:Fm9_ZBxW4yiH3XthgS2Nn8M-4XzMgG9TlIuYWSAWx3V8cy7rpLmhJQ>
-    <xme:Fm9_ZBTu7plsJUTN5nzNRYxdbHsGL27qNQoLD8ZuP8iNIADGOOhDdP7a6eU6J7szD
-    lvKYKVP43YthA>
-X-ME-Received: <xmr:Fm9_ZLWucf5Zlb00q5EOvFMZeYPFDcMAdsevsPAR77SV3PNZ4szc3S07g5S8-pXJCkAPg72G4qiDMgzJOtj3jFvyZ-VAc28BbCo1_g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedtuddguddujecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgv
-    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeeghe
-    euhefgtdeluddtleekfeegjeetgeeikeehfeduieffvddufeefleevtddtvdenucffohhm
-    rghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
-    hmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhm
-X-ME-Proxy: <xmx:Fm9_ZDhtHcP52W02iVcqevBNti67Xiyj1aQHrJ9b0AjHmFOpwG--Dg>
-    <xmx:Fm9_ZDCVi_9XVMSQtbeUFH1R2-KfYu_zbdBm29FA9BdS4zyyTi6ELA>
-    <xmx:Fm9_ZMJBnt9JFwziIF_Y72ZM1PRjkGS3IjAALeP3UR2iiGnSyePCOw>
-    <xmx:Fm9_ZH7TwSODW2-aojuprw-iBhW852L7NvPhVernxfQLP7jfIel29Q>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 6 Jun 2023 13:38:29 -0400 (EDT)
-Date:   Tue, 6 Jun 2023 19:38:27 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Sidhartha Kumar <sidhartha.kumar@oracle.com>
-Cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        songmuchun@bytedance.com, mike.kravetz@oracle.com,
-        Ackerley Tng <ackerleytng@google.com>
-Subject: Re: [PATCH 6.3.y] mm/hugetlb: revert use of page_cache_next_miss()
-Message-ID: <2023060650-overlying-skiing-191d@gregkh>
-References: <20230606172022.128441-1-sidhartha.kumar@oracle.com>
-MIME-Version: 1.0
+        Tue, 6 Jun 2023 13:39:17 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2071.outbound.protection.outlook.com [40.107.244.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0CF8E47;
+        Tue,  6 Jun 2023 10:39:15 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eHwfCpRzGIBEPRfR++qZzkTJb+pImlf/1o2L/i2JI5IxlSeqU/B020aR0Iy+2d7y0J6X/lTAlbkoLBvZ3ZriU8nFyx67JIbcGhWuTCVzPMDwjkrGRuouN/hmqHSIGqCTJrytFrwhcmH3SyswzloPBYTYy7qa2Dvp+xnSFUC1vbWS3jBRsMcf6YfTjWDI0s+LZ8q0Nk806paEcz+evn9PoUzsBW0KK+FyBNyuRxWT8UDmjw1o/r2w1n6e8XvYxfr5EG/cA4mgDFHFo2CYUCLsXTazB48XtZNNdYq7F+YIq8GjSTWytil6wJLtIe4WJK0TDbGD/0qCda2Mok1tmprCOQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=TXE+GwIuVMTiNu+R/JalQk+nel2vw+eLcjLs6O2WMIU=;
+ b=iroYgjSMKH8u1rdl2bVb7CVg0d9AZBaDP4JLjLlIJyGALDlpdDO4zRQeN+lMc2sbqpSO8VL2DOq3EBwLzAdXPHqfYH9lJd+cnlhS9kNms92CkhLMc+lqwMRyveSr1szAJMLfEwp8F6x2iOQRQJ7I6AAGf+hij/478D+KJmMD4/UmKOmVtPzrsean4aJFpOruCNDztPs67WqBCZjcBJz1cbpyssRVE+QO1Bwqx+RhKCQBPl3rxb6wLFbwR6UQkWr09qqGW6qAhrZhSFLXLHVEVwhzQMIfpN3ymBPHrAI+51MIpK6o3/2VV2ztXrwmEUGDfklifkJjGVrcfqooxnNmbQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TXE+GwIuVMTiNu+R/JalQk+nel2vw+eLcjLs6O2WMIU=;
+ b=DcdCtTYTQRoGgfbt6dI4B+U6vPsHxLcPjQQ2JkK5ja93zWD9/u5UzNsHQ4k+SDHp0NKuXHyjQtdJBqKYy3n/Cpfw0QS+pOPpI4qefI7rwxZOePvsv7/cdlzxQa7rZECEqJL6JK0RfHG7+fta/dig80LKZGUGlaQTDF7jrdBwNnBBjhCOXonJKUy59sLAAd3m0GU57S9Qmp9e3OxvllfJbq45S7hukHVg1w0jDq5pHeZcsBWf/uBJN8og42rd2Fk/T1lWUC1Ox02Xxx59SqvLD67bhtRLBRCrxpiurOrZjgqLRVi3LtAx1pLmZ797fz+EHB8TcoeQ8YyM3tvNy9gZCQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by BY5PR12MB4082.namprd12.prod.outlook.com (2603:10b6:a03:212::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Tue, 6 Jun
+ 2023 17:39:13 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f7a7:a561:87e9:5fab%6]) with mapi id 15.20.6455.028; Tue, 6 Jun 2023
+ 17:39:13 +0000
+Date:   Tue, 6 Jun 2023 14:39:11 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Alistair Popple <apopple@nvidia.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Robin Murphy <robin.murphy@arm.com>
+Subject: Re: [PATCH 1/3] KVM: VMX: Retry APIC-access page reload if
+ invalidation is in-progress
+Message-ID: <ZH9vP97MhY66Q1MC@nvidia.com>
+References: <20230602011518.787006-1-seanjc@google.com>
+ <20230602011518.787006-2-seanjc@google.com>
+ <87wn0hnxh7.fsf@nvidia.com>
+ <ZH9rRnU8h+gDZZuB@google.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230606172022.128441-1-sidhartha.kumar@oracle.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+In-Reply-To: <ZH9rRnU8h+gDZZuB@google.com>
+X-ClientProxiedBy: CH2PR14CA0007.namprd14.prod.outlook.com
+ (2603:10b6:610:60::17) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|BY5PR12MB4082:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3dde1ceb-b753-4011-78e4-08db66b4f14c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: qoxVsflvj94qYjoyX4CwYyYv4cHBUCvXyzVt15Hfzgdc4nIGDkiZKT/paOg2w6DYX3D8hS15XUsLki6OROqRDHUBdqo527jmO6Gma2++VFkkX+WvKv2+95LZkDZNdetoNf8vAVZquN/03kKODZpWYZ7R8VIWUySxjVis5Y6B7FL7gIFxyoWtTQ6JXj0OSLgOxDoHt6wvYdK9HHf5aOH++DhPcuq600D4UcM4avnmxinY/9+64xc3AOUf9RRehmbS5nN75pSbKChm5446NL2/CVZUgo+Fa7Ka64wlZY1f/GdnYiuSAWF8E3J73qnJZ84oGhqL4mNO+kaGySlIeRJTHxYZOg3VhuEr+kbd7JR2zlOmiu3K9QGQn9B1NDFbzDHEOETmgSg3KjgzWuPdBVcvmxipNoqc+BcuhAOiSf2o69xy9Dg4zCgzvgOBh3KCrjmnha0DWT0nNc0kX23X/CGp74KA+WlwaMEq1Hjdyn1gM4BoMm2QKIpE/Sf9+zMZypgOyHCfO+lUZnWFBh+2Zdqg3ulYy66im7VfMmJC5PJDiyAekyKWyqB2NFWxk46KC3+E
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(396003)(366004)(136003)(376002)(451199021)(26005)(66556008)(66946007)(66476007)(38100700002)(4326008)(6916009)(83380400001)(6486002)(478600001)(2616005)(36756003)(2906002)(6506007)(6512007)(41300700001)(316002)(8676002)(54906003)(8936002)(5660300002)(86362001)(186003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Hp7A36AMCDk8BMW+TBZpgHXB0nga2Y27XpCYUB2TyWspBmwD6AFT2an7tyG8?=
+ =?us-ascii?Q?6JXAxIjOJaJnHt2iWbKfylOQRoMkShHWxwf8sgC4AgZc5l+jnb2C4O//Aekk?=
+ =?us-ascii?Q?KGNcnQzs+uGZMsGth7aC8vKKXHVXHo93fH8vP530iev73hlXFQ/Ec+IRzEqJ?=
+ =?us-ascii?Q?SJKLHWNGZb9+f3JGEeSBAp5agLFFzWVMP+T16uutrISgqbD5U+AYaXhRbnsK?=
+ =?us-ascii?Q?x0l5DE+/omMJmWqitXdrzYUOwpjG06oMKmBYz30S9+Kn6qd5SJbH/vbYycBV?=
+ =?us-ascii?Q?LPlkU7P24PBeGPlHzEzE7FYtdiKBzvcgw5MlEVmenxdn+f8ypT4kWhKfpcdw?=
+ =?us-ascii?Q?OXA1B5jF3akrzWhI2+V6j0ZqMf0kK2zeA5dBfKs5BOflfDDKSE2CJncbC3Tp?=
+ =?us-ascii?Q?FBxl8JLog79zls6rATq12CPG48q504aHH4Sp+DpeWG4GS5bNMz+FfYr8b+gU?=
+ =?us-ascii?Q?dq04pfjB/MnIAHHk26I7D/qOsOPfQCrzoGuXcxS01y5pTJw9aG0/yus8PujJ?=
+ =?us-ascii?Q?HFxe4mHNhfPRDmmQjCwN4BwUfHzHT1wS5FAbcSwvlbX3KSEZ8eKTUlJLqyzt?=
+ =?us-ascii?Q?jPpur7XJkXNcEChYxaDAXlJRhCuL1+FPjgQCPBB/kYeEExp3kjfVz3wHYttU?=
+ =?us-ascii?Q?nkOs5Ak1jfzdUX0mZTuyzhx4aseJKCsaKd0vPYaKdqgW+g8rGwG5LB7qtIgj?=
+ =?us-ascii?Q?6w88SmjG7wjLIfLkAA3rkAY/JSKCbOOJewL4wpt0mI0aQU/huapoReYqT+bY?=
+ =?us-ascii?Q?BoeEvNU1+/UTOqQUbAqPY6yUop9nCXc2J1TmwDx7FyMIMXn+IxMypnrPhqTz?=
+ =?us-ascii?Q?6acVaRwjqmwi4tIHNLEVgrBB2PAZUn08gWI6KuHhK2CUQzuI8+A55OUnOnLr?=
+ =?us-ascii?Q?r6p6rEckcJGAAEC0kakwMrzE1nZTXE1U+Z0CwaQb646iJ6SHPbPU6yUx70BB?=
+ =?us-ascii?Q?MDAIqMDqHQ2l3MshknjyYtbryrQTEpf+8vBKacadjOYhW7pED/Ql5pSO0ocp?=
+ =?us-ascii?Q?6bY9r+elYB/m5Os1YzGDESpk77OASCDXoOxQK8APg/bo0du+gv3SzQrOf8+U?=
+ =?us-ascii?Q?oS7B7p8zMH/pHS+kKRMa5rjrurXk1Kkd2I2QyOZp8f+Az4AzI3jyphb3KkkP?=
+ =?us-ascii?Q?JeU2XtAABnSdJAwscZ1Yc6verot72Kdg1rMIDY/oZocMuM+ilKGlCyjW5Vvk?=
+ =?us-ascii?Q?f5oUc/8SKMFKacK3vA6lxzSvDBnuRozDc5IwkrEsBBHGpmtQhhYqw7sS5d+m?=
+ =?us-ascii?Q?E+4HZhe3h5S0TL24I8JDbkXmBRpIKSewloffg/hOrP765EmcFcoqXY5AgILV?=
+ =?us-ascii?Q?khloozSnf676+HIstIyrsvdYztmrwcc7SB1q4Mp4FEU0ckzF5q2RnvmS4JIj?=
+ =?us-ascii?Q?M1POwWNiRkOp9TmvLdXMktP6LGn8A12JKhBjTz99qBrXm+kj74W9ZFl3W20I?=
+ =?us-ascii?Q?e0H5JBGA/ihShJSgen9BMSFcMe+RfEhEbp2k2Rxcz1fpn2UgKlxPsg4GLR7J?=
+ =?us-ascii?Q?KXWFAAmYrmbqQbAAxEp22MLQS+lfazuzH6KSfwNA1cI9Puqt5pjYX3DWKV8H?=
+ =?us-ascii?Q?o8JrIls07OkBKnK1expBIqn26DN60vg3WZLBWOny?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3dde1ceb-b753-4011-78e4-08db66b4f14c
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2023 17:39:13.2964
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ISyEunUF6yitILzYshD3sllzXVIxlWJ84q21uAeIuNwEVmak0SstTY9It6MDAvN7
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4082
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,41 +119,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 10:20:22AM -0700, Sidhartha Kumar wrote:
-> As reported by Ackerley[1], the use of page_cache_next_miss() in
-> hugetlbfs_fallocate() introduces a bug where a second fallocate() call to
-> same offset fails with -EEXIST. Revert this change and go back to the
-> previous method of using get from the page cache and then dropping the
-> reference on success.
+On Tue, Jun 06, 2023 at 10:22:14AM -0700, Sean Christopherson wrote:
+> On Tue, Jun 06, 2023, Alistair Popple wrote:
+> > 
+> > Thanks for doing this. I'm not overly familiar with KVM implementation
+> > but am familiar with mmu notifiers so read through the KVM usage. Looks
+> > like KVM is sort of doing something similar to what mmu_interval_notifiers
+> > do and I wonder if some of that could be shared.
 > 
-> hugetlbfs_pagecache_present() was also refactored to use
-> page_cache_next_miss(), revert the usage there as well.
-> 
-> User visible impacts include hugetlb fallocate incorrectly returning
-> EEXIST if pages are already present in the file. In addition, hugetlb
-> pages will not be included in core dumps if they need to be brought in via
-> GUP. userfaultfd UFFDIO_COPY also uses this code and will not notice pages
-> already present in the cache. It may try to allocate a new page and
-> potentially return ENOMEM as opposed to EEXIST.
-> 
-> Fixes: d0ce0e47b323 ("mm/hugetlb: convert hugetlb fault paths to use alloc_hugetlb_folio()")
-> Cc: <stable@vger.kernel.org> #v6.3
-> Reported-by: Ackerley Tng <ackerleytng@google.com>
-> Signed-off-by: Sidhartha Kumar <sidhartha.kumar@oracle.com>
-> Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
-> 
-> [1] https://lore.kernel.org/linux-mm/cover.1683069252.git.ackerleytng@google.com/
-> ---
-> 
-> This revert is the safest way to fix 6.3. The upstream fix will either
-> fix page_cache_next_miss() itself or use Ackerley's patch to introduce a
-> new function to check if a page is present in the page cache. Both
-> directions are currently under review so we can use this safe and simple
-> fix for 6.3
+> They're very, very similar.  At a glance, KVM likely could be moved over to the
+> common interval tree implementation, but it would require a substantial amount of
+> work in KVM, and various extensions to the mmu notifiers too.  I definitely wouldn't
+> be opposed to converging KVM if someone wants to put in the effort, but at the same
+> time I wouldn't recommend that anyone actually do the work as the ROI is likely
+> very low.
 
-Is there any specific reason why we don't just wait for the fix for
-Linus's tree before applying this one, or applying the real fix instead?
+I looked at it lightly a long time ago and came to sort of the same
+conclusion, it might even be a negative for KVM as it isn't quite as
+tightly inlined and lock free.
 
-thanks,
-
-greg k-h
+Jason
