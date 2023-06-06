@@ -2,109 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85B07723823
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 08:50:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B666D723825
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 08:50:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235471AbjFFGuc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 02:50:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50908 "EHLO
+        id S235539AbjFFGuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 02:50:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234018AbjFFGuZ (ORCPT
+        with ESMTP id S235517AbjFFGul (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 02:50:25 -0400
-Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EEB1E40
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 23:50:24 -0700 (PDT)
-Received: by mail-vk1-xa36.google.com with SMTP id 71dfb90a1353d-463e368a74cso1096307e0c.0
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 23:50:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686034223; x=1688626223;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=6D8/A1EaMpr0fZI/q/93AmR2VPYJ65578K2QcmNIOO4=;
-        b=Wfays52CAY5id1Tvb60S6cBe4OW7bTPCrqwUhOLQZCdBURdjyoDs4CKzv42NeTdTBA
-         FCpdWsttL9AyZrImgWH3YaI+/r/3fL88i8VkQiYoGGxyPrJBl1gDMpJ1JzMWTnclt9ul
-         QYe3R0itQEyVIffou7S6Ifu1AIKYIL7bgErmNQcPcsZCHQiD7Li0yadRRWxzT1T/OQy9
-         5YbtvGaq/3TVhvdPPs7OXj7DspG3vISjb04JD/dHiedItdW+J8kVAymtfGOiqMMWx9Eh
-         sOYpucn3QZPIdzPoepcHtxcPcU57s0WUZt+/0KaQQXkHm1GO5YYbpgTvIFhbnPGElwKK
-         YZtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686034223; x=1688626223;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6D8/A1EaMpr0fZI/q/93AmR2VPYJ65578K2QcmNIOO4=;
-        b=EGgZTZDwkTXSQHmvFTyDfjrRHqLdOZvTEI7Ur5sKF6pKt6ca7VbbmSh204+kMPnIsj
-         e7zLy1h40/nrXi375CB/zeMO/h2m47mSklbk4RWaD833bh2QTJPkUU9muyac3CofIyCt
-         Wyj//aGMJ6m0X6YbN0Lxbps28hoK10xxG91I/bCCbXfaw4Vsb+T8LzFMyGcjbAI7mB4U
-         8CyuGebXrwLnz9W5O9Q7BcLU5NHoCF9L6UvYE2rXiiKDVGLjDwXM4ISH7uOSl3l6ABWB
-         gRoQ92tlzsqVQ9lZXO3PpAxx6YnDb0c446G+F1EMf46iprLuDdzbu7PRZ5cOlWi8qOBE
-         EESQ==
-X-Gm-Message-State: AC+VfDw9wKMVCd4vNU+i0Thzx2lJvSt2zLzeeyzuG8mZVRv66XAkyoxa
-        EciPQ9OWKNS0JM1T8419ZB/YjYiriajYzyOJWCU+GA==
-X-Google-Smtp-Source: ACHHUZ77YD2qmuIEso1iXnD54IE8hSPoEpKABhPPf8kF3y/L1FcPQsBzBpPrIjvtxBwtrUbpd9YDRZJ3u5BfwyRGIZo=
-X-Received: by 2002:a1f:c3c3:0:b0:43f:f4a3:7385 with SMTP id
- t186-20020a1fc3c3000000b0043ff4a37385mr407796vkf.7.1686034223556; Mon, 05 Jun
- 2023 23:50:23 -0700 (PDT)
+        Tue, 6 Jun 2023 02:50:41 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 09A36E48;
+        Mon,  5 Jun 2023 23:50:37 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.170])
+        by gateway (Coremail) with SMTP id _____8Cx_eo8135kVgYAAA--.139S3;
+        Tue, 06 Jun 2023 14:50:36 +0800 (CST)
+Received: from [10.20.42.170] (unknown [10.20.42.170])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxauU8135ka+cBAA--.8527S3;
+        Tue, 06 Jun 2023 14:50:36 +0800 (CST)
+Message-ID: <7fe18fdb-4335-fca8-f596-03aa6c642315@loongson.cn>
+Date:   Tue, 6 Jun 2023 14:50:36 +0800
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 6 Jun 2023 12:19:32 +0530
-Message-ID: <CA+G9fYtVYhyCtD-ExKj7tOJbj9nykxkBs7dxHKo5v_H+kqG1Gg@mail.gmail.com>
-Subject: perf: arch/x86/tests/amd-ibs-via-core-pmu.c:47:25: error: 'pmus' undeclared
-To:     linux-perf-users@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        ravi.bangoria@amd.com, Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2] PCI: Align pci memory space base address with page
+ size
+Content-Language: en-US
+To:     Huacai Chen <chenhuacai@kernel.org>, Will Deacon <will@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>, helgaas@kernel.org,
+        linux-pci@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        WANG Xuerui <kernel@xen0n.name>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, loongson-kernel@lists.loongnix.cn
+References: <20230605034423.1528206-1-maobibo@loongson.cn>
+ <20230605145138.GH21212@willie-the-truck>
+ <CAAhV-H449Kv0WVfpD-d_j1Gq0Ud-TGqZRHAn6MrjQWH76cLGCA@mail.gmail.com>
+From:   "bibo, mao" <maobibo@loongson.cn>
+In-Reply-To: <CAAhV-H449Kv0WVfpD-d_j1Gq0Ud-TGqZRHAn6MrjQWH76cLGCA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8AxauU8135ka+cBAA--.8527S3
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBj93XoWxAr4UCF1xZFy3Gw4DAry8CrX_yoW5XrWfp3
+        yxC3Z8CFs8Gr13Gwsavw1DuFsag3Z2kw43Xry3Jr9IkrnxZry7Cr15try7ury8ur48Kr4j
+        vFs0vr1a9Fy5ZagCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUBvb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+        xVW8Jr0_Cr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
+        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
+        AVWUtwAv7VC2z280aVAFwI0_Gr1j6F4UJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64
+        vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkE
+        bVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E74
+        80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0
+        I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04
+        k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4UJVWxJr1lIxAIcVC2z280aVCY
+        1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07jnEfOUUUUU=
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Following warnings and errors noticed while building perf x86_64,
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-Build log:
----------
-arch/x86/tests/amd-ibs-via-core-pmu.c: In function 'test__amd_ibs_via_core_pmu':
-arch/x86/tests/amd-ibs-via-core-pmu.c:47:25: error: 'pmus' undeclared
-(first use in this function)
-   47 |         if (list_empty(&pmus))
-      |                         ^~~~
-arch/x86/tests/amd-ibs-via-core-pmu.c:47:25: note: each undeclared
-identifier is reported only once for each function it appears in
-arch/x86/tests/amd-ibs-via-core-pmu.c:48:17: error: implicit
-declaration of function 'perf_pmu__scan'; did you mean
-'perf_pmus__scan'? [-Werror=implicit-function-declaration]
-   48 |                 perf_pmu__scan(NULL);
-      |                 ^~~~~~~~~~~~~~
-      |                 perf_pmus__scan
-arch/x86/tests/amd-ibs-via-core-pmu.c:50:19: error: implicit
-declaration of function 'perf_pmu__find'; did you mean
-'perf_pmus__find'? [-Werror=implicit-function-declaration]
-   50 |         ibs_pmu = perf_pmu__find("ibs_op");
-      |                   ^~~~~~~~~~~~~~
-      |                   perf_pmus__find
-arch/x86/tests/amd-ibs-via-core-pmu.c:50:17: error: assignment to
-'struct perf_pmu *' from 'int' makes pointer from integer without a
-cast [-Werror=int-conversion]
-   50 |         ibs_pmu = perf_pmu__find("ibs_op");
-      |                 ^
-cc1: all warnings being treated as errors
-
-Links:
-======
- - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230606/testrun/17346999/suite/build/test/gcc-11-lkftconfig-perf/log
- - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230606/testrun/17346999/suite/build/test/gcc-11-lkftconfig-perf/history/
 
 
---
-Linaro LKFT
-https://lkft.linaro.org
+在 2023/6/6 10:27, Huacai Chen 写道:
+> On Mon, Jun 5, 2023 at 10:51 PM Will Deacon <will@kernel.org> wrote:
+>>
+>> On Mon, Jun 05, 2023 at 11:44:23AM +0800, Bibo Mao wrote:
+>>> Some PCI devices has only 4K memory space size, it is normal in general
+>>> machines and aligned with page size. However some architectures which
+>>> support different page size, default page size on LoongArch is 16K, and
+>>> ARM64 supports page size varying from 4K to 64K. On machines where larger
+>>> page size is use, memory space region of two different pci devices may be
+>>> in one page. It is not safe with mmu protection, also VFIO pci device
+>>> driver requires base address of pci memory space page aligned, so that it
+>>> can be memory mapped to qemu user space when it is pass-through to vm.
+>>>
+>>> It consumes more pci memory resource with page size alignment requirement,
+>>> on 64 bit system it should not be a problem. And UEFI bios set pci memory
+>>> base address with 4K fixed-size aligned, the safer solution is to align
+>>> with larger size on UEFI BIOS stage on these architectures, linux kernel
+>>> can reuse resource from UEFI bios. For new devices such hotplug pci
+>>> devices and sriov devices, pci resource is assigned in Linux kernel side.
+>>>
+>>> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+>>> ---
+>>>  arch/arm64/kernel/pci.c  | 13 +++++++++++++
+>>>  arch/loongarch/pci/pci.c | 18 ++++++++++++++++++
+>>>  2 files changed, 31 insertions(+)
+>>>
+>>> diff --git a/arch/arm64/kernel/pci.c b/arch/arm64/kernel/pci.c
+>>> index 2276689b5411..e2f7b176b156 100644
+>>> --- a/arch/arm64/kernel/pci.c
+>>> +++ b/arch/arm64/kernel/pci.c
+>>> @@ -232,4 +232,17 @@ void pcibios_remove_bus(struct pci_bus *bus)
+>>>       acpi_pci_remove_bus(bus);
+>>>  }
+>>>
+>>> +resource_size_t pcibios_align_resource(void *data, const struct resource *res,
+>>> +                             resource_size_t size, resource_size_t align)
+>>> +{
+>>> +     resource_size_t start = res->start;
+>>> +
+>>> +     /*
+>>> +      * align base address of pci memory resource with page size
+>>> +      */
+>>> +     if ((res->flags & IORESOURCE_MEM) && (align < PAGE_SIZE))
+>>> +             start = ALIGN(start, PAGE_SIZE);
+>>> +
+>>> +     return start;
+>>> +}
+>>>  #endif
+>>
+>> If this is needed by all architectures with !4k page size, why don't we
+>> instead handle the alignment in the core code, given that it is aware
+>> of the page size?
+> Agree, modifying the common weak version of pcibios_align_resource()
+> seems better. Maybe we can use CONFIG_VFIO_PCI to guard the align
+> operation.
+will do. only that I am not sure it is ok for all architectures, after all it consumes
+more pci memory resource if forced to page size aligned.
+ 
+Regards
+Bibo, Mao
+> 
+> Huacai
+>>
+>> Will
+
