@@ -2,128 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10316723DEF
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 11:40:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43DF9723DF7
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 11:41:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230208AbjFFJjw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 05:39:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46314 "EHLO
+        id S236493AbjFFJk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 05:40:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236809AbjFFJjf (ORCPT
+        with ESMTP id S230080AbjFFJji (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 05:39:35 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2066.outbound.protection.outlook.com [40.107.243.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49DB1E49;
-        Tue,  6 Jun 2023 02:39:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=l5MhZ4B3e/fbrbJdrzhGGI45U94GvMvWwR6zQ6HltUJMp+R69iCr+pa6+Hdp/nol9OxMA8chudkDxV8ZnjGDo8vsrj4ndaSplA3l5SD8n87yFdJMDzzGRDycSjgqNfkk35341djkORt2dLgHTHsfC3iUfcrPCLYNFX0DiOGHL1Gyxf21X6rSqLsOx6gRq0ghh2td16esU4WF7a6hzpYHwVZVU0/oWHENtApPaW9FFIl7AcQPxRHNDKwxdQvXR91SYTilbqjsggy4BgCkF18HZbYE9QEEusKSlbGroukkNAa1bYo4woN+rFsLMMcQ5GBePphJqIF6UoZ4KzF8D9GxXg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=q/bxZpM7zFWWrKXgDTo7+dwgK+IMBpTZrDBj0brG2k8=;
- b=O8GsA0tCCjYc4mXAbKJyGEenFSge1ZNM3EKAqxhpveQbYWdv9FNUiEqCDlFcLfvnkYxSgTtFZoq1BPIbl14blXFfY+UT/7785jcLNni5JCBGIXadsAIUdktl6mh1XmF5yMQb5OUdaY1diZizjRo6DuXuxV84AvLx+rK32SH7wDOUG/rbU0TugJGevCz/n100KdaLuGybL1NlwjqgsHLO+8f3KiRFG44USpotGzo+3oPBA/pcE9OYa81Q+ckh9MNAr+5WOv4pOcuMp2APZKWFISn6Y5ncYcZ6jiEWOc/q02pc+KLyOc+Hx08zaFbsEtX2a6grTQP/dh0ey13oZUzSog==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=q/bxZpM7zFWWrKXgDTo7+dwgK+IMBpTZrDBj0brG2k8=;
- b=RZ4tUgPudFzZfttshvtDT+ExBz1WCw+Y5+d/Qb76Sw0AcII2kNmdPRz2nwBYMXeWC9nxvO466PF0pMBligG4rAPo/s0UGcSKASDoHE1EuiRHfg4anji4u3Qf7vgiKa/r2JjHW3Iq7wboYaYrYfF8lQz6DgzY3QcuOqFVEo3HN7jWASsghrkgZ6dCrbWkXfjn8w7w04iBqGNSAR5OdpmiCjHCCgDj4Lq6zbvW6gNSaCPMYtWxH6IMD8gI0GiuIi/3gmQi2fGphq56Bxc2zn7qZJQe0ZDJ+fe4l7rWpLdXxnWzqM45yYFLi+6bJsRVZ5fHZ2AkSxzyDp2KNIXAMspTCg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
- CY8PR12MB7170.namprd12.prod.outlook.com (2603:10b6:930:5a::18) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6455.33; Tue, 6 Jun 2023 09:39:20 +0000
-Received: from CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::21ef:9d59:5b2d:f1e8]) by CO6PR12MB5444.namprd12.prod.outlook.com
- ([fe80::21ef:9d59:5b2d:f1e8%4]) with mapi id 15.20.6455.030; Tue, 6 Jun 2023
- 09:39:20 +0000
-Message-ID: <e7ae22f4-52c1-62a1-e5c2-71732bcb04b2@nvidia.com>
-Date:   Tue, 6 Jun 2023 10:39:13 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2] phy: tegra: xusb: Fix use-after-free issue
-Content-Language: en-US
-To:     Haotien Hsu <haotienh@nvidia.com>, JC Kuo <jckuo@nvidia.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-phy@lists.infradead.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Wayne Chang <waynec@nvidia.com>, EJ Hsu <ejh@nvidia.com>
-References: <20230508100320.345673-1-haotienh@nvidia.com>
-From:   Jon Hunter <jonathanh@nvidia.com>
-In-Reply-To: <20230508100320.345673-1-haotienh@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO2P265CA0236.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:b::32) To CO6PR12MB5444.namprd12.prod.outlook.com
- (2603:10b6:5:35e::8)
+        Tue, 6 Jun 2023 05:39:38 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21433126;
+        Tue,  6 Jun 2023 02:39:37 -0700 (PDT)
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3569SqoM008343;
+        Tue, 6 Jun 2023 09:39:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=yLReRD9Clu0wRB13j7IVpSWOR37fOCXZ5phKlgbzA8Y=;
+ b=n/g8LHSRFJ2wBC9rRPoopdlBBZU5pUSwLDfxN9avT0Y+h6qBb0RotVnTTnmk5cUH5huA
+ iYOKMA4qBALjiAY8EqwKCnSecITiVCrNLi/fEtOWWP7RWyrYnM6a2IDACqNkNe3KGsZO
+ x+TDFN7Pp3WtbS2/XF8GgOO5EJDyEiY1RVss8Et9kPjxvG2Qbc7xEQZjViG7q3fSwzXH
+ 1PqaQq5qFVtjP1mdrwjZvV385KHhWdOp8Kg4chnjr+96IaEYHuVOizpph8+1MpPCjSu1
+ vBcJ3yYfiNsZuJ9keTzyWTNbfHlBVgqSGaHnVASS0F8GAxjP2yP3HolDm/nicrDOFN7K Dw== 
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r2274r7kn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Jun 2023 09:39:27 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3567pfB8022829;
+        Tue, 6 Jun 2023 09:39:25 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma05fra.de.ibm.com (PPS) with ESMTPS id 3qyx8xhf5t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Jun 2023 09:39:25 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3569dN2F18350604
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 6 Jun 2023 09:39:23 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 06E972004F;
+        Tue,  6 Jun 2023 09:39:23 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4957720040;
+        Tue,  6 Jun 2023 09:39:21 +0000 (GMT)
+Received: from li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com (unknown [9.109.253.169])
+        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Tue,  6 Jun 2023 09:39:21 +0000 (GMT)
+Date:   Tue, 6 Jun 2023 15:09:17 +0530
+From:   Ojaswin Mujoo <ojaswin@linux.ibm.com>
+To:     Kemeng Shi <shikemeng@huaweicloud.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 16/19] ext4: call ext4_mb_mark_group_bb in
+ ext4_mb_clear_bb
+Message-ID: <ZH7+xclxW3hKb7GA@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
+References: <20230603150327.3596033-1-shikemeng@huaweicloud.com>
+ <20230603150327.3596033-17-shikemeng@huaweicloud.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR12MB5444:EE_|CY8PR12MB7170:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0e97e48d-5016-4541-74a9-08db6671e788
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: t6jtDeKL2WuZP8Exg52gLVu14LoSDbGj5F4l8fuI5Y+59KcZMp26Sz8hqwEeWVoFRzJIS68a3Nlbz2njKSsodQbaSsDAreH1XV/0UNk7lkbGO7vcj6ab4RvBYQCd/Vl9f/ICQ3HytciwhoLcgJwBzpvuu5LeTFXlg2DQqw30lE/BhJ7Szm+MkGxJJOuDfWyXYBWDlj7vPV20qE8Bl9O+EMSTW96hd2lGks+caMCYqOl8a3b6i91TkCWHA8IcoYRS7dNQGpe+YK1BdIVrOS7hDG2vXmIQsIFbWM/t7uZoRLVXMV7zMrYPcCnTMrhsVYtW4yrAohfPuYnWwwBvMfBkJPEbwrYk4zS8CG2a2rTWC4wi8TvXdovMTO0Qolp/SpSp6Sxf0b1G2f3uxUjjmy9jpR6FAcAt4Ja3EeAKqrxijc+ckPJ3Y8XbGlw324hbMGBPuIBPDTOb/RsHOzu7FNiVvikA/OfNCilZ08uxNNXCrBAOG3bu9MH019rtgUe/70GDBkmAUbWZLIAGQV4cmdrzjCmX+trHmsHD6ppf4ojRLJQ3EutStpK95TvuBZpT46nNAGgCFAedPVVqvRpwdDoWgzzvO+4NM6xjEFLyG9ZQor+MnNZrkYQvUP65XS0CSg6oQF89NjXG6M5L+PxS5EWVMg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(39860400002)(396003)(376002)(366004)(346002)(451199021)(6486002)(6666004)(53546011)(55236004)(107886003)(26005)(6512007)(6506007)(36756003)(186003)(2616005)(31696002)(86362001)(38100700002)(110136005)(54906003)(5660300002)(316002)(41300700001)(66556008)(8936002)(66476007)(4326008)(66946007)(31686004)(478600001)(8676002)(2906002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RzVqd1pOaWdyTG83d1IxbVpBVEh1YXVoNmtIRFBxeGdJSDYxKy9UTlg4TjFW?=
- =?utf-8?B?dXNGbm1KRTNwUVJQVUN4NjBpeGFqT2VQTjZxNS9tYjlTUE9rcHE0Vk9NMzl3?=
- =?utf-8?B?Y2k1TENZVTlRNjArck5WcmdOcGtTMDQwMzA0ZWNDT3RrSGhsbnR0Y2lBbjls?=
- =?utf-8?B?THFJa250a05xaTlCeHh3ZUh4ZllhUCtBQzRodkJvcFVUUFJIYlI5TTBzTGVN?=
- =?utf-8?B?NGx0ZzlRcy9UbU9rOWd2bjlmYjRuZXpycW5LQytqb1JuNnI0ViswVTBSSWF2?=
- =?utf-8?B?VFZrd3Z2bHdXTW5VeGhZWW0xWW1SY0drcm5wRzQyc3BjRDdDU0RzUU5pdmpH?=
- =?utf-8?B?cVpKeDhHeTJGMVQ5QnpHaDMwWjlZa1g2RjRkOVFlaDhyTE1BNDdhZEdmUGxs?=
- =?utf-8?B?enJsNGtZbUI5Rk54aVExTmF0TUhHYjZaM3Y0NVpYcVpYQ045YnhHRjEzejNl?=
- =?utf-8?B?N3FJRDNFdk8raURKQ3Z6cHJyV3c5cTdBM1Z1bmY0bmRpQm5vQklPZmZJUWIx?=
- =?utf-8?B?YStJbnNCckhtdm51SEhjL3NuVis5U3FSaHJnMkhrRDFTQlpqdFpqVUI3eGlC?=
- =?utf-8?B?K0EwRTUrOGw0elVqN0pFdjFaSU5HNnZQMyt4ZmFxZndsb0puS1lEWDkrUGJn?=
- =?utf-8?B?djJZQktkNktQRVZ6MW1mNjczRzJYTUxFb1dXODZidnl5cWFCUEVLa2FnYlJi?=
- =?utf-8?B?OWVOWmpqdVVwMGprTnBjaWYyemZEWHF1N2Q1cjB1UHZ4S2JXY2RVbkFucDZS?=
- =?utf-8?B?MmN4Y1RzQWsxVTdHa2NnYmRIRGpMcFZMRUtVb0hhMjJzZzRvbk1Vdk8wT1pQ?=
- =?utf-8?B?K2hYdTZueEZIWGhzSW9INEdVK3dNd1FBaGJNWDNPdm5lalRNQVFLQVUzQTM1?=
- =?utf-8?B?RHhTbEFrRk0rUWhsWnFocmluSDBBK3hFN0ZsdE45OWxaWmJVQVpKUmI2Z0Zj?=
- =?utf-8?B?dnNLUkZDdGJrRmRGdXdtQ1VtV29lVkRBYWE1MTVEaXBXVFpMb2FOQ052NFdq?=
- =?utf-8?B?VThNWFZERlpzNjQ0Ni9XWW5HZ2hQWEYraTRDc1F0WjNXSHBiSVlqcWtYTkc1?=
- =?utf-8?B?ZGc4Y2NubWMzcnYyNGI0c1NGa3lWeHFCYVJEUnBWUGQ4OS9Gd2x3WUgvK0V2?=
- =?utf-8?B?azRsNVd4SG9MeC9nRTNOSXJXSDdoU0pJaHFPaFJZKzA4eVhmVGxuY3E3WS8x?=
- =?utf-8?B?QkJzVkovNjQxL2h4N1QrSzBNeEhVY0pUUndOR2dMYWIySCtucjJOYjhJRFh0?=
- =?utf-8?B?dnVXUytrSm0rb2lNcHo4aUx3SkdZbEwwejAvUWlJNGs3NlNGczlFb1ltSWEy?=
- =?utf-8?B?RlY4SC9hQkFEdXg5ak5CRlhiNDBPSkYyc3FZc0o4cm4vUWU2OXZCT0lTMFJY?=
- =?utf-8?B?V2ZmRmYvaWliUFVxZGZWVlZDWmVRYnNxR3RlMWNmQXIySXZtUFM2ejhTRHhW?=
- =?utf-8?B?djRvTm1tbWMyakhFblJjMTgrckpmUWFNbC9FSXNXcDhlaW50Mzd2NVVITjVr?=
- =?utf-8?B?MVNXdnF1TGNlbmtzZHVxQytWK3FrUTlRREN4QnU2bHZwY0wxeHArbmpVWFgr?=
- =?utf-8?B?QjZGcWpYbVNyNlo5ZTFoY0RTVUg2bGduM1FTa3YxWWZ3ZHhoVjRsSFFEWnQx?=
- =?utf-8?B?eU1EbTBYcmc3dFhTQnNGL2N5OFJSd2UxQmgxaUZDNEFHRHRmWkl3RS9ZUzNB?=
- =?utf-8?B?ZWFHbFJRSkxJRHZCSTBlemxlK0F3eFQvTS9LOHZsdzFqc0w2SXlLckRsWkh3?=
- =?utf-8?B?cFdaWnVXcWJyQWdrc01Xak9pcE01WHpaVER5WFBQd0hmSU5ZbnVIWjNrUk14?=
- =?utf-8?B?SEk4d3k3Njk2dVlRQ1dXNzZObStmemo0TVVQZ1Vta2xneFRuYWtNRDFYWlhy?=
- =?utf-8?B?UWpvaUVPNTZob3JSNEVUOFVtcHI1L0w3UUJqeW1FeVd4QjM5QlJlNkNzZEg2?=
- =?utf-8?B?Nyt6R3l2Mm9QQTJFMDUwM0lwMklWclNYSWZLS2REWHZlaHB6blBGbEtnbHRx?=
- =?utf-8?B?MTg2bmpzZHBudU1yZ0t1V3NFMUNKd0FuNkVBeisvZyttb0dYcStJWHdqSHI1?=
- =?utf-8?B?TitYMG14UmtjbVd4S0EwcnJLbFBTbXZUakFwcnYvUENCdlhFaWExdzRCMkcw?=
- =?utf-8?B?eTVVTUJITFA3emJ6QXNqaW5pVWl0cGJZMGgzUVZQckpNZk91NDVoUnZIZTFB?=
- =?utf-8?B?bUE9PQ==?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0e97e48d-5016-4541-74a9-08db6671e788
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2023 09:39:20.7666
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 0qK3ycNPp0F6b8YToyz6n5sn8NPvOZ8ooHETTYBpLkD1VAI23B3bEcYXojceSO0/PfaZjvLLghB9wXoFmryN2w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7170
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230603150327.3596033-17-shikemeng@huaweicloud.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: dqKNK8qeo2mI7E1-TJGtKmv5qFiIwN_2
+X-Proofpoint-ORIG-GUID: dqKNK8qeo2mI7E1-TJGtKmv5qFiIwN_2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-06_06,2023-06-05_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1015
+ bulkscore=0 impostorscore=0 priorityscore=1501 mlxscore=0 adultscore=0
+ lowpriorityscore=0 spamscore=0 suspectscore=0 mlxlogscore=999 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
+ definitions=main-2306060080
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -131,52 +85,247 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vinod,
+On Sat, Jun 03, 2023 at 11:03:24PM +0800, Kemeng Shi wrote:
+> call ext4_mb_mark_group_bb in ext4_mb_clear_bb to remove repeat code
+> to update block bitmap and group descriptor on disk.
+> 
+> Note: ext4_mb_clear_bb will update buddy and bitmap in two critical sections
+> instead of update in the same critical section.
+> 
+> Original lock behavior introduced in 7a2fcbf7f857 ("ext4: don't use
+> blocks freed but not yet committed in buddy cache init") to avoid
+> race betwwen ext4_mb_free_blocks and ext4_mb_init_cache:
+> ext4_mb_load_buddy_gfp
+> ext4_lock_group
+> mb_clear_bits(bitmap_bh, ...)
+> mb_free_blocks/ext4_mb_free_metadata
+> ext4_unlock_group
+> ext4_mb_unload_buddy
+> 
+> New lock behavior in this patch:
+> ext4_mb_load_buddy_gfp
+> ext4_lock_group
+> mb_clear_bits(bitmap_bh, ...)
+> ext4_unlock_group
+> 
+> /* no ext4_mb_init_cache for the same group will be called as
+> ext4_mb_load_buddy_gfp will ensure buddy page is update-to-date */
+> 
+> ext4_lock_group
+> mb_free_blocks/ext4_mb_free_metadata
+> ext4_unlock_group
+> ext4_mb_unload_buddy
+> 
+> As buddy page for group is always update-to-date between
+> ext4_mb_load_buddy_gfp and ext4_mb_unload_buddy. Then no
+> ext4_mb_init_cache will be called for the same group concurrentlly when
+> we update bitmap and buddy page betwwen buddy load and unload.
+> 
+> Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
 
-On 08/05/2023 11:03, Haotien Hsu wrote:
-> From: EJ Hsu <ejh@nvidia.com>
-> 
-> For the dual-role port, it will assign the phy dev to usb-phy dev and
-> use the port dev driver as the dev driver of usb-phy.
-> 
-> When we try to destroy the port dev, it will destroy its dev driver
-> as well. But we did not remove the reference from usb-phy dev. This
-> might cause the use-after-free issue in KASAN.
-> 
-> Fixes: e8f7d2f409a1 ("phy: tegra: xusb: Add usb-phy support")
-> Cc: stable@vger.kernel.org
-> 
-> Signed-off-by: EJ Hsu <ejh@nvidia.com>
-> Signed-off-by: Haotien Hsu <haotienh@nvidia.com>
+Hi Kemeng,
+
+Sorry for the late reply I was trying to understand the codepath
+properly. So I have a question here:
+
+With the changes you've made in the patch, the flow would look something
+like:
+
+ext4_mb_clear_bb():
+  ext4_mb_mark_group_bb():
+    ext4_group_lock()
+      - Mark bitmap free
+      - Modify gdp
+    ext4_group_unlock()
+    ext4_handle_dirty_metadata()
+			- I understand this will add the bitmap and gdp buffers to journal's 
+        dirty metadata list
+  ...
+  ext4_group_lock()
+    ext4_mb_free_metadata()
+			- Add ext4_free_data entries to sbi->s_freed_data_list. (On commit 
+        ext4_journal_commit_callback() will then free the buddy for these)
+  ext4_group_unlock()
+
+My question is what happens if journal commits between
+ext4_handle_dirty_metadata() and ext4_mb_free_metadata() call (Possible?). Then we might
+never end up freeing the metadata in the buddy bitmap because the commit callback wont
+be able to find the ext4_free_data entries in sbi->s_freed_data_list.
+
+Regards,
+ojaswin
+
 > ---
-> V1 -> V2: Remove extra movements to clarify the change
-> ---
->   drivers/phy/tegra/xusb.c | 1 +
->   1 file changed, 1 insertion(+)
+>  fs/ext4/mballoc.c | 90 ++++++++++++-----------------------------------
+>  1 file changed, 23 insertions(+), 67 deletions(-)
 > 
-> diff --git a/drivers/phy/tegra/xusb.c b/drivers/phy/tegra/xusb.c
-> index 78045bd6c214..26b66a668f3b 100644
-> --- a/drivers/phy/tegra/xusb.c
-> +++ b/drivers/phy/tegra/xusb.c
-> @@ -568,6 +568,7 @@ static void tegra_xusb_port_unregister(struct tegra_xusb_port *port)
->   		usb_role_switch_unregister(port->usb_role_sw);
->   		cancel_work_sync(&port->usb_phy_work);
->   		usb_remove_phy(&port->usb_phy);
-> +		port->usb_phy.dev->driver = NULL;
->   	}
->   
->   	if (port->ops->remove)
-
-
-Are you OK to pick this up now?
-
-FWIW ...
-
-Acked-by: Jon Hunter <jonathanh@nvidia.com>
-
-I believe Thierry already ACK'ed V1.
-
-Jon
-
--- 
-nvpublic
+> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
+> index 46b37f5c9223..e4f1b34448e3 100644
+> --- a/fs/ext4/mballoc.c
+> +++ b/fs/ext4/mballoc.c
+> @@ -6135,19 +6135,21 @@ static void ext4_mb_clear_bb(handle_t *handle, struct inode *inode,
+>  			       ext4_fsblk_t block, unsigned long count,
+>  			       int flags)
+>  {
+> -	struct buffer_head *bitmap_bh = NULL;
+> +	struct ext4_mark_context mc = {
+> +		.handle = handle,
+> +		.sb = inode->i_sb,
+> +		.state = 0,
+> +	};
+>  	struct super_block *sb = inode->i_sb;
+> -	struct ext4_group_desc *gdp;
+>  	struct ext4_group_info *grp;
+>  	unsigned int overflow;
+>  	ext4_grpblk_t bit;
+> -	struct buffer_head *gd_bh;
+>  	ext4_group_t block_group;
+>  	struct ext4_sb_info *sbi;
+>  	struct ext4_buddy e4b;
+>  	unsigned int count_clusters;
+>  	int err = 0;
+> -	int ret;
+> +	int mark_flags = 0;
+>  
+>  	sbi = EXT4_SB(sb);
+>  
+> @@ -6179,18 +6181,6 @@ static void ext4_mb_clear_bb(handle_t *handle, struct inode *inode,
+>  		/* The range changed so it's no longer validated */
+>  		flags &= ~EXT4_FREE_BLOCKS_VALIDATED;
+>  	}
+> -	count_clusters = EXT4_NUM_B2C(sbi, count);
+> -	bitmap_bh = ext4_read_block_bitmap(sb, block_group);
+> -	if (IS_ERR(bitmap_bh)) {
+> -		err = PTR_ERR(bitmap_bh);
+> -		bitmap_bh = NULL;
+> -		goto error_return;
+> -	}
+> -	gdp = ext4_get_group_desc(sb, block_group, &gd_bh);
+> -	if (!gdp) {
+> -		err = -EIO;
+> -		goto error_return;
+> -	}
+>  
+>  	if (!(flags & EXT4_FREE_BLOCKS_VALIDATED) &&
+>  	    !ext4_inode_block_valid(inode, block, count)) {
+> @@ -6200,28 +6190,7 @@ static void ext4_mb_clear_bb(handle_t *handle, struct inode *inode,
+>  		goto error_return;
+>  	}
+>  
+> -	BUFFER_TRACE(bitmap_bh, "getting write access");
+> -	err = ext4_journal_get_write_access(handle, sb, bitmap_bh,
+> -					    EXT4_JTR_NONE);
+> -	if (err)
+> -		goto error_return;
+> -
+> -	/*
+> -	 * We are about to modify some metadata.  Call the journal APIs
+> -	 * to unshare ->b_data if a currently-committing transaction is
+> -	 * using it
+> -	 */
+> -	BUFFER_TRACE(gd_bh, "get_write_access");
+> -	err = ext4_journal_get_write_access(handle, sb, gd_bh, EXT4_JTR_NONE);
+> -	if (err)
+> -		goto error_return;
+> -#ifdef AGGRESSIVE_CHECK
+> -	{
+> -		int i;
+> -		for (i = 0; i < count_clusters; i++)
+> -			BUG_ON(!mb_test_bit(bit + i, bitmap_bh->b_data));
+> -	}
+> -#endif
+> +	count_clusters = EXT4_NUM_B2C(sbi, count);
+>  	trace_ext4_mballoc_free(sb, inode, block_group, bit, count_clusters);
+>  
+>  	/* __GFP_NOFAIL: retry infinitely, ignore TIF_MEMDIE and memcg limit. */
+> @@ -6230,6 +6199,22 @@ static void ext4_mb_clear_bb(handle_t *handle, struct inode *inode,
+>  	if (err)
+>  		goto error_return;
+>  
+> +#ifdef AGGRESSIVE_CHECK
+> +	mark_flags |= EXT4_MB_BITMAP_MARKED_CHECK;
+> +#endif
+> +	err = ext4_mb_mark_group_bb(&mc, block_group, bit, count_clusters,
+> +				    mark_flags);
+> +
+> +
+> +	if (err && mc.changed == 0) {
+> +		ext4_mb_unload_buddy(&e4b);
+> +		goto error_return;
+> +	}
+> +
+> +#ifdef AGGRESSIVE_CHECK
+> +	BUG_ON(mc.changed != count_clusters);
+> +#endif
+> +
+>  	/*
+>  	 * We need to make sure we don't reuse the freed block until after the
+>  	 * transaction is committed. We make an exception if the inode is to be
+> @@ -6252,13 +6237,8 @@ static void ext4_mb_clear_bb(handle_t *handle, struct inode *inode,
+>  		new_entry->efd_tid = handle->h_transaction->t_tid;
+>  
+>  		ext4_lock_group(sb, block_group);
+> -		mb_clear_bits(bitmap_bh->b_data, bit, count_clusters);
+>  		ext4_mb_free_metadata(handle, &e4b, new_entry);
+>  	} else {
+> -		/* need to update group_info->bb_free and bitmap
+> -		 * with group lock held. generate_buddy look at
+> -		 * them with group lock_held
+> -		 */
+>  		if (test_opt(sb, DISCARD)) {
+>  			err = ext4_issue_discard(sb, block_group, bit,
+>  						 count_clusters, NULL);
+> @@ -6271,23 +6251,11 @@ static void ext4_mb_clear_bb(handle_t *handle, struct inode *inode,
+>  			EXT4_MB_GRP_CLEAR_TRIMMED(e4b.bd_info);
+>  
+>  		ext4_lock_group(sb, block_group);
+> -		mb_clear_bits(bitmap_bh->b_data, bit, count_clusters);
+>  		mb_free_blocks(inode, &e4b, bit, count_clusters);
+>  	}
+>  
+> -	ret = ext4_free_group_clusters(sb, gdp) + count_clusters;
+> -	ext4_free_group_clusters_set(sb, gdp, ret);
+> -	ext4_block_bitmap_csum_set(sb, gdp, bitmap_bh);
+> -	ext4_group_desc_csum_set(sb, block_group, gdp);
+>  	ext4_unlock_group(sb, block_group);
+>  
+> -	if (sbi->s_log_groups_per_flex) {
+> -		ext4_group_t flex_group = ext4_flex_group(sbi, block_group);
+> -		atomic64_add(count_clusters,
+> -			     &sbi_array_rcu_deref(sbi, s_flex_groups,
+> -						  flex_group)->free_clusters);
+> -	}
+> -
+>  	/*
+>  	 * on a bigalloc file system, defer the s_freeclusters_counter
+>  	 * update to the caller (ext4_remove_space and friends) so they
+> @@ -6302,26 +6270,14 @@ static void ext4_mb_clear_bb(handle_t *handle, struct inode *inode,
+>  
+>  	ext4_mb_unload_buddy(&e4b);
+>  
+> -	/* We dirtied the bitmap block */
+> -	BUFFER_TRACE(bitmap_bh, "dirtied bitmap block");
+> -	err = ext4_handle_dirty_metadata(handle, NULL, bitmap_bh);
+> -
+> -	/* And the group descriptor block */
+> -	BUFFER_TRACE(gd_bh, "dirtied group descriptor block");
+> -	ret = ext4_handle_dirty_metadata(handle, NULL, gd_bh);
+> -	if (!err)
+> -		err = ret;
+> -
+>  	if (overflow && !err) {
+>  		block += count;
+>  		count = overflow;
+> -		put_bh(bitmap_bh);
+>  		/* The range changed so it's no longer validated */
+>  		flags &= ~EXT4_FREE_BLOCKS_VALIDATED;
+>  		goto do_more;
+>  	}
+>  error_return:
+> -	brelse(bitmap_bh);
+>  	ext4_std_error(sb, err);
+>  	return;
+>  }
+> -- 
+> 2.30.0
+> 
