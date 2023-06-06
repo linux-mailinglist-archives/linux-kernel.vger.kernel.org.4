@@ -2,183 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 552D5724076
+	by mail.lfdr.de (Postfix) with ESMTP id A986C724077
 	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 13:05:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234917AbjFFLEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 07:04:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41592 "EHLO
+        id S235229AbjFFLEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 07:04:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235219AbjFFLEX (ORCPT
+        with ESMTP id S234860AbjFFLD2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 07:04:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F0CF10E7
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 04:03:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686049413;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=PECCGAhd7teBhoQVIkKkQ0gCChVRirWpXr8QC6vVa88=;
-        b=b54OKLEvK+NAKPBFsc68Rt9vnMKHqjavlIlPotac5n4rfG3L44+lqKxG4+YdXL4PJ5MeWl
-        zwr4jpXEti/IS3kJLg9BM2+3LAs7KL4fv2/sJdIXUxLNCUmBm1KlSeMgvwCBRvb6N7VONr
-        JQ8cLo7mHtapx4quGhZ6yy/0kTpWLP8=
-Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com
- [209.85.215.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-149-wqq9HCkiP4Ocnasu7kqNKg-1; Tue, 06 Jun 2023 07:03:32 -0400
-X-MC-Unique: wqq9HCkiP4Ocnasu7kqNKg-1
-Received: by mail-pg1-f199.google.com with SMTP id 41be03b00d2f7-5400b72fcb0so1704844a12.1
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 04:03:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686049411; x=1688641411;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PECCGAhd7teBhoQVIkKkQ0gCChVRirWpXr8QC6vVa88=;
-        b=AaJdsfUHRfMU65y3BJLWNl7Lz+3nptzS9IeOLVEX8YiNcDEl3P5rYa+EGQvhu9bgsF
-         Dpr1OFQ/HpTWxvyGq2xK/LwWSOolOAyHTyJoiIDT25NsKILwSwyYEjZ/HbAWCjxcSo0N
-         zSJ4S/gkgAxpzaVURN6/smBwFEDiWrPgaB+o/25dHVmj+M9sOnGiM7TWt4Xj36w1/pQK
-         s38TrkQ2Ee4lRULXbDrLX06GDy4c4+czOPsbKzf3bhGV1tRLKlN9I8v+a2OKsWjd0rsW
-         EJ7IZkBELqUcuyoTgDsJdD7I8YZv0Uy+oQYzXRozs0l/gK7cDi2qFcwstvju98sd/VGh
-         9mEQ==
-X-Gm-Message-State: AC+VfDypsIBC1sOlr3+8UADN8E+lTRLcA79zEaDiZmdmTtTo159ELT5H
-        UWd70icj648E8OEaRLtuRjoqiciTX1hMVj+X9kgKFC7kV8Fk9tlYJcPiiDcLk7L6BttJn4dcFrs
-        JkSe5zoVWaduwf73dNEj7um7q
-X-Received: by 2002:a17:90a:cb8f:b0:24e:2e86:5465 with SMTP id a15-20020a17090acb8f00b0024e2e865465mr244070pju.31.1686049411621;
-        Tue, 06 Jun 2023 04:03:31 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7Ut1fWyiC1Sxe/ag4hpzoFeyDmazttp0G3bC8zYvg1LgXcS3Mz6lzRVYGA5vny7y9WWqUGuQ==
-X-Received: by 2002:a17:90a:cb8f:b0:24e:2e86:5465 with SMTP id a15-20020a17090acb8f00b0024e2e865465mr244050pju.31.1686049411302;
-        Tue, 06 Jun 2023 04:03:31 -0700 (PDT)
-Received: from localhost ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id l3-20020a6542c3000000b005307501cfe4sm6611337pgp.44.2023.06.06.04.03.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 04:03:30 -0700 (PDT)
-Date:   Tue, 6 Jun 2023 19:02:19 +0800
-From:   Coiby Xu <coxu@redhat.com>
-To:     Milan Broz <gmazyland@gmail.com>
-Cc:     Eric Biggers <ebiggers@kernel.org>, kexec@lists.infradead.org,
-        Baoquan He <bhe@redhat.com>, x86@kernel.org,
-        dm-devel@redhat.com, Pingfan Liu <kernelfans@gmail.com>,
-        linux-kernel@vger.kernel.org, Dave Hansen <dave.hansen@intel.com>,
-        Kairui Song <ryncsn@gmail.com>,
-        Jan Pazdziora <jpazdziora@redhat.com>,
-        Thomas Staudt <tstaudt@de.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Dave Young <dyoung@redhat.com>
-Subject: Re: [PATCH 0/5] Support kdump with LUKS encryption by reusing LUKS
- volume key
-Message-ID: <oosx274kf6kzasncdfdg5a53ut6wey3nlnbho5x3rql2df3zep@c6r6m4whphvh>
-References: <20230601072444.2033855-1-coxu@redhat.com>
- <20230602213452.GC628@quark.localdomain>
- <f569a35a-bff9-9dbb-2ded-7e02ee060a9a@gmail.com>
- <36mz3gn764ceadfbuhhmoo2zaiqmzplpkdcnszha2hzhmb3i62@sm6hilxryzk4>
- <a5eaa21d-6551-5857-98cd-50578fe59566@gmail.com>
+        Tue, 6 Jun 2023 07:03:28 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5519210D7
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 04:03:08 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PMsdMAQnZTbHMa5oYL41JGD8GnQPnpStX2rmZHQcv5xDEjHEZYkTZh+wyZV/Jh9Ltu5VG2h+TmO1YxE67+4UulDwIqXVp2N3gcYhcZywN5+2sK72Xln0jJoPYvq34lMwhqeNU26yzRk8KcwjCt0bMOugI4OvcdLhEb6yrADyI0BFmlW2GWxEzd9ALqjpK3HRK8l2tWedJf2wDSPXrLXJOT2wLSMb+5dLpoM1UCqGQAmWTmJK7t1GYJs5kC+1lDmaGKsEK9XFJCOSgL1PXNyG5e6vLqA4fy8mW5gNDUEhHnYJkOR0krYbA8hO0E/ic8yGuaONndQ4HvB/QFnlqRjvLA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2v/Mc0KK7tDHCTNZrkW1gls2KiLO0p7VEJ0StWZOvYM=;
+ b=DN2oPp3z39ebzV3GrnXhRyruAtHn2OXWoQ8iUJT1bV4TMQsDkc4U6jRU0lUmnbVwkpfNA1pbOH950cVcqZhvc5UAqTr7FsxXT5iSgMgQSGcCzCYCUlZI0SSfsFxUBJWKUcot6tNaP4umPqMX2U2vRA0cwXlcbWuTbGuMP+JKlj9sjNwmsl+qU5N9rU7Y2THqI2CDtTHrDzM/mCNifZBOaTR7vbZK5OMsVrKQ/L45uZxSExn2r9b82qyLcKhQ3l3USbUccQ5tYoCt1yeHYzUVGzQ56Hr7BlPZjqRih/eXGMbue3/FoBgli+YgSN6cb3aBPZ+wAsQUTw/U2/YEII5vwg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2v/Mc0KK7tDHCTNZrkW1gls2KiLO0p7VEJ0StWZOvYM=;
+ b=PPFuowd+g3coB7botapoYf6RxToIcihC5J0mqll7ofChKsxJWD3zlgFrzRoMGoHnfps/KxojH2H7gG+f+MIkUo2EE0vDAc3ki27g0yayyyzkQDq0F9xTh3VnY2dZH8Mgvlg0OEDhNMRzOM+uOjAtrcbzTtnvP72lZ5G8zIg3/1Y=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CH3PR12MB8308.namprd12.prod.outlook.com (2603:10b6:610:131::8)
+ by DS0PR12MB7945.namprd12.prod.outlook.com (2603:10b6:8:153::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Tue, 6 Jun
+ 2023 11:03:05 +0000
+Received: from CH3PR12MB8308.namprd12.prod.outlook.com
+ ([fe80::e452:1914:1054:de79]) by CH3PR12MB8308.namprd12.prod.outlook.com
+ ([fe80::e452:1914:1054:de79%7]) with mapi id 15.20.6455.030; Tue, 6 Jun 2023
+ 11:03:05 +0000
+Message-ID: <ffb49486-4e29-a44d-97f6-18fea5386ba1@amd.com>
+Date:   Tue, 6 Jun 2023 16:32:51 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v2] cdx: add MSI support for CDX bus
+Content-Language: en-US
+To:     gregkh@linuxfoundation.org, maz@kernel.org, tglx@linutronix.de,
+        jgg@ziepe.ca, linux-kernel@vger.kernel.org
+Cc:     git@amd.com, harpreet.anand@amd.com,
+        pieter.jansen-van-vuuren@amd.com, nikhil.agarwal@amd.com,
+        michal.simek@amd.com, abhijit.gangurde@amd.com
+References: <20230518114418.18025-1-nipun.gupta@amd.com>
+From:   Nipun Gupta <nipun.gupta@amd.com>
+In-Reply-To: <20230518114418.18025-1-nipun.gupta@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN2PR01CA0236.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:eb::20) To CH3PR12MB8308.namprd12.prod.outlook.com
+ (2603:10b6:610:131::8)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <a5eaa21d-6551-5857-98cd-50578fe59566@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH3PR12MB8308:EE_|DS0PR12MB7945:EE_
+X-MS-Office365-Filtering-Correlation-Id: a62d3639-4744-42d1-f49b-08db667d9a4e
+X-LD-Processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: jyxgZHTGtBPbuxkf4OlFmq0vyV8vzg6NlUqB5paZJNoEtA3rgn6wcccoVduI0x5cvSt3i3oGFlLkMY/2BKuiW2eNeWSe4nxrZXj0cmgNyzxLQRTwjCGJGuzBGDTCdzYaDsA8i0h1wmcM4XQgUKLzKrud4aPt96eoJFK/5uGbDnBTyjpnc0A/wlL6RkZJiT7mEwAE8V/KLvaN8Tpe8CP+BMBh31tFYP9nv82yK7vxEtKNFwZdMbmmxAJKgJFrTq9yL1eurohDTWPg4PKefiUl3vrtdyRtrd+2kCoCEbkUwLecTlsp2b0AN/Rs46hy71gB/82JoEQTcIbrJTVGB8wStRhmCMPDvq/Z26YmW/Nl1fsn/s58GY86FJo2xnppU1GTeYYVRw+DWNLw6fH4N+oTONc8dezI5ukwXOBF9K+KuVDNhWB2MgMP7fD/tc+3VyYGOKbwFVZroO+97KX4O2D0X+5KyDbv0KZqvS++O4CcAe5WJtxaeg7WnOBvwPvqL8LYtn+8svGdrl/AuEWFyZNWQxI0nQAAjfriVAKq0wB9E8A5mny4biqWYIgnTJ83i5wuruHDoBoTUufqk3k9OQLyfChOXjBnlde7QjsdnRZxXDDWnCYcYhznrjla26tmh35DWUJfoxDxslt1eQjORtAT1Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8308.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(39860400002)(396003)(346002)(136003)(376002)(451199021)(478600001)(2906002)(6486002)(36756003)(6666004)(83380400001)(2616005)(6506007)(53546011)(86362001)(26005)(31696002)(186003)(38100700002)(6512007)(5660300002)(31686004)(316002)(8676002)(8936002)(66946007)(66556008)(4326008)(66476007)(44832011)(41300700001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?N1pSRzVmOHJyNXhSdkRIMmdKUFZzcmNvR1Q2cmdnVGc0Q0JycmI1WGNEVkZF?=
+ =?utf-8?B?eVhPRTBuVEJ3aW5kUFpZc1NLR0gxcWFyTGxhbjN5RFJEbVg3WEFUWWtkOWMz?=
+ =?utf-8?B?MTVSLzFLVTI1Q2x5akNIREhmcGtRM2tjZXNOTkRPTlM0ZjVNMTBRWE9sSGdU?=
+ =?utf-8?B?STdzMWQ3SlBGTFk3TVJITzhVNTN4UHBJYklQOGo2VUpPekQzc1Frd2dMUmls?=
+ =?utf-8?B?WWdCS1BuOVZ1bnhWbXNrT0oyaGQva3JNc1hpU3hLSU5QRzJRd0RncGdVb1RK?=
+ =?utf-8?B?WjVULzdUTHhDelp6L1ZnUW9ZVXRDTm1qMDgzTDZZT3VUQnZNNFBSSm12R3p1?=
+ =?utf-8?B?S1BHYUM2NFBKeW5ZSWhzbXFRbU1WSjcvSkt3cEpBalRGRFRya0RLZG8ySG12?=
+ =?utf-8?B?V2U4SXRuSnB5N2IvTGNEa2xWZWZNV1NpQlJYTTFmZ1FEdmh1N0VFQ2ZJN0h0?=
+ =?utf-8?B?VFJySksweFVDakk0TG8zdjhGeG9ZcFZwUmZXc1hmbTVUT3VYdkVVK2J5WkJF?=
+ =?utf-8?B?Ymtadk0xNDMwTDl4TXNmZmJQTUtRWlBHbVhwT1pvNGVwcjMrUlo4bWo0eFpO?=
+ =?utf-8?B?dWhWcVZjYWtMZjAwVU96b0VlREx0K3F5SE5HbXAraWZYSGgyZ3g3dklGR29Y?=
+ =?utf-8?B?Zk8vMmpxYUtkaFFsMWhXM3lrVlNmcE83SnB3VlBpV2xySWVwbkhRWGNQeFNr?=
+ =?utf-8?B?YUJiVnJlZXdDVGJwaVV0U3diZitIZlBXMkIzL1Rudk0rOE80ZldEUXJQZDVZ?=
+ =?utf-8?B?bGh3bVlva3JMREhYVGphb2ZVSXJDNGpndzVYRTVzZDY3VmtPM0Y1eFdtQWYy?=
+ =?utf-8?B?WDl6RHBOb1g4dmMzamQrVGJUdnRNRnc0Ky9Za0tRUUFaQUtORUFPUzB6R0pY?=
+ =?utf-8?B?bVBscjgyTW1EbFVsblQ5cktIYTdOS1NuVVVWcTMyOHc5YkU3TDBwMkg0bW1i?=
+ =?utf-8?B?ZWd0blpvV1hqVE93WEZIQWpLSkY5bStmQ2l0V25KdlRwY2ZwK25TemJtZXJj?=
+ =?utf-8?B?WlhRZi9mcHVPUnpJWndEYlRJU2EraHYwamlQaEJGRWs5L3ZGcnFFRlVXdHBW?=
+ =?utf-8?B?VlZyLzRYMmV6NHlFK3ZXUGVVd1VHTEdQWmJqUXJVazNuNXBVSVVFd3N4NEFS?=
+ =?utf-8?B?M3NRcm9jVEpEdzU0MmpBWW14RW1LdGZDSjZ1d2RUY05TQm5NVlAvVkhlZ0lw?=
+ =?utf-8?B?UmdZRzNpY3VSNGM3WTlTTDNQSUh3Y1lvQ0JmY0RWb0EvNHJONXIxSmFKT0oz?=
+ =?utf-8?B?MUJNbmk4SEVqeVVIa2dOclpwL0VhdkNnd29GdlkzMWxpWkxjRVhDWWlTNWdS?=
+ =?utf-8?B?Z01BUXJXNVJvbXJzcCszVkR4V0NtLy92N01VdkgxSjcvT2R6bkhSZnZ4YmNq?=
+ =?utf-8?B?M2FJNTNqdGp6OFM5YWw5RlRueW9SaGpiQ3dadS9seU5XUkd6a21CTyszSnhO?=
+ =?utf-8?B?MU9MeUROVDZ3RTB4UlNNZHRmbzBNdEJTVVFVaHpId0djY2xjK2RqaFZCN0pS?=
+ =?utf-8?B?WFlFQVpLb2NNQkowcWhnQlZtcVE4cDhCOEM3TW00Mkhib2hUeVl3a3gyUTZS?=
+ =?utf-8?B?WnVVaDhsQkNZZ1p5d0hiUXp1bU1GWEV0K1JxU3pyd1NaS2F2cWZDbDV6aEsy?=
+ =?utf-8?B?alp3aitPWUJWeUFkc215Wkd6WlQ0RWtvYVY4M2hRRFUzcmhydWhHbkxlOXlC?=
+ =?utf-8?B?a3V0VDk3SHlHVysrZ0VvaHFldWVMSDRtUUtYdFc0YzlsNzlLT1k3T3piRjN3?=
+ =?utf-8?B?Y0hBL3hIRU5UWit6QWRsdVJzcFpyQjNpS1BRbmc1Z3c2TUIyM0h3RVM2ZDRs?=
+ =?utf-8?B?T1ZnQmUvWUtvcFFpVWZnR2lJOFNQY0tQVHFQQXBNMUFSMVJqUCtmRHpEZHkw?=
+ =?utf-8?B?UEFqcVpPajdFbUhBK0RBVE5RVVQ5QktwTlBEdHA5VVBCZU95akRqd0p1L1lx?=
+ =?utf-8?B?UHlpTnh6cmo3VmNYRFIxYUZsZFkvSGlSbDY2RVVrUzA3VW5jeHBWdisrK1Rq?=
+ =?utf-8?B?WHR6dDBaTkcvWG4wTU5ScUZlRXcyeWgrTGdMbHRPbnlHakU3b0J2clE5ejc4?=
+ =?utf-8?B?STJ1dExtRTNLSnhKNUp2dktRWC8ydWIvek1GaE1hcXppb0FtdG9OeEJEOWhi?=
+ =?utf-8?Q?K2sLN5cYail0Zltb72MOuL7G0?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a62d3639-4744-42d1-f49b-08db667d9a4e
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8308.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2023 11:03:05.2356
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3kz5vHu9hYguWLzEiPceh4Ra/sGLqT9i4sxlK2InHQmZBNUFGZQDYsGdjVMJ5j9G
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7945
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 05, 2023 at 09:09:49AM +0200, Milan Broz wrote:
->On 6/5/23 04:31, Coiby Xu wrote:
->>Hi Eric and Milan,
->>
->>On Sat, Jun 03, 2023 at 11:22:52AM +0200, Milan Broz wrote:
->>>On 6/2/23 23:34, Eric Biggers wrote:
->>>>On Thu, Jun 01, 2023 at 03:24:39PM +0800, Coiby Xu wrote:
->>>>>[PATCH 0/5] Support kdump with LUKS encryption by reusing LUKS volume key
->>>>
->>>>The kernel has no concept of LUKS at all.  It provides dm-crypt, which LUKS
->>>>happens to use.  But LUKS is a userspace concept.
->>>>
->>>>This is a kernel patchset, so why does it make sense for it to be talking about
->>>>LUKS at all?  Perhaps you mean dm-crypt?
->>>
->>>Exactly.
->>
->>Thanks for raising the above concern! The use cases like CoreOS and
->>Confidential VMs explicitly want kdump to work for LUKS. And correct me
->>if I'm wrong, I think the two problems addressed by this patch set only
->>apply to LUKS so the kdump part of the kernel only cares about the LUKS
->>case. If there are use cases where similar approach is needed, I'll be
->>happy to make the solution more generic.
->>
->>>
->>>I had the same comment almost a year ago... and it still applies:
->>>https://lore.kernel.org/all/c857dcf8-024e-ab8a-fd26-295ce2e0ae41@gmail.com/
->>>
->>>Anyway, please fix the naming before this patchset can be read or reviewed!
->>>
->>>LUKS is user-space key management only (on-disk metadata); the kernel has
->>>no idea how the key is derived or what LUKS is - dm-crypt only knows the key
->>>(either through keyring or directly in the mapping table).
->>>
->>>Polluting kernel namespace with "luks" names variables is wrong - dm-crypt
->>>is used in many other mappings (plain, bitlocker, veracrypt, ...)
->>>Just use the dm-crypt key, do not reference LUKS at all.
->>
->>Thanks for the reminding! That comment was on the first RFC version. But
->>starting with "RFC v2", there is no longer any interaction with dm-crypt
->>(to save a copy of the LUKS volume key for the kdump kernel) and now I
->>make cryptsetup talks to the kdump part of the kernel via the sysfs to
->>reuse the volume key. So only the kdump part of the kernel needs to know
->>LUKS which is what it cares. Thus I don't think there is any kernel
->>namespace pollution now.
->
->Hi,
->
->I am sorry if I did understand correctly, but I thought that kdump is part
->of the kernel.
 
-Yes, there is the kernel part of the kdump although there is also the
-userspace part to make the feature complete:)
 
->
->I am trying to say that kernel generally has no concept of LUKS;
->this is a userspace abstraction for key management.
->
->Even the cryptsetup dm-crypt configuration mapping table generated from LUKS
->has nothing LUKS special in it (only in DM-UUID as a name prefix).
->
->So I do not understand why you need to mention LUKS even in kdump part.
->Perhaps it is still only a naming problem, nothing more.
->
->All you need is to preserve key and configuration parameters (for dm-crypt).
->If it is set by cryptsetup, dmsetup, or any other way is not important - on this
->kernel layer, it has nothing to do with LUKS key management metadata.
->
->No problem if you support only LUKS in userspace, but really, all this machinery
->should work for any dm-crypt devices. Perhaps your patch even works for it already.
+On 5/18/2023 5:14 PM, Nipun Gupta wrote:
+> Add CDX-MSI domain per CDX controller with gic-its domain as
+> a parent, to support MSI for CDX devices. CDX devices allocate
+> MSIs from the CDX domain. Also, introduce APIs to alloc and free
+> IRQs for CDX domain.
+> 
+> In CDX subsystem firmware is a controller for all devices and
+> their configuration. CDX bus controller sends all the write_msi_msg
+> commands to firmware running on RPU and the firmware interfaces with
+> actual devices to pass this information to devices
+> 
+> Since, CDX controller is the only way to communicate with the Firmware
+> for MSI write info, CDX domain per controller required in contrast to
+> having a CDX domain per device.
+> 
+> Co-developed-by: Nikhil Agarwal <nikhil.agarwal@amd.com>
+> Signed-off-by: Nikhil Agarwal <nikhil.agarwal@amd.com>
+> Co-developed-by: Abhijit Gangurde <abhijit.gangurde@amd.com>
+> Signed-off-by: Abhijit Gangurde <abhijit.gangurde@amd.com>
+> Signed-off-by: Nipun Gupta <nipun.gupta@amd.com>
+> Reviewed-by: Pieter Jansen van Vuuren <pieter.jansen-van-vuuren@amd.com>
+> Tested-by: Nikhil Agarwal <nikhil.agarwal@amd.com>
+> ---
+> 
+> Changes v1->v2:
+> - fixed scenario where msi write was called asyncronously in
+>    an atomic context, by using irq_chip_(un)lock, and using sync
+>    MCDI API for write MSI message.
+> - fixed broken Signed-off-by chain.
 
-Thanks for the explanation! After reflecting on your words for some
-time, I realize I had an implicit assumption. I assumed is if I use a
-name like dm_crypt_key instead of luks_volume_key, I need to support all
-mappings like plain, bitlocker, veracrypt as mentioned by you and this
-could mean much more efforts. So I'm not motivated to do that as
-currently users only request kdump to work for LUKS.  
+Hi Thomas,
 
-But maybe I can divide the efforts into the kernel part and userspace
-part. For the kernel part, almost no effort is needed since only
-renaming is needed as pointed out by you. For the userpace part, maybe
-it's OK to support preserving key only for LUKS2 in cryptsetup as hinted
-by your last paragraph? Does it look good to you from the viewpoint of
-the maintainer of cryptsetup?
+Did you had a chance to look at patch v2. Please let me know in case 
+anything else is required to be updated.
 
->
->Milan
->
-
--- 
-Best regards,
-Coiby
-
+Thanks,
+Nipun
