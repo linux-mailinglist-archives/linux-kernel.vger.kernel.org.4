@@ -2,149 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A01BE724DBC
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 22:11:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A41D724DB6
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 22:11:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239681AbjFFULz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 16:11:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45766 "EHLO
+        id S239674AbjFFULl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 16:11:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238399AbjFFULx (ORCPT
+        with ESMTP id S238399AbjFFULi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 16:11:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E35110F2
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 13:11:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686082269;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lzgqGsD7+CrrqOciLpvZvEV1lKYjsInQHGa9T++ytWk=;
-        b=VWoyk2Fsjk8Pv0TJw5J10FLBMxCAYqX3CvkoAVOgO6afqwYBSwTKPpWDG9EbHSXkJUQY7X
-        b/3YWr+i/ZLIKw/fLvFMet65m8XxhJEECO8DXJDUFTihCSWPMNiYBZSfB62TAr6UP2usF3
-        l7yeGh29pCB3Lqw+E9h6R57QEOj0sYo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-648-7QNlY6cENyyi_C61lCve9w-1; Tue, 06 Jun 2023 16:11:04 -0400
-X-MC-Unique: 7QNlY6cENyyi_C61lCve9w-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 843AE185A791;
-        Tue,  6 Jun 2023 20:11:03 +0000 (UTC)
-Received: from [10.22.34.1] (unknown [10.22.34.1])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5284C40CFD46;
-        Tue,  6 Jun 2023 20:11:02 +0000 (UTC)
-Message-ID: <563fd5e1-650a-e329-8aab-2fa1953a9f49@redhat.com>
-Date:   Tue, 6 Jun 2023 16:11:02 -0400
+        Tue, 6 Jun 2023 16:11:38 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9724710F9;
+        Tue,  6 Jun 2023 13:11:37 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 356JupBl025545;
+        Tue, 6 Jun 2023 20:11:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=bvsZXgcD57GgTs7jfVBXkEq6F1r0JDOgf/+pss35C0c=;
+ b=Ey8KeDZvHW1kUa0Cx+8Ijr3vK2KGTUidhDf9+tKhfCznQyU25qaX3B9t/oSTDn4qmqE+
+ QfBezOOJqUTXGyz5ZLrSN7yGgOVBmfNs7clC0sY9mM+AFwlUHsZrlDLTXWu01lefPULR
+ TPogu/XHCm7Wj4cbHTm8Uqsty3SOMoq9RUMTfNdWIukq9S3VcIA2Br+EfiUAXecH/8Ih
+ tyhehmqj+7tOIaz/9Zd18XC4FkAEJ9LK84HnQP/CKqcpWwyIXGP0LT+EtUQSwDQ6TNx6
+ iZQ/eZwQ3pe159JagT+4GxYF8RiAl+NbLHzxuG7exbsuRB/k2VktfjDF1mM3CAg4tAeQ Gg== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r2a7685qt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Jun 2023 20:11:28 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 356KBRsZ006364
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 6 Jun 2023 20:11:27 GMT
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Tue, 6 Jun 2023 13:11:26 -0700
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
+        <dianders@chromium.org>, <vkoul@kernel.org>, <daniel@ffwll.ch>,
+        <airlied@gmail.com>, <agross@kernel.org>,
+        <dmitry.baryshkov@linaro.org>, <andersson@kernel.org>,
+        <marijn.suijten@somainline.org>
+CC:     <quic_abhinavk@quicinc.com>, <quic_khsieh@quicinc.com>,
+        <quic_jesszhan@quicinc.com>, <quic_sbillaka@quicinc.com>,
+        <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v17] drm/msm/dpu: add DSC blocks to the catalog of MSM8998
+Date:   Tue, 6 Jun 2023 13:11:12 -0700
+Message-ID: <1686082272-22191-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH 0/5] cgroup/cpuset: A new "isolcpus" paritition
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>
-Cc:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Mrunal Patel <mpatel@redhat.com>,
-        Ryan Phillips <rphillips@redhat.com>,
-        Brent Rowsell <browsell@redhat.com>,
-        Peter Hunt <pehunt@redhat.com>, Phil Auld <pauld@redhat.com>
-References: <deb7b684-3d7c-b3ae-7b36-5b7ba2dd8001@redhat.com>
- <ZFUo5IYAIwTEKR4_@slm.duckdns.org>
- <759603dd-7538-54ad-e63d-bb827b618ae3@redhat.com>
- <405b2805-538c-790b-5bf8-e90d3660f116@redhat.com>
- <ZGvHUjOCjwat91Gq@slm.duckdns.org>
- <18793f4a-fd39-2e71-0b77-856afb01547b@redhat.com>
- <ZH4jfmypOXGJPu0D@slm.duckdns.org>
- <be64a569-4388-9dd9-3e06-36d716a54f6c@redhat.com>
- <ZH5FNc6wjlGPsaaO@slm.duckdns.org>
- <a2220c9f-7a8d-da82-ecc0-b39f3807408c@redhat.com>
- <ZH-P7X_yjnVfhy7b@slm.duckdns.org>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <ZH-P7X_yjnVfhy7b@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: MY6gKuCYNm-VrZr3l5-OEb7AqbEj-epL
+X-Proofpoint-GUID: MY6gKuCYNm-VrZr3l5-OEb7AqbEj-epL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-06_15,2023-06-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ priorityscore=1501 malwarescore=0 lowpriorityscore=0 clxscore=1015
+ mlxscore=0 bulkscore=0 adultscore=0 phishscore=0 mlxlogscore=999
+ impostorscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2305260000 definitions=main-2306060171
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/6/23 15:58, Tejun Heo wrote:
-> Hello, Waiman.
->
-> On Mon, Jun 05, 2023 at 10:47:08PM -0400, Waiman Long wrote:
-> ...
->> I had a different idea on the semantics of the cpuset.cpus.exclusive at the
->> beginning. My original thinking is that it was the actual exclusive CPUs
->> that are allocated to the cgroup. Now if we treat this as a hint of what
->> exclusive CPUs should be used and it becomes valid only if the cgroup can
-> I wouldn't call it a hint. It's still hard allocation of the CPUs to the
-> cgroups that own them. Setting up a partition requires exclusive CPUs and
-> thus would depend on exclusive allocations set up accordingly.
->
->> become a valid partition. I can see it as a value that can be hierarchically
->> set throughout the whole cpuset hierarchy.
->>
->> So a transition to a valid partition is possible iff
->>
->> 1) cpuset.cpus.exclusive is a subset of cpuset.cpus and is a subset of
->> cpuset.cpus.exclusive of all its ancestors.
-> Yes.
->
->> 2) If its parent is not a partition root, none of the CPUs in
->> cpuset.cpus.exclusive are currently allocated to other partitions. This the
-> Not just that, the CPUs aren't available to cgroups which don't have them
-> set in the .exclusive file. IOW, if a CPU is in cpus.exclusive of some
-> cgroups, it shouldn't appear in cpus.effective of cgroups which don't have
-> the CPU in their cpus.exclusive.
->
-> So, .exclusive explicitly establishes exclusive ownership of CPUs and
-> partitions depend on that with an implicit "turn CPUs exclusive" behavior in
-> case the parent is a partition root for backward compatibility.
-The current CPU exclusive behavior is limited to sibling cgroups only. 
-Because of the hierarchical nature of cpu distribution, the set of 
-exclusive CPUs have to appear in all its ancestors. When partition is 
-enabled, we do a sibling exclusivity test at that point to verify that 
-it is exclusive. It looks like you want to do an exclusivity test even 
-when the partition isn't active. I can certainly do that when the file 
-is being updated. However, it will fail the write if the exclusivity 
-test fails just like the v1 cpuset.cpus.exclusive flag if you are OK 
-with that.
->
->> same remote partition concept in my v2 patch. If its parent is a partition
->> root, part of its exclusive CPUs will be distributed to this child partition
->> like the current behavior of cpuset partition.
-> Yes, similar in a sense. Please do away with the "once .reserve is used, the
-> behavior is switched" part.
+From: Abhinav Kumar <quic_abhinavk@quicinc.com>
 
-That behavior has been gone in my v2 patch.
+Some platforms have DSC blocks which have not been declared in the catalog.
+Complete DSC 1.1 support for all platforms by adding the missing blocks to
+MSM8998.
 
-> Instead, it can be sth like "if the parent is a
-> partition root, cpuset implicitly tries to set all CPUs in its cpus file in
-> its cpus.exclusive file" so that user-visible behavior stays unchanged
-> depending on past history.
+Changes in v9:
+-- add MSM8998 and SC8180x to commit title
 
-If parent is a partition root, auto reservation will be done and 
-cpus.exclusive will be set automatically just like before. So existing 
-applications using partition will not be affected.
+Changes in v10:
+-- fix grammar at commit text
 
-Cheers,
-Longman
+Changes in v12:
+-- fix "titil" with "title" at changes in v9
+
+Changes in v14:
+-- "dsc" tp "DSC" at commit title
+
+Changes in v15:
+-- fix merge conflicts at dpu_5_1_sc8180x.h
+
+Changes in v16
+-- fix cherry-pick error by deleting both redundant .dsc and .dsc_count
+   assignment from dpu_5_1_sc8180x.h
+
+Changes in v17
+-- remove sc8180x from both commit title and text
+-- remove Reviewed-by
+
+Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+---
+ drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
+index 3c732a0..7d0d0e7 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
++++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
+@@ -126,6 +126,11 @@ static const struct dpu_pingpong_cfg msm8998_pp[] = {
+ 			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 15)),
+ };
+ 
++static const struct dpu_dsc_cfg msm8998_dsc[] = {
++	DSC_BLK("dsc_0", DSC_0, 0x80000, 0),
++	DSC_BLK("dsc_1", DSC_1, 0x80400, 0),
++};
++
+ static const struct dpu_dspp_cfg msm8998_dspp[] = {
+ 	DSPP_BLK("dspp_0", DSPP_0, 0x54000, DSPP_SC7180_MASK,
+ 		 &msm8998_dspp_sblk),
+@@ -199,6 +204,8 @@ const struct dpu_mdss_cfg dpu_msm8998_cfg = {
+ 	.dspp = msm8998_dspp,
+ 	.pingpong_count = ARRAY_SIZE(msm8998_pp),
+ 	.pingpong = msm8998_pp,
++	.dsc_count = ARRAY_SIZE(msm8998_dsc),
++	.dsc = msm8998_dsc,
+ 	.intf_count = ARRAY_SIZE(msm8998_intf),
+ 	.intf = msm8998_intf,
+ 	.vbif_count = ARRAY_SIZE(msm8998_vbif),
+-- 
+2.7.4
 
