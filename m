@@ -2,141 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A0EF723635
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 06:25:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE92A723636
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 06:26:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232207AbjFFEZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 00:25:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58936 "EHLO
+        id S232107AbjFFE0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 00:26:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230418AbjFFEZv (ORCPT
+        with ESMTP id S233914AbjFFE0K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 00:25:51 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99781E9;
-        Mon,  5 Jun 2023 21:25:47 -0700 (PDT)
-X-QQ-mid: bizesmtp83t1686025537tyl56hli
-Received: from linux-lab-host.localdomain ( [61.141.77.49])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Tue, 06 Jun 2023 12:25:35 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: hoArX50alxEfEPP/uYMrq9xoC2wjjN8NM6dsaYFofGz7MxMU8eJ/Ut1Ckk7Di
-        WlXkQq7puxHc6ZLmSXJMLKIQYMO/W7J9KnheGdVjjgOOYD4n1oDW/goqJjYxJ2UxV7z15Nh
-        sCKUj5ATFdShH0fZ3Z76met6sziLiFUlLHNrDf2YbO96hOP5V/3r3Bw1lAjYrzzwZ09RQyb
-        PZ7e9XDqR/mkBpOF/7WmOOKygOJ0m4AI38D/6F5KbHU1N+PPporQlCwQaJfHlnrTXLcpoC4
-        fvWcXRF5lPdUzBbzJ4U5Y8l2Xuhs4UtFZA3RUVASk1v+gFSdAoFKzWx0G8yxlDHY4QjwIw5
-        9c8aGuBN3AIVEJDhjG+BNN3gftyjVB7MLKLWUhyCZv0uHPHoBM=
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 15960807705076664772
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     falcon@tinylab.org
-Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        thomas@t-8ch.de, w@1wt.eu
-Subject: [PATCH v3 0/3] nolibc: add part2 of support for rv32
-Date:   Tue,  6 Jun 2023 12:25:35 +0800
-Message-Id: <20230606042535.354118-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1685780412.git.falcon@tinylab.org>
-References: <cover.1685780412.git.falcon@tinylab.org>
+        Tue, 6 Jun 2023 00:26:10 -0400
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEF3E1B3
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 21:26:06 -0700 (PDT)
+Received: by mail-il1-x133.google.com with SMTP id e9e14a558f8ab-33dea7d5424so57395ab.1
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 21:26:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686025566; x=1688617566;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OQ5KIiU+371VE+O6tbV23sC+HS9OsW9UQGsKTvKCpCQ=;
+        b=HPjn5qRrsdsv/dZ+nEQLwU1R2JvpW1DqCq0woAZA893EcgFhCWI+Vm9z4DH6pk3C6A
+         WyUC6Co0IEX61+Dp3n4/AFK0ozhxtlW96XFbuT+WqqXSZemLBQfhUphcvkokQd3y5cLn
+         aKXkRVBZfm9z8GUybulk4eCo/IB25tiiokgclrXf5uqpSLGEc9VSaTlC0Sxj3TMJwdV4
+         Ya6qA09PwtK4TDIIDM7cYyFGo/xaci1PY6AztcGznvBOtuORRkGh+gMERvhlsFph+ad8
+         JEhJFmoFhKiZSVQowCq9uNdZYg9+MOv7JUdcO9YblLMumQcExSieV1l/jISCxjEUsfjC
+         yS4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686025566; x=1688617566;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OQ5KIiU+371VE+O6tbV23sC+HS9OsW9UQGsKTvKCpCQ=;
+        b=QbmFMuwOB+32dQgyqO3UhCm+CqfgQ72wYx0VlCW7DJpl/Vrn6jIFh6OWsuZFrqKPp2
+         3JEZPqaAR7zk1cAmQupGeFf305MP7fPXsQ6/Wfk4vZjaYs9z3qicEaVdujJOcZcyDxd/
+         xxnbL8FsgsllqPKlGAnwjZLCp2o3fE60+dTGKuf73mcrQ5pbUNkEjhR40RHwc/OBS9aZ
+         hloAMCPDLMicCXM4uyKYpcffAXDGpK8ABXW9q+YiDcdvn14NRYCEsCBpmlF2YDzLOoPC
+         344CwHsHi4yV9EB9ystk5HJApst98W6T5c4fpAzt+RK1ZOqcPstq9/X9E8HZaTjFwmeJ
+         /UeQ==
+X-Gm-Message-State: AC+VfDyaeOmeIRfviG8Ln+7/sifMN+6G148qBc+vsAEywC9RWB/sdA1Q
+        CkwSLNTGdlLf7RvaQhi9MA+rUNSrjytPQBmS04feBw==
+X-Google-Smtp-Source: ACHHUZ4Db41GcOQrOCF8YXWvTqVG+NIItyIT/5OGHltHUPxTYHY2nmQSYwHki03XyrK8QlEjOqUDr10qoiYBHQFOq+k=
+X-Received: by 2002:a05:6e02:20c5:b0:338:9f6a:d54a with SMTP id
+ 5-20020a056e0220c500b003389f6ad54amr117548ilq.24.1686025566021; Mon, 05 Jun
+ 2023 21:26:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230605202712.1690876-1-irogers@google.com> <20230605202712.1690876-2-irogers@google.com>
+ <ZH6gZgcwAbDrEiqX@krava>
+In-Reply-To: <ZH6gZgcwAbDrEiqX@krava>
+From:   Ian Rogers <irogers@google.com>
+Date:   Mon, 5 Jun 2023 21:25:54 -0700
+Message-ID: <CAP-5=fWgQDrgDJ_UFuo_G5NaCzR5vWrRyvQ-_qpvFP0p0q18+w@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] perf build: Add ability to build with a generated vmlinux.h
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        James Clark <james.clark@arm.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Arnd
+On Mon, Jun 5, 2023 at 7:57=E2=80=AFPM Jiri Olsa <olsajiri@gmail.com> wrote=
+:
+>
+> On Mon, Jun 05, 2023 at 01:27:09PM -0700, Ian Rogers wrote:
+> > Commit a887466562b4 ("perf bpf skels: Stop using vmlinux.h generated
+> > from BTF, use subset of used structs + CO-RE") made it so that
+> > vmlinux.h was uncondtionally included from
+> > tools/perf/util/vmlinux.h. This change reverts part of that change (so
+> > that vmlinux.h is once again generated) and makes it so that the
+> > vmlinux.h used at build time is selected from the VMLINUX_H
+> > variable. By default the VMLINUX_H variable is set to the vmlinux.h
+> > added in change a887466562b4, but if GEN_VMLINUX_H=3D1 is passed on the
+> > build command line then the previous generation behavior kicks in.
+> >
+> > The build with GEN_VMLINUX_H=3D1 currently fails with:
+> > ```
+> > util/bpf_skel/lock_contention.bpf.c:419:8: error: redefinition of 'rq'
+> > struct rq {};
+> >        ^
+> > /tmp/perf/util/bpf_skel/.tmp/../vmlinux.h:45630:8: note: previous defin=
+ition is here
+> > struct rq {
+> >        ^
+> > 1 error generated.
+> > ```
+> >
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+> > Acked-by: Andrii Nakryiko <andrii@kernel.org>
+> > ---
+> >  tools/perf/Makefile.config                       |  4 ++++
+> >  tools/perf/Makefile.perf                         | 16 +++++++++++++++-
+> >  tools/perf/util/bpf_skel/.gitignore              |  1 +
+> >  tools/perf/util/bpf_skel/{ =3D> vmlinux}/vmlinux.h |  0
+> >  4 files changed, 20 insertions(+), 1 deletion(-)
+> >  rename tools/perf/util/bpf_skel/{ =3D> vmlinux}/vmlinux.h (100%)
+>
+> looks good, but I don't understand why you moved the vmlinux.h
+>
+> jirka
 
-Because this patchset is a 'big' change derived from the idea of suggestion
-from you [3], I do very welcome your feedback about this change, just like
-Thomas suggested, this requires more discussion before Willy plan to determine
-merge it or not.
-
-The first two convert all compile failures to a return of -ENOSYS, if you do
-like it, welcome your Reviewed-by. These two are required by the coming new
-time64 syscalls for rv32, because they depends on how we cope with the
-unsupported syscalls, returning -ENOSYS is really better than simply fail the
-compiling.
-
-Hi, Thomas, If you are happy with them, welcome your Reviewed-by too, thanks.
-If the first two are ok, then, I can focus on preparing the left time64
-patchsets.
-
-The third one is not that urgent, because some important syscalls are
-still missing for rv32. It is added here only for compile test.
+Dumb reason, as headers in the same directory take priority, I had to
+move the vmlinux.h out of the directory with the C code for skeletons
+so that it could be selected via a -I.
 
 Thanks,
-Zhangjin
+Ian
 
-> Hi, Willy
-> 
-> This is the v3 part2 of support for rv32, differs from the v2 part2 [1],
-> we only fix up compile issues in this patchset.
-> 
-> With the v3 generic part1 [2] and this patchset, we can compile nolibc
-> for rv32 now.
-> 
-> This is based on the idea of suggestions from Arnd [3], instead of
-> '#error' on the unsupported syscall on a target platform, a 'return
-> -ENOSYS' allow us to compile it at first and then allow we fix up the
-> test failures reported by nolibc-test one by one.
-> 
-> The first two patches fix up all of the compile failures with '-ENOSYS'
-> (and '#ifdef' if required):
-> 
->   tools/nolibc: fix up #error compile failures with -ENOSYS
->   tools/nolibc: fix up undeclared syscall macros with #ifdef and -ENOSYS
-> 
-> The last one enables rv32 compile support:
->   
->   selftests/nolibc: riscv: customize makefile for rv32
-> 
-> The above compile support patch here is only for test currently, as
-> Thomas suggested, for a full rv32 support, it should wait for the left
-> parts.
-> 
-> Welcome your feedbacks, will wait for enough discussion on this patchset
-> and then send the left parts one by one to fix up the test failures
-> about waitid, llseek and time64 syscalls: ppoll_time64, clock_gettime64,
-> pselect6_time64.
-> 
-> So, I do recommend to apply this patchset, it allows us to send the left
-> parts independently, otherwise, all of them should be sent out for
-> review together. with this patchset, the rv32 users may be able to use
-> nolibc although some syscalls still missing :-)
-> 
-> Or at least we apply the first two, so, I can manually cherry-pick the
-> compile support patch to do my local test, and the other platform
-> developer may also benefit from them.
-> 
-> I'm cleaning up the left parts, but still require some time, I plan to
-> split them to such parts:
-> 
->   * part3: waitid, prepared, will send out later
->   * part4: llseek, prepared, will send out later
->   * part5: time64 syscalls, ppoll_time64 ok, will finish them next week
->            (It is a little hard to split them)
-> 
-> Best regards,
-> Zhangjin
-> ---
-> 
-> [1]: https://lore.kernel.org/linux-riscv/cover.1685387484.git.falcon@tinylab.org/T/#t
-> [2]: https://lore.kernel.org/linux-riscv/cover.1685777982.git.falcon@tinylab.org/T/#t
-> [3]: https://lore.kernel.org/linux-riscv/5e7d2adf-e96f-41ca-a4c6-5c87a25d4c9c@app.fastmail.com/
-> 
-> Zhangjin Wu (3):
->   tools/nolibc: fix up #error compile failures with -ENOSYS
->   tools/nolibc: fix up undeclared syscall macros with #ifdef and -ENOSYS
->   selftests/nolibc: riscv: customize makefile for rv32
-> 
->  tools/include/nolibc/sys.h              | 38 ++++++++++++++++---------
->  tools/testing/selftests/nolibc/Makefile | 11 +++++--
->  2 files changed, 34 insertions(+), 15 deletions(-)
+> >
+> > diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+> > index a794d9eca93d..08d4e7eaa721 100644
+> > --- a/tools/perf/Makefile.config
+> > +++ b/tools/perf/Makefile.config
+> > @@ -680,6 +680,10 @@ ifdef BUILD_BPF_SKEL
+> >    CFLAGS +=3D -DHAVE_BPF_SKEL
+> >  endif
+> >
+> > +ifndef GEN_VMLINUX_H
+> > +  VMLINUX_H=3D$(src-perf)/util/bpf_skel/vmlinux/vmlinux.h
+> > +endif
+> > +
+> >  dwarf-post-unwind :=3D 1
+> >  dwarf-post-unwind-text :=3D BUG
+> >
+> > diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+> > index f48794816d82..f1840af195c0 100644
+> > --- a/tools/perf/Makefile.perf
+> > +++ b/tools/perf/Makefile.perf
+> > @@ -1080,7 +1080,21 @@ $(BPFTOOL): | $(SKEL_TMP_OUT)
+> >       $(Q)CFLAGS=3D $(MAKE) -C ../bpf/bpftool \
+> >               OUTPUT=3D$(SKEL_TMP_OUT)/ bootstrap
+> >
+> > -$(SKEL_TMP_OUT)/%.bpf.o: util/bpf_skel/%.bpf.c $(LIBBPF) | $(SKEL_TMP_=
+OUT)
+> > +VMLINUX_BTF_PATHS ?=3D $(if $(O),$(O)/vmlinux)                        =
+ \
+> > +                  $(if $(KBUILD_OUTPUT),$(KBUILD_OUTPUT)/vmlinux)    \
+> > +                  ../../vmlinux                                      \
+> > +                  /sys/kernel/btf/vmlinux                            \
+> > +                  /boot/vmlinux-$(shell uname -r)
+> > +VMLINUX_BTF ?=3D $(abspath $(firstword $(wildcard $(VMLINUX_BTF_PATHS)=
+)))
+> > +
+> > +$(SKEL_OUT)/vmlinux.h: $(VMLINUX_BTF) $(BPFTOOL)
+> > +ifeq ($(VMLINUX_H),)
+> > +     $(QUIET_GEN)$(BPFTOOL) btf dump file $< format c > $@
+> > +else
+> > +     $(Q)cp "$(VMLINUX_H)" $@
+> > +endif
+> > +
+> > +$(SKEL_TMP_OUT)/%.bpf.o: util/bpf_skel/%.bpf.c $(LIBBPF) $(SKEL_OUT)/v=
+mlinux.h | $(SKEL_TMP_OUT)
+> >       $(QUIET_CLANG)$(CLANG) -g -O2 -target bpf -Wall -Werror $(BPF_INC=
+LUDE) $(TOOLS_UAPI_INCLUDE) \
+> >         -c $(filter util/bpf_skel/%.bpf.c,$^) -o $@
+> >
+> > diff --git a/tools/perf/util/bpf_skel/.gitignore b/tools/perf/util/bpf_=
+skel/.gitignore
+> > index 7a1c832825de..cd01455e1b53 100644
+> > --- a/tools/perf/util/bpf_skel/.gitignore
+> > +++ b/tools/perf/util/bpf_skel/.gitignore
+> > @@ -1,3 +1,4 @@
+> >  # SPDX-License-Identifier: GPL-2.0-only
+> >  .tmp
+> >  *.skel.h
+> > +vmlinux.h
+> > diff --git a/tools/perf/util/bpf_skel/vmlinux.h b/tools/perf/util/bpf_s=
+kel/vmlinux/vmlinux.h
+> > similarity index 100%
+> > rename from tools/perf/util/bpf_skel/vmlinux.h
+> > rename to tools/perf/util/bpf_skel/vmlinux/vmlinux.h
+> > --
+> > 2.41.0.rc0.172.g3f132b7071-goog
+> >
