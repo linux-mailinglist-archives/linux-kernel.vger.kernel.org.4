@@ -2,77 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F1C572368C
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 07:03:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E027F723697
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 07:04:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233298AbjFFFDT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 01:03:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39338 "EHLO
+        id S234288AbjFFFEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 01:04:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231419AbjFFFDP (ORCPT
+        with ESMTP id S230516AbjFFFEl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 01:03:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3FE111A
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 22:02:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686027747;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Q6TiThBigVDB9aOyNqXFDkJ+jf7GDr7BiU78S3IKVbg=;
-        b=DXOSmGQuJPWqI3JjrijL3JdgIbSjHJVOttzKXLdF++Hah6mDhu7ZLv+4NlWG2U40tetT9/
-        /Lg8Qm4TtjKxwmy2D0vRPkTrUEaRJbHdbct6NuQFjUSUdwmN7gWHHz22X6YzhF35MZZKth
-        7JBjm/xUL0Mj7ZfawNYgve/e0H/0BSo=
-Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com
- [209.85.167.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-360-xb3VxhJGO8mBpvtHMTtG2w-1; Tue, 06 Jun 2023 01:02:26 -0400
-X-MC-Unique: xb3VxhJGO8mBpvtHMTtG2w-1
-Received: by mail-lf1-f71.google.com with SMTP id 2adb3069b0e04-4f61f59c230so1876194e87.2
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 22:02:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686027744; x=1688619744;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Q6TiThBigVDB9aOyNqXFDkJ+jf7GDr7BiU78S3IKVbg=;
-        b=fMPL9gS7cQgLSBdInRKU2YEEzI3BXJli5dDmEkFaF3ZPSwJ/ywL2iXf5DcHDz0Dsm3
-         M9YzzDr3oQMX+uH6oqAzI5VgheNClKc95lOR+Vc8cvUXWKQ8XV/hy8U1F3WrKIpZh95f
-         5OxuhH+3DXkZ0QjUyFiKfB7PLhd2j1+eh5rPp0jgLYEqq3cBG9IwnVgWNsbxkY4oIa0f
-         kcolVmnFIZFoKLELmWpWcNkSuGO4nnybw8+tMO5hmtPdEaUa+65qzkfBzjc1m1S9V1Mb
-         b13Liw6LPd2ngv89aNAR12eoQEzShvCBTAtyITajUnLSruxS1w7OKGDH9ylG+2sSoa2m
-         SrAA==
-X-Gm-Message-State: AC+VfDzEiv0RBFe8RKWs7N328xMajHBUkV/opPxSRerA4cQ9d2IcM1iK
-        xKZ9+Yw5lrXYciZ1fjgYFIAIvqBTa8YXTAE52bR3bgDNXRCOzT2q1lwf4JK010m60uGoKla0cj2
-        wBry4a4hCsj3u0ktrNS9DgMSKbvwb4zk3ZvDev8S1ef5ogP81XLdJ4yp2viRiwHGMtbHHESYGQv
-        a9CZyi0K9fNw==
-X-Received: by 2002:ac2:5a51:0:b0:4f3:7a59:d19 with SMTP id r17-20020ac25a51000000b004f37a590d19mr509150lfn.59.1686027744592;
-        Mon, 05 Jun 2023 22:02:24 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7HrphmL6HhmYZDJSf6TcjUvcKI32fHvyE6ck53soSUhNDdEynhBUz3F7HNTCEMljoLCCxaMg==
-X-Received: by 2002:ac2:5a51:0:b0:4f3:7a59:d19 with SMTP id r17-20020ac25a51000000b004f37a590d19mr509133lfn.59.1686027744205;
-        Mon, 05 Jun 2023 22:02:24 -0700 (PDT)
-Received: from mjp-Z390-AORUS-MASTER.redhat.com (62-78-130-207.bb.dnainternet.fi. [62.78.130.207])
-        by smtp.gmail.com with ESMTPSA id v11-20020a056512096b00b004f5bc4e80easm1323915lft.171.2023.06.05.22.02.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jun 2023 22:02:23 -0700 (PDT)
-From:   mpenttil@redhat.com
-To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Cc:     =?UTF-8?q?Mika=20Penttil=C3=A4?= <mpenttil@redhat.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        "Huang, Ying" <ying.huang@intel.com>
-Subject: [PATCH v3] mm/migrate_device: Try to handle swapcache pages
-Date:   Tue,  6 Jun 2023 08:01:49 +0300
-Message-Id: <20230606050149.25699-1-mpenttil@redhat.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 6 Jun 2023 01:04:41 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 454F6196;
+        Mon,  5 Jun 2023 22:04:40 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 26F2B3200A93;
+        Tue,  6 Jun 2023 01:04:39 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Tue, 06 Jun 2023 01:04:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=who-t.net; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1686027878; x=1686114278; bh=WP
+        3yKSXu55VaU9s/qiTySC2G3aZBpjBEicEtRyfVroM=; b=R2JYD0ZHbVmfBBIKFN
+        RBlHtlXT3VutVokCtWVUOHhNkBrqk8JufwnmB8D3dpvKOVE2hXg95sXRLPF369am
+        TL/eCHMfsSd53jpz7zbYjZe/uSzPybJMm9u8sTNxf+dT+h3ffWAI/gvEScZfIM+G
+        RGfD8u8kPyQCFhIG4daSBQnyV7ug5a1xVDe/mijGPR6/FCLPGsY3rNmTbhjlDQ1V
+        bRxLeyY/mkCi6L1wREyjLA4PRuNEOKNvvNFf0qioM50T5MlQJcpGinpWUBX1Dbtk
+        Mv9mzWu2oEYTB0hBXpA8dUl/5n45ZdWTBFT7If4s1rq5NDmYmuCMyBIToYfuzQW+
+        kVQA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1686027878; x=1686114278; bh=WP3yKSXu55VaU
+        9s/qiTySC2G3aZBpjBEicEtRyfVroM=; b=YLpyzhIdzUf9Gc39Njz/Lnyf4Ezbm
+        MOkqio4XC34ZwDF6AXj1PFUjLZpEhDQSRGdZKOCTr4M6+s2q8engIw3/cdI693aT
+        o+gq08KkEPBi0nm2VnZd8yVUloGzj1m6UD66Iz+WMITerOYuOWe/0OqyYzKiVvee
+        SVoc1hy1Y3vUy4P6r8MjrUcAcffKfJr0lJqyHOK7eFs8IBuKhC5e17QvclCWoxQE
+        jofxPaFrItDZOe/IVm7akvT/LvO7oP3iwqgRREekvtrOxJdGPCKNJmITgn67Hjlb
+        aJXGb1Cf8ci/sLMVgLFRiRKjAM/eEP2ZTpRMBdU9xgKAT2gJUmtmzSZSw==
+X-ME-Sender: <xms:Zr5-ZIpvRqMcynQqaXbPnDytAE4bWHhiAuWFZTjB_i-o08IIhnZaLw>
+    <xme:Zr5-ZOqVYZTmUq0k9l7fzT2VL3GvJATnYlIfzFJmbr4rTbqo7mRIRLCBErKD0dHiI
+    vgrXnqdduQzpjGbUyA>
+X-ME-Received: <xmr:Zr5-ZNNoVfGcpoAor35pBytvOjcGDwASD29xZyzE0cmuY-sywQ3CQWpx2AKVQVY935M-aN8Q-ex-AcYo0MV1HJKua8mUPioshoOX>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedttddgkeelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomheprfgvthgv
+    rhcujfhuthhtvghrvghruceophgvthgvrhdrhhhuthhtvghrvghrseifhhhoqdhtrdhnvg
+    htqeenucggtffrrghtthgvrhhnpeekvdekgeehfeejgfdvudffhfevheejffevgfeigfek
+    hfduieefudfgtedugfetgfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
+    grihhlfhhrohhmpehpvghtvghrrdhhuhhtthgvrhgvrhesfihhohdqthdrnhgvth
+X-ME-Proxy: <xmx:Zr5-ZP6f8l4EYgNnJG_hd3-aBqbXrQPP8oKDDwaDAofR3S2IF59NnA>
+    <xmx:Zr5-ZH4XeGfdXfH7aBvediKrKISKfUG1Kt2nmi4SYH1XdGLUtpAIXg>
+    <xmx:Zr5-ZPjQS2C8gRRDSqy6Mi_9k-V9W5JyNDdeB7KeyGcXHJDC_F8omg>
+    <xmx:Zr5-ZBsszMhPYYAdDH8Zs9Ar5rSmkLhNbCXvvNsokELd_MH-M3kVbQ>
+Feedback-ID: i7ce144cd:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 6 Jun 2023 01:04:34 -0400 (EDT)
+Date:   Tue, 6 Jun 2023 15:04:31 +1000
+From:   Peter Hutterer <peter.hutterer@who-t.net>
+To:     Enric Balletbo i Serra <eballetbo@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Dana Elfassy <delfassy@redhat.com>,
+        linux-input@vger.kernel.org, phuttere@redhat.com,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Subject: Re: [PATCH v2] selftests/input: Introduce basic tests for evdev
+ ioctls
+Message-ID: <20230606050431.GA3789903@quokka>
+References: <20230530102627.87284-1-eballetbo@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230530102627.87284-1-eballetbo@kernel.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,67 +90,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mika Penttilä <mpenttil@redhat.com>
+On Tue, May 30, 2023 at 12:26:27PM +0200, Enric Balletbo i Serra wrote:
+> This provides a basic infrastructure for the creation of tests for the evdev
+> interface. Most of this code is adapted from the libevdev wrapper library. While
+> most of evdev ioctls are covered and tested using libevdev tests there are some
+> evdev ioctls that aren't because are not supported (and will not be supported)
+> by libevdev [1]. So, adding, at least those tests, would make sense.
+> 
+> The test creates an uinput device (and an evdev device) so you can
+> call the wanted ioctl from userspace. So, to run those tests you need
+> to have support for uinput and evdev as well.
+> 
+> [1] For example, libevdev doesn't support setting EV_REP because it's inherently
+> racy - one libevdev context to set those values via the ioctl would cause all
+> other libevdev contexts on the same device to be out of sync. Since we do not
+> get notifications when the values changed, libevdev's buffered values for EV_REP
+> will remain whatever they were initially.
+> 
+> Signed-off-by: Enric Balletbo i Serra <eballetbo@kernel.org>
 
-Migrating file pages and swapcache pages into device memory is not supported.
-The decision is done based on page_mapping(). For now, swapcache pages are not migrated.
+thanks, this mostly LGTM but there's still a bug left in the vararg
+handling.
 
-Things can however be improved, for swapcache pages. Try to get rid of the swap cache,
-and if successful, go ahead as with other anonymous pages.
+[...]
 
-Cc: Alistair Popple <apopple@nvidia.com>
-Cc: John Hubbard <jhubbard@nvidia.com>
-Cc: Ralph Campbell <rcampbell@nvidia.com>
-Cc: "Huang, Ying" <ying.huang@intel.com>
-Reviewed-by: "Huang, Ying" <ying.huang@intel.com>
-Reviewed-by: Alistair Popple <apopple@nvidia.com>
-Signed-off-by: Mika Penttilä <mpenttil@redhat.com>
----
+> +#include <dirent.h>
+> +#include <errno.h>
+> +#include <fcntl.h>
+> +#include <linux/uinput.h>
+> +#include <poll.h>
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <string.h>
+> +#include <sys/stat.h>
+> +#include <time.h>
+> +#include <unistd.h>
+> +
+> +#include "../kselftest_harness.h"
+> +
+> +#define TEST_DEVICE_NAME "selftest input device"
+> +
+> +struct selftest_uinput {
+> +	int uinput_fd; /** file descriptor to uinput */
+> +	int evdev_fd; /** file descriptor to evdev */
+> +	char *name; /** device name */
+> +	char *syspath; /** /sys path */
+> +	char *devnode; /** device node */
 
-v3:
-  - Adjust comments
-  - Add Reviewed-bys
+nitpick: none of name, syspath, devnode are used in the tests and it's
+likely they'll never need to be so there's no reason to strdup them
+here. You could change fetch_syspath_and_devnode() to open_devnode() and
+return the opened fd, meaning you can reduce the code even more.
 
-v2:
-  - use folio_test_anon() (Huang, Ying)
+[...]
 
- mm/migrate_device.c | 22 ++++++++++++++++------
- 1 file changed, 16 insertions(+), 6 deletions(-)
+> +
+> +TEST(eviocgname_get_device_name)
+> +{
+> +	struct selftest_uinput *uidev;
+> +	char buf[256];
+> +	int rc;
+> +
+> +	rc = selftest_uinput_create_device(&uidev);
 
-diff --git a/mm/migrate_device.c b/mm/migrate_device.c
-index d30c9de60b0d..f76ebccfe067 100644
---- a/mm/migrate_device.c
-+++ b/mm/migrate_device.c
-@@ -747,13 +747,23 @@ static void __migrate_device_pages(unsigned long *src_pfns,
+this one and the others without extra arguments need to be:
+
+	rc = selftest_uinput_create_device(&uidev, -1);
+
+otherwise the vararg loop is going to keep the room warm for no reason.
+
+Cheers,
+  Peter
+
  
- 		if (is_device_private_page(newpage) ||
- 		    is_device_coherent_page(newpage)) {
--			/*
--			 * For now only support anonymous memory migrating to
--			 * device private or coherent memory.
--			 */
-+
- 			if (mapping) {
--				src_pfns[i] &= ~MIGRATE_PFN_MIGRATE;
--				continue;
-+				struct folio *folio;
-+
-+				folio = page_folio(page);
-+
-+				/*
-+				 * For now only support anonymous memory migrating to
-+				 * device private or coherent memory.
-+				 *
-+				 * Try to get rid of swap cache if possible.
-+				 *
-+				 */
-+				if (!folio_test_anon(folio) || !folio_free_swap(folio)) {
-+					src_pfns[i] &= ~MIGRATE_PFN_MIGRATE;
-+					continue;
-+				}
- 			}
- 		} else if (is_zone_device_page(newpage)) {
- 			/*
--- 
-2.17.1
-
