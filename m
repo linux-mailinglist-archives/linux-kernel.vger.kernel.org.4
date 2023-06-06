@@ -2,59 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75A85724D55
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 21:43:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37CDA724D5D
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 21:43:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239370AbjFFTnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 15:43:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33918 "EHLO
+        id S239538AbjFFTnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 15:43:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239135AbjFFTmk (ORCPT
+        with ESMTP id S239146AbjFFTmk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 6 Jun 2023 15:42:40 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CDF810FB;
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E41BC10F2;
         Tue,  6 Jun 2023 12:42:38 -0700 (PDT)
-Date:   Tue, 06 Jun 2023 19:42:35 -0000
+Date:   Tue, 06 Jun 2023 19:42:36 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686080556;
+        s=2020; t=1686080557;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=i5R2sL6rKsk29qzEv5zQGnq6eOM/ZoNfbjetALpWF/A=;
-        b=ZGqLOq/6wFR4YOecZJuBk1Kt0Cyoj7YaDNUn5kH6Xi+gsMcihpBtvggfDsGvQoTF18PEkg
-        hXgkKSwOi9/WT4zbyOlZhDlRQtFKIfUvDhNDpECTyaszz6Vw3Nlzjr3IcYaXy1Jy0fRhRG
-        9Li5qaYeVnc+Di3+928FfnHNn3ia0Z/T2HsWGUq8QXz/C3AeyNGdjAs50ja75EgH5gow+E
-        C436OrBGHqRgg96g+fCLNijyQffe/NIojS16W0sQvKOQRtFtZYSCxX/Hf3DIRwTOn/et40
-        o/VXdwcnnO4O38+n/TupVFCAX6120gIXnEFjdkprKEHxG3VaCBR2T5JU5IAT0Q==
+        bh=lOz/zRX2KsAIC+9VO3KjjcGC2PC5/fj3tQaohMlCoxY=;
+        b=skz8vXx2xk/wAFAtLzr2dl7quwLdpmzJwyez1u86UgHQwimkp/Seh2TjrNAVF2xHwyIavd
+        mkLnydvocPALzNh5zvkaa2oqiJIeJxkM+9kWR0fWGtoj5UVIYhAoOdZbEASm4X+IoGeoSr
+        utyUwiVeSi5W66rZmSkcj7DVzs9moHlhccEbr8JQUyj9ahY9D7IEBkAn+IKmpk0C1Ct5bD
+        TAkB61tmoQxHNdzet61trUiOlR3QR9i0OtYAHLtxtjy1JBbvuOWqH+WhidTAN6juCJloF3
+        /fGnLYGiwKB6mdIvH1scCIxzMQsBqz155LbkYj0nUDYIKtkJQ2WFedB8oZQHfQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686080556;
+        s=2020e; t=1686080557;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=i5R2sL6rKsk29qzEv5zQGnq6eOM/ZoNfbjetALpWF/A=;
-        b=KFxUMXXxu3vPCog24k9p3CA2msRAbtZlaSkT99NFPgcnSyLbLK0ZR+kZ1VJCn0z/ivFsT3
-        rZzd0k/FcBKsd4BQ==
-From:   "tip-bot2 for Dionna Glaze" <tip-bot2@linutronix.de>
+        bh=lOz/zRX2KsAIC+9VO3KjjcGC2PC5/fj3tQaohMlCoxY=;
+        b=iEKbLyA+XtPTa2rQU/iFeFycNikOTmeaQOynG7fVzpLO+llQJRpSqRSCw9tDzzb7n4w+17
+        k5PgMllRJSirQ0DQ==
+From:   "tip-bot2 for Tom Lendacky" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cc] x86/efi: Safely enable unaccepted memory in UEFI
-Cc:     Dionna Glaze <dionnaglaze@google.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "Borislav Petkov (AMD)" <bp@alien8.de>,
-        Ard Biesheuvel <ardb@kernel.org>, x86@kernel.org,
+Subject: [tip: x86/cc] x86/sev: Use large PSC requests if applicable
+Cc:     Tom Lendacky <thomas.lendacky@amd.com>,
+        "Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: =?utf-8?q?=3C0d5f3d9a20b5cf361945b7ab1263c36586a78a42=2E16860?=
+In-Reply-To: =?utf-8?q?=3C050d17b460dfc237b51d72082e5df4498d3513cb=2E16860?=
  =?utf-8?q?63086=2Egit=2Ethomas=2Elendacky=40amd=2Ecom=3E?=
-References: =?utf-8?q?=3C0d5f3d9a20b5cf361945b7ab1263c36586a78a42=2E168606?=
+References: =?utf-8?q?=3C050d17b460dfc237b51d72082e5df4498d3513cb=2E168606?=
  =?utf-8?q?3086=2Egit=2Ethomas=2Elendacky=40amd=2Ecom=3E?=
 MIME-Version: 1.0
-Message-ID: <168608055573.404.11417198471686782791.tip-bot2@tip-bot2>
+Message-ID: <168608055648.404.2471070210247027730.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -71,124 +69,298 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/cc branch of tip:
 
-Commit-ID:     c0461bd16666351f0de11578b1e02dcdae4db736
-Gitweb:        https://git.kernel.org/tip/c0461bd16666351f0de11578b1e02dcdae4db736
-Author:        Dionna Glaze <dionnaglaze@google.com>
-AuthorDate:    Tue, 06 Jun 2023 09:51:27 -05:00
+Commit-ID:     15d9088779b8693cffe47527ea4f9ff8fde4cd03
+Gitweb:        https://git.kernel.org/tip/15d9088779b8693cffe47527ea4f9ff8fde4cd03
+Author:        Tom Lendacky <thomas.lendacky@amd.com>
+AuthorDate:    Tue, 06 Jun 2023 09:51:25 -05:00
 Committer:     Borislav Petkov (AMD) <bp@alien8.de>
-CommitterDate: Tue, 06 Jun 2023 18:32:59 +02:00
+CommitterDate: Tue, 06 Jun 2023 18:29:35 +02:00
 
-x86/efi: Safely enable unaccepted memory in UEFI
+x86/sev: Use large PSC requests if applicable
 
-The UEFI v2.9 specification includes a new memory type to be used in
-environments where the OS must accept memory that is provided from its
-host. Before the introduction of this memory type, all memory was
-accepted eagerly in the firmware. In order for the firmware to safely
-stop accepting memory on the OS's behalf, the OS must affirmatively
-indicate support to the firmware. This is only a problem for AMD
-SEV-SNP, since Linux has had support for it since 5.19. The other
-technology that can make use of unaccepted memory, Intel TDX, does not
-yet have Linux support, so it can strictly require unaccepted memory
-support as a dependency of CONFIG_TDX and not require communication with
-the firmware.
+In advance of providing support for unaccepted memory, request 2M Page
+State Change (PSC) requests when the address range allows for it. By using
+a 2M page size, more PSC operations can be handled in a single request to
+the hypervisor. The hypervisor will determine if it can accommodate the
+larger request by checking the mapping in the nested page table. If mapped
+as a large page, then the 2M page request can be performed, otherwise the
+2M page request will be broken down into 512 4K page requests. This is
+still more efficient than having the guest perform multiple PSC requests
+in order to process the 512 4K pages.
 
-Enabling unaccepted memory requires calling a 0-argument enablement
-protocol before ExitBootServices. This call is only made if the kernel
-is compiled with UNACCEPTED_MEMORY=y
+In conjunction with the 2M PSC requests, attempt to perform the associated
+PVALIDATE instruction of the page using the 2M page size. If PVALIDATE
+fails with a size mismatch, then fallback to validating 512 4K pages. To
+do this, page validation is modified to work with the PSC structure and
+not just a virtual address range.
 
-This protocol will be removed after the end of life of the first LTS
-that includes it, in order to give firmware implementations an
-expiration date for it. When the protocol is removed, firmware will
-strictly infer that a SEV-SNP VM is running an OS that supports the
-unaccepted memory type. At the earliest convenience, when unaccepted
-memory support is added to Linux, SEV-SNP may take strict dependence in
-it. After the firmware removes support for the protocol, this should be
-reverted.
-
-  [tl: address some checkscript warnings]
-
-Signed-off-by: Dionna Glaze <dionnaglaze@google.com>
 Signed-off-by: Tom Lendacky <thomas.lendacky@amd.com>
 Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
-Link: https://lore.kernel.org/r/0d5f3d9a20b5cf361945b7ab1263c36586a78a42.1686063086.git.thomas.lendacky@amd.com
+Link: https://lore.kernel.org/r/050d17b460dfc237b51d72082e5df4498d3513cb.1686063086.git.thomas.lendacky@amd.com
 ---
- drivers/firmware/efi/libstub/x86-stub.c | 36 ++++++++++++++++++++++++-
- include/linux/efi.h                     |  3 ++-
- 2 files changed, 39 insertions(+)
+ arch/x86/include/asm/sev.h |   4 +-
+ arch/x86/kernel/sev.c      | 125 +++++++++++++++++++++++-------------
+ 2 files changed, 84 insertions(+), 45 deletions(-)
 
-diff --git a/drivers/firmware/efi/libstub/x86-stub.c b/drivers/firmware/efi/libstub/x86-stub.c
-index 3cc7faa..220be75 100644
---- a/drivers/firmware/efi/libstub/x86-stub.c
-+++ b/drivers/firmware/efi/libstub/x86-stub.c
-@@ -26,6 +26,17 @@ const efi_dxe_services_table_t *efi_dxe_table;
- u32 image_offset __section(".data");
- static efi_loaded_image_t *image = NULL;
+diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
+index 7ca5c9e..e21e1c5 100644
+--- a/arch/x86/include/asm/sev.h
++++ b/arch/x86/include/asm/sev.h
+@@ -80,11 +80,15 @@ extern void vc_no_ghcb(void);
+ extern void vc_boot_ghcb(void);
+ extern bool handle_vc_boot_ghcb(struct pt_regs *regs);
  
-+typedef union sev_memory_acceptance_protocol sev_memory_acceptance_protocol_t;
-+union sev_memory_acceptance_protocol {
-+	struct {
-+		efi_status_t (__efiapi * allow_unaccepted_memory)(
-+			sev_memory_acceptance_protocol_t *);
-+	};
-+	struct {
-+		u32 allow_unaccepted_memory;
-+	} mixed_mode;
-+};
++/* PVALIDATE return codes */
++#define PVALIDATE_FAIL_SIZEMISMATCH	6
 +
- static efi_status_t
- preserve_pci_rom_image(efi_pci_io_protocol_t *pci, struct pci_setup_rom **__rom)
- {
-@@ -310,6 +321,29 @@ setup_memory_protection(unsigned long image_base, unsigned long image_size)
- #endif
+ /* Software defined (when rFlags.CF = 1) */
+ #define PVALIDATE_FAIL_NOUPDATE		255
+ 
+ /* RMP page size */
+ #define RMP_PG_SIZE_4K			0
++#define RMP_PG_SIZE_2M			1
+ 
+ #define RMPADJUST_VMSA_PAGE_BIT		BIT(16)
+ 
+diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
+index 973756c..17b3d00 100644
+--- a/arch/x86/kernel/sev.c
++++ b/arch/x86/kernel/sev.c
+@@ -657,32 +657,58 @@ static u64 __init get_jump_table_addr(void)
+ 	return ret;
  }
  
-+static void setup_unaccepted_memory(void)
-+{
-+	efi_guid_t mem_acceptance_proto = OVMF_SEV_MEMORY_ACCEPTANCE_PROTOCOL_GUID;
-+	sev_memory_acceptance_protocol_t *proto;
-+	efi_status_t status;
-+
-+	if (!IS_ENABLED(CONFIG_UNACCEPTED_MEMORY))
-+		return;
-+
-+	/*
-+	 * Enable unaccepted memory before calling exit boot services in order
-+	 * for the UEFI to not accept all memory on EBS.
-+	 */
-+	status = efi_bs_call(locate_protocol, &mem_acceptance_proto, NULL,
-+			     (void **)&proto);
-+	if (status != EFI_SUCCESS)
-+		return;
-+
-+	status = efi_call_proto(proto, allow_unaccepted_memory);
-+	if (status != EFI_SUCCESS)
-+		efi_err("Memory acceptance protocol failed\n");
-+}
-+
- static const efi_char16_t apple[] = L"Apple";
+-static void pvalidate_pages(unsigned long vaddr, unsigned long npages, bool validate)
++static void pvalidate_pages(struct snp_psc_desc *desc)
+ {
+-	unsigned long vaddr_end;
++	struct psc_entry *e;
++	unsigned long vaddr;
++	unsigned int size;
++	unsigned int i;
++	bool validate;
+ 	int rc;
  
- static void setup_quirks(struct boot_params *boot_params,
-@@ -908,6 +942,8 @@ asmlinkage unsigned long efi_main(efi_handle_t handle,
- 
- 	setup_quirks(boot_params, bzimage_addr, buffer_end - buffer_start);
- 
-+	setup_unaccepted_memory();
+-	vaddr = vaddr & PAGE_MASK;
+-	vaddr_end = vaddr + (npages << PAGE_SHIFT);
++	for (i = 0; i <= desc->hdr.end_entry; i++) {
++		e = &desc->entries[i];
 +
- 	status = exit_boot(boot_params, handle);
- 	if (status != EFI_SUCCESS) {
- 		efi_err("exit_boot() failed!\n");
-diff --git a/include/linux/efi.h b/include/linux/efi.h
-index 67cb72d..18d83a6 100644
---- a/include/linux/efi.h
-+++ b/include/linux/efi.h
-@@ -437,6 +437,9 @@ void efi_native_runtime_setup(void);
- #define DELLEMC_EFI_RCI2_TABLE_GUID		EFI_GUID(0x2d9f28a2, 0xa886, 0x456a,  0x97, 0xa8, 0xf1, 0x1e, 0xf2, 0x4f, 0xf4, 0x55)
- #define AMD_SEV_MEM_ENCRYPT_GUID		EFI_GUID(0x0cf29b71, 0x9e51, 0x433a,  0xa3, 0xb7, 0x81, 0xf3, 0xab, 0x16, 0xb8, 0x75)
- 
-+/* OVMF protocol GUIDs */
-+#define OVMF_SEV_MEMORY_ACCEPTANCE_PROTOCOL_GUID	EFI_GUID(0xc5a010fe, 0x38a7, 0x4531,  0x8a, 0x4a, 0x05, 0x00, 0xd2, 0xfd, 0x16, 0x49)
++		vaddr = (unsigned long)pfn_to_kaddr(e->gfn);
++		size = e->pagesize ? RMP_PG_SIZE_2M : RMP_PG_SIZE_4K;
++		validate = e->operation == SNP_PAGE_STATE_PRIVATE;
 +
- typedef struct {
- 	efi_guid_t guid;
- 	u64 table;
++		rc = pvalidate(vaddr, size, validate);
++		if (rc == PVALIDATE_FAIL_SIZEMISMATCH && size == RMP_PG_SIZE_2M) {
++			unsigned long vaddr_end = vaddr + PMD_SIZE;
++
++			for (; vaddr < vaddr_end; vaddr += PAGE_SIZE) {
++				rc = pvalidate(vaddr, RMP_PG_SIZE_4K, validate);
++				if (rc)
++					break;
++			}
++		}
+ 
+-	while (vaddr < vaddr_end) {
+-		rc = pvalidate(vaddr, RMP_PG_SIZE_4K, validate);
+ 		if (WARN(rc, "Failed to validate address 0x%lx ret %d", vaddr, rc))
+ 			sev_es_terminate(SEV_TERM_SET_LINUX, GHCB_TERM_PVALIDATE);
+-
+-		vaddr = vaddr + PAGE_SIZE;
+ 	}
+ }
+ 
+-static void early_set_pages_state(unsigned long paddr, unsigned long npages, enum psc_op op)
++static void early_set_pages_state(unsigned long vaddr, unsigned long paddr,
++				  unsigned long npages, enum psc_op op)
+ {
+ 	unsigned long paddr_end;
+ 	u64 val;
++	int ret;
++
++	vaddr = vaddr & PAGE_MASK;
+ 
+ 	paddr = paddr & PAGE_MASK;
+ 	paddr_end = paddr + (npages << PAGE_SHIFT);
+ 
+ 	while (paddr < paddr_end) {
++		if (op == SNP_PAGE_STATE_SHARED) {
++			/* Page validation must be rescinded before changing to shared */
++			ret = pvalidate(vaddr, RMP_PG_SIZE_4K, false);
++			if (WARN(ret, "Failed to validate address 0x%lx ret %d", paddr, ret))
++				goto e_term;
++		}
++
+ 		/*
+ 		 * Use the MSR protocol because this function can be called before
+ 		 * the GHCB is established.
+@@ -703,7 +729,15 @@ static void early_set_pages_state(unsigned long paddr, unsigned long npages, enu
+ 			 paddr, GHCB_MSR_PSC_RESP_VAL(val)))
+ 			goto e_term;
+ 
+-		paddr = paddr + PAGE_SIZE;
++		if (op == SNP_PAGE_STATE_PRIVATE) {
++			/* Page validation must be performed after changing to private */
++			ret = pvalidate(vaddr, RMP_PG_SIZE_4K, true);
++			if (WARN(ret, "Failed to validate address 0x%lx ret %d", paddr, ret))
++				goto e_term;
++		}
++
++		vaddr += PAGE_SIZE;
++		paddr += PAGE_SIZE;
+ 	}
+ 
+ 	return;
+@@ -728,10 +762,7 @@ void __init early_snp_set_memory_private(unsigned long vaddr, unsigned long padd
+ 	  * Ask the hypervisor to mark the memory pages as private in the RMP
+ 	  * table.
+ 	  */
+-	early_set_pages_state(paddr, npages, SNP_PAGE_STATE_PRIVATE);
+-
+-	/* Validate the memory pages after they've been added in the RMP table. */
+-	pvalidate_pages(vaddr, npages, true);
++	early_set_pages_state(vaddr, paddr, npages, SNP_PAGE_STATE_PRIVATE);
+ }
+ 
+ void __init early_snp_set_memory_shared(unsigned long vaddr, unsigned long paddr,
+@@ -746,11 +777,8 @@ void __init early_snp_set_memory_shared(unsigned long vaddr, unsigned long paddr
+ 	if (!(sev_status & MSR_AMD64_SEV_SNP_ENABLED))
+ 		return;
+ 
+-	/* Invalidate the memory pages before they are marked shared in the RMP table. */
+-	pvalidate_pages(vaddr, npages, false);
+-
+ 	 /* Ask hypervisor to mark the memory pages shared in the RMP table. */
+-	early_set_pages_state(paddr, npages, SNP_PAGE_STATE_SHARED);
++	early_set_pages_state(vaddr, paddr, npages, SNP_PAGE_STATE_SHARED);
+ }
+ 
+ void __init snp_prep_memory(unsigned long paddr, unsigned int sz, enum psc_op op)
+@@ -834,10 +862,11 @@ out:
+ 	return ret;
+ }
+ 
+-static void __set_pages_state(struct snp_psc_desc *data, unsigned long vaddr,
+-			      unsigned long vaddr_end, int op)
++static unsigned long __set_pages_state(struct snp_psc_desc *data, unsigned long vaddr,
++				       unsigned long vaddr_end, int op)
+ {
+ 	struct ghcb_state state;
++	bool use_large_entry;
+ 	struct psc_hdr *hdr;
+ 	struct psc_entry *e;
+ 	unsigned long flags;
+@@ -851,27 +880,37 @@ static void __set_pages_state(struct snp_psc_desc *data, unsigned long vaddr,
+ 	memset(data, 0, sizeof(*data));
+ 	i = 0;
+ 
+-	while (vaddr < vaddr_end) {
+-		if (is_vmalloc_addr((void *)vaddr))
++	while (vaddr < vaddr_end && i < ARRAY_SIZE(data->entries)) {
++		hdr->end_entry = i;
++
++		if (is_vmalloc_addr((void *)vaddr)) {
+ 			pfn = vmalloc_to_pfn((void *)vaddr);
+-		else
++			use_large_entry = false;
++		} else {
+ 			pfn = __pa(vaddr) >> PAGE_SHIFT;
++			use_large_entry = true;
++		}
+ 
+ 		e->gfn = pfn;
+ 		e->operation = op;
+-		hdr->end_entry = i;
+ 
+-		/*
+-		 * Current SNP implementation doesn't keep track of the RMP page
+-		 * size so use 4K for simplicity.
+-		 */
+-		e->pagesize = RMP_PG_SIZE_4K;
++		if (use_large_entry && IS_ALIGNED(vaddr, PMD_SIZE) &&
++		    (vaddr_end - vaddr) >= PMD_SIZE) {
++			e->pagesize = RMP_PG_SIZE_2M;
++			vaddr += PMD_SIZE;
++		} else {
++			e->pagesize = RMP_PG_SIZE_4K;
++			vaddr += PAGE_SIZE;
++		}
+ 
+-		vaddr = vaddr + PAGE_SIZE;
+ 		e++;
+ 		i++;
+ 	}
+ 
++	/* Page validation must be rescinded before changing to shared */
++	if (op == SNP_PAGE_STATE_SHARED)
++		pvalidate_pages(data);
++
+ 	local_irq_save(flags);
+ 
+ 	if (sev_cfg.ghcbs_initialized)
+@@ -879,6 +918,7 @@ static void __set_pages_state(struct snp_psc_desc *data, unsigned long vaddr,
+ 	else
+ 		ghcb = boot_ghcb;
+ 
++	/* Invoke the hypervisor to perform the page state changes */
+ 	if (!ghcb || vmgexit_psc(ghcb, data))
+ 		sev_es_terminate(SEV_TERM_SET_LINUX, GHCB_TERM_PSC);
+ 
+@@ -886,29 +926,28 @@ static void __set_pages_state(struct snp_psc_desc *data, unsigned long vaddr,
+ 		__sev_put_ghcb(&state);
+ 
+ 	local_irq_restore(flags);
++
++	/* Page validation must be performed after changing to private */
++	if (op == SNP_PAGE_STATE_PRIVATE)
++		pvalidate_pages(data);
++
++	return vaddr;
+ }
+ 
+ static void set_pages_state(unsigned long vaddr, unsigned long npages, int op)
+ {
+-	unsigned long vaddr_end, next_vaddr;
+ 	struct snp_psc_desc desc;
++	unsigned long vaddr_end;
+ 
+ 	/* Use the MSR protocol when a GHCB is not available. */
+ 	if (!boot_ghcb)
+-		return early_set_pages_state(__pa(vaddr), npages, op);
++		return early_set_pages_state(vaddr, __pa(vaddr), npages, op);
+ 
+ 	vaddr = vaddr & PAGE_MASK;
+ 	vaddr_end = vaddr + (npages << PAGE_SHIFT);
+ 
+-	while (vaddr < vaddr_end) {
+-		/* Calculate the last vaddr that fits in one struct snp_psc_desc. */
+-		next_vaddr = min_t(unsigned long, vaddr_end,
+-				   (VMGEXIT_PSC_MAX_ENTRY * PAGE_SIZE) + vaddr);
+-
+-		__set_pages_state(&desc, vaddr, next_vaddr, op);
+-
+-		vaddr = next_vaddr;
+-	}
++	while (vaddr < vaddr_end)
++		vaddr = __set_pages_state(&desc, vaddr, vaddr_end, op);
+ }
+ 
+ void snp_set_memory_shared(unsigned long vaddr, unsigned long npages)
+@@ -916,8 +955,6 @@ void snp_set_memory_shared(unsigned long vaddr, unsigned long npages)
+ 	if (!cc_platform_has(CC_ATTR_GUEST_SEV_SNP))
+ 		return;
+ 
+-	pvalidate_pages(vaddr, npages, false);
+-
+ 	set_pages_state(vaddr, npages, SNP_PAGE_STATE_SHARED);
+ }
+ 
+@@ -927,8 +964,6 @@ void snp_set_memory_private(unsigned long vaddr, unsigned long npages)
+ 		return;
+ 
+ 	set_pages_state(vaddr, npages, SNP_PAGE_STATE_PRIVATE);
+-
+-	pvalidate_pages(vaddr, npages, true);
+ }
+ 
+ static int snp_set_vmsa(void *va, bool vmsa)
