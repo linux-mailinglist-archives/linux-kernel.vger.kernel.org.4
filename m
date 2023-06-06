@@ -2,164 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E019F724A86
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 19:49:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0B3F724A89
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 19:49:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238822AbjFFRs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 13:48:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48734 "EHLO
+        id S238830AbjFFRta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 13:49:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233638AbjFFRsu (ORCPT
+        with ESMTP id S233638AbjFFRt2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 13:48:50 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 685B910F4;
-        Tue,  6 Jun 2023 10:48:48 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8Bxb+t6cX9k90cAAA--.1089S3;
-        Wed, 07 Jun 2023 01:48:42 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxZuR2cX9k29kCAA--.11270S3;
-        Wed, 07 Jun 2023 01:48:38 +0800 (CST)
-Message-ID: <dd2409ed-dac2-30b5-783d-8d84e38ad5c9@loongson.cn>
-Date:   Wed, 7 Jun 2023 01:48:38 +0800
+        Tue, 6 Jun 2023 13:49:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9600910F4;
+        Tue,  6 Jun 2023 10:49:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B5DB6306F;
+        Tue,  6 Jun 2023 17:49:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76EAEC433EF;
+        Tue,  6 Jun 2023 17:49:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686073766;
+        bh=pgWxxc2pXaOIXxZHnc21uLoXRzmI3gMVWZH7Ahht6W8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=p6CkLvGT6/u2gYsz2ZI9hsYNyI3961g9ByfPqZHHlddzADAlS4V7qRk/yYmkgO3SP
+         Ns4wZs1+t/vQI10WhNoIFVCMMalJiGq57xVqDsF1un74bOLtavajk/clxqYjx6Ppeg
+         faNiRttu1ryG+NxJHpAt0n3zClE/z8wkCsFVyj7buTX16ffEbiTcNoDpaUQZJbHnfS
+         8WuyB3/mk8DKVRcJuUClaXfoKxy8jFiVHYGdFKxyC/74go0DR5ehdHstQytcCdJW2/
+         DrtcJE4IcMvrDKUb/tEfIr5yxJx98dJ994HnlEZhu1+UYXUuFQGWf10HLGHvBJAz2k
+         CpPpcuuqYNI8g==
+Date:   Tue, 6 Jun 2023 18:49:19 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        dianders@chromium.org, linux-arm-msm@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_msavaliy@quicinc.com, mka@chromium.org, swboyd@chromium.org,
+        quic_vtanuku@quicinc.com, quic_ptalari@quicinc.com
+Subject: Re: [PATCH v2 0/2] spi-geni-qcom: Add new interfaces and utilise
+ them to do map/unmap in framework for SE DMA
+Message-ID: <bffedd6c-acc2-4c89-9e4d-82aa70249b57@sirena.org.uk>
+References: <1684325894-30252-1-git-send-email-quic_vnivarth@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] linux/pci.h: add a dummy implement for pci_clear_master()
-Content-Language: en-US
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
-        kernel test robot <lkp@intel.com>
-References: <20230606161346.GA1127246@bhelgaas>
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-Organization: Loongson
-In-Reply-To: <20230606161346.GA1127246@bhelgaas>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxZuR2cX9k29kCAA--.11270S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj93XoWxWF15AF45XryrKF1UAr47Awc_yoW5tw1fpa
-        y5AF1FkrW8GFyjkw47Xa43ZFyFva95Z34ftrW7Kw1q93ZFy34ktFsYkF15Krn3XrZYkF4a
-        qwnFka45Ww1UAFXCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUBjb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-        Gr0_Gr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
-        kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWU
-        AwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMx
-        k0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_
-        Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67
-        AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8I
-        cVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI
-        8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v2
-        6r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07jepB-UUUUU=
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="AcBOIuEM4L/yvJax"
+Content-Disposition: inline
+In-Reply-To: <1684325894-30252-1-git-send-email-quic_vnivarth@quicinc.com>
+X-Cookie: Keep out of the sunlight.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On 2023/6/7 00:13, Bjorn Helgaas wrote:
-> On Tue, May 30, 2023 at 06:16:55PM +0800, Sui Jingfeng wrote:
->> As some arch(m68k for example) doesn't have config_pci enabled, drivers[1]
->> call pci_clear_master() without config_pci guard can not built.
->>
->>     drivers/gpu/drm/etnaviv/etnaviv_pci_drv.c:
->>     In function 'etnaviv_gpu_pci_fini':
->>>> drivers/gpu/drm/etnaviv/etnaviv_pci_drv.c:32:9:
->>     error: implicit declaration of function 'pci_clear_master';
->>     did you mean 'pci_set_master'? [-Werror=implicit-function-declaration]
->>        32 |         pci_clear_master(pdev);
->>           |         ^~~~~~~~~~~~~~~~
->>           |         pci_set_master
->>     cc1: some warnings being treated as errors
->>
->> [1] https://patchwork.freedesktop.org/patch/539977/?series=118522&rev=1
->>
->> Reported-by: kernel test robot <lkp@intel.com>
->> Closes: https://lore.kernel.org/oe-kbuild-all/202305301659.4guSLavL-lkp@intel.com/
->> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
-> I applied this to pci/misc for v6.5, with commit log as below.
->
-> But I suspect that it might make your life easier if you include it
-> with your etnaviv series.  You may be able to avoid adding the
-> CONFIG_DRM_ETNAVIV_PCI_DRIVER symbol.
->
-> If so, feel free to include this patch in that series with my ack:
->
-> Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+--AcBOIuEM4L/yvJax
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I do want add this tag to my all  of the patches in the drm/etnaviv 
-series, thanks.
+On Wed, May 17, 2023 at 05:48:12PM +0530, Vijaya Krishna Nivarthi wrote:
+> A "known issue" during implementation of SE DMA for spi geni driver was
+> that it does DMA map/unmap internally instead of in spi framework.
+> Current patches remove this hiccup and also clean up code a bit.
 
-and I really love you this idea.
+Given Konrad's review I'll go ahead and apply these on a branch
+(assuming my CI is happy), if there's a need to merge them into the qcom
+tree I can sign a pull request (or revert the commits).  Hopefully
+that's OK with everyone.
 
-> If you do include it in your series, please use the commit log below
-> and let me know so I can drop it from my queue.
+--AcBOIuEM4L/yvJax
+Content-Type: application/pgp-signature; name="signature.asc"
 
-No, please keep this patch merged by you.
+-----BEGIN PGP SIGNATURE-----
 
-Because this patch belong to drivers/pci, Its belong to you domain.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmR/cZ8ACgkQJNaLcl1U
+h9C1MAf/b+Cz+UhbCvp93H9oihETiPDy+5bjUooM27kl60urEm1j+ViCXUDFJwE4
+ZoctmMVAUSWKbZs9Ad1iaukoiVJ52HjcmPUXu1V7KTnNNCMBUSRGA12Rt4e38G0b
+2kg8YqAo7QhHaCBmIWNoUgZfCCiezuDBX/4Y3kRUIqUZT48ymfUwMUdIMwstDfWd
+ehx+XCQkFm/qfXf735N+fg98AVVGpbdLakgSdK3BtA6eh2Et60xtckdzl32oJTYj
+RSgoM8R7nS0R0YQmf5bPpkMt4x+xcCH9/sw/wT1sPi5Dif7lH5w0DoOTwcp3x7/2
+IhFRytVhDnNzUZ3H92Phh47EoS5nnw==
+=VF1y
+-----END PGP SIGNATURE-----
 
-
-I might choose to  remove the CONFIG_DRM_ETNAVIV_PCI_DRIVER option at 
-next version
-
-of my drm/etnaviv patch If it arrived to drm/tip branch.
-
-
-But I guess some reviewers may still prefer a 
-CONFIG_DRM_ETNAVIV_PCI_DRIVER option,
-
-depend on the attitude of etnaviv folks.
-
-> Bjorn
->
->
->    Author: Sui Jingfeng <suijingfeng@loongson.cn>
->    Date:   Wed May 31 18:27:44 2023 +0800
->
->      PCI: Add pci_clear_master() stub for non-CONFIG_PCI
->      
->      Add a pci_clear_master() stub when CONFIG_PCI is not set so drivers that
->      support both PCI and platform devices don't need #ifdefs or extra Kconfig
->      symbols for the PCI parts.
->      
->      [bhelgaas: commit log]
->      Fixes: 6a479079c072 ("PCI: Add pci_clear_master() as opposite of pci_set_master()")
->      Link: https://lore.kernel.org/r/20230531102744.2354313-1-suijingfeng@loongson.cn
->      Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
->      Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
->      Acked-by: Bjorn Helgaas <bhelgaas@google.com>
->
->> ---
->>   include/linux/pci.h | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/include/linux/pci.h b/include/linux/pci.h
->> index d0c19ff0c958..71c85380676c 100644
->> --- a/include/linux/pci.h
->> +++ b/include/linux/pci.h
->> @@ -1904,6 +1904,7 @@ static inline int pci_dev_present(const struct pci_device_id *ids)
->>   #define pci_dev_put(dev)	do { } while (0)
->>   
->>   static inline void pci_set_master(struct pci_dev *dev) { }
->> +static inline void pci_clear_master(struct pci_dev *dev) { }
->>   static inline int pci_enable_device(struct pci_dev *dev) { return -EIO; }
->>   static inline void pci_disable_device(struct pci_dev *dev) { }
->>   static inline int pcim_enable_device(struct pci_dev *pdev) { return -EIO; }
->> -- 
->> 2.25.1
->>
--- 
-Jingfeng
-
+--AcBOIuEM4L/yvJax--
