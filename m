@@ -2,208 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38B6B7237B5
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 08:29:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B34D87237BA
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 08:30:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234736AbjFFG3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 02:29:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39434 "EHLO
+        id S232373AbjFFGa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 02:30:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235090AbjFFG2l (ORCPT
+        with ESMTP id S230121AbjFFGay (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 02:28:41 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED101E76
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 23:28:33 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-565e6beb7aaso72071917b3.2
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 23:28:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686032913; x=1688624913;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lh4nTYVvP2xhbTqzCFThdJwLmWrtDo6cCYu0K1MEaUc=;
-        b=ULW8wPRikckM9LELAx9UpWle2Lb4WwZxPIXEDt1lR9wQIO5cxXakH/8jTLMBuZw8wx
-         Uh47SeunW4Tp+pyb/wTLCC6nZMEC4nTofGf4XUgb3BlgvfEFnDLECsk+JtbDPIEYi26x
-         9vZZ874SZy4X8WigJ/C8mjXXdDbReJrV0R4WIGr0mh0A5ZnrYuJU6h/Cw9u/zsQYaDk7
-         mLxWS2XDJjEOTgncPyb98NRz5neLtObTpcxFngkG2w0fp+AzoZOrYLnFHTWNsS7we8ze
-         5+dQOLu1Iwg73UmL89hyYzq5nExeBAcTkTsnwBDNieMk9P3B3h923KXyo65p9UTdz89t
-         Xo3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686032913; x=1688624913;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lh4nTYVvP2xhbTqzCFThdJwLmWrtDo6cCYu0K1MEaUc=;
-        b=Ef2VxiW53zpZHR01cVvLfJ2zOGQaWHRY+obYsRZmCspof+WM5iTR6RX68cU3CoaoSM
-         l9nuO2e9d3kIa+jJ4c8vv8Iys2vjX+lKYLFomBPFw23m/WtiJ8uKO8Z3l9YsCzfMySnD
-         j3FMV3AjDjCDnCuxHJpMQZLKXXs7hGgucJsHobsiDv0LE3FHzMp1kfLes5xL30P0u3tN
-         erI7BWzj/PzvDyv4wikZ8LOD8jGJ3R8fCu5HGXve8a5+vTDnvgczh7dt77ruH04lDbkI
-         cIjplpUUYyjJ4Lm3o9UNaUBueezNRrGtKrcU7jspNPFSsIuubPlHf7q7IcbKOzWjsYam
-         TJNQ==
-X-Gm-Message-State: AC+VfDykz9SqVPhugjVq5Miyelu/7D+Y2SxhR9pV6o0qpVipwCuxLNDz
-        GiRkcu+sdp/eM0sX7+lUb96CTg==
-X-Google-Smtp-Source: ACHHUZ7idIXR3XCuKUN9DZBZ124U2LyUkc47jWZoQiMKnSHKdPcQWeTsiAJumin9N7U+fFXlqtOy5g==
-X-Received: by 2002:a0d:dd0f:0:b0:565:a3e6:1b7b with SMTP id g15-20020a0ddd0f000000b00565a3e61b7bmr1184720ywe.18.1686032912712;
-        Mon, 05 Jun 2023 23:28:32 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id u127-20020a818485000000b00569e0490babsm626769ywf.16.2023.06.05.23.28.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jun 2023 23:28:32 -0700 (PDT)
-Date:   Mon, 5 Jun 2023 23:28:27 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Jann Horn <jannh@google.com>
-cc:     Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Peter Xu <peterx@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Steven Price <steven.price@arm.com>,
-        SeongJae Park <sj@kernel.org>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Song Liu <song@kernel.org>,
-        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH 00/12] mm: free retracted page table by RCU
-In-Reply-To: <CAG48ez1Yua=6ztK6Urc-BZj9ku14MWbOKP8iBUK6_F5VzRXP-A@mail.gmail.com>
-Message-ID: <99fadcf-3979-a493-2664-291c5fbce19e@google.com>
-References: <35e983f5-7ed3-b310-d949-9ae8b130cdab@google.com> <CAG48ez0pCqfRdVSnJz7EKtNvMR65=zJgVB-72nTdrNuhtJNX2Q@mail.gmail.com> <3a33b59f-47c1-9dea-209a-9f77eec3cb1@google.com> <CAG48ez1Yua=6ztK6Urc-BZj9ku14MWbOKP8iBUK6_F5VzRXP-A@mail.gmail.com>
+        Tue, 6 Jun 2023 02:30:54 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8568392;
+        Mon,  5 Jun 2023 23:30:51 -0700 (PDT)
+Received: from loongson.cn (unknown [192.168.100.1])
+        by gateway (Coremail) with SMTP id _____8DxPPCW0n5kWgQAAA--.144S3;
+        Tue, 06 Jun 2023 14:30:46 +0800 (CST)
+Received: from [0.0.0.0] (unknown [192.168.100.1])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxJeST0n5ko+EBAA--.8268S3;
+        Tue, 06 Jun 2023 14:30:44 +0800 (CST)
+Subject: Re: [PATCH v12 01/31] LoongArch: KVM: Add kvm related header files
+To:     Tianrui Zhao <zhaotianrui@loongson.cn>
+References: <20230530015223.147755-1-zhaotianrui@loongson.cn>
+ <20230530015223.147755-2-zhaotianrui@loongson.cn>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        loongarch@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
+        Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oliver Upton <oliver.upton@linux.dev>, maobibo@loongson.cn,
+        Xi Ruoyao <xry111@xry111.site>
+From:   Youling Tang <tangyouling@loongson.cn>
+Message-ID: <7bbc1383-9248-438b-cc09-1639185b7b45@loongson.cn>
+Date:   Tue, 6 Jun 2023 14:30:43 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="-1463760895-360064877-1686032912=:3708"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230530015223.147755-2-zhaotianrui@loongson.cn>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8AxJeST0n5ko+EBAA--.8268S3
+X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBj93XoW7ur17CF18GFWxCryUCF18Xrc_yoW8Kryxpa
+        yvkw1xKr47X340grn7tw1qvF9rJr4Ut3W2vanrJrWrA3Z7Ka4fCFs8G34DZF4fA3ykXanF
+        ya4rGwsxursrJacCm3ZEXasCq-sJn29KB7ZKAUJUUUUf529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUPIb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+        xVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
+        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
+        AVWUtwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
+        8JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vI
+        r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67
+        AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIY
+        rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14
+        v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8
+        JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07jFApnUUU
+        UU=
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Hi, Tianrui
 
----1463760895-360064877-1686032912=:3708
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+On 05/30/2023 09:51 AM, Tianrui Zhao wrote:
+/* snip */
+> +struct kvm_vcpu_arch {
+> +	/*
+> +	 * Switch pointer-to-function type to unsigned long
+> +	 * for loading the value into register directly.
+> +	 */
+> +	unsigned long guest_eentry;
+> +	unsigned long host_eentry;
+> +
+> +	/* Pointers stored here for easy accessing from assembly code */
+> +	int (*handle_exit)(struct kvm_run *run, struct kvm_vcpu *vcpu);
+> +
+> +	/* Host registers preserved across guest mode execution */
+> +	unsigned long host_stack;
+> +	unsigned long host_gp;
 
-On Fri, 2 Jun 2023, Jann Horn wrote:
-> On Fri, Jun 2, 2023 at 6:37=E2=80=AFAM Hugh Dickins <hughd@google.com> wr=
-ote:
->=20
-> > The most obvious vital thing (in the split ptlock case) is that it
-> > remains a struct page with a usable ptl spinlock embedded in it.
-> >
-> > The question becomes more urgent when/if extending to replacing the
-> > pagetable pmd by huge pmd in one go, without any mmap_lock: powerpc
-> > wants to deposit the page table for later use even in the shmem/file
-> > case (and all arches in the anon case): I did work out the details once
-> > before, but I'm not sure whether I would still agree with myself; and w=
-as
-> > glad to leave replacement out of this series, to revisit some time late=
-r.
-> >
-> > >
-> > > So in particular, in handle_pte_fault() we can reach the "if
-> > > (unlikely(!pte_same(*vmf->pte, entry)))" with vmf->pte pointing to a
-> > > detached zeroed page table, but we're okay with that because in that
-> > > case we know that !pte_none(vmf->orig_pte)&&pte_none(*vmf->pte) ,
-> > > which implies !pte_same(*vmf->pte, entry) , which means we'll bail
-> > > out?
-> >
-> > There is no current (even at end of series) circumstance in which we
-> > could be pointing to a detached page table there; but yes, I want to
-> > allow for that, and yes I agree with your analysis.
->=20
-> Hmm, what am I missing here?
+In arch/loongarch/kvm/switch.S,
 
-I spent quite a while trying to reconstruct what I had been thinking,
-what meaning of "detached" or "there" I had in mind when I asserted so
-confidently "There is no current (even at end of series) circumstance
-in which we could be pointing to a detached page table there".
+ld.d tp, a2, KVM_ARCH_HGP
+ld.d sp, a2, KVM_ARCH_HSTACK
 
-But had to give up and get on with more useful work.
-Of course you are right, and that is what this series is about.
+Should we need to change host_gp to host_tp (and also change host_stack
+to host_sp for consistency).
 
-Hugh
+And modify KVM_ARCH_HSTACK and KVM_ARCH_HGP synchronously.
 
->=20
-> static vm_fault_t handle_pte_fault(struct vm_fault *vmf)
-> {
->   pte_t entry;
->=20
->   if (unlikely(pmd_none(*vmf->pmd))) {
->     [not executed]
->   } else {
->     /*
->      * A regular pmd is established and it can't morph into a huge
->      * pmd by anon khugepaged, since that takes mmap_lock in write
->      * mode; but shmem or file collapse to THP could still morph
->      * it into a huge pmd: just retry later if so.
->      */
->     vmf->pte =3D pte_offset_map_nolock(vmf->vma->vm_mm, vmf->pmd,
->              vmf->address, &vmf->ptl);
->     if (unlikely(!vmf->pte))
->       [not executed]
->     // this reads a present readonly PTE
->     vmf->orig_pte =3D ptep_get_lockless(vmf->pte);
->     vmf->flags |=3D FAULT_FLAG_ORIG_PTE_VALID;
->=20
->     if (pte_none(vmf->orig_pte)) {
->       [not executed]
->     }
->   }
->=20
->   [at this point, a concurrent THP collapse operation detaches the page t=
-able]
->   // vmf->pte now points into a detached page table
->=20
->   if (!vmf->pte)
->     [not executed]
->=20
->   if (!pte_present(vmf->orig_pte))
->     [not executed]
->=20
->   if (pte_protnone(vmf->orig_pte) && vma_is_accessible(vmf->vma))
->     [not executed]
->=20
->   spin_lock(vmf->ptl);
->   entry =3D vmf->orig_pte;
->   // vmf->pte still points into a detached page table
->   if (unlikely(!pte_same(*vmf->pte, entry))) {
->     update_mmu_tlb(vmf->vma, vmf->address, vmf->pte);
->     goto unlock;
->   }
->   [...]
-> }
----1463760895-360064877-1686032912=:3708--
+Thanks,
+Youling
+> +	unsigned long host_pgd;
+> +
+> +	/* Host CSRs are used when handling exits from guest */
+> +	unsigned long badi;
+> +	unsigned long badv;
+> +	unsigned long host_ecfg;
+> +	unsigned long host_estat;
+> +	unsigned long host_percpu;
+> +
+> +	/* GPRs */
+> +	unsigned long gprs[32];
+> +	unsigned long pc;
+> +
+> +	/* FPU state */
+> +	struct loongarch_fpu fpu FPU_ALIGN;
+> +	/* Which auxiliary state is loaded (KVM_LOONGARCH_AUX_*) */
+> +	unsigned int aux_inuse;
+> +
+> +	/* CSR state */
+> +	struct loongarch_csrs *csr;
+> +
+> +	/* GPR used as IO source/target */
+> +	u32 io_gpr;
+> +
+> +	struct hrtimer swtimer;
+> +	/* KVM register to control count timer */
+> +	u32 count_ctl;
+> +
+> +	/* Bitmask of exceptions that are pending */
+> +	unsigned long irq_pending;
+> +	/* Bitmask of pending exceptions to be cleared */
+> +	unsigned long irq_clear;
+> +
+> +	/* Cache for pages needed inside spinlock regions */
+> +	struct kvm_mmu_memory_cache mmu_page_cache;
+> +
+> +	/* vcpu's vpid */
+> +	u64 vpid;
+> +
+> +	/* Period of stable timer tick in ns */
+> +	u64 timer_period_ns;
+> +	/* Frequency of stable timer in Hz */
+> +	u64 timer_mhz;
+> +	/* Stable bias from the raw time */
+> +	u64 timer_bias;
+> +	/* Dynamic nanosecond bias (multiple of timer_period_ns) to avoid overflow */
+> +	s64 timer_dyn_bias;
+> +
+> +	ktime_t stable_ktime_saved;
+> +
+> +	u64 core_ext_ioisr[4];
+> +
+> +	/* Last CPU the vCPU state was loaded on */
+> +	int last_sched_cpu;
+> +	/* Last CPU the vCPU actually executed guest code on */
+> +	int last_exec_cpu;
+> +	/* mp state */
+> +	struct kvm_mp_state mp_state;
+> +};
+
