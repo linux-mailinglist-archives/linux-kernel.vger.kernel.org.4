@@ -2,184 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81F577235B0
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 05:20:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 984AD7235B3
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 05:21:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234498AbjFFDUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 23:20:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40464 "EHLO
+        id S234549AbjFFDVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 23:21:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230362AbjFFDUs (ORCPT
+        with ESMTP id S234567AbjFFDVA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 23:20:48 -0400
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D462112D
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 20:20:46 -0700 (PDT)
-Received: by mail-ot1-x336.google.com with SMTP id 46e09a7af769-6af6fe73f11so5252404a34.0
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 20:20:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1686021646; x=1688613646;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7ntz136Kv/Z3zkhnJ6VCfDwRACVjWDfGBtrEKcKvWUw=;
-        b=DqncP1yN7WvbpQmN3FIeaCkq3uY5TqNpLAQQZx+mpFCIDPZvMnxMND6j6piAILHxFZ
-         12jQKJcLNw78VtiWS4VyU11ZsmRDw6Dm9et5QMiEjYJNXlcwuH9TUqH1n1MLaIhSUkTs
-         Y8w0K3I95RBssUjpOT6c8Zsifk7Gma0/7XBfQ1cROortF+wRJO3JkSGKcAbymSdKpDlR
-         ctkPxm3/qZqnPj+G0p4YMdNPBpMYuCeMovBjxu0SX6DztNyyVNBIiJFQGjXpmmifSSjk
-         byeo1qdtYt3G1C80N/sjLfejh1dzK48I6TyppSVCdXCZd55kwmdvI4+0jQUA9jixYidH
-         9z5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686021646; x=1688613646;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=7ntz136Kv/Z3zkhnJ6VCfDwRACVjWDfGBtrEKcKvWUw=;
-        b=eIL46ENmWyurG/L1AsE8S6gyJCuKF4jufPiohxd9Ff4/jr1YjEiCuRlFv1VPYR987G
-         qhffi6Uu82RcpstLttiZhQ7gW01Sg01zYJJZ7VWZ6zaI2zHGOzx+wK/sZcsdi/EXPFSX
-         tY53VyTJFMW91j9dCcwLr6jw6ZbKrZSh9j9QFEvu2/ulz1D0rvoA0X1rP4B36gZR+EUz
-         CnMOlO+HHOzh2gAy97QWfcQWUZCCumqSRMQfZkNbrvmtVA5C0u/WQdt1WgqsRFovpTWG
-         v++BTVSDvbiVzwUpZiYzdlmRgFlKrjuFEsz3AEj1udSu2WlNkfmCikV9yUKG/io+Ja7W
-         BxxA==
-X-Gm-Message-State: AC+VfDwU9IMqAW5PAbg2C7cIVoNmQuRP+dBkz/X+Q1rlDkW/ra/MfPy7
-        yofhgjAm505E6/x3RA8Cge4Q6A==
-X-Google-Smtp-Source: ACHHUZ6YuXJUXGWkdpcGrIlzXzS0Yda3ftDJl98KfFEAf+y0rJ12iMkNK2jsHTija0uGTAdiexMjcw==
-X-Received: by 2002:a9d:67d3:0:b0:6ab:1d99:5dc6 with SMTP id c19-20020a9d67d3000000b006ab1d995dc6mr821640otn.3.1686021646162;
-        Mon, 05 Jun 2023 20:20:46 -0700 (PDT)
-Received: from [10.71.57.173] ([203.208.167.147])
-        by smtp.gmail.com with ESMTPSA id j1-20020aa78d01000000b0065329194416sm5769668pfe.193.2023.06.05.20.20.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Jun 2023 20:20:45 -0700 (PDT)
-Message-ID: <2d138e12-9273-46e6-c219-96c665f38f0f@bytedance.com>
-Date:   Tue, 6 Jun 2023 11:20:38 +0800
+        Mon, 5 Jun 2023 23:21:00 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B2DAEE40;
+        Mon,  5 Jun 2023 20:20:56 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.86])
+        by gateway (Coremail) with SMTP id _____8AxB_EXpn5krFoAAA--.1121S3;
+        Tue, 06 Jun 2023 11:20:55 +0800 (CST)
+Received: from [10.20.42.86] (unknown [10.20.42.86])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxluQVpn5kObABAA--.7496S3;
+        Tue, 06 Jun 2023 11:20:53 +0800 (CST)
+Subject: Re: [PATCH v12 10/31] LoongArch: KVM: Implement vcpu ENABLE_CAP ioctl
+ interface
+To:     "bibo, mao" <maobibo@loongson.cn>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+References: <20230530015223.147755-1-zhaotianrui@loongson.cn>
+ <20230530015223.147755-11-zhaotianrui@loongson.cn>
+ <3f352d6f-2d4f-0b41-f015-991ba8421007@loongson.cn>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        loongarch@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
+        Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Xi Ruoyao <xry111@xry111.site>
+From:   Tianrui Zhao <zhaotianrui@loongson.cn>
+Message-ID: <9ab60c16-8276-c46e-951a-434e936264c8@loongson.cn>
+Date:   Tue, 6 Jun 2023 11:20:53 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.0
-Subject: Re: Re: [PATCH bpf-next] bpf: getsockopt hook to get optval without
- checking kernel retval
-To:     Martin KaFai Lau <martin.lau@linux.dev>
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yangzhenze@bytedance.com, wangdongdong.6@bytedance.com,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org
-References: <20230601024900.22902-1-zhoufeng.zf@bytedance.com>
- <5bc1ac0d-cea8-19e5-785a-cd72140d8cdb@linux.dev>
- <20881602-9afc-96b7-3d58-51c31e3f50b7@bytedance.com>
- <d7be9d22-c6aa-da2a-77fc-9638ad1e0f15@linux.dev>
-From:   Feng Zhou <zhoufeng.zf@bytedance.com>
-In-Reply-To: <d7be9d22-c6aa-da2a-77fc-9638ad1e0f15@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <3f352d6f-2d4f-0b41-f015-991ba8421007@loongson.cn>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8DxluQVpn5kObABAA--.7496S3
+X-CM-SenderInfo: p2kd03xldq233l6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBj93XoW7ZFW3ZF1kJF43Aw1UJrW3twc_yoW8CFyxpF
+        WkCan8WrWrJrW2gwnIqws3WrnIqrWkKr4xZF9rJa45JFnFkryrKFyFkrZrCFW5Awn5uF1x
+        ZF1Fq3Wa9F98AacCm3ZEXasCq-sJn29KB7ZKAUJUUUU3529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUPqb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+        xVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
+        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
+        AVWUtwAv7VC2z280aVAFwI0_Cr0_Gr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwI
+        xGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAK
+        I48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrV
+        AFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCI
+        c40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267
+        AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Cr0_
+        Gr1UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jb_-
+        PUUUUU=
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2023/6/1 23:50, Martin KaFai Lau 写道:
-> On 5/31/23 11:05 PM, Feng Zhou wrote:
->> 在 2023/6/1 13:37, Martin KaFai Lau 写道:
->>> On 5/31/23 7:49 PM, Feng zhou wrote:
->>>> From: Feng Zhou <zhoufeng.zf@bytedance.com>
->>>>
->>>> Remove the judgment on retval and pass bpf ctx by default. The
->>>> advantage of this is that it is more flexible. Bpf getsockopt can
->>>> support the new optname without using the module to call the
->>>> nf_register_sockopt to register.
->>>>
->>>> Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
->>>> ---
->>>>   kernel/bpf/cgroup.c | 35 +++++++++++++----------------------
->>>>   1 file changed, 13 insertions(+), 22 deletions(-)
->>>>
->>>> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
->>>> index 5b2741aa0d9b..ebad5442d8bb 100644
->>>> --- a/kernel/bpf/cgroup.c
->>>> +++ b/kernel/bpf/cgroup.c
->>>> @@ -1896,30 +1896,21 @@ int 
->>>> __cgroup_bpf_run_filter_getsockopt(struct sock *sk, int level,
->>>>       if (max_optlen < 0)
->>>>           return max_optlen;
->>>> -    if (!retval) {
->>>> -        /* If kernel getsockopt finished successfully,
->>>> -         * copy whatever was returned to the user back
->>>> -         * into our temporary buffer. Set optlen to the
->>>> -         * one that kernel returned as well to let
->>>> -         * BPF programs inspect the value.
->>>> -         */
->>>> -
->>>> -        if (get_user(ctx.optlen, optlen)) {
->>>> -            ret = -EFAULT;
->>>> -            goto out;
->>>> -        }
->>>> +    if (get_user(ctx.optlen, optlen)) {
->>>> +        ret = -EFAULT;
->>>> +        goto out;
->>>> +    }
->>>> -        if (ctx.optlen < 0) {
->>>> -            ret = -EFAULT;
->>>> -            goto out;
->>>> -        }
->>>> -        orig_optlen = ctx.optlen;
->>>> +    if (ctx.optlen < 0) {
->>>> +        ret = -EFAULT;
->>>> +        goto out;
->>>> +    }
->>>> +    orig_optlen = ctx.optlen;
->>>> -        if (copy_from_user(ctx.optval, optval,
->>>> -                   min(ctx.optlen, max_optlen)) != 0) {
->>>> -            ret = -EFAULT;
->>>> -            goto out;
->>>> -        }
->>>> +    if (copy_from_user(ctx.optval, optval,
->>>> +                min(ctx.optlen, max_optlen)) != 0) {
->>> What is in optval that is useful to copy from if the kernel didn't 
->>> handle the optname?
->>
->> For example, if the user customizes a new optname, it will not be 
->> processed if the kernel does not support it. Then the data stored in 
->> optval is the data put 
-> 
-> 
-> 
->> by the user. If this part can be seen by bpf prog, the user can 
->> implement processing logic of the custom optname through bpf prog.
-> 
-> This part does not make sense. It is a (get)sockopt. Why the bpf prog 
-> should expect anything useful in the original __user optval? Other than 
-> unnecessary copy for other common cases, it looks like a bad api, so 
-> consider it a NAK.
-> 
->>
->>>
->>> and there is no selftest also.
->>>
->>
->> Yes, if remove this restriction, everyone thinks it's ok, I'll add it 
->> in the next version.
->>
->>>> +        ret = -EFAULT;
->>>> +        goto out;
->>>>       }
->>>>       lock_sock(sk);
->>>
->>
-> 
 
-According to my understanding, users will have such requirements, 
-customize an optname, which is not available in the kernel. All logic is 
-completed in bpf prog, and bpf prog needs to obtain the user data passed 
-in by the system call, and then return the data required by the user 
-according to this data.
 
-For optname not in the kernel, the error code is
-#define ENOPROTOOPT 92/* Protocol not available */
-Whether to consider the way of judging with error codes,
-If (! retval | | retval == -ENOPROTOOPT)
+在 2023年06月05日 21:12, bibo, mao 写道:
+>
+> 在 2023/5/30 09:52, Tianrui Zhao 写道:
+>> Implement LoongArch vcpu KVM_ENABLE_CAP ioctl interface.
+>>
+>> Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
+>> ---
+>>   arch/loongarch/kvm/vcpu.c | 26 ++++++++++++++++++++++++++
+>>   1 file changed, 26 insertions(+)
+>>
+>> diff --git a/arch/loongarch/kvm/vcpu.c b/arch/loongarch/kvm/vcpu.c
+>> index 278fbafc59b4..5a88f815c412 100644
+>> --- a/arch/loongarch/kvm/vcpu.c
+>> +++ b/arch/loongarch/kvm/vcpu.c
+>> @@ -186,6 +186,23 @@ int kvm_arch_vcpu_ioctl_set_regs(struct kvm_vcpu *vcpu, struct kvm_regs *regs)
+>>   	return 0;
+>>   }
+>>   
+>> +static int kvm_vcpu_ioctl_enable_cap(struct kvm_vcpu *vcpu,
+>> +				     struct kvm_enable_cap *cap)
+>> +{
+>> +	int r = 0;
+>> +
+>> +	if (!kvm_vm_ioctl_check_extension(vcpu->kvm, cap->cap))
+>> +		return -EINVAL;
+> It is a little strange to check extension of the whole vm in enable vcap capability.
+> can we change to usage like  general architectures?
+Thanks, I look up this interface of other archs and re-consider it, and 
+I think it should be removed.
+
+Thanks
+Tianrui Zhao
+>
+>> +	if (cap->flags)
+>> +		return -EINVAL;
+>> +	if (cap->args[0])
+>> +		return -EINVAL;
+>> +	if (cap->cap)
+>> +		return -EINVAL;
+> Do we need check args[0] and cap here ?
+>
+> Regards
+> Bibo, Mao
+No need, I will remove the two conditions.
+
+Thanks
+Tianrui Zhao
+>> +
+>> +	return r;
+>> +}
+>> +
+>>   long kvm_arch_vcpu_ioctl(struct file *filp,
+>>   			 unsigned int ioctl, unsigned long arg)
+>>   {
+>> @@ -209,6 +226,15 @@ long kvm_arch_vcpu_ioctl(struct file *filp,
+>>   			r = _kvm_get_reg(vcpu, &reg);
+>>   		break;
+>>   	}
+>> +	case KVM_ENABLE_CAP: {
+>> +		struct kvm_enable_cap cap;
+>> +
+>> +		r = -EFAULT;
+>> +		if (copy_from_user(&cap, argp, sizeof(cap)))
+>> +			break;
+>> +		r = kvm_vcpu_ioctl_enable_cap(vcpu, &cap);
+>> +		break;
+>> +	}
+>>   	default:
+>>   		r = -ENOIOCTLCMD;
+>>   		break;
 
