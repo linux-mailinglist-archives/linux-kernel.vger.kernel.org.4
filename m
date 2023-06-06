@@ -2,143 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E00AE724AB5
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 19:59:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBF7B724AB8
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 20:00:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238156AbjFFR7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 13:59:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53744 "EHLO
+        id S238840AbjFFSAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 14:00:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238028AbjFFR7P (ORCPT
+        with ESMTP id S233537AbjFFSAM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 13:59:15 -0400
-Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20D3610F8;
-        Tue,  6 Jun 2023 10:59:14 -0700 (PDT)
-Received: by mail-vs1-xe35.google.com with SMTP id ada2fe7eead31-43c1e5978e4so309766137.1;
-        Tue, 06 Jun 2023 10:59:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20221208; t=1686074353; x=1688666353;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=JYq8kaJ2RB9RXyaMdQYUWfY+ygasp2eONssKUmLHTZI=;
-        b=hqHBn18UMUosvkpX9pz+Y6rsS4UMWZoFG2VwNtxGnnDpZNq/lhwkRTPbMMqik6EZFe
-         5nsTkuXOy9pyW9Zn8xiL1qdjLR0E124veGavMyq3Jy0JqXaie7zbs26oh5UAIMoTc40r
-         MFyOp9rg98QbjuujmiyA3JK7SGX1dlSVQUBdQDR1paObBHdMlLyKdp1mecbikUDvmGml
-         1KE5kEQn0wNEcpZPJWOsM7IN/tTMK+XQs74/DzA1t8D+aUn4lN+JTY7JXlmzDllxT/f/
-         2SJpSZwFtiQ6BSloMPjiHdIvM6qmitvzNwDXl/95QJR6n0THRFzUimQii6+X7xgkKOIw
-         MgSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686074353; x=1688666353;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JYq8kaJ2RB9RXyaMdQYUWfY+ygasp2eONssKUmLHTZI=;
-        b=cFPNqF7cj98LsbPTjy2ftugr8OZoOHaTOZyKBxNSuuye0se3J+NuI1aeCEuCXmtB5p
-         q3ZCEGvdaPrG56lSot1fn0izZwfz39PIJnUOChg6Gz0ilBgIbiHaJ8Dc4dsoLvSEypuI
-         lY1BViJCAEfTnMy7WdT6G+IZyX4U3+7RtxRWPDnl1cRiIKYPRtVypKDEtcpBeWxj8zTM
-         MwqyP6BzpWgrLDKoDhX0mbjy+6wMb22/SKaMVZoUoqIJ0z01dZhNXDiBPOaYehYNc8qb
-         KIUf8JbRCSGUIx1KF08RdcUwyjNXndnPKE9v5f4ogk1qCFBloJP1R/fHzozTFJcBvtrQ
-         sNmQ==
-X-Gm-Message-State: AC+VfDz3budrDEYyrIqQTIgEslbDdP8kxPmymRhQ50LqnynyecNYmumc
-        n9DO66qxreP51GjZa2e/s493tmSZ21c7yHeE+RM=
-X-Google-Smtp-Source: ACHHUZ6XV7FNTI9IXULFRO/fknoKV1VuqA0s1kTybjmUeeu6wHnvSJtwOFAzTmTqjQKnwmaKZ/PiXmmhlYL6PmX1C34=
-X-Received: by 2002:a67:f545:0:b0:43b:15b6:18d0 with SMTP id
- z5-20020a67f545000000b0043b15b618d0mr242299vsn.10.1686074353178; Tue, 06 Jun
- 2023 10:59:13 -0700 (PDT)
+        Tue, 6 Jun 2023 14:00:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 457A910CA;
+        Tue,  6 Jun 2023 11:00:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CA5D4632CF;
+        Tue,  6 Jun 2023 18:00:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF3FFC433EF;
+        Tue,  6 Jun 2023 18:00:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686074409;
+        bh=PLuf57EhVfN+pzuJMTQc3DpS8E0teEzKSJLSsmxE3ms=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gyUtHkQrJzRJgPO0kIvGWmbM/g65OIvt5y8qiFe2hg843c8Ku3KaLFrXKkbx73A5B
+         O2g2baBlIP5tw3qqHng6MgJowAEZi7UQqVLzZjXI8UQIctIsp6OQUrJJb7p/AorbiU
+         m6Goxhsl5js0B9JYnmTSgMTmmZ0g7z4QMJOmM8L5iF6wKVzLK99sDr8UozX78b4bKG
+         TJK4FY1OfHhSbYbU1+mIqz+vfjxkfLhAs508IdazNXFL3lqn6+kZ0vi04buOg65JyN
+         0EGoSklj5yG8Amcojv+CICp1Ap8d61+F8E3GoZpHPdmPWMYD/iLMzEaotzHt1fDY/5
+         CufjpRR+0E+Fg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 2E0ED40692; Tue,  6 Jun 2023 15:00:06 -0300 (-03)
+Date:   Tue, 6 Jun 2023 15:00:06 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org, Andi Kleen <ak@linux.intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>
+Subject: Re: [PATCH v2 1/2] perf annotate: Handle x86 instruction suffix
+ generally
+Message-ID: <ZH90JspD7JP7i1LZ@kernel.org>
+References: <20230524205054.3087004-1-namhyung@kernel.org>
+ <20230606230658.c1b478f905c82a9f7005034d@kernel.org>
 MIME-Version: 1.0
-References: <20230601190508.56610-1-franziska.naepelt@gmail.com>
- <20230602085902.59006-1-franziska.naepelt@gmail.com> <ZH8mhIrjyBvTF4oZ@debian.me>
- <e39efb7f-5d8f-4433-83b3-8eea8a6c0486@kadam.mountain> <CT5NH4XXIYQF.5XXJE6JA5FZP@suppilovahvero>
- <e44d03cf-9993-483c-b3d4-6185f5c028cc@kadam.mountain> <CT5P0JH7NOTO.3P08AWR6O128R@suppilovahvero>
-In-Reply-To: <CT5P0JH7NOTO.3P08AWR6O128R@suppilovahvero>
-From:   =?UTF-8?Q?Franziska_N=C3=A4pelt?= 
-        <franziska.naepelt@googlemail.com>
-Date:   Tue, 6 Jun 2023 19:59:02 +0200
-Message-ID: <CAAUT3iPVFZEQE+bFk4HhWbaAtnsbQLYrzggeD2Va4mC0Q09SNQ@mail.gmail.com>
-Subject: Re: [PATCH v2] certs/extract-cert: Fix checkpatch issues
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Dan Carpenter <dan.carpenter@linaro.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>, keyrings@vger.kernel.org,
-        dhowells@redhat.com, dwmw2@infradead.org,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Linux SPDX Licenses <linux-spdx@vger.kernel.org>,
-        Linux Kernel Janitors <kernel-janitors@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230606230658.c1b478f905c82a9f7005034d@kernel.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Di., 6. Juni 2023 um 18:03 Uhr schrieb Jarkko Sakkinen <jarkko@kernel.org>:
-> On Tue Jun 6, 2023 at 6:25 PM EEST, Dan Carpenter wrote:
-> > On Tue, Jun 06, 2023 at 05:51:09PM +0300, Jarkko Sakkinen wrote:
-> > > On Tue Jun 6, 2023 at 4:38 PM EEST, Dan Carpenter wrote:
-> > > > On Tue, Jun 06, 2023 at 07:28:52PM +0700, Bagas Sanjaya wrote:
-> > > > > On Fri, Jun 02, 2023 at 10:59:02AM +0200, Franziska Naepelt wrote:
-> > > > > > The following issues are fixed:
-> > > > > > - WARNING: Missing or malformed SPDX-License-Identifier tag
-> > > > > > - ERROR: trailing statements should be on next line
-> > > > > > - WARNING: braces {} are not necessary for single statement blocks
-> > > > > > - ERROR: space required before the open parenthesis '('
-> > > > > > - ERROR: code indent should use tabs where possible
-> > > > > > - WARNING: please, no spaces at the start of a line
-> > > > > > - WARNING: Missing a blank line after declarations
-> > > > >
-> > > > > Again, write the patch description in imperative mood (e.g. "Do foo").
-> > > > >
-> > > >
-> > > > Why do you care about imperative tense?  Imperative tense doesn't
-> > > > matter.  What matters is that you can understand the issue and how it
-> > > > looks like to the user.  I was working with a group of foreign students
-> > > > and it was painful to see the contortions that they went through to make
-> > > > a commit message imperative.  It's like saying "Bake a cake", "Ok, now
-> > > > bake it while juggling."  The cake ends up worse.  And the commit
-> > > > message end up worse when we force nonsense rules like this.
-> > >
-> > > How about a simple and stupid reason?
-> > >
-> > > Usually I write commit message without caring about this. Then I rewrite
-> > > the commit message and 9/10 it gets shorter. Based on empirical
-> > > experience, imperative form has minimum amount of extra words.
-> > >
-> >
-> > I'm looking through the git log to see if it's true the imperative tense
-> > commit message are shorter and better and neither one of those things is
-> > obvious to me.
-> >
-> > This patch had an imperative subject already so it was already kind of
-> > imperative.  Does every sentence have to be imperative or can you just
-> > add a "Fix it." to the end?
-> >
-> > I don't want to belittle the challenges you face around the English
-> > language but I think students were less fluent than you are.  So maybe
-> > imperative tense works for you but it definitely made their commit
-> > messages far worse.
->
-> Yeah, I was not trying to oppose, just reasoning why I like it more.
->
-> For a single patch, this does not really matter anyway :-)
->
-> BR, Jarkko
+Em Tue, Jun 06, 2023 at 11:06:58PM +0900, Masami Hiramatsu escreveu:
+> On Wed, 24 May 2023 13:50:53 -0700
+> Namhyung Kim <namhyung@kernel.org> wrote:
+> 
+> > In AT&T asm syntax, most of x86 instructions can have size suffix like
+> > b, w, l or q.  Instead of adding all these instructions in the table,
+> > we can handle them in a general way.
+> > 
+> > For example, it can try to find an instruction as is.  If not found,
+> > assuming it has a suffix and it'd try again without the suffix if it's
+> > one of the allowed suffixes.  This way, we can reduce the instruction
+> > table size for duplicated entries of the same instructions with a
+> > different suffix.
+> > 
+> > If an instruction xyz and others like xyz<suffix> are completely
+> > different ones, then they both need to be listed in the table so that
+> > they can be found before the second attempt (without the suffix).
+> 
+> Looks good to me.
+> 
+> Reviewed-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-I'm a bit puzzled now since there are different opinions on my patch.
-I'm struggling to draw a conclusion whether to split the patch into smaller
-single line patches or not.
+Thanks, applied both patches.
 
-I'd propose to split it into two patches:
-* One for SPDX license tag fix
-* One for spacing, tab, blank line, unnecessary braces etc.
-And fix the remarks related to SPDX license tag and the use of imperative.
+- Arnaldo
 
-If you agree I'm happy to provide two new patches.
+ 
+> > 
+> > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> > ---
+> >  tools/perf/util/annotate.c | 22 ++++++++++++++++++++++
+> >  1 file changed, 22 insertions(+)
+> > 
+> > diff --git a/tools/perf/util/annotate.c b/tools/perf/util/annotate.c
+> > index b708bbc49c9e..7f05f2a2aa83 100644
+> > --- a/tools/perf/util/annotate.c
+> > +++ b/tools/perf/util/annotate.c
+> > @@ -70,6 +70,7 @@ struct arch {
+> >  	struct ins_ops  *(*associate_instruction_ops)(struct arch *arch, const char *name);
+> >  	bool		sorted_instructions;
+> >  	bool		initialized;
+> > +	const char	*insn_suffix;
+> >  	void		*priv;
+> >  	unsigned int	model;
+> >  	unsigned int	family;
+> > @@ -179,6 +180,7 @@ static struct arch architectures[] = {
+> >  		.init = x86__annotate_init,
+> >  		.instructions = x86__instructions,
+> >  		.nr_instructions = ARRAY_SIZE(x86__instructions),
+> > +		.insn_suffix = "bwlq",
+> >  		.objdump =  {
+> >  			.comment_char = '#',
+> >  		},
+> > @@ -720,6 +722,26 @@ static struct ins_ops *__ins__find(struct arch *arch, const char *name)
+> >  	}
+> >  
+> >  	ins = bsearch(name, arch->instructions, nmemb, sizeof(struct ins), ins__key_cmp);
+> > +	if (ins)
+> > +		return ins->ops;
+> > +
+> > +	if (arch->insn_suffix) {
+> > +		char tmp[32];
+> > +		char suffix;
+> > +		size_t len = strlen(name);
+> > +
+> > +		if (len == 0 || len >= sizeof(tmp))
+> > +			return NULL;
+> > +
+> > +		suffix = name[len - 1];
+> > +		if (strchr(arch->insn_suffix, suffix) == NULL)
+> > +			return NULL;
+> > +
+> > +		strcpy(tmp, name);
+> > +		tmp[len - 1] = '\0'; /* remove the suffix and check again */
+> > +
+> > +		ins = bsearch(tmp, arch->instructions, nmemb, sizeof(struct ins), ins__key_cmp);
+> > +	}
+> >  	return ins ? ins->ops : NULL;
+> >  }
+> >  
+> > -- 
+> > 2.41.0.rc0.172.g3f132b7071-goog
+> > 
+> 
+> 
+> -- 
+> Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-Anyway, as per Dan's proposal I'll continue to work in drivers/staging.
+-- 
 
-Thanks,
-Franziska
+- Arnaldo
