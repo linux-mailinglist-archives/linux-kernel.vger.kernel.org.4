@@ -2,80 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF504724B1D
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 20:21:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 208F6724B06
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 20:16:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238206AbjFFSVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 14:21:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38446 "EHLO
+        id S238481AbjFFSQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 14:16:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232888AbjFFSVF (ORCPT
+        with ESMTP id S231429AbjFFSQU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 14:21:05 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83F46139;
-        Tue,  6 Jun 2023 11:20:59 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 716E05FD54;
-        Tue,  6 Jun 2023 21:20:57 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1686075657;
-        bh=B5Qw5duyjB9cR794f+VlBhHzBAd7Vjp1cXPs9T2oIMA=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=IgIzcHYhG1Tzv1L+X3M/QmEQyzGQ0gtieCwr3yaCyMTa8cu0OTxWxlQf1AhGAOnh9
-         CmhW3+EcitR9CaB1EWqbOvBwlMRL/Vvrn124XlE2XNCKY5M2eRwF9IHnOMD+WAybZ7
-         3QuGShSd4VD2+cQbHFjUmtzLfkOLUQS5WrD5vXMxrKNmJEsa6nBR69Fe5HmtSpnKlh
-         mIn35Svw7CGxVVfYjpwp3s0FQPKcLiRnuVHBSx407V8eZOeb72e4HOCC2LjTnRk0CR
-         2h6I/+bv0M5ngvUcW0VCVWJfqyKn2JgFBhJMuRJ1/v81tzkq3xGCGYzsy07V8XZLUU
-         IH9TBKQFV9r0g==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Tue,  6 Jun 2023 21:20:52 +0300 (MSK)
-Message-ID: <33fae8f8-9dd3-d5ee-2081-dd7c6a61f744@sberdevices.ru>
-Date:   Tue, 6 Jun 2023 21:15:55 +0300
+        Tue, 6 Jun 2023 14:16:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73912170D;
+        Tue,  6 Jun 2023 11:16:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 05D0863651;
+        Tue,  6 Jun 2023 18:16:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A68BC433EF;
+        Tue,  6 Jun 2023 18:16:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686075362;
+        bh=inb0aKFlhB3adnPbM4bwwgiQcbLSDywTmtGkBf4rPHQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CYp8Ca9Ca/V2e/bNn3Fx6RZ5GmcNa2941KImmjIOK9QBOjCaZ2kXs1JXVYuD/mB+o
+         o8PAAF1MX2LCJdA6xTLd4WfbJjM6m2hr7EAv92ZyQTe6M6Z8aZtZBTVmguvz2kjOYN
+         3H+JAFgOyA7qLXnYEkvc33PXIhffIo+fCAu+5xmI4zEUoIJ8oxzzfabnEPmjIlDvGQ
+         +roEqvxjzY1ejwFBB1+UHnRBZUyX707pAz8YuIMYdnJeuRK6RMOIVQjjsLZq5XYEKw
+         VmXemURxWvj+9+04Pa3P+qKPY3jIf/EkvyKcDY8sBB07iiUyKSSVPgRuHHOx8iH3//
+         WLAYlutU14hYg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 86CF340692; Tue,  6 Jun 2023 15:15:59 -0300 (-03)
+Date:   Tue, 6 Jun 2023 15:15:59 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH V3 0/1] perf tools: Allow config terms with breakpoints
+Message-ID: <ZH933yJMYTr0cC+N@kernel.org>
+References: <20230525082902.25332-1-adrian.hunter@intel.com>
+ <afe1c05a-2b77-c3d8-aacf-b4c7bebb8bf8@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH RFC net-next v3 0/8] virtio/vsock: support datagrams
-To:     Bobby Eshleman <bobbyeshleman@gmail.com>
-CC:     Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Bryan Tan <bryantan@vmware.com>, <kvm@vger.kernel.org>,
-        <virtualization@lists.linux-foundation.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-hyperv@vger.kernel.org>,
-        Jiang Wang <jiang.wang@bytedance.com>
-References: <20230413-b4-vsock-dgram-v3-0-c2414413ef6a@bytedance.com>
- <2830ac58-fd77-7e5f-5565-eb47dd027d81@sberdevices.ru>
- <ZHe3v8PHcIdFk+R5@bullseye>
-Content-Language: en-US
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-In-Reply-To: <ZHe3v8PHcIdFk+R5@bullseye>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/06/06 14:43:00 #21444531
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <afe1c05a-2b77-c3d8-aacf-b4c7bebb8bf8@intel.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,89 +60,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Em Tue, Jun 06, 2023 at 08:00:33AM +0300, Adrian Hunter escreveu:
+> On 25/05/23 11:29, Adrian Hunter wrote:
+> > Hi
+> > 
+> > Here is a patch (V3) to the event parser for breakpoint events.
+> > I am not that familiar with flex / bison, but it seemed to
+> > need trailing context to stop the mem event colon and slash
+> > delimiters from getting mixed up with delimiters for config
+> > terms or event modifiers.  Please look closely at that.
+> > 
+> > 
+> > Changes in V3:
+> > 
+> >       Add Ian's Reviewed-by
+> >       Re-base
+> 
+> Still applies.  Any more comments?
+
+Tried it now, twice, once after removing the O= build dir:
+
+  CC      /tmp/build/perf-tools-next/tests/event-times.o
+  CC      /tmp/build/perf-tools-next/tests/expr.o
+  BISON   /tmp/build/perf-tools-next/util/parse-events-bison.c
+util/parse-events.y:508.24-34: warning: unused value: $3 [-Wother]
+  508 | PE_PREFIX_MEM PE_VALUE PE_BP_SLASH PE_VALUE PE_BP_COLON PE_MODIFIER_BP opt_event_config
+      |                        ^~~~~~~~~~~
+util/parse-events.y:508.45-55: warning: unused value: $5 [-Wother]
+  508 | PE_PREFIX_MEM PE_VALUE PE_BP_SLASH PE_VALUE PE_BP_COLON PE_MODIFIER_BP opt_event_config
+      |                                             ^~~~~~~~~~~
+util/parse-events.y:526.24-34: warning: unused value: $3 [-Wother]
+  526 | PE_PREFIX_MEM PE_VALUE PE_BP_SLASH PE_VALUE opt_event_config
+      |                        ^~~~~~~~~~~
+util/parse-events.y:543.24-34: warning: unused value: $3 [-Wother]
+  543 | PE_PREFIX_MEM PE_VALUE PE_BP_COLON PE_MODIFIER_BP opt_event_config
+      |                        ^~~~~~~~~~~
+  CC      /tmp/build/perf-tools-next/tests/backward-ring-buffer.o
 
 
-On 01.06.2023 00:10, Bobby Eshleman wrote:
-> On Mon, Jun 05, 2023 at 11:42:06PM +0300, Arseniy Krasnov wrote:
->> Hello Bobby!
->>
->> Thanks for this patchset, really interesting!
->>
->> I applied it on head:
->>
->> https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/commit/?id=d20dd0ea14072e8a90ff864b2c1603bd68920b4b
->>
->> And tried to run ./vsock_test (client in the guest, server in the host), I had the following crash:
->>
->> Control socket connected to 192.168.1.1:12345.                          
->> 0 - SOCK_STREAM connection reset...                                     
->> [    8.050215] BUG: kernel NULL pointer derefer                         
->> [    8.050960] #PF: supervisor read access in kernel mode               
->> [    8.050960] #PF: error_code(0x0000) - not-present page               
->> [    8.050960] PGD 0 P4D 0                                              
->> [    8.050960] Oops: 0000 [#1] PREEMPT SMP PTI                          
->> [    8.050960] CPU: 0 PID: 109 Comm: vsock_test Not tainted 6.4.0-rc3-gd707c220a700
->> [    8.050960] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.14
->> [    8.050960] RIP: 0010:static_key_count+0x0/0x20                      
->> [    8.050960] Code: 04 4c 8b 46 08 49 29 c0 4c 01 c8 4c 89 47 08 89 0e 89 56 04 4f
->> [    8.050960] RSP: 0018:ffffa9a1c021bdc0 EFLAGS: 00010202              
->> [    8.050960] RAX: ffffffffac309880 RBX: ffffffffc02fc140 RCX: 0000000000000000
->> [    8.050960] RDX: ffff9a5eff944600 RSI: 0000000000000000 RDI: 0000000000000000
->> [    8.050960] RBP: ffff9a5ec2371900 R08: ffffa9a1c021bd30 R09: ffff9a5eff98e0c0
->> [    8.050960] R10: 0000000000001000 R11: 0000000000000000 R12: ffffa9a1c021be80
->> [    8.050960] R13: 0000000000000000 R14: 0000000000000002 R15: ffff9a5ec1cfca80
->> [    8.050960] FS:  00007fa9bf88c5c0(0000) GS:ffff9a5efe400000(0000) knlGS:00000000
->> [    8.050960] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033        
->> [    8.050960] CR2: 0000000000000000 CR3: 00000000023e0000 CR4: 00000000000006f0
->> [    8.050960] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
->> [    8.050960] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
->> [    8.050960] Call Trace:                                              
->> [    8.050960]  <TASK>                                                  
->> [    8.050960]  once_deferred+0xd/0x30                                  
->> [    8.050960]  vsock_assign_transport+0xa2/0x1b0 [vsock]               
->> [    8.050960]  vsock_connect+0xb4/0x3a0 [vsock]                        
->> [    8.050960]  ? var_wake_function+0x60/0x60                           
->> [    8.050960]  __sys_connect+0x9e/0xd0                                 
->> [    8.050960]  ? _raw_spin_unlock_irq+0xe/0x30                         
->> [    8.050960]  ? do_setitimer+0x128/0x1f0                              
->> [    8.050960]  ? alarm_setitimer+0x4c/0x90                             
->> [    8.050960]  ? fpregs_assert_state_consistent+0x1d/0x50              
->> [    8.050960]  ? exit_to_user_mode_prepare+0x36/0x130                  
->> [    8.050960]  __x64_sys_connect+0x11/0x20                             
->> [    8.050960]  do_syscall_64+0x3b/0xc0                                 
->> [    8.050960]  entry_SYSCALL_64_after_hwframe+0x4b/0xb5                
->> [    8.050960] RIP: 0033:0x7fa9bf7c4d13                                 
->> [    8.050960] Code: 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 48
->> [    8.050960] RSP: 002b:00007ffdf2d96cc8 EFLAGS: 00000246 ORIG_RAX: 0000000000000a
->> [    8.050960] RAX: ffffffffffffffda RBX: 0000560c305d0020 RCX: 00007fa9bf7c4d13
->> [    8.050960] RDX: 0000000000000010 RSI: 00007ffdf2d96ce0 RDI: 0000000000000004
->> [    8.050960] RBP: 0000000000000004 R08: 0000560c317dc018 R09: 0000000000000000
->> [    8.050960] R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
->> [    8.050960] R13: 0000560c305ccc2d R14: 00007ffdf2d96ce0 R15: 00007ffdf2d96d70
->> [    8.050960]  </TASK>  
->>
->>
->> I guess crash is somewhere near:
->>
->> old_info->transport->release(vsk); in vsock_assign_transport(). May be my config is wrong...
->>
->> Thanks, Arseniy
-> 
-> Thanks Arseniy!
-> 
-> I now see I broke the tests, but did't break the stream/dgram socket
-> utility I was using in development.
-> 
-> I'll track this down and include a fix in the next rev.
+⬢[acme@toolbox perf-tools-next]$ cat /etc/redhat-release
+Fedora release 36 (Thirty Six)
 
-Great! Thanks!
+⬢[acme@toolbox perf-tools-next]$ rpm -q bison
+bison-3.8.2-2.fc36.x86_64
+⬢[acme@toolbox perf-tools-next]$ rpm -q flex
+flex-2.6.4-10.fc36.x86_64
+⬢[acme@toolbox perf-tools-next]$
 
-Thanks, Arseniy
 
+- Arnaldo
+ 
+> > 
+> > Changes in V2:
+> > 
+> >       Add comments to tools/perf/util/parse-events.l
+> >       Add a test for 2 mem events back to back with config terms
+> > 
+> > 
+> > Adrian Hunter (1):
+> >       perf tools: Allow config terms with breakpoints
+> > 
+> >  tools/perf/tests/parse-events.c | 157 ++++++++++++++++++++++++++++++++++++++++
+> >  tools/perf/util/parse-events.c  |  23 +++++-
+> >  tools/perf/util/parse-events.h  |   6 +-
+> >  tools/perf/util/parse-events.l  |  23 +++++-
+> >  tools/perf/util/parse-events.y  |  42 ++++++-----
+> >  5 files changed, 224 insertions(+), 27 deletions(-)
+> > 
+> > 
+> > Regards
+> > Adrian
 > 
-> I should have warned this v3 is pretty under-tested. Being unsure if
-> some of the design choices would be accepted at all, I didn't want to
-> waste too much time until things were accepted at a high level.
-> 
-> Best,
-> Bobby
+
+-- 
+
+- Arnaldo
