@@ -2,76 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C28A472351B
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 04:14:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC3EC723524
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 04:17:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233750AbjFFCOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 22:14:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48010 "EHLO
+        id S233673AbjFFCRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 22:17:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231836AbjFFCOC (ORCPT
+        with ESMTP id S231268AbjFFCRh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 22:14:02 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85EBC11D;
-        Mon,  5 Jun 2023 19:13:53 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id 41be03b00d2f7-5429d91efc2so549757a12.0;
-        Mon, 05 Jun 2023 19:13:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686017633; x=1688609633;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GK3SH+ZRgMM3hnQg2lJiFOx+Ehf48Mzwt4h/2p4dLtA=;
-        b=od6j8MHiM34MxiAmu/7VpTdynYLAAW+dMGjCcMBFWgPNRZKANQ64sDInmd3TM8FHX+
-         +aHwrfDrm9mPt/VGJRnjKe7u2zonavLCUhZbuVWdov5BnAQ7TbpmNLsHx7UIOLtu9edy
-         Wj80xJuJFpWQYKsb6uYiZRiCuS3I/vgYSoofBRhbc0rgfxnxO2XEwBaMaXVhhz81jQZv
-         ZEXgNe1cu/QI77ritG/hM3R2Ict2mRyzes1QZ4MFg5m8rSPpzv4D7DdRHG79h22eczGN
-         FTAHrig4R6hA5Fwu+fRuQHGm5n6E0ie0drKGfFmTIr+4dQ1zuhOX2bSxC5+JF+babEI/
-         XL+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686017633; x=1688609633;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GK3SH+ZRgMM3hnQg2lJiFOx+Ehf48Mzwt4h/2p4dLtA=;
-        b=Z1Tbr5dbaYKWS0nwpqHtzpLDK6/DnJyFUP0kJtia9gJDh1mAkFfSScQnNXOKpGanyb
-         kvt4E1PqyXZo7o7j6A87ywCnYpQW9ZN4X1Z8cb4qJ1KVOg8HsvedbMyYJs18ZSiabT3v
-         YAbIeAV1ITSTEQ9K+/ljRwmeoGd4h0wt+T8xovmWnXgPknPjl5TM2CboxVuCrTBIqvux
-         pzHuT7Ly2ooD0lVVc/S4PDupGf4xVhpJSXtDEE0DBqDLKxK8gN1O3VHUyYLyF/IEK4kk
-         /X8M0fDgx3KWnHzlJYrlDCCspQDxYlUwb3lS9AdqToTKe8LtZuE17v2l90eTvhG+jix0
-         NSOw==
-X-Gm-Message-State: AC+VfDyVbRF8DmNx5wxOECP4FDaMo0MQ+nY4xpm4ELq5mpFixflqu2j6
-        1y1yU6BF3YgGkg91Y53NwJg=
-X-Google-Smtp-Source: ACHHUZ4AgqcoZQHQ9vBMlx5Pm4Vzq8IAyRRH9N50lXIEBRai3htmt99Xy8nuKv0x0CXxVsC5A/sbjg==
-X-Received: by 2002:a17:902:e751:b0:1ae:1364:6086 with SMTP id p17-20020a170902e75100b001ae13646086mr923553plf.2.1686017632804;
-        Mon, 05 Jun 2023 19:13:52 -0700 (PDT)
-Received: from [127.0.0.1] ([2404:c140:1f03::caf2])
-        by smtp.gmail.com with ESMTPSA id u10-20020a170902e80a00b001aadd0d7364sm7225788plg.83.2023.06.05.19.13.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Jun 2023 19:13:52 -0700 (PDT)
-Message-ID: <1626a8b8-ae7a-a110-44a1-24c8f600822a@gmail.com>
-Date:   Tue, 6 Jun 2023 10:13:44 +0800
+        Mon, 5 Jun 2023 22:17:37 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6EF8114;
+        Mon,  5 Jun 2023 19:17:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=vEESWuWR6a7zo6/+YfJEjRj9QTT4KTa8skRBEe6P8zY=; b=zO2TB/k92D5ScwkozcyGQOy9TJ
+        UPXtj0RdivvwIxboqyCmjYyNn2jN6D6YXFpr/+k5AslurE94wQsuY2lFFw/dNY14e9/gH8TGFJHmi
+        YKyy3LfzKsV0c31BnZwS1hHyBJnLrDidS5zsxB2h0BCWhAtNaLsW4VQTmDsxO9hcJn/O1LTRFvo1f
+        CEAs8ilAVpxvodkQ4EG8XCETHoZWSAXlq17kJX94OKI/uOym/IFvtEHirs3qEM51PXEvgYnKAITgs
+        2VAldDn31fT8lmNFmejOrXrKUL+gCq/7JZ2BKJJpkMOoAInub5GbKxED654ulYKL1tuxnqy3Cf1v1
+        NZQ/kOPg==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1q6MGN-00HQTW-0Y;
+        Tue, 06 Jun 2023 02:17:35 +0000
+Message-ID: <32ffb593-c39c-c741-7b6f-6f1cbcb1d558@infradead.org>
+Date:   Mon, 5 Jun 2023 19:17:34 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH net] net: sched: fix possible refcount leak in
- tc_chain_tmplt_add()
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     jhs@mojatatu.com, xiyou.wangcong@gmail.com, jiri@resnulli.us,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230605070158.48403-1-hbh25y@gmail.com>
- <ZH3Vju3D3KCKAkCO@corigine.com>
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v8 01/12] Documentation/x86: Document Key Locker
 Content-Language: en-US
-From:   Hangyu Hua <hbh25y@gmail.com>
-In-Reply-To: <ZH3Vju3D3KCKAkCO@corigine.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     "Chang S. Bae" <chang.seok.bae@intel.com>,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        dm-devel@redhat.com
+Cc:     ebiggers@kernel.org, elliott@hpe.com, gmazyland@gmail.com,
+        luto@kernel.org, dave.hansen@linux.intel.com, tglx@linutronix.de,
+        bp@alien8.de, mingo@kernel.org, x86@kernel.org,
+        herbert@gondor.apana.org.au, ardb@kernel.org,
+        dan.j.williams@intel.com, bernie.keany@intel.com,
+        charishma1.gairuboyina@intel.com,
+        lalithambika.krishnakumar@intel.com, nhuck@google.com,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org
+References: <20230524165717.14062-1-chang.seok.bae@intel.com>
+ <20230603152227.12335-1-chang.seok.bae@intel.com>
+ <20230603152227.12335-2-chang.seok.bae@intel.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230603152227.12335-2-chang.seok.bae@intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,43 +66,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/6/2023 20:31, Simon Horman wrote:
-> On Mon, Jun 05, 2023 at 03:01:58PM +0800, Hangyu Hua wrote:
->> try_module_get can be called in tcf_proto_lookup_ops. So if ops don't
->> implement the corresponding function we should call module_put to drop
->> the refcount.
+
+
+On 6/3/23 08:22, Chang S. Bae wrote:
+> Document the overview of the feature along with relevant consideration
+> when provisioning dm-crypt volumes with AES-KL instead of AES-NI.
 > 
-> Hi Hangyu Hua,
-> 
-> Is this correct even if try_module_get() is
-> not called via tcf_proto_lookup_ops() ?
+> ---
+> ---
+>  Documentation/arch/x86/index.rst     |  1 +
+>  Documentation/arch/x86/keylocker.rst | 97 ++++++++++++++++++++++++++++
+>  2 files changed, 98 insertions(+)
+>  create mode 100644 Documentation/arch/x86/keylocker.rst
 > 
 
-tcf_proto_lookup_ops will return error if try_module_get() is not called 
-in tcf_proto_lookup_ops(). I am not sure what you mean?
+> diff --git a/Documentation/arch/x86/keylocker.rst b/Documentation/arch/x86/keylocker.rst
+> new file mode 100644
+> index 000000000000..5557b8d0659a
+> --- /dev/null
+> +++ b/Documentation/arch/x86/keylocker.rst
+> @@ -0,0 +1,97 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +==============
+> +x86 Key Locker
+> +==============
+> +
+> +Introduction
+> +============
+> +
+> +Key Locker is a CPU feature to reduce key exfiltration opportunities
+> +while maintaining a programming interface similar to AES-NI. It
+> +converts the AES key into an encoded form, called the 'key handle'.
+> +The key handle is a wrapped version of the clear-text key where the
+> +wrapping key has limited exposure. Once converted, all subsequent data
+> +encryption using new AES instructions (AES-KL) uses this key handle,
+> +reducing the exposure of private key material in memory.
+> +
+> +CPU-internal Wrapping Key
+> +=========================
+> +
+> +The CPU-internal wrapping key is an entity in a software-invisible CPU
+> +state. On every system boot, a new key is loaded. So the key handle that
+> +was encoded by the old wrapping key is no longer usable on system shutdown
+> +or reboot.
+> +
+> +And the key may be lost on the following exceptional situation upon wakeup:
+> +
+> +Wrapping Key Restore Failure
+> +----------------------------
+> +
+> +The CPU state is volatile with the ACPI S3/4 sleep states. When the system
+> +supports those states, the key has to be backed up so that it is restored
+> +on wake up. The kernel saves the key in non-volatile media.
+> +
+> +The event of a wrapping key restore failure upon resume from suspend, all
 
-Thanks,
-Hangyu
+   Upon the event of a ...
 
->> Fixes: 9f407f1768d3 ("net: sched: introduce chain templates")
->> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
->> ---
->>   net/sched/cls_api.c | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/net/sched/cls_api.c b/net/sched/cls_api.c
->> index 2621550bfddc..92bfb892e638 100644
->> --- a/net/sched/cls_api.c
->> +++ b/net/sched/cls_api.c
->> @@ -2952,6 +2952,7 @@ static int tc_chain_tmplt_add(struct tcf_chain *chain, struct net *net,
->>   		return PTR_ERR(ops);
->>   	if (!ops->tmplt_create || !ops->tmplt_destroy || !ops->tmplt_dump) {
->>   		NL_SET_ERR_MSG(extack, "Chain templates are not supported with specified classifier");
->> +		module_put(ops->owner);
->>   		return -EOPNOTSUPP;
->>   	}
->>   
->> -- 
->> 2.34.1
->>
->>
+> +established key handles become invalid. In flight dm-crypt operations
+> +receive error results from pending operations. In the likely scenario that
+> +dm-crypt is hosting the root filesystem the recovery is identical to if a
+> +storage controller failed to resume from suspend, reboot. If the volume
+> +impacted by a wrapping key restore failure is a data-volume then it is
+
+                                                   data volume
+
+> +possible that I/O errors on that volume do not bring down the rest of the
+> +system. However, a reboot is still required because the kernel will have
+> +soft-disabled Key Locker. Upon the failure, the crypto library code will
+> +return -ENODEV on every AES-KL function call. The Key Locker implementation
+> +only loads a new wrapping key at initial boot, not any time after like
+> +resume from suspend.
+> +
+> +Use Case and Non-use Cases
+> +==========================
+> +
+> +Bare metal disk encryption is the only intended use case.
+> +
+> +Userspace usage is not supported because there is no ABI provided to
+> +communicate and coordinate wrapping-key restore failure to userspace. For
+> +now, key restore failures are only coordinated with kernel users. But the
+> +kernel can not prevent userspace from using the feature's AES instructions
+> +('AES-KL') when the feature has been enabled. So, the lack of userspace
+> +support is only documented, not actively enforced.
+> +
+> +Key Locker is not expected to be advertised to guest VMs and the kernel
+> +implementation ignores it even if the VMM enumerates the capability. The
+> +expectation is that a guest VM wants private wrapping key state, but the
+> +architecture does not provide that. An emulation of that capability, by
+> +caching per-VM wrapping keys in memory, defeats the purpose of Key Locker.
+> +The backup / restore facility is also not performant enough to be suitable
+> +for guest VM context switches.
+> +
+> +AES Instruction Set
+> +===================
+> +
+> +The feature accompanies a new AES instruction set. This instruction set is
+> +analogous to AES-NI. A set of AES-NI instructions can be mapped to an
+> +AES-KL instruction. For example, AESENC128KL is responsible for ten rounds
+> +of transformation, which is equivalent to nine times AESENC and one
+> +AESENCLAST in AES-NI.
+> +
+> +But they have some notable differences:
+> +
+> +* AES-KL provides a secure data transformation using an encrypted key.
+> +
+> +* If an invalid key handle is provided, e.g. a corrupted one or a handle
+> +  restriction failure, the instruction fails with setting RFLAGS.ZF. The
+> +  crypto library implementation includes the flag check to return -EINVAL.
+> +  Note that this flag is also set if the wrapping key is changed, e.g.,
+> +  because of the backup error.
+> +
+> +* AES-KL implements support for 128-bit and 256-bit keys, but there is no
+> +  AES-KL instruction to process an 192-bit key. The AES-KL cipher
+> +  implementation logs a warning message with a 192-bit key and then falls
+> +  back to AES-NI. So, this 192-bit key-size limitation is only documented,
+
+Is it logged anywhere?  i.e., a kernel log message?
+
+> +  not enforced. It means the key will remain in clear-text in memory. This
+> +  is to meet Linux crypto-cipher expectation that each implementation must
+> +  support all the AES-compliant key sizes.
+> +
+> +* Some AES-KL hardware implementation may have noticeable performance
+> +  overhead when compared with AES-NI instructions.
+> +
+
+-- 
+~Randy
