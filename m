@@ -2,89 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BDEC724E51
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 22:52:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CDEE724E5C
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 22:57:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239584AbjFFUwH convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 6 Jun 2023 16:52:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57544 "EHLO
+        id S233632AbjFFU5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 16:57:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239592AbjFFUwE (ORCPT
+        with ESMTP id S231706AbjFFU5j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 16:52:04 -0400
-Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDC101717;
-        Tue,  6 Jun 2023 13:52:00 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id 8F00B63CC103;
-        Tue,  6 Jun 2023 22:51:58 +0200 (CEST)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id PHgZNUdjvgcB; Tue,  6 Jun 2023 22:51:57 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id BE5DF608F44F;
-        Tue,  6 Jun 2023 22:51:57 +0200 (CEST)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id aN1OkdMjbyuq; Tue,  6 Jun 2023 22:51:57 +0200 (CEST)
-Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
-        by lithops.sigma-star.at (Postfix) with ESMTP id 940C063CC103;
-        Tue,  6 Jun 2023 22:51:57 +0200 (CEST)
-Date:   Tue, 6 Jun 2023 22:51:57 +0200 (CEST)
-From:   Richard Weinberger <richard@nod.at>
-To:     Azeem Shaikh <azeemshaikh38@gmail.com>
-Cc:     Maxim Krasnyansky <maxk@qti.qualcomm.com>,
-        anton ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-hardening <linux-hardening@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        kernel test robot <lkp@intel.com>
-Message-ID: <1833651082.3690424.1686084717406.JavaMail.zimbra@nod.at>
-In-Reply-To: <20230606182410.3976487-1-azeemshaikh38@gmail.com>
-References: <20230606182410.3976487-1-azeemshaikh38@gmail.com>
-Subject: Re: [PATCH v2] uml: Replace strlcpy with strscpy
+        Tue, 6 Jun 2023 16:57:39 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D3EBD1707;
+        Tue,  6 Jun 2023 13:57:37 -0700 (PDT)
+Received: from W11-BEAU-MD.localdomain (unknown [76.135.27.212])
+        by linux.microsoft.com (Postfix) with ESMTPSA id E580820BE492;
+        Tue,  6 Jun 2023 13:57:36 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E580820BE492
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1686085057;
+        bh=0ETLWs8Ceu9GxJZiRavPxUta0//U9m1gAOQEZ5ERUwU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=L8o1R6hOw20Q2OWIIrmyxakKURspNvlCCiRArHQP/p4Lbia0vbpaHE0XIODGn0J7a
+         qrJJbcbRtKDznCwU5ka91xEZMOmRPqe6/rIaCfxPTn9CT/zkyXE2iA6Ltz7AWuqx+a
+         MUkr3uiaEvsb+g67+0KFrI9OqGW8WzTVYC6H97fk=
+Date:   Tue, 6 Jun 2023 13:57:30 -0700
+From:   Beau Belgrave <beaub@linux.microsoft.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-trace-kernel@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        David Vernet <void@manifault.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        dthaler@microsoft.com, brauner@kernel.org, hch@infradead.orgl,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH] tracing/user_events: Run BPF program if attached
+Message-ID: <20230606205730.GA163@W11-BEAU-MD.localdomain>
+References: <20230508163751.841-1-beaub@linux.microsoft.com>
+ <CAADnVQLYL-ZaP_2vViaktw0G4UKkmpOK2q4ZXBa+f=M7cC25Rg@mail.gmail.com>
+ <20230509130111.62d587f1@rorschach.local.home>
+ <20230509163050.127d5123@rorschach.local.home>
+ <20230515165707.hv65ekwp2djkjj5i@MacBook-Pro-8.local>
+ <20230515192407.GA85@W11-BEAU-MD.localdomain>
+ <20230517003628.aqqlvmzffj7fzzoj@MacBook-Pro-8.local>
+ <20230606225741.a9d8003a22451db96545b5a8@kernel.org>
+ <CAEf4BzbhvBTQ2c1ENk2pVXdQ=SrXwTFXVjpopTANZsdn1EEeMA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [195.201.40.130]
-X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF97 (Linux)/8.8.12_GA_3809)
-Thread-Topic: Replace strlcpy with strscpy
-Thread-Index: kDC0hXVrB1XbeTt1tCVxurpE9ug2qA==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEf4BzbhvBTQ2c1ENk2pVXdQ=SrXwTFXVjpopTANZsdn1EEeMA@mail.gmail.com>
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------ Ursprüngliche Mail -----
-> Von: "Azeem Shaikh" <azeemshaikh38@gmail.com>
-> strlcpy() reads the entire source buffer first.
-> This read may exceed the destination size limit.
-> This is both inefficient and can lead to linear read
-> overflows if a source string is not NUL-terminated [1].
-> In an effort to remove strlcpy() completely [2], replace
-> strlcpy() here with strscpy().
-> No return values were used, so direct replacement is safe.
+On Tue, Jun 06, 2023 at 09:57:14AM -0700, Andrii Nakryiko wrote:
+> On Tue, Jun 6, 2023 at 6:57 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> >
+> > Hi,
+> >
+> > On Tue, 16 May 2023 17:36:28 -0700
+> > Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+> >
+> > > BPF progs have three ways to access kernel tracepoints:
+> > > 1. traditional tracepoint
+> >
+> > This is the trace_events, which is used by ftrace, right?
+> >
+> > > 2. raw tracepoint
+> > > 3. raw tracepoint with BTF
+> > >
+> > > 1 was added first and now rarely used (only by old tools), since it's slow.
+> > > 2 was added later to address performance concerns.
+> > > 3 was added after BTF was introduced to provide accurate types.
+> > >
+> > > 3 is the only one that bpf community recommends and is the one that is used most often.
+> > >
+> > > As far as I know trace_events were never connected to bpf.
+> > > Unless somebody sneaked the code in without us seeing it.
+> >
+> > With this design, I understand that you may not want to connect BPF
+> > directly to user_events. It needs a different model.
+> >
+> > >
+> > > I think you're trying to model user_events+bpf as 1.
+> > > Which means that you'll be repeating the same mistakes.
+> >
+> > The user_events is completely different from the traceppoint and
+> > must have no BTF with it.
+> > Also, all information must be sent in the user-written data packet.
+> > (No data structure, event if there is a structure, it must be fully
+> > contained in the packet.)
+> >
+> > For the tracepoint, there is a function call with some values or
+> > pointers of data structure. So it is meaningful to skip using the
+> > traceevent (which converts all pointers to actual field values of
+> > the data structure and store it to ftrace buffer) because most of
+> > the values can be ignored in the BPF prog.
+> >
+> > However, for the user_events, the data is just passed from the
+> > user as a data packet, and BPF prog can access to the data packet
+> > (to avoid accessing malicious data, data validator can not be
+> > skipped). So this seems like 1. but actually you can access to
+> > the validated data on perf buffer. Maybe we can allow BPF to
+> > hook the write syscall and access user-space data, but it may
+> > not safe. I think this is the safest way to do that.
 > 
-> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
-> [2] https://github.com/KSPP/linux/issues/89
+> I'm trying to understand why we need a new kernel concept for all
+> this. It looks like we are just creating a poor man's
+> publisher/subscriber solution in the kernel, but mostly intend to use
+> it from user-space? Why not just use Unix domain sockets for this,
+> though? Use SOCK_SEQPACKET, put "event data" into a single packet
+> that's guaranteed to not be broken up. Expose this to other processes
+> through named pipes, if necessary.
 > 
-> Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes:
-> https://lore.kernel.org/oe-kbuild-all/202305311135.zGMT1gYR-lkp@intel.com/
+> Sorry if it's naive questions, but it's not clear what problem
+> user_events are solving and why we need a new thing and can't use
+> existing kernel primitives?
+> 
 
-Are you sure Reported-by and Closes make sense?
-AFAIK the report was only on your first patch and nothing against upstream.
-So stating this in the updated patch is in vain.
+There's a number of reasons why we did not do as you suggest.
 
-Other than that,
-Acked-by: Richard Weinberger <richard@nod.at>
+The first reason is we want to only take the write() syscall cost when
+events are wanting to be monitored. This is done at a per-trace_event
+level and is not at a per-process level. user_events gives us the
+ability to know cheaply when an event is or is not to be written. It
+does this by setting/clearing a bit in each process when the trace_event
+classes register function is invoked to attach/detach perf or ftrace.
+By using a bit instead of bytes, we also have the ability to share
+tracing out to the kernel as well as any local user tracer in the
+future, this work was started by Mathieu Desnoyers via libside [1].
+
+The second reason is we have found user based buffers to be unreliable
+when either the user process is crashing or has a corruption bug. By
+having the data buffers reside within the kernel, we prevent this from
+happening. If the kernel panics, we can also pull events out of the
+perf_event buffers via GDB to understand what our user processes were
+doing before the time of the panic.
+
+The third reason is we want to make use of all the features that perf,
+ftrace, and eBPF have. We do not want to have to re-write all of those
+features. The main things are being able to filter upon event payloads
+and aggregate them together. We also selectively turn on and off stack
+walking for some events (not all). Perf lets us selectively do this on a
+per-event basis in addition to grabbing raw stack data to enable
+unwinding via DWARF instructions. When we monitor events via
+perf/ftrace, we can find each offset and type for the fields within the
+event. We need to know these to properly decode events and analyze them.
+Tracefs gives a us a single place to see all of these events and
+efficiently decode them, including a stable event ID. We would have to
+replicate all of that work in userspace in addition to the other
+features we rely upon.
+
+The fourth reason is related to the third, we have a lot of existing
+diagnostics that rely upon and setup perf ring buffers. We want the user
+and kernel diagnostics to land in the same buffers with the same
+timestamps so we can see a full picture of what is going on.
 
 Thanks,
-//richard
+-Beau
+
+1. https://github.com/compudj/libside
+
+> 
+> >
+> > Thank you,
+> >
+> > --
+> > Masami Hiramatsu (Google) <mhiramat@kernel.org>
