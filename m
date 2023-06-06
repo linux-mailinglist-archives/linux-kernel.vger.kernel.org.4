@@ -2,158 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10AEE723CD5
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 11:16:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E95A723CD3
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 11:16:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236059AbjFFJQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 05:16:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57780 "EHLO
+        id S235975AbjFFJQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 05:16:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232793AbjFFJQr (ORCPT
+        with ESMTP id S229451AbjFFJQs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 05:16:47 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2085.outbound.protection.outlook.com [40.107.21.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF0B10D9;
-        Tue,  6 Jun 2023 02:16:38 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LyMMZwoeoBJWv9NFvlR8QtV4VK6kc1QA4ommnRWG70GJhGRYo9/vfwRMB6CBvoL38XImz5ic2JgNQS9z9Lk+48FOTFnPWuq2+IPpqOO3heYe6rVyyujHw8QlsS4nUPcHTzgWXFzcVGa6St5XTpBMrvqgK/eDqtwXBj7IkNiTp8lMw+DneyIzxpQaposx/uywzgp4YcM+FDB86gdZgQS/xw924tCFsejt0ZWZBiCPX+VZZxeeuEIt5D9lHa/JZvSEfw1mSFNdamdNidJKX+EBu1oXOw02+R8/J29tJeTf0cxLHpcMNbGFJGGT9wszWxaOSVH+avNEzm4tCYgHTlfZuA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cZ2SdVcyCB6HJLPcgVXm1rPYGrnBQzLG2k71kHZf7u8=;
- b=T3s1kDRREk64jYr0q1kIbIVsi8KbsB8HUh05S5for0nLEHZlu6AO+sYZOYRnGP8FtY/EGBThRNfbZlVb5aYz0CgOZaPQ5AUtTM5lD3SsG3RW/WY4Zo34mCUmEJ+osAM2yKYRpJqVYQRl3vLFHLRAe5Pu9+4PtmBfHAoAcil+1egoRGBLh0gzqfUTcyEUqKVvenW5CTZakftIrPbFk8agAdIh7+66Kxv1L2uLb6FNo8fBv8tWou3nGtXD7Npt70M70MX8oLXsBSFHoAP/HjMoVQW2UOYLDW/dC4Hy8ymoXK319wf1elgatYYdHcd3BV5RTvuTR6DMICCz+IezdPRqLQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cZ2SdVcyCB6HJLPcgVXm1rPYGrnBQzLG2k71kHZf7u8=;
- b=ejygKjIEFKIWfGE+4FBh0GpjKC0p95AjsLsd44YHmEjziBCGDgEYouEiyQpHPOn/GiyRu1t6joam4bRWN8BCUz4YXTtQdOb0HdK71RbXWdd/HiB/yyOseFPL/nmpyhFbSo7QAI2uJ7YK1fvGehTfhenCijWSgP34Q8OfWD2dUQA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from DB8PR04MB6459.eurprd04.prod.outlook.com (2603:10a6:10:103::19)
- by DB9PR04MB8409.eurprd04.prod.outlook.com (2603:10a6:10:244::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.32; Tue, 6 Jun
- 2023 09:16:35 +0000
-Received: from DB8PR04MB6459.eurprd04.prod.outlook.com
- ([fe80::5ca3:2022:337:7c40]) by DB8PR04MB6459.eurprd04.prod.outlook.com
- ([fe80::5ca3:2022:337:7c40%7]) with mapi id 15.20.6455.030; Tue, 6 Jun 2023
- 09:16:35 +0000
-Date:   Tue, 6 Jun 2023 12:16:31 +0300
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     wei.fang@nxp.com
-Cc:     claudiu.manoil@nxp.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net] net: enetc: correct the indexes of highest and 2nd
- highest TCs
-Message-ID: <20230606091631.xqof3ponylrpnoo4@skbuf>
-References: <20230606084618.1126471-1-wei.fang@nxp.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230606084618.1126471-1-wei.fang@nxp.com>
-X-ClientProxiedBy: FR0P281CA0189.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:ab::20) To DB8PR04MB6459.eurprd04.prod.outlook.com
- (2603:10a6:10:103::19)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB8PR04MB6459:EE_|DB9PR04MB8409:EE_
-X-MS-Office365-Filtering-Correlation-Id: d3c491ad-926d-4cb6-ab1c-08db666eb9cd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: h63sBn7VS4MLmfrl4DdJWg9lB7WI/KQ2dSZqt70g3/Pls/P4gsy/khcMHqz/F6+55jPS4qtFkBZ3CaGhKJkI/NkjVimPfLY3tKkOruT+5r+M2EJlWwPZKKJJYwgHMGhpTAuxSCaE3/pmQHbNmJA8mzFt7V5qLi35OxTMrhzSssPdCt/a/G2PQ9371cOk9XotgySlmncmfnJl34PJ6m1AJfwGDSVe18ocDa3k2WUPzbLhHGfwSEMj7ahgTdQx/R8ydo29ngKkSuvue1JyMf4c50IcnP9PX586igtLS50s3OsHdWkaAOoZg62JEgN6bnGM2oSPh63vce1s+dEf8LaeEYo/+6gHbulgKuAjZhz2zzp9BBbN/H0Kh4+sI4+kJtBQGNKeQnBQHWpALqbtV56Wv7O6bBUu4SGlN7CpN7OOZE12blMPjsv+OlwXFioP7JvWLuMyqR5ZXB3lq1N/8lmeRl2cHkpu0NH0AHwNRv3JI86jDMGCwnF7YBkH99c6V3F2zAmxGGLxnbUyPVeR5VBREQJJYy0kSEPGBwssjbX2qnM0wLlAiDiCWvoDx3VRP7ZO
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR04MB6459.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(7916004)(346002)(136003)(39860400002)(396003)(366004)(376002)(451199021)(33716001)(6506007)(9686003)(1076003)(186003)(26005)(6512007)(83380400001)(6486002)(6666004)(2906002)(8676002)(8936002)(34206002)(44832011)(478600001)(5660300002)(86362001)(6636002)(38100700002)(4326008)(66476007)(41300700001)(316002)(66556008)(66946007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Z+FZyWjaDjmjwxXxhRSaSqHUuA4CFIgxyjDhmMDFHm9lOQoIii0wAGC5hKc+?=
- =?us-ascii?Q?/wNjw47ebpOmT9SHhMM0Cv1jW3dCu0l7wmlghWF9SALHZ34iz6Pg2gBMrluo?=
- =?us-ascii?Q?1MkkhmKUEd93f/qdGTlRk+Lu0brilPpgBEDNwDFi8ZbZYLC/HSkrCNTZiC2K?=
- =?us-ascii?Q?4l/0R56n7+Qtlj04QYJYOc4OQJegeP8z8s8WPivuAo6tWzjz0MtU4Rn2D1/j?=
- =?us-ascii?Q?B7K7mA4X99CYmwHJRaFy0GfkJeg8Cow06QKqOA0ikKrK5aGqz3md4wQjaktu?=
- =?us-ascii?Q?LEVPX7tOnbWbAomVOgk+xtOT7RkFPLchjghQc7BF4Na1JvlHX/S+YI4SskhX?=
- =?us-ascii?Q?CrMyJ3dTxmzRS5EW+ASUmM8F25HDE4Gma6o1jPkeUIVnn3AJod8ZF3ZdFT9v?=
- =?us-ascii?Q?6gCA2jO1FnTIjC9Wz/6uaCXjthwHNWjMxZilpf4nIaLAPSf1v7WL8xn3cZ6b?=
- =?us-ascii?Q?uAFK3mhVznFZjOuE3UfJql9oWx8TPX+SabaJlj9jQCW0p12EYtdQPVKXEQZy?=
- =?us-ascii?Q?IFrpVqhv0r3YkuWqp3Q9q96dhCwjbfHmq7vavbagY5SWhPo6aziZ0HVWXU2d?=
- =?us-ascii?Q?Z4A8NKVOXowpJti6tKwL33IvXOW+oohisVNAKhWzb7OUzdTN31PUfjL87UZ2?=
- =?us-ascii?Q?4jt5rEdFT6PXUR97pu+LUPvguw2LuXsmz5wk4pY7erFR6H4dUkGICmXylmH6?=
- =?us-ascii?Q?2fFtE6lPjq+oWqB5agVhJSQNOfD0dPOcbgnh3Ws1xgJP28nESq10ZT6WAOI3?=
- =?us-ascii?Q?fLTAzyj41IJHd0MkOQCMcuC7f/WyNbN3LPbWpUINPz+7cVsG45aisqvw+p8q?=
- =?us-ascii?Q?pbsEaXXHKC1Vdk/BwE7CcHBFpnCO5poudzFLD7aN9915fXrqudRKm97PErQa?=
- =?us-ascii?Q?4f4rx3d8WBM1siYB2cN+lJecvlkkpT+uoYLn6fTO08NzUfK7ZH4nJiL3EW4/?=
- =?us-ascii?Q?T1R9T2aocKfrxXIll6DarAPjvC52sjMLbOdcgGl+xyMYmVDXaBEJAOThxQbZ?=
- =?us-ascii?Q?B9lrexyETG76qFXTrgkITce4PKqK+SNEMfpkS9P5FY0xOFkqhATmmzR6gwmI?=
- =?us-ascii?Q?joYJzbT+xOpxcLuqPG4yb51TLyE834jvGyrjDCQYSkQLApaqmflzUmtUnLXS?=
- =?us-ascii?Q?tK529woNKGvVuJpQCiaS6wJMxlu6SIpun2UpeBsP+xemlelWoZVZHWgYAdpH?=
- =?us-ascii?Q?h+gaBIHhFuSY3mPsmjdsosHpBh2Bpyf+Knl3/FK2lhWk99KFosnRcGwg41nM?=
- =?us-ascii?Q?jrPQgNmpmaBWsBLVsGuMSm8DtoTtOdgKF01TEC3ksJZDO6tOmsRKFBPi31Q3?=
- =?us-ascii?Q?5eDYGVIeznhMLct1FkiHEaCnp4dHVfSsPktBQQowE5zVZJw2UHFemWCNUXq6?=
- =?us-ascii?Q?ml6f8K84kJP9GmLoNcSurjDF41Q/BuPmMM/WQaPVl5PiWjY114HpvLCPfQAy?=
- =?us-ascii?Q?WGuK+VT7kWzBIX+1NPdWwPbzJSJ8COrMzoMSL+SIsjwrGogk15LMX0lKLO5B?=
- =?us-ascii?Q?ZAMO7SZGDA+/0OpaU9dRwj779WYQRKPHoiz/l7Ejk+sp0bdTrwpKAYZdpXke?=
- =?us-ascii?Q?mu0Q6DzsOvziY7v+0friRyIRxSkx2qMKQSS+Iq6uUGtREjGGDPlRGLt2q1KH?=
- =?us-ascii?Q?xA=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d3c491ad-926d-4cb6-ab1c-08db666eb9cd
-X-MS-Exchange-CrossTenant-AuthSource: DB8PR04MB6459.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2023 09:16:35.4329
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1t35pPMZgugoIVGDE/i6HaZpKTEoMQAvByOMBTRvFdQe4KnJXB+2+PhGC6mwo+PFtUDFsnpcwAYdq3LMDMEI1g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB8409
+        Tue, 6 Jun 2023 05:16:48 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14206E76
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 02:16:42 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id 41be03b00d2f7-53404873a19so3037120a12.3
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 02:16:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686043001; x=1688635001;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ah2zhbL7HyNfNMLyCJlZsl1+8Ty4BOz43t9+LJgTCHg=;
+        b=ryrCzJG30j61sGFl6c7bZZF4wXWpbxoPEcD26ngT1SxTpoyPc6VR0oPv+08gWU+cSu
+         mhvgCVcu0KlLlKhfMXL8rXT6CRwQVh+doXz3yqrth1+yWsL+EQ9yGeO2LtHLXCGh8ZPz
+         T0DezVLAE3CiBc0agNM5CyzLd+BkXeB91nYWVTUYBaIV1mxlXJ7g1ePEgSmRY/TuMgDZ
+         af7JPAjrjPSiTmOqSLR2RUTlp4mgZVVqKYWZ2HDr0skp29j0TaGQDlA5I4YhiWwCDeWF
+         iCGYvW2NW8qvkKma8uQhgaLJG1rx/NvBlsWKcnN+qOazoFTn5YiW0LqeFS34GNTIdLBQ
+         H1FA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686043001; x=1688635001;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Ah2zhbL7HyNfNMLyCJlZsl1+8Ty4BOz43t9+LJgTCHg=;
+        b=lub6ABK/O6ICGxG1lGlUSL019qLwLtuHfaQkOYCdcq7WuVraQRzXxvboyTaWZp99r2
+         ILmfs06sPRNPWjypxGpxBxIllCanUIMKPourx0H7YTAqwncDraJS5B/uw8WbRubcMdPr
+         gZflLBL5PCna+YSpEGbP2S0l84HHBVeW2lGtoLF1ErW+VrqZz/7YsybOnZHNRYdkLmJE
+         /Klm9/2e/otPhDhqIeYR4dvSmg8c+0vWYCcm/EQkxlo7hLN2dUePTMOPn1EnFsAPT+FM
+         L6OtFvcSCWFWnnnxxraJHnpVB5B06fOyNO1WytztVF6KOOKvRqcm7ujyJ/EkQES2f28M
+         S5Mg==
+X-Gm-Message-State: AC+VfDxhg+HDX+xWVPmmMjTsUXxSkiizzht53wr07yydejcsy/H/xAZt
+        VxFdAZSJvz++xzoq0z8QAkLyDaCTYhOZ8A==
+X-Google-Smtp-Source: ACHHUZ6SERKFytLvIZERSMLk/IwvxuJKwbZjn3t2jyy1qwOa9lZVAlJGduBPqky8qiUl82UmebzqpA==
+X-Received: by 2002:a17:903:1c9:b0:1a9:86ca:38cd with SMTP id e9-20020a17090301c900b001a986ca38cdmr870663plh.2.1686043001430;
+        Tue, 06 Jun 2023 02:16:41 -0700 (PDT)
+Received: from localhost (58-6-230-127.tpgi.com.au. [58.6.230.127])
+        by smtp.gmail.com with ESMTPSA id jk19-20020a170903331300b001b0aec3ed59sm7997002plb.256.2023.06.06.02.16.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Jun 2023 02:16:40 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 06 Jun 2023 19:16:36 +1000
+Message-Id: <CT5GCZLAL3QC.URC3KKG0M0WR@wheely>
+Cc:     <linux-kernel@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH 3/4] powerpc/kuap: Refactor static branch for disabling
+ kuap
+From:   "Nicholas Piggin" <npiggin@gmail.com>
+To:     "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        "Michael Ellerman" <mpe@ellerman.id.au>
+X-Mailer: aerc 0.14.0
+References: <1a3c69e38349b687c6c65240d7c09a7817a797d8.1685963081.git.christophe.leroy@csgroup.eu> <4d775047675e9f8ae2a9db9cb8a0cc8216a309b8.1685963081.git.christophe.leroy@csgroup.eu>
+In-Reply-To: <4d775047675e9f8ae2a9db9cb8a0cc8216a309b8.1685963081.git.christophe.leroy@csgroup.eu>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 04:46:18PM +0800, wei.fang@nxp.com wrote:
-> From: Wei Fang <wei.fang@nxp.com>
-> 
-> For ENETC hardware, the TCs are numbered from 0 to N-1, where N
-> is the number of TCs. Numerically higher TC has higher priority.
-> It's obvious that the highest priority TC index should be N-1 and
-> the 2nd highest priority TC index should be N-2.
-> However, the previous logic uses netdev_get_prio_tc_map() to get
-> the indexes of highest priority and 2nd highest priority TCs, it
-> does not make sense and is incorrect. It may get wrong indexes of
-> the two TCs and make the CBS unconfigurable. e.g.
-
-Well, you need to consider that prior to commit 1a353111b6d4 ("net:
-enetc: act upon the requested mqprio queue configuration"), the driver
-would always set up an identity mapping between priorities, traffic
-classes, rings and netdev queues.
-
-So, yes, giving a "tc" argument to netdev_get_prio_tc_map() is
-semantically incorrect, but it only started being a problem when the
-identity mapping started being configurable.
-
-> $ tc qdisc add dev eno0 parent root handle 100: mqprio num_tc 6 \
-> 	map 0 0 1 1 2 3 4 5 queues 1@0 1@1 1@2 1@3 2@4 2@6 hw 1
-> $ tc qdisc replace dev eno0 parent 100:6 cbs idleslope 100000 \
-> 	sendslope -900000 hicredit 12 locredit -113 offload 1
-> $ Error: Specified device failed to setup cbs hardware offload.
->   ^^^^^
-
-ok.
-
-> 
-> Fixes: c431047c4efe ("enetc: add support Credit Based Shaper(CBS) for hardware offload")
-
-In principle, there shouldn't be an issue with backporting the fix that
-far (v5.5), even if it is unnecessary beyond commit 1a353111b6d4 (v6.3).
-If you want to respin the patch to clarify the situation, fine. If not,
-also fine.
-
-> Signed-off-by: Wei Fang <wei.fang@nxp.com>
+On Mon Jun 5, 2023 at 9:04 PM AEST, Christophe Leroy wrote:
+> All but book3s/64 use a static branch key for disabling kuap.
+> book3s/64 uses a memory feature.
+>
+> Refactor all targets except book3s/64.
+>
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 > ---
+>  arch/powerpc/include/asm/book3s/32/kup.h     |  7 -------
+>  arch/powerpc/include/asm/book3s/64/kup.h     |  1 +
+>  arch/powerpc/include/asm/kup.h               | 15 +++++++++++++++
+>  arch/powerpc/include/asm/nohash/32/kup-8xx.h |  7 -------
+>  arch/powerpc/include/asm/nohash/kup-booke.h  |  7 -------
+>  arch/powerpc/mm/book3s32/kuap.c              |  3 ---
+>  arch/powerpc/mm/init-common.c                |  3 +++
+>  arch/powerpc/mm/nohash/kup.c                 |  3 ---
+>  8 files changed, 19 insertions(+), 27 deletions(-)
+>
+> diff --git a/arch/powerpc/include/asm/book3s/32/kup.h b/arch/powerpc/incl=
+ude/asm/book3s/32/kup.h
+> index 466a19cfb4df..8da9997a67ba 100644
+> --- a/arch/powerpc/include/asm/book3s/32/kup.h
+> +++ b/arch/powerpc/include/asm/book3s/32/kup.h
+> @@ -11,8 +11,6 @@
+> =20
+>  #include <linux/jump_label.h>
+> =20
+> -extern struct static_key_false disable_kuap_key;
+> -
+>  static __always_inline bool kuep_is_disabled(void)
+>  {
+>  	return !IS_ENABLED(CONFIG_PPC_KUEP);
+> @@ -25,11 +23,6 @@ static __always_inline bool kuep_is_disabled(void)
+>  #define KUAP_NONE	(~0UL)
+>  #define KUAP_ALL	(~1UL)
+> =20
+> -static __always_inline bool kuap_is_disabled(void)
+> -{
+> -	return static_branch_unlikely(&disable_kuap_key);
+> -}
+> -
+>  static inline void kuap_lock_one(unsigned long addr)
+>  {
+>  	mtsr(mfsr(addr) | SR_KS, addr);
+> diff --git a/arch/powerpc/include/asm/book3s/64/kup.h b/arch/powerpc/incl=
+ude/asm/book3s/64/kup.h
+> index 1b0215ff3710..f8b8e93c488c 100644
+> --- a/arch/powerpc/include/asm/book3s/64/kup.h
+> +++ b/arch/powerpc/include/asm/book3s/64/kup.h
+> @@ -233,6 +233,7 @@ static __always_inline bool kuap_is_disabled(void)
+>  {
+>  	return !mmu_has_feature(MMU_FTR_BOOK3S_KUAP);
+>  }
+> +#define kuap_is_disabled kuap_is_disabled
 
-Reviewed-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+Is there any point to doing this pattern since the code is in places
+that have ifdef PPC6 S etc?
+
+> diff --git a/arch/powerpc/mm/init-common.c b/arch/powerpc/mm/init-common.=
+c
+> index 119ef491f797..74e140b1efef 100644
+> --- a/arch/powerpc/mm/init-common.c
+> +++ b/arch/powerpc/mm/init-common.c
+> @@ -32,6 +32,9 @@ EXPORT_SYMBOL_GPL(kernstart_virt_addr);
+>  bool disable_kuep =3D !IS_ENABLED(CONFIG_PPC_KUEP);
+>  bool disable_kuap =3D !IS_ENABLED(CONFIG_PPC_KUAP);
+> =20
+> +struct static_key_false disable_kuap_key;
+> +EXPORT_SYMBOL(disable_kuap_key);
+> +
+
+That's going to define it on 64s?
+
+Nice refactoring though.
+
+Thanks,
+Nick
