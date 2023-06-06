@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA4B47248A6
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 18:13:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D056A7248A7
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 18:13:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238341AbjFFQNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 12:13:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48180 "EHLO
+        id S238496AbjFFQNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 12:13:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238317AbjFFQNI (ORCPT
+        with ESMTP id S238005AbjFFQNJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 12:13:08 -0400
+        Tue, 6 Jun 2023 12:13:09 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A63010D5;
-        Tue,  6 Jun 2023 09:12:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87E7610F7;
+        Tue,  6 Jun 2023 09:12:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E38A62D99;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1DD4562F50;
+        Tue,  6 Jun 2023 16:12:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 809E2C4339C;
         Tue,  6 Jun 2023 16:12:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FC68C433A1;
-        Tue,  6 Jun 2023 16:12:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686067971;
-        bh=wrC0UjEKUIFXbnICT6UkqA3YCTd+/hzNT3Qa2DVLVho=;
+        s=k20201202; t=1686067973;
+        bh=Lo8FZAWJl35tTJ74PxG2G+/6DGoIbw32r9OQUCYExV4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pqUxlUAAfHFBC3Son5rC5+xAa6jjgpsHSGxsg4M/WiYTt9pHprI4XaCAHrOG8o+/D
-         1XBX1YT//ifYVdvxF/OlNMImZ2737HUhKEfUOORPihYxc3ilmdXEbq9v3iwRRUcp8Z
-         b30hYpzlxpAY25Mwa7/XA3kvPNOk6ly9Clt+zchhn0GHS5Jy3HZgaTMbfrTRpcjuuM
-         4r8eKpUrGtpebtoqpQFZSg3s9oNCvCtDM0vZu3YF5dgJmP/3e+5QKGjMeHGBpa+tRr
-         6ph3L08A5MUVe1na7AOi5dY677SKqIWruDdLp7NSUpplYqUlSVHxE/kThTW6buIQWv
-         CejDQDWAFaGeg==
+        b=WUTmYS4IjWAARaoZj47S3OMBdIkMIy4AFeXoGo1OQwm4USgCVNpDruk3/KcafRB5V
+         F1r2C+m8R3jU3/tlhsD25e0kR5/p9BBls01cOqtCYm79QXkFaLKT5F2dPpffz28976
+         JXWa0v0WvyEPN/NrrpRPvvvB1pNgCIcUj9kxM9713cYw+Fc8LNGma1ppAhyPoCjy7A
+         0NRkeaQVhMc8Ytj3uoytQyIszLTLWyogentxYPJdY0HDvQ+vm5ZAJZvdGaa6Vrp8Uu
+         tDeaPl8WlYy2E0L9apxGagMEvQaFPGza1Kw1WWh8M1wpQdCPIEwpCMW7aTUUVFdL98
+         s98jaj9lYILBA==
 From:   Daniel Bristot de Oliveira <bristot@kernel.org>
 To:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
         Steven Rostedt <rostedt@goodmis.org>
@@ -40,9 +40,9 @@ Cc:     linux-doc@vger.kernel.org, Juri Lelli <juri.lelli@redhat.com>,
         Daniel Bristot de Oliveira <bristot@kernel.org>,
         Masami Hiramatsu <mhiramat@kernel.org>,
         Jonathan Corbet <corbet@lwn.net>
-Subject: [PATCH V3 06/11] rtla/timerlat_hist: Add auto-analysis support
-Date:   Tue,  6 Jun 2023 18:12:20 +0200
-Message-Id: <c2693f47ee83e659a7723fed8035f5d2534f528e.1686066600.git.bristot@kernel.org>
+Subject: [PATCH V3 07/11] rtla: Start the tracers after creating all instances
+Date:   Tue,  6 Jun 2023 18:12:21 +0200
+Message-Id: <67da7a703a56f75d7cd46568525145a65501a7e8.1686066600.git.bristot@kernel.org>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <cover.1686066600.git.bristot@kernel.org>
 References: <cover.1686066600.git.bristot@kernel.org>
@@ -58,9 +58,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add auto-analysis to timerlat hist, including the --no-aa option to
-reduce overhead and --dump-task. --aa-only was not added as it is
-already on timerlat top.
+Group all start tracing after finishing creating all instances.
+
+The tracing instance starts first for the case of hitting a stop
+tracing while enabling other instances. The trace instance is the
+one with most valuable information.
 
 Cc: Steven Rostedt <rostedt@goodmis.org>
 Cc: Daniel Bristot de Oliveira <bristot@kernel.org>
@@ -68,227 +70,170 @@ Cc: Masami Hiramatsu <mhiramat@kernel.org>
 Cc: Jonathan Corbet <corbet@lwn.net>
 Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
 ---
- .../tools/rtla/common_timerlat_aa.rst         |  7 ---
- .../tools/rtla/rtla-timerlat-hist.rst         |  7 ++-
- .../tools/rtla/rtla-timerlat-top.rst          |  7 +++
- tools/tracing/rtla/src/timerlat_hist.c        | 51 ++++++++++++++++++-
- 4 files changed, 61 insertions(+), 11 deletions(-)
+ tools/tracing/rtla/src/osnoise_hist.c  | 14 +++++++++++---
+ tools/tracing/rtla/src/osnoise_top.c   | 13 ++++++++++---
+ tools/tracing/rtla/src/timerlat_hist.c | 17 ++++++++++++-----
+ tools/tracing/rtla/src/timerlat_top.c  | 19 +++++++++++++------
+ 4 files changed, 46 insertions(+), 17 deletions(-)
 
-diff --git a/Documentation/tools/rtla/common_timerlat_aa.rst b/Documentation/tools/rtla/common_timerlat_aa.rst
-index 795b9fbcbc6d..077029e6b289 100644
---- a/Documentation/tools/rtla/common_timerlat_aa.rst
-+++ b/Documentation/tools/rtla/common_timerlat_aa.rst
-@@ -5,10 +5,3 @@
- **--no-aa**
- 
-         disable auto-analysis, reducing rtla timerlat cpu usage
--
--**--aa-only** *us*
--
--        Set stop tracing conditions and run without collecting and displaying statistics.
--        Print the auto-analysis if the system hits the stop tracing condition. This option
--        is useful to reduce rtla timerlat CPU, enabling the debug without the overhead of
--        collecting the statistics.
-diff --git a/Documentation/tools/rtla/rtla-timerlat-hist.rst b/Documentation/tools/rtla/rtla-timerlat-hist.rst
-index 6bf7f0ca4556..057db78d4095 100644
---- a/Documentation/tools/rtla/rtla-timerlat-hist.rst
-+++ b/Documentation/tools/rtla/rtla-timerlat-hist.rst
-@@ -29,15 +29,18 @@ OPTIONS
- 
- .. include:: common_options.rst
- 
-+.. include:: common_timerlat_aa.rst
-+
- EXAMPLE
- =======
- In the example below, **rtla timerlat hist** is set to run for *10* minutes,
- in the cpus *0-4*, *skipping zero* only lines. Moreover, **rtla timerlat
- hist** will change the priority of the *timerlat* threads to run under
- *SCHED_DEADLINE* priority, with a *10us* runtime every *1ms* period. The
--*1ms* period is also passed to the *timerlat* tracer::
-+*1ms* period is also passed to the *timerlat* tracer. Auto-analysis is disabled
-+to reduce overhead ::
- 
--  [root@alien ~]# timerlat hist -d 10m -c 0-4 -P d:100us:1ms -p 1ms
-+  [root@alien ~]# timerlat hist -d 10m -c 0-4 -P d:100us:1ms -p 1ms --no-aa
-   # RTLA timerlat histogram
-   # Time unit is microseconds (us)
-   # Duration:   0 00:10:00
-diff --git a/Documentation/tools/rtla/rtla-timerlat-top.rst b/Documentation/tools/rtla/rtla-timerlat-top.rst
-index 73799c1150ad..1b7cf4e3eafe 100644
---- a/Documentation/tools/rtla/rtla-timerlat-top.rst
-+++ b/Documentation/tools/rtla/rtla-timerlat-top.rst
-@@ -32,6 +32,13 @@ OPTIONS
- 
- .. include:: common_timerlat_aa.rst
- 
-+**--aa-only** *us*
-+
-+        Set stop tracing conditions and run without collecting and displaying statistics.
-+        Print the auto-analysis if the system hits the stop tracing condition. This option
-+        is useful to reduce rtla timerlat CPU, enabling the debug without the overhead of
-+        collecting the statistics.
-+
- EXAMPLE
- =======
- 
-diff --git a/tools/tracing/rtla/src/timerlat_hist.c b/tools/tracing/rtla/src/timerlat_hist.c
-index 1675d54cae81..e720c8908906 100644
---- a/tools/tracing/rtla/src/timerlat_hist.c
-+++ b/tools/tracing/rtla/src/timerlat_hist.c
-@@ -16,6 +16,7 @@
- #include "utils.h"
- #include "osnoise.h"
- #include "timerlat.h"
-+#include "timerlat_aa.h"
- 
- struct timerlat_hist_params {
- 	char			*cpus;
-@@ -34,6 +35,8 @@ struct timerlat_hist_params {
- 	int			dma_latency;
- 	int			cgroup;
- 	int			hk_cpus;
-+	int			no_aa;
-+	int			dump_tasks;
- 	cpu_set_t		hk_cpu_set;
- 	struct sched_attr	sched_param;
- 	struct trace_events	*events;
-@@ -438,7 +441,7 @@ static void timerlat_hist_usage(char *usage)
- 		"  usage: [rtla] timerlat hist [-h] [-q] [-d s] [-D] [-n] [-a us] [-p us] [-i us] [-T us] [-s us] \\",
- 		"         [-t[=file]] [-e sys[:event]] [--filter <filter>] [--trigger <trigger>] [-c cpu-list] [-H cpu-list]\\",
- 		"	  [-P priority] [-E N] [-b N] [--no-irq] [--no-thread] [--no-header] [--no-summary] \\",
--		"	  [--no-index] [--with-zeros] [--dma-latency us] [-C[=cgroup_name]]",
-+		"	  [--no-index] [--with-zeros] [--dma-latency us] [-C[=cgroup_name]] [--no-aa] [--dump-task]",
- 		"",
- 		"	  -h/--help: print this menu",
- 		"	  -a/--auto: set automatic trace mode, stopping the session if argument in us latency is hit",
-@@ -450,12 +453,14 @@ static void timerlat_hist_usage(char *usage)
- 		"	  -H/--house-keeping cpus: run rtla control threads only on the given cpus",
- 		"	  -C/--cgroup[=cgroup_name]: set cgroup, if no cgroup_name is passed, the rtla's cgroup will be inherited",
- 		"	  -d/--duration time[m|h|d]: duration of the session in seconds",
-+		"	     --dump-tasks: prints the task running on all CPUs if stop conditions are met (depends on !--no-aa)",
- 		"	  -D/--debug: print debug info",
- 		"	  -t/--trace[=file]: save the stopped trace to [file|timerlat_trace.txt]",
- 		"	  -e/--event <sys:event>: enable the <sys:event> in the trace instance, multiple -e are allowed",
- 		"	     --filter <filter>: enable a trace event filter to the previous -e event",
- 		"	     --trigger <trigger>: enable a trace event trigger to the previous -e event",
- 		"	  -n/--nano: display data in nanoseconds",
-+		"	     --no-aa: disable auto-analysis, reducing rtla timerlat cpu usage",
- 		"	  -b/--bucket-size N: set the histogram bucket size (default 1)",
- 		"	  -E/--entries N: set the number of entries of the histogram (default 256)",
- 		"	     --no-irq: ignore IRQ latencies",
-@@ -537,13 +542,15 @@ static struct timerlat_hist_params
- 			{"trigger",		required_argument,	0, '6'},
- 			{"filter",		required_argument,	0, '7'},
- 			{"dma-latency",		required_argument,	0, '8'},
-+			{"no-aa",		no_argument,		0, '9'},
-+			{"dump-task",		no_argument,		0, '\1'},
- 			{0, 0, 0, 0}
- 		};
- 
- 		/* getopt_long stores the option index here. */
- 		int option_index = 0;
- 
--		c = getopt_long(argc, argv, "a:c:C::b:d:e:E:DhH:i:np:P:s:t::T:0123456:7:8:",
-+		c = getopt_long(argc, argv, "a:c:C::b:d:e:E:DhH:i:np:P:s:t::T:0123456:7:8:9\1",
- 				 long_options, &option_index);
- 
- 		/* detect the end of the options. */
-@@ -556,6 +563,7 @@ static struct timerlat_hist_params
- 
- 			/* set thread stop to auto_thresh */
- 			params->stop_total_us = auto_thresh;
-+			params->stop_us = auto_thresh;
- 
- 			/* get stack trace */
- 			params->print_stack = auto_thresh;
-@@ -699,6 +707,12 @@ static struct timerlat_hist_params
- 				exit(EXIT_FAILURE);
- 			}
- 			break;
-+		case '9':
-+			params->no_aa = 1;
-+			break;
-+		case '\1':
-+			params->dump_tasks = 1;
-+			break;
- 		default:
- 			timerlat_hist_usage("Invalid option");
+diff --git a/tools/tracing/rtla/src/osnoise_hist.c b/tools/tracing/rtla/src/osnoise_hist.c
+index dfbcb5ca7ecb..8f81fa007364 100644
+--- a/tools/tracing/rtla/src/osnoise_hist.c
++++ b/tools/tracing/rtla/src/osnoise_hist.c
+@@ -870,8 +870,6 @@ int osnoise_hist_main(int argc, char *argv[])
  		}
-@@ -715,6 +729,12 @@ static struct timerlat_hist_params
- 	if (params->no_index && !params->with_zeros)
- 		timerlat_hist_usage("no-index set with with-zeros is not set - it does not make sense");
+ 	}
+ 
+-	trace_instance_start(trace);
+-
+ 	if (params->trace_output) {
+ 		record = osnoise_init_trace_tool("osnoise");
+ 		if (!record) {
+@@ -885,9 +883,19 @@ int osnoise_hist_main(int argc, char *argv[])
+ 				goto out_hist;
+ 		}
+ 
+-		trace_instance_start(&record->trace);
+ 	}
  
 +	/*
-+	 * Auto analysis only happens if stop tracing, thus:
++	 * Start the tracer here, after having set all instances.
++	 *
++	 * Let the trace instance start first for the case of hitting a stop
++	 * tracing while enabling other instances. The trace instance is the
++	 * one with most valuable information.
 +	 */
-+	if (!params->stop_us && !params->stop_total_us)
-+		params->no_aa = 1;
-+
- 	return params;
- }
- 
-@@ -848,6 +868,7 @@ int timerlat_hist_main(int argc, char *argv[])
- 	struct timerlat_hist_params *params;
- 	struct osnoise_tool *record = NULL;
- 	struct osnoise_tool *tool = NULL;
-+	struct osnoise_tool *aa = NULL;
- 	struct trace_instance *trace;
- 	int dma_latency_fd = -1;
- 	int return_value = 1;
-@@ -919,6 +940,26 @@ int timerlat_hist_main(int argc, char *argv[])
- 		trace_instance_start(&record->trace);
- 	}
- 
-+	if (!params->no_aa) {
-+		aa = osnoise_init_tool("timerlat_aa");
-+		if (!aa)
-+			goto out_hist;
-+
-+		retval = timerlat_aa_init(aa, params->dump_tasks);
-+		if (retval) {
-+			err_msg("Failed to enable the auto analysis instance\n");
-+			goto out_hist;
-+		}
-+
-+		retval = enable_timerlat(&aa->trace);
-+		if (retval) {
-+			err_msg("Failed to enable timerlat tracer\n");
-+			goto out_hist;
-+		}
-+
-+		trace_instance_start(&aa->trace);
-+	}
++	if (params->trace_output)
++		trace_instance_start(&record->trace);
++	trace_instance_start(trace);
 +
  	tool->start_time = time(NULL);
- 	timerlat_hist_set_signals(params);
+ 	osnoise_hist_set_signals(params);
  
-@@ -946,6 +987,10 @@ int timerlat_hist_main(int argc, char *argv[])
- 
- 	if (trace_is_off(&tool->trace, &record->trace)) {
- 		printf("rtla timerlat hit stop tracing\n");
-+
-+		if (!params->no_aa)
-+			timerlat_auto_analysis(params->stop_us, params->stop_total_us);
-+
- 		if (params->trace_output) {
- 			printf("  Saving trace to %s\n", params->trace_output);
- 			save_trace_to_file(record->trace.inst, params->trace_output);
-@@ -953,12 +998,14 @@ int timerlat_hist_main(int argc, char *argv[])
+diff --git a/tools/tracing/rtla/src/osnoise_top.c b/tools/tracing/rtla/src/osnoise_top.c
+index 0833537bb2eb..85abba568faf 100644
+--- a/tools/tracing/rtla/src/osnoise_top.c
++++ b/tools/tracing/rtla/src/osnoise_top.c
+@@ -697,8 +697,6 @@ int osnoise_top_main(int argc, char **argv)
+ 		}
  	}
  
- out_hist:
-+	timerlat_aa_destroy();
- 	if (dma_latency_fd >= 0)
- 		close(dma_latency_fd);
- 	trace_events_destroy(&record->trace, params->events);
- 	params->events = NULL;
- out_free:
- 	timerlat_free_histogram(tool->data);
-+	osnoise_destroy_tool(aa);
- 	osnoise_destroy_tool(record);
- 	osnoise_destroy_tool(tool);
- 	free(params);
+-	trace_instance_start(trace);
+-
+ 	if (params->trace_output) {
+ 		record = osnoise_init_trace_tool("osnoise");
+ 		if (!record) {
+@@ -711,9 +709,18 @@ int osnoise_top_main(int argc, char **argv)
+ 			if (retval)
+ 				goto out_top;
+ 		}
++	}
+ 
++	/*
++	 * Start the tracer here, after having set all instances.
++	 *
++	 * Let the trace instance start first for the case of hitting a stop
++	 * tracing while enabling other instances. The trace instance is the
++	 * one with most valuable information.
++	 */
++	if (params->trace_output)
+ 		trace_instance_start(&record->trace);
+-	}
++	trace_instance_start(trace);
+ 
+ 	tool->start_time = time(NULL);
+ 	osnoise_top_set_signals(params);
+diff --git a/tools/tracing/rtla/src/timerlat_hist.c b/tools/tracing/rtla/src/timerlat_hist.c
+index e720c8908906..f431cf43246c 100644
+--- a/tools/tracing/rtla/src/timerlat_hist.c
++++ b/tools/tracing/rtla/src/timerlat_hist.c
+@@ -922,8 +922,6 @@ int timerlat_hist_main(int argc, char *argv[])
+ 		}
+ 	}
+ 
+-	trace_instance_start(trace);
+-
+ 	if (params->trace_output) {
+ 		record = osnoise_init_trace_tool("timerlat");
+ 		if (!record) {
+@@ -936,8 +934,6 @@ int timerlat_hist_main(int argc, char *argv[])
+ 			if (retval)
+ 				goto out_hist;
+ 		}
+-
+-		trace_instance_start(&record->trace);
+ 	}
+ 
+ 	if (!params->no_aa) {
+@@ -956,9 +952,20 @@ int timerlat_hist_main(int argc, char *argv[])
+ 			err_msg("Failed to enable timerlat tracer\n");
+ 			goto out_hist;
+ 		}
++	}
+ 
++	/*
++	 * Start the tracers here, after having set all instances.
++	 *
++	 * Let the trace instance start first for the case of hitting a stop
++	 * tracing while enabling other instances. The trace instance is the
++	 * one with most valuable information.
++	 */
++	if (params->trace_output)
++		trace_instance_start(&record->trace);
++	if (!params->no_aa)
+ 		trace_instance_start(&aa->trace);
+-	}
++	trace_instance_start(trace);
+ 
+ 	tool->start_time = time(NULL);
+ 	timerlat_hist_set_signals(params);
+diff --git a/tools/tracing/rtla/src/timerlat_top.c b/tools/tracing/rtla/src/timerlat_top.c
+index d6b5a382569e..02cff4948981 100644
+--- a/tools/tracing/rtla/src/timerlat_top.c
++++ b/tools/tracing/rtla/src/timerlat_top.c
+@@ -743,8 +743,6 @@ int timerlat_top_main(int argc, char *argv[])
+ 		}
+ 	}
+ 
+-	trace_instance_start(trace);
+-
+ 	if (params->trace_output) {
+ 		record = osnoise_init_trace_tool("timerlat");
+ 		if (!record) {
+@@ -757,8 +755,6 @@ int timerlat_top_main(int argc, char *argv[])
+ 			if (retval)
+ 				goto out_top;
+ 		}
+-
+-		trace_instance_start(&record->trace);
+ 	}
+ 
+ 	if (!params->no_aa) {
+@@ -785,11 +781,22 @@ int timerlat_top_main(int argc, char *argv[])
+ 				err_msg("Failed to enable timerlat tracer\n");
+ 				goto out_top;
+ 			}
+-
+-			trace_instance_start(&aa->trace);
+ 		}
+ 	}
+ 
++	/*
++	 * Start the tracers here, after having set all instances.
++	 *
++	 * Let the trace instance start first for the case of hitting a stop
++	 * tracing while enabling other instances. The trace instance is the
++	 * one with most valuable information.
++	 */
++	if (params->trace_output)
++		trace_instance_start(&record->trace);
++	if (!params->no_aa && aa != top)
++		trace_instance_start(&aa->trace);
++	trace_instance_start(trace);
++
+ 	top->start_time = time(NULL);
+ 	timerlat_top_set_signals(params);
+ 
 -- 
 2.38.1
 
