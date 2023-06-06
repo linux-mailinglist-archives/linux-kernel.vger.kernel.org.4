@@ -2,68 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC4367243B5
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 15:07:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 002377243B4
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 15:07:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237985AbjFFNHt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 09:07:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35962 "EHLO
+        id S238016AbjFFNHe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 09:07:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233703AbjFFNHq (ORCPT
+        with ESMTP id S238021AbjFFNHX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 09:07:46 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 00CEA198E;
-        Tue,  6 Jun 2023 06:07:21 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 211C72F4;
-        Tue,  6 Jun 2023 06:07:20 -0700 (PDT)
-Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.28.175])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C65F43F793;
-        Tue,  6 Jun 2023 06:06:30 -0700 (PDT)
-Date:   Tue, 6 Jun 2023 14:06:24 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Yicong Yang <yangyicong@huawei.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, gregkh@linuxfoundation.org,
-        yangyicong@hisilicon.com, linuxarm@huawei.com,
-        Dan Williams <dan.j.williams@intel.com>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>,
-        Jiucheng Xu <jiucheng.xu@amlogic.com>,
-        Khuong Dinh <khuong@os.amperecomputing.com>,
-        Robert Richter <rric@kernel.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Anup Patel <anup@brainfault.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Frank Li <Frank.li@nxp.com>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, linux-fpga@vger.kernel.org,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Liang Kan <kan.liang@linux.intel.com>
-Subject: Re: [PATCH 01/32] perf: Allow a PMU to have a parent
-Message-ID: <ZH8vUKt+iCF4M70d@FVFF77S0Q05N.cambridge.arm.com>
-References: <20230404134225.13408-1-Jonathan.Cameron@huawei.com>
- <20230404134225.13408-2-Jonathan.Cameron@huawei.com>
- <61f8e489-ae76-38d6-2da0-43cf3c17853d@huawei.com>
- <20230406111607.00007be5@Huawei.com>
- <20230406124040.GD392176@hirez.programming.kicks-ass.net>
- <20230406174445.0000235c@Huawei.com>
- <20230406194938.GB405948@hirez.programming.kicks-ass.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230406194938.GB405948@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Tue, 6 Jun 2023 09:07:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C0BC1728;
+        Tue,  6 Jun 2023 06:07:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A07F5632CC;
+        Tue,  6 Jun 2023 13:06:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAB60C433D2;
+        Tue,  6 Jun 2023 13:06:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686056802;
+        bh=Of7kuM6rwHgcdNEnTPw4TSCttG8x0dqdHftUZ4BZnaE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=V8KFe2g8NEeJs1ujHbRUJWxphr2zce5G2CGnYMUHXBl8QgnVG5sV98aZd/cRx4PN7
+         0ZpxVVnE2ozNSnwafwQR758kNBpFyBSfa1NqzQD3LNrVkidbo3kPmpo2O2f0/DRjhG
+         55nTfCH1jdsc9f3Oh+rq7RzmQIUYveZnNG9FRUtW+N4yAMDkSr81ZySeRXBCx/0xm5
+         VWx8XDI1PqGpz3lZIUS57u3rXCdVndDKc31qUDlonsj/nEAWo1KLrrNTIUANf3Qx+2
+         XlXl32CodNBzbejj/YxTt96oeiIqaIxJh0WFZ7PWVdkRmFK8Vb9z934UO2KqxR3iQN
+         zPmLBJZfAX6tQ==
+From:   Mark Brown <broonie@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: [GIT PULL] SPI fixes for v6.4-rc5
+Date:   Tue, 06 Jun 2023 14:06:29 +0100
+Message-Id: <20230606130641.AAB60C433D2@smtp.kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,46 +49,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 06, 2023 at 09:49:38PM +0200, Peter Zijlstra wrote:
-> On Thu, Apr 06, 2023 at 05:44:45PM +0100, Jonathan Cameron wrote:
-> > On Thu, 6 Apr 2023 14:40:40 +0200
-> > Peter Zijlstra <peterz@infradead.org> wrote:
-> > 
-> > > On Thu, Apr 06, 2023 at 11:16:07AM +0100, Jonathan Cameron wrote:
-> > > 
-> > > > In the long run I agree it would be good.  Short term there are more instances of
-> > > > struct pmu that don't have parents than those that do (even after this series).
-> > > > We need to figure out what to do about those before adding checks on it being
-> > > > set.  
-> > > 
-> > > Right, I don't think you've touched *any* of the x86 PMUs for example,
-> > > and getting everybody that boots an x86 kernel a warning isn't going to
-> > > go over well :-)
-> > > 
-> > 
-> > It was tempting :) "Warning: Parentless PMU: try a different architecture."
-> 
-> Haha!
-> 
-> > I'd love some inputs on what the x86 PMU devices parents should be?
-> > CPU counters in general tend to just spin out of deep in the architecture code.
-> 
-> For the 'simple' ones I suppose we can use the CPU device.
+The following changes since commit 6afe2ae8dc48e643cb9f52e86494b96942440bc6:
 
-Uh, *which* CPU device? Do we have a container device for all CPUs?
+  spi: spi-cadence: Interleave write of TX and read of RX FIFO (2023-05-22 11:41:05 +0100)
 
-> > My overall favorite is an l2 cache related PMU that is spun up in
-> > arch/arm/kernel/irq.c init_IRQ()
+are available in the Git repository at:
 
-That's an artifact of the L2 cache controller driver getting initialized there;
-ideally we'd have a device for the L2 cache itself (which presumably should
-hang off an aggregate CPU device).
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.4-rc5
 
-> Yeah, we're going to have a ton of them as well. Some of them are PCI
-> devices and have a clear parent, others, not so much :/
+for you to fetch changes up to 0c331fd1dccfba657129380ee084b95c1cedfbef:
 
-In a number of places the only thing we have is the PMU driver, and we don't
-have a driver (or device) for the HW block it's a part of. Largely that's
-interconnect PMUs; we could create container devices there.
+  spi: qup: Request DMA before enabling clocks (2023-05-30 13:43:31 +0100)
 
-Mark.
+----------------------------------------------------------------
+spi: Fixes for v6.4
+
+A small collection of driver specific fixes, none of them particularly
+remarkable or severe.
+
+----------------------------------------------------------------
+Clark Wang (1):
+      spi: lpspi: disable lpspi module irq in DMA mode
+
+Daniel Golle (1):
+      spi: mt65xx: make sure operations completed before unloading
+
+Stephan Gerhold (1):
+      spi: qup: Request DMA before enabling clocks
+
+ drivers/spi/spi-fsl-lpspi.c |  7 ++++++-
+ drivers/spi/spi-mt65xx.c    |  3 +++
+ drivers/spi/spi-qup.c       | 37 ++++++++++++++++++-------------------
+ 3 files changed, 27 insertions(+), 20 deletions(-)
