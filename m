@@ -2,159 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0686F723408
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 02:25:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 132F072340C
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 02:26:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233241AbjFFAZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 20:25:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38842 "EHLO
+        id S233449AbjFFA0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 20:26:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231844AbjFFAZt (ORCPT
+        with ESMTP id S233276AbjFFA0d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 20:25:49 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1EFBFD
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 17:25:47 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2b1b86146afso39792111fa.3
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 17:25:47 -0700 (PDT)
+        Mon, 5 Jun 2023 20:26:33 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB66103
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 17:26:32 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id 41be03b00d2f7-53425d37fefso1729885a12.3
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Jun 2023 17:26:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686011146; x=1688603146;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=google.com; s=20221208; t=1686011192; x=1688603192;
+        h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=6pVDecfV/BYz9QMaz3qiB/Z106nCFvvqH4oCFzszVqo=;
-        b=N7ZEF6Wkj+bZNrM2qtv7sDbfsw+hmChjhFwjUJba2Qo9s8RmpUwOOxnJ7c8vHpf+A8
-         NA7O4tiebw8A1rK3EF05AbxtJ1YkvtAhVPtBpXGTcZTg8bO/TbP1OjkLxCddOGzjVLqJ
-         5KMoXqzaFUUNy7NeXPjrG/Lez5PfbuJsFC5devTBTcoIQgBwfp79EjMGmmx4AqS6/sAH
-         QvDxyYLG99A2QRwz/d6wVIHxvApnz8jHf+zLz/g91zXC5M4s/rHFCOXwgO9kxBJpHDjP
-         1VUG/Ph3dEBnbAzZeZBybtvT+t6DCsH4tTCQKAXfgO4Wck8eGnnOg03ChGSCaPIaw/l/
-         BUFg==
+        bh=57xLL5QLpKaW3OXqEodlsTSv1HyOP+9co98ax0v76HY=;
+        b=lqEYY1lnfLDxtpmn4kplzYK2jl2f1q3Kos6UryusxG9eQVVIqu7/Ff8GoyG72Tx4ju
+         tnhzpT3A9fyaimcyP1o0BPzwwCkO2aV0wdneYijIcMs49wVjSBMiHD1mtSpCCZyiQQAO
+         LUgjCG8i0FIuKKyqLzpVGeN2LKI8EMPdntsdX4IXmq2dPh9dC3pba9ANxBHYAP4MwVJW
+         fPahOHyICaUDN2W1cKpGuzNLm+cshK4FhAsynaVs3YTgOxE5dRfw7gCKnNE19Q2G6cG2
+         0HGc/WBVJIaYDIjaj9x2UOLclL488MA04FJXbwALCu8YCUR91whX23UNEONuypv0g/Ew
+         QaBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686011146; x=1688603146;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1686011192; x=1688603192;
+        h=to:from:subject:message-id:references:mime-version:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6pVDecfV/BYz9QMaz3qiB/Z106nCFvvqH4oCFzszVqo=;
-        b=Wxa7oQnOXWG1xFxzDAqUwioTMCH55bc5cLBLhKMlCVHoqAeiP7uh4XDRuNSux/VIM4
-         LruHKCtbhQ3cQvtdzC2MkbyR9uqd6WizeVbp+/Wcc3LamiXCMSg/o/SiFHHpusI6G9Yz
-         mBqSaCSbugIn9ZQb9KgmjHCGrK6XABN3nwsNAsMn7jHbTfCCd4/fDfMWPvPm3FTanjmx
-         cShfd0qVDa9Ok1U3iYIhDjqzG7VOS41irXFqJn1rHxuymzAXORdDz/paDn+XvY87cA10
-         zM0oxjyzOYqp6aqZaSRDZZpuqiXMA3BplWdJ8HyIu7KiyZTgxjJofildHSUypuu5FiEr
-         FRpQ==
-X-Gm-Message-State: AC+VfDw/BOPeIaJ2NM/IOa4qAQRB/ZD4PdbMyEmpWHwnffuOBq4yXOmd
-        qrkO1oewiElz6XPVjPnguODf6A==
-X-Google-Smtp-Source: ACHHUZ5scGBZR1QRRrZKXR6QfQndX4wHi2oXhUk7wNlJ2XP7wmi6Ugo/J8fNXMTFBRqRHTlIFpGjgg==
-X-Received: by 2002:ac2:53bc:0:b0:4f6:13f1:38a4 with SMTP id j28-20020ac253bc000000b004f613f138a4mr239027lfh.41.1686011145891;
-        Mon, 05 Jun 2023 17:25:45 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id u16-20020a056512095000b004f38260f196sm1271670lft.218.2023.06.05.17.25.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Jun 2023 17:25:45 -0700 (PDT)
-Message-ID: <6be601ab-b5a4-3967-ea45-9965827e9f66@linaro.org>
-Date:   Tue, 6 Jun 2023 03:25:44 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v15] drm/msm/dpu: add DSC blocks to the catalog of MSM8998
- and SC8180X
-Content-Language: en-GB
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
-        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
-        agross@kernel.org, andersson@kernel.org,
-        marijn.suijten@somainline.org
-Cc:     quic_abhinavk@quicinc.com, quic_jesszhan@quicinc.com,
-        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1686009494-25127-1-git-send-email-quic_khsieh@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <1686009494-25127-1-git-send-email-quic_khsieh@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        bh=57xLL5QLpKaW3OXqEodlsTSv1HyOP+9co98ax0v76HY=;
+        b=kP6ozH+CtGhYfHRKyudX96LbNy9gIgwVxDZiqCU4sr85OKxS+WAR/ydxiG2Q7h7ejv
+         474vc41XwwTvBb5KhlErl0Yake5mbEUXYFyzPbu13D7SGh+IEKnYqeIrkAyHoH+7Iyr0
+         Oex0gx4Y2m1/79TQpH4RG3xqdEJ+WdENjTCWwcjazoTRBl+jVxmfC3c5G8+mIooPuAjX
+         nwmwvhBpMJqm+BLr1nIWdD+oiTDR2+ztraZ0pMNKS73TOl9GjQzZk1U8oo7f+XXRZo/y
+         4FVyUNJkN4Z3Pl10/Yo/MPp0AVdlproFbnTJTUihbkVnZkRtUJpBMXWHgbcyZuJFCTMD
+         mEow==
+X-Gm-Message-State: AC+VfDwNaXKlr1EFjXmA5W4M02nrztOoSXzrjlyh1oFkLMz0p2mG1OlQ
+        TnTBtI7vAV2/8u5AGT6eLCEnd8WyC14=
+X-Google-Smtp-Source: ACHHUZ4cvPIdTvtBLYP239DC1Dl4JGNt+zyM+8Rr3NHcHnAYPFoLJF8UpE/Jj96GHIqo16D1tbQCqPGOMPY=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a63:1911:0:b0:542:ac5b:f2c8 with SMTP id
+ z17-20020a631911000000b00542ac5bf2c8mr10598pgl.6.1686011191788; Mon, 05 Jun
+ 2023 17:26:31 -0700 (PDT)
+Date:   Mon, 5 Jun 2023 17:26:30 -0700
+In-Reply-To: <ZGztAF1e5op6FlRQ@u40bc5e070a0153.ant.amazon.com>
+Mime-Version: 1.0
+References: <20230504120042.785651-1-rkagan@amazon.de> <de6acc7e-8e7f-2c54-11cc-822df4084719@gmail.com>
+ <ZGztAF1e5op6FlRQ@u40bc5e070a0153.ant.amazon.com>
+Message-ID: <ZH59NkUHPcgfxJSO@google.com>
+Subject: Re: [PATCH] KVM: x86: vPMU: truncate counter value to allowed width
+From:   Sean Christopherson <seanjc@google.com>
+To:     Roman Kagan <rkagan@amazon.de>, Like Xu <like.xu.linux@gmail.com>,
+        Jim Mattson <jmattson@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, x86@kernel.org,
+        Eric Hankland <ehankland@google.com>,
+        linux-kernel@vger.kernel.org, kvm list <kvm@vger.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/06/2023 02:58, Kuogee Hsieh wrote:
-> From: Abhinav Kumar <quic_abhinavk@quicinc.com>
+On Tue, May 23, 2023, Roman Kagan wrote:
+> On Tue, May 23, 2023 at 08:40:53PM +0800, Like Xu wrote:
+> > On 4/5/2023 8:00 pm, Roman Kagan wrote:
+> > > Performance counters are defined to have width less than 64 bits.  The
+> > > vPMU code maintains the counters in u64 variables but assumes the value
+> > > to fit within the defined width.  However, for Intel non-full-width
+> > > counters (MSR_IA32_PERFCTRx) the value receieved from the guest is
+> > > truncated to 32 bits and then sign-extended to full 64 bits.  If a
+> > > negative value is set, it's sign-extended to 64 bits, but then in
+> > > kvm_pmu_incr_counter() it's incremented, truncated, and compared to the
+> > > previous value for overflow detection.
+> > 
+> > Thanks for reporting this issue. An easier-to-understand fix could be:
+> > 
+> > diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
+> > index e17be25de6ca..51e75f121234 100644
+> > --- a/arch/x86/kvm/pmu.c
+> > +++ b/arch/x86/kvm/pmu.c
+> > @@ -718,7 +718,7 @@ void kvm_pmu_destroy(struct kvm_vcpu *vcpu)
+> > 
+> >  static void kvm_pmu_incr_counter(struct kvm_pmc *pmc)
+> >  {
+> > -       pmc->prev_counter = pmc->counter;
+> > +       pmc->prev_counter = pmc->counter & pmc_bitmask(pmc);
+> >        pmc->counter = (pmc->counter + 1) & pmc_bitmask(pmc);
+> >        kvm_pmu_request_counter_reprogram(pmc);
+> >  }
+> > 
+> > Considering that the pmu code uses pmc_bitmask(pmc) everywhere to wrap
+> > around, I would prefer to use this fix above first and then do a more thorough
+> > cleanup based on your below diff. What do you think ?
 > 
-> Some platforms have DSC blocks which have not been declared in the catalog.
-> Complete DSC 1.1 support for all platforms by adding the missing blocks to
-> MSM8998 and SC8180X.
-> 
-> Changes in v9:
-> -- add MSM8998 and SC8180x to commit title
-> 
-> Changes in v10:
-> -- fix grammar at commit text
-> 
-> Changes in v12:
-> -- fix "titil" with "title" at changes in v9
-> 
-> Changes in v14:
-> -- "dsc" tp "DSC" at commit title
-> 
-> Changes in v15:
-> -- fix merge conflicts at dpu_5_1_sc8180x.h
-> 
-> Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
-> ---
->   drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h | 7 +++++++
->   drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h | 2 ++
->   2 files changed, 9 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
-> index 3c732a0..7d0d0e7 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
-> @@ -126,6 +126,11 @@ static const struct dpu_pingpong_cfg msm8998_pp[] = {
->   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 15)),
->   };
->   
-> +static const struct dpu_dsc_cfg msm8998_dsc[] = {
-> +	DSC_BLK("dsc_0", DSC_0, 0x80000, 0),
-> +	DSC_BLK("dsc_1", DSC_1, 0x80400, 0),
-> +};
-> +
->   static const struct dpu_dspp_cfg msm8998_dspp[] = {
->   	DSPP_BLK("dspp_0", DSPP_0, 0x54000, DSPP_SC7180_MASK,
->   		 &msm8998_dspp_sblk),
-> @@ -199,6 +204,8 @@ const struct dpu_mdss_cfg dpu_msm8998_cfg = {
->   	.dspp = msm8998_dspp,
->   	.pingpong_count = ARRAY_SIZE(msm8998_pp),
->   	.pingpong = msm8998_pp,
-> +	.dsc_count = ARRAY_SIZE(msm8998_dsc),
-> +	.dsc = msm8998_dsc,
->   	.intf_count = ARRAY_SIZE(msm8998_intf),
->   	.intf = msm8998_intf,
->   	.vbif_count = ARRAY_SIZE(msm8998_vbif),
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
-> index 8ed2b263..b5c575c 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
-> @@ -230,6 +230,8 @@ const struct dpu_mdss_cfg dpu_sc8180x_cfg = {
->   	.dsc = sc8180x_dsc,
->   	.pingpong_count = ARRAY_SIZE(sc8180x_pp),
->   	.pingpong = sc8180x_pp,
-> +	.dsc_count = ARRAY_SIZE(sc8180x_dsc),
-> +	.dsc = sc8180x_dsc,
+> I did exactly this at first.  However, it felt more natural and easier
+> to reason about and less error-prone going forward, to maintain the
+> invariant that pmc->counter always fits in the assumed width.
 
-If you take a glance three lines above, you'll see .dsc assignment.
-
->   	.merge_3d_count = ARRAY_SIZE(sc8180x_merge_3d),
->   	.merge_3d = sc8180x_merge_3d,
->   	.intf_count = ARRAY_SIZE(sc8180x_intf),
-
--- 
-With best wishes
-Dmitry
-
+Agreed, KVM shouldn't store information that's not supposed to exist.
