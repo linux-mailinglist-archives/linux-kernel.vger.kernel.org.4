@@ -2,101 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AA25723FF2
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 12:44:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4696723FF8
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 12:46:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235867AbjFFKoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 06:44:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60026 "EHLO
+        id S237253AbjFFKq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 06:46:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235590AbjFFKna (ORCPT
+        with ESMTP id S234915AbjFFKqT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 06:43:30 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B538B10D1
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 03:42:09 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-977cf86aae5so389313766b.0
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 03:42:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686048128; x=1688640128;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7hztYX3lCCszrQN2sLS6OQQbXo0IrqmI3DHUIMhxyE4=;
-        b=xt5rNJ5A92ysQqwhJJhYw0coJTIrKX4DgtbH5fGHfhu5LpDsAZHObPbCnwNHtaMZJq
-         G1rbDd7KajXMFc+VlKEkb1tJTOGEcY7/xrhIrYpkQ6NAxSb06EhGap3os+1IPzumdbTF
-         wbOv9kZC+/oWDrZJALtqTUYOSS/Mu1JkbYw8DDRMZ0b/QllhL3Mr/xv73KHFNAIlRoLT
-         N353oc5ZG3FbdvSogTOYrSGcWRHNGgeZbzsm8NPlkfj4bGhDSe3Z3M8OgaaNxvm36rbO
-         3HEAplByMqOIHmg9Atam/7BlRPW9QgKS8pJNMJM0zuw+kF8TNi4FSLN+vtrxaXlrXIfT
-         LzKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686048128; x=1688640128;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7hztYX3lCCszrQN2sLS6OQQbXo0IrqmI3DHUIMhxyE4=;
-        b=MLEhEPishZTgGZT08ZwS+L786/mHGjaWfoypwK/gb+dpxaCLdAf7p7AOcq9eprbR6n
-         yNU2PKRpwJrWb85pl/HshNax/nn4/q2C6KKWelcm/66g7L/40KW3tfYFzNy32iGLiKV7
-         PzqscPvOE469UGUjL38rHD9cBXl3JIUPI0fSFopPuaNL8HsB8HNDzE3dJLZdmXDhaR8n
-         GcOaf68P9FUYatYJM+XAfnMPI6N3muvueXb1c3xNaxKc/GgRR1H41k7tvN+JbUSmCq8n
-         GKvdj8dUszIueMSaED6/T0ZBi1ZwNmmQ1KUwSbzydw03EU1oknm1EqHOobYDcwOiWcy+
-         HheA==
-X-Gm-Message-State: AC+VfDwjl+nRFBdq3ZkG/3FOA9YULSccDoWu+P/eZVJF2p77+52qZY04
-        e5O7gX5iMdisjJmxQ3Vt3Elqdg==
-X-Google-Smtp-Source: ACHHUZ4AfaeSpVY/ckQkqL5x95HhvZI47BGZCIoqkV64ZUEXQa8B+xm4b1XkP3o7H2cESv0dYCWcVw==
-X-Received: by 2002:a17:907:7f10:b0:974:4f34:b04c with SMTP id qf16-20020a1709077f1000b009744f34b04cmr2114952ejc.41.1686048128277;
-        Tue, 06 Jun 2023 03:42:08 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id fx4-20020a170906b74400b00977d0f1c5bcsm3115801ejb.69.2023.06.06.03.42.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Jun 2023 03:42:07 -0700 (PDT)
-Message-ID: <636526b0-b5b3-aa80-49f7-fa805ebbac5c@linaro.org>
-Date:   Tue, 6 Jun 2023 12:42:05 +0200
+        Tue, 6 Jun 2023 06:46:19 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72BFF18E;
+        Tue,  6 Jun 2023 03:44:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=ioAQcLHmFe5lShDUAfyfXBw7PEQ13xYiSgOqhDs0xDo=; b=bk5CItPE2XxteW8CONPDrQoKne
+        Njhw4e9GGxXqsJaMSzMU0RuGa/1oG3eKoMLeT1jYmUQ1iqQy4uEul+HXWDSWhoQIKMQlvj4fClfDW
+        vHEXJifq3ecdxI38YesU/kxoJCCBteV0d1dCIG+j/sUF/QhMhEeL+YcXaBH3jRK5Zh5aCi9AuiKo1
+        +//ZpfzNX0GT30XCVQhcRonJaKddPG9kgbdttsolWGkcgjBzC3lO9BQ2OZvjxzLIj7StI95tebPz4
+        g8m8MquDOFiU1aQ29l7IIYZsjao+XxKXlbz9r0BhbnqMwMsDcAqi8XevXq8SGTHr7O+UZ3Qpi/QQF
+        5e4K2lsg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:48520)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1q6UAd-0005Vy-Pi; Tue, 06 Jun 2023 11:44:11 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1q6UAa-000751-Ly; Tue, 06 Jun 2023 11:44:08 +0100
+Date:   Tue, 6 Jun 2023 11:44:08 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alexis.lothore@bootlin.com,
+        thomas.petazzoni@bootlin.com, Andrew Lunn <andrew@lunn.ch>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Simon Horman <simon.horman@corigine.com>
+Subject: Re: [PATCH net-next 1/2] net: stmmac: Add PCS_LYNX as a dependency
+ for the whole driver
+Message-ID: <ZH8N+GtRFcDV4eaI@shell.armlinux.org.uk>
+References: <20230606064914.134945-1-maxime.chevallier@bootlin.com>
+ <20230606064914.134945-2-maxime.chevallier@bootlin.com>
+ <889297a0-88c3-90df-7752-efa00184859@linux-m68k.org>
+ <ZH78uGBfeHjI4Cdn@shell.armlinux.org.uk>
+ <20230606121311.3cc5aa78@pc-7.home>
+ <ZH8JxF+TNuX0C1vC@shell.armlinux.org.uk>
+ <CAMuHMdWnqmwT_rEe5G4e+yZYAeTQxjjE=Xqq7R6No9SAF16sdg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [v5 1/5] dt-bindings: pwm: Add bindings for aspeed pwm controller
-Content-Language: en-US
-To:     Billy Tsai <billy_tsai@aspeedtech.com>, jdelvare@suse.com,
-        linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, joel@jms.id.au, andrew@aj.id.au,
-        lee@kernel.org, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de, corbet@lwn.net,
-        p.zabel@pengutronix.de, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-doc@vger.kernel.org,
-        patrick@stwcx.xyz
-References: <20230606094535.5388-1-billy_tsai@aspeedtech.com>
- <20230606094535.5388-2-billy_tsai@aspeedtech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230606094535.5388-2-billy_tsai@aspeedtech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdWnqmwT_rEe5G4e+yZYAeTQxjjE=Xqq7R6No9SAF16sdg@mail.gmail.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/06/2023 11:45, Billy Tsai wrote:
-> Add the aspeed pwm device which should be the child-node of pwm-tach mfd.
+On Tue, Jun 06, 2023 at 12:35:23PM +0200, Geert Uytterhoeven wrote:
+> Hi Russell,
 > 
+> > diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> > index fa07b0d50b46..1801f8cc8413 100644
+> > --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> > +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> > @@ -940,9 +940,6 @@ static struct phylink_pcs *stmmac_mac_select_pcs(struct phylink_config *config,
+> >         if (priv->hw->xpcs)
+> >                 return &priv->hw->xpcs->pcs;
+> >
+> > -       if (priv->hw->lynx_pcs)
+> > -               return priv->hw->lynx_pcs;
+> > -
+> >         return NULL;
+> >  }
+> 
+> I think the above hunk is wrong, and should be replaced by a removal
+> of the call to lynx_pcs_destroy()?
 
-This is a friendly reminder during the review process.
+Indeed, and wrong file too. Thanks for spotting, I think we spotted
+the mistake at almost the same time. Replacement patch sent.
 
-It seems my previous comments were not fully addressed. Maybe my
-feedback got lost between the quotes, maybe you just forgot to apply it.
-Please go back to the previous discussion and either implement all
-requested changes or keep discussing them.
+It'd be good to have the patch thoroughly reviewed to make sure I
+haven't missed anything else, bearing in mind that I don't know this
+driver inside out and don't have the hardware.
 
-Thank you.
+Thanks.
 
-
-Best regards,
-Krzysztof
-
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
