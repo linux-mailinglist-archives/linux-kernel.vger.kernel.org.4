@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 041F67245B1
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:21:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC5917245B5
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:22:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237272AbjFFOV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 10:21:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56210 "EHLO
+        id S233532AbjFFOWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 10:22:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232596AbjFFOVx (ORCPT
+        with ESMTP id S236496AbjFFOV5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 10:21:53 -0400
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 619A5E78;
-        Tue,  6 Jun 2023 07:21:52 -0700 (PDT)
+        Tue, 6 Jun 2023 10:21:57 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC222E78;
+        Tue,  6 Jun 2023 07:21:54 -0700 (PDT)
 X-GND-Sasl: maxime.chevallier@bootlin.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1686061311;
+        t=1686061313;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=VThXr8NXS8rFWvl2CAIgnRHShKVVcGIlkBbj131gSq4=;
-        b=KBZSce67wV7oZbGwh6FkegmgSjVTEZ+VfIHehNbLzs58XAQKjrV7g4U6pDBFAmbQoejj/3
-        xWxFWDomkt+7vF8JvcBDQ6dhUrS9a4pVIMU1Sy3EzdyQpApeyozudKbOyNC7VXvj64w6jp
-        c5U23wtx3uustnF1wuEYOiCUOyMgNHb/UB0viT+0gLUxO5RGslyP7ePYmfgn7QkyDwo5O+
-        xiEV7kCStqhVYjoru+WqHAwPhgG+jCfIrn/yq2tMRDegIktqWrz0M30mLeNdSbyVKUuxxl
-        PvJE+z/UjHjF2vbXCuHxAMy404VvcHiZr+34pEdJ8vcUmxtAi2jkgJ/CEZqYmQ==
+        bh=zTsUPxX5JlG8pNvfHUdTE26pyVIUcwJBtGhnOrSoCew=;
+        b=Lf9ryONeXllUx+y4UnnpxTOBWaSY3Mu+sF4cqKHkWFe5PsvljjEO9gMDIThxE6CRG6QEQB
+        XOc7hkCId3+f7/fZhrFflV0JJvNV60qyhLdqyN7fJonyzDbwjAo4MZ3+JAr/4KUlKeKkqQ
+        I1Bk9Yp1buLsrgVNAjFg9xde1WOG+Ycb8xaMxWJhF5/X6Nzz4QBQyJPrlpKij5wUO2PibU
+        VwRuRZk2lix8GHIHSO67HQT/hclmhZxCNXWHsr8ft4ggPdpnpi17/M1LO7hufMVtI9r5r3
+        Zv664s2CUKiFMwr4hW8zVpNcoMVvBeYEMuFC8YjAYOhv2lmr9gvj1YNVMQZ7ew==
 X-GND-Sasl: maxime.chevallier@bootlin.com
 X-GND-Sasl: maxime.chevallier@bootlin.com
 X-GND-Sasl: maxime.chevallier@bootlin.com
@@ -49,8 +49,8 @@ X-GND-Sasl: maxime.chevallier@bootlin.com
 X-GND-Sasl: maxime.chevallier@bootlin.com
 X-GND-Sasl: maxime.chevallier@bootlin.com
 X-GND-Sasl: maxime.chevallier@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1EC4CC000C;
-        Tue,  6 Jun 2023 14:21:48 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3D18AC0009;
+        Tue,  6 Jun 2023 14:21:51 +0000 (UTC)
 From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
 To:     davem@davemloft.net
 Cc:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
@@ -71,9 +71,9 @@ Cc:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
         Alexandre Torgue <alexandre.torgue@foss.st.com>,
         Giuseppe Cavallaro <peppe.cavallaro@st.com>,
         Simon Horman <simon.horman@corigine.com>
-Subject: [PATCH net-next v2 1/3] net: altera-tse: Initialize the regmap_config struct before using it
-Date:   Tue,  6 Jun 2023 16:21:42 +0200
-Message-Id: <20230606142144.308675-2-maxime.chevallier@bootlin.com>
+Subject: [PATCH net-next v2 2/3] net: altera_tse: Use the correct Kconfig option for the PCS_LYNX depenency
+Date:   Tue,  6 Jun 2023 16:21:43 +0200
+Message-Id: <20230606142144.308675-3-maxime.chevallier@bootlin.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230606142144.308675-1-maxime.chevallier@bootlin.com>
 References: <20230606142144.308675-1-maxime.chevallier@bootlin.com>
@@ -89,30 +89,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The regmap_config needs to be zeroed before using it. This will cause
-spurious errors at probe time as config->pad_bits is containing random
-uninitialized data.
+Use the correct Kconfig dependency for altera_tse as PCS_ALTERA_TSE was
+replaced by PCS_LYNX.
 
 Fixes: db48abbaa18e ("net: ethernet: altera-tse: Convert to mdio-regmap and use PCS Lynx")
 Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
 ---
-V1->V2: No change
+V1->V2 : New patch
 
- drivers/net/ethernet/altera/altera_tse_main.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/ethernet/altera/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/altera/altera_tse_main.c b/drivers/net/ethernet/altera/altera_tse_main.c
-index d866c0f1b503..df509abcd378 100644
---- a/drivers/net/ethernet/altera/altera_tse_main.c
-+++ b/drivers/net/ethernet/altera/altera_tse_main.c
-@@ -1255,6 +1255,7 @@ static int altera_tse_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto err_free_netdev;
- 
-+	memset(&pcs_regmap_cfg, 0, sizeof(pcs_regmap_cfg));
- 	/* SGMII PCS address space. The location can vary depending on how the
- 	 * IP is integrated. We can have a resource dedicated to it at a specific
- 	 * address space, but if it's not the case, we fallback to the mdiophy0
+diff --git a/drivers/net/ethernet/altera/Kconfig b/drivers/net/ethernet/altera/Kconfig
+index 93533ba03429..17985319088c 100644
+--- a/drivers/net/ethernet/altera/Kconfig
++++ b/drivers/net/ethernet/altera/Kconfig
+@@ -4,7 +4,7 @@ config ALTERA_TSE
+ 	depends on HAS_DMA
+ 	select PHYLIB
+ 	select PHYLINK
+-	select PCS_ALTERA_TSE
++	select PCS_LYNX
+ 	select MDIO_REGMAP
+ 	select REGMAP_MMIO
+ 	help
 -- 
 2.40.1
 
