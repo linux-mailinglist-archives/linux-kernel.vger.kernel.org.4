@@ -2,143 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4407724F67
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 00:02:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDCEB724F68
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 00:03:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237847AbjFFWCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 18:02:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50228 "EHLO
+        id S239808AbjFFWCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 18:02:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234506AbjFFWCi (ORCPT
+        with ESMTP id S234506AbjFFWCv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 18:02:38 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDE4E1702
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 15:02:37 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-64d24136685so4831701b3a.1
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 15:02:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1686088957; x=1688680957;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=q84P/Zpj4US01+iC9oxhz+4mQn9TmvaFzrXQHOhoFsI=;
-        b=2t1oK2AUusaPWDyrc/bAkX09X3lnEYzFmaxyk172+GG0cOEWQmf6wECBZF6+Zp+gKf
-         d3KHNOvi0ris9Zhy+trBvtmoay1bmS0vXYGhbohIc18FZ8CcoUAaKNIySqUBG3phAi/f
-         HA+r0lNUAfKBh6C5NkCyeAptNErIRSShNhDoH3tqBFr/cgLZZV7UocP0M7p70JxxsVFM
-         UXChm6PyU/uV8fWMUC55Bu3osIPvtlLamRBbxopA1FpM4A/bDeGLRCunyYY3kCl96buM
-         envV9YQ8SSiEzeRqgSRZb93XH047c9f6kQdiO8TJtQvZ10t21DHCA0c+WMLiwiXo5qxt
-         dSCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686088957; x=1688680957;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=q84P/Zpj4US01+iC9oxhz+4mQn9TmvaFzrXQHOhoFsI=;
-        b=jbD3DUH592TigJbSEvT3X88hjhs0HbjC/mgFRNlHqrM1aKrEHMfVUoV1+FoYI1zn3A
-         8RL8MxGydivfMxag5nOH/UrjjVTjWj7oAKJYxhHpxYXynRSrAcu7mUiXYZk5FfoYgHi/
-         39ByKqKcO2kV3tOiUhYXxjVMJSbSXq69LTqwsBqrZuMqL9SYVUnTg8flrfOXIZhjaSlc
-         C3CJ4aBtXo7itg/sWKLIwAyV4Z80CFZLxOuHPRenPT0Ghs57ZaVffDTXmsqYsWTSSM6Z
-         Es+OCzc8xsqBf4IuGoIIHg+1CD5S3Shk43J7vKqXTcupcLvgmjBjzaJX4RrTnCA/02qf
-         14WQ==
-X-Gm-Message-State: AC+VfDzPPcucIW4PZAFmaKN2OjNiD1iHwVsPJwe/ZMiKaxCRzCUYB0bl
-        6dBV8XqJSPxciWw1eO5M16xWhg==
-X-Google-Smtp-Source: ACHHUZ7xLo3qxQtzWUeCkYrgCfEBLb/Py3jsG4y1l0xhkRqsxW/43h0D9tK1yS87PaV2qRPEinYD6Q==
-X-Received: by 2002:a05:6a00:3316:b0:645:834c:f521 with SMTP id cq22-20020a056a00331600b00645834cf521mr4960797pfb.17.1686088957175;
-        Tue, 06 Jun 2023 15:02:37 -0700 (PDT)
-Received: from dread.disaster.area (pa49-179-79-151.pa.nsw.optusnet.com.au. [49.179.79.151])
-        by smtp.gmail.com with ESMTPSA id p15-20020aa7860f000000b0064d47cd117esm7293989pfn.39.2023.06.06.15.02.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 15:02:36 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.96)
-        (envelope-from <david@fromorbit.com>)
-        id 1q6el7-008ePi-0l;
-        Wed, 07 Jun 2023 08:02:33 +1000
-Date:   Wed, 7 Jun 2023 08:02:33 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     Kirill Tkhai <tkhai@ya.ru>
-Cc:     akpm@linux-foundation.org, roman.gushchin@linux.dev,
-        vbabka@suse.cz, viro@zeniv.linux.org.uk, brauner@kernel.org,
-        djwong@kernel.org, hughd@google.com, paulmck@kernel.org,
-        muchun.song@linux.dev, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, zhengqi.arch@bytedance.com
-Subject: Re: [PATCH v2 0/3] mm: Make unregistration of super_block shrinker
- more faster
-Message-ID: <ZH+s+XOI2HlLTDzs@dread.disaster.area>
-References: <168599103578.70911.9402374667983518835.stgit@pro.pro>
- <ZH5ig590WleaH1Ed@dread.disaster.area>
- <ef1b0ecd-5a03-4256-2a7a-3e22b755aa53@ya.ru>
+        Tue, 6 Jun 2023 18:02:51 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3FA810EA;
+        Tue,  6 Jun 2023 15:02:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=LRafhOMAwhAEc3nrF8NDxvakjlwyJsgz2fT7Toaugrg=; b=W3pOKu8IAVK84T7RGiHDOruiVa
+        lHMxv/JjJyjOoZEpOUXzGFthgca2KPYEVma/YbrvYtbCE+slYVWAJZ9eIX9oYb8p9UkUQlnym1+Bs
+        lCW+8Fb+dsiq25ZBPfQUyeLsU+lv0isotTiKt3NierZoFqegEnFSlvHBrdRzrty/JCwBQ7FxnfRop
+        +GLUmj7vbpK27c4Zv240hyrZUPIsNLyR6Sd0q/M8Zgpx50w8joYM+A3ap48BFLKWpW1pD2xfPaoFg
+        WQ0GXaLBojN3Izp77y61ZU7Ctxrs1qwJFoCAI+LywA28jFxiiUhtLNodqWJsQOFbiR3P7FsiofGWv
+        EOu4Yv2Q==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:53124)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1q6elH-0006TP-5U; Tue, 06 Jun 2023 23:02:43 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1q6elE-0007Wu-DM; Tue, 06 Jun 2023 23:02:40 +0100
+Date:   Tue, 6 Jun 2023 23:02:40 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Florian Fainelli <florian.fainelli@broadcom.com>
+Cc:     netdev@vger.kernel.org, o.rempel@pengutronix.de, andrew@lunn.ch,
+        hkallweit1@gmail.com, Doug Berger <opendmb@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net] net: bcmgenet: Fix EEE implementation
+Message-ID: <ZH+tAKg4hqlosb2N@shell.armlinux.org.uk>
+References: <20230606214348.2408018-1-florian.fainelli@broadcom.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ef1b0ecd-5a03-4256-2a7a-3e22b755aa53@ya.ru>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230606214348.2408018-1-florian.fainelli@broadcom.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 12:06:03AM +0300, Kirill Tkhai wrote:
-> On 06.06.2023 01:32, Dave Chinner wrote:
-> > On Mon, Jun 05, 2023 at 10:02:46PM +0300, Kirill Tkhai wrote:
-> >> This patch set introduces a new scheme of shrinker unregistration. It allows to split
-> >> the unregistration in two parts: fast and slow. This allows to hide slow part from
-> >> a user, so user-visible unregistration becomes fast.
-> >>
-> >> This fixes the -88.8% regression of stress-ng.ramfs.ops_per_sec noticed
-> >> by kernel test robot:
-> >>
-> >> https://lore.kernel.org/lkml/202305230837.db2c233f-yujie.liu@intel.com/
-> >>
-> >> ---
-> >>
-> >> Kirill Tkhai (2):
-> >>       mm: Split unregister_shrinker() in fast and slow part
-> >>       fs: Use delayed shrinker unregistration
-> > 
-> > Did you test any filesystem other than ramfs?
-> > 
-> > Filesystems more complex than ramfs have internal shrinkers, and so
-> > they will still be running the slow synchronize_srcu() - potentially
-> > multiple times! - in every unmount. Both XFS and ext4 have 3
-> > internal shrinker instances per mount, so they will still call
-> > synchronize_srcu() at least 3 times per unmount after this change.
-> > 
-> > What about any other subsystem that runs a shrinker - do they have
-> > context depedent shrinker instances that get frequently created and
-> > destroyed? They'll need the same treatment.
+On Tue, Jun 06, 2023 at 02:43:47PM -0700, Florian Fainelli wrote:
+> We had a number of short comings:
 > 
-> Of course, all of shrinkers should be fixed. This patch set just aims to describe
-> the idea more wider, because I'm not sure most people read replys to kernel robot reports.
+> - EEE must be re-evaluated whenever the state machine detects a link
+>   change as wight be switching from a link partner with EEE
+>   enabled/disabled
 > 
-> This is my suggestion of way to go. Probably, Qi is right person to ask whether
-> we're going to extend this and to maintain f95bdb700bc6 in tree.
+> - tx_lpi_enabled controls whether EEE should be enabled/disabled for the
+>   transmit path, which applies to the TBUF block
 > 
-> There is not much time. Unfortunately, kernel test robot reported this significantly late.
+> - We do not need to forcibly enable EEE upon system resume, as the PHY
+>   state machine will trigger a link event that will do that, too
+> 
+> Fixes: 6ef398ea60d9 ("net: bcmgenet: add EEE support")
+> Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
+> ---
+> netdev maintainers, please do not apply without Andrew, Russell and
+> Oleksij reviewing first since this relates to the on-going EEE rework
+> from Andrew.
 
-And that's why it should be reverted rather than trying to rush to
-try to fix it.
+Hi Florian,
 
-I'm kind of tired of finding out about mm reclaim regressions only
-when I see patches making naive and/or broken changes to subsystem
-shrinker implementations without any real clue about what they are
-doing.  If people/subsystems who maintain shrinker implementations
-were cc'd on the changes to the shrinker implementation, this would
-have all been resolved before merging occurred....
+Please could you include some information on the UMAC_EEE_CTRL EEE_EN
+bit - is this like the main switch for EEE which needs to be set
+along with the bits in the tbuf register for the transmit side to
+signal LPI?
 
-Lockless shrinker lists need a heap of supporting changes to be done
-first so that they aren't reliant on synchronise_srcu() *at all*. If
-the code was properly designed in the first place (i.e. dynamic
-shrinker structures freed via call_rcu()), we wouldn't be in rushing
-to fix weird regressions right now. 
+Thanks.
 
-Can we please revert this and start again with a properly throught
-out and reveiwed design?
-
--Dave.
 -- 
-Dave Chinner
-david@fromorbit.com
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
