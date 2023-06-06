@@ -2,158 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 939F672379C
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 08:25:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D06472379F
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 08:26:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234527AbjFFGZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 02:25:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34184 "EHLO
+        id S232490AbjFFG0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 02:26:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233008AbjFFGY7 (ORCPT
+        with ESMTP id S235290AbjFFGZs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 02:24:59 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2085.outbound.protection.outlook.com [40.107.243.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A14C310CA;
-        Mon,  5 Jun 2023 23:23:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NT9EJnjQTZcSugXOUgwO4dwAuCW/gtsUT0q99YdryZVw8jyyvLufhxla9uvFpe/54eFzZ7y/yjrkthEu3pvf3y7ELkUQkj2np0/phStTP05BEv/8MKeucl3MsgooUUMNbRdwLC5/C3A71Gzotyer5/MBi0DPRkjOj1Nu+/Qb4+jg+i0Fj4kO5Y998v4TLdbN4wgRFWAmAkHk7CdVnKaeflBQWp86J1ART6AKrwIBRRwDOLwN2BQsVoI8JKKwv2hSGo7RE1rHEwV1xm59EewZ56zlR6xJDq5WXEm148VPle22S7tDkDdZjDypq0T9mGijw1LPrcdgTTg0mEq5/3X0SA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Xj5y1DA/SACnEF2x7WH7mITQ4+L8d9VfnpTYXUTJI0s=;
- b=lIxGV81TZAT2bi64d/tDGfL9tNyQWcfqRgrZSaNM2BleodQ/hrj8QFYWR6jTtMpo7E3LUtuetoQzR8WIj689pm8pqcnurEeE/f6lQw8AHB09H+GlxBeJitlBvf0O9GzO3YZz16F9sKSK9u6EWhpIgATpFVD6mKubyfwo6fSFmXplg74QbQWJ6hzswQlX4MeXpOz8mxHxWE/PJeZEEX+zNxXHX+2mOCVzZXPEkvzEfqWx3nHJJTUTZ7XB+bPdJU3+aAgcA94XAxNR7QNsv+LK8EygoiCaKeniMq+T3kO9UqjCEhW448rA1O3m/HW7hGumz0FpxXpUeq6I0OPbPh2igw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Xj5y1DA/SACnEF2x7WH7mITQ4+L8d9VfnpTYXUTJI0s=;
- b=ozY8Qfgv+9mPOAzjToXDZXmfs3N1aGuEcM5yUjzW5otB3j+N9rz+4PmHdb/pYGeEULYb7vm4S4U24cjUO/q6bAKRtc+gtzalSMEGeTxmOprqCZdC+Pf2ECbP/kTRHxEHC8D1/7apl9K8Rfk0H/emi+qulGn+R3WQil/jqRAiO2J10+206cqyWgftksfJcVnNyJXypKDG8QGELnGD6UUP3GzfrxpBjHreVsFNldotci911/gjEeBH3dRSn6iErrx3AdewVGRem8CNN6UEDVNuW931YMZrXv64VqKzkhM7XMFfi2AuwLY43mK/eZZhaSrjEW2knTKqo2QvMp/a18NmOw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
- by DM6PR12MB4973.namprd12.prod.outlook.com (2603:10b6:5:1b7::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Tue, 6 Jun
- 2023 06:23:19 +0000
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::e01a:d41e:80b4:7cef]) by BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::e01a:d41e:80b4:7cef%7]) with mapi id 15.20.6455.030; Tue, 6 Jun 2023
- 06:23:19 +0000
-Message-ID: <ea3548ae-de27-fb67-5b2a-34aca006005c@nvidia.com>
-Date:   Mon, 5 Jun 2023 23:23:15 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v1 2/3] selftests/mm: gup_longterm: new functional test
- for FOLL_LONGTERM
+        Tue, 6 Jun 2023 02:25:48 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA1A61738;
+        Mon,  5 Jun 2023 23:24:31 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3566O1c9116622;
+        Tue, 6 Jun 2023 01:24:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1686032641;
+        bh=1oF8jYUUOFXRvok3JCIbs1nq6NypvZAwnqD3d/2He+U=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To;
+        b=g30x9dBF1zC36PjMPwA0ig95TppWAlatcYk4tDbenNbbuWS3jWW4jQ7KTMM7kEj9g
+         V+l4yCgwT8rrQ5YV2dqJF/3ld+/ubIBJf2y+3kWIodN44kBfNYjrc34FvBJo8L7u8Q
+         qdnOTPPspSzjNxvgUTM1U2V/4HoMf4v+nZPL23nU=
+Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3566O1ex060770
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 6 Jun 2023 01:24:01 -0500
+Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 6
+ Jun 2023 01:24:01 -0500
+Received: from DLEE105.ent.ti.com ([fe80::d8b7:9c27:242c:8236]) by
+ DLEE105.ent.ti.com ([fe80::d8b7:9c27:242c:8236%17]) with mapi id
+ 15.01.2507.023; Tue, 6 Jun 2023 01:24:01 -0500
+From:   "Raja, M Sinthu" <sinthu.raja@ti.com>
+To:     "Menon, Nishanth" <nm@ti.com>, Conor Dooley <conor+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Tero Kristo <kristo@kernel.org>,
+        "Raghavendra, Vignesh" <vigneshr@ti.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "Kumar, Udit" <u-kumar1@ti.com>, "Yadav, Nitin" <n-yadav@ti.com>,
+        "Francis, Neha" <n-francis@ti.com>
+Subject: Re: [PATCH 4/6] arm64: dts: ti: k3-am68-sk-som: Enable wakeup_i2c0
+ and eeprom
+Thread-Topic: [PATCH 4/6] arm64: dts: ti: k3-am68-sk-som: Enable wakeup_i2c0
+ and eeprom
+Thread-Index: AQHZlWftKL498kU7mk6eWjSIJ3iMGa99U6jD
+Date:   Tue, 6 Jun 2023 06:24:01 +0000
+Message-ID: <3eb70e7f2aed4d7893714c9f5ddc70c1@ti.com>
+References: <20230602153554.1571128-1-nm@ti.com>,<20230602153554.1571128-5-nm@ti.com>
+In-Reply-To: <20230602153554.1571128-5-nm@ti.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Jens Axboe <axboe@kernel.dk>, Peter Xu <peterx@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>, Jan Kara <jack@suse.cz>
-References: <20230519102723.185721-1-david@redhat.com>
- <20230519102723.185721-3-david@redhat.com>
-From:   John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <20230519102723.185721-3-david@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BYAPR05CA0093.namprd05.prod.outlook.com
- (2603:10b6:a03:e0::34) To BY5PR12MB4130.namprd12.prod.outlook.com
- (2603:10b6:a03:20b::16)
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.250.134.136]
+x-exclaimer-md-config: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR12MB4130:EE_|DM6PR12MB4973:EE_
-X-MS-Office365-Filtering-Correlation-Id: aa142a1b-0981-4b55-87e0-08db66568529
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8l6iaCBxOkd7jKIvObhIinGkhUymU3baQ2erzfpBFeEUKI2OTOe1bypp+x10VqqNQv7TlFB7KQYzwQb7641As6AxtG+wzEiskPNAzICyjjmCeIrEjxjYl5kKWTw6mX/AcMqtCPFeYU0fMhQ9WThIttho0pwZgmIgIGmy0zC8wFc4decVRtvJlGqJNew4Nhp6EuQ21R+q8AiznEFAkKxrO9jAta6sbu7dx0u84ZGpN6m3yKk+RKyVP3wQHxW2OCr7GA48MBsmjjhINc0IH41ePHrPEi4AivGdmxrxl3TLCeUpKk3zYUHizBfNnRAH7L0ZAvsFvcZmnTtnQAGlRXF6hxDj3wA6N47+X3ZSV4ko6HY20LSLbMuRZOSgHXeA6ftB9hBCo1X5BV4zRvKutp6HEW2X5FAUtgPp1kLSORodqNfGySoLjkxPwMcwf6JGvCsnIB8vl2DBf18rc/v8v2OywK/zk/3zJYkrd851ELGlaaP4Q9fVlNPsxrY/CxGf61eR+/GaFrqAQjKG2JjPcvBdF7I+3wkUQgpbgTyOQeptRTv3TFsVitmQo+CEO5VyVcCh9QwZdJsCrc1nOgdZlHSlFPn0TVkGPfIjOASr70J0628pXmBkONiGSUYfXHPuhHnhTQNUy1SetkGNz+ZSVgq5g1E8QxnKYchXo9S7gCL2/Xy1wvQTMebPlzbMuHzDwEEt
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(366004)(376002)(396003)(39860400002)(451199021)(6506007)(186003)(26005)(6512007)(53546011)(2616005)(31686004)(966005)(7416002)(6486002)(6666004)(36756003)(4744005)(2906002)(8936002)(8676002)(478600001)(5660300002)(38100700002)(86362001)(4326008)(31696002)(54906003)(41300700001)(316002)(66946007)(66556008)(66476007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?K1VUKzlqS3VVU0VDUnRWVVdvbXVjdGtYTHR3Q1ZTcEhxUVQvaHYrMnNYU0dx?=
- =?utf-8?B?aFBjdHdYNisvc3RIWGUxMFZMOFd6OHFjVXZ1ZDIyRGN1V3JBSDd2VG91cHVn?=
- =?utf-8?B?R2kxNldVN0JlcFMxZVppRGczUEhaTENFMVlmUDZGdEgxNGcwa2wzdngrMVNS?=
- =?utf-8?B?d3lwVnNJdmk1L1pPbktBY2RRVnpRR3RRTHhnTSsyNE4vV1RaMXFNcW5XVFN4?=
- =?utf-8?B?SWQ2TDh6TC9HRlB0OVd0eWZKWFFidGZVblpxMjNYQ3E2OEh1QzB2dHBTN2Ix?=
- =?utf-8?B?bGJIMFNMcVUzSmVKc1JCSXV4Yi9qRU9mVDY1KzArSVZtUUkxODZyNDNiWEFJ?=
- =?utf-8?B?a29YOCt4ZmRDUkpUaFRuMEdtR0pwWEJsUlhld1VKeit3bXRlRmRGUmlHUU90?=
- =?utf-8?B?cVE2SVkwb3U5S1ZaMVlBOTNSeEVzN1ExNWZ1dktQdFdXZGFBa2dhTHVwRUdZ?=
- =?utf-8?B?U3BRVFMyQklLR3BSNUZFUlVBbmRwNXQyUHd0UHBqbHVlSUR2dlQvSU5JcTRZ?=
- =?utf-8?B?ZFUwenQ3eDU4ZU1oVDFVWXZMWXZodVIxMGRER1BlZ2FMUGpmamdlMXlxVTdQ?=
- =?utf-8?B?NUhqdllET2dldFMyQ2hFQUJhbDhHNHhvcmE2WGN4VU1oZ3kwdVFTdEtHWVl0?=
- =?utf-8?B?WVhkVEVPWmtuRFdwKzcxR0FiYjNudU1PT2Vqa2Vsa2ZmRXJ2Q2RVYnl3MTFW?=
- =?utf-8?B?aEw1eGRJMG5FaFRNSHZNenYwODZHd3ZyYktmVlBKb2RhNndtMlFqcFVMb0xT?=
- =?utf-8?B?b2JzNFFUVFQwK3RBV3d4ODlKR1NsRTJVTm9qMHR3RW8rWFphOUZvNHRMZDgx?=
- =?utf-8?B?M3J6UkJYVjJVakJIQlR6V0l5RkhyNjB1eDFrMzVpYnI3eGNTbXg2aWtCYVNK?=
- =?utf-8?B?RSt4ZEM1bXY5NlMrTlBjT3BxZDQwbW9FUExXdUZnLzg0NGJrZGhzem1FNkQz?=
- =?utf-8?B?UXVBcGV2UGRTU3NUQUFTUDBOQnpJU0FnWktLMDU0dkVLM0wzYkcwVTVPNHdR?=
- =?utf-8?B?Ri8zMThIWUN4WUovbHZIVUsvcEhaN1FKL0g3NUM5Z0I0KzFNeEpyQ05NUm9n?=
- =?utf-8?B?RU5QRytEQzd1K3ZReE9HUzJmc09XYnZ4N2JwUFoyYTNqS2pUTnd5VnM1ZHNE?=
- =?utf-8?B?aEV1bnJQbW4zSitDTkZJUUFadHBNcVJyMTFoVGN0ZTBldlpyOFNoRDdqODNH?=
- =?utf-8?B?dWVLcnJuSjdYRTBReTQwYTRwUGdHUzN3ano0SXhZTCs3TEZ3dmZiNFE3NXJ2?=
- =?utf-8?B?T3QvMzVSem04bS8vbXdtWjNHVHY3YnlST214NUhDZnJ5QzV2Mk9MSnhJVld4?=
- =?utf-8?B?RTZZd2FrUFgrSDBGZkt3OFNDd2c0clZTSkZLdkc4dldjazJGd2xLM1hJbkhL?=
- =?utf-8?B?ekhlWjVvNHpYRDZRYTBteWJRMkZqTWIvTUlocmtNVDNEenNiNk5ZZmRtMTJl?=
- =?utf-8?B?bGlUeWsvaGI3MWRWd3k0bUVLd2w3VGRKS1JIUGprRzJ1aGplTWFxdG4wTjM2?=
- =?utf-8?B?NEJVSWppQk1QdFAyZnBMSzlxV21UTlFWYzM2Q014UFEyWXdybTFKUXZxYm9a?=
- =?utf-8?B?VlJNNTBBM0J1Y1orTHF1THBzcTc3QXZhQWNCalozWGFWdjVmZXczdjZ0empn?=
- =?utf-8?B?a0drc0RRdE4rd04zbVBtMitwMENZTSthYjhnMzhRZkFvcHZJRW53Tmw0MVJW?=
- =?utf-8?B?QUN5ZW9hSEU4K3lFYTBjeDA3TDdNMzFxL1R0dEo3Q0lmRVlpNHMxOWh1RkJl?=
- =?utf-8?B?a1JJVXBqRjM4eWt3emV3REVtWGZramY1VE92KzJtTTlpcmgvdXZzWEtUYnI3?=
- =?utf-8?B?T0E4Q25ndjFPbzIvaDFrN3lxWDRQZlBNV0k4a2N3N3E5dnM1eWhYLzNxeUpm?=
- =?utf-8?B?dm94S2w0QXc2cXJTdm1hcmE1WWxEUHB0SnZvMy9TcWpDZDdFZ3FSZWp1VWlF?=
- =?utf-8?B?eHdjc3E2dHpwbjBXSkZsWjN1akxKYWFpSHBLajFmc055SDVRM0NxN1pqbWow?=
- =?utf-8?B?OHIvdXF3SjA2UlM1RGlxVnRxTXppbTl5c2RGNnEwVGE2dFBXQ3RKUC9POU04?=
- =?utf-8?B?Y0NUWUVtSTZpTHk3MU15Q2FGbkVxNFZqYzdEbno0NWkvamlKL1puODdCdHAx?=
- =?utf-8?Q?F0wYjHrgXCvGv6Eb0rR4LnfLP?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: aa142a1b-0981-4b55-87e0-08db66568529
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2023 06:23:19.2729
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: aPoT5gzM5XSgth2rlMR5P3Hvm3EOlpGOYPk1JDiy6CpAovrPHlIHN1eDPJOq+orrQXqHW3+/eA87+c3YbcCS8w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4973
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/19/23 03:27, David Hildenbrand wrote:
-...
-> diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-> index 23af4633f0f4..95acb099315e 100644
-> --- a/tools/testing/selftests/mm/Makefile
-> +++ b/tools/testing/selftests/mm/Makefile
-> @@ -34,6 +34,7 @@ LDLIBS = -lrt -lpthread
->  
->  TEST_GEN_PROGS = cow
->  TEST_GEN_PROGS += compaction_test
-> +TEST_GEN_PROGS += gup_longterm
-
-Hi David,
-
-Peter Xu just pointed out that we need a .gitignore entry for
-gup_longterm [1]. That logically belongs in this patch, I think.
+Nishanth,
 
 
-[1] https://lore.kernel.org/all/ZH4FFa4FV9KGwBZo@x1n
 
-thanks,
--- 
-John Hubbard
-NVIDIA
 
+From: Menon, Nishanth
+Sent: Friday, June 2, 2023 9:05 PM
+To: Conor Dooley; Krzysztof Kozlowski; Rob Herring; Tero Kristo; Raghavendr=
+a, Vignesh
+Cc: linux-kernel@vger.kernel.org; devicetree@vger.kernel.org; linux-arm-ker=
+nel@lists.infradead.org; Menon, Nishanth; Kumar, Udit; Yadav, Nitin; Franci=
+s, Neha; Raja, M Sinthu
+Subject: [PATCH 4/6] arm64: dts: ti: k3-am68-sk-som: Enable wakeup_i2c0 and=
+ eeprom
+=A0  =20
+Enable wakeup_i2c. While at it, describe the board detection eeprom
+present on the board.
+
+Signed-off-by: Nishanth Menon <nm@ti.com>
+---
+new patch
+
+=A0arch/arm64/boot/dts/ti/k3-am68-sk-som.dtsi | 22 ++++++++++++++++++++++
+=A01 file changed, 22 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/ti/k3-am68-sk-som.dtsi b/arch/arm64/boot/d=
+ts/ti/k3-am68-sk-som.dtsi
+index e92431250729..e2c80fff7478 100644
+--- a/arch/arm64/boot/dts/ti/k3-am68-sk-som.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-am68-sk-som.dtsi
+@@ -27,3 +27,25 @@ secure_ddr: optee@9e800000 {
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 };
+=A0=A0=A0=A0=A0=A0=A0=A0 };
+=A0};
++
++&wkup_pmx2 {
++=A0=A0=A0=A0=A0=A0 wkup_i2c0_pins_default: wkup-i2c0-pins-default {
++=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 pinctrl-single,pins =3D <
++=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 J721S2_=
+WKUP_IOPAD(0x098, PIN_INPUT, 0) /* (H24) WKUP_I2C0_SCL */
++=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 J721S2_=
+WKUP_IOPAD(0x09c, PIN_INPUT, 0) /* (H27) WKUP_I2C0_SDA */
++=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 >;
++=A0=A0=A0=A0=A0=A0 };
++};
++
++&wkup_i2c0 {
++=A0=A0=A0=A0=A0=A0 status =3D "okay";
++=A0=A0=A0=A0=A0=A0 pinctrl-names =3D "default";
++=A0=A0=A0=A0=A0=A0 pinctrl-0 =3D <&wkup_i2c0_pins_default>;
++=A0=A0=A0=A0=A0=A0 clock-frequency =3D <400000>;
++
++=A0=A0=A0=A0=A0=A0 eeprom@51 {
++=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 /* AT24C512C-MAHM-T */
++=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 compatible =3D "atmel,24c512";
++=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 reg =3D <0x51>;
++=A0=A0=A0=A0=A0=A0 };
++};
+
+LGTM
+
+Reviewed-by: Sinthu Raja <sinthu.raja@ti.com>
+
+--=20
+2.40.0
+
+    =
