@@ -2,57 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FAF972453C
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:06:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DCA872453D
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:07:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236976AbjFFOFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 10:05:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46810 "EHLO
+        id S236463AbjFFOG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 10:06:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236463AbjFFOFX (ORCPT
+        with ESMTP id S237676AbjFFOGj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 10:05:23 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CEA110CC
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 07:05:18 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (om126253223039.31.openmobile.ne.jp [126.253.223.39])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id DDA14AB;
-        Tue,  6 Jun 2023 16:04:49 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1686060290;
-        bh=Aaq/KoXC/ySwqQ0dnFsaUJNQb07dBEPZkJPfJbEBotw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=s/dilhGw0TFAFDBC4ITGPQAgGjVw0Q9x/mkAzQa5mjZ0UaJO7uS1nKyxeKd1t4Jjw
-         ZI6LqUMa7nxrWB+7H79My9LS8UKv2xnXVHtEzUDzJ8tanjotlRk0KQSDBE+f0ftqoM
-         eKoEqqvhRjEZsni9splZWBf1nrNQatNcBvXUX4EQ=
-Date:   Tue, 6 Jun 2023 17:05:12 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Siddh Raman Pant <code@siddh.me>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Suraj Upadhyay <usuraj35@gmail.com>
-Subject: Re: [PATCH v9 2/8] drm/print: Fix and add support for NULL as first
- argument in drm_* macros
-Message-ID: <20230606140512.GA5197@pendragon.ideasonboard.com>
-References: <cover.1686047727.git.code@siddh.me>
- <ae42791195a788bb77b3f9c2b87bca5d4e78cf83.1686047727.git.code@siddh.me>
+        Tue, 6 Jun 2023 10:06:39 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2082.outbound.protection.outlook.com [40.107.102.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E7628F
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 07:06:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fY5/ydAr8c4Fq4XZWPgsflUplPyQrxQDhrsYOdaLTcFbuNylCSXGsgZ+DBjix/d0h8EDSvGM9KensNyDWpDCnH0pkzCN8W1ce003iA8+B2bnE/itvsUxekggSagvFcMRDDDOAiYM3Anda+Ji9koT+xGsRVC2kQujCwkXuNshyUZwlwlMjClO4Bjha5Bd4qO9k+m0lO4Tbe7T0mRpJ2TaLj7oA4ht6Pgmu5PztefiilTHNonQjK3K7TbrERfQBvxbQ+jut6BkyLjTM2xAgN7OuSsyJ8o0bNN9Ma3BDWxnRimt8lIzGWaWCPs8RHIBQl2ipbJVG5PlgYAbXVKZhiLEHA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8yBUpBBumUgkcefOv8Xi0xj7ALGfCSRipS6thThi76I=;
+ b=PYMS++rjRxXuwEufAkTszWkjjGrS5Zjn7aXRfCNNr2Rsd5/opyuWssoKsSdsnpP/hS1IZuNOO/lNsfDIe92AHDKEIhyKnubGmi/ZcHao7xnQhdEPTbkvw8ttOJF0wincr93tA0sKtaEFuMpcYFUEMw0vElgCTHsH+pLWJFGbojyIv0fEg+vR8AX80t5eQbZY3Dd1HlLXDfLNdR5FgEj7jdk+nyKaKcWM3pJYtlDK6S55SJZkVy0TpCdpJ9+lsjo5gg+9rfUgTlIBOdFe37oq0vIlOzbyUxK3t9iPjQwioWO8y9MzDWVFQ1qWnJ1yYDebnbVMecMHgX3rmhZSfkai8A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8yBUpBBumUgkcefOv8Xi0xj7ALGfCSRipS6thThi76I=;
+ b=mxL1HEtvJKWyUECLlW1mK2TH8HWn6FP7GXnY5eBPCcIldmZMWttXChtxEhs+QIEB0FlqTVsy8HV4i7/VIbc0ClXzfKOJI4ES8MSezzcdqThmZL4lEz0pkL4AgO1qpleUFV6Om0Q3HJmdzAMpl6TRrahoaTeo8Fglf8dA38QhlGI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM8PR12MB5445.namprd12.prod.outlook.com (2603:10b6:8:24::7) by
+ BL0PR12MB4931.namprd12.prod.outlook.com (2603:10b6:208:17e::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Tue, 6 Jun
+ 2023 14:06:35 +0000
+Received: from DM8PR12MB5445.namprd12.prod.outlook.com
+ ([fe80::1f96:31ad:7de0:2175]) by DM8PR12MB5445.namprd12.prod.outlook.com
+ ([fe80::1f96:31ad:7de0:2175%4]) with mapi id 15.20.6455.030; Tue, 6 Jun 2023
+ 14:06:35 +0000
+Message-ID: <f2e52440-6e8a-7438-cbc9-17933bf8d943@amd.com>
+Date:   Tue, 6 Jun 2023 07:06:33 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v3 0/5] iommu/amd: AVIC Interrupt Remapping Improvements
+Content-Language: en-US
+To:     linux-kernel@vger.kernel.org, iommu@lists.linux.dev
+Cc:     joro@8bytes.org, joao.m.martins@oracle.com,
+        alejandro.j.jimenez@oracle.com, boris.ostrovsky@oracle.com,
+        jon.grimm@amd.com, santosh.shukla@amd.com, vasant.hegde@amd.com,
+        kishon.vijayabraham@amd.com, jsnitsel@redhat.com
+References: <20230530141137.14376-1-suravee.suthikulpanit@amd.com>
+From:   "Suthikulpanit, Suravee" <suravee.suthikulpanit@amd.com>
+In-Reply-To: <20230530141137.14376-1-suravee.suthikulpanit@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BYAPR05CA0029.namprd05.prod.outlook.com
+ (2603:10b6:a03:c0::42) To DM8PR12MB5445.namprd12.prod.outlook.com
+ (2603:10b6:8:24::7)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ae42791195a788bb77b3f9c2b87bca5d4e78cf83.1686047727.git.code@siddh.me>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM8PR12MB5445:EE_|BL0PR12MB4931:EE_
+X-MS-Office365-Filtering-Correlation-Id: c48e6832-e4f0-4e52-8810-08db66973d3e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: dbQS1b6G4HLzNkWWSvn56nbTr1pjNW2+tlFZKDCl84mNFjbKgW7DdTYocxfzQjfbS1wajzNsckFeQl4Hv7k+WGf1js2ygICRLttdfHX9DMPRvZDBNeNvdhUcuADT4WD3L2tACJjFrSW/g3AoqQj+Ioy85aMLTOKR+gGNupGpirNpnp2NJLI8dlcT5PzOktuv5u1ZWKd0Pczq8d7zJ4adbANAQYhr4z5ifI/6pWlwqwn2BtyUddFUBviPEn6/WTmqO4dSLCZJwaZAi/69shdSReL0N+JrVNYOpWkI3tsUP4n4H29aXtcB1A8+AllvqNqw/5smKOeLSEdAMcpJDYL1Uz6P5wY/FrfCLgVl2NWJIKWFp8hfbdPCKLUe+LKTagd9SayuIOSh8KH99Y1mHW/SjF4rGgjbA5VZs/VDKGhurqn2Gean4Oss7F658T1m+uVtRkNBE60E9MThK4KTnrBkzJ1VUajkeRoyFTR+C5wJAQn7PLeDGIp53VFsEr0w7xxPlVAWlfagGOw27YfapNpFgiewqG9uC5da5i1k/pDIdEMul9eQW0npDeASHmugTBolUNLN3/s3lHmqK+191toFB3yM4Y+XnVXyZhMhfjBu52eXXnpOyryONCNGUFIZiJwn9Tg5jn+LSZEK5c0XGKaHXnUL7DsbqrbJ/qUgDHCjd/g=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR12MB5445.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(366004)(39860400002)(396003)(376002)(136003)(451199021)(186003)(478600001)(8676002)(8936002)(4326008)(41300700001)(66946007)(38100700002)(316002)(66556008)(66476007)(2616005)(83380400001)(6486002)(6512007)(26005)(6506007)(53546011)(31696002)(86362001)(5660300002)(2906002)(36756003)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?N2RwbDRDb1NSU0NEcnFvR3UwSDhtN3N5L0JMMHJpODlDUUV6cDBlSUZDdzFL?=
+ =?utf-8?B?V3U3MkpHaVYrTEFXTFlxK2Vkb0s3dzUyM3VGbDFkK1p6Q29vd2ZraHB0R3ph?=
+ =?utf-8?B?Qmd6VFR2Q0tySldVRlkyNkZ1bFhiRWNKYzhOOFk5QWM4Sko0QjZ6cllZUnd0?=
+ =?utf-8?B?Um5wQnI2amJkOU5zM0h2WEdwWDNwaXlJVE9haFczczBlVS92R2ZLbHoyRUN1?=
+ =?utf-8?B?bEpsVTFnZllpV0c4SCtWa3pEcHhJbXhjeGZpWEhFajNhSHk4QlQwNmk3Nk84?=
+ =?utf-8?B?UWNKZndNczdFSmpoOHBFMDh5VTRIZGQvQytVZHk1M3pTZDJhd2NibklKTExT?=
+ =?utf-8?B?VGVSejJVNE1wRFNjYlBzSHR2OStkKy9naFVxZTQ4NXVNb2xQbERXdDZXUHg2?=
+ =?utf-8?B?cG5VQWhqblNNNy9KZy9hWDU0T2taVnh2NzJESWxyQU1DNVZZazk3OHJGY3Rz?=
+ =?utf-8?B?aHlaN0xFYmt4T0J5d0FvQ2x2M09aYTlmUDBWV3N2eVhabVlIdCtIUmJKTGs2?=
+ =?utf-8?B?ZmZuVzVDZTRpakozekdhOXJLU0lyd2cwNDc2YjZPNFVycXdpOXFmZk9CWndk?=
+ =?utf-8?B?bGVSekpVTGV0VXZNcy9HbExqd3dVQ0xqV04wY2NaWWJGblhocytzdjBWZkJQ?=
+ =?utf-8?B?a3pWcm5jcFd3S0srcy9sNUUxS0hLY2R1VFlsNlduTXJVbUdsVy9SWTdheGJD?=
+ =?utf-8?B?RWdyOTNjMnFxMysrczJ4Y1NzK0pLRkpyclZiVThIR3kvWVZHZVI0MTdUUU0y?=
+ =?utf-8?B?U0cwUTJRY2NWUFFXdTFUUkx2M2doMjJiRCs1RnEyK0pvUzdYeVJaeFBtbExR?=
+ =?utf-8?B?OFYwQk1OT285SElTZ0pxUWllc2V4eWFZMnpHS2Uxa1kxMVZpUnpYNHJVd2Iz?=
+ =?utf-8?B?M3ErMVZ0KzN2UTBFSHE1alp1eHArOTFJL0xtRVNSK3RsTUhrR2I1SFFubmJT?=
+ =?utf-8?B?V2tnbldvcGdYdk5EdDEwTkhXbmRqazk5SHJoZzhOdGpzeTQ1bmtoVmxvUTZI?=
+ =?utf-8?B?VWY2V1dVQ2tDOG13WEdaZjdFQXNMQXJUemdqc3R3RmcxTVU2YStkTFZSRjM3?=
+ =?utf-8?B?ZVVkYjk0MldHd0hVcTZoVzJnS3VEeTRVelhMSnRTZlVXempEakJ0NXBFTWdw?=
+ =?utf-8?B?RjBjN3FubTZiejY4YTdHdHhFTmRjZkhkc3hXdVIzOXRsN2FpN3ZEc25UTHFm?=
+ =?utf-8?B?U001T0M0elpGL0lhc3FrRS96WHZ0dDZqNnhJaEtHcWtjMEozOWx0V2t0WW9a?=
+ =?utf-8?B?bW1ocnN6QWVjcTkxUC85bWpod28rM3pIMnUrcXd2QUs3T0ZIKy9DZ09UZTMv?=
+ =?utf-8?B?MzlYZlVhTWZMcDlESlFScFVmTUdrejAvRlc1TXlMMVJ1QTNHSnNrNlUwUjlL?=
+ =?utf-8?B?Uy84a3pQZ3JKL1pKam0xOUM0TUpwWUpXNllQR1lyUmJWa0NvL2dzdW1mVEM2?=
+ =?utf-8?B?OFlabDk3aXk3MVpTdkVJN3haQlIwV3gyZWV3NGlyNi9ZV0RMSEZNZ3dTYjhw?=
+ =?utf-8?B?R0JRenVlY0RQcU5qNk0xd0F5cHA3UExjS0FMM0JYZ3kzeWNMYk5GNFBzL0Fj?=
+ =?utf-8?B?dk1NUzcvVzE4ZkZuN2JqUThZNWQwQk42R1dnRE82VFhnNnVNQlJNUDN3Snpy?=
+ =?utf-8?B?ck5DOVp2U29QMzNlSXJCaEp0ckZ4L1F3Q1BtZzZXYnpUQU92UnlReDRlMTA0?=
+ =?utf-8?B?K2pQZzZwRmtjclEzS1BuUmlVVEhTMVkvV2ZyNWdXMlJRTFI5RW12N3p1M0RJ?=
+ =?utf-8?B?dTZsVmEvSkFPL1FpMXgwZDArOHJGWmNId0dLNjVVakV6SHZQSlVCWE0xZTQ2?=
+ =?utf-8?B?ZjFabVBtejQxWmRlRnhCZEFBSmRFeHhXQkM5UEpZVGowaWRXSmcvMmlkRlFw?=
+ =?utf-8?B?cjZpQ1V4R1ZaWkIzTGllUU5RSnBjcWk3c25hYWtLb3QxZzJuQ3RFVmdxZXpu?=
+ =?utf-8?B?aVhlN0d3VDFmdndPbWdmUUsyL29vTjRSRUhYNEhPV0xMZUJLRlJPckNlVmti?=
+ =?utf-8?B?YmxvWFNMT2NPaUxrakkxemN0N3VHTlNmNGdCNnNqbStFK0hDVDBtM0lSekxL?=
+ =?utf-8?B?aWczL3lTRytIMGVKdGtmRG5NUk5idkxZUncxVzdzR2dwZk1OODBIM3JTWVl1?=
+ =?utf-8?Q?Fl7I/k/hN9FVJf1PWNlFETHBm?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c48e6832-e4f0-4e52-8810-08db66973d3e
+X-MS-Exchange-CrossTenant-AuthSource: DM8PR12MB5445.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2023 14:06:35.8375
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: FUWURSE4YSpBKIn3gbJDTy89Xxt43JArySyN3jIJfDh/f4kXT0yO+yUnB0Wck7CgGk/UgHQ0M0hcwhJmFb0/HA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB4931
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,183 +127,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Siddh,
+Hi Joerg,
 
-Thank you for the patch.
+Please let me know if you have any other concerns for this series.
 
-On Tue, Jun 06, 2023 at 04:15:16PM +0530, Siddh Raman Pant wrote:
-> Comments say macros DRM_DEBUG_* are deprecated in favor of
-> drm_dbg_*(NULL, ...), but they have broken support for it,
-> as the macro will result in `(NULL) ? (NULL)->dev : NULL`.
+Thanks,
+Suravee
 
-What's the problem there ?
-
-> Thus, fix them by separating logic to get dev ptr in a new
-> function, which will return the dev ptr if arg is not NULL.
-> Use it in drm_dbg_*, and also in __DRM_DEFINE_DBG_RATELIMITED,
-> where a similar (but correct) NULL check was in place.
+On 5/30/2023 9:11 PM, Suravee Suthikulpanit wrote:
+> For IOMMU AVIC, the IOMMU driver needs to keep track of vcpu scheduling
+> changes, and updates interrupt remapping table entry (IRTE) accordingly.
+> The IRTE is normally cached by the hardware, which requires the IOMMU
+> driver to issue IOMMU IRT invalidation command and wait for completion
+> everytime it updates the table.
 > 
-> Also, add support for NULL in __drm_printk, so that all the
-> drm_* macros will hence support NULL as the first argument.
-> This also means that deprecation comments mentioning pr_()*
-> can now be changed to the drm equivalents.
+> Enabling IOMMU AVIC on a large scale system with lots of vcpus and
+> VFIO pass-through devices running interrupt-intensive workload,
+> it could result in high IRT invalidation rate. In such case, the overhead
+> from IRT invalidation could outweigh the benefit of IRTE caching.
 > 
-> Signed-off-by: Siddh Raman Pant <code@siddh.me>
-> ---
->  include/drm/drm_print.h | 79 +++++++++++++++++++++++++++--------------
->  1 file changed, 52 insertions(+), 27 deletions(-)
+> Therefore, introduce a new AMD IOMMU driver option "amd_iommu=irtcachedis"
+> to allow disabling IRTE caching, and avoid the need for IRTE invalidation.
 > 
-> diff --git a/include/drm/drm_print.h b/include/drm/drm_print.h
-> index a93a387f8a1a..4b8532cf2ae6 100644
-> --- a/include/drm/drm_print.h
-> +++ b/include/drm/drm_print.h
-> @@ -34,6 +34,7 @@
->  #include <linux/dynamic_debug.h>
->  
->  #include <drm/drm.h>
-> +#include <drm/drm_device.h>
->  
->  /* Do *not* use outside of drm_print.[ch]! */
->  extern unsigned long __drm_debug;
-> @@ -451,9 +452,32 @@ void __drm_dev_dbg(struct _ddebug *desc, const struct device *dev,
->   * Prefer drm_device based logging over device or prink based logging.
->   */
->  
-> +/* Helpers for struct drm_device based logging. */
-> +
-> +/**
-> + * __drm_dev_ptr - Helper function to get drm->dev pointer.
-> + * @drm: struct drm_device pointer.
-> + *
-> + * RETURNS:
-> + * The struct device pointer (NULL if @drm is NULL).
-> + */
-> +static inline struct device *__drm_dev_ptr(const struct drm_device *drm)
-> +{
-> +	if (drm)
-> +		return drm->dev;
-> +
-> +	return NULL;
-> +}
-> +
->  /* Helper for struct drm_device based logging. */
->  #define __drm_printk(drm, level, type, fmt, ...)			\
-> -	dev_##level##type((drm)->dev, "[drm] " fmt, ##__VA_ARGS__)
-> +({									\
-> +	struct device *__dev_ = __drm_dev_ptr(drm);			\
-> +	if (__dev_)							\
-> +		dev_##level##type(__dev_, "[drm] " fmt, ##__VA_ARGS__);	\
-> +	else								\
-> +		pr_##level##type("[drm] " fmt, ##__VA_ARGS__);		\
-
-If I recall correctly, dev_*() handle a NULL dev pointer just fine. Do
-we need to manually fall back to pr_*() ?
-
-> +})
->  
->  
->  #define drm_info(drm, fmt, ...)					\
-> @@ -487,25 +511,25 @@ void __drm_dev_dbg(struct _ddebug *desc, const struct device *dev,
->  
->  
->  #define drm_dbg_core(drm, fmt, ...)					\
-> -	drm_dev_dbg((drm) ? (drm)->dev : NULL, DRM_UT_CORE, fmt, ##__VA_ARGS__)
-> -#define drm_dbg_driver(drm, fmt, ...)						\
-> -	drm_dev_dbg((drm) ? (drm)->dev : NULL, DRM_UT_DRIVER, fmt, ##__VA_ARGS__)
-> +	drm_dev_dbg(__drm_dev_ptr(drm), DRM_UT_CORE, fmt, ##__VA_ARGS__)
-> +#define drm_dbg_driver(drm, fmt, ...)					\
-> +	drm_dev_dbg(__drm_dev_ptr(drm), DRM_UT_DRIVER, fmt, ##__VA_ARGS__)
->  #define drm_dbg_kms(drm, fmt, ...)					\
-> -	drm_dev_dbg((drm) ? (drm)->dev : NULL, DRM_UT_KMS, fmt, ##__VA_ARGS__)
-> +	drm_dev_dbg(__drm_dev_ptr(drm), DRM_UT_KMS, fmt, ##__VA_ARGS__)
->  #define drm_dbg_prime(drm, fmt, ...)					\
-> -	drm_dev_dbg((drm) ? (drm)->dev : NULL, DRM_UT_PRIME, fmt, ##__VA_ARGS__)
-> +	drm_dev_dbg(__drm_dev_ptr(drm), DRM_UT_PRIME, fmt, ##__VA_ARGS__)
->  #define drm_dbg_atomic(drm, fmt, ...)					\
-> -	drm_dev_dbg((drm) ? (drm)->dev : NULL, DRM_UT_ATOMIC, fmt, ##__VA_ARGS__)
-> +	drm_dev_dbg(__drm_dev_ptr(drm), DRM_UT_ATOMIC, fmt, ##__VA_ARGS__)
->  #define drm_dbg_vbl(drm, fmt, ...)					\
-> -	drm_dev_dbg((drm) ? (drm)->dev : NULL, DRM_UT_VBL, fmt, ##__VA_ARGS__)
-> +	drm_dev_dbg(__drm_dev_ptr(drm), DRM_UT_VBL, fmt, ##__VA_ARGS__)
->  #define drm_dbg_state(drm, fmt, ...)					\
-> -	drm_dev_dbg((drm) ? (drm)->dev : NULL, DRM_UT_STATE, fmt, ##__VA_ARGS__)
-> +	drm_dev_dbg(__drm_dev_ptr(drm), DRM_UT_STATE, fmt, ##__VA_ARGS__)
->  #define drm_dbg_lease(drm, fmt, ...)					\
-> -	drm_dev_dbg((drm) ? (drm)->dev : NULL, DRM_UT_LEASE, fmt, ##__VA_ARGS__)
-> +	drm_dev_dbg(__drm_dev_ptr(drm), DRM_UT_LEASE, fmt, ##__VA_ARGS__)
->  #define drm_dbg_dp(drm, fmt, ...)					\
-> -	drm_dev_dbg((drm) ? (drm)->dev : NULL, DRM_UT_DP, fmt, ##__VA_ARGS__)
-> +	drm_dev_dbg(__drm_dev_ptr(drm), DRM_UT_DP, fmt, ##__VA_ARGS__)
->  #define drm_dbg_drmres(drm, fmt, ...)					\
-> -	drm_dev_dbg((drm) ? (drm)->dev : NULL, DRM_UT_DRMRES, fmt, ##__VA_ARGS__)
-> +	drm_dev_dbg(__drm_dev_ptr(drm), DRM_UT_DRMRES, fmt, ##__VA_ARGS__)
->  
->  #define drm_dbg(drm, fmt, ...)	drm_dbg_driver(drm, fmt, ##__VA_ARGS__)
->  
-> @@ -533,31 +557,31 @@ void __drm_err(const char *format, ...);
->  #define _DRM_PRINTK(once, level, fmt, ...)				\
->  	printk##once(KERN_##level "[" DRM_NAME "] " fmt, ##__VA_ARGS__)
->  
-> -/* NOTE: this is deprecated in favor of pr_info(). */
-> +/* NOTE: this is deprecated in favor of drm_info(NULL, ...). */
->  #define DRM_INFO(fmt, ...)						\
->  	_DRM_PRINTK(, INFO, fmt, ##__VA_ARGS__)
-> -/* NOTE: this is deprecated in favor of pr_notice(). */
-> +/* NOTE: this is deprecated in favor of drm_notice(NULL, ...). */
->  #define DRM_NOTE(fmt, ...)						\
->  	_DRM_PRINTK(, NOTICE, fmt, ##__VA_ARGS__)
-> -/* NOTE: this is deprecated in favor of pr_warn(). */
-> +/* NOTE: this is deprecated in favor of drm_warn(NULL, ...). */
->  #define DRM_WARN(fmt, ...)						\
->  	_DRM_PRINTK(, WARNING, fmt, ##__VA_ARGS__)
->  
-> -/* NOTE: this is deprecated in favor of pr_info_once(). */
-> +/* NOTE: this is deprecated in favor of drm_info_once(NULL, ...). */
->  #define DRM_INFO_ONCE(fmt, ...)						\
->  	_DRM_PRINTK(_once, INFO, fmt, ##__VA_ARGS__)
-> -/* NOTE: this is deprecated in favor of pr_notice_once(). */
-> +/* NOTE: this is deprecated in favor of drm_notice_once(NULL, ...). */
->  #define DRM_NOTE_ONCE(fmt, ...)						\
->  	_DRM_PRINTK(_once, NOTICE, fmt, ##__VA_ARGS__)
-> -/* NOTE: this is deprecated in favor of pr_warn_once(). */
-> +/* NOTE: this is deprecated in favor of drm_warn_once(NULL, ...). */
->  #define DRM_WARN_ONCE(fmt, ...)						\
->  	_DRM_PRINTK(_once, WARNING, fmt, ##__VA_ARGS__)
->  
-> -/* NOTE: this is deprecated in favor of pr_err(). */
-> +/* NOTE: this is deprecated in favor of drm_err(NULL, ...). */
->  #define DRM_ERROR(fmt, ...)						\
->  	__drm_err(fmt, ##__VA_ARGS__)
->  
-> -/* NOTE: this is deprecated in favor of pr_err_ratelimited(). */
-> +/* NOTE: this is deprecated in favor of drm_err_ratelimited(NULL, ...). */
->  #define DRM_ERROR_RATELIMITED(fmt, ...)					\
->  	DRM_DEV_ERROR_RATELIMITED(NULL, fmt, ##__VA_ARGS__)
->  
-> @@ -593,13 +617,14 @@ void __drm_err(const char *format, ...);
->  #define DRM_DEBUG_DP(fmt, ...)						\
->  	__drm_dbg(DRM_UT_DP, fmt, ## __VA_ARGS__)
->  
-> -#define __DRM_DEFINE_DBG_RATELIMITED(category, drm, fmt, ...)					\
-> -({												\
-> -	static DEFINE_RATELIMIT_STATE(rs_, DEFAULT_RATELIMIT_INTERVAL, DEFAULT_RATELIMIT_BURST);\
-> -	const struct drm_device *drm_ = (drm);							\
-> -												\
-> -	if (drm_debug_enabled(DRM_UT_ ## category) && __ratelimit(&rs_))			\
-> -		drm_dev_printk(drm_ ? drm_->dev : NULL, KERN_DEBUG, fmt, ## __VA_ARGS__);	\
-> +#define __DRM_DEFINE_DBG_RATELIMITED(category, drm, fmt, ...)		\
-> +({									\
-> +	static DEFINE_RATELIMIT_STATE(rs_, DEFAULT_RATELIMIT_INTERVAL,	\
-> +				      DEFAULT_RATELIMIT_BURST);		\
-> +									\
-> +	if (drm_debug_enabled(DRM_UT_ ## category) && __ratelimit(&rs_))\
-> +		drm_dev_printk(__drm_dev_ptr(drm), KERN_DEBUG,		\
-> +			       fmt, ## __VA_ARGS__);			\
->  })
->  
->  #define drm_dbg_kms_ratelimited(drm, fmt, ...) \
-
--- 
-Regards,
-
-Laurent Pinchart
+> Patch 1,2 prepare the AMD IOMMU driver to support IRT cache disabling.
+> Patch 3,4 introduce IRT cache disabling support
+> Patch 5 improves the code path in IOMMU driver for updating vcpu scheduling
+> for AVIC.
+> 
+> Thank you,
+> Suravee
+> 
+> Changes from V2
+> (https://lore.kernel.org/linux-iommu/rlurmw6n6eyyhtnfr6wva6azur2gvgcrdn4mvykr3nvsosj5py@ieaivyv6cqrv/T/)
+> * Added Reviewed-by and Sign-off-by.
+> * Patch 4: Reword the commit summary (per Jerry suggestion).
+> 
+> Changes from V1
+> (https://lore.kernel.org/lkml/20230509111646.369661-1-suravee.suthikulpanit@amd.com/T/)
+> * Patch 3: Add logic to clean up the IRTE cache disabling
+>    and handle kdump code path (per Alejandro)
+> 
+> Joao Martins (1):
+>    iommu/amd: Switch amd_iommu_update_ga() to use modify_irte_ga()
+> 
+> Suravee Suthikulpanit (4):
+>    iommu/amd: Remove the unused struct amd_ir_data.ref
+>    iommu/amd: Introduce Disable IRTE Caching Support
+>    iommu/amd: Do not Invalidate IRT when IRTE caching is disabled
+>    iommu/amd: Improving Interrupt Remapping Table Invalidation
+> 
+>   .../admin-guide/kernel-parameters.txt         |  1 +
+>   drivers/iommu/amd/amd_iommu_types.h           |  7 +-
+>   drivers/iommu/amd/init.c                      | 38 +++++++-
+>   drivers/iommu/amd/iommu.c                     | 97 ++++++++++---------
+>   4 files changed, 94 insertions(+), 49 deletions(-)
+> 
