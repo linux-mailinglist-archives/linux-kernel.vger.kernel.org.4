@@ -2,98 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E181C7240F9
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 13:34:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DD4E724102
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 13:35:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236370AbjFFLeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 07:34:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56654 "EHLO
+        id S235791AbjFFLfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 07:35:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236387AbjFFLeQ (ORCPT
+        with ESMTP id S235886AbjFFLf1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 07:34:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D69DF4;
-        Tue,  6 Jun 2023 04:34:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C554D626E6;
-        Tue,  6 Jun 2023 11:34:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3267FC433D2;
-        Tue,  6 Jun 2023 11:34:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686051254;
-        bh=9M8xhZ+ixdmXS57U7MdJ1ZWhnbtY3orihPjl0VkHNy8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ponqGETuSCaM74hQCdufE61DKKDGkx1G+wMiS0GmWtoerMlmATDLSw9EseA1dxwXn
-         Wq4M5X25OexUcV9SY30rZUegEqFiwCwewCUe2nuRFyXLT5HdR+dGxVu5GoWDZLzFCJ
-         UBlQLPsC1oNK7GRKyP6bzCu+U3B68tlIno+kIQdtcoxVQskYe2AlckgePT04AoKjwc
-         x+DFGJ4Y1ZxAWLKl8kgLwZznXYYPt7FGC4FUHNpWm6HQiAmxK0j5JUZ4SOiNvFGVE4
-         329nKRLmfwwHb/aVy0+7WyXCm5zmvR1YZnBLo8MzgU4n+emg/iCaO52/dtcbOLiHef
-         b4guYPeBEF0Qw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1q6UxO-00067b-D0; Tue, 06 Jun 2023 13:34:34 +0200
-Date:   Tue, 6 Jun 2023 13:34:34 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Corey Minyard <minyard@acm.org>
-Subject: Re: [PATCH v2 1/3] USB: serial: return errors from break handling
-Message-ID: <ZH8ZyjG_D1HiNay5@hovoldconsulting.com>
-References: <20230604123505.4661-1-johan@kernel.org>
- <20230604123505.4661-2-johan@kernel.org>
- <88472624-cc92-31a7-f35d-a212e61ab959@suse.com>
+        Tue, 6 Jun 2023 07:35:27 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBA5AE52
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 04:35:23 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f6e1394060so51913435e9.3
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 04:35:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tessares.net; s=google; t=1686051322; x=1688643322;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lvATKcdZSwuPOJh2GRkP6X8hkhA21/bnoihEc7xpbVg=;
+        b=kkLLVCklE5BWE+AJ9mXI4TIQutfTJhTLR6Slhen4KahnxjKdtVRy37/sFU0L+Q+db2
+         OExJHd2WMUVHHy6wUwwAkaF0vfd6P3q5pVBjt3o7stpyWEZOq3L8HRzNPiMaojaJLjvA
+         whYeOY1676CfIKjVytE6OXhftebOvEjMHDq20m/8J6oZs00MR0GXwk1eU3rxIHHGqhh8
+         EuxOG3+EJPg4oM57NrpX2KBsoJcBNhnVVlRpCMXbWhC9nT7WpY69fpV4TqBQpCaZrLgy
+         nT5NAmrWS8vxhM7J1Fvq3uGiN0E7zVpqBdei+OWDlOZs4r4YLUzw9/phQ76BHDNAFTls
+         H0MA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686051322; x=1688643322;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lvATKcdZSwuPOJh2GRkP6X8hkhA21/bnoihEc7xpbVg=;
+        b=f0bl8kdLJlwL/2NBDdqafJFGVGYX9QJABBUv7c/oo9mZth2x1LBPXGS8MfCh0jQIxu
+         i+Sr1uGKSo8M8gn2IwCWX6l1mf2XVAEXCQTJaXuK45BdZQOkCqj1ibPVKd30ITptGWam
+         gdvsQOjTC70HGZGTQdTiKe+dssNOJkXCBI4dTEffRI1NdvWq2vzETsbzranKQiXblnts
+         0rlC5VIXIMZrF5VFOXHStRHBgXvfujeSUBV/aPiu20m4s3WRrzprVBOw0/WRiz5Q5dhF
+         JFiq8aZ6q3HkL79vV5r9CUHrrJWenZOZ6gjTrOnJDPa5YAh9FnQN9xDVMAHDIJw05Ik0
+         9/uA==
+X-Gm-Message-State: AC+VfDzYgMcu/9qa1dN0kmYfOJn7BwSKs3BW3a8b1UOw21CQbIKOFblV
+        RRjJAkRKQHNpfDohKyhZc4AVzg==
+X-Google-Smtp-Source: ACHHUZ5kD2v+8EkF8x2chCUib+bgiV9eyH42+QjLZKwrasuxwl/S8sfhnB72NeeoY1SloBs4skJaXQ==
+X-Received: by 2002:a1c:6a12:0:b0:3f0:b1c9:25d4 with SMTP id f18-20020a1c6a12000000b003f0b1c925d4mr1855738wmc.21.1686051322295;
+        Tue, 06 Jun 2023 04:35:22 -0700 (PDT)
+Received: from ?IPV6:2a02:578:8593:1200:426c:bb31:d569:3738? ([2a02:578:8593:1200:426c:bb31:d569:3738])
+        by smtp.gmail.com with ESMTPSA id m16-20020a7bcb90000000b003f6028a4c85sm17233920wmi.16.2023.06.06.04.35.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Jun 2023 04:35:22 -0700 (PDT)
+Message-ID: <c709b7d0-6b06-4fc9-a99a-520ec13550ac@tessares.net>
+Date:   Tue, 6 Jun 2023 13:35:20 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <88472624-cc92-31a7-f35d-a212e61ab959@suse.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH net-next v5] net: ioctl: Use kernel memory on protocol
+ ioctl callbacks
+Content-Language: en-GB
+To:     Breno Leitao <leitao@debian.org>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc:     Remi Denis-Courmont <courmisch@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexander Aring <alex.aring@gmail.com>,
+        Stefan Schmidt <stefan@datenfreihafen.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        David Ahern <dsahern@kernel.org>,
+        Mat Martineau <martineau@kernel.org>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Xin Long <lucien.xin@gmail.com>, axboe@kernel.dk,
+        asml.silence@gmail.com, leit@fb.com, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, dccp@vger.kernel.org,
+        linux-wpan@vger.kernel.org, mptcp@lists.linux.dev,
+        linux-sctp@vger.kernel.org
+References: <20230602163044.1820619-1-leitao@debian.org>
+ <CAF=yD-Kk9mVWPZN50NUu8uGwEbySNS-WzvJ=1HTTcVsA6OOuvA@mail.gmail.com>
+ <ZHxEX0TlXX7VV9kX@gmail.com>
+ <CAF=yD-LvTDmWp+wAqwuQ7vKLT0hAHcQjV9Ef2rEag5J4cSZrkA@mail.gmail.com>
+ <ZH8Ga15IFIUUA7j8@gmail.com>
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+In-Reply-To: <ZH8Ga15IFIUUA7j8@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Oliver,
+Hi Breno,
 
-On Tue, Jun 06, 2023 at 01:13:30PM +0200, Oliver Neukum wrote:
-> On 04.06.23 14:35, Johan Hovold wrote:
-> > @@ -1077,15 +1077,19 @@ static void pl2303_set_break(struct usb_serial_port *port, bool enable)
-> >   	result = usb_control_msg(serial->dev, usb_sndctrlpipe(serial->dev, 0),
-> >   				 BREAK_REQUEST, BREAK_REQUEST_TYPE, state,
-> >   				 0, NULL, 0, 100);
-> > -	if (result)
-> > +	if (result) {
-> >   		dev_err(&port->dev, "error sending break = %d\n", result);
-> > +		return result;
-> > +	}
-> > +
-> > +	return 0;
-> >   }
-
-And thanks for taking a look.
-
-> this code was always fishy, but I am afraid it worked by accident albeit
-> spamming the logs.
-> If I may quote from the kerneldoc of usb_control_msg():
+On 06/06/2023 12:11, Breno Leitao wrote:
+> On Sun, Jun 04, 2023 at 11:17:56AM +0200, Willem de Bruijn wrote:
+>>> On Sat, Jun 03, 2023 at 10:21:50AM +0200, Willem de Bruijn wrote:
+>>>> On Fri, Jun 2, 2023 at 6:31 PM Breno Leitao <leitao@debian.org> wrote:
+>>>>> Signed-off-by: Breno Leitao <leitao@debian.org>
+>>>>
+>>>> Please check the checkpatch output
+>>>>
+>>>> https://patchwork.hopto.org/static/nipa/753609/13265673/checkpatch/stdout
+>>>
+>>> I am checking my current checkpatch before sending the patch, but I am
+>>> not seeing the problems above.
+>>>
+>>> My tree is at 44c026a73be8038 ("Linux 6.4-rc3"), and I am not able to
+>>> reproduce the problems above.
+>>>
+>>>         $ scripts/checkpatch.pl v5/v5-0001-net-ioctl-Use-kernel-memory-on-protocol-ioctl-cal.patch
+>>>         total: 0 errors, 0 warnings, 0 checks, 806 lines checked
+>>>         v5/v5-0001-net-ioctl-Use-kernel-memory-on-protocol-ioctl-cal.patch has no obvious style problems and is ready for submission.
+>>>
+>>> Let me investigate what options I am missing when running checkpatch.
+>>
+>> The reference is to the checkpatch as referenced by patchwork:
+>>
+>> https://patchwork.kernel.org/project/netdevbpf/patch/20230602163044.1820619-1-leitao@debian.org/
+>>
+>> The 80 character limit is a soft limit. But also note the CHECK
+>> statements on whitespace.
 > 
->   * usb_control_msg - Builds a control urb, sends it off and waits for completion
+> Right. In order to enable the "CHECK" statments, we need to pass the
+> "--subjective" parameter to checpatch.pl
 > 
-> [..]
+> That said, I am able to reproduce the same output now, using the
+> following command line:
 > 
->   * Return: If successful, the number of bytes transferred. Otherwise, a negative
->   * error number.
->   */
-> 
-> You need to test for < 0, not != 0
+> 	$ scripts/checkpatch.pl --subjective --max-line-length=80
 
-No, the current code is just fine as there is no data stage so
-usb_control_msg() returns 0 or negative errno.
+The different results visible on Patchwork are posted by a CI using
+scripts hosted there:
 
-Johan
+  https://github.com/kuba-moo/nipa
+
+If you are interested to know how checkpatch.pl is executed, you can
+have a look there:
+
+
+https://github.com/kuba-moo/nipa/blob/master/tests/patch/checkpatch/checkpatch.sh#L16
+
+I guess what you need is the "--strict" argument:
+
+>   $ ./scripts/checkpatch.pl --strict --max-line-length=80 \
+>       --ignore=COMMIT_LOG_LONG_LINE,MACRO_ARG_REUSE,ALLOC_SIZEOF_STRUCT,NO_AUTHOR_SIGN_OFF,GIT_COMMIT_ID,CAMELCASE \
+>       -g HEAD
+
+Cheers,
+Matt
+-- 
+Tessares | Belgium | Hybrid Access Solutions
+www.tessares.net
