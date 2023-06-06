@@ -2,112 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB96B725016
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 00:45:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2F8C725017
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 00:45:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239997AbjFFWps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 18:45:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37362 "EHLO
+        id S240038AbjFFWp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 18:45:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239987AbjFFWph (ORCPT
+        with ESMTP id S240022AbjFFWpw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 18:45:37 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E901703
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 15:45:36 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id 5614622812f47-39c503bc770so869793b6e.0
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 15:45:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1686091536; x=1688683536;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bcp3ffy5XwTKce5q56EsqOA6PVGSPjy/lGc3gn6qOmU=;
-        b=Wj9iARWqwKYgu1upHY1HlgemGOrhjZzWv7NuN6Ahgl/AsNZfjnfA7Auy9tv7nZm4PR
-         cDlu/GYxb3Sm/ROvjGgow1ZtN87VDyaCjxTir2f4Z1aJht/Jj8YS0TOdKMy3xdewK/z7
-         ruYyjQhptjT9jyitvst2phsnk0OK2HvFuhXTq2OiB4AC42AL7ByRYrnQvAI3kqwk3bXo
-         gKXtEZaFURDN6igizQDGKO8HhDy8VbSz7VvVbop2CFqMhcQ9lVdJSgXCTM6St/ymWfdO
-         HnryHCajNg/IWpTBRklu65AOYO9egNLWiNS7pYFfEqD0YawgsPxScZXDAu6T02vzZkKc
-         N6Rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686091536; x=1688683536;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bcp3ffy5XwTKce5q56EsqOA6PVGSPjy/lGc3gn6qOmU=;
-        b=PeyZsQ/YO+LxRnwkDBnnSLmOCbQuCSpH7TicJx4aXdHD4S6kJVfhiGTzR6ve04wypQ
-         ShFJ22FbbKI56Is+nKabrVQm6FF3qv/OV5ER6OsLcRf7Ce7v+Zw9a7ubLSPyq5SNpyVp
-         hZpRlQZrAFCrMeUUphVyu0dUvzb10PNRKQjdHQB8fmkCYd7fxajafiy+5TM4HxTUaDOv
-         pNXAds/sk6mw4yvSpBhShvxmJt0yMB7xbCpEaWNB4ujZxxrAlEKf+uwgcl8bcDfPTtsk
-         3K0Vqlgis71x8o0RdW++fCVT2bkFzO6DPiK7zidAf4dakoI1u/samjnmr29r0hWH3B+E
-         ZgWA==
-X-Gm-Message-State: AC+VfDz6/CG2q2lHc+UeEapWCqzRcOHcYPveNerZXymiKobuOExVcgXF
-        Jvy05sO/OjZ6018czmYrbkIDog==
-X-Google-Smtp-Source: ACHHUZ5fi0BA0A0q3DfsBlhTUutkY29CteYXLvsSh9kIVopCpR1sLQ1E5i8v1OAycYH7pgKENB/E3Q==
-X-Received: by 2002:aca:130c:0:b0:396:3b9b:d217 with SMTP id e12-20020aca130c000000b003963b9bd217mr3496151oii.18.1686091536046;
-        Tue, 06 Jun 2023 15:45:36 -0700 (PDT)
-Received: from dread.disaster.area (pa49-179-79-151.pa.nsw.optusnet.com.au. [49.179.79.151])
-        by smtp.gmail.com with ESMTPSA id b10-20020a63cf4a000000b0050a0227a4bcsm7927471pgj.57.2023.06.06.15.45.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 15:45:35 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.96)
-        (envelope-from <david@fromorbit.com>)
-        id 1q6fQi-008f6H-2S;
-        Wed, 07 Jun 2023 08:45:32 +1000
-Date:   Wed, 7 Jun 2023 08:45:32 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     David Sterba <dsterba@suse.cz>
-Cc:     syzbot <syzbot+a694851c6ab28cbcfb9c@syzkaller.appspotmail.com>,
-        clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [btrfs?] INFO: task hung in btrfs_sync_file (2)
-Message-ID: <ZH+3DJQC8CUSs+/x@dread.disaster.area>
-References: <00000000000086021605fd1b484c@google.com>
- <20230606142405.GI25292@twin.jikos.cz>
+        Tue, 6 Jun 2023 18:45:52 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AC9111A
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 15:45:49 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 2A3FB3200999;
+        Tue,  6 Jun 2023 18:45:48 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Tue, 06 Jun 2023 18:45:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1686091547; x=
+        1686177947; bh=hSS0JdktrhCdp8+MPFMBImmGxdk+d02HM+d8vXxlhEo=; b=S
+        gCU68vnMrvV/FktbEABGRwkdhc+K22LZ62NuJfb0yaYdXZC8mbgsiPGFtM1o6wWe
+        sikN62H1vD1EHnOqyh601z93TzED895lAtkM01chCLihO+/ov4iQ0F6dnZ+FS71d
+        RALXYm6uyKvWxtyV/M3f4xb/Y4beuYaE+WNdUJaTYutmTUIAXCxP3BFyQlVrAjBc
+        MqVGaeSAc8lATYvmy9qKQmRJLIK8HHCTL3qJyPmyv05x8K1Td0rWlRokL5T4SBu7
+        myJR68Y7WgSya/P7QuzN5XI087X5RXZ4F1L7bnOHtQieShKzidaTJTdxV+u4G2XE
+        gjXVHSx1nSY+ycE0anHdQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1686091547; x=1686177947; bh=hSS0JdktrhCdp
+        8+MPFMBImmGxdk+d02HM+d8vXxlhEo=; b=GarzA6WL88bJIjRe2HI33IfkGitIG
+        oKqDvgPW6We9j6fwf5CH2o6wwNBCy+PdfxZuoYwdN+FyGLZ1SC597tXCYEnROGCN
+        84mozrjLD52MIwd7qbkXe0WGLBVd66Nx8wY9M5OSvca10cK16Y5vF77040foOOO+
+        pY3moTVfbiNQVky2WF7jNbGvxqsLnIe3wuBcRop2dAhqP/5s1OnOdnXGcZBwttNn
+        ZVORf7XgySQC5buls7XuCQ1zsPS9QX+J50ye0t0/tVoB9Kp0xgFlFh7UqYF/XWNU
+        LFlW+zq8g3ByxQsxG638yICnfqvUMMnToM9ZEyQ1m4Z+AMXUD7yh/pMaQ==
+X-ME-Sender: <xms:G7d_ZP1yEjH6oe4muUD0DHLZOC1OJJ3GIWeHYUiQvZrGXyQQuDb2fQ>
+    <xme:G7d_ZOFfXCfJWMUBJ5IwpdFBqyBtXK-XtFTlVxF_rUAdnW3OQ9zyrrlnrp4T69-Z9
+    X0iyi0DnEhWS-4DT4w>
+X-ME-Received: <xmr:G7d_ZP5QRTl2z275bnljb5uhmk7XZ81b7CwRrkTHZhQcltnI-VdMZ6rM0x39VYgsaH6U3Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedtvddgudefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
+    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
+    grmhgvqeenucggtffrrghtthgvrhhnpeelgffhfeetlefhveffleevfffgtefffeelfedu
+    udfhjeduteeggfeiheefteehjeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuve
+    hluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepkhhirhhilhhl
+    sehshhhuthgvmhhovhdrnhgrmhgv
+X-ME-Proxy: <xmx:G7d_ZE0cU9waJJXsLAk3SHmrXBEF9w0ZV_KMDL2hvQfD_SKcdieGbA>
+    <xmx:G7d_ZCH_D5TEBQZigZQJb7zFnKCClGyP7RBmNBvNUw7FcqSW7ogCnQ>
+    <xmx:G7d_ZF_jWbvhy0ISh8m2BRD84mXfitBmtHRRgRym3vXnvLhUf03hPw>
+    <xmx:G7d_ZPNrVrXS9dy8B1cHGzCcUSK8U8msiDHHsucAqW6e01oQCafJqA>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 6 Jun 2023 18:45:46 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id DAF4710F0D2; Wed,  7 Jun 2023 01:45:43 +0300 (+03)
+Date:   Wed, 7 Jun 2023 01:45:43 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     "Huang, Kai" <kai.huang@intel.com>
+Cc:     "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        Borislav Petkov <bp@alien8.de>
+Subject: Re: [PATCH] x86/tdx: Explicitly include <linux/errno.h> in
+ <asm/tdx.h>
+Message-ID: <20230606224543.a4jex2dmn43dvze4@box.shutemov.name>
+References: <20230606034000.380270-1-kai.huang@intel.com>
+ <c84707e6-4f74-dc89-6243-63a72e86c62b@linux.intel.com>
+ <df89f1c66059e717e9a66e314da24f939cc3eabc.camel@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230606142405.GI25292@twin.jikos.cz>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <df89f1c66059e717e9a66e314da24f939cc3eabc.camel@intel.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 04:24:05PM +0200, David Sterba wrote:
-> On Thu, Jun 01, 2023 at 06:15:06PM -0700, syzbot wrote:
-> > RIP: 0010:rep_movs_alternative+0x33/0xb0 arch/x86/lib/copy_user_64.S:56
-> > Code: 46 83 f9 08 73 21 85 c9 74 0f 8a 06 88 07 48 ff c7 48 ff c6 48 ff c9 75 f1 c3 66 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 8b 06 <48> 89 07 48 83 c6 08 48 83 c7 08 83 e9 08 74 df 83 f9 08 73 e8 eb
-> > RSP: 0018:ffffc9000becf728 EFLAGS: 00050206
-> > RAX: 0000000000000000 RBX: 0000000000000038 RCX: 0000000000000038
-> > RDX: fffff520017d9efb RSI: ffffc9000becf7a0 RDI: 0000000020000120
-> > RBP: 0000000020000120 R08: 0000000000000000 R09: fffff520017d9efa
-> > R10: ffffc9000becf7d7 R11: 0000000000000001 R12: ffffc9000becf7a0
-> > R13: 0000000020000158 R14: 0000000000000000 R15: ffffc9000becf7a0
-> >  copy_user_generic arch/x86/include/asm/uaccess_64.h:112 [inline]
-> >  raw_copy_to_user arch/x86/include/asm/uaccess_64.h:133 [inline]
-> >  _copy_to_user lib/usercopy.c:41 [inline]
-> >  _copy_to_user+0xab/0xc0 lib/usercopy.c:34
-> >  copy_to_user include/linux/uaccess.h:191 [inline]
-> >  fiemap_fill_next_extent+0x217/0x370 fs/ioctl.c:144
-> >  emit_fiemap_extent+0x18e/0x380 fs/btrfs/extent_io.c:2616
-> >  fiemap_process_hole+0x516/0x610 fs/btrfs/extent_io.c:2874
+On Tue, Jun 06, 2023 at 10:17:53PM +0000, Huang, Kai wrote:
+> On Tue, 2023-06-06 at 06:10 -0700, Sathyanarayanan Kuppuswamy wrote:
+> > 
+> > On 6/5/23 8:40 PM, Kai Huang wrote:
+> > > Currently, in <asm/tdx.h> tdx_kvm_hypercall() simply returns -ENODEV
+> > > when TDX guest isn't enabled in the Kconfig w/o having <linux/errno.h>
+> > 
+> > Maybe you can explicitly say "CONFIG_INTEL_TDX_GUEST is not enabled"
 > 
-> and extent enumeration from FIEMAP, this would qualify as a stress on
-> the inode
+> It also can be disabled by !CONFIG_KVM_GUEST.
 
-FWIW, when I've seen this sort of hang on XFS in past times, it's
-been caused by a corrupt extent list or a circular reference in a
-btree that the fuzzing introduced. Hence FIEMAP just keeps going
-around in circles and never gets out of the loop to drop the inode
-lock....
+Borislav has already fixed it during unaccepted memory patchset
+application. He used <asm/errno.h>, not <linux/errno.h>.
 
-Cheers,
+See [1] and [2].
 
-Dave.
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=75d090fd167acab4d7eda7e2b65729e877c0fd64
+[2] https://lore.kernel.org/all/20230606161606.GDZH9bxhrGnFkaLl2A@fat_crate.local
+
 -- 
-Dave Chinner
-david@fromorbit.com
+  Kiryl Shutsemau / Kirill A. Shutemov
