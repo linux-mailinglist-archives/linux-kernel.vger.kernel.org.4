@@ -2,134 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A51007242EF
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 14:48:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 115087242F4
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 14:49:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237699AbjFFMsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 08:48:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46736 "EHLO
+        id S237708AbjFFMtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 08:49:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231609AbjFFMsK (ORCPT
+        with ESMTP id S231609AbjFFMtC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 08:48:10 -0400
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2921E10D9;
-        Tue,  6 Jun 2023 05:47:45 -0700 (PDT)
-Received: by mail-qt1-x82d.google.com with SMTP id d75a77b69052e-3f9a6c18e45so15530691cf.3;
-        Tue, 06 Jun 2023 05:47:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686055599; x=1688647599;
-        h=in-reply-to:content-disposition:mime-version:references:reply-to
-         :message-id:subject:cc:to:from:date:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cKiZBq4N2uzyc1uP6K/gn6kRYmbs2MnPBrOh0qNFFjQ=;
-        b=k/3CYpTYDMXNGlJOl6Vm9Siv7kMMxDjZlTRcNkC2QhX+jqbIUlq3IOMsj2Gm9A1mzc
-         1dYq4Re0QPPi3GaghqNM5WaUCBHiu6jq76O0VoKd/IYxcZPXxT2Z4OKVR9b8WkkF+giQ
-         jKYV63OJOzqTaGTYSrNrTQLBooeIQQgSERqIpmX8FFG0qAMTCSgsojNChDdxd5qj4dqF
-         9GK9LctSx5UKPqV/E/ssgNqEmo9sp28Bo9AHbxV1iHXrpTIIVkxVGPc1jaKuzyflH86w
-         ubo+Y7RhC7zmpeFfhjOgy/XgmvUHi6i4vNUnWpVh0me0mL4bR+Ex9WuS5Wu+Q5LTXMR3
-         J0jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686055599; x=1688647599;
-        h=in-reply-to:content-disposition:mime-version:references:reply-to
-         :message-id:subject:cc:to:from:date:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=cKiZBq4N2uzyc1uP6K/gn6kRYmbs2MnPBrOh0qNFFjQ=;
-        b=TYP4j4IRdSDQvAXRf3M/mzmTKZluBhCWTb4fr9BoABaUGA2OBJMW3JEYkoFCbk4fUE
-         vOCuRienwmT/N4RWZZcKjqqzU4oUBem7n05vQ6qHD/PU8jyJqEIl219Zk2a1gROMzxxU
-         Nd9tgn1G9n+xDaS70o5wIX/4WXpigHIxj4Ns7v37ejUWQn9NTzNg22mk2AxeBR4UZ9ym
-         UcOhJCVWkR8epRYj6Ln3f1SDFt+j9uTVZdzhraO6M5+yOZSICAJ4M9V5BpZ150htYOeI
-         p8Vdw18NIDX5n7eidsMITIoUgSO2rP+U2EA5Jjlag6KcMnHL3Gg+Ct7keVMuVZH2lzuR
-         kN3w==
-X-Gm-Message-State: AC+VfDzdGq7ir+f6pIOsiX6xnZkV+fpCLlevxrkqwiYb2R6sOGJakrff
-        HNqeiNxoOgvQ3qdESIQ5KA==
-X-Google-Smtp-Source: ACHHUZ7MMeHe7IIxBi59pp1HzL7wP2kz34CP+OK4jBeZLb+ItXcgXkd8wFtMZv+gD+NNBPr5K8lLeg==
-X-Received: by 2002:ac8:7d8e:0:b0:3f5:3d3d:d1b5 with SMTP id c14-20020ac87d8e000000b003f53d3dd1b5mr1553621qtd.27.1686055599534;
-        Tue, 06 Jun 2023 05:46:39 -0700 (PDT)
-Received: from serve.minyard.net ([47.189.94.26])
-        by smtp.gmail.com with ESMTPSA id g22-20020ac84696000000b003ef189ffa82sm2605273qto.90.2023.06.06.05.46.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 05:46:38 -0700 (PDT)
-Sender: Corey Minyard <tcminyard@gmail.com>
-Received: from mail.minyard.net (unknown [IPv6:2001:470:b8f6:1b:6303:b09c:2f6b:4f53])
-        by serve.minyard.net (Postfix) with ESMTPSA id 4F393180044;
-        Tue,  6 Jun 2023 12:46:37 +0000 (UTC)
-Date:   Tue, 6 Jun 2023 07:46:36 -0500
-From:   Corey Minyard <minyard@acm.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] USB: serial: return errors from break handling
-Message-ID: <ZH8qrBBwcXH0eP8/@mail.minyard.net>
-Reply-To: minyard@acm.org
-References: <20230604123505.4661-1-johan@kernel.org>
- <726a6f5f-5338-50a9-3081-7c02194dd7af@suse.com>
- <ZH8a12ZYtA2RzEK_@hovoldconsulting.com>
+        Tue, 6 Jun 2023 08:49:02 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 952EA10E3;
+        Tue,  6 Jun 2023 05:48:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686055721; x=1717591721;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=gR36ITDDKQoqtYhYluzqHiQDyaA9y7i+CxIJmiFhGag=;
+  b=XIp8fqrUiWLzRnw5LEg0zj9uh2yk5XD7EMjj0R8/FZvEZwrC8DE/IKSF
+   Xi/UMr96/bMo0CugQ8yTlqoeZ1Caqh91Gh9ClhqSnnBEKKUf3kDKAF8Ka
+   LA+FhgprVYo36BQPo6COvsOHAGf6NyQucIbadAto7E7RCiDZxSd6bZyt1
+   0FA2gZY/Eyrx640UqUnHM5OPPAxEAiW2UTzN4nbAgu9LlJB2RZU7bks1x
+   Q61lWTeQytNehKWIg9H5zrS7zFM560BEjEbmq2UNW+jn91cBH0DGcAJHr
+   Tu/8uN1TA63z2M33ERzUfcFWvSbNY1Zwf6pyRfdYxoJjJzNv8O+0OcobY
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="346257032"
+X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
+   d="scan'208";a="346257032"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 05:47:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="833211908"
+X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
+   d="scan'208";a="833211908"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orsmga004.jf.intel.com with ESMTP; 06 Jun 2023 05:47:32 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 6 Jun 2023 05:47:32 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Tue, 6 Jun 2023 05:47:32 -0700
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.43) by
+ edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Tue, 6 Jun 2023 05:47:32 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JQbVrA7DB4qN+OaOVX4J29gBn/hH9LZKQQURBqqj7w2C7usOFHxeGYjfrFwyfzZ2W9jMas6UvKUFE2uW4B00bH5MQOHm+lPeouiqkesBPCmkRo8H3Nx3UrBv0eW9Fa3B01cEnIx5VY6qpiqDQC/rSG+CdPE8iuDHEwiWdp5xI6yFY0LVCebvNr3QjHNZRO9Rs0E6G2DNyBFSsCD/X0iTB0GfX4+i+2yBdSnscOZeAtpct0kz/zvQ+xBLMjlHan/bq4ALqU14RAlYeiSAdFwhOxEi+7adnFLI1ZkZCvQIpp4ZSgZr7o92IWdUNw/pT4ajWLTcEhrwZS2FLPj9wfLCRw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HQESu2kqYqmMJIb3n1oi8iSv/9O8t1gJkj3tv3pNlU4=;
+ b=F86nxhtjNmL8qWO7uF4p+27LoQLOGJnL5Lx3Y+NCm2cirkZAKtE22v1P2h41K8BtwsR9tqGOoeLj+W5XN1SSQ4tJbiFJ0okP3WA++N3AlJcgmaomABORcQy9IfizMLu3Qw1VJv/d1NRrSeVDSveazqFUbbqoeI8pPvN7J5BTe2QhFZrV9l8pNsP9B7sBaaqgxkpSgtqIsIE16nz9ktJfFFdBrBU80jh6fXQ8yUlUV9AGkYnBLGXeTIVRih3IATGFLHzOj32T3YlLgz9SNMc//FE/wo3F+cKPCfkKYG/XmvxxWyXAoj8dY5sSbm5/fTJTyA7QYYdL0RLt+jyI4GP88w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from BYAPR11MB3672.namprd11.prod.outlook.com (2603:10b6:a03:fa::30)
+ by PH8PR11MB6753.namprd11.prod.outlook.com (2603:10b6:510:1c8::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Tue, 6 Jun
+ 2023 12:47:30 +0000
+Received: from BYAPR11MB3672.namprd11.prod.outlook.com
+ ([fe80::87ad:6b1:f9f4:9299]) by BYAPR11MB3672.namprd11.prod.outlook.com
+ ([fe80::87ad:6b1:f9f4:9299%4]) with mapi id 15.20.6455.030; Tue, 6 Jun 2023
+ 12:47:30 +0000
+Message-ID: <0a9223c1-702a-eff3-7cdc-340791a9dcf4@intel.com>
+Date:   Tue, 6 Jun 2023 14:47:20 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [Intel-wired-lan] [Patch] net/e1000: Fix extern warnings
+Content-Language: en-US
+To:     Tree Davies <tdavies@darkphysics.net>,
+        <anthony.l.nguyen@intel.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>
+CC:     <intel-wired-lan@lists.osuosl.org>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>
+References: <ZHv7EDzikZPikoRh@oatmeal.darkphysics>
+From:   Przemek Kitszel <przemyslaw.kitszel@intel.com>
+In-Reply-To: <ZHv7EDzikZPikoRh@oatmeal.darkphysics>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: ZRAP278CA0012.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:10::22) To BYAPR11MB3672.namprd11.prod.outlook.com
+ (2603:10b6:a03:fa::30)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZH8a12ZYtA2RzEK_@hovoldconsulting.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR11MB3672:EE_|PH8PR11MB6753:EE_
+X-MS-Office365-Filtering-Correlation-Id: 799ef70e-e99a-47d5-df5a-08db668c3062
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zs3i3QSnpvNBleZ3rHvYxbGItWZ2e6QV5sAlJyvZRCf0IaxFPajUoR7ELMKHQCI1qCKxeYRjPF/GVs/N/FWQmYnB/HH5r+tk/lKTVfdT/aLniJxKGzoSnQ6eQb6vaLWCkuFGif2TKHSPRGlmwPw9Jm2aK+RDIoZOup/FmABuFZiesRa/pu63ks19CV6WVplNReKYI2C5NME0HA8kXV9CHcH08ImCYl1++jV/S/SWho5LUsdDvk5rffuouFCRg56FzrRM2VdmBOINPVonesfYKmSfsH2OZJeiBdFWA3u0ULd4ULPOq9fZc2WCUk+Z+sosxO7U4yE6GJc/vYknTFICAs8IEKi+/GrzGf4vEBEWq5c0kq+6J3+EPJT/1etiu9mXphb4XnXImScfSb5lVJC/mkixgwaeadCqFcfQ1xXovgZ0A+h2hmFvP0OkCK5lmrjUJcb8sVanaKoiGAcQmOtdW7j/4lcelUM3CzlG9QTEwUGHs08APmaBvS8F7l1pBX5pOIlzhaylXdiXUZO5DeGuQBP1+x+N2lBONapAsd8FpTakdM9cJW7SpW2r6PASYHSevrJQB23QvaTcW9P1OesPugaw0dkvDHkz+W3Vc/4cocwZ/U0ruzYjczL+KbkIxM7r
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3672.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(396003)(346002)(366004)(39860400002)(376002)(451199021)(478600001)(2616005)(6486002)(26005)(53546011)(6506007)(6512007)(6666004)(966005)(186003)(31686004)(83380400001)(82960400001)(41300700001)(316002)(38100700002)(5660300002)(8676002)(8936002)(66476007)(4326008)(66946007)(2906002)(4744005)(66556008)(31696002)(86362001)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?K3FZT3R0VENWUzJTRHlidmh6Ri9XYlhzNnBVeS9KS2lFS1JESUczQy9DL2M0?=
+ =?utf-8?B?SWZ1blV4Nm5raWpPZVF5NnZuTE5UejFrVjBhS1RHa3lSWUtuV2Y5QWpnZkFz?=
+ =?utf-8?B?Z2NUc3pMME9ON0V4UTJxQ3ZaVFNrQitjYmtLZkVQNHU2MTdidVNKVG5jWWdj?=
+ =?utf-8?B?aG5KNjgxWERVYmNPYVhXbGxaUEpuSExHcUpNOUNGUU5BMVdVREJ1TCtwZVQy?=
+ =?utf-8?B?elJxWmxWNFY2RzZ5bndQd0Z5QVZVNW5CbVVSY1lRTU5BTXp1YlpsYjUxSTBZ?=
+ =?utf-8?B?WmRjamlXMmxwR1pOZmpSZU8xNHJwOEc1dmRocll2eEF2RnFySHYzb0ExLzNz?=
+ =?utf-8?B?WnJUeUZVaVU2bWlHTnFJRng2SXFYRzJLeUFUTFJtVVpPZllURTQyYldqVmpR?=
+ =?utf-8?B?Y21ONzJiRC9QSmZBNmJpcmJkNm5aak9rdDQ0RGl0RWFobm5ESnVTV2p6ZTJF?=
+ =?utf-8?B?U3ZpaHdsUE5uc1dydjRmSjExWVQrL09NL0lhODdzUCtuRThxWnFOOW92T1pK?=
+ =?utf-8?B?VDBsVnUvNEwyQXR6Nml5dmNjb3cyblNJK1Zndkl5ZDdRaUE4enVjYnRxNjZa?=
+ =?utf-8?B?S1FzcmVMN3g0eHlxNUJQbXBiYTZhSnFRbktOcVVraFpRRDNWR1RGd2hUcGYv?=
+ =?utf-8?B?Z3VFem91TFkzdG5BaFliNko0bEppMkx5VkZYYWlyQWpIc3RwNmRDcEdrYTVB?=
+ =?utf-8?B?WHVZKytyRi95MVJLYVA3NFpyU3c3bmJmNzc3S0I4Y2ExeG02R1VLR2ZoalRT?=
+ =?utf-8?B?cmM3UksyZkdDbUtvQmZnb3dMbjYreHFWM2NzMnZ4bWFPM0NhSGlkVysxTjNn?=
+ =?utf-8?B?K2swMVNESjdnRTR2aFIrYThYZVRoSTNDNlRKT3dBdkE0TjZQV1ZHVGkxbEYz?=
+ =?utf-8?B?YUFCcFJMV1V2L1o4QyttdGE2Q2FQS24ySE1UeXI0a1Q2eWhtUHlQRWZYdk51?=
+ =?utf-8?B?c3FNRnk4YWs5d3Z2cEV3aDZtRjVHNVI2SEVNNUlxa3FxS2lYbFBZeDYzWGRi?=
+ =?utf-8?B?K3pKQzFnQkFxRmhYQTNsYXpPcUx1UG9uR0M5dldOVlNYT09BR2hMbmIzc1FE?=
+ =?utf-8?B?akNjOXV2djR6K243bHZxMnltTzV2aE9iT3pTcnRYM0hSR0dGY1F6cEc2Z28r?=
+ =?utf-8?B?Yk5KQWdYTUs3N01kdkpqQXQ0b0IxRjBrN3FCek5tSCtHYkNORGx0dE5QY3Ur?=
+ =?utf-8?B?NEVkOGkzalZGKzFNRnlZb0F5dGtCRHNIc1hPdHNZOXBENTl2R2Zycms1c09w?=
+ =?utf-8?B?WjFqM3AyaHJTcmhuMEYzWmlPblhzS0dPMG1IckVnTlpWenBWSlI4NUxNRzdJ?=
+ =?utf-8?B?WU5qRUMxaExXZTJqcFdKUS9waVJ4ZXV5U255TXU0dENKV0oybEdpM0htaHBq?=
+ =?utf-8?B?Mk5UV0xiMmtiTklZNHhVSnNnampKV2djSHhhMnNWMnR2TzlwQWdtTVZQTlBB?=
+ =?utf-8?B?RGZrdnZwNW02REp4T1djc2lkWFdGSzhQQXpiRzFIaXU0MlNXdUNscjZtdmF5?=
+ =?utf-8?B?UFdHUVVDTGRpWDJ0Uk5valNlVStuN1dtQmUwTU9QNFg1dzBMRlNtSzlJUFNB?=
+ =?utf-8?B?NlJwR3BGR2x0RWdyenZJMXhZRUZwdEVWS2E3cm8vRGMzQTk5V1Z5SnJXVDk4?=
+ =?utf-8?B?TVhLV0NjNW9oYS8xa092aUVTODV6OFBZSWNlYnVIcThOKzl2TmFCM1RwZmZ4?=
+ =?utf-8?B?ZkFrelFzaUxoSFlVSnk0TC9idmNVcWJYc0FQb0h1RVgrOTkrWWRZbVMwTWEw?=
+ =?utf-8?B?cFN1NUVaYXJ5Sk5OYjJEK2VpaU9ETFNRaFRzWGpaQUZVdXo5YllLRG1DVXpT?=
+ =?utf-8?B?WUFtajcwbG9DT1AwYkdzTnh6T2IzTDRMRCtBdEpWMnpHY2NhSk1SMDdIbWll?=
+ =?utf-8?B?Yk5Mb2EyZ0Q0K3BFQW9tVld1eEIyanBDclF0cElyWVU1RnZJQ2lva2x1WklN?=
+ =?utf-8?B?NVpWMXdWY2FVWGtGR0FCZWpsTDRRcnhOeXord2hDQVB1M0pqRGxHaTBxbm53?=
+ =?utf-8?B?QW9OTnk4MVB4SG55ZmpLdWpxZUJjWUoyUjdiNEJSVEtQQ0twQkRSL0JsNk5W?=
+ =?utf-8?B?SCtPRzhJTUJjcHlCMnpvUWwzRndYRUpWQzdPcVpzRnpDN2lEMHlNSEhzS2Mv?=
+ =?utf-8?B?OWpHVjNTdS9BSXFrMk4yekZMZEZIMDVUbXI5ZUt6dTNyMVJNY2Z6QWNDQk5p?=
+ =?utf-8?B?aVE9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 799ef70e-e99a-47d5-df5a-08db668c3062
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3672.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2023 12:47:29.9556
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: IP02BSBG8FUjIj3uH7rZ1/cljigJ7xu3uZ1aF/miHCgKKxR+5iKZhz9IfWaqVBOVcPY5hs1dQi56qytlnY1ozzRgsmHV0easHyEAOEg9Glo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR11MB6753
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 01:39:03PM +0200, Johan Hovold wrote:
-> On Tue, Jun 06, 2023 at 01:18:19PM +0200, Oliver Neukum wrote:
-> > On 04.06.23 14:35, Johan Hovold wrote:
-> > > This series starts returning errors from break handling and also uses
-> > > that mechanism to report to user space when break signalling is not
-> > > supported (e.g. when device or driver support is missing).
+On 6/4/23 04:46, Tree Davies wrote:
 > 
-> > do you eventually want this to be done for all serial devices?
-> > That is does cdc-acm need something like this patch?
-> 
-> Looks good to me. If this turns out to confuse userspace we may have to
-> turn that -ENOTTY into 0 in the tty layer, but we can still use it to
-> avoid the unnecessary wait to "disable" the break state.
-> 
-> > From 16430d9f109f904b2bfbac6e43a939209b6c4bc7 Mon Sep 17 00:00:00 2001
-> > From: Oliver Neukum <oneukum@suse.com>
-> > Date: Tue, 6 Jun 2023 12:57:00 +0200
-> > Subject: [PATCH] usb: cdc-acm: return correct error code on unsupported break
-> > 
-> > Return -ENOTTY if the device says that it doesn't support break
-> > so that the upper layers get error reporting right.
+> _______________________________________________
+> Intel-wired-lan mailing list
+> Intel-wired-lan@osuosl.org
+> https://lists.osuosl.org/mailman/listinfo/intel-wired-lan
 
-Yeah, when I asked for this, I didn't realize that no devices did this,
-I thought it was a one-off with this device.  There is a distinct
-possibility that this will break userland.  This sounds like a good
-plan.
+Hi Tree,
 
--corey
+next time please send your contributions (applies to all kernel related 
+mailing lists) as text only/paste it into message.
+That way it will greatly improve readers experience and give you more 
+chance of not being ignored.
 
-> > 
-> > Signed-off-by: Oliver Neukum <oneukum@suse.com>
-> 
-> Acked-by: Johan Hovold <johan@kernel.org>
-> 
-> > ---
-> >  drivers/usb/class/cdc-acm.c | 3 +++
-> >  1 file changed, 3 insertions(+)
-> > 
-> > diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
-> > index 11da5fb284d0..7751f5728716 100644
-> > --- a/drivers/usb/class/cdc-acm.c
-> > +++ b/drivers/usb/class/cdc-acm.c
-> > @@ -892,6 +892,9 @@ static int acm_tty_break_ctl(struct tty_struct *tty, int state)
-> >  	struct acm *acm = tty->driver_data;
-> >  	int retval;
-> >  
-> > +	if (!(acm->ctrl_caps & USB_CDC_CAP_BRK))
-> > +		return -ENOTTY;
-> > +
-> >  	retval = acm_send_break(acm, state ? 0xffff : 0);
-> >  	if (retval < 0)
-> >  		dev_dbg(&acm->control->dev,
+Considering just content of your patch, it is fine,
+Reviewed-by: Przemek Kitszel <przemyslaw.kitszel@intel.com>
