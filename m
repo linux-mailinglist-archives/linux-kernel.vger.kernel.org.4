@@ -2,194 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5365C7241D0
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 14:12:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41B2C7241D1
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 14:13:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232135AbjFFMMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 08:12:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49332 "EHLO
+        id S237545AbjFFMNU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 08:13:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237449AbjFFMMf (ORCPT
+        with ESMTP id S236266AbjFFMNM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 08:12:35 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C031E78;
-        Tue,  6 Jun 2023 05:12:13 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 356Bu27l019072;
-        Tue, 6 Jun 2023 12:11:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=vL07l/foXbYW2GbPAvxRMO9aFR20+bjrFykzc+VGJOI=;
- b=obGN6yyyewnpP9Jhv3BaOBW01a7L92tfLOu5Yt9YeoMdaZFLNcG8mJAwJ7vm9GxZy4EC
- 6P37WOI01pM9qO7iEpgMlqPfw0v56Icv3r1sP+NHixNHdZf0pxm5h7or/01HmPyy+4z+
- AmzqAcxi9rzymWKWHNQe3Nesz3RLaSk9ikLuHvuyOa/Rn6bCGnkFr0/ZMZPR1+vKVt5J
- 2XgvoSdGAEB1t2MpJvdLHqUflE+S2VaXLaa3e5sOsfn9TmvqNx7oZI4t6ESFvnn56+Fb
- LWEwMK2rMMk7aGgV6w6IKIute22fH64WwB3PbxGkexL9QUNPe+ZbBaA5BtU3Puv9hfnD Nw== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r1d4etwvy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 06 Jun 2023 12:11:12 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 356CBBvY022935
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 6 Jun 2023 12:11:11 GMT
-Received: from [10.216.9.253] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 6 Jun 2023
- 05:11:03 -0700
-Message-ID: <feb0d11d-0930-d0b8-ab6e-cf477bbf114b@quicinc.com>
-Date:   Tue, 6 Jun 2023 17:41:00 +0530
+        Tue, 6 Jun 2023 08:13:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEB87199D
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 05:12:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686053475;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=C9UWxNSLczplRrlU8D85PXIfR9MjaZts2kqh1cwWtVQ=;
+        b=O/hFqfesUD8iA6RLTT/0Mj6sCJTv7rmZibBCb/IHvXs6BhOVGHQwdH3jY0iPgwdDxRHDGh
+        GjpDzTCBjYk5mAIMzPGwoHUltdTSwkuQ2cm6vrdo4bAFLQp8znHpVG2zaBsj4A3X/1EfRY
+        Em6yxJNsnhiJsvEeJ9a2iczKVkAEr/I=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-639-qeLKYcDPMJqNh4S-gPwWtw-1; Tue, 06 Jun 2023 08:11:10 -0400
+X-MC-Unique: qeLKYcDPMJqNh4S-gPwWtw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 72CDE858F1C;
+        Tue,  6 Jun 2023 12:11:09 +0000 (UTC)
+Received: from localhost (ovpn-12-83.pek2.redhat.com [10.72.12.83])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9C01E492B00;
+        Tue,  6 Jun 2023 12:11:08 +0000 (UTC)
+Date:   Tue, 6 Jun 2023 20:11:04 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Uladzislau Rezki <urezki@gmail.com>
+Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Dave Chinner <david@fromorbit.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
+Subject: Re: [PATCH 8/9] mm: vmalloc: Offload free_vmap_area_lock global lock
+Message-ID: <ZH8iWAgsDSF1I+B6@MiWiFi-R3L-srv>
+References: <20230522110849.2921-1-urezki@gmail.com>
+ <20230522110849.2921-9-urezki@gmail.com>
+ <ZH0vuwaSddREy9dz@MiWiFi-R3L-srv>
+ <ZH7128Q0MiRh6S5f@pc638.lan>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH V2 01/13] dt-bindings: remoteproc: qcom: Add support for
- multipd model
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <jassisinghbrar@gmail.com>, <mathieu.poirier@linaro.org>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <quic_eberman@quicinc.com>, <quic_mojha@quicinc.com>,
-        <kvalo@kernel.org>, <loic.poulain@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>
-CC:     <quic_srichara@quicinc.com>, <quic_sjaganat@quicinc.com>,
-        <quic_kathirav@quicinc.com>, <quic_anusha@quicinc.com>,
-        <quic_poovendh@quicinc.com>, <quic_varada@quicinc.com>,
-        <quic_devipriy@quicinc.com>
-References: <20230521222852.5740-1-quic_mmanikan@quicinc.com>
- <20230521222852.5740-2-quic_mmanikan@quicinc.com>
- <7940c743-815f-f864-d015-43d7e916ecfa@linaro.org>
- <a1456f62-d0a7-d5ec-b379-db1b6035c89c@quicinc.com>
- <d187eafb-4a80-9479-d063-3a01b47d8efa@linaro.org>
-From:   Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
-In-Reply-To: <d187eafb-4a80-9479-d063-3a01b47d8efa@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: PX85kbnB417PqgOd07TlNVd4HWUgoBA2
-X-Proofpoint-GUID: PX85kbnB417PqgOd07TlNVd4HWUgoBA2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-06_08,2023-06-06_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
- clxscore=1015 priorityscore=1501 malwarescore=0 mlxscore=0
- lowpriorityscore=0 adultscore=0 impostorscore=0 spamscore=0
- mlxlogscore=895 suspectscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2304280000 definitions=main-2306060103
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZH7128Q0MiRh6S5f@pc638.lan>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 06/06/23 at 11:01am, Uladzislau Rezki wrote:
+> On Mon, Jun 05, 2023 at 08:43:39AM +0800, Baoquan He wrote:
+> > On 05/22/23 at 01:08pm, Uladzislau Rezki (Sony) wrote:
+> > ......  
+> > > +static unsigned long
+> > > +this_cpu_zone_alloc_fill(struct cpu_vmap_zone *z,
+> > > +	unsigned long size, unsigned long align,
+> > > +	gfp_t gfp_mask, int node)
+> > > +{
+> > > +	unsigned long addr = VMALLOC_END;
+> > > +	struct vmap_area *va;
+> > > +
+> > > +	/*
+> > > +	 * It still can race. One task sets a progress to
+> > > +	 * 1 a second one gets preempted on entry, the first
+> > > +	 * zeroed the progress flag and second proceed with
+> > > +	 * an extra prefetch.
+> > > +	 */
+> > > +	if (atomic_xchg(&z->fill_in_progress, 1))
+> > > +		return addr;
+> > > +
+> > > +	va = kmem_cache_alloc_node(vmap_area_cachep, gfp_mask, node);
+> > > +	if (unlikely(!va))
+> > > +		goto out;
+> > > +
+> > > +	spin_lock(&free_vmap_area_lock);
+> > > +	addr = __alloc_vmap_area(&free_vmap_area_root, &free_vmap_area_list,
+> > > +		cvz_size, 1, VMALLOC_START, VMALLOC_END);
+> > > +	spin_unlock(&free_vmap_area_lock);
+> > 
+> > The 'z' is passed in from this_cpu_zone_alloc(), and it's got with
+> > raw_cpu_ptr(&cpu_vmap_zone). Here when we try to get chunk of cvz_size
+> > from free_vmap_area_root/free_vmap_area_list, how can we guarantee it
+> > must belong to the 'z' zone? With my understanding, __alloc_vmap_area()
+> > will get efficient address range sequentially bottom up from
+> > free_vmap_area_root. Please correct me if I am wrong.
+> > 
+> We do not guarantee that and it does not worth it. The most important is:
+> 
+> If we search a zone that exactly match a CPU-id the usage of a global
+> vmap space becomes more wider, i.e. toward a high address space. This is
+> not good because we can affect other users which allocate within a specific
+> range. On a big system it might be a problem. Therefore a pre-fetch is done 
+> sequentially on demand.
+> 
+> Secondly, i do not see much difference in performance if we follow
+> exactly CPU-zone-id.
 
+Ah, I see, the allocated range will be put into appropriate zone's
+busy tree by calculating its zone via addr_to_cvz(va->va_start). The
+cvz->free tree is only a percpu pre-fetch cache. This is smart, thanks a
+lot for explanation. 
 
-On 6/6/2023 11:44 AM, Krzysztof Kozlowski wrote:
-> On 05/06/2023 14:02, Manikanta Mylavarapu wrote:
->>>> +  memory-region:
->>>> +    items:
->>>> +      - description: Q6 pd reserved region
->>>> +
->>>> +  glink-edge:
->>>> +    $ref: /schemas/remoteproc/qcom,glink-edge.yaml#
->>>> +    description:
->>>> +      Qualcomm G-Link subnode which represents communication edge, channels
->>>> +      and devices related to the Modem.
->>>> +
->>>> +patternProperties:
->>>> +  "^pd-1|pd-2|pd-3":
->>>> +    type: object
->>>> +    description:
->>>> +      In Multipd model, WCSS pd depends on Q6 pd i.e Q6 pd should be up before
->>>> +      WCSS. It can be achieved by keeping wcss pd node as subnode of Q6
->>>> +      device node.
->>>
->>> That's not enough. Your description does not say what is this, why you
->>> have two protection domains for same compatible. What's more, it a bit
->>> deviates from hardware description.
->>>
->> WCSS means 'wireless connectivity sub system', in simple words it's a
->> wifi radio block.
->>
->> IPQ5018 SOC has both internal (AHB) wifi radio/WCSS and external (PCIE)
->> wifi radio/WCSS. In Q6, Root protection domain will provide services to
->> both internal (AHB) and external (PCIE) wifi radio's protection domain.
->> So we have two protection domains for IPQ5018, one is for internal(AHB)
->> and other is for external(PCIE) wifi radio.
 > 
-> So it is now in email, but not in the code...
->>
-I will add this info, corresponding block diagram in driver code.
+> > static unsigned long
+> > this_cpu_zone_alloc(unsigned long size, unsigned long align, gfp_t gfp_mask, int node)
+> > {
+> >         struct cpu_vmap_zone *z = raw_cpu_ptr(&cpu_vmap_zone);
+> > 	......
+> > 	if (addr == VMALLOC_END && left < 4 * PAGE_SIZE)
+> >                 addr = this_cpu_zone_alloc_fill(z, size, align, gfp_mask, node);
+> > }
+> > 
+> > > +
+> > > +	if (addr == VMALLOC_END) {
+> > > +		kmem_cache_free(vmap_area_cachep, va);
+> > > +		goto out;
+> > > +	}
+> > > +
+> > > +	va->va_start = addr;
+> > > +	va->va_end = addr + cvz_size;
+> > > +
+> > > +	fbl_lock(z, FREE);
+> > > +	va = merge_or_add_vmap_area_augment(va,
+> > > +		&fbl_root(z, FREE), &fbl_head(z, FREE));
+> > > +	addr = va_alloc(va, &fbl_root(z, FREE), &fbl_head(z, FREE),
+> > > +		size, align, VMALLOC_START, VMALLOC_END);
+> > > +	fbl_unlock(z, FREE);
+> > > +
+> > > +out:
+> > > +	atomic_set(&z->fill_in_progress, 0);
+> > > +	return addr;
+> > > +}
+> > > +
+> > > +static unsigned long
+> > > +this_cpu_zone_alloc(unsigned long size, unsigned long align, gfp_t gfp_mask, int node)
+> > > +{
+> > > +	struct cpu_vmap_zone *z = raw_cpu_ptr(&cpu_vmap_zone);
+> > > +	unsigned long extra = align > PAGE_SIZE ? align : 0;
+> > > +	unsigned long addr = VMALLOC_END, left = 0;
+> > > +
+> > > +	/*
+> > > +	 * It is disabled, fallback to a global heap.
+> > > +	 */
+> > > +	if (cvz_size == ULONG_MAX)
+> > > +		return addr;
+> > > +
+> > > +	/*
+> > > +	 * Any allocation bigger/equal than one half of
+> >                           ~~~~~~typo~~~~~~  bigger than/equal to
+> I will rework it!
+> 
+> --
+> Uladzislau Rezki
+> 
 
->>>> +
->>>> +    properties:
->>>> +      compatible:
->>>> +        enum:
->>>> +          - qcom,ipq5018-wcss-ahb-mpd
->>>> +          - qcom,ipq9574-wcss-ahb-mpd
->>>> +          - qcom,ipq5018-wcss-pcie-mpd
->>>
->>> Keep rather alphabetical order (so both 5018 together).
->>>
->>> I also do not understand these at all. Why adding bus type to
->>> compatible? This rarely is allowed (unless it is PCIe controller within
->>> soc).
->>>
->> IPQ5018 SOC has in-built PCIE controller. Here QDSP6 will bring up
->> external(PCIE) and internal (AHB) wifi radio's. To separate AHB, PCIE
->> radio's properties, i have added bus type to compatible.
-> 
-> It's the same device - WCSS - right? We do not create multiple nodes and
-> compatibles for the same devices. Bus suffixes are almost never parts of
-> compatibles.
-> 
-> 
-No it's not the same device. WCSS on inside IPQ5018 and WCSS attached 
-via pcie to IPQ5018. Here QDSP6 managing both WCSS's.
-
-So for better clarity i will use attached SOC ID in compatible.
-Below are the new compatible's.
-
-- qcom,ipq5018-wcss-mpd //IPQ5018 internal radio
-- qcom,ipq9574-wcss-mpd	//IPQ9574 internal radio
-- qcom,qcn6122-wcss-mpd //IPQ5018 attached radio
-
->>>
->>> Drop.
->>>
->>>> +
->>>> +unevaluatedProperties: false
->>>
->>> This changed... why?
->>>
->>>
->> 'unevaluatedProperties' is similar to 'additionalProperties' except
->> that it recognize properties declared in subschemas as well.
-> 
-> You don't have to explain me what are unevaluatedProperties or
-> additionalProperties. Let's assume that I know them. What you should
-> explain is why you changed it. Where is the reference to other schema?
-> 
-I will go with previously used 'additionalProperties' itself and add
-'unevaluatedProperties' in glink-edge.
-
-Thanks & Regards,
-Manikanta.
-> 
-> Best regards,
-> Krzysztof
-> 
