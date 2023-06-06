@@ -2,115 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A79172474F
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 17:11:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6499C724756
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 17:11:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231431AbjFFPLP convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 6 Jun 2023 11:11:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40956 "EHLO
+        id S237962AbjFFPLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 11:11:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233277AbjFFPLN (ORCPT
+        with ESMTP id S238079AbjFFPLi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 11:11:13 -0400
-Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A9D91B5
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 08:11:11 -0700 (PDT)
-Received: from omf19.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay07.hostedemail.com (Postfix) with ESMTP id 6CC35160658;
-        Tue,  6 Jun 2023 15:11:08 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf19.hostedemail.com (Postfix) with ESMTPA id 487DA20029;
-        Tue,  6 Jun 2023 15:11:04 +0000 (UTC)
-Message-ID: <9717acd3dd00d607da718da251a0bba6b376da96.camel@perches.com>
-Subject: Re: [PATCH] checkpatch: check for missing Fixes tags
-From:   Joe Perches <joe@perches.com>
-To:     Dan Carpenter <dan.carpenter@linaro.org>,
-        Andy Whitcroft <apw@canonical.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Sasha Levin <sashal@kernel.org>, Tom Gall <tom.gall@linaro.org>
-Date:   Tue, 06 Jun 2023 08:11:03 -0700
-In-Reply-To: <ZH7uo6ph8nhidxcV@moroto>
-References: <ZH7uo6ph8nhidxcV@moroto>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.48.2 (3.48.2-1.fc38) 
+        Tue, 6 Jun 2023 11:11:38 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EFBBE40;
+        Tue,  6 Jun 2023 08:11:30 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3f7353993cbso23937115e9.0;
+        Tue, 06 Jun 2023 08:11:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686064289; x=1688656289;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fCd3lkwQUjAtQAbzUB28HjKPWXHFoc2L/9jgru84Ov0=;
+        b=ish0zYwfcnWBf23xCA7LmIgG4NTvS7zwkirPatfbITtkHga5J2dnUELsXYRmHw0hBK
+         2yPxou7r4G8wvcn8AR4AyXg+7jdpQBAemLF0oJCAhgyfqkAzU9XbDmR/85SxX/z2Yu5b
+         cliNfhOvw2b42Wl5gHv75Ld69bHmzetlxrL47ffbcjjlsy2IbAdK1AX5V2ERve3MCx+5
+         7OBjY/tNIlVjhAu/YnqWiVEgSp0jMPOJqi6HEoMxfrcqUVFn7bAcWr55PpJHLqXYRHcm
+         AtnPEMnI9zN3rABTomPwziKyxWMqDZrEAg5p04xZSzUXONqtjhuOqX8WlVneJAOjZ9uE
+         LejQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686064289; x=1688656289;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fCd3lkwQUjAtQAbzUB28HjKPWXHFoc2L/9jgru84Ov0=;
+        b=Bqjt3DQryeo5TeR4OuMrS6gUJHt5mbsYVHPbpI3DRK+QBTTqu0AyTXpC3JdXTdQ7ua
+         iNEfe17CUhwX6FalKeW1S/nW2Wo/0soQ84pYukbU6af72K5nODp/F7gl5h76F7rZqyf5
+         MUMhVvWXTnJdtad7bKRADB24JN4aElJXRDHbahMOKnp+zvGVDZFJve+9h+QucaRFqSkb
+         fJ3PJ5e0MnIuHQ1+JAv1BQa/LBib4BNGX7FXdrvjsTeKgdX+lfOiP3XoaVHc0OcMvzh8
+         WXCK3/0bU0ExIEseteWi+4vKNtgGGucPT8XnQZwSqUAyWHWuw9XgFQOCOpWxn40WlO99
+         UKIg==
+X-Gm-Message-State: AC+VfDyrhcFb4Zy2wQwm1kT/HQg14LN47I/nv/OYpgL2sqU8iH8lRyes
+        QpBq1SemmwdMt70PmNhWMn8=
+X-Google-Smtp-Source: ACHHUZ7kQjKHWOPBn6JXoALqEPZQHEH2+LHU26Wrp2SsYPhNJLZsybqPxUZc7kMF/pLrl02otLjVKA==
+X-Received: by 2002:a7b:c3d4:0:b0:3f4:1ce0:a606 with SMTP id t20-20020a7bc3d4000000b003f41ce0a606mr2131867wmj.1.1686064288726;
+        Tue, 06 Jun 2023 08:11:28 -0700 (PDT)
+Received: from ?IPV6:2a01:c22:6ea0:1800:989b:ff6a:75e0:288d? (dynamic-2a01-0c22-6ea0-1800-989b-ff6a-75e0-288d.c22.pool.telefonica.de. [2a01:c22:6ea0:1800:989b:ff6a:75e0:288d])
+        by smtp.googlemail.com with ESMTPSA id m14-20020a7bcb8e000000b003f7ba52eeccsm6762911wmi.7.2023.06.06.08.11.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Jun 2023 08:11:28 -0700 (PDT)
+Message-ID: <7aa7af7f-7d27-02bf-bfa8-3551d5551d61@gmail.com>
+Date:   Tue, 6 Jun 2023 17:11:27 +0200
 MIME-Version: 1.0
-X-Stat-Signature: e8yizfse93tg34wrnxuks1axdeyptqji
-X-Rspamd-Server: rspamout07
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED
-        autolearn=no autolearn_force=no version=3.4.6
-X-Rspamd-Queue-Id: 487DA20029
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1+javYTQk+znKLFunfTX/GuQNyDwql5ppE=
-X-HE-Tag: 1686064264-172003
-X-HE-Meta: U2FsdGVkX1+eUvA1i0Fj9NdSdrQT4hO2mjQv92PtA4kgpE592e6rAUI3ME5m6kc/aR+LitmPRJmYeBdyse8MSNXulh2JgBTfY3OeW3bBqx5wxzTRqYbJe1QT0sM58LArvNmrF2Vm2++3q9Tw5hhUtlwGAb4Jchkgz/O/FLUmU3KycC7FahjjhIKIr7B+V1HaZok109BExatA9FZr1OdBXhBIr1262F5TXYb8tEcz5M0Tu6y+TP9OZi3sEekDA+5iSXwwZSV32nD49EWBuhPwwRuRTdEOWPDqZzN0GIsvAtFj++Kt1iOcHoFLWrZ3qNLG
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Content-Language: en-US
+To:     Patrick Thompson <ptf@google.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        nic_swsd@realtek.com
+References: <20230606140041.3244713-1-ptf@google.com>
+ <CAJs+hrHAz17Kvr=9e2FR+R=qZK1TyhpMyHKzSKO9k8fidHhTsA@mail.gmail.com>
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+Subject: Re: [PATCH] r8169: Disable multicast filter for RTL_GIGA_MAC_VER_46
+In-Reply-To: <CAJs+hrHAz17Kvr=9e2FR+R=qZK1TyhpMyHKzSKO9k8fidHhTsA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-06-06 at 11:30 +0300, Dan Carpenter wrote:
-> This check looks for common words that probably indicate a patch
-> is a fix.  For now the regex is:
+On 06.06.2023 16:15, Patrick Thompson wrote:
+> For added context I came across this issue on this realtek adapter:
+> 10ec:8168:103c:8267. The device erroneously filters multicast packets
+> that I can see with other adapters using the same netdev settings.
 > 
-> 	(BUG: KASAN|Call Trace:|syzkaller|stable\@)
+> 
+> On Tue, Jun 6, 2023 at 10:00 AM Patrick Thompson <ptf@google.com> wrote:
+>>
+>> MAC_VER_46 ethernet adapters fail to detect IPv6 multicast packets
+>> unless allmulti is enabled. Add exception for VER_46 in the same way
+>> VER_35 has an exception.
+>>
+>> Signed-off-by: Patrick Thompson <ptf@google.com>
+>> ---
+>>
+>>  drivers/net/ethernet/realtek/r8169_main.c | 3 ++-
+>>  1 file changed, 2 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/net/ethernet/realtek/r8169_main.c b/drivers/net/ethernet/realtek/r8169_main.c
+>> index 4b19803a7dd01..96245e96ee507 100644
+>> --- a/drivers/net/ethernet/realtek/r8169_main.c
+>> +++ b/drivers/net/ethernet/realtek/r8169_main.c
+>> @@ -2583,7 +2583,8 @@ static void rtl_set_rx_mode(struct net_device *dev)
+>>                 rx_mode |= AcceptAllPhys;
+>>         } else if (netdev_mc_count(dev) > MC_FILTER_LIMIT ||
+>>                    dev->flags & IFF_ALLMULTI ||
+>> -                  tp->mac_version == RTL_GIGA_MAC_VER_35) {
+>> +                  tp->mac_version == RTL_GIGA_MAC_VER_35 ||
+>> +                  tp->mac_version == RTL_GIGA_MAC_VER_46) {
+>>                 /* accept all multicasts */
+>>         } else if (netdev_mc_empty(dev)) {
+>>                 rx_mode &= ~AcceptMulticast;
+>> --
+>> 2.41.0.rc0.172.g3f132b7071-goog
+>>
 
-Seems sensible.  Style notes:
+Thanks for the report and the patch. I just asked a contact in Realtek
+whether more chip versions may be affected. Then the patch should be
+extended accordingly. Let's wait few days for a response.
 
+I think we should make this a fix. Add the following as Fixes tag
+and annotate the patch as "net" (see netdev FAQ).
 
-> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-[]
-> @@ -3186,6 +3192,12 @@ sub process {
->  			}
->  		}
->  
-> +# These indicate a bug fix
-> +		if (!$in_header_lines &&
-> +			$line =~ /(BUG: KASAN|Call Trace:|syzkaller|stable\@)/) {
-> +			$needs_fixes_tag++;
-
-Align to open parenthesis please.
-Maybe add "Closes:"
-This should not check any actual patch lines.
-
-So this should likely use
-
-		if (!$in_header_lines && !$is_patch &&
-		    $line =~ /\b(?:BUG: KASAN|Call Trace:|Closes:|syzkaller|stable\@)/) {
-
-There's no use of $needs_fixes_tag as something
-other than a bool, so please just use
-
-			$needs_fixes_tag = 1;
-
-> @@ -3198,6 +3210,7 @@ sub process {
->  			my $id_length = 1;
->  			my $id_case = 1;
->  			my $title_has_quotes = 0;
-> +			$fixes_tag++;
-
-			$fixes_tag = 1;
-
-here too
-
-> @@ -7636,6 +7649,12 @@ sub process {
->  		ERROR("NOT_UNIFIED_DIFF",
->  		      "Does not appear to be a unified-diff format patch\n");
->  	}
-> +	if ($is_patch && $has_commit_log && $chk_fixes_tag) {
-> +		if ($needs_fixes_tag && $fixes_tag == 0) {
-
-		if ($needs_fixes_tag && !$fixes_tag) {
-
-> +			ERROR("MISSING_FIXES_TAG",
-> +			"This looks like a fix but there is no Fixes: tag\n");
-
-Alignment to open parenthesis and likely WARN not ERROR
+6e1d0b898818 ("r8169:add support for RTL8168H and RTL8107E")
 
