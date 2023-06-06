@@ -2,72 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38F6C723493
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 03:35:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46E02723495
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 03:36:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233709AbjFFBf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 21:35:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56894 "EHLO
+        id S233751AbjFFBgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 21:36:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230089AbjFFBf0 (ORCPT
+        with ESMTP id S230089AbjFFBgC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 21:35:26 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2C9048F;
-        Mon,  5 Jun 2023 18:35:23 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.170])
-        by gateway (Coremail) with SMTP id _____8AxSPFajX5kv0kAAA--.1158S3;
-        Tue, 06 Jun 2023 09:35:22 +0800 (CST)
-Received: from [10.20.42.170] (unknown [10.20.42.170])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxNeRZjX5kYo8BAA--.6894S3;
-        Tue, 06 Jun 2023 09:35:21 +0800 (CST)
-Message-ID: <4831764b-c53a-188f-cdd2-6764c76fc627@loongson.cn>
-Date:   Tue, 6 Jun 2023 09:35:21 +0800
+        Mon, 5 Jun 2023 21:36:02 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2574DC;
+        Mon,  5 Jun 2023 18:36:01 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id 5614622812f47-392116b8f31so3074589b6e.2;
+        Mon, 05 Jun 2023 18:36:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686015361; x=1688607361;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=XpR3P96jv7SCbbRT9L5gH5HvCTvECFvcY1akf5QQvZI=;
+        b=ZgnMWNz7zw07iop91hw4lWFpbR/jj8HOAVd8tmOEFdyhyQFdn+zGX23B89n9IbVy9U
+         kJemcIDDqBGZz//Mq5LC980MwTFBmQQcrkjyRdv+iTfj2qCYp7Kt9m7uAu7lTt56vhEO
+         bJPFKRarCj0tSS5IJNCxgiGNoaGwCFjvDuh3iHbDg0QA1urjm14KAQDIxm4D26VhGEyH
+         xH3PRchBfbdyBB8tD6hmgxvCFeOI1RcwdS2FFR6tRWhsuIpjq+ZKjxU8t48a1djVC+cw
+         1Q2TAwm87bReqjiKnrTFqbhtlyosX7iR/tGfi05XUKXlkaMij1SqSrVG1AziMxSf4Qi3
+         bjpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686015361; x=1688607361;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XpR3P96jv7SCbbRT9L5gH5HvCTvECFvcY1akf5QQvZI=;
+        b=XH4EffOCdQskzUzgk/m9HisuLVuVIC+UaHAstWeSgge5RGgtgFxM3US6AMz0JVxopY
+         B1BMQ3buI7U6XxFPdaugsiNpvZkHPqY9nzKULzoGWLwhheJ5Im4Olo3i3EHnZFoRTQbF
+         NGhPyDOrJ/FEcYSUx9cSdqtbc7mn3V5+ugHOX+su8/mRBHvEoKuBr+ZDDoemMvAUcBlv
+         znKzYpn5SiSbIN+TpKCPvTItHrZt0I5fWd44lemtPCgG0TJs9BgpjYvpN+cNYYI65U/S
+         LjPjeO3lgnnEO1D/k3LqUGX0JWnaBtMUJUUXGhMx7fIlcItenKGyqwrbJkJFHkvZLYqJ
+         qRAQ==
+X-Gm-Message-State: AC+VfDyoVByvdRU+F2uEOwJ5JjZoBZf82cbI8IrxB+QhNnNGVlBaciry
+        d4mMORqlgWpkKGXCDckXHdQ=
+X-Google-Smtp-Source: ACHHUZ5oS6qs4j0ZcaYF5n2D3KQf9+yBhNSKgYie6iczVtetpf7zaE0ckCqefaWMmXgCdyVT5d6mTw==
+X-Received: by 2002:aca:f1a:0:b0:39a:ca93:53d2 with SMTP id 26-20020aca0f1a000000b0039aca9353d2mr322736oip.10.1686015360840;
+        Mon, 05 Jun 2023 18:36:00 -0700 (PDT)
+Received: from debian.me (subs32-116-206-28-36.three.co.id. [116.206.28.36])
+        by smtp.gmail.com with ESMTPSA id 3-20020aa79243000000b0065a1b05193asm2549852pfp.185.2023.06.05.18.36.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Jun 2023 18:36:00 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 0C10E1069AF; Tue,  6 Jun 2023 08:35:56 +0700 (WIB)
+Date:   Tue, 6 Jun 2023 08:35:56 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux Kernel Network Developers <netdev@vger.kernel.org>,
+        Linux Real Time <linux-rt-users@vger.kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Paolo Abeni <pabeni@redhat.com>, SamW <proaudiomanuk@gmail.com>
+Subject: Re: Fwd: commit 6e98b09da931a00bf4e0477d0fa52748bf28fcce suspect
+ causing full system lockup
+Message-ID: <ZH6NfCe-WbvukFsJ@debian.me>
+References: <9f12c322-fb62-26f0-46d1-61936a419468@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v12 20/31] LoongArch: KVM: Implement handle csr excption
-Content-Language: en-US
-To:     Tianrui Zhao <zhaotianrui@loongson.cn>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        loongarch@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
-        Mark Brown <broonie@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Xi Ruoyao <xry111@xry111.site>
-References: <20230530015223.147755-1-zhaotianrui@loongson.cn>
- <20230530015223.147755-21-zhaotianrui@loongson.cn>
-From:   "bibo, mao" <maobibo@loongson.cn>
-In-Reply-To: <20230530015223.147755-21-zhaotianrui@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxNeRZjX5kYo8BAA--.6894S3
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBj93XoWxZFW3JrW8Zw15Wry5Xw1fGrX_yoW5tr1rpa
-        4kA3WrCrW0qw17t34ftFnavFn8JrZ7Gw17XFy2q345Z3Zrtrn5GFWvgryDXrWDGFZ5XF4I
-        qay5trs5Cr4qyagCm3ZEXasCq-sJn29KB7ZKAUJUUUUf529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUP2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-        6r4j6r4UJwAaw2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0c
-        Ia020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_
-        WrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrw
-        CYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48J
-        MxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI
-        0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y
-        0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x0267AKxV
-        W8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1l
-        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8KNt3UUUU
-        U==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="NLJN2ITb1fArYsZS"
+Content-Disposition: inline
+In-Reply-To: <9f12c322-fb62-26f0-46d1-61936a419468@gmail.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -75,126 +79,38 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--NLJN2ITb1fArYsZS
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-在 2023/5/30 09:52, Tianrui Zhao 写道:
-> Implement kvm handle LoongArch vcpu exit caused by reading and
-> writing csr. Using csr structure to emulate the registers.
-> 
-> Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
-> ---
->  arch/loongarch/kvm/exit.c | 98 +++++++++++++++++++++++++++++++++++++++
->  1 file changed, 98 insertions(+)
->  create mode 100644 arch/loongarch/kvm/exit.c
-> 
-> diff --git a/arch/loongarch/kvm/exit.c b/arch/loongarch/kvm/exit.c
-> new file mode 100644
-> index 000000000000..508cbce31aa5
-> --- /dev/null
-> +++ b/arch/loongarch/kvm/exit.c
-> @@ -0,0 +1,98 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2020-2023 Loongson Technology Corporation Limited
-> + */
-> +
-> +#include <linux/errno.h>
-> +#include <linux/err.h>
-> +#include <linux/module.h>
-> +#include <linux/preempt.h>
-> +#include <linux/vmalloc.h>
-> +#include <asm/fpu.h>
-> +#include <asm/inst.h>
-> +#include <asm/time.h>
-> +#include <asm/tlb.h>
-> +#include <asm/loongarch.h>
-> +#include <asm/numa.h>
-> +#include <asm/kvm_vcpu.h>
-> +#include <asm/kvm_csr.h>
-> +#include <linux/kvm_host.h>
-> +#include <asm/mmzone.h>
-> +#include "trace.h"
-> +
-> +static unsigned long _kvm_emu_read_csr(struct kvm_vcpu *vcpu, int csrid)
-> +{
-> +	struct loongarch_csrs *csr = vcpu->arch.csr;
-> +	unsigned long val = 0;
-> +
-> +	if (csrid < 4096 && (get_gcsr_flag(csrid) & SW_GCSR))
-> +		val = kvm_read_sw_gcsr(csr, csrid);
-> +	else
-> +		pr_warn_once("Unsupport csrread 0x%x with pc %lx\n",
-> +			csrid, vcpu->arch.pc);
-> +	return val;
-> +}
-can 4096 be replace with macro, or be wrapped in function get_gcsr_flag and add GCSR_VALID flag?
-> +
-> +static void _kvm_emu_write_csr(struct kvm_vcpu *vcpu, int csrid,
-> +	unsigned long val)
-> +{
-> +	struct loongarch_csrs *csr = vcpu->arch.csr;
-> +
-> +	if (csrid < 4096 && (get_gcsr_flag(csrid) & SW_GCSR))
-> +		kvm_write_sw_gcsr(csr, csrid, val);
-> +	else
-> +		pr_warn_once("Unsupport csrwrite 0x%x with pc %lx\n",
-> +				csrid, vcpu->arch.pc);
-> +}
-ditto 
+On Fri, Jun 02, 2023 at 09:27:48AM +0700, Bagas Sanjaya wrote:
+> Anyway, I'm adding it to regzbot:
+>=20
+> #regzbot introduced: 6e98b09da931a0 https://bugzilla.kernel.org/show_bug.=
+cgi?id=3D217519
+> #regzbot title: Networking pull for v6.4 causes full system lockup on RTL=
+8111/8168/8411
+>=20
 
-> +
-> +static void _kvm_emu_xchg_csr(struct kvm_vcpu *vcpu, int csrid,
-> +	unsigned long csr_mask, unsigned long val)
-> +{
-> +	struct loongarch_csrs *csr = vcpu->arch.csr;
-> +
-> +	if (csrid < 4096 && (get_gcsr_flag(csrid) & SW_GCSR)) {
-> +		unsigned long orig;
-> +
-> +		orig = kvm_read_sw_gcsr(csr, csrid);
-> +		orig &= ~csr_mask;
-> +		orig |= val & csr_mask;
-> +		kvm_write_sw_gcsr(csr, csrid, orig);
-> +	} else
-> +		pr_warn_once("Unsupport csrxchg 0x%x with pc %lx\n",
-> +				csrid, vcpu->arch.pc);
-> +}
-ditto
+Closing as there is already a confirmed fix (see Bugzilla):
 
-Regards
-Bibo, Mao
-> +
-> +static int _kvm_handle_csr(struct kvm_vcpu *vcpu, larch_inst inst)
-> +{
-> +	unsigned int rd, rj, csrid;
-> +	unsigned long csr_mask;
-> +	unsigned long val = 0;
-> +
-> +	/*
-> +	 * CSR value mask imm
-> +	 * rj = 0 means csrrd
-> +	 * rj = 1 means csrwr
-> +	 * rj != 0,1 means csrxchg
-> +	 */
-> +	rd = inst.reg2csr_format.rd;
-> +	rj = inst.reg2csr_format.rj;
-> +	csrid = inst.reg2csr_format.csr;
-> +
-> +	/* Process CSR ops */
-> +	if (rj == 0) {
-> +		/* process csrrd */
-> +		val = _kvm_emu_read_csr(vcpu, csrid);
-> +		vcpu->arch.gprs[rd] = val;
-> +	} else if (rj == 1) {
-> +		/* process csrwr */
-> +		val = vcpu->arch.gprs[rd];
-> +		_kvm_emu_write_csr(vcpu, csrid, val);
-> +	} else {
-> +		/* process csrxchg */
-> +		val = vcpu->arch.gprs[rd];
-> +		csr_mask = vcpu->arch.gprs[rj];
-> +		_kvm_emu_xchg_csr(vcpu, csrid, csr_mask, val);
-> +	}
-> +
-> +	return EMULATE_DONE;
-> +}
+#regzbot resolved: d6c36cbc5e533f
 
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--NLJN2ITb1fArYsZS
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZH6NdwAKCRD2uYlJVVFO
+o+7tAP0a3YFgJGGHZy3B4JvneA+tB3lEMl8UXLMzavt/BnCnUQD9GbssiUMLtzBb
+dC8nEXgn6KRFlEoGuT2zpF7hOzycJA0=
+=KTvF
+-----END PGP SIGNATURE-----
+
+--NLJN2ITb1fArYsZS--
