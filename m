@@ -2,51 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55AAE723F55
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 12:26:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 352B1723F5A
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 12:26:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235707AbjFFK0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 06:26:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48704 "EHLO
+        id S234997AbjFFK0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 06:26:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231438AbjFFKZ4 (ORCPT
+        with ESMTP id S232883AbjFFK0W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 06:25:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A80E8;
-        Tue,  6 Jun 2023 03:25:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CB755623A8;
-        Tue,  6 Jun 2023 10:25:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96818C433EF;
-        Tue,  6 Jun 2023 10:25:52 +0000 (UTC)
-Message-ID: <cb390322-3b4a-7ed3-e304-11393342787c@xs4all.nl>
-Date:   Tue, 6 Jun 2023 12:25:51 +0200
+        Tue, 6 Jun 2023 06:26:22 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E9B0E6E;
+        Tue,  6 Jun 2023 03:26:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=PP+oq9SiF87lBNI6tats4jiuMD4acRFhfDstaMQqkVg=; b=O86TfGr/JsGqU9JoWtD9rq4e0D
+        WdU4OjJMOzATtHlzH3FDupVbiJ7nUkC6KSBCwa4M4K7GjTf37SSjKRKR+Eu4lKU/3EIZpxcNP+pO4
+        JUCBx/hIz8FEY4gK+0vjBTzKwYzLC7gLew9VzYmYD9Rkh3BDb3JtitiGfZJqOPXvckqLFA8KGl3Gq
+        I0hbxK3KLdfmiU6nLTIpOJn/bxOYBrW72lk2fo1evKo9BAshGWcmIgreYmGUZ2kSkEDrBX7Kf3Tyd
+        dXMg6lTpW6nZwIZuRxXI2DNKE8/sp52vLFUBDIdzxXjdoYZu80iFbbrSyUTIcLHz5q+HgNvugkSOY
+        H4JCJOIw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:41340)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1q6TtH-0005Sx-DX; Tue, 06 Jun 2023 11:26:15 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1q6TtE-00073O-Cm; Tue, 06 Jun 2023 11:26:12 +0100
+Date:   Tue, 6 Jun 2023 11:26:12 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Maxime Chevallier <maxime.chevallier@bootlin.com>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>, davem@davemloft.net,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alexis.lothore@bootlin.com, thomas.petazzoni@bootlin.com,
+        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Simon Horman <simon.horman@corigine.com>
+Subject: Re: [PATCH net-next 1/2] net: stmmac: Add PCS_LYNX as a dependency
+ for the whole driver
+Message-ID: <ZH8JxF+TNuX0C1vC@shell.armlinux.org.uk>
+References: <20230606064914.134945-1-maxime.chevallier@bootlin.com>
+ <20230606064914.134945-2-maxime.chevallier@bootlin.com>
+ <889297a0-88c3-90df-7752-efa00184859@linux-m68k.org>
+ <ZH78uGBfeHjI4Cdn@shell.armlinux.org.uk>
+ <20230606121311.3cc5aa78@pc-7.home>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH RFC v2 5/6] media: v4l2-ctrls: add lens calibration
- controls
-Content-Language: en-US
-To:     Michael Riesch <michael.riesch@wolfvision.net>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     libcamera-devel@lists.libcamera.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Matthias Fend <Matthias.Fend@wolfvision.net>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230406-feature-controls-lens-v2-0-faa8ad2bc404@wolfvision.net>
- <20230406-feature-controls-lens-v2-5-faa8ad2bc404@wolfvision.net>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <20230406-feature-controls-lens-v2-5-faa8ad2bc404@wolfvision.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230606121311.3cc5aa78@pc-7.home>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,131 +78,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/04/2023 11:45, Michael Riesch wrote:
-> Add the controls V4L2_CID_LENS_CALIB_CONTROL and V4L2_CID_LENS_CALIB_STATUS
-> that facilitate the control of the lens group calibration procedure.
+On Tue, Jun 06, 2023 at 12:13:11PM +0200, Maxime Chevallier wrote:
+> Hello Geert, Russell,
 > 
-> Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
-> ---
->  .../userspace-api/media/v4l/ext-ctrls-camera.rst   | 35 ++++++++++++++++++++++
->  drivers/media/v4l2-core/v4l2-ctrls-defs.c          |  4 +++
->  include/uapi/linux/v4l2-controls.h                 | 12 ++++++++
->  3 files changed, 51 insertions(+)
+> On Tue, 6 Jun 2023 10:30:32 +0100
+> "Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
 > 
-> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
-> index a17620ab03b9..8b54a0f3a617 100644
-> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
-> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
-> @@ -297,6 +297,41 @@ enum v4l2_auto_focus_range -
->      (V4L2_CID_ZOOM_ABSOLUTE and V4L2_CID_ZOOM_RELATIVE). The unit is
->      driver-specific. The value should be a positive integer.
->  
-> +``V4L2_CID_LENS_CALIB_CONTROL (bitmask)``
-> +    Control the calibration procedure (or individual parts thereof) of the lens
-> +    groups. For example, this could include the mechanical range detection
-> +    of zoom lens motors. This is a write-only control.
-> +
-> +.. tabularcolumns:: |p{6.8cm}|p{10.7cm}|
-> +
-> +.. flat-table::
-> +    :header-rows:  0
-> +    :stub-columns: 0
-> +
-> +    * - ``V4L2_LENS_CALIB_STOP``
-> +      - Stop the lens calibration procedure.
-> +    * - ``V4L2_LENS_CALIB_START``
-> +      - Start the complete lens calibration procedure.
-
-I don't like this as a bitmask control. Wouldn't it be better to have
-two 'button' controls? One to start the calibration, one to stop?
-
-Are more calibration control actions expected?
-
-> +
-> +``V4L2_CID_LENS_CALIB_STATUS (bitmask)``
-> +    The status of the calibration procedure (or individual parts thereof) of
-> +    the lens groups. This is a read-only control.
-> +
-> +.. tabularcolumns:: |p{6.8cm}|p{10.7cm}|
-> +
-> +.. flat-table::
-> +    :header-rows:  0
-> +    :stub-columns: 0
-> +
-> +    * - ``V4L2_LENS_CALIB_IDLE``
-> +      - Lens calibration procedure has not yet been started.
-> +    * - ``V4L2_LENS_CALIB_BUSY``
-> +      - Lens calibration procedure is in progress.
-> +    * - ``V4L2_LENS_CALIB_COMPLETE``
-> +      - Lens calibration procedure is complete.
-> +    * - ``V4L2_LENS_CALIB_FAILED``
-> +      - Lens calibration procedure has failed.
-> +
->  ``V4L2_CID_IRIS_ABSOLUTE (integer)``
->      This control sets the camera's aperture to the specified value. The
->      unit is undefined. Larger values open the iris wider, smaller values
-> diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-> index 3ef465ba73bd..faddfecba6d9 100644
-> --- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-> +++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-> @@ -1050,6 +1050,8 @@ const char *v4l2_ctrl_get_name(u32 id)
->  	case V4L2_CID_ZOOM_STATUS:		return "Zoom, Status";
->  	case V4L2_CID_FOCUS_SPEED:		return "Focus, Speed";
->  	case V4L2_CID_ZOOM_SPEED:		return "Zoom, Speed";
-> +	case V4L2_CID_LENS_CALIB_CONTROL:	return "Lens Calibration, Control";
-> +	case V4L2_CID_LENS_CALIB_STATUS:	return "Lens Calibration, Status";
->  
->  	/* FM Radio Modulator controls */
->  	/* Keep the order of the 'case's the same as in v4l2-controls.h! */
-> @@ -1596,6 +1598,7 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
->  	case V4L2_CID_FOCUS_RELATIVE:
->  	case V4L2_CID_IRIS_RELATIVE:
->  	case V4L2_CID_ZOOM_RELATIVE:
-> +	case V4L2_CID_LENS_CALIB_CONTROL:
->  		*flags |= V4L2_CTRL_FLAG_WRITE_ONLY |
->  			  V4L2_CTRL_FLAG_EXECUTE_ON_WRITE;
->  		break;
-> @@ -1603,6 +1606,7 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
->  	case V4L2_CID_FOCUS_STATUS:
->  	case V4L2_CID_ZOOM_CURRENT:
->  	case V4L2_CID_ZOOM_STATUS:
-> +	case V4L2_CID_LENS_CALIB_STATUS:
->  		*flags |= V4L2_CTRL_FLAG_READ_ONLY | V4L2_CTRL_FLAG_VOLATILE;
-
-It makes no sense that this is volatile. Besides the comments I made in patch 3/6, there
-is also the fact that I would expect the device to provide some sort of interrupt to
-indicate calibration status changes. Otherwise userspace would have to keep polling to
-know when the calibration finishes, which would be a really poor hardware design.
-
-Is this really the case for the hardware you are considering?
-
->  		break;
->  	case V4L2_CID_FLASH_STROBE_STATUS:
-> diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-> index 8d84508d4db8..24c0eb5f4d29 100644
-> --- a/include/uapi/linux/v4l2-controls.h
-> +++ b/include/uapi/linux/v4l2-controls.h
-> @@ -1004,6 +1004,18 @@ enum v4l2_auto_focus_range {
->  #define V4L2_CID_FOCUS_SPEED			(V4L2_CID_CAMERA_CLASS_BASE+41)
->  #define V4L2_CID_ZOOM_SPEED			(V4L2_CID_CAMERA_CLASS_BASE+42)
->  
-> +#define V4L2_LENS_CALIB_STOP			(0 << 0)
-> +#define V4L2_LENS_CALIB_START			(1 << 0)
-> +
-> +#define V4L2_CID_LENS_CALIB_CONTROL		(V4L2_CID_CAMERA_CLASS_BASE+43)
-> +
-> +#define V4L2_LENS_CALIB_IDLE			(0 << 0)
-> +#define V4L2_LENS_CALIB_BUSY			(1 << 0)
-> +#define V4L2_LENS_CALIB_COMPLETE		(1 << 1)
-> +#define V4L2_LENS_CALIB_FAILED			(1 << 2)
-> +
-> +#define V4L2_CID_LENS_CALIB_STATUS		(V4L2_CID_CAMERA_CLASS_BASE+44)
-> +
->  /* FM Modulator class control IDs */
->  
->  #define V4L2_CID_FM_TX_CLASS_BASE		(V4L2_CTRL_CLASS_FM_TX | 0x900)
+> > On Tue, Jun 06, 2023 at 10:29:20AM +0200, Geert Uytterhoeven wrote:
+> > > 	Hi Maxime,
+> > > 
+> > > On Tue, 6 Jun 2023, Maxime Chevallier wrote:  
+> > > > Although pcs_lynx is only used on dwmac_socfpga for now, the cleanup
+> > > > path is in the generic driver, and triggers build issues for other
+> > > > stmmac variants. Make sure we build pcs_lynx in all cases too, as for
+> > > > XPCS.  
+> > > 
+> > > That seems suboptimal to me, as it needlesly increases kernel size for
+> > > people who do not use dwmac_socfpga.  Hence I made an alternative patch:
+> > > https://lore.kernel/org/7b36ac43778b41831debd5c30b5b37d268512195.1686039915.git.geert+renesas@glider.be  
+> > 
+> > A better solution would be to re-architect the removal code so that
+> > whatever creates the PCS is also responsible for removing it.
+> > 
+> > Also, dwmac_socfpga nees to be reorganised anyway, because it calls
+> > stmmac_dvr_probe() which then goes on to call register_netdev(),
+> > publishing the network device, and then after stmmac_dvr_probe(),
+> > further device setup is done. As the basic driver probe flow should
+> > be setup and then publish, the existing code structure violates that.
+> > 
 > 
+> I agree that this solution is definitely suboptimal, I wanted mostly to get it
+> fixed quickly as this breaks other stmmac variants.
+> 
+> Do we still go on with the current patch (as Geert's has issues) and then
+> consider reworking dwmac_socfpga ?
 
-Regards,
+As Geert himself mentioned, passed on from Arnd:
+  As pointed out by Arnd, this doesn't work when PCS_LYNX is a loadable
+  module and STMMAC is built-in:
+  https://lore.kernel.org/r/11bd37e9-c62e-46ba-9456-8e3b353df28f@app.fastmail.com
 
-	Hans
+So Geert's solution will just get rid of the build error, but leave the
+Lynx PCS undestroyed. I take Geert's comment as a self-nack on his
+proposed patch.
+
+The changes are only in net-next at the moment, and we're at -rc5.
+There's probably about 2.5 weeks to get this sorted before the merge
+window opens.
+
+So, we currently have your suggestion. Here's mine as an immediate
+fix. This doesn't address all the points I've raised, but should
+resolve the immediate issue.
+
+Untested since I don't have the hardware... (the test build is
+running):
+
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c
+index e399fccbafe5..239c7e9ed41d 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c
+@@ -494,6 +494,17 @@ static int socfpga_dwmac_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
++static void socfpga_dwmac_remove(struct platform_device *pdev)
++{
++	struct net_device *ndev = platform_get_drvdata(pdev);
++	struct stmmac_priv *priv = netdev_priv(ndev);
++	struct phylink_pcs *pcs = priv->hw->lynx_pcs;
++
++	stmmac_pltfr_remove(pdev);
++
++	lynx_pcs_destroy(pcs);
++}
++
+ #ifdef CONFIG_PM_SLEEP
+ static int socfpga_dwmac_resume(struct device *dev)
+ {
+@@ -565,7 +576,7 @@ MODULE_DEVICE_TABLE(of, socfpga_dwmac_match);
+ 
+ static struct platform_driver socfpga_dwmac_driver = {
+ 	.probe  = socfpga_dwmac_probe,
+-	.remove_new = stmmac_pltfr_remove,
++	.remove_new = socfpga_dwmac_remove,
+ 	.driver = {
+ 		.name           = "socfpga-dwmac",
+ 		.pm		= &socfpga_dwmac_pm_ops,
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+index fa07b0d50b46..1801f8cc8413 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+@@ -940,9 +940,6 @@ static struct phylink_pcs *stmmac_mac_select_pcs(struct phylink_config *config,
+ 	if (priv->hw->xpcs)
+ 		return &priv->hw->xpcs->pcs;
+ 
+-	if (priv->hw->lynx_pcs)
+-		return priv->hw->lynx_pcs;
+-
+ 	return NULL;
+ }
+ 
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
