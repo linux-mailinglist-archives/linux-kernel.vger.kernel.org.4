@@ -2,123 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5DFD724422
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 15:16:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89FF472442C
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 15:18:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238024AbjFFNQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 09:16:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44802 "EHLO
+        id S238142AbjFFNSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 09:18:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237850AbjFFNQg (ORCPT
+        with ESMTP id S233726AbjFFNR4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 09:16:36 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A050F10C3
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 06:16:25 -0700 (PDT)
-Date:   Tue, 6 Jun 2023 15:16:21 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686057383;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TnnwGQjwBJKNKyeoriEOiM1KFg3/YDdFChAUa/K2FB0=;
-        b=a8aXfBKn/IZyYqgFSLg9sq8bcadvMZ2xUAAA4h/iYmpYz/0dYTDs9F2pa2cnYqNSumyJrc
-        h16hD8Q+bP2vMjJikVozrCcJ46aF2LPtbPGz6NQoZDIh9Clyojmk6kb8Uyksun2tOGMMuk
-        pSnnWyxaOQcvnW55FXzx28xGkHgmirWnSL0ftYZrLIFCaLwxDDbfIkvqqWTl+umnIMqqzZ
-        8MSYnA8X3ZapZrF1uz9DIlvf6nMIJLBv27o7t9SlDxlyumy8QDIn0uOltFxhYjsCvqdixQ
-        rWV1PL6WmOuvxMqPawxdweSODTppa7NUNPr3KA4H8pyiwPU9mr9HT5+mt/KmtA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686057383;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TnnwGQjwBJKNKyeoriEOiM1KFg3/YDdFChAUa/K2FB0=;
-        b=2/rp97Sq+RaZMj/w2kuIhza8UlmzuhCDhIVyADr4hDXYRtgT076EtiTSUMagixW2eIp6vq
-        Vi9FlZOmzNvJblAQ==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: [PATCH 2/2 v2] signal: Don't disable preemption in ptrace_stop() on
- PREEMPT_RT.
-Message-ID: <20230606131621.nbXfkFvG@linutronix.de>
-References: <20230606085524.2049961-1-bigeasy@linutronix.de>
- <20230606085524.2049961-3-bigeasy@linutronix.de>
- <20230606110447.GA7542@redhat.com>
- <20230606111418.GA906324@hirez.programming.kicks-ass.net>
- <20230606113853.GC7542@redhat.com>
+        Tue, 6 Jun 2023 09:17:56 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA009F3
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 06:17:54 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-977c72b116fso499393666b.3
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 06:17:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1686057473; x=1688649473;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+4m4td7TsrrilSTR7j+gHheVoaRExoQsmOFwSbyWIUo=;
+        b=DY7rGVtAaWLwVUgmwFZLJZYI3PPxhWaRAQRrNjTUUSmIR017i55dGv+30XXnWPXI1D
+         TFfyMWWcbdAi33jLUGtB0Dv3ZXCBLKYMFyQY+biI2BG8oAK5l8GpLMzOK3zMKfbEY65S
+         mqMVkueVV6C2yNeIbyqxU7eSIYkWPZd7q20AU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686057473; x=1688649473;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+4m4td7TsrrilSTR7j+gHheVoaRExoQsmOFwSbyWIUo=;
+        b=Qhz7tLcI71H8e/dlrwnWgUJ6+mMz+xdT0Hjp8Iz/dVWFJF5JVKPS1bYTxopszZqFUk
+         vzlKYybO47iDN63H1Ll8FMP68S/vioiVSzV1mbhDVYGh4/pFN0Ydqnvkatp8/YU8pw7t
+         uamw0YfXxNkNXUPSl/uZWQy4BQtp0dv2VjMElIp8tAwPLwxmkAIirSRIDLARDfwU2xqs
+         jBra0DmBw49DFH4uo53MVuU/+5UItDOFjUgyQ7BrcEbEuetGjfMT9UcIdLM4xIWsOXH6
+         zw6YuQAQ4lrBH5CiA9j0FeaBh6hVJrIHN2Z5z5AVEEK1/nZLOPyU9k06sXV/ychYf1sY
+         WBMA==
+X-Gm-Message-State: AC+VfDyi8G/DUM1Ly144UDI5IDkBz8EN+9zcekolazN6XAZAN0JtAiJj
+        DICshsPzrt5abGlFZyGCYnFb27/SGqFGnaCBEGpY6zhZ
+X-Google-Smtp-Source: ACHHUZ4cfVqEOvEK0HfFh7rKE2MUYV5uCUwJpvUZELId456aLlSO+ClC9M163AnYUzAqj2oBwbWfEA==
+X-Received: by 2002:a17:906:d54f:b0:96a:1c2a:5a38 with SMTP id cr15-20020a170906d54f00b0096a1c2a5a38mr2800176ejc.11.1686057473260;
+        Tue, 06 Jun 2023 06:17:53 -0700 (PDT)
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com. [209.85.208.45])
+        by smtp.gmail.com with ESMTPSA id sd17-20020a170906ce3100b0095fbb1b72c2sm5560865ejb.63.2023.06.06.06.17.51
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Jun 2023 06:17:52 -0700 (PDT)
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-51492ae66a4so8553160a12.1
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 06:17:51 -0700 (PDT)
+X-Received: by 2002:aa7:d605:0:b0:514:92d7:7d69 with SMTP id
+ c5-20020aa7d605000000b0051492d77d69mr1793652edr.27.1686057471469; Tue, 06 Jun
+ 2023 06:17:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+References: <20230526205204.861311518@infradead.org> <CAHk-=wg2RHZKTN29Gr7MhgYfaNtzz58wry9jCNP75LAmQ9t8-A@mail.gmail.com>
+ <20230530092342.GA149947@hirez.programming.kicks-ass.net> <20230606094251.GA907347@hirez.programming.kicks-ass.net>
+In-Reply-To: <20230606094251.GA907347@hirez.programming.kicks-ass.net>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 6 Jun 2023 06:17:33 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wi-RyoUhbChiVaJZoZXheAwnJ7OO=Gxe85BkPAd93TwDA@mail.gmail.com>
+Message-ID: <CAHk-=wi-RyoUhbChiVaJZoZXheAwnJ7OO=Gxe85BkPAd93TwDA@mail.gmail.com>
+Subject: Re: [PATCH v2 0/2] Lock and Pointer guards
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     keescook@chromium.org, gregkh@linuxfoundation.org,
+        pbonzini@redhat.com, linux-kernel@vger.kernel.org,
+        ojeda@kernel.org, ndesaulniers@google.com, mingo@redhat.com,
+        will@kernel.org, longman@redhat.com, boqun.feng@gmail.com,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
+        joel@joelfernandes.org, josh@joshtriplett.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        rcu@vger.kernel.org, tj@kernel.org, tglx@linutronix.de,
+        linux-toolchains@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230606113853.GC7542@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On PREEMPT_RT keeping preemption disabled during the invocation of
-cgroup_enter_frozen() is a problem because the function acquires css_set_lo=
-ck
-which is a sleeping lock on PREEMPT_RT and must not be acquired with disabl=
-ed
-preemption.
-The preempt-disabled section is only for performance optimisation
-reasons and can be avoided.
+On Tue, Jun 6, 2023 at 2:43=E2=80=AFAM Peter Zijlstra <peterz@infradead.org=
+> wrote:
+>
+> ( GCC refuses to accept _Pragma() inside an expression.
 
-Extend the comment and don't disable preemption before scheduling on
-PREEMPT_RT.
+If we really want this all, I think we'd just stop using
+-Wdeclaration-after-statement entirely.
 
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
----
+There are other uses for it, and people have asked for mixing
+declarations and code before.
 
-Is this better?
+I think that particular straightjacket has been a good thing, but I
+also think that it's ok to just let it go as a hard rule, and just try
+to make it a coding style issue for the common case, but allow mixed
+declarations and code when it makes sense.
 
-v1=E2=80=A6v2:
-  - Extend the comment to note that preemption isn't disabled due to
-    the lock to make it obvious that the optimisation isn't just
-    harmful but also pointless.
+For the whole "automatic release case it definitely makes sense, but
+it's not like it isn't possible useful elsewhere. I just don't want
+for it to become some global pattern for everything.
 
- kernel/signal.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+That said, I still don't understand why you lke the name "guard" for
+this.  I understand not liking "auto", but "guard" doesn't seem any
+better. In fact, much worse. Guarded expressions means something
+completely different both in real life and in computer science.
 
-diff --git a/kernel/signal.c b/kernel/signal.c
-index da017a5461163..dcb0b1fbcb3a8 100644
---- a/kernel/signal.c
-+++ b/kernel/signal.c
-@@ -2328,11 +2328,20 @@ static int ptrace_stop(int exit_code, int why, unsi=
-gned long message,
- 	 * The preempt-disable section ensures that there will be no preemption
- 	 * between unlock and schedule() and so improving the performance since
- 	 * the ptracer has no reason to sleep.
-+	 *
-+	 * On PREEMPT_RT locking tasklist_lock does not disable preemption.
-+	 * Therefore the task can be preempted (after
-+	 * do_notify_parent_cldstop()) before unlocking tasklist_lock so there
-+	 * is no benefit in doing this. The optimisation is harmful on
-+	 * PEEMPT_RT because the spinlock_t (in cgroup_enter_frozen()) must not
-+	 * be acquired with disabled preemption.
- 	 */
--	preempt_disable();
-+	if (!IS_ENABLED(CONFIG_PREEMPT_RT))
-+		preempt_disable();
- 	read_unlock(&tasklist_lock);
- 	cgroup_enter_frozen();
--	preempt_enable_no_resched();
-+	if (!IS_ENABLED(CONFIG_PREEMPT_RT))
-+		preempt_enable_no_resched();
- 	schedule();
- 	cgroup_leave_frozen(true);
-=20
---=20
-2.40.1
+I'm assuming there's some history there, but it makes no sense to me
+as a name here.
 
+              Linus
