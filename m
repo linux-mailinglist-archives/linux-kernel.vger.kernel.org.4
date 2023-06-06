@@ -2,84 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77102723FC4
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 12:38:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F686723FC2
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 12:37:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235632AbjFFKiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 06:38:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56918 "EHLO
+        id S237214AbjFFKhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 06:37:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236775AbjFFKhO (ORCPT
+        with ESMTP id S236033AbjFFKhA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 06:37:14 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E761710F0
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 03:36:26 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-51480d3e161so8598706a12.3
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 03:36:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google; t=1686047785; x=1688639785;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=qd8uKMFm81vYRFqw2LDxc+4LQWMvwJ/7wVX2rL8bDEE=;
-        b=FLE32HTMQXTPXIMgRym716RCPA5ZfaA426svAlixR6NT+JFwFi3wq9dhD5MTfGgcdS
-         ydtKJDvXeYGZsCfd+Tpk4F1Ps9V0Sum8jeyo/vtelPtEMQ7X+FOslAzStxiS/F1qBha6
-         7lhn3d9cM9dPtUfsVDGrEjsK1NUJDrPtoRc7k=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686047785; x=1688639785;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qd8uKMFm81vYRFqw2LDxc+4LQWMvwJ/7wVX2rL8bDEE=;
-        b=ZgAayKYePBpQyHhd+JwywVpCnnI2mtDla09G6gp6MeKuH6sxjdrtwzZJzCOHHs2HSw
-         Pn0mKkTJPRGX5J8RaIrZbKEzEGDGU7Fg3XgjYk4pdFCdaeyIQukulrlQ9E6aECLD79F3
-         BqwtaGjNtpcN/jrBU42aKzrbZ5vtlNuk3SQHZUJnpPYfiX42FX8GC4kipBHXJ7j8vKew
-         l+Rf1O7zwLJmuG2zlojHMGpIkbCRRo08EVSEpGelLZbrwz+4xjNeKJfcZKsugyoHD7Ic
-         yjuijitPi5rAF4nYc6liZgYveOa2QBuHneY630wCYPyDyIqOXVYhQ+3WByli5YN8kgqU
-         uFmQ==
-X-Gm-Message-State: AC+VfDx4mnGKHz8Q+nq2sDo+TGSh2vp5RLoWOZN6WH8APJ2Mh2cpUVYO
-        7LZc7rcxxS2Yhy1ZyIeIjBq2EXImClHxApuaIidzqA==
-X-Google-Smtp-Source: ACHHUZ4DMm4EvB7MjP9b43pG7ppWOQ0n/9PE9z9PAfZkfaEzPc7VW24qLvfbEvgkodbFEfEf9pxMeDTJbxgOCc0lIso=
-X-Received: by 2002:a17:907:2d13:b0:974:1e0e:9bd2 with SMTP id
- gs19-20020a1709072d1300b009741e0e9bd2mr2417597ejc.14.1686047785487; Tue, 06
- Jun 2023 03:36:25 -0700 (PDT)
+        Tue, 6 Jun 2023 06:37:00 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F88B10FB;
+        Tue,  6 Jun 2023 03:36:22 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (om126253223039.31.openmobile.ne.jp [126.253.223.39])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D356A1221;
+        Tue,  6 Jun 2023 12:35:54 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1686047755;
+        bh=biVLKsT44hZdITyP0tgFesm18vuBods/TDQ/DGnqbVQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kMo32PpiPT6GyJLXuZOrPei9Uztqe/JW3nOkL3fO/YVxXKItPyK8S5PktZX3FfbQ7
+         5UB0lP52cBUvMBO23hh91xRpKL6ZBbajA2wHvOG5l1eB37HHNP8pm2UYnjqSNAdw8V
+         dab1OhIP8MssRPcnLLVHV0tQj83PrENqtXpNTFrw=
+Date:   Tue, 6 Jun 2023 13:36:18 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Michael Riesch <michael.riesch@wolfvision.net>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        libcamera-devel@lists.libcamera.org,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Matthias Fend <Matthias.Fend@wolfvision.net>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC v2 2/6] media: v4l2-ctrls: clarify documentation of
+ V4L2_CID_FOCUS_RELATIVE
+Message-ID: <20230606103618.GB25774@pendragon.ideasonboard.com>
+References: <20230406-feature-controls-lens-v2-0-faa8ad2bc404@wolfvision.net>
+ <20230406-feature-controls-lens-v2-2-faa8ad2bc404@wolfvision.net>
 MIME-Version: 1.0
-References: <amir73il@gmail.com> <20230506150911.1983249-1-gwj1235@yeah.net>
-In-Reply-To: <20230506150911.1983249-1-gwj1235@yeah.net>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Tue, 6 Jun 2023 12:36:14 +0200
-Message-ID: <CAJfpegs8HOreFpdVoBq9J5TLxOOPTXQ8BGa17Zg=JvejZdbzng@mail.gmail.com>
-Subject: Re: [PATCH v2] overlayfs: clean error handling
-To:     wenjun93 <gwj0511@gmail.com>
-Cc:     linux-unionfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        wenjun93 <gwj1235@yeah.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230406-feature-controls-lens-v2-2-faa8ad2bc404@wolfvision.net>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 6 May 2023 at 17:09, wenjun93 <gwj0511@gmail.com> wrote:
->
-> Remove PTR_ERR from unused code path and
-> assign error value where it exactly happens.
-> This cleans the code and also helps to reduce
-> the possibility of incorrect err settings
-> when it's set globally and is forgotten to be
-> overwrite in custom development.
->
-> Signed-off-by: wenjun93 <gwj1235@yeah.net>
+Hi Michael,
 
-Nack.
+Thank you for the patch.
 
-This is a regularly used pattern across the kernel to unclutter error handling.
+On Tue, Apr 25, 2023 at 11:45:12AM +0200, Michael Riesch wrote:
+> The control V4L2_CID_FOCUS_RELATIVE only makes sense if the device cannot
+> handle absolute focal point positioning with V4L2_CID_FOCUS_ABSOLUTE.
+> Clarify this in the documentation.
+> 
+> Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
+> ---
+>  Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
+> index df29150dce7b..42cf4c3cda0c 100644
+> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
+> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
+> @@ -147,7 +147,9 @@ enum v4l2_exposure_metering -
+>      This control moves the focal point of the camera by the specified
+>      amount. The unit is undefined. Positive values move the focus closer
+>      to the camera, negative values towards infinity. This is a
+> -    write-only control.
+> +    write-only control. It should be implemented only if the device cannot
+> +    handle absolute values.
+> +
 
-If you find a concrete bug, please submit a fix for that.
+Extra blank line.
 
-Thanks,
-Miklos
+I don't think this is right. The control was added for the UVC driver,
+and there are devices that implement both absolute and relative focus.
+
+>  
+>  ``V4L2_CID_FOCUS_AUTO (boolean)``
+>      Enables continuous automatic focus adjustments. The effect of manual
+> 
+
+-- 
+Regards,
+
+Laurent Pinchart
