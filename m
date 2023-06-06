@@ -2,31 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 168B972479A
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 17:25:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA90A72479D
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 17:25:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236898AbjFFPZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 11:25:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47684 "EHLO
+        id S237003AbjFFPZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 11:25:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235646AbjFFPZK (ORCPT
+        with ESMTP id S236547AbjFFPZM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 11:25:10 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB18E42;
-        Tue,  6 Jun 2023 08:25:08 -0700 (PDT)
+        Tue, 6 Jun 2023 11:25:12 -0400
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5772CE42;
+        Tue,  6 Jun 2023 08:25:11 -0700 (PDT)
 X-GND-Sasl: maxime.chevallier@bootlin.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1686065106;
+        t=1686065109;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Iit6gZbgWQgXudNIuixMsiN76MK5PGWY3YFp5VdyDpA=;
-        b=XeGZwldPR2714FTtaZenBKRtzxVmV+mtS7QhTam1rdaeSpRJwNJltf2ZkFBbdw9wWYGxLB
-        dlz4hHwdzyP9jJemIpgR3dkXsqwH4YSBg7nvg0nH+j72C2mqlWEDGnnImWs6GAbuzmvhyu
-        /Bpb20Hp9KXqKAlO0ryQvJ8iyj36N3luZwTkk+olYpfRwm0KuDjT2E8MzKo/PPCA6qOgEI
-        Tz8Qol51MpUTm3lU9d/bHdN08hEQLP42SVy28A17sxxr75NhTmmVtfIRXAK2xNEWehIQtg
-        FTjPzLEfI/n92wEpZ95/A6GerR/5BuRJBhNK/tfQXlQYQ5yNaMgBMuo4oZbR+w==
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3nxUzUxzeLa0OD4Q5BuvGX8OJQ56jlO8Eull2jqeeVM=;
+        b=WMLEuwQYww0RaPTWgJV6hDyRaLUPczqmu71lsnUnyetPnEL/lPJdcTzVhkMB0scIrsTrzF
+        bdUAG3c5vpwHZrNziNuJQQFSoENCwNjk9iYHM5eJi1uB1eGUSforUOIayrWIrDvA/xSaEc
+        8tFOzK7+XdFV131becSLX4cDUJ6nMBFyEBgv/tWUN7gfGqRMHB02Bf38tLDXy/EbIkBfKD
+        ekkCuhPw2LY+RFXkTRqqHL5HhljTWoGd8JZGx73+FlgyKPxaxWOOwJ587EyW3cS5ZJnEIq
+        lx8qlxWJO74CtXCHpe1QQy67azlqYKrB7yhz6+L620FVard8m5767Vh6wcJ4Ww==
 X-GND-Sasl: maxime.chevallier@bootlin.com
 X-GND-Sasl: maxime.chevallier@bootlin.com
 X-GND-Sasl: maxime.chevallier@bootlin.com
@@ -48,8 +49,8 @@ X-GND-Sasl: maxime.chevallier@bootlin.com
 X-GND-Sasl: maxime.chevallier@bootlin.com
 X-GND-Sasl: maxime.chevallier@bootlin.com
 X-GND-Sasl: maxime.chevallier@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2D60BFF80F;
-        Tue,  6 Jun 2023 15:25:02 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id DCA00FF811;
+        Tue,  6 Jun 2023 15:25:06 +0000 (UTC)
 From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
 To:     davem@davemloft.net
 Cc:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
@@ -70,10 +71,12 @@ Cc:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
         Alexandre Torgue <alexandre.torgue@foss.st.com>,
         Giuseppe Cavallaro <peppe.cavallaro@st.com>,
         Simon Horman <simon.horman@corigine.com>
-Subject: [PATCH net-next v3 0/5] Followup fixes for the dwmac and altera lynx conversion
-Date:   Tue,  6 Jun 2023 17:24:56 +0200
-Message-Id: <20230606152501.328789-1-maxime.chevallier@bootlin.com>
+Subject: [PATCH net-next v3 1/5] net: altera-tse: Initialize the regmap_config struct before using it
+Date:   Tue,  6 Jun 2023 17:24:57 +0200
+Message-Id: <20230606152501.328789-2-maxime.chevallier@bootlin.com>
 X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230606152501.328789-1-maxime.chevallier@bootlin.com>
+References: <20230606152501.328789-1-maxime.chevallier@bootlin.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -86,35 +89,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello everyone,
+The regmap_config needs to be zeroed before using it. This will cause
+spurious errors at probe time as config->pad_bits is containing random
+uninitialized data.
 
-Here's another version of the cleanup series for the TSE PCS replacement
-by PCS Lynx. It includes Kconfig fixups, some missing initialisations
-and a slight rework suggested by Russell for the dwmac cleanup sequence.
+Fixes: db48abbaa18e ("net: ethernet: altera-tse: Convert to mdio-regmap and use PCS Lynx")
+Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
+---
+V2->V3 : No changes
+V1->V2 : No changes
 
-V2->V3 :
- - Fix uninitialized .autoscan field for mdio regmap configuration in
-   both altera_tse and dwmac_socfpga
-V1->V2 : 
- - Fix a Kconfig inconsistency
- - rework the dwmac_socfpga cleanup sequence
+ drivers/net/ethernet/altera/altera_tse_main.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Maxime Chevallier (5):
-  net: altera-tse: Initialize the regmap_config struct before using it
-  net: altera_tse: Use the correct Kconfig option for the PCS_LYNX
-    dependency
-  net: stmmac: make the pcs_lynx cleanup sequence specific to
-    dwmac_socfpga
-  net: altera_tse: explicitly disable autoscan on the regmap-mdio bus
-  net: dwmac_socfpga: explicitly disable autoscan on the regmap-mdio bus
-
- drivers/net/ethernet/altera/Kconfig               |  2 +-
- drivers/net/ethernet/altera/altera_tse_main.c     |  2 ++
- drivers/net/ethernet/stmicro/stmmac/common.h      |  1 -
- .../net/ethernet/stmicro/stmmac/dwmac-socfpga.c   | 15 ++++++++++++++-
- drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c |  3 ---
- 5 files changed, 17 insertions(+), 6 deletions(-)
-
+diff --git a/drivers/net/ethernet/altera/altera_tse_main.c b/drivers/net/ethernet/altera/altera_tse_main.c
+index d866c0f1b503..df509abcd378 100644
+--- a/drivers/net/ethernet/altera/altera_tse_main.c
++++ b/drivers/net/ethernet/altera/altera_tse_main.c
+@@ -1255,6 +1255,7 @@ static int altera_tse_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		goto err_free_netdev;
+ 
++	memset(&pcs_regmap_cfg, 0, sizeof(pcs_regmap_cfg));
+ 	/* SGMII PCS address space. The location can vary depending on how the
+ 	 * IP is integrated. We can have a resource dedicated to it at a specific
+ 	 * address space, but if it's not the case, we fallback to the mdiophy0
 -- 
 2.40.1
 
