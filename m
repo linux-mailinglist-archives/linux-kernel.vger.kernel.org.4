@@ -2,482 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A413C725025
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 00:49:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E633272502B
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 00:51:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240050AbjFFWto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 18:49:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39566 "EHLO
+        id S239499AbjFFWu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 18:50:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233812AbjFFWtj (ORCPT
+        with ESMTP id S240088AbjFFWug (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 18:49:39 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3DF810FF
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 15:49:36 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2b1c910ee19so35950771fa.3
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 15:49:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google; t=1686091775; x=1688683775;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3O84Kr2aCzlDWKopTTwNiejrO0oE+BpcM66RIGfp2cI=;
-        b=DT2jRBXjDiC/DZ+R3kaPfYV13qblbKwBko0caM2iz4iRhtWyDEFbVqikFudP8DAJwq
-         JD6sTPOqOOOEKYrI4oE7fvGTbP0E0K8pCsv41d9sxnJ7+l24SjJScKYbWXn8CXjbgb+a
-         Nopv5uvz2lHX4NgczrG7pFoYxG56UaX9wLMWQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686091775; x=1688683775;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3O84Kr2aCzlDWKopTTwNiejrO0oE+BpcM66RIGfp2cI=;
-        b=ie+YDyfh5GifDBLUDsntwlmAjaRc9ClKzjWp4gBgfZ4ZS1P9s7VZv4sdEXd862TKF8
-         L9jOi5ImVC8id2XTb/8Tekxp6/wXhrGeWb2vb8hVshQ81WRgjeniI1b76RHNHSeJE3t2
-         PuAEJ7FVcIr9YSJBJzUBJbf979i3Y55/4b25WIrotdVJ+OY9SLU5zv3wG2kkp8m9Ctel
-         XKjZoWJXOFKNI5/Z7MbLsiGDu0vtHK0bBsmuwYP4o0s4rsJwBmcbVyoE4+B63rukUYJe
-         y/gHO7Tqbf1+X+iobRokb/sGidF3AFLRJhfXwixGBPkR/gbQPgLWFL9buGdmyDcT+6mn
-         wNNg==
-X-Gm-Message-State: AC+VfDxRxThfYw4khj5emYfNiL6sTQU5Y8XDsGz1ufK+pKl6BmU+4mpr
-        Zf23QlE40gj4fp7c9/LpSYpQJV/k6m3TTFdOZr6+
-X-Google-Smtp-Source: ACHHUZ5zUx1toihhCA0UeG0UtKQ+EQNtgBbRc85cMA5ctycEW/K/uX85ifPQebKC88uB0XbQqx86SAqUs8EfRXR0ywg=
-X-Received: by 2002:a2e:9192:0:b0:2ac:7904:e38f with SMTP id
- f18-20020a2e9192000000b002ac7904e38fmr1815037ljg.12.1686091774943; Tue, 06
- Jun 2023 15:49:34 -0700 (PDT)
+        Tue, 6 Jun 2023 18:50:36 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB391728
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 15:50:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686091835; x=1717627835;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=j4owAEfT9qM/0ewXwbIn577ZEr59pnnhnUC9ZVZHmr4=;
+  b=AlYPu0waOVMhyEalNsVSSkNiAs2/j8iOnbpR4rww+f21c7caxVmGjZhs
+   6WszSIRioj6gR6HYFClmBwKBsQqZ5G2AjTVZ/isFegY8wSvEMxCEjv1Iw
+   337Jid9t7HBStJ0fhqJZu2B4ceHdlUWAIvWlnnG/JlNXizm7/e9U2GtEo
+   6Dh5VtFma6D8NjbSPu3ySWxfPpNXVKpadYAqA1TbFv2kS6VprbvVw+MGk
+   PKPeiQt1Lz9aKI0zhAnHhvfu6kSU5MmioW+LamkvzTqX0aW/+FCd+N1Ns
+   5BI98nf7J5Zwpi9cv5UsXQmvRUqMRXSkKhyz9vrXnMSrw9jCVDGVmIpP/
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="341469848"
+X-IronPort-AV: E=Sophos;i="6.00,222,1681196400"; 
+   d="scan'208";a="341469848"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 15:50:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="853602301"
+X-IronPort-AV: E=Sophos;i="6.00,222,1681196400"; 
+   d="scan'208";a="853602301"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by fmsmga001.fm.intel.com with ESMTP; 06 Jun 2023 15:50:34 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 6 Jun 2023 15:50:34 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 6 Jun 2023 15:50:33 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Tue, 6 Jun 2023 15:50:33 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.106)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Tue, 6 Jun 2023 15:50:33 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NIML4La8AkWROCCSHcx6D5nuk3Xo2LDDYz8yM+sTZcE9oUtiVMRTVCO55obalk8CctWi5YEmVbxJMONdmok/I4pt+lXtRH0ZDhxGmRKcjfh8fTF/uyrSTlhGqcrjo0SyxGXenOIg2fFD5soN1fUM+ForJRbEigXSSPoXapf+vmnXUWIU4Kj1o4sQ5wivUOre9/WM9J3g4vYh/uC8lb3D/wD8lD4kL5STm9BWV/msK9Ox1gBAZ6D8j21F4o6PsEPjfiLnFuFXNYcKCjkRFnfNI5wYOUsrRDS4JVcCmhL/Q2BijzZUgavkYTyQHwZV0i9N5DJ7yKtKwrHqCtnW5AOGWA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=j4owAEfT9qM/0ewXwbIn577ZEr59pnnhnUC9ZVZHmr4=;
+ b=bPKjEHeH3L7NSYtg3cFtFMnDzxlN6fP4eQW9BkDdUQnrm1UHvaxFMjkPNnfnvO36AoILsZPSUWTnPvr8Nd6ttL3jkPH+I0/qSNu5S1ODpZskGjE4LCq3inOwwXZDd/ZZdm0TuP5d5MBGPkwcUyxth5BR8GUx3koHTzZ4FVaCJ2eHfyWyeX+d3QKy3ZsoS6Z2IIVtXljjNn6G7Nqkl0DT6F4vsPw03wRtaD7F+omt5qdV3oMoSz9qYl3PTGmhHPthwkShmN7a88dYq8YH+E6liYsHuYZr9zbX6JCcHomKkmpuKCUTfYVa34FMGhxqi6cMdvi+mlfyvYQpjbds/pXfrg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
+ by PH7PR11MB7988.namprd11.prod.outlook.com (2603:10b6:510:243::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Tue, 6 Jun
+ 2023 22:50:28 +0000
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::19b7:466f:32ac:b764]) by BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::19b7:466f:32ac:b764%3]) with mapi id 15.20.6455.030; Tue, 6 Jun 2023
+ 22:50:27 +0000
+From:   "Huang, Kai" <kai.huang@intel.com>
+To:     "kirill@shutemov.name" <kirill@shutemov.name>
+CC:     "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>
+Subject: Re: [PATCH] x86/tdx: Explicitly include <linux/errno.h> in
+ <asm/tdx.h>
+Thread-Topic: [PATCH] x86/tdx: Explicitly include <linux/errno.h> in
+ <asm/tdx.h>
+Thread-Index: AQHZmCim8jOtX6SwhEChddwFpeg98q99wC+AgACY9oCAAAfJgIAAAU8A
+Date:   Tue, 6 Jun 2023 22:50:27 +0000
+Message-ID: <4d1e620aa261f51a31c823fcd3ad4835b342b2b1.camel@intel.com>
+References: <20230606034000.380270-1-kai.huang@intel.com>
+         <c84707e6-4f74-dc89-6243-63a72e86c62b@linux.intel.com>
+         <df89f1c66059e717e9a66e314da24f939cc3eabc.camel@intel.com>
+         <20230606224543.a4jex2dmn43dvze4@box.shutemov.name>
+In-Reply-To: <20230606224543.a4jex2dmn43dvze4@box.shutemov.name>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.48.2 (3.48.2-1.fc38) 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BL1PR11MB5978:EE_|PH7PR11MB7988:EE_
+x-ms-office365-filtering-correlation-id: bb4fbeb8-388e-4a0a-fd3f-08db66e06bf1
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: /Cg+LhfOvKOcMgNp6WEP3dme8TnUjz2mxVBclFfA9RmLRfPNMon1rrM3S/P8gK/VfaQ2xvhQEUnn0ISaD2moB4q53Fi5LhJ+lkgIZ8kf0cbyeC5llN6XojaJLat3oUKCmnlEvxt2X2sy7LJGemyF7ZaSx10MxTYbt7ydpSvUSYbV46oMIskFfPJ/k1EqNp87JJsR69Zsn6qp7bOyBm5xDg8ph15EMChDUO1WGGFwsCp+0g0Oj2edjN9zowYwWRSr+tFicgxIbh8mL7ZmRcdZ17HRHW+3x+sk/ScvUpbHEHCjWz0XSVo/JJDAzYkPaYKkucgYDzwV+tk7hFzTmBXKi9w/V8u0U6UfLPBV7cBtUsUBr7H+BYPmjLB34Ne2Mh72F84SSWxUgoLLJPMSAB5FCZOnPPCZBkmKQHRJpt58MIC2O4aYDA21dsMhy7LxvnTy+Cl7T/4J6i1BI3KhetjKecpPbjibodZw4EJrjHQvuEqPr2R4mTInsEGgPKzLeX9n+SVSVaFgulNZGkLe6fYJndEw3MKIUbtqYLmh1m/cYEl2vE/BvKYW6WSxugLHSb05wcVT5WOR/wYxhv5ayzJbcVA0NBY6HRpvMQt2d6YIy8qGBxz5pLdJ5CLBDOrfiyr0kL4Unq/HzThMZOVMzurWHg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(366004)(346002)(396003)(39860400002)(136003)(451199021)(36756003)(86362001)(966005)(2616005)(83380400001)(6486002)(53546011)(6512007)(6506007)(26005)(2906002)(4744005)(186003)(76116006)(66556008)(82960400001)(4326008)(66476007)(66446008)(6916009)(122000001)(71200400001)(478600001)(64756008)(41300700001)(5660300002)(91956017)(316002)(66946007)(54906003)(38100700002)(8676002)(8936002)(38070700005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TlIxQ3FUU2QrVlIyYXFXQzNnaVloMko1RTlwRjRubjYwT1F3bzhINmlmeFVj?=
+ =?utf-8?B?Q2wzMThaaFNqTkFOS0d6S3NQeHZWRFlZaThTMDBjM09QTlNYNjBQNHNwZkFU?=
+ =?utf-8?B?dms0RGhuV09RZUVvTTJySXd6WmdjSjJsTDlsZXdpSU8yWWZPeUZGL3ZDT1BL?=
+ =?utf-8?B?L0NvbGo0ZStkZTRvcFRxc1JYRjdSVmdoZENhNExPMnQrWGs3Y1BMbTR1Ym5p?=
+ =?utf-8?B?akpWNHdTVzBIUW1QdXB6azYxK0YweW5wb04rN0xmVlIrazE2eE5qSU9PVVZH?=
+ =?utf-8?B?Q2NPTnhmTzBTVFlUeDErd1oyb3BWMERxUWsxSnVZME1jc29sVFJ5U0xJVGxi?=
+ =?utf-8?B?V3JoWXIrYWlzTVdlSW9EejRpZWhoZGh6VExBRXM2QWJJTjM4d1hZNFVoMDJw?=
+ =?utf-8?B?ZlhCaGtuSEhmYkphNkVENHo2SC9QUWxNNXVzaWhwVTlJMjhKekpSU2hhRWJV?=
+ =?utf-8?B?NkY5by9ubm9ZNDNlbERyY1N6WEZsNDZCemVJMkltZWt6ZElGeW95Ykp6ZjAw?=
+ =?utf-8?B?cnNvWUN6ZkNFYlJid3BWaGg1OTJiM3llWENVeEdBZWpSN2pQc01lcExDcUFa?=
+ =?utf-8?B?OFRXaGY4YmtGOW1VRU1CekwrbWVibUpadm9UTXRocWxtZ1krYXIrU1NyYkZC?=
+ =?utf-8?B?dFAxYzVuTTE1SGF0TDQyYVk2OCs5NVlqZ2tvUmlSWldFZWRUa202bmI1eEZP?=
+ =?utf-8?B?b1VxZm5pN2FEOUp5dWJ4WkIvSHpybVQyRVkzelBoQzExdzZici8rMjUzV3Zl?=
+ =?utf-8?B?czltaVl1cGRaTXdVdGhFUUxzTlo3dkYxazRQb3dPVDg4T1FINVBUeHI3M3I4?=
+ =?utf-8?B?Y0NUTWg2NXcrTHgrY1BaQUIrUm9kL1VBcU1BZ2ExZ05pWndFaUxCUkY3NGpV?=
+ =?utf-8?B?OEZOTGNCa2tWc0RoRnl4cDNwM1JxblA1RnNpR1FrSHU1eXZGdXJVV3c4TGI3?=
+ =?utf-8?B?a0ZhR3Z3KzBEY1B3V016d2t4eEJiaVB5bHFaaXRtS1BRemRIWU5RMy9qS2gx?=
+ =?utf-8?B?czZ5YXRtT2R3YkU4ZGlLaENIRlBzS2NNdVBqc0RqNmQ2MEQ3WHp5UHphcnRo?=
+ =?utf-8?B?c0NCUDNyUDZEeUpJODBhRTZqM2tzRFIyQyt5dmNHb1FmTytWcEwrSmVSdlRN?=
+ =?utf-8?B?SUs2VjRSeE1sWUJNS3J5L1NMekZSK1pDVERKYkFtMy9OL2FLY1kxNm80SUhP?=
+ =?utf-8?B?UXZJMTdqWHVzaFBzMVFLRFBRMXVTaUhSVzJLaGRodGlsZ3AzdkxnSE43TjVN?=
+ =?utf-8?B?YVp5UjFMaWduWXVYQlVIdHh4ZnoxNENsRUVZRXpOdnpyZ2R0K0IyOGwxVWhk?=
+ =?utf-8?B?SEpoYTNwQm1BTkNKTFB5UVkrTkh5dTFvWXdpUlZoamJuUUJ3U3NNV08ybVUw?=
+ =?utf-8?B?QjhsMFJETCtCdXdpRDhrZWhSOVpBK0VxMnlPQU1tUU83bE8vMEtCV0w3SllK?=
+ =?utf-8?B?Nk1LNXM0TXVsV0ppcGlod3R4ZVVlYmZQUExodXQveVlKNGtKdVhuMlZxWUdJ?=
+ =?utf-8?B?ckpQeEFTOHNXUnRoV0psQ2JhaGlsekE5MWs5Q29XSnpIb1kybFpFV3p5NjFv?=
+ =?utf-8?B?RnlFUzJFL3dXTEM3SmQzVnNHSUN6eEZsTElmZzJCWWlUSW84WjVTNzdXWnVh?=
+ =?utf-8?B?Qm15V3Z3QTJacnI4Z01WSlRTQUZqV1F3ZHJ3SStDQTRubGI4aVdtL0pRK3NT?=
+ =?utf-8?B?YUFjSkptZjl4bGYveWs3SkNxb2pmV0k5bThWbGZSVEFtVCtnbVQyM01DSzdT?=
+ =?utf-8?B?NnRCVkd5dWtaaUdaMzFWdWFmUklNTHFQL1lkTUx5OU1SVm1keDVSTVcxSTE4?=
+ =?utf-8?B?eDJmY2t3VFRCMXlDTE1xb2laZzZlK0FUejltbWh0QUNUckVxa0Zsd3YrUWFM?=
+ =?utf-8?B?SlA0MnY4TWwxVkNvWGo5Nk9YQ2Z5MVhrV2Z2Qk5qMFdMdGhoNEJkeTc2TWdk?=
+ =?utf-8?B?ZkwwT05LdEdqOERsUTJ5aGI3SXRCU3htcWV5TlFJTmxtakZwM3plZHJXU1BZ?=
+ =?utf-8?B?UE1pZk9vb2VzLzZKWXFDM0hpS3JURW00a245VzJQMWxtQkVvZTErTXJZSHlU?=
+ =?utf-8?B?dEx2UlE0NDNGUW5VazMwdDcyd1loNXk1cFhpMDJJSksveTAzV0srQUxyOXhE?=
+ =?utf-8?B?SFhOZU9BUkdIVGtHV0h5dFN6UU1wRnNZNWdiMlBMSllYZVVuMldtNmljUE1Y?=
+ =?utf-8?B?N3c9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <57EE5E1F1656424F94D48FACC273581B@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20230517105135.1871868-1-apatel@ventanamicro.com> <20230517105135.1871868-2-apatel@ventanamicro.com>
-In-Reply-To: <20230517105135.1871868-2-apatel@ventanamicro.com>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Tue, 6 Jun 2023 15:49:23 -0700
-Message-ID: <CAOnJCUKftuqtKhmzaHjV5FbdszYoASPRuaU4ZER4e-tNsmcuzw@mail.gmail.com>
-Subject: Re: [PATCH 01/10] RISC-V: KVM: Implement guest external interrupt
- line management
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Andrew Jones <ajones@ventanamicro.com>, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bb4fbeb8-388e-4a0a-fd3f-08db66e06bf1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Jun 2023 22:50:27.2747
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: NQC7//NjyMGiPPlUvZZqk5tqKAz5mRtkBHCdebqGYESA6sUURfiSj0ing6gsi4bHK9V/GBrQeCoiRYwhyhCdWw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB7988
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 3:51=E2=80=AFAM Anup Patel <apatel@ventanamicro.com=
-> wrote:
->
-> The RISC-V host will have one guest external interrupt line for each
-> VS-level IMSICs associated with a HART. The guest external interrupt
-> lines are per-HART resources and hypervisor can use HGEIE, HGEIP, and
-> HIE CSRs to manage these guest external interrupt lines.
->
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-> ---
->  arch/riscv/include/asm/kvm_aia.h |  10 ++
->  arch/riscv/kvm/aia.c             | 244 +++++++++++++++++++++++++++++++
->  arch/riscv/kvm/main.c            |   3 +-
->  arch/riscv/kvm/vcpu.c            |   2 +
->  4 files changed, 258 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/riscv/include/asm/kvm_aia.h b/arch/riscv/include/asm/kv=
-m_aia.h
-> index 1de0717112e5..0938e0cadf80 100644
-> --- a/arch/riscv/include/asm/kvm_aia.h
-> +++ b/arch/riscv/include/asm/kvm_aia.h
-> @@ -44,10 +44,15 @@ struct kvm_vcpu_aia {
->
->  #define irqchip_in_kernel(k)           ((k)->arch.aia.in_kernel)
->
-> +extern unsigned int kvm_riscv_aia_nr_hgei;
->  DECLARE_STATIC_KEY_FALSE(kvm_riscv_aia_available);
->  #define kvm_riscv_aia_available() \
->         static_branch_unlikely(&kvm_riscv_aia_available)
->
-> +static inline void kvm_riscv_vcpu_aia_imsic_release(struct kvm_vcpu *vcp=
-u)
-> +{
-> +}
-> +
->  #define KVM_RISCV_AIA_IMSIC_TOPEI      (ISELECT_MASK + 1)
->  static inline int kvm_riscv_vcpu_aia_imsic_rmw(struct kvm_vcpu *vcpu,
->                                                unsigned long isel,
-> @@ -119,6 +124,11 @@ static inline void kvm_riscv_aia_destroy_vm(struct k=
-vm *kvm)
->  {
->  }
->
-> +int kvm_riscv_aia_alloc_hgei(int cpu, struct kvm_vcpu *owner,
-> +                            void __iomem **hgei_va, phys_addr_t *hgei_pa=
-);
-> +void kvm_riscv_aia_free_hgei(int cpu, int hgei);
-> +void kvm_riscv_aia_wakeon_hgei(struct kvm_vcpu *owner, bool enable);
-> +
->  void kvm_riscv_aia_enable(void);
->  void kvm_riscv_aia_disable(void);
->  int kvm_riscv_aia_init(void);
-> diff --git a/arch/riscv/kvm/aia.c b/arch/riscv/kvm/aia.c
-> index 4f1286fc7f17..1cee75a8c883 100644
-> --- a/arch/riscv/kvm/aia.c
-> +++ b/arch/riscv/kvm/aia.c
-> @@ -8,11 +8,47 @@
->   */
->
->  #include <linux/kernel.h>
-> +#include <linux/bitops.h>
-> +#include <linux/irq.h>
-> +#include <linux/irqdomain.h>
->  #include <linux/kvm_host.h>
-> +#include <linux/percpu.h>
-> +#include <linux/spinlock.h>
->  #include <asm/hwcap.h>
->
-> +struct aia_hgei_control {
-> +       raw_spinlock_t lock;
-> +       unsigned long free_bitmap;
-> +       struct kvm_vcpu *owners[BITS_PER_LONG];
-> +};
-> +static DEFINE_PER_CPU(struct aia_hgei_control, aia_hgei);
-> +static int hgei_parent_irq;
-> +
-> +unsigned int kvm_riscv_aia_nr_hgei;
->  DEFINE_STATIC_KEY_FALSE(kvm_riscv_aia_available);
->
-> +static int aia_find_hgei(struct kvm_vcpu *owner)
-> +{
-> +       int i, hgei;
-> +       unsigned long flags;
-> +       struct aia_hgei_control *hgctrl =3D get_cpu_ptr(&aia_hgei);
-> +
-> +       raw_spin_lock_irqsave(&hgctrl->lock, flags);
-> +
-> +       hgei =3D -1;
-> +       for (i =3D 1; i <=3D kvm_riscv_aia_nr_hgei; i++) {
-> +               if (hgctrl->owners[i] =3D=3D owner) {
-> +                       hgei =3D i;
-> +                       break;
-> +               }
-> +       }
-> +
-> +       raw_spin_unlock_irqrestore(&hgctrl->lock, flags);
-> +
-> +       put_cpu_ptr(&aia_hgei);
-> +       return hgei;
-> +}
-> +
->  static void aia_set_hvictl(bool ext_irq_pending)
->  {
->         unsigned long hvictl;
-> @@ -56,6 +92,7 @@ void kvm_riscv_vcpu_aia_sync_interrupts(struct kvm_vcpu=
- *vcpu)
->
->  bool kvm_riscv_vcpu_aia_has_interrupts(struct kvm_vcpu *vcpu, u64 mask)
->  {
-> +       int hgei;
->         unsigned long seip;
->
->         if (!kvm_riscv_aia_available())
-> @@ -74,6 +111,10 @@ bool kvm_riscv_vcpu_aia_has_interrupts(struct kvm_vcp=
-u *vcpu, u64 mask)
->         if (!kvm_riscv_aia_initialized(vcpu->kvm) || !seip)
->                 return false;
->
-> +       hgei =3D aia_find_hgei(vcpu);
-> +       if (hgei > 0)
-> +               return !!(csr_read(CSR_HGEIP) & BIT(hgei));
-> +
->         return false;
->  }
->
-> @@ -348,6 +389,143 @@ int kvm_riscv_vcpu_aia_rmw_ireg(struct kvm_vcpu *vc=
-pu, unsigned int csr_num,
->         return KVM_INSN_EXIT_TO_USER_SPACE;
->  }
->
-> +int kvm_riscv_aia_alloc_hgei(int cpu, struct kvm_vcpu *owner,
-> +                            void __iomem **hgei_va, phys_addr_t *hgei_pa=
-)
-> +{
-> +       int ret =3D -ENOENT;
-> +       unsigned long flags;
-> +       struct aia_hgei_control *hgctrl =3D per_cpu_ptr(&aia_hgei, cpu);
-> +
-> +       if (!kvm_riscv_aia_available() || !hgctrl)
-> +               return -ENODEV;
-> +
-> +       raw_spin_lock_irqsave(&hgctrl->lock, flags);
-> +
-> +       if (hgctrl->free_bitmap) {
-> +               ret =3D __ffs(hgctrl->free_bitmap);
-> +               hgctrl->free_bitmap &=3D ~BIT(ret);
-> +               hgctrl->owners[ret] =3D owner;
-> +       }
-> +
-> +       raw_spin_unlock_irqrestore(&hgctrl->lock, flags);
-> +
-> +       /* TODO: To be updated later by AIA in-kernel irqchip support */
-> +       if (hgei_va)
-> +               *hgei_va =3D NULL;
-> +       if (hgei_pa)
-> +               *hgei_pa =3D 0;
-> +
-> +       return ret;
-> +}
-> +
-> +void kvm_riscv_aia_free_hgei(int cpu, int hgei)
-> +{
-> +       unsigned long flags;
-> +       struct aia_hgei_control *hgctrl =3D per_cpu_ptr(&aia_hgei, cpu);
-> +
-> +       if (!kvm_riscv_aia_available() || !hgctrl)
-> +               return;
-> +
-> +       raw_spin_lock_irqsave(&hgctrl->lock, flags);
-> +
-> +       if (hgei > 0 && hgei <=3D kvm_riscv_aia_nr_hgei) {
-> +               if (!(hgctrl->free_bitmap & BIT(hgei))) {
-> +                       hgctrl->free_bitmap |=3D BIT(hgei);
-> +                       hgctrl->owners[hgei] =3D NULL;
-> +               }
-> +       }
-> +
-> +       raw_spin_unlock_irqrestore(&hgctrl->lock, flags);
-> +}
-> +
-> +void kvm_riscv_aia_wakeon_hgei(struct kvm_vcpu *owner, bool enable)
-> +{
-> +       int hgei;
-> +
-> +       if (!kvm_riscv_aia_available())
-> +               return;
-> +
-> +       hgei =3D aia_find_hgei(owner);
-> +       if (hgei > 0) {
-> +               if (enable)
-> +                       csr_set(CSR_HGEIE, BIT(hgei));
-> +               else
-> +                       csr_clear(CSR_HGEIE, BIT(hgei));
-> +       }
-> +}
-> +
-> +static irqreturn_t hgei_interrupt(int irq, void *dev_id)
-> +{
-> +       int i;
-> +       unsigned long hgei_mask, flags;
-> +       struct aia_hgei_control *hgctrl =3D get_cpu_ptr(&aia_hgei);
-> +
-> +       hgei_mask =3D csr_read(CSR_HGEIP) & csr_read(CSR_HGEIE);
-> +       csr_clear(CSR_HGEIE, hgei_mask);
-> +
-> +       raw_spin_lock_irqsave(&hgctrl->lock, flags);
-> +
-> +       for_each_set_bit(i, &hgei_mask, BITS_PER_LONG) {
-> +               if (hgctrl->owners[i])
-> +                       kvm_vcpu_kick(hgctrl->owners[i]);
-> +       }
-> +
-> +       raw_spin_unlock_irqrestore(&hgctrl->lock, flags);
-> +
-> +       put_cpu_ptr(&aia_hgei);
-> +       return IRQ_HANDLED;
-> +}
-> +
-> +static int aia_hgei_init(void)
-> +{
-> +       int cpu, rc;
-> +       struct irq_domain *domain;
-> +       struct aia_hgei_control *hgctrl;
-> +
-> +       /* Initialize per-CPU guest external interrupt line management */
-> +       for_each_possible_cpu(cpu) {
-> +               hgctrl =3D per_cpu_ptr(&aia_hgei, cpu);
-> +               raw_spin_lock_init(&hgctrl->lock);
-> +               if (kvm_riscv_aia_nr_hgei) {
-> +                       hgctrl->free_bitmap =3D
-> +                               BIT(kvm_riscv_aia_nr_hgei + 1) - 1;
-> +                       hgctrl->free_bitmap &=3D ~BIT(0);
-> +               } else
-> +                       hgctrl->free_bitmap =3D 0;
-> +       }
-> +
-> +       /* Find INTC irq domain */
-> +       domain =3D irq_find_matching_fwnode(riscv_get_intc_hwnode(),
-> +                                         DOMAIN_BUS_ANY);
-> +       if (!domain) {
-> +               kvm_err("unable to find INTC domain\n");
-> +               return -ENOENT;
-> +       }
-> +
-> +       /* Map per-CPU SGEI interrupt from INTC domain */
-> +       hgei_parent_irq =3D irq_create_mapping(domain, IRQ_S_GEXT);
-> +       if (!hgei_parent_irq) {
-> +               kvm_err("unable to map SGEI IRQ\n");
-> +               return -ENOMEM;
-> +       }
-> +
-> +       /* Request per-CPU SGEI interrupt */
-> +       rc =3D request_percpu_irq(hgei_parent_irq, hgei_interrupt,
-> +                               "riscv-kvm", &aia_hgei);
-> +       if (rc) {
-> +               kvm_err("failed to request SGEI IRQ\n");
-> +               return rc;
-> +       }
-> +
-> +       return 0;
-> +}
-> +
-> +static void aia_hgei_exit(void)
-> +{
-> +       /* Free per-CPU SGEI interrupt */
-> +       free_percpu_irq(hgei_parent_irq, &aia_hgei);
-> +}
-> +
->  void kvm_riscv_aia_enable(void)
->  {
->         if (!kvm_riscv_aia_available())
-> @@ -362,21 +540,82 @@ void kvm_riscv_aia_enable(void)
->         csr_write(CSR_HVIPRIO1H, 0x0);
->         csr_write(CSR_HVIPRIO2H, 0x0);
->  #endif
-> +
-> +       /* Enable per-CPU SGEI interrupt */
-> +       enable_percpu_irq(hgei_parent_irq,
-> +                         irq_get_trigger_type(hgei_parent_irq));
-> +       csr_set(CSR_HIE, BIT(IRQ_S_GEXT));
->  }
->
->  void kvm_riscv_aia_disable(void)
->  {
-> +       int i;
-> +       unsigned long flags;
-> +       struct kvm_vcpu *vcpu;
-> +       struct aia_hgei_control *hgctrl;
-> +
->         if (!kvm_riscv_aia_available())
->                 return;
-> +       hgctrl =3D get_cpu_ptr(&aia_hgei);
-> +
-> +       /* Disable per-CPU SGEI interrupt */
-> +       csr_clear(CSR_HIE, BIT(IRQ_S_GEXT));
-> +       disable_percpu_irq(hgei_parent_irq);
->
->         aia_set_hvictl(false);
-> +
-> +       raw_spin_lock_irqsave(&hgctrl->lock, flags);
-> +
-> +       for (i =3D 0; i <=3D kvm_riscv_aia_nr_hgei; i++) {
-> +               vcpu =3D hgctrl->owners[i];
-> +               if (!vcpu)
-> +                       continue;
-> +
-> +               /*
-> +                * We release hgctrl->lock before notifying IMSIC
-> +                * so that we don't have lock ordering issues.
-> +                */
-> +               raw_spin_unlock_irqrestore(&hgctrl->lock, flags);
-> +
-> +               /* Notify IMSIC */
-> +               kvm_riscv_vcpu_aia_imsic_release(vcpu);
-> +
-> +               /*
-> +                * Wakeup VCPU if it was blocked so that it can
-> +                * run on other HARTs
-> +                */
-> +               if (csr_read(CSR_HGEIE) & BIT(i)) {
-> +                       csr_clear(CSR_HGEIE, BIT(i));
-> +                       kvm_vcpu_kick(vcpu);
-> +               }
-> +
-> +               raw_spin_lock_irqsave(&hgctrl->lock, flags);
-> +       }
-> +
-> +       raw_spin_unlock_irqrestore(&hgctrl->lock, flags);
-> +
-> +       put_cpu_ptr(&aia_hgei);
->  }
->
->  int kvm_riscv_aia_init(void)
->  {
-> +       int rc;
-> +
->         if (!riscv_isa_extension_available(NULL, SxAIA))
->                 return -ENODEV;
->
-> +       /* Figure-out number of bits in HGEIE */
-> +       csr_write(CSR_HGEIE, -1UL);
-> +       kvm_riscv_aia_nr_hgei =3D fls_long(csr_read(CSR_HGEIE));
-> +       csr_write(CSR_HGEIE, 0);
-> +       if (kvm_riscv_aia_nr_hgei)
-> +               kvm_riscv_aia_nr_hgei--;
-> +
-> +       /* Initialize guest external interrupt line management */
-> +       rc =3D aia_hgei_init();
-> +       if (rc)
-> +               return rc;
-> +
->         /* Enable KVM AIA support */
->         static_branch_enable(&kvm_riscv_aia_available);
->
-> @@ -385,4 +624,9 @@ int kvm_riscv_aia_init(void)
->
->  void kvm_riscv_aia_exit(void)
->  {
-> +       if (!kvm_riscv_aia_available())
-> +               return;
-> +
-> +       /* Cleanup the HGEI state */
-> +       aia_hgei_exit();
->  }
-> diff --git a/arch/riscv/kvm/main.c b/arch/riscv/kvm/main.c
-> index a7112d583637..48ae0d4b3932 100644
-> --- a/arch/riscv/kvm/main.c
-> +++ b/arch/riscv/kvm/main.c
-> @@ -116,7 +116,8 @@ static int __init riscv_kvm_init(void)
->         kvm_info("VMID %ld bits available\n", kvm_riscv_gstage_vmid_bits(=
-));
->
->         if (kvm_riscv_aia_available())
-> -               kvm_info("AIA available\n");
-> +               kvm_info("AIA available with %d guest external interrupts=
-\n",
-> +                        kvm_riscv_aia_nr_hgei);
->
->         rc =3D kvm_init(sizeof(struct kvm_vcpu), 0, THIS_MODULE);
->         if (rc) {
-> diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
-> index 8bd9f2a8a0b9..2db62c6c0d3e 100644
-> --- a/arch/riscv/kvm/vcpu.c
-> +++ b/arch/riscv/kvm/vcpu.c
-> @@ -250,10 +250,12 @@ int kvm_cpu_has_pending_timer(struct kvm_vcpu *vcpu=
-)
->
->  void kvm_arch_vcpu_blocking(struct kvm_vcpu *vcpu)
->  {
-> +       kvm_riscv_aia_wakeon_hgei(vcpu, true);
->  }
->
->  void kvm_arch_vcpu_unblocking(struct kvm_vcpu *vcpu)
->  {
-> +       kvm_riscv_aia_wakeon_hgei(vcpu, false);
->  }
->
->  int kvm_arch_vcpu_runnable(struct kvm_vcpu *vcpu)
-> --
-> 2.34.1
->
-
-
-
-Reviewed-by: Atish Patra <atishp@rivosinc.com>
-
---=20
-Regards,
-Atish
+T24gV2VkLCAyMDIzLTA2LTA3IGF0IDAxOjQ1ICswMzAwLCBLaXJpbGwgQS4gU2h1dGVtb3Ygd3Jv
+dGU6DQo+IE9uIFR1ZSwgSnVuIDA2LCAyMDIzIGF0IDEwOjE3OjUzUE0gKzAwMDAsIEh1YW5nLCBL
+YWkgd3JvdGU6DQo+ID4gT24gVHVlLCAyMDIzLTA2LTA2IGF0IDA2OjEwIC0wNzAwLCBTYXRoeWFu
+YXJheWFuYW4gS3VwcHVzd2FteSB3cm90ZToNCj4gPiA+IA0KPiA+ID4gT24gNi81LzIzIDg6NDAg
+UE0sIEthaSBIdWFuZyB3cm90ZToNCj4gPiA+ID4gQ3VycmVudGx5LCBpbiA8YXNtL3RkeC5oPiB0
+ZHhfa3ZtX2h5cGVyY2FsbCgpIHNpbXBseSByZXR1cm5zIC1FTk9ERVYNCj4gPiA+ID4gd2hlbiBU
+RFggZ3Vlc3QgaXNuJ3QgZW5hYmxlZCBpbiB0aGUgS2NvbmZpZyB3L28gaGF2aW5nIDxsaW51eC9l
+cnJuby5oPg0KPiA+ID4gDQo+ID4gPiBNYXliZSB5b3UgY2FuIGV4cGxpY2l0bHkgc2F5ICJDT05G
+SUdfSU5URUxfVERYX0dVRVNUIGlzIG5vdCBlbmFibGVkIg0KPiA+IA0KPiA+IEl0IGFsc28gY2Fu
+IGJlIGRpc2FibGVkIGJ5ICFDT05GSUdfS1ZNX0dVRVNULg0KPiANCj4gQm9yaXNsYXYgaGFzIGFs
+cmVhZHkgZml4ZWQgaXQgZHVyaW5nIHVuYWNjZXB0ZWQgbWVtb3J5IHBhdGNoc2V0DQo+IGFwcGxp
+Y2F0aW9uLiBIZSB1c2VkIDxhc20vZXJybm8uaD4sIG5vdCA8bGludXgvZXJybm8uaD4uDQo+IA0K
+PiBTZWUgWzFdIGFuZCBbMl0uDQo+IA0KPiBbMV0gaHR0cHM6Ly9naXQua2VybmVsLm9yZy9wdWIv
+c2NtL2xpbnV4L2tlcm5lbC9naXQvdGlwL3RpcC5naXQvY29tbWl0Lz9pZD03NWQwOTBmZDE2N2Fj
+YWI0ZDdlZGE3ZTJiNjU3MjllODc3YzBmZDY0DQo+IFsyXSBodHRwczovL2xvcmUua2VybmVsLm9y
+Zy9hbGwvMjAyMzA2MDYxNjE2MDYuR0RaSDlieGhyR25Ga2FMbDJBQGZhdF9jcmF0ZS5sb2NhbA0K
+PiANCg0KV29uZGVyZnVsLCB0aGVuIHdlIGNhbiBkcm9wIHRoaXMgb25lIDopDQo=
