@@ -2,181 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC4517243C6
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 15:08:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B4FB7243C9
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 15:09:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238044AbjFFNI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 09:08:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37766 "EHLO
+        id S238062AbjFFNJN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 09:09:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237768AbjFFNIy (ORCPT
+        with ESMTP id S238043AbjFFNJG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 09:08:54 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31F2F170F
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 06:08:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686056915; x=1717592915;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=EGypTDkiiflKHYna6oC/dC9BQiC2e9SaCPgHT4ONrUQ=;
-  b=HuuuH8UalcIaVBXkDeVDDr5dzhozbp2jx3OM2CafOpBYcyzU6LH1gJnm
-   Z2jVzcy3VQkXzLXVA7jUnBLYW/I4AI8MpB8lE0Q27bbFWrAM0hU3ZOCLQ
-   Gs2A+PXqiQ9TGYwSKet3ioRC6r+jwX/LvAwEvQQ8OHlEI8MJDL3tllsWp
-   uXxq7oroJA47llteKIJ5xu/x//Mr5OqbFqFfEPoNkWcSf1AF+NBUvfPsk
-   HiXpYwi+tFqiqv9WZugd8ABSxxwsafWNu7WIVjAQUPVS5nlwF+IIiVqJP
-   plt3qdBrysvZ/GwB0CEmQlrtz54HvbZ6x6Tf67w2/vuOSHvsmG3bP81aK
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="443041112"
-X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
-   d="scan'208";a="443041112"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 06:07:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="821626227"
-X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
-   d="scan'208";a="821626227"
-Received: from abobyr-mobl1.ccr.corp.intel.com (HELO localhost) ([10.252.59.4])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 06:07:53 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Siddh Raman Pant <code@siddh.me>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Suraj Upadhyay <usuraj35@gmail.com>
-Subject: Re: [PATCH v9 1/8] Revert "drm: mipi-dsi: Convert logging to drm_*
- functions."
-In-Reply-To: <20230606125537.GC25774@pendragon.ideasonboard.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <cover.1686047727.git.code@siddh.me>
- <bff523677c65a4a6b1c06152b154cf5651f51d68.1686047727.git.code@siddh.me>
- <20230606125537.GC25774@pendragon.ideasonboard.com>
-Date:   Tue, 06 Jun 2023 16:07:47 +0300
-Message-ID: <87pm68u4bg.fsf@intel.com>
+        Tue, 6 Jun 2023 09:09:06 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5855810C0;
+        Tue,  6 Jun 2023 06:08:42 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 356D8EN6102247;
+        Tue, 6 Jun 2023 08:08:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1686056894;
+        bh=br8C969Tk/Q3upf8dFCWCpzUM36C2jIPTueuAaa4o/c=;
+        h=Date:From:Subject:To:CC:References:In-Reply-To;
+        b=LMg/8LauN8UGZLpxQBK5C1p/Nm9WnAWvcGLddSYkPk7bYcn4gUOJZqyIjmmgVuKPV
+         F18PhjuqMgsRzNDXxaTP5ZXFB3UZfBJ2cg/IXUQXyBh0ek9syiwRGU8/DTJPlqcT5H
+         449OBvDKKJreEusfMYYmDuBDpACFsTAOGHqzAy2M=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 356D8EUQ019053
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 6 Jun 2023 08:08:14 -0500
+Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 6
+ Jun 2023 08:08:14 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 6 Jun 2023 08:08:14 -0500
+Received: from [10.249.141.75] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 356D8AhN006614;
+        Tue, 6 Jun 2023 08:08:11 -0500
+Message-ID: <97d14e4a-956c-790f-f3e3-ec8174a9f0b1@ti.com>
+Date:   Tue, 6 Jun 2023 18:38:10 +0530
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+From:   "Kumar, Udit" <u-kumar1@ti.com>
+Subject: Re: [PATCH 4/7] arm64: dts: ti: k3-j7200-mcu: Add mcu_secproxy
+To:     Nishanth Menon <nm@ti.com>
+CC:     Conor Dooley <conor+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Tero Kristo <kristo@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Nitin Yadav <n-yadav@ti.com>, Andrew Davis <afd@ti.com>,
+        <u-kumar1@ti.com>
+References: <20230530165900.47502-1-nm@ti.com>
+ <20230530165900.47502-5-nm@ti.com>
+ <e25936b9-d85c-dfe8-0eb1-07b51fdfff1e@ti.com>
+ <20230531173906.zznrzuxfytk5feun@spied>
+Content-Language: en-US
+In-Reply-To: <20230531173906.zznrzuxfytk5feun@spied>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 06 Jun 2023, Laurent Pinchart <laurent.pinchart@ideasonboard.com> wrote:
-> Hi Siddh,
->
-> Thank you for the patch.
->
-> On Tue, Jun 06, 2023 at 04:15:15PM +0530, Siddh Raman Pant wrote:
->> This reverts commit 1040e424353f5f4d39f6f3aa8723eb3bd6ea6446.
->> 
->> It used an incorrect way to use drm_* functions. Only drm_device ptrs
->> should be passed, but the mentioned commit passed mipi_dsi_host ptr.
->> It worked by accident due to macro magic.
->> 
->> Reported-by: Jani Nikula <jani.nikula@linux.intel.com>
->> Reviewed-by: Jani Nikula <jani.nikula@intel.com>
->> Signed-off-by: Siddh Raman Pant <code@siddh.me>
->
-> Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
->
-> Any chance we could prevent this from happening by turning the macros
-> into inline functions ?
 
-Patch 2 adds static inline struct device *__drm_dev_ptr(const struct
-drm_device *drm) which should tackle this.
+On 5/31/2023 11:09 PM, Nishanth Menon wrote:
+> On 22:37-20230531, Kumar, Udit wrote:
+> [...]
+>>> +	secure_proxy_mcu: mailbox@2a480000 {
+>> I think, we should start name as  mailbox@2a380000
+>>> +		compatible = "ti,am654-secure-proxy";
+>>> +		#mbox-cells = <1>;
+>>> +		reg-names = "target_data", "rt", "scfg";
+>>> +		reg = <0x0 0x2a480000 0x0 0x80000>,
+>>> +		      <0x0 0x2a380000 0x0 0x80000>,
+>>> +		      <0x0 0x2a400000 0x0 0x80000>;
+>> I think, we should have increasing order for reg. Unless there is some
+>> strong reason to keep in this way.
+> Binding is defined this way - the items section in the binding
+> enforces the order. As a result the first reg entry(target_data)
+> address causes the node name.
 
-BR,
-Jani.
 
->
->> ---
->>  drivers/gpu/drm/drm_mipi_dsi.c | 15 ++++++++-------
->>  1 file changed, 8 insertions(+), 7 deletions(-)
->> 
->> diff --git a/drivers/gpu/drm/drm_mipi_dsi.c b/drivers/gpu/drm/drm_mipi_dsi.c
->> index 3fd6c733ff4e..a37af4edf394 100644
->> --- a/drivers/gpu/drm/drm_mipi_dsi.c
->> +++ b/drivers/gpu/drm/drm_mipi_dsi.c
->> @@ -33,7 +33,6 @@
->>  
->>  #include <drm/display/drm_dsc.h>
->>  #include <drm/drm_mipi_dsi.h>
->> -#include <drm/drm_print.h>
->>  
->>  #include <video/mipi_display.h>
->>  
->> @@ -156,18 +155,19 @@ static int mipi_dsi_device_add(struct mipi_dsi_device *dsi)
->>  static struct mipi_dsi_device *
->>  of_mipi_dsi_device_add(struct mipi_dsi_host *host, struct device_node *node)
->>  {
->> +	struct device *dev = host->dev;
->>  	struct mipi_dsi_device_info info = { };
->>  	int ret;
->>  	u32 reg;
->>  
->>  	if (of_alias_from_compatible(node, info.type, sizeof(info.type)) < 0) {
->> -		drm_err(host, "modalias failure on %pOF\n", node);
->> +		dev_err(dev, "modalias failure on %pOF\n", node);
->>  		return ERR_PTR(-EINVAL);
->>  	}
->>  
->>  	ret = of_property_read_u32(node, "reg", &reg);
->>  	if (ret) {
->> -		drm_err(host, "device node %pOF has no valid reg property: %d\n",
->> +		dev_err(dev, "device node %pOF has no valid reg property: %d\n",
->>  			node, ret);
->>  		return ERR_PTR(-EINVAL);
->>  	}
->> @@ -202,21 +202,22 @@ mipi_dsi_device_register_full(struct mipi_dsi_host *host,
->>  			      const struct mipi_dsi_device_info *info)
->>  {
->>  	struct mipi_dsi_device *dsi;
->> +	struct device *dev = host->dev;
->>  	int ret;
->>  
->>  	if (!info) {
->> -		drm_err(host, "invalid mipi_dsi_device_info pointer\n");
->> +		dev_err(dev, "invalid mipi_dsi_device_info pointer\n");
->>  		return ERR_PTR(-EINVAL);
->>  	}
->>  
->>  	if (info->channel > 3) {
->> -		drm_err(host, "invalid virtual channel: %u\n", info->channel);
->> +		dev_err(dev, "invalid virtual channel: %u\n", info->channel);
->>  		return ERR_PTR(-EINVAL);
->>  	}
->>  
->>  	dsi = mipi_dsi_device_alloc(host);
->>  	if (IS_ERR(dsi)) {
->> -		drm_err(host, "failed to allocate DSI device %ld\n",
->> +		dev_err(dev, "failed to allocate DSI device %ld\n",
->>  			PTR_ERR(dsi));
->>  		return dsi;
->>  	}
->> @@ -227,7 +228,7 @@ mipi_dsi_device_register_full(struct mipi_dsi_host *host,
->>  
->>  	ret = mipi_dsi_device_add(dsi);
->>  	if (ret) {
->> -		drm_err(host, "failed to add DSI device %d\n", ret);
->> +		dev_err(dev, "failed to add DSI device %d\n", ret);
->>  		kfree(dsi);
->>  		return ERR_PTR(ret);
->>  	}
->> 
+Ok thanks, u boot defined in other way but i don't see problem post sync,
 
--- 
-Jani Nikula, Intel Open Source Graphics Center
+As u-boot driver is getting node address based upon name instead of index.
+
+
+Reviewed-by: Udit Kumar <u-kumar1@ti.com>
+
