@@ -2,106 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B54A7240BC
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 13:21:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F38E67240C2
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 13:22:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234615AbjFFLVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 07:21:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50482 "EHLO
+        id S235127AbjFFLWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 07:22:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233221AbjFFLVS (ORCPT
+        with ESMTP id S234742AbjFFLVt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 07:21:18 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55577E55
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 04:21:16 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-514924b4f8cso9150633a12.3
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 04:21:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20221208.gappssmtp.com; s=20221208; t=1686050475; x=1688642475;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=WgEiERv4Bqd8wYQ9qGd58dje1mGdDZnpS8Q33NIZosE=;
-        b=wnxII4xg6UhjdYQWVBrx+4Svi6hEZiufrEz1S2U8BuPUtzZHyEWdQmhCihcqZd1skY
-         8LReU2JOhUXSaM7xm0VEdSDS195XArVE04Rht8GJzldSHrTfKIi7boRXiE3SeFexl66b
-         K4CE685yHVi56qYK7JL04MBjZFUQtqDGLzt6GUMGwQnsDTDLdM29ZKJ/2VBcz5h8ZRqM
-         AgI6efazcDIQGrMut8pLeVwwCIcVNTqeGsoFE7mqlnCWxSxetrfoigrrqgHUNXZkv1dp
-         Ylhpggwz8/IWa94OQbrCMMJPA5KivrOjvysN0WT0NNRac3Y/9b9N+X5CXnHMV5ogRDK2
-         aP2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686050475; x=1688642475;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WgEiERv4Bqd8wYQ9qGd58dje1mGdDZnpS8Q33NIZosE=;
-        b=Lav7au9/+NFtig19wCPQ/1PmMBGXYPqE65N+LO1FOh9YKstm1wXdq6HItSQwzJSNNj
-         XoZsVgzymgKTKx7pIww7fjpKjKyRQoO+h+N1vaUPmgrdGc8ETbwyiFyOnU8BA1V9puKR
-         /vR9CFIJuFEAnaRQJR1rKRqqwuQRznkovCFJJJRWf4KWk2qknoJobRPw7rI54SXOMf8f
-         ZqjfRrXdHUUm2Hp+bW2u3N5mJg/pLNElwwg9ZsNfdCIMxePirSwEdmcnn9Xp9ufwdqwi
-         949O1zZaXSVoUcEibhVbNvohGVcVlgdz+bVjq0LRMiKO/a+bOWfSG3qQAoTDbaUmMV49
-         0HOg==
-X-Gm-Message-State: AC+VfDwAB7rWlcz5wXWPJ608bOo+k8bwc9WeL/1Jv2WwCTwz6yrQiOIn
-        KGNXYtVPyYS1PPp4KFwaAm1qNg==
-X-Google-Smtp-Source: ACHHUZ4W8h7HbUt/slejTdu2ShesuI6S68HrQo12VgfWHb2zXa8uQ1H7x1LX41CnzWzS5T/bNEja7A==
-X-Received: by 2002:a17:907:8a08:b0:973:ad8f:ef9b with SMTP id sc8-20020a1709078a0800b00973ad8fef9bmr2301783ejc.5.1686050474742;
-        Tue, 06 Jun 2023 04:21:14 -0700 (PDT)
-Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
-        by smtp.gmail.com with ESMTPSA id v3-20020a1709063bc300b0096650f46004sm5412062ejf.56.2023.06.06.04.21.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 04:21:13 -0700 (PDT)
-Date:   Tue, 6 Jun 2023 13:21:12 +0200
-From:   Jiri Pirko <jiri@resnulli.us>
-To:     Hangyu Hua <hbh25y@gmail.com>
-Cc:     jhs@mojatatu.com, xiyou.wangcong@gmail.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net] net: sched: fix possible refcount leak in
- tc_chain_tmplt_add()
-Message-ID: <ZH8WqFQZrniml8Yq@nanopsycho>
-References: <20230605070158.48403-1-hbh25y@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230605070158.48403-1-hbh25y@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 6 Jun 2023 07:21:49 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90568E5E;
+        Tue,  6 Jun 2023 04:21:48 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id F33D95C01BC;
+        Tue,  6 Jun 2023 07:21:47 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 06 Jun 2023 07:21:47 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1686050507; x=1686136907; bh=1x
+        n4EnfXPYPcSd+SYlCMqeGdlk7+uLOsdP8xB0JMCIg=; b=Ql8KhoFvs6janwDPYm
+        OzFnqZbirQ3Y1K/vaWQUlfwmD6LLsen3JVt1Trqjhmh1d6XJaad8lWQ/Lnqi3H60
+        f0DMSkIZbX1RAd1S3OiQgOy/huyUyDrgIK311sNrC9SVe4CMaC12/NySF6Oi6SYI
+        T0xJtHVXbRqTxA346xGMtBCkMTiR2bjcah9oeGV2pehTWN+Q3m3QOs4UtlEHfor1
+        ATqjmdDuCG/8IVRJsw19UFeisjALKMEEuIhKJdMFkSP8zmyYOXO9cjCwPMV7JrHG
+        1moLS1VazweI4fT39KVr/Wvxh/U+JubvzNVd6GTLfWGvvbT4Ax8XHQg7Qeu0d1jz
+        oE9g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1686050507; x=1686136907; bh=1xn4EnfXPYPcS
+        d+SYlCMqeGdlk7+uLOsdP8xB0JMCIg=; b=SoXI6SuToid++cgZQHF+nQwl5JUOj
+        B7iVXV2kSaTM6n4O/WMF/pZSxe14Lp/NszNzLEzghNRlmhh6PkKz9aQA5GIadIcy
+        sVd8mf1y9DyNR4aAqyb+xyfP7lC4ROYB24Y7TcxuPswg7T83xu0gmOF1rJTnXQf2
+        5RpPjxVsykYqTUgp8VfuoP85DUjrQDAf4b6iBvcm3gTGn1cjnadFvHmfy8jA4aRd
+        DKGFVTgCMoPfmpDSn1XVpoU4/ymakGZlF+kuwniJd/wRlYPDe6tOvonLCmNdwqUw
+        vcOxpswbtRteBo6hIP4O69/NM0zUMLBp+pp81ElMQehHzbt1h+AwapsAg==
+X-ME-Sender: <xms:yhZ_ZM8OrrNAFSWfiy_I81HTHoPLeUkTMlXNIPkNhZ6lbqofLZkK0A>
+    <xme:yhZ_ZEtkNFO4emSxZjf73vuZBsZRrOiSU_a8c9Qv7WubopeJ1rQVorVGmqlf7RCa_
+    Yce6O80Q0xxIFuCrxE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedtuddggedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:yxZ_ZCBu7vWQL64mUtLPgb2p5GNhVIwZVeAxWIvr1Huc-JIXN-OUCw>
+    <xmx:yxZ_ZMcP2Xc1TwSQbQs00NMfGL5dDmmy2GUm4thhbLAAw0dL1V_M_w>
+    <xmx:yxZ_ZBNGUGXTxkdrRQATBt9rqKTOj7AcJwUPc7-8tnf9xwjiYyYxDg>
+    <xmx:yxZ_ZCquUM0kNEoguyU_GnRNzIHkGfSFKYmSx0osfr8NYSbTAm_Ang>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id DC0D9B60086; Tue,  6 Jun 2023 07:21:46 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-447-ge2460e13b3-fm-20230525.001-ge2460e13
+Mime-Version: 1.0
+Message-Id: <63133024-e986-44e2-86f5-efc1c42207ac@app.fastmail.com>
+In-Reply-To: <20230606111216.524384-1-falcon@tinylab.org>
+References: <d1c83340-af4c-4780-a101-b9d22b47379c@app.fastmail.com>
+ <20230606111216.524384-1-falcon@tinylab.org>
+Date:   Tue, 06 Jun 2023 13:21:26 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Zhangjin Wu" <falcon@tinylab.org>,
+        =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>,
+        "Willy Tarreau" <w@1wt.eu>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v3 3/3] selftests/nolibc: riscv: customize makefile for rv32
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mon, Jun 05, 2023 at 09:01:58AM CEST, hbh25y@gmail.com wrote:
->try_module_get can be called in tcf_proto_lookup_ops. So if ops don't
->implement the corresponding function we should call module_put to drop
->the refcount.
-
-Who's "we"? Use imperative mood. Tell the codebase what to do, what to
-change, etc.
-
-Code-wise, this is fine. Please fix the patch description.
-
-
+On Tue, Jun 6, 2023, at 13:12, Zhangjin Wu wrote:
+>> On Sat, Jun 3, 2023, at 11:05, Zhangjin Wu wrote:
+>> would seem more consistent with how x86 is handled, and would
+>> probably be more easily extensible if we want to also make
+>> this work with other sub-targets like mipseb, armv5 or ppc32
+>> in the future.
 >
->Fixes: 9f407f1768d3 ("net: sched: introduce chain templates")
->Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
->---
-> net/sched/cls_api.c | 1 +
-> 1 file changed, 1 insertion(+)
+> As Arnd and Thomas suggested to align with x86, I just tried to find a
+> solution to avoid mixing the use of _ARCH and ARCH in this Makefile.
 >
->diff --git a/net/sched/cls_api.c b/net/sched/cls_api.c
->index 2621550bfddc..92bfb892e638 100644
->--- a/net/sched/cls_api.c
->+++ b/net/sched/cls_api.c
->@@ -2952,6 +2952,7 @@ static int tc_chain_tmplt_add(struct tcf_chain *chain, struct net *net,
-> 		return PTR_ERR(ops);
-> 	if (!ops->tmplt_create || !ops->tmplt_destroy || !ops->tmplt_dump) {
-> 		NL_SET_ERR_MSG(extack, "Chain templates are not supported with specified classifier");
->+		module_put(ops->owner);
-> 		return -EOPNOTSUPP;
-> 	}
-> 
->-- 
->2.34.1
+> Since both riscv32 and riscv64 share the same SRCARCH=riscv (arch/riscv),
+> and the kernel side doesn't accept riscv32 or riscv64 currently, we need to
+> manually convert them to _ARCH=riscv and pass them to the kernel makefile
+> like this: ARCH=$(_ARCH), it mixes the use of _ARCH and ARCH, this is why I
+> used the '$(if' method currently.
 >
+> The solution is adding something like x86 in the kernel Makefile:
+>
+>     diff --git a/Makefile b/Makefile
+>     index 9d765ebcccf1..a442c893d795 100644
+>     --- a/Makefile
+>     +++ b/Makefile
+>     @@ -415,6 +415,14 @@ ifeq ($(ARCH),parisc64)
+>             SRCARCH := parisc
+>      endif
+>
+>     +# Additional ARCH settings for riscv
+>     +ifeq ($(ARCH),riscv32)
+>     +        SRCARCH := riscv
+>     +endif
+>     +ifeq ($(ARCH),riscv64)
+>     +        SRCARCH := riscv
+>     +endif
+>     +
+>      export cross_compiling :=
+>      ifneq ($(SRCARCH),$(SUBARCH))
+>      cross_compiling := 1
+
+I've never been a big fan of the top-level $(ARCH) setting
+in the kernel, is there a reason this has to be the same
+as the variable in tools/include/nolibc? If not, I'd just
+leave the Linux Makefile unchanged.
+
+For userspace we have a lot more target names than
+arch/*/ directories in the kernel, and I don't think
+I'd want to enumerate all the possibilities in the
+build system globally.
+> b/tools/testing/selftests/nolibc/Makefile
+>     index 4a3a105e1fdf..1b2247a6365d 100644
+>     --- a/tools/testing/selftests/nolibc/Makefile
+>     +++ b/tools/testing/selftests/nolibc/Makefile
+>     @@ -21,6 +21,8 @@ IMAGE_x86        = arch/x86/boot/bzImage
+>      IMAGE_arm64      = arch/arm64/boot/Image
+>      IMAGE_arm        = arch/arm/boot/zImage
+>      IMAGE_mips       = vmlinuz
+>     +IMAGE_riscv32    = arch/riscv/boot/Image
+>     +IMAGE_riscv64    = arch/riscv/boot/Image
+>      IMAGE_riscv      = arch/riscv/boot/Image
+>      IMAGE_s390       = arch/s390/boot/bzImage
+>      IMAGE_loongarch  = arch/loongarch/boot/vmlinuz.efi
+>     @@ -34,6 +36,8 @@ DEFCONFIG_x86        = defconfig
+>      DEFCONFIG_arm64      = defconfig
+>      DEFCONFIG_arm        = multi_v7_defconfig
+>      DEFCONFIG_mips       = malta_defconfig
+>     +DEFCONFIG_riscv32    = rv32_defconfig
+>     +DEFCONFIG_riscv64    = defconfig
+...
+
+Right, that part looks good to me.
+
+      Arnd
