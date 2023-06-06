@@ -2,82 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A723E723E7C
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 11:55:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA945723E83
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 11:56:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237154AbjFFJzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 05:55:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58066 "EHLO
+        id S237393AbjFFJ4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 05:56:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236799AbjFFJzt (ORCPT
+        with ESMTP id S237326AbjFFJ4f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 05:55:49 -0400
-Received: from michel.telenet-ops.be (michel.telenet-ops.be [IPv6:2a02:1800:110:4::f00:18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E0FAE60
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 02:55:47 -0700 (PDT)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed30:a3e8:6562:a823:d832])
-        by michel.telenet-ops.be with bizsmtp
-        id 5lvk2A0041Tjf1k06lvkck; Tue, 06 Jun 2023 11:55:44 +0200
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtp (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1q6TPP-005EIs-2y;
-        Tue, 06 Jun 2023 11:55:43 +0200
-Received: from geert by rox.of.borg with local (Exim 4.95)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1q6TPj-00BR14-Qp;
-        Tue, 06 Jun 2023 11:55:43 +0200
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Philipp Zabel <p.zabel@pengutronix.de>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jacky Huang <ychuang3@nuvoton.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] reset: RESET_NUVOTON_MA35D1 should depend on ARCH_MA35
-Date:   Tue,  6 Jun 2023 11:55:42 +0200
-Message-Id: <011578db5fc4426d7df5d8ce2cf5ac09b7080531.1686045287.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.34.1
+        Tue, 6 Jun 2023 05:56:35 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B4D4E6E
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 02:56:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686045393; x=1717581393;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Z2Dvf4mA1VzzTZjfh3y1HywjdJsGHa7T3oAn6+kI0iA=;
+  b=lrJtaNNnH7FWLmvZEEXbkZAFk8ytjcBEkJ2Ib4EqFMFrn62OEC21CQKD
+   33J9nQDw+cEDLfV6mN+qFAHhkc0kzel5UZQR1A0wVNg1NQS60bH0UX74e
+   emCSiyUUVVslko9h7woka7NCPhPbpgRDRjJTnOX6F3wEPsAn/wBHQgplw
+   QYJP7g1NNiNfeIQBy/Ouy3+geak7uaY/salg/l1BTpcLB8WPsOX6k15ZR
+   OrcrR2Vq+FM2k6CvZ77n82f3cRrorbyxJqC3nPClwFt12sT+Fs9U4gLGe
+   /KEUnzomyMVIPaGzDuZSHSucXJwQAfSIyz8e4mw1kyvj1YPynxcacXlFl
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="336249090"
+X-IronPort-AV: E=Sophos;i="6.00,219,1681196400"; 
+   d="scan'208";a="336249090"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 02:56:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="853348525"
+X-IronPort-AV: E=Sophos;i="6.00,219,1681196400"; 
+   d="scan'208";a="853348525"
+Received: from rgraefe-mobl1.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.58.173])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 02:56:29 -0700
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 9F11F10A6A4; Tue,  6 Jun 2023 12:56:26 +0300 (+03)
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     dave.hansen@intel.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de
+Cc:     decui@microsoft.com, rick.p.edgecombe@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, seanjc@google.com,
+        thomas.lendacky@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: [PATCHv3 0/3] x86/tdx: Fix one more load_unaligned_zeropad() issue
+Date:   Tue,  6 Jun 2023 12:56:19 +0300
+Message-Id: <20230606095622.1939-1-kirill.shutemov@linux.intel.com>
+X-Mailer: git-send-email 2.39.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Nuvoton MA35D1 reset controller is only present on Nuvoton MA35
-SoCs.  Hence add a dependency on ARCH_MA35, to prevent asking the user
-about this driver when configuring a kernel without MA35 SoC support.
-Also, do not enable the driver by default when merely compile-testing.
+During review of TDX guests on Hyper-V patchset Dave pointed to the
+potential race between changing page private/shared status and
+load_unaligned_zeropad().
 
-While at it, fix a misspelling of "Nuvoton".
+Fix the issue.
 
-Fixes: e4bb55d6ccf0f774 ("reset: Add Nuvoton ma35d1 reset driver support")
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- drivers/reset/Kconfig | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+v3:
+ - Fix grammar;
+ - Add Sathya's Reviewed-bys;
+v2:
+ - Add more info in commit message of the first patch.
+ - Move enc_status_change_finish_noop() into a separate patch.
+ - Fix typo in commit message and comment.
 
-diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
-index 0cdf9d64c2185c89..ccd59ddd76100a51 100644
---- a/drivers/reset/Kconfig
-+++ b/drivers/reset/Kconfig
-@@ -144,8 +144,9 @@ config RESET_NPCM
- 	  BMC SoCs.
- 
- config RESET_NUVOTON_MA35D1
--	bool "Nuvton MA35D1 Reset Driver"
--	default ARCH_MA35 || COMPILE_TEST
-+	bool "Nuvoton MA35D1 Reset Driver"
-+	depends on ARCH_MA35 || COMPILE_TEST
-+	default ARCH_MA35
- 	help
- 	  This enables the reset controller driver for Nuvoton MA35D1 SoC.
- 
+Kirill A. Shutemov (3):
+  x86/mm: Allow guest.enc_status_change_prepare() to fail
+  x86/tdx: Fix race between set_memory_encrypted() and
+    load_unaligned_zeropad()
+  x86/mm: Fix enc_status_change_finish_noop()
+
+ arch/x86/coco/tdx/tdx.c         | 64 +++++++++++++++++++++++++++++++--
+ arch/x86/include/asm/x86_init.h |  2 +-
+ arch/x86/kernel/x86_init.c      |  4 +--
+ arch/x86/mm/mem_encrypt_amd.c   |  4 ++-
+ arch/x86/mm/pat/set_memory.c    |  3 +-
+ 5 files changed, 69 insertions(+), 8 deletions(-)
+
 -- 
-2.34.1
+2.39.3
 
