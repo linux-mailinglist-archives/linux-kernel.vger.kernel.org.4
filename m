@@ -2,171 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C91E7724C40
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 21:05:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A7FE724C0E
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 21:04:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239014AbjFFTFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 15:05:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38524 "EHLO
+        id S239222AbjFFTEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 15:04:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239227AbjFFTEY (ORCPT
+        with ESMTP id S239196AbjFFTEQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 15:04:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B52101
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 12:03:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686078218;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bmPwhcLQLS6QAOJhnaZRrlptzdg2mUtfNMjjPY6LfS8=;
-        b=AFuQrzjWZt9DInEY1lFNe2Dkl2jWUeOnZvEx5qHaeGepugKSmH3uiA6RXeZM6tL2ddVh48
-        DmlcdnHCQCHqUaJaJTJi4xa7fyWwzBuf0roPU+B8OJVu5y5PjQqcZGmW0Z02eAWTJ5Qn2d
-        evCVBAC6WjTzbhU7/EYtMPaLsJ+bbMg=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-221-EnKZds2HNkKzgAAM0aaO7w-1; Tue, 06 Jun 2023 15:03:37 -0400
-X-MC-Unique: EnKZds2HNkKzgAAM0aaO7w-1
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-75b147a2548so130958785a.1
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 12:03:37 -0700 (PDT)
+        Tue, 6 Jun 2023 15:04:16 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3F5610F0
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 12:04:13 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-bb39316a68eso1899066276.0
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 12:04:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686078253; x=1688670253;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=/joJEhBBdzxQgynNGH7peDx/QfEr6GsPkjZ482ouABQ=;
+        b=MCnDuiOdaiqemGK+B9Wcg2SOCR5FqYrZoFyJJMxj8OcQTvGJd46LgU8813yFq4OLu7
+         oxHawS6NtHSn47FD97mwhGbAiG58ujpvOTG0QKQ4duIfdH2pTgFT7ia1AZxbbcr3ih+7
+         R0vp77j8ghcoOJNy8K3dZ61GW2OiUnJ991eqFbjtcZnx3wsx6YbEjQH50Ze0UWl2SR14
+         x0iygVg9EVNacsgk4nhQ62VJMBm+3y9KBWw+Gq9TnkIyJiGCZqpaH27nWgEGB+3I3Sui
+         4bYDl+vG7ScgFNu0van73yt1DCU3OG2JXehWtrcz9fihEkacxto7+YCuNAN9BCX1WiGD
+         qdxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686078216; x=1688670216;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bmPwhcLQLS6QAOJhnaZRrlptzdg2mUtfNMjjPY6LfS8=;
-        b=ARc3L2qIBS9UPxj9i7DN76YB8LM7hQZHNukqyG78+12PfrRPQRzkPJpNZToP4oR6XD
-         f6fOcH5WiIOC4fGJcGNuyJWtrysQVE/pyBlQ3l7VF/DeVFRDOJlD5JBh7Ka/38xPpaJF
-         e0dv5nUIc6e/I1dXY5xqSYsVnjlhOpJ9FRWsUx4Ag2r4JitpZsn1Muei7PAvAwIMmBvp
-         QioHRlxkg3dFZvDvFuU4EATSFMdJcWHId8oIryy6PFQ6HcW9TD1zIXv2SbTiOIDAHwaH
-         XU/vMOh8TwPzv0QayH63vZ7lCZ7WZ6AiLZxwtPurnVx9tEH7eNfafrJZ2ASaHg1w65TG
-         Fykg==
-X-Gm-Message-State: AC+VfDw17alNPiAfM2ZBhbcPTF1CrmzzZ9zxDW+kN/DiumiCF+uAErrj
-        rIaVutA0avAq7fplZnS8kJn9zMTTs6AxS8pg1GsSudK0GNITACcD1KEz8RUpL2J99zDyqDikMuT
-        VQUqqTrVrBXLo4yGqq9m3RFH7
-X-Received: by 2002:a05:620a:2b92:b0:75b:23a1:69f0 with SMTP id dz18-20020a05620a2b9200b0075b23a169f0mr3107605qkb.7.1686078216680;
-        Tue, 06 Jun 2023 12:03:36 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5C5YMccZA+iUS9RAssWOgobvDgS7+Te3WrU+7dZkM3FviCtXVqQlWbzikNWhoOiLhOPK8t2g==
-X-Received: by 2002:a05:620a:2b92:b0:75b:23a1:69f0 with SMTP id dz18-20020a05620a2b9200b0075b23a169f0mr3107557qkb.7.1686078216403;
-        Tue, 06 Jun 2023 12:03:36 -0700 (PDT)
-Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
-        by smtp.gmail.com with ESMTPSA id d14-20020a05620a166e00b0074636e35405sm5100311qko.65.2023.06.06.12.03.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 12:03:35 -0700 (PDT)
-Date:   Tue, 6 Jun 2023 15:03:31 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Hugh Dickins <hughd@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Steven Price <steven.price@arm.com>,
-        SeongJae Park <sj@kernel.org>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Zack Rusin <zackr@vmware.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Song Liu <song@kernel.org>,
-        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Jann Horn <jannh@google.com>,
-        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH 05/12] powerpc: add pte_free_defer() for pgtables sharing
- page
-Message-ID: <ZH+DAxLhIYpTlIFc@x1n>
-References: <35e983f5-7ed3-b310-d949-9ae8b130cdab@google.com>
- <28eb289f-ea2c-8eb9-63bb-9f7d7b9ccc11@google.com>
- <ZHSwWgLWaEd+zi/g@casper.infradead.org>
- <ZHn6n5eVTsr4Wl8x@ziepe.ca>
- <4df4909f-f5dd-6f94-9792-8f2949f542b3@google.com>
- <ZH95oobIqN0WO5MK@ziepe.ca>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZH95oobIqN0WO5MK@ziepe.ca>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        d=1e100.net; s=20221208; t=1686078253; x=1688670253;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/joJEhBBdzxQgynNGH7peDx/QfEr6GsPkjZ482ouABQ=;
+        b=JaqsyepNrhPKgkcCXdzb64AWezhq+6UOwL30EvuLv1zZkKBUXgWH8dgsxE8VmAbucu
+         lXdJ92kQwdVn8yay4RQM2RPql2T11OVScJc8yFzLv5KZem3ALjEj2Ih2KYcLTf1pMB5R
+         tcX/C+bjZXsv8Uta0Sg20wsmQs3vHIOA+x1vqd6CmE28wDlWcwDexCnAMVR5cqRpgonQ
+         lj76sls7Kr6YCmnDuU9wn/VHK11htvyQ37JrrWZbFOrfiu+4TIHiUuGQWlOyvnYwmwkF
+         k2l/ZxUbQJQZUSUHCQE5f3/nVrk11OL74IbivMYA5aiEGue21q7SwVJE7/hLleK8/G+l
+         YUuw==
+X-Gm-Message-State: AC+VfDz0DtOOQNwITkYlyt7Xwh0/ZJ34mkrSDNc7KW5uyRYfDyEIfZYW
+        w8EMXQo1aomIcTyGboQAyPEQYNh0HEFi/ZEGWQ==
+X-Google-Smtp-Source: ACHHUZ4mPNkOsDu9C8Eiuye4FOnWmREtZe3ZknvM1VWa8zvgrZkllOp4bORlEobPosGcDw7BEWu+PuC75l4g5O+J5Q==
+X-Received: from ackerleytng-ctop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:13f8])
+ (user=ackerleytng job=sendgmr) by 2002:a25:b53:0:b0:ba8:918a:ceec with SMTP
+ id 80-20020a250b53000000b00ba8918aceecmr1077064ybl.4.1686078252995; Tue, 06
+ Jun 2023 12:04:12 -0700 (PDT)
+Date:   Tue,  6 Jun 2023 19:03:45 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
+Message-ID: <cover.1686077275.git.ackerleytng@google.com>
+Subject: [RFC PATCH 00/19] hugetlb support for KVM guest_mem
+From:   Ackerley Tng <ackerleytng@google.com>
+To:     akpm@linux-foundation.org, mike.kravetz@oracle.com,
+        muchun.song@linux.dev, pbonzini@redhat.com, seanjc@google.com,
+        shuah@kernel.org, willy@infradead.org
+Cc:     brauner@kernel.org, chao.p.peng@linux.intel.com,
+        coltonlewis@google.com, david@redhat.com, dhildenb@redhat.com,
+        dmatlack@google.com, erdemaktas@google.com, hughd@google.com,
+        isaku.yamahata@gmail.com, jarkko@kernel.org, jmattson@google.com,
+        joro@8bytes.org, jthoughton@google.com, jun.nakajima@intel.com,
+        kirill.shutemov@linux.intel.com, liam.merwick@oracle.com,
+        mail@maciej.szmigiero.name, mhocko@suse.com, michael.roth@amd.com,
+        qperret@google.com, rientjes@google.com, rppt@kernel.org,
+        steven.price@arm.com, tabba@google.com, vannapurve@google.com,
+        vbabka@suse.cz, vipinsh@google.com, vkuznets@redhat.com,
+        wei.w.wang@intel.com, yu.c.zhang@linux.intel.com,
+        kvm@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        qemu-devel@nongnu.org, x86@kernel.org,
+        Ackerley Tng <ackerleytng@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 03:23:30PM -0300, Jason Gunthorpe wrote:
-> On Mon, Jun 05, 2023 at 08:40:01PM -0700, Hugh Dickins wrote:
-> 
-> > diff --git a/arch/powerpc/mm/pgtable-frag.c b/arch/powerpc/mm/pgtable-frag.c
-> > index 20652daa1d7e..e4f58c5fc2ac 100644
-> > --- a/arch/powerpc/mm/pgtable-frag.c
-> > +++ b/arch/powerpc/mm/pgtable-frag.c
-> > @@ -120,3 +120,54 @@ void pte_fragment_free(unsigned long *table, int kernel)
-> >  		__free_page(page);
-> >  	}
-> >  }
-> > +
-> > +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
-> > +#define PTE_FREE_DEFERRED 0x10000 /* beyond any PTE_FRAG_NR */
-> > +
-> > +static void pte_free_now(struct rcu_head *head)
-> > +{
-> > +	struct page *page;
-> > +	int refcount;
-> > +
-> > +	page = container_of(head, struct page, rcu_head);
-> > +	refcount = atomic_sub_return(PTE_FREE_DEFERRED - 1,
-> > +				     &page->pt_frag_refcount);
-> > +	if (refcount < PTE_FREE_DEFERRED) {
-> > +		pte_fragment_free((unsigned long *)page_address(page), 0);
-> > +		return;
-> > +	}
-> 
-> From what I can tell power doesn't recycle the sub fragment into any
-> kind of free list. It just waits for the last fragment to be unused
-> and then frees the whole page.
-> 
-> So why not simply go into pte_fragment_free() and do the call_rcu directly:
-> 
-> 	BUG_ON(atomic_read(&page->pt_frag_refcount) <= 0);
-> 	if (atomic_dec_and_test(&page->pt_frag_refcount)) {
-> 		if (!kernel)
-> 			pgtable_pte_page_dtor(page);
-> 		call_rcu(&page->rcu_head, free_page_rcu)
+Hello,
 
-We need to be careful on the lock being freed in pgtable_pte_page_dtor(),
-in Hugh's series IIUC we need the spinlock being there for the rcu section
-alongside the page itself.  So even if to do so we'll need to also rcu call 
-pgtable_pte_page_dtor() when needed.
+This patchset builds upon a soon-to-be-published WIP patchset that Sean
+published at https://github.com/sean-jc/linux/tree/x86/kvm_gmem_solo, mentioned
+at [1].
 
--- 
-Peter Xu
+The tree can be found at:
+https://github.com/googleprodkernel/linux-cc/tree/gmem-hugetlb-rfc-v1
 
+In this patchset, hugetlb support for KVM's guest_mem (aka gmem) is introduced,
+allowing VM private memory (for confidential computing) to be backed by hugetlb
+pages.
+
+guest_mem provides userspace with a handle, with which userspace can allocate
+and deallocate memory for confidential VMs without mapping the memory into
+userspace.
+
+Why use hugetlb instead of introducing a new allocator, like gmem does for 4K
+and transparent hugepages?
+
++ hugetlb provides the following useful functionality, which would otherwise
+  have to be reimplemented:
+    + Allocation of hugetlb pages at boot time, including
+        + Parsing of kernel boot parameters to configure hugetlb
+        + Tracking of usage in hstate
+        + gmem will share the same system-wide pool of hugetlb pages, so users
+          don't have to have separate pools for hugetlb and gmem
+    + Page accounting with subpools
+        + hugetlb pages are tracked in subpools, which gmem uses to reserve
+          pages from the global hstate
+    + Memory charging
+        + hugetlb provides code that charges memory to cgroups
+    + Reporting: hugetlb usage and availability are available at /proc/meminfo,
+      etc
+
+The first 11 patches in this patchset is a series of refactoring to decouple
+hugetlb and hugetlbfs.
+
+The central thread binding the refactoring is that some functions (like
+inode_resv_map(), inode_subpool(), inode_hstate(), etc) rely on a hugetlbfs
+concept, that the resv_map, subpool, hstate, are in a specific field in a
+hugetlb inode.
+
+Refactoring to parametrize functions by hstate, subpool, resv_map will allow
+hugetlb to be used by gmem and in other places where these data structures
+aren't necessarily stored in the same positions in the inode.
+
+The refactoring proposed here is just the minimum required to get a
+proof-of-concept working with gmem. I would like to get opinions on this
+approach before doing further refactoring. (See TODOs)
+
+TODOs:
+
++ hugetlb/hugetlbfs refactoring
+    + remove_inode_hugepages() no longer needs to be exposed, it is hugetlbfs
+      specific and used only in inode.c
+    + remove_mapping_hugepages(), remove_inode_single_folio(),
+      hugetlb_unreserve_pages() shouldn't need to take inode as a parameter
+        + Updating inode->i_blocks can be refactored to a separate function and
+          called from hugetlbfs and gmem
+    + alloc_hugetlb_folio_from_subpool() shouldn't need to be parametrized by
+      vma
+    + hugetlb_reserve_pages() should be refactored to be symmetric with
+      hugetlb_unreserve_pages()
+        + It should be parametrized by resv_map
+        + alloc_hugetlb_folio_from_subpool() could perhaps use
+          hugetlb_reserve_pages()?
++ gmem
+    + Figure out if resv_map should be used by gmem at all
+        + Probably needs more refactoring to decouple resv_map from hugetlb
+          functions
+
+Questions for the community:
+
+1. In this patchset, every gmem file backed with hugetlb is given a new
+   subpool. Is that desirable?
+    + In hugetlbfs, a subpool always belongs to a mount, and hugetlbfs has one
+      mount per hugetlb size (2M, 1G, etc)
+    + memfd_create(MFD_HUGETLB) effectively returns a full hugetlbfs file, so it
+      (rightfully) uses the hugetlbfs kernel mounts and their subpools
+    + I gave each file a subpool mostly to speed up implementation and still be
+      able to reserve hugetlb pages from the global hstate based on the gmem
+      file size.
+    + gmem, unlike hugetlbfs, isn't meant to be a full filesystem, so
+        + Should there be multiple mounts, one for each hugetlb size?
+        + Will the mounts be initialized on boot or on first gmem file creation?
+        + Or is one subpool per gmem file fine?
+2. Should resv_map be used for gmem at all, since gmem doesn't allow userspace
+   reservations?
+
+[1] https://lore.kernel.org/lkml/ZEM5Zq8oo+xnApW9@google.com/
+
+---
+
+Ackerley Tng (19):
+  mm: hugetlb: Expose get_hstate_idx()
+  mm: hugetlb: Move and expose hugetlbfs_zero_partial_page
+  mm: hugetlb: Expose remove_inode_hugepages
+  mm: hugetlb: Decouple hstate, subpool from inode
+  mm: hugetlb: Allow alloc_hugetlb_folio() to be parametrized by subpool
+    and hstate
+  mm: hugetlb: Provide hugetlb_filemap_add_folio()
+  mm: hugetlb: Refactor vma_*_reservation functions
+  mm: hugetlb: Refactor restore_reserve_on_error
+  mm: hugetlb: Use restore_reserve_on_error directly in filesystems
+  mm: hugetlb: Parametrize alloc_hugetlb_folio_from_subpool() by
+    resv_map
+  mm: hugetlb: Parametrize hugetlb functions by resv_map
+  mm: truncate: Expose preparation steps for truncate_inode_pages_final
+  KVM: guest_mem: Refactor kvm_gmem fd creation to be in layers
+  KVM: guest_mem: Refactor cleanup to separate inode and file cleanup
+  KVM: guest_mem: hugetlb: initialization and cleanup
+  KVM: guest_mem: hugetlb: allocate and truncate from hugetlb
+  KVM: selftests: Add basic selftests for hugetlbfs-backed guest_mem
+  KVM: selftests: Support various types of backing sources for private
+    memory
+  KVM: selftests: Update test for various private memory backing source
+    types
+
+ fs/hugetlbfs/inode.c                          | 102 ++--
+ include/linux/hugetlb.h                       |  86 ++-
+ include/linux/mm.h                            |   1 +
+ include/uapi/linux/kvm.h                      |  25 +
+ mm/hugetlb.c                                  | 324 +++++++-----
+ mm/truncate.c                                 |  24 +-
+ .../testing/selftests/kvm/guest_memfd_test.c  |  33 +-
+ .../testing/selftests/kvm/include/test_util.h |  14 +
+ tools/testing/selftests/kvm/lib/test_util.c   |  74 +++
+ .../kvm/x86_64/private_mem_conversions_test.c |  38 +-
+ virt/kvm/guest_mem.c                          | 488 ++++++++++++++----
+ 11 files changed, 882 insertions(+), 327 deletions(-)
+
+--
+2.41.0.rc0.172.g3f132b7071-goog
