@@ -2,231 +2,279 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F287723530
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 04:20:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0624D723519
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 04:13:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233967AbjFFCUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 22:20:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50390 "EHLO
+        id S233708AbjFFCNq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 22:13:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233976AbjFFCT4 (ORCPT
+        with ESMTP id S233673AbjFFCNo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 22:19:56 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2048.outbound.protection.outlook.com [40.107.223.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A478211A;
-        Mon,  5 Jun 2023 19:19:54 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QJsRmLoWTzyfyQOvxoidjA9b4XqfvkPrAdvZL4zgGyDkJjJ2YOOtwZtqaQyISwIgrYZnSWGILQLWca21nudnAA3hno8i602L+FCsufKuSqIEc/RxM8mO6bRkwfYzka7KCm0Lsccuh3+2oG72A2YmjesH2jpfnqkeZngROV+fpKHsnEtXWy90rTtwMwPWLz/nOxror3sOb1vj+gAowbcEmFn4l8xzSJnfQXjOOGKjvPZBrCE3Gc3+PjSo5TiDQo2G0Wuth2n79nIQuvWIyoPKUIbY2OqYarAjqaalulB93oke+I5Sn44U9SP+jNMlZ2lR3T5cIw57aCugFlJZESx5fQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fJwv2v470PeNonAAOMaNkMFUuU4Mj6me9SwmYHqNkW4=;
- b=Gd94j1bqQw81+Eg2liBu2Mb1xQe0YmpygXAadlZMIJu0lE034AvcDJXB+jG1mzaaLgQeAy53zb3qcbFwWwRhFIVLhkwIX9lzF6Cq/svtxZjZsxVm/84QKNuSTr8Q4SvZb8DoQOYwTP4zEArAd7nMZGT82uRC2tlRSFRxROVBV6K7juFJMok0KS7qep6h2oeGfoYFl9g3nAh1p4dxA95Q+omNmIKGYsWr+ypmCVm8POXGQe001EtBb7wJHOH0mzK0451lY9S5d5w8NIJ1Z17CGOwIXGvufFzMUqB6jElD3UAUhRW/TnGo7DZBmw7xustDKJhe6Ds6B6Zs8AkLibslIQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fJwv2v470PeNonAAOMaNkMFUuU4Mj6me9SwmYHqNkW4=;
- b=OeR448F7RUgpJwT/cXTbtjB9gcMPao6k4Gtn7+y6JJ+L1z02KKLtjcAX9kyMl+Obs/PE8UmQT6RgOaAMcwscadt29XQvws2/z0qXtkdljPQ2Wj7Zb0kq+Kpvbjv7t/nfJ7C6rnI+RalXOY+mHZ+8O3Kszdl782uiBQKeV1i3yHyvdgMrg5PamlOlTHIHwiEIRQw7O870EWpVxxG4jJOYRF/mC0kSNeYRqlBTEdznEEd+N4d4GQq4BE/KSJSC42tj9ffqlSeAgwMmLx5r2gvrXr0s3hnbscePz/czE+4uSZFJyrmPvZbsIzKxBVsPQIgL/KXbGak8MlOMQFeqiP6nvA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DM6PR12MB3179.namprd12.prod.outlook.com (2603:10b6:5:183::18)
- by BL0PR12MB4914.namprd12.prod.outlook.com (2603:10b6:208:1c4::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Tue, 6 Jun
- 2023 02:19:52 +0000
-Received: from DM6PR12MB3179.namprd12.prod.outlook.com
- ([fe80::dc79:d410:23d3:f718]) by DM6PR12MB3179.namprd12.prod.outlook.com
- ([fe80::dc79:d410:23d3:f718%5]) with mapi id 15.20.6455.030; Tue, 6 Jun 2023
- 02:19:52 +0000
-References: <20230602011518.787006-1-seanjc@google.com>
- <20230602011518.787006-2-seanjc@google.com>
-User-agent: mu4e 1.8.10; emacs 28.2
-From:   Alistair Popple <apopple@nvidia.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@nvidia.com>,
-        Robin Murphy <robin.murphy@arm.com>
-Subject: Re: [PATCH 1/3] KVM: VMX: Retry APIC-access page reload if
- invalidation is in-progress
-Date:   Tue, 06 Jun 2023 12:11:37 +1000
-In-reply-to: <20230602011518.787006-2-seanjc@google.com>
-Message-ID: <87wn0hnxh7.fsf@nvidia.com>
-Content-Type: text/plain
-X-ClientProxiedBy: BY5PR17CA0039.namprd17.prod.outlook.com
- (2603:10b6:a03:167::16) To DM6PR12MB3179.namprd12.prod.outlook.com
- (2603:10b6:5:183::18)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR12MB3179:EE_|BL0PR12MB4914:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8f4ef857-a9d2-4a06-e74d-08db663482ad
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 62M009CQ0zz07fWvZVhCuT73GGP4ON4E5Q4ws4vtpMo8prOnxNY8Ln1ZilhVyQm1f10tiV2Gjr0Eke7sWrWxN3gTYHDY8F84I3/eyRzTwh1bgkuP7pjs/CbhT4/cdRXdh7KytHZ3idKPwUgcObdpBfmddZqGajA1PrbcYjLeMNPLXJJoh2cAvAqukfHNPfnAPu9kKAwRCNmWsBx2GCRd9X822wbx0NSZpbVfFUqzaPS1roVx0wgzh36altBxGHt6aat4T6CjFPHqJjrWx/enfY8gAY41CpdsxRy4KDLqyzmA4MrbVw/hn4DoI3NRZGwYzwZVtCq4MRqotHNOkZ78MeytTaFBBLrGlQ+dHqbQtlRKS+uTbKkbzItUHL3BkphR87448Xj/7dHI/n5ebzuIjk2KbuFA/D5sYiWLWlyoPIdtP4iCbIjwjFQr16ipZW2dUYC8krckHzRNfAUOoXZpub8yEfcsgSYgXuQL7Km4gqO98M5KASHpCgY9twxwXD86zfQvUv02qCc9/rSh8vN/619DvUYo+HseT1Vq6QsbsqucesiZMT9f2bVP4+qj/kZ7
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3179.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(136003)(396003)(376002)(346002)(39860400002)(451199021)(478600001)(2906002)(6486002)(36756003)(6666004)(2616005)(83380400001)(6506007)(26005)(86362001)(186003)(6512007)(38100700002)(5660300002)(316002)(8676002)(8936002)(66946007)(6916009)(4326008)(66556008)(66476007)(54906003)(41300700001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?L53KD4w3UhpcPFV1ctZl+oGOdnIfU63AUbZu4LfaVlbURU+/LWRwEOQQotQQ?=
- =?us-ascii?Q?v1OVcx3QKlEDmlIvt9VDRM78XwvkM4u7yDOYKT6crUobCkFGTypHLoWorFpk?=
- =?us-ascii?Q?MCpok5/rneE5GZQIo2wfr7+aeGBqo8VPlTQuHtIW3xJzfPfbqNh+Kb0gp9WQ?=
- =?us-ascii?Q?jkK289Dm8Wp5vEOK/brMhnkZol1PQXu3NfPlEqkNGzNksDfnWVHtZkmgSCEe?=
- =?us-ascii?Q?+5t2hZjX5rBg1YiKuY6p2KPgW/zCxEldhxeztpc5cfbM7cJAtyMQdP5iQEBr?=
- =?us-ascii?Q?qUkEWc4MoVApwm561Dhe+RKC8ID4V9+g55LEpkpwfzwsiZ2rxCwttBTsFJq/?=
- =?us-ascii?Q?zQw5QoTBUjWgKHewAxbLntWPSZWgSNm/vZe49yl33ArltnlAVKk+dzwmDOnq?=
- =?us-ascii?Q?vC5p5GscTUb4QPTJoH+odKs0ZqILtwEF3TKY4tJzN3fEaF1bppDVWHHEWlZX?=
- =?us-ascii?Q?pKhi+Fw6kZz2eULP/zTvlKWL1Yev5NX0Hux9KK4mlQUq+N+Z8wGVLJkkOxZh?=
- =?us-ascii?Q?ZVImnUM1w13PzfupQM5Z0IOW10y1/D8cCc8KnC0oJUZEY8UInvdNN6UbiO/Q?=
- =?us-ascii?Q?y4rOJbol3abEu2dg/va1Liv0rQYCseKNpXVG3erXshDcumC+0qpryMqwdkL+?=
- =?us-ascii?Q?ozQ082Eyc3eOeB0ethiqr6UP4XKcNDXzrED2N4LhnR1oQbuZeqzNLACLXUr/?=
- =?us-ascii?Q?VcL7Wob3Gaxu34CIIp+0RAY6okVIPdLR4/A5/70wgypok6gTGammOLlWuvSw?=
- =?us-ascii?Q?IRrvWg5yYPu6Zt9WMSykLVsYjCmt2GgG2a/8M5sB9Had7TRf6rwZDIdpa2hB?=
- =?us-ascii?Q?8Akwdk3EXJRdK184x3PE4LY+/s8XLj04sxY+4+BKnV8yEDBShcfnyS7q0kTt?=
- =?us-ascii?Q?93punsRtA0WFia0g5Ahqr/tCWLNewsBUmhDjquxJuo3uAgdoy0yJNev/GRDX?=
- =?us-ascii?Q?mxqgU1GE+ftrUewfSBrwIQjfrlxRb3UNpcQNc5T9ur5vLyApLwX8Oh/QX5Zb?=
- =?us-ascii?Q?glamjKq41etzLo1/+1mcnYUfKCeGxuzFSj8MbtkLfv/ZZzN/peTAkGSfWrgR?=
- =?us-ascii?Q?gW/bRyFgNZVhoKi39QBGtuyKAreMjF5UbobEqpmFXBLcaA3fT7l2ICeDfukc?=
- =?us-ascii?Q?fUqvdtoFoDj/acw6wKaISFtY93I0/B7LXGFrfMlJ0oE2Nrw7ygdTMhMu3oBN?=
- =?us-ascii?Q?zNCnW6LwjVTQIaE/pmzaCEBG8i5K6UTIUDWFQvXcVVeypdJXdnwSQbbmou5l?=
- =?us-ascii?Q?ciwPPkWhrxSCPMKiPxDUz3zr0jle9cIyF88fhYrKOgyw8auKclT+V17Y7NEI?=
- =?us-ascii?Q?Jv4cMEoGoRq4pcMJlp7CMZDwTWMNG9E3Ia+1IiMZ0MsmSmy8C7Py/FrHFxdT?=
- =?us-ascii?Q?IBs/oa3al/+Ux5IWLLxdwIGPuayXAYO+at8tHDvyLbB15/38iTfpafvzZqo5?=
- =?us-ascii?Q?xoYTiOZK8TqQLFiOG2emXRXcJ8G8xauhuTtYRkGbV0kRIE6Q1a15XdXkXX8x?=
- =?us-ascii?Q?XB849oNWzK7Y6VPem30IHLc3JSyPL7Oyc6eWOVpd+JnZcnadbAGTnZxRuIsC?=
- =?us-ascii?Q?gOaY00N59wqcHOhEL36iYhQz0ns9HB/VGcEfjMYw?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8f4ef857-a9d2-4a06-e74d-08db663482ad
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3179.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2023 02:19:52.1345
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: cXmo6n5fqq6dvb9/l6PRuu7MFxWNRHPN+2GiSo9gcEoQpts71nEXYhcA6O+Gp6npHRK4KlNJ73rT5P3Vteymog==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB4914
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+        Mon, 5 Jun 2023 22:13:44 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5BF612A
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 19:13:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686017622; x=1717553622;
+  h=date:from:to:cc:subject:message-id;
+  bh=2mk0vSFpdMSXpM/xsoqQdP5eNci2t+J93taVmZZtpfs=;
+  b=kcDGSTc2WTvlP6LrhnTkPZMUsN8MS9HmYlxNvsrt+RirqgzgeCeeWFSr
+   7Y2+xBtNJc+UUoHPsqENGjHhJzQHTeXlBb9xd2d3OMwmDebk4p4HLt7S3
+   XrvUQ8wg+2v9ARzmW8xLKxK/Ioe68kC2eGULnSitNBElQ0a2J7iW8l87f
+   Utn4kCEAGihFY6+/qg9jH3TSQPSmPUkMgoQ3W6849SRlVw6r8AYGyp1FK
+   P08is07nEYbpcPjrLwoUyz+dEohRjsxUsraFOLbh042FkIxCDGq205RFl
+   qhk0FwEUukPZr9dXJvZ9o/exnDT/h01Xle8dJxJSAL3xQsG+E5bvMsL5j
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="422364638"
+X-IronPort-AV: E=Sophos;i="6.00,219,1681196400"; 
+   d="scan'208";a="422364638"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 19:13:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="778797434"
+X-IronPort-AV: E=Sophos;i="6.00,219,1681196400"; 
+   d="scan'208";a="778797434"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 05 Jun 2023 19:13:40 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q6MCZ-0004hR-0K;
+        Tue, 06 Jun 2023 02:13:39 +0000
+Date:   Tue, 06 Jun 2023 10:13:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:ras/core] BUILD SUCCESS
+ 1b474896156b1b30e37dcd1f98e79875cf505090
+Message-ID: <20230606021326.AvZZC%lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git ras/core
+branch HEAD: 1b474896156b1b30e37dcd1f98e79875cf505090  EDAC/amd64: Cache and use GPU node map
 
-Thanks for doing this. I'm not overly familiar with KVM implementation
-but am familiar with mmu notifiers so read through the KVM usage. Looks
-like KVM is sort of doing something similar to what mmu_interval_notifiers
-do and I wonder if some of that could be shared. Anyway I didn't spot
-anything wrong here so feel free to add:
+elapsed time: 722m
 
-Reviewed-by: Alistair Popple <apopple@nvidia.com>
+configs tested: 202
+configs skipped: 19
 
-Sean Christopherson <seanjc@google.com> writes:
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> Re-request an APIC-access page reload if there is a relevant mmu_notifier
-> invalidation in-progress when KVM retrieves the backing pfn, i.e. stall
-> vCPUs until the backing pfn for the APIC-access page is "officially"
-> stable.  Relying on the primary MMU to not make changes after invoking
-> ->invalidate_range() works, e.g. any additional changes to a PRESENT PTE
-> would also trigger an ->invalidate_range(), but using ->invalidate_range()
-> to fudge around KVM not honoring past and in-progress invalidations is a
-> bit hacky.
->
-> Honoring invalidations will allow using KVM's standard mmu_notifier hooks
-> to detect APIC-access page reloads, which will in turn allow removing
-> KVM's implementation of ->invalidate_range() (the APIC-access page case is
-> a true one-off).
->
-> Opportunistically add a comment to explain why doing nothing if a memslot
-> isn't found is functionally correct.
->
-> Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
-> Cc: Alistair Popple <apopple@nvidia.com>
-> Cc: Robin Murphy <robin.murphy@arm.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  arch/x86/kvm/vmx/vmx.c | 50 +++++++++++++++++++++++++++++++++++++-----
->  1 file changed, 45 insertions(+), 5 deletions(-)
->
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index 44fb619803b8..59195f0dc7a5 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -6708,7 +6708,12 @@ void vmx_set_virtual_apic_mode(struct kvm_vcpu *vcpu)
->  
->  static void vmx_set_apic_access_page_addr(struct kvm_vcpu *vcpu)
->  {
-> -	struct page *page;
-> +	const gfn_t gfn = APIC_DEFAULT_PHYS_BASE >> PAGE_SHIFT;
-> +	struct kvm *kvm = vcpu->kvm;
-> +	struct kvm_memslots *slots = kvm_memslots(kvm);
-> +	struct kvm_memory_slot *slot;
-> +	unsigned long mmu_seq;
-> +	kvm_pfn_t pfn;
->  
->  	/* Defer reload until vmcs01 is the current VMCS. */
->  	if (is_guest_mode(vcpu)) {
-> @@ -6720,18 +6725,53 @@ static void vmx_set_apic_access_page_addr(struct kvm_vcpu *vcpu)
->  	    SECONDARY_EXEC_VIRTUALIZE_APIC_ACCESSES))
->  		return;
->  
-> -	page = gfn_to_page(vcpu->kvm, APIC_DEFAULT_PHYS_BASE >> PAGE_SHIFT);
-> -	if (is_error_page(page))
-> +	/*
-> +	 * Grab the memslot so that the hva lookup for the mmu_notifier retry
-> +	 * is guaranteed to use the same memslot as the pfn lookup, i.e. rely
-> +	 * on the pfn lookup's validation of the memslot to ensure a valid hva
-> +	 * is used for the retry check.
-> +	 */
-> +	slot = id_to_memslot(slots, APIC_ACCESS_PAGE_PRIVATE_MEMSLOT);
-> +	if (!slot || slot->flags & KVM_MEMSLOT_INVALID)
->  		return;
->  
-> -	vmcs_write64(APIC_ACCESS_ADDR, page_to_phys(page));
-> +	/*
-> +	 * Ensure that the mmu_notifier sequence count is read before KVM
-> +	 * retrieves the pfn from the primary MMU.  Note, the memslot is
-> +	 * protected by SRCU, not the mmu_notifier.  Pairs with the smp_wmb()
-> +	 * in kvm_mmu_invalidate_end().
-> +	 */
-> +	mmu_seq = kvm->mmu_invalidate_seq;
-> +	smp_rmb();
-> +
-> +	/*
-> +	 * No need to retry if the memslot does not exist or is invalid.  KVM
-> +	 * controls the APIC-access page memslot, and only deletes the memslot
-> +	 * if APICv is permanently inhibited, i.e. the memslot won't reappear.
-> +	 */
-> +	pfn = gfn_to_pfn_memslot(slot, gfn);
-> +	if (is_error_noslot_pfn(pfn))
-> +		return;
-> +
-> +	read_lock(&vcpu->kvm->mmu_lock);
-> +	if (mmu_invalidate_retry_hva(kvm, mmu_seq,
-> +				     gfn_to_hva_memslot(slot, gfn))) {
-> +		kvm_make_request(KVM_REQ_APIC_PAGE_RELOAD, vcpu);
-> +		read_unlock(&vcpu->kvm->mmu_lock);
-> +		goto out;
-> +	}
-> +
-> +	vmcs_write64(APIC_ACCESS_ADDR, pfn_to_hpa(pfn));
-> +	read_unlock(&vcpu->kvm->mmu_lock);
-> +
->  	vmx_flush_tlb_current(vcpu);
->  
-> +out:
->  	/*
->  	 * Do not pin apic access page in memory, the MMU notifier
->  	 * will call us again if it is migrated or swapped out.
->  	 */
-> -	put_page(page);
-> +	kvm_release_pfn_clean(pfn);
->  }
->  
->  static void vmx_hwapic_isr_update(int max_isr)
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha        buildonly-randconfig-r001-20230605   gcc  
+alpha        buildonly-randconfig-r004-20230605   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r016-20230605   gcc  
+alpha                randconfig-r026-20230605   gcc  
+arc                              allyesconfig   gcc  
+arc          buildonly-randconfig-r002-20230605   gcc  
+arc          buildonly-randconfig-r006-20230605   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r004-20230605   gcc  
+arc                  randconfig-r015-20230605   gcc  
+arc                  randconfig-r022-20230605   gcc  
+arc                  randconfig-r026-20230605   gcc  
+arc                  randconfig-r043-20230605   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r031-20230605   gcc  
+arm                  randconfig-r032-20230605   gcc  
+arm                  randconfig-r033-20230605   gcc  
+arm                  randconfig-r036-20230605   gcc  
+arm                  randconfig-r046-20230605   clang
+arm64                            allyesconfig   gcc  
+arm64        buildonly-randconfig-r005-20230605   clang
+arm64                               defconfig   gcc  
+arm64                randconfig-r006-20230605   clang
+arm64                randconfig-r012-20230605   gcc  
+arm64                randconfig-r013-20230605   gcc  
+arm64                randconfig-r016-20230605   gcc  
+csky         buildonly-randconfig-r005-20230605   gcc  
+csky                                defconfig   gcc  
+csky                 randconfig-r001-20230605   gcc  
+csky                 randconfig-r005-20230605   gcc  
+csky                 randconfig-r025-20230605   gcc  
+csky                 randconfig-r031-20230605   gcc  
+csky                 randconfig-r032-20230605   gcc  
+csky                 randconfig-r034-20230605   gcc  
+hexagon      buildonly-randconfig-r001-20230605   clang
+hexagon              randconfig-r004-20230605   clang
+hexagon              randconfig-r025-20230605   clang
+hexagon              randconfig-r036-20230605   clang
+hexagon              randconfig-r041-20230605   clang
+hexagon              randconfig-r045-20230605   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-i001-20230605   clang
+i386                 randconfig-i002-20230605   clang
+i386                 randconfig-i003-20230605   clang
+i386                 randconfig-i004-20230605   clang
+i386                 randconfig-i005-20230605   clang
+i386                 randconfig-i006-20230605   clang
+i386                 randconfig-i011-20230605   gcc  
+i386                 randconfig-i012-20230605   gcc  
+i386                 randconfig-i013-20230605   gcc  
+i386                 randconfig-i014-20230605   gcc  
+i386                 randconfig-i015-20230605   gcc  
+i386                 randconfig-i016-20230605   gcc  
+i386                 randconfig-i051-20230605   clang
+i386                 randconfig-i052-20230605   clang
+i386                 randconfig-i053-20230605   clang
+i386                 randconfig-i054-20230605   clang
+i386                 randconfig-i055-20230605   clang
+i386                 randconfig-i056-20230605   clang
+i386                 randconfig-i061-20230605   clang
+i386                 randconfig-i062-20230605   clang
+i386                 randconfig-i063-20230605   clang
+i386                 randconfig-i064-20230605   clang
+i386                 randconfig-i065-20230605   clang
+i386                 randconfig-i066-20230605   clang
+i386                 randconfig-r011-20230605   gcc  
+i386                 randconfig-r021-20230605   gcc  
+i386                 randconfig-r022-20230605   gcc  
+i386                 randconfig-r025-20230605   gcc  
+i386                 randconfig-r026-20230605   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r006-20230606   gcc  
+loongarch            randconfig-r012-20230605   gcc  
+loongarch            randconfig-r016-20230605   gcc  
+m68k                             allmodconfig   gcc  
+m68k         buildonly-randconfig-r001-20230605   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r002-20230606   gcc  
+m68k                 randconfig-r021-20230605   gcc  
+m68k                 randconfig-r023-20230605   gcc  
+microblaze   buildonly-randconfig-r004-20230605   gcc  
+microblaze           randconfig-r003-20230606   gcc  
+microblaze           randconfig-r034-20230605   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips         buildonly-randconfig-r002-20230605   gcc  
+mips         buildonly-randconfig-r003-20230605   gcc  
+mips                 randconfig-r003-20230605   gcc  
+mips                 randconfig-r021-20230605   clang
+nios2                               defconfig   gcc  
+nios2                randconfig-r011-20230605   gcc  
+nios2                randconfig-r016-20230605   gcc  
+nios2                randconfig-r032-20230605   gcc  
+nios2                randconfig-r035-20230605   gcc  
+openrisc     buildonly-randconfig-r001-20230605   gcc  
+openrisc     buildonly-randconfig-r003-20230605   gcc  
+openrisc     buildonly-randconfig-r004-20230605   gcc  
+openrisc     buildonly-randconfig-r005-20230605   gcc  
+openrisc             randconfig-r002-20230605   gcc  
+openrisc             randconfig-r006-20230605   gcc  
+openrisc             randconfig-r023-20230605   gcc  
+openrisc             randconfig-r024-20230605   gcc  
+openrisc             randconfig-r035-20230605   gcc  
+parisc       buildonly-randconfig-r004-20230605   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r002-20230605   gcc  
+parisc               randconfig-r012-20230605   gcc  
+parisc               randconfig-r014-20230605   gcc  
+parisc               randconfig-r015-20230605   gcc  
+parisc               randconfig-r031-20230605   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc      buildonly-randconfig-r002-20230605   gcc  
+powerpc      buildonly-randconfig-r003-20230605   gcc  
+powerpc              randconfig-r001-20230605   clang
+powerpc              randconfig-r005-20230606   gcc  
+powerpc              randconfig-r013-20230605   gcc  
+powerpc              randconfig-r014-20230605   gcc  
+powerpc              randconfig-r015-20230605   gcc  
+powerpc              randconfig-r035-20230605   clang
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv        buildonly-randconfig-r006-20230605   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r002-20230605   clang
+riscv                randconfig-r006-20230605   clang
+riscv                randconfig-r015-20230605   gcc  
+riscv                randconfig-r023-20230605   gcc  
+riscv                randconfig-r042-20230605   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r001-20230606   gcc  
+s390                 randconfig-r016-20230605   gcc  
+s390                 randconfig-r035-20230605   clang
+s390                 randconfig-r044-20230605   gcc  
+sh                               allmodconfig   gcc  
+sh           buildonly-randconfig-r005-20230605   gcc  
+sh                   randconfig-r013-20230605   gcc  
+sh                   randconfig-r025-20230605   gcc  
+sh                   randconfig-r032-20230605   gcc  
+sh                   randconfig-r034-20230605   gcc  
+sparc        buildonly-randconfig-r002-20230605   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r004-20230605   gcc  
+sparc                randconfig-r006-20230605   gcc  
+sparc                randconfig-r022-20230605   gcc  
+sparc                randconfig-r025-20230605   gcc  
+sparc                randconfig-r033-20230605   gcc  
+sparc                randconfig-r035-20230605   gcc  
+sparc64      buildonly-randconfig-r003-20230605   gcc  
+sparc64      buildonly-randconfig-r006-20230605   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a001-20230605   clang
+x86_64               randconfig-a002-20230605   clang
+x86_64               randconfig-a003-20230605   clang
+x86_64               randconfig-a004-20230605   clang
+x86_64               randconfig-a005-20230605   clang
+x86_64               randconfig-a006-20230605   clang
+x86_64               randconfig-a011-20230605   gcc  
+x86_64               randconfig-a012-20230605   gcc  
+x86_64               randconfig-a013-20230605   gcc  
+x86_64               randconfig-a014-20230605   gcc  
+x86_64               randconfig-a015-20230605   gcc  
+x86_64               randconfig-a016-20230605   gcc  
+x86_64               randconfig-r005-20230605   clang
+x86_64               randconfig-r024-20230605   gcc  
+x86_64               randconfig-r031-20230605   clang
+x86_64               randconfig-x051-20230605   gcc  
+x86_64               randconfig-x052-20230605   gcc  
+x86_64               randconfig-x053-20230605   gcc  
+x86_64               randconfig-x054-20230605   gcc  
+x86_64               randconfig-x055-20230605   gcc  
+x86_64               randconfig-x056-20230605   gcc  
+x86_64               randconfig-x061-20230605   gcc  
+x86_64               randconfig-x062-20230605   gcc  
+x86_64               randconfig-x063-20230605   gcc  
+x86_64               randconfig-x064-20230605   gcc  
+x86_64               randconfig-x065-20230605   gcc  
+x86_64               randconfig-x066-20230605   gcc  
+x86_64                               rhel-8.3   gcc  
+xtensa       buildonly-randconfig-r005-20230605   gcc  
+xtensa       buildonly-randconfig-r006-20230605   gcc  
+xtensa               randconfig-r011-20230605   gcc  
+xtensa               randconfig-r012-20230605   gcc  
+xtensa               randconfig-r013-20230605   gcc  
+xtensa               randconfig-r015-20230605   gcc  
+xtensa               randconfig-r023-20230605   gcc  
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
