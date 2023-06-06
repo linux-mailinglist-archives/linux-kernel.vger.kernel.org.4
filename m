@@ -2,105 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8094A724204
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 14:24:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBBE9724208
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 14:26:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236669AbjFFMY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 08:24:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57328 "EHLO
+        id S232089AbjFFM0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 08:26:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232356AbjFFMYZ (ORCPT
+        with ESMTP id S229835AbjFFM03 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 08:24:25 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD7D010C7;
-        Tue,  6 Jun 2023 05:24:24 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 5A2321FD69;
-        Tue,  6 Jun 2023 12:24:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1686054263; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wb/zjNGR8vZ6lz2lsTJaQdU6G03xji6YZEjNm9p9xpM=;
-        b=XbRAzKIk+8BwZMJqCTkROBCnYCApL5tn3HVK3mLxE01nMJ13uoOtRVNt7R452KNNNUiXNz
-        CP85SeKxXqHb1GIMAWU+Z+jF8oTf/FjHldEzmA42cnXvMU7brPyiAX8CgoWEwLy7uIHc8Z
-        g8jX2KkCSzVJTw+ufERjCA4U8dZe84k=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1686054263;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wb/zjNGR8vZ6lz2lsTJaQdU6G03xji6YZEjNm9p9xpM=;
-        b=cqVAqDwKfn7FglB6pJlPli5dVhc49ugHt/54UYqQV+sO+PsyKWwb/p5I0iUShcsrNtIjaU
-        iUVuONkOQcHmTWBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4CA9E13519;
-        Tue,  6 Jun 2023 12:24:23 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Rw6PEnclf2SDOAAAMHmgww
-        (envelope-from <dwagner@suse.de>); Tue, 06 Jun 2023 12:24:23 +0000
-From:   Daniel Wagner <dwagner@suse.de>
-To:     linux-nvme@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Shin'ichiro Kawasaki <shinichiro@fastmail.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Hannes Reinecke <hare@suse.de>, Daniel Wagner <dwagner@suse.de>
-Subject: [PATCH v4 1/1] nvmet-fcloop: Do not wait on completion when unregister fails
-Date:   Tue,  6 Jun 2023 14:24:11 +0200
-Message-Id: <20230606122411.7972-2-dwagner@suse.de>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230606122411.7972-1-dwagner@suse.de>
-References: <20230606122411.7972-1-dwagner@suse.de>
+        Tue, 6 Jun 2023 08:26:29 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9720710C7;
+        Tue,  6 Jun 2023 05:26:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686054388; x=1717590388;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rjRBgamwSeRSfHezoWT0bmvktJ8N6eyh4nvQHsFNuDQ=;
+  b=fhfvs9MEvSU7P5uTfW+4YJwKRPX73M6vMEt3T5btWxmxMl67XuA9JUoE
+   DdO77wx5r6xJuSc+W9iwPE9DkU/31o9Q3Y5N/wqA3v0ETLtQNQj3xMfgU
+   Y2Lt0LZFYfZzSyuDysTadtFOkk72TivxpIsv/6Dm0TUNR7JL+s9OBHn4n
+   7WCXb0OWxfr9gOcXC58VD0Ggcr83YePYJxqfXvGIE2tzBo4l1GTavu3R7
+   Ma2ufr3s+JHOTi3nWpahC9fxc7bZHsZ5nHchx+HcVe3WfZAPkatS1bMPA
+   sOq3IWx2DfahYuXKB7QfzJSDcyq0HZvGdsvBSAJ9V/y20Ssyyud2VVfMe
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="443031643"
+X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
+   d="scan'208";a="443031643"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 05:26:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="883321208"
+X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
+   d="scan'208";a="883321208"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 06 Jun 2023 05:26:23 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q6VlW-0005Dv-21;
+        Tue, 06 Jun 2023 12:26:22 +0000
+Date:   Tue, 6 Jun 2023 20:26:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        James Clark <james.clark@arm.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Andrii Nakryiko <andrii@kernel.org>
+Subject: Re: [PATCH v2 1/4] perf build: Add ability to build with a generated
+ vmlinux.h
+Message-ID: <202306062005.DdBIyoSS-lkp@intel.com>
+References: <20230605202712.1690876-2-irogers@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230605202712.1690876-2-irogers@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The nvme_fc_unregister_localport() returns an error code in case that
-the locaport pointer is NULL or has already been unegisterd. localport is
-is either in the ONLINE state (all resources allocated) or has already
-been put into DELETED state.
+Hi Ian,
 
-In this case we will never receive an wakeup call and thus any caller
-will hang, e.g. module unload.
+kernel test robot noticed the following build warnings:
 
-Signed-off-by: Daniel Wagner <dwagner@suse.de>
----
- drivers/nvme/target/fcloop.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+[auto build test WARNING on acme/perf/core]
+[also build test WARNING on tip/master tip/auto-latest linus/master v6.4-rc5 next-20230606]
+[cannot apply to tip/perf/core]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/drivers/nvme/target/fcloop.c b/drivers/nvme/target/fcloop.c
-index 1ab3d900f2bf..c65a73433c05 100644
---- a/drivers/nvme/target/fcloop.c
-+++ b/drivers/nvme/target/fcloop.c
-@@ -1166,7 +1166,8 @@ __wait_localport_unreg(struct fcloop_lport *lport)
- 
- 	ret = nvme_fc_unregister_localport(lport->localport);
- 
--	wait_for_completion(&lport->unreg_done);
-+	if (!ret)
-+		wait_for_completion(&lport->unreg_done);
- 
- 	kfree(lport);
- 
+url:    https://github.com/intel-lab-lkp/linux/commits/Ian-Rogers/perf-build-Add-ability-to-build-with-a-generated-vmlinux-h/20230606-043106
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git perf/core
+patch link:    https://lore.kernel.org/r/20230605202712.1690876-2-irogers%40google.com
+patch subject: [PATCH v2 1/4] perf build: Add ability to build with a generated vmlinux.h
+config: i386-randconfig-i052-20230605 (https://download.01.org/0day-ci/archive/20230606/202306062005.DdBIyoSS-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add acme https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git
+        git fetch acme perf/core
+        git checkout acme/perf/core
+        b4 shazam https://lore.kernel.org/r/20230605202712.1690876-2-irogers@google.com
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306062005.DdBIyoSS-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> tools/perf/util/bpf_skel/vmlinux/vmlinux.h: warning: ignored by one of the .gitignore files
+   tools/testing/selftests/arm64/tags/.gitignore: warning: ignored by one of the .gitignore files
+   tools/testing/selftests/arm64/tags/Makefile: warning: ignored by one of the .gitignore files
+   tools/testing/selftests/arm64/tags/run_tags_test.sh: warning: ignored by one of the .gitignore files
+   tools/testing/selftests/arm64/tags/tags_test.c: warning: ignored by one of the .gitignore files
+   tools/testing/selftests/kvm/.gitignore: warning: ignored by one of the .gitignore files
+   tools/testing/selftests/kvm/Makefile: warning: ignored by one of the .gitignore files
+   tools/testing/selftests/kvm/config: warning: ignored by one of the .gitignore files
+   tools/testing/selftests/kvm/settings: warning: ignored by one of the .gitignore files
+
 -- 
-2.40.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
