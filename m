@@ -2,120 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5439172391D
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 09:35:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11176723920
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 09:36:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236237AbjFFHf4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 03:35:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47962 "EHLO
+        id S236202AbjFFHgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 03:36:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235090AbjFFHfx (ORCPT
+        with ESMTP id S231626AbjFFHgv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 03:35:53 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3DB711D;
-        Tue,  6 Jun 2023 00:35:51 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 129EA5C00CC;
-        Tue,  6 Jun 2023 03:35:49 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 06 Jun 2023 03:35:49 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1686036949; x=1686123349; bh=JP
-        6R94uQbzQBfUBBvYz80fUZWf0TL/O0HNFiOYoH0g8=; b=VzA/5wvw+R/Q0vEigx
-        C6bAunIc1d6yzEraxrGySxrM2Id2FfJbsuAgHJIWW7cxm+dvWvB+5urBCTuP/aCt
-        oBtRxJh+nBd0aERvmDnApWrYKp9f+vx1onw2ekLHupDXSbY1FoeS1M0XW1vntoYb
-        QILd8QYJa+0e2BlpOuwrHwouhgh8HewOcxOwEZjxWf43hJtvhpcbUDhizkUiqr4W
-        6XPiIvx3fOWe63trfROGA4YOvcPc4PFY6vjuSb6FTWqBJaD4F5DlISMf4dvrOHKp
-        CN3YJvGMiM1ktsW/dO7PZ+kK5QPvg8i7+CdDMH53oVygrDLDsIx+HdbQ9crCMRnD
-        RdxQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1686036949; x=1686123349; bh=JP6R94uQbzQBf
-        UBBvYz80fUZWf0TL/O0HNFiOYoH0g8=; b=NJZ/bUauyn6r9C2HniX6H8c+cfhTz
-        zWalf2888DaLopnoz27/2Bhayjh1J7fAqLRxel8pdEoGtvN74uqeJskTSRP+PjKx
-        1ACNlag3qsQY4TwYXeJOX+b6caxIE6GXgCvw4UocZ0dAj8RKictsabo9jR4oKDSb
-        1kPRfEvSld4q463ZukNMi2EZc6nMf5UK3T0Fo1KnhqbzjaBEyZKdIbUbcpwUoKGw
-        O2+xz/3sKW1RDpfi5te+Ln8XeCEquZEZYHke4XoS6cJg+aDrbTXLBxYVcKZsKBGE
-        d4uBpzsPSLmAiOa9419nOpkYnrH3vHZog8Nh8bztyXiKFPz58qOvk7IWQ==
-X-ME-Sender: <xms:1OF-ZKt9FM-Vh1KjIFQye05jUJr2DB9M0kJ3xkz2GOCM6xJIrEKTNA>
-    <xme:1OF-ZPc_OwDlWmBUK1wtW1BsCPhNvqwQxqXM5bja4oepM_sVkE4bblHJ4TNFnAUFe
-    l8u3RWEGfH9F8vJeIQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedttddguddvtdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeevhfffledtgeehfeffhfdtgedvheejtdfgkeeuvefgudffteettdekkeeu
-    feehudenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:1OF-ZFx-xnV4OSZPeRQwP67_ZNCCCObOLZBge6a0A-hiiSGnA4RcPA>
-    <xmx:1OF-ZFPhvQTI52yGaUY8KdiJAuK1kW_ejI79kv0KPVwIzhhHHWtTaA>
-    <xmx:1OF-ZK9GEYwyjb3dy3bwc6Lir3zhwym7NWTiTM4_J37LyQs2LkUklw>
-    <xmx:1eF-ZBZ6vCszYkLrJswcZcm_k0XMuUbT_z6z-oydrUerYNiK6XLS_w>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 5175CB60086; Tue,  6 Jun 2023 03:35:48 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-447-ge2460e13b3-fm-20230525.001-ge2460e13
-Mime-Version: 1.0
-Message-Id: <4fcdd08c-e6fb-40b7-9f2b-77f96e798b37@app.fastmail.com>
-In-Reply-To: <f2776eb566b8cf2409d2c21f83ebf85ab92d2f09.1685780412.git.falcon@tinylab.org>
-References: <cover.1685780412.git.falcon@tinylab.org>
- <f2776eb566b8cf2409d2c21f83ebf85ab92d2f09.1685780412.git.falcon@tinylab.org>
-Date:   Tue, 06 Jun 2023 09:35:27 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Zhangjin Wu" <falcon@tinylab.org>, "Willy Tarreau" <w@1wt.eu>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-Subject: Re: [PATCH v3 1/3] tools/nolibc: fix up #error compile failures with -ENOSYS
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 6 Jun 2023 03:36:51 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CCB9106;
+        Tue,  6 Jun 2023 00:36:50 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1b0201d9a9eso42378375ad.0;
+        Tue, 06 Jun 2023 00:36:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686037010; x=1688629010;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=nD/LkGWtI5flKQ+Ke2jMCbqz9Sr5XNRMirWL/QAprxA=;
+        b=AcmFSCfdJkk9Hn7hgZC5mDeXrTp+dEiBAeSopwWhIpVuqmeml2QyMIXHyh+KVYJGfp
+         lpoc7El2Ps0adh7C5569hmz7fR/33rQhMwylPaXozbK83Egh744tigif2cmQj5HKJYva
+         Oaz1+2HOPMYwoHWfTiW+JXO451kD2H5QbejrwOC1sjZAoB70C+reunq2k//0tR5/dDOO
+         r5WRDhytXwr0fbWnnEAGRpO0WZyo6XMJvq7oO82X3Io6jQeyPm3p/ZAsApmJmb0Oo+gs
+         y9me+NeBEdnwJiaZW0hSWRTjAhnSHcTJj70+EqAom7xhYVuLApaUL0/k7c2FwTuZRKiI
+         jLOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686037010; x=1688629010;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nD/LkGWtI5flKQ+Ke2jMCbqz9Sr5XNRMirWL/QAprxA=;
+        b=hA81Hu2nz8CI7RFKFJAdN2diPHfVjP9wD7NQPeU0xDQyTaGU9bPsted/5LD3dBNx/W
+         iiCyCL3Bzc4eC7J9flYFAFwLkywCJONKLz2qjOwHsWZTlsICWIbeB6tEmZ2cOSHdQvav
+         AAIpavDAyRQIU7w/YippaCiwP59LCg2RATSWlmnUMPqJwz4i6trxwCixUg2NfSoRkoQa
+         7pe2dB40s/Hf2sU9HP7u9Mmd/vhLwYWFYTtF8b0HHXD/as3MUoheyXemsPoyonwbEQqY
+         FzMC+9g+znMgQmYRIVjHIZTg1GV5NJ/JqGVktG0th9VzvUB8gvEI9q6dAdhaPIFqNrge
+         GR5Q==
+X-Gm-Message-State: AC+VfDxEfn+vBEE00WtowqT5SQXP39x4ilj4MCT0Hpj905oOOcT8Be5O
+        XyyhNVAuJpgLaTHRHxtsdxlQv6TS5yd9CYOEaQI=
+X-Google-Smtp-Source: ACHHUZ428r6gqxfQi0LZN59H7BZK1TBLgS52eAK3fHMnnNGvKJfr7euZ5zxRhhFrw6faArzEBTIeE6YDOATI6/h9tiI=
+X-Received: by 2002:a17:902:e845:b0:1ac:820e:c34a with SMTP id
+ t5-20020a170902e84500b001ac820ec34amr11893662plg.0.1686037009953; Tue, 06 Jun
+ 2023 00:36:49 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230605153539.497602-1-pavacic.p@gmail.com> <20230605153539.497602-4-pavacic.p@gmail.com>
+ <4bb22e77-b3f0-be07-5e8a-442c3aa3fd48@linaro.org>
+In-Reply-To: <4bb22e77-b3f0-be07-5e8a-442c3aa3fd48@linaro.org>
+From:   Paulo Pavacic <pavacic.p@gmail.com>
+Date:   Tue, 6 Jun 2023 09:36:39 +0200
+Message-ID: <CAO9szn05edU_HZHVnREMZcwm6TbBa4psABoqSqLWghFc=KbV7w@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] drm/panel-fannal-c3003: Add fannal c3004 DSI panel
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     neil.armstrong@linaro.org, sam@ravnborg.org, airlied@gmail.com,
+        daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 3, 2023, at 11:01, Zhangjin Wu wrote:
+Hello Krzysztof,
+
+uto, 6. lip 2023. u 09:14 Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> napisao je:
 >
-> Suggested-by: Arnd Bergmann <arnd@arndb.de>
-> Link: 
-> https://lore.kernel.org/linux-riscv/5e7d2adf-e96f-41ca-a4c6-5c87a25d4c9c@app.fastmail.com/
-> Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-> ---
->  tools/include/nolibc/sys.h | 26 +++++++++++++-------------
->  1 file changed, 13 insertions(+), 13 deletions(-)
+> On 05/06/2023 17:35, Paulo Pavacic wrote:
+> > Fannal C3004 is a 480x800 display made by fannal that requires
+> > DCS initialization sequences.
+> >
+> > Signed-off-by: Paulo Pavacic <pavacic.p@gmail.com>
+> > ---
 >
-> diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-> index 856249a11890..78c86f124335 100644
-> --- a/tools/include/nolibc/sys.h
-> +++ b/tools/include/nolibc/sys.h
-> @@ -124,7 +124,7 @@ int sys_chmod(const char *path, mode_t mode)
->  #elif defined(__NR_chmod)
->  	return my_syscall2(__NR_chmod, path, mode);
->  #else
-> -#error Neither __NR_fchmodat nor __NR_chmod defined, cannot implement 
-> sys_chmod()
-> +	return -ENOSYS;
->  #endif
->  }
+> > v3 changelog:
+> >  - using generic mipi_dsi_dcs_write_seq
+>
+> This is marked as v2?
 
-I think the most logical would be to have each syscall (chmod,
-fchmodat, ...) have its own function that returns -ENOSYS if
-that is not defined, and have the logic that decides which one
-to use as a separate function.
+I have ruined numbering. At first this driver was named
+panel-mipi-dsi-bringup and parts of it weren't handled under patchset.
 
-This patch is a step in that direction though, so I think that's
-totally fine.
+>
+> >  - removed success prints
+> >  - removed some comments
+> >  - simplified code/removed support for different panels
+> >  - changed namespace from fann to fannal
+> > v2 changelog:
+> >  - renamed from panel-mipi-dsi-bringup
+> >  - only one MAINTAINER e-mail
+> > ---
+> >  MAINTAINERS
+>
+>
+> > +static int fannal_panel_probe(struct mipi_dsi_device *dsi)
+> > +{
+> > +     struct device *dev = &dsi->dev;
+> > +     struct fannal_panel_data *panel_data;
+> > +     int ret;
+> > +
+> > +     panel_data = devm_kzalloc(&dsi->dev, sizeof(*panel_data), GFP_KERNEL);
+> > +
+> > +     if (!panel_data)
+> > +             return -ENOMEM;
+> > +
+> > +     panel_data->reset = devm_gpiod_get_optional(
+> > +             dev, "reset", GPIOD_OUT_LOW | GPIOD_FLAGS_BIT_NONEXCLUSIVE);
+>
+> dev should be in previous line
+>
+> Why this is nonexclusive? How many instances of same driver are
+> expecting to get this on one system?
+>
+> > +
+> > +     if (IS_ERR(panel_data->reset)) {
+> > +             ret = PTR_ERR(panel_data->reset);
+> > +             dev_err(dev,
+> > +                     "error: probe: get reset GPIO: (%d) Check the fdt\n",
+> > +                     ret);
+>
+> return dev_err_probe
+>
+> > +             return ret;
+> > +     }
+> > +
+> > +     mipi_dsi_set_drvdata(dsi, panel_data);
+> > +
+> > +     dsi->format = MIPI_DSI_FMT_RGB888;
+> > +     dsi->mode_flags = MIPI_DSI_CLOCK_NON_CONTINUOUS |
+> > +                       MIPI_DSI_MODE_VSYNC_FLUSH | MIPI_DSI_MODE_VIDEO_HSE |
+> > +                       MIPI_DSI_MODE_NO_EOT_PACKET |
+> > +                       MIPI_DSI_MODE_VIDEO_SYNC_PULSE | MIPI_DSI_MODE_VIDEO;
+> > +     dsi->lanes = 2;
+> > +
+> > +     gpiod_set_value_cansleep(panel_data->reset, 1);
+>
+> So you leave the panel in reset state?
+yes
 
-     Arnd
+> > +
+> > +     drm_panel_init(&panel_data->panel, dev, &fannal_panel_funcs,
+> > +                    DRM_MODE_CONNECTOR_DSI);
+> > +     dev_set_drvdata(dev, panel_data);
+> > +
+> > +     drm_panel_add(&panel_data->panel);
+> > +
+> > +     ret = mipi_dsi_attach(dsi);
+> > +     if (ret) {
+> > +             drm_panel_remove(&panel_data->panel);
+> > +             dev_err(dev, "error: probe fail: can't attach mipi_dsi!\n");
+>
+> No need to shout, skip exclamation mark.
+>
+>
+> Best regards,
+> Krzysztof
+>
+
+Thanks,
+Paulo
