@@ -2,127 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDCDA724EF9
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 23:44:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA2A6724F05
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 23:49:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239770AbjFFVn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 17:43:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46514 "EHLO
+        id S239784AbjFFVtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 17:49:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234403AbjFFVnz (ORCPT
+        with ESMTP id S234113AbjFFVtB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 17:43:55 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73BDBA7;
-        Tue,  6 Jun 2023 14:43:54 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 7EBC75C00FE;
-        Tue,  6 Jun 2023 17:43:51 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Tue, 06 Jun 2023 17:43:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=benboeckel.net;
-         h=cc:cc:content-transfer-encoding:content-type:content-type
-        :date:date:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to;
-         s=fm2; t=1686087831; x=1686174231; bh=Cj7jNwhxEUWz3YGh46Ym6JKeV
-        BhfBtfYbafJNC47oEc=; b=EV6cSfJN/+e3O6NPk2xHDyMT0iYg1wsYBZhxSjecy
-        necIJN0wcdKSXBrum8wXN/IV131ScLJdjTJzUcID3c0Vmzf8ed7H6EB+aM8RdoZr
-        0H4Rq36LU/FXSjS9pvR5RfT+wEIN/mrwGqdZ66w0BZaNWyPMwFRTLipHexRg3K9F
-        qxNfTFqfCutTh8yRGWCQzpei/2pp2DaXle8MKtlYMqpZJjD0ZPDhBuS+D69acFAf
-        3Re5bzAzetDHSwmBXREc76FkrVAse5aLlFZ8dP+Kt7b1csZlB1p61RmbyDb8NphK
-        m2CbsuwR6nwLI+x0LudylpBCVNIn6vfoTptRVWJc0TorA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1686087831; x=1686174231; bh=Cj7jNwhxEUWz3YGh46Ym6JKeVBhfBtfYbaf
-        JNC47oEc=; b=bsCXGcDKILNgxPxyfhGhZOgD2Ku0A24dQgt+FCCKwsjnAmTcPsY
-        RpzPykyxZbJzUHfT9KESssrWnaCaL1aiZd5w66Ac+cWl4BZSESnY2W3t43ojopTK
-        R4G/+7GWonDsHu2a1dLQwxaa6RjYbZn9A1k2TH15fX571hmjLM3O7ZIQh3ZAsRMz
-        7p2pneFyn/7azJ2O9hSP/r/Xa4fzS7SusL8P4hf7mxgR/PMOn6L9f94GBb67VRk4
-        sNvoP5yap146P8HTZ1AZnYoAJ3ROTIJsVATcJdhqkrnQRD7uHnsEWvsIAYzaP5GX
-        vLQKMBdKMegrYFPS4nKZfdrYTRmwG+PQXTQ==
-X-ME-Sender: <xms:l6h_ZB-4reFOSFf3a2L0Jr1oKB0xLuCt8naNMFgYi2LC3HifdZnB6w>
-    <xme:l6h_ZFtb7RAkk3d9I8wuXI0_o6OQlC3xo8syjugZDCDPzNeJp4IFUMa4EFBw77OYy
-    nwKL11HG9xGSYjqVao>
-X-ME-Received: <xmr:l6h_ZPD_Z45mDs7vkq46FfGDnhh2H_np6lOeD_M0bhBIll0I6tNMBkGoPCIH6YGNCGz_vR-NEuVXA4PWQOXA-6NupPrnOM2mJ3IX>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedtuddgudeiiecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtugfgjggfsehtkeertddtreejnecuhfhrohhmpeeu
-    vghnuceuohgvtghkvghluceomhgvsegsvghnsghovggtkhgvlhdrnhgvtheqnecuggftrf
-    grthhtvghrnhepudekvdejteeuudffveffhfelfefgjeehffefhffhgeeiieduveehfeej
-    ffetveefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epmhgvsegsvghnsghovggtkhgvlhdrnhgvth
-X-ME-Proxy: <xmx:l6h_ZFcFXWg4DzmX1yFfdukFl9HMQpQlUs-N4jO1Iul-wPgpDTYq5w>
-    <xmx:l6h_ZGM035zFSDaoF1VoqiAC3rGBreVDrlGp6acY4ppU1c7R5JKpJw>
-    <xmx:l6h_ZHncRPrMU1ywF1JVrgPIZTYLUqDs9X0lMvprq7e5HZJQL2ehvw>
-    <xmx:l6h_ZHGlVwAWYNImAeT8mnjoQrrKetjPkHbIteN7YfAO2z-vTA798Q>
-Feedback-ID: iffc1478b:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 6 Jun 2023 17:43:50 -0400 (EDT)
-Date:   Tue, 6 Jun 2023 17:43:50 -0400
-From:   Ben Boeckel <me@benboeckel.net>
-To:     Dan Carpenter <dan.carpenter@linaro.org>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Franziska Naepelt <franziska.naepelt@googlemail.com>,
-        keyrings@vger.kernel.org, dhowells@redhat.com, dwmw2@infradead.org,
-        linux-kernel@vger.kernel.org,
-        Franziska Naepelt <franziska.naepelt@gmail.com>,
-        kernel test robot <lkp@intel.com>,
-        Linux SPDX Licenses <linux-spdx@vger.kernel.org>,
-        Linux Kernel Janitors <kernel-janitors@vger.kernel.org>
-Subject: Re: [PATCH v2] certs/extract-cert: Fix checkpatch issues
-Message-ID: <20230606214350.GA142397@farprobe>
-References: <20230601190508.56610-1-franziska.naepelt@gmail.com>
- <20230602085902.59006-1-franziska.naepelt@gmail.com>
- <ZH8mhIrjyBvTF4oZ@debian.me>
- <e39efb7f-5d8f-4433-83b3-8eea8a6c0486@kadam.mountain>
- <CT5NH4XXIYQF.5XXJE6JA5FZP@suppilovahvero>
- <e44d03cf-9993-483c-b3d4-6185f5c028cc@kadam.mountain>
+        Tue, 6 Jun 2023 17:49:01 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3A961702;
+        Tue,  6 Jun 2023 14:49:00 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 356LgTXp002720;
+        Tue, 6 Jun 2023 21:48:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Dup6Sn3Ee73dXIJOK9wTvQhxLryIo4XSmfEySws+h24=;
+ b=mGHie9sa18IfEAEvxF4iD8saVfOF+iOXeqzg40Kho6PBu/zRhgsrzlNOu3qf7rIWOmlc
+ rBbG3TZiJFS7EU15n0p7XP6nipQULxTuJmRkXxGOBc10YRyXJ+7DZyUi7+G2mHJpn20l
+ Lm1oHEyjnng13H97zJeOCDjlpH/fnQ8uE9uxGA3sXYqOOhvku68WQb4dZ9+Y/KtdN2Oz
+ dMHoRPziQWhw4qfcCPjFLvyKFx5GXqxTAb02EeYx7ca5hbPDgTMGmHXjd5OoHmLAE4HU
+ nDqIkl6ej6IHIFZBYXFoRJz+PLw9lFuNtg9+0CdXDPsoMPpeH1QUScZnYJ3jljCl1SVE 1Q== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r2a7k0ae2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Jun 2023 21:48:51 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 356LmoSg023685
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 6 Jun 2023 21:48:50 GMT
+Received: from [10.134.70.142] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 6 Jun 2023
+ 14:48:47 -0700
+Message-ID: <868e6966-1e3a-fcc1-3710-d9c5ad96d259@quicinc.com>
+Date:   Tue, 6 Jun 2023 14:48:45 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v17] drm/msm/dpu: add DSC blocks to the catalog of MSM8998
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <marijn.suijten@somainline.org>
+CC:     <quic_jesszhan@quicinc.com>, <quic_sbillaka@quicinc.com>,
+        <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1686082272-22191-1-git-send-email-quic_khsieh@quicinc.com>
+ <a5e25f3e-1b66-8a66-7e16-9d5c22a53e66@linaro.org>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <a5e25f3e-1b66-8a66-7e16-9d5c22a53e66@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <e44d03cf-9993-483c-b3d4-6185f5c028cc@kadam.mountain>
-User-Agent: Mutt/2.2.9 (2022-11-12)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: o7VfX28WqfGAdsaeMJN6F4O1NGxTflnC
+X-Proofpoint-ORIG-GUID: o7VfX28WqfGAdsaeMJN6F4O1NGxTflnC
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-06_16,2023-06-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ spamscore=0 impostorscore=0 suspectscore=0 malwarescore=0 phishscore=0
+ mlxlogscore=999 adultscore=0 mlxscore=0 bulkscore=0 priorityscore=1501
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306060181
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 18:25:24 +0300, Dan Carpenter wrote:
-> I'm looking through the git log to see if it's true the imperative tense
-> commit message are shorter and better and neither one of those things is
-> obvious to me.
+Hi Dmitry
+
+On 6/6/2023 1:21 PM, Dmitry Baryshkov wrote:
+> On 06/06/2023 23:11, Kuogee Hsieh wrote:
+>> From: Abhinav Kumar <quic_abhinavk@quicinc.com>
+>>
+>> Some platforms have DSC blocks which have not been declared in the 
+>> catalog.
+>> Complete DSC 1.1 support for all platforms by adding the missing 
+>> blocks to
+>> MSM8998.
 > 
-> This patch had an imperative subject already so it was already kind of
-> imperative.  Does every sentence have to be imperative or can you just
-> add a "Fix it." to the end?
+> 'Some platforms' doesn't make sense if we are talking about a single 
+> poor msm8998.
+> 
 
-I don't know about the length argument, but it feels like it reads
-better when skimming summaries with the imperative mood. The way I think
-about it is that the subject should complete the phrase:
+If you dont mind, can you please fix this while applying? Thanks for 
+consideration.
 
-    When applied, this patch will…
-
-The body then gives more context and description as necessary. I don't
-really worry so much about the mood/tense/whatever in the body except
-that I try to use the present tense for anything the patch is doing and
-past for any historical context. I understand that kernel maintainers
-may care a lot more about it though.
-
-Basically, a patch, on its own, does nothing (just like a recipe). It is
-only when it is applied that anything actually happens. I read it as
-"`git apply`, please $summary".
-
---Ben
+>>
+>> Changes in v9:
+>> -- add MSM8998 and SC8180x to commit title
+>>
+>> Changes in v10:
+>> -- fix grammar at commit text
+>>
+>> Changes in v12:
+>> -- fix "titil" with "title" at changes in v9
+>>
+>> Changes in v14:
+>> -- "dsc" tp "DSC" at commit title
+>>
+>> Changes in v15:
+>> -- fix merge conflicts at dpu_5_1_sc8180x.h
+>>
+>> Changes in v16
+>> -- fix cherry-pick error by deleting both redundant .dsc and .dsc_count
+>>     assignment from dpu_5_1_sc8180x.h
+>>
+>> Changes in v17
+>> -- remove sc8180x from both commit title and text
+>> -- remove Reviewed-by
+>>
+>> Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+>> ---
+>>   drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h | 7 +++++++
+>>   1 file changed, 7 insertions(+)
+>>
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h 
+>> b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
+>> index 3c732a0..7d0d0e7 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
+>> @@ -126,6 +126,11 @@ static const struct dpu_pingpong_cfg msm8998_pp[] 
+>> = {
+>>               DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 15)),
+>>   };
+>> +static const struct dpu_dsc_cfg msm8998_dsc[] = {
+>> +    DSC_BLK("dsc_0", DSC_0, 0x80000, 0),
+>> +    DSC_BLK("dsc_1", DSC_1, 0x80400, 0),
+>> +};
+>> +
+>>   static const struct dpu_dspp_cfg msm8998_dspp[] = {
+>>       DSPP_BLK("dspp_0", DSPP_0, 0x54000, DSPP_SC7180_MASK,
+>>            &msm8998_dspp_sblk),
+>> @@ -199,6 +204,8 @@ const struct dpu_mdss_cfg dpu_msm8998_cfg = {
+>>       .dspp = msm8998_dspp,
+>>       .pingpong_count = ARRAY_SIZE(msm8998_pp),
+>>       .pingpong = msm8998_pp,
+>> +    .dsc_count = ARRAY_SIZE(msm8998_dsc),
+>> +    .dsc = msm8998_dsc,
+>>       .intf_count = ARRAY_SIZE(msm8998_intf),
+>>       .intf = msm8998_intf,
+>>       .vbif_count = ARRAY_SIZE(msm8998_vbif),
+> 
