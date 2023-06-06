@@ -2,81 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C9D27250E5
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 01:40:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E411C7250EC
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 01:44:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239897AbjFFXks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 19:40:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33406 "EHLO
+        id S240032AbjFFXoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 19:44:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239503AbjFFXko (ORCPT
+        with ESMTP id S234333AbjFFXoL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 19:40:44 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C577D10F1
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 16:40:42 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-565a1788f3fso111025457b3.0
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 16:40:42 -0700 (PDT)
+        Tue, 6 Jun 2023 19:44:11 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50A01170E;
+        Tue,  6 Jun 2023 16:44:10 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-64d44b198baso44839b3a.0;
+        Tue, 06 Jun 2023 16:44:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686094842; x=1688686842;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ub7lhejOg/lDdTY+htbdM3tFIdBZH/I/WvN3Xdx1uV0=;
-        b=x3+7d7dOxbuMsgi4YuWRxiMypQc2TrTU2D9YB3UiXYC+EUc7Y9pseC434rQBLcpXAL
-         GdebpzGU+Ppi+3pg/sPm2opKG0AIj3TpKgdafc0t7y19pnJwnX6lnXEW0+OoUhdwqDwE
-         Z4ysfR37q5DV4NBHLSUb535QOnfJ37VpXUT0s/YKbyEmYt6p3WurjeOIxM5TXMaanlts
-         Dbq1Z9rC6GiKn/Ofl3HttKVh+kDIVJTeUF0OknTzUCQHCr+pmySor7NykqACcPQcQ0xy
-         DY4ddSj00fmaOy6VUmaFhckuswO05xoX5292LnCzhz9+pCxJfgV+HS3Cr0N3cRaGlaIo
-         JIXQ==
+        d=gmail.com; s=20221208; t=1686095050; x=1688687050;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mEZkIZY9Q7jTP/McBQstCS6PR169uMprlxbbas5+TgM=;
+        b=n8hRF4MSiRkNfUvc8i87aRrACp6giMIbhGu+lCaOcY3T23RWe5R6yTEszIukbeyMSm
+         weqnE4w2TVNcK7Sym65s37htsxfSTQ/p4IVGtkQX89lCAsXIo8LQCJw4Ln+2dSQZjlVs
+         NXwKWSS4mgrfrUqtDtiqCjJmRNPKNQm83Si4eJqbPy0OXr8gkBQJ9LTxaFjLOhwzLbFP
+         bliYMmczVVHC9vw1KKOnUH+EAMqRe1jsqINbip5WMtCFYkR4nUI8kIUB1QhyZ8YDt+HA
+         LUFg+4G4GsMey4PlvtzlYgg24NGT9EuoIn+Ze44Dz0kBIbKNHB6mjrSOFREAVXPZdcCr
+         KnVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686094842; x=1688686842;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Ub7lhejOg/lDdTY+htbdM3tFIdBZH/I/WvN3Xdx1uV0=;
-        b=Zdi0V8RoaPpS6Uk3i+Ur+HwrVdBS1981k8aL71PofV/8zdtUJRwRq+/pw6cddoE2bZ
-         9yI+FW9mTTdRcCesFZVAsHY8dJ1U9q50RAaNo410rEmR6BI2brj3jfOGKM93ZW+P4aku
-         fsshR8iNW8GS2g4QFnTDLb7GEq8bLuDoIsYMq0hIDXXsWmLkebHVwnduFwcqNoqlMogy
-         O/fQmb0cFBD4Bwcqia8zmsao27Wf7t4owi4pTBOjwgzYj6gtvwpdKnn7YXCKCq9llOrM
-         QT0OT1qwN/iRl/0TgZhGlyHE2C8CMZNL+9Uivwa32XXgY+QnjlTJNmNLo/E1/AB8JNtg
-         T6rA==
-X-Gm-Message-State: AC+VfDwTsoZih/QIDwu2rVPg1tdhIjpYXsdZOT+trWsx4+Us34X9sp/m
-        ePpFlRr8B3JBvd24PKgCt33QbFsqQLI=
-X-Google-Smtp-Source: ACHHUZ4t4b8ZaKk9b7bDtFeK18uGx3qsOG0WbmPPzW7N60k5P+UvNaqfyxvCrb9uJeLbM2s4DI7dL+WqIoo=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:d007:0:b0:568:a244:d8e5 with SMTP id
- v7-20020a81d007000000b00568a244d8e5mr1898740ywi.9.1686094841928; Tue, 06 Jun
- 2023 16:40:41 -0700 (PDT)
-Date:   Tue, 6 Jun 2023 16:40:40 -0700
-In-Reply-To: <8AE71A62-1BE3-4D6F-B57C-B5FCEA93169F@nutanix.com>
-Mime-Version: 1.0
-References: <20230530200152.18961-1-jon@nutanix.com> <2a6502e3-ba87-0355-af09-825e8467b81f@intel.com>
- <F4AFC5EE-9967-4117-BA85-ED82C106575C@nutanix.com> <ZHd2P6D142rCByrm@google.com>
- <E17EFDD7-C54A-4532-B1D3-D567557FC54B@nutanix.com> <ZHermsSGQBcDD07R@google.com>
- <CBFC095A-10D1-4925-9F28-DEDEBBB38EF8@nutanix.com> <8AE71A62-1BE3-4D6F-B57C-B5FCEA93169F@nutanix.com>
-Message-ID: <ZH/D+JP2OGFtCUBy@google.com>
-Subject: Re: [PATCH] x86/fpu/xstate: clear XSAVE features if DISABLED_MASK set
-From:   Sean Christopherson <seanjc@google.com>
-To:     Jon Kohler <jon@nutanix.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Kyle Huey <me@kylehuey.com>,
-        "neelnatu@google.com" <neelnatu@google.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        d=1e100.net; s=20221208; t=1686095050; x=1688687050;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mEZkIZY9Q7jTP/McBQstCS6PR169uMprlxbbas5+TgM=;
+        b=bNIWSJ5HrhY2F6wFQNINRr755s0o4SRxGL4xwzJJa2JD51ybpYPnq7QAvAzZ0dK6Y3
+         +WhPp4qmR1LFujXZ1oQSGFp5aCGPjbj4iZ8WMBmakbsmcyPLSGWv5NeZGNp3bg7OeDIr
+         9x+ei1/Stk71s6bI+ovUP0OW2YKE7axsDg+p1a2ZLo9WR8DuL7Iuj0GDWqIk2zrZHxhc
+         sTRFWj0HS4Fh36wO7xOdh//mY2k/k8Ybk8QfhWmpN0tNtQVoPqTUQIjorcfnW5WB12r+
+         egGm+QaBaMGthjSCJ32x0Sq7XYNndV1z/okTra4rCg9VkxgyaV08RwyZErGqUzF2AOb+
+         srJQ==
+X-Gm-Message-State: AC+VfDxMSC28cd9MWgtFeBWRnj5s9lOd5RO/46hNOfF1x7Rc7cLWg9YF
+        6L1Ak+RIhqiBMycIy6sq2Vg=
+X-Google-Smtp-Source: ACHHUZ6ELRc9CiQE6xiKHl+27ELaDVpnZylJ3B8xbEzOwiolUc5ZwT/a+AYfyajhlDYhqp+nzXt2qw==
+X-Received: by 2002:a05:6a00:238e:b0:65c:d458:cedc with SMTP id f14-20020a056a00238e00b0065cd458cedcmr3508063pfc.12.1686095049540;
+        Tue, 06 Jun 2023 16:44:09 -0700 (PDT)
+Received: from localhost ([192.55.54.50])
+        by smtp.gmail.com with ESMTPSA id b20-20020aa78114000000b00660f0e4da6esm1302157pfi.183.2023.06.06.16.44.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Jun 2023 16:44:09 -0700 (PDT)
+Date:   Tue, 6 Jun 2023 16:44:07 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-mm@kvack.org, dave.hansen@intel.com,
+        kirill.shutemov@linux.intel.com, tony.luck@intel.com,
+        peterz@infradead.org, tglx@linutronix.de, seanjc@google.com,
+        pbonzini@redhat.com, david@redhat.com, dan.j.williams@intel.com,
+        rafael.j.wysocki@intel.com, ying.huang@intel.com,
+        reinette.chatre@intel.com, len.brown@intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, chao.gao@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, bagasdotme@gmail.com,
+        sagis@google.com, imammedo@redhat.com, isaku.yamahata@gmail.com
+Subject: Re: [PATCH v11 02/20] x86/virt/tdx: Detect TDX during kernel boot
+Message-ID: <20230606234407.GC2244082@ls.amr.corp.intel.com>
+References: <cover.1685887183.git.kai.huang@intel.com>
+ <af4e428ab1245e9441031438e606c14472daf927.1685887183.git.kai.huang@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <af4e428ab1245e9441031438e606c14472daf927.1685887183.git.kai.huang@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,87 +80,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 05, 2023, Jon Kohler wrote:
-> > On May 31, 2023, at 5:09 PM, Jon Kohler <jon@nutanix.com> wrote:
-> >> The CPUID bits that enumerate support for a feature are independent fr=
-om the CPUID
-> >> bits that enumerate what XCR0 bits are supported, i.e. what features c=
-an be saved
-> >> and restored via XSAVE/XRSTOR.
-> >>=20
-> >> KVM does mostly account for host XCR0, but in a very ad hoc way.  E.g.=
- MPX is
-> >> handled by manually checking host XCR0.
-> >>=20
-> >> 	if (kvm_mpx_supported())
-> >> 		kvm_cpu_cap_check_and_set(X86_FEATURE_MPX);
-> >>=20
-> >> PKU manually checks too, but indirectly by looking at whether or not t=
-he kernel
-> >> has enabled CR4.OSPKE.
-> >>=20
-> >> 	if (!tdp_enabled || !boot_cpu_has(X86_FEATURE_OSPKE))
-> >> 		kvm_cpu_cap_clear(X86_FEATURE_PKU);
-> >>=20
-> >> But unless I'm missing something, the various AVX and AMX bits rely so=
-lely on
-> >> boot_cpu_data, i.e. would break if someone added CONFIG_X86_AVX or CON=
-FIG_X86_AMX.
-> >=20
-> > What if we simply moved static unsigned short xsave_cpuid_features[] =
-=E2=80=A6 into
-> > xstate.h, which is already included in arch/x86/kvm/cpuid.c, and do
-> > something similar to what I=E2=80=99m proposing in this patch already
-> >=20
-> > This would future proof such breakages I=E2=80=99d imagine?
-> >=20
-> > void kvm_set_cpu_caps(void)
-> > {
-> > ...
-> >    /*
-> >     * Clear CPUID for XSAVE features that are disabled.
-> >     */
-> >    for (i =3D 0; i < ARRAY_SIZE(xsave_cpuid_features); i++) {
-> >        unsigned short cid =3D xsave_cpuid_features[i];
-> >=20
-> >        /* Careful: X86_FEATURE_FPU is 0! */
-> >        if ((i !=3D XFEATURE_FP && !cid) || !boot_cpu_has(cid) ||
-> >            !cpu_feature_enabled(cid))
-> >            kvm_cpu_cap_clear(cid);
-> >    }
-> > =E2=80=A6
-> > }
-> >=20
->=20
-> Sean - following up on this rough idea code above, wanted to validate tha=
-t
-> this was the direction you were thinking of having kvm_set_cpu_caps() cle=
-ar
-> caps when a particular xsave feature was disabled?
+On Mon, Jun 05, 2023 at 02:27:15AM +1200,
+Kai Huang <kai.huang@intel.com> wrote:
+> diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
+> new file mode 100644
+> index 000000000000..2d91e7120c90
+> --- /dev/null
+> +++ b/arch/x86/virt/vmx/tdx/tdx.c
+> @@ -0,0 +1,92 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright(c) 2023 Intel Corporation.
+> + *
+> + * Intel Trusted Domain Extensions (TDX) support
+> + */
+> +
+> +#define pr_fmt(fmt)	"tdx: " fmt
+> +
+> +#include <linux/types.h>
+> +#include <linux/cache.h>
+> +#include <linux/init.h>
+> +#include <linux/errno.h>
+> +#include <linux/printk.h>
+> +#include <asm/msr-index.h>
+> +#include <asm/msr.h>
+> +#include <asm/tdx.h>
+> +
+> +static u32 tdx_global_keyid __ro_after_init;
+> +static u32 tdx_guest_keyid_start __ro_after_init;
+> +static u32 tdx_nr_guest_keyids __ro_after_init;
+> +
+> +static int __init record_keyid_partitioning(u32 *tdx_keyid_start,
+> +					    u32 *nr_tdx_keyids)
+> +{
+> +	u32 _nr_mktme_keyids, _tdx_keyid_start, _nr_tdx_keyids;
+> +	int ret;
+> +
+> +	/*
+> +	 * IA32_MKTME_KEYID_PARTIONING:
+> +	 *   Bit [31:0]:	Number of MKTME KeyIDs.
+> +	 *   Bit [63:32]:	Number of TDX private KeyIDs.
+> +	 */
+> +	ret = rdmsr_safe(MSR_IA32_MKTME_KEYID_PARTITIONING, &_nr_mktme_keyids,
+> +			&_nr_tdx_keyids);
+> +	if (ret)
+> +		return -ENODEV;
+> +
+> +	if (!_nr_tdx_keyids)
+> +		return -ENODEV;
+> +
+> +	/* TDX KeyIDs start after the last MKTME KeyID. */
+> +	_tdx_keyid_start = _nr_mktme_keyids + 1;
+> +
+> +	*tdx_keyid_start = _tdx_keyid_start;
+> +	*nr_tdx_keyids = _nr_tdx_keyids;
+> +
+> +	return 0;
+> +}
+> +
+> +static int __init tdx_init(void)
+> +{
+> +	u32 tdx_keyid_start, nr_tdx_keyids;
+> +	int err;
+> +
+> +	err = record_keyid_partitioning(&tdx_keyid_start, &nr_tdx_keyids);
+> +	if (err)
+> +		return err;
+> +
+> +	pr_info("BIOS enabled: private KeyID range [%u, %u)\n",
+> +			tdx_keyid_start, tdx_keyid_start + nr_tdx_keyids);
+> +
+> +	/*
+> +	 * The TDX module itself requires one 'global KeyID' to protect
+> +	 * its metadata.  If there's only one TDX KeyID, there won't be
+> +	 * any left for TDX guests thus there's no point to enable TDX
+> +	 * at all.
+> +	 */
+> +	if (nr_tdx_keyids < 2) {
+> +		pr_info("initialization failed: too few private KeyIDs available.\n");
 
-Ya, more or or less.  But for KVM, that should be kvm_cpu_cap_has(), not bo=
-ot_cpu_has().
-And then I think KVM could actually WARN on a feature being disabled, i.e. =
-put up
-a tripwire to detect if things change in the future and the kernel lets the=
- user
-disable a feature that KVM wants to expose to a guest.
-
-Side topic, I find the "cid" nomenclature super confusing, and the establis=
-hed
-name in KVM is x86_feature.
-
-Something like this?
-
-	for (i =3D 0; i < ARRAY_SIZE(xsave_cpuid_features); i++) {
-		unsigned int x86_feature =3D xsave_cpuid_features[i];
-
-		if (i !=3D XFEATURE_FP && !x86_feature)
-			continue;
-
-		if (!kvm_cpu_cap_has(x86_feature))
-			continue;
-
-		if (WARN_ON_ONCE(!cpu_feature_enabled(x86_feature)))
-			kvm_cpu_cap_clear(x86_feature);
-	}
+Because this case is against the admin expectation, pr_warn() or pr_err()?
+Except that, looks good to me
+Reviewed-by: Isaku Yamahata <isaku.yamahata@intel.com>
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>
