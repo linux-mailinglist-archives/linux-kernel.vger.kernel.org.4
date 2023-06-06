@@ -2,145 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 616B7723629
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 06:20:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9036723630
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 06:22:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232215AbjFFEUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 00:20:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57162 "EHLO
+        id S233895AbjFFEW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 00:22:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbjFFEUL (ORCPT
+        with ESMTP id S230491AbjFFEW0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 00:20:11 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBE7219C;
-        Mon,  5 Jun 2023 21:20:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686025209; x=1717561209;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=nnz9fZvyDWSFCGNXmQbJTPH46HIsD8UF+79vDgHHkkE=;
-  b=ebKEmJoN3pr7fJvr5aS66vdBwRHY7PZfKchFUxL933DpGECr0x8Fe7BZ
-   od36wVa7gjL0eptRVb8EBIy2n824FrMNypgicXgirXrag0cGlehBsMrCf
-   QrfymbjKpdWSGAVX9ZT+1ZRXeq2g7x+zwEFOIsedUSnZo/p1PtD6aFKrQ
-   I5WKohvxm7HcOvTyLrBLWk4wo3BFOht+CpIWb6sFACYQZVWBrfAndp393
-   0kSK0qlBT6bML2VEQmrN7G+7V96Sd1+rYJIZg46562Shbo9EbU79dOzvi
-   TOe1kXhjxj0qsVYMpwjrL0001sRiDTfRvSrWHuXVWbgNF/2iFryITPvgX
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="346154734"
-X-IronPort-AV: E=Sophos;i="6.00,219,1681196400"; 
-   d="scan'208";a="346154734"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 21:20:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="955590355"
-X-IronPort-AV: E=Sophos;i="6.00,219,1681196400"; 
-   d="scan'208";a="955590355"
-Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.254.210.225]) ([10.254.210.225])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 21:20:05 -0700
-Message-ID: <a8e89abd-3480-8568-afcb-2645d2cd3d31@linux.intel.com>
-Date:   Tue, 6 Jun 2023 12:20:03 +0800
+        Tue, 6 Jun 2023 00:22:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3E8E187;
+        Mon,  5 Jun 2023 21:22:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A82D62BF7;
+        Tue,  6 Jun 2023 04:22:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3CD6C433D2;
+        Tue,  6 Jun 2023 04:22:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686025343;
+        bh=HA8kGF+w0RaR5xoeiuzp/X+oqD7Y1cxhfO27BGJ4a9o=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=CAjiwGz9jRt1wuRCN7l43vjBJFw3MqH9Y8RtzsXuuGgR+eJ0ekefvDM1bkEvP2jvh
+         Aj0r1qz46kw8rNpG+xkcd8V3gFTfdCiAtF33TRqScpBFeSDulUQyCEDFqufZyiD6jC
+         ybWbHLaIqlSRdJQYqIFgIZu76mJvr9eCyl/FO90kr8rRmrGI0kenSlouGMDOdqRVla
+         uWrPEAJzn7hl2pz3DOUeUsbc7ViV5krGZ+v8J+cCStfDBKOMykfLfm5xQ3nn49jn/p
+         Ph5qfEY12fob7iT0qC4KGvJJ4f6J5pwiQDRquXsyrdJxtNsL748UsVS1E3k3o//L7Y
+         jS+dpCQ+TdOgA==
+Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-39c4c3da9cbso47004b6e.2;
+        Mon, 05 Jun 2023 21:22:23 -0700 (PDT)
+X-Gm-Message-State: AC+VfDwAd3embYDtaj5YAvoriROu5PhD+qhD4P3ZMlVVpcaK6ECSvBcm
+        zl24u85qXKj0Q2N5wOw/K8JF9pJCS6JsCD3w8rU=
+X-Google-Smtp-Source: ACHHUZ4waYFPoMaU/7NZoJeDy2EZuc956Cje2Cz+WyLBOeKIojGIPGR8qMUkFESrIJkv/j+F4/J+UaZqeqEElEwum+c=
+X-Received: by 2002:a05:6808:b12:b0:39a:9957:9c26 with SMTP id
+ s18-20020a0568080b1200b0039a99579c26mr400127oij.24.1686025343186; Mon, 05 Jun
+ 2023 21:22:23 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v1 5/6] KVM: x86: LASS protection on KVM emulation
-To:     Zeng Guang <guang.zeng@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        H Peter Anvin <hpa@zytor.com>, kvm@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-References: <20230601142309.6307-1-guang.zeng@intel.com>
- <20230601142309.6307-6-guang.zeng@intel.com>
-From:   Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <20230601142309.6307-6-guang.zeng@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230602230014.a435aab03cee.I21ab3b54eeebd638676bead3b2f87417944e44f3@changeid>
+ <CAK7LNAQ87U202fgqkd5T9G82h4F6sNOMW2=vH1HmgAoVA48CMw@mail.gmail.com> <70071209bfa07b38df576c59341b935b9b95ae28.camel@sipsolutions.net>
+In-Reply-To: <70071209bfa07b38df576c59341b935b9b95ae28.camel@sipsolutions.net>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 6 Jun 2023 13:21:47 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATyKdsvD6878RVL+fF0kLm_wcA4XU=5swc3DVY6=TPOTg@mail.gmail.com>
+Message-ID: <CAK7LNATyKdsvD6878RVL+fF0kLm_wcA4XU=5swc3DVY6=TPOTg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] kernel-doc: don't let V=1 change outcome
+To:     Johannes Berg <johannes@sipsolutions.net>
+Cc:     linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/1/2023 10:23 PM, Zeng Guang wrote:
-> Do LASS violation check for instructions emulated by KVM. Note that for
-> instructions executed in the guest directly, hardware will perform the
-> check.
+On Mon, Jun 5, 2023 at 5:19=E2=80=AFPM Johannes Berg <johannes@sipsolutions=
+.net> wrote:
 >
-> Not all instruction emulation leads to accesses to guest linear addresses
-> because 1) some instructions like CPUID, RDMSR, don't take memory as
-> operands 2) instruction fetch in most cases is already done inside the
-> guest.
+> On Mon, 2023-06-05 at 09:36 +0900, Masahiro Yamada wrote:
 >
-> Four cases in which KVM uses a linear address to access guest memory:
-> - KVM emulates instruction fetches or data accesses
-> - KVM emulates implicit data access to a system data structure
-> - VMX instruction emulation
-> - SGX ENCLS instruction emulation
+> > > +if (defined($ENV{'KDOC_WRETURN'})) {
+> > > +       $Wreturn =3D "$ENV{'KDOC_WRETURN'}";
+> > > +}
+> > > +
+> > > +if (defined($ENV{'KDOC_WSHORT_DESC'})) {
+> > > +       $Wshort_desc =3D "$ENV{'KDOC_WSHORT_DESC'}";
+> > > +}
+> > > +
+> > > +if (defined($ENV{'KDOC_WCONTENTS_BEFORE_SECTION'})) {
+> > > +       $Wcontents_before_sections =3D "$ENV{'KDOC_WCONTENTS_BEFORE_S=
+ECTION'}";
+> > > +}
+> > > +
+> > > +if (defined($ENV{'KDOC_WALL'})) {
+> > > +       $Wreturn =3D "$ENV{'KDOC_WALL'}";
+> > > +       $Wshort_desc =3D "$ENV{'KDOC_WALL'}";
+> > > +       $Wcontents_before_sections =3D "$ENV{'KDOC_WALL'}";
+> > > +}
+> >
+> >
+> >
+> > Adding an environment variable to each of them is tedious.
 >
-> LASS violation check applies to these linear addresses so as to enforce
-> mode-based protections as hardware behaves.
+> Agree. And adding one for -Wall is especially tedious because you have
+> to spell out the list of affected warnings in two places :)
 >
-> As exceptions, the target memory address of emulation of invlpg, branch
-> and call instructions doesn't require LASS violation check.
-I think LASS doesn't apply to the target addresses in the descriptors of 
-INVPCID and INVVPID.
-Although no code change needed, IMHO, it's better to describe it in the 
-changelog or/and comments.
-
+> > If you enable -Wall via the command line option,
+> > these lines are unneeded?
+> >
+> > For example,
+> >
+> > ifneq ($(KBUILD_EXTRA_WARN),)
+> >   cmd_checkdoc =3D $(srctree)/scripts/kernel-doc -none \
+> >          $(if $(findstring 2, $(KBUILD_EXTRA_WARN)), -Wall) $<
+> > endif
+> >
 >
-> Signed-off-by: Zeng Guang <guang.zeng@intel.com>
-> Tested-by: Xuelian Guo <xuelian.guo@intel.com>
-> ---
->   arch/x86/kvm/emulate.c    | 30 ++++++++++++++++++++++++++++--
->   arch/x86/kvm/vmx/nested.c |  3 +++
->   arch/x86/kvm/vmx/sgx.c    |  4 ++++
->   3 files changed, 35 insertions(+), 2 deletions(-)
+> Yes, that should be possible.
 >
-[...]
-> diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-> index e35cf0bd0df9..bb1c3fa13c13 100644
-> --- a/arch/x86/kvm/vmx/nested.c
-> +++ b/arch/x86/kvm/vmx/nested.c
-> @@ -4986,6 +4986,9 @@ int get_vmx_mem_address(struct kvm_vcpu *vcpu, unsigned long exit_qualification,
->   		 * destination for long mode!
->   		 */
->   		exn = is_noncanonical_address(*ret, vcpu);
-> +
-> +		if (!exn)
-> +			exn = vmx_check_lass(vcpu, 0, *ret, 0);
-Can be simpler by using logical-or:
+> I feel like maybe we should still have individual settings for the three
+> different classes, because you might want to have -Wshort-desc without
+> the extra -Wcontents-before-sections (which I thought about removing
+> entirely, kernel-doc seems to parse just fine that way, what's the point
+> of it?)
+>
+> But we could even move the env var handling _completely_ to the Makefile
+> if you don't mind, and then we don't have to have two places in the
+> script that need to be aligned all the time.
 
-exn = is_noncanonical_address(*ret, vcpu) || vmx_check_lass(vcpu, 0, *ret, 0);
+Yes, probably that will be a good idea.
 
 
 
->   	} else {
->   		/*
->   		 * When not in long mode, the virtual/linear address is
-> diff --git a/arch/x86/kvm/vmx/sgx.c b/arch/x86/kvm/vmx/sgx.c
-> index 2261b684a7d4..3825275827eb 100644
-> --- a/arch/x86/kvm/vmx/sgx.c
-> +++ b/arch/x86/kvm/vmx/sgx.c
-> @@ -46,6 +46,10 @@ static int sgx_get_encls_gva(struct kvm_vcpu *vcpu, unsigned long offset,
->   			((s.base != 0 || s.limit != 0xffffffff) &&
->   			(((u64)*gva + size - 1) > s.limit + 1));
->   	}
-> +
-> +	if (!fault && is_long_mode(vcpu))
-> +		fault = vmx_check_lass(vcpu, 0, *gva, 0);
-> +
->   	if (fault)
->   		kvm_inject_gp(vcpu, 0);
->   	return fault ? -EINVAL : 0;
-
+--=20
+Best Regards
+Masahiro Yamada
