@@ -2,52 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 614F7724BAE
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 20:46:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB10C724BAF
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 20:47:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239073AbjFFSqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 14:46:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55178 "EHLO
+        id S238867AbjFFSrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 14:47:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238572AbjFFSqG (ORCPT
+        with ESMTP id S233835AbjFFSrH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 14:46:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F15F9E42;
-        Tue,  6 Jun 2023 11:46:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 84DDD61238;
-        Tue,  6 Jun 2023 18:46:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B54C3C433D2;
-        Tue,  6 Jun 2023 18:46:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686077163;
-        bh=T0RyLdGfc21xsWDQUnUoisT3w5J4nNOMhqlDCeQuh7I=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=E591/OdISbdE1NHpAYxY5WLKXZb76PLRy9Ojh09XQYnEQwN0Pijnrzn1Hi7ddsnD5
-         lf6xZUqAfZiODNpODDSnm8Oy64o2V+tD9IuDQN0+Lkz04KLEsjIsWpTICXrIszqhvl
-         F/06y2r1mxj8K8KhHuNpxw3O2deSGOpTJ51IFvcZdxFNDb/FpJKyuyL3uL6erHRsNe
-         ekTWkWjDD88sXM7SZQLJWdtUcrGgnzuPQphC1vMa79H1Yvk18wHDQ6LxGmPslXJ7X3
-         Jf5HQwhygRIqiudSRQTFkrz9XyPdc+x84rYa/RhZlRm6TFRmCo0k4XNbvU7oDeDzNf
-         DfdnIwoDxJoWg==
-Date:   Tue, 6 Jun 2023 13:46:02 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Sui Jingfeng <suijingfeng@loongson.cn>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] linux/pci.h: add a dummy implement for pci_clear_master()
-Message-ID: <20230606184602.GA1134277@bhelgaas>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <dd2409ed-dac2-30b5-783d-8d84e38ad5c9@loongson.cn>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        Tue, 6 Jun 2023 14:47:07 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06AA01BDC
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 11:46:41 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-565a66a5d84so92700827b3.0
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 11:46:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686077200; x=1688669200;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8vjpQ/gPzw4IAJmjKfdYy1HzHlAdIXHWfCI3TgMZlwU=;
+        b=ypxK+3K3Wqh9SEziB1wlVd3OXIxJkoZxUU29TjkP4NQfcmqUjYpzEI0ZCaGkW9laDX
+         nlSauA7rwSDQTkXavXsmp2sFJQwjlS7Z7N8rlBs/HGdQAO+X6saXMRiRUwSZ2QsSo8Oc
+         ECKz0m4J/WylJgGkqyV5saqIXdWNicH0E5miuOcb2beDdzJkL1jGRsJny8+chyiyklgQ
+         m+6gNf7c7+JO4bl04XWNNlAxUEa93DKd5AkQ/W0WvN3qWS3eOJLtq97gP2573eH0BSnR
+         WYCeeAcpO+8GjAkkxNN3FK7QMMh35AWVvnzwEGVp6iTvwWiflZuLsF3V/vEcbQwBnBIi
+         Eknw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686077200; x=1688669200;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8vjpQ/gPzw4IAJmjKfdYy1HzHlAdIXHWfCI3TgMZlwU=;
+        b=ChVLUejd1QIQcou8ab3sUBQXiRBYewl3vx+Go4a7IjM+kIp6ubc2LgAkdtEjlQtgOH
+         icIW8uS+vDmsymKQw5U4mzgd9/ME6kHAFaov7GGz2WB/JDVEg/W+TRjwt0TwiERs9gaD
+         fIaTqiaDp3ATsBB6FJgAZG5wwQWR44wO5OVN5gUlKtLs+Na13D5OPtcX8/OQyC5c/aDW
+         yLlYY+nbHTnoy3EwLSdLpYjNuLgV4F6sb4pzIfCkfM6B+BWC6qmuqv3Vpw+TQ62+yiw7
+         DluXJ/H+AUSxst5fhgSgklUimcfCpuj9GF72MWd8HKWXpSAf45TY5nMJXtO1Gr08Xa1V
+         JLbw==
+X-Gm-Message-State: AC+VfDxmHXIxdxZwupEqOHWARAvC7jIj+znsS4YIeMftRsm32YRetfFA
+        zcFWdv1S3Pac51Hrw0a71Xk/3z+hUfk=
+X-Google-Smtp-Source: ACHHUZ7D4X5yRQTBWsHRPpLKxwHpepmjLlEx5mAwqv7Ydx6p+XrFcpF8l2408/KWu4GJ21U8881K0JtJPa4=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a81:b619:0:b0:565:b20e:5b28 with SMTP id
+ u25-20020a81b619000000b00565b20e5b28mr1565461ywh.8.1686077200223; Tue, 06 Jun
+ 2023 11:46:40 -0700 (PDT)
+Date:   Tue, 6 Jun 2023 11:46:38 -0700
+In-Reply-To: <20230522161249.800829-3-aleksandr.mikhalitsyn@canonical.com>
+Mime-Version: 1.0
+References: <20230522161249.800829-1-aleksandr.mikhalitsyn@canonical.com> <20230522161249.800829-3-aleksandr.mikhalitsyn@canonical.com>
+Message-ID: <ZH9/Drgo+sDYTGIG@google.com>
+Subject: Re: [PATCH v2 2/2] KVM: SVM: enhance info printk's in SEV init
+From:   Sean Christopherson <seanjc@google.com>
+To:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Cc:     pbonzini@redhat.com,
+        "=?iso-8859-1?Q?St=E9phane?= Graber" <stgraber@ubuntu.com>,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,111 +72,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 01:48:38AM +0800, Sui Jingfeng wrote:
-> On 2023/6/7 00:13, Bjorn Helgaas wrote:
-> > On Tue, May 30, 2023 at 06:16:55PM +0800, Sui Jingfeng wrote:
-> > > As some arch(m68k for example) doesn't have config_pci enabled, drivers[1]
-> > > call pci_clear_master() without config_pci guard can not built.
-> > > 
-> > >     drivers/gpu/drm/etnaviv/etnaviv_pci_drv.c:
-> > >     In function 'etnaviv_gpu_pci_fini':
-> > > > > drivers/gpu/drm/etnaviv/etnaviv_pci_drv.c:32:9:
-> > >     error: implicit declaration of function 'pci_clear_master';
-> > >     did you mean 'pci_set_master'? [-Werror=implicit-function-declaration]
-> > >        32 |         pci_clear_master(pdev);
-> > >           |         ^~~~~~~~~~~~~~~~
-> > >           |         pci_set_master
-> > >     cc1: some warnings being treated as errors
-> > > 
-> > > [1] https://patchwork.freedesktop.org/patch/539977/?series=118522&rev=1
-> > > 
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> > > Closes: https://lore.kernel.org/oe-kbuild-all/202305301659.4guSLavL-lkp@intel.com/
-> > > Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
-> > I applied this to pci/misc for v6.5, with commit log as below.
-> > 
-> > But I suspect that it might make your life easier if you include it
-> > with your etnaviv series.  You may be able to avoid adding the
-> > CONFIG_DRM_ETNAVIV_PCI_DRIVER symbol.
-> > 
-> > If so, feel free to include this patch in that series with my ack:
-> > 
-> > Acked-by: Bjorn Helgaas <bhelgaas@google.com>
-> 
-> I do want add this tag to my all  of the patches in the drm/etnaviv series,
-> thanks.
-> 
-> and I really love you this idea.
+On Mon, May 22, 2023, Alexander Mikhalitsyn wrote:
+> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+> index cc832a8d1bca..fff63d1f2a34 100644
+> --- a/arch/x86/kvm/svm/sev.c
+> +++ b/arch/x86/kvm/svm/sev.c
+> @@ -2224,7 +2224,6 @@ void __init sev_hardware_setup(void)
+>  		goto out;
+>  	}
+>  
+> -	pr_info("SEV supported: %u ASIDs\n", sev_asid_count);
+>  	sev_supported = true;
+>  
+>  	/* SEV-ES support requested? */
+> @@ -2252,10 +2251,16 @@ void __init sev_hardware_setup(void)
+>  	if (misc_cg_set_capacity(MISC_CG_RES_SEV_ES, sev_es_asid_count))
+>  		goto out;
+>  
+> -	pr_info("SEV-ES supported: %u ASIDs\n", sev_es_asid_count);
+>  	sev_es_supported = true;
+>  
+>  out:
+> +	if (boot_cpu_has(X86_FEATURE_SEV))
+> +		pr_info("SEV %s (ASIDs %u - %u)\n",
+> +			sev_supported ? "enabled" : "disabled", min_sev_asid, max_sev_asid);
+> +	if (boot_cpu_has(X86_FEATURE_SEV_ES))
+> +		pr_info("SEV-ES %s (ASIDs %u - %u)\n",
+> +			sev_es_supported ? "enabled" : "disabled", 1, min_sev_asid - 1);
 
-Just to be clear, my ack only applies to the addition of the
-pci_clear_master() stub in pci.h.  It does not apply to the patches in
-the drm/etnaviv series at
-https://lore.kernel.org/r/20230603105943.3042766-1-15330273260@189.cn
+The min should print '0' if min_sev_asid<=1, otherwise the output will be
 
-> > If you do include it in your series, please use the commit log below
-> > and let me know so I can drop it from my queue.
-> 
-> No, please keep this patch merged by you.
-> 
-> Because this patch belong to drivers/pci, Its belong to you domain.
-> 
-> 
-> I might choose to  remove the CONFIG_DRM_ETNAVIV_PCI_DRIVER option at next
-> version
-> 
-> of my drm/etnaviv patch If it arrived to drm/tip branch.
-> 
-> 
-> But I guess some reviewers may still prefer a CONFIG_DRM_ETNAVIV_PCI_DRIVER
-> option,
-> 
-> depend on the attitude of etnaviv folks.
+	SEV-ES disabled (ASIDs 1 - 0)
 
-The purpose of my ack is to enable you to merge the patch along with
-the series that uses it.  This is a normal way of handling things that
-cross subsystem boundaries, so you don't need to feel uncomfortable
-about it.
+which is confusing.  That would also align with what gets printed out for SEV
+when it's not supported at all (min==max=0).
 
-It is much more difficult to remove config options than it is to add
-them, because you must ensure that the removal doesn't break old
-.config files.
-
-I will keep this patch in my queue unless you tell me to drop it.
-
-Bjorn
-
-> >    Author: Sui Jingfeng <suijingfeng@loongson.cn>
-> >    Date:   Wed May 31 18:27:44 2023 +0800
-> > 
-> >      PCI: Add pci_clear_master() stub for non-CONFIG_PCI
-> >      Add a pci_clear_master() stub when CONFIG_PCI is not set so drivers that
-> >      support both PCI and platform devices don't need #ifdefs or extra Kconfig
-> >      symbols for the PCI parts.
-> >      [bhelgaas: commit log]
-> >      Fixes: 6a479079c072 ("PCI: Add pci_clear_master() as opposite of pci_set_master()")
-> >      Link: https://lore.kernel.org/r/20230531102744.2354313-1-suijingfeng@loongson.cn
-> >      Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
-> >      Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> >      Acked-by: Bjorn Helgaas <bhelgaas@google.com>
-> > 
-> > > ---
-> > >   include/linux/pci.h | 1 +
-> > >   1 file changed, 1 insertion(+)
-> > > 
-> > > diff --git a/include/linux/pci.h b/include/linux/pci.h
-> > > index d0c19ff0c958..71c85380676c 100644
-> > > --- a/include/linux/pci.h
-> > > +++ b/include/linux/pci.h
-> > > @@ -1904,6 +1904,7 @@ static inline int pci_dev_present(const struct pci_device_id *ids)
-> > >   #define pci_dev_put(dev)	do { } while (0)
-> > >   static inline void pci_set_master(struct pci_dev *dev) { }
-> > > +static inline void pci_clear_master(struct pci_dev *dev) { }
-> > >   static inline int pci_enable_device(struct pci_dev *dev) { return -EIO; }
-> > >   static inline void pci_disable_device(struct pci_dev *dev) { }
-> > >   static inline int pcim_enable_device(struct pci_dev *pdev) { return -EIO; }
-> > > -- 
-> > > 2.25.1
-> > > 
-> -- 
-> Jingfeng
-> 
+No need for v3, I'll fixup when applying.
