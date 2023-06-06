@@ -2,180 +2,286 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51B1A724156
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 13:54:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B579724150
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 13:50:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235757AbjFFLyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 07:54:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39620 "EHLO
+        id S232274AbjFFLuj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 07:50:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231883AbjFFLyT (ORCPT
+        with ESMTP id S230394AbjFFLuh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 07:54:19 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABC5AE7D
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 04:54:15 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 7684D5FD1B;
-        Tue,  6 Jun 2023 14:54:13 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1686052453;
-        bh=+ZZfKmQj6/YLWqBngVi0EkQ9ZjUSOi285N/+oCXONrE=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=GPR3O3h0XKEek0LjFeWDuk/NcU99TDjPaCUJr8vGd+9TYzv4aXmazirIoUziHUwKJ
-         jw9P8gLEmRrc6mo4AOSr7TM1SASrvscD0y3FxUGF8zk7wqg5f5Fa63sYpOD773WAr/
-         a0vIT8R0W4YbVOy7pIe+daG3svT7/AanFxKBdi0R3m5vqDLASRBFtbBqRcmX+rFAXo
-         U2rf1h3xupdXQYUoT22jo3eN+iY4PwONOSS9312hBVatTYXB9YpeIf63gb4I/RMb05
-         Wbe695HdSzT3DlUYbTBCDSkx9BCPwsK03FnjJ7frPleC4lmIR2zO7hkdudHPSR9T9F
-         3QZ5uG+enFNZA==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Tue,  6 Jun 2023 14:54:11 +0300 (MSK)
-Message-ID: <5c98362c-1808-d7d2-bff8-c2f2f3ae0e89@sberdevices.ru>
-Date:   Tue, 6 Jun 2023 14:49:19 +0300
+        Tue, 6 Jun 2023 07:50:37 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E03186
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 04:50:34 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f6042d610fso59713805e9.1
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 04:50:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1686052233; x=1688644233;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=M8EMdDbUjL4XG7fKUoOhrnPZTq4GDBikqz9MMG7h3Ms=;
+        b=0iEo/LQwrBp18M+mlla+WZPg8zD6VUftXMqEqoamYj2IFMWTRFiPxVpmyIG0i7hkwp
+         RvF99UqwHuCJ9cNjtNL/UO/xI/QaufRRcQRyjAnyLjSLPYpHoLSZIqQSaJLuIV5FeVxi
+         IzTEhQjRDOi2uTG8PQEPGdqjjisLaY+HjqcWVEZx2te0qddzTv4od1Gjz9rq3LwpMvzc
+         SAVomgSns9DtbtDXoIXEtGHzkprqPP4is9ZafMP1nUGz/22KoajsZbC13CPQU1hybNjY
+         H3l6g+HwFQYy9GnF7n9iWMq6fm985tK22H+p8ERqeZ57WAuZaHxhsdEyE0YS0DQZaq9M
+         2oQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686052233; x=1688644233;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=M8EMdDbUjL4XG7fKUoOhrnPZTq4GDBikqz9MMG7h3Ms=;
+        b=D/L53tcWAnEM1+Gn9aMX+36qmOuSSJQAERVObrLFMoN3AvSAhHqmwuMxdSwKOVemmX
+         +OBZtJavoyogvrb8uc/BSU2LvrmyiMRt2rSF1gJuMA/wGF4I37h21xArDB85ecjusy2J
+         APyBZS0g1sHke0uDdprSVxfp7qaCVivllSsmANi+O5c0jkHf5DrjBy8G1RL339WQ7CPA
+         kNdtMVIm8riF+oSXXwmXTmax711QDj+IWsSZhVMbLU5xjwciM+vHoQkP5iuPOS0L2kRR
+         tWX7LPhEcXLFHC5CIlyB0gR0k5A37gdX5ufg3iryeBimjMLJZ4MKu1yilXONbW6Xjpp8
+         VnhQ==
+X-Gm-Message-State: AC+VfDzDYhwPIraxWWxuimFxY8xkqlBU6FxuLAnxdzByVdctkpNMcEl8
+        qRrMWiicR1mbb7ljRmCt6O2Thlfjn8PtPLKiN4S79w==
+X-Google-Smtp-Source: ACHHUZ4yXUvuBO5X7qRkwpBWDs/S+5TEqbHk3bWzmiq87QHNzuu/tCrZzng4Yydws5clqLOUcTCgfYYRczIBqF0NMuA=
+X-Received: by 2002:a05:600c:2158:b0:3f6:f56:5e82 with SMTP id
+ v24-20020a05600c215800b003f60f565e82mr1847496wml.3.1686052233249; Tue, 06 Jun
+ 2023 04:50:33 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH v5 2/6] mtd: rawnand: meson: wait for command in
- polling mode
-Content-Language: en-US
-To:     Liang Yang <liang.yang@amlogic.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-CC:     Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
-        <linux-mtd@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-References: <20230601061850.3907800-1-AVKrasnov@sberdevices.ru>
- <20230601061850.3907800-3-AVKrasnov@sberdevices.ru>
- <20230601100751.41c3ff0b@xps-13>
- <9e106d50-2524-c999-48b1-a20760238aaf@sberdevices.ru>
- <20230605110546.6cb00a8d@xps-13>
- <2a755783-1d56-9842-2eee-b5ab41152c81@amlogic.com>
- <163e0684-caff-77d0-1eaf-9a58290c200d@amlogic.com>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-In-Reply-To: <163e0684-caff-77d0-1eaf-9a58290c200d@amlogic.com>
+References: <tencent_7C3B580B47C1B17C16488EC1@qq.com> <CAHVXubjm5ax5KYTV_G=GUUH0KJK=v6_jO09XF1T4AzzUTr0CSg@mail.gmail.com>
+ <ZH37WMnx/rYSRF/o@sunil-laptop> <CAOnJCU+v-tinJb3=FY9GKzR=CGc+AE45wVdpVVZLSG1WOR2PLA@mail.gmail.com>
+ <0855b8d6-e1e0-fea6-2b15-d7cc66d34e02@ghiti.fr> <ZH716mJDnHlj1OBz@sunil-laptop>
+In-Reply-To: <ZH716mJDnHlj1OBz@sunil-laptop>
+From:   Alexandre Ghiti <alexghiti@rivosinc.com>
+Date:   Tue, 6 Jun 2023 13:50:22 +0200
+Message-ID: <CAHVXubjEyexKuSgyDj4EOy+FCi5mxLPUAqKrJQL5FeX5VPb4eA@mail.gmail.com>
+Subject: Re: Bug report: kernel paniced while booting
+To:     Sunil V L <sunilvl@ventanamicro.com>
+Cc:     Alexandre Ghiti <alex@ghiti.fr>,
+        Atish Patra <atishp@atishpatra.org>,
+        Song Shuai <songshuaishuai@tinylab.org>,
+        robh <robh@kernel.org>, ajones <ajones@ventanamicro.com>,
+        anup <anup@brainfault.org>, palmer <palmer@rivosinc.com>,
+        "jeeheng.sia" <jeeheng.sia@starfivetech.com>,
+        "leyfoon.tan" <leyfoon.tan@starfivetech.com>,
+        "mason.huo" <mason.huo@starfivetech.com>,
+        "paul.walmsley" <paul.walmsley@sifive.com>,
+        "conor.dooley" <conor.dooley@microchip.com>,
+        guoren <guoren@kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/06/06 07:40:00 #21442908
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jun 6, 2023 at 11:01=E2=80=AFAM Sunil V L <sunilvl@ventanamicro.com=
+> wrote:
+>
+> On Tue, Jun 06, 2023 at 09:20:34AM +0200, Alexandre Ghiti wrote:
+> >
+> > On 05/06/2023 22:55, Atish Patra wrote:
+> > > On Mon, Jun 5, 2023 at 8:13=E2=80=AFAM Sunil V L <sunilvl@ventanamicr=
+o.com> wrote:
+> > > > On Mon, Jun 05, 2023 at 04:25:06PM +0200, Alexandre Ghiti wrote:
+> > > > > Hi Song,
+> > > > >
+> > > > > On Mon, Jun 5, 2023 at 12:52=E2=80=AFPM Song Shuai <songshuaishua=
+i@tinylab.org> wrote:
+> > > > > > Description of problem:
+> > > > > >
+> > > > > > Booting Linux With RiscVVirtQemu edk2 firmware, a Store/AMO pag=
+e fault was trapped to trigger a kernel panic.
+> > > > > > The entire log has been posted at this link : https://termbin.c=
+om/nga4.
+> > > > > >
+> > > > > > You can reproduce it with the following step :
+> > > > > >
+> > > > > > 1. prepare the environment with
+> > > > > >     - Qemu-virt:  v8.0.0 (with OpenSbi v1.2)
+> > > > > >     - edk2 : at commit (2bc8545883 "UefiCpuPkg/CpuPageTableLib:=
+ Reduce the number of random tests")
+> > > > > >     - Linux : v6.4-rc1 and later version
+> > > > > >
+> > > > > > 2. start the Qemu virt board
+> > > > > >
+> > > > > > ```sh
+> > > > > > $ cat ~/8_riscv/start_latest.sh
+> > > > > > #!/bin/bash
+> > > > > > /home/song/8_riscv/3_acpi/qemu/ooo/usr/local/bin/qemu-system-ri=
+scv64 \
+> > > > > >          -s -nographic -drive file=3D/home/song/8_riscv/3_acpi/=
+Build_virt/RiscVVirtQemu/RELEASE_GCC5/FV/RISCV_VIRT.fd,if=3Dpflash,format=
+=3Draw,unit=3D1 \
+> > > > > >          -machine virt,acpi=3Doff -smp 2 -m 2G \
+> > > > > >          -kernel /home/song/9_linux/linux/00_rv_def/arch/riscv/=
+boot/Image \
+> > > > > >          -initrd /home/song/8_riscv/3_acpi/buildroot/output/ima=
+ges/rootfs.ext2 \
+> > > > > >          -append "root=3D/dev/ram ro console=3DttyS0 earlycon=
+=3Duart8250,mmio,0x10000000 efi=3Ddebug loglevel=3D8 memblock=3Ddebug" ## a=
+lso panic by memtest
+> > > > > > ```
+> > > > > > 3. Then you will encounter the kernel panic logged in the above=
+ link
+> > > > > >
+> > > > > > Other Information:
+> > > > > >
+> > > > > > 1. -------
+> > > > > >
+> > > > > > This report is not identical to my prior report -- "kernel pani=
+ced when system hibernates" [1], but both of them
+> > > > > > are closely related with the commit (3335068f8721 "riscv: Use P=
+UD/P4D/PGD pages for the linear mapping").
+> > > > > >
+> > > > > > With this commit, hibernation is trapped with "access fault" wh=
+ile accessing the PMP-protected regions (mmode_resv0@80000000)
+> > > > > > from OpenSbi (BTW, hibernation is marked as nonportable by Cono=
+r[2]).
+> > > > > >
+> > > > > > In this report, efi_init handoffs the memory mapping from Boot =
+Services to memblock where reserves mmode_resv0@80000000,
+> > > > > > so there is no "access fault" but "page fault".
+> > > > > >
+> > > > > > And reverting commit 3335068f8721 indeed fixed this panic.
+> > > > > >
+> > > > > > 2. -------
+> > > > > >
+> > > > > > As the gdb-pt-dump [3] tool shows, the PTE which covered the fa=
+ult virtual address had the appropriate permission to store.
+> > > > > > Is there another way to trigger the "Store/AMO page fault"? Or =
+the creation of linear mapping in commit 3335068f8721 did something wrong?
+> > > > > >
+> > > > > > ```
+> > > > > > (gdb) p/x $satp
+> > > > > > $1 =3D 0xa000000000081708
+> > > > > > (gdb) pt -satp 0xa000000000081708
+> > > > > >               Address :     Length   Permissions
+> > > > > >    0xff1bfffffea39000 :     0x1000 | W:1 X:0 R:1 S:1
+> > > > > >    0xff1bfffffebf9000 :     0x1000 | W:1 X:0 R:1 S:1
+> > > > > >    0xff1bfffffec00000 :   0x400000 | W:1 X:0 R:1 S:1
+> > > > > >    0xff60000000000000 :   0x1c0000 | W:1 X:0 R:1 S:1
+> > > > > >    0xff60000000200000 :   0xa00000 | W:0 X:0 R:1 S:1
+> > > > > >    0xff60000000c00000 : 0x7f000000 | W:1 X:0 R:1 S:1  // badadd=
+r: ff6000007fdb1000
+> > > > > >    0xff6000007fdc0000 :    0x3d000 | W:1 X:0 R:1 S:1
+> > > > > >    0xff6000007ffbf000 :     0x1000 | W:1 X:0 R:1 S:1
+> > > > > >    0xffffffff80000000 :   0xc00000 | W:0 X:1 R:1 S:1
+> > > > > >    0xffffffff80c00000 :   0xa00000 | W:1 X:0 R:1 S:1
+> > > > > >
+> > > > > > ```
+> > > > > >
+> > > > > > 3. ------
+> > > > > >
+> > > > > > You can also reproduce similar panic by appending "memtest" in =
+kernel cmdline.
+> > > > > > I have posted the memtest boot log at this link: https://termbi=
+n.com/1twl.
+> > > > > >
+> > > > > > Please correct me if I'm wrong.
+> > > > > >
+> > > > > > [1]: https://lore.kernel.org/linux-riscv/CAAYs2=3DgQvkhTeioMmqR=
+DVGjdtNF_vhB+vm_1dHJxPNi75YDQ_Q@mail.gmail.com/
+> > > > > > [2]: https://lore.kernel.org/linux-riscv/20230526-astride-deton=
+ator-9ae120051159@wendy/
+> > > > > > [3]: https://github.com/martinradev/gdb-pt-dump
+> > > > > Thanks for the thorough report, really appreciated.
+> > > > >
+> > > > > So there are multiple issues here:
+> > > > >
+> > > > > - the first one is that the memory region for opensbi is marked a=
+s not
+> > > > > cacheable in the efi memory map, and then this region is not mapp=
+ed in
+> > > > > the linear mapping:
+> > > > > [    0.000000] efi:   0x000080000000-0x00008003ffff [Reserved    =
+|   |
+> > > > >   |  |  |  |  |  |  |  |   |  |  |  |UC]
+> > > > >
+> > > @Alex: The OpenSBI region is marked reserved because EDK2 chooses to
+> > > do that explicitly as explained by Sunil.
+> > > I don't think UC has to do anything with it. All the EFI memory regio=
+ns are UC.
+> >
+> >
+> > Oops, thanks for correcting me, UC has nothing to do with that indeed, =
+I
+> > misread is_usable_memory() (https://elixir.bootlin.com/linux/latest/sou=
+rce/drivers/firmware/efi/efi-init.c#L127):
+> > EFI_RESERVED_TYPE will return false.
+> >
+> > And then this region won't get mapped, so that's the equivalent of "no-=
+map".
+> >
+> >
+> > >
+> > > > > - the second one (that I feel a bit ashamed of...) is that I did =
+not
+> > > > > check the alignment of the virtual address when choosing the map =
+size
+> > > > > in best_map_size() and then we end up trying to map a physical re=
+gion
+> > > > > aligned on 2MB that is actually not aligned on 2MB virtually beca=
+use
+> > > > > the opensbi region is not mapped at all.
+> > > > >
+> > > > > - the possible third one is that we should not map the linear map=
+ping
+> > > > > using 4K pages, this would be slow in my opinion, and I think we
+> > > > > should waste a bit of memory to align va and pa on a 2MB boundary=
+.
+> > > > >
+> > > > > So I'll fix the second issue, and possibly the third one, and if =
+no
+> > > > > one looks into why the opensbi region is mapped in UC, I'll take =
+a
+> > > > > look at edk2.
+> > > > >
+> > > > Hi Alex,
+> > > >
+> > > > EDK2 marks opensbi range as reserved memory in EFI map. According t=
+o DT
+> > > > spec, if the no-map is not set, we need to mark it as
+> > > > EfiBootServicesData but EfiBootServicesData is actually considered =
+as
+> > > > free memory in kernel, as per UEFI spec. To avoid kernel using this
+> > > > memory, we deviated from the DT spec for opensbi ranges.
+> > > >
+> > > IMO, that should be the correct way unless we can change it to
+> > > EfiRunServicesData/Code.
+> >
+> >
+> > I'd say that everything depends on "reusable" no?
+> >
+> > If "no-map" then
+> >    EfiReserved
+> > else
+> >    if reusable then
+> >       EfiBootServicesData
+> >    else
+> >       EfiRuntimeServicesData
+> >    endif
+> > endif
+> >
+> Hi Alex,
+>
+> Is this your proposal or documented somewhere? If it is proposal, this
+> option was intentionally not allowed as I understand from Ard's response
+> at [1].
+>
+> [1] - https://github.com/ARM-software/ebbr/issues/52#issuecomment-6903622=
+94
 
+You mean because EfiRuntimeServicesData are actually not mapped in the
+linear mapping by the kernel right? In that case, yes you're right!
 
-On 05.06.2023 16:30, Liang Yang wrote:
-> 
-> 
-> On 2023/6/5 21:19, Liang Yang wrote:
->> Hi Miquel and Arseniy,
->>
->>
->> On 2023/6/5 17:05, Miquel Raynal wrote:
->>> [ EXTERNAL EMAIL ]
->>>
->>> Hi Arseniy,
->>>
->>>>>> @@ -1412,6 +1419,8 @@ static int meson_nfc_probe(struct platform_device *pdev)
->>>>>>             return ret;
->>>>>>     }
->>>>>>
->>>>>> +  nfc->use_polling = of_property_read_bool(dev->of_node, "polling");
->>>>>
->>>>> This is a problem. You cannot add a polling property like that.
->>>>>
->>>>> There is already a nand-rb property which is supposed to carry how are
->>>>> wired the RB lines. I don't see any in-tree users of the compatibles, I
->>>>> don't know how acceptable it is to consider using soft fallback when
->>>>> this property is missing, otherwise take the values of the rb lines
->>>>> provided in the DT and user hardware control, but I would definitely
->>>>> prefer that.
->>>>
->>>> I see. So i need to implement processing of this property here? And if it
->>>> is missed -> use software waiting. I think interesting thing will be that:
->>>>
->>>> 1) Even with support of this property here, I really don't know how to pass
->>>>     RB values to this controller - I just have define for RB command and that's
->>>>     it. I found that this property is an array of u32 - IIUC each element is
->>>>     RB pin per chip. May be i need to dive into the old vendor's driver to find
->>>>     how to use RB values (although this driver uses software waiting so I'm not
->>>>     sure that I'll find something in it).
->>>
->>> Liang, can you please give use the relevant information here? How do we
->>> target RB0 and RB1? It seems like you use the CS as only information
->>> like if the RB lines where hardwired internally to a CS. Can we invert
->>> the lines with a specific configuration?
->>
->> Controllor has only one external RB pinmux (NAND_RB0). all the RB pins
->> of different CEs need to be bound into one wire and connect with
->> NAND_RB0 if want to use controller polling rb. the current operating
->> CE of NAND is decided to "chip_select", of course controller internally has different nfc commands to regconize which Ce's RB signal is polling.
->>
->> <&nand_pins> in dts/yaml should include the NAND_RB0 if hardware connects, or use software polling here.
->>
->> @Arseniy, sorry, i don't travel all the informations yet. but why don't you use the new RB_INT command with irq that i provided in another thread. the new RB_INT command doesn't depend on the physical RB wires, it also send the READ status command(0x70) and wait for the irq wake up completion.
-> 
-> Use "nand-rb" in dts to decide old RB_INT(physical RB wires is needed) or new RB_INT(no physical RB wires). the new RB_INT command decides the RB0 or RB1 by the previous command with ce args.
-> 
->>
->>> Arseniy, if the answer to my above question is no, then you should
->>> expect the nand-rb and reg arrays to be identical. If they are not,
->>> then you can return -EINVAL.
->>>
->>> If the nand-rb property is missing, then fallback to software wait.
->>>
->>>> 2) I can't test RB mode - I don't have such device :(
->>>>
->>>> Also for example in arasan-nand-controller.c parsed 'nand-rb' values are used
->>>> in controller specific register for waiting (I guess Meson controller has something
->>>> like that, but I don't have doc). While in marvell_nand.c it looks like that they parse
->>>> 'nand-rb' property, but never use it.
->>>
->>> Yes, the logic around the second RB line (taking care of CS1/CS3) is
->>> slightly broken or at least badly documented, and thus should not be
->>> used.
->>>
->>>>> In any case you'll need a dt-binding update which must be acked by
->>>>> dt-binding maintainers.
->>>>
->>>> You mean to add this property desc to Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yaml ?
->>>
->>> Yes. In a dedicated patch. Something along the lines:
->>>
->>>          nand-rb: true
->>>
->>> inside the nand chip object should be fine. And flag the change as a
->>> fix because we should have used and parsed this property since the
->>> beginning.
-
-Miquel,
-
-Small remark, do we really need to add this 'nand-rb' to the chip object, as Liang said,
-that there is only one RB wire (e.g. only one or nothing)? Maybe for Meson I can add it to the
-meson controller structure?
-
-Thanks, Arseniy
-
->>>
->>> Thanks,
->>> Miquèl
+>
+> Thanks,
+> Sunil
