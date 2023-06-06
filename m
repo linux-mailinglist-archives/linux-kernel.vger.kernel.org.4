@@ -2,186 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E9BC72473B
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 17:05:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00BDD724808
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 17:41:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237621AbjFFPF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 11:05:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39090 "EHLO
+        id S238635AbjFFPk6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 11:40:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237579AbjFFPFx (ORCPT
+        with ESMTP id S238647AbjFFPkg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 11:05:53 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 186A8100
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 08:05:49 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (om126253223039.31.openmobile.ne.jp [126.253.223.39])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id AA7D5AB;
-        Tue,  6 Jun 2023 17:05:21 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1686063922;
-        bh=LQjegiIG8BMujsnbKmP/q3x3xUNYgLrk3GkkEuJd7OY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cm/08jSQ1FFOaLX4cNxHRraaxnvhX9iXfXLhQ83gsRS7X+j4Gfqc75j08FvlNwJsc
-         r4e1Gy9ecEm+RcxDDdrlyvPMQVAOrRZqqqv5qIimyY0UsulY82cVMCAdVWeqaIROZl
-         KY3BI3UaHOr+5BQ7R0jQam85Cp/XmiYyRDWMKS1o=
-Date:   Tue, 6 Jun 2023 18:05:45 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Siddh Raman Pant <code@siddh.me>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Suraj Upadhyay <usuraj35@gmail.com>
-Subject: Re: [PATCH v9 0/8] drm: Remove usage of deprecated DRM_* macros
-Message-ID: <20230606150545.GJ5197@pendragon.ideasonboard.com>
-References: <cover.1686047727.git.code@siddh.me>
+        Tue, 6 Jun 2023 11:40:36 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80E8E100
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 08:40:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686066035; x=1717602035;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=JJbvRmCCUFV7p9M3l0n0kZA62PxQNfMx1/Z0AS4CdW4=;
+  b=ZuzRX1BDwFN+zwvnLJeHFE5sjeZKovmzY3QANB1aV+4jrKGNhU3Bb1JB
+   H/wfRripsf66oTHCRWrkDY72agIyFvj71Bu5LwNPyaCkd3ngRWjd9ValZ
+   Lpstc/XhMIVPqT6Z6UM1UeEhBoWnJ31HeWHcYAxYHCg1r7RPM76twASXT
+   mJV7Jns0Hv3tFoHCdnnMPp6Y611LpqRYWKLuhX8KvCkSSVNMbtKYO9Vqb
+   up6qCkyXXd4rWPhlbjvTm9J8ADero+QGOOS/1nNwTikoi/WVQB15PDVwz
+   PtAO4mBTFQU84SBvuiLsCD0/74SJYNUwsLu3JXs+p4gzJT2eV26sy8M2y
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="422550267"
+X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
+   d="scan'208";a="422550267"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 08:39:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="955816530"
+X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
+   d="scan'208";a="955816530"
+Received: from pdonvalk-mobl2.amr.corp.intel.com (HELO [10.255.231.168]) ([10.255.231.168])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 08:39:15 -0700
+Message-ID: <b9487589-7149-cdbe-59f3-d5279f25b02e@linux.intel.com>
+Date:   Tue, 6 Jun 2023 10:06:28 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <cover.1686047727.git.code@siddh.me>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.11.0
+Subject: Re: [PATCH V3 9/9] ASoC: amd: ps: Add SoundWire specific checks in
+ pci driver in pm ops.
+Content-Language: en-US
+To:     Vijendar Mukunda <Vijendar.Mukunda@amd.com>, broonie@kernel.org
+Cc:     alsa-devel@alsa-project.org, Basavaraj.Hiregoudar@amd.com,
+        Sunil-kumar.Dommati@amd.com, Mastan.Katragadda@amd.com,
+        Arungopal.kondaveeti@amd.com, mario.limonciello@amd.com,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Syed Saba Kareem <Syed.SabaKareem@amd.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230606060724.2038680-1-Vijendar.Mukunda@amd.com>
+ <20230606060724.2038680-10-Vijendar.Mukunda@amd.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20230606060724.2038680-10-Vijendar.Mukunda@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Siddh,
 
-On Tue, Jun 06, 2023 at 04:15:14PM +0530, Siddh Raman Pant wrote:
-> This patchset aims to remove usages of deprecated DRM_* macros from the
-> files residing in drivers/gpu/drm root.
-> 
-> In process, I found out that NULL as first argument of drm_dbg_* wasn't
-> working, but it was listed as the alternative in deprecation comment,
-> so I fixed that before removing usages of DRM_DEBUG_* macros.
-> 
-> Courtesy discussion on v1, I added support for NULL in drm_()* macros too.
-> 
-> Courtesy discussion on v7, I removed generic macro stuff meant to accomodate
-> stuff like mipi_dsi_host, and instead reverted a commit which used the
-> drm_err() macro incorrectly by passing mipi_dsi_host.
-> 
-> This patchset should be applied in order as changes might be dependent.
-> 
-> Please review and let me know if any errors are there, and hopefully
-> this gets accepted.
 
-This is a nice series, thank you for working on that.
-
-Now that the deprecated macros are used in drivers only, would it make
-sense to move them to a drm_print_deprecated.h header, to make sure no
-new driver uses them ?
-
+On 6/6/23 01:07, Vijendar Mukunda wrote:
+> AMD SoundWire manager supports different power modes.
+> In case of SoundWire Power off Mode, ACP pci parent driver
+> should invoke acp de-init and init sequence during suspend/resume
+> callbacks.
+> 
+> Signed-off-by: Vijendar Mukunda <Vijendar.Mukunda@amd.com>
 > ---
+>  sound/soc/amd/ps/pci-ps.c | 18 ++++++++++++++----
+>  1 file changed, 14 insertions(+), 4 deletions(-)
 > 
-> v8 -> v9 (today):
-> - Rebased to drm-misc-next.
-> 
-> v7 -> v8 (28 Feb 2023):
-> - Reverted 1040e424353f ("drm: mipi-dsi: Convert logging to drm_* functions.")
->   which used drm_err macro incorrectly by passing mipi_dsi_host.
-> - Thus, removed _Generic and allow only drm_device.
-> 
-> v6 -> v7 (26 Feb 2023):
-> - Rebased to drm-misc-next, accounting for the merger of last 3 patches
->   in the previous series (4665280990fa, fc2602b553c8, 7bd224b6625a),
->   and 7428ff70a18 ("drm: initialize accel framework").
-> 
-> v5 -> v6 (09 Jan 2023):
-> - Move drm_device to default case in _Generic as it is the default behaviour.
-> - Fix incorrect const drm_device handling in _Generic.
-> - Minor positioning / comment changes.
-> 
-> v4 -> v5 (07 Jan 2023):
-> - Make separate function instead of using boolean in _Generic (sravn on IRC).
-> - Also, simplified the Generic macro, and renamed the function and macro.
-> 
-> v3 -> v4 (05 Jan 2023):
-> - Fix commit message for DRM_NOTE erroneously mentioning DRM_INFO.
-> - Rebased to drm-misc-next, as 723dad977acd added drm_dbg_core() to some
->   files.
-> - Move Generic out to a separate macro __drm_get_dev_ptr, so that interface
->   of drm_dbg_*() is also same as other drm_*() macros.
-> - Fix comment in __drm_get_dev_ptr (now ___drm_get_dev_ptr) to use correct
->   name.
-> 
-> v2 -> v3 (26 Dec 2022):
-> - Added support for NULL in __drm_printk and thus by extension to drm_()*.
-> - Thus, converted dropped pr_()* changes to drm_*(NULL, ...).
-> - Rebased to drm-misc-next and resulting appropriate changes.
-> 
-> v1 (20 Dec 2022) -> v2 (22 Dec 2022):
-> - Removed conversions to pr_*() in DRM_INFO, DRM_NOTE, and DRM_ERROR changes.
-> - Due to above, DRM_NOTE usage cannot be removed and the patch is dropped.
-> - DRY: NULL support is now achieved by way of a separate function.
-> 
-> Siddh Raman Pant (8):
->   Revert "drm: mipi-dsi: Convert logging to drm_* functions."
->   drm/print: Fix and add support for NULL as first argument in drm_*
->     macros
->   drm: Remove usage of deprecated DRM_INFO
->   drm: Remove usage of deprecated DRM_NOTE
->   drm: Remove usage of deprecated DRM_ERROR
->   drm: Remove usage of deprecated DRM_DEBUG
->   drm: Remove usage of deprecated DRM_DEBUG_DRIVER
->   drm: Remove usage of deprecated DRM_DEBUG_KMS
-> 
->  drivers/gpu/drm/drm_agpsupport.c        |   4 +-
->  drivers/gpu/drm/drm_bridge.c            |   8 +-
->  drivers/gpu/drm/drm_bufs.c              | 122 ++++++++++++------------
->  drivers/gpu/drm/drm_client_modeset.c    | 118 +++++++++++++----------
->  drivers/gpu/drm/drm_color_mgmt.c        |   4 +-
->  drivers/gpu/drm/drm_connector.c         |  28 +++---
->  drivers/gpu/drm/drm_context.c           |  18 ++--
->  drivers/gpu/drm/drm_crtc.c              |  36 ++++---
->  drivers/gpu/drm/drm_crtc_helper.c       |  62 ++++++------
->  drivers/gpu/drm/drm_debugfs_crc.c       |   8 +-
->  drivers/gpu/drm/drm_displayid.c         |   6 +-
->  drivers/gpu/drm/drm_dma.c               |  10 +-
->  drivers/gpu/drm/drm_drv.c               |  28 +++---
->  drivers/gpu/drm/drm_edid.c              |  17 ++--
->  drivers/gpu/drm/drm_flip_work.c         |   2 +-
->  drivers/gpu/drm/drm_framebuffer.c       |   3 +-
->  drivers/gpu/drm/drm_gem.c               |   7 +-
->  drivers/gpu/drm/drm_gem_dma_helper.c    |   2 +-
->  drivers/gpu/drm/drm_hashtab.c           |  10 +-
->  drivers/gpu/drm/drm_irq.c               |   4 +-
->  drivers/gpu/drm/drm_kms_helper_common.c |   2 +-
->  drivers/gpu/drm/drm_lease.c             |   4 +-
->  drivers/gpu/drm/drm_legacy_misc.c       |   4 +-
->  drivers/gpu/drm/drm_lock.c              |  36 +++----
->  drivers/gpu/drm/drm_mipi_dbi.c          |  19 ++--
->  drivers/gpu/drm/drm_mipi_dsi.c          |  15 +--
->  drivers/gpu/drm/drm_mm.c                |   8 +-
->  drivers/gpu/drm/drm_mode_config.c       |   2 +-
->  drivers/gpu/drm/drm_mode_object.c       |   6 +-
->  drivers/gpu/drm/drm_modes.c             |  36 +++----
->  drivers/gpu/drm/drm_modeset_helper.c    |   2 +-
->  drivers/gpu/drm/drm_pci.c               |  14 +--
->  drivers/gpu/drm/drm_plane.c             |  46 ++++-----
->  drivers/gpu/drm/drm_probe_helper.c      |  39 ++++----
->  drivers/gpu/drm/drm_rect.c              |   4 +-
->  drivers/gpu/drm/drm_scatter.c           |  19 ++--
->  drivers/gpu/drm/drm_syncobj.c           |   2 +-
->  drivers/gpu/drm/drm_sysfs.c             |  22 ++---
->  drivers/gpu/drm/drm_vm.c                |  45 +++++----
->  include/drm/drm_print.h                 |  81 ++++++++++------
->  40 files changed, 480 insertions(+), 423 deletions(-)
+> diff --git a/sound/soc/amd/ps/pci-ps.c b/sound/soc/amd/ps/pci-ps.c
+> index daf54fe9cafd..5802a701b3b1 100644
+> --- a/sound/soc/amd/ps/pci-ps.c
+> +++ b/sound/soc/amd/ps/pci-ps.c
+> @@ -662,10 +662,15 @@ static int snd_acp63_probe(struct pci_dev *pci,
+>  static int __maybe_unused snd_acp63_suspend(struct device *dev)
+>  {
+>  	struct acp63_dev_data *adata;
+> -	int ret;
+> +	int ret = 0;
+>  
+>  	adata = dev_get_drvdata(dev);
+> -	ret = acp63_deinit(adata->acp63_base, dev);
+> +	if (adata->pdev_mask & ACP63_SDW_DEV_MASK) {
 
--- 
-Regards,
+And now back to my comment from the first patch, you are using a
+bit-wise operation with an enum which is not explicitly defined as a
+mask. This test would be true for ACP63_SDW_PDM_DEV_MASK as well.
 
-Laurent Pinchart
++enum acp_pdev_mask {
++	ACP63_PDM_DEV_MASK = 1,
++	ACP63_SDW_DEV_MASK,
++	ACP63_SDW_PDM_DEV_MASK,
++};
+
+> +		if (adata->acp_reset)
+> +			ret = acp63_deinit(adata->acp63_base, dev);
+> +	} else {
+> +		ret = acp63_deinit(adata->acp63_base, dev);
+> +	}
+>  	if (ret)
+>  		dev_err(dev, "ACP de-init failed\n");
+>  	return ret;
+> @@ -674,10 +679,15 @@ static int __maybe_unused snd_acp63_suspend(struct device *dev)
+>  static int __maybe_unused snd_acp63_resume(struct device *dev)
+>  {
+>  	struct acp63_dev_data *adata;
+> -	int ret;
+> +	int ret = 0;
+>  
+>  	adata = dev_get_drvdata(dev);
+> -	ret = acp63_init(adata->acp63_base, dev);
+> +	if (adata->pdev_mask & ACP63_SDW_DEV_MASK) {
+> +		if (adata->acp_reset)
+> +			ret = acp63_init(adata->acp63_base, dev);
+> +	} else {
+> +		ret = acp63_init(adata->acp63_base, dev);
+> +	}
+>  	if (ret)
+>  		dev_err(dev, "ACP init failed\n");
+>  	return ret;
