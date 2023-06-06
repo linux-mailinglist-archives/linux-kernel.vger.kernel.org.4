@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E71972467C
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:40:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09D8172467D
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:40:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238345AbjFFOkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 10:40:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42034 "EHLO
+        id S238350AbjFFOks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 10:40:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238254AbjFFOj0 (ORCPT
+        with ESMTP id S238096AbjFFOj2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 10:39:26 -0400
+        Tue, 6 Jun 2023 10:39:28 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D35C91FD8
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 07:38:27 -0700 (PDT)
-Message-ID: <20230606142033.225765113@linutronix.de>
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5535B1FDE
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 07:38:29 -0700 (PDT)
+Message-ID: <20230606142033.278111872@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686062301;
+        s=2020; t=1686062302;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=FIVxxbxY5nm7gn9Zivm/IXjYdCBMNgvVCHW/aP5AbxI=;
-        b=G6i/iDvAKRjpnjskrO4KtqHQuYJKJRrXwL2YweYtiuegs0NCLAy6Pb25JWXlFoQwMKyfpR
-        1nRwTmeynWyQ4FMaNIv5tDh+79wZYFWD31QE57op231XuvU37+E/JZs8aMd/eV4nTWMtrC
-        cSoO1FqNmROB5HyQI6MP98mhXwmjO8W4CM+1W6BrKA3UYPJMrtLf98GHN9i/CxU9IxWhq7
-        NpTmwR769D1GgHACm2qoDWQrWjBQsOmN7RyHGBe1iTcHqS6nDcVrMAE/mTD+KJ0aspBt5Y
-        2XRZAzo/z2Wx6OIMcm/j+qk/PEFXZLct23pJPTZac0jmRFxVqXZrd2IHQX5hqA==
+         references:references; bh=Uv3+NRg/Kf1yCAL/nMP1t/I/1XH205FZqRDMC4g6F7E=;
+        b=Nt7Cp8cks3GA6mTuqXJmwXQsjXCEORcSPqUYS7EZkdTdEUAPwg6tMSXVbab6r4bownb+1I
+        xOvqJUeBBA+eRMtdMWauNtYTmPrcXPFSOBSD5WCeWES6yZyG6gS8CyGS6zISG0nZaKPl5a
+        VboyMwT5HJHmvVIJQ0FvVydOxhLx1akpwG+Vt0RHyFl3TrI/N4AJx1nsu+jNQ+wYXHhKwd
+        TYlqOpe4ijaMUFlgM3oY+xOBcFX0slYk5iwAT/G7o68wiD4/QS2M7qv+VQ9roAvlx06a5H
+        oe34ahABp5FcXz76n8VG0Ba2Z2F4Bc94vfi4351U9FyyuGPO1FcjxOno9r+XOw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686062301;
+        s=2020e; t=1686062302;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=FIVxxbxY5nm7gn9Zivm/IXjYdCBMNgvVCHW/aP5AbxI=;
-        b=Vge8TkXGkw3jGg0X9UkQfMUAPmd57LOptsE0K6Wi3GYHsXdCwD/sfyqwSZmzU1CooGTGkg
-        R6GpuyzvnFWsO8CA==
+         references:references; bh=Uv3+NRg/Kf1yCAL/nMP1t/I/1XH205FZqRDMC4g6F7E=;
+        b=rSKcKGs6zOPvDRlV0uIw8qAWPWHuL2cEJvKN1zMRHu51x0sQPhlDha8JpkYs/qCMdMAoLs
+        PjOUop+JBZVpT+DQ==
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     Frederic Weisbecker <frederic@kernel.org>,
@@ -43,11 +43,11 @@ Cc:     Frederic Weisbecker <frederic@kernel.org>,
         Stephen Boyd <sboyd@kernel.org>,
         Eric Biederman <ebiederm@xmission.com>,
         Oleg Nesterov <oleg@redhat.com>
-Subject: [patch 39/45] signal: Provide ignored_posix_timers list
+Subject: [patch 40/45] posix-timers: Handle ignored list on delete and exit
 References: <20230606132949.068951363@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date:   Tue,  6 Jun 2023 16:38:20 +0200 (CEST)
+Date:   Tue,  6 Jun 2023 16:38:22 +0200 (CEST)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
@@ -58,51 +58,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To prepare for handling posix timer signals on sigaction(SIG_IGN) properly,
-add a list to task::signal.
+To handle posix timer signals on sigaction(SIG_IGN) properly, the timers
+will be queued on a separate ignored list.
 
-This list will be used to queue posix timers so their signal can be
-requeued when SIG_IGN is lifted later.
+Add the necessary cleanup code for timer_delete() and exit_itimers().
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 ---
- include/linux/sched/signal.h |    1 +
- init/init_task.c             |    5 +++--
- kernel/fork.c                |    1 +
- 3 files changed, 5 insertions(+), 2 deletions(-)
+ include/linux/posix-timers.h |    4 +++-
+ kernel/time/posix-timers.c   |   22 ++++++++++++++++++++++
+ 2 files changed, 25 insertions(+), 1 deletion(-)
 
---- a/include/linux/sched/signal.h
-+++ b/include/linux/sched/signal.h
-@@ -137,6 +137,7 @@ struct signal_struct {
- 	/* POSIX.1b Interval Timers */
- 	unsigned int		next_posix_timer_id;
- 	struct hlist_head	posix_timers;
-+	struct hlist_head	ignored_posix_timers;
+--- a/include/linux/posix-timers.h
++++ b/include/linux/posix-timers.h
+@@ -214,7 +214,8 @@ static inline void posix_cputimers_init_
  
- 	/* ITIMER_REAL timer for the process */
- 	struct hrtimer real_timer;
---- a/init/init_task.c
-+++ b/init/init_task.c
-@@ -28,8 +28,9 @@ static struct signal_struct init_signals
- 	.cred_guard_mutex = __MUTEX_INITIALIZER(init_signals.cred_guard_mutex),
- 	.exec_update_lock = __RWSEM_INITIALIZER(init_signals.exec_update_lock),
- #ifdef CONFIG_POSIX_TIMERS
--	.posix_timers	= HLIST_HEAD_INIT,
--	.cputimer	= {
-+	.posix_timers		= HLIST_HEAD_INIT,
-+	.ignored_posix_timers	= HLIST_HEAD_INIT,
-+	.cputimer		= {
- 		.cputime_atomic	= INIT_CPUTIME_ATOMIC,
- 	},
- #endif
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -1881,6 +1881,7 @@ static int copy_signal(unsigned long clo
+ /**
+  * struct k_itimer - POSIX.1b interval timer structure.
+- * @list:		List head for binding the timer to signals->posix_timers
++ * @list:		List node for binding the timer to tsk::signal::posix_timers
++ * @ignored_list:	List node for tracking ignored timers in tsk::signal::ignored_posix_timers
+  * @t_hash:		Entry in the posix timer hash table
+  * @it_lock:		Lock protecting the timer
+  * @kclock:		Pointer to the k_clock struct handling this timer
+@@ -237,6 +238,7 @@ static inline void posix_cputimers_init_
+  */
+ struct k_itimer {
+ 	struct hlist_node	list;
++	struct hlist_node	ignored_list;
+ 	struct hlist_node	t_hash;
+ 	spinlock_t		it_lock;
+ 	const struct k_clock	*kclock;
+--- a/kernel/time/posix-timers.c
++++ b/kernel/time/posix-timers.c
+@@ -1032,6 +1032,18 @@ int common_timer_del(struct k_itimer *ti
+ 	return 0;
+ }
  
- #ifdef CONFIG_POSIX_TIMERS
- 	INIT_HLIST_HEAD(&sig->posix_timers);
-+	INIT_HLIST_HEAD(&sig->ignored_posix_timers);
- 	hrtimer_init(&sig->real_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
- 	sig->real_timer.function = it_real_fn;
- #endif
++/*
++ * If the deleted timer is on the ignored list, remove it and
++ * drop the associated reference.
++ */
++static inline void posix_timer_cleanup_ignored(struct k_itimer *tmr)
++{
++	if (!hlist_unhashed(&tmr->ignored_list)) {
++		hlist_del_init(&tmr->ignored_list);
++		posixtimer_putref(tmr);
++	}
++}
++
+ static inline int timer_delete_hook(struct k_itimer *timer)
+ {
+ 	const struct k_clock *kc = timer->kclock;
+@@ -1064,6 +1076,7 @@ SYSCALL_DEFINE1(timer_delete, timer_t, t
+ 
+ 	spin_lock(&current->sighand->siglock);
+ 	hlist_del(&timer->list);
++	posix_timer_cleanup_ignored(timer);
+ 	spin_unlock(&current->sighand->siglock);
+ 	/*
+ 	 * A concurrent lookup could check timer::it_signal lockless. It
+@@ -1115,6 +1128,8 @@ static void itimer_delete(struct k_itime
+ 	}
+ 	hlist_del(&timer->list);
+ 
++	posix_timer_cleanup_ignored(timer);
++
+ 	/*
+ 	 * Setting timer::it_signal to NULL is technically not required
+ 	 * here as nothing can access the timer anymore legitimately via
+@@ -1150,6 +1165,13 @@ void exit_itimers(struct task_struct *ts
+ 		tmr = hlist_entry(timers.first, struct k_itimer, list);
+ 		itimer_delete(tmr);
+ 	}
++
++	/* Mop up timers which are on the ignored list */
++	hlist_move_list(&tsk->signal->ignored_posix_timers, &timers);
++	while (!hlist_empty(&timers)) {
++		tmr = hlist_entry(timers.first, struct k_itimer, list);
++		posix_timer_cleanup_ignored(tmr);
++	}
+ }
+ 
+ SYSCALL_DEFINE2(clock_settime, const clockid_t, which_clock,
 
