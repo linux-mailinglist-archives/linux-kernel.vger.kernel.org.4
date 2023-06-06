@@ -2,144 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 241D9723DBB
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 11:35:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C17E723D6C
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 11:30:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233337AbjFFJfo convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 6 Jun 2023 05:35:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45274 "EHLO
+        id S237045AbjFFJaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 05:30:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237733AbjFFJf1 (ORCPT
+        with ESMTP id S229998AbjFFJa2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 05:35:27 -0400
-Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2C7CE6B;
-        Tue,  6 Jun 2023 02:35:26 -0700 (PDT)
-Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-558cf19575dso1490483eaf.3;
-        Tue, 06 Jun 2023 02:35:26 -0700 (PDT)
+        Tue, 6 Jun 2023 05:30:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 026ECE62
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 02:29:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686043779;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hLqddK56/VOqKWL6TPavU9Pj8Wm/0NiaRm8Lo3WR5yQ=;
+        b=aNiybn+sOvNSr8zk92E2kWYOgzmx7XtA306qilLXjeHpEzI8jPn2V+ySJRiUQCl51BMWgd
+        189aeF0MSYjMr3760NU7wMH6s7mB4d7fXn1SoowkBFYemRAf2PTmifcK6Iwqjdv88jYxzk
+        kMBq9zA6lhHF6OwsmRjMqY3pmrjJOWw=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-631-U_HTfStxPRSdi_sFKK067g-1; Tue, 06 Jun 2023 05:29:37 -0400
+X-MC-Unique: U_HTfStxPRSdi_sFKK067g-1
+Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-970e0152da7so488703466b.2
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 02:29:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686044126; x=1688636126;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/ZvMEy864MwTP2VbOIQdW/FR/SOtiCNc16GfTX7zCXs=;
-        b=DL3It4Ca5xJL/vrKrqFBS9qmXsmu3UKzAg1VS+THcByn5cqRrkqYYoRy7Cx563ryEF
-         +jQ8LwKnGZug6cXlyR9SDaHb2Lh+h0CWc9y/8gNGOmZyAXo1v1Y7JohAKdmu0NkIo1Mb
-         aecOs4cvMhjA5j5jQIIam/rlVdRLCoaNYlS/goZjkHTaSILCJd8p2RsG1mn9tY504Ibn
-         KVb+rzaSVZzPQavhuOoGaw/rcnAoOPKQMYMx1B6iez2mTBUb0XAY9SSBC9PPrlJXudUS
-         KsDh8rUXLN2UxwzfhA4Av4lDw/bC5sQozlUJFUHwOaE4fvm6sz2CGhwxhNRhxdODEkSf
-         0k4A==
-X-Gm-Message-State: AC+VfDwP0Whb3napDvq0mUv1kUApSnDUoDg0JZJe6C8GtoNLFgzTd1jf
-        4puVAT1yrGXLkR90d6VEvoA8am9aMjL3jw==
-X-Google-Smtp-Source: ACHHUZ74uwk7tLOm3rALLOfpRcP3tLWD/D7I3Nks2fgxWfU5uoiBSZm7WX8ZjKo+uHkFWxJyeu3ILA==
-X-Received: by 2002:a4a:a688:0:b0:558:b5b2:72fe with SMTP id f8-20020a4aa688000000b00558b5b272femr1155642oom.2.1686044125525;
-        Tue, 06 Jun 2023 02:35:25 -0700 (PDT)
-Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com. [209.85.210.47])
-        by smtp.gmail.com with ESMTPSA id j15-20020a9d7f0f000000b006a43519523fsm4207977otq.1.2023.06.06.02.35.25
+        d=1e100.net; s=20221208; t=1686043777; x=1688635777;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hLqddK56/VOqKWL6TPavU9Pj8Wm/0NiaRm8Lo3WR5yQ=;
+        b=ZUNETQ23Lr+0P1y3i1XhjeLj3kr3rYkbuzXZMdhqrPS7BR4+GlNP9dMVZl2gh1zH6y
+         tqpUrKGAOBiM3QNluVAQYqCAtRaAQUP8OQMZTDhbTeYJ1hATtylPkLLjyIo9b9gxK83K
+         xAfQRwIuq3v5IZ4E9bumT2H/s8SUAU0vY1JTPf6CV7LpoSyrSOchwS8YR5bCLbOAXHRb
+         /qbdEz/r1/0XBKjzF4MHLblDsD/6bsZSS4xOIWCwdwryA4hdc32yO6DY+bsaYHAKNP16
+         eQqV8I2rzjf8lQRayBn7AHLvlkd62feCe5DwIIvuZ15YpTS09uJN7CT8ZcKamdPlAI8W
+         ub4g==
+X-Gm-Message-State: AC+VfDzQnu/Q/lYtkpxqv2+c4Xt61Ve7AY15s2KMqlj1koLHpHqxQMzW
+        FgD/6C8m1zk4zxvLpdfarmzXMc6N6VhtG8XWhl7ptTQBajubrRmQ3jFh+euV3oewUjIrMTjEb0y
+        XIx9X5y7+57Gs8gYXPVt1yJU9
+X-Received: by 2002:a17:907:2ce5:b0:973:903c:35a4 with SMTP id hz5-20020a1709072ce500b00973903c35a4mr2076547ejc.65.1686043776825;
+        Tue, 06 Jun 2023 02:29:36 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6EXRiSuEJC0Xld3SJGaWeiae6Bz2o8dNnaUNiiKbxcL4+i7TKvtpOMJda2aVlnj2nXVDZ+4A==
+X-Received: by 2002:a17:907:2ce5:b0:973:903c:35a4 with SMTP id hz5-20020a1709072ce500b00973903c35a4mr2076531ejc.65.1686043776534;
+        Tue, 06 Jun 2023 02:29:36 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id l1-20020a17090615c100b0096a742beb68sm5266459ejd.201.2023.06.06.02.29.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Jun 2023 02:35:25 -0700 (PDT)
-Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-6b16cbe4fb6so1808314a34.1;
-        Tue, 06 Jun 2023 02:35:25 -0700 (PDT)
-X-Received: by 2002:a0d:cb47:0:b0:565:c96b:f526 with SMTP id
- n68-20020a0dcb47000000b00565c96bf526mr1400799ywd.19.1686043729823; Tue, 06
- Jun 2023 02:28:49 -0700 (PDT)
+        Tue, 06 Jun 2023 02:29:35 -0700 (PDT)
+Message-ID: <776f19d5-96d7-cb20-84a3-ba97bf78efb0@redhat.com>
+Date:   Tue, 6 Jun 2023 11:29:35 +0200
 MIME-Version: 1.0
-References: <CA+G9fYv0a-XxXfG6bNuPZGT=fzjtEfRGEYwk3n6M1WhEHUPo9g@mail.gmail.com>
- <CA+G9fYueN0xti1SDtYVZstPt104sUj06GfOzyqDNrd3s3xXBkA@mail.gmail.com>
- <CAMuHMdX7hqipiMCF9uxpU+_RbLmzyHeo-D0tCE_Hx8eTqQ7Pig@mail.gmail.com> <11bd37e9-c62e-46ba-9456-8e3b353df28f@app.fastmail.com>
-In-Reply-To: <11bd37e9-c62e-46ba-9456-8e3b353df28f@app.fastmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 6 Jun 2023 11:28:38 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUH2Grrv6842YWXHDmd+O3iHdwqTVjYf8f1nbVRzGA+6w@mail.gmail.com>
-Message-ID: <CAMuHMdUH2Grrv6842YWXHDmd+O3iHdwqTVjYf8f1nbVRzGA+6w@mail.gmail.com>
-Subject: Re: arm: shmobile_defconfig: ld.lld: error: undefined symbol: lynx_pcs_destroy
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-next <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Netdev <netdev@vger.kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        maxime.chevallier@bootlin.com,
-        Simon Horman <simon.horman@corigine.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] platform/x86:intel/pmc: Remove Meteor Lake S platform
+ support
+Content-Language: en-US, nl
+To:     Xi Pardee <xi.pardee@intel.com>
+Cc:     irenic.rajneesh@gmail.com, linux-kernel@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, rajvi.jingar@intel.com,
+        david.e.box@linux.intel.com
+References: <20230601004706.871528-1-xi.pardee@intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230601004706.871528-1-xi.pardee@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+Hi,
 
-On Tue, Jun 6, 2023 at 11:16 AM Arnd Bergmann <arnd@arndb.de> wrote:
-> On Tue, Jun 6, 2023, at 11:01, Geert Uytterhoeven wrote:
-> > On Tue, Jun 6, 2023 at 10:53 AM Naresh Kamboju
-> > <naresh.kamboju@linaro.org> wrote:
-> >> On Tue, 6 Jun 2023 at 14:17, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
-> >> > Following build regressions found while building arm shmobile_defconfig on
-> >> > Linux next-20230606.
-> >> >
-> >> > Regressions found on arm:
-> >> >
-> >> >  - build/clang-16-shmobile_defconfig
-> >> >  - build/gcc-8-shmobile_defconfig
-> >> >  - build/gcc-12-shmobile_defconfig
-> >> >  - build/clang-nightly-shmobile_defconfig
-> >>
-> >> And mips defconfig builds failed.
-> >> Regressions found on mips:
-> >>
-> >>   - build/clang-16-defconfig
-> >>   - build/gcc-12-defconfig
-> >>   - build/gcc-8-defconfig
-> >>   - build/clang-nightly-defconfig
-> >
-> > Please give my fix a try:
-> > https://lore.kernel.org/linux-renesas-soc/7b36ac43778b41831debd5c30b5b37d268512195.1686039915.git.geert+renesas@glider.be
->
-> This won't work when PCS_LYNX is a loadable module and
-> STMMAC is built-in. I think we should just select PCS_LYNX
+On 6/1/23 02:47, Xi Pardee wrote:
+> commit c5ad454a12c6 ("platform/x86: intel/pmc/core: Add Meteor Lake
+> support to pmc core driver") was supposed to add support for Meter
+> Lake P/M and mistakenly added support for Meteor Lake S instead. Meteor
+> Lake P/M support was added later and MTL-S support needs to be removed
+> since its currently assigned to the wrong register maps.
+> 
+> Fixes: c5ad454a12c6 ("platform/x86: intel/pmc/core: Add Meteor Lake support to pmc core driver")
+> Signed-off-by: Xi Pardee <xi.pardee@intel.com>
+> Signed-off-by: David E. Box <david.e.box@linux.intel.com>
 
-Oops, you're right, forgot about that case.
-What about using IS_REACHABLE() instead?
-No, that won't work either, as DWMAC_SOCFPGA can be modular,
-with STMMAC builtin.
+Thank you for your patch, I've applied this patch to my review-hans 
+branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
 
-> unconditionally from stmmac even if no front-end driver
-> using it is enabled.
->
-> I tried to come up with a way to move the dependency into
-> the altera specific front-end, but couldn't find an obvious
-> or simple way to do this.
->
-> Having a proper abstraction for PCS drivers instead of
-> directly calling into exported driver symbols might help
-> here, but that would add complexity elsewhere.
+Note it will show up in my review-hans branch once I've pushed my
+local branch there, which might take a while.
 
-Gr{oetje,eeting}s,
+Once I've run some tests on this branch the patches there will be
+added to the platform-drivers-x86/for-next branch and eventually
+will be included in the pdx86 pull-request to Linus for the next
+merge-window.
 
-                        Geert
+Regards,
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Hans
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+
+
+> ---
+>  drivers/platform/x86/intel/pmc/core.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/platform/x86/intel/pmc/core.c b/drivers/platform/x86/intel/pmc/core.c
+> index da6e7206d38b..b8711330e411 100644
+> --- a/drivers/platform/x86/intel/pmc/core.c
+> +++ b/drivers/platform/x86/intel/pmc/core.c
+> @@ -1039,7 +1039,6 @@ static const struct x86_cpu_id intel_pmc_core_ids[] = {
+>  	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_P,        tgl_core_init),
+>  	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE,		adl_core_init),
+>  	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_S,	adl_core_init),
+> -	X86_MATCH_INTEL_FAM6_MODEL(METEORLAKE,          mtl_core_init),
+>  	X86_MATCH_INTEL_FAM6_MODEL(METEORLAKE_L,	mtl_core_init),
+>  	{}
+>  };
+
