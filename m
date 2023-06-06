@@ -2,67 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F033724E8B
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 23:13:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5A39724E8D
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 23:13:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233893AbjFFVNU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 17:13:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35958 "EHLO
+        id S237466AbjFFVNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 17:13:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231303AbjFFVNR (ORCPT
+        with ESMTP id S233902AbjFFVNj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 17:13:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F9B41701
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 14:13:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CE57D60B83
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 21:13:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFCA1C433D2;
-        Tue,  6 Jun 2023 21:13:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686085995;
-        bh=R04WYpn2Yn/2CI+p7yTj26c1Zcz5H3XWzXyGd969w1w=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=tOG3vGI9CgA0P3q+XPd+npFBCvAWDee15veR3ePiUB38NyTVaDsylmOE9W5kBD2dQ
-         KdI02sONG/xZUDqGgMumQBY3dj0HyWwo7pt0KjVTVPvFwWKgpUAc+7U2fiMClvgIt5
-         GWnngAINtxCsYptJG2NMhOpgHQKyPcWknASBOfY+UavKOYmnNpsbdZSeUrfntKgcFs
-         4p1id2yuXh+I3ymYAUvW9t2U0aC00+PczG7iDLXb3Il1lZl5bccEK/Gnb5EMMZEXp7
-         GaxLdL/4uRCFisAcGYJl5E9TYZ6fdjLaZXXw34kpddMRLQlv0q3vPZtq7m6sWKiQH0
-         vg4BKJMDC9TAw==
-Date:   Tue, 6 Jun 2023 14:13:14 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc:     <wei.fang@nxp.com>, <claudiu.manoil@nxp.com>,
-        <vladimir.oltean@nxp.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <pabeni@redhat.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net] net: enetc: correct the indexes of highest and 2nd
- highest TCs
-Message-ID: <20230606141314.7d82d9ad@kernel.org>
-In-Reply-To: <ZH+MBdlRAybwqFo8@boxer>
-References: <20230606084618.1126471-1-wei.fang@nxp.com>
-        <ZH+MBdlRAybwqFo8@boxer>
+        Tue, 6 Jun 2023 17:13:39 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42D471720
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 14:13:38 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id 3f1490d57ef6-ba81ded8d3eso7932925276.3
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 14:13:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1686086017; x=1688678017;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=39uw5j5XuTGu9DjyN0cv5Al3Po6ZxhAFPhk3sdMi2Fw=;
+        b=DKJQTgOo05HezKqlZ9DS24TwMox0bUnFdDpVF3dgI7CN2ObBD3SaEYsbUktmTDW3nM
+         cHhKGrXhZu1KqsaCP9jnv0Bp34rx+PYS100YfKOKjM4mxA02CdLOte/kP9xZfzXsU7Jr
+         TVsk8/Y9qLEb8qdVpsBs1+1hJa/fIPVVsmVwSC5ndAVa7wzGueVULvzXn1GP/M9Y8MiN
+         qDmSp76aEitGo90Zj5XHY850+R8ZbbjUNosIBlhmd+7ntSi4yOLtYtjUq1hxRFx85V8u
+         f4aBwZg4fN7Z3DJuHteCJdtybkK6yfduBhNRkpMcRce73D+gy8uTl0/tRwQ7+GYiVlCC
+         vHzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686086017; x=1688678017;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=39uw5j5XuTGu9DjyN0cv5Al3Po6ZxhAFPhk3sdMi2Fw=;
+        b=E82T6qoy/vdMGGA8rDEro85stFADra8ZaHpETh9hoil4dSYhpYEi3wWfNMD0iNZnFa
+         7b8nHj50xkHSvMgU2ibW33G4q6nddTOjysvWM3deLDrD5jHm6yXOXpXvW4pV9np+cM4R
+         tQIID0ItvHef2PqR4+GSN+2fzcVV3AcSlTPcqQmAY8JhgeoeiLx0EIFV51oGag7T3upz
+         8yx6d9+ZYlBn+AZKIVy0LLM5hZeKbZtOdi0oRf4Dqan5CpYmSgsxEp9IQhyw6I12FayE
+         JNUfpWLDWbCmH86DQQ1dAmfWRqJZkbYXOPjCXMdU31BKybeyGgdqsf1K+nJIu9Nvddn3
+         V7ew==
+X-Gm-Message-State: AC+VfDzqKsQha4bIU7bDa3IZKD1VnOgyXTzlOd4nAQYGWXmzYZqpt6+n
+        dRLGglHThpRWUyAHyM/ed0M108imTbMCQfsFp5MzDuzTE+WBK+4=
+X-Google-Smtp-Source: ACHHUZ7Qa99BZOB/MZdSXvp3X6lxNXMZNKUrs6bg5e4zcI6VWeiSNpPtkZjfFbJkTd4DlqH77r4OYNrsM6vZLPMRQeg=
+X-Received: by 2002:a25:a007:0:b0:ba8:620b:38a7 with SMTP id
+ x7-20020a25a007000000b00ba8620b38a7mr3428219ybh.53.1686086017436; Tue, 06 Jun
+ 2023 14:13:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230503064344.45825-1-aleksandr.mikhalitsyn@canonical.com>
+ <CAHC9VhTx+6f8riuGOG40HZoaYx3F8Kf3Hm7Eb5k3-An91eMWgg@mail.gmail.com> <CAEivzxcVQoA9rN06BtHJzyHCaN60RG1-cyGEEw-P+dp-tCB=QA@mail.gmail.com>
+In-Reply-To: <CAEivzxcVQoA9rN06BtHJzyHCaN60RG1-cyGEEw-P+dp-tCB=QA@mail.gmail.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 6 Jun 2023 17:13:26 -0400
+Message-ID: <CAHC9VhQnOszTFaFVBZACQCDxsuD6JrxDffmmJ-wBudK2MJ2pUA@mail.gmail.com>
+Subject: Re: [PATCH v2] LSM: SafeSetID: fix UID printed instead of GID
+To:     Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Cc:     mortonm@chromium.org, penguin-kernel@i-love.sakura.ne.jp,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 6 Jun 2023 21:41:57 +0200 Maciej Fijalkowski wrote:
-> On Tue, Jun 06, 2023 at 04:46:18PM +0800, wei.fang@nxp.com wrote:
-> > From: Wei Fang <wei.fang@nxp.com>  
-> 
-> if you are a sender then you could skip line above.
+On Tue, Jun 6, 2023 at 2:50=E2=80=AFPM Aleksandr Mikhalitsyn
+<aleksandr.mikhalitsyn@canonical.com> wrote:
+> On Thu, May 18, 2023 at 8:59=E2=80=AFPM Paul Moore <paul@paul-moore.com> =
+wrote:
+> > On Wed, May 3, 2023 at 2:44=E2=80=AFAM Alexander Mikhalitsyn
+> > <aleksandr.mikhalitsyn@canonical.com> wrote:
+> > >
+> > > pr_warn message clearly says that GID should be printed,
+> > > but we have UID there. Let's fix that.
+> > >
+> > > Found accidentaly during the work on isolated user namespaces.
+> > >
+> > > Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical=
+.com>
+> > > ---
+> > > v2: __kuid_val -> __kgid_val
+> > > ---
+> > >  security/safesetid/lsm.c | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > I'm assuming you're going to pick this up Micah?
+> >
+> > Reviewed-by: Paul Moore <paul@paul-moore.com>
+>
+> Dear Paul!
+>
+> Thanks for your review!
+>
+> Gentle ping to Micah Morton :-)
 
-Git generates it because the From in the headers does not have the
-names, just the email addr. It's better to keep it.
+Micah?
+
+The right thing would be for Micah to merge this via the SafeSetID
+tree, however, considering that it's been over a month with no
+response, and this patch looks trivially correct, I can pick this up
+via the LSM tree if we don't see anything from Micah this week.
+
+--=20
+paul-moore.com
