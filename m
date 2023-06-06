@@ -2,91 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E0687244AC
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 15:40:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F21EC7244B2
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 15:42:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237820AbjFFNkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 09:40:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60372 "EHLO
+        id S235566AbjFFNmv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 09:42:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232371AbjFFNkb (ORCPT
+        with ESMTP id S232371AbjFFNmt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 09:40:31 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C26AFE6E;
-        Tue,  6 Jun 2023 06:40:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=DEJxdjtBU7vOKqRY6jPSih5dZGAPLaGnK5K+JQdXahk=; b=fmScmA7quQpUDmvTdnGAr90SOA
-        07IMw8QsepSEaGk7U9W8ZeqvvgfopoSPAjNAxCNWFlfvY8GAnYAmHfnA3K4w+2ZWM+o28eptMhxQu
-        q8n3htgKAFPHLbXkwFm9ke4ZBs23Wm2hU5r1iht5IJxUTFW6lJwPQVXCaUBlbgsBR1UKZt1klNcd8
-        qrb61SlHK9EUNMfZrp4wPRr1IVQklUPuPlGVbptApgg+IbAlNpjLvYlkEvq25hxIhqnH2tVNIuID6
-        pUE5AtT2l1yZpxXvZAIyvo5x+qlpauZP9HwIqYxHMUNLttIDLhKxV39pfMifMbltat3U/frbFe/PW
-        MgGhdR7A==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1q6Wut-00DByY-Ut; Tue, 06 Jun 2023 13:40:08 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A4983300188;
-        Tue,  6 Jun 2023 15:40:05 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 8569A205EA3E8; Tue,  6 Jun 2023 15:40:05 +0200 (CEST)
-Date:   Tue, 6 Jun 2023 15:40:05 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     keescook@chromium.org, gregkh@linuxfoundation.org,
-        pbonzini@redhat.com, linux-kernel@vger.kernel.org,
-        ojeda@kernel.org, ndesaulniers@google.com, mingo@redhat.com,
-        will@kernel.org, longman@redhat.com, boqun.feng@gmail.com,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-        joel@joelfernandes.org, josh@joshtriplett.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-        rcu@vger.kernel.org, tj@kernel.org, tglx@linutronix.de,
-        linux-toolchains@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] Lock and Pointer guards
-Message-ID: <20230606134005.GE905437@hirez.programming.kicks-ass.net>
-References: <20230526205204.861311518@infradead.org>
- <CAHk-=wg2RHZKTN29Gr7MhgYfaNtzz58wry9jCNP75LAmQ9t8-A@mail.gmail.com>
- <20230530092342.GA149947@hirez.programming.kicks-ass.net>
- <20230606094251.GA907347@hirez.programming.kicks-ass.net>
- <CAHk-=wi-RyoUhbChiVaJZoZXheAwnJ7OO=Gxe85BkPAd93TwDA@mail.gmail.com>
+        Tue, 6 Jun 2023 09:42:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 389A9E6B;
+        Tue,  6 Jun 2023 06:42:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C847161AE4;
+        Tue,  6 Jun 2023 13:42:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87D69C433EF;
+        Tue,  6 Jun 2023 13:42:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686058967;
+        bh=U3h883flvEqS2X1clqH4TWWLP/40FL+WE/MAXYrRcIs=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=RT4Poi/FKBXFHXZbkEflbrtpDU7xwQq43Cyho27XMxZtrJ6nwUGLwOiJ14V66N/6o
+         aQ/qvtgaL1WIwtAlayzsuqYY/ki08wD6wlOhG8b+gZgEHBUYQrk+S84lj9G7t6UG40
+         BCIaN6WqMVHwvOh+6AaRW/e2ONpZzC9auCHpRTXsUJ2m87E4GoT7XDFah+d3v9VB7b
+         1AV1QYHZW14nxr2nYqP6tu/4fI+T5JLKfumi8/XePna7WV0tYucwqId17Tv1e1ljKd
+         B+ufRw2u7WQaw3VPJp70Q6yR2O0+7zz8NYx3K/h1nOV7L27M65z7XsHOjxW8Xmwbhs
+         SHMP6ejCV8HFA==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Dan Carpenter <dan.carpenter@linaro.org>
+Cc:     oe-kbuild@lists.linux.dev, Felix Fietkau <nbd@nbd.name>,
+        lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org
+Subject: Re: drivers/net/wireless/mediatek/mt76/mt76x02_util.c:475 mt76x02_set_key() warn: variable dereferenced before check 'key' (see line 415)
+References: <2f121202-5846-44a9-8b83-e2ba1fa671d0@kadam.mountain>
+Date:   Tue, 06 Jun 2023 16:42:43 +0300
+In-Reply-To: <2f121202-5846-44a9-8b83-e2ba1fa671d0@kadam.mountain> (Dan
+        Carpenter's message of "Tue, 6 Jun 2023 08:38:37 +0300")
+Message-ID: <87mt1ciu5o.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wi-RyoUhbChiVaJZoZXheAwnJ7OO=Gxe85BkPAd93TwDA@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 06:17:33AM -0700, Linus Torvalds wrote:
+Adding linux-wireless, top posting so that the whole report is included.
 
-> That said, I still don't understand why you lke the name "guard" for
-> this.  I understand not liking "auto", but "guard" doesn't seem any
-> better. In fact, much worse. Guarded expressions means something
-> completely different both in real life and in computer science.
-> 
-> I'm assuming there's some history there, but it makes no sense to me
-> as a name here.
+Dan Carpenter <dan.carpenter@linaro.org> writes:
 
-I know the name from C++ where it is std::lock_guard<> (well, back when
-I still did C++ it wasn't std, but whatever), and Rust seems to have
-std::sync::MutexGuard<>.
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   f8dba31b0a826e691949cd4fdfa5c30defaac8c5
+> commit: e6db67fa871dee37d22701daba806bfcd4d9df49 wifi: mt76: ignore
+> key disable commands
+> config: riscv-randconfig-m031-20230605
+> (https://download.01.org/0day-ci/archive/20230606/202306060332.WbIToDHL-lkp@intel.com/config)
+> compiler: riscv64-linux-gcc (GCC) 12.3.0
+>
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+> | Closes: https://lore.kernel.org/r/202306060332.WbIToDHL-lkp@intel.com/
+>
+> smatch warnings:
+> drivers/net/wireless/mediatek/mt76/mt76x02_util.c:475
+> mt76x02_set_key() warn: variable dereferenced before check 'key' (see
+> line 415)
+>
+> vim +/key +475 drivers/net/wireless/mediatek/mt76/mt76x02_util.c
+>
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04 407 int
+> mt76x02_set_key(struct ieee80211_hw *hw, enum set_key_cmd cmd,
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04 408 struct ieee80211_vif
+> *vif, struct ieee80211_sta *sta,
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04 409 struct
+> ieee80211_key_conf *key)
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  410  {
+> d87cf75f111183 Lorenzo Bianconi 2018-10-07 411 struct mt76x02_dev *dev
+> = hw->priv;
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04 412 struct mt76x02_vif
+> *mvif = (struct mt76x02_vif *)vif->drv_priv;
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  413  	struct mt76x02_sta *msta;
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  414  	struct mt76_wcid *wcid;
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04 @415  	int idx = key->keyidx;
+>
+> "key" is dereferenced here
+>
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  416  	int ret;
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  417  
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04 418 /* fall back to sw
+> encryption for unsupported ciphers */
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  419  	switch (key->cipher) {
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  420  	case WLAN_CIPHER_SUITE_WEP40:
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  421  	case WLAN_CIPHER_SUITE_WEP104:
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  422  	case WLAN_CIPHER_SUITE_TKIP:
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  423  	case WLAN_CIPHER_SUITE_CCMP:
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  424  		break;
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  425  	default:
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  426  		return -EOPNOTSUPP;
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  427  	}
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  428  
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  429  	/*
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04 430 * The hardware does
+> not support per-STA RX GTK, fall back
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  431  	 * to software mode for these.
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  432  	 */
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04 433 if ((vif->type ==
+> NL80211_IFTYPE_ADHOC ||
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04 434 vif->type ==
+> NL80211_IFTYPE_MESH_POINT) &&
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04 435 (key->cipher ==
+> WLAN_CIPHER_SUITE_TKIP ||
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04 436 key->cipher ==
+> WLAN_CIPHER_SUITE_CCMP) &&
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04 437 !(key->flags &
+> IEEE80211_KEY_FLAG_PAIRWISE))
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  438  		return -EOPNOTSUPP;
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  439  
+> b98558e2529986 Stanislaw Gruszka 2019-03-19  440  	/*
+> b98558e2529986 Stanislaw Gruszka 2019-03-19 441 * In USB AP mode,
+> broadcast/multicast frames are setup in beacon
+> b98558e2529986 Stanislaw Gruszka 2019-03-19 442 * data registers and
+> sent via HW beacons engine, they require to
+> b98558e2529986 Stanislaw Gruszka 2019-03-19  443  	 * be already encrypted.
+> b98558e2529986 Stanislaw Gruszka 2019-03-19  444  	 */
+> 61c51a74a4e586 Lorenzo Bianconi  2019-10-29  445  	if (mt76_is_usb(&dev->mt76) &&
+> b98558e2529986 Stanislaw Gruszka 2019-03-19 446 vif->type ==
+> NL80211_IFTYPE_AP &&
+> b98558e2529986 Stanislaw Gruszka 2019-03-19 447 !(key->flags &
+> IEEE80211_KEY_FLAG_PAIRWISE))
+> b98558e2529986 Stanislaw Gruszka 2019-03-19  448  		return -EOPNOTSUPP;
+> b98558e2529986 Stanislaw Gruszka 2019-03-19  449  
+> 4b36cc6b390f18 David Bauer 2021-02-07 450 /* MT76x0 GTK offloading
+> does not work with more than one VIF */
+> 4b36cc6b390f18 David Bauer 2021-02-07 451 if (is_mt76x0(dev) &&
+> !(key->flags & IEEE80211_KEY_FLAG_PAIRWISE))
+> 4b36cc6b390f18 David Bauer       2021-02-07  452  		return -EOPNOTSUPP;
+> 4b36cc6b390f18 David Bauer       2021-02-07  453  
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04 454 msta = sta ? (struct
+> mt76x02_sta *)sta->drv_priv : NULL;
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04 455 wcid = msta ?
+> &msta->wcid : &mvif->group_wcid;
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  456  
+> e6db67fa871dee Felix Fietkau     2023-03-30  457  	if (cmd != SET_KEY) {
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04 458 if (idx ==
+> wcid->hw_key_idx) {
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04 459 wcid->hw_key_idx = -1;
+> f2f6a47b504b8f Felix Fietkau 2019-01-25 460 wcid->sw_iv = false;
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  461  		}
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  462  
+> e6db67fa871dee Felix Fietkau     2023-03-30  463  		return 0;
+> e6db67fa871dee Felix Fietkau     2023-03-30  464  	}
+> e6db67fa871dee Felix Fietkau     2023-03-30  465  
+> e6db67fa871dee Felix Fietkau     2023-03-30  466  	key->hw_key_idx = wcid->idx;
+> e6db67fa871dee Felix Fietkau     2023-03-30  467  	wcid->hw_key_idx = idx;
+> e6db67fa871dee Felix Fietkau 2023-03-30 468 if (key->flags &
+> IEEE80211_KEY_FLAG_RX_MGMT) {
+> e6db67fa871dee Felix Fietkau 2023-03-30 469 key->flags |=
+> IEEE80211_KEY_FLAG_SW_MGMT_TX;
+> e6db67fa871dee Felix Fietkau     2023-03-30  470  		wcid->sw_iv = true;
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  471  	}
+> d87cf75f111183 Lorenzo Bianconi 2018-10-07 472
+> mt76_wcid_key_setup(&dev->mt76, wcid, key);
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  473  
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  474  	if (!msta) {
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04 @475 if (key ||
+> wcid->hw_key_idx == idx) {
+>
+> This NULL check is too late.
+>
+> 8d66af49a3db9a Lorenzo Bianconi 2018-10-07 476 ret =
+> mt76x02_mac_wcid_set_key(dev, wcid->idx, key);
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  477  			if (ret)
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04 478 return ret;
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  479  		}
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  480  
+> 8d66af49a3db9a Lorenzo Bianconi 2018-10-07 481 return
+> mt76x02_mac_shared_key_setup(dev, mvif->idx, idx, key);
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  482  	}
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  483  
+> 8d66af49a3db9a Lorenzo Bianconi 2018-10-07 484 return
+> mt76x02_mac_wcid_set_key(dev, msta->wcid.idx, key);
+> 60c26859e863c1 Stanislaw Gruszka 2018-09-04  485  }
 
-But if that's the sole objection left, lets have a bike-shed party and
-pick a colour :-)
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
 
-'shield' 'sentry' 'sentinel' 'keeper' 'custodian' 'warden' ?
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
