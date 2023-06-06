@@ -2,152 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E95A723CD3
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 11:16:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A9A6723D24
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 11:23:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235975AbjFFJQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 05:16:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57944 "EHLO
+        id S237444AbjFFJXF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 05:23:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjFFJQs (ORCPT
+        with ESMTP id S237029AbjFFJXD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 05:16:48 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14206E76
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 02:16:42 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id 41be03b00d2f7-53404873a19so3037120a12.3
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 02:16:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686043001; x=1688635001;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ah2zhbL7HyNfNMLyCJlZsl1+8Ty4BOz43t9+LJgTCHg=;
-        b=ryrCzJG30j61sGFl6c7bZZF4wXWpbxoPEcD26ngT1SxTpoyPc6VR0oPv+08gWU+cSu
-         mhvgCVcu0KlLlKhfMXL8rXT6CRwQVh+doXz3yqrth1+yWsL+EQ9yGeO2LtHLXCGh8ZPz
-         T0DezVLAE3CiBc0agNM5CyzLd+BkXeB91nYWVTUYBaIV1mxlXJ7g1ePEgSmRY/TuMgDZ
-         af7JPAjrjPSiTmOqSLR2RUTlp4mgZVVqKYWZ2HDr0skp29j0TaGQDlA5I4YhiWwCDeWF
-         iCGYvW2NW8qvkKma8uQhgaLJG1rx/NvBlsWKcnN+qOazoFTn5YiW0LqeFS34GNTIdLBQ
-         H1FA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686043001; x=1688635001;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Ah2zhbL7HyNfNMLyCJlZsl1+8Ty4BOz43t9+LJgTCHg=;
-        b=lub6ABK/O6ICGxG1lGlUSL019qLwLtuHfaQkOYCdcq7WuVraQRzXxvboyTaWZp99r2
-         ILmfs06sPRNPWjypxGpxBxIllCanUIMKPourx0H7YTAqwncDraJS5B/uw8WbRubcMdPr
-         gZflLBL5PCna+YSpEGbP2S0l84HHBVeW2lGtoLF1ErW+VrqZz/7YsybOnZHNRYdkLmJE
-         /Klm9/2e/otPhDhqIeYR4dvSmg8c+0vWYCcm/EQkxlo7hLN2dUePTMOPn1EnFsAPT+FM
-         L6OtFvcSCWFWnnnxxraJHnpVB5B06fOyNO1WytztVF6KOOKvRqcm7ujyJ/EkQES2f28M
-         S5Mg==
-X-Gm-Message-State: AC+VfDxhg+HDX+xWVPmmMjTsUXxSkiizzht53wr07yydejcsy/H/xAZt
-        VxFdAZSJvz++xzoq0z8QAkLyDaCTYhOZ8A==
-X-Google-Smtp-Source: ACHHUZ6SERKFytLvIZERSMLk/IwvxuJKwbZjn3t2jyy1qwOa9lZVAlJGduBPqky8qiUl82UmebzqpA==
-X-Received: by 2002:a17:903:1c9:b0:1a9:86ca:38cd with SMTP id e9-20020a17090301c900b001a986ca38cdmr870663plh.2.1686043001430;
-        Tue, 06 Jun 2023 02:16:41 -0700 (PDT)
-Received: from localhost (58-6-230-127.tpgi.com.au. [58.6.230.127])
-        by smtp.gmail.com with ESMTPSA id jk19-20020a170903331300b001b0aec3ed59sm7997002plb.256.2023.06.06.02.16.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Jun 2023 02:16:40 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 06 Jun 2023 19:16:36 +1000
-Message-Id: <CT5GCZLAL3QC.URC3KKG0M0WR@wheely>
-Cc:     <linux-kernel@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: [PATCH 3/4] powerpc/kuap: Refactor static branch for disabling
- kuap
-From:   "Nicholas Piggin" <npiggin@gmail.com>
-To:     "Christophe Leroy" <christophe.leroy@csgroup.eu>,
-        "Michael Ellerman" <mpe@ellerman.id.au>
-X-Mailer: aerc 0.14.0
-References: <1a3c69e38349b687c6c65240d7c09a7817a797d8.1685963081.git.christophe.leroy@csgroup.eu> <4d775047675e9f8ae2a9db9cb8a0cc8216a309b8.1685963081.git.christophe.leroy@csgroup.eu>
-In-Reply-To: <4d775047675e9f8ae2a9db9cb8a0cc8216a309b8.1685963081.git.christophe.leroy@csgroup.eu>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 6 Jun 2023 05:23:03 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 33412E6A;
+        Tue,  6 Jun 2023 02:22:59 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.86])
+        by gateway (Coremail) with SMTP id _____8CxLPB6+X5kQBAAAA--.462S3;
+        Tue, 06 Jun 2023 17:16:42 +0800 (CST)
+Received: from [10.20.42.86] (unknown [10.20.42.86])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxPMp2+X5koxICAA--.366S3;
+        Tue, 06 Jun 2023 17:16:39 +0800 (CST)
+Subject: Re: [PATCH v12 26/31] LoongArch: KVM: Implement kvm exception vector
+To:     Youling Tang <tangyouling@loongson.cn>
+References: <20230530015223.147755-1-zhaotianrui@loongson.cn>
+ <20230530015223.147755-27-zhaotianrui@loongson.cn>
+ <b0e8a311-d988-a1be-a256-130adcdbbfc6@loongson.cn>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        loongarch@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
+        Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oliver Upton <oliver.upton@linux.dev>, maobibo@loongson.cn,
+        Xi Ruoyao <xry111@xry111.site>
+From:   Tianrui Zhao <zhaotianrui@loongson.cn>
+Message-ID: <14021ed3-7afd-f6a9-e889-53f92fb5aa90@loongson.cn>
+Date:   Tue, 6 Jun 2023 17:16:38 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
+MIME-Version: 1.0
+In-Reply-To: <b0e8a311-d988-a1be-a256-130adcdbbfc6@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8AxPMp2+X5koxICAA--.366S3
+X-CM-SenderInfo: p2kd03xldq233l6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBj93XoWxGFy7KF4UuFyUWrWfKw1xJFc_yoW5AF1fpF
+        yfC3WYyrWjg342yFy2yr4qgF13A3yxKr17Cr4xK34UZw4vvryrt395K393CFsxKrykZF1x
+        ZayUtr15uF4UG3cCm3ZEXasCq-sJn29KB7ZKAUJUUUUf529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUPqb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+        xVWxJr0_GcWln4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
+        xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q
+        6rW5McIj6I8E87Iv67AKxVWxJVW8Jr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
+        8JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vI
+        r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67
+        AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIY
+        rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Xr0_Ar1lIxAIcVC0I7IYx2IY6xkF7I0E14
+        v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWxJVW8
+        Jr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07j873
+        kUUUUU=
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon Jun 5, 2023 at 9:04 PM AEST, Christophe Leroy wrote:
-> All but book3s/64 use a static branch key for disabling kuap.
-> book3s/64 uses a memory feature.
+
+
+在 2023年06月06日 15:00, Youling Tang 写道:
 >
-> Refactor all targets except book3s/64.
 >
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> ---
->  arch/powerpc/include/asm/book3s/32/kup.h     |  7 -------
->  arch/powerpc/include/asm/book3s/64/kup.h     |  1 +
->  arch/powerpc/include/asm/kup.h               | 15 +++++++++++++++
->  arch/powerpc/include/asm/nohash/32/kup-8xx.h |  7 -------
->  arch/powerpc/include/asm/nohash/kup-booke.h  |  7 -------
->  arch/powerpc/mm/book3s32/kuap.c              |  3 ---
->  arch/powerpc/mm/init-common.c                |  3 +++
->  arch/powerpc/mm/nohash/kup.c                 |  3 ---
->  8 files changed, 19 insertions(+), 27 deletions(-)
+> On 05/30/2023 09:52 AM, Tianrui Zhao wrote:
+>> Implement kvm exception vector, using _kvm_fault_tables array to save
+>> the handle function pointer and it is used when vcpu handle exit.
+>>
+>> Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
+>> ---
+>>  arch/loongarch/kvm/exit.c | 48 +++++++++++++++++++++++++++++++++++++++
+>>  1 file changed, 48 insertions(+)
+>>
+>> diff --git a/arch/loongarch/kvm/exit.c b/arch/loongarch/kvm/exit.c
+>> index 10f9922a7e76..625045fc95c8 100644
+>> --- a/arch/loongarch/kvm/exit.c
+>> +++ b/arch/loongarch/kvm/exit.c
+>> @@ -657,3 +657,51 @@ static int _kvm_handle_fpu_disabled(struct 
+>> kvm_vcpu *vcpu)
+>>      kvm_own_fpu(vcpu);
+>>      return RESUME_GUEST;
+>>  }
+>> +
+>> +/*
+>> + * Loongarch KVM callback handling for not implemented guest exiting
+>> + */
+>> +static int _kvm_fault_ni(struct kvm_vcpu *vcpu)
+>> +{
+>> +    unsigned long estat, badv;
+>> +    unsigned int exccode, inst;
+>> +
+>> +    /*
+>> +     *  Fetch the instruction.
+>> +     */
+>> +    badv = vcpu->arch.badv;
+>> +    estat = vcpu->arch.host_estat;
+>> +    exccode = (estat & CSR_ESTAT_EXC) >> CSR_ESTAT_EXC_SHIFT;
+>> +    inst = vcpu->arch.badi;
+>> +    kvm_err("Exccode: %d PC=%#lx inst=0x%08x BadVaddr=%#lx 
+>> estat=%#lx\n",
+>> +            exccode, vcpu->arch.pc, inst, badv, read_gcsr_estat());
+>> +    kvm_arch_vcpu_dump_regs(vcpu);
+>> +    vcpu->run->exit_reason = KVM_EXIT_INTERNAL_ERROR;
+>> +
+>> +    return RESUME_HOST;
+>> +}
+>> +
+>> +static exit_handle_fn _kvm_fault_tables[EXCCODE_INT_START] = {
+>> +    [EXCCODE_TLBL]        = _kvm_handle_read_fault,
+>> +    [EXCCODE_TLBI]        = _kvm_handle_read_fault,
+>> +    [EXCCODE_TLBNR]        = _kvm_handle_read_fault,
+>> +    [EXCCODE_TLBNX]        = _kvm_handle_read_fault,
+>> +    [EXCCODE_TLBS]        = _kvm_handle_write_fault,
+>> +    [EXCCODE_TLBM]        = _kvm_handle_write_fault,
+>> +    [EXCCODE_FPDIS]        = _kvm_handle_fpu_disabled,
+>> +    [EXCCODE_GSPR]        = _kvm_handle_gspr,
+>> +};
+> It can be modified as follows and remove _kvm_init_fault().
 >
-> diff --git a/arch/powerpc/include/asm/book3s/32/kup.h b/arch/powerpc/incl=
-ude/asm/book3s/32/kup.h
-> index 466a19cfb4df..8da9997a67ba 100644
-> --- a/arch/powerpc/include/asm/book3s/32/kup.h
-> +++ b/arch/powerpc/include/asm/book3s/32/kup.h
-> @@ -11,8 +11,6 @@
-> =20
->  #include <linux/jump_label.h>
-> =20
-> -extern struct static_key_false disable_kuap_key;
-> -
->  static __always_inline bool kuep_is_disabled(void)
->  {
->  	return !IS_ENABLED(CONFIG_PPC_KUEP);
-> @@ -25,11 +23,6 @@ static __always_inline bool kuep_is_disabled(void)
->  #define KUAP_NONE	(~0UL)
->  #define KUAP_ALL	(~1UL)
-> =20
-> -static __always_inline bool kuap_is_disabled(void)
-> -{
-> -	return static_branch_unlikely(&disable_kuap_key);
-> -}
-> -
->  static inline void kuap_lock_one(unsigned long addr)
->  {
->  	mtsr(mfsr(addr) | SR_KS, addr);
-> diff --git a/arch/powerpc/include/asm/book3s/64/kup.h b/arch/powerpc/incl=
-ude/asm/book3s/64/kup.h
-> index 1b0215ff3710..f8b8e93c488c 100644
-> --- a/arch/powerpc/include/asm/book3s/64/kup.h
-> +++ b/arch/powerpc/include/asm/book3s/64/kup.h
-> @@ -233,6 +233,7 @@ static __always_inline bool kuap_is_disabled(void)
->  {
->  	return !mmu_has_feature(MMU_FTR_BOOK3S_KUAP);
->  }
-> +#define kuap_is_disabled kuap_is_disabled
+> static exit_handle_fn _kvm_fault_tables[EXCCODE_INT_START] = {
+>     [0 ... EXCCODE_INT_START - 1]    = _kvm_fault_ni,
+>
+>     [EXCCODE_TLBL]            = _kvm_handle_read_fault,
+>     [EXCCODE_TLBI]            = _kvm_handle_read_fault,
+>     [EXCCODE_TLBNR]            = _kvm_handle_read_fault,
+>     [EXCCODE_TLBNX]            = _kvm_handle_read_fault,
+>     [EXCCODE_TLBS]            = _kvm_handle_write_fault,
+>     [EXCCODE_TLBM]            = _kvm_handle_write_fault,
+>     [EXCCODE_FPDIS]            = _kvm_handle_fpu_disabled,
+>     [EXCCODE_GSPR]            = _kvm_handle_gspr,
+> };
+>
+> Thanks,
+> Youling
+Thanks, this method can simplify the code, I will fix it.
 
-Is there any point to doing this pattern since the code is in places
-that have ifdef PPC6 S etc?
+Thanks
+Tianrui Zhao
+>
+>> +
+>> +int _kvm_handle_fault(struct kvm_vcpu *vcpu, int fault)
+>> +{
+>> +    return _kvm_fault_tables[fault](vcpu);
+>> +}
+>> +
+>> +void _kvm_init_fault(void)
+>> +{
+>> +    int i;
+>> +
+>> +    for (i = 0; i < EXCCODE_INT_START; i++)
+>> +        if (!_kvm_fault_tables[i])
+>> +            _kvm_fault_tables[i] = _kvm_fault_ni;
+>> +}
+>>
 
-> diff --git a/arch/powerpc/mm/init-common.c b/arch/powerpc/mm/init-common.=
-c
-> index 119ef491f797..74e140b1efef 100644
-> --- a/arch/powerpc/mm/init-common.c
-> +++ b/arch/powerpc/mm/init-common.c
-> @@ -32,6 +32,9 @@ EXPORT_SYMBOL_GPL(kernstart_virt_addr);
->  bool disable_kuep =3D !IS_ENABLED(CONFIG_PPC_KUEP);
->  bool disable_kuap =3D !IS_ENABLED(CONFIG_PPC_KUAP);
-> =20
-> +struct static_key_false disable_kuap_key;
-> +EXPORT_SYMBOL(disable_kuap_key);
-> +
-
-That's going to define it on 64s?
-
-Nice refactoring though.
-
-Thanks,
-Nick
