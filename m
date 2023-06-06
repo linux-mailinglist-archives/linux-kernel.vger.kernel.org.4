@@ -2,162 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 483437234DD
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 03:51:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 688C07234DF
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 03:51:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232409AbjFFBu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Jun 2023 21:50:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37822 "EHLO
+        id S231889AbjFFBvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Jun 2023 21:51:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231844AbjFFBus (ORCPT
+        with ESMTP id S231847AbjFFBvQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Jun 2023 21:50:48 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 919F9E54;
-        Mon,  5 Jun 2023 18:50:20 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QZtgs2hWWz4x1f;
-        Tue,  6 Jun 2023 11:49:28 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1686016170;
-        bh=9XXm/QR5J7nxa7/gwe/mYjN3Je4hD6qAuS55zZUHYAU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=CdNHa2ki9JcNnl7r8mitNMwcyXFXWyiAIqDWB96i/9d/FmJ11o2JVrWRh3tJa4Zzh
-         tyDmC5mueCDPHMZw/LaD5l8vqGGNjzr2BB3TnHPT//Xrki8LkDFYO8heX/J8vF/sLb
-         mkDuckw2QKTJQrEqky3FAFskE365eK9XCxyM1w8ryPr5p2l3wTClDUiQRgJDN4CKP1
-         QCts/y+YMi1QhHymSjBTwFFGfCIq7qTaBKNLtnyCavZK1BDYDV2+VSBm59F7m2VJXS
-         eSVwsWxhV44v0KrLuXvUu4meXM49G2nXDu7mdDixK5Jd5pJ3o4dhGV/+wxD6yJbX5C
-         RB26o5dtEU4rg==
-Date:   Tue, 6 Jun 2023 11:49:27 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christoffer Dall <cdall@cs.columbia.edu>,
-        Marc Zyngier <maz@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Joey Gouly <joey.gouly@arm.com>,
-        Kristina Martsenko <kristina.martsenko@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>
-Subject: linux-next: manual merge of the kvm-arm tree with the arm64 tree
-Message-ID: <20230606114927.227a66a5@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/XVrtAiSNcUo33DlqVi4Wb7U";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 5 Jun 2023 21:51:16 -0400
+Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 226A610C1;
+        Mon,  5 Jun 2023 18:50:49 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0VkU73yf_1686016221;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VkU73yf_1686016221)
+          by smtp.aliyun-inc.com;
+          Tue, 06 Jun 2023 09:50:22 +0800
+Message-ID: <1686016211.426338-1-xuanzhuo@linux.alibaba.com>
+Subject: Re: [PATCH net] virtio_net: use control_buf for coalesce params
+Date:   Tue, 6 Jun 2023 09:50:11 +0800
+From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+To:     Brett Creeley <brett.creeley@amd.com>
+Cc:     <brett.creeley@amd.com>, <shannon.nelson@amd.com>,
+        <allen.hubbe@amd.com>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>,
+        <virtualization@lists.linux-foundation.org>,
+        <alvaro.karsz@solid-run.com>, <pabeni@redhat.com>,
+        <kuba@kernel.org>, <edumazet@google.com>, <davem@davemloft.net>,
+        <xuanzhuo@linux.alibaba.com>, <jasowang@redhat.com>,
+        <mst@redhat.com>
+References: <20230605195925.51625-1-brett.creeley@amd.com>
+In-Reply-To: <20230605195925.51625-1-brett.creeley@amd.com>
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/XVrtAiSNcUo33DlqVi4Wb7U
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, 5 Jun 2023 12:59:25 -0700, Brett Creeley <brett.creeley@amd.com> wrote:
+> Commit 699b045a8e43 ("net: virtio_net: notifications coalescing
+> support") added coalescing command support for virtio_net. However,
+> the coalesce commands are using buffers on the stack, which is causing
+> the device to see DMA errors. There should also be a complaint from
+> check_for_stack() in debug_dma_map_xyz(). Fix this by adding and using
+> coalesce params from the control_buf struct, which aligns with other
+> commands.
+>
+> Fixes: 699b045a8e43 ("net: virtio_net: notifications coalescing support")
+> Reviewed-by: Shannon Nelson <shannon.nelson@amd.com>
+> Signed-off-by: Allen Hubbe <allen.hubbe@amd.com>
+> Signed-off-by: Brett Creeley <brett.creeley@amd.com>
 
-Hi all,
+Reviewed-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 
-Today's linux-next merge of the kvm-arm tree got a conflict in:
+Thanks.
 
-  arch/arm64/kernel/cpufeature.c
-
-between commits:
-
-  b7564127ffcb ("arm64: mops: detect and enable FEAT_MOPS")
-  c1fa32c8f189 ("arm64: cpufeature: add TCR2 cpucap")
-  b5a8e35236ee ("arm64: cpufeature: add Permission Indirection Extension cp=
-ucap")
-
-from the arm64 tree and commit:
-
-  c876c3f182a5 ("KVM: arm64: Relax trapping of CTR_EL0 when FEAT_EVT is ava=
-ilable")
-
-from the kvm-arm tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc arch/arm64/kernel/cpufeature.c
-index a74f41c7280f,4a2ab3f366de..000000000000
---- a/arch/arm64/kernel/cpufeature.c
-+++ b/arch/arm64/kernel/cpufeature.c
-@@@ -2662,35 -2641,17 +2662,46 @@@ static const struct arm64_cpu_capabilit
-  		.cpu_enable =3D cpu_enable_dit,
-  		ARM64_CPUID_FIELDS(ID_AA64PFR0_EL1, DIT, IMP)
-  	},
- +	{
- +		.desc =3D "Memory Copy and Memory Set instructions",
- +		.capability =3D ARM64_HAS_MOPS,
- +		.type =3D ARM64_CPUCAP_SYSTEM_FEATURE,
- +		.matches =3D has_cpuid_feature,
- +		.cpu_enable =3D cpu_enable_mops,
- +		ARM64_CPUID_FIELDS(ID_AA64ISAR2_EL1, MOPS, IMP)
- +	},
- +	{
- +		.capability =3D ARM64_HAS_TCR2,
- +		.type =3D ARM64_CPUCAP_SYSTEM_FEATURE,
- +		.sys_reg =3D SYS_ID_AA64MMFR3_EL1,
- +		.sign =3D FTR_UNSIGNED,
- +		.field_pos =3D ID_AA64MMFR3_EL1_TCRX_SHIFT,
- +		.field_width =3D 4,
- +		.min_field_value =3D ID_AA64MMFR3_EL1_TCRX_IMP,
- +		.matches =3D has_cpuid_feature,
- +	},
- +	{
- +		.desc =3D "Stage-1 Permission Indirection Extension (S1PIE)",
- +		.capability =3D ARM64_HAS_S1PIE,
- +		.type =3D ARM64_CPUCAP_BOOT_CPU_FEATURE,
- +		.sys_reg =3D SYS_ID_AA64MMFR3_EL1,
- +		.sign =3D FTR_UNSIGNED,
- +		.field_pos =3D ID_AA64MMFR3_EL1_S1PIE_SHIFT,
- +		.field_width =3D 4,
- +		.min_field_value =3D ID_AA64MMFR3_EL1_S1PIE_IMP,
- +		.matches =3D has_cpuid_feature,
- +	},
-+ 	{
-+ 		.desc =3D "Enhanced Virtualization Traps",
-+ 		.capability =3D ARM64_HAS_EVT,
-+ 		.type =3D ARM64_CPUCAP_SYSTEM_FEATURE,
-+ 		.sys_reg =3D SYS_ID_AA64MMFR2_EL1,
-+ 		.sign =3D FTR_UNSIGNED,
-+ 		.field_pos =3D ID_AA64MMFR2_EL1_EVT_SHIFT,
-+ 		.field_width =3D 4,
-+ 		.min_field_value =3D ID_AA64MMFR2_EL1_EVT_IMP,
-+ 		.matches =3D has_cpuid_feature,
-+ 	},
-  	{},
-  };
- =20
-
---Sig_/XVrtAiSNcUo33DlqVi4Wb7U
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmR+kKgACgkQAVBC80lX
-0GwiKQf/RKdM/u5wDeJWseb42r8Jmcimgfz0r9wAk1+7DEo15PbpfEevML0j1XTW
-I7t+2lL68XKxU+3yMMQE+CmCKSH53W3tcKElcdwHN+4ldDZZzOLil9cPdG6r6k6U
-nEenIylKLzVZBJsLOE2IXg9DCX6gL8KiKTf8zhOMfDNBQKwheD2dtqhkSXgm4ITf
-D9LHrM+caPRE2CuZfGSMouZfkW3clLmC0q5U6+UrI/ExUhC1mZGC6XTtzSZTNNBu
-dmANQMAP+szei4vIeWtAAqYYTvnNEvHiveJOaYQqt73qmmJhpMu8drmp98i+dAsU
-ncn2+FjuNlP8Jdw9owxqkgjmZJCvXQ==
-=yJEb
------END PGP SIGNATURE-----
-
---Sig_/XVrtAiSNcUo33DlqVi4Wb7U--
+> ---
+>  drivers/net/virtio_net.c | 16 ++++++++--------
+>  1 file changed, 8 insertions(+), 8 deletions(-)
+>
+> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> index 56ca1d270304..486b5849033d 100644
+> --- a/drivers/net/virtio_net.c
+> +++ b/drivers/net/virtio_net.c
+> @@ -205,6 +205,8 @@ struct control_buf {
+>  	__virtio16 vid;
+>  	__virtio64 offloads;
+>  	struct virtio_net_ctrl_rss rss;
+> +	struct virtio_net_ctrl_coal_tx coal_tx;
+> +	struct virtio_net_ctrl_coal_rx coal_rx;
+>  };
+>
+>  struct virtnet_info {
+> @@ -2934,12 +2936,10 @@ static int virtnet_send_notf_coal_cmds(struct virtnet_info *vi,
+>  				       struct ethtool_coalesce *ec)
+>  {
+>  	struct scatterlist sgs_tx, sgs_rx;
+> -	struct virtio_net_ctrl_coal_tx coal_tx;
+> -	struct virtio_net_ctrl_coal_rx coal_rx;
+>
+> -	coal_tx.tx_usecs = cpu_to_le32(ec->tx_coalesce_usecs);
+> -	coal_tx.tx_max_packets = cpu_to_le32(ec->tx_max_coalesced_frames);
+> -	sg_init_one(&sgs_tx, &coal_tx, sizeof(coal_tx));
+> +	vi->ctrl->coal_tx.tx_usecs = cpu_to_le32(ec->tx_coalesce_usecs);
+> +	vi->ctrl->coal_tx.tx_max_packets = cpu_to_le32(ec->tx_max_coalesced_frames);
+> +	sg_init_one(&sgs_tx, &vi->ctrl->coal_tx, sizeof(vi->ctrl->coal_tx));
+>
+>  	if (!virtnet_send_command(vi, VIRTIO_NET_CTRL_NOTF_COAL,
+>  				  VIRTIO_NET_CTRL_NOTF_COAL_TX_SET,
+> @@ -2950,9 +2950,9 @@ static int virtnet_send_notf_coal_cmds(struct virtnet_info *vi,
+>  	vi->tx_usecs = ec->tx_coalesce_usecs;
+>  	vi->tx_max_packets = ec->tx_max_coalesced_frames;
+>
+> -	coal_rx.rx_usecs = cpu_to_le32(ec->rx_coalesce_usecs);
+> -	coal_rx.rx_max_packets = cpu_to_le32(ec->rx_max_coalesced_frames);
+> -	sg_init_one(&sgs_rx, &coal_rx, sizeof(coal_rx));
+> +	vi->ctrl->coal_rx.rx_usecs = cpu_to_le32(ec->rx_coalesce_usecs);
+> +	vi->ctrl->coal_rx.rx_max_packets = cpu_to_le32(ec->rx_max_coalesced_frames);
+> +	sg_init_one(&sgs_rx, &vi->ctrl->coal_rx, sizeof(vi->ctrl->coal_rx));
+>
+>  	if (!virtnet_send_command(vi, VIRTIO_NET_CTRL_NOTF_COAL,
+>  				  VIRTIO_NET_CTRL_NOTF_COAL_RX_SET,
+> --
+> 2.17.1
+>
