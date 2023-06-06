@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65CC9724711
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:57:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AD5072470E
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:57:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238537AbjFFO5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 10:57:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60208 "EHLO
+        id S238526AbjFFO5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 10:57:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238518AbjFFO5C (ORCPT
+        with ESMTP id S238516AbjFFO5C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 6 Jun 2023 10:57:02 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71463172E
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 07:56:41 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-51458e3af68so9150596a12.2
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 07:56:41 -0700 (PDT)
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E53C71730
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 07:56:42 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-977d55ac17bso435193866b.3
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 07:56:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686063399; x=1688655399;
+        d=gmail.com; s=20221208; t=1686063401; x=1688655401;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=TN78WiIx7cKXEIt/YKhQKp1rR04fEU3vjXSMTSFKJB8=;
-        b=Zmi/pM5GeX1TCkDu0/TcsPvYa0WHt9FdbFsYAg17+aTuvKSuiIDo85Ig8fOayfYnVZ
-         odUqr0prtaZ8I6zWF9wcSKNIPNc7vNIzbG7ClXKrafjf86aD006b28o6zf5W1R3duQY+
-         3yjffZTjiGYCw/PpvsvmwGyYfSN2bP1c78vTirIqcqdwDZjYqSs7LmIfy/ZhoWWi2/ME
-         Rfh+SDW6e6FBVWPOzaQGiKK/7EC8vu6+GTvhx5lfNLwG8idoaY4Xc4CKf/HJEVQRp/M2
-         kAoa3YZ5TS6rffRSPrPYDK0ibprRjmOqVU13g+9sY2TTnZt6/cmA1mgnsvQGTLIDP2so
-         Le/g==
+        bh=eUrq3DY+OGrIYm8UgHc2JyLm8lRK0sjzVcTatP/l8cE=;
+        b=lV3nDQEHbDcpVPllE7l1H6osQPEUCuqT5vJrxzBodqY+3XMguqK34PcJMeRECQG32o
+         jfMfyeWIbmqdimmhaJui1HYH6XGTl00n63UupT5SSWY57u90RUB6qh8PEe3CM0Lc/PX6
+         bv7mUKsXdmXj1ANAvDdsgZl1EvX/+sL0EXfcXVHdX7RhZiJB9IKB7i/5FQDcMrULTFFn
+         tdsNTzFoKMtORONsGtRFRPVuPSgo7xFKTn9uMpk5ENTjj3Xfyx51Wb5NniaMeIN6iAnC
+         rpvp+3O9hEUP0oSwIRmO/ooVGoplU7z2s0bkinWyzhaud9E+g7zuGd38LgRH+vWUaMlk
+         Ju7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686063399; x=1688655399;
+        d=1e100.net; s=20221208; t=1686063401; x=1688655401;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=TN78WiIx7cKXEIt/YKhQKp1rR04fEU3vjXSMTSFKJB8=;
-        b=iMkY1Nx/iroQ8LUc2Dh3pV6v7W5+EdKFDUv5R4i55eKCvfKD17djP2p7U+M2M886ai
-         hyEgbRJLxXvlqF6lfAxypk7t/kbq8+CaQ9Txc3H34i/WXnnpLNMKpVKRdJ2pME6NerMI
-         M2QGfA0Xiyewm2pGrK2CuD9f1PjXPOUjQb3JEfrId0VFZzgbQD3ifjFVr5FJMnvxonJw
-         EZesS7pwCeGeDmz5RRb+nug8uXK99k2I1Ly7KpfmmU856EkYGemSs4ODwjwamDwu6ztK
-         lsjKcQlpzAvuTxh9J7bdQNxJzzhrg6olTRwlsStFfgfpNlgI3RDr9TJwfDtpkcAX1qqk
-         ptsg==
-X-Gm-Message-State: AC+VfDxEi2U/FHh9Tcrjr/lj4BY0EcqYFGWns5tZi+QAIj5hIJKBuKZD
-        R8pL1/JgU5WdyI+S4g4lSuU=
-X-Google-Smtp-Source: ACHHUZ7h0Sy8I8sy+GvB4+qK53PAR243yh2fyrMJjzTc76KSOjo3ZHg0Z/bVWRvlHrf19liu0BKU3w==
-X-Received: by 2002:a17:907:3189:b0:966:4bb3:df63 with SMTP id xe9-20020a170907318900b009664bb3df63mr2939539ejb.63.1686063399576;
-        Tue, 06 Jun 2023 07:56:39 -0700 (PDT)
+        bh=eUrq3DY+OGrIYm8UgHc2JyLm8lRK0sjzVcTatP/l8cE=;
+        b=FMskAl2nn0twn0rpEy9m9bR1cwEadBX5Zvk2wI4dLY3DbS5pj4/5i31DeVnvTS3Ibp
+         Q3xSaDHXbnjivb9KRCQwgbhAK7eThT+gVrMdWYxL3xPiS4sq0DM8Un7QAHi7JDr6+JxZ
+         EDBwVG47Iz3VTvG/a+usIGDnV4NDIChZc5a+VBIP6h4gIg2KnIlREv3yJ1A7FRi9oU74
+         6akBjQzJSGYF7UBFnAySCKNCV6Od5nBBRxjuKj8wLIRwRMDKRwq/a1xqMDv7I906x7ln
+         9xUcyBB1cVpY1lVOVPhD0jwMCf5U+iRmz5AdZhqpEZsmkHU32+k22Lhrx7Ip19rBJo55
+         JmAA==
+X-Gm-Message-State: AC+VfDyqHbSRJSCrC8utAQPyI4E0+R83/kTQoYXBPRVfFU6S4QEDZVUT
+        4oZc7IN04/n8MPaxsrhOLqw=
+X-Google-Smtp-Source: ACHHUZ5pD0vsW8EdLFGKjJYRErVu8SXwxuGlx8ik3u2HpLPxtexX7wphUTUbrU4cCwLMeLzZZq27ag==
+X-Received: by 2002:a17:907:3da4:b0:96a:6723:da47 with SMTP id he36-20020a1709073da400b0096a6723da47mr2821941ejc.43.1686063400942;
+        Tue, 06 Jun 2023 07:56:40 -0700 (PDT)
 Received: from lelloman-5950.homenet.telecomitalia.it (host-82-53-214-132.retail.telecomitalia.it. [82.53.214.132])
-        by smtp.gmail.com with ESMTPSA id t15-20020a1709063e4f00b00965c529f103sm5619618eji.86.2023.06.06.07.56.38
+        by smtp.gmail.com with ESMTPSA id t15-20020a1709063e4f00b00965c529f103sm5619618eji.86.2023.06.06.07.56.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 07:56:39 -0700 (PDT)
+        Tue, 06 Jun 2023 07:56:40 -0700 (PDT)
 From:   Domenico Cerasuolo <cerasuolodomenico@gmail.com>
 To:     vitaly.wool@konsulko.com, minchan@kernel.org,
         senozhatsky@chromium.org, yosryahmed@google.com, linux-mm@kvack.org
@@ -57,9 +57,9 @@ Cc:     ddstreet@ieee.org, sjenning@redhat.com, nphamcs@gmail.com,
         hannes@cmpxchg.org, akpm@linux-foundation.org,
         linux-kernel@vger.kernel.org, kernel-team@meta.com,
         Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-Subject: [RFC PATCH v2 2/7] mm: zswap: remove page reclaim logic from zbud
-Date:   Tue,  6 Jun 2023 16:56:06 +0200
-Message-Id: <20230606145611.704392-3-cerasuolodomenico@gmail.com>
+Subject: [RFC PATCH v2 3/7] mm: zswap: remove page reclaim logic from z3fold
+Date:   Tue,  6 Jun 2023 16:56:07 +0200
+Message-Id: <20230606145611.704392-4-cerasuolodomenico@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230606145611.704392-1-cerasuolodomenico@gmail.com>
 References: <20230606145611.704392-1-cerasuolodomenico@gmail.com>
@@ -76,186 +76,236 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 With the recent enhancement to zswap enabling direct page writeback, the
-need for the shrink code in zbud has become obsolete. As a result, this
-commit removes the page reclaim logic from zbud entirely.
+need for the shrink code in z3fold has become obsolete. As a result,
+this commit removes the page reclaim logic from z3fold entirely.
 
 Signed-off-by: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
 ---
- mm/zbud.c | 164 +-----------------------------------------------------
- 1 file changed, 2 insertions(+), 162 deletions(-)
+ mm/z3fold.c | 246 +---------------------------------------------------
+ 1 file changed, 3 insertions(+), 243 deletions(-)
 
-diff --git a/mm/zbud.c b/mm/zbud.c
-index 3acd26193920..19bc662ef5e9 100644
---- a/mm/zbud.c
-+++ b/mm/zbud.c
-@@ -83,11 +83,7 @@ struct zbud_pool;
-  *		its free region.
-  * @buddied:	list tracking the zbud pages that contain two buddies;
-  *		these zbud pages are full
-- * @lru:	list tracking the zbud pages in LRU order by most recently
+diff --git a/mm/z3fold.c b/mm/z3fold.c
+index 0cef845d397b..4af8741553ac 100644
+--- a/mm/z3fold.c
++++ b/mm/z3fold.c
+@@ -125,13 +125,11 @@ struct z3fold_header {
+ /**
+  * struct z3fold_pool - stores metadata for each z3fold pool
+  * @name:	pool name
+- * @lock:	protects pool unbuddied/lru lists
++ * @lock:	protects pool unbuddied lists
+  * @stale_lock:	protects pool stale page list
+  * @unbuddied:	per-cpu array of lists tracking z3fold pages that contain 2-
+  *		buddies; the list each z3fold page is added to depends on
+  *		the size of its free region.
+- * @lru:	list tracking the z3fold pages in LRU order by most recently
 - *		added buddy.
-  * @pages_nr:	number of zbud pages in the pool.
-- * @zpool:	zpool driver
-- * @zpool_ops:	zpool operations structure with an evict callback
-  *
-  * This structure is allocated at pool creation time and maintains metadata
-  * pertaining to a particular zbud pool.
-@@ -102,26 +98,20 @@ struct zbud_pool {
- 		struct list_head buddied;
- 		struct list_head unbuddied[NCHUNKS];
- 	};
+  * @stale:	list of pages marked for freeing
+  * @pages_nr:	number of z3fold pages in the pool.
+  * @c_handle:	cache for z3fold_buddy_slots allocation
+@@ -149,12 +147,9 @@ struct z3fold_pool {
+ 	spinlock_t lock;
+ 	spinlock_t stale_lock;
+ 	struct list_head *unbuddied;
 -	struct list_head lru;
- 	u64 pages_nr;
+ 	struct list_head stale;
+ 	atomic64_t pages_nr;
+ 	struct kmem_cache *c_handle;
 -	struct zpool *zpool;
 -	const struct zpool_ops *zpool_ops;
- };
+ 	struct workqueue_struct *compact_wq;
+ 	struct workqueue_struct *release_wq;
+ 	struct work_struct work;
+@@ -329,7 +324,6 @@ static struct z3fold_header *init_z3fold_page(struct page *page, bool headless,
+ 	struct z3fold_header *zhdr = page_address(page);
+ 	struct z3fold_buddy_slots *slots;
  
- /*
-  * struct zbud_header - zbud page metadata occupying the first chunk of each
-  *			zbud page.
-  * @buddy:	links the zbud page into the unbuddied/buddied lists in the pool
-- * @lru:	links the zbud page into the lru list in the pool
-  * @first_chunks:	the size of the first buddy in chunks, 0 if free
-  * @last_chunks:	the size of the last buddy in chunks, 0 if free
-  */
- struct zbud_header {
- 	struct list_head buddy;
--	struct list_head lru;
- 	unsigned int first_chunks;
- 	unsigned int last_chunks;
--	bool under_reclaim;
- };
+-	INIT_LIST_HEAD(&page->lru);
+ 	clear_bit(PAGE_HEADLESS, &page->private);
+ 	clear_bit(MIDDLE_CHUNK_MAPPED, &page->private);
+ 	clear_bit(NEEDS_COMPACTING, &page->private);
+@@ -451,8 +445,6 @@ static void __release_z3fold_page(struct z3fold_header *zhdr, bool locked)
+ 	set_bit(PAGE_STALE, &page->private);
+ 	clear_bit(NEEDS_COMPACTING, &page->private);
+ 	spin_lock(&pool->lock);
+-	if (!list_empty(&page->lru))
+-		list_del_init(&page->lru);
+ 	spin_unlock(&pool->lock);
  
- /*****************
-@@ -149,8 +139,6 @@ static struct zbud_header *init_zbud_page(struct page *page)
- 	zhdr->first_chunks = 0;
- 	zhdr->last_chunks = 0;
- 	INIT_LIST_HEAD(&zhdr->buddy);
--	INIT_LIST_HEAD(&zhdr->lru);
--	zhdr->under_reclaim = false;
- 	return zhdr;
- }
- 
-@@ -221,7 +209,6 @@ static struct zbud_pool *zbud_create_pool(gfp_t gfp)
- 	for_each_unbuddied_list(i, 0)
- 		INIT_LIST_HEAD(&pool->unbuddied[i]);
- 	INIT_LIST_HEAD(&pool->buddied);
--	INIT_LIST_HEAD(&pool->lru);
- 	pool->pages_nr = 0;
- 	return pool;
- }
-@@ -310,11 +297,6 @@ static int zbud_alloc(struct zbud_pool *pool, size_t size, gfp_t gfp,
- 		list_add(&zhdr->buddy, &pool->buddied);
+ 	if (locked)
+@@ -930,7 +922,6 @@ static struct z3fold_pool *z3fold_create_pool(const char *name, gfp_t gfp)
+ 		for_each_unbuddied_list(i, 0)
+ 			INIT_LIST_HEAD(&unbuddied[i]);
  	}
+-	INIT_LIST_HEAD(&pool->lru);
+ 	INIT_LIST_HEAD(&pool->stale);
+ 	atomic64_set(&pool->pages_nr, 0);
+ 	pool->name = name;
+@@ -1073,12 +1064,6 @@ static int z3fold_alloc(struct z3fold_pool *pool, size_t size, gfp_t gfp,
  
--	/* Add/move zbud page to beginning of LRU */
--	if (!list_empty(&zhdr->lru))
--		list_del(&zhdr->lru);
--	list_add(&zhdr->lru, &pool->lru);
+ headless:
+ 	spin_lock(&pool->lock);
+-	/* Add/move z3fold page to beginning of LRU */
+-	if (!list_empty(&page->lru))
+-		list_del(&page->lru);
+-
+-	list_add(&page->lru, &pool->lru);
 -
  	*handle = encode_handle(zhdr, bud);
  	spin_unlock(&pool->lock);
- 
-@@ -325,11 +307,6 @@ static int zbud_alloc(struct zbud_pool *pool, size_t size, gfp_t gfp,
-  * zbud_free() - frees the allocation associated with the given handle
-  * @pool:	pool in which the allocation resided
-  * @handle:	handle associated with the allocation returned by zbud_alloc()
-- *
-- * In the case that the zbud page in which the allocation resides is under
-- * reclaim, as indicated by the PG_reclaim flag being set, this function
-- * only sets the first|last_chunks to 0.  The page is actually freed
-- * once both buddies are evicted (see zbud_reclaim_page() below).
-  */
- static void zbud_free(struct zbud_pool *pool, unsigned long handle)
- {
-@@ -345,18 +322,11 @@ static void zbud_free(struct zbud_pool *pool, unsigned long handle)
- 	else
- 		zhdr->first_chunks = 0;
- 
--	if (zhdr->under_reclaim) {
--		/* zbud page is under reclaim, reclaim will free */
--		spin_unlock(&pool->lock);
--		return;
--	}
--
- 	/* Remove from existing buddy list */
- 	list_del(&zhdr->buddy);
- 
- 	if (zhdr->first_chunks == 0 && zhdr->last_chunks == 0) {
- 		/* zbud page is empty, free */
--		list_del(&zhdr->lru);
- 		free_zbud_page(zhdr);
- 		pool->pages_nr--;
- 	} else {
-@@ -368,110 +338,6 @@ static void zbud_free(struct zbud_pool *pool, unsigned long handle)
- 	spin_unlock(&pool->lock);
+ 	if (bud != HEADLESS)
+@@ -1115,9 +1100,6 @@ static void z3fold_free(struct z3fold_pool *pool, unsigned long handle)
+ 		 * immediately so we don't care about its value any more.
+ 		 */
+ 		if (!page_claimed) {
+-			spin_lock(&pool->lock);
+-			list_del(&page->lru);
+-			spin_unlock(&pool->lock);
+ 			put_z3fold_header(zhdr);
+ 			free_z3fold_page(page, true);
+ 			atomic64_dec(&pool->pages_nr);
+@@ -1172,194 +1154,6 @@ static void z3fold_free(struct z3fold_pool *pool, unsigned long handle)
+ 	put_z3fold_header(zhdr);
  }
  
 -/**
-- * zbud_reclaim_page() - evicts allocations from a pool page and frees it
+- * z3fold_reclaim_page() - evicts allocations from a pool page and frees it
 - * @pool:	pool from which a page will attempt to be evicted
 - * @retries:	number of pages on the LRU list for which eviction will
 - *		be attempted before failing
 - *
-- * zbud reclaim is different from normal system reclaim in that the reclaim is
-- * done from the bottom, up.  This is because only the bottom layer, zbud, has
-- * information on how the allocations are organized within each zbud page. This
-- * has the potential to create interesting locking situations between zbud and
-- * the user, however.
+- * z3fold reclaim is different from normal system reclaim in that it is done
+- * from the bottom, up. This is because only the bottom layer, z3fold, has
+- * information on how the allocations are organized within each z3fold page.
+- * This has the potential to create interesting locking situations between
+- * z3fold and the user, however.
 - *
-- * To avoid these, this is how zbud_reclaim_page() should be called:
+- * To avoid these, this is how z3fold_reclaim_page() should be called:
 - *
-- * The user detects a page should be reclaimed and calls zbud_reclaim_page().
-- * zbud_reclaim_page() will remove a zbud page from the pool LRU list and call
-- * the user-defined eviction handler with the pool and handle as arguments.
+- * The user detects a page should be reclaimed and calls z3fold_reclaim_page().
+- * z3fold_reclaim_page() will remove a z3fold page from the pool LRU list and
+- * call the user-defined eviction handler with the pool and handle as
+- * arguments.
 - *
 - * If the handle can not be evicted, the eviction handler should return
-- * non-zero. zbud_reclaim_page() will add the zbud page back to the
-- * appropriate list and try the next zbud page on the LRU up to
+- * non-zero. z3fold_reclaim_page() will add the z3fold page back to the
+- * appropriate list and try the next z3fold page on the LRU up to
 - * a user defined number of retries.
 - *
 - * If the handle is successfully evicted, the eviction handler should
-- * return 0 _and_ should have called zbud_free() on the handle. zbud_free()
+- * return 0 _and_ should have called z3fold_free() on the handle. z3fold_free()
 - * contains logic to delay freeing the page if the page is under reclaim,
 - * as indicated by the setting of the PG_reclaim flag on the underlying page.
 - *
-- * If all buddies in the zbud page are successfully evicted, then the
-- * zbud page can be freed.
+- * If all buddies in the z3fold page are successfully evicted, then the
+- * z3fold page can be freed.
 - *
 - * Returns: 0 if page is successfully freed, otherwise -EINVAL if there are
 - * no pages to evict or an eviction handler is not registered, -EAGAIN if
 - * the retry limit was hit.
 - */
--static int zbud_reclaim_page(struct zbud_pool *pool, unsigned int retries)
+-static int z3fold_reclaim_page(struct z3fold_pool *pool, unsigned int retries)
 -{
--	int i, ret, freechunks;
--	struct zbud_header *zhdr;
--	unsigned long first_handle = 0, last_handle = 0;
+-	int i, ret = -1;
+-	struct z3fold_header *zhdr = NULL;
+-	struct page *page = NULL;
+-	struct list_head *pos;
+-	unsigned long first_handle = 0, middle_handle = 0, last_handle = 0;
+-	struct z3fold_buddy_slots slots __attribute__((aligned(SLOTS_ALIGN)));
+-
+-	rwlock_init(&slots.lock);
+-	slots.pool = (unsigned long)pool | (1 << HANDLES_NOFREE);
 -
 -	spin_lock(&pool->lock);
--	if (list_empty(&pool->lru)) {
--		spin_unlock(&pool->lock);
--		return -EINVAL;
--	}
 -	for (i = 0; i < retries; i++) {
--		zhdr = list_last_entry(&pool->lru, struct zbud_header, lru);
--		list_del(&zhdr->lru);
--		list_del(&zhdr->buddy);
--		/* Protect zbud page against free */
--		zhdr->under_reclaim = true;
--		/*
--		 * We need encode the handles before unlocking, since we can
--		 * race with free that will set (first|last)_chunks to 0
--		 */
--		first_handle = 0;
--		last_handle = 0;
--		if (zhdr->first_chunks)
--			first_handle = encode_handle(zhdr, FIRST);
--		if (zhdr->last_chunks)
--			last_handle = encode_handle(zhdr, LAST);
+-		if (list_empty(&pool->lru)) {
+-			spin_unlock(&pool->lock);
+-			return -EINVAL;
+-		}
+-		list_for_each_prev(pos, &pool->lru) {
+-			page = list_entry(pos, struct page, lru);
+-
+-			zhdr = page_address(page);
+-			if (test_bit(PAGE_HEADLESS, &page->private)) {
+-				/*
+-				 * For non-headless pages, we wait to do this
+-				 * until we have the page lock to avoid racing
+-				 * with __z3fold_alloc(). Headless pages don't
+-				 * have a lock (and __z3fold_alloc() will never
+-				 * see them), but we still need to test and set
+-				 * PAGE_CLAIMED to avoid racing with
+-				 * z3fold_free(), so just do it now before
+-				 * leaving the loop.
+-				 */
+-				if (test_and_set_bit(PAGE_CLAIMED, &page->private))
+-					continue;
+-
+-				break;
+-			}
+-
+-			if (!z3fold_page_trylock(zhdr)) {
+-				zhdr = NULL;
+-				continue; /* can't evict at this point */
+-			}
+-
+-			/* test_and_set_bit is of course atomic, but we still
+-			 * need to do it under page lock, otherwise checking
+-			 * that bit in __z3fold_alloc wouldn't make sense
+-			 */
+-			if (zhdr->foreign_handles ||
+-			    test_and_set_bit(PAGE_CLAIMED, &page->private)) {
+-				z3fold_page_unlock(zhdr);
+-				zhdr = NULL;
+-				continue; /* can't evict such page */
+-			}
+-			list_del_init(&zhdr->buddy);
+-			zhdr->cpu = -1;
+-			/* See comment in __z3fold_alloc. */
+-			kref_get(&zhdr->refcount);
+-			break;
+-		}
+-
+-		if (!zhdr)
+-			break;
+-
+-		list_del_init(&page->lru);
 -		spin_unlock(&pool->lock);
 -
+-		if (!test_bit(PAGE_HEADLESS, &page->private)) {
+-			/*
+-			 * We need encode the handles before unlocking, and
+-			 * use our local slots structure because z3fold_free
+-			 * can zero out zhdr->slots and we can't do much
+-			 * about that
+-			 */
+-			first_handle = 0;
+-			last_handle = 0;
+-			middle_handle = 0;
+-			memset(slots.slot, 0, sizeof(slots.slot));
+-			if (zhdr->first_chunks)
+-				first_handle = __encode_handle(zhdr, &slots,
+-								FIRST);
+-			if (zhdr->middle_chunks)
+-				middle_handle = __encode_handle(zhdr, &slots,
+-								MIDDLE);
+-			if (zhdr->last_chunks)
+-				last_handle = __encode_handle(zhdr, &slots,
+-								LAST);
+-			/*
+-			 * it's safe to unlock here because we hold a
+-			 * reference to this page
+-			 */
+-			z3fold_page_unlock(zhdr);
+-		} else {
+-			first_handle = encode_handle(zhdr, HEADLESS);
+-			last_handle = middle_handle = 0;
+-		}
 -		/* Issue the eviction callback(s) */
+-		if (middle_handle) {
+-			ret = pool->zpool_ops->evict(pool->zpool, middle_handle);
+-			if (ret)
+-				goto next;
+-		}
 -		if (first_handle) {
 -			ret = pool->zpool_ops->evict(pool->zpool, first_handle);
 -			if (ret)
@@ -267,65 +317,105 @@ index 3acd26193920..19bc662ef5e9 100644
 -				goto next;
 -		}
 -next:
--		spin_lock(&pool->lock);
--		zhdr->under_reclaim = false;
--		if (zhdr->first_chunks == 0 && zhdr->last_chunks == 0) {
--			/*
--			 * Both buddies are now free, free the zbud page and
--			 * return success.
--			 */
--			free_zbud_page(zhdr);
--			pool->pages_nr--;
+-		if (test_bit(PAGE_HEADLESS, &page->private)) {
+-			if (ret == 0) {
+-				free_z3fold_page(page, true);
+-				atomic64_dec(&pool->pages_nr);
+-				return 0;
+-			}
+-			spin_lock(&pool->lock);
+-			list_add(&page->lru, &pool->lru);
 -			spin_unlock(&pool->lock);
--			return 0;
--		} else if (zhdr->first_chunks == 0 ||
--				zhdr->last_chunks == 0) {
--			/* add to unbuddied list */
--			freechunks = num_free_chunks(zhdr);
--			list_add(&zhdr->buddy, &pool->unbuddied[freechunks]);
+-			clear_bit(PAGE_CLAIMED, &page->private);
 -		} else {
--			/* add to buddied list */
--			list_add(&zhdr->buddy, &pool->buddied);
+-			struct z3fold_buddy_slots *slots = zhdr->slots;
+-			z3fold_page_lock(zhdr);
+-			if (kref_put(&zhdr->refcount,
+-					release_z3fold_page_locked)) {
+-				kmem_cache_free(pool->c_handle, slots);
+-				return 0;
+-			}
+-			/*
+-			 * if we are here, the page is still not completely
+-			 * free. Take the global pool lock then to be able
+-			 * to add it back to the lru list
+-			 */
+-			spin_lock(&pool->lock);
+-			list_add(&page->lru, &pool->lru);
+-			spin_unlock(&pool->lock);
+-			if (list_empty(&zhdr->buddy))
+-				add_to_unbuddied(pool, zhdr);
+-			clear_bit(PAGE_CLAIMED, &page->private);
+-			z3fold_page_unlock(zhdr);
 -		}
 -
--		/* add to beginning of LRU */
--		list_add(&zhdr->lru, &pool->lru);
+-		/* We started off locked to we need to lock the pool back */
+-		spin_lock(&pool->lock);
 -	}
 -	spin_unlock(&pool->lock);
 -	return -EAGAIN;
 -}
 -
  /**
-  * zbud_map() - maps the allocation associated with the given handle
+  * z3fold_map() - maps the allocation associated with the given handle
   * @pool:	pool in which the allocation resides
-@@ -518,14 +384,7 @@ static void *zbud_zpool_create(const char *name, gfp_t gfp,
+@@ -1470,8 +1264,6 @@ static bool z3fold_page_isolate(struct page *page, isolate_mode_t mode)
+ 	spin_lock(&pool->lock);
+ 	if (!list_empty(&zhdr->buddy))
+ 		list_del_init(&zhdr->buddy);
+-	if (!list_empty(&page->lru))
+-		list_del_init(&page->lru);
+ 	spin_unlock(&pool->lock);
+ 
+ 	kref_get(&zhdr->refcount);
+@@ -1531,9 +1323,6 @@ static int z3fold_page_migrate(struct page *newpage, struct page *page,
+ 		encode_handle(new_zhdr, MIDDLE);
+ 	set_bit(NEEDS_COMPACTING, &newpage->private);
+ 	new_zhdr->cpu = smp_processor_id();
+-	spin_lock(&pool->lock);
+-	list_add(&newpage->lru, &pool->lru);
+-	spin_unlock(&pool->lock);
+ 	__SetPageMovable(newpage, &z3fold_mops);
+ 	z3fold_page_unlock(new_zhdr);
+ 
+@@ -1559,9 +1348,6 @@ static void z3fold_page_putback(struct page *page)
+ 	INIT_LIST_HEAD(&page->lru);
+ 	if (kref_put(&zhdr->refcount, release_z3fold_page_locked))
+ 		return;
+-	spin_lock(&pool->lock);
+-	list_add(&page->lru, &pool->lru);
+-	spin_unlock(&pool->lock);
+ 	if (list_empty(&zhdr->buddy))
+ 		add_to_unbuddied(pool, zhdr);
+ 	clear_bit(PAGE_CLAIMED, &page->private);
+@@ -1582,14 +1368,7 @@ static void *z3fold_zpool_create(const char *name, gfp_t gfp,
  			       const struct zpool_ops *zpool_ops,
  			       struct zpool *zpool)
  {
--	struct zbud_pool *pool;
+-	struct z3fold_pool *pool;
 -
--	pool = zbud_create_pool(gfp);
+-	pool = z3fold_create_pool(name, gfp);
 -	if (pool) {
 -		pool->zpool = zpool;
 -		pool->zpool_ops = zpool_ops;
 -	}
 -	return pool;
-+	return zbud_create_pool(gfp);
++	return z3fold_create_pool(name, gfp);
  }
  
- static void zbud_zpool_destroy(void *pool)
-@@ -543,25 +402,6 @@ static void zbud_zpool_free(void *pool, unsigned long handle)
- 	zbud_free(pool, handle);
+ static void z3fold_zpool_destroy(void *pool)
+@@ -1607,25 +1386,6 @@ static void z3fold_zpool_free(void *pool, unsigned long handle)
+ 	z3fold_free(pool, handle);
  }
  
--static int zbud_zpool_shrink(void *pool, unsigned int pages,
+-static int z3fold_zpool_shrink(void *pool, unsigned int pages,
 -			unsigned int *reclaimed)
 -{
 -	unsigned int total = 0;
 -	int ret = -EINVAL;
 -
 -	while (total < pages) {
--		ret = zbud_reclaim_page(pool, 8);
+-		ret = z3fold_reclaim_page(pool, 8);
 -		if (ret < 0)
 -			break;
 -		total++;
@@ -337,18 +427,18 @@ index 3acd26193920..19bc662ef5e9 100644
 -	return ret;
 -}
 -
- static void *zbud_zpool_map(void *pool, unsigned long handle,
+ static void *z3fold_zpool_map(void *pool, unsigned long handle,
  			enum zpool_mapmode mm)
  {
-@@ -585,7 +425,7 @@ static struct zpool_driver zbud_zpool_driver = {
- 	.destroy =	zbud_zpool_destroy,
- 	.malloc =	zbud_zpool_malloc,
- 	.free =		zbud_zpool_free,
--	.shrink =	zbud_zpool_shrink,
+@@ -1649,7 +1409,7 @@ static struct zpool_driver z3fold_zpool_driver = {
+ 	.destroy =	z3fold_zpool_destroy,
+ 	.malloc =	z3fold_zpool_malloc,
+ 	.free =		z3fold_zpool_free,
+-	.shrink =	z3fold_zpool_shrink,
 +	.shrink =	NULL,
- 	.map =		zbud_zpool_map,
- 	.unmap =	zbud_zpool_unmap,
- 	.total_size =	zbud_zpool_total_size,
+ 	.map =		z3fold_zpool_map,
+ 	.unmap =	z3fold_zpool_unmap,
+ 	.total_size =	z3fold_zpool_total_size,
 -- 
 2.34.1
 
