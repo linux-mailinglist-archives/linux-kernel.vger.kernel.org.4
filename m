@@ -2,59 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94889724452
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 15:25:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 664C472445D
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 15:27:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237794AbjFFNZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 09:25:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51284 "EHLO
+        id S236964AbjFFN1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 09:27:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237456AbjFFNYt (ORCPT
+        with ESMTP id S231431AbjFFN13 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 09:24:49 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50A70E78
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 06:24:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=pGB2OELV1ZI3aHQVgPnKWDCXY7pLRJeg/VyzarCb7XE=; b=DfcmeHIHYCxYc5LRY3vVsvRZgl
-        wexYQWe2itHyp2c0lSJXToCIACgwoJMav90lsgZBpiXv9WeziZsXGIYZ4HR4JMVKEPAL7W+tCWvXc
-        Gp2mdzPrIx/5HlLWtlhK2KkZ1c2eK2KbzyUytEioEm3K1aH3Z5VhN7NklxTxWlg3HDQ0lgiSJTUaX
-        i9SkbIaVguI9BhxUaegrU0KrY90jG12WE2KLlfQ9RZPiUNpM5jaTseGGVH3euzgr7lWOewmKw8jrA
-        j4mDOKTLKcWg0ICDzoYBhVFvNQMPPNOA/qyjz9XY3fldFW/Cq6fZCWtjhJ487vZ9ihOG9j3AMXqwa
-        6p3SA+vQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1q6Wfq-00DBFl-1u; Tue, 06 Jun 2023 13:24:35 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2BA35300129;
-        Tue,  6 Jun 2023 15:24:33 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 0D150205EA3E1; Tue,  6 Jun 2023 15:24:33 +0200 (CEST)
-Date:   Tue, 6 Jun 2023 15:24:32 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Liang, Kan" <kan.liang@linux.intel.com>
-Cc:     mingo@redhat.com, acme@kernel.org, linux-kernel@vger.kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, namhyung@kernel.org, irogers@google.com,
-        adrian.hunter@intel.com, ak@linux.intel.com, eranian@google.com,
-        alexey.v.bayduraev@linux.intel.com, tinghao.zhang@intel.com
-Subject: Re: [PATCH V2 1/6] perf/x86/intel: Add Grand Ridge and Sierra Forest
-Message-ID: <20230606132432.GD905437@hirez.programming.kicks-ass.net>
-References: <20230522113040.2329924-1-kan.liang@linux.intel.com>
- <2b2e7308-edeb-2977-596a-f638d19174d6@linux.intel.com>
+        Tue, 6 Jun 2023 09:27:29 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3521118;
+        Tue,  6 Jun 2023 06:27:27 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1686058046;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4GE9WjdAFKVw1j/LBC/tJ3tEETtCjZm6/3ok9EzRiww=;
+        b=w5R70kFWsU64r33qYY+R3GNo4WBUNJSWY3CITWeMB8Ho1DaAglb56jHjjyHPUdrv0xPFtI
+        5mVQK8m+4uvVDtb0PQ04IOvf+Nxe7vbfrUesgfPsikP/YsWsH1P+FFdWBwyfUf64h/LZvF
+        fFWNnm46QdtmJKPKnu3m2XwFtDTmwbhp7seekB0dxQ0yqEfBGFF+GFsXK/orl1Zzr2DUFn
+        LhZDlI+aJNabFjlfG0h5Mt8G9qm4kNPmhx4HrfCLjDkr4/hDh3LJHMXkniebEdr9m9IiFf
+        dQ6EmrUfZn0XPcSvFtp6RdIiC65U8/2DYMYqMqHFTELKgtQh4HlM7H7+2EIvVg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1686058046;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=4GE9WjdAFKVw1j/LBC/tJ3tEETtCjZm6/3ok9EzRiww=;
+        b=te48p/rqwl0Wh/jc2Vr4qpI19ykvDLPW9ambOLCElI800bdN5cVIUOd3midi7weyXM/aaQ
+        uWeQsj/BVGfDvRBA==
+To:     "Li, Xin3" <xin3.li@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
+Cc:     "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "jiangshanlai@gmail.com" <jiangshanlai@gmail.com>,
+        "Kang, Shan" <shan.kang@intel.com>
+Subject: RE: [PATCH v8 30/33] x86/fred: allow dynamic stack frame size
+In-Reply-To: <SA1PR11MB673430AC2D6F20C5F77FC83AA852A@SA1PR11MB6734.namprd11.prod.outlook.com>
+References: <20230410081438.1750-1-xin3.li@intel.com>
+ <20230410081438.1750-31-xin3.li@intel.com> <87wn0i578t.ffs@tglx>
+ <SA1PR11MB673430AC2D6F20C5F77FC83AA852A@SA1PR11MB6734.namprd11.prod.outlook.com>
+Date:   Tue, 06 Jun 2023 15:27:25 +0200
+Message-ID: <87fs74lo02.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2b2e7308-edeb-2977-596a-f638d19174d6@linux.intel.com>
+Content-Type: text/plain
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,53 +69,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 08:42:42AM -0400, Liang, Kan wrote:
-> Hi Peter,
-> 
-> On 2023-05-22 7:30 a.m., kan.liang@linux.intel.com wrote:
-> > From: Kan Liang <kan.liang@linux.intel.com>
-> > 
-> > The Grand Ridge and Sierra Forest are successors to Snow Ridge. They
-> > both have Crestmont core. From the core PMU's perspective, they are
-> > similar to the e-core of MTL. The only difference is the LBR event
-> > logging feature, which will be implemented in the following patches.
-> > 
-> > Create a non-hybrid PMU setup for Grand Ridge and Sierra Forest.
-> > 
-> > Reviewed-by: Andi Kleen <ak@linux.intel.com>
-> > Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
-> > ---
-> > 
-> 
-> 
-> Gentle ping.
-> 
-> Do you have any comments for the patch set?
-> 
-> The patch set based on the perf/core branch which doesn't
-> include the latest fix, 90befef5a9e8 ("perf/x86: Fix missing sample size
-> update on AMD BRS").
-> https://lore.kernel.org/lkml/2f09023a-cccb-35df-da0a-d245ee5238be@linux.intel.com/
-> 
-> Should I rebase it on the perf/urgent and send the V3?
-> 
+On Tue, Jun 06 2023 at 06:18, Xin3 Li wrote:
+>> > A FRED stack frame could contain different amount of information for
+>> > This approach also works for IDT, thus we unify the code.
+>> 
+>> And thereby remove the useful comment and replace it with an undocumented
+>> macro mess.
+>> 
+>> I'm simply refusing to review this. It's not my job to understand this
+>> undocumented hackery.
+>> 
+>
+> I believe it's a nice idea to allow dynamic stack frame size, at least for
+> FRED.
 
-I can pull urgent into perf/core, but:
+Believe belongs in the realm of religion. What we need here are proper
+facts, explanations and justifications. Nice ideas are not helpful when
+they are not having a value.
 
-> > +	case INTEL_FAM6_GRANDRIDGE:
-> > +	case INTEL_FAM6_SIERRAFOREST_X:
-                        ^^^^^^^^^^^^^^^
+> It's totally my bad that I didn't make it meet the minimum standards,
+> I will rewrite the commit message and add better comments.
+>
+> After a second thought, I probably should only apply the change to FRED for
+> 2 reasons, the change seems problematic with ESPFIX (which FRED
+> doesn't need),
 
-Those are just plain wrong; please fix up the intel-family.h thing like
-suggested earlier in this thread.
+Indeed. Making this FRED only is going to need even more justification.
 
-And Tony, please no more of that platform name nonsense.. we want uarch
-names for a reason, so that enums like the above become something
-sensible like:
+> and such corner cases are hard to test (self-tests needed?)
 
-	case INTEL_FAM6_ATOM_CRESTMONT:
-	case INTEL_FAM6_ATOM_CRESTMONT_X:
+There is a test. It's not that hard to find:
 
-and now it's super obvious why they're grouped.
+# git grep -li ESPFIX tools/testing/selftests/
+tools/testing/selftests/x86/sigreturn.c
 
-> > +		pr_cont("Crestmont events, ");
+Thanks,
+
+        tglx
