@@ -2,287 +2,296 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 786A17244A7
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 15:39:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B1FA7244AA
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 15:40:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237954AbjFFNjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 09:39:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58954 "EHLO
+        id S237342AbjFFNkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 09:40:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237744AbjFFNi4 (ORCPT
+        with ESMTP id S231259AbjFFNkL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 09:38:56 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 629B410F1;
-        Tue,  6 Jun 2023 06:38:44 -0700 (PDT)
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 356DGwCG020986;
-        Tue, 6 Jun 2023 13:38:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=46n7lg100dSUJohI1inMeAPhUrgIQOl7+5M4mbM/d/g=;
- b=JueLAffdXfIvkDRnDdfJUyScCxorl9D48NfAYJ3i8qMMPFQV7k/MXQMvxNpabbzIkAq1
- qjBl0xrPJneh+qpW/Fuj+SbDnwnP5QvhLjwmOdRqlK2KmCK88eOXX1OSFxylZOLuNFs8
- EyYFINXGh1U57nDKDjn868uIRCX5FMO+A4rHdwTjX1gwPCF9Hs08roSOFkF5eADiZ3ZA
- aDWMcB+k5tUSq9dEcMdST9Mkt2h87ovWilpdJwTZ/kh6i32zsV7ECKD67D8PP6R9UEwF
- gPCYPpl99fDiApDA/3ThpxLNDD3a/4Pl6HJp7LKm/9qJ5TXMao3cru46xIIOahc6Ov42 gw== 
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r25hyrmr9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 06 Jun 2023 13:38:43 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3569VfT9001840;
-        Tue, 6 Jun 2023 13:33:36 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-        by ppma04fra.de.ibm.com (PPS) with ESMTPS id 3qyxbu9j97-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 06 Jun 2023 13:33:36 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 356DXWSj44761666
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 6 Jun 2023 13:33:33 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9CA4520040;
-        Tue,  6 Jun 2023 13:33:32 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1FB2520043;
-        Tue,  6 Jun 2023 13:33:32 +0000 (GMT)
-Received: from [9.171.79.116] (unknown [9.171.79.116])
-        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue,  6 Jun 2023 13:33:32 +0000 (GMT)
-Message-ID: <259a64f0-cdd4-ab96-f96e-baf00eb71e46@linux.ibm.com>
-Date:   Tue, 6 Jun 2023 15:33:31 +0200
+        Tue, 6 Jun 2023 09:40:11 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44E1F10D5
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 06:40:08 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-5149c51fd5bso9028016a12.0
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 06:40:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=metaspace-dk.20221208.gappssmtp.com; s=20221208; t=1686058807; x=1688650807;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=TuQcZTlYuJWIJGVGPX1FYC2vSGGbheUssDv1PYTz480=;
+        b=fNAefN4HvEGREq3Sj+Jyz3LnUeHV+vla1j7XQncjRwj3KoQxgJgwcceR8EXnVTNIGo
+         enEfS7FH5dVqCG/WHZeS7kFfm2RmDjy48dgBeFLD4ficFOEV4vEN8vKxRm/bFtfOkCwm
+         cPpJrJCvXRIO7OKqxY/nLqZ8EuFDCihAmtsQcRikp//A3TBuNNw2MSo4ot1T8BfVQM7f
+         A6FEgHOiN2EtH4eRWtd4dROi//SmekC/LngGNJ1xpqr/kdUGftuiU3W9aILIDHm06ud2
+         JBvA+Kphoi8+iBUFf59KYKiBPaSMSOzPWheee0FLTZplWrgLlt/nHp/Fui8qs94sBpqZ
+         52Pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686058807; x=1688650807;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TuQcZTlYuJWIJGVGPX1FYC2vSGGbheUssDv1PYTz480=;
+        b=QCbLnE4d5ZkgzC/QYxvTsseeb9ZxMlQAYET++cu26xw0ztbqFpAneltmrADh5UTEdq
+         S5RwYSW4XkOkp96qaDnaw9Ipzf40a8KM+N6UJGZolxL8CwjBG2+icKFlyEV/H47gvxqF
+         gcPeTa5z87xSEgrLyle2K2eJFlkSWYx3VYynKdZvK5DBQpEo36Tm/Qduqi/I96pxsF+w
+         sVF6gDFgg7H2WqUk6CIuics5vU7Hq9pW/23WyJ2qbQE1LrHtv7YX+ja90YOp7pv8H+i8
+         q9b7hIWrnqvbIEl97MpL6SMCdwDpJhzdmsXlLHcm4sbLp4J9YLswTFjgv6+pSeVV8pDk
+         1juQ==
+X-Gm-Message-State: AC+VfDwWf7Pe8kE+EM8L4P8yuOfZC7yphl6FLlYhBNLyHZU5Cp4yCi6A
+        9fX8MQ1FwHzTOFaiON6GcKeFyw==
+X-Google-Smtp-Source: ACHHUZ5XLO8axA40iII673EklfhmaEB/Gj3Fapwb9AgeUHHbXZrNug2Mh9mK2Elk+NrhZljQTGl33g==
+X-Received: by 2002:aa7:d716:0:b0:514:a110:6bed with SMTP id t22-20020aa7d716000000b00514a1106bedmr2040587edq.27.1686058806617;
+        Tue, 06 Jun 2023 06:40:06 -0700 (PDT)
+Received: from localhost ([79.142.230.34])
+        by smtp.gmail.com with ESMTPSA id r21-20020aa7c155000000b0051421010690sm4967093edp.21.2023.06.06.06.40.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Jun 2023 06:40:06 -0700 (PDT)
+References: <20230503090708.2524310-1-nmi@metaspace.dk>
+ <da7b815d-3da8-38e5-9b25-b9cfb6878293@acm.org>
+ <87jzxot0jk.fsf@metaspace.dk>
+ <b9a1c1b2-3baa-2cad-31ae-8b14e4ee5709@acm.org>
+ <ZFP+8apHunCCMmOZ@kbusch-mbp.dhcp.thefacebook.com>
+ <e7bc2155-613b-8904-9942-2e9615b0dc63@kernel.dk>
+User-agent: mu4e 1.10.3; emacs 28.2.50
+From:   "Andreas Hindborg (Samsung)" <nmi@metaspace.dk>
+To:     Jens Axboe <axboe@kernel.dk>, Keith Busch <kbusch@kernel.org>,
+        Christoph Hellwig <hch@lst.de>, Ming Lei <ming.lei@redhat.com>
+Cc:     Bart Van Assche <bvanassche@acm.org>,
+        Damien Le Moal <Damien.LeMoal@wdc.com>,
+        Hannes Reinecke <hare@suse.de>, rust-for-linux@vger.kernel.org,
+        linux-block@vger.kernel.org, Matthew Wilcox <willy@infradead.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?utf-8?Q?Bj?= =?utf-8?Q?=C3=B6rn?= Roy Baron 
+        <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>,
+        open list <linux-kernel@vger.kernel.org>, gost.dev@samsung.com,
+        Matias =?utf-8?Q?Bj=C3=B8rling?= <Matias.Bjorling@wdc.com>,
+        Niklas Cassel <Niklas.Cassel@wdc.com>,
+        Johannes Thumshirn <Johannes.Thumshirn@wdc.com>
+Subject: Re: [RFC PATCH 00/11] Rust null block driver
+Date:   Tue, 06 Jun 2023 15:33:44 +0200
+In-reply-to: <e7bc2155-613b-8904-9942-2e9615b0dc63@kernel.dk>
+Message-ID: <87ttvkaevf.fsf@metaspace.dk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 1/6] s390/uvdevice: Add info IOCTL
-To:     Steffen Eiden <seiden@linux.ibm.com>, kvm@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Viktor Mihajlovski <mihajlov@linux.ibm.com>
-Cc:     Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Nico Boehr <nrb@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Hendrik Brueckner <brueckner@linux.ibm.com>
-References: <20230606113736.2934503-1-seiden@linux.ibm.com>
- <20230606113736.2934503-2-seiden@linux.ibm.com>
-Content-Language: en-US
-From:   Janosch Frank <frankja@linux.ibm.com>
-In-Reply-To: <20230606113736.2934503-2-seiden@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Gq6Y4KcQm2DnkbTbe6WzSiDM8Nhtk4Yx
-X-Proofpoint-GUID: Gq6Y4KcQm2DnkbTbe6WzSiDM8Nhtk4Yx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-06_08,2023-06-06_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- impostorscore=0 mlxscore=0 adultscore=0 suspectscore=0 priorityscore=1501
- phishscore=0 spamscore=0 bulkscore=0 clxscore=1015 mlxlogscore=999
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2306060115
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/6/23 13:37, Steffen Eiden wrote:
-> Add an IOCTL that allows userspace to find out which IOCTLs the uvdevice
-> supports without trial and error.
-> 
-> Explicitly expose the IOCTL nr for the request types.
-> 
-> Signed-off-by: Steffen Eiden <seiden@linux.ibm.com>
 
-Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
+Hi All,
 
-> ---
->   arch/s390/include/uapi/asm/uvdevice.h | 42 ++++++++++++++-
->   drivers/s390/char/uvdevice.c          | 77 ++++++++++++++++++++++++---
->   2 files changed, 111 insertions(+), 8 deletions(-)
-> 
-> diff --git a/arch/s390/include/uapi/asm/uvdevice.h b/arch/s390/include/uapi/asm/uvdevice.h
-> index 10a5ac918e02..9d9b684836c2 100644
-> --- a/arch/s390/include/uapi/asm/uvdevice.h
-> +++ b/arch/s390/include/uapi/asm/uvdevice.h
-> @@ -32,6 +32,33 @@ struct uvio_attest {
->   	__u16 reserved136;				/* 0x0136 */
->   };
->   
-> +/**
-> + * uvio_uvdev_info - Information of supported functions
-> + * @supp_uvio_cmds - supported IOCTLs by this device
-> + * @supp_uv_cmds - supported UVCs corresponding to the IOCTL
-> + *
-> + * UVIO request to get information about supported request types by this
-> + * uvdevice and the Ultravisor.  Everything is output. Bits are in LSB0
-> + * ordering.  If the bit is set in both, @supp_uvio_cmds and @supp_uv_cmds, the
-> + * uvdevice and the Ultravisor support that call.
-> + *
-> + * Note that bit 0 (UVIO_IOCTL_UVDEV_INFO_NR) is always zero for `supp_uv_cmds`
-> + * as there is no corresponding UV-call.
-> + */
-> +struct uvio_uvdev_info {
-> +	/*
-> +	 * If bit `n` is set, this device supports the IOCTL with nr `n`.
-> +	 */
-> +	__u64 supp_uvio_cmds;
-> +	/*
-> +	 * If bit `n` is set, the Ultravisor(UV) supports the UV-call
-> +	 * corresponding to the IOCTL with nr `n` in the calling contextx (host
-> +	 * or guest).  The value is only valid if the corresponding bit in
-> +	 * @supp_uvio_cmds is set as well.
-> +	 */
-> +	__u64 supp_uv_cmds;
-> +};
-> +
->   /*
->    * The following max values define an upper length for the IOCTL in/out buffers.
->    * However, they do not represent the maximum the Ultravisor allows which is
-> @@ -46,6 +73,19 @@ struct uvio_attest {
->   #define UVIO_DEVICE_NAME "uv"
->   #define UVIO_TYPE_UVC 'u'
->   
-> -#define UVIO_IOCTL_ATT _IOWR(UVIO_TYPE_UVC, 0x01, struct uvio_ioctl_cb)
-> +enum UVIO_IOCTL_NR {
-> +	UVIO_IOCTL_UVDEV_INFO_NR = 0x00,
-> +	UVIO_IOCTL_ATT_NR,
-> +	/* must be the last entry */
-> +	UVIO_IOCTL_NUM_IOCTLS
-> +};
-> +
-> +#define UVIO_IOCTL(nr)		_IOWR(UVIO_TYPE_UVC, nr, struct uvio_ioctl_cb)
-> +#define UVIO_IOCTL_UVDEV_INFO	UVIO_IOCTL(UVIO_IOCTL_UVDEV_INFO_NR)
-> +#define UVIO_IOCTL_ATT		UVIO_IOCTL(UVIO_IOCTL_ATT_NR)
-> +
-> +#define UVIO_SUPP_CALL(nr)	(1ULL << (nr))
-> +#define UVIO_SUPP_UDEV_INFO	UVIO_SUPP_CALL(UVIO_IOCTL_UDEV_INFO_NR)
-> +#define UVIO_SUPP_ATT		UVIO_SUPP_CALL(UVIO_IOCTL_ATT_NR)
->   
->   #endif /* __S390_ASM_UVDEVICE_H */
-> diff --git a/drivers/s390/char/uvdevice.c b/drivers/s390/char/uvdevice.c
-> index 1d40457c7b10..4efeebcaf382 100644
-> --- a/drivers/s390/char/uvdevice.c
-> +++ b/drivers/s390/char/uvdevice.c
-> @@ -32,6 +32,52 @@
->   #include <asm/uvdevice.h>
->   #include <asm/uv.h>
->   
-> +#define BIT_UVIO_INTERNAL U32_MAX
-> +/* Mapping from IOCTL-nr to UVC-bit */
-> +static const u32 ioctl_nr_to_uvc_bit[] __initconst = {
-> +	[UVIO_IOCTL_UVDEV_INFO_NR] = BIT_UVIO_INTERNAL,
-> +	[UVIO_IOCTL_ATT_NR] = BIT_UVC_CMD_RETR_ATTEST,
-> +};
-> +
-> +static_assert(ARRAY_SIZE(ioctl_nr_to_uvc_bit) == UVIO_IOCTL_NUM_IOCTLS);
-> +
-> +static struct uvio_uvdev_info uvdev_info = {
-> +	.supp_uvio_cmds = GENMASK_ULL(UVIO_IOCTL_NUM_IOCTLS - 1, 0),
-> +};
-> +
-> +static void __init set_supp_uv_cmds(unsigned long *supp_uv_cmds)
-> +{
-> +	int i;
-> +
-> +	for (i = 0; i < UVIO_IOCTL_NUM_IOCTLS; i++) {
-> +		if (ioctl_nr_to_uvc_bit[i] == BIT_UVIO_INTERNAL)
-> +			continue;
-> +		if (!test_bit_inv(ioctl_nr_to_uvc_bit[i], uv_info.inst_calls_list))
-> +			continue;
-> +		__set_bit(i, supp_uv_cmds);
-> +	}
-> +}
-> +
-> +/**
-> + * uvio_uvdev_info() - get information about the uvdevice
-> + *
-> + * @uv_ioctl: ioctl control block
-> + *
-> + * Lists all IOCTLs that are supported by this uvdevice
-> + */
-> +static int uvio_uvdev_info(struct uvio_ioctl_cb *uv_ioctl)
-> +{
-> +	void __user *user_buf_arg = (void __user *)uv_ioctl->argument_addr;
-> +
-> +	if (uv_ioctl->argument_len < sizeof(uvdev_info))
-> +		return -EINVAL;
-> +	if (copy_to_user(user_buf_arg, &uvdev_info, sizeof(uvdev_info)))
-> +		return -EFAULT;
-> +
-> +	uv_ioctl->uv_rc = UVC_RC_EXECUTED;
-> +	return  0;
-> +}
-> +
->   static int uvio_build_uvcb_attest(struct uv_cb_attest *uvcb_attest, u8 *arcb,
->   				  u8 *meas, u8 *add_data, struct uvio_attest *uvio_attest)
->   {
-> @@ -185,8 +231,19 @@ static int uvio_attestation(struct uvio_ioctl_cb *uv_ioctl)
->   	return ret;
->   }
->   
-> -static int uvio_copy_and_check_ioctl(struct uvio_ioctl_cb *ioctl, void __user *argp)
-> +static int uvio_copy_and_check_ioctl(struct uvio_ioctl_cb *ioctl, void __user *argp,
-> +				     unsigned long cmd)
->   {
-> +	u8 nr = _IOC_NR(cmd);
-> +
-> +	if (_IOC_DIR(cmd) != (_IOC_READ | _IOC_WRITE))
-> +		return -ENOIOCTLCMD;
-> +	if (_IOC_TYPE(cmd) != UVIO_TYPE_UVC)
-> +		return -ENOIOCTLCMD;
-> +	if (nr >= UVIO_IOCTL_NUM_IOCTLS)
-> +		return -ENOIOCTLCMD;
-> +	if (_IOC_SIZE(cmd) != sizeof(*ioctl))
-> +		return -ENOIOCTLCMD;
->   	if (copy_from_user(ioctl, argp, sizeof(*ioctl)))
->   		return -EFAULT;
->   	if (ioctl->flags != 0)
-> @@ -194,7 +251,7 @@ static int uvio_copy_and_check_ioctl(struct uvio_ioctl_cb *ioctl, void __user *a
->   	if (memchr_inv(ioctl->reserved14, 0, sizeof(ioctl->reserved14)))
->   		return -EINVAL;
->   
-> -	return 0;
-> +	return nr;
->   }
->   
->   /*
-> @@ -205,12 +262,17 @@ static long uvio_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
->   	void __user *argp = (void __user *)arg;
->   	struct uvio_ioctl_cb uv_ioctl = { };
->   	long ret;
-> +	int nr;
-> +
-> +	nr = uvio_copy_and_check_ioctl(&uv_ioctl, argp, cmd);
-> +	if (nr < 0)
-> +		return nr;
->   
-> -	switch (cmd) {
-> -	case UVIO_IOCTL_ATT:
-> -		ret = uvio_copy_and_check_ioctl(&uv_ioctl, argp);
-> -		if (ret)
-> -			return ret;
-> +	switch (nr) {
-> +	case UVIO_IOCTL_UVDEV_INFO_NR:
-> +		ret = uvio_uvdev_info(&uv_ioctl);
-> +		break;
-> +	case UVIO_IOCTL_ATT_NR:
->   		ret = uvio_attestation(&uv_ioctl);
->   		break;
->   	default:
-> @@ -245,6 +307,7 @@ static void __exit uvio_dev_exit(void)
->   
->   static int __init uvio_dev_init(void)
->   {
-> +	set_supp_uv_cmds((unsigned long *)&uvdev_info.supp_uv_cmds);
->   	return misc_register(&uvio_dev_miscdev);
->   }
->   
+I apologize for the lengthy email, but I have a lot of things to cover.
 
+As some of you know, a goal of mine is to make it possible to write blk-mq
+device drivers in Rust. The RFC patches I have sent to this list are the first
+steps of making that goal a reality. They are a sample of the work I am doing.
+
+My current plan of action is to provide a Rust API that allows implementation of
+blk-mq device drives, along with a Rust implementation of null_blk to serve as a
+reference implementation. This reference implementation will demonstrate how to
+use the API.
+
+I attended LSF in Vancouver a few weeks back where I led a discussion on the
+topic. My goal for that session was to obtain input from the community on how to
+upstream the work as it becomes more mature.
+
+I received a lot of feedback, both during the session, in the hallway, and on
+the mailing list. Ultimately, we did not achieve consensus on a path forward. I
+will try to condense the key points raised by the community here. If anyone feel
+their point is not contained below, please chime in.
+
+Please note that I am paraphrasing the points below, they are not citations.
+
+1) "Block layer community does not speak Rust and thus cannot review Rust patches"
+
+   This work hinges on one of two things happening. Either block layer reviewers
+   and maintainers eventually becoming fluent in Rust, or they accept code in
+   their tree that are maintained by the "rust people". I very much would prefer
+   the first option.
+
+   I would suggest to use this work to facilitate gradual adoption of Rust. I
+   understand that this will be a multi-year effort. By giving the community
+   access to a Rust bindings specifically designed or the block layer, the block
+   layer community will have a helpful reference to consult when investigating
+   Rust.
+
+   While the block community is getting up to speed in Rust, the Rust for Linux
+   community is ready to conduct review of patches targeting the block layer.
+   Until such a time where Rust code can be reviewed by block layer experts, the
+   work could be gated behind an "EXPERIMENTAL" flag.
+
+   Selection of the null_blk driver for a reference implementation to drive the
+   Rust block API was not random. The null_blk driver is relatively simple and
+   thus makes for a good platform to demonstrate the Rust API without having to
+   deal with actual hardware.
+
+   The null_blk driver is a piece of testing infrastructure that is not usually
+   deployed in production environments, so people who are worried about Rust in
+   general will not have to worry about their production environments being
+   infested with Rust.
+
+   Finally there have been suggestions both to replace and/or complement the
+   existing C null_blk driver with the Rust version. I would suggest
+   (eventually, not _now_) complementing the existing driver, since it can be
+   very useful to benchmark and test the two drivers side by side.
+
+2) "Having Rust bindings for the block layer in-tree is a burden for the
+   maintainers"
+
+   I believe we can integrate the bindings in a way so that any potential
+   breakage in the Rust API does not impact current maintenance work.
+   Maintainers and reviewers that do not wish to bother with Rust should be able
+   to opt out. All Rust parts should be gated behind a default N kconfig option.
+   With this scheme there should be very little inconvenience for current
+   maintainers.
+
+   I will take necessary steps to make sure block layer Rust bindings are always
+   up to date with changes to kernel C API. I would run CI against
+
+   - for-next of https://git.kernel.dk/linux.git
+   - master of https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+   - mainline releases including RCs
+   - stable and longterm kernels with queues applied
+   - stable and longterm releases including RCs
+
+   Samsung will provide resources to support this CI effort. Through this effort
+   I will aim to minimize any inconvenience for maintainers.
+
+3) "How will you detect breakage in the Rust API caused by changes to C code?"
+
+   The way we call C code from Rust in the kernel guarantees that most changes
+   to C APIs that are called by Rust code will cause a compile failure when
+   building the kernel with Rust enabled. This includes changing C function
+   argument names or types, and struct field names or types. Thus, we do not need
+   to rely on symvers CRC calculation as suggested by James Bottomley at LSF.
+
+   However, if the semantics of a kernel C function is changed without changing
+   its name or signature, potential breakage will not be detected by the build
+   system. To detect breakage resulting from this kind of change, we have to
+   rely _on the same mechanics_ that maintainers of kernel C code are relying on
+   today:
+
+   - kunit tests
+   - blktests
+   - fstests
+   - staying in the loop wrt changes in general
+
+   We also have Rust support in Intel 0-day CI, although only compile tests for
+   now.
+
+4) "How will you prevent breakage in C code resulting from changes to Rust code"
+
+   The way the Rust API is designed, existing C code is not going to be reliant
+   on Rust code. If anything breaks just disable Rust and no Rust code will be
+   built. Or disable block layer Rust code if you want to keep general Rust
+   support. If Rust is disabled by default, nothing in the kernel should break
+   because of Rust, if not explicitly enabled.
+
+5) "Block drivers in general are not security sensitive because they are mostly
+   privileged code and have limited user visible API"
+
+   There are probably easier ways to exploit a Linux system than to target the
+   block layer, although people are plugging in potentially malicious block
+   devices all the time in the form of USB Mass Storage devices or CF cards.
+
+   While memory safety is very relevant for preventing exploitable security
+   vulnerabilities, it is also incredibly useful in preventing memory safety
+   bugs in general. Fewer bugs means less risk of bugs leading to data
+   corruption. It means less time spent on tracking down and fixing bugs, and
+   less time spent reviewing bug fixes. It also means less time required to
+   review patches in general, because reviewers do not have to review for memory
+   safety issues.
+
+   So while Rust has high merit in exposed and historically exploited
+   subsystems, this does not mean that it has no merit in other subsystems.
+
+6) "Other subsystems may benefit more from adopting Rust"
+
+   While this might be true, it does not prevent the block subsystem from
+   benefiting from adopting Rust (see 5).
+
+
+7) "Do not waste time re-implementing null_blk, it is test infrastructure so
+   memory safety does not matter. Why don't you do loop instead?"
+
+   I strongly believe that memory safety is also relevant in test
+   infrastructure. We waste time and energy fixing memory safety issues in our
+   code, no matter if the code is test infrastructure or not. I refer to the
+   statistics I posted to the list at an earlier date [3].
+
+   Further, I think it is a benefit to all if the storage community can become
+   fluent in Rust before any critical infrastructure is deployed using Rust.
+   This is one reason that I switched my efforts to null_block and that I am not
+   pushing Rust NVMe.
+
+8) "Why don't you wait with this work until you have a driver for a new storage
+   standard"
+
+   Let's be proactive. I think it is important to iron out the details of the
+   Rust API before we implement any potential new driver. When we eventually
+   need to implement a driver for a future storage standard, the choice to do so
+   in Rust should be easy. By making the API available ahead of time, we will be
+   able to provide future developers with a stable implementation to choose
+   from.
+
+9) "You are a new face in our community. How do we know you will not disappear?"
+
+   I recognize this consideration and I acknowledge that the community is trust
+   based. Trust takes time to build. I can do little more than state that I
+   intend to stay with my team at Samsung to take care of this project for many
+   years to come. Samsung is behind this particular effort. In general Google
+   and Microsoft are actively contributing to the wider Rust for Linux project.
+   Perhaps that can be an indication that the project in general is not going
+   away.
+
+10) "How can I learn how to build the kernel with Rust enabled?"
+
+    We have a guide in `Documentation/rust/quick-start.rst`. If that guide does
+    not get you started, please reach out to us [1] and we will help you get
+    started (and fix the documentation since it must not be good enough then).
+
+11) "What if something catches fire and you are out of office?"
+
+    If I am for some reason not responding to pings during a merge, please
+    contact the Rust subsystem maintainer and the Rust for Linux list [2]. There
+    are quite a few people capable of firefighting if it should ever become
+    necessary.
+
+12) "These patches are not ready yet, we should not accept them"
+
+    They most definitely are _not_ ready, and I would not ask for them to be
+    included at all in their current state. The RFC is meant to give a sample of
+    the work that I am doing and to start this conversation. I would rather have
+    this conversation preemptively. I did not intend to give the impression that
+    the patches are in a finalized state at all.
+
+
+With all this in mind I would suggest that we treat the Rust block layer API and
+associated null block driver as an experiment. I would suggest that we merge it
+in when it is ready, and we gate it behind an experimental kconfig option. If it
+turns out that all your worst nightmares come true and it becomes an unbearable
+load for maintainers, reviewers and contributors, it will be low effort remove
+it again. I very much doubt this will be the case though.
+
+Jens, Kieth, Christoph, Ming, I would kindly ask you to comment on my suggestion
+for next steps, or perhaps suggest an alternate path. In general I would
+appreciate any constructive feedback from the community.
+
+[1] https://rust-for-linux.com/contact
+[2] rust-for-linux@vger.kernel.org
+[3] https://lore.kernel.org/all/87y1ofj5tt.fsf@metaspace.dk/
+
+Best regards,
+Andreas Hindborg
