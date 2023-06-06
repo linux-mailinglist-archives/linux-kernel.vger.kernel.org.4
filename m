@@ -2,253 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7560C7247FB
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 17:40:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D211A7247FE
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 17:40:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237643AbjFFPj5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 11:39:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57790 "EHLO
+        id S237685AbjFFPj7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 11:39:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238009AbjFFPjp (ORCPT
+        with ESMTP id S238641AbjFFPjy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 11:39:45 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E16610D2
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 08:39:44 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id 3f1490d57ef6-ba829e17aacso7800737276.0
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 08:39:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20221208.gappssmtp.com; s=20221208; t=1686065983; x=1688657983;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=elTBqfUhPXSPyDwW3mi+yRAT2Okd4Dn54wk2+xqX2uE=;
-        b=rtwZNt1EG2rvaIQ3g0XQOeXafgz9lj2O4EZGXPm8k2SAGvhSVzmpija/Byq7Ikvzyv
-         RabBusq0CTYp1R7MXvDA0x0MfddvGSvaHyuBPRomUw4Eg1auAAYHujXW+hJtMPDBwQEg
-         +dgYzjo50cwXSBqu+bYfmD1WFBdOY9mouOrrylGfg2z9yWS3AcLG4ed4u5fRB1I//PaY
-         AKQTsUu7jCLe/Z5mrAkQO8rrWsh5OmMZHvgUm1BrUPVc/dqp/nWkVaedAHhVhF6BJjeT
-         ZfmUk+mWccMp3GQGUHoH+24iU+prN9i/ho5ep5PG5sGrnMwRyk3rH2vpaBdJSpPVNWjS
-         QlKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686065983; x=1688657983;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=elTBqfUhPXSPyDwW3mi+yRAT2Okd4Dn54wk2+xqX2uE=;
-        b=DjPE0rpBboUJYNpCFRDMslaeCAH2pqz7vKc+NmSqbEFcCM+MSyLP7v1nZ1OeaZoJAt
-         vMRWWbpHbxEzuhDipkKrEKjx6urbBNMW60ylxGoEPEuoM5A1h7+lRTXRhZ+ixm/p+kRr
-         GYzB8e+jmitv7/E9825xifZPmbCSV8Ih9DzCkFpPQ9nKwdIu2OWlo2lZWCpbyqexuqwH
-         Ubn6j/BBFvGmbs29K63mPtkK3W60v1fqf//YSgl+xGu6uaEuelHu7rzAWFiwUEqXIkLW
-         3uFVUEm0j4yAteeUrs/QdBcBFAXc2JaiY898wvVB6ZV+FCdvx9BYh+lRvyoQWkQTPOpt
-         8xoQ==
-X-Gm-Message-State: AC+VfDyPQbkVLKED5bl31WFt8V20bKFHvn7BGLwxbdhC9uCzF6bSvF9o
-        gyxY4rXpjlUBysbDhNa0MeCM/P7Jp6OoE2POdPiuQQ==
-X-Google-Smtp-Source: ACHHUZ6AbldddbAsOhtAOSD4tHHYX3Z/CCZtQcDWqnC9xbTaFKB8pD7G4yqlPp6lz2sDL0oyfz8R4u+lgk8ScfFX0JE=
-X-Received: by 2002:a0d:df93:0:b0:567:2891:a2ec with SMTP id
- i141-20020a0ddf93000000b005672891a2ecmr2323430ywe.22.1686065983484; Tue, 06
- Jun 2023 08:39:43 -0700 (PDT)
+        Tue, 6 Jun 2023 11:39:54 -0400
+Received: from finn.localdomain (finn.gateworks.com [108.161.129.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E22B210CE;
+        Tue,  6 Jun 2023 08:39:53 -0700 (PDT)
+Received: from 068-189-091-139.biz.spectrum.com ([68.189.91.139] helo=tharvey.pdc.gateworks.com)
+        by finn.localdomain with esmtp (Exim 4.93)
+        (envelope-from <tharvey@gateworks.com>)
+        id 1q6Ymh-0067pw-VC; Tue, 06 Jun 2023 15:39:48 +0000
+From:   Tim Harvey <tharvey@gateworks.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tim Harvey <tharvey@gateworks.com>
+Subject: [PATCH] arm64: dts: imx8mm-venice-gw7903: disable disp_blk_ctrl
+Date:   Tue,  6 Jun 2023 08:39:45 -0700
+Message-Id: <20230606153945.1449457-1-tharvey@gateworks.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230602103750.2290132-1-vladimir.oltean@nxp.com>
- <CAM0EoMnqscw=OfWzyEKV10qFW5+EFMd5JWZxPSPCod3TvqpnuQ@mail.gmail.com> <20230605165353.tnjrwa7gbcp4qhim@skbuf>
-In-Reply-To: <20230605165353.tnjrwa7gbcp4qhim@skbuf>
-From:   Jamal Hadi Salim <jhs@mojatatu.com>
-Date:   Tue, 6 Jun 2023 11:39:32 -0400
-Message-ID: <CAM0EoM=qG9sDjM=F6D=i=h3dKXwQXAt1wui8W_EXDJi2tijRnw@mail.gmail.com>
-Subject: Re: [PATCH RESEND net-next 0/5] Improve the taprio qdisc's
- relationship with its children
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
-        linux-kernel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        Muhammad Husaini Zulkifli <muhammad.husaini.zulkifli@intel.com>,
-        Peilin Ye <yepeilin.cs@gmail.com>,
-        Pedro Tammela <pctammela@mojatatu.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vladimir,
+The GW7903 does not connect the VDD_MIPI power rails thus MIPI is
+disabled. However we must also disable disp_blk_ctrl as it uses the
+pgc_mipi power domain and without it being disabled imx8m-blk-ctrl will
+fail to probe:
+imx8m-blk-ctrl 32e28000.blk-ctrl: error -ETIMEDOUT: failed to attach power domain "mipi-dsi"
+imx8m-blk-ctrl: probe of 32e28000.blk-ctrl failed with error -110
 
-On Mon, Jun 5, 2023 at 12:53=E2=80=AFPM Vladimir Oltean <vladimir.oltean@nx=
-p.com> wrote:
->
-> Hi Jamal,
->
-> On Mon, Jun 05, 2023 at 11:44:17AM -0400, Jamal Hadi Salim wrote:
-> > I havent been following - but if you show me sample intended tc
-> > configs for both s/w and hardware offloads i can comment.
->
-> There is not much difference in usage between the 2 modes. IMO the softwa=
-re
-> data path logic is only a simulation for demonstrative purposes of what t=
-he
-> shaper is intended to do. If hardware offload is available, it is always
-> preferable. Otherwise, I'm not sure if anyone uses the pure software
-> scheduling mode (also without txtime assist) for a real life use case.
->
+Fixes: a72ba91e5bc7 ("arm64: dts: imx: Add i.mx8mm Gateworks gw7903 dts support")
+Signed-off-by: Tim Harvey <tharvey@gateworks.com>
+---
+ arch/arm64/boot/dts/freescale/imx8mm-venice-gw7903.dts | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Thanks for the sample. Understood on the software twin being useful
-for simulation (our standard rule is you need to have a software twin)
-- it is great you conform to that.
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7903.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7903.dts
+index 363020a08c9b..4660d086cb09 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7903.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7903.dts
+@@ -567,6 +567,10 @@ &pcie0 {
+ 	status = "okay";
+ };
+ 
++&disp_blk_ctrl {
++	status = "disabled";
++};
++
+ &pgc_mipi {
+ 	status = "disabled";
+ };
+-- 
+2.25.1
 
-I took a cursory glance at the existing kernel code in order to get
-better context (I will make more time later). Essentially this qdisc
-is classful and is capable of hardware offload. Initial comments are
-unrelated to the patchset (all this Klingon DCB thingy configuration
-like a flag 0x2 is still magic to me).
-
-1)Just some details become confusing in regards to offload vs not; F.e
-class grafting (taprio_graft()) is de/activating the device but that
-seems only needed for offload. Would it not be better to have those
-separate and call graft_offload vs graft_software, etc? We really need
-to create a generic document on how someone would write code for
-qdiscs for consistency (I started working on one but never completed
-it - if there is a volunteer i would be happy to work with one to
-complete it).
-2) It seems like in mqprio this qdisc can only be root qdisc (like
-mqprio) and you dont want to replace the children with other types of
-qdiscs i.e the children are always pfifo? i.e is it possible or
-intended for example to replace 8001:x with bfifo etc? or even change
-the pfifo queue size, etc?
-3) Offload intention seems really to be bypassing enqueue() and going
-straigth to the driver xmit() for a specific DMA ring that the skb is
-mapped to. Except for the case where the driver says it's busy and
-refuses to stash the skb in ring in which case you have to requeue to
-the appropriate child qdisc/class. I am not sure how that would work
-here - mqprio gets away with it by not defining any of the
-en/de/requeue() callbacks - but likely it will be the lack of requeue
-that makes it work.
-
- I will read the other thread you pointed to when i get a moment.
-
-cheers,
-jamal
-
-> I was working with something like this for testing the code paths affecte=
-d
-> by these changes:
->
-> #!/bin/bash
->
-> add_taprio()
-> {
->         local offload=3D$1
->         local extra_flags
->
->         case $offload in
->         true)
->                 extra_flags=3D"flags 0x2"
->                 ;;
->         false)
->                 extra_flags=3D"clockid CLOCK_TAI"
->                 ;;
->         esac
->
->         tc qdisc replace dev eno0 handle 8001: parent root stab overhead =
-24 taprio \
->                 num_tc 8 \
->                 map 0 1 2 3 4 5 6 7 \
->                 queues 1@0 1@1 1@2 1@3 1@4 1@5 1@6 1@7 \
->                 max-sdu 0 0 0 0 0 200 0 0 \
->                 base-time 200 \
->                 sched-entry S 80 20000 \
->                 sched-entry S a0 20000 \
->                 sched-entry S 5f 60000 \
->                 $extra_flags
-> }
->
-> add_cbs()
-> {
->         local offload=3D$1
->         local extra_flags
->
->         case $offload in
->         true)
->                 extra_flags=3D"offload 1"
->                 ;;
->         false)
->                 extra_flags=3D""
->                 ;;
->         esac
->
->         max_frame_size=3D1500
->         data_rate_kbps=3D20000
->         port_transmit_rate_kbps=3D1000000
->         idleslope=3D$data_rate_kbps
->         sendslope=3D$(($idleslope - $port_transmit_rate_kbps))
->         locredit=3D$(($max_frame_size * $sendslope / $port_transmit_rate_=
-kbps))
->         hicredit=3D$(($max_frame_size * $idleslope / $port_transmit_rate_=
-kbps))
->         tc qdisc replace dev eno0 parent 8001:8 cbs \
->                 idleslope $idleslope \
->                 sendslope $sendslope \
->                 hicredit $hicredit \
->                 locredit $locredit \
->                 $extra_flags
-> }
->
-> # this should always fail
-> add_second_taprio()
-> {
->         tc qdisc replace dev eno0 parent 8001:7 taprio \
->                 num_tc 8 \
->                 map 0 1 2 3 4 5 6 7 \
->                 queues 1@0 1@1 1@2 1@3 1@4 1@5 1@6 1@7 \
->                 max-sdu 0 0 0 0 0 200 0 0 \
->                 base-time 200 \
->                 sched-entry S 80 20000 \
->                 sched-entry S a0 20000 \
->                 sched-entry S 5f 60000 \
->                 clockid CLOCK_TAI
-> }
->
-> ip link set eno0 up
->
-> echo "Offload:"
-> add_taprio true
-> add_cbs true
-> add_second_taprio
-> mausezahn eno0 -t ip -b 00:04:9f:05:f6:27 -c 100 -p 60
-> sleep 5
-> tc -s class show dev eno0
-> tc qdisc del dev eno0 root
->
-> echo "Software:"
-> add_taprio false
-> add_cbs false
-> add_second_taprio
-> mausezahn eno0 -t ip -b 00:04:9f:05:f6:27 -c 100 -p 60
-> sleep 5
-> tc -s class show dev eno0
-> tc qdisc del dev eno0 root
->
-> > In my cursory look i assumed you wanted to go along the path of mqprio
-> > where nothing much happens in the s/w datapath other than requeues
-> > when the tx hardware path is busy (notice it is missing an
-> > enqueue/deque ops). In that case the hardware selection is essentially
-> > of a DMA ring based on skb tags. It seems you took it up a notch by
-> > infact having a choice of whether to have pure s/w or offload path.
->
-> Yes. Actually the original taprio design always had the enqueue()/dequeue=
-()
-> ops involved in the data path, then commit 13511704f8d7 ("net: taprio
-> offload: enforce qdisc to netdev queue mapping") retrofitted the mqprio
-> model when using the "flags 0x2" argument.
-
-
-> If you have time to read, the discussion behind that redesign was here:
-> https://lore.kernel.org/netdev/20210511171829.17181-1-yannick.vignon@oss.=
-nxp.com/
