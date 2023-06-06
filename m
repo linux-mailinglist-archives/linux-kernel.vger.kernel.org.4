@@ -2,81 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10EFB724FE5
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 00:34:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1994F725002
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 00:37:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240042AbjFFWeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 18:34:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58892 "EHLO
+        id S238678AbjFFWhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 18:37:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240022AbjFFWdd (ORCPT
+        with ESMTP id S239999AbjFFWhK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 18:33:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD44319B0
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 15:32:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686090762;
+        Tue, 6 Jun 2023 18:37:10 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C01E71FDD
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 15:36:03 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1686090942;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=a7jCgjA/GeF+vfePBjhGpS1KJtr0QbtMbF11c3DSw0c=;
-        b=M8UtupcC4WHE+4XEIod1gC4c9v0Lc+8+bPs4511w0yrca8sOqUrKsfIN4fyPdIDbCF0tJw
-        MhNqL8cfd3GcufokL1bI3lUXjQ4SdonwpxO1ZxwO56KtnjChcWwitL7BaTcR85VnzAzoAV
-        9QlX3XRrqFkBrXdsECt8SXmwxaDAqJg=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-488-pwVBVrwoM_m_lJAs5E5GcQ-1; Tue, 06 Jun 2023 18:32:40 -0400
-X-MC-Unique: pwVBVrwoM_m_lJAs5E5GcQ-1
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-94f7a2b21fdso595693166b.2
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 15:32:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686090759; x=1688682759;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=a7jCgjA/GeF+vfePBjhGpS1KJtr0QbtMbF11c3DSw0c=;
-        b=bgKHUJZVpd0ABYVBKOF22Zjf7ZH/A7AcASi7qOfo1+j+6h+XiC2hSHgxirwygxg/76
-         yGUFxquLXKoxAJn6OJxhHlVGIYqvZUuXb9cnF7cvWXUXFfoQuzhz9KUyIBsDMrzZLUmE
-         eXwWBHnpExpzvB5zmDsAieAYxGQSmEjQHEPWquEDNNCoBKPOHwbt35MYJyOYZBL9KVuv
-         3K6n55oZ5rZK3Czbz9mIlBcMZ/PSQ4Sr7zonaRRtKSPIri2EP7Co7JTZX2dHdc/qHq83
-         nDHhwfmsneQ6Xe1Eeu9AP8iG/LJmTpPvdk8khrwlaW8rAp2p8R3btkdcPpgk1LNFaUpn
-         aFcw==
-X-Gm-Message-State: AC+VfDygDGGph3sjOXGUGOkKXxOWs0+Ko8+DUmFaV4cGaZbcqlqDoHpx
-        8J7RNvYXpOOoNt+VzBJ1ft4Q28krYj9wPgl1GYJ84vOYoPNm8U7fo/qn6j8xfSvrvJqq7OdMVUO
-        cxaFgf0/edsE+1RSBi/4dQBS0
-X-Received: by 2002:a17:907:961c:b0:96f:f046:9a92 with SMTP id gb28-20020a170907961c00b0096ff0469a92mr4529863ejc.37.1686090759330;
-        Tue, 06 Jun 2023 15:32:39 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6qGlpc03YEG/CcUcMQBwrK3ZBv0I8EcaoURRio7MIi2slO/uki0F3KmJyflgj5wBFLEUnEiA==
-X-Received: by 2002:a17:907:961c:b0:96f:f046:9a92 with SMTP id gb28-20020a170907961c00b0096ff0469a92mr4529834ejc.37.1686090759142;
-        Tue, 06 Jun 2023 15:32:39 -0700 (PDT)
-Received: from cassiopeiae.. ([2a02:810d:4b3f:de9c:642:1aff:fe31:a19f])
-        by smtp.gmail.com with ESMTPSA id g9-20020a1709063b0900b00969e9fef151sm6051554ejf.97.2023.06.06.15.32.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 15:32:38 -0700 (PDT)
-From:   Danilo Krummrich <dakr@redhat.com>
-To:     airlied@gmail.com, daniel@ffwll.ch, tzimmermann@suse.de,
-        mripard@kernel.org, corbet@lwn.net, christian.koenig@amd.com,
-        bskeggs@redhat.com, Liam.Howlett@oracle.com,
-        matthew.brost@intel.com, boris.brezillon@collabora.com,
-        alexdeucher@gmail.com, ogabbay@kernel.org, bagasdotme@gmail.com,
-        willy@infradead.org, jason@jlekstrand.net
-Cc:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Danilo Krummrich <dakr@redhat.com>
-Subject: [PATCH drm-next v4 14/14] drm/nouveau: debugfs: implement DRM GPU VA debugfs
-Date:   Wed,  7 Jun 2023 00:31:30 +0200
-Message-Id: <20230606223130.6132-15-dakr@redhat.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230606223130.6132-1-dakr@redhat.com>
-References: <20230606223130.6132-1-dakr@redhat.com>
+        bh=zt0kqscp3g8VO9/il4J06xJrTrfCXuchslOey9lexZk=;
+        b=vp9dpQ7rR6TmmUIqw15AI4EY0D/Q2WCqeUi99v8LeIYxj6eceBxNl4nDx9CQL2RptmSJE/
+        3r4vyJubo625m06Hd3w4YHeDYX8/oOCZ5WdYB1L9COUn1V1exupXWV3klngBpSmlr+xYKv
+        pTVfvIwGTZJ2bcbWMBQIOcnu/ALYuj7NrRfkLxaMYpnyp59MWeKnrnMDZLujL5MA3JBdDn
+        6LyuifR5rAkSD5bSFofZahXsLkze2x5+LeWWO0gq2obAkaElJUMOI6Vn7CDBtlJHyqlyHg
+        GXG+lgHBXMy1oH2wkUgl6NF6hNRxgfXpIh/eG+jv0hg73+A0gksuiOVh7nluKQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1686090942;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zt0kqscp3g8VO9/il4J06xJrTrfCXuchslOey9lexZk=;
+        b=jgdK0R2MYIB1NdkAJdO21+gMIOKePzqXnUCGwxv+WpgT61LH86Utm7BeqMYoTQm7PhT4/u
+        r0+X1OWUfhkCCDBQ==
+To:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
+        syzbot <syzbot+7937ba6a50bdd00fffdf@syzkaller.appspotmail.com>,
+        syzkaller-bugs@googlegroups.com
+Cc:     linux-kernel@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        wuchi <wuchi.zero@gmail.com>
+Subject: Re: [PATCH] debugobjects: turn off debug_objects_enabled from
+ debug_objects_oom()
+In-Reply-To: <1af29817-4698-c5ac-cf63-0dad289e740f@I-love.SAKURA.ne.jp>
+References: <0000000000003a2f8505fcd5f06b@google.com>
+ <1af29817-4698-c5ac-cf63-0dad289e740f@I-love.SAKURA.ne.jp>
+Date:   Wed, 07 Jun 2023 00:35:41 +0200
+Message-ID: <871qiokyma.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,71 +61,155 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Provide the driver indirection iterating over all DRM GPU VA spaces to
-enable the common 'gpuvas' debugfs file for dumping DRM GPU VA spaces.
+Tetsuo!
 
-Signed-off-by: Danilo Krummrich <dakr@redhat.com>
----
- drivers/gpu/drm/nouveau/nouveau_debugfs.c | 39 +++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+On Mon, May 29 2023 at 23:39, Tetsuo Handa wrote:
+> syzbot is reporting false positive ODEBUG message immediately after
+> ODEBUG was disabled due to OOM.
+>
+>   [ 1062.309646][T22911] ODEBUG: Out of memory. ODEBUG disabled
+>   [ 1062.886755][ T5171] ------------[ cut here ]------------
+>   [ 1062.892770][ T5171] ODEBUG: assert_init not available (active state 0) object: ffffc900056afb20 object type: timer_list hint: process_timeout+0x0/0x40
+>
+> This race happened because debug_objects_oom() emitted OOM message but did
+> not turn off debug_objects_enabled, and debug_print_object() did not check
+> debug_objects_enabled when calling WARN().
+>
+>   CPU 0 [ T5171]                CPU 1 [T22911]
+>   --------------                --------------
+>   debug_object_assert_init() {
+>     if (!debug_objects_enabled)
+>       return;
+>     db = get_bucket((unsigned long) addr); // Finds a bucket, but...
+>                                 debug_objects_oom() {
+>                                   pr_warn("Out of memory. ODEBUG disabled\n");
+>                                   // all buckets get emptied here, and...
+>                                   hlist_move_list(&db->list, &freelist);
+>                                 }
+>     lookup_object_or_alloc(addr, db, descr, false, true) {
+>       lookup_object(addr, b) {
+>         return NULL; // this bucket is already empty.
+>       }
+>       if (!descr->is_static_object || !descr->is_static_object(addr))
+>         return ERR_PTR(-ENOENT);
+>     }
+>     if (!obj) { // obj == ERR_PTR(-ENOENT) because non-static object.
+>        debug_objects_oom();
+>        return;
+>     }
+>     debug_print_object(&o, "assert_init") {
+>       // False positive due to not checking debug_objects_enabled.
+>       WARN(1, KERN_ERR "ODEBUG: %s %s (active state %u) "
+>            "object: %p object type: %s hint: %pS\n", ...);
+>     }
+>   }
 
-diff --git a/drivers/gpu/drm/nouveau/nouveau_debugfs.c b/drivers/gpu/drm/nouveau/nouveau_debugfs.c
-index 99d022a91afc..053f703f2f68 100644
---- a/drivers/gpu/drm/nouveau/nouveau_debugfs.c
-+++ b/drivers/gpu/drm/nouveau/nouveau_debugfs.c
-@@ -203,6 +203,44 @@ nouveau_debugfs_pstate_open(struct inode *inode, struct file *file)
- 	return single_open(file, nouveau_debugfs_pstate_get, inode->i_private);
- }
+The above is undecodable gibberish.
+
+Something like this is completely sufficient:
+
+  CPU 0 [ T5171]			CPU 1 [T22911]
+  --------------                	--------------
+  debug_object_assert_init() {
+    db = get_bucket(addr);
+					debug_objects_oom() {
+                                  	  pr_warn("Out of memory. ODEBUG disabled\n");
+                                  	  // all buckets get emptied here
+                                	}
+    lookup_object_or_alloc(addr, db, ...)
+      // Due to OOM:
+      return ERR_PTR(-ENOENT);
+    ...
+
+    // Emits assert_init message and warning
+    debug_print_object(&o, "assert_init");
+  }
+
+And this:
+
+> This race happened because debug_objects_oom() emitted OOM message but did
+> not turn off debug_objects_enabled
+
+is completely wrong. Why?
+
+The place where debug_objects_enabled is set to 0 is way before
+debug_objects_oom() is invoked. That place _cannot_ invoke
+debug_objects_oom() because it holds a hash bucket lock.
+
+There are exactly three places which invoke debug_objects_oom() and for
+all three places the pattern is exactly the same:
+
+      lock_bucket();
+      obj = lookup_object_or_alloc();
+      unlock_bucket();
+      if (!obj)
+         debug_objects_oom();
+
+The place which clears debug_objects_enabled is unsurprisingly
+lookup_object_or_alloc() itself, which _cannot_ invoke
+debug_objects_oom() because it is invoked with the hash bucket lock
+held. There is even a comment to that effect:
+
+	/* Out of memory. Do the cleanup outside of the locked region */
+	debug_objects_enabled = 0;
+	return NULL;
+
+So at the point where debug_objects_oom() is invoked
+@debug_objects_enabled is already 0.
+
+But you claim that this is required, right?
+
+> @@ -466,6 +466,7 @@ static void debug_objects_oom(void)
+>  	unsigned long flags;
+>  	int i;
+>  
+> +	debug_objects_enabled = 0;
+>  	pr_warn("Out of memory. ODEBUG disabled\n");
+
+Q: What is setting a variable which is already 0 to 0 solving?
+A: Absolutely nothing
+
+Now this:
+
+> @@ -502,10 +503,10 @@ static void debug_print_object(struct de
+>  		void *hint = descr->debug_hint ?
+>  			descr->debug_hint(obj->object) : NULL;
+>  		limit++;
+> -		WARN(1, KERN_ERR "ODEBUG: %s %s (active state %u) "
+> -				 "object: %p object type: %s hint: %pS\n",
+> -			msg, obj_states[obj->state], obj->astate,
+> -			obj->object, descr->name, hint);
+> +		WARN(debug_objects_enabled, KERN_ERR
+> +		     "ODEBUG: %s %s (active state %u) object: %p object type: %s hint: %pS\n",
+> +		     msg, obj_states[obj->state], obj->astate,
+> +		     obj->object, descr->name, hint);
+>  	}
+
+Q: Why is this related to the WARN() itself?
+A: It's not related at all
+
+The obvious fix is:
+
+--- a/lib/debugobjects.c
++++ b/lib/debugobjects.c
+@@ -498,6 +498,14 @@ static void debug_print_object(struct de
+ 	const struct debug_obj_descr *descr = obj->descr;
+ 	static int limit;
  
-+static void
-+nouveau_debugfs_gpuva_regions(struct seq_file *m, struct nouveau_uvmm *uvmm)
-+{
-+	MA_STATE(mas, &uvmm->region_mt, 0, 0);
-+	struct nouveau_uvma_region *reg;
++	/*
++	 * OOM handling is asynchronous for performance reasons. So the
++	 * call site might have raced with a concurrent OOM which cleared
++	 * the hash buckets.
++	 */
++	if (!debug_objects_enabled)
++		return;
 +
-+	seq_puts  (m, " VA regions  | start              | range              | end                \n");
-+	seq_puts  (m, "----------------------------------------------------------------------------\n");
-+	mas_for_each(&mas, reg, ULONG_MAX)
-+		seq_printf(m, "             | 0x%016llx | 0x%016llx | 0x%016llx\n",
-+			   reg->va.addr, reg->va.range, reg->va.addr + reg->va.range);
-+}
-+
-+static int
-+nouveau_debugfs_gpuva(struct seq_file *m, void *data)
-+{
-+	struct drm_info_node *node = (struct drm_info_node *) m->private;
-+	struct nouveau_drm *drm = nouveau_drm(node->minor->dev);
-+	struct nouveau_cli *cli;
-+
-+	mutex_lock(&drm->clients_lock);
-+	list_for_each_entry(cli, &drm->clients, head) {
-+		struct nouveau_uvmm *uvmm = nouveau_cli_uvmm(cli);
-+
-+		if (!uvmm)
-+			continue;
-+
-+		nouveau_uvmm_lock(uvmm);
-+		drm_debugfs_gpuva_info(m, &uvmm->umgr);
-+		seq_puts(m, "\n");
-+		nouveau_debugfs_gpuva_regions(m, uvmm);
-+		nouveau_uvmm_unlock(uvmm);
-+	}
-+	mutex_unlock(&drm->clients_lock);
-+
-+	return 0;
-+}
-+
- static const struct file_operations nouveau_pstate_fops = {
- 	.owner = THIS_MODULE,
- 	.open = nouveau_debugfs_pstate_open,
-@@ -214,6 +252,7 @@ static const struct file_operations nouveau_pstate_fops = {
- static struct drm_info_list nouveau_debugfs_list[] = {
- 	{ "vbios.rom",  nouveau_debugfs_vbios_image, 0, NULL },
- 	{ "strap_peek", nouveau_debugfs_strap_peek, 0, NULL },
-+	DRM_DEBUGFS_GPUVA_INFO(nouveau_debugfs_gpuva, NULL),
- };
- #define NOUVEAU_DEBUGFS_ENTRIES ARRAY_SIZE(nouveau_debugfs_list)
- 
--- 
-2.40.1
+ 	if (limit < 5 && descr != descr_test) {
+ 		void *hint = descr->debug_hint ?
+ 			descr->debug_hint(obj->object) : NULL;
 
+Along with a understandable changelog, no?
+
+Thanks,
+
+        tglx
