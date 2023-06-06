@@ -2,156 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D1AD724809
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 17:41:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E30E7247F6
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 17:38:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238647AbjFFPlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 11:41:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58474 "EHLO
+        id S233363AbjFFPiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 11:38:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238654AbjFFPkl (ORCPT
+        with ESMTP id S237973AbjFFPis (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 11:40:41 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B048710D7
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 08:40:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686066039; x=1717602039;
-  h=message-id:date:mime-version:from:subject:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=I2633yDyTf08CYs+GWR0b+lShf5xiYi7UgFoFUgHPII=;
-  b=XhYn09WS6R7vWOeQpxCvAO/WTZkUAtfuZJ7ArvPuOQ5GCnsX09ocZQ50
-   IM1wTGhjiJ93kaI9n/xNxJ93YRfNms73SIrGL3a4xZmw+Q+gchv+TQ/KR
-   YH3kw4FjX3BIq4EnJwQIPkBnAdUfg2nc5J/nQYrmZJ3SWunFkrT8ZWpQK
-   T2S/YiNVLY5ardnVxZcVzW6iIy8Z2N5GYr+5qY/Uo4ZJhtv288sHD5VYm
-   nZqenY1hs/yAViy70/251ATUxiqwmVKgn7Hy4JhSxapJ1FdakouH5pGtX
-   WbCuNI/uQQzygixKiZH+OozG5ziIBFrsIKMNVkx7WYn4TGb1jQGtXAwvm
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="422550300"
-X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
-   d="scan'208";a="422550300"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 08:39:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="955816533"
-X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
-   d="scan'208";a="955816533"
-Received: from pdonvalk-mobl2.amr.corp.intel.com (HELO [10.255.231.168]) ([10.255.231.168])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 08:39:17 -0700
-Message-ID: <7ed3e421-ad04-746a-e252-45bc83f76256@linux.intel.com>
-Date:   Tue, 6 Jun 2023 10:38:31 -0500
+        Tue, 6 Jun 2023 11:38:48 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BB5C10D1;
+        Tue,  6 Jun 2023 08:38:45 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id BDE8C5FD4D;
+        Tue,  6 Jun 2023 18:38:42 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1686065922;
+        bh=Fb53Ze/gEd5ZbtU+koYVHdOb5F9vo2dFU1Jt2wM1uWw=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=MThwGBXaeuiX+mmzlXXmbP3fN5BFUU4DZdlCMp4zUXvUdSF1Zh0YziB8vhfBnq2pH
+         T8E2ODyUTPswCDzybjRRHdShm8C1cV7n19u5E7XIJZgRYh/WRuTZdrgILoz2XbkEwI
+         NZIUYccSXQlgy2m4hDR9QpjXv9MbMCEK+Ai7qvj0ZLeV6ro4rpwkXeV0+dNctBZTyJ
+         5rmPe66EuZwnbijpnKcP2F0H7bsRee1u063dDkIlsMpYIDw0kw3ROc+/t94kn5oZYy
+         4vHnQOR0kDba4jtX5kytMeKWbPbQM82p7L6BzGFjQ0sMMRMceO3JPdP1VtTUK6Kv+O
+         FFV1P7YMgEnwQ==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Tue,  6 Jun 2023 18:38:41 +0300 (MSK)
+Date:   Tue, 6 Jun 2023 18:38:41 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     Yu Tu <yu.tu@amlogic.com>
+CC:     Jerome Brunet <jbrunet@baylibre.com>, <linux-clk@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        <kelvin.zhang@amlogic.com>, <qi.duan@amlogic.com>
+Subject: Re: [PATCH V9 4/4] clk: meson: s4: add support for Amlogic S4 SoC
+ peripheral clock controller
+Message-ID: <20230606153841.plf5uh6eyzpzsm2e@CAB-WSD-L081021>
+References: <20230517070215.28463-1-yu.tu@amlogic.com>
+ <20230517070215.28463-5-yu.tu@amlogic.com>
+ <1jwn0g39t2.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.11.0
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Subject: Re: [PATCH V3 4/9] ASoC: amd: ps: add SoundWire dma driver dma ops
-To:     Vijendar Mukunda <Vijendar.Mukunda@amd.com>, broonie@kernel.org
-Cc:     alsa-devel@alsa-project.org, Basavaraj.Hiregoudar@amd.com,
-        Sunil-kumar.Dommati@amd.com, Mastan.Katragadda@amd.com,
-        Arungopal.kondaveeti@amd.com, mario.limonciello@amd.com,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Syed Saba Kareem <Syed.SabaKareem@amd.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230606060724.2038680-1-Vijendar.Mukunda@amd.com>
- <20230606060724.2038680-5-Vijendar.Mukunda@amd.com>
-Content-Language: en-US
-In-Reply-To: <20230606060724.2038680-5-Vijendar.Mukunda@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <1jwn0g39t2.fsf@starbuckisacylon.baylibre.com>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/06/06 11:10:00 #21443593
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Yu,
 
-> +static int acp63_sdw_dma_start(struct snd_pcm_substream *substream, void __iomem *acp_base)
-> +{
-> +	struct acp_sdw_dma_stream *stream;
-> +	u32 stream_id;
-> +	u32 sdw_dma_en_reg;
-> +	u32 sdw_dma_en_stat_reg;
-> +	u32 sdw_dma_stat;
-> +
-> +	stream = substream->runtime->private_data;
-> +	stream_id = stream->stream_id;
-> +	switch (stream->instance) {
-> +	case ACP_SDW0:
-> +		sdw_dma_en_reg = sdw0_dma_enable_reg[stream_id];
-> +		break;
-> +	case ACP_SDW1:
-> +		sdw_dma_en_reg = sdw1_dma_enable_reg[stream_id];
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +	writel(0x01, acp_base + sdw_dma_en_reg);
-> +	sdw_dma_en_stat_reg = sdw_dma_en_reg + 4;
-> +	return readl_poll_timeout(acp_base + sdw_dma_en_stat_reg, sdw_dma_stat,
-> +				  (sdw_dma_stat & BIT(0)), ACP_DELAY_US, ACP_COUNTER);
-> +}
-> +
-> +static int acp63_sdw_dma_stop(struct snd_pcm_substream *substream, void __iomem *acp_base)
-> +{
-> +	struct acp_sdw_dma_stream *stream;
-> +	u32 stream_id;
-> +	u32 sdw_dma_en_reg;
-> +	u32 sdw_dma_en_stat_reg;
-> +	u32 sdw_dma_stat;
-> +
-> +	stream = substream->runtime->private_data;
-> +	stream_id = stream->stream_id;
-> +	switch (stream->instance) {
-> +	case ACP_SDW0:
-> +		sdw_dma_en_reg = sdw0_dma_enable_reg[stream_id];
-> +		break;
-> +	case ACP_SDW1:
-> +		sdw_dma_en_reg = sdw1_dma_enable_reg[stream_id];
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	writel(0, acp_base + sdw_dma_en_reg);
-> +	sdw_dma_en_stat_reg = sdw_dma_en_reg + 4;
-> +	return readl_poll_timeout(acp_base + sdw_dma_en_stat_reg, sdw_dma_stat, !sdw_dma_stat,
-> +				  ACP_DELAY_US, ACP_COUNTER);
-> +}
+On Tue, Jun 06, 2023 at 04:38:15PM +0200, Jerome Brunet wrote:
+> 
+> On Wed 17 May 2023 at 15:02, Yu Tu <yu.tu@amlogic.com> wrote:
+> 
+> > Add the peripherals clock controller driver in the s4 SoC family.
+> >
+> > Signed-off-by: Yu Tu <yu.tu@amlogic.com>
+> > ---
+> >  drivers/clk/meson/Kconfig          |   12 +
+> >  drivers/clk/meson/Makefile         |    1 +
+> >  drivers/clk/meson/s4-peripherals.c | 3830 ++++++++++++++++++++++++++++
+> >  drivers/clk/meson/s4-peripherals.h |  217 ++
+> >  4 files changed, 4060 insertions(+)
+> >  create mode 100644 drivers/clk/meson/s4-peripherals.c
+> >  create mode 100644 drivers/clk/meson/s4-peripherals.h
+> >
+> > diff --git a/drivers/clk/meson/Kconfig b/drivers/clk/meson/Kconfig
+> > index a663c90a3f3b..a6eb9fa15c74 100644
+> > --- a/drivers/clk/meson/Kconfig
+> > +++ b/drivers/clk/meson/Kconfig
+> > @@ -128,4 +128,16 @@ config COMMON_CLK_S4_PLL
+> >  	  aka s4. Amlogic S805X2 and S905Y4 devices include AQ222 and AQ229.
+> >  	  Say Y if you want the board to work, because plls are the parent of most
+> >  	  peripherals.
+> > +
+> > +config COMMON_CLK_S4
+> > +	tristate "S4 SoC Peripherals clock controllers support"
+> > +	depends on ARM64
+> > +	default y
+> > +	select COMMON_CLK_MESON_REGMAP
+> > +	select COMMON_CLK_MESON_DUALDIV
+> > +	select COMMON_CLK_MESON_VID_PLL_DIV
+> > +	help
+> > +	  Support for the Peripherals clock controller on Amlogic S805X2 and S905Y4
+> > +	  devices, aka s4. Amlogic S805X2 and S905Y4 devices include AQ222 and AQ229.
+> > +	  Say Y if you want peripherals to work.
+> >  endmenu
 
-these start/stop routines look mostly the same, except for the value to
-be written in the register. Maybe they can be factored with a common
-helper, e.g. acp63_sdw_dma_enable(true/false).
-> +
-> +static int acp63_sdw_dma_trigger(struct snd_soc_component *comp,
-> +				 struct snd_pcm_substream *substream,
-> +				 int cmd)
-> +{
-> +	struct sdw_dma_dev_data *sdw_data;
-> +	int ret;
-> +
-> +	sdw_data = dev_get_drvdata(comp->dev);
-> +	switch (cmd) {
-> +	case SNDRV_PCM_TRIGGER_START:
-> +	case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
-> +	case SNDRV_PCM_TRIGGER_RESUME:
-> +		ret = acp63_sdw_dma_start(substream, sdw_data->acp_base);
-> +		break;
-> +	case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
-> +	case SNDRV_PCM_TRIGGER_SUSPEND:
-> +	case SNDRV_PCM_TRIGGER_STOP:
-> +		ret = acp63_sdw_dma_stop(substream, sdw_data->acp_base);
-> +		break;
-> +	default:
-> +		ret = -EINVAL;
-> +	}
-> +	if (ret)
-> +		dev_err(comp->dev, "trigger %d failed: %d", cmd, ret);
-> +	return ret;
-> +}
+[...]
+
+> > +static struct clk_regmap s4_rtc_32k_by_oscin = {
+> > +	.data = &(struct clk_regmap_gate_data){
+> > +		.offset = CLKCTRL_RTC_BY_OSCIN_CTRL0,
+> > +		.bit_idx = 30,
+> > +	},
+> > +	.hw.init = &(struct clk_init_data) {
+> > +		.name = "rtc_32k_by_oscin",
+> > +		.ops = &clk_regmap_gate_ops,
+> > +		.parent_hws = (const struct clk_hw *[]) {
+> > +			&s4_rtc_32k_by_oscin_sel.hw
+> > +		},
+> > +		.num_parents = 1,
+> > +		.flags = CLK_SET_RATE_PARENT,
+> > +	},
+> > +};
+> > +
+> > +/*
+> > + * This RTC clock can be supplied by an external 32KHz crystal oscillator.
+> > + * If it is used, it should be documented in using fw_name and documented in the
+> > + * Bindings. Not currently in use on this board.
+> > + */
+> 
+> This is confusing and not really helpful
+> What you describe here is simply the purpose of fw_name ... so it does
+> not warrant a specific comment
+> 
+> > +static const struct clk_parent_data rtc_clk_sel_parent_data[] = {
+> > +	{ .hw = &s4_rtc_32k_by_oscin.hw },
+> > +	{ .hw = &s4_rtc_32k_by_oscin_div.hw },
+> > +	{ .fw_name = "ext_32k",  }
+> > +};
+> > +
+> > +/*
+> > + * All clocks that can be inherited from a more accurate RTC clock are marked
+> > + * with the CLK_SET_RATE_NO_REPARENT flag. This is because in certain
+> > + * situations, we may need to freeze their parent. The parent setup of these
+> > + * clocks should be located on the device tree side.
+> > + */
+> 
+> It looks like the consensus is that CLK_SET_RATE_NO_REPARENT is not
+> required. Please have at look at the discussion between Dmitry and
+> Martin for the a1 controller
+> 
+
+I hope below links will be helpful for you:
+
+CLK_SET_RATE_NO_REPARENT IRC discussion:
+https://libera.irclog.whitequark.org/linux-amlogic/2023-05-18
+
+Clock driver LKML discussion about CLK_SET_RATE_NO_REPARENT:
+https://lore.kernel.org/all/20230530120640.irugyrio3qa7czjy@CAB-WSD-L081021/
+https://lore.kernel.org/all/20230524092750.ldm362chnpkwkcj4@CAB-WSD-L081021/
+
+PWM discussion about special RTC case:
+https://lore.kernel.org/all/20230522133739.7tc35zr2npsysopd@CAB-WSD-L081021/
+
+And I apologize for any confusion I may have caused in our previous
+discussion. I want to clarify that I have updated the implementation
+of CLK_SET_RATE_NO_REPARENT after discussing it with Martin...
+
+[...]
+
+-- 
+Thank you,
+Dmitry
