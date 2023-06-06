@@ -2,116 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DCDE724642
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:36:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFBDA72464B
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:37:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237367AbjFFOgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 10:36:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40156 "EHLO
+        id S233403AbjFFOhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 10:37:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231827AbjFFOgH (ORCPT
+        with ESMTP id S233693AbjFFOg5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 10:36:07 -0400
-Received: from sender-of-o51.zoho.in (sender-of-o51.zoho.in [103.117.158.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94ED1E6C
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 07:36:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1686062111; cv=none; 
-        d=zohomail.in; s=zohoarc; 
-        b=FoV90p8s7KGaX/AFXXGRhVbKUQdUKO2sbtjs5ppLjap3oUZw8CqU+N13Wg3aTYAqRPSZAi52hCdPoxdrkrOwiYQ5AzBPtnP7KBKbv8QXVhczksabmfWjJpcZdJ8NRP3SNi67eOCUejoRpbRx4e8Wxb/kgExij9EA8zBwObstuKM=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
-        t=1686062111; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=nhq6ObVRtO0F/91ipiCPjsG/qJ9zJ64B4gXqedyDihU=; 
-        b=PjoWZh7AMGFCsBVZgB5ttbmU3/UHrqT7dv0aiYmOX0OhmemYaEErbOG3EjlW8rgKrHDQ/7zW/LztC/9GbkVrbn6V3JbMaX2TiwYXAHUn7+68S8Su7m+ClVcaPRysuB8hRgrn1/BV39vdyNbfVRBuAJHoaziuXXAb3MrZoluFTSg=
-ARC-Authentication-Results: i=1; mx.zohomail.in;
-        dkim=pass  header.i=siddh.me;
-        spf=pass  smtp.mailfrom=code@siddh.me;
-        dmarc=pass header.from=<code@siddh.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1686062111;
-        s=zmail; d=siddh.me; i=code@siddh.me;
-        h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=nhq6ObVRtO0F/91ipiCPjsG/qJ9zJ64B4gXqedyDihU=;
-        b=ea4aSFICrqljBDAllkvvJUzxGaPmplAPZ2LzUC+BO7tT/ohYqTLT90xsiK+dbii2
-        G+X3unpnzvNEFHfaUCzqdTkb2dSbphflmz6Gdhhk12QxbnLMaT8QSH3X1Jw+yqwY3Nt
-        45IOMsAysJn4VEi895FZ3m3qQ2P5s7v40DmzhDXU=
-Received: from mail.zoho.in by mx.zoho.in
-        with SMTP id 168606207938986.73514266463042; Tue, 6 Jun 2023 20:04:39 +0530 (IST)
-Date:   Tue, 06 Jun 2023 20:04:39 +0530
-From:   Siddh Raman Pant <code@siddh.me>
-To:     "Laurent Pinchart" <laurent.pinchart@ideasonboard.com>
-Cc:     "Maarten Lankhorst" <maarten.lankhorst@linux.intel.com>,
-        "Maxime Ripard" <mripard@kernel.org>,
-        "Thomas Zimmermann" <tzimmermann@suse.de>,
-        "David Airlie" <airlied@gmail.com>,
-        "Daniel Vetter" <daniel@ffwll.ch>,
-        "Andrzej Hajda" <andrzej.hajda@intel.com>,
-        "Neil Armstrong" <neil.armstrong@linaro.org>,
-        "Robert Foss" <rfoss@kernel.org>,
-        "Jonas Karlman" <jonas@kwiboo.se>,
-        "Jernej Skrabec" <jernej.skrabec@gmail.com>,
-        "Jani Nikula" <jani.nikula@linux.intel.com>,
-        "dri-devel" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel" <linux-kernel@vger.kernel.org>,
-        "Suraj Upadhyay" <usuraj35@gmail.com>
-Message-ID: <18891219d8e.6a7d8f15119986.32609419593331086@siddh.me>
-In-Reply-To: <20230606140512.GA5197@pendragon.ideasonboard.com>
-References: <cover.1686047727.git.code@siddh.me>
- <ae42791195a788bb77b3f9c2b87bca5d4e78cf83.1686047727.git.code@siddh.me> <20230606140512.GA5197@pendragon.ideasonboard.com>
-Subject: Re: [PATCH v9 2/8] drm/print: Fix and add support for NULL as first
- argument in drm_* macros
+        Tue, 6 Jun 2023 10:36:57 -0400
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06F3D10CA;
+        Tue,  6 Jun 2023 07:36:51 -0700 (PDT)
+Received: by mail-qk1-x72a.google.com with SMTP id af79cd13be357-75e4497597cso235658885a.2;
+        Tue, 06 Jun 2023 07:36:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686062210; x=1688654210;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/pHfhgJpmyYHKAj9H1AH6OpEbFEZgptlDbr8iBk/Wos=;
+        b=j/8Muj0Jskxwh51gbdolgS/TzJHxJvOle6Tp5pRV7vUCGcGOIMNG6xLwme6+/jK9ex
+         +D2dg8WZI5bHLjrBk0p2Jceg5hQ9toCaLE5PywYI8al7dIqlzc1+70PorZp2XMA6tEMZ
+         6aO3yX+uID2xVnGZjkjeSS7BUKPeiRR9eUYBsdw3/U/Af2xSFj4byHVp8WeMChKubBSV
+         rjdKQpWNWtQpVe0OvWugf7VkrKPG5texNqHMHsSW8523EaXTM5Nec+Y/6OR3sVDVwNyp
+         sFdGQQ/4kPkqsT/E5jOxa4RSkcHYuaHH/u1R35heqljtviIc7+nrC+Z7ZYGlExGBT1r0
+         EHMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686062210; x=1688654210;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/pHfhgJpmyYHKAj9H1AH6OpEbFEZgptlDbr8iBk/Wos=;
+        b=LuHymNYuyFxaRDLSVfB9BVfrXcPYcKhEKXYwZKjadtqzqR1QPQmaE78GZtQAAotEzo
+         +VOPVJ0EdOGzrQAbChaLeKN05uOc0P+AjRhmQJwNXsvaen/jZ16IBKNnAKxybazGOj7A
+         R0T9R4w8NLonQ0253qJcaI8SXaMfzpmBV86KC1kOMRweZce1p4pZewwaAzl4fOQHiRDc
+         BSzXdhptagwe8x/3MuE2pxdPUIaTTjpY8PGXcXWSxHZvCVay4eim57rSdiqwNmmmKHON
+         8fRd6pnfGFYr+di2Ke+SK59WjGwTnJOKehIp8EbNFpx8Gi+79IS/3g/AjnujhgC/UxRU
+         V0jw==
+X-Gm-Message-State: AC+VfDwjPlfmw9ONM29nyMKgfVaMLwQQskSJEfTA8nWj3sROSA9hERwZ
+        93Xfy5wc3DxqF9duUUrrHK2yGbOUm1gipH+Z/dk=
+X-Google-Smtp-Source: ACHHUZ5hPolR27BbcFXkbeEHThpkvtUWrhy6uOFaajbFQCLbRF+UBSxD82ZTDoQp4Mw84aLjYdUGp8gv+mBI32zJvGg=
+X-Received: by 2002:a05:6214:1c8e:b0:56a:d94d:6deb with SMTP id
+ ib14-20020a0562141c8e00b0056ad94d6debmr2510370qvb.25.1686062210042; Tue, 06
+ Jun 2023 07:36:50 -0700 (PDT)
 MIME-Version: 1.0
+References: <20230511-tps65219-add-gpio-support-v4-0-b5d6a764d722@baylibre.com>
+ <20230511-tps65219-add-gpio-support-v4-1-b5d6a764d722@baylibre.com>
+ <ZHXZBCwk6tTu8gjY@surfacebook> <e487f966-aafb-7d21-935d-b1d0ac7c21ac@baylibre.com>
+In-Reply-To: <e487f966-aafb-7d21-935d-b1d0ac7c21ac@baylibre.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 6 Jun 2023 17:36:14 +0300
+Message-ID: <CAHp75Vfu0V_nqy-0tdOM31onZn-P+mGDXJO5CnC4GkuVqYvvdQ@mail.gmail.com>
+Subject: Re: [PATCH v4 1/2] gpio: tps65219: add GPIO support for TPS65219 PMIC
+To:     jerome Neanne <jneanne@baylibre.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Tony Lindgren <tony@atomide.com>, Lee Jones <lee@kernel.org>,
+        khilman@baylibre.com, msp@baylibre.com, francesco@dolcini.it,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-omap@vger.kernel.org,
+        Jonathan Cormier <jcormier@criticallink.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-Importance: Medium
-User-Agent: Zoho Mail
-X-Mailer: Zoho Mail
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 06 Jun 2023 19:35:12 +0530, Laurent Pinchart wrote:
-> Hi Siddh,
-> 
-> Thank you for the patch.
+On Tue, Jun 6, 2023 at 3:45=E2=80=AFPM jerome Neanne <jneanne@baylibre.com>=
+ wrote:
+> On 30/05/2023 13:07, andy.shevchenko@gmail.com wrote:
+> > Tue, May 30, 2023 at 09:59:59AM +0200, Jerome Neanne kirjoitti:
 
-Anytime :)
+...
 
-> On Tue, Jun 06, 2023 at 04:15:16PM +0530, Siddh Raman Pant wrote:
-> > Comments say macros DRM_DEBUG_* are deprecated in favor of
-> > drm_dbg_*(NULL, ...), but they have broken support for it,
-> > as the macro will result in `(NULL) ? (NULL)->dev : NULL`.
-> 
-> What's the problem there ?
+> >> Datasheet describes specific usage for non standard GPIO.
+> >> Link: https://www.ti.com/lit/ds/symlink/tps65219.pdf
+> >
+> > Can you convert this to be a Datasheet tag? Currently even Link is *not=
+* a tag
+> > because there must be no blank lines in the tag block.
+> >
+> >> Co-developed-by: Jonathan Cormier <jcormier@criticallink.com>
+> >> Signed-off-by: Jonathan Cormier <jcormier@criticallink.com>
+> >> Signed-off-by: Jerome Neanne <jneanne@baylibre.com>
+> >
+> I misinterpreted this comment. I looked at wrong examples but I think I
+> understand now that the right usage is to have all the tags grouped
+> together into one block which is delimited by blank lines before and
+> after the whole block.
 
-(NULL)->dev is invalid C. It's a macro, so preprocessor substitutes
-that text directly, there is no evaluation. GCC will throw an error
-regarding dereferencing a void* pointer.
+(Note, there is no "after", tag block is the last in the commit message)
 
-> >  /* Helper for struct drm_device based logging. */
-> >  #define __drm_printk(drm, level, type, fmt, ...)                     \
-> > -     dev_##level##type((drm)->dev, "[drm] " fmt, ##__VA_ARGS__)
-> > +({                                                                   \
-> > +     struct device *__dev_ = __drm_dev_ptr(drm);                     \
-> > +     if (__dev_)                                                     \
-> > +             dev_##level##type(__dev_, "[drm] " fmt, ##__VA_ARGS__); \
-> > +     else                                                            \
-> > +             pr_##level##type("[drm] " fmt, ##__VA_ARGS__);          \
-> 
-> If I recall correctly, dev_*() handle a NULL dev pointer just fine. Do
-> we need to manually fall back to pr_*() ?
+> I'll then do this and put all the Datasheet/Link into the tag block.
+> Stop putting Links inside the commit message right after I refer to it.
+> https://www.kernel.org/doc/html/latest/process/5.Posting.html#patch-forma=
+tting-and-changelogs
 
-I took drm_dev_printk (on line 261 of drm_print.c) as the reference,
-wherein it uses a conditional for determining whether dev_printk or
-printk should be called.
-
-I suppose it is to avoid printing "(NULL device *)", which dev_printk
-does if it gets a NULL device pointer (refer the definition on line
-4831 of drivers/base/core.c). Though if I'm wrong, kindly let me know.
-
-Thanks,
-Siddh
+--=20
+With Best Regards,
+Andy Shevchenko
