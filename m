@@ -2,59 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B116724FB9
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 00:32:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8F77724FC4
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 00:32:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239893AbjFFWcc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 18:32:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58804 "EHLO
+        id S239920AbjFFWcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 18:32:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234129AbjFFWc3 (ORCPT
+        with ESMTP id S239897AbjFFWcg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 18:32:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 814981985
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 15:31:39 -0700 (PDT)
+        Tue, 6 Jun 2023 18:32:36 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6696A172E
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 15:31:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686090698;
+        s=mimecast20190719; t=1686090704;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ody0vpt36WOPqAoJdBcvHEaKIYL9CofPEciboVsrYGI=;
-        b=Zve5TYO5nRdS5DIBT3UtQMGzUp1awWzDUOLosBJpUwSW+SNH/lDefP4d0Y+TN0r+/YF3gn
-        W/mL38FTeqHiyqJTrJuLJ3NkuzosANCkQ3t6g4CsunH9ajiGFRUd468BdVqemJrq7ZmAss
-        SwDmwmshMFo9lz8RlUWJrLXPTAxWyY4=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jrbzg+CmRCvuhL1HQ8eolPglcnYqLN7hgbEg0b79Sq0=;
+        b=LuocEHIPCxbDW9zmsTHa7NGFqiryo7H2nx+1fldWJmnWBfATA8yrK9wmFSgnJ/Dh99uxap
+        rKItJ1AUrkNCM+cmCV4C0OQxTX78/aPdFMz8UPN1mna2E+fH+aoHgTzrFzzYwovAoDkQad
+        EyMeUh1pqjrFyYFjeAeOcfoPzW6ol4U=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-287-4TOsob6OM1Sx_ZfhCyhlTg-1; Tue, 06 Jun 2023 18:31:37 -0400
-X-MC-Unique: 4TOsob6OM1Sx_ZfhCyhlTg-1
-Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-51494233c2cso188097a12.1
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 15:31:37 -0700 (PDT)
+ us-mta-138-EumpBJCINJWIfdC75_sHAg-1; Tue, 06 Jun 2023 18:31:42 -0400
+X-MC-Unique: EumpBJCINJWIfdC75_sHAg-1
+Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-9787b126181so21532566b.0
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 15:31:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686090696; x=1688682696;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ody0vpt36WOPqAoJdBcvHEaKIYL9CofPEciboVsrYGI=;
-        b=RixqDMBBYP+lytJOeGqYZeKwVpczYRbv9vPVPf3IWfav4LSBdQ/sGrMM+2TudmAMMM
-         H3U9As05UOdEnrq5Pnuapwg111gAEPJ2LhTYH8LX/33Fz1MgTmufLXUF0/E7r7nCHAUT
-         d8yTomvEFVYiO4annpfa1fGJ8/+ZfIlwbC/DYTueCHdaZ/cYx5Yxp3nxnPVfwCXL7nj+
-         y+iT6RelaA208HtFex37DT2QdaTR3vDgcxtpLo/iwUrcEXiqrfjedr9KH51XtYw2y4+4
-         3qMiSdu9jAVRlQWtJKly1LYtbKgjl19Cu3LGR2x/ocQPjFGj+BcsI+WPOd9y0WZzem+E
-         Q13Q==
-X-Gm-Message-State: AC+VfDwC91MqaFTTplRwWRYETe1tYal/Nx9LqBni0JGIFJQMdhSIEySG
-        IdUVIfgfbhK3kRvRBOIj/oRzWuid9odQi+KhPVIn/05RNHwgZOTwEjXFBMJ+UnlbzA4m22k/5QN
-        OmHkZ0yb8bycsjq9STBHORYil
-X-Received: by 2002:aa7:d9d3:0:b0:511:111f:c8bf with SMTP id v19-20020aa7d9d3000000b00511111fc8bfmr2908761eds.9.1686090696535;
-        Tue, 06 Jun 2023 15:31:36 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4iHxw1M9+ybPRNFvl6atTde4/SpP7zFKLXTonOdvamGv/a53gjlK224tm7v1Au6/ki4Fdafg==
-X-Received: by 2002:aa7:d9d3:0:b0:511:111f:c8bf with SMTP id v19-20020aa7d9d3000000b00511111fc8bfmr2908739eds.9.1686090696207;
-        Tue, 06 Jun 2023 15:31:36 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686090701; x=1688682701;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jrbzg+CmRCvuhL1HQ8eolPglcnYqLN7hgbEg0b79Sq0=;
+        b=Dhvle1T7+IzNZcpR6ffV84dixMDmVpvNp2H0pmwe3TQcqX3BRa+pjbZVN1sVyd4M8J
+         UpVQSLN5XOlSd3OPGfEq6BesOFuEmSHGispLavqrsySphYiXl2mqW4E7zNaCwQsuZUk7
+         iRf851dhlFru2MdAc/Btg4ysNmmR/N/NI6a0PUGP4yDpfr6tZQTLH5xA3E0H3cLL4SUp
+         0M5Ysv0etlugALh4nV3hbW6ZGhugDkzCcX9AR7FQYVww5/a0It4jyVE+IYedcPiruHEN
+         j3jRF1FcGTgtNSundPw2yXDvEPIS0e82HA0kUvtr13BDyCD81iHYxITqvDtWrYhYmONN
+         wx1Q==
+X-Gm-Message-State: AC+VfDww0PhDIfWxzJDY/BqYoaWI8mApVAiBeHaMyEHdLpEiHHDxTAPf
+        mGLkCtA4EUnDHs/EhUkW9Y5E+TZ59qD/nDbXyrQenhubBsQW7h98soNVk6s5+ZATUkEtUfk4lnm
+        Q39NCsRuo5qOYW3fZu19+trSR
+X-Received: by 2002:a17:907:1687:b0:96f:d345:d104 with SMTP id hc7-20020a170907168700b0096fd345d104mr5320005ejc.38.1686090701238;
+        Tue, 06 Jun 2023 15:31:41 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4Kxk1h1HGNKcKIdVOzSHGMepFvoSF9TnlcN9p9TC8q1Ap8KnZNICJA9ez0XxG8WzDZThDEFg==
+X-Received: by 2002:a17:907:1687:b0:96f:d345:d104 with SMTP id hc7-20020a170907168700b0096fd345d104mr5319990ejc.38.1686090700838;
+        Tue, 06 Jun 2023 15:31:40 -0700 (PDT)
 Received: from cassiopeiae.. ([2a02:810d:4b3f:de9c:642:1aff:fe31:a19f])
-        by smtp.gmail.com with ESMTPSA id h26-20020aa7c95a000000b00514bddcb87csm5534978edt.31.2023.06.06.15.31.34
+        by smtp.gmail.com with ESMTPSA id va26-20020a17090711da00b00977d3fb2a7dsm3567620ejb.76.2023.06.06.15.31.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 15:31:35 -0700 (PDT)
+        Tue, 06 Jun 2023 15:31:40 -0700 (PDT)
 From:   Danilo Krummrich <dakr@redhat.com>
 To:     airlied@gmail.com, daniel@ffwll.ch, tzimmermann@suse.de,
         mripard@kernel.org, corbet@lwn.net, christian.koenig@amd.com,
@@ -64,276 +65,516 @@ To:     airlied@gmail.com, daniel@ffwll.ch, tzimmermann@suse.de,
         willy@infradead.org, jason@jlekstrand.net
 Cc:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
         linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Danilo Krummrich <dakr@redhat.com>
-Subject: [PATCH drm-next v4 00/14] [RFC] DRM GPUVA Manager & Nouveau VM_BIND UAPI
-Date:   Wed,  7 Jun 2023 00:31:16 +0200
-Message-Id: <20230606223130.6132-1-dakr@redhat.com>
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= 
+        <ckoenig.leichtzumerken@gmail.com>
+Subject: [PATCH drm-next v4 01/14] drm: execution context for GEM buffers v4
+Date:   Wed,  7 Jun 2023 00:31:17 +0200
+Message-Id: <20230606223130.6132-2-dakr@redhat.com>
 X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230606223130.6132-1-dakr@redhat.com>
+References: <20230606223130.6132-1-dakr@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Furthermore, with the DRM GPUVA manager it provides a new DRM core feature to
-keep track of GPU virtual address (VA) mappings in a more generic way.
+From: Christian König <ckoenig.leichtzumerken@gmail.com>
 
-The DRM GPUVA manager is indented to help drivers implement userspace-manageable
-GPU VA spaces in reference to the Vulkan API. In order to achieve this goal it
-serves the following purposes in this context.
+This adds the infrastructure for an execution context for GEM buffers
+which is similar to the existing TTMs execbuf util and intended to replace
+it in the long term.
 
-    1) Provide infrastructure to track GPU VA allocations and mappings,
-       making use of the maple_tree.
+The basic functionality is that we abstracts the necessary loop to lock
+many different GEM buffers with automated deadlock and duplicate handling.
 
-    2) Generically connect GPU VA mappings to their backing buffers, in
-       particular DRM GEM objects.
+v2: drop xarray and use dynamic resized array instead, the locking
+    overhead is unecessary and measurable.
+v3: drop duplicate tracking, radeon is really the only one needing that.
+v4: fixes issues pointed out by Danilo, some typos in comments and a
+    helper for lock arrays of GEM objects.
 
-    3) Provide a common implementation to perform more complex mapping
-       operations on the GPU VA space. In particular splitting and merging
-       of GPU VA mappings, e.g. for intersecting mapping requests or partial
-       unmap requests.
-
-The new VM_BIND Nouveau UAPI build on top of the DRM GPUVA manager, itself
-providing the following new interfaces.
-
-    1) Initialize a GPU VA space via the new DRM_IOCTL_NOUVEAU_VM_INIT ioctl
-       for UMDs to specify the portion of VA space managed by the kernel and
-       userspace, respectively.
-
-    2) Allocate and free a VA space region as well as bind and unbind memory
-       to the GPUs VA space via the new DRM_IOCTL_NOUVEAU_VM_BIND ioctl.
-
-    3) Execute push buffers with the new DRM_IOCTL_NOUVEAU_EXEC ioctl.
-
-Both, DRM_IOCTL_NOUVEAU_VM_BIND and DRM_IOCTL_NOUVEAU_EXEC, make use of the DRM
-scheduler to queue jobs and support asynchronous processing with DRM syncobjs
-as synchronization mechanism.
-
-By default DRM_IOCTL_NOUVEAU_VM_BIND does synchronous processing,
-DRM_IOCTL_NOUVEAU_EXEC supports asynchronous processing only.
-
-The new VM_BIND UAPI for Nouveau makes also use of drm_exec (execution context
-for GEM buffers) by Christian König. Since the patch implementing drm_exec was
-not yet merged into drm-next it is part of this series, as well as a small fix
-for this patch, which was found while testing this series.
-
-This patch series is also available at [1].
-
-There is a Mesa NVK merge request by Dave Airlie [2] implementing the
-corresponding userspace parts for this series.
-
-The Vulkan CTS test suite passes the sparse binding and sparse residency test
-cases for the new UAPI together with Dave's Mesa work.
-
-There are also some test cases in the igt-gpu-tools project [3] for the new UAPI
-and hence the DRM GPU VA manager. However, most of them are testing the DRM GPU
-VA manager's logic through Nouveau's new UAPI and should be considered just as
-helper for implementation.
-
-However, I absolutely intend to change those test cases to proper kunit test
-cases for the DRM GPUVA manager, once and if we agree on it's usefulness and
-design.
-
-[1] https://gitlab.freedesktop.org/nouvelles/kernel/-/tree/new-uapi-drm-next /
-    https://gitlab.freedesktop.org/nouvelles/kernel/-/merge_requests/1
-[2] https://gitlab.freedesktop.org/nouveau/mesa/-/merge_requests/150/
-[3] https://gitlab.freedesktop.org/dakr/igt-gpu-tools/-/tree/wip_nouveau_vm_bind
-
-Changes in V2:
-==============
-  Nouveau:
-    - Reworked the Nouveau VM_BIND UAPI to avoid memory allocations in fence
-      signalling critical sections. Updates to the VA space are split up in three
-      separate stages, where only the 2. stage executes in a fence signalling
-      critical section:
-
-        1. update the VA space, allocate new structures and page tables
-        2. (un-)map the requested memory bindings
-        3. free structures and page tables
-
-    - Separated generic job scheduler code from specific job implementations.
-    - Separated the EXEC and VM_BIND implementation of the UAPI.
-    - Reworked the locking parts of the nvkm/vmm RAW interface, such that
-      (un-)map operations can be executed in fence signalling critical sections.
-
-  GPUVA Manager:
-    - made drm_gpuva_regions optional for users of the GPUVA manager
-    - allow NULL GEMs for drm_gpuva entries
-    - swichted from drm_mm to maple_tree for track drm_gpuva / drm_gpuva_region
-      entries
-    - provide callbacks for users to allocate custom drm_gpuva_op structures to
-      allow inheritance
-    - added user bits to drm_gpuva_flags
-    - added a prefetch operation type in order to support generating prefetch
-      operations in the same way other operations generated
-    - hand the responsibility for mutual exclusion for a GEM's
-      drm_gpuva list to the user; simplified corresponding (un-)link functions
-
-  Maple Tree:
-    - I added two maple tree patches to the series, one to support custom tree
-      walk macros and one to hand the locking responsibility to the user of the
-      GPUVA manager without pre-defined lockdep checks.
-
-Changes in V3:
-==============
-  Nouveau:
-    - Reworked the Nouveau VM_BIND UAPI to do the job cleanup (including page
-      table cleanup) within a workqueue rather than the job_free() callback of
-      the scheduler itself. A job_free() callback can stall the execution (run()
-      callback) of the next job in the queue. Since the page table cleanup
-      requires to take the same locks as need to be taken for page table
-      allocation, doing it directly in the job_free() callback would still
-      violate the fence signalling critical path.
-    - Separated Nouveau fence allocation and emit, such that we do not violate
-      the fence signalling critical path in EXEC jobs.
-    - Implement "regions" (for handling sparse mappings through PDEs and dual
-      page tables) within Nouveau.
-    - Drop the requirement for every mapping to be contained within a region.
-    - Add necassary synchronization of VM_BIND job operation sequences in order
-      to work around limitations in page table handling. This will be addressed
-      in a future re-work of Nouveau's page table handling.
-    - Fixed a couple of race conditions found through more testing. Thanks to
-      Dave for consitently trying to break it. :-)
-
-  GPUVA Manager:
-    - Implement pre-allocation capabilities for tree modifications within fence
-      signalling critical sections.
-    - Implement accessors to to apply tree modification while walking the GPUVA
-      tree in order to actually support processing of drm_gpuva_ops through
-      callbacks in fence signalling critical sections rather than through
-      pre-allocated operation lists.
-    - Remove merging of GPUVAs; the kernel has limited to none knowlege about
-      the semantics of mapping sequences. Hence, merging is purely speculative.
-      It seems that gaining a significant (or at least a measurable) performance
-      increase through merging is way more likely to happen when userspace is
-      responsible for merging mappings up to the next larger page size if
-      possible.
-    - Since merging was removed, regions pretty much loose their right to exist.
-      They might still be useful for handling dual page tables or similar
-      mechanisms, but since Nouveau seems to be the only driver having a need
-      for this for now, regions were removed from the GPUVA manager.
-    - Fixed a couple of maple_tree related issues; thanks to Liam for helping me
-      out.
-
-Changes in V4:
-==============
-  Nouveau:
-    - Refactored how specific VM_BIND and EXEC jobs are created and how their
-      arguments are passed to the generic job implementation.
-    - Fixed a UAF race condition where bind job ops could have been freed
-      already while still waiting for a job cleanup to finish. This is due to
-      in certain cases we need to wait for mappings actually being unmapped
-      before creating sparse regions in the same area.
-    - Re-based the code onto drm_exec v4 patch.
-
-  GPUVA Manager:
-    - Fixed a maple tree related bug when pre-allocating MA states.
-      (Boris Brezillion)
-    - Made struct drm_gpuva_fn_ops a const object in all occurrences.
-      (Boris Brezillion)
-
-TODO
-====
-  Maple Tree:
-    - Maple tree uses the 'unsinged long' type for node entries. While this
-      works for 64bit, it's incompatible with the DRM GPUVA Manager on 32bit,
-      since the DRM GPUVA Manager uses the u64 type and so do drivers using it.
-      While it's questionable whether a 32bit kernel and a > 32bit GPU address
-      space make any sense, it creates tons of compiler warnings when compiling
-      for 32bit. Maybe it makes sense to expand the maple tree API to let users
-      decide which size to pick - other ideas / proposals are welcome.
-
-
-Christian König (1):
-  drm: execution context for GEM buffers v4
-
-Danilo Krummrich (13):
-  maple_tree: split up MA_STATE() macro
-  drm: manager to keep track of GPUs VA mappings
-  drm: debugfs: provide infrastructure to dump a DRM GPU VA space
-  drm/nouveau: new VM_BIND uapi interfaces
-  drm/nouveau: get vmm via nouveau_cli_vmm()
-  drm/nouveau: bo: initialize GEM GPU VA interface
-  drm/nouveau: move usercopy helpers to nouveau_drv.h
-  drm/nouveau: fence: separate fence alloc and emit
-  drm/nouveau: fence: fail to emit when fence context is killed
-  drm/nouveau: chan: provide nouveau_channel_kill()
-  drm/nouveau: nvkm/vmm: implement raw ops to manage uvmm
-  drm/nouveau: implement new VM_BIND uAPI
-  drm/nouveau: debugfs: implement DRM GPU VA debugfs
-
- Documentation/gpu/driver-uapi.rst             |   11 +
- Documentation/gpu/drm-mm.rst                  |   43 +
- drivers/gpu/drm/Kconfig                       |    6 +
- drivers/gpu/drm/Makefile                      |    3 +
- drivers/gpu/drm/drm_debugfs.c                 |   41 +
- drivers/gpu/drm/drm_exec.c                    |  278 +++
- drivers/gpu/drm/drm_gem.c                     |    3 +
- drivers/gpu/drm/drm_gpuva_mgr.c               | 1687 +++++++++++++++
- drivers/gpu/drm/nouveau/Kbuild                |    3 +
- drivers/gpu/drm/nouveau/Kconfig               |    2 +
- drivers/gpu/drm/nouveau/dispnv04/crtc.c       |    9 +-
- drivers/gpu/drm/nouveau/include/nvif/if000c.h |   26 +-
- drivers/gpu/drm/nouveau/include/nvif/vmm.h    |   19 +-
- .../gpu/drm/nouveau/include/nvkm/subdev/mmu.h |   20 +-
- drivers/gpu/drm/nouveau/nouveau_abi16.c       |   24 +
- drivers/gpu/drm/nouveau/nouveau_abi16.h       |    1 +
- drivers/gpu/drm/nouveau/nouveau_bo.c          |  204 +-
- drivers/gpu/drm/nouveau/nouveau_bo.h          |    2 +-
- drivers/gpu/drm/nouveau/nouveau_chan.c        |   22 +-
- drivers/gpu/drm/nouveau/nouveau_chan.h        |    1 +
- drivers/gpu/drm/nouveau/nouveau_debugfs.c     |   39 +
- drivers/gpu/drm/nouveau/nouveau_dmem.c        |    9 +-
- drivers/gpu/drm/nouveau/nouveau_drm.c         |   27 +-
- drivers/gpu/drm/nouveau/nouveau_drv.h         |   94 +-
- drivers/gpu/drm/nouveau/nouveau_exec.c        |  418 ++++
- drivers/gpu/drm/nouveau/nouveau_exec.h        |   54 +
- drivers/gpu/drm/nouveau/nouveau_fence.c       |   23 +-
- drivers/gpu/drm/nouveau/nouveau_fence.h       |    5 +-
- drivers/gpu/drm/nouveau/nouveau_gem.c         |   62 +-
- drivers/gpu/drm/nouveau/nouveau_mem.h         |    5 +
- drivers/gpu/drm/nouveau/nouveau_prime.c       |    2 +-
- drivers/gpu/drm/nouveau/nouveau_sched.c       |  461 ++++
- drivers/gpu/drm/nouveau/nouveau_sched.h       |  123 ++
- drivers/gpu/drm/nouveau/nouveau_svm.c         |    2 +-
- drivers/gpu/drm/nouveau/nouveau_uvmm.c        | 1898 +++++++++++++++++
- drivers/gpu/drm/nouveau/nouveau_uvmm.h        |  107 +
- drivers/gpu/drm/nouveau/nouveau_vmm.c         |    4 +-
- drivers/gpu/drm/nouveau/nvif/vmm.c            |  100 +-
- .../gpu/drm/nouveau/nvkm/subdev/mmu/uvmm.c    |  213 +-
- drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.c |  197 +-
- drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.h |   25 +
- .../drm/nouveau/nvkm/subdev/mmu/vmmgf100.c    |   16 +-
- .../drm/nouveau/nvkm/subdev/mmu/vmmgp100.c    |   16 +-
- .../gpu/drm/nouveau/nvkm/subdev/mmu/vmmnv50.c |   27 +-
- include/drm/drm_debugfs.h                     |   25 +
- include/drm/drm_drv.h                         |    6 +
- include/drm/drm_exec.h                        |  119 ++
- include/drm/drm_gem.h                         |   75 +
- include/drm/drm_gpuva_mgr.h                   |  681 ++++++
- include/linux/maple_tree.h                    |    7 +-
- include/uapi/drm/nouveau_drm.h                |  209 ++
- 51 files changed, 7212 insertions(+), 242 deletions(-)
+Signed-off-by: Christian König <christian.koenig@amd.com>
+---
+ Documentation/gpu/drm-mm.rst |  12 ++
+ drivers/gpu/drm/Kconfig      |   6 +
+ drivers/gpu/drm/Makefile     |   2 +
+ drivers/gpu/drm/drm_exec.c   | 278 +++++++++++++++++++++++++++++++++++
+ include/drm/drm_exec.h       | 119 +++++++++++++++
+ 5 files changed, 417 insertions(+)
  create mode 100644 drivers/gpu/drm/drm_exec.c
- create mode 100644 drivers/gpu/drm/drm_gpuva_mgr.c
- create mode 100644 drivers/gpu/drm/nouveau/nouveau_exec.c
- create mode 100644 drivers/gpu/drm/nouveau/nouveau_exec.h
- create mode 100644 drivers/gpu/drm/nouveau/nouveau_sched.c
- create mode 100644 drivers/gpu/drm/nouveau/nouveau_sched.h
- create mode 100644 drivers/gpu/drm/nouveau/nouveau_uvmm.c
- create mode 100644 drivers/gpu/drm/nouveau/nouveau_uvmm.h
  create mode 100644 include/drm/drm_exec.h
- create mode 100644 include/drm/drm_gpuva_mgr.h
 
-
-base-commit: 33a86170888b7e4aa0cea94ebb9c67180139cea9
+diff --git a/Documentation/gpu/drm-mm.rst b/Documentation/gpu/drm-mm.rst
+index a79fd3549ff8..a52e6f4117d6 100644
+--- a/Documentation/gpu/drm-mm.rst
++++ b/Documentation/gpu/drm-mm.rst
+@@ -493,6 +493,18 @@ DRM Sync Objects
+ .. kernel-doc:: drivers/gpu/drm/drm_syncobj.c
+    :export:
+ 
++DRM Execution context
++=====================
++
++.. kernel-doc:: drivers/gpu/drm/drm_exec.c
++   :doc: Overview
++
++.. kernel-doc:: include/drm/drm_exec.h
++   :internal:
++
++.. kernel-doc:: drivers/gpu/drm/drm_exec.c
++   :export:
++
+ GPU Scheduler
+ =============
+ 
+diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
+index ba3fb04bb691..2dc81eb062eb 100644
+--- a/drivers/gpu/drm/Kconfig
++++ b/drivers/gpu/drm/Kconfig
+@@ -201,6 +201,12 @@ config DRM_TTM
+ 	  GPU memory types. Will be enabled automatically if a device driver
+ 	  uses it.
+ 
++config DRM_EXEC
++	tristate
++	depends on DRM
++	help
++	  Execution context for command submissions
++
+ config DRM_BUDDY
+ 	tristate
+ 	depends on DRM
+diff --git a/drivers/gpu/drm/Makefile b/drivers/gpu/drm/Makefile
+index a33257d2bc7f..9c6446eb3c83 100644
+--- a/drivers/gpu/drm/Makefile
++++ b/drivers/gpu/drm/Makefile
+@@ -78,6 +78,8 @@ obj-$(CONFIG_DRM_PANEL_ORIENTATION_QUIRKS) += drm_panel_orientation_quirks.o
+ #
+ # Memory-management helpers
+ #
++#
++obj-$(CONFIG_DRM_EXEC) += drm_exec.o
+ 
+ obj-$(CONFIG_DRM_BUDDY) += drm_buddy.o
+ 
+diff --git a/drivers/gpu/drm/drm_exec.c b/drivers/gpu/drm/drm_exec.c
+new file mode 100644
+index 000000000000..18071bff20f4
+--- /dev/null
++++ b/drivers/gpu/drm/drm_exec.c
+@@ -0,0 +1,278 @@
++/* SPDX-License-Identifier: GPL-2.0 OR MIT */
++
++#include <drm/drm_exec.h>
++#include <drm/drm_gem.h>
++#include <linux/dma-resv.h>
++
++/**
++ * DOC: Overview
++ *
++ * This component mainly abstracts the retry loop necessary for locking
++ * multiple GEM objects while preparing hardware operations (e.g. command
++ * submissions, page table updates etc..).
++ *
++ * If a contention is detected while locking a GEM object the cleanup procedure
++ * unlocks all previously locked GEM objects and locks the contended one first
++ * before locking any further objects.
++ *
++ * After an object is locked fences slots can optionally be reserved on the
++ * dma_resv object inside the GEM object.
++ *
++ * A typical usage pattern should look like this::
++ *
++ *	struct drm_gem_object *obj;
++ *	struct drm_exec exec;
++ *	unsigned long index;
++ *	int ret;
++ *
++ *	drm_exec_init(&exec, true);
++ *	drm_exec_while_not_all_locked(&exec) {
++ *		ret = drm_exec_prepare_obj(&exec, boA, 1);
++ *		drm_exec_continue_on_contention(&exec);
++ *		if (ret)
++ *			goto error;
++ *
++ *		ret = drm_exec_prepare_obj(&exec, boB, 1);
++ *		drm_exec_continue_on_contention(&exec);
++ *		if (ret)
++ *			goto error;
++ *	}
++ *
++ *	drm_exec_for_each_locked_object(&exec, index, obj) {
++ *		dma_resv_add_fence(obj->resv, fence, DMA_RESV_USAGE_READ);
++ *		...
++ *	}
++ *	drm_exec_fini(&exec);
++ *
++ * See struct dma_exec for more details.
++ */
++
++/* Dummy value used to initially enter the retry loop */
++#define DRM_EXEC_DUMMY (void*)~0
++
++/* Unlock all objects and drop references */
++static void drm_exec_unlock_all(struct drm_exec *exec)
++{
++	struct drm_gem_object *obj;
++	unsigned long index;
++
++	drm_exec_for_each_locked_object(exec, index, obj) {
++		dma_resv_unlock(obj->resv);
++		drm_gem_object_put(obj);
++	}
++
++	drm_gem_object_put(exec->prelocked);
++	exec->prelocked = NULL;
++}
++
++/**
++ * drm_exec_init - initialize a drm_exec object
++ * @exec: the drm_exec object to initialize
++ * @interruptible: if locks should be acquired interruptible
++ *
++ * Initialize the object and make sure that we can track locked objects.
++ */
++void drm_exec_init(struct drm_exec *exec, bool interruptible)
++{
++	exec->interruptible = interruptible;
++	exec->objects = kmalloc(PAGE_SIZE, GFP_KERNEL);
++
++	/* If allocation here fails, just delay that till the first use */
++	exec->max_objects = exec->objects ? PAGE_SIZE / sizeof(void *) : 0;
++	exec->num_objects = 0;
++	exec->contended = DRM_EXEC_DUMMY;
++	exec->prelocked = NULL;
++}
++EXPORT_SYMBOL(drm_exec_init);
++
++/**
++ * drm_exec_fini - finalize a drm_exec object
++ * @exec: the drm_exec object to finalize
++ *
++ * Unlock all locked objects, drop the references to objects and free all memory
++ * used for tracking the state.
++ */
++void drm_exec_fini(struct drm_exec *exec)
++{
++	drm_exec_unlock_all(exec);
++	kvfree(exec->objects);
++	if (exec->contended != DRM_EXEC_DUMMY) {
++		drm_gem_object_put(exec->contended);
++		ww_acquire_fini(&exec->ticket);
++	}
++}
++EXPORT_SYMBOL(drm_exec_fini);
++
++/**
++ * drm_exec_cleanup - cleanup when contention is detected
++ * @exec: the drm_exec object to cleanup
++ *
++ * Cleanup the current state and return true if we should stay inside the retry
++ * loop, false if there wasn't any contention detected and we can keep the
++ * objects locked.
++ */
++bool drm_exec_cleanup(struct drm_exec *exec)
++{
++	if (likely(!exec->contended)) {
++		ww_acquire_done(&exec->ticket);
++		return false;
++	}
++
++	if (likely(exec->contended == DRM_EXEC_DUMMY)) {
++		exec->contended = NULL;
++		ww_acquire_init(&exec->ticket, &reservation_ww_class);
++		return true;
++	}
++
++	drm_exec_unlock_all(exec);
++	exec->num_objects = 0;
++	return true;
++}
++EXPORT_SYMBOL(drm_exec_cleanup);
++
++/* Track the locked object in the array */
++static int drm_exec_obj_locked(struct drm_exec *exec,
++			       struct drm_gem_object *obj)
++{
++	if (unlikely(exec->num_objects == exec->max_objects)) {
++		size_t size = exec->max_objects * sizeof(void *);
++		void *tmp;
++
++		tmp = kvrealloc(exec->objects, size, size + PAGE_SIZE,
++				GFP_KERNEL);
++		if (!tmp)
++			return -ENOMEM;
++
++		exec->objects = tmp;
++		exec->max_objects += PAGE_SIZE / sizeof(void *);
++	}
++	drm_gem_object_get(obj);
++	exec->objects[exec->num_objects++] = obj;
++
++	return 0;
++}
++
++/* Make sure the contended object is locked first */
++static int drm_exec_lock_contended(struct drm_exec *exec)
++{
++	struct drm_gem_object *obj = exec->contended;
++	int ret;
++
++	if (likely(!obj))
++		return 0;
++
++	if (exec->interruptible) {
++		ret = dma_resv_lock_slow_interruptible(obj->resv,
++						       &exec->ticket);
++		if (unlikely(ret))
++			goto error_dropref;
++	} else {
++		dma_resv_lock_slow(obj->resv, &exec->ticket);
++	}
++
++	ret = drm_exec_obj_locked(exec, obj);
++	if (unlikely(ret)) {
++		dma_resv_unlock(obj->resv);
++		goto error_dropref;
++	}
++
++	swap(exec->prelocked, obj);
++
++error_dropref:
++	/* Always cleanup the contention so that error handling can kick in */
++	drm_gem_object_put(obj);
++	exec->contended = NULL;
++	return ret;
++}
++
++/**
++ * drm_exec_prepare_obj - prepare a GEM object for use
++ * @exec: the drm_exec object with the state
++ * @obj: the GEM object to prepare
++ * @num_fences: how many fences to reserve
++ *
++ * Prepare a GEM object for use by locking it and reserving fence slots. All
++ * successfully locked objects are put into the locked container.
++ *
++ * Returns: -EDEADLK if a contention is detected, -EALREADY when object is
++ * already locked, -ENOMEM when memory allocation failed and zero for success.
++ */
++int drm_exec_prepare_obj(struct drm_exec *exec, struct drm_gem_object *obj,
++			 unsigned int num_fences)
++{
++	int ret;
++
++	ret = drm_exec_lock_contended(exec);
++	if (unlikely(ret))
++		return ret;
++
++	if (exec->prelocked == obj) {
++		drm_gem_object_put(exec->prelocked);
++		exec->prelocked = NULL;
++
++		return dma_resv_reserve_fences(obj->resv, num_fences);
++	}
++
++	if (exec->interruptible)
++		ret = dma_resv_lock_interruptible(obj->resv, &exec->ticket);
++	else
++		ret = dma_resv_lock(obj->resv, &exec->ticket);
++
++	if (unlikely(ret == -EDEADLK)) {
++		drm_gem_object_get(obj);
++		exec->contended = obj;
++		return -EDEADLK;
++	}
++
++	if (unlikely(ret))
++		return ret;
++
++	ret = drm_exec_obj_locked(exec, obj);
++	if (ret)
++		goto error_unlock;
++
++	/* Keep locked when reserving fences fails */
++	return dma_resv_reserve_fences(obj->resv, num_fences);
++
++error_unlock:
++	dma_resv_unlock(obj->resv);
++	return ret;
++}
++EXPORT_SYMBOL(drm_exec_prepare_obj);
++
++/**
++ * drm_exec_prepare_array - helper to prepare an array of objects
++ * @exec: the drm_exec object with the state
++ * @objects: array of GEM object to prepare
++ * @num_objects: number of GEM objects in the array
++ * @num_fences: number of fences to reserve on each GEM object
++ *
++ * Prepares all GEM objects in an array, handles contention but aports on first
++ * error otherwise. Reserves @num_fences on each GEM object after locking it.
++ *
++ * Returns: -EALREADY when object is already locked, -ENOMEM when memory
++ * allocation failed and zero for success.
++ */
++int drm_exec_prepare_array(struct drm_exec *exec,
++			   struct drm_gem_object **objects,
++			   unsigned int num_objects,
++			   unsigned int num_fences)
++{
++	int ret;
++
++	drm_exec_while_not_all_locked(exec) {
++		for (unsigned int i = 0; i < num_objects; ++i) {
++			ret = drm_exec_prepare_obj(exec, objects[i],
++						   num_fences);
++			drm_exec_break_on_contention(exec);
++			if (unlikely(ret))
++				return ret;
++		}
++	}
++
++	return 0;
++}
++EXPORT_SYMBOL(drm_exec_prepare_array);
++
++MODULE_DESCRIPTION("DRM execution context");
++MODULE_LICENSE("Dual MIT/GPL");
+diff --git a/include/drm/drm_exec.h b/include/drm/drm_exec.h
+new file mode 100644
+index 000000000000..7c7481ed088a
+--- /dev/null
++++ b/include/drm/drm_exec.h
+@@ -0,0 +1,119 @@
++/* SPDX-License-Identifier: GPL-2.0 OR MIT */
++
++#ifndef __DRM_EXEC_H__
++#define __DRM_EXEC_H__
++
++#include <linux/ww_mutex.h>
++
++struct drm_gem_object;
++
++/**
++ * struct drm_exec - Execution context
++ */
++struct drm_exec {
++	/**
++	 * @interruptible: If locks should be taken interruptible
++	 */
++	bool			interruptible;
++
++	/**
++	 * @ticket: WW ticket used for acquiring locks
++	 */
++	struct ww_acquire_ctx	ticket;
++
++	/**
++	 * @num_objects: number of objects locked
++	 */
++	unsigned int		num_objects;
++
++	/**
++	 * @max_objects: maximum objects in array
++	 */
++	unsigned int		max_objects;
++
++	/**
++	 * @objects: array of the locked objects
++	 */
++	struct drm_gem_object	**objects;
++
++	/**
++	 * @contended: contended GEM object we backed off for
++	 */
++	struct drm_gem_object	*contended;
++
++	/**
++	 * @prelocked: already locked GEM object due to contention
++	 */
++	struct drm_gem_object *prelocked;
++};
++
++/**
++ * drm_exec_for_each_locked_object - iterate over all the locked objects
++ * @exec: drm_exec object
++ * @index: unsigned long index for the iteration
++ * @obj: the current GEM object
++ *
++ * Iterate over all the locked GEM objects inside the drm_exec object.
++ */
++#define drm_exec_for_each_locked_object(exec, index, obj)	\
++	for (index = 0, obj = (exec)->objects[0];		\
++	     index < (exec)->num_objects;			\
++	     ++index, obj = (exec)->objects[index])
++
++/**
++ * drm_exec_while_not_all_locked - loop until all GEM objects are prepared
++ * @exec: drm_exec object
++ *
++ * Core functionality of the drm_exec object. Loops until all GEM objects are
++ * prepared and no more contention exists.
++ *
++ * At the beginning of the loop it is guaranteed that no GEM object is locked.
++ */
++#define drm_exec_while_not_all_locked(exec)	\
++	while (drm_exec_cleanup(exec))
++
++/**
++ * drm_exec_continue_on_contention - continue the loop when we need to cleanup
++ * @exec: drm_exec object
++ *
++ * Control flow helper to continue when a contention was detected and we need to
++ * clean up and re-start the loop to prepare all GEM objects.
++ */
++#define drm_exec_continue_on_contention(exec)		\
++	if (unlikely(drm_exec_is_contended(exec)))	\
++		continue
++
++/**
++ * drm_exec_break_on_contention - break a subordinal loop on contention
++ * @exec: drm_exec object
++ *
++ * Control flow helper to break a subordinal loop when a contention was detected
++ * and we need to clean up and re-start the loop to prepare all GEM objects.
++ */
++#define drm_exec_break_on_contention(exec)		\
++	if (unlikely(drm_exec_is_contended(exec)))	\
++		break
++
++/**
++ * drm_exec_is_contended - check for contention
++ * @exec: drm_exec object
++ *
++ * Returns true if the drm_exec object has run into some contention while
++ * locking a GEM object and needs to clean up.
++ */
++static inline bool drm_exec_is_contended(struct drm_exec *exec)
++{
++	return !!exec->contended;
++}
++
++void drm_exec_init(struct drm_exec *exec, bool interruptible);
++void drm_exec_fini(struct drm_exec *exec);
++bool drm_exec_cleanup(struct drm_exec *exec);
++int drm_exec_prepare_obj(struct drm_exec *exec, struct drm_gem_object *obj,
++			 unsigned int num_fences);
++int drm_exec_prepare_array(struct drm_exec *exec,
++			   struct drm_gem_object **objects,
++			   unsigned int num_objects,
++			   unsigned int num_fences);
++
++#endif
 -- 
 2.40.1
 
