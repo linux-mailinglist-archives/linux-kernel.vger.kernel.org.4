@@ -2,149 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18FF3723C16
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 10:44:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA1AB723C18
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 10:45:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237245AbjFFIon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 04:44:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39154 "EHLO
+        id S237246AbjFFIpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 04:45:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236858AbjFFIok (ORCPT
+        with ESMTP id S231545AbjFFIpp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 04:44:40 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27250FA
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 01:44:39 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-977d0288fd2so374800466b.1
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 01:44:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686041077; x=1688633077;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XDg6FhswbLnxmS80mCt2IqXJuf8NCtYRpgYnIYW/CqI=;
-        b=D+o10JAiGV/K8Dk8o+sTomnICPqQiKXQqiasLdnFHwrRq8AdmQ2PfydvWTEeDP84N/
-         dStB8WQGQgAtmYa8scNzeiqDHoprVOcygCaYiDK3wjFU78QB4eHxEmyNDsCakwGUWDQR
-         B6p/fW+n3tOogKlmTpCCJTZb4iQzwuOMP4Qluuma4aIBAm/OkXE9Jru0pAomBhb1ZPXJ
-         LJb1uYH90Qw4T14XSm0AGDG0+QJl4b+ZCwjJXmEg4VaxZlg65OPOsGT29y29qv2D0xz5
-         3rDYnN2DY4C0kwM//FLiQ7UcJFFThl78c6JoWIZWYUvlZI0+xtbnz20IdvLB5ucl+8GT
-         te9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686041077; x=1688633077;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XDg6FhswbLnxmS80mCt2IqXJuf8NCtYRpgYnIYW/CqI=;
-        b=kwjUWHNEhn1gh360qXsx0Z6DMQVj77mpn/0N2On4Yk2Z7HNcyuOrkbeVe6xf6urnwU
-         skUwzV9LaKdvjySjxq8gqZw/e0pwvq8AtbxjYpgoELA5pbJhYvrU5C6uHUxIekzqopz1
-         7WqqiwR+iF4R7W9wb7Hz3CLaWxwBbtEJX6BE7g97KDzM3KREnn70ZJlBHJfX59OphAJk
-         twehuvTpiJeQX/7Pxk7tIDioAA8OAXg5QMOvBDpQDagsy2jG4eeDUMVospPCSlvTAhaS
-         85Na2ZkUSRQ0Rg7+BlVzol0ZZxAaiEOIrnYtZj1eskb6O6fhLuqhoMe3RL66iUuUgR73
-         gGoQ==
-X-Gm-Message-State: AC+VfDzRdSxLXJhZv7rXIM2AoemXhPSkvmBCJh+VTMSF6ZAN9HsNUm58
-        kYNEp/ku24UoOuCy5czxSbp4UQ==
-X-Google-Smtp-Source: ACHHUZ6wAfRnXikBVJbGi1CsiXd+lwR0OYsSoSocIDBbbRBkyIdkfClvyjFYznjWuYv6kxmoRkeiFA==
-X-Received: by 2002:a17:907:3ea5:b0:973:9f60:c57e with SMTP id hs37-20020a1709073ea500b009739f60c57emr2012710ejc.2.1686041077566;
-        Tue, 06 Jun 2023 01:44:37 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id d4-20020a17090694c400b0096f67b55b0csm5265406ejy.115.2023.06.06.01.44.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Jun 2023 01:44:37 -0700 (PDT)
-Message-ID: <845924ba-d9bf-d0ec-e1f2-f721366f43c0@linaro.org>
-Date:   Tue, 6 Jun 2023 10:44:34 +0200
+        Tue, 6 Jun 2023 04:45:45 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 21F6FEA;
+        Tue,  6 Jun 2023 01:45:42 -0700 (PDT)
+Received: from loongson.cn (unknown [10.2.9.158])
+        by gateway (Coremail) with SMTP id _____8BxHPA08n5k1g0AAA--.408S3;
+        Tue, 06 Jun 2023 16:45:40 +0800 (CST)
+Received: from kvm-1-158.loongson.cn (unknown [10.2.9.158])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxTMoz8n5kzAkCAA--.301S2;
+        Tue, 06 Jun 2023 16:45:39 +0800 (CST)
+From:   Bibo Mao <maobibo@loongson.cn>
+To:     Bjorn Helgaas <bhelgaas@google.com>
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Will Deacon <will@kernel.org>, loongarch@lists.linux.dev,
+        loongson-kernel@lists.loongnix.cn
+Subject: [PATCH v3] PCI: Align pci memory space base address with page size
+Date:   Tue,  6 Jun 2023 16:45:39 +0800
+Message-Id: <20230606084539.1694441-1-maobibo@loongson.cn>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v8 3/3] dt-bindings: mtd: marvell-nand: Convert to YAML DT
- scheme
-Content-Language: en-US
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-Cc:     "richard@nod.at" <richard@nod.at>,
-        "vigneshr@ti.com" <vigneshr@ti.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "conor+dt@kernel.org" <conor+dt@kernel.org>,
-        "andrew@lunn.ch" <andrew@lunn.ch>,
-        "gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
-        "sebastian.hesselbarth@gmail.com" <sebastian.hesselbarth@gmail.com>,
-        "conor@kernel.org" <conor@kernel.org>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "enachman@marvell.com" <enachman@marvell.com>,
-        Vadym Kochan <vadym.kochan@plvision.eu>
-References: <20230531234923.2307013-1-chris.packham@alliedtelesis.co.nz>
- <20230531234923.2307013-4-chris.packham@alliedtelesis.co.nz>
- <a23dd485-a3d9-e31f-be3e-0ab293fcfc4a@linaro.org>
- <785368df-1881-e62e-6172-d902cee814a8@alliedtelesis.co.nz>
- <eaf9d7cf-c9f5-a5d5-67af-c43761c3c6cf@linaro.org>
- <4ea0b16e-0cec-00db-c598-e0364a7edef8@alliedtelesis.co.nz>
- <9fc57052-5049-ed50-ca95-cfd1d0420dd9@alliedtelesis.co.nz>
- <20230606094855.1ab005eb@xps-13>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230606094855.1ab005eb@xps-13>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8BxTMoz8n5kzAkCAA--.301S2
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBj93XoW7AF15tFy7CrWfZFWrGr45Jwc_yoW8Xr13pF
+        W7AanrCry8Gr13Gw4vqw1kuF4fWa1v93yYyrWfAasag3ZrCas2yr1UAFy5Zry8ur47GF1U
+        XFs8tr1fZFWrXagCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUU9Ib4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+        xVWxJr0_GcWln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
+        xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y
+        6r17McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
+        vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_
+        Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
+        AY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAI
+        cVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42
+        IY6I8E87Iv67AKxVW8Jr0_Cr1UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnI
+        WIevJa73UjIFyTuYvjxU2MKZDUUUU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/06/2023 09:48, Miquel Raynal wrote:
->>>>>>> +          it (otherwise it is harmless).
->>>>>>> +        $ref: /schemas/types.yaml#/definitions/flag
->>>>>>> +        deprecated: true
->>>>>>> +
->>>>>>> +    additionalProperties: false  
->>>>>> unevaluatedProperties: false  
->>>>> It was hiding by '"^nand@[0-3]$":'. Should I move it here?  
->>>> You cannot have both additionalProps and unevaluatedProps at the same
->>>> time, so we do not talk about same thing or this was never working?  
->>>
->>> Hmm, I'm a little confused then. At various times I've been told to 
->>> put 'additionalProperties: false' or 'unevaluatedProperties: false' 
->>> (although never at the same time). I'm not sure when to use one or the 
->>> other.
->>>
->>> From what I've been able to glean 'additionalProperties: true' 
->>> indicates that the node is expected to have child nodes defined in a 
->>> different schema so I would have thought 'additionalProperties: false' 
->>> would be appropriate for a schema covering a leaf node. 
->>> 'unevaluatedProperties: false' seems to enable stricter checking which 
->>> makes sense when all the properties are described in the schema.  
->>
->> So I think this might be the problem. If I look at qcom,nandc.yaml or 
->> ingenic,nand.yaml which both have a partitions property in their 
->> example. Neither have 'unevaluatedProperties: false' on the nand@... 
->> subnode. If I add it sure enough I start getting complaints about the 
->> 'partitions' node being unexpected.
-> 
-> Sorry if that was unclear, I think the whole logic around the yaml
-> files is to progressively constrain the descriptions, schema after
-> schema. IOW, in the marvell binding you should set
-> unevaluatedProperties: false for the NAND controller. What is inside
-> (NAND chips, partition container, partition parsers, "mtd" properties,
-> etc) will be handled by other files. Of course you can constrain a bit
-> what can/cannot be used inside these subnodes, but I think you don't
-> need to set unevaluatedProperties in these subnodes (the NAND chip in
-> this case, or even the partitions) because you already reference
-> nand-controller.yaml which references nand-chip.yaml, mtd.yaml,
-> partitions.yaml, etc. *they* will make the generic checks and hopefully
-> apply stricter checks, when deemed relevant.
+Some PCI devices have only 4K memory space size, it is normal in general
+machines and aligned with page size. However some architectures which
+support different page size, default page size on LoongArch is 16K, and
+ARM64 supports page size varying from 4K to 64K. On machines where larger
+page size is use, memory space region of two different pci devices may be
+in one page. It is not safe with mmu protection, also VFIO pci device
+driver requires base address of pci memory space page aligned, so that it
+can be memory mapped to qemu user space when it is passed-through to vm.
 
-No, neither nand-controller.yaml nor nand-chip.yaml limit the properties
-in this context, so each device schema must have unevaluatedProperties:
-false, for which I asked few emails ago.
+It consumes more pci memory resource with page size alignment requirement,
+it should not be a problem on 64 bit system.
 
-Best regards,
-Krzysztof
+Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+---
+ drivers/pci/setup-res.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/drivers/pci/setup-res.c b/drivers/pci/setup-res.c
+index 967f9a758923..55440ae0128d 100644
+--- a/drivers/pci/setup-res.c
++++ b/drivers/pci/setup-res.c
+@@ -339,6 +339,14 @@ int pci_assign_resource(struct pci_dev *dev, int resno)
+ 		return -EINVAL;
+ 	}
+ 
++#ifdef CONFIG_64BIT
++	/*
++	 * force minimum page alignment for vfio pci usage
++	 * supposing there is enough pci memory resource on 64bit system
++	 */
++	if (res->flags & IORESOURCE_MEM)
++		align = max_t(resource_size_t, PAGE_SIZE, align);
++#endif
+ 	size = resource_size(res);
+ 	ret = _pci_assign_resource(dev, resno, size, align);
+ 
+-- 
+2.27.0
 
