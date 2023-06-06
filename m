@@ -2,127 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5895D724DCB
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 22:13:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B12DD724DD4
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 22:15:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239698AbjFFUNg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 16:13:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47216 "EHLO
+        id S238804AbjFFUPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 16:15:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234673AbjFFUNe (ORCPT
+        with ESMTP id S234226AbjFFUPm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 16:13:34 -0400
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AB1EB0;
-        Tue,  6 Jun 2023 13:13:33 -0700 (PDT)
-Received: by mail-ot1-x335.google.com with SMTP id 46e09a7af769-6b28fc460bcso1592212a34.1;
-        Tue, 06 Jun 2023 13:13:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686082412; x=1688674412;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4fV7Pb5i2MwRKtXI+L72eacF/AO/0yqXx0MJ01SSud0=;
-        b=pDP+yL9WN+pff/JjCduS7JvbmoHcUSbG+eB9kCz+wqvdammYyaHY7+8vJHuvMS2fq/
-         wiDeLf7KOGZcqtQNbGAEc8cfZqZ03MuVCAWl7EFXiUe4r2M3mpMpPBs3vzm9/Bo/75Lx
-         9BQjCpEmrUs9QbozWlAryEHce3fGTg8unUtkNcIsLsEbC87BqGdI/b2EUZjbVWjLf58a
-         zelXaH1SDbvnKF5pNVwCS69lLvPBQLsjYLmUOVlxC0+SblWdlOdmN5POjSpacS5wXzdW
-         kKAwGzBoG4g4vye8rCXAQcekBLgJRqhfL3YzPy42XeTh0addYmx2XSyBsIhIO743iW5y
-         8a9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686082412; x=1688674412;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4fV7Pb5i2MwRKtXI+L72eacF/AO/0yqXx0MJ01SSud0=;
-        b=LiXBXWZAkDuB65ntKty2uYqsaNFN7VsRIyHigLqWCwqhUUzXQkgmnFHIxPr9zMsvOw
-         cN5gNRD0hN+HPs0hR7IIWhCFNGdXFtQDTXor33VvPFwPESgL/UOplRG239EVE6mSwElh
-         3pAfMpFu4MnIxP+fcoCttZF/mzQptGjM2FObXj5xuswV21nBodiyGUyGPOmcGbFiKsEo
-         QN9dKL+urjAHA7GLCME3DclckjcPpJVlsP7Kx26LZteorVMp20mIQwfwNp1uvDdirqcD
-         V4QtYF4UTVEwvb6arQ3IgkiwRZW3yQ7xwvWeGxtG6N9F8HjwDXB5+rCsnacDvX4ouydr
-         gYgA==
-X-Gm-Message-State: AC+VfDy3Q9lJjyY+4Kl8yw2pALOrlbRwqwlOQmYvMgaYFWBIM60suz0N
-        Pos4oDjDMh86NYCEtMHptUy1F8i8+t4=
-X-Google-Smtp-Source: ACHHUZ4iLr+olIDpe6s8ZRWHjb0zuQyQc8mlYCwoYHuAuIvcatBpGiqxjkl/qs78RZxnA9Jw8tY6zg==
-X-Received: by 2002:a9d:6253:0:b0:6af:9eb0:5de1 with SMTP id i19-20020a9d6253000000b006af9eb05de1mr3007443otk.36.1686082412201;
-        Tue, 06 Jun 2023 13:13:32 -0700 (PDT)
-Received: from localhost (dhcp-72-235-13-41.hawaiiantel.net. [72.235.13.41])
-        by smtp.gmail.com with ESMTPSA id b16-20020aa78710000000b00646e7d2b5a7sm7157908pfo.112.2023.06.06.13.13.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 13:13:31 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 6 Jun 2023 10:13:31 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Mrunal Patel <mpatel@redhat.com>,
-        Ryan Phillips <rphillips@redhat.com>,
-        Brent Rowsell <browsell@redhat.com>,
-        Peter Hunt <pehunt@redhat.com>, Phil Auld <pauld@redhat.com>
-Subject: Re: [RFC PATCH 0/5] cgroup/cpuset: A new "isolcpus" paritition
-Message-ID: <ZH-Ta7jDozegNo3o@slm.duckdns.org>
-References: <759603dd-7538-54ad-e63d-bb827b618ae3@redhat.com>
- <405b2805-538c-790b-5bf8-e90d3660f116@redhat.com>
- <ZGvHUjOCjwat91Gq@slm.duckdns.org>
- <18793f4a-fd39-2e71-0b77-856afb01547b@redhat.com>
- <ZH4jfmypOXGJPu0D@slm.duckdns.org>
- <be64a569-4388-9dd9-3e06-36d716a54f6c@redhat.com>
- <ZH5FNc6wjlGPsaaO@slm.duckdns.org>
- <a2220c9f-7a8d-da82-ecc0-b39f3807408c@redhat.com>
- <ZH-P7X_yjnVfhy7b@slm.duckdns.org>
- <563fd5e1-650a-e329-8aab-2fa1953a9f49@redhat.com>
+        Tue, 6 Jun 2023 16:15:42 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E6099E
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 13:15:40 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 303A71FD8C;
+        Tue,  6 Jun 2023 20:15:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1686082539; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GRdaNaKr0mVo9Z+XRAEpnMDkFT3nh/DoMeZkPYisvDM=;
+        b=ioC/quvRSy7NIVr6dNWhuWtynvA0QHib3x3S1200yPrmXu2hDy+rvxNYTFGDhG7eKVL3vP
+        bTDfDeW4uGxoFQVUVijBy/FNL/9x29uPcy7FJHUXN45DEF8OyNwrbO7+KSiMmmv4moTaZ8
+        Iv6s8+xTPSPSSRjcvDa3HluXs9GpxIs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1686082539;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GRdaNaKr0mVo9Z+XRAEpnMDkFT3nh/DoMeZkPYisvDM=;
+        b=di+1KcQGyUMmvlbPmv74BZ6926czHaKCgvmzYYBCsAS/yPE5NoWqPz1hcrz7+wV9ZUpM1G
+        aXnFibq0THq8DYAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EEB1E13776;
+        Tue,  6 Jun 2023 20:15:38 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id q0y8OeqTf2RPJwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 06 Jun 2023 20:15:38 +0000
+Message-ID: <6403a950-7367-0b00-8cd5-2f0a32dac953@suse.cz>
+Date:   Tue, 6 Jun 2023 22:15:38 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <563fd5e1-650a-e329-8aab-2fa1953a9f49@redhat.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: RFC for new feature to move pages from one vma to another without
+ split
+To:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>
+Cc:     Lokesh Gidra <lokeshgidra@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Brian Geffon <bgeffon@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Nicolas Geoffray <ngeoffray@google.com>,
+        Jared Duke <jdduke@google.com>,
+        android-mm <android-mm@google.com>,
+        Blake Caldwell <blake.caldwell@colorado.edu>,
+        Mike Rapoport <rppt@kernel.org>
+References: <CA+EESO4uO84SSnBhArH4HvLNhaUQ5nZKNKXqxRCyjniNVjp0Aw@mail.gmail.com>
+ <ZC8BgFSFC3cDcAcS@x1n> <27ac2f51-e2bf-7645-7a76-0684248a5902@redhat.com>
+ <ZDbVMk0trT5UaqaA@x1n> <3059388f-1604-c326-c66f-c2e0f9bb6cbf@redhat.com>
+ <ZDghhTH2KtCeAwcZ@x1n>
+Content-Language: en-US
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <ZDghhTH2KtCeAwcZ@x1n>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-On Tue, Jun 06, 2023 at 04:11:02PM -0400, Waiman Long wrote:
-...
-> The current CPU exclusive behavior is limited to sibling cgroups only.
-> Because of the hierarchical nature of cpu distribution, the set of exclusive
-> CPUs have to appear in all its ancestors. When partition is enabled, we do a
-> sibling exclusivity test at that point to verify that it is exclusive. It
-> looks like you want to do an exclusivity test even when the partition isn't
-> active. I can certainly do that when the file is being updated. However, it
-> will fail the write if the exclusivity test fails just like the v1
-> cpuset.cpus.exclusive flag if you are OK with that.
-
-Yeah, doesn't look like there's a way around it if we want to make
-.exclusive a feature which is useful on its own.
-
-> > Instead, it can be sth like "if the parent is a
-> > partition root, cpuset implicitly tries to set all CPUs in its cpus file in
-> > its cpus.exclusive file" so that user-visible behavior stays unchanged
-> > depending on past history.
+On 4/13/23 17:36, Peter Xu wrote:
+> On Thu, Apr 13, 2023 at 10:10:44AM +0200, David Hildenbrand wrote:
+>> So instead, we consider the whole address space as a virtual, anon file,
+>> starting at offset 0. The pgoff of a VMA is then simply the offset in that
+>> virtual file (easily computed from the start of the VMA), and VMA merging is
+>> just the same as for an ordinary file.
 > 
-> If parent is a partition root, auto reservation will be done and
-> cpus.exclusive will be set automatically just like before. So existing
-> applications using partition will not be affected.
+> Interesting point, thanks!
 
-Sounds great.
+FYI, I've advised a master thesis exploring how to update page->index during
+mremap() to keep things mergeable:
 
-Thanks.
+https://dspace.cuni.cz/bitstream/handle/20.500.11956/176288/120426800.pdf
 
--- 
-tejun
+I think the last RFC posting was:
+https://lore.kernel.org/all/20220516125405.1675-1-matenajakub@gmail.com/
+
+It was really tricky for the general case. Maybe it would be more feasible
+for the limited case Lokesh describes, if we could be sure the pages that
+are moved aren't mapped anywhere else.
