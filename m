@@ -2,162 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AB58724B4D
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 20:24:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A999724B64
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 20:28:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238970AbjFFSYW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 14:24:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40258 "EHLO
+        id S238832AbjFFS2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 14:28:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238954AbjFFSYI (ORCPT
+        with ESMTP id S233653AbjFFS2t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 14:24:08 -0400
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F040B1FE9
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 11:23:37 -0700 (PDT)
-Received: by mail-qv1-xf29.google.com with SMTP id 6a1803df08f44-62884fa0e53so38156856d6.0
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 11:23:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1686075812; x=1688667812;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lRK8iTgMb5TScoKA9P/J+NjKmgAke6TT3GAMczOWAY4=;
-        b=jPTtD7S91r09g5GZ5enOvX5p1h2bE1pdqCLmsV5LGnWj/qXlaFjTKr8u0jEgv/8EJa
-         hY4FdwIqOIk7kTUaBc7VFbHJ+am4ZQIgpqa0l/+TL8DzoNdAIe62OPQVQ4ra11vVpelk
-         DoqXX3ISlkm0edxF8e7WCTJSKm1Ipzzf3dQhhjoYWQ+naJIg49ZDRYNQH9PkIULo4N/q
-         q0XGCvK12HESNzBwtCGHKf5j7mgSphBf2k76g+ZYrWGEJkNVJi15JYjsMZWJ6iplKlfX
-         evTLvuaVNlMPAeqT4m1wTzu2PYZ1Ez+MjP+uRqkV2x2SNfBLoSWj6/MhrLMSfsLM4C27
-         YAzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686075812; x=1688667812;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lRK8iTgMb5TScoKA9P/J+NjKmgAke6TT3GAMczOWAY4=;
-        b=PneJxD9xiqTktr4eJnyj14yHV/0zORqOS/D/zySRBmJxbokUwvO/efUSgTj+pL5AED
-         9EvINygvR1uU08L+fFit9XXGsrK618158RULiej+MVyXL6JJF3aujZvjEIRpWVH2YhCg
-         vAoi7Dy4g8aVGmFnIXAz+o3f5uvDLbwAy1/bVOR8dYQDJ3ig8j01fb1eWLu9KhsGJ1TW
-         din/9mbRPLeklOaGS52Tjf4WFO2V16/NXvn6j1jwXqL9hOs77xrGORzbTCeszeZq/1x9
-         aY4WZ7VwMP95SY1izFzoPppwvHsnVIqjxSCFRRajPlpyocV7yLJL5J23T/UCd319h8kj
-         Dfrw==
-X-Gm-Message-State: AC+VfDwjYtLZsRUb6y3oYi6DBMnRQ3MmNw5TngJjCyoHJWuN9KgHMCtp
-        3G9IPZK4xGkjdAVD/GYUP1AXlQ==
-X-Google-Smtp-Source: ACHHUZ5YVdCH5/dS9hodEJr36EZ44XO5GEyKgrVSvJAfG4M8kimdM0r3/RKcMebdOYHUsIqUASQktw==
-X-Received: by 2002:a05:6214:124d:b0:62b:4e7e:8aba with SMTP id r13-20020a056214124d00b0062b4e7e8abamr366606qvv.60.1686075811887;
-        Tue, 06 Jun 2023 11:23:31 -0700 (PDT)
-Received: from ziepe.ca ([206.223.160.26])
-        by smtp.gmail.com with ESMTPSA id ff24-20020a05622a4d9800b003f9baa693c7sm26279qtb.10.2023.06.06.11.23.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 11:23:31 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1q6bL8-0030Xz-9V;
-        Tue, 06 Jun 2023 15:23:30 -0300
-Date:   Tue, 6 Jun 2023 15:23:30 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Peter Xu <peterx@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Steven Price <steven.price@arm.com>,
-        SeongJae Park <sj@kernel.org>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Zack Rusin <zackr@vmware.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Song Liu <song@kernel.org>,
-        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Jann Horn <jannh@google.com>,
-        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH 05/12] powerpc: add pte_free_defer() for pgtables sharing
- page
-Message-ID: <ZH95oobIqN0WO5MK@ziepe.ca>
-References: <35e983f5-7ed3-b310-d949-9ae8b130cdab@google.com>
- <28eb289f-ea2c-8eb9-63bb-9f7d7b9ccc11@google.com>
- <ZHSwWgLWaEd+zi/g@casper.infradead.org>
- <ZHn6n5eVTsr4Wl8x@ziepe.ca>
- <4df4909f-f5dd-6f94-9792-8f2949f542b3@google.com>
+        Tue, 6 Jun 2023 14:28:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C9A11D;
+        Tue,  6 Jun 2023 11:28:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B63B2636B1;
+        Tue,  6 Jun 2023 18:23:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A157C433D2;
+        Tue,  6 Jun 2023 18:23:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686075820;
+        bh=T+JI2ckyFu8VOR3qL8ljjpZpkbu8FJMpdeuRNK5j1WE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VdOOJgmvG/YB+5sHAaFhY5A1/u8H5VgzQ7ybtKfQFNamKSS9dJ4/2MKitMx+RX8YA
+         Y32N4YPmL+OSm1EWmcEEE0K0IKBbZ3PLd883eAlzxXu7mAkzMSlzYk7vflhxq/8Vh/
+         7IEOHX+NR72Q1mUOV1QALhWSQGgfMKj3bP61tpr5DGD6dFraRH6orAyBAFf0ESBwgf
+         JYajhMXowNPNKau/sp5QRce4Vb2fnSrBLEUv4700TxaqE/6t7QDZqkSsccwKU/brf8
+         Qhcze7tgo6uoSPF8KFW8zEhMbc+Tm6W2qexRbJrzVaIgoGWiGtOjB4qy+n+mVFxjei
+         07Q0q5FHVkpRg==
+Date:   Tue, 6 Jun 2023 19:23:32 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Tommaso Merciai <tomm.merciai@gmail.com>,
+        jacopo.mondi@ideasonboard.com, martin.hecht@avnet.eu,
+        michael.roeder@avnet.eu, linuxfancy@googlegroups.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Gerald Loacker <gerald.loacker@wolfvision.net>,
+        Mikhail Rudenko <mike.rudenko@gmail.com>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Nicholas Roth <nicholas@rothemail.net>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/3] media: dt-bindings: alvium: add document YAML
+ binding
+Message-ID: <20230606-create-catchable-e16113afac82@spud>
+References: <20230606155416.260941-1-tomm.merciai@gmail.com>
+ <20230606155416.260941-3-tomm.merciai@gmail.com>
+ <20230606163656.GI25679@pendragon.ideasonboard.com>
+ <20230606-jaundice-womankind-7e583789fb7a@spud>
+ <20230606181752.GC14101@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="/wO+rvK5rRihXazv"
 Content-Disposition: inline
-In-Reply-To: <4df4909f-f5dd-6f94-9792-8f2949f542b3@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230606181752.GC14101@pendragon.ideasonboard.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 05, 2023 at 08:40:01PM -0700, Hugh Dickins wrote:
 
-> diff --git a/arch/powerpc/mm/pgtable-frag.c b/arch/powerpc/mm/pgtable-frag.c
-> index 20652daa1d7e..e4f58c5fc2ac 100644
-> --- a/arch/powerpc/mm/pgtable-frag.c
-> +++ b/arch/powerpc/mm/pgtable-frag.c
-> @@ -120,3 +120,54 @@ void pte_fragment_free(unsigned long *table, int kernel)
->  		__free_page(page);
->  	}
->  }
-> +
-> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
-> +#define PTE_FREE_DEFERRED 0x10000 /* beyond any PTE_FRAG_NR */
-> +
-> +static void pte_free_now(struct rcu_head *head)
-> +{
-> +	struct page *page;
-> +	int refcount;
-> +
-> +	page = container_of(head, struct page, rcu_head);
-> +	refcount = atomic_sub_return(PTE_FREE_DEFERRED - 1,
-> +				     &page->pt_frag_refcount);
-> +	if (refcount < PTE_FREE_DEFERRED) {
-> +		pte_fragment_free((unsigned long *)page_address(page), 0);
-> +		return;
-> +	}
+--/wO+rvK5rRihXazv
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-From what I can tell power doesn't recycle the sub fragment into any
-kind of free list. It just waits for the last fragment to be unused
-and then frees the whole page.
+On Tue, Jun 06, 2023 at 09:17:52PM +0300, Laurent Pinchart wrote:
+> On Tue, Jun 06, 2023 at 07:07:42PM +0100, Conor Dooley wrote:
+> > Hey Laurent, Tommaso,
+> >=20
+> > On Tue, Jun 06, 2023 at 07:36:56PM +0300, Laurent Pinchart wrote:
+> > > On Tue, Jun 06, 2023 at 05:54:03PM +0200, Tommaso Merciai wrote:
+> >=20
+> > > > +  alliedvision,lp2hs-delay-us:
+> > > > +    maxItems: 1
+> > > > +    description:
+> > > > +      Low power to high speed delay time in microseconds.
+> > >=20
+> > > You can drop "in microseconds", that's implied by the suffix.
+> > >=20
+> > > > +      The purpose of this property is force a DPhy reset for the p=
+eriod
+> > > > +      described by the microseconds on the property, before it sta=
+rts
+> > > > +      streaming. To be clear, with that value bigger than 0 the Al=
+vium
+> > > > +      forces a dphy-reset on all lanes for that period. That means=
+ all
+> > > > +      lanes go up into low power state. This may help a csi2 rx ip=
+ to
+> > > > +      reset if that IP can't deal with a continous clock.
+> > >=20
+> > > I'd like to propose what I think is a clearer version:
+> > >=20
+> > >     description: |
+> > >       Low power to high speed delay time.
+> > >=20
+> > >       If the value is larger than 0, the camera forces a reset of all
+> > >       D-PHY lanes for the duration specified by this property. All la=
+nes
+> > >       will transition to the low-power state and back to the high-spe=
+ed
+> > >       state after the delay. Otherwise the lanes will transition to a=
+nd
+> > >       remain in the high-speed state immediately after power on.
+> > >=20
+> > >       This is meant to help CSI-2 receivers synchronizing their D-PHY
+> > >       RX.
+> >=20
+> > Question about the property.
+> > Why not make it have a minimum value of 1 and drop the special-case
+> > behaviour for zero?
+>=20
+> The property is optional, so it can indeed be omitted if no delay is
+> desired. I have no strong preference on whether or not to allow 0 as a
+> valid value.
 
-So why not simply go into pte_fragment_free() and do the call_rcu directly:
+FWIW, I prefer the semantics of the property if it doesn't have the
+limbo state of being present but doing nothing.
 
-	BUG_ON(atomic_read(&page->pt_frag_refcount) <= 0);
-	if (atomic_dec_and_test(&page->pt_frag_refcount)) {
-		if (!kernel)
-			pgtable_pte_page_dtor(page);
-		call_rcu(&page->rcu_head, free_page_rcu)
+Cheers,
+Conor.
 
-?
+BTW, I seem to get bounces from shawnx.tu@intel.com, who is listed in
+MAINTAINERS for several drivers. Do you know if they have a non-intel
+address to replace those entries with, or should they be dropped?
 
-Jason
+--/wO+rvK5rRihXazv
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZH95pAAKCRB4tDGHoIJi
+0ku3AP4ggWo9VZWGTA9FT9GGznavW3AY/aadgCo0GxyloBybbgEAzzzwXaC7fzis
+PR8yODKfvMxBuv0CdqCLPm6e3sft8AI=
+=hRQC
+-----END PGP SIGNATURE-----
+
+--/wO+rvK5rRihXazv--
