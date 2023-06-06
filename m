@@ -2,93 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 185EE724105
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 13:36:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1099772410A
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 13:36:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236727AbjFFLf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 07:35:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57350 "EHLO
+        id S230467AbjFFLgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 07:36:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236530AbjFFLfw (ORCPT
+        with ESMTP id S235498AbjFFLgt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 07:35:52 -0400
-Received: from out0-200.mail.aliyun.com (out0-200.mail.aliyun.com [140.205.0.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7C7010D3
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 04:35:41 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018047192;MF=houwenlong.hwl@antgroup.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---.TMrLcZL_1686051336;
-Received: from localhost(mailfrom:houwenlong.hwl@antgroup.com fp:SMTPD_---.TMrLcZL_1686051336)
-          by smtp.aliyun-inc.com;
-          Tue, 06 Jun 2023 19:35:37 +0800
-Date:   Tue, 06 Jun 2023 19:35:36 +0800
-From:   "Hou Wenlong" <houwenlong.hwl@antgroup.com>
-To:     Nadav Amit <namit@vmware.com>
-Cc:     "Juergen Gross" <jgross@suse.com>,
-        "kernel list" <linux-kernel@vger.kernel.org>,
-        "Thomas Garnier" <thgarnie@chromium.org>,
-        "Lai Jiangshan" <jiangshan.ljs@antgroup.com>,
-        "Kees Cook" <keescook@chromium.org>,
-        "srivatsa@csail.mit.edu" <srivatsa@csail.mit.edu>,
-        "Alexey Makhalov" <amakhalov@vmware.com>,
-        "Pv-drivers" <Pv-drivers@vmware.com>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "X86 ML" <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        "Song Liu" <song@kernel.org>, "Arnd Bergmann" <arnd@arndb.de>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>
-Subject: Re: [PATCH RFC 13/43] x86/paravirt: Use relative reference for
- original instruction
-Message-ID: <20230606113536.GA106605@k08j02272.eu95sqa>
-References: <cover.1682673542.git.houwenlong.hwl@antgroup.com>
- <d0e601438f4d140c0c383c6ad09483b34c7c572e.1682673543.git.houwenlong.hwl@antgroup.com>
- <44e2fb4d-151c-dba9-9cb8-0d99c3668a6f@suse.com>
- <4D9D12CE-87A7-485F-B8F6-A9F77156C372@vmware.com>
+        Tue, 6 Jun 2023 07:36:49 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C428F196;
+        Tue,  6 Jun 2023 04:36:48 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id 5614622812f47-39c503bc770so306517b6e.0;
+        Tue, 06 Jun 2023 04:36:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686051408; x=1688643408;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=R92KuS7gawSx2LWw+ooVWTPC6JkJv9bdowpbo01HVAw=;
+        b=KWM8ThY/M3uM372kffwhthc6oRXcuseLvAve9vjPRRuzhSZxcV1WgKQCyntbH7Esu7
+         cZlAzbtguAWGAxejMBdHHv7Ibvu3VWnpXyGRw51hrlfbOSnejVz5vCPbsh/1WI68Tp91
+         +2zdkEy/aDO0dcopt49vPZlstLrxUbp3PTlfEZTa6+LPHMdIllJ4PoXLh07CjiT7nuQ8
+         zvPy+HIydi7yjsqanQcMr/fRwI8lILVvDkxnyN3ALPKafYzdFFsXqpoREvA2TTNqZd8Q
+         qPXyI1Qq9XWu8GIrE7whBTX+FxVv/27CHPmeIfnsdcKICNNIHkymjVSYNnEZNgQMLg8X
+         E+xA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686051408; x=1688643408;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R92KuS7gawSx2LWw+ooVWTPC6JkJv9bdowpbo01HVAw=;
+        b=V5w5nPzymjIZOVSOF9Cwjg4LjVkKPXDyEP+xAa+sRAnzh3fipUAf1Rm/bPV0vpRAzO
+         j+XgWfnPX33SIZcsiQdt+rWHDSUl9thhVznhypkSF1tTo+e+L7sBaJf27YEiyzg5Z1oR
+         xE6Vpl5eizeopF6jMplH6q7tiKx/CXLBnhUvRAGfGToLfJku45C0PkZL8biAy7MVh+AP
+         HwEsP2wR2S7ncBlR1blrF07Dmpiu74wwIMpBB8iCFn+5X3k+WUyOKbdPyYQw0w/rYR3N
+         UcpBhbOrfyvaUAsmLSN9IPSkclx0Zam+O5Qmt7hJwR3lhwK53cRQWxMknrQdA4GM/XHV
+         zsJA==
+X-Gm-Message-State: AC+VfDxlULC5abDy8BDp/keCUxy3OCjOF305h0DbpOIoklTtBIPOqvHp
+        X5e3LKc/3//j5dkcxLkxlHzoTEhOnv4=
+X-Google-Smtp-Source: ACHHUZ6076hhAKQCiN1ZGGrVzz/fYBz/bp2CAfqnll20uGWpIG1MlOWX50Uveq2xE2o3dLht+3Ugsw==
+X-Received: by 2002:aca:130c:0:b0:396:3b9b:d217 with SMTP id e12-20020aca130c000000b003963b9bd217mr2133146oii.18.1686051407914;
+        Tue, 06 Jun 2023 04:36:47 -0700 (PDT)
+Received: from debian.me (subs09a-223-255-225-71.three.co.id. [223.255.225.71])
+        by smtp.gmail.com with ESMTPSA id g12-20020a63e60c000000b00502ecc282e2sm7244378pgh.5.2023.06.06.04.36.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Jun 2023 04:36:47 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id BD9E2106A3A; Tue,  6 Jun 2023 18:36:43 +0700 (WIB)
+Date:   Tue, 6 Jun 2023 18:36:43 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Franziska Naepelt <franziska.naepelt@googlemail.com>,
+        linux-crypto@vger.kernel.org
+Cc:     herbert@gondor.apana.org.au, davem@davemloft.net,
+        linux-kernel@vger.kernel.org,
+        Franziska Naepelt <franziska.naepelt@gmail.com>,
+        Linux SPDX Licenses <linux-spdx@vger.kernel.org>,
+        Linux Kernel Janitors <kernel-janitors@vger.kernel.org>,
+        David Howells <dhowells@redhat.com>
+Subject: Re: [PATCH] crypto: frcypt Fix checkpatch warnings
+Message-ID: <ZH8aS-rMMKaxRD50@debian.me>
+References: <20230606111042.96855-1-franziska.naepelt@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="dC9uVHJs6Xkabe7S"
 Content-Disposition: inline
-In-Reply-To: <4D9D12CE-87A7-485F-B8F6-A9F77156C372@vmware.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230606111042.96855-1-franziska.naepelt@gmail.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 05, 2023 at 02:40:54PM +0800, Nadav Amit wrote:
-> 
-> 
-> > On Jun 1, 2023, at 2:29 AM, Juergen Gross <jgross@suse.com> wrote:
-> > 
-> > On 28.04.23 11:50, Hou Wenlong wrote:
-> >> Similar to the alternative patching, use relative reference for original
-> >> instruction rather than absolute one, which saves 8 bytes for one entry
-> >> on x86_64.  And it could generate R_X86_64_PC32 relocation instead of
-> >> R_X86_64_64 relocation, which also reduces relocation metadata on
-> >> relocatable builds. And the alignment could be hard coded to be 4 now.
-> >> Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
-> >> Cc: Thomas Garnier <thgarnie@chromium.org>
-> >> Cc: Lai Jiangshan <jiangshan.ljs@antgroup.com>
-> >> Cc: Kees Cook <keescook@chromium.org>
-> > 
-> > Reviewed-by: Juergen Gross <jgross@suse.com>
-> > 
-> > I think this patch should be taken even without the series.
-> 
-> It looks good to me, I am just not sure what the alignment is needed
-> at all.
-> 
-> Why not to make the struct __packed (like struct alt_instr) and get rid
-> of all the .align directives? Am I missing something?
 
-Yes, making the struct __packed can save more space. If I understand
-correctly, it could be done even without this patch but it may lead to
-misaligned memory access. However, it seems to not matter as I didn't
-find any related log for packing struct alt_instr. I can do such things
-if needed.
+--dC9uVHJs6Xkabe7S
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+[Also Cc: linux-spdx list and original author mentioned in the license
+boilerplate]
+
+On Tue, Jun 06, 2023 at 01:10:42PM +0200, Franziska Naepelt wrote:
+> The following checkpatch warnings have been fixed:
+> - WARNING: Missing or malformed SPDX-License-Identifier tag
+> - WARNING: Block comments use a trailing */ on a separate line
+
+Two different logical changes in a patch - please break them into a
+2-patch series, with each patch do one job. And please write the patch
+description in imperative mood instead (e.g. "Do foo").
+
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+>  /* FCrypt encryption algorithm
+>   *
+>   * Copyright (C) 2006 Red Hat, Inc. All Rights Reserved.
+
+NAK!
+
+There is also BSD 3-clause boilerplate (from original code that fcrypt.c
+is based on). Thus, the proper SPDX tag should have been:
+
+```
+// SPDX-License-Identifier: GPL-2.0-or-later AND BSD-3-Clause
+```
+
+And please also delete the boilerplate.
 
 Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--dC9uVHJs6Xkabe7S
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZH8aSAAKCRD2uYlJVVFO
+o+5nAQDtfVmY2eW2DPOLirsfAmVGuQiWkV0+NL/MsYP9RNXafwD/ZPj7b2dzkhai
+PZb6kQJeq9muOKeXuk5Bf4e3ZxhizAI=
+=p0tN
+-----END PGP SIGNATURE-----
+
+--dC9uVHJs6Xkabe7S--
