@@ -2,76 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BF23723AE8
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 10:03:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1384723AF5
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 10:05:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231688AbjFFIDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 04:03:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38112 "EHLO
+        id S232402AbjFFIFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 04:05:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235878AbjFFIDR (ORCPT
+        with ESMTP id S232228AbjFFIFi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 04:03:17 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EE561FDF;
-        Tue,  6 Jun 2023 01:01:39 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id F0FC01FD63;
-        Tue,  6 Jun 2023 08:01:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1686038497; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Q/TE6zVCRq29HuGy5d7GIpLOa+ICFNR+J5+3C//QsCM=;
-        b=uKJ5ggFn/WW+0FZko2JGOegGPip8/4GkaQfVv60LhMeW1sK7+o0Btz1YtdZ3lVDzwx/XJD
-        kcSueOlXjeG1VGVgUH0Ck+T8mM0e+Q8tlyFYHsV9UMQKa5eP520r3MGDNNiM+hGzsz2sZ7
-        ly3uXD5xfvk/rToqS1pD5pZSPf2GT1M=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1686038497;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Q/TE6zVCRq29HuGy5d7GIpLOa+ICFNR+J5+3C//QsCM=;
-        b=V52dAcAoEB23yBsJMqOIxepI/ju/rhCEPGThjzkJYqo9a5V6Xh8FVVBlCsZEqg5n88WwGZ
-        nauwrBDA7eAWgRBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B987313519;
-        Tue,  6 Jun 2023 08:01:37 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id kRRiLOHnfmRcIQAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Tue, 06 Jun 2023 08:01:37 +0000
-Message-ID: <6b0a12bf-a8d4-43df-860c-3aa271cfc624@suse.de>
-Date:   Tue, 6 Jun 2023 10:01:36 +0200
+        Tue, 6 Jun 2023 04:05:38 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59BA4A7;
+        Tue,  6 Jun 2023 01:05:35 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3567xkYn015567;
+        Tue, 6 Jun 2023 08:04:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=facug056d0RiPkC7LdStbwvQj4Z8RZr2uwGXrQefcjI=;
+ b=KFSWpRK2MqMpynFD9+Vq7z5BeF1uuzFZedbRFRs6nQ5QZAzwfFfc4y18JaTAYsPkhOB2
+ c6SqONyLuLurLArbvDO6UOGpE+n+tQqToANLEwOQlHsG2dx62Vy2BN01WwiMiq54frZa
+ v/VBcNBW5kFupS/PSbKD8JWfj9Z3PJUnY95X6HYNlJJQEdGQzOAajyUb1SlosrzsdKIZ
+ FZsS9iNXuL4RBns4SQ7YA2UVVher33nemHMFBEpisJAZkiZiZWJ9UemZ/8mIMUE/x+Hp
+ 8mgR7mZEkGlGhvnzgUieMa0IyzcxDY9WqAM26DSz0OEeb0l7SKKXTHwPBXBTeKxGEdb1 cA== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r1db9abrd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Jun 2023 08:04:52 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35684pbp008241
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 6 Jun 2023 08:04:51 GMT
+Received: from [10.214.66.58] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 6 Jun 2023
+ 01:04:45 -0700
+Message-ID: <f2885b05-e6e7-6576-a0de-6f930cfd539f@quicinc.com>
+Date:   Tue, 6 Jun 2023 13:34:42 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 0/5] drm/ssd130x: A few enhancements and cleanups
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH v2 06/10] arm64: dts: qcom: Add SDX75 platform and IDP
+ board support
 Content-Language: en-US
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-References: <20230605074753.562332-1-javierm@redhat.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20230605074753.562332-1-javierm@redhat.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------CyUiPeozYYacUyESNr435dOY"
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>, <agross@kernel.org>,
+        <andersson@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <rafael@kernel.org>, <viresh.kumar@linaro.org>,
+        <tglx@linutronix.de>, <maz@kernel.org>, <will@kernel.org>,
+        <robin.murphy@arm.com>, <joro@8bytes.org>, <mani@kernel.org>,
+        <robimarko@gmail.com>
+CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <iommu@lists.linux.dev>
+References: <1685982557-28326-1-git-send-email-quic_rohiagar@quicinc.com>
+ <1685982557-28326-7-git-send-email-quic_rohiagar@quicinc.com>
+ <fc579cdb-4594-bdc9-18f0-e16ab89e8eaf@linaro.org>
+From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
+In-Reply-To: <fc579cdb-4594-bdc9-18f0-e16ab89e8eaf@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: ZJbJIaxp6PQmmP-5QwdJ93v_NVOyY2gK
+X-Proofpoint-GUID: ZJbJIaxp6PQmmP-5QwdJ93v_NVOyY2gK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-06_04,2023-06-05_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1015
+ lowpriorityscore=0 adultscore=0 phishscore=0 impostorscore=0
+ malwarescore=0 bulkscore=0 mlxlogscore=999 mlxscore=0 spamscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2306060069
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,83 +89,482 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------CyUiPeozYYacUyESNr435dOY
-Content-Type: multipart/mixed; boundary="------------GpYSlaN0KD7buWrEyk10G0FZ";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Javier Martinez Canillas <javierm@redhat.com>,
- linux-kernel@vger.kernel.org
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>,
- Maxime Ripard <mripard@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
- Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@gmail.com>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
- dri-devel@lists.freedesktop.org
-Message-ID: <6b0a12bf-a8d4-43df-860c-3aa271cfc624@suse.de>
-Subject: Re: [PATCH 0/5] drm/ssd130x: A few enhancements and cleanups
-References: <20230605074753.562332-1-javierm@redhat.com>
-In-Reply-To: <20230605074753.562332-1-javierm@redhat.com>
 
---------------GpYSlaN0KD7buWrEyk10G0FZ
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+On 6/5/2023 11:45 PM, Konrad Dybcio wrote:
+>
+> On 5.06.2023 18:29, Rohit Agarwal wrote:
+>> Add basic devicetree support for SDX75 platform and IDP board from
+>> Qualcomm. The SDX75 platform features an ARM Cortex A55 CPU which forms
+>> the Application Processor Sub System (APSS) along with standard Qualcomm
+>> peripherals like GCC, TLMM, UART, QPIC, and BAM etc... Also, there
+>> exists the networking parts such as IPA, MHI, PCIE-EP, EMAC, and Modem
+>> etc..
+>>
+>> This commit adds basic devicetree support.
+> You just said that in the first sentence! :P
+Sorry :')
+>
+>> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
+>> ---
+>>   arch/arm64/boot/dts/qcom/Makefile      |   1 +
+>>   arch/arm64/boot/dts/qcom/sdx75-idp.dts |  18 ++
+>>   arch/arm64/boot/dts/qcom/sdx75.dtsi    | 533 +++++++++++++++++++++++++++++++++
+>>   3 files changed, 552 insertions(+)
+>>   create mode 100644 arch/arm64/boot/dts/qcom/sdx75-idp.dts
+>>   create mode 100644 arch/arm64/boot/dts/qcom/sdx75.dtsi
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+>> index d42c595..4fd5a18 100644
+>> --- a/arch/arm64/boot/dts/qcom/Makefile
+>> +++ b/arch/arm64/boot/dts/qcom/Makefile
+>> @@ -173,6 +173,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-xiaomi-polaris.dtb
+>>   dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-shift-axolotl.dtb
+>>   dtb-$(CONFIG_ARCH_QCOM)	+= sdm850-lenovo-yoga-c630.dtb
+>>   dtb-$(CONFIG_ARCH_QCOM)	+= sdm850-samsung-w737.dtb
+>> +dtb-$(CONFIG_ARCH_QCOM)	+= sdx75-idp.dtb
+>>   dtb-$(CONFIG_ARCH_QCOM)	+= sm4250-oneplus-billie2.dtb
+>>   dtb-$(CONFIG_ARCH_QCOM)	+= sm6115p-lenovo-j606f.dtb
+>>   dtb-$(CONFIG_ARCH_QCOM)	+= sm6125-sony-xperia-seine-pdx201.dtb
+>> diff --git a/arch/arm64/boot/dts/qcom/sdx75-idp.dts b/arch/arm64/boot/dts/qcom/sdx75-idp.dts
+>> new file mode 100644
+>> index 0000000..1e08f25
+>> --- /dev/null
+>> +++ b/arch/arm64/boot/dts/qcom/sdx75-idp.dts
+>> @@ -0,0 +1,18 @@
+>> +// SPDX-License-Identifier: BSD-3-Clause
+>> +/*
+>> + * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+>> + */
+>> +
+>> +/dts-v1/;
+>> +
+>> +#include "sdx75.dtsi"
+>> +
+>> +/ {
+>> +	model = "Qualcomm Technologies, Inc. SDX75 IDP";
+>> +	compatible = "qcom,sdx75-idp", "qcom,sdx75";
+>> +
+> Stray newline
+>
+>> +};
+>> +
+>> +&tlmm {
+>> +	gpio-reserved-ranges = <110 6>;
+>> +};
+>> diff --git a/arch/arm64/boot/dts/qcom/sdx75.dtsi b/arch/arm64/boot/dts/qcom/sdx75.dtsi
+>> new file mode 100644
+>> index 0000000..3d1646b
+>> --- /dev/null
+>> +++ b/arch/arm64/boot/dts/qcom/sdx75.dtsi
+>> @@ -0,0 +1,533 @@
+>> +// SPDX-License-Identifier: BSD-3-Clause
+>> +/*
+>> + * SDX75 SoC device tree source
+>> + *
+>> + * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+>> + *
+>> + */
+>> +
+>> +#include <dt-bindings/clock/qcom,rpmh.h>
+>> +#include <dt-bindings/interrupt-controller/arm-gic.h>
+>> +#include <dt-bindings/soc/qcom,rpmh-rsc.h>
+>> +
+>> +/ {
+>> +	#address-cells = <2>;
+>> +	#size-cells = <2>;
+>> +	interrupt-parent = <&intc>;
+>> +
+>> +	chosen: chosen { };
+>> +
+>> +	memory@80000000 {
+> Please sort the top-level nodes alphabetically
+>
+>> +		device_type = "memory";
+>> +		reg = <0 0x80000000 0 0>;
+> Please use 0x0 for consistency
+Sure, Will make everywhere this as 0x0
+>
+>> +	};
+>> +
+>> +	clocks { };
+>> +
+>> +	cpus {
+>> +		#address-cells = <2>;
+>> +		#size-cells = <0>;
+>> +
+>> +		CPU0: cpu@0 {
+>> +			device_type = "cpu";
+>> +			compatible = "arm,cortex-a55";
+>> +			reg = <0x0 0x0>;
+>> +			enable-method = "psci";
+>> +			power-domains = <&CPU_PD0>;
+>> +			power-domain-names = "psci";
+>> +			next-level-cache = <&L2_0>;
+> Missing newline before subnode
+>
+>> +			L2_0: l2-cache {
+>> +				compatible = "cache";
+>> +				next-level-cache = <&L3_0>;
+>> +				L3_0: l3-cache {
+>> +					compatible = "cache";
+>> +				};
+>> +			};
+>> +		};
+> [...]
+>
+>> +		CLUSTER_PD: power-domain-cpu-cluster0 {
+>> +			#power-domain-cells = <0>;
+>> +			domain-idle-states = <&CLUSTER_SLEEP_0 &CX_RET &CLUSTER_SLEEP_1>;
+> Shouldn't CX_RET be the last one?
+Here seems to an issue with the naming that I added. CLUSTER_SLEEP_1 
+should actually be APPS_SLEEP
+which is deeper than CX_RET.
+So will update the names in the next.
 
-SGkgSmF2aWVybSwNCg0KSSd2ZSByZWFkIHRocm91Z2ggdGhlIHBhdGNoZXMgYW5kIHRoZXkg
-bG9vayBjb3JyZWN0IHRvIG1lLg0KDQpSZXZpZXdlZC1ieTogVGhvbWFzIFppbW1lcm1hbm4g
-PHR6aW1tZXJtYW5uQHN1c2UuZGU+DQoNCkJ1dCBJIGhhZCBvbmUgcXVlc3Rpb24gYWJvdXQg
-dGhlIHBhZ2Ugc2l6ZS4gWW91IHJvdW5kIHVwIHRvIG11bHRpcGxlcyBvZiANCnBhZ2Vfc2l6
-ZSBpbiBzZXZlcmFsIHBsYWNlcy4gVGhhdCBjb3VsZCBsZWFkIHRvIGFuIG91dC1vZi1ib3Vu
-ZHMgYWNjZXNzLiANCkRvIHlvdSBuZWVkIHRvIGFsbG9jYXRlIEdFTSBidWZmZXJzIHRvIGJl
-IG11bHRpcGxlcyBvZiBwYWdlX3NpemUgYXMgd2VsbD8NCg0KQmVzdCByZWdhcmRzDQpUaG9t
-YXMNCg0KQW0gMDUuMDYuMjMgdW0gMDk6NDcgc2NocmllYiBKYXZpZXIgTWFydGluZXogQ2Fu
-aWxsYXM6DQo+IEhlbGxvLA0KPiANCj4gV2hpbGUgd29ya2luZyBvbiBhZGRpbmcgc3VwcG9y
-dCBmb3IgdGhlIFNTRDEzMlggZmFtaWx5IG9mIDQtYml0IGdyYXlzY2FsZQ0KPiBTb2xvbW9u
-IE9MRUQgcGFuZWwgY29udHJvbGxlcnMsIEkgbm90aWNlZCBhIGZldyB0aGluZ3MgaW4gdGhl
-IGRyaXZlciB0aGF0DQo+IGNhbiBiZSBpbXByb3ZlZCBhbmQgbWFrZSBleHRlbmRpbmcgdG8g
-c3VwcG9ydCBvdGhlciBjaGlwIGZhbWlsaWVzIGVhc2llci4NCj4gDQo+IEkndmUgc3BsaXQg
-dGhlIHByZXBhcmF0b3J5IHBhdGNoZXMgaW4gdGhpcyBzZXJpZXMgYW5kIHdpbGwgcG9zdCB0
-aGUgYWN0dWFsDQo+IFNTRDEzMlggc3VwcG9ydCBhcyBhIHNlcGFyYXRlIHBhdGNoLXNldCBv
-bmNlIHRoaXMgb25lIGlzIG1lcmdlZC4NCj4gDQo+IEJlc3QgcmVnYXJkcywNCj4gSmF2aWVy
-DQo+IA0KPiANCj4gSmF2aWVyIE1hcnRpbmV6IENhbmlsbGFzICg1KToNCj4gICAgZHJtL3Nz
-ZDEzMHg6IE1ha2UgZGVmYXVsdCB3aWR0aCBhbmQgaGVpZ2h0IHRvIGJlIGNvbnRyb2xsZXIg
-ZGVwZW5kZW50DQo+ICAgIGR0LWJpbmRpbmdzOiBkaXNwbGF5OiBzc2QxMzA3ZmI6IFJlbW92
-ZSBkZWZhdWx0IHdpZHRoIGFuZCBoZWlnaHQNCj4gICAgICB2YWx1ZXMNCj4gICAgZHJtL3Nz
-ZDEzMHg6IFNldCB0aGUgcGFnZSBoZWlnaHQgdmFsdWUgaW4gdGhlIGRldmljZSBpbmZvIGRh
-dGENCj4gICAgZHJtL3NzZDEzMHg6IERvbid0IGFsbG9jYXRlIGJ1ZmZlcnMgb24gZWFjaCBw
-bGFuZSB1cGRhdGUNCj4gICAgZHJtL3NzZDEzMHg6IFJlbW92ZSBoYXJkY29kZWQgYml0cy1w
-ZXItcGl4ZWwgaW4gc3NkMTMweF9idWZfYWxsb2MoKQ0KPiANCj4gICAuLi4vYmluZGluZ3Mv
-ZGlzcGxheS9zb2xvbW9uLHNzZDEzMDdmYi55YW1sICAgfCAgIDggKy0NCj4gICBkcml2ZXJz
-L2dwdS9kcm0vc29sb21vbi9zc2QxMzB4LmMgICAgICAgICAgICAgfCAxMjQgKysrKysrKysr
-KysrLS0tLS0tDQo+ICAgZHJpdmVycy9ncHUvZHJtL3NvbG9tb24vc3NkMTMweC5oICAgICAg
-ICAgICAgIHwgICA2ICsNCj4gICAzIGZpbGVzIGNoYW5nZWQsIDkzIGluc2VydGlvbnMoKyks
-IDQ1IGRlbGV0aW9ucygtKQ0KPiANCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhp
-Y3MgRHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBH
-bWJIDQpGcmFua2Vuc3RyYXNzZSAxNDYsIDkwNDYxIE51ZXJuYmVyZywgR2VybWFueQ0KR0Y6
-IEl2byBUb3RldiwgQW5kcmV3IE15ZXJzLCBBbmRyZXcgTWNEb25hbGQsIEJvdWRpZW4gTW9l
-cm1hbg0KSFJCIDM2ODA5IChBRyBOdWVybmJlcmcpDQo=
-
---------------GpYSlaN0KD7buWrEyk10G0FZ--
-
---------------CyUiPeozYYacUyESNr435dOY
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmR+5+AFAwAAAAAACgkQlh/E3EQov+Ax
-uhAAnjqM2/S3q0LTwmr7+H3d22qxVMTSWB9v+d/XEEx+CAkmIb50OLBOrvv/47ZtpWudhd/fwgly
-4FDp/DR/e3Kalv4RQB62THzPCvJ+m8LsyeHcB2mWTk+NsEL3GLqJp3orXqRdNnwhNTwqguVsLn9A
-AXzA4q/O3i23OYEbvOezpQbBLaVcM9XLrrSUlktghzNsdJ7hAvnwYshrxcOqEvgwjESffe/IBCl6
-1p72+TxUWQVsQrHeaDQvDw4o0d1pGd8+ckWVuZ2AlUPuGrgPzQ55rzF5P3NeNAj7+XvRN9BHmYnw
-IHHnO4/dQ3tCLIAOXSSPaOJnE+RVlMDHf2AiQvU6jxeXW0191a7E3bLJJhJY7tXT2BW8GuegiFVg
-5A/WUjQRSooiDkqMX7NnJwomjLEEAS2/pyHGkRpOhbQYGYKjEXMPvMjBsXvIlPF9iQYinP/3CryO
-pW5ZRRX+/3pVm8YL7AWISyROfNtNE9UwRKEjiwjPaOWtDNHqLgT5/2lTG8xEyDMATQSX55ySy0wo
-45PzUfMA9aOrAg6zsUkZCmeMvmJgzG6CTQ75ulHg9CkLxVmTumxWBcU7K+moXeWyIzNQxsomyuE7
-SWBDQSMu8ZcnfgcjJj9UK3VWS3IpSImI4CxVWIWDBcBIBzqz5zqUPmL/aXGecLA05aIg6unA+vUk
-x6w=
-=0+0j
------END PGP SIGNATURE-----
-
---------------CyUiPeozYYacUyESNr435dOY--
+Thanks for pointing out.
+Rohit.
+>
+> Konrad
+>> +		};
+>> +	};
+>> +
+>> +	firmware {
+>> +		scm: scm {
+>> +			compatible = "qcom,scm-sdx75", "qcom,scm";
+>> +		};
+>> +	};
+>> +
+>> +	pmu {
+>> +		compatible = "arm,armv8-pmuv3";
+>> +		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH>;
+>> +	};
+>> +
+>> +	reserved-memory {
+>> +		#address-cells = <2>;
+>> +		#size-cells = <2>;
+>> +		ranges;
+>> +
+>> +		gunyah_hyp_mem: gunyah-hyp@80000000 {
+>> +			reg = <0x0 0x80000000 0x0 0x800000>;
+>> +			no-map;
+>> +		};
+>> +
+>> +		hyp_elf_package_mem: hyp-elf-package@80800000 {
+>> +			reg = <0x0 0x80800000 0x0 0x200000>;
+>> +			no-map;
+>> +		};
+>> +
+>> +		access_control_db_mem: access-control-db@81380000 {
+>> +			reg = <0x0 0x81380000 0x0 0x80000>;
+>> +			no-map;
+>> +		};
+>> +
+>> +		qteetz_mem: qteetz@814e0000 {
+>> +			reg = <0x0 0x814e0000 0x0 0x2a0000>;
+>> +			no-map;
+>> +		};
+>> +
+>> +		trusted_apps_mem: trusted-apps@81780000 {
+>> +			reg = <0x0 0x81780000 0x0 0xa00000>;
+>> +			no-map;
+>> +		};
+>> +
+>> +		xbl_ramdump_mem: xbl-ramdump@87a00000 {
+>> +			reg = <0x0 0x87a00000 0x0 0x1c0000>;
+>> +			no-map;
+>> +		};
+>> +
+>> +		cpucp_fw_mem: cpucp-fw@87c00000 {
+>> +			reg = <0x0 0x87c00000 0x0 0x100000>;
+>> +			no-map;
+>> +		};
+>> +
+>> +		xbl_dtlog_mem: xbl-dtlog@87d00000 {
+>> +			reg = <0x0 0x87d00000 0x0 0x40000>;
+>> +			no-map;
+>> +		};
+>> +
+>> +		xbl_sc_mem: xbl-sc@87d40000 {
+>> +			reg = <0x0 0x87d40000 0x0 0x40000>;
+>> +			no-map;
+>> +		};
+>> +
+>> +		modem_efs_shared_mem: modem-efs-shared@87d80000 {
+>> +			reg = <0x0 0x87d80000 0x0 0x10000>;
+>> +			no-map;
+>> +		};
+>> +
+>> +		aop_image_mem: aop-image@87e00000 {
+>> +			reg = <0x0 0x87e00000 0x0 0x20000>;
+>> +			no-map;
+>> +		};
+>> +
+>> +		smem_mem: smem@87e20000 {
+>> +			reg = <0x0 0x87e20000 0x0 0xc0000>;
+>> +			no-map;
+>> +		};
+>> +
+>> +		aop_cmd_db_mem: aop-cmd-db@87ee0000 {
+>> +			compatible = "qcom,cmd-db";
+>> +			reg = <0x0 0x87ee0000 0x0 0x20000>;
+>> +			no-map;
+>> +		};
+>> +
+>> +		aop_config_mem: aop-config@87f00000 {
+>> +			reg = <0x0 0x87f00000 0x0 0x20000>;
+>> +			no-map;
+>> +		};
+>> +
+>> +		ipa_fw_mem: ipa-fw@87f20000 {
+>> +			reg = <0x0 0x87f20000 0x0 0x10000>;
+>> +			no-map;
+>> +		};
+>> +
+>> +		secdata_mem: secdata@87f30000 {
+>> +			reg = <0x0 0x87f30000 0x0 0x1000>;
+>> +			no-map;
+>> +		};
+>> +
+>> +		tme_crashdump_mem: tme-crashdump@87f31000 {
+>> +			reg = <0x0 0x87f31000 0x0 0x40000>;
+>> +			no-map;
+>> +		};
+>> +
+>> +		tme_log_mem: tme-log@87f71000 {
+>> +			reg = <0x0 0x87f71000 0x0 0x4000>;
+>> +			no-map;
+>> +		};
+>> +
+>> +		uefi_log_mem: uefi-log@87f75000 {
+>> +			reg = <0x0 0x87f75000 0x0 0x10000>;
+>> +			no-map;
+>> +		};
+>> +
+>> +		qdss_mem: qdss@88800000 {
+>> +			reg = <0x0 0x88800000 0x0 0x300000>;
+>> +			no-map;
+>> +		};
+>> +
+>> +		audio_heap_mem: audio-heap@88b00000 {
+>> +			compatible = "shared-dma-pool";
+>> +			reg = <0x0 0x88b00000 0x0 0x400000>;
+>> +			no-map;
+>> +		};
+>> +
+>> +		mpss_dsmharq_mem: mpss-dsmharq@88f00000 {
+>> +			reg = <0x0 0x88f00000 0x0 0x5080000>;
+>> +			no-map;
+>> +		};
+>> +
+>> +		q6_mpss_dtb_mem: q6-mpss-dtb@8df80000 {
+>> +			reg = <0x0 0x8df80000 0x0 0x80000>;
+>> +			no-map;
+>> +		};
+>> +
+>> +		mpssadsp_mem: mpssadsp@8e000000 {
+>> +			reg = <0x0 0x8e000000 0x0 0xf400000>;
+>> +			no-map;
+>> +		};
+>> +
+>> +		gunyah_trace_buffer_mem: gunyah-trace-buffer@bdb00000 {
+>> +			reg = <0x0 0xbdb00000 0x0 0x2000000>;
+>> +			no-map;
+>> +		};
+>> +
+>> +		smmu_debug_buf_mem: smmu-debug-buf@bfb00000 {
+>> +			reg = <0x0 0xbfb00000 0x0 0x100000>;
+>> +			no-map;
+>> +		};
+>> +
+>> +		hyp_smmu_s2_pt_mem: hyp-smmu-s2-pt@bfc00000 {
+>> +			reg = <0x0 0xbfc00000 0x0 0x400000>;
+>> +			no-map;
+>> +		};
+>> +	};
+>> +
+>> +	smem: qcom,smem {
+>> +		compatible = "qcom,smem";
+>> +		memory-region = <&smem_mem>;
+>> +		hwlocks = <&tcsr_mutex 3>;
+>> +	};
+>> +
+>> +	soc: soc {
+>> +		compatible = "simple-bus";
+>> +		#address-cells = <2>;
+>> +		#size-cells = <2>;
+>> +		ranges = <0 0 0 0 0x10 0>;
+>> +		dma-ranges = <0 0 0 0 0x10 0>;
+>> +
+>> +		tcsr_mutex: hwlock@1f40000 {
+>> +			compatible = "qcom,tcsr-mutex";
+>> +			reg = <0x0 0x01f40000 0x0 0x40000>;
+>> +			#hwlock-cells = <1>;
+>> +		};
+>> +
+>> +		pdc: interrupt-controller@b220000 {
+>> +			compatible = "qcom,sdx75-pdc", "qcom,pdc";
+>> +			reg = <0x0 0xb220000 0x0 0x30000>,
+>> +			      <0x0 0x174000f0 0x0 0x64>;
+>> +			qcom,pdc-ranges = <0 147 52>,
+>> +					  <52 266 32>,
+>> +					  <84 500 59>;
+>> +			#interrupt-cells = <2>;
+>> +			interrupt-parent = <&intc>;
+>> +			interrupt-controller;
+>> +		};
+>> +
+>> +		tlmm: pinctrl@f000000 {
+>> +			compatible = "qcom,sdx75-tlmm";
+>> +			reg = <0x0 0x0f000000 0x0 0x400000>;
+>> +			interrupts = <GIC_SPI 212 IRQ_TYPE_LEVEL_HIGH>;
+>> +			gpio-controller;
+>> +			#gpio-cells = <2>;
+>> +			gpio-ranges = <&tlmm 0 0 133>;
+>> +			interrupt-controller;
+>> +			#interrupt-cells = <2>;
+>> +			wakeup-parent = <&pdc>;
+>> +		};
+>> +
+>> +		apps_smmu: iommu@15000000 {
+>> +			compatible = "qcom,sdx75-smmu-500", "arm,mmu-500";
+>> +			reg = <0x0 0x15000000 0x0 0x40000>;
+>> +			#iommu-cells = <2>;
+>> +			#global-interrupts = <2>;
+>> +			dma-coherent;
+>> +			interrupts = <GIC_SPI 65 IRQ_TYPE_LEVEL_HIGH>,
+>> +				     <GIC_SPI 68 IRQ_TYPE_LEVEL_HIGH>,
+>> +				     <GIC_SPI 69 IRQ_TYPE_LEVEL_HIGH>,
+>> +				     <GIC_SPI 70 IRQ_TYPE_LEVEL_HIGH>,
+>> +				     <GIC_SPI 71 IRQ_TYPE_LEVEL_HIGH>,
+>> +				     <GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>,
+>> +				     <GIC_SPI 73 IRQ_TYPE_LEVEL_HIGH>,
+>> +				     <GIC_SPI 94 IRQ_TYPE_LEVEL_HIGH>,
+>> +				     <GIC_SPI 95 IRQ_TYPE_LEVEL_HIGH>,
+>> +				     <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>,
+>> +				     <GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>,
+>> +				     <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>,
+>> +				     <GIC_SPI 99 IRQ_TYPE_LEVEL_HIGH>,
+>> +				     <GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH>,
+>> +				     <GIC_SPI 101 IRQ_TYPE_LEVEL_HIGH>,
+>> +				     <GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>,
+>> +				     <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>,
+>> +				     <GIC_SPI 104 IRQ_TYPE_LEVEL_HIGH>,
+>> +				     <GIC_SPI 105 IRQ_TYPE_LEVEL_HIGH>,
+>> +				     <GIC_SPI 106 IRQ_TYPE_LEVEL_HIGH>,
+>> +				     <GIC_SPI 107 IRQ_TYPE_LEVEL_HIGH>,
+>> +				     <GIC_SPI 108 IRQ_TYPE_LEVEL_HIGH>,
+>> +				     <GIC_SPI 109 IRQ_TYPE_LEVEL_HIGH>,
+>> +				     <GIC_SPI 110 IRQ_TYPE_LEVEL_HIGH>,
+>> +				     <GIC_SPI 298 IRQ_TYPE_LEVEL_HIGH>,
+>> +				     <GIC_SPI 299 IRQ_TYPE_LEVEL_HIGH>,
+>> +				     <GIC_SPI 300 IRQ_TYPE_LEVEL_HIGH>,
+>> +				     <GIC_SPI 301 IRQ_TYPE_LEVEL_HIGH>,
+>> +				     <GIC_SPI 302 IRQ_TYPE_LEVEL_HIGH>,
+>> +				     <GIC_SPI 303 IRQ_TYPE_LEVEL_HIGH>,
+>> +				     <GIC_SPI 304 IRQ_TYPE_LEVEL_HIGH>,
+>> +				     <GIC_SPI 305 IRQ_TYPE_LEVEL_HIGH>,
+>> +				     <GIC_SPI 306 IRQ_TYPE_LEVEL_HIGH>;
+>> +		};
+>> +
+>> +		intc: interrupt-controller@17200000 {
+>> +			compatible = "arm,gic-v3";
+>> +			#interrupt-cells = <3>;
+>> +			interrupt-controller;
+>> +			#redistributor-regions = <1>;
+>> +			redistributor-stride = <0x0 0x20000>;
+>> +			reg = <0x0 0x17200000 0x0 0x10000>,
+>> +			      <0x0 0x17260000 0x0 0x80000>;
+>> +			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
+>> +		};
+>> +
+>> +		timer@17420000 {
+>> +			compatible = "arm,armv7-timer-mem";
+>> +			reg = <0x0 0x17420000 0x0 0x1000>;
+>> +			#address-cells = <1>;
+>> +			#size-cells = <1>;
+>> +			ranges = <0 0 0 0x20000000>;
+>> +
+>> +			frame@17421000 {
+>> +				reg = <0x17421000 0x1000>,
+>> +				      <0x17422000 0x1000>;
+>> +				frame-number = <0>;
+>> +				interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
+>> +					     <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>;
+>> +			};
+>> +
+>> +			frame@17423000 {
+>> +				reg = <0x17423000 0x1000>;
+>> +				frame-number = <1>;
+>> +				interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
+>> +				status = "disabled";
+>> +			};
+>> +
+>> +			frame@17425000 {
+>> +				reg = <0x17425000 0x1000>;
+>> +				frame-number = <2>;
+>> +				interrupts = <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>;
+>> +				status = "disabled";
+>> +			};
+>> +
+>> +			frame@17427000 {
+>> +				reg = <0x17427000 0x1000>;
+>> +				frame-number = <3>;
+>> +				interrupts = <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
+>> +				status = "disabled";
+>> +			};
+>> +
+>> +			frame@17429000 {
+>> +				reg = <0x17429000 0x1000>;
+>> +				frame-number = <4>;
+>> +				interrupts = <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>;
+>> +				status = "disabled";
+>> +			};
+>> +
+>> +			frame@1742b000 {
+>> +				reg = <0x1742b000 0x1000>;
+>> +				frame-number = <5>;
+>> +				interrupts = <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>;
+>> +				status = "disabled";
+>> +			};
+>> +
+>> +			frame@1742d000 {
+>> +				reg = <0x1742d000 0x1000>;
+>> +				frame-number = <6>;
+>> +				interrupts = <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>;
+>> +				status = "disabled";
+>> +			};
+>> +		};
+>> +
+>> +		apps_rsc: rsc@17a00000 {
+>> +			label = "apps_rsc";
+>> +			compatible = "qcom,rpmh-rsc";
+>> +			reg = <0x0 0x17a00000 0x0 0x10000>,
+>> +			      <0x0 0x17a10000 0x0 0x10000>,
+>> +			      <0x0 0x17a20000 0x0 0x10000>;
+>> +			reg-names = "drv-0", "drv-1", "drv-2";
+>> +			interrupts = <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>,
+>> +				     <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>,
+>> +				     <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>;
+>> +
+>> +			power-domains = <&CLUSTER_PD>;
+>> +			qcom,tcs-offset = <0xd00>;
+>> +			qcom,drv-id = <2>;
+>> +			qcom,tcs-config = <ACTIVE_TCS    3>,
+>> +					  <SLEEP_TCS     2>,
+>> +					  <WAKE_TCS      2>,
+>> +					  <CONTROL_TCS   0>;
+>> +
+>> +			apps_bcm_voter: bcm_voter {
+>> +				compatible = "qcom,bcm-voter";
+>> +			};
+>> +		};
+>> +	};
+>> +
+>> +	timer {
+>> +		compatible = "arm,armv8-timer";
+>> +		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
+>> +			     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
+>> +			     <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
+>> +			     <GIC_PPI 12 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>;
+>> +	};
+>> +};
