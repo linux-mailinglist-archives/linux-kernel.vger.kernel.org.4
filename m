@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36E3572508D
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 01:14:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3C45725091
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 01:15:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240216AbjFFXOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 19:14:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49024 "EHLO
+        id S240239AbjFFXOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 19:14:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240224AbjFFXO0 (ORCPT
+        with ESMTP id S240217AbjFFXOe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 19:14:26 -0400
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C31D1706
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 16:14:24 -0700 (PDT)
-Received: by mail-qk1-x730.google.com with SMTP id af79cd13be357-75da00a1eddso358228485a.3
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 16:14:24 -0700 (PDT)
+        Tue, 6 Jun 2023 19:14:34 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7252C19A0
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 16:14:27 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id af79cd13be357-75d5051fad3so459497985a.3
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 16:14:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1686093263; x=1688685263;
+        d=broadcom.com; s=google; t=1686093266; x=1688685266;
         h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
          :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=19YeYuGMdrBP8BcBy6qvZnJ7POtkzTzxfbLYppbf8ls=;
-        b=XTaBro+qytTMBqU4ZbSvlbNy8RGzZcUL1hgm8bVRNKP/7A3xPDL42lLvyHseJANKCy
-         3VDmAAs0LZkqKpNgE5+LTNVTQ0u0ZVgTUMXoCyymgVb+jSiuFFCBRDr+/YPPQ2htNnSs
-         PbVPW35NL0hJnD+X5ClGbPmqR/iKL0K6hQMJo=
+        bh=Y/bt+LEczbR9ZUUhvtsOE3sTva/F2otJWZaeIMwxWEk=;
+        b=IcvpTxqz3X3uEzw7gAkqP2liMCfJ2uugzeIKp6t36GLVNCcdf6xV5178qrmEUAsyOX
+         mLvx6qrqCfXcUN/hqyEGHOmAzXMv4b6GKoGR1aWaxPc9mrIvr9BAVVVv5Eis1QBj2qYb
+         mif4GWt4gIjcabQYs+fXdHxksx8EP8zVHs2IY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686093263; x=1688685263;
+        d=1e100.net; s=20221208; t=1686093266; x=1688685266;
         h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
          :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=19YeYuGMdrBP8BcBy6qvZnJ7POtkzTzxfbLYppbf8ls=;
-        b=CgBZrOWVdXnmUuAy5GKCv0Lsc5Ll6eIEtpGXvdF5YzUng8O1lsUNr/AcMtCmoRyA32
-         bdDPKHXyjtrxMmtXPJJqL2RYPdQyyRLa3IMocP46cjlZiPBcvgSoFCEPgxZmAGT/HdZQ
-         N0cdM4IiwUEoFlWURRHjy/RQACbTnuSQ5KEUu86ce9zH3nOGtbOzK7Dr/TGeTXJZWMNO
-         0sZmaGIbq/m2viGW3+dYP6ht7yLt5bcm7fWfTYLbEvM7fn309m8AjDUnUlFpA6L+JZ9i
-         S1x76Abu/9+7EwAzkzt+3dm2v22f7YUSg4C88Z0DCY2RE183eMq8Nq2erPVc8Ymw2iBm
-         BO1Q==
-X-Gm-Message-State: AC+VfDzfwFahoci6CDH8MDuvmChu0aqaHsKe+MY53coSIFWR8S7oXQk7
-        yU+DH1hNx6r5YGXMNYYy837mrA==
-X-Google-Smtp-Source: ACHHUZ7LddUfNOfyOiaakC9UCBKCNt4kz9djb+nGIaNhjpdEoMAEAViYavs7Y20bOOFka7/BT7X0ug==
-X-Received: by 2002:a05:620a:88a:b0:75d:4699:756e with SMTP id b10-20020a05620a088a00b0075d4699756emr110283qka.56.1686093263318;
-        Tue, 06 Jun 2023 16:14:23 -0700 (PDT)
+        bh=Y/bt+LEczbR9ZUUhvtsOE3sTva/F2otJWZaeIMwxWEk=;
+        b=MzsmuL2J3jqemKM0SllD1LOOEMn2sMsQfwD3+EGqOrpApQviNBL+w9QmnyKsVrdPZB
+         uikCiwHSomFBbLDk7IEtDxbevqgi13bWT95QHg0EdffUUmJd+FfiRx4wXGcF+GBqZOG4
+         2von6T7PLvyL17fAC6yutTf/2516cPWiX8r0jDprmDouM+fVn8mTp/5HjPfQOEp+T1wG
+         2Vbtd5loOO4KSwUjrvNTgxuIoyYZ4DY3t6MZ+7n5jCsfaQkLrxBLPNELVNI+HRr7zqxL
+         j98C/R7V84NhuS2KgngoICvzm8UA2iWWy/glgHZ49TgiPeRbQkcZlw5+ylsVXxnCPF4q
+         wN7Q==
+X-Gm-Message-State: AC+VfDxjYSXE86BmjhEMPO0qT/3nS5zoJ8C6rF9B4/Ke2AuZkdvBiJIg
+        gcT72sd/YkdbSILO/amTfKB1h2bJYK1DTvi2Oh4=
+X-Google-Smtp-Source: ACHHUZ5OlfE/zg8Cp5ebXW1jsglUgsZt/1hdKsqlIBeJdNWn7TcE4RIUkynqISkt/NVg9DDu6NVzmg==
+X-Received: by 2002:a05:620a:6285:b0:75d:5446:3bff with SMTP id ov5-20020a05620a628500b0075d54463bffmr132327qkn.55.1686093266463;
+        Tue, 06 Jun 2023 16:14:26 -0700 (PDT)
 Received: from ubuntu-22.localdomain ([192.19.222.250])
-        by smtp.gmail.com with ESMTPSA id x9-20020ae9e909000000b0075b23e55640sm5221519qkf.123.2023.06.06.16.14.20
+        by smtp.gmail.com with ESMTPSA id x9-20020ae9e909000000b0075b23e55640sm5221519qkf.123.2023.06.06.16.14.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 16:14:22 -0700 (PDT)
+        Tue, 06 Jun 2023 16:14:25 -0700 (PDT)
 From:   William Zhang <william.zhang@broadcom.com>
 To:     Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
         Linux MTD List <linux-mtd@lists.infradead.org>
@@ -59,15 +59,15 @@ Cc:     f.fainelli@gmail.com, rafal@milecki.pl, kursad.oney@broadcom.com,
         Vignesh Raghavendra <vigneshr@ti.com>,
         Richard Weinberger <richard@nod.at>,
         Kamal Dasu <kdasu.kdev@gmail.com>
-Subject: [PATCH 03/12] mtd: rawnand: brcmnand: Fix crash during the panic_write
-Date:   Tue,  6 Jun 2023 16:12:43 -0700
-Message-Id: <20230606231252.94838-4-william.zhang@broadcom.com>
+Subject: [PATCH 04/12] mtd: rawnand: brcmnand: Fix potential out-of-bounds access in oob write
+Date:   Tue,  6 Jun 2023 16:12:44 -0700
+Message-Id: <20230606231252.94838-5-william.zhang@broadcom.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230606231252.94838-1-william.zhang@broadcom.com>
 References: <20230606231252.94838-1-william.zhang@broadcom.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000009324e05fd7e2e58"
+        boundary="0000000000003911eb05fd7e2e21"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -78,51 +78,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000009324e05fd7e2e58
+--0000000000003911eb05fd7e2e21
 Content-Transfer-Encoding: 8bit
 
-During the panic write path to execute another nand command, if
-there is a pending command, we should wait for the command instead of
-calling BUG_ON so we don't crash while crashing.
+When the oob buffer length is not in multiple of words, the oob write
+function does out-of-bounds read on the oob source buffer at the last
+iteration. Fix that by always checking length limit on the oob buffer
+read and fill with 0xff when reaching the end of the buffer to the oob
+registers.
 
 Fixes: 27c5b17cd1b1 ("mtd: nand: add NAND driver "library" for Broadcom STB NAND controller")
 Signed-off-by: William Zhang <william.zhang@broadcom.com>
 Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
-Reviewed-by: Kursad Oney <kursad.oney@broadcom.com>
-Reviewed-by: Kamal Dasu <kamal.dasu@broadcom.com>
 ---
 
- drivers/mtd/nand/raw/brcmnand/brcmnand.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ drivers/mtd/nand/raw/brcmnand/brcmnand.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/mtd/nand/raw/brcmnand/brcmnand.c b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
-index b6346a8b9833..20832857c4aa 100644
+index 20832857c4aa..d920e88c7f5b 100644
 --- a/drivers/mtd/nand/raw/brcmnand/brcmnand.c
 +++ b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
-@@ -1608,7 +1608,17 @@ static void brcmnand_send_cmd(struct brcmnand_host *host, int cmd)
+@@ -1486,10 +1486,10 @@ static int write_oob_to_regs(struct brcmnand_controller *ctrl, int i,
  
- 	dev_dbg(ctrl->dev, "send native cmd %d addr 0x%llx\n", cmd, cmd_addr);
+ 	for (j = 0; j < tbytes; j += 4)
+ 		oob_reg_write(ctrl, j,
+-				(oob[j + 0] << 24) |
+-				(oob[j + 1] << 16) |
+-				(oob[j + 2] <<  8) |
+-				(oob[j + 3] <<  0));
++				(((j < tbytes) ? oob[j] : 0xff) << 24) |
++				(((j + 1 < tbytes) ? oob[j + 1] : 0xff) << 16) |
++				(((j + 2 < tbytes) ? oob[j + 2] : 0xff) << 8) |
++				((j + 3 < tbytes) ? oob[j + 3] : 0xff));
+ 	return tbytes;
+ }
  
--	BUG_ON(ctrl->cmd_pending != 0);
-+	/*
-+	 * If we came here through _panic_write and there is a pending
-+	 * command, try to wait for it. If it times out, rather than
-+	 * hitting BUG_ON, just return so we don't crash while crashing.
-+	 */
-+	if (oops_in_progress) {
-+		if (ctrl->cmd_pending &&
-+			bcmnand_ctrl_poll_status(ctrl, NAND_CTRL_RDY, NAND_CTRL_RDY, 0))
-+			return;
-+	} else
-+		BUG_ON(ctrl->cmd_pending != 0);
- 	ctrl->cmd_pending = cmd;
- 
- 	ret = bcmnand_ctrl_poll_status(ctrl, NAND_CTRL_RDY, NAND_CTRL_RDY, 0);
 -- 
 2.37.3
 
 
---00000000000009324e05fd7e2e58
+--0000000000003911eb05fd7e2e21
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -193,13 +189,13 @@ VhYAxZlzj7tSjUIM7G7IhyfqPC46GKJ/4x+Amz1Z6YxNGy71L68kYD6hIbBcA5AM42QBUufly6Oa
 urb/KlmDGfVrIRYDbL0ckhGQIP5c6L+kSQZ2sHnQK0e0WgIaZYxaPYeY5u0GLCOze+3vyRMxggJt
 MIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYD
 VQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwxuh2XG3FXRL1W
-JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIOvVdLofE2kgp09T1giMhjP37+vM
-LyIhytXNCAyokO7QMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
-MDYwNjIzMTQyM1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
+JOEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIMXPGX/Y9vvhVbhRE8/+lN22+XJV
+GMAruWuO+RBQ/AguMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIz
+MDYwNjIzMTQyNlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsG
 CWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFl
-AwQCATANBgkqhkiG9w0BAQEFAASCAQCqTx5QhGV0Xy4nOU1JN7qXSRrftpz/FzkT9rU7U+5JgNSJ
-TkxYCBIrC2y1qb/jSi9O+BCT50FcSIg+YVxHqC/yUQZFPo/JJ1rVBOevzwnAKxffT47bCHaHnqlP
-jHZOJqQKOkmrZoPxRqghqo7FPMKKFDT8KOdMh/S/It/uow6LvgWluDiBTFRty3jdJK/LxqRJt/LB
-WL58OrMiKHzEsczkURL03CYuScrSDMZgdOWMEAfTVy+bmlxWtKLX+q5Qi2Wmo3IKbH7l25DFBiKM
-z3eg2wx9IemdhU+IdDPEZ6AZxWuuETr/49EfHNELQ2zKk1UZDHu38fCrJj+zOuRwj20J
---00000000000009324e05fd7e2e58--
+AwQCATANBgkqhkiG9w0BAQEFAASCAQAiGr2aPn30wTIxlgimOxTzBHnKQVXtlZH8rc5ZTEZ6tpS6
+thkZbDkCviotZDYgigif77CUsRC3DZBMRPgj+R91T371QkEalpbsSsfuPiue+0Ts3TzjFCpUzD0P
+IdDBlmHSck0/QyRaNP8e2LtawV/8QQXUmmMHAKW99xbPLpiCK5n+2M/fSrU9TVEacEwwRPNwdsIO
+/zmnnC8Q4GkOyw8699SG//kywWZT7SFDdvRZ1hRQbFFdbxHI7bD5EWysqUQsGeRjUXmM/aCDamI7
+0zows/AINg4eZuLpmcg48dhljEexXM+wkYGKkIhtNj/8iy9pT6tewOd4yvhyRp0h2r4N
+--0000000000003911eb05fd7e2e21--
