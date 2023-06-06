@@ -2,60 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F15D672488C
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 18:10:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D549E72488E
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 18:11:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236771AbjFFQKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 12:10:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46614 "EHLO
+        id S236858AbjFFQLM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 12:11:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229866AbjFFQKW (ORCPT
+        with ESMTP id S229866AbjFFQLK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 12:10:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84B8B10D5;
-        Tue,  6 Jun 2023 09:10:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 6 Jun 2023 12:11:10 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73B7210F4
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 09:11:08 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 20CE762F49;
-        Tue,  6 Jun 2023 16:10:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBB1AC433D2;
-        Tue,  6 Jun 2023 16:10:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686067820;
-        bh=gRgcx3PlM1lkDs/ejUMYDSVg/Hy+quxERjLKcCkMACM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hAZQk+On2KXCEEAO9ksHbkS7d3It/UE7DcVEcHqfVi48gnnZR/OT2AIjZ+jjyEIri
-         p1DHw9bGh5dRBvbnesVuKNwxRSOXTdtMV03eTh+PFvU4YFgPgibrm8ZurACIykorFt
-         Imxzr96VmZUaX9FMxduNL5OOaMZGmKQumJ9u0uA0atPU4MLHDDfeTmOj1vCHA/2PCm
-         lg9FvP4e7bY4hWqNAB8Kas4JAYEglD1UZkLUpx9GNulbCa2L9PU3/xYUI4BblSB6o7
-         Y132ddlFjV0SVyJGAro8FcxrUOB9kqnWzXOPDCftciXsLusNYDxI2M9OQskTwjwmw5
-         Dz+SUVB33iAzA==
-Date:   Tue, 6 Jun 2023 17:10:13 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     Shenghao Ding <13916275206@139.com>, devicetree@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        lgirdwood@gmail.com, perex@perex.cz,
-        pierre-louis.bossart@linux.intel.com, kevin-lu@ti.com,
-        shenghao-ding@ti.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, x1077012@ti.com, peeyush@ti.com,
-        navada@ti.com, gentuser@gmail.com, Ryan_Chu@wistron.com,
-        Sam_Wu@wistron.com
-Subject: Re: [PATCH v4 5/6] ALSA: hda/tas2781: Add tas2781 HDA driver
-Message-ID: <65ef4914-dc0e-4f0f-a6f8-3016931488bd@sirena.org.uk>
-References: <20230527223613.11106-1-13916275206@139.com>
- <874jnkfu98.wl-tiwai@suse.de>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 2F99721986;
+        Tue,  6 Jun 2023 16:11:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1686067867; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WA9TCdUcv82zThgquwL+JZWAlge/m1Sa+GLhYtCy31g=;
+        b=DJ1uaamvWwQ10PlsUbgAkqk2om67RcLino90aEHDji+yvPsDGYc+EQwplnGaXEWbtAQrHX
+        QFcQqNA5A87e4SmXvEonv0R6TutBO0UP0u5LV3KfdhmWGA5QhxXRKBDpXp6tn9jDXNNz0J
+        xM65UNdm+ItaH8Yf2Oq6sIqtVxmvcJg=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 11F6213519;
+        Tue,  6 Jun 2023 16:11:07 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id iR8bAptaf2SuNAAAMHmgww
+        (envelope-from <mhocko@suse.com>); Tue, 06 Jun 2023 16:11:07 +0000
+Date:   Tue, 6 Jun 2023 18:11:06 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Lorenzo Stoakes <lstoakes@gmail.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Baoquan He <bhe@redhat.com>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH] mm/vmalloc: do not output a spurious warning when huge
+ vmalloc() fails
+Message-ID: <ZH9amtJ7XuAuck4U@dhcp22.suse.cz>
+References: <20230605201107.83298-1-lstoakes@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="lEOJfeNRUJcYTo9Q"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <874jnkfu98.wl-tiwai@suse.de>
-X-Cookie: Keep out of the sunlight.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20230605201107.83298-1-lstoakes@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,42 +66,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon 05-06-23 21:11:07, Lorenzo Stoakes wrote:
+> In __vmalloc_area_node() we always warn_alloc() when an allocation
+> performed by vm_area_alloc_pages() fails unless it was due to a pending
+> fatal signal.
+> 
+> However, huge page allocations instigated either by vmalloc_huge() or
+> __vmalloc_node_range() (or a caller that invokes this like kvmalloc() or
+> kvmalloc_node()) always falls back to order-0 allocations if the huge page
+> allocation fails.
+> 
+> This renders the warning useless and noisy, especially as all callers
+> appear to be aware that this may fallback. This has already resulted in at
+> least one bug report from a user who was confused by this (see link).
+> 
+> Therefore, simply update the code to only output this warning for order-0
+> pages when no fatal signal is pending.
 
---lEOJfeNRUJcYTo9Q
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+The way how high order allocations are grafted in is just horrendous.
+Sigh.
+ 
+> Link: https://bugzilla.suse.com/show_bug.cgi?id=1211410
+> Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
 
-On Tue, Jun 06, 2023 at 06:08:51PM +0200, Takashi Iwai wrote:
-> Shenghao Ding wrote:
+Acked-by: Michal Hocko <mhocko@suse.com>
+Thanks!
 
-> > +	//Lenovo devices
-> > +	if ((subid == 0x387d) || (subid == 0x387e) || (subid == 0x3881)
-> > +		|| (subid == 0x3884) || (subid == 0x3886) || (subid == 0x38a7)
-> > +		|| (subid == 0x38a8) || (subid == 0x38ba) || (subid == 0x38bb)
-> > +		|| (subid == 0x38be) || (subid == 0x38bf) || (subid == 0x38c3)
-> > +		|| (subid == 0x38cb) || (subid == 0x38cd))
-> > +		tas_priv->catlog_id = LENOVO;
-> > +	else
-> > +		tas_priv->catlog_id = OTHERS;
+> ---
+>  mm/vmalloc.c | 17 +++++++++++++----
+>  1 file changed, 13 insertions(+), 4 deletions(-)
+> 
+> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> index ab606a80f475..e563f40ad379 100644
+> --- a/mm/vmalloc.c
+> +++ b/mm/vmalloc.c
+> @@ -3149,11 +3149,20 @@ static void *__vmalloc_area_node(struct vm_struct *area, gfp_t gfp_mask,
+>  	 * allocation request, free them via vfree() if any.
+>  	 */
+>  	if (area->nr_pages != nr_small_pages) {
+> -		/* vm_area_alloc_pages() can also fail due to a fatal signal */
+> -		if (!fatal_signal_pending(current))
+> +		/*
+> +		 * vm_area_alloc_pages() can fail due to insufficient memory but
+> +		 * also:-
+> +		 *
+> +		 * - a pending fatal signal
+> +		 * - insufficient huge page-order pages
+> +		 *
+> +		 * Since we always retry allocations at order-0 in the huge page
+> +		 * case a warning for either is spurious.
+> +		 */
+> +		if (!fatal_signal_pending(current) && page_order == 0)
+>  			warn_alloc(gfp_mask, NULL,
+> -				"vmalloc error: size %lu, page order %u, failed to allocate pages",
+> -				area->nr_pages * PAGE_SIZE, page_order);
+> +				"vmalloc error: size %lu, failed to allocate pages",
+> +				area->nr_pages * PAGE_SIZE);
+>  		goto fail;
+>  	}
+>  
+> -- 
+> 2.40.1
 
-> Hmm, I don't like checking subid here, but we can live with it for
-> now...
-
-Might be more idiomatically/neatly written as a switch statement though.
-
---lEOJfeNRUJcYTo9Q
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmR/WmQACgkQJNaLcl1U
-h9DX7Qf8D1/so4MXwyyoryqUqBwhZILjp3cE1N3KqUivAOfiCwP4EU67H1I76Q/C
-4FJiHX5VWstaLjPa0VyxetmE2HizEf1gZrwKlUWK8d1i4j9Z+17nCK9K51ErRKfF
-+bh+7o3MQWugxzVVCbwtcErGwoM+qbh29rsQXpUqJLS26oTh1lE+/bafxZEJIl4t
-Tl+UErh4wWdD+KspoYgN+E1DEhUdH5SexOrLOekZmvi5mZMT8dXeeiKaHgo4Xvx9
-v1UjUVA/kjgVlAx9dR4SyQPYvol76iAxv4EU/jWaR1IPh8lVEHR/wKCCqMAUduy8
-f0MrL9Fm9g0HhxzaljsrSH9P2xUPzg==
-=MogT
------END PGP SIGNATURE-----
-
---lEOJfeNRUJcYTo9Q--
+-- 
+Michal Hocko
+SUSE Labs
