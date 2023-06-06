@@ -2,113 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3893E723D3F
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 11:25:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25667723D43
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 11:26:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237060AbjFFJZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 05:25:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37606 "EHLO
+        id S237373AbjFFJ03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 05:26:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231700AbjFFJZv (ORCPT
+        with ESMTP id S237179AbjFFJ0X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 05:25:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D32F9E55
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 02:25:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686043505;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1FjaNZ7+M8ixgklXKY7vWvF9ET0ANZmsx5DhZNKDjLs=;
-        b=Rx0hf1JA3jaTb8gqEvPVy1fCrVF5vPw/KsKAy6UFz8hV/18fOnSMK+gToHQp0img9kiHNK
-        /iHKinTiOgmngz3IoEiEGnlZswpTIos5Y9f1suJBfd9rukTxSwkEYsn4+i+VdtJUgv6J2J
-        PH4iqXPBgyHXMcyBq4CP35nsrxfvOGM=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-435-THFJdaEpPA-GwDd5F7Zibg-1; Tue, 06 Jun 2023 05:25:01 -0400
-X-MC-Unique: THFJdaEpPA-GwDd5F7Zibg-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9D65A1C068EC;
-        Tue,  6 Jun 2023 09:25:00 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.182])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 01E5E492B00;
-        Tue,  6 Jun 2023 09:24:56 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <ZH7xzYfwQoWZLUYa@gondor.apana.org.au>
-References: <ZH7xzYfwQoWZLUYa@gondor.apana.org.au> <20230530141635.136968-1-dhowells@redhat.com> <20230530141635.136968-11-dhowells@redhat.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     dhowells@redhat.com, netdev@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-crypto@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v2 10/10] crypto: af_alg/hash: Support MSG_SPLICE_PAGES
+        Tue, 6 Jun 2023 05:26:23 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1F5BE51;
+        Tue,  6 Jun 2023 02:26:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686043581; x=1717579581;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=F3qIBZZvEOP1o7XmUo3JpMouW8LuVpAL3sqN4V4ah1s=;
+  b=bVYtwmCwyuf0+7hhwtYnjjM6CTCDOiNH78EiQffhWe2jdB7ZOXGBnWJJ
+   D22pwjFm42jkKscbD9GNr1JPMKVc6mfUjCFKJ5K+46Jv7p04hFrxJUvbv
+   rL6Fn4tgpCg6eMSIgViOaJ6tVV1UicRtQrQhn1V/DfszFKEs++Emyl1q2
+   UF4Y33mCpfw/ZJF1Jv/8GfwOPipB7D1YHftxtN4p07/HsdBgnoarIcws2
+   T95kXP41P9mSLJUn+7lsIVAuFtRCDVehNsHLeMJxljYkdrBXISK3942DX
+   skYZBR7YseRBBhP0ZxdqHeD0ZsjDB9ireqAUD2QmFc7hWel0t4cZflOii
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="355467502"
+X-IronPort-AV: E=Sophos;i="6.00,219,1681196400"; 
+   d="scan'208";a="355467502"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 02:26:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="742075415"
+X-IronPort-AV: E=Sophos;i="6.00,219,1681196400"; 
+   d="scan'208";a="742075415"
+Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.249.170.159]) ([10.249.170.159])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 02:26:19 -0700
+Message-ID: <b227532c-72ce-433e-cf2a-3feb2d14a1ae@linux.intel.com>
+Date:   Tue, 6 Jun 2023 17:26:17 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1845448.1686043495.1@warthog.procyon.org.uk>
-Date:   Tue, 06 Jun 2023 10:24:55 +0100
-Message-ID: <1845449.1686043495@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v8 0/6] Linear Address Masking (LAM) KVM Enabling
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     pbonzini@redhat.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, chao.gao@intel.com,
+        kai.huang@intel.com, robert.hu@linux.intel.com
+References: <20230510060611.12950-1-binbin.wu@linux.intel.com>
+ <2692c723-239c-20ad-a735-8b83988f072a@linux.intel.com>
+ <ZG+F02XuoSbZvuvv@google.com>
+From:   Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <ZG+F02XuoSbZvuvv@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SCC_BODY_URI_ONLY,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Herbert Xu <herbert@gondor.apana.org.au> wrote:
 
-> > -	if (limit > sk->sk_sndbuf)
-> > -		limit = sk->sk_sndbuf;
-> > +	/* Don't limit to ALG_MAX_PAGES if the pages are all already pinned. */
-> > +	if (!user_backed_iter(&msg->msg_iter))
-> > +		max_pages = INT_MAX;
 
-If the iov_iter is a kernel-backed type (BVEC, KVEC, XARRAY) then (a) all the
-pages it refers to must already be pinned in memory and (b) the caller must
-have limited it in some way (splice is limited by the pipe capacity, for
-instance).  In which case, it seems pointless taking more than one pass of the
-while loop if we can avoid it - at least from the point of view of memory
-handling; granted there might be other criteria such as hogging crypto offload
-hardware.
-
-> > +	else
-> > +		max_pages = min_t(size_t, max_pages,
-> > +				  DIV_ROUND_UP(sk->sk_sndbuf, PAGE_SIZE));
-> 
-> What's the purpose of relaxing this limit?
-
-If the iov_iter is a user-backed type (IOVEC or UBUF) then it's not relaxed.
-max_pages is ALG_MAX_PAGES here (actually, I should just move that here so
-that it's clearer).
-
-I am, however, applying the sk_sndbuf limit here also - there's no point
-extracting more pages than we need to if ALG_MAX_PAGES of whole pages would
-overrun the byte limit.
-
-> Even if there is a reason for this shouldn't this be in a patch by itself?
-
-I suppose I could do it as a follow-on patch; use ALG_MAX_PAGES and sk_sndbuf
-before that as for user-backed iterators.
-
-Actually, is it worth paying attention to sk_sndbuf for kernel-backed
-iterators?
-
-David
+On 5/25/2023 11:59 PM, Sean Christopherson wrote:
+> On Thu, May 25, 2023, Binbin Wu wrote:
+>> Gentle ping.
+>> Do you have any comments for this patch series?
+> Probably, I haven't looked at it yet.  This is on my todo list, but there are
+> multiple large series ahead of it.
+Updated the patch version to v9 to address the comments from Chao, Kai 
+and David in v8.
+https://lore.kernel.org/kvm/20230606091842.13123-1-binbin.wu@linux.intel.com/T/#t
 
