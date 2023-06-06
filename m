@@ -2,159 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A999724B64
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 20:28:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FBA8724B51
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 20:25:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238832AbjFFS2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 14:28:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45094 "EHLO
+        id S238715AbjFFSZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 14:25:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233653AbjFFS2t (ORCPT
+        with ESMTP id S239120AbjFFSZK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 14:28:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C9A11D;
-        Tue,  6 Jun 2023 11:28:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B63B2636B1;
-        Tue,  6 Jun 2023 18:23:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A157C433D2;
-        Tue,  6 Jun 2023 18:23:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686075820;
-        bh=T+JI2ckyFu8VOR3qL8ljjpZpkbu8FJMpdeuRNK5j1WE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VdOOJgmvG/YB+5sHAaFhY5A1/u8H5VgzQ7ybtKfQFNamKSS9dJ4/2MKitMx+RX8YA
-         Y32N4YPmL+OSm1EWmcEEE0K0IKBbZ3PLd883eAlzxXu7mAkzMSlzYk7vflhxq/8Vh/
-         7IEOHX+NR72Q1mUOV1QALhWSQGgfMKj3bP61tpr5DGD6dFraRH6orAyBAFf0ESBwgf
-         JYajhMXowNPNKau/sp5QRce4Vb2fnSrBLEUv4700TxaqE/6t7QDZqkSsccwKU/brf8
-         Qhcze7tgo6uoSPF8KFW8zEhMbc+Tm6W2qexRbJrzVaIgoGWiGtOjB4qy+n+mVFxjei
-         07Q0q5FHVkpRg==
-Date:   Tue, 6 Jun 2023 19:23:32 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Tommaso Merciai <tomm.merciai@gmail.com>,
-        jacopo.mondi@ideasonboard.com, martin.hecht@avnet.eu,
-        michael.roeder@avnet.eu, linuxfancy@googlegroups.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Gerald Loacker <gerald.loacker@wolfvision.net>,
-        Mikhail Rudenko <mike.rudenko@gmail.com>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Nicholas Roth <nicholas@rothemail.net>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] media: dt-bindings: alvium: add document YAML
- binding
-Message-ID: <20230606-create-catchable-e16113afac82@spud>
-References: <20230606155416.260941-1-tomm.merciai@gmail.com>
- <20230606155416.260941-3-tomm.merciai@gmail.com>
- <20230606163656.GI25679@pendragon.ideasonboard.com>
- <20230606-jaundice-womankind-7e583789fb7a@spud>
- <20230606181752.GC14101@pendragon.ideasonboard.com>
+        Tue, 6 Jun 2023 14:25:10 -0400
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A742C11D;
+        Tue,  6 Jun 2023 11:24:42 -0700 (PDT)
+Received: by mail-il1-x12b.google.com with SMTP id e9e14a558f8ab-33aa60f4094so19032095ab.1;
+        Tue, 06 Jun 2023 11:24:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686075867; x=1688667867;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=V12rCjy7mPc3LIBp5uRLQjG6txyB7DcxNo61Y87f3E8=;
+        b=iy/xvJarg3bLpHU7R7JQ/+OIqn6X9rB1vjDBEYSmRbGrF2GYKSNyCBxqDKaTg3TsY1
+         m8XyTGpH3SUlb8n2kQg7nkhHq0b+xvMWHVAwznViXl32hPsaKltXyM7txeJ3El3WXp2H
+         /RsZ/MHX05X8ig+jqB6WkaMITlkFjywymK1swg8trjjSAYwPLIC84KO7kM2we1+ZWb8x
+         Vpq/cQw/auxNKUg100D2+YjMMUajgwlUt09Z73LOQworieqQRB3yUdq/odGQZDC+Xl0Q
+         mwL7r6Z+4XZ7veO+wP2a9CgrH8sfBr9vQdwtRPstIS8z/ofMvJYtn8MFqNF6uDm7mvl+
+         2P9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686075867; x=1688667867;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=V12rCjy7mPc3LIBp5uRLQjG6txyB7DcxNo61Y87f3E8=;
+        b=YVeIXuC8MIwciJhis37aO+lbz3lhpHjywreeMm9lTAZdDgbAIx4FN+tPLFcEk8K5hu
+         YpRYFXnmSinKRmmxvNkYHBQuiUJ4TwZYZipSi4ApOZc0A/WHFEqiXSeOcebeQA9PSFL/
+         5zHlRxT8qGaK2FMU5rkFlJU2CfEllFm22rAqGe2ZWbunXeg9LB7OnpB6EwY1iUU/XNno
+         Y7SC7GTvT181Q4Fzi2IdWeqUbaTQGX72MfsXMtxm/IlsfPOxTfAHzIcqHR2jHLqBnLyG
+         q9uPanwufc9seBY6woY0H9cxvKEe8JD7VijB3GYqoBS+fl1rZ6ZNVNmRze2flUGzecXN
+         1pUQ==
+X-Gm-Message-State: AC+VfDyBrSRykUBwrIms1ibpGpr6DZpA84Vlstadx9QefFGUAmmhXzCa
+        LDyXfVw/bqX8r8HkzKjOBaM=
+X-Google-Smtp-Source: ACHHUZ4Xl6Q3aZU+8ToKIEYcfoUZ4oDIRjhiWwJIU6JSAcZnO8WFZANa3GqrSDV09npzYmGy1N2rbQ==
+X-Received: by 2002:a92:2805:0:b0:334:de38:d600 with SMTP id l5-20020a922805000000b00334de38d600mr2401946ilf.3.1686075867141;
+        Tue, 06 Jun 2023 11:24:27 -0700 (PDT)
+Received: from azeems-kspp.c.googlers.com.com (54.70.188.35.bc.googleusercontent.com. [35.188.70.54])
+        by smtp.gmail.com with ESMTPSA id p15-20020a92da4f000000b0033a4f125238sm3235543ilq.41.2023.06.06.11.24.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Jun 2023 11:24:26 -0700 (PDT)
+From:   Azeem Shaikh <azeemshaikh38@gmail.com>
+To:     Maxim Krasnyansky <maxk@qti.qualcomm.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>
+Cc:     linux-hardening@vger.kernel.org,
+        Azeem Shaikh <azeemshaikh38@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH v2] uml: Replace strlcpy with strscpy
+Date:   Tue,  6 Jun 2023 18:24:09 +0000
+Message-ID: <20230606182410.3976487-1-azeemshaikh38@gmail.com>
+X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="/wO+rvK5rRihXazv"
-Content-Disposition: inline
-In-Reply-To: <20230606181752.GC14101@pendragon.ideasonboard.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+strlcpy() reads the entire source buffer first.
+This read may exceed the destination size limit.
+This is both inefficient and can lead to linear read
+overflows if a source string is not NUL-terminated [1].
+In an effort to remove strlcpy() completely [2], replace
+strlcpy() here with strscpy().
+No return values were used, so direct replacement is safe.
 
---/wO+rvK5rRihXazv
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
+[2] https://github.com/KSPP/linux/issues/89
 
-On Tue, Jun 06, 2023 at 09:17:52PM +0300, Laurent Pinchart wrote:
-> On Tue, Jun 06, 2023 at 07:07:42PM +0100, Conor Dooley wrote:
-> > Hey Laurent, Tommaso,
-> >=20
-> > On Tue, Jun 06, 2023 at 07:36:56PM +0300, Laurent Pinchart wrote:
-> > > On Tue, Jun 06, 2023 at 05:54:03PM +0200, Tommaso Merciai wrote:
-> >=20
-> > > > +  alliedvision,lp2hs-delay-us:
-> > > > +    maxItems: 1
-> > > > +    description:
-> > > > +      Low power to high speed delay time in microseconds.
-> > >=20
-> > > You can drop "in microseconds", that's implied by the suffix.
-> > >=20
-> > > > +      The purpose of this property is force a DPhy reset for the p=
-eriod
-> > > > +      described by the microseconds on the property, before it sta=
-rts
-> > > > +      streaming. To be clear, with that value bigger than 0 the Al=
-vium
-> > > > +      forces a dphy-reset on all lanes for that period. That means=
- all
-> > > > +      lanes go up into low power state. This may help a csi2 rx ip=
- to
-> > > > +      reset if that IP can't deal with a continous clock.
-> > >=20
-> > > I'd like to propose what I think is a clearer version:
-> > >=20
-> > >     description: |
-> > >       Low power to high speed delay time.
-> > >=20
-> > >       If the value is larger than 0, the camera forces a reset of all
-> > >       D-PHY lanes for the duration specified by this property. All la=
-nes
-> > >       will transition to the low-power state and back to the high-spe=
-ed
-> > >       state after the delay. Otherwise the lanes will transition to a=
-nd
-> > >       remain in the high-speed state immediately after power on.
-> > >=20
-> > >       This is meant to help CSI-2 receivers synchronizing their D-PHY
-> > >       RX.
-> >=20
-> > Question about the property.
-> > Why not make it have a minimum value of 1 and drop the special-case
-> > behaviour for zero?
->=20
-> The property is optional, so it can indeed be omitted if no delay is
-> desired. I have no strong preference on whether or not to allow 0 as a
-> valid value.
+Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202305311135.zGMT1gYR-lkp@intel.com/
+---
+v1: https://lore.kernel.org/all/20230530164004.986750-1-azeemshaikh38@gmail.com/
 
-FWIW, I prefer the semantics of the property if it doesn't have the
-limbo state of being present but doing nothing.
+Changes from v1 - added strscpy declaration. v1 does not build.
 
-Cheers,
-Conor.
+ arch/um/include/shared/user.h          | 1 +
+ arch/um/os-Linux/drivers/tuntap_user.c | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-BTW, I seem to get bounces from shawnx.tu@intel.com, who is listed in
-MAINTAINERS for several drivers. Do you know if they have a non-intel
-address to replace those entries with, or should they be dropped?
+diff --git a/arch/um/include/shared/user.h b/arch/um/include/shared/user.h
+index bda66e5a9d4e..0347a190429c 100644
+--- a/arch/um/include/shared/user.h
++++ b/arch/um/include/shared/user.h
+@@ -52,6 +52,7 @@ static inline int printk(const char *fmt, ...)
+ extern int in_aton(char *str);
+ extern size_t strlcpy(char *, const char *, size_t);
+ extern size_t strlcat(char *, const char *, size_t);
++extern size_t strscpy(char *, const char *, size_t);
+ 
+ /* Copied from linux/compiler-gcc.h since we can't include it directly */
+ #define barrier() __asm__ __volatile__("": : :"memory")
+diff --git a/arch/um/os-Linux/drivers/tuntap_user.c b/arch/um/os-Linux/drivers/tuntap_user.c
+index 53eb3d508645..2284e9c1cbbb 100644
+--- a/arch/um/os-Linux/drivers/tuntap_user.c
++++ b/arch/um/os-Linux/drivers/tuntap_user.c
+@@ -146,7 +146,7 @@ static int tuntap_open(void *data)
+ 		}
+ 		memset(&ifr, 0, sizeof(ifr));
+ 		ifr.ifr_flags = IFF_TAP | IFF_NO_PI;
+-		strlcpy(ifr.ifr_name, pri->dev_name, sizeof(ifr.ifr_name));
++		strscpy(ifr.ifr_name, pri->dev_name, sizeof(ifr.ifr_name));
+ 		if (ioctl(pri->fd, TUNSETIFF, &ifr) < 0) {
+ 			err = -errno;
+ 			printk(UM_KERN_ERR "TUNSETIFF failed, errno = %d\n",
+-- 
+2.41.0.rc0.172.g3f132b7071-goog
 
---/wO+rvK5rRihXazv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZH95pAAKCRB4tDGHoIJi
-0ku3AP4ggWo9VZWGTA9FT9GGznavW3AY/aadgCo0GxyloBybbgEAzzzwXaC7fzis
-PR8yODKfvMxBuv0CdqCLPm6e3sft8AI=
-=hRQC
------END PGP SIGNATURE-----
-
---/wO+rvK5rRihXazv--
