@@ -2,52 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20FD9724EC7
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 23:27:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30F24724ECF
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 23:29:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239711AbjFFV1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 17:27:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42482 "EHLO
+        id S239724AbjFFV3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 17:29:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234271AbjFFV1M (ORCPT
+        with ESMTP id S234271AbjFFV3K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 17:27:12 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEA6F10D1;
-        Tue,  6 Jun 2023 14:27:10 -0700 (PDT)
-X-GND-Sasl: alexandre.belloni@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1686086829;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BR43p4vFQutMyYXqBIKO62/tUgmD0zV23thmYuRjMzw=;
-        b=FlWU8qKRmx/dIllvOWX2F9qZORCGEDXh0A11c8Pl/5ZGcyNHuvcZF6d0n7pX09zO+pmfzW
-        popQUbiaWVgrSdr5ajFNRYuUlo4EmednQ9QLagpg0TTVXmnukwEFAs+DLVYS0gbojMysds
-        /kJG7lK0WxUqhdLQlNyp+6jBe+5LK/2dspv7VlFr+XYVpymgMt1qJ8Bm2F+/j2xagFYluE
-        0d1TImHdIJBpNKgU6Nk0gIFwIfnkwZkpQXCV45xhYe7CSAQol983qKzoiVWgAPc+Dkno1y
-        zosYoIEzOJmwPTlfVgqAx/Q7IipZuVY3/PC5Tzc8DgfRg18tk9/OXNUdMP/Avw==
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-GND-Sasl: alexandre.belloni@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 218AC240004;
-        Tue,  6 Jun 2023 21:27:09 +0000 (UTC)
-Date:   Tue, 6 Jun 2023 23:27:08 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [RESEND PATCH 1/4] rtc: ab-eoz9: constify pointers to
- hwmon_channel_info
-Message-ID: <168608680172.26438.4791232990703685081.b4-ty@bootlin.com>
-References: <20230511175609.282191-1-krzysztof.kozlowski@linaro.org>
+        Tue, 6 Jun 2023 17:29:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A6CB10F2
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 14:29:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E4D0636E1
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 21:29:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A584C433EF;
+        Tue,  6 Jun 2023 21:29:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686086948;
+        bh=k5dh5UqC/q7zNRQQgS95fX7gkoUieGfOD7x/ugEKKhM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=eIkkDuie0nqk9UmDo1LBJ+f+bKAv58jJdfhRWxjSgF+akX4V38UmQ/9kFOoQGpCK6
+         clLxnDZHLQKPJzL13Mae0xSjVA0fkwl2I8m5rx7m+K2yarDesBaDPnotDoFZjx5atI
+         XCOEzUIgDU103Mdr7dCB796LLJXjgOgUuEm5TDdpOD1ibgy0o5OI6cVdXP0QqQ/m2X
+         JGdh/QmiDD8f9moxqZaAOW+hBqRZuWVmqwJ7PA3jCnpSGPwaLO+VlLJo8uZvRhv6WC
+         v6SpM36Qob7NPst5ZhjS/uSGM9tk5x49uj1fwqJTifCNme3p66xu7kmc5RlMWyaNxe
+         25bRZNqf7es/w==
+Date:   Tue, 6 Jun 2023 14:29:07 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     Patrick Thompson <ptf@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        nic_swsd@realtek.com
+Subject: Re: [PATCH] r8169: Disable multicast filter for RTL_GIGA_MAC_VER_46
+Message-ID: <20230606142907.456eec7e@kernel.org>
+In-Reply-To: <7aa7af7f-7d27-02bf-bfa8-3551d5551d61@gmail.com>
+References: <20230606140041.3244713-1-ptf@google.com>
+        <CAJs+hrHAz17Kvr=9e2FR+R=qZK1TyhpMyHKzSKO9k8fidHhTsA@mail.gmail.com>
+        <7aa7af7f-7d27-02bf-bfa8-3551d5551d61@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230511175609.282191-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,27 +60,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Thu, 11 May 2023 19:56:06 +0200, Krzysztof Kozlowski wrote:
-> Statically allocated array of pointers to hwmon_channel_info can be made
-> const for safety.
+On Tue, 6 Jun 2023 17:11:27 +0200 Heiner Kallweit wrote:
+> Thanks for the report and the patch. I just asked a contact in Realtek
+> whether more chip versions may be affected. Then the patch should be
+> extended accordingly. Let's wait few days for a response.
 > 
+> I think we should make this a fix. Add the following as Fixes tag
+> and annotate the patch as "net" (see netdev FAQ).
 > 
+> 6e1d0b898818 ("r8169:add support for RTL8168H and RTL8107E")
 
-Applied, thanks!
-
-[1/4] rtc: ab-eoz9: constify pointers to hwmon_channel_info
-      commit: 973ef08456f8c6aea4672ae986dfe907b9e4fdc3
-[2/4] rtc: ds3232: constify pointers to hwmon_channel_info
-      commit: d00caa55cecd3e833c21c9372fc558cb9f40a07f
-[3/4] rtc: isl12022: constify pointers to hwmon_channel_info
-      commit: 303b1e894470421f7c5b6452937fc8c1f0f89075
-[4/4] rtc: rv3032: constify pointers to hwmon_channel_info
-      commit: b19118965778da3ba9fbeeca39bdf24738d229b4
-
-Best regards,
-
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Perhaps it's best if you repost with the Fixes tag included once
+Realtek responded. 
