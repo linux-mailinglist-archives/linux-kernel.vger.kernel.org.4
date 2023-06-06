@@ -2,238 +2,416 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2495724DBE
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 22:12:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC88A724D47
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 21:43:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239695AbjFFUL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 16:11:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45800 "EHLO
+        id S239019AbjFFTm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 15:42:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239686AbjFFUL4 (ORCPT
+        with ESMTP id S239032AbjFFTmJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 16:11:56 -0400
-X-Greylist: delayed 1877 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 06 Jun 2023 13:11:54 PDT
-Received: from mx0d-0054df01.pphosted.com (mx0d-0054df01.pphosted.com [67.231.150.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BA3010F2;
-        Tue,  6 Jun 2023 13:11:54 -0700 (PDT)
-Received: from pps.filterd (m0209000.ppops.net [127.0.0.1])
-        by mx0c-0054df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 356JUgtb021328;
-        Tue, 6 Jun 2023 15:40:17 -0400
-Received: from can01-yt3-obe.outbound.protection.outlook.com (mail-yt3can01lp2177.outbound.protection.outlook.com [104.47.75.177])
-        by mx0c-0054df01.pphosted.com (PPS) with ESMTPS id 3r2b13006v-1
+        Tue, 6 Jun 2023 15:42:09 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B562D10F0;
+        Tue,  6 Jun 2023 12:41:57 -0700 (PDT)
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 356JaOmN024752;
+        Tue, 6 Jun 2023 19:40:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=keFCyDsNdacTA2OQj9oiReKVufM6GGO2OhVxCJqDtS0=;
+ b=GeMbTsIqCghaUH7JSGyANkCZrkXtnSNvwh5DPVN4bqKuAUA+W99c61loIc8tIxfSA30j
+ pPxnrHLTfobxozWPhxtI46gXUrydatm2GuIlNBJT0OtiOIxTj+s/q9brEJ3rHQ46x8IB
+ Y0hlwvfOu42ysvXI+3HiPhM51Ut4FuIbzWMYwKWH3HtihKNDDKZTRLtRGPZOc/rPQmo2
+ tXWVNsVcP1fzrif+0t8TvN4yAZGQs0314MMKgfRXWJX3nGLo61tpjwlv9TtVMqSQ52bm
+ ZR+4LZ3EqgQLmJV+hBrEteI65dpYU8+ZPtUdHuAwT8PuosMXMI11QbB2ZzsVt5DWQsaf QA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r2aku113e-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 06 Jun 2023 15:40:17 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IsuGGAZoFUS2z96+Lv4gHxZWuxY9h6boMBQh8OWeBmTPgkgjddrSBtAFwBL5l0fLRHk03b9x9CquMMEcOGjVA3lzrlGq0jMCzBJasdTrr9qD+RQdquxzx0CHD8V+CjeYTWFkQ7gQVlCtmGj9CMfDxSOxJTXV+mGCz8m6HLYQbaR0SbZJDdTMgVpdsYEwTSH0fhf8ykVKGeKM/zlKc+bHqW7KygcnlOJ3m3ZoTpC31fn0jOGH4G5lMZH1PgBQ4H0qj4L8Kk3P4jkMa5pRDuvPkN+XIW+lGSbDwQR6yEbpV8ePY/Ogg+jHsc/MkziaSSA6dwh5DY7iCUymu+8oLwlchA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GN71xGVuGwJ+gFwEh4MVX1VU98ksuQfAcWKKPbmNL+Y=;
- b=MIyJFojxnzDC2ONuOmG8/JEtrvdpUpHktAHg84Y3xrgRsUI4rpBMrpBb/ez0wk/OGIVl9/PGAry7wgXCk2HMK68g/DnhouOGw5wBJNo4MW4+Q8UlInRVb9B4ReCQ7jaA9RcctnZUbq0aa1KkTUzO8GpoFCNVJMwVDRpR4ZSRO/FRYt1sAYYDrzvTAjajZ+NKmuXxcpNJ1PqUrsiZqoJsiozUzLfNRXH2Rf4Pdn82GlkGTBztaCBm7QcOypm4ckV1d0rkgziqStbqTGyDSoMBriCoBWS4KV5dB+/wPr/69wQZhrri3ruwWDWIxtlz0hcwXmahS8bPcW505HrolVql2A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=calian.com; dmarc=pass action=none header.from=calian.com;
- dkim=pass header.d=calian.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=calian.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GN71xGVuGwJ+gFwEh4MVX1VU98ksuQfAcWKKPbmNL+Y=;
- b=p6krLU1pHSSzjgA81c5+HN8WowdqTOH/fNdUyxFnNg6X9+nOYLTwaFMLYyuIgX5WpUY68pg0fqu+yVv7P5XkSfieP4CLwl2mzql4Ty2oH8g/HUJgiZALonsbxUDhExFj1Ui3FrAlWTNzsitgVzwV5inR06nXvV3Z7u1fRIvf4XA=
-Received: from YT2PR01MB8838.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:b9::6)
- by YT2PR01MB8629.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:b4::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Tue, 6 Jun
- 2023 19:40:15 +0000
-Received: from YT2PR01MB8838.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::c059:dcd5:ca20:4a0]) by YT2PR01MB8838.CANPRD01.PROD.OUTLOOK.COM
- ([fe80::c059:dcd5:ca20:4a0%6]) with mapi id 15.20.6455.030; Tue, 6 Jun 2023
- 19:40:15 +0000
-From:   Robert Hancock <robert.hancock@calian.com>
-To:     "andi.shyti@kernel.org" <andi.shyti@kernel.org>
-CC:     "michal.simek@amd.com" <michal.simek@amd.com>,
-        "shubhraj@xilinx.com" <shubhraj@xilinx.com>,
-        "marex@denx.de" <marex@denx.de>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "wsa@kernel.org" <wsa@kernel.org>
-Subject: Re: [PATCH] i2c: xiic: Don't try to handle more interrupt events
- after error
-Thread-Topic: [PATCH] i2c: xiic: Don't try to handle more interrupt events
- after error
-Thread-Index: AQHZmKRr5HCKlPlB4kiPAHoGiUQ0I69+J9qAgAAES4A=
-Date:   Tue, 6 Jun 2023 19:40:15 +0000
-Message-ID: <c763371c710c9952154496026610e2ff583c173a.camel@calian.com>
-References: <20230606182558.1301413-1-robert.hancock@calian.com>
-         <20230606192453.zjzz4kt76kus5hr5@intel.intel>
-In-Reply-To: <20230606192453.zjzz4kt76kus5hr5@intel.intel>
-Accept-Language: en-CA, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.44.4-0ubuntu1 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: YT2PR01MB8838:EE_|YT2PR01MB8629:EE_
-x-ms-office365-filtering-correlation-id: be8957e3-5574-4e35-f1cb-08db66c5da36
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Xz9ab05ODXbqTA/yMiBA9sCvhWVp/6/9PhEjFWxAHwWzdJdEDZVYYvD8rfiwQq2LFGyGsAtVYmxtKAZeZanjWLrm/hqNOVkdFkCBN48Befu00hkGhke9IjcGnLG83VozdiFNxckgpzog2NLZb3PiQuOnpRl7vFBjHFc3+OJ2oCLnZ9QAkJCroqWifnt+HyKPUivPPwPHXgbmfMBw4l9Sat4PDNalIFK0xhe1WM0tDrmaDWKMJBEoSVlYCf+wGqMGCP+yT5toPhMU4FDpEth6D4w91tamOvMTaMEzHbL4dpV/142jXqUiF7Y+SwXmBW+M6GQpB1C+mZ0QuCFPahcnyGU4b1X8D3CDM7NvwB1zhGeE+QhKo8sh2m49UbawEbG1zBeNUqTHpFraIDW08FPJFasIplovNt57wxEf2AEKsQniFQ/t4n/TIAxW9qFs7XYiIumqV+zQ7Z0VHqeDDVc0IbVPCPBC3q8szEi/5Zu19ZeQ2CFfkiUnXc75MA1YaOY44H5kibIy71VqTX0eW1b+RY8IwPYMpMf7u33m5pE53TfkZEBHfprkb9N3RK2fGlzhahi3/Jfr0PEE/PeKsA5cM1Q73SzX8EDBy2NPfCZxH8HbhBbH8bqJDm/YUhGrb264PhSzfQv5N6vzQ6/AKX/HHR2Jq9ThyqL7bi+Ru5pu/lo=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT2PR01MB8838.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(136003)(346002)(39860400002)(366004)(451199021)(36756003)(38070700005)(2906002)(86362001)(5660300002)(44832011)(71200400001)(6486002)(83380400001)(6506007)(6512007)(478600001)(316002)(54906003)(91956017)(186003)(64756008)(38100700002)(41300700001)(76116006)(66446008)(66946007)(4326008)(2616005)(66476007)(122000001)(66556008)(6916009)(8676002)(8936002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?K3VhQS9LMjdVSUtzcTIxdTFnSlpPU0lIcEJJVHVpSWdvSjNzT1pjRzB2TE4y?=
- =?utf-8?B?TUd1M1J0STdURGQ2blpUQTNNOFB3L0hEWlFEQXhoelk1dEpKekJHSEFxUzE3?=
- =?utf-8?B?YTNhUWx5b2l4N29xbjhFVkRoU3hWcXh5ZHVRdGRxSDhZVEVGU1FGUHcydXpk?=
- =?utf-8?B?U3pFcVdobGkrdVkzTHFLSU1KS3Zmcm1UL3lQek5adXNmSm80bXluQmxwUmEx?=
- =?utf-8?B?LzFpQzhhZmQ1VnM2WHdOcjZFVkpkN3pGczRocVFyZTNTL0o1QU1NOGQ4TVpL?=
- =?utf-8?B?U0NzVjdNTFFkNmd6MTkreW43UFFySmJkZGx4Wk1JOEFjY0RvdTdGT1hHeW9O?=
- =?utf-8?B?d3Mrd3B1bk11ZGxPZWNJa3ZUUGV6UUhDendXM25IM3V4eXYwaEZCeUtBWjBz?=
- =?utf-8?B?cCszUzNmQUJTTHB1ZFIwUFk4emc2SmNWWk4xVjB2V1dCZzRHOTNyVmlTSlBX?=
- =?utf-8?B?bEZMS0RHcGg4U3pVYU9GdnZKRitiZkJ4MHUreUJSQ0lWV25uVHVSblZSUG95?=
- =?utf-8?B?S1FFcmJ1c2VQNXdYR1lPSUd3c2hIdHZWS0NKVi9ZdHlnMjM0K3JlU05paGVL?=
- =?utf-8?B?NzA1YmloQUxDaWdxdEttaGMrYkoyejVqZEV0ZXhJWjRscWJySk9sVEJMY3lE?=
- =?utf-8?B?eldHT0hwN0MvSjBNeW16ZkU0Ym5tQ0d3MkV4TVQ0ZFpNd2VlNG55Qk9uNFo4?=
- =?utf-8?B?MVVGU2FSSmhZeXA2S3B4NXZiYzd1N0hyc2FPMVF4SURMdzFUNFBpa2NjWmsx?=
- =?utf-8?B?MkhkSGdBMDFwUW14cWJsaGY2bjZCQXBEVDNPMnQ0dXBrakJwZnZiS3c4STgr?=
- =?utf-8?B?Z1hPVVhuM3c1amJVREFqejZWTGRXUE5vMUt0bDY5TTZoUGZaUDZJUlVuSW4v?=
- =?utf-8?B?NVlQbUoxS2VtTU9uVTFtYzNycmZpZ3IvNHc1YWdHdHFWT3pBMlc0U3Fzblhj?=
- =?utf-8?B?Sit0VTZaeXVpa3B0ZDdOL2VjV0JJcmhyOHNwSzlzT1V4cU91Yk1Xd2EvZi9r?=
- =?utf-8?B?aXVLU0RIL1RCT0EzOGJqMW5BcEJMR3R3dXFJNXMveURxYmZvY1lDeDVXOUlD?=
- =?utf-8?B?ekJHRlR1OEMyMlVESmVZMzRnQnVrdUxJR252RFJGRXpnV0hyWU5WdFIraVU0?=
- =?utf-8?B?ZXBFK2l1c3RBK0JKdjlNRzNCRkVvVnM1MGdGZmE0N0V3aUNnUlVmaHlnTmE4?=
- =?utf-8?B?MVZ1bkNqTzEwWVFZQ3JtWm0xQUNvUE1hK3ZzVFJIdVdGc1hNMXU5MDhYS3o1?=
- =?utf-8?B?N0JKYnNuWm1VUlZTNDFhWmhlOG1aYzBYV1U2OXppR1VkY2NpcXV2WFFvaW9D?=
- =?utf-8?B?TzRmak1RMGFqUEVDbGk0cXRCVWdFTEJxOVNRTnppTUw2LzBVVEVDK0U3QVpp?=
- =?utf-8?B?R3NoU3cyampxY2hsczJHNzFWRXpSaCszTHZWRFZ3Zy9VMHR5d2VKZFVFZXlH?=
- =?utf-8?B?cjBVbkcycndMeGdESDNmN3d3Y25lRmVoUkRuUEtiWXdOVmhVQ1Q0dm5HOG9Z?=
- =?utf-8?B?VXBQOG9obWdGUHVGR2VhV1grVGQ3aGs1a21VVGsvVEQ4RG0wRUdGenBtZFJB?=
- =?utf-8?B?VXdKNlVCVVFZb1N2dUUzTVF2TmtiTWJCQnZQOGxWV3JHWGprdTVOY0VhRlB0?=
- =?utf-8?B?YWsxT0VUMjRXVzJpdnEyUUNuUU5YejZPMTlOVzRkOHVyWUxsVG9JajYxMDVo?=
- =?utf-8?B?dUsvNnRiaEk5ZndHWERaQVVMVjZ2ZjdRcXUrb1U1RFlXcGQzdjNSdGhYblFa?=
- =?utf-8?B?WmN6bW4zV3ZFOTEvT2dOalRHd0kvWFBvL1hHeVFLdVA0U2tvU2JwOHAvbnJU?=
- =?utf-8?B?WXpDRHFINDc3ZmFxUjgzdnR5c1JxSzAybGpOVWhjQy9hcGZRVHRwL2JWYXE5?=
- =?utf-8?B?ODRBSGxVcFFMZFRVWnoyb0pwY0o1bVdhRmRDZ2pYRUdvS1JnelRjdEM2K0hC?=
- =?utf-8?B?N2tFQzhKQUtqZ29wNW5CUjAzSDJtVVk5RnlZc2xGSmpwS1NaNkhodUhlZ2Z0?=
- =?utf-8?B?YmtqdFE2RzBKUUZCNUxXa1FZK2hKS0pSQkY5Tk4zSmxFNWI0cTFSM0JVN3Ba?=
- =?utf-8?B?c2ZmTTd1bHhtSnZ6QVhtVVJ1OEYzSUM3MVF3RFFKNDh2YllJK0RYVnV0dzhC?=
- =?utf-8?B?UkhNK1l3VzRWNTg0OFYrS29CSWR5VERFaGJid1A3RGMvMFRuRU0xaTFXMTc3?=
- =?utf-8?B?NzhtY3QzUVdXNEJxRFR0NENUb0FxdXhQTUxOV2MxNU1XeEhmTmMydGhpMmxU?=
- =?utf-8?B?TG5jMVBIbmYwTXVrR1BFc3BFaVlRPT0=?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <91FDBB8E9225ED4BB7D6EC8733A69858@CANPRD01.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Tue, 06 Jun 2023 19:40:50 +0000
+Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 356JaIeo024108;
+        Tue, 6 Jun 2023 19:40:49 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r2aku111h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Jun 2023 19:40:49 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 356IZbJu013718;
+        Tue, 6 Jun 2023 19:40:46 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3r2a7a0186-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Jun 2023 19:40:46 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 356JeggF20972220
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 6 Jun 2023 19:40:43 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DA2B120043;
+        Tue,  6 Jun 2023 19:40:42 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F018720040;
+        Tue,  6 Jun 2023 19:40:39 +0000 (GMT)
+Received: from thinkpad-T15 (unknown [9.179.8.65])
+        by smtpav04.fra02v.mail.ibm.com (Postfix) with SMTP;
+        Tue,  6 Jun 2023 19:40:39 +0000 (GMT)
+Date:   Tue, 6 Jun 2023 21:40:37 +0200
+From:   Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Vasily Gorbik <gor@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Price <steven.price@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Jann Horn <jannh@google.com>,
+        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH 07/12] s390: add pte_free_defer(), with use of
+ mmdrop_async()
+Message-ID: <20230606214037.09c6b280@thinkpad-T15>
+In-Reply-To: <175ebec8-761-c3f-2d98-6c3bd87161c8@google.com>
+References: <35e983f5-7ed3-b310-d949-9ae8b130cdab@google.com>
+        <6dd63b39-e71f-2e8b-7e0-83e02f3bcb39@google.com>
+        <175ebec8-761-c3f-2d98-6c3bd87161c8@google.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
+Content-Type: text/plain; charset=US-ASCII
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: IBzt0HR068keJSuKL98a8MYgtpNVJKOC
+X-Proofpoint-GUID: _Gg1ZL486poj2Zp-jL0cqzcguQIoxv08
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?bkFSSFdIQkRKM3BSMVVNY3NtQTVoNFR4SzNsZUI2d2tVQlJMNks3TjFvRlA5?=
- =?utf-8?B?VytWYzI0d0dkZlFoNytUWHZwcjh0aUpQWm84WmtySzRSOExCSUtiWGRBTGRL?=
- =?utf-8?B?dGlUT2dLYTMzVUhGVHRtVSs1Si91ZVg3NFgzTExYKy9KaE9XRGxPc1VBSXpD?=
- =?utf-8?B?aGc2d3pqRWEzSkhMUDVmdm1JWUV1WHFlYkZpbjBSZWFzZW8zRkd4anFsRUI1?=
- =?utf-8?B?bXR1Ujc5NXFJb3BsVktON1hOSXhUbmZmNTNFSSt1cGZqZHZudXpCclQ1QzRD?=
- =?utf-8?B?cXJLTE52OE9WL0VxNFRnYnl0SVhxNytDZWVJVnlyakk2aWdPUllwVUo1TE1n?=
- =?utf-8?B?enc0cDZxYXAwRmlNcDNNV0dQSFBBUytZMnpKQkNDNmlTM0d5WUpheTRGTEU1?=
- =?utf-8?B?U0hYc1grU3l1cytMYXlMOWQwYU0vYWttam9tVGhlZ3hGa1RoQ05RN0NDaEZD?=
- =?utf-8?B?R0RPSlp2emF5Wk8vYVg0WXkwMFFEdFhYbmlJSWszRm55K0w4U0xMcGg4ZXlJ?=
- =?utf-8?B?RmJyclVRVTBaeG1GSERlR3JRdHJEWEpZcUdLNG4yV0dyVUUraXVxeGY0NU9a?=
- =?utf-8?B?ZDlaL3BDYUp1c0s5QXA3K0lBUnlyZVIzVyttdlJpN1NVRHViRG14M2NjRVYw?=
- =?utf-8?B?RzNoSE9rT2hIa3VtK2tRN2lseEpOVVZFRFA0VHYwdTNrc0FxSkl4WW10TlBX?=
- =?utf-8?B?WmpFOEVTUjY5NXFnQkVjSjROUkE2WGttK1VtZGg1MUU2YXh0YWt6SWovdkJo?=
- =?utf-8?B?Um5xQ3M1RFpvUG1CNXBuaXBBOFp2TUlYSG5ENG9UNGhkVmxqYzlXZnB5VkhP?=
- =?utf-8?B?TmFQSldFWnRHc0dOS0h5YjdKd3VyNWsyS2FKZGtQOUlQUHFWRTFLWUxGbUg5?=
- =?utf-8?B?bDNXQzdtMkwzS3lkcnNTUVdzZFBjNGE3cHZFbGxCVHg0N1BJMlVtaUd1NEhK?=
- =?utf-8?B?NldOcnJXbWNERGNrdEVNM2oxbWdpVm4yUDd4djRoWFp1WHpVWlBtcUl0VFZr?=
- =?utf-8?B?eGRlYVkzeHBDQkkza1BBQ3ZJdVZDNERzdG10a2pJTk1mcHpWcHJJc2NlSXNu?=
- =?utf-8?B?K1daeUgzeDJ2UC9aT3BLTVdZcXJvR25qU2c4QWVkQVVhajlsYStpR0dFVG1v?=
- =?utf-8?B?cXA3cW91cklGKzVITTFVVnBDVVhIMWlJcmpkdHBRdGFBSGV0UEhLZHFBbEJo?=
- =?utf-8?B?VXRsT3VTbWNkVGlQK1prNWlEZ3M0K0JQQ3haZ0JNdGdDVEpKejNSYkIwNldJ?=
- =?utf-8?Q?WKlcdgMmRRmtGUK?=
-X-OriginatorOrg: calian.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: YT2PR01MB8838.CANPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: be8957e3-5574-4e35-f1cb-08db66c5da36
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Jun 2023 19:40:15.8416
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 23b57807-562f-49ad-92c4-3bb0f07a1fdf
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: c60QxJYW+LHmAv62R6173dMO5Hue7yWJjGmAGlqdRyBc9INEeMaj+kfIgVnzVkiJyUq8Pkdp3x0IzZYJxHbaOhcC/ruRe7h/CkEDMVVj0Ik=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT2PR01MB8629
-X-Proofpoint-ORIG-GUID: 0gpwAGA4j5kE81PlOdSIYc_sSeobFtY9
-X-Proofpoint-GUID: 0gpwAGA4j5kE81PlOdSIYc_sSeobFtY9
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
  definitions=2023-06-06_14,2023-06-06_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 spamscore=0
- malwarescore=0 mlxlogscore=598 phishscore=0 adultscore=0
- lowpriorityscore=0 mlxscore=0 bulkscore=0 priorityscore=1501
- impostorscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2305260000 definitions=main-2306060167
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 bulkscore=0
+ suspectscore=0 mlxlogscore=999 spamscore=0 lowpriorityscore=0
+ impostorscore=0 clxscore=1015 phishscore=0 priorityscore=1501 mlxscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306060166
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVHVlLCAyMDIzLTA2LTA2IGF0IDIxOjI0ICswMjAwLCBBbmRpIFNoeXRpIHdyb3RlOg0KPiBI
-aSBSb2JlcnQsDQo+IA0KPiBPbiBUdWUsIEp1biAwNiwgMjAyMyBhdCAxMjoyNTo1OFBNIC0wNjAw
-LCBSb2JlcnQgSGFuY29jayB3cm90ZToNCj4gPiBJbiB4aWljX3Byb2Nlc3MsIGl0IGlzIHBvc3Np
-YmxlIHRoYXQgZXJyb3IgZXZlbnRzIHN1Y2ggYXMNCj4gPiBhcmJpdHJhdGlvbg0KPiA+IGxvc3Qg
-b3IgVFggZXJyb3IgY2FuIGJlIHJhaXNlZCBpbiBjb25qdW5jdGlvbiB3aXRoIG90aGVyIGludGVy
-cnVwdA0KPiA+IGZsYWdzDQo+ID4gc3VjaCBhcyBUWCBGSUZPIGVtcHR5IG9yIGJ1cyBub3QgYnVz
-eS4gRXJyb3IgZXZlbnRzIHJlc3VsdCBpbiB0aGUNCj4gPiBjb250cm9sbGVyIGJlaW5nIHJlc2V0
-IGFuZCB0aGUgZXJyb3IgcmV0dXJuZWQgdG8gdGhlIGNhbGxpbmcNCj4gPiByZXF1ZXN0LA0KPiA+
-IGJ1dCB0aGUgZnVuY3Rpb24gY291bGQgcG90ZW50aWFsbHkgdHJ5IHRvIGtlZXAgaGFuZGxpbmcg
-dGhlIG90aGVyDQo+ID4gZXZlbnRzLCBzdWNoIGFzIGJ5IHdyaXRpbmcgbW9yZSBtZXNzYWdlcyBp
-bnRvIHRoZSBUWCBGSUZPLiBTaW5jZQ0KPiA+IHRoZQ0KPiA+IHRyYW5zYWN0aW9uIGhhcyBhbHJl
-YWR5IGZhaWxlZCwgdGhpcyBpcyBub3QgaGVscGZ1bCBhbmQgd2lsbCBqdXN0DQo+ID4gY2F1c2UN
-Cj4gPiBpc3N1ZXMuDQo+IA0KPiB3aGF0IGtpbmQgb2YgaXNzdWVzPw0KPiANCg0KVGhlIG9uZSBJ
-IHJhbiBpbnRvIGlzIHdoYXQgSSBhbGx1ZGVkIHRvIGZ1cnRoZXIgZG93biwgd2hlcmUgdGhhdA0K
-V0FSTl9PTiB3YXMgdHJpZ2dlcmluZyByZXBlYXRlZGx5LCB3aGljaCBlbmRlZCB1cCBmbG9vZGlu
-ZyB0aGUga2VybmVsDQpsb2cgYW5kIGNhdXNpbmcgdGhlIGRldmljZSdzIHdhdGNoZG9nIHRpbWVy
-IHRvIHRpbWVvdXQuIEknbSBub3Qgc3VyZQ0Kd2hhdCBvdGhlciBmb3JtcyBvZiBoYXZvYyBtaWdo
-dCBlbnN1ZSwgb3RoZXIgdGhhbiAibm90aGluZyBnb29kIi4uDQoNCj4gPiBUaGlzIHByb2JsZW0g
-aGFzIGJlZW4gcHJlc2VudCBldmVyIHNpbmNlOg0KPiA+IA0KPiA+IGNvbW1pdCA3Zjk5MDZiZDdm
-NzIgKCJpMmM6IHhpaWM6IFNlcnZpY2UgYWxsIGludGVycnVwdHMgaW4gaXNyIikNCj4gPiANCj4g
-PiB3aGljaCBhbGxvd2VkIG5vbi1lcnJvciBldmVudHMgdG8gYmUgaGFuZGxlZCBhZnRlciBlcnJv
-cnMsIGJ1dA0KPiA+IGJlY2FtZQ0KPiA+IG1vcmUgb2J2aW91cyBhZnRlcjoNCj4gPiANCj4gPiBj
-b21taXQgNzQzZTIyN2E4OTU5ICgiaTJjOiB4aWljOiBEZWZlciB4aWljX3dha2V1cCgpIGFuZA0K
-PiA+IF9feGlpY19zdGFydF94ZmVyKCkgaW4geGlpY19wcm9jZXNzKCkiKQ0KPiA+IA0KPiA+IHdo
-aWNoIHJld29ya2VkIHRoZSBjb2RlIHRvIGFkZCBhIFdBUk5fT04gd2hpY2ggdHJpZ2dlcnMgaWYg
-Ym90aCB0aGUNCj4gPiB4ZmVyX21vcmUgYW5kIHdha2V1cF9yZXEgZmxhZ3Mgd2VyZSBzZXQsIHNp
-bmNlIHRoaXMgY29tYmluYXRpb24gaXMNCj4gPiBub3Qgc3VwcG9zZWQgdG8gaGFwcGVuLCBidXQg
-d2FzIG9jY3VycmluZyBpbiB0aGlzIHNjZW5hcmlvLg0KPiA+IA0KPiA+IFNraXAgZnVydGhlciBp
-bnRlcnJ1cHQgaGFuZGxpbmcgYWZ0ZXIgZXJyb3IgZmxhZ3MgYXJlIGRldGVjdGVkIHRvDQo+ID4g
-YXZvaWQNCj4gPiB0aGlzIHByb2JsZW0uDQo+ID4gDQo+ID4gRml4ZXM6IDdmOTkwNmJkN2Y3MiAo
-ImkyYzogeGlpYzogU2VydmljZSBhbGwgaW50ZXJydXB0cyBpbiBpc3IiKQ0KPiA+IFNpZ25lZC1v
-ZmYtYnk6IFJvYmVydCBIYW5jb2NrIDxyb2JlcnQuaGFuY29ja0BjYWxpYW4uY29tPg0KPiANCj4g
-cGxlYXNlIGFkZDoNCj4gDQo+IENjOiA8c3RhYmxlQHZnZXIua2VybmVsLm9yZz4gIyB2NC4zKw0K
-PiANCg0KQ2FuIGFkZCBmb3IgYSB2MiAtIGFsdGhvdWdoIHdpdGggdGhlIEZpeGVzIHRhZyBpdCB3
-b3VsZCBtb3N0IGxpa2VseSBiZQ0KcGlja2VkIHVwIGZvciBzdGFibGUgYW55d2F5Li4NCg0KPiA+
-IC0tLQ0KPiA+IMKgZHJpdmVycy9pMmMvYnVzc2VzL2kyYy14aWljLmMgfCAyICsrDQo+ID4gwqAx
-IGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspDQo+ID4gDQo+ID4gZGlmZiAtLWdpdCBhL2Ry
-aXZlcnMvaTJjL2J1c3Nlcy9pMmMteGlpYy5jDQo+ID4gYi9kcml2ZXJzL2kyYy9idXNzZXMvaTJj
-LXhpaWMuYw0KPiA+IGluZGV4IDhhM2Q5ODE3Y2I0MS4uZWU2ZWRjOTYzZGVhIDEwMDY0NA0KPiA+
-IC0tLSBhL2RyaXZlcnMvaTJjL2J1c3Nlcy9pMmMteGlpYy5jDQo+ID4gKysrIGIvZHJpdmVycy9p
-MmMvYnVzc2VzL2kyYy14aWljLmMNCj4gPiBAQCAtNzIxLDYgKzcyMSw4IEBAIHN0YXRpYyBpcnFy
-ZXR1cm5fdCB4aWljX3Byb2Nlc3MoaW50IGlycSwgdm9pZA0KPiA+ICpkZXZfaWQpDQo+ID4gwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHdha2V1cF9yZXEgPSAxOw0K
-PiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB3YWtldXBfY29k
-ZSA9IFNUQVRFX0VSUk9SOw0KPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIH0NCj4gPiAr
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIC8qIGRvbid0IHRyeSB0byBoYW5kbGUgb3RoZXIgZXZl
-bnRzICovDQo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBnb3RvIG91dDsNCj4gDQo+IHdo
-eSBkb24ndCB3ZSBoYXZlIGdvdG8ncyBhZnRlciBldmVyeSBpcnEgZXZhbHVhdGlvbiBidXQgb25s
-eQ0KPiBoZXJlPyBEbyB0aGUgaXNzdWVzIHlvdSBtZW50aW9uZWQgaGFwcGVuIG9sbnkgaW4gdGhp
-cyBwYXJ0aWN1bGFyDQo+IGVycm9yIGNhc2U/DQo+IA0KDQpBcyBmYXIgYXMgSSBjYW4gdGVsbCwg
-eWVzLiBGb3IgZXhhbXBsZSB5b3UgY291bGQgbGVnaXRpbWF0ZWx5IGhhdmUNClhJSUNfSU5UUl9U
-WF9FTVBUWV9NQVNLIGFuZCBYSUlDX0lOVFJfQk5CX01BU0sgYm90aCBiZWluZyBoYW5kbGVkLiBU
-aGUNCmVycm9yIGNhc2UgaXMgc3BlY2lhbCBhcyB3ZSBlbmQgdXAgcmVzZXR0aW5nIHRoZSBjb250
-cm9sbGVyLCBzbyBpdA0KZG9lc24ndCBtYWtlIHNlbnNlIHRvIHRyeSB0byBjb250aW51ZSB3aXRo
-IHRoZSByZXN0IG9mIHRoZSB0cmFuc2FjdGlvbg0Kd2hpbGUgYWxzbyBjb21wbGV0aW5nIGl0IHdp
-dGggYW4gZXJyb3IuDQoNCj4gVGhhbmtzLA0KPiBBbmRpDQo+IA0KPiA+IMKgwqDCoMKgwqAgfQ0K
-PiA+IMKgwqDCoMKgwqAgaWYgKHBlbmQgJiBYSUlDX0lOVFJfUlhfRlVMTF9NQVNLKSB7DQo+ID4g
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgLyogUmVjZWl2ZSByZWdpc3Rlci9GSUZPIGlzIGZ1
-bGwgKi8NCj4gPiAtLQ0KPiA+IDIuNDAuMQ0KPiA+IA0KDQotLSANClJvYmVydCBIYW5jb2NrIDxy
-b2JlcnQuaGFuY29ja0BjYWxpYW4uY29tPg0K
+On Mon, 5 Jun 2023 22:11:52 -0700 (PDT)
+Hugh Dickins <hughd@google.com> wrote:
+
+> On Sun, 28 May 2023, Hugh Dickins wrote:
+> 
+> > Add s390-specific pte_free_defer(), to call pte_free() via call_rcu().
+> > pte_free_defer() will be called inside khugepaged's retract_page_tables()
+> > loop, where allocating extra memory cannot be relied upon.  This precedes
+> > the generic version to avoid build breakage from incompatible pgtable_t.
+> > 
+> > This version is more complicated than others: because page_table_free()
+> > needs to know which fragment is being freed, and which mm to link it to.
+> > 
+> > page_table_free()'s fragment handling is clever, but I could too easily
+> > break it: what's done here in pte_free_defer() and pte_free_now() might
+> > be better integrated with page_table_free()'s cleverness, but not by me!
+> > 
+> > By the time that page_table_free() gets called via RCU, it's conceivable
+> > that mm would already have been freed: so mmgrab() in pte_free_defer()
+> > and mmdrop() in pte_free_now().  No, that is not a good context to call
+> > mmdrop() from, so make mmdrop_async() public and use that.  
+> 
+> But Matthew Wilcox quickly pointed out that sharing one page->rcu_head
+> between multiple page tables is tricky: something I knew but had lost
+> sight of.  So the powerpc and s390 patches were broken: powerpc fairly
+> easily fixed, but s390 more painful.
+> 
+> In https://lore.kernel.org/linux-s390/20230601155751.7c949ca4@thinkpad-T15/
+> On Thu, 1 Jun 2023 15:57:51 +0200
+> Gerald Schaefer <gerald.schaefer@linux.ibm.com> wrote:
+> > 
+> > Yes, we have 2 pagetables in one 4K page, which could result in same
+> > rcu_head reuse. It might be possible to use the cleverness from our
+> > page_table_free() function, e.g. to only do the call_rcu() once, for
+> > the case where both 2K pagetable fragments become unused, similar to
+> > how we decide when to actually call __free_page().
+> > 
+> > However, it might be much worse, and page->rcu_head from a pagetable
+> > page cannot be used at all for s390, because we also use page->lru
+> > to keep our list of free 2K pagetable fragments. I always get confused
+> > by struct page unions, so not completely sure, but it seems to me that
+> > page->rcu_head would overlay with page->lru, right?  
+> 
+> Sigh, yes, page->rcu_head overlays page->lru.  But (please correct me if
+> I'm wrong) I think that s390 could use exactly the same technique for
+> its list of free 2K pagetable fragments as it uses for its list of THP
+> "deposited" pagetable fragments, over in arch/s390/mm/pgtable.c: use
+> the first two longs of the page table itself for threading the list.
+
+Nice idea, I think that could actually work, since we only need the empty
+2K halves on the list. So it should be possible to store the list_head
+inside those.
+
+> 
+> And while it could use third and fourth longs instead, I don't see any
+> need for that: a deposited pagetable has been allocated, so would not
+> be on the list of free fragments.
+
+Correct, that should not interfere.
+
+> 
+> Below is one of the grossest patches I've ever posted: gross because
+> it's a rushed attempt to see whether that is viable, while it would take
+> me longer to understand all the s390 cleverness there (even though the
+> PP AA commentary above page_table_alloc() is excellent).
+
+Sounds fair, this is also one of the grossest code we have, which is also
+why Alexander added the comment. I guess we could need even more comments
+inside the code, as it still confuses me more than it should.
+
+Considering that, you did remarkably well. Your patch seems to work fine,
+at least it survived some LTP mm tests. I will also add it to our CI runs,
+to give it some more testing. Will report tomorrow when it broke something.
+See also below for some patch comments.
+
+> 
+> I'm hoping the use of page->lru in arch/s390/mm/gmap.c is disjoint.
+> And cmma_init_nodat()? Ah, that's __init so I guess disjoint.
+
+cmma_init_nodat() should be disjoint, not only because it is __init,
+but also because it explicitly skips pagetable pages, so it should
+never touch page->lru of those.
+
+Not very familiar with the gmap code, it does look disjoint, and we should
+also use complete 4K pages for pagetables instead of 2K fragments there,
+but Christian or Claudio should also have a look.
+
+> 
+> Gerald, s390 folk: would it be possible for you to give this
+> a try, suggest corrections and improvements, and then I can make it
+> a separate patch of the series; and work on avoiding concurrent use
+> of the rcu_head by pagetable fragment buddies (ideally fit in with
+> the scheme already there, maybe DD bits to go along with the PP AA).
+
+It feels like it could be possible to not only avoid the double
+rcu_head, but also avoid passing over the mm via page->pt_mm.
+I.e. have pte_free_defer(), which has the mm, do all the checks and
+list updates that page_table_free() does, for which we need the mm.
+Then just skip the pgtable_pte_page_dtor() + __free_page() at the end,
+and do call_rcu(pte_free_now) instead. The pte_free_now() could then
+just do _dtor/__free_page similar to the generic version.
+
+I must admit that I still have no good overview of the "big picture"
+here, and especially if this approach would still fit in. Probably not,
+as the to-be-freed pagetables would still be accessible, but not really
+valid, if we added them back to the list, with list_heads inside them.
+So maybe call_rcu() has to be done always, and not only for the case
+where the whole 4K page becomes free, then we probably cannot do w/o
+passing over the mm for proper list handling.
+
+Ah, and they could also be re-used, once they are back on the list,
+which will probably not go well. Is that what you meant with DD bits,
+i.e. mark such fragments to prevent re-use? Smells a bit like the
+"pending purge"
+
+> 
+> Why am I even asking you to move away from page->lru: why don't I
+> thread s390's pte_free_defer() pagetables like THP's deposit does?
+> I cannot, because the deferred pagetables have to remain accessible
+> as valid pagetables, until the RCU grace period has elapsed - unless
+> all the list pointers would appear as pte_none(), which I doubt.
+
+Yes, only empty and invalid PTEs will appear as pte_none(), i.e. entries
+that contain only 0x400.
+
+Ok, I guess that also explains why the approach mentioned above,
+to avoid passing over the mm and do the list handling already in
+pte_free_defer(), will not be so easy or possible at all.
+
+> 
+> (That may limit our possibilities with the deposited pagetables in
+> future: I can imagine them too wanting to remain accessible as valid
+> pagetables.  But that's not needed by this series, and s390 only uses
+> deposit/withdraw for anon THP; and some are hoping that we might be
+> able to move away from deposit/withdraw altogther - though powerpc's
+> special use will make that more difficult.)
+> 
+> Thanks!
+> Hugh
+> 
+> --- 6.4-rc5/arch/s390/mm/pgalloc.c
+> +++ linux/arch/s390/mm/pgalloc.c
+> @@ -232,6 +232,7 @@ void page_table_free_pgste(struct page *
+>   */
+>  unsigned long *page_table_alloc(struct mm_struct *mm)
+>  {
+> +	struct list_head *listed;
+>  	unsigned long *table;
+>  	struct page *page;
+>  	unsigned int mask, bit;
+> @@ -241,8 +242,8 @@ unsigned long *page_table_alloc(struct m
+>  		table = NULL;
+>  		spin_lock_bh(&mm->context.lock);
+>  		if (!list_empty(&mm->context.pgtable_list)) {
+> -			page = list_first_entry(&mm->context.pgtable_list,
+> -						struct page, lru);
+> +			listed = mm->context.pgtable_list.next;
+> +			page = virt_to_page(listed);
+>  			mask = atomic_read(&page->_refcount) >> 24;
+>  			/*
+>  			 * The pending removal bits must also be checked.
+> @@ -259,9 +260,12 @@ unsigned long *page_table_alloc(struct m
+>  				bit = mask & 1;		/* =1 -> second 2K */
+>  				if (bit)
+>  					table += PTRS_PER_PTE;
+> +				BUG_ON(table != (unsigned long *)listed);
+>  				atomic_xor_bits(&page->_refcount,
+>  							0x01U << (bit + 24));
+> -				list_del(&page->lru);
+> +				list_del(listed);
+> +				set_pte((pte_t *)&table[0], __pte(_PAGE_INVALID));
+> +				set_pte((pte_t *)&table[1], __pte(_PAGE_INVALID));
+>  			}
+>  		}
+>  		spin_unlock_bh(&mm->context.lock);
+> @@ -288,8 +292,9 @@ unsigned long *page_table_alloc(struct m
+>  		/* Return the first 2K fragment of the page */
+>  		atomic_xor_bits(&page->_refcount, 0x01U << 24);
+>  		memset64((u64 *)table, _PAGE_INVALID, 2 * PTRS_PER_PTE);
+> +		listed = (struct list head *)(table + PTRS_PER_PTE);
+
+Missing "_" in "struct list head"
+
+>  		spin_lock_bh(&mm->context.lock);
+> -		list_add(&page->lru, &mm->context.pgtable_list);
+> +		list_add(listed, &mm->context.pgtable_list);
+>  		spin_unlock_bh(&mm->context.lock);
+>  	}
+>  	return table;
+> @@ -310,6 +315,7 @@ static void page_table_release_check(str
+>  
+>  void page_table_free(struct mm_struct *mm, unsigned long *table)
+>  {
+> +	struct list_head *listed;
+>  	unsigned int mask, bit, half;
+>  	struct page *page;
+
+Not sure if "reverse X-mas" is still part of any style guidelines,
+but I still am a big fan of that :-). Although the other code in that
+file is also not consistently using it ...
+
+>  
+> @@ -325,10 +331,24 @@ void page_table_free(struct mm_struct *m
+>  		 */
+>  		mask = atomic_xor_bits(&page->_refcount, 0x11U << (bit + 24));
+>  		mask >>= 24;
+> -		if (mask & 0x03U)
+> -			list_add(&page->lru, &mm->context.pgtable_list);
+> -		else
+> -			list_del(&page->lru);
+> +		if (mask & 0x03U) {
+> +			listed = (struct list_head *)table;
+> +			list_add(listed, &mm->context.pgtable_list);
+> +		} else {
+> +			/*
+> +			 * Get address of the other page table sharing the page.
+> +			 * There are sure to be MUCH better ways to do all this!
+> +			 * But I'm rushing, while trying to keep to the obvious.
+> +			 */
+> +			listed = (struct list_head *)(table + PTRS_PER_PTE);
+> +			if (virt_to_page(listed) != page) {
+> +				/* sizeof(*listed) is twice sizeof(*table) */
+> +				listed -= PTRS_PER_PTE;
+> +			}
+
+Bitwise XOR with 0x800 should do the trick here, i.e. give you the address
+of the other 2K half, like this:
+
+			listed = (struct list_head *)((unsigned long) table ^ 0x800UL);
+
+> +			list_del(listed);
+> +			set_pte((pte_t *)&listed->next, __pte(_PAGE_INVALID));
+> +			set_pte((pte_t *)&listed->prev, __pte(_PAGE_INVALID));
+> +		}
+>  		spin_unlock_bh(&mm->context.lock);
+>  		mask = atomic_xor_bits(&page->_refcount, 0x10U << (bit + 24));
+>  		mask >>= 24;
+> @@ -349,6 +369,7 @@ void page_table_free(struct mm_struct *m
+>  void page_table_free_rcu(struct mmu_gather *tlb, unsigned long *table,
+>  			 unsigned long vmaddr)
+>  {
+> +	struct list_head *listed;
+>  	struct mm_struct *mm;
+>  	struct page *page;
+>  	unsigned int bit, mask;
+> @@ -370,10 +391,24 @@ void page_table_free_rcu(struct mmu_gath
+>  	 */
+>  	mask = atomic_xor_bits(&page->_refcount, 0x11U << (bit + 24));
+>  	mask >>= 24;
+> -	if (mask & 0x03U)
+> -		list_add_tail(&page->lru, &mm->context.pgtable_list);
+> -	else
+> -		list_del(&page->lru);
+> +	if (mask & 0x03U) {
+> +		listed = (struct list_head *)table;
+> +		list_add_tail(listed, &mm->context.pgtable_list);
+> +	} else {
+> +		/*
+> +		 * Get address of the other page table sharing the page.
+> +		 * There are sure to be MUCH better ways to do all this!
+> +		 * But I'm rushing, and trying to keep to the obvious.
+> +		 */
+> +		listed = (struct list_head *)(table + PTRS_PER_PTE);
+> +		if (virt_to_page(listed) != page) {
+> +			/* sizeof(*listed) is twice sizeof(*table) */
+> +			listed -= PTRS_PER_PTE;
+> +		}
+
+Same as above.
+
+> +		list_del(listed);
+> +		set_pte((pte_t *)&listed->next, __pte(_PAGE_INVALID));
+> +		set_pte((pte_t *)&listed->prev, __pte(_PAGE_INVALID));
+> +	}
+>  	spin_unlock_bh(&mm->context.lock);
+>  	table = (unsigned long *) ((unsigned long) table | (0x01U << bit));
+>  	tlb_remove_table(tlb, table);
+
+Reviewed-by: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
