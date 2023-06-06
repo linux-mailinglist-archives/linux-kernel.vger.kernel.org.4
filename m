@@ -2,70 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C4A27249FB
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 19:17:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 352C07249F2
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 19:15:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238594AbjFFRRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 13:17:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58372 "EHLO
+        id S238294AbjFFRPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 13:15:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238366AbjFFRRg (ORCPT
+        with ESMTP id S238665AbjFFRPF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 13:17:36 -0400
-Received: from sender-of-o51.zoho.in (sender-of-o51.zoho.in [103.117.158.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9747610CB
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 10:17:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1686071812; cv=none; 
-        d=zohomail.in; s=zohoarc; 
-        b=ATrlHIcqcLpy1PBiRvhF7ACfyIJDrqdLx7VuzKLtLADdGOPy2KtrBQmZpkVvmFrCp+xhPpTnSLWxeJJbmfUJMjS7hFvOJ2V1bRhtLnl3nfDtRO2PPqnV/Sl9DVpgpIRO8JFsSjq3rPOCsdexYF/of3gPyw3kmEmeclooFO2benI=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
-        t=1686071812; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=LTxuxhAkDUTr7cvt9W2R40ESQVovz8E2KvQjnCTzwmk=; 
-        b=d9jAGnc7PtqUmZhZZRmrtXcVp/0zdeiopoa1q1ktD6WxUVgD19w1lFWPbQRBwKIy5HzaKX+b04S50A+zRL5AZ+KubPNXihhtIP51FUfi8bYEWcd3nQtPKAV7Dzp+OhLJKXTig0ZeOSUm+FnGdBP1tHOmSMY1qLicdKyWajKF120=
-ARC-Authentication-Results: i=1; mx.zohomail.in;
-        dkim=pass  header.i=siddh.me;
-        spf=pass  smtp.mailfrom=code@siddh.me;
-        dmarc=pass header.from=<code@siddh.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1686071812;
-        s=zmail; d=siddh.me; i=code@siddh.me;
-        h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=LTxuxhAkDUTr7cvt9W2R40ESQVovz8E2KvQjnCTzwmk=;
-        b=t5SOgODmJS0mdusxjbfc+2BsRCB66NPFEZuH/oG7AY0QbnXJ2/h/fxzA5qRwwBwr
-        ExzAcXtHTkz5O5xI2ZjLunbCzmi23ZMSKQQ1KwQk6S4tdC/yKAVCAIaEE/KJ0ya2hcl
-        vxGIULlPy5o8LQaJ65f7Yk7PaD/67TchBMtAWyog=
-Received: from mail.zoho.in by mx.zoho.in
-        with SMTP id 1686071671472920.9108657396287; Tue, 6 Jun 2023 22:44:31 +0530 (IST)
-Date:   Tue, 06 Jun 2023 22:44:31 +0530
-From:   Siddh Raman Pant <code@siddh.me>
-To:     "Laurent Pinchart" <laurent.pinchart@ideasonboard.com>
-Cc:     "Maarten Lankhorst" <maarten.lankhorst@linux.intel.com>,
-        "Maxime Ripard" <mripard@kernel.org>,
-        "Thomas Zimmermann" <tzimmermann@suse.de>,
-        "David Airlie" <airlied@gmail.com>,
-        "Daniel Vetter" <daniel@ffwll.ch>,
-        "Andrzej Hajda" <andrzej.hajda@intel.com>,
-        "Neil Armstrong" <neil.armstrong@linaro.org>,
-        "Robert Foss" <rfoss@kernel.org>,
-        "Jonas Karlman" <jonas@kwiboo.se>,
-        "Jernej Skrabec" <jernej.skrabec@gmail.com>,
-        "Jani Nikula" <jani.nikula@linux.intel.com>,
-        "dri-devel" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel" <linux-kernel@vger.kernel.org>,
-        "Suraj Upadhyay" <usuraj35@gmail.com>
-Message-ID: <18891b3faa3.57976e1f126744.7700241596970251743@siddh.me>
-In-Reply-To: <20230606145706.GE7234@pendragon.ideasonboard.com>
-References: <cover.1686047727.git.code@siddh.me>
- <3b880e4a20b7952b257b896900256fcfff14b153.1686047727.git.code@siddh.me> <20230606145706.GE7234@pendragon.ideasonboard.com>
-Subject: Re: [PATCH v9 6/8] drm: Remove usage of deprecated DRM_DEBUG
+        Tue, 6 Jun 2023 13:15:05 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2980B18E;
+        Tue,  6 Jun 2023 10:15:03 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 356HEiRw057354;
+        Tue, 6 Jun 2023 12:14:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1686071684;
+        bh=/+aT73LDBXI0ipR5eTaYxAJSmTBn/FoWO8VadiHta7o=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=nuzWGhJt2mnC5QMOipag053U6Myld9lAy/iX/OXKDgY6JkytRvgB9/4b4F5j4OIqR
+         mQz1whstvVMShqAC9K8oZw22yjpojwUV38AR3gZH62IQ4kFNPBMJhQCzEaI3RBFEjr
+         Q2RgW0QbN2ew6fbJGlQROA+Jil9SPYT6kjA3Zhz8=
+Received: from DLEE110.ent.ti.com (dlee110.ent.ti.com [157.170.170.21])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 356HEilF047665
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 6 Jun 2023 12:14:44 -0500
+Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 6
+ Jun 2023 12:14:44 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 6 Jun 2023 12:14:44 -0500
+Received: from uda0132425.dhcp.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 356HEeY3099045;
+        Tue, 6 Jun 2023 12:14:41 -0500
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, Nishanth Menon <nm@ti.com>
+CC:     Vignesh Raghavendra <vigneshr@ti.com>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Tero Kristo <kristo@kernel.org>,
+        Neha Malcom Francis <n-francis@ti.com>,
+        Nikhil M Jain <n-jain1@ti.com>, Tom Rini <trini@konsulko.com>
+Subject: Re: [PATCH 00/10] arm64: dts: ti: k3-am64: Add missing properties used in u-boot
+Date:   Tue, 6 Jun 2023 22:44:33 +0530
+Message-ID: <168607161906.2072651.15382306818493912009.b4-ty@ti.com>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230414073328.381336-1-nm@ti.com>
+References: <20230414073328.381336-1-nm@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-Importance: Medium
-User-Agent: Zoho Mail
-X-Mailer: Zoho Mail
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,61 +69,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 06 Jun 2023 20:27:06 +0530, Laurent Pinchart wrote:
-> Hi Siddh,
+Hi Nishanth Menon,
+
+On Fri, 14 Apr 2023 02:33:18 -0500, Nishanth Menon wrote:
+> while attempting to cleanup u-boot, I noticed that u-boot had some
+> additional nodes that were'nt in kernel.org, and this makes syncing the
+> kernel.org patches back to u-boot hard.
 > 
-> Thank you for the patch.
-
-Anytime :)
-
-> >       if (!ctx_entry) {
-> > -             DRM_DEBUG("out of memory\n");
-> > +             drm_dbg_core(dev, "out of memory\n");
+> So, sync the same.
 > 
-> This message could also be dropped.
-
-Okay.
-
-> > -     DRM_DEBUG("\n");
-> > +     drm_dbg_core(dev, "\n");
+> Bootlogs: (SK and evm)
+> https://gist.github.com/nmenon/6b09f55251225d3f3cce076c32a33bba
 > 
-> This message seems of dubious value :-) Maybe you could drop it in a
-> patch on top of this series ?
+> [...]
 
-Okay.
+I have applied the following to branch ti-k3-dts-next on [1].
+Thank you!
 
-> > -     DRM_DEBUG("\n");
-> > +     drm_dbg_core(NULL, "\n");
-> 
-> This is even worse :-) The next two messages are also fairly useless,
-> they should be expanded, or dropped.
+[01/10] arm64: dts: ti: k3-am64: Add general purpose timers
+        commit: 9972b45776aba937d0db67f8080ec627a924f56e
+[02/10] arm64: dts: ti: k3-am642-sk: Fix mmc1 pinmux
+        commit: 744545ffec14f74f26f57828afa685f6f4eadd9e
+[03/10] arm64: dts: ti: k3-am642-sk: Enable main_i2c0 and eeprom
+        commit: 1d79ca01e62096e87686244cdf4864f338ccd200
+[04/10] arm64: dts: ti: k3-am642-sk: Describe main_uart1 pins
+        commit: c8da2f207168d2c93f7fa7bff92f6b395c342e4a
+[05/10] arm64: dts: ti: k3-am642-sk: Rename regulator node name
+        commit: 826b6679bd08694ad7a830eb30608c3e5a780941
+[06/10] arm64: dts: ti: k3-am642-evm: Enable main_i2c0 and eeprom
+        commit: cf3b25bc3cc0b66cfaae9614620228a5c2246ecb
+[07/10] arm64: dts: ti: k3-am642-evm: Describe main_uart1 pins
+        commit: e3e1d9ab65ebbd95907b6951637cd6809c69afc7
+[08/10] arm64: dts: ti: k3-am642-evm: Rename regulator node name
+        commit: 61ee5572075dfc16b480103763091b603cb06aa1
+[09/10] arm64: dts: ti: k3-am642-evm: Add VTT GPIO regulator for DDR
+        commit: aca16cefdd25cdcd284212f840b70b07101f2548
+[10/10] arm64: dts: ti: k3-am642-sk|evm: Drop bootargs, add aliases
+        commit: bb3d657872215942cf87dd194904a7543fce3cc4
 
-Okay.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent up the chain during
+the next merge window (or sooner if it is a relevant bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-> > -     DRM_DEBUG("\n");
-> > +   drm_dbg_core(dev, "\n");
-> 
-> Ditto.
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-Okay.
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-> > +   drm_dbg_core(dev, "\n");
-> > +
-> 
-> Same, and the two messages below too.
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
-Okay.
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
+--
+Vignesh
 
-> > -   DRM_DEBUG("\n");
-> > +     drm_dbg_core(dev, "\n");
-> 
-> Here too.
-
-Okay.
-
-> With the commit subject fixed,
-> 
-> Reviewed-by: Laurent Pinchart laurent.pinchart+renesas@ideasonboard.com>
-
-Thanks,
-Siddh
