@@ -2,20 +2,20 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2310724D5E
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 21:43:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 365B5724D67
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 21:44:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239556AbjFFTnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 15:43:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33966 "EHLO
+        id S239501AbjFFTnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 15:43:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239174AbjFFTmn (ORCPT
+        with ESMTP id S239175AbjFFTmn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 6 Jun 2023 15:42:43 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F301810EC;
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA7CF10D7;
         Tue,  6 Jun 2023 12:42:41 -0700 (PDT)
-Date:   Tue, 06 Jun 2023 19:42:37 -0000
+Date:   Tue, 06 Jun 2023 19:42:38 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1686080558;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=j/QzS4DZr/MAWlGkTC1jPLmonujE+Jd/Z/6pz1neILU=;
-        b=QpayI/7xqooY9+M2GYnD8AY67UrGJIKaOIo4oyXwhvsXM27xf2ReUpk3QQfCQasXlgdgPa
-        NTxxeae92h3tfeMjXz2Z5k6WzlCjFGEC5pzAgxrhBsg5Z+B3SB5A/Zvc90hRaATCVMXUSa
-        KWsEJhEOR8tRtoXRmX8ay53/cDQ7WagVA1GE36jhMtQ+aM+jExxkC/8aDndUv22asurFT7
-        2EjC38tTKlbC8UmTze1pDNMTmjCyWLe63rIGkFZDzTBKAJW7vrzyd33Szp6RNSYo7Z6IP4
-        NMNKlVhxyAkl81oiY/lyv4vOx1ms5FPHlnQUC61B1ntzvHmrPKmvcFu/dN2zaA==
+        bh=e6EOkEwQXm5M9IGtvC3fIaAOfkXDjgMAZeCndjMMDIs=;
+        b=E50ZMF/7MYUzMzPpt3QKGMbRD5JZJovv0JOy2W6G42TcT/i82ojv4PkWYzSfJyp56vA+16
+        spJzwz410ZUFeHHcASt0Ep5IUHgAAbcTHS5+4uiDZTkzVtf49bam3W6HZoBl6h0C38GOn3
+        CMf3b+qH6WPqJGV5cfJ9V2hFJSyIYS07bh1S2TQGDfyoseQQAV0qMKnO9kwuqW7B50Xh47
+        PYmtLh3GzPPkyw6uCuUwwN3NGR/SsCRwxJWO/FCEYSD+TBtLWY0SbrU49kHX2UlsB6NyF0
+        a/kzaOeUOl4rAAPPmZMyOq3Zx1DuCLbpjIi+txMtCdAp5r2G52Aes+VbpTKK9w==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1686080558;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,24 +36,21 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=j/QzS4DZr/MAWlGkTC1jPLmonujE+Jd/Z/6pz1neILU=;
-        b=llKXb/Z0YKZYgZscsNP+pc3KEIlk/1hAb6UN/68E4MSW192UDjT3PfjylbVYCqhCOGR+lq
-        vJs1E7KObBSWunCA==
-From:   "tip-bot2 for Tom Lendacky" <tip-bot2@linutronix.de>
+        bh=e6EOkEwQXm5M9IGtvC3fIaAOfkXDjgMAZeCndjMMDIs=;
+        b=oW7WzaGOvCxlxkyTdzPaNzBuSJgUt+E9IxxnHJi9eMXqNkMCC8mLpmz8zEGENp9ACE1WQo
+        CexNF83d7om4xfAg==
+From:   "tip-bot2 for Kirill A. Shutemov" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cc] x86/sev: Fix calculation of end address based on number
- of pages
-Cc:     Tom Lendacky <thomas.lendacky@amd.com>,
+Subject: [tip: x86/cc] x86/tdx: Add unaccepted memory support
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
         "Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: =?utf-8?q?=3C6a6e4eea0e1414402bac747744984fa4e9c01bb6=2E16860?=
- =?utf-8?q?63086=2Egit=2Ethomas=2Elendacky=40amd=2Ecom=3E?=
-References: =?utf-8?q?=3C6a6e4eea0e1414402bac747744984fa4e9c01bb6=2E168606?=
- =?utf-8?q?3086=2Egit=2Ethomas=2Elendacky=40amd=2Ecom=3E?=
+In-Reply-To: <20230606142637.5171-10-kirill.shutemov@linux.intel.com>
+References: <20230606142637.5171-10-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
-Message-ID: <168608055767.404.11563725377926262842.tip-bot2@tip-bot2>
+Message-ID: <168608055806.404.13974110132045536621.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -70,133 +67,399 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/cc branch of tip:
 
-Commit-ID:     5dee19b6b2b194216919b99a1f5af2949a754016
-Gitweb:        https://git.kernel.org/tip/5dee19b6b2b194216919b99a1f5af2949a754016
-Author:        Tom Lendacky <thomas.lendacky@amd.com>
-AuthorDate:    Tue, 06 Jun 2023 09:51:22 -05:00
+Commit-ID:     75d090fd167acab4d7eda7e2b65729e877c0fd64
+Gitweb:        https://git.kernel.org/tip/75d090fd167acab4d7eda7e2b65729e877c0fd64
+Author:        Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+AuthorDate:    Tue, 06 Jun 2023 17:26:37 +03:00
 Committer:     Borislav Petkov (AMD) <bp@alien8.de>
-CommitterDate: Tue, 06 Jun 2023 18:27:20 +02:00
+CommitterDate: Tue, 06 Jun 2023 18:25:57 +02:00
 
-x86/sev: Fix calculation of end address based on number of pages
+x86/tdx: Add unaccepted memory support
 
-When calculating an end address based on an unsigned int number of pages,
-any value greater than or equal to 0x100000 that is shift PAGE_SHIFT bits
-results in a 0 value, resulting in an invalid end address. Change the
-number of pages variable in various routines from an unsigned int to an
-unsigned long to calculate the end address correctly.
+Hookup TDX-specific code to accept memory.
 
-Fixes: 5e5ccff60a29 ("x86/sev: Add helper for validating pages in early enc attribute changes")
-Fixes: dc3f3d2474b8 ("x86/mm: Validate memory when changing the C-bit")
-Signed-off-by: Tom Lendacky <thomas.lendacky@amd.com>
+Accepting the memory is done with ACCEPT_PAGE module call on every page
+in the range. MAP_GPA hypercall is not required as the unaccepted memory
+is considered private already.
+
+Extract the part of tdx_enc_status_changed() that does memory acceptance
+in a new helper. Move the helper tdx-shared.c. It is going to be used by
+both main kernel and decompressor.
+
+  [ bp: Fix the INTEL_TDX_GUEST=y, KVM_GUEST=n build. ]
+
+Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Link: https://lore.kernel.org/r/6a6e4eea0e1414402bac747744984fa4e9c01bb6.1686063086.git.thomas.lendacky@amd.com
+Link: https://lore.kernel.org/r/20230606142637.5171-10-kirill.shutemov@linux.intel.com
 ---
- arch/x86/include/asm/sev.h | 16 ++++++++--------
- arch/x86/kernel/sev.c      | 14 +++++++-------
- 2 files changed, 15 insertions(+), 15 deletions(-)
+ arch/x86/Kconfig                         |  2 +-
+ arch/x86/boot/compressed/Makefile        |  2 +-
+ arch/x86/boot/compressed/error.c         | 19 ++++++-
+ arch/x86/boot/compressed/error.h         |  1 +-
+ arch/x86/boot/compressed/mem.c           | 35 ++++++++++-
+ arch/x86/boot/compressed/tdx-shared.c    |  2 +-
+ arch/x86/coco/tdx/Makefile               |  2 +-
+ arch/x86/coco/tdx/tdx-shared.c           | 71 +++++++++++++++++++++++-
+ arch/x86/coco/tdx/tdx.c                  | 70 +-----------------------
+ arch/x86/include/asm/shared/tdx.h        |  2 +-
+ arch/x86/include/asm/tdx.h               |  2 +-
+ arch/x86/include/asm/unaccepted_memory.h | 24 ++++++++-
+ 12 files changed, 162 insertions(+), 70 deletions(-)
+ create mode 100644 arch/x86/boot/compressed/tdx-shared.c
+ create mode 100644 arch/x86/coco/tdx/tdx-shared.c
+ create mode 100644 arch/x86/include/asm/unaccepted_memory.h
 
-diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
-index 13dc2a9..7ca5c9e 100644
---- a/arch/x86/include/asm/sev.h
-+++ b/arch/x86/include/asm/sev.h
-@@ -192,12 +192,12 @@ struct snp_guest_request_ioctl;
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 53bab12..5c72067 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -884,9 +884,11 @@ config INTEL_TDX_GUEST
+ 	bool "Intel TDX (Trust Domain Extensions) - Guest Support"
+ 	depends on X86_64 && CPU_SUP_INTEL
+ 	depends on X86_X2APIC
++	depends on EFI_STUB
+ 	select ARCH_HAS_CC_PLATFORM
+ 	select X86_MEM_ENCRYPT
+ 	select X86_MCE
++	select UNACCEPTED_MEMORY
+ 	help
+ 	  Support running as a guest under Intel TDX.  Without this support,
+ 	  the guest kernel can not boot or run under TDX.
+diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
+index cc49781..b13a580 100644
+--- a/arch/x86/boot/compressed/Makefile
++++ b/arch/x86/boot/compressed/Makefile
+@@ -106,7 +106,7 @@ ifdef CONFIG_X86_64
+ endif
  
- void setup_ghcb(void);
- void __init early_snp_set_memory_private(unsigned long vaddr, unsigned long paddr,
--					 unsigned int npages);
-+					 unsigned long npages);
- void __init early_snp_set_memory_shared(unsigned long vaddr, unsigned long paddr,
--					unsigned int npages);
-+					unsigned long npages);
- void __init snp_prep_memory(unsigned long paddr, unsigned int sz, enum psc_op op);
--void snp_set_memory_shared(unsigned long vaddr, unsigned int npages);
--void snp_set_memory_private(unsigned long vaddr, unsigned int npages);
-+void snp_set_memory_shared(unsigned long vaddr, unsigned long npages);
-+void snp_set_memory_private(unsigned long vaddr, unsigned long npages);
- void snp_set_wakeup_secondary_cpu(void);
- bool snp_init(struct boot_params *bp);
- void __init __noreturn snp_abort(void);
-@@ -212,12 +212,12 @@ static inline int pvalidate(unsigned long vaddr, bool rmp_psize, bool validate) 
- static inline int rmpadjust(unsigned long vaddr, bool rmp_psize, unsigned long attrs) { return 0; }
- static inline void setup_ghcb(void) { }
- static inline void __init
--early_snp_set_memory_private(unsigned long vaddr, unsigned long paddr, unsigned int npages) { }
-+early_snp_set_memory_private(unsigned long vaddr, unsigned long paddr, unsigned long npages) { }
- static inline void __init
--early_snp_set_memory_shared(unsigned long vaddr, unsigned long paddr, unsigned int npages) { }
-+early_snp_set_memory_shared(unsigned long vaddr, unsigned long paddr, unsigned long npages) { }
- static inline void __init snp_prep_memory(unsigned long paddr, unsigned int sz, enum psc_op op) { }
--static inline void snp_set_memory_shared(unsigned long vaddr, unsigned int npages) { }
--static inline void snp_set_memory_private(unsigned long vaddr, unsigned int npages) { }
-+static inline void snp_set_memory_shared(unsigned long vaddr, unsigned long npages) { }
-+static inline void snp_set_memory_private(unsigned long vaddr, unsigned long npages) { }
- static inline void snp_set_wakeup_secondary_cpu(void) { }
- static inline bool snp_init(struct boot_params *bp) { return false; }
- static inline void snp_abort(void) { }
-diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
-index b031244..108bbae 100644
---- a/arch/x86/kernel/sev.c
-+++ b/arch/x86/kernel/sev.c
-@@ -645,7 +645,7 @@ static u64 __init get_jump_table_addr(void)
- 	return ret;
+ vmlinux-objs-$(CONFIG_ACPI) += $(obj)/acpi.o
+-vmlinux-objs-$(CONFIG_INTEL_TDX_GUEST) += $(obj)/tdx.o $(obj)/tdcall.o
++vmlinux-objs-$(CONFIG_INTEL_TDX_GUEST) += $(obj)/tdx.o $(obj)/tdcall.o $(obj)/tdx-shared.o
+ vmlinux-objs-$(CONFIG_UNACCEPTED_MEMORY) += $(obj)/mem.o
+ 
+ vmlinux-objs-$(CONFIG_EFI) += $(obj)/efi.o
+diff --git a/arch/x86/boot/compressed/error.c b/arch/x86/boot/compressed/error.c
+index c881878..5313c5c 100644
+--- a/arch/x86/boot/compressed/error.c
++++ b/arch/x86/boot/compressed/error.c
+@@ -22,3 +22,22 @@ void error(char *m)
+ 	while (1)
+ 		asm("hlt");
+ }
++
++/* EFI libstub  provides vsnprintf() */
++#ifdef CONFIG_EFI_STUB
++void panic(const char *fmt, ...)
++{
++	static char buf[1024];
++	va_list args;
++	int len;
++
++	va_start(args, fmt);
++	len = vsnprintf(buf, sizeof(buf), fmt, args);
++	va_end(args);
++
++	if (len && buf[len - 1] == '\n')
++		buf[len - 1] = '\0';
++
++	error(buf);
++}
++#endif
+diff --git a/arch/x86/boot/compressed/error.h b/arch/x86/boot/compressed/error.h
+index 1de5821..86fe33b 100644
+--- a/arch/x86/boot/compressed/error.h
++++ b/arch/x86/boot/compressed/error.h
+@@ -6,5 +6,6 @@
+ 
+ void warn(char *m);
+ void error(char *m) __noreturn;
++void panic(const char *fmt, ...) __noreturn __cold;
+ 
+ #endif /* BOOT_COMPRESSED_ERROR_H */
+diff --git a/arch/x86/boot/compressed/mem.c b/arch/x86/boot/compressed/mem.c
+index 69038ed..f04b29f 100644
+--- a/arch/x86/boot/compressed/mem.c
++++ b/arch/x86/boot/compressed/mem.c
+@@ -2,11 +2,44 @@
+ 
+ #include "error.h"
+ #include "misc.h"
++#include "tdx.h"
++#include <asm/shared/tdx.h>
++
++/*
++ * accept_memory() and process_unaccepted_memory() called from EFI stub which
++ * runs before decompresser and its early_tdx_detect().
++ *
++ * Enumerate TDX directly from the early users.
++ */
++static bool early_is_tdx_guest(void)
++{
++	static bool once;
++	static bool is_tdx;
++
++	if (!IS_ENABLED(CONFIG_INTEL_TDX_GUEST))
++		return false;
++
++	if (!once) {
++		u32 eax, sig[3];
++
++		cpuid_count(TDX_CPUID_LEAF_ID, 0, &eax,
++			    &sig[0], &sig[2],  &sig[1]);
++		is_tdx = !memcmp(TDX_IDENT, sig, sizeof(sig));
++		once = true;
++	}
++
++	return is_tdx;
++}
+ 
+ void arch_accept_memory(phys_addr_t start, phys_addr_t end)
+ {
+ 	/* Platform-specific memory-acceptance call goes here */
+-	error("Cannot accept memory");
++	if (early_is_tdx_guest()) {
++		if (!tdx_accept_memory(start, end))
++			panic("TDX: Failed to accept memory\n");
++	} else {
++		error("Cannot accept memory: unknown platform\n");
++	}
  }
  
--static void pvalidate_pages(unsigned long vaddr, unsigned int npages, bool validate)
-+static void pvalidate_pages(unsigned long vaddr, unsigned long npages, bool validate)
- {
- 	unsigned long vaddr_end;
- 	int rc;
-@@ -662,7 +662,7 @@ static void pvalidate_pages(unsigned long vaddr, unsigned int npages, bool valid
- 	}
+ bool init_unaccepted_memory(void)
+diff --git a/arch/x86/boot/compressed/tdx-shared.c b/arch/x86/boot/compressed/tdx-shared.c
+new file mode 100644
+index 0000000..5ac4376
+--- /dev/null
++++ b/arch/x86/boot/compressed/tdx-shared.c
+@@ -0,0 +1,2 @@
++#include "error.h"
++#include "../../coco/tdx/tdx-shared.c"
+diff --git a/arch/x86/coco/tdx/Makefile b/arch/x86/coco/tdx/Makefile
+index 46c5599..2c7dcbf 100644
+--- a/arch/x86/coco/tdx/Makefile
++++ b/arch/x86/coco/tdx/Makefile
+@@ -1,3 +1,3 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
+-obj-y += tdx.o tdcall.o
++obj-y += tdx.o tdx-shared.o tdcall.o
+diff --git a/arch/x86/coco/tdx/tdx-shared.c b/arch/x86/coco/tdx/tdx-shared.c
+new file mode 100644
+index 0000000..ef20ddc
+--- /dev/null
++++ b/arch/x86/coco/tdx/tdx-shared.c
+@@ -0,0 +1,71 @@
++#include <asm/tdx.h>
++#include <asm/pgtable.h>
++
++static unsigned long try_accept_one(phys_addr_t start, unsigned long len,
++				    enum pg_level pg_level)
++{
++	unsigned long accept_size = page_level_size(pg_level);
++	u64 tdcall_rcx;
++	u8 page_size;
++
++	if (!IS_ALIGNED(start, accept_size))
++		return 0;
++
++	if (len < accept_size)
++		return 0;
++
++	/*
++	 * Pass the page physical address to the TDX module to accept the
++	 * pending, private page.
++	 *
++	 * Bits 2:0 of RCX encode page size: 0 - 4K, 1 - 2M, 2 - 1G.
++	 */
++	switch (pg_level) {
++	case PG_LEVEL_4K:
++		page_size = 0;
++		break;
++	case PG_LEVEL_2M:
++		page_size = 1;
++		break;
++	case PG_LEVEL_1G:
++		page_size = 2;
++		break;
++	default:
++		return 0;
++	}
++
++	tdcall_rcx = start | page_size;
++	if (__tdx_module_call(TDX_ACCEPT_PAGE, tdcall_rcx, 0, 0, 0, NULL))
++		return 0;
++
++	return accept_size;
++}
++
++bool tdx_accept_memory(phys_addr_t start, phys_addr_t end)
++{
++	/*
++	 * For shared->private conversion, accept the page using
++	 * TDX_ACCEPT_PAGE TDX module call.
++	 */
++	while (start < end) {
++		unsigned long len = end - start;
++		unsigned long accept_size;
++
++		/*
++		 * Try larger accepts first. It gives chance to VMM to keep
++		 * 1G/2M Secure EPT entries where possible and speeds up
++		 * process by cutting number of hypercalls (if successful).
++		 */
++
++		accept_size = try_accept_one(start, len, PG_LEVEL_1G);
++		if (!accept_size)
++			accept_size = try_accept_one(start, len, PG_LEVEL_2M);
++		if (!accept_size)
++			accept_size = try_accept_one(start, len, PG_LEVEL_4K);
++		if (!accept_size)
++			return false;
++		start += accept_size;
++	}
++
++	return true;
++}
+diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
+index 0d5fe6e..a9c4ba6 100644
+--- a/arch/x86/coco/tdx/tdx.c
++++ b/arch/x86/coco/tdx/tdx.c
+@@ -713,46 +713,6 @@ static bool tdx_cache_flush_required(void)
+ 	return true;
  }
  
--static void __init early_set_pages_state(unsigned long paddr, unsigned int npages, enum psc_op op)
-+static void __init early_set_pages_state(unsigned long paddr, unsigned long npages, enum psc_op op)
- {
- 	unsigned long paddr_end;
- 	u64 val;
-@@ -701,7 +701,7 @@ e_term:
- }
+-static unsigned long try_accept_one(phys_addr_t start, unsigned long len,
+-				    enum pg_level pg_level)
+-{
+-	unsigned long accept_size = page_level_size(pg_level);
+-	u64 tdcall_rcx;
+-	u8 page_size;
+-
+-	if (!IS_ALIGNED(start, accept_size))
+-		return 0;
+-
+-	if (len < accept_size)
+-		return 0;
+-
+-	/*
+-	 * Pass the page physical address to the TDX module to accept the
+-	 * pending, private page.
+-	 *
+-	 * Bits 2:0 of RCX encode page size: 0 - 4K, 1 - 2M, 2 - 1G.
+-	 */
+-	switch (pg_level) {
+-	case PG_LEVEL_4K:
+-		page_size = 0;
+-		break;
+-	case PG_LEVEL_2M:
+-		page_size = 1;
+-		break;
+-	case PG_LEVEL_1G:
+-		page_size = 2;
+-		break;
+-	default:
+-		return 0;
+-	}
+-
+-	tdcall_rcx = start | page_size;
+-	if (__tdx_module_call(TDX_ACCEPT_PAGE, tdcall_rcx, 0, 0, 0, NULL))
+-		return 0;
+-
+-	return accept_size;
+-}
+-
+ /*
+  * Inform the VMM of the guest's intent for this physical page: shared with
+  * the VMM or private to the guest.  The VMM is expected to change its mapping
+@@ -777,33 +737,9 @@ static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
+ 	if (_tdx_hypercall(TDVMCALL_MAP_GPA, start, end - start, 0, 0))
+ 		return false;
  
- void __init early_snp_set_memory_private(unsigned long vaddr, unsigned long paddr,
--					 unsigned int npages)
-+					 unsigned long npages)
- {
- 	/*
- 	 * This can be invoked in early boot while running identity mapped, so
-@@ -723,7 +723,7 @@ void __init early_snp_set_memory_private(unsigned long vaddr, unsigned long padd
- }
+-	/* private->shared conversion  requires only MapGPA call */
+-	if (!enc)
+-		return true;
+-
+-	/*
+-	 * For shared->private conversion, accept the page using
+-	 * TDX_ACCEPT_PAGE TDX module call.
+-	 */
+-	while (start < end) {
+-		unsigned long len = end - start;
+-		unsigned long accept_size;
+-
+-		/*
+-		 * Try larger accepts first. It gives chance to VMM to keep
+-		 * 1G/2M Secure EPT entries where possible and speeds up
+-		 * process by cutting number of hypercalls (if successful).
+-		 */
+-
+-		accept_size = try_accept_one(start, len, PG_LEVEL_1G);
+-		if (!accept_size)
+-			accept_size = try_accept_one(start, len, PG_LEVEL_2M);
+-		if (!accept_size)
+-			accept_size = try_accept_one(start, len, PG_LEVEL_4K);
+-		if (!accept_size)
+-			return false;
+-		start += accept_size;
+-	}
++	/* shared->private conversion requires memory to be accepted before use */
++	if (enc)
++		return tdx_accept_memory(start, end);
  
- void __init early_snp_set_memory_shared(unsigned long vaddr, unsigned long paddr,
--					unsigned int npages)
-+					unsigned long npages)
- {
- 	/*
- 	 * This can be invoked in early boot while running identity mapped, so
-@@ -879,7 +879,7 @@ static void __set_pages_state(struct snp_psc_desc *data, unsigned long vaddr,
- 		sev_es_terminate(SEV_TERM_SET_LINUX, GHCB_TERM_PSC);
+ 	return true;
  }
+diff --git a/arch/x86/include/asm/shared/tdx.h b/arch/x86/include/asm/shared/tdx.h
+index 1ff0ee8..19228be 100644
+--- a/arch/x86/include/asm/shared/tdx.h
++++ b/arch/x86/include/asm/shared/tdx.h
+@@ -91,5 +91,7 @@ struct tdx_module_output {
+ u64 __tdx_module_call(u64 fn, u64 rcx, u64 rdx, u64 r8, u64 r9,
+ 		      struct tdx_module_output *out);
  
--static void set_pages_state(unsigned long vaddr, unsigned int npages, int op)
-+static void set_pages_state(unsigned long vaddr, unsigned long npages, int op)
- {
- 	unsigned long vaddr_end, next_vaddr;
- 	struct snp_psc_desc *desc;
-@@ -904,7 +904,7 @@ static void set_pages_state(unsigned long vaddr, unsigned int npages, int op)
- 	kfree(desc);
- }
++bool tdx_accept_memory(phys_addr_t start, phys_addr_t end);
++
+ #endif /* !__ASSEMBLY__ */
+ #endif /* _ASM_X86_SHARED_TDX_H */
+diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
+index 234197e..603e6d1 100644
+--- a/arch/x86/include/asm/tdx.h
++++ b/arch/x86/include/asm/tdx.h
+@@ -5,6 +5,8 @@
  
--void snp_set_memory_shared(unsigned long vaddr, unsigned int npages)
-+void snp_set_memory_shared(unsigned long vaddr, unsigned long npages)
- {
- 	if (!cc_platform_has(CC_ATTR_GUEST_SEV_SNP))
- 		return;
-@@ -914,7 +914,7 @@ void snp_set_memory_shared(unsigned long vaddr, unsigned int npages)
- 	set_pages_state(vaddr, npages, SNP_PAGE_STATE_SHARED);
- }
+ #include <linux/init.h>
+ #include <linux/bits.h>
++
++#include <asm/errno.h>
+ #include <asm/ptrace.h>
+ #include <asm/shared/tdx.h>
  
--void snp_set_memory_private(unsigned long vaddr, unsigned int npages)
-+void snp_set_memory_private(unsigned long vaddr, unsigned long npages)
- {
- 	if (!cc_platform_has(CC_ATTR_GUEST_SEV_SNP))
- 		return;
+diff --git a/arch/x86/include/asm/unaccepted_memory.h b/arch/x86/include/asm/unaccepted_memory.h
+new file mode 100644
+index 0000000..572514e
+--- /dev/null
++++ b/arch/x86/include/asm/unaccepted_memory.h
+@@ -0,0 +1,24 @@
++#ifndef _ASM_X86_UNACCEPTED_MEMORY_H
++#define _ASM_X86_UNACCEPTED_MEMORY_H
++
++#include <linux/efi.h>
++#include <asm/tdx.h>
++
++static inline void arch_accept_memory(phys_addr_t start, phys_addr_t end)
++{
++	/* Platform-specific memory-acceptance call goes here */
++	if (cpu_feature_enabled(X86_FEATURE_TDX_GUEST)) {
++		if (!tdx_accept_memory(start, end))
++			panic("TDX: Failed to accept memory\n");
++	} else {
++		panic("Cannot accept memory: unknown platform\n");
++	}
++}
++
++static inline struct efi_unaccepted_memory *efi_get_unaccepted_table(void)
++{
++	if (efi.unaccepted == EFI_INVALID_TABLE_ADDR)
++		return NULL;
++	return __va(efi.unaccepted);
++}
++#endif
