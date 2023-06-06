@@ -2,355 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24DBD7250B1
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 01:20:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D84D87250BB
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 01:22:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240347AbjFFXUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 19:20:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49810 "EHLO
+        id S239972AbjFFXWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 19:22:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240387AbjFFXT4 (ORCPT
+        with ESMTP id S240285AbjFFXV7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 19:19:56 -0400
-Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com [IPv6:2607:f8b0:4864:20::a2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7819D1BC7
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 16:19:54 -0700 (PDT)
-Received: by mail-vk1-xa2f.google.com with SMTP id 71dfb90a1353d-4640f75d784so33621e0c.0
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 16:19:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google; t=1686093593; x=1688685593;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2RCHT2COdWryPrMvHCz/MFwKiAgVKwlfn/HHVFCUMWo=;
-        b=ffRYjN1zXrdkruM5LzNn01OVnuQwT4eUN3gBzFgkLdOIDro2vWjTt5lLbQvfhC35PS
-         m4gZk6fu5f58XXt0FDg/2ib5aHZ8t/TmyYQWG/J8ei/fDHQJpneD+1MwpKUQH8/iLUKB
-         uHUA8gjGEMxf05S4keqM27sXiYdvZzTivso7I=
+        Tue, 6 Jun 2023 19:21:59 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6A5D199A
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 16:21:55 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-33b0ad1027aso2064195ab.0
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 16:21:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686093593; x=1688685593;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2RCHT2COdWryPrMvHCz/MFwKiAgVKwlfn/HHVFCUMWo=;
-        b=SLImFa7lom7Rg3TAzWBWh96EBQrnD4+5ng7hQTKs8r4RMYm4yJEjXoG83Xd/XLVfSL
-         klnvrtoui4RLrJhYakpMtGEPC8azeWGiI8VAWqQHB8PqLyEHtgoWGyBB7m1slRNAO/En
-         PAYqFmSY/wWQ/X2FKgdnA27NK2BzAhIW3YcE95tSAqJS1/gk7tK2Ev1Srvvv35iAECHN
-         VwaFBdc3yT+mpPZbtIKbL5+fS1wlq9SCYeprEhasaS+IhUVkA8Epi6N9ua4dwUQuelMj
-         UOsTwkH3bOXqMJPweFnzEWgp465EGLCA4ymlPiXTTeqCCCITyt6BDs72RRkf5GeJGJJp
-         WWEg==
-X-Gm-Message-State: AC+VfDyTYyqtdOENNzVDPiuZIZJ9HN2oEnp7G0tEqNjXx9Bs+roTtadP
-        qgsPLU4d9KYFcc8FC24rQV+aOj4O//3RvUUrFnsK
-X-Google-Smtp-Source: ACHHUZ78qqmUyPtOom7yhG9SY8oaE0K7IyTy7B5bFGwtRoSGXOea+4P0D9FQhu+ep9LARCGJJiCyb4IT5bCpeFz0jhc=
-X-Received: by 2002:a1f:7c02:0:b0:457:56a4:19e7 with SMTP id
- x2-20020a1f7c02000000b0045756a419e7mr7690188vkc.0.1686093593451; Tue, 06 Jun
- 2023 16:19:53 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686093715; x=1688685715;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uaw8+zjh0NK6MTFy6PtThiP3fMKWcFKEOZLWg7Hnxbo=;
+        b=dwxRStaULwv2Jg6YwHR8c1O2HyflSCSLdkeaArNpEaiRG63+AUEUhE1kkl1ttwMOuh
+         YdMNR22efmZdNkgZxWoXYrGoTMrBIKzqkPv5feORuTfyxaTeEhG4Mt7Eh+zX8mT6VxA9
+         OleiWtsDNdK9UJWDtRohL2EcEydkfQcdl9mhoEnM/xuhVz9thXCdM89ukgqCv4c/4eau
+         A9djt516wx07A2OjYp2xcnV4SLSodwUWpVOhpSkMR62lQzpltulTwN5C/ShnlkJsLR1b
+         bDWtzpbYZLHduVMwAht+E7iPu7iBmXY26gSFcLHINlYyeSwhzS15b1jml/gnf0VluSvf
+         O4dw==
+X-Gm-Message-State: AC+VfDz7z/YtfydTTBqTQwFuXBV645hIBWlG+K4QZ6Ix1t2b6ZAlYd5n
+        y0+uCzXdxDKr5jonUSNdVkTnakt2TKrCSZQK7yrF+l0C0ws/
+X-Google-Smtp-Source: ACHHUZ5wRd9iaUWBeihpwV1Zeu5IxbL8gN+M2f1cUzcipDPEUYYJQpDKIOkGcP2k6Q+vhdGigwER8eTNCw+0SYymmVyhWO3mEhJX
 MIME-Version: 1.0
-References: <20230517105135.1871868-1-apatel@ventanamicro.com> <20230517105135.1871868-6-apatel@ventanamicro.com>
-In-Reply-To: <20230517105135.1871868-6-apatel@ventanamicro.com>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Tue, 6 Jun 2023 16:19:40 -0700
-Message-ID: <CAOnJCULb03KPmdqz+JwTZe5T96+cyqDrydbq4VbZMwXobktg3Q@mail.gmail.com>
-Subject: Re: [PATCH 05/10] RISC-V: KVM: Skeletal in-kernel AIA irqchip support
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Andrew Jones <ajones@ventanamicro.com>, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
+X-Received: by 2002:a92:cec6:0:b0:33c:9631:3ea6 with SMTP id
+ z6-20020a92cec6000000b0033c96313ea6mr1766215ilq.4.1686093714897; Tue, 06 Jun
+ 2023 16:21:54 -0700 (PDT)
+Date:   Tue, 06 Jun 2023 16:21:54 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ef407105fd7e485e@google.com>
+Subject: [syzbot] Monthly f2fs report (Jun 2023)
+From:   syzbot <syzbot+listf5045cc3857cd5f3f4c2@syzkaller.appspotmail.com>
+To:     chao@kernel.org, jaegeuk@kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 3:52=E2=80=AFAM Anup Patel <apatel@ventanamicro.com=
-> wrote:
->
-> To incrementally implement in-kernel AIA irqchip support, we first
-> add minimal skeletal support which only compiles but does not provide
-> any functionality.
->
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> ---
->  arch/riscv/include/asm/kvm_aia.h  |  20 ++++++
->  arch/riscv/include/asm/kvm_host.h |   4 ++
->  arch/riscv/include/uapi/asm/kvm.h |   4 ++
->  arch/riscv/kvm/Kconfig            |   4 ++
->  arch/riscv/kvm/aia.c              |   8 +++
->  arch/riscv/kvm/vm.c               | 115 ++++++++++++++++++++++++++++++
->  6 files changed, 155 insertions(+)
->
-> diff --git a/arch/riscv/include/asm/kvm_aia.h b/arch/riscv/include/asm/kv=
-m_aia.h
-> index 0938e0cadf80..3bc0a0e47a15 100644
-> --- a/arch/riscv/include/asm/kvm_aia.h
-> +++ b/arch/riscv/include/asm/kvm_aia.h
-> @@ -45,6 +45,7 @@ struct kvm_vcpu_aia {
->  #define irqchip_in_kernel(k)           ((k)->arch.aia.in_kernel)
->
->  extern unsigned int kvm_riscv_aia_nr_hgei;
-> +extern unsigned int kvm_riscv_aia_max_ids;
->  DECLARE_STATIC_KEY_FALSE(kvm_riscv_aia_available);
->  #define kvm_riscv_aia_available() \
->         static_branch_unlikely(&kvm_riscv_aia_available)
-> @@ -116,6 +117,25 @@ static inline void kvm_riscv_vcpu_aia_deinit(struct =
-kvm_vcpu *vcpu)
->  {
->  }
->
-> +static inline int kvm_riscv_aia_inject_msi_by_id(struct kvm *kvm,
-> +                                                u32 hart_index,
-> +                                                u32 guest_index, u32 iid=
-)
-> +{
-> +       return 0;
-> +}
-> +
-> +static inline int kvm_riscv_aia_inject_msi(struct kvm *kvm,
-> +                                          struct kvm_msi *msi)
-> +{
-> +       return 0;
-> +}
-> +
-> +static inline int kvm_riscv_aia_inject_irq(struct kvm *kvm,
-> +                                          unsigned int irq, bool level)
-> +{
-> +       return 0;
-> +}
-> +
->  static inline void kvm_riscv_aia_init_vm(struct kvm *kvm)
->  {
->  }
-> diff --git a/arch/riscv/include/asm/kvm_host.h b/arch/riscv/include/asm/k=
-vm_host.h
-> index ee0acccb1d3b..871432586a63 100644
-> --- a/arch/riscv/include/asm/kvm_host.h
-> +++ b/arch/riscv/include/asm/kvm_host.h
-> @@ -27,6 +27,8 @@
->
->  #define KVM_VCPU_MAX_FEATURES          0
->
-> +#define KVM_IRQCHIP_NUM_PINS           1024
-> +
->  #define KVM_REQ_SLEEP \
->         KVM_ARCH_REQ_FLAGS(0, KVM_REQUEST_WAIT | KVM_REQUEST_NO_WAKEUP)
->  #define KVM_REQ_VCPU_RESET             KVM_ARCH_REQ(1)
-> @@ -318,6 +320,8 @@ int kvm_riscv_gstage_vmid_init(struct kvm *kvm);
->  bool kvm_riscv_gstage_vmid_ver_changed(struct kvm_vmid *vmid);
->  void kvm_riscv_gstage_vmid_update(struct kvm_vcpu *vcpu);
->
-> +int kvm_riscv_setup_default_irq_routing(struct kvm *kvm, u32 lines);
-> +
->  void __kvm_riscv_unpriv_trap(void);
->
->  unsigned long kvm_riscv_vcpu_unpriv_read(struct kvm_vcpu *vcpu,
-> diff --git a/arch/riscv/include/uapi/asm/kvm.h b/arch/riscv/include/uapi/=
-asm/kvm.h
-> index f92790c9481a..332d4a274891 100644
-> --- a/arch/riscv/include/uapi/asm/kvm.h
-> +++ b/arch/riscv/include/uapi/asm/kvm.h
-> @@ -15,6 +15,7 @@
->  #include <asm/bitsperlong.h>
->  #include <asm/ptrace.h>
->
-> +#define __KVM_HAVE_IRQ_LINE
->  #define __KVM_HAVE_READONLY_MEM
->
->  #define KVM_COALESCED_MMIO_PAGE_OFFSET 1
-> @@ -203,6 +204,9 @@ enum KVM_RISCV_SBI_EXT_ID {
->  #define KVM_REG_RISCV_SBI_MULTI_REG_LAST       \
->                 KVM_REG_RISCV_SBI_MULTI_REG(KVM_RISCV_SBI_EXT_MAX - 1)
->
-> +/* One single KVM irqchip, ie. the AIA */
-> +#define KVM_NR_IRQCHIPS                        1
-> +
->  #endif
->
->  #endif /* __LINUX_KVM_RISCV_H */
-> diff --git a/arch/riscv/kvm/Kconfig b/arch/riscv/kvm/Kconfig
-> index 28891e583259..dfc237d7875b 100644
-> --- a/arch/riscv/kvm/Kconfig
-> +++ b/arch/riscv/kvm/Kconfig
-> @@ -21,6 +21,10 @@ config KVM
->         tristate "Kernel-based Virtual Machine (KVM) support (EXPERIMENTA=
-L)"
->         depends on RISCV_SBI && MMU
->         select HAVE_KVM_EVENTFD
-> +       select HAVE_KVM_IRQCHIP
-> +       select HAVE_KVM_IRQFD
-> +       select HAVE_KVM_IRQ_ROUTING
-> +       select HAVE_KVM_MSI
->         select HAVE_KVM_VCPU_ASYNC_IOCTL
->         select KVM_GENERIC_DIRTYLOG_READ_PROTECT
->         select KVM_GENERIC_HARDWARE_ENABLING
-> diff --git a/arch/riscv/kvm/aia.c b/arch/riscv/kvm/aia.c
-> index 3f97575707eb..18c442c15ff2 100644
-> --- a/arch/riscv/kvm/aia.c
-> +++ b/arch/riscv/kvm/aia.c
-> @@ -26,6 +26,7 @@ static DEFINE_PER_CPU(struct aia_hgei_control, aia_hgei=
-);
->  static int hgei_parent_irq;
->
->  unsigned int kvm_riscv_aia_nr_hgei;
-> +unsigned int kvm_riscv_aia_max_ids;
->  DEFINE_STATIC_KEY_FALSE(kvm_riscv_aia_available);
->
->  static int aia_find_hgei(struct kvm_vcpu *owner)
-> @@ -618,6 +619,13 @@ int kvm_riscv_aia_init(void)
->          */
->         kvm_riscv_aia_nr_hgei =3D 0;
->
-> +       /*
-> +        * Find number of guest MSI IDs
-> +        *
-> +        * TODO: To be updated later by AIA IMSIC HW guest file support
-> +        */
-> +       kvm_riscv_aia_max_ids =3D IMSIC_MAX_ID;
-> +
->         /* Initialize guest external interrupt line management */
->         rc =3D aia_hgei_init();
->         if (rc)
-> diff --git a/arch/riscv/kvm/vm.c b/arch/riscv/kvm/vm.c
-> index 6ef15f78e80f..d2349326b2ce 100644
-> --- a/arch/riscv/kvm/vm.c
-> +++ b/arch/riscv/kvm/vm.c
-> @@ -55,6 +55,121 @@ void kvm_arch_destroy_vm(struct kvm *kvm)
->         kvm_riscv_aia_destroy_vm(kvm);
->  }
->
-> +int kvm_vm_ioctl_irq_line(struct kvm *kvm, struct kvm_irq_level *irql,
-> +                         bool line_status)
-> +{
-> +       if (!irqchip_in_kernel(kvm))
-> +               return -ENXIO;
-> +
-> +       return kvm_riscv_aia_inject_irq(kvm, irql->irq, irql->level);
-> +}
-> +
-> +int kvm_set_msi(struct kvm_kernel_irq_routing_entry *e,
-> +               struct kvm *kvm, int irq_source_id,
-> +               int level, bool line_status)
-> +{
-> +       struct kvm_msi msi;
-> +
-> +       if (!level)
-> +               return -1;
-> +
-> +       msi.address_lo =3D e->msi.address_lo;
-> +       msi.address_hi =3D e->msi.address_hi;
-> +       msi.data =3D e->msi.data;
-> +       msi.flags =3D e->msi.flags;
-> +       msi.devid =3D e->msi.devid;
-> +
-> +       return kvm_riscv_aia_inject_msi(kvm, &msi);
-> +}
-> +
-> +static int kvm_riscv_set_irq(struct kvm_kernel_irq_routing_entry *e,
-> +                            struct kvm *kvm, int irq_source_id,
-> +                            int level, bool line_status)
-> +{
-> +       return kvm_riscv_aia_inject_irq(kvm, e->irqchip.pin, level);
-> +}
-> +
-> +int kvm_riscv_setup_default_irq_routing(struct kvm *kvm, u32 lines)
-> +{
-> +       struct kvm_irq_routing_entry *ents;
-> +       int i, rc;
-> +
-> +       ents =3D kcalloc(lines, sizeof(*ents), GFP_KERNEL);
-> +       if (!ents)
-> +               return -ENOMEM;
-> +
-> +       for (i =3D 0; i < lines; i++) {
-> +               ents[i].gsi =3D i;
-> +               ents[i].type =3D KVM_IRQ_ROUTING_IRQCHIP;
-> +               ents[i].u.irqchip.irqchip =3D 0;
-> +               ents[i].u.irqchip.pin =3D i;
-> +       }
-> +       rc =3D kvm_set_irq_routing(kvm, ents, lines, 0);
-> +       kfree(ents);
-> +
-> +       return rc;
-> +}
-> +
-> +bool kvm_arch_can_set_irq_routing(struct kvm *kvm)
-> +{
-> +       return irqchip_in_kernel(kvm);
-> +}
-> +
-> +int kvm_set_routing_entry(struct kvm *kvm,
-> +                         struct kvm_kernel_irq_routing_entry *e,
-> +                         const struct kvm_irq_routing_entry *ue)
-> +{
-> +       int r =3D -EINVAL;
-> +
-> +       switch (ue->type) {
-> +       case KVM_IRQ_ROUTING_IRQCHIP:
-> +               e->set =3D kvm_riscv_set_irq;
-> +               e->irqchip.irqchip =3D ue->u.irqchip.irqchip;
-> +               e->irqchip.pin =3D ue->u.irqchip.pin;
-> +               if ((e->irqchip.pin >=3D KVM_IRQCHIP_NUM_PINS) ||
-> +                   (e->irqchip.irqchip >=3D KVM_NR_IRQCHIPS))
-> +                       goto out;
-> +               break;
-> +       case KVM_IRQ_ROUTING_MSI:
-> +               e->set =3D kvm_set_msi;
-> +               e->msi.address_lo =3D ue->u.msi.address_lo;
-> +               e->msi.address_hi =3D ue->u.msi.address_hi;
-> +               e->msi.data =3D ue->u.msi.data;
-> +               e->msi.flags =3D ue->flags;
-> +               e->msi.devid =3D ue->u.msi.devid;
-> +               break;
-> +       default:
-> +               goto out;
-> +       }
-> +       r =3D 0;
-> +out:
-> +       return r;
-> +}
-> +
-> +int kvm_arch_set_irq_inatomic(struct kvm_kernel_irq_routing_entry *e,
-> +                             struct kvm *kvm, int irq_source_id, int lev=
-el,
-> +                             bool line_status)
-> +{
-> +       if (!level)
-> +               return -EWOULDBLOCK;
-> +
-> +       switch (e->type) {
-> +       case KVM_IRQ_ROUTING_MSI:
-> +               return kvm_set_msi(e, kvm, irq_source_id, level, line_sta=
-tus);
-> +
-> +       case KVM_IRQ_ROUTING_IRQCHIP:
-> +               return kvm_riscv_set_irq(e, kvm, irq_source_id,
-> +                                        level, line_status);
-> +       }
-> +
-> +       return -EWOULDBLOCK;
-> +}
-> +
-> +bool kvm_arch_irqchip_in_kernel(struct kvm *kvm)
-> +{
-> +       return irqchip_in_kernel(kvm);
-> +}
-> +
->  int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
->  {
->         int r;
-> --
-> 2.34.1
->
+Hello f2fs maintainers/developers,
 
-Reviewed-by: Atish Patra <atishp@rivosinc.com>
+This is a 31-day syzbot report for the f2fs subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/f2fs
 
---=20
-Regards,
-Atish
+During the period, 0 new issues were detected and 0 were fixed.
+In total, 16 issues are still open and 28 have been fixed so far.
+
+Some of the still happening issues:
+
+Ref Crashes Repro Title
+<1> 187     Yes   INFO: task hung in f2fs_balance_fs
+                  https://syzkaller.appspot.com/bug?extid=8b85865808c8908a0d8c
+<2> 63      Yes   kernel BUG in f2fs_evict_inode
+                  https://syzkaller.appspot.com/bug?extid=e1246909d526a9d470fa
+<3> 4       Yes   WARNING: lock held when returning to user space in f2fs_write_single_data_page
+                  https://syzkaller.appspot.com/bug?extid=eb6201248f684e99b9f8
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
+
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
+
+You may send multiple commands in a single email message.
