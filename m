@@ -2,291 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3145272495D
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 18:40:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8807072495E
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 18:40:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238234AbjFFQkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 12:40:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37434 "EHLO
+        id S238241AbjFFQkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 12:40:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233423AbjFFQkp (ORCPT
+        with ESMTP id S231232AbjFFQkq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 12:40:45 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51D6C126
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 09:40:43 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-569ca440bf0so28404347b3.3
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 09:40:43 -0700 (PDT)
+        Tue, 6 Jun 2023 12:40:46 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D637010C2;
+        Tue,  6 Jun 2023 09:40:44 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f62cf9755eso2715037e87.1;
+        Tue, 06 Jun 2023 09:40:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686069642; x=1688661642;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CDHXe6/mXqOWQkeWC60ckAzzU5mVeJqLNCMLvLmgUos=;
-        b=xhDTcceBwAw9Hs5SifWGC5faHwzclH50ckfhr+4ZttJgMnRdSwdWP59i2ZeVHRVvNN
-         NQ2I6AxxNTUHDKNrbeoVw+nkD1Q4+6gU51HtkZiMwABvNhVDX+ioWikU0a6VsWiBCoHl
-         zTEybfVeAEphjLcwjwGwRzeSvwr8pYARX9ec2lZkB7VQOyvc9ZtEZREYge2RlSiJSm+b
-         H6bc6EHPyMpbk5BRCREhxXd8SRhb2gjTe+L5FTmyhWnZK6hBbeUq8J3GLXc7oPQQRvtx
-         nkBSFr9Nw9ifdA4X4iDe09re0Dqv9PzOeBdVdKqLVTE3spemNoerz8dgDjzKLvYhyUAL
-         D+bw==
+        d=gmail.com; s=20221208; t=1686069643; x=1688661643;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=norESNq/iGPk1UB7TAGxhH8PXhOkHVXlC8bXJqdAByE=;
+        b=MyU3pryKLoA3UVgvjV92Bc7JqT2MkUT3l6INkZZYfWD4Oavm1JcKHBdB3dAVTFhuCw
+         PFlgeOhj6guDRAYm1JyAWM/NB5JSM36F2PxEkOaS0TRrb7ci6dg3oiuZxkn1WEhXvWJG
+         9SCL8V3SYr7kx32iZzlr7WFRo4qDZCd2xcpkDsGy5dqsoNhqXGmA1aiQzNufBpNETM8u
+         wSUJp5XHZPXao1HlhgEgjCzNGaXxFjzD35ixfQCnBsRjrhDL8kA+HaC/2ju/wgrM2DiG
+         RMma3AtoPGJCTq/hx/qMUgQWopCZduj9rQP4keqnKErsY1mc1zqHh9fHb5MXx4LBb67m
+         xaOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686069642; x=1688661642;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CDHXe6/mXqOWQkeWC60ckAzzU5mVeJqLNCMLvLmgUos=;
-        b=A+BjnPJ3gHbQtI2FIWh0HOqye5TaBIGPduUlWQBoUWt8QhcCq7UlvdIUPI1aB6+yMa
-         S3QY2IIKlOHqvj3npI/OT/fnaqiCjdJuabDojEy7OPjxEIcZk7I+3zyx3Cj0qoJRaEwg
-         hUIuiceFnnrRfkf8mCUFP/YvuYMN2ZZq+G8TKNSGntHZElGZA6sFtM89OlAqnLpilchr
-         /FLHWqPFLvQI9Qo+dkHIFI2G3IPsmWJyb7OJNF2QhF1EjYL/eTW/CRmAKro3xlvXqHm0
-         mJWN3MfIsJARCRwWpZdRZdqQmpjdGydvxabugE7Ofj7IsGJd8TIL7YyuX/r+yx/HibPa
-         uIZQ==
-X-Gm-Message-State: AC+VfDzoU1bOdnMgCVtyLCMz+5jxIpENBiI01SF5PVYZZgkMFTm15gbo
-        pNEeqbuAQyyhicCAC8CN+3RydhTOMsw=
-X-Google-Smtp-Source: ACHHUZ7YfN+4stEUN8h1tykFk/Ez/hVtkSfng+Y2nfGVFX0HgWdJ2ji8gf0BFxO78aNTgD4sEMFEFR3Smcs=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:ac08:0:b0:552:d924:a304 with SMTP id
- k8-20020a81ac08000000b00552d924a304mr1325753ywh.4.1686069642539; Tue, 06 Jun
- 2023 09:40:42 -0700 (PDT)
-Date:   Tue, 6 Jun 2023 09:40:40 -0700
-In-Reply-To: <20230524061634.54141-2-chao.gao@intel.com>
-Mime-Version: 1.0
-References: <20230524061634.54141-1-chao.gao@intel.com> <20230524061634.54141-2-chao.gao@intel.com>
-Message-ID: <ZH9hiCWupvMS40Eu@google.com>
-Subject: Re: [PATCH v2 1/3] KVM: x86: Track supported ARCH_CAPABILITIES in kvm_caps
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Gao <chao.gao@intel.com>
-Cc:     kvm@vger.kernel.org, x86@kernel.org, xiaoyao.li@intel.com,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1686069643; x=1688661643;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=norESNq/iGPk1UB7TAGxhH8PXhOkHVXlC8bXJqdAByE=;
+        b=ELjUevAHNCnceHOMUlTirY4iZSbJaDYlWPx1i+JtMHQupQVfqUffadY7TLHgPpoRXb
+         zslaNbdAgvIHIbmVa5p2Mgp2MwV8Zy4xZ1JPUfQagfAsdBsfzf9Rr0fnUnjDt6bUrxqC
+         eBOaNEsEvTth/TIwGi0M26AkL6TtyxTMk7qN+GdIyKy+By0AOPJ65QYu2LngMefhE1B6
+         QP8pKUk1+s9GsZo8lxTwXfn8FKZfeKENRkaTHxuVG6wGIwph62qabV4AVCZl9AAy5hWW
+         N8h0nmx6XP+Wtu6R8G5xk3OXkHycOBWglpi7qOcZaylDhXda8cHXxor2JlqSYgwwRWzH
+         L3wg==
+X-Gm-Message-State: AC+VfDxVo/tCyG4N0OOeFROuW9Lh1bc3WkJ5kdzkmBwwztSs9jdzKxu8
+        uZjAFVr5xO4msfnpC6H42OI=
+X-Google-Smtp-Source: ACHHUZ7Z722i/xWTtbac8UrrnqqzXTdipL6Up2noyjRPmLNyTuQ82H1SwFMmUFDND/SxWY9hWgGaSQ==
+X-Received: by 2002:ac2:4ace:0:b0:4e8:5112:1ff2 with SMTP id m14-20020ac24ace000000b004e851121ff2mr1180745lfp.27.1686069642782;
+        Tue, 06 Jun 2023 09:40:42 -0700 (PDT)
+Received: from mobilestation ([95.79.140.35])
+        by smtp.gmail.com with ESMTPSA id d7-20020ac24c87000000b004f252003071sm1510897lfl.37.2023.06.06.09.40.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Jun 2023 09:40:42 -0700 (PDT)
+Date:   Tue, 6 Jun 2023 19:40:40 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Abe Kohandel <abe.kohandel@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH 0/2] spi: dw: Add compatible for Intel Mount Evans SoC
+Message-ID: <20230606164040.s3ozznrkcclozugx@mobilestation>
+References: <20230606145402.474866-1-abe.kohandel@intel.com>
+ <168606867693.49694.16483038401822255147.b4-ty@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <168606867693.49694.16483038401822255147.b4-ty@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 24, 2023, Chao Gao wrote:
-> @@ -9532,6 +9532,7 @@ static int __kvm_x86_vendor_init(struct kvm_x86_init_ops *ops)
->  		kvm_caps.max_guest_tsc_khz = max;
->  	}
->  	kvm_caps.default_tsc_scaling_ratio = 1ULL << kvm_caps.tsc_scaling_ratio_frac_bits;
-> +	kvm_caps.supported_arch_cap = kvm_get_arch_capabilities();
->  	kvm_init_msr_lists();
->  	return 0;
->  
-> @@ -11895,7 +11896,7 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
->  	if (r)
->  		goto free_guest_fpu;
->  
-> -	vcpu->arch.arch_capabilities = kvm_get_arch_capabilities();
-> +	vcpu->arch.arch_capabilities = kvm_caps.supported_arch_cap;
->  	vcpu->arch.msr_platform_info = MSR_PLATFORM_INFO_CPUID_FAULT;
->  	kvm_xen_init_vcpu(vcpu);
->  	kvm_vcpu_mtrr_init(vcpu);
-> diff --git a/arch/x86/kvm/x86.h b/arch/x86/kvm/x86.h
-> index c544602d07a3..d3e524bcc169 100644
-> --- a/arch/x86/kvm/x86.h
-> +++ b/arch/x86/kvm/x86.h
-> @@ -29,6 +29,7 @@ struct kvm_caps {
->  	u64 supported_xcr0;
->  	u64 supported_xss;
->  	u64 supported_perf_cap;
-> +	u64 supported_arch_cap;
+On Tue, Jun 06, 2023 at 05:24:36PM +0100, Mark Brown wrote:
+> On Tue, 06 Jun 2023 07:54:00 -0700, Abe Kohandel wrote:
+> > The Intel Mount Evans SoC's Integrated Management Complex has a DW
+> > apb_ssi_v4.02a controller. This series adds support for this controller.
+> > 
+> > No SoC level chip select override is provided and as such no DMA
+> > configuration is done for the controller.
+> > 
+> > Thanks,
+> > Abe
+> > 
+> > [...]
+> 
+> Applied to
+> 
+>    https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Hrm, I take back my earlier vote about using a dynamic snapshot.
+Mark, next time please wait at least for a few days before applying.
+Give me a chance to review.)
 
-"supported" isn't quite right.  KVM always "supports" advertising SKIP_VMENTRY_L1DFLUSH
-to the guest.  And KVM really does treat the MSR like a CPUID leaf, in that KVM
-doesn't sanity check the value coming in from userspace.  Whether or not that's
-a good idea is debatable, but it is was it is.  The value is more like KVM's current
-default.
+* In this case I have had a question regarding the in-code comment
+which may have been needed to be fixed a bit.
 
-Looking at all the uses of both the default/supported value, and the host MSR,
-I think it makes more sense to snapshot the host value than it does to snapshot
-and update the default/supported value.  The default value is used only when a
-vCPU is created and when userspace does a system-scoped KVM_GET_MSRS, i.e. avoiding
-the RDMSR is nice, but making the read super fast isn't necessary, e.g. the overhead
-of the boot_cpu_has() and boot_cpu_has_bug() checks is negligible.
+-Serge(y)
 
-And if KVM snapshots the MSR, the other usage of the host value can be cleaned up
-too.
-
-I'm leaning towards doing this instead of patches [1/3] and [3/3]:
-
-From: Sean Christopherson <seanjc@google.com>
-Date: Tue, 6 Jun 2023 09:20:31 -0700
-Subject: [PATCH 1/2] KVM: x86: Snapshot host's MSR_IA32_ARCH_CAPABILITIES
-
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/vmx/vmx.c | 22 ++++++----------------
- arch/x86/kvm/x86.c     | 13 +++++++------
- arch/x86/kvm/x86.h     |  1 +
- 3 files changed, 14 insertions(+), 22 deletions(-)
-
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 2d9d155691a7..42d1148f933c 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -255,14 +255,9 @@ static int vmx_setup_l1d_flush(enum vmx_l1d_flush_state l1tf)
- 		return 0;
- 	}
- 
--	if (boot_cpu_has(X86_FEATURE_ARCH_CAPABILITIES)) {
--		u64 msr;
--
--		rdmsrl(MSR_IA32_ARCH_CAPABILITIES, msr);
--		if (msr & ARCH_CAP_SKIP_VMENTRY_L1DFLUSH) {
--			l1tf_vmx_mitigation = VMENTER_L1D_FLUSH_NOT_REQUIRED;
--			return 0;
--		}
-+	if (host_arch_capabilities & ARCH_CAP_SKIP_VMENTRY_L1DFLUSH) {
-+		l1tf_vmx_mitigation = VMENTER_L1D_FLUSH_NOT_REQUIRED;
-+		return 0;
- 	}
- 
- 	/* If set to auto use the default l1tf mitigation method */
-@@ -373,15 +368,10 @@ static int vmentry_l1d_flush_get(char *s, const struct kernel_param *kp)
- 
- static void vmx_setup_fb_clear_ctrl(void)
- {
--	u64 msr;
--
--	if (boot_cpu_has(X86_FEATURE_ARCH_CAPABILITIES) &&
-+	if ((host_arch_capabilities & ARCH_CAP_FB_CLEAR_CTRL) &&
- 	    !boot_cpu_has_bug(X86_BUG_MDS) &&
--	    !boot_cpu_has_bug(X86_BUG_TAA)) {
--		rdmsrl(MSR_IA32_ARCH_CAPABILITIES, msr);
--		if (msr & ARCH_CAP_FB_CLEAR_CTRL)
--			vmx_fb_clear_ctrl_available = true;
--	}
-+	    !boot_cpu_has_bug(X86_BUG_TAA))
-+		vmx_fb_clear_ctrl_available = true;
- }
- 
- static __always_inline void vmx_disable_fb_clear(struct vcpu_vmx *vmx)
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 7c7be4815eaa..7c2e796fa460 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -237,6 +237,9 @@ EXPORT_SYMBOL_GPL(enable_apicv);
- u64 __read_mostly host_xss;
- EXPORT_SYMBOL_GPL(host_xss);
- 
-+u64 __read_mostly host_arch_capabilities;
-+EXPORT_SYMBOL_GPL(host_arch_capabilities);
-+
- const struct _kvm_stats_desc kvm_vm_stats_desc[] = {
- 	KVM_GENERIC_VM_STATS(),
- 	STATS_DESC_COUNTER(VM, mmu_shadow_zapped),
-@@ -1612,12 +1615,7 @@ static bool kvm_is_immutable_feature_msr(u32 msr)
- 
- static u64 kvm_get_arch_capabilities(void)
- {
--	u64 data = 0;
--
--	if (boot_cpu_has(X86_FEATURE_ARCH_CAPABILITIES)) {
--		rdmsrl(MSR_IA32_ARCH_CAPABILITIES, data);
--		data &= KVM_SUPPORTED_ARCH_CAP;
--	}
-+	u64 data = host_arch_capabilities & KVM_SUPPORTED_ARCH_CAP;
- 
- 	/*
- 	 * If nx_huge_pages is enabled, KVM's shadow paging will ensure that
-@@ -9492,6 +9490,9 @@ static int __kvm_x86_vendor_init(struct kvm_x86_init_ops *ops)
- 
- 	kvm_init_pmu_capability(ops->pmu_ops);
- 
-+	if (boot_cpu_has(X86_FEATURE_ARCH_CAPABILITIES))
-+		rdmsrl(MSR_IA32_ARCH_CAPABILITIES, host_arch_capabilities);
-+
- 	r = ops->hardware_setup();
- 	if (r != 0)
- 		goto out_mmu_exit;
-diff --git a/arch/x86/kvm/x86.h b/arch/x86/kvm/x86.h
-index 82e3dafc5453..1e7be1f6ab29 100644
---- a/arch/x86/kvm/x86.h
-+++ b/arch/x86/kvm/x86.h
-@@ -323,6 +323,7 @@ fastpath_t handle_fastpath_set_msr_irqoff(struct kvm_vcpu *vcpu);
- 
- extern u64 host_xcr0;
- extern u64 host_xss;
-+extern u64 host_arch_capabilities;
- 
- extern struct kvm_caps kvm_caps;
- 
-
-base-commit: 02f1b0b736606f9870595b3089d9c124f9da8be9
--- 
-2.41.0.rc2.161.g9c6817b8e7-goog
-
-From bd4b41fea5d5fa0347c5ef1ffb73dbdf783b23d0 Mon Sep 17 00:00:00 2001
-From: Sean Christopherson <seanjc@google.com>
-Date: Tue, 6 Jun 2023 09:25:55 -0700
-Subject: [PATCH 2/2] KVM: VMX: Drop unnecessary vmx_fb_clear_ctrl_available
- "cache"
-
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/vmx/vmx.c | 17 +++--------------
- 1 file changed, 3 insertions(+), 14 deletions(-)
-
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 42d1148f933c..17003660138a 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -237,9 +237,6 @@ static const struct {
- #define L1D_CACHE_ORDER 4
- static void *vmx_l1d_flush_pages;
- 
--/* Control for disabling CPU Fill buffer clear */
--static bool __read_mostly vmx_fb_clear_ctrl_available;
--
- static int vmx_setup_l1d_flush(enum vmx_l1d_flush_state l1tf)
- {
- 	struct page *page;
-@@ -366,14 +363,6 @@ static int vmentry_l1d_flush_get(char *s, const struct kernel_param *kp)
- 	return sprintf(s, "%s\n", vmentry_l1d_param[l1tf_vmx_mitigation].option);
- }
- 
--static void vmx_setup_fb_clear_ctrl(void)
--{
--	if ((host_arch_capabilities & ARCH_CAP_FB_CLEAR_CTRL) &&
--	    !boot_cpu_has_bug(X86_BUG_MDS) &&
--	    !boot_cpu_has_bug(X86_BUG_TAA))
--		vmx_fb_clear_ctrl_available = true;
--}
--
- static __always_inline void vmx_disable_fb_clear(struct vcpu_vmx *vmx)
- {
- 	u64 msr;
-@@ -399,7 +388,9 @@ static __always_inline void vmx_enable_fb_clear(struct vcpu_vmx *vmx)
- 
- static void vmx_update_fb_clear_dis(struct kvm_vcpu *vcpu, struct vcpu_vmx *vmx)
- {
--	vmx->disable_fb_clear = vmx_fb_clear_ctrl_available;
-+	vmx->disable_fb_clear = (host_arch_capabilities & ARCH_CAP_FB_CLEAR_CTRL) &&
-+				!boot_cpu_has_bug(X86_BUG_MDS) &&
-+				!boot_cpu_has_bug(X86_BUG_TAA);
- 
- 	/*
- 	 * If guest will not execute VERW, there is no need to set FB_CLEAR_DIS
-@@ -8580,8 +8571,6 @@ static int __init vmx_init(void)
- 	if (r)
- 		goto err_l1d_flush;
- 
--	vmx_setup_fb_clear_ctrl();
--
- 	for_each_possible_cpu(cpu) {
- 		INIT_LIST_HEAD(&per_cpu(loaded_vmcss_on_cpu, cpu));
- 
--- 
-
-
-
+> 
+> Thanks!
+> 
+> [1/2] spi: dw: Add compatible for Intel Mount Evans SoC
+>       commit: 0760d5d0e9f0c0e2200a0323a61d1995bb745dee
+> [2/2] dt-bindings: spi: snps,dw-apb-ssi: Add compatible for Intel Mount Evans SoC
+>       commit: 7bac98a338d63efb0b44ce4b79d53838491f00df
+> 
+> All being well this means that it will be integrated into the linux-next
+> tree (usually sometime in the next 24 hours) and sent to Linus during
+> the next merge window (or sooner if it is a bug fix), however if
+> problems are discovered then the patch may be dropped or reverted.
+> 
+> You may get further e-mails resulting from automated or manual testing
+> and review of the tree, please engage with people reporting problems and
+> send followup patches addressing any issues that are reported if needed.
+> 
+> If any updates are required or you are submitting further changes they
+> should be sent as incremental updates against current git, existing
+> patches will not be replaced.
+> 
+> Please add any relevant lists and maintainers to the CCs when replying
+> to this mail.
+> 
+> Thanks,
+> Mark
+> 
