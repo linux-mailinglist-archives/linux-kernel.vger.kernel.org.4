@@ -2,135 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D3EB7249E7
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 19:10:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60B457249E0
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 19:09:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238014AbjFFRKI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 13:10:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54600 "EHLO
+        id S237906AbjFFRJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 13:09:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231700AbjFFRKF (ORCPT
+        with ESMTP id S237581AbjFFRJ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 13:10:05 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7504210EB;
-        Tue,  6 Jun 2023 10:10:04 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 356CPliG008825;
-        Tue, 6 Jun 2023 17:09:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=cMFO+lrUNM2Y2ZHtb0xZ2vZlDKP4pr+BXCaQJt8SZHM=;
- b=OElBh+H2UVDhy74uXx3KEhCHaY2mDZZkiv4YF2z/MmoEWkd6545oYtxxxLZCBCYDbAgz
- Lz36FksUexn7BX9w5dk97CKggRlyTJh9pamSMAEpBU8tr2FLcVJCA8JWH95TmAwWuyAE
- YxiZ+7grcYvWTghdpZLMBjiCY/21mmErb4SdktrNwm4t+Zg7pHmVoYsYXzobLCLxD2en
- axRpFEY20HiRo4fMP/SpNyI1GIkQuRvpt41T65vOt8nrH2kRlmEqJ5uccNXfEwYeBVFf
- M20r9tDPEhajk+tVTSQZAdLbi90lWwStcq+gWrKBdmEz/eeOpaBFdLGKaBDjXW6CFNdz YA== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r249n0qxf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 06 Jun 2023 17:09:23 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 356H9MOr009459
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 6 Jun 2023 17:09:22 GMT
-Received: from akhilpo-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Tue, 6 Jun 2023 10:09:16 -0700
-Date:   Tue, 6 Jun 2023 22:39:13 +0530
-From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-CC:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Rob Clark <robdclark@chromium.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>
-Subject: Re: [PATCH v8 06/18] drm/msm/a6xx: Improve
- a6xx_bus_clear_pending_transactions()
-Message-ID: <bkaws4kq74idxgpbkas2tle76uqfxwwioucx2s2wuq3entxves@blb2b5dcr7tn>
-References: <20230223-topic-gmuwrapper-v8-0-69c68206609e@linaro.org>
- <20230223-topic-gmuwrapper-v8-6-69c68206609e@linaro.org>
+        Tue, 6 Jun 2023 13:09:26 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2831707;
+        Tue,  6 Jun 2023 10:09:23 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (om126253223039.31.openmobile.ne.jp [126.253.223.39])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A1C6BAB;
+        Tue,  6 Jun 2023 19:08:55 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1686071336;
+        bh=CuOX6Q52U6G/HtPqj/s+T6RC4X0NVcHpdj+l4I/Y470=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=O+QnxxNdlcROp0r8FoQaoD5hpFqCHpVZwrZ2DZ0WZG2YQiBG/K4M3k8nWXu74iOkg
+         1H1rOkqWKMm88+++bONoHJeQ1uJY0omcdUTIAI0jpygjr1GAjpKNlYj2+VxWuEHISr
+         6wsKJG7FTtlBaMHGSuppA0Z7YKOpETrF35YVelPo=
+Date:   Tue, 6 Jun 2023 20:09:19 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Linux regressions mailing list <regressions@lists.linux.dev>
+Cc:     linux-media@vger.kernel.org, Poncho <poncho@spahan.ch>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ricardo Ribalda <ribalda@chromium.org>
+Subject: Re: Webcam LED control regression
+Message-ID: <20230606170919.GJ25679@pendragon.ideasonboard.com>
+References: <468a36ec-c3ac-cb47-e12f-5906239ae3cd@spahan.ch>
+ <5cae4b60-a303-5cf6-9d30-8a723d417467@leemhuis.info>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230223-topic-gmuwrapper-v8-6-69c68206609e@linaro.org>
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: DHc7Ixj7KM7S8vUVBI1mq2BpPrhNNbXE
-X-Proofpoint-GUID: DHc7Ixj7KM7S8vUVBI1mq2BpPrhNNbXE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-06_12,2023-06-06_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
- adultscore=0 clxscore=1015 impostorscore=0 spamscore=0 priorityscore=1501
- mlxscore=0 mlxlogscore=958 bulkscore=0 suspectscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2306060148
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5cae4b60-a303-5cf6-9d30-8a723d417467@leemhuis.info>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 29, 2023 at 03:52:25PM +0200, Konrad Dybcio wrote:
-> 
-> Unify the indentation and explain the cryptic 0xF value.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Hello,
 
-Reviewed-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+CC'ing Ricardo.
 
--Akhil
+On Tue, Jun 06, 2023 at 12:40:25PM +0200, Linux regression tracking (Thorsten Leemhuis) wrote:
+> CCing a few people and lists that should be aware of this and might be
+> able to help.
+> 
+> On 05.06.23 18:39, Poncho wrote:
+> > With kernel 6.3, the LED of my C922 Pro Stream Webcam is no longer
+> > controllable.
+> > 
+> > With kernel 6.1 v4l2-ctl --all returns:
+> > 
+> >> led1_mode 0x0a046d05 (menu)   : min=0 max=3 default=0 value=0 (Off)
+> >>     0: Off
+> >>     1: On
+> >>     2: Blink
+> >>     3: Auto
+> > 
+> > 
+> > 
+> > but with kernel 6.3 I get:
+> > 
+> >> led1_mode 0x0a046d05 (menu)   : min=4 max=4 default=0 value=0
+> >>     4:
+> 
+> Thanks for the report.
+> 
+> FWIW, maybe one of those people that I CCed has an idea what's wrong. If
+> none of them brings one to the table withing the next two or three days,
+> you likely have to perform a bisection to find the change that broke
+> thing for you.
 
-> ---
->  drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
+I suspect commit 716c330433e3 ("media: uvcvideo: Use standard names for
+menus") to be the culprit. I'll post a (untested) candidate fix in reply
+to this e-mail.
+
+> For the rest of this mail:
 > 
-> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> index 6bb4da70f6a6..e3ac3f045665 100644
-> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> @@ -1597,17 +1597,18 @@ static void a6xx_llc_slices_init(struct platform_device *pdev,
->  		a6xx_gpu->llc_mmio = ERR_PTR(-EINVAL);
->  }
->  
-> -#define GBIF_CLIENT_HALT_MASK             BIT(0)
-> -#define GBIF_ARB_HALT_MASK                BIT(1)
-> +#define GBIF_CLIENT_HALT_MASK		BIT(0)
-> +#define GBIF_ARB_HALT_MASK		BIT(1)
-> +#define VBIF_XIN_HALT_CTRL0_MASK	GENMASK(3, 0)
->  
->  void a6xx_bus_clear_pending_transactions(struct adreno_gpu *adreno_gpu, bool gx_off)
->  {
->  	struct msm_gpu *gpu = &adreno_gpu->base;
->  
->  	if (!a6xx_has_gbif(adreno_gpu)) {
-> -		gpu_write(gpu, REG_A6XX_VBIF_XIN_HALT_CTRL0, 0xf);
-> +		gpu_write(gpu, REG_A6XX_VBIF_XIN_HALT_CTRL0, VBIF_XIN_HALT_CTRL0_MASK);
->  		spin_until((gpu_read(gpu, REG_A6XX_VBIF_XIN_HALT_CTRL1) &
-> -								0xf) == 0xf);
-> +				(VBIF_XIN_HALT_CTRL0_MASK)) == VBIF_XIN_HALT_CTRL0_MASK);
->  		gpu_write(gpu, REG_A6XX_VBIF_XIN_HALT_CTRL0, 0);
->  
->  		return;
+> [TLDR: I'm adding this report to the list of tracked Linux kernel
+> regressions; the text you find below is based on a few templates
+> paragraphs you might have encountered already in similar form.
+> See link in footer if these mails annoy you.]
 > 
-> -- 
-> 2.40.1
+> > Full output bellow:
+> > 
+> >> Driver Info:
+> >>     Driver name      : uvcvideo
+> >>     Card type        : C922 Pro Stream Webcam
+> >>     Bus info         : usb-0000:00:14.0-9
+> >>     Driver version   : 6.3.5
+> >>     Capabilities     : 0x84a00001
+> >>         Video Capture
+> >>         Metadata Capture
+> >>         Streaming
+> >>         Extended Pix Format
+> >>         Device Capabilities
+> >>     Device Caps      : 0x04200001
+> >>         Video Capture
+> >>         Streaming
+> >>         Extended Pix Format
+> >> Media Driver Info:
+> >>     Driver name      : uvcvideo
+> >>     Model            : C922 Pro Stream Webcam
+> >>     Serial           : 6E8DF1BF
+> >>     Bus info         : usb-0000:00:14.0-9
+> >>     Media version    : 6.3.5
+> >>     Hardware revision: 0x00000016 (22)
+> >>     Driver version   : 6.3.5
+> >> Interface Info:
+> >>     ID               : 0x03000002
+> >>     Type             : V4L Video
+> >> Entity Info:
+> >>     ID               : 0x00000001 (1)
+> >>     Name             : C922 Pro Stream Webcam
+> >>     Function         : V4L2 I/O
+> >>     Flags            : default
+> >>     Pad 0x01000007   : 0: Sink
+> >>       Link 0x0200001f: from remote pad 0x100000a of entity 'Processing 3' (Video Pixel Formatter): Data, Enabled, Immutable
+> >> Priority: 2
+> >> Video input : 0 (Camera 1: ok)
+> >> Format Video Capture:
+> >>     Width/Height      : 160/90
+> >>     Pixel Format      : 'YUYV' (YUYV 4:2:2)
+> >>     Field             : None
+> >>     Bytes per Line    : 320
+> >>     Size Image        : 28800
+> >>     Colorspace        : sRGB
+> >>     Transfer Function : Rec. 709
+> >>     YCbCr/HSV Encoding: ITU-R 601
+> >>     Quantization      : Default (maps to Limited Range)
+> >>     Flags             : Crop Capability Video Capture:
+> >>     Bounds      : Left 0, Top 0, Width 160, Height 90
+> >>     Default     : Left 0, Top 0, Width 160, Height 90
+> >>     Pixel Aspect: 1/1
+> >> Selection Video Capture: crop_default, Left 0, Top 0, Width 160,
+> >> Height 90, Flags: Selection Video Capture: crop_bounds, Left 0, Top 0,
+> >> Width 160, Height 90, Flags: Streaming Parameters Video Capture:
+> >>     Capabilities     : timeperframe
+> >>     Frames per second: 30.000 (30/1)
+> >>     Read buffers     : 0
+> >>
+> >> User Controls
+> >>
+> >>                      brightness 0x00980900 (int)    : min=0 max=255 step=1 default=128 value=128
+> >>                        contrast 0x00980901 (int)    : min=0 max=255 step=1 default=128 value=128
+> >>                      saturation 0x00980902 (int)    : min=0 max=255 step=1 default=128 value=128
+> >>         white_balance_automatic 0x0098090c (bool)   : default=1 value=1
+> >>                            gain 0x00980913 (int)    : min=0 max=255 step=1 default=0 value=0
+> >>            power_line_frequency 0x00980918 (menu)   : min=0 max=2 default=2 value=2 (60 Hz)
+> >>                 0: Disabled
+> >>                 1: 50 Hz
+> >>                 2: 60 Hz
+> >>       white_balance_temperature 0x0098091a (int)    : min=2000 max=6500 step=1 default=4000 value=4000 flags=inactive
+> >>                       sharpness 0x0098091b (int)    : min=0 max=255 step=1 default=128 value=128
+> >>          backlight_compensation 0x0098091c (int)    : min=0 max=1 step=1 default=0 value=0
+> >>
+> >> Camera Controls
+> >>
+> >>                   auto_exposure 0x009a0901 (menu)   : min=0 max=3 default=3 value=3 (Aperture Priority Mode)
+> >>                 1: Manual Mode
+> >>                 3: Aperture Priority Mode
+> >>          exposure_time_absolute 0x009a0902 (int)    : min=3 max=2047 step=1 default=250 value=250 flags=inactive
+> >>      exposure_dynamic_framerate 0x009a0903 (bool)   : default=0 value=1
+> >>                    pan_absolute 0x009a0908 (int)    : min=-36000 max=36000 step=3600 default=0 value=0
+> >>                   tilt_absolute 0x009a0909 (int)    : min=-36000 max=36000 step=3600 default=0 value=0
+> >>                  focus_absolute 0x009a090a (int)    : min=0 max=250 step=5 default=0 value=0 flags=inactive
+> >>      focus_automatic_continuous 0x009a090c (bool)   : default=1 value=1
+> >>                   zoom_absolute 0x009a090d (int)    : min=100 max=500 step=1 default=100 value=100
+> >>                       led1_mode 0x0a046d05 (menu)   : min=4 max=4 default=0 value=0
+> >>                 4:                  led1_frequency 0x0a046d06 (int)   
+> >> : min=0 max=255 step=1 default=0 value=255
 > 
+> To be sure the issue doesn't fall through the cracks unnoticed, I'm
+> adding it to regzbot, the Linux kernel regression tracking bot:
+> 
+> #regzbot ^introduced v6.1..v6.3
+> #regzbot title media: uvcvideo: Webcam LED control regression
+> #regzbot ignore-activity
+> 
+> This isn't a regression? This issue or a fix for it are already
+> discussed somewhere else? It was fixed already? You want to clarify when
+> the regression started to happen? Or point out I got the title or
+> something else totally wrong? Then just reply and tell me -- ideally
+> while also telling regzbot about it, as explained by the page listed in
+> the footer of this mail.
+> 
+> Developers: When fixing the issue, remember to add 'Link:' tags pointing
+> to the report (the parent of this mail). See page linked in footer for
+> details.
+> 
+> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+> --
+> Everything you wanna know about Linux kernel regression tracking:
+> https://linux-regtracking.leemhuis.info/about/#tldr
+> That page also explains what to do if mails like this annoy you.
+
+-- 
+Regards,
+
+Laurent Pinchart
