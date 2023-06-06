@@ -2,101 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5446724519
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 16:00:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64955724804
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 17:41:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235259AbjFFOAO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 10:00:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43196 "EHLO
+        id S238200AbjFFPku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 11:40:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238221AbjFFOAJ (ORCPT
+        with ESMTP id S238287AbjFFPkU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 10:00:09 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D90196
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 07:00:06 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-30af86a96b4so5018150f8f.3
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 07:00:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1686060005; x=1688652005;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FwrMrJM0MbRtGcxqqd7/qoRa+Z48fgcXIKuxfVUvplM=;
-        b=Qmkebezhd3bE3EvClEVx5a7mjquFqdwFKJ07a+K/AxFUAUuZLUzo+nJmpQh0A1yT2c
-         Kseq4TT0aRD3LwDElehU16MKuowQDxTagXLfA+S2b9hCQkgoCb+B6EXJJDuZ0N5zENVv
-         aQXBjdLHxHKnWazjp2gv4X85tqhJ8MXmp8xYbReBJ6riWDDaUmpesbk5nH+H+j9BLFr+
-         QBZZfqfPTE/DJ+03sI6+cvdy0DPOJdkAiRf7xQfCvC0d7D9j5RW6ozVBibrWo1Toonq7
-         jLK6vvN7LyMlsKZ7ADisxhcWO+C+lAzJonHXyuQXiB9TmJMl36QVEdRf39rfR+RLWvfZ
-         /l2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686060005; x=1688652005;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FwrMrJM0MbRtGcxqqd7/qoRa+Z48fgcXIKuxfVUvplM=;
-        b=Lbj0MOq/Ftu2nZjqWIXOURK/gW8TLiZGZFZCWmVnxMGT6voikrBRKzyOhqlaRoOoE9
-         jDA04In0n1vxc7/ier64vaZOBHVco26tIBll7ttpSkoB4X7dNj2QH56B1aQJ/wCs2XSv
-         PFOA5loUXKfzd53KnqmaUMd5uarEJm8gEXfEzi+9m9KkLZxVhMW2K5pGUlBD63p/Efwu
-         j892sDg4c3qUSTZ8X4ze5KMKIp05nXPbvBSZYbcwCxlQiuaD6LkYiEL596eFp5zK4rIn
-         oLCENdGtbD0UjWEZDc/SXkDjN9RaViniJ2HleBu5XJbWKmUqrQjD8rAHAjJ/yIW1KIUB
-         IrnA==
-X-Gm-Message-State: AC+VfDy6A7gI5a/vF+/spWEQhZEI6L6jXAwRpXnF5/L9wJE2QDa6qNb0
-        tAPxxbxUc9TfvHCjjoBqB5fSwg==
-X-Google-Smtp-Source: ACHHUZ4ccc0T1eCTcxB1MhwmrQqdwiijiuxyeqJgwleyD1UPH+KZBBX2FUY5GnJZiKflEDdNGeHzAA==
-X-Received: by 2002:a5d:5102:0:b0:30e:4c8d:c6c with SMTP id s2-20020a5d5102000000b0030e4c8d0c6cmr1743312wrt.55.1686060004870;
-        Tue, 06 Jun 2023 07:00:04 -0700 (PDT)
-Received: from [192.168.1.172] (158.22.5.93.rev.sfr.net. [93.5.22.158])
-        by smtp.gmail.com with ESMTPSA id y14-20020a5d470e000000b002fed865c55esm12639517wrq.56.2023.06.06.07.00.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Jun 2023 07:00:04 -0700 (PDT)
-Message-ID: <1dd3ee51-f1e8-2a4e-f0d5-dd61ee5206f2@baylibre.com>
-Date:   Tue, 6 Jun 2023 16:00:03 +0200
+        Tue, 6 Jun 2023 11:40:20 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E1AC139
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 08:40:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686066019; x=1717602019;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=+Yd7V++zdvA2vEUkR1sYRPT7hNptU858SN5zGbFEXrY=;
+  b=apAOSI+2yF4UhOOnMyLxUYPWwUyDVl3V927vBXZfsGNZGE6RB7JMsLna
+   IZDM6BfMNxMORXYIiVR0ZpHGYzuh4bWJXSo3ZuX5zWcYFHIqVNA89v5l5
+   ZXcwh8I8tIF2xb7As8h9pQBFnfFnxnDQwK7sPr9nM9TSUoe2XPgMg8gro
+   4ZnaCWsGH429wVWamfwMng2hZ9thLXxw25H4mj6WxveGfbyFGA3A8GeGb
+   ztVk99BB88UXsRwWdvUNfQfl0ZLHws/tl68pjaZOjM3Xsg0yGSyJgFMal
+   ZIslqMwL3xj2/1tOQ0kSsncBRBRqJdrkMK7SUYAA6FfvQv395JbsyhhLg
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="422550127"
+X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
+   d="scan'208";a="422550127"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 08:39:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="955816512"
+X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
+   d="scan'208";a="955816512"
+Received: from pdonvalk-mobl2.amr.corp.intel.com (HELO [10.255.231.168]) ([10.255.231.168])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 08:39:06 -0700
+Message-ID: <00aeb130-b3d0-ebab-51da-4e590eef8c7b@linux.intel.com>
+Date:   Tue, 6 Jun 2023 09:00:12 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v12 3/7] iommu/mediatek: Adjust mtk_iommu_config flow
+ Firefox/102.0 Thunderbird/102.11.0
+Subject: Re: [PATCH V3 1/9] ASoC: amd: ps: create platform devices based on
+ acp config
+To:     Vijendar Mukunda <Vijendar.Mukunda@amd.com>, broonie@kernel.org
+Cc:     alsa-devel@alsa-project.org, Basavaraj.Hiregoudar@amd.com,
+        Sunil-kumar.Dommati@amd.com, Mastan.Katragadda@amd.com,
+        Arungopal.kondaveeti@amd.com, mario.limonciello@amd.com,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Syed Saba Kareem <Syed.SabaKareem@amd.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230606060724.2038680-1-Vijendar.Mukunda@amd.com>
+ <20230606060724.2038680-2-Vijendar.Mukunda@amd.com>
 Content-Language: en-US
-To:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Robin Murphy <robin.murphy@arm.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, iommu@lists.linux.dev,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        mingyuan.ma@mediatek.com, yf.wang@mediatek.com,
-        jianjiao.zeng@mediatek.com, chengci.xu@mediatek.com
-References: <20230602090227.7264-1-yong.wu@mediatek.com>
- <20230602090227.7264-4-yong.wu@mediatek.com>
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-In-Reply-To: <20230602090227.7264-4-yong.wu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20230606060724.2038680-2-Vijendar.Mukunda@amd.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/06/2023 11:02, Yong Wu wrote:
-> If there are many ports in a infra master, current flow will update
-> the INFRA register many times. This patch saves all ports to portid_msk
-> in the front of mtk_iommu_config(), then update only once for the IOMMU
-> configure. After this, we could avoid send too many SMC calls to ATF in
-> MT8188.
-> 
-> Prepare for MT8188, also reduce the indention without functional change.
 
-Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
 
--- 
-Regards,
-Alexandre
 
+> +/**
+> + * acp_pdev_mask corresponds to platform device mask based on audio endpoint combinations.
+> + * acp_pdev_mask will be calculated based on ACPI Scan under ACP PCI device and
+> + * ACP PIN Configuration.
+> + * Based acp_pdev_mask, platform devices will be created.
+> + * Below are possible platform device combinations.
+> + * 1) ACP PDM Controller, dmic-codec, machine driver platform device node
+> + * 2) ACP PDM Controller , dmic-codec, SW0 SoundWire manager instance, platform device for
+> + *    SoundWire DMA driver
+> + * 3) SW0, SW1 SoundWire manager instances, platform device for SoundWire DMA driver
+> + * 4) ACP PDM Controller, dmic-codec, SDW0, SDW1 manager instances, platform device for
+> + *    SoundWire DMA driver
+> + * ACP63_PDM_DEV_MASK corresponds to platform device mask for ACP PDM controller.
+> + * ACP63_SDW_DEV_MASK corresponds to platform device mask for SDW manager instances.
+> + * ACP63_SDW_PDM_DEV_MASK corresponds to platform device mask for ACP PDM + SDW manager combination
+> + */
+> +enum acp_pdev_mask {
+> +	ACP63_PDM_DEV_MASK = 1,
+> +	ACP63_SDW_DEV_MASK,
+> +	ACP63_SDW_PDM_DEV_MASK,
+> +};
+
+This does not look like a mask, the definitions prevent bit-wise
+operations from happening.
+
+Either use BIT(0), BIT(1), BIT(2) or GENMASK(1, 0), or demote this to a
+regular enum (e.g. pdev_config or something)
+
+> +
+>  struct pdm_stream_instance {
+>  	u16 num_pages;
+>  	u16 channels;
+> @@ -95,14 +144,38 @@ struct pdm_dev_data {
+>  	struct snd_pcm_substream *capture_stream;
+>  };
+>  
+> +/**
+> + * struct acp63_dev_data - acp pci driver context
+> + * @acp63_base: acp mmio base
+> + * @res: resource
+> + * @pdev: array of child platform device node structures
+> + * @acp_lock: used to protect acp common registers
+> + * @sdw_fw_node: SoundWire controller fw node handle
+> + * @pdev_mask: platform device mask
+> + * @pdev_count: platform devices count
+> + * @pdm_dev_index: pdm platform device index
+> + * @sdw_manager_count: SoundWire manager instance count
+> + * @sdw0_dev_index: SoundWire Manager-0 platform device index
+> + * @sdw1_dev_index: SoundWire Manager-1 platform device index
+> + * @sdw_dma_dev_index: SoundWire DMA controller platform device index
+> + * @acp_reset: flag set to true when bus reset is applied across all
+> + * the active SoundWire manager instances
+> + */
+> +
+>  struct acp63_dev_data {
+>  	void __iomem *acp63_base;
+>  	struct resource *res;
+>  	struct platform_device *pdev[ACP63_DEVS];
+>  	struct mutex acp_lock; /* protect shared registers */
+> +	struct fwnode_handle *sdw_fw_node;
+>  	u16 pdev_mask;
+>  	u16 pdev_count;
+>  	u16 pdm_dev_index;
+> +	u8 sdw_manager_count;
+> +	u16 sdw0_dev_index;
+> +	u16 sdw1_dev_index;
+> +	u16 sdw_dma_dev_index;
+> +	bool acp_reset;
+>  };
+>  
+>  int snd_amd_acp_find_config(struct pci_dev *pci);
+> diff --git a/sound/soc/amd/ps/pci-ps.c b/sound/soc/amd/ps/pci-ps.c
+> index 54752d6040d6..816c22e7f1ab 100644
+> --- a/sound/soc/amd/ps/pci-ps.c
+> +++ b/sound/soc/amd/ps/pci-ps.c
+> @@ -6,6 +6,7 @@
+>   */
+>  
+>  #include <linux/pci.h>
+> +#include <linux/bitops.h>
+>  #include <linux/module.h>
+>  #include <linux/io.h>
+>  #include <linux/delay.h>
+> @@ -15,6 +16,7 @@
+>  #include <sound/pcm_params.h>
+>  #include <linux/pm_runtime.h>
+>  #include <linux/iopoll.h>
+> +#include <linux/soundwire/sdw_amd.h>
+>  
+>  #include "acp63.h"
+>  
+> @@ -119,37 +121,162 @@ static irqreturn_t acp63_irq_handler(int irq, void *dev_id)
+>  	return IRQ_NONE;
+>  }
+>  
+> -static void get_acp63_device_config(u32 config, struct pci_dev *pci,
+> -				    struct acp63_dev_data *acp_data)
+> +static int sdw_amd_scan_controller(struct device *dev)
+> +{
+> +	struct acp63_dev_data *acp_data;
+> +	struct fwnode_handle *link;
+> +	char name[32];
+> +	u32 sdw_manager_bitmap;
+> +	u8 count = 0;
+> +	u32 acp_sdw_power_mode = 0;
+> +	int index;
+> +	int ret;
+> +
+> +	acp_data = dev_get_drvdata(dev);
+> +	acp_data->acp_reset = true;
+> +	/* Found controller, find links supported */
+> +	ret = fwnode_property_read_u32_array((acp_data->sdw_fw_node), "mipi-sdw-manager-list",
+> +					     &sdw_manager_bitmap, 1);
+
+IIRC this is only defined in the DisCo 2.0 spec, previous editions had a
+'mipi-master-count'. A comment would not hurt to point to the minimal
+DisCo spec version.
+
+> +
+> +	if (ret) {
+> +		dev_err(dev, "Failed to read mipi-sdw-manager-list: %d\n", ret);
+> +		return -EINVAL;
+> +	}
+> +	count = hweight32(sdw_manager_bitmap);
+> +	/* Check count is within bounds */
+> +	if (count > AMD_SDW_MAX_MANAGERS) {
+> +		dev_err(dev, "Manager count %d exceeds max %d\n", count, AMD_SDW_MAX_MANAGERS);
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (!count) {
+> +		dev_dbg(dev, "No SoundWire Managers detected\n");
+> +		return -EINVAL;
+> +	}
+> +	dev_dbg(dev, "ACPI reports %d SoundWire Manager devices\n", count);
+> +	acp_data->sdw_manager_count = count;
+> +	for (index = 0; index < count; index++) {
+> +		snprintf(name, sizeof(name), "mipi-sdw-link-%d-subproperties", index);
+> +		link = fwnode_get_named_child_node(acp_data->sdw_fw_node, name);
+> +		if (!link) {
+> +			dev_err(dev, "Manager node %s not found\n", name);
+> +			return -EIO;
+> +		}
+> +
+> +		ret = fwnode_property_read_u32(link, "amd-sdw-power-mode", &acp_sdw_power_mode);
+> +		if (ret)
+> +			return ret;
+> +		/*
+> +		 * when SoundWire configuration is selected from acp pin config,
+> +		 * based on manager instances count, acp init/de-init sequence should be
+> +		 * executed as part of PM ops only when Bus reset is applied for the active
+> +		 * SoundWire manager instances.
+> +		 */
+> +		if (acp_sdw_power_mode != AMD_SDW_POWER_OFF_MODE) {
+> +			acp_data->acp_reset = false;
+> +			return 0;
+> +		}
+> +	}
+> +	return 0;
+> +}
+> +
+> +static int get_acp63_device_config(u32 config, struct pci_dev *pci, struct acp63_dev_data *acp_data)
+>  {
+>  	struct acpi_device *dmic_dev;
+> +	struct acpi_device *sdw_dev;
+>  	const union acpi_object *obj;
+>  	bool is_dmic_dev = false;
+> +	bool is_sdw_dev = false;
+> +	int ret;
+>  
+>  	dmic_dev = acpi_find_child_device(ACPI_COMPANION(&pci->dev), ACP63_DMIC_ADDR, 0);
+>  	if (dmic_dev) {
+> +		/* is_dmic_dev flag will be set when ACP PDM controller device exists */
+>  		if (!acpi_dev_get_property(dmic_dev, "acp-audio-device-type",
+
+usually properties start with the 'mipi-' or 'vendor-' prefix. Is there
+a missing 'amd-' here or is 'acp-' unique enough?
