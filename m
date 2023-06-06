@@ -2,64 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE1EE724081
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 13:09:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A167372407E
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 13:09:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235842AbjFFLJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 07:09:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43150 "EHLO
+        id S232572AbjFFLJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 07:09:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236800AbjFFLIy (ORCPT
+        with ESMTP id S236696AbjFFLIj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 07:08:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 895041715
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 04:06:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686049605;
+        Tue, 6 Jun 2023 07:08:39 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64425198C;
+        Tue,  6 Jun 2023 04:07:26 -0700 (PDT)
+X-GND-Sasl: miquel.raynal@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1686049644;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=O9d5bP1gQuJXoEA6pUWt9ORuENs1rGV35zFDv1yXe84=;
-        b=ForNn+qq2tqGr2a6+9nSt5fIYxwwpNkueshTPv/yCN+K0zt4lICevJzIl+ewHV0Tj1EYA/
-        1poUk3PkyJnOmHUUkX05JWAhAjGsL6z9yc2yciMlHYKvxKabiSsahpgJhL9tkaPPDXHZYe
-        fwb94+MbOLvmeqbJX+HcZzDfi69GntM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-532-yCGlh9owPYug3WKAQVddAw-1; Tue, 06 Jun 2023 07:06:44 -0400
-X-MC-Unique: yCGlh9owPYug3WKAQVddAw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F1F8385A5BB;
-        Tue,  6 Jun 2023 11:06:43 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.226.222])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 850517AE4;
-        Tue,  6 Jun 2023 11:06:42 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Tue,  6 Jun 2023 13:06:21 +0200 (CEST)
-Date:   Tue, 6 Jun 2023 13:06:19 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH REPOST 1/2] signal: Add proper comment about the
- preempt-disable in ptrace_stop().
-Message-ID: <20230606110618.GB7542@redhat.com>
-References: <20230606085524.2049961-1-bigeasy@linutronix.de>
- <20230606085524.2049961-2-bigeasy@linutronix.de>
+        bh=09M+g6gmWXcLOlBrqcMFpDqHK+MqU1CBFEr/Ok+0g8I=;
+        b=AQpOpxdw1CqkMeYpVcOKhMeqrhBhfnWmdaUaItWRJoZMp3S1lZMh4M+NvPjloiNQJfZdnh
+        /TN6xPwnB+jTieCuPmAea+CetcLysfPg3yDjjgu6bjEJ/hhr/t/EXo2vEDRAdi4qVbKeOg
+        ix8QSQHY401UTJve/0F8BV6M+HhWVmIpw689AERXV2DPNkBsjd207iNS1Xw2YYMWlqabif
+        JEpP/7fnNE1ogD79oqySl2XUCUPJKqudU1wa+3x1LP52wU2zfZS0dBDudr2vD2kzNHDY9a
+        +z91WzYciBYLXk3w7Nc9cvG8KT2AELvKyNHqW1UV6fj4RuXY63e+ylv3iqVeuw==
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id ADE5CE000D;
+        Tue,  6 Jun 2023 11:07:20 +0000 (UTC)
+Date:   Tue, 6 Jun 2023 13:07:19 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
+        "richard@nod.at" <richard@nod.at>,
+        "vigneshr@ti.com" <vigneshr@ti.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "conor+dt@kernel.org" <conor+dt@kernel.org>,
+        "andrew@lunn.ch" <andrew@lunn.ch>,
+        "gregory.clement@bootlin.com" <gregory.clement@bootlin.com>,
+        "sebastian.hesselbarth@gmail.com" <sebastian.hesselbarth@gmail.com>,
+        "conor@kernel.org" <conor@kernel.org>,
+        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "enachman@marvell.com" <enachman@marvell.com>,
+        Vadym Kochan <vadym.kochan@plvision.eu>
+Subject: Re: [PATCH v8 3/3] dt-bindings: mtd: marvell-nand: Convert to YAML
+ DT scheme
+Message-ID: <20230606130719.5350174c@xps-13>
+In-Reply-To: <20230606125724.126a4685@xps-13>
+References: <20230531234923.2307013-1-chris.packham@alliedtelesis.co.nz>
+        <20230531234923.2307013-4-chris.packham@alliedtelesis.co.nz>
+        <a23dd485-a3d9-e31f-be3e-0ab293fcfc4a@linaro.org>
+        <785368df-1881-e62e-6172-d902cee814a8@alliedtelesis.co.nz>
+        <eaf9d7cf-c9f5-a5d5-67af-c43761c3c6cf@linaro.org>
+        <4ea0b16e-0cec-00db-c598-e0364a7edef8@alliedtelesis.co.nz>
+        <9fc57052-5049-ed50-ca95-cfd1d0420dd9@alliedtelesis.co.nz>
+        <20230606094855.1ab005eb@xps-13>
+        <845924ba-d9bf-d0ec-e1f2-f721366f43c0@linaro.org>
+        <20230606122812.411b223a@xps-13>
+        <e0d14527-8147-5e8b-6a43-ee043e0d0f8b@linaro.org>
+        <d0b2cdc5-12fd-9a19-b38c-0653b4147c2b@linaro.org>
+        <20230606125724.126a4685@xps-13>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230606085524.2049961-2-bigeasy@linutronix.de>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,16 +99,165 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/06, Sebastian Andrzej Siewior wrote:
->
-> Commit 53da1d9456fe7 ("fix ptrace slowness") added a preempt-disable section
-> between read_unlock() and the following schedule() invocation without
-> explaining why it is needed.
->
-> Replace the comment with an explanation why this is needed. Clarify that
-> it is needed for correctness but for performance reasons.
->
-> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Hi Krzysztof,
 
-Acked-by: Oleg Nesterov <oleg@redhat.com>
+miquel.raynal@bootlin.com wrote on Tue, 6 Jun 2023 12:57:24 +0200:
 
+> Hi Krzysztof,
+>=20
+> krzysztof.kozlowski@linaro.org wrote on Tue, 6 Jun 2023 12:40:45 +0200:
+>=20
+> > On 06/06/2023 12:37, Krzysztof Kozlowski wrote:
+> > > On 06/06/2023 12:28, Miquel Raynal wrote: =20
+> > >> Hi Krzysztof,
+> > >>
+> > >> krzysztof.kozlowski@linaro.org wrote on Tue, 6 Jun 2023 10:44:34 +02=
+00:
+> > >> =20
+> > >>> On 06/06/2023 09:48, Miquel Raynal wrote: =20
+> > >>>>>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 it (=
+otherwise it is harmless).
+> > >>>>>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 $ref: /schemas/t=
+ypes.yaml#/definitions/flag
+> > >>>>>>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 deprecated: true
+> > >>>>>>>>>> +
+> > >>>>>>>>>> +=C2=A0=C2=A0=C2=A0 additionalProperties: false     =20
+> > >>>>>>>>> unevaluatedProperties: false     =20
+> > >>>>>>>> It was hiding by '"^nand@[0-3]$":'. Should I move it here?    =
+ =20
+> > >>>>>>> You cannot have both additionalProps and unevaluatedProps at th=
+e same
+> > >>>>>>> time, so we do not talk about same thing or this was never work=
+ing?     =20
+> > >>>>>>
+> > >>>>>> Hmm, I'm a little confused then. At various times I've been told=
+ to=20
+> > >>>>>> put 'additionalProperties: false' or 'unevaluatedProperties: fal=
+se'=20
+> > >>>>>> (although never at the same time). I'm not sure when to use one =
+or the=20
+> > >>>>>> other.
+> > >>>>>>
+> > >>>>>> From what I've been able to glean 'additionalProperties: true'=20
+> > >>>>>> indicates that the node is expected to have child nodes defined =
+in a=20
+> > >>>>>> different schema so I would have thought 'additionalProperties: =
+false'=20
+> > >>>>>> would be appropriate for a schema covering a leaf node.=20
+> > >>>>>> 'unevaluatedProperties: false' seems to enable stricter checking=
+ which=20
+> > >>>>>> makes sense when all the properties are described in the schema.=
+     =20
+> > >>>>>
+> > >>>>> So I think this might be the problem. If I look at qcom,nandc.yam=
+l or=20
+> > >>>>> ingenic,nand.yaml which both have a partitions property in their=
+=20
+> > >>>>> example. Neither have 'unevaluatedProperties: false' on the nand@=
+...=20
+> > >>>>> subnode. If I add it sure enough I start getting complaints about=
+ the=20
+> > >>>>> 'partitions' node being unexpected.   =20
+> > >>>>
+> > >>>> Sorry if that was unclear, I think the whole logic around the yaml
+> > >>>> files is to progressively constrain the descriptions, schema after
+> > >>>> schema. IOW, in the marvell binding you should set
+> > >>>> unevaluatedProperties: false for the NAND controller. What is insi=
+de
+> > >>>> (NAND chips, partition container, partition parsers, "mtd" propert=
+ies,
+> > >>>> etc) will be handled by other files. Of course you can constrain a=
+ bit
+> > >>>> what can/cannot be used inside these subnodes, but I think you don=
+'t
+> > >>>> need to set unevaluatedProperties in these subnodes (the NAND chip=
+ in
+> > >>>> this case, or even the partitions) because you already reference
+> > >>>> nand-controller.yaml which references nand-chip.yaml, mtd.yaml,
+> > >>>> partitions.yaml, etc. *they* will make the generic checks and hope=
+fully
+> > >>>> apply stricter checks, when deemed relevant.   =20
+> > >>>
+> > >>> No, neither nand-controller.yaml nor nand-chip.yaml limit the prope=
+rties
+> > >>> in this context, so each device schema must have unevaluatedPropert=
+ies:
+> > >>> false, for which I asked few emails ago. =20
+> > >>
+> > >> The controller description shall be guarded by unevaluatedProperties:
+> > >> false, we agree. Do you mean the nand chip description in each nand
+> > >> controller binding should also include it at its own level? Because
+> > >> that is not what we enforced so far IIRC. I am totally fine doing so
+> > >> starting from now on if this is a new requirement (which makes sense=
+).
+> > >>
+> > >> If yes, then it means we would need to list *all* the nand
+> > >> chip properties in each schema, which clearly involves a lot of
+> > >> duplication as you would need to define all types of partitions,
+> > >> partition parsers, generic properties, etc in order for the examples=
+ to
+> > >> pass all the checks. Only the properties like pinctrl-* would not ne=
+ed
+> > >> to be listed I guess. =20
+> > >=20
+> > > Yes, this is what should be done. Each node should have either =20
+> >=20
+> > Eh, no, I responded in wrong part of message. My yes was for:
+> >=20
+> > " Do you mean the nand chip description in each nand
+> > controller binding should also include it at its own level?"
+>=20
+> Clear.
+>=20
+> >=20
+> > Now for actual paragraph:
+> >=20
+> > "If yes, then it means we would need to list *all* the nand chip
+> > properties in each schema,"
+> >=20
+> > No, why? I don't understand. Use the same pattern as all other bindings,
+> > this is not special. Absolutely all have the same behavior, e.g.
+> > mentioned leds. You finish with unevaluatedProps and you're done, which
+> > is what I wrote here long, long time ago.
+>=20
+> Maybe because so far we did not bother referencing another schema in
+> the NAND chip nodes? For your hint to work I guess we should have, in
+> each controller binding, something along:
+>=20
+>  patternProperties:
+>    "^nand@[a-f0-9]$":
+>      type: object
+> +    $ref: nand-chip.yaml#
+>      properties:
+>=20
+> If yes, please ignore the series sent aside, I will work on it again
+> and send a v2.
+
+Actually I already see a problem, let's the ingenic,nand.yaml example.
+The goal, IIUC, is to do:
+
+ patternProperties:
+   "^nand@[a-f0-9]$":
+     type: object
++    $ref: nand-chip.yaml
+     properties:
+
+       ...
+
++    unevaluatedProperties: false
+
+The example in this file uses a property, nand-on-flash-bbt, which is
+described inside nand-controller.yaml instead of nand-chip.yaml.
+Indeed, the former actually describes many properties which are a bit
+more controller related than chip related. With the above description,
+the example fails because nand-on-flash-bbt is not allowed (it is not
+listed in nand-chip.yaml).
+
+How would you proceed in this case?
+
+Maybe I could move all the NAND chip properties which are somehow
+related to NAND controllers (and defined in nand-controller.yaml) in a
+dedicated file and reference it from nand-chip.yaml? Any other idea is
+welcome.
+
+Thanks, Miqu=C3=A8l
