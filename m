@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 968B1724C10
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 21:04:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 189D1724C16
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 21:04:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239229AbjFFTEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 15:04:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38690 "EHLO
+        id S232656AbjFFTEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 15:04:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239199AbjFFTEQ (ORCPT
+        with ESMTP id S239213AbjFFTET (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 15:04:16 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF2B1706
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 12:04:15 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-ba83a9779f3so9814227276.1
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 12:04:15 -0700 (PDT)
+        Tue, 6 Jun 2023 15:04:19 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 971EC10F2
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 12:04:17 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5651d8acfe2so107569377b3.2
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 12:04:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686078255; x=1688670255;
+        d=google.com; s=20221208; t=1686078257; x=1688670257;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=W42CnlEhHXSQD8oU0aesgTIb+2nDDRqlSHCZLxoyAZw=;
-        b=SI6wxzD3jNLZvjIR3ui3oLLkrgjrOnUdyqmkDtNB4LvaXzaOxSopYwQDXGSPUwGt0b
-         d1EHBVyiG4hUUHi15P58bSdZq1hiIfxHNvpvia7Cxzf6d0mYTmKP/FDWWkzVCNVJSia8
-         WKQpt+ZebghqzxY/2xXY0xK+V+7VuTACGmy8UzpKH/NOajrF02Jvbazs2Qt1cP/5GZi3
-         Pxw8kkdCQkLaRblrUwFR5NCQzIvEfWgJISfEM1oMrdysWZB/g9FTr60M+vCWXu+AmqCG
-         W3rBiG3Eit8E92Xwv+sO+1jySrdLIuEFp3Em5lURfr02pKqbadaZwr4BvewtCxcGcLfE
-         Bs7Q==
+        bh=+hBYwj+hDVdRsN8/1AwobMe3CTJKx3rv/kAyLXc58so=;
+        b=H7E3FiMFKx8wp9Dwc4KoRhYITqBdXBFbeuSdYVU7Xl2quiLV1TI/RBj6a84p3NhH+A
+         6Ot5kD4xdeERpXhx7UwpPyWytx0ckODJexzs4v23BK+jBmvA/ejV4+lVF1eJPpgHviEu
+         uumCUBgaOBD3ECdp59KweUCJLiBB+HqC6NZrMNuSqXw8B1oiojQQln/v/JBqZ3dwGu23
+         pfO6fIO6tANLPLyeFwUcf8Qi72Eo5MQO/Xul1ZcTopSBQKuO94fsqUr8V4qbQI+x7jBp
+         uRAq7xDxsM2mm1v+/TKXiQUaFoQhkNFaDB59XiYo7wFgeMK27ohvJb62IAQGNTsPTIVZ
+         PvjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686078255; x=1688670255;
+        d=1e100.net; s=20221208; t=1686078257; x=1688670257;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=W42CnlEhHXSQD8oU0aesgTIb+2nDDRqlSHCZLxoyAZw=;
-        b=RRQcpgvtYecvKwxzlT1qvB9e9xB76jLexQwIvLmY2LAxC0XFHHSo/559txZZnNd96I
-         0HAhWzZFAiQseZe8adiaVGGlQhzzSoTp1RoKJWLcisf12Yu9UshNUbNVulN9cUPBJtOv
-         sBzalnVmoIPW5zPBiMOCzCdtgDNAl1vMxOEQ+KX6QKTSuOowpthqFYLkHZat23v7ROsO
-         l0chQkqTD3pugkzQkebQPIg2l7hGkYdRmQeRIt44rMJEWEOOiPtyB2g5jkblvGcAj+10
-         NVwGDL28ty4JgMaMk32wFMBl24+R6i9AMkExKREBzXuQHpp/IBXrDK8Vj12Kym2LguD1
-         A1og==
-X-Gm-Message-State: AC+VfDzOY3bCReXFkeFZ/fBHxMULbEtZYPk+7uekQJJYa9WomUKnCAXl
-        T5rXZ+zuxF769wWOUaw6sHuusN2n+7hBHyoQqQ==
-X-Google-Smtp-Source: ACHHUZ535voW+NPlWmi/k960ILK6GzLJuoo4o0Ye5mrBBjql7Wgmyk28/ve76hKFr5oQ8deqfVoTqFa20GrqC6sA9g==
+        bh=+hBYwj+hDVdRsN8/1AwobMe3CTJKx3rv/kAyLXc58so=;
+        b=KwEpT2bxz/WH3zoQGNOPP2hFnI0BV2HSWv/Re+hGgA1zTi9EOungmylpXqHJLYHG0S
+         Xc9XfmFp68owrbgfHvtVKLXNhMw8AoyesYourYqyX/90O3k4LZxpqiAJ9jbkHXqKoVjG
+         jKbKgkSmwJwm4FJeFmJMG3gPhw8YdZl3G5LNjKOMXRLQg0FWv/zXTh6spSiPPeg1qQbK
+         Vf1P60I4mKiavVnuhMJ9bKwav23f97K25L1yn9iGrTUdT6e39savvn4UxFBC04LCyRf7
+         RXMhovL6783NZF8kfCdIPkfPXYnY9G2mSGySqeDOEEeB4X6NqRIHUaTIepMBeeLz+Yjj
+         2WTQ==
+X-Gm-Message-State: AC+VfDyAk8Via4/taJcEWqyZU9lsKPmQTCBu6wfilYz1PdIIkLjkg29K
+        HKuHX7O8kG5oe/GUYc1xX6H40mopbVDKcEnAyw==
+X-Google-Smtp-Source: ACHHUZ68tuaeB7ur+Gj0U5ZR5IxxzkEh+TRxbplImu5DoiCt68fH6drAzpWUcd9Di+kjyJGUd+Eua/GN38BmucMMtA==
 X-Received: from ackerleytng-ctop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:13f8])
- (user=ackerleytng job=sendgmr) by 2002:a25:2ce:0:b0:bb3:ac6a:6d61 with SMTP
- id 197-20020a2502ce000000b00bb3ac6a6d61mr1216938ybc.3.1686078254851; Tue, 06
- Jun 2023 12:04:14 -0700 (PDT)
-Date:   Tue,  6 Jun 2023 19:03:46 +0000
+ (user=ackerleytng job=sendgmr) by 2002:a05:6902:1882:b0:ba8:337a:d8a3 with
+ SMTP id cj2-20020a056902188200b00ba8337ad8a3mr1661367ybb.11.1686078256773;
+ Tue, 06 Jun 2023 12:04:16 -0700 (PDT)
+Date:   Tue,  6 Jun 2023 19:03:47 +0000
 In-Reply-To: <cover.1686077275.git.ackerleytng@google.com>
 Mime-Version: 1.0
 References: <cover.1686077275.git.ackerleytng@google.com>
 X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Message-ID: <b3924b31a274477b623d156b456ebc8891756e10.1686077275.git.ackerleytng@google.com>
-Subject: [RFC PATCH 01/19] mm: hugetlb: Expose get_hstate_idx()
+Message-ID: <97c312c8c0b56218454d546a540a3ea2e2a825e2.1686077275.git.ackerleytng@google.com>
+Subject: [RFC PATCH 02/19] mm: hugetlb: Move and expose hugetlbfs_zero_partial_page
 From:   Ackerley Tng <ackerleytng@google.com>
 To:     akpm@linux-foundation.org, mike.kravetz@oracle.com,
         muchun.song@linux.dev, pbonzini@redhat.com, seanjc@google.com,
@@ -77,73 +77,135 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Expose get_hstate_idx() so it can be used from KVM's guest_mem code
+Zeroing of pages is generalizable to hugetlb and is not specific to
+hugetlbfs.
+
+Rename hugetlbfs_zero_partial_page => hugetlb_zero_partial_page, move
+it to mm/hugetlb.c and expose it in linux/hugetlb.h.
 
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 ---
- fs/hugetlbfs/inode.c    |  9 ---------
- include/linux/hugetlb.h | 14 ++++++++++++++
- 2 files changed, 14 insertions(+), 9 deletions(-)
+ fs/hugetlbfs/inode.c    | 27 ++-------------------------
+ include/linux/hugetlb.h |  6 ++++++
+ mm/hugetlb.c            | 22 ++++++++++++++++++++++
+ 3 files changed, 30 insertions(+), 25 deletions(-)
 
 diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
-index 9062da6da567..406d7366cf3e 100644
+index 406d7366cf3e..3dab50d3ed88 100644
 --- a/fs/hugetlbfs/inode.c
 +++ b/fs/hugetlbfs/inode.c
-@@ -1560,15 +1560,6 @@ static int can_do_hugetlb_shm(void)
- 	return capable(CAP_IPC_LOCK) || in_group_p(shm_group);
+@@ -688,29 +688,6 @@ static void hugetlb_vmtruncate(struct inode *inode, loff_t offset)
+ 	remove_inode_hugepages(inode, offset, LLONG_MAX);
  }
  
--static int get_hstate_idx(int page_size_log)
+-static void hugetlbfs_zero_partial_page(struct hstate *h,
+-					struct address_space *mapping,
+-					loff_t start,
+-					loff_t end)
 -{
--	struct hstate *h = hstate_sizelog(page_size_log);
+-	pgoff_t idx = start >> huge_page_shift(h);
+-	struct folio *folio;
 -
--	if (!h)
--		return -1;
--	return hstate_index(h);
+-	folio = filemap_lock_folio(mapping, idx);
+-	if (!folio)
+-		return;
+-
+-	start = start & ~huge_page_mask(h);
+-	end = end & ~huge_page_mask(h);
+-	if (!end)
+-		end = huge_page_size(h);
+-
+-	folio_zero_segment(folio, (size_t)start, (size_t)end);
+-
+-	folio_unlock(folio);
+-	folio_put(folio);
 -}
 -
- /*
-  * Note that size should be aligned to proper hugepage size in caller side,
-  * otherwise hugetlb_reserve_pages reserves one less hugepages than intended.
+ static long hugetlbfs_punch_hole(struct inode *inode, loff_t offset, loff_t len)
+ {
+ 	struct hugetlbfs_inode_info *info = HUGETLBFS_I(inode);
+@@ -737,7 +714,7 @@ static long hugetlbfs_punch_hole(struct inode *inode, loff_t offset, loff_t len)
+ 
+ 	/* If range starts before first full page, zero partial page. */
+ 	if (offset < hole_start)
+-		hugetlbfs_zero_partial_page(h, mapping,
++		hugetlb_zero_partial_page(h, mapping,
+ 				offset, min(offset + len, hole_start));
+ 
+ 	/* Unmap users of full pages in the hole. */
+@@ -750,7 +727,7 @@ static long hugetlbfs_punch_hole(struct inode *inode, loff_t offset, loff_t len)
+ 
+ 	/* If range extends beyond last full page, zero partial page. */
+ 	if ((offset + len) > hole_end && (offset + len) > hole_start)
+-		hugetlbfs_zero_partial_page(h, mapping,
++		hugetlb_zero_partial_page(h, mapping,
+ 				hole_end, offset + len);
+ 
+ 	i_mmap_unlock_write(mapping);
 diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-index 7c977d234aba..37c2edf7beea 100644
+index 37c2edf7beea..023293ceec25 100644
 --- a/include/linux/hugetlb.h
 +++ b/include/linux/hugetlb.h
-@@ -876,6 +876,15 @@ static inline int hstate_index(struct hstate *h)
- 	return h - hstates;
+@@ -256,6 +256,9 @@ long hugetlb_change_protection(struct vm_area_struct *vma,
+ bool is_hugetlb_entry_migration(pte_t pte);
+ void hugetlb_unshare_all_pmds(struct vm_area_struct *vma);
+ 
++void hugetlb_zero_partial_page(struct hstate *h, struct address_space *mapping,
++			       loff_t start, loff_t end);
++
+ #else /* !CONFIG_HUGETLB_PAGE */
+ 
+ static inline void hugetlb_dup_vma_private(struct vm_area_struct *vma)
+@@ -464,6 +467,9 @@ static inline vm_fault_t hugetlb_fault(struct mm_struct *mm,
+ 
+ static inline void hugetlb_unshare_all_pmds(struct vm_area_struct *vma) { }
+ 
++static inline void hugetlb_zero_partial_page(
++	struct hstate *h, struct address_space *mapping, loff_t start, loff_t end) {}
++
+ #endif /* !CONFIG_HUGETLB_PAGE */
+ /*
+  * hugepages at page global directory. If arch support
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index 07abcb6eb203..9c9262833b4f 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -7407,6 +7407,28 @@ void hugetlb_unshare_all_pmds(struct vm_area_struct *vma)
+ 			ALIGN_DOWN(vma->vm_end, PUD_SIZE));
  }
  
-+static inline int get_hstate_idx(int page_size_log)
++void hugetlb_zero_partial_page(struct hstate *h,
++			       struct address_space *mapping,
++			       loff_t start, loff_t end)
 +{
-+	struct hstate *h = hstate_sizelog(page_size_log);
++	pgoff_t idx = start >> huge_page_shift(h);
++	struct folio *folio;
 +
-+	if (!h)
-+		return -1;
-+	return hstate_index(h);
++	folio = filemap_lock_folio(mapping, idx);
++	if (!folio)
++		return;
++
++	start = start & ~huge_page_mask(h);
++	end = end & ~huge_page_mask(h);
++	if (!end)
++		end = huge_page_size(h);
++
++	folio_zero_segment(folio, (size_t)start, (size_t)end);
++
++	folio_unlock(folio);
++	folio_put(folio);
 +}
 +
- extern int dissolve_free_huge_page(struct page *page);
- extern int dissolve_free_huge_pages(unsigned long start_pfn,
- 				    unsigned long end_pfn);
-@@ -1142,6 +1151,11 @@ static inline int hstate_index(struct hstate *h)
- 	return 0;
- }
+ #ifdef CONFIG_CMA
+ static bool cma_reserve_called __initdata;
  
-+static inline int get_hstate_idx(int page_size_log)
-+{
-+	return 0;
-+}
-+
- static inline int dissolve_free_huge_page(struct page *page)
- {
- 	return 0;
 -- 
 2.41.0.rc0.172.g3f132b7071-goog
 
