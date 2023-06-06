@@ -2,173 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D51EB723C79
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 11:03:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4722723C7D
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 11:05:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236367AbjFFJDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 05:03:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50262 "EHLO
+        id S232302AbjFFJFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 05:05:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234678AbjFFJDo (ORCPT
+        with ESMTP id S230507AbjFFJFX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 05:03:44 -0400
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2101.outbound.protection.outlook.com [40.107.101.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44D51EA;
-        Tue,  6 Jun 2023 02:03:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Y5n3o0X/PJ2jlhMrTk5pxxP3ltpIX3TCGhbPmWLpUNMeJhHTWB6gkaCl6SnymUpwfYe00Hmz6lWEtpkaQUGazxhfg4BDJJ1B8GElGCg4rM+fAEet6IrGWj0IoxlMJ88vwFIxewgdjbNs6Kj8UmACLTKyhj+n8jGNNXeDnlV7CKU0kWY1pkiPY+QwXtIYCNDyJZipMrz+YLHWObnyUS21dcNFkWDxGdOXorqA6FxiQK81k6XoK9gFvTxbyPiGeNNqvJhUYxeeGl/wm/6u9rLq/4Jc1FguWUpgMYqv4IR0AdjypyMHx/t79oX8FlblRTHdPuBnGXdp033OuIY95eQ01A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uiMD/Wi2OORyyqz7AWIVv2bvNz5qMuDJx32kVoEMjMs=;
- b=Ki2v61LyxR0pIyfiN3XcZ/3B4bvDayynqSFMReDq9GxCdDNQzVKXNFv+4sNYboX7dMo4F4PfeAq2loHMuR3mIN6qLOOCdFQCmRqOLnJJn/19mKr/NLbqABtFdA+Jwvy7UXs0CO3qqjqRJmqVSGNBj0/5kPvHcmjo3kL/gHzBg3mBy0H6dAXuSMe4h3svQxfCrF8qiNGCWu7aSH+TOo7dzfW9oFfg+LGSjAHkjL/2Q2LIeRflwXM9h8vkNRjSXRGle1epPYpNm32tuo3kkDMaAnoDEKfK3gyKex5abH1vVQSqC6s8tq5xMEgKJoTPaI0c+A2lO0K4Sj6N+hw86LVcYQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Tue, 6 Jun 2023 05:05:23 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7BAB8F
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 02:05:21 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-30c4775d05bso4310981f8f.2
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 02:05:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uiMD/Wi2OORyyqz7AWIVv2bvNz5qMuDJx32kVoEMjMs=;
- b=k7SH6W+JZt1GFJdiXKlrNwslkhfHwUG4brf37bZcbYSeO49hcAWP2dAgO2DSBWlW5vIb+2iqz9OPQO6zUX/D+bwAnL5bVgb1dPQ9OVXrc0LUCDpdBcDbn3bkflL4hGETtdzjtKV/2HtkKWaWMwocXdMkYhBb+I233kURwk+FE9U=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by CH2PR13MB3895.namprd13.prod.outlook.com (2603:10b6:610:94::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Tue, 6 Jun
- 2023 09:03:39 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb8f:e482:76e0:fe6e]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::eb8f:e482:76e0:fe6e%4]) with mapi id 15.20.6455.030; Tue, 6 Jun 2023
- 09:03:39 +0000
-Date:   Tue, 6 Jun 2023 11:03:31 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Paul Fertser <fercerpav@gmail.com>
-Cc:     linux-wireless@vger.kernel.org, Felix Fietkau <nbd@nbd.name>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Shayne Chen <shayne.chen@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, Rani Hod <rani.hod@gmail.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] mt76: mt7615: do not advertise 5 GHz on first phy of
- MT7615D (DBDC)
-Message-ID: <ZH72YwgpywPNxbd2@corigine.com>
-References: <20230605073408.8699-1-fercerpav@gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230605073408.8699-1-fercerpav@gmail.com>
-X-ClientProxiedBy: AS4P190CA0044.EURP190.PROD.OUTLOOK.COM
- (2603:10a6:20b:5d1::8) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        d=linaro.org; s=google; t=1686042320; x=1688634320;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=wwgj8k1ofjFPTMWJGTpnmuKpMNoWPqWb68cZdGx1NL4=;
+        b=yRq6Q4OBl2P63tGLKgbTRbW4zjkreFWFvg/pJSnL/vPBKEbMlNlDMKP3q5VRhJYVh0
+         JbF0EIEEcl4HULNeCq8LM9RJUDAkOWe9jdYppiMQbdFucVJl995AAK4W6GSwahTwJir7
+         IQCUVgRZDVUdKT9PvCEeAhnvjCg98MIZlTbObeRWk66qgDhQtni5DTiyQdWfEo033LGI
+         lNuuZUpQKFTtg0TL+0oTlJsr+mqTzKNSZ31zjewiog3hLyaMyTnQbOuV+DZpPrMmHdpj
+         lkPy1AS/se4xUgi2NUq+x2U8ETBCtW9KPQqyKOD1oGugADxNzAcmHu1Q4XVETlhg3GcP
+         OERw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686042320; x=1688634320;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wwgj8k1ofjFPTMWJGTpnmuKpMNoWPqWb68cZdGx1NL4=;
+        b=eLH0v8MJaXO4IVQ3OsSjHeQMnUx9Y+JFtsv39QsagDXH0DbBep8Hb9J6OhObtIRHUK
+         UNY1D6zq6993Z6hizN2PLScXH69Ok2FoRIFYZaLKLMgnjrR9tsquYanrxInKxreiF4kT
+         OZkpGHfMADPJlTylUxEJAN0mosNm3JQCoWxdsS5LPjrA/PhgcUTJVNuTwDYjrc/HRxyU
+         31mkknys6r4wgc8As7YEQJrV+y3LtoCLuL8VdstWOWw1JFULAx6D6mkB1ZO1FW33mkdr
+         heH+MJTz/ZsNm+Cf0g6dLlHk8YXDEucDrhn3XfQgh6BD94boHDpugEedIAK2paTeCELr
+         LWVQ==
+X-Gm-Message-State: AC+VfDzBqc6TfZlblzUw1gnGvs4q+0ze4/G3KbXXyAVCQ9jPZllosFip
+        Le7OfvJvHxtQ4g6RbTJGhaNjvg==
+X-Google-Smtp-Source: ACHHUZ4OZMcdol/nUB9cASf0i7t5RKdy/Xf2x73R0rdrOofi3ztvlKw3U50b0I+1PoeBk3uN3U6Xwg==
+X-Received: by 2002:adf:f1c6:0:b0:30c:7183:b2dc with SMTP id z6-20020adff1c6000000b0030c7183b2dcmr1385939wro.14.1686042320314;
+        Tue, 06 Jun 2023 02:05:20 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:4973:1165:b171:fa69? ([2a01:e0a:982:cbb0:4973:1165:b171:fa69])
+        by smtp.gmail.com with ESMTPSA id a10-20020a1cf00a000000b003f6050d35c9sm13268321wmb.20.2023.06.06.02.05.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Jun 2023 02:05:19 -0700 (PDT)
+Message-ID: <b3a1712c-7b4d-3f3b-e3b2-f71bf1060db0@linaro.org>
+Date:   Tue, 6 Jun 2023 11:05:18 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|CH2PR13MB3895:EE_
-X-MS-Office365-Filtering-Correlation-Id: 26cc7868-b010-46fc-6977-08db666ceb25
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6vLL0v4tyHCgLpyIhOh5And6p9DzQiC8mzNh/XrKZTeSRzFl79rb6IQGJUS6FyEUXDNA92cjb4+9MPABPY8hFhTJ9FAfD1QGOracLVMRG6PbCi8QzMCqxQQ/dJXwX5CYhRgwT591CU/WWE+9JvQfY0p+0qcRYvUjqjASUf3e2KsndC5JcufVApAINOmzt7JCKj0LmueCbuhOrp6xUUxk6DiTEe8CGGIHAvyRQsaYqugRVhBEJrOYqx6oAAYVONrz0H5Gr1p1EGIJrT2OrlCDJC3YGnMLNfFw4xPJOLIEdmnNlO9cHGcw1wQuR/0lbX27VeunTkmHGX+VGnGsd4Fl5N4oPnGRlBoiEEV7etRePovtv8xCmobncHRtBDvE1ZA//FLr5SZwjfzltyBPwLuS0QoZ8k5DquMNxToDHY8w3/mAQThGihNVmvWHFs3p6Pq8cBAOnNMhMp0UhG3w9MAGg3hcr12zVOdfVIEJsTT2tGjPHFJcc4KokYZYGHdSQayu8wV/UPXtA59DFSvTxfMOqRJazKykN/hvWaFYwYm6zYOVwphKIu8JIi7MnHYtUotH3Be2m+TIz3Z4IYZToZlGdksfi7F7EisXvYryl3/8HOU=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(366004)(39840400004)(376002)(396003)(451199021)(83380400001)(54906003)(4326008)(66476007)(6916009)(966005)(66946007)(66556008)(38100700002)(6666004)(6486002)(478600001)(2906002)(36756003)(186003)(316002)(8936002)(8676002)(2616005)(41300700001)(5660300002)(86362001)(44832011)(7416002)(6512007)(6506007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ztEVLp+RRakxsPZNTVbGTgc7OWpXeRPSOI7E5SDIz5khooI2KOOrkIyk/NEm?=
- =?us-ascii?Q?PePFG3IzttXUjOespF5b2BVmGIwEI5++Lhvl+WPsyS1GrVJF+ZudnbKbC0qR?=
- =?us-ascii?Q?mr91M/OhtapnoAo17bfakdVzstu+1yFaIjfrA+EOOzThB7HojJuve6J5Y0+k?=
- =?us-ascii?Q?uWaCVChnTCdAifGQisLPBtoZ8fjDy+1gFiTeseWPPD7A2YbYD5ln14XzcJq0?=
- =?us-ascii?Q?PR2xMKRJDUdFENrKz+j4/MreN9/cBgPR8ZS/K6U90J7kF3M9WBbBbc9Brx4H?=
- =?us-ascii?Q?wV09YUr8u1bgAZJhrLEh47RKxccRB0R44iu+IWwwVEHQ6+rJRbRbxBk9wdN4?=
- =?us-ascii?Q?Z9odqUhqHQEzrxydqthm4G230T7Z/y6SymqJICc+DC+h1d5pGtoQIaLL8mWT?=
- =?us-ascii?Q?LNXTcitJyi7+RLPtcTedX/zkzF6nceW1/vuYs2slhwG404fHXY2/PbAZq1oj?=
- =?us-ascii?Q?cr/IaENxeM5dpIp3iC5T2AHjt2pAWMSoF6jvbOsJ1xkvhweiqNza02M+FUDC?=
- =?us-ascii?Q?+7ZRDFraYOvjkZYEv2UCmYI8z48QGcYqHHe9i0Mb3THA/z6mG+w3RUKSGfBd?=
- =?us-ascii?Q?n84AMGjLfpZsuCG124+YoeyU6MwQJ8yVKQSzBM1tETzXlYw9zhmG3ofST5xT?=
- =?us-ascii?Q?BCxkQBIf0D0GHsYy6Ql18LtU8lQUIOQPnR9Ns22YltgNqXDdKvq2utCuNh5S?=
- =?us-ascii?Q?eOOEbnTTC3PK7KcaKbSYlnc5JQMZvSaTp8KXSmmAAKL0hJrAfhJhYyVRFrkX?=
- =?us-ascii?Q?ZDOWumtRoy75yv0macrsbRVDdcoTLDkU+9KqDPfNNvk7S3hcFmeLzwklOaaT?=
- =?us-ascii?Q?vMVpWQlWENz2UJqnzJbFekswc5v7SUoJljrsX3QTjRnHXbRYa2P0xWFmJIkb?=
- =?us-ascii?Q?5hkYLgWhx4btvzbFVRkUe3mXswzU0M9HYa97wX4DK+0CKog125ZFeANDBmcj?=
- =?us-ascii?Q?vANL7UFkwd0/vfWyPcSzTnQ5wDlHkOBcdh8h5keSgA68wH8e3NNEFutWnfgS?=
- =?us-ascii?Q?1AsGoqNxWPkoia8zJzYTIUe6kGXikBoUIbIB+QOCUklmjUF20XnbVng4q/PM?=
- =?us-ascii?Q?2KfimcBlruQUn7e1wuwYf7n77Qeundof53R7cwd4hRPQRcIMLLUJeQnRr1Gt?=
- =?us-ascii?Q?+6YCz/Qw5Tdu3GoDbGgf2/+cNt9kgjKQyju+HeGfYz5fvxj/Kp5Ap8K+Q72R?=
- =?us-ascii?Q?KcBcgwAKqO1rI6iseDnL/gid8EMTw6P9ECLNojwGhcrjSnyB4/bRHNcxqCMT?=
- =?us-ascii?Q?intWGsLzCHNhsFQuszVoaZVF9E6mVqUxHTfNtM2I8ib/ysV8noLOLIrF3Yr9?=
- =?us-ascii?Q?5Dx2Rd7qNVdeHPLsHXwId97LUMHT+4JUD3afGqteEKo8IdS/llR1zVblcr1I?=
- =?us-ascii?Q?ahj4R9ueiXTRXNrV8XKT0Z4Pys8PhD26TxV6MFXNQ0pnVf+EnoLlUVYPQOa3?=
- =?us-ascii?Q?zHWqsbBlWEOgTB7k5/4e8lP1ZA/xdViQg7gtfQuDgvM94vsoNPZEAziNSrxw?=
- =?us-ascii?Q?nCNlgP1ghw7P59Dx+3eaNgk2ZrStRKfS32J85EmZ2bxB/psYonyB6DYXsWWi?=
- =?us-ascii?Q?7j5SH2C/DZ7fBTf+1E9QThu4noS4ZzqUpGPMhlEVR62HoCNeCv+us5KhJ0V3?=
- =?us-ascii?Q?iY2xPwkTcCb1IEFSl7+yxMiboi9CT7lH1ac2YrwVXVL3KDl6MnVFJUg3hBVr?=
- =?us-ascii?Q?DeBpuQ=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 26cc7868-b010-46fc-6977-08db666ceb25
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2023 09:03:39.2199
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ivYV1jnjasOgO/+FCQ2pnmw8iV9E6e7iFknJnQUwdRZDB2XwwLDDr4aSWHRccwriP7QXh2j+CtiAh/ePwHECEf+FgoSsIk5cDhHNn/zSWNI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR13MB3895
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH v7 3/8] drm/bridge: mhdp8546: Add minimal format
+ negotiation
+Content-Language: en-US
+To:     Aradhya Bhatia <a-bhatia1@ti.com>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Jyri Sarha <jyri.sarha@iki.fi>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Robert Foss <rfoss@kernel.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Swapnil Jakhade <sjakhade@cadence.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Francesco Dolcini <francesco@dolcini.it>
+Cc:     DRI Development List <dri-devel@lists.freedesktop.org>,
+        Linux Kernel List <linux-kernel@vger.kernel.org>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rahul T R <r-ravikumar@ti.com>,
+        Devarsh Thakkar <devarsht@ti.com>,
+        Jayesh Choudhary <j-choudhary@ti.com>
+References: <20230606082142.23760-1-a-bhatia1@ti.com>
+ <20230606082142.23760-4-a-bhatia1@ti.com>
+Organization: Linaro Developer Services
+In-Reply-To: <20230606082142.23760-4-a-bhatia1@ti.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 05, 2023 at 10:34:07AM +0300, Paul Fertser wrote:
-> On DBDC devices the first (internal) phy is only capable of using
-> 2.4 GHz band, and the 5 GHz band is exposed via a separate phy object,
-> so avoid the false advertising.
-
-Hi Paul,
-
-Can I clarify that the second object won't hit the logic change
-below and thus be limited to 2GHz?
-
-> Reported-by: Rani Hod <rani.hod@gmail.com>
-> Closes: https://github.com/openwrt/openwrt/pull/12361
-> Fixes: 7660a1bd0c22 ("mt76: mt7615: register ext_phy if DBDC is detected")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Paul Fertser <fercerpav@gmail.com>
+On 06/06/2023 10:21, Aradhya Bhatia wrote:
+> From: Nikhil Devshatwar <nikhil.nd@ti.com>
+> 
+> With new connector model, mhdp bridge will not create the connector and
+> SoC driver will rely on format negotiation to setup the encoder format.
+> 
+> Support minimal format negotiations hooks in the drm_bridge_funcs.
+> Complete format negotiation can be added based on EDID data.
+> This patch adds the minimal required support to avoid failure
+> after moving to new connector model.
+> 
+> Signed-off-by: Nikhil Devshatwar <nikhil.nd@ti.com>
+> [a-bhatia1: Drop the output_fmt check condition]
+> Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
 > ---
->  drivers/net/wireless/mediatek/mt76/mt7615/eeprom.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/net/wireless/mediatek/mt76/mt7615/eeprom.c b/drivers/net/wireless/mediatek/mt76/mt7615/eeprom.c
-> index 68e88224b8b1..ccedea7e8a50 100644
-> --- a/drivers/net/wireless/mediatek/mt76/mt7615/eeprom.c
-> +++ b/drivers/net/wireless/mediatek/mt76/mt7615/eeprom.c
-> @@ -128,12 +128,12 @@ mt7615_eeprom_parse_hw_band_cap(struct mt7615_dev *dev)
->  	case MT_EE_5GHZ:
->  		dev->mphy.cap.has_5ghz = true;
->  		break;
-> -	case MT_EE_2GHZ:
-> -		dev->mphy.cap.has_2ghz = true;
-> -		break;
->  	case MT_EE_DBDC:
->  		dev->dbdc_support = true;
->  		fallthrough;
-> +	case MT_EE_2GHZ:
-> +		dev->mphy.cap.has_2ghz = true;
-> +		break;
->  	default:
->  		dev->mphy.cap.has_2ghz = true;
->  		dev->mphy.cap.has_5ghz = true;
-> -- 
-> 2.34.1
+> Notes:
 > 
+>      changes from v1:
+>      * cosmetic fixes, commit message update.
 > 
+>      changes from v5:
+>      * drop the default_bus_format variable and directly assigned
+>        MEDIA_BUS_FMT_RGB121212_1X36 to input_fmts.
+> 
+>      changes from v6:
+>      * Drop the output_fmt check condition and hence drop Tomi
+>        Valkeinen's R-b tag.
+> 
+>   .../drm/bridge/cadence/cdns-mhdp8546-core.c   | 22 +++++++++++++++++++
+>   1 file changed, 22 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c b/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c
+> index f6822dfa3805..afd4e353f37a 100644
+> --- a/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c
+> +++ b/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c
+> @@ -2146,6 +2146,27 @@ cdns_mhdp_bridge_atomic_reset(struct drm_bridge *bridge)
+>   	return &cdns_mhdp_state->base;
+>   }
+>   
+> +static u32 *cdns_mhdp_get_input_bus_fmts(struct drm_bridge *bridge,
+> +					 struct drm_bridge_state *bridge_state,
+> +					 struct drm_crtc_state *crtc_state,
+> +					 struct drm_connector_state *conn_state,
+> +					 u32 output_fmt,
+> +					 unsigned int *num_input_fmts)
+> +{
+> +	u32 *input_fmts;
+> +
+> +	*num_input_fmts = 0;
+> +
+> +	input_fmts = kzalloc(sizeof(*input_fmts), GFP_KERNEL);
+> +	if (!input_fmts)
+> +		return NULL;
+> +
+> +	*num_input_fmts = 1;
+> +	input_fmts[0] = MEDIA_BUS_FMT_RGB121212_1X36;
+> +
+> +	return input_fmts;
+> +}
+> +
+>   static int cdns_mhdp_atomic_check(struct drm_bridge *bridge,
+>   				  struct drm_bridge_state *bridge_state,
+>   				  struct drm_crtc_state *crtc_state,
+> @@ -2210,6 +2231,7 @@ static const struct drm_bridge_funcs cdns_mhdp_bridge_funcs = {
+>   	.atomic_duplicate_state = cdns_mhdp_bridge_atomic_duplicate_state,
+>   	.atomic_destroy_state = cdns_mhdp_bridge_atomic_destroy_state,
+>   	.atomic_reset = cdns_mhdp_bridge_atomic_reset,
+> +	.atomic_get_input_bus_fmts = cdns_mhdp_get_input_bus_fmts,
+>   	.detect = cdns_mhdp_bridge_detect,
+>   	.get_edid = cdns_mhdp_bridge_get_edid,
+>   	.hpd_enable = cdns_mhdp_bridge_hpd_enable,
+
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
