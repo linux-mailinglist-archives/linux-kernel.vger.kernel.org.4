@@ -2,169 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3900D72501D
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 00:47:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A8ED725021
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 00:48:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239996AbjFFWrT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 18:47:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38256 "EHLO
+        id S239600AbjFFWsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 18:48:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234632AbjFFWrR (ORCPT
+        with ESMTP id S240011AbjFFWrl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 18:47:17 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 702E39E;
-        Tue,  6 Jun 2023 15:47:16 -0700 (PDT)
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 356IfFbM014390;
-        Tue, 6 Jun 2023 15:46:55 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=s2048-2021-q4;
- bh=6PznnTs89qsjqyfHmU2y1dTJJAnt2Fmz9QnQsI+Xg/c=;
- b=U/WXx+z/djnHy296r8lDtkqDeY6yFydEI/6INDHlf1MZ1FvFCvRoSg7R28O0ycbufMAK
- fMvw8uxCrrqFOIS1r89dzMlGYzCkg7oUSClX7mgOyxscxl3r6igecYUk1yTE9R0uDBkC
- Ix0wuKMK7ndselZd0LucA+IXIWpzlrYuRY2Y7RNyJeI2jGyfLd0VfoBFmuaJsaClEKMp
- IGNH71QfnWFkBhcbRD9F5guaYc9SpHGS/GpdoX+Vbfv8/o9lfap6ruoAMTyIB/Bus3/Q
- 7zZnubJVjQGN1C9C5VLLk0AV9crXQGPULFr+XJw/qsiYUBZB8PoLl0L3iYSngP4cyiTG Pg== 
-Received: from nam02-dm3-obe.outbound.protection.outlook.com (mail-dm3nam02lp2048.outbound.protection.outlook.com [104.47.56.48])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3r2a7shrf3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 06 Jun 2023 15:46:55 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CVy6TadW1t2O5bQvrHIaMp3ULXoBDN7Zq73qW2Ml5jlkdBGClbnEHhu1QpOTbzADS4zLyzo7LRHepR7u2yhChS32xrdOxK36sFMvm23Z++u6T5OoW5YT5xuqwcx9+fkG2zcWoVQxJZQLZ6axSC5MH1r3FWr9TfFUk9OjD/C/MEc+EaywTEqLBsH83htlsmj77/2L6c5uKvzySX0UDMC09jA8Otpa1mLDGFF0ymFOHwNfRgbpKyY5IqXADihHkNookSPDFqEvvzM609r4h9x/4XdFjzw2kKgg7upiIi11noVdJfXEPmLjA1YarfHSdJ/rHMTSYCIUpOKbGgA2vMMm4A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6PznnTs89qsjqyfHmU2y1dTJJAnt2Fmz9QnQsI+Xg/c=;
- b=X1CiZdmITfCU4UwqB7JE7ChBIifg4r25icgnKNnOhJEm6gkbIlEoAZOjkYhwLYPxP2K7jy50QTa9NV5FOJ7yCGMAdNAEt6WnnjuWfmchWsEuNV4MAuUuVXwou1Y6LIzuExxFS3QYYJrcN1VXLdCYi0OKzxxGHjtNkOc4PSKrrzSTGQcYoNZe/44ijbfQdN/nSscuAG1wLPVH0zwFiCmcWQ9vVT1khk3JF0cgmYffoMw0fkpLLJKX4pRw76IQgCQ4jD4UmbmFRha97tHheDkn/nnnN265UtZkL4dFi1PJCCyUKAixxs8HjwXgRx4lnvgQjAy6KLC0qB0bI1HFL9j8Vg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
- dkim=pass header.d=meta.com; arc=none
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
- by DM4PR15MB5380.namprd15.prod.outlook.com (2603:10b6:8:63::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6455.33; Tue, 6 Jun 2023 22:46:53 +0000
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::bf7d:a453:b8d9:cf0]) by SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::bf7d:a453:b8d9:cf0%6]) with mapi id 15.20.6455.030; Tue, 6 Jun 2023
- 22:46:53 +0000
-Message-ID: <b896db61-2ee1-44c8-ebb7-930e3033df42@meta.com>
-Date:   Tue, 6 Jun 2023 15:46:49 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.2
-Subject: Re: [PATCH 1/2] [v3] bpf: hide unused bpf_patch_call_args
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230602135128.1498362-1-arnd@kernel.org>
-Content-Language: en-US
-From:   Yonghong Song <yhs@meta.com>
-In-Reply-To: <20230602135128.1498362-1-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BY5PR17CA0061.namprd17.prod.outlook.com
- (2603:10b6:a03:167::38) To SN6PR1501MB2064.namprd15.prod.outlook.com
- (2603:10b6:805:d::27)
+        Tue, 6 Jun 2023 18:47:41 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 874BC1735
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 15:47:35 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-5147f4bbfdaso330977a12.0
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 15:47:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686091654; x=1688683654;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=X1Gsh3rDXwoxQE+ZW67KOw9Ou/YNhg+Z5AKxlf0N33g=;
+        b=kI8yaVNaEqbRDdLShVWzw+v0zvtY03b5cSWqxyAQgllRPr07bH1Bi7ZIF2e2t4/yfl
+         ODNO1TU5thCKm8LFXthxYJSw+EDUwswBYnpelKPJhOriC2gvpSMJ2LV2vk5IcMOBjl2L
+         eMeDPc2LdUJ7Pwt1naT93rJ6LLcPL1g17fKc1zfe7HXbZgdAfWubAtwrl5pZ0arLY/v7
+         r5uUdepOXrTuZrf4wUJl377KlQ83m0+KSiO1SmBL8TYGivWwks7COe7jNCwBbyp1xfgW
+         RG7t460f0jrwc+JSchib6sPOv+luP8WS/wgopXUb5UZ35ng+qNMOHjAcQ++4L5pgySXM
+         zjDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686091654; x=1688683654;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=X1Gsh3rDXwoxQE+ZW67KOw9Ou/YNhg+Z5AKxlf0N33g=;
+        b=H2+rZldLOEZ5jpAlGFSiJX29JtPTUfs9Xfv/r1n0I5qVGVmNJl6Orl0qs7SmPBaE2G
+         JoHfBzI/7fMdj52vDdO/EDAiwTvvUPXy/UzIhHz1yKk08WafN+jioqnY/UZSWwPmS3b5
+         onfeAPtOmVrn6HS82qxA3xVkuPGALzK0CO/Hf0Fe82Thr4QDRIymOcFrsvsSiHeTIzLZ
+         ebplMjnMUrze9Kjl3tieVduMEpEtlPnLxrrD1wjFTy2eokFynRKtGedDrVC+ODe3Sgy+
+         cjv9mTjT+efEbxQtCuN80RdoTbPlXXYpxZo2v+deyd0kA5KQ1ecWL9q9Onu3cwJ1+s8p
+         o6Dg==
+X-Gm-Message-State: AC+VfDwWdyAD9PqfM1nWJWxvbxCkAbaQD6CBmsUYTgYWrp/bLurN/Qza
+        SwVNzBLeTSqtbVWHVtvNjlBiW/p1VJVc1JQjHIObKQ==
+X-Google-Smtp-Source: ACHHUZ4iKuoK9ihXN3ve5BrpM/kTOhrcSdCc6LrobjxOs2/UMt299TRnrnV7vr1yuU1RXrgXkAU/VbgwBn5YuxIpfZg=
+X-Received: by 2002:a17:907:9496:b0:96f:f19b:887a with SMTP id
+ dm22-20020a170907949600b0096ff19b887amr3503289ejc.56.1686091653710; Tue, 06
+ Jun 2023 15:47:33 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR1501MB2064:EE_|DM4PR15MB5380:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5989c925-a04b-42fe-88fd-08db66dfec30
-X-FB-Source: Internal
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: VMRBEmqqKhuGgC7/TpLVakmEMrsC0bXyv0eoyuaHz82j/5H0q2E9Z8dV7yt5GlSl74n1NLfpRPxnmq3fDR4qCuFxu+/QX6wLRWj74jVH1WH8sNw+Fo5dBTqESX26QFeSq+RoKzo6UttWaegiFsrLvULQseZhiYTs666fwR2GdULSZoQi32aZZdGNDMd7m3GGhMQ5ywKkKni3agLjRktDPTW7mgxCVMEmG2V61v3rkAPJGDz9hwZ1OApUsJwLkln04FdvS6Drjzz/NCsMXGjXrn/L+OPuKDS0oM/h5TCTG5BUXyGPvO8y/fU9aatUE3VRnkB06ZhnSRitZHL4URx2NhN3r774bbo2kS+pMrUYXbmvoSOa6mLEVMTHtlt7PNP7LvcPY0fQD6ribwGsF3LUeKCOkHQBJcdBswN5jsWxCHos5Lo9hpcUYootLDNQqwAYFSll/+EUt0OpOYgeFr8eK1wdPbWKpkzbo3CFZinEI39OOG2s17oTcd6XsZBXKFX9+/COHVPGplm5LbTMd4feriM2ZKygjomTIYeusOMFjCRtgBKuiFPxygrM2I0hGhyvzKD3IP+rLCCx19B7DYRoY4dQ/Iab2h4/M650uuBMapJIrzwEwpnKVn2hBiYlpWrzfIl46MbNYH/Wjsavz+UpWQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(366004)(376002)(396003)(39860400002)(451199021)(54906003)(110136005)(478600001)(66556008)(8936002)(8676002)(7416002)(2906002)(36756003)(31696002)(5660300002)(86362001)(4744005)(316002)(4326008)(66476007)(66946007)(38100700002)(6506007)(2616005)(41300700001)(53546011)(6512007)(83380400001)(186003)(6486002)(31686004)(6666004)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cGNyUE1XajIvaXBudURHQUZzYnV0cHdjc0xEeWpZZjhnbGFrUlU0dWhNQlBQ?=
- =?utf-8?B?WjBzSHh2VkdITTA3U0xNV29KWGxudm5PUXY1bzVpR2lGKzU0NzkvQkZSNE96?=
- =?utf-8?B?NnhVY0s1cWFPRjVaZkxENUlPbW1JbC9kWjNUN2JHQlNDTU9Xc0YxWHRHN0Vt?=
- =?utf-8?B?N2dXdmxBNWthd3RBMlBaUVZGVVFJUEMzTHpGekdveGE0bGZjU0Z3L0ZXcW5N?=
- =?utf-8?B?N2g3dUYxSjhpT01DTzI4ajhGNmV6cHhMM2t3YkVJNmV4b2JGaWZrNmJSRzdO?=
- =?utf-8?B?TmlZb3k2YS90OGViWGZBSk9pS2hkckx3bmMyWWlMM2hpTXZha3VncWpkbzk3?=
- =?utf-8?B?TWdjZHFGRjVjMWVaMTUzME5aYk84MUJNeUdPcmZISWhHazJqM1pqSy9Kd2pT?=
- =?utf-8?B?WXVVU3REUnBaODJpTk10bWp5UVg0OEFFbmI5OVZ6Tk44V09IU3Z3bVNDU1FS?=
- =?utf-8?B?WVdpa2FITlBJeUNoVVYraXpFNjVzd0RkK3lCL0FoRVdrSlJ2bnRGSkhLeTA1?=
- =?utf-8?B?clVZbUljUFplSTdTaWFiWlVuWlFiWFlPNFZMWkFaUU5mY01Ba29vOGRmWE5P?=
- =?utf-8?B?THljdHlpQWw4OXVhdUVRa25NMDhSQnVuNHMrRkV3ZG9qWmc2K1h4c3dzUGlm?=
- =?utf-8?B?Yml2QmtCTzBweG1rY3B0SUJrWnc1UG9odXRwOGYva0ZiYi9Icmk0TGdqd0E1?=
- =?utf-8?B?R0wvczJLak5QSXRqRERjUlJuVGJDTi92eUN3a3A5TzhGTzZkbUQ4ZDJ4L2FH?=
- =?utf-8?B?WlBncDhJZ3lSK3M5OEY2clFjZStKNHQ3VmI1aG0rSEZKVDhsOEphdU03Wklh?=
- =?utf-8?B?V1BQMEs5b2IrbkxCYmJUcG9rOGFZQkI5MXd2VXgwWFZwQ2E1cGRobG1yRUxk?=
- =?utf-8?B?VnZzWmVqZ3RHdStvUk5mMlZydmNjVDVBcms2ais4Y1FXcDdJTVlHZk4ySzR4?=
- =?utf-8?B?akdjd3lSV2huYlY1Y1JPT3YzUEFvV0RqZXJPWE5SSjY1M050Yi9wT1VFWWhq?=
- =?utf-8?B?NHJBTnk3OXI3bXNxejE5WWRmWHlDYkpIYldVd205a3dmaFBYNlVPWTBidmp0?=
- =?utf-8?B?bTVYVHR5ZGd6WWY2dUdNTFdSWnozZHAybmo1MHIzUWg0TEdqNkQ1QW9tSnhX?=
- =?utf-8?B?RjBhbFdhY0hWZEFESUdveVNPbitNeVRJbUhNMWI5alFJbjhqZjRRMEYwRlk5?=
- =?utf-8?B?N2xYV2k1eGJlbXR0TytlWWNkUkdpbVllcFlJdzlXYWJjMDg5QkhNbmlqK1By?=
- =?utf-8?B?SnA4Nms4azdDUnIxZmhjQUNISzFJS0RSWkk0TE9Ba2Q0TlV1cWkrdy9odEl6?=
- =?utf-8?B?WlZydzJuNm5aQkZiSm5ITUhYRng4WXd4My9yQjF2aElMdk1uczMxdC9YT2FH?=
- =?utf-8?B?TjlZNGZEVVJZYTAraTl4bjRaUmN6ZHZwVUNvNGhBUWZFOVAxa0xRaThQaDJq?=
- =?utf-8?B?T2FnNWwwRzFrWEloM2tJVDFqeXJSZUJSakRzVDl0dVpQMDNJQ2E0RlJsZzJk?=
- =?utf-8?B?OWppN0VpbnoxeHkrVEx3eXJpMkpLN1RlUXJzTWdLWThIVW9XMm5qMUdPbU9X?=
- =?utf-8?B?MUJYaThJb3NCeUQzUlpZbXZPWkV4ZTVOclA3aTRJK09DZGRleis2dmVwak5I?=
- =?utf-8?B?b293TVR5M0dPQlZ0Nkk0RGNRYjJxcisyU3luNlNtck5qRlBvam1jVzJNUm5V?=
- =?utf-8?B?OTQwcERLMGV4c3JOVUMyT3RxNnl3UHNML1pDT0hwZzRYRnk3bUxOUW51Rkl4?=
- =?utf-8?B?QlVyYXFpR3BIb3VqK0s0YmRDOHBjNjVEdTBHVTFJN0dXMXhyczdDYjNPMDZI?=
- =?utf-8?B?b0VzOVJDRnRDRGEyL2dvZ2p2bUtCQWF5Nk1yY1NONDNSV2ZZRGYrYmR4SzNU?=
- =?utf-8?B?VEw5a0lmZ2ZpUlpwbXNtZFdTRE15cUlhTTVSR0p0ektZMnFYU01pNHlmaXR0?=
- =?utf-8?B?UHFKdVh0NmpkMnJ2WjBsbTM2Um1nakV1d0Yzbm1HbXBZTDRKanhucHRqK01V?=
- =?utf-8?B?UHBBTU1NaGU4VnJYRlRWTGZaUEhLMGQxYVZwY1lPTTE3RGZDUWpwZW01NlUr?=
- =?utf-8?B?aUFFUDRQV3hSTS9LVUtTaklRUHVaY0pPSUgvaGlMazdqd1V6YmdkT0RlTWVZ?=
- =?utf-8?B?Mld3WVQ4UDlEWFgzeE1FRkRubTY1Y1FFSG55MjVaK0x2Z2wzQU9hUXRVV092?=
- =?utf-8?B?QlE9PQ==?=
-X-OriginatorOrg: meta.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5989c925-a04b-42fe-88fd-08db66dfec30
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2023 22:46:53.1636
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: AEoMxVetOE1XHANL8+JcYRT/gXXDzHoznoj90hMN3XWUl85ojSF/ZGv2B5L02FOi
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR15MB5380
-X-Proofpoint-ORIG-GUID: QW6NU6R7Lo-NeObI6ZLk-ebOrAhoA17W
-X-Proofpoint-GUID: QW6NU6R7Lo-NeObI6ZLk-ebOrAhoA17W
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-06_16,2023-06-06_02,2023-05-22_02
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230605004334.1930091-1-mizhang@google.com> <CALMp9eSQgcKd=SN4q2QRYbveKoayKzuYEQPM0Xu+FgQ_Mja8-g@mail.gmail.com>
+ <CAL715WJowYL=W40SWmtPoz1F9WVBFDG7TQwbsV2Bwf9-cS77=Q@mail.gmail.com> <ZH4ofuj0qvKNO9Bz@google.com>
+In-Reply-To: <ZH4ofuj0qvKNO9Bz@google.com>
+From:   Mingwei Zhang <mizhang@google.com>
+Date:   Tue, 6 Jun 2023 15:46:57 -0700
+Message-ID: <CAL715WKtsC=93Nqr7QJZxspWzF04_CLqN3FUxUaqTHWFRUrwBA@mail.gmail.com>
+Subject: Re: [PATCH] KVM: x86/mmu: Remove KVM MMU write lock when accessing indirect_shadow_pages
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Jim Mattson <jmattson@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ben Gardon <bgardon@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> > >
+> > > I don't understand the need for READ_ONCE() here. That implies that
+> > > there is something tricky going on, and I don't think that's the case.
+> >
+> > READ_ONCE() is just telling the compiler not to remove the read. Since
+> > this is reading a global variable,  the compiler might just read a
+> > previous copy if the value has already been read into a local
+> > variable. But that is not the case here...
+> >
+> > Note I see there is another READ_ONCE for
+> > kvm->arch.indirect_shadow_pages, so I am reusing the same thing.
+>
+> I agree with Jim, using READ_ONCE() doesn't make any sense.  I suspect it may have
+> been a misguided attempt to force the memory read to be as close to the write_lock()
+> as possible, e.g. to minimize the chance of a false negative.
+
+Sean :) Your suggestion is the opposite with Jim. He is suggesting
+doing nothing, but
+your suggestion is doing way more than READ_ONCE().
+
+>
+> > I did check the reordering issue but it should be fine because when
+> > 'we' see indirect_shadow_pages as 0, the shadow pages must have
+> > already been zapped. Not only because of the locking, but also the
+> > program order in __kvm_mmu_prepare_zap_page() shows that it will zap
+> > shadow pages first before updating the stats.
+>
+> I don't think zapping, i.e. the 1=>0 transition, is a concern.  KVM is dropping
+> the SPTE, so racing with kvm_mmu_pte_write() is a non-issue because the guest
+> will either see the old value, or will fault after the SPTE is zapped, i.e. KVM
+> won't run with a stale even if kvm_mmu_pte_write() sees '0' before TLBs are
+> flushed.
+
+Agree.
+>
+> I believe the 0=>1 transition on the other hand doesn't have a *very* theoretical
+> bug.  KVM needs to ensure that either kvm_mmu_pte_write() sees an elevated count,
+> or that a page fault task sees the updated guest PTE, i.e. the emulated write.
+> The READ_ONCE() likely serves this purpose in practice, though technically it's
+> insufficient.
+
+Agree.
+
+>
+> So I think this?
+
+Hmm. I agree with both points above, but below, the change seems too
+heavyweight. smp_wb() is a mfence(), i.e., serializing all
+loads/stores before the instruction. Doing that for every shadow page
+creation and destruction seems a lot.
+
+In fact, the case that only matters is '0->1' which may potentially
+confuse kvm_mmu_pte_write() when it reads 'indirect_shadow_count', but
+the majority of the cases are 'X => X + 1' where X != 0. So, those
+cases do not matter. So, if we want to add barriers, we only need it
+for 0->1. Maybe creating a new variable and not blocking
+account_shadow() and unaccount_shadow() is a better idea?
+
+Regardless, the above problem is related to interactions among
+account_shadow(), unaccount_shadow() and kvm_mmu_pte_write(). It has
+nothing to do with the 'reexecute_instruction()', which is what this
+patch is about. So, I think having a READ_ONCE() for
+reexecute_instruction() should be good enough. What do you think.
 
 
-On 6/2/23 6:50 AM, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> This function is only used when CONFIG_BPF_JIT_ALWAYS_ON is disabled,
-> but CONFIG_BPF_SYSCALL is enabled. When both are turned off, the
-> prototype is missing but the unused function is still compiled,
-> as seen from this W=1 warning:
-> 
-> kernel/bpf/core.c:2075:6: error: no previous prototype for 'bpf_patch_call_args' [-Werror=missing-prototypes]
-> 
-> Add a matching #ifdef for the definition to leave it out.
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-
-Acked-by: Yonghong Song <yhs@fb.com>
+>
+> ---
+>  arch/x86/kvm/mmu.h     | 14 ++++++++++++++
+>  arch/x86/kvm/mmu/mmu.c | 13 ++++++++++++-
+>  arch/x86/kvm/x86.c     |  8 +-------
+>  3 files changed, 27 insertions(+), 8 deletions(-)
+>
+> diff --git a/arch/x86/kvm/mmu.h b/arch/x86/kvm/mmu.h
+> index 92d5a1924fc1..9cd105ccb1d4 100644
+> --- a/arch/x86/kvm/mmu.h
+> +++ b/arch/x86/kvm/mmu.h
+> @@ -264,6 +264,20 @@ static inline bool kvm_memslots_have_rmaps(struct kvm *kvm)
+>         return !tdp_mmu_enabled || kvm_shadow_root_allocated(kvm);
+>  }
+>
+> +static inline bool kvm_mmu_has_indirect_shadow_pages(struct kvm *kvm)
+> +{
+> +       /*
+> +        * When emulating guest writes, ensure the written value is visible to
+> +        * any task that is handling page faults before checking whether or not
+> +        * KVM is shadowing a guest PTE.  This ensures either KVM will create
+> +        * the correct SPTE in the page fault handler, or this task will see
+> +        * a non-zero indirect_shadow_pages.  Pairs with the smp_mb() in
+> +        * account_shadowed() and unaccount_shadowed().
+> +        */
+> +       smp_mb();
+> +       return kvm->arch.indirect_shadow_pages;
+> +}
+> +
+>  static inline gfn_t gfn_to_index(gfn_t gfn, gfn_t base_gfn, int level)
+>  {
+>         /* KVM_HPAGE_GFN_SHIFT(PG_LEVEL_4K) must be 0. */
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index c8961f45e3b1..1735bee3f653 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -830,6 +830,17 @@ static void account_shadowed(struct kvm *kvm, struct kvm_mmu_page *sp)
+>         gfn_t gfn;
+>
+>         kvm->arch.indirect_shadow_pages++;
+> +
+> +       /*
+> +        * Ensure indirect_shadow_pages is elevated prior to re-reading guest
+> +        * child PTEs in FNAME(gpte_changed), i.e. guarantee either in-flight
+> +        * emulated writes are visible before re-reading guest PTEs, or that
+> +        * an emulated write will see the elevated count and acquire mmu_lock
+> +        * to update SPTEs.  Pairs with the smp_mb() in
+> +        * kvm_mmu_has_indirect_shadow_pages().
+> +        */
+> +       smp_mb();
+> +
+>         gfn = sp->gfn;
+>         slots = kvm_memslots_for_spte_role(kvm, sp->role);
+>         slot = __gfn_to_memslot(slots, gfn);
+> @@ -5692,7 +5703,7 @@ static void kvm_mmu_pte_write(struct kvm_vcpu *vcpu, gpa_t gpa,
+>          * If we don't have indirect shadow pages, it means no page is
+>          * write-protected, so we can exit simply.
+>          */
+> -       if (!READ_ONCE(vcpu->kvm->arch.indirect_shadow_pages))
+> +       if (!kvm_mmu_has_indirect_shadow_pages(vcpu->kvm))
+>                 return;
+>
+>         pgprintk("%s: gpa %llx bytes %d\n", __func__, gpa, bytes);
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index abfba3cae0ba..22c226f5f4f8 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -8588,13 +8588,7 @@ static bool reexecute_instruction(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
+>
+>         /* The instructions are well-emulated on direct mmu. */
+>         if (vcpu->arch.mmu->root_role.direct) {
+> -               unsigned int indirect_shadow_pages;
+> -
+> -               write_lock(&vcpu->kvm->mmu_lock);
+> -               indirect_shadow_pages = vcpu->kvm->arch.indirect_shadow_pages;
+> -               write_unlock(&vcpu->kvm->mmu_lock);
+> -
+> -               if (indirect_shadow_pages)
+> +               if (kvm_mmu_has_indirect_shadow_pages(vcpu->kvm))
+>                         kvm_mmu_unprotect_page(vcpu->kvm, gpa_to_gfn(gpa));
+>
+>                 return true;
+>
+> base-commit: 69b4e5b82fec7195c79c939ce25789b16a133f3a
+> --
+>
