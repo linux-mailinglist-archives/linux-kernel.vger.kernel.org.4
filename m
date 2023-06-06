@@ -2,51 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B430724E86
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 23:10:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F033724E8B
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 23:13:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237735AbjFFVKf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 17:10:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35392 "EHLO
+        id S233893AbjFFVNU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 17:13:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232478AbjFFVKc (ORCPT
+        with ESMTP id S231303AbjFFVNR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 17:10:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30853171D;
-        Tue,  6 Jun 2023 14:10:32 -0700 (PDT)
+        Tue, 6 Jun 2023 17:13:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F9B41701
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 14:13:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B82D662FC7;
-        Tue,  6 Jun 2023 21:10:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 576F4C433EF;
-        Tue,  6 Jun 2023 21:10:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CE57D60B83
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 21:13:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFCA1C433D2;
+        Tue,  6 Jun 2023 21:13:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686085831;
-        bh=29s3VwULHt/or99UmP4xe8ouFwwgxuwFanN/l3kgc7c=;
-        h=Date:Subject:From:To:References:In-Reply-To:From;
-        b=B7U2uNJGyW1nydKLZFAE6oyM6y5KTEpAk0Hb5CKE0cN7mcfnGPELK+DjWHbMe+CKX
-         Ahcx7t1EsbPp7OsCaBaNaU1ofDz1LNqHnYzi0LgAWkKsa7nYrLGCdlVVnvDmpIIigZ
-         8X06v6NsIZVrHDiJlHqmB2mXwc/C5kcn6ksDUnXKNEb35Ev/rissac4kaVzJq83DDL
-         Jj5/lqCR3FTKEkFmbkLikzGzuqS4FaXAWRE0aCiOjUuCh2Yjv0v75gc2BhojNPo1Tk
-         auJguRO9LWZ8spVXSXh/N8ToWE0aPo0uUJoD2l9f+/bi82BPQ77dnih/HYsv9lS54B
-         SUPxii+c2M1/g==
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Wed, 07 Jun 2023 00:10:28 +0300
-Message-Id: <CT5VJKCFVQVT.3J6KJMTN0YSZW@suppilovahvero>
-Subject: Re: [PATCH v2 2/4] tpm_tis: Move CRC check to generic send routine
-From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Alexander Steffen" <Alexander.Steffen@infineon.com>,
-        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-X-Mailer: aerc 0.14.0
-References: <20230605175959.2131-1-Alexander.Steffen@infineon.com>
- <20230605175959.2131-3-Alexander.Steffen@infineon.com>
-In-Reply-To: <20230605175959.2131-3-Alexander.Steffen@infineon.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        s=k20201202; t=1686085995;
+        bh=R04WYpn2Yn/2CI+p7yTj26c1Zcz5H3XWzXyGd969w1w=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=tOG3vGI9CgA0P3q+XPd+npFBCvAWDee15veR3ePiUB38NyTVaDsylmOE9W5kBD2dQ
+         KdI02sONG/xZUDqGgMumQBY3dj0HyWwo7pt0KjVTVPvFwWKgpUAc+7U2fiMClvgIt5
+         GWnngAINtxCsYptJG2NMhOpgHQKyPcWknASBOfY+UavKOYmnNpsbdZSeUrfntKgcFs
+         4p1id2yuXh+I3ymYAUvW9t2U0aC00+PczG7iDLXb3Il1lZl5bccEK/Gnb5EMMZEXp7
+         GaxLdL/4uRCFisAcGYJl5E9TYZ6fdjLaZXXw34kpddMRLQlv0q3vPZtq7m6sWKiQH0
+         vg4BKJMDC9TAw==
+Date:   Tue, 6 Jun 2023 14:13:14 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc:     <wei.fang@nxp.com>, <claudiu.manoil@nxp.com>,
+        <vladimir.oltean@nxp.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <pabeni@redhat.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net] net: enetc: correct the indexes of highest and 2nd
+ highest TCs
+Message-ID: <20230606141314.7d82d9ad@kernel.org>
+In-Reply-To: <ZH+MBdlRAybwqFo8@boxer>
+References: <20230606084618.1126471-1-wei.fang@nxp.com>
+        <ZH+MBdlRAybwqFo8@boxer>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,58 +58,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon Jun 5, 2023 at 8:59 PM EEST, Alexander Steffen wrote:
-> The CRC functionality is initialized before tpm_tis_core, so it can be us=
-ed
-> on all code paths within the module. Therefore, move the CRC check to the
-> generic send routine, that also contains all other checks for successful
-> command transmission, so that all those checks are in one place.
->
-> Also, this ensures that tpm_tis_ready is called when a CRC failure is
-> detected, to clear the invalid data from the TPM, which did not happen
-> previously.
->
-> Signed-off-by: Alexander Steffen <Alexander.Steffen@infineon.com>
-> ---
->  drivers/char/tpm/tpm_tis_core.c | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_c=
-ore.c
-> index aaaa136044ae..5ddaf24518be 100644
-> --- a/drivers/char/tpm/tpm_tis_core.c
-> +++ b/drivers/char/tpm/tpm_tis_core.c
-> @@ -466,6 +466,12 @@ static int tpm_tis_send_data(struct tpm_chip *chip, =
-const u8 *buf, size_t len)
->  		goto out_err;
->  	}
-> =20
-> +	rc =3D tpm_tis_verify_crc(priv, len, buf);
-> +	if (rc < 0) {
-> +		dev_err(&chip->dev, "CRC mismatch for command.\n");
-> +		goto out_err;
-> +	}
-> +
->  	return 0;
-> =20
->  out_err:
-> @@ -510,12 +516,6 @@ static int tpm_tis_send_main(struct tpm_chip *chip, =
-const u8 *buf, size_t len)
->  	if (rc < 0)
->  		return rc;
-> =20
-> -	rc =3D tpm_tis_verify_crc(priv, len, buf);
-> -	if (rc < 0) {
-> -		dev_err(&chip->dev, "CRC mismatch for command.\n");
-> -		return rc;
-> -	}
-> -
->  	/* go and do it */
->  	rc =3D tpm_tis_write8(priv, TPM_STS(priv->locality), TPM_STS_GO);
->  	if (rc < 0)
-> --=20
-> 2.34.1
+On Tue, 6 Jun 2023 21:41:57 +0200 Maciej Fijalkowski wrote:
+> On Tue, Jun 06, 2023 at 04:46:18PM +0800, wei.fang@nxp.com wrote:
+> > From: Wei Fang <wei.fang@nxp.com>  
+> 
+> if you are a sender then you could skip line above.
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-
-BR, Jarkko
+Git generates it because the From in the headers does not have the
+names, just the email addr. It's better to keep it.
