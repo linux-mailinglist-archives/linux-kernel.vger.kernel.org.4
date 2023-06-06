@@ -2,239 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A8C872380B
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 08:46:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96A377237F4
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Jun 2023 08:44:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235292AbjFFGqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 02:46:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48716 "EHLO
+        id S235263AbjFFGn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 02:43:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234634AbjFFGqf (ORCPT
+        with ESMTP id S230499AbjFFGnw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 02:46:35 -0400
-Received: from baidu.com (mx21.baidu.com [220.181.3.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3368CE4C;
-        Mon,  5 Jun 2023 23:46:32 -0700 (PDT)
-From:   Duan Muquan <duanmuquan@baidu.com>
-To:     <davem@davemloft.net>, <dsahern@kernel.org>, <edumazet@google.com>,
-        <kuba@kernel.org>, <pabeni@redhat.com>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Duan Muquan <duanmuquan@baidu.com>
-Subject: [PATCH v2] tcp: fix connection reset due to tw hashdance race.
-Date:   Tue, 6 Jun 2023 14:43:06 +0800
-Message-ID: <20230606064306.9192-1-duanmuquan@baidu.com>
-X-Mailer: git-send-email 2.32.0
+        Tue, 6 Jun 2023 02:43:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BDF4C7
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Jun 2023 23:43:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E493161F48
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 06:43:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DDFCC433A4;
+        Tue,  6 Jun 2023 06:43:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686033830;
+        bh=iuTfu26glfb8E1WFTPHNw0lExwnuCUbJYgkCjPpeHcA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=FDPka2ENBwIPSxTnzOoEx1HTMgEMn5YtVGOMtTaTohqpcM4Qh/uaBlq1HEHQZHY5k
+         91M/IXd+qG59sNGGOXi/TgXD04zKRk2QJdX3d8Cp2fTqg4NgjC2L1Y9WQYOwBB6ZaU
+         1ZruUwmdAanKJOA1jh+GPWePUT2hA5QMuO+XiAKWGMlBCSuzdndHqATN3NIqtHoFzY
+         eN45H6BFFzkt7WwEcyJeqnZjYLH5uz+G8SmdZfCurjOVyaKF28a1gJFAyXBVcle7BY
+         LIDIo/YQd77HCQjw5k7uRn9QTUPKc5jsSd32R2n7gkRVtVxwfQoYCpyc1kmfys4il9
+         8ILd7eMDiDfTA==
+Message-ID: <e8e4758f-5895-acd7-27d2-4b72b69722b3@kernel.org>
+Date:   Tue, 6 Jun 2023 14:43:47 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [172.31.62.13]
-X-ClientProxiedBy: BC-Mail-Ex21.internal.baidu.com (172.31.51.15) To
- BJHW-MAIL-EX26.internal.baidu.com (10.127.64.41)
-X-FEAS-Client-IP: 10.127.64.13
-X-FE-Policy-ID: 15:10:21:SYSTEM
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] f2fs: enable nowait async buffered writes
+Content-Language: en-US
+To:     Yangtao Li <frank.li@vivo.com>, Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     Lu Hongfei <luhongfei@vivo.com>,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+References: <20230531144006.7307-1-frank.li@vivo.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20230531144006.7307-1-frank.li@vivo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the FIN from passive closer and the ACK for active closer's FIN are
-processed on different CPUs concurrently, tw hashdance race may occur.
-On loopback interface, transmit function queues a skb to current CPU's
-softnet's input queue by default. Suppose active closer runs on CPU 0,
-and passive closer runs on CPU 1. If the ACK for the active closer's
-FIN is sent with no delay, it will be processed and tw hashdance will
-be done on CPU 0; The passive closer's FIN will be sent in another
-segment and processed on CPU 1, it may fail to find tw sock in the
-ehash table due to tw hashdance on CPU 0, then get a RESET.
-If application reconnects immediately with the same source port, it
-will get reset because tw sock's tw_substate is still TCP_FIN_WAIT2.
+On 2023/5/31 22:40, Yangtao Li wrote:
+> This adds the async buffered write support to f2fs,
+> the following is the relevant test data.
 
-The dmesg to trace down this issue:
+Yangtao,
 
-.333516] tcp_send_fin: sk 0000000092105ad2 cookie 9 cpu 3
-.333524] rcv_state_process:FIN_WAIT2 sk 0000000092105ad2 cookie 9 cpu 3
-.333534] tcp_close: tcp_time_wait: sk 0000000092105ad2 cookie 9 cpu 3
-.333538] hashdance: tw 00000000690fdb7a added to ehash cookie 9 cpu 3
-.333541] hashdance: sk 0000000092105ad2 removed cookie 9 cpu 3
-.333544] __inet_lookup_established: Failed the refcount check:
-		 !refcount_inc_not_zero 00000000690fdb7a ref 0 cookie 9 cpu 0
-.333549] hashdance: tw 00000000690fdb7a before add ref 0 cookie 9 cpu 3
-.333552] rcv_state: RST for FIN listen 000000003c50afa6 cookie 0 cpu 0
-.333574] tcp_send_fin: sk 0000000066757bf8 ref 2 cookie 0 cpu 0
-.333611] timewait_state: TCP_TW_RST tw 00000000690fdb7a cookie 9 cpu 0
-.333626] tcp_connect: sk 0000000066757bf8 cpu 0 cookie 0
+Could you please provide detailed test command?
 
-Here is the call trace map:
+Thanks,
 
-CPU 0                                    CPU 1
-
---------                                 --------
-tcp_close()
-tcp_send_fin()
-loopback_xmit()
-netif_rx()
-tcp_v4_rcv()
-tcp_ack_snd_check()
-loopback_xmit
-netif_rx()                              tcp_close()
-...                                     tcp_send_fin()
-										loopback_xmit()
-										netif_rx()
-										tcp_v4_rcv()
-										...
-tcp_time_wait()
-inet_twsk_hashdance() {
-...
-                                    <-__inet_lookup_established()
-								(bad case (1), find sk, may fail tw_refcnt check)
-inet_twsk_add_node_tail_rcu(tw, ...)
-                                    <-__inet_lookup_established()
-								(bad case (1), find sk, may fail tw_refcnt check)
-
-__sk_nulls_del_node_init_rcu(sk)
-                                    <-__inet_lookup_established()
-								(bad case (2), find tw, may fail tw_refcnt check)
-refcount_set(&tw->tw_refcnt, 3)
-                                    <-__inet_lookup_established()
-								(good case, find tw, tw_refcnt is not 0)
-...
-}
-
-This issue occurs with a small probability on our application working
-on loopback interface, client gets a connection refused error when it
-reconnects. In reproducing environments on kernel 4.14,5.10 and
-6.4-rc1, modify tcp_ack_snd_check() to disable delay ack all the
-time; Let client connect server and server sends a message to client
-then close the connection; Repeat this process forever; Let the client
-bind the same source port every time, it can be reproduced in about 20
-minutes.
-
-Brief of the scenario:
-
-1. Server runs on CPU 0 and Client runs on CPU 1. Server closes
-connection actively and sends a FIN to client. The lookback's driver
-enqueues the FIN segment to backlog queue of CPU 0 via
-loopback_xmit()->netif_rx(), one of the conditions for non-delay ack
-meets in __tcp_ack_snd_check(), and the ACK is sent immediately.
-
-2. On loopback interface, the ACK is received and processed on CPU 0,
-the 'dance' from original sock to tw sock will perfrom, tw sock will
-be inserted to ehash table, then the original sock will be removed.
-
-3. On CPU 1, client closes the connection, a FIN segment is sent and
-processed on CPU 1. When it is looking up sock in ehash table (with no
-lock), tw hashdance race may occur, it fails to find the tw sock and
-get a listener sock in the flowing 3 cases:
-
-  (1) Original sock is found, but it has been destroyed and sk_refcnt
-	  has become 0 when validating it.
-  (2) tw sock is found, but its tw_refcnt has not been set to 3, it is
-	  still 0, validating for sk_refcnt will fail.
-  (3) For versions without Eric and Jason's commit(3f4ca5fafc08881d7a5
-	  7daa20449d171f2887043), tw sock is added to the head of the list.
-	  It will be missed if the list is traversed before tw sock is
-	  added. And if the original sock is removed before it is found, no
-	  established sock will be found.
-
-The listener sock will reset the FIN segment which has ack bit set.
-
-4. If client reconnects immediately and is assigned with the same
-source port as previous connection, the tw sock with tw_substate
-TCP_FIN_WAIT2 will reset client's SYN and destroy itself in
-inet_twsk_deschedule_put(). Application gets a connection refused
-error.
-
-5. If client reconnects again, it will succeed.
-
-Introduce the flowing 2 modifications to solve the above 3 bad cases:
-
-For bad case (2):
-Set tw_refcnt to 3 before adding it into list.
-
-For bad case (1):
-In function tcp_v4_rcv(), if __inet_lookup_skb() returns a listener
-sock and this segment has FIN bit set, then retry the lookup process
-one time. This fix can cover bad case (3) for the versions without
-Eric and Jason's fix.
-
-There may be another bad case, if the original sock is found and passes
-validation, but during further process for the passive closer's FIN on
-CPU 1, the sock has been destroyed on CPU 0, then the FIN segment will
-be dropped and retransmitted. This case does not hurt application as
-much as resetting reconnection, and this case has less possibility than
-the other bad cases, it does not occur on our product and in
-experimental environment, so it is not considered in this patch.
-
-Could you please check whether this fix is OK, or any suggestions?
-Looking forward for your precious comments!
-
-Signed-off-by: Duan Muquan <duanmuquan@baidu.com>
----
- net/ipv4/inet_timewait_sock.c | 15 +++++++--------
- net/ipv4/tcp_ipv4.c           | 13 +++++++++++++
- 2 files changed, 20 insertions(+), 8 deletions(-)
-
-diff --git a/net/ipv4/inet_timewait_sock.c b/net/ipv4/inet_timewait_sock.c
-index 40052414c7c7..ed1f255c9aa8 100644
---- a/net/ipv4/inet_timewait_sock.c
-+++ b/net/ipv4/inet_timewait_sock.c
-@@ -144,14 +144,6 @@ void inet_twsk_hashdance(struct inet_timewait_sock *tw, struct sock *sk,
- 
- 	spin_lock(lock);
- 
--	inet_twsk_add_node_tail_rcu(tw, &ehead->chain);
--
--	/* Step 3: Remove SK from hash chain */
--	if (__sk_nulls_del_node_init_rcu(sk))
--		sock_prot_inuse_add(sock_net(sk), sk->sk_prot, -1);
--
--	spin_unlock(lock);
--
- 	/* tw_refcnt is set to 3 because we have :
- 	 * - one reference for bhash chain.
- 	 * - one reference for ehash chain.
-@@ -162,6 +154,13 @@ void inet_twsk_hashdance(struct inet_timewait_sock *tw, struct sock *sk,
- 	 * so we are not allowed to use tw anymore.
- 	 */
- 	refcount_set(&tw->tw_refcnt, 3);
-+	inet_twsk_add_node_tail_rcu(tw, &ehead->chain);
-+
-+	/* Step 3: Remove SK from hash chain */
-+	if (__sk_nulls_del_node_init_rcu(sk))
-+		sock_prot_inuse_add(sock_net(sk), sk->sk_prot, -1);
-+
-+	spin_unlock(lock);
- }
- EXPORT_SYMBOL_GPL(inet_twsk_hashdance);
- 
-diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
-index 06d2573685ca..3e3cef202f76 100644
---- a/net/ipv4/tcp_ipv4.c
-+++ b/net/ipv4/tcp_ipv4.c
-@@ -2018,6 +2018,19 @@ int tcp_v4_rcv(struct sk_buff *skb)
- 	sk = __inet_lookup_skb(net->ipv4.tcp_death_row.hashinfo,
- 			       skb, __tcp_hdrlen(th), th->source,
- 			       th->dest, sdif, &refcounted);
-+
-+	/* If tw "dance" is performed on another CPU, the lookup process may find
-+	 * no tw sock for the passive closer's FIN segment, but a listener sock,
-+	 * which will reset the FIN segment. If application reconnects immediately
-+	 * with the same source port, it will get reset because the tw sock's
-+	 * tw_substate is still TCP_FIN_WAIT2. Try to get the tw sock in another try.
-+	 */
-+	if (unlikely(th->fin && sk && sk->sk_state == TCP_LISTEN)) {
-+		sk = __inet_lookup_skb(net->ipv4.tcp_death_row.hashinfo,
-+				       skb, __tcp_hdrlen(th), th->source,
-+				       th->dest, sdif, &refcounted);
-+	}
-+
- 	if (!sk)
- 		goto no_tcp_socket;
- 
--- 
-2.32.0
-
+> 
+> iodepth      | 1    | 2    | 4    | 8    | 16   |
+> before(M/s)  | 1012 | 1133 | 894  | 981  | 866  |
+> after(M/s)   | 1488 | 1896 | 2081 | 2188 | 2207 |
+> 
+> Signed-off-by: Lu Hongfei <luhongfei@vivo.com>
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> ---
+>   fs/f2fs/file.c | 5 +----
+>   1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+> index 23c68ee946e5..4faf2c04e325 100644
+> --- a/fs/f2fs/file.c
+> +++ b/fs/f2fs/file.c
+> @@ -546,7 +546,7 @@ static int f2fs_file_open(struct inode *inode, struct file *filp)
+>   	if (err)
+>   		return err;
+>   
+> -	filp->f_mode |= FMODE_NOWAIT | FMODE_BUF_RASYNC;
+> +	filp->f_mode |= FMODE_NOWAIT | FMODE_BUF_RASYNC | FMODE_BUF_WASYNC;
+>   
+>   	return dquot_file_open(inode, filp);
+>   }
+> @@ -4515,9 +4515,6 @@ static ssize_t f2fs_buffered_write_iter(struct kiocb *iocb,
+>   	struct inode *inode = file_inode(file);
+>   	ssize_t ret;
+>   
+> -	if (iocb->ki_flags & IOCB_NOWAIT)
+> -		return -EOPNOTSUPP;
+> -
+>   	current->backing_dev_info = inode_to_bdi(inode);
+>   	ret = generic_perform_write(iocb, from);
+>   	current->backing_dev_info = NULL;
