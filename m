@@ -2,78 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04044726919
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 20:44:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD19F72691C
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 20:45:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232120AbjFGSoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 14:44:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55680 "EHLO
+        id S232915AbjFGSo6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 14:44:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231423AbjFGSoH (ORCPT
+        with ESMTP id S231562AbjFGSo4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 14:44:07 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E194319AC
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 11:44:05 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-976a0a1a92bso975451666b.1
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 11:44:05 -0700 (PDT)
+        Wed, 7 Jun 2023 14:44:56 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB7C1725;
+        Wed,  7 Jun 2023 11:44:53 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-516a0546230so1166250a12.3;
+        Wed, 07 Jun 2023 11:44:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686163444; x=1688755444;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8Dae8dZiTsM2lOHOWA+ivaRCZrMy5pd+W9PJihkcNNA=;
-        b=As/3M3FyPUHVMPeG7viKKVkqqDYwP7HZ8xH1xEUZ/TtpYOJDXSEPjUMmVqksZCFPrV
-         sKSpo21dppXVWiUcU7HXvfa/un7XQJ9Rp4Y+3sqYbVSgqT8xkNzoNapmjj98kWXfGS6z
-         P0sB3oYsBZWcz3zhStve0ANTXSK75jNysa4GurYLT7t43LoBZHLTdOU9lEM+LS5Pxnmp
-         1+Y6Kv5Ewt62FWWEJOf4/gZo8DmDuFNhdWGiUnETTosMXiVOrzecIOj4ap8cNBwXazl+
-         VpkPg3QLRw8cvJVIA0smCADjSaX4gh1KO9WrWOq/qB1uQwcxffopjuFVaMTZW3rxBaJ7
-         3oUA==
+        d=gmail.com; s=20221208; t=1686163492; x=1688755492;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=y9ETnFKWquG8HyfAcx0wHtEZ8uLP0iUgTJAX7JIWHGA=;
+        b=NfqxpGOQuz8zZ/Ox4ng+8dHzr/MnISrbbetMVtAUKwWoR425bIwYJPO/oXTFliIKyD
+         PFOGWS+7gs+9DCLCJVGauYnoDlngCCr54mECDjq7ksn93RnWD5GtCRx9aqU4U037Br/5
+         /ltW8bvlRNg57xFeWfCGxdnfKoqYWFXM1fXVgTP3xW9sqNuZi5bPQ+NkZy6MzDWxjeDv
+         b/JCFajcHWH+ACZqXey73J/LrS195F8YFHhdZYNW0fh+YYRjJOgyvIxljYgPbftuO2ne
+         NiVOwQq211Duw9nheE7Nvmo+/MDtdkjD7nYqjosqcGgExhyoQKjeuuf7AlPvJkzFXflb
+         lIhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686163444; x=1688755444;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8Dae8dZiTsM2lOHOWA+ivaRCZrMy5pd+W9PJihkcNNA=;
-        b=SPSxmynFY59JnXYuckj2gc92LYqd9rpvx1gH9U8uAubZryHK2YSZ8y0vimU5DgCQ6f
-         X1HFvhfttrGTMRVTevIGl2Qh4glzEgNpe4VSI6LxJAvl3IJ/SA1ez12LUmS4IuvQV9bR
-         +KG4M9WMzvAAhlozdjkDVR4mio6iUcvo6AzOfP9FVdVPoM4RUxLDoJpFtI+KR8qNBWTy
-         3g0vOacXH9chN0ofVGV9HSBXvglVyNXl//QDwXbywUc5jcXnxqvroUjrnu6r+OxvmLDG
-         OcLZ+1vYAwHRojo3/vXt85p5O400WT0mj4H0gAqoieuX1Wl6XOMrHkLNvMVpj8jBJEfS
-         q5IA==
-X-Gm-Message-State: AC+VfDx9ZtdkHP6nIEf7Ynn0ACyUjyZC+wzfrb8CaWH/DRszNGf9hhqM
-        5tNbjll4rTTOU9joZSXmNdnPoA==
-X-Google-Smtp-Source: ACHHUZ5ehFpgK4APWouGQ0tCzLqe03SIcw3PO5Qn5jK1/EC0TqUbVVr6dKDAQCT/L+3KCQEwf8nX7g==
-X-Received: by 2002:a17:907:7baa:b0:96a:30b5:cfb0 with SMTP id ne42-20020a1709077baa00b0096a30b5cfb0mr7151833ejc.22.1686163444351;
-        Wed, 07 Jun 2023 11:44:04 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id bm11-20020a0564020b0b00b00514b2717ec6sm6545000edb.28.2023.06.07.11.44.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 11:44:03 -0700 (PDT)
-Message-ID: <44267461-e6f9-b549-a8eb-cba76384660b@linaro.org>
-Date:   Wed, 7 Jun 2023 20:44:01 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [RESEND PATCH v1 1/2] dt-bindings: misc: fastrpc: add fastrpc
- group IDs property
-Content-Language: en-US
-To:     Ekansh Gupta <quic_ekangupt@quicinc.com>,
-        srinivas.kandagatla@linaro.org, linux-arm-msm@vger.kernel.org
-Cc:     ekangupt@qti.qualcomm.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, fastrpc.upstream@qti.qualcomm.com,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        d=1e100.net; s=20221208; t=1686163492; x=1688755492;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=y9ETnFKWquG8HyfAcx0wHtEZ8uLP0iUgTJAX7JIWHGA=;
+        b=jciZw1aC62oz6Un2xhp4p5eXPH9a1y4KMakINLYX7R0cU72pGS0ON8QVlM834dKbHo
+         9gyI+7vm2cYH6PRkafRn6aIytZX658jRyZQ1NSRrprZ37B1e09kWcGCtq1WnIXw09Jt7
+         KhvbgeLWXaKZCyxUqfftWmqxrIT4FLmSfruBX20Deb3Wah600hD2UEtmHDqV0obzBEYQ
+         J8FtC4a8DpyoxF66UF76i+fcIi1IPbSKan7hn22QlRVGSFBc1jHzPYyjK6SLfyvhN1hr
+         E0E7plmOGxKPo/tVrpABrbR3LX3c+JtvDGUGPEcNu7fl0915r7rnnLFBrkx5wtJm6QIV
+         WoQQ==
+X-Gm-Message-State: AC+VfDw3Kc8KPeddt1mQxEzvlsFXBSXWSSd3y7Dzak4Y4YxVbb9J1ehN
+        QEydwS/BwC0UkZiWz6x8iyQ=
+X-Google-Smtp-Source: ACHHUZ4OvlV9qMWuC3ZXvf89FEx8QvOzLH/lpRHt8OEpU4QoZXJ3k2amLQnFuzQlJgV8i/Bw8Xpikw==
+X-Received: by 2002:a17:907:94c6:b0:966:5c04:2c61 with SMTP id dn6-20020a17090794c600b009665c042c61mr6910055ejc.8.1686163491486;
+        Wed, 07 Jun 2023 11:44:51 -0700 (PDT)
+Received: from fedora.. ([213.149.38.186])
+        by smtp.googlemail.com with ESMTPSA id d12-20020a1709063ecc00b0096f03770be2sm7154447ejj.52.2023.06.07.11.44.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 11:44:50 -0700 (PDT)
+From:   Robert Marko <robimarko@gmail.com>
+To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
         robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, devicetree@vger.kernel.org
-References: <1686155407-20054-1-git-send-email-quic_ekangupt@quicinc.com>
- <1686155407-20054-2-git-send-email-quic_ekangupt@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1686155407-20054-2-git-send-email-quic_ekangupt@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        conor+dt@kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     ansuelsmth@gmail.com, Robert Marko <robimarko@gmail.com>
+Subject: [PATCH] arm64: dts: qcom: ipq8074: add critical thermal trips
+Date:   Wed,  7 Jun 2023 20:44:48 +0200
+Message-Id: <20230607184448.2512179-1-robimarko@gmail.com>
+X-Mailer: git-send-email 2.40.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,53 +71,200 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/06/2023 18:30, Ekansh Gupta wrote:
-> Add "qcom,fastrpc-gids" property to the list of optional properties.
-> This property contains the list of privileged group IDs which is
-> used to offload process to remote subsystem with increased privileges.
+According to bindings, thermal zones must have associated trips as well.
+Since we currently dont have CPUFreq support and thus no passive cooling
+lets start by defining critical trips to protect the devices against
+severe overheating.
 
-Why or when anyone would use this property?
+Signed-off-by: Robert Marko <robimarko@gmail.com>
+---
+ arch/arm64/boot/dts/qcom/ipq8074.dtsi | 96 +++++++++++++++++++++++++++
+ 1 file changed, 96 insertions(+)
 
-> 
-> Signed-off-by: Ekansh Gupta <quic_ekangupt@quicinc.com>
-> ---
->  Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml b/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
-> index 1ab9588..2a2124f 100644
-> --- a/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
-> +++ b/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
-> @@ -57,6 +57,11 @@ properties:
->        Virtual machine IDs for remote processor.
->      $ref: "/schemas/types.yaml#/definitions/uint32-array"
->  
-> +  qcom,fastrpc-gids:
-> +    description:
-> +      Group IDs for fastrpc.
-
-You just pasted here property name. It does not help me to understand
-what's this. Explain in description.
-
-> +    $ref: "/schemas/types.yaml#/definitions/uint32-array"
-
-Drop quotes.
-
-missing min/maxItems.
-
-> +
->    "#address-cells":
->      const: 1
->  
-> @@ -120,6 +125,7 @@ examples:
->              qcom,glink-channels = "fastrpcglink-apps-dsp";
->              label = "sdsp";
->              qcom,non-secure-domain;
-> +            qcom,fastrpc-gids = <2908>
-
-Eh, what does 2908 stands for? Why not 3012 or 1842? How anyone can
-figure this out?
-
-Best regards,
-Krzysztof
+diff --git a/arch/arm64/boot/dts/qcom/ipq8074.dtsi b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
+index 996a9b9ff8bb..74551f51f097 100644
+--- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
++++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
+@@ -1318,6 +1318,14 @@ nss-top-thermal {
+ 			polling-delay = <1000>;
+ 
+ 			thermal-sensors = <&tsens 4>;
++
++			trips {
++				nss-top-crit {
++					temperature = <110000>;
++					hysteresis = <1000>;
++					type = "critical";
++				};
++			};
+ 		};
+ 
+ 		nss0-thermal {
+@@ -1325,6 +1333,14 @@ nss0-thermal {
+ 			polling-delay = <1000>;
+ 
+ 			thermal-sensors = <&tsens 5>;
++
++			trips {
++				nss-0-crit {
++					temperature = <110000>;
++					hysteresis = <1000>;
++					type = "critical";
++				};
++			};
+ 		};
+ 
+ 		nss1-thermal {
+@@ -1332,6 +1348,14 @@ nss1-thermal {
+ 			polling-delay = <1000>;
+ 
+ 			thermal-sensors = <&tsens 6>;
++
++			trips {
++				nss-1-crit {
++					temperature = <110000>;
++					hysteresis = <1000>;
++					type = "critical";
++				};
++			};
+ 		};
+ 
+ 		wcss-phya0-thermal {
+@@ -1339,6 +1363,14 @@ wcss-phya0-thermal {
+ 			polling-delay = <1000>;
+ 
+ 			thermal-sensors = <&tsens 7>;
++
++			trips {
++				wcss-phya0-crit {
++					temperature = <110000>;
++					hysteresis = <1000>;
++					type = "critical";
++				};
++			};
+ 		};
+ 
+ 		wcss-phya1-thermal {
+@@ -1346,6 +1378,14 @@ wcss-phya1-thermal {
+ 			polling-delay = <1000>;
+ 
+ 			thermal-sensors = <&tsens 8>;
++
++			trips {
++				wcss-phya1-crit {
++					temperature = <110000>;
++					hysteresis = <1000>;
++					type = "critical";
++				};
++			};
+ 		};
+ 
+ 		cpu0_thermal: cpu0-thermal {
+@@ -1353,6 +1393,14 @@ cpu0_thermal: cpu0-thermal {
+ 			polling-delay = <1000>;
+ 
+ 			thermal-sensors = <&tsens 9>;
++
++			trips {
++				cpu0-crit {
++					temperature = <110000>;
++					hysteresis = <1000>;
++					type = "critical";
++				};
++			};
+ 		};
+ 
+ 		cpu1_thermal: cpu1-thermal {
+@@ -1360,6 +1408,14 @@ cpu1_thermal: cpu1-thermal {
+ 			polling-delay = <1000>;
+ 
+ 			thermal-sensors = <&tsens 10>;
++
++			trips {
++				cpu1-crit {
++					temperature = <110000>;
++					hysteresis = <1000>;
++					type = "critical";
++				};
++			};
+ 		};
+ 
+ 		cpu2_thermal: cpu2-thermal {
+@@ -1367,6 +1423,14 @@ cpu2_thermal: cpu2-thermal {
+ 			polling-delay = <1000>;
+ 
+ 			thermal-sensors = <&tsens 11>;
++
++			trips {
++				cpu2-crit {
++					temperature = <110000>;
++					hysteresis = <1000>;
++					type = "critical";
++				};
++			};
+ 		};
+ 
+ 		cpu3_thermal: cpu3-thermal {
+@@ -1374,6 +1438,14 @@ cpu3_thermal: cpu3-thermal {
+ 			polling-delay = <1000>;
+ 
+ 			thermal-sensors = <&tsens 12>;
++
++			trips {
++				cpu3-crit {
++					temperature = <110000>;
++					hysteresis = <1000>;
++					type = "critical";
++				};
++			};
+ 		};
+ 
+ 		cluster_thermal: cluster-thermal {
+@@ -1381,6 +1453,14 @@ cluster_thermal: cluster-thermal {
+ 			polling-delay = <1000>;
+ 
+ 			thermal-sensors = <&tsens 13>;
++
++			trips {
++				cluster-crit {
++					temperature = <110000>;
++					hysteresis = <1000>;
++					type = "critical";
++				};
++			};
+ 		};
+ 
+ 		wcss-phyb0-thermal {
+@@ -1388,6 +1468,14 @@ wcss-phyb0-thermal {
+ 			polling-delay = <1000>;
+ 
+ 			thermal-sensors = <&tsens 14>;
++
++			trips {
++				wcss-phyb0-crit {
++					temperature = <110000>;
++					hysteresis = <1000>;
++					type = "critical";
++				};
++			};
+ 		};
+ 
+ 		wcss-phyb1-thermal {
+@@ -1395,6 +1483,14 @@ wcss-phyb1-thermal {
+ 			polling-delay = <1000>;
+ 
+ 			thermal-sensors = <&tsens 15>;
++
++			trips {
++				wcss-phyb1-crit {
++					temperature = <110000>;
++					hysteresis = <1000>;
++					type = "critical";
++				};
++			};
+ 		};
+ 	};
+ };
+-- 
+2.40.1
 
