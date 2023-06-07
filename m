@@ -2,99 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73067726137
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 15:26:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E52272613A
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 15:27:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240192AbjFGN0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 09:26:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50390 "EHLO
+        id S240510AbjFGN1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 09:27:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235032AbjFGN0U (ORCPT
+        with ESMTP id S235032AbjFGN1B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 09:26:20 -0400
-Received: from frasgout11.his.huawei.com (unknown [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB381AC;
-        Wed,  7 Jun 2023 06:26:19 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4QbnsK34lVz9xGgS;
-        Wed,  7 Jun 2023 21:15:49 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwCH9O9thYBk6e8aAw--.4240S2;
-        Wed, 07 Jun 2023 14:26:09 +0100 (CET)
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     akpm@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        stable@vger.kernel.org
-Subject: [PATCH] memfd: Check for non-NULL file_seals in memfd_create() syscall
-Date:   Wed,  7 Jun 2023 15:24:27 +0200
-Message-Id: <20230607132427.2867435-1-roberto.sassu@huaweicloud.com>
+        Wed, 7 Jun 2023 09:27:01 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 140091AC;
+        Wed,  7 Jun 2023 06:26:57 -0700 (PDT)
+X-QQ-mid: bizesmtp79t1686144406t8q8sh1i
+Received: from linux-lab-host.localdomain ( [61.141.77.49])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 07 Jun 2023 21:26:44 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: gSGF8h2+s1IeuyvNvsjPqo51c92Oei+VMiWk3neliuJycIgEbNKvZYuLZeUAz
+        lFnZwQGxKatqDuzMJQohZXLRw7ojULNOb0uySR+PI0K0wz6TMCdQK5KMg3dv/ZBa7cf690j
+        F3aLIkjJfE3lX4ajZr1YhoqbesoV5tm1xPa4dgHqPRx4tnlNdb6/oenJsj48MaPH/aQufsD
+        Sp37ssx34gS5ZLeJOCeKoo5c5NvhJHhx8r8CLz/vloLE2w420Q6cPe+pfk1Nc0dUfNqTu1N
+        bTMFDwxFV3/+1jfMLT8XM9JJBvPv1sXabROdq0SdWbp1kI1zQZpLo2ym5FGUTuy7u2kcCrp
+        vmlng70HKM3MPHoViSeRec/NWnaWjkBVaCo2c1qQ8V6lsgomCqO0G6+7IgnbvNrTd1PJFeS
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 11098037038039291754
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     arnd@arndb.de
+Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        thomas@t-8ch.de, w@1wt.eu
+Subject: Re: [PATCH v3 1/3] tools/nolibc: fix up #error compile failures with -ENOSYS
+Date:   Wed,  7 Jun 2023 21:26:44 +0800
+Message-Id: <20230607132644.824792-1-falcon@tinylab.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <635d1aaf-3982-4404-9c05-05e51800691e@app.fastmail.com>
+References: <635d1aaf-3982-4404-9c05-05e51800691e@app.fastmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LxC2BwCH9O9thYBk6e8aAw--.4240S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrZF15tFW7JFW7uF4UWFykXwb_yoWkAwbEg3
-        y0qryrJr1DWw47CF4xAr13Zry8KFWDJrnxZF95tF4xAa98Ga1kWrZ3ur1fX348Gw4I9r1r
-        tFZrZF17Ar97GjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb7xYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20E
-        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x02
-        67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267
-        AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxVAaw2AFwI0_GFv_Wryl42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVW3JVWrJr1lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY
-        1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07jx3ktUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQABBF1jj45W0QAAs8
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+> On Wed, Jun 7, 2023, at 11:46, Zhangjin Wu wrote:
+> >> On Wed, Jun 7, 2023, at 07:19, Zhangjin Wu wrote:
+> >
+> > Ok, agree, as the 64bit version of lseek may be enough for nolibc, if a target
+> > application really require, they can add the alias themselves.
+> >
+> >> Are there any examples of functions where we actually want mulitple
+> >> versions?
+> >>
+> >
+> > For example, the following ones are related to the syscalls being added,
+> > all of them have similar library routines in current sys.h:
+> >
+> > * waitid, https://linux.die.net/man/2/waitid
+> > * ppoll, https://linux.die.net/man/2/ppoll
+> > * pselect, https://linux.die.net/man/2/pselect6
+> > * clock_gettime, https://linux.die.net/man/2/clock_gettime
+> >
+> > The similar routines are put in right side:
+> >
+> > * waitid --> waitpid, wait, wait4
+> > * ppoll --> poll
+> > * pselect --> select
+> > * clock_gettime --> gettimeofday
+> 
+> Ok, I think these are all useful to have in both versions.
+> 
+> All four of these examples are old enough that I think it's
+> sufficient just expose them to userspace as the bare system
+> calls, and have the older library calls be implemented using
+> them without a fallback to the native syscalls of the same
+> name on architectures that have both, newer architectures
+> would only have the latest version anyway.
+>
 
-Ensure that file_seals is non-NULL before using it in the memfd_create()
-syscall. One situation in which memfd_file_seals_ptr() could return a NULL
-pointer is when CONFIG_SHMEM=n.
+Ok, Thanks, I have already added parts of them, will send waitid and
+64bit lseek at first.
 
-Cc: stable@vger.kernel.org # 4.16.x
-Fixes: 47b9012ecdc7 ("shmem: add sealing support to hugetlb-backed memfd")
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- mm/memfd.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+> > For the clock_gettime, it may also let us think about if we need to add
+> > its friends (clock_getres, clock_settime) together.
+> 
+> Yes, I think that makes sense. We also need clock_settime()
+> to implement settimeofday() on rv32.
+>
 
-diff --git a/mm/memfd.c b/mm/memfd.c
-index 69b90c31d38..e763e76f110 100644
---- a/mm/memfd.c
-+++ b/mm/memfd.c
-@@ -371,12 +371,15 @@ SYSCALL_DEFINE2(memfd_create,
- 
- 		inode->i_mode &= ~0111;
- 		file_seals = memfd_file_seals_ptr(file);
--		*file_seals &= ~F_SEAL_SEAL;
--		*file_seals |= F_SEAL_EXEC;
-+		if (file_seals) {
-+			*file_seals &= ~F_SEAL_SEAL;
-+			*file_seals |= F_SEAL_EXEC;
-+		}
- 	} else if (flags & MFD_ALLOW_SEALING) {
- 		/* MFD_EXEC and MFD_ALLOW_SEALING are set */
- 		file_seals = memfd_file_seals_ptr(file);
--		*file_seals &= ~F_SEAL_SEAL;
-+		if (file_seals)
-+			*file_seals &= ~F_SEAL_SEAL;
- 	}
- 
- 	fd_install(fd, file);
--- 
-2.25.1
+Ok.
 
+> Ideally, I'd love to extend the tooling around system calls
+> in the kernel so we can automatically generate the low-level
+> wrapper functions from syscall.tbl,
+
+That's cool.
+
+BTW, I did something on dead syscall elimination [1] (DSE, RFC
+patchset), a v1 has been prepared locally, but not sent out yet.
+
+It also requires to work with the syscall.tbl or the generic
+include/uapi/asm-generic/unistd.h, welcome your feedback on the RFC
+patchset [1] and you should be the right reviewer of the coming v1 ;-)
+
+The left issue of RFC version is finding a way to not KEEP the exception
+entries (in ld script) added by get_user/put_user() if the corresponding
+syscalls are not really used, such KEEPs of exception entries reverts
+the ownership from "syscalls -> get_user/put_user" to "get_user/put_user
+-> syscalls" and blocks the gc'ing of the sections of such syscalls.
+
+In the coming v1, I used a script trick to drop the wrongly KEPT
+exception entries to allow drop all of the unused syscalls at last. Will
+clean up them asap. But it is a little slow and looks ugly, it is only
+for a further demo of the possibility.
+
+In v2 of DSE, I'm wondering whether it is possible to drop all of the
+manually added KEEP operations from ld scripts and use some conditional
+attributes (for the sections added by get_user/put_user) to build the
+'used' references from "syscalls" to "sections created by
+get_user/put_user", this may need support from gcc and ld, welcome your
+suggestions too, thanks.
+
+And that RFC patchset added a patch to record the used 'syscalls' in
+nolibc automatically ;-)
+
+[1]: https://lore.kernel.org/linux-riscv/cover.1676594211.git.falcon@tinylab.org/
+[2]: https://reviews.llvm.org/D96838
+
+> but this needs a lot of
+> other work that you should not need to depend on for what
+> you are doing right now.
+
+Ok, welcome to share any progress.
+
+Thanks,
+Zhangjin
+
+> 
+>      Arnd
