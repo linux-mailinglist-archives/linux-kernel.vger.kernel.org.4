@@ -2,89 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5E0C726E4A
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 22:49:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FA3A726E3C
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 22:49:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235112AbjFGUt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 16:49:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49548 "EHLO
+        id S235088AbjFGUtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 16:49:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235022AbjFGUs7 (ORCPT
+        with ESMTP id S235091AbjFGUs3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 16:48:59 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B24C32136
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 13:48:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        from:to:cc:subject:date:message-id:mime-version
-        :content-transfer-encoding; s=k1; bh=Nk2vTCJEsnlPnE56r3fJgIEOB6M
-        ZuR6H9s9EOtmA/NA=; b=yRsWiNYWRM7ooz35PXbdckapHagJ+oZ9qr3iiT3mWPr
-        zv0nMTE92AFKb5y9ILF/H+lGmxhzkA4+v+ScPb45/7n0JqjsfxKg12/3pPfOn3qw
-        yNZD+cUpfDvSYcRD8UGMnMxLkJ/489LNfYPVMupqC6DL556syGfFu4hi8CUx1PSQ
-        =
-Received: (qmail 730854 invoked from network); 7 Jun 2023 22:47:53 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 7 Jun 2023 22:47:53 +0200
-X-UD-Smtp-Session: l3s3148p1@/nzuP5D99qcujnt4
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-renesas-soc@vger.kernel.org
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] PCI: rcar: use proper naming for R-Car
-Date:   Wed,  7 Jun 2023 22:47:50 +0200
-Message-Id: <20230607204750.27837-1-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 7 Jun 2023 16:48:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42D0C2707;
+        Wed,  7 Jun 2023 13:48:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 80C75646D2;
+        Wed,  7 Jun 2023 20:48:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0D9AC433A0;
+        Wed,  7 Jun 2023 20:48:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686170887;
+        bh=9sKpccaxmX9doTAUeC3c++CWO+L3WAFAUsJBLGfryic=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fIsvz5WXnc3KC+vrIgKCXPjOp7pVxra0afjmTXtZYxBhAyh0TCjpGrRqqUzM81Fre
+         JLpwFUT+JPPCvxrXaDreIYLPCmqmG3UhCqkvUvXhUaaNf7Ns9jQJBcHXMG1uzjBXvY
+         s32dTk9EYb2jLd37hl+8xeK+MH9Ysb+BurBcOa/ihAwveSXoXfu9Ta956KwEbsj1Us
+         xw1vRfuqetfGySFuKRs2/mmvwjhvr27R/oS5cjCw/1nI2i70c6bP31KNgK8U5Ede8R
+         14kdSyDzae/0/M6tPb8NKbW1+feSvwLw2jpIvTxr3Rfou9OPKp0xk5k/SeMesCHBeo
+         n20DjSCaaVvFg==
+Date:   Wed, 7 Jun 2023 21:48:03 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Claudiu Beznea <claudiu.beznea@microchip.com>,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        sre@kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 3/4] dt-bindings: power: reset: atmel,sama5d2-shdwc:
+ convert to yaml
+Message-ID: <20230607-refute-acrobat-3b3f645da71b@spud>
+References: <20230524123528.439082-1-claudiu.beznea@microchip.com>
+ <20230524123528.439082-4-claudiu.beznea@microchip.com>
+ <20230524-blizzard-hunting-4da815e634e2@spud>
+ <20230607204351.GA3984668-robh@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="CRbTNylh+HJ+G0nN"
+Content-Disposition: inline
+In-Reply-To: <20230607204351.GA3984668-robh@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Neither RCar, nor Rcar, but R-Car.
 
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
+--CRbTNylh+HJ+G0nN
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Change since V1:
-* fix typo in $subject (Thanks, Biju!)
+On Wed, Jun 07, 2023 at 02:43:51PM -0600, Rob Herring wrote:
+> On Wed, May 24, 2023 at 08:19:08PM +0100, Conor Dooley wrote:
+> > On Wed, May 24, 2023 at 03:35:27PM +0300, Claudiu Beznea wrote:
+> > > Convert Atmel SAMA5D2 shutdown controller to YAML. SAMA7G5 SHDWC DT n=
+ode
+> > > (available in arch/arm/boot/dts/sama7g5.dtsi) has syscon along with i=
+ts
+> > > compatible. There is no usage of this syscon in the current code but =
+it
+> > > may be necessary in future as some registers of SHDWC are accessed in
+> > > different drivers (at91-sama5d2_shdwc.c and arch/arm/mach-at91/pm.c).
+> > > Thus update the YAML with it to make DT checkers happy.
+> > >=20
+> > > Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+> >=20
+> > Modulo the license thing that I mentioned on v1,
+>=20
+> Should be fine given it's an Microchip employee changing a Microchip=20
+> binding.
 
- drivers/pci/controller/pcie-rcar-host.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Aye, that part I figured was fine - it was the when I looked at the
+blame for the files & they were filled with your name that I wondered
+about the licensing.
+If you're okay with it though then clearly there's not an issue :)
 
-diff --git a/drivers/pci/controller/pcie-rcar-host.c b/drivers/pci/controller/pcie-rcar-host.c
-index e80e56b2a842..f4dac8ff97cb 100644
---- a/drivers/pci/controller/pcie-rcar-host.c
-+++ b/drivers/pci/controller/pcie-rcar-host.c
-@@ -684,7 +684,7 @@ static void rcar_compose_msi_msg(struct irq_data *data, struct msi_msg *msg)
- }
- 
- static struct irq_chip rcar_msi_bottom_chip = {
--	.name			= "Rcar MSI",
-+	.name			= "R-Car MSI",
- 	.irq_ack		= rcar_msi_irq_ack,
- 	.irq_mask		= rcar_msi_irq_mask,
- 	.irq_unmask		= rcar_msi_irq_unmask,
-@@ -813,7 +813,7 @@ static int rcar_pcie_enable_msi(struct rcar_pcie_host *host)
- 
- 	/*
- 	 * Setup MSI data target using RC base address address, which
--	 * is guaranteed to be in the low 32bit range on any RCar HW.
-+	 * is guaranteed to be in the low 32bit range on any R-Car HW.
- 	 */
- 	rcar_pci_write_reg(pcie, lower_32_bits(res.start) | MSIFE, PCIEMSIALR);
- 	rcar_pci_write_reg(pcie, upper_32_bits(res.start), PCIEMSIAUR);
--- 
-2.35.1
+Cheers,
+Conor.
 
+--CRbTNylh+HJ+G0nN
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIDtAwAKCRB4tDGHoIJi
+0ouDAP4mi4vjAQvARowdJZWeA1v9bVnwZ8/8xHXHfrAuJy+fYgEAqbtuOxnkH91I
+6ywA3pjB+Up3KD43T5iS3FJxRRTMnwQ=
+=iVKO
+-----END PGP SIGNATURE-----
+
+--CRbTNylh+HJ+G0nN--
