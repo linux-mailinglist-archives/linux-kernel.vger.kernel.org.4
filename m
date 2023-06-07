@@ -2,75 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 521D572552E
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 09:13:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88246725531
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 09:15:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238774AbjFGHNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 03:13:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48432 "EHLO
+        id S238809AbjFGHPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 03:15:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234332AbjFGHNq (ORCPT
+        with ESMTP id S238838AbjFGHOy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 03:13:46 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B29198B
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 00:13:45 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-51478f6106cso906458a12.1
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 00:13:45 -0700 (PDT)
+        Wed, 7 Jun 2023 03:14:54 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43087E62;
+        Wed,  7 Jun 2023 00:14:53 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-9786fc23505so233654466b.2;
+        Wed, 07 Jun 2023 00:14:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686122024; x=1688714024;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XIDN7SGNAgmTaDACmxzYbK4nm0ku0E334Z45z434qxI=;
-        b=FUGLpMgfWvUcB5HfVjIvsrysPNGk9zKmJ9TF9Z3IV/N8oy228vAGTedg8SGEdXrcch
-         u6gemLT/ulLDVK4h9lrzUUNYDtIWQtXQhvtU4UhKccrIiLu8g/H2MD8NH4LiZ/XES3Bk
-         8Coy8mclP13JrefNXfptFQcf6A98G3zrEyDLo6hOYC5A3jE76bxCdA2VKNO60NBJMjga
-         dwiaTMHs0V2GHztJ0uiu2b4EVdsV7RhJCsi9QcfeQRm1qSDl+oVWI/LC5iNiOGf6i1iq
-         TY0iYp1SQFY3ZMGVZgNOnEdk8Vx+FNMkc3DxN7n+gb6N+UtHlY4fONLTrL27ZZlCeIXa
-         xdbg==
+        d=gmail.com; s=20221208; t=1686122091; x=1688714091;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=uSuufyMcsyCNhc9935w8FFk8/YUkDDPohUMbAYt6SfI=;
+        b=ilhgOo6QT90fgsgn+CEW5VvsdcWWOHZfG6Qs1Ms6smfWNMDfUSvmVi+ObuVkmXUXYA
+         Y78FMCqjMP6r6TLAXorocecwYVAKnluhtQh4mV/rVABUWyG33HJvDp5Zd6ezMPeGbpzC
+         zymQ239q26nE/Uu3Sidy5M/pr8+4AFbr47qpRMpvi+p0r8ri9IqCCPSCFWiOoqC5g4aC
+         CvYDGAFPcygcrDuRg2QGwJ6Zu/xt14fDrKtrzfsN20OMkjSVUxNg+jSXU3CnMkk3P1Z3
+         NiAKmPC+IxJKn9nkWeQWNo3W8ey5K7ztAUgW1SUs3N/3licrEOjcxwzas+pD0PwZZp+H
+         AbUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686122024; x=1688714024;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XIDN7SGNAgmTaDACmxzYbK4nm0ku0E334Z45z434qxI=;
-        b=kEHtXN41JDd7omNYfvmCdS7xofIDz3AffibA4s88x+n2T59IS4ZbLsBLL8YoXAyfvS
-         Ah+f8nPsypXpkBlzX12e6r2Qg4WWpxFe/uv1Qp7YVyga6WpYn400ho6Arv1ihBOBpzrq
-         ui5+5B5wHu9Tu/HszQ/i/LleYQmwFjOuiCyoNbXFnmkR1xvM041I7wlkkj3i5k98uRyI
-         3FS54TSz+gAoFbkripRc5QOQ3migU9NEkNmzK/M3uNe8B137q2zm7OnsICsUuASu4/0d
-         /34zLGk5NnEpIcgH2SkFCY/E6wgR9mj+NRFDlGgcwKX1lXCK6ySSF/b/DMl8iUbYUZam
-         ZXOA==
-X-Gm-Message-State: AC+VfDz2yP8wKKzvYoDKwYkYJ9mZosJu+9EyjpWL0W/fFmJNQSNhJt/7
-        Gvh8JnhhrvJsZlpmmvgdmjLWrgXn/RfgYTJbyxM=
-X-Google-Smtp-Source: ACHHUZ7ue8QUkbf4LbystMAyp9y0G6QSXOiirtn3D+841TOqHe87HS/FVdskvk+EA6ZSurS/dR3YwQ==
-X-Received: by 2002:aa7:ca4e:0:b0:50d:1e11:eb9 with SMTP id j14-20020aa7ca4e000000b0050d1e110eb9mr3704112edt.1.1686122023997;
-        Wed, 07 Jun 2023 00:13:43 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id d5-20020a50fe85000000b00504ecc4fa96sm5922105edt.95.2023.06.07.00.13.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 00:13:43 -0700 (PDT)
-Message-ID: <24cc82c7-a4b5-e687-5775-208665d915eb@linaro.org>
-Date:   Wed, 7 Jun 2023 09:13:41 +0200
+        d=1e100.net; s=20221208; t=1686122092; x=1688714092;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uSuufyMcsyCNhc9935w8FFk8/YUkDDPohUMbAYt6SfI=;
+        b=DNiJYaAsa36ky9N/UlxXTr0FRpmDHrHqS/AswwZ0Gz4OIRFL4uKYG/OUIPxJO7Ddf4
+         PztPckV19zewpKntdRZvxXGsWl+jXe94KmLnuMcDZPlsUXK/SYstjml0nBceHyvNAGWc
+         y8HQd/QLkcSGFLxbCgfLMVms1TGF1W5vscZdIdz6pfqwI6qp3gDgunKNL0W6JLb/U4ey
+         vudGVsEYZT9cXpGg9xCHcDRQmWr4gd3+v/VzbaT2RM4X2ci7CagvX4TD/+5mQtQYPEJo
+         LKzf2QdeHFFUGrwxIIevSLg4U7xjzGor+FL2iaj5i/HkMiRj3mknXBzpIVHLnBbatFne
+         AqUw==
+X-Gm-Message-State: AC+VfDyA2H990jOBGhKDl27gCAiugpoD9URcQKUVO7rCgZ2/zbbzdudl
+        avZ6qWfUjp7+km5dxaw1h4U=
+X-Google-Smtp-Source: ACHHUZ5RsUVyMc7PHaB7qrI4ubSnR5YtnP5RqWnK43pw5t0wCpMbIO2L6kFAJF1hXn1DJDM+JcZFKQ==
+X-Received: by 2002:a17:907:c1e:b0:973:e349:43c9 with SMTP id ga30-20020a1709070c1e00b00973e34943c9mr5805150ejc.77.1686122091313;
+        Wed, 07 Jun 2023 00:14:51 -0700 (PDT)
+Received: from tom-HP-ZBook-Fury-15-G7-Mobile-Workstation (net-188-217-50-121.cust.vodafonedsl.it. [188.217.50.121])
+        by smtp.gmail.com with ESMTPSA id xo21-20020a170907bb9500b00965ffb8407asm6504007ejc.87.2023.06.07.00.14.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 00:14:50 -0700 (PDT)
+Date:   Wed, 7 Jun 2023 09:14:48 +0200
+From:   Tommaso Merciai <tomm.merciai@gmail.com>
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        jacopo.mondi@ideasonboard.com, martin.hecht@avnet.eu,
+        michael.roeder@avnet.eu, linuxfancy@googlegroups.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Gerald Loacker <gerald.loacker@wolfvision.net>,
+        Mikhail Rudenko <mike.rudenko@gmail.com>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Nicholas Roth <nicholas@rothemail.net>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/3] media: dt-bindings: alvium: add document YAML
+ binding
+Message-ID: <ZIAuaF/5Aib1DoQ+@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
+References: <20230606155416.260941-1-tomm.merciai@gmail.com>
+ <20230606155416.260941-3-tomm.merciai@gmail.com>
+ <20230606163656.GI25679@pendragon.ideasonboard.com>
+ <20230606-jaundice-womankind-7e583789fb7a@spud>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 1/2 v9] dt-bindings: watchdog: marvell GTI system watchdog
- driver
-Content-Language: en-US
-To:     Bharat Bhushan <bbhushan2@marvell.com>, wim@linux-watchdog.org,
-        linux@roeck-us.net, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-watchdog@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sgoutham@marvell.com
-References: <20230605045945.26262-1-bbhushan2@marvell.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230605045945.26262-1-bbhushan2@marvell.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230606-jaundice-womankind-7e583789fb7a@spud>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,17 +94,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/06/2023 06:59, Bharat Bhushan wrote:
-> Add binding documentation for the Marvell GTI system
-> watchdog driver.
+Hi Conor,
+
+Thanks for your feedback.
+
+On Tue, Jun 06, 2023 at 07:07:42PM +0100, Conor Dooley wrote:
+> Hey Laurent, Tommaso,
 > 
-> Signed-off-by: Bharat Bhushan <bbhushan2@marvell.com>
-> ---
-> v9:
+> On Tue, Jun 06, 2023 at 07:36:56PM +0300, Laurent Pinchart wrote:
+> > On Tue, Jun 06, 2023 at 05:54:03PM +0200, Tommaso Merciai wrote:
+> 
+> > > +  alliedvision,lp2hs-delay-us:
+> > > +    maxItems: 1
+> > > +    description:
+> > > +      Low power to high speed delay time in microseconds.
+> > 
+> > You can drop "in microseconds", that's implied by the suffix.
+> > 
+> > > +      The purpose of this property is force a DPhy reset for the period
+> > > +      described by the microseconds on the property, before it starts
+> > > +      streaming. To be clear, with that value bigger than 0 the Alvium
+> > > +      forces a dphy-reset on all lanes for that period. That means all
+> > > +      lanes go up into low power state. This may help a csi2 rx ip to
+> > > +      reset if that IP can't deal with a continous clock.
+> > 
+> > I'd like to propose what I think is a clearer version:
+> > 
+> >     description: |
+> >       Low power to high speed delay time.
+> > 
+> >       If the value is larger than 0, the camera forces a reset of all
+> >       D-PHY lanes for the duration specified by this property. All lanes
+> >       will transition to the low-power state and back to the high-speed
+> >       state after the delay. Otherwise the lanes will transition to and
+> >       remain in the high-speed state immediately after power on.
+> > 
+> >       This is meant to help CSI-2 receivers synchronizing their D-PHY
+> >       RX.
+> 
+> Question about the property.
+> Why not make it have a minimum value of 1 and drop the special-case
+> behaviour for zero?
 
+Personally I prefer to stay with zero case.
+This reflect better the real camera register behaviour.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+(also is optional)
 
-Best regards,
-Krzysztof
+Thanks! :)
+Tommaso
+
+> 
+> Cheers,
+> Conor.
+
 
