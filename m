@@ -2,161 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EBDC72515D
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 03:05:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70AF272516B
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 03:15:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240416AbjFGBFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 21:05:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55476 "EHLO
+        id S240434AbjFGBPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 21:15:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234757AbjFGBFb (ORCPT
+        with ESMTP id S234423AbjFGBPv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 21:05:31 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D6BF10EA;
-        Tue,  6 Jun 2023 18:05:30 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QbTfX3SCNz4x3y;
-        Wed,  7 Jun 2023 11:05:23 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1686099925;
-        bh=e4oZlAfw52y9JGXr735f5Rbf2RXrsy8Vp7qSQsJEEt8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=bXqLtneUEW8i9LgqjEDQqK6GnOO4/BaU6zwyv0uEyn1TAJbZN+Vc/1bxvW+qZ3AIZ
-         lzXfWViMxw8Ig3zLouGpcB80bo+dpwJoj4QN5NluB/GmHzQe9MlvKmxNb8D82XlHG9
-         5cYu/tPPlRzNjjYzp/9bLQra5+rpz0i6OkyknzeqmJ52fHl3eKR5h83VDccCyvhPcY
-         JtGgulsWjflkNvS0q9KOWaNiGJzHtYvFyl7YikZO1+KlcWEyS0l359QGx+TQ7Vmcof
-         KLTOriz9DqT9V4zbkRrhgisaQPzxtgw/gv2ICVjuYqoeNFm3yDZReS3x5weN3W1XaD
-         EKEL4Gl3162Jg==
-Date:   Wed, 7 Jun 2023 11:05:21 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christoffer Dall <cdall@cs.columbia.edu>,
-        Marc Zyngier <maz@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Joey Gouly <joey.gouly@arm.com>,
-        Kristina Martsenko <kristina.martsenko@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>
-Subject: Re: linux-next: manual merge of the kvm-arm tree with the arm64
- tree
-Message-ID: <20230607110521.442280f9@canb.auug.org.au>
-In-Reply-To: <20230606114927.227a66a5@canb.auug.org.au>
-References: <20230606114927.227a66a5@canb.auug.org.au>
+        Tue, 6 Jun 2023 21:15:51 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4EA092;
+        Tue,  6 Jun 2023 18:15:50 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3570l0Io027460;
+        Wed, 7 Jun 2023 01:15:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=/Rth1cf7f+VKMc6Ja0hfE3TOoTNMHCjb3sNHoK8EcuM=;
+ b=UIOqis854vQBY9EMedBjcUMdIoXm8rsNrDgc78gOKE39SJO1NJHZ5mUI158Aqo6NxJyc
+ naBIHthuPv4vHXvFtlcGO24Sxe14ZYK9PYcDr+hk8cV2x5Zuziz75i/6doKWdzuGGHpw
+ XrK9/8SSajgOW7Ip5NiONdCWbc3fQ/a9+kl4U8HncfzfoSwWL6+uE8U9IwieU2Gg7Xwc
+ B7nFeNRHQRhx5XLj9O5cZ8ClOcdt1QFaeMOJASONbfI9zzoMefDNqt47GwuEN9PXJ7Rg
+ tV+9PfeYWkz7N3JTbLeB4o+54VWzWQlu+1A8zfwZa0baWyJOJHlLBlpH8XwJmOpIKjNq ZQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r2a7k0k7g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Jun 2023 01:15:44 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3571FhhT017678
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 7 Jun 2023 01:15:43 GMT
+Received: from [10.216.46.27] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 6 Jun 2023
+ 18:15:39 -0700
+Message-ID: <f40157df-8792-fc28-55eb-56dadf46b382@quicinc.com>
+Date:   Wed, 7 Jun 2023 06:44:53 +0530
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/b+2pJYc_b01Vegx//5E+E+a";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 0/2] spi-geni-qcom: Add new interfaces and utilise them
+ to do map/unmap in framework for SE DMA
+Content-Language: en-CA
+To:     Mark Brown <broonie@kernel.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <dianders@chromium.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_msavaliy@quicinc.com>,
+        <mka@chromium.org>, <swboyd@chromium.org>,
+        <quic_vtanuku@quicinc.com>, <quic_ptalari@quicinc.com>
+References: <1684325894-30252-1-git-send-email-quic_vnivarth@quicinc.com>
+ <bffedd6c-acc2-4c89-9e4d-82aa70249b57@sirena.org.uk>
+From:   Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
+In-Reply-To: <bffedd6c-acc2-4c89-9e4d-82aa70249b57@sirena.org.uk>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: GZWKrXuSEDiDptvdtTwJ6N73bTI1344g
+X-Proofpoint-GUID: GZWKrXuSEDiDptvdtTwJ6N73bTI1344g
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-06_17,2023-06-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1015
+ impostorscore=0 spamscore=0 lowpriorityscore=0 phishscore=0
+ mlxlogscore=814 adultscore=0 bulkscore=0 suspectscore=0 priorityscore=1501
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306070009
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/b+2pJYc_b01Vegx//5E+E+a
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+On 6/6/2023 11:19 PM, Mark Brown wrote:
+> On Wed, May 17, 2023 at 05:48:12PM +0530, Vijaya Krishna Nivarthi wrote:
+>> A "known issue" during implementation of SE DMA for spi geni driver was
+>> that it does DMA map/unmap internally instead of in spi framework.
+>> Current patches remove this hiccup and also clean up code a bit.
+> Given Konrad's review I'll go ahead and apply these on a branch
+> (assuming my CI is happy), if there's a need to merge them into the qcom
+> tree I can sign a pull request (or revert the commits).  Hopefully
+> that's OK with everyone.
 
-On Tue, 6 Jun 2023 11:49:27 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> Today's linux-next merge of the kvm-arm tree got a conflict in:
->=20
->   arch/arm64/kernel/cpufeature.c
->=20
-> between commits:
->=20
->   b7564127ffcb ("arm64: mops: detect and enable FEAT_MOPS")
->   c1fa32c8f189 ("arm64: cpufeature: add TCR2 cpucap")
->   b5a8e35236ee ("arm64: cpufeature: add Permission Indirection Extension =
-cpucap")
->=20
-> from the arm64 tree and commit:
->=20
->   c876c3f182a5 ("KVM: arm64: Relax trapping of CTR_EL0 when FEAT_EVT is a=
-vailable")
->=20
-> from the kvm-arm tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
 
-Commit b5a8e35236ee changed a bit, so the new resolution is below.
---=20
-Cheers,
-Stephen Rothwell
+Sounds ok to me given Bjorn seems not available until 9th.
 
-diff --cc arch/arm64/kernel/cpufeature.c
-index c3bdb14bb4bd,4a2ab3f366de..000000000000
---- a/arch/arm64/kernel/cpufeature.c
-+++ b/arch/arm64/kernel/cpufeature.c
-@@@ -2662,27 -2641,17 +2662,38 @@@ static const struct arm64_cpu_capabilit
-  		.cpu_enable =3D cpu_enable_dit,
-  		ARM64_CPUID_FIELDS(ID_AA64PFR0_EL1, DIT, IMP)
-  	},
- +	{
- +		.desc =3D "Memory Copy and Memory Set instructions",
- +		.capability =3D ARM64_HAS_MOPS,
- +		.type =3D ARM64_CPUCAP_SYSTEM_FEATURE,
- +		.matches =3D has_cpuid_feature,
- +		.cpu_enable =3D cpu_enable_mops,
- +		ARM64_CPUID_FIELDS(ID_AA64ISAR2_EL1, MOPS, IMP)
- +	},
- +	{
- +		.capability =3D ARM64_HAS_TCR2,
- +		.type =3D ARM64_CPUCAP_SYSTEM_FEATURE,
- +		.matches =3D has_cpuid_feature,
- +		ARM64_CPUID_FIELDS(ID_AA64MMFR3_EL1, TCRX, IMP)
- +	},
- +	{
- +		.desc =3D "Stage-1 Permission Indirection Extension (S1PIE)",
- +		.capability =3D ARM64_HAS_S1PIE,
- +		.type =3D ARM64_CPUCAP_BOOT_CPU_FEATURE,
- +		.matches =3D has_cpuid_feature,
- +		ARM64_CPUID_FIELDS(ID_AA64MMFR3_EL1, S1PIE, IMP)
- +	},
-+ 	{
-+ 		.desc =3D "Enhanced Virtualization Traps",
-+ 		.capability =3D ARM64_HAS_EVT,
-+ 		.type =3D ARM64_CPUCAP_SYSTEM_FEATURE,
-+ 		.sys_reg =3D SYS_ID_AA64MMFR2_EL1,
-+ 		.sign =3D FTR_UNSIGNED,
-+ 		.field_pos =3D ID_AA64MMFR2_EL1_EVT_SHIFT,
-+ 		.field_width =3D 4,
-+ 		.min_field_value =3D ID_AA64MMFR2_EL1_EVT_IMP,
-+ 		.matches =3D has_cpuid_feature,
-+ 	},
-  	{},
-  };
- =20
+Thank you everyone for review and time.
 
---Sig_/b+2pJYc_b01Vegx//5E+E+a
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+-Vijay/
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmR/19EACgkQAVBC80lX
-0GwnEwf9GJrMfL66JdX4Ojy8XtbbvCpzsCeQNgb5Vf7879jZO3u5iYcU8qcDTsuf
-nu73SAB0PfZfDeN190wXB/lcKmrIYg3S3++QkVRf3SH3RWUwBJQN3it+qJyDoQIi
-wNTGBCwtsmwgQNSf8jnprpk2P2N1GG5F9LiZTfetlFv+euxXy4R8321cOUFgnugp
-J5pbEeiJr4SjWyPkQDbkPShZVelIcY4EfLwYs5agESyIg8mkuyMI4nWTqQ0piihz
-BLdj2U37zxJkhT6N5lFmOh5LOkjRvAg9EE1EhaqVUuWHzSwXcKSKzxxDT2c4QnDJ
-M0wNS1KOerCkaw8SFvDyUTRkHbjZ0A==
-=kLt6
------END PGP SIGNATURE-----
-
---Sig_/b+2pJYc_b01Vegx//5E+E+a--
