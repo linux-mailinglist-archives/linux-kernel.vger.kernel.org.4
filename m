@@ -2,128 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3100872693F
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 20:54:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93BCA72694C
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 20:55:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229642AbjFGSyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 14:54:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60484 "EHLO
+        id S233095AbjFGSzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 14:55:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230193AbjFGSx7 (ORCPT
+        with ESMTP id S231199AbjFGSzD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 14:53:59 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBC841BD6;
-        Wed,  7 Jun 2023 11:53:57 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-653436fcc1bso3376312b3a.2;
-        Wed, 07 Jun 2023 11:53:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686164037; x=1688756037;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CWlI8O5y17mVIgSckRO28rpjnfk78X92V4g11ktEnnQ=;
-        b=LrSIqPYIl2O2Vb7lnDHMQaAJbXiVOZhw8EnOdrmM+4Yq6NcCwopRy54dAnHyLKik1N
-         vKHSVT487M6ibmwfs5fmti5ThA0U6IlWp+XMlljGp2Vb52tp+h9/TXHDcYlDQEaZkLvC
-         QHMRKHS5z+P+e94aRD5q5oIuMQ1z/q5JSyiD7IfN0G+7JpjsVFs/che2oi9MKW8suAEf
-         R7cmM15MdF3Ep3Z98w2ypVreOu9VaGXAgrhRtIGSTwN0tswPxKMd0ZUdhfSO5OJ6ldeO
-         6fS/KBCqzZA6oDXAPw8KwQw1raW/6FMFjNZ6whQZo7dmu9uXUuJOpQLAE1iHj6Y2tZJy
-         32PQ==
+        Wed, 7 Jun 2023 14:55:03 -0400
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CAB52696;
+        Wed,  7 Jun 2023 11:54:38 -0700 (PDT)
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-6513e7e5d44so4587281b3a.0;
+        Wed, 07 Jun 2023 11:54:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686164037; x=1688756037;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CWlI8O5y17mVIgSckRO28rpjnfk78X92V4g11ktEnnQ=;
-        b=U3368yENAOx8LMqtOQLfeQzSmjHWSnpfgYoghpgAO4XZFiRz4NoyQ7hCgl+5UZf2R2
-         Zvt+kK+efImvWSb40gmI1KYAk1HAZC268ID6Z6Kg0huDHxEp7g8NOAuCRmrLy+DjeX3N
-         /R4QsJnb55PXWnQu0lZd6vk0hKO78U01cLNAlrod7tYWV+TMCt++QkJIikfYsejmYPkj
-         5nHNXb3hSifcWNfZBri5+3LjKdyBDNHR36HHrAp1S/pt4mU3swgKkOcg8iUoeyqW7hH5
-         B4WmhNu4Sixqp+/ijSWDt/w4HTWA5T3ufxkHOdB9yRxm0/xgiMORt9ONXnjXrusAO2no
-         pSgw==
-X-Gm-Message-State: AC+VfDxGsGm0I61vwdfzW327SpCitfleObbUKlJ36CoPGahVvlZrkNtr
-        4OK3w0ZqNBHbMMvzJfAKUYvXH9bEkUFWEA==
-X-Google-Smtp-Source: ACHHUZ74yVXNTUyi/V0LeKw31FQ74c28oWW2Gy0sH1FOyjyS4+1dENhhE4ZRoViIU8ul9JyRxCWSBA==
-X-Received: by 2002:a05:6a00:1252:b0:660:523a:8fef with SMTP id u18-20020a056a00125200b00660523a8fefmr2920833pfi.13.1686164037156;
-        Wed, 07 Jun 2023 11:53:57 -0700 (PDT)
-Received: from localhost ([192.55.54.50])
-        by smtp.gmail.com with ESMTPSA id n35-20020a635923000000b0051303d3e3c5sm9372544pgb.42.2023.06.07.11.53.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 11:53:56 -0700 (PDT)
-Date:   Wed, 7 Jun 2023 11:53:55 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-mm@kvack.org,
-        kirill.shutemov@linux.intel.com, tony.luck@intel.com,
-        peterz@infradead.org, tglx@linutronix.de, seanjc@google.com,
-        pbonzini@redhat.com, david@redhat.com, dan.j.williams@intel.com,
-        rafael.j.wysocki@intel.com, ying.huang@intel.com,
-        reinette.chatre@intel.com, len.brown@intel.com, ak@linux.intel.com,
-        isaku.yamahata@intel.com, chao.gao@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, bagasdotme@gmail.com,
-        sagis@google.com, imammedo@redhat.com, isaku.yamahata@gmail.com
-Subject: Re: [PATCH v11 05/20] x86/virt/tdx: Add SEAMCALL infrastructure
-Message-ID: <20230607185355.GH2244082@ls.amr.corp.intel.com>
-References: <cover.1685887183.git.kai.huang@intel.com>
- <ec640452a4385d61bec97f8b761ed1ff38898504.1685887183.git.kai.huang@intel.com>
- <92e19d74-447f-19e0-d9ec-8a3f12f04927@intel.com>
+        d=1e100.net; s=20221208; t=1686164078; x=1688756078;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oGiAZafvbgMjci4riKVs2WjWWK2srfpG0HwElIpYDrY=;
+        b=it5heMos1Q4KiOkiydvNQrwjPrygXP3Az6JTsfUottzqKBedfObZm00oiCSQ54kwow
+         Q1rYwpGwAMIF5yxLU3X6lEYVrtob6jvFDZy9uy0llmvAh8APrL9oxXE9pZeKbipNsHEF
+         qzpaw6NnE0d2OIvqUqqcd9/GAarjmXIi3VejQxbhFLjmHabzsk4lATGElddpQ7dLLS7C
+         q3YTkhhTvyi4tOaCHdusrhAj4CwG79xhLHEk6+g2p8VNkNKi+uDiO1GjLTB3slGAKVph
+         p1uktHThjaEN9xRrSajv53v6Zuofp6X560YdkOEQwhqwtpC3kb4HxJzjPQQMRatLN6pP
+         YgHw==
+X-Gm-Message-State: AC+VfDxuI9DcBiemy6lXNYYHWTUHfcX2CV9PA/nv+MVuI5XipGEuPdy8
+        i3GP9JJf3cRDZMITp7yqwT0=
+X-Google-Smtp-Source: ACHHUZ40F49rmtVj3sZ7rs0LK2+jqZIItHUEYYCjU+TBqC7bYhteKBYkfk6lV7p1TpNBU7BsyddtIA==
+X-Received: by 2002:a05:6a20:841e:b0:10b:dca4:8a3b with SMTP id c30-20020a056a20841e00b0010bdca48a3bmr2205714pzd.31.1686164077642;
+        Wed, 07 Jun 2023 11:54:37 -0700 (PDT)
+Received: from [192.168.51.14] ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id c19-20020aa78813000000b006542b17a9f6sm7450519pfo.194.2023.06.07.11.54.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Jun 2023 11:54:37 -0700 (PDT)
+Message-ID: <e165b0fd-983a-91dd-eb74-dd2465758390@acm.org>
+Date:   Wed, 7 Jun 2023 11:54:35 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <92e19d74-447f-19e0-d9ec-8a3f12f04927@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 1/3] ufs: make __ufshcd_send_uic_cmd not wrapped by
+ host_lock
+Content-Language: en-US
+To:     Kiwoong Kim <kwmad.kim@samsung.com>, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alim.akhtar@samsung.com,
+        avri.altman@wdc.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, beanhuo@micron.com,
+        adrian.hunter@intel.com, sc.suh@samsung.com, hy50.seo@samsung.com,
+        sh425.lee@samsung.com, kwangwon.min@samsung.com,
+        junwoo80.lee@samsung.com
+References: <cover.1685927620.git.kwmad.kim@samsung.com>
+ <CGME20230605012506epcas2p2c487b751827e3a39c74fdbd88dbd1311@epcas2p2.samsung.com>
+ <002dcd4e99b2e03dcd698493f1f1adbb0375bf5c.1685927620.git.kwmad.kim@samsung.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <002dcd4e99b2e03dcd698493f1f1adbb0375bf5c.1685927620.git.kwmad.kim@samsung.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 07:24:23AM -0700,
-Dave Hansen <dave.hansen@intel.com> wrote:
+On 6/4/23 18:15, Kiwoong Kim wrote:
+> __ufshcd_send_uic_cmd is wrapped uic_cmd_mutex and
+> its related contexts are accessed within the period wrappted
+> by uic_cmd_mutex. Thus, wrapping with host_lock is
+> redundant.
 
-> On 6/4/23 07:27, Kai Huang wrote:
-> > TDX introduces a new CPU mode: Secure Arbitration Mode (SEAM).  This
-> > mode runs only the TDX module itself or other code to load the TDX
-> > module.
-> > 
-> > The host kernel communicates with SEAM software via a new SEAMCALL
-> > instruction.  This is conceptually similar to a guest->host hypercall,
-> > except it is made from the host to SEAM software instead.  The TDX
-> > module establishes a new SEAMCALL ABI which allows the host to
-> > initialize the module and to manage VMs.
-> > 
-> > Add infrastructure to make SEAMCALLs.  The SEAMCALL ABI is very similar
-> > to the TDCALL ABI and leverages much TDCALL infrastructure.
-> > 
-> > SEAMCALL instruction causes #GP when TDX isn't BIOS enabled, and #UD
-> > when CPU is not in VMX operation.  Currently, only KVM code mocks with
-> 
-> "mocks"?  Did you mean "mucks"?
-> 
-> > VMX enabling, and KVM is the only user of TDX.  This implementation
-> > chooses to make KVM itself responsible for enabling VMX before using
-> > TDX and let the rest of the kernel stay blissfully unaware of VMX.
-> > 
-> > The current TDX_MODULE_CALL macro handles neither #GP nor #UD.  The
-> > kernel would hit Oops if SEAMCALL were mistakenly made w/o enabling VMX
-> > first.  Architecturally, there is no CPU flag to check whether the CPU
-> > is in VMX operation.  Also, if a BIOS were buggy, it could still report
-> > valid TDX private KeyIDs when TDX actually couldn't be enabled.
-> 
-> I'm not sure this is a great justification.  If the BIOS is lying to the
-> OS, we _should_ oops.
-> 
-> How else can this happen other than silly kernel bugs.  It's OK to oops
-> in the face of silly kernel bugs.
-
-TDX KVM + reboot can hit #UD.  On reboot, VMX is disabled (VMXOFF) via
-syscore.shutdown callback.  However, guest TD can be still running to issue
-SEAMCALL resulting in #UD.
-
-Or we can postpone the change and make the TDX KVM patch series carry a patch
-for it.
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
