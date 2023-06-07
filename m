@@ -2,156 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9CA4725D0C
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 13:27:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22D8A725D19
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 13:29:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240061AbjFGL1Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 07:27:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58928 "EHLO
+        id S240329AbjFGL3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 07:29:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235655AbjFGL1W (ORCPT
+        with ESMTP id S240337AbjFGL3o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 07:27:22 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F5C010DE;
-        Wed,  7 Jun 2023 04:27:21 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-976a0a1a92bso885463766b.1;
-        Wed, 07 Jun 2023 04:27:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686137240; x=1688729240;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MZj9zEPNMu6PNT680HAS4M1mr61aJ9tD4PBTYeqywYs=;
-        b=RQlok25fj/9vJrPYbbct9bexovSu3Uf3Q+g2uMbk3emn9X6o3H00jzcyLGpxscGEIN
-         4ZFNKn2kiWKwvY++sqS6vgbRVfSGiJvPOo/DWxXyxGvUWt4nrjHUuJVq5i75r7mPbJc9
-         EljJx82O2k77zi/nO/1SVJ7OSKA1SLVOEYnzezu+SicfDlv0rM5zRmzBSaIlJej3D5ei
-         mVozfbF1QlAWMmJIWOdKc5EJGMT/Qx7JpBcGn0HaVGqTuz0X5SDy6TbitEfFLj+CrzLp
-         vIY2MwuxtNIMrOJPVDoIB9ITCGTy4tHWz8YjCsSmQRN2EWcg2+vmm3hJICN2VeN1Glrb
-         F8mA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686137240; x=1688729240;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MZj9zEPNMu6PNT680HAS4M1mr61aJ9tD4PBTYeqywYs=;
-        b=TI2ceIzmVMFGDZ+O1Vp+jCfMcXyD7RlqMtcS+esmJYz1QShKOZoVQ4Vqydbt4vI7Ks
-         Gpn82jeeOZk8fS7R56T80CXYRhDfZMRQOW9KNBQ+IpbN7UkWYjGQ/2z5oueHil7D9M/K
-         D6r9QEJ6Wyr2xdH3HQOrlTWrUczTsu2Wvgvh27jR0viHPD5hCRRloA8oxxTa2gGBgcX2
-         bp4HuiffhXk9TM0SG1108nVPa9ssM2l8YmWzj+5nRVp1StYsAPsjF4RjcnbCHqKFENPf
-         cSGDEst0vILBxJTEmB1IhHacd/HtwwUYYZ4yfMCMCRifZYLR02zloQNU4AcfshxDxj1i
-         JfhQ==
-X-Gm-Message-State: AC+VfDxSIKpZQMxQYyRFHmjHalgMBTHZdB0OOWfILMuunaFvSK1q9rHv
-        q8ZP0AogQvmbhHCLQxTpsZs=
-X-Google-Smtp-Source: ACHHUZ4qNanpQ2K8kT4AddIsaGIj7F+UCXUl8nxvF7xcI0lE+eswM2cdOkE7Frhj31mu39SJ9K7thg==
-X-Received: by 2002:a17:907:2d10:b0:973:fe5d:ef71 with SMTP id gs16-20020a1709072d1000b00973fe5def71mr5991058ejc.14.1686137239579;
-        Wed, 07 Jun 2023 04:27:19 -0700 (PDT)
-Received: from tom-HP-ZBook-Fury-15-G7-Mobile-Workstation (net-188-217-50-121.cust.vodafonedsl.it. [188.217.50.121])
-        by smtp.gmail.com with ESMTPSA id u3-20020a1709063b8300b00977e7f7d599sm3195495ejf.71.2023.06.07.04.27.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 04:27:19 -0700 (PDT)
-Date:   Wed, 7 Jun 2023 13:27:16 +0200
-From:   Tommaso Merciai <tomm.merciai@gmail.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Conor Dooley <conor@kernel.org>, jacopo.mondi@ideasonboard.com,
-        martin.hecht@avnet.eu, michael.roeder@avnet.eu,
-        linuxfancy@googlegroups.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Gerald Loacker <gerald.loacker@wolfvision.net>,
-        Mikhail Rudenko <mike.rudenko@gmail.com>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Nicholas Roth <nicholas@rothemail.net>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] media: dt-bindings: alvium: add document YAML
- binding
-Message-ID: <ZIBplDv/NFb0jGoq@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
-References: <20230606155416.260941-1-tomm.merciai@gmail.com>
- <20230606155416.260941-3-tomm.merciai@gmail.com>
- <20230606163656.GI25679@pendragon.ideasonboard.com>
- <20230606-jaundice-womankind-7e583789fb7a@spud>
- <ZIAuaF/5Aib1DoQ+@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
- <20230607072134.GK14101@pendragon.ideasonboard.com>
+        Wed, 7 Jun 2023 07:29:44 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE3331993;
+        Wed,  7 Jun 2023 04:29:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686137383; x=1717673383;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=UwqTTS8un7pHNkC69VKFGHnWNTgBVFRY5wjuGB303Rc=;
+  b=dDr0OsfmrLRQvikbhXF64uOfpYsolGxJpkgxhYgWx8nsmbANBhwCeHJf
+   KuNnBqGc940JizB5mLWY3ALmh81E73Qp/WVLCqX7fVUOs4Rwa22o7Frrn
+   HR5sIBR0lMJ/r+JG86Z9uuxdKWMxy41z+EMrM0v0ke99K3tLklMIxdEaW
+   FgahT7s6GwEE4+mv/X1Iejs/T8k2TJeaqcWa+IxdXkIhIMismpS71wybk
+   3QWmGkDQ10QZr9ggBsTi8SDxZD+beEVysxyY6r416OBg2SBDfjn6/3GmP
+   fPWk4hRgO74oJbaYbS0faHZ+LTyIZdAwDOeVk/VqObK0kIprpu9bfTJxo
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="385278967"
+X-IronPort-AV: E=Sophos;i="6.00,223,1681196400"; 
+   d="scan'208";a="385278967"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 04:29:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="742625613"
+X-IronPort-AV: E=Sophos;i="6.00,223,1681196400"; 
+   d="scan'208";a="742625613"
+Received: from vsmyers-mobl2.amr.corp.intel.com (HELO [10.212.146.233]) ([10.212.146.233])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 04:27:55 -0700
+Message-ID: <aa9cd68b-645b-d997-e327-dc8335de913e@intel.com>
+Date:   Wed, 7 Jun 2023 04:27:55 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230607072134.GK14101@pendragon.ideasonboard.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] x86/hyperv: Trace hv_set_register()
+Content-Language: en-US
+To:     Nischala Yelchuri <niyelchu@linux.microsoft.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Tyler Hicks <code@tyhicks.com>, boqun.feng@gmail.com,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Nischala Yelchuri <niyelchu@microsoft.com>
+References: <1686101757-23985-1-git-send-email-niyelchu@linux.microsoft.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <1686101757-23985-1-git-send-email-niyelchu@linux.microsoft.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 6/6/23 18:35, Nischala Yelchuri wrote:
+>  void hv_set_register(unsigned int reg, u64 value)
+>  {
+> +	trace_hyperv_set_register(reg, value);
+> +
+>  	if (hv_nested)
+>  		reg = hv_get_nested_reg(reg);
 
-Hi Laurent,
-
-On Wed, Jun 07, 2023 at 10:21:34AM +0300, Laurent Pinchart wrote:
-> On Wed, Jun 07, 2023 at 09:14:48AM +0200, Tommaso Merciai wrote:
-> > On Tue, Jun 06, 2023 at 07:07:42PM +0100, Conor Dooley wrote:
-> > > On Tue, Jun 06, 2023 at 07:36:56PM +0300, Laurent Pinchart wrote:
-> > > > On Tue, Jun 06, 2023 at 05:54:03PM +0200, Tommaso Merciai wrote:
-> > > 
-> > > > > +  alliedvision,lp2hs-delay-us:
-> > > > > +    maxItems: 1
-> > > > > +    description:
-> > > > > +      Low power to high speed delay time in microseconds.
-> > > > 
-> > > > You can drop "in microseconds", that's implied by the suffix.
-> > > > 
-> > > > > +      The purpose of this property is force a DPhy reset for the period
-> > > > > +      described by the microseconds on the property, before it starts
-> > > > > +      streaming. To be clear, with that value bigger than 0 the Alvium
-> > > > > +      forces a dphy-reset on all lanes for that period. That means all
-> > > > > +      lanes go up into low power state. This may help a csi2 rx ip to
-> > > > > +      reset if that IP can't deal with a continous clock.
-> > > > 
-> > > > I'd like to propose what I think is a clearer version:
-> > > > 
-> > > >     description: |
-> > > >       Low power to high speed delay time.
-> > > > 
-> > > >       If the value is larger than 0, the camera forces a reset of all
-> > > >       D-PHY lanes for the duration specified by this property. All lanes
-> > > >       will transition to the low-power state and back to the high-speed
-> > > >       state after the delay. Otherwise the lanes will transition to and
-> > > >       remain in the high-speed state immediately after power on.
-> > > > 
-> > > >       This is meant to help CSI-2 receivers synchronizing their D-PHY
-> > > >       RX.
-> > > 
-> > > Question about the property.
-> > > Why not make it have a minimum value of 1 and drop the special-case
-> > > behaviour for zero?
-> > 
-> > Personally I prefer to stay with zero case.
-> > This reflect better the real camera register behaviour.
-> 
-> Speaking of which, could you document the maximum value in the bindings
-> ?
-
-150ms is the max value I'll document this in v4.
-
-Regards,
-Tommaso
-
-> 
-> > (also is optional)
-> 
-> -- 
-> Regards,
-> 
-> Laurent Pinchart
+I can't help but wonder if this is just a patch for people that don't
+know how to set kprobes.
