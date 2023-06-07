@@ -2,167 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C4BD726631
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 18:42:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26F53726634
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 18:42:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229834AbjFGQmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 12:42:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60408 "EHLO
+        id S229899AbjFGQmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 12:42:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229641AbjFGQmJ (ORCPT
+        with ESMTP id S229641AbjFGQmh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 12:42:09 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FA911FC4;
-        Wed,  7 Jun 2023 09:42:08 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 194615C007C;
-        Wed,  7 Jun 2023 12:42:08 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Wed, 07 Jun 2023 12:42:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        invisiblethingslab.com; h=cc:cc:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1686156128; x=1686242528; bh=42y1EYFXvq4hYeXlSpmVr7gmNpbInmaS7tg
-        G+Ss9F5U=; b=CHxsNu/TLuBvPTG0yHh4WOq5QJN1It8U4K4Mt15g1FIi6vpL6Ad
-        4SNv/41uiq14W8leF4UWTsz72Su5CRbXiIRYEnHIDHBx9oDZqT6ymIagHkd2CQwm
-        wNifs0xXvmsiFF3ncmrudJvXcMTwLJELPyOnernFr6t3hASMW0zPB0PfLDwC0BW0
-        uHq3ry34wEAUTA3EsUXoZvNluvYHvcmg1lIB0QJ7a3DfUUW9bYOQ3lM4uFz62ezH
-        Prl2L8QV+COLB0QySNuIbWY+j9m6wIwBBTmIGRXwua/wfc+B9Lhpp6LKDxOCNs1A
-        bvTFZlTojHJl6zVroypQ8HtiXc5lAVlS+rQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1686156128; x=1686242528; bh=42y1EYFXvq4hY
-        eXlSpmVr7gmNpbInmaS7tgG+Ss9F5U=; b=CsL/olnib/EC7s2AniVOsID2RnvaO
-        gHEE1/PviC87GXlrK2jQrtRUoDiIUCd3PtoZMt1pM2/PfxbOkOjWQjNVZkVe/Lvr
-        KUlvOi1I9n0bCjNREsjfXNTcuAmGB3wZUYXeFyqAUFyLIH0XI/ZdN2tZRXyBDIDw
-        Q0OybDNsW02ypxRMnzz6nL11B8Pm6rec3hbwVmEFrw+0ZpslcCIJJN3Q1grAWypJ
-        LgceyJdxSEpqDgSvmOPuPPq4XxJZ5J0z5qm3GBh9GhG88SW3k3wKeKyHBl/WLKwK
-        9wEObMIJ7i8awdQgzUCQQmLUcfv6L9lHBdVfEyqqz1sK1byku2VFQmGKg==
-X-ME-Sender: <xms:X7OAZM1ueUtCZdO5gXwRqFsrTiESkIoCnY3pNx4WgbAYO0oyzbY1PA>
-    <xme:X7OAZHF3Mm8dFQfIxCWk2Q2sncJ1ilMSCg4BcG3qR59V5ItJEHxuGXhmWfURtWr79
-    0K3DL6PsGWuCx4>
-X-ME-Received: <xmr:X7OAZE65WME9hDYCcsiCzgK011Z8Vz86jMcNQVl3Ypi6IuTe6Ryys5wXUsw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedtgedguddtgecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehgtderredttdejnecuhfhrohhmpeffvghm
-    ihcuofgrrhhivgcuqfgsvghnohhurhcuoeguvghmihesihhnvhhishhisghlvghthhhinh
-    hgshhlrggsrdgtohhmqeenucggtffrrghtthgvrhhnpedvjeetgeekhfetudfhgfetffeg
-    fffguddvgffhffeifeeikeektdehgeetheffleenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpeguvghmihesihhnvhhishhisghlvghthhhinhhg
-    shhlrggsrdgtohhm
-X-ME-Proxy: <xmx:X7OAZF1mDsYgwtD-fK8d8Ln8N-NhaJ-ZqD3je5aBQiOsM5VgdG175w>
-    <xmx:X7OAZPHnGIQFnU7zGkQzx5MOEv1iOX-kwemrqJUS1fOPh52IJyHP7A>
-    <xmx:X7OAZO_jD_APgbz570axrPJPE4wcAJWB3FlObPxftl1hiSmRcMkhFA>
-    <xmx:YLOAZFMANyMVDb7AixBzA8LP_hT_vpDIINqDbQ6YIw0Uxp04beErWA>
-Feedback-ID: iac594737:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 7 Jun 2023 12:42:07 -0400 (EDT)
-Date:   Wed, 7 Jun 2023 12:42:00 -0400
-From:   Demi Marie Obenour <demi@invisiblethingslab.com>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] block, loop: Increment diskseq when releasing a loop
- device
-Message-ID: <ZICzXbJeLj56NRYB@itl-email>
-References: <20230601222656.2062-1-demi@invisiblethingslab.com>
- <ZIA004HDuhoTQzY/@infradead.org>
- <ZICg2sxHQRRPW3Nc@itl-email>
+        Wed, 7 Jun 2023 12:42:37 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D871FD7;
+        Wed,  7 Jun 2023 09:42:34 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id 41be03b00d2f7-528cdc9576cso3858536a12.0;
+        Wed, 07 Jun 2023 09:42:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686156154; x=1688748154;
+        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pNtQsqwcFl/cHA8FXUAC3pwd32NzZkO9EqSyIbOcyco=;
+        b=lqBbMWYtgQwb2e9GiOTqPvz4mdI1YVqPmHtmWQCmULRjFGUp84mM12ddNWfwBc//37
+         jt5oQnwu3g/vfBjBhX6IiXwYKLsuOw2ryTvyeEkXSgpZTJryxVHarPq0rOAd85HkIPF+
+         2q5Fcv81XB5jIzLz+sdydNl1i4/b/uayaqZsZ059DoGa8+VbvY3WebXon92xlrkOJdvN
+         Uq8ECg4lBA3QdwoIIISprFaq6QydgjKll46UHhbL2wKyi3rz/Ywqp1K852xtCQ2fy04x
+         OaxTe16+p19NFT9T/RB6YZ4/pesvMvWwRJ6UQn/Gig4Px2c2v2trO5SkaBrjjQwlEEFe
+         RhZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686156154; x=1688748154;
+        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pNtQsqwcFl/cHA8FXUAC3pwd32NzZkO9EqSyIbOcyco=;
+        b=SgEf1TZiZ3jUrZcHxzq2d85yaRfGczzQiYI674RCQ7KkCGiKJOszSRHtdJboCEhNo/
+         YD0baKPMH3iA8o/NdnD8cJVWf6mR+1eCZyUthq3khowmPuk5cJ52obw8P1U8DqP7YsBA
+         1MBtjc+JC/v6XSYKO67hWqoxnEqU4JDOXR3RJZoSRL7BLwt/H+Q2Kx/OJteOkGjW/+IL
+         uZ5Pjnlh/HYwOhEvIp4nLgQjvJaaAuLgvEFcPk+BZBSiH77wLSZBHjKaAIY+H9cru3UD
+         XrYaR6UxT0cfI+szyKR9Z6yWATo/0bApTtUepuAi6jRyKzGUokP6RLXrBFNep99QF24y
+         HJsg==
+X-Gm-Message-State: AC+VfDx46sg/Xp7gVpWbuiOOoH+AjWbVzE//fC4LsK+vyG31z1CQsed6
+        N5MvVRTuqnq3zZxgOPq3luA=
+X-Google-Smtp-Source: ACHHUZ5x797qgEOmmP2yN4igJvBd6Ap5yVl4IpECKeDgF/IM4SX0es4JjtuBNb4zxg647LMBjGShkQ==
+X-Received: by 2002:a17:902:d487:b0:1b0:46af:7f15 with SMTP id c7-20020a170902d48700b001b046af7f15mr3229541plg.64.1686156153623;
+        Wed, 07 Jun 2023 09:42:33 -0700 (PDT)
+Received: from krava (c-67-160-222-115.hsd1.ca.comcast.net. [67.160.222.115])
+        by smtp.gmail.com with ESMTPSA id g16-20020a170902869000b001b02162c86bsm10703357plo.80.2023.06.07.09.42.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 09:42:33 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Wed, 7 Jun 2023 09:42:30 -0700
+To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>, bpf@vger.kernel.org
+Subject: [RFC] fprobe call of rethook_try_get faults
+Message-ID: <ZICzdpvp46Xk1rIv@krava>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Lhc+hn0jVRR2V+8y"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZICg2sxHQRRPW3Nc@itl-email>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+hi,
+I occasionally get following fault:
 
---Lhc+hn0jVRR2V+8y
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 7 Jun 2023 12:42:00 -0400
-From: Demi Marie Obenour <demi@invisiblethingslab.com>
-To: Christoph Hellwig <hch@infradead.org>
-Cc: Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] block, loop: Increment diskseq when releasing a loop
- device
+  general protection fault, probably for non-canonical address 0x6b6b6b6b6b6b6b6b: 0000 [#1] PREEMPT SMP DEBUG_PAGEALLOC NOPTI
+  CPU: 3 PID: 28438 Comm: test_progs Tainted: G           OE      6.4.0-rc3+ #448 dad92bc91c459c664b308990ada0799837010e31
+  Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-1.fc37 04/01/2014
+  RIP: 0010:rethook_try_get+0x34/0xf0
+  Code: 48 8b 47 08 85 d2 74 0b 65 8b 15 af 26 eb 7e 85 d2 74 57 48 85 c0 74 73 e8 39 8e f0 ff 84 c0 74 6a 48 8b 53 10 48 85 d2 74 >
+  RSP: 0018:ffffc90003ccfcf0 EFLAGS: 00010202
+  RAX: 0000000000000001 RBX: ffff88810920db40 RCX: 0000000000000003
+  RDX: 6b6b6b6b6b6b6b6b RSI: ffffffff82c0a371 RDI: ffffffff82bcbddb
+  RBP: ffffffff81f5a5f0 R08: 0000000000000001 R09: 0000000000000000
+  R10: 0000000000000000 R11: 0000000000014000 R12: ffffffffa02ec3f2
+  R13: fffffffffffffff7 R14: ffffc90003ccfd38 R15: 0000000000000000
+  FS:  00007f2f8195eb80(0000) GS:ffff88846da00000(0000) knlGS:0000000000000000
+  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+  CR2: 00007f2f819c0140 CR3: 0000000189cb8006 CR4: 0000000000770ee0
+  PKRU: 55555554
+  Call Trace:
+   <TASK>
+   fprobe_handler+0xc1/0x270
+   ? __pfx_bpf_testmod_init+0x10/0x10 [bpf_testmod b0bc3019aa6d6bdb2afc30cf6381f510d7e5abbe]
+   ? __pfx_bpf_testmod_init+0x10/0x10 [bpf_testmod b0bc3019aa6d6bdb2afc30cf6381f510d7e5abbe]
+   ? bpf_fentry_test1+0x5/0x10
+   ? bpf_fentry_test1+0x5/0x10
+   ? bpf_testmod_init+0x22/0x80 [bpf_testmod b0bc3019aa6d6bdb2afc30cf6381f510d7e5abbe]
+   ? do_one_initcall+0x63/0x2e0
+   ? rcu_is_watching+0xd/0x40
+   ? kmalloc_trace+0xaf/0xc0
+   ? do_init_module+0x60/0x250
+   ? __do_sys_finit_module+0xac/0x120
+   ? do_syscall_64+0x37/0x90
+   ? entry_SYSCALL_64_after_hwframe+0x72/0xdc
+   </TASK>
+  Modules linked in: bpf_testmod(OE+) loop bpf_preload intel_rapl_msr intel_rapl_common crct10dif_pclmul crc32_pclmul crc32c_intel >
 
-On Wed, Jun 07, 2023 at 11:23:00AM -0400, Demi Marie Obenour wrote:
-> > > --- a/drivers/block/loop.c
-> > > +++ b/drivers/block/loop.c
-> > > @@ -1205,6 +1205,12 @@ static void __loop_clr_fd(struct loop_device *=
-lo, bool release)
-> > >  	if (!part_shift)
-> > >  		set_bit(GD_SUPPRESS_PART_SCAN, &lo->lo_disk->state);
-> > >  	mutex_lock(&lo->lo_mutex);
-> > > +
-> > > +	/*
-> > > +	 * Increment the disk sequence number, so that userspace knows this
-> > > +	 * device now points to something else.
-> > > +	 */
-> > > +	inc_diskseq(lo->lo_disk);
-> >=20
-> > And I'm not sure why we even need this.  __loop_clr_fd
-> > already calls disk_force_media_change, which calls inc_diskseq.
-> > Why do we need an extra increment?
->=20
-> How does disk_force_media_change() call inc_diskseq()?  I don=E2=80=99t s=
-ee any
-> calls in the source code.  I=E2=80=99m going to use systemtap to see if t=
-here is
-> an indirect call chain.
 
-Were you thinking of bdev_check_media_change()?  That can call
-inc_diskseq() via this call chain:
+I can't really reliable reproduce this, but while checking the code, I wonder
+we should call rethook_free only after we call unregister_ftrace_function like
+in the patch below
 
-  bdev_check_media_change()
-    disk_clear_events()
-      disk_check_events()
-        inc_diskseq()
+jirka
 
-disk_force_media_change() does not call inc_diskseq(), and I checked
-that calling losetup -D does not change the diskseq of a loop device.
-=46rom what you have writte, I=E2=80=99m pretty sure that=E2=80=99s a bug in
-disk_force_media_change(), though.  I=E2=80=99ll send a v3 that adds this c=
-all.
---=20
-Sincerely,
-Demi Marie Obenour (she/her/hers)
-Invisible Things Lab
 
---Lhc+hn0jVRR2V+8y
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEEdodNnxM2uiJZBxxxsoi1X/+cIsEFAmSAs10ACgkQsoi1X/+c
-IsGbBBAAoZxDjSSs9J+siCWh0MMyGUEwddaQhnOqS6hH//JuLOHDb71mJVF51gZR
-ayDHrJnYDhxsSpb02lxWKKPfo0plXSnTwb8gt2ZX+HUIXR+QteXUpfXzKi45ZwT7
-p70ZnygsFNmn24ePKu5RS491F3n/Kz51PPdacIE429QBLi5YRAAlTTan4pOJRvRt
-bgliY4CSe63mDrCJ4GMd7614e4mTPrsaJYbAAx5ri1xJBNy8pKjbyUMcSfR5VQnu
-ujJgAXImHu3mzEeJlHKusofkCA43rWdhLsrZvrjArGXEXOcK7Qk4zkVUGh/dG7Ta
-QxljW+MD+foQRsFmsrc+XMfIpPuWy/AigkYi7a+jINyzwfmNqfnWwuxW4Q3mQlhu
-eJ7inplmVJ7xsPJKbRL/DcqiHvE+KgGU5GHuZPCwu7e9G+pkcEJ1kTqzHZrRTAJW
-WXhLxBLajojgzKCrbTusEmLuodkVMZpqM1VPsSBeGjYwV+BvVlymK15DWtlxffC4
-XdsQHu88yG8rdDe4TO7GgSWfNXDGuIQOtmHTsvrvLR/XVduEByxaXdsYj5k5JO/V
-A7h0LAnLqTZo2+0tYqaFHHUjUHWua8edZYrdVvXTsNgkMfDol8/SGSSsbstvEbGz
-8WGMKF+Qp8uA8T9fUDq95d6QDXwdg1E5NLawy7Yg9CfYScpy1Mg=
-=AmeY
------END PGP SIGNATURE-----
-
---Lhc+hn0jVRR2V+8y--
+---
+diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
+index 18d36842faf5..0121e8c0d54e 100644
+--- a/kernel/trace/fprobe.c
++++ b/kernel/trace/fprobe.c
+@@ -364,19 +364,13 @@ int unregister_fprobe(struct fprobe *fp)
+ 		    fp->ops.saved_func != fprobe_kprobe_handler))
+ 		return -EINVAL;
+ 
+-	/*
+-	 * rethook_free() starts disabling the rethook, but the rethook handlers
+-	 * may be running on other processors at this point. To make sure that all
+-	 * current running handlers are finished, call unregister_ftrace_function()
+-	 * after this.
+-	 */
+-	if (fp->rethook)
+-		rethook_free(fp->rethook);
+-
+ 	ret = unregister_ftrace_function(&fp->ops);
+ 	if (ret < 0)
+ 		return ret;
+ 
++	if (fp->rethook)
++		rethook_free(fp->rethook);
++
+ 	ftrace_free_filter(&fp->ops);
+ 
+ 	return ret;
