@@ -2,106 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 977F6727174
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 00:20:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA184727198
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 00:25:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232449AbjFGWUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 18:20:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35858 "EHLO
+        id S229580AbjFGWZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 18:25:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232476AbjFGWT6 (ORCPT
+        with ESMTP id S231259AbjFGWZh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 18:19:58 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 591B526A9;
-        Wed,  7 Jun 2023 15:19:22 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id d75a77b69052e-3f9aa383527so27970361cf.1;
-        Wed, 07 Jun 2023 15:19:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686176350; x=1688768350;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rIgA+P7f4yCi2//4vLetDTH19rWaTG6QenjxMKj5UEM=;
-        b=gz/Avg2DZa0mkWMnclQQHqpjltVHceBf4YG1kLo2+ktQ5UXiVXN8rg5SGNL7Z9KzqX
-         4+waSR2CALIN7sFwAkASQxwAXr+a2PfHKRkcUWPq1PwQ3nG4s1hMMXVcq/5w9IzkvcJT
-         Ykgsx4zEHAUZH36A8xQG8bSAzu1n9G0BxfEWHDgAXPoc/O9ZU7mocG77K4SVNiK5eUXE
-         lzs1jJp4brDGhaK5KpoYS/8nB16YFtgMwCGFF4cnlp+QqLV1MlACmw4V52lBhMDLCvPr
-         7ai/Aj440WFYMvIIsGyBWVXsc8D4X7AyXM3VS66daVu6/r82xaZLgcrL3eosXB/Yh+Q6
-         Y4oA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686176350; x=1688768350;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rIgA+P7f4yCi2//4vLetDTH19rWaTG6QenjxMKj5UEM=;
-        b=aG77ULoF7hZBpCix5cp1jJbsqyqM54x6Uq6jwbYnKGpb/S5X9FaZ1hDYRYF0KJWFqn
-         ut057U2LL1NY5N0ypixjyR5oYdV9MORD6s7JIiVPMUw2AbXJyi7pf0U84gZeUATRdP+B
-         PjBeP7MfsQM6DvV49nkhIatQ8S6rfqr7yQ4+4GpC/kcWf60jnVvs3QsoN1MvVPS1XKRn
-         ruxl1421V+Zzafbq0v2CLauztqNuWxQH0V3xLYJuKGmoFB0b2BUlJgOGu7O0653GNhHu
-         lqg5J70UVpoRJbIGhPWHHdsyRN46oS1d5o/2wqvLbEeSb7uSXY3y19Mtt8a9bhoaUCRl
-         R5Ig==
-X-Gm-Message-State: AC+VfDzLHBBl+K+PsdL8k2B78WLBeYJqUUx1OGVF8SMJR/H+djs3pM48
-        pefQ9KK7t8RuxtXZsZj+rTk0ve+FVn8q0A==
-X-Google-Smtp-Source: ACHHUZ6rHF7ySirc4pbFlDouMFKi3e2FuMyqXAfP00bgd0iRloaj39fFZFnIWrwyOq6XQzJ5j6BD6Q==
-X-Received: by 2002:ac8:7f54:0:b0:3f4:dec2:76c3 with SMTP id g20-20020ac87f54000000b003f4dec276c3mr5780582qtk.22.1686176349641;
-        Wed, 07 Jun 2023 15:19:09 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id fg21-20020a05622a581500b003e69c51cf53sm230151qtb.72.2023.06.07.15.19.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 15:19:09 -0700 (PDT)
-Message-ID: <202b6f78-c43c-65f2-01ce-83406ea04260@gmail.com>
-Date:   Wed, 7 Jun 2023 15:18:57 -0700
+        Wed, 7 Jun 2023 18:25:37 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9664E2689
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 15:24:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686176697; x=1717712697;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=DWrcl5RLtV27uRfGpUsqXK1OJLGa0Ts8dBhu0iCMJjQ=;
+  b=kffq3Hu9c6tpIVmktmCW3xaOJ3ORCwz1gmOMjvG7xFecIiPFg+lH/AF+
+   B4eBW3rfgzsXSqrqW00lEDK1Uns6QCNyKba70JtfDfC9htJuHSPMzBLNX
+   sTPddlD44lOLI/NfsysiERpDVv/E4jm940B45tN/uHBbmI4l63MD+Up/d
+   UMdKA+c5oSj4PohHFuRGzkyy4m3ugZNBQ56DPkPnEAE3zm9+wEdJOqOs2
+   s0JTGP3qeyzEZwh6nqpnRdN2EH0fT+lUWaQ5cVJWKd8qe6a32uVOgbzmk
+   mDJCSJFOfmvsqGSLivd2XSPvYxRNQjgMxXcA+JDiJk88BbF2aNqU7MNho
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="355982217"
+X-IronPort-AV: E=Sophos;i="6.00,225,1681196400"; 
+   d="scan'208";a="355982217"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 15:20:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="703839900"
+X-IronPort-AV: E=Sophos;i="6.00,225,1681196400"; 
+   d="scan'208";a="703839900"
+Received: from araj-dh-work.jf.intel.com (HELO araj-dh-work) ([10.165.157.158])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 15:20:47 -0700
+Date:   Wed, 7 Jun 2023 15:19:16 -0700
+From:   Ashok Raj <ashok_raj@linux.intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Ashok Raj <ashok.raj@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Ashok Raj <ashok.raj@intel.com>
+Subject: Re: [patch 0/6] Cure kexec() vs. mwait_play_dead() troubles
+Message-ID: <ZIECZMHxtEYnuBAJ@araj-dh-work>
+References: <20230603193439.502645149@linutronix.de>
+ <ZH4eNL4Bf7yPItee@google.com>
+ <87pm694jmg.ffs@tglx>
+ <ZICuhZHCqSYvR4IO@araj-dh-work>
+ <ZIC/b+AwvH2wIz/o@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 5.4 00/99] 5.4.246-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230607200900.195572674@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230607200900.195572674@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZIC/b+AwvH2wIz/o@google.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/7/23 13:15, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.246 release.
-> There are 99 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Wed, Jun 07, 2023 at 10:33:35AM -0700, Sean Christopherson wrote:
+> On Wed, Jun 07, 2023, Ashok Raj wrote:
+> > On Tue, Jun 06, 2023 at 12:41:43AM +0200, Thomas Gleixner wrote:
+> > > On Mon, Jun 05 2023 at 10:41, Sean Christopherson wrote:
+> > > > On Sat, Jun 03, 2023, Thomas Gleixner wrote:
+> > > >> This is only half safe because HLT can resume execution due to NMI, SMI and
+> > > >> MCE. Unfortunately there is no real safe mechanism to "park" a CPU reliably,
+> > > >
+> > > > On Intel.  On AMD, enabling EFER.SVME and doing CLGI will block everything except
+> > > > single-step #DB (lol) and RESET.  #MC handling is implementation-dependent and
+> > > > *might* cause shutdown, but at least there's a chance it will work.  And presumably
+> > > > modern CPUs do pend the #MC until GIF=1.
+> > > 
+> > > Abusing SVME for that is definitely in the realm of creative bonus
+> > > points, but not necessarily a general purpose solution.
+> > > 
+> > > >> So parking them via INIT is not completely solving the problem, but it
+> > > >> takes at least NMI and SMI out of the picture.
+> > > >
+> > > > Don't most SMM handlers rendezvous all CPUs?  I.e. won't blocking SMIs indefinitely
+> > > > potentially cause problems too?
+> > > 
+> > > Not that I'm aware of. If so then this would be a hideous firmware bug
+> > > as firmware must be aware of CPUs which hang around in INIT independent
+> > > of this.
+> > 
+> > SMM does do the rendezvous of all CPUs, but also has a way to detect the
+> > blocked ones, in WFS via some package scoped ubox register. So it knows to
+> > skip those. I can find this in internal sources, but they aren't available
+> > in the edk2 open reference code. They happen to be documented only in the
+> > BWG, which isn't available freely.
 > 
-> Responses should be made by Fri, 09 Jun 2023 20:07:31 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.246-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+> Ah, so putting CPUs into WFS shouldn't result in odd delays.  At least not on
+> bare metal.  Hmm, and AFAIK the primary use case for SMM in VMs is for secure
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tseted on 
-BMIPS_GENERIC:
+Never knew SMM had any role in VM's.. I thought SMM was always native. 
 
-Tested-by: Florian Fainelli <florian.fainelli@broadcom.com>
--- 
-Florian
+Who owns this SMM for VM's.. from the VirtualBIOS?
 
+> boot, so taking SMIs after booting and putting CPUs back into WFS should be ok-ish.
+> 
+> Finding a victim to test this in a QEMU VM w/ Secure Boot would be nice to have.
+
+I always seem to turn off secureboot installing Ubuntu :-).. I'll try to
+find someone who might know especially doing SMM In VM. 
+
+Can you tell what needs to be validated in the guest?  Would doing kexec
+inside the guest with the new patch set be sufficient? 
+
+Or you mean in guest, do a kexec and launch secure boot of new kernel?
+
+If there is a specific test you want done, let me know.
