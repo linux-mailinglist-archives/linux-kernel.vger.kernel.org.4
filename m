@@ -2,284 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E33D72666E
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 18:51:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8992726679
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 18:53:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230259AbjFGQvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 12:51:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37620 "EHLO
+        id S230462AbjFGQxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 12:53:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbjFGQve (ORCPT
+        with ESMTP id S229655AbjFGQxF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 12:51:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E8CA188;
-        Wed,  7 Jun 2023 09:51:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A80F161755;
-        Wed,  7 Jun 2023 16:51:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 098AFC433AF;
-        Wed,  7 Jun 2023 16:51:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686156692;
-        bh=fTWXqsOdQ+GQlo6s8Oemgm/FqPpMc6cdzA2maiDZLwU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=e3yd1enkles3shpqF56c5kmWYXNwsi++Vluzgaa2qfIs/WqinoJjE+8iE4Y3CXzAp
-         KnFELCiBTxeDYL8pBfE4zPs8pDh/bEXofBv/0jkA8jsdNEwWTuZj3OB81srg0e6IQ/
-         /yKAMzVHhmFM9NTu5j6DWxeINky6LRWAZLmfWOa/TympcnfzBADP/XlgWM9amvEbuv
-         MjuMyjhZGmPakNpH0/Bor9MIWo7X00rhNyyL/yOvFFK0DKczN8eEhzjet4Snc4vUJF
-         WGfmDddjaKS6TKqsabgcxTpK2asaSqjf7ccu+4g+hiPH7FUaZngOif1DJLnKWxpjHV
-         ltwN60ymCqzIw==
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-4f620583bc2so5502121e87.1;
-        Wed, 07 Jun 2023 09:51:31 -0700 (PDT)
-X-Gm-Message-State: AC+VfDyKeN9DMC34t4zFELWjWmEOffRaX2VS714iS4PKTvVTwWw3GgDC
-        LXG/t2axPKpiutGCRPDZADYpAB08rgHviSGHZDg=
-X-Google-Smtp-Source: ACHHUZ6WxFXx0QpjkFMtU2jymXfqnIhG8GigB3cV4+9rAyzzZ02jU5g11X498Vno+ghq/2oi+o6mT4WEHfLvkv237Ps=
-X-Received: by 2002:a2e:9cd1:0:b0:2b1:e943:8abe with SMTP id
- g17-20020a2e9cd1000000b002b1e9438abemr2332841ljj.47.1686156689811; Wed, 07
- Jun 2023 09:51:29 -0700 (PDT)
+        Wed, 7 Jun 2023 12:53:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B29801FC2
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 09:52:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686156724;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=E+Camu/wrYylmYMS88G8cmb/R4NWSFmH8HlRp/yIaXc=;
+        b=bHb4p4Uz2smGJdBcrkzJYoJbg1KQQuqdr/kGxs3KpvC29k5+VzAaDJxPbL1sop6mjVkav7
+        2r4UdxEhKA195sU1GU/J+LazUVhizHByMu8W/mbmNbQKFHLMOi1cK5CHV1jrYS55yVylIr
+        E43XE5XGsaYSKNeUrYalWdBpaXGkkf4=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-235-48hzDrGwM36B5OMkf5EqSg-1; Wed, 07 Jun 2023 12:52:03 -0400
+X-MC-Unique: 48hzDrGwM36B5OMkf5EqSg-1
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3f6089a9689so46322585e9.1
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 09:52:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686156722; x=1688748722;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=E+Camu/wrYylmYMS88G8cmb/R4NWSFmH8HlRp/yIaXc=;
+        b=JYKrZxxDHnCfpoZK6B9OWRQa0Yn4DVV3bPjzfb30+1RcEdiY89vsuqwAmz6O3D19Vx
+         hBXcfZpAWL/e6qvQqXIlYwNIticgocBJnfkg/cjX5Dbkh93sa8Rc/uf14unT8dkRuVHd
+         A/Um9ewKnog1kd0Pn33g8gNzp1n628TC0BtF0NebJCvS/OH5KKpxEYUdaOApKqisxPt7
+         m7nCL+Ir1LneVDXKr5okeH6Q8WtnIxRtLs1kYGjMn5++hfCVwk7nWPdsHXHHvChFxeYP
+         j/JAt8TjqMcgFf8yN48GJuWcpLoJYy1aaV6PLa1hMELx5Eb9L9Bfd55UdvnOLIR2IsoF
+         zRyg==
+X-Gm-Message-State: AC+VfDyMqlJFIQzO3iR6DUWpKQFWxMVblwBk5nkvf9KiidvjefW0Z9dy
+        PV9EddD1LNdqQl2nlaUbn0nqmFsvtFfGMTMYwieEYi1mD2T63q+parPu4BVQfVLJtJWP1VP30Ww
+        +mTsYq0daCe2VnU4qiYDOPlttFCJ7W4ga
+X-Received: by 2002:a5d:5687:0:b0:309:838:8c21 with SMTP id f7-20020a5d5687000000b0030908388c21mr4844412wrv.38.1686156722208;
+        Wed, 07 Jun 2023 09:52:02 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7xPltdMzBs9LNvRUqNzLN0Hg5c1lRRR0kmkHjhr8XETs7I3mNU/9WXnzEVajwk2UZq5vgngg==
+X-Received: by 2002:a5d:5687:0:b0:309:838:8c21 with SMTP id f7-20020a5d5687000000b0030908388c21mr4844395wrv.38.1686156721825;
+        Wed, 07 Jun 2023 09:52:01 -0700 (PDT)
+Received: from debian (2a01cb058d652b00ba1a24d15502040a.ipv6.abo.wanadoo.fr. [2a01:cb05:8d65:2b00:ba1a:24d1:5502:40a])
+        by smtp.gmail.com with ESMTPSA id z18-20020a1c4c12000000b003f60d0eef36sm2747537wmf.48.2023.06.07.09.52.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 09:52:01 -0700 (PDT)
+Date:   Wed, 7 Jun 2023 18:51:59 +0200
+From:   Guillaume Nault <gnault@redhat.com>
+To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: POSSIBLE BUG: selftests/net/fcnal-test.sh: [FAIL][FIX TESTED] in
+ vrf "bind - ns-B IPv6 LLA" test
+Message-ID: <ZIC1r6IHOM5nr9QD@debian>
+References: <b6191f90-ffca-dbca-7d06-88a9788def9c@alu.unizg.hr>
+ <ZHeN3bg28pGFFjJN@debian>
+ <a379796a-5cd6-caa7-d11d-5ffa7419b90e@alu.unizg.hr>
+ <ZH84zGEODT97TEXG@debian>
+ <48cfd903-ad2f-7da7-e5a6-a22392dc8650@alu.unizg.hr>
+ <ZH+BhFzvJkWyjBE0@debian>
+ <a3b2891d-d355-dacd-24ec-af9f8aacac57@alu.unizg.hr>
 MIME-Version: 1.0
-References: <20230607072342.4054036-1-ardb@kernel.org> <20230607072342.4054036-20-ardb@kernel.org>
- <46f93827-630a-32f0-555d-aa51a2fd2a60@amd.com>
-In-Reply-To: <46f93827-630a-32f0-555d-aa51a2fd2a60@amd.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Wed, 7 Jun 2023 18:51:18 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXHpxqvbo_NcgzAAHsE71GohoCcttatMXZsjVvXqPBO33w@mail.gmail.com>
-Message-ID: <CAMj1kXHpxqvbo_NcgzAAHsE71GohoCcttatMXZsjVvXqPBO33w@mail.gmail.com>
-Subject: Re: [PATCH v5 19/20] x86/efistub: Perform SNP feature test while
- running in the firmware
-To:     Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Evgeniy Baskov <baskov@ispras.ru>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Peter Jones <pjones@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Dave Young <dyoung@redhat.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a3b2891d-d355-dacd-24ec-af9f8aacac57@alu.unizg.hr>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 7 Jun 2023 at 18:08, Tom Lendacky <thomas.lendacky@amd.com> wrote:
->
-> On 6/7/23 02:23, Ard Biesheuvel wrote:
-> > Before refactoring the EFI stub boot flow to avoid the legacy bare metal
-> > decompressor, duplicate the SNP feature check in the EFI stub before
-> > handing over to the kernel proper.
-> >
-> > The SNP feature check can be performed while running under the EFI boot
-> > services, which means we can fail gracefully and return an error to the
-> > bootloader if the loaded kernel does not implement support for all the
-> > features that the hypervisor enabled.
-> >
-> > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> > ---
-> >   arch/x86/boot/compressed/sev.c          | 71 +++++++++++---------
-> >   arch/x86/include/asm/sev.h              |  4 ++
-> >   drivers/firmware/efi/libstub/x86-stub.c | 17 +++++
-> >   3 files changed, 62 insertions(+), 30 deletions(-)
-> >
-> > diff --git a/arch/x86/boot/compressed/sev.c b/arch/x86/boot/compressed/sev.c
-> > index 09dc8c187b3cc752..9593bc80c9c6b89d 100644
-> > --- a/arch/x86/boot/compressed/sev.c
-> > +++ b/arch/x86/boot/compressed/sev.c
->
-> ...
->
-> > -void sev_enable(struct boot_params *bp)
-> > +u64 sev_get_status(void)
-> >   {
-> >       unsigned int eax, ebx, ecx, edx;
-> >       struct msr m;
-> > +
-> > +     /* Check for the SME/SEV support leaf */
-> > +     eax = 0x80000000;
-> > +     ecx = 0;
-> > +     native_cpuid(&eax, &ebx, &ecx, &edx);
-> > +     if (eax < 0x8000001f)
-> > +             return 0;
-> > +
-> > +     /*
-> > +      * Check for the SME/SEV feature:
-> > +      *   CPUID Fn8000_001F[EAX]
-> > +      *   - Bit 0 - Secure Memory Encryption support
-> > +      *   - Bit 1 - Secure Encrypted Virtualization support
-> > +      *   CPUID Fn8000_001F[EBX]
-> > +      *   - Bits 5:0 - Pagetable bit position used to indicate encryption
-> > +      */
-> > +     eax = 0x8000001f;
-> > +     ecx = 0;
-> > +     native_cpuid(&eax, &ebx, &ecx, &edx);
-> > +     /* Check whether SEV is supported */
-> > +     if (!(eax & BIT(1)))
-> > +             return 0;
-> > +
-> > +     /* Set the SME mask if this is an SEV guest. */
-> > +     sme_me_mask = BIT_ULL(ebx & 0x3f);
-> > +
-> > +     boot_rdmsr(MSR_AMD64_SEV, &m);
-> > +     return m.q;
-> > +}
-> > +
-> > +void sev_enable(struct boot_params *bp)
-> > +{
-> >       bool snp;
-> >
-> >       /*
-> > @@ -410,37 +447,13 @@ void sev_enable(struct boot_params *bp)
-> >        */
-> >       snp = snp_init(bp);
-> >
-> > -     /* Check for the SME/SEV support leaf */
-> > -     eax = 0x80000000;
-> > -     ecx = 0;
-> > -     native_cpuid(&eax, &ebx, &ecx, &edx);
-> > -     if (eax < 0x8000001f)
-> > -             return;
-> > -
-> > -     /*
-> > -      * Check for the SME/SEV feature:
-> > -      *   CPUID Fn8000_001F[EAX]
-> > -      *   - Bit 0 - Secure Memory Encryption support
-> > -      *   - Bit 1 - Secure Encrypted Virtualization support
-> > -      *   CPUID Fn8000_001F[EBX]
-> > -      *   - Bits 5:0 - Pagetable bit position used to indicate encryption
-> > -      */
-> > -     eax = 0x8000001f;
-> > -     ecx = 0;
-> > -     native_cpuid(&eax, &ebx, &ecx, &edx);
-> > -     /* Check whether SEV is supported */
-> > -     if (!(eax & BIT(1))) {
-> > +     sev_status = sev_get_status();
-> > +     if (!(sev_status & MSR_AMD64_SEV_ENABLED)) {
-> >               if (snp)
-> >                       error("SEV-SNP support indicated by CC blob, but not CPUID.");
->
-> This ends up checking the CPUID path because if SEV isn't advertised in
-> CPUID the returned status value is 0. But it also checks the SEV_STATUS
-> MSR as well. So I think you can remove the SNP / SEV_STATUS check at the
-> end of this function (since that check is identical to this now) and just
-> update the message to indicate not CPUID or SEV status MSR.
->
+On Wed, Jun 07, 2023 at 12:04:52AM +0200, Mirsad Goran Todorovac wrote:
+> I cannot tell if those are new for the architecture (Ubuntu 22.04 + AMD Ryzen)
+> 
+> However, Ubuntu's unsigned 6.3.1 generic mainline kernel is also affected.
+> So, it might seem like an old problem.
+> 
+> (If you could isolate the exact tests, I could try a bisect.)
+> 
+> [...]
+> TEST: ping local, VRF bind - ns-A IP                                          [ OK ]
+> TEST: ping local, VRF bind - VRF IP                                           [FAIL]
+> TEST: ping local, VRF bind - loopback                                         [ OK ]
+> TEST: ping local, device bind - ns-A IP                                       [FAIL]
+> TEST: ping local, device bind - VRF IP                                        [ OK ]
+> [...]
+> 
+> SYSCTL: net.ipv4.raw_l3mdev_accept=1
+> 
+> [...]
+> TEST: ping local, VRF bind - ns-A IP                                          [ OK ]
+> TEST: ping local, VRF bind - VRF IP                                           [FAIL]
+> TEST: ping local, VRF bind - loopback                                         [ OK ]
+> TEST: ping local, device bind - ns-A IP                                       [FAIL]
+> TEST: ping local, device bind - VRF IP                                        [ OK ]
+> [...]
+> 
+> Yes, just tested, w commit 42510dffd0e2 these are still present
+> in fcnal-test.sh output:
+> 
+> [...]
+> TEST: ping local, VRF bind - ns-A IP                                          [ OK ]
+> TEST: ping local, VRF bind - VRF IP                                           [FAIL]
+> TEST: ping local, VRF bind - loopback                                         [ OK ]
+> TEST: ping local, device bind - ns-A IP                                       [FAIL]
+> TEST: ping local, device bind - VRF IP                                        [ OK ]
+> [...]
+> TEST: ping local, VRF bind - ns-A IP                                          [ OK ]
+> TEST: ping local, VRF bind - VRF IP                                           [FAIL]
+> TEST: ping local, VRF bind - loopback                                         [ OK ]
+> TEST: ping local, device bind - ns-A IP                                       [FAIL]
+> TEST: ping local, device bind - VRF IP                                        [ OK ]
+> [...]
 
-But that one checks for MSR_AMD64_SEV_SNP_ENABLED not
-MSR_AMD64_SEV_ENABLED. Does that matter at all?
+I have the same failures here. They don't seem to be recent.
+I'll take a look.
 
-> The sme_me_mask should probably be cleared at this point before returning,
-> too. Or, alternately, in sev_get_status(), you can update the setting of
-> sme_me_mask to based on MSR_AMD64_SEV_ENABLED being set in the SEV_STATUS MSR.
->
-
-I'll go for the latter, seems cleaner not to touch it in that case.
-
---- a/arch/x86/boot/compressed/sev.c
-+++ b/arch/x86/boot/compressed/sev.c
-@@ -422,10 +422,12 @@ u64 sev_get_status(void)
-        if (!(eax & BIT(1)))
-                return 0;
-
--       /* Set the SME mask if this is an SEV guest. */
--       sme_me_mask = BIT_ULL(ebx & 0x3f);
--
-        boot_rdmsr(MSR_AMD64_SEV, &m);
-+
-+       /* Set the SME mask if this is an SEV guest. */
-+       if (m.q & MSR_AMD64_SEV_ENABLED)
-+               sme_me_mask = BIT_ULL(ebx & 0x3f);
-+
-        return m.q;
- }
+> I have attached the config used and lshw.
+> 
+> Best regards,
+> Mirsad
 
 
-> >   /* Search for Confidential Computing blob in the EFI config table. */
-> > diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
-> > index 86e1296e87f513b7..081c39b0e8d0d208 100644
-> > --- a/arch/x86/include/asm/sev.h
-> > +++ b/arch/x86/include/asm/sev.h
-> > @@ -207,6 +207,8 @@ bool snp_init(struct boot_params *bp);
-> >   void __init __noreturn snp_abort(void);
-> >   int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, struct snp_guest_request_ioctl *rio);
-> >   void snp_accept_memory(phys_addr_t start, phys_addr_t end);
-> > +u64 snp_get_unsupported_features(u64 status);
-> > +u64 sev_get_status(void);
-> >   #else
-> >   static inline void sev_es_ist_enter(struct pt_regs *regs) { }
-> >   static inline void sev_es_ist_exit(void) { }
-> > @@ -232,6 +234,8 @@ static inline int snp_issue_guest_request(u64 exit_code, struct snp_req_data *in
-> >   }
-> >
-> >   static inline void snp_accept_memory(phys_addr_t start, phys_addr_t end) { }
-> > +static inline u64 snp_get_unsupported_features(u64 status) { return 0; }
-> > +static inline u64 sev_get_status(void) { return 0; }
-> >   #endif
-> >
-> >   #endif
-> > diff --git a/drivers/firmware/efi/libstub/x86-stub.c b/drivers/firmware/efi/libstub/x86-stub.c
-> > index abcd5703e9f3f980..1015ef883f5850a4 100644
-> > --- a/drivers/firmware/efi/libstub/x86-stub.c
-> > +++ b/drivers/firmware/efi/libstub/x86-stub.c
-> > @@ -15,6 +15,7 @@
-> >   #include <asm/setup.h>
-> >   #include <asm/desc.h>
-> >   #include <asm/boot.h>
-> > +#include <asm/sev.h>
-> >
-> >   #include "efistub.h"
-> >   #include "x86-stub.h"
-> > @@ -790,6 +791,19 @@ static efi_status_t exit_boot(struct boot_params *boot_params, void *handle)
-> >       return EFI_SUCCESS;
-> >   }
-> >
-> > +static bool have_unsupported_snp_features(void)
-> > +{
-> > +     u64 unsupported;
-> > +
-> > +     unsupported = snp_get_unsupported_features(sev_get_status());
->
-> This will also set sme_me_mask, but I think that is ok, since on error
-> things will terminate, otherwise sev_enable() should update appropriately
-> later.
->
 
-OK
-
-> > +     if (unsupported) {
-> > +             efi_err("Unsupported SEV-SNP features detected: 0x%llx\n",
-> > +                     unsupported);
-> > +             return true;
-> > +     }
-> > +     return false;
-> > +}
-> > +
-> >   static void __noreturn enter_kernel(unsigned long kernel_addr,
-> >                                   struct boot_params *boot_params)
-> >   {
-> > @@ -820,6 +834,9 @@ void __noreturn efi_stub_entry(efi_handle_t handle,
-> >       if (efi_system_table->hdr.signature != EFI_SYSTEM_TABLE_SIGNATURE)
-> >               efi_exit(handle, EFI_INVALID_PARAMETER);
-> >
-> > +     if (have_unsupported_snp_features())
-> > +             efi_exit(handle, EFI_UNSUPPORTED);
-> > +
-> >       if (IS_ENABLED(CONFIG_EFI_DXE_MEM_ATTRIBUTES)) {
-> >               efi_dxe_table = get_efi_config_table(EFI_DXE_SERVICES_TABLE_GUID);
-> >               if (efi_dxe_table &&
