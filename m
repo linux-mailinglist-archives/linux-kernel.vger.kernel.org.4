@@ -2,118 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7D01725148
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 02:56:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA7F172514A
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 02:57:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234232AbjFGA4e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 20:56:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52318 "EHLO
+        id S234826AbjFGA5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 20:57:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234514AbjFGA4b (ORCPT
+        with ESMTP id S234458AbjFGA5H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 20:56:31 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71FA0170D
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 17:56:30 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-bb0cb2e67c5so9725495276.0
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 17:56:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686099389; x=1688691389;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=AqtEDAPCg3PtcRxPjnzxO3xegx/BjNmyDzr1+EL/qfI=;
-        b=he1l32c/rGoI+AHks8np42sxdXuBvRf6WyMj6DgQlqG1MrkQ5WL3LJLPYk9u1juYY8
-         FLYnb/Eiksk4AYSXFFoEi6L45dbAramG4ubJRrpIMaiC3U5loC2/GpvyKaDKWsLMoX3u
-         p8SNXNVC2F2Bi0rZ2jhK/3Fgeym7yV3tDuznuzqRIwuOiSea81/2Vy1qnPPjslOQSRMZ
-         0zsYNWjbcZtekdSzWjOEwoeXj0cawyOXXQ1rTpl0Ej6WSFi+gy6tbxfMAKEDSyraSE7Q
-         SBEERBXVnrg/N7bkQxDQ0hXDY5vkUVXXz9CceEVedJYXiQg6zHmXdiW1oenyTlXevCPm
-         ZbDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686099389; x=1688691389;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AqtEDAPCg3PtcRxPjnzxO3xegx/BjNmyDzr1+EL/qfI=;
-        b=ZY9QYITX7pK/VDHrKACUwY0qlVF5WzdGCCKhRh2qNwCGcLyhc385hxH+pATIPLpVVz
-         TH0L0EW2UWtZb8HZgXpcoUd+ILHJVRFss0OjgZHUndJFeQ4Y+W7QemLCe3UkyPMCe39p
-         cmlB6szYJ18uXo1R866uB2RtYTwc5EZKGkc7Uz+VZJX+WfgexJWsZ9VuCpSgxGzdZRGg
-         cCWzFEy8sC1mh1NPg8stGwm0qe6cUpbTFt4hMPca/2hV/afUV8ZNGkU7xJHxy7+8onQc
-         ib28y4YWEjESRvflzjwi4A699pz2uDJub7G1etnP6Igt/+cAyNyTYnPmM1t0sCdANCR+
-         iNHA==
-X-Gm-Message-State: AC+VfDwOLqoSbT7Fhd9c3kylP2cMYLOX4XX8v8LhllJuFS4uqOXoWBhP
-        iVN4PyfagASu9JC9rC7WqqmeCQaqVik=
-X-Google-Smtp-Source: ACHHUZ5ERD8JHJ/mENi7A4A1jnXVlCzkv+i1+DGi2+6lodC6zM66kJmbk7c2/9TIa20EZin9mSPuskOaUjE=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:ce46:0:b0:bad:99d:f086 with SMTP id
- x67-20020a25ce46000000b00bad099df086mr1350961ybe.10.1686099389766; Tue, 06
- Jun 2023 17:56:29 -0700 (PDT)
-Date:   Tue,  6 Jun 2023 17:55:14 -0700
-In-Reply-To: <20230603011058.1038821-1-seanjc@google.com>
-Mime-Version: 1.0
-References: <20230603011058.1038821-1-seanjc@google.com>
-X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-Message-ID: <168609790857.1417369.13152633386083458084.b4-ty@google.com>
-Subject: Re: [PATCH v7 00/12] KVM: x86: Add AMD Guest PerfMonV2 PMU support
-From:   Sean Christopherson <seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Like Xu <like.xu.linux@gmail.com>,
-        Like Xu <likexu@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Sandipan Das <sandipan.das@amd.com>
-Content-Type: text/plain; charset="utf-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 6 Jun 2023 20:57:07 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B761728;
+        Tue,  6 Jun 2023 17:57:04 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QbTSn3mlLz4x2c;
+        Wed,  7 Jun 2023 10:56:57 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1686099422;
+        bh=k56jEU2ViEAn2/eGC8DhZ9t/fIq2mRoRRD7wYVTLs68=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=FGl+omh82Vv4jaVNMc+afltpnJ1JUx45tyoPHvWMYcjdt/LlDYElF5ZRuwC2KLZHX
+         t+x8uElM34LTJEQi0obzdLoTOkN8+in6RN6vxkNFtfLAQ9yNfNLMT5PKT+MQFDIjpq
+         MbRyiMkQdolx7g4SPeb41LrlltsrkM7sVyN3UzBxi0cJjMiDGJIFbPxWu+MOQ/bmTs
+         0q+r7K3tlAKA395fM0KJPDf5NJD4t5yJhq7OMl6N/SNr/DZ320Wm9pjxtg/M3I+3qw
+         W5DsGN6BNPKIPin5xyk/XTRCb/2eMrScoJ7vkHGLWQqIyPG4Tng+eal+GbYeutNFJV
+         UDPj8QNi1H7tg==
+Date:   Wed, 7 Jun 2023 10:56:56 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Ravi Bangoria <ravi.bangoria@amd.com>,
+        Peter Zijlstra <peterz@infradead.org>, irogers@google.com,
+        suzuki.poulose@arm.com, mike.leach@linaro.org, leo.yan@linaro.org,
+        john.g.garry@oracle.com, will@kernel.org, james.clark@arm.com,
+        mingo@redhat.com, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, adrian.hunter@intel.com, kjain@linux.ibm.com,
+        renyu.zj@linux.alibaba.com, kan.liang@linux.intel.com,
+        zhengjun.xing@linux.intel.com, maddy@linux.ibm.com,
+        atrajeev@linux.vnet.ibm.com, wangming01@loongson.cn,
+        chenhuacai@kernel.org, sandipan.das@amd.com, 9erthalion6@gmail.com,
+        seanjc@google.com, robh@kernel.org, tmricht@linux.ibm.com,
+        tegongkang@gmail.com, linux-kernel@vger.kernel.org,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH v2] perf test amd: Fix build failure with
+ amd-ibs-via-core-pmu.c
+Message-ID: <20230607105656.1f2f8b89@canb.auug.org.au>
+In-Reply-To: <20230606142436.153750d9@canb.auug.org.au>
+References: <CAP-5=fUPZ7+nAcxBp5sFBfxzkOH8kzWkLV0uziHqxYC0cDbbDw@mail.gmail.com>
+        <20230603044650.286-1-ravi.bangoria@amd.com>
+        <ZH3w7TWRQZsPqhB2@kernel.org>
+        <20230606142436.153750d9@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/ZpeoibezJ3cg31_biwxtWat";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 02 Jun 2023 18:10:46 -0700, Sean Christopherson wrote:
-> v7 of AMD PMU v2 support.  This includes the global_ovf_ctrl_mask =>
-> global_status_mask rename that I *just* posted.  I really wanted to apply
-> v6 and be done with this series, and so sent it out separately, but the
-> code movement from pmu_intel.c to common x86 was too buggy to do in fixup.
-> 
-> Lightly tested (it's late, it's Friday).
-> 
-> [...]
+--Sig_/ZpeoibezJ3cg31_biwxtWat
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Somewhat speculatively applied to kvm-x86 pmu.  I'd really like to get a thumbs
-up that I didn't break anything, but I'm OOO later this week and want to get
-this into linux-next before I go offline.  Holler if something is broken, this
-is the only thing sitting in "pmu" so it should be easy to massage if necessary.
+Hi all,
 
-Thanks!
+On Tue, 6 Jun 2023 14:24:36 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>
+> On Mon, 5 Jun 2023 11:27:57 -0300 Arnaldo Carvalho de Melo <acme@kernel.o=
+rg> wrote:
+> >
+> > How are things like this resolved in linux-next? =20
+>=20
+> Well, if it produces a conflict (or a build failure due to a semantic
+> conflict) I will fix it up (maybe using a separate patch such as this)
+> and report it so that the maintainers know that they need to let Linus
+> know about this when he merges their trees.
+>=20
+> But since neither of those things has happened (it seems that an
+> allmodconfig build does not build the tests), I can still take this
+> patch and use it to fix up the tip tree merge (since that happens after
+> the perf tree merge) starting tomorrow and report it as above.  I will
+> then keep applying this patch to the merge until it is no longer needed.
+>=20
+> Please send me the actual patch. (I am assuming that the patch applies
+> on top of a recent linux-next release?)
 
-[01/12] KVM: x86/pmu: Rename global_ovf_ctrl_mask to global_status_mask
-        https://github.com/kvm-x86/linux/commit/53550b89220b
-[02/12] KVM: x86/pmu: Move reprogram_counters() to pmu.h
-        https://github.com/kvm-x86/linux/commit/8de18543dfe3
-[03/12] KVM: x86/pmu: Reject userspace attempts to set reserved GLOBAL_STATUS bits
-        https://github.com/kvm-x86/linux/commit/30dab5c0b65e
-[04/12] KVM: x86/pmu: Move handling PERF_GLOBAL_CTRL and friends to common x86
-        https://github.com/kvm-x86/linux/commit/c85cdc1cc1ea
-[05/12] KVM: x86/pmu: Provide Intel PMU's pmc_is_enabled() as generic x86 code
-        https://github.com/kvm-x86/linux/commit/13afa29ae489
-[06/12] KVM: x86: Explicitly zero cpuid "0xa" leaf when PMU is disabled
-        https://github.com/kvm-x86/linux/commit/6593039d33c1
-[07/12] KVM: x86/pmu: Disable vPMU if the minimum num of counters isn't met
-        https://github.com/kvm-x86/linux/commit/6a08083f294c
-[08/12] KVM: x86/pmu: Advertise PERFCTR_CORE iff the min nr of counters is met
-        https://github.com/kvm-x86/linux/commit/d338d8789e64
-[09/12] KVM: x86/pmu: Constrain the num of guest counters with kvm_pmu_cap
-        https://github.com/kvm-x86/linux/commit/1c2bf8a6b045
-[10/12] KVM: x86/cpuid: Add a KVM-only leaf to redirect AMD PerfMonV2 flag
-        https://github.com/kvm-x86/linux/commit/fe8d76c1a6f0
-[11/12] KVM: x86/svm/pmu: Add AMD PerfMonV2 support
-        https://github.com/kvm-x86/linux/commit/4a2771895ca6
-[12/12] KVM: x86/cpuid: Add AMD CPUID ExtPerfMonAndDbg leaf 0x80000022
-        https://github.com/kvm-x86/linux/commit/94cdeebd8211
+I fetched the patch from lore and have applied it to the tip tree merge
+from today.  So the tip and perf folks need to remember to tell Linus
+about this fix up patch when they send their pull requests during the
+merge window.  I have included the patch here just to be sure.
 
---
-https://github.com/kvm-x86/linux/tree/next
-https://github.com/kvm-x86/linux/tree/fixes
+From:   Ravi Bangoria <ravi.bangoria@amd.com>
+To:     <irogers@google.com>, <acme@kernel.org>, <sfr@canb.auug.org.au>
+CC:     <ravi.bangoria@amd.com>, <suzuki.poulose@arm.com>,
+        <mike.leach@linaro.org>, <leo.yan@linaro.org>,
+        <john.g.garry@oracle.com>, <will@kernel.org>,
+        <james.clark@arm.com>, <peterz@infradead.org>, <mingo@redhat.com>,
+        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
+        <jolsa@kernel.org>, <namhyung@kernel.org>,
+        <adrian.hunter@intel.com>, <kjain@linux.ibm.com>,
+        <renyu.zj@linux.alibaba.com>, <kan.liang@linux.intel.com>,
+        <zhengjun.xing@linux.intel.com>, <maddy@linux.ibm.com>,
+        <atrajeev@linux.vnet.ibm.com>, <wangming01@loongson.cn>,
+        <chenhuacai@kernel.org>, <sandipan.das@amd.com>,
+        <9erthalion6@gmail.com>, <seanjc@google.com>, <robh@kernel.org>,
+        <tmricht@linux.ibm.com>, <tegongkang@gmail.com>,
+        <linux-kernel@vger.kernel.org>, <coresight@lists.linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-perf-users@vger.kernel.org>
+Subject: [PATCH v2] perf test amd: Fix build failure with amd-ibs-via-core-=
+pmu.c
+Date:   Sat, 3 Jun 2023 10:16:50 +0530
+Message-ID: <20230603044650.286-1-ravi.bangoria@amd.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=3D"UTF-8"
+Content-Transfer-Encoding: 8bit
+
+Since amd-ibs-via-core-pmu.c was applied via Peter's tree, some of
+the changes came via Arnaldo's tree did not reflect in this file,
+which is causing build failures.
+
+  arch/x86/tests/amd-ibs-via-core-pmu.c:47:25: error: =E2=80=98pmus=E2=80=
+=99 undeclared
+  (first use in this function)
+     47 |         if (list_empty(&pmus))
+        |                         ^~~~
+  arch/x86/tests/amd-ibs-via-core-pmu.c:48:17: error: implicit declaration
+  of function =E2=80=98perf_pmu__scan=E2=80=99; did you mean
+  perf_pmus__scan=E2=80=99? [-Werror=3Dimplicit-function-declaration]
+     48 |                 perf_pmu__scan(NULL);
+        |                 ^~~~~~~~~~~~~~
+        |                 perf_pmus__scan
+  arch/x86/tests/amd-ibs-via-core-pmu.c:50:19: error: implicit declaration
+  of function =E2=80=98perf_pmu__find=E2=80=99; did you mean
+  perf_pmus__find=E2=80=99? [-Werror=3Dimplicit-function-declaration]
+     50 |         ibs_pmu =3D perf_pmu__find("ibs_op");
+        |                   ^~~~~~~~~~~~~~
+        |                   perf_pmus__find
+
+Fix those.
+
+Fixes: 1eaf496ed386 ("perf pmu: Separate pmu and pmus")
+Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
+---
+v1->v2:
+  - Remove unnecessary perf_pmus__scan(NULL) as suggested by Ian.
+
+ tools/perf/arch/x86/tests/amd-ibs-via-core-pmu.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/tools/perf/arch/x86/tests/amd-ibs-via-core-pmu.c b/tools/perf/=
+arch/x86/tests/amd-ibs-via-core-pmu.c
+index 2902798ca5c1..78b1902f6f59 100644
+--- a/tools/perf/arch/x86/tests/amd-ibs-via-core-pmu.c
++++ b/tools/perf/arch/x86/tests/amd-ibs-via-core-pmu.c
+@@ -44,10 +44,7 @@ int test__amd_ibs_via_core_pmu(struct test_suite *test _=
+_maybe_unused,
+ 	int ret =3D TEST_OK;
+ 	int fd, i;
+=20
+-	if (list_empty(&pmus))
+-		perf_pmu__scan(NULL);
+-
+-	ibs_pmu =3D perf_pmu__find("ibs_op");
++	ibs_pmu =3D perf_pmus__find("ibs_op");
+ 	if (!ibs_pmu)
+ 		return TEST_SKIP;
+=20
+--=20
+2.40.1
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/ZpeoibezJ3cg31_biwxtWat
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmR/1dgACgkQAVBC80lX
+0GwEqQgApkQtYT6BEX7UvGVKbn52sWwZYKrdQ1DWsGofGs+4lLUpn1xaSUlKzgti
+kToeuGImVORge1pkFEHQmqZdiAOgw3++JnysEXuqwDgENj6Ryqhxu+18ES+FESuN
+YKddRznS9/lDG/V2iO7VFRIYzTY1XJVkjmcmhJWFt/NnP3hjdXw63cvPaanb+3oj
+xShRuVdMifVYY9ApLM7gU4mCQhBWHp6n5VcihdSkI9+MevC63FJnDv+v6Bssq7oi
+qS3VoNouc/rZ7ZMxYDqRUVadH9f2O3PR74DZ7fx1c4hHQR3ee6x2wDLDjOURa0xl
+MS/l4I74SWG2fedTtFaY/l7wH+hFgA==
+=9mrs
+-----END PGP SIGNATURE-----
+
+--Sig_/ZpeoibezJ3cg31_biwxtWat--
