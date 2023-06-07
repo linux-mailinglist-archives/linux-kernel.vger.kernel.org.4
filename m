@@ -2,59 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1FD9725156
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 03:02:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8580725159
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 03:02:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240428AbjFGBCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 21:02:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53612 "EHLO
+        id S240439AbjFGBC3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 21:02:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240387AbjFGBCO (ORCPT
+        with ESMTP id S240401AbjFGBCR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 21:02:14 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53ABC10D5
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 18:02:13 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id 41be03b00d2f7-5343c1d114cso6231461a12.0
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 18:02:13 -0700 (PDT)
+        Tue, 6 Jun 2023 21:02:17 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B824F1712
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 18:02:15 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-bb2fae9b286so4669091276.3
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 18:02:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686099733; x=1688691733;
+        d=google.com; s=20221208; t=1686099735; x=1688691735;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=GdxTpX9Spmnpfwqe75ekBKH+Ldw87KCa0RRFcAselmo=;
-        b=f3El6h4m5J8UNxRj4A3Eoe7PFYBiRVvCRS7XcW3t5c08Z3ub3hWjb5iqnmgk+kAqJ6
-         OCB9HveaWmu7txC0/3bapAUlHQAV7dnXwgqCC6ZTEpyPZEgS9yryjImgtqwNOYzHb++Q
-         2eX5upC9ARA+s2JKqAvyakW6S48rXgVswrhpWugfB3KHwjchSpZ4e+oKV3L1WDhfuEpn
-         F9W82WDmGKAZg7LF1qNA2aH2i59k7UmicNdZATpGNgij8p6+t9m65K+wsLWJyveegdYP
-         IlrmJGwMoGVPukj6ZMn9+cml7v6SBNm+ZnJ31oEyJMCF2dZHJCncUB4CpFo7Skez72MP
-         MrQw==
+        bh=/p3hE18mmnljLb7fbFnVkkn8QwKXTaT5e9jEQlBWXcU=;
+        b=6UvT6b0pBC2I3ReD74BskUKqwcHxT2DPwtJz6h4dQIf0lHIvZSKhTS2z6XHo0m2YyQ
+         dyyCZPMTIaqqpphsP6+05vRW/aDN6KreYQqGeaaZWyXjMzJUD60PPE0HtOuAuZjtOHMu
+         Oz+BBNEuK99s7gfi6PJtXvYxpHyEpOiYFxX+/yJI+S3tLnIoesOR7gyw8m4ynEGveJzT
+         SDnYH7M+8WW2xoCXwUP1RnvMVPRCKHzj1ZNFKfxS2wp2nz7Ui38bmNTLEX2S2iKr5L45
+         Wb2+GpSmRSs1WwOAyl3F0INfi5pydWmUHlJRxYt6nOm1gQqIOSFij9xPXiJ3UssrOsEz
+         RiNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686099733; x=1688691733;
+        d=1e100.net; s=20221208; t=1686099735; x=1688691735;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=GdxTpX9Spmnpfwqe75ekBKH+Ldw87KCa0RRFcAselmo=;
-        b=aECPSGy08uS5UBjEKy0HCH6xkn4mII6U90iQCDTEetqVx8qD88caBWbIBU5ATQCQCD
-         wThneuSC0NjqrzAes671WVEvpPzhMmQLYmggboQYti/fx8rBDZh8XN9bM1XIplV1AfAS
-         7xFnAe9rjxEkTKd+hNuI80Pf6XxW1xD2k8dvjfauQlv5JDby9egMXRmyci0DBinRioGV
-         PRrqD4LEolVNspC2u4zh9RTQfH3j1qAAVLoNYQrWGvLsOsN4E3hGZrI1sBrrF+spbBB6
-         iSwWox0AcLOawVofv1Xeb9ihmNN8kLANaLWHR++wpHrTj4Yj32FBQvTg1lk5sFaH5PbR
-         wfNQ==
-X-Gm-Message-State: AC+VfDxCgX8rJYFJoiJqiqQ6AemJM7wJ+LLYIXw7ik2X9zXJ3azxTPgq
-        JD5mwRBML0slUwdLJPtaVp4/Z+sqjsg=
-X-Google-Smtp-Source: ACHHUZ4oC1kUgVxWFiIo/95OlQu9U0TYB1bjBRCbryG3OehS1nQ1msVcE1xkdm7mCLPE3mpSxP/Qos6YgK8=
+        bh=/p3hE18mmnljLb7fbFnVkkn8QwKXTaT5e9jEQlBWXcU=;
+        b=TKmul+SGiTfMIUavBzh1Gw3oR5r5TehlRZcODkZf4IXQUNZ3eBecIc2n32HhBbhsKK
+         op3+wggnvb6cuxS284euMF5cNIWiyOWm8aqWUT28AIO2o/RnvBSn+nrlRLdVzvaM3OMw
+         dZuM8Y8Jq01JoLM2/is7W4g4Rfax2kZwlLW8cJn2XR5hn2EOIIF6WAmw0Z6q1LWWVX5I
+         R/tNN21EbmQpAfJnAEwDV3LwuvsnP/YE33v+wa4agUyG1yJrXyt/DcLiZaDH72umCQsJ
+         tyuSDcbHf7tomFSXqbvyV4cfoq+B6XyFpAfJXuJeht5fQVAVswZl3BUfkb4lWGXukLmA
+         NCVg==
+X-Gm-Message-State: AC+VfDzRVMEXk6AuKL1Npc4R+SIYZ6MmA0PyEC602/pfSdiUO533Er1M
+        oahioZVlsFVPUITeD2apOp1medE/5xg=
+X-Google-Smtp-Source: ACHHUZ66ZN18TSVUSFfTJ9KYMFh531G+fYQnxCFRROXfI3t6AlHX78mEuOWXgZ1KtH0TDjdOM2NxAZyogNQ=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a65:68c6:0:b0:528:c2cd:9b42 with SMTP id
- k6-20020a6568c6000000b00528c2cd9b42mr761868pgt.3.1686099732871; Tue, 06 Jun
- 2023 18:02:12 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a25:4117:0:b0:ba8:9653:c948 with SMTP id
+ o23-20020a254117000000b00ba89653c948mr1341420yba.3.1686099734922; Tue, 06 Jun
+ 2023 18:02:14 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue,  6 Jun 2023 18:02:04 -0700
+Date:   Tue,  6 Jun 2023 18:02:05 -0700
 In-Reply-To: <20230607010206.1425277-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20230607010206.1425277-1-seanjc@google.com>
 X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-Message-ID: <20230607010206.1425277-3-seanjc@google.com>
-Subject: [PATCH 2/4] KVM: x86/pmu: Simplify intel_hw_event_available()
+Message-ID: <20230607010206.1425277-4-seanjc@google.com>
+Subject: [PATCH 3/4] KVM: x86/pmu: Require nr fixed_pmc_events to match nr max
+ fixed counters
 From:   Sean Christopherson <seanjc@google.com>
 To:     Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>
@@ -72,45 +73,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Walk only the "real", i.e. non-pseudo, architectural events when checking
-if a hardware event is available, i.e. isn't disabled by guest CPUID.
-Skipping pseudo-arch events in the loop body is unnecessarily convoluted,
-especially now that KVM has enums that delineate between real and pseudo
-events.
+Assert that the number of known fixed_pmc_events matches the max number of
+fixed counters supported by KVM, and clean up related code.
+
+Opportunistically extend setup_fixed_pmc_eventsel()'s use of
+array_index_nospec() to cover fixed_counters, as nr_arch_fixed_counters is
+set based on userspace input (but capped using KVM-controlled values).
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/vmx/pmu_intel.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ arch/x86/kvm/vmx/pmu_intel.c | 19 +++++++++----------
+ 1 file changed, 9 insertions(+), 10 deletions(-)
 
 diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
-index 0050d71c9c01..f281e634af3c 100644
+index f281e634af3c..c0b0a721b97f 100644
 --- a/arch/x86/kvm/vmx/pmu_intel.c
 +++ b/arch/x86/kvm/vmx/pmu_intel.c
-@@ -122,17 +122,16 @@ static bool intel_hw_event_available(struct kvm_pmc *pmc)
+@@ -527,16 +527,17 @@ static int intel_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
  
- 	BUILD_BUG_ON(ARRAY_SIZE(intel_arch_events) != NR_INTEL_ARCH_EVENTS);
+ static void setup_fixed_pmc_eventsel(struct kvm_pmu *pmu)
+ {
+-	size_t size = ARRAY_SIZE(fixed_pmc_events);
+-	struct kvm_pmc *pmc;
+-	u32 event;
+ 	int i;
  
--	for (i = 0; i < NR_INTEL_ARCH_EVENTS; i++) {
-+	/*
-+	 * Disallow events reported as unavailable in guest CPUID.  Note, this
-+	 * doesn't apply to pseudo-architectural events.
-+	 */
-+	for (i = 0; i < NR_REAL_INTEL_ARCH_EVENTS; i++) {
- 		if (intel_arch_events[i].eventsel != event_select ||
- 		    intel_arch_events[i].unit_mask != unit_mask)
- 			continue;
- 
--		/* disable event that reported as not present by cpuid */
--		if ((i < PSEUDO_ARCH_REFERENCE_CYCLES) &&
--		    !(pmu->available_event_types & (1 << i)))
--			return false;
--
--		break;
-+		return pmu->available_event_types & BIT(i);
++	BUILD_BUG_ON(ARRAY_SIZE(fixed_pmc_events) != KVM_PMC_MAX_FIXED);
++
+ 	for (i = 0; i < pmu->nr_arch_fixed_counters; i++) {
+-		pmc = &pmu->fixed_counters[i];
+-		event = fixed_pmc_events[array_index_nospec(i, size)];
++		int index = array_index_nospec(i, KVM_PMC_MAX_FIXED);
++		struct kvm_pmc *pmc = &pmu->fixed_counters[index];
++		u32 event = fixed_pmc_events[index];
++
+ 		pmc->eventsel = (intel_arch_events[event].unit_mask << 8) |
+-			intel_arch_events[event].eventsel;
++				 intel_arch_events[event].eventsel;
  	}
+ }
  
- 	return true;
+@@ -597,10 +598,8 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
+ 	if (pmu->version == 1) {
+ 		pmu->nr_arch_fixed_counters = 0;
+ 	} else {
+-		pmu->nr_arch_fixed_counters =
+-			min3(ARRAY_SIZE(fixed_pmc_events),
+-			     (size_t) edx.split.num_counters_fixed,
+-			     (size_t)kvm_pmu_cap.num_counters_fixed);
++		pmu->nr_arch_fixed_counters = min_t(int, edx.split.num_counters_fixed,
++						    kvm_pmu_cap.num_counters_fixed);
+ 		edx.split.bit_width_fixed = min_t(int, edx.split.bit_width_fixed,
+ 						  kvm_pmu_cap.bit_width_fixed);
+ 		pmu->counter_bitmask[KVM_PMC_FIXED] =
 -- 
 2.41.0.162.gfafddb0af9-goog
 
