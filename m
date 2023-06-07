@@ -2,51 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33D33725601
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 09:40:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E049725605
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 09:40:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238644AbjFGHkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 03:40:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37442 "EHLO
+        id S235302AbjFGHk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 03:40:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238408AbjFGHjc (ORCPT
+        with ESMTP id S234352AbjFGHjx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 03:39:32 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5C3A30FF;
-        Wed,  7 Jun 2023 00:37:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=M7NmYC/Iylm9myghHwqILim55SAUt9QrM+UZYk0eJlw=; b=uFJ/YLyasn02ccX4eOnPN90GJE
-        ZXSadDNXdmXgzlGpqxVfyn1LuXll8QWajHB1C5k42xmowA61EKHp8hHIsBaGIexP1cMN1und6YZjn
-        cguL618L/Wv6O7jrl3wD75Wwz+uKZB2ZaNlH77W/+4k5YsIxLzbLCMqSJtUgzGFCR+XkNZrKF6jj0
-        FKZVtUfXntHxrLzfUABYRjeZl7mMwWx2aHPA51P3yyMFD0TFpHWhOhJ7U91wSopztEd0FdL+rWj2w
-        KqLAZF+DmQXepg0oqUG85ajHHSP2m9ZS7NB3oSgIX0w8i7ghkNI1HqsBnNGLgMJOXKlRvNDEWTo8g
-        N+cnR/Rw==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1q6njY-004lfP-37;
-        Wed, 07 Jun 2023 07:37:32 +0000
-Date:   Wed, 7 Jun 2023 00:37:32 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Zhong Jinghua <zhongjinghua@huaweicloud.com>
-Cc:     josef@toxicpanda.com, axboe@kernel.dk, linux-block@vger.kernel.org,
-        nbd@other.debian.org, linux-kernel@vger.kernel.org,
-        zhongjinghua@huawei.com, yi.zhang@huawei.com, yukuai3@huawei.com,
-        yangerkun@huawei.com
-Subject: Re: [PATCH -next] nbd: Add the maximum limit of allocated index in
- nbd_dev_add
-Message-ID: <ZIAzvKZuGrcQUx82@infradead.org>
-References: <20230605122159.2134384-1-zhongjinghua@huaweicloud.com>
+        Wed, 7 Jun 2023 03:39:53 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6052C2134;
+        Wed,  7 Jun 2023 00:37:52 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id B32C16606EF8;
+        Wed,  7 Jun 2023 08:37:49 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686123470;
+        bh=gIcMYp3O7FdAHtN8BtUN+DUj+kni/8m9bxwj2IZrZl0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=UMn2Bo0iiBsXGoBFnTlJWQzYjlpKhaZ46hBT+eqlVyPvbxPloNjxFiy4KgHWAmMl8
+         dAA8OuyOj6QPrT1RcuzIFTs2nMgdTo7fOuK3Ia2C3evaUk+XqpfzsmK8iithC5fSfd
+         L2Kd56dqVp6iiuMSvGC3CEKHATtX/72SRahedJYz5H7I3uHoKme1WWgdcSawgTWf97
+         RxkFi6VJAWWTqVzH19VBxR98Buellb8egSQn2qoMorfEeOwH+rReq6zx/69kfugWDU
+         JF2ljdYdSHwuO7KGm5+W8bXleU+lzoJIEbIemJwejCIaas5aE2hzt6DbsrLwCl151a
+         Lpv+15ZBo0ozg==
+Message-ID: <348ff172-4a29-9dc1-3bf5-0abf86d64acd@collabora.com>
+Date:   Wed, 7 Jun 2023 09:37:47 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230605122159.2134384-1-zhongjinghua@huaweicloud.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v1 2/6] dt-bindings: reset: mt8188: Add reset control bits
+ for VDOSYS1
+Content-Language: en-US
+To:     Hsiao Chien Sung <shawn.sung@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Singo Chang <singo.chang@mediatek.com>,
+        Nancy Lin <nancy.lin@mediatek.com>,
+        Jason-JH Lin <jason-jh.lin@mediatek.com>,
+        Fei Shao <fshao@google.com>
+References: <20230607061121.6732-1-shawn.sung@mediatek.com>
+ <20230607061121.6732-3-shawn.sung@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230607061121.6732-3-shawn.sung@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,7 +70,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Looks good:
+Il 07/06/23 08:11, Hsiao Chien Sung ha scritto:
+> Add reset control bits for  MT8188 VDOSYS1.
+> 
+> Signed-off-by: Hsiao Chien Sung <shawn.sung@mediatek.com>
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
 
