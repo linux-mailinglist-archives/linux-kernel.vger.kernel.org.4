@@ -2,221 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51751726995
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 21:17:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BF57726992
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 21:17:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233056AbjFGTRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 15:17:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42332 "EHLO
+        id S232634AbjFGTRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 15:17:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232462AbjFGTRX (ORCPT
+        with ESMTP id S229580AbjFGTQ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 15:17:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 123C91BF8
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 12:16:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686165403;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cZNWBgFagXc/NX64lSZGo0BDhqymiWiaab1rV7vOvEQ=;
-        b=gwY+jmP1jUnlPFkTMg0vHw0WYiBVJhBldJCRko2elJA9qsrwAp9BMmeRcsmmFcZtNZ8Q2S
-        F3hLGiTiutJ1PZ25QMG2jRcH3+zPmc+zv5dp5DRkolxVCnstn3zeZCdzOFXgQ0kzJl3e4e
-        FqC/vlbXz8Q8pWNVbKcwdz9RJnKQN8E=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-323-2EuyWYTrNDys2-0u1CjtBQ-1; Wed, 07 Jun 2023 15:16:41 -0400
-X-MC-Unique: 2EuyWYTrNDys2-0u1CjtBQ-1
-Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-97888ed1982so85819266b.0
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 12:16:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686165400; x=1688757400;
-        h=in-reply-to:from:content-language:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=cZNWBgFagXc/NX64lSZGo0BDhqymiWiaab1rV7vOvEQ=;
-        b=fYon9xbsSqbk4pVBaQrxWbRlFFgZwYUgl988cbnkryxsEpAFz+oXGy9YcTcSwpWz2r
-         tqs/MafArKaEBuJgJUKAkEbmOt8+yDLkOC3CJ/3MgjgpWrIOEZtj8bDnWy/R85r+80hN
-         4w0rbmTKpeoE1szC0hwuaYTj4GQMdMfzowdwfEUbskur6wFZeLkYW/UAqiCGzQI1//mv
-         OCJn9WsrrJNVXCAJViR4oGlSLwGcw4G6MhiUWgBbYmMWh1MnHLsIzjXowN3LeQhGnT65
-         6h/2jMFAxV7hM3yZwczVNKeiiHaK39wt3umCpUDN9dGECyCCVAYGYjAibmS6Gw1Lh67c
-         tCoQ==
-X-Gm-Message-State: AC+VfDxLdE7iK3uI21hPOpxpIxbcYMbv/NIGUDpmobQH3RRiAkFNjTIu
-        TIOfbm9Z1qVyXJfVsfz2sPoMYf2xrg7JJ9Yh4XvVTK/xMRnoaxCbnBlhaIYV1CG70KFt18xJ2qh
-        KX3CY5UHp/xtvP4iztcRyOW1W
-X-Received: by 2002:a17:907:7e9f:b0:978:6e73:e833 with SMTP id qb31-20020a1709077e9f00b009786e73e833mr7227273ejc.45.1686165400475;
-        Wed, 07 Jun 2023 12:16:40 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7TOrdMfH+uDvM1JCqZARTMzGMSeLSS/8e4tAp59DNw1viAJkLxxdYvH0Eb88FUvnG9o30pYg==
-X-Received: by 2002:a17:907:7e9f:b0:978:6e73:e833 with SMTP id qb31-20020a1709077e9f00b009786e73e833mr7227254ejc.45.1686165400121;
-        Wed, 07 Jun 2023 12:16:40 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id y11-20020a17090668cb00b00977eb9957e9sm3523793ejr.128.2023.06.07.12.16.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 12:16:39 -0700 (PDT)
-Content-Type: multipart/mixed; boundary="------------vgbUXUgh5jkimy1I05UYkAvz"
-Message-ID: <457e2a4a-e28a-cd24-c129-4ff6162ccc36@redhat.com>
-Date:   Wed, 7 Jun 2023 21:16:38 +0200
+        Wed, 7 Jun 2023 15:16:59 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5196C19D;
+        Wed,  7 Jun 2023 12:16:58 -0700 (PDT)
+Received: from W11-BEAU-MD.localdomain (unknown [76.135.27.212])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 73C4520C1440;
+        Wed,  7 Jun 2023 12:16:57 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 73C4520C1440
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1686165417;
+        bh=pYYzhbmZt7Sf9oZRbG0KFxG6URBGYIxxrSNs2hGYJ2w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Otze/uJzHUvL8i48n/kF0mN8sq3q2ZphOdehU36zn7kHx0P8VHNbMjp0GAhkMwOuJ
+         3Yb7syLKS28tSprq5Rzemogz60k0UCU94KONTb/szKuQmAYivGyBbw0GLb9swPMvB8
+         UDzfLfL0O1xxclFqA+XlF0OorjbCAfypF18vRtc8=
+Date:   Wed, 7 Jun 2023 12:16:52 -0700
+From:   Beau Belgrave <beaub@linux.microsoft.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-trace-kernel@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>, dcook@linux.microsoft.com
+Subject: Re: [PATCH v2 3/5] tracing/user_events: Add auto cleanup and a flag
+ to persist events
+Message-ID: <20230607191652.GA85@W11-BEAU-MD.localdomain>
+References: <20230605233900.2838-1-beaub@linux.microsoft.com>
+ <20230605233900.2838-4-beaub@linux.microsoft.com>
+ <CAADnVQL3bJaXW6mzTrTFTbAyCaBfiHYet+gNorF1N69a0X5TXQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] platform/x86: dell-laptop: Add drm module soft dependency
-To:     Matthew Garrett <mjg59@srcf.ucam.org>,
-        AceLan Kao <acelan.kao@canonical.com>
-Cc:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
-        Mark Gross <markgross@kernel.org>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-References: <20230607034331.576623-1-acelan.kao@canonical.com>
- <20230607042032.GA28835@srcf.ucam.org>
- <CAFv23QmDNUFcPwvSQt5aUxtmHasfr8wrF72ObvcO-X19gfn=LA@mail.gmail.com>
- <20230607052724.GA29834@srcf.ucam.org>
- <CAFv23QkEdGnEz1q7vbyFCa9S9Dqh-zec72nRGyZ3wAz-8wpbvA@mail.gmail.com>
- <20230607062341.GA30618@srcf.ucam.org> <20230607065604.yaivqbbd3dkawxo4@pali>
- <CAFv23Q==r4newMXE3OWavRSRt-bEi5-qR0Vo-5HGLw4r9J36MA@mail.gmail.com>
- <20230607074732.GA31666@srcf.ucam.org>
-Content-Language: en-US, nl
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230607074732.GA31666@srcf.ucam.org>
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQL3bJaXW6mzTrTFTbAyCaBfiHYet+gNorF1N69a0X5TXQ@mail.gmail.com>
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------vgbUXUgh5jkimy1I05UYkAvz
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-
-Hi,
-
-On 6/7/23 09:47, Matthew Garrett wrote:
-> On Wed, Jun 07, 2023 at 03:39:33PM +0800, AceLan Kao wrote:
+On Tue, Jun 06, 2023 at 06:26:56PM -0700, Alexei Starovoitov wrote:
+> On Mon, Jun 5, 2023 at 4:39 PM Beau Belgrave <beaub@linux.microsoft.com> wrote:
+> > +       /*
+> > +        * When the event is not enabled for auto-delete there will always
+> > +        * be at least 1 reference to the event. During the event creation
+> > +        * we initially set the refcnt to 2 to achieve this. In those cases
+> > +        * the caller must acquire event_mutex and after decrement check if
+> > +        * the refcnt is 1, meaning this is the last reference. When auto
+> > +        * delete is enabled, there will only be 1 ref, IE: refcnt will be
+> > +        * only set to 1 during creation to allow the below checks to go
+> > +        * through upon the last put. The last put must always be done with
+> > +        * the event mutex held.
+> > +        */
+> > +       if (!locked) {
+> > +               lockdep_assert_not_held(&event_mutex);
+> > +               delete = refcount_dec_and_mutex_lock(&user->refcnt, &event_mutex);
+> > +       } else {
+> > +               lockdep_assert_held(&event_mutex);
+> > +               delete = refcount_dec_and_test(&user->refcnt);
+> > +       }
+> > +
+> > +       if (!delete)
+> > +               return;
+> > +
+> > +       /* We now have the event_mutex in all cases */
+> > +
+> > +       if (user->reg_flags & USER_EVENT_REG_PERSIST) {
+> > +               /* We should not get here when persist flag is set */
+> > +               pr_alert("BUG: Auto-delete engaged on persistent event\n");
+> > +               goto out;
+> > +       }
+> > +
+> > +       /*
+> > +        * Unfortunately we have to attempt the actual destroy in a work
+> > +        * queue. This is because not all cases handle a trace_event_call
+> > +        * being removed within the class->reg() operation for unregister.
+> > +        */
+> > +       INIT_WORK(&user->put_work, delayed_destroy_user_event);
+> > +
+> > +       /*
+> > +        * Since the event is still in the hashtable, we have to re-inc
+> > +        * the ref count to 1. This count will be decremented and checked
+> > +        * in the work queue to ensure it's still the last ref. This is
+> > +        * needed because a user-process could register the same event in
+> > +        * between the time of event_mutex release and the work queue
+> > +        * running the delayed destroy. If we removed the item now from
+> > +        * the hashtable, this would result in a timing window where a
+> > +        * user process would fail a register because the trace_event_call
+> > +        * register would fail in the tracing layers.
+> > +        */
+> > +       refcount_set(&user->refcnt, 1);
 > 
->> What do you think if we unregister backlight devices if the backlight type
->> is larger than the current registered one.
->> Do this check in backlight_device_register() and unregister backlight
->> devices by the order raw(1) > platform(2) > firmware(3)
->> And maybe introduce a sticky bit into the backlight device if the backlight
->> driver doesn't want to be removed.
-> 
-> Hans looked at doing this, but there were some awkward corner cases. 
-> When we first introduced this functionality, firmware was preferred to 
-> platform was preferred to raw - but on Intel, at least, this behaviour 
-> changed with later versions of Windows. I don't think there's a single 
-> static policy that works, I think you need to pay attention to the hints 
-> the platform gives you. How does Windows know which interface to use on 
-> this platform? The simplest solution may actually just be for 
-> dell-laptop to refuse to register a backlight if the platform claims to 
-> be Windows 8 or later.
+> The recnt-ing scheme is quite unorthodox.
 
-I like that idea.
+Yes, it's unfortunately because we have to keep the event in the hashtable.
 
-AceLan, I guess that you hit this easy while testing on a (development)
-Meteor Lake platform ?
+Typically we'd just remove the event from the hashtable, ref_dec and
+then upon final ref_dec free it. The problem with that is the event in
+the hashtable is an actual trace_event exposed via tracefs/perf. It
+prevents us from removing it at this time as the comment tries to
+explain.
 
-I have had other/similar reports about Meteor Lake platforms.
+> Atomically decrementing it to zero and then immediately set it back to 1?
+> Smells racy.
 
-On hw from the last 10 years dell-laptop will not register
-its vendor-type backlight class device because
-acpi_video_get_backlight_type() will return acpi_backlight_video
-there (1) so it does not matter if the GPU driver shows up only
-later (2).
+Thanks for pointing this out, I likely need another comment in the code
+explaining why this is ok.
 
-But it seems that on Meteor Lake the ACPI tables will no longer
-contain acpi_video backlight control support which causes
-acpi_video_get_backlight_type() to return acpi_backlight_vendor (2).
-triggering the issue you are seeing.
+It might smell that way :) But the only way once it's zero to get
+another reference is by acquiring event_mutex and then calling
+find_user_event(). This is why it's important that at this phase we hold
+the event_mutex in all cases.
 
-Can you give the attached patch a try please ?
+> Another process can go through the same code and do another dec and set to 1
+> and we'll have two work queued?
 
-Regards,
+Once we set it to 1, we cannot get into this code path again until the
+work that was queued is finished. The scheduled work acquires
+event_mutex and ensures it's still the last reference before doing any
+actual deletion or a refcount_dec that would allow for another work
+queue via this path.
 
-Hans
+> Will mutex_lock help somehow? If yes, then why atomic refcnt?
 
+I hopefully fully explained the mutex_lock above, if it's confusing
+still let me know. The rason for the atomic refcnt though is because you
+initially get a reference to a user_event via find_user_event() under
+the lock, but then each FD (and each enabler) has a reference to the
+underlying user_event (and thus the trace_event). Fork() and enablement
+registers are done outside of this lock for performance reasons. When
+the task exits, we also close down the enablers for that mm/task, and so
+the lock is not there either (and why having the less used
+refcount_dec_and_mutex_lock being required on put when it's not
+acquired).
 
-1) Starting with kernel >= 6.2 acpi_video.c will only register
-the /sys/class/backlight/acpi_video# node after a drm/kms drivers
-asks it to register it.
-
-2) The native GPU driver will tell the drivers/acpi/video_detect.c
-code that native backlight control is available changing
-the return of acpi_video_get_backlight_type() to native, which
-is what loading the native GPU driver first also fixes this issue.
-
---------------vgbUXUgh5jkimy1I05UYkAvz
-Content-Type: text/x-patch; charset=UTF-8;
- name="0001-ACPI-video-Stop-trying-to-use-vendor-backlight-contr.patch"
-Content-Disposition: attachment;
- filename*0="0001-ACPI-video-Stop-trying-to-use-vendor-backlight-contr.pa";
- filename*1="tch"
-Content-Transfer-Encoding: base64
-
-RnJvbSA1OWY0OGE4ZGViNTI1ZDljNzUxM2UyYzBkZmZjN2YzMGE0MzU2MDMwIE1vbiBTZXAg
-MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBIYW5zIGRlIEdvZWRlIDxoZGVnb2VkZUByZWRoYXQu
-Y29tPgpEYXRlOiBXZWQsIDcgSnVuIDIwMjMgMjA6MzM6MTIgKzAyMDAKU3ViamVjdDogW1BB
-VENIXSBBQ1BJOiB2aWRlbzogU3RvcCB0cnlpbmcgdG8gdXNlIHZlbmRvciBiYWNrbGlnaHQg
-Y29udHJvbCBvbgogbGFwdG9wcyBmcm9tIGFmdGVyIH4yMDEyCgpUaGVyZSBoYXZlIGJlZW4g
-MiBzZXBhcmF0ZSByZXBvcnRzIG5vdyBhYm91dCBhIG5vbiB3b3JraW5nCiJkZWxsX2JhY2ts
-aWdodCIgZGV2aWNlIGdldHRpbmcgcmVnaXN0ZXJlZCB1bmRlciAvc3lzL2NsYXNzL2JhY2ts
-aWdodAp3aXRoIE1ldGVvckxha2UgKGRldmVsb3BtZW50KSBwbGF0Zm9ybXMuCgpPbiBodyBm
-cm9tIHRoZSBsYXN0IDEwIHllYXJzIGRlbGwtbGFwdG9wIHdpbGwgbm90IHJlZ2lzdGVyICJk
-ZWxsX2JhY2tsaWdodCIKYmVjYXVzZSBhY3BpX3ZpZGVvX2dldF9iYWNrbGlnaHRfdHlwZSgp
-IHdpbGwgcmV0dXJuIGFjcGlfYmFja2xpZ2h0X3ZpZGVvCnRoZXJlIGlmIGNhbGxlZCBiZWZv
-cmUgdGhlIEdQVS9rbXMgZHJpdmVyIGxvYWRzLiBTbyBpdCBkb2VzIG5vdCBtYXR0ZXIgaWYK
-dGhlIEdQVSBkcml2ZXIncyBuYXRpdmUgYmFja2xpZ2h0IGdldHMgcmVnaXN0ZXJlZCBhZnRl
-ciBkZWxsLWxhcHRvcCBsb2Fkcy4KCkJ1dCBpdCBzZWVtcyB0aGF0IG9uIE1ldGVvciBMYWtl
-IHRoZSBBQ1BJIHRhYmxlcyB3aWxsIG5vIGxvbmdlcgpjb250YWluIGFjcGlfdmlkZW8gYmFj
-a2xpZ2h0IGNvbnRyb2wgc3VwcG9ydCB3aGljaCBjYXVzZXMKYWNwaV92aWRlb19nZXRfYmFj
-a2xpZ2h0X3R5cGUoKSB0byByZXR1cm4gYWNwaV9iYWNrbGlnaHRfdmVuZG9yIGNhdXNpbmcK
-ImRlbGxfYmFja2xpZ2h0IiB0byBnZXQgcmVnaXN0ZXJlZCBpZiB0aGUgZGVsbC1sYXB0b3Ag
-bW9kdWxlIGlzIGxvYWRlZApiZWZvcmUgdGhlIEdQVS9rbXMgZHJpdmVyLgoKVmVuZG9yIHNw
-ZWNpZmljIGJhY2tsaWdodCBjb250cm9sIGxpa2UgdGhlICJkZWxsX2JhY2tsaWdodCIgZGV2
-aWNlIGlzCm9ubHkgbmVjZXNzYXJ5IG9uIHF1aXRlIG9sZCBodyAoZnJvbSBiZWZvcmUgYWNw
-aV92aWRlbyBiYWNrbGlnaHQgY29udHJvbAp3YXMgaW50cm9kdWNlZCkuIFdvcmsgYXJvdW5k
-ICJkZWxsX2JhY2tsaWdodCIgcmVnaXN0ZXJpbmcgb24gdmVyeSBuZXcKaHcgKHdoZXJlIGFj
-cGlfdmlkZW8gYmFja2xpZ2h0IGNvbnRyb2wgc2VlbXMgdG8gYmUgbm8gbW9yZSkgYnkgbWFr
-aW5nCmFjcGlfdmlkZW9fZ2V0X2JhY2tsaWdodF90eXBlKCkgdXNlIGFjcGlfYmFja2xpZ2h0
-X25vbmUgaW5zdGVhZApvZiBhY3BpX2JhY2tsaWdodF92ZW5kb3IgYXMgZmluYWwgZmFsbGJh
-Y2sgd2hlbiB0aGUgQUNQSSB0YWJsZXMgaGF2ZQpzdXBwb3J0IGZvciBXaW5kb3dzIDggb3Ig
-bGF0ZXIgKGxhcHRvcHMgZnJvbSBhZnRlciB+MjAxMikuCgpTdWdnZXN0ZWQtYnk6IE1hdHRo
-ZXcgR2FycmV0dCA8bWpnNTlAc3JjZi51Y2FtLm9yZz4KUmVwb3J0ZWQtYnk6IEFjZUxhbiBL
-YW8gPGFjZWxhbi5rYW9AY2Fub25pY2FsLmNvbT4KQ2xvc2VzOiBodHRwczovL2xvcmUua2Vy
-bmVsLm9yZy9wbGF0Zm9ybS1kcml2ZXIteDg2LzIwMjMwNjA3MDM0MzMxLjU3NjYyMy0xLWFj
-ZWxhbi5rYW9AY2Fub25pY2FsLmNvbS8KU2lnbmVkLW9mZi1ieTogSGFucyBkZSBHb2VkZSA8
-aGRlZ29lZGVAcmVkaGF0LmNvbT4KLS0tCiBkcml2ZXJzL2FjcGkvdmlkZW9fZGV0ZWN0LmMg
-fCAyMSArKysrKysrKysrKysrKysrKysrKysKIDEgZmlsZSBjaGFuZ2VkLCAyMSBpbnNlcnRp
-b25zKCspCgpkaWZmIC0tZ2l0IGEvZHJpdmVycy9hY3BpL3ZpZGVvX2RldGVjdC5jIGIvZHJp
-dmVycy9hY3BpL3ZpZGVvX2RldGVjdC5jCmluZGV4IGI4Nzc4M2M1ODcyZC4uZWIwMTRjMGVi
-YTQyIDEwMDY0NAotLS0gYS9kcml2ZXJzL2FjcGkvdmlkZW9fZGV0ZWN0LmMKKysrIGIvZHJp
-dmVycy9hY3BpL3ZpZGVvX2RldGVjdC5jCkBAIC04NDQsNiArODQ0LDI3IEBAIGVudW0gYWNw
-aV9iYWNrbGlnaHRfdHlwZSBfX2FjcGlfdmlkZW9fZ2V0X2JhY2tsaWdodF90eXBlKGJvb2wg
-bmF0aXZlLCBib29sICphdXRvCiAJaWYgKG5hdGl2ZV9hdmFpbGFibGUpCiAJCXJldHVybiBh
-Y3BpX2JhY2tsaWdodF9uYXRpdmU7CiAKKwkvKgorCSAqIFRoZSB2ZW5kb3Igc3BlY2lmaWMg
-QklPUyBpbnRlcmZhY2VzIGFyZSBvbmx5IG5lY2Vzc2FyeSBmb3IKKwkgKiBsYXB0b3BzIGZy
-b20gYmVmb3JlIH4yMDA4LgorCSAqCisJICogRm9yIGxhcHRvcHMgZnJvbSB+MjAwOCB0aWxs
-IH4yMDIzIHRoaXMgcG9pbnQgaXMgbmV2ZXIgcmVhY2hlZAorCSAqIGJlY2F1c2Ugb24gdGhv
-c2UgKHZpZGVvX2NhcHMgJiBBQ1BJX1ZJREVPX0JBQ0tMSUdIVCkgYWJvdmUgaXMgdHJ1ZS4K
-KwkgKgorCSAqIExhcHRvcHMgZnJvbSBhZnRlciB+MjAyMyBubyBsb25nZXIgc3VwcG9ydCBB
-Q1BJX1ZJREVPX0JBQ0tMSUdIVCwKKwkgKiBpZiB0aGlzIHBvaW50IGlzIHJlYWNoZWQgb24g
-dGhvc2UsIHRoaXMgbGlrZWx5IG1lYW5zIHRoYXQKKwkgKiB0aGUgR1BVIGttcyBkcml2ZXIg
-d2hpY2ggc2V0cyBuYXRpdmVfYXZhaWxhYmxlIGhhcyBub3QgbG9hZGVkIHlldC4KKwkgKgor
-CSAqIFJldHVybmluZyBhY3BpX2JhY2tsaWdodF92ZW5kb3IgaW4gdGhpcyBjYXNlIGlzIGtu
-b3duIHRvIHNvbWV0aW1lcworCSAqIGNhdXNlIGEgbm9uIHdvcmtpbmcgdmVuZG9yIHNwZWNp
-ZmljIC9zeXMvY2xhc3MvYmFja2xpZ2h0IGRldmljZSB0bworCSAqIGdldCByZWdpc3RlcmVk
-LgorCSAqCisJICogUmV0dXJuIGFjcGlfYmFja2xpZ2h0X25vbmUgb24gbGFwdG9wcyB3aXRo
-IEFDUEkgdGFibGVzIHdyaXR0ZW4KKwkgKiBmb3IgV2luZG93cyA4IChsYXB0b3BzIGZyb20g
-YWZ0ZXIgfjIwMTIpIHRvIGF2b2lkIHRoaXMgcHJvYmxlbS4KKwkgKi8KKwlpZiAoYWNwaV9v
-c2lfaXNfd2luOCgpKQorCQlyZXR1cm4gYWNwaV9iYWNrbGlnaHRfbm9uZTsKKwogCS8qIE5v
-IEFDUEkgdmlkZW8vbmF0aXZlIChvbGQgaHcpLCB1c2UgdmVuZG9yIHNwZWNpZmljIGZ3IG1l
-dGhvZHMuICovCiAJcmV0dXJuIGFjcGlfYmFja2xpZ2h0X3ZlbmRvcjsKIH0KLS0gCjIuNDAu
-MQoK
-
---------------vgbUXUgh5jkimy1I05UYkAvz--
-
+Thanks,
+-Beau
