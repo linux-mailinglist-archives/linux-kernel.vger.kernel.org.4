@@ -2,57 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D95BC7272B3
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 01:06:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BB537272B9
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 01:09:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231818AbjFGXGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 19:06:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33128 "EHLO
+        id S231343AbjFGXJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 19:09:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229958AbjFGXGj (ORCPT
+        with ESMTP id S229604AbjFGXJJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 19:06:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8553D11A;
-        Wed,  7 Jun 2023 16:06:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 24A4364AF3;
-        Wed,  7 Jun 2023 23:06:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81E92C433D2;
-        Wed,  7 Jun 2023 23:06:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686179197;
-        bh=0m/PD+a5Q4hNH8VOTTNxtiGJuWQbyimWt10i3W7S5XU=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=T0QxSCUfYJwG7bdctzIZxKussCT3Nx8Hn5ZRY7LgDxmgY/IaFmSLsrkjzPa396tAj
-         XgMP9fmoRW6QV/KyLvJ0SbZrPlTlTNSc2DUV5q4q1lBsP7iP+XfgSXhGpv+4mwhxXM
-         KuatpxcsTAo5b+mNkeATRLEG0B+bcYJCzZohvjmZLSYVNlU77elADoIsIOr8v7TVWa
-         WV3CFfv33Z3BHrq5Loh1Hw9pRmSkqdFIIU70rkCIr9OqCqhwdGJIn0NlxN9K2mBP++
-         gMzzL1kzXoJ2zwt242AdmuSpMwYbPHWZpquIWbTl4YDR4A8pr5TOlnjn2hdj47BvzF
-         azfceEGlNqH5A==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 1B332CE3A6C; Wed,  7 Jun 2023 16:06:37 -0700 (PDT)
-Date:   Wed, 7 Jun 2023 16:06:37 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     Zhangjin Wu <falcon@tinylab.org>, thomas@t-8ch.de,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: nolibc patches, still possible for 6.5 ?
-Message-ID: <208b317e-8553-4d0d-b97c-a0e808fe98f2@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <ZHyPi29q3MKiNAQZ@1wt.eu>
- <5494ac68-b4b9-434f-92c1-7e197c92a4ab@paulmck-laptop>
- <ZH1V21rhUQlvRgnU@1wt.eu>
- <ec85bd36-9b39-458c-9618-af500656ca7b@paulmck-laptop>
- <ZID1LnvAj1lamHhv@1wt.eu>
+        Wed, 7 Jun 2023 19:09:09 -0400
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF4BD1BC
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 16:09:08 -0700 (PDT)
+Received: by mail-lf1-x144.google.com with SMTP id 2adb3069b0e04-4f13c41c957so10596e87.1
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 16:09:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686179347; x=1688771347;
+        h=to:subject:message-id:date:from:sender:reply-to:mime-version:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=PmuVHgQTGSW4pBgLHyr3r3J1G7KlM6k/vY2ryTt9UVA=;
+        b=gxrVTxAB285MdXgb80hgStxgDNV5Cl2q79sQCGOF6Fbp2eyEmcgQ7AUTTHqEkEFdC8
+         EN9KcSYeZSWUzVM9K4uQnUsQseKe+3ztwELVGK/jqCHdEVuLbTsfPeNrg1T2YvEBP9Es
+         6jNGrmh8wcTTupXSAZpffBuqQexZD6L707oqD3zQ4IKa2RpUATccn1bdglFigFEp476g
+         HtXNxsasGcBq3GOQ4U2+7tC7IO9I3kxQ/czo9zCACYPOZWCzJyO+tAsyfQvZ2Xi52QO0
+         AE9wYetaL2nBMgJFTVeHkio2q9KI+G4S+mHL7I+abrSUCOmKm651YtstslCqhLUdqHis
+         CGEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686179347; x=1688771347;
+        h=to:subject:message-id:date:from:sender:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PmuVHgQTGSW4pBgLHyr3r3J1G7KlM6k/vY2ryTt9UVA=;
+        b=MClh4um7wsttsPwa7MLn9RAWfrYpEU9lVS99x8DBNuhuBKS6P+rarI9kfLA8i5FxLu
+         cx/8aDraI7MBUZ2zRXUQs7lXRWFEC9TWmT/IQt4nCktrjd4h/avK5A+ITtVPNbnqafmo
+         WZcXg4eFvXm4XBfLU4fDnLgqU+zcOMVF1s7dCHx9kWDvC158oPHBCKEgY/mVNnhhfydC
+         DxCHRbLhG9c6eT8/D+OUZoRkHzRNI8hwhAsF+oSObloErP3bs3xc7jkkVednJ3VbRu2+
+         JGLsunYQvcbe13umBR639c1AcR6dKY8QxPUAaZQehBXGLWjmdFT0z020r3Uec7N+x8dy
+         YxPA==
+X-Gm-Message-State: AC+VfDzaRKum0dOinfoFq/IklrwasO7iPpv6lgEOVxLEOGjmP1/YQr/F
+        33VyrhvWYoBrSiPgDFEzqr/lpNO29SeUX+qrhDs=
+X-Google-Smtp-Source: ACHHUZ7eYszHqq28NjvxeNuv9+mRdUrrTZMcIkNaF4h9mjPWha8Ti3rB5Cxln9iFktzChvWGViJFe5H99O4Nzpnsh3s=
+X-Received: by 2002:a2e:aa1c:0:b0:2b1:e724:4d08 with SMTP id
+ bf28-20020a2eaa1c000000b002b1e7244d08mr1310999ljb.4.1686179346484; Wed, 07
+ Jun 2023 16:09:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZID1LnvAj1lamHhv@1wt.eu>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Reply-To: dr.zeida.chedsworth1@gmail.com
+Sender: edrrreeee@gmail.com
+Received: by 2002:a05:6022:a307:b0:40:d448:1cfd with HTTP; Wed, 7 Jun 2023
+ 16:09:06 -0700 (PDT)
+From:   Dr Zeida Chedsworth <dr.zeida.chedsworth1@gmail.com>
+Date:   Wed, 7 Jun 2023 16:09:06 -0700
+X-Google-Sender-Auth: GMGcoW8ugErF9bB43FPyyiUZc9Q
+Message-ID: <CAF7czdqgqO-t8u4dRPyVfQB3ode76aFSaKpdDoZrCY8YEEu71A@mail.gmail.com>
+Subject: Good Friend,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FREEMAIL_REPLYTO_END_DIGIT,HK_RANDOM_ENVFROM,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,43 +68,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 11:22:54PM +0200, Willy Tarreau wrote:
-> On Wed, Jun 07, 2023 at 02:03:17PM -0700, Paul E. McKenney wrote:
-> > > > (There were some kernel test
-> > > > robot complaints as well, valid or not I am not sure.)
-> > > 
-> > > You mean in relation with nolibc stuff (or nolibc-test) or something
-> > > totally different ?
-> > 
-> > Apologies, this was me being confused and failing to look closely.
-> > 
-> > The complaints were not about nolibc, but rather about my patches that
-> > they were on top of.  Not your problem!
-> 
-> Ah no problem :-)
-> 
-> > And please let me know when the next batch from your tree are ready to go.
-> > (You might have been saying that they were in your recent emails, but
-> > I thought I should double-check.)
-> 
-> No pb, I just sent it while you were writing and our emails have crossed :-)
-> 
-> In short, it's ready now with branch 20230606-nolibc-rv32+stkp7a but if you
-> need any more info (more detailed summary, a public repost of the whole
-> series etc), just let me know. And I faced 2 kernel build errors on s390x
-> and riscv about rcu_task something, though you might be interested :-/
+Good Friend,
 
-And I pulled them in and got this from "make run":
+I have a client who has indicated interest in investing overseas. He
+also intends to partner with anyone with a good knowledge of business
+in the country of the investment who shall act as the Managing partner
+as he may not be able to relocate out of his country at the moment to
+manage the business because he holds a political appointment with the
+government. Please, if you're interested, reply for further
+discussions. Contact the director here for more explanation Regards
+Management,
 
-138 test(s) passed, 0 skipped, 0 failed.[    2.416045] reboot: Power down
-
-And this from "make run-user":
-
-136 test(s) passed, 2 skipped, 0 failed. See all results in /home/git/linux-rcu/tools/testing/selftests/nolibc/run.out
-
-And run.out looks as it has before, so all looks good at this end.
-
-Thus, unless you tell me otherwise, I will move these to my nolibc branch
-for the upcoming merge window.
-
-							Thanx, Paul
+Dr Zeida Chedsworth,
