@@ -2,174 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2BFD725622
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 09:44:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EC24725625
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 09:44:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238593AbjFGHoG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 03:44:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37350 "EHLO
+        id S239045AbjFGHoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 03:44:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237764AbjFGHnh (ORCPT
+        with ESMTP id S238737AbjFGHnk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 03:43:37 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0756421D
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 00:40:41 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-9745d99cfccso976216866b.1
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 00:40:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686123640; x=1688715640;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QzNzUxBgctT5U3+gB3td/wPDXx9tt+J9TkByw444vb4=;
-        b=dpiv/lAao6jUqNRWIwDa/t6LO1tyPxkPWni1OUv3MwCcaBvBG9TZJWlQAsTwrpJG8z
-         WiSLr3KTYWPNapPhFe4g/UQTjDvdv2Kh5m3vUHx2Uvn0qhMaWW7936pz4POvuJM/IQsq
-         Nj5IuPvfSkJvvk2/lgKSqanZnlPWCLIWckttk5fd61hIvF0Cv5Sw1t5kE8iZvriviEW+
-         In+gf5HZQY8yoXdiDm/zttqRTvXjVTxgNdcYNhuap4h3KffjSa1/I4wWvgR5nzhKYxNl
-         ilEXGjb2B7MxuIK+KjltPks5gdQ0IXXIg2nLLmfmXMao4M6uuWPsgMMFy1+JhqAIHqER
-         v4DA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686123640; x=1688715640;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QzNzUxBgctT5U3+gB3td/wPDXx9tt+J9TkByw444vb4=;
-        b=XLmYif31+lLyT3mVQdxuRbOmJ8LeQuOFtGLZc9eJL42NNzxKNQAISXO98wKtst7qkq
-         1wS5O47kiGFwfv4p4IdGYOt83pcHihRF7MdSKnK/abOiep1Sn7SVWQrHf+ccIfI12SBX
-         n3t7lkYSF1+7cbMfuXHFeRNTTc08/t7liEXez1vn2yqdzQh3nNtsC49dmfm/xmTOot5s
-         vgNxcKMD6gCY0rUnp0zhOuJfFKUdlWvkYUH8MiEScR+n3C14yM9aAoUcW2AwXNUmHzON
-         WO8kB9fyit6HiPCwmLJ3ZOAZOttQrZgABVv5daOTJ5zGNeYD8PekuY96g+0LZ6ZXTFo2
-         jReg==
-X-Gm-Message-State: AC+VfDw2SkcwlBbcF7JHtdt7tWKOGYLjmVkdBvKYXoQTcuaw4QPhb0F1
-        Lqw6m+axkH+Krz3LjPHh9cinrQ==
-X-Google-Smtp-Source: ACHHUZ6nIjpeIRlx7fPahFZ5gzxmNl29452UMvG6AuY1y9w+PrjwLC4zGKqXZHhvW+xhYzrUW9v6Ug==
-X-Received: by 2002:a17:907:9403:b0:965:cc76:7716 with SMTP id dk3-20020a170907940300b00965cc767716mr4912526ejc.76.1686123640173;
-        Wed, 07 Jun 2023 00:40:40 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id k16-20020a1709065fd000b00977db7d08cbsm3376124ejv.74.2023.06.07.00.40.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 00:40:39 -0700 (PDT)
-Message-ID: <f141a538-23b8-d10e-227c-5f0ad191c3a6@linaro.org>
-Date:   Wed, 7 Jun 2023 09:40:37 +0200
+        Wed, 7 Jun 2023 03:43:40 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1689335A2;
+        Wed,  7 Jun 2023 00:40:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686123645; x=1717659645;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=aMpkuX5Sw5My/OYgeGSE5OKSW09lmjDyiMmDlb2tVMM=;
+  b=GV2ltWOznw3OZgdZGox4JvGG8ndt4TemIkMyuC9LgLtA+uWJSs0zP2R7
+   HIDbpslxrpXYEc95gof9jIf7jUMuVbn0kwYBKw+297bBl+RKamkC6BcW3
+   VgPzGtaVol+pMzfPO8WOoUh7+Rn8kLlwUiN/683v6Hi1TG1G+nmR3JGZR
+   SMwut4G3XoyGxDjZp7Njn7H18IY8WjPE4B3ipvXdjrZ9RjCvB+EmrFIuX
+   XFbYuXlbpYi1dCd2K0sMwelM5MNUX1+HBDD4Ev9IwPH/e+sMh0zYqtcHP
+   GBpZVbdSrlnB565IuPjkHvaYC+RAP4vQ93j97j2MF8qRApUAaianHpG7a
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="420469737"
+X-IronPort-AV: E=Sophos;i="6.00,223,1681196400"; 
+   d="scan'208";a="420469737"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 00:40:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="659841952"
+X-IronPort-AV: E=Sophos;i="6.00,223,1681196400"; 
+   d="scan'208";a="659841952"
+Received: from sihanche-mobl.ccr.corp.intel.com (HELO localhost) ([10.255.28.83])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 00:40:40 -0700
+Date:   Wed, 7 Jun 2023 15:40:37 +0800
+From:   yu.c.zhang@linux.intel.com
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@nvidia.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Robin Murphy <robin.murphy@arm.com>
+Subject: Re: [PATCH 1/3] KVM: VMX: Retry APIC-access page reload if
+ invalidation is in-progress
+Message-ID: <20230607073728.vggwcoylibj3cp6s@linux.intel.com>
+References: <20230602011518.787006-1-seanjc@google.com>
+ <20230602011518.787006-2-seanjc@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 2/7] dt-bindings: pwm: restrict node name suffixes
-Content-Language: en-US
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Dipen Patel <dipenp@nvidia.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Dilip Kota <eswara.kota@linux.intel.com>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-rtc@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-spi@vger.kernel.org, timestamp@lists.linux.dev,
-        linux-watchdog@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Oleksij Rempel <o.rempel@pengutronix.de>
-References: <20230530144851.92059-1-krzysztof.kozlowski@linaro.org>
- <20230530144851.92059-3-krzysztof.kozlowski@linaro.org>
- <20230607073652.hoyrernfcuoryrqs@pengutronix.de>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230607073652.hoyrernfcuoryrqs@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230602011518.787006-2-seanjc@google.com>
+User-Agent: NeoMutt/20171215
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/06/2023 09:36, Uwe Kleine-König wrote:
-> On Tue, May 30, 2023 at 04:48:46PM +0200, Krzysztof Kozlowski wrote:
->> Make the pattern matching node names a bit stricter to improve DTS
->> consistency.  The pattern is restricted to:
->> 1. Only one unit address or one -N suffix,
->> 2. -N suffixes to decimal numbers.
->>
->> Suggested-by: Rob Herring <robh@kernel.org>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On Thu, Jun 01, 2023 at 06:15:16PM -0700, Sean Christopherson wrote:
+> Re-request an APIC-access page reload if there is a relevant mmu_notifier
+> invalidation in-progress when KVM retrieves the backing pfn, i.e. stall
+> vCPUs until the backing pfn for the APIC-access page is "officially"
+> stable.  Relying on the primary MMU to not make changes after invoking
+> ->invalidate_range() works, e.g. any additional changes to a PRESENT PTE
+> would also trigger an ->invalidate_range(), but using ->invalidate_range()
+> to fudge around KVM not honoring past and in-progress invalidations is a
+> bit hacky.
 > 
->>
->> ---
->>
->> Cc: Tony Lindgren <tony@atomide.com>
->> Cc: Oleksij Rempel <o.rempel@pengutronix.de>
->> ---
->>  Documentation/devicetree/bindings/pwm/pwm.yaml | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/Documentation/devicetree/bindings/pwm/pwm.yaml b/Documentation/devicetree/bindings/pwm/pwm.yaml
->> index 3c01f85029e5..abd9fa873354 100644
->> --- a/Documentation/devicetree/bindings/pwm/pwm.yaml
->> +++ b/Documentation/devicetree/bindings/pwm/pwm.yaml
->> @@ -13,7 +13,7 @@ select: false
->>  
->>  properties:
->>    $nodename:
->> -    pattern: "^pwm(@.*|-[0-9a-f])*$"
->> +    pattern: "^pwm(@.*|-([0-9]|[1-9][0-9]+))?$"
+> Honoring invalidations will allow using KVM's standard mmu_notifier hooks
+> to detect APIC-access page reloads, which will in turn allow removing
+> KVM's implementation of ->invalidate_range() (the APIC-access page case is
+> a true one-off).
 > 
-> With this patch we forbid now the following patterns:
+> Opportunistically add a comment to explain why doing nothing if a memslot
+> isn't found is functionally correct.
 > 
-> 	pwm-[0-9a-f][@-].*
-> 	pwm-0[0-9a-f]+
-> 	pwm-[a-f]([@-].*)?
-
-Yes, this was discussed last time:
-https://lore.kernel.org/all/20221127182232.GA128974-robh@kernel.org/
-
+> Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
+> Cc: Alistair Popple <apopple@nvidia.com>
+> Cc: Robin Murphy <robin.murphy@arm.com>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/kvm/vmx/vmx.c | 50 +++++++++++++++++++++++++++++++++++++-----
+>  1 file changed, 45 insertions(+), 5 deletions(-)
 > 
-> Checking for such names:
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index 44fb619803b8..59195f0dc7a5 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -6708,7 +6708,12 @@ void vmx_set_virtual_apic_mode(struct kvm_vcpu *vcpu)
+>  
+>  static void vmx_set_apic_access_page_addr(struct kvm_vcpu *vcpu)
+>  {
+> -	struct page *page;
+> +	const gfn_t gfn = APIC_DEFAULT_PHYS_BASE >> PAGE_SHIFT;
+> +	struct kvm *kvm = vcpu->kvm;
+> +	struct kvm_memslots *slots = kvm_memslots(kvm);
+> +	struct kvm_memory_slot *slot;
+> +	unsigned long mmu_seq;
+> +	kvm_pfn_t pfn;
+>  
+>  	/* Defer reload until vmcs01 is the current VMCS. */
+>  	if (is_guest_mode(vcpu)) {
+> @@ -6720,18 +6725,53 @@ static void vmx_set_apic_access_page_addr(struct kvm_vcpu *vcpu)
+>  	    SECONDARY_EXEC_VIRTUALIZE_APIC_ACCESSES))
+>  		return;
+>  
+> -	page = gfn_to_page(vcpu->kvm, APIC_DEFAULT_PHYS_BASE >> PAGE_SHIFT);
+> -	if (is_error_page(page))
+> +	/*
+> +	 * Grab the memslot so that the hva lookup for the mmu_notifier retry
+> +	 * is guaranteed to use the same memslot as the pfn lookup, i.e. rely
+> +	 * on the pfn lookup's validation of the memslot to ensure a valid hva
+> +	 * is used for the retry check.
+> +	 */
+> +	slot = id_to_memslot(slots, APIC_ACCESS_PAGE_PRIVATE_MEMSLOT);
+> +	if (!slot || slot->flags & KVM_MEMSLOT_INVALID)
+>  		return;
+>  
+> -	vmcs_write64(APIC_ACCESS_ADDR, page_to_phys(page));
+> +	/*
+> +	 * Ensure that the mmu_notifier sequence count is read before KVM
+> +	 * retrieves the pfn from the primary MMU.  Note, the memslot is
+> +	 * protected by SRCU, not the mmu_notifier.  Pairs with the smp_wmb()
+> +	 * in kvm_mmu_invalidate_end().
+> +	 */
+> +	mmu_seq = kvm->mmu_invalidate_seq;
+> +	smp_rmb();
+> +
+> +	/*
+> +	 * No need to retry if the memslot does not exist or is invalid.  KVM
+> +	 * controls the APIC-access page memslot, and only deletes the memslot
+> +	 * if APICv is permanently inhibited, i.e. the memslot won't reappear.
+> +	 */
+> +	pfn = gfn_to_pfn_memslot(slot, gfn);
+> +	if (is_error_noslot_pfn(pfn))
+> +		return;
+> +
+> +	read_lock(&vcpu->kvm->mmu_lock);
+> +	if (mmu_invalidate_retry_hva(kvm, mmu_seq,
+> +				     gfn_to_hva_memslot(slot, gfn))) {
+> +		kvm_make_request(KVM_REQ_APIC_PAGE_RELOAD, vcpu);
+
+Are the mmu_invalidate_retry_hva() and the following request meant to stall
+the vCPU if there's on going invalidation? 
+
+If yes, may I ask how would the vCPU be stalled?
+
+Below are my understandings and confusions about this process. I must have
+missed something, waiting to be educated... :) 
+
+When the backing page of APIC access page is to be reclaimed:
+1> kvm_mmu_notifier_invalidate_range_start() -> __kvm_handle_hva_range() will
+increase the kvm->mmu_invalidate_in_progress and account the start/end of this
+page in kvm_mmu_invalidate_begin().
+2> And then kvm_unmap_gfn_range() will zap the TDP, and send the request,
+KVM_REQ_APIC_PAGE_RELOAD, to all vCPUs.
+3> While a vCPU tries to reload the APIC access page before entering the guest,
+kvm->mmu_invalidate_in_progress will be checked in mmu_invalidate_retry_hva(),
+but it is possible(or is it?) that the kvm->mmu_invalidate_in_progess is still
+positive, so KVM_REQ_APIC_PAGE_RELOAD is set again. No reload, and no TLB flush.
+4> So what if the vCPU resumes with KVM_REQ_APIC_PAGE_RELOAD & KVM_REQ_TLB_FLUSH
+flags being set, yet APIC access page is not reloaded and TLB is not flushed? Or,
+will this happen?
+
+One more dumb question - why does KVM not just pin the APIC access page? 
+
+> +		read_unlock(&vcpu->kvm->mmu_lock);
+> +		goto out;
+> +	}
+> +
+> +	vmcs_write64(APIC_ACCESS_ADDR, pfn_to_hpa(pfn));
+> +	read_unlock(&vcpu->kvm->mmu_lock);
+> +
+>  	vmx_flush_tlb_current(vcpu);
+>  
+> +out:
+>  	/*
+>  	 * Do not pin apic access page in memory, the MMU notifier
+>  	 * will call us again if it is migrated or swapped out.
+>  	 */
+> -	put_page(page);
+> +	kvm_release_pfn_clean(pfn);
+>  }
+>  
+>  static void vmx_hwapic_isr_update(int max_isr)
+> -- 
+> 2.41.0.rc2.161.g9c6817b8e7-goog
 > 
-> 	$ git grep -oP '\bpwm-([0-9a-f][@-].*|0[0-9a-f]+|[0-9]*[a-f][0-9a-f]*)(*pla:\s*\{)' arch/*/boot/dts
-> 	arch/arm/boot/dts/meson8.dtsi:pwm-f-ao
-> 	arch/arm/boot/dts/meson8.dtsi:pwm-e
-> 	arch/arm/boot/dts/meson8b.dtsi:pwm-d
-> 	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-a
-> 	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-b-x7
-> 	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-b-x19
-> 	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-c-c
-> 	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-c-x5
-> 	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-c-x8
-> 	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-d-x3
-> 	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-d-x6
-> 	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-e
-> 	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-f-z
-> 	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-f-a
-> 	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-f-x
-> 	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-f-h
-> 	arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi:pwm-a-e
 
-Are you sure these are pwms, not pins?
-
-> 
-> These are all pinmux-settings and no pwm nodes, so the change is fine.
-> (But arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi isn't properly
-> sorted alphabetically.)
-
-Exactly...
-
-> 
-> Reviewed-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-
-
-Best regards,
-Krzysztof
-
+B.R.
+Yu
