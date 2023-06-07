@@ -2,131 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38DB672513B
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 02:46:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1C5172513C
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 02:50:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240277AbjFGAqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 20:46:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49100 "EHLO
+        id S239297AbjFGAup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 20:50:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240084AbjFGAql (ORCPT
+        with ESMTP id S234763AbjFGAum (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 20:46:41 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C91510F8
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 17:46:39 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id 41be03b00d2f7-53f6e194e7bso5965733a12.1
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 17:46:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686098799; x=1688690799;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/VjdTgpDcT/dS1LNnv8iDFQQueMacBncHOzc48DAKj8=;
-        b=c9AsXxDWT0gzp5q/ErKD1QiqLU2yryyO83LQCVlwv1EUlMSi0tX/m04vbma2cdeLMw
-         Ri+hIPgk9ELtir4CkCRQPZKacnJeuweXNPSFZTHLrPJLdQlXXLHFlJcjRgu786HvdwDG
-         Oj3gd+ZMMq6WzWagrOhbuqUE+nug6FsxF1/tgX83odv9rQQinUzNaQdGS9WYFlFTjc04
-         4lUHOjQhfQqk7+CrW7WW9ZRKlglcYdVsKyQnch5pW8x9YB8EN/XSOrsM4wFFFyG3+b6E
-         vbwt1Iro+OYvtb9cR4bXN28eiV++f6XJmgMDMG335qAmy7iGENda63hRxjEZWQpYtT9H
-         S9ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686098799; x=1688690799;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/VjdTgpDcT/dS1LNnv8iDFQQueMacBncHOzc48DAKj8=;
-        b=ACColakc5qmAR4DtVKbMt6ZS6W2mqk6epHnMk4KGlfhkWrHtov2pI3HTE9rCBvWjAt
-         7UbWn3Oi/WN32AbHsZ3LRjtVQzu6fu/7n3QCDGQZr3+BJ6PZ8U0HvNTMlYFPG0UCpqPP
-         ge4BZNxK48h9+t6Nwejn2cvMJ/IZd2DgIkKvAl7I6j60soKcdj2UUc/75evUpfBiiKbT
-         6EcFcxzQBoFZcBYV1waTtm4PlA5xWLxv34XfFct+nfwHWN8r/2vsW3/B0SK5vxCNBUAz
-         bmMBsaV1OzKA1B/e9gRZ6IflTCOIWNeo+tjhrTzoJ+cNwSb/YhJ91u+xzHW1d4JK0cL2
-         ec8g==
-X-Gm-Message-State: AC+VfDznxLfmZypE16r9IbrmhydAagTKmB4bibWrGF3GJ66W3j1sfRgb
-        EauMzE67VeNdQMJs1CJ1Vq25o/a+P7U=
-X-Google-Smtp-Source: ACHHUZ4q5Ka7zSH23P2/S5hiUlEw/WG2v18E0Z8k93HTLm5/cYV+Nc8kKNhnYxZSSOToXvgd69Iz5Ye9res=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a63:225b:0:b0:519:d08d:a4d5 with SMTP id
- t27-20020a63225b000000b00519d08da4d5mr824334pgm.6.1686098799145; Tue, 06 Jun
- 2023 17:46:39 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue,  6 Jun 2023 17:46:36 -0700
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-Message-ID: <20230607004636.1421424-1-seanjc@google.com>
-Subject: [PATCH] KVM: x86: Update comments about MSR lists exposed to userspace
-From:   Sean Christopherson <seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Binbin Wu <binbin.wu@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Tue, 6 Jun 2023 20:50:42 -0400
+Received: from smtp.tom.com (smtprz25.163.net [106.38.219.110])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CC31189
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 17:50:40 -0700 (PDT)
+Received: from my-app02.tom.com (my-app02.tom.com [127.0.0.1])
+        by freemail02.tom.com (Postfix) with ESMTP id DC907B00CBF
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 08:50:35 +0800 (CST)
+Received: from my-app02.tom.com (HELO smtp.tom.com) ([127.0.0.1])
+          by my-app02 (TOM SMTP Server) with SMTP ID -1855971513
+          for <linux-kernel@vger.kernel.org>;
+          Wed, 07 Jun 2023 08:50:35 +0800 (CST)
+Received: from antispam1.tom.com (unknown [172.25.16.55])
+        by freemail02.tom.com (Postfix) with ESMTP id B38F5B00D42
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 08:50:35 +0800 (CST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=tom.com; s=201807;
+        t=1686099035; bh=QsFM4uyy5VZQwk9mEzKAccKlevD3TSVUAfLJgnmLgyU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=GeWkcCSocYpAIfjS1zXhLvob49Q3HRhMPXc6qXDllzN07hUYC4C5YMUtDBE6JLw6N
+         NKfue4T4hfe6z4JIyPlS/DUaTraGT7nuj9vZB9alVIojirtSubISpwYZCzTETdhCVA
+         xvrS1ETseqqcP5cHJAZPkcXzE+qaQ42uCpQ++mNE=
+Received: from antispam1.tom.com (antispam1.tom.com [127.0.0.1])
+        by antispam1.tom.com (Postfix) with ESMTP id 4D21ED41AE1
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 08:50:34 +0800 (CST)
+X-Virus-Scanned: Debian amavisd-new at antispam1.tom.com
+Received: from antispam1.tom.com ([127.0.0.1])
+        by antispam1.tom.com (antispam1.tom.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id miztMT90RBjg for <linux-kernel@vger.kernel.org>;
+        Wed,  7 Jun 2023 08:50:27 +0800 (CST)
+Received: from [172.30.38.103] (unknown [180.167.10.98])
+        by antispam1.tom.com (Postfix) with ESMTPA id 3D3ACD4170C;
+        Wed,  7 Jun 2023 08:50:24 +0800 (CST)
+Message-ID: <928cc71e-7b66-9cb0-7751-ce1f65489360@tom.com>
+Date:   Wed, 7 Jun 2023 08:50:23 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] drm/bridge: ti-sn65dsi86: Avoid possible buffer overflow
+Content-Language: en-US
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, andersson@kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        u.kleine-koenig@pengutronix.de
+References: <20230606075527.155346-1-suhui@nfschina.com>
+ <CAD=FV=X_n4Si3k4iQ0yRJZRqX2DuhGF2pjPqEzbiKqBY3ZCNHg@mail.gmail.com>
+From:   Longsuhui <Jack_sun@tom.com>
+In-Reply-To: <CAD=FV=X_n4Si3k4iQ0yRJZRqX2DuhGF2pjPqEzbiKqBY3ZCNHg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Refresh comments about msrs_to_save, emulated_msrs, and msr_based_features
-to remove stale references left behind by commit 2374b7310b66 (KVM:
-x86/pmu: Use separate array for defining "PMU MSRs to save"), and to
-better reflect the current reality, e.g. emulated_msrs is no longer just
-for MSRs that are "kvm-specific".
+Hi,
 
-Reported-by: Binbin Wu <binbin.wu@linux.intel.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/x86.c | 27 +++++++++++++--------------
- 1 file changed, 13 insertions(+), 14 deletions(-)
+On 2023/6/6 23:28, Doug Anderson wrote:
+> Hi,
+>
+> On Tue, Jun 6, 2023 at 12:56 AM Su Hui <suhui@nfschina.com> wrote:
+>> Smatch error:buffer overflow 'ti_sn_bridge_refclk_lut' 5 <= 5.
+>>
+>> Fixes: cea86c5bb442 ("drm/bridge: ti-sn65dsi86: Implement the pwm_chip")
+>> Signed-off-by: Su Hui <suhui@nfschina.com>
+>> ---
+>>   drivers/gpu/drm/bridge/ti-sn65dsi86.c | 3 ++-
+>>   1 file changed, 2 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/gpu/drm/bridge/ti-sn65dsi86.c b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
+>> index 7a748785c545..952aae4221e7 100644
+>> --- a/drivers/gpu/drm/bridge/ti-sn65dsi86.c
+>> +++ b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
+>> @@ -305,7 +305,8 @@ static void ti_sn_bridge_set_refclk_freq(struct ti_sn65dsi86 *pdata)
+>>           * The PWM refclk is based on the value written to SN_DPPLL_SRC_REG,
+>>           * regardless of its actual sourcing.
+>>           */
+>> -       pdata->pwm_refclk_freq = ti_sn_bridge_refclk_lut[i];
+>> +       if (i < refclk_lut_size)
+>> +               pdata->pwm_refclk_freq = ti_sn_bridge_refclk_lut[i];
+> I don't think this is quite the right fix. I don't think we can just
+> skip assigning "pdata->pwm_refclk_freq". In general I think we're in
+> pretty bad shape if we ever fail to match a refclk from the table and
+> I'm not quite sure how the bridge chip could work at all in this case.
+> Probably that at least deserves a warning message in the logs. There's
+> no place to return an error though, so I guess the warning is the best
+> we can do and then we can do our best to do something reasonable.
+>
+> In this case, I think "reasonable" might be that if the for loop exits
+> and "i == refclk_lut_size" that we should set "i" to 1. According to
+> the datasheet [1] setting a value of 5 (which the existing code does)
+> is the same as setting a value of 1 (the default) and if it's 1 then
+> we'll be able to look this up in the table.
+I think you are right. And " if ( i >= refclk_lut_size) i=1" is a 
+suitable change.
+I will send patch v2 a litter latter.
+Thanks for your suggestion.
 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 5ad55ef71433..c77f72cf6dc8 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -1427,15 +1427,14 @@ int kvm_emulate_rdpmc(struct kvm_vcpu *vcpu)
- EXPORT_SYMBOL_GPL(kvm_emulate_rdpmc);
- 
- /*
-- * List of msr numbers which we expose to userspace through KVM_GET_MSRS
-- * and KVM_SET_MSRS, and KVM_GET_MSR_INDEX_LIST.
-- *
-- * The three MSR lists(msrs_to_save, emulated_msrs, msr_based_features)
-- * extract the supported MSRs from the related const lists.
-- * msrs_to_save is selected from the msrs_to_save_all to reflect the
-- * capabilities of the host cpu. This capabilities test skips MSRs that are
-- * kvm-specific. Those are put in emulated_msrs_all; filtering of emulated_msrs
-- * may depend on host virtualization features rather than host cpu features.
-+ * The three MSR lists(msrs_to_save, emulated_msrs, msr_based_features) track
-+ * the set of MSRs that KVM exposes to userspace through KVM_GET_MSRS,
-+ * KVM_SET_MSRS, and KVM_GET_MSR_INDEX_LIST.  msrs_to_save holds MSRs that
-+ * require host support, i.e. should be probed via RDMSR.  emulated_msrs holds
-+ * MSRs that emulates without strictly requiring host support.
-+ * msr_based_features holds MSRs that enumerate features, i.e. are effectively
-+ * CPUID leafs.  Note, msr_based_features isn't mutually exclusive with
-+ * msrs_to_save and emulated_msrs.
-  */
- 
- static const u32 msrs_to_save_base[] = {
-@@ -1531,11 +1530,11 @@ static const u32 emulated_msrs_all[] = {
- 	MSR_IA32_UCODE_REV,
- 
- 	/*
--	 * The following list leaves out MSRs whose values are determined
--	 * by arch/x86/kvm/vmx/nested.c based on CPUID or other MSRs.
--	 * We always support the "true" VMX control MSRs, even if the host
--	 * processor does not, so I am putting these registers here rather
--	 * than in msrs_to_save_all.
-+	 * KVM always supports the "true" VMX control MSRs, even if the host
-+	 * does not.  The VMX MSRs as a whole are considered "emulated" as KVM
-+	 * doesn't strictly require them to exist in the host (ignoring that
-+	 * KVM would refuse to load in the first place if the core set of MSRs
-+	 * aren't supported).
- 	 */
- 	MSR_IA32_VMX_BASIC,
- 	MSR_IA32_VMX_TRUE_PINBASED_CTLS,
+Su Hui
 
-base-commit: 31b4fc3bc64aadd660c5bfa5178c86a7ba61e0f7
--- 
-2.41.0.162.gfafddb0af9-goog
-
+>
+> [1] https://www.ti.com/lit/gpn/sn65dsi86
+>
+> -Doug
