@@ -2,137 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 140B87268D5
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 20:34:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F397F7268E3
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 20:35:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231979AbjFGSeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 14:34:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49396 "EHLO
+        id S232775AbjFGSf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 14:35:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231585AbjFGSeN (ORCPT
+        with ESMTP id S232659AbjFGSfY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 14:34:13 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 680011FE9;
-        Wed,  7 Jun 2023 11:34:02 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 8384A5C017E;
-        Wed,  7 Jun 2023 14:34:01 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Wed, 07 Jun 2023 14:34:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1686162841; x=1686249241; bh=hI
-        AsYVAmQhrwKHACsiAIdwxjB+I4M7q3AX8nU7deL08=; b=f3VlPMlix6wv8T5tim
-        d3pG5yxns4bF6ExxzmVMzCbRz2MRvA42FEjLc5PUiadtvCg0hgviBGB3pYzCdJ31
-        qQQA2gP6nCiffQtnaL3vRzpZ8U7UqvwBPe2dFANQJ05qbMstITkCwutjw3yIIpXJ
-        UD4hRsVag5sZP9hou9DCtUWBWEkObZe86eqkw9Pys3QZUoZU3jNPbo4yAOFYpX41
-        soc45iyP2UhOMo1EeLPReSsh1idruu9C5S2NOlWeBbd1KOpWqTz34OkOlQShvxNe
-        7/JMxGXaUFH3NSnlHJG2Y1ZG92C3OttSOIQPy77LY9Oo6SlNyh2GuCBOmzdfJXYM
-        2Sow==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1686162841; x=1686249241; bh=hIAsYVAmQhrwK
-        HACsiAIdwxjB+I4M7q3AX8nU7deL08=; b=cjwkb0uv/EXxOHfEP8BBdKbrp/2Mn
-        /VADnopGp4+Om8M4423PfUgBO2x3hMp1Wxu2xAoKwwKCsA5usR/wPMum1qe8JUGH
-        4MEElq54uvv0gvhrUtW4HA0qBITFpkSsqf+rZtRZ8esIe0p4L/l4QTB5xu1ldstW
-        gvbGDP97padpT+KhKhGBoJnJMy/i4VsLv5+r4U1u3gu/A6WFNv179HH+GXqEg87f
-        3u34l3LdKro5fsT0rw/pK9oBrESrlYce6fe5su9CNT91+rPFUj4ciRJzfMpgAGCO
-        prB66DHLPBuMcblZ0BFHa+CJTrCQIbQ0Gw8CM/w314UleHIyLuKNj2KQw==
-X-ME-Sender: <xms:mc2AZGOqZK7gU6O53OnJGS84qHZ-AQcBzHtbi5LbJDxyr2zVn3zkyg>
-    <xme:mc2AZE-aK-cJy7HV-41hgVSwgq7Ad1lKECv8GUAbOkoR8gUW1VxC93vbX3Q6zCC-P
-    IQQHBjL3AGNpg>
-X-ME-Received: <xmr:mc2AZNQFaFRGE-QH_JS7A5ZcFrmuSMw1QrUaRMo7ItT8m6VHys53wzgfx2tpL51r41bqBwmQ7xseohfG5PWsSsbZxshwZo-HYDPreQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedtgedguddvjecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgv
-    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeeghe
-    euhefgtdeluddtleekfeegjeetgeeikeehfeduieffvddufeefleevtddtvdenucffohhm
-    rghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
-    hmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhm
-X-ME-Proxy: <xmx:mc2AZGtf2uG2APQpSPPfDlng6J5b7Fy4HhTj775clZlJaSzNWhp-SQ>
-    <xmx:mc2AZOeGnFgVQzCmHyjTzJ9pT7wf_lgs7NqYCDOo34wmCnnYuXAvVw>
-    <xmx:mc2AZK2Ws4tv-rBEpaeqh9-OPhx9_PzuWI398alDN31if4iurtao2A>
-    <xmx:mc2AZPWg3gn4yXhRxaGZGpscgjUYgHTDZ22YsuxfEdlepyymjJTzmQ>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 7 Jun 2023 14:34:00 -0400 (EDT)
-Date:   Wed, 7 Jun 2023 20:33:54 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Sidhartha Kumar <sidhartha.kumar@oracle.com>
-Cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        songmuchun@bytedance.com, mike.kravetz@oracle.com,
-        Ackerley Tng <ackerleytng@google.com>
-Subject: Re: [PATCH 6.3.y] mm/hugetlb: revert use of page_cache_next_miss()
-Message-ID: <2023060745-kilometer-omnivore-4471@gregkh>
-References: <20230606172022.128441-1-sidhartha.kumar@oracle.com>
- <2023060650-overlying-skiing-191d@gregkh>
- <c6ead868-3523-f25c-3f04-119da28a50ff@oracle.com>
+        Wed, 7 Jun 2023 14:35:24 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB2931FE2
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 11:35:18 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1b011cffe7fso35861465ad.1
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 11:35:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1686162918; x=1688754918;
+        h=mime-version:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Y12/KdUTXZPtVz1erwmHseWZVgCpa+t1llOc70/u30c=;
+        b=h/+/lggmMOVwrQvCWiHVKRwHUEUXPzonAx7+0w0iGo95Je0lyjB6LdnKGVFXb8aI4z
+         3wxZEsDAHx1sN+j0t/KIXUYA/9bExPQBxkAiDZvFJO/DvVehadvV1Cdo0nBWBKnBr5Y3
+         HkhM5uZNiN/thGAHB2xMBAtWUo5DhL3yum0go=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686162918; x=1688754918;
+        h=mime-version:message-id:date:subject:cc:to:from:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Y12/KdUTXZPtVz1erwmHseWZVgCpa+t1llOc70/u30c=;
+        b=TXTzRMWX+kQZFtlOa1R2Tu6hUrIalUoxR1N/gnYjMkGfjEWIBoJ1CTbtKTGwe4Az+4
+         vZ3/cFdKVKxspLQotsbQIeK9sOL2a1ytwemJKG/Te5buSAWkNtMmjOC8IncE09W5HARQ
+         Bp4yIHL1hXx0qZqQeZ4z78Pev3ID6gXn0yXZ5zLiGpGgLk9l44w0YIIJI25ZNbYRrXcJ
+         GSe8hR+19CPA1L+hXOA4ppQhm0zFJR0a17S8+7Jd2Ejzoy4S9Z8WOM68No1LdPidMKOQ
+         F4SuJhwxoJG62VTBHtOoAh90/Gdv4PY+nRE9JVwzjIv0JTXZnLt0P/AgymNi/NIJUm90
+         LJAw==
+X-Gm-Message-State: AC+VfDw4kIcGqDY4WQWieYUaAgebOOO47qPKpGwuGrfXJzsxjD0u7bdL
+        EacwmcEJzrfwe2UjwVbPTGJsfw==
+X-Google-Smtp-Source: ACHHUZ4IbXX6Qb3xDk0Enwfo+gW3JVb08X3q3ZerslSQlFRNt40nRYOr1YKshbADwbCyI9QY/ghmQQ==
+X-Received: by 2002:a17:903:2781:b0:1af:b97c:2353 with SMTP id jw1-20020a170903278100b001afb97c2353mr2424607plb.15.1686162918401;
+        Wed, 07 Jun 2023 11:35:18 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id je12-20020a170903264c00b001addf547a6esm10746876plb.17.2023.06.07.11.35.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 11:35:17 -0700 (PDT)
+From:   Florian Fainelli <florian.fainelli@broadcom.com>
+To:     netdev@vger.kernel.org
+Cc:     Florian Fainelli <florian.fainelli@broadcom.com>,
+        Doug Berger <opendmb@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH 0/2] LED brightness support for Broadcom PHYs
+Date:   Wed,  7 Jun 2023 11:34:51 -0700
+Message-Id: <20230607183453.2587726-1-florian.fainelli@broadcom.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c6ead868-3523-f25c-3f04-119da28a50ff@oracle.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000cda8a605fd8e656c"
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIME_NO_TEXT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 11:13:05AM -0700, Sidhartha Kumar wrote:
-> On 6/6/23 10:38 AM, Greg KH wrote:
-> > On Tue, Jun 06, 2023 at 10:20:22AM -0700, Sidhartha Kumar wrote:
-> > > As reported by Ackerley[1], the use of page_cache_next_miss() in
-> > > hugetlbfs_fallocate() introduces a bug where a second fallocate() call to
-> > > same offset fails with -EEXIST. Revert this change and go back to the
-> > > previous method of using get from the page cache and then dropping the
-> > > reference on success.
-> > > 
-> > > hugetlbfs_pagecache_present() was also refactored to use
-> > > page_cache_next_miss(), revert the usage there as well.
-> > > 
-> > > User visible impacts include hugetlb fallocate incorrectly returning
-> > > EEXIST if pages are already present in the file. In addition, hugetlb
-> > > pages will not be included in core dumps if they need to be brought in via
-> > > GUP. userfaultfd UFFDIO_COPY also uses this code and will not notice pages
-> > > already present in the cache. It may try to allocate a new page and
-> > > potentially return ENOMEM as opposed to EEXIST.
-> > > 
-> > > Fixes: d0ce0e47b323 ("mm/hugetlb: convert hugetlb fault paths to use alloc_hugetlb_folio()")
-> > > Cc: <stable@vger.kernel.org> #v6.3
-> > > Reported-by: Ackerley Tng <ackerleytng@google.com>
-> > > Signed-off-by: Sidhartha Kumar <sidhartha.kumar@oracle.com>
-> > > Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
-> > > 
-> > > [1] https://lore.kernel.org/linux-mm/cover.1683069252.git.ackerleytng@google.com/
-> > > ---
-> > > 
-> > > This revert is the safest way to fix 6.3. The upstream fix will either
-> > > fix page_cache_next_miss() itself or use Ackerley's patch to introduce a
-> > > new function to check if a page is present in the page cache. Both
-> > > directions are currently under review so we can use this safe and simple
-> > > fix for 6.3
-> > 
-> > Is there any specific reason why we don't just wait for the fix for
-> > Linus's tree before applying this one, or applying the real fix instead?
-> 
-> I missed Andrew's message stating he would prefer the real fix[1].
-> 
-> Sorry for the noise,
-> Sidhartha Kumar
-> 
-> [1] https://lore.kernel.org/lkml/20230603022209.GA114055@monkey/T/#mea6c8a015dbea5f9c2be88b9791996f4be6c2de8
+--000000000000cda8a605fd8e656c
+Content-Transfer-Encoding: 8bit
 
-Great, is that going to Linus's tree soon?
+This patch series adds support for controlling the LED brightness on
+Broadcom PHYs.
 
-thanks,
+Florian Fainelli (2):
+  net: phy: broadcom: Rename LED registers
+  net: phy: broadcom: Add support for setting LED brightness
 
-greg k-h
+ drivers/net/phy/bcm-phy-lib.c | 27 +++++++++++++++++++++++++++
+ drivers/net/phy/bcm-phy-lib.h |  3 +++
+ drivers/net/phy/broadcom.c    | 25 ++++++++++++++++++++-----
+ include/linux/brcmphy.h       |  9 ++++++---
+ 4 files changed, 56 insertions(+), 8 deletions(-)
+
+-- 
+2.34.1
+
+
+--000000000000cda8a605fd8e656c
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
+QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
+UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
+M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
+Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
+14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
+a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
+XzCCBVgwggRAoAMCAQICDBP8P9hKRVySg3Qv5DANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
+RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
+UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAxMjE4MTFaFw0yNTA5MTAxMjE4MTFaMIGW
+MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
+BgNVBAoTDUJyb2FkY29tIEluYy4xGTAXBgNVBAMTEEZsb3JpYW4gRmFpbmVsbGkxLDAqBgkqhkiG
+9w0BCQEWHWZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOC
+AQ8AMIIBCgKCAQEA+oi3jMmHltY4LMUy8Up5+1zjd1iSgUBXhwCJLj1GJQF+GwP8InemBbk5rjlC
+UwbQDeIlOfb8xGqHoQFGSW8p9V1XUw+cthISLkycex0AJ09ufePshLZygRLREU0H4ecNPMejxCte
+KdtB4COST4uhBkUCo9BSy1gkl8DJ8j/BQ1KNUx6oYe0CntRag+EnHv9TM9BeXBBLfmMRnWNhvOSk
+nSmRX0J3d9/G2A3FIC6WY2XnLW7eAZCQPa1Tz3n2B5BGOxwqhwKLGLNu2SRCPHwOdD6e0drURF7/
+Vax85/EqkVnFNlfxtZhS0ugx5gn2pta7bTdBm1IG4TX+A3B1G57rVwIDAQABo4IB3jCCAdowDgYD
+VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
+ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
+CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
+MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
+d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
+hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
+bDAoBgNVHREEITAfgR1mbG9yaWFuLmZhaW5lbGxpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggr
+BgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUUwwfJ6/F
+KL0fRdVROal/Lp4lAF0wDQYJKoZIhvcNAQELBQADggEBAKBgfteDc1mChZjKBY4xAplC6uXGyBrZ
+kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
+2s1RH00JOkO5SkYdwCHj4DB9B7KEnLatJtD8MBorvt+QxTuSh4ze96Jz3kEIoHMvwGFkgObWblsc
+3/YcLBmCgaWpZ3Ksev1vJPr5n8riG3/N4on8gO5qinmmr9Y7vGeuf5dmZrYMbnb+yCBalkUmZQwY
+NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
+AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
+LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
+/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIBMztrrz8Lc1UfxB
+KxopvsS6E4ug6an5njv2tEAtS/gQMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
+AQkFMQ8XDTIzMDYwNzE4MzUxOFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBLRkYlj92zgmVoLgMIkv8TbNAeh/kTm4lG
+tC9tO4WHQYOvUGqfqNLVtwkpK5r28tQfTvJRIKypWEg0oYoSqJLGJSwt6PBKndntrTaA6CblY973
+gkdQ1YOT7gsNIUbQCrssYlGl4cl6yCP/hhq/c90wAWt8yYa2OG6yQAXbk4R1gd/Hu9SX/LG+JIw+
+pIAaBSOhNXU5Ir9PNJlB1XZpx7IKT8wNJqoVPXPTyj6TvePt8EZB2ujlf0SaVZ/Y0vg8dGzop6x0
+9SjaERw2PqHInsgidUF1PkMjTiOvb1p4cdJvs7lEsZ2HZW0j4ASZF2zrrk+1O/WSkG0JGBg9CZIz
+8efM
+--000000000000cda8a605fd8e656c--
