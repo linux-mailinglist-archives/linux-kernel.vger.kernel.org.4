@@ -2,44 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83F40725DCB
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 13:57:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8C78725DD0
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 13:57:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239719AbjFGL5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 07:57:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47654 "EHLO
+        id S240461AbjFGL55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 07:57:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240012AbjFGL53 (ORCPT
+        with ESMTP id S240442AbjFGL5v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 07:57:29 -0400
+        Wed, 7 Jun 2023 07:57:51 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4460F1BD6
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 04:57:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C5651BDF
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 04:57:46 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <lgo@pengutronix.de>)
-        id 1q6rmf-0000CL-Ll; Wed, 07 Jun 2023 13:57:01 +0200
+        id 1q6rmx-0000Fm-6e; Wed, 07 Jun 2023 13:57:19 +0200
 Received: from [2a0a:edc0:0:1101:1d::39] (helo=dude03.red.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <lgo@pengutronix.de>)
-        id 1q6rme-005jFm-0V; Wed, 07 Jun 2023 13:57:00 +0200
+        id 1q6rmu-005jFt-RW; Wed, 07 Jun 2023 13:57:16 +0200
 Received: from lgo by dude03.red.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <lgo@pengutronix.de>)
-        id 1q6rmc-00CT0f-Th; Wed, 07 Jun 2023 13:56:58 +0200
+        id 1q6rmu-00CTIM-4H; Wed, 07 Jun 2023 13:57:16 +0200
 From:   =?UTF-8?q?Leonard=20G=C3=B6hrs?= <l.goehrs@pengutronix.de>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Sungbo Eo <mans0n@gorani.run>
+To:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
 Cc:     kernel@pengutronix.de,
         =?UTF-8?q?Leonard=20G=C3=B6hrs?= <l.goehrs@pengutronix.de>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 3/8] dt-bindings: gpio: pca9570: add gpio-line-names property
-Date:   Wed,  7 Jun 2023 13:55:02 +0200
-Message-Id: <20230607115508.2964574-3-l.goehrs@pengutronix.de>
+        Conor Dooley <conor+dt@kernel.org>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1 4/8] dt-bindings: can: m_can: add termination-{gpios,ohms} properties
+Date:   Wed,  7 Jun 2023 13:55:03 +0200
+Message-Id: <20230607115508.2964574-4-l.goehrs@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230607115508.2964574-1-l.goehrs@pengutronix.de>
 References: <20230607115508.2964574-1-l.goehrs@pengutronix.de>
@@ -59,25 +64,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch allows giving each of the controller's pins a meaningful
-name.
+The termination-gpios property allows specifying a GPIO pin that
+enables/disables a termination resistor on said CAN interface.
+The termination-ohms property specifies the resistance of said resistor.
 
 Signed-off-by: Leonard Göhrs <l.goehrs@pengutronix.de>
 ---
- Documentation/devicetree/bindings/gpio/gpio-pca9570.yaml | 4 ++++
- 1 file changed, 4 insertions(+)
+ Documentation/devicetree/bindings/net/can/bosch,m_can.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/gpio/gpio-pca9570.yaml b/Documentation/devicetree/bindings/gpio/gpio-pca9570.yaml
-index 5b0134304e51c..452f8972a9659 100644
---- a/Documentation/devicetree/bindings/gpio/gpio-pca9570.yaml
-+++ b/Documentation/devicetree/bindings/gpio/gpio-pca9570.yaml
-@@ -24,6 +24,10 @@ properties:
-   '#gpio-cells':
-     const: 2
+diff --git a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
+index 67879aab623b5..106c79fa560c3 100644
+--- a/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
++++ b/Documentation/devicetree/bindings/net/can/bosch,m_can.yaml
+@@ -118,6 +118,9 @@ properties:
+   phys:
+     maxItems: 1
  
-+  gpio-line-names:
-+    minItems: 4
-+    maxItems: 8
++  termination-gpios: true
++  termination-ohms: true
 +
  required:
    - compatible
