@@ -2,370 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEE757266BE
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 19:07:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B45E07266C5
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 19:09:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231426AbjFGRHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 13:07:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45336 "EHLO
+        id S229838AbjFGRI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 13:08:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231384AbjFGRHl (ORCPT
+        with ESMTP id S230418AbjFGRIy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 13:07:41 -0400
-Received: from finn.localdomain (finn.gateworks.com [108.161.129.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4C251BEA;
-        Wed,  7 Jun 2023 10:07:39 -0700 (PDT)
-Received: from 068-189-091-139.biz.spectrum.com ([68.189.91.139] helo=tharvey.pdc.gateworks.com)
-        by finn.localdomain with esmtp (Exim 4.93)
-        (envelope-from <tharvey@gateworks.com>)
-        id 1q6wd5-0069bl-IN; Wed, 07 Jun 2023 17:07:27 +0000
-From:   Tim Harvey <tharvey@gateworks.com>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tim Harvey <tharvey@gateworks.com>
-Subject: [PATCH 2/2] arm64: dts: freescale: Add imx8mp-venice-gw71xx-2x
-Date:   Wed,  7 Jun 2023 10:07:24 -0700
-Message-Id: <20230607170724.2016988-2-tharvey@gateworks.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230607170724.2016988-1-tharvey@gateworks.com>
-References: <20230607170724.2016988-1-tharvey@gateworks.com>
+        Wed, 7 Jun 2023 13:08:54 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A7E11BF1;
+        Wed,  7 Jun 2023 10:08:51 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 94B245C0114;
+        Wed,  7 Jun 2023 13:08:50 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Wed, 07 Jun 2023 13:08:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        invisiblethingslab.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1686157730; x=1686244130; bh=OKyh78clxdjUBYWd2RtYdS/EeUQhHG5NkHJ
+        Jd2T0ITE=; b=RPkXP4UqXwqtzc4+CXRx9FxVrOrEZzqZmfOzTAiQ+taGvOmATQN
+        rj+aO8Xk1QGMQ7j3XoSZBCw8CSp/tvb7LF28DRnVJBtTuypN1Sw+C2fXhVag3Jhk
+        /AgsNFzQA7EvlpgH2RFC+DVczoLAm2C3a6edP6BQ00Yu3VbAR/4BG3p3X9CgdWI9
+        EhijfUujWe3M0JLYcencH4B6liJgxTIdeFFrA79rnv/zeuasZjrPUyjbS6VbYWQj
+        r1TDdpikdqjz8X2NrCVBtBWWAwipFetp6T+fRXXIUxhbk/SDMCfmvXACFZC9farX
+        FIqC9OJaDO/uuV0UJnuZ+6ihPz2hkoAB1yg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1686157730; x=1686244130; bh=OKyh78clxdjUB
+        YWd2RtYdS/EeUQhHG5NkHJJd2T0ITE=; b=cdQ6mHvF+jJeoSE1SIIJc0G+qRe32
+        sxQMAprznL3aEwzR58XPYUuhV5XU7rSXl4+/NQfl8jpoJtyHTOEFK6zbIwz1M47p
+        8VOuXCUpORa5Vg5p/t18yU9QY3b/s3TTbak01SZB4RYbgBmDdWbfvhHET2Ibqykh
+        gdiol4bOmq/aP4S5ECQWAHomQA9wFda6uexs5UeyrjTL9mXC+4g4tM8Hr5VLopnv
+        rB7v4ikQgiNURCk6I7mvGxYxFtYcVQBQTqk2oWUuArq7OLTaR65I7nrpJIwxOjf8
+        HBX1c91L2DW3I+i7xByD0GI5cjiYqHMvCRwB6AWOiznDllN7A1uCwxrHg==
+X-ME-Sender: <xms:obmAZPRtFAlz8_WGzi3fOAUhg0_V4VKXtv-5rFSc-7F0iow9ICtk4w>
+    <xme:obmAZAwlYnVRgGojcw5gy3wPXjEObii0isJMyOu1ZnEPSFtD2kilBlUcL1_g0iM-P
+    xYbDrDlbYCGHrg>
+X-ME-Received: <xmr:obmAZE3mgq4zImQGj0w7FdEaKzfeiRmaZFzl9W8z3UK15QqQjLFlnp3JNxHa_NXJ15G0Zz6VMqc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedtgedguddutdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpeffvghmihcu
+    ofgrrhhivgcuqfgsvghnohhurhcuoeguvghmihesihhnvhhishhisghlvghthhhinhhgsh
+    hlrggsrdgtohhmqeenucggtffrrghtthgvrhhnpedvfeegkedvkefgffegkefhieejtdff
+    keehhfelheefjeeutefgleeggfdtveeileenucevlhhushhtvghrufhiiigvpedtnecurf
+    grrhgrmhepmhgrihhlfhhrohhmpeguvghmihesihhnvhhishhisghlvghthhhinhhgshhl
+    rggsrdgtohhm
+X-ME-Proxy: <xmx:ormAZPCohEKhhsuy2IFxVUXjQE3jI2EykAWgmlTPBgiUHjAFaUDmNA>
+    <xmx:ormAZIhSx5s4oUcYwnGdRAPUCHvTGc-z11VU7IB5PfM4EnTLXs69Uw>
+    <xmx:ormAZDrwSu6oZ28lrMWuMqR6WY79roL2h5s-9jwVw7kz8Mbcb8gGZg>
+    <xmx:ormAZBtj5-aHoXYFn2X5DltgszFvVNJVfhOAmYreCtZnjr-5POUpuQ>
+Feedback-ID: iac594737:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 7 Jun 2023 13:08:49 -0400 (EDT)
+From:   Demi Marie Obenour <demi@invisiblethingslab.com>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Demi Marie Obenour <demi@invisiblethingslab.com>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Christoph Hellwig <hch@infradead.org>, stable@vger.kernel.org
+Subject: [PATCH] block: increment diskseq on all media change events
+Date:   Wed,  7 Jun 2023 13:08:37 -0400
+Message-Id: <20230607170837.1559-1-demi@invisiblethingslab.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Gateworks imx8mp-venice-gw71xx-2x consists of a SOM + baseboard.
+Currently, associating a loop device with a different file descriptor
+does not increment its diskseq.  This allows the following race
+condition:
 
-The GW702x SOM contains the following:
- - i.MX8M Plus SoC
- - LPDDR4 memory
- - eMMC Boot device
- - Gateworks System Controller (GSC) with integrated EEPROM, button
-   controller, and ADC's
- - PMIC
- - SOM connector providing:
-  - eQoS GbE MII
-  - 1x SPI
-  - 2x I2C
-  - 4x UART
-  - 2x USB 3.0
-  - 1x PCI
-  - 1x SDIO (4-bit 3.3V)
-  - 1x SDIO (4-bit 3.3V/1.8V)
-  - GPIO
+1. Program X opens a loop device
+2. Program X gets the diskseq of the loop device.
+3. Program X associates a file with the loop device.
+4. Program X passes the loop device major, minor, and diskseq to
+   something.
+5. Program X exits.
+6. Program Y detaches the file from the loop device.
+7. Program Y attaches a different file to the loop device.
+8. The opener finally gets around to opening the loop device and checks
+   that the diskseq is what it expects it to be.  Even though the
+   diskseq is the expected value, the result is that the opener is
+   accessing the wrong file.
 
-The GW71xx Baseboard contains the following:
- - GPS
- - RJ45 GbE (eQoS)
- - off-board I/O connector with UART, I2C, SPI, GPIO
- - EERPOM
- - PCIe clock generator
- - full-length miniPCIe socket with PCI/USB3 (via mux) and USB2.0
- - USB Type-C with USB 2.0 host and peripheral support
- - Wide range DC input supply
+From discussions with Christoph Hellwig, it appears that
+disk_force_media_change() was supposed to call inc_diskseq(), but in
+fact it does not.  Adding a Fixes: tag to indicate this.  Christoph's
+Reported-by is because he stated that disk_force_media_change()
+calls inc_diskseq(), which is what led me to discover that it should but
+does not.
 
-Signed-off-by: Tim Harvey <tharvey@gateworks.com>
+Reported-by: Christoph Hellwig <hch@infradead.org>
+Signed-off-by: Demi Marie Obenour <demi@invisiblethingslab.com>
+Fixes: e6138dc12de9 ("block: add a helper to raise a media changed event")
+Cc: stable@vger.kernel.org # 5.15+
 ---
- arch/arm64/boot/dts/freescale/Makefile        |   1 +
- .../dts/freescale/imx8mp-venice-gw71xx-2x.dts |  19 ++
- .../dts/freescale/imx8mp-venice-gw71xx.dtsi   | 236 ++++++++++++++++++
- 3 files changed, 256 insertions(+)
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-venice-gw71xx-2x.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-venice-gw71xx.dtsi
+ block/disk-events.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
-index 62f22b77b38b..b3bb823d0168 100644
---- a/arch/arm64/boot/dts/freescale/Makefile
-+++ b/arch/arm64/boot/dts/freescale/Makefile
-@@ -101,6 +101,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mp-icore-mx8mp-edimm2.2.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mp-msc-sm2s-ep1.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mp-phyboard-pollux-rdk.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mp-tqma8mpql-mba8mpxl.dtb
-+dtb-$(CONFIG_ARCH_MXC) += imx8mp-venice-gw71xx-2x.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mp-venice-gw74xx.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mp-venice-gw7905-2x.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mp-verdin-nonwifi-dahlia.dtb
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp-venice-gw71xx-2x.dts b/arch/arm64/boot/dts/freescale/imx8mp-venice-gw71xx-2x.dts
-new file mode 100644
-index 000000000000..53120fc9cd7f
---- /dev/null
-+++ b/arch/arm64/boot/dts/freescale/imx8mp-venice-gw71xx-2x.dts
-@@ -0,0 +1,19 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright 2023 Gateworks Corporation
-+ */
-+
-+/dts-v1/;
-+
-+#include "imx8mp.dtsi"
-+#include "imx8mp-venice-gw702x.dtsi"
-+#include "imx8mp-venice-gw71xx.dtsi"
-+
-+/ {
-+	model = "Gateworks Venice GW71xx-2x i.MX8MP Development Kit";
-+	compatible = "gateworks,imx8mp-gw71xx-2x", "fsl,imx8mp";
-+
-+	chosen {
-+		stdout-path = &uart2;
-+	};
-+};
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp-venice-gw71xx.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-venice-gw71xx.dtsi
-new file mode 100644
-index 000000000000..86999f52d4b2
---- /dev/null
-+++ b/arch/arm64/boot/dts/freescale/imx8mp-venice-gw71xx.dtsi
-@@ -0,0 +1,236 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright 2023 Gateworks Corporation
-+ */
-+
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/leds/common.h>
-+#include <dt-bindings/phy/phy-imx8-pcie.h>
-+
-+/ {
-+	led-controller {
-+		compatible = "gpio-leds";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_gpio_leds>;
-+
-+		led-0 {
-+			function = LED_FUNCTION_STATUS;
-+			color = <LED_COLOR_ID_GREEN>;
-+			gpios = <&gpio4 1 GPIO_ACTIVE_HIGH>;
-+			default-state = "on";
-+			linux,default-trigger = "heartbeat";
-+		};
-+
-+		led-1 {
-+			function = LED_FUNCTION_STATUS;
-+			color = <LED_COLOR_ID_RED>;
-+			gpios = <&gpio4 5 GPIO_ACTIVE_HIGH>;
-+			default-state = "off";
-+		};
-+	};
-+
-+	pcie0_refclk: pcie0-refclk {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <100000000>;
-+	};
-+
-+	pps {
-+		compatible = "pps-gpio";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_pps>;
-+		gpios = <&gpio4 3 GPIO_ACTIVE_HIGH>;
-+		status = "okay";
-+	};
-+};
-+
-+/* off-board header */
-+&ecspi2 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_spi2>;
-+	cs-gpios = <&gpio5 13 GPIO_ACTIVE_LOW>;
-+	status = "okay";
-+};
-+
-+&gpio4 {
-+	gpio-line-names =
-+		"", "", "", "",
-+		"", "", "", "",
-+		"dio1", "", "", "dio0",
-+		"", "", "pci_usb_sel", "",
-+		"", "", "", "",
-+		"", "", "", "",
-+		"dio3", "", "dio2", "",
-+		"pci_wdis#", "", "", "";
-+};
-+
-+&i2c2 {
-+	clock-frequency = <400000>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_i2c2>;
-+	status = "okay";
-+
-+	accelerometer@19 {
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_accel>;
-+		compatible = "st,lis2de12";
-+		reg = <0x19>;
-+		st,drdy-int-pin = <1>;
-+		interrupt-parent = <&gpio4>;
-+		interrupts = <21 IRQ_TYPE_LEVEL_LOW>;
-+		interrupt-names = "INT1";
-+	};
-+};
-+
-+&pcie_phy {
-+	fsl,refclk-pad-mode = <IMX8_PCIE_REFCLK_PAD_INPUT>;
-+	fsl,clkreq-unsupported;
-+	clocks = <&pcie0_refclk>;
-+	clock-names = "ref";
-+	status = "okay";
-+};
-+
-+&pcie {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_pcie0>;
-+	reset-gpio = <&gpio4 29 GPIO_ACTIVE_LOW>;
-+	status = "okay";
-+};
-+
-+/* GPS */
-+&uart1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_uart1>;
-+	status = "okay";
-+};
-+
-+/* off-board header */
-+&uart3 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_uart3>;
-+	status = "okay";
-+};
-+
-+/* USB1 Type-C front panel */
-+&usb3_0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_usb1>;
-+	fsl,over-current-active-low;
-+	status = "okay";
-+};
-+
-+&usb3_phy0 {
-+	status = "okay";
-+};
-+
-+&usb_dwc3_0 {
-+	/* dual role is implemented but not a full featured OTG */
-+	adp-disable;
-+	hnp-disable;
-+	srp-disable;
-+	dr_mode = "otg";
-+	usb-role-switch;
-+	role-switch-default-mode = "peripheral";
-+	status = "okay";
-+
-+	connector {
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_usbcon1>;
-+		compatible = "gpio-usb-b-connector", "usb-b-connector";
-+		type = "micro";
-+		label = "Type-C";
-+		id-gpios = <&gpio3 21 GPIO_ACTIVE_HIGH>;
-+	};
-+};
-+
-+/* USB2 - MiniPCIe socket */
-+&usb3_1 {
-+	fsl,permanently-attached;
-+	fsl,disable-port-power-control;
-+	status = "okay";
-+};
-+
-+&usb3_phy1 {
-+	status = "okay";
-+};
-+
-+&usb_dwc3_1 {
-+	dr_mode = "host";
-+	status = "okay";
-+};
-+
-+&iomuxc {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_hog>;
-+
-+	pinctrl_hog: hoggrp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_SAI1_RXD6__GPIO4_IO08	0x40000146 /* DIO1 */
-+			MX8MP_IOMUXC_SAI1_TXC__GPIO4_IO11	0x40000146 /* DIO0 */
-+			MX8MP_IOMUXC_SAI1_TXD2__GPIO4_IO14	0x40000106 /* PCIE_USBSEL */
-+			MX8MP_IOMUXC_SAI2_TXD0__GPIO4_IO26	0x40000146 /* DIO2 */
-+			MX8MP_IOMUXC_SAI2_TXFS__GPIO4_IO24	0x40000146 /* DIO3 */
-+			MX8MP_IOMUXC_SAI3_RXFS__GPIO4_IO28	0x40000106 /* PCIE_WDIS# */
-+		>;
-+	};
-+
-+	pinctrl_accel: accelgrp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_SAI2_RXFS__GPIO4_IO21	0x150	/* IRQ */
-+		>;
-+	};
-+
-+	pinctrl_gpio_leds: gpioledgrp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_SAI1_RXC__GPIO4_IO01	0x6	/* LEDG */
-+			MX8MP_IOMUXC_SAI1_RXD3__GPIO4_IO05	0x6	/* LEDR */
-+		>;
-+	};
-+
-+	pinctrl_pcie0: pcie0grp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_SAI3_RXC__GPIO4_IO29	0x106
-+		>;
-+	};
-+
-+	pinctrl_pps: ppsgrp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_SAI1_RXD1__GPIO4_IO03	0x146
-+		>;
-+	};
-+
-+	pinctrl_usb1: usb1grp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_GPIO1_IO13__USB1_OTG_OC	0x140 /* USB1_FLT# */
-+		>;
-+	};
-+
-+	pinctrl_usbcon1: usbcon1grp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_SAI5_RXD0__GPIO3_IO21	0x140 /* USB1_ID */
-+		>;
-+	};
-+
-+	pinctrl_spi2: spi2grp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_ECSPI2_SCLK__ECSPI2_SCLK	0x140
-+			MX8MP_IOMUXC_ECSPI2_MOSI__ECSPI2_MOSI	0x140
-+			MX8MP_IOMUXC_ECSPI2_MISO__ECSPI2_MISO	0x140
-+			MX8MP_IOMUXC_ECSPI2_SS0__GPIO5_IO13	0x140
-+		>;
-+	};
-+
-+	pinctrl_uart1: uart1grp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_UART1_RXD__UART1_DCE_RX	0x140
-+			MX8MP_IOMUXC_UART1_TXD__UART1_DCE_TX	0x140
-+		>;
-+	};
-+
-+	pinctrl_uart3: uart3grp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_UART3_RXD__UART3_DCE_RX	0x140
-+			MX8MP_IOMUXC_UART3_TXD__UART3_DCE_TX	0x140
-+		>;
-+	};
-+};
+diff --git a/block/disk-events.c b/block/disk-events.c
+index aee25a7e1ab7de8cc82b3c3774e83489d3a86ff9..450c2cbe23d56cc0fa8fa40db9866cdae0e7a626 100644
+--- a/block/disk-events.c
++++ b/block/disk-events.c
+@@ -307,6 +307,7 @@ bool disk_force_media_change(struct gendisk *disk, unsigned int events)
+ 	if (!(events & DISK_EVENT_MEDIA_CHANGE))
+ 		return false;
+ 
++	inc_diskseq(disk);
+ 	if (__invalidate_device(disk->part0, true))
+ 		pr_warn("VFS: busy inodes on changed media %s\n",
+ 			disk->disk_name);
 -- 
-2.25.1
-
+Sincerely,
+Demi Marie Obenour (she/her/hers)
+Invisible Things Lab
