@@ -2,161 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE21E7253F7
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 08:16:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4E90725401
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 08:21:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234472AbjFGGQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 02:16:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48670 "EHLO
+        id S234840AbjFGGVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 02:21:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234075AbjFGGQo (ORCPT
+        with ESMTP id S233537AbjFGGVp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 02:16:44 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 34B68AA;
-        Tue,  6 Jun 2023 23:16:41 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.43:37502.551464108
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
-        by 189.cn (HERMES) with SMTP id 0EAFE1002C5;
-        Wed,  7 Jun 2023 14:16:34 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-75648544bd-7vx9t with ESMTP id 63d46740575b4bae9c59180969e45e00 for helgaas@kernel.org;
-        Wed, 07 Jun 2023 14:16:39 CST
-X-Transaction-ID: 63d46740575b4bae9c59180969e45e00
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <a540daba-d61f-1de0-a3dd-eab733a25706@189.cn>
-Date:   Wed, 7 Jun 2023 14:16:31 +0800
+        Wed, 7 Jun 2023 02:21:45 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13467AA;
+        Tue,  6 Jun 2023 23:21:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=as7HoSo6fK1iB1ZeJ1fvStsjFygkeg1TGSwX3BDPsnY=; b=Jqx2/aBqpN8trsbbYkEWEM4Ma/
+        WXV779ZszyTPK+MRTmdnoCAtfOz3l/xhv1y0BStvycm8gcZz0+ObE0FRGZDwLcnBfqct3Yo8c+a1K
+        fcfV1LHyRnv3GPgOhdtzblIdBIkUOnGCwaqYig9kW2qTbPwSCo1DeL8UO0/ZffqZ1urxxLUSuqv4/
+        jc5735mzM8o82g/coA2CyyPkua9vo6y17AGco2nSORcVpFqt/kxUXRvdtqHvexqCKRObDEJrn6KRH
+        Lbkfv+R7kVu47U70YffNXgBw9AOH5+rlM7CHJUrY5SxSM4+ooIsEIP/RK8r+7hgGsylfjp79OEjwG
+        qWWAg3hw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1q6mY8-004Xuy-1f;
+        Wed, 07 Jun 2023 06:21:40 +0000
+Date:   Tue, 6 Jun 2023 23:21:40 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Wu Bo <bo.wu@vivo.com>
+Cc:     Jan Kara <jack@suse.cz>, Amir Goldstein <amir73il@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        wubo.oduw@gmail.com
+Subject: Re: [PATCH 1/1] fsnotify: export 'fsnotify_recalc_mask' symbol
+Message-ID: <ZIAh9BFbUy3Soz4W@infradead.org>
+References: <20230607024700.11060-1-bo.wu@vivo.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [Intel-gfx] [PATCH v2 1/2] vgaarb: various coding style and
- comments fix
-Content-Language: en-US
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        Christian Konig <christian.koenig@amd.com>,
-        Pan Xinhui <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Hawking Zhang <Hawking.Zhang@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Lijo Lazar <lijo.lazar@amd.com>,
-        YiPeng Chai <YiPeng.Chai@amd.com>,
-        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        Somalapuram Amaranath <Amaranath.Somalapuram@amd.com>,
-        Bokun Zhang <Bokun.Zhang@amd.com>,
-        Ville Syrjala <ville.syrjala@linux.intel.com>,
-        Li Yi <liyi@loongson.cn>,
-        Sui Jingfeng <suijingfeng@loongson.cn>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        Abhishek Sahu <abhsahu@nvidia.com>,
-        Yi Liu <yi.l.liu@intel.com>, kvm@vger.kernel.org,
-        nouveau@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        loongson-kernel@lists.loongnix.cn, amd-gfx@lists.freedesktop.org,
-        linux-pci@vger.kernel.org
-References: <20230606194921.GA1139774@bhelgaas>
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <20230606194921.GA1139774@bhelgaas>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230607024700.11060-1-bo.wu@vivo.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Jun 07, 2023 at 10:47:00AM +0800, Wu Bo wrote:
+> To enable modules to update existing mark, export 'fsnotify_recalc_mask'
+> symbol.
 
-On 2023/6/7 03:49, Bjorn Helgaas wrote:
-> Match the subject line style:
->
->    $ git log --oneline drivers/pci/vgaarb.c
->    f321c35feaee PCI/VGA: Replace full MIT license text with SPDX identifier
->    d5109fe4d1ec PCI/VGA: Use unsigned format string to print lock counts
->    4e6c91847a7f PCI/VGA: Log bridge control messages when adding devices
->    dc593fd48abb PCI/VGA: Remove empty vga_arb_device_card_gone()
->    ...
->
-> Subject line should be a summary of the commit log, not just "various
-> style fixes".  This one needs to say something about
-> vga_str_to_iostate().
-
-Ok, thanks for the educating .
-
-> On Mon, Jun 05, 2023 at 04:58:30AM +0800, Sui Jingfeng wrote:
->> From: Sui Jingfeng <suijingfeng@loongson.cn>
->>
->> To keep consistent with vga_iostate_to_str() function, the third argument
->> of vga_str_to_iostate() function should be 'unsigned int *'.
->>
->> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
->> ---
->>   drivers/pci/vgaarb.c   | 29 +++++++++++++++--------------
->>   include/linux/vgaarb.h |  8 +++-----
->>   2 files changed, 18 insertions(+), 19 deletions(-)
->>
->> diff --git a/drivers/pci/vgaarb.c b/drivers/pci/vgaarb.c
->> index 5a696078b382..e40e6e5e5f03 100644
->> --- a/drivers/pci/vgaarb.c
->> +++ b/drivers/pci/vgaarb.c
->> @@ -61,7 +61,6 @@ static bool vga_arbiter_used;
->>   static DEFINE_SPINLOCK(vga_lock);
->>   static DECLARE_WAIT_QUEUE_HEAD(vga_wait_queue);
->>   
->> -
->>   static const char *vga_iostate_to_str(unsigned int iostate)
->>   {
->>   	/* Ignore VGA_RSRC_IO and VGA_RSRC_MEM */
->> @@ -77,10 +76,12 @@ static const char *vga_iostate_to_str(unsigned int iostate)
->>   	return "none";
->>   }
->>   
->> -static int vga_str_to_iostate(char *buf, int str_size, int *io_state)
->> +static int vga_str_to_iostate(char *buf, int str_size, unsigned int *io_state)
->>   {
->> -	/* we could in theory hand out locks on IO and mem
->> -	 * separately to userspace but it can cause deadlocks */
->> +	/*
->> +	 * we could in theory hand out locks on IO and mem
->> +	 * separately to userspace but it can cause deadlocks
->> +	 */
-> Omit all the comment formatting changes.  They are distractions from the
-> vga_str_to_iostate() parameter change.
->
-> I think this patch should be the single line change to the
-> vga_str_to_iostate() prototype so it matches the callers.
->
-> If you want to do the other comment formatting changes, they're fine,
-> but they should be all together in a separate patch that clearly
-> doesn't change the generated code.
-
-Ok, no problem.
-
-Will be improved at next version.
-
-> Bjorn
+Why, and which module?  And why isn't the code to use it included?
