@@ -2,154 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BF57726992
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 21:17:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B021C726997
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 21:17:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232634AbjFGTRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 15:17:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42384 "EHLO
+        id S233137AbjFGTRu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 15:17:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbjFGTQ7 (ORCPT
+        with ESMTP id S233096AbjFGTRt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 15:16:59 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5196C19D;
-        Wed,  7 Jun 2023 12:16:58 -0700 (PDT)
-Received: from W11-BEAU-MD.localdomain (unknown [76.135.27.212])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 73C4520C1440;
-        Wed,  7 Jun 2023 12:16:57 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 73C4520C1440
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1686165417;
-        bh=pYYzhbmZt7Sf9oZRbG0KFxG6URBGYIxxrSNs2hGYJ2w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Otze/uJzHUvL8i48n/kF0mN8sq3q2ZphOdehU36zn7kHx0P8VHNbMjp0GAhkMwOuJ
-         3Yb7syLKS28tSprq5Rzemogz60k0UCU94KONTb/szKuQmAYivGyBbw0GLb9swPMvB8
-         UDzfLfL0O1xxclFqA+XlF0OorjbCAfypF18vRtc8=
-Date:   Wed, 7 Jun 2023 12:16:52 -0700
-From:   Beau Belgrave <beaub@linux.microsoft.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-trace-kernel@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>, dcook@linux.microsoft.com
-Subject: Re: [PATCH v2 3/5] tracing/user_events: Add auto cleanup and a flag
- to persist events
-Message-ID: <20230607191652.GA85@W11-BEAU-MD.localdomain>
-References: <20230605233900.2838-1-beaub@linux.microsoft.com>
- <20230605233900.2838-4-beaub@linux.microsoft.com>
- <CAADnVQL3bJaXW6mzTrTFTbAyCaBfiHYet+gNorF1N69a0X5TXQ@mail.gmail.com>
+        Wed, 7 Jun 2023 15:17:49 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B7071B0
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 12:17:48 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-977cc662f62so685285066b.3
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 12:17:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686165466; x=1688757466;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QlNPfUGJaJXwGH3zT3CXSvGGYrKjJY2HsEiv2gCp6wE=;
+        b=M6gHFChilLuhyziiQ5zZWWjemKbhPpQCL3D4MW9xDElImH0+UaLSYJ+yMom5eNJsWq
+         eUpnOweSHmdRU4DSs2Pdfz+WYjHsm+j9GNfNsYShBDbN2R3mHJMPaFGAIhOG/jAQ6XI7
+         qWl01TwAzWqbeD9NaVkTAeLLwarteMaWyFR67Btu4kFjIU/fw/+vIyXodS/NoZkJ9c8m
+         dQwUUZ4yVT415ffGPtQozlyXXPJUHQdXuVrM/wlUWNAiN5Kayc1ULd+TRDY5dLUUkgNS
+         8ksmVl1aYBbWynEQ0bnsh6dWyvOKTaaX4gkBOpiDtNnYgV1WRcMdj4LsWZ5ecRUzIm3p
+         Fa/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686165466; x=1688757466;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QlNPfUGJaJXwGH3zT3CXSvGGYrKjJY2HsEiv2gCp6wE=;
+        b=ZVe877EfzbX4ZrnPlN11QNdaAWVHNAFq5kCltOm30HicsR0ndKLCyA4BOyaZpjViFS
+         8nW0iP+cBEBVMwplvyQUkjjdtH7Ab4cgRkIOGWN/JhowvRPuLUNiz3j1CASFcc7yAFUs
+         L6UElpzd2ShzOSFp57o/HfRyUqdxlbi63muMbNSVqv2Q3MIuBlFPVRIs4X+nuP9lMeHh
+         ROigJd8pYmOAL2QmsP59lwPtPPlMceJmSHphyDnD/0JefcsRvJYkCn9hqzAJG2oQVCLT
+         nvAmadzg4Eb9mwEzQ4VPr47PTUsJGnPslj4lw37/HEcXMODk0zKuvOC84ekJKRIb0Dld
+         lJZg==
+X-Gm-Message-State: AC+VfDzK278EHCLnSHSvHh34uxPAyc9Ef2XQ/0ml2wfAHVzslcyK9m7z
+        2DjTUFuf3NjqZ4ppfFyaJWVLnAEKk/E+z5YRr5i24w==
+X-Google-Smtp-Source: ACHHUZ5p7ispZs6AsV3pu9jxIahSyqwTK4y6N4ljjf17XsO/YDywPzs48rV28fo/aDq0GbaLX8dqMCO19fyY0yAGLtI=
+X-Received: by 2002:a17:907:8a04:b0:973:daa0:315 with SMTP id
+ sc4-20020a1709078a0400b00973daa00315mr7493679ejc.1.1686165466307; Wed, 07 Jun
+ 2023 12:17:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQL3bJaXW6mzTrTFTbAyCaBfiHYet+gNorF1N69a0X5TXQ@mail.gmail.com>
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+References: <20230530162153.836565-1-nphamcs@gmail.com> <CAJD7tkZJttvpYs4mgjL3pt8-jkX0fnWRJP7hVBZmm=i_Ef3Abg@mail.gmail.com>
+ <CAKEwX=OK5qK9DTYLKZUefE0eq8KooygT-nbkgUZaYjK72SKzFQ@mail.gmail.com>
+ <CAJD7tkZUc=h+h4f1a+nas8KruFBaGMuaq67jZLk+LkdbwZVqKQ@mail.gmail.com> <20230607120939.c1256fac4bb4e081811c02da@linux-foundation.org>
+In-Reply-To: <20230607120939.c1256fac4bb4e081811c02da@linux-foundation.org>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Wed, 7 Jun 2023 12:17:09 -0700
+Message-ID: <CAJD7tkbsy7X08zp8FF-XYn2krd6hDgWVz7t2ZoFr+RAm_Zcn4w@mail.gmail.com>
+Subject: Re: [PATCH] zswap: do not shrink when memory.zswap.max is 0
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Nhat Pham <nphamcs@gmail.com>, hannes@cmpxchg.org,
+        cerasuolodomenico@gmail.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, sjenning@redhat.com,
+        ddstreet@ieee.org, vitaly.wool@konsulko.com, kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 06:26:56PM -0700, Alexei Starovoitov wrote:
-> On Mon, Jun 5, 2023 at 4:39 PM Beau Belgrave <beaub@linux.microsoft.com> wrote:
-> > +       /*
-> > +        * When the event is not enabled for auto-delete there will always
-> > +        * be at least 1 reference to the event. During the event creation
-> > +        * we initially set the refcnt to 2 to achieve this. In those cases
-> > +        * the caller must acquire event_mutex and after decrement check if
-> > +        * the refcnt is 1, meaning this is the last reference. When auto
-> > +        * delete is enabled, there will only be 1 ref, IE: refcnt will be
-> > +        * only set to 1 during creation to allow the below checks to go
-> > +        * through upon the last put. The last put must always be done with
-> > +        * the event mutex held.
-> > +        */
-> > +       if (!locked) {
-> > +               lockdep_assert_not_held(&event_mutex);
-> > +               delete = refcount_dec_and_mutex_lock(&user->refcnt, &event_mutex);
-> > +       } else {
-> > +               lockdep_assert_held(&event_mutex);
-> > +               delete = refcount_dec_and_test(&user->refcnt);
-> > +       }
-> > +
-> > +       if (!delete)
-> > +               return;
-> > +
-> > +       /* We now have the event_mutex in all cases */
-> > +
-> > +       if (user->reg_flags & USER_EVENT_REG_PERSIST) {
-> > +               /* We should not get here when persist flag is set */
-> > +               pr_alert("BUG: Auto-delete engaged on persistent event\n");
-> > +               goto out;
-> > +       }
-> > +
-> > +       /*
-> > +        * Unfortunately we have to attempt the actual destroy in a work
-> > +        * queue. This is because not all cases handle a trace_event_call
-> > +        * being removed within the class->reg() operation for unregister.
-> > +        */
-> > +       INIT_WORK(&user->put_work, delayed_destroy_user_event);
-> > +
-> > +       /*
-> > +        * Since the event is still in the hashtable, we have to re-inc
-> > +        * the ref count to 1. This count will be decremented and checked
-> > +        * in the work queue to ensure it's still the last ref. This is
-> > +        * needed because a user-process could register the same event in
-> > +        * between the time of event_mutex release and the work queue
-> > +        * running the delayed destroy. If we removed the item now from
-> > +        * the hashtable, this would result in a timing window where a
-> > +        * user process would fail a register because the trace_event_call
-> > +        * register would fail in the tracing layers.
-> > +        */
-> > +       refcount_set(&user->refcnt, 1);
-> 
-> The recnt-ing scheme is quite unorthodox.
+On Wed, Jun 7, 2023 at 12:09=E2=80=AFPM Andrew Morton <akpm@linux-foundatio=
+n.org> wrote:
+>
+> It's unclear (to me) whether we should proceed with this.  Thoughts, plea=
+se?
 
-Yes, it's unfortunately because we have to keep the event in the hashtable.
+This version looks good to me. I added my Reviewed-by on some version,
+but I guess it got lost with all the versions and fixlets :)
 
-Typically we'd just remove the event from the hashtable, ref_dec and
-then upon final ref_dec free it. The problem with that is the event in
-the hashtable is an actual trace_event exposed via tracefs/perf. It
-prevents us from removing it at this time as the comment tries to
-explain.
+>
+> Here's what I presently have in mm-hotfixes-unstable:
+>
+>
+> From: Nhat Pham <nphamcs@gmail.com>
+> Subject: zswap: do not shrink if cgroup may not zswap
+> Date: Tue, 30 May 2023 15:24:40 -0700
+>
+> Before storing a page, zswap first checks if the number of stored pages
+> exceeds the limit specified by memory.zswap.max, for each cgroup in the
+> hierarchy.  If this limit is reached or exceeded, then zswap shrinking is
+> triggered and short-circuits the store attempt.
+>
+> However, since the zswap's LRU is not memcg-aware, this can create the
+> following pathological behavior: the cgroup whose zswap limit is 0 will
+> evict pages from other cgroups continually, without lowering its own zswa=
+p
+> usage.  This means the shrinking will continue until the need for swap
+> ceases or the pool becomes empty.
+>
+> As a result of this, we observe a disproportionate amount of zswap
+> writeback and a perpetually small zswap pool in our experiments, even
+> though the pool limit is never hit.
+>
+> More generally, a cgroup might unnecessarily evict pages from other
+> cgroups before we drive the memcg back below its limit.
+>
+> This patch fixes the issue by rejecting zswap store attempt without
+> shrinking the pool when obj_cgroup_may_zswap() returns false.
+>
+> [akpm@linux-foundation.org: fix return of unintialized value]
+> [akpm@linux-foundation.org: s/ENOSPC/ENOMEM/]
+> Link: https://lkml.kernel.org/r/20230530222440.2777700-1-nphamcs@gmail.co=
+m
+> Link: https://lkml.kernel.org/r/20230530232435.3097106-1-nphamcs@gmail.co=
+m
+> Fixes: f4840ccfca25 ("zswap: memcg accounting")
+> Signed-off-by: Nhat Pham <nphamcs@gmail.com>
 
-> Atomically decrementing it to zero and then immediately set it back to 1?
-> Smells racy.
+Reviewed-by: Yosry Ahmed <yosryahmed@google.com>
 
-Thanks for pointing this out, I likely need another comment in the code
-explaining why this is ok.
-
-It might smell that way :) But the only way once it's zero to get
-another reference is by acquiring event_mutex and then calling
-find_user_event(). This is why it's important that at this phase we hold
-the event_mutex in all cases.
-
-> Another process can go through the same code and do another dec and set to 1
-> and we'll have two work queued?
-
-Once we set it to 1, we cannot get into this code path again until the
-work that was queued is finished. The scheduled work acquires
-event_mutex and ensures it's still the last reference before doing any
-actual deletion or a refcount_dec that would allow for another work
-queue via this path.
-
-> Will mutex_lock help somehow? If yes, then why atomic refcnt?
-
-I hopefully fully explained the mutex_lock above, if it's confusing
-still let me know. The rason for the atomic refcnt though is because you
-initially get a reference to a user_event via find_user_event() under
-the lock, but then each FD (and each enabler) has a reference to the
-underlying user_event (and thus the trace_event). Fork() and enablement
-registers are done outside of this lock for performance reasons. When
-the task exits, we also close down the enablers for that mm/task, and so
-the lock is not there either (and why having the less used
-refcount_dec_and_mutex_lock being required on put when it's not
-acquired).
-
-Thanks,
--Beau
+> Cc: Dan Streetman <ddstreet@ieee.org>
+> Cc: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+> Cc: Johannes Weiner <hannes@cmpxchg.org>
+> Cc: Seth Jennings <sjenning@redhat.com>
+> Cc: Vitaly Wool <vitaly.wool@konsulko.com>
+> Cc: Yosry Ahmed <yosryahmed@google.com>
+> Cc: <stable@vger.kernel.org>
+> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+> ---
+>
+>  mm/zswap.c |   11 +++++++++--
+>  1 file changed, 9 insertions(+), 2 deletions(-)
+>
+> --- a/mm/zswap.c~zswap-do-not-shrink-if-cgroup-may-not-zswap
+> +++ a/mm/zswap.c
+> @@ -1174,9 +1174,16 @@ static int zswap_frontswap_store(unsigne
+>                 goto reject;
+>         }
+>
+> +       /*
+> +        * XXX: zswap reclaim does not work with cgroups yet. Without a
+> +        * cgroup-aware entry LRU, we will push out entries system-wide b=
+ased on
+> +        * local cgroup limits.
+> +        */
+>         objcg =3D get_obj_cgroup_from_page(page);
+> -       if (objcg && !obj_cgroup_may_zswap(objcg))
+> -               goto shrink;
+> +       if (objcg && !obj_cgroup_may_zswap(objcg)) {
+> +               ret =3D -ENOMEM;
+> +               goto reject;
+> +       }
+>
+>         /* reclaim space if needed */
+>         if (zswap_is_full()) {
+> _
+>
