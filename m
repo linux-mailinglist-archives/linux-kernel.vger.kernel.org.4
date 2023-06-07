@@ -2,71 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E21A3725420
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 08:26:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26539725424
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 08:28:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235186AbjFGG0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 02:26:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50558 "EHLO
+        id S234137AbjFGG2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 02:28:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235007AbjFGG0b (ORCPT
+        with ESMTP id S231634AbjFGG2v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 02:26:31 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCDAB1721;
-        Tue,  6 Jun 2023 23:26:28 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 3576PThD4024925, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 3576PThD4024925
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Wed, 7 Jun 2023 14:25:29 +0800
-Received: from RTEXMBS02.realtek.com.tw (172.21.6.95) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Wed, 7 Jun 2023 14:25:44 +0800
-Received: from RTEXH36505.realtek.com.tw (172.21.6.25) by
- RTEXMBS02.realtek.com.tw (172.21.6.95) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Wed, 7 Jun 2023 14:25:44 +0800
-Received: from localhost.localdomain (172.21.252.101) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server id
- 15.1.2375.32 via Frontend Transport; Wed, 7 Jun 2023 14:25:44 +0800
-From:   Stanley Chang <stanley_chang@realtek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Stanley Chang <stanley_chang@realtek.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Ray Chi <raychi@google.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        "Michael Grzeschik" <m.grzeschik@pengutronix.de>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Flavio Suligoi <f.suligoi@asem.it>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
-Subject: [PATCH v3 5/5] dt-bindings: phy: realtek: Add the doc about the Realtek SoC USB 3.0 PHY
-Date:   Wed, 7 Jun 2023 14:24:41 +0800
-Message-ID: <20230607062500.24669-5-stanley_chang@realtek.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230607062500.24669-1-stanley_chang@realtek.com>
-References: <20230607062500.24669-1-stanley_chang@realtek.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-KSE-ServerInfo: RTEXMBS02.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        Wed, 7 Jun 2023 02:28:51 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 159DF1BC6;
+        Tue,  6 Jun 2023 23:28:16 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3573Ddua012254;
+        Wed, 7 Jun 2023 06:28:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=lW3wG+8j/vKdx89Rcmr3DMtHKEhTBBXLqiY87hQZwz8=;
+ b=QVcQK/aQICJxwmXum24hYHE5V1+7UBV7Ks+btboyjIjoNQDXCTJWglwpIqheO/2uCu9Z
+ iE593GkIoXejkibTvxFwl5fVJtDGId2L75ixba2CAlofOMWut4NV86ghbTi3xsFr1vqw
+ WxFK9RSRi5x5TU/DjeamVLZef4BoqR1WIkPfKpXQ/qTQ4xsnf53hbElPniHzHq5+PV+q
+ 9LmGEdr+2llxRwABGWjeWclj08Q/rls7Msgn8/6cXwIgHfAZzlI+psAm9hp2xOjCvfWA
+ +CK/VGeQjgHy2QVxgUVb3L1I07HMWlmq9/gUDIlfXKjZp+UnQLtQ/64yCjzWCClJb0TM WQ== 
+Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r2a7k13ff-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Jun 2023 06:28:11 +0000
+Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 3576S7Nd012633;
+        Wed, 7 Jun 2023 06:28:07 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3qyxkm0u1j-1;
+        Wed, 07 Jun 2023 06:28:07 +0000
+Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3576S7DH012628;
+        Wed, 7 Jun 2023 06:28:07 GMT
+Received: from hyd-lablnx377.qualcomm.com (hyd-lablnx377.qualcomm.com [10.204.178.226])
+        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3576S7Ei012625;
+        Wed, 07 Jun 2023 06:28:07 +0000
+Received: by hyd-lablnx377.qualcomm.com (Postfix, from userid 4035820)
+        id B060620B89; Wed,  7 Jun 2023 11:58:06 +0530 (IST)
+From:   Sai Teja Aluvala <quic_saluvala@quicinc.com>
+To:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com
+Cc:     linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        quic_hemantg@quicinc.com, quic_bgodavar@quicinc.com,
+        jiangzp@google.com, mmandlik@google.com,
+        Sai Teja Aluvala <quic_saluvala@quicinc.com>
+Subject: [PATCH v3 1/2] Bluetooth: hci_qca: Add qcom devcoredump sysfs support
+Date:   Wed,  7 Jun 2023 11:57:56 +0530
+Message-Id: <1686119276-10756-1-git-send-email-quic_saluvala@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 6AahDkLab7ioVa5UwqdsjdMQwLguDe7H
+X-Proofpoint-GUID: 6AahDkLab7ioVa5UwqdsjdMQwLguDe7H
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-07_03,2023-06-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1011
+ impostorscore=0 spamscore=0 lowpriorityscore=0 phishscore=0
+ mlxlogscore=999 adultscore=0 bulkscore=0 suspectscore=0 priorityscore=1501
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306070052
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,188 +78,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the documentation explain the property about Realtek USB PHY driver.
+This patch implements the hci_qca driver side .coredump() callback to
+trigger a devcoredump via sysfs.
 
-Realtek DHC (digital home center) RTD SoCs support DWC3 XHCI USB
-controller. Added the driver to drive the  USB 3.0 PHY transceivers.
+Signed-off-by: Sai Teja Aluvala <quic_saluvala@quicinc.com>
 
-Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
+v2 -> V3:
+--------
+Updated commit text
+
+v1 -> V2:
+--------
+Updated to work with the updated HCI devcoredump API.
 ---
-v2 to v3 change:
-    1. Broken down into two patches, one for each of USB 2 & 3.
-    2. Add more description about Realtek RTD SoCs architecture.
-    3. Removed parameter v1 support for simplification.
-    4. Revised the compatible name for fallback compatible.
-    5. Remove some properties that can be set in the driver.
-v1 to v2 change:
-    Add phy-cells for generic phy driver
----
- .../bindings/phy/realtek,usb3phy.yaml         | 156 ++++++++++++++++++
- 1 file changed, 156 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/phy/realtek,usb3phy.yaml
+ drivers/bluetooth/hci_qca.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/phy/realtek,usb3phy.yaml b/Documentation/devicetree/bindings/phy/realtek,usb3phy.yaml
-new file mode 100644
-index 000000000000..b45c398bba5f
---- /dev/null
-+++ b/Documentation/devicetree/bindings/phy/realtek,usb3phy.yaml
-@@ -0,0 +1,156 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+# Copyright 2023 Realtek Semiconductor Corporation
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/phy/realtek,usb3phy.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
+index e30c979..1ee5323 100644
+--- a/drivers/bluetooth/hci_qca.c
++++ b/drivers/bluetooth/hci_qca.c
+@@ -2384,6 +2384,18 @@ static const struct acpi_device_id qca_bluetooth_acpi_match[] = {
+ MODULE_DEVICE_TABLE(acpi, qca_bluetooth_acpi_match);
+ #endif
+ 
++#ifdef CONFIG_DEV_COREDUMP
++static void hciqca_coredump(struct device *dev)
++{
++	struct serdev_device *serdev = to_serdev_device(dev);
++	struct qca_serdev *qcadev = serdev_device_get_drvdata(serdev);
++	struct hci_uart *hu = &qcadev->serdev_hu;
++	struct hci_dev  *hdev = hu->hdev;
 +
-+title: Realtek DHC SoCs USB 3.0 PHY
-+
-+maintainers:
-+  - Stanley Chang <stanley_chang@realtek.com>
-+
-+description:
-+  Realtek USB 3.0 PHY support the digital home center (DHC) RTD series SoCs.
-+  The USB 3.0 PHY driver is designed to support the XHCI controller. The SoCs
-+  support multiple XHCI controllers. One PHY device node maps to one XHCI
-+  controller.
-+
-+  RTD1295/RTD1619 SoCs USB
-+  The USB architecture includes three XHCI controllers.
-+  Each XHCI maps to one USB 2.0 PHY and map one USB 3.0 PHY on some
-+  controllers.
-+  XHCI controller#0 -- usb2phy -- phy#0
-+                    |- usb3phy -- phy#0
-+  XHCI controller#1 -- usb2phy -- phy#0
-+  XHCI controller#2 -- usb2phy -- phy#0
-+                    |- usb3phy -- phy#0
-+
-+  RTD1395 SoCs USB
-+  The USB architecture includes two XHCI controllers.
-+  The controller#0 has one USB 2.0 PHY. The controller#1 includes two USB 2.0
-+  PHY.
-+  XHCI controller#0 -- usb2phy -- phy#0
-+  XHCI controller#1 -- usb2phy -- phy#0
-+                               |- phy#1
-+
-+  RTD1319/RTD1619b SoCs USB
-+  The USB architecture includes three XHCI controllers.
-+  Each XHCI maps to one USB 2.0 PHY and map one USB 3.0 PHY on controllers#2.
-+  XHCI controller#0 -- usb2phy -- phy#0
-+  XHCI controller#1 -- usb2phy -- phy#0
-+  XHCI controller#2 -- usb2phy -- phy#0
-+                    |- usb3phy -- phy#0
-+
-+  RTD1319d SoCs USB
-+  The USB architecture includes three XHCI controllers.
-+  Each xhci maps to one USB 2.0 PHY and map one USB 3.0 PHY on controllers#0.
-+  XHCI controller#0 -- usb2phy -- phy#0
-+                    |- usb3phy -- phy#0
-+  XHCI controller#1 -- usb2phy -- phy#0
-+  XHCI controller#2 -- usb2phy -- phy#0
-+
-+  RTD1312c/RTD1315e SoCs USB
-+  The USB architecture includes three XHCI controllers.
-+  Each XHCI maps to one USB 2.0 PHY.
-+  XHCI controller#0 -- usb2phy -- phy#0
-+  XHCI controller#1 -- usb2phy -- phy#0
-+  XHCI controller#2 -- usb2phy -- phy#0
-+
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+          - realtek,rtd1295-usb3phy
-+          - realtek,rtd1619-usb3phy
-+          - realtek,rtd1319-usb3phy
-+          - realtek,rtd1619b-usb3phy
-+          - realtek,rtd1319d-usb3phy
-+      - const: realtek,usb3phy
-+
-+  reg:
-+    description: PHY data registers
-+    maxItems: 1
-+
-+  "#address-cells":
-+    const: 1
-+
-+  "#size-cells":
-+    const: 0
-+
-+  "#phy-cells":
-+    const: 0
-+
-+patternProperties:
-+  "^phy@[0-3]+$":
-+    description: Each sub-node is a PHY device for one XHCI controller.
-+    type: object
-+    properties:
-+      realtek,param:
-+        description: The data of PHY parameter are the pair of the
-+          offset and value.
-+        $ref: /schemas/types.yaml#/definitions/uint8-array
-+
-+      realtek,do-toggle:
-+        description: Set this flag to enable the PHY parameter toggle
-+          when port status change.
-+        type: boolean
-+
-+      realtek,do-toggle-once:
-+        description: Set this flag to do PHY parameter toggle only on
-+          PHY init.
-+        type: boolean
-+
-+      realtek,check-efuse:
-+        description: Enable to update PHY parameter from reading otp table.
-+        type: boolean
-+
-+      realtek,use-default-parameter:
-+        description: Don't set parameter and use default value in hardware.
-+        type: boolean
-+
-+      realtek,check-rx-front-end-offset:
-+        description: Enable to check rx front end offset.
-+        type: boolean
-+
-+required:
-+  - compatible
-+  - reg
-+  - "#address-cells"
-+  - "#size-cells"
-+  - "#phy-cells"
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    usb_port2_usb3phy: usb-phy@13e10 {
-+        compatible = "realtek,rtd1319d-usb3phy", "realtek,usb3phy";
-+        reg = <0x13e10 0x4>;
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        #phy-cells = <0>;
-+
-+        phy@0 {
-+            reg = <0>;
-+            realtek,param =
-+                    <0x01 0xac8c>,
-+                    <0x06 0x0017>,
-+                    <0x09 0x724c>,
-+                    <0x0B 0xb90d>,
-+                    <0x0A 0xb610>,
-+                    <0x0D 0xef2a>,
-+                    <0x0F 0x9050>,
-+                    <0x10 0x000c>,
-+                    <0x20 0x70ff>,
-+                    <0x21 0xcfaa>,
-+                    <0x22 0x0013>,
-+                    <0x23 0xdb66>,
-+                    <0x26 0x8609>,
-+                    <0x29 0xff13>,
-+                    <0x2A 0x3070>;
-+            realtek,do-toggle-once;
-+            realtek,check-efuse;
-+        };
-+    };
-+
++	if (hdev->dump.coredump)
++		hdev->dump.coredump(hdev);
++}
++#endif
+ 
+ static struct serdev_device_driver qca_serdev_driver = {
+ 	.probe = qca_serdev_probe,
+@@ -2394,6 +2406,9 @@ static struct serdev_device_driver qca_serdev_driver = {
+ 		.acpi_match_table = ACPI_PTR(qca_bluetooth_acpi_match),
+ 		.shutdown = qca_serdev_shutdown,
+ 		.pm = &qca_pm_ops,
++#ifdef CONFIG_DEV_COREDUMP
++		.coredump = hciqca_coredump,
++#endif
+ 	},
+ };
+ 
 -- 
-2.34.1
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc.
 
