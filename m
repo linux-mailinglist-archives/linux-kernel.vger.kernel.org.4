@@ -2,110 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74B3F726283
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 16:15:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 049D7726286
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 16:16:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240862AbjFGOPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 10:15:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48824 "EHLO
+        id S241070AbjFGOQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 10:16:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240039AbjFGOPo (ORCPT
+        with ESMTP id S240039AbjFGOQA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 10:15:44 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C7888E;
-        Wed,  7 Jun 2023 07:15:41 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id F272E5C01FA;
-        Wed,  7 Jun 2023 10:15:40 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Wed, 07 Jun 2023 10:15:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tycho.pizza; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1686147340; x=1686233740; bh=kV54xPBWSO
-        6jMRDaa0Nz4NRiwXl2hA/6yyw97A8fySA=; b=rClrL9xg4oWeWdx/QDG/GMl+D5
-        s3uH/2yHFup5Hylu3zYmRHQZ/U/cvBlMdWHKXV8dlV1CW1RhGLxP84FokE+Y0Pte
-        sE15lwqmlAAYLFyoasuLnrt2fc9scdIL1Uk/kHoR+Au4V6OnyHTEFDd2ciOv4oH/
-        ivQ+++TAQhFFXzF8CEu6ryudeCCTg4cQONoo6egJ0+1Vg6neEVb5cY/9N25N1WI6
-        ItjHcqufcgbe3L3Y2D3rhgr1cKAnMuOXS02MXESLlSxZC326oHHGxaxJpKjtsmyi
-        ljxLXOK57IoaUq0mERgzQF4rFXkViqyCyR1JR6o1nnhBTLaEVGbXfaXX2jgQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1686147340; x=1686233740; bh=kV54xPBWSO6jM
-        RDaa0Nz4NRiwXl2hA/6yyw97A8fySA=; b=mQ7UPclt+8YsRjJ8OMuoVy7mZbEV1
-        t6VKMJi46vysfr7Q0T6qc3h1e/5npznxqQoIwi3sKhqPSB4EvPJQ8p/qMD1bmhxn
-        MvGjkVeaZvY37venlZH1IuzRnx9nkCDYuFemnq3Q1NU4uFvFnlH36I4+MfCnq+pz
-        /sZuvZslYssOTHjPCfCB+WG9t3l24nX4W6D/WZdn9fTeUOwoB+ZGnJyi7UN8MdK1
-        KEZsRjiZyiaXHnMkF65mrayWrNi0j3cAKYRD3yFc6xX2bZi/AalhsmDLoAwB0JFR
-        sDhdbBQ/M0dZgB2u6d9sdC5LrkXEx396Ckf6xLoBsaSvLEOHFB8YYLewA==
-X-ME-Sender: <xms:DJGAZE-DQAzuL8l8JyKcPTzZZR0lTkuyXsJzXwvMZLIpKHLjJU85rA>
-    <xme:DJGAZMv-OgThk8SzwGoovDsg4OWsxNqno3ImlTlb_QwO61b0IBwqrcfO1IQ_lzo5k
-    57j1vyrQOekovPT8gw>
-X-ME-Received: <xmr:DJGAZKA2jbKIC4B7tE7LoKaXMYLUviVsnjPuXgve9ewbvryAuT2_lz6rkVVhNsZcwYKnU_mn>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedtgedgjeegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepvfihtghhohcu
-    tehnuggvrhhsvghnuceothihtghhohesthihtghhohdrphhiiiiirgeqnecuggftrfgrth
-    htvghrnhepheeffeehleeftdfgjeegheelieefvdfghfeuudeuheehuefhhffhtefhiedv
-    geegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepth
-    ihtghhohesthihtghhohdrphhiiiiirg
-X-ME-Proxy: <xmx:DJGAZEdul0Wf-CGFYbs6muLf3RGIh39JpPTBeUjuay8fSb2LRm2eEg>
-    <xmx:DJGAZJOCRSZt7jHq19Wq8SqqcLEguZUAZ3siM9A5nev-RBBKWQZI9w>
-    <xmx:DJGAZOlGUxm-9rlydG_ORy9-hIU_rlhhv_Fk1jp3Q8Z9LUTrma5zCQ>
-    <xmx:DJGAZM08tfyy-gdiPMhj99OLtffOd2qlu0z0KT0fek4ENShuVwPNqA>
-Feedback-ID: i21f147d5:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 7 Jun 2023 10:15:39 -0400 (EDT)
-From:   Tycho Andersen <tycho@tycho.pizza>
-To:     "Paul E . McKenney" <paulmck@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     rcu@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Tycho Andersen <tycho@tycho.pizza>,
-        Tycho Andersen <tandersen@netflix.com>
-Subject: [PATCH] documentation/rcu: fix typo
-Date:   Wed,  7 Jun 2023 08:15:21 -0600
-Message-Id: <20230607141521.539828-1-tycho@tycho.pizza>
-X-Mailer: git-send-email 2.34.1
+        Wed, 7 Jun 2023 10:16:00 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DD9F1BEA;
+        Wed,  7 Jun 2023 07:15:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686147358; x=1717683358;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=iQiCIoJzhIO4mN9Mh3ygJf9p/9Yr66SOAT+qlykhdT8=;
+  b=SiGtxUCVRtdRS1liazLn6mNl7F4KB4rwujD347NGYkgxjSQdEElCOTSm
+   yW9GavB66chIH48HB9nZOx3SfrBykW+OoRqr/8PlnGCFqDbwMigY4RbS+
+   AiZv4ByEIrHMjwn4Xo8nDkGUyCgjRAVq+LaEyBV9Mqpv5/4hEng1nNd8U
+   6WyuPoPZ+EDA3XivQhrqLuoxMGN8ZALLgKkaFSSKQR7OX4wDdGfB8n4+Q
+   Xt+/eGuaE2zAUzLvMQZ6rvFcKoEHMkOrbF5Q9oHCTTWaSJCBVpgncpE/F
+   CIfu09kTao1nHKL1pfOnROOwr6+OdX9AfyRMX3LgoQkVuNDGn4NHKLLUs
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="355851828"
+X-IronPort-AV: E=Sophos;i="6.00,224,1681196400"; 
+   d="scan'208";a="355851828"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 07:15:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="822171650"
+X-IronPort-AV: E=Sophos;i="6.00,224,1681196400"; 
+   d="scan'208";a="822171650"
+Received: from vsmyers-mobl2.amr.corp.intel.com (HELO [10.212.146.233]) ([10.212.146.233])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 07:15:55 -0700
+Message-ID: <bf797bc6-e264-02b0-12ee-c2ebf7c92d22@intel.com>
+Date:   Wed, 7 Jun 2023 07:15:54 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v11 04/20] x86/cpu: Detect TDX partial write machine check
+ erratum
+Content-Language: en-US
+To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     linux-mm@kvack.org, kirill.shutemov@linux.intel.com,
+        tony.luck@intel.com, peterz@infradead.org, tglx@linutronix.de,
+        seanjc@google.com, pbonzini@redhat.com, david@redhat.com,
+        dan.j.williams@intel.com, rafael.j.wysocki@intel.com,
+        ying.huang@intel.com, reinette.chatre@intel.com,
+        len.brown@intel.com, ak@linux.intel.com, isaku.yamahata@intel.com,
+        chao.gao@intel.com, sathyanarayanan.kuppuswamy@linux.intel.com,
+        bagasdotme@gmail.com, sagis@google.com, imammedo@redhat.com
+References: <cover.1685887183.git.kai.huang@intel.com>
+ <86f2a8814240f4bbe850f6a09fc9d0b934979d1b.1685887183.git.kai.huang@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <86f2a8814240f4bbe850f6a09fc9d0b934979d1b.1685887183.git.kai.huang@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tycho Andersen <tandersen@netflix.com>
+On 6/4/23 07:27, Kai Huang wrote:
+> TDX memory has integrity and confidentiality protections.  Violations of
+> this integrity protection are supposed to only affect TDX operations and
+> are never supposed to affect the host kernel itself.  In other words,
+> the host kernel should never, itself, see machine checks induced by the
+> TDX integrity hardware.
 
-Signed-off-by: Tycho Andersen <tandersen@netflix.com>
----
- Documentation/RCU/lockdep-splat.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+At the risk of patting myself on the back by acking a changelog that I
+wrote 95% of:
 
-diff --git a/Documentation/RCU/lockdep-splat.rst b/Documentation/RCU/lockdep-splat.rst
-index 2a5c79db57dc..bcbc4b3c88d7 100644
---- a/Documentation/RCU/lockdep-splat.rst
-+++ b/Documentation/RCU/lockdep-splat.rst
-@@ -10,7 +10,7 @@ misuses of the RCU API, most notably using one of the rcu_dereference()
- family to access an RCU-protected pointer without the proper protection.
- When such misuse is detected, an lockdep-RCU splat is emitted.
- 
--The usual cause of a lockdep-RCU slat is someone accessing an
-+The usual cause of a lockdep-RCU splat is someone accessing an
- RCU-protected data structure without either (1) being in the right kind of
- RCU read-side critical section or (2) holding the right update-side lock.
- This problem can therefore be serious: it might result in random memory
-
-base-commit: a4d7d701121981e3c3fe69ade376fe9f26324161
--- 
-2.34.1
+Reviewed-by: Dave Hansen <dave.hansen@linux.intel.com>
 
