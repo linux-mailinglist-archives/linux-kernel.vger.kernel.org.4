@@ -2,113 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC3D77251D6
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 03:55:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A15387251DF
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 03:58:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240405AbjFGBzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 21:55:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41750 "EHLO
+        id S240436AbjFGB6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 21:58:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240636AbjFGBy5 (ORCPT
+        with ESMTP id S234436AbjFGB6N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 21:54:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 849F2196;
-        Tue,  6 Jun 2023 18:54:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 6 Jun 2023 21:58:13 -0400
+Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57305196;
+        Tue,  6 Jun 2023 18:58:11 -0700 (PDT)
+Received: from localhost.localdomain (unknown [222.129.46.53])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B2786316E;
-        Wed,  7 Jun 2023 01:54:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B06EC433EF;
-        Wed,  7 Jun 2023 01:54:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686102895;
-        bh=L5++KAY1MZjlyXEgE62/aSSXjGPmyMxfne3vd2s3Qh0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=mCWRdAv9G9mqhBqQL78XetAXwO85iy64XPDCYeMLzla2fz2hjB5WC6W++watZjd0s
-         oaLdHFMuRkCtMN8Kuhq8OwNylmDR1p439v2jHKPaCmwerg/RNg/h8GmPHlonUjSRE9
-         sgAfLkEhP/2C5uFWAg0e1Kfd+sihCI6EXlz8mp2x9xvkFRcIccQXLQYybbo+wuLxcs
-         XHkx7gPJn+QqcQMpgdLj9yYAODmRwZknUfyZCN6DdQRAtgUWY4mUmX+jbi/1F9fS6O
-         IdrfgStPm1AbFEOvapklC8HpviuJTVRt9pHfufo6OxwEEKqklpPuLBpKQpCTEKaW6m
-         McbRq3mezKn1g==
-Date:   Tue, 6 Jun 2023 18:54:53 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Justin Chen <justin.chen@broadcom.com>
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        florian.fainelli@broadcom.com, davem@davemloft.net,
-        edumazet@google.com, pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        opendmb@gmail.com, andrew@lunn.ch, hkallweit1@gmail.com,
-        linux@armlinux.org.uk, richardcochran@gmail.com,
-        sumit.semwal@linaro.org, christian.koenig@amd.com,
-        simon.horman@corigine.com
-Subject: Re: [PATCH net-next v6 3/6] net: bcmasp: Add support for ASP2.0
- Ethernet controller
-Message-ID: <20230606185453.582d3831@kernel.org>
-In-Reply-To: <8601be87-4bcb-8e6b-5124-1c63150c7c40@broadcom.com>
-References: <1685657551-38291-1-git-send-email-justin.chen@broadcom.com>
-        <1685657551-38291-4-git-send-email-justin.chen@broadcom.com>
-        <20230602235859.79042ff0@kernel.org>
-        <956dc20f-386c-f4fe-b827-1a749ee8af02@broadcom.com>
-        <20230606171605.3c20ae79@kernel.org>
-        <8601be87-4bcb-8e6b-5124-1c63150c7c40@broadcom.com>
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id A3D7341E1B;
+        Wed,  7 Jun 2023 01:58:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1686103089;
+        bh=9jQwoFHBV0DDoVB44LwqGLuFZFu+qgP0qrXPp4Wffu4=;
+        h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
+         MIME-Version;
+        b=qQ/7P+1fG3bdkLmOfMffEJDAFJg1UOD71vAaX0HtvAtd6KnqmSKjcJgagsJOOkFfK
+         6f7G0eINeEvzyXgCRAZj2eWFI2ZNj7W6MdOR0WOZP04KqKC5EayxXfd8Bmw4ZPByn7
+         hcePI1re75lB4FLgCrLn7vtCG4TaK2qV9o+XknnNdoGOrctWq6Klc7PfB6qrRwKiQV
+         RBkjiW1tonKq2vANjoqlnDN0OAwksJNysvzthBYnjJF05oTxgdnlcvRGmFfZY9SUUp
+         WFS9KuYV1nQhSD0MZqa/HgRazR5nmPa622ADsNC5hmPttMgiohNrNBY+9nfRuKEvnN
+         CBjZmQOp3pGdQ==
+From:   Aaron Ma <aaron.ma@canonical.com>
+To:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jeff Garzik <jgarzik@redhat.com>,
+        Auke Kok <auke-jan.h.kok@intel.com>,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net v2] igb: fix hang issue of AER error during resume
+Date:   Wed,  7 Jun 2023 09:56:46 +0800
+Message-Id: <20230607015646.558534-1-aaron.ma@canonical.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230526163001.67626-1-aaron.ma@canonical.com>
+References: <20230526163001.67626-1-aaron.ma@canonical.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 6 Jun 2023 18:35:51 -0700 Justin Chen wrote:
-> > Also - can you describe how you can have multiple netdevs for
-> > the same MAC?  
-> 
-> Not netdevs per se, but packets can be redirected to an offload 
-> co-processor.
+PCIe AER error_detected caused a race issue with igb_resume.
+Protect error_detected when igb is in down state.
 
-How is the redirecting configured?
+Error logs:
+kernel: igb 0000:02:00.0: disabling already-disabled device
+kernel: WARNING: CPU: 0 PID: 277 at drivers/pci/pci.c:2248 pci_disable_device+0xc4/0xf0
+kernel: RIP: 0010:pci_disable_device+0xc4/0xf0
+kernel: Call Trace:
+kernel:  <TASK>
+kernel:  igb_io_error_detected+0x3e/0x60
+kernel:  report_error_detected+0xd6/0x1c0
+kernel:  ? __pfx_report_normal_detected+0x10/0x10
+kernel:  report_normal_detected+0x16/0x30
+kernel:  pci_walk_bus+0x74/0xa0
+kernel:  pcie_do_recovery+0xb9/0x340
+kernel:  ? __pfx_aer_root_reset+0x10/0x10
+kernel:  aer_process_err_devices+0x168/0x220
+kernel:  aer_isr+0x1b5/0x1e0
+kernel:  ? __pfx_irq_thread_fn+0x10/0x10
+kernel:  irq_thread_fn+0x21/0x70
+kernel:  irq_thread+0xf8/0x1c0
+kernel:  ? __pfx_irq_thread_dtor+0x10/0x10
+kernel:  ? __pfx_irq_thread+0x10/0x10
+kernel:  kthread+0xef/0x120
+kernel:  ? __pfx_kthread+0x10/0x10
+kernel:  ret_from_fork+0x29/0x50
+kernel:  </TASK>
+kernel: ---[ end trace 0000000000000000 ]---
 
-Could you split this patch into basic netdev datapath,
-and then as separate patches support for ethtool configuration features,
-each with its own patch? This will make it easier for area experts to
-review.
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=217446
+Fixes: 9d5c824399de ("igb: PCI-Express 82575 Gigabit Ethernet driver")
+Signed-off-by: Aaron Ma <aaron.ma@canonical.com>
+Reviewed-by: Mateusz Palczewski <mateusz.palczewski@intel.com>
+---
+V1->V2: Add target tree tag net and Fixes tag.
 
-The base patch can probably include these:
+ drivers/net/ethernet/intel/igb/igb_main.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-+	.get_drvinfo		= bcmasp_get_drvinfo,
-+	.get_link		= ethtool_op_get_link,
-+	.get_link_ksettings	= phy_ethtool_get_link_ksettings,
-+	.set_link_ksettings	= phy_ethtool_set_link_ksettings,
-+	.get_msglevel		= bcmasp_get_msglevel,
-+	.set_msglevel		= bcmasp_set_msglevel,
+diff --git a/drivers/net/ethernet/intel/igb/igb_main.c b/drivers/net/ethernet/intel/igb/igb_main.c
+index 58872a4c2540..8333d4ac8169 100644
+--- a/drivers/net/ethernet/intel/igb/igb_main.c
++++ b/drivers/net/ethernet/intel/igb/igb_main.c
+@@ -9581,14 +9581,21 @@ static pci_ers_result_t igb_io_error_detected(struct pci_dev *pdev,
+ 	struct net_device *netdev = pci_get_drvdata(pdev);
+ 	struct igb_adapter *adapter = netdev_priv(netdev);
+ 
++	if (test_bit(__IGB_DOWN, &adapter->state))
++		return PCI_ERS_RESULT_DISCONNECT;
++
++	rtnl_lock();
+ 	netif_device_detach(netdev);
+ 
+-	if (state == pci_channel_io_perm_failure)
++	if (state == pci_channel_io_perm_failure) {
++		rtnl_unlock();
+ 		return PCI_ERS_RESULT_DISCONNECT;
++	}
+ 
+ 	if (netif_running(netdev))
+ 		igb_down(adapter);
+ 	pci_disable_device(pdev);
++	rtnl_unlock();
+ 
+ 	/* Request a slot reset. */
+ 	return PCI_ERS_RESULT_NEED_RESET;
+-- 
+2.34.1
 
-WoL can be a separate patch:
-
-+	.get_wol		= bcmasp_get_wol,
-+	.set_wol		= bcmasp_set_wol,
-
-Stats a separate patch:
-
-+	.get_strings		= bcmasp_get_strings,
-+	.get_ethtool_stats	= bcmasp_get_ethtool_stats,
-+	.get_sset_count		= bcmasp_get_sset_count,
-+	.nway_reset		= phy_ethtool_nway_reset,
-
-Flow steering separate:
-
-+	.get_rxnfc		= bcmasp_get_rxnfc,
-+	.set_rxnfc		= bcmasp_set_rxnfc,
-
-EEE separate:
-
-+	.set_eee		= bcmasp_set_eee,
-+	.get_eee		= bcmasp_get_eee,
