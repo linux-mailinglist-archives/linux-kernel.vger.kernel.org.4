@@ -2,38 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1919D725BC9
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 12:45:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0093725BCC
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 12:46:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238726AbjFGKpu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 06:45:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55752 "EHLO
+        id S239119AbjFGKpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 06:45:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237700AbjFGKpY (ORCPT
+        with ESMTP id S237744AbjFGKp3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 06:45:24 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5FBCBAA;
-        Wed,  7 Jun 2023 03:45:21 -0700 (PDT)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 357AixTA001922;
-        Wed, 7 Jun 2023 12:44:59 +0200
-Date:   Wed, 7 Jun 2023 12:44:59 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Zhangjin Wu <falcon@tinylab.org>
-Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        thomas@t-8ch.de
-Subject: Re: [PATCH v3 3/3] selftests/nolibc: riscv: customize makefile for
- rv32
-Message-ID: <ZIBfq3p29Z5QlIcj@1wt.eu>
-References: <ZIAywHvr6UB1J4of@1wt.eu>
- <20230607081103.746962-1-falcon@tinylab.org>
+        Wed, 7 Jun 2023 06:45:29 -0400
+Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E6B4192
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 03:45:27 -0700 (PDT)
+X-ASG-Debug-ID: 1686134724-1eb14e2b4909f00001-xx1T2L
+Received: from ZXSHMBX2.zhaoxin.com (ZXSHMBX2.zhaoxin.com [10.28.252.164]) by mx2.zhaoxin.com with ESMTP id JwSC10RSH0V5rtst (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Wed, 07 Jun 2023 18:45:24 +0800 (CST)
+X-Barracuda-Envelope-From: TonyWWang-oc@zhaoxin.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX2.zhaoxin.com
+ (10.28.252.164) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Wed, 7 Jun
+ 2023 18:45:23 +0800
+Received: from tony-HX002EA.zhaoxin.com (10.32.65.162) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Wed, 7 Jun
+ 2023 18:45:21 +0800
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.164
+From:   Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
+X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.163
+To:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <dave.hansen@linux.intel.com>, <hpa@zytor.com>,
+        <tony.luck@intel.com>, <youquan.song@intel.com>,
+        <qiuxu.zhuo@intel.com>, <arnd@arndb.de>,
+        <aleksander.lobakin@intel.com>, <linux-edac@vger.kernel.org>,
+        <x86@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <TonyWWang-oc@zhaoxin.com>
+CC:     <CobeChen@zhaoxin.com>, <TimGuo@zhaoxin.com>,
+        <LeoLiu-oc@zhaoxin.com>
+Subject: [PATCH 1/3] x86/mce: Move Zhaoxin MCE functions to the separate file
+Date:   Wed, 7 Jun 2023 18:45:25 +0800
+X-ASG-Orig-Subj: [PATCH 1/3] x86/mce: Move Zhaoxin MCE functions to the separate file
+Message-ID: <20230607104527.3298-1-TonyWWang-oc@zhaoxin.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230607081103.746962-1-falcon@tinylab.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+Content-Type: text/plain
+X-Originating-IP: [10.32.65.162]
+X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
+X-Barracuda-Connect: ZXSHMBX2.zhaoxin.com[10.28.252.164]
+X-Barracuda-Start-Time: 1686134724
+X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
+X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at zhaoxin.com
+X-Barracuda-Scan-Msg-Size: 5418
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
+X-Barracuda-Spam-Score: -2.02
+X-Barracuda-Spam-Status: No, SCORE=-2.02 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.109718
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -42,86 +72,170 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 04:11:03PM +0800, Zhangjin Wu wrote:
-> This did inspire me a lot, so, what about simply go back to the KARCH
-> method without any overriding:
-> 
->     diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
->     index 4a3a105e1fdf..bde635b083f4 100644
->     --- a/tools/testing/selftests/nolibc/Makefile
->     +++ b/tools/testing/selftests/nolibc/Makefile
->     @@ -14,6 +14,12 @@ include $(srctree)/scripts/subarch.include
->      ARCH = $(SUBARCH)
->      endif
-> 
->     +# kernel supported ARCH names by architecture
->     +KARCH_riscv32    = riscv
->     +KARCH_riscv64    = riscv
->     +KARCH_riscv      = riscv
->     +KARCH            = $(or $(KARCH_$(ARCH)),$(ARCH))
->     +
->      # kernel image names by architecture
->      IMAGE_i386       = arch/x86/boot/bzImage
->      IMAGE_x86_64     = arch/x86/boot/bzImage
->     @@ -21,6 +27,8 @@ IMAGE_x86        = arch/x86/boot/bzImage
->      IMAGE_arm64      = arch/arm64/boot/Image
->      IMAGE_arm        = arch/arm/boot/zImage
->      IMAGE_mips       = vmlinuz
-> 
-> And this:
-> 
->     @@ -117,7 +132,7 @@ sysroot: sysroot/$(ARCH)/include
->      sysroot/$(ARCH)/include:
->             $(Q)rm -rf sysroot/$(ARCH) sysroot/sysroot
->             $(QUIET_MKDIR)mkdir -p sysroot
->     -       $(Q)$(MAKE) -C ../../../include/nolibc ARCH=$(ARCH) OUTPUT=$(CURDIR)/sysroot/ headers_standalone
->     +       $(Q)$(MAKE) -C ../../../include/nolibc ARCH=$(KARCH) OUTPUT=$(CURDIR)/sysroot/ headers_standalone
->             $(Q)mv sysroot/sysroot sysroot/$(ARCH)
-> 
->      nolibc-test: nolibc-test.c sysroot/$(ARCH)/include
->     @@ -141,10 +156,10 @@ initramfs: nolibc-test
->             $(Q)cp nolibc-test initramfs/init
-> 
->      defconfig:
->     -       $(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) mrproper $(DEFCONFIG) prepare
->     +       $(Q)$(MAKE) -C $(srctree) ARCH=$(KARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) mrproper $(DEFCONFIG) prepare
-> 
->      kernel: initramfs
->     -       $(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) $(IMAGE_NAME) CONFIG_INITRAMFS_SOURCE=$(CURDIR)/initramfs
->     +       $(Q)$(MAKE) -C $(srctree) ARCH=$(KARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) $(IMAGE_NAME) CONFIG_INITRAMFS_SOURCE=$(CURDIR)/initramfs
-> 
-> It is almost consistent with the original Makefile now.
+Right now the functions of Zhaoxin MCE are in the MCE core.c file.
+Create a separate zhaoxin.c to make MCE core.c more clearly.
+Functions not change.
 
-If it works, I like it!
+Signed-off-by: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
+---
+ arch/x86/Kconfig                  |  8 +++++
+ arch/x86/include/asm/mce.h        |  8 +++++
+ arch/x86/kernel/cpu/mce/Makefile  |  1 +
+ arch/x86/kernel/cpu/mce/core.c    | 49 ++++++++++++-------------------
+ arch/x86/kernel/cpu/mce/zhaoxin.c | 15 ++++++++++
+ 5 files changed, 50 insertions(+), 31 deletions(-)
+ create mode 100644 arch/x86/kernel/cpu/mce/zhaoxin.c
 
-> I do like this method more than the override method now, the override
-> method may break the maintainability a lot especially that the
-> developers may be hard to know which ARCH value it is when he touch a
-> line of the Makefile.
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index a98c5f82be48..79db47afd752 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -1182,6 +1182,14 @@ config X86_MCE_INJECT
+ 	  If you don't know what a machine check is and you don't do kernel
+ 	  QA it is safe to say n.
+ 
++config X86_MCE_ZHAOXIN
++	def_bool y
++	prompt "Zhaoxin MCE features"
++	depends on X86_MCE && X86_LOCAL_APIC && X86_MCE_INTEL
++	help
++	  Additional support for Zhaoxin specific MCE features such as
++	  the DRAM error threshold.
++
+ source "arch/x86/events/Kconfig"
+ 
+ config X86_LEGACY_VM86
+diff --git a/arch/x86/include/asm/mce.h b/arch/x86/include/asm/mce.h
+index 180b1cbfcc4e..c4776421518e 100644
+--- a/arch/x86/include/asm/mce.h
++++ b/arch/x86/include/asm/mce.h
+@@ -353,4 +353,12 @@ static inline void mce_hygon_feature_init(struct cpuinfo_x86 *c)	{ return mce_am
+ 
+ unsigned long copy_mc_fragile_handle_tail(char *to, char *from, unsigned len);
+ 
++#ifdef CONFIG_X86_MCE_ZHAOXIN
++void mce_zhaoxin_feature_init(void);
++void mce_zhaoxin_feature_clear(void);
++#else
++static inline void mce_zhaoxin_feature_init(void) { }
++static inline void mce_zhaoxin_feature_clear(void) { }
++#endif
++
+ #endif /* _ASM_X86_MCE_H */
+diff --git a/arch/x86/kernel/cpu/mce/Makefile b/arch/x86/kernel/cpu/mce/Makefile
+index 015856abdbb1..ff0b67f643d4 100644
+--- a/arch/x86/kernel/cpu/mce/Makefile
++++ b/arch/x86/kernel/cpu/mce/Makefile
+@@ -5,6 +5,7 @@ obj-$(CONFIG_X86_ANCIENT_MCE)	+= winchip.o p5.o
+ obj-$(CONFIG_X86_MCE_INTEL)	+= intel.o
+ obj-$(CONFIG_X86_MCE_AMD)	+= amd.o
+ obj-$(CONFIG_X86_MCE_THRESHOLD) += threshold.o
++obj-$(CONFIG_X86_MCE_ZHAOXIN)	+= zhaoxin.o
+ 
+ mce-inject-y			:= inject.o
+ obj-$(CONFIG_X86_MCE_INJECT)	+= mce-inject.o
+diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+index 22dfcb2adcd7..6ae68749383c 100644
+--- a/arch/x86/kernel/cpu/mce/core.c
++++ b/arch/x86/kernel/cpu/mce/core.c
+@@ -1884,6 +1884,21 @@ static int __mcheck_cpu_apply_quirks(struct cpuinfo_x86 *c)
+ 	}
+ 
+ 	if (c->x86_vendor == X86_VENDOR_ZHAOXIN) {
++		/*
++		 * These CPUs have MCA bank 8 which reports only one error type called
++		 * SVAD (System View Address Decoder). The reporting of that error is
++		 * controlled by IA32_MC8.CTL.0.
++		 *
++		 * If enabled, prefetching on these CPUs will cause SVAD MCE when
++		 * virtual machines start and result in a system  panic. Always disable
++		 * bank 8 SVAD error by default.
++		 */
++		if ((c->x86 == 7 && c->x86_model == 0x1b) ||
++		    (c->x86_model == 0x19 || c->x86_model == 0x1f)) {
++			if (this_cpu_read(mce_num_banks) > 8)
++				mce_banks[8].ctl = 0;
++		}
++
+ 		/*
+ 		 * All newer Zhaoxin CPUs support MCE broadcasting. Enable
+ 		 * synchronization with a one second timeout.
+@@ -1951,35 +1966,6 @@ static void mce_centaur_feature_init(struct cpuinfo_x86 *c)
+ 	}
+ }
+ 
+-static void mce_zhaoxin_feature_init(struct cpuinfo_x86 *c)
+-{
+-	struct mce_bank *mce_banks = this_cpu_ptr(mce_banks_array);
+-
+-	/*
+-	 * These CPUs have MCA bank 8 which reports only one error type called
+-	 * SVAD (System View Address Decoder). The reporting of that error is
+-	 * controlled by IA32_MC8.CTL.0.
+-	 *
+-	 * If enabled, prefetching on these CPUs will cause SVAD MCE when
+-	 * virtual machines start and result in a system  panic. Always disable
+-	 * bank 8 SVAD error by default.
+-	 */
+-	if ((c->x86 == 7 && c->x86_model == 0x1b) ||
+-	    (c->x86_model == 0x19 || c->x86_model == 0x1f)) {
+-		if (this_cpu_read(mce_num_banks) > 8)
+-			mce_banks[8].ctl = 0;
+-	}
+-
+-	intel_init_cmci();
+-	intel_init_lmce();
+-	mce_adjust_timer = cmci_intel_adjust_timer;
+-}
+-
+-static void mce_zhaoxin_feature_clear(struct cpuinfo_x86 *c)
+-{
+-	intel_clear_lmce();
+-}
+-
+ static void __mcheck_cpu_init_vendor(struct cpuinfo_x86 *c)
+ {
+ 	switch (c->x86_vendor) {
+@@ -2002,7 +1988,8 @@ static void __mcheck_cpu_init_vendor(struct cpuinfo_x86 *c)
+ 		break;
+ 
+ 	case X86_VENDOR_ZHAOXIN:
+-		mce_zhaoxin_feature_init(c);
++		mce_zhaoxin_feature_init();
++		mce_adjust_timer = cmci_intel_adjust_timer;
+ 		break;
+ 
+ 	default:
+@@ -2018,7 +2005,7 @@ static void __mcheck_cpu_clear_vendor(struct cpuinfo_x86 *c)
+ 		break;
+ 
+ 	case X86_VENDOR_ZHAOXIN:
+-		mce_zhaoxin_feature_clear(c);
++		mce_zhaoxin_feature_clear();
+ 		break;
+ 
+ 	default:
+diff --git a/arch/x86/kernel/cpu/mce/zhaoxin.c b/arch/x86/kernel/cpu/mce/zhaoxin.c
+new file mode 100644
+index 000000000000..f4e90ec99267
+--- /dev/null
++++ b/arch/x86/kernel/cpu/mce/zhaoxin.c
+@@ -0,0 +1,15 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <asm/mce.h>
++
++#include "internal.h"
++
++void mce_zhaoxin_feature_init(void)
++{
++	intel_init_cmci();
++	intel_init_lmce();
++}
++
++void mce_zhaoxin_feature_clear(void)
++{
++	intel_clear_lmce();
++}
+-- 
+2.17.1
 
-Yes definitely, add to this the risk that a patch applies at the wrong
-line and only breaks one or two archs, etc.
-
-> > Generally speaking when you try to
-> > add support for your own arch here, you look there for similar ones,
-> > where commands are called, and read in reverse mode till the beginning,
-> > hoping to understand the transformations. I think the current ones and
-> > the proposed ones above are self-explanatory. Anything doing too much
-> > magic renaming or doing too much hard-coded automatic stuff can quickly
-> > obfuscate the principle and make things more complicated. I already
-> > despise "override" because it messes up with macros, but I agree it can
-> > sometimes have some value. If you dup it into ORIG_ARCH or USER_ARCH,
-> > and modify the few lines overriding arch in an explicit manner, I think
-> > it would preserve its maintainability.
-> >
-> 
-> Agree, let's give up the 'override' stuff.
-> 
-> > What do you think ?
-> 
-> So, let's go with the KARCH method if you agree too.
-
-I'm fine with it!
-
-Thanks,
-Willy
