@@ -2,50 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C769E726281
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 16:15:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74B3F726283
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 16:15:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240021AbjFGOPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 10:15:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48570 "EHLO
+        id S240862AbjFGOPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 10:15:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235922AbjFGOPW (ORCPT
+        with ESMTP id S240039AbjFGOPo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 10:15:22 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE298E;
-        Wed,  7 Jun 2023 07:15:18 -0700 (PDT)
-X-QQ-mid: bizesmtp70t1686147307tuwgirwz
-Received: from linux-lab-host.localdomain ( [61.141.77.49])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 07 Jun 2023 22:15:06 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: 3M0okmaRx3hda9yjQxBgTlXDIeBYTBUIZhPiyCqr68M1QLHysxyV/Xa++1dWh
-        rpU9PDVQlvesrGXg026N1n2+/rgrAcLuq595b0CjO6OtAr+2sxNPZqiE55B2FEOMX6/4Abc
-        4vtLVfieMXgVqyCsKSIWVbefp0PGu0NR+F3rAPHofh8HdqKa/RdqfsJB7tWet5EJYfNqRa3
-        Ff0pU+GCV3Vb3RlVPuRQpZQGI+etbFV9MrY9uEVo+p36OYJSY1fIfeDOEDj9t2ohDU5ni7u
-        Y3iqQuhQde84KL3NTEoFLys2uVvrYWzmJUjg88P2U5j5WLUaHC8g2FivR5cfFTbMsAffjqS
-        gpdJZfQkXSS5bKN6xJ0mFziyLhuNdgKun18rpVx4xTq69dQxjrqjzVlXOEjTqD+w3RTGThY
-        YQs49fGsni8=
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 9306648573384316120
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        thomas@t-8ch.de
-Subject: Re: [PATCH 1/4] selftests/nolibc: add a test-report target
-Date:   Wed,  7 Jun 2023 22:15:02 +0800
-Message-Id: <20230607141502.864645-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <ZIB792FtG6ibOudp@1wt.eu>
-References: <ZIB792FtG6ibOudp@1wt.eu>
+        Wed, 7 Jun 2023 10:15:44 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C7888E;
+        Wed,  7 Jun 2023 07:15:41 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id F272E5C01FA;
+        Wed,  7 Jun 2023 10:15:40 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Wed, 07 Jun 2023 10:15:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tycho.pizza; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1686147340; x=1686233740; bh=kV54xPBWSO
+        6jMRDaa0Nz4NRiwXl2hA/6yyw97A8fySA=; b=rClrL9xg4oWeWdx/QDG/GMl+D5
+        s3uH/2yHFup5Hylu3zYmRHQZ/U/cvBlMdWHKXV8dlV1CW1RhGLxP84FokE+Y0Pte
+        sE15lwqmlAAYLFyoasuLnrt2fc9scdIL1Uk/kHoR+Au4V6OnyHTEFDd2ciOv4oH/
+        ivQ+++TAQhFFXzF8CEu6ryudeCCTg4cQONoo6egJ0+1Vg6neEVb5cY/9N25N1WI6
+        ItjHcqufcgbe3L3Y2D3rhgr1cKAnMuOXS02MXESLlSxZC326oHHGxaxJpKjtsmyi
+        ljxLXOK57IoaUq0mERgzQF4rFXkViqyCyR1JR6o1nnhBTLaEVGbXfaXX2jgQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1686147340; x=1686233740; bh=kV54xPBWSO6jM
+        RDaa0Nz4NRiwXl2hA/6yyw97A8fySA=; b=mQ7UPclt+8YsRjJ8OMuoVy7mZbEV1
+        t6VKMJi46vysfr7Q0T6qc3h1e/5npznxqQoIwi3sKhqPSB4EvPJQ8p/qMD1bmhxn
+        MvGjkVeaZvY37venlZH1IuzRnx9nkCDYuFemnq3Q1NU4uFvFnlH36I4+MfCnq+pz
+        /sZuvZslYssOTHjPCfCB+WG9t3l24nX4W6D/WZdn9fTeUOwoB+ZGnJyi7UN8MdK1
+        KEZsRjiZyiaXHnMkF65mrayWrNi0j3cAKYRD3yFc6xX2bZi/AalhsmDLoAwB0JFR
+        sDhdbBQ/M0dZgB2u6d9sdC5LrkXEx396Ckf6xLoBsaSvLEOHFB8YYLewA==
+X-ME-Sender: <xms:DJGAZE-DQAzuL8l8JyKcPTzZZR0lTkuyXsJzXwvMZLIpKHLjJU85rA>
+    <xme:DJGAZMv-OgThk8SzwGoovDsg4OWsxNqno3ImlTlb_QwO61b0IBwqrcfO1IQ_lzo5k
+    57j1vyrQOekovPT8gw>
+X-ME-Received: <xmr:DJGAZKA2jbKIC4B7tE7LoKaXMYLUviVsnjPuXgve9ewbvryAuT2_lz6rkVVhNsZcwYKnU_mn>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedtgedgjeegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepvfihtghhohcu
+    tehnuggvrhhsvghnuceothihtghhohesthihtghhohdrphhiiiiirgeqnecuggftrfgrth
+    htvghrnhepheeffeehleeftdfgjeegheelieefvdfghfeuudeuheehuefhhffhtefhiedv
+    geegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepth
+    ihtghhohesthihtghhohdrphhiiiiirg
+X-ME-Proxy: <xmx:DJGAZEdul0Wf-CGFYbs6muLf3RGIh39JpPTBeUjuay8fSb2LRm2eEg>
+    <xmx:DJGAZJOCRSZt7jHq19Wq8SqqcLEguZUAZ3siM9A5nev-RBBKWQZI9w>
+    <xmx:DJGAZOlGUxm-9rlydG_ORy9-hIU_rlhhv_Fk1jp3Q8Z9LUTrma5zCQ>
+    <xmx:DJGAZM08tfyy-gdiPMhj99OLtffOd2qlu0z0KT0fek4ENShuVwPNqA>
+Feedback-ID: i21f147d5:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 7 Jun 2023 10:15:39 -0400 (EDT)
+From:   Tycho Andersen <tycho@tycho.pizza>
+To:     "Paul E . McKenney" <paulmck@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     rcu@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Tycho Andersen <tycho@tycho.pizza>,
+        Tycho Andersen <tandersen@netflix.com>
+Subject: [PATCH] documentation/rcu: fix typo
+Date:   Wed,  7 Jun 2023 08:15:21 -0600
+Message-Id: <20230607141521.539828-1-tycho@tycho.pizza>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,128 +84,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 01:52:00PM +0800, Zhangjin Wu wrote:
-> > Hi, Willy
-> > 
-> (...)
-> > > 
-> > > Ok, thanks, what about this?
-> > > 
-> > >     # LOG_REPORT: report the test results
-> > >     LOG_REPORT   := awk '/\[OK\][\r]*$$/{p++} /\[FAIL\][\r]*$$/{f++} /\[SKIPPED\][\r]*$$/{s++} \
-> > > 	                 END{ printf("%d test(s) passed, %d skipped, %d failed.", p, s, f); \
-> > > 	                 printf(" See all results in %s\n", ARGV[1]); }'
-> > > 
-> > >     run-user: nolibc-test
-> > > 	$(Q)qemu-$(QEMU_ARCH) ./nolibc-test > "$(CURDIR)/run.out" || :
-> > > 	$(Q)$(LOG_REPORT) $(CURDIR)/run.out
-> > > 
-> > >     run: kernel
-> > > 	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
-> > > 	$(Q)$(LOG_REPORT) $(CURDIR)/run.out
-> > > 
-> > >     rerun:
-> > > 	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
-> > > 	$(Q)$(LOG_REPORT) $(CURDIR)/run.out
-> > > 
-> > > Or we directly add a standalone test report script? something like
-> > > tools/testing/selftests/nolibc/report.sh
-> > > 
-> > >     #!/bin/sh
-> > >     #
-> > >     # report.sh -- report the test results of nolibc-test
-> > >     #
-> > >     
-> > >     LOG_FILE=$1
-> > >     [ ! -f "$LOG_FILE" ] && echo "Usage: $0 /path/to/run.out"
-> > >     
-> > >     awk '
-> > >         /\[OK\][\r]*$$/{ p++ }
-> > >         /\[FAIL\][\r]*$$/{ f++ }
-> > >         /\[SKIPPED\][\r]*$$/{ s++ }
-> > >     
-> > >         END {
-> > >             printf("%d test(s) passed, %d skipped, %d failed.", p, s, f);
-> > >             printf(" See all results in %s\n", ARGV[1]);
-> > >         }' $LOG_FILE
-> > > 
-> > > And use it like this:
-> > > 
-> > >     LOG_REPORT           = $(CURDIR)/report.sh
-> > >
-> > 
-> > I plan to renew this patchset, which one of the above methods do you
-> > prefer?
-> 
-> IFF it needs to be done I prefer the macro in the Makefile to avoid
-> depending on external scripts that are useless outside of the makefile.
-> BUT, my point remains that I adopted this so that I could quickly and
-> visually check that everything was OK. I'm fine with any other method
-> but I do not want to have to carefully read all these lines to make
-> sure I'm not mixing a "8" with a "0" (I'm mentioning this one because
-> it's exactly the one I had when I decided to add the extra values).
-> For example if you prepend "FAILURE: ", "WARNING: ", "SUCCESS: " in
-> front of these lines to summarize them depending on the highest level
-> encountered (success, skipped, failed), then I'm fine because it's
-> easy to check that all lines show the same word.
-> 
+From: Tycho Andersen <tandersen@netflix.com>
 
-Ok.
+Signed-off-by: Tycho Andersen <tandersen@netflix.com>
+---
+ Documentation/RCU/lockdep-splat.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> > For the always print statement:
-> > 
-> >     printf(" See all results in %s\n", ARGV[1]); }'
-> 
-> Then please put it on its own line without the leading space, this
-> will be even more readable.
->
+diff --git a/Documentation/RCU/lockdep-splat.rst b/Documentation/RCU/lockdep-splat.rst
+index 2a5c79db57dc..bcbc4b3c88d7 100644
+--- a/Documentation/RCU/lockdep-splat.rst
++++ b/Documentation/RCU/lockdep-splat.rst
+@@ -10,7 +10,7 @@ misuses of the RCU API, most notably using one of the rcu_dereference()
+ family to access an RCU-protected pointer without the proper protection.
+ When such misuse is detected, an lockdep-RCU splat is emitted.
+ 
+-The usual cause of a lockdep-RCU slat is someone accessing an
++The usual cause of a lockdep-RCU splat is someone accessing an
+ RCU-protected data structure without either (1) being in the right kind of
+ RCU read-side critical section or (2) holding the right update-side lock.
+ This problem can therefore be serious: it might result in random memory
 
-It is a good balance.
+base-commit: a4d7d701121981e3c3fe69ade376fe9f26324161
+-- 
+2.34.1
 
-This may be more useful if we run this from the kselftest framework,
-seems it is not able to run it from the 'kselftest' target currently,
-here shares something I have tried:
-
-I tried something like this, seems run-user works, but defconfig and run
-not.
-
-    diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-    index 4a3a105e1fdf..70693f6501c6 100644
-    --- a/tools/testing/selftests/nolibc/Makefile
-    +++ b/tools/testing/selftests/nolibc/Makefile
-    @@ -83,6 +83,8 @@ CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 \
-                    $(CFLAGS_$(ARCH)) $(CFLAGS_STACKPROTECTOR)
-     LDFLAGS := -s
-   
-    +NOLIBC_SUBTARGETS ?= run-user
-    +
-     help:
-            @echo "Supported targets under selftests/nolibc:"
-            @echo "  all          call the \"run\" target below"
-    @@ -110,7 +112,9 @@ help:
-            @echo "  IMAGE_NAME    = $(if $(IMAGE_NAME),$(IMAGE_NAME),UNKNOWN_ARCH) [determined from \$$ARCH]"
-            @echo ""
-
-    -all: run
-    +run_tests: $(NOLIBC_SUBTARGETS)
-    +
-    +all: $(NOLIBC_SUBTARGETS)
-
-This can be triggered from the top-level kselftest framework:
-
-    $ make -C /path/to/linux-stable kselftest TARGETS=nolibc NOLIBC_SUBTARGETS=run-user
-
-And seems we still not support O= currently either.
-
-> > I will paste the reason why I need it, as mentioned in [1], if you still
-> > need a clean test report, I will give up this change ;-)
-> 
-> No worries, I don't want to be annoying if you need something, but I
-> don't want to be annoyed by changes either :-)
-> 
-
-Thanks,
-Zhangjin
-
-> thanks,
-> Willy
