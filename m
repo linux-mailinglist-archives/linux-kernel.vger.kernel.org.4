@@ -2,174 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91CF1725B0F
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 11:50:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 236AB725B13
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 11:51:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238949AbjFGJuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 05:50:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34818 "EHLO
+        id S239745AbjFGJvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 05:51:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240205AbjFGJtw (ORCPT
+        with ESMTP id S234384AbjFGJvm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 05:49:52 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7B701E47
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 02:49:50 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8DxTuu8UoBkDxkAAA--.381S3;
-        Wed, 07 Jun 2023 17:49:48 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxKeW6UoBk70AEAA--.15579S3;
-        Wed, 07 Jun 2023 17:49:47 +0800 (CST)
-Message-ID: <6a765dff-b3ed-3027-dcf8-7883ca46ea4e@loongson.cn>
-Date:   Wed, 7 Jun 2023 17:49:46 +0800
+        Wed, 7 Jun 2023 05:51:42 -0400
+X-Greylist: delayed 403 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 07 Jun 2023 02:51:39 PDT
+Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B55A7E49;
+        Wed,  7 Jun 2023 02:51:39 -0700 (PDT)
+Received: from ed3e173716be.home.arpa (unknown [124.16.138.125])
+        by APP-03 (Coremail) with SMTP id rQCowACniR4dU4BkidqzDA--.1731S2;
+        Wed, 07 Jun 2023 17:51:25 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     james.smart@broadcom.com, ram.vegesna@broadcom.com,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
+        chenzhongjin@huawei.com, dwagner@suse.de, hare@suse.de
+Cc:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH v2] scsi: efct: Add missing check for ioremap
+Date:   Wed,  7 Jun 2023 17:51:24 +0800
+Message-Id: <20230607095124.38414-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] drm/amdgpu: display/Kconfig: replace leading spaces with
- tab
-To:     "Chen, Guchun" <Guchun.Chen@amd.com>,
-        Alex Deucher <alexdeucher@gmail.com>
-Cc:     "Li, Sun peng (Leo)" <Sunpeng.Li@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        "Siqueira, Rodrigo" <Rodrigo.Siqueira@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Wentland, Harry" <Harry.Wentland@amd.com>,
-        "Koenig, Christian" <Christian.Koenig@amd.com>
-References: <20230606133328.148490-1-suijingfeng@loongson.cn>
- <CADnq5_MdNSBJuNrJC2-fRByhEoUqEJmMGATT+OrFvjqA7k4F5Q@mail.gmail.com>
- <85b7bf66-840b-c6de-a7e3-be1f49953464@loongson.cn>
- <7db6a90f-1929-5e36-3f1d-c96acb5c70a1@loongson.cn>
- <DM5PR12MB2469E5DA60D629BBEC0A6157F153A@DM5PR12MB2469.namprd12.prod.outlook.com>
-Content-Language: en-US
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-Organization: Loongson
-In-Reply-To: <DM5PR12MB2469E5DA60D629BBEC0A6157F153A@DM5PR12MB2469.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxKeW6UoBk70AEAA--.15579S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj93XoWxJF4fXry7uFWfJw45AF4UWrX_yoW5CFy5pw
-        43AFn0kF4DXF1rt3srta4fWF15tan3tFy8XryDGw1UZryqvF1SgrWkKrs8ur95ZF1xCa1r
-        ZFyrWF47W3WFyrgCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUU9qb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v2
-        6F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
-        02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAF
-        wI0_Cr0_Gr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1c
-        AE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E
-        14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4
-        CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1x
-        MIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF
-        4lIxAIcVC2z280aVAFwI0_Cr0_Gr1UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIY
-        CTnIWIevJa73UjIFyTuYvjxUzcTmUUUUU
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: rQCowACniR4dU4BkidqzDA--.1731S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Xw4Utry8AF4fJF48ZFWDurg_yoW8JrW7pF
+        WSvay5uF4rtF45Kr1UAF1UCF1Fva40v3yDurWjg343uay0qFyrtFWfJFyakr15A3yktw17
+        tw15JFy8Xa4DJaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvC14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+        Y2ka0xkIwI1lc2xSY4AK67AK6r4fMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
+        1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
+        b7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
+        vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAI
+        cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2Kf
+        nxnUUI43ZEXa7VUjC385UUUUU==
+X-Originating-IP: [124.16.138.125]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Add check for ioremap() and return the error if it fails in order to
+guarantee the success of ioremap().
 
-On 2023/6/7 17:09, Chen, Guchun wrote:
-> [Public]
->
-> It's https://gitlab.freedesktop.org/agd5f/linux/-/tree/amd-staging-drm-next?ref_type=heads. Latest patches including yours's will be pushed to this branch after a while.
+Fixes: 4df84e846624 ("scsi: elx: efct: Driver initialization routines")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+Changelog:
 
-Now I know,  thanks for your kindness reply.
+v1 -> v2:
 
-> Regards,
-> Guchun
->
->> -----Original Message-----
->> From: amd-gfx <amd-gfx-bounces@lists.freedesktop.org> On Behalf Of Sui
->> Jingfeng
->> Sent: Wednesday, June 7, 2023 2:34 PM
->> To: Alex Deucher <alexdeucher@gmail.com>
->> Cc: Li, Sun peng (Leo) <Sunpeng.Li@amd.com>; David Airlie
->> <airlied@gmail.com>; Pan, Xinhui <Xinhui.Pan@amd.com>; Siqueira, Rodrigo
->> <Rodrigo.Siqueira@amd.com>; linux-kernel@vger.kernel.org; dri-
->> devel@lists.freedesktop.org; amd-gfx@lists.freedesktop.org; Daniel Vetter
->> <daniel@ffwll.ch>; Deucher, Alexander <Alexander.Deucher@amd.com>;
->> Wentland, Harry <Harry.Wentland@amd.com>; Koenig, Christian
->> <Christian.Koenig@amd.com>
->> Subject: Re: [PATCH] drm/amdgpu: display/Kconfig: replace leading spaces
->> with tab
->>
->> https://cgit.freedesktop.org/amd/drm-amd/
->>
->>
->> This one has a long time with no update.
->>
->>
->> On 2023/6/7 14:31, Sui Jingfeng wrote:
->>> Hi,
->>>
->>> On 2023/6/7 03:15, Alex Deucher wrote:
->>>> Applied.  Thanks!
->>> Where is the official branch of drm/amdgpu, I can't find it on the
->>> internet.
->>>
->>> Sorry for asking this silly question.
->>>> Alex
->>>>
->>>> On Tue, Jun 6, 2023 at 9:33 AM Sui Jingfeng <suijingfeng@loongson.cn>
->>>> wrote:
->>>>> This patch replace the leading spaces with tab, make them keep
->>>>> aligned with the rest of the config options. No functional change.
->>>>>
->>>>> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
->>>>> ---
->>>>>    drivers/gpu/drm/amd/display/Kconfig | 17 +++++++----------
->>>>>    1 file changed, 7 insertions(+), 10 deletions(-)
->>>>>
->>>>> diff --git a/drivers/gpu/drm/amd/display/Kconfig
->>>>> b/drivers/gpu/drm/amd/display/Kconfig
->>>>> index 2d8e55e29637..04ccfc70d583 100644
->>>>> --- a/drivers/gpu/drm/amd/display/Kconfig
->>>>> +++ b/drivers/gpu/drm/amd/display/Kconfig
->>>>> @@ -42,16 +42,13 @@ config DEBUG_KERNEL_DC
->>>>>             Choose this option if you want to hit kdgb_break in assert.
->>>>>
->>>>>    config DRM_AMD_SECURE_DISPLAY
->>>>> -        bool "Enable secure display support"
->>>>> -        depends on DEBUG_FS
->>>>> -        depends on DRM_AMD_DC_FP
->>>>> -        help
->>>>> -            Choose this option if you want to
->>>>> -            support secure display
->>>>> -
->>>>> -            This option enables the calculation
->>>>> -            of crc of specific region via debugfs.
->>>>> -            Cooperate with specific DMCU FW.
->>>>> +       bool "Enable secure display support"
->>>>> +       depends on DEBUG_FS
->>>>> +       depends on DRM_AMD_DC_FP
->>>>> +       help
->>>>> +         Choose this option if you want to support secure display
->>>>>
->>>>> +         This option enables the calculation of crc of specific
->>>>> region via
->>>>> +         debugfs. Cooperate with specific DMCU FW.
->>>>>
->>>>>    endmenu
->>>>> --
->>>>> 2.25.1
->>>>>
->> --
->> Jingfeng
+1. Add "rc = -EINVAL;" in the error handling.
+---
+ drivers/scsi/elx/efct/efct_driver.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/scsi/elx/efct/efct_driver.c b/drivers/scsi/elx/efct/efct_driver.c
+index 49fd2cfed70c..8cb6d42b7432 100644
+--- a/drivers/scsi/elx/efct/efct_driver.c
++++ b/drivers/scsi/elx/efct/efct_driver.c
+@@ -528,6 +528,10 @@ efct_pci_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 		if (pci_resource_flags(pdev, i) & IORESOURCE_MEM) {
+ 			efct->reg[r] = ioremap(pci_resource_start(pdev, i),
+ 					       pci_resource_len(pdev, i));
++			if (!efct->reg[r]) {
++				rc = -EINVAL;
++				goto ioremap_out;
++			}
+ 			r++;
+ 		}
+ 
+@@ -580,7 +584,7 @@ efct_pci_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 	efct_teardown_msix(efct);
+ dma_mask_out:
+ 	pci_set_drvdata(pdev, NULL);
+-
++ioremap_out:
+ 	for (i = 0; i < EFCT_PCI_MAX_REGS; i++) {
+ 		if (efct->reg[i])
+ 			iounmap(efct->reg[i]);
 -- 
-Jingfeng
+2.25.1
 
