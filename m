@@ -2,174 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0227372625C
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 16:09:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CB16726264
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 16:09:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240966AbjFGOI5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 10:08:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43646 "EHLO
+        id S241009AbjFGOJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 10:09:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235770AbjFGOIz (ORCPT
+        with ESMTP id S234318AbjFGOJV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 10:08:55 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2052.outbound.protection.outlook.com [40.107.94.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD241FD5;
-        Wed,  7 Jun 2023 07:08:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KCmxOSP8ac3FpLSKrFtlXlJMO417JTMFZrlcU6NanlL6tMFlPZ3DwnG9K9rJbVNGLhSmf+4nbtQ4GAeItFjXMDaumklqVkX3YHovU938vWqEMbn8e4TD6EWB4P/hOI0TgWONWoqkMIYQ6uNPTraIPjr4I3rlwi7ahJ6q4TESYGgFDYfKm3/stSv1ybRTelLsItR8sYnLPHHJ5u83kEEaIFR9rsAk3vKwBFoq/Gpi5ApjKRKjR1O6WxQIdgx+5lo5LFiSNuAzfP7ifpAzfNLC/R+2fXuNa68u55lRCT6o1Kkkox0c9haXReOJz35NowYAhaHZuhr4H/MBn1xcsTIptA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HmKXde6l//YB9SvA7td1OEZ0SiGiJJ2TVtY0yfV9bH4=;
- b=V0qC+7LUe/mLh0ShZPvN7bm8uyJjxcc1VRPJnyt38jUZ/gdP6f1VJtQXn+MEDgZAGw5RVThYKlnXp8P0Cxp/vpJwb6ozws5gehv8y/SHW4j/BQIsDzLF0kKVR9HFY3i6JuXPquDOf9l6VGwh5rb1EZDSujCZZU9yYV24AHa17LGWeVnpXs+Z52TpHIy6kKV7QsxiAw7RfrP9UcHrnSPVmzRCHb5NKcFz+xLeV/9cPphAXuyPoT41+PGqZdqkIe63lfhlwgIuwtRvOoJcU6xFjW3+0fBml2PWPzi4UE9860YdOnZJOc9oo2NhE0qZlanQUerKXV0sY+pkHgyOIQPbZg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HmKXde6l//YB9SvA7td1OEZ0SiGiJJ2TVtY0yfV9bH4=;
- b=KQrLIYgF74FexpUATK4FJ+9XPJyNLKl6QzquUc0bfklbO02P7nWvGmC7pPjoNV57QeayDUk8Got25ms70aQgK23xttqgMu/bCGUTGQfs2ky6USvlsWQtUa3z6mwj23EARnA0Yol2vu9nNqi1EJV4iULBBLXjxqxxOh7t+W98mCk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
- by MN2PR12MB4238.namprd12.prod.outlook.com (2603:10b6:208:199::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.36; Wed, 7 Jun
- 2023 14:07:52 +0000
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::ca6a:7f77:6bb7:17fb]) by BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::ca6a:7f77:6bb7:17fb%3]) with mapi id 15.20.6455.028; Wed, 7 Jun 2023
- 14:07:52 +0000
-Message-ID: <c84f5983-930d-0bbe-b7fe-01875c045815@amd.com>
-Date:   Wed, 7 Jun 2023 10:07:49 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Cc:     yazen.ghannam@amd.com, linux-kernel@vger.kernel.org, bp@alien8.de,
-        mingo@redhat.com, mchehab@kernel.org, tony.luck@intel.com,
-        nchatrad@amd.com, Muralidhara M K <muralidhara.mk@amd.com>
-Subject: Re: [PATCH] EDAC/mce_amd: Remove SMCA Extended Error code
- descriptions
-Content-Language: en-US
-To:     Muralidhara M K <muralimk@amd.com>, linux-edac@vger.kernel.org,
-        x86@kernel.org
-References: <20230523085550.391768-1-muralimk@amd.com>
- <20230523085550.391768-2-muralimk@amd.com>
-From:   Yazen Ghannam <yazen.ghannam@amd.com>
-In-Reply-To: <20230523085550.391768-2-muralimk@amd.com>
-Content-Type: text/plain; charset=UTF-8
+        Wed, 7 Jun 2023 10:09:21 -0400
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 292F81BF1;
+        Wed,  7 Jun 2023 07:08:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
+        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=rkWjMt2GNbfEvT17R5tH+mVMzIISMovCHFDUfGIB0Q0=; b=cGUk3O6ZxNQwpJgwqnWwggUeTk
+        9GJroCwjndZbfuvkGkexFcMpvCyq1TErIJs7Bd7PLSLHH6/vCTLHZ5PU9BaOTqHnGVxXENnSPa1NN
+        xzrU1kfKCZ1WBCaHvlJIc3opEzWfk2arBxiIq9Hcu0duPhdGhXh9FrSFXZ2hBF8/ZG84=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:37910 helo=pettiford)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1q6tpO-0005jo-UK; Wed, 07 Jun 2023 10:08:00 -0400
+Date:   Wed, 7 Jun 2023 10:07:58 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Hugo Villeneuve <hugo@hugovil.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        jirislaby@kernel.org, jringle@gridpoint.com,
+        tomasz.mon@camlingroup.com, l.perczak@camlintechnologies.com,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        stable@vger.kernel.org, Andy Shevchenko <andy.shevchenko@gmail.com>
+Message-Id: <20230607100758.705c82abae71de6a675cbe96@hugovil.com>
+In-Reply-To: <20230604191613.ea95fa9a1bc508525fe3bbd5@hugovil.com>
+References: <20230602152626.284324-1-hugo@hugovil.com>
+        <20230602152626.284324-6-hugo@hugovil.com>
+        <2023060454-cotton-paramount-e33e@gregkh>
+        <20230604134344.73dc3cbb57d335d4a0b4b33a@hugovil.com>
+        <2023060406-scarcity-clear-cc56@gregkh>
+        <20230604191613.ea95fa9a1bc508525fe3bbd5@hugovil.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BN0PR04CA0170.namprd04.prod.outlook.com
- (2603:10b6:408:eb::25) To BN8PR12MB3108.namprd12.prod.outlook.com
- (2603:10b6:408:40::20)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3108:EE_|MN2PR12MB4238:EE_
-X-MS-Office365-Filtering-Correlation-Id: a59edfe3-4d1c-4014-bc9f-08db6760950f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 7pAK2C4X70WwcLzG1RsR6JNi0dSr0WG6bNXWQyNwrxiMI+pZi743Uo2joxiK4Jsj9dthB9ri0bdA9MNq+OyEz541fBhkM+Y2It+RNqeZGxXtN3oX/U1HpEnsxfNv0POnTV9He0waq941BYE4RNYZPN498msQZmqM8yfz2mB/FB8UkKxmuSN8Lw/6ifZbjQ6V4POB4TQICnAvb5j0P0yEeelhOFBrKTckgDuLFZ3Odnm3PhhtvoncLcBHA0AwYI3T4YOzY7b1sRanrCC4JIdMhQcf9SMZA2DOygS7D9bisXLRWioYXO33vRaYLgMlK+fOJ3SmBuVIuujL2g/360pmy+EHqKMUfPYUgdwS/52TiooRYXgmywHGlo9w4RkBG90UosuHqeG1lkp7rZ9jpI13VYJum+rQ3odj6tYx/+Rb+brwy0rwO0Xd2tNGN8DLnZMjBNnzGAp1MRzC5eFu0dshYwi1Rpb30zjdeixDYJ5uTt4myDlr6isOGLbXRsY3mpYbbs/zT5yZO/RPxzcdO8u0W/f2nlMnBZY65vy0kMXBqKNstcVAyio7gDG1ZikynzmlFR2P7rmpdoycsPWhBafVWuDxLJUQZTAPYbOg5VA4lhT4V6iUtDKxN8W6OuHfT5BKEzoN8+vnLRVXVVNjO4VoAw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(136003)(376002)(366004)(39860400002)(451199021)(6486002)(6666004)(2906002)(66946007)(66556008)(66476007)(36756003)(38100700002)(5660300002)(8936002)(86362001)(8676002)(44832011)(31696002)(41300700001)(4326008)(316002)(478600001)(2616005)(53546011)(26005)(6512007)(6506007)(31686004)(186003)(83380400001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Z3ZFYVBlTTB3VTdvNlkvM2s4d1RDVTc5UzNnMmZ6MlNWYkxZNnZTbjlBQzYr?=
- =?utf-8?B?dnBYb3ptZDVMY2w4bGRxdHB2bGxTNGI2S1d3QlZIRWZuRzhMMmNCTnF1cmZh?=
- =?utf-8?B?d2hrN3FpOTNZMHdRVllrMCtreHJ3UDh1ZkVuQmtRd29mcGovaDZHaFBEb1hV?=
- =?utf-8?B?MGM1YTBQVGwvVG1LUnluaXkwOWNxTFE2UmVPTjJxUjZDeWdwb25JblJZbmVC?=
- =?utf-8?B?L01SN2xvdE5MdlBIUkN5RjdtK0lGOG95R3N3YmN0cS9aM2dlNmw5V2VCR3Fa?=
- =?utf-8?B?c0l5cFZ3N1FEWGdKdjFWWnAvV2diRThPU2FpZHVqMlJmcXVFbUdjZFZXMWJY?=
- =?utf-8?B?VmxvbC9YcTZSQWxlaTJOcDRIVFY3dHZYTmxkQ0JyL2QzYnBTaDd3YytrRkJC?=
- =?utf-8?B?TDFvYmlnS0pxMjRNZkhLZ3VWaEF0d2RFWGFrNDRhU3ZaR2JmcTloRW5MSUVl?=
- =?utf-8?B?bFFoYzVXem1uVURoNHl4SDRnd0F2enVqdW83V2ZuTTdjb0NJcmxRMkEzRVk3?=
- =?utf-8?B?c3RKbkN4aSsxQ252T0JjLzhGRE8vbk00NlFBcjhXeVd5VkZyV0NjOWEzRG1Q?=
- =?utf-8?B?K2VEaEQrcS9qNGpCWFJPRGJBc0hUMHlQanlTREZJa2dJOFV4STdNZjRMRlhQ?=
- =?utf-8?B?ZzNsMitaalFsZlhHelBSVk5nbVJnMnFmdTY4RlpPV3NoaXE0MWJGUnVlejNu?=
- =?utf-8?B?SVNxZlBubFA1S2FuRFBXd2J2MFRwKzRrRldBRnZsOTNjS3dHR0czNWJUVmRa?=
- =?utf-8?B?UVJ0MzlqMFl4NEgvTHpnVUhvaTB5QTFsWWZxdVhvQjZGeFRYS3pjck15djMv?=
- =?utf-8?B?bFhRRGxOZ05lZXBmak5WS0xTeW9aNm9oVE1nMFp2U1ZCcytGa2p0YkRUWTJi?=
- =?utf-8?B?WUFaS0xHeU1icVFJc3NiWm9ZNC9TVldlNHhTWWlXeHErT0xKeFJJSVRjTkpy?=
- =?utf-8?B?MXk5M0hnOGxVOFBoRXpuWFFWdiswRkFCV0gwWFhSa2V2WkI1blpaN00zVWZj?=
- =?utf-8?B?cVNuQmlIM1NZWU8zaW04YmRrdERNeURrdlk0ejVlTFFlcXFMQ1lOVHlZS3VI?=
- =?utf-8?B?K3pYZ1pzYWdvZ2VaTDEwMTZ2VVBBM25sWUdScTZmZDN1Vkx3OFZqaVdqc25X?=
- =?utf-8?B?QU1LUG5lWkpobmIyMXNLRE5NQ2NyVk1wanc4K2NmSXV0ZjRxdnd0KzRFcGVN?=
- =?utf-8?B?ZHR0UkpEWEJxaUtUMUVneS9MdWlBMmdPL0FEakNoYUN0VDd3NWRueTBGaFRO?=
- =?utf-8?B?Slc2dC8rMlV3SGRLYTIzdlljNlBMWHdEM0hJa0R1V2Fjd2VkWHhZdXNpQkE5?=
- =?utf-8?B?dzFrMW9sdlYwRkZndkFRRlZDZzUzcjZ3YzJpNzFEZnpGVVNaOHVvQTRsOXpw?=
- =?utf-8?B?RDg0ZVlzbDBiOHBINEQ4OTEzaTFmRmhqaVRINVhpQ2NaTHpNMmNFcGdUMUVT?=
- =?utf-8?B?eEFsSk5kOCsyYVhmOC94MFV3VWsydkF3M3BwMWc2djgzZmlpeGVyT29jWlI5?=
- =?utf-8?B?REEvRW1QSGdQR3BBYUpkVitpNGRKVWZwSFRnWUlXSVRaQmg0VHhuWFBFMXNI?=
- =?utf-8?B?M3dEaEtkeE5mMWpKOHBRTzkvVXJLZDRjQmZQSjhBQllXbms2aW5KYXJobGFI?=
- =?utf-8?B?YjdxcStjSHpINnlyaDRVZFliRCtEYzZSTHkzSitzRVFTLzRMK2EyV0hmN1J2?=
- =?utf-8?B?NHJIaThTMDUwTlFjeU9pRHNOWWIzaXVleC80dEpJNXhqbWtkeVllL0FCWm5v?=
- =?utf-8?B?QWdLajJ4Q1duNzh4UzRtKzRXU0hQVWRmMEQrRGYwNTl2R3VVOGdMRkorY0wx?=
- =?utf-8?B?Y2ErNC9lMWV4Zlh2Vk1saWpGdnNaUmhDVVZhSzBCeFplQkI3bFgzQThVWk5Z?=
- =?utf-8?B?eVJTcExDOGFhVzJ4aTNxcmFrT3pZTnBCQm9hTjkyb05VcFczTlF1RHZRUGtN?=
- =?utf-8?B?RnNDNndGdzQxbENoNnU1a3Z6R1prMStaZERFMVo4N1FINDlCZjVXZWFaVloy?=
- =?utf-8?B?dVFUL1VLd3lNTjh6a2w2NzFTV0d4SC9FaDNYTEVKbzFVMnI5K0daaE5GZ1ox?=
- =?utf-8?B?QWFoazNmOTdKOXFPTHpFdUdOZDZvMzZVSHZtOE5kdmZpaWFEU2tWWEg4REFx?=
- =?utf-8?Q?pyqCH0YFWENoYOvHa6bZwZCHk?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a59edfe3-4d1c-4014-bc9f-08db6760950f
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2023 14:07:51.9750
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: MGhFGhSV509R3YmLG+aCgdWT+0cM0XybYuH8xePS3ADy6d51PgRV/XcCC2KrZ/RAvulupUvvt7bDcxX1aMMy0Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4238
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-SA-Exim-Connect-IP: 70.80.174.168
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v7 5/9] serial: sc16is7xx: fix regression with GPIO
+ configuration
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/23/23 4:55 AM, Muralidhara M K wrote:
-> From: Muralidhara M K <muralidhara.mk@amd.com>
+On Sun, 4 Jun 2023 19:16:13 -0400
+Hugo Villeneuve <hugo@hugovil.com> wrote:
+
+> On Sun, 4 Jun 2023 20:29:58 +0200
+> Greg KH <gregkh@linuxfoundation.org> wrote:
 > 
-> On AMD systems with Scalable MCA, each machine check error of a SMCA bank
-> type has an associated bit position in the bank's control (CTL) register.
+> > On Sun, Jun 04, 2023 at 01:43:44PM -0400, Hugo Villeneuve wrote:
+> > > Here is what I suggest to silence the warning:
+> > > 
+> > > 	mctrl_mask = sc16is7xx_setup_mctrl_ports(dev);
+> > > 
+> > > #ifdef CONFIG_GPIOLIB
+> > > 	ret = sc16is7xx_setup_gpio_chip(dev, mctrl_mask);
+> > > 	if (ret)
+> > > 		goto out_thread;
+> > > #else
+> > > 	(void) mctrl_mask;
+> > > #endif
+> > 
+> > Eeek,  no, please no...
+> > 
+> > First off, please don't put #ifdef in .c files if at all possible.
 > 
-> An error's bit position in the CTL register is used during error decoding
-> for offsetting into the corresponding bank's error description structure.
-> As new errors are being added in newer AMD systems for existing SMCA bank
-> types, the underlying SMCA architecture guarantees that the bit positions
-> of existing errors are not altered.
+> Hi Greg,
+> Andy also made a similar comment, but couldn't suggest a valid
+> alternative when I asked him what to do about that.
 > 
-> However, on some AMD systems some of the existing bit definitions in the
-> CTL register of SMCA bank type are reassigned without defining new HWID
-> and McaType. Consequently, the errors whose bit definitions have been
-> reassigned in the CTL register are being erroneously decoded.
+> Just as a sidenote, I didn't add those #ifdef, they were already
+> present in the driver in multiple places.
 > 
-> Remove SMCA Extended Error Code descriptions. This avoids decoding issues
-> for incorrectly reassigned bits, and avoids the related maintenance burden
-> in the kernel. This decoding can be done in external tools or by referring
-> to AMD documentation. The bank type and Extended Error Code value for an
-> error will continue to be printed as a convenience
->
-
-Minor nit: there should be a (.) at the end of the last sentence.
-
-> Signed-off-by: Muralidhara M K <muralidhara.mk@amd.com>
-> ---
->  drivers/edac/mce_amd.c | 480 -----------------------------------------
->  1 file changed, 480 deletions(-)
+> What would be your suggestion to get rid of those #ifdef, simply delete
+> them all?
 > 
+> If you suggest me what to do, I will be happy to submit a
+> future patch after this series is finalized to clean that aspect.
 
-This patch is completely within EDAC, so it's not necessary to copy the
-x86 or TIP maintainers.
+Hi Greg,
+altough I just send a new V8, I am still curious to hear your point of
+view about those #ifdef...
 
-Also, this patch was sent in-reply-to another patch that is not related.
-Each of these can be sent independently.
+Hugo.
 
-Otherwise, this looks good to me.
 
-Reviewed-by: Yazen Ghannam <yazen.ghannam@amd.com>
-
-Thanks,
-Yazen
+> > Secondly, that (void) craziness is just that.  Rework this to not be an
+> > issue some other way please.
+> > 
+> > > I could also store (define new variable) mctrl_mask directly inside struct sc16is7xx_port...
+> > 
+> > Sure, that sounds best.
+> 
+> Ok, I will do that.
+> 
+> 
+> > > > And you have a real port here, no need to pass in a "raw" struct device,
+> > > > right?
+> > > 
+> > > The function operates globally on both ports (or nr_uart), not just a single port. That is why I pass the "raw" struct device, in order to extract the 
+> > > struct sc16is7xx_port from it:
+> > > 
+> > >     struct sc16is7xx_port *s = dev_get_drvdata(dev);
+> > > 
+> > > Inside the function, I also need the "raw" struc device. If we pass a struct sc16is7xx_port to the function, then I can get the "raw" struc device with this:
+> > > 
+> > > static u8 sc16is7xx_setup_mctrl_ports(struct sc16is7xx_port *s)
+> > > {
+> > > 	struct device *dev = &s->p[0].port.dev;
+> > > 
+> > > But I find this more obfuscated and hard to understand than to simply pass a "raw" struct device...
+> > 
+> > You should never need a "raw" struct device for stuff (if so, something
+> > is really odd).  Except for error messages, but that's not really a big
+> > deal, right?
+> 
+> > Don't pass around struct device in a driver, use the real types as you
+> > know you have it and it saves odd casting around and it just doesn't
+> > look safe at all to do so.
+> 
+> If you look at the patch, you will see that I need "struct device *dev"
+> at two places in the sc16is7xx_setup_mctrl_ports() function to read the
+> device properties:
+> 
+> ...
+> +static u8 sc16is7xx_setup_mctrl_ports(struct device *dev)
+> ...
+> +	count = device_property_count_u32(dev,...
+> ...
+> +	ret = device_property_read_u32_array(dev,
+> ...
+> 
+> I do not understand why this is odd?
+> 
+> 
+> > And if you have that crazy s->p.... stuff in multiple places, the
+> > perhaps you might want to rethink the structure somehow?  Or at the very
+> > least, write an inline function to get it when needed.
+> 
+> I am not sure what you mean by that, since again that "crazy" stuff is
+> already used everywhere in this driver?
+> 
+> 
+> > Also, meta comment, you might want to use some \n characters in your
+> > emails, your lines are really long :)
+> 
+> Strange, I use sylpheed as a mail client, and the option "Wrap lines at
+> 72 characters" is enabled by default, but somehow you must also check
+> the box "Wrap on input" for it to work, not very intuitive :) Thanks for
+> pointing that to me.
+> 
+> Hugo.
