@@ -2,223 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6CDF725706
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 10:11:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DF6D725712
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 10:13:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239388AbjFGILX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 04:11:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55984 "EHLO
+        id S239389AbjFGINP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 04:13:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234278AbjFGILV (ORCPT
+        with ESMTP id S238853AbjFGINM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 04:11:21 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0691C95;
-        Wed,  7 Jun 2023 01:11:18 -0700 (PDT)
-X-QQ-mid: bizesmtp75t1686125468tf9po345
-Received: from linux-lab-host.localdomain ( [61.141.77.49])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 07 Jun 2023 16:11:07 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: t+YzzcYcY/yIcYJBJAauvIxKKd3tsAr7koUSEaZ8zaovQMdGosVaKCJWd1dp3
-        3AznNfz7xPXMB8v22KQ8la1jDw6ACQcuAKPOVu7cB1q7cKLlyIcQZXGavNxuFNICM4jCdPQ
-        nZrcg4DQXzkFRYrT/IojBq86LZRVcJQqGP1AScW7qZp08DggRkTsU6bdmqtrIp+BmEtqmkR
-        2G2ci7QeoAEVBkMnnD6+HfWm/zydQlvvTIAfL1Vb868dLorSnZjS7qZay+c4VTzR5XLZ7O7
-        KLS1kzeO6ZT4y4b3pGClyfonwGhBZ8IrLpFBzwruN8EXA20Q5XX1xsuPUDrl3YmD+9DamKs
-        60AenKfN4R3T8cpMJEV+s5zy7QMho8seioMXwWLzM+UGSb69+GuhKP4LxYV01+hKo2YYlq4
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 15885581524704403754
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        thomas@t-8ch.de
-Subject: Re: [PATCH v3 3/3] selftests/nolibc: riscv: customize makefile for rv32
-Date:   Wed,  7 Jun 2023 16:11:03 +0800
-Message-Id: <20230607081103.746962-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <ZIAywHvr6UB1J4of@1wt.eu>
-References: <ZIAywHvr6UB1J4of@1wt.eu>
+        Wed, 7 Jun 2023 04:13:12 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F73210D7;
+        Wed,  7 Jun 2023 01:13:11 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 3D38A5C007D;
+        Wed,  7 Jun 2023 04:11:52 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Wed, 07 Jun 2023 04:11:52 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.fm; h=
+        cc:cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1686125512; x=1686211912; bh=oehWi2mcNypSHEDOl07F4vFqlJbimL9Vc+E
+        tsRILVQI=; b=3tBEpoLaA/r3IvvvcW/Ed2Ro+VtkUlWTC3HJbGojPOqGYunM0JS
+        fBli8vZY8hdf+N7bcLFL8uDqD7dLkN50xvcw9lTLhIROeslktAco3SpOjqk8ijah
+        m2zsSotjAGXl/a7qbnCmZP8YrrbBPHeBkBWZ/hKJJlm31mR6QWG6fwhUgxokwjXm
+        C8b2GW0YLAeEAWez7P+jYL84+J82ZPYhz0GraGjJ2S8X7TJqX1d/TwKu6P3rr5TA
+        HIcjy0NVVi2ECCpuwDydofkwcK0Df6vYgABblaamoaTB5nqlkrh83HSw/XPkYLDn
+        2MvOFC7hlCQiJIwRtXYnaWDQKcCxHwq6gXw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1686125512; x=1686211912; bh=oehWi2mcNypSHEDOl07F4vFqlJbimL9Vc+E
+        tsRILVQI=; b=Fk3bJIbP/+nkkg/GJiocAqU1LnFGAzIkf94CX5g4uRIc/xbzz8d
+        /RJ05hrPkcCkPtvUC2tVjmBMrcWsfq65YNMk4vofncc1Y1vFKjZ5T8s6k34XhwPW
+        nY6pHbseKWtbmsbAF8Td3/L8//y7Yl0XgAwKatO7wzloJu4P2QeVF6SOqRZ0Tsvo
+        pRi0LVypSgVhOinnqvdcH3xC/JkY/HjJpMzghqinr1jiuOdZCB+xIXgen6bOeK6V
+        3j0UWNSPRPJJbQrlpUB91M7vzd8PZ8r6eVZ8hJpMUBrVcNwXp+Euk2m+jyQqXwTh
+        B4+W6LmRz4XuyHAQ+VnDimFiVCc4HoASuUg==
+X-ME-Sender: <xms:yDuAZAx33D9gHHgAbE5EHnbc9rm-PgkP1QIg7W8kEfjekSXbRJxTOA>
+    <xme:yDuAZESU2bKlWqdG9grNBUokueCtDDQs3DLcadYinmBNhfuqj20VDfblYDS_XLAQq
+    L4rnBFVF6pYDtiY>
+X-ME-Received: <xmr:yDuAZCWR6T_2EeU0iI9nEWDcCguaH-YSwyf5Al8LQdKOm0uA_jKB_MC45BocSi26OWuYAhohbhM0YCOBee7emNkAn96Vlg-7_gEdcStR-KgnETAWtabR>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedtfedgleduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepkfffgggfuffvvehfhfgjtgfgsehtjeertddtfeejnecuhfhrohhmpeeuvghr
+    nhguucfutghhuhgsvghrthcuoegsvghrnhgurdhstghhuhgsvghrthesfhgrshhtmhgrih
+    hlrdhfmheqnecuggftrfgrthhtvghrnheptdeujeffueehtdefjedtfeeltedvhffhteeh
+    ffevudelhfegiedtuddvteekgffhnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenuc
+    evlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsvghrnhgu
+    rdhstghhuhgsvghrthesfhgrshhtmhgrihhlrdhfmh
+X-ME-Proxy: <xmx:yDuAZOh22Tdjn1YdTNr0bxkTYpfIZikOAB7_CuX_IYojnXbUHeC8JQ>
+    <xmx:yDuAZCDVjzIHQy1nQQ2YdTQzgnEIJL8eOjyW1JNvBypbPibeTo0h6g>
+    <xmx:yDuAZPIaH3s3ssetJPgzm6W7uDuwFMfTRU2EqNTc6tsMRycLXpqGZA>
+    <xmx:yDuAZJ6zkx3gs4STOM1wLl0a5PeKaz2hIYlxCZS_u7Quh_h-o_M7tA>
+Feedback-ID: id8a24192:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 7 Jun 2023 04:11:51 -0400 (EDT)
+Message-ID: <9f79a2b7-c3f4-9c42-e6f3-f3c77f75afa2@fastmail.fm>
+Date:   Wed, 7 Jun 2023 10:11:49 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 0/6] vfs: provide automatic kernel freeze / resume
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     Askar Safin <safinaskar@gmail.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        fuse-devel <fuse-devel@lists.sourceforge.net>
+References: <CAPnZJGDWUT0D7cT_kWa6W9u8MHwhG8ZbGpn=uY4zYRWJkzZzjA@mail.gmail.com>
+ <CAJfpeguZX5pF8-UNsSfJmMhpgeUFT5XyG_rDzMD-4pB+MjkhZA@mail.gmail.com>
+ <5d69a11e-c64e-25dd-a982-fd4c935f2bf3@fastmail.fm>
+ <CAJfpeguQ87Vxdn-+c4yYy7=hKnSYwWJNe22f-6dG8FNAwjWBXA@mail.gmail.com>
+Content-Language: en-US, de-DE
+From:   Bernd Schubert <bernd.schubert@fastmail.fm>
+In-Reply-To: <CAJfpeguQ87Vxdn-+c4yYy7=hKnSYwWJNe22f-6dG8FNAwjWBXA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Wed, Jun 07, 2023 at 02:33:14PM +0800, Zhangjin Wu wrote:
-> >
-> >     ifneq ($(findstring riscv,$(ARCH)),)
-> >       KARCH = riscv
-> >     else
-> >       KARCH = $(ARCH)
-> >     endif
-> (...)
->
-> At least it suggests what it's going to be used for instead of just
-> being marked as "special" (something the underscore does).
->
+On 6/7/23 09:21, Miklos Szeredi wrote:
+> On Tue, 6 Jun 2023 at 22:18, Bernd Schubert <bernd.schubert@fastmail.fm> wrote:
+>>
+>>
+>>
+>> On 6/6/23 16:37, Miklos Szeredi wrote:
+>>> On Sun, 14 May 2023 at 00:04, Askar Safin <safinaskar@gmail.com> wrote:
+>>>>
+>>>> Will this patch fix a long-standing fuse vs suspend bug? (
+>>>> https://bugzilla.kernel.org/show_bug.cgi?id=34932 )
+>>>
+>>> No.
+>>>
+>>> The solution to the fuse issue is to freeze processes that initiate
+>>> fuse requests *before* freezing processes that serve fuse requests.
+>>>
+>>> The problem is finding out which is which.  This can be complicated by
+>>> the fact that a process could be both serving requests *and*
+>>> initiating them (even without knowing).
+>>>
+>>> The best idea so far is to let fuse servers set a process flag
+>>> (PF_FREEZE_LATE) that is inherited across fork/clone.  For example the
+>>> sshfs server would do the following before starting request processing
+>>> or starting ssh:
+>>>
+>>>     echo 1 > /proc/self/freeze_late
+>>>
+>>> This would make the sshfs and ssh processes be frozen after processes
+>>> that call into the sshfs mount.
+>>
+>> Hmm, why would this need to be done manually on the server (daemon)
+>> side? It could be automated on the fuse kernel side, for example in
+>> process_init_reply() using current task context?
+> 
+> Setting the flag for the current task wouldn't be sufficient, it would
+> need to set it for all threads of a process.  Even that wouldn't work
+> for e.g. sshfs, which forks off ssh before starting request
+> processing.
 
-Yeah.
+Assuming a fuse server process is not handing over requests to other 
+threads/forked-processes, isn't the main issue that all fuse server 
+tasks are frozen and none is left to take requests? A single non-frozen 
+thread should be sufficient for that?
 
-> > but the new method mentioned here differs, it split the whole Makefile
-> > to two 'parts', the before part accept something like ARCH=riscv32,
-> > ARCH=riscv64, ARCH=riscv, the after part use the ARCH=riscv, this avoid
-> > touch the targets context:
->
-> We don't care about touching *code*. What is important is that it scales
-> and is understandable, thus maintainable. Code that has many exceptions
-> or requires a lot of head scratching to figure what's being done is a
-> pain to maintain and nobody wants to take the risk to touch it. That was
-> exactly the purpose of the enumeration of per-target args, flags etc in
-> the makefile: nobody needs to be expert in multiple areas to touch their
-> own area. If we face a showstopper, we need to address it, and not work
-> around it for the sake of touching less context.
->
 
-Get it clearly.
+> 
+> So I'd prefer setting this explicitly.   This could be done from
+> libfuse, before starting threads.  Or, as in the case of sshfs, it
+> could be done by the filesystem itself.
 
-> >     ... variable assignments before this line ...
-> >
-> >     +# Some architectures share the same arch/<ARCH>/ source code tree among the <ARCH>xyz variants
-> >     +# Top-level kernel Makefile only accepts ARCH=<ARCH>, override <ARCH>xyz variants to make kernel happy
-> >     +ARCHS := riscv
-> >     +_ARCH := $(strip $(foreach arch, $(ARCHS), $(if $(findstring x$(arch),x$(ARCH)),$(arch))))
-> >     +ifneq ($(_ARCH),)
-> >     +override ARCH := $(_ARCH)
-> >     +endif
-> >     +
->
-> So actually this is a perfect example of head scratching for me. I suspect
-> it would replace x86_64 with x86 if x86 would be placed there for example,
-> though it would not change anything for i386. Maybe for s390/s390x,
-> arm/arm64 or ppc/ppc64 etc it would act similarly while these are different
-> archs. Thus this seems to be trying to generalize a rule around a single
-> particular case.
->
+With a flag that should work, with my score proposal it would be difficult.
 
-It is true, we did worry about when users wrongly add new ARCH in the
-list, a generic way is very hard before we really use them.
+> 
+>>
+>> A slightly better version would give scores, the later the daemon/server
+>> is created the higher its freezing score - would help a bit with stacked
+>> fuse file systems, although not perfectly. For that struct task would
+>> need to be extended, though.
+> 
+> If we can quiesce the top of the stack, then hopefully all the lower
+> ones will also have no activity.   There could be special cases, but
+> that would need to be dealt with in the fuse server itself.
 
-> Probably that instead this particular case should be addressed explicitly
-> until we find a generalization (if ever) to other archs:
->
->   ifeq($(ARCH),riscv32)
->   override ARCH := riscv
->   else ifeq($(ARCH),riscv64)
->   override ARCH := riscv
->   endif
->   endif
->
-> Or maybe even better you can decide to remap arch names explicitly:
->
->   # use KARCH_from=to to rename ARCH from $from to $to past this point.
->   KARCH_riscv32 := riscv
->   KARCH_riscv64 := riscv
->   ...
->   ifneq($(KARCH_$(ARCH)),)
->   override ARCH := $(KARCH_$(ARCH))
->   endif
->
 
-This did inspire me a lot, so, what about simply go back to the KARCH
-method without any overriding:
+Ah, when all non flagged processes are frozen first no IO should come 
+in. Yeah, it mostly works, but I wonder if init/systemd is not going to 
+set that flag as well. And then you have an issue when fuse is on a file 
+system used by systemd. My long time ago initial interest on fuse is to 
+use fuse as root file system and I still do that for some cases - not 
+sure if a flag would be sufficient here. I think a freezing score would 
+solve more issues.
+Although probably better to do step by step - flag first and score can 
+be added later.
 
-    diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-    index 4a3a105e1fdf..bde635b083f4 100644
-    --- a/tools/testing/selftests/nolibc/Makefile
-    +++ b/tools/testing/selftests/nolibc/Makefile
-    @@ -14,6 +14,12 @@ include $(srctree)/scripts/subarch.include
-     ARCH = $(SUBARCH)
-     endif
 
-    +# kernel supported ARCH names by architecture
-    +KARCH_riscv32    = riscv
-    +KARCH_riscv64    = riscv
-    +KARCH_riscv      = riscv
-    +KARCH            = $(or $(KARCH_$(ARCH)),$(ARCH))
-    +
-     # kernel image names by architecture
-     IMAGE_i386       = arch/x86/boot/bzImage
-     IMAGE_x86_64     = arch/x86/boot/bzImage
-    @@ -21,6 +27,8 @@ IMAGE_x86        = arch/x86/boot/bzImage
-     IMAGE_arm64      = arch/arm64/boot/Image
-     IMAGE_arm        = arch/arm/boot/zImage
-     IMAGE_mips       = vmlinuz
 
-And this:
-
-    @@ -117,7 +132,7 @@ sysroot: sysroot/$(ARCH)/include
-     sysroot/$(ARCH)/include:
-            $(Q)rm -rf sysroot/$(ARCH) sysroot/sysroot
-            $(QUIET_MKDIR)mkdir -p sysroot
-    -       $(Q)$(MAKE) -C ../../../include/nolibc ARCH=$(ARCH) OUTPUT=$(CURDIR)/sysroot/ headers_standalone
-    +       $(Q)$(MAKE) -C ../../../include/nolibc ARCH=$(KARCH) OUTPUT=$(CURDIR)/sysroot/ headers_standalone
-            $(Q)mv sysroot/sysroot sysroot/$(ARCH)
-
-     nolibc-test: nolibc-test.c sysroot/$(ARCH)/include
-    @@ -141,10 +156,10 @@ initramfs: nolibc-test
-            $(Q)cp nolibc-test initramfs/init
-
-     defconfig:
-    -       $(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) mrproper $(DEFCONFIG) prepare
-    +       $(Q)$(MAKE) -C $(srctree) ARCH=$(KARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) mrproper $(DEFCONFIG) prepare
-
-     kernel: initramfs
-    -       $(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) $(IMAGE_NAME) CONFIG_INITRAMFS_SOURCE=$(CURDIR)/initramfs
-    +       $(Q)$(MAKE) -C $(srctree) ARCH=$(KARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) $(IMAGE_NAME) CONFIG_INITRAMFS_SOURCE=$(CURDIR)/initramfs
-
-It is almost consistent with the original Makefile now.
-
-I do like this method more than the override method now, the override
-method may break the maintainability a lot especially that the
-developers may be hard to know which ARCH value it is when he touch a
-line of the Makefile.
-
-> And this does deserve an explicit note in the makefile that anything
-> using $(ARCH) using a macro will see the renamed arch while anything
-> using it as a variable before that line will see the original one.
->
-> If you want to avoid the '=' vs ':=' mess you can even keep a copy of
-> the original ARCH at the beginning of the makefile:
->
->   # keep a copy of the arch name requested by the user, for use later
->   # when the original form is preferred over the kernel's arch name.
->   USER_ARCH = $(ARCH)
->
-
-Yeah, a copy is good for the override case.
-
-> > Willy, Which one do you prefer?
->
-> The most explicit ones like above. Generally speaking when you try to
-> add support for your own arch here, you look there for similar ones,
-> where commands are called, and read in reverse mode till the beginning,
-> hoping to understand the transformations. I think the current ones and
-> the proposed ones above are self-explanatory. Anything doing too much
-> magic renaming or doing too much hard-coded automatic stuff can quickly
-> obfuscate the principle and make things more complicated. I already
-> despise "override" because it messes up with macros, but I agree it can
-> sometimes have some value. If you dup it into ORIG_ARCH or USER_ARCH,
-> and modify the few lines overriding arch in an explicit manner, I think
-> it would preserve its maintainability.
->
-
-Agree, let's give up the 'override' stuff.
-
-> What do you think ?
-
-So, let's go with the KARCH method if you agree too.
-
-Best regards,
-Zhangjin
-
->
-> thanks,
-> Willy
+Thanks,
+Bernd
