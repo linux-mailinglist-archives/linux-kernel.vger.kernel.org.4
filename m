@@ -2,38 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72F2B72670D
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 19:19:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF798726711
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 19:20:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231482AbjFGRT2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 13:19:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53508 "EHLO
+        id S231523AbjFGRUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 13:20:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231346AbjFGRT1 (ORCPT
+        with ESMTP id S231346AbjFGRTu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 13:19:27 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1AE0E192;
-        Wed,  7 Jun 2023 10:19:26 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 230E0AB6;
-        Wed,  7 Jun 2023 10:20:11 -0700 (PDT)
-Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A1B193F71E;
-        Wed,  7 Jun 2023 10:19:24 -0700 (PDT)
-From:   Robin Murphy <robin.murphy@arm.com>
-To:     bhelgaas@google.com
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        iommu@lists.linux.dev, hch@infradead.org, stable@vger.kernel.org,
-        Jason Adriaanse <jason_a69@yahoo.co.uk>
-Subject: [PATCH RESEND] PCI: Add function 1 DMA alias quirk for Marvell 88SE9235
-Date:   Wed,  7 Jun 2023 18:18:47 +0100
-Message-Id: <731507e05d70239aec96fcbfab6e65d8ce00edd2.1686157165.git.robin.murphy@arm.com>
-X-Mailer: git-send-email 2.39.2.101.g768bb238c484.dirty
+        Wed, 7 Jun 2023 13:19:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A14291FD5
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 10:19:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 18CDF641D4
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 17:19:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCBBBC433D2;
+        Wed,  7 Jun 2023 17:19:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686158387;
+        bh=sM9s5rM2STlzlaVPLAL0I0uiZASg+eSmYmdRpfR8XhA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=kQpZB91nZiuTOirqxWJgBPdqf25i2CyhejL+gKom8fvSGnOZB68iLEp89ML4qSTP3
+         hgwvsrMX1Jp0GbQxXzphYLAOQ2fxK+zcFoMMpkH7y24R0H6rKfb32NpUzBk75yYtra
+         6VinNPwHhS5cBbHrTF3ghHOKNqlhYUPKbmEKReGrIVcs77JYGON8x1Dela4expLhLB
+         E6LCB7JcQzcTsW4VEMfKmUBiMyE/Hr4bAutkwbRfaJY4HZN8asyExxWnKGpKPNwBQa
+         0D5dJ3z2PHDmZcCZ0ENLuquMg3jkHsxe6+k+/RpFWNvu3E8wAdx8FhPvDIhCZOdEwC
+         glFM3AnwMbSrA==
+Date:   Wed, 7 Jun 2023 10:19:45 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     David Howells <dhowells@redhat.com>
+Cc:     netdev@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Boris Pismenny <borisp@nvidia.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v5 11/14] tls/sw: Support MSG_SPLICE_PAGES
+Message-ID: <20230607101945.65c5df51@kernel.org>
+In-Reply-To: <20230607140559.2263470-12-dhowells@redhat.com>
+References: <20230607140559.2263470-1-dhowells@redhat.com>
+        <20230607140559.2263470-12-dhowells@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -41,40 +66,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Marvell's own product brief implies the 92xx series are a closely
-related family, and sure enough it turns out that 9235 seems to need the
-same quirk as the other three, although possibly only when certain ports
-are used.
+On Wed,  7 Jun 2023 15:05:56 +0100 David Howells wrote:
+> +static int tls_sw_sendmsg_splice(struct sock *sk, struct msghdr *msg,
+> +				 struct sk_msg *msg_pl, size_t try_to_copy,
+> +				 ssize_t *copied)
+> +{
+> +	struct page *page = NULL, **pages = &page;
+> +
+> +	do {
+> +		ssize_t part;
+> +		size_t off;
+> +		bool put = false;
+> +
+> +		part = iov_iter_extract_pages(&msg->msg_iter, &pages,
+> +					      try_to_copy, 1, 0, &off);
+> +		if (part <= 0)
+> +			return part ?: -EIO;
+> +
+> +		if (WARN_ON_ONCE(!sendpage_ok(page))) {
+> +			iov_iter_revert(&msg->msg_iter, part);
+> +			return -EIO;
+> +		}
+> +
+> +		sk_msg_page_add(msg_pl, page, part, off);
+> +		sk_mem_charge(sk, part);
+> +		if (put)
+> +			put_page(page);
 
-CC: stable@vger.kernel.org
-Reported-by: Jason Adriaanse <jason_a69@yahoo.co.uk>
-Link: https://lore.kernel.org/linux-iommu/2a699a99-545c-1324-e052-7d2f41fed1ae@yahoo.co.uk/
-Signed-off-by: Robin Murphy <robin.murphy@arm.com>
----
+is put ever set to true?
 
-Note that the actual regression which started the thread is a different
-matter, wherein a particular combination of parameters which used to put
-intel-iommu into passthrough mode now enables full translation instead.
+> +		*copied += part;
+> +		try_to_copy -= part;
+> +	} while (try_to_copy && !sk_msg_full(msg_pl));
+> +
+> +	return 0;
+> +}
+> +
+>  int tls_sw_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
+>  {
+>  	long timeo = sock_sndtimeo(sk, msg->msg_flags & MSG_DONTWAIT);
+> @@ -1020,6 +1052,17 @@ int tls_sw_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
+>  			full_record = true;
+>  		}
+>  
+> +		if (try_to_copy && (msg->msg_flags & MSG_SPLICE_PAGES)) {
+> +			ret = tls_sw_sendmsg_splice(sk, msg, msg_pl,
+> +						    try_to_copy, &copied);
+> +			if (ret < 0)
+> +				goto send_end;
+> +			tls_ctx->pending_open_record_frags = true;
+> +			if (full_record || eor || sk_msg_full(msg_pl))
+> +				goto copied;
+> +			continue;
+> +		}
+> +
+>  		if (!is_kvec && (full_record || eor) && !async_capable) {
+>  			u32 first = msg_pl->sg.end;
+>  
+> @@ -1082,8 +1125,9 @@ int tls_sw_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
+>  		/* Open records defined only if successfully copied, otherwise
+>  		 * we would trim the sg but not reset the open record frags.
+>  		 */
+> -		tls_ctx->pending_open_record_frags = true;
+>  		copied += try_to_copy;
+> +copied:
+> +		tls_ctx->pending_open_record_frags = true;
 
-Take #2, hopefully not royally screwing up my email alises this time.
-Sorry about that...
+Why move pending-open-record-frags setting if it's also set before
+jumping?
 
- drivers/pci/quirks.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-index f4e2a88729fd..3186f2c84eab 100644
---- a/drivers/pci/quirks.c
-+++ b/drivers/pci/quirks.c
-@@ -4174,6 +4174,8 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_MARVELL_EXT, 0x9220,
- /* https://bugzilla.kernel.org/show_bug.cgi?id=42679#c49 */
- DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_MARVELL_EXT, 0x9230,
- 			 quirk_dma_func1_alias);
-+DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_MARVELL_EXT, 0x9235,
-+			 quirk_dma_func1_alias);
- DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_TTI, 0x0642,
- 			 quirk_dma_func1_alias);
- DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_TTI, 0x0645,
--- 
-2.39.2.101.g768bb238c484.dirty
-
+>  		if (full_record || eor) {
+>  			ret = bpf_exec_tx_verdict(msg_pl, sk, full_record,
+>  						  record_type, &copied,
