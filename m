@@ -2,136 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48CE372561C
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 09:42:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1F72727B35
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 11:26:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238776AbjFGHmw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 03:42:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37376 "EHLO
+        id S235636AbjFHJ0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 05:26:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238674AbjFGHmQ (ORCPT
+        with ESMTP id S232417AbjFHJ0n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 03:42:16 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5993F2110
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 00:39:49 -0700 (PDT)
-Received: from mail-yw1-f197.google.com (mail-yw1-f197.google.com [209.85.128.197])
+        Thu, 8 Jun 2023 05:26:43 -0400
+Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9480B2136;
+        Thu,  8 Jun 2023 02:26:39 -0700 (PDT)
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [10.196.197.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 873D93F15D
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 07:39:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1686123585;
-        bh=a+IsLMCDpVZ5o6KdPBMxK1oLOZYb4TM7DWXj0EndxK0=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=gUKjcJcWL8fEc+/Ttr3tFKtMsrS61LQbWezn+hHiGkYfB8PiMXK8rRyN8D0/PNQOu
-         deQwS9e5lNwanFdpUFhrbKLgtNxiw3BwdLikjeJKaRdk/X0g74lu+8dIeAODZYHYjr
-         xBQMyatvwohzKORtGww/1+sN9s5aJ4lgeExfNIBMJrUS03zOGIgm3XEiKAcp77YzhA
-         npnZMQdjL2y7VzZjtTD4XUAKwq+XQSqaEUPsmuOceszt1JqAjolWBlkYSYQG4et9Dr
-         r317Gb1oQDp5xbLPqJpp9nPo+hQtFPHYCTJKiWGlR+MUQHHydImvghtAu+KkRqR6EB
-         v9wCYvPPebhiQ==
-Received: by mail-yw1-f197.google.com with SMTP id 00721157ae682-56938733c13so95541147b3.1
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 00:39:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686123584; x=1688715584;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=a+IsLMCDpVZ5o6KdPBMxK1oLOZYb4TM7DWXj0EndxK0=;
-        b=kIe+WJYosrYHGF5laa1jF5LPR34To6NFiPmi0qoYCk2wH5/c6tiOIU60VvUTMlkEpc
-         yQVsp/u1vn7hYgji0/dLIbpSczqhvsOT6hADG6eUF/5Mw7APmf+N4Zv++EolE+do/x0T
-         r6MSeCShc6dGinOi+dqLTm/09EM9pyKoaYFSYzlBiZibLtZwep4i9p7gRd+nx6xDavkG
-         K9XXnchogCFPAxMhzR6hrQaUdU826R/9fLBfapCxFX8BAxYdafEeVytlK0Suu7Vknek6
-         UaQqymbZYeOdubtL4yy19UOq89+xH/TwYVKTK9kFRg4g6ZOHzEdMVOtkoMF31qqSGas0
-         5VZg==
-X-Gm-Message-State: AC+VfDwiHNd8VVHL9bwdEsEDhVEjKoe6FkShXwfZinUzdkDj0cTx0nie
-        nA4md0Tx0t9aP0c/qHrqiXBHg/Of68H1NbjD411GG42ip9FVzL+04hRspbS5E81aUy81Sdfd0v0
-        idGiaElT5+l6UuYoYG3cwvPSmSNT9pRwKT3cMbfknxnW6oGlUUtsL17vFTF+sYBOoBA==
-X-Received: by 2002:a81:5c03:0:b0:561:baee:ee8 with SMTP id q3-20020a815c03000000b00561baee0ee8mr5044615ywb.32.1686123584510;
-        Wed, 07 Jun 2023 00:39:44 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6L4HVvHy/GOEAO2TXPFsXsHE/3PcRoxTjbR0PztArJXfMLUc+TtpXzedeSTv0A8K3pvSAEXQf4ONq4OwqMlNo=
-X-Received: by 2002:a81:5c03:0:b0:561:baee:ee8 with SMTP id
- q3-20020a815c03000000b00561baee0ee8mr5044591ywb.32.1686123584194; Wed, 07 Jun
- 2023 00:39:44 -0700 (PDT)
+        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4QcJkN0BPlz9spJ;
+        Thu,  8 Jun 2023 11:26:36 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oltmanns.dev;
+        s=MBO0001; t=1686216396;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WC+E0j9/A465/cq9Z16jbdoVUQlkJxw4cJqWxLv9qaU=;
+        b=srYmoYFaSKsuPxwSQYGXBs0NnVGljK5EyHlibUc5HzP0yvyraFE3vC1ry4lczDZ162FR0Y
+        atte+edyYs0HQ293KnBExruvvmHSZEOyDuraw/dk00jAPkV3xv4PBt3GvOBJGW97GPwvp3
+        /4KYmEJramxTGvUcLVRWWibNpUA5xFpNcZ774E8fP5CgLd/3q764hYuQ8+dt9UK9ueFUSL
+        J5vt0RyFK3vcJsFpekzgVjT1ME9nMF+SR+mufsIuByrl0uHcY0Oi5zX9UDXTIRfs8QCVpE
+        oPrTP6mYed+kLQyxIfJkfukufYSFKx0Plh0nGbcZ0UsGgcQ+DDycw69tf1cJEQ==
+References: <20230605190745.366882-1-frank@oltmanns.dev>
+ <20230605190745.366882-2-frank@oltmanns.dev>
+ <2bvcukogzhcdbfsrruylgw5fbezaqjpcojqaambfoiv5fc2upy@ffumn5sevbeb>
+From:   Frank Oltmanns <frank@oltmanns.dev>
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Andre Przywara <andre.przywara@arm.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Roman Beranek <me@crly.cz>,
+        Samuel Holland <samuel@sholland.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH 1/2] clk: sunxi-ng: nkm: consider alternative parent
+ rates when finding rate
+Date:   Wed, 07 Jun 2023 09:39:35 +0200
+In-reply-to: <2bvcukogzhcdbfsrruylgw5fbezaqjpcojqaambfoiv5fc2upy@ffumn5sevbeb>
+Message-ID: <875y7y1f0d.fsf@oltmanns.dev>
 MIME-Version: 1.0
-References: <20230607034331.576623-1-acelan.kao@canonical.com>
- <20230607042032.GA28835@srcf.ucam.org> <CAFv23QmDNUFcPwvSQt5aUxtmHasfr8wrF72ObvcO-X19gfn=LA@mail.gmail.com>
- <20230607052724.GA29834@srcf.ucam.org> <CAFv23QkEdGnEz1q7vbyFCa9S9Dqh-zec72nRGyZ3wAz-8wpbvA@mail.gmail.com>
- <20230607062341.GA30618@srcf.ucam.org> <20230607065604.yaivqbbd3dkawxo4@pali>
-In-Reply-To: <20230607065604.yaivqbbd3dkawxo4@pali>
-From:   AceLan Kao <acelan.kao@canonical.com>
-Date:   Wed, 7 Jun 2023 15:39:33 +0800
-Message-ID: <CAFv23Q==r4newMXE3OWavRSRt-bEi5-qR0Vo-5HGLw4r9J36MA@mail.gmail.com>
-Subject: Re: [PATCH] platform/x86: dell-laptop: Add drm module soft dependency
-To:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
-Cc:     Matthew Garrett <mjg59@srcf.ucam.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_24_48,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pali Roh=C3=A1r <pali@kernel.org> =E6=96=BC 2023=E5=B9=B46=E6=9C=887=E6=97=
-=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=882:56=E5=AF=AB=E9=81=93=EF=BC=9A
+Hi Maxime,
+
+On 2023-06-07 at 08:38:39 +0200, Maxime Ripard <maxime@cerno.tech> wrote:
+> [[PGP Signed Part:Undecided]]
+> On Mon, Jun 05, 2023 at 09:07:44PM +0200, Frank Oltmanns wrote:
+>> In case the CLK_SET_RATE_PARENT flag is set, consider using a different
+>> parent rate when determining a new rate.
+>>
+>> To find the best match for the requested rate, perform the following
+>> steps for each NKM combination:
+>>  - calculate the optimal parent rate,
+>>  - find the best parent rate that the parent clock actually supports
+>>  - use that parent rate to calculate the effective rate.
+>>
+>> In case the clk does not support setting the parent rate, use the same
+>> algorithm as before.
+>>
+>> Signed-off-by: Frank Oltmanns <frank@oltmanns.dev>
+>> ---
+>>  drivers/clk/sunxi-ng/ccu_nkm.c | 40 ++++++++++++++++++++++++++--------
+>>  1 file changed, 31 insertions(+), 9 deletions(-)
+>>
+>> diff --git a/drivers/clk/sunxi-ng/ccu_nkm.c b/drivers/clk/sunxi-ng/ccu_nkm.c
+>> index a0978a50edae..c71e237226f2 100644
+>> --- a/drivers/clk/sunxi-ng/ccu_nkm.c
+>> +++ b/drivers/clk/sunxi-ng/ccu_nkm.c
+>> @@ -16,10 +16,10 @@ struct _ccu_nkm {
+>>  	unsigned long	m, min_m, max_m;
+>>  };
+>>
+>> -static unsigned long ccu_nkm_find_best(unsigned long parent, unsigned long rate,
+>> -				       struct _ccu_nkm *nkm)
+>> +static unsigned long ccu_nkm_find_best(unsigned long *parent, unsigned long rate,
+>> +				       struct _ccu_nkm *nkm, struct clk_hw *parent_hw)
+>>  {
+>> -	unsigned long best_rate = 0;
+>> +	unsigned long best_rate = 0, best_parent_rate = 0, tmp_parent = *parent;
+>>  	unsigned long best_n = 0, best_k = 0, best_m = 0;
+>>  	unsigned long _n, _k, _m;
+>>
+>> @@ -28,12 +28,29 @@ static unsigned long ccu_nkm_find_best(unsigned long parent, unsigned long rate,
+>>  			for (_m = nkm->min_m; _m <= nkm->max_m; _m++) {
+>>  				unsigned long tmp_rate;
+>>
+>> -				tmp_rate = parent * _n * _k / _m;
+>> +				if (parent_hw) {
 >
-> On Wednesday 07 June 2023 07:23:41 Matthew Garrett wrote:
-> > On Wed, Jun 07, 2023 at 02:13:31PM +0800, AceLan Kao wrote:
-> > > Matthew Garrett <mjg59@srcf.ucam.org> =E6=96=BC 2023=E5=B9=B46=E6=9C=
-=887=E6=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=881:27=E5=AF=AB=E9=81=93=
-=EF=BC=9A
-> > > >
-> > > > On Wed, Jun 07, 2023 at 01:19:40PM +0800, AceLan Kao wrote:
-> > > > > Gfx drivers(i915/amdgpu/nvidia) depend on the drm driver, so dela=
-ying
-> > > > > the loading of dell_laptop after drm can ease the issue the most.
-> > > > > Right, it's still possible to encounter the issue, unfortunately,=
- we
-> > > > > do not have a better solution for it at the moment.
-> > > >
-> > > > We could unregister inappropriate backlight drivers when a more
-> > > > appropriate one is loaded, or the policy decision around which driv=
-er to
-> > > > use could be made in userland?
-> > > It's hard to decide which backlight driver is redundant, and it's kin=
-d of ugly
-> > > to unregister the backlight driver which is registered by other drive=
-r and maybe
-> > > problematic.
-> >
-> > But you're relying on registering the working backlight first, which is
-> > an inherently racy thing? We shouldn't be relying on order of
-> > initialisation to make this work, either we should only export a workin=
-g
-> > interface or we should expose enough information for whatever is using
-> > the interfaces to make an appropriate policy decision itself.
+> NKM clocks always have a parent
 >
-> IIRC, drm drivers unregister redundant fbcon drivers (vesafb), so cannot
-> drm drivers use similar strategy also for backlight drivers and
-> unregister the redundant? If every backlight driver would have some
-> "flag" which say if it should be unregistered by drm then maybe it could
-> work? Or are there some other pitfalls?
-Matthew,
+> You should test if the CLK_SET_RATE_PARENT flag is set.
 
-What do you think if we unregister backlight devices if the backlight type
-is larger than the current registered one.
-Do this check in backlight_device_register() and unregister backlight
-devices by the order raw(1) > platform(2) > firmware(3)
-And maybe introduce a sticky bit into the backlight device if the backlight
-driver doesn't want to be removed.
+ccu_nkm_find_best is called in the following two situations:
+ a. from ccu_nkm_set_rate when setting the rate
+ b. from ccu_nkm_round_rate when determining the rate
 
-Pali,
+In situation a. we never want ccu_nkm_find_best to try different parent
+rates because setting the parent rate is a done deal (at least that's my
+understanding).
 
-No, it doesn't work by doing this in the drm driver if the backlight driver
-is registered after the drm driver has been loaded.
+In situation b. we only want ccu_nkm_find_best to try different parent
+rates when, as you mentioned, the CLK_SET_RATE_PARENT flag is set.
+
+So, what this patch does, it provides a NULL pointer as parent_hw when
+we don't want ccu_nkm_find_best to try alternative parent rates.
+
+Is it ok if I add a comment to ccu_nkm_find_best that explains the
+function and explicitly also the parameters?
+
+I also thought about using two different functions for the two
+situations. I have no strong opinion which is better.
+
+However, I don't think we should hand over the flags to this function,
+because we'd still only need to provide the parent_hw if we want to find
+the optimal parent rate, so having two parametes for the same purpose
+seems redundant. Unless, there is a rule to not use NULL pointers.
+
+>
+>> +					// We must round up the desired parent rate, because the
+>> +					// rounding down happens when calculating tmp_rate. If we
+>> +					// round down also here, we'd round down twice.
+>> +					unsigned long optimal_parent =
+>> +							(rate * _m + (_n * _k - 1)) / _n / _k;
+>
+> I assume the addition of n * k - 1 is to round up, but I'm not sure we
+> should hack around like that.
+>
+> You should compute the ideal parent rate for a given set of timings, and
+> then just call round_rate on it. If the parent wants to round it one way
+> or another, that's the parent concern.
+
+I admit that the comment explaining this is not doing the complexity of
+this issue any justice. Let me try to explain:
+
+Let's say for our panel the optimal rate for pll-mipi is 449064000. The
+best closest we can get is 449035712 with a parent rate of 217714285
+(n=11, k=3, m=16).
+
+Eventually, ccu_nkm_find_best is going to be called with 449035712 as
+the rate. If we don't round up, like I proposend, but instead calculate:
+  optimal_parent = rate * m / n / k
+(which is, I think, what you you're proposing) leading to an optimal
+parent of 217714284 (!). We can't get 217714284 from the parent (we
+could get 217714285, but we're not asking for that) so the parent rounds
+down.
+
+To make things worse, this story continues for the new "best rate" as
+well.
+
+In the end, ccu_nkm_find_best claims:
+ - the optimal rate for 449064000 is 449035712 (parent=217714285, n=11,
+   k=3, m=16)
+ - but ccu_nkm_find_best would claim that the optimal rate for 449035712
+   is 449018181 (parent=235200000, n=7, k=3, m=11)
+ - and finally, the optimal rate for 449018181 is 449018180
+   (parent=213818181, n=7, k=3, m=10)
+
+This doesn't seem right to me.
+
+But you're also right, in that we can't just always round up. In a
+hypothetical example that we request a parent rate of 450000000. With
+rounding up, we'd get an optimal parent rate of 218181819 for n=11, k=3,
+m=16. And let's now further claim that the parent could provide exactly
+that rate, we'd end up with a rate of 450000001. So, we'd overshoot,
+which (currently) is not acceptable.
+
+Hmm... I currently can't think of a clever way to solve this other than
+this:
+
+    optimal_parent = (rate * _m + (_n * _k - 1)) / _n / _k;
+    tmp_parent = clk_hw_round_rate(parent_hw, optimal_parent);
+    tmp_rate = tmp_parent * _n * _k / _m;
+    if (tmp_rate > rate) {
+        optimal_parent = rate * m / n / k
+        tmp_parent = clk_hw_round_rate(parent_hw, optimal_parent);
+        tmp_rate = tmp_parent * _n * _k / _m;
+    }
+    if (tmp_parent > optimal_parent)
+        continue;
+
+This seems ugly, but at least it should work in all cases. Any opinions?
+
+Cheers,
+  Frank
+
+>
+> Maxime
+>
+> [[End of PGP Signed Part]]
