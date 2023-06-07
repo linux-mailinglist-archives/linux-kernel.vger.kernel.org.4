@@ -2,144 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3FAF725182
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 03:27:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93056725188
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 03:29:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240311AbjFGB1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 21:27:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59252 "EHLO
+        id S240472AbjFGB3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 21:29:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240121AbjFGB1L (ORCPT
+        with ESMTP id S240383AbjFGB3I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 21:27:11 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B87491981;
-        Tue,  6 Jun 2023 18:27:09 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f122ff663eso8407072e87.2;
-        Tue, 06 Jun 2023 18:27:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686101228; x=1688693228;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AocMQ+e+Td8Ov9i0CF6sYvZu1zVVcBTKduhGqLyYOsU=;
-        b=DFmaDogHAer9Fxml11hhtM6P3bM7iRK+qzFd5owLEveg3f3C89Uu5PSukKTL9otYDU
-         4Om4UArQszjytyCDaoYeQ88HIOMZo7lwq3MPZdcfr9x2G/RmY6PXnyvar+ImorflXFc9
-         792/vQsTrNpHGeOSmu9zMFuXG+YHuRGLgFJfiGM3Byf8PGXJQZ/cfeBJEF5TwvqvTfJf
-         j6LcVSeIACwflX02xSUe/AZAqd/oijN68/IHLfHib74ExaqW8yxfAFgPXdfGBVyUw5IZ
-         TBQek7gMdFVsZW+tb7RaLkJX6z0QsJtAyqCKN0M91/RgtK6Y+1KhsLwqe1l4Y09sFHiH
-         tUHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686101228; x=1688693228;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AocMQ+e+Td8Ov9i0CF6sYvZu1zVVcBTKduhGqLyYOsU=;
-        b=Sp2LluYfFNmiS/ZvHtKQdWBHYhDJj2YWZDEaahpbfxraDLOQ4/JaC+aoUxTOjzyeB4
-         s7Fld7qPUTZyRbwtyKF5g/2NswNYcvE02z6LoY4Wc28I9cqtcQPR5jTVQzNXTAsIHef9
-         00d4EON1OFMKZvUsH5JeUI6tQ4tYbskpx3uxRRbHaTIKCrUiH9R/KbgU5gyKIcKqrHvs
-         fsFXbUpNs7pwg/sVXrFeiHfG50IfarZAzfRzx/I+sjqn6qMLt7vJE+rWD61CwhmNn/Rz
-         f0c5bH0zKqQiLlz6NSckEYCL47K+N9gg2sd+eO0nxBwbDu23RpzAabeK2HIMpFjEM8RR
-         7Jag==
-X-Gm-Message-State: AC+VfDxr9OdxSUdx4P4mHTp/vcf/WKMB02j2r/M6JTdP7H4M5Cfed9GP
-        d7ugLbJjx3qGyaqg97MMT0vOStAIte+uM27vcAFkpR2a
-X-Google-Smtp-Source: ACHHUZ58ZDWo8eE5G6dk8YWyXRUqA8QE6PH5NFaGIfisgEHFf/fF/UWMshoFQk6bttNBRBCB+Z6zL77XZX05+6O4AkU=
-X-Received: by 2002:ac2:48b3:0:b0:4ed:ca3b:40f0 with SMTP id
- u19-20020ac248b3000000b004edca3b40f0mr1795600lfg.9.1686101227519; Tue, 06 Jun
- 2023 18:27:07 -0700 (PDT)
+        Tue, 6 Jun 2023 21:29:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E88AB1984
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 18:28:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686101300;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1h0nXm4obQWr/nMN17xlxThI6u2crQzlPISlM1jWir0=;
+        b=XaAwKWI8M34st32pDbwA7SxRgVZ813Ujx0f0R6yXS5VQ3Nb/7TkkY2TtQ9OB1A5Bs7rTZg
+        H1JeEA47bkMUCZuN0+OPdGJM1FFV8I46CgFBDrApLt8ESwg4YkskKGzssqp5yISTiVLyA3
+        KTx/yUieOnRU3OVXpzVqDqye3iMwh5Y=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-583-ITxAbywmO4unISCQRha-2w-1; Tue, 06 Jun 2023 21:28:17 -0400
+X-MC-Unique: ITxAbywmO4unISCQRha-2w-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1DEC5801182;
+        Wed,  7 Jun 2023 01:28:17 +0000 (UTC)
+Received: from ovpn-8-23.pek2.redhat.com (ovpn-8-23.pek2.redhat.com [10.72.8.23])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id E961440D1B66;
+        Wed,  7 Jun 2023 01:28:12 +0000 (UTC)
+Date:   Wed, 7 Jun 2023 09:28:08 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Tejun Heo <tj@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        Josef Bacik <josef@toxicpanda.com>, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] blk-cgroup: Reinit blkg_iostat_set after clearing in
+ blkcg_reset_stats()
+Message-ID: <ZH/dKFnTIHZqsjQa@ovpn-8-23.pek2.redhat.com>
+References: <20230606180724.2455066-1-longman@redhat.com>
 MIME-Version: 1.0
-References: <20230605233900.2838-1-beaub@linux.microsoft.com> <20230605233900.2838-4-beaub@linux.microsoft.com>
-In-Reply-To: <20230605233900.2838-4-beaub@linux.microsoft.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 6 Jun 2023 18:26:56 -0700
-Message-ID: <CAADnVQL3bJaXW6mzTrTFTbAyCaBfiHYet+gNorF1N69a0X5TXQ@mail.gmail.com>
-Subject: Re: [PATCH v2 3/5] tracing/user_events: Add auto cleanup and a flag
- to persist events
-To:     Beau Belgrave <beaub@linux.microsoft.com>,
-        Christian Brauner <brauner@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-trace-kernel@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>, dcook@linux.microsoft.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230606180724.2455066-1-longman@redhat.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 5, 2023 at 4:39=E2=80=AFPM Beau Belgrave <beaub@linux.microsoft=
-.com> wrote:
-> +       /*
-> +        * When the event is not enabled for auto-delete there will alway=
-s
-> +        * be at least 1 reference to the event. During the event creatio=
-n
-> +        * we initially set the refcnt to 2 to achieve this. In those cas=
-es
-> +        * the caller must acquire event_mutex and after decrement check =
-if
-> +        * the refcnt is 1, meaning this is the last reference. When auto
-> +        * delete is enabled, there will only be 1 ref, IE: refcnt will b=
-e
-> +        * only set to 1 during creation to allow the below checks to go
-> +        * through upon the last put. The last put must always be done wi=
-th
-> +        * the event mutex held.
-> +        */
-> +       if (!locked) {
-> +               lockdep_assert_not_held(&event_mutex);
-> +               delete =3D refcount_dec_and_mutex_lock(&user->refcnt, &ev=
-ent_mutex);
-> +       } else {
-> +               lockdep_assert_held(&event_mutex);
-> +               delete =3D refcount_dec_and_test(&user->refcnt);
-> +       }
+On Tue, Jun 06, 2023 at 02:07:24PM -0400, Waiman Long wrote:
+> When blkg_alloc() is called to allocate a blkcg_gq structure
+> with the associated blkg_iostat_set's, there are 2 fields within
+> blkg_iostat_set that requires proper initialization - blkg & sync.
+> The former field was introduced by commit 3b8cc6298724 ("blk-cgroup:
+> Optimize blkcg_rstat_flush()") while the later one was introduced by
+> commit f73316482977 ("blk-cgroup: reimplement basic IO stats using
+> cgroup rstat").
+> 
+> Unfortunately those fields in the blkg_iostat_set's are not properly
+> re-initialized when they are cleared in v1's blkcg_reset_stats(). This
+> can lead to a kernel panic due to NULL pointer access of the blkg
+> pointer. The missing initialization of sync is less problematic and
+> can be a problem in a debug kernel due to missing lockdep initialization.
+> 
+> Fix these problems by re-initializing them after memory clearing.
+> 
+> Fixes: 3b8cc6298724 ("blk-cgroup: Optimize blkcg_rstat_flush()")
+> Fixes: f73316482977 ("blk-cgroup: reimplement basic IO stats using cgroup rstat")
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> ---
+>  block/blk-cgroup.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/block/blk-cgroup.c b/block/blk-cgroup.c
+> index 90c2efc3767f..48084321e3e0 100644
+> --- a/block/blk-cgroup.c
+> +++ b/block/blk-cgroup.c
+> @@ -636,8 +636,13 @@ static int blkcg_reset_stats(struct cgroup_subsys_state *css,
+>  			struct blkg_iostat_set *bis =
+>  				per_cpu_ptr(blkg->iostat_cpu, cpu);
+>  			memset(bis, 0, sizeof(*bis));
 > +
-> +       if (!delete)
-> +               return;
-> +
-> +       /* We now have the event_mutex in all cases */
-> +
-> +       if (user->reg_flags & USER_EVENT_REG_PERSIST) {
-> +               /* We should not get here when persist flag is set */
-> +               pr_alert("BUG: Auto-delete engaged on persistent event\n"=
-);
-> +               goto out;
-> +       }
-> +
-> +       /*
-> +        * Unfortunately we have to attempt the actual destroy in a work
-> +        * queue. This is because not all cases handle a trace_event_call
-> +        * being removed within the class->reg() operation for unregister=
-.
-> +        */
-> +       INIT_WORK(&user->put_work, delayed_destroy_user_event);
-> +
-> +       /*
-> +        * Since the event is still in the hashtable, we have to re-inc
-> +        * the ref count to 1. This count will be decremented and checked
-> +        * in the work queue to ensure it's still the last ref. This is
-> +        * needed because a user-process could register the same event in
-> +        * between the time of event_mutex release and the work queue
-> +        * running the delayed destroy. If we removed the item now from
-> +        * the hashtable, this would result in a timing window where a
-> +        * user process would fail a register because the trace_event_cal=
-l
-> +        * register would fail in the tracing layers.
-> +        */
-> +       refcount_set(&user->refcnt, 1);
+> +			/* Re-initialize the cleared blkg_iostat_set */
+> +			u64_stats_init(&bis->sync);
+> +			bis->blkg = blkg;
+>  		}
+>  		memset(&blkg->iostat, 0, sizeof(blkg->iostat));
+> +		u64_stats_init(&blkg->iostat.sync);
+>  
+>  		for (i = 0; i < BLKCG_MAX_POLS; i++) {
+>  			struct blkcg_policy *pol = blkcg_policy[i];
 
-The recnt-ing scheme is quite unorthodox.
-Atomically decrementing it to zero and then immediately set it back to 1?
-Smells racy.
-Another process can go through the same code and do another dec and set to =
-1
-and we'll have two work queued?
-Will mutex_lock help somehow? If yes, then why atomic refcnt?
+Looks fine,
+
+Reviewed-by: Ming Lei <ming.lei@redhat.com>
+
+
+Thanks,
+Ming
+
