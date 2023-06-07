@@ -2,177 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85C51726198
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 15:45:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 693AD726459
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 17:25:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240144AbjFGNpS convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 7 Jun 2023 09:45:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60042 "EHLO
+        id S241169AbjFGPZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 11:25:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239001AbjFGNpP (ORCPT
+        with ESMTP id S241581AbjFGPZK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 09:45:15 -0400
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B0319BF;
-        Wed,  7 Jun 2023 06:45:14 -0700 (PDT)
-Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-bb3d122a19fso1530335276.0;
-        Wed, 07 Jun 2023 06:45:14 -0700 (PDT)
+        Wed, 7 Jun 2023 11:25:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13EBB269A
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 08:23:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686151376;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+21+UJe7FXTwrAHp4Kil2Yb3E5Xx9Nc7BO+F/S0Qdi8=;
+        b=eyRvlO5ncYEs92M8KTYxkn6PvQghun3ZqrhVCKviWfNEy5qBdwdCXZHwXZHNPuO8uE3L2Q
+        tBRlfocRe9SghuplZk0/bHgySZn+TsTNX6XFL39ijQH64d5Vyb/31w52W/fPTI4ZjL6pRr
+        S+8KDR5OncE0XrrbkFcFYfqx4qX6mnI=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-446-X8UEEqFsN16p8t_j7RDbVA-1; Wed, 07 Jun 2023 09:47:45 -0400
+X-MC-Unique: X8UEEqFsN16p8t_j7RDbVA-1
+Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-6262360e603so79219336d6.2
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 06:47:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686145513; x=1688737513;
+        d=1e100.net; s=20221208; t=1686145665; x=1688737665;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=89KRlV/r+fdosLxqMDM4AtIM18bITUmtBR0bjcUA6Gw=;
-        b=dVt7Mmy24Jnr1w5AHw+yYvTMZC9HH2AQR1BCM66kBO7lMKj73cGg1nFEjeQpcs28Rr
-         LKSs8WHhipL5MdzZREjVd+N4MURmc/4EMwSoDyMsJImRCkgCeeFAiqCyrM7bIM0xiakt
-         CJlX9jWMnsBAO6zaaHf+TKCh8MK/mpRJnPVW0XLYBpcXrargQLz3Pb8DHYTrFaxgowB6
-         ojcIu+0hldIl/YT78NDZY96K4UI8quV1UcY+Ez57d1kbWVGPx82R0RELud7WxjM6L+sG
-         6TtYAeQ/p3ef4M65yqvNiLzdrBbJDiv39q43pYjiHHkqteUU1v41bR7oC1HBmXmQAdRF
-         HOJw==
-X-Gm-Message-State: AC+VfDwxNfoUg+Ygxh9DU2d5+x4/D8pj2Iz9KHkx5YVOiG7ujAzVS3hp
-        7+0of8G5EsG3J6oXUP9/KdfAABvU3kygKQ==
-X-Google-Smtp-Source: ACHHUZ7kIhsE9/1CUUMEq3Q32FQchYhWgrQP6VG9GQo67SUM/r/XaA+VBXILaIqR44Q88gyrlqhTjQ==
-X-Received: by 2002:a25:6086:0:b0:bb3:8945:d6fd with SMTP id u128-20020a256086000000b00bb38945d6fdmr5060140ybb.12.1686145510547;
-        Wed, 07 Jun 2023 06:45:10 -0700 (PDT)
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
-        by smtp.gmail.com with ESMTPSA id e66-20020a25e745000000b00ba6ffc7ef35sm3834778ybh.65.2023.06.07.06.45.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 06:45:09 -0700 (PDT)
-Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-bacf9edc87bso8672364276.1;
-        Wed, 07 Jun 2023 06:45:09 -0700 (PDT)
-X-Received: by 2002:a25:3289:0:b0:ba8:2473:bb4c with SMTP id
- y131-20020a253289000000b00ba82473bb4cmr5294364yby.31.1686145509569; Wed, 07
- Jun 2023 06:45:09 -0700 (PDT)
+        bh=+21+UJe7FXTwrAHp4Kil2Yb3E5Xx9Nc7BO+F/S0Qdi8=;
+        b=Xn9pDnPN7YlElKbMA5MN5XK+SMe7aHl4Wd3vEWR6DzmNf9XOdGPWbh8asFcSlOKCZi
+         lMdDDy1m9cODsSwWRLKGSqrCRws6woacVSV8dissnOaFJPkbDR1MN042KzvAAnkeSnwl
+         l3Szp1UueC90I6//MdTUdOiLh3M76vEwFm4gfetw/+smxTOnUtvKN8qIVCMuJv42MfJZ
+         lT6cv82xeX2GaVE3L9ZBFxZfrAvAuqFMtXzLN2AUV9jVm28+XBejwSGdgHeqdBGKL9ZS
+         OXz78JXNBi+ToXXoy+CBX3bGxqfCKKLBxBvdoz+Xu2HOwZwMO40f45YnFPIwNFtff/eU
+         lpZA==
+X-Gm-Message-State: AC+VfDzMa+JEACycGcrmgD99+xGpsSnYTKA0BZZstIPBMNTBf0L/7vmb
+        Z2kryt/QFpXaQjfanbfbhsL6Ci+cQKkuFPGBdfEHAtJHGlrR0jOCta+k22gi5FPa7775IDFLWoc
+        HmZrpCZPW0Yv+vL/tXl7+N9dTWrV9MucyxnnOwmYN
+X-Received: by 2002:a05:6214:2a4c:b0:625:aa48:e628 with SMTP id jf12-20020a0562142a4c00b00625aa48e628mr3798649qvb.56.1686145665032;
+        Wed, 07 Jun 2023 06:47:45 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5LqxdVGt9gx33r5P7dquZMC9hoYE8QxbVMlD5LrvGUwG/TxPa0OKI696JmPUonIqCwR3J+uW/uXUU6LYLmhZE=
+X-Received: by 2002:a05:6214:2a4c:b0:625:aa48:e628 with SMTP id
+ jf12-20020a0562142a4c00b00625aa48e628mr3798623qvb.56.1686145664752; Wed, 07
+ Jun 2023 06:47:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230530112050.5635-1-aford173@gmail.com> <20230530112050.5635-3-aford173@gmail.com>
- <CAMuHMdXJaZCSN18aB1yBvhuTk=DQoe4B6aVHgoZvyLsZcRfrDA@mail.gmail.com> <CAHCN7xJbi4ej2s6SOvC7o7aMcjv2awztKkNoAZTiVFn4GJRVXw@mail.gmail.com>
-In-Reply-To: <CAHCN7xJbi4ej2s6SOvC7o7aMcjv2awztKkNoAZTiVFn4GJRVXw@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 7 Jun 2023 15:44:58 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdX9vrnwZ5cA1_u9MtRetME-wt+BaaU=JX=Yc4jeJb9H9g@mail.gmail.com>
-Message-ID: <CAMuHMdX9vrnwZ5cA1_u9MtRetME-wt+BaaU=JX=Yc4jeJb9H9g@mail.gmail.com>
-Subject: Re: [RFC 3/3] arm64: dts: renesas: r8a774a1: Add GPU Node
-To:     Adam Ford <aford173@gmail.com>
-Cc:     linux-renesas-soc@vger.kernel.org, biju.das.jz@bp.renesas.com,
-        marek.vasut+renesas@gmail.com, cstevens@beaconembedded.com,
-        aford@beaconembedded.com, Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+References: <20230607053940.39078-10-bagasdotme@gmail.com> <20230607053940.39078-18-bagasdotme@gmail.com>
+In-Reply-To: <20230607053940.39078-18-bagasdotme@gmail.com>
+From:   Richard Fontana <rfontana@redhat.com>
+Date:   Wed, 7 Jun 2023 09:47:33 -0400
+Message-ID: <CAC1cPGx-mD0DAEanCFtoxoGRyHkcu-GTTNX=ePzjhb8XM+73mg@mail.gmail.com>
+Subject: Re: [PATCH 8/8] crypto: cts: Convert MIT boilerplate to corresponding
+ SPDX license identifier
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Franziska Naepelt <franziska.naepelt@googlemail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux SPDX Licenses <linux-spdx@vger.kernel.org>,
+        Linux Kernel Janitors <kernel-janitors@vger.kernel.org>,
+        Linux Crypto <linux-crypto@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Dan Carpenter <dan.carpenter@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Adam,
-
-On Wed, Jun 7, 2023 at 3:31 PM Adam Ford <aford173@gmail.com> wrote:
-> On Wed, Jun 7, 2023 at 8:21 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > On Tue, May 30, 2023 at 1:21 PM Adam Ford <aford173@gmail.com> wrote:
-> > > With the 3dge and ZG clocks now available, the generic GPU node can
-> > > be added.  Until proper firmware is made, it is not usable.
-> > >
-> > > Signed-off-by: Adam Ford <aford173@gmail.com>
-> > > ---
-> > > This is based on the assumption that the Rogue 6250 could use
-> > > generic driver [1] and firmware [2] being implemebted by the Mesa group
-> > > and others.  In practice, the firmware isn't really compatible since
-> > > the 6250 in the RZ/G2M appears to be a different variant.
-> > >
-> > > [1] - https://gitlab.freedesktop.org/frankbinns/powervr/-/tree/powervr-next
-> > > [2] - https://gitlab.freedesktop.org/frankbinns/linux-firmware/-/tree/powervr/powervr
-> >
-> > Thanks for your patch!
-> >
-> > > --- a/arch/arm64/boot/dts/renesas/r8a774a1.dtsi
-> > > +++ b/arch/arm64/boot/dts/renesas/r8a774a1.dtsi
-> > > @@ -226,6 +226,27 @@ extalr_clk: extalr {
-> > >                 clock-frequency = <0>;
-> > >         };
-> > >
-> > > +       gpu_opp_table: opp-table {
-> > > +               compatible = "operating-points-v2";
-> > > +
-> > > +               opp-200000000 {
-> > > +                       opp-hz = /bits/ 64 <200000000>;
-> > > +                       opp-microvolt = <830000>;
-> > > +               };
-> > > +               opp-300000000 {
-> > > +                       opp-hz = /bits/ 64 <300000000>;
-> > > +                       opp-microvolt = <830000>;
-> > > +               };
-> > > +               opp-400000000 {
-> > > +                       opp-hz = /bits/ 64 <400000000>;
-> > > +                       opp-microvolt = <830000>;
-> > > +               };
-> > > +               opp-600000000 {
-> > > +                       opp-hz = /bits/ 64 <600000000>;
-> > > +                       opp-microvolt = <830000>;
-> > > +               };
-> > > +       };
-> > > +
-> > >         /* External PCIe clock - can be overridden by the board */
-> > >         pcie_bus_clk: pcie_bus {
-> > >                 compatible = "fixed-clock";
-> > > @@ -2347,6 +2368,18 @@ gic: interrupt-controller@f1010000 {
-> > >                         resets = <&cpg 408>;
-> > >                 };
-> > >
-> > > +               gpu@fd000000 {
-> > > +                       compatible = "img,powervr-series6xt";
-> > > +                       reg = <0 0xfd000000 0 0x40000>;
-> > > +                       interrupts = <GIC_SPI 119 IRQ_TYPE_LEVEL_HIGH>;
-> > > +                       clocks = <&cpg CPG_MOD 112>, <&cpg CPG_MOD 112>,<&cpg CPG_MOD 112>;
-> > > +                       clock-names = "core", "mem", "sys";
-> > > +                       interrupt-names = "gpu";
-> > > +                       operating-points-v2 = <&gpu_opp_table>;
-> > > +                       power-domains = <&sysc R8A774A1_PD_3DG_B>;
-> > > +                       resets = <&cpg 112>;
-> > > +               };
-> > > +
-> > >                 pciec0: pcie@fe000000 {
-> > >                         compatible = "renesas,pcie-r8a774a1",
-> > >                                      "renesas,pcie-rcar-gen3";
-> >
-> > LGTM.  But obviously I cannot take this as-is, as there are no DT bindings
-> > for this device, and it didn't work for you...
+On Wed, Jun 7, 2023 at 1:41=E2=80=AFAM Bagas Sanjaya <bagasdotme@gmail.com>=
+ wrote:
 >
-> It was mostly to follow up to the previous ones with links for the
-> mainline Rogue video driver in the hopes that someone from Renesas
-> might have some input on whether or not Renesas might be able to
-> support this and have a discussion.  I knew when I submitted it that
-> it wouldn't be accepted which is why I posted it as an RFC.
-> If I address concerns you have in the previous patches, would you be
-> OK with me submitting then as a formal patch to at least get the rest
-> of the system ready in the event the GPU driver/firmware becomes
-> available?  It seems harmless, but I also see the argument that it's
-> dead code without the GPU node.
+> License boilerplate in CTS mode implementation (crypto/cts.c) looks like
+> MIT license with advertising clause. Replace it with correspondig
+> SPDX tag.
+>
+> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> ---
+>  crypto/cts.c | 24 +-----------------------
+>  1 file changed, 1 insertion(+), 23 deletions(-)
+>
+> diff --git a/crypto/cts.c b/crypto/cts.c
+> index 8f604f6554b1c3..9ec7e9787c0f6a 100644
+> --- a/crypto/cts.c
+> +++ b/crypto/cts.c
+> @@ -1,3 +1,4 @@
+> +// SPDX-License-Identifier: MIT
+>  /*
+>   * CTS: Cipher Text Stealing mode
+>   *
+> @@ -5,29 +6,6 @@
+>   * The Regents of the University of Michigan
+>   * ALL RIGHTS RESERVED
+>   *
+> - * Permission is granted to use, copy, create derivative works
+> - * and redistribute this software and such derivative works
+> - * for any purpose, so long as the name of The University of
+> - * Michigan is not used in any advertising or publicity
+> - * pertaining to the use of distribution of this software
+> - * without specific, written prior authorization.  If the
+> - * above copyright notice or any other identification of the
+> - * University of Michigan is included in any copy of any
+> - * portion of this software, then the disclaimer below must
+> - * also be included.
+> - *
+> - * THIS SOFTWARE IS PROVIDED AS IS, WITHOUT REPRESENTATION
+> - * FROM THE UNIVERSITY OF MICHIGAN AS TO ITS FITNESS FOR ANY
+> - * PURPOSE, AND WITHOUT WARRANTY BY THE UNIVERSITY OF
+> - * MICHIGAN OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING
+> - * WITHOUT LIMITATION THE IMPLIED WARRANTIES OF
+> - * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE
+> - * REGENTS OF THE UNIVERSITY OF MICHIGAN SHALL NOT BE LIABLE
+> - * FOR ANY DAMAGES, INCLUDING SPECIAL, INDIRECT, INCIDENTAL, OR
+> - * CONSEQUENTIAL DAMAGES, WITH RESPECT TO ANY CLAIM ARISING
+> - * OUT OF OR IN CONNECTION WITH THE USE OF THE SOFTWARE, EVEN
+> - * IF IT HAS BEEN OR IS HEREAFTER ADVISED OF THE POSSIBILITY OF
+> - * SUCH DAMAGES.
+>   */
 
-The clock patches are almost there, and I'm happy to accept them
-when the last rough edges have been removed.
+This is not the MIT license (as defined by SPDX) - there may not be an
+SPDX identifier covering this license text.
 
-> If not, I'll shelve this for now, and hope to get some responses from Renesas.
+This is at least the second time in your recent patches where you have
+assumed that a non-GPL license corresponds to a particular SPDX
+identifier without (apparently) checking.
 
-Good luck! ;-)
+Richard
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
