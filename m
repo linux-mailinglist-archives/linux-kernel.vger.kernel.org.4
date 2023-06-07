@@ -2,132 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77B58727348
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 01:45:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C628F72734E
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 01:50:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233110AbjFGXpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 19:45:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50896 "EHLO
+        id S231261AbjFGXuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 19:50:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231276AbjFGXpy (ORCPT
+        with ESMTP id S229917AbjFGXuH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 19:45:54 -0400
-Received: from mail-io1-f79.google.com (mail-io1-f79.google.com [209.85.166.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFAFF1BE4
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 16:45:52 -0700 (PDT)
-Received: by mail-io1-f79.google.com with SMTP id ca18e2360f4ac-77a1d6d2f7fso191055339f.2
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 16:45:52 -0700 (PDT)
+        Wed, 7 Jun 2023 19:50:07 -0400
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1127211C
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 16:50:06 -0700 (PDT)
+Received: by mail-il1-x130.google.com with SMTP id e9e14a558f8ab-33d0b7114a9so10474105ab.2
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 16:50:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1686181805; x=1688773805;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zh1qTh2owhTw6iheqxXCV3Jh42E0lrVswaTb+2hzc4w=;
+        b=oGua17VAzq6o1oBx0+hqcX48AmEfEBiMUNAg2PKlwD/jwK68OmonL2fpyYhMo3H0cH
+         mgbSZsUJZcknP5y+T3NNF3aJ11SOZLZMTV9EhtXsBYcKf1djd5iPvBAkYNBS9XlWnqA5
+         muX2eTZI5hMLO+Dq0ltEB8foUE3ltkVzruWZ4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686181552; x=1688773552;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eWOJCBMKP6mSfYbctvklOmN3wcRqN+DKVS7GuRE6chI=;
-        b=M8m1Kxqh/QeNM8ul4RVaAigyrgtGBZI9ow0WxqSFkorUZzz2iCgce07ns+tKgtQOMk
-         FuNi9Sica6fzup8DwO9iPjqQyQUmeMifOea2IRieddh1xq4UBczzyK0xUL7iMh00Byq/
-         j489NLKUpZc6wXwKjN8OUpX83QCNo+33jfoQAMK2CoQQ08CgOTy4A6xBZ0QVq4aT9YHU
-         m5TUB/O8N79nEHFOZRnAWFNj8PPPixK39sFPIO3b1BhhmszuojqDDOQbYgdQkFgTrGRM
-         /1/W+8kgJ48dHAnl/bRji2JvxkNL+XjgROOUgS6eTIc++SqrYR31NQ0BBJptPTerIxOB
-         4J1Q==
-X-Gm-Message-State: AC+VfDwT+DGkHD4hNvT2m7FjT1A27ylFfPbACVOR8PMk0oDfBnByT8sk
-        m2aEBmCrX3+YorTVFGX9lTZ8zYPN4OE96jO3Mq+rZ2ZqYGC2
-X-Google-Smtp-Source: ACHHUZ55IA8Z0TgQ4yXZHNd1NXUzMwL9ikkAEETla75rjb06L4umBd1aPiWzck/1UePIu/KS0vMO0nXHoS4SsDf0wp3TbJyF/dOc
+        d=1e100.net; s=20221208; t=1686181805; x=1688773805;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zh1qTh2owhTw6iheqxXCV3Jh42E0lrVswaTb+2hzc4w=;
+        b=X4hG5ZBTOpZMvOceQM1/BnldvyzGf7WVOtGdZbha4+FTeeNY141mQapMuTw2hFiPZF
+         nkcdy6QPZk0S2HXBKACDbyAhuUd67pZP+4czgFO7ZhwfBX/hk50gZyWlvA3H8I51p35P
+         Xgghm/oQZIHXQigpy0YpfDuHJYqUNC0PjqWERFavf/CD6UTL+7IUZKi126BzWIAu71gC
+         ZXkirCEIu/VS61bBZjpX4/0AM+F7gLTNE/mXV+jhw5VVNajcTLSNqQTo/g72BkADVMf8
+         oSZdxDu5QnGLmjiQjs9O1mA/7kmoKKlZPH0rzcYdRRDxw8EtKcNl0as8v5nSyLMJe9IX
+         YdCA==
+X-Gm-Message-State: AC+VfDzoLXQpjFTOVAhEwtoUPGdk/im7U+aDMJJJelX82i6csw3nlD1k
+        1a4D5+O4VRGMhNZKgoB9rpA+oCGmZfOwu0cOOLA=
+X-Google-Smtp-Source: ACHHUZ5TxFbbZt/c1mC7qz+St39pEkJ6kPehH9SvBd6ZMdWy/dYoDOpqvha2cNtHqAwL5aM8sTNlgA==
+X-Received: by 2002:a92:cc43:0:b0:33b:ef57:65b1 with SMTP id t3-20020a92cc43000000b0033bef5765b1mr10121224ilq.19.1686181805267;
+        Wed, 07 Jun 2023 16:50:05 -0700 (PDT)
+Received: from mail-io1-f45.google.com (mail-io1-f45.google.com. [209.85.166.45])
+        by smtp.gmail.com with ESMTPSA id t7-20020a92c907000000b0032ab5a86443sm35719ilp.74.2023.06.07.16.50.02
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Jun 2023 16:50:02 -0700 (PDT)
+Received: by mail-io1-f45.google.com with SMTP id ca18e2360f4ac-775ebe161c5so360090339f.1
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 16:50:02 -0700 (PDT)
+X-Received: by 2002:a5e:8c15:0:b0:763:5a8f:fe6 with SMTP id
+ n21-20020a5e8c15000000b007635a8f0fe6mr9992800ioj.21.1686181802445; Wed, 07
+ Jun 2023 16:50:02 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a6b:7507:0:b0:76c:7d5f:3690 with SMTP id
- l7-20020a6b7507000000b0076c7d5f3690mr3378640ioh.1.1686181552159; Wed, 07 Jun
- 2023 16:45:52 -0700 (PDT)
-Date:   Wed, 07 Jun 2023 16:45:52 -0700
-In-Reply-To: <00000000000009ee1005fc425b4b@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000071812e05fd92bcef@google.com>
-Subject: Re: [syzbot] [btrfs?] WARNING in btrfs_split_ordered_extent
-From:   syzbot <syzbot+ee90502d5c8fd1d0dd93@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <20230607133458.4075667-1-yangcong5@huaqin.corp-partner.google.com>
+ <20230607133458.4075667-3-yangcong5@huaqin.corp-partner.google.com>
+In-Reply-To: <20230607133458.4075667-3-yangcong5@huaqin.corp-partner.google.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 7 Jun 2023 16:49:50 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=Uy=UNKDEhqeguhVGn_aTPk5+MppsXChpNOinVc4HJjYg@mail.gmail.com>
+Message-ID: <CAD=FV=Uy=UNKDEhqeguhVGn_aTPk5+MppsXChpNOinVc4HJjYg@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] HID: i2c-hid: elan: Add ili9882t timing
+To:     Cong Yang <yangcong5@huaqin.corp-partner.google.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, dmitry.torokhov@gmail.com, jikos@kernel.org,
+        benjamin.tissoires@redhat.com, hsinyi@google.com,
+        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+Hi,
 
-HEAD commit:    a27648c74210 afs: Fix setting of mtime when creating a fil..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=12b04695280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=7474de833c217bf4
-dashboard link: https://syzkaller.appspot.com/bug?extid=ee90502d5c8fd1d0dd93
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=120b88fd280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17e6a23b280000
+On Wed, Jun 7, 2023 at 6:35=E2=80=AFAM Cong Yang
+<yangcong5@huaqin.corp-partner.google.com> wrote:
+>
+> The ili9882t is a TDDI IC (Touch with Display Driver). The
+> datasheet specifies there should be 60ms between touch SDA
+> sleep and panel RESX. Doug's series[1] allows panels and
+> touchscreens to power on/off together, so we can add the 65 ms
+> delay in i2c_hid_core_suspend before panel_unprepare.
+>
+> [1]: https: //lore.kernel.org/all/20230523193017.4109557-1-dianders@chrom=
+ium.org/
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/33fadb6220e9/disk-a27648c7.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/31a2f6248c1a/vmlinux-a27648c7.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/c97df5fe3d0b/bzImage-a27648c7.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/735d868a5353/mount_0.gz
+FWIW: I posted v2 today:
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+ee90502d5c8fd1d0dd93@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 5017 at fs/btrfs/ordered-data.c:1138 btrfs_split_ordered_extent+0x628/0x840
-Modules linked in:
-CPU: 1 PID: 5017 Comm: syz-executor199 Not tainted 6.4.0-rc5-syzkaller-00017-ga27648c74210 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
-RIP: 0010:btrfs_split_ordered_extent+0x628/0x840 fs/btrfs/ordered-data.c:1138
-Code: fe 48 c7 c7 a0 94 2a 8b 48 c7 c6 20 90 2a 8b ba 6c 04 00 00 e8 09 a9 1d 07 e8 f4 4a fb fd 0f 0b e9 21 fb ff ff e8 e8 4a fb fd <0f> 0b bb ea ff ff ff eb b0 e8 da 4a fb fd 0f 0b bb ea ff ff ff eb
-RSP: 0018:ffffc90003cbedd8 EFLAGS: 00010293
-RAX: ffffffff83903448 RBX: 0000000000010000 RCX: ffff88801929bb80
-RDX: 0000000000000000 RSI: 0000000000010000 RDI: 0000000000001000
-RBP: 1ffff1100fde111b R08: ffffffff83903012 R09: fffffbfff1cab9ae
-R10: 0000000000000000 R11: dffffc0000000001 R12: dffffc0000000000
-R13: ffff88807ef088d8 R14: 0000000000001000 R15: 0000000000000000
-FS:  00007f807fad4700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f9cf00c2723 CR3: 000000002b121000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- btrfs_extract_ordered_extent+0x12c/0xb00 fs/btrfs/inode.c:2625
- btrfs_dio_submit_io+0x239/0x340 fs/btrfs/inode.c:7737
- iomap_dio_submit_bio fs/iomap/direct-io.c:75 [inline]
- iomap_dio_bio_iter+0xe15/0x1430 fs/iomap/direct-io.c:355
- __iomap_dio_rw+0x12c3/0x22e0 fs/iomap/direct-io.c:598
- btrfs_dio_write+0xb6/0x100 fs/btrfs/inode.c:7770
- btrfs_direct_write fs/btrfs/file.c:1529 [inline]
- btrfs_do_write_iter+0x870/0x1270 fs/btrfs/file.c:1674
- do_iter_write+0x7b1/0xcb0 fs/read_write.c:860
- iter_file_splice_write+0x843/0xfe0 fs/splice.c:795
- do_splice_from fs/splice.c:873 [inline]
- direct_splice_actor+0xe7/0x1c0 fs/splice.c:1039
- splice_direct_to_actor+0x4c4/0xbd0 fs/splice.c:994
- do_splice_direct+0x283/0x3d0 fs/splice.c:1082
- do_sendfile+0x620/0xff0 fs/read_write.c:1254
- __do_sys_sendfile64 fs/read_write.c:1322 [inline]
- __se_sys_sendfile64+0x17c/0x1e0 fs/read_write.c:1308
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f8086f49329
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 41 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f807fad42f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000028
-RAX: ffffffffffffffda RBX: 00007f8086fd27b0 RCX: 00007f8086f49329
-RDX: 0000000000000000 RSI: 0000000000000004 RDI: 0000000000000004
-RBP: 00007f8086f9f1f4 R08: 00007f807fad4700 R09: 0000000000000000
-R10: 0000000008800000 R11: 0000000000000246 R12: 6f63617461646f6e
-R13: 70735f6473736f6e R14: 0030656c69662f2e R15: 00007f8086fd27b8
- </TASK>
+https://lore.kernel.org/r/20230607215224.2067679-1-dianders@chromium.org
 
 
----
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+> Signed-off-by: Cong Yang <yangcong5@huaqin.corp-partner.google.com>
+> ---
+>  drivers/hid/i2c-hid/i2c-hid-of-elan.c | 20 ++++++++++++++++----
+>  1 file changed, 16 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/hid/i2c-hid/i2c-hid-of-elan.c b/drivers/hid/i2c-hid/=
+i2c-hid-of-elan.c
+> index 76ddc8be1cbb..411d7ea2725d 100644
+> --- a/drivers/hid/i2c-hid/i2c-hid-of-elan.c
+> +++ b/drivers/hid/i2c-hid/i2c-hid-of-elan.c
+> @@ -18,7 +18,8 @@
+>  #include "i2c-hid.h"
+>
+>  struct elan_i2c_hid_chip_data {
+> -       unsigned int post_gpio_reset_delay_ms;
+> +       unsigned int post_gpio_reset_on_delay_ms;
+> +       unsigned int post_gpio_reset_off_delay_ms;
+>         unsigned int post_power_delay_ms;
+>         u16 hid_descriptor_address;
+>  };
+
+I would prefer it if you would add something to the
+"elan_i2c_hid_chip_data" indicating the name of the main supply. Set
+it to "vcc33" for the elan touchscreen and the NULL for your new one.
+
+It's probably worth adding a comment next to where you set it to NULL
+that this touchscreen is tightly integrated with the panel and assumes
+that the relevant power rails (other than the IO rail) have already
+been turned on by the panel driver because we're a panel follower.
+Otherwise someone is going to be super confused about how this could
+work.
