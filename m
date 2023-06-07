@@ -2,126 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B9F5727334
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 01:39:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41355727332
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 01:39:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232925AbjFGXja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 19:39:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47760 "EHLO
+        id S233476AbjFGXj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 19:39:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232927AbjFGXjX (ORCPT
+        with ESMTP id S233396AbjFGXjW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 19:39:23 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 255612115;
-        Wed,  7 Jun 2023 16:39:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686181155; x=1717717155;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=N+5v16ekd4mpMdaitluJiCwSxF+P8KWqlxIOWs7E2XU=;
-  b=m5Ykuvsya0tthuO1WIvfngfTcovTsCH4E95bQ+OuiCKJc8gsq4h7sE4p
-   MZi2BiekztJEgjwvm6uYJgxcz2QgurWmfjUnDiLwT/oI1QeFl5lU5j/6K
-   QDawhNNlScIkYK7mVcaFQz5RhITcMMedxjtNuB8gNXruqQ+2cs0a4eI88
-   K6I63YP9nbfWTjhIlNc+oY72c3eQr9sbTp+WDV9v0+l7HDexwSmvh16OM
-   h4KBtbEalFV/EXStaIOxxwPWda6j6p1okvNiOVoUq2jUaa+6DwJ/WWqVJ
-   eiXjmV1tvl+eVzrXUBKElMHMm7KLRfjd2awaYbcHsa4yvnL5uckS94WUn
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="354631549"
-X-IronPort-AV: E=Sophos;i="6.00,225,1681196400"; 
-   d="scan'208";a="354631549"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 16:38:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="739461206"
-X-IronPort-AV: E=Sophos;i="6.00,225,1681196400"; 
-   d="scan'208";a="739461206"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga008.jf.intel.com with ESMTP; 07 Jun 2023 16:38:50 -0700
-Received: from debox1-desk4.intel.com (unknown [10.251.3.221])
-        by linux.intel.com (Postfix) with ESMTP id 605AF580D26;
-        Wed,  7 Jun 2023 16:38:50 -0700 (PDT)
-From:   "David E. Box" <david.e.box@linux.intel.com>
-To:     linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org
-Cc:     david.e.box@linux.intel.com, markgross@kernel.org,
-        hdegoede@redhat.com, irenic.rajneesh@gmail.com,
-        ilpo.jarvinen@linux.intel.com, xi.pardee@intel.com,
-        rajvi.jingar@linux.intel.com
-Subject: [PATCH V2 2/2] platform/x86/intel/pmc/mtl: Put devices in D3 during resume
-Date:   Wed,  7 Jun 2023 16:38:49 -0700
-Message-Id: <20230607233849.239047-2-david.e.box@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230607233849.239047-1-david.e.box@linux.intel.com>
-References: <20230607233849.239047-1-david.e.box@linux.intel.com>
+        Wed, 7 Jun 2023 19:39:22 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DA8F26A8
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 16:39:09 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2b1b92845e1so59430321fa.0
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 16:39:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686181148; x=1688773148;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XONB9T8Mj7o/MLrEwoJSSBYj969JG7tPSlspH2W5BIw=;
+        b=GTSY7qEdobWh7LkTRnOAImvPKZUJQfgOgETcJ+tk6DI5sF/chuwr6uFDqqlVN23O2W
+         //yo7tNg480hQs0zkZINMpSZx3sk/T3RykwcV+TsgCqjcm6lxUr7OIiZgxIFpwSR5GDM
+         4G0wg5Ie0zBjwOhgMcBHNt5pPR8zWZkXbyFtqUc4AfJayZmsCu3RwDeCa8spwMuwj3kd
+         l7IFXSZtuqtnQi6PcQ7vFnWwXhpYhZaVzrLSjtc6apATcNyaMuyKL3dvg8eSImkt7HNR
+         s3HuH1jxWmY/bYrPhnN5PoHhxg9HXsMayW/9mjwSHTu08V8Fjpsb3fvDLgVQ95kyqjtA
+         HJ8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686181148; x=1688773148;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XONB9T8Mj7o/MLrEwoJSSBYj969JG7tPSlspH2W5BIw=;
+        b=kSh3LhGjSjEsYxBPNo8yqPYf+0TO1NYdUQ+ZETxQYj1MxOOg9PXhMtEYJri4ohyRmQ
+         T4yWZLGbpAUBiFI1Fv4N5LDco4qZk823wuYj17/69Cdhbed7j/4cWNtpgXNcmQWd1t3w
+         8iw+x6oWuNyOj4G7C7NX5WyLYQK/RQFbWMeY0db2upYMtWk1fJ+QmUUSUQwTio9LxK7v
+         qiM+Lu345mRImLD3VEoFa14zdMUPvYYzdtJt/+pNTdB7AgzvuMrKtPWsaAxZVu0Ovv6X
+         s6mtoam7ZxvmfXKHBpuURw/0A8FSGA38f1kduCS8Fl/ItQP0vMhGv+zUfWa5GLJ4q6r8
+         B4NQ==
+X-Gm-Message-State: AC+VfDzD2e3fLHGBs62Uf3fsMqYt/3A2RM0cDqhIzjbUtYHeL7CdUGUo
+        ydD+DjF89p+kPlyYHz7lZjHdtw==
+X-Google-Smtp-Source: ACHHUZ5Ti07xNp1+TYebI62vHoSL/r5taUDlEmn3ZQRy27Ik7N84bpsPjsq4VfKfSjqdaopI0zXg+A==
+X-Received: by 2002:a2e:730c:0:b0:2a7:7100:ff5a with SMTP id o12-20020a2e730c000000b002a77100ff5amr2976356ljc.6.1686181147775;
+        Wed, 07 Jun 2023 16:39:07 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id o15-20020a2e90cf000000b002b1b92910c8sm346ljg.86.2023.06.07.16.39.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Jun 2023 16:39:07 -0700 (PDT)
+Message-ID: <e70b266b-85bb-f23f-dac8-47702a2aaf37@linaro.org>
+Date:   Thu, 8 Jun 2023 02:39:06 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v6 00/12] SM63(50|75) DPU support
+Content-Language: en-GB
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux.dev, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+References: <20230411-topic-straitlagoon_mdss-v6-0-dee6a882571b@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230411-topic-straitlagoon_mdss-v6-0-dee6a882571b@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-An earlier commit placed some driverless devices in D3 during boot so that
-they don't block package cstate entry on Meteor Lake. Also place these
-devices in D3 after resume from suspend.
+On 06/06/2023 15:43, Konrad Dybcio wrote:
 
-Fixes: 336ba968d3e3 ("platform/x86/intel/pmc/mtl: Put GNA/IPU/VPU devices in D3")
-Signed-off-by: David E. Box <david.e.box@linux.intel.com>
----
+[skipped the changelog]
 
-V2 - rename mtl_fixup to mtl_d3_fixup. Call it from new mtl_resume
-     function, followed by the common resume. Suggested by Ilpo.
+> ---
+> Konrad Dybcio (12):
+>        dt-bindings: display/msm: dsi-controller-main: Add SM6350
+>        dt-bindings: display/msm: dsi-controller-main: Add SM6375
+>        dt-bindings: display/msm: sc7180-dpu: Describe SM6350 and SM6375
+>        dt-bindings: display/msm: Add SM6350 MDSS
+>        dt-bindings: display/msm: Add SM6375 MDSS
+>        drm/msm/dpu: Add SM6350 support
+>        drm/msm: mdss: Add SM6350 support
+>        drm/msm/dpu: Add SM6375 support
+>        drm/msm: mdss: Add SM6375 support
 
- drivers/platform/x86/intel/pmc/mtl.c | 29 ++++++++++++++++++++--------
- 1 file changed, 21 insertions(+), 8 deletions(-)
+Will, we have finally picked up the display related patches. Could you 
+please pick up the IOMMU patches if they look fine to you.
 
-diff --git a/drivers/platform/x86/intel/pmc/mtl.c b/drivers/platform/x86/intel/pmc/mtl.c
-index e8cc156412ce..2b00ad9da621 100644
---- a/drivers/platform/x86/intel/pmc/mtl.c
-+++ b/drivers/platform/x86/intel/pmc/mtl.c
-@@ -68,16 +68,29 @@ static void mtl_set_device_d3(unsigned int device)
- 	}
- }
- 
--void mtl_core_init(struct pmc_dev *pmcdev)
-+/*
-+ * Set power state of select devices that do not have drivers to D3
-+ * so that they do not block Package C entry.
-+ */
-+static void mtl_d3_fixup(void)
- {
--	pmcdev->map = &mtl_reg_map;
--	pmcdev->core_configure = mtl_core_configure;
--
--	/*
--	 * Set power state of select devices that do not have drivers to D3
--	 * so that they do not block Package C entry.
--	 */
- 	mtl_set_device_d3(MTL_GNA_PCI_DEV);
- 	mtl_set_device_d3(MTL_IPU_PCI_DEV);
- 	mtl_set_device_d3(MTL_VPU_PCI_DEV);
- }
-+
-+static int mtl_resume(struct pmc_dev *pmcdev)
-+{
-+	mtl_d3_fixup();
-+	return pmc_core_resume_common(pmcdev);
-+}
-+
-+void mtl_core_init(struct pmc_dev *pmcdev)
-+{
-+	pmcdev->map = &mtl_reg_map;
-+	pmcdev->core_configure = mtl_core_configure;
-+
-+	mtl_d3_fixup();
-+
-+	pmcdev->resume = mtl_resume;
-+}
+>        iommu/arm-smmu-qcom: Sort the compatible list alphabetically
+>        iommu/arm-smmu-qcom: Add SM6375 DPU compatible
+>        iommu/arm-smmu-qcom: Add SM6350 DPU compatible
+> 
+>   .../bindings/display/msm/dsi-controller-main.yaml  |   4 +
+>   .../bindings/display/msm/qcom,sc7180-dpu.yaml      |  23 ++-
+>   .../bindings/display/msm/qcom,sm6350-mdss.yaml     | 213 ++++++++++++++++++++
+>   .../bindings/display/msm/qcom,sm6375-mdss.yaml     | 215 +++++++++++++++++++++
+>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_4_sm6350.h | 173 +++++++++++++++++
+>   .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_9_sm6375.h | 139 +++++++++++++
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     |   6 +
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h     |   2 +
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c            |   2 +
+>   drivers/gpu/drm/msm/msm_mdss.c                     |  10 +
+>   drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c         |   6 +-
+>   11 files changed, 790 insertions(+), 3 deletions(-)
+> ---
+> base-commit: 6db29e14f4fb7bce9eb5290288e71b05c2b0d118
+> change-id: 20230411-topic-straitlagoon_mdss-8f34cacd5e26
+> 
+> Best regards,
+
 -- 
-2.34.1
+With best wishes
+Dmitry
 
