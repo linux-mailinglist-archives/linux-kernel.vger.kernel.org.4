@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A36AD725CFF
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 13:24:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8335F725D00
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 13:24:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240066AbjFGLYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 07:24:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57170 "EHLO
+        id S240326AbjFGLYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 07:24:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233982AbjFGLY2 (ORCPT
+        with ESMTP id S235273AbjFGLYc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 07:24:28 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB90A1707
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 04:24:27 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-652d1d3e040so3661241b3a.1
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 04:24:27 -0700 (PDT)
+        Wed, 7 Jun 2023 07:24:32 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48FA110DE
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 04:24:31 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1b01d3bb571so31194175ad.2
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 04:24:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1686137067; x=1688729067;
+        d=ventanamicro.com; s=google; t=1686137071; x=1688729071;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FaLF8SuXqZ+eem5Z+p2tHoPzcT4Es5+ktuLMhNLEyaQ=;
-        b=WCsZ22y+8czgBOQ9DxhWSAUqumehO6PNurNynJB4BmToYu6snCtWQL+exdFzufbLlX
-         bvoB8jqEWvGls4utETB1quXhAdc5ateJtVPpVG4Q4BIe4sjEz3iOxrJttLa/Zed52lyX
-         8/1RJJw8nfPLIXTmTbjyLBm+goVaPkeavhGj9qTnaJr3G5/hC2Usy66pUFkgIdsprF6B
-         yG2k9rXQs/q4qVOPjcxFPmhS2y77EH+DgMcSW1alU7l/U05q8ySYu3r4bmnQyCGJDC2t
-         yGUlrc0mC09c4EFcq8rMqJAnUmIh2YhnVaxFWt49+zt5a143SHm+N31hZyAvF8C/BM5R
-         +50A==
+        bh=EKUAIZ0nFHOgAYGnbeK6iIGxT+kuJpEiGpjsvdtXi+U=;
+        b=PApebzMKCyqeqXPvbn9sAWGMu9YTfuYS1wTr4s7XojjK/1/8qH0LdaYZ3piwvnIIQr
+         LGaZGt6kN5ptNt6YkYXgEfms51C0lWvb4hy/7KMpH6JJNfVF9tuXDP4KPF81cV4uc/2u
+         tBH5nf8dSv3mWC38EwFDMdWkkCq/cAGDoDgHuQCDo2Mb8plFlvkLVRCDxKmzHVNBUWjY
+         NwRsL6ac/88EiMnZOCnd2l/NbV+HhcHyHbB4RUXMPiP2GcsJ++76oDehR7ppMoluV37J
+         fDqEOH0awHQvjzGk7DCl900Kbp7do5DuU9krb1YPvAcI8FaqAnmar4vdEN8ogPgFxEob
+         Kryg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686137067; x=1688729067;
+        d=1e100.net; s=20221208; t=1686137071; x=1688729071;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=FaLF8SuXqZ+eem5Z+p2tHoPzcT4Es5+ktuLMhNLEyaQ=;
-        b=Bta+ORg/sjQaCCFRPiVRbyJ8U6pfOrrbeQ7tqYkGwDTvzJU6tSbSBff/gDun4H+/cv
-         aKSSMJYL1pkb9RWKnqOUO8YM1ZnvO7AmVbToAqwKkAGmy2ZqqfJ9Djv+QFLiY94Eizho
-         F77c2TA91jBdsXIGpavi3knYnPytu/yftruBIx6GPyu/bV38kbq+Mry4Nuc8XFGLNEGz
-         hMQAgoGjqfey01MBkz/OeT9E5jLC0iSniqsJhKTOH06VNfth6/E0MDmvezLE6C6Q/daH
-         Liuln45kHKj6N8HnflclwUSg6aJHIJWUfLwvgh1getCclHo8OKoA/F3Yp9jQYpBn9T5X
-         6Obg==
-X-Gm-Message-State: AC+VfDzALkdmYvIKJMt8qD3Zp+d7zNA9H4EVu6Few2M4m7i9ZYXQ7i4Q
-        4yXFV+6DLptF8HU8JC6kN15WsQ==
-X-Google-Smtp-Source: ACHHUZ7bgZCFwzNHwgERU+x+RNj4ugM3cQipIuaTgbdgLN9TtiyCfdPlPvQ9Awpx6wOuhAxwXgYNLQ==
-X-Received: by 2002:a05:6a21:3706:b0:10e:96b5:45fa with SMTP id yl6-20020a056a21370600b0010e96b545famr1341134pzb.43.1686137067317;
-        Wed, 07 Jun 2023 04:24:27 -0700 (PDT)
+        bh=EKUAIZ0nFHOgAYGnbeK6iIGxT+kuJpEiGpjsvdtXi+U=;
+        b=BbP2dg0FYZ8YmDDQ5a+oiOYfGw1yfbyHsYuABxmfozcoJu8zvRtNTAbmlMKzbZKJDg
+         yycb+fmNSa6cYT3Ile/jDNeR3FiLTyFKwPYqALNlEMHqGcDC0GvmUEzKFVOhM0SXka3N
+         UlTqctwrjepo9ng+UOxYAYa90Xbh/C6Hv1S2Nq8vsp9/hWvyL9im2YXSW2JuLxxVxWCF
+         L/WEeKYyXTb/urkoJKU+1nWGhsWEjzPyxRaWe2LGCNiILY2viC6BMMVclTQRDbqR72pu
+         bIYDlH9WVninz6H1i8vb7gqH5kCnuCdhQP6w8ZTIaIHXKf/p4uJetHC74ZSQCf4eDeDv
+         kAyQ==
+X-Gm-Message-State: AC+VfDxIJEMq2XDrxBbm7uIEbW6Jt8YbSaCtRaZx52ZtT9dnp2YcDHCw
+        evKfdz/aQvBzAaZH1ViyV/xcDA==
+X-Google-Smtp-Source: ACHHUZ4t9BGyHEKPtBUNtotOJXdVGN9mEB3zaIkJB+YNFGcAMkMgyLneHkxAZFJZFz3IbJdEsSVI1g==
+X-Received: by 2002:a17:902:cec4:b0:1b1:dfbd:a192 with SMTP id d4-20020a170902cec400b001b1dfbda192mr2072940plg.57.1686137070768;
+        Wed, 07 Jun 2023 04:24:30 -0700 (PDT)
 Received: from kerodi.Dlink ([106.51.186.3])
-        by smtp.gmail.com with ESMTPSA id o10-20020a1709026b0a00b001b2069072ccsm6228322plk.18.2023.06.07.04.24.23
+        by smtp.gmail.com with ESMTPSA id o10-20020a1709026b0a00b001b2069072ccsm6228322plk.18.2023.06.07.04.24.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 04:24:26 -0700 (PDT)
+        Wed, 07 Jun 2023 04:24:30 -0700 (PDT)
 From:   Sunil V L <sunilvl@ventanamicro.com>
 To:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
@@ -61,11 +61,10 @@ Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
         Will Deacon <will@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Sunil V L <sunilvl@ventanamicro.com>,
-        kernel test robot <lkp@intel.com>,
         Conor Dooley <conor.dooley@microchip.com>
-Subject: [PATCH v2 -next 1/2] RISC-V: ACPI : Fix for usage of pointers in different address space
-Date:   Wed,  7 Jun 2023 16:54:16 +0530
-Message-Id: <20230607112417.782085-2-sunilvl@ventanamicro.com>
+Subject: [PATCH v2 -next 2/2] RISC-V/perf: Use standard interface to get INTC domain
+Date:   Wed,  7 Jun 2023 16:54:17 +0530
+Message-Id: <20230607112417.782085-3-sunilvl@ventanamicro.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230607112417.782085-1-sunilvl@ventanamicro.com>
 References: <20230607112417.782085-1-sunilvl@ventanamicro.com>
@@ -81,44 +80,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The arch specific __acpi_map_table can be wrapper around either
-early_memremap or early_ioremap. But early_memremap
-routine works with normal pointers whereas __acpi_map_table expects
-pointers in iomem address space. This causes kernel test bot to fail
-while using the sparse tool. Fix the issue by using early_ioremap and
-similar fix done for __acpi_unmap_table.
+Currently the PMU driver is using DT based lookup to
+find the INTC node for sscofpmf extension. This will not work
+for ACPI based systems causing the driver to fail to register
+the PMU overflow interrupt handler.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202305201427.I7QhPjNW-lkp@intel.com/
-Fixes: a91a9ffbd3a5 ("RISC-V: Add support to build the ACPI core")
+Hence, change the code to use the standard interface to find
+the INTC node which works irrespective of DT or ACPI.
+
 Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
 Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- arch/riscv/kernel/acpi.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/perf/riscv_pmu_sbi.c | 17 ++---------------
+ 1 file changed, 2 insertions(+), 15 deletions(-)
 
-diff --git a/arch/riscv/kernel/acpi.c b/arch/riscv/kernel/acpi.c
-index df5a45a2eb93..5ee03ebab80e 100644
---- a/arch/riscv/kernel/acpi.c
-+++ b/arch/riscv/kernel/acpi.c
-@@ -204,7 +204,7 @@ void __init __iomem *__acpi_map_table(unsigned long phys, unsigned long size)
- 	if (!size)
- 		return NULL;
+diff --git a/drivers/perf/riscv_pmu_sbi.c b/drivers/perf/riscv_pmu_sbi.c
+index 4f3ac296b3e2..0bc491252a44 100644
+--- a/drivers/perf/riscv_pmu_sbi.c
++++ b/drivers/perf/riscv_pmu_sbi.c
+@@ -739,7 +739,6 @@ static int pmu_sbi_setup_irqs(struct riscv_pmu *pmu, struct platform_device *pde
+ {
+ 	int ret;
+ 	struct cpu_hw_events __percpu *hw_events = pmu->hw_events;
+-	struct device_node *cpu, *child;
+ 	struct irq_domain *domain = NULL;
  
--	return early_memremap(phys, size);
-+	return early_ioremap(phys, size);
- }
+ 	if (riscv_isa_extension_available(NULL, SSCOFPMF)) {
+@@ -756,20 +755,8 @@ static int pmu_sbi_setup_irqs(struct riscv_pmu *pmu, struct platform_device *pde
+ 	if (!riscv_pmu_use_irq)
+ 		return -EOPNOTSUPP;
  
- void __init __acpi_unmap_table(void __iomem *map, unsigned long size)
-@@ -212,7 +212,7 @@ void __init __acpi_unmap_table(void __iomem *map, unsigned long size)
- 	if (!map || !size)
- 		return;
- 
--	early_memunmap(map, size);
-+	early_iounmap(map, size);
- }
- 
- void *acpi_os_ioremap(acpi_physical_address phys, acpi_size size)
+-	for_each_of_cpu_node(cpu) {
+-		child = of_get_compatible_child(cpu, "riscv,cpu-intc");
+-		if (!child) {
+-			pr_err("Failed to find INTC node\n");
+-			of_node_put(cpu);
+-			return -ENODEV;
+-		}
+-		domain = irq_find_host(child);
+-		of_node_put(child);
+-		if (domain) {
+-			of_node_put(cpu);
+-			break;
+-		}
+-	}
++	domain = irq_find_matching_fwnode(riscv_get_intc_hwnode(),
++					  DOMAIN_BUS_ANY);
+ 	if (!domain) {
+ 		pr_err("Failed to find INTC IRQ root domain\n");
+ 		return -ENODEV;
 -- 
 2.34.1
 
