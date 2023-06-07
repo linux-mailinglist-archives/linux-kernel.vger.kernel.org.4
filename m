@@ -2,264 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B111725A51
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 11:27:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF6DE725AA5
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 11:36:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239962AbjFGJ1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 05:27:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48052 "EHLO
+        id S239797AbjFGJg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 05:36:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231890AbjFGJ1R (ORCPT
+        with ESMTP id S239837AbjFGJgZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 05:27:17 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0011E1725
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 02:27:14 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-5147f7d045bso888792a12.2
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 02:27:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686130033; x=1688722033;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NeOVyyzx2aFg+HiDo8xoGuPCyLIjyDb2msJx9kNdD80=;
-        b=wCuhghmjcdqhSltrPabDz96VMoaq3h7gnM8P3G85h5r+4H1Bg8PiV1KggTHgHUS5Ps
-         H24m3Yehlh0P/v7kPkX2BcyJyhk/bJuQmtVT2jYC99ZX2i22T7iE97RRsROtEKoYN63v
-         GV3oH5JXO2kHz4uc0jGOfVlgQ+HEE9QNDsAoOQxWb9L0YcZZ4xpAl/yGD+K9K3Sy6y7V
-         lpyyCoDwPdpOlFJlgn13YVr6Tr/HLsZY0GgIF7/rL9RPpInQGdfMot0t59qmnpy+lcyQ
-         YZWETC7zKGNfWlIHHjUCeEM891MwyVX+LHA1xWHelZn5YefVCWFYVv3K1dAGh+qLIYKA
-         CNGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686130033; x=1688722033;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NeOVyyzx2aFg+HiDo8xoGuPCyLIjyDb2msJx9kNdD80=;
-        b=U/RPcb089GyQYjA1rTiO9idVMJZMSLlgwBbSxbc1iZBN4BDhW//6UBq2DLxC18Rdsf
-         EfIEbjHrykKWTTcUE1l8vhb3I4+U5RZDAwEI3LCO1K/Z2nbs3JRJ4BssmNG6FZ3OGox4
-         O/5qJWBKfOFEyll1swYIfg/xqiaDEMQGjBPmCC7E33MOUkLSV28PEwcREi9K7NxAl/r9
-         srx2HpTUv1S/oXNV3yEb7IHO6qPiyTPp6a2bwSoOXKTgoJBJ09BWpN1Ggnygi2VK/hIG
-         zwFdEZBPytT3kGMd/fYVKyl3RMwJ1MmH5CPu4prG7XLS25aoCJ2GNsLLny8pyhJ4Q+0C
-         wxFA==
-X-Gm-Message-State: AC+VfDyJhyGSI/wyZRRzxVMFxgfh8ChG/FzR8Kf1vvb2nliFcsEcfB8V
-        uNxL77LHcMl/w15etcEYB0u3rDASmLND5des8moNNg==
-X-Google-Smtp-Source: ACHHUZ6Rb3Tred2Ry6K0iwQMFvAK9MVGZ16UUCiLX1gNCkFNCO/mOM00ePKvztpPtrOgoNhRAMGyP7KKCBZTuQN/2fc=
-X-Received: by 2002:a17:907:eaa:b0:973:e69d:c720 with SMTP id
- ho42-20020a1709070eaa00b00973e69dc720mr6689340ejc.51.1686130033219; Wed, 07
- Jun 2023 02:27:13 -0700 (PDT)
+        Wed, 7 Jun 2023 05:36:25 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D18A31BC2;
+        Wed,  7 Jun 2023 02:36:03 -0700 (PDT)
+X-QQ-mid: bizesmtp71t1686130553tmsdhqdy
+Received: from linux-lab-host.localdomain ( [61.141.77.49])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 07 Jun 2023 17:35:52 +0800 (CST)
+X-QQ-SSF: 00200000000000D0V000000A0000000
+X-QQ-FEAT: lkL5M32tl2CKtzfdmJppNXVfPo4dxxS2i5yjRnmFQwVRtg9qihhO/bdGb8f45
+        yWn2uxZLxaR03l3EEyG3ZSe+rmOHf0zQcc978/tiuiHl9/xeA/a5gsfw1Iz5iwm9HgXYtxx
+        PP8ebuEvcyWxkYw5KtdUj/NMNt0ADHXsRQs4S7w5o7GFUXvGt70EaVa1Z9M2HAzmkU0j/3+
+        Ly/ztVpho8T0NWn1hGi9u1c3QjZoSjFOtbvsYaVB9tnmAOJ4B3oiKbDMiv+FjFA+JDdXPCE
+        Izip3hN+MT1jbZAgpNtiTLAHenU2xXWtiLfC3EzFz8W4ty+E3z3Xdes0vghwexbdeA149FC
+        1h5T5I9ph8YUWFsHRh2goaMbO2tFv9l+YES8qlLlsYf4mDSk5c1NABZFvisRPFGLWZakBFf
+        qSvd39YkcwE=
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 14568529187218780332
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     thomas@t-8ch.de, w@1wt.eu
+Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: [PATCH v4 2/3] tools/nolibc: fix up undeclared syscall macros with #ifdef and -ENOSYS
+Date:   Wed,  7 Jun 2023 17:27:52 +0800
+Message-Id: <1b2ace57de2f47ae0da4457845594baf59f7e06d.1686128703.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1686128703.git.falcon@tinylab.org>
+References: <cover.1686128703.git.falcon@tinylab.org>
 MIME-Version: 1.0
-References: <20230606145611.704392-1-cerasuolodomenico@gmail.com> <20230606145611.704392-7-cerasuolodomenico@gmail.com>
-In-Reply-To: <20230606145611.704392-7-cerasuolodomenico@gmail.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Wed, 7 Jun 2023 02:26:37 -0700
-Message-ID: <CAJD7tkY09KvHGGVwQqSj7XHvHe+z5iC1-Ghj97gHbbWnDk1_kg@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 6/7] mm: zswap: simplify writeback function
-To:     Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-Cc:     vitaly.wool@konsulko.com, minchan@kernel.org,
-        senozhatsky@chromium.org, linux-mm@kvack.org, ddstreet@ieee.org,
-        sjenning@redhat.com, nphamcs@gmail.com, hannes@cmpxchg.org,
-        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        TVD_PH_BODY_ACCOUNTS_PRE,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 6, 2023 at 7:56=E2=80=AFAM Domenico Cerasuolo
-<cerasuolodomenico@gmail.com> wrote:
->
-> Previously, in zswap, the writeback function was passed to zpool drivers
-> for their usage in calling the writeback operation. However, since the
-> drivers did not possess references to entries and the function was
-> specifically designed to work with handles, the writeback process has
-> been modified to occur directly within zswap. Consequently, this change
-> allows for some simplification of the writeback function, taking into
-> account the updated workflow.
->
-> Signed-off-by: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-> ---
->  mm/zswap.c | 69 ++++++++++++++----------------------------------------
->  1 file changed, 17 insertions(+), 52 deletions(-)
->
-> diff --git a/mm/zswap.c b/mm/zswap.c
-> index 2831bf56b168..ef8604812352 100644
-> --- a/mm/zswap.c
-> +++ b/mm/zswap.c
-> @@ -250,7 +250,8 @@ static bool zswap_has_pool;
->         pr_debug("%s pool %s/%s\n", msg, (p)->tfm_name,         \
->                  zpool_get_type((p)->zpool))
->
-> -static int zswap_writeback_entry(struct zpool *pool, unsigned long handl=
-e);
-> +static int zswap_writeback_entry(struct zswap_entry *entry, struct zswap=
-_header *zhdr,
-> +                                struct zswap_tree *tree);
->  static int zswap_pool_get(struct zswap_pool *pool);
->  static void zswap_pool_put(struct zswap_pool *pool);
->
-> @@ -632,15 +633,21 @@ static int zswap_shrink(struct zswap_pool *pool)
->         }
->         spin_unlock(&tree->lock);
->
-> -       ret =3D zswap_writeback_entry(pool->zpool, lru_entry->handle);
-> +       ret =3D zswap_writeback_entry(lru_entry, zhdr, tree);
->
->         spin_lock(&tree->lock);
->         if (ret) {
->                 spin_lock(&pool->lru_lock);
->                 list_move(&lru_entry->lru, &pool->lru);
->                 spin_unlock(&pool->lru_lock);
-> +               zswap_entry_put(tree, tree_entry);
-> +       } else {
-> +               /* free the local reference */
-> +               zswap_entry_put(tree, tree_entry);
-> +               /* free the entry if it's not been invalidated*/
-> +               if (lru_entry =3D=3D zswap_rb_search(&tree->rbroot, swpof=
-fset))
-> +                       zswap_entry_put(tree, tree_entry);
+Compiling nolibc for rv32 got such errors:
 
-The comment that was here about the 2 possible cases was useful imo,
-maybe keep it?
+    nolibc/sysroot/riscv/include/sys.h: In function ‘sys_gettimeofday’:
+    nolibc/sysroot/riscv/include/sys.h:557:21: error: ‘__NR_gettimeofday’ undeclared (first use in this function); did you mean ‘sys_gettimeofday’?
+      557 |  return my_syscall2(__NR_gettimeofday, tv, tz);
+          |                     ^~~~~~~~~~~~~~~~~
+    nolibc/sysroot/riscv/include/sys.h: In function ‘sys_lseek’:
+    nolibc/sysroot/riscv/include/sys.h:675:21: error: ‘__NR_lseek’ undeclared (first use in this function)
+      675 |  return my_syscall3(__NR_lseek, fd, offset, whence);
+          |                     ^~~~~~~~~~
+    nolibc/sysroot/riscv/include/sys.h: In function ‘sys_wait4’:
+    nolibc/sysroot/riscv/include/sys.h:1341:21: error: ‘__NR_wait4’ undeclared (first use in this function)
+     1341 |  return my_syscall4(__NR_wait4, pid, status, options, rusage);
 
-Also, I am not sure why we need to do a tree search vs. just reading
-the refcount here before the first put. We can even make
-zswap_entry_put() return the refcount after the put to know if we need
-the additional put or not.
+If a syscall macro is not supported by a target platform, wrap it with
+'#ifdef' and 'return -ENOSYS' for the '#else' branch, which lets the
+other syscalls work as-is and allows developers to fix up the test
+failures reported by nolibc-test one by one later.
 
-Can anyone think of any reason why we need to explicitly search the tree he=
-re?
+This wraps all of the failed syscall macros with '#ifdef' and 'return
+-ENOSYS' for the '#else' branch, so, all of the undeclared failures are
+fixed.
 
->         }
-> -       zswap_entry_put(tree, tree_entry);
->         spin_unlock(&tree->lock);
->
->         return ret ? -EAGAIN : 0;
-> @@ -1039,16 +1046,14 @@ static int zswap_get_swap_cache_page(swp_entry_t =
-entry,
->   * the swap cache, the compressed version stored by zswap can be
->   * freed.
->   */
-> -static int zswap_writeback_entry(struct zpool *pool, unsigned long handl=
-e)
-> +static int zswap_writeback_entry(struct zswap_entry *entry, struct zswap=
-_header *zhdr,
-> +                                struct zswap_tree *tree)
->  {
-> -       struct zswap_header *zhdr;
-> -       swp_entry_t swpentry;
-> -       struct zswap_tree *tree;
-> -       pgoff_t offset;
-> -       struct zswap_entry *entry;
-> +       swp_entry_t swpentry =3D zhdr->swpentry;
->         struct page *page;
->         struct scatterlist input, output;
->         struct crypto_acomp_ctx *acomp_ctx;
-> +       struct zpool *pool =3D entry->pool->zpool;
->
->         u8 *src, *tmp =3D NULL;
->         unsigned int dlen;
-> @@ -1063,25 +1068,6 @@ static int zswap_writeback_entry(struct zpool *poo=
-l, unsigned long handle)
->                         return -ENOMEM;
->         }
->
-> -       /* extract swpentry from data */
-> -       zhdr =3D zpool_map_handle(pool, handle, ZPOOL_MM_RO);
-> -       swpentry =3D zhdr->swpentry; /* here */
-> -       tree =3D zswap_trees[swp_type(swpentry)];
-> -       offset =3D swp_offset(swpentry);
-> -       zpool_unmap_handle(pool, handle);
-> -
-> -       /* find and ref zswap entry */
-> -       spin_lock(&tree->lock);
-> -       entry =3D zswap_entry_find_get(&tree->rbroot, offset);
-> -       if (!entry) {
-> -               /* entry was invalidated */
-> -               spin_unlock(&tree->lock);
-> -               kfree(tmp);
-> -               return 0;
-> -       }
-> -       spin_unlock(&tree->lock);
-> -       BUG_ON(offset !=3D entry->offset);
-> -
->         /* try to allocate swap cache page */
->         switch (zswap_get_swap_cache_page(swpentry, &page)) {
->         case ZSWAP_SWAPCACHE_FAIL: /* no memory or invalidate happened */
-> @@ -1115,12 +1101,12 @@ static int zswap_writeback_entry(struct zpool *po=
-ol, unsigned long handle)
->                 acomp_ctx =3D raw_cpu_ptr(entry->pool->acomp_ctx);
->                 dlen =3D PAGE_SIZE;
->
-> -               zhdr =3D zpool_map_handle(pool, handle, ZPOOL_MM_RO);
-> +               zhdr =3D zpool_map_handle(pool, entry->handle, ZPOOL_MM_R=
-O);
->                 src =3D (u8 *)zhdr + sizeof(struct zswap_header);
->                 if (!zpool_can_sleep_mapped(pool)) {
->                         memcpy(tmp, src, entry->length);
->                         src =3D tmp;
-> -                       zpool_unmap_handle(pool, handle);
-> +                       zpool_unmap_handle(pool, entry->handle);
->                 }
->
->                 mutex_lock(acomp_ctx->mutex);
-> @@ -1135,7 +1121,7 @@ static int zswap_writeback_entry(struct zpool *pool=
-, unsigned long handle)
->                 if (!zpool_can_sleep_mapped(pool))
->                         kfree(tmp);
->                 else
-> -                       zpool_unmap_handle(pool, handle);
-> +                       zpool_unmap_handle(pool, entry->handle);
->
->                 BUG_ON(ret);
->                 BUG_ON(dlen !=3D PAGE_SIZE);
-> @@ -1152,23 +1138,7 @@ static int zswap_writeback_entry(struct zpool *poo=
-l, unsigned long handle)
->         put_page(page);
->         zswap_written_back_pages++;
->
-> -       spin_lock(&tree->lock);
-> -       /* drop local reference */
-> -       zswap_entry_put(tree, entry);
-> -
-> -       /*
-> -       * There are two possible situations for entry here:
-> -       * (1) refcount is 1(normal case),  entry is valid and on the tree
-> -       * (2) refcount is 0, entry is freed and not on the tree
-> -       *     because invalidate happened during writeback
-> -       *  search the tree and free the entry if find entry
-> -       */
-> -       if (entry =3D=3D zswap_rb_search(&tree->rbroot, offset))
-> -               zswap_entry_put(tree, entry);
-> -       spin_unlock(&tree->lock);
-> -
->         return ret;
-> -
->  fail:
->         if (!zpool_can_sleep_mapped(pool))
->                 kfree(tmp);
-> @@ -1177,13 +1147,8 @@ static int zswap_writeback_entry(struct zpool *poo=
-l, unsigned long handle)
->         * if we get here due to ZSWAP_SWAPCACHE_EXIST
->         * a load may be happening concurrently.
->         * it is safe and okay to not free the entry.
-> -       * if we free the entry in the following put
->         * it is also okay to return !0
->         */
-> -       spin_lock(&tree->lock);
-> -       zswap_entry_put(tree, entry);
-> -       spin_unlock(&tree->lock);
-> -
->         return ret;
->  }
->
-> --
-> 2.34.1
->
+Suggested-by: Arnd Bergmann <arnd@arndb.de>
+Link: https://lore.kernel.org/linux-riscv/5e7d2adf-e96f-41ca-a4c6-5c87a25d4c9c@app.fastmail.com/
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+---
+ tools/include/nolibc/sys.h | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+index 78c86f124335..5464f93e863e 100644
+--- a/tools/include/nolibc/sys.h
++++ b/tools/include/nolibc/sys.h
+@@ -554,7 +554,11 @@ long getpagesize(void)
+ static __attribute__((unused))
+ int sys_gettimeofday(struct timeval *tv, struct timezone *tz)
+ {
++#ifdef __NR_gettimeofday
+ 	return my_syscall2(__NR_gettimeofday, tv, tz);
++#else
++	return -ENOSYS;
++#endif
+ }
+ 
+ static __attribute__((unused))
+@@ -672,7 +676,11 @@ int link(const char *old, const char *new)
+ static __attribute__((unused))
+ off_t sys_lseek(int fd, off_t offset, int whence)
+ {
++#ifdef __NR_lseek
+ 	return my_syscall3(__NR_lseek, fd, offset, whence);
++#else
++	return -ENOSYS;
++#endif
+ }
+ 
+ static __attribute__((unused))
+@@ -1338,7 +1346,11 @@ int unlink(const char *path)
+ static __attribute__((unused))
+ pid_t sys_wait4(pid_t pid, int *status, int options, struct rusage *rusage)
+ {
++#ifdef __NR_wait4
+ 	return my_syscall4(__NR_wait4, pid, status, options, rusage);
++#else
++	return -ENOSYS;
++#endif
+ }
+ 
+ static __attribute__((unused))
+-- 
+2.25.1
+
