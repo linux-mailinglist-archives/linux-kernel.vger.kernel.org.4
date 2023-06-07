@@ -2,149 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9169F726166
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 15:35:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5049072616B
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 15:36:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240917AbjFGNfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 09:35:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54686 "EHLO
+        id S240058AbjFGNgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 09:36:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240878AbjFGNfc (ORCPT
+        with ESMTP id S234794AbjFGNgr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 09:35:32 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB8221FD7
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 06:35:26 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1b1806264e9so38344715ad.0
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 06:35:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=huaqin-corp-partner-google-com.20221208.gappssmtp.com; s=20221208; t=1686144926; x=1688736926;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fKwUqHo5Vcp6qEMOdr+qgbBliBp4lX8cCeTzjjNJbpw=;
-        b=vDexOXu2iIzDnbzJeHisiv80zH3JeZTpzRW3zRFkaQhe/QD9qIDmnUrEREOvWE2T3s
-         TLVOMm1jlZK0nVBbYQ7wZVGj/pUa2TgmCYFpCboteWPAPQxpjrycjRxm3vQaQ/Y8dkcB
-         mTO6G111vPXh+lNvDB7z7ZhGtwzUC/e8Q06nIhiW8Sqg0D5EsZg9s9xQNlxcg1CO+wck
-         OU3hr92/PINnL1N/kcM9wGd0KwJ7m8TeYfOA6rYlCRH7ey8R/FwUzoJlFDMb8vK02g0I
-         09VIvog7Cw1ZiXT2T0Pvekq25iSaSiktEz0D22am7pfPyAFHSUGDluChWauQd2glW+WX
-         CbPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686144926; x=1688736926;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fKwUqHo5Vcp6qEMOdr+qgbBliBp4lX8cCeTzjjNJbpw=;
-        b=lHsLjlDp1NUC48MdEXQL1i8vWFTOh7KE/0Pbr6+Fmy8pkfuN6PaOGMpI2ermJb5N3G
-         BWh7qGPkxfjbrf5V4CQA7fJ0DBHvDPvOgmW+WU7GXnp2O/R3RGSNkJAcf303IYIJ3TvJ
-         ETqFcu0VTm79JyyL1S8/1l8aCQiV1nmHOQQKmsqERJRYKbmLoe8X6eWGFv1gXi08woip
-         jWkik5/2D7dDd83VqUl2oK3VKtKRyyLffI/LTzqUfE8uVfIJiS4xuxPvhOzTwPtir87j
-         mVsw2H+nMj8A/y9nBxX3+E6DZBwB4KVUQnY837nvzDiRLQzyyijT9givgFTfYnLryB3l
-         C1lg==
-X-Gm-Message-State: AC+VfDwluHOYwmlKI6OOs85TqxrIbHxc0m6ONzGlgwJyc7jioP7CI88i
-        z2Qo8tv5pMds6/4a9foR7LRk2w==
-X-Google-Smtp-Source: ACHHUZ4cx6vLE/wpixupF2+hfTcl4jtltVB8iMsN060sd7EriDE/221A7qPMluKKOsGTqKO0I8kKyw==
-X-Received: by 2002:a17:902:9888:b0:1af:ffda:855a with SMTP id s8-20020a170902988800b001afffda855amr2195158plp.9.1686144926260;
-        Wed, 07 Jun 2023 06:35:26 -0700 (PDT)
-Received: from yc.huaqin.com ([101.78.151.214])
-        by smtp.gmail.com with ESMTPSA id y20-20020a170902ed5400b001b034faf49csm10405680plb.285.2023.06.07.06.35.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 06:35:25 -0700 (PDT)
-From:   Cong Yang <yangcong5@huaqin.corp-partner.google.com>
-To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, dmitry.torokhov@gmail.com, jikos@kernel.org,
-        benjamin.tissoires@redhat.com, dianders@chromium.org,
-        hsinyi@google.com
-Cc:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Cong Yang <yangcong5@huaqin.corp-partner.google.com>
-Subject: [PATCH v3 2/2] HID: i2c-hid: elan: Add ili9882t timing
-Date:   Wed,  7 Jun 2023 21:34:58 +0800
-Message-Id: <20230607133458.4075667-3-yangcong5@huaqin.corp-partner.google.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230607133458.4075667-1-yangcong5@huaqin.corp-partner.google.com>
-References: <20230607133458.4075667-1-yangcong5@huaqin.corp-partner.google.com>
+        Wed, 7 Jun 2023 09:36:47 -0400
+Received: from out162-62-57-49.mail.qq.com (out162-62-57-49.mail.qq.com [162.62.57.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A9681993
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 06:36:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1686145002;
+        bh=BPguxngCcatQFXlBdF+cO4v4EYUu4CjSbAh+qgMu1hI=;
+        h=From:To:Cc:Subject:Date;
+        b=HGFYRNnynM4+R8XRpOzxNtHpcDgz1GbhTUPZEBWdoFMQeh8KaeXCZV/un7v3IHV+V
+         kQCZGyUJzzPD6Z9oB498gMi1iaHkRRApALbELqlRKaGSLp8KGUab85m5NNsZAHdXn5
+         yAxdBmAwem3H2MT5r8EvfLW4sVpm2Imdk5+nk5LY=
+Received: from localhost ([101.224.149.128])
+        by newxmesmtplogicsvrszc2-0.qq.com (NewEsmtp) with SMTP
+        id 928874E8; Wed, 07 Jun 2023 21:36:40 +0800
+X-QQ-mid: xmsmtpt1686145000tb1eyu550
+Message-ID: <tencent_B15C0F1F3105597D0DCE7DADC96C5EB5CF0A@qq.com>
+X-QQ-XMAILINFO: NioaTWkRhWwaYWTxZeEaVMvYT+6+8WBXxjru4PK5DK6okfUQA1P7v2En+zPoE5
+         1z2hnrATIIcrCuuKw/AznibA2SzpN7O3IfFjLKOySd5ejj03Pxk8w1pZjsUaZnJrwbZ5AW/EbbcG
+         a90pH9d6d6woHq6WHb24b77J0mciKoDab6wKeYEx/hyy7vMdmqhocNJGCMWaZfKUfhNq+o4FT7GC
+         jYcT+QmzbY8XnyB2+g5RsKnVevJecvqymIQONDidDQPY7x62h8xgJp6JNyNB4iNISOsAGQ4lRGwn
+         4zv6yH9Z71tLcLrrk9lBE6geVDESfMc+gyN+4iYiyVzRddH4AujsPKOFLZeKfhxiW3NR1nd2RWI4
+         sJIjWvjtPLFCF0Xzk/ZuB7IjByv7ZWdGQN2osyyHnVcRzCBpgS9QpWHgvHBqlE72dQGybw8y4I4a
+         2x4NfozxHwGMVjk8yCKxug4SVOp1OQiCzBDf4ujU11UQXhk3vHCeOiDb4HMYbmy5trXZAR0l5Ebl
+         QpTjD6shVS3GgNgmHpmHCPAZW2mTsiQzWaYyYUkHySFrQ8nYOiuRN/YhOYwn/COs0tLwsVTEHcqs
+         GCouN6JX+hopwcLkPi3kmY9qyATKAha4WFEcDj11X9ob87AuHlF8g1FhUGEBlO2jfHgw+Vw0cOie
+         NxsY08ofqoVLiws8bDxLNYQeLNEGRbQHcOzK8SgIhJuQEXGpBr0M5p5TrZWlg+zK3W1gzg8f9YuQ
+         9+fuOuw8FvLTILBeZB+SUbtJVkzF2l/+V33p2q/+ySyJ7FFCcQSwc+r39vRdtTf39lxhrhAfD0tK
+         tsNheMtt+YMjKZS2i+7qIkGhfjFtZEijis50o0Hupr7hqqUXxBbyajaqsKRuCpeaYhUaFI5p0fom
+         KrZXXKX0sEbADejJWLTbfpK3EvqfNouJvZqtPGQCI2Va5jPl6ZT5b7SUKkiOVM3Y+dsC/4FCN9V8
+         5OOc4af7zAERcA1+hs/nVYu2XgQ6wEhhWEgL0Zpnw=
+From:   Woody Zhang <woodylab@foxmail.com>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Woody Zhang <woodylab@foxmail.com>
+Subject: [PATCH] riscv: reserve DTB before possible memblock allocation
+Date:   Wed,  7 Jun 2023 21:35:19 +0800
+X-OQ-MSGID: <20230607133518.2472995-1-woodylab@foxmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ili9882t is a TDDI IC (Touch with Display Driver). The
-datasheet specifies there should be 60ms between touch SDA
-sleep and panel RESX. Doug's series[1] allows panels and
-touchscreens to power on/off together, so we can add the 65 ms
-delay in i2c_hid_core_suspend before panel_unprepare.
+It's possible that early_init_fdt_scan_reserved_mem() allocates memory
+from memblock for dynamic reserved memory in `/reserved-memory` node.
+Any fixed reservation must be done before that to avoid potential
+conflicts.
 
-[1]: https: //lore.kernel.org/all/20230523193017.4109557-1-dianders@chromium.org/
+Reserve the DTB in memblock just after early scanning it.
 
-Signed-off-by: Cong Yang <yangcong5@huaqin.corp-partner.google.com>
+Signed-off-by: Woody Zhang <woodylab@foxmail.com>
 ---
- drivers/hid/i2c-hid/i2c-hid-of-elan.c | 20 ++++++++++++++++----
- 1 file changed, 16 insertions(+), 4 deletions(-)
+ arch/riscv/kernel/setup.c | 10 ++++++++++
+ arch/riscv/mm/init.c      |  9 ---------
+ 2 files changed, 10 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/hid/i2c-hid/i2c-hid-of-elan.c b/drivers/hid/i2c-hid/i2c-hid-of-elan.c
-index 76ddc8be1cbb..411d7ea2725d 100644
---- a/drivers/hid/i2c-hid/i2c-hid-of-elan.c
-+++ b/drivers/hid/i2c-hid/i2c-hid-of-elan.c
-@@ -18,7 +18,8 @@
- #include "i2c-hid.h"
+diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
+index 36b026057503..c147fa8da929 100644
+--- a/arch/riscv/kernel/setup.c
++++ b/arch/riscv/kernel/setup.c
+@@ -16,6 +16,7 @@
+ #include <linux/console.h>
+ #include <linux/screen_info.h>
+ #include <linux/of_fdt.h>
++#include <linux/libfdt.h>
+ #include <linux/sched/task.h>
+ #include <linux/smp.h>
+ #include <linux/efi.h>
+@@ -256,6 +257,15 @@ static void __init parse_dtb(void)
+ 		pr_err("No DTB passed to the kernel\n");
+ 	}
  
- struct elan_i2c_hid_chip_data {
--	unsigned int post_gpio_reset_delay_ms;
-+	unsigned int post_gpio_reset_on_delay_ms;
-+	unsigned int post_gpio_reset_off_delay_ms;
- 	unsigned int post_power_delay_ms;
- 	u16 hid_descriptor_address;
- };
-@@ -52,8 +53,8 @@ static int elan_i2c_hid_power_up(struct i2chid_ops *ops)
- 		msleep(ihid_elan->chip_data->post_power_delay_ms);
- 
- 	gpiod_set_value_cansleep(ihid_elan->reset_gpio, 0);
--	if (ihid_elan->chip_data->post_gpio_reset_delay_ms)
--		msleep(ihid_elan->chip_data->post_gpio_reset_delay_ms);
-+	if (ihid_elan->chip_data->post_gpio_reset_on_delay_ms)
-+		msleep(ihid_elan->chip_data->post_gpio_reset_on_delay_ms);
- 
- 	return 0;
- }
-@@ -64,6 +65,9 @@ static void elan_i2c_hid_power_down(struct i2chid_ops *ops)
- 		container_of(ops, struct i2c_hid_of_elan, ops);
- 
- 	gpiod_set_value_cansleep(ihid_elan->reset_gpio, 1);
-+	if (ihid_elan->chip_data->post_gpio_reset_off_delay_ms)
-+		msleep(ihid_elan->chip_data->post_gpio_reset_off_delay_ms);
++	/*
++	 * If DTB is built in, no need to reserve its memblock.
++	 * Otherwise, do reserve it but avoid using
++	 * early_init_fdt_reserve_self() since __pa() does
++	 * not work for DTB pointers that are fixmap addresses
++	 */
++	if (!IS_ENABLED(CONFIG_BUILTIN_DTB))
++		memblock_reserve(dtb_early_pa, fdt_totalsize(dtb_early_va));
 +
- 	regulator_disable(ihid_elan->vccio);
- 	regulator_disable(ihid_elan->vcc33);
- }
-@@ -101,12 +105,20 @@ static int i2c_hid_of_elan_probe(struct i2c_client *client)
+ #ifdef CONFIG_CMDLINE_FORCE
+ 	strscpy(boot_command_line, CONFIG_CMDLINE, COMMAND_LINE_SIZE);
+ 	pr_info("Forcing kernel command line to: %s\n", boot_command_line);
+diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+index c6bb966e4123..f8c9a79acd94 100644
+--- a/arch/riscv/mm/init.c
++++ b/arch/riscv/mm/init.c
+@@ -254,15 +254,6 @@ static void __init setup_bootmem(void)
+ 	 */
+ 	early_init_fdt_scan_reserved_mem();
  
- static const struct elan_i2c_hid_chip_data elan_ekth6915_chip_data = {
- 	.post_power_delay_ms = 1,
--	.post_gpio_reset_delay_ms = 300,
-+	.post_gpio_reset_on_delay_ms = 300,
-+	.hid_descriptor_address = 0x0001,
-+};
-+
-+static const struct elan_i2c_hid_chip_data ilitek_ili9882t_chip_data = {
-+	.post_power_delay_ms = 1,
-+	.post_gpio_reset_on_delay_ms = 200,
-+	.post_gpio_reset_off_delay_ms = 65,
- 	.hid_descriptor_address = 0x0001,
- };
- 
- static const struct of_device_id elan_i2c_hid_of_match[] = {
- 	{ .compatible = "elan,ekth6915", .data = &elan_ekth6915_chip_data },
-+	{ .compatible = "ilitek,ili9882t", .data = &ilitek_ili9882t_chip_data },
- 	{ }
- };
- MODULE_DEVICE_TABLE(of, elan_i2c_hid_of_match);
+-	/*
+-	 * If DTB is built in, no need to reserve its memblock.
+-	 * Otherwise, do reserve it but avoid using
+-	 * early_init_fdt_reserve_self() since __pa() does
+-	 * not work for DTB pointers that are fixmap addresses
+-	 */
+-	if (!IS_ENABLED(CONFIG_BUILTIN_DTB))
+-		memblock_reserve(dtb_early_pa, fdt_totalsize(dtb_early_va));
+-
+ 	dma_contiguous_reserve(dma32_phys_limit);
+ 	if (IS_ENABLED(CONFIG_64BIT))
+ 		hugetlb_cma_reserve(PUD_SHIFT - PAGE_SHIFT);
 -- 
-2.25.1
+2.39.2
 
