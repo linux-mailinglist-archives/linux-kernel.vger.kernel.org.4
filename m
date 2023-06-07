@@ -2,192 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E390725787
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 10:27:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 419F1725792
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 10:27:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239325AbjFGI1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 04:27:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36274 "EHLO
+        id S239454AbjFGI11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 04:27:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239263AbjFGI05 (ORCPT
+        with ESMTP id S239401AbjFGI10 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 04:26:57 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E8FAEE62;
-        Wed,  7 Jun 2023 01:26:54 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.170])
-        by gateway (Coremail) with SMTP id _____8DxyOlMP4BkBxMAAA--.210S3;
-        Wed, 07 Jun 2023 16:26:52 +0800 (CST)
-Received: from [10.20.42.170] (unknown [10.20.42.170])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxCOVKP4BknBoEAA--.14829S3;
-        Wed, 07 Jun 2023 16:26:50 +0800 (CST)
-Message-ID: <e8f80e1a-7f2e-bbff-4630-a04e6cc9c5fe@loongson.cn>
-Date:   Wed, 7 Jun 2023 16:26:50 +0800
+        Wed, 7 Jun 2023 04:27:26 -0400
+Received: from first.geanix.com (first.geanix.com [116.203.34.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04DE6E60;
+        Wed,  7 Jun 2023 01:27:22 -0700 (PDT)
+Received: from xps.skovby (85.184.138.13.dynamic.dhcp.aura-net.dk [85.184.138.13])
+        by first.geanix.com (Postfix) with ESMTPSA id 9FB794E5FAC;
+        Wed,  7 Jun 2023 08:27:19 +0000 (UTC)
+Authentication-Results: ORIGINATING;
+        auth=pass smtp.auth=martin@geanix.com smtp.mailfrom=martin@geanix.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
+        t=1686126439; bh=2eMiQLgQD/9nKKzqJMDwHwcTU9X0x8fIp1G9yAWOOlg=;
+        h=From:To:Cc:Subject:Date;
+        b=TtGoA9zU9lpibDRIM3aDNFNrxRnIwkOrgdkO2k2gc8vtM9pTKpROaI5bO8gBJvGvk
+         92sdMMzipGbcBN1RzvCRsHEkbZmE5AG3EpimE5KZcEuMYU6thfOcSTNVuTGOTfC4ap
+         iNl2WronG7BsYKsReUdimBavtb1Jer9Pkqkk3ebJV2LKz3qUZH7g4atFevGpgMgZhs
+         BVwP3YI8F2CEIVuAgu74UbRakxSH5kuJPX0hyKWW6Og93Cb9hFL7P8xZpQrpl4JlJo
+         c0+taRo/VeIBnzsd/ExOWecFl6EBlkZbB+cF2pdIhkkqM6ES+LC7QjdDCwkpxO8vkb
+         5qzoTVU7kBxLg==
+From:   =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <martin@geanix.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <martin@geanix.com>,
+        stable@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCHv2] mmc: meson: remove redundant mmc_request_done() call from irq context
+Date:   Wed,  7 Jun 2023 10:27:12 +0200
+Message-Id: <20230607082713.517157-1-martin@geanix.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3] PCI: Align pci memory space base address with page
- size
-Content-Language: en-US
-From:   "bibo, mao" <maobibo@loongson.cn>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
-        loongarch@lists.linux.dev, loongson-kernel@lists.loongnix.cn,
-        Bjorn Helgaas <bhelgaas@google.com>
-References: <20230606204522.GA1142773@bhelgaas>
- <685d3265-ac76-60a9-57b2-66da00b04b32@loongson.cn>
-In-Reply-To: <685d3265-ac76-60a9-57b2-66da00b04b32@loongson.cn>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxCOVKP4BknBoEAA--.14829S3
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBj93XoW3WF17AryfWFWfur48KrW7Awc_yoW7Gw45pF
-        WxCF4qkF4DtryfGws2vwn8uFnaqw4I9rWYgrySkr90ka4DAFyxtry7JrW5CrykXr4rGF1j
-        qr45tr1xuas5ZagCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUP2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v2
-        6F4UJVW0owAaw2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0c
-        Ia020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_
-        JF1lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrw
-        CYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48J
-        MxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI
-        0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y
-        0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxV
-        WUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1l
-        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0Urc3UUUU
-        U==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The call to mmc_request_done() can schedule, so it must not be called
+from irq context. Wake the irq thread if it needs to be called, and let
+its existing logic do its work.
 
+Fixes the following kernel bug, which appears when running an RT patched
+kernel on the AmLogic Meson AXG A113X SoC:
+[   11.111407] BUG: scheduling while atomic: kworker/0:1H/75/0x00010001
+[   11.111438] Modules linked in:
+[   11.111451] CPU: 0 PID: 75 Comm: kworker/0:1H Not tainted 6.4.0-rc3-rt2-rtx-00081-gfd07f41ed6b4-dirty #1
+[   11.111461] Hardware name: RTX AXG A113X Linux Platform Board (DT)
+[   11.111469] Workqueue: kblockd blk_mq_run_work_fn
+[   11.111492] Call trace:
+[   11.111497]  dump_backtrace+0xac/0xe8
+[   11.111510]  show_stack+0x18/0x28
+[   11.111518]  dump_stack_lvl+0x48/0x60
+[   11.111530]  dump_stack+0x18/0x24
+[   11.111537]  __schedule_bug+0x4c/0x68
+[   11.111548]  __schedule+0x80/0x574
+[   11.111558]  schedule_loop+0x2c/0x50
+[   11.111567]  schedule_rtlock+0x14/0x20
+[   11.111576]  rtlock_slowlock_locked+0x468/0x730
+[   11.111587]  rt_spin_lock+0x40/0x64
+[   11.111596]  __wake_up_common_lock+0x5c/0xc4
+[   11.111610]  __wake_up+0x18/0x24
+[   11.111620]  mmc_blk_mq_req_done+0x68/0x138
+[   11.111633]  mmc_request_done+0x104/0x118
+[   11.111644]  meson_mmc_request_done+0x38/0x48
+[   11.111654]  meson_mmc_irq+0x128/0x1f0
+[   11.111663]  __handle_irq_event_percpu+0x70/0x114
+[   11.111674]  handle_irq_event_percpu+0x18/0x4c
+[   11.111683]  handle_irq_event+0x80/0xb8
+[   11.111691]  handle_fasteoi_irq+0xa4/0x120
+[   11.111704]  handle_irq_desc+0x20/0x38
+[   11.111712]  generic_handle_domain_irq+0x1c/0x28
+[   11.111721]  gic_handle_irq+0x8c/0xa8
+[   11.111735]  call_on_irq_stack+0x24/0x4c
+[   11.111746]  do_interrupt_handler+0x88/0x94
+[   11.111757]  el1_interrupt+0x34/0x64
+[   11.111769]  el1h_64_irq_handler+0x18/0x24
+[   11.111779]  el1h_64_irq+0x64/0x68
+[   11.111786]  __add_wait_queue+0x0/0x4c
+[   11.111795]  mmc_blk_rw_wait+0x84/0x118
+[   11.111804]  mmc_blk_mq_issue_rq+0x5c4/0x654
+[   11.111814]  mmc_mq_queue_rq+0x194/0x214
+[   11.111822]  blk_mq_dispatch_rq_list+0x3ac/0x528
+[   11.111834]  __blk_mq_sched_dispatch_requests+0x340/0x4d0
+[   11.111847]  blk_mq_sched_dispatch_requests+0x38/0x70
+[   11.111858]  blk_mq_run_work_fn+0x3c/0x70
+[   11.111865]  process_one_work+0x17c/0x1f0
+[   11.111876]  worker_thread+0x1d4/0x26c
+[   11.111885]  kthread+0xe4/0xf4
+[   11.111894]  ret_from_fork+0x10/0x20
 
-在 2023/6/7 09:42, bibo, mao 写道:
-> 
-> 
-> 在 2023/6/7 04:45, Bjorn Helgaas 写道:
->> On Tue, Jun 06, 2023 at 06:06:04PM +0800, bibo, mao wrote:
->>> Huacai,
->>>
->>> Although I post this patch, I think this should be arch specified
->>> rather than general problem.  X86 has solved this problem, arm64
->>> with 64K page size is not popular. However LoongArch has this
->>> problem, page size is 16K rather than 4K. It is the problem of
->>> LoongArch system rather than generic issue.
->>
->> I think this is only related to the page size, not to any
->> LoongArch-specific details.  If that's the case, I don't think the
->> change should be arch-specific.
->>
->>> There is such discussion before:
->>> https://patchwork.kernel.org/project/linux-pci/patch/22400b8828ad44ddbccb876cc5ca3b11@FE-MBX1012.de.bosch.com/#19319457
->>>
->>> UEFI bios sets pci memory space 4K aligned, however Loongarch kernel rescans the pci
->>> bus and reassigns pci memory resource. So it it strange like this, here is pci memory info on
->>>  my 7A2000 board.
->>> root@user-pc:~# lspci -vvv | grep Region
->>>         Region 5: Memory at e003526e800 (32-bit, non-prefetchable) [size=1K]
->>>         Region 0: Memory at e003526ec00 (64-bit, non-prefetchable) [size=1K]
->>
->> I guess these BARs are from different devices, and the problem you're
->> pointing out is that both BARs end up in the same 16K page (actually
->> even the same 4K page):
->>
->>   (gdb) p/x 0xe003526e800 >> 12
->>   $1 = 0xe003526e
->>   (gdb) p/x 0xe003526ec00 >> 12
->>   $2 = 0xe003526e
->>
->> I agree that's a potential issue because a user mmap of the first
->> device also gets access to the BAR of the second device.  But it
->> doesn't seem to be a *new* or LoongArch-specific issue.
->>
->> So I *think* the point of this patch is to ensure that BARs of
->> different devices never share a page.  Why is that suddenly an issue
->> for LoongArch?  Is it only because you see more sharing with 16K pages
->> than other arches do with 4K pages?
-> The UEFI BIOS has assigned the PCI device with minimal 4K aligned, I guest
-> Linux kernel on X86/ARM uses resource directly rather than reassign resource
-> again. So there is problem for hot-plug devices, however most hot-plug devices
-> are used for server system and they are high speed devices, PCI resource size
-> is larger than 4K. So it is not obvious on x86/ARM system.
-> 
-> However on LoongArch system with page size 16K, the problem is obvious since
-> pci devices with 4K resource size are popular.
->>
->>> 在 2023/6/6 16:45, Bibo Mao 写道:
->>>> Some PCI devices have only 4K memory space size, it is normal in general
->>>> machines and aligned with page size. However some architectures which
->>>> support different page size, default page size on LoongArch is 16K, and
->>>> ARM64 supports page size varying from 4K to 64K. On machines where larger
->>>> page size is use, memory space region of two different pci devices may be
->>>> in one page. It is not safe with mmu protection, also VFIO pci device
->>>> driver requires base address of pci memory space page aligned, so that it
->>>> can be memory mapped to qemu user space when it is passed-through to vm.
->>
->> The minimum memory BAR per spec is 128 bytes (not 4K).  You just
->> demonstrated that even with 4K pages, different devices can share a
->> page.
->>
->>>> It consumes more pci memory resource with page size alignment requirement,
->>>> it should not be a problem on 64 bit system.
->>>>
->>>> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
->>>> ---
->>>>  drivers/pci/setup-res.c | 8 ++++++++
->>>>  1 file changed, 8 insertions(+)
->>>>
->>>> diff --git a/drivers/pci/setup-res.c b/drivers/pci/setup-res.c
->>>> index 967f9a758923..55440ae0128d 100644
->>>> --- a/drivers/pci/setup-res.c
->>>> +++ b/drivers/pci/setup-res.c
->>>> @@ -339,6 +339,14 @@ int pci_assign_resource(struct pci_dev *dev, int resno)
->>>>  		return -EINVAL;
->>>>  	}
->>>>  
->>>> +#ifdef CONFIG_64BIT
->>>> +	/*
->>>> +	 * force minimum page alignment for vfio pci usage
->>>> +	 * supposing there is enough pci memory resource on 64bit system
->>>> +	 */
->>>> +	if (res->flags & IORESOURCE_MEM)
->>>> +		align = max_t(resource_size_t, PAGE_SIZE, align);
->>>> +#endif
->>
->> Why is this under CONFIG_64BIT?  That doesn't have anything to do with
->> the BAR size.  The only reason I can see is that with CONFIG_64BIT=y,
->> we *might* have more MMIO space to use for BARs.
-> yes, I assume that there is enough PCI memory resource with 64 bit system,
-> after all it consumes more memory resource and brings out negative effect.
-> For UIO and SRIOV requirements, they are most 64-bit server system, they
-> can suffer from wasting some PCI memory resource.
-Can we add extra config option and let architecture selects whether enable it?
-Here is piece of code:
+Fixes: 51c5d8447bd7 ("MMC: meson: initial support for GX platforms")
+Cc: stable@vger.kernel.org
+Signed-off-by: Martin Hundebøll <martin@geanix.com>
+---
+Version 1 of this patch:
+https://lore.kernel.org/linux-amlogic/20230606065918.460866-1-martin@geanix.com/
 
-#ifdef CONFIG_PCI_MEMRES_PAGE_ALIGN
-        /*
-         * force minimum page alignment for vfio pci usage
-         */
-        if (res->flags & IORESOURCE_MEM)
-                align = max_t(resource_size_t, PAGE_SIZE, align);
-#endif
+Changes since v1:
+ * remove redundant change to meson_mmc_irq_thread(), as per Martin's
+   review
+ * return early instead of assigning to "ret" variable
+ * change commit short-log to reflect code removal instead of it being
+   moved. (Was: "mmc: meson: move mmc_request_done() call to irq thread")
 
-Regards
-Bibo, Mao
-> 
-> Regards
-> Bibo, Mao
->>
->>>>  	size = resource_size(res);
->>>>  	ret = _pci_assign_resource(dev, resno, size, align);
+ drivers/mmc/host/meson-gx-mmc.c | 10 ++--------
+ 1 file changed, 2 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/mmc/host/meson-gx-mmc.c b/drivers/mmc/host/meson-gx-mmc.c
+index b8514d9d5e736..f90b0fd8d8b00 100644
+--- a/drivers/mmc/host/meson-gx-mmc.c
++++ b/drivers/mmc/host/meson-gx-mmc.c
+@@ -991,11 +991,8 @@ static irqreturn_t meson_mmc_irq(int irq, void *dev_id)
+ 
+ 		if (data && !cmd->error)
+ 			data->bytes_xfered = data->blksz * data->blocks;
+-		if (meson_mmc_bounce_buf_read(data) ||
+-		    meson_mmc_get_next_command(cmd))
+-			ret = IRQ_WAKE_THREAD;
+-		else
+-			ret = IRQ_HANDLED;
++
++		return IRQ_WAKE_THREAD;
+ 	}
+ 
+ out:
+@@ -1007,9 +1004,6 @@ static irqreturn_t meson_mmc_irq(int irq, void *dev_id)
+ 		writel(start, host->regs + SD_EMMC_START);
+ 	}
+ 
+-	if (ret == IRQ_HANDLED)
+-		meson_mmc_request_done(host->mmc, cmd->mrq);
+-
+ 	return ret;
+ }
+ 
+-- 
+2.40.1
 
