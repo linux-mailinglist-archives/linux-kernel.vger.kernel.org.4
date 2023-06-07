@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B28D6725134
+	by mail.lfdr.de (Postfix) with ESMTP id 67D6C725133
 	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 02:43:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240095AbjFGAnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 20:43:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46994 "EHLO
+        id S240235AbjFGAnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 20:43:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239981AbjFGAnR (ORCPT
+        with ESMTP id S240083AbjFGAnV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 20:43:17 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 832BD1732
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 17:43:16 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id d9443c01a7336-1b23f04e268so3024635ad.3
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 17:43:16 -0700 (PDT)
+        Tue, 6 Jun 2023 20:43:21 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C34DC19A1
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 17:43:19 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-bb39316a68eso2472523276.0
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 17:43:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686098596; x=1688690596;
+        d=google.com; s=20221208; t=1686098599; x=1688690599;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=9+MS+yTKdJPUgAK9JMZ2lmcpf9TYn8U5kmreyrww4/k=;
-        b=GGY+hlFot4AUKOibBQ139XChSkWEIYm+AJuH7ziOV3noh8d0xYGkgJheiWHDDf0Bed
-         v9HBFZtZe4i3+/JpP0y5mcmRM90VCE64QPtXY6VRx6RGq1qcOOuXjYT0jA4Kj1t2WRgP
-         I7CQwNOG28qJewg2eW7reUEZeizEeQ3gnhyc6tuBtXpyohzy/ROZV+bAkWvzOSz8fuB0
-         BERmi1KuOFmKn4OBfXrtV0eYz0H+yLMJRRkYwMj1LKV4YBX+UpG5Y0rs2D0CHay5djXA
-         Q8CZmM+wz4focbAiFmowqNKrW6ZuzUN7GyXf21kBC31fvSbhbA7J1tzMq2oqTCcyutwo
-         Xztg==
+        bh=iWpx+RfSpqGCjC/645vo3rjaj4FpsSPwYJ169RAHthE=;
+        b=pxetOLQocTqwrPnV3EV/w5idyhiG8XYmDrXsHQd2U14s8p5u2EVCgIgk+8I7dqiP93
+         aOmgTbqkfnkFBItWeLUE9Ow9WgnuTiUuSudnCyfK99s4mHpzPT41YEILu+uZ1ZLpste+
+         obA95rKvnjRhTB4EeAZMn5VWUGX/TQqhqGdwDSRbo4frz/xTu3GGfK1BVHyimWV/rUcT
+         xhNPGlhvhL3IyT1I8eNtErpOoK1MozEEPby6B2okd253BCEY0Bsr/DBfGQLUwAGZ9ppT
+         oB6J2x+3FOG/A80GYb6uAFqSmGu8sl8qGMxvFPDvQPdkNZFgFyBNgkuBGTxMZoSSDelM
+         NEzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686098596; x=1688690596;
+        d=1e100.net; s=20221208; t=1686098599; x=1688690599;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=9+MS+yTKdJPUgAK9JMZ2lmcpf9TYn8U5kmreyrww4/k=;
-        b=aT3QMf2/aT79Eb6wz+QF59DbwM1kc7RoIBMqZiO4hMb0k1A6c5yXB5FWr+O1J/pQma
-         iY446bUVCxmy8qbokcXaNwsc31cXWDeK9Tn9ldZh9kwfcLck23l7nRlFCzHgPyqa7T+m
-         BydkUUK9vFsVR5ahr36r/3jbBKSIv4yn8pU7IbLLIKO2mZz5szRjgJ5Nt/AhE5ZO2MlO
-         eREJHNy3DJU4bEEDzSnP87s+YN2jzt0coXLoPRnHuTzRDILdaArVlWoHB7YCZBKwXfjw
-         rIKSNSspJOzwCrb38pdKdv6JZw75xwActi7g26hys3LgKVNfiZ1FbqW2l6f1XiUd/Ur6
-         x1fw==
-X-Gm-Message-State: AC+VfDx6GIkoKaqYCk8RhkhG83iSlhtptQoGgapBBcKZIoTePl22OQ0h
-        95miu6S/nFTppUB5fTJucNhsTVQCoJI=
-X-Google-Smtp-Source: ACHHUZ7CqvxrAff/0HHKCH+uMhqE9Ff8aPZiF/5N6ugn3nZaMd2KZSl8LkQmYc8KxfHAqBACT8z0dkPsMf8=
+        bh=iWpx+RfSpqGCjC/645vo3rjaj4FpsSPwYJ169RAHthE=;
+        b=lUGbfX708beo3uw4MzG2YA6cv8Bc2nhDaSRSjTZoIpv16+dzHGeQkLfZ4OsvxSqV4C
+         uJjyxWjJhekk5gMbj3cksrnBFjH9fcfnWXuH/RLos40dYdtbV9NokmrvaZBp8iak4Nv6
+         3P3ip2P8xYFzCaiMcxivJqeBVfOd1Jd8qEBp6zHMHJIsBu/vCKWQc0rh8koDFf3tgUxq
+         JeTvrfOS3WLlUN1D24bplI0fRgEZwqDtIAF++8v8Cjo21zJNaSVdYKbt/VCeIBN6vRlA
+         rF65u1QQPXrLF+n8Uj2n4T1G8/QGbQT9Ul/VMss5azfbyhK6cuDgSKt+ueINpZHGwyI8
+         NtLw==
+X-Gm-Message-State: AC+VfDxUQYs4TBsat2pFwQDtGf/McTolth8/KO1JUSwiXoCMOEz01jMZ
+        dp7bxp5mJDHLvwVS8a3D2i/yHYzAchE=
+X-Google-Smtp-Source: ACHHUZ6WDGc6dSyAYqCWbMICZuWNSAvkeozfOxaiyprE0dooA/9MBteFyjCTI2p5nz/KcLZhnd8fMUGpMOE=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:cecf:b0:1b1:86ad:332d with SMTP id
- d15-20020a170902cecf00b001b186ad332dmr1234293plg.12.1686098596054; Tue, 06
- Jun 2023 17:43:16 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a81:a7c3:0:b0:568:ee83:d87d with SMTP id
+ e186-20020a81a7c3000000b00568ee83d87dmr1857439ywh.5.1686098599082; Tue, 06
+ Jun 2023 17:43:19 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue,  6 Jun 2023 17:43:09 -0700
+Date:   Tue,  6 Jun 2023 17:43:10 -0700
 In-Reply-To: <20230607004311.1420507-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20230607004311.1420507-1-seanjc@google.com>
 X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-Message-ID: <20230607004311.1420507-2-seanjc@google.com>
-Subject: [PATCH 1/2] KVM: x86: Snapshot host's MSR_IA32_ARCH_CAPABILITIES
+Message-ID: <20230607004311.1420507-3-seanjc@google.com>
+Subject: [PATCH 2/2] KVM: VMX: Drop unnecessary vmx_fb_clear_ctrl_available "cache"
 From:   Sean Christopherson <seanjc@google.com>
 To:     Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>
@@ -66,130 +66,74 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Snapshot the host's MSR_IA32_ARCH_CAPABILITIES, if it's supported, instead
-of reading the MSR every time KVM wants to query the host state, e.g. when
-initializing the default value during vCPU creation.  The paths that query
-ARCH_CAPABILITIES aren't particularly performance sensitive, but creating
-vCPUs is a frequent enough operation that burning 8 bytes is a good
-trade-off.
+Now that KVM snapshots the host's MSR_IA32_ARCH_CAPABILITIES, drop the
+similar snapshot/cache of whether or not KVM is allowed to manipulate
+ARCH_CAPABILITIES.FB_CLEAR_CTRL.  The motivation for the cache was
+presumably to avoid the RDMSR, e.g. boot_cpu_has_bug() is quite cheap, and
+modifying the vCPU's MSR_IA32_ARCH_CAPABILITIES is an infrequent option
+and a relatively slow path.
 
-Alternatively, KVM could add a field in kvm_caps and thus skip the
-on-demand calculations entirely, but a pure snapshot isn't possible due to
-the way KVM handles the l1tf_vmx_mitigation module param.  And unlike the
-other "supported" fields in kvm_caps, KVM doesn't enforce the "supported"
-value, i.e. KVM treats ARCH_CAPABILITIES like a CPUID leaf and lets
-userspace advertise whatever it wants.  Those problems are solvable, but
-it's not clear there is real benefit versus snapshotting the host value,
-and grabbing the host value will allow additional cleanup of KVM's
-FB_CLEAR_CTRL code.
-
-Link: https://lore.kernel.org/all/20230524061634.54141-2-chao.gao@intel.com
-Cc: Chao Gao <chao.gao@intel.com>
-Cc: Xiaoyao Li <xiaoyao.li@intel.com>
+Cc: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/vmx/vmx.c | 22 ++++++----------------
- arch/x86/kvm/x86.c     | 13 +++++++------
- arch/x86/kvm/x86.h     |  1 +
- 3 files changed, 14 insertions(+), 22 deletions(-)
+ arch/x86/kvm/vmx/vmx.c | 17 +++--------------
+ 1 file changed, 3 insertions(+), 14 deletions(-)
 
 diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 2d9d155691a7..42d1148f933c 100644
+index 42d1148f933c..17003660138a 100644
 --- a/arch/x86/kvm/vmx/vmx.c
 +++ b/arch/x86/kvm/vmx/vmx.c
-@@ -255,14 +255,9 @@ static int vmx_setup_l1d_flush(enum vmx_l1d_flush_state l1tf)
- 		return 0;
- 	}
+@@ -237,9 +237,6 @@ static const struct {
+ #define L1D_CACHE_ORDER 4
+ static void *vmx_l1d_flush_pages;
  
--	if (boot_cpu_has(X86_FEATURE_ARCH_CAPABILITIES)) {
--		u64 msr;
+-/* Control for disabling CPU Fill buffer clear */
+-static bool __read_mostly vmx_fb_clear_ctrl_available;
 -
--		rdmsrl(MSR_IA32_ARCH_CAPABILITIES, msr);
--		if (msr & ARCH_CAP_SKIP_VMENTRY_L1DFLUSH) {
--			l1tf_vmx_mitigation = VMENTER_L1D_FLUSH_NOT_REQUIRED;
--			return 0;
--		}
-+	if (host_arch_capabilities & ARCH_CAP_SKIP_VMENTRY_L1DFLUSH) {
-+		l1tf_vmx_mitigation = VMENTER_L1D_FLUSH_NOT_REQUIRED;
-+		return 0;
- 	}
- 
- 	/* If set to auto use the default l1tf mitigation method */
-@@ -373,15 +368,10 @@ static int vmentry_l1d_flush_get(char *s, const struct kernel_param *kp)
- 
- static void vmx_setup_fb_clear_ctrl(void)
+ static int vmx_setup_l1d_flush(enum vmx_l1d_flush_state l1tf)
  {
--	u64 msr;
--
--	if (boot_cpu_has(X86_FEATURE_ARCH_CAPABILITIES) &&
-+	if ((host_arch_capabilities & ARCH_CAP_FB_CLEAR_CTRL) &&
- 	    !boot_cpu_has_bug(X86_BUG_MDS) &&
--	    !boot_cpu_has_bug(X86_BUG_TAA)) {
--		rdmsrl(MSR_IA32_ARCH_CAPABILITIES, msr);
--		if (msr & ARCH_CAP_FB_CLEAR_CTRL)
--			vmx_fb_clear_ctrl_available = true;
--	}
-+	    !boot_cpu_has_bug(X86_BUG_TAA))
-+		vmx_fb_clear_ctrl_available = true;
+ 	struct page *page;
+@@ -366,14 +363,6 @@ static int vmentry_l1d_flush_get(char *s, const struct kernel_param *kp)
+ 	return sprintf(s, "%s\n", vmentry_l1d_param[l1tf_vmx_mitigation].option);
  }
  
- static __always_inline void vmx_disable_fb_clear(struct vcpu_vmx *vmx)
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 7c7be4815eaa..7c2e796fa460 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -237,6 +237,9 @@ EXPORT_SYMBOL_GPL(enable_apicv);
- u64 __read_mostly host_xss;
- EXPORT_SYMBOL_GPL(host_xss);
- 
-+u64 __read_mostly host_arch_capabilities;
-+EXPORT_SYMBOL_GPL(host_arch_capabilities);
-+
- const struct _kvm_stats_desc kvm_vm_stats_desc[] = {
- 	KVM_GENERIC_VM_STATS(),
- 	STATS_DESC_COUNTER(VM, mmu_shadow_zapped),
-@@ -1612,12 +1615,7 @@ static bool kvm_is_immutable_feature_msr(u32 msr)
- 
- static u64 kvm_get_arch_capabilities(void)
- {
--	u64 data = 0;
+-static void vmx_setup_fb_clear_ctrl(void)
+-{
+-	if ((host_arch_capabilities & ARCH_CAP_FB_CLEAR_CTRL) &&
+-	    !boot_cpu_has_bug(X86_BUG_MDS) &&
+-	    !boot_cpu_has_bug(X86_BUG_TAA))
+-		vmx_fb_clear_ctrl_available = true;
+-}
 -
--	if (boot_cpu_has(X86_FEATURE_ARCH_CAPABILITIES)) {
--		rdmsrl(MSR_IA32_ARCH_CAPABILITIES, data);
--		data &= KVM_SUPPORTED_ARCH_CAP;
--	}
-+	u64 data = host_arch_capabilities & KVM_SUPPORTED_ARCH_CAP;
+ static __always_inline void vmx_disable_fb_clear(struct vcpu_vmx *vmx)
+ {
+ 	u64 msr;
+@@ -399,7 +388,9 @@ static __always_inline void vmx_enable_fb_clear(struct vcpu_vmx *vmx)
+ 
+ static void vmx_update_fb_clear_dis(struct kvm_vcpu *vcpu, struct vcpu_vmx *vmx)
+ {
+-	vmx->disable_fb_clear = vmx_fb_clear_ctrl_available;
++	vmx->disable_fb_clear = (host_arch_capabilities & ARCH_CAP_FB_CLEAR_CTRL) &&
++				!boot_cpu_has_bug(X86_BUG_MDS) &&
++				!boot_cpu_has_bug(X86_BUG_TAA);
  
  	/*
- 	 * If nx_huge_pages is enabled, KVM's shadow paging will ensure that
-@@ -9492,6 +9490,9 @@ static int __kvm_x86_vendor_init(struct kvm_x86_init_ops *ops)
+ 	 * If guest will not execute VERW, there is no need to set FB_CLEAR_DIS
+@@ -8580,8 +8571,6 @@ static int __init vmx_init(void)
+ 	if (r)
+ 		goto err_l1d_flush;
  
- 	kvm_init_pmu_capability(ops->pmu_ops);
- 
-+	if (boot_cpu_has(X86_FEATURE_ARCH_CAPABILITIES))
-+		rdmsrl(MSR_IA32_ARCH_CAPABILITIES, host_arch_capabilities);
-+
- 	r = ops->hardware_setup();
- 	if (r != 0)
- 		goto out_mmu_exit;
-diff --git a/arch/x86/kvm/x86.h b/arch/x86/kvm/x86.h
-index 82e3dafc5453..1e7be1f6ab29 100644
---- a/arch/x86/kvm/x86.h
-+++ b/arch/x86/kvm/x86.h
-@@ -323,6 +323,7 @@ fastpath_t handle_fastpath_set_msr_irqoff(struct kvm_vcpu *vcpu);
- 
- extern u64 host_xcr0;
- extern u64 host_xss;
-+extern u64 host_arch_capabilities;
- 
- extern struct kvm_caps kvm_caps;
+-	vmx_setup_fb_clear_ctrl();
+-
+ 	for_each_possible_cpu(cpu) {
+ 		INIT_LIST_HEAD(&per_cpu(loaded_vmcss_on_cpu, cpu));
  
 -- 
 2.41.0.162.gfafddb0af9-goog
