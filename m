@@ -2,84 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80905726453
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 17:25:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A6F2726466
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 17:26:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240106AbjFGPZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 11:25:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33786 "EHLO
+        id S241454AbjFGP0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 11:26:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241254AbjFGPYs (ORCPT
+        with ESMTP id S241218AbjFGPZk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 11:24:48 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B71E2707;
-        Wed,  7 Jun 2023 08:24:13 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 54D205C0083;
-        Wed,  7 Jun 2023 11:23:09 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Wed, 07 Jun 2023 11:23:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        invisiblethingslab.com; h=cc:cc:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1686151389; x=1686237789; bh=Wv7B88fCXHMfzlDN3UtqKmkgxzrFTCsQxuL
-        FkzoPHro=; b=XHoJXnU2+Jkn+R2bLfxIbPT3bxyCMF5fQ0zS8CtDaGSqTker57P
-        +kWa087zeC5Ak/d9FH1sIyKJfOUWIEPH0W+iLtAAwje6RiZiNIzNHKAKLuZBcQzy
-        iSA8qh+dv3ecCR3pxKTD1QhHl76XcJUmsRH4JD2b3zdtTGSPFs+0BvS3My/btqlf
-        1QxY6VQJrkPBM/yDs5df/q66phXvfOxWuP60SCz0KAu0jOjFksl7ptO5Yad9+w91
-        3I4JMbOv0gOb/nITmlYw+i1RAmyT0ry3MSHecRMprLdXrSoOLf/0D/BFsVWFOM7k
-        45UTq+Lo+WOzCC+V7SKVWcYnC3Ie3qSwFkw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1686151389; x=1686237789; bh=Wv7B88fCXHMfz
-        lDN3UtqKmkgxzrFTCsQxuLFkzoPHro=; b=WfumrNaC/mT4OajhXHOPWdcfHkkRO
-        SZxV2GMvr7fjCKdu30Xlbk8xXeRJbI2KfUgBJ2UetKMClF6NadOWhoMVJbj1lEqp
-        cRJeUFo4/rxQ+zmQI/G68XmA8Tq6x8++apsN10xmDfBDdUxsJvR/3Vm9yWfMxQxK
-        4BSwzZdM7ZpVYXu7YH8mF9TuYgXHVSZ63yHwIJTGJmDzZXj1EEbqdpEt8N2cVELa
-        OC12kqNMT+udqBO0F9ZrEtpESzyCByu0HE1ih+9yzF/WBJ0vFiRfa+mw8bAHB91a
-        I0ZIjGVNV9DekVhFswsKhRMNNj+EygWawq/0HoK06rTHZlxXEA5iBzxdg==
-X-ME-Sender: <xms:3aCAZKIePnmYH3J5jOSqMNxXvAl_imf-4iBP7eI7sGwDDo1N4Fd42Q>
-    <xme:3aCAZCKzRnAX1EsopXNKY1hl1_lndEpGoS6tHm1M4cruxgXfpc0s2CLvPFGVBreZp
-    HEEznlA5akIP7c>
-X-ME-Received: <xmr:3aCAZKspw-lkDixv91bZzVjZ1rJrXPT5JfphLqFuvqcyQfgzQvv59PW1iQs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedtgedgkeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtjeenucfhrhhomhepffgvmhhi
-    ucforghrihgvucfqsggvnhhouhhruceouggvmhhisehinhhvihhsihgslhgvthhhihhngh
-    hslhgrsgdrtghomheqnecuggftrfgrthhtvghrnhepvdejteegkefhteduhffgteffgeff
-    gfduvdfghfffieefieekkedtheegteehffelnecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomhepuggvmhhisehinhhvihhsihgslhgvthhhihhnghhs
-    lhgrsgdrtghomh
-X-ME-Proxy: <xmx:3aCAZPbLD9jwZE94B875RYnbBA-THOuPZ6lpzR_jbGp8OkRaFT3dRA>
-    <xmx:3aCAZBagBMf94CsyL7OqQza8ILYscmGdY9fEXTkwXQP7GACLD-oZbA>
-    <xmx:3aCAZLCJ-g2hls9eWfKLhTzmcZKfZdH0igmijUnbFehtRrhRfVHzlg>
-    <xmx:3aCAZAwgnAlah1z8Ldh3loCdK-6XmzNQqI3Pc2Fvn1p3p4I8NW0f5w>
-Feedback-ID: iac594737:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 7 Jun 2023 11:23:08 -0400 (EDT)
-Date:   Wed, 7 Jun 2023 11:23:00 -0400
-From:   Demi Marie Obenour <demi@invisiblethingslab.com>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] block, loop: Increment diskseq when releasing a loop
- device
-Message-ID: <ZICg2sxHQRRPW3Nc@itl-email>
-References: <20230601222656.2062-1-demi@invisiblethingslab.com>
- <ZIA004HDuhoTQzY/@infradead.org>
+        Wed, 7 Jun 2023 11:25:40 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FB241BE2
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 08:25:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686151515; x=1717687515;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ARZjNToUiO85DLbaOveTz4aJbWaU0n8lP8ieuY9WBAg=;
+  b=A2mvcJi/gZezCXpPtX4airtaCl2TnYEKg+ctc8gocffxIWVDOJM1W8Dm
+   WqzIit5+dOgpDCMwii9wGHS//aYtOgxyUF7ZvwccajBuCei/5a2Leig/K
+   hILp/SIiiQzpBHrpZ9p1ph5fKiPqjWSMu1k76QLI86uLwcimNUFX2gDOF
+   q8lpOozzI3lhSh9cXSmwsgZg/5INGPUPXfsRsvLvyq6xwpLywirkgR2ak
+   xWrXD0k3RJX/+1RFnEyjruQC9Fc5VenV5BjGPXpmiGOIt6NS3iqTjxRLZ
+   rArzy/foOgUH6xrnGTO9MwTidkGcc+Uz3RoJSLwXeOCnXAzKp4yK2adPk
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="337383278"
+X-IronPort-AV: E=Sophos;i="6.00,224,1681196400"; 
+   d="scan'208";a="337383278"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 08:24:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="956327825"
+X-IronPort-AV: E=Sophos;i="6.00,224,1681196400"; 
+   d="scan'208";a="956327825"
+Received: from jkrzyszt-mobl2.ger.corp.intel.com ([10.213.10.174])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 08:24:00 -0700
+From:   Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Juergen Gross <jgross@suse.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        Andi Shyti <andi.shyti@linux.intel.com>,
+        intel-gfx@lists.freedesktop.org,
+        Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
+Subject: [PATCH v2] x86/mm: Fix PAT bit missing from page protection modify mask
+Date:   Wed,  7 Jun 2023 17:23:09 +0200
+Message-ID: <20230607152308.125787-2-janusz.krzysztofik@linux.intel.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ciKbitYsLUhZP3Im"
-Content-Disposition: inline
-In-Reply-To: <ZIA004HDuhoTQzY/@infradead.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -88,78 +66,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Visible glitches have been observed when running graphics applications on
+Linux under Xen hypervisor.  Those observations have been confirmed with
+failures from kms_pwrite_crc Intel GPU test that verifies data coherency
+of DRM frame buffer objects using hardware CRC checksums calculated by
+display controllers, exposed to userspace via debugfs.  Affected
+processing paths have then been identified with new IGT test variants that
+mmap the objects using different methods and caching modes [1].
 
---ciKbitYsLUhZP3Im
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 7 Jun 2023 11:23:00 -0400
-From: Demi Marie Obenour <demi@invisiblethingslab.com>
-To: Christoph Hellwig <hch@infradead.org>
-Cc: Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] block, loop: Increment diskseq when releasing a loop
- device
+When running as a Xen PV guest, Linux uses Xen provided PAT configuration
+which is different from its native one.  In particular, Xen specific PTE
+encoding of write-combining caching, likely used by graphics applications,
+differs from the Linux default one found among statically defined minimal
+set of supported modes.  Since Xen defines PTE encoding of the WC mode as
+_PAGE_PAT, it no longer belongs to the minimal set, depends on correct
+handling of _PAGE_PAT bit, and can be mismatched with write-back caching.
 
-On Wed, Jun 07, 2023 at 12:42:11AM -0700, Christoph Hellwig wrote:
-> > +++ b/block/genhd.c
-> > @@ -1502,3 +1502,4 @@ void inc_diskseq(struct gendisk *disk)
-> >  {
-> >  	disk->diskseq =3D atomic64_inc_return(&diskseq);
-> >  }
-> > +EXPORT_SYMBOL(inc_diskseq);
->=20
-> I really do not like exporting this as a lowlevel function.  If we
-> increment the sequence it should be part of a higher level operation.
+When a user calls mmap() for a DRM buffer object, DRM device specific
+.mmap file operation, called from mmap_region(), takes care of setting PTE
+encoding bits in a vm_page_prot field of an associated virtual memory area
+structure.  Unfortunately, _PAGE_PAT bit is not preserved when the vma's
+.vm_flags are then applied to .vm_page_prot via vm_set_page_prot().  Bits
+to be preserved are determined with _PAGE_CHG_MASK symbol that doesn't
+cover _PAGE_PAT.  As a consequence, WB caching is requested instead of WC
+when running under Xen (also, WP is silently changed to WT, and UC
+downgraded to UC_MINUS).  When running on bare metal, WC is not affected,
+but WP and WT extra modes are unintentionally replaced with WC and UC,
+respectively.
 
-Fair!
+WP and WT modes, encoded with _PAGE_PAT bit set, were introduced by commit
+281d4078bec3 ("x86: Make page cache mode a real type").  Care was taken
+to extend _PAGE_CACHE_MASK symbol with that additional bit, but that
+symbol has never been used for identification of bits preserved when
+applying page protection flags.  Support for all cache modes under Xen,
+including the problematic WC mode, was then introduced by commit
+47591df50512 ("xen: Support Xen pv-domains using PAT").
 
-> > --- a/drivers/block/loop.c
-> > +++ b/drivers/block/loop.c
-> > @@ -1205,6 +1205,12 @@ static void __loop_clr_fd(struct loop_device *lo=
-, bool release)
-> >  	if (!part_shift)
-> >  		set_bit(GD_SUPPRESS_PART_SCAN, &lo->lo_disk->state);
-> >  	mutex_lock(&lo->lo_mutex);
-> > +
-> > +	/*
-> > +	 * Increment the disk sequence number, so that userspace knows this
-> > +	 * device now points to something else.
-> > +	 */
-> > +	inc_diskseq(lo->lo_disk);
->=20
-> And I'm not sure why we even need this.  __loop_clr_fd
-> already calls disk_force_media_change, which calls inc_diskseq.
-> Why do we need an extra increment?
+Extend bitmask used by pgprot_modify() for selecting bits to be preserved
+with _PAGE_PAT bit.  However, since that bit can be reused as _PAGE_PSE,
+and the _PAGE_CHG_MASK symbol, primarly used by pte_modify(), is likely
+intentionally defined with that bit not set, keep that symbol unchanged.
 
-How does disk_force_media_change() call inc_diskseq()?  I don=E2=80=99t see=
- any
-calls in the source code.  I=E2=80=99m going to use systemtap to see if the=
-re is
-an indirect call chain.
---=20
-Sincerely,
-Demi Marie Obenour (she/her/hers)
-Invisible Things Lab
+v2: Keep pgprot_modify() untouched, make _PAGE_PAT part of _PAGE_CHG_MASK
+    instead (Borislav),
+  - also add _PAGE_PAT_LARGE to _HPAGE_CHG_MASK (Juergen).
 
---ciKbitYsLUhZP3Im
-Content-Type: application/pgp-signature; name="signature.asc"
+[1] https://gitlab.freedesktop.org/drm/igt-gpu-tools/-/commit/0f0754413f14
 
------BEGIN PGP SIGNATURE-----
+Closes: https://gitlab.freedesktop.org/drm/intel/-/issues/7648
+Fixes: 281d4078bec3 ("x86: Make page cache mode a real type")
+Signed-off-by: Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
+Tested-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
+Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
+Cc: Juergen Gross <jgross@suse.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: stable@vger.kernel.org # v3.19+
+---
+ arch/x86/include/asm/pgtable_types.h | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-iQIzBAEBCgAdFiEEdodNnxM2uiJZBxxxsoi1X/+cIsEFAmSAoNoACgkQsoi1X/+c
-IsHQlBAAkPrxFId08lsXJQUerNo6JNd7c3rnGL/J7C1RclnoXZvb2wTxTOU7SyAK
-Pm0DjJ+MkEbJPCtk4mhaA75ezfDNiA66cPmmaN3xBDb9VmuqwMSUgKhEDqpvMGyD
-r41wCIrMIv3daXrqMbdThLX8MN9nyLNFPG2VkLK71z7Yar/3jEhTVH7JkcrCZ79C
-STBv9mj8oG86ycCIUrKeWpI3zFZaniO0yUqlqXEuCt9x5LZ1WQ/EG6G9kiQyJIb1
-rdKyWeJg0al9eRWJT9xQxnBmPlGAj5l/C9NUk70WYWaer5r7xmhmVZhyazIAwf/I
-pz3huGDWEr7XEt7Nf6+3Xoyq4+koI9RnJtO3Hn5wYzQC/Xn6+JA1qcD1krJoLA2F
-fockSGh2BA7UtVXx+krv3tnC9xmayLJCxuFBYjzcoWFmzsJoXpgaQ2wR77qXtwnB
-SUbw55OBbOR2TCXmJajNIDhKc9WvqV46uFd15/Sq8S+xhyU5pkeZM/uK7QBxUT6j
-Wrb0iPLE6R5KOhDiE+TqfFfaUxMS9zi1sS4eu+KyZ7bQ42CN70SGH/1UDmwAk3x6
-rWtTna5azpbJbQO7y4TtOS1/7ieCXwFBbGESqJCOACdBWHNKCmoA4Krc1p16l3+k
-Qapw/TfC17dcL5X9rynQ238Hvvgwmu6tRFIQFonQVRaaKY9LeFk=
-=OUMI
------END PGP SIGNATURE-----
+diff --git a/arch/x86/include/asm/pgtable_types.h b/arch/x86/include/asm/pgtable_types.h
+index 447d4bee25c48..0432ed9e59e3e 100644
+--- a/arch/x86/include/asm/pgtable_types.h
++++ b/arch/x86/include/asm/pgtable_types.h
+@@ -125,11 +125,11 @@
+  * instance, and is *not* included in this mask since
+  * pte_modify() does modify it.
+  */
+-#define _PAGE_CHG_MASK	(PTE_PFN_MASK | _PAGE_PCD | _PAGE_PWT |		\
+-			 _PAGE_SPECIAL | _PAGE_ACCESSED | _PAGE_DIRTY |	\
+-			 _PAGE_SOFT_DIRTY | _PAGE_DEVMAP | _PAGE_ENC |  \
++#define _PAGE_CHG_MASK	(PTE_PFN_MASK | _PAGE_PCD | _PAGE_PWT |	_PAGE_PAT | \
++			 _PAGE_SPECIAL | _PAGE_ACCESSED | _PAGE_DIRTY |	    \
++			 _PAGE_SOFT_DIRTY | _PAGE_DEVMAP | _PAGE_ENC |	    \
+ 			 _PAGE_UFFD_WP)
+-#define _HPAGE_CHG_MASK (_PAGE_CHG_MASK | _PAGE_PSE)
++#define _HPAGE_CHG_MASK (_PAGE_CHG_MASK | _PAGE_PSE | _PAGE_PAT_LARGE)
+ 
+ /*
+  * The cache modes defined here are used to translate between pure SW usage
+-- 
+2.41.0
 
---ciKbitYsLUhZP3Im--
