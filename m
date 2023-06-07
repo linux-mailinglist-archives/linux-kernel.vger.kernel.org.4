@@ -2,127 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BB577271C9
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 00:33:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF1A87271D1
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 00:37:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231800AbjFGWdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 18:33:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45442 "EHLO
+        id S230358AbjFGWhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 18:37:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232053AbjFGWdE (ORCPT
+        with ESMTP id S229584AbjFGWht (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 18:33:04 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D8C419B6
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 15:33:01 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id d75a77b69052e-3f6b2af4558so59289991cf.1
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 15:33:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1686177180; x=1688769180;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=8llCPG+vVtkPUwjQtiWJ3WQx6JiHNRGSvHVuzeIpYl8=;
-        b=Teys5iOPggBuB4MwMYC4fYT40I07CnWHKp2KVP33MNp7LzhrMhIh6ZjObVDrpqopU6
-         S65i4AlM1ZRe6MI3inCaIuujJqtHY3mpfIHpgYcW3A2moxi69m94sezvmvs3B/NcLx+7
-         iU+VVrAlgQt2E7JKi5S6PiaNiVlghFzKR/ARm11fVjxDlhrC+EKlyw5njk6unuVZY8MW
-         EqRLzYpdwLrMOAVx5/6LqgWGEftbBGDSRQ73BGXA1yS4lh7PHIgetQguKtqN2iwwYQrl
-         rwvddBBAltGZgnSQjwVhbs9jpRJ5MjhJTCZCQ/GMvIcTgN17Ae8n/+YiEOm36PPooY7e
-         LhRw==
+        Wed, 7 Jun 2023 18:37:49 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D2A39E
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 15:37:48 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-7776b76cc59so720245239f.2
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 15:37:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686177180; x=1688769180;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8llCPG+vVtkPUwjQtiWJ3WQx6JiHNRGSvHVuzeIpYl8=;
-        b=DesQXrf6K3tEjP7Bg8iAn0+6VNFh3XlXzAO3hJNrxsCZhw7sVh/mD5WqmmiiZV/+JV
-         H7uchFuXMuBEuQxlQi5Ufm5ktwmQ5ngNHXu9tvUwKRElS8EizHoE4ecbw01iMx+7g5L8
-         94MY8vMjvezD2yA82pNddyK5pCOGx3/9CfikbUba+7bdHp9Sls3pKShkJPP6dmIzgsMc
-         d4rsmWjwBuOiqEFWZfrR3QtAhIBiL/C6Q4eVXXgnbUWStrMTsuVwG59g96Vu0cbZPcsc
-         d4lfaSlSwXn6iY28x28NvJqcsE6t0xsKLdeUBFb05Zj8OVZair47IfP1yopQHhjNK7rM
-         VlVg==
-X-Gm-Message-State: AC+VfDywP1j1TH/QOWiqfImugvawumg6XXfXTbFc8hOY48GPpz8VUWyK
-        CrvgBu3REcE90HBJpSLa3kik
-X-Google-Smtp-Source: ACHHUZ6HuJH98YyEK9wHunJsZWtU8xAgmefz01BAYcD2rGExrmEEa1OcsJqKl5/Lpuv7iYuO62ZykQ==
-X-Received: by 2002:ac8:7f81:0:b0:3f8:6cc0:d663 with SMTP id z1-20020ac87f81000000b003f86cc0d663mr5296197qtj.17.1686177180421;
-        Wed, 07 Jun 2023 15:33:00 -0700 (PDT)
-Received: from localhost (static-96-237-115-254.bstnma.fios.verizon.net. [96.237.115.254])
-        by smtp.gmail.com with ESMTPSA id g4-20020ac80704000000b003ef33e02eb9sm230021qth.83.2023.06.07.15.32.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 15:33:00 -0700 (PDT)
-Date:   Wed, 07 Jun 2023 18:32:59 -0400
-Message-ID: <b09b591926e0f297fe0a3e9d8fcf3a6a.paul@paul-moore.com>
-From:   Paul Moore <paul@paul-moore.com>
-To:     Casey Schaufler <casey@schaufler-ca.com>,
-        linux-security-module@vger.kernel.org
-Cc:     jmorris@namei.org, keescook@chromium.org,
-        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
-        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, mic@digikod.net, selinux@vger.kernel.org
-Subject: Re: [PATCH v10 10/11] SELinux: Add selfattr hooks
-References: <20230428203417.159874-11-casey@schaufler-ca.com>
-In-Reply-To: <20230428203417.159874-11-casey@schaufler-ca.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1686177467; x=1688769467;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vKg85XFwqrZMzs8/sG2+Db1oJaIEhkVJ2HJ4fsWR33Q=;
+        b=EmQpe47QnVCpidvK009ZwzR+i0tunNRAI4oInEGB+/snGjWGQ+Q+QQcXojj45nX/jU
+         ENssVWHEhy0UBtbAYjM86JgQI9+ygApneVthmlNKQFAvWpOtQZk1T1BAn/GLYOLZDx+A
+         4t1Z9SDf/pI3nVlYyd+nZAzH480OAMp1Fu1J9savRbOMmGEnaILyWBG2G7fTnrISbF68
+         TQmyrFVAkoiVg63J/ts8CvXMS9pb9nA0xvdc2h8DZDkrGm39BgQO9ug6j2n2VkPvWbhC
+         yUr91pb/6NkdL6kR7d+2S1/09/of6LL83vcFnTSufM3UHiHYLOq5KOEDlfJPby5J6Gok
+         3bdA==
+X-Gm-Message-State: AC+VfDyq2edH+Ocl/Abag4O+zmm/z6ggII1svWHJCr2l3I/1fLa/pR3O
+        XaaunLK8L73hrr8OSf2B3ge7Cma2NpKJik6BT+jHLzNCae8AqFI=
+X-Google-Smtp-Source: ACHHUZ4TmBHLZLhZSYi2Gc+EX8a2R2V4wAkDAIrKfFFPQ4paCaqINn016cl8Rhcbgl1+Z2H0QnOHLIHweEoXy2m3HnmC1h9XWP70
+MIME-Version: 1.0
+X-Received: by 2002:a05:6638:10ec:b0:41d:85a2:489f with SMTP id
+ g12-20020a05663810ec00b0041d85a2489fmr3294991jae.1.1686177467625; Wed, 07 Jun
+ 2023 15:37:47 -0700 (PDT)
+Date:   Wed, 07 Jun 2023 15:37:47 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000fc77d905fd91c8c6@google.com>
+Subject: [syzbot] Monthly mm report (Jun 2023)
+From:   syzbot <syzbot+list97d3fa46d32378bb75bb@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Apr 28, 2023 Casey Schaufler <casey@schaufler-ca.com> wrote:
-> 
-> Add hooks for setselfattr and getselfattr. These hooks are not very
-> different from their setprocattr and getprocattr equivalents, and
-> much of the code is shared.
-> 
-> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
-> Cc: selinux@vger.kernel.org
-> Cc: Paul Moore <paul@paul-moore.com>
-> ---
->  security/selinux/hooks.c | 154 +++++++++++++++++++++++++++++++--------
->  1 file changed, 124 insertions(+), 30 deletions(-)
-> 
-> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
-> index 2ee92d3fb79d..e78b955e04f8 100644
-> --- a/security/selinux/hooks.c
-> +++ b/security/selinux/hooks.c
-> @@ -6542,6 +6559,81 @@ static int selinux_setprocattr(const char *name, void *value, size_t size)
->  	return error;
->  }
->  
-> +static int selinux_getselfattr(unsigned int attr, struct lsm_ctx __user *ctx,
-> +			       size_t *size, u32 flags)
-> +{
-> +	char *value;
-> +	size_t total_len;
-> +	int len;
-> +	int rc;
-> +
-> +	len = selinux_lsm_getattr(attr, current, &value);
-> +	if (len < 0)
-> +		return len;
-> +
-> +	total_len = ALIGN(struct_size(ctx, ctx, len), 8);
-> +
-> +	if (total_len > *size)
-> +		rc = -E2BIG;
+Hello mm maintainers/developers,
 
-Hmm.  Since we need to calculate the aligned @total_len value in the
-LSM specific code, perhaps it doesn't make sense to also do the
-alignment in lsm_fill_user_ctx().  My apologies, I know I was the one
-who suggested doing the alignment in a common place previously.
+This is a 31-day syzbot report for the mm subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/mm
 
-> +	else if (ctx)
-> +		rc = lsm_fill_user_ctx(ctx, value, len, LSM_ID_SELINUX, 0);
-> +	else
-> +		rc = 1;
-> +
-> +	*size = total_len;
-> +	if (rc < 0)
-> +		return rc;
-> +	return 1;
-> +}
+During the period, 3 new issues were detected and 1 were fixed.
+In total, 44 issues are still open and 217 have been fixed so far.
 
---
-paul-moore.com
+Some of the still happening issues:
+
+Ref Crashes Repro Title
+<1> 7330    Yes   WARNING in ext4_dirty_folio
+                  https://syzkaller.appspot.com/bug?extid=ecab51a4a5b9f26eeaa1
+<2> 473     No    KCSAN: data-race in generic_fillattr / shmem_mknod (2)
+                  https://syzkaller.appspot.com/bug?extid=702361cf7e3d95758761
+<3> 425     No    KCSAN: data-race in generic_fillattr / shmem_unlink (3)
+                  https://syzkaller.appspot.com/bug?extid=f682b67a78ce05867e78
+<4> 96      Yes   BUG: bad usercopy in fpa_set
+                  https://syzkaller.appspot.com/bug?extid=cb76c2983557a07cdb14
+<5> 78      No    linux-next boot error: WARNING: refcount bug in __reset_page_owner
+                  https://syzkaller.appspot.com/bug?extid=2a0e61ee9fcd4f7fd8ef
+<6> 77      No    KCSAN: data-race in __filemap_remove_folio / shmem_get_folio_gfp
+                  https://syzkaller.appspot.com/bug?extid=ec4650f158c91a963120
+<7> 4       Yes   INFO: task hung in __unmap_and_move (4)
+                  https://syzkaller.appspot.com/bug?extid=b7ad168b779385f8cd58
+<8> 1       Yes   KASAN: slab-use-after-free Read in mas_prev_nentry
+                  https://syzkaller.appspot.com/bug?extid=f3728183b2f78d0d40f6
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
+
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
+
+You may send multiple commands in a single email message.
