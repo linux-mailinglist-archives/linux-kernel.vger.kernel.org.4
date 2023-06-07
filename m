@@ -2,66 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF7CB7252B0
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 06:11:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF78A7252B9
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 06:15:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234923AbjFGEK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 00:10:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39204 "EHLO
+        id S234763AbjFGEO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 00:14:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240777AbjFGEK0 (ORCPT
+        with ESMTP id S233697AbjFGENv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 00:10:26 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8157F1FF2
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 21:09:33 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-977cc662f62so551909266b.3
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 21:09:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686110969; x=1688702969;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cTLqOAtTyMXFuGGrm+2NknWfH2oQLCgaA0ayHism+pI=;
-        b=mzVP8+inwt5KjgNmamFzI+zx93ehVJtCgfO5vQrg3VpQUFHVpzWHUXn9b3s7yHaJVD
-         Si44j26k57IC5MvopnD8eshr1seAITXYiE6e+25eHeEf5qHyPVIhmSkylWYPDIpZb7sl
-         adv4rOS5l4kGo7B0Fr9hxxF+/eaV6wv6V5d/+S79W4S5/VkEIW793Yu6szEoW6jDK+4K
-         VTL/cgkU5eILx8cHcl/INoFKdHroIx4QpFUL937SJr9/2B8IfP10vsAv2G+uN/YxBKAo
-         dOvNpUUlptYF/cZwsc3I+V3TApq2B/IrnRj+qFLuVKvKow1wEYrSmAdHUzwUr5uZDFwB
-         MAoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686110969; x=1688702969;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cTLqOAtTyMXFuGGrm+2NknWfH2oQLCgaA0ayHism+pI=;
-        b=dSvi8htvXQqIlj2GWeslB6h4rdATBDxoL25JBlm56OlBW6VKTgtXupWHT1DmHHKpeD
-         ngyz2216U8EnRKkjgFnHObA/TZ+UM+fTfQ6bV5ib1BXfI+BOjfDwkLmb8MIGp/1VU9zc
-         XnLFw0sz+/wDKUImC2bno97JCA1cqju9Bk+nvkgey5v/n++80Y7ZyPWmPcDD82teM0xY
-         oXf8HggXOPY/szrk56hjm9lnshXzw/b3aqOkTxZE2wktkBikKlYHZFQZ+LKhNtq7QVhn
-         P9aK8oeAoL+ZwC2WunShUsHmmL528WSlSA6OzCHQCxoFUkktr4/8/arwVuL0PV7HZ4O8
-         jdnA==
-X-Gm-Message-State: AC+VfDzbNJB++BXGlk7rs/oFrNwNO8nORfSTc03Ri+Df6mlHTOt2dgJb
-        IO4na7ZJB8GkrmRYiOnmAtA+ndZz7uEc9GR2TLno7HldkoEfAAul
-X-Google-Smtp-Source: ACHHUZ4ckeQmi5O2OoWT3LP3pgwIjwZ/HCOtXPfkpP8BBHj1ayd1p3rwi7GC+cagHQ3Ua591PPiSFLYqTr7qNvgnsCE=
-X-Received: by 2002:a17:907:7e84:b0:978:6489:f9f with SMTP id
- qb4-20020a1709077e8400b0097864890f9fmr4359074ejc.52.1686110969440; Tue, 06
- Jun 2023 21:09:29 -0700 (PDT)
+        Wed, 7 Jun 2023 00:13:51 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE8A8210C;
+        Tue,  6 Jun 2023 21:12:09 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QbYmP54q0z4x41;
+        Wed,  7 Jun 2023 14:10:45 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1686111046;
+        bh=L0EaDKlygTD6/hJSe6VBHSN9xPCJwLW3u+1oYmJzgyQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=tuxorlyrzFkrH1xktaU1X/Q0X5NeASSJ0hSTgId56X0mA4LBXR0tJW7RR6XL3yrWJ
+         e0IxnvCnyqv2B5eRvJJLHA7RmUa/MvGKX6EAR7x53IvI10tukx0SpfM+Pb7HGDMRBD
+         vAZGpKfGLTDoGE1h5QSZWgfTK94UwtJ2fRpXIxFj0nOI6JDNTNAJouhYTJ80W4L7XU
+         vYSUwaxcwfU9HJ4pJrSYlv3e6tlJnWxOxXcALcppUl/gs/KRjZyr11zP+XI5qgJV6K
+         3wT2WOCMPC3JDP+YaQW8orKdger/JXGt3glTbP77hTToDLEmJW8N76JX4M7VU+MrNN
+         nhQUQyMl773PQ==
+Date:   Wed, 7 Jun 2023 14:10:44 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
+Cc:     Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: runtime warning after merge of the landlock tree
+Message-ID: <20230607141044.1df56246@canb.auug.org.au>
 MIME-Version: 1.0
-References: <cover.1685350577.git.chunguang.xu@shopee.com> <ZH9NcBtrDxwq5xRU@ovpn-8-17.pek2.redhat.com>
-In-Reply-To: <ZH9NcBtrDxwq5xRU@ovpn-8-17.pek2.redhat.com>
-From:   =?UTF-8?B?6K645pil5YWJ?= <brookxu.cn@gmail.com>
-Date:   Wed, 7 Jun 2023 12:09:17 +0800
-Message-ID: <CADtkEeeVWZ_b9mDWzwaq_5hdfZ53-RX2rd1SDDem=YsSBQ_g8A@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/4] nvme-tcp: fix hung issues for deleting
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     kbusch@kernel.org, axboe@kernel.dk, hch@lst.de, sagi@grimberg.me,
-        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+Content-Type: multipart/signed; boundary="Sig_/i=8nT44GQRpQ8sBi_oj3vig";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,101 +51,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ming:
+--Sig_/i=8nT44GQRpQ8sBi_oj3vig
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Ming Lei <ming.lei@redhat.com> =E4=BA=8E2023=E5=B9=B46=E6=9C=886=E6=97=A5=
-=E5=91=A8=E4=BA=8C 23:15=E5=86=99=E9=81=93=EF=BC=9A
->
-> Hello Chunguang,
->
-> On Mon, May 29, 2023 at 06:59:22PM +0800, brookxu.cn wrote:
-> > From: Chunguang Xu <chunguang.xu@shopee.com>
-> >
-> > We found that nvme_remove_namespaces() may hang in flush_work(&ctrl->sc=
-an_work)
-> > while removing ctrl. The root cause may due to the state of ctrl change=
-d to
-> > NVME_CTRL_DELETING while removing ctrl , which intterupt nvme_tcp_error=
-_recovery_work()/
-> > nvme_reset_ctrl_work()/nvme_tcp_reconnect_or_remove().  At this time, c=
-trl is
->
-> I didn't dig into ctrl state check in these error handler yet, but error
-> handling is supposed to provide forward progress for any controller state=
-.
->
-> Can you explain a bit how switching to DELETING interrupts the above
-> error handling and breaks the forward progress guarantee?
+Hi all,
 
-Here we freezed ctrl, if ctrl state has changed to DELETING or
-DELETING_NIO(by nvme disconnect),  we will break up and lease ctrl
-freeze, so nvme_remove_namespaces() hang.
+Today's linux-next qemu boot test (powerpc pseries_le_defconfig) produced
+this warning:
 
-static void nvme_tcp_error_recovery_work(struct work_struct *work)
-{
-        ...
-        if (!nvme_change_ctrl_state(ctrl, NVME_CTRL_CONNECTING)) {
-                /* state change failure is ok if we started ctrl delete */
-                WARN_ON_ONCE(ctrl->state !=3D NVME_CTRL_DELETING &&
-                             ctrl->state !=3D NVME_CTRL_DELETING_NOIO);
-                return;
-        }
+WARNING: CPU: 0 PID: 53 at security/landlock/net.c:78 check_socket_access+0=
+xfc/0x210
+Modules linked in:
+CPU: 0 PID: 53 Comm: init Not tainted 6.4.0-rc5-07746-gd88425633b73 #1
+Hardware name: IBM pSeries (emulated by qemu) POWER8 (raw) 0x4d0200 0xf0000=
+04 of:SLOF,HEAD pSeries
+NIP:  c00000000090717c LR: c0000000008c54d4 CTR: c000000000907290
+REGS: c000000006817970 TRAP: 0700   Not tainted  (6.4.0-rc5-07746-gd8842563=
+3b73)
+MSR:  8000000000029033 <SF,EE,ME,IR,DR,RI,LE>  CR: 2800084a  XER: 20000000
+CFAR: c0000000009070cc IRQMASK: 0=20
+GPR00: c0000000008c54d4 c000000006817c10 c000000001558e00 c000000005040000=
+=20
+GPR04: c000000006817cf8 000000000000006e 0000000000000002 0000000000000000=
+=20
+GPR08: 0000000000000000 0000000000000000 c00000000476bfe0 0000000000000000=
+=20
+GPR12: c000000000907290 c000000002ad0000 0000000000000000 0000000000000000=
+=20
+GPR16: 0000000000000000 0000000000000000 0000000000000000 0000000000000000=
+=20
+GPR20: 0000000000000000 0000000000000000 0000000000000000 0000000000000000=
+=20
+GPR24: 0000000000000000 0000000000000000 0000000000000000 0000000000000000=
+=20
+GPR28: c000000005040000 c000000006817cf8 000000000000006e 0000000000000000=
+=20
+NIP [c00000000090717c] check_socket_access+0xfc/0x210
+LR [c0000000008c54d4] security_socket_connect+0x74/0xe0
+Call Trace:
+[c000000006817c10] [c000000006817c50] 0xc000000006817c50 (unreliable)
+[c000000006817c50] [c000000006817ca0] 0xc000000006817ca0
+[c000000006817c90] [c000000000e4e26c] __sys_connect_file+0x6c/0xe0
+[c000000006817cd0] [c000000000e4e3c4] __sys_connect+0xe4/0x130
+[c000000006817da0] [c000000000e50d1c] sys_socketcall+0x46c/0x530
+[c000000006817e10] [c000000000030958] system_call_exception+0x128/0x330
+[c000000006817e50] [c00000000000d6a0] system_call_common+0x160/0x2c4
+--- interrupt: c00 at 0x7fff7fd9e544
+NIP:  00007fff7fd9e544 LR: 00007fff7fd96c4c CTR: 0000000000000000
+REGS: c000000006817e80 TRAP: 0c00   Not tainted  (6.4.0-rc5-07746-gd8842563=
+3b73)
+MSR:  800000000280f033 <SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE>  CR: 24000842  =
+XER: 00000000
+IRQMASK: 0=20
+GPR00: 0000000000000066 00007fffc31f3b30 00007fff7fe39900 0000000000000003=
+=20
+GPR04: 00007fffc31f3b60 000000000000006e 0000000000000000 0000000000000000=
+=20
+GPR08: 0000000000000000 0000000000000000 0000000000000000 0000000000000000=
+=20
+GPR12: 0000000000000000 00007fff7feba9a0 0000000000000000 0000000000000000=
+=20
+GPR16: 0000000000000000 0000000000000000 0000000000000000 0000000000000000=
+=20
+GPR20: 0000000000000016 0000000000000002 00007fff7fe33e14 00007fff7fe33e08=
+=20
+GPR24: 0000000000000001 00007fff7fe33e16 00007fff7fe07b48 ffffffffffffffff=
+=20
+GPR28: ffffffffffffffff 00007fff7fe30110 00007fff7fe33e08 00007fff7feb39b0=
+=20
+NIP [00007fff7fd9e544] 0x7fff7fd9e544
+LR [00007fff7fd96c4c] 0x7fff7fd96c4c
+--- interrupt: c00
+Code: ebc10030 38600000 e9410028 e92d0c78 7d4a4a79 39200000 7c6307b4 408201=
+0c 38210040 ebe1fff8 4e800020 ebc10030 <0fe00000> 7c0802a6 fbc10030 f801005=
+0=20
+---[ end trace 0000000000000000 ]---
 
-        nvme_tcp_reconnect_or_remove(ctrl);
-}
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/i=8nT44GQRpQ8sBi_oj3vig
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-Another path, we will check ctrl state while reconnecting, if it changes to
-DELETING or DELETING_NIO, we will break up and lease ctrl freeze and
-queue quiescing (through reset path), as a result Hang occurs.
+-----BEGIN PGP SIGNATURE-----
 
-static void nvme_tcp_reconnect_or_remove(struct nvme_ctrl *ctrl)
-{
-        /* If we are resetting/deleting then do nothing */
-        if (ctrl->state !=3D NVME_CTRL_CONNECTING) {
-                WARN_ON_ONCE(ctrl->state =3D=3D NVME_CTRL_NEW ||
-                        ctrl->state =3D=3D NVME_CTRL_LIVE);
-                return;
-        }
-        ...
-}
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSAA0QACgkQAVBC80lX
+0Gy7JQf/ShJDyQZusw0go0tTOePXfZjpuPpp/2OsN+748oq4YzUHqN5OBOzYvNas
+XMiz1ZcVYP1kcHqjzlwvIFubMgy6lGyaVbsC1F/TJmcCN6+f/RKK27gKL3CYEVgV
+fwICs+tkldSCyXxi0HlVGIjfwJUpQbu0dgc5jVgMiiQZId6PSSkVD1+jj1uexvU2
+RD2r6s7/7OXHoMbLuSYjJVZ1ld93/przCQA8QJ7JXkSoCVUK+iy9WoKbgY8PIZQQ
+VW2f/Y95NWT8O1B5wIfVHHSU/oMs0dIiB1pi0M+BR5L0bq+DM7qkODAtE1G+hKuY
+gbHn02PVuT2OW1Gl7nhmfQ98f5IyEA==
+=gRSU
+-----END PGP SIGNATURE-----
 
-> > freezed and queue is quiescing . Since scan_work may continue to issue =
-IOs to
-> > load partition table, make it blocked, and lead to nvme_tcp_error_recov=
-ery_work()
-> > hang in flush_work(&ctrl->scan_work).
-> >
-> > After analyzation, we found that there are mainly two case:
-> > 1. Since ctrl is freeze, scan_work hang in __bio_queue_enter() while it=
- issue
-> >    new IO to load partition table.
->
-> Yeah, nvme freeze usage is fragile, and I suggested to move
-> nvme_start_freeze() from nvme_tcp_teardown_io_queues to
-> nvme_tcp_configure_io_queues(), such as the posted change on rdma:
->
-> https://lore.kernel.org/linux-block/CAHj4cs-4gQHnp5aiekvJmb6o8qAcb6nLV61u=
-OGFiisCzM49_dg@mail.gmail.com/T/#ma0d6bbfaa0c8c1be79738ff86a2fdcf7582e06b0
-
-While drive reconnecting, I think we should freeze ctrl or quiescing queue,
-otherwise nvme_fail_nonready_command()may return BLK_STS_RESOURCE,
-and the IOs may retry frequently. So I think we may better freeze ctrl
-while entering
-error_recovery/reconnect, but need to unfreeze it while exit.
-
-
-> > 2. Since queus is quiescing, requeue timeouted IO may hang in hctx->dis=
-patch
-> >    queue, leading scan_work waiting for IO completion.
->
-> That still looks one problem in related error handling code, which is
-> supposed to recover and unquiesce queue finally.
-
-If I have not misunderstood that is what this patchset does.
-
-Thanks.
->
-> Thanks,
-> Ming
->
+--Sig_/i=8nT44GQRpQ8sBi_oj3vig--
