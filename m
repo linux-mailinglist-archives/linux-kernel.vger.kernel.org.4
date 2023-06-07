@@ -2,817 +2,573 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CB5272658B
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 18:13:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A722072658F
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 18:13:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240889AbjFGQNA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 12:13:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40002 "EHLO
+        id S241589AbjFGQNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 12:13:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235426AbjFGQM5 (ORCPT
+        with ESMTP id S241546AbjFGQNT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 12:12:57 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80A751BEC;
-        Wed,  7 Jun 2023 09:12:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1686154371;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lt2PAuX6ogLwweJHt0XpKOi0qBHu6KFBJkJ9eCDXBLc=;
-        b=LRRsWNiO0V+uLTymFpCVIfdXW1dHJcxO/PLiMUXHDNXEySnnKwh/ZAVPqvaKYtAUPOOyxr
-        pXiIOIh2bfvSOpTMIuenDBwHikYdl7gCjV7uBlipLrGytp5ZVHEmjLpf5u8WmeId2dTUwl
-        BS+btEk60KtkaQ1/oyrfDwqiSddV+Lg=
-Message-ID: <2dd4c870a5605a79105fb621c97a5f59a18c8c24.camel@crapouillou.net>
-Subject: Re: [PATCH] drm: gem: add an option for supporting the dma-coherent
- hardware.
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Sui Jingfeng <suijingfeng@loongson.cn>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn
-Date:   Wed, 07 Jun 2023 18:12:48 +0200
-In-Reply-To: <d5494751-0af0-42f6-bcad-f75415e4a6bd@loongson.cn>
-References: <20230607053053.345101-1-suijingfeng@loongson.cn>
-         <d4378aad1cf179d308068ef6072c5c7ff2bf2502.camel@crapouillou.net>
-         <6db23d14-652e-4b13-24cb-bfb92fa3faed@loongson.cn>
-         <e9714a0c29b1c4268081827571ad2545b0e6d5ec.camel@crapouillou.net>
-         <d5494751-0af0-42f6-bcad-f75415e4a6bd@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 7 Jun 2023 12:13:19 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 897301BFA;
+        Wed,  7 Jun 2023 09:13:11 -0700 (PDT)
+Received: from [192.168.10.48] (unknown [119.152.150.198])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 267546606F0B;
+        Wed,  7 Jun 2023 17:13:02 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686154389;
+        bh=/E+RySgRt7WQ7Lc/lmqKu/Xzi1hQFJmb9USYUYriHx4=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=k6da084i/96mW6B5ssX/wKQahuGtAA9KD+kaa5xQQI0GAqFzKHwT2eo4cDU1Ko9NM
+         suO+vZipiylAjIGkxCsSoM20gyrhI8/F+pp1+DbPb9rziZ3/xJ1n/S57NFzw5PzhzT
+         QXptkuRg+GfrVxAyDgiUld60ZVeNhWktA+1CsBR5J3EsdbozrmtJQxMjqM/+cX4UpC
+         4kuIF6Qjc0tcUcMxrUeI10WZumgBRPxqFtsX7zU5Z6JZZ4Z2nOj+UDtvNi2GEAC8p7
+         d95LR1y5W3M2NGL4CWAnX4T4lqcIuOMIGsLRjaP/HFc4P53Hq7Mn5SA84EsnYWShlR
+         oMcw+Q6/OjrCg==
+Message-ID: <0b8b19e7-fffa-aa1f-8479-e5a338780f7a@collabora.com>
+Date:   Wed, 7 Jun 2023 21:12:58 +0500
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v17 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+References: <20230606060822.1065182-1-usama.anjum@collabora.com>
+ <20230606060822.1065182-3-usama.anjum@collabora.com>
+ <CABb0KFGUSDwbMHQymCbPDwPiDit1+1JHbgTzzxXL04vQMUxo5w@mail.gmail.com>
+Content-Language: en-US
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <CABb0KFGUSDwbMHQymCbPDwPiDit1+1JHbgTzzxXL04vQMUxo5w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sui,
+Hi Michał,
 
-Le mercredi 07 juin 2023 =C3=A0 22:38 +0800, Sui Jingfeng a =C3=A9crit=C2=
-=A0:
-> Hi,=C2=A0 welcome to discussion.
->=20
->=20
-> I have limited skills in manipulating English.
->=20
-> It may not express what I'm really means in the short time.
->=20
-> Part of word in the sentence may not as accurate as your.
->=20
-> Well, please don't misunderstand, I'm not doing the rude to you.
+Thank you for taking time to review!
 
-No problem.
+On 6/7/23 7:52 PM, Michał Mirosław wrote:
+> On Tue, 6 Jun 2023 at 08:08, Muhammad Usama Anjum
+> <usama.anjum@collabora.com> wrote:
+>> This IOCTL, PAGEMAP_SCAN on pagemap file can be used to get and/or clear
+>> the info about page table entries. The following operations are supported
+>> in this ioctl:
+>> - Get the information if the pages have been written-to (PAGE_IS_WRITTEN),
+>>   file mapped (PAGE_IS_FILE), present (PAGE_IS_PRESENT) or swapped
+>>   (PAGE_IS_SWAPPED).
+>> - Find pages which have been written-to and/or write protect the pages
+>>   (atomic PM_SCAN_OP_GET + PM_SCAN_OP_WP)
+>>
+>> This IOCTL can be extended to get information about more PTE bits.
+> [...]
+>> --- a/fs/proc/task_mmu.c
+>> +++ b/fs/proc/task_mmu.c
+> [...]
+>> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+>> +static inline bool is_pmd_uffd_wp(pmd_t pmd)
+>> +{
+>> +       return (pmd_present(pmd) && pmd_uffd_wp(pmd)) ||
+>> +              (is_swap_pmd(pmd) && pmd_swp_uffd_wp(pmd));
+>> +}
+> [...]
+>> +#ifdef CONFIG_HUGETLB_PAGE
+>> +static inline bool is_huge_pte_uffd_wp(pte_t pte)
+>> +{
+>> +       return ((pte_present(pte) && huge_pte_uffd_wp(pte)) ||
+>> +              pte_swp_uffd_wp_any(pte));
+> 
+> Nit: please remove the outer parentheses (it is already done for
+> similar finctuons above).
+Will remove.
 
->=20
-> I will explain it with more details.
->=20
-> See below:
->=20
->=20
-> On 2023/6/7 20:09, Paul Cercueil wrote:
-> > Hi Sui,
-> >=20
-> > Le mercredi 07 juin 2023 =C3=A0 18:30 +0800, Sui Jingfeng a =C3=A9crit=
-=C2=A0:
-> > > Hi,
-> > >=20
-> > >=20
-> > > On 2023/6/7 17:36, Paul Cercueil wrote:
-> > > > Hi Sui,
-> > > >=20
-> > > > Le mercredi 07 juin 2023 =C3=A0 13:30 +0800, Sui Jingfeng a =C3=A9c=
-rit=C2=A0:
-> > > > > The single map_noncoherent member of struct
-> > > > > drm_gem_dma_object
-> > > > > may
-> > > > > not
-> > > > > sufficient for describing the backing memory of the GEM
-> > > > > buffer
-> > > > > object.
-> > > > >=20
-> > > > > Especially on dma-coherent systems, the backing memory is
-> > > > > both
-> > > > > cached
-> > > > > coherent for multi-core CPUs and dma-coherent for peripheral
-> > > > > device.
-> > > > > Say architectures like X86-64, LoongArch64, Loongson Mips64,
-> > > > > etc.
-> > > > >=20
-> > > > > Whether a peripheral device is dma-coherent or not can be
-> > > > > implementation-dependent. The single map_noncoherent option
-> > > > > is
-> > > > > not
-> > > > > enough
-> > > > > to reflect real hardware anymore. For example, the Loongson
-> > > > > LS3A4000
-> > > > > CPU
-> > > > > and LS2K2000/LS2K1000 SoC, peripheral device of such hardware
-> > > > > platform
-> > > > > allways snoop CPU's cache. Doing the allocation with
-> > > > > dma_alloc_coherent
-> > > > > function is preferred. The return buffer is cached, it should
-> > > > > not
-> > > > > using
-> > > > > the default write-combine mapping. While with the current
-> > > > > implement,
-> > > > > there
-> > > > > no way to tell the drm core to reflect this.
-> > > > >=20
-> > > > > This patch adds cached and coherent members to struct
-> > > > > drm_gem_dma_object.
-> > > > > which allow driver implements to inform the core. Introducing
-> > > > > new
-> > > > > mappings
-> > > > > while keeping the original default behavior unchanged.
-> > > > Did you try to simply set the "dma-coherent" property to the
-> > > > device's
-> > > > node?
-> > > But this approach can only be applied for the device driver with
-> > > DT
-> > > support.
-> > >=20
-> > > X86-64, Loongson ls3a4000 mips64, Loongson ls3a5000 CPU typically
-> > > do
-> > > not
-> > > have DT support.
-> > >=20
-> > > They using ACPI to pass parameter from the firmware to Linux
-> > > kernel.
-> > >=20
-> > > You approach will lost the effectiveness on such a case.
-> > Well, I don't really know how ACPI handles it - but it should just
-> > be a
-> > matter of setting dev->dma_coherent. That's basically what the DT
-> > code
-> > does.
-> >=20
-> > Some MIPS boards set it in their setup code for instance.
-> >=20
-> This is a *strategy*, not a *mechanism*.
->=20
-> In this case, DT is just used to describing the hardware.
->=20
-> (It is actually a hardware feature describing language, the
-> granularity=20
-> is large)
->=20
-> It does not changing the state of the hardware.
->=20
-> It's your platform firmware or kernel setting up code who actually do
-> such a things.
->=20
->=20
-> It's just that it works on *one* platform, it does not guarantee it
-> will=20
-> works on others.
+> 
+>> +}
+> 
+>> +static inline bool pagemap_scan_check_page_written(struct pagemap_scan_private *p)
+>> +{
+>> +       return (p->required_mask | p->anyof_mask | p->excluded_mask) &
+>> +              PAGE_IS_WRITTEN;
+>> +}
+> 
+> This could be precalculated and put as a flag into
+> pagemap_scan_private - it is kernel-private structure and there are a
+> few spare bits in `flags` if you'd prefer not to add an explicit
+> boolean.
+This inline function is only being used at one spot. I can remove the
+function altogether. I don't like putting it in flags. It'll bring some
+complexity.
 
-If you add the "dma-coherent" property in a device node in DT, you
-effectively specify that the device is DMA-coherent; so you describe
-the hardware, which is what DT is for, and you are not changing the
-state of the hardware.
+> 
+> [...]
+>> +static int pagemap_scan_output(bool wt, bool file, bool pres, bool swap,
+>> +                              struct pagemap_scan_private *p,
+>> +                              unsigned long addr, unsigned int n_pages)
+>> +{
+>> +       unsigned long bitmap = PM_SCAN_BITMAP(wt, file, pres, swap);
+>> +       struct page_region *cur = &p->cur;
+>> +
+>> +       if (!n_pages)
+>> +               return -EINVAL;
+>> +
+>> +       if ((p->required_mask & bitmap) != p->required_mask)
+>> +               return 0;
+>> +       if (p->anyof_mask && !(p->anyof_mask & bitmap))
+>> +               return 0;
+>> +       if (p->excluded_mask & bitmap)
+>> +               return 0;
+>> +
+>> +       bitmap &= p->return_mask;
+>> +       if (!bitmap)
+>> +               return 0;
+>> +
+>> +       if (cur->bitmap == bitmap &&
+>> +           cur->start + cur->len * PAGE_SIZE == addr) {
+>> +               cur->len += n_pages;
+>> +               p->found_pages += n_pages;
+>> +       } else {
+>> +               /*
+>> +                * All data is copied to cur first. When more data is found, we
+>> +                * push cur to vec and copy new data to cur. The vec_index
+>> +                * represents the current index of vec array. We add 1 to the
+>> +                * vec_index while performing checks to account for data in cur.
+>> +                */
+>> +               if (cur->len && (p->vec_index + 1) >= p->vec_len)
+>> +                       return -ENOSPC;
+>> +
+>> +               if (cur->len) {
+>> +                       memcpy(&p->vec[p->vec_index], cur, sizeof(*p->vec));
+>> +                       p->vec_index++;
+>> +               }
+>> +
+>> +               cur->start = addr;
+>> +               cur->len = n_pages;
+>> +               cur->bitmap = bitmap;
+>> +               p->found_pages += n_pages;
+>> +       }
+>> +
+>> +       if (p->max_pages && (p->found_pages == p->max_pages))
+>> +               return PM_SCAN_FOUND_MAX_PAGES;
+>> +
+>> +       return 0;
+>> +}
+>> +
+>> +static int pagemap_scan_pmd_entry(pmd_t *pmd, unsigned long start,
+>> +                                 unsigned long end, struct mm_walk *walk)
+>> +{
+>> +       struct pagemap_scan_private *p = walk->private;
+>> +       struct vm_area_struct *vma = walk->vma;
+>> +       unsigned long addr = end;
+>> +       pte_t *pte, *orig_pte;
+>> +       spinlock_t *ptl;
+>> +       bool is_written;
+>> +       int ret = 0;
+>> +
+>> +       arch_enter_lazy_mmu_mode();
+>> +
+>> +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+>> +       ptl = pmd_trans_huge_lock(pmd, vma);
+>> +       if (ptl) {
+>> +               unsigned long n_pages = (end - start)/PAGE_SIZE;
+>> +
+>> +               if (p->max_pages && n_pages > p->max_pages - p->found_pages)
+>> +                       n_pages = p->max_pages - p->found_pages;
+> 
+> Since p->found_pages is only ever increased in `pagemap_scan_output()`
+> and that function is only called for GET or GET+WP operations, maybe
+> the logic could be folded to pagemap_scan_output() to avoid
+> duplication?
+> In this function the calculation is used only when WP op is done to
+> split the HP if n_pages limit would be hit, but if using plain WP
+> (without GET) it doesn't make sense to use the limit.
+The n_pages is needed to decide if THP need to be broken down and it is
+used in pagemap_scan_output(). I've brought this condition out of
+pagemap_scan_output() to cater this former condition. If I move it to
+pagemap_scan_output(), I'll have to write same condition to find out if I
+need to breakt he THP. This seems like repetition, but we have same use
+case for tlbhuge page.
 
-Note that some MIPS platforms (arch/mips/alchemy/common/setup.c)
-default to DMA-coherent mapping; I believe you could do something
-similar with your Loongson LS3A4000 CPU and LS2K2000/LS2K1000 SoC.
+> (pagemap_scan_output() is trivial enough so I think it could be pulled
+> inside the spinlocked region.)
+It is already in spinlocked region. Spin lock is being released after tlb
+flush.
 
+> 
+>> +
+>> +               is_written = !is_pmd_uffd_wp(*pmd);
+>> +
+>> +               /*
+>> +                * Break huge page into small pages if the WP operation need to
+>> +                * be performed is on a portion of the huge page.
+>> +                */
+>> +               if (is_written && IS_PM_SCAN_WP(p->flags) &&
+>> +                   n_pages < HPAGE_SIZE/PAGE_SIZE) {
+>> +                       spin_unlock(ptl);
+>> +
+>> +                       split_huge_pmd(vma, pmd, start);
+>> +                       goto process_smaller_pages;
+>> +               }
+>> +
+>> +               if (IS_PM_SCAN_GET(p->flags))
+>> +                       ret = pagemap_scan_output(is_written, vma->vm_file,
+>> +                                                 pmd_present(*pmd),
+>> +                                                 is_swap_pmd(*pmd),
+>> +                                                 p, start, n_pages);
+>> +
+>> +               if (ret >= 0 && is_written && IS_PM_SCAN_WP(p->flags))
+>> +                       make_uffd_wp_pmd(vma, addr, pmd);
+>> +
+>> +               if (IS_PM_SCAN_WP(p->flags))
+> 
+> Why `is_written` is not checked? If is_written is false, then the WP
+> op should be a no-op and so won't need TLB flushing, will it? [Same
+> for the PTE case below.]
+It can be done for THP. But for ptes we cannot trust is_written as
+is_written only represent last pte state.
 
-> While my patch is trying to create a *mechanism* which could probably
->=20
-> works on all platform.
->=20
->=20
-> It is based the patch you have already commuted.
->=20
-> Thanks for your excellent contribution.
->=20
->=20
-> > > > =C2=A0=C2=A0From what I understand if you add that property then Li=
-nux
-> > > > will
-> > > > use DMA
-> > > > coherent memory even though you use dma_alloc_noncoherent() and
-> > > > the
-> > > > sync_single_for_cpu() / sync_single_for_device() are then NOPs.
-> > > Please do not mitigate the problems with confusing method.
-> > >=20
-> > >=20
-> > > This approach not only tend to generate confusion but also
-> > > implement-dependent
-> > >=20
-> > > and arch-dependent. It's definitely problematic.
-> > >=20
-> > >=20
-> > > How does the dma_alloc_coherent/dma_alloc_noncoherent is a ARCH
-> > > specific
-> > > thing.
-> > >=20
-> > > Dependent on how does the arch_dma_ops is implemented.
-> > >=20
-> > >=20
-> > > The definition of the coherent on different ARCH has different
-> > > meanings.
-> > >=20
-> > > The definition of the wirte-combine on different ARCH has
-> > > different
-> > > meanings.
-> > >=20
-> > >=20
-> > > The wirte-combine(uncache acceleration) on mips is non dma-
-> > > coherent.
-> > It is dma-coherent on Ingenic SoCs.
-> >=20
-> >=20
-> It is dma-coherent ? How does it achieve it?
->=20
->=20
-> As far as I know,=C2=A0 there is a write buffer within the mips cpu.
->=20
-> typically 64 byte,=C2=A0 but it is not cache. It will gather the CPU writ=
-e
-> access,
->=20
-> When a peripheral device do the DMA, how does you platform guarantee
->=20
-> the data in the CPU write buffer has been already arrived at (or
-> flushed=20
-> out to)
->=20
-> the system RAM?
->=20
->=20
-> Does the=C2=A0 peripheral device snoop the CPU's write buffer,
->=20
-> or it need manually flush the write buffer with SYNC instruction?
+> 
+>> +                       flush_tlb_range(vma, start, end);
+>> +
+> [...]
+>> +       if (IS_PM_SCAN_WP(p->flags))
+>> +               flush_tlb_range(vma, start, addr);
+>> +
+>> +       pte_unmap_unlock(orig_pte, ptl);
+>> +       arch_leave_lazy_mmu_mode();
+>> +
+>> +       cond_resched();
+>> +       return ret;
+>> +}
+>> +
+>> +#ifdef CONFIG_HUGETLB_PAGE
+>> +static int pagemap_scan_hugetlb_entry(pte_t *ptep, unsigned long hmask,
+>> +                                     unsigned long start, unsigned long end,
+>> +                                     struct mm_walk *walk)
+>> +{
+>> +       unsigned long n_pages = (end - start)/PAGE_SIZE;
+>> +       struct pagemap_scan_private *p = walk->private;
+>> +       struct vm_area_struct *vma = walk->vma;
+>> +       struct hstate *h = hstate_vma(vma);
+>> +       spinlock_t *ptl;
+>> +       bool is_written;
+>> +       int ret = 0;
+>> +       pte_t pte;
+>> +
+>> +       if (p->max_pages && n_pages > p->max_pages - p->found_pages)
+>> +               n_pages = p->max_pages - p->found_pages;
+>> +
+>> +       if (IS_PM_SCAN_WP(p->flags)) {
+>> +               i_mmap_lock_write(vma->vm_file->f_mapping);
+>> +               ptl = huge_pte_lock(h, vma->vm_mm, ptep);
+>> +       }
+>> +
+>> +       pte = huge_ptep_get(ptep);
+>> +       is_written = !is_huge_pte_uffd_wp(pte);
+>> +
+>> +       /*
+>> +        * Partial hugetlb page clear isn't supported
+>> +        */
+>> +       if (is_written && IS_PM_SCAN_WP(p->flags) &&
+>> +           n_pages < HPAGE_SIZE/PAGE_SIZE) {
+>> +               ret = -EPERM;
+> 
+> Shouldn't this be ENOSPC, conveying that the operation would overflow
+> the n_pages limit?
+We are testing here is user has asked us to engage WP on a part of the
+hugetlb or we can only perform WP on a part of the engage as user buffer is
+full. We cannot judge this has happened because of the former or later
+condition. So I'm assuming that user's parameters aren't solid enough and
+returning -EPERM. It seemed more suitable to me. But I can return -ENOSPC
+as well, if you say?
 
-I believe the DMA flushes the write buffer? I don't actually know the
-details, it would be something to ask to Ingenic.
+> 
+>> +               goto unlock_and_return;
+>> +       }
+>> +
+>> +       if (IS_PM_SCAN_GET(p->flags)) {
+>> +               ret = pagemap_scan_output(is_written, vma->vm_file,
+>> +                                         pte_present(pte), is_swap_pte(pte),
+>> +                                         p, start, n_pages);
+>> +               if (ret < 0)
+>> +                       goto unlock_and_return;
+>> +       }
+>> +
+>> +       if (is_written && IS_PM_SCAN_WP(p->flags)) {
+> 
+> Oh, this case does check `is_written` before flushing TLB, contrary to
+> what the cases above do.
+> 
+>> +               make_uffd_wp_huge_pte(vma, start, ptep, pte);
+>> +               flush_hugetlb_tlb_range(vma, start, end);
+>> +       }
+>> +
+>> +unlock_and_return:
+>> +       if (IS_PM_SCAN_WP(p->flags)) {
+>> +               spin_unlock(ptl);
+>> +               i_mmap_unlock_write(vma->vm_file->f_mapping);
+>> +       }
+>> +
+>> +       return ret;
+>> +}
+>> +#else
+>> +#define pagemap_scan_hugetlb_entry NULL
+>> +#endif
+>> +
+>> +static int pagemap_scan_pte_hole(unsigned long addr, unsigned long end,
+>> +                                int depth, struct mm_walk *walk)
+>> +{
+>> +       unsigned long n_pages = (end - addr)/PAGE_SIZE;
+>> +       struct pagemap_scan_private *p = walk->private;
+>> +       struct vm_area_struct *vma = walk->vma;
+>> +       int ret = 0;
+>> +
+>> +       if (!vma || !IS_PM_SCAN_GET(p->flags))
+>> +               return 0;
+>> +
+>> +       if (p->max_pages && n_pages > p->max_pages - p->found_pages)
+>> +               n_pages = p->max_pages - p->found_pages;
+> 
+> Nit: If the page flags don't match (wouldn't be output), the limit
+> would not be hit and the calculation is unnecessary. But if it was
+> done in pagemap_scan_output() instead after all the flags checks...
+Correct for this use case. But moving to pagemap_scan_output() would make
+me do duplicate calculation for other 2 cases as explained above.
 
->=20
-> > > But on arm, It seem that wirte-combine is coherent. (guaranteed
-> > > by
-> > > arch
-> > > implement).
-> > >=20
-> > >=20
-> > > I also heard using dma_alloc_coherent=C2=A0 to allocation the buffer
-> > > for
-> > > the
-> > > non-coherent doesn't hurt, but the reverse is not true.
-> > >=20
-> > >=20
-> > > But please do not create confusion.
-> > >=20
-> > > software composite is faster because better cacheusing rate and
-> > >=20
-> > > cache is faster to read.
-> > >=20
-> > > It is faster because it is cached, not because it is non-
-> > > coherent.
-> > >=20
-> > > non-coherent is arch thing and/or driver-side thing,
-> > >=20
-> > > it is a side effect of=C2=A0 using the cached mapping.
-> > Yes, I know that.
-> >=20
-> > >=20
-> > > It should left to driver to handle such a side effect. The device
-> > > driver
-> > >=20
-> > > know their device, so its the device driver's responsibility to
-> > > maintain
-> > > the coherency.=C2=A0 On loongson platform, we don't need to call
-> > > drm_fb_dma_sync_non_coherent() function, Its already guaranteed
-> > > by
-> > > hardware.
-> > I understand. What I'm saying, is that you should be able to set
-> > dma_obj->map_noncoherent (which would arguably be better named
-> > "map_cached",
->=20
-> My point is that the word *cached* reflect the nature,
->=20
-> dma-coherent or dma-noncoherent is secondary.
->=20
-> We are all on the way to pursue the performance.
->=20
-> In the end, it is the cache give us the speed.
->=20
->=20
-> Why not we credit the cache hardware inside of the CPU?
+> 
+>> +       ret = pagemap_scan_output(false, vma->vm_file, false, false, p, addr,
+>> +                                 n_pages);
+>> +
+>> +       return ret;
+>> +}
+> [...]
+>> +static long do_pagemap_scan(struct mm_struct *mm,
+>> +                           struct pm_scan_arg __user *uarg)
+>> +{
+>> +       unsigned long start, end, walk_start, walk_end;
+>> +       unsigned long empty_slots, vec_index = 0;
+>> +       struct mmu_notifier_range range;
+>> +       struct page_region __user *vec;
+>> +       struct pagemap_scan_private p;
+>> +       struct pm_scan_arg arg;
+>> +       int ret = 0;
+>> +
+>> +       if (copy_from_user(&arg, uarg, sizeof(arg)))
+>> +               return -EFAULT;
+>> +
+>> +       start = untagged_addr((unsigned long)arg.start);
+>> +       vec = (struct page_region *)untagged_addr((unsigned long)arg.vec);
+>> +
+>> +       ret = pagemap_scan_args_valid(&arg, start, vec);
+>> +       if (ret)
+>> +               return ret;
+>> +
+>> +       end = start + arg.len;
+>> +       p.max_pages = arg.max_pages;
+>> +       p.found_pages = 0;
+>> +       p.flags = arg.flags;
+>> +       p.required_mask = arg.required_mask;
+>> +       p.anyof_mask = arg.anyof_mask;
+>> +       p.excluded_mask = arg.excluded_mask;
+>> +       p.return_mask = arg.return_mask;
+>> +       p.cur.start = p.cur.len = p.cur.bitmap = 0;
+>> +       p.vec = NULL;
+>> +       p.vec_len = PAGEMAP_WALK_SIZE >> PAGE_SHIFT;
+> 
+> If p.vec_len would not count the entry held in `cur` (IOW: vec_len =
+> WALK_SIZE - 1), then pagemap_scan_output() wouldn't need the big
+> comment about adding or subtracting 1 when checking for overflow. The
+> output vector needs to have space for at least one entrry to make GET
+> useful. Maybe `cur` could be renamed or annotated to express that it
+> always holds the last entry?
+Ohhh.. This can be done by doing subtracting 1 from empty_slots. But I've
+explored the idea. I don't see any benefit. If we do this, then I'll have
+to put a comment why subtracting 1 is needed. Seems like same problem:
 
-dma_alloc_noncoherent() gives you *cached* memory.
+--- a/fs/proc/task_mmu.c
++++ b/fs/proc/task_mmu.c
+@@ -1909,7 +1909,7 @@ static int pagemap_scan_output(bool wt, bool file,
+bool pres, bool swap,
+                 * represents the current index of vec array. We add 1 to the
+                 * vec_index while performing checks to account for data in
+cur.
+                 */
+-               if (cur->len && (p->vec_index + 1) >= p->vec_len)
++               if (cur->len && p->vec_index >= p->vec_len)
+                        return -ENOSPC;
 
-Therefore, if you want *cached* memory, you should set
-gem->map_noncoherent.
+                if (cur->len) {
+@@ -2202,7 +2202,7 @@ static long do_pagemap_scan(struct mm_struct *mm,
+                if (IS_PM_SCAN_GET(p.flags)) {
+                        p.vec_index = 0;
 
-I understand your confusion; it would be easier to understand if this
-function was called dma_alloc_cached().
+-                       empty_slots = arg.vec_len - vec_index;
++                       empty_slots = arg.vec_len - 1 - vec_index;
+                        p.vec_len = min(p.vec_len, empty_slots);
+                }
 
-Then, if the memory is actually DMA-coherent for the device (dev-
->dma_coherent =3D=3D true), the drm_fb_dma_sync_non_coherent() function is
-a no-op.
+Lets leave it as it is. I can change `cur` to `last` or any other name.
+Please suggest.
 
-But in both cases (DMA-coherent device, non DMA-coherent device), if
-you want cached buffers, you should call dma_alloc_noncoherent().
+> 
+>> +
+>> +       /*
+>> +        * Allocate smaller buffer to get output from inside the page walk
+>> +        * functions and walk page range in PAGEMAP_WALK_SIZE size chunks. As
+>> +        * we want to return output to user in compact form where no two
+>> +        * consecutive regions should be continuous and have the same flags.
+>> +        * So store the latest element in p.cur between different walks and
+>> +        * store the p.cur at the end of the walk to the user buffer.
+>> +        */
+>> +       if (IS_PM_SCAN_GET(p.flags)) {
+>> +               p.vec = kmalloc_array(p.vec_len, sizeof(*p.vec), GFP_KERNEL);
+>> +               if (!p.vec)
+>> +                       return -ENOMEM;
+>> +       }
+>> +
+>> +       if (IS_PM_SCAN_WP(p.flags)) {
+>> +               mmu_notifier_range_init(&range, MMU_NOTIFY_PROTECTION_VMA, 0,
+>> +                                       mm, start, end);
+>> +               mmu_notifier_invalidate_range_start(&range);
+>> +       }
+>> +
+>> +       walk_start = walk_end = start;
+>> +       while (walk_end < end && !ret) {
+>> +               if (IS_PM_SCAN_GET(p.flags)) {
+>> +                       p.vec_index = 0;
+>> +
+>> +                       empty_slots = arg.vec_len - vec_index;
+> 
+> Can `empty_slots` be zero here? I don't see anything prohibiting this case.
+I'll add a check here and abort the loop here instead of continuing the
+operation.
 
+> 
+>> +                       p.vec_len = min(p.vec_len, empty_slots);
+> 
+> ( If not counting `cur`, it would be min(p.vec_len, empty_slots - 1); )
+> 
+>> +               }
+>> +
+>> +               walk_end = (walk_start + PAGEMAP_WALK_SIZE) & PAGEMAP_WALK_MASK;
+>> +               if (walk_end > end)
+>> +                       walk_end = end;
+>> +
+>> +               ret = mmap_read_lock_killable(mm);
+>> +               if (ret)
+>> +                       goto free_data;
+>> +               ret = walk_page_range(mm, walk_start, walk_end,
+>> +                                     &pagemap_scan_ops, &p);
+>> +               mmap_read_unlock(mm);
+>> +
+>> +               if (ret && ret != -ENOSPC && ret != PM_SCAN_FOUND_MAX_PAGES)
+>> +                       goto free_data;
+>> +
+>> +               walk_start = walk_end;
+>> +               if (IS_PM_SCAN_GET(p.flags) && p.vec_index) {
+>> +                       if (copy_to_user(&vec[vec_index], p.vec,
+>> +                                        p.vec_index * sizeof(*p.vec))) {
+>> +                               /*
+>> +                                * Return error even though the OP succeeded
+>> +                                */
+>> +                               ret = -EFAULT;
+>> +                               goto free_data;
+>> +                       }
+>> +                       vec_index += p.vec_index;
+>> +               }
+>> +       }
+>> +
+>> +       if (IS_PM_SCAN_GET(p.flags) && p.cur.len) {
+> 
+> Nit: p.cur.len can be non-zero only if we do a GET (or GET+WP) operation.
+I'll remove the first half of condition.
 
-> > but that's a different problem). Then the GEM code would
-> > end up calling dma_alloc_noncoherent(), which will give you
-> > *cached*
-> > memory. Then as long as dev->dma_coherent =3D true,
-> > drm_fb_dma_sync_non_coherent() should be a NOP - so you wouldn't
-> > pointlessly sync/invalidate the caches.
-> >=20
-> > And I disagree with you, the driver shouldn't handle such things.
->=20
-> You already handle the side effect of such things, See below:
->=20
->=20
-> ```
->=20
-> =C2=A0=C2=A0=C2=A0 if (ingenic_drm_map_noncoherent(ipu->master))
-> =C2=A0=C2=A0=C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0 drm_fb_dma_sync_non_coherent(=
-ipu->drm, oldstate, newstate);
->=20
-> ```
->=20
-> By the way,=C2=A0 Ingenic is the only driver in the drivers/gpu/drm/ that=
-=20
-> handle such things
->=20
-> so far.
+> 
+>> +               if (copy_to_user(&vec[vec_index], &p.cur, sizeof(*p.vec))) {
+> 
+> Nit: sizeof(*p.cur); (even though this is the same type)
+Good point.
 
-Yes; and now I think that this was a bad idea (for the reasons Maxime
-listed in his email).
+> 
+>> +                       ret = -EFAULT;
+>> +                       goto free_data;
+>> +               }
+>> +               vec_index++;
+>> +       }
+>> +
+>> +       ret = vec_index;
+>> +
+>> +free_data:
+>> +       if (IS_PM_SCAN_WP(p.flags))
+>> +               mmu_notifier_invalidate_range_end(&range);
+>> +
+>> +       kfree(p.vec);
+>> +       return ret;
+>> +}
+>> +
+>> +static long do_pagemap_cmd(struct file *file, unsigned int cmd,
+>> +                          unsigned long arg)
+>> +{
+>> +       struct pm_scan_arg __user *uarg = (struct pm_scan_arg __user *)arg;
+> 
+> The cast should be in do_pagemap_scan() as if there comes another
+> `cmd`, then it might use a different argument type.
+I'll update.
 
->=20
-> > =C2=A0 The
-> > fact that it is better to use cached memory or uncached with write-
-> > combine really is platform-specific and not something that the
-> > driver
-> > should be aware of.
->=20
-> But the fact is that,=C2=A0 It is drm/ingenic tell the drm core,=C2=A0 so=
-me SoC
-> is=20
-> prefer cached,
->=20
-> but unable to enforce the coherent. So that it need=C2=A0 flush the cache=
-=20
-> manually.
->=20
-> What do you meant by saying that the driver should not be aware of ?
+> 
+>> +       struct mm_struct *mm = file->private_data;
+>> +
+>> +       switch (cmd) {
+>> +       case PAGEMAP_SCAN:
+>> +               return do_pagemap_scan(mm, uarg);
+>> +
+>> +       default:
+>> +               return -EINVAL;
+>> +       }
+>> +}
+> 
+> Best Regards
+> Michał Mirosław
 
-Ideally, the driver should just call a function "dma_alloc_buffer",
-which would return cached memory when it makes sense, otherwise a
-uncached buffer with the write-combine attribute.
-
-Then the arch code (or DT) can decide what's the best setting, and not
-the driver.
-
-In the meantime, you should use gem->dma_noncoherent like the ingenic-
-drm driver does - until somebody (probably me) refactor things.
-
-Cheers,
--Paul
-
->=20
-> > Cheers,
-> > -Paul
-> >=20
-> > >=20
-> > > > Cheers,
-> > > > -Paul
-> > > >=20
-> > > > > Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
-> > > > > ---
-> > > > > =C2=A0=C2=A0=C2=A0drivers/gpu/drm/drm_fb_dma_helper.c=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 | 11 +++++------
-> > > > > =C2=A0=C2=A0=C2=A0drivers/gpu/drm/drm_fbdev_dma.c=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 2 +-
-> > > > > =C2=A0=C2=A0=C2=A0drivers/gpu/drm/drm_gem_dma_helper.c=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 | 20
-> > > > > ++++++++++++++++----
-> > > > > =C2=A0=C2=A0=C2=A0drivers/gpu/drm/ingenic/ingenic-drm-drv.c |=C2=
-=A0 5 ++++-
-> > > > > =C2=A0=C2=A0=C2=A0drivers/gpu/drm/rcar-du/Kconfig=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 2 --
-> > > > > =C2=A0=C2=A0=C2=A0drivers/gpu/drm/rcar-du/rcar_du_kms.c=C2=A0=C2=
-=A0=C2=A0=C2=A0 |=C2=A0 4 +++-
-> > > > > =C2=A0=C2=A0=C2=A0include/drm/drm_gem_dma_helper.h=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 7 +++++--
-> > > > > =C2=A0=C2=A0=C2=A07 files changed, 34 insertions(+), 17 deletions=
-(-)
-> > > > >=20
-> > > > > diff --git a/drivers/gpu/drm/drm_fb_dma_helper.c
-> > > > > b/drivers/gpu/drm/drm_fb_dma_helper.c
-> > > > > index 3b535ad1b07c..93ff05041192 100644
-> > > > > --- a/drivers/gpu/drm/drm_fb_dma_helper.c
-> > > > > +++ b/drivers/gpu/drm/drm_fb_dma_helper.c
-> > > > > @@ -106,16 +106,15 @@ dma_addr_t
-> > > > > drm_fb_dma_get_gem_addr(struct
-> > > > > drm_framebuffer *fb,
-> > > > > =C2=A0=C2=A0=C2=A0EXPORT_SYMBOL_GPL(drm_fb_dma_get_gem_addr);
-> > > > > =C2=A0=C2=A0=20
-> > > > > =C2=A0=C2=A0=C2=A0/**
-> > > > > - * drm_fb_dma_sync_non_coherent - Sync GEM object to non-
-> > > > > coherent
-> > > > > backing
-> > > > > - *=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0memory
-> > > > > + * drm_fb_dma_sync_non_coherent - Sync GEM object to cached
-> > > > > backing
-> > > > > memory
-> > > > > =C2=A0=C2=A0=C2=A0 * @drm: DRM device
-> > > > > =C2=A0=C2=A0=C2=A0 * @old_state: Old plane state
-> > > > > =C2=A0=C2=A0=C2=A0 * @state: New plane state
-> > > > > =C2=A0=C2=A0=C2=A0 *
-> > > > > =C2=A0=C2=A0=C2=A0 * This function can be used by drivers that us=
-e damage
-> > > > > clips
-> > > > > and
-> > > > > have
-> > > > > - * DMA GEM objects backed by non-coherent memory. Calling
-> > > > > this
-> > > > > function
-> > > > > - * in a plane's .atomic_update ensures that all the data in
-> > > > > the
-> > > > > backing
-> > > > > - * memory have been written to RAM.
-> > > > > + * DMA GEM objects backed by cached memory. Calling this
-> > > > > function in
-> > > > > a
-> > > > > + * plane's .atomic_update ensures that all the data in the
-> > > > > backing
-> > > > > memory
-> > > > > + * have been written to RAM.
-> > > > > =C2=A0=C2=A0=C2=A0 */
-> > > > > =C2=A0=C2=A0=C2=A0void drm_fb_dma_sync_non_coherent(struct drm_de=
-vice *drm,
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 st=
-ruct drm_plane_state
-> > > > > *old_state,
-> > > > > @@ -131,7 +130,7 @@ void drm_fb_dma_sync_non_coherent(struct
-> > > > > drm_device *drm,
-> > > > > =C2=A0=C2=A0=20
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0for (=
-i =3D 0; i < finfo->num_planes; i++) {
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0dma_obj =3D drm_fb_dma_get_gem=
-_obj(state->fb,
-> > > > > i);
-> > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0if (!dma_obj->map_noncoherent)
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0if (dma_obj->cached && dma_obj->coherent)
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0continue;
-> > > > > =C2=A0=C2=A0=20
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0daddr =3D drm_fb_dma_get_gem_a=
-ddr(state->fb,
-> > > > > state, i);
-> > > > > diff --git a/drivers/gpu/drm/drm_fbdev_dma.c
-> > > > > b/drivers/gpu/drm/drm_fbdev_dma.c
-> > > > > index d86773fa8ab0..49fe9b284cc8 100644
-> > > > > --- a/drivers/gpu/drm/drm_fbdev_dma.c
-> > > > > +++ b/drivers/gpu/drm/drm_fbdev_dma.c
-> > > > > @@ -131,7 +131,7 @@ static int
-> > > > > drm_fbdev_dma_helper_fb_probe(struct
-> > > > > drm_fb_helper *fb_helper,
-> > > > > =C2=A0=C2=A0=20
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* sc=
-reen */
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0info-=
->flags |=3D FBINFO_VIRTFB; /* system memory */
-> > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (dma_obj->map_nonco=
-herent)
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (dma_obj->cached)
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0info->flags |=3D FBINFO_READS_=
-FAST; /* signal
-> > > > > caching
-> > > > > */
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0info-=
->screen_size =3D sizes->surface_height * fb-
-> > > > > > pitches[0];
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0info-=
->screen_buffer =3D map.vaddr;
-> > > > > diff --git a/drivers/gpu/drm/drm_gem_dma_helper.c
-> > > > > b/drivers/gpu/drm/drm_gem_dma_helper.c
-> > > > > index 870b90b78bc4..dec1d512bdf1 100644
-> > > > > --- a/drivers/gpu/drm/drm_gem_dma_helper.c
-> > > > > +++ b/drivers/gpu/drm/drm_gem_dma_helper.c
-> > > > > @@ -93,7 +93,11 @@ __drm_gem_dma_create(struct drm_device
-> > > > > *drm,
-> > > > > size_t size, bool private)
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0drm_gem_private_object_init(dr=
-m, gem_obj,
-> > > > > size);
-> > > > > =C2=A0=C2=A0=20
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* Always use writecombine for=
- dma-buf
-> > > > > mappings
-> > > > > */
-> > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0dma_obj->map_noncoherent =3D false;
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0/* FIXME: This is not always true, on some
-> > > > > dma
-> > > > > coherent system,
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 * cached mappings should be preferred over
-> > > > > writecombine
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0dma_obj->cached =3D false;
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0dma_obj->coherent =3D false;
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0} els=
-e {
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ret =3D drm_gem_object_init(dr=
-m, gem_obj,
-> > > > > size);
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
-> > > > > @@ -143,7 +147,11 @@ struct drm_gem_dma_object
-> > > > > *drm_gem_dma_create(struct drm_device *drm,
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (I=
-S_ERR(dma_obj))
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return dma_obj;
-> > > > > =C2=A0=C2=A0=20
-> > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (dma_obj->map_nonco=
-herent) {
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (dma_obj->cached &&=
- dma_obj->coherent) {
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0dma_obj->vaddr =3D dma_alloc_coherent(drm->dev,
-> > > > > size,
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 &dma_obj-
-> > > > > > dma_addr,
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0
-> > > > > GFP_KERNEL |
-> > > > > __GFP_NOWARN);
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0} else if (dma_obj->ca=
-ched && !dma_obj->coherent) {
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0dma_obj->vaddr =3D dma_alloc_n=
-oncoherent(drm-
-> > > > > >dev,
-> > > > > size,
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0
-> > > > > &dma_obj-
-> > > > > > dma_addr,
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=20
-> > > > > DMA_TO_DEVICE,
-> > > > > @@ -153,6 +161,7 @@ struct drm_gem_dma_object
-> > > > > *drm_gem_dma_create(struct drm_device *drm,
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 &dma_=
-obj-
-> > > > > > dma_addr,
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 GFP_K=
-ERNEL |
-> > > > > __GFP_NOWARN);
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
-> > > > > +
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (!=
-dma_obj->vaddr) {
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0drm_dbg(drm, "failed to alloca=
-te buffer
-> > > > > with
-> > > > > size
-> > > > > %zu\n",
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 size);
-> > > > > @@ -233,7 +242,10 @@ void drm_gem_dma_free(struct
-> > > > > drm_gem_dma_object
-> > > > > *dma_obj)
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0dma_buf_vunmap_unlocked(gem_obj-
-> > > > > > import_attach->dmabuf, &map);
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0drm_prime_gem_destroy(gem_obj,=
- dma_obj-
-> > > > > >sgt);
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0} els=
-e if (dma_obj->vaddr) {
-> > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0if (dma_obj->map_noncoherent)
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0if (dma_obj->cached && dma_obj->coherent)
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-dma_free_coherent(gem_obj->dev->dev,
-> > > > > dma_obj-
-> > > > > > base.size,
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 dma_obj->vaddr,
-> > > > > dma_obj-
-> > > > > > dma_addr);
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0else if (dma_obj->cached && !dma_obj-
-> > > > > >coherent)
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0dma_free_noncoherent(gem_obj->dev-
-> > > > > >dev,
-> > > > > dma_obj->base.size,
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dma_obj-
-> > > > > >vaddr,
-> > > > > dma_obj-
-> > > > > > dma_addr,
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0
-> > > > > DMA_TO_DEVICE);
-> > > > > @@ -532,7 +544,7 @@ int drm_gem_dma_mmap(struct
-> > > > > drm_gem_dma_object
-> > > > > *dma_obj, struct vm_area_struct *
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0vma->=
-vm_pgoff -=3D drm_vma_node_start(&obj-
-> > > > > >vma_node);
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0vm_fl=
-ags_mod(vma, VM_DONTEXPAND, VM_PFNMAP);
-> > > > > =C2=A0=C2=A0=20
-> > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (dma_obj->map_nonco=
-herent) {
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (dma_obj->cached) {
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0vma->vm_page_prot =3D vm_get_p=
-age_prot(vma-
-> > > > > > vm_flags);
-> > > > > =C2=A0=C2=A0=20
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ret =3D dma_mmap_pages(dma_obj=
-->base.dev-
-> > > > > >dev,
-> > > > > diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-> > > > > b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-> > > > > index 5ec75e9ba499..a3df2f99a757 100644
-> > > > > --- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-> > > > > +++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-> > > > > @@ -919,7 +919,10 @@ ingenic_drm_gem_create_object(struct
-> > > > > drm_device
-> > > > > *drm, size_t size)
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (!=
-obj)
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return ERR_PTR(-ENOMEM);
-> > > > > =C2=A0=C2=A0=20
-> > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0obj->map_noncoherent =
-=3D priv->soc_info-
-> > > > > >map_noncoherent;
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (priv->soc_info->ma=
-p_noncoherent) {
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0obj->cached =3D true;
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0obj->coherent =3D false;
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
-> > > > > =C2=A0=C2=A0=20
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0retur=
-n &obj->base;
-> > > > > =C2=A0=C2=A0=C2=A0}
-> > > > > diff --git a/drivers/gpu/drm/rcar-du/Kconfig
-> > > > > b/drivers/gpu/drm/rcar-
-> > > > > du/Kconfig
-> > > > > index 53c356aed5d5..dddc70c08bdc 100644
-> > > > > --- a/drivers/gpu/drm/rcar-du/Kconfig
-> > > > > +++ b/drivers/gpu/drm/rcar-du/Kconfig
-> > > > > @@ -2,8 +2,6 @@
-> > > > > =C2=A0=C2=A0=C2=A0config DRM_RCAR_DU
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0trist=
-ate "DRM Support for R-Car Display Unit"
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0depen=
-ds on DRM && OF
-> > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0depends on ARM || ARM6=
-4
-> > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0depends on ARCH_RENESA=
-S || COMPILE_TEST
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0selec=
-t DRM_KMS_HELPER
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0selec=
-t DRM_GEM_DMA_HELPER
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0selec=
-t VIDEOMODE_HELPERS
-> > > > > diff --git a/drivers/gpu/drm/rcar-du/rcar_du_kms.c
-> > > > > b/drivers/gpu/drm/rcar-du/rcar_du_kms.c
-> > > > > index adfb36b0e815..1142d51473e6 100644
-> > > > > --- a/drivers/gpu/drm/rcar-du/rcar_du_kms.c
-> > > > > +++ b/drivers/gpu/drm/rcar-du/rcar_du_kms.c
-> > > > > @@ -386,7 +386,9 @@ struct drm_gem_object
-> > > > > *rcar_du_gem_prime_import_sg_table(struct drm_device *dev,
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0gem_o=
-bj->funcs =3D &rcar_du_gem_funcs;
-> > > > > =C2=A0=C2=A0=20
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0drm_g=
-em_private_object_init(dev, gem_obj, attach-
-> > > > > > dmabuf-
-> > > > > > size);
-> > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0dma_obj->map_noncohere=
-nt =3D false;
-> > > > > +
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0dma_obj->cached =3D fa=
-lse;
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0dma_obj->coherent =3D =
-false;
-> > > > > =C2=A0=C2=A0=20
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ret =
-=3D drm_gem_create_mmap_offset(gem_obj);
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (r=
-et) {
-> > > > > diff --git a/include/drm/drm_gem_dma_helper.h
-> > > > > b/include/drm/drm_gem_dma_helper.h
-> > > > > index 8a043235dad8..585ce3d4d1eb 100644
-> > > > > --- a/include/drm/drm_gem_dma_helper.h
-> > > > > +++ b/include/drm/drm_gem_dma_helper.h
-> > > > > @@ -16,7 +16,9 @@ struct drm_mode_create_dumb;
-> > > > > =C2=A0=C2=A0=C2=A0 *=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 more tha=
-n one entry but they are guaranteed to
-> > > > > have
-> > > > > contiguous
-> > > > > =C2=A0=C2=A0=C2=A0 *=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 DMA addr=
-esses.
-> > > > > =C2=A0=C2=A0=C2=A0 * @vaddr: kernel virtual address of the backin=
-g memory
-> > > > > - * @map_noncoherent: if true, the GEM object is backed by
-> > > > > non-
-> > > > > coherent memory
-> > > > > + * @cached: if true, the GEM object is backed by cached
-> > > > > memory
-> > > > > + * @coherent: This option only meaningful when a GEM object
-> > > > > is
-> > > > > cached.
-> > > > > + *=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 If true, Sync the GEM object for DMA access is
-> > > > > not
-> > > > > required.
-> > > > > =C2=A0=C2=A0=C2=A0 */
-> > > > > =C2=A0=C2=A0=C2=A0struct drm_gem_dma_object {
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struc=
-t drm_gem_object base;
-> > > > > @@ -26,7 +28,8 @@ struct drm_gem_dma_object {
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* Fo=
-r objects with DMA memory allocated by GEM DMA
-> > > > > */
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0void =
-*vaddr;
-> > > > > =C2=A0=C2=A0=20
-> > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0bool map_noncoherent;
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0bool cached;
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0bool coherent;
-> > > > > =C2=A0=C2=A0=C2=A0};
-> > > > > =C2=A0=C2=A0=20
-> > > > > =C2=A0=C2=A0=C2=A0#define to_drm_gem_dma_obj(gem_obj) \
->=20
-
+-- 
+BR,
+Muhammad Usama Anjum
