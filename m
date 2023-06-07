@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBC7D725BAB
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 12:33:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1941F725BAE
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 12:34:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239230AbjFGKdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 06:33:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50408 "EHLO
+        id S239323AbjFGKei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 06:34:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234423AbjFGKdh (ORCPT
+        with ESMTP id S234352AbjFGKeg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 06:33:37 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F8E5EA
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 03:33:36 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Wed, 7 Jun 2023 06:34:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD976EA;
+        Wed,  7 Jun 2023 03:34:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 486C0219F7;
-        Wed,  7 Jun 2023 10:33:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1686134015; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2GQDwm9XkXFV1nznF3vSR6+NBAxeeNTuAQMVtcoe+2I=;
-        b=I1TTb94ckPTKnPVhzz6RBMCKJSPvHt55awTKzeRhsiiJDlx93lQ76y3oJSKU86F9H99TeM
-        aqYhiPKTXEfFpzgE8oZxI8WTbWx52u86xBIlDGnO4CH0F3rgh17wJj2xDZTJVOhrX7imTw
-        4q7a7mP8wNqHfZb38UIR6VTvXLzLByU=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 349971346D;
-        Wed,  7 Jun 2023 10:33:35 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id H1IxDP9cgGR/BAAAMHmgww
-        (envelope-from <mhocko@suse.com>); Wed, 07 Jun 2023 10:33:35 +0000
-Date:   Wed, 7 Jun 2023 12:33:34 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Haifeng Xu <haifeng.xu@shopee.com>
-Cc:     david@redhat.com, rppt@kernel.org, osalvador@suse.de,
-        akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] mm/mm_init.c: remove reset_node_present_pages()
-Message-ID: <ZIBc/tgaKsPYU5CT@dhcp22.suse.cz>
-References: <d92273f6-28be-dc37-3ca5-a9579a75f8c4@redhat.com>
- <20230607025056.1348-1-haifeng.xu@shopee.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3831C62DEF;
+        Wed,  7 Jun 2023 10:34:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1670BC433D2;
+        Wed,  7 Jun 2023 10:34:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686134074;
+        bh=EnWyL/RGZVIPRednPxgadT7R3he2GlukPWhgaMHT7gw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Hd0GZexWOXSaSGDZT9lqrMXsp4ss4me/8CSkbFA0Zl09kEn295vV5t7omARWN+yF+
+         TNjYnTS4TbdjxxFVdTrzdep/OEfveLzAbfuIXw9aGcuxe4a8Xr4KOSKNnQ7hTRlhk5
+         0seKiKVRAPQuOurxVu24CUrVKUJswMa0fKyN2OKcKEA/5AzxB9uQujexZFbjYbkNXP
+         XxgQw4i0h0xHQIgo42//4c1o80Mrr6hdpfEcff5ccSScHpuqIFX7qahwIAPUhvg7bM
+         Yox5OQKitnZTFGtVhOaAxhmztxyYADhZ8cW/pg+aIxQLrAfJv7Ecf4ZPtLXO06CfHM
+         NSWYZNiTSfxYg==
+Date:   Wed, 7 Jun 2023 12:34:31 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Md Sadre Alam <quic_mdalam@quicinc.com>
+Cc:     loic.poulain@linaro.org, rfoss@kernel.org,
+        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_sjaganat@quicinc.com,
+        quic_srichara@quicinc.com, quic_varada@quicinc.com
+Subject: Re: [PATCH 3/5] i2c: qcom-cci:Use
+ devm_platform_get_and_ioremap_resource()
+Message-ID: <ZIBdN/16vizJqNZp@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Md Sadre Alam <quic_mdalam@quicinc.com>, loic.poulain@linaro.org,
+        rfoss@kernel.org, linux-i2c@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_sjaganat@quicinc.com, quic_srichara@quicinc.com,
+        quic_varada@quicinc.com
+References: <20230306144522.15699-1-quic_mdalam@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="bsZdphsPPiw7WIHD"
 Content-Disposition: inline
-In-Reply-To: <20230607025056.1348-1-haifeng.xu@shopee.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+In-Reply-To: <20230306144522.15699-1-quic_mdalam@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,103 +64,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 07-06-23 02:50:56, Haifeng Xu wrote:
-> reset_node_present_pages() only get called in hotadd_init_pgdat(), move
-> the action that clear present pages to free_area_init_core_hotplug(), so
-> the helper can be removed.
 
-There is no explanation why moving the action is desirable and/or
-needed. I do agree that removing this trivial helper which only has a
-single caller. I guess the incentive is an overal simplification but
-please spell that out.
+--bsZdphsPPiw7WIHD
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> Signed-off-by: Haifeng Xu <haifeng.xu@shopee.com>
-> Suggested-by: David Hildenbrand <david@redhat.com>
+On Mon, Mar 06, 2023 at 08:15:22PM +0530, Md Sadre Alam wrote:
+> Convert platform_get_resource(), devm_ioremap_resource() to a single
+> call to devm_platform_get_and_ioremap_resource(), as this is exactly
+> what this function does.
+>=20
+> Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
 
-The patch itself makes sense
-Acked-by: Michal Hocko <mhocko@suse.com>
+Loic, Robert, do you agree with this patch?
 
-> ---
-> v2:
-> - declare 'struct zone' within the for loop
-> - fix comment layout
-> ---
->  mm/memory_hotplug.c | 18 ------------------
->  mm/mm_init.c        | 15 +++++++++++++--
->  2 files changed, 13 insertions(+), 20 deletions(-)
-> 
-> diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
-> index 65e385f34679..ee1c0d9a4d5a 100644
-> --- a/mm/memory_hotplug.c
-> +++ b/mm/memory_hotplug.c
-> @@ -1172,16 +1172,6 @@ int __ref online_pages(unsigned long pfn, unsigned long nr_pages,
->  	return ret;
->  }
->  
-> -static void reset_node_present_pages(pg_data_t *pgdat)
-> -{
-> -	struct zone *z;
-> -
-> -	for (z = pgdat->node_zones; z < pgdat->node_zones + MAX_NR_ZONES; z++)
-> -		z->present_pages = 0;
-> -
-> -	pgdat->node_present_pages = 0;
-> -}
-> -
->  /* we are OK calling __meminit stuff here - we have CONFIG_MEMORY_HOTPLUG */
->  static pg_data_t __ref *hotadd_init_pgdat(int nid)
->  {
-> @@ -1204,14 +1194,6 @@ static pg_data_t __ref *hotadd_init_pgdat(int nid)
->  	 */
->  	build_all_zonelists(pgdat);
->  
-> -	/*
-> -	 * When memory is hot-added, all the memory is in offline state. So
-> -	 * clear all zones' present_pages because they will be updated in
-> -	 * online_pages() and offline_pages().
-> -	 * TODO: should be in free_area_init_core_hotplug?
-> -	 */
-> -	reset_node_present_pages(pgdat);
-> -
->  	return pgdat;
->  }
->  
-> diff --git a/mm/mm_init.c b/mm/mm_init.c
-> index 78e67041ae9f..a02ba9a79b3d 100644
-> --- a/mm/mm_init.c
-> +++ b/mm/mm_init.c
-> @@ -1507,6 +1507,8 @@ void __ref free_area_init_core_hotplug(struct pglist_data *pgdat)
->  	pgdat->kswapd_order = 0;
->  	pgdat->kswapd_highest_zoneidx = 0;
->  	pgdat->node_start_pfn = 0;
-> +	pgdat->node_present_pages = 0;
-> +
->  	for_each_online_cpu(cpu) {
->  		struct per_cpu_nodestat *p;
->  
-> @@ -1514,8 +1516,17 @@ void __ref free_area_init_core_hotplug(struct pglist_data *pgdat)
->  		memset(p, 0, sizeof(*p));
->  	}
->  
-> -	for (z = 0; z < MAX_NR_ZONES; z++)
-> -		zone_init_internals(&pgdat->node_zones[z], z, nid, 0);
-> +	/*
-> +	 * When memory is hot-added, all the memory is in offline state. So
-> +	 * clear all zones' present_pages and managed_pages because they will
-> +	 * be updated in online_pages() and offline_pages().
-> +	 */
-> +	for (z = 0; z < MAX_NR_ZONES; z++) {
-> +		struct zone *zone = pgdat->node_zones + z;
-> +
-> +		zone->present_pages = 0;
-> +		zone_init_internals(zone, z, nid, 0);
-> +	}
->  }
->  #endif
->  
-> -- 
-> 2.25.1
 
--- 
-Michal Hocko
-SUSE Labs
+--bsZdphsPPiw7WIHD
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmSAXTcACgkQFA3kzBSg
+KbarcQ//Y+9HmY6t53QDwVMuvc4Z8203aKAUdHggYnJ6n5kwNoCcutIFR8+/AYIT
+rz5uytUYJg956cMgaqSk8eAJJTZf+/8JOyWIWkawDEwG710RDjDj1+ULYGe1h77U
+o7a52fRi+88AMG7V2COvq3umsxVKecjyMQtJ7ysTR+Up0vaLF0Nq7p/nvM2l583o
+h/VwWxwrd8NbPIzaEAlczrQPJXwxQymkNK2QQm3x0tWxZXm6ZzYAzduKpRMX3JXT
++g/n5obKYtqDl/GCB+vMzzoDh/144H34KTZYZN6IpQeuTkh/nJMp6xdGJ6pfZRc5
+TtKzvrHreKu6pYVxuxCzkbOzt56knibv/EDpFlF3ckzW9SC3AIPAjHkBV+70ChMh
+kgVuk9z6zlI2h8BykYQHF46SJTdZS03msfHg+ROXgkeffMt0JV0gZCYYnP3ZB6y6
+2oI4/gd3W4h+IWQxAFhfGFLVheLIDnnuamb5F/cXPwzfv0oSXNblkD2uSif5uOxh
+X3D4FyjJ0G2P5xkcjpvMLYqGRFfdVDW9lW/wTK5vICXBywjGCZhMqEIQYjgGgJaV
+7h4NEscOfSmqkRbE2DMEBN+z/Nzf8tIUPSixf1j0CgwLVZFGbvnwLJEn4tgNu0zP
+rPSNx3VxXEH/Miu7qFbF8o8VWt43H4otn5AIbj8gh4mjvdbhZqo=
+=83z4
+-----END PGP SIGNATURE-----
+
+--bsZdphsPPiw7WIHD--
