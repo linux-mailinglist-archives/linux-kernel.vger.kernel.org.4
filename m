@@ -2,68 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DA19726408
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 17:19:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5820972640A
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 17:19:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240069AbjFGPS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 11:18:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59986 "EHLO
+        id S241288AbjFGPTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 11:19:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232686AbjFGPSm (ORCPT
+        with ESMTP id S241290AbjFGPSx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 11:18:42 -0400
-Received: from mail-ed1-x54a.google.com (mail-ed1-x54a.google.com [IPv6:2a00:1450:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D77C1FD7
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 08:18:41 -0700 (PDT)
-Received: by mail-ed1-x54a.google.com with SMTP id 4fb4d7f45d1cf-51664cca8dcso1044051a12.1
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 08:18:40 -0700 (PDT)
+        Wed, 7 Jun 2023 11:18:53 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 823D61BFF
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 08:18:51 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id d75a77b69052e-3f83971680eso4625601cf.0
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 08:18:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686151119; x=1688743119;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=deVQh+qbleFKFMBXvnJT6n7IHyrSJm7waz9PF08hDFU=;
-        b=DNXQlO+kgvXwz6qTJX0etAVSfGVzhFmEBenY1HHqPAA3uAG+PnXCUE7jvbEGWQvs2j
-         CHWEuYhIOyskMTlKZZBQbahX0jfdn2xYBiYf3V5MfSVfB8XWxVFHENd1V7ARhwY4OvFd
-         pReca3JGKzbul6Xb48vcaWW8e/HczwXy5I8sXDtBOiCG+UgFFu72hBmjn+4FAq3ed4Kx
-         7QVrQn+ie8L4PDdPcypfIoPQlUVl5Q4qvvpnTG8ifuRtJHgCFVYWU7eUuPMPvv8VAnVU
-         l+lXs7A6C23rOGvrP0ssUOs6FaauJbJr61DcGg7m/hHRTx5Z7XluO9VPZ1GjbQOBt1+u
-         7zgw==
+        d=linaro.org; s=google; t=1686151130; x=1688743130;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=mTsukKw+BIS5VUrX2hZ7HJxEmat0w3WDB9Ehs58lLcs=;
+        b=v0JwFjF3phSowDl0fS5dmxunvl8Gs6shwjlrdjCjLHWeHEfCexXx+34/kpgEc33WNb
+         rSpSpeSWfD46k1frYJEcDqrMnfp07wcMri9RMpwfn+XB5mmJnJYPYHmcd3NFfAtMlryD
+         faKxikZcA6aHNdrRzfCBtEBRdzFB/sGw1G145erEuh2wj67V+trv5+s8mTZJRejq5yrx
+         xnhpdVIsfkbPaw+NEszd7QRLR1ujD1o0izxSZmIaORc7sQmc/HxidCWVaa77y+lDUVi1
+         szsTZQ0gjktBuy5t39kZIebzTcEYOu2UKui2NpecWUqfc9X54Tfskjtom++ivPCOV60Z
+         EX/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686151119; x=1688743119;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=deVQh+qbleFKFMBXvnJT6n7IHyrSJm7waz9PF08hDFU=;
-        b=bc6pd/xTeAf2L8JK3SD+XaCjdKdNXIQ62bqnU7b7x2ISvPCjK9MZ1y4ozfjh/eMMhE
-         KsLFrsxAJnbtESI1x17NkqOTibHOmO1K/5GONpb3lKfGMuZmxQRNfreGHYgItH4Ljh1L
-         +2XrYV9yOpmKnle1l5/+vVjXvxqAgZ6REfxZFDed0HjcdTwxbObLpmVG9+LUmgfKg9k3
-         vtK1GruIb4Qrwo+7O4kGeCAkbp/dfwLb68GDy/IuaTV1hEJk8ZNTWC2vxk2dolLtbPN+
-         Otp+3fWa3cT7jE+Jmi2aG86bDkneUeHuymPIvnPGgEluuPo/2EpjaTyfF0VCuKFxDsM9
-         9GYQ==
-X-Gm-Message-State: AC+VfDxwgaLpMK7oj5qX4zFWDEe3Uc9rEAm6r4eg2FubLipBwZTxyO6T
-        zBubCkNDWd/ZoXDcPA5fC8RuIJrIlS+VTxQ=
-X-Google-Smtp-Source: ACHHUZ5+zXTXF5D3mZ/9fHkAjNG/eNG0QStWdbxlxoduzPgPX6YpKC8RCoeMj1HG0n0ESy8+IfPs3bCbvb/mmtU=
-X-Received: from aliceryhl.c.googlers.com ([fda3:e722:ac3:cc00:31:98fb:c0a8:6c8])
- (user=aliceryhl job=sendgmr) by 2002:a50:99cd:0:b0:50b:c4b5:bb77 with SMTP id
- n13-20020a5099cd000000b0050bc4b5bb77mr2220409edb.1.1686151119485; Wed, 07 Jun
- 2023 08:18:39 -0700 (PDT)
-Date:   Wed,  7 Jun 2023 15:18:37 +0000
-In-Reply-To: <ZH/C/lKeYxM7tbYA@boqun-archlinux>
-Mime-Version: 1.0
-References: <ZH/C/lKeYxM7tbYA@boqun-archlinux>
-X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Message-ID: <20230607151837.1193399-1-aliceryhl@google.com>
-Subject: Re: [PATCH v2 1/8] rust: workqueue: add low-level workqueue bindings
-From:   Alice Ryhl <aliceryhl@google.com>
-To:     boqun.feng@gmail.com
-Cc:     alex.gaynor@gmail.com, aliceryhl@google.com,
-        benno.lossin@proton.me, bjorn3_gh@protonmail.com, gary@garyguo.net,
-        jiangshanlai@gmail.com, linux-kernel@vger.kernel.org,
-        ojeda@kernel.org, patches@lists.linux.dev,
-        rust-for-linux@vger.kernel.org, tj@kernel.org, wedsonaf@gmail.com
+        d=1e100.net; s=20221208; t=1686151130; x=1688743130;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mTsukKw+BIS5VUrX2hZ7HJxEmat0w3WDB9Ehs58lLcs=;
+        b=A9G5BIH/+aB758M5M5COo4bnVqEzQ0AwuWN+yuuvnGk157fJS/xGNjItetXI8P//Da
+         3Wi5bNTLNkxJzUrbZFZdqLUZtosbNzx8o0HB9BHTlLJnV4r+Ns0vZ2cNaOjL6iffJa5F
+         8loOEAE0CxTDOgdSN5K1AcdWA79PYEALaDbrbw7tDRQJZy5yDiWGRsZugQB8WJGH/gfs
+         5H1uwss2pee5qFO7rnF1oyog1fuI2oQUgWVnu0RFhIaYiMTTe9yqLpDYq0PCnw0BudVZ
+         yPjN3dtlcJmWuQNWGtpQAukZu7sGO0SS+CQb8b2KyVJgr1uLtmPjPnqkdgcQPpr0PnFA
+         fzNw==
+X-Gm-Message-State: AC+VfDyHb7Tc4d2NINwhoJUmZWHZ6C3q3/E7FVpPWT0IKLT16Xgt07R7
+        AyyNlTMfnXV5Z3DNPCN+rRZzRQ0703ezmQ5nUSP48Q==
+X-Google-Smtp-Source: ACHHUZ7+xiReE2OVgwmqBeLUBU6ivvu05+bPglG1UtVJBcEijza5e+I8Q88yQ4qyEMWcCUl/HPxf7/2efC/JIbcQY6c=
+X-Received: by 2002:ad4:5bc4:0:b0:625:aa49:ea0a with SMTP id
+ t4-20020ad45bc4000000b00625aa49ea0amr3393123qvt.29.1686151130576; Wed, 07 Jun
+ 2023 08:18:50 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230526010748.1222-1-masahisa.kojima@linaro.org>
+ <20230526010748.1222-4-masahisa.kojima@linaro.org> <0d3e0370-eb76-010f-3d30-9acc9b59645c@siemens.com>
+ <CAFA6WYPnWJNPvhT2JDkO-qXRUaJoxBGZEvSfhxcRynV7=VSdQA@mail.gmail.com>
+ <CAMj1kXFM45PCTU--+CCed6Cq_N5XqDG6tTu6fnQTSCpW2BWA5A@mail.gmail.com>
+ <4ff09002-e871-38b9-43ec-227a64bac731@siemens.com> <CAC_iWjJJ5E9Q1or5yTiDynzv_WAYH-g+N24aRdu9rvcsbWqnrg@mail.gmail.com>
+ <CAFA6WYNFYB1LiOFB_iwTsdD5PmnDdSbtDSH2J4FVFPx3uik8rQ@mail.gmail.com>
+ <CAC_iWj+E7-XK6dCeSn4205K0O3EZCLxCaC+adu-14ST6sdudfA@mail.gmail.com> <76da826f-b608-6add-5401-6de818b180e3@siemens.com>
+In-Reply-To: <76da826f-b608-6add-5401-6de818b180e3@siemens.com>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Wed, 7 Jun 2023 20:48:38 +0530
+Message-ID: <CAFA6WYPCDRjFzsUMU=SNzEt88nT7Fcm1eOFL8z4HiQO+=2JeVA@mail.gmail.com>
+Subject: Re: [PATCH v5 3/3] efi: Add tee-based EFI variable driver
+To:     Jan Kiszka <jan.kiszka@siemens.com>
+Cc:     Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Masahisa Kojima <masahisa.kojima@linaro.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-efi@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        "Su, Bao Cheng (RC-CN DF FA R&D)" <baocheng.su@siemens.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,34 +83,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Boqun Feng <boqun.feng@gmail.com> writes:
-> On Thu, Jun 01, 2023 at 01:49:39PM +0000, Alice Ryhl wrote:
-> [...]
->> +/// A raw work item.
->> +///
->> +/// This is the low-level trait that is designed for being as general as possible.
->> +///
->> +/// The `ID` parameter to this trait exists so that a single type can provide multiple
->> +/// implementations of this trait. For example, if a struct has multiple `work_struct` fields, then
->> +/// you will implement this trait once for each field, using a different id for each field. The
->> +/// actual value of the id is not important as long as you use different ids for different fields
->> +/// of the same struct. (Fields of different structs need not use different ids.)
->> +///
->> +/// Note that the id is used only to select the right method to call during compilation. It wont be
->> +/// part of the final executable.
->> +///
->> +/// # Safety
->> +///
->> +/// Implementers must ensure that any pointers passed to a `queue_work_on` closure by `__enqueue`
->> +/// remain valid for the duration specified in the documentation for `__enqueue`.
-> 
-> ^ better to say "the #Guarantees section in the documentation for
-> `__enqueue`"?
-> 
-> Regards,
-> Boqun
+On Wed, 7 Jun 2023 at 18:10, Jan Kiszka <jan.kiszka@siemens.com> wrote:
+>
+> On 07.06.23 10:25, Ilias Apalodimas wrote:
+> > Hi Sumit,
+> >
+> > On Wed, 7 Jun 2023 at 10:25, Sumit Garg <sumit.garg@linaro.org> wrote:
+> >>
+> >> Hi Ilias,
+> >>
+> >> On Wed, 7 Jun 2023 at 12:05, Ilias Apalodimas
+> >> <ilias.apalodimas@linaro.org> wrote:
+> >>>
+> >>> Hi Jan,
+> >>>
+> >>> [...]
+> >>>
+> >>>>>>>>
+> >>>>> ...
+> >>>>>>>
+> >>>>>>> I think we have a probe ordering issue with this driver:
+> >>>>>>> efivarfs_fill_super() may be called before the TEE bus was probed, thus
+> >>>>>>> with the default efivar ops still registered. And that means
+> >>>>>>> efivar_supports_writes() will return false, and the fs declares itself
+> >>>>>>> as readonly. I've seen systemd mounting it r/o initialling, and you need
+> >>>>>>> to remount the fs to enable writability.
+> >>>>>>>
+> >>>>>>> Is there anything that could be done to re-order things reliably, probe
+> >>>>>>> the tee bus earlier etc.?
+> >>>>>>
+> >>>>>> This driver has a dependency on user-space daemon: tee-supplicant to
+> >>>>>> be running for RPMB access. So once you start that daemon the
+> >>>>>> corresponding device will be enumerated on the TEE bus and this driver
+> >>>>>> probe will be invoked. So I would suggest you to load this daemon very
+> >>>>>> early in the boot process or better to make it a part of initramfs.
+> >>>>>>
+> >>>>>
+> >>>>> That is not the point, really.
+> >>>>>
+> >>>>> If this dependency exists, the code should be aware of that, and made
+> >>>>> to work correctly in spite of it. Requiring a module to be part of
+> >>>>> initramfs is not a reasonable fix.
+> >>>>
+> >>>> In fact, I've tested a non-modularized build as well, just to exclude
+> >>>> that issue. The daemon dependency is more likely the problem here.
+> >>>>
+> >>>>>
+> >>>>> IIUC, this also means that the efivar ops are updated while there is
+> >>>>> already a client. This seems less than ideal as well
+> >>>
+> >>> As Sumit pointed out, the 'device' won't be available from OP-TEE
+> >>> until the supplicant is up and running and as a result, the module
+> >>> _probe() function won't run.  Unfortunately, this isn't something we
+> >>> can avoid since the supplicant is responsible for the RPMB writes.
+> >>> The only thing I can think of is moving parts of the supplicant to the
+> >>> kernel and wiring up the RPC calls for reading/writing data to the
+> >>> eMMC subsystem.  There was another discussion here [0] requesting the
+> >>> same thing for different reasons. But unless I am missing something
+> >>> this won't solve the problem completely either.  You still have a
+> >>> timing dependency of "when did the RT callbacks change" -- "when was
+> >>> my efivarfs mounted".
+> >>
+> >> With the RPMB writes wired through the kernel [1], the only dependency
+> >> left is when do you load the tee-stmm-efi driver to have real EFI
+> >> runtime variables support. IMO, tee-stmm-efi driver should be built-in
+> >> to support systems without initramfs. The distro installers may choose
+> >> to bundle it in initramfs. Do you still see a timing dependency with
+> >> this approach?
+> >
+> > No I don't, this will work reliably without the need to remount the efivarfs.
+> > As you point out you will still have this dependency if you end up
+> > building them as modules and you manage to mount the efivarfs before
+> > those get inserted.  Does anyone see a reasonable workaround?
+> > Deceiving the kernel and making the bootloader set the RT property bit
+> > to force the filesystem being mounted as rw is a nasty hack that we
+> > should avoid.  Maybe adding a kernel command line parameter that says
+> > "Ignore the RTPROP I know what I am doing"?  I don't particularly love
+> > this either, but it's not unreasonable.
+>
+> In the context of https://github.com/OP-TEE/optee_os/issues/6094,
+> basically this issue mapped on reboot/shutdown, I would really love to
+> see the unhandy tee-supplicant daemon to be overcome.
 
-Sure, I will clarify that this refers to the guarantees section in the
-next version of the patchset.
+I have seen this error before and it has been on my todo list. So I
+have tried to fix it here [1]. Feel free to test it and let me know if
+you see any further issues.
 
-Alice
+[1] https://lkml.org/lkml/2023/6/7/927
+
+-Sumit
+
+>
+> Jan
+>
+> --
+> Siemens AG, Technology
+> Competence Center Embedded Linux
+>
