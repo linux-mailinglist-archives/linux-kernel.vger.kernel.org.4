@@ -2,200 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E31337258CC
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 10:55:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B71D7258C2
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 10:55:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239463AbjFGIzt convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 7 Jun 2023 04:55:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51280 "EHLO
+        id S238247AbjFGIze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 04:55:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239793AbjFGIzK (ORCPT
+        with ESMTP id S239616AbjFGIyw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 04:55:10 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F6C32119
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 01:54:28 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1q6ovb-0007f2-IU; Wed, 07 Jun 2023 10:54:03 +0200
-Message-ID: <e0eeae3b35e8efac7c577ca3159abcf7f43d5082.camel@pengutronix.de>
-Subject: Re: [PATCH 3/9] drm/verisilicon: Add basic drm driver
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Keith Zhao <keith.zhao@starfivetech.com>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Shengyang Chen <shengyang.chen@starfivetech.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jagan Teki <jagan@edgeble.ai>,
-        Rob Herring <robh+dt@kernel.org>,
-        Chris Morgan <macromorgan@hotmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Changhuang Liang <changhuang.liang@starfivetech.com>,
-        Jack Zhu <jack.zhu@starfivetech.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Shawn Guo <shawnguo@kernel.org>, christian.koenig@amd.com
-Date:   Wed, 07 Jun 2023 10:53:57 +0200
-In-Reply-To: <20230602074043.33872-4-keith.zhao@starfivetech.com>
-References: <20230602074043.33872-1-keith.zhao@starfivetech.com>
-         <20230602074043.33872-4-keith.zhao@starfivetech.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Wed, 7 Jun 2023 04:54:52 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 302FD1BCB
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 01:54:04 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-5149e65c218so1088963a12.2
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 01:54:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686128042; x=1688720042;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=X96dpBw8S4IY6Gzd4KpRfg7hYofA6lqYbeQBswygWX8=;
+        b=Rub0Qx/sbOrUtTriSDzOsFqIWDAXZSm2DLB0RlGmTUNapdv6VM5lxilTBurtQiorNa
+         vxKd47kcNmBomEu4Y57Jxuik9LkohylcEJjsxRXyAbQpbf9OzeICl3cUQrQzGN267+71
+         dxZ5xN4030LlJtPIm8pI3kQtk5z+ABjbfOjfGRL11DR+jHpe8Nq6/BujsirGk0Rf7ksq
+         t6MNLB8Z1pl9AWNn1W+G8AEnX3DLhSWhvEgYC41ccVEaC96qm2RUQ1AknQYkEyNgtVNy
+         F1srZXKIbcXJJURehv9/tC6y0dciIv7xVeBVhdQE147nCZ1Pl76eEFyhRzEHkyv+PO6e
+         8zuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686128042; x=1688720042;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=X96dpBw8S4IY6Gzd4KpRfg7hYofA6lqYbeQBswygWX8=;
+        b=aY9yydpHC3kRPq1C63goNMUiGHhATfH84Y5zckZP7LTrLuf+I53Mn9IZkMx8pBVnIi
+         QMo7b4Rs4idt5s6OnUvReoW6vy2ZW9D7RO8P53+0IZYNAvFegCDL2t6Y7XSB3j6a7xue
+         8QqUOip2jW/tboEl4ltvIqyQEWmnrkBXZV8zezLq8ZwzFwya334IcW6cKVCGy4luXf+O
+         d0nf2CDjF7Qj5GlVNV/Oujfs6qpqUVq90rJumiRmKSMngoxY3lkTDjlNplKViG1u/v2K
+         57THU962jxyqBNuo2abRFxpyn3muKkXq310QLzDvp03p9BDo4pOYIexy95ZalNl5ai1Z
+         efPQ==
+X-Gm-Message-State: AC+VfDx0MIBgK7PdDMPjzb836LVQl7N1HQIx5KKB1Gdhc8I1UMvVNJe/
+        Ah4flPi0pWJioXdT8ZQ7kaUcgQ==
+X-Google-Smtp-Source: ACHHUZ7yX1CFlPtzj5ye82i6EMSyNPrLJX5q2v+anBRmgx/s3kNd1PeNOoPKK0AdUrHHxO7MOx8/ZA==
+X-Received: by 2002:a17:907:3da9:b0:973:f321:36a6 with SMTP id he41-20020a1709073da900b00973f32136a6mr4765561ejc.31.1686128042291;
+        Wed, 07 Jun 2023 01:54:02 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id i5-20020a170906850500b0097886843f75sm328645ejx.177.2023.06.07.01.54.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Jun 2023 01:54:01 -0700 (PDT)
+Message-ID: <08da4e86-433a-7d2e-25ff-ffa24221abdf@linaro.org>
+Date:   Wed, 7 Jun 2023 10:53:59 +0200
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v1] dt-bindings: nand: meson: Fix 'nand-rb' property
+Content-Language: en-US
+To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Liang Yang <liang.yang@amlogic.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        oxffffaa@gmail.com, kernel@sberdevices.ru,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230606193507.35024-1-AVKrasnov@sberdevices.ru>
+ <20230607095802.3adcd4f9@xps-13>
+ <166bdc27-f77c-9076-f866-180cfa5bff76@sberdevices.ru>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <166bdc27-f77c-9076-f866-180cfa5bff76@sberdevices.ru>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Keith,
-
-Am Freitag, dem 02.06.2023 um 15:40 +0800 schrieb Keith Zhao:
-> Add a basic platform driver of the DRM driver for JH7110 SoC.
+On 07/06/2023 10:40, Arseniy Krasnov wrote:
+> Hello Miquel, 
 > 
-> Signed-off-by: Keith Zhao <keith.zhao@starfivetech.com>
-> ---
->  MAINTAINERS                          |   2 +
->  drivers/gpu/drm/Kconfig              |   2 +
->  drivers/gpu/drm/Makefile             |   1 +
->  drivers/gpu/drm/verisilicon/Kconfig  |  13 ++
->  drivers/gpu/drm/verisilicon/Makefile |   6 +
->  drivers/gpu/drm/verisilicon/vs_drv.c | 284 +++++++++++++++++++++++++++
->  drivers/gpu/drm/verisilicon/vs_drv.h |  48 +++++
->  include/uapi/drm/drm_fourcc.h        |  83 ++++++++
->  include/uapi/drm/vs_drm.h            |  50 +++++
->  9 files changed, 489 insertions(+)
->  create mode 100644 drivers/gpu/drm/verisilicon/Kconfig
->  create mode 100644 drivers/gpu/drm/verisilicon/Makefile
->  create mode 100644 drivers/gpu/drm/verisilicon/vs_drv.c
->  create mode 100644 drivers/gpu/drm/verisilicon/vs_drv.h
->  create mode 100644 include/uapi/drm/vs_drm.h
+> On 07.06.2023 10:58, Miquel Raynal wrote:
 > 
+>> Hi Arseniy,
+>>
+>> AVKrasnov@sberdevices.ru wrote on Tue, 6 Jun 2023 22:35:07 +0300:
+>>
+>>> Add description of 'nand-rb' property. Use "Fixes" because this property
+>>> must be supported since the beginning. For this controller 'nand-rb' is
+>>> stored in the controller node (not in chip), because it has only single
+>>> r/b wire for all chips.
+>>
+>> Sorry if I mislead you in the first place, but you could definitely
+>> have two chips and only one with RB wired. It needs to be defined in
+>> the chips.
 > 
-> [...]
-> +#endif /* __VS_DRV_H__ */
-> diff --git a/include/uapi/drm/drm_fourcc.h b/include/uapi/drm/drm_fourcc.h
-> index de703c6be969..af4fb50f9207 100644
-> --- a/include/uapi/drm/drm_fourcc.h
-> +++ b/include/uapi/drm/drm_fourcc.h
-> @@ -419,6 +419,7 @@ extern "C" {
->  #define DRM_FORMAT_MOD_VENDOR_ARM     0x08
->  #define DRM_FORMAT_MOD_VENDOR_ALLWINNER 0x09
->  #define DRM_FORMAT_MOD_VENDOR_AMLOGIC 0x0a
-> +#define DRM_FORMAT_MOD_VENDOR_VS      0x0b
->  
->  /* add more to the end as needed */
->  
-> @@ -1519,6 +1520,88 @@ drm_fourcc_canonicalize_nvidia_format_mod(__u64 modifier)
->  #define AMD_FMT_MOD_CLEAR(field) \
->  	(~((__u64)AMD_FMT_MOD_##field##_MASK << AMD_FMT_MOD_##field##_SHIFT))
->  
-> +#define DRM_FORMAT_MOD_VS_TYPE_NORMAL        0x00
-> +#define DRM_FORMAT_MOD_VS_TYPE_COMPRESSED    0x01
-> +#define DRM_FORMAT_MOD_VS_TYPE_CUSTOM_10BIT  0x02
-> +#define DRM_FORMAT_MOD_VS_TYPE_MASK     ((__u64)0x3 << 54)
-> +
-> +#define fourcc_mod_vs_code(type, val) \
-> +	fourcc_mod_code(VS, ((((__u64)type) << 54) | (val)))
-> +
-> +#define DRM_FORMAT_MOD_VS_DEC_TILE_MODE_MASK    0x3F
-> +#define DRM_FORMAT_MOD_VS_DEC_TILE_8X8_XMAJOR   0x00
-> +#define DRM_FORMAT_MOD_VS_DEC_TILE_8X8_YMAJOR   0x01
-> +#define DRM_FORMAT_MOD_VS_DEC_TILE_16X4     0x02
-> +#define DRM_FORMAT_MOD_VS_DEC_TILE_8X4      0x03
-> +#define DRM_FORMAT_MOD_VS_DEC_TILE_4X8      0x04
-> +#define DRM_FORMAT_MOD_VS_DEC_RASTER_16X4   0x06
-> +#define DRM_FORMAT_MOD_VS_DEC_TILE_64X4     0x07
-> +#define DRM_FORMAT_MOD_VS_DEC_TILE_32X4     0x08
-> +#define DRM_FORMAT_MOD_VS_DEC_RASTER_256X1  0x09
-> +#define DRM_FORMAT_MOD_VS_DEC_RASTER_128X1  0x0A
-> +#define DRM_FORMAT_MOD_VS_DEC_RASTER_64X4   0x0B
-> +#define DRM_FORMAT_MOD_VS_DEC_RASTER_256X2  0x0C
-> +#define DRM_FORMAT_MOD_VS_DEC_RASTER_128X2  0x0D
-> +#define DRM_FORMAT_MOD_VS_DEC_RASTER_128X4  0x0E
-> +#define DRM_FORMAT_MOD_VS_DEC_RASTER_64X1   0x0F
-> +#define DRM_FORMAT_MOD_VS_DEC_TILE_16X8     0x10
-> +#define DRM_FORMAT_MOD_VS_DEC_TILE_8X16     0x11
-> +#define DRM_FORMAT_MOD_VS_DEC_RASTER_512X1  0x12
-> +#define DRM_FORMAT_MOD_VS_DEC_RASTER_32X4   0x13
-> +#define DRM_FORMAT_MOD_VS_DEC_RASTER_64X2   0x14
-> +#define DRM_FORMAT_MOD_VS_DEC_RASTER_32X2   0x15
-> +#define DRM_FORMAT_MOD_VS_DEC_RASTER_32X1   0x16
-> +#define DRM_FORMAT_MOD_VS_DEC_RASTER_16X1   0x17
-> +#define DRM_FORMAT_MOD_VS_DEC_TILE_128X4    0x18
-> +#define DRM_FORMAT_MOD_VS_DEC_TILE_256X4    0x19
-> +#define DRM_FORMAT_MOD_VS_DEC_TILE_512X4    0x1A
-> +#define DRM_FORMAT_MOD_VS_DEC_TILE_16X16    0x1B
-> +#define DRM_FORMAT_MOD_VS_DEC_TILE_32X16    0x1C
-> +#define DRM_FORMAT_MOD_VS_DEC_TILE_64X16    0x1D
-> +#define DRM_FORMAT_MOD_VS_DEC_TILE_128X8    0x1E
-> +#define DRM_FORMAT_MOD_VS_DEC_TILE_8X4_S    0x1F
-> +#define DRM_FORMAT_MOD_VS_DEC_TILE_16X4_S   0x20
-> +#define DRM_FORMAT_MOD_VS_DEC_TILE_32X4_S   0x21
-> +#define DRM_FORMAT_MOD_VS_DEC_TILE_16X4_LSB 0x22
-> +#define DRM_FORMAT_MOD_VS_DEC_TILE_32X4_LSB 0x23
-> +#define DRM_FORMAT_MOD_VS_DEC_TILE_32X8     0x24
-> +
-> +#define DRM_FORMAT_MOD_VS_DEC_ALIGN_32      (0x01 << 6)
-> +#define DRM_FORMAT_MOD_VS_DEC_ALIGN_64      (0x01 << 7)
-> +
-> +#define fourcc_mod_vs_dec_code(tile, align) \
-> +	fourcc_mod_vs_code(DRM_FORMAT_MOD_VS_TYPE_COMPRESSED, \
-> +				((tile) | (align)))
-> +
-> +#define DRM_FORMAT_MOD_VS_NORM_MODE_MASK        0x1F
-> +#define DRM_FORMAT_MOD_VS_LINEAR                0x00
-> +#define DRM_FORMAT_MOD_VS_TILED4x4              0x01
-> +#define DRM_FORMAT_MOD_VS_SUPER_TILED_XMAJOR    0x02
-> +#define DRM_FORMAT_MOD_VS_SUPER_TILED_YMAJOR    0x03
-> +#define DRM_FORMAT_MOD_VS_TILE_8X8              0x04
-> +#define DRM_FORMAT_MOD_VS_TILE_MODE1            0x05
-> +#define DRM_FORMAT_MOD_VS_TILE_MODE2            0x06
-> +#define DRM_FORMAT_MOD_VS_TILE_8X4              0x07
-> +#define DRM_FORMAT_MOD_VS_TILE_MODE4            0x08
-> +#define DRM_FORMAT_MOD_VS_TILE_MODE5            0x09
-> +#define DRM_FORMAT_MOD_VS_TILE_MODE6            0x0A
-> +#define DRM_FORMAT_MOD_VS_SUPER_TILED_XMAJOR_8X4    0x0B
-> +#define DRM_FORMAT_MOD_VS_SUPER_TILED_YMAJOR_4X8    0x0C
-> +#define DRM_FORMAT_MOD_VS_TILE_Y                0x0D
-> +#define DRM_FORMAT_MOD_VS_TILE_128X1            0x0F
-> +#define DRM_FORMAT_MOD_VS_TILE_256X1            0x10
-> +#define DRM_FORMAT_MOD_VS_TILE_32X1             0x11
-> +#define DRM_FORMAT_MOD_VS_TILE_64X1             0x12
-> +#define DRM_FORMAT_MOD_VS_TILE_MODE4X4          0x15
-> +
-> +#define fourcc_mod_vs_norm_code(tile) \
-> +	fourcc_mod_vs_code(DRM_FORMAT_MOD_VS_TYPE_NORMAL, \
-> +				(tile))
-> +
-> +#define fourcc_mod_vs_custom_code(tile) \
-> +	fourcc_mod_vs_code(DRM_FORMAT_MOD_VS_TYPE_CUSTOM_10BIT, \
-> +				(tile))
-> +
+> Ok, so to clarify: is it ok, that in bindings this property will be placed in the
+> chip, but in driver, i'm trying to read it from the controller node (thus  in
+> dts file it will be also in controller node)?
 
-You are opening a new namespace for what is effectively the VIVANTE
-tiling. While your list seems much more exhaustive than the (reverse
-engineered) list provided under the VIVANTE namespace, this is still
-unacceptable as it adds new aliases for existing modifiers.
+No, because how would your DTS pass validation? I understand you did not
+test the bindings, but this will improve, right?
 
-Also any modifier additions should be in a separate patch and not
-buried in another change.
+> Because in driver there is no sense
+> to store this value in chip structure. 
 
-Regards,
-Lucas
+Driver does not shape the DTS. Hardware does.
+
+
+
+Best regards,
+Krzysztof
+
