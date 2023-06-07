@@ -2,95 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A9C2726747
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 19:29:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7884726754
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 19:30:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231218AbjFGR27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 13:28:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33456 "EHLO
+        id S231801AbjFGRaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 13:30:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjFGR24 (ORCPT
+        with ESMTP id S231761AbjFGRaR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 13:28:56 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F1A128;
-        Wed,  7 Jun 2023 10:28:54 -0700 (PDT)
-From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1686158932;
-        bh=vGUG5+5oObmVUMabCNgsKcKkHQm2lWjGYzZ1M+89FSk=;
-        h=From:Date:Subject:To:Cc:From;
-        b=REuygNSSwrT5jIxKvsN28vuZ/cs8XfMn+12DSgMfY5RxhC+sWXCL9vc0tEytMCjQb
-         05pt0RsH6dJanwO3393YuAXrE1zqO2ney6umLmXj3kDGfwVqlFC/RHjg0RNyCrbwdU
-         eHtFD9DbByXTIhE8zIJxwvMM0Z0LZFEu3kmHU+5c=
-Date:   Wed, 07 Jun 2023 19:28:48 +0200
-Subject: [PATCH] fs: avoid empty option when generating legacy mount string
+        Wed, 7 Jun 2023 13:30:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE41B19AA
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 10:29:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686158967;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ce1A88jUKFjSY0Tt+7w8QiaS9zhzMSTost2c+cyMfRw=;
+        b=fCIhCbIKjTYUYgWjT9n+kLNhg0q2A4kIfJwj8/7PgFg6+5ZC1HotewEjMX0nkMD1n2T33k
+        WlkNY+JIY5n2MbSA8aoSFA/OZM7fxDaGY7f3NRjO70IzANrGkf6tfZV8rGROEcCYL0xyEM
+        ZmFDWkgLrXMrsZLb+6pRj9fbjX4I0kw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-561-rIVfiEgZNeSYJi6TjNk2gw-1; Wed, 07 Jun 2023 13:29:20 -0400
+X-MC-Unique: rIVfiEgZNeSYJi6TjNk2gw-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BF81A802E58;
+        Wed,  7 Jun 2023 17:29:18 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.182])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B727D477F61;
+        Wed,  7 Jun 2023 17:29:15 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20230607101945.65c5df51@kernel.org>
+References: <20230607101945.65c5df51@kernel.org> <20230607140559.2263470-1-dhowells@redhat.com> <20230607140559.2263470-12-dhowells@redhat.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     dhowells@redhat.com, netdev@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Boris Pismenny <borisp@nvidia.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v5 11/14] tls/sw: Support MSG_SPLICE_PAGES
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20230607-fs-empty-option-v1-1-20c8dbf4671b@weissschuh.net>
-X-B4-Tracking: v=1; b=H4sIAE++gGQC/x2N0QqDMAxFf0XybKBGVmG/MnxoNc6Aq6VR2RD/3
- bDHczmHe4JyEVZ4VicUPkRlTQZNXcEwh/RmlNEYyFHrvOtwUuRP3n645s1cJP/wRG3XmABWxaC
- MsYQ0zNalfVlszIUn+f5vXv113XtkcZx2AAAA
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Howells <dhowells@redhat.com>,
-        Karel Zak <kzag@redhat.com>, stable@vger.kernel.org,
-        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1686158931; l=1248;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=vGUG5+5oObmVUMabCNgsKcKkHQm2lWjGYzZ1M+89FSk=;
- b=xhti7ZhwZRPSH3Hgfw1or7/06qz18rCyqWGpAlyNjvbuso7uaeCsOL0oGQ/kvzetFYV78p9r5
- vOP30ikcCPeC3hE7I9eZEjC4UjhTsX05D9hBZJk67VLhQwwASbWhNsn
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2291291.1686158954.1@warthog.procyon.org.uk>
+Date:   Wed, 07 Jun 2023 18:29:14 +0100
+Message-ID: <2291292.1686158954@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As each option string fragment is always prepended with a comma it would
-happen that the whole string always starts with a comma.
-This could be interpreted by filesystem drivers as an empty option and
-may produce errors.
+Jakub Kicinski <kuba@kernel.org> wrote:
 
-For example the NTFS driver from ntfs.ko behaves like this and fails when
-mounted via the new API.
+> > +		if (put)
+> > +			put_page(page);
+> 
+> is put ever set to true?
 
-Link: https://github.com/util-linux/util-linux/issues/2298
-Fixes: 3e1aeb00e6d1 ("vfs: Implement a filesystem superblock creation/configuration context")
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- fs/fs_context.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Ah, the copy-data-if-slab thing got removed.  I'll clean this bit up.
 
-diff --git a/fs/fs_context.c b/fs/fs_context.c
-index 24ce12f0db32..851214d1d013 100644
---- a/fs/fs_context.c
-+++ b/fs/fs_context.c
-@@ -561,7 +561,8 @@ static int legacy_parse_param(struct fs_context *fc, struct fs_parameter *param)
- 			return -ENOMEM;
- 	}
- 
--	ctx->legacy_data[size++] = ',';
-+	if (size)
-+		ctx->legacy_data[size++] = ',';
- 	len = strlen(param->key);
- 	memcpy(ctx->legacy_data + size, param->key, len);
- 	size += len;
+> > -		tls_ctx->pending_open_record_frags = true;
+> >  		copied += try_to_copy;
+> > +copied:
+> > +		tls_ctx->pending_open_record_frags = true;
+> 
+> Why move pending-open-record-frags setting if it's also set before
+> jumping?
 
----
-base-commit: 9561de3a55bed6bdd44a12820ba81ec416e705a7
-change-id: 20230607-fs-empty-option-265622371023
+I should probably remove it from before the goto - unless you'd prefer to do
+it in both places.
 
-Best regards,
--- 
-Thomas Weißschuh <linux@weissschuh.net>
+David
 
