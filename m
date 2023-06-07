@@ -2,95 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C83C725FC4
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 14:41:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3016A725FD0
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 14:46:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241018AbjFGMli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 08:41:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50826 "EHLO
+        id S239860AbjFGMqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 08:46:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241026AbjFGMla (ORCPT
+        with ESMTP id S234352AbjFGMqQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 08:41:30 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5773E1BF5;
-        Wed,  7 Jun 2023 05:41:09 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-565ba53f434so81610457b3.3;
-        Wed, 07 Jun 2023 05:41:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686141667; x=1688733667;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=s3W1JuI47URiCgppMqI7CfJp4KETvzWbAEnpPKIrCU0=;
-        b=KJHpPjrJf4ChWSPrBt9rPnJP9fvwvLT3FXsQHlewbHXpHYSMggSId+tIvf7Wk9nNAL
-         B2BK25FPa750aXPU9fZ16pZ/j0jy8FCYbt2lszXIf7nn1fDgTurJUymdHuG4be4M1Lki
-         +TSeNmzGDhS2wlmqVd02cPZPkZYTX3+HLZwxZ5izCmfKpjVZRdsg/sIcJDg0TYwbty+x
-         bsa7qnazdSiwL5I/p41q64+7AzTcPPZWAwAnNaLiq0Z5eHFClE9R63AC3Ewl4Zd6nSo8
-         1+rzsJWDNotIQMkRzNUwy7F2lakLNI3DiTFO3mGBRpYYvA0a7Vb7wpkp0VCCskXO3KQK
-         LFGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686141667; x=1688733667;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=s3W1JuI47URiCgppMqI7CfJp4KETvzWbAEnpPKIrCU0=;
-        b=MhRfxCfR1rSs/wdZiarfLV6oDpEYs8eV5yMvkO4Z64YjQ0dCKtgZsiEW2FcnTODm8w
-         Vu/r6dPRf2fbDpr+Cy1/EeoE22+ef+jHADtW0Nb5ZGKtz1/Zz43Xcam3CbvzoUXLDWZj
-         wloQV/yuKzRs9Z11SV8TVy3ydLXQKCwHS1pragoYXN30e7a0oaaAhyxRmtqTY3fBZmp+
-         rSywNi5ZxL80qps9r8lhEk/dXq8+egMQG+jg7k7B4DsTX5qX4njN4Ye0DvVxQxbtZNR+
-         0TX3Rgg+2sSUSGPi6lVpKI4PWqteWH1hZTZe2v4XxfsPt/S8AcM0e9QcOR70VZ+68JxB
-         PUXw==
-X-Gm-Message-State: AC+VfDyQ2/WPHSnoxEGryQtkDWUc/e7Hw6dKa3Tjs/D9wJ07J3arRpfq
-        bCa5qzBGsNjC8JbvS/QpbDgzNe6MaiPG8KVzVSg=
-X-Google-Smtp-Source: ACHHUZ6vw/Yhp8nVhvM3voWe+gKtR/4Tgbabn4pTd+masS8WGYl65sXIhd9VnGok8H488loGlNA5k9T0T7WB03B4wy4=
-X-Received: by 2002:a81:8984:0:b0:567:421c:cab5 with SMTP id
- z126-20020a818984000000b00567421ccab5mr6639448ywf.49.1686141666782; Wed, 07
- Jun 2023 05:41:06 -0700 (PDT)
+        Wed, 7 Jun 2023 08:46:16 -0400
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7FDC6E6B;
+        Wed,  7 Jun 2023 05:46:14 -0700 (PDT)
+Received: (from willy@localhost)
+        by mail.home.local (8.17.1/8.17.1/Submit) id 357Cjhfj003458;
+        Wed, 7 Jun 2023 14:45:43 +0200
+Date:   Wed, 7 Jun 2023 14:45:43 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     Zhangjin Wu <falcon@tinylab.org>
+Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        thomas@t-8ch.de
+Subject: Re: [PATCH 1/4] selftests/nolibc: add a test-report target
+Message-ID: <ZIB792FtG6ibOudp@1wt.eu>
+References: <20230605065459.153001-1-falcon@tinylab.org>
+ <20230607055200.667447-1-falcon@tinylab.org>
 MIME-Version: 1.0
-References: <20230527012206.133464-1-samsagax@gmail.com> <8ae3e2ad-27ff-4339-88d4-504c2f59e501@roeck-us.net>
- <CABgtM3h8DXs0swGQth=dcE3J_W8k8iejvfFgjVSm9nKbRmxHDQ@mail.gmail.com> <820cef00-4768-46ae-c5a5-ea7c0dff71c5@roeck-us.net>
-In-Reply-To: <820cef00-4768-46ae-c5a5-ea7c0dff71c5@roeck-us.net>
-From:   Joaquin Aramendia <samsagax@gmail.com>
-Date:   Wed, 7 Jun 2023 09:40:55 -0300
-Message-ID: <CABgtM3h0KMsOzZZvYKZLsFXn9A81V59ygSKizoF3TTkraMWr-Q@mail.gmail.com>
-Subject: Re: [PATCH] hwmon: (oxp-sensors) Add tt_toggle attribute on supported boards
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     derekjohn.clark@gmail.com, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230607055200.667447-1-falcon@tinylab.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello again. And sorry for my late reply. I'm struggling to find a
-good solution to this functionality. It most definitely feels icky to
-be attached to the hwmon driver so it should be a different driver for
-those devices. Would misc be a good place for that single toggle? or
-maybe platform? The latter seems most fitting since is very device
-specific.
+Hi Zhangjin,
 
-> You are attaching the attribute to the hwmon device. Moving the driver
-> to another directory would just be an attempt to avoid review by a
-> hwmon maintainer. Just for that reason I would NACK such an attempt.
+On Wed, Jun 07, 2023 at 01:52:00PM +0800, Zhangjin Wu wrote:
+> Hi, Willy
+> 
+> > > On Mon, Jun 05, 2023 at 11:48:52AM +0800, Zhangjin Wu wrote:
+> > > > A standalone test-report target is added to let the run, run-user and
+> > > > rerun targets share them.
+> > > > 
+> > > > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+> > > > ---
+> > > >  tools/testing/selftests/nolibc/Makefile | 26 ++++++++++++-------------
+> > > >  1 file changed, 13 insertions(+), 13 deletions(-)
+> > > > 
+> > > > diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+> > > > index be4159837494..8149ace2938a 100644
+> > > > --- a/tools/testing/selftests/nolibc/Makefile
+> > > > +++ b/tools/testing/selftests/nolibc/Makefile
+> > > > @@ -127,14 +127,18 @@ nolibc-test: nolibc-test.c sysroot/$(ARCH)/include
+> > > >  libc-test: nolibc-test.c
+> > > >  	$(QUIET_CC)$(CC) -o $@ $<
+> > > >  
+> > > > -# qemu user-land test
+> > > > -run-user: nolibc-test
+> > > > -	$(Q)qemu-$(QEMU_ARCH) ./nolibc-test > "$(CURDIR)/run.out" || :
+> > > > +test-report:
+> > > >  	$(Q)awk '/\[OK\]$$/{p++} /\[FAIL\]$$/{f++} /\[SKIPPED\]$$/{s++} \
+> > > >  	         END{ printf("%d test(s) passed, %d skipped, %d failed.", p, s, f); \
+> > > >  	         if (s+f > 0) printf(" See all results in %s\n", ARGV[1]); else print; }' \
+> > > >  	         $(CURDIR)/run.out
+> > > >  
+> > > > +# qemu user-land test
+> > > > +_run-user: nolibc-test
+> > > > +	$(Q)qemu-$(QEMU_ARCH) ./nolibc-test > "$(CURDIR)/run.out" || :
+> > > > +
+> > > > +run-user: _run-user test-report
+> > > > +
+> > > 
+> > > This will not reliably work, there's no ordering here, nothing guarantees
+> > > that test-report will run *after* _run-user (e.g. make -j). Another
+> > > approach is needed if you want to factor this, but in general creating
+> > > sequences in makefiles is difficult and often more painful than having
+> > > 3 times the same 3 lines.
+> > >
+> > 
+> > Ok, thanks, what about this?
+> > 
+> >     # LOG_REPORT: report the test results
+> >     LOG_REPORT   := awk '/\[OK\][\r]*$$/{p++} /\[FAIL\][\r]*$$/{f++} /\[SKIPPED\][\r]*$$/{s++} \
+> > 	                 END{ printf("%d test(s) passed, %d skipped, %d failed.", p, s, f); \
+> > 	                 printf(" See all results in %s\n", ARGV[1]); }'
+> > 
+> >     run-user: nolibc-test
+> > 	$(Q)qemu-$(QEMU_ARCH) ./nolibc-test > "$(CURDIR)/run.out" || :
+> > 	$(Q)$(LOG_REPORT) $(CURDIR)/run.out
+> > 
+> >     run: kernel
+> > 	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
+> > 	$(Q)$(LOG_REPORT) $(CURDIR)/run.out
+> > 
+> >     rerun:
+> > 	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
+> > 	$(Q)$(LOG_REPORT) $(CURDIR)/run.out
+> > 
+> > Or we directly add a standalone test report script? something like
+> > tools/testing/selftests/nolibc/report.sh
+> > 
+> >     #!/bin/sh
+> >     #
+> >     # report.sh -- report the test results of nolibc-test
+> >     #
+> >     
+> >     LOG_FILE=$1
+> >     [ ! -f "$LOG_FILE" ] && echo "Usage: $0 /path/to/run.out"
+> >     
+> >     awk '
+> >         /\[OK\][\r]*$$/{ p++ }
+> >         /\[FAIL\][\r]*$$/{ f++ }
+> >         /\[SKIPPED\][\r]*$$/{ s++ }
+> >     
+> >         END {
+> >             printf("%d test(s) passed, %d skipped, %d failed.", p, s, f);
+> >             printf(" See all results in %s\n", ARGV[1]);
+> >         }' $LOG_FILE
+> > 
+> > And use it like this:
+> > 
+> >     LOG_REPORT           = $(CURDIR)/report.sh
+> >
+> 
+> I plan to renew this patchset, which one of the above methods do you
+> prefer?
 
-By no means I intend to avoid review. Don't get me wrong. I'm trying
-to understand what the best practice would be in this scenario. The
-driver is part reverse engineering and part asking contacts from the
-manufacturer (who is no longer in the company so it is reverse
-engineering at this point). So any new functionality we find might be
-a different driver for what i gather since it is not related to
-hardware monitoring. The oxp-sensors as is now it is mostly done and
-it works well for the users.
+IFF it needs to be done I prefer the macro in the Makefile to avoid
+depending on external scripts that are useless outside of the makefile.
+BUT, my point remains that I adopted this so that I could quickly and
+visually check that everything was OK. I'm fine with any other method
+but I do not want to have to carefully read all these lines to make
+sure I'm not mixing a "8" with a "0" (I'm mentioning this one because
+it's exactly the one I had when I decided to add the extra values).
+For example if you prepend "FAILURE: ", "WARNING: ", "SUCCESS: " in
+front of these lines to summarize them depending on the highest level
+encountered (success, skipped, failed), then I'm fine because it's
+easy to check that all lines show the same word.
 
-Thanks for your review and explanation. Any pointers would be greatly
-appreciated.
---=20
-Joaqu=C3=ADn I. Aramend=C3=ADa
+> For the always print statement:
+> 
+>     printf(" See all results in %s\n", ARGV[1]); }'
+
+Then please put it on its own line without the leading space, this
+will be even more readable.
+
+> I will paste the reason why I need it, as mentioned in [1], if you still
+> need a clean test report, I will give up this change ;-)
+
+No worries, I don't want to be annoying if you need something, but I
+don't want to be annoyed by changes either :-)
+
+thanks,
+Willy
