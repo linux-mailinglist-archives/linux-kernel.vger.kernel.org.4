@@ -2,55 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91A957256D4
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 10:05:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 470D17256D9
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 10:05:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239208AbjFGIFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 04:05:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50816 "EHLO
+        id S239050AbjFGIFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 04:05:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238932AbjFGIFM (ORCPT
+        with ESMTP id S238820AbjFGIFN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 04:05:12 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82AB1172B
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 01:05:10 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q6oAC-0007vh-Fs; Wed, 07 Jun 2023 10:05:04 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q6oAA-005hQ1-F7; Wed, 07 Jun 2023 10:05:02 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q6oA9-00Bwjr-Ls; Wed, 07 Jun 2023 10:05:01 +0200
-Date:   Wed, 7 Jun 2023 10:05:01 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Nikita Shubin <nikita.shubin@maquefel.me>,
-        Thierry Reding <thierry.reding@gmail.com>
-Cc:     Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Michael Peters <mpeters@embeddedTS.com>,
-        Kris Bahnsen <kris@embeddedTS.com>, linux-pwm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 37/43] pwm: ep93xx: drop legacy pinctrl
-Message-ID: <20230607080501.3y3t7tswfoyhqep2@pengutronix.de>
-References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
- <20230601054549.10843-19-nikita.shubin@maquefel.me>
+        Wed, 7 Jun 2023 04:05:13 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B1BF196
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 01:05:11 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-30af56f5f52so5860704f8f.1
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 01:05:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686125110; x=1688717110;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MtzYn96ig+lorMysgzvmIhs2jjpLBGL4+9ZV/9hvBQI=;
+        b=uNYTQtE0Za4Fy+tKFPNhJ5JJ7XmY3nhTJ0LHaaoKZajPOjUK/aXGdu+bOtrlW2uJhF
+         nNC10FIKbMoaBQ2KfdE4o3xxxysUJ+l2MepabkB8b8KXeS/NGgk8zZ5SG6lQnWzeKZPA
+         XU4U3CldeyTxvAjn/Qd1BJXQ3GXP/L78T2BVIP2JVEaDmmB+wFv0/I9TRB8JDvX937Jl
+         1R5VfPRioTjeQvjJDF83ZPwW5JTUctlbEYa7+33MTaAkH7n6nTMZsKTAOgpRpf7UEkw0
+         b3aV1Y1j/p2FPqkOl6k36PrKGM7UPpzlS/3IclDSLRxp+Bb6unTkHlxCjnLz6AFDanAV
+         pvWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686125110; x=1688717110;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MtzYn96ig+lorMysgzvmIhs2jjpLBGL4+9ZV/9hvBQI=;
+        b=TKtM/POleQuNgpouRPJq0pbrmWfptcRcMZgc3d9zYZwX3jC7+k1abJNDUCTxgbgfbS
+         iJ6U/rIpq0mruT4iteqchkYGAIoTAMaeN+g0PGqSOxhLhkztzWbc6xj+KOmdzItrMmDt
+         h39n3Y1jSnCmzz5rtvjfHpI1r3Y/nyve9+1ZfinzjEqa/h3oD5lGVWlT56t+4lndQ2Yi
+         dzrB4x1yKQppbc3mtVRiv2u36zJVcAUorRypLB7a1q8m3D2lDdPeXy1+NRuGUqz1aT6m
+         ZLPosDxZZoTp7HkRwv54/DcAl7RMwhJN6MXObjV46F8TLLhJzwiio4jC/k1SXYxmGBh8
+         DC1g==
+X-Gm-Message-State: AC+VfDxx0wU2sEsEd7UFGyLk0SZnOIjStXDPxlPcXHyxEJ+jg9lgYhx7
+        b1XHMkOQUkMP9rEg58/rlQcRFg==
+X-Google-Smtp-Source: ACHHUZ4FuRhoHzUiKf+yOibOeZljiDY9bUJxusfzOPQix1/WrJYnTWsWIjkHZ/PZsWdwMuC17ndy7Q==
+X-Received: by 2002:a05:6000:550:b0:30e:3c81:ca1c with SMTP id b16-20020a056000055000b0030e3c81ca1cmr3432223wrf.29.1686125109803;
+        Wed, 07 Jun 2023 01:05:09 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
+        by smtp.gmail.com with ESMTPSA id h8-20020adfe988000000b0030ae5a0516csm14706269wrm.17.2023.06.07.01.05.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 01:05:09 -0700 (PDT)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Date:   Wed, 07 Jun 2023 10:05:02 +0200
+Subject: [PATCH v2 3/8] usb: ucsi: glink: use the connector orientation
+ GPIO to provide switch events
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="kvq3zup3qbya4ukn"
-Content-Disposition: inline
-In-Reply-To: <20230601054549.10843-19-nikita.shubin@maquefel.me>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230601-topic-sm8550-upstream-type-c-v2-3-3bbdf37575c3@linaro.org>
+References: <20230601-topic-sm8550-upstream-type-c-v2-0-3bbdf37575c3@linaro.org>
+In-Reply-To: <20230601-topic-sm8550-upstream-type-c-v2-0-3bbdf37575c3@linaro.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3632;
+ i=neil.armstrong@linaro.org; h=from:subject:message-id;
+ bh=dJsk94W4hJQWsF7UZ7NHEWxATRmNKuU8IakNNu3DGzw=;
+ b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBkgDou7uKydBdy68HGNJVUOuX2u93V9pItw/FCCqCb
+ S3p9hguJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZIA6LgAKCRB33NvayMhJ0e3SEA
+ CCKMPH4CVrYSjY5mzcsv9iYk6a/p4pT35wnTqwE4FxqM0mL+Ce2XQ70S7Ez0g09/x9QASPNdJwNhLp
+ ksqByU/Tr+JT9NWRMEShlMz3b8ojNOUG2Qq20rhIMXYzNMoIE2Utu/lHbvcdnTjzP+d8UQGOyx3GLv
+ SuQ171ozUEGtD+1vNjVkwHUFkFnMh1hKn6peJjkQRG42rGwXaVC/TTvaGJwndI1kGeOkXiMc6LLIEG
+ wl1jZ9+hMoJ7vGg8MgGYAJf/zF+pfPUGQd+PI14vbuTA3dfoKu19pX02bZ5j47P81khssnJqo8aWcq
+ Ek+Xy3VYLkb6ALlzvBrfaTzItKXu/P+tARUe1Qmo5AJlGedOkDCl6ebJHOYYFSWhjTG3samL0TGemj
+ X8NUIwXkV5dG66DKq5FVQb6vvNoV83afeOBvWTShRHqTpQ8bKGevB+lJMKbKj4cE4IkQr3P0dgx3kO
+ bOskE6XWSTkDOBqhslAe5Jn3Aql1g3RkHeSrFBonCfZX/SXofmb5W2IhR7W3LpI3lmZBuOsU4u3zRp
+ t5O6kfZHdrKQCKENfZ4GKLRUYKwkYOOhU6W7sVulA4ZXXr0XDIgw2VKF/FQU917AzwR3I/iElaLon0
+ Tf4QEU1ZEsr35JGok73G4Q/m+7Vv1Px8PNMUyAM33elYM5wZ5GIuWSrjtFiA==
+X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
+ fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,45 +99,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On SM8550, the non-altmode orientation is not given anymore within
+altmode events, even with USB SVIDs events.
 
---kvq3zup3qbya4ukn
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On the other side, the Type-C connector orientation is correctly
+reported by a signal from the PMIC.
 
-Hello,
+Take this gpio signal when we detect some Type-C port activity
+to notify any Type-C switches tied to the Type-C port connectors.
 
-On Thu, Jun 01, 2023 at 08:45:42AM +0300, Nikita Shubin wrote:
-> Drop legacy gpio request/free since we are using
-> pinctrl for this now.
->=20
-> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
-> Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+ drivers/usb/typec/ucsi/ucsi_glink.c | 52 ++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 51 insertions(+), 1 deletion(-)
 
-I'm not aware of other changes to drivers/pwm/pwm-ep93xx.c so for me
-it's fine to merge this via arm-soc. But note that Thierry's Ack
-for that would be good.
+diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
+index 1fe9cb5b6bd9..88491dbff7e3 100644
+--- a/drivers/usb/typec/ucsi/ucsi_glink.c
++++ b/drivers/usb/typec/ucsi/ucsi_glink.c
+@@ -9,9 +9,13 @@
+ #include <linux/mutex.h>
+ #include <linux/property.h>
+ #include <linux/soc/qcom/pdr.h>
++#include <linux/usb/typec_mux.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/soc/qcom/pmic_glink.h>
+ #include "ucsi.h"
+ 
++#define PMIC_GLINK_MAX_PORTS	2
++
+ #define UCSI_BUF_SIZE                   48
+ 
+ #define MSG_TYPE_REQ_RESP               1
+@@ -53,6 +57,9 @@ struct ucsi_notify_ind_msg {
+ struct pmic_glink_ucsi {
+ 	struct device *dev;
+ 
++	struct gpio_desc *port_orientation[PMIC_GLINK_MAX_PORTS];
++	struct typec_switch *port_switch[PMIC_GLINK_MAX_PORTS];
++
+ 	struct pmic_glink_client *client;
+ 
+ 	struct ucsi *ucsi;
+@@ -221,8 +228,20 @@ static void pmic_glink_ucsi_notify(struct work_struct *work)
+ 	}
+ 
+ 	con_num = UCSI_CCI_CONNECTOR(cci);
+-	if (con_num)
++	if (con_num) {
++		if (con_num < PMIC_GLINK_MAX_PORTS &&
++		    ucsi->port_orientation[con_num - 1]) {
++			int orientation = gpiod_get_value(ucsi->port_orientation[con_num - 1]);
++
++			if (orientation >= 0) {
++				typec_switch_set(ucsi->port_switch[con_num - 1],
++						 orientation ? TYPEC_ORIENTATION_REVERSE
++							     : TYPEC_ORIENTATION_NORMAL);
++			}
++		}
++
+ 		ucsi_connector_change(ucsi->ucsi, con_num);
++	}
+ 
+ 	if (ucsi->sync_pending && cci & UCSI_CCI_BUSY) {
+ 		ucsi->sync_val = -EBUSY;
+@@ -283,6 +302,7 @@ static int pmic_glink_ucsi_probe(struct auxiliary_device *adev,
+ {
+ 	struct pmic_glink_ucsi *ucsi;
+ 	struct device *dev = &adev->dev;
++	struct fwnode_handle *fwnode;
+ 	int ret;
+ 
+ 	ucsi = devm_kzalloc(dev, sizeof(*ucsi), GFP_KERNEL);
+@@ -310,6 +330,36 @@ static int pmic_glink_ucsi_probe(struct auxiliary_device *adev,
+ 
+ 	ucsi_set_drvdata(ucsi->ucsi, ucsi);
+ 
++	device_for_each_child_node(dev, fwnode) {
++		u32 port;
++
++		ret = fwnode_property_read_u32(fwnode, "reg", &port);
++		if (ret < 0) {
++			dev_err(dev, "missing reg property of %pOFn\n", fwnode);
++			return ret;
++		}
++
++		if (port >= PMIC_GLINK_MAX_PORTS) {
++			dev_warn(dev, "invalid connector number, ignoring\n");
++			continue;
++		}
++
++		ucsi->port_orientation[port] = devm_fwnode_gpiod_get(&adev->dev, fwnode,
++								     "orientation",
++								     GPIOD_IN, NULL);
++		if (IS_ERR(ucsi->port_orientation[port]))
++			return dev_err_probe(dev, PTR_ERR(ucsi->port_orientation[port]),
++					     "unable to acquire orientation gpio\n");
++
++		if (!ucsi->port_orientation[port])
++			continue;
++
++		ucsi->port_switch[port] = fwnode_typec_switch_get(fwnode);
++		if (IS_ERR(ucsi->port_switch[port]))
++			return dev_err_probe(dev, PTR_ERR(ucsi->port_switch[port]),
++					"failed to acquire orientation-switch\n");
++	}
++
+ 	ucsi->client = devm_pmic_glink_register_client(dev,
+ 						       PMIC_GLINK_OWNER_USBC,
+ 						       pmic_glink_ucsi_callback,
 
-Best regards
-Uwe
+-- 
+2.34.1
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---kvq3zup3qbya4ukn
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSAOiwACgkQj4D7WH0S
-/k50VQf/Z0Z146yb8ZnA/hfzt8wtm2qPxk1WClIqQzrapySHezELFowBUNZa42g6
-1/xrOydBkQC5cRqAcbx/C8TOB3wwpdakVv6KQeN0WoR8PR5DBL4s/P5bQzPb+tMU
-AFirsmM/HX9t8DiTLprU+TSukLOhdsfvUU23U/48QNKJUWcXaSePH0aApRv+UNJE
-MO6ZPW7NpIdq31fJ7k5fEfDUUhW4kM/9LweT3xBQUFCAh5mLUaXuLFoA7zSkuLpC
-W9+Rtv4ehZW6gvIpf1CeOl/3N+S9b/lRQ2rIn3kbJU0qeXnsJc3J4a6/bmtRA4Go
-II19T1hCwJbHhl3GBp0pEDVf982SXw==
-=8rvR
------END PGP SIGNATURE-----
-
---kvq3zup3qbya4ukn--
