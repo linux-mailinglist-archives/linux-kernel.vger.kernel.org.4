@@ -2,184 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDF48725B48
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 12:08:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD523725B4D
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 12:09:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235790AbjFGKIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 06:08:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40400 "EHLO
+        id S238408AbjFGKJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 06:09:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234009AbjFGKIS (ORCPT
+        with ESMTP id S234009AbjFGKJJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 06:08:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F37199A
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 03:07:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686132454;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EvYvWP/dmRw7dcP93qz9byoXzFOKtvhvKrmHdFETiw8=;
-        b=S4V54KCmKtG43bb7GWAp4G8kVtnqWkmv8erZ9NUvOz653CHV3FMzWMVrNnOXyC/CowxlEH
-        jxLy8mKoPVTcMCijL7mzMiF7DrguCMx1Rj+UTNJSdC7Ai1f/zKVg9ZAzDoSyNOGB7r/znj
-        U61i0Bm3xJ5g1GYqoq7mWAJszcnXb4Q=
-Received: from mail-yb1-f200.google.com (mail-yb1-f200.google.com
- [209.85.219.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-461-hoPI2V0YMs20GsLvFyp_jQ-1; Wed, 07 Jun 2023 06:07:32 -0400
-X-MC-Unique: hoPI2V0YMs20GsLvFyp_jQ-1
-Received: by mail-yb1-f200.google.com with SMTP id 3f1490d57ef6-bb0cb2e67c5so10375099276.0
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 03:07:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686132452; x=1688724452;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EvYvWP/dmRw7dcP93qz9byoXzFOKtvhvKrmHdFETiw8=;
-        b=kcUvRiZ+tYRGdfn+DRqumKj0GftF8HPUReCjXJ+IEAuvL3rZ6qEMSHz7XLIquHTJDq
-         8qcpWf87i9sSbXoQ+IQTEj9/XlupgbfuJdXYGQgsRtEzZl3vazECGnD3MIrQggzuoiiP
-         5jo+oCVwW6vPx3Lw2doXoA6FSqHVw5DYYQ0pjTsRqTxqk9km7haElH4mSp/VqqrWE3xu
-         5gIb8XaPv/P9XuZm2wA2T7swXJcByd8XcnT2DhV/owgVczkBY+LNy/1KpiPppovq9P2n
-         7EL8t5dbMFKDqyPgqZ1fmMHZ6fN8QyGvZ0srtr3aWQQgHPYwOPTSVaR+n0553jQF/bZC
-         dkQw==
-X-Gm-Message-State: AC+VfDz5ji7Mg6Z4bXaRNv9woPB3Aa2CdNjnrp9dwi2w7lEK+AM942IE
-        epEQBffhF2U8UcVJ03LNm35KZXf24Fn05aTV1CQ39N+6MaczCF9iQgV3wSuXhWz7o/jhP2ZDcMh
-        JQ5xwKZ6JBfU0QK/pziiW3fvt6keK9xx6gRvsFP7Y
-X-Received: by 2002:a25:b90e:0:b0:b9e:5055:ce7e with SMTP id x14-20020a25b90e000000b00b9e5055ce7emr5436820ybj.55.1686132452439;
-        Wed, 07 Jun 2023 03:07:32 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5qr+y7gbTb42/JGVX0Drco0Mo+DgGu0Fu1MKsKD0cM9YVxkXtnAWRmjd4kaGRA2Sy+E6o6RFSwWPGuilreMio=
-X-Received: by 2002:a25:b90e:0:b0:b9e:5055:ce7e with SMTP id
- x14-20020a25b90e000000b00b9e5055ce7emr5436799ybj.55.1686132452198; Wed, 07
- Jun 2023 03:07:32 -0700 (PDT)
+        Wed, 7 Jun 2023 06:09:09 -0400
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2053.outbound.protection.outlook.com [40.107.22.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F38199A;
+        Wed,  7 Jun 2023 03:09:08 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RH2ouwgEsDchCPp/EB3hHv5qhqzh4Wg0NCKTyP5UoUsKB+15jDgwakyx1CUFWXKJcVfRF4cHcm7lz/N5tiUQgiW014CZJvauPMhqQbiflTDrjZIm070oKc3TbV22JjJbfHs0mPuhyXq02F3+mXvRV8+7kIL52LDEzJpzvb5Npy8XpLXETXVUmRHUoS1JLxLS5VtI1LRJuZ9eyhA1VIVZ91qKrdCw2saf+6NDi+Umw1b7COCPibVjph4T8TKfvesAk/WVcyEgRpVP2SghWtfljNNcNeJ/P9KNHzj+Q2VU72dIDsQX8bw6sRpp4XmefmG3iRYNS7zOzTx4Wqa1Hm/W7Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SvqoDWocQ6qtUzWbPQv4oi+RzUCN0aUab5OyA80W2q8=;
+ b=dFhmsVFHW5H7+yZIot8TMHesCkIM9z9WwJfV7SzVyFjc5vWewk8yaUiz0K/yAAygPZkyWHjwg4gfQntU6/gKSAf4SkpSLSobDJ9qde685BsV0LifQ/BPmUuvekgItIVfQU416hPZwVXh9Q/bbZvbbbMQ4akxFMKVWFteF+q7PVFycxMAsb0kHm/q+cU7cCfe827OsSwUXBhnTLBT8+9wXn2Q/wJXjaDhvq+IwJGjofJlh2bhvuvOkN8l4cdRHjSqY8DllXyinT1Lu3o+OL2Gb5epnAPvt+aarE5zYF827mmPGaFikpdGizzIqEW21w+Rg4qDtAybhzu/Q0Mu1VUb8A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SvqoDWocQ6qtUzWbPQv4oi+RzUCN0aUab5OyA80W2q8=;
+ b=s3La49lY3Pq2LmY7tvGUwZ4nUpef7N7IXhLjNvx/L1kvTFSDk65c2uZpWEX2luHF7/tpE1/qcMh3zZcQVpvGXAI6tGJYEK+DELuFzJDjjWxXwuA7Vteux7muJPUahL1YGOoKbcnkf4O5V2yRi8tBCowPkX5x+d71lYhOL1uNx48=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM0PR04MB6452.eurprd04.prod.outlook.com (2603:10a6:208:16d::21)
+ by AS8PR04MB9173.eurprd04.prod.outlook.com (2603:10a6:20b:448::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.32; Wed, 7 Jun
+ 2023 10:09:05 +0000
+Received: from AM0PR04MB6452.eurprd04.prod.outlook.com
+ ([fe80::c40e:d76:fd88:f460]) by AM0PR04MB6452.eurprd04.prod.outlook.com
+ ([fe80::c40e:d76:fd88:f460%4]) with mapi id 15.20.6455.030; Wed, 7 Jun 2023
+ 10:09:05 +0000
+Date:   Wed, 7 Jun 2023 13:09:01 +0300
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     Jamal Hadi Salim <jhs@mojatatu.com>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        linux-kernel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        Muhammad Husaini Zulkifli <muhammad.husaini.zulkifli@intel.com>,
+        Peilin Ye <yepeilin.cs@gmail.com>,
+        Pedro Tammela <pctammela@mojatatu.com>
+Subject: Re: [PATCH RESEND net-next 0/5] Improve the taprio qdisc's
+ relationship with its children
+Message-ID: <20230607100901.qpqdgv6nbvi3k6e2@skbuf>
+References: <20230602103750.2290132-1-vladimir.oltean@nxp.com>
+ <CAM0EoMnqscw=OfWzyEKV10qFW5+EFMd5JWZxPSPCod3TvqpnuQ@mail.gmail.com>
+ <20230605165353.tnjrwa7gbcp4qhim@skbuf>
+ <CAM0EoM=qG9sDjM=F6D=i=h3dKXwQXAt1wui8W_EXDJi2tijRnw@mail.gmail.com>
+ <20230606163156.7ee6uk7jevggmaba@skbuf>
+ <CAM0EoM=3+qwj+C9MzDEULeYc3B=_N=vHyP_QDdhcrNsyaQQODw@mail.gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAM0EoM=3+qwj+C9MzDEULeYc3B=_N=vHyP_QDdhcrNsyaQQODw@mail.gmail.com>
+X-ClientProxiedBy: FR2P281CA0093.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:9b::18) To AM0PR04MB6452.eurprd04.prod.outlook.com
+ (2603:10a6:208:16d::21)
 MIME-Version: 1.0
-References: <20230531082428.21763-1-hadess@hadess.net> <nycvar.YFH.7.76.2305311606160.29760@cbobk.fhfr.pm>
- <nycvar.YFH.7.76.2306031440380.29760@cbobk.fhfr.pm> <15bb2507-a145-7f1b-8e84-58aeb02484b9@leemhuis.info>
- <nycvar.YFH.7.76.2306061527080.29760@cbobk.fhfr.pm> <42b6e582-f642-7521-135a-449140984211@leemhuis.info>
- <CAO-hwJL3RcfOxQvhqDFTwgfY=oAJqR5rsHmO5qDVwNUEh3K58Q@mail.gmail.com> <2023060703-colony-shakily-3514@gregkh>
-In-Reply-To: <2023060703-colony-shakily-3514@gregkh>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Wed, 7 Jun 2023 12:07:21 +0200
-Message-ID: <CAO-hwJJxZuXP=kgTxEc-F+OtcFsR59iGE3Vw3ptZs48+MotNtA@mail.gmail.com>
-Subject: Re: [PATCH] HID: logitech-hidpp: Handle timeout differently from busy
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
-        Jiri Kosina <jikos@kernel.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Peter F . Patel-Schneider" <pfpschneider@gmail.com>,
-        =?UTF-8?Q?Filipe_La=C3=ADns?= <lains@riseup.net>,
-        Nestor Lopez Casado <nlopezcasad@logitech.com>,
-        Mark Lord <mlord@pobox.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM0PR04MB6452:EE_|AS8PR04MB9173:EE_
+X-MS-Office365-Filtering-Correlation-Id: bf4b17a8-dfd0-401c-a4c4-08db673f39af
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: hYjQ47TFpJc0EuCZJWFszJ66AEfOf6LaoDdfVn91BbXaxIWBMNgdP8RUlLQqWQqjt+Cd1cWxIs73bg+knMbz51a7/HxLLN668Ug4QKlu9HU8ePDXuzqj6d7RXAqZxSiFrFRLe875JhvgAZXhT2VC1VUweuqOd//0n0V8BUSJeFXIfO9G/xVPSCOtI7UTmzpnZial6ODNK0vFN0ADNhRc8dUxS3+rWGick620s1dmdZzz6EECfilcf7s90Tre7PdiFg865I9Q9WhJ7Lws7eCwXps+uRZ7Dog/pP31JAOs4Dl8Cfn2dHGTXL6FpekIj93VCHO1CUfU79eNUI5SBtsi+asJef0m0iCmJDaxFLeefB10RmKdWGPIx5y1+PiDBsN757tgyN+MpzHyb2Ivvf92HmYThEFnIXNuqb8wQCOO4vaRE8abuWuFYHLOxIcnJ5LbLdMloTrdt/TGiK5Es0uvOKdZppyqfxX5u115iGeJw3KBC2WI9BfgLptSr0W+GMm4+JeAPu75NiflJm2dt2KFWY6lijsxslUfq6yNorzWy2AyKownUQP2v1jZGW4V49pf
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6452.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(4636009)(376002)(136003)(366004)(39860400002)(396003)(346002)(451199021)(478600001)(38100700002)(4326008)(6916009)(66946007)(66556008)(54906003)(66476007)(8936002)(7416002)(44832011)(5660300002)(8676002)(86362001)(41300700001)(316002)(2906002)(83380400001)(6506007)(26005)(6512007)(1076003)(9686003)(33716001)(186003)(6486002)(6666004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?PuTso/DNwVmWsegB6voWc5B6+v4VPHIqBdRPfsOSEs8mSDpNv6Ev7d7DI11P?=
+ =?us-ascii?Q?+YdLR+a+BcVl0yW0arw2TOqRHiOli9JeMa3LgKX2pYIKL6w45E9AgzVA4YNs?=
+ =?us-ascii?Q?zxKo0KLgRRZQMlu9L/fiwhT5cLQxaUY3VI3RgVAV2H4dzbcM6D0XeBlT1vn6?=
+ =?us-ascii?Q?r47oUluSoQYNGBP/u3fzIJ+0r1H1STwm6L8wMqrW8IUWFl8x+jJLJcoOBX+O?=
+ =?us-ascii?Q?GAapeJcPNA2VAr83FK4rpoSVZqaAqDfdIWdH8mJZoiHHbFioqXv+mbCfmV+S?=
+ =?us-ascii?Q?19aZwrhrNbYiJwKSsiZPszeVr2gwW6K35ManHmraRk9zShpxByEhaPKka6Z8?=
+ =?us-ascii?Q?4oTye2pUW/xTnwuAPPRGzx8EaLj4LUIW5aOPuGOzCkincL8ahzfwDI1n3XLS?=
+ =?us-ascii?Q?ReHopCCm7AcXU8ME/nloXDmz0H5nMub1d8WVHuSUayAKSeFxzFbl88XwnsJb?=
+ =?us-ascii?Q?uH3R7zf3mOWH5DPE6R/1d+2Dt+mMJagVg9112qP7IFs6+luzPQqxzxxG7+qK?=
+ =?us-ascii?Q?Sl8US6hpi+ObgKsueB1KP/2p+dpsOJNbgHdya+cVeTDkl1VgblVCFnGhxn8u?=
+ =?us-ascii?Q?SeRZk78ygDP3hEuMbwRpnzoyrLBwt/dxC8VhILayws4tvR3GdNZ0mbaNVY7E?=
+ =?us-ascii?Q?IU75sn72hZMoT92KDn0kHT961ed2dLuYCm22GXmoGw0i+TEi6vQFvg0GosAI?=
+ =?us-ascii?Q?KV+BYTdXITbbRSssjcj7vOnywHHRPyp6Q0bkU+UHW6p2cjD/Jl3yvDo2oI5W?=
+ =?us-ascii?Q?Xp+JZYzJ+ELxK2fwOlAHP3iDELiB+HnBJhRI0scHVXlgtp/8EA8RFqyeuQR5?=
+ =?us-ascii?Q?fBy+cPe3P037rNm5gHHH47WLyEGahfwujzcRrUp1PCqpPpBW9szBpJFAniqn?=
+ =?us-ascii?Q?xR7mEtZN0Wky1iZTD+i9pwCYnvxEFmB/tt0jpTvOL42tAy/e6EuKgLEWl6rw?=
+ =?us-ascii?Q?KnyswCgiuUsF3v3hSK8qRGvClUNoyFUEt5pnPTVOQKvbe5YbqZGg2UKfXuaB?=
+ =?us-ascii?Q?T3aomyOptskWRaTd+yyiCARG03u/fUTbCwP7AU77Qw6nI0b53Aw1z4lf/jah?=
+ =?us-ascii?Q?dXhRWmiCKDy7DD7AoJu8UhRn8PT27uRnLNV3Ob8BOEzAwmq8/ztPy6XItgtZ?=
+ =?us-ascii?Q?u3F30rFJwnR/JNkwXpmcKswHkOxikp4PE8P3ezEVKy//AAudRKbw6tgBj3tN?=
+ =?us-ascii?Q?hSk1WK5VJI55/Qy83fR2Q9b/GgWCYfZowBpOatEN+Q26sjLXFcZ2zLRQQ3AH?=
+ =?us-ascii?Q?HwxMtIrHP+t5tNIaOSmmk6+CxtyrVv12gHZn3pY8MvvGFGkIBdU07xjlb60o?=
+ =?us-ascii?Q?57A31nDsN213l+qsduqhebFlF/lGMeQIygcEaTcsvoOaFjMNAJDqBizB4Qjq?=
+ =?us-ascii?Q?Gq3Hph4jmyJ8m1QFYNkDfwmhT242ZJVbmehKE+YrXWTknDN+lczTOOW7mLqK?=
+ =?us-ascii?Q?qFVH7JjpwNJG7LWYgmXimVsUaxXT19Iny/ugym+gBMLjH6fFICqyuEBKGzSm?=
+ =?us-ascii?Q?jRKF18B1QAqmpJ4TysiBw9cJOvtcjnsfew67P+nxOy+hpadbrn7IltnIWxaB?=
+ =?us-ascii?Q?/pfEavQcZnDu0aL8nIDyZlRlr1iaSDQaX1Xk9b68twUgxfFVA52FaivE5kvq?=
+ =?us-ascii?Q?2Q=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bf4b17a8-dfd0-401c-a4c4-08db673f39af
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6452.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2023 10:09:05.3056
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: u5RcjxrP/ttw1zimQOudeA10aKbyt/Lambnz2W8Ca986hk6vr3QW/noqpfOyA5B1K1g5x72tg23LCbAADTx1xg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB9173
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 7, 2023 at 11:46=E2=80=AFAM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Tue, Jun 06, 2023 at 08:37:26PM +0200, Benjamin Tissoires wrote:
-> > On Tue, Jun 6, 2023 at 8:18=E2=80=AFPM Linux regression tracking (Thors=
-ten
-> > Leemhuis) <regressions@leemhuis.info> wrote:
-> > >
-> > >
-> > >
-> > > On 06.06.23 15:27, Jiri Kosina wrote:
-> > > > On Mon, 5 Jun 2023, Linux regression tracking (Thorsten Leemhuis) w=
-rote:
-> > > >
-> > > >>>>> If an attempt at contacting a receiver or a device fails becaus=
-e the
-> > > >>>>> receiver or device never responds, don't restart the communicat=
-ion, only
-> > > >>>>> restart it if the receiver or device answers that it's busy, as=
- originally
-> > > >>>>> intended.
-> > > >>>>>
-> > > >>>>> This was the behaviour on communication timeout before commit 5=
-86e8fede795
-> > > >>>>> ("HID: logitech-hidpp: Retry commands when device is busy").
-> > > >>>>>
-> > > >>>>> This fixes some overly long waits in a critical path on boot, w=
-hen
-> > > >>>>> checking whether the device is connected by getting its HID++ v=
-ersion.
-> > > >>>>>
-> > > >>>>> Signed-off-by: Bastien Nocera <hadess@hadess.net>
-> > > >>>>> Suggested-by: Mark Lord <mlord@pobox.com>
-> > > >>>>> Fixes: 586e8fede795 ("HID: logitech-hidpp: Retry commands when =
-device is busy")
-> > > >>>>> Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D217412
-> > > >>> [...]
-> > > >>>>
-> > > >>>> I have applied this even before getting confirmation from the re=
-porters in
-> > > >>>> bugzilla, as it's the right thing to do anyway.
-> > > >>>
-> > > >>> Unfortunately it doesn't seem to cure the reported issue (while r=
-everting
-> > > >>> 586e8fede79 does):
-> > > >>
-> > > >> BTW, remind me again: was fixing this by reverting 586e8fede79 for=
- now a
-> > > >> option? I guess it's not, but if I'm wrong I wonder if that might =
-at
-> > > >> this point be the best way forward.
-> > > >
-> > > > This should now all be fixed by
-> > > >
-> > > >     https://git.kernel.org/linus/7c28afd5512e371773dbb2bf95a31ed562=
-5651d9
-> > >
-> > > Jiri, Benjamin, many many thx for working on this.
-> > >
-> > > Hmmm. No CC: <stable... tag.
-> > >
-> > > Should we ask Greg to pick this up for 6.3 now, or better wait a few
-> > > days? He currently already has 6199d23c91ce ("HID: logitech-hidpp:
-> > > Handle timeout differently from busy") in his queue for the next 6.3.=
-y
-> > > release.
+On Tue, Jun 06, 2023 at 01:42:19PM -0400, Jamal Hadi Salim wrote:
+> > > 2) It seems like in mqprio this qdisc can only be root qdisc (like
+> > > mqprio)
 > >
-> > Well, the Fixes: tag supposedly is enough to let the stable folks to
-> > pick it up.
->
-> No, not at all, please see:
->     https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.ht=
-ml
-> for how to do this properly.
->
-> (hint, we need a cc: stable@ in the signed-off-by area.)
->
-> We only pick up stuff with "Fixes:" semi-often, sometimes never,
-> depending on our workload.  Never rely on that.
-
-Oh right. Given that those patches eventually end up in stable sooner
-or later I made the shortcut in my head. Thanks for correcting that :)
-
->
-> It's been this way for 18+ years now, nothing new :)
->
-> > But you are right, let's Cc Greg for a quicker inclusion
-> > in the 6.3 tree.
+> > so far so good
 > >
-> > Greg, would you mind adding the commit above (7c28afd5512e37) onto the
-> > 6.3 stable queue? Thanks!
->
-> Now queued up, thanks.
+> > > and you dont want to replace the children with other types of
+> > > qdiscs i.e the children are always pfifo? i.e is it possible or
+> > > intended for example to replace 8001:x with bfifo etc? or even change
+> > > the pfifo queue size, etc?
+> >
+> > no, this is not true, why do you say this?
+> 
+> I am just asking questions trying to understand;-> So if can i
+> replace, for example, with a tbf would it make sense even in s/w?
+> 
+> > The child could have its own complex enqueue() and dequeue() and that is
+> > perfectly fine - for example cbs_dequeue_soft() is a valid child dequeue
+> > procedure - as long as the process isn't blocked in the sendmsg() call
+> > by __qdisc_run() processing packets belonging to unrelated traffic
+> > classes.
+> 
+> Does it matter what type the child enqueue/dequeue? eg can i attach htb, etc?
 
-Great thanks!
+So in principle, the taprio model is compatible with attaching any child
+Qdisc to the per-TXQ child classes - with tc-cbs in particular being of
+interest, because that is a TSN shaper, but also, tbf or htb could be
+reasonably imagined as children, and taprio doesn't oppose to any Qdisc
+as its child.
 
-Cheers,
-Benjamin
+That being said, a non-offloaded cbs/htb will not work with an offloaded
+taprio root anymore after commit 13511704f8d7 ("net: taprio offload:
+enforce qdisc to netdev queue mapping"), and IMO what should be done
+there is to reject somehow those child Qdiscs which also can't be
+offloaded when the root is offloaded.
 
+Offloading a taprio qdisc (potentially with offloaded cbs children) also
+affects the autonomous forwarding data path in case of an Ethernet switch.
+So it's not just about dev_queue_xmits() from Linux.
