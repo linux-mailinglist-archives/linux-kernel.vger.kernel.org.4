@@ -2,64 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFC5F726713
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 19:20:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD4DC726720
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 19:21:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231607AbjFGRU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 13:20:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54176 "EHLO
+        id S231667AbjFGRVp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 13:21:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231586AbjFGRU0 (ORCPT
+        with ESMTP id S230042AbjFGRVg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 13:20:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C8E1E62
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 10:20:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 113C763B0E
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 17:20:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C17FDC433EF;
-        Wed,  7 Jun 2023 17:20:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686158424;
-        bh=adqvDA+1TjaAGnTMKfAosw2t+UHx0gdR3o+C9+WLfas=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=QrgEDUrpuvtjtYYXyNXRk1dM2+tU5LatKXwXs/1xrXOOFssrCslRRsYtUyt3hdrkn
-         Dh+x3YRI3wjtLLcilrzbAlRVvaLYnG0rcVd/Zq5rTIqTJb/bk6b2AdJhN2Jwvr5VQy
-         Y+psu3Ozz53QvE8pkOaoGyFJra9fJeporG6xTn4ngLRRqX0uGjaWkRdg3rbA0NO/bn
-         Ou7iQI5PFw3OR4mfe5YqMygaocJk4FR2iqfVb4093jkA93CKs5hB+FL+jEI4h/LAmU
-         z/1SnG7PASoJh0YamOmuhju0WO98sy0xlKkuv/wDL7v5AV7XKcTVyZ4CA0JS3GEw1z
-         tKCVsbaX9/Elg==
-Date:   Wed, 7 Jun 2023 10:20:22 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     netdev@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Boris Pismenny <borisp@nvidia.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH net-next v5 12/14] tls/sw: Convert tls_sw_sendpage() to
- use MSG_SPLICE_PAGES
-Message-ID: <20230607102022.42498d4d@kernel.org>
-In-Reply-To: <20230607140559.2263470-13-dhowells@redhat.com>
-References: <20230607140559.2263470-1-dhowells@redhat.com>
-        <20230607140559.2263470-13-dhowells@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Wed, 7 Jun 2023 13:21:36 -0400
+Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A86131725;
+        Wed,  7 Jun 2023 10:21:35 -0700 (PDT)
+Received: by mail-io1-f54.google.com with SMTP id ca18e2360f4ac-777ac4344f9so129627939f.0;
+        Wed, 07 Jun 2023 10:21:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686158495; x=1688750495;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=OMqgVdX9Zz/X8ixIFydMOZK3AqgJ4bp/xohKlAbcPao=;
+        b=Ip7VRYWw1pgoNd4hnOyYeBI9WcXQnrFbegNzK0mWYnX9oLJvswMsCJ3uNPLxJfnnvP
+         /BXaberyyfxQfWDpMS0/Y2myZgKFz+bgU2ENh5k93QLWNZLjhD5j0Dhgtz6cRzOUYEDb
+         00GrvNN6coIV9CK9mF0oEMsYdyhR0vGAlc+8hab7aobOPJd6ryFhZOwn4XXFpPUlXxqs
+         sBqNFKvEU0hsPq/0K+oIit+ikNOOXi4nhFz+kI7l6RYSaHtduJmUSiYq0+Rv9JeUk6Fj
+         S7G9F1DVy/4R8YpvRYC3am2xTloPpPJWpxXOy+b8KKmmGXvQdDrpLGv4BMNhwbXxTrwy
+         Rhqw==
+X-Gm-Message-State: AC+VfDzTk09WeJR54LxhgJDyezjZlAjm41nsJoInaf32rmXSLM2ydpWq
+        apZP8rqnZboMSIb79q4Uiw==
+X-Google-Smtp-Source: ACHHUZ6XIddSBEqrxRfMhoQYmpM9/x70i9xG4ujpQEXjTtUsUvfCGMHBT3QLAIuDVGgwjUARpXTnBg==
+X-Received: by 2002:a05:6602:218c:b0:777:b4b7:f6ac with SMTP id b12-20020a056602218c00b00777b4b7f6acmr6950873iob.10.1686158494747;
+        Wed, 07 Jun 2023 10:21:34 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id l9-20020a056638220900b004168295d33esm3670915jas.47.2023.06.07.10.21.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 10:21:34 -0700 (PDT)
+Received: (nullmailer pid 3589542 invoked by uid 1000);
+        Wed, 07 Jun 2023 17:21:28 -0000
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+MIME-Version: 1.0
+From:   Rob Herring <robh@kernel.org>
+To:     Ekansh Gupta <quic_ekangupt@quicinc.com>
+Cc:     linux-kernel@vger.kernel.org, konrad.dybcio@linaro.org,
+        srinivas.kandagatla@linaro.org, fastrpc.upstream@qti.qualcomm.com,
+        gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, ekangupt@qti.qualcomm.com,
+        linux-arm-msm@vger.kernel.org, conor+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, andersson@kernel.org,
+        agross@kernel.org
+In-Reply-To: <1686155407-20054-2-git-send-email-quic_ekangupt@quicinc.com>
+References: <1686155407-20054-1-git-send-email-quic_ekangupt@quicinc.com>
+ <1686155407-20054-2-git-send-email-quic_ekangupt@quicinc.com>
+Message-Id: <168615848839.3589502.17296725428809710882.robh@kernel.org>
+Subject: Re: [RESEND PATCH v1 1/2] dt-bindings: misc: fastrpc: add fastrpc
+ group IDs property
+Date:   Wed, 07 Jun 2023 11:21:28 -0600
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,15 +70,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed,  7 Jun 2023 15:05:57 +0100 David Howells wrote:
-> Convert tls_sw_sendpage() and tls_sw_sendpage_locked() to use sendmsg()
-> with MSG_SPLICE_PAGES rather than directly splicing in the pages itself.
-> 
-> [!] Note that tls_sw_sendpage_locked() appears to have the wrong locking
->     upstream.  I think the caller will only hold the socket lock, but it
->     should hold tls_ctx->tx_lock too.
-> 
-> This allows ->sendpage() to be replaced by something that can handle
-> multiple multipage folios in a single transaction.
 
-Reviewed-by: Jakub Kicinski <kuba@kernel.org>
+On Wed, 07 Jun 2023 22:00:06 +0530, Ekansh Gupta wrote:
+> Add "qcom,fastrpc-gids" property to the list of optional properties.
+> This property contains the list of privileged group IDs which is
+> used to offload process to remote subsystem with increased privileges.
+> 
+> Signed-off-by: Ekansh Gupta <quic_ekangupt@quicinc.com>
+> ---
+>  Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
+
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+Error: Documentation/devicetree/bindings/misc/qcom,fastrpc.example.dts:36.17-18 syntax error
+FATAL ERROR: Unable to parse input tree
+make[1]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/misc/qcom,fastrpc.example.dtb] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1512: dt_binding_check] Error 2
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/1686155407-20054-2-git-send-email-quic_ekangupt@quicinc.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
