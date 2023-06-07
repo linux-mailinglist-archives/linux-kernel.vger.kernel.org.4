@@ -2,38 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F3437252C4
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 06:21:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F09B7252C5
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 06:22:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233700AbjFGEVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 00:21:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42300 "EHLO
+        id S233945AbjFGEWa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 00:22:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234126AbjFGEVT (ORCPT
+        with ESMTP id S233782AbjFGEVq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 00:21:19 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DB106273A;
-        Tue,  6 Jun 2023 21:18:13 -0700 (PDT)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 3574HDVJ030768;
-        Wed, 7 Jun 2023 06:17:13 +0200
-Date:   Wed, 7 Jun 2023 06:17:13 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Zhangjin Wu <falcon@tinylab.org>
-Cc:     arnd@arndb.de, thomas@t-8ch.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v3 3/3] selftests/nolibc: riscv: customize makefile for
- rv32
-Message-ID: <ZIAEybZdXywKv43C@1wt.eu>
-References: <20230606120755.548017-1-falcon@tinylab.org>
- <20230607012032.585223-1-falcon@tinylab.org>
+        Wed, 7 Jun 2023 00:21:46 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B4F2695
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 21:19:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hBUZToYx1vwbzYROIIA+ZwS5MeCOIIJY2Hi9zq9pjT7dtAdIL5+7N4izvkhdRs7WSTN7/jdGIuzXB3RERWbT0LxmUBbRD6rbOrov5OlFlOdXpFFET/isQN/RGdQh8iRNBVDn3Z+HCkosiI4WBDICmhvBGlzhw7UmFVvN7G6Rxmbb4vXK42+FPL1ufPlq8XCSrIhOeAg36cFT10gy+UT73nGMiQevV5NjmSr9UHkthLF30XPMdcYcqDkJaKO13xBcb7Jpw6/hnEkq6U6BO8aAdSwPbsL1Lsy4Js2q+sUXsUwL9hMHB9ddfZt88rzDUjV4ligr3HlBAQ8Zsu8S/YDAzg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=johPKzC95uwnqjq/A8l1LI4UFwfkha+sn7H8Buw0kNk=;
+ b=KKSvG/so8q0W3EIDP7vVoKXL/QFhg4dLoM2aFiWs25Xx3Bxn61DYZmcCsNgCUZ3C0oOHmT05M44IxQOqN9h5fIb7zfNCuR6S7x0FeX1fPgpizHOhAQXG+za6QWIIK8k37cdCUaj3eNMU8XIHbpDLtqEXWiDMfl3bAmc6myhvw686jLa0H3rmcjCHopWJ89Z8a1sy0irFPUlr55D4vlt+3Bc8fXHnLWjisixYCvQMQKeB9yGONntC4A163dbf0ehZGMbZjRsCZ2bh6hqKIg4pKOz5YmpVPX0q1UnOb5kNGYa8tldoa+kXcr4t9Tr8hZopTD2BJp4xlEnlWSCgKXlJug==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=johPKzC95uwnqjq/A8l1LI4UFwfkha+sn7H8Buw0kNk=;
+ b=dcB9zkTWUfePRsJcwLG+vHFQR8l4SsEVKgU1NUmJLmSjI0l/F30M5LleiwM+srSgFgYDDNXJO8g6Mk/MY+5/MDTULrFAbEhWEuDFSDdZu6rYtx1wgGKf4AFfj2Qn2owyvJJFrzjkOfzo3SEJONNe/F2N+HhvEX7H8wurB5Y3cYo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DS7PR12MB6048.namprd12.prod.outlook.com (2603:10b6:8:9f::5) by
+ BN9PR12MB5084.namprd12.prod.outlook.com (2603:10b6:408:135::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Wed, 7 Jun
+ 2023 04:19:19 +0000
+Received: from DS7PR12MB6048.namprd12.prod.outlook.com
+ ([fe80::7cbf:236a:55b:2c99]) by DS7PR12MB6048.namprd12.prod.outlook.com
+ ([fe80::7cbf:236a:55b:2c99%4]) with mapi id 15.20.6455.030; Wed, 7 Jun 2023
+ 04:19:19 +0000
+Message-ID: <8610d516-b83b-3614-04a4-5ed2d4b66c56@amd.com>
+Date:   Wed, 7 Jun 2023 09:49:07 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] iommu/amd: Fix possible memory leak of 'domain'
+Content-Language: en-US
+To:     Su Hui <suhui@nfschina.com>, Joerg Roedel <joro@8bytes.org>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>
+Cc:     jgg@ziepe.ca, kevin.tian@intel.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <20230606070742.139575-1-suhui@nfschina.com>
+From:   Vasant Hegde <vasant.hegde@amd.com>
+In-Reply-To: <20230606070742.139575-1-suhui@nfschina.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN2PR01CA0009.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:25::14) To DS7PR12MB6048.namprd12.prod.outlook.com
+ (2603:10b6:8:9f::5)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230607012032.585223-1-falcon@tinylab.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR12MB6048:EE_|BN9PR12MB5084:EE_
+X-MS-Office365-Filtering-Correlation-Id: c3cb58d8-4310-4c24-e817-08db670e5cf5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: XVWAsPu5G1cFVdnVKWcUe7QRODlplEsaV5r0BzIFRnP1dwvGWvJ4h/f09SNifNlLIe1gQXhDx3/l14zu7TVhNGVX4KZ6u3VuV4FamdvDwf1bpO2FWypqUTIk5ZqQgbfM7ugqo5hDrBCCYem9WRTIvtNin600lZgkUY9/EM299+iU/JLgtLjfFfiPRRCBN/etZjHnHJBlii1D3ZLdqXiEpV9J6L0+ott2xAmVZCFTF5GBymYWtd2/YTmwDfmhUUvE5j46iTbjQRKDRNSuTog/zcN01LPMv2yChR9uFKXYKqM8VbPNEmJfSteviM5Ljxsrs76Pvnunuuucz7T/R7JOPHysBWAfXzpr3xUlBvAkuAOP0xWMW5NPVL5Ox0qPGAmw+LtgRFfgC6UUd32VbHH79TzxvYnNKzEwy0iI6CD8ehifdMhTUDqHxcZoMk7nPOxNBBF+qDO0yW+zwXWNnShScZiZpSrjoiKwBX+9AaUb0f00bBuYjxI4n/eevdmXr7yrsBkGcJcLv5GLl8x1SKhn/tAQ03juRbF2G0OcU+DFGogo89fiiW5l87+WQDdkOybwj8cyzW1pp9tHO6HtgNf5a8dyKDEPNKgduyDFvYbKXEnd4gectKNncHMPqrkJJItjCp5eYpzKtkfStWJOIEBGrA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB6048.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(366004)(136003)(396003)(376002)(39860400002)(451199021)(86362001)(83380400001)(110136005)(4326008)(38100700002)(66476007)(66946007)(6666004)(66556008)(6486002)(478600001)(2906002)(36756003)(186003)(4744005)(2616005)(5660300002)(8936002)(41300700001)(8676002)(316002)(31696002)(44832011)(31686004)(26005)(53546011)(6512007)(6506007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Z25uQktwYjJRMWtHdkc5bkhoSzNwM1k4OERKOE96ZEN4dHczT3lQWk9aTzZn?=
+ =?utf-8?B?OWNvS1FlMTg1Wk44YndyZzFtb2xlSmlHMUU5aUtOQTl6R1pXZDNDYk1JKzdH?=
+ =?utf-8?B?blh6OU9QRCtmbW1MdUJBS0R2SmtjZUJWM2h3cWJ5WHZHc3ZGZkZtWVFMU0Vh?=
+ =?utf-8?B?bmJscEpUajBTMkh2Zkl3UzdBUmF5aU1yY1k3M3YyL0loOTNkWnduY2VBM29K?=
+ =?utf-8?B?R0NGalQrdEszVDRmZnZIeU5ZdWdNc2lKczdBSE5mY2VIUHgxUTZsbmk5MWdz?=
+ =?utf-8?B?bDdmeEZsTTBMMUpYZGRta3JmanFEY2RBcktJZDlhNmNEQm0yTXdrTW9LbzIz?=
+ =?utf-8?B?NHV6K25wdmU3T1JRU1E4NVNQZHcyZTFwbUFrcWtnemsxY0xWMmxOZWRzZE11?=
+ =?utf-8?B?WlU4M0FOdDV4WWVPVTcrUkxVOXJkTUpiYlcyUkpkcEJIZXpabWErcE1lU29U?=
+ =?utf-8?B?N1BPbHg0S0JZcTFpTDFiTWdUNDVTcTQyUGNuUXI5S0M5TVVvZFBNanJRazM0?=
+ =?utf-8?B?NkZFYTNPcm45aHRldU1ZM1V6RkZiYVdoOUJMb2o0OHNmbTU5ek5GVE8xNXYw?=
+ =?utf-8?B?aTdGY3Y5eVlLMGJmckZEZTJmNHdvRStmVUdsMHBZMk5vQyt1Wm9XTHNIeW1W?=
+ =?utf-8?B?bStCUGIzSkl0ZkZiUVBkcmR3YmIyWWZCTjFuanVGODBKQUFTSTdWZ2RlQjFP?=
+ =?utf-8?B?N1VUclZoUDFYc1R2ZVlJck5aKzBzdHlMNEcwcFlnRUdVL045ZER4elpHU1Bl?=
+ =?utf-8?B?WUQ0Z1V3N3RQS2lBWENCenpyYlhQS3hFRWs2aWxJdGlqanFmSkpBeWpNNklG?=
+ =?utf-8?B?TldoN3FQckZrRkhuZU5DbjQ1S0h0bU1Ba0FLZi9qd3dnSjVWUVZkRS9pRHZB?=
+ =?utf-8?B?ajVKcm9WMS8vNk13K21GMjJDOWpEenJTRGZMWHB0allWTTFDeXZLVWh5a0tR?=
+ =?utf-8?B?elVrOENpNStVNENpRnNpQ1VlSjFQZzFTRTA0eHIrbENIc2ZYbUtmVlFsMThY?=
+ =?utf-8?B?QXhnRkUzcUg0UHEyYkRWQXZXOWx6YnJKT3RVN0ppZmI4UEMvTklFeGUzMkpr?=
+ =?utf-8?B?L1BZeG1oNDJVTlBwWEpBUHhlVSthVlpqUk02V2x2Y1VFYVBVUlFvRGVQQWFH?=
+ =?utf-8?B?N0tENk12TkQ2ZzloR2FtVTB1OXNSSFUrQWZ3YWhXeWZVSmFLK2p3VjBpTlNI?=
+ =?utf-8?B?a2p2MzZHQS9OUldUQUN0bkkxWFpuRWJGcG10dEcrVVVpeGtjMzZ1ek9rTFdH?=
+ =?utf-8?B?M1JZWGFicHY5KzZaNm9aYVRvZERZdmNyaE53ZjNXK0pKQlVlNHBwWWY5Mng4?=
+ =?utf-8?B?eU12allBdVFOb1VnM0cwYVl1OW1nUFFlZ3dIVm9VUUdmQUpWTW5xblNBUE13?=
+ =?utf-8?B?aTZCd1pEc2lxN1VpanV4Q3hMSWxIUHFpSEcwTVljUTlzMGZRaGd2bXhrbHky?=
+ =?utf-8?B?bHNVOVc5NHBLSzhzeHE1bUFMZlp2ODkwU0J3WHFCa1MxNDBZZGxQRUJqTnhY?=
+ =?utf-8?B?dWNRU053NFh3RnVjUE13V3hZUS9HbzBBTmVsTjdzWHBBWFBvWjcxeERVaHJP?=
+ =?utf-8?B?bjZFeDZiUkU0QUY3Z09VS0c3M1R1VEtHYkdqWHZiQUJDUGZnbnJ1WVhTMGZZ?=
+ =?utf-8?B?T2NiMk9zbnZwYSsyYWNMNk95K0QzOUZiT2Z4TDhBNzhhbkZKelF4bTZVWjZ3?=
+ =?utf-8?B?RDYzTkExb0FxcDltdjkrOGVjRlB2ZnZKUGxKWGQ3dEVBREZHR0c3UFk4cW1J?=
+ =?utf-8?B?NWloU3IrVnlaTmlQOW9yeS8vWGh5dHB3YXhmMDlyTkduZTVaZWFESFk5NXpN?=
+ =?utf-8?B?SXpNRFF0SUZYcWx1VjJtZUZVem9lbFdGUnY2ZWdIZVFYWlRBMHN6YmVSaEht?=
+ =?utf-8?B?emcyVThSL05vWXBxSCt0UFhzbmNKdHZlUVprTWowblB1d0ZlT3FrSGYvVWZU?=
+ =?utf-8?B?b2E4TE85QnVMYWsyWFdUdFlyRkIzMEhmdEpNR0l2OEp1UVA5N1Rpd3FOYVZ2?=
+ =?utf-8?B?LzNKTVpVQm1naW5lK1VMekhXbEprZGRnMnpFMFVmeUJVMmVNelJRNTgvM091?=
+ =?utf-8?B?MVVkUE5FR1Z6YXhXdkhkYWRDeXFzTWxHcHlUWEJnOFF0S0hrM21WRFFydlRJ?=
+ =?utf-8?Q?VD9Dfe1of47QV/hdWqAhBsxju?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c3cb58d8-4310-4c24-e817-08db670e5cf5
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB6048.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2023 04:19:19.3442
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: dgG2t9kQ/t8gJHoZu13WN+X42pZw0ZBxrRiPP//M1raOAaokLd02uJlEt+KKXZ3wI6VPi0s7fu+Bow2ZVqYCnw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5084
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -41,126 +128,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On Wed, Jun 07, 2023 at 09:20:32AM +0800, Zhangjin Wu wrote:
-> Arnd, Thomas, Willy
-> 
-> > > >     +# Additional ARCH settings for riscv
-> > > >     +ifeq ($(ARCH),riscv32)
-> > > >     +        SRCARCH := riscv
-> > > >     +endif
-> > > >     +ifeq ($(ARCH),riscv64)
-> > > >     +        SRCARCH := riscv
-> > > >     +endif
-> > > >     +
-> > > >      export cross_compiling :=
-> > > >      ifneq ($(SRCARCH),$(SUBARCH))
-> > > >      cross_compiling := 1
-> > >
-> > > I've never been a big fan of the top-level $(ARCH) setting
-> > > in the kernel, is there a reason this has to be the same
-> > > as the variable in tools/include/nolibc? If not, I'd just
-> > > leave the Linux Makefile unchanged.
-> > >
-> > > For userspace we have a lot more target names than
-> > > arch/*/ directories in the kernel, and I don't think
-> > > I'd want to enumerate all the possibilities in the
-> > > build system globally.
 
-Actually it's not exactly used by nolibc, except to pass to the kernel
-for the install part to extract kernel headers (make headers_install).
-It's one of the parts that has required to stick to most of the kernel's
-variables very closely (the other one being for nolibc-test which needs
-to build a kernel).
+On 6/6/2023 12:37 PM, Su Hui wrote:
+> free memory of domain before return NULL.
+> 
+> Fixes: 29f54745f245 ("iommu/amd: Add missing domain type checks")
+> Signed-off-by: Su Hui <suhui@nfschina.com>
 
-> Good news, I did find a better solution without touching the top-level
-> Makefile, that is overriding the ARCH to 'riscv' just before the targets
-> and after we got the necessary settings with the original ARCH=riscv32
-> or ARCH=riscv64, but it requires to convert the '=' assignments to ':=',
-> which is not that hard to do and it is more acceptable, just verified it
-> and it worked well.
-> 
->     ...
-> 
->      LDFLAGS := -s
-> 
->     +# top-level kernel Makefile only accept ARCH=riscv, override ARCH to make kernel happy
->     +ifneq ($(findstring riscv,$(ARCH)),)
->     +override ARCH := riscv
->     +endif
->     +
+Reviewed-by: Vasant Hegde <vasant.hegde@amd.com>
 
-That can be one approach indeed. Another one if we continue to face
-difficulties for this one would be to use a distinct KARCH variable
-to assign to ARCH in all kernel-specific operations.
 
->      help:
->             @echo "Supported targets under selftests/nolibc:"
->             @echo "  all          call the \"run\" target below"
-> 
-> This change is not that big, and the left changes can keep consistent with the
-> other platforms. but I still need to add a standalone patch to convert the '='
-> to ':=' to avoid the before setting using our new overridded ARCH.
+-Vasant
 
-I don't even see why the other ones below are needed, given that as
-long as they remain assigned as macros, they will be replaced in-place
-where they are used, so they will reference the last known assignment
-to ARCH.
 
->     ++ b/tools/testing/selftests/nolibc/Makefile
->     @@ -26,7 +26,7 @@ IMAGE_riscv64    = arch/riscv/boot/Image
->      IMAGE_riscv      = arch/riscv/boot/Image
->      IMAGE_s390       = arch/s390/boot/bzImage
->      IMAGE_loongarch  = arch/loongarch/boot/vmlinuz.efi
->     -IMAGE            = $(IMAGE_$(ARCH))
->     +IMAGE           := $(IMAGE_$(ARCH))
->      IMAGE_NAME       = $(notdir $(IMAGE))
+> ---
+>  drivers/iommu/amd/iommu.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
->      # default kernel configurations that appear to be usable
->     @@ -41,7 +41,7 @@ DEFCONFIG_riscv64    = defconfig
->      DEFCONFIG_riscv      = defconfig
->      DEFCONFIG_s390       = defconfig
->      DEFCONFIG_loongarch  = defconfig
->     -DEFCONFIG            = $(DEFCONFIG_$(ARCH))
->     +DEFCONFIG           := $(DEFCONFIG_$(ARCH))
-> 
->      # optional tests to run (default = all)
->      TEST =
->     @@ -58,7 +58,7 @@ QEMU_ARCH_riscv64    = riscv64
->      QEMU_ARCH_riscv      = riscv64
->      QEMU_ARCH_s390       = s390x
->      QEMU_ARCH_loongarch  = loongarch64
->     -QEMU_ARCH            = $(QEMU_ARCH_$(ARCH))
->     +QEMU_ARCH           := $(QEMU_ARCH_$(ARCH))
-> 
->      # QEMU_ARGS : some arch-specific args to pass to qemu
->      QEMU_ARGS_i386       = -M pc -append "console=ttyS0,9600 i8042.noaux panic=-1 $(TEST:%=NOLIBC_TEST=%)"
->     @@ -72,7 +72,7 @@ QEMU_ARGS_riscv64    = -M virt -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_T
->      QEMU_ARGS_riscv      = -M virt -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
->      QEMU_ARGS_s390       = -M s390-ccw-virtio -m 1G -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
->      QEMU_ARGS_loongarch  = -M virt -append "console=ttyS0,115200 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
->     -QEMU_ARGS            = $(QEMU_ARGS_$(ARCH)) $(QEMU_ARGS_EXTRA)
->     +QEMU_ARGS           := $(QEMU_ARGS_$(ARCH)) $(QEMU_ARGS_EXTRA)
-> 
->      # OUTPUT is only set when run from the main makefile, otherwise
->      # it defaults to this nolibc directory.
->     @@ -87,11 +87,18 @@ endif
->      CFLAGS_riscv32 = -march=rv32im -mabi=ilp32
->      CFLAGS_s390 = -m64
->      CFLAGS_STACKPROTECTOR ?= $(call cc-option,-mstack-protector-guard=global $(call cc-option,-fstack-protector-all))
->     -CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 \
->     +CFLAGS_default := -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 \
->                     $(call cc-option,-fno-stack-protector) \
->                     $(CFLAGS_$(ARCH)) $(CFLAGS_STACKPROTECTOR)
->     +
->     +CFLAGS  ?= $(CFLAGS_default)
-
-Why did you need to split this one like this instead of proceeding
-like for the other ones ? Because of the "?=" maybe ? Please
-double-check that you really need to turn this from a macro to a
-variable, if as I suspect it it's not needed, it would be even
-simpler.
-
-Thanks,
-Willy
+> diff --git a/drivers/iommu/amd/iommu.c b/drivers/iommu/amd/iommu.c
+> index dc1ec6849775..f08e65629c74 100644
+> --- a/drivers/iommu/amd/iommu.c
+> +++ b/drivers/iommu/amd/iommu.c
+> @@ -2094,7 +2094,7 @@ static struct protection_domain *protection_domain_alloc(unsigned int type)
+>  	} else if (type == IOMMU_DOMAIN_DMA || type == IOMMU_DOMAIN_DMA_FQ) {
+>  		pgtable = amd_iommu_pgtable;
+>  	} else {
+> -		return NULL;
+> +		goto out_err;
+>  	}
+>  
+>  	switch (pgtable) {
