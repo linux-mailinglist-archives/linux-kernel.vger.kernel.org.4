@@ -2,103 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B8D4725D7D
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 13:44:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0DF1725D82
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 13:45:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240399AbjFGLoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 07:44:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39200 "EHLO
+        id S240159AbjFGLpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 07:45:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234932AbjFGLoI (ORCPT
+        with ESMTP id S239901AbjFGLow (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 07:44:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A34419BD;
-        Wed,  7 Jun 2023 04:44:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F35B63DEC;
-        Wed,  7 Jun 2023 11:44:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E24B6C4339B;
-        Wed,  7 Jun 2023 11:44:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686138247;
-        bh=MwyhiYcJENevj1dluDqPre/wvn9RYsMbpU1n3B8UBGc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XP5fEfMWhR1k6iKYyVbghg7Zpf0snzMJyW2y9bOGK3IxsQ5pf82vV4ZhdQCoV9604
-         CW25JEqmDKX69xEOQDDVte4q8yZeGdJ9tGVPh5z2Ufa0B0mP/OeLHEwmfLDpv2O2e/
-         +7z64XYje57uCu3pJ/t0E0jutzfBuqx/GYjHgQO8JqXff3p/LE9OKS6O0FlPubA7Fp
-         a150cXzUyFoo+zxAQaqLuwbZElgTfJ72pXnKMQs0YT60BFpBQ8R5fxY5jLM8uXw71X
-         6IxHLMjGc+JN0Z0b2zcOf7ms1vYhFf1RQhTok5XNwOpiIjS1ARgRiYuA6vwowFrzmY
-         TR+KUDe32WlVA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1q6raW-0008Uw-VQ; Wed, 07 Jun 2023 13:44:29 +0200
-Date:   Wed, 7 Jun 2023 13:44:28 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com, quic_wcheng@quicinc.com,
-        quic_jackp@quicinc.com, quic_harshq@quicinc.com,
-        ahalaney@redhat.com
-Subject: Re: [PATCH v8 6/9] usb: dwc3: qcom: Add multiport controller support
- for qcom wrapper
-Message-ID: <ZIBtnPp0oV6_GFFk@hovoldconsulting.com>
-References: <20230514054917.21318-1-quic_kriskura@quicinc.com>
- <20230514054917.21318-7-quic_kriskura@quicinc.com>
- <20230515222730.7snn2i33gkg6ctd2@ripper>
- <20230526025554.ni527gsr2bqxadl3@ripper>
- <37fd026e-ecb1-3584-19f3-f8c1e5a9d20a@quicinc.com>
+        Wed, 7 Jun 2023 07:44:52 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB441BCC
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 04:44:49 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-30ae95c4e75so7326637f8f.2
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 04:44:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1686138287; x=1688730287;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pZF0bWbVqQomN3DSZfJF9QrCWL0o2iDr9KrxQLP2Njw=;
+        b=3RBQjFfyDmBSo1AlYjKhIdm1beEdbNpeWKrKMomP7swI46B5yjDO5BHhe1tyU1q8ky
+         t1CWplL20m0oi2y9YZQhsRKLhqNOV8jqzD8AdgCtLZSYm8GaahtxsNiV6+093izidZOc
+         sDjlMaU18OGfEobAFY9ZhXQMQu8vcx4i4pxIx0eHAc4xmC1VDgVQNxvtHYGYLQfJUiF/
+         QwuIQvmqz5jeI2Xrq3QtoGIG3MoKh+ZsizZHQESghrYuyfnjsEveUYtFwNYgPIELhx+F
+         pwQ7zAVRDv8r6l7rv6rtyfVBq9ZfWcnQY+3VXW4YVXU/C10L3zvHPz1MXI+obInazKwJ
+         EHnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686138287; x=1688730287;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pZF0bWbVqQomN3DSZfJF9QrCWL0o2iDr9KrxQLP2Njw=;
+        b=UWgOwNptkGTzXU/ApXXyN0ZO7vT+ees+0vbXEaujbOurJhMUf4qJQ5XtyJdCoWBnOF
+         Hudv+/xXPi1HxGYbqpB8zVZoUCvtSf1O1PgNk7Sm/EsNkYAYicttqCKWMTPv8e9Z+4mQ
+         TW7DXCgrhCtc8Z/8WhQqFZNkUOVi+mzEmkvZKx190o+TAbOSRAF3aDxV5f3KRzkjLoGk
+         Ek7D3GMD6VG9fQkYkgfuDjeq3TFO84KkKp1gyaftn+QbqRX4jZRFqrm3+rU4TEIYPZS6
+         XXDkOifiMkXzMS5YbW0juZfHKfeBe/r8n8xlUrA0JFwsnLUbSndFG6Hdfyry8xE/Dc/e
+         rPIQ==
+X-Gm-Message-State: AC+VfDxim6+7DEJibLtD1zP4GtNuQ+Ylpw03Omt/X+JAl7Hv/krXfKZh
+        f7bmeR3TsqkvQCLCCFcvBNDoCA==
+X-Google-Smtp-Source: ACHHUZ4ag2NB29YmYf2NEyem1AS1fBVfRnebEHbs1kVzFKODnpHwBnsEXbEBUs2kQ3ajwzKCBP//Cg==
+X-Received: by 2002:adf:efc7:0:b0:306:26d1:230a with SMTP id i7-20020adfefc7000000b0030626d1230amr3860283wrp.65.1686138287554;
+        Wed, 07 Jun 2023 04:44:47 -0700 (PDT)
+Received: from [192.168.1.91] (192.201.68.85.rev.sfr.net. [85.68.201.192])
+        by smtp.gmail.com with ESMTPSA id n18-20020a5d4c52000000b0030ae901bc54sm15135507wrt.62.2023.06.07.04.44.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Jun 2023 04:44:47 -0700 (PDT)
+Message-ID: <613601c2-cc98-526b-a9e3-2ad2abc68e1d@baylibre.com>
+Date:   Wed, 7 Jun 2023 13:44:46 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <37fd026e-ecb1-3584-19f3-f8c1e5a9d20a@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v5 3/3] regulator: tps6594-regulator: Add driver for TI
+ TPS6594 regulators
+Content-Language: en-US
+To:     andy.shevchenko@gmail.com, Esteban Blanc <eblanc@baylibre.com>
+Cc:     linus.walleij@linaro.org, lgirdwood@gmail.com, broonie@kernel.org,
+        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, jpanis@baylibre.com,
+        aseketeli@baylibre.com, u-kumar1@ti.com
+References: <20230522163115.2592883-1-eblanc@baylibre.com>
+ <20230522163115.2592883-4-eblanc@baylibre.com> <ZG0VHnEByyMW9i4a@surfacebook>
+From:   jerome Neanne <jneanne@baylibre.com>
+In-Reply-To: <ZG0VHnEByyMW9i4a@surfacebook>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 26, 2023 at 08:55:22PM +0530, Krishna Kurapati PSSNV wrote:
-> On 5/26/2023 8:25 AM, Bjorn Andersson wrote:
 
-> > We need to fix the dwc3 glue design, so that the glue and the core can
-> > cooperate - and we have a few other use cases where this is needed (e.g.
-> > usb_role_switch propagation to the glue code).
-
->    Thanks for the comments on this patch. I had some suggestions come in 
-> from the team internally:
 > 
-> 1. To use the notifier call available in drivers/usb/core/notify.c and 
-> make sure that host mode is enabled. That way we can access dwc or xhci 
-> without any issue.
+>> +	enum {
+>> +		MULTI_BUCK12,
+>> +		MULTI_BUCK123,
+>> +		MULTI_BUCK1234,
+>> +		MULTI_BUCK12_34,
+> 
+>> +		MULTI_FIRST = MULTI_BUCK12,
+>> +		MULTI_LAST = MULTI_BUCK12_34,
+>> +		MULTI_NUM = MULTI_LAST - MULTI_FIRST + 1
+> 
+> 		MULT_NUM
+> 
+> will suffice instead all this.
+> 
+>> +	};
+> 
+> But why enum at all? See below.
+Just for the switch case readability.
+I have to iterate across the multiphases array for look up name into 
+device tree and evaluate in that order.
 
-I don't think this is a good idea and instead the callbacks should be
-dedicated for the xhci and dwc3 drivers. A struct with callbacks can be
-passed down to the child devices, which call back into the drivers of
-their parents for notifications and when they need services from them
-(e.g. during suspend or on role changes).
+This can be reduced to:
+	enum {
+		MULTI_BUCK12,
+		MULTI_BUCK123,
+		MULTI_BUCK1234,
+		MULTI_BUCK12_34,
+		MULTI_NUM = MULTI_BUCK12_34 - MULTI_BUCK12 + 1
+	};
 
-> 2. For this particular case where we are trying to get info on number of 
-> ports present (dwc->num_usb2_ports), we can add compatible data for 
-> sc8280-mp and provide input to driver telling num ports is 4.
+> 
+> ...
+> 
+>> +	/*
+>> +	 * Switch case defines different possible multi phase config
+>> +	 * This is based on dts buck node name.
+>> +	 * Buck node name must be chosen accordingly.
+>> +	 * Default case is no Multiphase buck.
+>> +	 * In case of Multiphase configuration, value should be defined for
+>> +	 * buck_configured to avoid creating bucks for every buck in multiphase
+>> +	 */
+>> +	for (multi = MULTI_FIRST; multi < MULTI_NUM; multi++) {
+>> +		np = of_find_node_by_name(tps->dev->of_node, multiphases[multi]);
+>> +		npname = of_node_full_name(np);
+>> +		np_pmic_parent = of_get_parent(of_get_parent(np));
+>> +		if (of_node_cmp(of_node_full_name(np_pmic_parent), tps->dev->of_node->full_name))
+> 
+> Why not of_node_full_name() in the second case?
+Sure.
+> 
+> 
+>> +			continue;
+>> +		delta = strcmp(npname, multiphases[multi]);
+>> +		if (!delta) {
+>> +			switch (multi) {
+>> +			case MULTI_BUCK12:
+> 
+> This all looks like match_string() reinvention.
+I can go with match_string but this is not significantly changing the game:
 
-That may also work as a way to avoid parsing the xhci registers, but I'm
-still not sure why simply counting the PHYs in DT would not work.
+index = match_string(multiphases, ARRAY_SIZE(multiphases), npname);
+if (index >= 0) {
+	switch (index) {
 
-Johan
+No question on all your other feedback. Just wondering if I missed 
+something with match_string use. Looks like a good idea indeed but this 
+is not drastically changing the code as you seem to expect... Let me 
+know if you think I'm doing it in a wrong way.
+
+Regards,
+Jerome.
