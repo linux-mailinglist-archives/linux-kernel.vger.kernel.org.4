@@ -2,84 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35129725B3F
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 12:02:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27059725B44
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 12:06:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239986AbjFGKCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 06:02:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39320 "EHLO
+        id S235402AbjFGKGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 06:06:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238408AbjFGKCo (ORCPT
+        with ESMTP id S234009AbjFGKGP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 06:02:44 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4303E19BD;
-        Wed,  7 Jun 2023 03:02:43 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 89F633200907;
-        Wed,  7 Jun 2023 06:02:40 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Wed, 07 Jun 2023 06:02:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1686132160; x=1686218560; bh=T0
-        S94E2qLXmGs+N9sPOaQszP553BKZ2FJLocWfYPArs=; b=pFhjS116As8+eGURjI
-        zVHDXCcfMw2WiNMgh3caeu5W6Fpjv5Bo5arbt445G4Ii3l0NgiWci8HdkXDCbE7j
-        RbuTQqfMjFMXWdjpo58NMN24tC84cBVnIBIEZBYZQnyvjU6xpAxyKHBd6K+oFd1O
-        HYKnOwSH3S364eDp9K+YXhHnkb2ryLRIx1pbskIO3y0EHyyj0zSpwTuDzo8j8Gpm
-        ALCYUqnfSIIr+mRw7NzfQE6V9jAZ8Qyg8QJ0bJdWIvVLzRDlsvL38xnaJQQ9k0my
-        ck9peEuB/sSL9ZVv+FBjUtIFDuukdpR4EusWJmbu8InAzLKoVADG1iRjkxremr3J
-        acPA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1686132160; x=1686218560; bh=T0S94E2qLXmGs
-        +N9sPOaQszP553BKZ2FJLocWfYPArs=; b=t8ZZIgthjGwEP1RH+BAH4u5JBRhm7
-        ZnXTWLnHptByfT2ahXyjN+BqgcKxWyELWKlp9hBk8Q0Bchj7u1copP+07bM4cYFO
-        47sm6ZPJo2RBXGGAOhYlcd8L82/mGxF3iImaWsF5WpVO3lefh1RmeLFC1Fz4opq3
-        d2Rhm+ooAoNRLUjASCToADEW7D3iOXIw2POZHMUeBaxUVBNlfyvunBTS754pcBtS
-        DyMnXvvnIAR6HD5C2uDIEb5iqfqzfMjK58l5cWjjIohtmitJuIQhT3xqxBsAgfzv
-        WwIEpYNcZ+qYJ4gNDZQIqHaof3ye7q4YkSXIAPCJSp3RhsHBt6A8dhoAg==
-X-ME-Sender: <xms:v1WAZNZ6tx4KzLLwjBQybMyfYrpydqQygebu58gMU898AaW3Mybsxg>
-    <xme:v1WAZEatuQXZPeiyRazxsbX3d6f2KdM7mEZ8Joak9-W_Nn0ZwoOM2j0h8NB8lGVji
-    f12eYqsaVUL0Vpli0E>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedtgedgvdduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffdtleeuheffgefggedugfelleeigfdukeegffeggefhveffgeekteduleel
-    vdetnecuffhomhgrihhnpeguihgvrdhnvghtnecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:v1WAZP8CpKmKcWHhUIHLX1JxIlfSRjRGRMjCP-2R5lQFwxZOdQGFbQ>
-    <xmx:v1WAZLrMfb9ykHuWBytX9AIPB1zYj5Q47SnOwDbZuTmgL7sFnciGcQ>
-    <xmx:v1WAZIoLO9IR2dKbhHGEOnadDVWykCK-gRTYXRN-dsPt49J4Yap3jw>
-    <xmx:wFWAZDWWByNSSzYfgRTvqGCehTTBvNYxePiX4YXRyDy2bA9U4OPQzg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 14B58B60086; Wed,  7 Jun 2023 06:02:38 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-447-ge2460e13b3-fm-20230525.001-ge2460e13
-Mime-Version: 1.0
-Message-Id: <635d1aaf-3982-4404-9c05-05e51800691e@app.fastmail.com>
-In-Reply-To: <20230607094615.792013-1-falcon@tinylab.org>
-References: <b80f021a-30b7-47e9-8455-3844be157cc2@app.fastmail.com>
- <20230607094615.792013-1-falcon@tinylab.org>
-Date:   Wed, 07 Jun 2023 12:02:18 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Zhangjin Wu" <falcon@tinylab.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>,
-        "Willy Tarreau" <w@1wt.eu>
-Subject: Re: [PATCH v3 1/3] tools/nolibc: fix up #error compile failures with -ENOSYS
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        Wed, 7 Jun 2023 06:06:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD23199A
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 03:05:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686132325;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pabWd2MRgsuVxUvV0DGgCD7SRbaF3wZm1tvsg81rdig=;
+        b=JdXeJPvjPQh5ALkAZfbY/Kld/PM6R75gmFE9njQrCSAk4dcHfOvIOeHZAFCmL7mhNs1Tht
+        mgYwe9ERiyn/HRn0BhQpUuL4tI6m3M9MgdivUA7XALuriwKaaHwRTuUKd87fbB4yTOH8sk
+        zVPp806Vs/kVfe8LTb8pcw9MQtIl17I=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-383-ZAds3EvuOWuQ-ToMitXKTQ-1; Wed, 07 Jun 2023 06:05:24 -0400
+X-MC-Unique: ZAds3EvuOWuQ-ToMitXKTQ-1
+Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-62615f764b4so8672076d6.0
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 03:05:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686132324; x=1688724324;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pabWd2MRgsuVxUvV0DGgCD7SRbaF3wZm1tvsg81rdig=;
+        b=eP4kNB3yHDGcigYSW9wyODki0tDbbe14B5L7z29er/eVFdGgmLJfB+UbdmwhIRdP2a
+         FKqAJQo2aOXjYzM3FY5/njf+j0lMAK95fe0Z6patJ7tbcUJHQo8lPcUFF13DWPAwn3Mw
+         GcjAGVFJd9z6bwmaLx6ALvZNRlH1ytYPwA58/sE4kFKJsry7juh42uo2BiSHwCBOLn5T
+         fkHXALpmvsX8OlK94QgTtBkEVAIUx09ZdTR1EPvyuee2ssBo3TU5i5Sb9LGbsJUkhJh0
+         W1eo+rD3+yBNbEHJE7mfZj1wISiwlVvtiXhqZWO1tSw8FDbvAxuO/te3Vp6LOzZtle7O
+         ugyg==
+X-Gm-Message-State: AC+VfDxmNf8fpA93KSd79jM/Qg61fhIc6sRukF/FV+HXovtiFazKqPfT
+        SapbeOlyYqTQAKpdZA5O8ZkTcSDCUBAzOoi6yX3MjCq8vz8GDl6B2pg/stpMWHb9QL16VAyZGrj
+        V0QZ1nENw7Misyt3a/n75levK
+X-Received: by 2002:a05:6214:5297:b0:625:77a1:2a5f with SMTP id kj23-20020a056214529700b0062577a12a5fmr1380581qvb.5.1686132324231;
+        Wed, 07 Jun 2023 03:05:24 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7sCXPPAWyY9MZsxKcdqeTNcw91QomhRFU3GqMhd2G/fj4dGIw1ubuYxSotSN/dL/v4EjVLzA==
+X-Received: by 2002:a05:6214:5297:b0:625:77a1:2a5f with SMTP id kj23-20020a056214529700b0062577a12a5fmr1380549qvb.5.1686132323832;
+        Wed, 07 Jun 2023 03:05:23 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-247-199.dyn.eolo.it. [146.241.247.199])
+        by smtp.gmail.com with ESMTPSA id y9-20020ad457c9000000b00626161ea7a3sm6033222qvx.2.2023.06.07.03.05.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 03:05:23 -0700 (PDT)
+Message-ID: <c4707459ac2cb0b48cb9552e83ad4057ae5b9300.camel@redhat.com>
+Subject: Re: [PATCH RESEND net-next 2/5] net/sched: taprio: keep child Qdisc
+ refcount elevated at 2 in offload mode
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        linux-kernel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        Muhammad Husaini Zulkifli <muhammad.husaini.zulkifli@intel.com>,
+        Peilin Ye <yepeilin.cs@gmail.com>,
+        Pedro Tammela <pctammela@mojatatu.com>
+Date:   Wed, 07 Jun 2023 12:05:19 +0200
+In-Reply-To: <20230606155605.so7xpob6zbuugnwv@skbuf>
+References: <20230602103750.2290132-1-vladimir.oltean@nxp.com>
+         <20230602103750.2290132-3-vladimir.oltean@nxp.com>
+         <6bce1c55e1cd4295a3f36cb4b37398d951ead07b.camel@redhat.com>
+         <20230606155605.so7xpob6zbuugnwv@skbuf>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,50 +92,217 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 7, 2023, at 11:46, Zhangjin Wu wrote:
->> On Wed, Jun 7, 2023, at 07:19, Zhangjin Wu wrote:
->
-> Ok, agree, as the 64bit version of lseek may be enough for nolibc, if a target
-> application really require, they can add the alias themselves.
->
->> Are there any examples of functions where we actually want mulitple
->> versions?
->>
->
-> For example, the following ones are related to the syscalls being added,
-> all of them have similar library routines in current sys.h:
->
-> * waitid, https://linux.die.net/man/2/waitid
-> * ppoll, https://linux.die.net/man/2/ppoll
-> * pselect, https://linux.die.net/man/2/pselect6
-> * clock_gettime, https://linux.die.net/man/2/clock_gettime
->
-> The similar routines are put in right side:
->
-> * waitid --> waitpid, wait, wait4
-> * ppoll --> poll
-> * pselect --> select
-> * clock_gettime --> gettimeofday
+On Tue, 2023-06-06 at 18:56 +0300, Vladimir Oltean wrote:
+> On Tue, Jun 06, 2023 at 12:27:09PM +0200, Paolo Abeni wrote:
+> > On Fri, 2023-06-02 at 13:37 +0300, Vladimir Oltean wrote:
+> > > The taprio qdisc currently lives in the following equilibrium.
+> > >=20
+> > > In the software scheduling case, taprio attaches itself to all TXQs,
+> > > thus having a refcount of 1 + the number of TX queues. In this mode,
+> > > q->qdiscs[] is not visible directly to the Qdisc API. The lifetime of
+> > > the Qdiscs from this private array lasts until qdisc_destroy() ->
+> > > taprio_destroy().
+> > >=20
+> > > In the fully offloaded case, the root taprio has a refcount of 1, and
+> > > all child q->qdiscs[] also have a refcount of 1. The child q->qdiscs[=
+]
+> > > are visible to the Qdisc API (they are attached to the netdev TXQs
+> > > directly), however taprio loses a reference to them very early - duri=
+ng
+> > > qdisc_graft(parent=3D=3DNULL) -> taprio_attach(). At that time, tapri=
+o frees
+> > > the q->qdiscs[] array to not leak memory, but interestingly, it does =
+not
+> > > release a reference on these qdiscs because it doesn't effectively ow=
+n
+> > > them - they are created by taprio but owned by the Qdisc core, and wi=
+ll
+> > > be freed by qdisc_graft(parent=3D=3DNULL, new=3D=3DNULL) -> qdisc_put=
+(old) when
+> > > the Qdisc is deleted or when the child Qdisc is replaced with somethi=
+ng
+> > > else.
+> > >=20
+> > > My interest is to change this equilibrium such that taprio also owns =
+a
+> > > reference on the q->qdiscs[] child Qdiscs for the lifetime of the roo=
+t
+> > > Qdisc, including in full offload mode. I want this because I would li=
+ke
+> > > taprio_leaf(), taprio_dump_class(), taprio_dump_class_stats() to have
+> > > insight into q->qdiscs[] for the software scheduling mode - currently
+> > > they look at dev_queue->qdisc_sleeping, which is, as mentioned, the s=
+ame
+> > > as the root taprio.
+> > >=20
+> > > The following set of changes is necessary:
+> > > - don't free q->qdiscs[] early in taprio_attach(), free it late in
+> > >   taprio_destroy() for consistency with software mode. But:
+> > > - currently that's not possible, because taprio doesn't own a referen=
+ce
+> > >   on q->qdiscs[]. So hold that reference - once during the initial
+> > >   attach() and once during subsequent graft() calls when the child is
+> > >   changed.
+> > > - always keep track of the current child in q->qdiscs[], even for ful=
+l
+> > >   offload mode, so that we free in taprio_destroy() what we should, a=
+nd
+> > >   not something stale.
+> > >=20
+> > > Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+> > > ---
+> > >  net/sched/sch_taprio.c | 28 +++++++++++++++++-----------
+> > >  1 file changed, 17 insertions(+), 11 deletions(-)
+> > >=20
+> > > diff --git a/net/sched/sch_taprio.c b/net/sched/sch_taprio.c
+> > > index b1c611c72aa4..8807fc915b79 100644
+> > > --- a/net/sched/sch_taprio.c
+> > > +++ b/net/sched/sch_taprio.c
+> > > @@ -2138,23 +2138,20 @@ static void taprio_attach(struct Qdisc *sch)
+> > > =20
+> > >  			qdisc->flags |=3D TCQ_F_ONETXQUEUE | TCQ_F_NOPARENT;
+> > >  			old =3D dev_graft_qdisc(dev_queue, qdisc);
+> > > +			/* Keep refcount of q->qdiscs[ntx] at 2 */
+> > > +			qdisc_refcount_inc(qdisc);
+> > >  		} else {
+> > >  			/* In software mode, attach the root taprio qdisc
+> > >  			 * to all netdev TX queues, so that dev_qdisc_enqueue()
+> > >  			 * goes through taprio_enqueue().
+> > >  			 */
+> > >  			old =3D dev_graft_qdisc(dev_queue, sch);
+> > > +			/* Keep root refcount at 1 + num_tx_queues */
+> > >  			qdisc_refcount_inc(sch);
+> > >  		}
+> > >  		if (old)
+> > >  			qdisc_put(old);
+> > >  	}
+> > > -
+> > > -	/* access to the child qdiscs is not needed in offload mode */
+> > > -	if (FULL_OFFLOAD_IS_ENABLED(q->flags)) {
+> > > -		kfree(q->qdiscs);
+> > > -		q->qdiscs =3D NULL;
+> > > -	}
+> > >  }
+> > > =20
+> > >  static struct netdev_queue *taprio_queue_get(struct Qdisc *sch,
+> > > @@ -2183,15 +2180,24 @@ static int taprio_graft(struct Qdisc *sch, un=
+signed long cl,
+> > >  	if (dev->flags & IFF_UP)
+> > >  		dev_deactivate(dev);
+> > > =20
+> > > -	if (FULL_OFFLOAD_IS_ENABLED(q->flags)) {
+> > > +	/* In software mode, the root taprio qdisc is still the one attache=
+d to
+> > > +	 * all netdev TX queues, and hence responsible for taprio_enqueue()=
+ to
+> > > +	 * forward the skbs to the child qdiscs from the private q->qdiscs[=
+]
+> > > +	 * array. So only attach the new qdisc to the netdev queue in offlo=
+ad
+> > > +	 * mode, where the enqueue must bypass taprio. However, save the
+> > > +	 * reference to the new qdisc in the private array in both cases, t=
+o
+> > > +	 * have an up-to-date reference to our children.
+> > > +	 */
+> > > +	if (FULL_OFFLOAD_IS_ENABLED(q->flags))
+> > >  		*old =3D dev_graft_qdisc(dev_queue, new);
+> > > -	} else {
+> > > +	else
+> > >  		*old =3D q->qdiscs[cl - 1];
+> > > -		q->qdiscs[cl - 1] =3D new;
+> > > -	}
+> > > =20
+> > > -	if (new)
+> > > +	q->qdiscs[cl - 1] =3D new;
+> > > +	if (new) {
+> > > +		qdisc_refcount_inc(new);
+> > >  		new->flags |=3D TCQ_F_ONETXQUEUE | TCQ_F_NOPARENT;
+> > > +	}
+> > > =20
+> > Isn't the above leaking a reference to old with something alike:
+> >=20
+> > tc qdisc replace dev eth0 handle 8001: parent root stab overhead 24 tap=
+rio flags 0x2 #...
+> > 	# each q in q->qdiscs has refcnt =3D=3D 2
+> > tc qdisc replace dev eth0 parent 8001:8 cbs #...
+> > 	# -> taprio_graft(..., cbs, ...)
+> > 	# cbs refcnt is 2
+> > 	# 'old' refcnt decreases by 1, refcount will not reach 0?!?
+> >=20
+> > kmemleak should be able to see that.
+>=20
+> You're right - in full offload mode, the refcount of "old" (pfifo, parent=
+ 8001:8)
+> does not drop to 0 after grafting something else to 8001:8.
+>=20
+> I believe this other implementation should work in all cases.
+>=20
+> static int taprio_graft(struct Qdisc *sch, unsigned long cl,
+> 			struct Qdisc *new, struct Qdisc **old,
+> 			struct netlink_ext_ack *extack)
+> {
+> 	struct taprio_sched *q =3D qdisc_priv(sch);
+> 	struct net_device *dev =3D qdisc_dev(sch);
+> 	struct netdev_queue *dev_queue =3D taprio_queue_get(sch, cl);
+>=20
+> 	if (!dev_queue)
+> 		return -EINVAL;
+>=20
+> 	if (dev->flags & IFF_UP)
+> 		dev_deactivate(dev);
+>=20
+> 	/* In offload mode, the child Qdisc is directly attached to the netdev
+> 	 * TX queue, and thus, we need to keep its refcount elevated in order
+> 	 * to counteract qdisc_graft()'s call to qdisc_put() once per TX queue.
+> 	 * However, save the reference to the new qdisc in the private array in
+> 	 * both software and offload cases, to have an up-to-date reference to
+> 	 * our children.
+> 	 */
+> 	if (FULL_OFFLOAD_IS_ENABLED(q->flags)) {
+> 		*old =3D dev_graft_qdisc(dev_queue, new);
+> 		if (new)
+> 			qdisc_refcount_inc(new);
+> 		if (*old)
+> 			qdisc_put(*old);
+> 	} else {
+> 		*old =3D q->qdiscs[cl - 1];
+> 	}
 
-Ok, I think these are all useful to have in both versions.
+Perhaps the above chunk could be:
 
-All four of these examples are old enough that I think it's
-sufficient just expose them to userspace as the bare system
-calls, and have the older library calls be implemented using
-them without a fallback to the native syscalls of the same
-name on architectures that have both, newer architectures
-would only have the latest version anyway.
+	*old =3D q->qdiscs[cl - 1];
+	if (FULL_OFFLOAD_IS_ENABLED(q->flags)) {
+		WARN_ON_ONCE(dev_graft_qdisc(dev_queue, new) !=3D *old);
+		if (new)
+			qdisc_refcount_inc(new);
+		if (*old)
+			qdisc_put(*old);
+	}
 
-> For the clock_gettime, it may also let us think about if we need to add
-> its friends (clock_getres, clock_settime) together.
+(boldly assuming I'm not completely lost, which looks a wild bet ;)
 
-Yes, I think that makes sense. We also need clock_settime()
-to implement settimeofday() on rv32.
+> 	q->qdiscs[cl - 1] =3D new;
+> 	if (new)
+> 		new->flags |=3D TCQ_F_ONETXQUEUE | TCQ_F_NOPARENT;
+>=20
+> 	if (dev->flags & IFF_UP)
+> 		dev_activate(dev);
+>=20
+> 	return 0;
+> }
+>=20
+> > BTW, what about including your tests from the cover letter somewhere un=
+der tc-testing?
+>=20
+> I don't know about that. Does it involve adding taprio hw offload to netd=
+evsim,
+> so that both code paths are covered?
 
-Ideally, I'd love to extend the tooling around system calls
-in the kernel so we can automatically generate the low-level
-wrapper functions from syscall.tbl, but this needs a lot of
-other work that you should not need to depend on for what
-you are doing right now.
+I guess I underlooked the needed effort and we could live without new
+tests here.
 
-     Arnd
+
+Cheers,
+
+Paolo
+
