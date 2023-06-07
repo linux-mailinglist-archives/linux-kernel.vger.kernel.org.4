@@ -2,131 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DBFC7267B2
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 19:45:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 904277267B3
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 19:45:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232196AbjFGRpc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 13:45:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44772 "EHLO
+        id S232214AbjFGRpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 13:45:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230253AbjFGRpa (ORCPT
+        with ESMTP id S232143AbjFGRpg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 13:45:30 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 842D51BF1
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 10:45:29 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-977cf86aae5so663532966b.0
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 10:45:29 -0700 (PDT)
+        Wed, 7 Jun 2023 13:45:36 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3305F1BFF
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 10:45:35 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1b23f04e333so8602965ad.3
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 10:45:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686159928; x=1688751928;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XxW7nL1eX+5FPRhCjmj+SIcQXT7uzv8fsXCgUREBOYE=;
-        b=h+WNrdFjmAPyVmqrl8m06KrDelxGtj1GSTDfB/twyaXrpxG6yqmU66LdrIetvsYISp
-         sA9FEJzoVdtnhzpqi8sOobRNTCQPLFriZotutmc715DsCfT6eQAxvh5+GSJv84tJClI2
-         OwbuhfXOGzh0GKTHoy2Cxyv3g9lpuRbXtqEaCmVqw5140X4GyA1PK6HaESkXRWjk6++L
-         P5keTkiX+nfGbepPwf7M9P4GvAFrdP3TMKxFIFpA9lwej4lmo0vllg8qW82drcKdsS7Y
-         Go/ornv/aeCZOMNnHHikB2XLvp8ZYlZTz+G4ygyNTh92CIu91S7/SEThMGCWIhxE7RoE
-         dgKg==
+        d=gmail.com; s=20221208; t=1686159934; x=1688751934;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LEHz2ZoKgSyxNB1AeUKqmQu+HCPGQ2ML++3OH4j+o7Y=;
+        b=rFwImea/OOEo/0t4Q+mAr1zCkoA8LoFl8bbw94y42DLLnSvH1pSjKAgRF3GooBY/c0
+         pNtCc8NjjwqhV4+14Xtl0Z7zh28EzajitRvHvBYbxTDwi21L/J4XROhMYzEIk0D5oI0S
+         IxcgQN0OBJKbP0wT3JFRo6g3ZMrWBPCOA0tm0nIiab0NatPd/iYtMDctRO5yf1Q+PSfb
+         uVifLBThQVvXfA7WwnYizYdVhhovoTCAUi0ETxlbs1b7eK03yIU5hGxONHJTc0QqjypP
+         KNRqdjpILdxqX5hqOtz4ECxBpRgFkC9ubtpUAUNw5xLaUOiIo+6fS82Fc9vYqevKGFsn
+         EY7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686159928; x=1688751928;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XxW7nL1eX+5FPRhCjmj+SIcQXT7uzv8fsXCgUREBOYE=;
-        b=jczBReg/2ouykGmQpyI4Ye5oCj/+kRNDY2p1SaEor9TJ+zhknltJN0cF47qUTo82Cr
-         lPKnuMQIMRvgBYwqHyv8a0IFiPEOqjLVKWAYrG7HyTYKiStZUG8VQkUgTRcD28kLLxZn
-         LPKabzCDta7cjl+hxyjpqqrn/n0tULUeXtrA2eU/GBJrpIjBZO2YY8z+NK6ZldxIv1zb
-         ZST/B9CWuHOal54qtW5EAnuGOjjuw72mOPjW9IA85nZnsSUTvPrKzRQ2N1CRamp2hSXD
-         VqbkMJWQE3mN8kHgdhFd1eqba9llxwpFSEaEdiJmoNBP9MQV3/0aP6z1vYxEAh0Qm/7T
-         Y/Wg==
-X-Gm-Message-State: AC+VfDxsg7s05NE0JMj+8qo3TVLzNrS1pnh1tGKoZDHFyhAObg0kvzid
-        cGuhZwHq22kbWiVIEe8vuR31aA==
-X-Google-Smtp-Source: ACHHUZ4d0RVijM4MVpNsN1YOU7p+/14qoJL+ZVESbUW9GjbNKGL+J88JvOW+Wq1xlX80s7JUZaA/fQ==
-X-Received: by 2002:a17:907:60d4:b0:96f:5747:a0de with SMTP id hv20-20020a17090760d400b0096f5747a0demr6189489ejc.6.1686159927910;
-        Wed, 07 Jun 2023 10:45:27 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id h15-20020a170906260f00b00977e6992962sm3621333ejc.106.2023.06.07.10.45.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 10:45:27 -0700 (PDT)
-Message-ID: <07b33c1e-895e-d7d7-a108-0ee5f2812ffa@linaro.org>
-Date:   Wed, 7 Jun 2023 19:45:25 +0200
+        d=1e100.net; s=20221208; t=1686159934; x=1688751934;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LEHz2ZoKgSyxNB1AeUKqmQu+HCPGQ2ML++3OH4j+o7Y=;
+        b=EkV8hx+cN0SXh0SNLOAix4PKJH/nIr5NYm+EftoJDOVxYTxI0tGmTLD3fVBaGd+Ip7
+         qfiDNh8aX7run2dSwZ3lBc8JGDBlOirV5plOGp7B3C36GH4NFZc3ox9Z8wD9JIoC/Y8K
+         c0nUW8S1ElPG1YnRMewZ+8s7lBGW4DHXhsbmLOpjwHp1vkLSDaY3yFYeVtUJ5BKpIjVn
+         UeNylpugIBIVARhI/kaCZgryVRDQDJGa7gNd9nZk9pLxJIaYJ1U2GPfZIQqalScT4O7U
+         kdYVUbr0C7iOyDT8eYEs7g9B/JwhSYeYSlEaO1WdCZHjHwnFnj8FauyAVNFFz4yAvuCg
+         0YWg==
+X-Gm-Message-State: AC+VfDxLnd7Pod3AHz8CThVFKKnrkhCCJpU8DC5WaLDC1tx4LEAZqMui
+        nYxihg75IPet6k/byhbvIUw=
+X-Google-Smtp-Source: ACHHUZ58Y6XNgIIhNBrPN7yClCVvnBcR7oCRQ9QnbUohlQCTzrZ0qLJvr2/Br7MnQjJVX9r/zW6T5g==
+X-Received: by 2002:a17:902:dacc:b0:1ac:8837:de9 with SMTP id q12-20020a170902dacc00b001ac88370de9mr3030728plx.3.1686159934539;
+        Wed, 07 Jun 2023 10:45:34 -0700 (PDT)
+Received: from google.com ([2620:15c:211:201:b727:cbb8:689a:5510])
+        by smtp.gmail.com with ESMTPSA id l12-20020a170902f68c00b001afd821c057sm10697262plg.58.2023.06.07.10.45.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 10:45:33 -0700 (PDT)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Wed, 7 Jun 2023 10:45:31 -0700
+From:   Minchan Kim <minchan@kernel.org>
+To:     Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+Cc:     vitaly.wool@konsulko.com, senozhatsky@chromium.org,
+        yosryahmed@google.com, linux-mm@kvack.org, ddstreet@ieee.org,
+        sjenning@redhat.com, nphamcs@gmail.com, hannes@cmpxchg.org,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com
+Subject: Re: [RFC PATCH v2 4/7] mm: zswap: remove page reclaim logic from
+ zsmalloc
+Message-ID: <ZIDCO2dAOHFM5mhS@google.com>
+References: <20230606145611.704392-1-cerasuolodomenico@gmail.com>
+ <20230606145611.704392-5-cerasuolodomenico@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH RFC net 1/2] nfc: nxp-nci: Fix i2c read on ThinkPad
- hardware
-Content-Language: en-US
-To:     Marco Giorgi <giorgi.marco.96@disroot.org>, netdev@vger.kernel.org
-Cc:     u.kleine-koenig@pengutronix.de, davem@davemloft.net,
-        michael@walle.cc, kuba@kernel.org, linux-kernel@vger.kernel.org
-References: <20230607170009.9458-1-giorgi.marco.96@disroot.org>
- <20230607170009.9458-2-giorgi.marco.96@disroot.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230607170009.9458-2-giorgi.marco.96@disroot.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230606145611.704392-5-cerasuolodomenico@gmail.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        FSL_HELO_FAKE,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/06/2023 19:00, Marco Giorgi wrote:
-> Add the IRQ GPIO configuration.
-
-Why? Please include reasons in commit msg. What you are doing is quite
-easy to see.
-
+On Tue, Jun 06, 2023 at 04:56:08PM +0200, Domenico Cerasuolo wrote:
+> With the recent enhancement to zswap enabling direct page writeback, the
+> need for the shrink code in zsmalloc has become obsolete. As a result,
+> this commit removes the page reclaim logic from zsmalloc entirely.
 > 
-> Signed-off-by: Marco Giorgi <giorgi.marco.96@disroot.org>
+> Signed-off-by: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
 > ---
->  drivers/nfc/nxp-nci/i2c.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
+>  mm/zsmalloc.c | 393 ++------------------------------------------------
+>  1 file changed, 13 insertions(+), 380 deletions(-)
 > 
-> diff --git a/drivers/nfc/nxp-nci/i2c.c b/drivers/nfc/nxp-nci/i2c.c
-> index d4c299be7949..4ba26a958258 100644
-> --- a/drivers/nfc/nxp-nci/i2c.c
-> +++ b/drivers/nfc/nxp-nci/i2c.c
-> @@ -35,6 +35,7 @@ struct nxp_nci_i2c_phy {
+> diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
+> index 02f7f414aade..75386283dba0 100644
+> --- a/mm/zsmalloc.c
+> +++ b/mm/zsmalloc.c
+> @@ -107,21 +107,8 @@
+>   */
+>  #define OBJ_ALLOCATED_TAG 1
 >  
->  	struct gpio_desc *gpiod_en;
->  	struct gpio_desc *gpiod_fw;
-> +	struct gpio_desc *gpiod_irq;
+> -#ifdef CONFIG_ZPOOL
+> -/*
+> - * The second least-significant bit in the object's header identifies if the
+> - * value stored at the header is a deferred handle from the last reclaim
+> - * attempt.
+> - *
+> - * As noted above, this is valid because we have room for two bits.
+> - */
+> -#define OBJ_DEFERRED_HANDLE_TAG	2
+> -#define OBJ_TAG_BITS	2
+> -#define OBJ_TAG_MASK	(OBJ_ALLOCATED_TAG | OBJ_DEFERRED_HANDLE_TAG)
+> -#else
+>  #define OBJ_TAG_BITS	1
+>  #define OBJ_TAG_MASK	OBJ_ALLOCATED_TAG
+> -#endif /* CONFIG_ZPOOL */
 >  
->  	int hard_fault; /*
->  			 * < 0 if hardware error occurred (e.g. i2c err)
-> @@ -254,10 +255,12 @@ static irqreturn_t nxp_nci_i2c_irq_thread_fn(int irq, void *phy_id)
->  	return IRQ_NONE;
+>  #define OBJ_INDEX_BITS	(BITS_PER_LONG - _PFN_BITS - OBJ_TAG_BITS)
+>  #define OBJ_INDEX_MASK	((_AC(1, UL) << OBJ_INDEX_BITS) - 1)
+> @@ -227,12 +214,6 @@ struct link_free {
+>  		 * Handle of allocated object.
+>  		 */
+>  		unsigned long handle;
+> -#ifdef CONFIG_ZPOOL
+> -		/*
+> -		 * Deferred handle of a reclaimed object.
+> -		 */
+> -		unsigned long deferred_handle;
+> -#endif
+>  	};
+>  };
+>  
+> @@ -250,13 +231,6 @@ struct zs_pool {
+>  	/* Compact classes */
+>  	struct shrinker shrinker;
+>  
+> -#ifdef CONFIG_ZPOOL
+> -	/* List tracking the zspages in LRU order by most recently added object */
+> -	struct list_head lru;
+> -	struct zpool *zpool;
+> -	const struct zpool_ops *zpool_ops;
+> -#endif
+> -
+>  #ifdef CONFIG_ZSMALLOC_STAT
+>  	struct dentry *stat_dentry;
+>  #endif
+> @@ -279,13 +253,6 @@ struct zspage {
+>  	unsigned int freeobj;
+>  	struct page *first_page;
+>  	struct list_head list; /* fullness list */
+> -
+> -#ifdef CONFIG_ZPOOL
+> -	/* links the zspage to the lru list in the pool */
+> -	struct list_head lru;
+> -	bool under_reclaim;
+> -#endif
+> -
+>  	struct zs_pool *pool;
+>  	rwlock_t lock;
+>  };
+> @@ -393,14 +360,7 @@ static void *zs_zpool_create(const char *name, gfp_t gfp,
+>  	 * different contexts and its caller must provide a valid
+>  	 * gfp mask.
+>  	 */
+> -	struct zs_pool *pool = zs_create_pool(name);
+> -
+> -	if (pool) {
+> -		pool->zpool = zpool;
+> -		pool->zpool_ops = zpool_ops;
+> -	}
+> -
+> -	return pool;
+> +	return zs_create_pool(name);
 >  }
 >  
-> +static const struct acpi_gpio_params irq_gpios = { 0, 0, false };
->  static const struct acpi_gpio_params firmware_gpios = { 1, 0, false };
->  static const struct acpi_gpio_params enable_gpios = { 2, 0, false };
+>  static void zs_zpool_destroy(void *pool)
+> @@ -422,27 +382,6 @@ static void zs_zpool_free(void *pool, unsigned long handle)
+>  	zs_free(pool, handle);
+>  }
 >  
->  static const struct acpi_gpio_mapping acpi_nxp_nci_gpios[] = {
-> +	{ "irq-gpios", &irq_gpios, 1 },
->  	{ "enable-gpios", &enable_gpios, 1 },
->  	{ "firmware-gpios", &firmware_gpios, 1 },
->  	{ }
-> @@ -286,6 +289,12 @@ static int nxp_nci_i2c_probe(struct i2c_client *client)
->  	if (r)
->  		dev_dbg(dev, "Unable to add GPIO mapping table\n");
->  
-> +	phy->gpiod_irq = devm_gpiod_get(dev, "irq", GPIOD_IN);
+> -static int zs_reclaim_page(struct zs_pool *pool, unsigned int retries);
+> -
+> -static int zs_zpool_shrink(void *pool, unsigned int pages,
+> -			unsigned int *reclaimed)
+> -{
+> -	unsigned int total = 0;
+> -	int ret = -EINVAL;
+> -
+> -	while (total < pages) {
+> -		ret = zs_reclaim_page(pool, 8);
+> -		if (ret < 0)
+> -			break;
+> -		total++;
+> -	}
+> -
+> -	if (reclaimed)
+> -		*reclaimed = total;
+> -
+> -	return ret;
+> -}
+> -
+>  static void *zs_zpool_map(void *pool, unsigned long handle,
+>  			enum zpool_mapmode mm)
+>  {
+> @@ -481,7 +420,7 @@ static struct zpool_driver zs_zpool_driver = {
+>  	.malloc_support_movable = true,
+>  	.malloc =		  zs_zpool_malloc,
+>  	.free =			  zs_zpool_free,
+> -	.shrink =		  zs_zpool_shrink,
+> +	.shrink =		  NULL,
 
-Bindings do not allow it. Please update bindings... or not, because they
-clearly state that interrupts are already there.
+You can simply delete the line instead since the NULL is default behavior.
 
-You need to explain what is this.
+Other than that, Super nice. Thanks, Domenico!
 
-
-
-Best regards,
-Krzysztof
-
+Acked-by: Minchan Kim <minchan@kernel.org>
