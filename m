@@ -2,126 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E3D67266FF
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 19:17:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47789726712
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 19:20:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231225AbjFGRR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 13:17:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52502 "EHLO
+        id S231573AbjFGRUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 13:20:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230037AbjFGRRZ (ORCPT
+        with ESMTP id S231734AbjFGRT6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 13:17:25 -0400
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D2E1BDC;
-        Wed,  7 Jun 2023 10:17:24 -0700 (PDT)
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-655fce0f354so2409816b3a.0;
-        Wed, 07 Jun 2023 10:17:24 -0700 (PDT)
+        Wed, 7 Jun 2023 13:19:58 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 129AE1725;
+        Wed,  7 Jun 2023 10:19:57 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id d75a77b69052e-3f9b1f43bd0so23579121cf.0;
+        Wed, 07 Jun 2023 10:19:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686158396; x=1688750396;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oH5f7Jv4iQPlTMfbAHE6RS0udww2Ru879vIYjDJbT6k=;
+        b=KaeC7xfEiotvSfP14IjbqKALm4pzt+sOY5LxGSvKV340X2pC+Uvi65yAyA3tbtPNgx
+         lTmBCmR/Isgs9msWDwav63X1YQtA63Vdn1X6K/iJoLynZhFF4PdV1Wylh/F+IGlomIHv
+         rO9m69N3ASYqZa3IDYy+NKzIYVFcCXAYpdHRz9BMh/83oLQxKzqX+8pyLVbGn3sdI2WS
+         XCby6EncINE1NktAmvOsBHU41ff6uUsnmQqr1PCOo+Ntit4TnEAg+F9Welo3cPCJ23/3
+         2XWdbiscWeTHsPXymsHMu1Kx4hymxZ4VzcWArlAZblm+ibSPUSbi5Tbqk5LybgWi6Cws
+         NkFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686158244; x=1688750244;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DFPGwpCQpZDlbK+2dcezD0d5mxiO5AMq/+/AN27SQOM=;
-        b=Yc9OAdceP2EkMmzV5XHhv1rtLxoDRavVLZ4CyMM3lMoTYc6R2MHT9itt/VftOWArtu
-         kuOnhb/Pkh9I4k5GuFBO2OcF8jnJaYVPA+GzRrE7r1z/pmnRQuvptgnguOItL1Zq7W1i
-         IFs08raDkz4Bv7bvGTdvkJhhjG5YX12VLzq/VgwNiOWAAKN0Wme20PIpDNdQo5RpXf6T
-         0rte9LSqojdgJxdhtPf+m1LFGb64MSRedxQHOT2FYPCOJJvjOrcwWKi0fvubGZJHt8lm
-         DxUQO0AEheISX0ra6e61Ggv7D8Q9jAxYFFczZPZB67JELyyiInjmca8pcKMeDaKlcQq3
-         Vw5A==
-X-Gm-Message-State: AC+VfDw8F5OEhlHqX1FO9FAGXfqV5QOJ1/QTEqDOOg4yN+QSetR+5FwB
-        /DJFtpODVquFXqoMQuZfED4=
-X-Google-Smtp-Source: ACHHUZ7v8zzX5zKgbuGtCNfhzwZXUtn5YrrNGyBjX3Hfyxj9y8BR90kt2+NZlmgBHihAc8RVnQ2zPg==
-X-Received: by 2002:a05:6a20:7293:b0:10f:13bb:5d4f with SMTP id o19-20020a056a20729300b0010f13bb5d4fmr2039900pzk.2.1686158243558;
-        Wed, 07 Jun 2023 10:17:23 -0700 (PDT)
-Received: from [192.168.3.219] ([98.51.102.78])
-        by smtp.gmail.com with ESMTPSA id d10-20020a631d0a000000b0051b36aee4f6sm9349487pgd.83.2023.06.07.10.17.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 10:17:23 -0700 (PDT)
-Message-ID: <ed3cad40-5634-ffff-aa29-c14f91c7f8a4@acm.org>
-Date:   Wed, 7 Jun 2023 10:17:22 -0700
+        d=1e100.net; s=20221208; t=1686158396; x=1688750396;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oH5f7Jv4iQPlTMfbAHE6RS0udww2Ru879vIYjDJbT6k=;
+        b=Eu30+kIFbF0NrAVjsPxcigKX57VrWNDXgb+uVAOruKyVw8lWK/4075ISrHmSG4FjJU
+         zWUUf4EC5jtIJH9judnKYZvrWzoNwNh1A/Jx5nMXAIUeT4zaSrdLfS9qDxGg78J5RtJF
+         Beq5NdTe2bnN7ms/yVrIVWpiRP1KtWpAZRzHcVAWDxP5CbVrYUQ2D1TN824buTiy9dXB
+         WUS9H3uIZWZJBfdEVxKBI4COEeTMczQUsQbozYdPx8AIrdcsgnjCYx7yFo0zVBW2gobC
+         iNEbFlnj3QjQwwh9uE4lhxv9+8mqconoy+1fbHWtJQR4JPRmLm56jFpdEl05fQx+UFlQ
+         h0uw==
+X-Gm-Message-State: AC+VfDx7TRr/1ILot6j+joot0Q8Bu2nVu28jxn4h/x1C4bAOwt9JYT2F
+        7dFNvf17t5R3Rh+wF3IzBNA=
+X-Google-Smtp-Source: ACHHUZ7QBsFQkmnN1qHD5DnM1JWPMxx2OuD7EZ/HmWXsKgjVYOhfWHqBAwdQM0JbS7gVhMUBFwyVpw==
+X-Received: by 2002:a05:622a:178e:b0:3ec:490b:ce6e with SMTP id s14-20020a05622a178e00b003ec490bce6emr5055623qtk.48.1686158395951;
+        Wed, 07 Jun 2023 10:19:55 -0700 (PDT)
+Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
+        by smtp.gmail.com with ESMTPSA id cj22-20020a05622a259600b003f3937c16c4sm72933qtb.5.2023.06.07.10.19.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 10:19:55 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 83F0627C0054;
+        Wed,  7 Jun 2023 13:19:54 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Wed, 07 Jun 2023 13:19:54 -0400
+X-ME-Sender: <xms:ObyAZFZxbEAWWuKpXL6AqInOQtX_dF2xR0wmWgC4o0D2NbLr1j5zEg>
+    <xme:ObyAZMahPTMGffmB5TkLV0nyr87J0dh4YZPD4zkwyIfUKEA8qUx366GmtOUMoSHMN
+    nXTSEb3IH7LnE1asA>
+X-ME-Received: <xmr:ObyAZH8dfv5V1Y28F-OmM__UpvXwBF81eHx1r38XAwDeCXJpE4uYMjvh5Zg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedtgedgudduvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhq
+    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
+    grthhtvghrnhepjeeihfdtuedvgedvtddufffggeefhefgtdeivdevveelvefhkeehffdt
+    keeihedvnecuffhomhgrihhnpehruhhsthdqlhgrnhhgrdhorhhgnecuvehluhhsthgvrh
+    fuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsghoqhhunhdomhgvshhmthhp
+    rghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedtieegqddujeejkeehheehvddqsg
+    hoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfhhigihmvgdrnhgrmhgv
+X-ME-Proxy: <xmx:ObyAZDoVKkIVG33XXLk2iizFciTW0-cbG4iSqPFTwHZAEt5CrWc-hQ>
+    <xmx:ObyAZArquBRtlIgE6F34ECyQJKvpbbUe-AhWyIEO1VQnKnwQI-19iQ>
+    <xmx:ObyAZJQ-H-PgJSXmjXuy7K_4hm8rnIZp9SfzwUGMF9y5qnqPzQOFJg>
+    <xmx:OryAZGjlMEz41Bibcn1JqrsmgKtSM42oGgWnPAvPZgJhb-b0cGUfUA>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 7 Jun 2023 13:19:52 -0400 (EDT)
+Date:   Wed, 7 Jun 2023 10:18:26 -0700
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Qingsong Chen <changxian.cqs@antgroup.com>
+Cc:     linux-kernel@vger.kernel.org,
+        =?utf-8?B?55Sw5rSq5Lqu?= <tate.thl@antgroup.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
+        Alice Ryhl <aliceryhl@google.com>,
+        Asahi Lina <lina@asahilina.net>, rust-for-linux@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] rust: kernel: add ScatterList abstraction
+Message-ID: <ZIC74gLDC1pLIx+Z@boqun-archlinux>
+References: <20230602101819.2134194-1-changxian.cqs@antgroup.com>
+ <20230602101819.2134194-2-changxian.cqs@antgroup.com>
+ <ZH3+jARBbn2iG1dW@Boquns-Mac-mini.local>
+ <fe4744bb-17db-6f60-4b8c-1453009ef11a@antgroup.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH] scsi: ufs-mediatek: add dependency for RESET_CONTROLLER
-Content-Language: en-US
-To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
-Cc:     kernel test robot <lkp@intel.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Peter Wang <peter.wang@mediatek.com>,
-        Paul Gazzillo <paul@pgazz.com>,
-        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
-        linux-scsi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-References: <20230602023957.9187-1-rdunlap@infradead.org>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20230602023957.9187-1-rdunlap@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fe4744bb-17db-6f60-4b8c-1453009ef11a@antgroup.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/1/23 19:39, Randy Dunlap wrote:
-> When RESET_CONTROLLER is not set, kconfig complains about missing
-> dependencies for RESET_TI_SYSCON, so add the missing dependency
-> just as is done above for SCSI_UFS_QCOM.
+On Tue, Jun 06, 2023 at 03:01:30PM +0800, Qingsong Chen wrote:
+> On 6/5/23 11:26 PM, Boqun Feng wrote:
+> > On Fri, Jun 02, 2023 at 06:18:17PM +0800, Qingsong Chen wrote:
+> > [...]
+> > > +impl<'a> ScatterList<'a> {
+> > > +    /// Construct a new initializer.
+> > > +    pub fn new(buf: &'a Pin<&mut [u8]>) -> impl PinInit<ScatterList<'a>> {
+> > > +        // SAFETY: `slot` is valid while the closure is called, the memory
+> > > +        // buffer is pinned and valid.
+> > > +        unsafe {
+> > > +            init::pin_init_from_closure(move |slot: *mut Self| {
+> > > +                (*slot).set_buf(buf);
+> > > +                (*slot).mark_end();
+> > 
+> > Benno can provide more information, but you cannot dereference or create
+> > a reference to `*slot`, since `slot` points to an uninitialized object
+> > (see `try_pin_init` implementations), and referencing uninitialized
+> > objects is UB (or may cause UB).
 > 
-> Silences this kconfig warning:
-> 
-> WARNING: unmet direct dependencies detected for RESET_TI_SYSCON
->    Depends on [n]: RESET_CONTROLLER [=n] && HAS_IOMEM [=y]
->    Selected by [m]:
->    - SCSI_UFS_MEDIATEK [=m] && SCSI_UFSHCD [=y] && SCSI_UFSHCD_PLATFORM [=y] && ARCH_MEDIATEK [=y]
-> 
-> Fixes: de48898d0cb6 ("scsi: ufs-mediatek: Create reset control device_link")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: lore.kernel.org/r/202306020859.1wHg9AaT-lkp@intel.com
-> Cc: Stanley Chu <stanley.chu@mediatek.com>
-> Cc: Peter Wang <peter.wang@mediatek.com>
-> Cc: Paul Gazzillo <paul@pgazz.com>
-> Cc: Necip Fazil Yildiran <fazilyildiran@gmail.com>
-> Cc: linux-scsi@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-mediatek@lists.infradead.org
-> Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
-> Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-> ---
->   drivers/ufs/host/Kconfig |    1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff -- a/drivers/ufs/host/Kconfig b/drivers/ufs/host/Kconfig
-> --- a/drivers/ufs/host/Kconfig
-> +++ b/drivers/ufs/host/Kconfig
-> @@ -72,6 +72,7 @@ config SCSI_UFS_QCOM
->   config SCSI_UFS_MEDIATEK
->   	tristate "Mediatek specific hooks to UFS controller platform driver"
->   	depends on SCSI_UFSHCD_PLATFORM && ARCH_MEDIATEK
-> +	depends on RESET_CONTROLLER
->   	select PHY_MTK_UFS
->   	select RESET_TI_SYSCON
->   	help
+> I understand that `reading` from uninitialized objects is UB, either
+> via references or raw pointers. But in this unsafe closure, we just do
+> the `writing` job to `slot` for initializing. This makes me a little
+> confused, why is there a difference between reference and raw pointer?
 
-Hmm ... is the above patch complete? Shouldn't a similar dependency be
-added to the ufs-hisi and ufs-sprd drivers? See also the following git
-grep output:
+References (or the existence of the references) mean the underlying
+objects are valid:
 
-$ git grep -nH 'include.*linux/reset.h' */ufs
-drivers/ufs/host/ufs-hisi.c:16:#include <linux/reset.h>
-drivers/ufs/host/ufs-mediatek.c:21:#include <linux/reset.h>
-drivers/ufs/host/ufs-qcom.h:9:#include <linux/reset.h>
-drivers/ufs/host/ufs-sprd.c:14:#include <linux/reset.h>
+	https://doc.rust-lang.org/std/primitive.reference.html
 
-Thanks,
+, so creating a reference (even a temporary one) to an uninitialized is
+an UB, that being said..
 
-Bart.
+> Is there any compiler magic on reference which may cause UB? Still, I
+
+I'm not creative enough to come up with a compiler optimization that
+will (ab)use this UB to do evil if you can be sure that set_buf() and
+mark_end() are purely writes. So your confusion looks reasonable to me
+;-) But still it's an UB. And I guess you don't want to be suprised by
+any future compiler optimization, right? ;-)
+
+Regards,
+Boqun
+
+> would fix this by `addr_of`. Thanks.
