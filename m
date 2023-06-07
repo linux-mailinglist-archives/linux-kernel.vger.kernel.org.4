@@ -2,178 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EF4A726399
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 17:02:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDFFA72639A
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 17:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241010AbjFGPCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 11:02:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49372 "EHLO
+        id S241239AbjFGPCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 11:02:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241181AbjFGPCS (ORCPT
+        with ESMTP id S241148AbjFGPCW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 11:02:18 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6360B2101
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 08:02:12 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-65314ee05c6so3535154b3a.1
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 08:02:12 -0700 (PDT)
+        Wed, 7 Jun 2023 11:02:22 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2129B1FCE
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 08:02:14 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-19f68a583a7so463619fac.1
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 08:02:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686150131; x=1688742131;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zG5lPa3pt3CBh78GFYF12trQ1TmiLPYaWhXfF67zHG0=;
-        b=fvS9ICf7N5XMNdzgrh45C2R3ReuaMK6GJBriQnHXs0Czvd5kFAFdhB2MeUD11cgxww
-         Y9juJb9+7UyrACHWPXzuyF4j3BtDCEnCpxOEaD2Zmn9+xYt9zKPCyhS54JSo3FJpeLtD
-         paBmgmY+Og8RqX9BHdfL7KguvfxIsK8DXboc8CvH4tz1gk1kL3gfaV/0k8lRJ9dseVkO
-         ZTay6y56HSk2Vag9sf3Ok3MqubW3yh8OX67pXgHoxS5tT14V7YcJtrZx3MQ6QiS2j0WD
-         3ZOJvzK9jx7W0SFciPjJKsXqQFJjoNS2M9F8oxFpLfC5QZNxiJDwxNXvLkFothhoTuOf
-         V7yA==
+        d=mojatatu-com.20221208.gappssmtp.com; s=20221208; t=1686150133; x=1688742133;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2qAxT/R+HpbFYxwfQDqG6aZkmtWtVsKV+dhh4zLlAns=;
+        b=0M0PNhqz0V8jzCyGAmgRGORAji7GQ49SGXAzpQvPg/kFnLDM/PmFxALmgCURiD+5Pp
+         Bl6r0ivWp/XgZE9ncF2S88XxqgdwygXvPqDK1GXdxBpE5TjiuXQo2jNUxjVTY4cf81Sr
+         EgUHSclPc78WOq4L1cI9kAnBXMWvd06T3oqRydgIoXnsDCxBh7PKlbmAtpXSYnr4GZ4d
+         VJS5lZxwiwSft60iTmtjDFFHX/InlgkJcSmgSqhZg9wyEh72saAHrIr1tLEgnrE+OZaT
+         6X2q9MnhjW8MvWn8EShkimGeT4GEfQd7zLUkiLdm3vIysjCbnMUavPATluXqIk51MrTR
+         +MCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686150131; x=1688742131;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zG5lPa3pt3CBh78GFYF12trQ1TmiLPYaWhXfF67zHG0=;
-        b=eejv+j4EK9Hx0fqcq9yxXCKmWhI38AJ49iPA+BUuduSlgtFkymrKIgxpUu2IYadT0R
-         oVONjTE4MD2bY2eJADSaGZyEKst5hBnQvLHl7i3EveiseA0S2DEdqdJmAp5+mYTBiyEr
-         X9xlZ3gPRGtWcd1anHuk+j7e5uuk4r4CwVmgzkF5VQEb56KBUFZoFrCD4g6ozG9gIfiU
-         j9j+4/U5y00Vdvky9bMAie1njKB6sy8NHesz/1605rwBcdqcvbBOyRYNEZD1uz9bXcqi
-         2apsOuju33X2AU47+IIlwr6/gQsDRSX04nxCzeHU/g4+Eo9d7hyZDw+FyNLsHIxVsM+L
-         RWog==
-X-Gm-Message-State: AC+VfDwdzWXGw0HenlOccPJ7mCt4LInSzFkZOE6nMgSKsVyyAj6PaQw8
-        5JuqJfzxC1l6UsejpEevY+k=
-X-Google-Smtp-Source: ACHHUZ6h3Y9+P1svH1XAJ9BG/1uE9rCcobjW9vR+sGhuY7lgwDoF35Dt2eX4NYdlDEjqipeESYwzBQ==
-X-Received: by 2002:a05:6a00:2284:b0:64d:6c6f:84f2 with SMTP id f4-20020a056a00228400b0064d6c6f84f2mr3234856pfe.19.1686150130489;
-        Wed, 07 Jun 2023 08:02:10 -0700 (PDT)
-Received: from yogi-Zephyrus ([103.251.210.211])
-        by smtp.gmail.com with ESMTPSA id c14-20020aa78e0e000000b0063d24fcc2besm8524214pfr.125.2023.06.07.08.02.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 08:02:10 -0700 (PDT)
-Date:   Wed, 7 Jun 2023 20:32:06 +0530
-From:   Yogesh Hegde <yogi.kernel@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/5] staging: rtl8192e: Remove variable SetBWModeHandler
-Message-ID: <0af9595916447a28e27c249f3696fe107382ca53.1686149467.git.yogi.kernel@gmail.com>
-References: <cover.1686149467.git.yogi.kernel@gmail.com>
+        d=1e100.net; s=20221208; t=1686150133; x=1688742133;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2qAxT/R+HpbFYxwfQDqG6aZkmtWtVsKV+dhh4zLlAns=;
+        b=WYUxnXQ/ju1E84i1HjCGgjiX0P3lG0opGK1Wb9o0sHcpKFBh2sfjN0ZTImXHARZ2yc
+         E8tvsaZrEjC3/1oqUtjWDwerZFIZuy0K/iZBf/QLsFiKKRdya8VlZ8LogCcTjpTELq9V
+         5ACB3SDgjwIhOcopZtNzFSdp1zbudbpAiTrj09ESkDzgbekk1MDN8SzyofvXYqKYNaYU
+         m+rKV4/ZMBUdl9oyramvOh/nHnP7jJeWPP8yfubj9DSjqx+QBNrVFedQ6Ebcd38JaBnr
+         9yBWfmz9dTStg6wHv9GRP+iBLzqInI6LtCyp5EB4MFliSmykegjNbMLrQazx9vhiDD+x
+         JJwQ==
+X-Gm-Message-State: AC+VfDyqW/t1lYqqrMoCVugnd8aKpEux465zC7RM6UR3RViHNuFBdJGh
+        lvqrqrOkHef70368/P2PLm/owQ==
+X-Google-Smtp-Source: ACHHUZ5QcMrIID6RYx/DVnVKpV935j4lAhZVf5FPs7QTeWboIgReIZ2/M0vn42FjqV65jj1LqFXYng==
+X-Received: by 2002:a05:6870:148e:b0:1a2:865c:eadc with SMTP id k14-20020a056870148e00b001a2865ceadcmr3383577oab.29.1686150133322;
+        Wed, 07 Jun 2023 08:02:13 -0700 (PDT)
+Received: from ?IPV6:2804:14d:5c5e:44fb:9148:dfc3:4a0d:3b4e? ([2804:14d:5c5e:44fb:9148:dfc3:4a0d:3b4e])
+        by smtp.gmail.com with ESMTPSA id n1-20020a056870e40100b0019a3bbeeb34sm5944311oag.40.2023.06.07.08.02.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Jun 2023 08:02:12 -0700 (PDT)
+Message-ID: <3679ed57-a0b9-4af2-cf83-e8aaa4bbd29e@mojatatu.com>
+Date:   Wed, 7 Jun 2023 12:02:07 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1686149467.git.yogi.kernel@gmail.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] net/sched: Set the flushing flags to false to prevent an
+ infinite loop
+Content-Language: en-US
+To:     renmingshuai <renmingshuai@huawei.com>
+Cc:     caowangbao@huawei.com, davem@davemloft.net, edumazet@google.com,
+        jhs@mojatatu.com, jiri@resnulli.us, kuba@kernel.org,
+        liaichun@huawei.com, linux-kernel@vger.kernel.org,
+        liubo335@huawei.com, netdev@vger.kernel.org, pabeni@redhat.com,
+        xiyou.wangcong@gmail.com, yanan@huawei.com
+References: <81cd0ecb-29a6-d748-8962-dc741a02e691@mojatatu.com>
+ <20230607041920.2012792-1-renmingshuai@huawei.com>
+From:   Pedro Tammela <pctammela@mojatatu.com>
+In-Reply-To: <20230607041920.2012792-1-renmingshuai@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The variable SetBWModeHandler is set in only one place throughout the
-driver. This patch removes the variable and calls the real function
-directly instead, eliminating the unnecessary indirection.
-Additionally, the removal of the variable aligns with the checkpatch
-guidelines by removing the use of CamelCase.
+On 07/06/2023 01:19, renmingshuai wrote:
+>> On 06/06/2023 11:45, renmingshuai wrote:
+>>> When a new chain is added by using tc, one soft lockup alarm will be
+>>>    generated after delete the prio 0 filter of the chain. To reproduce
+>>>    the problem, perform the following steps:
+>>> (1) tc qdisc add dev eth0 root handle 1: htb default 1
+>>> (2) tc chain add dev eth0
+>>> (3) tc filter del dev eth0 chain 0 parent 1: prio 0
+>>> (4) tc filter add dev eth0 chain 0 parent 1:
+>>
+>> This seems like it could be added to tdc or 3 and 4 must be run in parallel?
+> 3 and 4 do not need to be run inparallel. When a new chain is added by the
+>   way as step 1 and the step 3 is completed, this problem always occurs
+>   whenever step 4 is run.
 
-Signed-off-by: Yogesh Hegde <yogi.kernel@gmail.com>
----
+Got it,
+The test still hangs with the provided patch.
 
-v2: Removed the variable and called the function direction instead of
-    just renaming the variable as suggested by Greg Kroah-Hartman
-    <gregkh@linuxfoundation.org>
----
- drivers/staging/rtl8192e/rtl8192e/rtl_core.c | 1 -
- drivers/staging/rtl8192e/rtl819x_HTProc.c    | 8 ++++----
- drivers/staging/rtl8192e/rtllib.h            | 3 ---
- drivers/staging/rtl8192e/rtllib_softmac_wx.c | 6 +++---
- 4 files changed, 7 insertions(+), 11 deletions(-)
++ tc qdisc add dev lo root handle 1: htb default 1
++ tc chain add dev lo
++ tc filter del dev lo chain 0 parent 1: prio 0
+[   68.790030][ T6704] [+]
+[   68.790060][ T6704] chain refcnt 2
+[   68.790951][ T6704] [-]
++ tc filter add dev lo chain 0 parent 1:
+<hangs>
 
-diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-index bbe0864e1348..6f6c31344441 100644
---- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-@@ -717,7 +717,6 @@ static void _rtl92e_init_priv_handler(struct net_device *dev)
- 	priv->rtllib->handle_assoc_response	= _rtl92e_handle_assoc_response;
- 	priv->rtllib->handle_beacon		= _rtl92e_handle_beacon;
- 	priv->rtllib->LeisurePSLeave		= rtl92e_leisure_ps_leave;
--	priv->rtllib->SetBWModeHandler		= rtl92e_set_bw_mode;
- 	priv->rf_set_chan			= rtl92e_set_channel;
- 
- 	priv->rtllib->start_send_beacons = rtl92e_start_beacon;
-diff --git a/drivers/staging/rtl8192e/rtl819x_HTProc.c b/drivers/staging/rtl8192e/rtl819x_HTProc.c
-index fe30a291e64c..ad92a8230055 100644
---- a/drivers/staging/rtl8192e/rtl819x_HTProc.c
-+++ b/drivers/staging/rtl8192e/rtl819x_HTProc.c
-@@ -6,6 +6,8 @@
-  */
- #include "rtllib.h"
- #include "rtl819x_HT.h"
-+#include "rtl8192e/r8192E_phy.h"
-+
- u8 MCS_FILTER_ALL[16] = {
- 	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
- 	0xff, 0x1f, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-@@ -835,12 +837,10 @@ static void HTSetConnectBwModeCallback(struct rtllib_device *ieee)
- 			ieee->set_chan(ieee->dev,
- 				       ieee->current_network.channel);
- 
--		ieee->SetBWModeHandler(ieee->dev, HT_CHANNEL_WIDTH_20_40,
--				       ht_info->CurSTAExtChnlOffset);
-+		rtl92e_set_bw_mode(ieee->dev, HT_CHANNEL_WIDTH_20_40, ht_info->CurSTAExtChnlOffset);
- 	} else {
- 		ieee->set_chan(ieee->dev, ieee->current_network.channel);
--		ieee->SetBWModeHandler(ieee->dev, HT_CHANNEL_WIDTH_20,
--				       HT_EXTCHNL_OFFSET_NO_EXT);
-+		rtl92e_set_bw_mode(ieee->dev, HT_CHANNEL_WIDTH_20, HT_EXTCHNL_OFFSET_NO_EXT);
- 	}
- 
- 	ht_info->sw_bw_in_progress = false;
-diff --git a/drivers/staging/rtl8192e/rtllib.h b/drivers/staging/rtl8192e/rtllib.h
-index 68a3b8af3119..d22a586043f2 100644
---- a/drivers/staging/rtl8192e/rtllib.h
-+++ b/drivers/staging/rtl8192e/rtllib.h
-@@ -1706,9 +1706,6 @@ struct rtllib_device {
- 
- 	/* check whether Tx hw resource available */
- 	short (*check_nic_enough_desc)(struct net_device *dev, int queue_index);
--	void (*SetBWModeHandler)(struct net_device *dev,
--				 enum ht_channel_width bandwidth,
--				 enum ht_extchnl_offset Offset);
- 	bool (*GetNmodeSupportBySecCfg)(struct net_device *dev);
- 	bool (*GetHalfNmodeSupportByAPsHandler)(struct net_device *dev);
- 	u8   (*rtllib_ap_sec_type)(struct rtllib_device *ieee);
-diff --git a/drivers/staging/rtl8192e/rtllib_softmac_wx.c b/drivers/staging/rtl8192e/rtllib_softmac_wx.c
-index d85a32d2d050..9fb4fee93990 100644
---- a/drivers/staging/rtl8192e/rtllib_softmac_wx.c
-+++ b/drivers/staging/rtl8192e/rtllib_softmac_wx.c
-@@ -15,6 +15,7 @@
- 
- #include "rtllib.h"
- #include "dot11d.h"
-+#include "rtl8192e/r8192E_phy.h"
- /* FIXME: add A freqs */
- 
- const long rtllib_wlan_frequencies[] = {
-@@ -359,8 +360,7 @@ void rtllib_wx_sync_scan_wq(void *data)
- 		b40M = 1;
- 		chan_offset = ieee->ht_info->CurSTAExtChnlOffset;
- 		bandwidth = (enum ht_channel_width)ieee->ht_info->bCurBW40MHz;
--		ieee->SetBWModeHandler(ieee->dev, HT_CHANNEL_WIDTH_20,
--				       HT_EXTCHNL_OFFSET_NO_EXT);
-+		rtl92e_set_bw_mode(ieee->dev, HT_CHANNEL_WIDTH_20, HT_EXTCHNL_OFFSET_NO_EXT);
- 	}
- 
- 	rtllib_start_scan_syncro(ieee, 0);
-@@ -372,7 +372,7 @@ void rtllib_wx_sync_scan_wq(void *data)
- 			ieee->set_chan(ieee->dev, chan - 2);
- 		else
- 			ieee->set_chan(ieee->dev, chan);
--		ieee->SetBWModeHandler(ieee->dev, bandwidth, chan_offset);
-+		rtl92e_set_bw_mode(ieee->dev, bandwidth, chan_offset);
- 	} else {
- 		ieee->set_chan(ieee->dev, chan);
- 	}
--- 
-2.25.1
+Also please add this test to tdc, it should be straightforward.
+
+>>>
+>>>
+>>> The refcnt of the chain added by step 2 is equal to 1. After step 3,
+>>>    the flushing flag of the chain is set to true in the tcf_chain_flush()
+>>>    called by tc_del_tfilter() because the prio is 0. In this case, if
+>>>    we add a new filter to this chain, it will never succeed and try again
+>>>    and again because the refresh flash is always true and refcnt is 1.
+>>>    A soft lock alarm is generated 20 seconds later.
+>>> The stack is show as below:
+>>>
+>>> Kernel panic - not syncing: softlockup: hung tasks
+>>> CPU: 2 PID: 3321861 Comm: tc Kdump: loaded Tainted: G
+>>> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996)
+>>> Call Trace:
+>>>    <IRQ>
+>>>    dump_stack+0x57/0x6e
+>>>    panic+0x196/0x3ec
+>>>    watchdog_timer_fn.cold+0x16/0x5c
+>>>    __run_hrtimer+0x5e/0x190
+>>>    __hrtimer_run_queues+0x8a/0xe0
+>>>    hrtimer_interrupt+0x110/0x2c0
+>>>    ? irqtime_account_irq+0x49/0xf0
+>>>    __sysvec_apic_timer_interrupt+0x5f/0xe0
+>>>    asm_call_irq_on_stack+0x12/0x20
+>>>    </IRQ>
+>>>    sysvec_apic_timer_interrupt+0x72/0x80
+>>>    asm_sysvec_apic_timer_interrupt+0x12/0x20
+>>> RIP: 0010:mutex_lock+0x24/0x70
+>>> RSP: 0018:ffffa836004ab9a8 EFLAGS: 00000246
+>>> RAX: 0000000000000000 RBX: ffff95bb02d76700 RCX: 0000000000000000
+>>> RDX: ffff95bb27462100 RSI: 0000000000000000 RDI: ffff95ba5b527000
+>>> RBP: ffff95ba5b527000 R08: 0000000000000001 R09: ffffa836004abbb8
+>>> R10: 000000000000000f R11: 0000000000000000 R12: 0000000000000000
+>>> R13: ffff95ba5b527000 R14: ffffa836004abbb8 R15: 0000000000000001
+>>>    __tcf_chain_put+0x27/0x200
+>>>    tc_new_tfilter+0x5e8/0x810
+>>>    ? tc_setup_cb_add+0x210/0x210
+>>>    rtnetlink_rcv_msg+0x2e3/0x380
+>>>    ? rtnl_calcit.isra.0+0x120/0x120
+>>>    netlink_rcv_skb+0x50/0x100
+>>>    netlink_unicast+0x12d/0x1d0
+>>>    netlink_sendmsg+0x286/0x490
+>>>    sock_sendmsg+0x62/0x70
+>>>    ____sys_sendmsg+0x24c/0x2c0
+>>>    ? import_iovec+0x17/0x20
+>>>    ? sendmsg_copy_msghdr+0x80/0xa0
+>>>    ___sys_sendmsg+0x75/0xc0
+>>>    ? do_fault_around+0x118/0x160
+>>>    ? do_read_fault+0x68/0xf0
+>>>    ? __handle_mm_fault+0x3f9/0x6f0
+>>>    __sys_sendmsg+0x59/0xa0
+>>>    do_syscall_64+0x33/0x40
+>>>    entry_SYSCALL_64_after_hwframe+0x61/0xc6
+>>> RIP: 0033:0x7f96705b8247
+>>> RSP: 002b:00007ffe552e9dc8 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+>>> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f96705b8247
+>>> RDX: 0000000000000000 RSI: 00007ffe552e9e40 RDI: 0000000000000003
+>>> RBP: 0000000000000001 R08: 0000000000000001 R09: 0000558113f678b0
+>>> R10: 00007f967069ab00 R11: 0000000000000246 R12: 00000000647ea089
+>>> R13: 00007ffe552e9f30 R14: 0000000000000001 R15: 0000558113175f00
+>>>
+>>> To avoid this case, set chain->flushing to be false if the chain->refcnt
+>>>    is 1 after flushing the chain when prio is 0.
+>>>
+>>> Fixes: 726d061286ce ("net: sched: prevent insertion of new classifiers during chain flush")
+>>> Signed-off-by: Ren Mingshuai <renmingshuai@huawei.com>
+>>> ---
+>>>    net/sched/cls_api.c | 7 +++++++
+>>>    1 file changed, 7 insertions(+)
+>>>
+>>> diff --git a/net/sched/cls_api.c b/net/sched/cls_api.c
+>>> index 2621550bfddc..68be55d75831 100644
+>>> --- a/net/sched/cls_api.c
+>>> +++ b/net/sched/cls_api.c
+>>> @@ -2442,6 +2442,13 @@ static int tc_del_tfilter(struct sk_buff *skb, struct nlmsghdr *n,
+>>>    		tfilter_notify_chain(net, skb, block, q, parent, n,
+>>>    				     chain, RTM_DELTFILTER, extack);
+>>>    		tcf_chain_flush(chain, rtnl_held);
+>>> +		/* Set the flushing flags to false to prevent an infinite loop
+>>> +		 * when a new filter is added.
+>>> +		 */
+>>> +		mutex_lock(&chain->filter_chain_lock);
+>>> +		if (chain->refcnt == 1)
+>>> +			chain->flushing = false;
+>>> +		mutex_unlock(&chain->filter_chain_lock);
+>>>    		err = 0;
+>>>    		goto errout;
+>>>    	}
 
