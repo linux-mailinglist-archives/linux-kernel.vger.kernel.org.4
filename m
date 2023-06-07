@@ -2,277 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45E36725359
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 07:31:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D23372535B
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 07:32:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233789AbjFGFbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 01:31:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33278 "EHLO
+        id S233500AbjFGFb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 01:31:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjFGFbB (ORCPT
+        with ESMTP id S232517AbjFGFb5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 01:31:01 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0AFF21989;
-        Tue,  6 Jun 2023 22:30:57 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8Bxb+sPFoBkAggAAA--.157S3;
-        Wed, 07 Jun 2023 13:30:55 +0800 (CST)
-Received: from openarena.loongson.cn (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxZuQNFoBkiN8DAA--.14158S2;
-        Wed, 07 Jun 2023 13:30:54 +0800 (CST)
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn
-Subject: [PATCH] drm: gem: add an option for supporting the dma-coherent hardware.
-Date:   Wed,  7 Jun 2023 13:30:53 +0800
-Message-Id: <20230607053053.345101-1-suijingfeng@loongson.cn>
-X-Mailer: git-send-email 2.25.1
+        Wed, 7 Jun 2023 01:31:57 -0400
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0B30198B
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 22:31:55 -0700 (PDT)
+Received: by mail-ot1-x330.google.com with SMTP id 46e09a7af769-6b291d55f52so1222469a34.2
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 22:31:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1686115915; x=1688707915;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=os/aeqRhsyR2udmNtFJcHkFZKaZyNQcEib6HfkQ0L18=;
+        b=HHf4ZsFDOATneFcjMagAeFdAmQa0S3zkFPR6Kl71dO6kSzG4yeJDphbAmWiXLpVWnk
+         LibMuVLNT0qp7vStwD2E6gBmTwULqAq+v6LJKNY8Z6B4wfnKBJ59oYvBvOQoFET93b+d
+         1XWVy5sGRtsP4Q2A/XHEaaMj446yXhLNHvTxg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686115915; x=1688707915;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=os/aeqRhsyR2udmNtFJcHkFZKaZyNQcEib6HfkQ0L18=;
+        b=NwT3Q7gYx0xpqn5QAo+iiCsXt83MH+0lh0TieRd1i0U2MBMorieHDOyIMSghcmefJI
+         zxiD6kbfA4xXeKfv91SyW0SzdXc+1GoxLEgcVEhcLNd+Htcozy9npjoo1ZKiDJb+ArFP
+         UAsx+mhedyhvcT5Mf+QgKWFZWmeicnugQf1DOxjpCWVlXf09mU8yTlS6nX4CziP92IuC
+         cBzxmjiaRwfPHF3mBVv1ysBr4GiblBlN6CwUcB4WQfrGHpScOxKzgKAzd1MxKX2WmUET
+         c1UZAwGwtvnbdxqbeAjyTPbDhTZQYQ6NTxNG2YYb6USplMf5U2JvYecKR79yqudkBD/v
+         QFew==
+X-Gm-Message-State: AC+VfDzW5d2Pkf6SS5+JK9ii3vqECI4O6/03NUAeYh5lF4EnF95sshr5
+        hVg9MggX8Etz+4q6jRS4+sjiNg==
+X-Google-Smtp-Source: ACHHUZ5lMJIND9Kzi4ibR4p+GOc+LHJey4+fB1q0UaEPsfdK6Vz/9m2eHCXPfGlL9pY/laVGtRBz3Q==
+X-Received: by 2002:a05:6358:1a9c:b0:129:c89e:46cb with SMTP id gm28-20020a0563581a9c00b00129c89e46cbmr951145rwb.15.1686115915057;
+        Tue, 06 Jun 2023 22:31:55 -0700 (PDT)
+Received: from localhost ([2401:fa00:8f:203:a706:dc8b:addd:1237])
+        by smtp.gmail.com with UTF8SMTPSA id b10-20020a63cf4a000000b0050a0227a4bcsm8336856pgj.57.2023.06.06.22.31.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Jun 2023 22:31:54 -0700 (PDT)
+From:   David Stevens <stevensd@chromium.org>
+X-Google-Original-From: David Stevens <stevensd@google.com>
+To:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>
+Cc:     Peter Xu <peterx@redhat.com>, Matthew Wilcox <willy@infradead.org>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Yang Shi <shy828301@gmail.com>,
+        David Hildenbrand <david@redhat.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jiaqi Yan <jiaqiyan@google.com>, linux-kernel@vger.kernel.org,
+        David Stevens <stevensd@chromium.org>
+Subject: [PATCH] mm/khugepaged: fix iteration in collapse_file
+Date:   Wed,  7 Jun 2023 14:31:35 +0900
+Message-ID: <20230607053135.2087354-1-stevensd@google.com>
+X-Mailer: git-send-email 2.41.0.rc2.161.g9c6817b8e7-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxZuQNFoBkiN8DAA--.14158S2
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj93XoW3WF4fJF45JF1fZFyDXF1DJwc_yoWfWF48pF
-        sxCryjgrW8tFWfKr17Aa1ku3W3Cw4fJay8Cr98Xwn3Cw1rCF17Zr98Cr1UXFWUJr1xZF1S
-        q3ZFyFyfA3WUCFXCm3ZEXasCq-sJn29KB7ZKAUJUUUUD529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUBIb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-        xVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
-        tVWrXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7V
-        AKI48JMxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY
-        6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7
-        xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xII
-        jxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw2
-        0EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x02
-        67AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8XTm3UUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The single map_noncoherent member of struct drm_gem_dma_object may not
-sufficient for describing the backing memory of the GEM buffer object.
+From: David Stevens <stevensd@chromium.org>
 
-Especially on dma-coherent systems, the backing memory is both cached
-coherent for multi-core CPUs and dma-coherent for peripheral device.
-Say architectures like X86-64, LoongArch64, Loongson Mips64, etc.
+Remove an unnecessary call to xas_set(index) when iterating over the
+target range in collapse_file. The extra call to xas_set reset the xas
+cursor to the top of the tree, causing the xas_next call on the next
+iteration to walk the tree to index instead of advancing to index+1.
+This returned the same page again, which would cause collapse_file to
+fail because the page is already locked.
 
-Whether a peripheral device is dma-coherent or not can be
-implementation-dependent. The single map_noncoherent option is not enough
-to reflect real hardware anymore. For example, the Loongson LS3A4000 CPU
-and LS2K2000/LS2K1000 SoC, peripheral device of such hardware platform
-allways snoop CPU's cache. Doing the allocation with dma_alloc_coherent
-function is preferred. The return buffer is cached, it should not using
-the default write-combine mapping. While with the current implement, there
-no way to tell the drm core to reflect this.
+This bug was hidden when CONFIG_DEBUG_VM was set. When that config was
+used, the xas_load in a subsequent VM_BUG_ON assert would walk xas from
+the top of the tree to index, causing the xas_next call on the next loop
+iteration to advance the cursor as expected.
 
-This patch adds cached and coherent members to struct drm_gem_dma_object.
-which allow driver implements to inform the core. Introducing new mappings
-while keeping the original default behavior unchanged.
-
-Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+Fixes: a2e17cc2efc7 ("mm/khugepaged: maintain page cache uptodate flag")
+Signed-off-by: David Stevens <stevensd@chromium.org>
 ---
- drivers/gpu/drm/drm_fb_dma_helper.c       | 11 +++++------
- drivers/gpu/drm/drm_fbdev_dma.c           |  2 +-
- drivers/gpu/drm/drm_gem_dma_helper.c      | 20 ++++++++++++++++----
- drivers/gpu/drm/ingenic/ingenic-drm-drv.c |  5 ++++-
- drivers/gpu/drm/rcar-du/Kconfig           |  2 --
- drivers/gpu/drm/rcar-du/rcar_du_kms.c     |  4 +++-
- include/drm/drm_gem_dma_helper.h          |  7 +++++--
- 7 files changed, 34 insertions(+), 17 deletions(-)
+ mm/khugepaged.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/drm_fb_dma_helper.c b/drivers/gpu/drm/drm_fb_dma_helper.c
-index 3b535ad1b07c..93ff05041192 100644
---- a/drivers/gpu/drm/drm_fb_dma_helper.c
-+++ b/drivers/gpu/drm/drm_fb_dma_helper.c
-@@ -106,16 +106,15 @@ dma_addr_t drm_fb_dma_get_gem_addr(struct drm_framebuffer *fb,
- EXPORT_SYMBOL_GPL(drm_fb_dma_get_gem_addr);
+diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+index 6b9d39d65b73..2d0d58fb4e7f 100644
+--- a/mm/khugepaged.c
++++ b/mm/khugepaged.c
+@@ -2070,7 +2070,6 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
+ 					TTU_IGNORE_MLOCK | TTU_BATCH_FLUSH);
  
- /**
-- * drm_fb_dma_sync_non_coherent - Sync GEM object to non-coherent backing
-- *	memory
-+ * drm_fb_dma_sync_non_coherent - Sync GEM object to cached backing memory
-  * @drm: DRM device
-  * @old_state: Old plane state
-  * @state: New plane state
-  *
-  * This function can be used by drivers that use damage clips and have
-- * DMA GEM objects backed by non-coherent memory. Calling this function
-- * in a plane's .atomic_update ensures that all the data in the backing
-- * memory have been written to RAM.
-+ * DMA GEM objects backed by cached memory. Calling this function in a
-+ * plane's .atomic_update ensures that all the data in the backing memory
-+ * have been written to RAM.
-  */
- void drm_fb_dma_sync_non_coherent(struct drm_device *drm,
- 				  struct drm_plane_state *old_state,
-@@ -131,7 +130,7 @@ void drm_fb_dma_sync_non_coherent(struct drm_device *drm,
+ 		xas_lock_irq(&xas);
+-		xas_set(&xas, index);
  
- 	for (i = 0; i < finfo->num_planes; i++) {
- 		dma_obj = drm_fb_dma_get_gem_obj(state->fb, i);
--		if (!dma_obj->map_noncoherent)
-+		if (dma_obj->cached && dma_obj->coherent)
- 			continue;
+ 		VM_BUG_ON_PAGE(page != xas_load(&xas), page);
  
- 		daddr = drm_fb_dma_get_gem_addr(state->fb, state, i);
-diff --git a/drivers/gpu/drm/drm_fbdev_dma.c b/drivers/gpu/drm/drm_fbdev_dma.c
-index d86773fa8ab0..49fe9b284cc8 100644
---- a/drivers/gpu/drm/drm_fbdev_dma.c
-+++ b/drivers/gpu/drm/drm_fbdev_dma.c
-@@ -131,7 +131,7 @@ static int drm_fbdev_dma_helper_fb_probe(struct drm_fb_helper *fb_helper,
- 
- 	/* screen */
- 	info->flags |= FBINFO_VIRTFB; /* system memory */
--	if (dma_obj->map_noncoherent)
-+	if (dma_obj->cached)
- 		info->flags |= FBINFO_READS_FAST; /* signal caching */
- 	info->screen_size = sizes->surface_height * fb->pitches[0];
- 	info->screen_buffer = map.vaddr;
-diff --git a/drivers/gpu/drm/drm_gem_dma_helper.c b/drivers/gpu/drm/drm_gem_dma_helper.c
-index 870b90b78bc4..dec1d512bdf1 100644
---- a/drivers/gpu/drm/drm_gem_dma_helper.c
-+++ b/drivers/gpu/drm/drm_gem_dma_helper.c
-@@ -93,7 +93,11 @@ __drm_gem_dma_create(struct drm_device *drm, size_t size, bool private)
- 		drm_gem_private_object_init(drm, gem_obj, size);
- 
- 		/* Always use writecombine for dma-buf mappings */
--		dma_obj->map_noncoherent = false;
-+		/* FIXME: This is not always true, on some dma coherent system,
-+		 * cached mappings should be preferred over writecombine
-+		 */
-+		dma_obj->cached = false;
-+		dma_obj->coherent = false;
- 	} else {
- 		ret = drm_gem_object_init(drm, gem_obj, size);
- 	}
-@@ -143,7 +147,11 @@ struct drm_gem_dma_object *drm_gem_dma_create(struct drm_device *drm,
- 	if (IS_ERR(dma_obj))
- 		return dma_obj;
- 
--	if (dma_obj->map_noncoherent) {
-+	if (dma_obj->cached && dma_obj->coherent) {
-+		dma_obj->vaddr = dma_alloc_coherent(drm->dev, size,
-+						    &dma_obj->dma_addr,
-+						    GFP_KERNEL | __GFP_NOWARN);
-+	} else if (dma_obj->cached && !dma_obj->coherent) {
- 		dma_obj->vaddr = dma_alloc_noncoherent(drm->dev, size,
- 						       &dma_obj->dma_addr,
- 						       DMA_TO_DEVICE,
-@@ -153,6 +161,7 @@ struct drm_gem_dma_object *drm_gem_dma_create(struct drm_device *drm,
- 					      &dma_obj->dma_addr,
- 					      GFP_KERNEL | __GFP_NOWARN);
- 	}
-+
- 	if (!dma_obj->vaddr) {
- 		drm_dbg(drm, "failed to allocate buffer with size %zu\n",
- 			 size);
-@@ -233,7 +242,10 @@ void drm_gem_dma_free(struct drm_gem_dma_object *dma_obj)
- 			dma_buf_vunmap_unlocked(gem_obj->import_attach->dmabuf, &map);
- 		drm_prime_gem_destroy(gem_obj, dma_obj->sgt);
- 	} else if (dma_obj->vaddr) {
--		if (dma_obj->map_noncoherent)
-+		if (dma_obj->cached && dma_obj->coherent)
-+			dma_free_coherent(gem_obj->dev->dev, dma_obj->base.size,
-+					  dma_obj->vaddr, dma_obj->dma_addr);
-+		else if (dma_obj->cached && !dma_obj->coherent)
- 			dma_free_noncoherent(gem_obj->dev->dev, dma_obj->base.size,
- 					     dma_obj->vaddr, dma_obj->dma_addr,
- 					     DMA_TO_DEVICE);
-@@ -532,7 +544,7 @@ int drm_gem_dma_mmap(struct drm_gem_dma_object *dma_obj, struct vm_area_struct *
- 	vma->vm_pgoff -= drm_vma_node_start(&obj->vma_node);
- 	vm_flags_mod(vma, VM_DONTEXPAND, VM_PFNMAP);
- 
--	if (dma_obj->map_noncoherent) {
-+	if (dma_obj->cached) {
- 		vma->vm_page_prot = vm_get_page_prot(vma->vm_flags);
- 
- 		ret = dma_mmap_pages(dma_obj->base.dev->dev,
-diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-index 5ec75e9ba499..a3df2f99a757 100644
---- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-+++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-@@ -919,7 +919,10 @@ ingenic_drm_gem_create_object(struct drm_device *drm, size_t size)
- 	if (!obj)
- 		return ERR_PTR(-ENOMEM);
- 
--	obj->map_noncoherent = priv->soc_info->map_noncoherent;
-+	if (priv->soc_info->map_noncoherent) {
-+		obj->cached = true;
-+		obj->coherent = false;
-+	}
- 
- 	return &obj->base;
- }
-diff --git a/drivers/gpu/drm/rcar-du/Kconfig b/drivers/gpu/drm/rcar-du/Kconfig
-index 53c356aed5d5..dddc70c08bdc 100644
---- a/drivers/gpu/drm/rcar-du/Kconfig
-+++ b/drivers/gpu/drm/rcar-du/Kconfig
-@@ -2,8 +2,6 @@
- config DRM_RCAR_DU
- 	tristate "DRM Support for R-Car Display Unit"
- 	depends on DRM && OF
--	depends on ARM || ARM64
--	depends on ARCH_RENESAS || COMPILE_TEST
- 	select DRM_KMS_HELPER
- 	select DRM_GEM_DMA_HELPER
- 	select VIDEOMODE_HELPERS
-diff --git a/drivers/gpu/drm/rcar-du/rcar_du_kms.c b/drivers/gpu/drm/rcar-du/rcar_du_kms.c
-index adfb36b0e815..1142d51473e6 100644
---- a/drivers/gpu/drm/rcar-du/rcar_du_kms.c
-+++ b/drivers/gpu/drm/rcar-du/rcar_du_kms.c
-@@ -386,7 +386,9 @@ struct drm_gem_object *rcar_du_gem_prime_import_sg_table(struct drm_device *dev,
- 	gem_obj->funcs = &rcar_du_gem_funcs;
- 
- 	drm_gem_private_object_init(dev, gem_obj, attach->dmabuf->size);
--	dma_obj->map_noncoherent = false;
-+
-+	dma_obj->cached = false;
-+	dma_obj->coherent = false;
- 
- 	ret = drm_gem_create_mmap_offset(gem_obj);
- 	if (ret) {
-diff --git a/include/drm/drm_gem_dma_helper.h b/include/drm/drm_gem_dma_helper.h
-index 8a043235dad8..585ce3d4d1eb 100644
---- a/include/drm/drm_gem_dma_helper.h
-+++ b/include/drm/drm_gem_dma_helper.h
-@@ -16,7 +16,9 @@ struct drm_mode_create_dumb;
-  *       more than one entry but they are guaranteed to have contiguous
-  *       DMA addresses.
-  * @vaddr: kernel virtual address of the backing memory
-- * @map_noncoherent: if true, the GEM object is backed by non-coherent memory
-+ * @cached: if true, the GEM object is backed by cached memory
-+ * @coherent: This option only meaningful when a GEM object is cached.
-+ *            If true, Sync the GEM object for DMA access is not required.
-  */
- struct drm_gem_dma_object {
- 	struct drm_gem_object base;
-@@ -26,7 +28,8 @@ struct drm_gem_dma_object {
- 	/* For objects with DMA memory allocated by GEM DMA */
- 	void *vaddr;
- 
--	bool map_noncoherent;
-+	bool cached;
-+	bool coherent;
- };
- 
- #define to_drm_gem_dma_obj(gem_obj) \
 -- 
-2.25.1
+2.41.0.rc2.161.g9c6817b8e7-goog
 
