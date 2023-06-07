@@ -2,88 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58353725807
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 10:40:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A791772580B
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 10:40:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238498AbjFGIkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 04:40:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43656 "EHLO
+        id S238784AbjFGIk2 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 7 Jun 2023 04:40:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237989AbjFGIkJ (ORCPT
+        with ESMTP id S238524AbjFGIkV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 04:40:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6FD61707
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 01:39:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686127162;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ljArIlCjiAk4raJisPzBpvdPPgGsnUJvYTJw2BtF6ok=;
-        b=S8zpOmU5De/a4E3TJ8+4huENyU0kYf8OOjGD/n31Z+XeMgAyExHdt6I2alhXbf0vqVTaIn
-        PKW+9Tx/UrAoiROWPOYjPPvQvIEHGFxvYswwWVsWO9/oo6M27ZyD4oCXTctjaBeaIYb3Xn
-        7DPmyIVQHVaNKU6nOpKa80meN/MPV18=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-591-M1_BAb_XPPKg1PFerbjBpw-1; Wed, 07 Jun 2023 04:39:20 -0400
-X-MC-Unique: M1_BAb_XPPKg1PFerbjBpw-1
-Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-94a348facbbso630065966b.1
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 01:39:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686127159; x=1688719159;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ljArIlCjiAk4raJisPzBpvdPPgGsnUJvYTJw2BtF6ok=;
-        b=Zabf1dNdewMmAWbHknP7455aLpEbuVES/y8Tg1k9oGuCMDE0bCgtHj4vF58yS/Z00K
-         ISQtrEI+mVGAJJYDz08p7TgTRH5tZ7AdojNCrMW1o5vJ69Lkmo5qNNDU3tgX/FNG4Xi2
-         VsUm2vKjf68YyUmWNEHan9WXzjPHVY6ONYSCuM7Yp/7TJ79xEwiveVHwmkPNeDq+zamG
-         uuyC0yuOG2YmYoNdPAjjxXQhZFa9JqRUV0Ig0CSTvZ//JqwA3hg4wqWbRthxk5Zuof8l
-         fTLAWX9hhhT/mnv7v9fD5NnvgkoXYlH/C0umxE+VJj+7pzA7c1Cn6g8hYgB+d6U9t2Yz
-         GMFg==
-X-Gm-Message-State: AC+VfDxgRgZjgNAHLZ5eyLtwduCJfoQqMeyilF56ytn8fsd7CZ3B87Qi
-        ohtbBQ3zZhx1aGbVagMmeL+cIFK8LG/RM4sK5Sl+4u8/QaJVxbVccCI3EbyGMmSX7SKBiGZ6Dtj
-        mMqavioq6xT1nHnp//Jq4SSRm
-X-Received: by 2002:a17:907:2d91:b0:8b1:7de3:cfaa with SMTP id gt17-20020a1709072d9100b008b17de3cfaamr5662274ejc.3.1686127159116;
-        Wed, 07 Jun 2023 01:39:19 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7btGdgIzKw5k5WmwW3L/Sj3hNi5PvtUs3V2LlGUM++yAslee+IT231SvTSKQcWeSSHb5giPg==
-X-Received: by 2002:a17:907:2d91:b0:8b1:7de3:cfaa with SMTP id gt17-20020a1709072d9100b008b17de3cfaamr5662257ejc.3.1686127158820;
-        Wed, 07 Jun 2023 01:39:18 -0700 (PDT)
-Received: from sgarzare-redhat (host-87-12-25-16.business.telecomitalia.it. [87.12.25.16])
-        by smtp.gmail.com with ESMTPSA id t15-20020a1709066bcf00b0096f7500502csm6655804ejs.199.2023.06.07.01.39.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 01:39:17 -0700 (PDT)
-Date:   Wed, 7 Jun 2023 10:39:15 +0200
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        Shannon Nelson <shannon.nelson@amd.com>,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        Eugenio =?utf-8?B?UMOpcmV6?= <eperezma@redhat.com>,
-        Tiwei Bie <tiwei.bie@intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] vhost-vdpa: filter VIRTIO_F_RING_PACKED feature
-Message-ID: <CAGxU2F7fkgL-HpZdj=5ZEGNWcESCHQpgRAYQA3W2sPZaoEpNyQ@mail.gmail.com>
-References: <20230605110644.151211-1-sgarzare@redhat.com>
- <20230605084104-mutt-send-email-mst@kernel.org>
- <24fjdwp44hovz3d3qkzftmvjie45er3g3boac7aezpvzbwvuol@lmo47ydvnqau>
- <20230605085840-mutt-send-email-mst@kernel.org>
- <gi2hngx3ndsgz5d2rpqjywdmou5vxhd7xgi5z2lbachr7yoos4@kpifz37oz2et>
- <20230605095404-mutt-send-email-mst@kernel.org>
- <32ejjuvhvcicv7wjuetkv34qtlpa657n4zlow4eq3fsi2twozk@iqnd2t5tw2an>
- <CACGkMEu3PqQ99UoKF5NHgVADD3q=BF6jhLiyumeT4S1QCqN1tw@mail.gmail.com>
- <20230606085643-mutt-send-email-mst@kernel.org>
+        Wed, 7 Jun 2023 04:40:21 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 203571706;
+        Wed,  7 Jun 2023 01:40:14 -0700 (PDT)
+Received: from ip5b412278.dynamic.kabel-deutschland.de ([91.65.34.120] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1q6oi6-0006LM-Ch; Wed, 07 Jun 2023 10:40:06 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Keith Zhao <keith.zhao@starfivetech.com>,
+        Shengyu Qu <wiagn233@outlook.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        christian.koenig@amd.com, Bjorn Andersson <andersson@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>, Jagan Teki <jagan@edgeble.ai>,
+        Chris Morgan <macromorgan@hotmail.com>,
+        Jack Zhu <jack.zhu@starfivetech.com>,
+        Shengyang Chen <shengyang.chen@starfivetech.com>,
+        Changhuang Liang <changhuang.liang@starfivetech.com>
+Subject: Re: [PATCH 1/9] dt-bindings: display: Add yamls for JH7110 display subsystem
+Date:   Wed, 07 Jun 2023 10:40:04 +0200
+Message-ID: <3560873.iIbC2pHGDl@diego>
+In-Reply-To: <20230606-geometry-blurb-1f0f07d4bf6a@spud>
+References: <20230602074043.33872-1-keith.zhao@starfivetech.com>
+ <1991848.PYKUYFuaPT@diego> <20230606-geometry-blurb-1f0f07d4bf6a@spud>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230606085643-mutt-send-email-mst@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,124 +65,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 6, 2023 at 2:58 PM Michael S. Tsirkin <mst@redhat.com> wrote:
->
-> On Tue, Jun 06, 2023 at 09:29:22AM +0800, Jason Wang wrote:
-> > On Mon, Jun 5, 2023 at 10:58 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
-> > >
-> > > On Mon, Jun 05, 2023 at 09:54:57AM -0400, Michael S. Tsirkin wrote:
-> > > >On Mon, Jun 05, 2023 at 03:30:35PM +0200, Stefano Garzarella wrote:
-> > > >> On Mon, Jun 05, 2023 at 09:00:25AM -0400, Michael S. Tsirkin wrote:
-> > > >> > On Mon, Jun 05, 2023 at 02:54:20PM +0200, Stefano Garzarella wrote:
-> > > >> > > On Mon, Jun 05, 2023 at 08:41:54AM -0400, Michael S. Tsirkin wrote:
-> > > >> > > > On Mon, Jun 05, 2023 at 01:06:44PM +0200, Stefano Garzarella wrote:
-> > > >> > > > > vhost-vdpa IOCTLs (eg. VHOST_GET_VRING_BASE, VHOST_SET_VRING_BASE)
-> > > >> > > > > don't support packed virtqueue well yet, so let's filter the
-> > > >> > > > > VIRTIO_F_RING_PACKED feature for now in vhost_vdpa_get_features().
-> > > >> > > > >
-> > > >> > > > > This way, even if the device supports it, we don't risk it being
-> > > >> > > > > negotiated, then the VMM is unable to set the vring state properly.
-> > > >> > > > >
-> > > >> > > > > Fixes: 4c8cf31885f6 ("vhost: introduce vDPA-based backend")
-> > > >> > > > > Cc: stable@vger.kernel.org
-> > > >> > > > > Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
-> > > >> > > > > ---
-> > > >> > > > >
-> > > >> > > > > Notes:
-> > > >> > > > >     This patch should be applied before the "[PATCH v2 0/3] vhost_vdpa:
-> > > >> > > > >     better PACKED support" series [1] and backported in stable branches.
-> > > >> > > > >
-> > > >> > > > >     We can revert it when we are sure that everything is working with
-> > > >> > > > >     packed virtqueues.
-> > > >> > > > >
-> > > >> > > > >     Thanks,
-> > > >> > > > >     Stefano
-> > > >> > > > >
-> > > >> > > > >     [1] https://lore.kernel.org/virtualization/20230424225031.18947-1-shannon.nelson@amd.com/
-> > > >> > > >
-> > > >> > > > I'm a bit lost here. So why am I merging "better PACKED support" then?
-> > > >> > >
-> > > >> > > To really support packed virtqueue with vhost-vdpa, at that point we would
-> > > >> > > also have to revert this patch.
-> > > >> > >
-> > > >> > > I wasn't sure if you wanted to queue the series for this merge window.
-> > > >> > > In that case do you think it is better to send this patch only for stable
-> > > >> > > branches?
-> > > >> > > > Does this patch make them a NOP?
-> > > >> > >
-> > > >> > > Yep, after applying the "better PACKED support" series and being
-> > > >> > > sure that
-> > > >> > > the IOCTLs of vhost-vdpa support packed virtqueue, we should revert this
-> > > >> > > patch.
-> > > >> > >
-> > > >> > > Let me know if you prefer a different approach.
-> > > >> > >
-> > > >> > > I'm concerned that QEMU uses vhost-vdpa IOCTLs thinking that the kernel
-> > > >> > > interprets them the right way, when it does not.
-> > > >> > >
-> > > >> > > Thanks,
-> > > >> > > Stefano
-> > > >> > >
-> > > >> >
-> > > >> > If this fixes a bug can you add Fixes tags to each of them? Then it's ok
-> > > >> > to merge in this window. Probably easier than the elaborate
-> > > >> > mask/unmask dance.
-> > > >>
-> > > >> CCing Shannon (the original author of the "better PACKED support"
-> > > >> series).
-> > > >>
-> > > >> IIUC Shannon is going to send a v3 of that series to fix the
-> > > >> documentation, so Shannon can you also add the Fixes tags?
-> > > >>
-> > > >> Thanks,
-> > > >> Stefano
-> > > >
-> > > >Well this is in my tree already. Just reply with
-> > > >Fixes: <>
-> > > >to each and I will add these tags.
-> > >
-> > > I tried, but it is not easy since we added the support for packed
-> > > virtqueue in vdpa and vhost incrementally.
-> > >
-> > > Initially I was thinking of adding the same tag used here:
-> > >
-> > > Fixes: 4c8cf31885f6 ("vhost: introduce vDPA-based backend")
-> > >
-> > > Then I discovered that vq_state wasn't there, so I was thinking of
-> > >
-> > > Fixes: 530a5678bc00 ("vdpa: support packed virtqueue for set/get_vq_state()")
-> > >
-> > > So we would have to backport quite a few patches into the stable branches.
-> > > I don't know if it's worth it...
-> > >
-> > > I still think it is better to disable packed in the stable branches,
-> > > otherwise I have to make a list of all the patches we need.
-> > >
-> > > Any other ideas?
-> >
-> > AFAIK, except for vp_vdpa, pds seems to be the first parent that
-> > supports packed virtqueue. Users should not notice anything wrong if
-> > they don't use packed virtqueue. And the problem of vp_vdpa + packed
-> > virtqueue came since the day0 of vp_vdpa. It seems fine to do nothing
-> > I guess.
-> >
-> > Thanks
->
->
-> I have a question though, what if down the road there
-> is a new feature that needs more changes? It will be
-> broken too just like PACKED no?
-> Shouldn't vdpa have an allowlist of features it knows how
-> to support?
+Am Mittwoch, 7. Juni 2023, 00:37:53 CEST schrieb Conor Dooley:
+> On Wed, Jun 07, 2023 at 12:22:33AM +0200, Heiko St�bner wrote:
+> > Am Dienstag, 6. Juni 2023, 20:41:17 CEST schrieb Shengyu Qu:
+> > > > On Fri, Jun 02, 2023 at 03:40:35PM +0800, Keith Zhao wrote:
+> > > >> Add bindings for JH7110 display subsystem which
+> > > >> has a display controller verisilicon dc8200
+> > > >> and an HDMI interface.
+> 
+> > > >> +description:
+> > > >> +  The StarFive SoC uses the HDMI signal transmiter based on innosilicon IP
+> > > > Is innosilicon the same thing as verisilicon? Also
+> > > > s/transmiter/transmitter/, both here and in the title.
+> > > 
+> > > I think that is not the same, I remember Rockchip has used a HDMI 
+> > > transmitter from
+> > > 
+> > > Innosilicon, and there is a existing driver for that in mainline.
+> > 
+> > Yep, I think Innosilicon is the company you turn to when you want to save
+> > a bit of money ;-) . In the bigger SoCs Rockchip most of the time uses
+> > Designware hdmi blocks and looking at the history only the rk3036 ever
+> > used an Innosilicon block.
+> > 
+> > Looking at the history, 2016 really was a long time ago :-D.
+> > 
+> > > So Keith, if that's true, I think it is better to seperate the HDMI 
+> > > stuff and reuse existing driver.
+> > 
+> > I'm not so sure about that - at least from a cursory glance :-) .
+> > 
+> > The registers do look slightly different and I don't know how much
+> > the IP changed between the rk3036-version and the jh7110 version.
+> > 
+> > At the very least, I know my rk3036 board isn't booting right now, so
+> > I can't really provide help for generalizing the rockchip-driver.
+> > 
+> > At the very least both the binding and driver could drop the "starfive-hdmi"
+> > and actually use the Innosilicon in the naming somewhere, so that it's
+> > clear for future developers :-)
+> 
+> Seeing "based on" always makes me a little bit nervous to be honest when
+> it comes to using a compatible from the IP. Is it the IP? What version
+> is it? etc. Perhaps "starfive,jh7110-hdmi" & falling back to some sort
+> of "innosilicon,hdmi" would be more future/IP-silliness proof.
+> Driver can always be generic & bind against "innosilicon,hdmi" until
+> that becomes impossible.
 
-It looks like we had it, but we took it out (by the way, we were
-enabling packed even though we didn't support it):
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6234f80574d7569444d8718355fa2838e92b158b
 
-The only problem I see is that for each new feature we have to modify 
-the kernel.
-Could we have new features that don't require handling by vhost-vdpa?
+what Connor said makes a lot of sense. Just name the compatible
+after the actual implementation - aka "starfive,jh7110-hdmi" .
 
-Thanks,
-Stefano
+This is similar to what the rk3036 does with its
+"rockchip,rk3036-inno-hdmi". That way you're nicely independent
+and future proof.
+
+
+Heiko
+
 
