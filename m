@@ -2,95 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DCE87266FA
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 19:16:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E3D67266FF
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 19:17:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230498AbjFGRQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 13:16:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52032 "EHLO
+        id S231225AbjFGRR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 13:17:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230037AbjFGRQy (ORCPT
+        with ESMTP id S230037AbjFGRRZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 13:16:54 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EC231BF1;
-        Wed,  7 Jun 2023 10:16:50 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id 41be03b00d2f7-5344d45bfb0so392530a12.1;
-        Wed, 07 Jun 2023 10:16:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686158209; x=1688750209;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=U/NZlXOYXqc88apQX7wCILgLxV86T50gknzurw4EXDE=;
-        b=fybBTZJizPvbcpoFUu7tozGJLcqG2F+Rd2NSILxctipUlYsGhd9Nzznz4S9WSc8VIN
-         AUNMSqvdjPgVOEn6hrAGEyxyYX3nBk8gUCg+rakBiI0wglGclmBd2Lvi2sjInZPD5sFF
-         jrXVUEziuIm1lzdJh81YgyuufXApvoOHXwbiFrOZdcq6kLaD2I7Wr87+DGTJ1bN3I3kt
-         EPa25QYVxADkB4jv3eRBi5FrHaPKx4Ay8VlGUBoyQCoCWJFgwT9GAYgR0tesZq2+zlbX
-         4hXzv7hRvNNYCZgiqQOi/J6sB3iQHQFf+jL1qRcXZTilNXt6qF54oPmWsAy+xnGsS2vH
-         iFTw==
+        Wed, 7 Jun 2023 13:17:25 -0400
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D2E1BDC;
+        Wed,  7 Jun 2023 10:17:24 -0700 (PDT)
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-655fce0f354so2409816b3a.0;
+        Wed, 07 Jun 2023 10:17:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686158209; x=1688750209;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=U/NZlXOYXqc88apQX7wCILgLxV86T50gknzurw4EXDE=;
-        b=KwwE9xIuweFkgFkRgQLXH/IOrPS/8hEYjboZMoH5ez5YMlvvRPi20qeg9K2ezOneCE
-         edjuz68NhD/rIvgoM3osis9CPFyNeeBZ0CUqdvxqR4TiO76iUR8seq9KgsHMt7lmxmad
-         svOMtrcjAuzvTFQPXcRZzMnZ1qhSVJH11xnm8kKbIK70hMsckeTHCDTKM7oEkTMCAid3
-         63Jk8rwaWtwAMRISmmjjxW0rvQJADj621blKJ5rbd5fhCW5vYQ4eZv8h12p4gBPV9ymK
-         TY65rsGi766Noy6iTMu6owfjq4QRMiXgW5rk1G77P4tGUQvR1lwOorMi/4MnfGUgdIqq
-         pEEA==
-X-Gm-Message-State: AC+VfDyzMg1eOvlQZyTEkLclZSHUlD41cNHBoNHpf0q2etzCYM29sTvS
-        uU3aSuoJPTLp3llZcKhkh24lEnl98euanM7qOXCIPd4DUQE=
-X-Google-Smtp-Source: ACHHUZ7+OqQ/Ea3yCPmgSYsW0A47pePuHw/dSQd2Jw6mJ1KE/duK6IdPlUpsIfj0wVbN4I6SOKko6ZFViWJAREIhPOc=
-X-Received: by 2002:a17:902:c942:b0:1a6:6bdb:b548 with SMTP id
- i2-20020a170902c94200b001a66bdbb548mr2773869pla.1.1686158209476; Wed, 07 Jun
- 2023 10:16:49 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686158244; x=1688750244;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DFPGwpCQpZDlbK+2dcezD0d5mxiO5AMq/+/AN27SQOM=;
+        b=Yc9OAdceP2EkMmzV5XHhv1rtLxoDRavVLZ4CyMM3lMoTYc6R2MHT9itt/VftOWArtu
+         kuOnhb/Pkh9I4k5GuFBO2OcF8jnJaYVPA+GzRrE7r1z/pmnRQuvptgnguOItL1Zq7W1i
+         IFs08raDkz4Bv7bvGTdvkJhhjG5YX12VLzq/VgwNiOWAAKN0Wme20PIpDNdQo5RpXf6T
+         0rte9LSqojdgJxdhtPf+m1LFGb64MSRedxQHOT2FYPCOJJvjOrcwWKi0fvubGZJHt8lm
+         DxUQO0AEheISX0ra6e61Ggv7D8Q9jAxYFFczZPZB67JELyyiInjmca8pcKMeDaKlcQq3
+         Vw5A==
+X-Gm-Message-State: AC+VfDw8F5OEhlHqX1FO9FAGXfqV5QOJ1/QTEqDOOg4yN+QSetR+5FwB
+        /DJFtpODVquFXqoMQuZfED4=
+X-Google-Smtp-Source: ACHHUZ7v8zzX5zKgbuGtCNfhzwZXUtn5YrrNGyBjX3Hfyxj9y8BR90kt2+NZlmgBHihAc8RVnQ2zPg==
+X-Received: by 2002:a05:6a20:7293:b0:10f:13bb:5d4f with SMTP id o19-20020a056a20729300b0010f13bb5d4fmr2039900pzk.2.1686158243558;
+        Wed, 07 Jun 2023 10:17:23 -0700 (PDT)
+Received: from [192.168.3.219] ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id d10-20020a631d0a000000b0051b36aee4f6sm9349487pgd.83.2023.06.07.10.17.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Jun 2023 10:17:23 -0700 (PDT)
+Message-ID: <ed3cad40-5634-ffff-aa29-c14f91c7f8a4@acm.org>
+Date:   Wed, 7 Jun 2023 10:17:22 -0700
 MIME-Version: 1.0
-References: <20230607171159.2019417-1-tharvey@gateworks.com> <20230607171159.2019417-2-tharvey@gateworks.com>
-In-Reply-To: <20230607171159.2019417-2-tharvey@gateworks.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Wed, 7 Jun 2023 14:16:38 -0300
-Message-ID: <CAOMZO5ASwTJpH84SJX78k7MtZzwFc0bnbGqXsSFA6JFGq+0Emg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] arm64: dts: freescale: Add imx8mp-venice-gw73xx-2x
-To:     Tim Harvey <tharvey@gateworks.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH] scsi: ufs-mediatek: add dependency for RESET_CONTROLLER
+Content-Language: en-US
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     kernel test robot <lkp@intel.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Peter Wang <peter.wang@mediatek.com>,
+        Paul Gazzillo <paul@pgazz.com>,
+        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
+        linux-scsi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+References: <20230602023957.9187-1-rdunlap@infradead.org>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20230602023957.9187-1-rdunlap@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tim,
+On 6/1/23 19:39, Randy Dunlap wrote:
+> When RESET_CONTROLLER is not set, kconfig complains about missing
+> dependencies for RESET_TI_SYSCON, so add the missing dependency
+> just as is done above for SCSI_UFS_QCOM.
+> 
+> Silences this kconfig warning:
+> 
+> WARNING: unmet direct dependencies detected for RESET_TI_SYSCON
+>    Depends on [n]: RESET_CONTROLLER [=n] && HAS_IOMEM [=y]
+>    Selected by [m]:
+>    - SCSI_UFS_MEDIATEK [=m] && SCSI_UFSHCD [=y] && SCSI_UFSHCD_PLATFORM [=y] && ARCH_MEDIATEK [=y]
+> 
+> Fixes: de48898d0cb6 ("scsi: ufs-mediatek: Create reset control device_link")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Link: lore.kernel.org/r/202306020859.1wHg9AaT-lkp@intel.com
+> Cc: Stanley Chu <stanley.chu@mediatek.com>
+> Cc: Peter Wang <peter.wang@mediatek.com>
+> Cc: Paul Gazzillo <paul@pgazz.com>
+> Cc: Necip Fazil Yildiran <fazilyildiran@gmail.com>
+> Cc: linux-scsi@vger.kernel.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-mediatek@lists.infradead.org
+> Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
+> Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+> ---
+>   drivers/ufs/host/Kconfig |    1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff -- a/drivers/ufs/host/Kconfig b/drivers/ufs/host/Kconfig
+> --- a/drivers/ufs/host/Kconfig
+> +++ b/drivers/ufs/host/Kconfig
+> @@ -72,6 +72,7 @@ config SCSI_UFS_QCOM
+>   config SCSI_UFS_MEDIATEK
+>   	tristate "Mediatek specific hooks to UFS controller platform driver"
+>   	depends on SCSI_UFSHCD_PLATFORM && ARCH_MEDIATEK
+> +	depends on RESET_CONTROLLER
+>   	select PHY_MTK_UFS
+>   	select RESET_TI_SYSCON
+>   	help
 
-On Wed, Jun 7, 2023 at 2:12=E2=80=AFPM Tim Harvey <tharvey@gateworks.com> w=
-rote:
+Hmm ... is the above patch complete? Shouldn't a similar dependency be
+added to the ufs-hisi and ufs-sprd drivers? See also the following git
+grep output:
 
-> +/* bluetooth HCI */
-> +&uart3 {
-> +       pinctrl-names =3D "default";
-> +       pinctrl-0 =3D <&pinctrl_uart3>, <&pinctrl_bten>;
-> +       cts-gpios =3D <&gpio5 8 GPIO_ACTIVE_LOW>;
-> +       rts-gpios =3D <&gpio5 9 GPIO_ACTIVE_LOW>;
-> +       uart-has-rtscts;
+$ git grep -nH 'include.*linux/reset.h' */ufs
+drivers/ufs/host/ufs-hisi.c:16:#include <linux/reset.h>
+drivers/ufs/host/ufs-mediatek.c:21:#include <linux/reset.h>
+drivers/ufs/host/ufs-qcom.h:9:#include <linux/reset.h>
+drivers/ufs/host/ufs-sprd.c:14:#include <linux/reset.h>
 
-'uart-has-rtscts' means: use native RTS and CTS lines, but you are
-passing 'cts-gpios/rts-gpios',
-which contradicts that.
+Thanks,
 
-I suggest you remove 'uart-has-rtscts'.
+Bart.
