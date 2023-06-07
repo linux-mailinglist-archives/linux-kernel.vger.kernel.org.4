@@ -2,78 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AE707267F5
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 20:07:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8164E7267FB
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 20:09:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232457AbjFGSHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 14:07:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54066 "EHLO
+        id S231281AbjFGSJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 14:09:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232060AbjFGSHC (ORCPT
+        with ESMTP id S229488AbjFGSJX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 14:07:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 466202132;
-        Wed,  7 Jun 2023 11:06:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BCA656419F;
-        Wed,  7 Jun 2023 18:06:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC230C433EF;
-        Wed,  7 Jun 2023 18:06:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1686161205;
-        bh=C/lHo+ZleFjO9LWFKlT+1j26eXRjziuLsc+qH3svza4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QzWaZ33ZncOK/LsiwA3boNsDl4XQVmccX89UKv3/6Sy91XNSeMnvrLyd8lNkFxs6l
-         V6XS2QUKtVuzFeq9126guglD4ucAkL2SWPesUht16gE8z9RsGjecV3UdYtHf+gix/A
-         78YaBJTRRAM1clbJW6zr+WdG4hzOAneLMxl0274Y=
-Date:   Wed, 7 Jun 2023 20:06:42 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Rishabh Bhatnagar <risbhat@amazon.com>
-Cc:     sfrench@samba.org, stable@vger.kernel.org,
-        linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paulo Alcantara <pc@cjr.nz>, Aurelien Aptel <aaptel@suse.com>,
-        Steve French <stfrench@microsoft.com>
-Subject: Re: [PATCH 5.4 1/2] cifs: get rid of unused parameter in
- reconn_setup_dfs_targets()
-Message-ID: <2023060758-identify-awkward-8f86@gregkh>
-References: <20230601205817.3957-1-risbhat@amazon.com>
- <20230601205817.3957-2-risbhat@amazon.com>
+        Wed, 7 Jun 2023 14:09:23 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7C0E95;
+        Wed,  7 Jun 2023 11:09:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686161361; x=1717697361;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9/2uJzSIVthDyF48nbJrZnon8BziXtKeAnUd+VjtAKY=;
+  b=m1rnk4MNx0bhdFokK01P/l8WwNNo3yAfrJykLJnXq4sycGnhVmx2Bce3
+   0msGpv5oTJyvxkxyRnAirFNf3+1/Lqd8wJGyV0Hv1H1Z5wqOuJIn09Fee
+   zA/pIQ+UZL1Rk4Q1OdVWVGLmOyijXYPjYnloVoFcznwIlS+AGr588C1Lb
+   jpzrhFZPyle22fOihVaVqsd+uG80FBio4aVeInwYcmetBgDZGWkJF4y6w
+   O3vugFzOhyoNN3elyXoJH4rT/nrp0/4o6UzWwZptnEBpEeaZZtu/an4o9
+   HfTuvq7Ef4F7aTqMm6+18gS5indloreHK3nPOphbfB2oQ3yrfc4LCd25X
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="346679713"
+X-IronPort-AV: E=Sophos;i="6.00,224,1681196400"; 
+   d="scan'208";a="346679713"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 11:09:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="779554536"
+X-IronPort-AV: E=Sophos;i="6.00,224,1681196400"; 
+   d="scan'208";a="779554536"
+Received: from yjiang5-mobl.amr.corp.intel.com (HELO localhost) ([10.144.161.97])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 11:09:20 -0700
+Date:   Wed, 7 Jun 2023 11:09:20 -0700
+From:   Yunhong Jiang <yunhong.jiang@linux.intel.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Evgeniy Baskov <baskov@ispras.ru>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Peter Jones <pjones@redhat.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Dave Young <dyoung@redhat.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Kees Cook <keescook@chromium.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>
+Subject: Re: [PATCH v5 10/20] x86/decompressor: Call trampoline directly from
+ C code
+Message-ID: <20230607180920.GA3110@yjiang5-mobl.amr.corp.intel.com>
+References: <20230607072342.4054036-1-ardb@kernel.org>
+ <20230607072342.4054036-11-ardb@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230601205817.3957-2-risbhat@amazon.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230607072342.4054036-11-ardb@kernel.org>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 01, 2023 at 08:58:16PM +0000, Rishabh Bhatnagar wrote:
-> From: Paulo Alcantara <pc@cjr.nz>
+On Wed, Jun 07, 2023 at 09:23:32AM +0200, Ard Biesheuvel wrote:
+> Instead of returning to the asm calling code to invoke the trampoline,
+> call it straight from the C code that sets the scene. That way, the
+> struct return type is no longer needed for returning two values, and the
+> call can be made conditional more cleanly in a subsequent patch.
 > 
-> commit baf3f08ef4083b76ca67b143e135213a7f941879 upstream.
-> 
-> The target iterator parameter "it" is not used in
-> reconn_setup_dfs_targets(), so just remove it.
-> 
-> Signed-off-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
-> Reviewed-by: Aurelien Aptel <aaptel@suse.com>
-> Signed-off-by: Steve French <stfrench@microsoft.com>
+> Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 > ---
+>  arch/x86/boot/compressed/head_64.S    | 20 +++-----------
+>  arch/x86/boot/compressed/pgtable_64.c | 28 ++++++++------------
+>  2 files changed, 15 insertions(+), 33 deletions(-)
+> 
+> diff --git a/arch/x86/boot/compressed/head_64.S b/arch/x86/boot/compressed/head_64.S
+> index cdefafd456c70335..3d4da7e5270c8d4d 100644
+> --- a/arch/x86/boot/compressed/head_64.S
+> +++ b/arch/x86/boot/compressed/head_64.S
+> @@ -430,24 +430,12 @@ SYM_CODE_START(startup_64)
+>  #endif
+>  
+>  	/*
+> -	 * paging_prepare() sets up the trampoline and checks if we need to
+> -	 * enable 5-level paging.
+> -	 *
+> -	 * paging_prepare() returns a two-quadword structure which lands
+> -	 * into RDX:RAX:
+> -	 *   - Address of the trampoline is returned in RAX.
+> -	 *   - Non zero RDX means trampoline needs to enable 5-level
+> -	 *     paging.
+> -	 *
+> +	 * set_paging_levels() updates the number of paging levels using a
+> +	 * trampoline in 32-bit addressable memory if the current number does
+> +	 * not match the desired number.
+>  	 */
+>  	movq	%r15, %rdi		/* pass struct boot_params pointer */
+> -	call	paging_prepare
+> -
+> -	/* Pass the trampoline address and boolean flag as args #1 and #2 */
+> -	movq	%rax, %rdi
+> -	movq	%rdx, %rsi
+> -	leaq	TRAMPOLINE_32BIT_CODE_OFFSET(%rax), %rax
+> -	call	*%rax
+> +	call	set_paging_levels
+>  
+>  	/*
+>  	 * cleanup_trampoline() would restore trampoline memory.
+> diff --git a/arch/x86/boot/compressed/pgtable_64.c b/arch/x86/boot/compressed/pgtable_64.c
+> index d66639c961b8eeda..1d28ad95ea839531 100644
+> --- a/arch/x86/boot/compressed/pgtable_64.c
+> +++ b/arch/x86/boot/compressed/pgtable_64.c
+> @@ -16,11 +16,6 @@ unsigned int __section(".data") pgdir_shift = 39;
+>  unsigned int __section(".data") ptrs_per_p4d = 1;
+>  #endif
+>  
+> -struct paging_config {
+> -	unsigned long trampoline_start;
+> -	unsigned long l5_required;
+> -};
+> -
+>  /* Buffer to preserve trampoline memory */
+>  static char trampoline_save[TRAMPOLINE_32BIT_SIZE];
+>  
+> @@ -106,10 +101,10 @@ static unsigned long find_trampoline_placement(void)
+>  	return bios_start - TRAMPOLINE_32BIT_SIZE;
+>  }
+>  
+> -struct paging_config paging_prepare(void *rmode)
+> +asmlinkage void set_paging_levels(void *rmode)
 
-When passing on patches from other people, you too have to sign-off on
-the patch, saying that you are ok with it.
-
-Please resend this series with your signed-off on it as well (after
-reading the documentation to understand what you are agreeing to.)
-
-thanks,
-
-greg k-h
+Can you please change the refer to paging_prepare() in the comments above also?
