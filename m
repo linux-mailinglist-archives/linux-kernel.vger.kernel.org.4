@@ -2,94 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 756377267B8
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 19:46:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 605C97267BC
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 19:47:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232252AbjFGRqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 13:46:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45770 "EHLO
+        id S232263AbjFGRrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 13:47:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232208AbjFGRqo (ORCPT
+        with ESMTP id S232208AbjFGRrU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 13:46:44 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3658D1FF5
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 10:46:39 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-977e7d6945aso589042066b.2
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 10:46:39 -0700 (PDT)
+        Wed, 7 Jun 2023 13:47:20 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD7310CA;
+        Wed,  7 Jun 2023 10:47:19 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-6621a7efe18so173990b3a.1;
+        Wed, 07 Jun 2023 10:47:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686159997; x=1688751997;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IS4yO5/WmR+TVZNJffAGCPAsefusOsebYnq87EbR9d8=;
-        b=PzyTuOtkeykTZ0E9oHoGoDsQ/p2Qa0UFZSSLm8W8vbcUh8U9lSgtO8y+UiTDleWhVd
-         IC4emAy2C+or6ZDf5bIl5qXYFSSDMX9ag9oEClJbOap2JZLS3NHFtSjkYm6/zkBQc+uG
-         pZJTUpiaMI7amxHQftTnaXbyaBCM4S1hIukTXP7XbEzajd6DNlcfQDVgRnP3P38tkKGg
-         gzkbrDweJUUFvbTvnJvqlUfafu1M/feCxMzQLnLgbVf1s6jg8WgSo6ZRpmvYg+OByjt8
-         7HekrhEqYX35nwdDI1p7WI1qKvWyRKHZ8NKQF3bpxA6SVImIm0MAJ8Ja4jK2YhuMOZ+M
-         tsEw==
+        d=gmail.com; s=20221208; t=1686160039; x=1688752039;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Of8fDCbAzKBU0E3fdobtakbNXasluc37nuXH5F34jmk=;
+        b=NKvomtQLfXx26DVNv0Tlz0YGU3B4EDx4lo9lyheksqm0WK8JAZG12YHocpKNGJDqU8
+         JMMGXjb9U4q6lqEDN0zA/N3hmTliS22jz7RAsrNZTE7qGPsVyqCIjSxmhHwy8FgGK7pE
+         KKpWqW+QVintGhddzYANBXQHhv+CYQZq/5yPDa/fR0eHaaSGyuYWNIvkjoZg4B/vXL4h
+         cW0aYFOQphjgvBmOPkZR11UTOhWKnytQfoXM9c0paVAdZ9MkMK9XQxCb5pCtwsTrR28a
+         rOnXGzGjY1Kb3Zlx8gj8Dk/FWl+opDaL68AKJ57QiuEB9h4QQmJd37H4KNH14cVYgObk
+         25Og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686159997; x=1688751997;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IS4yO5/WmR+TVZNJffAGCPAsefusOsebYnq87EbR9d8=;
-        b=Mca9L9c871ARNp0zMJGvxRjgCcGFGR4D1nnYB3vyyXC5PyopUCl20O0BjWH8t6360c
-         SdLNWx6MARCBXjkuwWXiG4M8Gj2C688Wqe4DD2Z0Fspwrx+sgfIivkTzTVweqKUUvwcC
-         t51TXIX3VcjlQJHObtpmfxkWt1W2BXkzCwk1AhMIAkM0uB+KBbRSKpycfWIzA7KhQbET
-         4mLwzVChSQipSxCWKemPceKO3e1Tr1bG9BIiqCX94lUU8SE7l/qsFvsUu1Po+eygiSr1
-         uRykGfAnWwZuOPfRYR4CsLApkb0QjKa4wYuhq7w1gm1hUutsRd1Z9jKrBnVN4w4p0+m4
-         tkhQ==
-X-Gm-Message-State: AC+VfDwkIRIeqlB2+oaz5D/UvjNsVehw8SsP0+ratJMcnP75N9mFNpO9
-        ktczGNNdFXchPdpc+wFekhqElg==
-X-Google-Smtp-Source: ACHHUZ6vACvk/Fp/owXZGI5nFgVQVKJgETLwe7WJ0NqCxrx8BOmb1qgAg2jht151GmXiO55T0EdEeg==
-X-Received: by 2002:a17:907:1622:b0:968:2b4a:aba3 with SMTP id hb34-20020a170907162200b009682b4aaba3mr6198186ejc.5.1686159997582;
-        Wed, 07 Jun 2023 10:46:37 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id v1-20020a1709060b4100b0096f6647b5e8sm7141037ejg.64.2023.06.07.10.46.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 10:46:37 -0700 (PDT)
-Message-ID: <84508d22-2dcd-c49f-2424-37a717a49e1b@linaro.org>
-Date:   Wed, 7 Jun 2023 19:46:35 +0200
+        d=1e100.net; s=20221208; t=1686160039; x=1688752039;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Of8fDCbAzKBU0E3fdobtakbNXasluc37nuXH5F34jmk=;
+        b=BxEaLLzL9EfJj08u0ATX+c+Wbs8Ay23z3bFAHJx8jhzgWe7fkcw1TsbiJjAet/c5gC
+         sjqnhWYu/yffVjXYhQL7RaxaNPH9dL1ocQG5horIKrhvjrRqhZKPntj35ycUltxJTbLG
+         M1r7s/l/odd8GXF8CTxru0PYRw2m38ki5eyU6cPYQlieTyMO9qoF/sJsXPI7my+Qcpqy
+         n0cKKb1jI4BM2RzVMqhXcST5AumRIvhQkTfhLW25eRDAR3Qhgz41UgIq0rN1Aej1tzXH
+         aYf4dgp2+ndvszH8pevM5IDlFQYtTMxMvJ9z8bEPNAUaugML/RaBJp4C0LbLLsH40uV3
+         Q/Lg==
+X-Gm-Message-State: AC+VfDwT212JbHgP5bD+9cbdDGyI/aVY/POuVu57oEVvax+KPeQqPQ4L
+        VUiHF/oLvHDDIxjwAU6nJ64=
+X-Google-Smtp-Source: ACHHUZ7mh0cTvL7KvDRqsg+seMhXvGeWEE219xToJY6WKwhkwcyHDYxaVIgGdGmy4xfELN/mpooRYw==
+X-Received: by 2002:a05:6a20:72a7:b0:10b:e7d2:9066 with SMTP id o39-20020a056a2072a700b0010be7d29066mr3109250pzk.2.1686160039013;
+        Wed, 07 Jun 2023 10:47:19 -0700 (PDT)
+Received: from hoboy.vegasvil.org ([2601:640:8200:e:e2d5:5eff:fea5:802f])
+        by smtp.gmail.com with ESMTPSA id b38-20020a631b66000000b0051eff0a70d7sm9148638pgm.94.2023.06.07.10.47.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 10:47:18 -0700 (PDT)
+Date:   Wed, 7 Jun 2023 10:47:16 -0700
+From:   Richard Cochran <richardcochran@gmail.com>
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Subject: Re: [PATCH net-next] net: micrel: Change to receive timestamp in the
+ frame for lan8841
+Message-ID: <ZIDCpPbCFCxKBV2k@hoboy.vegasvil.org>
+References: <20230607070948.1746768-1-horatiu.vultur@microchip.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH RFC net 2/2] nfc: nxp-nci: Fix i2c read on ThinkPad
- hardware
-Content-Language: en-US
-To:     Marco Giorgi <giorgi.marco.96@disroot.org>, netdev@vger.kernel.org
-Cc:     u.kleine-koenig@pengutronix.de, davem@davemloft.net,
-        michael@walle.cc, kuba@kernel.org, linux-kernel@vger.kernel.org
-References: <20230607170009.9458-1-giorgi.marco.96@disroot.org>
- <20230607170009.9458-3-giorgi.marco.96@disroot.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230607170009.9458-3-giorgi.marco.96@disroot.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230607070948.1746768-1-horatiu.vultur@microchip.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/06/2023 19:00, Marco Giorgi wrote:
-> Read IRQ GPIO value and exit from IRQ if the device is not ready.
+On Wed, Jun 07, 2023 at 09:09:48AM +0200, Horatiu Vultur wrote:
 
-Why? What problem are you solving?
+> Doing these changes to start to get the received timestamp in the
+> reserved field of the header, will give a great CPU usage performance.
+> Running ptp4l with logSyncInterval of -9 will give a ~50% CPU
+> improvment.
 
-Why IRQ GPIO - whatever it is - means device is not ready for I2C transfer?
+Really?
 
-> 
-> Signed-off-by: Marco Giorgi <giorgi.marco.96@disroot.org>
-> ---
->  drivers/nfc/nxp-nci/i2c.c | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
+> -static struct lan8814_ptp_rx_ts *lan8841_ptp_get_rx_ts(struct kszphy_ptp_priv *ptp_priv)
+> -{
+> -	struct phy_device *phydev = ptp_priv->phydev;
+> -	struct lan8814_ptp_rx_ts *rx_ts;
+> -	u32 sec, nsec;
+> -	u16 seq;
+> -
+> -	nsec = phy_read_mmd(phydev, 2, LAN8841_PTP_RX_INGRESS_NS_HI);
+> -	if (!(nsec & LAN8841_PTP_RX_INGRESS_NSEC_HI_VALID))
+> -		return NULL;
+> -
+> -	nsec = ((nsec & 0x3fff) << 16);
+> -	nsec = nsec | phy_read_mmd(phydev, 2, LAN8841_PTP_RX_INGRESS_NS_LO);
+> -
+> -	sec = phy_read_mmd(phydev, 2, LAN8841_PTP_RX_INGRESS_SEC_HI);
+> -	sec = sec << 16;
+> -	sec = sec | phy_read_mmd(phydev, 2, LAN8841_PTP_RX_INGRESS_SEC_LO);
+> -
+> -	seq = phy_read_mmd(phydev, 2, LAN8841_PTP_RX_MSG_HEADER2);
 
-Best regards,
-Krzysztof
+Before: 5x phy_read_mmd() per frame ...
 
+> -	rx_ts = kzalloc(sizeof(*rx_ts), GFP_KERNEL);
+> -	if (!rx_ts)
+> -		return NULL;
+> -
+> -	rx_ts->seconds = sec;
+> -	rx_ts->nsec = nsec;
+> -	rx_ts->seq_id = seq;
+> -
+> -	return rx_ts;
+> -}
+
+> +static void lan8841_ptp_getseconds(struct ptp_clock_info *ptp,
+> +				   struct timespec64 *ts)
+> +{
+> +	struct kszphy_ptp_priv *ptp_priv = container_of(ptp, struct kszphy_ptp_priv,
+> +							ptp_clock_info);
+> +	struct phy_device *phydev = ptp_priv->phydev;
+> +	time64_t s;
+> +
+> +	mutex_lock(&ptp_priv->ptp_lock);
+> +	/* Issue the command to read the LTC */
+> +	phy_write_mmd(phydev, 2, LAN8841_PTP_CMD_CTL,
+> +		      LAN8841_PTP_CMD_CTL_PTP_LTC_READ);
+> +
+> +	/* Read the LTC */
+> +	s = phy_read_mmd(phydev, 2, LAN8841_PTP_LTC_RD_SEC_HI);
+> +	s <<= 16;
+> +	s |= phy_read_mmd(phydev, 2, LAN8841_PTP_LTC_RD_SEC_MID);
+> +	s <<= 16;
+> +	s |= phy_read_mmd(phydev, 2, LAN8841_PTP_LTC_RD_SEC_LO);
+
+After: 4x phy_read_mmd() per frame.  How does that save 50% cpu?
+
+> +	mutex_unlock(&ptp_priv->ptp_lock);
+> +
+> +	set_normalized_timespec64(ts, s, 0);
+> +}
+
+
+> +static long lan8841_ptp_do_aux_work(struct ptp_clock_info *ptp)
+> +{
+> +	struct kszphy_ptp_priv *ptp_priv = container_of(ptp, struct kszphy_ptp_priv,
+> +							ptp_clock_info);
+> +	struct skb_shared_hwtstamps *shhwtstamps;
+> +	struct timespec64 ts;
+> +	struct sk_buff *skb;
+> +	u32 ts_header;
+> +
+> +	while ((skb = skb_dequeue(&ptp_priv->rx_queue)) != NULL) {
+> +		lan8841_ptp_getseconds(ptp, &ts);
+
+No need to call this once per frame.  It would be sufficent to call it
+once every 2 seconds and cache the result.
+
+> +		ts_header = __be32_to_cpu(LAN8841_SKB_CB(skb)->header->reserved2);
+> +
+> +		shhwtstamps = skb_hwtstamps(skb);
+> +		memset(shhwtstamps, 0, sizeof(*shhwtstamps));
+> +
+> +		/* Check for any wrap arounds for the second part */
+> +		if ((ts.tv_sec & GENMASK(1, 0)) < ts_header >> 30)
+> +			ts.tv_sec -= GENMASK(1, 0) + 1;
+> +
+> +		shhwtstamps->hwtstamp =
+> +			ktime_set((ts.tv_sec & ~(GENMASK(1, 0))) | ts_header >> 30,
+> +				  ts_header & GENMASK(29, 0));
+> +		LAN8841_SKB_CB(skb)->header->reserved2 = 0;
+> +
+> +		netif_rx(skb);
+> +	}
+> +
+> +	return -1;
+> +}
+
+Thanks,
+Richard
