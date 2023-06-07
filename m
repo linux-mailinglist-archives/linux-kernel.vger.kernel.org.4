@@ -2,129 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D24CA726277
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 16:12:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D15572627A
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 16:13:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235653AbjFGOMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 10:12:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46946 "EHLO
+        id S240876AbjFGONS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 10:13:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235390AbjFGOMl (ORCPT
+        with ESMTP id S239782AbjFGONP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 10:12:41 -0400
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 273291BD6;
-        Wed,  7 Jun 2023 07:12:39 -0700 (PDT)
-Received: by mail-qk1-x72a.google.com with SMTP id af79cd13be357-75d54faa03eso499443385a.1;
-        Wed, 07 Jun 2023 07:12:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686147158; x=1688739158;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=o0wEcp0FyXSoLy2vtZ9JTDGz03q0z6MYcd4FX8LSnA0=;
-        b=E9R7O5XsSRybn8qr4S0ORUKY8zeqTvj8KiPUeJ7evqPUeGr4vQBrV0NBTtN0RGk2wx
-         gWRe4wqRaXewsp8InU6DqZBUGeWB9xuT8jx/zCWcY5FTeT3uVBOY6vylZg/sk7xJBHbE
-         iNz/EPfmWz2ppf4aGtr/8EGQYkawBxR1A0/ohT2G+0oWIu4WnKGREdICU2vP0uoRRcy7
-         38NIrBX/FL2arhNoPHT5eUawQbzCDSDsS7OUbb+CDUEJS0vvb37x7cEZERxWOGEpltRt
-         iCes1snoUwCYZ9HA9kOY/PS3PcH9vmUj49s16AVaOZV/go8AkvlvwTaLkeUpwAROfGkV
-         VOhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686147158; x=1688739158;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=o0wEcp0FyXSoLy2vtZ9JTDGz03q0z6MYcd4FX8LSnA0=;
-        b=RQgvbszV3FjL9xlTvgUWWVWCNM2jTvzU65Hp4E1VXlhtd8IgSBWXO5JtGeyWOTqTDB
-         eM3Aoicn90M1h0CfciMvsfouEmuAfn+VFY3NDTHVd0Z9syBeNjBaWLyXG4PjdcL0Rtfv
-         RlfwZNk7PeUhWqEfq6c3Y7zMdjQ+RJqoJAsiAotEd50BY7/rBfs/PISlwNyJ/2fdBvIk
-         opuYAn5NCX5g5vC8if/LA/F/pQx/aMqh6AAjBzUuog85h9o/3EcRMvHF442247cYTSFZ
-         rD3K+bB4W4jDUB1AQ/qd66d9D3pA9m5KOGI2XeVbEVcxsmf1iUBHNPRUSS1pqz5aX75o
-         uAPQ==
-X-Gm-Message-State: AC+VfDyEdgErg9tbYoGMxVb6bczDc1lOjGtN1xV51iC9aIf6Aj5VEQuw
-        sOb3kyiB+RdH1ULPTfSONVuRy52GH8QRmDILA4avAGa2b3I=
-X-Google-Smtp-Source: ACHHUZ6wjaLOSlAIFymssVW5VtjFm1g6Ii3QQ9G/Xf8pBqUJob0EQgcLIxbmqLndMy93o64J12so1UlRleY8kjMRhXQ=
-X-Received: by 2002:a05:6214:212e:b0:623:690c:3ce6 with SMTP id
- r14-20020a056214212e00b00623690c3ce6mr3804849qvc.32.1686147158030; Wed, 07
- Jun 2023 07:12:38 -0700 (PDT)
+        Wed, 7 Jun 2023 10:13:15 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9FA410D7;
+        Wed,  7 Jun 2023 07:13:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=3T5RexQVbfA+VHoEyrP6w2iIV68bpAHWGq8VTMkiA/w=; b=cEtw03ybHWmNv3P0cpTTju7VmY
+        gnJaPq8slq6VXz6q3KOP8ClMwRV+Jck8cT33qFMl5nhUJpeQ4GyLxcVBh34sgocejE7o0HmQt3PCG
+        ohussvyYen6oTNC55KnNAGfA5T43bTD1TBKWgNVNta154LVRDh3Dc3czgeFMqgHp4HBbzLIuZR+oJ
+        rSdCwkQ97yRmGw49ImZma0r2MXeSAFgnquVBxFNA6CYVGwSgsO8DsgacLIlJqN1APbpURaytdUR6S
+        oL/gOgZZyJdhZPyUN5YRne3TTOlFSPeKq2VgeCAYtfSd9fAmiZ/qCL86L+wjeDhLDCgsF4Iy2xv2s
+        LXljzaDw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:46002)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1q6tuP-0007bf-Ff; Wed, 07 Jun 2023 15:13:09 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1q6tuL-0008IN-3D; Wed, 07 Jun 2023 15:13:05 +0100
+Date:   Wed, 7 Jun 2023 15:13:05 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Maxime Chevallier <maxime.chevallier@bootlin.com>
+Cc:     davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alexis.lothore@bootlin.com,
+        thomas.petazzoni@bootlin.com, Andrew Lunn <andrew@lunn.ch>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Feiyang Chen <chenfeiyang@loongson.cn>
+Subject: Re: [PATCH net-next v4 5/5] net: dwmac_socfpga: initialize local
+ data for mdio regmap configuration
+Message-ID: <ZICQcWb/iR0aB36J@shell.armlinux.org.uk>
+References: <20230607135941.407054-1-maxime.chevallier@bootlin.com>
+ <20230607135941.407054-6-maxime.chevallier@bootlin.com>
+ <ZIB306nKrhiru0hJ@shell.armlinux.org.uk>
+ <20230607165409.7fddd49a@pc-7.home>
 MIME-Version: 1.0
-References: <20230607081803.778223-1-jiawenwu@trustnetic.com>
-In-Reply-To: <20230607081803.778223-1-jiawenwu@trustnetic.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 7 Jun 2023 17:12:01 +0300
-Message-ID: <CAHp75Vdbq3uHOyrfT-KFYRSj6v+s9GgOQjQ9a8mGn-4HSCpB9Q@mail.gmail.com>
-Subject: Re: [PATCH v2] gpiolib: Fix GPIO chip IRQ initialization restriction
-To:     Jiawen Wu <jiawenwu@trustnetic.com>,
-        Michael Walle <michael@walle.cc>
-Cc:     linus.walleij@linaro.org, brgl@bgdev.pl,
-        shreeya.patel@collabora.com, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230607165409.7fddd49a@pc-7.home>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+Cc: Michael
+On Wed, Jun 07, 2023 at 04:54:09PM +0200, Maxime Chevallier wrote:
+> On Wed, 7 Jun 2023 13:28:03 +0100
+> "Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
+> 
+> > On Wed, Jun 07, 2023 at 03:59:41PM +0200, Maxime Chevallier wrote:
+> > > @@ -447,19 +446,22 @@ static int socfpga_dwmac_probe(struct platform_device *pdev)
+> > >  		struct mdio_regmap_config mrc;
+> > >  		struct regmap *pcs_regmap;
+> > >  		struct mii_bus *pcs_bus;
+> > >    
+> > ...
+> > > +		memset(&mrc, 0, sizeof(mrc));  
+> > ...
+> > >  		mrc.parent = &pdev->dev;
+> > >  		mrc.valid_addr = 0x0;
+> > > +		mrc.autoscan = false;  
+> > 
+> > Isn't this covered by the memset() ?
+> 
+> I have the same answer as for the above. It's redundant, but I don't
+> think there's any harm having it set explicitely ?
 
-On Wed, Jun 7, 2023 at 11:20=E2=80=AFAM Jiawen Wu <jiawenwu@trustnetic.com>=
- wrote:
->
-> In case of gpio-regmap, IRQ chip is added by regmap-irq and associated wi=
-th
-> GPIO chip by gpiochip_irqchip_add_domain(). The initialization flag was n=
-ot
-> added in gpiochip_irqchip_add_domain(), causing gpiochip_to_irq() to retu=
-rn
-> -EPROBE_DEFER.
+No harm, just redundant. I don't think this is a good enough reason not
+to merge it.
 
-Makes sense to me.
-FWIW,
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-
-But it would be nice to hear from Michael about this.
-
-> Fixes: 5467801f1fcb ("gpio: Restrict usage of GPIO chip irq members befor=
-e initialization")
-> Signed-off-by: Jiawen Wu <jiawenwu@trustnetic.com>
-> ---
-> v1 -> v2:
-> - add compiler barrier
-> ---
->  drivers/gpio/gpiolib.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
->
-> diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-> index a7220e04a93e..9ecf93cbd801 100644
-> --- a/drivers/gpio/gpiolib.c
-> +++ b/drivers/gpio/gpiolib.c
-> @@ -1792,6 +1792,14 @@ int gpiochip_irqchip_add_domain(struct gpio_chip *=
-gc,
->         gc->to_irq =3D gpiochip_to_irq;
->         gc->irq.domain =3D domain;
->
-> +       /*
-> +        * Using barrier() here to prevent compiler from reordering
-> +        * gc->irq.initialized before adding irqdomain.
-> +        */
-> +       barrier();
-> +
-> +       gc->irq.initialized =3D true;
-> +
->         return 0;
->  }
->  EXPORT_SYMBOL_GPL(gpiochip_irqchip_add_domain);
-> --
-> 2.27.0
->
-
-
---=20
-With Best Regards,
-Andy Shevchenko
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
