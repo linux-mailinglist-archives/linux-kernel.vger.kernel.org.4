@@ -2,58 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4E90725401
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 08:21:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E99FE725408
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 08:23:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234840AbjFGGVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 02:21:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49496 "EHLO
+        id S234861AbjFGGXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 02:23:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233537AbjFGGVp (ORCPT
+        with ESMTP id S232580AbjFGGXo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 02:21:45 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13467AA;
-        Tue,  6 Jun 2023 23:21:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=as7HoSo6fK1iB1ZeJ1fvStsjFygkeg1TGSwX3BDPsnY=; b=Jqx2/aBqpN8trsbbYkEWEM4Ma/
-        WXV779ZszyTPK+MRTmdnoCAtfOz3l/xhv1y0BStvycm8gcZz0+ObE0FRGZDwLcnBfqct3Yo8c+a1K
-        fcfV1LHyRnv3GPgOhdtzblIdBIkUOnGCwaqYig9kW2qTbPwSCo1DeL8UO0/ZffqZ1urxxLUSuqv4/
-        jc5735mzM8o82g/coA2CyyPkua9vo6y17AGco2nSORcVpFqt/kxUXRvdtqHvexqCKRObDEJrn6KRH
-        Lbkfv+R7kVu47U70YffNXgBw9AOH5+rlM7CHJUrY5SxSM4+ooIsEIP/RK8r+7hgGsylfjp79OEjwG
-        qWWAg3hw==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1q6mY8-004Xuy-1f;
-        Wed, 07 Jun 2023 06:21:40 +0000
-Date:   Tue, 6 Jun 2023 23:21:40 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Wu Bo <bo.wu@vivo.com>
-Cc:     Jan Kara <jack@suse.cz>, Amir Goldstein <amir73il@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        wubo.oduw@gmail.com
-Subject: Re: [PATCH 1/1] fsnotify: export 'fsnotify_recalc_mask' symbol
-Message-ID: <ZIAh9BFbUy3Soz4W@infradead.org>
-References: <20230607024700.11060-1-bo.wu@vivo.com>
+        Wed, 7 Jun 2023 02:23:44 -0400
+Received: from cavan.codon.org.uk (irc.codon.org.uk [IPv6:2a00:1098:84:22e::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4CE5AA;
+        Tue,  6 Jun 2023 23:23:42 -0700 (PDT)
+Received: by cavan.codon.org.uk (Postfix, from userid 1000)
+        id 9167742455; Wed,  7 Jun 2023 07:23:41 +0100 (BST)
+Date:   Wed, 7 Jun 2023 07:23:41 +0100
+From:   Matthew Garrett <mjg59@srcf.ucam.org>
+To:     AceLan Kao <acelan.kao@canonical.com>
+Cc:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
+Subject: Re: [PATCH] platform/x86: dell-laptop: Add drm module soft dependency
+Message-ID: <20230607062341.GA30618@srcf.ucam.org>
+References: <20230607034331.576623-1-acelan.kao@canonical.com>
+ <20230607042032.GA28835@srcf.ucam.org>
+ <CAFv23QmDNUFcPwvSQt5aUxtmHasfr8wrF72ObvcO-X19gfn=LA@mail.gmail.com>
+ <20230607052724.GA29834@srcf.ucam.org>
+ <CAFv23QkEdGnEz1q7vbyFCa9S9Dqh-zec72nRGyZ3wAz-8wpbvA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230607024700.11060-1-bo.wu@vivo.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAFv23QkEdGnEz1q7vbyFCa9S9Dqh-zec72nRGyZ3wAz-8wpbvA@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,KHOP_HELO_FCRDNS,SPF_HELO_NEUTRAL,
+        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 10:47:00AM +0800, Wu Bo wrote:
-> To enable modules to update existing mark, export 'fsnotify_recalc_mask'
-> symbol.
+On Wed, Jun 07, 2023 at 02:13:31PM +0800, AceLan Kao wrote:
+> Matthew Garrett <mjg59@srcf.ucam.org> 於 2023年6月7日 週三 下午1:27寫道：
+> >
+> > On Wed, Jun 07, 2023 at 01:19:40PM +0800, AceLan Kao wrote:
+> > > Gfx drivers(i915/amdgpu/nvidia) depend on the drm driver, so delaying
+> > > the loading of dell_laptop after drm can ease the issue the most.
+> > > Right, it's still possible to encounter the issue, unfortunately, we
+> > > do not have a better solution for it at the moment.
+> >
+> > We could unregister inappropriate backlight drivers when a more
+> > appropriate one is loaded, or the policy decision around which driver to
+> > use could be made in userland?
+> It's hard to decide which backlight driver is redundant, and it's kind of ugly
+> to unregister the backlight driver which is registered by other driver and maybe
+> problematic.
 
-Why, and which module?  And why isn't the code to use it included?
+But you're relying on registering the working backlight first, which is 
+an inherently racy thing? We shouldn't be relying on order of 
+initialisation to make this work, either we should only export a working 
+interface or we should expose enough information for whatever is using 
+the interfaces to make an appropriate policy decision itself.
