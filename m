@@ -2,177 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E829725125
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 02:34:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0684725128
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 02:37:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239746AbjFGAeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 20:34:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45024 "EHLO
+        id S238474AbjFGAhw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 20:37:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233518AbjFGAeX (ORCPT
+        with ESMTP id S233518AbjFGAhr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 20:34:23 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7231410EA;
-        Tue,  6 Jun 2023 17:34:20 -0700 (PDT)
-X-QQ-mid: bizesmtp80t1686098048tb6ncj0o
-Received: from linux-lab-host.localdomain ( [61.141.77.49])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 07 Jun 2023 08:34:07 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: 2qli6fYqcypcLY99/zUQyFc7OGvqHYqz5PiHI7yQ7HnWszpIoNcsoAMUj02ew
-        Wey8rV7CTOMl0Y+ApPuSc3Cbnpx7QkY2Wvjso2OA5T31VwSz4Nxa/gm77aJOQBY+6Cl/hEx
-        S/dvpbhonG0Fyips2ThCWreyj3PqH4IOmYOhaDoEqnqEDhW1i71CubLWPuuCrUzdMiFrLEn
-        gopznRXZeMfi3ZpUvVnsBfoXIR4zUPnH8FbvFr3ONszDpMgLeOePr7UCr9ZX/Fb1xQU0k4k
-        AnHSoiVH9o095/x6cDWNFOL0uZ1Yk0wXD3WOhMwW/J7SN8BF0fJSEAQNC1PIttK6Q0SPX1j
-        UDZBWvKMR72PNl7m9KYNbcf7RYxdQ==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 1982007782142480683
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de, w@1wt.eu
-Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 4/4] tools/nolibc: sys.h: apply __syscall() helper
-Date:   Wed,  7 Jun 2023 08:34:06 +0800
-Message-Id: <20230607003406.559638-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <7e76f099-4198-421c-8157-430201970c4c@t-8ch.de>
-References: <7e76f099-4198-421c-8157-430201970c4c@t-8ch.de>
+        Tue, 6 Jun 2023 20:37:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11B8410F8;
+        Tue,  6 Jun 2023 17:37:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A29CE631E0;
+        Wed,  7 Jun 2023 00:37:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DB85C433D2;
+        Wed,  7 Jun 2023 00:37:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686098266;
+        bh=Jj21BgI4T47Tjh7uvaUnsKqWs81Zaadmc3y9Tu/8suU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=szFRy8r+UfdfgVaMTxwyKm+qeOV4f6Sj1dYhO0dVlJmCNpu816jkqpdZRvCtYC8M0
+         scqqto4QwxkOEQgDK92ROrJ05loLtKeRa8YrDQ9NjTPdWzSTcyEsLF98WL1JUTEUtd
+         cu3UlI0a4jsn4CFpqIR3GVbofD6MFBdl7MVxCVC0JB2JxeZtY+arOCOq+M2F9JZk/t
+         VV71f0y34iZFWTcZd0PtxMPla3IbmkbJqKt8yAic9DLyeMSyll02fWHasC+BsLtZtm
+         yKIe4ySCZFnL1LUf6tq8ODQ7ypxOi6+AK8MgsDEcFIt4/7y/+mu7uFEaKqSLTxE+tm
+         hDTSiVhBileFg==
+From:   Eduardo Valentin <evalenti@kernel.org>
+To:     evalenti@kernel.org, eduval@amazon.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>
+Subject: [PATCH 1/1] thermal: sysfs: avoid actual readings from sysfs
+Date:   Tue,  6 Jun 2023 17:37:21 -0700
+Message-Id: <20230607003721.834038-1-evalenti@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Hi Zhangjin,
-> 
-> On 2023-06-06 16:17:38+0800, Zhangjin Wu wrote:
-> > Use __syscall() helper to shrink 252 lines of code.
-> > 
-> >     $ git show HEAD^:tools/include/nolibc/sys.h | wc -l
-> >     1425
-> >     $ git show HEAD:tools/include/nolibc/sys.h | wc -l
-> >     1173
-> >     $ echo "1425-1173" | bc -l
-> >     252
-> > 
-> > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-> > ---
-> >  tools/include/nolibc/sys.h | 336 +++++--------------------------------
-> >  1 file changed, 42 insertions(+), 294 deletions(-)
-> > 
-> > diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-> > index f6e3168b3e50..0cfc5157845a 100644
-> > --- a/tools/include/nolibc/sys.h
-> > +++ b/tools/include/nolibc/sys.h
-> > @@ -108,13 +108,7 @@ int sys_chdir(const char *path)
-> >  static __attribute__((unused))
-> >  int chdir(const char *path)
-> >  {
-> > -	int ret = sys_chdir(path);
-> > -
-> > -	if (ret < 0) {
-> > -		SET_ERRNO(-ret);
-> > -		ret = -1;
-> > -	}
-> > -	return ret;
-> > +	return __syscall(chdir, path);
-> 
-> To be honest I'm still not a big fan of the __syscall macro.
-> It's a bit too magic for too little gain.
-> 
-> The commit message argues that the patches make the code shorter.
-> 
-> However doing 
-> 
-> __sysret(sys_chdir(path));
-> 
-> instead of
-> 
-> __syscall(chdir, path);
-> 
-> is only three characters longer and the same amout of lines.
->
+From: Eduardo Valentin <eduval@amazon.com>
 
-Yeah, I do like your version too, it looks consise too, the only not
-comfortable part is there are dual calls in one line.
+As the thermal zone caches the current and last temperature
+value, the sysfs interface can use that instead of
+forcing an actual update or read from the device.
+This way, if multiple userspace requests are coming
+in, we avoid storming the device with multiple reads
+and potentially clogging the timing requirement
+for the governors.
 
-> Otherwise we would have syscall() _syscall() and __syscall() each doing
-> different things.
->
+Cc: "Rafael J. Wysocki" <rafael@kernel.org> (supporter:THERMAL)
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org> (supporter:THERMAL)
+Cc: Amit Kucheria <amitk@kernel.org> (reviewer:THERMAL)
+Cc: Zhang Rui <rui.zhang@intel.com> (reviewer:THERMAL)
+Cc: linux-pm@vger.kernel.org (open list:THERMAL)
+Cc: linux-kernel@vger.kernel.org (open list)
 
-Yes, I'm worried about this too, although the compilers may help a
-little, but it is too later.
+Signed-off-by: Eduardo Valentin <eduval@amazon.com>
+---
+ drivers/thermal/thermal_sysfs.c | 21 ++++++++++++++++-----
+ 1 file changed, 16 insertions(+), 5 deletions(-)
 
-Just brain storming, What about another non-similar name, for example,
-__syswrap() or __sysin() ?
+diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
+index b6daea2398da..a240c58d9e08 100644
+--- a/drivers/thermal/thermal_sysfs.c
++++ b/drivers/thermal/thermal_sysfs.c
+@@ -35,12 +35,23 @@ static ssize_t
+ temp_show(struct device *dev, struct device_attribute *attr, char *buf)
+ {
+ 	struct thermal_zone_device *tz = to_thermal_zone(dev);
+-	int temperature, ret;
+-
+-	ret = thermal_zone_get_temp(tz, &temperature);
++	int temperature;
+ 
+-	if (ret)
+-		return ret;
++	/*
++	 * don't force new update from external reads
++	 * This way we avoid messing up with time constraints.
++	 */
++	if (tz->mode == THERMAL_DEVICE_DISABLED) {
++		int r;
++
++		r = thermal_zone_get_temp(tz, &temperature); /* holds tz->lock*/
++		if (r)
++			return r;
++	} else {
++		mutex_lock(&tz->lock);
++		temperature = tz->temperature;
++		mutex_unlock(&tz->lock);
++	}
+ 
+ 	return sprintf(buf, "%d\n", temperature);
+ }
+-- 
+2.34.1
 
-Or even convert __sysret() to __sysout() and __syscall() to __sysin(),
-do you like it? or even __sysexit(), __sysentry(), but the __sysexit()
-may be misused with sys_exit().
-
-    /* Syscall return helper, set errno as -ret when ret < 0 */
-    static __inline__ __attribute__((unused, always_inline))
-    long __sysout(long ret)
-    {
-    	if (ret < 0) {
-    		SET_ERRNO(-ret);
-    		ret = -1;
-    	}
-    	return ret;
-    }
-    
-    /* Syscall call helper, use syscall name instead of syscall number */
-    #define __sysin(name, ...) __sysout(sys_##name(__VA_ARGS__))
-
-    static __attribute__((unused))
-    int brk(void *addr)
-    {
-    	return __sysout(sys_brk(addr) ? 0 : -ENOMEM);
-    }
-
-    static __attribute__((unused))
-    int chdir(const char *path)
-    {
-    	return __sysin(chdir, path);
-    }
-
-If we really want something like __syscall()/__sysret(), I do think they
-should be a pair ;-)
-
-> And __syscall does not behave like a regular function.
-> 
-> The rest of the patchset looks great.
->
-
-Thanks for your nice review.
-
-> Maybe Willy can break the tie?
->
-
-If there is no better solution, I think your version is also a first
-step to go.
-
-> 
-> Thomas
-> 
-> 
-> Note: If we figure out a way to build syscall() without macros I would
-> like that also :-)
-
-Yes, but it is not easy to cope with the variable number of arguments
-without a macro.
-
-BTW, do you like to convert the my_syscallN() of sys.h to the syscall()
-you added? I do worry about it will make the checking of arguments
-mismatch, exspecially, the checking of number of them hardly.
-
-Best regards,
-Zhangjin
