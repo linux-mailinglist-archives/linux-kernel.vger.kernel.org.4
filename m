@@ -2,168 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC27B725F8E
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 14:37:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 015C0725FA7
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 14:37:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235429AbjFGMgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 08:36:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46420 "EHLO
+        id S239908AbjFGMho (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 08:37:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235243AbjFGMgq (ORCPT
+        with ESMTP id S240947AbjFGMhQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 08:36:46 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E63310F8
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 05:36:44 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 3DFF21FDB0;
-        Wed,  7 Jun 2023 12:36:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1686141403; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=PGvn6ZdohOOtVUUdOvyiYpScXO3VVCt1a9Kf6pUq/oo=;
-        b=c+AMWVzZLkboDs3i9HYvNVea+80TZY8OLFt31HnDAQD8RVVGlB/WU3txkylDnJV+TljaBf
-        Uuxyhud9XLrbu6MzRg6uAjrkRJnWOHLj9hpjrtFfE4ZBWBMvoFRH7OoVldnlUA0WhSjxoI
-        Onf1if4shMM1/GQMrW0D95Yx3gFqGFw=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 19A4713776;
-        Wed,  7 Jun 2023 12:36:43 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ubJ8Bdt5gGQySgAAMHmgww
-        (envelope-from <petr.pavlu@suse.com>); Wed, 07 Jun 2023 12:36:43 +0000
-From:   Petr Pavlu <petr.pavlu@suse.com>
-To:     jgross@suse.com, sstabellini@kernel.org,
-        oleksandr_tyshchenko@epam.com
-Cc:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        Petr Pavlu <petr.pavlu@suse.com>
-Subject: [PATCH] xen/xenbus: Avoid a lockdep warning when adding a watch
-Date:   Wed,  7 Jun 2023 14:36:24 +0200
-Message-Id: <20230607123624.15739-1-petr.pavlu@suse.com>
-X-Mailer: git-send-email 2.35.3
+        Wed, 7 Jun 2023 08:37:16 -0400
+Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB21EE6B;
+        Wed,  7 Jun 2023 05:37:15 -0700 (PDT)
+Received: by mail-il1-x142.google.com with SMTP id e9e14a558f8ab-33b3cfb9495so4149705ab.2;
+        Wed, 07 Jun 2023 05:37:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686141435; x=1688733435;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vYpDm8AgCQ+Jjdrz0qWAN2s9cw9E+zpsCV8mVTUXM7c=;
+        b=i5rFskEEOgyCq5QuYFWKv28gtEf10KrrK/2fQXblBJmEV0FN88vbBP3DcNSMNbbJ5n
+         1baPoBt/MAUPX0UZ0rIcD7iAxP8eeAxS5efL7rWqyyxat4IhpN4mbRoFuMuj6Ez6iXPd
+         mkPXNru6T7TaQ+VHJvnYBkGsqXU4kroiR8MxEvTPiUS3j0dS3PdsUJnJzEscHO2Prt8i
+         e+JDEl9omKQ1Gz0mvk0MoGRYZDGT/+aX8mIvpRESv30CL21iWa4OcX/8y4A2iaCnNLbJ
+         EtJpTAKc32s79S/MZtmwrSzbG95HIZBF8ii1gB5vBf0Wq75LnlkQaN9LwLtvBeTXLC+X
+         FJ1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686141435; x=1688733435;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vYpDm8AgCQ+Jjdrz0qWAN2s9cw9E+zpsCV8mVTUXM7c=;
+        b=VD+NFqOU3Ly2zs19UjG0/bERCvLnbnaE1ylUTRXJfs9aQp5coBD1vrzxEFvHug/Vpj
+         0Rc42H7B4MyFuTD0lpvTX4njV0Btcct5vuBw2LQe6zJ6vgiXgVoKzUOXnpiYY+Mu4neD
+         YgV+SjeKouhUom9Ecu9W0nelhlK3TMvTL3W48wZUW6cJhCWw0/KR6gEtJu2DDxo9AwAR
+         wH/nFOtkgnX0EiNs+trmZrBaSN6W/T3AAOokKrmdIE7LX9xC1xzhBAfU5EL91NzTd+Jz
+         rV5Uubdnps7wqAzVaJZQT7yFz15opwlXUffV6p4jLLWd0rjO1w/QooAwoHsNPbA6HrSn
+         /bdw==
+X-Gm-Message-State: AC+VfDxc2hy7aGAVYpBNMRmOCYEJIpikx5YlJrkuxMWtA3t+gZ6JYXKX
+        PT35rDzntUMst9ek8wthjSU=
+X-Google-Smtp-Source: ACHHUZ4/jz8p/1GszGAyG4E08CuPfynTdlrVyhTG0zDtq89XUolUiiwtsjizzPdWOdqYd2LPOO+bnQ==
+X-Received: by 2002:a92:d8c9:0:b0:33d:1072:361b with SMTP id l9-20020a92d8c9000000b0033d1072361bmr6859096ilo.21.1686141435110;
+        Wed, 07 Jun 2023 05:37:15 -0700 (PDT)
+Received: from CLOUDLIANG-MB2.tencent.com ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id k18-20020a635a52000000b00528db73ed70sm9038904pgm.3.2023.06.07.05.37.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 05:37:14 -0700 (PDT)
+From:   Jinrong Liang <ljr.kernel@gmail.com>
+X-Google-Original-From: Jinrong Liang <cloudliang@tencent.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Aaron Lewis <aaronlewis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Like Xu <like.xu.linux@gmail.com>,
+        Jinrong Liang <cloudliang@tencent.com>,
+        linux-kselftest@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/4] KVM: selftests: Improve PMU event filter settings and add test cases
+Date:   Wed,  7 Jun 2023 20:36:56 +0800
+Message-Id: <20230607123700.40229-1-cloudliang@tencent.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following lockdep warning appears during boot on a Xen dom0 system:
+Hi,
 
-[   96.388794] ======================================================
-[   96.388797] WARNING: possible circular locking dependency detected
-[   96.388799] 6.4.0-rc5-default+ #8 Tainted: G            EL
-[   96.388803] ------------------------------------------------------
-[   96.388804] xenconsoled/1330 is trying to acquire lock:
-[   96.388808] ffffffff82acdd10 (xs_watch_rwsem){++++}-{3:3}, at: register_xenbus_watch+0x45/0x140
-[   96.388847]
-               but task is already holding lock:
-[   96.388849] ffff888100c92068 (&u->msgbuffer_mutex){+.+.}-{3:3}, at: xenbus_file_write+0x2c/0x600
-[   96.388862]
-               which lock already depends on the new lock.
+This patch series aims to improve the PMU event filter settings with a cleaner
+and more organized structure and adds several test cases related to PMU event
+filters.
 
-[   96.388864]
-               the existing dependency chain (in reverse order) is:
-[   96.388866]
-               -> #2 (&u->msgbuffer_mutex){+.+.}-{3:3}:
-[   96.388874]        __mutex_lock+0x85/0xb30
-[   96.388885]        xenbus_dev_queue_reply+0x48/0x2b0
-[   96.388890]        xenbus_thread+0x1d7/0x950
-[   96.388897]        kthread+0xe7/0x120
-[   96.388905]        ret_from_fork+0x2c/0x50
-[   96.388914]
-               -> #1 (xs_response_mutex){+.+.}-{3:3}:
-[   96.388923]        __mutex_lock+0x85/0xb30
-[   96.388930]        xenbus_backend_ioctl+0x56/0x1c0
-[   96.388935]        __x64_sys_ioctl+0x90/0xd0
-[   96.388942]        do_syscall_64+0x5c/0x90
-[   96.388950]        entry_SYSCALL_64_after_hwframe+0x72/0xdc
-[   96.388957]
-               -> #0 (xs_watch_rwsem){++++}-{3:3}:
-[   96.388965]        __lock_acquire+0x1538/0x2260
-[   96.388972]        lock_acquire+0xc6/0x2b0
-[   96.388976]        down_read+0x2d/0x160
-[   96.388983]        register_xenbus_watch+0x45/0x140
-[   96.388990]        xenbus_file_write+0x53d/0x600
-[   96.388994]        vfs_write+0xe4/0x490
-[   96.389003]        ksys_write+0xb8/0xf0
-[   96.389011]        do_syscall_64+0x5c/0x90
-[   96.389017]        entry_SYSCALL_64_after_hwframe+0x72/0xdc
-[   96.389023]
-               other info that might help us debug this:
+The first patch of this series introduces a custom "__kvm_pmu_event_filter"
+structure that simplifies the event filter setup and improves overall code
+readability and maintainability.
 
-[   96.389025] Chain exists of:
-                 xs_watch_rwsem --> xs_response_mutex --> &u->msgbuffer_mutex
+The second patch adds test cases to check that unsupported input values in the
+PMU event filters are rejected, covering unsupported "action" values,
+unsupported "flags" values, and unsupported "nevents" values, as well as the
+setting of non-existent fixed counters in the fixed bitmap.
 
-[   96.413429]  Possible unsafe locking scenario:
+The third patch includes tests for the PMU event filter's behavior when applied
+to fixed performance counters, ensuring the correct operation in cases where no
+fixed counters exist (e.g., Intel guest PMU version=1 or AMD guest).
 
-[   96.413430]        CPU0                    CPU1
-[   96.413430]        ----                    ----
-[   96.413431]   lock(&u->msgbuffer_mutex);
-[   96.413432]                                lock(xs_response_mutex);
-[   96.413433]                                lock(&u->msgbuffer_mutex);
-[   96.413434]   rlock(xs_watch_rwsem);
-[   96.413436]
-                *** DEADLOCK ***
+Finally, the fourth patch adds a test to verify that setting both generic and
+fixed performance event filters does not impact the consistency of the fixed
+performance filter behavior.
 
-[   96.413436] 1 lock held by xenconsoled/1330:
-[   96.413438]  #0: ffff888100c92068 (&u->msgbuffer_mutex){+.+.}-{3:3}, at: xenbus_file_write+0x2c/0x600
-[   96.413446]
+These changes help to ensure that KVM's PMU event filter functions as expected
+in all supported use cases. These patches have been tested and verified to
+function properly.
 
-An ioctl call IOCTL_XENBUS_BACKEND_SETUP (record #1 in the report)
-results in calling xenbus_alloc() -> xs_suspend() which introduces
-ordering xs_watch_rwsem --> xs_response_mutex. The xenbus_thread()
-operation (record #2) creates xs_response_mutex --> &u->msgbuffer_mutex.
-An XS_WATCH write to the xenbus file then results in a complain about
-the opposite lock order &u->msgbuffer_mutex --> xs_watch_rwsem.
+Any feedback or suggestions are greatly appreciated.
 
-The dependency xs_watch_rwsem --> xs_response_mutex is spurious. Avoid
-it and the warning by changing the ordering in xs_suspend(), first
-acquire xs_response_mutex and then xs_watch_rwsem. Reverse also the
-unlocking order in xs_suspend_cancel() for consistency, but keep
-xs_resume() as is because it needs to have xs_watch_rwsem unlocked only
-after exiting xs suspend and re-adding all watches.
+Please note that following patches should be applied before this patch series:
 
-Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
----
- drivers/xen/xenbus/xenbus_xs.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+https://lore.kernel.org/kvm/20230530134248.23998-2-cloudliang@tencent.com
+https://lore.kernel.org/kvm/20230530134248.23998-3-cloudliang@tencent.com
 
-diff --git a/drivers/xen/xenbus/xenbus_xs.c b/drivers/xen/xenbus/xenbus_xs.c
-index 12e02eb01f59..028a182bcc9e 100644
---- a/drivers/xen/xenbus/xenbus_xs.c
-+++ b/drivers/xen/xenbus/xenbus_xs.c
-@@ -840,8 +840,8 @@ void xs_suspend(void)
- {
- 	xs_suspend_enter();
- 
--	down_write(&xs_watch_rwsem);
- 	mutex_lock(&xs_response_mutex);
-+	down_write(&xs_watch_rwsem);
- }
- 
- void xs_resume(void)
-@@ -866,8 +866,8 @@ void xs_resume(void)
- 
- void xs_suspend_cancel(void)
- {
--	mutex_unlock(&xs_response_mutex);
- 	up_write(&xs_watch_rwsem);
-+	mutex_unlock(&xs_response_mutex);
- 
- 	xs_suspend_exit();
- }
+This will ensure that macro definitions such as X86_INTEL_MAX_FIXED_CTR_NUM,
+INTEL_PMC_IDX_FIXED, etc. can be used.
+
+Sincerely,
+Jinrong Liang
+
+Changes log:
+
+v3:
+- Rebased to 31b4fc3bc64a(tag: kvm-x86-next-2023.06.02).
+- Dropped the patch "KVM: selftests: Replace int with uint32_t for nevents". (Sean)
+- Dropped the patch "KVM: selftests: Test pmu event filter with incompatible
+  kvm_pmu_event_filter". (Sean)
+- Introduce __kvm_pmu_event_filter to replace the original method of creating
+  PMU event filters. (Sean)
+- Use the macro definition of kvm_cpu_property to find the number of supported
+  fixed counters instead of calculating it via the vcpu's cpuid. (Sean)
+- Remove the wrappers that are single line passthroughs. (Sean)
+- Optimize function names and variable names. (Sean)
+- Optimize comments to make them more rigorous. (Sean)
+
+v2:
+- Wrap the code from the documentation in a block of code. (Bagas Sanjaya)
+
+v1:
+https://lore.kernel.org/kvm/20230414110056.19665-1-cloudliang@tencent.com
+
+Jinrong Liang (4):
+  KVM: selftests: Introduce __kvm_pmu_event_filter to improved event
+    filter settings
+  KVM: selftests: Test unavailable event filters are rejected
+  KVM: selftests: Check if event filter meets expectations on fixed
+    counters
+  KVM: selftests: Test gp event filters don't affect fixed event filters
+
+ .../kvm/x86_64/pmu_event_filter_test.c        | 341 +++++++++++++-----
+ 1 file changed, 246 insertions(+), 95 deletions(-)
+
+
+base-commit: 31b4fc3bc64aadd660c5bfa5178c86a7ba61e0f7
+prerequisite-patch-id: 909d42f185f596d6e5c5b48b33231c89fa5236e4
+prerequisite-patch-id: ba0dd0f97d8db0fb6cdf2c7f1e3a60c206fc9784
 -- 
-2.35.3
+2.31.1
 
