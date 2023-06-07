@@ -2,71 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4A5F725426
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 08:29:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FC55725429
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 08:29:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231520AbjFGG3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 02:29:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52632 "EHLO
+        id S234221AbjFGG3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 02:29:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234210AbjFGG3V (ORCPT
+        with ESMTP id S234120AbjFGG3b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 02:29:21 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D58F1FCA;
-        Tue,  6 Jun 2023 23:29:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686119347; x=1717655347;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=8s4/A/li4xc6E8e+qolexVNkC6cEYlX78umXHVQ4tug=;
-  b=JC1PJLYG/JeamTxlDwYJsF6yjTHNgsxLtgdMPE6vGZPdRAYZg3ZkrJaJ
-   h30W3cscfwvYfiW71aYbW7ePx935oIG56Znuiyi0IJt5A9nHZGP4eLQA0
-   ykLWcOwixqJFJFdOjx/DQBFJyqXRDewWdF+O145f4dCEYq3VyfObhaXhi
-   dTjBjoCpknxJCsY4wYCdl78UQGFkzEy6ADk+NV/Zq53HaldH7Z4FBSWjg
-   oQB9vJLvJzF8S6ymbuHfttXeoBy0fS7rGAV8NdY0WBeFiggxNpudcw7oq
-   dnupToA1dUGAe69Bs0em3jRdCmgEkLfFwWBQ5estgntFWhl0ZnljXOfsZ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="354392635"
-X-IronPort-AV: E=Sophos;i="6.00,223,1681196400"; 
-   d="scan'208";a="354392635"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 23:29:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="799175329"
-X-IronPort-AV: E=Sophos;i="6.00,223,1681196400"; 
-   d="scan'208";a="799175329"
-Received: from zengguan-mobl1.ccr.corp.intel.com (HELO [10.238.0.196]) ([10.238.0.196])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 23:29:04 -0700
-Message-ID: <ab5de923-db2e-5137-6df8-16af7a2af333@intel.com>
-Date:   Wed, 7 Jun 2023 14:28:54 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v1 3/6] KVM: VMX: Add new ops in kvm_x86_ops for LASS
- violation check
-Content-Language: en-US
-To:     Binbin Wu <binbin.wu@linux.intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        H Peter Anvin <hpa@zytor.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230601142309.6307-1-guang.zeng@intel.com>
- <20230601142309.6307-4-guang.zeng@intel.com>
- <3b3d9106-9e4f-8a76-30ee-29540b06022a@linux.intel.com>
-From:   Zeng Guang <guang.zeng@intel.com>
-In-Reply-To: <3b3d9106-9e4f-8a76-30ee-29540b06022a@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        Wed, 7 Jun 2023 02:29:31 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A44F1BC3;
+        Tue,  6 Jun 2023 23:29:29 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3575jtUX013751;
+        Wed, 7 Jun 2023 06:29:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=WOBANkS/yJyX2nh6dwdWmYUzm9+a8g1tU7f1ZDffvsw=;
+ b=jzm+VukmJfTm4zHD1dVI7RHMiKlOFi8D1HpjMPZbKmxjItWH/qNJK/YUh+qtl0wsXmX6
+ fk6BAaoZKpkAoI1y4LiyLwQ39dGskEMgp8zMI06tA9qR3lLtzzQjs1hSZNl+HcaGP7Xj
+ JrtVwrQnpzS08dgBuPuI7Bd7RbzMO+/2xJNL0q+pUNXz5Ns5mPmrqdLEaAr6jFMGI2IQ
+ WVTMDmDVoCxiJxmSMJb1iux/6ifYQyWI++1l5mhI/lZrTtXNeO9eXDgmA1jDzdrFVpX0
+ DX/lbTQA3RC8IFAtin5u2EQa0LPQ18CNGf8CFzWy/r6wJ7pN/4t+kBvzgHi2ZOjMe8rn 2Q== 
+Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r2a6y941g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Jun 2023 06:29:23 +0000
+Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 3576TJsm013460;
+        Wed, 7 Jun 2023 06:29:19 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3qyxkm0u5t-1;
+        Wed, 07 Jun 2023 06:29:19 +0000
+Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3576TJrc013454;
+        Wed, 7 Jun 2023 06:29:19 GMT
+Received: from hyd-lablnx377.qualcomm.com (hyd-lablnx377.qualcomm.com [10.204.178.226])
+        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3576TJ1K013453;
+        Wed, 07 Jun 2023 06:29:19 +0000
+Received: by hyd-lablnx377.qualcomm.com (Postfix, from userid 4035820)
+        id A1C4320B89; Wed,  7 Jun 2023 11:59:18 +0530 (IST)
+From:   Sai Teja Aluvala <quic_saluvala@quicinc.com>
+To:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com
+Cc:     linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        quic_hemantg@quicinc.com, quic_bgodavar@quicinc.com,
+        jiangzp@google.com, mmandlik@google.com,
+        Sai Teja Aluvala <quic_saluvala@quicinc.com>
+Subject: [PATCH v3 2/2] Bluetooth: hci_qca: Add qcom devcoredump support
+Date:   Wed,  7 Jun 2023 11:59:16 +0530
+Message-Id: <1686119356-10907-1-git-send-email-quic_saluvala@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 0J6RwO-LZQkENopLxCbaLSOrjBCLw-yj
+X-Proofpoint-ORIG-GUID: 0J6RwO-LZQkENopLxCbaLSOrjBCLw-yj
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-07_04,2023-06-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 phishscore=0
+ clxscore=1015 suspectscore=0 adultscore=0 spamscore=0 bulkscore=0
+ mlxscore=0 priorityscore=1501 lowpriorityscore=0 malwarescore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306070052
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,179 +78,292 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Intercept debug exception events from QCA controller and put them into
+a devcoredump using hci devcoredump APIs of hci_core
 
-On 6/5/2023 11:31 AM, Binbin Wu wrote:
->
-> On 6/1/2023 10:23 PM, Zeng Guang wrote:
->> Intel introduces LASS (Linear Address Separation) feature providing
->                         ^
->    missing "Space" here
-Thanks.
->> an independent mechanism to achieve the mode-based protection.
->>
->> LASS partitions 64-bit linear address space into two halves, user-mode
->> address (LA[bit 63]=0) and supervisor-mode address (LA[bit 63]=1). It
->> stops any code execution or conditional data access[1]
->>       1. from user mode to supervisor-mode address space
->>       2. from supervisor mode to user-mode address space
->> and generates LASS violation fault accordingly.
->>
->> [1]A supervisor mode data access causes a LASS violation only if supervisor
->> mode access protection is enabled (CR4.SMAP = 1) and either RFLAGS.AC = 0
->> or the access implicitly accesses a system data structure.
->>
->> Following are the rules of LASS violation check on the linear address(LA).
->> User access to supervisor-mode address space:
->>       LA[bit 63] && (CPL == 3)
->> Supervisor access to user-mode address space:
->>       Instruction fetch: !LA[bit 63] && (CPL < 3)
->>       Data access: !LA[bit 63] && (CR4.SMAP==1) && ((RFLAGS.AC == 0 &&
->>                    CPL < 3) || Implicit supervisor access)
->>
->> Add new ops in kvm_x86_ops to do LASS violation check.
->>
->> Signed-off-by: Zeng Guang <guang.zeng@intel.com>
->> Tested-by: Xuelian Guo <xuelian.guo@intel.com>
->> ---
->>    arch/x86/include/asm/kvm-x86-ops.h |  3 +-
->>    arch/x86/include/asm/kvm_host.h    |  2 ++
->>    arch/x86/kvm/kvm_emulate.h         |  1 +
->>    arch/x86/kvm/vmx/vmx.c             | 47 ++++++++++++++++++++++++++++++
->>    arch/x86/kvm/vmx/vmx.h             |  2 ++
->>    5 files changed, 54 insertions(+), 1 deletion(-)
->>
->> diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
->> index 13bc212cd4bc..8980a3bfa687 100644
->> --- a/arch/x86/include/asm/kvm-x86-ops.h
->> +++ b/arch/x86/include/asm/kvm-x86-ops.h
->> @@ -132,7 +132,8 @@ KVM_X86_OP_OPTIONAL(migrate_timers)
->>    KVM_X86_OP(msr_filter_changed)
->>    KVM_X86_OP(complete_emulated_msr)
->>    KVM_X86_OP(vcpu_deliver_sipi_vector)
->> -KVM_X86_OP_OPTIONAL_RET0(vcpu_get_apicv_inhibit_reasons);
->> +KVM_X86_OP_OPTIONAL_RET0(vcpu_get_apicv_inhibit_reasons)
->> +KVM_X86_OP_OPTIONAL_RET0(check_lass)
->>    
->>    #undef KVM_X86_OP
->>    #undef KVM_X86_OP_OPTIONAL
->> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
->> index 92d8e65fe88c..98666d1e7727 100644
->> --- a/arch/x86/include/asm/kvm_host.h
->> +++ b/arch/x86/include/asm/kvm_host.h
->> @@ -1731,6 +1731,8 @@ struct kvm_x86_ops {
->>    	 * Returns vCPU specific APICv inhibit reasons
->>    	 */
->>    	unsigned long (*vcpu_get_apicv_inhibit_reasons)(struct kvm_vcpu *vcpu);
->> +
->> +	bool (*check_lass)(struct kvm_vcpu *vcpu, u64 access, u64 la, u32 flags);
->>    };
->>    
->>    struct kvm_x86_nested_ops {
->> diff --git a/arch/x86/kvm/kvm_emulate.h b/arch/x86/kvm/kvm_emulate.h
->> index 5b9ec610b2cb..f1439ab7c14b 100644
->> --- a/arch/x86/kvm/kvm_emulate.h
->> +++ b/arch/x86/kvm/kvm_emulate.h
->> @@ -91,6 +91,7 @@ struct x86_instruction_info {
->>    /* x86-specific emulation flags */
->>    #define X86EMUL_F_FETCH			BIT(0)
->>    #define X86EMUL_F_WRITE			BIT(1)
->> +#define X86EMUL_F_SKIPLASS		BIT(2)
->>    
->>    struct x86_emulate_ops {
->>    	void (*vm_bugged)(struct x86_emulate_ctxt *ctxt);
->> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
->> index a33205ded85c..876997e8448e 100644
->> --- a/arch/x86/kvm/vmx/vmx.c
->> +++ b/arch/x86/kvm/vmx/vmx.c
->> @@ -8130,6 +8130,51 @@ static void vmx_vm_destroy(struct kvm *kvm)
->>    	free_pages((unsigned long)kvm_vmx->pid_table, vmx_get_pid_table_order(kvm));
->>    }
->>    
->> +/*
->> + * Determine whether an access to the linear address causes a LASS violation.
->> + * LASS protection is only effective in long mode. As a prerequisite, caller
->> + * should make sure vCPU running in long mode and invoke this api to do LASS
->> + * violation check.
->> + */
->> +bool vmx_check_lass(struct kvm_vcpu *vcpu, u64 access, u64 la, u32 flags)
->> +{
->> +	bool user_mode, user_as, rflags_ac;
->> +
->> +	if (!!(flags & X86EMUL_F_SKIPLASS) ||
->> +	    !kvm_is_cr4_bit_set(vcpu, X86_CR4_LASS))
->> +		return false;
->> +
->> +	WARN_ON_ONCE(!is_long_mode(vcpu));
-> IMHO, it's better to skip the following checks and return false if it is
-> out of long mode.
-In some cases , cpu mode check already exists before invoking LASS violation
-detect, e.g. vmx instruction emulation. So it's designed to make 
-vmx_check_lass()
-focusing on LASS violation alone, and leave it to caller taking care of 
-cpu mode
-in advance.
+Signed-off-by: Sai Teja Aluvala <quic_saluvala@quicinc.com>
 
-The purpose is to avoid duplicating cpu mode check though the impact 
-seems not
-significant. :)
->> +
->> +	user_as = !(la >> 63);
-> It's better to describe how LASS treat linear address in compatibility
-> mode in changelog or/and in comment,
-> i.e. for a linear address with only 32 bits (or 16 bits), the processor
-> treats bit 63 as if it were 0.
->
-OK, will add comments on specific treatment in compatibility mode.
->> +
->> +	/*
->> +	 * An access is a supervisor-mode access if CPL < 3 or if it implicitly
->> +	 * accesses a system data structure. For implicit accesses to system
->> +	 * data structure, the processor acts as if RFLAGS.AC is clear.
->> +	 */
->> +	if (access & PFERR_IMPLICIT_ACCESS) {
->> +		user_mode = false;
->> +		rflags_ac = false;
->> +	} else {
->> +		user_mode = vmx_get_cpl(vcpu) == 3;
->> +		if (!user_mode)
->> +			rflags_ac = !!(kvm_get_rflags(vcpu) & X86_EFLAGS_AC);
->> +	}
->> +
->> +	if (user_mode == user_as)
->> +		return false;
->> +
->> +	/*
->> +	 * Supervisor-mode _data_ accesses to user address space
->> +	 * cause LASS violations only if SMAP is enabled.
->> +	 */
->> +	if (!user_mode && !(access & PFERR_FETCH_MASK))
->> +		return kvm_is_cr4_bit_set(vcpu, X86_CR4_SMAP) && !rflags_ac;
->> +
->> +	return true;
->> +}
->> +
->>    static struct kvm_x86_ops vmx_x86_ops __initdata = {
->>    	.name = KBUILD_MODNAME,
->>    
->> @@ -8269,6 +8314,8 @@ static struct kvm_x86_ops vmx_x86_ops __initdata = {
->>    	.complete_emulated_msr = kvm_complete_insn_gp,
->>    
->>    	.vcpu_deliver_sipi_vector = kvm_vcpu_deliver_sipi_vector,
->> +
->> +	.check_lass = vmx_check_lass,
->>    };
->>    
->>    static unsigned int vmx_handle_intel_pt_intr(void)
->> diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
->> index 9e66531861cf..f2e775b9849b 100644
->> --- a/arch/x86/kvm/vmx/vmx.h
->> +++ b/arch/x86/kvm/vmx/vmx.h
->> @@ -433,6 +433,8 @@ void vmx_enable_intercept_for_msr(struct kvm_vcpu *vcpu, u32 msr, int type);
->>    u64 vmx_get_l2_tsc_offset(struct kvm_vcpu *vcpu);
->>    u64 vmx_get_l2_tsc_multiplier(struct kvm_vcpu *vcpu);
->>    
->> +bool vmx_check_lass(struct kvm_vcpu *vcpu, u64 access, u64 la, u32 flags);
->> +
->>    static inline void vmx_set_intercept_for_msr(struct kvm_vcpu *vcpu, u32 msr,
->>    					     int type, bool value)
->>    {
+V2 -> V3:
+---------
+changed hci_coredump_qca function
+
+V1 -> V2:
+---------
+Updated to work with the updated HCI devcoredump API.
+---
+ drivers/bluetooth/hci_qca.c | 135 ++++++++++++++++++++++++++++----------------
+ 1 file changed, 85 insertions(+), 50 deletions(-)
+
+diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
+index 1ee5323..87a7325 100644
+--- a/drivers/bluetooth/hci_qca.c
++++ b/drivers/bluetooth/hci_qca.c
+@@ -117,9 +117,7 @@ enum qca_memdump_states {
+ 	QCA_MEMDUMP_TIMEOUT,
+ };
+ 
+-struct qca_memdump_data {
+-	char *memdump_buf_head;
+-	char *memdump_buf_tail;
++struct qca_memdump_info {
+ 	u32 current_seq_no;
+ 	u32 received_dump;
+ 	u32 ram_dump_size;
+@@ -160,13 +158,15 @@ struct qca_data {
+ 	struct work_struct ws_tx_vote_off;
+ 	struct work_struct ctrl_memdump_evt;
+ 	struct delayed_work ctrl_memdump_timeout;
+-	struct qca_memdump_data *qca_memdump;
++	struct qca_memdump_info *qca_memdump;
+ 	unsigned long flags;
+ 	struct completion drop_ev_comp;
+ 	wait_queue_head_t suspend_wait_q;
+ 	enum qca_memdump_states memdump_state;
+ 	struct mutex hci_memdump_lock;
+ 
++	u16 fw_version;
++	u16 controller_id;
+ 	/* For debugging purpose */
+ 	u64 ibs_sent_wacks;
+ 	u64 ibs_sent_slps;
+@@ -233,6 +233,7 @@ static void qca_regulator_disable(struct qca_serdev *qcadev);
+ static void qca_power_shutdown(struct hci_uart *hu);
+ static int qca_power_off(struct hci_dev *hdev);
+ static void qca_controller_memdump(struct work_struct *work);
++static void qca_dmp_hdr(struct hci_dev *hdev, struct sk_buff *skb);
+ 
+ static enum qca_btsoc_type qca_soc_type(struct hci_uart *hu)
+ {
+@@ -980,6 +981,28 @@ static int qca_recv_acl_data(struct hci_dev *hdev, struct sk_buff *skb)
+ 	return hci_recv_frame(hdev, skb);
+ }
+ 
++static void qca_dmp_hdr(struct hci_dev *hdev, struct sk_buff *skb)
++{
++	struct hci_uart *hu = hci_get_drvdata(hdev);
++	struct qca_data *qca = hu->priv;
++	char buf[80];
++
++	snprintf(buf, sizeof(buf), "Controller Name: 0x%x\n",
++		qca->controller_id);
++	skb_put_data(skb, buf, strlen(buf));
++
++	snprintf(buf, sizeof(buf), "Firmware Version: 0x%x\n",
++		qca->fw_version);
++	skb_put_data(skb, buf, strlen(buf));
++
++	snprintf(buf, sizeof(buf), "Vendor:Qualcomm\n");
++	skb_put_data(skb, buf, strlen(buf));
++
++	snprintf(buf, sizeof(buf), "Driver: %s\n",
++		hu->serdev->dev.driver->name);
++	skb_put_data(skb, buf, strlen(buf));
++}
++
+ static void qca_controller_memdump(struct work_struct *work)
+ {
+ 	struct qca_data *qca = container_of(work, struct qca_data,
+@@ -987,13 +1010,11 @@ static void qca_controller_memdump(struct work_struct *work)
+ 	struct hci_uart *hu = qca->hu;
+ 	struct sk_buff *skb;
+ 	struct qca_memdump_event_hdr *cmd_hdr;
+-	struct qca_memdump_data *qca_memdump = qca->qca_memdump;
++	struct qca_memdump_info *qca_memdump = qca->qca_memdump;
+ 	struct qca_dump_size *dump;
+-	char *memdump_buf;
+-	char nullBuff[QCA_DUMP_PACKET_SIZE] = { 0 };
+ 	u16 seq_no;
+-	u32 dump_size;
+ 	u32 rx_size;
++	int ret = 0;
+ 	enum qca_btsoc_type soc_type = qca_soc_type(hu);
+ 
+ 	while ((skb = skb_dequeue(&qca->rx_memdump_q))) {
+@@ -1009,7 +1030,7 @@ static void qca_controller_memdump(struct work_struct *work)
+ 		}
+ 
+ 		if (!qca_memdump) {
+-			qca_memdump = kzalloc(sizeof(struct qca_memdump_data),
++			qca_memdump = kzalloc(sizeof(struct qca_memdump_info),
+ 					      GFP_ATOMIC);
+ 			if (!qca_memdump) {
+ 				mutex_unlock(&qca->hci_memdump_lock);
+@@ -1035,44 +1056,49 @@ static void qca_controller_memdump(struct work_struct *work)
+ 			set_bit(QCA_IBS_DISABLED, &qca->flags);
+ 			set_bit(QCA_MEMDUMP_COLLECTION, &qca->flags);
+ 			dump = (void *) skb->data;
+-			dump_size = __le32_to_cpu(dump->dump_size);
+-			if (!(dump_size)) {
++			qca_memdump->ram_dump_size = __le32_to_cpu(dump->dump_size);
++			if (!(qca_memdump->ram_dump_size)) {
+ 				bt_dev_err(hu->hdev, "Rx invalid memdump size");
+ 				kfree(qca_memdump);
+ 				kfree_skb(skb);
+-				qca->qca_memdump = NULL;
+ 				mutex_unlock(&qca->hci_memdump_lock);
+ 				return;
+ 			}
+ 
+-			bt_dev_info(hu->hdev, "QCA collecting dump of size:%u",
+-				    dump_size);
+ 			queue_delayed_work(qca->workqueue,
+ 					   &qca->ctrl_memdump_timeout,
+-					   msecs_to_jiffies(MEMDUMP_TIMEOUT_MS)
+-					  );
+-
+-			skb_pull(skb, sizeof(dump_size));
+-			memdump_buf = vmalloc(dump_size);
+-			qca_memdump->ram_dump_size = dump_size;
+-			qca_memdump->memdump_buf_head = memdump_buf;
+-			qca_memdump->memdump_buf_tail = memdump_buf;
+-		}
++					   msecs_to_jiffies(MEMDUMP_TIMEOUT_MS));
++			skb_pull(skb, sizeof(qca_memdump->ram_dump_size));
++			qca_memdump->current_seq_no = 0;
++			qca_memdump->received_dump = 0;
++			ret = hci_devcd_init(hu->hdev, qca_memdump->ram_dump_size);
++			bt_dev_info(hu->hdev, "hci_devcd_init Return:%d",
++				    ret);
++			if (ret < 0) {
++				kfree(qca->qca_memdump);
++				qca->qca_memdump = NULL;
++				qca->memdump_state = QCA_MEMDUMP_COLLECTED;
++				cancel_delayed_work(&qca->ctrl_memdump_timeout);
++				clear_bit(QCA_MEMDUMP_COLLECTION, &qca->flags);
++				mutex_unlock(&qca->hci_memdump_lock);
++				return;
++			}
+ 
+-		memdump_buf = qca_memdump->memdump_buf_tail;
++			bt_dev_info(hu->hdev, "QCA collecting dump of size:%u",
++				    qca_memdump->ram_dump_size);
++
++		}
+ 
+ 		/* If sequence no 0 is missed then there is no point in
+ 		 * accepting the other sequences.
+ 		 */
+-		if (!memdump_buf) {
++		if (!test_bit(QCA_MEMDUMP_COLLECTION, &qca->flags)) {
+ 			bt_dev_err(hu->hdev, "QCA: Discarding other packets");
+ 			kfree(qca_memdump);
+ 			kfree_skb(skb);
+-			qca->qca_memdump = NULL;
+ 			mutex_unlock(&qca->hci_memdump_lock);
+ 			return;
+ 		}
+-
+ 		/* There could be chance of missing some packets from
+ 		 * the controller. In such cases let us store the dummy
+ 		 * packets in the buffer.
+@@ -1082,8 +1108,8 @@ static void qca_controller_memdump(struct work_struct *work)
+ 		 * bits, so skip this checking for missing packet.
+ 		 */
+ 		while ((seq_no > qca_memdump->current_seq_no + 1) &&
+-		       (soc_type != QCA_QCA6390) &&
+-		       seq_no != QCA_LAST_SEQUENCE_NUM) {
++			(soc_type != QCA_QCA6390) &&
++			seq_no != QCA_LAST_SEQUENCE_NUM) {
+ 			bt_dev_err(hu->hdev, "QCA controller missed packet:%d",
+ 				   qca_memdump->current_seq_no);
+ 			rx_size = qca_memdump->received_dump;
+@@ -1094,43 +1120,38 @@ static void qca_controller_memdump(struct work_struct *work)
+ 					   qca_memdump->received_dump);
+ 				break;
+ 			}
+-			memcpy(memdump_buf, nullBuff, QCA_DUMP_PACKET_SIZE);
+-			memdump_buf = memdump_buf + QCA_DUMP_PACKET_SIZE;
++			hci_devcd_append_pattern(hu->hdev, 0x00,
++				QCA_DUMP_PACKET_SIZE);
+ 			qca_memdump->received_dump += QCA_DUMP_PACKET_SIZE;
+ 			qca_memdump->current_seq_no++;
+ 		}
+ 
+-		rx_size = qca_memdump->received_dump + skb->len;
++		rx_size = qca_memdump->received_dump  + skb->len;
+ 		if (rx_size <= qca_memdump->ram_dump_size) {
+ 			if ((seq_no != QCA_LAST_SEQUENCE_NUM) &&
+-			    (seq_no != qca_memdump->current_seq_no))
++			    (seq_no != qca_memdump->current_seq_no)) {
+ 				bt_dev_err(hu->hdev,
+ 					   "QCA memdump unexpected packet %d",
+ 					   seq_no);
++			}
+ 			bt_dev_dbg(hu->hdev,
+ 				   "QCA memdump packet %d with length %d",
+ 				   seq_no, skb->len);
+-			memcpy(memdump_buf, (unsigned char *)skb->data,
+-			       skb->len);
+-			memdump_buf = memdump_buf + skb->len;
+-			qca_memdump->memdump_buf_tail = memdump_buf;
+-			qca_memdump->current_seq_no = seq_no + 1;
+-			qca_memdump->received_dump += skb->len;
++			hci_devcd_append(hu->hdev, skb);
++			qca_memdump->current_seq_no += 1;
++			qca_memdump->received_dump = rx_size;
+ 		} else {
+ 			bt_dev_err(hu->hdev,
+-				   "QCA memdump received %d, no space for packet %d",
+-				   qca_memdump->received_dump, seq_no);
++				   "QCA memdump received no space for packet %d",
++				    qca_memdump->current_seq_no);
+ 		}
+-		qca->qca_memdump = qca_memdump;
+-		kfree_skb(skb);
++
+ 		if (seq_no == QCA_LAST_SEQUENCE_NUM) {
+ 			bt_dev_info(hu->hdev,
+-				    "QCA memdump Done, received %d, total %d",
+-				    qca_memdump->received_dump,
+-				    qca_memdump->ram_dump_size);
+-			memdump_buf = qca_memdump->memdump_buf_head;
+-			dev_coredumpv(&hu->serdev->dev, memdump_buf,
+-				      qca_memdump->received_dump, GFP_KERNEL);
++				"QCA memdump Done, received %d, total %d",
++				qca_memdump->received_dump,
++				qca_memdump->ram_dump_size);
++			hci_devcd_complete(hu->hdev);
+ 			cancel_delayed_work(&qca->ctrl_memdump_timeout);
+ 			kfree(qca->qca_memdump);
+ 			qca->qca_memdump = NULL;
+@@ -1541,8 +1562,8 @@ static void qca_hw_error(struct hci_dev *hdev, u8 code)
+ 	mutex_lock(&qca->hci_memdump_lock);
+ 	if (qca->memdump_state != QCA_MEMDUMP_COLLECTED) {
+ 		bt_dev_err(hu->hdev, "clearing allocated memory due to memdump timeout");
++		hci_devcd_abort(hu->hdev);
+ 		if (qca->qca_memdump) {
+-			vfree(qca->qca_memdump->memdump_buf_head);
+ 			kfree(qca->qca_memdump);
+ 			qca->qca_memdump = NULL;
+ 		}
+@@ -1706,6 +1727,17 @@ static int qca_power_on(struct hci_dev *hdev)
+ 	return ret;
+ }
+ 
++static void hci_coredump_qca(struct hci_dev *hdev)
++{
++	static const u8 param[] = { 0x26 };
++	struct sk_buff *skb;
++
++	skb = __hci_cmd_sync(hdev, 0xfc0c, 1, param, HCI_CMD_TIMEOUT);
++	if (IS_ERR(skb))
++		bt_dev_err(hdev, "%s: trigger crash failed (%ld)", __func__, PTR_ERR(skb));
++	kfree_skb(skb);
++}
++
+ static int qca_setup(struct hci_uart *hu)
+ {
+ 	struct hci_dev *hdev = hu->hdev;
+@@ -1820,6 +1852,9 @@ static int qca_setup(struct hci_uart *hu)
+ 		hu->hdev->set_bdaddr = qca_set_bdaddr_rome;
+ 	else
+ 		hu->hdev->set_bdaddr = qca_set_bdaddr;
++	qca->fw_version = le16_to_cpu(ver.patch_ver);
++	qca->controller_id = le16_to_cpu(ver.rom_ver);
++	hci_devcd_register(hdev, hci_coredump_qca, qca_dmp_hdr, NULL);
+ 
+ 	return ret;
+ }
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc.
+
