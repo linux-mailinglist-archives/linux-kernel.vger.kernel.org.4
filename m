@@ -2,151 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37D0372619D
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 15:47:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B14D7261A1
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 15:48:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239001AbjFGNrr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 09:47:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60748 "EHLO
+        id S240390AbjFGNsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 09:48:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235549AbjFGNrp (ORCPT
+        with ESMTP id S240238AbjFGNr6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 09:47:45 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56FD01993;
-        Wed,  7 Jun 2023 06:47:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KLH2Q0eiKaWtDFBj/ZsCqTfpL7qxNKauekflhcvBQ2urWEnSz26aQyINhJhNVEr9aaHc7icjoOK40uS+82im89JsLjZqB3RMfq6SyoQsJp1ngW1HnocFqSo0H1abQysxZyrMw/KcjUx47GMt3tgctuwDU2QLrz0/+NFtudqAcgKVnj22ZmWEb8Jihs11+wt1ufOT0utdWINa8wUsIpDQ9tVvafwfV4S2ml9g7bqH1tVc7HlQBVeajdrTRrJwo9d0Sckbd4sw0+iiFEihg4jGQE5nd3LiQzu+zILECYVKD0UIn13O4aGJsNsSS5DSKljMkEgnFQ9l9wFwN2cxaxtM2Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OzzQl71VrMSHAgl9EdVJ+7sxVrqoY7kWzLSrBUg8weQ=;
- b=kEA2W5DcocY+O/LCOPZ0AunPaF7nrDLj9UjSNuijL9pftWv1SuZ4DWy8KTIAdDJxszxWCRlbfUkl6PBs86QozNR5JuO8Plzf3zyZtBNOvsh3/sQ6abmeTnQnE1cO/8RyKS7E1FSiRtHEvFDt25Am5ynmT/5bGSsGJmnIbKUU6MJyAJtgd91KNCowD+ZXmwn3L2v0ofDXUnCsfuY7luXsFyUd4iFg9TkkhY0fZWKTaJH7bs+Vy9h2c592QMXNTBOXUATs2TA6LxOHNqj0HEwawTiimUl2ug2S1xX5ki+nSqDAU+uw1nvsKalHOu2eGiMd0WCjfCZlo8QS2WWg8tQBGQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OzzQl71VrMSHAgl9EdVJ+7sxVrqoY7kWzLSrBUg8weQ=;
- b=sfjoBap4W0auTWD8CvX3o1lmiX2psaPAxCePcs4UukLuOnn731oMCcUdSlkZEI+7Y7PE84eTcHi5fGlUvNZKElwRt/moGVMNFjssdU9OW4prKWP8GT81g25DVhh8xlc4F6MFuaPuGwUz/g4ByPlFMrJgevlu9rYVXs/Ncdi70lA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
- by SJ0PR12MB7458.namprd12.prod.outlook.com (2603:10b6:a03:48d::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Wed, 7 Jun
- 2023 13:47:40 +0000
-Received: from BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::ca6a:7f77:6bb7:17fb]) by BN8PR12MB3108.namprd12.prod.outlook.com
- ([fe80::ca6a:7f77:6bb7:17fb%3]) with mapi id 15.20.6455.028; Wed, 7 Jun 2023
- 13:47:40 +0000
-Message-ID: <0b8c44c1-1456-5d3a-5db7-00b67a5e4960@amd.com>
-Date:   Wed, 7 Jun 2023 09:47:37 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Cc:     yazen.ghannam@amd.com, linux-kernel@vger.kernel.org, bp@alien8.de,
-        mingo@redhat.com, mchehab@kernel.org, tony.luck@intel.com,
-        nchatrad@amd.com, Muralidhara M K <muralidhara.mk@amd.com>
-Subject: Re: [PATCH] EDAC/mc: Add new HBM3 memory type
-Content-Language: en-US
-To:     Muralidhara M K <muralimk@amd.com>, linux-edac@vger.kernel.org,
-        x86@kernel.org
-References: <20230523085550.391768-1-muralimk@amd.com>
-From:   Yazen Ghannam <yazen.ghannam@amd.com>
-In-Reply-To: <20230523085550.391768-1-muralimk@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BN8PR03CA0009.namprd03.prod.outlook.com
- (2603:10b6:408:94::22) To BN8PR12MB3108.namprd12.prod.outlook.com
- (2603:10b6:408:40::20)
+        Wed, 7 Jun 2023 09:47:58 -0400
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E25871BE2
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 06:47:56 -0700 (PDT)
+Received: by mail-io1-xd2e.google.com with SMTP id ca18e2360f4ac-777b1b5ff50so133677639f.3
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 06:47:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1686145675; x=1688737675;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Igbil4rQ+bksY47TEj8Cy1rhyNXKg8xa0jQJqvVvp7E=;
+        b=eHS9dZgPSMn88aCtAZNwchhK4VxtP6ZilnYohBfTTvLdD6mLOp+lZFqoglDdtulnwD
+         On7mPzxvlxu2rbcy1CthZ4Uj0c0MN/tDSZDoYdFIy/rrX4cidB2xkmYSU9CIBycjRhz8
+         Lf00h091Tnt4AaJdQDOnuvurCWGgwLniOziPU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686145675; x=1688737675;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Igbil4rQ+bksY47TEj8Cy1rhyNXKg8xa0jQJqvVvp7E=;
+        b=JHD28PxBDbLBQ+PGq5wVfEe9egvOUroegetp00P8RHb9Tv++nLMhZo2PNCMFxJNOTN
+         DXNf6KWvEnSdpFznlfOcROJNs63U6KL9ERx8QGM+/NvQn26gRD+u4hM+ZrKJbNP0VT9M
+         HTz+Y9Ph+Hqfko6phENyFJadVHvH0UzbPCecVFknWAwm6HHDAg50sS4FldaonurV3PUc
+         PrMjJZE9PWalWL3DzSJov/C8GhNScACwNhNMCxF0jjYDk97bSzPF64vDjiRsj/i8O1pe
+         XvFPsBsXaz3yDD5DmzEeoKYLnhnBzkr/MzCccRccDN/K0hmHTd1qORMqakdhWX4CUrEj
+         7nZw==
+X-Gm-Message-State: AC+VfDxflIrhNI9ET80WDmpEyYdYYDg0uw4x0tCj3ZPCxMLUJg8HQp7H
+        nEYd9zdULD44j1qL0hc5qKUTkki2PjeL02mcDrA=
+X-Google-Smtp-Source: ACHHUZ4qATKds3LWnnfGbdxaldlR3JjNJaAqCz4hA+gIGsmVy+rwrMvppZepQ1A68jDRmyhPjdGPew==
+X-Received: by 2002:a5d:9390:0:b0:760:a3c7:1a86 with SMTP id c16-20020a5d9390000000b00760a3c71a86mr5623051iol.16.1686145675323;
+        Wed, 07 Jun 2023 06:47:55 -0700 (PDT)
+Received: from mail-il1-f174.google.com (mail-il1-f174.google.com. [209.85.166.174])
+        by smtp.gmail.com with ESMTPSA id dq31-20020a0566384d1f00b0041f5061884asm2350278jab.29.2023.06.07.06.47.53
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Jun 2023 06:47:54 -0700 (PDT)
+Received: by mail-il1-f174.google.com with SMTP id e9e14a558f8ab-33dea7d5424so105695ab.1
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 06:47:53 -0700 (PDT)
+X-Received: by 2002:a05:6e02:12c4:b0:33d:8c8a:cd0e with SMTP id
+ i4-20020a056e0212c400b0033d8c8acd0emr223924ilm.20.1686145673358; Wed, 07 Jun
+ 2023 06:47:53 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3108:EE_|SJ0PR12MB7458:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7e9647ae-c177-4908-7f7d-08db675dc325
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: sXiyANJ1sgSTcCuXswYQaoQaUqhIvvFMlSFtKIBmMPOeEkEy+n+rMDLTcmKvyp+QLqd7RfDAFttkCeBQa9n/TC5O7ApjemJwqcbdC7zxxAesp6Xrg2cduV9HjYRKYGfLTjoXgWFLPVRHH5+6PjdiXiAgYkDPvmxs1DSVSqPAdW5MzvQbtfAvTU2XYhi9lVonlQ7+VoqGF5KzQ29Q5xqULMKEG0yhMtpwQ4igN2woMIguUMXnvegmXtGr+9xHEIYASj+u6kVMIVAuY2hDJAztnHL1EzeYj2f8hbhfbDYRkrc+ilmA0ncy3TlOsAK5yEfeQ2PjGS8z2trRNG/07P6hDhbDPKlaMVZn1dJ6LzRNp5vSwd9fxt47SBdNq43Pdnd7vSC/O8V7sWRhnCxzI+m8Ntw/piPZbrnnUqhgiYDtLEp6kypXqUiglVRcDVw/GwBxm/qi7L9wdYz5eNE0PdFaHEaixzo0nijmJNIIvCLT6qLUMUajv/uaO5njncb6PxGmGhpMQ2aUEiwp0dYHtbicb56i7VFBvu88ZayoKuO8a/NYR3hxlHwGBt4i6qS+rju4jL1F42gmcC1i8doPuIYegoJkXLlc5r8JUmh3V6f2JxXsrBQT4ssHsCnhwsW8MGioO3crakd/e1CEh2hEN7wz/A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(366004)(396003)(39860400002)(136003)(346002)(451199021)(86362001)(478600001)(44832011)(8936002)(8676002)(316002)(41300700001)(66476007)(66556008)(66946007)(38100700002)(5660300002)(4326008)(31696002)(4744005)(6486002)(6666004)(36756003)(2906002)(6512007)(26005)(186003)(6506007)(31686004)(53546011)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QWtiWUdxbXl4VGk1L3EvUnJlZ0g4cmY4ZTFrMFcwcitQa3FxSzJPUmFGVFB1?=
- =?utf-8?B?K3A4TEVKREY0dk1DL2dEd0R6bjR2aDVrUnQ2ZFMvVUxvb2xkVzdXZ0tIVGtK?=
- =?utf-8?B?emZuTUxKVlV5aEwydjZGMEhmbFNSc1hOazkvUG1tdTU3bWF2Y0Vsa3VENUlz?=
- =?utf-8?B?T0hqSmlnWjJ1eXU3TFQvR3hlR2NtVzJ3YTdMOEgrZ2tMaEtYRmUwRHV1OEE3?=
- =?utf-8?B?RDdsdWxjblpqQTNNSk5MTnZjcFVuSTE0bElDdVJPQUtDZG0vTlVKeU5tRWJO?=
- =?utf-8?B?R29ZQnJRdXk5Z1NGMWwvMXpOWDkyRjR6QkNJQVN2ZTViQVFrakV0RDdMaEps?=
- =?utf-8?B?NGxQKzkxUzNKcFpJNTJJdURpcXhJbWN2QjZ0RzdObzJXRFpoTUF3MWk4V2sw?=
- =?utf-8?B?RUJWRmEwVExYSEVEWFl6ZG1PY2g1ZlQwMlovYkh6ZG1QWGN0RFo0dmUxaGFB?=
- =?utf-8?B?cjJuRS9mMFIrQlRZK0JhcG44WTZwd2RRQzlhZzRqT1VNN1JhS0srODlJMUpo?=
- =?utf-8?B?R1lIbVFFZEpYeGJkV1I2NTh0dEdzbDhucTIxV1pTSzlQTlIrMzhmSWtvYmRT?=
- =?utf-8?B?WGFxbllmOEN2Y0FBcUVQdWtQVExWRHp4MWtFcXQ3VzBES2NSMDlPeUYzbkUr?=
- =?utf-8?B?WDJZZy9LY3VLeEZCamR3NEpPRHZXNmRscjBsMWJNc3ZscjU4QnhpWEJVOUZQ?=
- =?utf-8?B?WkhzelZkWkkwTm5PSGdoaFp2ZUV4QVMxZ2lIUzVHQzRlV1hWaHBPd2VGTzBh?=
- =?utf-8?B?R0x4L1Zmdy9wUjIwVG16clFCaDlhK0xabnpPTXpnL3ZYVXB6Y29yMXZTQkxm?=
- =?utf-8?B?VW9PejRwdXFkUFN4QWJZUVhCQnVsODVWa0MrT3AzOWJpaG1ubUh6azYwUEZH?=
- =?utf-8?B?R3pyb1RUdnlSMDJCUGJPWmV3VmIxeWs1dFdTMy9haTl0ZXF4M0VIQTM2UEJS?=
- =?utf-8?B?d1cyMkNBTGVSWHIxNkp1dGExQ3B3d3NFUmt3TU9yeU5aOE0ycTB0TlZUNWts?=
- =?utf-8?B?ZnFOWVlKWGVRZzZwQ0VXaGY2SnNWeFQ4enJBK1lWbVRrSVZGSlZtY3kvbkRV?=
- =?utf-8?B?eTV5ZWt3bWU4NTRtSjlYK0piZndNcXlZbFBRaDJZbUV6azQxQXFGTTZSNmxF?=
- =?utf-8?B?RzJDOEszOHpJelJwcmtZV1MzR3E0UGxBQ1lkSTV4cjZpUC9SRmFvNlM5bU52?=
- =?utf-8?B?M3MvNy9EZ2xMblRhUGI3eFJoZ1VQRWZDRXByWFdxUjJaYVBDSDV6RjZmOVJw?=
- =?utf-8?B?RllpNTBGaVkrRFpSS2tzcmphUFNxZWlmbWNDWE55N3oyaS9rZU9ucjlrTHhF?=
- =?utf-8?B?Ny9XQXhrZ2s3aTBtWktWNkZ4UURvdGsxVkNuUXNvWW1SaXQ4aTBpVWJyZFZu?=
- =?utf-8?B?Vk43cjFVMXRnN2tlcUNxTE5pWWdpOEJaVklJZVJzTmpvOCtFVGtkNnZsTXZQ?=
- =?utf-8?B?RWRndUJYdDR0amljRGFtbjMvYmlvK2R0VUFXRWswZzBNbjhGUmRrOEgzVDRm?=
- =?utf-8?B?Q1J2NnNqYzVuc0JiUkJ5ZTVzd0h4L05UTWN1NVFBemszNEsya1hKMkF0VGM3?=
- =?utf-8?B?Yk90aC9jMkR0U1ZOMmlvcytjNkV6WllObzBZN255OUp3WjAyMFdrcFprY0Yr?=
- =?utf-8?B?TGp5WXArTzlzT3FISHJQaDZnWkZ6dkp4SkNlbTlHaFpJKzVmem9KNjJ2YmJL?=
- =?utf-8?B?TlhvN1RjMFlOVXgvdURTN0xMVE94SlFWd2o1Z1k2QlR1RGZ5NEpnYytHNXhJ?=
- =?utf-8?B?S0hpM3Y1a2pmUG9rZkdVVnpES3NnUzRJQkoxdEEyajZ3WE1SWGcwaCs2UEtm?=
- =?utf-8?B?MGEvVHR2cjE0dUNXVDB5SzFBQjlpWmlYbHNKVXB5VENLMU9PcGtpdWx6R0pT?=
- =?utf-8?B?a3RIcXB5WCtjejJNWTY5Tkpva2k1YWNsNFRFbHM4M0JlVHMxcHFlai9ha2Nh?=
- =?utf-8?B?eDl2NkZFK3hHQjgvcmhidHo5TFlCdjJMSWNXTmRuRytZZ0lVaVlzQ3VscTBK?=
- =?utf-8?B?a0g2b2daM1FCQ0xXU01uZDEwdjA4Vmg1MTZBcXJaQ1RySXJ4NURXQmRZTTVF?=
- =?utf-8?B?VGxubVVmdHZuamFlbXF1ZzE4QkZndG1zVmdPVFRqbm4yckpoYUJJVlZtOWpD?=
- =?utf-8?Q?r89ZXm4Z/hsOfS2KU12cNfxf3?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7e9647ae-c177-4908-7f7d-08db675dc325
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2023 13:47:40.8470
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1fUtDBGqsdiHeuIX2HM8IjDedoOAkrCg5WWiuWbhzU1dF94TarjjzXlWkOU2g4Boc0WJwrMHkJhdcqbdI5R8Bw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB7458
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+References: <CAMi1Hd05z8uBotO4vs7Ropmt7W2gSA__tTu_=X1t0mze7bXrhg@mail.gmail.com>
+ <CAD=FV=VSFDe445WEVTHXxU1WS_HGUV5jR5E8_Vgd4eyhn3rHyA@mail.gmail.com>
+ <CAMi1Hd28FJUjB8A-9YF7xpKOzSyNWXX3qung4aDjpLBhOvw_eA@mail.gmail.com>
+ <CAD=FV=W13L0H88G1gt8qRnXfpV-_7E9QfHufN_a23_B1bb=aww@mail.gmail.com>
+ <CAMi1Hd1WCtNvNaY_kVMx5F8T0nMVHvsjk9LsSETCMWWQyaq_Vw@mail.gmail.com>
+ <CAD=FV=W5Y_SHp0y2MEs8d1k255bm_PXdRYEmYei+g79pjnzYuA@mail.gmail.com>
+ <CAMi1Hd2OeL940r7jq0=Z_oxE8MYVioy0YnJXQC_5e0vJONd2sQ@mail.gmail.com>
+ <1bc79c48-7cba-476d-9a7e-5754a88fcdae@sirena.org.uk> <CAMi1Hd2BLB6H3QRLB5svRTkGoXaUeEsakNsmfCOjbDBcCEeqkA@mail.gmail.com>
+ <CAD=FV=UKyjRNZG-ED2meUAR9aXdco+AbUTHiKixTzjCkaJbjTg@mail.gmail.com> <bb5c828a-b8c5-40a0-9b67-44e73abcbef0@sirena.org.uk>
+In-Reply-To: <bb5c828a-b8c5-40a0-9b67-44e73abcbef0@sirena.org.uk>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 7 Jun 2023 06:47:41 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=UXOse+yRUmZBUOkfpWXPRKBw2R-+BVzPGcuwwFV_VqQw@mail.gmail.com>
+Message-ID: <CAD=FV=UXOse+yRUmZBUOkfpWXPRKBw2R-+BVzPGcuwwFV_VqQw@mail.gmail.com>
+Subject: Re: [PATCH] regulator: qcom-rpmh: Revert "regulator: qcom-rpmh: Use PROBE_FORCE_SYNCHRONOUS"
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Amit Pundir <amit.pundir@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Saravana Kannan <saravanak@google.com>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/23/23 4:55 AM, Muralidhara M K wrote:
-> From: Muralidhara M K <muralidhara.mk@amd.com>
-> 
-> Add a new entry to 'enum mem_type' and a new string to 'edac_mem_types[]'
-> for HBM3 (High Bandwidth Memory Gen 3) new memory type.
-> 
-> Signed-off-by: Muralidhara M K <muralidhara.mk@amd.com>
-> ---
->  drivers/edac/edac_mc.c | 1 +
->  include/linux/edac.h   | 3 +++
->  2 files changed, 4 insertions(+)
+Hi,
+
+On Wed, Jun 7, 2023 at 6:18=E2=80=AFAM Mark Brown <broonie@kernel.org> wrot=
+e:
 >
+> On Tue, Jun 06, 2023 at 04:29:29PM -0700, Doug Anderson wrote:
+>
+> > 2. Try adding some delays to some of the regulators with
+> > "regulator-enable-ramp-delay" and/or "regulator-settling-time-us".
+> > Without a scope, it'll be tricky to figure out exactly which
+> > regulators might need delays, but you could at least confirm if the
+> > "overkill" approach of having all the regulators have some delay
+> > helps... I guess you could also try putting a big delay for "ldo26".
+> > If that works, you could try moving it up (again using a bisect style
+> > approach) to see where the delay matters?
+>
+> This is information which should be in the datasheets for the part.
 
-Hi Murali,
-
-This patch is completely within EDAC, so it's not necessary to copy the
-x86 or TIP maintainers.
-
-Also, this change is not currently used, so the patch should be included
-as part of a set when it is needed.
-
-Thanks,
-Yazen
+I was thinking more of something board-specific, not part specific. In
+theory with RPMH this is also all supposed to be abstracted out into
+the firmware code that sets up RPMH which magically takes care of
+things like this, but it certainly could be wrong.
