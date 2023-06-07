@@ -2,94 +2,305 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CFB8726FA0
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 23:00:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5F5F726FB5
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 23:01:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235832AbjFGVAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 17:00:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33946 "EHLO
+        id S235978AbjFGVBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 17:01:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236402AbjFGVAi (ORCPT
+        with ESMTP id S235818AbjFGVAq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 17:00:38 -0400
-Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1339EFC;
-        Wed,  7 Jun 2023 14:00:19 -0700 (PDT)
-Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-777a6ebb542so179248339f.0;
-        Wed, 07 Jun 2023 14:00:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686171578; x=1688763578;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bReB+G99C/TitPAfGna3q3OEgVBDkQB9BG1TaTm9cig=;
-        b=QC5BXdUWeTr+Fs2otTY4ua7LcNbJD+1GpNC13VKGrYyPJ4y2QtoKQnjWl94j0bwIIb
-         k1fa+uz6la9l6lx9EsOtVbGHELXC3WGasfj5rgXo4hT+KtcaM/MCR2sj+Swk1NBxGwhE
-         kkYI4DaEKBJcXIw+tiTmj1QtQaBUXmcBTpfCg69QSAD+rmMBhE1Ag1Lzd903Wxk0ol94
-         sgHA7i6E49TkQwhzS1we7LXRf5I6cCL+/zdAeoi8Qk9xljeM1my2HR3GFBlT7PZcWoz0
-         vB80W6vq4H4/1W60gBBZ+877Pg7lST1MkBjnnCHl6ev3bik7WEIvDDuRn6hszEASve+m
-         2Vyw==
-X-Gm-Message-State: AC+VfDw4hK9uir7RPlcdIZdoy9V2Ip/1YDLimrtHoRnGVYqcjmFUfPX0
-        +Kl/OE+/efNbGhQrqomKyA==
-X-Google-Smtp-Source: ACHHUZ7tr2rY4wJwOgLmdXMjkDXUq68gIy7/NbTCkGDzXAqIzWGLJONAaOq/QVcAsm5gbrpJmn+Vvw==
-X-Received: by 2002:a6b:7614:0:b0:779:c221:eb6c with SMTP id g20-20020a6b7614000000b00779c221eb6cmr4666621iom.19.1686171578643;
-        Wed, 07 Jun 2023 13:59:38 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id f19-20020a056638119300b0040fad79ac08sm3697065jas.89.2023.06.07.13.59.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 13:59:37 -0700 (PDT)
-Received: (nullmailer pid 4012378 invoked by uid 1000);
-        Wed, 07 Jun 2023 20:59:36 -0000
-Date:   Wed, 7 Jun 2023 14:59:36 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Stefan Wahren <stefan.wahren@i2se.com>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, Marek Vasut <marex@denx.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
+        Wed, 7 Jun 2023 17:00:46 -0400
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B3592113;
+        Wed,  7 Jun 2023 14:00:27 -0700 (PDT)
+Received: from g550jk.localnet (unknown [185.176.222.176])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 1A9B8CFCA8;
+        Wed,  7 Jun 2023 21:00:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1686171602; bh=5CIPX0QVCk1ehZxhs60pbSqWoXfhuCQAdNwLZHmhw+E=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=TQAvuRLdr+dyGp2ZaARbfsnN2mrEnHq/dSPwtvRkDPgTarwO1HOUpLHg+4ehsOX6u
+         7VOqq3pm2ALs+mEf6GqKiJUQ5Ifi9gFkScloQl3Fk0r2aGYFO6QLIbEXmvX6iwbr5D
+         mAa42iXiHcAUVt8uCZnEJyW8/0wc40uIZA87W21M=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-crypto@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-Subject: Re: [PATCH V4 2/2] dt-bindings: imxgpt: add imx6ul compatible
-Message-ID: <168617157566.4012324.4683965294535906539.robh@kernel.org>
-References: <20230530100843.15072-1-stefan.wahren@i2se.com>
- <20230530100843.15072-3-stefan.wahren@i2se.com>
+        Conor Dooley <conor+dt@kernel.org>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Jeykumar Sankaran <quic_jeykumar@quicinc.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org
+Subject: Re: [Freedreno] [PATCH v3 6/7] drm/msm/dsi: Add phy configuration for MSM8226
+Date:   Wed, 07 Jun 2023 23:00:00 +0200
+Message-ID: <12219954.O9o76ZdvQC@z3ntu.xyz>
+In-Reply-To: <51712e34-c964-a5b3-3df8-1af10c7751f6@quicinc.com>
+References: <20230308-msm8226-mdp-v3-0-b6284145d67a@z3ntu.xyz>
+ <20230308-msm8226-mdp-v3-6-b6284145d67a@z3ntu.xyz>
+ <51712e34-c964-a5b3-3df8-1af10c7751f6@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230530100843.15072-3-stefan.wahren@i2se.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mittwoch, 7. Juni 2023 21:46:31 CEST Jeykumar Sankaran wrote:
+> On 6/1/2023 10:00 AM, Luca Weiss wrote:
+> > MSM8226 uses a modified PLL lock sequence compared to MSM8974, which is
+> > based on the function dsi_pll_enable_seq_m in the msm-3.10 kernel.
+> > 
+> > Worth noting that the msm-3.10 downstream kernel also will try other
+> > sequences in case this one doesn't work, but during testing it has shown
+> > 
+> > that the _m sequence succeeds first time also:
+> >    .pll_enable_seqs[0] = dsi_pll_enable_seq_m,
+> >    .pll_enable_seqs[1] = dsi_pll_enable_seq_m,
+> >    .pll_enable_seqs[2] = dsi_pll_enable_seq_d,
+> >    .pll_enable_seqs[3] = dsi_pll_enable_seq_d,
+> >    .pll_enable_seqs[4] = dsi_pll_enable_seq_f1,
+> >    .pll_enable_seqs[5] = dsi_pll_enable_seq_c,
+> >    .pll_enable_seqs[6] = dsi_pll_enable_seq_e,
+> > 
+> > We may need to expand this in the future.
+> > 
+> > Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> > ---
+> > 
+> >   drivers/gpu/drm/msm/dsi/phy/dsi_phy.c      |  2 +
+> >   drivers/gpu/drm/msm/dsi/phy/dsi_phy.h      |  3 +-
+> >   drivers/gpu/drm/msm/dsi/phy/dsi_phy_28nm.c | 97
+> >   ++++++++++++++++++++++++++++++ 3 files changed, 101 insertions(+), 1
+> >   deletion(-)
+> > 
+> > diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
+> > b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c index bb09cbe8ff86..9d5795c58a98
+> > 100644
+> > --- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
+> > +++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
+> > @@ -541,6 +541,8 @@ static const struct of_device_id dsi_phy_dt_match[] =
+> > {
+> > 
+> >   	  .data = &dsi_phy_28nm_hpm_famb_cfgs },
+> >   	
+> >   	{ .compatible = "qcom,dsi-phy-28nm-lp",
+> >   	
+> >   	  .data = &dsi_phy_28nm_lp_cfgs },
+> > 
+> > +	{ .compatible = "qcom,dsi-phy-28nm-8226",
+> > +	  .data = &dsi_phy_28nm_8226_cfgs },
+> > 
+> >   #endif
+> >   #ifdef CONFIG_DRM_MSM_DSI_20NM_PHY
+> >   
+> >   	{ .compatible = "qcom,dsi-phy-20nm",
+> > 
+> > diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.h
+> > b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.h index 7137a17ae523..8b640d174785
+> > 100644
+> > --- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.h
+> > +++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.h
+> > @@ -46,8 +46,9 @@ struct msm_dsi_phy_cfg {
+> > 
+> >   extern const struct msm_dsi_phy_cfg dsi_phy_28nm_hpm_cfgs;
+> >   extern const struct msm_dsi_phy_cfg dsi_phy_28nm_hpm_famb_cfgs;
+> >   extern const struct msm_dsi_phy_cfg dsi_phy_28nm_lp_cfgs;
+> > 
+> > -extern const struct msm_dsi_phy_cfg dsi_phy_20nm_cfgs;
+> > +extern const struct msm_dsi_phy_cfg dsi_phy_28nm_8226_cfgs;
+> > 
+> >   extern const struct msm_dsi_phy_cfg dsi_phy_28nm_8960_cfgs;
+> > 
+> > +extern const struct msm_dsi_phy_cfg dsi_phy_20nm_cfgs;
+> > 
+> >   extern const struct msm_dsi_phy_cfg dsi_phy_14nm_cfgs;
+> >   extern const struct msm_dsi_phy_cfg dsi_phy_14nm_660_cfgs;
+> >   extern const struct msm_dsi_phy_cfg dsi_phy_14nm_2290_cfgs;
+> > 
+> > diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_28nm.c
+> > b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_28nm.c index
+> > 4c1bf55c5f38..ceec7bb87bf1 100644
+> > --- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy_28nm.c
+> > +++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy_28nm.c
+> > @@ -37,6 +37,7 @@
+> > 
+> >   /* v2.0.0 28nm LP implementation */
+> >   #define DSI_PHY_28NM_QUIRK_PHY_LP	BIT(0)
+> > 
+> > +#define DSI_PHY_28NM_QUIRK_PHY_8226	BIT(1)
+> > 
+> >   #define LPFR_LUT_SIZE			10
+> >   struct lpfr_cfg {
+> > 
+> > @@ -377,6 +378,74 @@ static int dsi_pll_28nm_vco_prepare_hpm(struct clk_hw
+> > *hw)> 
+> >   	return ret;
+> >   
+> >   }
+> > 
+> > +static int dsi_pll_28nm_vco_prepare_8226(struct clk_hw *hw)
+> > +{
+> > +	struct dsi_pll_28nm *pll_28nm = to_pll_28nm(hw);
+> > +	struct device *dev = &pll_28nm->phy->pdev->dev;
+> > +	void __iomem *base = pll_28nm->phy->pll_base;
+> > +	u32 max_reads = 5, timeout_us = 100;
+> > +	bool locked;
+> > +	u32 val;
+> > +	int i;
+> > +
+> > +	DBG("id=%d", pll_28nm->phy->id);
+> > +
+> > +	pll_28nm_software_reset(pll_28nm);
+> > +
+> > +	/*
+> > +	 * PLL power up sequence.
+> > +	 * Add necessary delays recommended by hardware.
+> > +	 */
+> > +	dsi_phy_write(base + REG_DSI_28nm_PHY_PLL_CAL_CFG1, 0x34);
+> > +
+> > +	val = DSI_28nm_PHY_PLL_GLB_CFG_PLL_PWRDN_B;
+> > +	dsi_phy_write_udelay(base + REG_DSI_28nm_PHY_PLL_GLB_CFG, val, 200);
+> > +
+> > +	val |= DSI_28nm_PHY_PLL_GLB_CFG_PLL_PWRGEN_PWRDN_B;
+> > +	dsi_phy_write_udelay(base + REG_DSI_28nm_PHY_PLL_GLB_CFG, val, 200);
+> > +
+> > +	val |= DSI_28nm_PHY_PLL_GLB_CFG_PLL_LDO_PWRDN_B;
+> > +	val |= DSI_28nm_PHY_PLL_GLB_CFG_PLL_ENABLE;
+> > +	dsi_phy_write_udelay(base + REG_DSI_28nm_PHY_PLL_GLB_CFG, val, 600);
+> > +
+> > +	for (i = 0; i < 7; i++) {
+> > +		/* DSI Uniphy lock detect setting */
+> > +		dsi_phy_write(base + REG_DSI_28nm_PHY_PLL_LKDET_CFG2, 0x0d);
+> > +		dsi_phy_write_udelay(base + REG_DSI_28nm_PHY_PLL_LKDET_CFG2,
+> > +				0x0c, 100);
+> > +		dsi_phy_write(base + REG_DSI_28nm_PHY_PLL_LKDET_CFG2, 0x0d);
+> > +
+> > +		/* poll for PLL ready status */
+> > +		locked = pll_28nm_poll_for_ready(pll_28nm,
+> > +						max_reads, timeout_us);
+> > +		if (locked)
+> > +			break;
+> > +
+> > +		pll_28nm_software_reset(pll_28nm);
+> > +
+> > +		/*
+> > +		 * PLL power up sequence.
+> > +		 * Add necessary delays recommended by hardware.
+> > +		 */
+> > +		dsi_phy_write_udelay(base + REG_DSI_28nm_PHY_PLL_PWRGEN_CFG, 0x00, 50);
+> > +
+> > +		val = DSI_28nm_PHY_PLL_GLB_CFG_PLL_PWRDN_B;
+> > +		val |= DSI_28nm_PHY_PLL_GLB_CFG_PLL_PWRGEN_PWRDN_B;
+> > +		dsi_phy_write_udelay(base + REG_DSI_28nm_PHY_PLL_GLB_CFG, val, 100);
+> > +
+> > +		val |= DSI_28nm_PHY_PLL_GLB_CFG_PLL_LDO_PWRDN_B;
+> > +		val |= DSI_28nm_PHY_PLL_GLB_CFG_PLL_ENABLE;
+> > +		dsi_phy_write_udelay(base + REG_DSI_28nm_PHY_PLL_GLB_CFG, val, 600);
+> > +	}
+> > +
+> > +	if (unlikely(!locked))
+> > +		DRM_DEV_ERROR(dev, "DSI PLL lock failed\n");
+> > +	else
+> > +		DBG("DSI PLL Lock success");
+> > +
+> > +	return locked ? 0 : -EINVAL;
+> > +}
+> > +
+> 
+> Could you please share the downstream reference you used to come up with
+> this sequence?
 
-On Tue, 30 May 2023 12:08:43 +0200, Stefan Wahren wrote:
-> Currently the dtbs_check for imx6ul generates warnings like this:
-> 
-> ['fsl,imx6ul-gpt', 'fsl,imx6sx-gpt'] is too long
-> 
-> According to the timer-imx-gpt driver all imx6 use the same imx6dl data,
-> but according to the existing DTS files the imx6ul GPT IP is derived from
-> imx6sx. So better follow the DTS files here and make the imx6ul GPT
-> compatible to the imx6sl one to fix the warning.
-> 
-> Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  Documentation/devicetree/bindings/timer/fsl,imxgpt.yaml | 3 +++
->  1 file changed, 3 insertions(+)
-> 
+Hi, it should be this if I don't misremember.
 
-Applied, thanks!
+https://android.googlesource.com/kernel/msm/+/refs/heads/android-msm-lenok-3.10-marshmallow-mr1-wear-release/arch/arm/mach-msm/clock-mdss-8974.c#1088
+
+Regards
+Luca
+
+> 
+> Thanks and Regards,
+> Jeykumar S.
+> 
+> >   static int dsi_pll_28nm_vco_prepare_lp(struct clk_hw *hw)
+> >   {
+> >   
+> >   	struct dsi_pll_28nm *pll_28nm = to_pll_28nm(hw);
+> > 
+> > @@ -471,6 +540,15 @@ static const struct clk_ops
+> > clk_ops_dsi_pll_28nm_vco_lp = {> 
+> >   	.is_enabled = dsi_pll_28nm_clk_is_enabled,
+> >   
+> >   };
+> > 
+> > +static const struct clk_ops clk_ops_dsi_pll_28nm_vco_8226 = {
+> > +	.round_rate = dsi_pll_28nm_clk_round_rate,
+> > +	.set_rate = dsi_pll_28nm_clk_set_rate,
+> > +	.recalc_rate = dsi_pll_28nm_clk_recalc_rate,
+> > +	.prepare = dsi_pll_28nm_vco_prepare_8226,
+> > +	.unprepare = dsi_pll_28nm_vco_unprepare,
+> > +	.is_enabled = dsi_pll_28nm_clk_is_enabled,
+> > +};
+> > +
+> > 
+> >   /*
+> >   
+> >    * PLL Callbacks
+> >    */
+> > 
+> > @@ -536,6 +614,8 @@ static int pll_28nm_register(struct dsi_pll_28nm
+> > *pll_28nm, struct clk_hw **prov> 
+> >   	if (pll_28nm->phy->cfg->quirks & DSI_PHY_28NM_QUIRK_PHY_LP)
+> >   	
+> >   		vco_init.ops = &clk_ops_dsi_pll_28nm_vco_lp;
+> > 
+> > +	else if (pll_28nm->phy->cfg->quirks & DSI_PHY_28NM_QUIRK_PHY_8226)
+> > +		vco_init.ops = &clk_ops_dsi_pll_28nm_vco_8226;
+> > 
+> >   	else
+> >   	
+> >   		vco_init.ops = &clk_ops_dsi_pll_28nm_vco_hpm;
+> > 
+> > @@ -820,3 +900,20 @@ const struct msm_dsi_phy_cfg dsi_phy_28nm_lp_cfgs = {
+> > 
+> >   	.quirks = DSI_PHY_28NM_QUIRK_PHY_LP,
+> >   
+> >   };
+> > 
+> > +const struct msm_dsi_phy_cfg dsi_phy_28nm_8226_cfgs = {
+> > +	.has_phy_regulator = true,
+> > +	.regulator_data = dsi_phy_28nm_regulators,
+> > +	.num_regulators = ARRAY_SIZE(dsi_phy_28nm_regulators),
+> > +	.ops = {
+> > +		.enable = dsi_28nm_phy_enable,
+> > +		.disable = dsi_28nm_phy_disable,
+> > +		.pll_init = dsi_pll_28nm_init,
+> > +		.save_pll_state = dsi_28nm_pll_save_state,
+> > +		.restore_pll_state = dsi_28nm_pll_restore_state,
+> > +	},
+> > +	.min_pll_rate = VCO_MIN_RATE,
+> > +	.max_pll_rate = VCO_MAX_RATE,
+> > +	.io_start = { 0xfd922b00 },
+> > +	.num_dsi_phy = 1,
+> > +	.quirks = DSI_PHY_28NM_QUIRK_PHY_8226,
+> > +};
+
+
+
 
