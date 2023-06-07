@@ -2,160 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C29F725499
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 08:45:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62ADC725498
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 08:45:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237824AbjFGGpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 02:45:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34166 "EHLO
+        id S237739AbjFGGo6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 02:44:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237737AbjFGGot (ORCPT
+        with ESMTP id S229503AbjFGGos (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 02:44:49 -0400
+        Wed, 7 Jun 2023 02:44:48 -0400
 Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76BE8196;
-        Tue,  6 Jun 2023 23:44:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFDFE196
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 23:44:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686120288; x=1717656288;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4tki/V8b+YyMtWB/3hCmjlsI9h+GFezHEZ6clq56P3o=;
-  b=hFjCdm5wy8LPU92a30nx1h7gfH1fTIUT1n7R0ZjL4VYahSSoKMtUw/QU
-   R3A1TU18Rmtr4Dwesodh6L0A0FzPejctZbwfL/hfMOv/4GwY+gb07MazO
-   96YNAouuo4FQdkB0I3zaCmLaDOi3QPOJQSqopa5DJVIuoaiUusK0zpfLW
-   kTVkLaTKXKQWb0PnW3FC1SHDI38ZavQw9+oIgcdYN40UM89kiOg4qeS+8
-   wUvM1zzDIDKmPMm7PgKW4Eo5QyS3d7WpS6fxlD9ZXIuPqcSkKXGz4BiuI
-   0W4UbF8axay0TU4iLXOC4QppjUoFtW5NTyHz6kranP70JIXJ9jxmmzV6z
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="354395965"
+  t=1686120286; x=1717656286;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=oKyrJxqpl8bGHvolZMu7hOb15fNzHkW3io8+ya7efCM=;
+  b=b/9ggDL5WcFNqqtGNUwEAKyA7ZE2L8PfCulM1dIxQsG+khOjpRBIKJTW
+   25NmtUpiklveiSIApSAJdyKobZidmDcmQhbeZv0jOfQAwIHi3EJoSSTqx
+   YoVNH529BgEJ/5nA4aUBD5qLAppsBTSaREL3wa6hwfK6zojyvSytVpcKq
+   Z0sci4qzQAniN97aYy9lzJkt3c1zM64zdEpRPMW1g0ebg4RkmFYCcJ35i
+   38RJ3nN2m53dfDnCrV6zvqEFJdxl2xAE8Y3VzIky5OV+AX2/jOdcHN3QW
+   N6hq9NuQmEQ5kcdzgCGfcCbtdOxRPO3zjKjt4iOovzoFq5HxPD3lBPF9X
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="354395954"
 X-IronPort-AV: E=Sophos;i="6.00,223,1681196400"; 
-   d="scan'208";a="354395965"
+   d="scan'208";a="354395954"
 Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 23:44:48 -0700
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 23:44:46 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="956089496"
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="956089494"
 X-IronPort-AV: E=Sophos;i="6.00,223,1681196400"; 
-   d="scan'208";a="956089496"
+   d="scan'208";a="956089494"
 Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 06 Jun 2023 23:44:45 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 06 Jun 2023 23:44:44 -0700
 Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1q6muS-0006Gr-0t;
+        id 1q6muS-0006Gl-0V;
         Wed, 07 Jun 2023 06:44:44 +0000
-Date:   Wed, 7 Jun 2023 14:43:45 +0800
+Date:   Wed, 7 Jun 2023 14:43:54 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Steffen Eiden <seiden@linux.ibm.com>, kvm@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Viktor Mihajlovski <mihajlov@linux.ibm.com>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Nico Boehr <nrb@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Hendrik Brueckner <brueckner@linux.ibm.com>
-Subject: Re: [PATCH v4 6/6] s390/uv: Update query for secret-UVCs
-Message-ID: <202306071439.xUNkOsqy-lkp@intel.com>
-References: <20230606180817.3019077-7-seiden@linux.ibm.com>
+To:     Vineet Gupta <vgupta@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org
+Subject: include/linux/compiler_types.h:328:45: error: call to
+ '__compiletime_assert_303' declared with attribute error: BUILD_BUG_ON
+ failed: (PTRS_PER_PTE * sizeof(pte_t)) > PAGE_SIZE
+Message-ID: <202306071430.5Ve50U7F-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230606180817.3019077-7-seiden@linux.ibm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Steffen,
+Hi Vineet,
 
-kernel test robot noticed the following build errors:
+FYI, the error/warning still remains.
 
-[auto build test ERROR on kvms390/next]
-[also build test ERROR on s390/features mst-vhost/linux-next linus/master v6.4-rc5 next-20230607]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Steffen-Eiden/s390-uvdevice-Add-info-IOCTL/20230607-021159
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/kvms390/linux.git next
-patch link:    https://lore.kernel.org/r/20230606180817.3019077-7-seiden%40linux.ibm.com
-patch subject: [PATCH v4 6/6] s390/uv: Update query for secret-UVCs
-config: s390-defconfig (https://download.01.org/0day-ci/archive/20230607/202306071439.xUNkOsqy-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 12.3.0
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   a4d7d701121981e3c3fe69ade376fe9f26324161
+commit: d9820ff76f95fa26d33e412254a89cd65b23142d ARC: mm: switch pgtable_t back to struct page *
+date:   1 year, 9 months ago
+config: arc-randconfig-r002-20230607 (https://download.01.org/0day-ci/archive/20230607/202306071430.5Ve50U7F-lkp@intel.com/config)
+compiler: arc-elf-gcc (GCC) 12.3.0
 reproduce (this is a W=1 build):
         mkdir -p ~/bin
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        git remote add kvms390 https://git.kernel.org/pub/scm/linux/kernel/git/kvms390/linux.git
-        git fetch kvms390 next
-        git checkout kvms390/next
-        b4 shazam https://lore.kernel.org/r/20230606180817.3019077-7-seiden@linux.ibm.com
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d9820ff76f95fa26d33e412254a89cd65b23142d
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout d9820ff76f95fa26d33e412254a89cd65b23142d
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=arc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306071439.xUNkOsqy-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306071430.5Ve50U7F-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   arch/s390/boot/uv.c: In function 'uv_query_info':
->> arch/s390/boot/uv.c:53:55: error: expected ';' before '}' token
-      53 |                 uv_info.max_secrets = uvcb.max_secrets
-         |                                                       ^
-         |                                                       ;
-      54 |         }
-         |         ~                                              
+   arch/arc/mm/init.c:35:13: warning: no previous prototype for 'arc_get_mem_sz' [-Wmissing-prototypes]
+      35 | long __init arc_get_mem_sz(void)
+         |             ^~~~~~~~~~~~~~
+   arch/arc/mm/init.c:88:13: warning: no previous prototype for 'setup_arch_memory' [-Wmissing-prototypes]
+      88 | void __init setup_arch_memory(void)
+         |             ^~~~~~~~~~~~~~~~~
+   In file included from <command-line>:
+   arch/arc/mm/init.c: In function 'mem_init':
+>> include/linux/compiler_types.h:328:45: error: call to '__compiletime_assert_303' declared with attribute error: BUILD_BUG_ON failed: (PTRS_PER_PTE * sizeof(pte_t)) > PAGE_SIZE
+     328 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                                             ^
+   include/linux/compiler_types.h:309:25: note: in definition of macro '__compiletime_assert'
+     309 |                         prefix ## suffix();                             \
+         |                         ^~~~~~
+   include/linux/compiler_types.h:328:9: note: in expansion of macro '_compiletime_assert'
+     328 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ^~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+         |         ^~~~~~~~~~~~~~~~
+   arch/arc/mm/init.c:194:9: note: in expansion of macro 'BUILD_BUG_ON'
+     194 |         BUILD_BUG_ON((PTRS_PER_PTE * sizeof(pte_t)) > PAGE_SIZE);
+         |         ^~~~~~~~~~~~
 
 
-vim +53 arch/s390/boot/uv.c
+vim +/__compiletime_assert_303 +328 include/linux/compiler_types.h
 
-    18	
-    19	void uv_query_info(void)
-    20	{
-    21		struct uv_cb_qui uvcb = {
-    22			.header.cmd = UVC_CMD_QUI,
-    23			.header.len = sizeof(uvcb)
-    24		};
-    25	
-    26		if (!test_facility(158))
-    27			return;
-    28	
-    29		/* rc==0x100 means that there is additional data we do not process */
-    30		if (uv_call(0, (uint64_t)&uvcb) && uvcb.header.rc != 0x100)
-    31			return;
-    32	
-    33		if (IS_ENABLED(CONFIG_KVM)) {
-    34			memcpy(uv_info.inst_calls_list, uvcb.inst_calls_list, sizeof(uv_info.inst_calls_list));
-    35			uv_info.uv_base_stor_len = uvcb.uv_base_stor_len;
-    36			uv_info.guest_base_stor_len = uvcb.conf_base_phys_stor_len;
-    37			uv_info.guest_virt_base_stor_len = uvcb.conf_base_virt_stor_len;
-    38			uv_info.guest_virt_var_stor_len = uvcb.conf_virt_var_stor_len;
-    39			uv_info.guest_cpu_stor_len = uvcb.cpu_stor_len;
-    40			uv_info.max_sec_stor_addr = ALIGN(uvcb.max_guest_stor_addr, PAGE_SIZE);
-    41			uv_info.max_num_sec_conf = uvcb.max_num_sec_conf;
-    42			uv_info.max_guest_cpu_id = uvcb.max_guest_cpu_id;
-    43			uv_info.uv_feature_indications = uvcb.uv_feature_indications;
-    44			uv_info.supp_se_hdr_ver = uvcb.supp_se_hdr_versions;
-    45			uv_info.supp_se_hdr_pcf = uvcb.supp_se_hdr_pcf;
-    46			uv_info.conf_dump_storage_state_len = uvcb.conf_dump_storage_state_len;
-    47			uv_info.conf_dump_finalize_len = uvcb.conf_dump_finalize_len;
-    48			uv_info.supp_att_req_hdr_ver = uvcb.supp_att_req_hdr_ver;
-    49			uv_info.supp_att_pflags = uvcb.supp_att_pflags;
-    50			uv_info.supp_add_secret_req_ver = uvcb.supp_add_secret_req_ver;
-    51			uv_info.supp_add_secret_pcf = uvcb.supp_add_secret_pcf;
-    52			uv_info.supp_secret_types = uvcb.supp_secret_types;
-  > 53			uv_info.max_secrets = uvcb.max_secrets
-    54		}
-    55	
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  314  
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  315  #define _compiletime_assert(condition, msg, prefix, suffix) \
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  316  	__compiletime_assert(condition, msg, prefix, suffix)
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  317  
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  318  /**
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  319   * compiletime_assert - break build and emit msg if condition is false
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  320   * @condition: a compile-time constant condition to check
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  321   * @msg:       a message to emit if condition is false
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  322   *
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  323   * In tradition of POSIX assert, this macro will break the build if the
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  324   * supplied condition is *false*, emitting the supplied error message if the
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  325   * compiler has support to do so.
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  326   */
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  327  #define compiletime_assert(condition, msg) \
+eb5c2d4b45e3d2 Will Deacon 2020-07-21 @328  	_compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+eb5c2d4b45e3d2 Will Deacon 2020-07-21  329  
+
+:::::: The code at line 328 was first introduced by commit
+:::::: eb5c2d4b45e3d2d5d052ea6b8f1463976b1020d5 compiler.h: Move compiletime_assert() macros into compiler_types.h
+
+:::::: TO: Will Deacon <will@kernel.org>
+:::::: CC: Will Deacon <will@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
