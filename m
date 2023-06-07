@@ -2,90 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B7D67261A0
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 15:48:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 614AB7261A4
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 15:48:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240532AbjFGNr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 09:47:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60814 "EHLO
+        id S240113AbjFGNsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 09:48:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239710AbjFGNr5 (ORCPT
+        with ESMTP id S240459AbjFGNsW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 09:47:57 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 426AC19BF
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 06:47:56 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-7748b05ab49so560999139f.1
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 06:47:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686145675; x=1688737675;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pQUIevp3kmh7Rh77lhqlWB6JiMORR4Y83bN8LaMYusg=;
-        b=j6+h4E+Sqdj14HPnzQvZaL4pnZR9CUgCKDGlo3kbjPM8U4qGSwlmcBd++w1ksT/4By
-         F+roxcqij8Q+SgMxCeEHKhplfP2VOgs5SxX5iIUyBnSHRoK+rxL61AS2H15TPxpMp2Zj
-         PeD3QbyLKPfmVqRcxMCVpi1LsogbbwhR30oMys9z5kbmawldeiQ0+IWaPI9YubkV3D6b
-         Um6jhmSbKRNpVAhqrnFHaZL1bkTqEUJ6lSwOjzjjXW3MS6tCMlL4BF630bgRtBNjXGkL
-         UsPiTR+pNgz/hF50G4Ae7B4QqttZjog4uVHhR4t25RCdvrSjGmOWg5jAANoeYhS51It1
-         Qexg==
-X-Gm-Message-State: AC+VfDxLq4nvJOQA9dg+tood9UHfDt0+HPpVdSoLG1fUXZhThXE1Wg7I
-        nJz/rKut5QTycLan+cszKO/eEDLerNNmib6UBG+zAI6NEj0O
-X-Google-Smtp-Source: ACHHUZ5RPNC5+tKMTBl7BPNrhzt6ZZ6ENxCd2akQXW3rTYBc71dCFjfsUc8hYja6jBGCneAGrmf3AcOIbugAUV2OYnTN6hjWpRtW
+        Wed, 7 Jun 2023 09:48:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B5E1FC8;
+        Wed,  7 Jun 2023 06:48:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 62FE263F9C;
+        Wed,  7 Jun 2023 13:48:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D9B8C4339E;
+        Wed,  7 Jun 2023 13:48:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686145691;
+        bh=wf2XVFNUEgH+dPenf4U/GenfgafdyccvlWF1Dp+rFHM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=l7XHq6YO7SuvCp5ZPMGFBBhOT0+DObP+Fft8vLFS/PJgrWhszhHbDuTgj+RpS3hNs
+         s7m2gCGV4CAr4/2/dCtlj6ui4oURAdLGa+8o+NrzWywqX+Z3DZN9ZK1nWcyTS7NjzT
+         CgkoaxXb3W1DQVvRwVbTbrAkkBgFZXAILcax2fazhBrgWdBZ2q8B4CGRt7qdRll2gM
+         NvNtUyUYQ0KNWe4V5IsMJsJhoJGvNp2W/Tc0u5CveuYK7nP7D5F1/95reK+evbTRwM
+         HrBMBpWzh/A9xSeXcXpuNNDijir1m2yTwU8LKaR9pXu/srfpYNxbmkvoqzuUCFi6Ta
+         Eneaq0snhGMJg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 1392D40692; Wed,  7 Jun 2023 10:48:09 -0300 (-03)
+Date:   Wed, 7 Jun 2023 10:48:08 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH V3 0/1] perf tools: Allow config terms with breakpoints
+Message-ID: <ZICKmA1kcDa2nG53@kernel.org>
+References: <20230525082902.25332-1-adrian.hunter@intel.com>
+ <afe1c05a-2b77-c3d8-aacf-b4c7bebb8bf8@intel.com>
+ <ZH933yJMYTr0cC+N@kernel.org>
+ <ZH+Havh+xRIfwa4n@kernel.org>
+ <9a3776f9-9c9e-b23f-9f18-91b4b5b8364d@intel.com>
+ <f7228dc9-fe18-a8e3-7d3f-52922e0e1113@intel.com>
 MIME-Version: 1.0
-X-Received: by 2002:a02:b001:0:b0:41d:be7a:21f7 with SMTP id
- p1-20020a02b001000000b0041dbe7a21f7mr2550987jah.5.1686145675512; Wed, 07 Jun
- 2023 06:47:55 -0700 (PDT)
-Date:   Wed, 07 Jun 2023 06:47:55 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000000753ac05fd8a6256@google.com>
-Subject: [syzbot] Monthly 9p report (Jun 2023)
-From:   syzbot <syzbot+list2ae9773daf371845c70b@syzkaller.appspotmail.com>
-To:     asmadeus@codewreck.org, ericvh@gmail.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lucho@ionkov.net, syzkaller-bugs@googlegroups.com,
-        v9fs-developer@lists.sourceforge.net
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f7228dc9-fe18-a8e3-7d3f-52922e0e1113@intel.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello 9p maintainers/developers,
+Em Wed, Jun 07, 2023 at 08:33:07AM +0300, Adrian Hunter escreveu:
+> Maybe this is cleaner:
 
-This is a 31-day syzbot report for the 9p subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/9p
+It is, I folded it into your original patch, thanks!
 
-During the period, 0 new issues were detected and 0 were fixed.
-In total, 6 issues are still open and 27 have been fixed so far.
+- Arnaldo
+ 
+> 
+> From: Adrian Hunter <adrian.hunter@intel.com>
+> Date: Wed, 7 Jun 2023 08:12:29 +0300
+> Subject: [PATCH] perf tools: Suppress bison unused value warnings
+> 
+> Patch "perf tools: Allow config terms with breakpoints" introduced
+> parse tokens for colons and slashes within breakpoint parsing to
+> prevent mix up with colons and slashes related to config terms.
+> 
+> The token values are not needed but introduce bison "unused value"
+> warnings.
+> 
+> Suppress those warnings.
+> 
+> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+> ---
+>  tools/perf/util/parse-events.h | 4 ++++
+>  tools/perf/util/parse-events.y | 7 +++++++
+>  2 files changed, 11 insertions(+)
+> 
+> diff --git a/tools/perf/util/parse-events.h b/tools/perf/util/parse-events.h
+> index b0eb95f93e9c..5fdc1f33f57e 100644
+> --- a/tools/perf/util/parse-events.h
+> +++ b/tools/perf/util/parse-events.h
+> @@ -228,6 +228,10 @@ void parse_events_error__handle(struct parse_events_error *err, int idx,
+>  void parse_events_error__print(struct parse_events_error *err,
+>  			       const char *event);
+>  
+> +static inline void parse_events_unused_value(const void *x __maybe_unused)
+> +{
+> +}
+> +
+>  #ifdef HAVE_LIBELF_SUPPORT
+>  /*
+>   * If the probe point starts with '%',
+> diff --git a/tools/perf/util/parse-events.y b/tools/perf/util/parse-events.y
+> index bbfb8110947c..0c3d086cc22a 100644
+> --- a/tools/perf/util/parse-events.y
+> +++ b/tools/perf/util/parse-events.y
+> @@ -510,6 +510,9 @@ PE_PREFIX_MEM PE_VALUE PE_BP_SLASH PE_VALUE PE_BP_COLON PE_MODIFIER_BP opt_event
+>  	struct list_head *list;
+>  	int err;
+>  
+> +	parse_events_unused_value(&$3);
+> +	parse_events_unused_value(&$5);
+> +
+>  	list = alloc_list();
+>  	ABORT_ON(!list);
+>  	err = parse_events_add_breakpoint(_parse_state, list,
+> @@ -528,6 +531,8 @@ PE_PREFIX_MEM PE_VALUE PE_BP_SLASH PE_VALUE opt_event_config
+>  	struct list_head *list;
+>  	int err;
+>  
+> +	parse_events_unused_value(&$3);
+> +
+>  	list = alloc_list();
+>  	ABORT_ON(!list);
+>  	err = parse_events_add_breakpoint(_parse_state, list,
+> @@ -545,6 +550,8 @@ PE_PREFIX_MEM PE_VALUE PE_BP_COLON PE_MODIFIER_BP opt_event_config
+>  	struct list_head *list;
+>  	int err;
+>  
+> +	parse_events_unused_value(&$3);
+> +
+>  	list = alloc_list();
+>  	ABORT_ON(!list);
+>  	err = parse_events_add_breakpoint(_parse_state, list,
+> -- 
+> 2.34.1
+> 
+> 
 
-Some of the still happening issues:
+-- 
 
-Ref Crashes Repro Title
-<1> 1157    Yes   INFO: task hung in iterate_supers
-                  https://syzkaller.appspot.com/bug?extid=2349f5067b1772c1d8a5
-<2> 542     Yes   WARNING in inc_nlink (3)
-                  https://syzkaller.appspot.com/bug?extid=2b3af42c0644df1e4da9
-<3> 268     Yes   WARNING in v9fs_fid_get_acl
-                  https://syzkaller.appspot.com/bug?extid=a83dc51a78f0f4cf20da
-<4> 163     Yes   BUG: corrupted list in p9_fd_cancelled (2)
-                  https://syzkaller.appspot.com/bug?extid=1d26c4ed77bc6c5ed5e6
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-To disable reminders for individual bugs, reply with the following command:
-#syz set <Ref> no-reminders
-
-To change bug's subsystems, reply with:
-#syz set <Ref> subsystems: new-subsystem
-
-You may send multiple commands in a single email message.
+- Arnaldo
