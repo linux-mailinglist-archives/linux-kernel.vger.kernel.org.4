@@ -2,52 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B98B725B89
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 12:23:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5439725B92
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 12:25:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238524AbjFGKXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 06:23:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46322 "EHLO
+        id S235490AbjFGKZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 06:25:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233837AbjFGKXd (ORCPT
+        with ESMTP id S233580AbjFGKZh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 06:23:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3944A1BD7;
-        Wed,  7 Jun 2023 03:23:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AA7D363D54;
-        Wed,  7 Jun 2023 10:23:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 692A0C433D2;
-        Wed,  7 Jun 2023 10:23:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686133411;
-        bh=TNIgjcq56ZRDkdSGzMWMs6K5wEwgg10X47XgM2HsqZU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eEhM7wFquqbYVy9hJvmw6p/m8vmK3oiK0QX71oZ1jF4DzN91SwoiQhiVHL76lgj8J
-         FufTiPtOr5VeHU0ltMKxaQ9RcNivLi0jEq1szZpcxqc8oNKYhZISk2YU7ABzVDGLhx
-         16cAM0mA9RSeV4Y0I+zvK/Atmt4sWftFCu6f8oXjk+OQ+gw0F+pxbJPW8zsuoku1tf
-         IXB/w1/9n1yRkl4/lcB2G/cAdPC6wwGt1I0nbtUr20hTzG+c+S8HKndhx9VUljFa4S
-         Qv0CzK/na9L+dCKb8njZriyslS7BE5NzaY9DowafFWESdoAZJ/kzoduZ0n8WG/MddV
-         ApxCWSXg6xnFw==
-Date:   Wed, 7 Jun 2023 12:23:25 +0200
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     Siddharth Vadapalli <s-vadapalli@ti.com>
-Cc:     tjoseph@cadence.com, robh@kernel.org, kw@linux.com,
-        bhelgaas@google.com, nadeem@cadence.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        vigneshr@ti.com, srk@ti.com, nm@ti.com
-Subject: Re: [PATCH v3] PCI: cadence: Fix Gen2 Link Retraining process
-Message-ID: <ZIBanRGGPeFw90NZ@lpieralisi>
-References: <20230607091427.852473-1-s-vadapalli@ti.com>
+        Wed, 7 Jun 2023 06:25:37 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F07761BD7;
+        Wed,  7 Jun 2023 03:25:35 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.43])
+        by gateway (Coremail) with SMTP id _____8AxX+seW4Bk2hoAAA--.405S3;
+        Wed, 07 Jun 2023 18:25:34 +0800 (CST)
+Received: from [10.20.42.43] (unknown [10.20.42.43])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxbMoeW4Bk9VUEAA--.7057S3;
+        Wed, 07 Jun 2023 18:25:34 +0800 (CST)
+Message-ID: <26b1f0a2-7bb0-b5eb-fa1f-2d646cff3f1f@loongson.cn>
+Date:   Wed, 7 Jun 2023 18:25:33 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230607091427.852473-1-s-vadapalli@ti.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] drm/ingenic: Kconfig: select REGMAP and REGMAP_MMIO
+Content-Language: en-US
+To:     Paul Cercueil <paul@crapouillou.net>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     linux-mips@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20230607072253.440613-1-suijingfeng@loongson.cn>
+ <845a483ed09728c712ad57b1fe9bc5c930a72d98.camel@crapouillou.net>
+From:   Sui Jingfeng <suijingfeng@loongson.cn>
+Organization: Loongson
+In-Reply-To: <845a483ed09728c712ad57b1fe9bc5c930a72d98.camel@crapouillou.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8DxbMoeW4Bk9VUEAA--.7057S3
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBj93XoWxJry8tFy5tr1DJF18Zr13GFX_yoW8Aryfpr
+        s5ta4UuFWxuF4vkr12yF17WFy5Xw15Ja4rArykta4q9ryDAr1jqrZrZFZ09FyDAr4xJr4U
+        X3s7GFy7ZF17XrbCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUU9qb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v2
+        6F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
+        02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAF
+        wI0_Cr0_Gr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1c
+        AE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E
+        14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4
+        CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1x
+        MIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF
+        4lIxAIcVC2z280aVAFwI0_Cr0_Gr1UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIY
+        CTnIWIevJa73UjIFyTuYvjxUzcTmUUUUU
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,105 +68,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 02:44:27PM +0530, Siddharth Vadapalli wrote:
-> The Link Retraining process is initiated to account for the Gen2 defect in
-> the Cadence PCIe controller in J721E SoC. The errata corresponding to this
-> is i2085, documented at:
-> https://www.ti.com/lit/er/sprz455c/sprz455c.pdf
-> 
-> The existing workaround implemented for the errata waits for the Data Link
-> initialization to complete and assumes that the link retraining process
-> at the Physical Layer has completed. However, it is possible that the
-> Physical Layer training might be ongoing as indicated by the
-> PCI_EXP_LNKSTA_LT bit in the PCI_EXP_LNKSTA register.
-> 
-> Fix the existing workaround, to ensure that the Physical Layer training
-> has also completed, in addition to the Data Link initialization.
-> 
-> Fixes: 4740b969aaf5 ("PCI: cadence: Retrain Link to work around Gen2 training defect")
-> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
-> Reviewed-by: Vignesh Raghavendra <vigneshr@ti.com>
-> ---
-> 
-> Hello,
-> 
-> This patch is based on linux-next tagged next-20230606.
-> 
-> v2:
-> https://lore.kernel.org/r/20230315070800.1615527-1-s-vadapalli@ti.com/
-> Changes since v2:
-> - Merge the cdns_pcie_host_training_complete() function with the
->   cdns_pcie_host_wait_for_link() function, as suggested by Bjorn
->   for the v2 patch.
-> - Add dev_err() to notify when Link Training fails, since this is a
->   fatal error and proceeding from this point will almost always crash
->   the kernel.
-> 
-> v1:
-> https://lore.kernel.org/r/20230102075656.260333-1-s-vadapalli@ti.com/
-> Changes since v1:
-> - Collect Reviewed-by tag from Vignesh Raghavendra.
-> - Rebase on next-20230315.
-> 
-> Regards,
-> Siddharth.
-> 
->  .../controller/cadence/pcie-cadence-host.c    | 20 +++++++++++++++++++
->  1 file changed, 20 insertions(+)
-> 
-> diff --git a/drivers/pci/controller/cadence/pcie-cadence-host.c b/drivers/pci/controller/cadence/pcie-cadence-host.c
-> index 940c7dd701d6..70a5f581ff4f 100644
-> --- a/drivers/pci/controller/cadence/pcie-cadence-host.c
-> +++ b/drivers/pci/controller/cadence/pcie-cadence-host.c
-> @@ -12,6 +12,8 @@
->  
->  #include "pcie-cadence.h"
->  
-> +#define LINK_RETRAIN_TIMEOUT HZ
-> +
->  static u64 bar_max_size[] = {
->  	[RP_BAR0] = _ULL(128 * SZ_2G),
->  	[RP_BAR1] = SZ_2G,
-> @@ -80,8 +82,26 @@ static struct pci_ops cdns_pcie_host_ops = {
->  static int cdns_pcie_host_wait_for_link(struct cdns_pcie *pcie)
->  {
->  	struct device *dev = pcie->dev;
-> +	unsigned long end_jiffies;
-> +	u16 link_status;
->  	int retries;
->  
-> +	/* Wait for link training to complete */
-> +	end_jiffies = jiffies + LINK_RETRAIN_TIMEOUT;
-> +	do {
-> +		link_status = cdns_pcie_rp_readw(pcie, CDNS_PCIE_RP_CAP_OFFSET + PCI_EXP_LNKSTA);
-> +		if (!(link_status & PCI_EXP_LNKSTA_LT))
-> +			break;
+Ok, thanks
 
-You can use a bool variable eg link_trained and use that below.
+On 2023/6/7 17:46, Paul Cercueil wrote:
+> Hi Sui,
+>
+> Le mercredi 07 juin 2023 à 15:22 +0800, Sui Jingfeng a écrit :
+>> Otherwise its failed to pass basic compile test on platform without
+>> REGMAP_MMIO selected by defconfig
+>>
+>> make -j$(nproc) ARCH=mips CROSS_COMPILE=mips64el-linux-gnuabi64-
+>>
+>>    SYNC    include/config/auto.conf.cmd
+>>    Checking missing-syscalls for N32
+>>    CALL    scripts/checksyscalls.sh
+>>    Checking missing-syscalls for O32
+>>    CALL    scripts/checksyscalls.sh
+>>    CALL    scripts/checksyscalls.sh
+>>    MODPOST Module.symvers
+>> ERROR: modpost: "__devm_regmap_init_mmio_clk"
+>> [drivers/gpu/drm/ingenic/ingenic-drm.ko] undefined!
+>> make[1]: *** [scripts/Makefile.modpost:136: Module.symvers] Error 1
+>> make: *** [Makefile:1978: modpost] Error 2
+>>
+>> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+>> ---
+>>   drivers/gpu/drm/ingenic/Kconfig | 2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/drivers/gpu/drm/ingenic/Kconfig
+>> b/drivers/gpu/drm/ingenic/Kconfig
+>> index a53f475d33df..7457c0b65034 100644
+>> --- a/drivers/gpu/drm/ingenic/Kconfig
+>> +++ b/drivers/gpu/drm/ingenic/Kconfig
+>> @@ -5,6 +5,8 @@ config DRM_INGENIC
+>>          depends on CMA
+>>          depends on OF
+>>          depends on COMMON_CLK
+>> +       select REGMAP
+>> +       select REGMAP_MMIO
+> nit: order alphabetically (move them after the DRM_* ones).
+>
+> Cheers,
+> -Paul
+>
+>>          select DRM_BRIDGE
+>>          select DRM_PANEL_BRIDGE
+>>          select DRM_KMS_HELPER
 
-> +		usleep_range(0, 1000);
-> +	} while (time_before(jiffies, end_jiffies));
-> +
-> +	if (!(link_status & PCI_EXP_LNKSTA_LT)) {
-> +		dev_info(dev, "Link training complete\n");
-> +	} else {
-> +		dev_err(dev, "Fatal! Link training incomplete\n");
-> +		return -ETIMEDOUT;
-> +	}
+-- 
+Jingfeng
 
-I don't necessarily see the reason why you are adding additional
-logging, more so given that this now does not affect just the
-workaround but all cadence controllers.
-
-Actually, is that something you have tested and considered ?
-
-Thanks,
-Lorenzo
-
-> +
->  	/* Check if the link is up or not */
->  	for (retries = 0; retries < LINK_WAIT_MAX_RETRIES; retries++) {
->  		if (cdns_pcie_link_up(pcie)) {
-> -- 
-> 2.25.1
-> 
