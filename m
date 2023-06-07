@@ -2,125 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5896725EC6
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 14:19:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43172725EC7
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 14:19:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240644AbjFGMTg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 08:19:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33816 "EHLO
+        id S240653AbjFGMTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 08:19:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240541AbjFGMTe (ORCPT
+        with ESMTP id S240645AbjFGMTf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 08:19:34 -0400
-Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2081.outbound.protection.outlook.com [40.107.247.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5867E1BD7
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 05:19:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=I4+mywNDdj1rEmT6KukK7BBIbDAb0xB77cYGlsOIU4mOSyRIvb2VvN8zsP/IX8HtwsxiZZ9H2ZmGTWlOZapwwhOICxe7K+ku0r8ktpk5KBH9/mjF8ASySfm+NT+3P2iQHHEeHwZVn8VbOHE38DEOTLuCEITMB6H11E0f8alflesKCv5L7OFGn3dfQieexUf0RIgICetHOgSX/gxb7yzpDMb1B7axJBWqnUWcPeP4rSHHVMNK3ZdX3XsJIbvkf+AjrV0M46vNtkya2Cam0RiQ0Zljwld7Jzsm0uZ39oEOAtUeHt9vIAjMmaPTMjzKT7cABkKHAwpHTVkHFBXMKCe5Xg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OkFJr1bPNuT+2C8dHDYP1vrnChnZ6HuuRkTrWNfHB2Y=;
- b=baYcj84MyHvVIxsqr2gTnE9bOH7zWYMdt5I/OW/1P9vM1zAfbNN17YoN7/cRe4yQK832ckG4Py+cGUGTWOKGAR4cli6PBcmleL7E5tTwmGMLZpnztY+UVOgP2F3PQRTCcCC2ENtxNVi42/5OCmfKvU/ajeekAlMQWd7Cf06K7ZlcEVqHxIl6vU5sRT+RsW5JF7dF086pGluft2FClJztvkJTaoK3ynVjHZkqChGZIvYCUqHNAHpuKnm2GKq823Kx2gUIS8PwNVxLR+IC4t9Vwm9HGArYom95FRpyKQrmVJ9fIidcR2CkDWzEGwfINgSa2Kk9ZKslrgUD/XOIeM7pPA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OkFJr1bPNuT+2C8dHDYP1vrnChnZ6HuuRkTrWNfHB2Y=;
- b=gBTTgUnk0z+FWUh6HaXOCE3f4Da0ioDDd4JyT2JoQu4Yq1CStNlClWdNrUXL8qWeGv1LfJjcB7Ovq6HfPo5rNJr51iAoWxIWjO5D8/OHH/lRGOlATYKJn+EUWw0CO1FhqedZXwXB36sRhY+mu7dC9bY56S/wrdKE3labQYxQ2zXwAAqyi0fZuYYhe4of+X217jD97myMCExK6nkIWFSV4Ni+fMvj8baLhwoPw5uWOYeLkcp4zHJZw2khO4EKYgdlw+iFYTde6dzw/ko+tbcNWUwxxmP/KmzL27m0N00/wAIRBEBzguH/B0AY0/Erp+PPRFyQskPz6q/xkxBn5ShjMg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from PA4PR04MB7790.eurprd04.prod.outlook.com (2603:10a6:102:cc::8)
- by AS8PR04MB8056.eurprd04.prod.outlook.com (2603:10a6:20b:288::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.32; Wed, 7 Jun
- 2023 12:19:29 +0000
-Received: from PA4PR04MB7790.eurprd04.prod.outlook.com
- ([fe80::66a2:8913:a22a:be8d]) by PA4PR04MB7790.eurprd04.prod.outlook.com
- ([fe80::66a2:8913:a22a:be8d%4]) with mapi id 15.20.6455.030; Wed, 7 Jun 2023
- 12:19:29 +0000
-Message-ID: <80f2045b-f276-e127-8e46-87fb6994fb41@suse.com>
-Date:   Wed, 7 Jun 2023 15:19:26 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 3/3] x86: Disable running 32bit processes if ia32_disabled
- is passed
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org
-Cc:     linux-kernel@vger.kernel.org, mhocko@suse.com, jslaby@suse.cz
-References: <20230607072936.3766231-1-nik.borisov@suse.com>
- <20230607072936.3766231-4-nik.borisov@suse.com> <87legvjxat.ffs@tglx>
-From:   Nikolay Borisov <nik.borisov@suse.com>
-In-Reply-To: <87legvjxat.ffs@tglx>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR3P281CA0050.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:4a::19) To PA4PR04MB7790.eurprd04.prod.outlook.com
- (2603:10a6:102:cc::8)
+        Wed, 7 Jun 2023 08:19:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D8FB170E;
+        Wed,  7 Jun 2023 05:19:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DB0A63E6A;
+        Wed,  7 Jun 2023 12:19:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD412C433D2;
+        Wed,  7 Jun 2023 12:19:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686140372;
+        bh=sVlBMXZgb2WeMO8wyewjKVLUTq3MSJdNX3OB4y/Ih0A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=syPHLxNbaTloM+A4Y+SyVpODXo9hKoYl8uIYzugXbU1evZIQwJSUqGOUXJIAudKOv
+         BxET4O/2JAWaTLx67Hc7fHT31a7Y/R2C/cfLQe5IPSVSWO2U7RLArg+nIu82pF4D0f
+         bQt7AgAJckwuYC/VxhduACtREzcSPAf+OaWwd2b98JXVn5O1J4/yeszzZeUy3XQ5Mt
+         CUcJs8WOYh4GSRx2KAAd+9rm8NR5/QXLkVk4NJBgEDaRDu0ugFQFnJQ3Jg0Kpg7NFQ
+         F1XNEUlGiXK+H4kRvYqf0oezsxt+Q0RmOIUXpW8etepWYW7V5pHqflo7h1yp93nbm5
+         jBbDys4w0BVfg==
+Date:   Wed, 7 Jun 2023 14:19:29 +0200
+From:   Maxime Ripard <mripard@kernel.org>
+To:     Sui Jingfeng <suijingfeng@loongson.cn>
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn
+Subject: Re: [PATCH] drm: gem: add an option for supporting the dma-coherent
+ hardware.
+Message-ID: <l343rk4s6mrppjl3vxxvnwc52wlovg6bojduiy3qf5zup5ifzx@7qu7jilrsgn5>
+References: <20230607053053.345101-1-suijingfeng@loongson.cn>
+ <d4378aad1cf179d308068ef6072c5c7ff2bf2502.camel@crapouillou.net>
+ <6db23d14-652e-4b13-24cb-bfb92fa3faed@loongson.cn>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PA4PR04MB7790:EE_|AS8PR04MB8056:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4cb36886-ba1a-4aaa-d881-08db675170ef
-X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: OKvlpzzDKNQmHrQYCMDpR7uztxhy5ZpnhQhEVYA2fG4rw+POByzPnGHsVII/gB7CTYLjBrn3LYpNUiO6ITOap0nrigepc6HoUfaMT5jFLMU+N2nqJ5U4PYgaUUnDfb+eC0pDcT6wrMggoDCxKDJ8OCE5TXGX/Zf6szmTCCkRA+CNhdKkNHKqKDWc94Z00vyRbIJqXCvhYecXrE0ALZ4ZC0lHIqvZrPal2PFzdLy5A6XB+4YxgXS2kLWJQce266DHBObQb54lPDjvEBg3ngo5sEqd/IxZxxJlwaHFNezp77MplaIaV50BOVxbKiDQp+qYw19c2I794aixSRxigg5q280Zeyp5juE2lLmFPHq9h7fPCVHtw0rk4Efcp5yRcQ53L98PRd7Zpv9r1IeuEZzmRc+vKU5bDq8UIrCIMnWqsQV+LhVtxcNmDYiXqDNhJAXizqpSk3lveEpoa6+Ql0s7H6wpoTSEV0HqAQGRyLlW2VG72WNfkw1e6fGHeyp8QDxjAAMZyYuVhmv14y/pOPomk70DP0ABTp8W2QeKioMLghjpNzQ3fN/YoICl9vPvHVJnWCoCCIVgow92BgxVUNHLiDUgBxMubSBrNMxIINyfEDGW6maD20HYZelo0FCUl/9uArOL/u6sSecSLon14R7Z0w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR04MB7790.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(366004)(376002)(136003)(396003)(346002)(451199021)(66476007)(66946007)(2906002)(4326008)(478600001)(8936002)(8676002)(31686004)(41300700001)(316002)(66556008)(6666004)(5660300002)(6486002)(6506007)(6512007)(38100700002)(186003)(2616005)(83380400001)(36756003)(86362001)(31696002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bWNyR0liMHRpRGxNU1E0QkFNdlRMTlRTQlRhYVBraG9JZDRFbmE2a1ZEemho?=
- =?utf-8?B?dmF4UXFWMUdWRW1IcCsxR2ZmeGxCR0c3Umx6U0RWRlExWHZrOVBmRmo4emp1?=
- =?utf-8?B?aXNQZWFzMjBXMDZQOUhGQXRYT0pEYkFmTWNrMWc3b1JsREU0RXlKcnJHZzZn?=
- =?utf-8?B?THgyak5yazZTaDZMNThVVitxKy9Xc2E2MGh2TUh4cVF2a012eUlrZXNBaVFn?=
- =?utf-8?B?V3pVaUU3MUh6bi84NkFuUUxKalhKdm42ZHZZNjVWNlRITUlLU3l5bWNKRksv?=
- =?utf-8?B?TnEwMmxncGFyUDNZQlVsMXBSL2FWL3hVeE9sWUZkWXBGNUduV2pVNGlZbFNh?=
- =?utf-8?B?VTVrVDMyUXRBUnRXK2RvSjluellKZXBlYmloOURsaGJ4bW1lTVFHRnQrUkcv?=
- =?utf-8?B?OEhQc3phYjVaMENwdklFa2JKZ2dRVTJ1dVpQOFZTQWxKN2c1SitUbXVORDVI?=
- =?utf-8?B?elBEaWVmb1BBYUlZU01TZGo4Z2ZTU2lJTXB5ZEtNL053b2FuZGVlVFB6cUtx?=
- =?utf-8?B?UzdLZW9tNm5DUW05bmR1QlVrRkY5OHVJczdBemxsYVNwb1c3RU15TG02ZE9u?=
- =?utf-8?B?b0lMbEpNU0JHRzZEOXNFWWFHeDVmVEVvSkg3M2FYUzEyTjZzancyT3llOUMv?=
- =?utf-8?B?YjZmSE5NNWVCdlBRM1p4OTEwNVBhT0VsOGdjRWZjeDBIZnllUVJBeFpWNVBQ?=
- =?utf-8?B?dWdYWS80a2NaV1RoZExxVDVLbTJVOVJBWDRibUh2V2gvaXllVmNRQ2FZbFY2?=
- =?utf-8?B?SzVKd1E5dzhSNzF1SzVHazRNTHBRRlEyRUhHUG9JemV2SHZmRW9HSDB3QVJq?=
- =?utf-8?B?SmVKUC8rbXNuQ0M0ajNqOVRubU1oM1FxQ29OSGVreTNnSmhEOFpQRlY2emxO?=
- =?utf-8?B?bE1PL0Q3d2duekpGRXpaQW5SVlRHU0RncUtNc1cwL3RzM2JvM3EvZW1saVBB?=
- =?utf-8?B?QzArcS9NUlMrOWx0dmVyM1g3NmV3M3JnLzFuVGhBTkg0c095SUU5ZlM4RVht?=
- =?utf-8?B?ZWJUMkNXOWljc2I4aFRyV2plS1FoTm9GNElkWnZvY3RJKzlJQUVuaVIxWXBx?=
- =?utf-8?B?MFlKcTRlOFhURWVRU2s3YkZMRWhvTjBxWUI3UHFBcStzTkJMZ0V2QWJZaGN2?=
- =?utf-8?B?dDVzc0dTdUdyWXVvem4vQ2QzbC9YZmo2Vzg3cVZWWEl6cHZEMEM1bDdwbnRU?=
- =?utf-8?B?b2wyWmlibVhvclhRVzZ3RHBzbko2cDNoWkQyNFJpTXpERENsaEJLTEtBMzNu?=
- =?utf-8?B?WmNrcFowWEFMTnRsOVZBR2o0bytJQ3dzQVJSZHd6Zjd0N2ZuRGd0QVNGZVRm?=
- =?utf-8?B?RTlybUhwUExkRmRIMFQrR3g4ZEREWklRNTNMUjVFTnFMcWQxVHBmWitXRzJQ?=
- =?utf-8?B?aXdTV2FEYTNWRXRodktsMDVnZkdEbVhodEJlcjVHV2Z6U1p4TUVFYUx4bURT?=
- =?utf-8?B?QzN5VTJobzNVcHNhd2RjMGFaUjl0MlJCSUJnYkdTZWpvRHp3L0oxcW9iMzU1?=
- =?utf-8?B?dWowKzcvZzZWZXAwOWpHSXVOVHNEeFgrNWNxbkZhZlUxeWdqMmhXVUtpUXdV?=
- =?utf-8?B?TUliek83bmUreFNoQWtKVnRWUnRSYlFNM2V6T1l2NTBqZmMvZXR3Qlkxenp4?=
- =?utf-8?B?aTBhbGZ2eDhyVmlLY296eTREaWszaTltcVFKZVVvbEh2UXZQamx0NUdlbXJT?=
- =?utf-8?B?UFlrYXZGQTNEUWpvSjBReCt1VVdNaGV3VW05aEpkeDlkdytNSHNiUFEvdnhh?=
- =?utf-8?B?ekVDRmkzV3NDYnhSTmh2OER2NUd5c3pWVFNjSXU2VTFDdDFwTEVCQWJxcmN1?=
- =?utf-8?B?OWs5MDNSSGhYZUh0US9sQ01pcjhiRi9CbzFlU3ZmS1lHS2JYbWo1MlA1VlFj?=
- =?utf-8?B?Ylh5QTJpWERQSVF5eURsZzFhSDJPL1JNakEwQk5qSVdTd2NkMmVYcmZ6THY2?=
- =?utf-8?B?b2YyRS9wZnM0WnQ5blRrelBZVkhjL09USllRQlVaQzlUVEFCSzhZN0xkZGg1?=
- =?utf-8?B?STRRVExZLy80aDJYRnhYS1BtVmM2bWpHZkxRb3Y4QjNFL2JEcHFjQTJZUDho?=
- =?utf-8?B?RnJSYU9BK256d1VHdE5QMFh3Q2hwU0tIcHVQZWt3endwU2tVa1dwRDJBcDRN?=
- =?utf-8?B?c1Zmd0FDTHJCZmRmV05GbnNzYVlDbEh5a1ZxNUNMSUZHeFpFemtZbmhrWXZ0?=
- =?utf-8?Q?8BgQbtjqjZ5+q8trmA/gr8coobMDmLsescglA64hdmTs?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4cb36886-ba1a-4aaa-d881-08db675170ef
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR04MB7790.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2023 12:19:28.9533
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: IlaPikTkdH8qwnY4C/vvyF8E+vwHGWDDNa5+s12ZOAHbuu/eJIhUKhs1ONnx9acxb5dO7om9TszcOa1BrDqwsw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8056
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="rvdpeqztss6vkzn5"
+Content-Disposition: inline
+In-Reply-To: <6db23d14-652e-4b13-24cb-bfb92fa3faed@loongson.cn>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -128,106 +67,178 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--rvdpeqztss6vkzn5
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 7.06.23 г. 15:01 ч., Thomas Gleixner wrote:
-> On Wed, Jun 07 2023 at 10:29, Nikolay Borisov wrote:
->> In addition to disabling 32bit syscall interface let's also disable the
->> ability to run 32bit processes altogether. This is achieved by setting
->> the GDT_ENTRY_DEFAULT_USER32_CS descriptor to not present which would
->> cause 32 bit processes to trap with a #NP exception. Furthermore,
->> forbid loading compat processes as well.
-> 
-> This is obviously the wrong order of things. Prevent loading of compat
-> processes is the first step, no?
+On Wed, Jun 07, 2023 at 06:30:01PM +0800, Sui Jingfeng wrote:
+> On 2023/6/7 17:36, Paul Cercueil wrote:
+> > Hi Sui,
+> >=20
+> > Le mercredi 07 juin 2023 =E0 13:30 +0800, Sui Jingfeng a =E9crit=A0:
+> > > The single map_noncoherent member of struct drm_gem_dma_object may
+> > > not
+> > > sufficient for describing the backing memory of the GEM buffer
+> > > object.
+> > >=20
+> > > Especially on dma-coherent systems, the backing memory is both cached
+> > > coherent for multi-core CPUs and dma-coherent for peripheral device.
+> > > Say architectures like X86-64, LoongArch64, Loongson Mips64, etc.
+> > >=20
+> > > Whether a peripheral device is dma-coherent or not can be
+> > > implementation-dependent. The single map_noncoherent option is not
+> > > enough
+> > > to reflect real hardware anymore. For example, the Loongson LS3A4000
+> > > CPU
+> > > and LS2K2000/LS2K1000 SoC, peripheral device of such hardware
+> > > platform
+> > > allways snoop CPU's cache. Doing the allocation with
+> > > dma_alloc_coherent
+> > > function is preferred. The return buffer is cached, it should not
+> > > using
+> > > the default write-combine mapping. While with the current implement,
+> > > there
+> > > no way to tell the drm core to reflect this.
+> > >=20
+> > > This patch adds cached and coherent members to struct
+> > > drm_gem_dma_object.
+> > > which allow driver implements to inform the core. Introducing new
+> > > mappings
+> > > while keeping the original default behavior unchanged.
+> > Did you try to simply set the "dma-coherent" property to the device's
+> > node?
+>=20
+> But this approach can only be applied for the device driver with DT suppo=
+rt.
+>
+> X86-64, Loongson ls3a4000 mips64, Loongson ls3a5000 CPU typically do not
+> have DT support.
+>=20
+> They using ACPI to pass parameter from the firmware to Linux kernel.
+>=20
+> You approach will lost the effectiveness on such a case.
 
-You mean to change the sequence in which those things are mentioned in 
-the log?
+Not really, no. All DT support is doing is setting some generic device
+parameter based on that property, but the infrastructure is very much
+generic and can be used on systems without a DT.
 
-> 
->>   
->> +extern bool ia32_disabled;
->>   #define compat_elf_check_arch(x)					\
-> 
-> So in patch 1 you add the declaration with #ifdef guards and now you add
-> another one without. Fortunately this is the last patch otherwise we'd
-> might end up with another incarnation in the next header file.
+> >  From what I understand if you add that property then Linux will use DMA
+> > coherent memory even though you use dma_alloc_noncoherent() and the
+> > sync_single_for_cpu() / sync_single_for_device() are then NOPs.
+ >
+> Please do not mitigate the problems with confusing method.
 
-My bad, will fix it.
+It's not a confusing method, it's one of the two main API to deal with
+DMA buffers. And you might disagree with Paul but there's no need to be
+rude about it.
 
-> 
->> -	(elf_check_arch_ia32(x) ||					\
->> -	 (IS_ENABLED(CONFIG_X86_X32_ABI) && (x)->e_machine == EM_X86_64))
->> +	(!ia32_disabled && (elf_check_arch_ia32(x) ||			\
->> +	 (IS_ENABLED(CONFIG_X86_X32_ABI) && (x)->e_machine == EM_X86_64)))
-> 
-> If I'm reading this correctly then ia32_disabled also prevents binaries
-> with X32 ABI to be loaded.
-> 
-> That might be intentional but I'm failing to find any explanation for
-> this in the changelog.
-> 
-> X32_ABI != IA32_EMULATION
+> This approach not only tend to generate confusion but also
+> implement-dependent and arch-dependent. It's definitely problematic.
+>=20
+>=20
+> How does the dma_alloc_coherent/dma_alloc_noncoherent is a ARCH specific
+> thing.
+>=20
+> Dependent on how does the arch_dma_ops is implemented.
+>=20
+>=20
+> The definition of the coherent on different ARCH has different meanings.
+>=20
+> The definition of the wirte-combine on different ARCH has different
+> meanings.
+>=20
+>=20
+> The wirte-combine(uncache acceleration) on mips is non dma-coherent.
 
-Right, however given the other changes (i.e disabling sysenter/int 0x80) 
-can we really have a working X32 abi when ia32_disabled is true? Now I'm 
-thinking can we really have IA32_EMULATION && X32_ABI && ia32_disabled, 
-I guess the answer is no?
+Then MIPS breaks the DMA allocation semantics. A buffer allocated with
+dma_alloc_wc is supposed to be coherent.
 
-> 
->>   static inline void elf_common_init(struct thread_struct *t,
->>   				   struct pt_regs *regs, const u16 ds)
->> diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
->> index 71f8b55f70c9..ddc301c09419 100644
->> --- a/arch/x86/kernel/cpu/common.c
->> +++ b/arch/x86/kernel/cpu/common.c
->> @@ -2359,6 +2359,11 @@ void microcode_check(struct cpuinfo_x86 *prev_info)
->>   }
->>   #endif
->>   
->> +static void remove_user32cs_from_gdt(void * __unused)
->> +{
->> +	get_current_gdt_rw()[GDT_ENTRY_DEFAULT_USER32_CS].p = 0;
->> +}
->> +
->>   /*
->>    * Invoked from core CPU hotplug code after hotplug operations
->>    */
->> @@ -2368,4 +2373,7 @@ void arch_smt_update(void)
->>   	cpu_bugs_smt_update();
->>   	/* Check whether IPI broadcasting can be enabled */
->>   	apic_smt_update();
->> +	if (ia32_disabled)
->> +		on_each_cpu(remove_user32cs_from_gdt, NULL, 1);
->> +
->>   }
-> 
-> This issues a SMP function call on all online CPUs to set these entries
-> to 0 on _every_ CPU hotplug operation.
-> 
-> I'm sure there is a reason why these bits need to be cleared over and
-> over. It's just not obvious to me why clearing them _ONCE_ per boot is
-> not sufficient. It's neither clear to me why CPU0 must do that ($NCPUS -
-> 1) times, but for the last CPU it's enough to do it once.
+> But on arm, It seem that wirte-combine is coherent. (guaranteed by arch
+> implement).
+>=20
+>=20
+> I also heard using dma_alloc_coherent=A0 to allocation the buffer for the
+> non-coherent doesn't hurt, but the reverse is not true.
+>=20
+>=20
+> But please do not create confusion.
+>=20
+> software composite is faster because better cacheusing rate and
+>=20
+> cache is faster to read.
+>=20
+> It is faster because it is cached, not because it is non-coherent.
+>=20
+> non-coherent is arch thing and/or driver-side thing,
+>=20
+> it is a side effect of=A0 using the cached mapping.
 
-Actually clearing them once per-cpu is perfectly fine. Looking around 
-the code i saw arch_smt_update() to be the only place where a 
-on_each_cpu() call is being made hence I put the code there. Another 
-aspect I was thinking of is what if a cpu gets onlined at a later stage 
-and a 32bit process is scheduled on that cpu, if the gdt entry wasn't 
-cleared on that CPU then it would be possible to run 32bit processes on 
-it. I guess a better alternative is to use arch_initcall() ?
+Honestly, it's not clear to me what your point or issue is.
 
-> 
-> That aside, what's the justification for doing this in the first place
-> and why is this again inconsistent vs. CONFIG_IA32_EMULATION=n?
+Going back to the description in your commit log, you mention that you
+want to support multiple hardware that might or might not be DMA
+coherent, and thus you want to allocate a buffer with different
+attributes depending on that?
 
-I'll put it under an ifdef CONFIG_IA32_EMULATION, unfortunately the 
-traps.h header can't be included in elf.h without causing build breakage.
+Like, you say that the LS3A4000 has a coherency unit and thus doing the
+allocation with dma_alloc_coherent is preferred. Preferred to what? A WC
+buffer? Why?
 
-> 
-> The changelog is full of void in that aspect.
-> 
-> Thanks,
-> 
->          tglx
->          
+A WC buffer is a coherent buffer that is allowed to cache writes.
+
+It doesn't have to, and worst case scenario you're inexactly the same
+case than a dma_alloc_coherent buffer.
+
+> It should left to driver to handle such a side effect. The device
+> driver know their device, so its the device driver's responsibility to
+> maintain the coherency.
+
+Not really, no. Some driver are used across multiple SoCs and multiple
+arch. It doesn't make any sense to encode this in the driver... which is
+why it's in the DT in the first place, and abstracted away by the DMA
+API. Like, do you really expect the amdgpu driver to know the DMA
+attributes it needs to allocate a buffer from when running from a
+RaspberryPi?
+
+> On loongson platform, we don't need to call
+> drm_fb_dma_sync_non_coherent() function, Its already guaranteed by
+> hardware.
+
+And mostly guaranteed by dma_alloc_coherent. And if you wanted to call
+it anyway, it would be a nop if the device is declared as coherent
+already.
+
+I think you're thinking about this backward. A buffer has mapping
+attributes, and a device has hardware properties.
+
+The driver (ie, software) will allocate a buffer with some mapping
+attributes, and will assume that they are met in the rest of its code.
+How they are met is an implementation detail of the hardware, and for
+all the driver cares, it doesn't have to match.
+
+You can allocate a WC buffer to use on a non-coherent device and that's
+fine. You can allocate a non-coherent buffer on a coherent device and
+that's fine too. The DMA API will make everything work when it needs to,
+and if the hardware already provides stronger guarantees, then it will
+just skip whatever is redundant.
+
+So you need to write your driver using buffer is the most convenient for
+you, and it's really all that matters at the driver level. But for that
+to work, you need to flag the coherence-ness of your devices properly,
+like Paul suggested.
+
+Maxime
+
+--rvdpeqztss6vkzn5
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZIB10QAKCRDj7w1vZxhR
+xRD3AP4+CuKSClOhR6Tk+iHUSE+0W1zUPXL6Vw6z9e2OOEHMwQD/Y0tjh52EyZ91
+R/egrhpeLpiA8WFUrMSUE2jKmKrJjgI=
+=XMoq
+-----END PGP SIGNATURE-----
+
+--rvdpeqztss6vkzn5--
