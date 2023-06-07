@@ -2,171 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DA277265EF
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 18:29:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 858017265F6
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 18:30:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231638AbjFGQ3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 12:29:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51674 "EHLO
+        id S231714AbjFGQaU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 12:30:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231599AbjFGQ3p (ORCPT
+        with ESMTP id S232056AbjFGQ3x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 12:29:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D8761FEC;
-        Wed,  7 Jun 2023 09:29:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DFD46415F;
-        Wed,  7 Jun 2023 16:28:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83CD5C433EF;
-        Wed,  7 Jun 2023 16:28:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686155330;
-        bh=qhVYY2FmMZrFRsftIUZetCqdFejj1HerZ9DwCRLZCxw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JM4c4kh8ZNry5+PjpNC3mhXchJQIlXchKkkbksW3y4vGtvDWXBwLDA8+r03W3aAqY
-         OTn5QZnAh1PkstgOXLFhV4DaGIzs4kuiJM7s9gcgYJhV2+lE0kZxDsdON81OJhN1a3
-         XatHC3jWdWGULKXBtIbquO5i+KqCyQqcCcLbE3U6/+Tc8nIvRe/wOfWQAAMD/ZomZV
-         MLGwYvkA6RmHyL4SKCT76t7B0snL9IgLfPoWJIUx1I6PBDcWKMZJwzGWc8SJ+9QCZ2
-         8ysLrF1rxAWuqgqQVGtOFyzMfsm3ZrLGszM/4b3NCnwepl3Y95yOBJ3ZqU64v7QWpV
-         QSOVEcr6sJ7ug==
-Date:   Wed, 7 Jun 2023 09:28:47 -0700
-From:   Eduardo Valentin <evalenti@kernel.org>
-To:     "Zhang, Rui" <rui.zhang@intel.com>
-Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "Valentin, Eduardo" <eduval@amazon.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "evalenti@kernel.org" <evalenti@kernel.org>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "amitk@kernel.org" <amitk@kernel.org>
-Subject: Re: [PATCH 1/1] thermal: sysfs: avoid actual readings from sysfs
-Message-ID: <ZICwP9MqJYwrw0HW@uf8f119305bce5e.ant.amazon.com>
-References: <20230607003721.834038-1-evalenti@kernel.org>
- <27c8bd5ddea62391f9573ea77cfcebb4fa88ff66.camel@intel.com>
+        Wed, 7 Jun 2023 12:29:53 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 234A0210D;
+        Wed,  7 Jun 2023 09:29:28 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 357EqCQl015786;
+        Wed, 7 Jun 2023 16:29:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=9nrQBIXtdNUx9JeZ1Z1+4kKEbqvzN1eFuc+10QOn6N8=;
+ b=HSrk0FENJj1kzcG/57Kf2xOO873kfTB1Y7IiyiVYLQC2ZnO/33rbvMAHkjO0il2nxEmf
+ 1NB9K5MLslyzko1CUPJo21Tck9Y1b0ex9tGLqUW/DBBIs9LRA00WmTdofMx/UCoGFcry
+ mxur6dQ87xtDTJpHdGcqww3bw5j7lvHcP3iVQtn1v+xC4+hk3KGVt2wd0l4wuMhxIC9t
+ 8i/xW3AJ6hfxKz/SVErjTMsojnetACb2CPH2kuZRFflUmGd4fAug8GD8Pfikvd+DaAOP
+ 99fvPKyLIF8Mg1TaqM15b5w4tnY1U2gIc28IpgPZg+6R7CZEiPF3E39bleUX8ATQHVVR OQ== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r2a6ytcrq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Jun 2023 16:29:08 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 357GT7XQ022524
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 7 Jun 2023 16:29:07 GMT
+Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 7 Jun 2023
+ 09:29:06 -0700
+Message-ID: <36d5b410-3cc1-473f-acac-6963aa89aa9a@quicinc.com>
+Date:   Wed, 7 Jun 2023 10:29:05 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <27c8bd5ddea62391f9573ea77cfcebb4fa88ff66.camel@intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH v2 2/2] MAINTAINERS: Add entry for MHI networking drivers
+ under MHI bus
+Content-Language: en-US
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>
+CC:     <mhi@lists.linux.dev>, <linux-arm-msm@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <loic.poulain@linaro.org>
+References: <20230607152427.108607-1-manivannan.sadhasivam@linaro.org>
+ <20230607152427.108607-3-manivannan.sadhasivam@linaro.org>
+From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
+In-Reply-To: <20230607152427.108607-3-manivannan.sadhasivam@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: tMmwxk2Lt4nzs7IqK67szmPbJ2AdLRLO
+X-Proofpoint-GUID: tMmwxk2Lt4nzs7IqK67szmPbJ2AdLRLO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-07_07,2023-06-07_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1015
+ bulkscore=0 priorityscore=1501 mlxlogscore=397 adultscore=0 suspectscore=0
+ phishscore=0 lowpriorityscore=0 mlxscore=0 spamscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306070140
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rui!
+On 6/7/2023 9:24 AM, Manivannan Sadhasivam wrote:
+> The host MHI net driver was not listed earlier. So let's add both host and
+> endpoint MHI net drivers under MHI bus.
+> 
+> Cc: Loic Poulain <loic.poulain@linaro.org>
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-Long time no chatting! In this case, no email exchange. Good to hear from you.
-
-On Wed, Jun 07, 2023 at 06:32:46AM +0000, Zhang, Rui wrote:
-> 
-> 
-> 
-> On Tue, 2023-06-06 at 17:37 -0700, Eduardo Valentin wrote:
-> > From: Eduardo Valentin <eduval@amazon.com>
-> >
-> > As the thermal zone caches the current and last temperature
-> > value, the sysfs interface can use that instead of
-> > forcing an actual update or read from the device.
-> > This way, if multiple userspace requests are coming
-> > in, we avoid storming the device with multiple reads
-> > and potentially clogging the timing requirement
-> > for the governors.
-> >
-> > Cc: "Rafael J. Wysocki" <rafael@kernel.org> (supporter:THERMAL)
-> > Cc: Daniel Lezcano <daniel.lezcano@linaro.org> (supporter:THERMAL)
-> > Cc: Amit Kucheria <amitk@kernel.org> (reviewer:THERMAL)
-> > Cc: Zhang Rui <rui.zhang@intel.com> (reviewer:THERMAL)
-> > Cc: linux-pm@vger.kernel.org (open list:THERMAL)
-> > Cc: linux-kernel@vger.kernel.org (open list)
-> >
-> > Signed-off-by: Eduardo Valentin <eduval@amazon.com>
-> > ---
-> >  drivers/thermal/thermal_sysfs.c | 21 ++++++++++++++++-----
-> >  1 file changed, 16 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/drivers/thermal/thermal_sysfs.c
-> > b/drivers/thermal/thermal_sysfs.c
-> > index b6daea2398da..a240c58d9e08 100644
-> > --- a/drivers/thermal/thermal_sysfs.c
-> > +++ b/drivers/thermal/thermal_sysfs.c
-> > @@ -35,12 +35,23 @@ static ssize_t
-> >  temp_show(struct device *dev, struct device_attribute *attr, char
-> > *buf)
-> >  {
-> >         struct thermal_zone_device *tz = to_thermal_zone(dev);
-> > -       int temperature, ret;
-> > -
-> > -       ret = thermal_zone_get_temp(tz, &temperature);
-> > +       int temperature;
-> >
-> > -       if (ret)
-> > -               return ret;
-> > +       /*
-> > +        * don't force new update from external reads
-> > +        * This way we avoid messing up with time constraints.
-> > +        */
-> > +       if (tz->mode == THERMAL_DEVICE_DISABLED) {
-> > +               int r;
-> > +
-> > +               r = thermal_zone_get_temp(tz, &temperature); /* holds
-> > tz->lock*/
-> 
-> what is the expected behavior of a disabled zone?
-> 
-> IMO, the hardware may not be functional at this point, and reading the
-> temperature should be avoided, as we do in
-> __thermal_zone_device_update().
-> 
-> should we just return failure in this case?
-> 
-> userspace should poke the temp attribute for enabled zones only.
-
-While I see your point, My understanding is that thermal zone mode
-is either kernel mode or userspace mode, which to my interpretation,
-it dictating where the control is, not that there is a malfunction,
-necessarily.
-
-Taking that perspective, the expected behavior here is to have a
-in userspace control/governor, where it:
-1. disables the in kernel control
-2. monitors the thermal zone by reading the /temp property
-3. Actuates on the assigned cooling devices for the thermal zone.
-
-The above setup works pretty well for non critical control, where
-the system design or state does not require an in kernel control.
-And for that scenario, the proposed cached value will not be updated
-given that the in kernel thread is not collecting/updating temperature
-values anymore, therefore, the sysfs entry has to talk to the
-driver to get the most current value.
-
-For the failure case you referred to, Rui, This patch will handle it
-too. It will talk to the driver, if the device is malfunction, the
-driver will return an error which will be reported back
-to userspace, as an error code upon read, which is expected behavior
-for userspace to know that there is a problem.
-
-> 
-> thanks,
-> rui
-> > +               if (r)
-> > +                       return r;
-> > +       } else {
-> > +               mutex_lock(&tz->lock);
-> > +               temperature = tz->temperature;
-> > +               mutex_unlock(&tz->lock);
-> > +       }
-> >
-> >         return sprintf(buf, "%d\n", temperature);
-> >  }
-> 
-
--- 
-All the best,
-Eduardo Valentin
+Reviewed-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
