@@ -2,130 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A75272542D
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 08:31:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C5AF72543B
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 08:31:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234983AbjFGGbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 02:31:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54016 "EHLO
+        id S235159AbjFGGbx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 02:31:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231970AbjFGGbd (ORCPT
+        with ESMTP id S235015AbjFGGbu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 02:31:33 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CCFECAA
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 23:31:31 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8Bxb+tCJIBkyAsAAA--.216S3;
-        Wed, 07 Jun 2023 14:31:30 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxfcpCJIBkwfEDAA--.5820S3;
-        Wed, 07 Jun 2023 14:31:30 +0800 (CST)
-Message-ID: <85b7bf66-840b-c6de-a7e3-be1f49953464@loongson.cn>
-Date:   Wed, 7 Jun 2023 14:31:29 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] drm/amdgpu: display/Kconfig: replace leading spaces with
- tab
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian Konig <christian.koenig@amd.com>,
-        Pan Xinhui <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
+        Wed, 7 Jun 2023 02:31:50 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B45D1BC6
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 23:31:45 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-3090d3e9c92so6839993f8f.2
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 23:31:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google; t=1686119503; x=1688711503;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3q0SzVmGHZSYA8dRUVFZwmu0+tSDXCd1K6OkYFYtOd8=;
+        b=M7Y9qbOgr2mCzPYbaTG2gTTgpe758R7rQlGfASKS5JQv7ihIt9vNrw/L7whQ9Ujgb2
+         5OsGaVMznTABhT+h2tEiJSyBIK1GlpO7P/n1vVgeBxLFIDtwRjdHE6vLDhT7+BWdpFMj
+         WG7dUZTg9+7/DB9QL5QDyO4hDjtU6LePF3u9k=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686119503; x=1688711503;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3q0SzVmGHZSYA8dRUVFZwmu0+tSDXCd1K6OkYFYtOd8=;
+        b=e9Zije0ph0pwC5OQoLkfD1iF9e1ChzzoFHjtvmp6K03Kq+kb4VXKcp6NdJOInSO7og
+         cJtthpN01/o6wUNzt06TnQLrpIRbyDUgeycRe42ryctva/l2fPylnmCrtl6nuEUysEzH
+         qmo5Ks78ROIYGNwFXVJtvLWboV7eS59JiTlVeMRkUDKcjtlqH4gq5IVSHOI0QfEY0lOh
+         zhIJzUYmEicYWg64Su63KmLMhCC7pLc8BJ9y/2Cc4swMZgPM88OyQtAVgQvhA7gtFC09
+         sydB/A5ttoHZC2n2iPPvYNGVPhBr6i4uOM0IlSZsQBDwI7VgTJww52I68fid5YorSrCx
+         UO3A==
+X-Gm-Message-State: AC+VfDwKEyd/NiO8z3bkPcRhWrkkOaKJ5chw5txUF+47h/ORNZlDNXBU
+        lXUAHUqMwYvGqAoKZfO20k6sLvylFyLtTBQvdOLMRA==
+X-Google-Smtp-Source: ACHHUZ7EBKC8ivl2FMOsG5mX9X/Fuw2ks1BSOq8ZukumLjV6wxbR5wx5KRK++ZkvEZChP06D2V6KKw==
+X-Received: by 2002:adf:f0c8:0:b0:30a:dd26:63cd with SMTP id x8-20020adff0c8000000b0030add2663cdmr3825382wro.5.1686119503550;
+        Tue, 06 Jun 2023 23:31:43 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.. ([37.159.114.163])
+        by smtp.gmail.com with ESMTPSA id m6-20020adff386000000b0030630120e56sm14385127wro.57.2023.06.06.23.31.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Jun 2023 23:31:42 -0700 (PDT)
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
+        linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org,
+        Philippe Cornu <philippe.cornu@foss.st.com>,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        michael@amarulasolutions.com,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        Conor Dooley <conor+dt@kernel.org>,
         Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20230606133328.148490-1-suijingfeng@loongson.cn>
- <CADnq5_MdNSBJuNrJC2-fRByhEoUqEJmMGATT+OrFvjqA7k4F5Q@mail.gmail.com>
-Content-Language: en-US
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-Organization: Loongson
-In-Reply-To: <CADnq5_MdNSBJuNrJC2-fRByhEoUqEJmMGATT+OrFvjqA7k4F5Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        David Airlie <airlied@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Yannick Fertre <yannick.fertre@foss.st.com>,
+        devicetree@vger.kernel.org
+Subject: [RESEND PATCH v2 0/6] Add display support on the stm32f746-disco board
+Date:   Wed,  7 Jun 2023 08:31:33 +0200
+Message-Id: <20230607063139.621351-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxfcpCJIBkwfEDAA--.5820S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj93XoW7Cw1rZr1DZF1UWry8tw1xXrc_yoW8WF1kp3
-        y5C3Z09rWUJF15K3y7Aa4rWFy5Jan3JFy8GryDG343Za4DAF12grZ5KFWYgrZrXFyxAa1r
-        ZFZ5WF47Z3WqkrgCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUU9lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E
-        14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
-        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2
-        jsIE14v26F4j6r4UJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
-        AS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCF
-        s4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r
-        1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWU
-        JVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r
-        1j6r1xMIIF0xvEx4A2jsIE14v26F4j6r4UJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4U
-        JbIYCTnIWIevJa73UjIFyTuYvjxU74lkUUUUU
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The series adds support for the display on the stm32f746-disco board,
+along with a generic patch that adds the "bpp" parameter to the stm-drm
+module. The intention is to allow users to size, within certain limits,
+the memory footprint required by the framebuffer.
 
-On 2023/6/7 03:15, Alex Deucher wrote:
-> Applied.  Thanks!
+Changes in v2:
+- Add 'Acked-by' tag of Conor Dooley.
+- Fix build warning reported by kernel test robot.
+- Add 'Reported-by' tag of kernel test robot.
 
-Where is the official branch of drm/amdgpu, I can't find it on the internet.
+Dario Binacchi (6):
+  ARM: dts: stm32: add ltdc support on stm32f746 MCU
+  ARM: dts: stm32: add pin map for LTDC on stm32f7
+  ARM: dts: stm32: support display on stm32f746-disco board
+  dt-bindings: display: simple: add Rocktech RK043FN48H
+  drm/panel: simple: add support for Rocktech RK043FN48H panel
+  drm/stm: add an option to change FB bpp
 
-Sorry for asking this silly question.
+ .../bindings/display/panel/panel-simple.yaml  |  2 +
+ arch/arm/boot/dts/stm32f7-pinctrl.dtsi        | 35 +++++++++++++
+ arch/arm/boot/dts/stm32f746-disco.dts         | 51 +++++++++++++++++++
+ arch/arm/boot/dts/stm32f746.dtsi              | 10 ++++
+ drivers/gpu/drm/panel/panel-simple.c          | 29 +++++++++++
+ drivers/gpu/drm/stm/drv.c                     |  8 ++-
+ 6 files changed, 134 insertions(+), 1 deletion(-)
 
-> Alex
->
-> On Tue, Jun 6, 2023 at 9:33 AM Sui Jingfeng <suijingfeng@loongson.cn> wrote:
->> This patch replace the leading spaces with tab, make them keep aligned with
->> the rest of the config options. No functional change.
->>
->> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
->> ---
->>   drivers/gpu/drm/amd/display/Kconfig | 17 +++++++----------
->>   1 file changed, 7 insertions(+), 10 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/amd/display/Kconfig b/drivers/gpu/drm/amd/display/Kconfig
->> index 2d8e55e29637..04ccfc70d583 100644
->> --- a/drivers/gpu/drm/amd/display/Kconfig
->> +++ b/drivers/gpu/drm/amd/display/Kconfig
->> @@ -42,16 +42,13 @@ config DEBUG_KERNEL_DC
->>            Choose this option if you want to hit kdgb_break in assert.
->>
->>   config DRM_AMD_SECURE_DISPLAY
->> -        bool "Enable secure display support"
->> -        depends on DEBUG_FS
->> -        depends on DRM_AMD_DC_FP
->> -        help
->> -            Choose this option if you want to
->> -            support secure display
->> -
->> -            This option enables the calculation
->> -            of crc of specific region via debugfs.
->> -            Cooperate with specific DMCU FW.
->> +       bool "Enable secure display support"
->> +       depends on DEBUG_FS
->> +       depends on DRM_AMD_DC_FP
->> +       help
->> +         Choose this option if you want to support secure display
->>
->> +         This option enables the calculation of crc of specific region via
->> +         debugfs. Cooperate with specific DMCU FW.
->>
->>   endmenu
->> --
->> 2.25.1
->>
 -- 
-Jingfeng
+2.32.0
 
