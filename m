@@ -2,181 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCFF3726578
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 18:08:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3B13726579
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 18:08:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241484AbjFGQIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 12:08:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36842 "EHLO
+        id S241538AbjFGQIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 12:08:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235944AbjFGQIB (ORCPT
+        with ESMTP id S241433AbjFGQID (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 12:08:01 -0400
-Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA92F199D;
-        Wed,  7 Jun 2023 09:07:56 -0700 (PDT)
-Received: from pps.filterd (m0134423.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 357BoB4H031239;
-        Wed, 7 Jun 2023 16:07:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : content-transfer-encoding : mime-version; s=pps0720;
- bh=ssqXep2eWDkJdvomPsqsdsCTbWGAvQdhm942BnBEJ0Y=;
- b=MV4f/62AcLCwjRUdaq+u+9rKazV1S/XRkUV75ZdIsdCjKa9E8+Vc+3FzHxnJeRtyppIQ
- F3DoufO3lUBYSmyIzLjyvyNXTK+2/sS79y8KR11ASWLwNWsR+aBt8eK+1JqpgMI00Es3
- FxW2F77q6eWwYLVQ7KiiE3ze1jxA39khHFTul1Vo6VGsZzHjT6dIPRGSew28FUoZk63k
- nTTHlb2IDGZ/K7eDs+Je9IPT5+Pnkn0e+9Ft1fjzFDgAbI+rlnK0Iuzxo5brxIYnrXFc
- BOUoZBAMvj7xg1GI4eTOsbyQKWQ0XzvHbuwLdCl1h48E4iHmJEAkyNeqlPMWT/tlaRsa MQ== 
-Received: from p1lg14880.it.hpe.com (p1lg14880.it.hpe.com [16.230.97.201])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3r2k0gnpbb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 07 Jun 2023 16:07:35 +0000
-Received: from p1wg14926.americas.hpqcorp.net (unknown [10.119.18.115])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by p1lg14880.it.hpe.com (Postfix) with ESMTPS id 320EB80022D;
-        Wed,  7 Jun 2023 16:07:34 +0000 (UTC)
-Received: from p1wg14927.americas.hpqcorp.net (10.119.18.117) by
- p1wg14926.americas.hpqcorp.net (10.119.18.115) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Wed, 7 Jun 2023 04:07:34 -1200
-Received: from p1wg14926.americas.hpqcorp.net (10.119.18.115) by
- p1wg14927.americas.hpqcorp.net (10.119.18.117) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Wed, 7 Jun 2023 04:07:33 -1200
-Received: from p1wg14921.americas.hpqcorp.net (16.230.19.124) by
- p1wg14926.americas.hpqcorp.net (10.119.18.115) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42
- via Frontend Transport; Wed, 7 Jun 2023 04:07:33 -1200
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (192.58.206.38)
- by edge.it.hpe.com (16.230.19.124) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Wed, 7 Jun 2023 04:07:33 -1200
+        Wed, 7 Jun 2023 12:08:03 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2041.outbound.protection.outlook.com [40.107.244.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B4571BE8;
+        Wed,  7 Jun 2023 09:08:00 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dlmRKRDaQMI7J6nAsZQ1gpXsRLYXcJwXHyA7ePlmT5C33jAFFGrEYwOfi4/8ukF3wUC8wABWIDZzLZE/t4IYhvzbkxd+2N1AJDmAxDXlYVSl9grN6U7ZlUYGsUxu2sznM0LmpScmcAvOnfjfQUkj6J42jKJVYl6UtN33L42YY7+o+xBS77JbUEioGuqVQu34Vv8poK2+z+4yrz5vfA0tnXEUK7UhG8j6deXebKvsPNWEZ+p8cctC+0g9cSGalwrVJkz0OYY756uuvg1xqhe+aMUp1CEQfPuKfoG+rDAHugiQbfT7dWe3s1kHV8oHQvhTaLVQ5ohXsdmQlNyLvYSH0A==
+ b=ifj9B+5LAOmSFTdSbXwgNKlT2EFSAzmTzJ0P8xgcyRJBTXjBu9lsnStRy68r0tOMkhi769z1HyZ8+jyKbEwDfRvPhUDwC2H2JDygnhIsH29KCuV7OBrMoWCKeaj6R6LHZdnceeOpW4Lzs4Bv87KJXYbRCbZIvpkuDUHmAxNTtqsM6lqJH0a+ff0nZlnppeWMICpiL0wpkywEs/HtyILuETKpIrjhQ5X0Unv4JRV0XZMVKqDXINovPuma1JllUF22iI1MGcQ9fdG2y4Xiv/bdTNyf2oDmrRuAefc4rh9P4zVC3r38pVyCi+0wbJVuH1uWIuZMcoHqb4KLzvcfP8l1sA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ssqXep2eWDkJdvomPsqsdsCTbWGAvQdhm942BnBEJ0Y=;
- b=AJD7/H5pnh+h77q/ocSGbrSQp18HRZe+AyQ548oLRlHdkeVmd53FcBwieXSBhOLYNbidcwHmqh46QJoSTo2GZS3Hld8SP9SGf0CJ4QkvAMrT20W23H2FJjhLZkbLs81yjJsCm5En5Q7xBSZT/1rz2SApsbEwv8fjPc2rgDcOomom4JuI6XdQ8H7Qqr+tex3HCPi4RSYbWqZnbZubUKLZUsbOG+W3IVQID4LhKx+UALrsdQUKKMG3Nm36ia9LG4mBckQceXzijG5wDW3WdHYC8ZcCY3BLh4bThYaHYGDJJK1zMPBKeF0KKYvLDWGAx9qkyUq1bZXkMFybh6DWOjHaOA==
+ bh=NkNxMqzOzQQHjfcx+Za2pPwIXpIXTiVwwRNnDFclpkM=;
+ b=QwHKulHO33E/ByNNKq8B1EnlDjFoOf+52c7nkR6NqmqHXyRHY5QdgxtL98baPLGTQ/2bm1X1B1BeqCz8PE7zpThjDWREsRtcDXQPrWoKl5krjrr8+Crl/qKtqVMpGXsQAaQqC8baCPQ8Iy6fZxALfzcifMex0Ze3QeCV6ttH8EHVqxf+pyBX0vtAYJMfIxTMB0g1oihDpBEG/Zx2OF0peYh5ZO3ucjJIx81GbRJf4kr8C9UK+Lq/4UHnrlaZ1GHuwu5LINjDpF4GJX9vTGdOO7Vomui8fFmY0CC2V416brVY1wlT3uuZcNIiOjLFPSZ06t5WuhQkv8HuAfZFXw6D+A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
- header.d=hpe.com; arc=none
-Received: from DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:8:4e::10) by
- SJ0PR84MB1578.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:a03:430::21) with
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NkNxMqzOzQQHjfcx+Za2pPwIXpIXTiVwwRNnDFclpkM=;
+ b=1wd9ExsjTu/52349kL8yhXdcpqahWYnFUKfISjEpZrB4S+SFI1CdCBwaO4W20CwGaVoMpJsyigH/juA0sbW5l64Th8h1dFCscHyXETu9lVV5pcb3s8TAhXgKy33I1v/f0Mpt87CjFqmEqsIvvLqGq1mLvOawyAyNvGrQI9DR8Do=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
+ by BL3PR12MB6641.namprd12.prod.outlook.com (2603:10b6:208:38d::8) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.36; Wed, 7 Jun
- 2023 16:07:31 +0000
-Received: from DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::2a07:1ac6:6523:8682]) by DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::2a07:1ac6:6523:8682%6]) with mapi id 15.20.6455.037; Wed, 7 Jun 2023
- 16:07:31 +0000
-From:   "Hawkins, Nick" <nick.hawkins@hpe.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-CC:     "Verdun, Jean-Marie" <verdun@hpe.com>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "brgl@bgdev.pl" <brgl@bgdev.pl>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-Subject: Re: [PATCH v3 2/5] gpio: gxp: Add HPE GXP GPIO
-Thread-Topic: [PATCH v3 2/5] gpio: gxp: Add HPE GXP GPIO
-Thread-Index: AQHZmBjF4JEt/zYBEESMQ0szz/IlCK99gJKAgABZOsCAAG30gIAA6I8A
-Date:   Wed, 7 Jun 2023 16:07:31 +0000
-Message-ID: <81CFCEE8-5276-475A-A2AB-A814DEDA04B2@hpe.com>
-References: <20230606014234.29491-1-nick.hawkins@hpe.com>
- <20230606014234.29491-3-nick.hawkins@hpe.com> <ZH76x6E9cbfrJHeu@surfacebook>
- <DM4PR84MB19278E9DD0BF34C570F714708852A@DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM>
- <CAHp75Vcc9hh6MYPSCJa1vniU=rC4Y+j9pCS4Np-b-Pyh5eUwNg@mail.gmail.com>
-In-Reply-To: <CAHp75Vcc9hh6MYPSCJa1vniU=rC4Y+j9pCS4Np-b-Pyh5eUwNg@mail.gmail.com>
-Accept-Language: en-US
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Wed, 7 Jun
+ 2023 16:07:56 +0000
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::1629:622f:93d0:f72f]) by DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::1629:622f:93d0:f72f%6]) with mapi id 15.20.6455.030; Wed, 7 Jun 2023
+ 16:07:56 +0000
+Message-ID: <46f93827-630a-32f0-555d-aa51a2fd2a60@amd.com>
+Date:   Wed, 7 Jun 2023 11:07:53 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v5 19/20] x86/efistub: Perform SNP feature test while
+ running in the firmware
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Microsoft-MacOutlook/16.73.23052700
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM4PR84MB1927:EE_|SJ0PR84MB1578:EE_
-x-ms-office365-filtering-correlation-id: e6a6ca15-319f-4992-8ca5-08db67714c73
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: wNQccykz9NbP0W01wFMkIdjqDOyr2aaM6FpB+e90/fZWUBw7GTfuI6Aw5wtZS5TgEFPIBRsy2+QY8DSi/ipsCbBtgy9bHjKuEbQpfLRWyR9Rncb5U9L7Apu+bjukT7vJaiLti0icZYounMjtOX+nqSHrd1Ggv0903QhVxIBzcKDAV+S8Wbcy6jZuLm3qoh6vjdUP9jXN5l2DtuCEaCHAmkD4d7Y7WMKdDlSG2ciwJx4+gre2WTzJotzbszA19XppHoxnZvgW9FiXxHpRyHniaccur8xpurt9sWp7NtkqVmGOA+YiqJJCMWEuQ8tL8x76i6hc7D3zJpYNTLZH/cgIY1mRQUmjks27iKGBBKgUeElmSP+crdIZ7eOSifsOG1OjLaglxEkezcVzYs38wc+TdMCGLgqD0TUIiAROo2PTr7DZnJr7q1UvuS4ysv0JHlYle6uBt3nZEqOJnvoXNHUj3sToqDlTPipuZOiXRTZMk+qgQfNMXiOhVOLOEwE4YDtAeqJmfquhnqcI7qea8zI5rOG2P/tNCSNucBB1oDZxAtz0bE80SuD0y6esjUwayCSTlw3WqNVycAwpdX1DA2PwDvfUOc1UbLVMrrFLqWIqgxHtBSYxrRYl6XrTIxJXtjJe/6EKa3Op0xiG3MpeBNsQ1Q==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(396003)(366004)(376002)(346002)(136003)(451199021)(36756003)(33656002)(41300700001)(186003)(6512007)(6506007)(5660300002)(83380400001)(2616005)(8676002)(8936002)(54906003)(478600001)(76116006)(91956017)(66946007)(66556008)(66476007)(66446008)(64756008)(4326008)(316002)(71200400001)(966005)(6486002)(122000001)(82960400001)(38100700002)(2906002)(38070700005)(86362001)(6916009)(7416002)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ZzBLano1cHpGTWlMZ2kxMDlPN3F2aVFXdEx5QmhKMWYwaXB0TGhmRVphRkEz?=
- =?utf-8?B?cUlPUHY5TENaMHhhRlh1ZWEyNEZSYjRsVkgwd3lQdnlEVzFIVlJNVVRmWlhj?=
- =?utf-8?B?V0dFOUEreU1sZXVoQm9jNkRGV3hVdVY1VTY4WkpLL1ZQSnFCci9nUjlBUGU1?=
- =?utf-8?B?MVRnWENBT3dvczBrNmlSVXB5anZPOHg2WEVxcmNEdkdKRnpNYTFHOUpXVWRP?=
- =?utf-8?B?RUxYdVNCRFM0cUtOZmdMSnFUaEpqaHA2UE9YN01rVlRWWnh4c1JQeERPUEhi?=
- =?utf-8?B?cG1HV3o2UjFpaktRRUZGb2lpc21wbXgzdHdleE5ycE83Y0crVFhLY0tyTk1n?=
- =?utf-8?B?Y0YvMUVCa2g3ZFJIZU9DTHRocXNVRytLYXZpdGdtK2JnUWVlMGhUWDZoTEVq?=
- =?utf-8?B?MUt1UVBuVFpMZjgrd2N1TzRiZGNFNHNsdlVuTk1RTU9KNnJaaXZaenppWlMw?=
- =?utf-8?B?cE1XSmxMdXBlUTdsSFB5ZkllSEREQW50TzhjVE5USk5OTHErODNCQzlJVjA3?=
- =?utf-8?B?M0xHQXlTcUZqN1lNdFJXZGQzbUVEakJnRDVFTFl2eksrQ1FPajB0QlJzay9E?=
- =?utf-8?B?S0FjU1hmRVk1aGZ2L0pIeXc1ZDhyZWwyN2hHUTNDMW5tL0kyNU9YcDRLaFdZ?=
- =?utf-8?B?VXp3WDdGSFFIVVhsNkU2bGMwRHFiS3pOUVpmN20rdWI2MTNqMEl3YjMrb1di?=
- =?utf-8?B?K1NnQ2hpNXBSQUw5ZHR3UzZVQ0daaWdXU3JkRFU3RVVPc25aYmZKUDNIalN4?=
- =?utf-8?B?aHhuN3BIdE9TN1RLNHpOZ1ZTNVFBOFUwS2t2eXhwemNyZERZSTJZWTdrVDUy?=
- =?utf-8?B?RkJrVXBPL2tHN3B0ZkpUOCtFWExwT3lTQXc2TlFMOERKNjRHY3Nqa2JNQjZu?=
- =?utf-8?B?R2xmeFB1S2hrTE40K1FUWXNNRklvVHIyQkdPd3lQVGphcjZTd3ArRU5xTWNK?=
- =?utf-8?B?SDk0a0VCMG8xemF0bmQwd2ZIUnNWVUU4UGZqd2d4anJVSnpnZTc4Y0FLMU0x?=
- =?utf-8?B?WGg4WU10czNqSTJQb3Z1ZnMyMDVBaEZuNi8xd2hGV2V6dTREenZtWHR4Q1hP?=
- =?utf-8?B?MVZPVzF2dFQyeEp6RUplb0J1RnRlTFJhQlJNR1dDWHlZdE1YVThKaEd2QkZV?=
- =?utf-8?B?dVRXU3dEVFE2VS9SbE5BR3NRUEU4WjBScVdZRVpCS0xGWU5jb2xrTzdnbDBp?=
- =?utf-8?B?cm1VU2lUdzVwS3F6L0QrdkZ0WG9iWW5iMFdGdlI2b216c2JuZ2ljakp5VjlS?=
- =?utf-8?B?WGVRWlZ3RlBSV3lvRmFLZXA0MG5WMmJnL1dKL3c0a1NIODVVMVhBcmhWaFZq?=
- =?utf-8?B?NlhrbDVUakFnU2JDOE93a2hhZEJGRmR5LzV0NmgzanErRldxb2lhZ1QwL0hG?=
- =?utf-8?B?TWQzUlRXY0NtUG5oZ3pYdzZjbkhVY0Nub0NxNCszWDJVNkgxTjQ5TEQ4MmZ1?=
- =?utf-8?B?WHJ5enBsb084VmpEMlBuVW5yLzFLQzNkUmpJMno0d1ZKNzFHR3RGazBIQm5s?=
- =?utf-8?B?U2loRDBTU0xBVlRESmxaMkkwcWNUQTdOTDhtZGZ4WjM2TTRoMmNZdFFQTFFj?=
- =?utf-8?B?eUJzQW01U1ZZWjgwM0gxZmF3VXAwT092Y2ZzbU9rOE9uUkVmVmk3VUNPRlVH?=
- =?utf-8?B?Yi8zUHFVNis1VEw4SFQ5R2ZCNjA2VWFSVWtpK2tBeGFEcWQ3RTR2RVNzUnpp?=
- =?utf-8?B?RmNWZTc0YVZiNWo0c0VGeUIrN3dudGt2bllEUXFvTE1LaEJlRGQ4cXI5UU1i?=
- =?utf-8?B?V2FYNlJvemNmbGRJS0xyMmlqR2p2UCtMeFR4MXphZ29lTC9WeThMbkJTbzhI?=
- =?utf-8?B?Vjd2cU1QVUljN3hWVlNsa0hTVSsxaDZ2elQ2c2lJaU9hZ1BwdHFIT2UyMHRT?=
- =?utf-8?B?ZlBKNElUVTJkQ3EzNXN2bXpGTXdCVlphZGQxd3BqcHEzUkQ0RzJKRytPaFRZ?=
- =?utf-8?B?RERrWXlpckNWM2xlNjgrUkZqMGFUWkwrUnRLbVg2aklaTUhGVE5RdHpraHlS?=
- =?utf-8?B?QTZCNmhxYlExd2Rid2ZjVHA2eExNMVl5a1JnNU9aZXlJOVdwOG5pa2JydjJS?=
- =?utf-8?B?Nmc5ZEMveHJhcGtXYmNCMDQrNTE3dnFXOGh4a2NUM0tqVllOaDhPNGhJQjNM?=
- =?utf-8?B?Q2Z6OXQrRjg2NmdIL3JuOXc2NG9lalRFODQwa3ZMWE41aDUvQXIxRTFKd3RS?=
- =?utf-8?B?eUE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <1C057D02CC68A6459AAC5A6C6521084B@NAMPRD84.PROD.OUTLOOK.COM>
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR84MB1927.NAMPRD84.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: e6a6ca15-319f-4992-8ca5-08db67714c73
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jun 2023 16:07:31.4476
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: gkV3XY0xLH4BkFq4tPIBI/caROsS+sb39Iyf+eKtOeQIZK2Qlm2GgGYhHZWerleaDwUevTpmMcyhTY0OmZ1TTw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR84MB1578
-X-OriginatorOrg: hpe.com
-X-Proofpoint-ORIG-GUID: WppCYM1N6j3KMuwr-La7XWLhuP4FJ8OI
-X-Proofpoint-GUID: WppCYM1N6j3KMuwr-La7XWLhuP4FJ8OI
-Content-Transfer-Encoding: base64
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+To:     Ard Biesheuvel <ardb@kernel.org>, linux-efi@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Evgeniy Baskov <baskov@ispras.ru>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Peter Jones <pjones@redhat.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Dave Young <dyoung@redhat.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>
+References: <20230607072342.4054036-1-ardb@kernel.org>
+ <20230607072342.4054036-20-ardb@kernel.org>
+From:   Tom Lendacky <thomas.lendacky@amd.com>
+In-Reply-To: <20230607072342.4054036-20-ardb@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SN6PR05CA0010.namprd05.prod.outlook.com
+ (2603:10b6:805:de::23) To DM4PR12MB5229.namprd12.prod.outlook.com
+ (2603:10b6:5:398::12)
 MIME-Version: 1.0
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-07_07,2023-06-07_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
- bulkscore=0 mlxlogscore=999 malwarescore=0 suspectscore=0 phishscore=0
- spamscore=0 adultscore=0 clxscore=1015 impostorscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
- definitions=main-2306070137
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5229:EE_|BL3PR12MB6641:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4a2fa6f2-441a-4c0c-c16d-08db67715b2e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ZfYnM4d/KFjaatt+LC0kn9E3l9F0umugWRWW+ai3Zy8sgkKFmoa1qpUvwWM6CvvxidBL7Huch5v+9gWPDMMXfRlQ1v0G2wb+MP7HwK59jx7oqZFkbX/KJ1Pa6lu0DTFHTXKuUzhGr0nO/Hddu+4GDilGjJTqHbyRsbtFb6t5PifipTWFVVCHGkBhPWw+ugYhug5Gb0XCjoD7AaZnl+nLn5Z4RJZJTbbgYTso9XwRxAN3tWT0zD7+M55Gsgh9bnfU8+Vbaqcq5tLcsqYIro4LoQeh1449fiKxWIjkAhNv5TY3v5aRjBMR2bXxVOuRci5Vt2kAAr/5eu+zU+map9HvD/Luf7h+sXCh8V1c8Mwk+xxqhst+03nGMZNlrPH6cd/BRoJh9s/9UDx3vCvVn0DwN6X+onwyfRZbxICXRwo9xwmHHrV7ALjRg2Hur9yp04DHJNtIBd7QTWu/wV+r8UKqblvnH6ivbXKmEoHlTsgC8dpUsGAhegvzu8AaZk7NXwMJ3lbw6WfQ9tbvMSl2hUJ2JvIxbrGtNL3QvDdzF95tFAdnFDs4VGgSpyXd8PZpz4mXIa/gfgMZ6hqCkCkMDVZ1aKPCOoMznrryeQTWZ+van8f0nk493caT7keedI21iRFyTInohGOSKHc2JgHyGAfmCw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(346002)(376002)(136003)(39860400002)(396003)(451199021)(54906003)(478600001)(316002)(8676002)(8936002)(41300700001)(38100700002)(66946007)(4326008)(66476007)(66556008)(2616005)(186003)(6486002)(6666004)(83380400001)(26005)(6512007)(6506007)(53546011)(31696002)(86362001)(5660300002)(7416002)(2906002)(36756003)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WXdVZ1p3RXk2VWdoQm4vYzBRSFRGUlBUQnVXR3lGQzNKUm1JUUJhOEV3NU9m?=
+ =?utf-8?B?MVFzUXE5RURrNVFaWlZyKy9DWGQwdURXcEpzTG85L3VlWndHUW5rcmJwZHVS?=
+ =?utf-8?B?NHBxd3pEK2Y5N2FuYlI5bElYdGdJR1A1VWpuQUdzWERKeXpKbk52K00yTElS?=
+ =?utf-8?B?dXdOSW1sTmw3a2g3RlZaT1M5ZkZqb2F2UFE1aUVpSXp0UFVpVXNmYVBTK2w1?=
+ =?utf-8?B?RmJBTk9vVk4xOCtEQVVmMkRaeDdHUi9YUzZuQXBlKzAvR3lIc1M0WFFGNmJS?=
+ =?utf-8?B?VHpYWGZOengxMytnV1gyT3c3SUYxWnAxOERDVlVpUXE0MjlBUGFSaHkxaWZx?=
+ =?utf-8?B?VU5tMU84dzdoNVJuZFJkdFlaTGc4Q0swN3FJN3NDS0VaeHRUbzYvVHlud0lX?=
+ =?utf-8?B?RkN5MnFQSTBYR29DY1c5RXZGaHgyV3FINDF0M0wrWHlNejhwMytEekJlVEU2?=
+ =?utf-8?B?aTJZMEdTSEZ6RlV3VkxjTDVYbzFRVnFadDduWjVoK3lkZVhjaldFclJPUUJU?=
+ =?utf-8?B?Yjh4cG1GN0dUNHdFcVgrNE5nVDNkWGhhczhDTmpmZG1lakVKcHJOU05NeExM?=
+ =?utf-8?B?aGpLeHFaeFVPVDZZV2wyZm9nVFFQTk9JSkplVVQ1WkhNWmNFSGxKTEdSa29J?=
+ =?utf-8?B?ZVBuVDFjU0pYcjljUCtBcmU1V1VWUzNjWWxkeTMzYi9zTkxxL2NFVUVqRFlB?=
+ =?utf-8?B?aklocWkyaVJ3SmRVUlJMRjU4QkRwMUdvUVhsR0xueG5hczczcDBVS1B3UWtU?=
+ =?utf-8?B?WDAwU0dwdVE2a01VbEZIdDUwMjR6WXdFMkU4U2Qzc2JrcHlqd29ZQldEUUFM?=
+ =?utf-8?B?R3BJZmd4clo3WVBzZU5hcjVKWjFSeXFLaEFsL1FVNDFrbEp6NUl1RnNoNXNw?=
+ =?utf-8?B?S2FBM1hWcmgxVGQ3aXo1elQ2N1pjR2pEclN5OVJDWjhxaUZsVWxla0pReGJQ?=
+ =?utf-8?B?MXVQOHJpeTVaTU12TFpzNVd6NnJoZmgwVW5wOGIrQXJoV3c5ekZmeFViTlVX?=
+ =?utf-8?B?QlFpem1OL0xJYVJOdWpLOFh3QUlvVmFxeC9qREowRndvVFFLSzI1dUprWXdO?=
+ =?utf-8?B?dEM4bkdybjlXZVU3Q3grWmlya05PeWI1U09xdHl2OUE4Z1VyUElHL2pINmM5?=
+ =?utf-8?B?UU5DYkpuajkrWWJTNGN3dktxMTN5SFN5YTc1azR4eGZEcks2Z2NNMFozT1pk?=
+ =?utf-8?B?UjluUVJHKzVaK3BOaUpqanB4ZUpYK3VjOVdWT0dMZnhjWCszQ0NteEh6NWNP?=
+ =?utf-8?B?bE96d2RYd1V0NnUvSWwwdnBSckNNdUxwVGFJUGlCUnR1VUFaZU5Qbm0xNklP?=
+ =?utf-8?B?TSthUnZyZEEyUFZuMFB5VXJhV2JMM3NuNFZZcktScENsZUdDdmVvbUVTdWc3?=
+ =?utf-8?B?akMzUnREMmllaTN3aEFFa25ndlNIckFpN1VOd0tXSXVnNksxQkpXbFFGanlk?=
+ =?utf-8?B?V3pZa2tnRHdQaHZFQUpkZ05MbGlEaG5hVC9rdnBXdEg4d3JhK3FlbTRiSmtj?=
+ =?utf-8?B?S3JURExZR0ZNZWthMWFTMjUvTjdIeGJvNGdhYXlUWit1d2VGOFlkQ0hDbUhI?=
+ =?utf-8?B?NDloOXdMa1Vma3BRcVM2Tmd2RjBtQ1U1enZNNWFPRitHOER5Yk5CQkxWTEo4?=
+ =?utf-8?B?YmVkMzlSU2NSMkFOQkhnOG05MTQxK3hQSDB1UXRIb0FFNlppTTdWcWRGL2JG?=
+ =?utf-8?B?MG41QzFLdi9FOW1KcEdmc216Z0RMdzVITUt2d1dUdU1jdzU4YjFxZ2lGd1FT?=
+ =?utf-8?B?MEpTdzJoN0lJc3ZvalM1bFRCeUx0eG1QTFdtY2pwOThnSW9uajgweE9ZeWtR?=
+ =?utf-8?B?QmY4T012M01IVElsNVA3eHFFNmp4U3RmYVcrNldrc1hpNXp4SXczSlRXTHJy?=
+ =?utf-8?B?SHgvNjBiYlpKSmV5K3hsM0J5cnBkQ0NUVjFIVzBxN2hsYmZIODkwUGpNK1pz?=
+ =?utf-8?B?WHFKbEhLcFkwWGllYmFRbE5oS1BtZC9ERXJ3Vy9yMmFqdy93M041UjJJTWlt?=
+ =?utf-8?B?RG5QOHNZQmU2R0ZMeVc4ajlNdHVMMTBTOGZlYVhQVDRmc3djRFYybkc2VlIz?=
+ =?utf-8?B?bmZzeDZxL0FWR24rekhja1FoaE5vOFF6OTQ3elpYTm95Nk1Kcmxxenh2bW1q?=
+ =?utf-8?Q?66/sKanQ4KR+F/8x5e0K8rcsj?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4a2fa6f2-441a-4c0c-c16d-08db67715b2e
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2023 16:07:56.3647
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ClXHN1GGaYsJ3jfdhEy4gY0v+FHsVFs/Orys9bvaebkAc8tIJfn5KZ78Usf+NNgCc3YliIXBHkloHHsXzrLAwA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR12MB6641
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -184,36 +141,199 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiA+ID4gV2h5IGFyZSB5b3Ugbm90IHVzaW5nIGdwaW8tcmVnbWFwPw0KPiA+DQo+ID4gSXMgdGhl
-cmUgYXJlIGdvb2QgZXhhbXBsZSBvciBwcmV2aW91cyBjb21taXQgeW91IHdvdWxkIHJlY29tbWVu
-ZA0KPiA+IGxvb2tpbmcgYXQgdGhhdCBzaG93cyBob3cgdG8gY29udmVydCBmcm9tIHJlZ21hcCB0
-byBncGlvLXJlZ21hcD8NCj4gPiBMYXRlciBpbiB0aGUgY29kZSBJIGFtIHVzaW5nIHJlZ21hcF9y
-ZWFkIGFuZCByZWdtYXBfdXBkYXRlX2JpdHMNCj4gPiB3aXRoIGxhcmdlIGRpZmZlcmVuY2VzIGlu
-IG9mZnNldCByZWdpc3RlcnMsIGFuZCBub3Qgc28gbXVjaCBhDQo+ID4gY29udGlndW91cyBibG9j
-ay4NCg0KDQo+IEkgZG9uJ3Qga25vdyBob3cgZ29vZCB0aGVzZSBhcmUsIGJ1dCB0aGF0J3Mgd2hh
-dCB3ZSBoYXZlIGN1cnJlbnRseSBhcw0KPiBtb3N0IHByb21pbmVudCB1c2Ugb2YgZ3Bpby1yZWdt
-YXANCg0KDQo+IDEpIChvbmdvaW5nKSBodHRwczovL2xvcmUua2VybmVsLm9yZy9saW51eC1ncGlv
-LzIwMjMwNjA2MDkyMTA3Ljc2NDYyMS02LWppYXdlbnd1QHRydXN0bmV0aWMuY29tIDxtYWlsdG86
-MjAyMzA2MDYwOTIxMDcuNzY0NjIxLTYtamlhd2Vud3VAdHJ1c3RuZXRpYy5jb20+Lw0KPiAyKSAo
-aW4gdGhlIHJlcG8pDQo+IGh0dHBzOi8vZWxpeGlyLmJvb3RsaW4uY29tL2xpbnV4L3Y2LjQtcmM0
-L3NvdXJjZS9kcml2ZXJzL2dwaW8vZ3Bpby1pODI1NS5jIDxodHRwczovL2VsaXhpci5ib290bGlu
-LmNvbS9saW51eC92Ni40LXJjNC9zb3VyY2UvZHJpdmVycy9ncGlvL2dwaW8taTgyNTUuYz4NCj4g
-MykgKGluIHRoZSByZXBvKQ0KPiBodHRwczovL2VsaXhpci5ib290bGluLmNvbS9saW51eC92Ni40
-LXJjNC9zb3VyY2UvZHJpdmVycy9ncGlvL2dwaW8tMTA0LWlkaS00OC5jIDxodHRwczovL2VsaXhp
-ci5ib290bGluLmNvbS9saW51eC92Ni40LXJjNC9zb3VyY2UvZHJpdmVycy9ncGlvL2dwaW8tMTA0
-LWlkaS00OC5jPg0KDQoNCj4gMikgJiAzKSB3ZXJlIGNvbnZlcnRlZCwgc28geW91IG1heSBzZWUg
-YnkgZXhlY3V0aW5nIHJlc3BlY3RpdmUgYGdpdA0KPiBsb2cgLXAgLS0gZHJpdmVycy9ncGlvLy4u
-LmAuDQoNCkdyZWV0aW5ncyBBbmR5LA0KDQpUaGFuayB5b3UgZm9yIHRob3NlIGxpbmtzLCBJIGhh
-dmUgb2JzZXJ2ZWQgdGhlIGdwaW9fcmVnbWFwIGNvZGUNCnRoZXkgaGF2ZSBpbXBsZW1lbnRlZCBp
-biB0aGF0IGNhc2UuIEl0IGFwcGVhcnMgdGhhdCB0aGUgcmVnbWFwDQpjb2RlIGlzIG9wZW5pbmcg
-dGhlIGVudGlyZSByYW5nZSBvZiBtZW1vcnkgdG8gYmUgcmVhZC4gRm9yIG15DQpwYXJ0aWN1bGFy
-IHB1cnBvc2UgSSBhbSBub3Qgd2FudGluZyB0byBleHBvc2UgYWxsIHRoZSAwLTB4ZmYgYnl0ZQ0K
-cmFuZ2Ugb2YgdGhlIEdQSU9zLiBJbiBteSBjYXNlIGlzIGl0IHN0aWxsIG5lY2Vzc2FyeSB0byB1
-c2UgdGhlDQpncGlvX3JlZ21hcCBjb2RlPw0KDQpJZiBncGlvX3JlZ21hcCBpcyByZXF1aXJlZCwg
-aG93IGRvIEkgY3JlYXRlIGEgZGlyZWN0IGNvcnJlbGF0aW9uDQpiZXR3ZWVuIGEgc3BlY2lmaWMg
-Z3Bpby1saW5lIGFuZCBhIHJlZ2lzdGVyIG9mZnNldD8gRm9yIGV4YW1wbGUsIGluDQpncGlvLWd4
-cC1wbC5jLiBHcGlvLWxpbmUgYXQgb2Zmc2V0IDAgKElPUExFRCkgaXMgYXQgcmVnaXN0ZXIgMHgw
-NC4gVGhlDQpncGlvLWxpbmUgYXQgb2Zmc2V0IDggKEZBTl9JTlNUKSBpcyBhdCByZWdpc3RlciAw
-eDI3LiANCg0KQWRkaXRpb25hbGx5LCBpcyBpdCByZXF1aXJlZCB0byByZW1vdmUgZ3Bpb19jaGlw
-IGlmIGdwaW9fcmVnbWFwIGlzDQp1c2VkPw0KDQpUaGFuayB5b3UgZm9yIHRoZSBhc3Npc3RhbmNl
-LA0KDQotTmljayBIYXdraW5zDQoNCg==
+On 6/7/23 02:23, Ard Biesheuvel wrote:
+> Before refactoring the EFI stub boot flow to avoid the legacy bare metal
+> decompressor, duplicate the SNP feature check in the EFI stub before
+> handing over to the kernel proper.
+> 
+> The SNP feature check can be performed while running under the EFI boot
+> services, which means we can fail gracefully and return an error to the
+> bootloader if the loaded kernel does not implement support for all the
+> features that the hypervisor enabled.
+> 
+> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> ---
+>   arch/x86/boot/compressed/sev.c          | 71 +++++++++++---------
+>   arch/x86/include/asm/sev.h              |  4 ++
+>   drivers/firmware/efi/libstub/x86-stub.c | 17 +++++
+>   3 files changed, 62 insertions(+), 30 deletions(-)
+> 
+> diff --git a/arch/x86/boot/compressed/sev.c b/arch/x86/boot/compressed/sev.c
+> index 09dc8c187b3cc752..9593bc80c9c6b89d 100644
+> --- a/arch/x86/boot/compressed/sev.c
+> +++ b/arch/x86/boot/compressed/sev.c
+
+...
+
+> -void sev_enable(struct boot_params *bp)
+> +u64 sev_get_status(void)
+>   {
+>   	unsigned int eax, ebx, ecx, edx;
+>   	struct msr m;
+> +
+> +	/* Check for the SME/SEV support leaf */
+> +	eax = 0x80000000;
+> +	ecx = 0;
+> +	native_cpuid(&eax, &ebx, &ecx, &edx);
+> +	if (eax < 0x8000001f)
+> +		return 0;
+> +
+> +	/*
+> +	 * Check for the SME/SEV feature:
+> +	 *   CPUID Fn8000_001F[EAX]
+> +	 *   - Bit 0 - Secure Memory Encryption support
+> +	 *   - Bit 1 - Secure Encrypted Virtualization support
+> +	 *   CPUID Fn8000_001F[EBX]
+> +	 *   - Bits 5:0 - Pagetable bit position used to indicate encryption
+> +	 */
+> +	eax = 0x8000001f;
+> +	ecx = 0;
+> +	native_cpuid(&eax, &ebx, &ecx, &edx);
+> +	/* Check whether SEV is supported */
+> +	if (!(eax & BIT(1)))
+> +		return 0;
+> +
+> +	/* Set the SME mask if this is an SEV guest. */
+> +	sme_me_mask = BIT_ULL(ebx & 0x3f);
+> +
+> +	boot_rdmsr(MSR_AMD64_SEV, &m);
+> +	return m.q;
+> +}
+> +
+> +void sev_enable(struct boot_params *bp)
+> +{
+>   	bool snp;
+>   
+>   	/*
+> @@ -410,37 +447,13 @@ void sev_enable(struct boot_params *bp)
+>   	 */
+>   	snp = snp_init(bp);
+>   
+> -	/* Check for the SME/SEV support leaf */
+> -	eax = 0x80000000;
+> -	ecx = 0;
+> -	native_cpuid(&eax, &ebx, &ecx, &edx);
+> -	if (eax < 0x8000001f)
+> -		return;
+> -
+> -	/*
+> -	 * Check for the SME/SEV feature:
+> -	 *   CPUID Fn8000_001F[EAX]
+> -	 *   - Bit 0 - Secure Memory Encryption support
+> -	 *   - Bit 1 - Secure Encrypted Virtualization support
+> -	 *   CPUID Fn8000_001F[EBX]
+> -	 *   - Bits 5:0 - Pagetable bit position used to indicate encryption
+> -	 */
+> -	eax = 0x8000001f;
+> -	ecx = 0;
+> -	native_cpuid(&eax, &ebx, &ecx, &edx);
+> -	/* Check whether SEV is supported */
+> -	if (!(eax & BIT(1))) {
+> +	sev_status = sev_get_status();
+> +	if (!(sev_status & MSR_AMD64_SEV_ENABLED)) {
+>   		if (snp)
+>   			error("SEV-SNP support indicated by CC blob, but not CPUID.");
+
+This ends up checking the CPUID path because if SEV isn't advertised in 
+CPUID the returned status value is 0. But it also checks the SEV_STATUS 
+MSR as well. So I think you can remove the SNP / SEV_STATUS check at the 
+end of this function (since that check is identical to this now) and just 
+update the message to indicate not CPUID or SEV status MSR.
+
+The sme_me_mask should probably be cleared at this point before returning, 
+too. Or, alternately, in sev_get_status(), you can update the setting of 
+sme_me_mask to based on MSR_AMD64_SEV_ENABLED being set in the SEV_STATUS MSR.
+
+>   		return;
+>   	}
+>   
+> -	/* Set the SME mask if this is an SEV guest. */
+> -	boot_rdmsr(MSR_AMD64_SEV, &m);
+> -	sev_status = m.q;
+> -	if (!(sev_status & MSR_AMD64_SEV_ENABLED))
+> -		return;
+> -
+>   	/* Negotiate the GHCB protocol version. */
+>   	if (sev_status & MSR_AMD64_SEV_ES_ENABLED) {
+>   		if (!sev_es_negotiate_protocol())
+> @@ -460,8 +473,6 @@ void sev_enable(struct boot_params *bp)
+>   
+>   	if (snp && !(sev_status & MSR_AMD64_SEV_SNP_ENABLED))
+>   		error("SEV-SNP supported indicated by CC blob, but not SEV status MSR.");
+> -
+> -	sme_me_mask = BIT_ULL(ebx & 0x3f);
+>   }
+>   
+>   /* Search for Confidential Computing blob in the EFI config table. */
+> diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
+> index 86e1296e87f513b7..081c39b0e8d0d208 100644
+> --- a/arch/x86/include/asm/sev.h
+> +++ b/arch/x86/include/asm/sev.h
+> @@ -207,6 +207,8 @@ bool snp_init(struct boot_params *bp);
+>   void __init __noreturn snp_abort(void);
+>   int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, struct snp_guest_request_ioctl *rio);
+>   void snp_accept_memory(phys_addr_t start, phys_addr_t end);
+> +u64 snp_get_unsupported_features(u64 status);
+> +u64 sev_get_status(void);
+>   #else
+>   static inline void sev_es_ist_enter(struct pt_regs *regs) { }
+>   static inline void sev_es_ist_exit(void) { }
+> @@ -232,6 +234,8 @@ static inline int snp_issue_guest_request(u64 exit_code, struct snp_req_data *in
+>   }
+>   
+>   static inline void snp_accept_memory(phys_addr_t start, phys_addr_t end) { }
+> +static inline u64 snp_get_unsupported_features(u64 status) { return 0; }
+> +static inline u64 sev_get_status(void) { return 0; }
+>   #endif
+>   
+>   #endif
+> diff --git a/drivers/firmware/efi/libstub/x86-stub.c b/drivers/firmware/efi/libstub/x86-stub.c
+> index abcd5703e9f3f980..1015ef883f5850a4 100644
+> --- a/drivers/firmware/efi/libstub/x86-stub.c
+> +++ b/drivers/firmware/efi/libstub/x86-stub.c
+> @@ -15,6 +15,7 @@
+>   #include <asm/setup.h>
+>   #include <asm/desc.h>
+>   #include <asm/boot.h>
+> +#include <asm/sev.h>
+>   
+>   #include "efistub.h"
+>   #include "x86-stub.h"
+> @@ -790,6 +791,19 @@ static efi_status_t exit_boot(struct boot_params *boot_params, void *handle)
+>   	return EFI_SUCCESS;
+>   }
+>   
+> +static bool have_unsupported_snp_features(void)
+> +{
+> +	u64 unsupported;
+> +
+> +	unsupported = snp_get_unsupported_features(sev_get_status());
+
+This will also set sme_me_mask, but I think that is ok, since on error 
+things will terminate, otherwise sev_enable() should update appropriately 
+later.
+
+Thanks,
+Tom
+
+> +	if (unsupported) {
+> +		efi_err("Unsupported SEV-SNP features detected: 0x%llx\n",
+> +			unsupported);
+> +		return true;
+> +	}
+> +	return false;
+> +}
+> +
+>   static void __noreturn enter_kernel(unsigned long kernel_addr,
+>   				    struct boot_params *boot_params)
+>   {
+> @@ -820,6 +834,9 @@ void __noreturn efi_stub_entry(efi_handle_t handle,
+>   	if (efi_system_table->hdr.signature != EFI_SYSTEM_TABLE_SIGNATURE)
+>   		efi_exit(handle, EFI_INVALID_PARAMETER);
+>   
+> +	if (have_unsupported_snp_features())
+> +		efi_exit(handle, EFI_UNSUPPORTED);
+> +
+>   	if (IS_ENABLED(CONFIG_EFI_DXE_MEM_ATTRIBUTES)) {
+>   		efi_dxe_table = get_efi_config_table(EFI_DXE_SERVICES_TABLE_GUID);
+>   		if (efi_dxe_table &&
