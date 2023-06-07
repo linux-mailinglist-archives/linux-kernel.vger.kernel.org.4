@@ -2,100 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB2BC7255DE
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 09:36:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 720277255D7
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 09:36:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239071AbjFGHgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 03:36:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33546 "EHLO
+        id S239121AbjFGHg0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 03:36:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239159AbjFGHet (ORCPT
+        with ESMTP id S239802AbjFGHfr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 03:34:49 -0400
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2057.outbound.protection.outlook.com [40.107.96.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AAC91FFB;
-        Wed,  7 Jun 2023 00:30:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eIAhoCVtyGcKPkUKz5Hw8bIwrBnRqNi4TtmrDbYUKICMS5NbpekFUnxzpITAEwdSOq8+mPjg/9ehdbHKUi0XCW0eJzWmDknoCxPZGOff0nJU+Z+Xwx/G1dKc4zm5BS0pWd841n6htOy554Y2xE8AXajAZU56bClm22Kt/cZZ1R27JrUecilnM79NlVJ/qpp2gFMUo6Wixd5zxowmlehG6B3SA/DlKGwUVfY04vRxrCVb5LtoWa5yrcE94P1PtSvYG34XaLZVaz4nzehHHJ/9dqPdOdso710SJd0NyqqYF60D61MNCH4yLlMzXRDqoZeekwNWm8cUsFTbykgcBwoA3w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SaVA7oT6nA8jGaAAuqZjypl5bmUtM+ge/q2crgX09oM=;
- b=FQyAQLWRFOzLTcaMk/9FicobDfqGFPB7o17MffBj05dveErjVbvPzLfAF/6+9R6sF6KNcOxCldTrUTSNZPTZJS/SyekoOrhxZyJKUsSXjceNuIqk+t/9pzXj821uWKEOP1sIgQ6r73JmeJEenonwA/hA1lOhbkZe5oBqh2vFd63oBS8bG1zEVNQtGo94RsQ7VwRj72+CVMmrPBg3YqbPuJm6tI1NUYRupTDggJhnyzA7FCMTS3KI115KWPDS4fsbKb/NVhvk2IIXhMRKbJuLd9QvpYkrQDwRadQd9ErUG1paAJC2tatbtyQMVgEjfDzcbesX719mrAXGo6VydxvWvQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SaVA7oT6nA8jGaAAuqZjypl5bmUtM+ge/q2crgX09oM=;
- b=WGEW5AlwuF5pyLEybJP8DRqD+RzL9QvGmqMicBJNzSg7+tA3VBl59okXFKH+PbVvP/b1dX6U4AnJtBmDp3Y1EphURspQ8/XVApf4HabDJdkv+09YBxtW4C8i21D8dii8eSjBcdaDxCyKdtxPWxd9vv8r1mXGWT6CT3bcvJVk40o=
-Received: from CY5PR15CA0080.namprd15.prod.outlook.com (2603:10b6:930:18::32)
- by CH2PR12MB5513.namprd12.prod.outlook.com (2603:10b6:610:68::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.36; Wed, 7 Jun
- 2023 07:30:30 +0000
-Received: from CY4PEPF0000E9D2.namprd03.prod.outlook.com
- (2603:10b6:930:18:cafe::36) by CY5PR15CA0080.outlook.office365.com
- (2603:10b6:930:18::32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.36 via Frontend
- Transport; Wed, 7 Jun 2023 07:30:30 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- CY4PEPF0000E9D2.mail.protection.outlook.com (10.167.241.145) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6477.13 via Frontend Transport; Wed, 7 Jun 2023 07:30:29 +0000
-Received: from SATLEXMB07.amd.com (10.181.41.45) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 7 Jun
- 2023 02:30:29 -0500
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB07.amd.com
- (10.181.41.45) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 7 Jun
- 2023 00:30:28 -0700
-Received: from xhdnavam40.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
- Transport; Wed, 7 Jun 2023 02:30:26 -0500
-From:   Piyush Mehta <piyush.mehta@amd.com>
-To:     <gregkh@linuxfoundation.org>, <michal.simek@amd.com>,
-        <linus.walleij@linaro.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <git@amd.com>, Piyush Mehta <piyush.mehta@amd.com>
-Subject: [PATCH] usb: gadget: udc: udc-xilinx: Add identifier to read_fn function arg
-Date:   Wed, 7 Jun 2023 12:59:59 +0530
-Message-ID: <20230607072959.2334046-1-piyush.mehta@amd.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 7 Jun 2023 03:35:47 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23303173B
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 00:35:27 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 993B35FD57;
+        Wed,  7 Jun 2023 10:35:24 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1686123324;
+        bh=14N2cMP1QG59BovPTkIgMqaHNq9tvDD14aCH5eeos9Q=;
+        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
+        b=rh2IUdOz19makuhL8iClCv91/uHGmWUcOa3T4aRXtGXZMZ7p35Mwd91Mjw/xfBI3y
+         KpVNEaFvnfLj7cNPpZviFKKGZ6ziX5iuD4OaW8gZHzeN5TyJA2slQQMlzw3DFzcZOy
+         stJ2FlDcr6s+YVO1Vi2ex3LZyMTWOpE0LrNXxdhs5AE8Qhexf9k9V4nwsB9UVXfA5G
+         bpmZO3In5ec8Or7ZBd84dNUNPi2hspJEkvKwMlybrmVsZC4zIMhWj0dMuN7xM9QA7m
+         wFmn+AZf+fnwiiKh2Xx0I0qC959FQufvZHlWeFakgzTRcqtck5vN/whKczDnBG4Mev
+         6VQ18gPANb1Wg==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Wed,  7 Jun 2023 10:35:23 +0300 (MSK)
+From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+To:     Liang Yang <liang.yang@amlogic.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+CC:     <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
+        Arseniy Krasnov <AVKrasnov@sberdevices.ru>,
+        <linux-mtd@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] mtd: rawnand: meson: waiting w/o wired ready/busy pin
+Date:   Wed, 7 Jun 2023 10:30:15 +0300
+Message-ID: <20230607073015.1280085-1-AVKrasnov@sberdevices.ru>
+X-Mailer: git-send-email 2.35.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000E9D2:EE_|CH2PR12MB5513:EE_
-X-MS-Office365-Filtering-Correlation-Id: aa88ff5b-8f3b-4160-f577-08db67291243
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Db9GQnDsjzFJpX7ti4XjNiRGOtKNJw748hvhLS4xXyPZwosuAzHrF3TBfN/VMcz2z5nEE9d99ZqJkNLDQh4akGWVIJXxmkIkKCsBJ4MKhEH+AGGKi430zCngqI71pARwixYCpJLq07lUsvL+/Ot8N2xwyUBVz8uSxdvf6P9nORLZpSltYj7egLjiWaRack9UPSgpqO2mePbaQOeegmUTFlYwTTW8Q12WI8vWBHsJ4vciRECR50KudoZ5vi3frSZY79e5qUTRMoht3hafL0qRn91fyEs7Sm4kxsP/aTIbPOl8pkTZpX6/iFoBW3d30BEv4LXB5ztKDF0CwYBJgb61hDxwDYAtVlDsfh2SgSLvy/6RY0x6FG9cBPR8fK27anzuvCvKH2v1oODjJAnV0Adw58r5cpEVLqGKtO/Sy+P1eA/I6xhJTMF/AOv1NOZHYdWtlY9zj57t14b+GeooXzcqVU0dumMIHO8R/nR2c7f03S0RJMhFgaW2Dp6OFjktIcfvtT1f9SQw3I4VGf3XDdSeibJ4LMqZS+Q61IKH5r6AbN1Nicrb9kHGRfY6DVKHYHGGnW1VKI5I7ymPZhBDBEI/9cNtS63IfWc1NBszPBVdBkTaEYJI+hrIUkb5hcE88gqJlA1CxOw6L3i9yDdNEj93eA0mWY9Ag/hbE4I0U1DXSDopwZ4AEj+3S4ynyaJUJIJyqt8dZ61qh6CLHblPcwx+HR2yN9XW+kineiRl2v3HUo/ig6XKBF0txcKd/GO5cFfyHS8kKoPFgpdzJd/CbtskWw==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(39860400002)(396003)(376002)(451199021)(46966006)(36840700001)(40470700004)(478600001)(6666004)(36860700001)(82310400005)(36756003)(2616005)(186003)(47076005)(336012)(426003)(83380400001)(86362001)(40480700001)(356005)(81166007)(82740400003)(26005)(1076003)(40460700003)(8936002)(8676002)(5660300002)(41300700001)(44832011)(4744005)(2906002)(110136005)(54906003)(4326008)(316002)(70206006)(70586007)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2023 07:30:29.9727
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: aa88ff5b-8f3b-4160-f577-08db67291243
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000E9D2.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB5513
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/06/07 04:52:00 #21449589
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -103,29 +72,163 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add an identifier in the read_fn function declaration because based on
-commit ca0d8929e75a ("checkpatch: add warning for unnamed function
-definition arguments") it is the preferred coding style even C standard
-allows both formats.
+If there is no wired ready/busy pin, classic way to wait for command
+completion is to use function 'nand_soft_waitrdy()'. Meson NAND has
+special command which allows to wait for NAND_STATUS_READY bit without
+reading status in a software loop (as 'nand_soft_waitrdy()' does). To
+use it send this command along with NAND_CMD_STATUS, then wait for an
+interrupt, and after interrupt send NAND_CMD_READ0. So this feature
+allows to use interrupt driven waiting without wired ready/busy pin.
 
-Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
+Suggested-by: Liang Yang <liang.yang@amlogic.com>
+Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
 ---
- drivers/usb/gadget/udc/udc-xilinx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Changelog:
+ v1 -> v2:
+  * Remove small delays from 'meson_nfc_wait_no_rb_pin()'. Both have no
+    effect according Liang's message.
+  * Type of 'no_rb_pin' is u32, the same as for 'nand-rb' property.
+  * 'meson_nfc_wait_no_rb_pin()' doesn't send NAND_CMD_READ0 in case of
+    page programming. Extra argument is added to 'meson_nfc_queue_rb()'
+    to check that case.
 
-diff --git a/drivers/usb/gadget/udc/udc-xilinx.c b/drivers/usb/gadget/udc/udc-xilinx.c
-index 4827e3cd3834..609f7e30cf2c 100644
---- a/drivers/usb/gadget/udc/udc-xilinx.c
-+++ b/drivers/usb/gadget/udc/udc-xilinx.c
-@@ -192,7 +192,7 @@ struct xusb_udc {
- 	bool dma_enabled;
- 	struct clk *clk;
+ drivers/mtd/nand/raw/meson_nand.c | 74 +++++++++++++++++++++++++++++--
+ 1 file changed, 70 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
+index 074e14225c06..ae404655b68c 100644
+--- a/drivers/mtd/nand/raw/meson_nand.c
++++ b/drivers/mtd/nand/raw/meson_nand.c
+@@ -38,6 +38,7 @@
+ #define NFC_CMD_SCRAMBLER_DISABLE	0
+ #define NFC_CMD_SHORTMODE_DISABLE	0
+ #define NFC_CMD_RB_INT		BIT(14)
++#define NFC_CMD_RB_INT_NO_PIN	((0xb << 10) | BIT(18) | BIT(16))
  
--	unsigned int (*read_fn)(void __iomem *);
-+	unsigned int (*read_fn)(void __iomem *reg);
- 	void (*write_fn)(void __iomem *, u32, u32);
+ #define NFC_CMD_GET_SIZE(x)	(((x) >> 22) & GENMASK(4, 0))
+ 
+@@ -179,6 +180,7 @@ struct meson_nfc {
+ 	u32 info_bytes;
+ 
+ 	unsigned long assigned_cs;
++	u32 no_rb_pin;
  };
  
+ enum {
+@@ -392,7 +394,42 @@ static void meson_nfc_set_data_oob(struct nand_chip *nand,
+ 	}
+ }
+ 
+-static int meson_nfc_queue_rb(struct meson_nfc *nfc, int timeout_ms)
++static int meson_nfc_wait_no_rb_pin(struct meson_nfc *nfc, int timeout_ms,
++				    bool need_cmd_read0)
++{
++	u32 cmd, cfg;
++
++	meson_nfc_cmd_idle(nfc, nfc->timing.twb);
++	meson_nfc_drain_cmd(nfc);
++	meson_nfc_wait_cmd_finish(nfc, CMD_FIFO_EMPTY_TIMEOUT);
++
++	cfg = readl(nfc->reg_base + NFC_REG_CFG);
++	cfg |= NFC_RB_IRQ_EN;
++	writel(cfg, nfc->reg_base + NFC_REG_CFG);
++
++	reinit_completion(&nfc->completion);
++	cmd = nfc->param.chip_select | NFC_CMD_CLE | NAND_CMD_STATUS;
++	writel(cmd, nfc->reg_base + NFC_REG_CMD);
++
++	/* use the max erase time as the maximum clock for waiting R/B */
++	cmd = NFC_CMD_RB | NFC_CMD_RB_INT_NO_PIN | nfc->timing.tbers_max;
++	writel(cmd, nfc->reg_base + NFC_REG_CMD);
++
++	if (!wait_for_completion_timeout(&nfc->completion,
++					 msecs_to_jiffies(timeout_ms)))
++		return -ETIMEDOUT;
++
++	if (need_cmd_read0) {
++		cmd = nfc->param.chip_select | NFC_CMD_CLE | NAND_CMD_READ0;
++		writel(cmd, nfc->reg_base + NFC_REG_CMD);
++		meson_nfc_drain_cmd(nfc);
++		meson_nfc_wait_cmd_finish(nfc, CMD_FIFO_EMPTY_TIMEOUT);
++	}
++
++	return 0;
++}
++
++static int meson_nfc_wait_rb_pin(struct meson_nfc *nfc, int timeout_ms)
+ {
+ 	u32 cmd, cfg;
+ 	int ret = 0;
+@@ -420,6 +457,25 @@ static int meson_nfc_queue_rb(struct meson_nfc *nfc, int timeout_ms)
+ 	return ret;
+ }
+ 
++static int meson_nfc_queue_rb(struct meson_nfc *nfc, int timeout_ms,
++			      bool need_cmd_read0)
++{
++	if (nfc->no_rb_pin) {
++		/* This mode is used when there is no wired R/B pin.
++		 * It works like 'nand_soft_waitrdy()', but instead of
++		 * polling NAND_CMD_STATUS bit in the software loop,
++		 * it will wait for interrupt - controllers checks IO
++		 * bus and when it detects NAND_CMD_STATUS on it, it
++		 * raises interrupt. After interrupt, NAND_CMD_READ0 is
++		 * sent as terminator of the ready waiting procedure.
++		 */
++		return meson_nfc_wait_no_rb_pin(nfc, timeout_ms,
++						need_cmd_read0);
++	} else {
++		return meson_nfc_wait_rb_pin(nfc, timeout_ms);
++	}
++}
++
+ static void meson_nfc_set_user_byte(struct nand_chip *nand, u8 *oob_buf)
+ {
+ 	struct meson_nfc_nand_chip *meson_chip = to_meson_nand(nand);
+@@ -623,7 +679,7 @@ static int meson_nfc_rw_cmd_prepare_and_execute(struct nand_chip *nand,
+ 	if (in) {
+ 		nfc->cmdfifo.rw.cmd1 = cs | NFC_CMD_CLE | NAND_CMD_READSTART;
+ 		writel(nfc->cmdfifo.rw.cmd1, nfc->reg_base + NFC_REG_CMD);
+-		meson_nfc_queue_rb(nfc, PSEC_TO_MSEC(sdr->tR_max));
++		meson_nfc_queue_rb(nfc, PSEC_TO_MSEC(sdr->tR_max), true);
+ 	} else {
+ 		meson_nfc_cmd_idle(nfc, nfc->timing.tadl);
+ 	}
+@@ -669,7 +725,7 @@ static int meson_nfc_write_page_sub(struct nand_chip *nand,
+ 
+ 	cmd = nfc->param.chip_select | NFC_CMD_CLE | NAND_CMD_PAGEPROG;
+ 	writel(cmd, nfc->reg_base + NFC_REG_CMD);
+-	meson_nfc_queue_rb(nfc, PSEC_TO_MSEC(sdr->tPROG_max));
++	meson_nfc_queue_rb(nfc, PSEC_TO_MSEC(sdr->tPROG_max), false);
+ 
+ 	meson_nfc_dma_buffer_release(nand, data_len, info_len, DMA_TO_DEVICE);
+ 
+@@ -952,7 +1008,8 @@ static int meson_nfc_exec_op(struct nand_chip *nand,
+ 			break;
+ 
+ 		case NAND_OP_WAITRDY_INSTR:
+-			meson_nfc_queue_rb(nfc, instr->ctx.waitrdy.timeout_ms);
++			meson_nfc_queue_rb(nfc, instr->ctx.waitrdy.timeout_ms,
++					   true);
+ 			if (instr->delay_ns)
+ 				meson_nfc_cmd_idle(nfc, delay_idle);
+ 			break;
+@@ -1412,6 +1469,15 @@ static int meson_nfc_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
+ 
++	ret = of_property_read_u32(dev->of_node, "nand-rb", &nfc->no_rb_pin);
++	if (ret) {
++		/* If property was not found, don't use rb pin. */
++		if (ret == -EINVAL)
++			nfc->no_rb_pin = 1;
++		else
++			return ret;
++	}
++
+ 	writel(0, nfc->reg_base + NFC_REG_CFG);
+ 	ret = devm_request_irq(dev, irq, meson_nfc_irq, 0, dev_name(dev), nfc);
+ 	if (ret) {
 -- 
-2.25.1
+2.35.0
 
