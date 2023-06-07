@@ -2,120 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC0F9726BE3
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 22:29:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 130EB726D86
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 22:43:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233540AbjFGU3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 16:29:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55402 "EHLO
+        id S234591AbjFGUnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 16:43:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233514AbjFGU3B (ORCPT
+        with ESMTP id S234475AbjFGUm6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 16:29:01 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C6C4269E
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 13:28:41 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-65c6881df05so781841b3a.1
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 13:28:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1686169718; x=1688761718;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=g1NtfRKLBxewd34t5Gh6CqfpKexDHoQxzpKbSXODOss=;
-        b=hpH8J+RP6Lx2aCaOgiVhXeFACjtdhhQmTUYfxAHMCF+wJ3p2S2tMcmkixOxxQpDWTO
-         e3rGDzk+QEIzH0pfJGC3LM1e0YI/l7Jcp5l5MRb1P5MjgBq38h0dtJSS4dpW18bYDzjA
-         BdK6z2QXlcrO0sQ3we+AuWjuEL/KPmT3nSil5wDyzbwdZfE/2hZ1Mll9BjH+ckTvxe4m
-         oLKQGHnZ/cbg2Qhhijkeez+vSolIVI8VXNT/YzqhFdvO/u8pGdcrozv4ULslU+6VKGxP
-         vXg088Ig7qrznPB58ztwc1JZ/ZmDRYczE7fmjWZCqtQp0HXUiENC5hfy8NazPBsBnw4T
-         cA3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686169718; x=1688761718;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=g1NtfRKLBxewd34t5Gh6CqfpKexDHoQxzpKbSXODOss=;
-        b=HBncHMKsVU2pGWwM/7swjlCEY7yQ0+rQfwbBB/9+2gJJOe9OVTyINlHC+OfakKezla
-         QnefiwUORTfTcmMViAyWnU7yAitAIOyE2LQLI1uaLrmY2nfDzk9GnERaZYKLsGDGxxbz
-         XrIGLBoWzlDkGrj20eTwp5UV+jutNdXTCzahJurrhMeYmo6SntZ+FTKxD+ybug2zRxpR
-         zFs4dl9C4NUq3vGKzEMx64nCxuw3EbeVFHEtiAaE4lLY0W2Z3G2FZsW0kRYuKvj9U3zq
-         R5RFcwoZT+9tcbvdDT8QQK+m+whKRN9tlZAwBwMiNYO4BBTwgTGRcl8oZHBaeUdbPW3r
-         OcQQ==
-X-Gm-Message-State: AC+VfDyn9viuZlPihGiJd3zUXIt0W9VCoRmow8ezbifE6l9nfiIBbJbN
-        CCCcZm5IA1vGY/UW7gbj++ViGA==
-X-Google-Smtp-Source: ACHHUZ4U2oYKGpIcb8vlY9R5t+nDeGtzp/Blv5niP/qS7WsFMO8inGOI4BMBYdCMMh4UXRRgY/z2PQ==
-X-Received: by 2002:a05:6a00:2909:b0:662:a9c3:7b84 with SMTP id cg9-20020a056a00290900b00662a9c37b84mr1578756pfb.2.1686169718218;
-        Wed, 07 Jun 2023 13:28:38 -0700 (PDT)
-Received: from [127.0.0.1] ([2620:10d:c090:600::2:9b70])
-        by smtp.gmail.com with ESMTPSA id fe16-20020a056a002f1000b00653dc27acadsm7828231pfb.205.2023.06.07.13.28.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 13:28:36 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20230310164549.22133-1-andriy.shevchenko@linux.intel.com>
-References: <20230310164549.22133-1-andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v2 0/9] pktdvd: Clean up the driver
-Message-Id: <168616971619.107466.374645634630337878.b4-ty@kernel.dk>
-Date:   Wed, 07 Jun 2023 14:28:36 -0600
+        Wed, 7 Jun 2023 16:42:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB9D2113
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 13:42:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 284816463E
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 20:42:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D39AC433EF;
+        Wed,  7 Jun 2023 20:42:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686170550;
+        bh=5aQZkv7b76uNRIEEdQU8uQNP36af9VapveubHqYUaFQ=;
+        h=From:Date:Subject:To:Cc:From;
+        b=NOTgZAD9znY+E34eMdNxRrYZ9WFsjp1bDtbNZVPoEftzkVH/LzVi1T42kRaawir7c
+         NKA/2AjGOyWhxbmJzrbHGjdA7pSvm7+lfpg16pLt9bsfH4AZkHLwo5+8JqlFNyuJRh
+         7HAjjVnt3E4qFM034doh6Aq/Qy6uqlO20o3YNdW2Q4qpoQj1twc3ZaivgDDRxB8WMW
+         +JguAl1+rO+7mT7HLUowSatyk5ow8CegDMLYVnOnQNRGZZK8Fay5SM+68iaSYZhQHf
+         MywLNQWEq6NYWrVPwT0VW65dcA5Z7zjIACREG6zVEGXlqw1NGRSoE2aaou8xtKX+tr
+         AKotEd4N2Mqvg==
+From:   Mark Brown <broonie@kernel.org>
+Date:   Wed, 07 Jun 2023 21:30:51 +0100
+Subject: [PATCH] arm64/fpsimd: Exit streaming mode when flushing tasks
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-c6835
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Message-Id: <20230607-arm64-flush-svcr-v1-1-7821a6199e0a@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAPvogGQC/x2N0QrCMAwAf2Xk2UCdoxV/RXxIY2aD2kmCUxj7d
+ zsf7+C4BVxMxeHULWAyq+tUG+x3HXChehPUa2PoQ38IMSQke8YBx8fbC/rMhkNiTpGOnDNDyzK
+ 5YDaqXLbwM9l90y+TUb//0/myrj82jPm5eQAAAA==
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.13-dev-bfdf5
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1038; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=5aQZkv7b76uNRIEEdQU8uQNP36af9VapveubHqYUaFQ=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkgOu0OWZtXqQLnmaga8qWcEKH43zY/MuFSc6R2FTB
+ QHARcI6JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZIDrtAAKCRAk1otyXVSH0F81B/
+ 0RF7RycQjSNI9WUnqO2R7nmzQwDLgtpGzQr5kXvGiRcOELDrerPK8ajLa+QDvaqgla82fv5d5Khccm
+ b9iZhy0q9RE35vZlqXELzI1IQ1PVvL60gNaE42C3AXZndnQdoWxUN9PNoilPLdDP+W6tmE2tlxFgfy
+ SW5+K61o5rJr8RlwuuOBIRGZb4BKWr0h0WEDOgml9yRh+q/jUaBQrW8iUa+e9OFqJKFdsQG6+GuUGi
+ DFygUmJwPf08bJpxFYhKhMAAhEJHyeoK2+K8o+OOUpX1NjwbLBs/lU3QVZbpCxm7TmyOjIMh7JKUkX
+ nvYQXSb30SRsVSaphjQPmpBN0BcDch
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Ensure there is no path where we might attempt to save SME state after we
+flush a task by updating the SVCR register state as well as updating our
+in memory state. I haven't seen a specific case where this is happening or
+seen a path where it might happen but for the cost of a single low overhead
+instruction it seems sensible to close the potential gap.
 
-On Fri, 10 Mar 2023 18:45:40 +0200, Andy Shevchenko wrote:
-> Some cleanups to the recently resurrected driver.
-> 
-> v2:
-> - added tags (Greg)
-> 
-> Andy Shevchenko (9):
->   pktcdvd: Get rid of custom printing macros
->   pktcdvd: replace sscanf() by kstrtoul()
->   pktcdvd: use sysfs_emit() to instead of scnprintf()
->   pktcdvd: Get rid of pkt_seq_show() forward declaration
->   pktcdvd: Drop redundant castings for sector_t
->   pktcdvd: Use DEFINE_SHOW_ATTRIBUTE() to simplify code
->   pktcdvd: Use put_unaligned_be16() and get_unaligned_be16()
->   pktcdvd: Get rid of redundant 'else'
->   pktcdvd: Sort headers
-> 
-> [...]
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ arch/arm64/kernel/fpsimd.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Applied, thanks!
+diff --git a/arch/arm64/kernel/fpsimd.c b/arch/arm64/kernel/fpsimd.c
+index 2fbafa5cc7ac..1627e0efe39a 100644
+--- a/arch/arm64/kernel/fpsimd.c
++++ b/arch/arm64/kernel/fpsimd.c
+@@ -1649,6 +1649,7 @@ void fpsimd_flush_thread(void)
+ 
+ 		fpsimd_flush_thread_vl(ARM64_VEC_SME);
+ 		current->thread.svcr = 0;
++		sme_smstop_sm();
+ 	}
+ 
+ 	current->thread.fp_type = FP_STATE_FPSIMD;
 
-[1/9] pktcdvd: Get rid of custom printing macros
-      commit: 3a41db531e5124adaa3a9ab9ca0c724aee85b10c
-[2/9] pktcdvd: replace sscanf() by kstrtoul()
-      commit: 1a0ddd56e545b743af510b5a1b8dbdfe7d35cd3b
-[3/9] pktcdvd: use sysfs_emit() to instead of scnprintf()
-      commit: 3bb5746c26cdfcc354af4867c02f1e0ec1131a62
-[4/9] pktcdvd: Get rid of pkt_seq_show() forward declaration
-      commit: f023faaa988671f0f1d1a965dc5d7e61d0f5e65e
-[5/9] pktcdvd: Drop redundant castings for sector_t
-      commit: 93c8f6f38be67e30adf8d8eb5e7e9ccb89326119
-[6/9] pktcdvd: Use DEFINE_SHOW_ATTRIBUTE() to simplify code
-      commit: 80d994d2a71f88e0809dcaccef2259c791d2e3ef
-[7/9] pktcdvd: Use put_unaligned_be16() and get_unaligned_be16()
-      commit: 046636a4bac575aff78e44c7e1cff84c83a345a9
-[8/9] pktcdvd: Get rid of redundant 'else'
-      commit: 6a5945a8eb5a626afe6feb341824e7e1d007c8ff
-[9/9] pktcdvd: Sort headers
-      commit: 7da15fb0318f18398feea2848d099a8d0d7b5965
+---
+base-commit: 44c026a73be8038f03dbdeef028b642880cf1511
+change-id: 20230607-arm64-flush-svcr-47cc76a8cbbc
 
 Best regards,
 -- 
-Jens Axboe
-
-
+Mark Brown <broonie@kernel.org>
 
