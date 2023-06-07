@@ -2,183 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC7447257F6
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 10:36:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA8417257FA
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 10:37:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237719AbjFGIgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 04:36:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42332 "EHLO
+        id S235640AbjFGIhw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 04:37:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236500AbjFGIgG (ORCPT
+        with ESMTP id S234162AbjFGIhr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 04:36:06 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F3E61715
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 01:36:02 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-5151934a4e3so828470a12.1
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 01:36:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686126960; x=1688718960;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OrBypWeubMbxcljEMrbhcsqFO6qImvP/mf4G4xcloiA=;
-        b=CoMG7GGoFmIb27F5iwkC4dcYhIURDa0iz6nd23TcOi2jGSO4YPEry92mXnx7Sbv0pz
-         PXphDr6sBgSRaeX2p2vZMXJFejvbI6jEVHXxW+BjH9L8qKMoVC+lqeYdvegV+lvar0Lm
-         JtBgrUsyc+ZL+Dx2yuLTtAjr9M4sxFZ14wulNTQH/gHXzHwVXhiosAPTQ6suM+IbGz8W
-         pmP84dFIypCg8SHVAaCZPy3ncxVyLSBp5x/lkh7K0QdSST4GopSwlZSaJhXO2gyKR2Qb
-         Snv8L1h05nwICLtL1x3a0sePYfsJmsJHMzVlPGwJ8z/aKpuz7pGO5KgFDyUUYy+6b0Cs
-         P59w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686126960; x=1688718960;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OrBypWeubMbxcljEMrbhcsqFO6qImvP/mf4G4xcloiA=;
-        b=edzVEkVUwc6PF4ACJn6E7XEn4VeopDe3jAIYSXC0377/2gGZUmmMXQ41UmJjOCXQt1
-         l0dTh40Mir5aP1PdLP8h1kYw0nseRuZ/Q6pVynqMNoCeve5+t5KgPYDdl8btxwpBZzI6
-         9gI/l3okA0IbRo6I1c5vpouPbCYOqV/R0kBm+e/rRPmeSLFxNGt7rySI4eKE+MIlTZih
-         UNyCeOLjw0zhnKP9nZBdlBBRhU2z2w7YdKVsuNUTG4OQDVXsliWFNWKLMhv+ou7ijo41
-         p//LpR+aBR8dr4SK4TmcRbtUGN48BMlKPP4tndBTKtAG8ABhJ0fTmuVdhg5nG9ze2aR4
-         sqMQ==
-X-Gm-Message-State: AC+VfDyYlI5Qi2ULHKQthRyRqPUZmIIWFHX2PbPafK7JUShAF4RVU6Ds
-        tr5YBxKCqJdT9bojcjs1yZdD4g==
-X-Google-Smtp-Source: ACHHUZ6ykvSByCH8/v69gOuWKopinDUva0RGEVG+ZsvSnFjn4B71tLz6YtG8xCXT/qyHkEG3v92gBw==
-X-Received: by 2002:a17:907:8a08:b0:974:419d:7837 with SMTP id sc8-20020a1709078a0800b00974419d7837mr6143995ejc.34.1686126960414;
-        Wed, 07 Jun 2023 01:36:00 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id lo12-20020a170906fa0c00b0094f07545d40sm6536109ejb.220.2023.06.07.01.35.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 01:35:59 -0700 (PDT)
-Message-ID: <45ad07cf-c046-876f-1374-0a83fa561107@linaro.org>
-Date:   Wed, 7 Jun 2023 10:35:57 +0200
+        Wed, 7 Jun 2023 04:37:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6E23172E
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 01:37:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686127020;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CGNGuZdb3YfUa/RgZYBAS20b4KQ6QaroF4WQ7qei7lo=;
+        b=g5ioPnQQ1hiX5qzgybMvDUvrYABzXSTttBExtem8anLCaX6F5FCdwwiTRlR/xPDxvrjd65
+        20L7RgY4Pi2rfH18XPdGYFRIENUQHgqyXPfHLnLYk7/uMBMKmO9pmVD0dpqxAiBeI4dhTV
+        9aG0nw7CENkWXSQphjxqSZoQpm9Fi1A=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-321-GM9I-4gjMCKvH9c3tuCwwQ-1; Wed, 07 Jun 2023 04:36:54 -0400
+X-MC-Unique: GM9I-4gjMCKvH9c3tuCwwQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9674D3801FF5;
+        Wed,  7 Jun 2023 08:36:53 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.182])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 10C6EC1603B;
+        Wed,  7 Jun 2023 08:36:49 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20230530232914.3689712-3-mcgrof@kernel.org>
+References: <20230530232914.3689712-3-mcgrof@kernel.org> <20230530232914.3689712-1-mcgrof@kernel.org>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     dhowells@redhat.com, keescook@chromium.org, yzaikin@google.com,
+        jarkko@kernel.org, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, j.granados@samsung.com, brauner@kernel.org,
+        ebiederm@xmission.com, patches@lists.linux.dev,
+        linux-fsdevel@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] sysctl: move security keys sysctl registration to its own file
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH RFC 1/4] dt-bindings: input: document Goodix Berlin
- Touchscreen IC
-Content-Language: en-US
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Henrik Rydberg <rydberg@bitmath.org>
-Cc:     linux-input@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230606-topic-goodix-berlin-upstream-initial-v1-0-4a0741b8aefd@linaro.org>
- <20230606-topic-goodix-berlin-upstream-initial-v1-1-4a0741b8aefd@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230606-topic-goodix-berlin-upstream-initial-v1-1-4a0741b8aefd@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2003476.1686127009.1@warthog.procyon.org.uk>
+Date:   Wed, 07 Jun 2023 09:36:49 +0100
+Message-ID: <2003477.1686127009@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/06/2023 16:31, Neil Armstrong wrote:
-> Document the Goodix GT9916 wich is part of the "Berlin" serie
-> of Touchscreen controllers IC from Goodix.
+Luis Chamberlain <mcgrof@kernel.org> wrote:
+
+> The security keys sysctls are already declared on its own file,
+> just move the sysctl registration to its own file to help avoid
+> merge conflicts on sysctls.c, and help with clearing up sysctl.c
+> further.
 > 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
->  .../bindings/input/touchscreen/goodix-berlin.yaml  | 81 ++++++++++++++++++++++
-
-Filename like compatible, so at least with vendor,device style.
-Preferably named exactly like compatible, since you have only one.
-
->  1 file changed, 81 insertions(+)
+> This creates a small penalty of 23 bytes:
 > 
-> diff --git a/Documentation/devicetree/bindings/input/touchscreen/goodix-berlin.yaml b/Documentation/devicetree/bindings/input/touchscreen/goodix-berlin.yaml
-> new file mode 100644
-> index 000000000000..4c24a541e919
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/input/touchscreen/goodix-berlin.yaml
-> @@ -0,0 +1,81 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/input/touchscreen/goodix-berlin.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Goodix Belin series touchscreen controller
-> +
-> +maintainers:
-> +  - Neil Armstrong <neil.armstrong@linaro.org>
-> +
-> +allOf:
-> +  - $ref: touchscreen.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - goodix,gt9916
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  reset-gpios:
-> +    maxItems: 1
-> +
-> +  avdd-supply:
-> +    description: Analog power supply regulator on AVDD pin
-> +
-> +  vddio-supply:
-> +    description: GPIO power supply regulator on VDDIO pin
-> +
-> +  spi-max-frequency: true
-> +  touchscreen-inverted-x: true
-> +  touchscreen-inverted-y: true
-> +  touchscreen-size-x: true
-> +  touchscreen-size-y: true
-> +  touchscreen-swapped-x-y: true
-> +
-> +additionalProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
+> ./scripts/bloat-o-meter vmlinux.1 vmlinux.2
+> add/remove: 2/0 grow/shrink: 0/1 up/down: 49/-26 (23)
+> Function                                     old     new   delta
+> init_security_keys_sysctls                     -      33     +33
+> __pfx_init_security_keys_sysctls               -      16     +16
+> sysctl_init_bases                             85      59     -26
+> Total: Before=21256937, After=21256960, chg +0.00%
+> 
+> But soon we'll be saving tons of bytes anyway, as we modify the
+> sysctl registrations to use ARRAY_SIZE and so we get rid of all the
+> empty array elements so let's just clean this up now.
+> 
+> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
 
-I bet supplies are required - at least one of them. If hardware needs
-them, they should be required by the bindings.
-
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    #include <dt-bindings/gpio/gpio.h>
-> +    i2c {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +      gt9916@5d {
-
-Node names should be generic. See also explanation and list of examples
-in DT specification:
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-
-touchscreen?
-
-> +        compatible = "goodix,gt9916";
-> +        reg = <0x5d>;
-> +        interrupt-parent = <&gpio>;
-> +        interrupts = <25 IRQ_TYPE_LEVEL_LOW>;
-> +        reset-gpios = <&gpio1 1 GPIO_ACTIVE_LOW>;
-> +      };
-> +    };
-
-
-Best regards,
-Krzysztof
+Acked-by: David Howells <dhowells@redhat.com>
 
