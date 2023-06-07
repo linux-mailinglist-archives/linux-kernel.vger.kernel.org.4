@@ -2,204 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4930C726599
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 18:15:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AE3572659C
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 18:16:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241296AbjFGQP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 12:15:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41640 "EHLO
+        id S241575AbjFGQQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 12:16:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234951AbjFGQPY (ORCPT
+        with ESMTP id S240581AbjFGQP6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 12:15:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31BDD1BEF;
-        Wed,  7 Jun 2023 09:15:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C05AF614D3;
-        Wed,  7 Jun 2023 16:15:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A50CC433D2;
-        Wed,  7 Jun 2023 16:15:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686154522;
-        bh=Nw67u17v+ICwqaNY1RqAFUyDGxpkSGDXq3fprBLEPag=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IA/k9fLjhb6VMhvJDYK3cYyav0NmL5B1JH0VyC5peNtLTPAoEFQRxBA9JjRjogHQ3
-         SpNgiNx36bNqJ4YSWlCEKfREf5D+t1GrI+MXplKCW8/iupGHC3H6D4tS+OYYMZyFNZ
-         74MdvfZhTajycdNXS9rYKDmqRVOzrqBpRaTsPlQ05XPqdaFdTPHI/71FAaYBiwD5rg
-         dLi9OnGPVDxWXKntFtD9dFp212GGkULUecSZOlxCBQ12zIbwkCMAz+HI+ikV8rQGnJ
-         FNdIfvxhKDsEZ0L325hvPlF1NuDKm3Q0IECvO4Yi6HLxbN3ezV0vqdIoS9DD0rI5+7
-         4f2rPamgnBhoA==
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Wed, 07 Jun 2023 19:15:18 +0300
-Message-Id: <CT6JW4528UBU.1K3QJTVUN25OR@suppilovahvero>
-From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Chris Packham" <Chris.Packham@alliedtelesis.co.nz>,
-        "Lino Sanfilippo" <l.sanfilippo@kunbus.com>,
-        "Sasha Levin" <sashal@kernel.org>,
-        "Peter Huewe" <peterhuewe@gmx.de>, "Jason Gunthorpe" <jgg@ziepe.ca>
-Cc:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: New kernel warning after updating from LTS 5.15.110 to 5.15.112
- (and 5.15.113)
-X-Mailer: aerc 0.14.0
-References: <fe6f7aa0-56c2-3729-ce8c-0f2d943b33f4@alliedtelesis.co.nz>
- <7bb470fa70ff5944b7b9b82ac17d759819bccdf2.camel@kernel.org>
- <0bdf509f-f71a-e3b2-b9fb-4a726021219b@alliedtelesis.co.nz>
-In-Reply-To: <0bdf509f-f71a-e3b2-b9fb-4a726021219b@alliedtelesis.co.nz>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 7 Jun 2023 12:15:58 -0400
+Received: from frasgout11.his.huawei.com (unknown [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9D39199D;
+        Wed,  7 Jun 2023 09:15:53 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4Qbscz46shz9v7N7;
+        Thu,  8 Jun 2023 00:05:23 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwDXhz4mrYBkJHoTAw--.4340S2;
+        Wed, 07 Jun 2023 17:15:39 +0100 (CET)
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     hughd@google.com, akpm@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        stable@vger.kernel.org
+Subject: [PATCH] shmem: Use ramfs_kill_sb() for kill_sb method of ramfs-based tmpfs
+Date:   Wed,  7 Jun 2023 18:15:23 +0200
+Message-Id: <20230607161523.2876433-1-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: GxC2BwDXhz4mrYBkJHoTAw--.4340S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Kw17Gw17ArW8ZrW5JFy8AFb_yoW8Aw4xpF
+        1DAFyrCr40gFyUZ3s2ka1vy34fWaykKrWvk34kuw1fJa43tr1vqF1vyr4akryrXrW8WryF
+        qr4j9ryjka4jyrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I0En4kS14v26r4a6rW5MxAIw28IcxkI
+        7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
+        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY
+        6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
+        AIw20EY4v20xvaj40_Zr0_Wr1UMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxUInYwUUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgABBF1jj4pc5gAAsG
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        MAY_BE_FORGED,PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed Jun 7, 2023 at 12:04 AM EEST, Chris Packham wrote:
-> Hi Jarkko,
->
-> On 6/06/23 21:39, Jarkko Sakkinen wrote:
-> > On Sun, 2023-05-28 at 23:42 +0000, Chris Packham wrote:
-> >> Hi,
-> >>
-> >> We have an embedded product with an Infineon SLM9670 TPM. After updati=
-ng
-> >> to a newer LTS kernel version we started seeing the following warning =
-at
-> >> boot.
-> >>
-> >> [=C2=A0=C2=A0=C2=A0 4.741025] ------------[ cut here ]------------
-> >> [=C2=A0=C2=A0=C2=A0 4.749894] irq 38 handler tis_int_handler+0x0/0x154=
- enabled interrupts
-> >> [=C2=A0=C2=A0=C2=A0 4.756555] WARNING: CPU: 0 PID: 0 at kernel/irq/han=
-dle.c:159
-> >> __handle_irq_event_percpu+0xf4/0x180
-> >> [=C2=A0=C2=A0=C2=A0 4.765557] Modules linked in:
-> >> [=C2=A0=C2=A0=C2=A0 4.768626] CPU: 0 PID: 0 Comm: swapper/0 Not tainte=
-d 5.15.113 #1
-> >> [=C2=A0=C2=A0=C2=A0 4.774747] Hardware name: Allied Telesis x250-18XS =
-(DT)
-> >> [=C2=A0=C2=A0=C2=A0 4.780080] pstate: 60000005 (nZCv daif -PAN -UAO -T=
-CO -DIT -SSBS
-> >> BTYPE=3D--)
-> >> [=C2=A0=C2=A0=C2=A0 4.787072] pc : __handle_irq_event_percpu+0xf4/0x18=
-0
-> >> [=C2=A0=C2=A0=C2=A0 4.792146] lr : __handle_irq_event_percpu+0xf4/0x18=
-0
-> >> [=C2=A0=C2=A0=C2=A0 4.797220] sp : ffff800008003e40
-> >> [=C2=A0=C2=A0=C2=A0 4.800547] x29: ffff800008003e40 x28: ffff800009395=
-1c0 x27:
-> >> ffff80000902a9b8
-> >> [=C2=A0=C2=A0=C2=A0 4.807716] x26: ffff800008fe8d28 x25: ffff8000094a6=
-2bd x24:
-> >> ffff000001b92400
-> >> [=C2=A0=C2=A0=C2=A0 4.814885] x23: 0000000000000026 x22: ffff800008003=
-ec4 x21:
-> >> 0000000000000000
-> >> [=C2=A0=C2=A0=C2=A0 4.822053] x20: 0000000000000001 x19: ffff000002381=
-200 x18:
-> >> ffffffffffffffff
-> >> [=C2=A0=C2=A0=C2=A0 4.829222] x17: ffff800076962000 x16: ffff800008000=
-000 x15:
-> >> ffff800088003b57
-> >> [=C2=A0=C2=A0=C2=A0 4.836390] x14: 0000000000000000 x13: ffff8000093a5=
-078 x12:
-> >> 000000000000035d
-> >> [=C2=A0=C2=A0=C2=A0 4.843558] x11: 000000000000011f x10: ffff8000093a5=
-078 x9 :
-> >> ffff8000093a5078
-> >> [=C2=A0=C2=A0=C2=A0 4.850727] x8 : 00000000ffffefff x7 : ffff8000093fd=
-078 x6 :
-> >> ffff8000093fd078
-> >> [=C2=A0=C2=A0=C2=A0 4.857895] x5 : 000000000000bff4 x4 : 0000000000000=
-000 x3 :
-> >> 0000000000000000
-> >> [=C2=A0=C2=A0=C2=A0 4.865062] x2 : 0000000000000000 x1 : 0000000000000=
-000 x0 :
-> >> ffff8000093951c0
-> >> [=C2=A0=C2=A0=C2=A0 4.872230] Call trace:
-> >> [=C2=A0=C2=A0=C2=A0 4.874686]=C2=A0 __handle_irq_event_percpu+0xf4/0x1=
-80
-> >> [=C2=A0=C2=A0=C2=A0 4.879411]=C2=A0 handle_irq_event+0x64/0xec
-> >> [=C2=A0=C2=A0=C2=A0 4.883264]=C2=A0 handle_level_irq+0xc0/0x1b0
-> >> [=C2=A0=C2=A0=C2=A0 4.887202]=C2=A0 generic_handle_irq+0x30/0x50
-> >> [=C2=A0=C2=A0=C2=A0 4.891229]=C2=A0 mvebu_gpio_irq_handler+0x11c/0x2a0
-> >> [=C2=A0=C2=A0=C2=A0 4.895780]=C2=A0 handle_domain_irq+0x60/0x90
-> >> [=C2=A0=C2=A0=C2=A0 4.899720]=C2=A0 gic_handle_irq+0x4c/0xd0
-> >> [=C2=A0=C2=A0=C2=A0 4.903398]=C2=A0 call_on_irq_stack+0x20/0x4c
-> >> [=C2=A0=C2=A0=C2=A0 4.907338]=C2=A0 do_interrupt_handler+0x54/0x60
-> >> [=C2=A0=C2=A0=C2=A0 4.911538]=C2=A0 el1_interrupt+0x30/0x80
-> >> [=C2=A0=C2=A0=C2=A0 4.915130]=C2=A0 el1h_64_irq_handler+0x18/0x24
-> >> [=C2=A0=C2=A0=C2=A0 4.919244]=C2=A0 el1h_64_irq+0x78/0x7c
-> >> [=C2=A0=C2=A0=C2=A0 4.922659]=C2=A0 arch_cpu_idle+0x18/0x2c
-> >> [=C2=A0=C2=A0=C2=A0 4.926249]=C2=A0 do_idle+0xc4/0x150
-> >> [=C2=A0=C2=A0=C2=A0 4.929404]=C2=A0 cpu_startup_entry+0x28/0x60
-> >> [=C2=A0=C2=A0=C2=A0 4.933343]=C2=A0 rest_init+0xe4/0xf4
-> >> [=C2=A0=C2=A0=C2=A0 4.936584]=C2=A0 arch_call_rest_init+0x10/0x1c
-> >> [=C2=A0=C2=A0=C2=A0 4.940699]=C2=A0 start_kernel+0x600/0x640
-> >> [=C2=A0=C2=A0=C2=A0 4.944375]=C2=A0 __primary_switched+0xbc/0xc4
-> >> [=C2=A0=C2=A0=C2=A0 4.948402] ---[ end trace 940193047b35b311 ]---
-> >>
-> >> Initially I dismissed this as a warning that would probably be cleaned
-> >> up when we did more work on the TPM support for our product but we als=
-o
-> >> seem to be getting some new i2c issues and possibly a kernel stack
-> >> corruption that we've conflated with this TPM warning.
-> > Hi, sorry for late response. I've been moving my (home) office to
-> > a different location during last couple of weeks, and email has been
-> > piling up.
-> >
-> > What does dmidecode give you?
-> >
-> > More specific, I'm interested on DMI type 43:
-> >
-> > $ sudo dmidecode -t 43
-> > # dmidecode 3.4
-> > Getting SMBIOS data from sysfs.
-> > SMBIOS 3.4.0 present.
-> >
-> > Handle 0x004D, DMI type 43, 31 bytes
-> > TPM Device
-> > 	Vendor ID: INTC
-> > 	Specification Version: 2.0
-> > 	Firmware Revision: 600.18
-> > 	Description: INTEL
-> > 	Characteristics:
-> > 		Family configurable via platform software support
-> > 	OEM-specific Information: 0x00000000
-> >
-> > BR, Jarkko
->
-> This is an embedded ARM64 (Marvell CN9130 SoC) device so no BIOS. The=20
-> relevant snippet from the device tree is
->
->  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 tpm@1 {
->  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 compatible =3D "infineon,slb9670";
->  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 reg =3D <1>; /* Chip select 1 */
->  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 interrupt-parent =3D <&cp0_gpio2>;
->  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 interrupts =3D <30 IRQ_TYPE_LEVEL_LOW>;
->  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 spi-max-frequency =3D <31250000>;
->  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
->
-> and I can tell you that the specific TPM chip is an Infinieon=20
-> SLM9670AQ20FW1311XTMA1
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-OK, you know what I own that chip in the form of LetsTrustTPM
-product.
+As the ramfs-based tmpfs uses ramfs_init_fs_context() for the
+init_fs_context method, which allocates fc->s_fs_info, use ramfs_kill_sb()
+to free it and avoid a memory leak.
 
-I have not used it a lot because of lack of time but I could try
-to reproduce the bug with that and RPi 3B, or at least see what
-happens with different hardware platform with the same TPM chip.
+Cc: stable@vger.kernel.org # v5.4.x
+Fixes: f32356261d44 ("vfs: Convert ramfs, shmem, tmpfs, devtmpfs, rootfs to use the new mount API")
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+---
+ fs/ramfs/inode.c      | 2 +-
+ include/linux/ramfs.h | 1 +
+ mm/shmem.c            | 2 +-
+ 3 files changed, 3 insertions(+), 2 deletions(-)
 
-BR, Jarkko
+diff --git a/fs/ramfs/inode.c b/fs/ramfs/inode.c
+index 5ba580c7883..fef477c7810 100644
+--- a/fs/ramfs/inode.c
++++ b/fs/ramfs/inode.c
+@@ -278,7 +278,7 @@ int ramfs_init_fs_context(struct fs_context *fc)
+ 	return 0;
+ }
+ 
+-static void ramfs_kill_sb(struct super_block *sb)
++void ramfs_kill_sb(struct super_block *sb)
+ {
+ 	kfree(sb->s_fs_info);
+ 	kill_litter_super(sb);
+diff --git a/include/linux/ramfs.h b/include/linux/ramfs.h
+index 917528d102c..d506dc63dd4 100644
+--- a/include/linux/ramfs.h
++++ b/include/linux/ramfs.h
+@@ -7,6 +7,7 @@
+ struct inode *ramfs_get_inode(struct super_block *sb, const struct inode *dir,
+ 	 umode_t mode, dev_t dev);
+ extern int ramfs_init_fs_context(struct fs_context *fc);
++extern void ramfs_kill_sb(struct super_block *sb);
+ 
+ #ifdef CONFIG_MMU
+ static inline int
+diff --git a/mm/shmem.c b/mm/shmem.c
+index e40a08c5c6d..74abb97ea55 100644
+--- a/mm/shmem.c
++++ b/mm/shmem.c
+@@ -4196,7 +4196,7 @@ static struct file_system_type shmem_fs_type = {
+ 	.name		= "tmpfs",
+ 	.init_fs_context = ramfs_init_fs_context,
+ 	.parameters	= ramfs_fs_parameters,
+-	.kill_sb	= kill_litter_super,
++	.kill_sb	= ramfs_kill_sb,
+ 	.fs_flags	= FS_USERNS_MOUNT,
+ };
+ 
+-- 
+2.25.1
+
