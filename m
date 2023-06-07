@@ -2,86 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95754725F70
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 14:30:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C24E3725F88
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 14:33:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234132AbjFGM3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 08:29:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42382 "EHLO
+        id S240764AbjFGMdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 08:33:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240917AbjFGM3Z (ORCPT
+        with ESMTP id S240747AbjFGMc7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 08:29:25 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6EED1BFD
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 05:29:21 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f611ac39c5so7216158e87.2
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 05:29:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686140960; x=1688732960;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Vvv5K2Fa6/qw28wNbL34OYbssjD8GFHlsFB1b17V23M=;
-        b=KV9fpP2jx6guTOKgEAlO6GhkKJpM1TSY2zJSafASqc7HPVMhRuJY8j8GDFnHslXoXd
-         tsQmZ4Ybww03zHKPSbSH7K0bX/W/4m6cefd8Ete87G9T723V5io/oaflGpqX6BmhMTuj
-         r6dnnncuVDGRCrJDxHt5dxeB6bhDplAltZqEodABoowDtqyLRmdILjXwpojH9A0BGOPl
-         dyMydx8sDJM4tCFZ4EFkKpdKlWbKCEEC8CVYMANtLM/vSx11Nhju3RDTRkTCpSMXVErj
-         AfPMqMS8hQE1YvwrwM5WbZuZJ6KppZuQIKCY2hzogJ5NT/V0Q5B/0h62P0I7fLhET1dv
-         l64Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686140960; x=1688732960;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vvv5K2Fa6/qw28wNbL34OYbssjD8GFHlsFB1b17V23M=;
-        b=aJQgriNWqV4t3u49o5ggW5k3D7jhYb7EAmUywHr3BH3Pl7TmwAahKkZKUDvERI1UW8
-         lYCfkA+cTM47H7ZUIe26sWn1ZwW/0/BIafw/RbkQneJRGC2hYWN17wlDeeoX1AQVjG/x
-         FD4ywCXr4+6V4t6lAMMERDI27lQWg1KRvLHqcBUDBZf0MrglXIa/bqF2tuQEXwYpxNlG
-         lQdjN5aCpqr4+1GcJyv8HMn0Rls08Hn8KVxWxdc5N8zoG3TGSZw4fSVVcx5dA3Q+BA4l
-         ghe4ZD4a0z8VcJ865q0zBNwzWE8WoU8Ez0EbhUaYZ8Gubj666oPYXBzhJgyEufspTM68
-         M5GQ==
-X-Gm-Message-State: AC+VfDyvxiajUS/6Bb6OCwqkUqfWzRRc90blm3bc2daBKKqDp4dIk7da
-        5AyKBxvwenB1lEVQZwkaNTJkSm7MCYAtdK6D15s=
-X-Google-Smtp-Source: ACHHUZ44ZMWKvFqzo9F7XcBtsUXfQ+FLzrGKodpTdTU2l21B1LHoRvSCpL1whhvOLHLsLTnYvfreGQ==
-X-Received: by 2002:a05:6512:40a:b0:4f6:19e0:8ab6 with SMTP id u10-20020a056512040a00b004f619e08ab6mr2021712lfk.30.1686140959818;
-        Wed, 07 Jun 2023 05:29:19 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id u4-20020a056512040400b004f262997496sm1798376lfk.76.2023.06.07.05.29.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 05:29:19 -0700 (PDT)
-Message-ID: <cf3c98c1-e283-3fac-3144-5a7354378a6b@linaro.org>
-Date:   Wed, 7 Jun 2023 15:29:18 +0300
+        Wed, 7 Jun 2023 08:32:59 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96DDA173B;
+        Wed,  7 Jun 2023 05:32:57 -0700 (PDT)
+Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 357CI3sH018559;
+        Wed, 7 Jun 2023 12:32:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=hDT+EsnEZTT85GETLFxOhsl5jbVJly+mb2YHySAH0Ak=;
+ b=j61it+uoliI9s0Uh02AuX9v5A4ILaHb8eZ1MFiTOQ8IWCKl8zO1hN00i8Ry5rFqisfQb
+ /pW0vqLb6t3dkU+ObUbD9h1T6veMI0gfPmT1ZyiEuXZQr79IvFxjWmTRXZ3uDMqwpldI
+ F3PiH7YK8zysOKoTCBN6rozByJtL2osWVKiI2rdrj19l70ap7zIv5NSbqC/l10RsZO0s
+ ejleTTNF/tc5KkXsswsg+cjxT0x82r+qG2uXI5pwwfdpuvfeHZPUHSsAibvfGLRsUJeN
+ qzGyEKbtkE4y9fC4YN0XaaI0m4gHED5f9dQD88ZJdobFtEC4uF5jgOK3f0/BQNBGcRx1 fA== 
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r2ssd8ccs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Jun 2023 12:32:56 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3573065u014126;
+        Wed, 7 Jun 2023 12:32:54 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3r2a768f37-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Jun 2023 12:32:54 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 357CWpNG60162372
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 7 Jun 2023 12:32:51 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 232F72004D;
+        Wed,  7 Jun 2023 12:32:51 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9E4BA2004B;
+        Wed,  7 Jun 2023 12:32:50 +0000 (GMT)
+Received: from [9.179.8.138] (unknown [9.179.8.138])
+        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Wed,  7 Jun 2023 12:32:50 +0000 (GMT)
+Message-ID: <e2b8d63e-06ff-bbd7-b76d-e358a9a8533e@linux.ibm.com>
+Date:   Wed, 7 Jun 2023 14:32:50 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH 3/9] phy: qcom-m31: Introduce qcom,m31 USB phy driver
-Content-Language: en-GB
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Varadarajan Narayanan <quic_varada@quicinc.com>,
-        agross@kernel.org, andersson@kernel.org, vkoul@kernel.org,
-        kishon@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        gregkh@linuxfoundation.org, catalin.marinas@arm.com,
-        will@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        p.zabel@pengutronix.de, arnd@arndb.de, geert+renesas@glider.be,
-        neil.armstrong@linaro.org, nfraprado@collabora.com,
-        broonie@kernel.org, rafal@milecki.pl, quic_srichara@quicinc.com,
-        quic_varada@quicinc.org, quic_wcheng@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-clk@vger.kernel.org
-References: <cover.1686126439.git.quic_varada@quicinc.com>
- <6bb345c6a57ee27516764f36ba7d34fd1a719b87.1686126439.git.quic_varada@quicinc.com>
- <416bef68-6df3-d5c4-2aed-ef1ae7c78d7b@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <416bef68-6df3-d5c4-2aed-ef1ae7c78d7b@linaro.org>
+Subject: Re: [PATCH v4 6/6] s390/uv: Update query for secret-UVCs
+Content-Language: en-US
+To:     Steffen Eiden <seiden@linux.ibm.com>, kvm@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Viktor Mihajlovski <mihajlov@linux.ibm.com>
+Cc:     Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Nico Boehr <nrb@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Hendrik Brueckner <brueckner@linux.ibm.com>
+References: <20230606180817.3019077-1-seiden@linux.ibm.com>
+ <20230606180817.3019077-7-seiden@linux.ibm.com>
+From:   Janosch Frank <frankja@linux.ibm.com>
+In-Reply-To: <20230606180817.3019077-7-seiden@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 0m5l70EYFKB8OCRm5pC6C5bXzQmjp_Ki
+X-Proofpoint-GUID: 0m5l70EYFKB8OCRm5pC6C5bXzQmjp_Ki
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-07_06,2023-06-07_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 mlxscore=0
+ lowpriorityscore=0 malwarescore=0 phishscore=0 suspectscore=0
+ priorityscore=1501 impostorscore=0 spamscore=0 clxscore=1015 adultscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306070100
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,158 +93,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Two minor nits on top of the review:
-
-On 07/06/2023 14:54, Konrad Dybcio wrote:
-> On 7.06.2023 12:56, Varadarajan Narayanan wrote:
->> Add the M31 USB2 phy driver
->>
->> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
->> ---
->>   drivers/phy/qualcomm/phy-qcom-m31.c | 360 ++++++++++++++++++++++++++++++++++++
->>   1 file changed, 360 insertions(+)
->>   create mode 100644 drivers/phy/qualcomm/phy-qcom-m31.c
->>
->> diff --git a/drivers/phy/qualcomm/phy-qcom-m31.c b/drivers/phy/qualcomm/phy-qcom-m31.c
->> new file mode 100644
->> index 0000000..d29a91e
->> --- /dev/null
->> +++ b/drivers/phy/qualcomm/phy-qcom-m31.c
->> @@ -0,0 +1,360 @@
->> +// SPDX-License-Identifier: GPL-2.0+
->> +/*
->> + * Copyright (c) 2014-2016, 2020, The Linux Foundation. All rights reserved.
->> + */
->> +
->> +#include <linux/module.h>
->> +#include <linux/kernel.h>
->> +#include <linux/err.h>
->> +#include <linux/slab.h>
->> +#include <linux/clk.h>
->> +#include <linux/delay.h>
->> +#include <linux/io.h>
->> +#include <linux/of.h>
->> +#include <linux/platform_device.h>
->> +#include <linux/usb/phy.h>
->> +#include <linux/reset.h>
->> +#include <linux/of_device.h>
-> Please sort these
+On 6/6/23 20:08, Steffen Eiden wrote:
+> Update the query struct such that secret-UVC related
+> information can be parsed.
+> Add sysfs files for these new values.
 > 
->> +
->> +enum clk_reset_action {
->> +	CLK_RESET_DEASSERT	= 0,
->> +	CLK_RESET_ASSERT	= 1
->> +};
->> +
->> +#define USB2PHY_PORT_POWERDOWN		0xA4
->> +#define POWER_UP			BIT(0)
->> +#define POWER_DOWN			0
->> +
->> +#define USB2PHY_PORT_UTMI_CTRL1	0x40
->> +
->> +#define USB2PHY_PORT_UTMI_CTRL2	0x44
->> +#define UTMI_ULPI_SEL			BIT(7)
->> +#define UTMI_TEST_MUX_SEL		BIT(6)
->> +
->> +#define HS_PHY_CTRL_REG			0x10
->> +#define UTMI_OTG_VBUS_VALID             BIT(20)
->> +#define SW_SESSVLD_SEL                  BIT(28)
->> +
->> +#define USB_PHY_CFG0			0x94
->> +#define USB_PHY_UTMI_CTRL5		0x50
->> +#define USB_PHY_FSEL_SEL		0xB8
->> +#define USB_PHY_HS_PHY_CTRL_COMMON0	0x54
->> +#define USB_PHY_REFCLK_CTRL		0xA0
->> +#define USB_PHY_HS_PHY_CTRL2		0x64
->> +#define USB_PHY_UTMI_CTRL0		0x3c
->> +#define USB2PHY_USB_PHY_M31_XCFGI_1	0xBC
->> +#define USB2PHY_USB_PHY_M31_XCFGI_4	0xC8
->> +#define USB2PHY_USB_PHY_M31_XCFGI_5	0xCC
->> +#define USB2PHY_USB_PHY_M31_XCFGI_11	0xE4
-> Could you sort them address-wise?
-
-... and lowercase the hex values, please.
-
+> 'supp_add_secret_req_ver' notes the supported versions for the
+> Add Secret UVC. Bit 0 indicates that version 0x100 is supported,
+> bit 1 indicates 0x200, and so on.
 > 
->> +
->> +#define USB2_0_TX_ENABLE		BIT(2)
->> +#define HSTX_SLEW_RATE_565PS		3
->> +#define PLL_CHARGING_PUMP_CURRENT_35UA	(3 << 3)
->> +#define ODT_VALUE_38_02_OHM		(3 << 6)
->> +#define ODT_VALUE_45_02_OHM		BIT(2)
->> +#define HSTX_PRE_EMPHASIS_LEVEL_0_55MA	(1)
-> Weird mix of values, bits, bitfields.. perhaps BIT(n) and
-> GENMASK() (+ FIELD_PREP) would be more suitable?
+> 'supp_add_secret_pcf' notes the supported plaintext flags for
+> the Add Secret UVC.
 > 
->> +
->> +#define UTMI_PHY_OVERRIDE_EN		BIT(1)
->> +#define POR_EN				BIT(1)
-> Please associate these with their registers, like
+> 'supp_secret_types' notes the supported types of secrets.
+> Bit 0 indicates secret type 1, bit 1 indicates type 2, and so on.
 > 
-> #define FOO_REG		0xf00
->   #define POR_EN		BIT(1)
+> 'max_secrets' notes the maximum amount of secrets the secret store can
+> store per pv guest.
 > 
->> +#define FREQ_SEL			BIT(0)
->> +#define COMMONONN			BIT(7)
->> +#define FSEL				BIT(4)
->> +#define RETENABLEN			BIT(3)
->> +#define USB2_SUSPEND_N_SEL		BIT(3)
->> +#define USB2_SUSPEND_N			BIT(2)
->> +#define USB2_UTMI_CLK_EN		BIT(1)
->> +#define CLKCORE				BIT(1)
->> +#define ATERESET			~BIT(0)
->> +#define FREQ_24MHZ			(5 << 4)
->> +#define XCFG_COARSE_TUNE_NUM		(2 << 0)
->> +#define XCFG_FINE_TUNE_NUM		(1 << 3)
-> same comment
+> Signed-off-by: Steffen Eiden <seiden@linux.ibm.com>
+> ---
+>   arch/s390/boot/uv.c        |  4 ++++
+>   arch/s390/include/asm/uv.h | 13 +++++++++++--
+>   arch/s390/kernel/uv.c      | 40 ++++++++++++++++++++++++++++++++++++++
+>   3 files changed, 55 insertions(+), 2 deletions(-)
 > 
->> +
->> +static void m31usb_write_readback(void *base, u32 offset,
->> +					const u32 mask, u32 val);
-> We don't need this forward-definition, just move the function up.
-> 
->> +
->> +struct m31usb_phy {
->> +	struct usb_phy		phy;
->> +	void __iomem		*base;
->> +	void __iomem		*qscratch_base;
->> +
->> +	struct reset_control	*phy_reset;
->> +
->> +	bool			cable_connected;
->> +	bool			suspended;
->> +	bool			ulpi_mode;
->> +};
->> +
->> +static void m31usb_reset(struct m31usb_phy *qphy, u32 action)
->> +{
->> +	if (action == CLK_RESET_ASSERT)
->> +		reset_control_assert(qphy->phy_reset);
->> +	else
->> +		reset_control_deassert(qphy->phy_reset);
->> +	wmb(); /* ensure data is written to hw register */
-> Please move the comment above the call.
-> 
->> +}
+> diff --git a/arch/s390/boot/uv.c b/arch/s390/boot/uv.c
+> index 0a077c0a2056..cdffc395f1cd 100644
+> --- a/arch/s390/boot/uv.c
+> +++ b/arch/s390/boot/uv.c
+> @@ -47,6 +47,10 @@ void uv_query_info(void)
+>   		uv_info.conf_dump_finalize_len = uvcb.conf_dump_finalize_len;
+>   		uv_info.supp_att_req_hdr_ver = uvcb.supp_att_req_hdr_ver;
+>   		uv_info.supp_att_pflags = uvcb.supp_att_pflags;
+> +		uv_info.supp_add_secret_req_ver = uvcb.supp_add_secret_req_ver;
+> +		uv_info.supp_add_secret_pcf = uvcb.supp_add_secret_pcf;
+> +		uv_info.supp_secret_types = uvcb.supp_secret_types;
+> +		uv_info.max_secrets = uvcb.max_secrets
 
-Or even better just inline the function. I was never a fan of such 
-multiplexers.
+Apart from this:
+Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
 
-Also does wmb() make sense here? Doesn't regmap (which is used by reset 
-controller) remove the need for it?
-
->> +
->> +static void m31usb_phy_enable_clock(struct m31usb_phy *qphy)
->> +{
->> +	/* Enable override ctrl */
->> +	writel(UTMI_PHY_OVERRIDE_EN, qphy->base + USB_PHY_CFG0);
-> Some of the comments are missing a space before '*/'
-> 
-> Also, please consider adding some newlines to logically split the
-> actions.
-
-
--- 
-With best wishes
-Dmitry
-
+But we can add the ";" when picking.
