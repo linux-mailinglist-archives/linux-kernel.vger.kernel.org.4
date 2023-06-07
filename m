@@ -2,147 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C50B6726772
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 19:32:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0A01726778
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 19:33:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231958AbjFGRc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 13:32:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36182 "EHLO
+        id S232047AbjFGRd0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 13:33:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229927AbjFGRcW (ORCPT
+        with ESMTP id S231937AbjFGRdR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 13:32:22 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8528919AA;
-        Wed,  7 Jun 2023 10:32:09 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (om126233170111.36.openmobile.ne.jp [126.233.170.111])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3B44C74C;
-        Wed,  7 Jun 2023 19:31:40 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1686159102;
-        bh=bKJBUt1V1z4ZiUZcJCmBWG432dDim4B4cyEsgkbFg9M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MXLE+2srcbYFVgxCt2pvRSMmU8bz/ouAC4OwnU3TClYoq5jEDIlbo0G47YZwpVJaV
-         hj20HknX8xc5Y4KSN0essBg82NlOk3ymuAO7etMyiWr969BsKtcctA0/LxxbZ7ro9q
-         XE3zzSOv6OdPGGkKRM+j+U1rdrscXF09VcmTE9xA=
-Date:   Wed, 7 Jun 2023 20:32:04 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Conor Dooley <conor@kernel.org>
-Cc:     linux-media@vger.kernel.org,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MAINTAINERS: drop Shawn Tu due to mail bounces
-Message-ID: <20230607173204.GG5058@pendragon.ideasonboard.com>
-References: <20230607-unfounded-blandness-93cf1e44f127@spud>
+        Wed, 7 Jun 2023 13:33:17 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id DD1C9211B
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 10:32:56 -0700 (PDT)
+Received: (qmail 233960 invoked by uid 1000); 7 Jun 2023 13:32:55 -0400
+Date:   Wed, 7 Jun 2023 13:32:55 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Badhri Jagan Sridharan <badhri@google.com>
+Cc:     gregkh@linuxfoundation.org, colin.i.king@gmail.com,
+        xuetao09@huawei.com, quic_eserrao@quicinc.com,
+        water.zhangjiantao@huawei.com, francesco@dolcini.it,
+        alistair@alistair23.me, stephan@gerhold.net, bagasdotme@gmail.com,
+        luca@z3ntu.xyz, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v6 1/2] usb: gadget: udc: core: Offload
+ usb_udc_vbus_handler processing
+Message-ID: <65faa454-c822-4163-be3d-940fb4a647c7@rowland.harvard.edu>
+References: <20230601031028.544244-1-badhri@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230607-unfounded-blandness-93cf1e44f127@spud>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230601031028.544244-1-badhri@google.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Conor,
-
-Thank you for the patch.
-
-On Wed, Jun 07, 2023 at 06:26:07PM +0100, Conor Dooley wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
+On Thu, Jun 01, 2023 at 03:10:27AM +0000, Badhri Jagan Sridharan wrote:
+> usb_udc_vbus_handler() can be invoked from interrupt context by irq
+> handlers of the gadget drivers, however, usb_udc_connect_control() has
+> to run in non-atomic context due to the following:
+> a. Some of the gadget driver implementations expect the ->pullup
+>    callback to be invoked in non-atomic context.
+> b. usb_gadget_disconnect() acquires udc_lock which is a mutex.
 > 
-> Emails to Shawn Tu bounce & I could not easily see a non-intel email
-> for them on lore. Drop them and orphan their drivers.
+> Hence offload invocation of usb_udc_connect_control()
+> to workqueue.
 > 
-> CC: Shawn Tu <shawnx.tu@intel.com>
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-
-Unless someonw from Intel wants to volunteer and take over maintenance
-of the drivers below,
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
+> UDC should not be pulled up unless gadget driver is bound. The new flag
+> "allow_connect" is now set by gadget_bind_driver() and cleared by
+> gadget_unbind_driver(). This prevents work item to pull up the gadget
+> even if queued when the gadget driver is already unbound.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 1016fc0c096c ("USB: gadget: Fix obscure lockdep violation for udc_mutex")
+> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
 > ---
-> A conversation starter as much as anything else.
+> Changes since v1:
+> - Address Alan Stern's comment on usb_udc_vbus_handler invocation from
+>   atomic context:
+> * vbus_events_lock is now a spinlock and allocations in
+> * usb_udc_vbus_handler are atomic now.
 > 
-> CC: Mauro Carvalho Chehab <mchehab@kernel.org>
-> CC: Sakari Ailus <sakari.ailus@linux.intel.com>
-> CC: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> CC: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-> CC: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
-> CC: linux-media@vger.kernel.org
-> CC: linux-kernel@vger.kernel.org
-> ---
->  MAINTAINERS | 13 ++++---------
->  1 file changed, 4 insertions(+), 9 deletions(-)
+> Changes since v2:
+> - Addressing Alan Stern's comments:
+> ** connect_lock is now held by callers of
+> * usb_gadget_pullup_update_locked() and gadget_(un)bind_driver() does
+> * notdirectly hold the lock.
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 0bbf6c035000..3d2a1314cb26 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -9614,9 +9614,8 @@ S:	Maintained
->  F:	arch/x86/kernel/cpu/hygon.c
->  
->  HYNIX HI556 SENSOR DRIVER
-> -M:	Shawn Tu <shawnx.tu@intel.com>
->  L:	linux-media@vger.kernel.org
-> -S:	Maintained
-> +S:	Orphan
->  T:	git git://linuxtv.org/media_tree.git
->  F:	drivers/media/i2c/hi556.c
->  
-> @@ -9627,9 +9626,8 @@ S:	Maintained
->  F:	drivers/media/i2c/hi846.c
->  
->  HYNIX HI847 SENSOR DRIVER
-> -M:	Shawn Tu <shawnx.tu@intel.com>
->  L:	linux-media@vger.kernel.org
-> -S:	Maintained
-> +S:	Orphan
->  F:	drivers/media/i2c/hi847.c
->  
->  Hyper-V/Azure CORE AND DRIVERS
-> @@ -15519,9 +15517,8 @@ F:	Documentation/filesystems/omfs.rst
->  F:	fs/omfs/
->  
->  OMNIVISION OG01A1B SENSOR DRIVER
-> -M:	Shawn Tu <shawnx.tu@intel.com>
->  L:	linux-media@vger.kernel.org
-> -S:	Maintained
-> +S:	Orphan
->  F:	drivers/media/i2c/og01a1b.c
->  
->  OMNIVISION OV01A10 SENSOR DRIVER
-> @@ -15585,7 +15582,6 @@ F:	drivers/media/i2c/ov2685.c
->  
->  OMNIVISION OV2740 SENSOR DRIVER
->  M:	Tianshu Qiu <tian.shu.qiu@intel.com>
-> -R:	Shawn Tu <shawnx.tu@intel.com>
->  R:	Bingbu Cao <bingbu.cao@intel.com>
->  L:	linux-media@vger.kernel.org
->  S:	Maintained
-> @@ -15625,9 +15621,8 @@ F:	Documentation/devicetree/bindings/media/i2c/ovti,ov5670.yaml
->  F:	drivers/media/i2c/ov5670.c
->  
->  OMNIVISION OV5675 SENSOR DRIVER
-> -M:	Shawn Tu <shawnx.tu@intel.com>
->  L:	linux-media@vger.kernel.org
-> -S:	Maintained
-> +S:	Orphan
->  T:	git git://linuxtv.org/media_tree.git
->  F:	Documentation/devicetree/bindings/media/i2c/ovti,ov5675.yaml
->  F:	drivers/media/i2c/ov5675.c
+> ** Both usb_gadget_(dis)connect() and usb_udc_vbus_handler() would
+> * set/clear udc->vbus and invoke usb_gadget_pullup_update_locked.
+> 
+> ** Add "unbinding" to prevent new connections after the gadget is being
+> * unbound.
+> 
+> Changes since v3:
+> ** Made a minor cleanup which I missed to do in v3 in
+> * usb_udc_vbus_handler().
+> 
+> Changes since v4:
+> - Addressing Alan Stern's comments:
+> ** usb_udc_vbus_handler() now offloads invocation of usb_udc_connect_control()
+> * from workqueue.
+> 
+> ** Dropped vbus_events list as this was redundant. Updating to the
+> * latest value is suffice
+> 
+> Changes since v5:
+> - Addressing Alan Stern's comments:
+> ** Squashed allow_connect logic to this patch.
+> ** Fixed comment length to wrap at 76
+> ** Cancelling vbus_work in del_gadget()
 
--- 
-Regards,
-
-Laurent Pinchart
+Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
