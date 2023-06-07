@@ -2,129 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE7EA7270A5
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 23:41:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 406E37270A8
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 23:41:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229996AbjFGVlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 17:41:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50144 "EHLO
+        id S232100AbjFGVlW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 17:41:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbjFGVlJ (ORCPT
+        with ESMTP id S232031AbjFGVlT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 17:41:09 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE04A1BF7;
-        Wed,  7 Jun 2023 14:41:08 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id 3f1490d57ef6-bacfa9fa329so5467276.0;
-        Wed, 07 Jun 2023 14:41:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686174067; x=1688766067;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=nGrbqkR+iLzazRj/5Eznoucnd0w6CLsNLWJLkMCRjmE=;
-        b=CJjLzbCxwiqomsb+jlDBuo4XtdzT0RRbk0bBi7sk+uwEbXCEV+5211UEpBoSeK7ddD
-         DfCZlyTN+ZHpQqT5+kTW4u3LJgyysWmHA5vfXUH65OoTNmtJVHOpq1nfuwvMq5GAw63Z
-         NkAE61S1L1WXzRmjR9vw1TfWJboQspQaDWdrVFu1AkEIL8+WjOAxl1FDWfktTheScczs
-         1bhFwwc9qG1j8NWRI2OoebHdEGipSto8Fa4EuxAis629dECIUtxLFq+gy9kJMOr1o+TM
-         sCwjQDJqtDl3VDSuSsBDI7XfY5QYGmM9fJpH/jQ6xfDB3sAi1DAaPeMQS922pCo7N7/t
-         sIpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686174067; x=1688766067;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nGrbqkR+iLzazRj/5Eznoucnd0w6CLsNLWJLkMCRjmE=;
-        b=anpFJG1QiZj7MKRyu1E+xMEWN4VMFg7GZGoF4lJka2404GaFExr9qBxClydIvmg/YH
-         m8b50yFCs1j9oFiydLjmaMsAkeMNgw0Zkw0UW0gFmzooVXVFXAbTN7BRzVyuv44q59KG
-         PTbYceChy1p/maMsKsV9qCPQ1uUKoOYrIUFZUJgfR53cWYSxoBvX8vR30jb+TyfJcx+p
-         ovEXdSFJjqkwbSWzrs/KxeR91d/OseRy7P58+sQrfjdTJp5zKZ53231so0sufxvKlS0z
-         lfun2SFFXlBGXh0Bwrr1DES8ZRZYSr5EdZ8Yt4/mnhd+vok9D0BCsAXETKyV43JMc1+o
-         k9rg==
-X-Gm-Message-State: AC+VfDwg1XKaagQWLN5mdOjFO+7Cm8X7NLioXDH7xJKrZKTnecMqbUzh
-        n375XO+NFqy22Q7i7TRj/LpaM+BdlsqFPg==
-X-Google-Smtp-Source: ACHHUZ58QT/d69mv9JhOkCKiAQq7JxdtSdfrT3g9kxfF6x5JcDQ6rcAbB2vfoB33GiVxVU+lfkOzbw==
-X-Received: by 2002:a25:fa09:0:b0:b9e:6d2c:ce2 with SMTP id b9-20020a25fa09000000b00b9e6d2c0ce2mr6629219ybe.46.1686174067588;
-        Wed, 07 Jun 2023 14:41:07 -0700 (PDT)
-Received: from horus.lan (75-164-186-145.ptld.qwest.net. [75.164.186.145])
-        by smtp.gmail.com with ESMTPSA id e18-20020a258912000000b00ba7c2112650sm172714ybl.30.2023.06.07.14.41.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 14:41:07 -0700 (PDT)
-From:   Jason Gerecke <killertofu@gmail.com>
-X-Google-Original-From: Jason Gerecke <jason.gerecke@wacom.com>
-To:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>
-Cc:     Ping Cheng <pinglinux@gmail.com>,
-        Aaron Armstrong Skomra <skomra@gmail.com>,
-        Joshua Dickens <Joshua@Joshua-Dickens.com>,
-        Jason Gerecke <jason.gerecke@wacom.com>
-Subject: [PATCH] HID: wacom: Use ktime_t rather than int when dealing with timestamps
-Date:   Wed,  7 Jun 2023 14:41:02 -0700
-Message-ID: <20230607214102.2113-1-jason.gerecke@wacom.com>
-X-Mailer: git-send-email 2.41.0
+        Wed, 7 Jun 2023 17:41:19 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A4751FEB;
+        Wed,  7 Jun 2023 14:41:17 -0700 (PDT)
+Date:   Wed, 7 Jun 2023 23:41:13 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
+        t=1686174075; bh=k1LN+P1OrnEuCtY5mNXGFc8mHGM41YmXWnusFCK8Ito=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=n3gIjf5J7A+HkRFvT9Eh57idzGUaN1U6Zh5ew+amecHo0lvyQlaSc9sD3EAccTLFv
+         7KjCkdQ+Qz3LEJEYRNG+D0DNGR3iyNWfCd/rSAnGccr/8tVeRCWxcuM4qH+MOeZpuI
+         Q5TmE+OijMNbIKmXKJO11uE9cZpp6tfYz532qsMA=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To:     Zhangjin Wu <falcon@tinylab.org>
+Cc:     w@1wt.eu, arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v3 0/3] tools/nolibc: add a new syscall helper
+Message-ID: <87e7a391-b97b-4001-b12a-76d20790563e@t-8ch.de>
+References: <cover.1686135913.git.falcon@tinylab.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <cover.1686135913.git.falcon@tinylab.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Code which interacts with timestamps needs to use the ktime_t type
-returned by functions like ktime_get. The int type does not offer
-enough space to store these values, and attempting to use it is a
-recipe for problems. In this particular case, overflows would occur
-when calculating/storing timestamps leading to incorrect values being
-reported to userspace. In some cases these bad timestamps cause input
-handling in userspace to appear hung.
+On 2023-06-07 19:28:58+0800, Zhangjin Wu wrote:
+> Willy, Thomas
+> 
+> This is the revision of the v2 syscall helpers [1], it is based on
+> 20230606-nolibc-rv32+stkp7a of [2]. It doesn't conflict with the v4 of
+> -ENOSYS patchset [3], so, it is ok to simply merge both of them.
+> 
+> This revision mainly applied Thomas' method, removed the __syscall()
+> helper and replaced it with __sysret() instead, because __syscall()
+> looks like _syscall() and syscall(), it may mixlead the developers.
+> 
+> Changes from v2 -> v3:
+> 
+> * tools/nolibc: sys.h: add a syscall return helper
+> 
+>   * The __syscall() is removed.
+> 
+>   * Align the code style of __sysret() with the others, and use
+>     __inline__ instead of inline (like stdlib.h) to let it work with
+>     the default -std=c89 in tools/testing/selftests/nolibc/Makefile
+> 
+> * tools/nolibc: unistd.h: apply __sysret() helper
+> 
+>   As v2.
+> 
+> * tools/nolibc: sys.h: apply __sysret() helper
+> 
+>   replaced __syscall() with __sysret() and merged two separated patches of v2 to one.
+> 
+> Did run-user tests for rv32 (with [3]), rv64 and arm64.
+> 
+> BTW, two questions for Thomas,
+> 
+> * This commit 659a49abc9c2 ("tools/nolibc: validate C89 compatibility")
+>   enables -std=c89, why not gnu11 used by kernel ? ;-)
 
-Link: https://gitlab.freedesktop.org/libinput/libinput/-/issues/901
-Fixes: 17d793f3ed53 ("HID: wacom: insert timestamp to packed Bluetooth (BT) events")
-Signed-off-by: Jason Gerecke <jason.gerecke@wacom.com>
----
- drivers/hid/wacom_wac.c | 4 ++--
- drivers/hid/wacom_wac.h | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Because nolibc needs to support whatever its users need.
+As nolibc is header-only all of it needs to work everywhere.
+C89 should work for everybody :-)
 
-diff --git a/drivers/hid/wacom_wac.c b/drivers/hid/wacom_wac.c
-index 2ccf83837134..2f16e47e4b69 100644
---- a/drivers/hid/wacom_wac.c
-+++ b/drivers/hid/wacom_wac.c
-@@ -1314,7 +1314,7 @@ static void wacom_intuos_pro2_bt_pen(struct wacom_wac *wacom)
- 	struct input_dev *pen_input = wacom->pen_input;
- 	unsigned char *data = wacom->data;
- 	int number_of_valid_frames = 0;
--	int time_interval = 15000000;
-+	ktime_t time_interval = 15000000;
- 	ktime_t time_packet_received = ktime_get();
- 	int i;
- 
-@@ -1359,7 +1359,7 @@ static void wacom_intuos_pro2_bt_pen(struct wacom_wac *wacom)
- 		bool range = frame[0] & 0x20;
- 		bool invert = frame[0] & 0x10;
- 		int frames_number_reversed = number_of_valid_frames - i - 1;
--		int event_timestamp = time_packet_received - frames_number_reversed * time_interval;
-+		ktime_t event_timestamp = time_packet_received - frames_number_reversed * time_interval;
- 
- 		if (!valid)
- 			continue;
-diff --git a/drivers/hid/wacom_wac.h b/drivers/hid/wacom_wac.h
-index 1a40bb8c5810..ee21bb260f22 100644
---- a/drivers/hid/wacom_wac.h
-+++ b/drivers/hid/wacom_wac.h
-@@ -324,7 +324,7 @@ struct hid_data {
- 	int ps_connected;
- 	bool pad_input_event_flag;
- 	unsigned short sequence_number;
--	int time_delayed;
-+	ktime_t time_delayed;
- };
- 
- struct wacom_remote_data {
--- 
-2.41.0
+The kernel on the other hand is compiled standalone and is not limited
+by its users.
 
+See the discussion here:
+
+https://lore.kernel.org/all/20230328-nolibc-c99-v2-0-c989f2289222@weissschuh.net/
+https://lore.kernel.org/all/20230328-nolibc-c99-v1-1-a8302fb19f19@weissschuh.net/
+
+> * Do we need to tune the order of the macros in unistd.h like this:
+> 
+>     #define _syscall(N, ...) __sysret(my_syscall##N(__VA_ARGS__))
+>     #define _syscall_n(N, ...) _syscall(N, __VA_ARGS__)
+>     #define __syscall_narg(_0, _1, _2, _3, _4, _5, _6, N, ...) N
+>     #define _sycall_narg(...) __syscall_narg(__VA_ARGS__, 6, 5, 4, 3, 2, 1, 0)
+>     #define syscall(...) _syscall_n(_sycall_narg(__VA_ARGS__), ##__VA_ARGS__)
+> 
+>   Before, It works but seems not put in using order:
+> 
+>     #define _syscall(N, ...) __sysret(my_syscall##N(__VA_ARGS__))
+>     #define _sycall_narg(...) __syscall_narg(__VA_ARGS__, 6, 5, 4, 3, 2, 1, 0)
+>     #define __syscall_narg(_0, _1, _2, _3, _4, _5, _6, N, ...) N
+>     #define _syscall_n(N, ...) _syscall(N, __VA_ARGS__)
+>     #define syscall(...) _syscall_n(_sycall_narg(__VA_ARGS__), ##__VA_ARGS__)
+
+Not sure it makes a big difference.
+If you want to change it, go for it.
+
+> Thanks.
+> 
+> Best regards,
+> Zhangjin
+> 
+> ---
+> [1]: https://lore.kernel.org/linux-riscv/cover.1686036862.git.falcon@tinylab.org/
+> [2]: https://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git
+> [3]: https://lore.kernel.org/linux-riscv/cover.1686128703.git.falcon@tinylab.org/T/#t
+> 
+> Zhangjin Wu (3):
+>   tools/nolibc: sys.h: add a syscall return helper
+>   tools/nolibc: unistd.h: apply __sysret() helper
+>   tools/nolibc: sys.h: apply __sysret() helper
+> 
+>  tools/include/nolibc/sys.h    | 364 +++++-----------------------------
+>  tools/include/nolibc/unistd.h |  11 +-
+>  2 files changed, 55 insertions(+), 320 deletions(-)
+
+For the full series:
+
+Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
+
+Thanks,
+Thomas
