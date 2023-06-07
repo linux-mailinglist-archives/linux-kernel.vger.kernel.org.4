@@ -2,73 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D23C5725459
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 08:34:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 239CE725463
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 08:36:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237893AbjFGGel (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 02:34:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55086 "EHLO
+        id S234376AbjFGGg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 02:36:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237661AbjFGGeF (ORCPT
+        with ESMTP id S235252AbjFGGgC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 02:34:05 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 15ADC1FF0
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 23:33:40 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8DxCerDJIBkDAwAAA--.156S3;
-        Wed, 07 Jun 2023 14:33:39 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Ax6OTBJIBkc_IDAA--.14543S3;
-        Wed, 07 Jun 2023 14:33:37 +0800 (CST)
-Message-ID: <7db6a90f-1929-5e36-3f1d-c96acb5c70a1@loongson.cn>
-Date:   Wed, 7 Jun 2023 14:33:37 +0800
+        Wed, 7 Jun 2023 02:36:02 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F2C272B
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 23:35:08 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2b15a327c20so82446191fa.1
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 23:35:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686119701; x=1688711701;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=GDLhbIj1h1brePs46a8+9RVwoL3klUcsVNRfX5GYZHU=;
+        b=f+4fDFosW9vw+ywjmYnEr0xgmF/taWie23nQww982PJApOEAKYXdl/oqboBfDEL/xJ
+         HCyDxeVUOG66QN9GUNGUfqs6vZzkPmU3K8Bs1v7okPvHW197gxdLXBab3To9UiQsl6U1
+         FwvLmMB4mjIPN4yxUfhZR3fwZgX6GWKqScUBn28K36UDqtwgyL1KA0OrZYbgZDqM6dDH
+         4aSnwdV5uUUxUduonTIj1rOtYhwhQLtCRmpOVwTDrR5TZQdu+Nqc1QczEGi62jrmVMHU
+         ecuNlkE2o1HCadiYU000ULSL+DiFiOfBR4grYwxxY0rgAizA1datInUlNvvmya3k5GdI
+         W1Fw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686119701; x=1688711701;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GDLhbIj1h1brePs46a8+9RVwoL3klUcsVNRfX5GYZHU=;
+        b=TA2I9/DrmwSK435jBxHHjqO7TO/yZYHa5fv99mCHRKCyVTl/TT8m5uqZhTdqW3XWWt
+         wNGBLEYKKsnwbywNgJkPPSrBKiXaN6yZiiIAHvDELMlcne6C66/YowxwwBKy1pE4LZ/H
+         3S0/WgG4C1pxoBvIVi8qL4wGiKwOtwmowBc01Xq3Jc+PmtfJGmX2a+3bsP1wZSmjdPnF
+         /726BXfRDUcH/55szDc1VDV8AwNXq2Ga1AYglifynhXaJlMl588bGFw0M4NDq4yPMd/q
+         ZmBIerwikO/zDt5erOtebq0fueuKSZpv3VjrhK6O+6XTojUQtTkR63b+PL+0GioW7b66
+         ESvA==
+X-Gm-Message-State: AC+VfDyiUWS77/bTyhVpawCXcPRSrpqjBkZnxpXRIHng+5GMIJiKhcDy
+        n6BwIgQrAPeovDlCpKjPpIYi8aFCEZ3bIOvL+xlwSA==
+X-Google-Smtp-Source: ACHHUZ4qNZTRuYZfvCX9IX8YM10d8EPKEN5e8MFW2FKTx2mNeEnMkCQbqpMClq9fy9Dfjnp6o+QbK7+ZVYdMDETfezA=
+X-Received: by 2002:a05:651c:102b:b0:2a8:adc4:a928 with SMTP id
+ w11-20020a05651c102b00b002a8adc4a928mr2042361ljm.18.1686119701151; Tue, 06
+ Jun 2023 23:35:01 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] drm/amdgpu: display/Kconfig: replace leading spaces with
- tab
-Content-Language: en-US
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian Konig <christian.koenig@amd.com>,
-        Pan Xinhui <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20230606133328.148490-1-suijingfeng@loongson.cn>
- <CADnq5_MdNSBJuNrJC2-fRByhEoUqEJmMGATT+OrFvjqA7k4F5Q@mail.gmail.com>
- <85b7bf66-840b-c6de-a7e3-be1f49953464@loongson.cn>
-Organization: Loongson
-In-Reply-To: <85b7bf66-840b-c6de-a7e3-be1f49953464@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Ax6OTBJIBkc_IDAA--.14543S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj93XoWxJrW3uFW3CFy3uF1UWF4DGFX_yoW8tr4Upw
-        4kJFy5CrWUJF1rJr47J3WUXFy5Jw4fJa4UJryDX3WUZ34DAF1jgr4qgrn0grWUJFWxA3W8
-        JF1rWr47ZF1qyrbCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUPmb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E
-        14v26r4UJVWxJr1ln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6x
-        kI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v2
-        6r1q6rW5McIj6I8E87Iv67AKxVWxJVW8Jr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcV
-        AKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4
-        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
-        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I
-        0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWx
-        JVW8Jr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8
-        ceOJUUUUU==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+References: <20230526010748.1222-1-masahisa.kojima@linaro.org>
+ <20230526010748.1222-4-masahisa.kojima@linaro.org> <0d3e0370-eb76-010f-3d30-9acc9b59645c@siemens.com>
+ <CAFA6WYPnWJNPvhT2JDkO-qXRUaJoxBGZEvSfhxcRynV7=VSdQA@mail.gmail.com>
+ <CAMj1kXFM45PCTU--+CCed6Cq_N5XqDG6tTu6fnQTSCpW2BWA5A@mail.gmail.com> <4ff09002-e871-38b9-43ec-227a64bac731@siemens.com>
+In-Reply-To: <4ff09002-e871-38b9-43ec-227a64bac731@siemens.com>
+From:   Ilias Apalodimas <ilias.apalodimas@linaro.org>
+Date:   Wed, 7 Jun 2023 09:34:25 +0300
+Message-ID: <CAC_iWjJJ5E9Q1or5yTiDynzv_WAYH-g+N24aRdu9rvcsbWqnrg@mail.gmail.com>
+Subject: Re: [PATCH v5 3/3] efi: Add tee-based EFI variable driver
+To:     Jan Kiszka <jan.kiszka@siemens.com>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Masahisa Kojima <masahisa.kojima@linaro.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-efi@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        "Su, Bao Cheng (RC-CN DF FA R&D)" <baocheng.su@siemens.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,70 +80,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-https://cgit.freedesktop.org/amd/drm-amd/
+Hi Jan,
 
+[...]
 
-This one has a long time with no update.
-
-
-On 2023/6/7 14:31, Sui Jingfeng wrote:
-> Hi,
+> >>>>
+> > ...
+> >>>
+> >>> I think we have a probe ordering issue with this driver:
+> >>> efivarfs_fill_super() may be called before the TEE bus was probed, thus
+> >>> with the default efivar ops still registered. And that means
+> >>> efivar_supports_writes() will return false, and the fs declares itself
+> >>> as readonly. I've seen systemd mounting it r/o initialling, and you need
+> >>> to remount the fs to enable writability.
+> >>>
+> >>> Is there anything that could be done to re-order things reliably, probe
+> >>> the tee bus earlier etc.?
+> >>
+> >> This driver has a dependency on user-space daemon: tee-supplicant to
+> >> be running for RPMB access. So once you start that daemon the
+> >> corresponding device will be enumerated on the TEE bus and this driver
+> >> probe will be invoked. So I would suggest you to load this daemon very
+> >> early in the boot process or better to make it a part of initramfs.
+> >>
+> >
+> > That is not the point, really.
+> >
+> > If this dependency exists, the code should be aware of that, and made
+> > to work correctly in spite of it. Requiring a module to be part of
+> > initramfs is not a reasonable fix.
 >
-> On 2023/6/7 03:15, Alex Deucher wrote:
->> Applied.  Thanks!
+> In fact, I've tested a non-modularized build as well, just to exclude
+> that issue. The daemon dependency is more likely the problem here.
 >
-> Where is the official branch of drm/amdgpu, I can't find it on the 
-> internet.
->
-> Sorry for asking this silly question.
+> >
+> > IIUC, this also means that the efivar ops are updated while there is
+> > already a client. This seems less than ideal as well
 
->
->> Alex
->>
->> On Tue, Jun 6, 2023 at 9:33 AM Sui Jingfeng <suijingfeng@loongson.cn> 
->> wrote:
->>> This patch replace the leading spaces with tab, make them keep 
->>> aligned with
->>> the rest of the config options. No functional change.
->>>
->>> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
->>> ---
->>>   drivers/gpu/drm/amd/display/Kconfig | 17 +++++++----------
->>>   1 file changed, 7 insertions(+), 10 deletions(-)
->>>
->>> diff --git a/drivers/gpu/drm/amd/display/Kconfig 
->>> b/drivers/gpu/drm/amd/display/Kconfig
->>> index 2d8e55e29637..04ccfc70d583 100644
->>> --- a/drivers/gpu/drm/amd/display/Kconfig
->>> +++ b/drivers/gpu/drm/amd/display/Kconfig
->>> @@ -42,16 +42,13 @@ config DEBUG_KERNEL_DC
->>>            Choose this option if you want to hit kdgb_break in assert.
->>>
->>>   config DRM_AMD_SECURE_DISPLAY
->>> -        bool "Enable secure display support"
->>> -        depends on DEBUG_FS
->>> -        depends on DRM_AMD_DC_FP
->>> -        help
->>> -            Choose this option if you want to
->>> -            support secure display
->>> -
->>> -            This option enables the calculation
->>> -            of crc of specific region via debugfs.
->>> -            Cooperate with specific DMCU FW.
->>> +       bool "Enable secure display support"
->>> +       depends on DEBUG_FS
->>> +       depends on DRM_AMD_DC_FP
->>> +       help
->>> +         Choose this option if you want to support secure display
->>>
->>> +         This option enables the calculation of crc of specific 
->>> region via
->>> +         debugfs. Cooperate with specific DMCU FW.
->>>
->>>   endmenu
->>> -- 
->>> 2.25.1
->>>
--- 
-Jingfeng
+As Sumit pointed out, the 'device' won't be available from OP-TEE
+until the supplicant is up and running and as a result, the module
+_probe() function won't run.  Unfortunately, this isn't something we
+can avoid since the supplicant is responsible for the RPMB writes.
+The only thing I can think of is moving parts of the supplicant to the
+kernel and wiring up the RPC calls for reading/writing data to the
+eMMC subsystem.  There was another discussion here [0] requesting the
+same thing for different reasons. But unless I am missing something
+this won't solve the problem completely either.  You still have a
+timing dependency of "when did the RT callbacks change" -- "when was
+my efivarfs mounted".
 
+Thanks
+/Ilias
+>
+> Jan
+>
+> --
+> Siemens AG, Technology
+> Competence Center Embedded Linux
+>
