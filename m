@@ -2,78 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5955F72654A
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 17:58:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C16D6726557
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 18:00:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240355AbjFGP6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 11:58:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59972 "EHLO
+        id S239096AbjFGQAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 12:00:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239935AbjFGP57 (ORCPT
+        with ESMTP id S235978AbjFGQAi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 11:57:59 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2CF8199D;
-        Wed,  7 Jun 2023 08:57:43 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-514859f3ffbso1603800a12.1;
-        Wed, 07 Jun 2023 08:57:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686153462; x=1688745462;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iHtYOKWjXE4LNBHmSRISovcNXkXYAO+Eyv40xIPPG9k=;
-        b=UmTnMb0IeP5nrNarQDqeInEpB9GQV+6xbAgySdcKusGk7/15Y/Rgqu53ADIeiEL9Kf
-         SU5pqvJdldXL26hQWBSzOJRAyA856Knqp5nUuUqHAwjbvsxRAAXRhfmDCbqCaiUMGsPu
-         L0kTnMuUnR6azxnKImPO1vzw8uZsyHeedQjqDXhWpkAIlHM5FNBGXZYyGd5kqSreOV9n
-         4792yvzZmKc4D2AVygogBwuiO/gUa3qqnKSW5O1aWG/fADp42gvahpp2bBY+3rNz9nYG
-         RvmdDU6/8Xx991szzAFdCSv+voh4DDOYZ4lSA4GXdsF1WUmvVwI/e5WC4APTuvXqS04c
-         94jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686153462; x=1688745462;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iHtYOKWjXE4LNBHmSRISovcNXkXYAO+Eyv40xIPPG9k=;
-        b=DjW8b5uxZD2VkgbfOz2AurlNUgvD+1ySXYYjBAosjPNKZTtj5/c+cSZFIp66sQG9c7
-         ZDGL+Hnkq3zrs7K5/UZxhxtxCC+4wkigvGvZdBwhqrU8yys0ePmVv86gGaXqmr9V9ikE
-         GdWcsqMrLRsi++zML7J7uPyg5uAzHIdziD1EvYrkV8w1O4YBBYXut/TWGCGqflRXagvJ
-         WhJxrNX7XLWvEPAHt0iHKUF2yjqlSiXYE9tj/4CUnhaPXjuHNt7xynDpUQsElc1Gv7xt
-         V0b4wsGmhZ3W7x5/sNGbWu8AGiws+pwAI3ZR7TwA9Saj4DLyNfu2KvN7sTEygV1D8UUW
-         i9hg==
-X-Gm-Message-State: AC+VfDzvx6bgNxCA/lMzorrLreHBNMo0po96K+LVp2IcXIJwsyswhbhf
-        X7eK0tZTqrXh/D80HEe3Nfn8V3rxXD0=
-X-Google-Smtp-Source: ACHHUZ440OktHbvcRSQlHCV6PoPnUOV8yGww7BdxQ6bF3JhMhC75Gc/Kz8wpWp4EO9w9QSZBf4SDoQ==
-X-Received: by 2002:a17:907:6d11:b0:978:6c0e:354e with SMTP id sa17-20020a1709076d1100b009786c0e354emr6606213ejc.4.1686153461898;
-        Wed, 07 Jun 2023 08:57:41 -0700 (PDT)
-Received: from orome (p200300e41f305300f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f30:5300:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id c8-20020a170906924800b00977cc473b41sm5157196ejx.142.2023.06.07.08.57.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 08:57:41 -0700 (PDT)
-Date:   Wed, 7 Jun 2023 17:57:39 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Peter De Schrijver <pdeschrijver@nvidia.com>
-Cc:     jonathanh@nvidia.com, mperttunen@nvidia.com, sudeep.holla@arm.com,
-        talho@nvidia.com, robh@kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stefank@nvidia.com,
-        krzysztof.kozlowski@linaro.org
-Subject: Re: [PATCH v4 6/6] firmware: tegra: bpmp: Add support for DRAM MRQ
- GSCs
-Message-ID: <ZICo8wYqM8tmCEob@orome>
-References: <20230511132048.1122075-1-pdeschrijver@nvidia.com>
- <20230511132048.1122075-7-pdeschrijver@nvidia.com>
- <ZGNOXO3rRtFx_12R@orome>
- <ZGNS9w+i9Y9gpz6R@44189d9-lcedt>
+        Wed, 7 Jun 2023 12:00:38 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B2BBE4;
+        Wed,  7 Jun 2023 09:00:37 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 869505C0135;
+        Wed,  7 Jun 2023 12:00:36 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Wed, 07 Jun 2023 12:00:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        invisiblethingslab.com; h=cc:cc:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1686153636; x=1686240036; bh=5028jVPHP9PdFYdLuVCSXCH9vrAc5KtFszG
+        WksMpGUc=; b=C1cAy4eG464IqwFzu5xeP8gAE0QO3dLhTabsmagrE6+5R6TBxmH
+        pvqIWi2MhW7XF++PVFirKmt/IhrFVF9S4TlHsMzlUbCfYF9odjPncT8XMrzJosos
+        kPB0xE/usXX0McDFIiZUqyZ7fKbpxkvofxzL4XBtKGAO9fYDVczXLbBHhy4LuCjk
+        EuRo9k9bs1b4Q/LufMkRTlvH6+agpSy+sBSlG1Oqxhaf17gJR8Xy87qMkxpecZSD
+        BXSK2SDOOZmSi0H/BVWOX4TlJaywLxpCysr+/V8LCGmaJ3INEaYiGf5k6z8uhUDC
+        cSkvagZov6MfRIgGYo+ic5Pv5TdHMImHh5w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1686153636; x=1686240036; bh=5028jVPHP9PdF
+        YdLuVCSXCH9vrAc5KtFszGWksMpGUc=; b=vHwfFTGT/5ssYIxdP7wETLuuxk6eC
+        ARgxzVUapDh+HCKJJ8iHh24XSq02KTaPS6M0Wt9XlqjMnO59fEC0q+Myz3byIQ+r
+        4eH+at1xsN5LoszpsLl4kMETWuXanw/kSXECpBBmoe2fFdFqqDccXU4Qc/ulqjxr
+        /UfuPuhs66RaE8mbOYgAkPq17kIAw2UbmlfFlJvqptPtot5Vk6cELU1U8T2iU/m2
+        WzMqVGJgdxCYjhiK6Ug/dB1dJelA/OiMIF6wxslWBXtkTvyRNfLF+FCZH9yVY1FV
+        Bpi/5dcOovMKPvtCy+Bs8MqZGv3pamgiWbyisiytKLVkgKCK3rZmDumgA==
+X-ME-Sender: <xms:pKmAZMcLo39yitTMll5iVSvRCR-Rm-1emH2Huav95zhyje1KSxLKdw>
+    <xme:pKmAZOPpaor5cBwX_YamCJT8uKI-s1RLSzDOEjHM6d1JyArTRoMo5T7XGE75s3gJx
+    44oGcV5aGdAnhw>
+X-ME-Received: <xmr:pKmAZNjfS2yjK4_WlTYeTsUp4nXQvd630j7pQiXvaBpB4BuYGAzSDyV4sbY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedtgedgleehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepffgvmhhi
+    ucforghrihgvucfqsggvnhhouhhruceouggvmhhisehinhhvihhsihgslhgvthhhihhngh
+    hslhgrsgdrtghomheqnecuggftrfgrthhtvghrnhepudeileefueetvdelheeuteffjeeg
+    jeegffekleevueelueekjeejudffteejkeetnecuvehluhhsthgvrhfuihiivgeptdenuc
+    frrghrrghmpehmrghilhhfrhhomhepuggvmhhisehinhhvihhsihgslhgvthhhihhnghhs
+    lhgrsgdrtghomh
+X-ME-Proxy: <xmx:pKmAZB_LbTcOUN9Y4UmEdCnb2EQpvfLp4_AGO3a7d4msJWJpEID-IQ>
+    <xmx:pKmAZIsaFZ01jW2Ims43CaghesuX8msDbywk_MLelotLBjIOwieWzA>
+    <xmx:pKmAZIHL31ojvjJN_FhQoqB9f7_5Pz-fhuiysZ51yGGlty5x4YBDkg>
+    <xmx:pKmAZKLHp2_Xb59rXMoTDV9vfJTPByJH8LEmMZvSAUf4sDbrJxueIA>
+Feedback-ID: iac594737:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 7 Jun 2023 12:00:35 -0400 (EDT)
+Date:   Wed, 7 Jun 2023 12:00:29 -0400
+From:   Demi Marie Obenour <demi@invisiblethingslab.com>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Roger Pau =?utf-8?B?TW9ubsOp?= <roger.pau@citrix.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= 
+        <marmarek@invisiblethingslab.com>, xen-devel@lists.xenproject.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] xen-blkback: Implement diskseq checks
+Message-ID: <ZICpodHAGv8qRw5A@itl-email>
+References: <20230601214823.1701-1-demi@invisiblethingslab.com>
+ <20230601214823.1701-2-demi@invisiblethingslab.com>
+ <ZIA1VkDdgt5kmqEt@infradead.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="gObwIVTIUUFZASFm"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="CTS34Y4jd0AZd9RG"
 Content-Disposition: inline
-In-Reply-To: <ZGNS9w+i9Y9gpz6R@44189d9-lcedt>
-User-Agent: Mutt/2.2.10 (2023-03-25)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ZIA1VkDdgt5kmqEt@infradead.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -81,130 +92,115 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---gObwIVTIUUFZASFm
-Content-Type: text/plain; charset=us-ascii
+--CTS34Y4jd0AZd9RG
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+Date: Wed, 7 Jun 2023 12:00:29 -0400
+From: Demi Marie Obenour <demi@invisiblethingslab.com>
+To: Christoph Hellwig <hch@infradead.org>
+Cc: Roger Pau =?utf-8?B?TW9ubsOp?= <roger.pau@citrix.com>,
+	Jens Axboe <axboe@kernel.dk>,
+	Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>,
+	xen-devel@lists.xenproject.org, linux-block@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] xen-blkback: Implement diskseq checks
 
-On Tue, May 16, 2023 at 12:55:03PM +0300, Peter De Schrijver wrote:
-> On Tue, May 16, 2023 at 11:35:24AM +0200, Thierry Reding wrote:
-> > On Thu, May 11, 2023 at 04:20:51PM +0300, Peter De Schrijver wrote:
-> > > Implement support for DRAM MRQ GSCs.
-> > >=20
-> > > Signed-off-by: Peter De Schrijver <pdeschrijver@nvidia.com>
-> > > ---
-> > >  drivers/firmware/tegra/bpmp-tegra186.c | 232 ++++++++++++++++++-----=
---
-> > >  drivers/firmware/tegra/bpmp.c          |   4 +-
-> > >  2 files changed, 168 insertions(+), 68 deletions(-)
-> > >=20
-> > > diff --git a/drivers/firmware/tegra/bpmp-tegra186.c b/drivers/firmwar=
-e/tegra/bpmp-tegra186.c
-> > > index 2e26199041cd..74575c9f0014 100644
-> > > --- a/drivers/firmware/tegra/bpmp-tegra186.c
-> > > +++ b/drivers/firmware/tegra/bpmp-tegra186.c
-> > > @@ -4,7 +4,9 @@
-> > >   */
-> > > =20
-> > >  #include <linux/genalloc.h>
-> > > +#include <linux/io.h>
-> > >  #include <linux/mailbox_client.h>
-> > > +#include <linux/of_address.h>
-> > >  #include <linux/platform_device.h>
-> > > =20
-> > >  #include <soc/tegra/bpmp.h>
-> > > @@ -13,12 +15,21 @@
-> > > =20
-> > >  #include "bpmp-private.h"
-> > > =20
-> > > +enum tegra_bpmp_mem_type { TEGRA_INVALID, TEGRA_SRAM, TEGRA_DRAM };
-> >=20
-> > Still not convinced about this one.
-> >=20
-> > > +
-> > >  struct tegra186_bpmp {
-> > >  	struct tegra_bpmp *parent;
-> > > =20
-> > >  	struct {
-> > > -		struct gen_pool *pool;
-> > > -		void __iomem *virt;
-> > > +		union {
-> > > +			struct {
-> > > +				void __iomem *virt;
-> > > +				struct gen_pool *pool;
-> > > +			} sram;
-> > > +			struct {
-> > > +				void *virt;
-> > > +			} dram;
-> > > +		};
-> >=20
-> > The drawback of these unions is that they can lead to ambiguity, so you
-> > need the tegra_bpmp_mem_type enum to differentiate between the two.
-> >=20
+On Wed, Jun 07, 2023 at 12:44:22AM -0700, Christoph Hellwig wrote:
+> On Thu, Jun 01, 2023 at 05:48:22PM -0400, Demi Marie Obenour wrote:
+> > +	if (diskseq) {
+> > +		struct gendisk *disk =3D bdev->bd_disk;
+> > +
+> > +		if (unlikely(disk =3D=3D NULL)) {
+> > +			pr_err("%s: device %08x has no gendisk\n",
+> > +			       __func__, vbd->pdevice);
+> > +			xen_vbd_free(vbd);
+> > +			return -EFAULT;
+> > +		}
 >=20
-> No, on the contrary, now it's clear you can either have void __iomem *
-> and struct gen_pool * or void *virt but not both.
+> bdev->bd_disk is never NULL.
 
-No, it's not clear. You can have one part of your driver write the
-sram.virt field and another read dram.virt and they'll end up pointing
-at the same memory location but with different meaning. That's why you
-need to introduce the enumeration in order to specify which one of the
-two you want to pick.
+Fixed in v3.
 
-And that's exactly where you start introducing the potential for
-inconsistency: now you need to be extra careful that the enumeration and
-the unions are set correctly. You effectively have two sources of truth
-and they don't necessarily match. You can also end up (at least
-theoretically) with the invalid value, so you need an extra check for
-that too.
-
-You can avoid all of those inconsistencies if you reduce this to one
-source of truth, namely the pointers that you're going to use.
-
-Your variant would be slightly better if you omitted the invalid value
-because then you could still have an internal inconsistency, but the
-likelihood is much reduced.
-
-> > If you change this to something like:
-> >=20
-> > 	struct {
-> > 		struct gen_pool *pool;
-> > 		void __iomem *sram;
-> > 		void *dram;
-> > 		dma_addr_t phys;
-> > 	} tx, rx;
-> >=20
-> > you eliminate all ambiguity because you can either have pool and sram
-> > set, or you can have dram set, and depending on which are set you know
-> > which type of memory you're dealing with.
-> >=20
+> > +	diskseq_str =3D xenbus_read(XBT_NIL, dev->nodename, "diskseq", &disks=
+eq_len);
 >=20
-> No. You just add ambiguity. It's not clear from looking at the data
-> structure which fields are valid for which case.
+> Please avoid the overly long line.
 
-That's easily fixed by adding comments explaining what you use them for.
-But the code should make that pretty clear already.
+Fixed in v3.
 
-Thierry
+> > +	if (IS_ERR(diskseq_str)) {
+> > +		int err =3D PTR_ERR(diskseq_str);
+> > +		diskseq_str =3D NULL;
+> > +
+> > +		/*
+> > +		 * If this does not exist, it means legacy userspace that does not
+>=20
+> .. even more so in comments.
 
---gObwIVTIUUFZASFm
+Fixed in v3.
+
+> > +		 * support diskseq.
+> > +		 */
+> > +		if (unlikely(!XENBUS_EXIST_ERR(err))) {
+> > +			xenbus_dev_fatal(dev, err, "reading diskseq");
+> > +			return;
+> > +		}
+> > +		diskseq =3D 0;
+> > +	} else if (diskseq_len <=3D 0) {
+> > +		xenbus_dev_fatal(dev, -EFAULT, "diskseq must not be empty");
+> > +		goto fail;
+> > +	} else if (diskseq_len > 16) {
+>=20
+> No need for a else after a return.
+
+Fixed in v3.
+
+> > +		xenbus_dev_fatal(dev, -ERANGE, "diskseq too long: got %d but limit i=
+s 16",
+> > +				 diskseq_len);
+> > +		goto fail;
+> > +	} else if (diskseq_str[0] =3D=3D '0') {
+> > +		xenbus_dev_fatal(dev, -ERANGE, "diskseq must not start with '0'");
+> > +		goto fail;
+> > +	} else {
+> > +		char *diskseq_end;
+> > +		diskseq =3D simple_strtoull(diskseq_str, &diskseq_end, 16);
+> > +		if (diskseq_end !=3D diskseq_str + diskseq_len) {
+> > +			xenbus_dev_fatal(dev, -EINVAL, "invalid diskseq");
+> > +			goto fail;
+> > +		}
+> > +		kfree(diskseq_str);
+> > +		diskseq_str =3D NULL;
+> > +	}
+>=20
+> And I suspect the code will be a lot easier to follow if you move
+> the diskseq validation into a separate helper.
+
+Fixed in v3.
+--=20
+Sincerely,
+Demi Marie Obenour (she/her/hers)
+Invisible Things Lab
+
+--CTS34Y4jd0AZd9RG
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmSAqPEACgkQ3SOs138+
-s6Frrg//ZrJkuxlHWAd1z2xHHXEIOkzdtcXyHgaIXwEUyUHlIpOt3KWDRuDLJcNt
-9eD/zPyD/P+FKoqmzf9GmhINi90pGVsiegEU6bMIoOdEtgnujiqwyhw18eNT70Cv
-1aEIaDs0ZAd9G30Y3TTt7GknBdLqecGSv9p1CLrtGTEew2J6dXgb+cT7cYuawK8B
-W7nl05lQYd2oxzBTGwncy3MyoVhyx11R6Cmb37DDZK4fA7KsJylZgRFlaj8jZtZq
-A8vHkzvk6r2l9VyEUezPP18OXDVpoqRaE1geOHj9RAzuee5XiUMjtn4UYmGxqS2b
-qfQkMiLqSMaFulQLqIiKiOuWs5So339UVYygx/Jb0qGdmU2fEH69SZghazbtm0IM
-SiluRtBtDdCaOZzu8aYxdF+fcqNCMaAxSzBF+7WLJeHSx+6smaFWjXRsOIBg2kBd
-CpcoTG8kBIMxfEJiwgQfPOvFWp8jy5lg6f+uiJQLltTK16oZGSS7fUOM1sDBHlnC
-SsITSkSSbQQ0hpk3UBU0/URrIf7L/aH84VkmvrrrP1r8ZX/O75U4a33+GAoQUxH7
-g2cDpKxx20VdCMcTUk2Xtyk/DSFAby1JkVckjK/Mp9XeI7bDPAiYBLOkWF/dpMwi
-X0EX0yJt66hcs64bGmt7Jhut64KxM6bV8/HfXMaS+sIrkuyGm14=
-=0L5G
+iQIzBAEBCgAdFiEEdodNnxM2uiJZBxxxsoi1X/+cIsEFAmSAqaEACgkQsoi1X/+c
+IsH5yhAAnK+FHobE4EaJLu/MXl1mYHrYhpZKqUOIopKg1xODd1RlWyQI95qq3vHX
+AnwOhHN+Wv/PbJ0vhvL+/DtuC56AIaCxzhShuZmqZjvLDPwdvi73nSf4xiV7SLWG
+6GfMhn9Mo8MGoj+ek88P10z9bIwrfdCWnvnuns6bcGlHsMkrx/B3Jzk5ZOD1QWWj
+W6jzKRmUDCv+RKHcajLUB3iM2JTTYOLcljqldvSyRv1SySytToLRtTWfZrOJS7Z2
+Tjf9heSRPhvHPvcaHyidiaZ87xQjcmI4LRzOXEybxFd6uxIf4QpDD4rschFu25NL
+TTEFPRIocqwHQgyVcG8aIu86nizNf7f/O/iLfQhNTuYQ1mbq6l8QNyAcJ6sXMz0A
+fms3iMGiH2LF/pi8vEprOfiC1+0L+whpAqEEogIWh4zYp/tM0raENGZNJL6ZTwXI
+BPkVkAmsrZAQljrzecbtjRWPZJUDmi+u9XGFCjY9MX7oHtnRH22hLdVeYqd1NljD
+bgleEMTPiV/ZhPhOPi/Fyccze9VneSOjQ7QoKii0JaiECzatJFr3ZoIgwpIJsv17
+KSglgXTjzQpGPURe+RK+rQWMAlb6V2gT3mNC36txOv8j+Y6CuL3xfwGIdfP5nLh+
+qTO2n1i40TxJ0VEZa9kD67tyqrLuOS7kru2hQbdhvW9f92eOPo4=
+=m1I6
 -----END PGP SIGNATURE-----
 
---gObwIVTIUUFZASFm--
+--CTS34Y4jd0AZd9RG--
