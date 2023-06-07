@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 091607251AD
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 03:45:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C08D7251BE
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 03:46:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240582AbjFGBop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 21:44:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34444 "EHLO
+        id S240635AbjFGBo6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 21:44:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240502AbjFGBoP (ORCPT
+        with ESMTP id S240507AbjFGBoR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 21:44:15 -0400
+        Tue, 6 Jun 2023 21:44:17 -0400
 Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C83C19B1
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 18:44:13 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-561eb6c66f6so85905317b3.0
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 18:44:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC4751BC2
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 18:44:15 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-56536dd5f79so111754477b3.3
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 18:44:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686102253; x=1688694253;
+        d=google.com; s=20221208; t=1686102255; x=1688694255;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Dff62jpwMb0/r6p2B6URTiqfETOO43Hv2eYdW2jRSl0=;
-        b=jE/KnNuh4nz7/QWE4tTJb+D0BsKFaT765WHBVXAZrnIWXxtBpOQMFn1ADjzNtxtYr/
-         P9U17ZzWpk+5aBbZvRE0XGraJEkIV7QeyYR2Nsosl5fh+uJ1OklegPcoMMOsdNCWlCa2
-         YUElndY4gbOB1buZxFGBI0KneE37gSGwOC6Y/R+Z7/GdDPMiebcbEtkdrBeq8ZcGhOms
-         w/hk1FfAzKS3TZ7d46gsISSOFqGGns8Ck9PECz91Tu8V3960JfrvGsTo+k966nmVt/Zm
-         1RDJwGXYCJDrY/IIWmW9wvyBSg3uKADhgjk2v4wqGKEVE7VhzwvqkkS9NtMDSVBdlkHm
-         3p5Q==
+        bh=JJ5Trkf+zwJ+Qw/wPApXjMzIheakkK4FyusRcx5mBBo=;
+        b=ECx+5clfS0XpvyLraFjIR93kikbwRhS4uD2PmePSls40y/2lPWUp9AmA/f2kl2mT6t
+         EKcfdKepfqrxYekoTt83zl63nUFfM6tG96Yg+mEpCNP8pml0Cfy/anOzaFdbWYUvMg6I
+         uxuTj1LTmltGGxXGmo0tCfOCTRpPbXBKuTYhKjdKdHZfUywYtSfiK+IKn4xDuXrkicKS
+         hJfuuNnE0StKvFdlBb7X1TDMDcD2rxqUuAAGe4CMWk64pNnqHOmjr1oPdWcIBeOLzjLk
+         PNV3OPhliVBP+XSibjLnrInnHHkDjofiWnLYW0qZg321zk09rfv0Kuc6qiuFyVz6EIin
+         JVWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686102253; x=1688694253;
+        d=1e100.net; s=20221208; t=1686102255; x=1688694255;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Dff62jpwMb0/r6p2B6URTiqfETOO43Hv2eYdW2jRSl0=;
-        b=XsAoPsEQ/PmUGe5laRbN+GuBeH1lDDNydLG2AU02ZpRNNDnSIjeV+gN2bjvCn1lpgn
-         FQPWupzGEOB3L31ebgHUtOmuiC1GH7gvP+1BZ22vO7dq2ZC5NJFyNilFXptW9d/cYCuv
-         m/JZwToqPAZ0lTdl9Dc9KopdCG9TAnxKiJRiFv0v0SP7ctZVsdQuOycEtCnj0k6cYb4U
-         kLdKcpeTihUMFmb5Qtn4K73jmm5y+b1uNikT4SUbCGXjujNXjxIZ66LTkdp8oDEjDGfv
-         B5t+x591qAhtYuv4FJzcIzegIpcKJ8w2qwT9Q6forGzvQdi3I5RvPCIgI51nqmM9x4Vi
-         ntog==
-X-Gm-Message-State: AC+VfDyB1vTxYD6pVGdKjMu446+Add7GN/xs8GAOKtFNrRIKc1CLyAl7
-        4IP5RYeBsy6XHX9/joNmAuIA00uPDRU/
-X-Google-Smtp-Source: ACHHUZ4Iawx/59lS6bbLlvoBcs3swYi2Y2WoCtxQS8p7kFfz1YVG7/9jwRMIuZYpQoUsdbH42nygYLmm6frH
+        bh=JJ5Trkf+zwJ+Qw/wPApXjMzIheakkK4FyusRcx5mBBo=;
+        b=Ptabfma5p0w2sHqSWdURE1fWMwJ5DVkYvkmfK+9acPzcjFb8KFIfYyTOAaYzA6UMVb
+         i9NAAhSZirrK1ITeMKhwPo4uuR1AQAdTm8bA6eQJQvKsmtgywnJ21QGkHvpekoSlZYzP
+         P8dtGF2Vtyi5wnTIkF9cPw0JkJST6IGE2d8w+G1BKyNqvsKPkaD35MYaTs6IAA5dbOqH
+         muXnG/eB2z61rGlsDEag2WMQ6QzMJMwXE2sA68nkiF377eaJW/8T/Q8XqOxGroOt8o1D
+         ePh0jhtzN6H10VECJd85JWHLZI7TIkvV/ug9WN6dw4d2pPJqo+LsvnsjMfIcugJZVfos
+         eV0Q==
+X-Gm-Message-State: AC+VfDyQjcP9bvvC2hlIOXPFAYoXVdbN5rUAVFbCdXup8OvfPb6MXj5C
+        eOJOQDWLcBCTpF8u50FR5pXjKHeNPsTv
+X-Google-Smtp-Source: ACHHUZ76rg8WrUptE+/K1Hf5i+VQz8ETyzhQr+BRqQcU4eOUY4bp/axgfBMEzvwL3cITsPfWn1mIxOxl9WvN
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:3c35:209f:5d38:b7a1])
- (user=irogers job=sendgmr) by 2002:a25:e6d6:0:b0:ba7:5d7a:b50d with SMTP id
- d205-20020a25e6d6000000b00ba75d7ab50dmr2102946ybh.10.1686102252735; Tue, 06
- Jun 2023 18:44:12 -0700 (PDT)
-Date:   Tue,  6 Jun 2023 18:43:34 -0700
+ (user=irogers job=sendgmr) by 2002:a81:b289:0:b0:562:837:122f with SMTP id
+ q131-20020a81b289000000b005620837122fmr2020660ywh.9.1686102255131; Tue, 06
+ Jun 2023 18:44:15 -0700 (PDT)
+Date:   Tue,  6 Jun 2023 18:43:35 -0700
 In-Reply-To: <20230607014353.3172466-1-irogers@google.com>
-Message-Id: <20230607014353.3172466-2-irogers@google.com>
+Message-Id: <20230607014353.3172466-3-irogers@google.com>
 Mime-Version: 1.0
 References: <20230607014353.3172466-1-irogers@google.com>
 X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Subject: [PATCH v1 01/20] perf thread: Remove notion of dead threads
+Subject: [PATCH v1 02/20] perf thread: Make threads rbtree non-invasive
 From:   Ian Rogers <irogers@google.com>
 To:     John Garry <john.g.garry@oracle.com>,
         Will Deacon <will@kernel.org>,
@@ -100,252 +100,289 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The dead thread list is best effort. Threads live on it until the
-reference count hits zero and they are removed. With correct reference
-counting this should never happen. It is, however, part of the 'perf
-sched' output that is now removed. If this is an issue we should
-implement tracking of dead threads in a robust not best-effort way.
+Separate the rbtree out of thread and into a new struct
+thread_rb_node. The refcnt is in thread and the rbtree is responsible
+for a single count.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/builtin-sched.c | 23 +----------------------
- tools/perf/util/cs-etm.c   |  6 ------
- tools/perf/util/intel-pt.c |  8 --------
- tools/perf/util/machine.c  | 32 +-------------------------------
- tools/perf/util/thread.c   | 25 +------------------------
- tools/perf/util/thread.h   | 11 +----------
- 6 files changed, 4 insertions(+), 101 deletions(-)
+ tools/perf/builtin-report.c |   2 +-
+ tools/perf/builtin-trace.c  |   2 +-
+ tools/perf/util/machine.c   | 101 +++++++++++++++++++++++-------------
+ tools/perf/util/thread.c    |   3 --
+ tools/perf/util/thread.h    |   6 ++-
+ 5 files changed, 73 insertions(+), 41 deletions(-)
 
-diff --git a/tools/perf/builtin-sched.c b/tools/perf/builtin-sched.c
-index cc4ba506e119..3a30c2ac5b47 100644
---- a/tools/perf/builtin-sched.c
-+++ b/tools/perf/builtin-sched.c
-@@ -2760,7 +2760,7 @@ struct total_run_stats {
- 	u64  total_run_time;
- };
+diff --git a/tools/perf/builtin-report.c b/tools/perf/builtin-report.c
+index 92c6797e7cba..c7d526283baf 100644
+--- a/tools/perf/builtin-report.c
++++ b/tools/perf/builtin-report.c
+@@ -911,7 +911,7 @@ static int tasks_print(struct report *rep, FILE *fp)
+ 		     nd = rb_next(nd)) {
+ 			task = tasks + itask++;
  
--static int __show_thread_runtime(struct thread *t, void *priv)
-+static int show_thread_runtime(struct thread *t, void *priv)
+-			task->thread = rb_entry(nd, struct thread, rb_node);
++			task->thread = rb_entry(nd, struct thread_rb_node, rb_node)->thread;
+ 			INIT_LIST_HEAD(&task->children);
+ 			INIT_LIST_HEAD(&task->list);
+ 			thread__set_priv(task->thread, task);
+diff --git a/tools/perf/builtin-trace.c b/tools/perf/builtin-trace.c
+index 62c7c99a0fe4..b0dd202d14eb 100644
+--- a/tools/perf/builtin-trace.c
++++ b/tools/perf/builtin-trace.c
+@@ -4348,7 +4348,7 @@ DEFINE_RESORT_RB(threads, (thread__nr_events(a->thread->priv) < thread__nr_event
+ 	struct thread *thread;
+ )
  {
- 	struct total_run_stats *stats = priv;
- 	struct thread_runtime *r;
-@@ -2783,22 +2783,6 @@ static int __show_thread_runtime(struct thread *t, void *priv)
- 	return 0;
+-	entry->thread = rb_entry(nd, struct thread, rb_node);
++	entry->thread = rb_entry(nd, struct thread_rb_node, rb_node)->thread;
  }
  
--static int show_thread_runtime(struct thread *t, void *priv)
--{
--	if (t->dead)
--		return 0;
--
--	return __show_thread_runtime(t, priv);
--}
--
--static int show_deadthread_runtime(struct thread *t, void *priv)
--{
--	if (!t->dead)
--		return 0;
--
--	return __show_thread_runtime(t, priv);
--}
--
- static size_t callchain__fprintf_folded(FILE *fp, struct callchain_node *node)
- {
- 	const char *sep = " <- ";
-@@ -2890,11 +2874,6 @@ static void timehist_print_summary(struct perf_sched *sched,
- 	if (!task_count)
- 		printf("<no still running tasks>\n");
- 
--	printf("\nTerminated tasks:\n");
--	machine__for_each_thread(m, show_deadthread_runtime, &totals);
--	if (task_count == totals.task_count)
--		printf("<no terminated tasks>\n");
--
- 	/* CPU idle stats not tracked when samples were skipped */
- 	if (sched->skipped_samples && !sched->idle_hist)
- 		return;
-diff --git a/tools/perf/util/cs-etm.c b/tools/perf/util/cs-etm.c
-index 91299cc56bf7..0f5be4ad24ba 100644
---- a/tools/perf/util/cs-etm.c
-+++ b/tools/perf/util/cs-etm.c
-@@ -3292,12 +3292,6 @@ int cs_etm__process_auxtrace_info_full(union perf_event *event,
- 		goto err_free_queues;
- 	}
- 
--	/*
--	 * Initialize list node so that at thread__zput() we can avoid
--	 * segmentation fault at list_del_init().
--	 */
--	INIT_LIST_HEAD(&etm->unknown_thread->node);
--
- 	err = thread__set_comm(etm->unknown_thread, "unknown", 0);
- 	if (err)
- 		goto err_delete_thread;
-diff --git a/tools/perf/util/intel-pt.c b/tools/perf/util/intel-pt.c
-index fe893c9bab3f..dde2ca77a005 100644
---- a/tools/perf/util/intel-pt.c
-+++ b/tools/perf/util/intel-pt.c
-@@ -4311,14 +4311,6 @@ int intel_pt_process_auxtrace_info(union perf_event *event,
- 		goto err_free_queues;
- 	}
- 
--	/*
--	 * Since this thread will not be kept in any rbtree not in a
--	 * list, initialize its list node so that at thread__put() the
--	 * current thread lifetime assumption is kept and we don't segfault
--	 * at list_del_init().
--	 */
--	INIT_LIST_HEAD(&pt->unknown_thread->node);
--
- 	err = thread__set_comm(pt->unknown_thread, "unknown", 0);
- 	if (err)
- 		goto err_delete_thread;
+ static size_t trace__fprintf_thread_summary(struct trace *trace, FILE *fp)
 diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
-index 9e02e19c1b7a..a1954ac85f59 100644
+index a1954ac85f59..cbf092e32ee9 100644
 --- a/tools/perf/util/machine.c
 +++ b/tools/perf/util/machine.c
-@@ -241,17 +241,6 @@ void machine__exit(struct machine *machine)
+@@ -43,7 +43,8 @@
+ #include <linux/string.h>
+ #include <linux/zalloc.h>
  
- 	for (i = 0; i < THREADS__TABLE_SIZE; i++) {
- 		struct threads *threads = &machine->threads[i];
--		struct thread *thread, *n;
--		/*
--		 * Forget about the dead, at this point whatever threads were
--		 * left in the dead lists better have a reference count taken
--		 * by who is using them, and then, when they drop those references
--		 * and it finally hits zero, thread__put() will check and see that
--		 * its not in the dead threads list and will not try to remove it
--		 * from there, just calling thread__delete() straight away.
--		 */
--		list_for_each_entry_safe(thread, n, &threads->dead, node)
--			list_del_init(&thread->node);
+-static void __machine__remove_thread(struct machine *machine, struct thread *th, bool lock);
++static void __machine__remove_thread(struct machine *machine, struct thread_rb_node *nd,
++				     struct thread *th, bool lock);
+ static int append_inlines(struct callchain_cursor *cursor, struct map_symbol *ms, u64 ip);
  
- 		exit_rwsem(&threads->lock);
+ static struct dso *machine__kernel_dso(struct machine *machine)
+@@ -72,6 +73,21 @@ static void machine__threads_init(struct machine *machine)
  	}
-@@ -2046,18 +2035,7 @@ static void __machine__remove_thread(struct machine *machine, struct thread *th,
- 	rb_erase_cached(&th->rb_node, &threads->entries);
- 	RB_CLEAR_NODE(&th->rb_node);
- 	--threads->nr;
--	/*
--	 * Move it first to the dead_threads list, then drop the reference,
--	 * if this is the last reference, then the thread__delete destructor
--	 * will be called and we will remove it from the dead_threads list.
--	 */
--	list_add_tail(&th->node, &threads->dead);
+ }
  
--	/*
--	 * We need to do the put here because if this is the last refcount,
--	 * then we will be touching the threads->dead head when removing the
--	 * thread.
--	 */
- 	thread__put(th);
++static int thread_rb_node__cmp_tid(const void *key, const struct rb_node *nd)
++{
++	int to_find = (int) *((pid_t *)key);
++
++	return to_find - (int)rb_entry(nd, struct thread_rb_node, rb_node)->thread->tid;
++}
++
++static struct thread_rb_node *thread_rb_node__find(const struct thread *th,
++						   struct rb_root *tree)
++{
++	struct rb_node *nd = rb_find(&th->tid, tree, thread_rb_node__cmp_tid);
++
++	return rb_entry(nd, struct thread_rb_node, rb_node);
++}
++
+ static int machine__set_mmap_name(struct machine *machine)
+ {
+ 	if (machine__is_host(machine))
+@@ -214,10 +230,10 @@ void machine__delete_threads(struct machine *machine)
+ 		down_write(&threads->lock);
+ 		nd = rb_first_cached(&threads->entries);
+ 		while (nd) {
+-			struct thread *t = rb_entry(nd, struct thread, rb_node);
++			struct thread_rb_node *trb = rb_entry(nd, struct thread_rb_node, rb_node);
  
- 	if (lock)
-@@ -2145,10 +2123,8 @@ int machine__process_exit_event(struct machine *machine, union perf_event *event
- 	if (dump_trace)
- 		perf_event__fprintf_task(event, stdout);
+ 			nd = rb_next(nd);
+-			__machine__remove_thread(machine, t, false);
++			__machine__remove_thread(machine, trb, trb->thread, false);
+ 		}
+ 		up_write(&threads->lock);
+ 	}
+@@ -605,6 +621,7 @@ static struct thread *____machine__findnew_thread(struct machine *machine,
+ 	struct rb_node **p = &threads->entries.rb_root.rb_node;
+ 	struct rb_node *parent = NULL;
+ 	struct thread *th;
++	struct thread_rb_node *nd;
+ 	bool leftmost = true;
  
--	if (thread != NULL) {
--		thread__exited(thread);
-+	if (thread != NULL)
- 		thread__put(thread);
--	}
+ 	th = threads__get_last_match(threads, machine, pid, tid);
+@@ -613,7 +630,7 @@ static struct thread *____machine__findnew_thread(struct machine *machine,
  
+ 	while (*p != NULL) {
+ 		parent = *p;
+-		th = rb_entry(parent, struct thread, rb_node);
++		th = rb_entry(parent, struct thread_rb_node, rb_node)->thread;
+ 
+ 		if (th->tid == tid) {
+ 			threads__set_last_match(threads, th);
+@@ -633,30 +650,39 @@ static struct thread *____machine__findnew_thread(struct machine *machine,
+ 		return NULL;
+ 
+ 	th = thread__new(pid, tid);
+-	if (th != NULL) {
+-		rb_link_node(&th->rb_node, parent, p);
+-		rb_insert_color_cached(&th->rb_node, &threads->entries, leftmost);
++	if (th == NULL)
++		return NULL;
+ 
+-		/*
+-		 * We have to initialize maps separately after rb tree is updated.
+-		 *
+-		 * The reason is that we call machine__findnew_thread
+-		 * within thread__init_maps to find the thread
+-		 * leader and that would screwed the rb tree.
+-		 */
+-		if (thread__init_maps(th, machine)) {
+-			rb_erase_cached(&th->rb_node, &threads->entries);
+-			RB_CLEAR_NODE(&th->rb_node);
+-			thread__put(th);
+-			return NULL;
+-		}
+-		/*
+-		 * It is now in the rbtree, get a ref
+-		 */
+-		thread__get(th);
+-		threads__set_last_match(threads, th);
+-		++threads->nr;
++	nd = malloc(sizeof(*nd));
++	if (nd == NULL) {
++		thread__put(th);
++		return NULL;
++	}
++	nd->thread = th;
++
++	rb_link_node(&nd->rb_node, parent, p);
++	rb_insert_color_cached(&nd->rb_node, &threads->entries, leftmost);
++
++	/*
++	 * We have to initialize maps separately after rb tree is updated.
++	 *
++	 * The reason is that we call machine__findnew_thread within
++	 * thread__init_maps to find the thread leader and that would screwed
++	 * the rb tree.
++	 */
++	if (thread__init_maps(th, machine)) {
++		rb_erase_cached(&nd->rb_node, &threads->entries);
++		RB_CLEAR_NODE(&nd->rb_node);
++		free(nd);
++		thread__put(th);
++		return NULL;
+ 	}
++	/*
++	 * It is now in the rbtree, get a ref
++	 */
++	thread__get(th);
++	threads__set_last_match(threads, th);
++	++threads->nr;
+ 
+ 	return th;
+ }
+@@ -1109,7 +1135,7 @@ size_t machine__fprintf(struct machine *machine, FILE *fp)
+ 
+ 		for (nd = rb_first_cached(&threads->entries); nd;
+ 		     nd = rb_next(nd)) {
+-			struct thread *pos = rb_entry(nd, struct thread, rb_node);
++			struct thread *pos = rb_entry(nd, struct thread_rb_node, rb_node)->thread;
+ 
+ 			ret += thread__fprintf(pos, fp);
+ 		}
+@@ -2020,10 +2046,14 @@ int machine__process_mmap_event(struct machine *machine, union perf_event *event
  	return 0;
  }
-@@ -3204,12 +3180,6 @@ int machine__for_each_thread(struct machine *machine,
+ 
+-static void __machine__remove_thread(struct machine *machine, struct thread *th, bool lock)
++static void __machine__remove_thread(struct machine *machine, struct thread_rb_node *nd,
++				     struct thread *th, bool lock)
+ {
+ 	struct threads *threads = machine__threads(machine, th->tid);
+ 
++	if (!nd)
++		nd = thread_rb_node__find(th, &threads->entries.rb_root);
++
+ 	if (threads->last_match == th)
+ 		threads__set_last_match(threads, NULL);
+ 
+@@ -2032,11 +2062,12 @@ static void __machine__remove_thread(struct machine *machine, struct thread *th,
+ 
+ 	BUG_ON(refcount_read(&th->refcnt) == 0);
+ 
+-	rb_erase_cached(&th->rb_node, &threads->entries);
+-	RB_CLEAR_NODE(&th->rb_node);
++	thread__put(nd->thread);
++	rb_erase_cached(&nd->rb_node, &threads->entries);
++	RB_CLEAR_NODE(&nd->rb_node);
+ 	--threads->nr;
+ 
+-	thread__put(th);
++	free(nd);
+ 
+ 	if (lock)
+ 		up_write(&threads->lock);
+@@ -2044,7 +2075,7 @@ static void __machine__remove_thread(struct machine *machine, struct thread *th,
+ 
+ void machine__remove_thread(struct machine *machine, struct thread *th)
+ {
+-	return __machine__remove_thread(machine, th, true);
++	return __machine__remove_thread(machine, NULL, th, true);
+ }
+ 
+ int machine__process_fork_event(struct machine *machine, union perf_event *event,
+@@ -3167,7 +3198,6 @@ int machine__for_each_thread(struct machine *machine,
+ {
+ 	struct threads *threads;
+ 	struct rb_node *nd;
+-	struct thread *thread;
+ 	int rc = 0;
+ 	int i;
+ 
+@@ -3175,8 +3205,9 @@ int machine__for_each_thread(struct machine *machine,
+ 		threads = &machine->threads[i];
+ 		for (nd = rb_first_cached(&threads->entries); nd;
+ 		     nd = rb_next(nd)) {
+-			thread = rb_entry(nd, struct thread, rb_node);
+-			rc = fn(thread, priv);
++			struct thread_rb_node *trb = rb_entry(nd, struct thread_rb_node, rb_node);
++
++			rc = fn(trb->thread, priv);
  			if (rc != 0)
  				return rc;
  		}
--
--		list_for_each_entry(thread, &threads->dead, node) {
--			rc = fn(thread, priv);
--			if (rc != 0)
--				return rc;
--		}
- 	}
- 	return rc;
- }
 diff --git a/tools/perf/util/thread.c b/tools/perf/util/thread.c
-index 4b5bdc277baa..d949bffc0ed6 100644
+index d949bffc0ed6..38d300e3e4d3 100644
 --- a/tools/perf/util/thread.c
 +++ b/tools/perf/util/thread.c
-@@ -125,31 +125,8 @@ struct thread *thread__get(struct thread *thread)
+@@ -66,7 +66,6 @@ struct thread *thread__new(pid_t pid, pid_t tid)
  
- void thread__put(struct thread *thread)
- {
--	if (thread && refcount_dec_and_test(&thread->refcnt)) {
--		/*
--		 * Remove it from the dead threads list, as last reference is
--		 * gone, if it is in a dead threads list.
--		 *
--		 * We may not be there anymore if say, the machine where it was
--		 * stored was already deleted, so we already removed it from
--		 * the dead threads and some other piece of code still keeps a
--		 * reference.
--		 *
--		 * This is what 'perf sched' does and finally drops it in
--		 * perf_sched__lat(), where it calls perf_sched__read_events(),
--		 * that processes the events by creating a session and deleting
--		 * it, which ends up destroying the list heads for the dead
--		 * threads, but before it does that it removes all threads from
--		 * it using list_del_init().
--		 *
--		 * So we need to check here if it is in a dead threads list and
--		 * if so, remove it before finally deleting the thread, to avoid
--		 * an use after free situation.
--		 */
--		if (!list_empty(&thread->node))
--			list_del_init(&thread->node);
-+	if (thread && refcount_dec_and_test(&thread->refcnt))
- 		thread__delete(thread);
--	}
- }
+ 		list_add(&comm->list, &thread->comm_list);
+ 		refcount_set(&thread->refcnt, 1);
+-		RB_CLEAR_NODE(&thread->rb_node);
+ 		/* Thread holds first ref to nsdata. */
+ 		thread->nsinfo = nsinfo__new(pid);
+ 		srccode_state_init(&thread->srccode_state);
+@@ -84,8 +83,6 @@ void thread__delete(struct thread *thread)
+ 	struct namespaces *namespaces, *tmp_namespaces;
+ 	struct comm *comm, *tmp_comm;
  
- static struct namespaces *__thread__namespaces(const struct thread *thread)
+-	BUG_ON(!RB_EMPTY_NODE(&thread->rb_node));
+-
+ 	thread_stack__free(thread);
+ 
+ 	if (thread->maps) {
 diff --git a/tools/perf/util/thread.h b/tools/perf/util/thread.h
-index 395c626699a9..86737812e06b 100644
+index 86737812e06b..3b3f9fb5a916 100644
 --- a/tools/perf/util/thread.h
 +++ b/tools/perf/util/thread.h
-@@ -30,10 +30,7 @@ struct lbr_stitch {
+@@ -29,8 +29,12 @@ struct lbr_stitch {
+ 	struct callchain_cursor_node	*prev_lbr_cursor;
  };
  
++struct thread_rb_node {
++	struct rb_node rb_node;
++	struct thread *thread;
++};
++
  struct thread {
--	union {
--		struct rb_node	 rb_node;
--		struct list_head node;
--	};
-+	struct rb_node		rb_node;
+-	struct rb_node		rb_node;
  	struct maps		*maps;
  	pid_t			pid_; /* Not all tools update this */
  	pid_t			tid;
-@@ -43,7 +40,6 @@ struct thread {
- 	refcount_t		refcnt;
- 	bool			comm_set;
- 	int			comm_len;
--	bool			dead; /* if set thread has exited */
- 	struct list_head	namespaces_list;
- 	struct rw_semaphore	namespaces_lock;
- 	struct list_head	comm_list;
-@@ -81,11 +77,6 @@ static inline void __thread__zput(struct thread **thread)
- 
- #define thread__zput(thread) __thread__zput(&thread)
- 
--static inline void thread__exited(struct thread *thread)
--{
--	thread->dead = true;
--}
--
- struct namespaces *thread__namespaces(struct thread *thread);
- int thread__set_namespaces(struct thread *thread, u64 timestamp,
- 			   struct perf_record_namespaces *event);
 -- 
 2.41.0.rc0.172.g3f132b7071-goog
 
