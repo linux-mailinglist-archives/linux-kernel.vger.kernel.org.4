@@ -2,125 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD523725B4D
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 12:09:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2032725B58
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 12:14:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238408AbjFGKJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 06:09:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40790 "EHLO
+        id S235467AbjFGKOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 06:14:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234009AbjFGKJJ (ORCPT
+        with ESMTP id S234210AbjFGKOB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 06:09:09 -0400
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2053.outbound.protection.outlook.com [40.107.22.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F38199A;
-        Wed,  7 Jun 2023 03:09:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RH2ouwgEsDchCPp/EB3hHv5qhqzh4Wg0NCKTyP5UoUsKB+15jDgwakyx1CUFWXKJcVfRF4cHcm7lz/N5tiUQgiW014CZJvauPMhqQbiflTDrjZIm070oKc3TbV22JjJbfHs0mPuhyXq02F3+mXvRV8+7kIL52LDEzJpzvb5Npy8XpLXETXVUmRHUoS1JLxLS5VtI1LRJuZ9eyhA1VIVZ91qKrdCw2saf+6NDi+Umw1b7COCPibVjph4T8TKfvesAk/WVcyEgRpVP2SghWtfljNNcNeJ/P9KNHzj+Q2VU72dIDsQX8bw6sRpp4XmefmG3iRYNS7zOzTx4Wqa1Hm/W7Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SvqoDWocQ6qtUzWbPQv4oi+RzUCN0aUab5OyA80W2q8=;
- b=dFhmsVFHW5H7+yZIot8TMHesCkIM9z9WwJfV7SzVyFjc5vWewk8yaUiz0K/yAAygPZkyWHjwg4gfQntU6/gKSAf4SkpSLSobDJ9qde685BsV0LifQ/BPmUuvekgItIVfQU416hPZwVXh9Q/bbZvbbbMQ4akxFMKVWFteF+q7PVFycxMAsb0kHm/q+cU7cCfe827OsSwUXBhnTLBT8+9wXn2Q/wJXjaDhvq+IwJGjofJlh2bhvuvOkN8l4cdRHjSqY8DllXyinT1Lu3o+OL2Gb5epnAPvt+aarE5zYF827mmPGaFikpdGizzIqEW21w+Rg4qDtAybhzu/Q0Mu1VUb8A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SvqoDWocQ6qtUzWbPQv4oi+RzUCN0aUab5OyA80W2q8=;
- b=s3La49lY3Pq2LmY7tvGUwZ4nUpef7N7IXhLjNvx/L1kvTFSDk65c2uZpWEX2luHF7/tpE1/qcMh3zZcQVpvGXAI6tGJYEK+DELuFzJDjjWxXwuA7Vteux7muJPUahL1YGOoKbcnkf4O5V2yRi8tBCowPkX5x+d71lYhOL1uNx48=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM0PR04MB6452.eurprd04.prod.outlook.com (2603:10a6:208:16d::21)
- by AS8PR04MB9173.eurprd04.prod.outlook.com (2603:10a6:20b:448::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.32; Wed, 7 Jun
- 2023 10:09:05 +0000
-Received: from AM0PR04MB6452.eurprd04.prod.outlook.com
- ([fe80::c40e:d76:fd88:f460]) by AM0PR04MB6452.eurprd04.prod.outlook.com
- ([fe80::c40e:d76:fd88:f460%4]) with mapi id 15.20.6455.030; Wed, 7 Jun 2023
- 10:09:05 +0000
-Date:   Wed, 7 Jun 2023 13:09:01 +0300
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     Jamal Hadi Salim <jhs@mojatatu.com>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Vinicius Costa Gomes <vinicius.gomes@intel.com>,
-        linux-kernel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        Muhammad Husaini Zulkifli <muhammad.husaini.zulkifli@intel.com>,
-        Peilin Ye <yepeilin.cs@gmail.com>,
-        Pedro Tammela <pctammela@mojatatu.com>
-Subject: Re: [PATCH RESEND net-next 0/5] Improve the taprio qdisc's
- relationship with its children
-Message-ID: <20230607100901.qpqdgv6nbvi3k6e2@skbuf>
-References: <20230602103750.2290132-1-vladimir.oltean@nxp.com>
- <CAM0EoMnqscw=OfWzyEKV10qFW5+EFMd5JWZxPSPCod3TvqpnuQ@mail.gmail.com>
- <20230605165353.tnjrwa7gbcp4qhim@skbuf>
- <CAM0EoM=qG9sDjM=F6D=i=h3dKXwQXAt1wui8W_EXDJi2tijRnw@mail.gmail.com>
- <20230606163156.7ee6uk7jevggmaba@skbuf>
- <CAM0EoM=3+qwj+C9MzDEULeYc3B=_N=vHyP_QDdhcrNsyaQQODw@mail.gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAM0EoM=3+qwj+C9MzDEULeYc3B=_N=vHyP_QDdhcrNsyaQQODw@mail.gmail.com>
-X-ClientProxiedBy: FR2P281CA0093.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:9b::18) To AM0PR04MB6452.eurprd04.prod.outlook.com
- (2603:10a6:208:16d::21)
+        Wed, 7 Jun 2023 06:14:01 -0400
+Received: from smtp-fw-52003.amazon.com (smtp-fw-52003.amazon.com [52.119.213.152])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0597C1BCA;
+        Wed,  7 Jun 2023 03:13:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.es; i=@amazon.es; q=dns/txt; s=amazon201209;
+  t=1686132840; x=1717668840;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=G7tXsJgQL2dp1Z2qVO87BdtC4KV1AU/HrZ3Nz1hNKas=;
+  b=YVOc384QUkESg2au1r+BPK4t8H9aHW0DRDoU6+TP1GTxzzaS1/aJz74H
+   d/nuI3P3zJBmbSBk8hKqR06B7u2a4HYaMNyQYFXYWhW14cKK9sgJemjCD
+   lKI8QiBamQu9cq0ogwBD7RSEUopvCKnnPkwqthownUF2G1rq/4IBTRd64
+   M=;
+X-IronPort-AV: E=Sophos;i="6.00,223,1681171200"; 
+   d="scan'208";a="589390051"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-1box-2bm6-32cf6363.us-west-2.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-52003.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 10:13:57 +0000
+Received: from EX19D001EUA001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-1box-2bm6-32cf6363.us-west-2.amazon.com (Postfix) with ESMTPS id 4964C803BC;
+        Wed,  7 Jun 2023 10:13:56 +0000 (UTC)
+Received: from EX19D037EUB003.ant.amazon.com (10.252.61.119) by
+ EX19D001EUA001.ant.amazon.com (10.252.50.59) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Wed, 7 Jun 2023 10:13:53 +0000
+Received: from [192.168.30.121] (10.1.212.27) by EX19D037EUB003.ant.amazon.com
+ (10.252.61.119) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Wed, 7 Jun
+ 2023 10:13:49 +0000
+Message-ID: <150e1ad0-3d59-762b-6032-897d5630a3bf@amazon.es>
+Date:   Wed, 7 Jun 2023 12:13:44 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM0PR04MB6452:EE_|AS8PR04MB9173:EE_
-X-MS-Office365-Filtering-Correlation-Id: bf4b17a8-dfd0-401c-a4c4-08db673f39af
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: hYjQ47TFpJc0EuCZJWFszJ66AEfOf6LaoDdfVn91BbXaxIWBMNgdP8RUlLQqWQqjt+Cd1cWxIs73bg+knMbz51a7/HxLLN668Ug4QKlu9HU8ePDXuzqj6d7RXAqZxSiFrFRLe875JhvgAZXhT2VC1VUweuqOd//0n0V8BUSJeFXIfO9G/xVPSCOtI7UTmzpnZial6ODNK0vFN0ADNhRc8dUxS3+rWGick620s1dmdZzz6EECfilcf7s90Tre7PdiFg865I9Q9WhJ7Lws7eCwXps+uRZ7Dog/pP31JAOs4Dl8Cfn2dHGTXL6FpekIj93VCHO1CUfU79eNUI5SBtsi+asJef0m0iCmJDaxFLeefB10RmKdWGPIx5y1+PiDBsN757tgyN+MpzHyb2Ivvf92HmYThEFnIXNuqb8wQCOO4vaRE8abuWuFYHLOxIcnJ5LbLdMloTrdt/TGiK5Es0uvOKdZppyqfxX5u115iGeJw3KBC2WI9BfgLptSr0W+GMm4+JeAPu75NiflJm2dt2KFWY6lijsxslUfq6yNorzWy2AyKownUQP2v1jZGW4V49pf
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6452.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(4636009)(376002)(136003)(366004)(39860400002)(396003)(346002)(451199021)(478600001)(38100700002)(4326008)(6916009)(66946007)(66556008)(54906003)(66476007)(8936002)(7416002)(44832011)(5660300002)(8676002)(86362001)(41300700001)(316002)(2906002)(83380400001)(6506007)(26005)(6512007)(1076003)(9686003)(33716001)(186003)(6486002)(6666004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?PuTso/DNwVmWsegB6voWc5B6+v4VPHIqBdRPfsOSEs8mSDpNv6Ev7d7DI11P?=
- =?us-ascii?Q?+YdLR+a+BcVl0yW0arw2TOqRHiOli9JeMa3LgKX2pYIKL6w45E9AgzVA4YNs?=
- =?us-ascii?Q?zxKo0KLgRRZQMlu9L/fiwhT5cLQxaUY3VI3RgVAV2H4dzbcM6D0XeBlT1vn6?=
- =?us-ascii?Q?r47oUluSoQYNGBP/u3fzIJ+0r1H1STwm6L8wMqrW8IUWFl8x+jJLJcoOBX+O?=
- =?us-ascii?Q?GAapeJcPNA2VAr83FK4rpoSVZqaAqDfdIWdH8mJZoiHHbFioqXv+mbCfmV+S?=
- =?us-ascii?Q?19aZwrhrNbYiJwKSsiZPszeVr2gwW6K35ManHmraRk9zShpxByEhaPKka6Z8?=
- =?us-ascii?Q?4oTye2pUW/xTnwuAPPRGzx8EaLj4LUIW5aOPuGOzCkincL8ahzfwDI1n3XLS?=
- =?us-ascii?Q?ReHopCCm7AcXU8ME/nloXDmz0H5nMub1d8WVHuSUayAKSeFxzFbl88XwnsJb?=
- =?us-ascii?Q?uH3R7zf3mOWH5DPE6R/1d+2Dt+mMJagVg9112qP7IFs6+luzPQqxzxxG7+qK?=
- =?us-ascii?Q?Sl8US6hpi+ObgKsueB1KP/2p+dpsOJNbgHdya+cVeTDkl1VgblVCFnGhxn8u?=
- =?us-ascii?Q?SeRZk78ygDP3hEuMbwRpnzoyrLBwt/dxC8VhILayws4tvR3GdNZ0mbaNVY7E?=
- =?us-ascii?Q?IU75sn72hZMoT92KDn0kHT961ed2dLuYCm22GXmoGw0i+TEi6vQFvg0GosAI?=
- =?us-ascii?Q?KV+BYTdXITbbRSssjcj7vOnywHHRPyp6Q0bkU+UHW6p2cjD/Jl3yvDo2oI5W?=
- =?us-ascii?Q?Xp+JZYzJ+ELxK2fwOlAHP3iDELiB+HnBJhRI0scHVXlgtp/8EA8RFqyeuQR5?=
- =?us-ascii?Q?fBy+cPe3P037rNm5gHHH47WLyEGahfwujzcRrUp1PCqpPpBW9szBpJFAniqn?=
- =?us-ascii?Q?xR7mEtZN0Wky1iZTD+i9pwCYnvxEFmB/tt0jpTvOL42tAy/e6EuKgLEWl6rw?=
- =?us-ascii?Q?KnyswCgiuUsF3v3hSK8qRGvClUNoyFUEt5pnPTVOQKvbe5YbqZGg2UKfXuaB?=
- =?us-ascii?Q?T3aomyOptskWRaTd+yyiCARG03u/fUTbCwP7AU77Qw6nI0b53Aw1z4lf/jah?=
- =?us-ascii?Q?dXhRWmiCKDy7DD7AoJu8UhRn8PT27uRnLNV3Ob8BOEzAwmq8/ztPy6XItgtZ?=
- =?us-ascii?Q?u3F30rFJwnR/JNkwXpmcKswHkOxikp4PE8P3ezEVKy//AAudRKbw6tgBj3tN?=
- =?us-ascii?Q?hSk1WK5VJI55/Qy83fR2Q9b/GgWCYfZowBpOatEN+Q26sjLXFcZ2zLRQQ3AH?=
- =?us-ascii?Q?HwxMtIrHP+t5tNIaOSmmk6+CxtyrVv12gHZn3pY8MvvGFGkIBdU07xjlb60o?=
- =?us-ascii?Q?57A31nDsN213l+qsduqhebFlF/lGMeQIygcEaTcsvoOaFjMNAJDqBizB4Qjq?=
- =?us-ascii?Q?Gq3Hph4jmyJ8m1QFYNkDfwmhT242ZJVbmehKE+YrXWTknDN+lczTOOW7mLqK?=
- =?us-ascii?Q?qFVH7JjpwNJG7LWYgmXimVsUaxXT19Iny/ugym+gBMLjH6fFICqyuEBKGzSm?=
- =?us-ascii?Q?jRKF18B1QAqmpJ4TysiBw9cJOvtcjnsfew67P+nxOy+hpadbrn7IltnIWxaB?=
- =?us-ascii?Q?/pfEavQcZnDu0aL8nIDyZlRlr1iaSDQaX1Xk9b68twUgxfFVA52FaivE5kvq?=
- =?us-ascii?Q?2Q=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bf4b17a8-dfd0-401c-a4c4-08db673f39af
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6452.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2023 10:09:05.3056
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: u5RcjxrP/ttw1zimQOudeA10aKbyt/Lambnz2W8Ca986hk6vr3QW/noqpfOyA5B1K1g5x72tg23LCbAADTx1xg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB9173
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.2
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        KVM list <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     Sean Christopherson <seanjc@google.com>,
+        Marc Zyngier <maz@kernel.org>, Alexander Graf <graf@amazon.de>,
+        "Cali, Marco" <xmarcalx@amazon.co.uk>
+References: <2f19f26e-20e5-8198-294e-27ea665b706f@redhat.com>
+Content-Language: en-US
+From:   Babis Chalios <bchalios@amazon.es>
+Subject: Re: [ANNOUNCE] KVM Microconference at LPC 2023
+In-Reply-To: <2f19f26e-20e5-8198-294e-27ea665b706f@redhat.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.1.212.27]
+X-ClientProxiedBy: EX19D045UWC003.ant.amazon.com (10.13.139.198) To
+ EX19D037EUB003.ant.amazon.com (10.252.61.119)
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -128,42 +71,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 01:42:19PM -0400, Jamal Hadi Salim wrote:
-> > > 2) It seems like in mqprio this qdisc can only be root qdisc (like
-> > > mqprio)
-> >
-> > so far so good
-> >
-> > > and you dont want to replace the children with other types of
-> > > qdiscs i.e the children are always pfifo? i.e is it possible or
-> > > intended for example to replace 8001:x with bfifo etc? or even change
-> > > the pfifo queue size, etc?
-> >
-> > no, this is not true, why do you say this?
-> 
-> I am just asking questions trying to understand;-> So if can i
-> replace, for example, with a tbf would it make sense even in s/w?
-> 
-> > The child could have its own complex enqueue() and dequeue() and that is
-> > perfectly fine - for example cbs_dequeue_soft() is a valid child dequeue
-> > procedure - as long as the process isn't blocked in the sendmsg() call
-> > by __qdisc_run() processing packets belonging to unrelated traffic
-> > classes.
-> 
-> Does it matter what type the child enqueue/dequeue? eg can i attach htb, etc?
 
-So in principle, the taprio model is compatible with attaching any child
-Qdisc to the per-TXQ child classes - with tc-cbs in particular being of
-interest, because that is a TSN shaper, but also, tbf or htb could be
-reasonably imagined as children, and taprio doesn't oppose to any Qdisc
-as its child.
 
-That being said, a non-offloaded cbs/htb will not work with an offloaded
-taprio root anymore after commit 13511704f8d7 ("net: taprio offload:
-enforce qdisc to netdev queue mapping"), and IMO what should be done
-there is to reject somehow those child Qdiscs which also can't be
-offloaded when the root is offloaded.
+On 9/5/23 11:55, Paolo Bonzini wrote:
+> Hi all!
+>
+> We are planning on submitting a CFP to host a KVM Microconference at
+> Linux Plumbers Conference 2023. To help justify the proposal, we would
+> like to gather a list of folks that would likely attend, and crowdsource
+> a list of topics to include in the proposal.
+>
+> For both this year and future years, the intent is that a KVM
+> Microconference will complement KVM Forum, *NOT* supplant it. As you
+> probably noticed, KVM Forum is going through a somewhat radical change in
+> how it's organized; the conference is now free and (with some help from
+> Red Hat) organized directly by the KVM and QEMU communities. Despite the
+> unexpected changes and some teething pains, community response to KVM
+> Forum continues to be overwhelmingly positive! KVM Forum will remain
+> the venue of choice for KVM/userspace collaboration, for educational
+> content covering both KVM and userspace, and to discuss new features in
+> QEMU and other userspace projects.
+>
+> At least on the x86 side, however, the success of KVM Forum led us
+> virtualization folks to operate in relative isolation. KVM depends on
+> and impacts multiple subsystems (MM, scheduler, perf) in profound ways,
+> and recently we’ve seen more and more ideas/features that require
+> non-trivial changes outside KVM and buy-in from stakeholders that
+> (typically) do not attend KVM Forum. Linux Plumbers Conference is a
+> natural place to establish such collaboration within the kernel.
+>
+> Therefore, the aim of the KVM Microconference will be:
+> * to provide a setting in which to discuss KVM and kernel internals
+> * to increase collaboration and reduce friction with other subsystems
+> * to discuss system virtualization issues that require coordination with
+> other subsystems (such as VFIO, or guest support in arch/)
+>
+> Below is a rough draft of the planned CFP submission.
+>
+> Thanks!
+>
+> Paolo Bonzini (KVM Maintainer)
+> Sean Christopherson (KVM x86 Co-Maintainer)
+> Marc Zyngier (KVM ARM Co-Maintainer)
+>
+>
+> ===================
+> KVM Microconference
+> ===================
+>
+> KVM (Kernel-based Virtual Machine) enables the use of hardware features
+> to improve the efficiency, performance, and security of virtual machines
+> created and managed by userspace.  KVM was originally developed to host
+> and accelerate "full" virtual machines running a traditional kernel and
+> operating system, but has long since expanded to cover a wide array of 
+> use
+> cases, e.g. hosting real time workloads, sandboxing untrusted workloads,
+> deprivileging third party code, reducing the trusted computed base of
+> security sensitive workloads, etc.  As KVM's use cases have grown, so too
+> have the requirements placed on KVM and the interactions between it and
+> other kernel subsystems.
+>
+> The KVM Microconference will focus on how to evolve KVM and adjacent
+> subsystems in order to satisfy new and upcoming requirements: serving
+> guest memory that cannot be accessed by host userspace[1], providing
+> accurate, feature-rich PMU/perf virtualization in cloud VMs[2], etc.
+>
+>
+> Potential Topics:
+>   - Serving inaccessible/unmappable memory for KVM guests (protected VMs)
+>   - Optimizing mmu_notifiers, e.g. reducing TLB flushes and spurious 
+> zapping
+>   - Supporting multiple KVM modules (for non-disruptive upgrades)
+>   - Improving and hardening KVM+perf interactions
+>   - Implementing arch-agnostic abstractions in KVM (e.g. MMU)
+>   - Defining KVM requirements for hardware vendors
+>   - Utilizing "fault" injection to increase test coverage of edge cases
+>   - KVM vs VFIO (e.g. memory types, a rather hot topic on the ARM side)
+>
+>
+> Key Attendees:
+>   - Paolo Bonzini <pbonzini@redhat.com> (KVM Maintainer)
+>   - Sean Christopherson <seanjc@google.com>  (KVM x86 Co-Maintainer)
+>   - Your name could be here!
+>
+> [1] 
+> https://lore.kernel.org/all/20221202061347.1070246-1-chao.p.peng@linux.intel.com
+> [2] 
+> https://lore.kernel.org/all/CALMp9eRBOmwz=mspp0m5Q093K3rMUeAsF3vEL39MGV5Br9wEQQ@mail.gmail.com
+>
 
-Offloading a taprio qdisc (potentially with offloaded cbs children) also
-affects the autonomous forwarding data path in case of an Ethernet switch.
-So it's not just about dev_queue_xmits() from Linux.
+Hi Paolo,
+
+I think this idea is great!
+
+On our side, we 've been working on providing ways to let VMs (kernel 
+and user space)
+know that they have been cloned/snapshotted/restored from snapshots[1].
+
+This is tightly coupled with PRNGs both in kernel and user space and 
+there needs to be some
+collaboration with random.c to tie everything together [2][3]. It sounds 
+like it could be a good
+fit for this MC (?).
+
+It would be interested to figure out whether such notifications would be 
+interested to other
+parts of the kernel as well.
+
+Cheers,
+Babis
+
+[1] https://www.spinics.net/lists/kernel/msg4808187.html
+[2] 
+https://www.mail-archive.com/virtio-dev@lists.oasis-open.org/msg09016.html
+[3] 
+https://lore.kernel.org/lkml/65d872db2e1be29bb03b43ed606e7cc9e74ec08d.camel@infradead.org/T/
