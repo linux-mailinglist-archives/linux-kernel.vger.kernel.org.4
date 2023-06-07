@@ -2,110 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E8A67265E6
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 18:28:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9334E7265EA
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 18:29:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231556AbjFGQ2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 12:28:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49558 "EHLO
+        id S231499AbjFGQ3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 12:29:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231749AbjFGQ1f (ORCPT
+        with ESMTP id S231449AbjFGQ3X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 12:27:35 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F367C1FE9
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 09:27:31 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-970056276acso1138789466b.2
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 09:27:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686155250; x=1688747250;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Aj2uGEddUvm2YSMazOH62CPVR32K30vnHRS73Clh5nI=;
-        b=G/rQv35xZ/aHsQB7/Ky+W6Q7KPQGRYZ+0vUeNzYoFUFi4mLOsegl/v/UnoNfXi3hlz
-         uqU+Wke78B7nM+ck2wPIo2p/kfKK+Tk+JK072t3Bqeg05rpd4lHMUakybO+OZ710yHXu
-         dF1M1C45fzNS6tUcXPMGetZrCLaLK0DEUo/yHRE1Bsemg3omAArsdlHHd4hAXtGmww8r
-         mCy7junxRo7YdEq7iV1P3yYw/pSfbtAtUyuYVLxMc6wKwW32ksPaf2qcPSwuKtCjpgsi
-         IwZPxEnevyTZjPteCIDrmnxYnFgLd7z4ckZbdfSwPORJUlQ7CQPG2QzHOPucaOhsIcT3
-         FcCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686155250; x=1688747250;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Aj2uGEddUvm2YSMazOH62CPVR32K30vnHRS73Clh5nI=;
-        b=Qw9X7R+t2uPQH08A3zWM2SbX435iBFq0mc9C+sMpL+kJmR/Cr3AP1xCLwn0EyV8AQE
-         nfpfJBOTpJ8giE4iFjSgjLfgRs7qxzLGjst1DPHtnwn5PHdXKDGgL7Vp9htaxeKdhKMg
-         GukJCgNDp7XjPCnyFMYl8yuHJyLMfgn/YD08ACF0iC+xFqumWC3MUmMhdVeH/PcuoO8A
-         hrpci+30nfnlQUu1b3xDb+oha8GQgcfSHsNdQR2vclFQSQviTvaawxzTkjzYnLHnLH7y
-         OeED5Uo6UrBXfvBSm9+5DsESeaVtVulhl17YFAiPA0bCX/FesHUcdcduT3f9LKMKaxS4
-         q2Jg==
-X-Gm-Message-State: AC+VfDyRBncBROe7mrXhs+o92ae+xFd5FsfdrIU+rjWFTMJpYnbF5TWD
-        Ae9d0sgTUVkGqkzRV+MseSA0+A==
-X-Google-Smtp-Source: ACHHUZ7eNiJq5WQXyq2bfvEZ1lOkGLfEQBy9mj531JYcuc2jACZnDyn6XQeTGuLB4PbOF9A+zu45dg==
-X-Received: by 2002:a17:907:60c9:b0:977:e99c:c958 with SMTP id hv9-20020a17090760c900b00977e99cc958mr6742836ejc.10.1686155250276;
-        Wed, 07 Jun 2023 09:27:30 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id fx22-20020a170906b75600b00977da5d3350sm4043375ejb.107.2023.06.07.09.27.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 09:27:29 -0700 (PDT)
-Message-ID: <4bee93d7-0613-3b15-d34d-c62cbb367547@linaro.org>
-Date:   Wed, 7 Jun 2023 18:27:28 +0200
+        Wed, 7 Jun 2023 12:29:23 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 737F42113;
+        Wed,  7 Jun 2023 09:28:49 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 357G7s9M008575;
+        Wed, 7 Jun 2023 16:27:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=27+/o+iLEAjAkmX6+2IU2QtYLVlt1oHU4+OW/n9wBSs=;
+ b=kLpP4cetmb1ZBZ6Whxokr0muLzPOGCzUvKbq1QTs8BkCKjCKaQUdbxzgyl9pohyrrHyW
+ yYGlHe61UXFgLmQoAwn8KbNQxB+GXodSdMwQs5Wsm6jVVVzFPd3beMhiQzd2c0BltzsR
+ FN7CbwkxspE7tO4mttU0+5FoHn3KIRuYInlMPjALGIZngMsFQu2eI5QHRpd9k+FPNsLk
+ hUYY4e2EGK/coHcSJpJNZDQXWQSohE9Yd7ajoFZ4mttq2OB3ThpWB/oftHhALLJiNang
+ 2O1bV6sR8J33Rno0rMLRTkkjY8YDoOQvG+qW2pdfYpzhJ1cE4QWTSAPc1KbavhvMO5Nt 9A== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r2w5501gs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Jun 2023 16:27:50 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 357GRn7j029180
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 7 Jun 2023 16:27:49 GMT
+Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 7 Jun 2023
+ 09:27:48 -0700
+Message-ID: <26a85bae-1a33-dd1f-5e73-0ab6da100abf@quicinc.com>
+Date:   Wed, 7 Jun 2023 10:27:47 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 1/2] dt-bindings: arm: Add Gateworks i.MX8M Mini GW7905-0x
- board
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH v2 1/2] net: Add MHI Endpoint network driver
 Content-Language: en-US
-To:     Tim Harvey <tharvey@gateworks.com>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230607162438.2009738-1-tharvey@gateworks.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230607162438.2009738-1-tharvey@gateworks.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>
+CC:     <mhi@lists.linux.dev>, <linux-arm-msm@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <loic.poulain@linaro.org>
+References: <20230607152427.108607-1-manivannan.sadhasivam@linaro.org>
+ <20230607152427.108607-2-manivannan.sadhasivam@linaro.org>
+From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
+In-Reply-To: <20230607152427.108607-2-manivannan.sadhasivam@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: iIXVLqb25q__aAaVUbTnMdPmk_XgCepD
+X-Proofpoint-ORIG-GUID: iIXVLqb25q__aAaVUbTnMdPmk_XgCepD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-07_07,2023-06-07_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ lowpriorityscore=0 adultscore=0 spamscore=0 phishscore=0 malwarescore=0
+ mlxscore=0 suspectscore=0 impostorscore=0 clxscore=1015 bulkscore=0
+ mlxlogscore=912 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306070140
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/06/2023 18:24, Tim Harvey wrote:
-> Add DT compatible string for a Gateworks GW7905-0x board based on
-> the i.MX8M Mini from NXP.
+On 6/7/2023 9:24 AM, Manivannan Sadhasivam wrote:
+> Add a network driver for the Modem Host Interface (MHI) endpoint devices
+> that provides network interfaces to the PCIe based Qualcomm endpoint
+> devices supporting MHI bus. This driver allows the MHI endpoint devices to
+> establish IP communication with the host machines (x86, ARM64) over MHI
+> bus.
 > 
-> Signed-off-by: Tim Harvey <tharvey@gateworks.com>
+> The driver currently supports only IP_SW0 MHI channel that can be used
+> to route IP traffic from the endpoint CPU to host machine.
+> 
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 > ---
->  Documentation/devicetree/bindings/arm/fsl.yaml | 1 +
->  1 file changed, 1 insertion(+)
+>   drivers/net/Kconfig      |   9 ++
+>   drivers/net/Makefile     |   1 +
+>   drivers/net/mhi_ep_net.c | 331 +++++++++++++++++++++++++++++++++++++++
+>   3 files changed, 341 insertions(+)
+>   create mode 100644 drivers/net/mhi_ep_net.c
 > 
-> diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
-> index 2510eaa8906d..b19444dc23da 100644
-> --- a/Documentation/devicetree/bindings/arm/fsl.yaml
-> +++ b/Documentation/devicetree/bindings/arm/fsl.yaml
-> @@ -915,6 +915,7 @@ properties:
->                - gw,imx8mm-gw7901          # i.MX8MM Gateworks Board
->                - gw,imx8mm-gw7902          # i.MX8MM Gateworks Board
->                - gw,imx8mm-gw7903          # i.MX8MM Gateworks Board
-> +              - gateworks,imx8mm-gw7905-0x # i.MX8MM Gateworks Board
+> diff --git a/drivers/net/Kconfig b/drivers/net/Kconfig
+> index 368c6f5b327e..36b628e2e49f 100644
+> --- a/drivers/net/Kconfig
+> +++ b/drivers/net/Kconfig
+> @@ -452,6 +452,15 @@ config MHI_NET
+>   	  QCOM based WWAN modems for IP or QMAP/rmnet protocol (like SDX55).
+>   	  Say Y or M.
+>   
+> +config MHI_EP_NET
+> +	tristate "MHI Endpoint network driver"
+> +	depends on MHI_BUS_EP
+> +	help
+> +	  This is the network driver for MHI bus implementation in endpoint
+> +	  devices. It is used provide the network interface for QCOM endpoint
+> +	  devices such as SDX55 modems.
+> +	  Say Y or M.
 
-Are you sure you are using correct prefix? Anyway, keep alphabetical
-order, so before "gw".
+What will the module be called if "m" is selected?
 
-Best regards,
-Krzysztof
+> +
+>   endif # NET_CORE
+>   
+>   config SUNGEM_PHY
+> diff --git a/drivers/net/Makefile b/drivers/net/Makefile
+> index e26f98f897c5..b8e706a4150e 100644
+> --- a/drivers/net/Makefile
+> +++ b/drivers/net/Makefile
+> @@ -40,6 +40,7 @@ obj-$(CONFIG_NLMON) += nlmon.o
+>   obj-$(CONFIG_NET_VRF) += vrf.o
+>   obj-$(CONFIG_VSOCKMON) += vsockmon.o
+>   obj-$(CONFIG_MHI_NET) += mhi_net.o
+> +obj-$(CONFIG_MHI_EP_NET) += mhi_ep_net.o
+>   
+>   #
+>   # Networking Drivers
+> diff --git a/drivers/net/mhi_ep_net.c b/drivers/net/mhi_ep_net.c
+> new file mode 100644
+> index 000000000000..0d7939caefc7
+> --- /dev/null
+> +++ b/drivers/net/mhi_ep_net.c
+> @@ -0,0 +1,331 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * MHI Endpoint Network driver
+> + *
+> + * Based on drivers/net/mhi_net.c
+> + *
+> + * Copyright (c) 2023, Linaro Ltd.
+> + * Author: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> + */
+> +
+> +#include <linux/if_arp.h>
+> +#include <linux/mhi_ep.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/module.h>
+> +#include <linux/netdevice.h>
+> +#include <linux/skbuff.h>
+> +#include <linux/u64_stats_sync.h>
+> +
+> +#define MHI_NET_MIN_MTU		ETH_MIN_MTU
+> +#define MHI_NET_MAX_MTU		0xffff
+> +
+> +struct mhi_ep_net_stats {
+> +	u64_stats_t rx_packets;
+> +	u64_stats_t rx_bytes;
+> +	u64_stats_t rx_errors;
+> +	u64_stats_t tx_packets;
+> +	u64_stats_t tx_bytes;
+> +	u64_stats_t tx_errors;
+> +	u64_stats_t tx_dropped;
+> +	struct u64_stats_sync tx_syncp;
+> +	struct u64_stats_sync rx_syncp;
+> +};
+> +
+> +struct mhi_ep_net_dev {
+> +	struct mhi_ep_device *mdev;
+> +	struct net_device *ndev;
+> +	struct mhi_ep_net_stats stats;
+> +	struct workqueue_struct *xmit_wq;
+> +	struct work_struct xmit_work;
+> +	struct sk_buff_head tx_buffers;
+> +	spinlock_t tx_lock; /* Lock for protecting tx_buffers */
+> +	u32 mru;
+> +};
+> +
+> +static void mhi_ep_net_dev_process_queue_packets(struct work_struct *work)
+> +{
+> +	struct mhi_ep_net_dev *mhi_ep_netdev = container_of(work,
+> +			struct mhi_ep_net_dev, xmit_work);
+
+Looks like this can fit all on one line to me.
 
