@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9647B7270DC
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 23:53:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E4CA7270E3
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 23:53:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232362AbjFGVx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 17:53:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54784 "EHLO
+        id S230298AbjFGVxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 17:53:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232255AbjFGVxT (ORCPT
+        with ESMTP id S232139AbjFGVxV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 17:53:19 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5363E2126
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 14:53:16 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-651f2f38634so7540394b3a.0
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 14:53:16 -0700 (PDT)
+        Wed, 7 Jun 2023 17:53:21 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B90B2129
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 14:53:19 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-65242634690so4647688b3a.0
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 14:53:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686174796; x=1688766796;
+        d=chromium.org; s=google; t=1686174798; x=1688766798;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=crBZss5mF3gjKLwx/CqtOTtfgR9i9SC8rNyLPUKs7BQ=;
-        b=gLEGdkrlNnvMgTTGOEdCWWcfB1i72xB3KWqQx+7tAf5HZk5n8a87dTE8cDhQijzzBu
-         lAV4kwbGPWSfrKgAixZN8QhMZX1SeEOn/DLX/dhv0PRDbO0tDOlWRmyatlez7rCoDgou
-         WTw7bTbJbWTLjeon8Fy7dVsLN71SI8wsOrOug=
+        bh=C0TJ0M8h8FSBEytElW2U8aVLESeLFlDMicg+igIg24E=;
+        b=ENQV/aC/8MxPO5Q9yi4JEgfC7IjnKPTFvema6S7aTysVupGrZimGTZvAuJcu78oBC4
+         O+bmUxGBIYUyrFdYZQQHNNtYwFkENO4CGZuSUlme+FgsHKK6Yw9s3il2gcK9OpDZ+vrp
+         xmuXwfUYInD3fPMXGm2Dnhyqk3dOQ330vO0+0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686174796; x=1688766796;
+        d=1e100.net; s=20221208; t=1686174798; x=1688766798;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=crBZss5mF3gjKLwx/CqtOTtfgR9i9SC8rNyLPUKs7BQ=;
-        b=ayzXyXNpe6k0SO7VYQuULKrLfNhxq0/TkXD0SUjXLoSQvJ2Q+YqwLYt7RhPn5/FQic
-         vppxT81LR0zqwnsf43jMm+Phlw0UsIJ4rqo3vXBt9Dzozf9g4WAHs+Kx6ZhiFk/6Otv+
-         P0eL4YTWGKsAMkNPLDK9ay53bpkhjtoNG0/qrRJVrenqEZ0ssHoj3h6zjG7pHJldnIFy
-         /A7jIZRXAZK5eH/+tj1Q+k25I9ifqxL4PeaQRAefXuw8Ghev4rzoINxRYkgyrZtiX6om
-         SmvW9ZuCD9AOVjscvaZQ3XD7JXW0IJQDE9W/yaL059Odpp+gCHa5TZF4COnTenMDAjiy
-         3Faw==
-X-Gm-Message-State: AC+VfDzhRsLSfbhXgvWcBQR4sV61AFeU0grwnRja2lkThM6OHDF0K8br
-        XPpiWwRBfF81qE81HnHpZntu9w==
-X-Google-Smtp-Source: ACHHUZ4vnQFYixY8jF66m21wSxp2x8lVupj/X6E4wb93LFsOExzlp2AYsSVAYdghITddglLp7a9/mQ==
-X-Received: by 2002:aa7:8889:0:b0:64c:a554:f577 with SMTP id z9-20020aa78889000000b0064ca554f577mr8115023pfe.11.1686174795822;
-        Wed, 07 Jun 2023 14:53:15 -0700 (PDT)
+        bh=C0TJ0M8h8FSBEytElW2U8aVLESeLFlDMicg+igIg24E=;
+        b=Vi5Ri230Qp7Xlnae8ewo6KI30vAoIM8p8UTWekUYVaQ5h4SSDvQndp6snJdFSRRviL
+         1BYLuqpWqnH5qdisy28fxolWhGrlSR1TA9+caD8gQhbMiU8bCWR5/jGc+vMPPwvFb2z4
+         6IKTGtjBiu2r7kx1u8DCNuwDw3hxu5ZmN5BrPFyPB6Y4BtyatmcHHLVqCV18zXzU0aK/
+         oGIz729zSJuxb8Bt9x0zBmGLU/cI/mXahMuj2ywzwldhy5f5v8Jlev5C8TeA2c0U+76d
+         ukaniKYJ6U6lM0qc9hvswkOQa2QRGzZYZQ+MjNm8UO9zhEf0BznowBdUWWhiDgMZaCd2
+         Mkpw==
+X-Gm-Message-State: AC+VfDyYA6FOb/tuoo/4Yfs2TsiS/2zVqT5kl66TJX0pepYwH5AMFPZh
+        TepAQhixDbQ0WdJUTb5yAYrXGQ==
+X-Google-Smtp-Source: ACHHUZ4o76KGtLcLOqrgeVMkTxebKqDSN6GJ+nYwHo+9U56ZkjgB0Injw8LFeejQKvFXjN28T4s+Iw==
+X-Received: by 2002:a05:6a00:1820:b0:65d:a631:9f39 with SMTP id y32-20020a056a00182000b0065da6319f39mr6657335pfa.32.1686174798580;
+        Wed, 07 Jun 2023 14:53:18 -0700 (PDT)
 Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:34b2:b638:6b53:f6c2])
-        by smtp.gmail.com with ESMTPSA id j25-20020aa78d19000000b0065dd1e7c2c1sm1376486pfe.63.2023.06.07.14.53.13
+        by smtp.gmail.com with ESMTPSA id j25-20020aa78d19000000b0065dd1e7c2c1sm1376486pfe.63.2023.06.07.14.53.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 14:53:15 -0700 (PDT)
+        Wed, 07 Jun 2023 14:53:18 -0700 (PDT)
 From:   Douglas Anderson <dianders@chromium.org>
 To:     Jiri Kosina <jikos@kernel.org>,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>,
@@ -70,9 +70,9 @@ Cc:     dri-devel@lists.freedesktop.org,
         linux-arm-msm@vger.kernel.org,
         Chris Morgan <macroalpha82@gmail.com>,
         Douglas Anderson <dianders@chromium.org>
-Subject: [PATCH v2 04/10] of: property: fw_devlink: Add a devlink for panel followers
-Date:   Wed,  7 Jun 2023 14:49:26 -0700
-Message-ID: <20230607144931.v2.4.Ibf8e1342b5b7906279db2365aca45e6253857bb3@changeid>
+Subject: [PATCH v2 05/10] HID: i2c-hid: Switch to SYSTEM_SLEEP_PM_OPS()
+Date:   Wed,  7 Jun 2023 14:49:27 -0700
+Message-ID: <20230607144931.v2.5.Ib2a2865bd3c0b068432259dfc7d76cebcbb512be@changeid>
 X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
 In-Reply-To: <20230607215224.2067679-1-dianders@chromium.org>
 References: <20230607215224.2067679-1-dianders@chromium.org>
@@ -88,46 +88,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Inform fw_devlink of the fact that a panel follower (like a
-touchscreen) is effectively a consumer of the panel from the purposes
-of fw_devlink.
+The SYSTEM_SLEEP_PM_OPS() allows us to get rid of '#ifdef
+CONFIG_PM_SLEEP', as talked about in commit 1a3c7bb08826 ("PM: core:
+Add new *_PM_OPS macros, deprecate old ones").
 
-NOTE: this patch isn't required for correctness but instead optimizes
-probe order / helps avoid deferrals.
+This change is expected to have no functional effect.
 
 Signed-off-by: Douglas Anderson <dianders@chromium.org>
 ---
-Since this is so small, I'd presume it's OK for it to go through a DRM
-tree with the proper Ack. That being said, this patch is just an
-optimization and thus it could land completely separately from the
-rest and they could all meet up in mainline.
 
-Changes in v2:
-- ("Add a devlink for panel followers") new for v2.
+(no changes since v1)
 
- drivers/of/property.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/hid/i2c-hid/i2c-hid-core.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/of/property.c b/drivers/of/property.c
-index ddc75cd50825..cf8dacf3e3b8 100644
---- a/drivers/of/property.c
-+++ b/drivers/of/property.c
-@@ -1266,6 +1266,7 @@ DEFINE_SIMPLE_PROP(pwms, "pwms", "#pwm-cells")
- DEFINE_SIMPLE_PROP(resets, "resets", "#reset-cells")
- DEFINE_SIMPLE_PROP(leds, "leds", NULL)
- DEFINE_SIMPLE_PROP(backlight, "backlight", NULL)
-+DEFINE_SIMPLE_PROP(panel, "panel", NULL)
- DEFINE_SUFFIX_PROP(regulators, "-supply", NULL)
- DEFINE_SUFFIX_PROP(gpio, "-gpio", "#gpio-cells")
+diff --git a/drivers/hid/i2c-hid/i2c-hid-core.c b/drivers/hid/i2c-hid/i2c-hid-core.c
+index efbba0465eef..19d985c20a5c 100644
+--- a/drivers/hid/i2c-hid/i2c-hid-core.c
++++ b/drivers/hid/i2c-hid/i2c-hid-core.c
+@@ -1085,7 +1085,6 @@ void i2c_hid_core_shutdown(struct i2c_client *client)
+ }
+ EXPORT_SYMBOL_GPL(i2c_hid_core_shutdown);
  
-@@ -1354,6 +1355,7 @@ static const struct supplier_bindings of_supplier_bindings[] = {
- 	{ .parse_prop = parse_resets, },
- 	{ .parse_prop = parse_leds, },
- 	{ .parse_prop = parse_backlight, },
-+	{ .parse_prop = parse_panel, },
- 	{ .parse_prop = parse_gpio_compat, },
- 	{ .parse_prop = parse_interrupts, },
- 	{ .parse_prop = parse_regulators, },
+-#ifdef CONFIG_PM_SLEEP
+ static int i2c_hid_core_suspend(struct device *dev)
+ {
+ 	struct i2c_client *client = to_i2c_client(dev);
+@@ -1138,10 +1137,9 @@ static int i2c_hid_core_resume(struct device *dev)
+ 
+ 	return hid_driver_reset_resume(hid);
+ }
+-#endif
+ 
+ const struct dev_pm_ops i2c_hid_core_pm = {
+-	SET_SYSTEM_SLEEP_PM_OPS(i2c_hid_core_suspend, i2c_hid_core_resume)
++	SYSTEM_SLEEP_PM_OPS(i2c_hid_core_suspend, i2c_hid_core_resume)
+ };
+ EXPORT_SYMBOL_GPL(i2c_hid_core_pm);
+ 
 -- 
 2.41.0.162.gfafddb0af9-goog
 
