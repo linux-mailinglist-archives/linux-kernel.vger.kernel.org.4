@@ -2,78 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 326F97267B5
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 19:46:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 756377267B8
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 19:46:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232223AbjFGRqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 13:46:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45064 "EHLO
+        id S232252AbjFGRqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 13:46:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232208AbjFGRqG (ORCPT
+        with ESMTP id S232208AbjFGRqo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 13:46:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35CDC1BFF
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 10:46:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B016664221
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 17:46:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79FCBC433EF;
-        Wed,  7 Jun 2023 17:46:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686159964;
-        bh=w4lH+1m5uA5ObF5GBeQgMdYOBG42Ypds2O9e4uqOF/E=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=jLQ+buIz34E+qg1PACQhLICnu5B6TtOgF/vjMrcRG7OMSFslvfXQE0GsZCYYEKiRt
-         AAFIBglsDG2yisi3goMFVCP1DscLH172Ta7SigN64q2JKdkDvKj8PUCEX5wUBpeUlQ
-         3SmWhs7IWg0OdZl1fzkmlGcfUVWOYXj4pHm25WXlucrzJAM8jRu/JynxZA4bDdS+ec
-         6rVt24N0nMKYTkc+YTku1vkVqv6kMcZjYtryd9t+HfE3WnAHZRUze/4drOb47l4SzE
-         08pa1cce10zLKXH/DmZgV4raPPZxkEHske9Wg5ZyUQD8rB30gS27UFPhWPiReQL13d
-         Bjhu2oVRRHtFw==
-Date:   Wed, 7 Jun 2023 10:46:02 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     netdev@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Boris Pismenny <borisp@nvidia.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v5 14/14] tls/device: Convert
- tls_device_sendpage() to use MSG_SPLICE_PAGES
-Message-ID: <20230607104602.17488bf3@kernel.org>
-In-Reply-To: <2293519.1686159322@warthog.procyon.org.uk>
-References: <20230607102600.07d16cf0@kernel.org>
-        <20230607140559.2263470-1-dhowells@redhat.com>
-        <20230607140559.2263470-15-dhowells@redhat.com>
-        <2293519.1686159322@warthog.procyon.org.uk>
+        Wed, 7 Jun 2023 13:46:44 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3658D1FF5
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 10:46:39 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-977e7d6945aso589042066b.2
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 10:46:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686159997; x=1688751997;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IS4yO5/WmR+TVZNJffAGCPAsefusOsebYnq87EbR9d8=;
+        b=PzyTuOtkeykTZ0E9oHoGoDsQ/p2Qa0UFZSSLm8W8vbcUh8U9lSgtO8y+UiTDleWhVd
+         IC4emAy2C+or6ZDf5bIl5qXYFSSDMX9ag9oEClJbOap2JZLS3NHFtSjkYm6/zkBQc+uG
+         pZJTUpiaMI7amxHQftTnaXbyaBCM4S1hIukTXP7XbEzajd6DNlcfQDVgRnP3P38tkKGg
+         gzkbrDweJUUFvbTvnJvqlUfafu1M/feCxMzQLnLgbVf1s6jg8WgSo6ZRpmvYg+OByjt8
+         7HekrhEqYX35nwdDI1p7WI1qKvWyRKHZ8NKQF3bpxA6SVImIm0MAJ8Ja4jK2YhuMOZ+M
+         tsEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686159997; x=1688751997;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IS4yO5/WmR+TVZNJffAGCPAsefusOsebYnq87EbR9d8=;
+        b=Mca9L9c871ARNp0zMJGvxRjgCcGFGR4D1nnYB3vyyXC5PyopUCl20O0BjWH8t6360c
+         SdLNWx6MARCBXjkuwWXiG4M8Gj2C688Wqe4DD2Z0Fspwrx+sgfIivkTzTVweqKUUvwcC
+         t51TXIX3VcjlQJHObtpmfxkWt1W2BXkzCwk1AhMIAkM0uB+KBbRSKpycfWIzA7KhQbET
+         4mLwzVChSQipSxCWKemPceKO3e1Tr1bG9BIiqCX94lUU8SE7l/qsFvsUu1Po+eygiSr1
+         uRykGfAnWwZuOPfRYR4CsLApkb0QjKa4wYuhq7w1gm1hUutsRd1Z9jKrBnVN4w4p0+m4
+         tkhQ==
+X-Gm-Message-State: AC+VfDwkIRIeqlB2+oaz5D/UvjNsVehw8SsP0+ratJMcnP75N9mFNpO9
+        ktczGNNdFXchPdpc+wFekhqElg==
+X-Google-Smtp-Source: ACHHUZ6vACvk/Fp/owXZGI5nFgVQVKJgETLwe7WJ0NqCxrx8BOmb1qgAg2jht151GmXiO55T0EdEeg==
+X-Received: by 2002:a17:907:1622:b0:968:2b4a:aba3 with SMTP id hb34-20020a170907162200b009682b4aaba3mr6198186ejc.5.1686159997582;
+        Wed, 07 Jun 2023 10:46:37 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id v1-20020a1709060b4100b0096f6647b5e8sm7141037ejg.64.2023.06.07.10.46.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Jun 2023 10:46:37 -0700 (PDT)
+Message-ID: <84508d22-2dcd-c49f-2424-37a717a49e1b@linaro.org>
+Date:   Wed, 7 Jun 2023 19:46:35 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH RFC net 2/2] nfc: nxp-nci: Fix i2c read on ThinkPad
+ hardware
+Content-Language: en-US
+To:     Marco Giorgi <giorgi.marco.96@disroot.org>, netdev@vger.kernel.org
+Cc:     u.kleine-koenig@pengutronix.de, davem@davemloft.net,
+        michael@walle.cc, kuba@kernel.org, linux-kernel@vger.kernel.org
+References: <20230607170009.9458-1-giorgi.marco.96@disroot.org>
+ <20230607170009.9458-3-giorgi.marco.96@disroot.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230607170009.9458-3-giorgi.marco.96@disroot.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 07 Jun 2023 18:35:22 +0100 David Howells wrote:
-> Jakub Kicinski <kuba@kernel.org> wrote:
-> 
-> > Acked-by: Jakub Kicinski <kuba@kernel.org>  
-> 
-> Did you mean Acked-by rather than Reviewed-by?
+On 07/06/2023 19:00, Marco Giorgi wrote:
+> Read IRQ GPIO value and exit from IRQ if the device is not ready.
 
-Yeah, looks mostly mechanical, I trust you did the right thing.
+Why? What problem are you solving?
+
+Why IRQ GPIO - whatever it is - means device is not ready for I2C transfer?
+
+> 
+> Signed-off-by: Marco Giorgi <giorgi.marco.96@disroot.org>
+> ---
+>  drivers/nfc/nxp-nci/i2c.c | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+
+Best regards,
+Krzysztof
+
