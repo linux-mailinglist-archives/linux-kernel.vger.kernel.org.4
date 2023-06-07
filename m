@@ -2,118 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DDA372695D
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 21:03:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3574B726967
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 21:04:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231651AbjFGTDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 15:03:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36004 "EHLO
+        id S230101AbjFGTEI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 15:04:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjFGTDP (ORCPT
+        with ESMTP id S229560AbjFGTEF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 15:03:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EA21193
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 12:03:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EEB1061779
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 19:03:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D38B2C433D2;
-        Wed,  7 Jun 2023 19:03:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1686164593;
-        bh=6rM3c0MzWmypFl9SNFBILYmJFrC7/yHDs2cmHU7fDRE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Ssml13aGyZyJ3ub78D/30u0UL0IB0MjCmCDTGHBI1B8L+zNeaRQzmtYap1KIiZzbx
-         iwFHzqzJ92fkaq893W+6Uo0nFRdBZC7b8EpitBAsS/01f3s27OicNfWuDXwzFKTj1R
-         gw6wXPo7gPLbJ2AOYwKqRyVsaoO4q6ZVJ3EHYaIc=
-Date:   Wed, 7 Jun 2023 12:03:12 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     Gerd Hoffmann <kraxel@redhat.com>,
-        Junxiao Chang <junxiao.chang@intel.com>,
-        kirill.shutemov@linux.intel.com, mhocko@suse.com,
-        jmarchan@redhat.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, muchun.song@linux.dev,
-        Vivek Kasireddy <vivek.kasireddy@intel.com>,
-        Dongwon Kim <dongwon.kim@intel.com>,
-        James Houghton <jthoughton@google.com>,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH] mm: fix hugetlb page unmap count balance issue
-Message-Id: <20230607120312.6da5cea7677ec1a3da35b92c@linux-foundation.org>
-In-Reply-To: <20230516223440.GA30624@monkey>
-References: <20230512072036.1027784-1-junxiao.chang@intel.com>
-        <CADrL8HV25JyeaT=peaR7NWhUiaBz8LzpyFosYZ3_0ACt+twU6w@mail.gmail.com>
-        <20230512232947.GA3927@monkey>
-        <20230515170259.GA3848@monkey>
-        <20230516223440.GA30624@monkey>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 7 Jun 2023 15:04:05 -0400
+Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 487511BF5;
+        Wed,  7 Jun 2023 12:04:05 -0700 (PDT)
+Received: by mail-il1-f180.google.com with SMTP id e9e14a558f8ab-33b1da9a8acso8010545ab.3;
+        Wed, 07 Jun 2023 12:04:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686164644; x=1688756644;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2DWn/Ze0Ut4orMd0/mcdLsynCVi5Qtok/YstQsgHfNM=;
+        b=PhIm70mR6s1/WapHKUFBpr+n3dUbEdCFRUzmXKtfEk/LTDRfdEJRuE6QWbO8b2Zzv6
+         STqu9FWvf7B2RplF8TY055c3oXvP6HF3QZWLItzkMGcP/cdaoUdh+k2g41cnV3VfN/+c
+         FrTE9TMEpfdp6UGPE0tj9R2ztCZcBMWyfEjpAV71Yws1RxslZlhHbF/C3fi9juR7PuIN
+         DcKoIO1mLM9nnVSCRkeoQX31iHdO0+3R7FHxKqrpk0fTMghBc8d6/JJPVQbt39S2jJwJ
+         +dBNb3Bft+DroglnznjwyJF1ZASnfTcBVgpayx8HPiHNsDyDVX0yV1OqUdSRzRH4z4KP
+         3Luw==
+X-Gm-Message-State: AC+VfDyZXlzizZmquXZpI4jLyBHeflpIrkotNXiH3ou8/zT5Z9q7Po/f
+        dCJ2NYi5+Ntt+S/Xn/Tq4Q==
+X-Google-Smtp-Source: ACHHUZ4LmyzEXnj/xRHWPuspG/WLerGfcXl235yaTAXTT0UAZR5KZoKSo+SSHLfTDzHl0HlaGOa1Gg==
+X-Received: by 2002:a92:cf4e:0:b0:331:105c:81f9 with SMTP id c14-20020a92cf4e000000b00331105c81f9mr9944539ilr.29.1686164644451;
+        Wed, 07 Jun 2023 12:04:04 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id l9-20020a056e0205c900b0033568b32890sm3908892ils.24.2023.06.07.12.04.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 12:04:03 -0700 (PDT)
+Received: (nullmailer pid 3777477 invoked by uid 1000);
+        Wed, 07 Jun 2023 19:04:01 -0000
+Date:   Wed, 7 Jun 2023 13:04:01 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Diederik de Haas <didi.debian@cknow.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, netdev@vger.kernel.org,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: Re: [PATCH v2] dt-bindings: net: realtek-bluetooth: Fix double
+ RTL8723CS in desc
+Message-ID: <168616464041.3777410.7010613597646626440.robh@kernel.org>
+References: <20230509141500.275887-1-didi.debian@cknow.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230509141500.275887-1-didi.debian@cknow.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 16 May 2023 15:34:40 -0700 Mike Kravetz <mike.kravetz@oracle.com> wrote:
 
-> On 05/15/23 10:04, Mike Kravetz wrote:
-> > On 05/12/23 16:29, Mike Kravetz wrote:
-> > > On 05/12/23 14:26, James Houghton wrote:
-> > > > On Fri, May 12, 2023 at 12:20 AM Junxiao Chang <junxiao.chang@intel.com> wrote:
-> > > > 
-> > > > This alone doesn't fix mapcounting for PTE-mapped HugeTLB pages. You
-> > > > need something like [1]. I can resend it if that's what we should be
-> > > > doing, but this mapcounting scheme doesn't work when the page structs
-> > > > have been freed.
-> > > > 
-> > > > It seems like it was a mistake to include support for hugetlb memfds in udmabuf.
-> > > 
-> > > IIUC, it was added with commit 16c243e99d33 udmabuf: Add support for mapping
-> > > hugepages (v4).  Looks like it was never sent to linux-mm?  That is unfortunate
-> > > as hugetlb vmemmap freeing went in at about the same time.  And, as you have
-> > > noted udmabuf will not work if hugetlb vmemmap freeing is enabled.
-> > > 
-> > > Sigh!
-> > > 
-> > > Trying to think of a way forward.
-> > > -- 
-> > > Mike Kravetz
-> > > 
-> > > > 
-> > > > [1]: https://lore.kernel.org/linux-mm/20230306230004.1387007-2-jthoughton@google.com/
-> > > > 
-> > > > - James
-> > 
-> > Adding people and list on Cc: involved with commit 16c243e99d33.
-> > 
-> > There are several issues with trying to map tail pages of hugetllb pages
-> > not taken into account with udmabuf.  James spent quite a bit of time trying
-> > to understand and address all the issues with the HGM code.  While using
-> > the scheme proposed by James, may be an approach to the mapcount issue there
-> > are also other issues that need attention.  For example, I do not see how
-> > the fault code checks the state of the hugetlb page (such as poison) as none
-> > of that state is carried in tail pages.
-> > 
-> > The more I think about it, the more I think udmabuf should treat hugetlb
-> > pages as hugetlb pages.  They should be mapped at the appropriate level
-> > in the page table.  Of course, this would impose new restrictions on the
-> > API (mmap and ioctl) that may break existing users.  I have no idea how
-> > extensively udmabuf is being used with hugetlb mappings.
+On Tue, 09 May 2023 16:15:01 +0200, Diederik de Haas wrote:
+> The description says 'RTL8723CS/RTL8723CS/...' whereas the title and
+> other places reference 'RTL8723BS/RTL8723CS/...'.
 > 
-> Verified that using udmabug on a hugetlb mapping with vmemmap optimization will
-> BUG as:
+> Signed-off-by: Diederik de Haas <didi.debian@cknow.org>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+> Changes since v1:
+> - Rebased on top of 6.4-rc1
+> - Added Acked-by from Krzysztof Kozlowski
+> v1: https://lore.kernel.org/netdev/20230312155435.12334-1-didi.debian@cknow.org/
+> 
+>  Documentation/devicetree/bindings/net/realtek-bluetooth.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
-BUGs aren't good.  Can we please find a way to push this along?
-
-Have we heard anything from any udmabuf people?
-
+Applied, thanks!
 
