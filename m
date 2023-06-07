@@ -2,173 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F04F3726015
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 14:52:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 310BB726018
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 14:53:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235545AbjFGMwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 08:52:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59500 "EHLO
+        id S238362AbjFGMxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 08:53:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235568AbjFGMwQ (ORCPT
+        with ESMTP id S233837AbjFGMxp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 08:52:16 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7589019AE
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 05:51:52 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-3f9a81da5d7so205431cf.0
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 05:51:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686142311; x=1688734311;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hGJqdQiK4MKfPRMFEElKPIlLSoaxgQujZcPcywtmuLE=;
-        b=vx9H63ZEKwP8kf2QmtQ5uIY2hNqkPc7muS69VQPvFQvC7m37HvsT/pqFCNYWwt26bY
-         ORN9HwT7kORDv951avMLH/QW4H+YjyalvyUuvkjFG7/yaTglyG8Cie0CC9KAzUNqW4cI
-         8+HanzbDZPc4noU+1JxQuPiMPJsKROvKQIRAi2/8yDnQCme5V0UhLSp2qpMGYHeL/Iyg
-         vV+HXyGrwJz/pFX4ngrVDMEBvpuMh/SJs/cZd3EfISpgHwL52kj/6LjNeLM0y1h2ro/A
-         0wLqB2FtqqZhFNmAvjBJY0e12bQbvuq/dADgWwFR2yC1wf7juC7gSY7dZiMrVhYSoD/v
-         TJ/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686142311; x=1688734311;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hGJqdQiK4MKfPRMFEElKPIlLSoaxgQujZcPcywtmuLE=;
-        b=LD+5xMIys583IioMfVEHNdcfNZA0okxMtXX+LwGCAPFBfDyHCQYDnznYvlA5BIF6Uh
-         RQvYmp7s2CZ/VoPvlJCmHOgo6EZGnToyTQAMNQcmi82YytMA4g2KcxtZvG+OVAVqJCF5
-         +Yu+tub+OZOTYeI07W5YxTV2tQZRQkqgqaTQTzVtaFrZSdor2sC9vTIAe3bUXZXDy6K2
-         LQcwBae/d+DWR/L0xImaCLIgu6KiK7JPgJwJxo6DqCFoHCIsaT5XLYUM+eB2oFjjVTLP
-         1lVC/jRdVs7A/wHU13SuTuj6lC188WV8JN2CE8LjoAvENpibnfDUxYXJZiczg3G77hpy
-         4tuA==
-X-Gm-Message-State: AC+VfDzoJkPVdNBk1QBjCJO0ip9loC5iFG1+CMg9r2if25u8yDITqKXP
-        e+rvDDBB6ZCfZvDonotR9PBM8Ue2vntp5Mc12E2A8D87ORURBGeLJEekpg==
-X-Google-Smtp-Source: ACHHUZ4idIE5V6jUDOkOEJpCWuSjtocPvIAom3pIMftOw5LFmwZj1Dz2NWoN4PhIYlr9xHShBW56wAzZPry7fTm7isQ=
-X-Received: by 2002:a05:622a:c5:b0:3f9:6930:1307 with SMTP id
- p5-20020a05622a00c500b003f969301307mr213974qtw.22.1686142311175; Wed, 07 Jun
- 2023 05:51:51 -0700 (PDT)
+        Wed, 7 Jun 2023 08:53:45 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F11161735
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 05:53:43 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1686142422;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DJiQE9VDAnzwpOGaRO9ka3cmwowQMgWUxgmdirElyzs=;
+        b=wyk5TgCnsEOOQ6RGV1FaXTIPOvX3AlV8oHHk72CY2bIVJbDWT7mM78HOCDijWGd3+qAmG7
+        LfUJ4LIjAFcy06vnVB7QYCu11hlnrzbXu/68DYvCEwRK/iDPPVttS4pPdZuES5PvHTnkHd
+        hiEktIgJs3teq8cPdJAHmCGprm9+lhnTrS3JbCA9hDR8mqbUJ8SpS0238tI+YfsbHSYmMe
+        pIJNMDqSIByOSiDz94whdr53GE5M5MI+CKjrERUs5x28dFcULnsuQpArVDqJXEHfq3vJvA
+        lHR5/x+LtcRQaaMzglsfiWccdhdkpVVMv9mbVv8ucjoQ6ArwD47oRjXv8hbFfw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1686142422;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DJiQE9VDAnzwpOGaRO9ka3cmwowQMgWUxgmdirElyzs=;
+        b=eYUIvSbbC1fBbB2LQUkgBTjnv1t0Qi5an0XfawoR5kvLwR9FgOJ4n5D8Mr5RzpxkrgEsB0
+        q8ZvcdskWZeoCCAA==
+To:     Nikolay Borisov <nik.borisov@suse.com>, x86@kernel.org
+Cc:     linux-kernel@vger.kernel.org, mhocko@suse.com, jslaby@suse.cz
+Subject: Re: [PATCH 3/3] x86: Disable running 32bit processes if
+ ia32_disabled is passed
+In-Reply-To: <80f2045b-f276-e127-8e46-87fb6994fb41@suse.com>
+References: <20230607072936.3766231-1-nik.borisov@suse.com>
+ <20230607072936.3766231-4-nik.borisov@suse.com> <87legvjxat.ffs@tglx>
+ <80f2045b-f276-e127-8e46-87fb6994fb41@suse.com>
+Date:   Wed, 07 Jun 2023 14:53:41 +0200
+Message-ID: <87fs73juwa.ffs@tglx>
 MIME-Version: 1.0
-References: <20230525180209.19497-1-james.morse@arm.com> <20230525180209.19497-13-james.morse@arm.com>
- <CALPaoCjLjngabG32m4X8sSwK-bbZ28oL6BVKSn_dFnDwPzkDkg@mail.gmail.com> <7ff7fcf9-725b-fb3d-43f3-b80a1df3a001@arm.com>
-In-Reply-To: <7ff7fcf9-725b-fb3d-43f3-b80a1df3a001@arm.com>
-From:   Peter Newman <peternewman@google.com>
-Date:   Wed, 7 Jun 2023 14:51:40 +0200
-Message-ID: <CALPaoChW=3T2EmrcW+eLEnDUY00rsRSQarTN3c0hSDX-FDRqvw@mail.gmail.com>
-Subject: Re: [PATCH v4 12/24] x86/resctrl: Make resctrl_arch_rmid_read() retry
- when it is interrupted
-To:     James Morse <james.morse@arm.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        H Peter Anvin <hpa@zytor.com>,
-        Babu Moger <Babu.Moger@amd.com>,
-        shameerali.kolothum.thodi@huawei.com,
-        D Scott Phillips OS <scott@os.amperecomputing.com>,
-        carl@os.amperecomputing.com, lcherian@marvell.com,
-        bobo.shaobowang@huawei.com, tan.shaopeng@fujitsu.com,
-        xingxin.hx@openanolis.org, baolin.wang@linux.alibaba.com,
-        Jamie Iles <quic_jiles@quicinc.com>,
-        Xin Hao <xhao@linux.alibaba.com>, dfustini@baylibre.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi James,
-
-On Tue, Jun 6, 2023 at 7:03=E2=80=AFPM James Morse <james.morse@arm.com> wr=
-ote:
-> On 06/06/2023 09:49, Peter Newman wrote:
-> > It looks like if __rmid_read() is interrupted by an occupancy counter
-> > read between writing QM_EVTSEL and reading QM_CTR, it will not perform
-> > any update to am->prev_msr, and the interrupted read will return the
-> > same counter value as in the interrupting read.
+On Wed, Jun 07 2023 at 15:19, Nikolay Borisov wrote:
+> On 7.06.23 =D0=B3. 15:01 =D1=87., Thomas Gleixner wrote:
+>>=20
+>>> -	(elf_check_arch_ia32(x) ||					\
+>>> -	 (IS_ENABLED(CONFIG_X86_X32_ABI) && (x)->e_machine =3D=3D EM_X86_64))
+>>> +	(!ia32_disabled && (elf_check_arch_ia32(x) ||			\
+>>> +	 (IS_ENABLED(CONFIG_X86_X32_ABI) && (x)->e_machine =3D=3D EM_X86_64)))
+>>=20
+>> If I'm reading this correctly then ia32_disabled also prevents binaries
+>> with X32 ABI to be loaded.
+>>=20
+>> That might be intentional but I'm failing to find any explanation for
+>> this in the changelog.
+>>=20
+>> X32_ABI !=3D IA32_EMULATION
 >
-> Yup, that's a problem. I was only looking at the mbm state in memory, not=
- the CPU register.
-> I think the fix is to read back QM_EVTSEL after reading QM_CTR. I'll do t=
-his in
-> __rmid_read() to avoid returning -EINTR. It creates two retry loops which=
- is annoying, but
-> making the window larger means you're more likely to see false positives.
+> Right, however given the other changes (i.e disabling sysenter/int 0x80)=
+=20
+> can we really have a working X32 abi when ia32_disabled is true? Now I'm=
+=20
+> thinking can we really have IA32_EMULATION && X32_ABI && ia32_disabled,=20
+> I guess the answer is no?
+
+X32_ABI is completely _independent_ from IA32_EMULATION.
+
+It just shares some of the required compat code, but it does not use
+sysenter/int 0x80 at all. It uses the regular 64bit system call.
+
+You can build a working kernel with X32_ABI=3Dy and IA32_EMULATION=3Dn.
+
+So why would boottime disabling of IA32_EMULATION affect X32_ABI in any
+way?
+
+>>=20
+>> This issues a SMP function call on all online CPUs to set these entries
+>> to 0 on _every_ CPU hotplug operation.
+>>=20
+>> I'm sure there is a reason why these bits need to be cleared over and
+>> over. It's just not obvious to me why clearing them _ONCE_ per boot is
+>> not sufficient. It's neither clear to me why CPU0 must do that ($NCPUS -
+>> 1) times, but for the last CPU it's enough to do it once.
 >
-> ----------------------------%<----------------------------
-> diff --git a/arch/x86/kernel/cpu/resctrl/monitor.c b/arch/x86/kernel/cpu/=
-resctrl
-> /monitor.c
-> index e24390d2e661..aeba035bb680 100644
-> --- a/arch/x86/kernel/cpu/resctrl/monitor.c
-> +++ b/arch/x86/kernel/cpu/resctrl/monitor.c
-> @@ -101,6 +101,7 @@ static inline u64 get_corrected_mbm_count(u32 rmid, u=
-nsigned
->  long val)
+> Actually clearing them once per-cpu is perfectly fine. Looking around=20
+> the code i saw arch_smt_update() to be the only place where a=20
+> on_each_cpu() call is being made hence I put the code there. Another=20
+> aspect I was thinking of is what if a cpu gets onlined at a later stage=20
+> and a 32bit process is scheduled on that cpu, if the gdt entry wasn't=20
+> cleared on that CPU then it would be possible to run 32bit processes on=20
+> it. I guess a better alternative is to use arch_initcall() ?
+
+Why do you need an on_each_cpu() function call at all? Why would you
+need an extra arch_initcall()?
+
+The obvious place to clear this is when a CPU is initialized, no?
+
+>> That aside, what's the justification for doing this in the first place
+>> and why is this again inconsistent vs. CONFIG_IA32_EMULATION=3Dn?
 >
->  static int __rmid_read(u32 rmid, enum resctrl_event_id eventid, u64 *val=
-)
->  {
-> +       u32 _rmid, _eventid;
->         u64 msr_val;
->
->         /*
-> @@ -110,9 +111,15 @@ static int __rmid_read(u32 rmid, enum resctrl_event_=
-id eventid, u64 *val)
->          * IA32_QM_CTR.data (bits 61:0) reports the monitored data.
->          * IA32_QM_CTR.Error (bit 63) and IA32_QM_CTR.Unavailable (bit 62=
-)
->          * are error bits.
-> +        * QM_EVTSEL is re-read to detect if this function was interrupte=
-d by
-> +        * another call, meaning the QM_CTR value may belong to a differe=
-nt
-> +        * event.
->          */
-> -       wrmsr(MSR_IA32_QM_EVTSEL, eventid, rmid);
-> -       rdmsrl(MSR_IA32_QM_CTR, msr_val);
-> +       do {
-> +               wrmsr(MSR_IA32_QM_EVTSEL, eventid, rmid);
-> +               rdmsrl(MSR_IA32_QM_CTR, msr_val);
-> +               rdmsr(MSR_IA32_QM_EVTSEL, _eventid, _rmid);
-> +       } while (eventid !=3D _eventid || rmid !=3D _rmid);
->
->         if (msr_val & RMID_VAL_ERROR)
->                 return -EIO;
+> I'll put it under an ifdef CONFIG_IA32_EMULATION, unfortunately the=20
+> traps.h header can't be included in elf.h without causing build breakage.
 
-I happen to be tracking the cost of resctrl_arch_rmid_read() calls, so
-I measured the impact of your fix on my AMD EPYC 7B12:
+You are not answering my question at all and neither the elf nor the
+traps header have anything to do with it. I'm happy to rephrase it:
 
-with both this and the soft RMID series[1] applied:
+  1) What is the justification for setting the 'present' bit of
+     GDT_ENTRY_DEFAULT_USER32_CS to 0?
 
-Base switch         7955     0.23%
-Hard RMID Switch    8476     6.80%
-Soft RMID Switch    10173   28.17%
-CLOSID+Soft RMID    10740   35.32%
+  2) Why is #1 inconsistent with CONFIG_IA32_EMULATION=3Dn?
 
-then adding EVTSEL read-back patch:
+Thanks,
 
-Base switch         7985
-Hard RMID Switch    8540     6.96%
-Soft RMID Switch    11015   37.95%
-CLOSID+Soft RMID    11590   45.16%
+        tglx
 
-The Soft RMID switches contain two __rmid_read() calls, so this
-implies each QM_EVTSEL read-back is around 420 cycles on this AMD
-implementation.
 
-Even if you don't agree with my plan to add resctrl_arch_rmid_read()
-calls to context switches, there should be cheaper ways to handle
-this.
 
--Peter
-
-[1] https://lore.kernel.org/lkml/20230421141723.2405942-4-peternewman@googl=
-e.com/
