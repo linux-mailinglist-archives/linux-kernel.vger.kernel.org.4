@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42F00726998
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 21:19:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E918A726999
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 21:20:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233155AbjFGTTD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 15:19:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43356 "EHLO
+        id S233147AbjFGTUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 15:20:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbjFGTTA (ORCPT
+        with ESMTP id S229614AbjFGTT6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 15:19:00 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C29911B0;
-        Wed,  7 Jun 2023 12:18:58 -0700 (PDT)
+        Wed, 7 Jun 2023 15:19:58 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C353A1BD4;
+        Wed,  7 Jun 2023 12:19:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686165538; x=1717701538;
+  t=1686165596; x=1717701596;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Ebd/5EJZnMmscD9/Cb26uNOTuFkdf4ba2XYKYT0ut5A=;
-  b=CnI6y377SGSgZVjWME/t6cfeC4iFnmXnWPWFY2Emj+IP7CkN9dv5y8uV
-   TA5POn6b/vPfZKLI/QfmhPNR2c9s+gdTGHJ8AnVJcKjMl3QCbgc/VMWbW
-   uytCBzg+9PQjhwf2PTXETzLl6TkLXtgxcW3cEmfuq+7fQQixtkHvjUpQ1
-   uMEfBkgBSWmx0SO0Ed7FkVAnczpbnFUUae0ilBcl1YPdDrrn+engLf3qv
-   zOiXvW03ENgw5XKMlIN4fpCqCose7xqP756uPWGFqPNJXEGWBNyALdzJy
-   rn0e0UXfETkjnhXVCbCaMcwrxFehAM6yPuNC6XwADvvg7eB8wkS2d+ADd
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="337447801"
+  bh=XMEomkbMgXMC6d/m4cFrF1CnpOyHNvyL7lkPILSp6Lw=;
+  b=fQPb8aF8qdtMVLXvYyBUJ3xIgQZqGuA4GkA0R8keiu1X0jfQ6lEMKhp9
+   LlcXmiIIiGjUXRHz/bqxCXaxHTvh1iWBfaXy96bKfAW+BE/O2y9natdtw
+   c89JoHVJdOQz1c/SvxQItx2ne1kEYbm9v8ur6CyBPAfMW7R+LdVzBnbsI
+   Brt2WUk9cxh43rDzaqgdLSKvQHmc2Fd15L/mX2qigETjlNbUAsa7swGh1
+   vzARdqT90BKYR1hS6digg1NcsyAwoz+EKXiEoGDGrUWdxICfsiYK8qGDg
+   UDgnc8ieCG9KMRggenGemfsxjO51Ur7GVsYo8oLUzpyU+8uIRtkwEasYs
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="360415927"
 X-IronPort-AV: E=Sophos;i="6.00,225,1681196400"; 
-   d="scan'208";a="337447801"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 12:18:58 -0700
+   d="scan'208";a="360415927"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 12:19:56 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="1039804709"
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="956411568"
 X-IronPort-AV: E=Sophos;i="6.00,225,1681196400"; 
-   d="scan'208";a="1039804709"
+   d="scan'208";a="956411568"
 Received: from aschofie-mobl2.amr.corp.intel.com (HELO aschofie-mobl2) ([10.209.21.116])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 12:18:57 -0700
-Date:   Wed, 7 Jun 2023 12:18:55 -0700
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 12:19:55 -0700
+Date:   Wed, 7 Jun 2023 12:19:54 -0700
 From:   Alison Schofield <alison.schofield@intel.com>
 To:     Vishal Verma <vishal.l.verma@intel.com>
 Cc:     Ira Weiny <ira.weiny@intel.com>, Dave Jiang <dave.jiang@intel.com>,
@@ -49,15 +49,15 @@ Cc:     Ira Weiny <ira.weiny@intel.com>, Dave Jiang <dave.jiang@intel.com>,
         Davidlohr Bueso <dave@stgolabs.net>,
         Jonathan Cameron <Jonathan.Cameron@huawei.com>,
         Russ Weight <russell.h.weight@intel.com>
-Subject: Re: [PATCH v2 2/4] tools/testing/cxl: Fix command effects for
- inject/clear poison
-Message-ID: <ZIDYHzw3sVTiOjeX@aschofie-mobl2>
+Subject: Re: [PATCH v2 3/4] tools/testing/cxl: Use named effects for the
+ Command Effect Log
+Message-ID: <ZIDYWlPb2Mc883MR@aschofie-mobl2>
 References: <20230602-vv-fw_update-v2-0-e9e5cd5adb44@intel.com>
- <20230602-vv-fw_update-v2-2-e9e5cd5adb44@intel.com>
+ <20230602-vv-fw_update-v2-3-e9e5cd5adb44@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230602-vv-fw_update-v2-2-e9e5cd5adb44@intel.com>
+In-Reply-To: <20230602-vv-fw_update-v2-3-e9e5cd5adb44@intel.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -68,44 +68,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 05, 2023 at 02:20:23PM -0600, Vishal Verma wrote:
-> The CXL spec (3.0, section 8.2.9.8.4) Lists Inject Poison and Clear
-> Poison as having the effects of "Immediate Data Change". Fix this in the
-> mock driver so that the command effect log is populated correctly.
-> 
-> Fixes: 371c16101ee8 ("tools/testing/cxl: Mock the Inject Poison mailbox command")
-> Cc: Alison Schofield <alison.schofield@intel.com>
-> Cc: Dan Williams <dan.j.williams@intel.com>
-> Signed-off-by: Vishal Verma <vishal.l.verma@intel.com>
+On Mon, Jun 05, 2023 at 02:20:24PM -0600, Vishal Verma wrote:
+> As more emulated mailbox commands are added to cxl_test, it is a pain
+> point to look up command effect numbers for each effect. Replace the
+> bare numbers in the mock driver with an enum that lists all possible
+> effects.
 
-Hi Vishal,
-I took a look at this, wondering if we should promote it as a 6.4 fix.
-I came up with a no. It has no user impact of inject/clear usage in the
-mock driver environment.
-
-Thanks for fixing!
 Reviewed-by: Alison Schofield <alison.schofield@intel.com>
 
-
+> 
+> Suggested-by: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+> Cc: Davidlohr Bueso <dave@stgolabs.net>
+> Cc: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+> Cc: Russ Weight <russell.h.weight@intel.com>
+> Cc: Alison Schofield <alison.schofield@intel.com>
+> Cc: Ira Weiny <ira.weiny@intel.com>
+> Cc: Dave Jiang <dave.jiang@intel.com>
+> Cc: Ben Widawsky <bwidawsk@kernel.org>
+> Cc: Dan Williams <dan.j.williams@intel.com>
+> Signed-off-by: Vishal Verma <vishal.l.verma@intel.com>
 > ---
->  tools/testing/cxl/test/mem.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  tools/testing/cxl/test/mem.c | 32 +++++++++++++++++++++++---------
+>  1 file changed, 23 insertions(+), 9 deletions(-)
 > 
 > diff --git a/tools/testing/cxl/test/mem.c b/tools/testing/cxl/test/mem.c
-> index 34b48027b3de..403cd3608772 100644
+> index 403cd3608772..68668d8df1cd 100644
 > --- a/tools/testing/cxl/test/mem.c
 > +++ b/tools/testing/cxl/test/mem.c
-> @@ -52,11 +52,11 @@ static struct cxl_cel_entry mock_cel[] = {
+> @@ -21,42 +21,56 @@
+>  
+>  static unsigned int poison_inject_dev_max = MOCK_INJECT_DEV_MAX;
+>  
+> +enum cxl_command_effects {
+> +	CONF_CHANGE_COLD_RESET = 0,
+> +	CONF_CHANGE_IMMEDIATE,
+> +	DATA_CHANGE_IMMEDIATE,
+> +	POLICY_CHANGE_IMMEDIATE,
+> +	LOG_CHANGE_IMMEDIATE,
+> +	SECURITY_CHANGE_IMMEDIATE,
+> +	BACKGROUND_OP,
+> +	SECONDARY_MBOX_SUPPORTED,
+> +};
+> +
+> +#define CXL_CMD_EFFECT_NONE cpu_to_le16(0)
+> +
+>  static struct cxl_cel_entry mock_cel[] = {
+>  	{
+>  		.opcode = cpu_to_le16(CXL_MBOX_OP_GET_SUPPORTED_LOGS),
+> -		.effect = cpu_to_le16(0),
+> +		.effect = CXL_CMD_EFFECT_NONE,
+>  	},
+>  	{
+>  		.opcode = cpu_to_le16(CXL_MBOX_OP_IDENTIFY),
+> -		.effect = cpu_to_le16(0),
+> +		.effect = CXL_CMD_EFFECT_NONE,
+>  	},
+>  	{
+>  		.opcode = cpu_to_le16(CXL_MBOX_OP_GET_LSA),
+> -		.effect = cpu_to_le16(0),
+> +		.effect = CXL_CMD_EFFECT_NONE,
+>  	},
+>  	{
+>  		.opcode = cpu_to_le16(CXL_MBOX_OP_GET_PARTITION_INFO),
+> -		.effect = cpu_to_le16(0),
+> +		.effect = CXL_CMD_EFFECT_NONE,
+>  	},
+>  	{
+>  		.opcode = cpu_to_le16(CXL_MBOX_OP_SET_LSA),
+> -		.effect = cpu_to_le16(EFFECT(1) | EFFECT(2)),
+> +		.effect = cpu_to_le16(EFFECT(CONF_CHANGE_IMMEDIATE) |
+> +				      EFFECT(DATA_CHANGE_IMMEDIATE)),
+>  	},
+>  	{
+>  		.opcode = cpu_to_le16(CXL_MBOX_OP_GET_HEALTH_INFO),
+> -		.effect = cpu_to_le16(0),
+> +		.effect = CXL_CMD_EFFECT_NONE,
+>  	},
+>  	{
+>  		.opcode = cpu_to_le16(CXL_MBOX_OP_GET_POISON),
+> -		.effect = cpu_to_le16(0),
+> +		.effect = CXL_CMD_EFFECT_NONE,
 >  	},
 >  	{
 >  		.opcode = cpu_to_le16(CXL_MBOX_OP_INJECT_POISON),
-> -		.effect = cpu_to_le16(0),
-> +		.effect = cpu_to_le16(EFFECT(2)),
+> -		.effect = cpu_to_le16(EFFECT(2)),
+> +		.effect = cpu_to_le16(EFFECT(DATA_CHANGE_IMMEDIATE)),
 >  	},
 >  	{
 >  		.opcode = cpu_to_le16(CXL_MBOX_OP_CLEAR_POISON),
-> -		.effect = cpu_to_le16(0),
-> +		.effect = cpu_to_le16(EFFECT(2)),
+> -		.effect = cpu_to_le16(EFFECT(2)),
+> +		.effect = cpu_to_le16(EFFECT(DATA_CHANGE_IMMEDIATE)),
 >  	},
 >  };
 >  
