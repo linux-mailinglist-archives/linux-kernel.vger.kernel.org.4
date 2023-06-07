@@ -2,131 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C628F72734E
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 01:50:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3143C727356
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 01:51:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231261AbjFGXuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 19:50:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51640 "EHLO
+        id S233319AbjFGXvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 19:51:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229917AbjFGXuH (ORCPT
+        with ESMTP id S233158AbjFGXvT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 19:50:07 -0400
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1127211C
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 16:50:06 -0700 (PDT)
-Received: by mail-il1-x130.google.com with SMTP id e9e14a558f8ab-33d0b7114a9so10474105ab.2
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 16:50:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686181805; x=1688773805;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zh1qTh2owhTw6iheqxXCV3Jh42E0lrVswaTb+2hzc4w=;
-        b=oGua17VAzq6o1oBx0+hqcX48AmEfEBiMUNAg2PKlwD/jwK68OmonL2fpyYhMo3H0cH
-         mgbSZsUJZcknP5y+T3NNF3aJ11SOZLZMTV9EhtXsBYcKf1djd5iPvBAkYNBS9XlWnqA5
-         muX2eTZI5hMLO+Dq0ltEB8foUE3ltkVzruWZ4=
+        Wed, 7 Jun 2023 19:51:19 -0400
+Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 653F82696
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 16:50:28 -0700 (PDT)
+Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-62884fa0e53so705276d6.0
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 16:50:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686181805; x=1688773805;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zh1qTh2owhTw6iheqxXCV3Jh42E0lrVswaTb+2hzc4w=;
-        b=X4hG5ZBTOpZMvOceQM1/BnldvyzGf7WVOtGdZbha4+FTeeNY141mQapMuTw2hFiPZF
-         nkcdy6QPZk0S2HXBKACDbyAhuUd67pZP+4czgFO7ZhwfBX/hk50gZyWlvA3H8I51p35P
-         Xgghm/oQZIHXQigpy0YpfDuHJYqUNC0PjqWERFavf/CD6UTL+7IUZKi126BzWIAu71gC
-         ZXkirCEIu/VS61bBZjpX4/0AM+F7gLTNE/mXV+jhw5VVNajcTLSNqQTo/g72BkADVMf8
-         oSZdxDu5QnGLmjiQjs9O1mA/7kmoKKlZPH0rzcYdRRDxw8EtKcNl0as8v5nSyLMJe9IX
-         YdCA==
-X-Gm-Message-State: AC+VfDzoLXQpjFTOVAhEwtoUPGdk/im7U+aDMJJJelX82i6csw3nlD1k
-        1a4D5+O4VRGMhNZKgoB9rpA+oCGmZfOwu0cOOLA=
-X-Google-Smtp-Source: ACHHUZ5TxFbbZt/c1mC7qz+St39pEkJ6kPehH9SvBd6ZMdWy/dYoDOpqvha2cNtHqAwL5aM8sTNlgA==
-X-Received: by 2002:a92:cc43:0:b0:33b:ef57:65b1 with SMTP id t3-20020a92cc43000000b0033bef5765b1mr10121224ilq.19.1686181805267;
-        Wed, 07 Jun 2023 16:50:05 -0700 (PDT)
-Received: from mail-io1-f45.google.com (mail-io1-f45.google.com. [209.85.166.45])
-        by smtp.gmail.com with ESMTPSA id t7-20020a92c907000000b0032ab5a86443sm35719ilp.74.2023.06.07.16.50.02
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 16:50:02 -0700 (PDT)
-Received: by mail-io1-f45.google.com with SMTP id ca18e2360f4ac-775ebe161c5so360090339f.1
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 16:50:02 -0700 (PDT)
-X-Received: by 2002:a5e:8c15:0:b0:763:5a8f:fe6 with SMTP id
- n21-20020a5e8c15000000b007635a8f0fe6mr9992800ioj.21.1686181802445; Wed, 07
- Jun 2023 16:50:02 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686181827; x=1688773827;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mhikzEBmpROllrpUkG6N5rn5swH/R/MkyomEPj+0LRU=;
+        b=MM7nKN4yRCfIRa3/uqU0Hy7nm5MXGsO6WCWk8yeRqH9L/7Z4ZxrsGGkB91OoRKfQq0
+         HAzvJL6BnDdhcXQsIeXVmlJQIxMBXRvQ9fBnhMuwSm2uqJ69gjHODGttP/9veV2fWlgJ
+         h1N+ms7UcR3PiRflxIiicHNhfl45CR9+WNLdKqdsASNwE0Nkq9oG+vwhDiPMnNauDTwo
+         k5dOzjiq3mS/2cfXSGQFFY2iUma10HVDaFe3r4OjVO+USVV/lPKs0C88SaxUAlQiZ04N
+         QQT6nZR9n4WOAKLDVbwXHJShH+RJ/QAVfri8qax2m2DGOqzl7B7KVsTAikmcURq6l5Au
+         21pQ==
+X-Gm-Message-State: AC+VfDxp8ddgN6Tw2NN1ljTB84cX52GXM8jsuM8ru3ASrNmGQaEfo+VJ
+        Js5SxIT0FxgGlYFNzmIt7dlP
+X-Google-Smtp-Source: ACHHUZ6y+cOL+ZxgisiLenJjAOucQc9Wtuow/WkgwMRhUI55SkTWbqnmzTclMfUHnNVFzRSWwX/5Nw==
+X-Received: by 2002:a05:620a:2b4b:b0:75b:23a1:3651 with SMTP id dp11-20020a05620a2b4b00b0075b23a13651mr4139465qkb.18.1686181827499;
+        Wed, 07 Jun 2023 16:50:27 -0700 (PDT)
+Received: from localhost (pool-68-160-166-30.bstnma.fios.verizon.net. [68.160.166.30])
+        by smtp.gmail.com with ESMTPSA id x12-20020ae9f80c000000b0075ca4cd03d4sm245229qkh.64.2023.06.07.16.50.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 16:50:27 -0700 (PDT)
+Date:   Wed, 7 Jun 2023 19:50:25 -0400
+From:   Mike Snitzer <snitzer@kernel.org>
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Joe Thornber <thornber@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Jason Wang <jasowang@redhat.com>,
+        Bart Van Assche <bvanassche@google.com>,
+        linux-kernel@vger.kernel.org, Joe Thornber <ejt@redhat.com>,
+        linux-block@vger.kernel.org, dm-devel@redhat.com,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Sarthak Kukreti <sarthakkukreti@chromium.org>,
+        linux-fsdevel@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
+        linux-ext4@vger.kernel.org, Brian Foster <bfoster@redhat.com>,
+        Alasdair Kergon <agk@redhat.com>
+Subject: Re: [PATCH v7 0/5] Introduce provisioning primitives
+Message-ID: <ZIEXwTd17z0iYW4s@redhat.com>
+References: <CAJ0trDbspRaDKzTzTjFdPHdB9n0Q9unfu1cEk8giTWoNu3jP8g@mail.gmail.com>
+ <ZHFEfngPyUOqlthr@dread.disaster.area>
+ <CAJ0trDZJQwvAzngZLBJ1hB0XkQ1HRHQOdNQNTw9nK-U5i-0bLA@mail.gmail.com>
+ <ZHYB/6l5Wi+xwkbQ@redhat.com>
+ <CAJ0trDaUOevfiEpXasOESrLHTCcr=oz28ywJU+s+YOiuh7iWow@mail.gmail.com>
+ <ZHYWAGmKhwwmTjW/@redhat.com>
+ <CAG9=OMMnDfN++-bJP3jLmUD6O=Q_ApV5Dr392_5GqsPAi_dDkg@mail.gmail.com>
+ <ZHqOvq3ORETQB31m@dread.disaster.area>
+ <ZHti/MLnX5xGw9b7@redhat.com>
+ <ZH/k9ss2Cg9HYrEV@dread.disaster.area>
 MIME-Version: 1.0
-References: <20230607133458.4075667-1-yangcong5@huaqin.corp-partner.google.com>
- <20230607133458.4075667-3-yangcong5@huaqin.corp-partner.google.com>
-In-Reply-To: <20230607133458.4075667-3-yangcong5@huaqin.corp-partner.google.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 7 Jun 2023 16:49:50 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=Uy=UNKDEhqeguhVGn_aTPk5+MppsXChpNOinVc4HJjYg@mail.gmail.com>
-Message-ID: <CAD=FV=Uy=UNKDEhqeguhVGn_aTPk5+MppsXChpNOinVc4HJjYg@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] HID: i2c-hid: elan: Add ili9882t timing
-To:     Cong Yang <yangcong5@huaqin.corp-partner.google.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, dmitry.torokhov@gmail.com, jikos@kernel.org,
-        benjamin.tissoires@redhat.com, hsinyi@google.com,
-        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZH/k9ss2Cg9HYrEV@dread.disaster.area>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, Jun 06 2023 at 10:01P -0400,
+Dave Chinner <david@fromorbit.com> wrote:
 
-On Wed, Jun 7, 2023 at 6:35=E2=80=AFAM Cong Yang
-<yangcong5@huaqin.corp-partner.google.com> wrote:
->
-> The ili9882t is a TDDI IC (Touch with Display Driver). The
-> datasheet specifies there should be 60ms between touch SDA
-> sleep and panel RESX. Doug's series[1] allows panels and
-> touchscreens to power on/off together, so we can add the 65 ms
-> delay in i2c_hid_core_suspend before panel_unprepare.
->
-> [1]: https: //lore.kernel.org/all/20230523193017.4109557-1-dianders@chrom=
-ium.org/
+> On Sat, Jun 03, 2023 at 11:57:48AM -0400, Mike Snitzer wrote:
+> > On Fri, Jun 02 2023 at  8:52P -0400,
+> > Dave Chinner <david@fromorbit.com> wrote:
+> > 
+> > > Mike, I think you might have misunderstood what I have been proposing.
+> > > Possibly unintentionally, I didn't call it REQ_OP_PROVISION but
+> > > that's what I intended - the operation does not contain data at all.
+> > > It's an operation like REQ_OP_DISCARD or REQ_OP_WRITE_ZEROS - it
+> > > contains a range of sectors that need to be provisioned (or
+> > > discarded), and nothing else.
+> > 
+> > No, I understood that.
+> > 
+> > > The write IOs themselves are not tagged with anything special at all.
+> > 
+> > I know, but I've been looking at how to also handle the delalloc
+> > usecase (and yes I know you feel it doesn't need handling, the issue
+> > is XFS does deal nicely with ensuring it has space when it tracks its
+> > allocations on "thick" storage
+> 
+> Oh, no it doesn't. It -works for most cases-, but that does not mean
+> it provides any guarantees at all. We can still get ENOSPC for user
+> data when delayed allocation reservations "run out".
+> 
+> This may be news to you, but the ephemeral XFS delayed allocation
+> space reservation is not accurate. It contains a "fudge factor"
+> called "indirect length". This is a "wet finger in the wind"
+> estimation of how much new metadata will need to be allocated to
+> index the physical allocations when they are made. It assumes large
+> data extents are allocated, which is good enough for most cases, but
+> it is no guarantee when there are no large data extents available to
+> allocate (e.g. near ENOSPC!).
+> 
+> And therein lies the fundamental problem with ephemeral range
+> reservations: at the time of reservation, we don't know how many
+> individual physical LBA ranges the reserved data range is actually
+> going to span.
+> 
+> As a result, XFS delalloc reservations are a "close-but-not-quite"
+> reservation backed by a global reserve pool that can be dipped into
+> if we run out of delalloc reservation. If the reserve pool is then
+> fully depleted before all delalloc conversion completes, we'll still
+> give ENOSPC. The pool is sized such that the vast majority of
+> workloads will complete delalloc conversion successfully before the
+> pool is depleted.
+> 
+> Hence XFS gives everyone the -appearance- that it deals nicely with
+> ENOSPC conditions, but it never provides a -guarantee- that any
+> accepted write will always succeed without ENOSPC.
+> 
+> IMO, using this "close-but-not-quite" reservation as the basis of
+> space requirements for other layers to provide "won't ENOSPC"
+> guarantees is fraught with problems. We already know that it is
+> insufficient in important corner cases at the filesystem level, and
+> we also know that lower layers trying to do ephemeral space
+> reservations will have exactly the same problems providing a
+> guarantee. And these are problems we've been unable to engineer
+> around in the past, so the likelihood we can engineer around them
+> now or in the future is also very unlikely.
 
-FWIW: I posted v2 today:
+Thanks for clarifying. Wasn't aware of XFS delalloc's "wet finger in
+the air" ;)
 
-https://lore.kernel.org/r/20230607215224.2067679-1-dianders@chromium.org
+So do you think it reasonable to require applications to fallocate
+their data files? Unaware if users are aware to take that extra step.
 
+> > -- so adding coordination between XFS
+> > and dm-thin layers provides comparable safety.. that safety is an
+> > expected norm).
+> >
+> > But rather than discuss in terms of data vs metadata, the distinction
+> > is:
+> > 1) LBA range reservation (normal case, your proposal)
+> > 2) non-LBA reservation (absolute value, LBA range is known at later stage)
+> > 
+> > But I'm clearly going off script for dwelling on wanting to handle
+> > both.
+> 
+> Right, because if we do 1) then we don't need 2). :)
 
-> Signed-off-by: Cong Yang <yangcong5@huaqin.corp-partner.google.com>
-> ---
->  drivers/hid/i2c-hid/i2c-hid-of-elan.c | 20 ++++++++++++++++----
->  1 file changed, 16 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/hid/i2c-hid/i2c-hid-of-elan.c b/drivers/hid/i2c-hid/=
-i2c-hid-of-elan.c
-> index 76ddc8be1cbb..411d7ea2725d 100644
-> --- a/drivers/hid/i2c-hid/i2c-hid-of-elan.c
-> +++ b/drivers/hid/i2c-hid/i2c-hid-of-elan.c
-> @@ -18,7 +18,8 @@
->  #include "i2c-hid.h"
->
->  struct elan_i2c_hid_chip_data {
-> -       unsigned int post_gpio_reset_delay_ms;
-> +       unsigned int post_gpio_reset_on_delay_ms;
-> +       unsigned int post_gpio_reset_off_delay_ms;
->         unsigned int post_power_delay_ms;
->         u16 hid_descriptor_address;
->  };
+Sure.
 
-I would prefer it if you would add something to the
-"elan_i2c_hid_chip_data" indicating the name of the main supply. Set
-it to "vcc33" for the elan touchscreen and the NULL for your new one.
+> > My looking at (ab)using REQ_META being set (use 1) vs not (use 2) was
+> > a crude simplification for branching between the 2 approaches.
+> > 
+> > And I understand I made you nervous by expanding the scope to a much
+> > more muddled/shitty interface. ;)
+> 
+> Nervous? No, I'm simply trying to make sure that everyone is on the
+> same page. i.e. that if we water down the guarantee that 1) relies
+> on, then it's not actually useful to filesystems at all.
 
-It's probably worth adding a comment next to where you set it to NULL
-that this touchscreen is tightly integrated with the panel and assumes
-that the relevant power rails (other than the IO rail) have already
-been turned on by the panel driver because we're a panel follower.
-Otherwise someone is going to be super confused about how this could
-work.
+Yeah, makes sense.
+ 
+> > > Put simply: if we restrict REQ_OP_PROVISION guarantees to just
+> > > REQ_META writes (or any other specific type of write operation) then
+> > > it's simply not worth persuing at the filesystem level because the
+> > > guarantees we actually need just aren't there and the complexity of
+> > > discovering and handling those corner cases just isn't worth the
+> > > effort.
+> > 
+> > Here is where I get to say: I think you misunderstood me (but it was
+> > my fault for not being absolutely clear: I'm very much on the same
+> > page as you and Joe; and your visions need to just be implemented
+> > ASAP).
+> 
+> OK, good that we've clarified the misunderstandings on both sides
+> quickly :)
+
+Do you think you're OK to scope out, and/or implement, the XFS changes
+if you use v7 of this patchset as the starting point? (v8 should just
+be v7 minus the dm-thin.c and dm-snap.c changes).  The thinp
+support in v7 will work enough to allow XFS to issue REQ_OP_PROVISION
+and/or fallocate (via mkfs.xfs) to dm-thin devices.
+
+And Joe and I can make independent progress on the dm-thin.c changes
+needed to ensure the REQ_OP_PROVISION gaurantee you need.
+
+Thanks,
+Mike
