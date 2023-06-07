@@ -2,65 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D71F372653F
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 17:57:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4C74726335
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 16:45:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234794AbjFGP5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 11:57:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58860 "EHLO
+        id S240832AbjFGOp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 10:45:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241547AbjFGP44 (ORCPT
+        with ESMTP id S239828AbjFGOpy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 11:56:56 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 176EA1FCF
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 08:56:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686153413; x=1717689413;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=7nNTbx876l3a0dmbd1lJ09G1ovmqUK2cjUQUfZr1dsM=;
-  b=U3HwomazOB+OwqDwHqE72XJA0lfMxYv9WTW0uzIkiVou/QCYwhKFVQjf
-   ZQe42Jyl066Ir3btG/zc5FwnCBSyWwZj8SYto/iDgnZSCwET/TBnjjxwj
-   mU1q0J4+YhfFpygztEIZ/KYqSHUZsj6TK+a9ZGUSZFIEqU+QbicF/VcIO
-   dDXMBz3hQZwBdV9nl9KHVSgbNNKYyuI3f82gmVqCPFz9C+1SMa+1cfLL9
-   37ACNFp4xwMsBzaSi6VFBIW0c4Oq/DW1dx37wWYCh6BSS7/uwwpx7RXg+
-   frQtdTu/z2mDXY2IXo40xwZb3JoyGJy0O8ana8pE3PS3XJ3O0hxylO/HA
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="360360055"
-X-IronPort-AV: E=Sophos;i="6.00,224,1681196400"; 
-   d="scan'208";a="360360055"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 08:56:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="739335739"
-X-IronPort-AV: E=Sophos;i="6.00,224,1681196400"; 
-   d="scan'208";a="739335739"
-Received: from sorrin-mobl3.amr.corp.intel.com (HELO [10.209.124.63]) ([10.209.124.63])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 08:56:49 -0700
-Message-ID: <a00d401f-961a-bd1d-b344-5c234e87135b@linux.intel.com>
-Date:   Wed, 7 Jun 2023 09:45:10 -0500
+        Wed, 7 Jun 2023 10:45:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1BFA1BD2;
+        Wed,  7 Jun 2023 07:45:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 532816403E;
+        Wed,  7 Jun 2023 14:45:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55874C433D2;
+        Wed,  7 Jun 2023 14:45:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686149151;
+        bh=KYxbixY/YPcTPmWMMjEzFB2YgbL02WvqegnlW8x4q/8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=iD70bf4rX5r1dba/J3aCUPj3qSHuwuhLe6KYypwKppjNruVQswPc0WhssUqXzDXxr
+         7PFmObSTK8grCkIhUSwN6suorixLko5WIbw+HZGd61Z9uQFIfkdCwc5e1J4w2D05XL
+         y+P4T2nMRuVKt3EGjCjMNBFlLkLjB+v5G7MmRXAxNNLvO2p/yBGffzVS27M+OLB9C4
+         LUfC9Fx2FjoyrainzfFJjYiUvof0apI7mIwDjn1I7/bWlBvj/VdDT0ZxoKvfFjENzr
+         zvTcZOcG5DxQtqFiM1K36FfKZzPdh1GgLTkHGglfgdyHiATbwHTpXtpovrINzKBcwW
+         BQyN1A1x8Vv4A==
+Message-ID: <ef90361e-15b2-7ce8-fcec-21fccebe727e@kernel.org>
+Date:   Wed, 7 Jun 2023 08:45:49 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.11.0
-Subject: Re: [PATCH v2 00/26] ASoC/soundwire: add support for ACE2.x
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>, alsa-devel@alsa-project.org,
-        tiwai@suse.de, linux-kernel@vger.kernel.org, bard.liao@intel.com
-References: <20230515071042.2038-1-yung-chuan.liao@linux.intel.com>
- <ZHHdSjXwyHvBezkG@matsya>
- <8f4a024d-a218-c4ed-925c-b74663b7e280@linux.intel.com>
- <ZICA/YIYQ/DGhhdk@matsya>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.2
+Subject: Re: [PATCH net-next v6] net: ioctl: Use kernel memory on protocol
+ ioctl callbacks
+To:     Breno Leitao <leitao@debian.org>,
+        Remi Denis-Courmont <courmisch@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexander Aring <alex.aring@gmail.com>,
+        Stefan Schmidt <stefan@datenfreihafen.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Mat Martineau <martineau@kernel.org>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Xin Long <lucien.xin@gmail.com>,
+        Ido Schimmel <idosch@idosch.org>
+Cc:     axboe@kernel.dk, asml.silence@gmail.com, leit@fb.com,
+        Martin KaFai Lau <martin.lau@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Jason Xing <kernelxing@tencent.com>,
+        Joanne Koong <joannelkoong@gmail.com>,
+        Hangyu Hua <hbh25y@gmail.com>,
+        Guillaume Nault <gnault@redhat.com>,
+        Andrea Righi <andrea.righi@canonical.com>,
+        Wojciech Drewek <wojciech.drewek@intel.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
+        "open list:DCCP PROTOCOL" <dccp@vger.kernel.org>,
+        "open list:IEEE 802.15.4 SUBSYSTEM" <linux-wpan@vger.kernel.org>,
+        "open list:NETWORKING [MPTCP]" <mptcp@lists.linux.dev>,
+        "open list:SCTP PROTOCOL" <linux-sctp@vger.kernel.org>
+References: <20230606180045.827659-1-leitao@debian.org>
 Content-Language: en-US
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <ZICA/YIYQ/DGhhdk@matsya>
+From:   David Ahern <dsahern@kernel.org>
+In-Reply-To: <20230606180045.827659-1-leitao@debian.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,52 +86,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/7/23 08:07, Vinod Koul wrote:
+On 6/6/23 12:00 PM, Breno Leitao wrote:
+> Most of the ioctls to net protocols operates directly on userspace
+> argument (arg). Usually doing get_user()/put_user() directly in the
+> ioctl callback.  This is not flexible, because it is hard to reuse these
+> functions without passing userspace buffers.
 > 
-> Hi Pierre,
+> Change the "struct proto" ioctls to avoid touching userspace memory and
+> operate on kernel buffers, i.e., all protocol's ioctl callbacks is
+> adapted to operate on a kernel memory other than on userspace (so, no
+> more {put,get}_user() and friends being called in the ioctl callback).
 > 
-> On 02-06-23, 15:46, Pierre-Louis Bossart wrote:
->> On 5/27/23 05:36, Vinod Koul wrote:
->>> On 15-05-23, 15:10, Bard Liao wrote:
->>>> This series uses the abstraction added in past kernel cycles to provide
->>>> support for the ACE2.x integration. The existing SHIM and Cadence
->>>> registers are now split in 3 (SHIM, IP, SHIM vendor-specific), with some
->>>> parts also moved to the HDaudio Extended Multi link structures. Nothing
->>>> fundamentally different except for the register map.
->>>>
->>>> This series only provides the basic mechanisms to expose SoundWire-based
->>>> DAIs. The PCI parts and DSP management will be contributed later, and the
->>>> DAI ops are now empty as well.
->>>>
->>>> The change is mainly on SoundWire. It would be better to go through
->>>> SoundWire tree.
->>>
->>> Applied, thanks
->>
->> Hi Vinod, is there a way you could provide an immutable tag for Mark
->> Brown, the patch1 in this set is required for my next set of ASoC
->> LunarLake patches?
+> This changes the "struct proto" ioctl format in the following way:
 > 
-> Unfortunately, I have picked the whole series into next. If I was aware
-> I would have pushed them to a topic.
+>     int                     (*ioctl)(struct sock *sk, int cmd,
+> -                                        unsigned long arg);
+> +                                        int *karg);
 > 
-> Mark can pull sdw/next but that would bring other things as well which
-> may not be preferred. I guess next best would be wait few weeks (rc1)
-
-Yeah, it's a miss on my side, I forgot about this one-line enum
-dependency for DMIC/SSP.
-
-SoundWire has more dependencies so we expected to send the relevant
-patches in the next cycle. DMIC/SSP is quite simple and could have been
-part of 6.5.
-
-Oh well.
-
->> "ASoC: SOF: Intel: shim: add enum for ACE 2.0 IP used in LunarLake" adds
->> the SOF_INTEL_ACE_2_0 definition to select different ops for LunarLake.
->>
->> Thank you
->> -Pierre
+> (Important to say that this patch does not touch the "struct proto_ops"
+> protocols)
 > 
+> So, the "karg" argument, which is passed to the ioctl callback, is a
+> pointer allocated to kernel space memory (inside a function wrapper).
+> This buffer (karg) may contain input argument (copied from userspace in
+> a prep function) and it might return a value/buffer, which is copied
+> back to userspace if necessary. There is not one-size-fits-all format
+> (that is I am using 'may' above), but basically, there are three type of
+> ioctls:
+> 
+> 1) Do not read from userspace, returns a result to userspace
+> 2) Read an input parameter from userspace, and does not return anything
+>   to userspace
+> 3) Read an input from userspace, and return a buffer to userspace.
+> 
+> The default case (1) (where no input parameter is given, and an "int" is
+> returned to userspace) encompasses more than 90% of the cases, but there
+> are two other exceptions. Here is a list of exceptions:
+> 
+> * Protocol RAW:
+>    * cmd = SIOCGETVIFCNT:
+>      * input and output = struct sioc_vif_req
+>    * cmd = SIOCGETSGCNT
+>      * input and output = struct sioc_sg_req
+>    * Explanation: for the SIOCGETVIFCNT case, userspace passes the input
+>      argument, which is struct sioc_vif_req. Then the callback populates
+>      the struct, which is copied back to userspace.
+> 
+> * Protocol RAW6:
+>    * cmd = SIOCGETMIFCNT_IN6
+>      * input and output = struct sioc_mif_req6
+>    * cmd = SIOCGETSGCNT_IN6
+>      * input and output = struct sioc_sg_req6
+> 
+> * Protocol PHONET:
+>   * cmd == SIOCPNADDRESOURCE | SIOCPNDELRESOURCE
+>      * input int (4 bytes)
+>   * Nothing is copied back to userspace.
+> 
+> For the exception cases, functions sock_sk_ioctl_inout() will
+> copy the userspace input, and copy it back to kernel space.
+> 
+> The wrapper that prepare the buffer and put the buffer back to user is
+> sk_ioctl(), so, instead of calling sk->sk_prot->ioctl(), the callee now
+> calls sk_ioctl(), which will handle all cases.
+> 
+> Signed-off-by: Breno Leitao <leitao@debian.org>
+> --
+
+It looks good to me, so:
+Reviewed-by: David Ahern <dsahern@kernel.org>
+
+What kind of testing was done with the patch? Would be good to run
+through a NOS style of test suites to make sure the ipmr and ip6mr
+changes are correct. (cc'ed Ido since the mlxsw crew has a really good
+test up)
