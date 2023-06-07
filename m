@@ -2,123 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F612727008
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 23:04:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D49F727025
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 23:05:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236075AbjFGVEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 17:04:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34834 "EHLO
+        id S236267AbjFGVEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 17:04:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236008AbjFGVDl (ORCPT
+        with ESMTP id S236208AbjFGVE1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 17:03:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8318F2711;
-        Wed,  7 Jun 2023 14:03:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 7 Jun 2023 17:04:27 -0400
+Received: from tiger.tulip.relay.mailchannels.net (tiger.tulip.relay.mailchannels.net [23.83.218.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AFCC2710
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 14:04:08 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id BFFA276174C
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 21:04:03 +0000 (UTC)
+Received: from pdx1-sub0-mail-a233.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 48864761754
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 21:04:03 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1686171843; a=rsa-sha256;
+        cv=none;
+        b=UIanYHls8B1e2zdz4kLP9AVb1exxMHHIcOo4U/FsoOlOcK/NzPsib03OO4n1ZplkSsunGt
+        8Uf3S8QqFGSejPSUiX+AslpsXTRSnna7GDyjXl1GT+zSouTX1IcQWHVDaPqZJZvSfpvUyh
+        vmguttadfmRqtZ47qFAv+aIIU1IyWKetaoorWL9qPO30pEa7j6AAn7501c/DOwqQrPyT+G
+        rcShq7ik5nDOXmVqlOs/RFG6M0rkeaQoA0sl4Tgvbf/5sakqOqbbPO9v3cue5VJLp+rROC
+        f14ZXWJL55fjPOF4oMuYZOOhhG2bDPhHUMW9jv7UuegxvwI5dJPHRPa1zBmW5Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1686171843;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=VgEDVaD96PpiQVvSuuPolddYls8rHIqf3JryVYxh20Q=;
+        b=n+Y6tEvJcehfkF8g02ESIPiF2PdFTM6xWdo17HhQ5XPhi0JIlHx2hAcPjnm/s4oG6M43a+
+        U8f6F4O8Tq+NhTQEkR4WPCtgmQ+o2IIuUXt635j5it2USnfnHcR53/1acb9ybq/Wu145kY
+        p9ipe+rdt4kzB/5d892SVAwXPxtsfFm8C2I7Bow7B5oMg0mEBT+FXJcfBSmO4KqjmtAW8o
+        hQPDMvK1QlpafaKi0R43qdBWQSs3MYiIUycP10935BsDwStmKFxF0iRTb4OgYnskns16nX
+        OpCAz6hXDCWAuLg7XmSp0SA1V1HR3aksa8l9xgDge/y5Yxu/WHmf+a3VXZAslA==
+ARC-Authentication-Results: i=1;
+        rspamd-6f5cfd578c-p4nmq;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=kjlx@templeofstupid.com
+X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|kjlx@templeofstupid.com
+X-MailChannels-Auth-Id: dreamhost
+X-Shelf-Shelf: 2063dcb93d50f266_1686171843564_4165597997
+X-MC-Loop-Signature: 1686171843564:2785457679
+X-MC-Ingress-Time: 1686171843564
+Received: from pdx1-sub0-mail-a233.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.103.24.122 (trex/6.8.1);
+        Wed, 07 Jun 2023 21:04:03 +0000
+Received: from kmjvbox (c-73-93-64-36.hsd1.ca.comcast.net [73.93.64.36])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 17CD764985;
-        Wed,  7 Jun 2023 21:03:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79F16C433A7;
-        Wed,  7 Jun 2023 21:03:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686171797;
-        bh=mKhJndr5Yz5FfUYWCqemdn7odbvtF6GeYOhtz3Hyooo=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=HnkuiumbRjGlMS/9s4j1QBjBgmZIvb4S9wxAXI5F05B7vr+zw2KUvsBcEQiD0wVmw
-         16I0WSw5yzN/m0KU6MNRvmo41HP3Tjl0XpPLS/0C1EXSVPXlyDMGZK1JpvVAOW+J7b
-         G1yBEBVjXQcd4PAZyg4cAD8sZQ4Pahpi9F9NThVR3PNoUVdpLN1GZGtR+SMHXUAz5i
-         hbTNPzDKQOx0GO8t9KH2ANidYYLsPjcP3vNZLQkYw0H+H5r4HS4Dd89Pas53v/RrQ4
-         Slthc7rzKGvspIgM2AVzlRaJovvTaSPWqFYl8K3iicNFXAj3uw9R48KhxHbE09UXZu
-         1irazWE7FpdlQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 19AB5CE3A6C; Wed,  7 Jun 2023 14:03:17 -0700 (PDT)
-Date:   Wed, 7 Jun 2023 14:03:17 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     Zhangjin Wu <falcon@tinylab.org>, thomas@t-8ch.de,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: nolibc patches, still possible for 6.5 ?
-Message-ID: <ec85bd36-9b39-458c-9618-af500656ca7b@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <ZHyPi29q3MKiNAQZ@1wt.eu>
- <5494ac68-b4b9-434f-92c1-7e197c92a4ab@paulmck-laptop>
- <ZH1V21rhUQlvRgnU@1wt.eu>
+        (Authenticated sender: kjlx@templeofstupid.com)
+        by pdx1-sub0-mail-a233.dreamhost.com (Postfix) with ESMTPSA id 4Qc0FZ3DYQzmL
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 14:04:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=templeofstupid.com;
+        s=dreamhost; t=1686171842;
+        bh=VgEDVaD96PpiQVvSuuPolddYls8rHIqf3JryVYxh20Q=;
+        h=Date:From:To:Cc:Subject:Content-Type:Content-Transfer-Encoding;
+        b=hu3WDKEe0rcjosyx/zlIvFagh5mtaQx+6schtl4mekrXSgPd7bOSiVY8mAh8QOBBf
+         Nm0foHzaCpmM55Q/5IlJM8lEc8qkSkfHHxXjZTGvtIgVd5W3ui+YnPY2vYxXKyE+is
+         I0qPQf7eBPKlSSw/xU32dSqIGhvdqG0CptDTp8TA=
+Received: from johansen (uid 1000)
+        (envelope-from kjlx@templeofstupid.com)
+        id e005f
+        by kmjvbox (DragonFly Mail Agent v0.12);
+        Wed, 07 Jun 2023 14:04:01 -0700
+Date:   Wed, 7 Jun 2023 14:04:01 -0700
+From:   Krister Johansen <kjlx@templeofstupid.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, LKML <linux-kernel@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        stable <stable@vger.kernel.org>
+Subject: Re: [PATCH bpf] bpf: search_bpf_extables should search subprogram
+ extables
+Message-ID: <20230607210401.GB2023@templeofstupid.com>
+References: <20230605164955.GA1977@templeofstupid.com>
+ <CAADnVQK7PQxj5jjfUu9sO524yLMPqE6vmzcipno1WYoeu0q-Gw@mail.gmail.com>
+ <20230606004139.GE1977@templeofstupid.com>
+ <CAADnVQLhqCVRcPuJ8JEZfd5ii+-TsSs4+AsJC0sbjwPMv7LX_Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZH1V21rhUQlvRgnU@1wt.eu>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQLhqCVRcPuJ8JEZfd5ii+-TsSs4+AsJC0sbjwPMv7LX_Q@mail.gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 05, 2023 at 05:26:19AM +0200, Willy Tarreau wrote:
-> On Sun, Jun 04, 2023 at 03:57:54PM -0700, Paul E. McKenney wrote:
-> > On Sun, Jun 04, 2023 at 03:20:11PM +0200, Willy Tarreau wrote:
-> > > Hello Paul,
-> > > 
-> > > Thomas and Zhangjin have provided significant nolibc cleanups, and
-> > > fixes, as well as preparation work to later support riscv32.
-> > > 
-> > > These consist in the following main series:
-> > >   - generalization of stackprotector to other archs that were not
-> > >     previously supported (riscv, mips, loongarch, arm, arm64)
-> > > 
-> > >   - general cleanups of the makefile, test report output, deduplication
-> > >     of certain tests
-> > > 
-> > >   - slightly better compliance of some tests performed on certain syscalls
-> > >     (e.g. no longer pass (void*)1 to gettimeofday() since glibc hates it).
-> > > 
-> > >   - add support for nanoseconds in stat() and statx()
-> > > 
-> > >   - fixes for some syscalls (e.g. ppoll() has 5 arguments not 4)
-> > > 
-> > >   - fixes around limits.h and  INT_MAX / INT_FAST64_MAX
-> > > 
-> > > I rebased the whole series on top of your latest dev branch (d19a9ca3d5)
-> > > and it works fine for all archs.
-> > > 
-> > > I don't know if you're still planning on merging new stuff in this area
-> > > for 6.5 or not (since I know that it involves new series of tests on your
-> > > side as well), but given that Zhangjin will engage into deeper changes
-> > > later for riscv32 that will likely imply to update more syscalls to use
-> > > the time64 ones, I would prefer to split the cleanups from the hard stuff,
-> > > but I'll let you judge based on the current state of what's pending for
-> > > 6.5.
-> > > 
-> > > In any case I'm putting all this here for now (not for merge yet):
-> > > 
-> > >    git://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git 20230604-nolibc-rv32+stkp6
-> > > 
-> > > I'd like Thomas and Zhangjin to perform a last check to confirm they're
-> > > OK with this final integration.
-> > 
-> > Given that the testing converges by the end of this week, I can't see
-> > any reason why these cannot make v6.5.
+On Mon, Jun 05, 2023 at 06:31:57PM -0700, Alexei Starovoitov wrote:
+> On Mon, Jun 5, 2023 at 5:46 PM Krister Johansen <kjlx@templeofstupid.com> wrote:
+> > With your comments in mind, I took
+> > another look at the ksym fields in the aux structs.  I have this in the
+> > main program:
+> >
+> >   ksym = {
+> >     start = 18446744072638420852,
+> >     end = 18446744072638423040,
+> >     name = <...>
+> >     lnode = {
+> >       next = 0xffff88d9c1065168,
+> >       prev = 0xffff88da91609168
+> >     },
+> >     tnode = {
+> >       node = {{
+> >           __rb_parent_color = 18446613068361611640,
+> >           rb_right = 0xffff88da91609178,
+> >           rb_left = 0xffff88d9f0c5a578
+> >         }, {
+> >           __rb_parent_color = 18446613068361611664,
+> >           rb_right = 0xffff88da91609190,
+> >           rb_left = 0xffff88d9f0c5a590
+> >         }}
+> >     },
+> >     prog = true
+> >   },
+> >
+> > and this in the func[0] subprogram:
+> >
+> >   ksym = {
+> >     start = 18446744072638420852,
+> >     end = 18446744072638423040,
+> >     name = <...>
+> >     lnode = {
+> >       next = 0xffff88da91609168,
+> >       prev = 0xffffffff981f8990 <bpf_kallsyms>
+> >     },
+> >     tnode = {
+> >       node = {{
+> >           __rb_parent_color = 18446613068361606520,
+> >           rb_right = 0x0,
+> >           rb_left = 0x0
+> >         }, {
+> >           __rb_parent_color = 18446613068361606544,
+> >           rb_right = 0x0,
+> >           rb_left = 0x0
+> >         }}
+> >     },
+> >     prog = true
+> >   },
+> >
+> > That sure looks like func[0] is a leaf in the rbtree and the main
+> > program is an intermediate node with leaves.  If that's the case, then
+> > bpf_prog_ksym_find may have found the main program instead of the
+> > subprogram.  In that case, do you think it's better to skip the main
+> > program's call to bpf_prog_ksym_set_addr() if it has subprograms instead
+> > of searching for subprograms if the main program is found?
 > 
-> Perfect, thank you!
+> I see.
+> Looks like we're doing double bpf_prog_kallsyms_add().
+> First in in jit_subprogs():
+>         for (i = 0; i < env->subprog_cnt; i++) {
+>                 bpf_prog_lock_ro(func[i]);
+>                 bpf_prog_kallsyms_add(func[i]);
+>         }
+> and then again:
+> bpf_prog_kallsyms_add(prog);
+> in bpf_prog_load().
 > 
-> > (There were some kernel test
-> > robot complaints as well, valid or not I am not sure.)
+> because func[0] is the main prog.
 > 
-> You mean in relation with nolibc stuff (or nolibc-test) or something
-> totally different ?
+> We are also doing double bpf_prog_lock_ro() for main prog,
+> but that's not causing harm.
+> 
+> The fix is probably just this:
+> 
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 1e38584d497c..89266dac9c12 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -17633,7 +17633,7 @@ static int jit_subprogs(struct bpf_verifier_env *env)
+>         /* finally lock prog and jit images for all functions and
+>          * populate kallsysm
+>          */
+> -       for (i = 0; i < env->subprog_cnt; i++) {
+> +       for (i = 1; i < env->subprog_cnt; i++) {
+>                 bpf_prog_lock_ro(func[i]);
+>                 bpf_prog_kallsyms_add(func[i]);
+>         }
 
-Apologies, this was me being confused and failing to look closely.
+This will cause the oops to always occur, because func[0] has a extable
+entry when jit_subporgs() completes, but prog->aux doesn't.
+jit_subprogs also sets prog->bpf_func which prevents the other copy of
+the main program from getting jit'd, and consequently getting an extable
+assigned.
 
-The complaints were not about nolibc, but rather about my patches that
-they were on top of.  Not your problem!
+There are probably a few options to fix:
 
-And please let me know when the next batch from your tree are ready to go.
-(You might have been saying that they were in your recent emails, but
-I thought I should double-check.)
+1. skip the bpf_prog_kallsyms_add in bpf_prog_load if the program being
+loaded has subprograms
 
-							Thanx, Paul
+2. check extables when searching to see if they're NULL and if the
+subprogram has one instead
+
+3. copy the main program's extable back to prog->aux
+
+I'll send out a v2 here shortly that includes the selftest you
+requested.  It takes approach #3, which is also a 1-line change.
+
+-K
+
