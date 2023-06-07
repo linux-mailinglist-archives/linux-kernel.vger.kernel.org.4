@@ -2,158 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 840E4726381
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 16:57:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FF2F72635F
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 16:53:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238619AbjFGO5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 10:57:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46206 "EHLO
+        id S240407AbjFGOxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 10:53:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240595AbjFGO5s (ORCPT
+        with ESMTP id S241194AbjFGOx1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 10:57:48 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C66E91FDB;
-        Wed,  7 Jun 2023 07:57:29 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id AE6045FD6E;
-        Wed,  7 Jun 2023 17:57:27 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1686149847;
-        bh=c5e9Hn2iWEoovV4OiRRedc1P1r4+v4qAhT08M7pHODc=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=gAaEepNtKegJU7Wc0IZhBJxXUjdudfDS2bXbuTPi2rcMrWr4upfpX+yvwDlMlTdMG
-         Newa/obL3r7plfg8OhFB7PwIcHtM1bnyZoKxCpHUDQggc0B/Nb4j0xL/ew1/A2Pyuq
-         DbnyxuePczlzcMcz9Px0V4rBOhnoapxGEXO12SsfxNt2s55T0Xa3qf70AejXZTBm+B
-         F7t1h9PUFWIQE+iAPINfqpNze08/oD3YeebSpID4U/atjAMZiqiZQ6skdKuB/qxc0f
-         1cXBq6Ew3jLIX0Oc1R4E19jQVNzyQEgo+iDII+8fjiR9pGG0OtTFiJ0YH+VoOc0Atr
-         pMCYg1N2lDF4Q==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Wed,  7 Jun 2023 17:57:27 +0300 (MSK)
-Message-ID: <6c1973d1-38c0-6048-90ad-da2f60df8238@sberdevices.ru>
-Date:   Wed, 7 Jun 2023 17:52:32 +0300
+        Wed, 7 Jun 2023 10:53:27 -0400
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF3D1FE2;
+        Wed,  7 Jun 2023 07:53:23 -0700 (PDT)
+Received: by mail-qv1-xf2f.google.com with SMTP id 6a1803df08f44-6260b578097so57468066d6.3;
+        Wed, 07 Jun 2023 07:53:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686149602; x=1688741602;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9BZ3nTd09gXKywNR/B6BfXsK/SAkvfps+yetF3PKLmE=;
+        b=g5Noxau3TS0Qg27aaV/uM0E3U96cuuuxg5aX1n2SRdPGgYPmSNfEhKnM8CPqpbdcnr
+         YcjPoGaItYSIyhkDVDe7vqJczQXUxK0Y8sADSJDPEnGAMLlR5TNi9pCfPFhR5+FQ61Mx
+         y1HxKZ3JR4mZccNqlUjdZ2VFPTpKETv2q9b5d8t8y8N+dRLVUg7KJLXNkx2XP6JHpb+C
+         dYRCP5EpZGwRSLtZgoendcgwwi8RxkHkpYJb7CZrNHDGUb5svgWq9vEDaF2xJRjunxR6
+         AalbRhmOkr8B0LnPdcfVlk0GJNCjjlQ9nk2GgMVlK/Xe+z8tu8Guhb3pJ6yz/VleyERL
+         ixVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686149602; x=1688741602;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9BZ3nTd09gXKywNR/B6BfXsK/SAkvfps+yetF3PKLmE=;
+        b=Gnvrgf3+zToP9ehpC0winhQgAIDtLxkUBf2tT4+7+kUczqcgcs77RcY/kTFMyOSakp
+         mZMdKRKvFFa1b2pskFIWhjCWAEjezlVSSRqOoyfybyJqRi5Mncc4/mUPARAuDUBEsqgX
+         7MPRYSdgadjX13KKrIBreIlF0benRvj5ZUxmQqhUYwy+8Xlc1z94S5PHhBvNg8/t8tOp
+         JKUyfCY1Q9QTWifYfX7pFZEUMUiHf22EWKy/HLE0R/GBt4QiSvBr8VjqQME86mxCiP/i
+         /S2Y5u+F8zxZHP9PPnEmiIjPAtPCxUEwZ2Z4tvMR5cQw/FhH1KmyaeytePCzYcGs0XkS
+         93XQ==
+X-Gm-Message-State: AC+VfDwjAu/Zbig60laRLYj+qIzYl6nF7ySeQkFL9Zw2T+FMrevyUnGb
+        vzw1iiEabO10l9GtACWLJr5c0CjA1W+5JMnilEE=
+X-Google-Smtp-Source: ACHHUZ7kfUiJiwb3xiTcDZskY9uOa78FYg/TuXDxXkqzTa/XzDsVaQ+2r8uqafTwTNZKrRUyc8awuYHs7dPVKzmn1Fk=
+X-Received: by 2002:a05:6214:2266:b0:625:aa48:e625 with SMTP id
+ gs6-20020a056214226600b00625aa48e625mr4610415qvb.53.1686149602171; Wed, 07
+ Jun 2023 07:53:22 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v1] dt-bindings: nand: meson: Fix 'nand-rb' property
-Content-Language: en-US
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Liang Yang <liang.yang@amlogic.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
-        <linux-mtd@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-References: <20230606193507.35024-1-AVKrasnov@sberdevices.ru>
- <20230607095802.3adcd4f9@xps-13>
- <166bdc27-f77c-9076-f866-180cfa5bff76@sberdevices.ru>
- <08da4e86-433a-7d2e-25ff-ffa24221abdf@linaro.org>
- <835a3587-1e0f-64d7-1d1a-b639ae8b7307@sberdevices.ru>
- <2ca6e619-1d57-8fff-6176-9ee890e0d167@linaro.org>
- <5ca9eb2b-4bc8-5883-a029-3eeca905fe6e@sberdevices.ru>
- <20230607113605.50a992bb@xps-13>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-In-Reply-To: <20230607113605.50a992bb@xps-13>
+References: <20230522163115.2592883-1-eblanc@baylibre.com> <20230522163115.2592883-4-eblanc@baylibre.com>
+ <ZG0VHnEByyMW9i4a@surfacebook> <613601c2-cc98-526b-a9e3-2ad2abc68e1d@baylibre.com>
+In-Reply-To: <613601c2-cc98-526b-a9e3-2ad2abc68e1d@baylibre.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 7 Jun 2023 17:52:46 +0300
+Message-ID: <CAHp75VdTi4y9=XsjjQOBzUhSYf8jzV7mwguruqMZD0jV7VqZkw@mail.gmail.com>
+Subject: Re: [PATCH v5 3/3] regulator: tps6594-regulator: Add driver for TI
+ TPS6594 regulators
+To:     jerome Neanne <jneanne@baylibre.com>
+Cc:     Esteban Blanc <eblanc@baylibre.com>, linus.walleij@linaro.org,
+        lgirdwood@gmail.com, broonie@kernel.org, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
+        jpanis@baylibre.com, aseketeli@baylibre.com, u-kumar1@ti.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/06/07 09:39:00 #21450961
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jun 7, 2023 at 2:44=E2=80=AFPM jerome Neanne <jneanne@baylibre.com>=
+ wrote:
 
+...
 
-On 07.06.2023 12:36, Miquel Raynal wrote:
-> Hi Arseniy,
-> 
-> avkrasnov@sberdevices.ru wrote on Wed, 7 Jun 2023 12:04:29 +0300:
-> 
->> On 07.06.2023 12:08, Krzysztof Kozlowski wrote:
->>> On 07/06/2023 10:57, Arseniy Krasnov wrote:  
->>>>
->>>>
->>>> On 07.06.2023 11:53, Krzysztof Kozlowski wrote:  
->>>>> On 07/06/2023 10:40, Arseniy Krasnov wrote:  
->>>>>> Hello Miquel, 
->>>>>>
->>>>>> On 07.06.2023 10:58, Miquel Raynal wrote:
->>>>>>  
->>>>>>> Hi Arseniy,
->>>>>>>
->>>>>>> AVKrasnov@sberdevices.ru wrote on Tue, 6 Jun 2023 22:35:07 +0300:
->>>>>>>  
->>>>>>>> Add description of 'nand-rb' property. Use "Fixes" because this property
->>>>>>>> must be supported since the beginning. For this controller 'nand-rb' is
->>>>>>>> stored in the controller node (not in chip), because it has only single
->>>>>>>> r/b wire for all chips.  
->>>>>>>
->>>>>>> Sorry if I mislead you in the first place, but you could definitely
->>>>>>> have two chips and only one with RB wired. It needs to be defined in
->>>>>>> the chips.  
->>>>>>
->>>>>> Ok, so to clarify: is it ok, that in bindings this property will be placed in the
->>>>>> chip, but in driver, i'm trying to read it from the controller node (thus  in
->>>>>> dts file it will be also in controller node)?  
-> 
-> The bindings and your driver internal representation are two different
-> things. Anyway, as mentioned above, wiring the RB line to one die and
-> not the other would be valid hardware design and would require the rb
-> property to be in the chip node. Please perform a per-chip property read
-> in the driver as well.
+> >> +    enum {
+> >> +            MULTI_BUCK12,
+> >> +            MULTI_BUCK123,
+> >> +            MULTI_BUCK1234,
+> >> +            MULTI_BUCK12_34,
+> >
+> >> +            MULTI_FIRST =3D MULTI_BUCK12,
+> >> +            MULTI_LAST =3D MULTI_BUCK12_34,
+> >> +            MULTI_NUM =3D MULTI_LAST - MULTI_FIRST + 1
 
-Done, I resend both patches (bindings + driver update) as a single patchset. Your review comments
-for driver code were also fixed.
+> >               MULT_NUM
+> >
+> > will suffice instead of all this.
 
-> 
->>>>>
->>>>> No, because how would your DTS pass validation? I understand you did not
->>>>> test the bindings, but this will improve, right?  
->>>>
->>>> Ok, i'll follow DTS layout in the driver, "test the bindings" You mean "make dt_binding_check"?  
->>>
->>> Yes. They were sent without testing.
->>>
->>> But please also test your DTS with dtbs_check. 
+(1)
 
-Done
+> >> +    };
+> >
+> > But why enum at all? See below.
+> Just for the switch case readability.
+> I have to iterate across the multiphases array for look up name into
+> device tree and evaluate in that order.
+>
+> This can be reduced to:
+>         enum {
+>                 MULTI_BUCK12,
+>                 MULTI_BUCK123,
+>                 MULTI_BUCK1234,
+>                 MULTI_BUCK12_34,
 
-Thanks, Arseniy
+>                 MULTI_NUM =3D MULTI_BUCK12_34 - MULTI_BUCK12 + 1
 
->>
->> Got it!
->>
->> Thanks, Arseniy
->>
->>>
->>>
->>> Best regards,
->>> Krzysztof
->>>   
-> 
-> 
-> Thanks,
-> Miquèl
+See (1) above.
+
+>         };
+
+...
+
+> >> +                    continue;
+> >> +            delta =3D strcmp(npname, multiphases[multi]);
+> >> +            if (!delta) {
+> >> +                    switch (multi) {
+> >> +                    case MULTI_BUCK12:
+> >
+> > This all looks like match_string() reinvention.
+> I can go with match_string but this is not significantly changing the gam=
+e:
+>
+> index =3D match_string(multiphases, ARRAY_SIZE(multiphases), npname);
+> if (index >=3D 0) {
+>         switch (index) {
+>
+> No question on all your other feedback. Just wondering if I missed
+> something with match_string use. Looks like a good idea indeed but this
+> is not drastically changing the code as you seem to expect... Let me
+> know if you think I'm doing it in a wrong way.
+
+I guess the entire big for-loop can be optimized, but I haven't looked
+at that. At least match_string() would help understanding what you are
+trying to do,
+
+In any case it seems Mark applied your version, so the follow ups can be ma=
+de.
+
+--=20
+With Best Regards,
+Andy Shevchenko
