@@ -2,150 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF78A7252B9
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 06:15:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2406B7252DE
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 06:33:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234763AbjFGEO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 00:14:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39646 "EHLO
+        id S234323AbjFGEdL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 00:33:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233697AbjFGENv (ORCPT
+        with ESMTP id S230086AbjFGEcd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 00:13:51 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE8A8210C;
-        Tue,  6 Jun 2023 21:12:09 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QbYmP54q0z4x41;
-        Wed,  7 Jun 2023 14:10:45 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1686111046;
-        bh=L0EaDKlygTD6/hJSe6VBHSN9xPCJwLW3u+1oYmJzgyQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=tuxorlyrzFkrH1xktaU1X/Q0X5NeASSJ0hSTgId56X0mA4LBXR0tJW7RR6XL3yrWJ
-         e0IxnvCnyqv2B5eRvJJLHA7RmUa/MvGKX6EAR7x53IvI10tukx0SpfM+Pb7HGDMRBD
-         vAZGpKfGLTDoGE1h5QSZWgfTK94UwtJ2fRpXIxFj0nOI6JDNTNAJouhYTJ80W4L7XU
-         vYSUwaxcwfU9HJ4pJrSYlv3e6tlJnWxOxXcALcppUl/gs/KRjZyr11zP+XI5qgJV6K
-         3wT2WOCMPC3JDP+YaQW8orKdger/JXGt3glTbP77hTToDLEmJW8N76JX4M7VU+MrNN
-         nhQUQyMl773PQ==
-Date:   Wed, 7 Jun 2023 14:10:44 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
-Cc:     Konstantin Meskhidze <konstantin.meskhidze@huawei.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: runtime warning after merge of the landlock tree
-Message-ID: <20230607141044.1df56246@canb.auug.org.au>
+        Wed, 7 Jun 2023 00:32:33 -0400
+Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E19241FEC;
+        Tue,  6 Jun 2023 21:30:45 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4QbYqX5904z4f3khb;
+        Wed,  7 Jun 2023 12:13:28 +0800 (CST)
+Received: from [10.174.176.117] (unknown [10.174.176.117])
+        by APP1 (Coremail) with SMTP id cCh0CgAngRvkA4BkYN7+KQ--.51373S2;
+        Wed, 07 Jun 2023 12:13:28 +0800 (CST)
+Subject: Re: [PATCH v4] blk-ioprio: Introduce promote-to-rt policy
+To:     linux-block@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
+Cc:     Bart Van Assche <bvanassche@acm.org>, Jan Kara <jack@suse.cz>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>, cgroups@vger.kernel.org,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org,
+        "houtao1@huawei.com" <houtao1@huawei.com>
+References: <20230428074404.280532-1-houtao@huaweicloud.com>
+ <1db53a95-46d3-c906-31a1-0be4992a4b8d@huaweicloud.com>
+ <bff92f4c-0f21-9cf2-7135-812a184716b3@huaweicloud.com>
+From:   Hou Tao <houtao@huaweicloud.com>
+Message-ID: <116e9f61-cdf9-2eeb-51c3-a211bb1f06ca@huaweicloud.com>
+Date:   Wed, 7 Jun 2023 12:13:24 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/i=8nT44GQRpQ8sBi_oj3vig";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <bff92f4c-0f21-9cf2-7135-812a184716b3@huaweicloud.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-CM-TRANSID: cCh0CgAngRvkA4BkYN7+KQ--.51373S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3GF1ftF1rWw43AF47GF18AFb_yoW3XF1DpF
+        4fAFW3uryvqF1xtF12q3WkXrW7t3s7tr17WFnxKFyF934qywnrAF1jyF18WFyxArWDXrZx
+        Zr98AFZ2kFy5ZrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7I2V7IY0VAS
+        07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
+        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_
+        GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
+        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAF
+        wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
+        7IU1zuWJUUUUU==
+X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/i=8nT44GQRpQ8sBi_oj3vig
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+ping ?
 
-Hi all,
+On 5/23/2023 2:48 PM, Hou Tao wrote:
+> ping ?
+>
+> On 5/8/2023 8:08 PM, Hou Tao wrote:
+>> ping ?
+>>
+>> On 4/28/2023 3:44 PM, Hou Tao wrote:
+>>> From: Hou Tao <houtao1@huawei.com>
+>>>
+>>> Since commit a78418e6a04c ("block: Always initialize bio IO priority on
+>>> submit"), bio->bi_ioprio will never be IOPRIO_CLASS_NONE when calling
+>>> blkcg_set_ioprio(), so there will be no way to promote the io-priority
+>>> of one cgroup to IOPRIO_CLASS_RT, because bi_ioprio will always be
+>>> greater than or equals to IOPRIO_CLASS_RT.
+>>>
+>>> It seems possible to call blkcg_set_ioprio() first then try to
+>>> initialize bi_ioprio later in bio_set_ioprio(), but this doesn't work
+>>> for bio in which bi_ioprio is already initialized (e.g., direct-io), so
+>>> introduce a new promote-to-rt policy to promote the iopriority of bio to
+>>> IOPRIO_CLASS_RT if the ioprio is not already RT.
+>>>
+>>> For none-to-rt policy, although it doesn't work now, but considering
+>>> that its purpose was also to override the io-priority to RT and allowing
+>>> for a smoother transition, just keep it and treat it as an alias of
+>>> the promote-to-rt policy.
+>>>
+>>> Acked-by: Tejun Heo <tj@kernel.org>
+>>> Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+>>> Reviewed-by: Chaitanya Kulkarni <kch@nvidia.com>
+>>> Reviewed-by: Jan Kara <jack@suse.cz>
+>>> Signed-off-by: Hou Tao <houtao1@huawei.com>
+>>> ---
+>>> v4:
+>>>  * rebased on 33afd4b76393
+>>>  * Add Reviewed-by from Jan Kara
+>>>
+>>> v3: https://lore.kernel.org/linux-block/20230223135154.3749088-1-houtao@huaweicloud.com
+>>>  * Use 'non-RT' instead of 'no-RT' in document (from Bagas)
+>>>  * Remove repeated sentence in commit message
+>>>  * Add Reviewed-by and Acked-by tags
+>>>  
+>>> v2: https://lore.kernel.org/linux-block/20230220135428.2632906-1-houtao@huaweicloud.com
+>>>
+>>>  * Simplify the implementation of promote-to-rt (from Bart)
+>>>  * Make none-to-rt to work again by treating it as an alias of
+>>>    the promote-to-rt policy (from Bart & Jan)
+>>>  * fix the style of new content in cgroup-v2.rst (from Bagas)
+>>>  * set the default priority level to 4 instead of 0 for promote-to-rt
+>>>
+>>> v1: https://lore.kernel.org/linux-block/20230201045227.2203123-1-houtao@huaweicloud.com
+>>>
+>>>  Documentation/admin-guide/cgroup-v2.rst | 42 ++++++++++++++-----------
+>>>  block/blk-ioprio.c                      | 23 ++++++++++++--
+>>>  2 files changed, 44 insertions(+), 21 deletions(-)
+>>>
+>>> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+>>> index f67c0829350b..7544ce00e0cb 100644
+>>> --- a/Documentation/admin-guide/cgroup-v2.rst
+>>> +++ b/Documentation/admin-guide/cgroup-v2.rst
+>>> @@ -2024,31 +2024,33 @@ that attribute:
+>>>    no-change
+>>>  	Do not modify the I/O priority class.
+>>>  
+>>> -  none-to-rt
+>>> -	For requests that do not have an I/O priority class (NONE),
+>>> -	change the I/O priority class into RT. Do not modify
+>>> -	the I/O priority class of other requests.
+>>> +  promote-to-rt
+>>> +	For requests that have a non-RT I/O priority class, change it into RT.
+>>> +	Also change the priority level of these requests to 4. Do not modify
+>>> +	the I/O priority of requests that have priority class RT.
+>>>  
+>>>    restrict-to-be
+>>>  	For requests that do not have an I/O priority class or that have I/O
+>>> -	priority class RT, change it into BE. Do not modify the I/O priority
+>>> -	class of requests that have priority class IDLE.
+>>> +	priority class RT, change it into BE. Also change the priority level
+>>> +	of these requests to 0. Do not modify the I/O priority class of
+>>> +	requests that have priority class IDLE.
+>>>  
+>>>    idle
+>>>  	Change the I/O priority class of all requests into IDLE, the lowest
+>>>  	I/O priority class.
+>>>  
+>>> +  none-to-rt
+>>> +	Deprecated. Just an alias for promote-to-rt.
+>>> +
+>>>  The following numerical values are associated with the I/O priority policies:
+>>>  
+>>> -+-------------+---+
+>>> -| no-change   | 0 |
+>>> -+-------------+---+
+>>> -| none-to-rt  | 1 |
+>>> -+-------------+---+
+>>> -| rt-to-be    | 2 |
+>>> -+-------------+---+
+>>> -| all-to-idle | 3 |
+>>> -+-------------+---+
+>>> ++----------------+---+
+>>> +| no-change      | 0 |
+>>> ++----------------+---+
+>>> +| rt-to-be       | 2 |
+>>> ++----------------+---+
+>>> +| all-to-idle    | 3 |
+>>> ++----------------+---+
+>>>  
+>>>  The numerical value that corresponds to each I/O priority class is as follows:
+>>>  
+>>> @@ -2064,9 +2066,13 @@ The numerical value that corresponds to each I/O priority class is as follows:
+>>>  
+>>>  The algorithm to set the I/O priority class for a request is as follows:
+>>>  
+>>> -- Translate the I/O priority class policy into a number.
+>>> -- Change the request I/O priority class into the maximum of the I/O priority
+>>> -  class policy number and the numerical I/O priority class.
+>>> +- If I/O priority class policy is promote-to-rt, change the request I/O
+>>> +  priority class to IOPRIO_CLASS_RT and change the request I/O priority
+>>> +  level to 4.
+>>> +- If I/O priorityt class is not promote-to-rt, translate the I/O priority
+>>> +  class policy into a number, then change the request I/O priority class
+>>> +  into the maximum of the I/O priority class policy number and the numerical
+>>> +  I/O priority class.
+>>>  
+>>>  PID
+>>>  ---
+>>> diff --git a/block/blk-ioprio.c b/block/blk-ioprio.c
+>>> index 055529b9b92b..4051fada01f1 100644
+>>> --- a/block/blk-ioprio.c
+>>> +++ b/block/blk-ioprio.c
+>>> @@ -23,25 +23,28 @@
+>>>  /**
+>>>   * enum prio_policy - I/O priority class policy.
+>>>   * @POLICY_NO_CHANGE: (default) do not modify the I/O priority class.
+>>> - * @POLICY_NONE_TO_RT: modify IOPRIO_CLASS_NONE into IOPRIO_CLASS_RT.
+>>> + * @POLICY_PROMOTE_TO_RT: modify no-IOPRIO_CLASS_RT to IOPRIO_CLASS_RT.
+>>>   * @POLICY_RESTRICT_TO_BE: modify IOPRIO_CLASS_NONE and IOPRIO_CLASS_RT into
+>>>   *		IOPRIO_CLASS_BE.
+>>>   * @POLICY_ALL_TO_IDLE: change the I/O priority class into IOPRIO_CLASS_IDLE.
+>>> + * @POLICY_NONE_TO_RT: an alias for POLICY_PROMOTE_TO_RT.
+>>>   *
+>>>   * See also <linux/ioprio.h>.
+>>>   */
+>>>  enum prio_policy {
+>>>  	POLICY_NO_CHANGE	= 0,
+>>> -	POLICY_NONE_TO_RT	= 1,
+>>> +	POLICY_PROMOTE_TO_RT	= 1,
+>>>  	POLICY_RESTRICT_TO_BE	= 2,
+>>>  	POLICY_ALL_TO_IDLE	= 3,
+>>> +	POLICY_NONE_TO_RT	= 4,
+>>>  };
+>>>  
+>>>  static const char *policy_name[] = {
+>>>  	[POLICY_NO_CHANGE]	= "no-change",
+>>> -	[POLICY_NONE_TO_RT]	= "none-to-rt",
+>>> +	[POLICY_PROMOTE_TO_RT]	= "promote-to-rt",
+>>>  	[POLICY_RESTRICT_TO_BE]	= "restrict-to-be",
+>>>  	[POLICY_ALL_TO_IDLE]	= "idle",
+>>> +	[POLICY_NONE_TO_RT]	= "none-to-rt",
+>>>  };
+>>>  
+>>>  static struct blkcg_policy ioprio_policy;
+>>> @@ -189,6 +192,20 @@ void blkcg_set_ioprio(struct bio *bio)
+>>>  	if (!blkcg || blkcg->prio_policy == POLICY_NO_CHANGE)
+>>>  		return;
+>>>  
+>>> +	if (blkcg->prio_policy == POLICY_PROMOTE_TO_RT ||
+>>> +	    blkcg->prio_policy == POLICY_NONE_TO_RT) {
+>>> +		/*
+>>> +		 * For RT threads, the default priority level is 4 because
+>>> +		 * task_nice is 0. By promoting non-RT io-priority to RT-class
+>>> +		 * and default level 4, those requests that are already
+>>> +		 * RT-class but need a higher io-priority can use ioprio_set()
+>>> +		 * to achieve this.
+>>> +		 */
+>>> +		if (IOPRIO_PRIO_CLASS(bio->bi_ioprio) != IOPRIO_CLASS_RT)
+>>> +			bio->bi_ioprio = IOPRIO_PRIO_VALUE(IOPRIO_CLASS_RT, 4);
+>>> +		return;
+>>> +	}
+>>> +
+>>>  	/*
+>>>  	 * Except for IOPRIO_CLASS_NONE, higher I/O priority numbers
+>>>  	 * correspond to a lower priority. Hence, the max_t() below selects
+>> .
+> .
 
-Today's linux-next qemu boot test (powerpc pseries_le_defconfig) produced
-this warning:
-
-WARNING: CPU: 0 PID: 53 at security/landlock/net.c:78 check_socket_access+0=
-xfc/0x210
-Modules linked in:
-CPU: 0 PID: 53 Comm: init Not tainted 6.4.0-rc5-07746-gd88425633b73 #1
-Hardware name: IBM pSeries (emulated by qemu) POWER8 (raw) 0x4d0200 0xf0000=
-04 of:SLOF,HEAD pSeries
-NIP:  c00000000090717c LR: c0000000008c54d4 CTR: c000000000907290
-REGS: c000000006817970 TRAP: 0700   Not tainted  (6.4.0-rc5-07746-gd8842563=
-3b73)
-MSR:  8000000000029033 <SF,EE,ME,IR,DR,RI,LE>  CR: 2800084a  XER: 20000000
-CFAR: c0000000009070cc IRQMASK: 0=20
-GPR00: c0000000008c54d4 c000000006817c10 c000000001558e00 c000000005040000=
-=20
-GPR04: c000000006817cf8 000000000000006e 0000000000000002 0000000000000000=
-=20
-GPR08: 0000000000000000 0000000000000000 c00000000476bfe0 0000000000000000=
-=20
-GPR12: c000000000907290 c000000002ad0000 0000000000000000 0000000000000000=
-=20
-GPR16: 0000000000000000 0000000000000000 0000000000000000 0000000000000000=
-=20
-GPR20: 0000000000000000 0000000000000000 0000000000000000 0000000000000000=
-=20
-GPR24: 0000000000000000 0000000000000000 0000000000000000 0000000000000000=
-=20
-GPR28: c000000005040000 c000000006817cf8 000000000000006e 0000000000000000=
-=20
-NIP [c00000000090717c] check_socket_access+0xfc/0x210
-LR [c0000000008c54d4] security_socket_connect+0x74/0xe0
-Call Trace:
-[c000000006817c10] [c000000006817c50] 0xc000000006817c50 (unreliable)
-[c000000006817c50] [c000000006817ca0] 0xc000000006817ca0
-[c000000006817c90] [c000000000e4e26c] __sys_connect_file+0x6c/0xe0
-[c000000006817cd0] [c000000000e4e3c4] __sys_connect+0xe4/0x130
-[c000000006817da0] [c000000000e50d1c] sys_socketcall+0x46c/0x530
-[c000000006817e10] [c000000000030958] system_call_exception+0x128/0x330
-[c000000006817e50] [c00000000000d6a0] system_call_common+0x160/0x2c4
---- interrupt: c00 at 0x7fff7fd9e544
-NIP:  00007fff7fd9e544 LR: 00007fff7fd96c4c CTR: 0000000000000000
-REGS: c000000006817e80 TRAP: 0c00   Not tainted  (6.4.0-rc5-07746-gd8842563=
-3b73)
-MSR:  800000000280f033 <SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE>  CR: 24000842  =
-XER: 00000000
-IRQMASK: 0=20
-GPR00: 0000000000000066 00007fffc31f3b30 00007fff7fe39900 0000000000000003=
-=20
-GPR04: 00007fffc31f3b60 000000000000006e 0000000000000000 0000000000000000=
-=20
-GPR08: 0000000000000000 0000000000000000 0000000000000000 0000000000000000=
-=20
-GPR12: 0000000000000000 00007fff7feba9a0 0000000000000000 0000000000000000=
-=20
-GPR16: 0000000000000000 0000000000000000 0000000000000000 0000000000000000=
-=20
-GPR20: 0000000000000016 0000000000000002 00007fff7fe33e14 00007fff7fe33e08=
-=20
-GPR24: 0000000000000001 00007fff7fe33e16 00007fff7fe07b48 ffffffffffffffff=
-=20
-GPR28: ffffffffffffffff 00007fff7fe30110 00007fff7fe33e08 00007fff7feb39b0=
-=20
-NIP [00007fff7fd9e544] 0x7fff7fd9e544
-LR [00007fff7fd96c4c] 0x7fff7fd96c4c
---- interrupt: c00
-Code: ebc10030 38600000 e9410028 e92d0c78 7d4a4a79 39200000 7c6307b4 408201=
-0c 38210040 ebe1fff8 4e800020 ebc10030 <0fe00000> 7c0802a6 fbc10030 f801005=
-0=20
----[ end trace 0000000000000000 ]---
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/i=8nT44GQRpQ8sBi_oj3vig
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSAA0QACgkQAVBC80lX
-0Gy7JQf/ShJDyQZusw0go0tTOePXfZjpuPpp/2OsN+748oq4YzUHqN5OBOzYvNas
-XMiz1ZcVYP1kcHqjzlwvIFubMgy6lGyaVbsC1F/TJmcCN6+f/RKK27gKL3CYEVgV
-fwICs+tkldSCyXxi0HlVGIjfwJUpQbu0dgc5jVgMiiQZId6PSSkVD1+jj1uexvU2
-RD2r6s7/7OXHoMbLuSYjJVZ1ld93/przCQA8QJ7JXkSoCVUK+iy9WoKbgY8PIZQQ
-VW2f/Y95NWT8O1B5wIfVHHSU/oMs0dIiB1pi0M+BR5L0bq+DM7qkODAtE1G+hKuY
-gbHn02PVuT2OW1Gl7nhmfQ98f5IyEA==
-=gRSU
------END PGP SIGNATURE-----
-
---Sig_/i=8nT44GQRpQ8sBi_oj3vig--
