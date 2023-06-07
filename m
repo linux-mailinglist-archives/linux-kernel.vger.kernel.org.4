@@ -2,186 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C51F87251A6
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 03:43:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF0DC7251AB
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 03:44:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237495AbjFGBnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 21:43:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34222 "EHLO
+        id S240554AbjFGBoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 21:44:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240512AbjFGBn3 (ORCPT
+        with ESMTP id S240501AbjFGBoN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 21:43:29 -0400
-Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-he1eur01on2048.outbound.protection.outlook.com [40.107.13.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3A291BC5;
-        Tue,  6 Jun 2023 18:43:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MoVliOYJb69eNzZjh1NAANyQyRnukpHSDaYrMIs85LoVrQkL98OCXK1SPfr1xNtlPoq9t/iMacuqJIP2hUzBkoSVXQOtAA3gQ9ENz/d2lsQgy8NcBguHY2G62y9wZt+CGLmjzWoSOQpxYVeF6JZOUJ0VZ6UUuo6Ptd9vT8yycJXJTxJMa4mjcWDtEdDwvtCGYxR3Gb4wlRmhuyuZur1+FJsuR3a2Y/TeHgcoDw7RGO/cPkCMrNcak4yr5b0r/hYe2/cpOChSRMwl1/mvZ/HVvLLIschBNdgfFdDSxCH0W+As9Fwep1zOI6nI21MFXBGgyTePlwNn6lztyXgrtY/qEg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=42a/qFDfcJTcEMoGdsYdcatU5+XmxokpvLztZFTaBQ0=;
- b=j6BIBnGbIKmenBEcxIfTPHFeavmwcpuYqb8/L2aWChMXoFqFNXc244gn/TKRfmeXDv9K2LwQTFybFeSpieJS4CejexY2QAvm8TffUsiMcy+QO/uL0F/y1lcdjeskGaOfK7yEQRaf27dk3a+x7N7x5U2N2n7u5lXoZbr/Ey4kxGNs/SLDlGarYhVZ6PKhpttv/orbLeqATQHKzOInTkLjHRqGZRGAitwWpudooojSLUhgiCn4eihoOqrJzKkoLmxuKqkmk7OavK0thDYOE831TemoY1HQeiGnucwjKzfrO88VqBz1+bYbFEJ8qW3j1Peau0XqdzSdbcaImCRO3fxMgA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=kunbus.com; dmarc=pass action=none header.from=kunbus.com;
- dkim=pass header.d=kunbus.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kunbus.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=42a/qFDfcJTcEMoGdsYdcatU5+XmxokpvLztZFTaBQ0=;
- b=jOovSujWRVv8S1ONNgohgUWW4IfolkFrKXjfIoVRlmudBIHeiEefem6bodv4CcF9a+zMXTZ63aE+suY0exR14thfZcPl16QASuUTC2oWlJVhbu/PMD3LbqW/MnEM2xoANDh62qYrFaEaYebwqVS6x96VG1KO2JlzS5/gxKq3LO4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=kunbus.com;
-Received: from VI1P193MB0413.EURP193.PROD.OUTLOOK.COM (2603:10a6:803:4e::14)
- by AM9P193MB1127.EURP193.PROD.OUTLOOK.COM (2603:10a6:20b:1f1::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.10; Wed, 7 Jun
- 2023 01:43:21 +0000
-Received: from VI1P193MB0413.EURP193.PROD.OUTLOOK.COM
- ([fe80::6727:e3fb:8fec:72a6]) by VI1P193MB0413.EURP193.PROD.OUTLOOK.COM
- ([fe80::6727:e3fb:8fec:72a6%7]) with mapi id 15.20.6477.016; Wed, 7 Jun 2023
- 01:43:20 +0000
-Message-ID: <f905141c-1f8e-aec8-470c-19d476e567a3@kunbus.com>
-Date:   Wed, 7 Jun 2023 03:43:18 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: New kernel warning after updating from LTS 5.15.110 to 5.15.112
- (and 5.15.113)
-Content-Language: en-US
-To:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Sasha Levin <sashal@kernel.org>,
-        Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Linux Kernel Integrity <linux-integrity@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Lukas Wunner <lukas@wunner.de>,
-        Philipp Rosenberger <p.rosenberger@kunbus.com>
-References: <fe6f7aa0-56c2-3729-ce8c-0f2d943b33f4@alliedtelesis.co.nz>
- <ZHQIFLWvrWUNMVxb@debian.me>
- <6e470461-1a9b-ec51-bac5-f2beb1dc11c9@alliedtelesis.co.nz>
- <2b09d2ed-0852-bbc9-b792-aad92235c7fa@gmail.com>
- <03daca5c-e468-8889-4dc2-e625a664d571@alliedtelesis.co.nz>
- <ec5245bd-3103-f0c7-d3ef-85aabb4d4712@alliedtelesis.co.nz>
- <ZH6TIjXeXJVMvSKa@debian.me>
-From:   Lino Sanfilippo <l.sanfilippo@kunbus.com>
-In-Reply-To: <ZH6TIjXeXJVMvSKa@debian.me>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FRYP281CA0017.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10::27)
- To VI1P193MB0413.EURP193.PROD.OUTLOOK.COM (2603:10a6:803:4e::14)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1P193MB0413:EE_|AM9P193MB1127:EE_
-X-MS-Office365-Filtering-Correlation-Id: 53f7272f-e66c-4c0b-621f-08db66f892a4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Y6jQpG815cZ8Umn62jlhderzMKEcanJrhBAYZ+KFeiFJlCYA9I0M6YG/i58EjMcsuR259thKfKi1kV5xVYxvsvQTRKpP8qIXCm/REID7c8eso539xJoWPfg8bfR/QxBXK5SUeTSqhtM0bLra+RYuEI7LpJdUDlVZguz96lcrxT4QaDVJlmAz2ybNEXKuQqehtM+iQdQtafw417G5VqjmfLyhealOOkfEMcSLhPJCYVwbFvGv+TBx/mXij9IHUb/y8ON3ouRezhdan+JXYaizqX4BsSHdAwKsiYhsNesuqOWl0FKJiHy2VMmZPwmhijg+Qtk7vwwTP1M6C4p59b+gQJNp5HiSIF6FVEvb49QZAQtoeLP57+P0/1ZDb8QnEEVYuQ2HfnF2kHA0GhOK704TXocXlBxy1eAnEuDGgeip8IuZ23dhACFo6rsVZxWUTpz9E/0p4MVG3HrxsFGCMljn7UY5Z41+HHSAzypLO0ATlDN5/mCR9qIP5+LNPI0xpg5s7cXahyzn+Ftg5uy9yO+YMfC52R6/bLo4Asxy1LvY2e8gDg7D/rVg+WaewdpVUOxGAaCqbe8YmNfhd8z2M24Ys5IoKL0w1SDfiTchd3SDYkEkYEccgscpWBmWWLEmJ1fB7VIXTB24FQUzEkf1TWQe9A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1P193MB0413.EURP193.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39840400004)(346002)(136003)(376002)(366004)(451199021)(31686004)(38100700002)(86362001)(66476007)(54906003)(110136005)(478600001)(66556008)(66946007)(36756003)(31696002)(4326008)(52116002)(53546011)(6506007)(6512007)(186003)(107886003)(8676002)(2906002)(2616005)(316002)(7416002)(8936002)(5660300002)(6486002)(41300700001)(83380400001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RmFxMXlkNzNUcGlLeGRRQThIYUhITWNRQW91QmYrdGNURGtpVDZFUmFSZkxM?=
- =?utf-8?B?bGt5YnF1bnh2RWlHYjJadHRLS1E1Mmd4THV5T2pBR0VOM2dYVFVyRHBCS1o5?=
- =?utf-8?B?Vk9Ca0NFT2JqaFJqdEZ5WUMrbXpFQW10Wk9TdXVuY2xYZkgrZlI2U3BtNmRM?=
- =?utf-8?B?b3pxWHZaditlMmo3MUo1ei9VOU51UUFIR3Qxb3F4L01vSU9oSGE3TmZ4akIy?=
- =?utf-8?B?M2FaS2lPVEdlT3pXektWYkRxNnpVOVZhMmNUV2tFK3pnWFEyZFZZRURMbTB6?=
- =?utf-8?B?Rm0vU0Jkc1hRaGpISzBKZkJoVFdoMGc1UUIzUnIwY0pId2hlWjdIanBYMUpy?=
- =?utf-8?B?cjFtaElNdE1WclEvcllxYjJ1K1JqVDFkUm5MbFdJUjQ2YUw2WUtGU1JHZHBL?=
- =?utf-8?B?UGJiSnRXc2dUeHp3MTFzSG9MWGFycHdwWEpiV0grdGFlWnhBOGFUZXJzYnQ4?=
- =?utf-8?B?NzV1VWRNNTdpSjd2RDJtRVFIdFFMTHYvblBiNHlLU0dlWGxJOThveGd1M1pw?=
- =?utf-8?B?c2NYK29jTVk2aDRybm1GNzZaUG10N3JoYmlTQ0t5ZkhLbUlrdS9wNFpEU0pl?=
- =?utf-8?B?LzlJWWJpQjk4T3hjbkhLSzZrVjN4VVQzYyt5Z29oa09GczQ5M1BiSUExdkIx?=
- =?utf-8?B?cHlKWjBGa24weTZxS05FaGEvUDRCQk5LZ2M2bm8xTzk1R01yN0tueFJQZnor?=
- =?utf-8?B?WUFyMWZDRnVUc2dQOGFUMmxZZXZud2NmN1p1RU1laWw2aG1JMmNHUjVIL0hy?=
- =?utf-8?B?UE5kUHM3TVpqb1cxRm1xbWlxbEU3SDNxcWkxUTNHaVVqbGVrTzhXY3BWQWhz?=
- =?utf-8?B?cjJZcFNpSTBTQ25WZ3NkTmVZWk0yeVpWRkU2K0hXS2NxTVV2NXdibmZYMG4x?=
- =?utf-8?B?M25RWEpaaTdzc3REelF5RTJKL3lSN2FJcW1SYnFpOHBvanlkZzF0R3drSTdF?=
- =?utf-8?B?R3ZpNUhLbUcwS3p3a2Q4aEMrRG1HNUs1RmI3cXc4U2NlVkFBS0w3TUUxdEQ5?=
- =?utf-8?B?YWFLZUczdXg4cHdBM1JQNTA4ckpWK0J2QVpWVlUxSDE4QkpzcjZWZklhcHQ4?=
- =?utf-8?B?TjJBeDZZWFA0MDkzSHpMcVA4WklzVEV0VUNvWmJkVGFlUXUvMERmZXZNVnU1?=
- =?utf-8?B?b2M5QUErSGhMU0JVL3o2S0VSemZqdEtYa1BNR1hCQ0NTQkFtZVBBT3J2Vyt2?=
- =?utf-8?B?cDgvVjc1UWJGQjNMTXFvL3dpc2xVWHRLNGd4a2s0Zlg3KzFmWGxUUnZPejVN?=
- =?utf-8?B?cGltb2FuYzRzMkdGUWFyOFhjYnFtTzA4amQ1ZGMwMVZKK1VHR1VsWnZPT3lG?=
- =?utf-8?B?eDdwYSs5TWs4NzlYQkhGZ25hWEhMTVQyN25kZVhiVXRSa2lhUlZ2ZVNWSlZz?=
- =?utf-8?B?cEZIYk93bG5POVZ5ZmRyVGVaUXlsaTBMc2hOWFUwNysxdVNTSXpwLzF4OHdt?=
- =?utf-8?B?a1dJeFZNZmtQN010eFBDeTBwSzVpSzJOOG1WbUZWcVdFWDV2NmlPRWlva2Y2?=
- =?utf-8?B?VFhES2hGai9kMWdFaHIrZWx6WXZSNWpxaWo0NC94ME85QmF5NUVQM2xMeXRl?=
- =?utf-8?B?MTUwZGtNc2Q4N0xhY2ZTcVRKNnBEQVJrWjBISTFGYzNNdHhRL1dTOTZ2TjNo?=
- =?utf-8?B?N0RXOUFPQm8rQStWZzh2K3FRc3FmUFhiU3Q2b2Faa3YvU1NaZnV4SmVpWlRH?=
- =?utf-8?B?QzE4VC9nOHFvU3U5Slp0QnUwblBiVlBSWkRTbENrVXgvaTdZNVRObUU4c0JJ?=
- =?utf-8?B?R1BHUnlYTGxDODZGbDh2UllyQ2RrM21kQWRzR2o4dTlFVG02YlRrNFBrYTNq?=
- =?utf-8?B?OU00VXJDcTFYbE12Tk94a1RNSlgveTJ0TThoRnlUSWc5ZHZhd0JTWDJUNnB0?=
- =?utf-8?B?eGxUMVlMYnBrY0VuSG9HdTc4b3JSbGpGdGtPL1crcVBNd2tGTWRGZ005YVNy?=
- =?utf-8?B?bUdXcDJJOHVkblNOM1J5ZmM1czBGckg3bytrYVVJSUVXWG9Kb1dzRWllcE9M?=
- =?utf-8?B?Q0QrTnBIV2M2Sy9KZmVRR2RUQllaQXlNRFRHQ0hiRkhzcitGSGZYaEhlaGll?=
- =?utf-8?B?eS9kZitFMGJ1QXZJQVVLNnRIUDVKbkFnbTdPdTlNUUUycXE0ZlNaSUxURGI5?=
- =?utf-8?B?TXMyNTlwSDlFdmkrSlFrY1d2Q0hYWnpvM3N2Y3pFcG9IWGdRYXVhYzdzY2tY?=
- =?utf-8?B?Y1k0d2xia3lpVUpOMmxUVVBLdXdXNmhzV2ZPbmRmZGhjVi9ZS1NJWXFWNGY3?=
- =?utf-8?B?aUZ1NUV1YnZrbFMxaWtEV1VJTlFBPT0=?=
-X-OriginatorOrg: kunbus.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 53f7272f-e66c-4c0b-621f-08db66f892a4
-X-MS-Exchange-CrossTenant-AuthSource: VI1P193MB0413.EURP193.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2023 01:43:20.4982
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: aaa4d814-e659-4b0a-9698-1c671f11520b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Ga62OdP+ko/yL5dfr8B3EloJd7HivZhW3icCIOQWv2M8ewqMe9w8YatlxROUj30wWQRLXqKlRFDnkl76OuqGsA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9P193MB1127
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 6 Jun 2023 21:44:13 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D6CF19AE
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 18:44:11 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-568bc5db50dso3146857b3.0
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 18:44:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686102250; x=1688694250;
+        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=m+NrEcbwPBOpk0EwDAsT956pzayXcPTozL+X916keWM=;
+        b=ihZc1GkVfXGtjLpOyBhShfyyoisYkAc9ytIA7e1nXdd+vWRvYBdn9SQ+uQu6ewAOSy
+         QXt97SmKFnQ4ud+LZKahKFx8IX9kvnpg13jOMgnvUDkUwZe1657qrDzwasTbzhbJIZtE
+         SbHCLBOkE2/TI0G2kjVumTBJzv68I+JbcwuT5QRYEiJq3tgSVEPUiOsOXJUtYGTiTQKX
+         ViH7l1v9ywAUDTK/zn/Vdle3j5H2Tsixp0KiHi2QhihB00KZZiD9gaSqXx9Hvq0wOe4Y
+         m1Fyd3fqIcJkRrASSmV/hl+qmQqaUzlvglW34RgpI5D3nt1yvdTbsdupKiECHK65kJOo
+         J7iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686102250; x=1688694250;
+        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=m+NrEcbwPBOpk0EwDAsT956pzayXcPTozL+X916keWM=;
+        b=J+ahJwIPpqbmnB1TLnwWgCHY2Xj2aaQehHVDm5vNq+62S8fz7oYTCnCOnb+63W6bjP
+         Ft+bFnNYzN0ZruBvmpVhSph9LxfJa7CRMOOMp3RVuJwZ5USQfhE0pBwLDAmK0pSImho5
+         jTwbW8Pk6rHMDCp26jB087IZ7QFBperPOWlj/kldmWCZUIf8dvpdJkdEN2XE0174sTn0
+         GiGNDET3IOHxu/RGNdOLRXyAKkaGE2VIo/YmZQ6YZeDRVMi7WnW4xcppuObvvDsDhK9J
+         acAqWiCM+yKRU6DVtWndRlnApOyuSFNUna+qAv7Auys04pY/xr51T5DMtQbLwTVmPxGx
+         ZJgQ==
+X-Gm-Message-State: AC+VfDxkKSjuPIFfWCicSRDIxaoRG0Tb7umXWjC8VRLZC1C8V8sPcaw1
+        /E84qBDeVWRBqTC/xCB1bhcJMQIQnQOP
+X-Google-Smtp-Source: ACHHUZ4GXlGCu+Zs/Vmx40Fv0PGFszyMqm+XmZo9fovWasK7rSshs945QNld6H5JztDcHFFIrotKEzVZQYuU
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:3c35:209f:5d38:b7a1])
+ (user=irogers job=sendgmr) by 2002:a05:6902:18c6:b0:ba8:4ff5:3214 with SMTP
+ id ck6-20020a05690218c600b00ba84ff53214mr2565675ybb.2.1686102250723; Tue, 06
+ Jun 2023 18:44:10 -0700 (PDT)
+Date:   Tue,  6 Jun 2023 18:43:33 -0700
+Message-Id: <20230607014353.3172466-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
+Subject: [PATCH v1 00/20] Reference count checking for thread
+From:   Ian Rogers <irogers@google.com>
+To:     John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        German Gomez <german.gomez@arm.com>,
+        Ali Saidi <alisaidi@amazon.com>,
+        Jing Zhang <renyu.zj@linux.alibaba.com>,
+        "=?UTF-8?q?Martin=20Li=C5=A1ka?=" <mliska@suse.cz>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        Liam Howlett <liam.howlett@oracle.com>,
+        Dmitrii Dolgov <9erthalion6@gmail.com>,
+        "Shawn M. Chapla" <schapla@codeweavers.com>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        Changbin Du <changbin.du@huawei.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Raul Silvera <rsilvera@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Steinar H. Gunderson" <sesse@google.com>,
+        Yuan Can <yuancan@huawei.com>,
+        Brian Robbins <brianrob@linux.microsoft.com>,
+        liuwenyu <liuwenyu7@huawei.com>,
+        Ivan Babrou <ivan@cloudflare.com>,
+        Fangrui Song <maskray@google.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, coresight@lists.linaro.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add reference count checking to thread after first refactoring bits of
+the code, such as making the thread red-black tree non-invasive (so
+the thread it references is easier to reference count, rather than
+having 3 potential references). Part of this refactoring also removes
+the dead thread list because if we held a reference here the threads
+would never die and anything else has questionable
+correctness. addr_location is made into its own C/header file to
+capture the init, exit and copy code.
 
-Hi Bagas, hi Chris
+Fix additional outstanding memory leak and reference count issues to
+the point that "perf test" compiled with address sanitizer but without
+libtraceevent passes all but one test - libtraceevent reports leaks
+within its own code, most likely as it isn't compiled with
+sanitizers. The remaining failing test is "68: Test dwarf unwind" and
+that has address sanitizer issues as it uses memcpy to access the
+stack within the process - we likely want to skip parts of the test
+with sanitizers enabled.
 
-On 06.06.23 04:00, Bagas Sanjaya wrote:
+Ian Rogers (20):
+  perf thread: Remove notion of dead threads
+  perf thread: Make threads rbtree non-invasive
+  perf thread: Add accessor functions for thread
+  perf maps: Make delete static, always use put
+  perf addr_location: Move to its own header
+  perf addr_location: Add init/exit/copy functions
+  perf thread: Add reference count checking
+  perf machine: Make delete_threads part of machine__exit
+  perf report: Avoid thread leak
+  perf header: Ensure bitmaps are freed
+  perf stat: Avoid evlist leak
+  perf intel-pt: Fix missed put and leak
+  perf evlist: Free stats in all evlist destruction
+  perf python: Avoid 2 leak sanitizer issues
+  perf jit: Fix two thread leaks
+  perf symbol-elf: Correct holding a reference
+  perf maps: Fix overlapping memory leak
+  perf machine: Fix leak of kernel dso
+  perf machine: Don't leak module maps
+  perf map/maps/thread: Changes to reference counting
 
-> On Tue, Jun 06, 2023 at 01:41:01AM +0000, Chris Packham wrote:
->>
+ tools/perf/arch/arm/tests/dwarf-unwind.c      |   2 +-
+ tools/perf/arch/arm64/tests/dwarf-unwind.c    |   2 +-
+ tools/perf/arch/powerpc/tests/dwarf-unwind.c  |   2 +-
+ tools/perf/arch/x86/tests/dwarf-unwind.c      |   2 +-
+ tools/perf/builtin-annotate.c                 |  28 +-
+ tools/perf/builtin-c2c.c                      |  18 +-
+ tools/perf/builtin-diff.c                     |  16 +-
+ tools/perf/builtin-inject.c                   |   4 +-
+ tools/perf/builtin-kmem.c                     |  13 +-
+ tools/perf/builtin-kwork.c                    |  15 +-
+ tools/perf/builtin-mem.c                      |   4 +-
+ tools/perf/builtin-report.c                   |  21 +-
+ tools/perf/builtin-sched.c                    |  80 +++--
+ tools/perf/builtin-script.c                   |  97 +++---
+ tools/perf/builtin-stat.c                     |   1 +
+ tools/perf/builtin-timechart.c                |  11 +-
+ tools/perf/builtin-top.c                      |   8 +-
+ tools/perf/builtin-trace.c                    |  38 ++-
+ .../scripts/python/Perf-Trace-Util/Context.c  |   4 +-
+ tools/perf/tests/code-reading.c               |   6 +-
+ tools/perf/tests/dwarf-unwind.c               |   1 -
+ tools/perf/tests/hists_common.c               |   2 +-
+ tools/perf/tests/hists_cumulate.c             |  18 +-
+ tools/perf/tests/hists_filter.c               |  11 +-
+ tools/perf/tests/hists_link.c                 |  20 +-
+ tools/perf/tests/hists_output.c               |  12 +-
+ tools/perf/tests/maps.c                       |   2 +-
+ tools/perf/tests/mmap-thread-lookup.c         |   5 +-
+ tools/perf/tests/perf-targz-src-pkg           |   5 +-
+ tools/perf/tests/symbols.c                    |   1 -
+ tools/perf/tests/thread-maps-share.c          |  13 +-
+ tools/perf/trace/beauty/pid.c                 |   4 +-
+ tools/perf/ui/browsers/hists.c                |  19 +-
+ tools/perf/ui/hist.c                          |   5 +-
+ tools/perf/ui/stdio/hist.c                    |   2 +-
+ tools/perf/util/Build                         |   1 +
+ tools/perf/util/addr_location.c               |  44 +++
+ tools/perf/util/addr_location.h               |  31 ++
+ tools/perf/util/arm-spe.c                     |   4 +-
+ tools/perf/util/build-id.c                    |   2 +
+ tools/perf/util/callchain.c                   |   7 +-
+ tools/perf/util/cs-etm.c                      |  28 +-
+ tools/perf/util/data-convert-json.c           |  16 +-
+ tools/perf/util/db-export.c                   |  20 +-
+ tools/perf/util/dlfilter.c                    |  17 +-
+ tools/perf/util/event.c                       |  37 +--
+ tools/perf/util/evlist.c                      |   2 +
+ tools/perf/util/evsel_fprintf.c               |   8 +-
+ tools/perf/util/header.c                      |  12 +-
+ tools/perf/util/hist.c                        |  22 +-
+ tools/perf/util/intel-bts.c                   |   2 +-
+ tools/perf/util/intel-pt.c                    |  88 +++---
+ tools/perf/util/jitdump.c                     |  12 +-
+ tools/perf/util/machine.c                     | 277 +++++++++---------
+ tools/perf/util/map.c                         |   2 +-
+ tools/perf/util/maps.c                        |   5 +-
+ tools/perf/util/maps.h                        |   9 +-
+ tools/perf/util/python.c                      |   4 +
+ .../scripting-engines/trace-event-python.c    |  28 +-
+ tools/perf/util/session.c                     |   8 +-
+ tools/perf/util/sort.c                        |  12 +-
+ tools/perf/util/symbol-elf.c                  |   4 +-
+ tools/perf/util/symbol.h                      |  17 +-
+ tools/perf/util/thread-stack.c                |  25 +-
+ tools/perf/util/thread.c                      | 218 +++++++-------
+ tools/perf/util/thread.h                      | 210 +++++++++++--
+ tools/perf/util/unwind-libdw.c                |  27 +-
+ tools/perf/util/unwind-libunwind-local.c      |  19 +-
+ tools/perf/util/unwind-libunwind.c            |   2 +-
+ tools/perf/util/vdso.c                        |   2 +-
+ 70 files changed, 1059 insertions(+), 655 deletions(-)
+ create mode 100644 tools/perf/util/addr_location.c
+ create mode 100644 tools/perf/util/addr_location.h
 
->>
->> Bisecting between v5.15.110 and v5.15.112 points to
->>
->> 51162b05a44cb5d98fb0ae2519a860910a47fd4b is the first bad commit
-> 
-> Thanks for the bisection.
-> 
-> Lino, it looks like this regression is caused by (backported) commit of yours.
-> Would you like to take a look on it?
-> 
-
-Before commit 51162b05a44c interrupt activation has failed since the concerning register was accessed
-without holding the required locality.
-
-Now with the commit applied the activation is successful and the interrupt handler is called as soon
-as an interrupt fires. However the handler runs in interrupt context while the register accesses
-are done via SPI which involves the SPI bus_lock_mutex. Calling the (sleepable) SPI functions in
-interrupt context results in the observed warning.
-
-To fix this additionally upstream commit 0c7e66e5fd69 ("tpm, tpm_tis: Request threaded interrupt handler") is
-required, since it ensures that the handler runs in process context.
-
-Note that even with this commit interrupts will eventually be disabled since the test for interrupts
-still fails (for the test to succeed at least upstream commit e644b2f498d2 "tpm, tpm_tis: Enable interrupt test"
-would be required).
-
-Chris, could you test again with commit 0c7e66e5fd69 additionally applied and confirm that the warning is gone?
-
-Regards,
-Lino
-
-
-
-
-
-
+-- 
+2.41.0.rc0.172.g3f132b7071-goog
 
