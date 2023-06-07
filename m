@@ -2,204 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ED10725A50
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 11:27:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B0B6725A37
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 11:24:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239928AbjFGJ07 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 05:26:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47758 "EHLO
+        id S239769AbjFGJYf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 05:24:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231890AbjFGJ04 (ORCPT
+        with ESMTP id S238431AbjFGJY0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 05:26:56 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2205192;
-        Wed,  7 Jun 2023 02:26:53 -0700 (PDT)
-X-QQ-mid: bizesmtp85t1686130004t6q4nk80
-Received: from linux-lab-host.localdomain ( [61.141.77.49])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 07 Jun 2023 17:26:42 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: ILHsT53NKPj2LqWj5vPyBfMEU/EQPK5yuVIJM9GKtuNMJ/hPIBysmg81s1Gz8
-        MkS3Lc5amQL/k7yLa8D+oVg2tmKv06roQQbcHxNopt+q4lhrjDKo9IKh0bT6+zrelNB00bw
-        QEmIVod6Rz2V6rwRmV9eu74xuYISdx3nhJfhAdmnoCXhxuFLzJvvvh4PkO8yDSXqzHpKfaZ
-        QS+7MAonVNqy4ephWB7/ZPT3CcsHK1l/5ZHNgmfCejGPizJglGYb3h3XKuSZGD75+TpXlbC
-        d9+GuHkdjxLCGaB7V3NeIDZJPRehsSntXVHqnFGmOhygN6tnnOQu9TKRTHdGfa3HIxVPCLG
-        0GmlGQp0tZS5pUXTdEMyj3xn5SKRblWKqMcFzZlQ6xLJlIZDEsqvdwAe//jdKDwkvZpTgXz
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 14623160687677460193
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de, w@1wt.eu
-Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: [PATCH v4 1/3] tools/nolibc: fix up #error compile failures with -ENOSYS
-Date:   Wed,  7 Jun 2023 17:24:12 +0800
-Message-Id: <149f2f9b6db8f927298446b0e92fda2d0a3430ae.1686128703.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1686128703.git.falcon@tinylab.org>
-References: <cover.1686128703.git.falcon@tinylab.org>
+        Wed, 7 Jun 2023 05:24:26 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9A458E
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 02:24:24 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-3094910b150so7182456f8f.0
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 02:24:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686129863; x=1688721863;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MHiJavEgLpvPSoAWMa5+afasJi2XtguSQGZabSBoZy4=;
+        b=yIDOuj7qUNG9ylsspk2Kypvp30Q/UrBU5ozHjp0V0cIlT1FfoESemKGtuMJFsMI9gP
+         ZQH9lGtuSodflpCW7WqFbNbVI8xj9beDwYYM/mYHXesZ3W4IX8jzUj501t6Lem3XoiTt
+         OgDSDveDLa7WsJZvb8EQFPZG7t2JS/eeHNITmntY896PbJS+2C9DBWcJ9C5SlXfK9RGY
+         r9IknGQtYpn0TzDrNvRh9mUtZEFum8gPhlu4ltQhZ9lfW/634lyTYG290DNvK7bJKptE
+         E+ZrSaUOmQZnfm0Vplh1OWz/0l4hmAy5AV12s8VOj25xqISkAy3uJ0NnWIe7Lk2HYdTK
+         Fi9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686129863; x=1688721863;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MHiJavEgLpvPSoAWMa5+afasJi2XtguSQGZabSBoZy4=;
+        b=IYl3+nd7sORihBx6HD43craLilb08hBFnRmwwxyyTeC2C981yuMFLbMfKzSM2LduWP
+         v9/bNp1SeuqHYTXTpM0lyCJ2Mr+qzBXYDYcD3p0+y9a2I2bTb8Qb8edzMHMf9ONbKcBQ
+         n/K8R05RPsKVAsMMEgS8KX85VStQ7Z7vTZ6+AjXcOiNwYwAjhOLblbtMqP0qu+sRxT51
+         ISuPUebk7k7JA+wxLBwXf5CiY68CJSbQuRw7Oy07AEsq3E2PPiipQVqb2I3erla8Xaw0
+         jbwuUJWlLP0UOZbDmuFAcIEGg+TCE78O36rore0FR1EV3rs1X7HiyyrQ0YKx/CoStohe
+         PKww==
+X-Gm-Message-State: AC+VfDzg6Xxk5hnUmSTZ5QTP4Gf6a1g5zZqRQyJra2GapytY3itXTQ0Z
+        D2LIazY+RVl+luxTpkNoSR6eQA==
+X-Google-Smtp-Source: ACHHUZ5O4Fpz4/8sz3Ma22BHJaCCEsF27TTTWpL4mIJyJoYmHDyN4aF1OIDyfDZ+7yNgQpnTvLdZzw==
+X-Received: by 2002:a5d:5341:0:b0:30e:1fc4:d0c9 with SMTP id t1-20020a5d5341000000b0030e1fc4d0c9mr3726783wrv.9.1686129863290;
+        Wed, 07 Jun 2023 02:24:23 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:d8fb:84d9:d402:6b22? ([2a05:6e02:1041:c10:d8fb:84d9:d402:6b22])
+        by smtp.googlemail.com with ESMTPSA id y13-20020adfd08d000000b003063db8f45bsm14852094wrh.23.2023.06.07.02.24.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Jun 2023 02:24:22 -0700 (PDT)
+Message-ID: <f26ac9a9-60af-a0fe-fccc-25bcd306f5a1@linaro.org>
+Date:   Wed, 7 Jun 2023 11:24:21 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 1/1] thermal: sysfs: avoid actual readings from sysfs
+Content-Language: en-US
+To:     Eduardo Valentin <evalenti@kernel.org>, eduval@amazon.com,
+        rafael@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>
+References: <20230607003721.834038-1-evalenti@kernel.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20230607003721.834038-1-evalenti@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Compiling nolibc for rv32 got such errors:
 
-    In file included from nolibc/sysroot/riscv/include/nolibc.h:99,
-                     from nolibc/sysroot/riscv/include/errno.h:26,
-                     from nolibc/sysroot/riscv/include/stdio.h:14,
-                     from tools/testing/selftests/nolibc/nolibc-test.c:12:
-    nolibc/sysroot/riscv/include/sys.h:946:2: error: #error Neither __NR_ppoll nor __NR_poll defined, cannot implement sys_poll()
-      946 | #error Neither __NR_ppoll nor __NR_poll defined, cannot implement sys_poll()
-          |  ^~~~~
-    nolibc/sysroot/riscv/include/sys.h:1062:2: error: #error None of __NR_select, __NR_pselect6, nor __NR__newselect defined, cannot implement sys_select()
-     1062 | #error None of __NR_select, __NR_pselect6, nor __NR__newselect defined, cannot implement sys_select()
+Hi Eduardo,
 
-If a syscall is not supported by a target platform, 'return -ENOSYS' is
-better than '#error', which lets the other syscalls work as-is and
-allows developers to fix up the test failures reported by nolibc-test
-one by one later.
+On 07/06/2023 02:37, Eduardo Valentin wrote:
+> From: Eduardo Valentin <eduval@amazon.com>
+> 
+> As the thermal zone caches the current and last temperature
+> value, the sysfs interface can use that instead of
+> forcing an actual update or read from the device.
 
-This converts all of the '#error' to 'return -ENOSYS', so, all of the
-'#error' failures are fixed.
+If the read fails, userspace can handle that by using the previous 
+value. Do we really want to hide driver dysfunctions?
 
-Suggested-by: Arnd Bergmann <arnd@arndb.de>
-Link: https://lore.kernel.org/linux-riscv/5e7d2adf-e96f-41ca-a4c6-5c87a25d4c9c@app.fastmail.com/
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
----
- tools/include/nolibc/sys.h | 26 +++++++++++++-------------
- 1 file changed, 13 insertions(+), 13 deletions(-)
+> This way, if multiple userspace requests are coming
+> in, we avoid storming the device with multiple reads
+> and potentially clogging the timing requirement
+> for the governors.
 
-diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-index 856249a11890..78c86f124335 100644
---- a/tools/include/nolibc/sys.h
-+++ b/tools/include/nolibc/sys.h
-@@ -124,7 +124,7 @@ int sys_chmod(const char *path, mode_t mode)
- #elif defined(__NR_chmod)
- 	return my_syscall2(__NR_chmod, path, mode);
- #else
--#error Neither __NR_fchmodat nor __NR_chmod defined, cannot implement sys_chmod()
-+	return -ENOSYS;
- #endif
- }
- 
-@@ -153,7 +153,7 @@ int sys_chown(const char *path, uid_t owner, gid_t group)
- #elif defined(__NR_chown)
- 	return my_syscall3(__NR_chown, path, owner, group);
- #else
--#error Neither __NR_fchownat nor __NR_chown defined, cannot implement sys_chown()
-+	return -ENOSYS;
- #endif
- }
- 
-@@ -251,7 +251,7 @@ int sys_dup2(int old, int new)
- #elif defined(__NR_dup2)
- 	return my_syscall2(__NR_dup2, old, new);
- #else
--#error Neither __NR_dup3 nor __NR_dup2 defined, cannot implement sys_dup2()
-+	return -ENOSYS;
- #endif
- }
- 
-@@ -351,7 +351,7 @@ pid_t sys_fork(void)
- #elif defined(__NR_fork)
- 	return my_syscall0(__NR_fork);
- #else
--#error Neither __NR_clone nor __NR_fork defined, cannot implement sys_fork()
-+	return -ENOSYS;
- #endif
- }
- #endif
-@@ -648,7 +648,7 @@ int sys_link(const char *old, const char *new)
- #elif defined(__NR_link)
- 	return my_syscall2(__NR_link, old, new);
- #else
--#error Neither __NR_linkat nor __NR_link defined, cannot implement sys_link()
-+	return -ENOSYS;
- #endif
- }
- 
-@@ -700,7 +700,7 @@ int sys_mkdir(const char *path, mode_t mode)
- #elif defined(__NR_mkdir)
- 	return my_syscall2(__NR_mkdir, path, mode);
- #else
--#error Neither __NR_mkdirat nor __NR_mkdir defined, cannot implement sys_mkdir()
-+	return -ENOSYS;
- #endif
- }
- 
-@@ -729,7 +729,7 @@ long sys_mknod(const char *path, mode_t mode, dev_t dev)
- #elif defined(__NR_mknod)
- 	return my_syscall3(__NR_mknod, path, mode, dev);
- #else
--#error Neither __NR_mknodat nor __NR_mknod defined, cannot implement sys_mknod()
-+	return -ENOSYS;
- #endif
- }
- 
-@@ -848,7 +848,7 @@ int sys_open(const char *path, int flags, mode_t mode)
- #elif defined(__NR_open)
- 	return my_syscall3(__NR_open, path, flags, mode);
- #else
--#error Neither __NR_openat nor __NR_open defined, cannot implement sys_open()
-+	return -ENOSYS;
- #endif
- }
- 
-@@ -943,7 +943,7 @@ int sys_poll(struct pollfd *fds, int nfds, int timeout)
- #elif defined(__NR_poll)
- 	return my_syscall3(__NR_poll, fds, nfds, timeout);
- #else
--#error Neither __NR_ppoll nor __NR_poll defined, cannot implement sys_poll()
-+	return -ENOSYS;
- #endif
- }
- 
-@@ -1059,7 +1059,7 @@ int sys_select(int nfds, fd_set *rfds, fd_set *wfds, fd_set *efds, struct timeva
- #endif
- 	return my_syscall5(__NR__newselect, nfds, rfds, wfds, efds, timeout);
- #else
--#error None of __NR_select, __NR_pselect6, nor __NR__newselect defined, cannot implement sys_select()
-+	return -ENOSYS;
- #endif
- }
- 
-@@ -1196,7 +1196,7 @@ int sys_stat(const char *path, struct stat *buf)
- #elif defined(__NR_stat)
- 	ret = my_syscall2(__NR_stat, path, &stat);
- #else
--#error Neither __NR_newfstatat nor __NR_stat defined, cannot implement sys_stat()
-+	return -ENOSYS;
- #endif
- 	buf->st_dev          = stat.st_dev;
- 	buf->st_ino          = stat.st_ino;
-@@ -1243,7 +1243,7 @@ int sys_symlink(const char *old, const char *new)
- #elif defined(__NR_symlink)
- 	return my_syscall2(__NR_symlink, old, new);
- #else
--#error Neither __NR_symlinkat nor __NR_symlink defined, cannot implement sys_symlink()
-+	return -ENOSYS;
- #endif
- }
- 
-@@ -1312,7 +1312,7 @@ int sys_unlink(const char *path)
- #elif defined(__NR_unlink)
- 	return my_syscall1(__NR_unlink, path);
- #else
--#error Neither __NR_unlinkat nor __NR_unlink defined, cannot implement sys_unlink()
-+	return -ENOSYS;
- #endif
- }
- 
+
+Can you elaborate 'the timing requirement for the governors' ? I'm 
+missing the point
+
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org> (supporter:THERMAL)
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org> (supporter:THERMAL)
+> Cc: Amit Kucheria <amitk@kernel.org> (reviewer:THERMAL)
+> Cc: Zhang Rui <rui.zhang@intel.com> (reviewer:THERMAL)
+> Cc: linux-pm@vger.kernel.org (open list:THERMAL)
+> Cc: linux-kernel@vger.kernel.org (open list)
+> 
+> Signed-off-by: Eduardo Valentin <eduval@amazon.com>
+> ---
+>   drivers/thermal/thermal_sysfs.c | 21 ++++++++++++++++-----
+>   1 file changed, 16 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
+> index b6daea2398da..a240c58d9e08 100644
+> --- a/drivers/thermal/thermal_sysfs.c
+> +++ b/drivers/thermal/thermal_sysfs.c
+> @@ -35,12 +35,23 @@ static ssize_t
+>   temp_show(struct device *dev, struct device_attribute *attr, char *buf)
+>   {
+>   	struct thermal_zone_device *tz = to_thermal_zone(dev);
+> -	int temperature, ret;
+> -
+> -	ret = thermal_zone_get_temp(tz, &temperature);
+> +	int temperature;
+>   
+> -	if (ret)
+> -		return ret;
+> +	/*
+> +	 * don't force new update from external reads
+> +	 * This way we avoid messing up with time constraints.
+> +	 */
+> +	if (tz->mode == THERMAL_DEVICE_DISABLED) {
+> +		int r;
+> +
+> +		r = thermal_zone_get_temp(tz, &temperature); /* holds tz->lock*/
+> +		if (r)
+> +			return r;
+> +	} else {
+> +		mutex_lock(&tz->lock);
+> +		temperature = tz->temperature;
+> +		mutex_unlock(&tz->lock);
+> +	}
+
+No please, we are pushing since several weeks a lot of changes to 
+encapsulate the thermal zone device structure and prevent external core 
+components to use the internals directly. Even if we can consider the 
+thermal_sysfs as part of the core code, that changes is not sysfs related.
+
+>   	return sprintf(buf, "%d\n", temperature);
+>   }
+
 -- 
-2.25.1
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
