@@ -2,80 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 192BA7258CD
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 10:56:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E31337258CC
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 10:55:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239528AbjFGIzz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 04:55:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54148 "EHLO
+        id S239463AbjFGIzt convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 7 Jun 2023 04:55:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239799AbjFGIzL (ORCPT
+        with ESMTP id S239793AbjFGIzK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 04:55:11 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7702116;
-        Wed,  7 Jun 2023 01:54:30 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3577b0GB023427;
-        Wed, 7 Jun 2023 08:53:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=vjjobwSIhyyY1l4vypVcI64T6a5jz7K/HSGD8skLmJ0=;
- b=Ui56vNBV3pXCqiNaoRauTKLT0anLbsyXmmzFybj7ZjzrlWXIa0CT8bIsG8NnCribDrmG
- pw+D4I3d1CzbTz3SwN+aU02nimjgMa/yVfxl9C+fWh8BqefzPd7DjvG/RYCq3a2N0cSJ
- E/OepKROYMzVky2BLkJ6C14pIqQT0ljVt9xNCC+Z8USq2XKjIC4UwJ4MokV659j2TrjF
- sG2nkaNKSb6EcmLfN4O9WVCNIK3mC2IIs6QJUFa+dXt77+wGijKaIZtNcm/NL8vSDASq
- O6NAoPE5LfUgUqbgtT1bBP94haCCfg2rZDda1aFTQqXOOFqjYVFwkOIzjjinCOGS1esB 1Q== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r2a719ctr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 07 Jun 2023 08:53:43 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3578rgZ3023332
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 7 Jun 2023 08:53:42 GMT
-Received: from varda-linux.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Wed, 7 Jun 2023 01:53:36 -0700
-From:   Varadarajan Narayanan <quic_varada@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <amitk@kernel.org>,
-        <thara.gopinath@gmail.com>, <rafael@kernel.org>,
-        <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Varadarajan Narayanan <quic_varada@quicinc.com>,
-        Praveenkumar I <quic_ipkumar@quicinc.com>
-Subject: [PATCH v6 3/3] arm64: dts: qcom: ipq9574: add thermal zone nodes
-Date:   Wed, 7 Jun 2023 14:23:10 +0530
-Message-ID: <404c88e9746b3f25585aef078861ec2c273232d5.1686125196.git.quic_varada@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1686125196.git.quic_varada@quicinc.com>
-References: <cover.1686125196.git.quic_varada@quicinc.com>
+        Wed, 7 Jun 2023 04:55:10 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F6C32119
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 01:54:28 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1q6ovb-0007f2-IU; Wed, 07 Jun 2023 10:54:03 +0200
+Message-ID: <e0eeae3b35e8efac7c577ca3159abcf7f43d5082.camel@pengutronix.de>
+Subject: Re: [PATCH 3/9] drm/verisilicon: Add basic drm driver
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Keith Zhao <keith.zhao@starfivetech.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Shengyang Chen <shengyang.chen@starfivetech.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jagan Teki <jagan@edgeble.ai>,
+        Rob Herring <robh+dt@kernel.org>,
+        Chris Morgan <macromorgan@hotmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Changhuang Liang <changhuang.liang@starfivetech.com>,
+        Jack Zhu <jack.zhu@starfivetech.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Shawn Guo <shawnguo@kernel.org>, christian.koenig@amd.com
+Date:   Wed, 07 Jun 2023 10:53:57 +0200
+In-Reply-To: <20230602074043.33872-4-keith.zhao@starfivetech.com>
+References: <20230602074043.33872-1-keith.zhao@starfivetech.com>
+         <20230602074043.33872-4-keith.zhao@starfivetech.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: _gv8qP5bIaIHv-ZcbiPlhDr3xg8n4m4E
-X-Proofpoint-ORIG-GUID: _gv8qP5bIaIHv-ZcbiPlhDr3xg8n4m4E
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-07_06,2023-06-06_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
- adultscore=0 lowpriorityscore=0 bulkscore=0 clxscore=1015 mlxlogscore=999
- phishscore=0 suspectscore=0 priorityscore=1501 spamscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
- definitions=main-2306070072
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,242 +64,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds thermal zone nodes for the various
-sensors present in IPQ9574
+Hi Keith,
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Co-developed-by: Praveenkumar I <quic_ipkumar@quicinc.com>
-Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
-Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
----
-[v2]:
-	Rename clusterX nodes as cpussX nodes
+Am Freitag, dem 02.06.2023 um 15:40 +0800 schrieb Keith Zhao:
+> Add a basic platform driver of the DRM driver for JH7110 SoC.
+> 
+> Signed-off-by: Keith Zhao <keith.zhao@starfivetech.com>
+> ---
+>  MAINTAINERS                          |   2 +
+>  drivers/gpu/drm/Kconfig              |   2 +
+>  drivers/gpu/drm/Makefile             |   1 +
+>  drivers/gpu/drm/verisilicon/Kconfig  |  13 ++
+>  drivers/gpu/drm/verisilicon/Makefile |   6 +
+>  drivers/gpu/drm/verisilicon/vs_drv.c | 284 +++++++++++++++++++++++++++
+>  drivers/gpu/drm/verisilicon/vs_drv.h |  48 +++++
+>  include/uapi/drm/drm_fourcc.h        |  83 ++++++++
+>  include/uapi/drm/vs_drm.h            |  50 +++++
+>  9 files changed, 489 insertions(+)
+>  create mode 100644 drivers/gpu/drm/verisilicon/Kconfig
+>  create mode 100644 drivers/gpu/drm/verisilicon/Makefile
+>  create mode 100644 drivers/gpu/drm/verisilicon/vs_drv.c
+>  create mode 100644 drivers/gpu/drm/verisilicon/vs_drv.h
+>  create mode 100644 include/uapi/drm/vs_drm.h
+> 
+> 
+> [...]
+> +#endif /* __VS_DRV_H__ */
+> diff --git a/include/uapi/drm/drm_fourcc.h b/include/uapi/drm/drm_fourcc.h
+> index de703c6be969..af4fb50f9207 100644
+> --- a/include/uapi/drm/drm_fourcc.h
+> +++ b/include/uapi/drm/drm_fourcc.h
+> @@ -419,6 +419,7 @@ extern "C" {
+>  #define DRM_FORMAT_MOD_VENDOR_ARM     0x08
+>  #define DRM_FORMAT_MOD_VENDOR_ALLWINNER 0x09
+>  #define DRM_FORMAT_MOD_VENDOR_AMLOGIC 0x0a
+> +#define DRM_FORMAT_MOD_VENDOR_VS      0x0b
+>  
+>  /* add more to the end as needed */
+>  
+> @@ -1519,6 +1520,88 @@ drm_fourcc_canonicalize_nvidia_format_mod(__u64 modifier)
+>  #define AMD_FMT_MOD_CLEAR(field) \
+>  	(~((__u64)AMD_FMT_MOD_##field##_MASK << AMD_FMT_MOD_##field##_SHIFT))
+>  
+> +#define DRM_FORMAT_MOD_VS_TYPE_NORMAL        0x00
+> +#define DRM_FORMAT_MOD_VS_TYPE_COMPRESSED    0x01
+> +#define DRM_FORMAT_MOD_VS_TYPE_CUSTOM_10BIT  0x02
+> +#define DRM_FORMAT_MOD_VS_TYPE_MASK     ((__u64)0x3 << 54)
+> +
+> +#define fourcc_mod_vs_code(type, val) \
+> +	fourcc_mod_code(VS, ((((__u64)type) << 54) | (val)))
+> +
+> +#define DRM_FORMAT_MOD_VS_DEC_TILE_MODE_MASK    0x3F
+> +#define DRM_FORMAT_MOD_VS_DEC_TILE_8X8_XMAJOR   0x00
+> +#define DRM_FORMAT_MOD_VS_DEC_TILE_8X8_YMAJOR   0x01
+> +#define DRM_FORMAT_MOD_VS_DEC_TILE_16X4     0x02
+> +#define DRM_FORMAT_MOD_VS_DEC_TILE_8X4      0x03
+> +#define DRM_FORMAT_MOD_VS_DEC_TILE_4X8      0x04
+> +#define DRM_FORMAT_MOD_VS_DEC_RASTER_16X4   0x06
+> +#define DRM_FORMAT_MOD_VS_DEC_TILE_64X4     0x07
+> +#define DRM_FORMAT_MOD_VS_DEC_TILE_32X4     0x08
+> +#define DRM_FORMAT_MOD_VS_DEC_RASTER_256X1  0x09
+> +#define DRM_FORMAT_MOD_VS_DEC_RASTER_128X1  0x0A
+> +#define DRM_FORMAT_MOD_VS_DEC_RASTER_64X4   0x0B
+> +#define DRM_FORMAT_MOD_VS_DEC_RASTER_256X2  0x0C
+> +#define DRM_FORMAT_MOD_VS_DEC_RASTER_128X2  0x0D
+> +#define DRM_FORMAT_MOD_VS_DEC_RASTER_128X4  0x0E
+> +#define DRM_FORMAT_MOD_VS_DEC_RASTER_64X1   0x0F
+> +#define DRM_FORMAT_MOD_VS_DEC_TILE_16X8     0x10
+> +#define DRM_FORMAT_MOD_VS_DEC_TILE_8X16     0x11
+> +#define DRM_FORMAT_MOD_VS_DEC_RASTER_512X1  0x12
+> +#define DRM_FORMAT_MOD_VS_DEC_RASTER_32X4   0x13
+> +#define DRM_FORMAT_MOD_VS_DEC_RASTER_64X2   0x14
+> +#define DRM_FORMAT_MOD_VS_DEC_RASTER_32X2   0x15
+> +#define DRM_FORMAT_MOD_VS_DEC_RASTER_32X1   0x16
+> +#define DRM_FORMAT_MOD_VS_DEC_RASTER_16X1   0x17
+> +#define DRM_FORMAT_MOD_VS_DEC_TILE_128X4    0x18
+> +#define DRM_FORMAT_MOD_VS_DEC_TILE_256X4    0x19
+> +#define DRM_FORMAT_MOD_VS_DEC_TILE_512X4    0x1A
+> +#define DRM_FORMAT_MOD_VS_DEC_TILE_16X16    0x1B
+> +#define DRM_FORMAT_MOD_VS_DEC_TILE_32X16    0x1C
+> +#define DRM_FORMAT_MOD_VS_DEC_TILE_64X16    0x1D
+> +#define DRM_FORMAT_MOD_VS_DEC_TILE_128X8    0x1E
+> +#define DRM_FORMAT_MOD_VS_DEC_TILE_8X4_S    0x1F
+> +#define DRM_FORMAT_MOD_VS_DEC_TILE_16X4_S   0x20
+> +#define DRM_FORMAT_MOD_VS_DEC_TILE_32X4_S   0x21
+> +#define DRM_FORMAT_MOD_VS_DEC_TILE_16X4_LSB 0x22
+> +#define DRM_FORMAT_MOD_VS_DEC_TILE_32X4_LSB 0x23
+> +#define DRM_FORMAT_MOD_VS_DEC_TILE_32X8     0x24
+> +
+> +#define DRM_FORMAT_MOD_VS_DEC_ALIGN_32      (0x01 << 6)
+> +#define DRM_FORMAT_MOD_VS_DEC_ALIGN_64      (0x01 << 7)
+> +
+> +#define fourcc_mod_vs_dec_code(tile, align) \
+> +	fourcc_mod_vs_code(DRM_FORMAT_MOD_VS_TYPE_COMPRESSED, \
+> +				((tile) | (align)))
+> +
+> +#define DRM_FORMAT_MOD_VS_NORM_MODE_MASK        0x1F
+> +#define DRM_FORMAT_MOD_VS_LINEAR                0x00
+> +#define DRM_FORMAT_MOD_VS_TILED4x4              0x01
+> +#define DRM_FORMAT_MOD_VS_SUPER_TILED_XMAJOR    0x02
+> +#define DRM_FORMAT_MOD_VS_SUPER_TILED_YMAJOR    0x03
+> +#define DRM_FORMAT_MOD_VS_TILE_8X8              0x04
+> +#define DRM_FORMAT_MOD_VS_TILE_MODE1            0x05
+> +#define DRM_FORMAT_MOD_VS_TILE_MODE2            0x06
+> +#define DRM_FORMAT_MOD_VS_TILE_8X4              0x07
+> +#define DRM_FORMAT_MOD_VS_TILE_MODE4            0x08
+> +#define DRM_FORMAT_MOD_VS_TILE_MODE5            0x09
+> +#define DRM_FORMAT_MOD_VS_TILE_MODE6            0x0A
+> +#define DRM_FORMAT_MOD_VS_SUPER_TILED_XMAJOR_8X4    0x0B
+> +#define DRM_FORMAT_MOD_VS_SUPER_TILED_YMAJOR_4X8    0x0C
+> +#define DRM_FORMAT_MOD_VS_TILE_Y                0x0D
+> +#define DRM_FORMAT_MOD_VS_TILE_128X1            0x0F
+> +#define DRM_FORMAT_MOD_VS_TILE_256X1            0x10
+> +#define DRM_FORMAT_MOD_VS_TILE_32X1             0x11
+> +#define DRM_FORMAT_MOD_VS_TILE_64X1             0x12
+> +#define DRM_FORMAT_MOD_VS_TILE_MODE4X4          0x15
+> +
+> +#define fourcc_mod_vs_norm_code(tile) \
+> +	fourcc_mod_vs_code(DRM_FORMAT_MOD_VS_TYPE_NORMAL, \
+> +				(tile))
+> +
+> +#define fourcc_mod_vs_custom_code(tile) \
+> +	fourcc_mod_vs_code(DRM_FORMAT_MOD_VS_TYPE_CUSTOM_10BIT, \
+> +				(tile))
+> +
 
-[v1]:
-	Fix node names
----
- arch/arm64/boot/dts/qcom/ipq9574.dtsi | 208 ++++++++++++++++++++++++++++++++++
- 1 file changed, 208 insertions(+)
+You are opening a new namespace for what is effectively the VIVANTE
+tiling. While your list seems much more exhaustive than the (reverse
+engineered) list provided under the VIVANTE namespace, this is still
+unacceptable as it adds new aliases for existing modifiers.
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-index a436bf2..c17722b 100644
---- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-@@ -592,6 +592,214 @@
- 		};
- 	};
- 
-+	thermal-zones {
-+		nss-top-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 3>;
-+
-+			trips {
-+				nss-top-critical {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		ubi-0-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 4>;
-+
-+			trips {
-+				ubi_0-critical {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		ubi-1-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 5>;
-+
-+			trips {
-+				ubi_1-critical {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		ubi-2-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 6>;
-+
-+			trips {
-+				ubi_2-critical {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		ubi-3-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 7>;
-+
-+			trips {
-+				ubi_3-critical {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		cpuss0-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 8>;
-+
-+			trips {
-+				cpu-critical {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		cpuss1-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 9>;
-+
-+			trips {
-+				cpu-critical {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		cpu0-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 10>;
-+
-+			trips {
-+				cpu-critical {
-+					temperature = <120000>;
-+					hysteresis = <10000>;
-+					type = "critical";
-+				};
-+
-+				cpu-passive {
-+					temperature = <110000>;
-+					hysteresis = <1000>;
-+					type = "passive";
-+				};
-+			};
-+		};
-+
-+		cpu1-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 11>;
-+
-+			trips {
-+				cpu-critical {
-+					temperature = <120000>;
-+					hysteresis = <10000>;
-+					type = "critical";
-+				};
-+
-+				cpu-passive {
-+					temperature = <110000>;
-+					hysteresis = <1000>;
-+					type = "passive";
-+				};
-+			};
-+		};
-+
-+		cpu2-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 12>;
-+
-+			trips {
-+				cpu-critical {
-+					temperature = <120000>;
-+					hysteresis = <10000>;
-+					type = "critical";
-+				};
-+
-+				cpu-passive {
-+					temperature = <110000>;
-+					hysteresis = <1000>;
-+					type = "passive";
-+				};
-+			};
-+		};
-+
-+		cpu3-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 13>;
-+
-+			trips {
-+				cpu-critical {
-+					temperature = <120000>;
-+					hysteresis = <10000>;
-+					type = "critical";
-+				};
-+
-+				cpu-passive {
-+					temperature = <110000>;
-+					hysteresis = <1000>;
-+					type = "passive";
-+				};
-+			};
-+		};
-+
-+		wcss-phyb-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 14>;
-+
-+			trips {
-+				wcss_phyb-critical {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		top-glue-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 15>;
-+
-+			trips {
-+				top_glue-critical {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+	};
-+
- 	timer {
- 		compatible = "arm,armv8-timer";
- 		interrupts = <GIC_PPI 2 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
--- 
-2.7.4
+Also any modifier additions should be in a separate patch and not
+buried in another change.
 
+Regards,
+Lucas
