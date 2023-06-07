@@ -2,47 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FE12725A2B
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 11:23:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E92E725A35
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 11:24:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239913AbjFGJXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 05:23:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45144 "EHLO
+        id S233979AbjFGJYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 05:24:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234349AbjFGJX3 (ORCPT
+        with ESMTP id S234349AbjFGJYN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 05:23:29 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8C911BD4;
-        Wed,  7 Jun 2023 02:23:15 -0700 (PDT)
-X-QQ-mid: bizesmtp76t1686129784tl9oaodx
-Received: from linux-lab-host.localdomain ( [61.141.77.49])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 07 Jun 2023 17:23:03 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: XBN7tc9DADIFM7iJZj/3G7Db0AryQR0jjbOpzlxnxKCoLoFzk5a9wv39TaYWu
-        ORYSoDohQWzfiO2HMD9c3nIiwV7hU7SvXXsgjVVEgIKzzWzlIEj+SIIOgeMWIhK8gieeJqj
-        El0KIX7ZCs4DEV4VU8uoQg4sGFiOSRnDWIX15ZHeVMSaA2vNR03IXhOavencDcqiA/FXcRV
-        gSN5OkZFthKYp+2Y3EkQGbcFAJt+uj3xYqmlNOiFWm1Qge73AXDVlTBMS30VJc19M0esJCS
-        blGSJzEItp1FH42FFapLAV6sUEFBgVPR+rZOP/9/So1cNojn7EJgk6dD5r88UNv2WYjL+cy
-        3ufanl8BnMM1Ej2IbElHh/5IxP7Buw/5pA32TbbCeFJVevY0TKat15DKUdsL7LqipDUbRwJ
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 10563508675985585977
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de, w@1wt.eu
-Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: [PATCH v4 0/3] nolibc: add part2 of support for rv32
-Date:   Wed,  7 Jun 2023 17:23:01 +0800
-Message-Id: <cover.1686128703.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
+        Wed, 7 Jun 2023 05:24:13 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 726491994
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 02:24:07 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-655d1fc8ad8so2157007b3a.1
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 02:24:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686129847; x=1688721847;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QuG7FJt7+/guVeJ8/c8dvfJd5cbH1CGDk8/6AW8Yle8=;
+        b=JVvaPbMqp4LAFR4QpYZzogKYRLoKfxK3tlP4kX9km/P7Amy4CSW20UV7Dtwlf/sFpA
+         +h9sUjqyT0GGma2DBwq5HQ2EHVCMGdBN8opTBjST/w08+sCt9Q3ui4XIpCxgtUxO2kjn
+         qWwzEXy4t+F5S9h0UnfTs3/RLsoYvyZwze+0IrgaP/RSHaSo/j8oZCppu69le3TdUBVW
+         jw8ciSuGRJVnW1J2vSEuvt8i+yGO73LdiGwzmboc/HGv5Bk8X3ZnWIaBOYUyBujZnpfM
+         +zWQIdj3nPBAxVCcO++FtOMThMO589mTvpmbPAvx/l7lQIUrrLsZ5Tv7xbDTePiTnp/y
+         Zq5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686129847; x=1688721847;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QuG7FJt7+/guVeJ8/c8dvfJd5cbH1CGDk8/6AW8Yle8=;
+        b=hTnddIhn0QqCiyB+/0DQL0n5YMbQ+10QKLRLRhVO/Vs0NsAOFg8kDWcv0Wj9KgBGh7
+         VfsXTE7Q22+YP/jX4S3bkNkymdpBthFxQ7THoBJVQj0vmgSYd7CivHKiEHAfMqdu+59B
+         Dst10P/otjRQtmtvzDGxDSh2i3U6Qi4F5HosJkZ48+/efTavWdaLivB3659XwiRTgLzu
+         /U1RswIy9OLylGONGzsiqp5Cg8yD9loGmMwTbZv0QAD+0EZFLruq7Py2Bgs9Pl9LmTp0
+         zIdxOBcN2SRD13hEmlfKZqgX7NboK9Mo781OPrHc/VSGPMxjHRcfslDLfDBiEN+6Pffc
+         9eSw==
+X-Gm-Message-State: AC+VfDw9UzJm7FOpRH+ASSR0Zl53dH5tIAzUbhqe4q6n5TQFvlOCqxha
+        thxNB56kWDE00h0jPzMFBzI9qaeg2nOcxfmVkt4=
+X-Google-Smtp-Source: ACHHUZ6olcbywFiJ8o2+fYH6jVdA9wf81hv7Hxa6DgDi2MZmsm2OOwaCjynLV2r5U8nYY0yDoNYbtQCmV7yFbYBx+6U=
+X-Received: by 2002:a05:6a20:a110:b0:10b:4a5d:87e with SMTP id
+ q16-20020a056a20a11000b0010b4a5d087emr762824pzk.53.1686129846787; Wed, 07 Jun
+ 2023 02:24:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20230606145611.704392-1-cerasuolodomenico@gmail.com> <CAJD7tkad3cWs2CkZE2pV4kzNjn+0crmT2YYpSKU9SynQf7S24Q@mail.gmail.com>
+In-Reply-To: <CAJD7tkad3cWs2CkZE2pV4kzNjn+0crmT2YYpSKU9SynQf7S24Q@mail.gmail.com>
+From:   Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+Date:   Wed, 7 Jun 2023 11:23:55 +0200
+Message-ID: <CA+CLi1j-tQ8DJzShmBr_9feaSWJLvteFXZ+bwafP0YK=MDVVuA@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 0/7] mm: zswap: move writeback LRU from zpool to zswap
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     vitaly.wool@konsulko.com, minchan@kernel.org,
+        senozhatsky@chromium.org, linux-mm@kvack.org, ddstreet@ieee.org,
+        sjenning@redhat.com, nphamcs@gmail.com, hannes@cmpxchg.org,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,83 +72,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Willy
+On Wed, Jun 7, 2023 at 11:16=E2=80=AFAM Yosry Ahmed <yosryahmed@google.com>=
+ wrote:
+>
+> On Tue, Jun 6, 2023 at 7:56=E2=80=AFAM Domenico Cerasuolo
+> <cerasuolodomenico@gmail.com> wrote:
+> >
+> > This series aims to improve the zswap reclaim mechanism by reorganizing
+> > the LRU management. In the current implementation, the LRU is maintaine=
+d
+> > within each zpool driver, resulting in duplicated code across the three
+> > drivers. The proposed change consists in moving the LRU management from
+> > the individual implementations up to the zswap layer.
+> >
+> > The primary objective of this refactoring effort is to simplify the
+> > codebase. By unifying the reclaim loop and consolidating LRU handling
+> > within zswap, we can eliminate redundant code and improve
+> > maintainability. Additionally, this change enables the reclamation of
+> > stored pages in their actual LRU order. Presently, the zpool drivers
+> > link backing pages in an LRU, causing compressed pages with different
+> > LRU positions to be written back simultaneously.
+> >
+> > The series consists of several patches. The first patch implements the
+> > LRU and the reclaim loop in zswap, but it is not used yet because all
+> > three driver implementations are marked as zpool_evictable.
+> > The following three commits modify each zpool driver to be not
+> > zpool_evictable, allowing the use of the reclaim loop in zswap.
+> > As the drivers removed their shrink functions, the zpool interface is
+> > then trimmed by removing zpool_evictable, zpool_ops, and zpool_shrink.
+> > Finally, the code in zswap is further cleaned up by simplifying the
+> > writeback function and removing the now unnecessary zswap_header.
+> >
+> > Based on mm-stable + commit 399ab221f3ff
+> > ("mm: zswap: shrink until can accept") currently in mm-unstable.
+>
+> I tested this + commit fe1d1f7d0fb5 ("mm: zswap: support exclusive
+> loads") currently in mm-unstable, using zsmalloc and
+> CONFIG_ZSWAP_EXCLUSIVE_LOADS=3Dy. I only ran basic zswap tests with
+> manual writeback induction and made sure everything is sane. I
+> obviously hope you did more involved testing :)
+>
+> The only problem I came across is the conflict with fe1d1f7d0fb5, and
+> I suggested the fix in patch 1. With the fix, everything seems
+> correct.
+>
+> So I guess, FWIW for all the patches except 2 & 3 (for zbud and z3fold):
+> Tested-by: Yosry Ahmed <yosryahmed@google.com>
 
-This is the v4 part2 of support for rv32 (v3 [1]), it applied the
-suggestions from Thomas, Arnd [2] and you [3]. now, the rv32 compile
-support almost aligned with x86 except the extra KARCH to make kernel
-happy, thanks very much for your nice review!
+Thanks a lot for the effort! I'll rebase and test it again before submittin=
+g the
+new version.
 
-Since the 'override' method mentioned in [4] split the whole Makefile
-context to two parts, it may make the code not that easy to maintain,
-so, this patchset goes back to the KARCH (suggested from Willy, before,
-I used something like _ARCH) passing method, as suggested by Willy, we
-also aligned the KARCH assignment with the other variables.
-
-Changes from v3 -> v4:
-
-* No new changes in the first two except a new Reviewed-by line from Arnd
-
-* selftests/nolibc: riscv: customize makefile for rv32
-
-  Do it like the other architectures, especially like x86.
-
-  The difference from x86 is, the top-level kernel Makefile doesn't
-  accept riscv32 and riscv64, it only accept riscv, to make kernel happy,
-  a KARCH variable is added for riscv32 and riscv64, and then passed to
-  kernel with ARCH=$(KARCH).
-
-  Since tools/include/nolibc/Makefile shares arch-riscv.h between riscv32
-  and riscv64 and there is a headers_standalone target who called kernel
-  headers and headers_install, so, pass ARCH=$(KARCH) to it too.
-
-Did compile test for aarch64, rv32 and rv64, include run-user and run.
-
-Note, this is required with the default config from the
-20230606-nolibc-rv32+stkp7a branch of [5]:
-
-    diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
-    index ce02bb09651b..72bd8fe0cad6 100644
-    --- a/kernel/rcu/tasks.h
-    +++ b/kernel/rcu/tasks.h
-    @@ -1934,11 +1934,13 @@ void show_rcu_tasks_gp_kthreads(void)
-     }
-     #endif /* #ifndef CONFIG_TINY_RCU */
-     
-    +#ifdef CONFIG_TASKS_RCU
-     struct task_struct *get_rcu_tasks_gp_kthread(void)
-     {
-            return rcu_tasks.kthread_ptr;
-     }
-     EXPORT_SYMBOL_GPL(get_rcu_tasks_gp_kthread);
-    +#endif
-     
-     #ifdef CONFIG_PROVE_RCU
-     struct rcu_tasks_test_desc {
-
-
-Best regards,
-Zhangjin
-
----
-
-[1]: https://lore.kernel.org/linux-riscv/cover.1685780412.git.falcon@tinylab.org/
-[2]: https://lore.kernel.org/linux-riscv/d1c83340-af4c-4780-a101-b9d22b47379c@app.fastmail.com/
-[3]: https://lore.kernel.org/lkml/ZIAywHvr6UB1J4of@1wt.eu/
-[4]: https://lore.kernel.org/lkml/20230607063314.671429-1-falcon@tinylab.org/
-[5]: https://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git
-
-
-
-Zhangjin Wu (3):
-  tools/nolibc: fix up #error compile failures with -ENOSYS
-  tools/nolibc: fix up undeclared syscall macros with #ifdef and -ENOSYS
-  selftests/nolibc: riscv: customize makefile for rv32
-
- tools/include/nolibc/sys.h              | 38 ++++++++++++++++---------
- tools/testing/selftests/nolibc/Makefile | 20 +++++++++++--
- 2 files changed, 42 insertions(+), 16 deletions(-)
-
--- 
-2.25.1
-
+>
+> >
+> > V2:
+> > - fixed lru list init/del/del_init (Johannes)
+> > - renamed pool.lock to lru_lock and added lock ordering comment (Yosry)
+> > - trimmed zsmalloc even more (Johannes | Nhat)
+> > - moved ref drop out of writeback function  (Johannes)
+> >
+> > Domenico Cerasuolo (7):
+> >   mm: zswap: add pool shrinking mechanism
+> >   mm: zswap: remove page reclaim logic from zbud
+> >   mm: zswap: remove page reclaim logic from z3fold
+> >   mm: zswap: remove page reclaim logic from zsmalloc
+> >   mm: zswap: remove shrink from zpool interface
+> >   mm: zswap: simplify writeback function
+> >   mm: zswap: remove zswap_header
+> >
+> >  include/linux/zpool.h |  19 +-
+> >  mm/z3fold.c           | 249 +-------------------------
+> >  mm/zbud.c             | 167 +-----------------
+> >  mm/zpool.c            |  48 +----
+> >  mm/zsmalloc.c         | 396 ++----------------------------------------
+> >  mm/zswap.c            | 186 +++++++++++---------
+> >  6 files changed, 130 insertions(+), 935 deletions(-)
+> >
+> > --
+> > 2.34.1
+> >
