@@ -2,61 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20FDA7258CB
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 10:55:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E70C07258C9
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 10:55:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239456AbjFGIzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 04:55:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50976 "EHLO
+        id S239394AbjFGIzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 04:55:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238922AbjFGIyX (ORCPT
+        with ESMTP id S239719AbjFGIzD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 04:54:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E47091BC8
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 01:53:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BD53663C81
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 08:52:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A8CAC4339B
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 08:52:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686127938;
-        bh=y+Vn9zbMc2hWJvwt6pYFCnKNfmsXKCru69Eowq/2vyg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=SH9hTd6Mbau3Gm7dVYVLFLwMQiv/GoLE0ZAvKr9Q/TvDt6zQC8nbigfjSenZSQFXX
-         pWT0daQA/KSxbK7p0Nq8AtbI+VQYDferv3PVPniF+FnD+W0x9oWis4SgJ2R/M6e8SP
-         nMk/DpWZBhi75Fbn0kFMXKa9rsfc2camhx33ENqKIv8Pv7iTNLlmONR88jS0Er6qAY
-         SKL8cgln01o+B3TeT/xIzVkD23FyAadQd4Kl8lHR6N2ssynhHnFxEIyibjWaenT9cL
-         KtA4/zNLsHjbpVAT2CbhD3dcH+4TB79FvRAljxpbVdAUhz/IC7GXokg+Bd0yCLCrW2
-         pL7M9ejtSl2pA==
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-9786c67ec32so295015666b.1
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 01:52:18 -0700 (PDT)
-X-Gm-Message-State: AC+VfDzNpUTs3DUa6lUvJApf/7bKdh4+yCdvv+9jY9rFpzSymZuunvgY
-        XoEH5QscoMIO8Z7WIwc56B8UgDzBdGefRk/gL6g=
-X-Google-Smtp-Source: ACHHUZ5rVX7nMf4mLB7xA+YwfztnsjhwjZ0qYq90zgPX5Rh3+cSvm4YXtdA/T/LZHsWx0XT0KdHMco0LugTGHjSSeFw=
-X-Received: by 2002:a17:907:6e22:b0:953:37eb:7727 with SMTP id
- sd34-20020a1709076e2200b0095337eb7727mr5584515ejc.43.1686127936329; Wed, 07
- Jun 2023 01:52:16 -0700 (PDT)
+        Wed, 7 Jun 2023 04:55:03 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363AF2111;
+        Wed,  7 Jun 2023 01:54:19 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3578dDVk012891;
+        Wed, 7 Jun 2023 08:53:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=goMxTImT6rE+E+h/Km3Yj4js6nWKl/eiPEeoaq5yC8A=;
+ b=AxTMkKVKKDF6LHIjggjrIF2Emb+be5IufT1k4mCvh755mAA+p7qXbUhFA24e7XkqFYMf
+ OAQoDlfCuK+dxWhtNHI6gmHZJ3rj+Ptu8f+uz9DQlD2ZRp6MuXgTHn2mfvCcRHdRkXJv
+ eZLhs2w5e8X7EpE4VTAGhE8lVfpYlqSaIVILBOyPYfwICizDZluAKXTHZihB9vCp4SK9
+ 796Kk0BghXD7vkRXqGt/gqO8+PKLFwFeVWusLoy2Iuwvy2WELxAmxpgOrUF6JK4aG2gB
+ LlL+Mu6WSg9qvyaQQe/ZaFEoNjMRNlYPOqgkmSnagyPg7WnmeJeLySxf2g/0YojpsJrD 3g== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r2a6y9d2d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Jun 2023 08:53:25 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3578rOLv015539
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 7 Jun 2023 08:53:24 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Wed, 7 Jun 2023 01:53:18 -0700
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <amitk@kernel.org>,
+        <thara.gopinath@gmail.com>, <rafael@kernel.org>,
+        <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Varadarajan Narayanan <quic_varada@quicinc.com>
+Subject: [PATCH v6 0/3] Enable IPQ9574 TSENS support
+Date:   Wed, 7 Jun 2023 14:23:07 +0530
+Message-ID: <cover.1686125196.git.quic_varada@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-References: <1685947150-4949-1-git-send-email-yangtiezhu@loongson.cn>
-In-Reply-To: <1685947150-4949-1-git-send-email-yangtiezhu@loongson.cn>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Wed, 7 Jun 2023 16:52:05 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H5CXX+tVdXj8jpYjeprwFihDJw6O6K5t6dRZPH8bWZ94A@mail.gmail.com>
-Message-ID: <CAAhV-H5CXX+tVdXj8jpYjeprwFihDJw6O6K5t6dRZPH8bWZ94A@mail.gmail.com>
-Subject: Re: [PATCH v5 0/6] Add uprobes support for LoongArch
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Jeff Xie <xiehuan09@gmail.com>
-Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 66E8xlCTmn7NBS-NCJa-GsrZrpcdUTw4
+X-Proofpoint-ORIG-GUID: 66E8xlCTmn7NBS-NCJa-GsrZrpcdUTw4
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-07_06,2023-06-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=791 phishscore=0
+ clxscore=1015 suspectscore=0 adultscore=0 spamscore=0 bulkscore=0
+ mlxscore=0 priorityscore=1501 lowpriorityscore=0 malwarescore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306070072
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,68 +79,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Jeff,
+This patch set enables tsens in IPQ9574
 
-I queued this series at
-https://github.com/chenhuacai/linux/commits/loongarch-next, could you
-please test it when you have time? Thanks.
+Depends on
+	https://lore.kernel.org/linux-arm-msm/20230406061314.10916-1-quic_devipriy@quicinc.com/
+[v6]:
+	Remove comments from tsens node in dtsi
+[v5]:
+	Fix make DT_CHECKER_FLAGS=-m dt_binding_check and make dtbs_check errors without removing existing entries
 
-Huacai
+[v4]:
+	Drop the sm6375-tsens and qcm2290-tsens related bindings
+	fix as it is already posted
 
-On Mon, Jun 5, 2023 at 2:39=E2=80=AFPM Tiezhu Yang <yangtiezhu@loongson.cn>=
- wrote:
->
-> v5:
->   -- Rebased on 6.4rc5
->   -- Like arm64, add user_enable_single_step() in arch_uprobe_pre_xol(),
->      add user_disable_single_step() in arch_uprobe_{post,abort}_xol(),
->      suggested by Jeff and Huacai offline
->
-> v4:
->   -- Rebased on 6.4rc1
->   -- Fix problem about "perf probe -x /lib64/libc.so.6 malloc"
->
-> v3:
->   -- Check atomic instructions in insns_not_supported()
->   -- Remove five DIE_* definitions in kdebug.h
->
-> v2:
->   -- Move the functions to inst.c in patch #1
->   -- Pass around union for insns_not_supported(),
->      insns_need_simulation() and arch_simulate_insn()
->
-> v1:
->   -- Split the RFC patch #2 into two patches
->   -- Use larch_insn_gen_break() to generate break insns
->      for kprobes and uprobes
->   -- Pass around instruction word instead of union for
->      insns_not_supported(), insns_need_simulation() and
->      arch_simulate_insn() to avoid type conversion for callers
->   -- Add a simple test case for uprobes in the commit message
->
-> Tiezhu Yang (6):
->   LoongArch: Move three functions from kprobes.c to inst.c
->   LoongArch: Add larch_insn_gen_break() to generate break insns
->   LoongArch: Use larch_insn_gen_break() for kprobes
->   LoongArch: Add uprobes support
->   LoongArch: Check atomic instructions in insns_not_supported()
->   LoongArch: Remove five DIE_* definitions in kdebug.h
->
->  arch/loongarch/Kconfig               |   3 +
->  arch/loongarch/include/asm/inst.h    |  42 ++++++++++
->  arch/loongarch/include/asm/kdebug.h  |   5 --
->  arch/loongarch/include/asm/kprobes.h |   2 +-
->  arch/loongarch/include/asm/uprobes.h |  35 ++++++++
->  arch/loongarch/kernel/Makefile       |   1 +
->  arch/loongarch/kernel/inst.c         |  54 +++++++++++++
->  arch/loongarch/kernel/kprobes.c      |  75 ++++-------------
->  arch/loongarch/kernel/traps.c        |   9 +--
->  arch/loongarch/kernel/uprobes.c      | 152 +++++++++++++++++++++++++++++=
-++++++
->  10 files changed, 306 insertions(+), 72 deletions(-)
->  create mode 100644 arch/loongarch/include/asm/uprobes.h
->  create mode 100644 arch/loongarch/kernel/uprobes.c
->
-> --
-> 2.1.0
->
+	Remove unnecessary changes from previous version
+
+[v3]:
+	Fix make DT_CHECKER_FLAGS=-m dt_binding_check and make dtbs_check errors
+
+[v2]:
+	Drop the driver change (https://lore.kernel.org/lkml/b45d33d38a334aabbd52c83b0d6028af1f4c74c8.1682682753.git.quic_varada@quicinc.com/)
+	since the tsens device is compatible with 8074's tsens
+	and use 8074's compatible itself
+
+	Rename clusterX nodes as cpussX
+
+[v1]:
+	Fix DT node names
+
+[v0]:
+	Initial patch introducing TSENS support
+
+Praveenkumar I (1):
+  dt-bindings: thermal: tsens: Add ipq9574 compatible
+
+Varadarajan Narayanan (2):
+  arm64: dts: qcom: ipq9574: add tsens node
+  arm64: dts: qcom: ipq9574: add thermal zone nodes
+
+ .../devicetree/bindings/thermal/qcom-tsens.yaml    |   6 +
+ arch/arm64/boot/dts/qcom/ipq9574.dtsi              | 218 +++++++++++++++++++++
+ 2 files changed, 224 insertions(+)
+
+-- 
+2.7.4
+
