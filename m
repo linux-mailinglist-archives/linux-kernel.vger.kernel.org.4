@@ -2,212 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 313EC727065
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 23:17:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98CF6727082
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 23:22:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbjFGVRW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 17:17:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44470 "EHLO
+        id S232151AbjFGVWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 17:22:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjFGVRU (ORCPT
+        with ESMTP id S229663AbjFGVWk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 17:17:20 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E127CE2
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 14:17:18 -0700 (PDT)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 357Elc7Q018013;
-        Wed, 7 Jun 2023 21:17:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2023-03-30;
- bh=/X0F23rhj9MoCaTE1mBg65dmcjuAqko5VoE+SGwpAis=;
- b=hhoRm1Ccdml86Q1KHa/ztWgkcadr/NFe2c0A2kzzlNk420Q7IVaIP6PNtLDKi0nnylfc
- +yfidIni5h7xeEWNqio/GS3PhiML5nsxqqBRgLpzWDgEdXDbbwkbNHVldZGCd3BfWsO4
- rRCQGD1rLmCpvKvrZN33vISr1DuZJcppn1+DOk8ihaWI7fg8mMCJfemMAkg4EgqI1OD8
- FCMSspkRoLF294xClWXsUy79KSakpGNKheo5tqItjN+3X3a6lAFnVXboEulzuirtOExa
- oaNdo2A1kZSw6pCCtK1qNm8WQ1Hk5hmjPzwRBa4uR3Bs4dnuGzThljBoTMTVQHdpc0rn 1g== 
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3r2a6uar96-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 07 Jun 2023 21:17:02 +0000
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 357JkJes015658;
-        Wed, 7 Jun 2023 21:17:01 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2100.outbound.protection.outlook.com [104.47.58.100])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3r2a6m9yvs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 07 Jun 2023 21:17:01 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=THyv15sHb3ekLgWCtsGu25Ma2uy+oR0fYNg9E5nc6TXWwBAGezw0tQKjFBujNPNyzaZTrvns7xAGkUiWmtUt/4+lXcLYZKm+++Pt+tUrLO/GkjYYBDEpgy8qWCojC69GeXKeiaov2V+WYTI6om8WAxl0GBlwi346Gcu6eq1oHzf/fmuWtlCS1xraCOLy0NfN2F87F5dxOERKeI+KsV+nAQVGZIZ4I7+3hJW4ad94qjlY4w11Frqdq0Z9BOT2w2SY0yM8tIMcIOP5xNytzCp4IndSg9pplnGTkbxAK4gUd39Jihb+nMUkxeJuIubmvC2y6iP2nN4Mj7ltBgohsaXpDA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/X0F23rhj9MoCaTE1mBg65dmcjuAqko5VoE+SGwpAis=;
- b=CgnaPiTYvY2tMzwHJJvG/va9pIDEWPPJ13cg688pet3vxFU1GBPHSXDlG4QuMr9P7DXyn9XvtfIG2ZxWUnDvK4T+w2JufA2+BF1kpkIHturBqjrVtWqADvW3CqPU+/hrSHiYbY+DRDGnZ+mogiMdIZuHMMNGLQzJiQmpRyFJf+NzMcof6IVQIxc+W5EApergHAjfRsPH+yofnEZSdf0rAB+E6cwr0EC69Nb4bct7m8NoF4DNeU0zboTMCz+lAz57P4C5T2n7lSBLzzS73imzm/nzDMJIU2m9vAeF1ubTFC6dALky4SMSP9rC+p80Kvi2U9+iygVFntv5AtEqpFioEg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/X0F23rhj9MoCaTE1mBg65dmcjuAqko5VoE+SGwpAis=;
- b=a5Z0+vkJN9eHVMRNwjLyxFQ7SiOcu2ZP+d9OI6RKakHYrVB10mFeZbsOWNTN5lkRJ3TUC/DnbF8zsG9NdG4ynor62cVdqS2j7sMUZjEhSazpHGe9QnsLTLolNRi+QbE3fAbtP027TjtBY822jPf0XI5aGUyNy4SdYS3WJJc7hR4=
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
- by PH0PR10MB4806.namprd10.prod.outlook.com (2603:10b6:510:3a::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Wed, 7 Jun
- 2023 21:16:59 +0000
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::4a17:13b0:2876:97f2]) by BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::4a17:13b0:2876:97f2%6]) with mapi id 15.20.6455.030; Wed, 7 Jun 2023
- 21:16:59 +0000
-Date:   Wed, 7 Jun 2023 14:16:55 -0700
-From:   Mike Kravetz <mike.kravetz@oracle.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Gerd Hoffmann <kraxel@redhat.com>,
-        Junxiao Chang <junxiao.chang@intel.com>,
-        kirill.shutemov@linux.intel.com, mhocko@suse.com,
-        jmarchan@redhat.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, muchun.song@linux.dev,
-        Vivek Kasireddy <vivek.kasireddy@intel.com>,
-        Dongwon Kim <dongwon.kim@intel.com>,
-        James Houghton <jthoughton@google.com>,
-        dri-devel@lists.freedesktop.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] mm: fix hugetlb page unmap count balance issue
-Message-ID: <20230607211655.GB4122@monkey>
-References: <20230512072036.1027784-1-junxiao.chang@intel.com>
- <CADrL8HV25JyeaT=peaR7NWhUiaBz8LzpyFosYZ3_0ACt+twU6w@mail.gmail.com>
- <20230512232947.GA3927@monkey>
- <20230515170259.GA3848@monkey>
- <20230516223440.GA30624@monkey>
- <20230607120312.6da5cea7677ec1a3da35b92c@linux-foundation.org>
- <20230607205310.GA4122@monkey>
- <20230607140001.6685b0a058511f125a005da4@linux-foundation.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230607140001.6685b0a058511f125a005da4@linux-foundation.org>
-X-ClientProxiedBy: MW3PR05CA0004.namprd05.prod.outlook.com
- (2603:10b6:303:2b::9) To BY5PR10MB4196.namprd10.prod.outlook.com
- (2603:10b6:a03:20d::23)
+        Wed, 7 Jun 2023 17:22:40 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6484B1BDF
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 14:22:36 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 9701F5FD05;
+        Thu,  8 Jun 2023 00:22:32 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1686172952;
+        bh=2kpvDvXcy/GUjx0LW3DrSZwkIGJ4jEn4ghaSBZUiAic=;
+        h=Message-ID:Date:MIME-Version:Subject:From:To:Content-Type;
+        b=j4hW/iUMium6JbncOhcHrHg59ffsdYCvh27CJ94lveABIQpnfHtL+qqv6U27cekkx
+         SwJC+txiewhKBcXR8IMMzcUjw4a8PQUtx+i2DPCu1gcQ7j0AnyaxEsFL5WCBG2M+y8
+         BeFRAiBIJKH0UCJ1zTHz1CqUg2/sXvqWrtz3aCjHyr/gLuuUuPishFDVpe1g5J/kvQ
+         QZSFBO2jx57ZKSjfW7BkPoecBuPul5W+qWelVO0o9m8Ovbj6QT8w1JaUIvUxmjsZq4
+         x8rE7OK5e2FKT6qjfDPc6LgEVo78aMWl2hww1f04odFPF1CPcXAQF4cpbSXJWKGJiA
+         h2ZKWP4TG1uFw==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Thu,  8 Jun 2023 00:22:30 +0300 (MSK)
+Message-ID: <3a9470ed-d7ad-6cae-0d58-732399590272@sberdevices.ru>
+Date:   Thu, 8 Jun 2023 00:17:35 +0300
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|PH0PR10MB4806:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5c44dafb-e39a-4fd0-4df2-08db679c8786
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qH+vU5JKjrUZvJMWJBYucO2g/0+qYaMZvQJm0lv9azUoLqnptGxa684Rm8oukr/VEc1yM8qqaW6w2IrW4wp3anjZZPyxkbHT7ot+xFirAZlLOdcS8ypDLJrHguu7+wy/kZtOwQ6/fuOeRIN2XypsVIK9piU4bNbHlAsvAuGnkFHMPsKtIxiVol44fEhMiDphy3A/ufyutRKQNpy3uBXiqAPe5In5sh/zLpiIsqHutRfiE9/tg4HrofSSD9NWVrPRPdPpUJz1VJhbqAAbTltB2l64/BOp5sZ/ewxSfl/jrBaihdXild7Q9Ag+8iro0aFskgRaPtUAUq5WL8dsJuvvKL3zMA3rGmxa67Xt+r1O76oHk/gwePB8tkLhCUbC7fIKgWdrmHMEt92XKSadFqM5HFxGfr749td/KShgZS87VDJhVy7EjHs+qk6xoWUh8m/89iR4JqqhzX9RBpEfHUpN35vBEUprt99Fo/++wt7rVlslUw8UtFe5VOLxXCmhyyijV8++6crIE+lEtTrXPDSTqgn9mORhKcCnZZtTNDlOoWdaekVhSO2uwpJcTUzP0wzZ
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(396003)(39860400002)(136003)(376002)(366004)(346002)(451199021)(478600001)(6506007)(33716001)(1076003)(186003)(53546011)(9686003)(6512007)(26005)(54906003)(41300700001)(4326008)(7416002)(66556008)(66476007)(66946007)(2906002)(6916009)(44832011)(38100700002)(8676002)(6486002)(8936002)(316002)(6666004)(33656002)(5660300002)(86362001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Gs0lDhtLX3thdsDT98MgcIEv39wmiPKAyKA32X4PPpA1/Yub+BLcIBK/avIW?=
- =?us-ascii?Q?1Ai3GIAhJA29XyyyWVbO7ryKajPZmnfrtzfAVJtYiC8mltNenNJ65BHfnhDd?=
- =?us-ascii?Q?SLTv5EmrCj/r8C8qh4Rv0UYeFAkylZ07UU4j976X6MKtA+1AHAFtG5bm3X12?=
- =?us-ascii?Q?63cKnWwOBhmjNaMUR6FOouwCp+pVOn7ePqbtBvSjcEWaetlbMrTOnu8LwCOV?=
- =?us-ascii?Q?oVBQggOaDPwJZXx0hra2bL/x7jb6Cn38tHFAtRCIBGD4Xdtz2jsorke95/qc?=
- =?us-ascii?Q?9DbKMNgo3as6isxB/Ttf4OW7LJw3EJDWh2nL5pv9/6cUjmVi88mjCLzCdkmz?=
- =?us-ascii?Q?pm53I7ZMl63cCEorDGC/w47iHP5q8oErL3qFNvuPI2s6/Bo3GmR0xOQnLo6N?=
- =?us-ascii?Q?PfxwsZvcpXi0teVoo90f/Kfa5ZTQMqEe9eH3U8QEURtxJ+SjFx7srxIZ23Wu?=
- =?us-ascii?Q?c9RjiLSmDMstqLk8x5KwQEGHyWme/6GmyQ6VGudaD2YtivX+1doPXHK9hWq3?=
- =?us-ascii?Q?JWYMVSwtgj8KvCuRY2DDP7CCtAB29bQ30BATa3kfpSfqi9uYLzKKTs61DC3W?=
- =?us-ascii?Q?ZqCaVOoNudfMY+L5AZ95peskYjkyu6lrVrLGhm+Fg6Fa0fImB8VBPlDGh9HU?=
- =?us-ascii?Q?cftkjXxL2hcahizdRJfXPUUKz/VacII24j3twK/v5+G8ZfMyui3P4dVR7cpP?=
- =?us-ascii?Q?SY/Q1yv1mpyQRBZEIWjfgK9A+Ih4RIvhZWgfeybbfVLCdo66Hqu43fSWgkMJ?=
- =?us-ascii?Q?ku6aBOiJFRGej4ax1UPqvRS87Gq5VLGPNiehDvpl2ss0gqY0IlcPjqe+QEq5?=
- =?us-ascii?Q?dk5MFsYpm3ObrUNnHtERTU0PJleydWo44/hZhcnjUspsocBvO2pEYYZDa5MA?=
- =?us-ascii?Q?lZBNjyffwKF9aaN9k7eT1g3KtVM9UFTZZMO1zetjjFp6/50shQ22MJzgJtrP?=
- =?us-ascii?Q?8jcUwGr6LMUbDUnZEmG/I5rOeaMUnSaXJR+hCGtD+ASMgL3D0Cqycyeo7xN2?=
- =?us-ascii?Q?dMVpfQW6etgb1lbPctnCS0VR5NU5F7sfhMQplKtzn8lEd+ymGXNNmKQiTK3M?=
- =?us-ascii?Q?Tj3ug3MxvL8MeB2ijxFWqeok39Y+1jbducXTaxPMXk3e3eQJDyG6ksSecW2W?=
- =?us-ascii?Q?2+f09NhvGicnNXjp1zTLZTSHpKGB+xQTpcinuz/sxTwX/VI93ZeCwQfDpZn+?=
- =?us-ascii?Q?aaRBCatfmAZ+Q0zuzEEllDC5dCsrxREYoNVVdSOmVfuGyts6MWLhVKTvNd7r?=
- =?us-ascii?Q?TD9leb/LB9KGcWUZkuqSp+TdhggBuOjwux/RnYx5KRSrFEvC04hOEdyMidlz?=
- =?us-ascii?Q?MotsItQiJjYQQVnGv01ACQqIjxwAQEUjpSJ+YUvz74S2ezcZqpsJOPk3mGYv?=
- =?us-ascii?Q?0LN1ONwmHEJKc0IKW9WbyJMIz1x3wWvyPE44zrhIu9zqdsM7BlK44b/30LY1?=
- =?us-ascii?Q?ysYIRRVO+LkKygppi+4gMPzCuBrsRnvSKBsJrwlsqpPNr2ED4ggX9Tag+JK6?=
- =?us-ascii?Q?zE0hObFdgGpzuuLXqXrc3xdOw22vsK2GwfoSO0l6LxJjAuEmBrqCxZJvV8yD?=
- =?us-ascii?Q?zA6qe7KSmmPW+e7iDQXnEw6/F3fT/5hV9wwV3a+2uzOKWGUc1WxfV64JDFR5?=
- =?us-ascii?Q?iw=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?fnT1R+ah+6hd2poJ9E8kxfs8XcuWKbPnh+4KE1cRoXoDaYuQyIw4pU7tgJG1?=
- =?us-ascii?Q?mGzptkKmTgHZyr8MFYozOS4pjB4FlDHKq6q8HIXkev6A46aAtMDKay1xEz1Z?=
- =?us-ascii?Q?MrfN7QJgG0OCzOf+pYnb/TLG2OQoH5mQi8p7OT8vGqFhdmETa39Ldu02S89U?=
- =?us-ascii?Q?mWhTuGZMqj9JivyhXGJ7IBLzLLE7vVIEyB78Xv1uaQlEUAVcbP/vioBL+QvJ?=
- =?us-ascii?Q?FrITlvRk08GhdGz5prroT7udU8KSLr6FxCGB8lUilZmK1IoiBkcrvL6g55xC?=
- =?us-ascii?Q?vFHl61fMvocFAdMVUVfLdjoARr+ycaiobLE6EbeE/x1N3qPbcZfo18phEBQX?=
- =?us-ascii?Q?jsJArwJBJrbYan9myTcpESiWx6LEO/ACNGtfhJUZsSkkFxIddkQ6B2Wudzqz?=
- =?us-ascii?Q?NyOmW0Fk6DMuUfh8vUEgqQrHM4VC4dD6UXygGgwp+BdAqT8IVAtH0jnIBCfB?=
- =?us-ascii?Q?Rsus3OE5WdiKbjSvIgkbBJQWk/2yE0JNvQtPFWgvW5A+9pl/QdPzz1bqKalN?=
- =?us-ascii?Q?lPxYHJrAQ3GFjKtTUOyhsLZVjnQJNnUTRZXXU9K7PPDfLlRkMC7hVnE+go4Z?=
- =?us-ascii?Q?GXsEkDwzjQ7owD2c51o7B2zQFM8lekPDkRZQwHwLYHftpGpSDK7uRy7y3CsX?=
- =?us-ascii?Q?kQaKH3yc6ueKhtN648doN1PpB+30V2hdZoFjWcgHhPIjGsI8fkyNbRNeJj+n?=
- =?us-ascii?Q?paWF0KQYPw7bkivlw+9OKF6/HRXaeUzCZmKb+rixPfxeKMjarZzAzBrShKdw?=
- =?us-ascii?Q?gbI2GSGnBpqqRzDX3kq3RM672tqkI5vIOpeAFzlF/orrWWJ0JZm1COpX1NTm?=
- =?us-ascii?Q?9lRFJTX7ftKV5PktFN4S/yMGFBFlu0TT0F+fLeC4uZnoFAx1lzB/gDQBSnES?=
- =?us-ascii?Q?PXOSBP6kpC32G3uagVMv0NN9bqq6NPPjBeSAngfqZ63JP88e7MPh9KGS9dCd?=
- =?us-ascii?Q?L2RvIj0+EhexwMhNk4odXLiJ3nLjRho0jB5B6ZMSQkFb+5nX1W3jAbUfHJcX?=
- =?us-ascii?Q?aP/UbmuSBlMkOJVYG6GT9SlRHkr6tc9D/JAJipSVPNq3CLJ9/2iTcHKdRad6?=
- =?us-ascii?Q?FAVDEpRa5oRjA+JeK0jVyr5HueyN0Tq+cwfzS8Q6fkbehh3xVdVJwUMJQyyE?=
- =?us-ascii?Q?5O6F0MuFc9tO?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5c44dafb-e39a-4fd0-4df2-08db679c8786
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2023 21:16:59.0643
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: HE7DDaCXuAL9thsfdqyp6F1jC2RsuAyN/a9WocPOoC3h2DUBb75uSozGaeWYEssVGJjax5wmyoVa5opBTkwKUA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB4806
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-07_11,2023-06-07_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 suspectscore=0 bulkscore=0
- spamscore=0 mlxlogscore=999 adultscore=0 phishscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
- definitions=main-2306070185
-X-Proofpoint-GUID: HlSc-Oim8cU-HPMvDPWDzNnOqTg7wyUE
-X-Proofpoint-ORIG-GUID: HlSc-Oim8cU-HPMvDPWDzNnOqTg7wyUE
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2] mtd: rawnand: meson: check buffer length
+Content-Language: en-US
+From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
+To:     Liang Yang <liang.yang@amlogic.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+CC:     <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
+        <linux-mtd@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+References: <20230606101644.3297859-1-AVKrasnov@sberdevices.ru>
+ <9adef6da-5930-dcaa-f148-e4a398d39f2d@sberdevices.ru>
+In-Reply-To: <9adef6da-5930-dcaa-f148-e4a398d39f2d@sberdevices.ru>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/06/07 16:55:00 #21454472
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/07/23 14:00, Andrew Morton wrote:
-> On Wed, 7 Jun 2023 13:53:10 -0700 Mike Kravetz <mike.kravetz@oracle.com> wrote:
-> 
-> > > 
-> > > BUGs aren't good.  Can we please find a way to push this along?
-> > > 
-> > > Have we heard anything from any udmabuf people?
-> > > 
-> > 
-> > I have not heard anything.  When this issue popped up, it took me by surprise.
-> > 
-> > udmabuf maintainer (Gerd Hoffmann), the people who added hugetlb support and
-> > the list where udmabuf was developed (dri-devel@lists.freedesktop.org) have
-> > been on cc.
-> 
-> Maybe Greg can suggest a way forward.
-> 
-> > My 'gut reaction' would be to remove hugetlb support from udmabuf.  From a
-> > quick look, if we really want this support then there will need to be some
-> > API changes.  For example UDMABUF_CREATE should be hugetlb page aligned
-> > and a multiple of hugetlb page size if using a hugetlb mapping.
-> > 
-> > It would be good to know about users of the driver.
-> 
-> So disabling "hugetlb=on" (and adding an explanatory printk) would
-> suffice for now?
+Hi again Miquel, Liang!
 
-I can put together a patch to do that.
+What do You think about this patch?
 
--- 
-Mike Kravetz
+Thanks, Arseniy
+
+On 06.06.2023 19:29, Arseniy Krasnov wrote:
+> Sorry, here is changelog:
+> v1 -> v2:
+> * Move checks from 'switch/case' which executes commands in 'meson_nfc_exec_op()' to a special
+>   separated function 'meson_nfc_check_op()' which is called before commands processing.
+> 
+> On 06.06.2023 13:16, Arseniy Krasnov wrote:
+>> Meson NAND controller has limited buffer length, so check it before
+>> command execution to avoid length trim. Also check MTD write size on
+>> chip attach.
+>>
+>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>> ---
+>>  drivers/mtd/nand/raw/meson_nand.c | 47 +++++++++++++++++++++++++++----
+>>  1 file changed, 42 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
+>> index 23a73268421b..db6b18753071 100644
+>> --- a/drivers/mtd/nand/raw/meson_nand.c
+>> +++ b/drivers/mtd/nand/raw/meson_nand.c
+>> @@ -111,6 +111,8 @@
+>>  
+>>  #define PER_INFO_BYTE		8
+>>  
+>> +#define NFC_CMD_RAW_LEN	GENMASK(13, 0)
+>> +
+>>  struct meson_nfc_nand_chip {
+>>  	struct list_head node;
+>>  	struct nand_chip nand;
+>> @@ -284,7 +286,7 @@ static void meson_nfc_cmd_access(struct nand_chip *nand, int raw, bool dir,
+>>  
+>>  	if (raw) {
+>>  		len = mtd->writesize + mtd->oobsize;
+>> -		cmd = (len & GENMASK(13, 0)) | scrambler | DMA_DIR(dir);
+>> +		cmd = len | scrambler | DMA_DIR(dir);
+>>  		writel(cmd, nfc->reg_base + NFC_REG_CMD);
+>>  		return;
+>>  	}
+>> @@ -573,7 +575,7 @@ static int meson_nfc_read_buf(struct nand_chip *nand, u8 *buf, int len)
+>>  	if (ret)
+>>  		goto out;
+>>  
+>> -	cmd = NFC_CMD_N2M | (len & GENMASK(13, 0));
+>> +	cmd = NFC_CMD_N2M | len;
+>>  	writel(cmd, nfc->reg_base + NFC_REG_CMD);
+>>  
+>>  	meson_nfc_drain_cmd(nfc);
+>> @@ -597,7 +599,7 @@ static int meson_nfc_write_buf(struct nand_chip *nand, u8 *buf, int len)
+>>  	if (ret)
+>>  		return ret;
+>>  
+>> -	cmd = NFC_CMD_M2N | (len & GENMASK(13, 0));
+>> +	cmd = NFC_CMD_M2N | len;
+>>  	writel(cmd, nfc->reg_base + NFC_REG_CMD);
+>>  
+>>  	meson_nfc_drain_cmd(nfc);
+>> @@ -1007,6 +1009,31 @@ meson_nand_op_put_dma_safe_output_buf(const struct nand_op_instr *instr,
+>>  		kfree(buf);
+>>  }
+>>  
+>> +static int meson_nfc_check_op(struct nand_chip *chip,
+>> +			      const struct nand_operation *op)
+>> +{
+>> +	int op_id;
+>> +
+>> +	for (op_id = 0; op_id < op->ninstrs; op_id++) {
+>> +		const struct nand_op_instr *instr;
+>> +
+>> +		instr = &op->instrs[op_id];
+>> +
+>> +		switch (instr->type) {
+>> +		case NAND_OP_DATA_IN_INSTR:
+>> +		case NAND_OP_DATA_OUT_INSTR:
+>> +			if (instr->ctx.data.len > NFC_CMD_RAW_LEN)
+>> +				return -ENOTSUPP;
+>> +
+>> +			break;
+>> +		default:
+>> +			break;
+>> +		}
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
+>>  static int meson_nfc_exec_op(struct nand_chip *nand,
+>>  			     const struct nand_operation *op, bool check_only)
+>>  {
+>> @@ -1015,10 +1042,12 @@ static int meson_nfc_exec_op(struct nand_chip *nand,
+>>  	const struct nand_op_instr *instr = NULL;
+>>  	void *buf;
+>>  	u32 op_id, delay_idle, cmd;
+>> +	int err;
+>>  	int i;
+>>  
+>> -	if (check_only)
+>> -		return 0;
+>> +	err = meson_nfc_check_op(nand, op);
+>> +	if (err || check_only)
+>> +		return err;
+>>  
+>>  	meson_nfc_select_chip(nand, op->cs);
+>>  	for (op_id = 0; op_id < op->ninstrs; op_id++) {
+>> @@ -1293,6 +1322,7 @@ static int meson_nand_attach_chip(struct nand_chip *nand)
+>>  	struct meson_nfc_nand_chip *meson_chip = to_meson_nand(nand);
+>>  	struct mtd_info *mtd = nand_to_mtd(nand);
+>>  	int nsectors = mtd->writesize / 1024;
+>> +	int raw_writesize;
+>>  	int ret;
+>>  
+>>  	if (!mtd->name) {
+>> @@ -1304,6 +1334,13 @@ static int meson_nand_attach_chip(struct nand_chip *nand)
+>>  			return -ENOMEM;
+>>  	}
+>>  
+>> +	raw_writesize = mtd->writesize + mtd->oobsize;
+>> +	if (raw_writesize > NFC_CMD_RAW_LEN) {
+>> +		dev_err(nfc->dev, "too big write size in raw mode: %d > %ld\n",
+>> +			raw_writesize, NFC_CMD_RAW_LEN);
+>> +		return -EINVAL;
+>> +	}
+>> +
+>>  	if (nand->bbt_options & NAND_BBT_USE_FLASH)
+>>  		nand->bbt_options |= NAND_BBT_NO_OOB;
+>>  
