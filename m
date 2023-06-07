@@ -2,148 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49010725701
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 10:10:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6CDF725706
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 10:11:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239350AbjFGIKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 04:10:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55652 "EHLO
+        id S239388AbjFGILX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 04:11:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234278AbjFGIKr (ORCPT
+        with ESMTP id S234278AbjFGILV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 04:10:47 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5095095;
-        Wed,  7 Jun 2023 01:10:46 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3573hgoH013040;
-        Wed, 7 Jun 2023 08:10:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=zNC49izImKDUwPg+4hUyOkDmU+KHJ1XdXUa8gCnXKX8=;
- b=fR6PmIelCrJjxOqw26q5umZ0gfPqa19W0Dvc+0TBtPRKn2H2MidblHCV1ALy+t3tLsaw
- jqEvfLilrQte9w1Ry25t96K8eiNPMBotNIoVniguqCfL5Nm1kdfLaQQIYwFWJhz/GQH5
- x1CxIFBtna6+EbGc3kDDuNYCeYyG6wU/ch9VhRKdgQAtnuQHXobFrdLoELEuZUIAfsaq
- XXRRA6sjFFRbvADO0PCSN1XBN1NBS5TYAHTxyUYXBo8ws2wkxGg7TXR4Z/+v1DekzDKO
- ufwEBvr9EnDGHJ8WNaFuuua60IJnG6+2G5gSKACHoQqeGQaURHm9R1JYwB6LXQetgzc5 Hw== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r2a7699yv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 07 Jun 2023 08:10:35 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3578AYhs030018
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 7 Jun 2023 08:10:34 GMT
-Received: from [10.216.18.190] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 7 Jun 2023
- 01:10:26 -0700
-Message-ID: <0555c089-9d0d-7d19-9646-f0f9b8630d12@quicinc.com>
-Date:   Wed, 7 Jun 2023 13:40:22 +0530
+        Wed, 7 Jun 2023 04:11:21 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0691C95;
+        Wed,  7 Jun 2023 01:11:18 -0700 (PDT)
+X-QQ-mid: bizesmtp75t1686125468tf9po345
+Received: from linux-lab-host.localdomain ( [61.141.77.49])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 07 Jun 2023 16:11:07 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: t+YzzcYcY/yIcYJBJAauvIxKKd3tsAr7koUSEaZ8zaovQMdGosVaKCJWd1dp3
+        3AznNfz7xPXMB8v22KQ8la1jDw6ACQcuAKPOVu7cB1q7cKLlyIcQZXGavNxuFNICM4jCdPQ
+        nZrcg4DQXzkFRYrT/IojBq86LZRVcJQqGP1AScW7qZp08DggRkTsU6bdmqtrIp+BmEtqmkR
+        2G2ci7QeoAEVBkMnnD6+HfWm/zydQlvvTIAfL1Vb868dLorSnZjS7qZay+c4VTzR5XLZ7O7
+        KLS1kzeO6ZT4y4b3pGClyfonwGhBZ8IrLpFBzwruN8EXA20Q5XX1xsuPUDrl3YmD+9DamKs
+        60AenKfN4R3T8cpMJEV+s5zy7QMho8seioMXwWLzM+UGSb69+GuhKP4LxYV01+hKo2YYlq4
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 15885581524704403754
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        thomas@t-8ch.de
+Subject: Re: [PATCH v3 3/3] selftests/nolibc: riscv: customize makefile for rv32
+Date:   Wed,  7 Jun 2023 16:11:03 +0800
+Message-Id: <20230607081103.746962-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <ZIAywHvr6UB1J4of@1wt.eu>
+References: <ZIAywHvr6UB1J4of@1wt.eu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH V2 01/13] dt-bindings: remoteproc: qcom: Add support for
- multipd model
-Content-Language: en-US
-To:     Kalle Valo <kvalo@kernel.org>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <jassisinghbrar@gmail.com>, <mathieu.poirier@linaro.org>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <quic_eberman@quicinc.com>, <quic_mojha@quicinc.com>,
-        <loic.poulain@linaro.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <quic_srichara@quicinc.com>, <quic_sjaganat@quicinc.com>,
-        <quic_kathirav@quicinc.com>, <quic_anusha@quicinc.com>,
-        <quic_poovendh@quicinc.com>, <quic_varada@quicinc.com>,
-        <quic_devipriy@quicinc.com>
-References: <20230521222852.5740-1-quic_mmanikan@quicinc.com>
- <20230521222852.5740-2-quic_mmanikan@quicinc.com>
- <7940c743-815f-f864-d015-43d7e916ecfa@linaro.org>
- <a1456f62-d0a7-d5ec-b379-db1b6035c89c@quicinc.com>
- <d187eafb-4a80-9479-d063-3a01b47d8efa@linaro.org>
- <feb0d11d-0930-d0b8-ab6e-cf477bbf114b@quicinc.com>
- <87edmoitu3.fsf@kernel.org>
-From:   Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
-In-Reply-To: <87edmoitu3.fsf@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: gqe4xl4c4R0xB_rjn82FRVjAJ6tko9eF
-X-Proofpoint-GUID: gqe4xl4c4R0xB_rjn82FRVjAJ6tko9eF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-07_04,2023-06-06_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- priorityscore=1501 malwarescore=0 lowpriorityscore=0 clxscore=1015
- mlxscore=0 bulkscore=0 adultscore=0 phishscore=0 mlxlogscore=758
- impostorscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2305260000 definitions=main-2306070066
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> On Wed, Jun 07, 2023 at 02:33:14PM +0800, Zhangjin Wu wrote:
+> >
+> >     ifneq ($(findstring riscv,$(ARCH)),)
+> >       KARCH = riscv
+> >     else
+> >       KARCH = $(ARCH)
+> >     endif
+> (...)
+>
+> At least it suggests what it's going to be used for instead of just
+> being marked as "special" (something the underscore does).
+>
 
+Yeah.
 
-On 6/6/2023 7:19 PM, Kalle Valo wrote:
-> Manikanta Mylavarapu <quic_mmanikan@quicinc.com> writes:
-> 
->>>>>> +
->>>>>> +    properties:
->>>>>> +      compatible:
->>>>>> +        enum:
->>>>>> +          - qcom,ipq5018-wcss-ahb-mpd
->>>>>> +          - qcom,ipq9574-wcss-ahb-mpd
->>>>>> +          - qcom,ipq5018-wcss-pcie-mpd
->>>>>
->>>>> Keep rather alphabetical order (so both 5018 together).
->>>>>
->>>>> I also do not understand these at all. Why adding bus type to
->>>>> compatible? This rarely is allowed (unless it is PCIe controller within
->>>>> soc).
->>>>>
->>>> IPQ5018 SOC has in-built PCIE controller. Here QDSP6 will bring up
->>>> external(PCIE) and internal (AHB) wifi radio's. To separate AHB, PCIE
->>>> radio's properties, i have added bus type to compatible.
->>>
->>> It's the same device - WCSS - right? We do not create multiple nodes and
->>> compatibles for the same devices. Bus suffixes are almost never parts of
->>> compatibles.
->>
->>
->> No it's not the same device. WCSS on inside IPQ5018 and WCSS attached
->> via pcie to IPQ5018. Here QDSP6 managing both WCSS's.
->>
->> So for better clarity i will use attached SOC ID in compatible.
->> Below are the new compatible's.
->>
->> - qcom,ipq5018-wcss-mpd //IPQ5018 internal radio
->> - qcom,ipq9574-wcss-mpd	//IPQ9574 internal radio
->> - qcom,qcn6122-wcss-mpd //IPQ5018 attached radio
-> 
-> What mandates that there's just one QCN6122 device attached to PCI?
-> Assuming fixed PCI configurations like that makes me worried.
-> 
+> > but the new method mentioned here differs, it split the whole Makefile
+> > to two 'parts', the before part accept something like ARCH=riscv32,
+> > ARCH=riscv64, ARCH=riscv, the after part use the ARCH=riscv, this avoid
+> > touch the targets context:
+>
+> We don't care about touching *code*. What is important is that it scales
+> and is understandable, thus maintainable. Code that has many exceptions
+> or requires a lot of head scratching to figure what's being done is a
+> pain to maintain and nobody wants to take the risk to touch it. That was
+> exactly the purpose of the enumeration of per-target args, flags etc in
+> the makefile: nobody needs to be expert in multiple areas to touch their
+> own area. If we face a showstopper, we need to address it, and not work
+> around it for the sake of touching less context.
+>
 
-IPQ5018 always has one internal radio, attached pcie radio's depends on 
-no of pcie ports. IPQ5018 has 2 pcie ports, so it supports max two 
-qcn6122 devices. One compatible (qcom,qcn6122-wcss-mpd) itself support's 
-number of pcie devices controlled by QDSP6.
+Get it clearly.
 
-Thanks & Regards,
-Manikanta.
+> >     ... variable assignments before this line ...
+> >
+> >     +# Some architectures share the same arch/<ARCH>/ source code tree among the <ARCH>xyz variants
+> >     +# Top-level kernel Makefile only accepts ARCH=<ARCH>, override <ARCH>xyz variants to make kernel happy
+> >     +ARCHS := riscv
+> >     +_ARCH := $(strip $(foreach arch, $(ARCHS), $(if $(findstring x$(arch),x$(ARCH)),$(arch))))
+> >     +ifneq ($(_ARCH),)
+> >     +override ARCH := $(_ARCH)
+> >     +endif
+> >     +
+>
+> So actually this is a perfect example of head scratching for me. I suspect
+> it would replace x86_64 with x86 if x86 would be placed there for example,
+> though it would not change anything for i386. Maybe for s390/s390x,
+> arm/arm64 or ppc/ppc64 etc it would act similarly while these are different
+> archs. Thus this seems to be trying to generalize a rule around a single
+> particular case.
+>
+
+It is true, we did worry about when users wrongly add new ARCH in the
+list, a generic way is very hard before we really use them.
+
+> Probably that instead this particular case should be addressed explicitly
+> until we find a generalization (if ever) to other archs:
+>
+>   ifeq($(ARCH),riscv32)
+>   override ARCH := riscv
+>   else ifeq($(ARCH),riscv64)
+>   override ARCH := riscv
+>   endif
+>   endif
+>
+> Or maybe even better you can decide to remap arch names explicitly:
+>
+>   # use KARCH_from=to to rename ARCH from $from to $to past this point.
+>   KARCH_riscv32 := riscv
+>   KARCH_riscv64 := riscv
+>   ...
+>   ifneq($(KARCH_$(ARCH)),)
+>   override ARCH := $(KARCH_$(ARCH))
+>   endif
+>
+
+This did inspire me a lot, so, what about simply go back to the KARCH
+method without any overriding:
+
+    diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+    index 4a3a105e1fdf..bde635b083f4 100644
+    --- a/tools/testing/selftests/nolibc/Makefile
+    +++ b/tools/testing/selftests/nolibc/Makefile
+    @@ -14,6 +14,12 @@ include $(srctree)/scripts/subarch.include
+     ARCH = $(SUBARCH)
+     endif
+
+    +# kernel supported ARCH names by architecture
+    +KARCH_riscv32    = riscv
+    +KARCH_riscv64    = riscv
+    +KARCH_riscv      = riscv
+    +KARCH            = $(or $(KARCH_$(ARCH)),$(ARCH))
+    +
+     # kernel image names by architecture
+     IMAGE_i386       = arch/x86/boot/bzImage
+     IMAGE_x86_64     = arch/x86/boot/bzImage
+    @@ -21,6 +27,8 @@ IMAGE_x86        = arch/x86/boot/bzImage
+     IMAGE_arm64      = arch/arm64/boot/Image
+     IMAGE_arm        = arch/arm/boot/zImage
+     IMAGE_mips       = vmlinuz
+
+And this:
+
+    @@ -117,7 +132,7 @@ sysroot: sysroot/$(ARCH)/include
+     sysroot/$(ARCH)/include:
+            $(Q)rm -rf sysroot/$(ARCH) sysroot/sysroot
+            $(QUIET_MKDIR)mkdir -p sysroot
+    -       $(Q)$(MAKE) -C ../../../include/nolibc ARCH=$(ARCH) OUTPUT=$(CURDIR)/sysroot/ headers_standalone
+    +       $(Q)$(MAKE) -C ../../../include/nolibc ARCH=$(KARCH) OUTPUT=$(CURDIR)/sysroot/ headers_standalone
+            $(Q)mv sysroot/sysroot sysroot/$(ARCH)
+
+     nolibc-test: nolibc-test.c sysroot/$(ARCH)/include
+    @@ -141,10 +156,10 @@ initramfs: nolibc-test
+            $(Q)cp nolibc-test initramfs/init
+
+     defconfig:
+    -       $(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) mrproper $(DEFCONFIG) prepare
+    +       $(Q)$(MAKE) -C $(srctree) ARCH=$(KARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) mrproper $(DEFCONFIG) prepare
+
+     kernel: initramfs
+    -       $(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) $(IMAGE_NAME) CONFIG_INITRAMFS_SOURCE=$(CURDIR)/initramfs
+    +       $(Q)$(MAKE) -C $(srctree) ARCH=$(KARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) $(IMAGE_NAME) CONFIG_INITRAMFS_SOURCE=$(CURDIR)/initramfs
+
+It is almost consistent with the original Makefile now.
+
+I do like this method more than the override method now, the override
+method may break the maintainability a lot especially that the
+developers may be hard to know which ARCH value it is when he touch a
+line of the Makefile.
+
+> And this does deserve an explicit note in the makefile that anything
+> using $(ARCH) using a macro will see the renamed arch while anything
+> using it as a variable before that line will see the original one.
+>
+> If you want to avoid the '=' vs ':=' mess you can even keep a copy of
+> the original ARCH at the beginning of the makefile:
+>
+>   # keep a copy of the arch name requested by the user, for use later
+>   # when the original form is preferred over the kernel's arch name.
+>   USER_ARCH = $(ARCH)
+>
+
+Yeah, a copy is good for the override case.
+
+> > Willy, Which one do you prefer?
+>
+> The most explicit ones like above. Generally speaking when you try to
+> add support for your own arch here, you look there for similar ones,
+> where commands are called, and read in reverse mode till the beginning,
+> hoping to understand the transformations. I think the current ones and
+> the proposed ones above are self-explanatory. Anything doing too much
+> magic renaming or doing too much hard-coded automatic stuff can quickly
+> obfuscate the principle and make things more complicated. I already
+> despise "override" because it messes up with macros, but I agree it can
+> sometimes have some value. If you dup it into ORIG_ARCH or USER_ARCH,
+> and modify the few lines overriding arch in an explicit manner, I think
+> it would preserve its maintainability.
+>
+
+Agree, let's give up the 'override' stuff.
+
+> What do you think ?
+
+So, let's go with the KARCH method if you agree too.
+
+Best regards,
+Zhangjin
+
+>
+> thanks,
+> Willy
