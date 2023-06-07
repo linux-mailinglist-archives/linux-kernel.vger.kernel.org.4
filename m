@@ -2,136 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4130E72550C
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 09:08:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3746672550E
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 09:09:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238669AbjFGHIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 03:08:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44846 "EHLO
+        id S238670AbjFGHJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 03:09:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238561AbjFGHIF (ORCPT
+        with ESMTP id S234052AbjFGHJO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 03:08:05 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 750F7198B;
-        Wed,  7 Jun 2023 00:08:04 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (om126233170111.36.openmobile.ne.jp [126.233.170.111])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4290C75B;
-        Wed,  7 Jun 2023 09:07:35 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1686121657;
-        bh=pJbYtMyyu1/ugr10zRFTfl56Goe4o8unQjK6lSSuXA0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=M2oudcTCVRe19TW5SqU+ZA9kZe5ZikzgWqneGHjT5MoVOhdWzL4bSYCWD21m+HcH4
-         D+oAib+NFALwEMOrv7F3EPSJb1xRc2C9c/jF1QWjCObojRWUV/IkmprH8dNPQtJkRl
-         HmVOpojZD+yZmoa/z0cIFQXWbnVOVUbF/W6m97rQ=
-Date:   Wed, 7 Jun 2023 10:07:59 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Michael Riesch <michael.riesch@wolfvision.net>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        libcamera-devel@lists.libcamera.org,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Matthias Fend <Matthias.Fend@wolfvision.net>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC v2 4/6] media: v4l2-ctrls: add lens group speed
- controls for zoom and focus
-Message-ID: <20230607070759.GI14101@pendragon.ideasonboard.com>
-References: <20230406-feature-controls-lens-v2-0-faa8ad2bc404@wolfvision.net>
- <20230406-feature-controls-lens-v2-4-faa8ad2bc404@wolfvision.net>
+        Wed, 7 Jun 2023 03:09:14 -0400
+Received: from cstnet.cn (smtp25.cstnet.cn [159.226.251.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC6251A7;
+        Wed,  7 Jun 2023 00:09:11 -0700 (PDT)
+Received: from ed3e173716be.home.arpa (unknown [124.16.138.125])
+        by APP-05 (Coremail) with SMTP id zQCowAA3P4vlLIBk8SHQDA--.699S2;
+        Wed, 07 Jun 2023 15:08:22 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     andy.shevchenko@gmail.com
+Cc:     oe-kbuild-all@lists.linux.dev, linus.walleij@linaro.org,
+        brgl@bgdev.pl, palmer@dabbelt.com, paul.walmsley@sifive.com,
+        linux-gpio@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: Re: [PATCH v3] gpio: ath79: Add missing check for platform_get_irq
+Date:   Wed,  7 Jun 2023 15:08:19 +0800
+Message-Id: <20230607070819.48553-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230406-feature-controls-lens-v2-4-faa8ad2bc404@wolfvision.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: zQCowAA3P4vlLIBk8SHQDA--.699S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7tF15Gw4kWr4kGrWxAF1fJFb_yoW8Gw17pF
+        W5KFWvka1kGa1j9wn7ZrWruFW0yan3KryrArWrta45Kwn8ZF9a9r4fKw4Y9FyxCry8Awn2
+        vw4ruan0gF9rZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvC14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+        Y2ka0xkIwI1lc2xSY4AK67AK6r4xMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
+        1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
+        b7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
+        vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAI
+        cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2Kf
+        nxnUUI43ZEXa7VUjGXdUUUUUU==
+X-Originating-IP: [124.16.138.125]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael,
+On Tue, 6 Jun 2023 17:46:36 +0800 Andy Shevchenko wrote:
+> Tue, Jun 06, 2023 at 12:28:17PM +0300, andy.shevchenko@gmail.com kirjoitti:
+>> Tue, Jun 06, 2023 at 11:18:41AM +0800, Jiasheng Jiang kirjoitti:
+>> 
+>> Is this v4?
+>>
 
-Thank you for the patch.
+I will submit a v4.
+ 
+>> > Add the missing check for platform_get_irq() and return error
+>> > if it fails.
+>> > The returned error code will be dealed with in
+>> > module_platform_driver(ath79_gpio_driver) and the driver will not
+>> > be registered.
+>> 
+>> No, this functional change and has not to be for the fixes unless _this_ is the
+>> regression you are fixing. Did the driver work before at some point as after
+>> this change?
 
-On Tue, Apr 25, 2023 at 11:45:14AM +0200, Michael Riesch wrote:
-> Add the controls V4L2_CID_FOCUS_SPEED and V4L2_CID_ZOOM_SPEED that set
-> the speed of the zoom lens group and focus lens group, respectively.
+I will remove the fixes tag in v4.
 
-Ah, now the UVC relative focus and zoom controls could be implemented
-;-) They still don't match the definition of the corresponding V4L2
-controls, so I'm still tempted to deprecate both.
-
-> Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
-> ---
->  Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst | 10 ++++++++++
->  drivers/media/v4l2-core/v4l2-ctrls-defs.c                  |  2 ++
->  include/uapi/linux/v4l2-controls.h                         |  2 ++
->  3 files changed, 14 insertions(+)
 > 
-> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
-> index 3ea4175f9619..a17620ab03b9 100644
-> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
-> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
-> @@ -174,6 +174,11 @@ enum v4l2_exposure_metering -
->  	will not transition from this state until another action is performed
->  	by an application.
->  
-> +``V4L2_CID_FOCUS_SPEED (integer)``
-> +    Set the speed with which the focus lens group of the camera is moved
-> +    (V4L2_CID_FOCUS_ABSOLUTE and V4L2_CID_FOCUS_RELATIVE). The unit is
-> +    driver-specific. The value should be a positive integer.
-> +
+> To be more clear, answer to the following questions:
+> 1) does driver work with wrong DT configuration?
+> 2a) if yes, does it make sense, i.e. the hardware functioning usefully?
+> 2b) if yes, can we guarantee there are no broken configurations in the wild?
+> 
+> Depending on the answers correct your code and/or commit message.
+> 
+>> Otherwise you have to _justify_ that this functional change won't break
+>> existing setups (with broked IRQ in Device Tree, for example).
 
-Could you explain your expected use cases for focus and zoom speed ?
+Sorry, I do not quite understand what you mean.
+I have no idea how these questions are related to my patch.
+Do you mean I should not fail the ->probe() if there is wrong IRQ numbering in the DT?
+Please tell me the relationship between these questions and my patch.
 
->  ``V4L2_CID_FOCUS_AUTO (boolean)``
->      Enables continuous automatic focus adjustments. The effect of manual
->      focus adjustments while this feature is enabled is undefined,
-> @@ -287,6 +292,11 @@ enum v4l2_auto_focus_range -
->  	not transition from this state until another action is performed by an
->  	application.
->  
-> +``V4L2_CID_ZOOM_SPEED (integer)``
-> +    Set the speed with which the zoom lens group of the camera is moved
-> +    (V4L2_CID_ZOOM_ABSOLUTE and V4L2_CID_ZOOM_RELATIVE). The unit is
-> +    driver-specific. The value should be a positive integer.
-> +
->  ``V4L2_CID_IRIS_ABSOLUTE (integer)``
->      This control sets the camera's aperture to the specified value. The
->      unit is undefined. Larger values open the iris wider, smaller values
-> diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-> index 794ef3ab0c02..3ef465ba73bd 100644
-> --- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-> +++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-> @@ -1048,6 +1048,8 @@ const char *v4l2_ctrl_get_name(u32 id)
->  	case V4L2_CID_FOCUS_STATUS:		return "Focus, Status";
->  	case V4L2_CID_ZOOM_CURRENT:		return "Zoom, Current";
->  	case V4L2_CID_ZOOM_STATUS:		return "Zoom, Status";
-> +	case V4L2_CID_FOCUS_SPEED:		return "Focus, Speed";
-> +	case V4L2_CID_ZOOM_SPEED:		return "Zoom, Speed";
->  
->  	/* FM Radio Modulator controls */
->  	/* Keep the order of the 'case's the same as in v4l2-controls.h! */
-> diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-> index 793ee8c65e87..8d84508d4db8 100644
-> --- a/include/uapi/linux/v4l2-controls.h
-> +++ b/include/uapi/linux/v4l2-controls.h
-> @@ -1001,6 +1001,8 @@ enum v4l2_auto_focus_range {
->  #define V4L2_CID_FOCUS_STATUS			(V4L2_CID_CAMERA_CLASS_BASE+38)
->  #define V4L2_CID_ZOOM_CURRENT			(V4L2_CID_CAMERA_CLASS_BASE+39)
->  #define V4L2_CID_ZOOM_STATUS			(V4L2_CID_CAMERA_CLASS_BASE+40)
-> +#define V4L2_CID_FOCUS_SPEED			(V4L2_CID_CAMERA_CLASS_BASE+41)
-> +#define V4L2_CID_ZOOM_SPEED			(V4L2_CID_CAMERA_CLASS_BASE+42)
->  
->  /* FM Modulator class control IDs */
->  
+Thanks,
+Jiasheng
 
--- 
-Regards,
-
-Laurent Pinchart
