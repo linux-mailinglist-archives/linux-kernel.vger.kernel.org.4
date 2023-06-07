@@ -2,124 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A14D725D17
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 13:29:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E407E725D15
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 13:29:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239904AbjFGL3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 07:29:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59916 "EHLO
+        id S240228AbjFGL3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 07:29:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240261AbjFGL3U (ORCPT
+        with ESMTP id S240174AbjFGL3J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 07:29:20 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E261B19BD;
-        Wed,  7 Jun 2023 04:29:14 -0700 (PDT)
-X-QQ-mid: bizesmtp79t1686137341tbhfj5g6
-Received: from linux-lab-host.localdomain ( [61.141.77.49])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 07 Jun 2023 19:29:00 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: q+yjhizk/eL77uWPsAdnep0mzHEQMbth2xOfZxpWL32hs5VqgL/zmKwk14/Wu
-        i9q8XPfvyhdXG9+3oacVYSQr6FunSQbFvOVbwZwjQv24RB6YKbMH//08rrGS+LL+BSbrRqZ
-        CwnbEjY/+7z/JMzsKqgv6sbEgj0I452l0mX23xA7jCjrQIbCkImtOj7EoGL6pyYUt7UkshA
-        mWct2lQuEKCpcF6JthwUcMbUeXZmqiBPya1w7LlWWa2RniMpOLmdCMGYKkdpMIdFoR87xBT
-        zyVt0HFh417TKiCcYhGJVjDY+gvn/0l9+8eHCG/KlDx+j6PvBTx4Y+0SVn6yaSZXvaY5j0m
-        QAJRD4PQlmSCcB1jJ9qo7Maw3XVxr15+CFbQOZhB8hlaYSTTbAJE1ybwp7nzPPkcOY8DcJL
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 6806432981910364890
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de, w@1wt.eu
-Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: [PATCH v3 0/3] tools/nolibc: add a new syscall helper
-Date:   Wed,  7 Jun 2023 19:28:58 +0800
-Message-Id: <cover.1686135913.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
+        Wed, 7 Jun 2023 07:29:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78BB41BC6;
+        Wed,  7 Jun 2023 04:29:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1338560C58;
+        Wed,  7 Jun 2023 11:29:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A729C433EF;
+        Wed,  7 Jun 2023 11:29:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686137345;
+        bh=0YWf+o7Xye4E9eXePegQbCM+6aymWifggrFVEC88RXI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uNhLA4VzEI2Mv5824IMpBMgv9KQd3RsVnpNduOHjv95cvSHi1QUGfHrsy71DCXQhT
+         zo1LnfOPw3joDanmv/x4Ikcousaum8xclOa6HSDPMS3Ze9OlLTzdA17Y+ZOTNnfW93
+         sgzdZc05IeR60rnzNI7K+N7Dw5EhS6xoMHvMVqVbi+DalDHR74eTczl9ogdk2OcXxP
+         8ZwLGwr3rUs83O0znJNieFHcfwxuJ/WxiiSe5NqhZphQ1jOOVkKFo5gAgZI+W7oxt+
+         GgL+Q+4KCIvGXW5TFDgUDsgquUv3wm+74r0twTozVm65hbI8d4lR6L6fU2QoiFYlfq
+         VdemOlVd7tGaw==
+Date:   Wed, 7 Jun 2023 12:29:00 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>, Lee Jones <lee@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patch in the regulator tree
+Message-ID: <38913e8e-4578-4c4f-a6cd-6f6e628957af@sirena.org.uk>
+References: <20230607163743.1c266a7f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="3+bTFYwajOTKhLCl"
+Content-Disposition: inline
+In-Reply-To: <20230607163743.1c266a7f@canb.auug.org.au>
+X-Cookie: Keep away from edge.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Willy, Thomas
 
-This is the revision of the v2 syscall helpers [1], it is based on
-20230606-nolibc-rv32+stkp7a of [2]. It doesn't conflict with the v4 of
--ENOSYS patchset [3], so, it is ok to simply merge both of them.
+--3+bTFYwajOTKhLCl
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This revision mainly applied Thomas' method, removed the __syscall()
-helper and replaced it with __sysret() instead, because __syscall()
-looks like _syscall() and syscall(), it may mixlead the developers.
+On Wed, Jun 07, 2023 at 04:37:43PM +1000, Stephen Rothwell wrote:
+> Hi all,
+>=20
+> The following commit is also in the mfd tree as a different commit
+> (but the same patch):
+>=20
+>   75c8cb2f4cb2 ("mfd: axp20x: Add support for AXP313a PMIC")
+>=20
+> This is commit
+>=20
+>   2f518d914bd3 ("mfd: axp20x: Add support for AXP313a PMIC")
+>=20
+> in the mfd tree.
 
-Changes from v2 -> v3:
+Hrm, that was a tag I pulled from Lee rather than something I applied -
+not sure what's going on there.
 
-* tools/nolibc: sys.h: add a syscall return helper
+--3+bTFYwajOTKhLCl
+Content-Type: application/pgp-signature; name="signature.asc"
 
-  * The __syscall() is removed.
+-----BEGIN PGP SIGNATURE-----
 
-  * Align the code style of __sysret() with the others, and use
-    __inline__ instead of inline (like stdlib.h) to let it work with
-    the default -std=c89 in tools/testing/selftests/nolibc/Makefile
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSAafsACgkQJNaLcl1U
+h9DoSwf+JJPbmXcuO3ZRX8iXbL8BytPcrH8QUdoL3hM6XNkFaXN4KSaYugBJTM2w
+r2HvYEEa6NRHqGX5//NZFivo3hfqQbWIChbRF4a3ieVi/iwidaizI4OKYuoOy0+Z
+R1vkoTVZBV7IlhPvsnMHNxZE+3ja12C8RcoPmNfJylbnhcOnFpmcRoob0KR/LL38
+v8bR+x40gDnELyJmDQyXv1ereHr23PhdD1qan+tgOLaaIWDreIo3s0X1Wa04YdLu
+0uG4hS5eIT/fABYrYRX3uyFDzQPkMT9hkZ7HJMg7GEm8SN7pHeqAsVTHG7/1v4Sz
+ksP4c9exiwcoFIMJhW3r5t6U+ZMU5w==
+=IyWe
+-----END PGP SIGNATURE-----
 
-* tools/nolibc: unistd.h: apply __sysret() helper
-
-  As v2.
-
-* tools/nolibc: sys.h: apply __sysret() helper
-
-  replaced __syscall() with __sysret() and merged two separated patches of v2 to one.
-
-Did run-user tests for rv32 (with [3]), rv64 and arm64.
-
-BTW, two questions for Thomas,
-
-* This commit 659a49abc9c2 ("tools/nolibc: validate C89 compatibility")
-  enables -std=c89, why not gnu11 used by kernel ? ;-)
-
-* Do we need to tune the order of the macros in unistd.h like this:
-
-    #define _syscall(N, ...) __sysret(my_syscall##N(__VA_ARGS__))
-    #define _syscall_n(N, ...) _syscall(N, __VA_ARGS__)
-    #define __syscall_narg(_0, _1, _2, _3, _4, _5, _6, N, ...) N
-    #define _sycall_narg(...) __syscall_narg(__VA_ARGS__, 6, 5, 4, 3, 2, 1, 0)
-    #define syscall(...) _syscall_n(_sycall_narg(__VA_ARGS__), ##__VA_ARGS__)
-
-  Before, It works but seems not put in using order:
-
-    #define _syscall(N, ...) __sysret(my_syscall##N(__VA_ARGS__))
-    #define _sycall_narg(...) __syscall_narg(__VA_ARGS__, 6, 5, 4, 3, 2, 1, 0)
-    #define __syscall_narg(_0, _1, _2, _3, _4, _5, _6, N, ...) N
-    #define _syscall_n(N, ...) _syscall(N, __VA_ARGS__)
-    #define syscall(...) _syscall_n(_sycall_narg(__VA_ARGS__), ##__VA_ARGS__)
-
-Thanks.
-
-Best regards,
-Zhangjin
-
----
-[1]: https://lore.kernel.org/linux-riscv/cover.1686036862.git.falcon@tinylab.org/
-[2]: https://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git
-[3]: https://lore.kernel.org/linux-riscv/cover.1686128703.git.falcon@tinylab.org/T/#t
-
-Zhangjin Wu (3):
-  tools/nolibc: sys.h: add a syscall return helper
-  tools/nolibc: unistd.h: apply __sysret() helper
-  tools/nolibc: sys.h: apply __sysret() helper
-
- tools/include/nolibc/sys.h    | 364 +++++-----------------------------
- tools/include/nolibc/unistd.h |  11 +-
- 2 files changed, 55 insertions(+), 320 deletions(-)
-
--- 
-2.25.1
-
+--3+bTFYwajOTKhLCl--
