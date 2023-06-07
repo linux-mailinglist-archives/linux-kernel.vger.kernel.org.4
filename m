@@ -2,156 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B4797272AF
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 01:05:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB7DA7272B0
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 01:05:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233216AbjFGXF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 19:05:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60046 "EHLO
+        id S233322AbjFGXFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 19:05:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233505AbjFGXE7 (ORCPT
+        with ESMTP id S233626AbjFGXFG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 19:04:59 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 003581FEA
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 16:04:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686179097; x=1717715097;
-  h=date:from:to:cc:subject:message-id;
-  bh=yYlnBSGOpSnq7CTyiDgIzQMSFfkXsgY10/watWVddzI=;
-  b=UXAYQPiFOKbfddRzYAooTIu36hz83E5L4keYMIwx/furp0wGrxj6067+
-   3Xn92EkMHY4sYpzpYTlJ69xNbzupN6r7aaHmEHkSqcGngAlnP+oh25TsL
-   1/+Lh9xARklHicHEF6xbWoT7ttlNzyVeQQkqqHwsBeBRibRqXL0YrfG6q
-   1dnGz8JIPeuXgT4o3lsjap71EEuaCWpi40p6wZMJMKhpp9iy0g/VY0Rep
-   3iQuT6G2IxffNN8LFe2eLlMYSn/srATPT5g/InRdrbYTf9PKkJJ/Wyg5m
-   uUY17lnJ1CqVsQUGfY/yy3lWZnV3081StzhqfWBTuXqtzrIr5l9YlhrR/
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="422979944"
-X-IronPort-AV: E=Sophos;i="6.00,225,1681196400"; 
-   d="scan'208";a="422979944"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 16:04:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="742877385"
-X-IronPort-AV: E=Sophos;i="6.00,225,1681196400"; 
-   d="scan'208";a="742877385"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 07 Jun 2023 16:04:56 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q72D1-0006zO-2x;
-        Wed, 07 Jun 2023 23:04:55 +0000
-Date:   Thu, 08 Jun 2023 07:04:46 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- 5320c4f88009a3cb2b0174988bf9c337db9bb8fc
-Message-ID: <20230607230446.znozd%lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 7 Jun 2023 19:05:06 -0400
+Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72F6B10DE;
+        Wed,  7 Jun 2023 16:05:05 -0700 (PDT)
+Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-77a1cad6532so131455139f.1;
+        Wed, 07 Jun 2023 16:05:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686179104; x=1688771104;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SKlzSAskxYQjFMQrq1GcFEOvXKAgtJCbeNAdADGIZQM=;
+        b=ko/v1TjFCs19BEP2w8YXPul+VsvJUfxoz9+NS7yFPGKG1F4jb/ASGJWKQ8Ig05aQ4g
+         2usqjpEvgj2EHnm6QzIVt5T7E45+/trqQC4jY07/yjHAkNJjSVrHDPkXul6pZdeJF20g
+         KH5GI5Hl4kWavKnEFi2/o55VX8m+5AP82jwWMrvIlbmKKsdZbGK3UbiwBlPOold0/bNP
+         EvP5NyWCQU8vzi4OBrNb9kL/SNbjeYPXisDJhQzGh17IrDDe5nSTZiYL3brT2vKiKGrf
+         1UWRWX9alrcDKx9sLqnGjEuF5xG21L4Lr0jHv40fuk5zOiSLyy+WCJQ5PnBwMluMOLGy
+         8BYA==
+X-Gm-Message-State: AC+VfDwEziqGsMOOiVsJ8wtqJubJG6rwk5Or/QJUseFmwAxYJbsz5GKm
+        5HklvpKEfboqrNQ2+4IS0g==
+X-Google-Smtp-Source: ACHHUZ6tk+oTIhwIPYYov3AbcNbbjKddfdX4uFboDrcRsYwo3fRyb/y/XYtMePP7i5wgf8PrNnjPbw==
+X-Received: by 2002:a05:6602:2001:b0:776:fd07:3c96 with SMTP id y1-20020a056602200100b00776fd073c96mr9432362iod.7.1686179104733;
+        Wed, 07 Jun 2023 16:05:04 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id d26-20020a5d9bda000000b00763699c3d02sm4150726ion.0.2023.06.07.16.05.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 16:05:04 -0700 (PDT)
+Received: (nullmailer pid 153358 invoked by uid 1000);
+        Wed, 07 Jun 2023 23:04:59 -0000
+Date:   Wed, 7 Jun 2023 17:04:59 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Leonard =?iso-8859-1?Q?G=F6hrs?= <l.goehrs@pengutronix.de>
+Cc:     Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Marek Vasut <marex@denx.de>,
+        kernel@pengutronix.de,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 5/8] dt-bindings: net: dsa: microchip: add missing
+ spi-{cpha,cpol} properties
+Message-ID: <20230607230459.GA151104-robh@kernel.org>
+References: <20230607115508.2964574-1-l.goehrs@pengutronix.de>
+ <20230607115508.2964574-5-l.goehrs@pengutronix.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230607115508.2964574-5-l.goehrs@pengutronix.de>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: 5320c4f88009a3cb2b0174988bf9c337db9bb8fc  Merge x86/cleanups into tip/master
+On Wed, Jun 07, 2023 at 01:55:04PM +0200, Leonard Göhrs wrote:
+> This patch allows setting the correct SPI phase and polarity for KSZ
+> switches.
+> 
+> Signed-off-by: Leonard Göhrs <l.goehrs@pengutronix.de>
+> ---
+>  Documentation/devicetree/bindings/net/dsa/microchip,ksz.yaml | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/dsa/microchip,ksz.yaml b/Documentation/devicetree/bindings/net/dsa/microchip,ksz.yaml
+> index e51be1ac03623..f7c620d9ee8b4 100644
+> --- a/Documentation/devicetree/bindings/net/dsa/microchip,ksz.yaml
+> +++ b/Documentation/devicetree/bindings/net/dsa/microchip,ksz.yaml
+> @@ -49,6 +49,9 @@ properties:
+>        Set if the output SYNCLKO clock should be disabled. Do not mix with
+>        microchip,synclko-125.
+>  
+> +  spi-cpha: true
+> +  spi-cpol: true
 
-elapsed time: 724m
+These should only be needed if the mode is configurable or variable. 
+Otherwise, the driver for the device should set the mode correctly.
 
-configs tested: 79
-configs skipped: 5
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r002-20230607   gcc  
-alpha                randconfig-r011-20230607   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r006-20230607   clang
-csky                                defconfig   gcc  
-csky                 randconfig-r003-20230607   gcc  
-hexagon      buildonly-randconfig-r001-20230607   clang
-hexagon      buildonly-randconfig-r006-20230607   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i011-20230607   gcc  
-i386                 randconfig-i012-20230607   gcc  
-i386                 randconfig-i013-20230607   gcc  
-i386                 randconfig-i014-20230607   gcc  
-i386                 randconfig-i015-20230607   gcc  
-i386                 randconfig-i016-20230607   gcc  
-i386                 randconfig-i051-20230607   clang
-i386                 randconfig-i052-20230607   clang
-i386                 randconfig-i053-20230607   clang
-i386                 randconfig-i054-20230607   clang
-i386                 randconfig-i055-20230607   clang
-i386                 randconfig-i056-20230607   clang
-i386                 randconfig-i061-20230607   clang
-i386                 randconfig-i062-20230607   clang
-i386                 randconfig-i063-20230607   clang
-i386                 randconfig-i064-20230607   clang
-i386                 randconfig-i065-20230607   clang
-i386                 randconfig-i066-20230607   clang
-i386                 randconfig-r014-20230607   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r004-20230607   gcc  
-loongarch            randconfig-r024-20230607   gcc  
-m68k                             allmodconfig   gcc  
-m68k         buildonly-randconfig-r003-20230607   gcc  
-m68k                                defconfig   gcc  
-microblaze           randconfig-r021-20230607   gcc  
-microblaze           randconfig-r023-20230607   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r016-20230607   gcc  
-nios2                randconfig-r025-20230607   gcc  
-openrisc             randconfig-r013-20230607   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc              randconfig-r012-20230607   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r001-20230607   clang
-s390                 randconfig-r022-20230607   gcc  
-sh                               allmodconfig   gcc  
-sh                   randconfig-r026-20230607   gcc  
-sparc                               defconfig   gcc  
-sparc64              randconfig-r005-20230607   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-r005-20230607   clang
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64                               rhel-8.3   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Rob
