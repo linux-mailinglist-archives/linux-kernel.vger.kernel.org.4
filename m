@@ -2,105 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F1F6727324
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 01:38:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99CB1727327
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 01:38:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233341AbjFGXiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 19:38:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46608 "EHLO
+        id S233438AbjFGXi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 19:38:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232936AbjFGXiE (ORCPT
+        with ESMTP id S233353AbjFGXiV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 19:38:04 -0400
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63FAC2D4A
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 16:37:40 -0700 (PDT)
-Received: by mail-il1-x132.google.com with SMTP id e9e14a558f8ab-33d0b7114a9so10426425ab.2
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 16:37:40 -0700 (PDT)
+        Wed, 7 Jun 2023 19:38:21 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9630A270C
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 16:37:56 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-65311774e52so3288965b3a.3
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 16:37:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686181058; x=1688773058;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EN7QCcXv3GhQ50KYCOkYuc7v8/KdYJA2Wdn7x5ACZBs=;
-        b=F5C6nzp+cNI2MtG6/XKmmxvpCjcrpQXH9zwlDATsZqNr8TW2LkR5B5hZZnVTvszt8a
-         XEpY1dYF6O2AXOt/RpjVrgZVJDJuYH4uyvm8nPSggRNzzSZ9YepME8o6ia4wAi4uEdSm
-         qadmXlE7AclTcZYJr/sk15VQxc5UkWahO7/K4=
+        d=chromium.org; s=google; t=1686181076; x=1688773076;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=q85ALpObps5sc/UCVblmdlmcE0aIZmHRuMxmvi7ZvV4=;
+        b=lV8syWtj43Ff/kNItqdKE8y9KFBRtz3T741CER394a4RMHngbFtuX1OVIX0rOLruXT
+         XkH5dqkCV3iSkoPeFmEZh8PwJCU/4Cdt3mBMneFJ3QGZyUUe1hEbZi9eVOiiXIZz4LRQ
+         ymAYcwB9baokNEZhdcnTBgqOSyGwxz97Y5k6k=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686181058; x=1688773058;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EN7QCcXv3GhQ50KYCOkYuc7v8/KdYJA2Wdn7x5ACZBs=;
-        b=Hjy6hKlSXz9DwL0jSZ+sqJK7oiya+i0Nhur2VvO05NHkKAQxMror5RasAsfqLzglzu
-         KrOyKQlUeES1TnSALcnGL1DoSSEHoKSrI5wuL2+2ivgJHdaRqncgcxHsgEiohOxZscFC
-         xaLZ2IHeO++/B3ow9p6i3AivWcZCBIgfQNnK6RmREg0jo96w9v8BmXFiHVo7o2Lre9Mp
-         CloxJRNP9u9Ih9pZRFunMnjFibn7DUf+X6Jb8mIJVljvzQoB2rZU+6zwLjw0+YH3JWH5
-         QY4AbMMq4Bjger6fWJGqzkbjNWpIaocxCxGPglEt+D3HCyyVP30K8a5pai1a9Eet7Ykw
-         AvPg==
-X-Gm-Message-State: AC+VfDxUD8e1rEg+NNvJILACR75LmL0zjXgweVBYaESE81IJo5InWvDO
-        qQ+TjySgSUpo7ekBFu3I1zargMtWUIgFqMhpCxA=
-X-Google-Smtp-Source: ACHHUZ5qy/iQN6+qCTnlD8uJ7XWbkRGcBb8D/mhdHXr4rIRFQgTfvS+pgYgouHPXZXvctizLvtynAA==
-X-Received: by 2002:a92:d411:0:b0:33b:7e4:167a with SMTP id q17-20020a92d411000000b0033b07e4167amr10229902ilm.15.1686181058206;
-        Wed, 07 Jun 2023 16:37:38 -0700 (PDT)
-Received: from mail-il1-f179.google.com (mail-il1-f179.google.com. [209.85.166.179])
-        by smtp.gmail.com with ESMTPSA id z18-20020a029f12000000b0041a9c4e0f1csm3716478jal.109.2023.06.07.16.37.32
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 16:37:34 -0700 (PDT)
-Received: by mail-il1-f179.google.com with SMTP id e9e14a558f8ab-33d928a268eso54825ab.0
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 16:37:32 -0700 (PDT)
-X-Received: by 2002:a92:c54d:0:b0:33e:6b65:6f78 with SMTP id
- a13-20020a92c54d000000b0033e6b656f78mr16557ilj.27.1686181051931; Wed, 07 Jun
- 2023 16:37:31 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686181076; x=1688773076;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=q85ALpObps5sc/UCVblmdlmcE0aIZmHRuMxmvi7ZvV4=;
+        b=cXlX67W0eyA1tLrv1d8ZkFFQEm4KGvgPBl+0vU7WYI8y5nHoQ8s2D90GCWHK179LYT
+         fXzxmVB4Xr7EWuJ+ib8PsQ8tETAOndPkVZdMgPafxzv/jPvngFIOo0dJB2yoig8czjPA
+         WoFDkDcl/qpDC0DDNgPYjY/hv4kVXCgYjlNrmSKoUDW6JRKp6ipNsgKUH10Jm8Xny9FY
+         gq8ypL08qiFztO+Kfde/qXj9g56pIfiQomBScy0HOIUVLH05GiZnLDM7D89QHN3sYPJE
+         XsQ4QP4t1zd6MUiGxd4dgR+DVnRLXq4gt0jowrd/g/Bz4dMxQ4S86CDVDkyTKhafZMA/
+         PPqg==
+X-Gm-Message-State: AC+VfDyjTm8/UB8ruUWpDrdO9g0GZ26KzmXHaDRjZLevEPkoBveCVHcZ
+        CpIOFKv11+wrPtXVE7rrmKr1nA==
+X-Google-Smtp-Source: ACHHUZ6ZXC7p4DKrsltkZH4GRsEhK/UFVuZ7UJv1bOQaR6JO3aYQPtnsPqCAKXnWT3JJJ9X0TBo+zA==
+X-Received: by 2002:a05:6a20:394a:b0:117:51fe:9b4c with SMTP id r10-20020a056a20394a00b0011751fe9b4cmr2792096pzg.7.1686181076046;
+        Wed, 07 Jun 2023 16:37:56 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id p19-20020aa78613000000b006414b2c9efasm8859392pfn.123.2023.06.07.16.37.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 16:37:55 -0700 (PDT)
+Date:   Wed, 7 Jun 2023 16:37:55 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Mark Brown <broonie@kernel.org>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] binfmt_elf: dynamically allocate note.data in
+ parse_elf_properties
+Message-ID: <202306071636.1C35171CC@keescook>
+References: <20230607144227.8956-1-ansuelsmth@gmail.com>
+ <202306071417.79F70AC@keescook>
+ <6480f938.1c0a0220.17a3a.0e1e@mx.google.com>
 MIME-Version: 1.0
-References: <20230607152432.5435-1-pmladek@suse.com>
-In-Reply-To: <20230607152432.5435-1-pmladek@suse.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 7 Jun 2023 16:37:20 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=W=xamTf6BUmp-Yg-SEEgE8GRKw6Pnfv6t=Hviywj-N-g@mail.gmail.com>
-Message-ID: <CAD=FV=W=xamTf6BUmp-Yg-SEEgE8GRKw6Pnfv6t=Hviywj-N-g@mail.gmail.com>
-Subject: Re: [PATCH 0/7] watchdog/hardlockup: Cleanup configuration of
- hardlockup detectors
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        kgdb-bugreport@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev@lists.ozlabs.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        sparclinux@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6480f938.1c0a0220.17a3a.0e1e@mx.google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Jun 07, 2023 at 08:31:58PM +0200, Christian Marangi wrote:
+> On Wed, Jun 07, 2023 at 02:19:51PM -0700, Kees Cook wrote:
+> > On Wed, Jun 07, 2023 at 04:42:27PM +0200, Christian Marangi wrote:
+> > > Dynamically allocate note.data in parse_elf_properties to fix
+> > > compilation warning on some arch.
+> > 
+> > I'd rather avoid dynamic allocation as much as possible in the exec
+> > path, but we can balance it against how much it may happen.
+> >
+> 
+> I guess there isn't a good way to handle this other than static global
+> variables and kmalloc. But check the arch question for additional info
+> on the case.
+> 
+> > > On some arch note.data exceed the stack limit for a single function and
+> > > this cause the following compilation warning:
+> > > fs/binfmt_elf.c: In function 'parse_elf_properties.isra':
+> > > fs/binfmt_elf.c:821:1: error: the frame size of 1040 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
+> > >   821 | }
+> > >       | ^
+> > > cc1: all warnings being treated as errors
+> > 
+> > Which architectures see this warning?
+> > 
+> 
+> This is funny. On OpenWRT we are enforcing WERROR and we had FRAME_WARN
+> hardcoded to 1024. (the option is set to 2048 on 64bit arch)
 
-On Wed, Jun 7, 2023 at 8:25=E2=80=AFAM Petr Mladek <pmladek@suse.com> wrote=
-:
->
-> Hi,
->
-> this patchset is supposed to replace the last patch in the patchset clean=
-ing
-> up after introducing the buddy detector, see
-> https://lore.kernel.org/r/20230526184139.10.I821fe7609e57608913fe05abd8f3=
-5b343e7a9aae@changeid
+Ah-ha. Okay, I was wondering how you got that. :)
 
-I will let Andrew chime in with his preference, but so far I haven't
-seen him dropping and/or modifying any patches that he's picked up in
-this series. I see that he's already picked up the patch that you're
-"replacing". I wonder if it would be easier for him if you just built
-atop that?
+> ARCH_USE_GNU_PROPERTY is set only on arm64 that have a FRAME_WARN set to
+> 2048.
+> 
+> So this was triggered by building arm64 with FRAME_WARN set to 1024.
+> 
+> Now with the configuration of 2048 the stack warn is not triggered, but
+> I wonder if it may happen to have a 32bit system with
+> ARCH_USE_GNU_PROPERTY. That would effectively trigger the warning.
+> 
+> So this is effectively a patch that fix a currently not possible
+> configuration, since:
+> 
+> !IS_ENABLED(CONFIG_ARCH_USE_GNU_PROPERTY) will result in node.data
+> effectively never allocated by the compiler are the function will return
+> 0 on everything that doesn't have CONFIG_ARCH_USE_GNU_PROPERTY.
+> 
+> > > Fix this by dynamically allocating the array.
+> > > Update the sizeof of the union to the biggest element allocated.
+> > 
+> > How common are these notes? I assume they're very common; I see them
+> > even in /bin/true:
+> > 
+> > $ readelf -lW /bin/true | grep PROP
+> >   GNU_PROPERTY   0x000338 0x0000000000000338 0x0000000000000338 0x000030 0x000030 R   0x8
+> > 
+> > -- 
+> 
+> Is there a way to check if this kmalloc actually cause perf regression?
 
--Doug
+I don't have a good benchmark besides just an exec loop. But since this
+isn't reachable in a regular config, I'd rather keep things how there
+already are.
+
+-Kees
+
+-- 
+Kees Cook
