@@ -2,54 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1041B7251F0
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 04:05:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F0DD7251A9
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 03:44:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240640AbjFGCFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 22:05:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44352 "EHLO
+        id S240007AbjFGBoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 21:44:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240103AbjFGCFs (ORCPT
+        with ESMTP id S240556AbjFGBoC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 22:05:48 -0400
-Received: from cstnet.cn (smtp80.cstnet.cn [159.226.251.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 611C410F0
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 19:05:47 -0700 (PDT)
-Received: from ed3e173716be.home.arpa (unknown [124.16.138.125])
-        by APP-01 (Coremail) with SMTP id qwCowAB3fxfr5X9kQYTMDA--.6398S2;
-        Wed, 07 Jun 2023 10:05:33 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     hyun.kwon@xilinx.com, laurent.pinchart@ideasonboard.com,
-        airlied@gmail.com, daniel@ffwll.ch, michal.simek@amd.com
-Cc:     dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] drm: xlnx: zynqmp_dpsub: Add missing check for dma_set_mask
-Date:   Wed,  7 Jun 2023 10:05:29 +0800
-Message-Id: <20230607020529.22934-1-jiasheng@iscas.ac.cn>
+        Tue, 6 Jun 2023 21:44:02 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBC701FE0
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 18:43:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686102228; x=1717638228;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=oak0LJhMLWtP9UoshEOtnO5xklZAVt1BPVezT+IWuFw=;
+  b=VoKaPitEcePYoZJ3P7av0GoEyTx9HNCsKInnIyFzq33Cn8aQvABT/op3
+   +BPQFsSe/xAY3crzKzehGLWJ04u9CP1Sc7O1TaMJwyZ2jAhmbc8Gpbkoy
+   Lo1ui8FT21QtGD/JP7JQ6i8HF0uKqAMny30T0eiXURoLJna5oi2w6Bk8y
+   Xt3ivmUxxcwJ8+iX0bMElCwsPQvQCvkLAvbR2/HYoZ8+6ckePgfa7bqbK
+   3dyXCPkXMWkcDQblrcufxRM/hRQi2d7BL7nlErndRHo7QHTVb2ncsk3/H
+   JTn6KelGSBaJVv6TBRAT7zCWYW4nlua+F4TRvDEH9PKhz1ySCizz3y1aD
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="359314355"
+X-IronPort-AV: E=Sophos;i="6.00,222,1681196400"; 
+   d="scan'208";a="359314355"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 18:43:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="742396227"
+X-IronPort-AV: E=Sophos;i="6.00,222,1681196400"; 
+   d="scan'208";a="742396227"
+Received: from bard-ubuntu.sh.intel.com ([10.239.185.57])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 18:43:44 -0700
+From:   Bard Liao <yung-chuan.liao@linux.intel.com>
+To:     alsa-devel@alsa-project.org, vkoul@kernel.org
+Cc:     vinod.koul@linaro.org, linux-kernel@vger.kernel.org,
+        pierre-louis.bossart@linux.intel.com, bard.liao@intel.com
+Subject: [PATCH] soundwire: debugfs: Add missing SCP registers
+Date:   Wed,  7 Jun 2023 10:06:32 +0800
+Message-Id: <20230607020632.1030309-1-yung-chuan.liao@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: qwCowAB3fxfr5X9kQYTMDA--.6398S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrKr1ktr1rJw47WF1xArWrZrb_yoWDWFc_Kr
-        1UCFyDXF4DAr1vqrsrCrySyr92k395XrZYvFs7Ka4FqryUGrnxX3y7ZFZ09r4DZ3W7ArWD
-        X3WjgrZxJrWIkjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbcxFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
-        Gr1UM28EF7xvwVC2z280aVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVCY1x0267AKxVWxJr
-        0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r4U
-        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
-        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0E
-        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
-        W8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
-        cVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbpwZ7UUUUU==
-X-Originating-IP: [124.16.138.125]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,29 +60,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add check for dma_set_mask() and return the error if it fails.
+From: Uday M Bhat <uday.m.bhat@intel.com>
 
-Fixes: d76271d22694 ("drm: xlnx: DRM/KMS driver for Xilinx ZynqMP DisplayPort Subsystem")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+SCP registers needs to be updated to accommodate additional
+register entries as per the Soundwire 1.2 specification.
+
+Signed-off-by: Uday M Bhat <uday.m.bhat@intel.com>
+Signed-off-by: Yong Zhi <yong.zhi@intel.com>
+Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
 ---
- drivers/gpu/drm/xlnx/zynqmp_dpsub.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/soundwire/debugfs.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/xlnx/zynqmp_dpsub.c b/drivers/gpu/drm/xlnx/zynqmp_dpsub.c
-index bab862484d42..068413be6527 100644
---- a/drivers/gpu/drm/xlnx/zynqmp_dpsub.c
-+++ b/drivers/gpu/drm/xlnx/zynqmp_dpsub.c
-@@ -227,7 +227,9 @@ static int zynqmp_dpsub_probe(struct platform_device *pdev)
- 	dpsub->dev = &pdev->dev;
- 	platform_set_drvdata(pdev, dpsub);
+diff --git a/drivers/soundwire/debugfs.c b/drivers/soundwire/debugfs.c
+index c3a1a359ee5c..d1553cb77187 100644
+--- a/drivers/soundwire/debugfs.c
++++ b/drivers/soundwire/debugfs.c
+@@ -86,10 +86,17 @@ static int sdw_slave_reg_show(struct seq_file *s_file, void *data)
  
--	dma_set_mask(dpsub->dev, DMA_BIT_MASK(ZYNQMP_DISP_MAX_DMA_BIT));
-+	ret = dma_set_mask(dpsub->dev, DMA_BIT_MASK(ZYNQMP_DISP_MAX_DMA_BIT));
-+	if (ret)
-+		return ret;
+ 	/* SCP registers */
+ 	ret += scnprintf(buf + ret, RD_BUF - ret, "\nSCP\n");
+-	for (i = SDW_SCP_INT1; i <= SDW_SCP_BANKDELAY; i++)
++	for (i = SDW_SCP_INT1; i <= SDW_SCP_BUS_CLOCK_BASE; i++)
+ 		ret += sdw_sprintf(slave, buf, ret, i);
+ 	for (i = SDW_SCP_DEVID_0; i <= SDW_SCP_DEVID_5; i++)
+ 		ret += sdw_sprintf(slave, buf, ret, i);
++	for (i = SDW_SCP_FRAMECTRL_B0; i <= SDW_SCP_BUSCLOCK_SCALE_B0; i++)
++		ret += sdw_sprintf(slave, buf, ret, i);
++	for (i = SDW_SCP_FRAMECTRL_B1; i <= SDW_SCP_BUSCLOCK_SCALE_B1; i++)
++		ret += sdw_sprintf(slave, buf, ret, i);
++	for (i = SDW_SCP_PHY_OUT_CTRL_0; i <= SDW_SCP_PHY_OUT_CTRL_7; i++)
++		ret += sdw_sprintf(slave, buf, ret, i);
++
  
- 	/* Try the reserved memory. Proceed if there's none. */
- 	of_reserved_mem_device_init(&pdev->dev);
+ 	/*
+ 	 * SCP Bank 0/1 registers are read-only and cannot be
 -- 
 2.25.1
 
