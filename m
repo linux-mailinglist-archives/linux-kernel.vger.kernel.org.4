@@ -2,196 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D71E0726909
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 20:38:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 817C9726911
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 20:42:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232939AbjFGSig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 14:38:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53538 "EHLO
+        id S229554AbjFGSl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 14:41:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230034AbjFGSib (ORCPT
+        with ESMTP id S231392AbjFGSl5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 14:38:31 -0400
-Received: from DM6FTOPR00CU001.outbound.protection.outlook.com (mail-centralusazon11020026.outbound.protection.outlook.com [52.101.61.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13F671FE6;
-        Wed,  7 Jun 2023 11:38:10 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=g4pgrC+itCjxe8wrylx4dxZmIhfo8YQr3Be0eosYA9drd5uiS7qU5OEfIGdyAnZrwF1pG8X6Bcpah81N2Q04SQKAVWZvVmhE44oribc7GYstN3lKpo5Zb9qCkjrVrS5v8oxTWMdl3A3TeDhjaZT4QNvh5AYBKLy44HNS9MuH65QP4NMe2f3POmA68HcK+tAUX8WTgZ4BHLUdnP1JbQu56o/ytkOF+XCzfxDf16X7aYpXk9BHV/TJsUoS4QRuGJ/pWKJ19ZqIW47c/zfm7urxRi1OPy426J1OSFTzIySKoaH8QX0byZlsAp//NZjITltPmIL/FxB4dDVzBW2yFt5LfA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Mmw8990CJhY0WaUzIbMhHZ0Zta1yPla0O+alsHiL0Ao=;
- b=Kh3QETH86xh/peT8VrB0X46I0FemLRQTbLBYDWOADVDj7sqmFZDfsixDa+NDuDla84kHNHCLf3I0n+U23ejQ3mZmSJsqL3EwQCE+TEm9wGYAmchEmkIoA7AoUxkEYVg6mC8+TBrYI6Xl5EE5DNTaMs0xau9X7PfG2tZ/FVBt/xN9TkBNzJei7KHZoCjj2qtcQCWGPSSY1sKVcvIkzk7+bOuXh6LrSsOTVYrX+6lmFSXwCA4q+oFq1Sg11yZBUwpgniYA9BLn65IXyex1os5xthKBYr4LLJ7kzclG5kgdiksSwUzg1ZzsC+EDWNJeaW7sE+5d97iOuRfrn1LfRnB6Qg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Mmw8990CJhY0WaUzIbMhHZ0Zta1yPla0O+alsHiL0Ao=;
- b=YizCf07N3anGNNnW4fxkqiDRjpYWIsJwb0atE1V5jar9d4hidu6F07sxC83W1chGhpCgAPM6OBNrNCkJYog2VPoxW66n6RyMc69PgCI/xN7EhWgC3XuJX3ozEXtugRjdxKEhiJyki50JI3lajgoamNGz/S1kBGTnfQ4kItxrINc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-Received: from BY5PR21MB1443.namprd21.prod.outlook.com (2603:10b6:a03:21f::18)
- by LV2PR21MB3373.namprd21.prod.outlook.com (2603:10b6:408:14d::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.7; Wed, 7 Jun
- 2023 18:38:07 +0000
-Received: from BY5PR21MB1443.namprd21.prod.outlook.com
- ([fe80::4eff:a209:efda:81d4]) by BY5PR21MB1443.namprd21.prod.outlook.com
- ([fe80::4eff:a209:efda:81d4%6]) with mapi id 15.20.6500.004; Wed, 7 Jun 2023
- 18:38:07 +0000
-From:   Haiyang Zhang <haiyangz@microsoft.com>
-To:     linux-hyperv@vger.kernel.org, netdev@vger.kernel.org
-Cc:     haiyangz@microsoft.com, decui@microsoft.com, kys@microsoft.com,
-        paulros@microsoft.com, olaf@aepfle.de, vkuznets@redhat.com,
-        davem@davemloft.net, wei.liu@kernel.org, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, leon@kernel.org,
-        longli@microsoft.com, ssengar@linux.microsoft.com,
-        linux-rdma@vger.kernel.org, daniel@iogearbox.net,
-        john.fastabend@gmail.com, bpf@vger.kernel.org, ast@kernel.org,
-        sharmaajay@microsoft.com, hawk@kernel.org, tglx@linutronix.de,
-        shradhagupta@linux.microsoft.com, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next] net: mana: Add support for vlan tagging
-Date:   Wed,  7 Jun 2023 11:37:38 -0700
-Message-Id: <1686163058-25469-1-git-send-email-haiyangz@microsoft.com>
-X-Mailer: git-send-email 1.8.3.1
-Content-Type: text/plain
-X-ClientProxiedBy: MW4PR04CA0051.namprd04.prod.outlook.com
- (2603:10b6:303:6a::26) To BY5PR21MB1443.namprd21.prod.outlook.com
- (2603:10b6:a03:21f::18)
+        Wed, 7 Jun 2023 14:41:57 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9AC71725
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 11:41:54 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-5147a478c38so1896058a12.0
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 11:41:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686163313; x=1688755313;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XfuroyQJAbz9eJ8IYNpTYqcNYBwtnqvDKwV5tW+1tFE=;
+        b=IcfL/GcfP36E83IHgmLLRi5x1twq00fmG6Sfg8gSppBVGwe2eLmviHQPFJ44wcHFAJ
+         BZjzoqPyR/Nr8XZQTdbjkEtgGtt5h9R/QencLiOrJZBGy7AlV7sPcECAxKrtr7HM2JqY
+         /tQh38luGPEzqOFmx5LXn57Ix1WXy1sw/jzFu3DeThk/4BqOeQx7xEaP8SczU190LF+F
+         ot9K9/TfEHCHi/GYMMbzC79T88RLWwZr/L10IayHPC1szSRe9EzXx74tSGl8hENMr48i
+         VMhEbpuoRrZpj2U2c7sJL9TG895IB21QKqKiB5pTkt08w04BKsNz4j3qX/tJYP+IwaxL
+         H6AQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686163313; x=1688755313;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XfuroyQJAbz9eJ8IYNpTYqcNYBwtnqvDKwV5tW+1tFE=;
+        b=KK9ILhrBAS01rkA1FyROXoYit7LlHCGSS9494uybq5I8mLs9ZQy11RJmvbFzRB3QVA
+         moXS9QM/gsq6udI+eKDHR+VnBl4Whjq8OW3YpKtmgd7+k+CUD6eR3yf3NW4kAEvHmNEA
+         agi8AhTMZDwoZi3JlEOAh6kStFSHfCpCWlVkyls2DuntGLbo/MyLzqZEGcdukdYYeW+z
+         rPqoq6eRojWg4bZ2KFkTz24YZ1so2yn8Q6vC/Hv/H/dPHtb55W4bK3sa6HO/CAySqvtb
+         nKrCyh09TkowPNAvxi5YLtZrdsgqoLd27GPdqXvPEYmt5QKHisK+S4m8kserc4S6QzYh
+         0q8g==
+X-Gm-Message-State: AC+VfDzOuZjpGhw0ltR8LoroThPfd1EvrV6pYmwhd+atnxkdjs/v9XBf
+        1hAzVm206q+XvhyI1lJ7CIUUUg==
+X-Google-Smtp-Source: ACHHUZ6zGHkNvsuGpMnZNEHMZYFlUcKqv1tGCUIBu62p6KkmSMlv2eSJHXspjLAOaPba7v7Y91kGHQ==
+X-Received: by 2002:a17:907:2da3:b0:978:337e:c417 with SMTP id gt35-20020a1709072da300b00978337ec417mr7146739ejc.60.1686163313297;
+        Wed, 07 Jun 2023 11:41:53 -0700 (PDT)
+Received: from krzk-bin.. ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id ci17-20020a170906c35100b009787ad3157bsm1435856ejb.39.2023.06.07.11.41.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 11:41:52 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] dt-bindings: misc: qcom,fastrpc: drop unneeded quotes
+Date:   Wed,  7 Jun 2023 20:41:47 +0200
+Message-Id: <20230607184147.420352-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Sender: LKML haiyangz <lkmlhyz@microsoft.com>
-X-MS-Exchange-MessageSentRepresentingType: 2
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR21MB1443:EE_|LV2PR21MB3373:EE_
-X-MS-Office365-Filtering-Correlation-Id: 68115893-f600-49c9-0cfa-08db678655d5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QztGZbFy6W/3BPy1JTRaQHA/eDlj/OZ7B/9ATexXuDk05xEsuWPozH7suZoL+k3ja+DIWnUnlhWkybnBew207le4OQarv2ijsRsgmueSrZdGePsRnR5ccuYKoVeDcF6Lk91NK1+/E3cGWG8cOvSh4iSFtBSzJu78JNFxx+yndTqtbExdjfaAKZ1DcZZCyrg7Tbxh5ohVUloLRB1VnHO/S8We/AlTaiPL4MuNuZXhY6v6Hf4iKosZ6DtQ7z4jb2ANGqVCaCB+yQlgMKoOW6G2bvD1FcZ0M1EEiaE3JCqgnN1d2NJACWi+nZWXBERHQ/jegKWkpilEZIMpY6oNofAFarqRVwM1gYdF01nmaFZEKhwuVFeBH274KdWkuAg6zKZJbiwBeUsvjP1w96ihnnHyks6T1b5HlebkRi/baOytd2NVokMb397q+bHdykQsZTBgBu37zyOuBmQ3EgrSKWx7MpmwmYAdg0iQfBvg7W6deZWweM0oEvg2wHDUHWfpOT0gNlZqmZE6GSkQuI/2/JVYV3t7fP9AZs9LQeCWSn9bGS55v/C1zKkRAQSdVaRVEzSzZqSxeTZQTA4WdXIjm9I45+l1TFziiVnCSkMB2A488gPviiephXm0Hr6XyGxZisdTslM23C/0tCcRbqCMs2/sc3h67+g9iD394HwGylFXqiA=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR21MB1443.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(39860400002)(366004)(396003)(136003)(451199021)(8676002)(4326008)(66556008)(66476007)(8936002)(66946007)(5660300002)(7416002)(316002)(41300700001)(2906002)(10290500003)(478600001)(82960400001)(82950400001)(38100700002)(6512007)(6506007)(186003)(26005)(38350700002)(36756003)(6486002)(52116002)(7846003)(2616005)(83380400001)(6666004);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?USf2LsrnZaqyCo+Cbf+lbOReK89t3jpniAQYKbCl+Jz7Q09auPWRu+VfxW8o?=
- =?us-ascii?Q?XWgSjM2AoJcpX1PCzP0+JPVO/Ep2o+Fn2G270hXfbEpeEk9lKajr8dFgu79O?=
- =?us-ascii?Q?IplwVi1ZUUFpcbW0l7UT84BKxCPXzvxV9U8ch8bUJllqCBNCO6OOxQA1ouwb?=
- =?us-ascii?Q?/mPR9qf3RxiKMHRctlsHM0Rn8mpla77IPce2im65LBv5NpoEWszf0HNfMcnS?=
- =?us-ascii?Q?QQReRhXfGSGvfqOFJOJvxfUFUS5WxrTeFmh/qBfU5GOJ6xUWnvyvVw8Qm8Bh?=
- =?us-ascii?Q?ecBbVDZpN7+/DMZuKyRlm8vMmv9FxCb+0zZwlI4Gawyr8VoeOnIjF4/mUqsC?=
- =?us-ascii?Q?IB9MDwiHmsKU0zG5UfBx/CWASprwsWPLizjNOGiQbMLqV7Ll4YCb04b+/JyP?=
- =?us-ascii?Q?zkqBJ8UJNdQJ3/68B8a0cfJrBPgShsRFT+GxC1QqbD/VplphYAs5V2VmyqT1?=
- =?us-ascii?Q?elCyk4Ptqgv+UYsZ588jKOI6QHWyL66ib3AH4ARv6YWKr3kSOnds8RVl46Dv?=
- =?us-ascii?Q?q2lVCva0tnuD3pQel0A809Pl6SgmiGi5EOrBssK7HgrU4Lq9cru4MCzCNJ3I?=
- =?us-ascii?Q?KC2GHeTAJM1lzAPkp0hSba7T3xSbOXQM3bdknA025bRUgB9oEO0l4d2LO2IT?=
- =?us-ascii?Q?h/YsclkPL43abrysDDraxuHoRBbLgQBYhSnQ3X3kYLuRYpc2PLkyhaFMPcCc?=
- =?us-ascii?Q?Zlx4x1gu4fQZA/JOQJt6Z3DUSCSCQZcy08Fot7ZiyiXaR8paFy8ngSCQc2aB?=
- =?us-ascii?Q?vxtSGZnp8P5fz6QrTc+JqpQDCVfDXrrq+j6EkHsEYBownWuXHcst4KgflG5p?=
- =?us-ascii?Q?MXDHGZYehLyZU/xVmIaT2W+UHEiQ35usgZ0YuaCGg/GbdYxkxelBfFfLynAB?=
- =?us-ascii?Q?pSwX9mszgAtH+SHknUAmLuzwty1iXWauqrIDAQcXg1g9kvMxWLVkqBPsj6AK?=
- =?us-ascii?Q?V/r4Aa/yUPFLw1RDM6/taU0eLZZ7Z4qJzl5dQ+MsbkIpbjPNFsN4QxAWoCES?=
- =?us-ascii?Q?Q8Ovkhy1lCPaIZHz3EUHtoVzxYnHP1ohN1RmmnbHeexQ1HzA4hXxr6ORzNWL?=
- =?us-ascii?Q?qKBtHaurRY0zGjlCyrr56sxxA05U0O1ZMsw9gbSWJkiKpI832WkWLKkiJ7xN?=
- =?us-ascii?Q?3RG5QGIepnndTViswgaoF62aFiwzR7CCCSy0+pC1zVFTga8B1Mhqk3MFQ3bD?=
- =?us-ascii?Q?qv1OG1C7xZLxssl/jj0M96UNIfj16vy3cdpZcpuK34ESq2ZL38PHIZEbAh76?=
- =?us-ascii?Q?1dVO17zzP8MRLa4d6fGx/HJdVT/7XohofJLdlbj9mGowWBOa7pK0GiAxExmt?=
- =?us-ascii?Q?8vVIM/WdqDhiacZajdwWRCfzihzBlBqbg5sv/M3fLQ+N6OobHkiCl5pOeH43?=
- =?us-ascii?Q?7whzCygZgl+hS+Phu6HMWjADGikqj5YE/1tApfOf7rYyUgxhoZSzbC8crqOk?=
- =?us-ascii?Q?R71pAUFE1X6kklFRz/auu+Xxsy/Dx74bq9xFiNRfRJ2I5N5WrnUXAQC13Ytx?=
- =?us-ascii?Q?jYDyF+bkohWRYl3M/niLG6OBRtLNyz3ly02/G25uhCDT+CcnmLDXNKRYdyiK?=
- =?us-ascii?Q?RJGEOn+idY84ysWMA6wUw88VOjeNZ921YBwkjyKS?=
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 68115893-f600-49c9-0cfa-08db678655d5
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR21MB1443.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2023 18:38:06.9632
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: nZUxHTzahHGIwuOoKPxDJU4uOK1s+Uuc/NThys6oMy7mNdol+0gei2B5NA/Ry2/xc/IbV410wyueOaQkV387bg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR21MB3373
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To support vlan, use MANA_LONG_PKT_FMT if vlan tag is present in TX
-skb. Then extract the vlan tag from the skb struct or the frame, and
-save it to tx_oob for the NIC to transmit.
+Cleanup bindings dropping unneeded quotes. Once all these are fixed,
+checking for this can be enabled in yamllint.
 
-For RX, extract the vlan tag from CQE and put it into skb.
-
-Signed-off-by: Haiyang Zhang <haiyangz@microsoft.com>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/net/ethernet/microsoft/mana/mana_en.c | 36 +++++++++++++++++--
- 1 file changed, 34 insertions(+), 2 deletions(-)
+ Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/ethernet/microsoft/mana/mana_en.c b/drivers/net/ethernet/microsoft/mana/mana_en.c
-index d907727c7b7a..1d76ac66908c 100644
---- a/drivers/net/ethernet/microsoft/mana/mana_en.c
-+++ b/drivers/net/ethernet/microsoft/mana/mana_en.c
-@@ -179,6 +179,31 @@ netdev_tx_t mana_start_xmit(struct sk_buff *skb, struct net_device *ndev)
- 		pkg.tx_oob.s_oob.short_vp_offset = txq->vp_offset;
- 	}
+diff --git a/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml b/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
+index 1ab9588cdd89..2dc3e245fa5d 100644
+--- a/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
++++ b/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
+@@ -36,7 +36,7 @@ properties:
+     description:
+       A list of channels tied to this function, used for matching
+       the function to a set of virtual channels.
+-    $ref: "/schemas/types.yaml#/definitions/string-array"
++    $ref: /schemas/types.yaml#/definitions/string-array
+     items:
+       - const: fastrpcglink-apps-dsp
  
-+	/* When using AF_PACKET we need to move VLAN header from
-+	 * the frame to the SKB struct to allow the NIC to xmit
-+	 * the 802.1Q packet.
-+	 */
-+	if (skb->protocol == htons(ETH_P_8021Q)) {
-+		u16 vlan_tci;
-+
-+		skb_reset_mac_header(skb);
-+		if (eth_type_vlan(eth_hdr(skb)->h_proto)) {
-+			if (unlikely(__skb_vlan_pop(skb, &vlan_tci)))
-+				goto tx_drop_count;
-+
-+			__vlan_hwaccel_put_tag(skb, htons(ETH_P_8021Q),
-+					       vlan_tci);
-+		}
-+	}
-+
-+	if (skb_vlan_tag_present(skb)) {
-+		pkt_fmt = MANA_LONG_PKT_FMT;
-+		pkg.tx_oob.l_oob.inject_vlan_pri_tag = 1;
-+		pkg.tx_oob.l_oob.pcp = skb_vlan_tag_get_prio(skb);
-+		pkg.tx_oob.l_oob.dei = skb_vlan_tag_get_cfi(skb);
-+		pkg.tx_oob.l_oob.vlan_id = skb_vlan_tag_get_id(skb);
-+	}
-+
- 	pkg.tx_oob.s_oob.pkt_fmt = pkt_fmt;
+@@ -48,14 +48,14 @@ properties:
+   qcom,smd-channels:
+     description:
+       Channel name used for the RPM communication
+-    $ref: "/schemas/types.yaml#/definitions/string-array"
++    $ref: /schemas/types.yaml#/definitions/string-array
+     items:
+       - const: fastrpcsmd-apps-dsp
  
- 	if (pkt_fmt == MANA_SHORT_PKT_FMT) {
-@@ -1457,6 +1482,12 @@ static void mana_rx_skb(void *buf_va, struct mana_rxcomp_oob *cqe,
- 			skb_set_hash(skb, hash_value, PKT_HASH_TYPE_L3);
- 	}
+   qcom,vmids:
+     description:
+       Virtual machine IDs for remote processor.
+-    $ref: "/schemas/types.yaml#/definitions/uint32-array"
++    $ref: /schemas/types.yaml#/definitions/uint32-array
  
-+	if (cqe->rx_vlantag_present) {
-+		u16 vlan_tci = cqe->rx_vlan_id;
-+
-+		__vlan_hwaccel_put_tag(skb, htons(ETH_P_8021Q), vlan_tci);
-+	}
-+
- 	u64_stats_update_begin(&rx_stats->syncp);
- 	rx_stats->packets++;
- 	rx_stats->bytes += pkt_len;
-@@ -2451,8 +2482,9 @@ static int mana_probe_port(struct mana_context *ac, int port_idx,
- 	ndev->hw_features |= NETIF_F_RXCSUM;
- 	ndev->hw_features |= NETIF_F_TSO | NETIF_F_TSO6;
- 	ndev->hw_features |= NETIF_F_RXHASH;
--	ndev->features = ndev->hw_features;
--	ndev->vlan_features = 0;
-+	ndev->features = ndev->hw_features | NETIF_F_HW_VLAN_CTAG_TX |
-+			 NETIF_F_HW_VLAN_CTAG_RX;
-+	ndev->vlan_features = ndev->features;
- 	ndev->xdp_features = NETDEV_XDP_ACT_BASIC | NETDEV_XDP_ACT_REDIRECT |
- 			     NETDEV_XDP_ACT_NDO_XMIT;
- 
+   "#address-cells":
+     const: 1
 -- 
-2.25.1
+2.34.1
 
