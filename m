@@ -2,212 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BE7672528D
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 05:49:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15F62725290
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 05:50:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240853AbjFGDtY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 23:49:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33764 "EHLO
+        id S240861AbjFGDuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 23:50:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240848AbjFGDtT (ORCPT
+        with ESMTP id S240928AbjFGDuR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 23:49:19 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C14019BA
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 20:49:17 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-565aa2cc428so64361177b3.1
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 20:49:17 -0700 (PDT)
+        Tue, 6 Jun 2023 23:50:17 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A95D1BCA;
+        Tue,  6 Jun 2023 20:50:16 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-565cfe4ece7so76602777b3.2;
+        Tue, 06 Jun 2023 20:50:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686109756; x=1688701756;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=z7egDDp6MmQZCbbodxJ12b9UShhbnTUq6PVtm9aM+04=;
-        b=Pqkuvwjf09O59UPXdhhO7tjU33/VqFu4i39Q1X5ngvz5wkjB5jztMKPW4Oy+gYaN7f
-         ryMo/pvFu2ihp6hoUNLGrxxJwEg8cYMz5y/fZ40STo2ayOGik+sBKWhCpCfn0AUciN7G
-         u/GoJh9IbWauEReNRcuISo1bdmXC0fxzeRJsQoJjK/V1wht50c5ITiIrEruEX8FLCjD2
-         dukvUd3PuNbqeJ+lutclQGH56tlKSgwPULdPaCAne7DDEI6NLUhCoAXG+BWCQuQ+cPUd
-         LuL0hGsrAkgsHjfC8Mobph1RQY6cg81EchUXYFPmRFE9lQLqL6vwX8Y9XC9AJeP/FN6P
-         1U9A==
+        d=gmail.com; s=20221208; t=1686109816; x=1688701816;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Na3I9K3/ba8EkhBO8d8TpKjtZepS1FFlDEJmyLoVzfY=;
+        b=YAOv7S+XmZKTiruiWIAGkJCsiSYU+BVv9ntx9FPw8bTJAOJcIXk9ERqnTqzlqIEzT1
+         g5rLKzhadfW3THVq+WWOSI0KB37jzV08jxONtXU7Dn2uARlbma7YxhcZSyoMHUimpic2
+         hWhSmPFmq/KL7cd2xcLpg2BSyznnz4WI1/8CDqaPgohsgts+Qdl2m5aQJhTn4NC3HVUn
+         3kdr9z06MQbQnJ8ujWUDFp2MtI5hgt8hgPnOWrKPxw3eewjUH07vMg97U9LTpd5zrJdY
+         1MMjPns05Ezz8eDrdOusOdvG2KtiLNJk8rUegXdPBIJtj7gNKAFl9wrF3BZO2fv2SGPU
+         qtJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686109756; x=1688701756;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=z7egDDp6MmQZCbbodxJ12b9UShhbnTUq6PVtm9aM+04=;
-        b=IFdtJHV/NN34/rh61K4mbiAAs+qDJjJC13NYhPcRO/KF7mYD2oaWkqrekEmeJ1Igia
-         Ebjzxov3oFGBh/zUk3xu9V8pB0pcjOUlccgCliSpioRgkV6Bu1FZ9TJpNai/4WnXWYY7
-         127YVj62DorqLi+MB/WivIbKF7HqZNAh+aMa11Yi4E5xHgqvmUlj9RJWI8E5qggmwFMz
-         X4cdZEt43Ga99QoHRGxvbNqFLka1MJw4E0/nD0f+1Q113EBSy35gUZFPcJr6xg1S5fdi
-         AW9ChKm1hALy9VbsfQrDx9dx1ymcEhWJ7wuJ3Qv8gZ8tF7B5KAGBBbxJS2syjRJt1DSd
-         a98g==
-X-Gm-Message-State: AC+VfDz7ZVaCekpsmXD86HqoOVUGTKx8gt76MhqalvjfT1Kp6v4lIiWs
-        N332h8Q8s4IPTo/h87DywpkekQ==
-X-Google-Smtp-Source: ACHHUZ6FeY70tXV92DFudQ4t5nR7rwwIAGb4bJwe8V5V4ANCDpC/kaCGZoHb9LVSkohk9DbNmeTmEg==
-X-Received: by 2002:a0d:cb47:0:b0:565:c96b:f526 with SMTP id n68-20020a0dcb47000000b00565c96bf526mr4712606ywd.19.1686109756614;
-        Tue, 06 Jun 2023 20:49:16 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id s11-20020a81bf4b000000b00555df877a4csm4446640ywk.102.2023.06.06.20.49.12
+        d=1e100.net; s=20221208; t=1686109816; x=1688701816;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Na3I9K3/ba8EkhBO8d8TpKjtZepS1FFlDEJmyLoVzfY=;
+        b=hmHfhTbo7pEml91QE950hMYTe4dzNEHIdZFl3pxxjCP397umEpgMtNXB4nRpCu3JGw
+         amkeqW3lLp7EtViHbqFy6a6KCQvVIYwmH+Thh73HDfLSRysanesNXm8AV3M0hb/QIvco
+         AaCiv6/aLzUNVy9zQpbyMBFhIu/p/zAurvQqMleRxFYDlMgfEGpnlnHpAmofM32HOgTi
+         uv+KDJXBFQftafrXc3e9SO03Q5tAr+inRkhqJEW0QmFkL8YXhse8G7GiBkRSwh4jOzgN
+         4OrmVvOItl6xTj3i2B9vZrXWqtAsVRgSIRGLAaenLan/yMeM4eR7uaKoYIzkLxg/mI5r
+         sy+A==
+X-Gm-Message-State: AC+VfDzcDJze+NQ8sYkmPUoURC8YPI5Z5ke81qInkMXfkXa/UjTaWZu0
+        P3mU5NKT82U56QshFB25G8jVCMLU6b8=
+X-Google-Smtp-Source: ACHHUZ4zFSbxL1pTJXYjAYiXR3ngk77EcmpvHWwR2989S7X47iKzObxTZANGKJPscpFtHnch4u6rdQ==
+X-Received: by 2002:a81:6f57:0:b0:561:7351:f56f with SMTP id k84-20020a816f57000000b005617351f56fmr5677716ywc.24.1686109815709;
+        Tue, 06 Jun 2023 20:50:15 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-15.three.co.id. [180.214.232.15])
+        by smtp.gmail.com with ESMTPSA id s19-20020aa78293000000b0063f0068cf6csm7368652pfm.198.2023.06.06.20.50.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 20:49:15 -0700 (PDT)
-Date:   Tue, 6 Jun 2023 20:49:04 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-cc:     Peter Xu <peterx@redhat.com>, Hugh Dickins <hughd@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Steven Price <steven.price@arm.com>,
-        SeongJae Park <sj@kernel.org>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Zack Rusin <zackr@vmware.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Song Liu <song@kernel.org>,
-        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Jann Horn <jannh@google.com>,
-        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH 05/12] powerpc: add pte_free_defer() for pgtables sharing
- page
-In-Reply-To: <ZH+EMp9RuEVOjVNb@ziepe.ca>
-Message-ID: <9130acb-193-6fdd-f8df-75766e663978@google.com>
-References: <35e983f5-7ed3-b310-d949-9ae8b130cdab@google.com> <28eb289f-ea2c-8eb9-63bb-9f7d7b9ccc11@google.com> <ZHSwWgLWaEd+zi/g@casper.infradead.org> <ZHn6n5eVTsr4Wl8x@ziepe.ca> <4df4909f-f5dd-6f94-9792-8f2949f542b3@google.com> <ZH95oobIqN0WO5MK@ziepe.ca>
- <ZH+DAxLhIYpTlIFc@x1n> <ZH+EMp9RuEVOjVNb@ziepe.ca>
+        Tue, 06 Jun 2023 20:50:15 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id C3AFC1069B8; Wed,  7 Jun 2023 10:50:11 +0700 (WIB)
+Date:   Wed, 7 Jun 2023 10:50:11 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Franziska Naepelt <franziska.naepelt@googlemail.com>
+Cc:     davem@davemloft.net, franziska.naepelt@gmail.com,
+        herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, martin.petersen@oracle.com,
+        tim.c.chen@linux.intel.com
+Subject: Re: [PATCH v2] crypto: crct10dif_common Add SPDX-License-Identifier
+ tag
+Message-ID: <ZH_-c_WHg2jz0W1R@debian.me>
+References: <ZH8ntoGLJHQpZriL@debian.me>
+ <20230606180713.99460-1-franziska.naepelt@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="69uuQyi9UHRbAGLa"
+Content-Disposition: inline
+In-Reply-To: <20230606180713.99460-1-franziska.naepelt@gmail.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 6 Jun 2023, Jason Gunthorpe wrote:
-> On Tue, Jun 06, 2023 at 03:03:31PM -0400, Peter Xu wrote:
-> > On Tue, Jun 06, 2023 at 03:23:30PM -0300, Jason Gunthorpe wrote:
-> > > On Mon, Jun 05, 2023 at 08:40:01PM -0700, Hugh Dickins wrote:
-> > > 
-> > > > diff --git a/arch/powerpc/mm/pgtable-frag.c b/arch/powerpc/mm/pgtable-frag.c
-> > > > index 20652daa1d7e..e4f58c5fc2ac 100644
-> > > > --- a/arch/powerpc/mm/pgtable-frag.c
-> > > > +++ b/arch/powerpc/mm/pgtable-frag.c
-> > > > @@ -120,3 +120,54 @@ void pte_fragment_free(unsigned long *table, int kernel)
-> > > >  		__free_page(page);
-> > > >  	}
-> > > >  }
-> > > > +
-> > > > +#ifdef CONFIG_TRANSPARENT_HUGEPAGE
-> > > > +#define PTE_FREE_DEFERRED 0x10000 /* beyond any PTE_FRAG_NR */
-> > > > +
-> > > > +static void pte_free_now(struct rcu_head *head)
-> > > > +{
-> > > > +	struct page *page;
-> > > > +	int refcount;
-> > > > +
-> > > > +	page = container_of(head, struct page, rcu_head);
-> > > > +	refcount = atomic_sub_return(PTE_FREE_DEFERRED - 1,
-> > > > +				     &page->pt_frag_refcount);
-> > > > +	if (refcount < PTE_FREE_DEFERRED) {
-> > > > +		pte_fragment_free((unsigned long *)page_address(page), 0);
-> > > > +		return;
-> > > > +	}
-> > > 
-> > > From what I can tell power doesn't recycle the sub fragment into any
-> > > kind of free list. It just waits for the last fragment to be unused
-> > > and then frees the whole page.
 
-Yes, it's relatively simple in that way: not as sophisticated as s390.
+--69uuQyi9UHRbAGLa
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > > 
-> > > So why not simply go into pte_fragment_free() and do the call_rcu directly:
-> > > 
-> > > 	BUG_ON(atomic_read(&page->pt_frag_refcount) <= 0);
-> > > 	if (atomic_dec_and_test(&page->pt_frag_refcount)) {
-> > > 		if (!kernel)
-> > > 			pgtable_pte_page_dtor(page);
-> > > 		call_rcu(&page->rcu_head, free_page_rcu)
-> > 
-> > We need to be careful on the lock being freed in pgtable_pte_page_dtor(),
-> > in Hugh's series IIUC we need the spinlock being there for the rcu section
-> > alongside the page itself.  So even if to do so we'll need to also rcu call 
-> > pgtable_pte_page_dtor() when needed.
+On Tue, Jun 06, 2023 at 08:07:13PM +0200, Franziska Naepelt wrote:
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+>  /*
+>   * Cryptographic API.
+>   *
+> @@ -7,21 +8,6 @@
+>   * Written by Martin K. Petersen <martin.petersen@oracle.com>
+>   * Copyright (C) 2013 Intel Corporation
+>   * Author: Tim Chen <tim.c.chen@linux.intel.com>
+> - *
+> - * This program is free software; you can redistribute it and/or modify =
+it
+> - * under the terms of the GNU General Public License as published by the=
+ Free
+> - * Software Foundation; either version 2 of the License, or (at your opt=
+ion)
+> - * any later version.
+> - *
+> - * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+> - * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+> - * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+> - * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+> - * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+> - * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+> - * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+> - * SOFTWARE.
+> - *
+>   */
 
-Thanks, Peter, yes that's right.
+LGTM but I'll send a SPDX conversion series for crypto/ instead soon.
 
-> 
-> Er yes, I botched that, the dtor and the free_page should be in a the
-> rcu callback function
+--=20
+An old man doll... just what I always wanted! - Clara
 
-But it was just a botched detail, and won't have answered Jason's doubt.
+--69uuQyi9UHRbAGLa
+Content-Type: application/pgp-signature; name="signature.asc"
 
-I had three (or perhaps it amounts to two) reasons for doing it this way:
-none of which may seem good enough reasons to you.  Certainly I'd agree
-that the way it's done seems... arcane.
+-----BEGIN PGP SIGNATURE-----
 
-One, as I've indicated before, I don't actually dare to go all
-the way into RCU freeing of all page tables for powerpc (or any other):
-I should think it's a good idea that everyone wants in the end, but I'm
-limited by my time and competence - and dread of losing my way in the
-mmu_gather TLB #ifdef maze.  It's work for someone else not me.
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZH/+bwAKCRD2uYlJVVFO
+o0EHAP4jGf2twi+ylLJiHcF2EKrmaEGDu27eStgPy+ChLvPkOwD/UbVRcII6evos
+uIPSZDwjqPHvWgC5DurP0V8DHueNHgg=
+=SXr6
+-----END PGP SIGNATURE-----
 
-(pte_free_defer() do as you suggest, without changing pte_fragment_free()
-itself?  No, that doesn't work out when defer does, say, the decrement of
-pt_frag_refcount from 2 to 1, then pte_fragment_free() does the decrement
-from 1 to 0: page freed without deferral.)
-
-Two, this was the code I'd worked out before, and was used in production,
-so I had confidence in it - it was just my mistake that I'd forgotten the
-single rcu_head issue, and thought I could avoid it in the initial posting.
-powerpc has changed around since then, but apparently not in any way that
-affects this.  And it's too easy to agree in review that something can be
-simpler, without bringing back to mind why the complications are there.
-
-Three (just an explanation of why the old code was like this), powerpc
-relies on THP's page table deposit+withdraw protocol, even for shmem/
-file THPs.  I've skirted that issue in this series, by sticking with
-retract_page_tables(), not attempting to insert huge pmd immediately.
-But if huge pmd is inserted to replace ptetable pmd, then ptetable must
-be deposited: pte_free_defer() as written protects the deposited ptetable
-from then being freed without deferral (rather like in the example above).
-
-But does not protect it from being withdrawn and reused within that
-grace period.  Jann has grave doubts whether that can ever be allowed
-(or perhaps I should grant him certainty, and examples that it cannot).
-I did convince myself, back in the day, that it was safe here: but I'll
-have to put in a lot more thought to re-justify it now, and on the way
-may instead be completely persuaded by Jann.
-
-Not very good reasons: good enough, or can you supply a better patch?
-
-Thanks,
-Hugh
+--69uuQyi9UHRbAGLa--
