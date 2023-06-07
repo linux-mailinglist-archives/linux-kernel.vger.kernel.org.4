@@ -2,98 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BF0D7261B1
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 15:52:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78CDD7261B4
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 15:54:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239710AbjFGNwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 09:52:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34632 "EHLO
+        id S239644AbjFGNyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 09:54:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235623AbjFGNwh (ORCPT
+        with ESMTP id S235763AbjFGNyW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 09:52:37 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C90D1BD9
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 06:52:36 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-3f6a695a0b8so9271281cf.1
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 06:52:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1686145955; x=1688737955;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8pWjfG7YX2PU6lTg87BQzQgK5gQrtCZuLosIt3qtFrw=;
-        b=QMGMlVX9pT4+APXXvlD2HGaGEg55QMH0btBqGqRw+dtdVOGo1kh5q+IRJfikBCjoAZ
-         vafj+YrmGCGYaOtKcFzs/g7GriOKBIzWtZZeh8BfNxsIDJ7VseMMJPYoiNuQt7caTcMI
-         fbzdenPFcryIzgWI+zcXPps0vDUIFsZMliLzzzo2NMTbOU8IV+6GRTdzS4etu2E7bG1G
-         zZy5GDzKAFGL863kgCYdqdlrRhzG8ovq7gNP99KiwoUnVzy58N3hDEkaisdrZi9QqDvh
-         12nHG5VND02dBavngpMxFq36XYe5fvooIddYSP6a8+XPAVtLp/lIB0YMBjMBb3y/nBpV
-         Px9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686145955; x=1688737955;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8pWjfG7YX2PU6lTg87BQzQgK5gQrtCZuLosIt3qtFrw=;
-        b=COcU4rYjLRszlWWr4AyCq/j7Pyclg2ei+xWTW7aBmFAPnN/KjUTzM+Y6LsaUNIQrsl
-         InO60JnratHeAmis25S8DebqdlytAW3ck5eB9h9C1wL88GnFJH2RIIllMqahkqbq5fw4
-         QWWsEvXaFMAq3ju7k7A7CawFXRHers+BdpeBKXMcOMoynEC/fUE1lyNcN9Glgwop3g+K
-         JO96ncBPcen4k21yUq6S+vUMgcRg+J2tDsXkF2xjOAy7itxacf7PifaDLof33JgT+VS5
-         H6IF5b9DMQ5k8prIT2iMdBQFf60qCXYvqzLwHuDNyd0MP4W9TapOGfQRYposrRoa0tBF
-         zWvQ==
-X-Gm-Message-State: AC+VfDxSK9/B+kWkiPIkFCIIja8YWWCHlKddopcCaKIBqspAs/p4U0ta
-        xCAnz1tfh08Gew2ZqWn7ajK1hA==
-X-Google-Smtp-Source: ACHHUZ5DwvtauaBvGPF/zgxanW0qGVda9dWL3S5jI/ddgyNov7yI8rfOmzvLFLxsl0kOx8qDfPrgNA==
-X-Received: by 2002:a05:622a:1899:b0:3f9:ab2c:8895 with SMTP id v25-20020a05622a189900b003f9ab2c8895mr2173118qtc.3.1686145955449;
-        Wed, 07 Jun 2023 06:52:35 -0700 (PDT)
-Received: from [127.0.0.1] ([50.234.116.5])
-        by smtp.gmail.com with ESMTPSA id s5-20020a05621412c500b0062119a7a7a3sm6141611qvv.4.2023.06.07.06.52.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 06:52:34 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
-        Waiman Long <longman@redhat.com>
-Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ming Lei <ming.lei@redhat.com>
-In-Reply-To: <20230606180724.2455066-1-longman@redhat.com>
-References: <20230606180724.2455066-1-longman@redhat.com>
-Subject: Re: [PATCH] blk-cgroup: Reinit blkg_iostat_set after clearing in
- blkcg_reset_stats()
-Message-Id: <168614595386.134969.17908041000836291196.b4-ty@kernel.dk>
-Date:   Wed, 07 Jun 2023 07:52:33 -0600
+        Wed, 7 Jun 2023 09:54:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F00E61BE3
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 06:54:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A8B76355A
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 13:54:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7600BC433EF;
+        Wed,  7 Jun 2023 13:54:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686146059;
+        bh=zswSACji8RucS+gLsRYsZAQhO7DmmuDGAXs5cJ/+r0Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=unJaYyJzP5C9G+j3dSb22t9MnD5IWPELBmqG5p9iDgY8dPw1HKGyzNLLV7b4p5MiM
+         eniJ18tfmBu+GFEnzpJw1lV0dbHr4rIjkwbGWra59U6Vwo6fjDJQ4bt9Y0VamETjHU
+         DO2m1yahmmH6dte0jnCYEeciXxe3rtqrOc9nA+ra7A98invZdx3hlL8/uHmardppK3
+         7H9zzEvhNu0/ub/j3r/Og6LW2FidZvlucPNEfYS1DRSWlhdNNumuD7QifLujM0coUC
+         62xugHQzdi+Q9G+ERIs4nDq3gHbMAA4RhQZVpgmm/LQeq3M1oYHAa2hN/IQzJsUyoJ
+         2SYdrPAFuEEiQ==
+Date:   Wed, 7 Jun 2023 15:54:15 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Anna-Maria Behnsen <anna-maria@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        John Stultz <jstultz@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Eric Dumazet <edumazet@google.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Arjan van de Ven <arjan@infradead.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Rik van Riel <riel@surriel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sebastian Siewior <bigeasy@linutronix.de>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        "Gautham R . Shenoy" <gautham.shenoy@amd.com>
+Subject: Re: [PATCH v7 19/21] timer: Implement the hierarchical pull model
+Message-ID: <ZICMBw-Fo-nzqGXb@2a01cb0980007dab8d6b2773c13fd2df.ipv6.abo.wanadoo.fr>
+References: <20230524070629.6377-1-anna-maria@linutronix.de>
+ <20230524070629.6377-20-anna-maria@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-c6835
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230524070629.6377-20-anna-maria@linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Le Wed, May 24, 2023 at 09:06:27AM +0200, Anna-Maria Behnsen a écrit :
+> +/*
+> + * Returns true, if there is nothing to be propagated to the next level
+> + *
+> + * @data->nextexp is reset to KTIME_MAX; it is reused for first global
+> + * event which needs to be handled by migrator (in toplevel group)
+> + *
+> + * This is the only place where group event expiry value is set.
+> + */
+> +static bool tmigr_update_events(struct tmigr_group *group,
+> +				struct tmigr_group *child,
+> +				struct tmigr_walk *data)
+> +{
+> +	struct tmigr_event *evt, *first_childevt;
+> +	bool walk_done, remote = data->remote;
+> +	u64 nextexp;
+> +
+> +	if (child) {
+> +		if (data->childstate.active)
+> +			return true;
+> +
+> +		raw_spin_lock(&child->lock);
+> +		raw_spin_lock_nested(&group->lock, SINGLE_DEPTH_NESTING);
+> +
+> +		first_childevt = tmigr_next_groupevt(child);
+> +		nextexp = child->next_expiry;
+> +		evt = &child->groupevt;
+> +	} else {
+> +		nextexp = data->nextexp;
+> +
+> +		/*
+> +		 * Set @data->nextexp to KTIME_MAX; it is reused for first
+> +		 * global event which needs to be handled by migrator (in
+> +		 * toplevel group)
+> +		 */
+> +		data->nextexp = KTIME_MAX;
+> +
+> +		first_childevt = evt = data->evt;
+> +
+> +		/*
+> +		 * Walking the hierarchy is required in any case, when a
+> +		 * remote expiry was done before.
 
-On Tue, 06 Jun 2023 14:07:24 -0400, Waiman Long wrote:
-> When blkg_alloc() is called to allocate a blkcg_gq structure
-> with the associated blkg_iostat_set's, there are 2 fields within
-> blkg_iostat_set that requires proper initialization - blkg & sync.
-> The former field was introduced by commit 3b8cc6298724 ("blk-cgroup:
-> Optimize blkcg_rstat_flush()") while the later one was introduced by
-> commit f73316482977 ("blk-cgroup: reimplement basic IO stats using
-> cgroup rstat").
-> 
-> [...]
+You can probably remove that comma because it feels like breaking the condition link.
 
-Applied, thanks!
+> +		 * This ensures to not lost
 
-[1/1] blk-cgroup: Reinit blkg_iostat_set after clearing in blkcg_reset_stats()
-      commit: 3d2af77e31ade05ff7ccc3658c3635ec1bea0979
+lose
 
-Best regards,
--- 
-Jens Axboe
+> +		 * already queued events in non active groups (see section
+> +		 * "Required event and timerqueue update after remote
+> +		 * expiry" in documentation at the top).
+> +		 */
+> +		if (evt->ignore && !remote)
 
+It looks like in the case of !remote, this branch will never end up
+stopping the propagation up because either:
 
+* We come here from tmigr_inactive_up() which takes care of the propagation.
 
+or
+
+* We come here from tmigr_new_timer() and ->ignore can't be set.
+
+If I'm right, can we add a comment about that so that the poor reviewer
+doesn't stutter on that for too long?
+
+Thanks.
+
+> +			return true;
