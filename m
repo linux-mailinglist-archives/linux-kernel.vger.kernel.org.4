@@ -2,49 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2987372672A
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 19:24:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C9DB72672E
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 19:24:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229835AbjFGRYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 13:24:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57110 "EHLO
+        id S231670AbjFGRYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 13:24:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231660AbjFGRX7 (ORCPT
+        with ESMTP id S231697AbjFGRYL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 13:23:59 -0400
+        Wed, 7 Jun 2023 13:24:11 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC7D01FC2;
-        Wed,  7 Jun 2023 10:23:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F372107;
+        Wed,  7 Jun 2023 10:24:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5EF12641FD;
-        Wed,  7 Jun 2023 17:23:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A56FC4339B;
-        Wed,  7 Jun 2023 17:23:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E7DFB63AC8;
+        Wed,  7 Jun 2023 17:24:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46059C4339C;
+        Wed,  7 Jun 2023 17:24:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686158636;
-        bh=ysTQmFwcrMaqtH0/fQKIWDIqrZAmWkJtUOp6eA2jO3Q=;
+        s=k20201202; t=1686158643;
+        bh=cYyHhjd7PB7WUP/KYCYgStoS0XkCHcCe06gZhREDRKs=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=BLtQ/YEq3DLQPvlWQQg1WppzW6CisxWFAfz371VCOAdPHz3KywMwhmub+66ev5bq2
-         tEczhXs1h3aelxFBqBXDf2ciJ7dUVXRIP2Kq3gkqeMAAlNCDYpE1zfJsY6yTC5RTdh
-         QnkA9h2QxWVSfxYwDcqFlc5lOs3yzpcQ32tI4WeWC1RErxFzjMgsVODKksIGROKkmD
-         GGu58Ub8OALiABj49Msr96yA71FmRdIjgpf6rLWfjO4a/T89pQiYXqZ3Iq4ouLrHeN
-         tILlBeoXLjYwCjVbpE1h1OAE/c3bWhXMlF1pD+Pw0g5WxfjyBqr9G/mRApvlTmWdTT
-         on0nFwWwAM0vg==
+        b=SlN5BX8koTm8zvZSbaFxw5ysu0owOydUNkknrYHn/0vtKYhMvz3XuuB/6X7p+o++m
+         crxM1EUIYWyTs88YDmnS4lNb3iaKeSSv1GrRp8feUK9T7A7FfLnQ/Ou9T2ssm9AjK0
+         Yzr1V8I7s2Jeaylq05uUNfpcKYZrkPjxnJIBIk8E8arpY7hhDWxkInQhmBsExwJBuH
+         nEUg81dHELRCwJ92uQqO9O3pTEHSFsJVZ9rFH5lI0omvf7bF0itArdRHmHjVknUwo8
+         KIP5u0tqGCVPwiPyGQqcFEjoYrVWL8hF9ViFAFmZXatcBLb7XQKCuoR8XkmbBm+bmK
+         tFX0MyZq4OsFg==
 From:   Mark Brown <broonie@kernel.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Abel Vesa <abel.vesa@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-In-Reply-To: <20230605115607.921308-1-abel.vesa@linaro.org>
-References: <20230605115607.921308-1-abel.vesa@linaro.org>
-Subject: Re: [PATCH] regulator: qcom-rpmh: Fix regulators for PM8550
-Message-Id: <168615863501.61774.16381253106507638065.b4-ty@kernel.org>
-Date:   Wed, 07 Jun 2023 18:23:55 +0100
+To:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Abe Kohandel <abe.kohandel@intel.com>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230606231844.726272-1-abe.kohandel@intel.com>
+References: <20230606231844.726272-1-abe.kohandel@intel.com>
+Subject: Re: [PATCH] spi: dw: Remove misleading comment for Mount Evans SoC
+Message-Id: <168615864200.61821.4077678656518358668.b4-ty@kernel.org>
+Date:   Wed, 07 Jun 2023 18:24:02 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -59,20 +56,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 05 Jun 2023 14:56:07 +0300, Abel Vesa wrote:
-> The PM8550 uses only NLDOs 515 and the LDO 6 through 8 are low voltage
-> type, so fix accordingly.
+On Tue, 06 Jun 2023 16:18:44 -0700, Abe Kohandel wrote:
+> Remove a misleading comment about the DMA operations of the Intel Mount
+> Evans SoC's SPI Controller as requested by Serge.
 > 
 > 
 
 Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
 Thanks!
 
-[1/1] regulator: qcom-rpmh: Fix regulators for PM8550
-      commit: b00de0000a69579f4d730077fe3ea8ca31404255
+[1/1] spi: dw: Remove misleading comment for Mount Evans SoC
+      commit: 5b6d0b91f84cff3f28724076f93f6f9e2ef8d775
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
