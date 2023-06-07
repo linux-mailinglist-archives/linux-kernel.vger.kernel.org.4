@@ -2,61 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5049072616B
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 15:36:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5149B726167
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 15:35:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240058AbjFGNgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 09:36:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55958 "EHLO
+        id S240901AbjFGNfq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 09:35:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234794AbjFGNgr (ORCPT
+        with ESMTP id S239276AbjFGNfh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 09:36:47 -0400
-Received: from out162-62-57-49.mail.qq.com (out162-62-57-49.mail.qq.com [162.62.57.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A9681993
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 06:36:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1686145002;
-        bh=BPguxngCcatQFXlBdF+cO4v4EYUu4CjSbAh+qgMu1hI=;
-        h=From:To:Cc:Subject:Date;
-        b=HGFYRNnynM4+R8XRpOzxNtHpcDgz1GbhTUPZEBWdoFMQeh8KaeXCZV/un7v3IHV+V
-         kQCZGyUJzzPD6Z9oB498gMi1iaHkRRApALbELqlRKaGSLp8KGUab85m5NNsZAHdXn5
-         yAxdBmAwem3H2MT5r8EvfLW4sVpm2Imdk5+nk5LY=
-Received: from localhost ([101.224.149.128])
-        by newxmesmtplogicsvrszc2-0.qq.com (NewEsmtp) with SMTP
-        id 928874E8; Wed, 07 Jun 2023 21:36:40 +0800
-X-QQ-mid: xmsmtpt1686145000tb1eyu550
-Message-ID: <tencent_B15C0F1F3105597D0DCE7DADC96C5EB5CF0A@qq.com>
-X-QQ-XMAILINFO: NioaTWkRhWwaYWTxZeEaVMvYT+6+8WBXxjru4PK5DK6okfUQA1P7v2En+zPoE5
-         1z2hnrATIIcrCuuKw/AznibA2SzpN7O3IfFjLKOySd5ejj03Pxk8w1pZjsUaZnJrwbZ5AW/EbbcG
-         a90pH9d6d6woHq6WHb24b77J0mciKoDab6wKeYEx/hyy7vMdmqhocNJGCMWaZfKUfhNq+o4FT7GC
-         jYcT+QmzbY8XnyB2+g5RsKnVevJecvqymIQONDidDQPY7x62h8xgJp6JNyNB4iNISOsAGQ4lRGwn
-         4zv6yH9Z71tLcLrrk9lBE6geVDESfMc+gyN+4iYiyVzRddH4AujsPKOFLZeKfhxiW3NR1nd2RWI4
-         sJIjWvjtPLFCF0Xzk/ZuB7IjByv7ZWdGQN2osyyHnVcRzCBpgS9QpWHgvHBqlE72dQGybw8y4I4a
-         2x4NfozxHwGMVjk8yCKxug4SVOp1OQiCzBDf4ujU11UQXhk3vHCeOiDb4HMYbmy5trXZAR0l5Ebl
-         QpTjD6shVS3GgNgmHpmHCPAZW2mTsiQzWaYyYUkHySFrQ8nYOiuRN/YhOYwn/COs0tLwsVTEHcqs
-         GCouN6JX+hopwcLkPi3kmY9qyATKAha4WFEcDj11X9ob87AuHlF8g1FhUGEBlO2jfHgw+Vw0cOie
-         NxsY08ofqoVLiws8bDxLNYQeLNEGRbQHcOzK8SgIhJuQEXGpBr0M5p5TrZWlg+zK3W1gzg8f9YuQ
-         9+fuOuw8FvLTILBeZB+SUbtJVkzF2l/+V33p2q/+ySyJ7FFCcQSwc+r39vRdtTf39lxhrhAfD0tK
-         tsNheMtt+YMjKZS2i+7qIkGhfjFtZEijis50o0Hupr7hqqUXxBbyajaqsKRuCpeaYhUaFI5p0fom
-         KrZXXKX0sEbADejJWLTbfpK3EvqfNouJvZqtPGQCI2Va5jPl6ZT5b7SUKkiOVM3Y+dsC/4FCN9V8
-         5OOc4af7zAERcA1+hs/nVYu2XgQ6wEhhWEgL0Zpnw=
-From:   Woody Zhang <woodylab@foxmail.com>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Woody Zhang <woodylab@foxmail.com>
-Subject: [PATCH] riscv: reserve DTB before possible memblock allocation
-Date:   Wed,  7 Jun 2023 21:35:19 +0800
-X-OQ-MSGID: <20230607133518.2472995-1-woodylab@foxmail.com>
-X-Mailer: git-send-email 2.39.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        Wed, 7 Jun 2023 09:35:37 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 497BB1BF0;
+        Wed,  7 Jun 2023 06:35:27 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id EC54C1FDAA;
+        Wed,  7 Jun 2023 13:35:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1686144925; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=BYiTeYmwLMBlpKvFU+nNSlpL2e+cOtcyKH6DxhJ12bE=;
+        b=oTdZBSxnsMNNnKsTVUYGnj1R+CFFp6oJFX1LZD2LOn7NxJ03J2hx5m06KB3yhl+47oM4Qk
+        3rC1hqbqThHZv3AcZqsAHFUwGRDnCgp3zcvtNlk1Uez3IlfPt65ZKOs2hp0831I2xcFGgx
+        hhqvJ4HnuUT+kLiXAOlzfih0pUm8pRg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1686144925;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=BYiTeYmwLMBlpKvFU+nNSlpL2e+cOtcyKH6DxhJ12bE=;
+        b=jkIjQP+4LWHQuK8dPKrwoIRgYghRjTfYsAXtJBvC5sFDLFGG80lhe7Rs3ilL2p+G8p8VG9
+        zFIyAPWuoplKj4Aw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C97E81346D;
+        Wed,  7 Jun 2023 13:35:25 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id i5G+MJ2HgGQSbQAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 07 Jun 2023 13:35:25 +0000
+Date:   Wed, 07 Jun 2023 15:35:25 +0200
+Message-ID: <87ilbzgztu.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Ivan Orlov <ivan.orlov0322@gmail.com>
+Cc:     perex@perex.cz, tiwai@suse.com, corbet@lwn.net, broonie@kernel.org,
+        skhan@linuxfoundation.org, alsa-devel@alsa-project.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, gregkh@linuxfoundation.org,
+        himadrispandya@gmail.com,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Subject: Re: [PATCH v4 1/3] docs: sound: add 'pcmtest' driver documentation
+In-Reply-To: <20230606193254.20791-1-ivan.orlov0322@gmail.com>
+References: <20230606193254.20791-1-ivan.orlov0322@gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,67 +73,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's possible that early_init_fdt_scan_reserved_mem() allocates memory
-from memblock for dynamic reserved memory in `/reserved-memory` node.
-Any fixed reservation must be done before that to avoid potential
-conflicts.
+On Tue, 06 Jun 2023 21:32:52 +0200,
+Ivan Orlov wrote:
+> 
+> Add documentation for the new Virtual PCM Test Driver. It covers all
+> possible usage cases: errors and delay injections, random and
+> pattern-based data generation, playback and ioctl redefinition
+> functionalities testing.
+> 
+> We have a lot of different virtual media drivers, which can be used for
+> testing of the userspace applications and media subsystem middle layer.
+> However, all of them are aimed at testing the video functionality and
+> simulating the video devices. For audio devices we have only snd-dummy
+> module, which is good in simulating the correct behavior of an ALSA device.
+> I decided to write a tool, which would help to test the userspace ALSA
+> programs (and the PCM middle layer as well) under unusual circumstances
+> to figure out how they would behave. So I came up with this Virtual PCM
+> Test Driver.
+> 
+> This new Virtual PCM Test Driver has several features which can be useful
+> during the userspace ALSA applications testing/fuzzing, or testing/fuzzing
+> of the PCM middle layer. Not all of them can be implemented using the
+> existing virtual drivers (like dummy or loopback). Here is what can this
+> driver do:
+> 
+> - Simulate both capture and playback processes
+> - Check the playback stream for containing the looped pattern
+> - Generate random or pattern-based capture data
+> - Inject delays into the playback and capturing processes
+> - Inject errors during the PCM callbacks
+> 
+> Also, this driver can check the playback stream for containing the
+> predefined pattern, which is used in the corresponding selftest to check
+> the PCM middle layer data transferring functionality. Additionally, this
+> driver redefines the default RESET ioctl, and the selftest covers this PCM
+> API functionality as well.
+> 
+> The driver supports both interleaved and non-interleaved access modes, and
+> have separate pattern buffers for each channel. The driver supports up to
+> 4 channels and up to 8 substreams.
+> 
+> Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
 
-Reserve the DTB in memblock just after early scanning it.
+Now I merged all three patches.
 
-Signed-off-by: Woody Zhang <woodylab@foxmail.com>
----
- arch/riscv/kernel/setup.c | 10 ++++++++++
- arch/riscv/mm/init.c      |  9 ---------
- 2 files changed, 10 insertions(+), 9 deletions(-)
 
-diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
-index 36b026057503..c147fa8da929 100644
---- a/arch/riscv/kernel/setup.c
-+++ b/arch/riscv/kernel/setup.c
-@@ -16,6 +16,7 @@
- #include <linux/console.h>
- #include <linux/screen_info.h>
- #include <linux/of_fdt.h>
-+#include <linux/libfdt.h>
- #include <linux/sched/task.h>
- #include <linux/smp.h>
- #include <linux/efi.h>
-@@ -256,6 +257,15 @@ static void __init parse_dtb(void)
- 		pr_err("No DTB passed to the kernel\n");
- 	}
- 
-+	/*
-+	 * If DTB is built in, no need to reserve its memblock.
-+	 * Otherwise, do reserve it but avoid using
-+	 * early_init_fdt_reserve_self() since __pa() does
-+	 * not work for DTB pointers that are fixmap addresses
-+	 */
-+	if (!IS_ENABLED(CONFIG_BUILTIN_DTB))
-+		memblock_reserve(dtb_early_pa, fdt_totalsize(dtb_early_va));
-+
- #ifdef CONFIG_CMDLINE_FORCE
- 	strscpy(boot_command_line, CONFIG_CMDLINE, COMMAND_LINE_SIZE);
- 	pr_info("Forcing kernel command line to: %s\n", boot_command_line);
-diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-index c6bb966e4123..f8c9a79acd94 100644
---- a/arch/riscv/mm/init.c
-+++ b/arch/riscv/mm/init.c
-@@ -254,15 +254,6 @@ static void __init setup_bootmem(void)
- 	 */
- 	early_init_fdt_scan_reserved_mem();
- 
--	/*
--	 * If DTB is built in, no need to reserve its memblock.
--	 * Otherwise, do reserve it but avoid using
--	 * early_init_fdt_reserve_self() since __pa() does
--	 * not work for DTB pointers that are fixmap addresses
--	 */
--	if (!IS_ENABLED(CONFIG_BUILTIN_DTB))
--		memblock_reserve(dtb_early_pa, fdt_totalsize(dtb_early_va));
--
- 	dma_contiguous_reserve(dma32_phys_limit);
- 	if (IS_ENABLED(CONFIG_64BIT))
- 		hugetlb_cma_reserve(PUD_SHIFT - PAGE_SHIFT);
--- 
-2.39.2
+thanks,
 
+Takashi
