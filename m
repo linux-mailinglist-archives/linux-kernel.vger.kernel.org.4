@@ -2,142 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E648725C39
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 12:56:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1EBC725CCB
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 13:12:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239980AbjFGK4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 06:56:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36454 "EHLO
+        id S238175AbjFGLL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 07:11:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239885AbjFGK4Q (ORCPT
+        with ESMTP id S239312AbjFGLLy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 06:56:16 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1581D192
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 03:56:15 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.31:55208.1520123491
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.31])
-        by 189.cn (HERMES) with SMTP id BBE501002CE;
-        Wed,  7 Jun 2023 18:56:13 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-75648544bd-xp9j7 with ESMTP id 2d6665bc324c466abda1ee67f04d8d7e for l.stach@pengutronix.de;
-        Wed, 07 Jun 2023 18:56:14 CST
-X-Transaction-ID: 2d6665bc324c466abda1ee67f04d8d7e
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-From:   Sui Jingfeng <15330273260@189.cn>
-To:     Lucas Stach <l.stach@pengutronix.de>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Li Yi <liyi@loongson.cn>
-Cc:     linux-kernel@vger.kernel.org, etnaviv@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org,
-        Sui Jingfeng <suijingfeng@loongson.cn>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: [PATCH v8 8/8] drm/etnaviv: add a dedicated function to create the virtual master
-Date:   Wed,  7 Jun 2023 18:55:51 +0800
-Message-Id: <20230607105551.568639-9-15330273260@189.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230607105551.568639-1-15330273260@189.cn>
-References: <20230607105551.568639-1-15330273260@189.cn>
+        Wed, 7 Jun 2023 07:11:54 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C8BAE79;
+        Wed,  7 Jun 2023 04:11:51 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 357AfiTl028657;
+        Wed, 7 Jun 2023 10:56:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=ppwtIPRiaridEX22kKaoo8ZqQTqMCoFPO7Tl3CkigXA=;
+ b=X3Loy+pNjTdqmzkfQvEFc2HEDoTc45M9Wi2jdsSiQTvu1E/NuwvPo+aKdiIZAt1JmIIJ
+ t2d3tis7AverFGA8ULtCRiArM68iCZPtE/7P7VUqrJPIODOdZcmIY+aIRs+gJeM3+clE
+ dQmdwvfmxVGJ/zgF4rr7B8er+DclOMU5RGkury9BhxZWTCd3bnWSZCQnVBdRIR7EiPs7
+ EESw/3SuxvUIFXW23xp0oNbckeT6TJA9p7yJrL188DFd21wNfAYzgbwSdJVm/HNjUpkG
+ JHBIEp+KTX5YrNy5ufNIUastztnhzDtOu6uKzyqji+a0RlP6cRXIQfvrGpAYCEgjXccF KQ== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r2rbtg0u2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Jun 2023 10:56:30 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 357AuTJg025287
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 7 Jun 2023 10:56:29 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Wed, 7 Jun 2023 03:56:20 -0700
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
+        <kishon@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <gregkh@linuxfoundation.org>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <p.zabel@pengutronix.de>, <arnd@arndb.de>,
+        <geert+renesas@glider.be>, <neil.armstrong@linaro.org>,
+        <nfraprado@collabora.com>, <broonie@kernel.org>,
+        <rafal@milecki.pl>, <quic_srichara@quicinc.com>,
+        <quic_varada@quicinc.org>, <quic_wcheng@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-clk@vger.kernel.org>
+CC:     Varadarajan Narayanan <quic_varada@quicinc.com>
+Subject: [PATCH 0/9] Enable IPQ5332 USB2
+Date:   Wed, 7 Jun 2023 16:26:04 +0530
+Message-ID: <cover.1686126439.git.quic_varada@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 8kHDuKT46JDbNroJKpYJwAP_zCYi0xy3
+X-Proofpoint-ORIG-GUID: 8kHDuKT46JDbNroJKpYJwAP_zCYi0xy3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-07_06,2023-06-07_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 malwarescore=0
+ adultscore=0 mlxlogscore=272 spamscore=0 priorityscore=1501 phishscore=0
+ impostorscore=0 mlxscore=0 clxscore=1011 lowpriorityscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306070089
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sui Jingfeng <suijingfeng@loongson.cn>
+This patch series adds the relevant phy and controller
+configurations for enabling USB2 on IPQ5332
 
-After introducing the etnaviv_of_first_available_node() helper, the
-creation of the virtual master platform device can also be simplified.
-So, switch to etnaviv_create_virtual_master() function.
+Depends On: https://lore.kernel.org/linux-arm-msm/cover.1686045347.git.quic_varada@quicinc.com/
 
-Cc: Lucas Stach <l.stach@pengutronix.de>
-Cc: Christian Gmeiner <christian.gmeiner@gmail.com>
-Cc: Philipp Zabel <p.zabel@pengutronix.de>
-Cc: Bjorn Helgaas <bhelgaas@google.com>
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
----
- drivers/gpu/drm/etnaviv/etnaviv_drv.c | 43 ++++++++++++++++-----------
- 1 file changed, 26 insertions(+), 17 deletions(-)
+Varadarajan Narayanan (9):
+  dt-bindings: usb: dwc3: Add IPQ5332 compatible
+  dt-bindings: phy: qcom,m31: Document qcom,m31 USB phy
+  phy: qcom-m31: Introduce qcom,m31 USB phy driver
+  clk: qcom: ipq5332: Fix USB related clock defines
+  phy: qcom-m31: Introduce qcom,m31 USB phy
+  phy: qcom: Add qcom,m31 USB phy driver
+  arm64: dts: qcom: ipq5332: Add USB related nodes
+  arm64: dts: qcom: ipq5332: Enable USB
+  arm64: defconfig: Enable QCOM M31 USB phy driver
 
-diff --git a/drivers/gpu/drm/etnaviv/etnaviv_drv.c b/drivers/gpu/drm/etnaviv/etnaviv_drv.c
-index d7e7498826f5..6f2260a76433 100644
---- a/drivers/gpu/drm/etnaviv/etnaviv_drv.c
-+++ b/drivers/gpu/drm/etnaviv/etnaviv_drv.c
-@@ -769,10 +769,32 @@ static void etnaviv_destroy_platform_device(struct platform_device **ppdev)
- 	*ppdev = NULL;
- }
- 
-+static int etnaviv_create_virtual_master(void)
-+{
-+	struct platform_device **master = &etnaviv_platform_device;
-+	struct device_node *np;
-+
-+	/*
-+	 * If the DT contains at least one available GPU device, instantiate
-+	 * the DRM platform device.
-+	 */
-+	np = etnaviv_of_first_available_node();
-+	if (np) {
-+		int ret;
-+
-+		of_node_put(np);
-+
-+		ret = etnaviv_create_platform_device("etnaviv", master);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	return 0;
-+}
-+
- static int __init etnaviv_init(void)
- {
- 	int ret;
--	struct device_node *np;
- 
- 	etnaviv_validate_init();
- 
-@@ -790,22 +812,9 @@ static int __init etnaviv_init(void)
- 		goto unregister_platform_driver;
- #endif
- 
--	/*
--	 * If the DT contains at least one available GPU device, instantiate
--	 * the DRM platform device.
--	 */
--	for_each_compatible_node(np, NULL, "vivante,gc") {
--		if (!of_device_is_available(np))
--			continue;
--		of_node_put(np);
--
--		ret = etnaviv_create_platform_device("etnaviv",
--						     &etnaviv_platform_device);
--		if (ret)
--			goto unregister_platform_driver;
--
--		break;
--	}
-+	ret = etnaviv_create_virtual_master();
-+	if (ret)
-+		goto unregister_platform_driver;
- 
- 	return ret;
- 
+ .../devicetree/bindings/phy/qcom,m31.yaml          |  69 ++++
+ .../devicetree/bindings/usb/qcom,dwc3.yaml         |   2 +
+ arch/arm64/boot/dts/qcom/ipq5332-rdp468.dts        |   8 +
+ arch/arm64/boot/dts/qcom/ipq5332.dtsi              |  55 ++++
+ arch/arm64/configs/defconfig                       |   1 +
+ drivers/clk/qcom/gcc-ipq5332.c                     |  34 +-
+ drivers/phy/qualcomm/Kconfig                       |  11 +
+ drivers/phy/qualcomm/Makefile                      |   1 +
+ drivers/phy/qualcomm/phy-qcom-m31.c                | 360 +++++++++++++++++++++
+ 9 files changed, 530 insertions(+), 11 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/phy/qcom,m31.yaml
+ create mode 100644 drivers/phy/qualcomm/phy-qcom-m31.c
+
 -- 
-2.25.1
+2.7.4
 
