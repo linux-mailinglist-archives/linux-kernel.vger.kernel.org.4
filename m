@@ -2,105 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 469227263A1
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 17:03:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A5397263DD
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 17:13:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236376AbjFGPDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 11:03:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49562 "EHLO
+        id S240767AbjFGPNb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 11:13:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235973AbjFGPDN (ORCPT
+        with ESMTP id S240202AbjFGPN2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 11:03:13 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719411FF7
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 08:03:12 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-662b85f4640so146604b3a.0
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 08:03:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686150192; x=1688742192;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Msfw3FZTKqUZwLFrkysjS96Cdf9AFaQ0r06ieq0j1EI=;
-        b=ae8/YKfoLrOaxVyfBu/iJH3C6PAtvFYaQurwvNiYf1D9kRVaGAfUs0+4s1rxmS0/f1
-         QAWo9JqKmCam0wf0B/CDYNnWcMId90CBErwYs1nGzPp6KLjyfu/699sLJqpmxt44Ju2j
-         y3EvTLYYI9qZZKAJEawMh9XwfYCBcNYwTt/kJGrhTlbB+GTP+xgjgi3dW9JE74V1jvPM
-         rktd/zKC2Ndwf0oe7MKoP0os2CLh4V3jyJRzSrZNZftsDfqNwp1+siCwC2y1pw4Nn3Bh
-         I/ZlWvthFgDf27Ix00KcIyLDulsUnkl4rWRBXM1+FZIOMt/KRPwxvapLDLA0E/0P60z6
-         R2ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686150192; x=1688742192;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Msfw3FZTKqUZwLFrkysjS96Cdf9AFaQ0r06ieq0j1EI=;
-        b=TO3zJ7cVBz0ItF300BrMDwFdrN12vbLRc/doY5BC/GT17r5KTCR4tsmAhFsioe/Fvv
-         K7BcOHwDiU3rCOEbFAWTQuIoYt8VXDQfG4hRe6ugZCE/44AKP49JdKIhbAE9nhZlyIUZ
-         6Oei7N+Sr4vSCN04yR+fE7rHPxUlN63t4Ago1enpskkH33gx5/RP7w0v9BqkwVsklhbe
-         rkg9XBhEJR74kHywNUAn/Iauc7F2inA07h6pi/9midTWaLjduAgultfktgTLZ76wQLkD
-         184wLYW3k3UZ7DVn6RR7EdxYlXGY2UjDHzl0SEf277MbIXFfom+OHkqH0cOuPVmIVUlM
-         +lbA==
-X-Gm-Message-State: AC+VfDxG0JaNZ1z7sxHmE1xkqV+iNJmJrRvKiduyxp0Zkgug+mp/1Dls
-        qWu1QVQElGYHVRDnm3fCcZw=
-X-Google-Smtp-Source: ACHHUZ5zTs8y/Itlfgfy+8u0sBdZokuQYGHRt7t3asqdPwB0slrZgugbMII/lgbtqzi09ALnSjxDnQ==
-X-Received: by 2002:a17:903:234c:b0:1ae:1659:bfe2 with SMTP id c12-20020a170903234c00b001ae1659bfe2mr2531711plh.34.1686150191792;
-        Wed, 07 Jun 2023 08:03:11 -0700 (PDT)
-Received: from yogi-Zephyrus ([103.251.210.211])
-        by smtp.gmail.com with ESMTPSA id ld6-20020a170902fac600b001b04c2023e3sm10569143plb.218.2023.06.07.08.03.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 08:03:11 -0700 (PDT)
-Date:   Wed, 7 Jun 2023 20:33:07 +0530
-From:   Yogesh Hegde <yogi.kernel@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 5/5] staging: rtl8192e: Remove DRV_NAME definition in
- rtllib_debug.h
-Message-ID: <41c6c24e703eedf6fb4febcf4cc7ef180af1db58.1686149467.git.yogi.kernel@gmail.com>
-References: <cover.1686149467.git.yogi.kernel@gmail.com>
+        Wed, 7 Jun 2023 11:13:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 229D11FD8
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 08:12:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686150752;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=K3r/K8HkhE4xuB+jM5Kf0f4GFwH3PwislIM7Zb9RO88=;
+        b=Kx/olDY7n+AR/mWIm3hZiRU0lk9Jhy8V3t2KtoG7v4MYsePw9bNbx41HRVONKQKKHhe6al
+        vRXWWUGYk7Lu7Iryo4M8e44M1vKpusF0bqmQMsQ67FCp3KM33EKCq5waNucshwXPgMff6R
+        WZ7vpjsCfALiead2nDZwLipB3+y0s5A=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-641-v6-IUeUzMTyM9FIOsecLMw-1; Wed, 07 Jun 2023 11:12:28 -0400
+X-MC-Unique: v6-IUeUzMTyM9FIOsecLMw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 93FE0848B6F;
+        Wed,  7 Jun 2023 15:03:50 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.182])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C69F82166B25;
+        Wed,  7 Jun 2023 15:03:41 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <4c49176f-147a-4283-f1b1-32aac7b4b996@gmail.com>
+References: <4c49176f-147a-4283-f1b1-32aac7b4b996@gmail.com> <20230522121125.2595254-1-dhowells@redhat.com> <20230522121125.2595254-9-dhowells@redhat.com>
+To:     Tariq Toukan <ttoukan.linux@gmail.com>
+Cc:     dhowells@redhat.com, netdev@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Chuck Lever III <chuck.lever@oracle.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Boris Pismenny <borisp@nvidia.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Gal Pressman <gal@nvidia.com>, ranro@nvidia.com,
+        samiram@nvidia.com, drort@nvidia.com,
+        Tariq Toukan <tariqt@nvidia.com>
+Subject: Re: [PATCH net-next v10 08/16] tls: Inline do_tcp_sendpages()
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1686149467.git.yogi.kernel@gmail.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2267271.1686150217.1@warthog.procyon.org.uk>
+Date:   Wed, 07 Jun 2023 16:03:37 +0100
+Message-ID: <2267272.1686150217@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The macro DRV_NAME is defined twice within the driver, once in
-"rtl_core.h" and again in "rtllib_debug.h". The definition in
-"rtllib_debug.h" overrides the definition in "rtl_core.h", resulting in
-warnings during compilation. This patch removes the redundant definition in
-"rtllib_debug.h" to avoid the warnings.
+Tariq Toukan <ttoukan.linux@gmail.com> wrote:
 
-Signed-off-by: Yogesh Hegde <yogi.kernel@gmail.com>
----
+> My team spotted a new degradation in TLS TX device offload, bisected to this
+> patch.
 
-v2: No changes.
----
- drivers/staging/rtl8192e/rtllib_debug.h | 5 -----
- 1 file changed, 5 deletions(-)
+I presume you're using some hardware (I'm guessing Mellanox?) that can
+actually do TLS offload?  Unfortunately, I don't have any hardware that can do
+this, so I can't test the tls_device stuff.
 
-diff --git a/drivers/staging/rtl8192e/rtllib_debug.h b/drivers/staging/rtl8192e/rtllib_debug.h
-index f6b23defe225..ab8bd5fc4ca0 100644
---- a/drivers/staging/rtl8192e/rtllib_debug.h
-+++ b/drivers/staging/rtl8192e/rtllib_debug.h
-@@ -9,11 +9,6 @@
- 
- #include <linux/bits.h>
- 
--/* Allow files to override DRV_NAME */
--#ifndef DRV_NAME
--#define DRV_NAME "rtllib_92e"
--#endif
--
- extern u32 rt_global_debug_component;
- 
- /* These are the defines for rt_global_debug_component */
--- 
-2.25.1
+> From a quick look at the patch, it's not clear to me what's going wrong.
+> Please let us know of any helpful information that we can provide to help in
+> the debug.
+
+Can you find out what source line this corresponds to?
+
+	RIP: 0010:skb_splice_from_iter+0x102/0x300
+
+Assuming you're building your own kernel, something like the following might
+do the trick:
+
+	echo "RIP: 0010:skb_splice_from_iter+0x102/0x300" |
+	./scripts/decode_stacktrace.sh /my/built/vmlinux /my/build/tree
+
+if you run it in the kernel source tree you're using and substitute the
+paths to vmlinux and the build tree for modules.
+
+David
 
