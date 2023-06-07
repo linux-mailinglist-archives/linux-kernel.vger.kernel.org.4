@@ -2,126 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D906E725534
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 09:15:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E0D1725546
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 09:19:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238813AbjFGHPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 03:15:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49180 "EHLO
+        id S238881AbjFGHTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 03:19:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238841AbjFGHPR (ORCPT
+        with ESMTP id S233896AbjFGHS5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 03:15:17 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D36A19AA;
-        Wed,  7 Jun 2023 00:15:13 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 328FC6606EF8;
-        Wed,  7 Jun 2023 08:15:11 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1686122111;
-        bh=f4cx7LEjgdBQ20mkfGT5V8OCsYXY+yPh4SHMgyvYoA8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=PfH5PXmP10MTgpuggjPd6ZbKaX8Mx7dBqMJ2fE+38L3nNITZRu7McUYHTijXarED4
-         tzOUGPOwy0uVroSBq5Yjn523Gdvpg6iSsXDV6pgqew8Blx5gPt19HS6MgBAcyqoy95
-         4iTqXDKTKFGy03knE7QPJwBmyc2gnuiEqva4Gno9eKzyDvhX3OEkb8n9bjbDS1+SY7
-         DmQUxiNZcsklXUdbHphyaTboQ0mNJmNHJ6sdBMpg8o8tipzfjFDFlfps/vjpt8Ki9v
-         RmCWzlCZJTSaZITqhoX4S6P+UYPKrt+mwwf80zypwdIIpioGdivJhUqHUFXqjNSuE1
-         RIwHdPCG16s/g==
-Message-ID: <a69ddadd-8d59-e784-ddce-16c83a7f13a6@collabora.com>
-Date:   Wed, 7 Jun 2023 09:15:08 +0200
+        Wed, 7 Jun 2023 03:18:57 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8CFBE6B;
+        Wed,  7 Jun 2023 00:18:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686122337; x=1717658337;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=U9BMiHlbFJNvV44cawwgmHJfPZst8d6vbpWFC5n0oo8=;
+  b=DPfg/cvvDwxBVEivyMQwRQ0WPPyBvlLjp4ze//cL0/mjsIiaY5gkT66F
+   HhKTJUsjb0yyD7DYQa39BSz2nai/Ux9Zuk/4+BkWbu844WlfJ2xezi/CF
+   t3MD+vcWTSJWt4md/m+j+r272Dq9FG+diRSEk45oijSYjimm7E+THvYSL
+   y24gJNomJqOGxb3PRmBI09P0/gO+HseDoeszH6th2pouQdHeLc95w2MbG
+   xXKEmy478++8jMqt+9N7hp35qL7raH2LcMedmC+sQn/Gzn8OcFbhVfdRp
+   UIhV5N6vctr3i4A9Yvx5PwL02hQePYsWFNhzk9KNyB+zE7EhkxCKrNh+e
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="420461772"
+X-IronPort-AV: E=Sophos;i="6.00,223,1681196400"; 
+   d="scan'208";a="420461772"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 00:18:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="833552774"
+X-IronPort-AV: E=Sophos;i="6.00,223,1681196400"; 
+   d="scan'208";a="833552774"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga004.jf.intel.com with ESMTP; 07 Jun 2023 00:18:55 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 7 Jun 2023 00:18:55 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 7 Jun 2023 00:18:55 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Wed, 7 Jun 2023 00:18:55 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.169)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Wed, 7 Jun 2023 00:18:53 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EG+zngTyWI0cZqfM1aH7ukOU9FomMOQwGW63s1glIRon1a7ghoKkRe++TduSYiwYF73yKSKyZiUGGwtQCkGstWU6ObS7P4sjunx7WG/WfD+C9Q8cn8n5gUwsca7VIbhg7NyhbP83d/J6myssv4LHKGkBXREKWhu0zUXwR3gruKkQw4GCYvcgJoU7OwQye1PNVgp/WGO8t0upyVyS2GUi5Jh+XFnRCW5z7sVo0wOjdYvnBEBhKZwoLdSrrnVM5e6NJtdnVgCXaGqpTRXU9n02IhWJ8WSh5FfltE2Q0rKEtH0mtOApQXMK5nC4NuPDSCZuiyxVEok8NuUI6S+z0AixDg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vLC0UU0PVcfkyTb3Axm+8MBdI/8sGCCCx1tjt6UiWIQ=;
+ b=Z/qKrP9cEO4ZnQGDP7UUGVttcfjrB3/oecVDqgoi4Q5tRWJtQuRBn1ANl3vt10oKre38Wa3TpqD5CRokSDmUMFAEtDVCZVxm44WFA1hbqzjo6zrsRVYg1wJZTDcmavDVqn51xSTHKGjy1Bw/8xYJrhwoRMRYoe0hyJP7iEVb4KphE8qGySPaNMd1yZLgOHLJBuksna1UNWRgQVu5LXReZl3wiGt5ZCOsyZJxYWF/ojGZtCgeS9kwTa5Rs62XpHzXh9qSDH0keiaqJoxkt4pyvtVMCbOhCWVyDXM8E/1hmZoIW1K9so4O3wVh5TpXf13CYNQtc4JPmFETJhnxECP23Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SN7PR11MB7540.namprd11.prod.outlook.com (2603:10b6:806:340::7)
+ by DS0PR11MB6351.namprd11.prod.outlook.com (2603:10b6:8:cc::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Wed, 7 Jun
+ 2023 07:18:51 +0000
+Received: from SN7PR11MB7540.namprd11.prod.outlook.com
+ ([fe80::9376:9c9d:424a:a0fe]) by SN7PR11MB7540.namprd11.prod.outlook.com
+ ([fe80::9376:9c9d:424a:a0fe%5]) with mapi id 15.20.6455.030; Wed, 7 Jun 2023
+ 07:18:51 +0000
+Date:   Wed, 7 Jun 2023 09:15:52 +0200
+From:   Larysa Zaremba <larysa.zaremba@intel.com>
+To:     Hangyu Hua <hbh25y@gmail.com>
+CC:     <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <simon.horman@corigine.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net v2] net: sched: fix possible refcount leak in
+ tc_chain_tmplt_add()
+Message-ID: <ZIAuqHiemLrpH6Fr@lincoln>
+References: <20230607022301.6405-1-hbh25y@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230607022301.6405-1-hbh25y@gmail.com>
+X-ClientProxiedBy: FR0P281CA0125.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:97::20) To SN7PR11MB7540.namprd11.prod.outlook.com
+ (2603:10b6:806:340::7)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v2] arm64: dts: qcom: sm8250-edo: Panel framebuffer is
- 2.5k instead of 4k
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        phone-devel@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230606211418.587676-1-marijn.suijten@somainline.org>
- <974f68dc-b667-c9a7-94c4-1023ef271fab@linaro.org>
-Content-Language: en-US
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <974f68dc-b667-c9a7-94c4-1023ef271fab@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN7PR11MB7540:EE_|DS0PR11MB6351:EE_
+X-MS-Office365-Filtering-Correlation-Id: 674c6cc5-4ea9-49cc-7e88-08db6727717a
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: /j0e4NncTXptfCdLHkEfKaEjaT4dZgNtxsd1zlv8PkLBxckzFQxC4ujFemppw7SIixhJooABiVq247GAFjlF1Q3jBMx6AKA+Tpdf7k57I19G5GIr/R/SfWqu4vMP8SbB+XjUUyMytm4Tgfrmtli/sFjbHb9h/cTuAwMyKb1M/nssvyoG0i8GUOUFuFS++b+zsPlhDS5tApenVMXTRhQSGRIcEZ4N5PU3M0JdJ7UV4gEfHot3ajE3Jv35oeGUvKkbQ348KJEvxxDC+Ra4AZKfPa9dx37oNSc8ibuMBxbN/yPdHbp4BLrGsOj4nwpU/nzUH0jsvRi4H6y8lrtQOwMVvyU/9ry8/Lg+1jorYQTQook2MnZJhJf+cyIuRLW4Vik69FgdfuX5HmjS45iqYLa67d6vPW7yuJCDZNRopNGEzSZ+5VZqWZRMHhhly3GG0nJ7lBZzeiIOAqdhb3Nm9d0TGI6itbKOhACRWNKc9fdPzd3jduwk1zbp452Ar6+rQMZHu1eW29vgADQCix2tcU+R5hW+bV6WFzqE18kUqNex5av0Mwx+O5UHfo9mqCEfpk/F
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN7PR11MB7540.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(39860400002)(136003)(346002)(366004)(376002)(396003)(451199021)(4744005)(2906002)(33716001)(86362001)(82960400001)(38100700002)(41300700001)(6486002)(316002)(5660300002)(8936002)(8676002)(478600001)(66946007)(66556008)(66476007)(6916009)(4326008)(6506007)(9686003)(6512007)(26005)(186003)(7416002)(44832011);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?fACWIt3uoGJ+qX1uakAq1C2/uSxDwymw/svzHDyxNDhUNdSDQmM5/zG9wGah?=
+ =?us-ascii?Q?C+ZuEV530kPF1FoVp7fJHC9G9Pr5P3/ldHNUALYdD/aDSFOeeMbf+Pb9dSCy?=
+ =?us-ascii?Q?BzjXL1mRK/VEhIivOGB87gszlxn/Ekc/JDEe1ppEfjIhwLe5WOunL0WUr15f?=
+ =?us-ascii?Q?RaGOHqX5A1do2NDvZ/dxEcjIVL9hg+w1c8C40YeKG5vkDlf0EwnrU/f0IaID?=
+ =?us-ascii?Q?FkP8nBw6pKueh7e0ds3zUe7/rvhowNUxQUkl7H+tdF+/feHBGAoFiiqW5TfC?=
+ =?us-ascii?Q?jhgXmBKOs1I7unCzV8H1u0zhtq2Zv/MTDdcAUIRyOkqJMOh2q3DGnFy1SVyR?=
+ =?us-ascii?Q?ANUIe4mHoyXd5zRx21KADkA6Cm2jYnEadEgGB+jQ3ekdKkkl5JJhCAwFrMoF?=
+ =?us-ascii?Q?JBrV+xKw4nbXSXxhA5WIDmtOUQOsYZkamIKvLReG2jZAOcCd8OrViaHVvUQA?=
+ =?us-ascii?Q?1KqK+T0ugzlVhzF6rx50pMdmCrHHtPxox6/jxUI+RaSn2HcVChhWPFt6GmRS?=
+ =?us-ascii?Q?F0NT/4bgE038B/mEtDzhgDrX/Vp6No3TGapzRytq1QvLzDYqNtxmYabaKWRa?=
+ =?us-ascii?Q?fPmB/wvTXKBq7zxt2PONBU3wUXOGNZ7Ulz3mVkn0ybzy+Yw+oyGMV/B5EJww?=
+ =?us-ascii?Q?uQXJ8nApLmWSpblyp+KYozMmbb1uCVAyLL2lvxrvPm3XMgFoI9apnr49f2Xb?=
+ =?us-ascii?Q?eCb+QmvIZqcTzeSucmQl3ivZQsm9vm5c3tsrto9TE75+piJfhrmqHUwNkLJR?=
+ =?us-ascii?Q?FOKnkVUW4fiG4IYJMUTWCrRTd3wVgYwnS5jYCPotQl32qDLidCP/Owq9qpGI?=
+ =?us-ascii?Q?/CcVXclfEtJ8UCE9Cbn28BsclrIICZArnDdy0XawPGbmJLPaIqYzdTkXKbu0?=
+ =?us-ascii?Q?vQKDZTk/UO/fqjUW92OWL/+HHdu61kmwjM8Lw563Lw93mK0WRvTlsb4j2bRo?=
+ =?us-ascii?Q?rwwOFfQ7Wx5BnLhXCxhZU40BA6FyiEvm9g+muBF88O+eHFXx9YMM9j4DwBc3?=
+ =?us-ascii?Q?/YdWFUCzEj829dFxrQUui/Vua7O0JxMH7InAK4JkGMUntSFOzf8xDmrKkKYv?=
+ =?us-ascii?Q?p7WC/tAP1oJIs/coNFTZPi5wG1px2LoBAqvosvsHuJbEbv5el8HTMi6DSMRN?=
+ =?us-ascii?Q?Aag+hgjnFrQK8YMHIGLjmuLa5KyxtrF9mo3fmZrBkKvFj5Fo82IWNmf2eTNP?=
+ =?us-ascii?Q?LI6lF+zA/lweD2G8YfzZ/UA/uwRDY8cXy5qAbPJYqkgCTdgzisHgFPvN1mIL?=
+ =?us-ascii?Q?sVCeyC+VrIuuMPzsKM0K0syYMqwsJ79gIPkQkOusvTJXoyYmVuihDyXw2EzT?=
+ =?us-ascii?Q?Dl+IfI6u9u5rsexKRVClIh6sxd4QbQVuZu8ATSa1XtAVwrzRE9b6MDrWQc/z?=
+ =?us-ascii?Q?Z/979nd6EvmXbS90VeP1ROBC9rhENdzGeg4uftVy7lSE48CVnsSt0q9lU5Ed?=
+ =?us-ascii?Q?+ACo3vX8kFtL+UtUVjrvBFeKvJ2GFBI65HYSv8EUO8dCacWNu3XWupzeS/7F?=
+ =?us-ascii?Q?Lw9IIcyFU5rt1Ow4KVrvrjUU6l++e0syeTAN3Rjmvbn19fmT/pkIJNhoe/6j?=
+ =?us-ascii?Q?FJIgPi8DI1BtvH8oHnjh78ggLwjyUyIb1BvSgPq4jBammOCmKnof8hLRJRMW?=
+ =?us-ascii?Q?xg=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 674c6cc5-4ea9-49cc-7e88-08db6727717a
+X-MS-Exchange-CrossTenant-AuthSource: SN7PR11MB7540.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2023 07:18:50.9657
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: FVeYhCc6JO6vW6ClUrMQZ50Qh9POMj/6v+t46xdU795AhWS6NK74J6FVSzFnxOJgPeyDgTQlxuViig6afixL0qeMfA5Os6auGt43DHTeCmk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB6351
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 07/06/23 00:52, Konrad Dybcio ha scritto:
+On Wed, Jun 07, 2023 at 10:23:01AM +0800, Hangyu Hua wrote:
+> try_module_get will be called in tcf_proto_lookup_ops. So module_put needs
+> to be called to drop the refcount if ops don't implement the required
+> function.
 > 
+> Fixes: 9f407f1768d3 ("net: sched: introduce chain templates")
+
+Reviewed-by: Larysa Zaremba <larysa.zaremba@intel.com>
+
+> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+> ---
+> 	
+> 	v2: fix the patch description.
 > 
-> On 6.06.2023 23:14, Marijn Suijten wrote:
->> The framebuffer configuration for edo pdx203, written in edo dtsi (which
->> is overwritten in pdx206 dts for its smaller panel) has to use a
->> 1096x2560 configuration as this is what the panel (and framebuffer area)
->> has been initialized to.  Downstream userspace also has access to (and
->> uses) this 2.5k mode by default, and only switches the panel to 4k when
->> requested.
->>
->> This is similar to commit be8de06dc397 ("arm64: dts: qcom:
->> sm8150-kumano: Panel framebuffer is 2.5k instead of 4k") which fixed the
->> same for the previous generation Sony platform.
->>
->> Fixes: 69cdb97ef652 ("arm64: dts: qcom: sm8250: Add support for SONY Xperia 1 II / 5 II (Edo platform)")
->> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
->> ---
-> And so I derped again.
+>  net/sched/cls_api.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-I would've liked more to see a commit saying "replace simple-framebuffer with xxxx"
-(where xxxx is DSI panel, etc) but that will as well do for now... :-)
-
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
+> diff --git a/net/sched/cls_api.c b/net/sched/cls_api.c
+> index 2621550bfddc..92bfb892e638 100644
+> --- a/net/sched/cls_api.c
+> +++ b/net/sched/cls_api.c
+> @@ -2952,6 +2952,7 @@ static int tc_chain_tmplt_add(struct tcf_chain *chain, struct net *net,
+>  		return PTR_ERR(ops);
+>  	if (!ops->tmplt_create || !ops->tmplt_destroy || !ops->tmplt_dump) {
+>  		NL_SET_ERR_MSG(extack, "Chain templates are not supported with specified classifier");
+> +		module_put(ops->owner);
+>  		return -EOPNOTSUPP;
+>  	}
+>  
+> -- 
+> 2.34.1
 > 
-> Konrad
->>
->> Changes since v2:
->> - Rename griffin (copy-paste from related patch) to pdx203 in comment.
->>
->>   arch/arm64/boot/dts/qcom/sm8250-sony-xperia-edo.dtsi | 7 ++++---
->>   1 file changed, 4 insertions(+), 3 deletions(-)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/sm8250-sony-xperia-edo.dtsi b/arch/arm64/boot/dts/qcom/sm8250-sony-xperia-edo.dtsi
->> index 3d22be747f042..8f867f841cb83 100644
->> --- a/arch/arm64/boot/dts/qcom/sm8250-sony-xperia-edo.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sm8250-sony-xperia-edo.dtsi
->> @@ -54,9 +54,10 @@ chosen {
->>   		framebuffer: framebuffer@9c000000 {
->>   			compatible = "simple-framebuffer";
->>   			reg = <0 0x9c000000 0 0x2300000>;
->> -			width = <1644>;
->> -			height = <3840>;
->> -			stride = <(1644 * 4)>;
->> +			/* pdx203 BL initializes in 2.5k mode, not 4k */
->> +			width = <1096>;
->> +			height = <2560>;
->> +			stride = <(1096 * 4)>;
->>   			format = "a8r8g8b8";
->>   		};
->>   	};
-
