@@ -2,68 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 616D27262D0
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 16:30:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73AD27262D4
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 16:30:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240945AbjFGOaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 10:30:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56544 "EHLO
+        id S241055AbjFGOae (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 10:30:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241125AbjFGOaI (ORCPT
+        with ESMTP id S235584AbjFGOac (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 10:30:08 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE9A11BEA
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 07:30:06 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id 41be03b00d2f7-51f7638a56fso6913496a12.3
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 07:30:06 -0700 (PDT)
+        Wed, 7 Jun 2023 10:30:32 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FBAB1FC0
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 07:30:30 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-97467e06511so956634066b.2
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 07:30:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686148206; x=1688740206;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DRgyzVKGCvMw/q3nuqjtgG4N4w0GjLMDNuDTOrtLH68=;
-        b=ygSd1D2Ibu6sM5/ueCqe1pCA8x9jH581VPCXUXR/ZZ09ovFXLqEnse7t91U5ldpcK9
-         0ytCW+q6gbxANgFnybq86Js100pXu5JD4G25NHAUBftINbwmIzlpQP0XtwaGpprVzcOE
-         gfv83APbZzNmfthv2sK/Rk+sTrAK444m51elu6ElIsqRzkAFbVZj8fphj4QrWP8EZ1LI
-         lxUm3HWLvWYNGqm03KoUqtJRKAww5CU0MGgnptQilDrwVnZOjctOVe7E3TyVevesqgyW
-         3HllKGyug6OHxMvpX43dE2oLd1RIlHFI9Nr2p1qtvpbM3eqxNgev8ASkV/JXUvj5I/z2
-         704g==
+        d=linaro.org; s=google; t=1686148229; x=1688740229;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=09wjGjuF8BafJz5/rIk0zFD7cGTqxzAdsPZzNoJir4A=;
+        b=jiBTqH/2bFljhkZ7rYTVEpCajh27br6re37VyXRZTW9S37k25kAA4ZR8ammFIMoW6z
+         Y8c1BLeMn6Ja1k1Pum02IMIYZvZJxxea7eow4BGwgU8waPsX5kowUv2h75q+JjHzcFqq
+         xi78YUQG3JDJRYmU9gDbqgaZ/7ZqvI6cIy1AMM1xgiZkCOByVJOs6ryYRaWgjSHKCsUr
+         669Sblqe5xRuA0NtMwj23K5giYHQSztjsADFhit7IwjYzwyIUMw+lidPK0H2oeaP/PMp
+         q7Qv4f4fB0GDfZS3uxvYn3YWD5W8CnyhJ/nqSVlFpMDoDi31LwtSc2JY5W5lAcFUgLxo
+         m7dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686148206; x=1688740206;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DRgyzVKGCvMw/q3nuqjtgG4N4w0GjLMDNuDTOrtLH68=;
-        b=UVpA2FF/rdO04TLxLhEfchGEWINcQrHUQDeIrKV1BQVMnitS18hABcnk8VEYUkfEE/
-         A45/up1fJjVMBeUxOJpv7dcE7m4LatXEiujfafauRfQFqdaOPf9izdeTGNkUdOx+TB8+
-         wWHsGSdpltAGEuydxbLU/qFbz+tbZcZq5hQLr0wYnLQxj8bQCGqpYWa42jrvLbW7wlE2
-         AuQLIuWznuRx4cK8CQQmWkDbvf2GNhOZ1gauQC+3snhL2L4bgg4niSTAWwYvgTuOE1pw
-         BfbLVR498yFOOyo0FNAbassl5XTkFHfETwxQG/z72lc3LVzexCbIwknTBdwjGgSrmQTq
-         VWwg==
-X-Gm-Message-State: AC+VfDxOZqjmh5R+L6x+KkWn2DY9Yafs6tRKFqrFlvaCAsj3s6zdgZcW
-        g1dfR70jqX3bYgZSX+99/6QU9bX+Dbw=
-X-Google-Smtp-Source: ACHHUZ7I80I2uZ3YcoemVBwNBPFwMJ3g3JfQPiNCnJscn+mrts1zvp3uPbTwQvdKepWDPfI0pvu6hfokOOw=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a63:5c11:0:b0:53f:2668:2bd3 with SMTP id
- q17-20020a635c11000000b0053f26682bd3mr1168127pgb.7.1686148206250; Wed, 07 Jun
- 2023 07:30:06 -0700 (PDT)
-Date:   Wed, 7 Jun 2023 07:30:04 -0700
-In-Reply-To: <20230607073728.vggwcoylibj3cp6s@linux.intel.com>
-Mime-Version: 1.0
-References: <20230602011518.787006-1-seanjc@google.com> <20230602011518.787006-2-seanjc@google.com>
- <20230607073728.vggwcoylibj3cp6s@linux.intel.com>
-Message-ID: <ZICUbIF2+Cvbb9GM@google.com>
-Subject: Re: [PATCH 1/3] KVM: VMX: Retry APIC-access page reload if
- invalidation is in-progress
-From:   Sean Christopherson <seanjc@google.com>
-To:     yu.c.zhang@linux.intel.com
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@nvidia.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Robin Murphy <robin.murphy@arm.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        d=1e100.net; s=20221208; t=1686148229; x=1688740229;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=09wjGjuF8BafJz5/rIk0zFD7cGTqxzAdsPZzNoJir4A=;
+        b=b26AbaPI+3HavjAS49ttuc9BMDZhLOlsNCBuImKaKQvv96v6UNotd/AYHc7vACgKMt
+         MEc/rBSAOUMqFvPmDnACOpsEuhVjNIux78pZTZEVoDzcEdjDSw6BMX9KCTr14rw8Lg41
+         KGBm9GR85bEn1fO7OGVgdgpSKcLnTORyyWjoiVMr72jQGF7zfaxUh/gfjR4NrWQwlMal
+         Y2LN6M24xPnQQ3++Q07BB0M9sYD6mjSo3zWu+VZil7hKFMqhcaoLkiQRGQ9/PwANkooq
+         jY1ZRUwFfZoPjVTSl9G74FbCz65CfUAmrSENh/wNzOSmrV2Gfua1D/8XYgatz6zSsk64
+         fgig==
+X-Gm-Message-State: AC+VfDzZlXYMIaEbWVM4TEKSnmV+GXYMVFI8k2tIIL/H0QoEdsrB2+c1
+        J3Qnk8S3unYuoVehWOKkeosVTA==
+X-Google-Smtp-Source: ACHHUZ6ID42MXAI0o8qCiY3ZLSzc3b/0MU2uU/cmT4za4Yi4tFXGx9q6fR/OHY0td5MgGgpabMriYg==
+X-Received: by 2002:a17:907:98e:b0:970:553:272c with SMTP id bf14-20020a170907098e00b009700553272cmr6066260ejc.27.1686148228914;
+        Wed, 07 Jun 2023 07:30:28 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id w22-20020a170906185600b00977d02973e8sm4759226eje.0.2023.06.07.07.30.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Jun 2023 07:30:28 -0700 (PDT)
+Message-ID: <f5cfc81d-d8ae-d270-f29a-c2b45b07a651@linaro.org>
+Date:   Wed, 7 Jun 2023 16:30:26 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v8 05/10] dt-bindings: sc16is7xx: Add property to change
+ GPIO function
+Content-Language: en-US
+To:     Hugo Villeneuve <hugo@hugovil.com>, gregkh@linuxfoundation.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, jirislaby@kernel.org, jringle@gridpoint.com,
+        jesse.sung@canonical.com, isaac.true@canonical.com,
+        l.perczak@camlintechnologies.com, tomasz.mon@camlingroup.com
+Cc:     linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        stable@vger.kernel.org, Conor Dooley <conor.dooley@microchip.com>,
+        Lech Perczak <lech.perczak@camlingroup.com>
+References: <20230607140525.833982-1-hugo@hugovil.com>
+ <20230607140525.833982-6-hugo@hugovil.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230607140525.833982-6-hugo@hugovil.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,121 +84,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023, yu.c.zhang@linux.intel.com wrote:
-> On Thu, Jun 01, 2023 at 06:15:16PM -0700, Sean Christopherson wrote:
-> > +	pfn = gfn_to_pfn_memslot(slot, gfn);
-> > +	if (is_error_noslot_pfn(pfn))
-> > +		return;
-> > +
-> > +	read_lock(&vcpu->kvm->mmu_lock);
-> > +	if (mmu_invalidate_retry_hva(kvm, mmu_seq,
-> > +				     gfn_to_hva_memslot(slot, gfn))) {
-> > +		kvm_make_request(KVM_REQ_APIC_PAGE_RELOAD, vcpu);
+On 07/06/2023 16:05, Hugo Villeneuve wrote:
+> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 > 
-> Are the mmu_invalidate_retry_hva() and the following request meant to stall
-> the vCPU if there's on going invalidation? 
-
-Yep.
-
-> If yes, may I ask how would the vCPU be stalled?
+> Some variants in this series of UART controllers have GPIO pins that
+> are shared between GPIO and modem control lines.
 > 
-> Below are my understandings and confusions about this process. I must have
-> missed something, waiting to be educated... :) 
+> The pin mux mode (GPIO or modem control lines) can be set for each
+> ports (channels) supported by the variant.
 > 
-> When the backing page of APIC access page is to be reclaimed:
-> 1> kvm_mmu_notifier_invalidate_range_start() -> __kvm_handle_hva_range() will
-> increase the kvm->mmu_invalidate_in_progress and account the start/end of this
-> page in kvm_mmu_invalidate_begin().
-> 2> And then kvm_unmap_gfn_range() will zap the TDP, and send the request,
-> KVM_REQ_APIC_PAGE_RELOAD, to all vCPUs.
-> 3> While a vCPU tries to reload the APIC access page before entering the guest,
-> kvm->mmu_invalidate_in_progress will be checked in mmu_invalidate_retry_hva(),
-> but it is possible(or is it?) that the kvm->mmu_invalidate_in_progess is still
-> positive, so KVM_REQ_APIC_PAGE_RELOAD is set again. No reload, and no TLB flush.
-> 4> So what if the vCPU resumes with KVM_REQ_APIC_PAGE_RELOAD & KVM_REQ_TLB_FLUSH
-> flags being set, yet APIC access page is not reloaded and TLB is not flushed? Or,
-> will this happen?
+> This adds a property to the device tree to set the GPIO pin mux to
+> modem control lines on selected ports if needed.
+> 
+> Cc: <stable@vger.kernel.org> # 6.1.x
+> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> Acked-by: Conor Dooley <conor.dooley@microchip.com>
+> Reviewed-by: Lech Perczak <lech.perczak@camlingroup.com>
+> ---
+>  .../bindings/serial/nxp,sc16is7xx.txt         | 46 +++++++++++++++++++
+>  1 file changed, 46 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt b/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt
+> index 0fa8e3e43bf8..1a7e4bff0456 100644
+> --- a/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt
+> +++ b/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt
+> @@ -23,6 +23,9 @@ Optional properties:
+>      1 = active low.
+>  - irda-mode-ports: An array that lists the indices of the port that
+>  		   should operate in IrDA mode.
+> +- nxp,modem-control-line-ports: An array that lists the indices of the port that
+> +				should have shared GPIO lines configured as
+> +				modem control lines.
+>  
+>  Example:
+>          sc16is750: sc16is750@51 {
+> @@ -35,6 +38,26 @@ Example:
+>                  #gpio-cells = <2>;
+>          };
+>  
+> +	sc16is752: sc16is752@53 {
 
-Pending requests block KVM from actually entering the guest.  If a request comes
-in after vcpu_enter_guest()'s initial handling of requests, KVM will bail before
-VM-Enter and go back through the entire "outer" run loop.
+Since you keep sending new versions, fix the names. nNode names should
+be generic. See also explanation and list of examples in DT specification:
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
 
-This isn't necessarily the most efficient way to handle the stall, e.g. KVM does
-a fair bit of prep for VM-Enter before detecting the pending request.  The
-alternative would be to have kvm_vcpu_reload_apic_access_page() return value
-instructing vcpu_enter_guest() whether to bail immediately or continue on.  I
-elected for the re-request approach because (a) it didn't require redefining the
-kvm_x86_ops vendor hook, (b) this should be a rare situation and not performance
-critical overall, and (c) there's no guarantee that bailing immediately would
-actually yield better performance from the guest's perspective, e.g. if there are
-other pending requests/work, then the KVM can handle those items while the vCPU
-is stalled instead of waiting until the invalidation completes to proceed.
+Best regards,
+Krzysztof
 
-> One more dumb question - why does KVM not just pin the APIC access page?
-
-Definitely not a dumb question, I asked myself the same thing multiple times when
-looking at this :-)  Pinning the page would be easier, and KVM actually did that
-in the original implementation.  The issue is in how KVM allocates the backing
-page.  It's not a traditional kernel allocation, but is instead anonymous memory
-allocated by way of vm_mmap(), i.e. for all intents and purposes it's a user
-allocation.  That means the kernel expects it to be a regular movable page, e.g.
-it's entirely possible the page (if it were pinned) could be the only page in a
-2MiB chunk preventing the kernel from migrating/compacting and creating a hugepage.
-
-In hindsight, I'm not entirely convinced that unpinning the page was the right
-choice, as it resulted in a handful of nasty bugs.  But, now that we've fixed all
-those bugs (knock wood), there's no good argument for undoing all of that work.
-Because while the code is subtle and requires hooks in a few paths, it's not *that*
-complex and for the most part doesn't require active maintenance.
-
-static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
-{
-	if (kvm_request_pending(vcpu)) {  <= check if any request is pending
-
-		if (kvm_check_request(KVM_REQ_APIC_PAGE_RELOAD, vcpu))
-			kvm_vcpu_reload_apic_access_page(vcpu); <= re-requests APIC_PAGE_RELOAD
-
-                ...
-	}
-
-	...
-
-	preempt_disable();
-
-	static_call(kvm_x86_prepare_switch_to_guest)(vcpu);
-
-        <host => guest bookkeeping>
-
-	if (kvm_vcpu_exit_request(vcpu)) {  <= detects the new pending request
-		vcpu->mode = OUTSIDE_GUEST_MODE;
-		smp_wmb();
-		local_irq_enable();
-		preempt_enable();
-		kvm_vcpu_srcu_read_lock(vcpu);
-		r = 1;
-		goto cancel_injection;  <= bails from actually entering the guest
-	}
-
-	if (req_immediate_exit) {
-		kvm_make_request(KVM_REQ_EVENT, vcpu);
-		static_call(kvm_x86_request_immediate_exit)(vcpu);
-	}
-
-	for (;;) {
-		<inner run / VM-Enter loop>
-	}
-
-	<VM-Exit path>
-
-	r = static_call(kvm_x86_handle_exit)(vcpu, exit_fastpath);
-	return r;
-
-cancel_injection:
-	if (req_immediate_exit)
-		kvm_make_request(KVM_REQ_EVENT, vcpu);
-	static_call(kvm_x86_cancel_injection)(vcpu);
-	if (unlikely(vcpu->arch.apic_attention))
-		kvm_lapic_sync_from_vapic(vcpu);
-out:
-	return r;
-}
