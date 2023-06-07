@@ -2,72 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DE417251ED
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 04:04:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1041B7251F0
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 04:05:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240184AbjFGCE4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 6 Jun 2023 22:04:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43824 "EHLO
+        id S240640AbjFGCFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 22:05:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233998AbjFGCEw (ORCPT
+        with ESMTP id S240103AbjFGCFs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 22:04:52 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C27AD3;
-        Tue,  6 Jun 2023 19:04:49 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 6610C24E254;
-        Wed,  7 Jun 2023 10:04:38 +0800 (CST)
-Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 7 Jun
- 2023 10:04:38 +0800
-Received: from EXMBX067.cuchost.com (172.16.6.67) by EXMBX068.cuchost.com
- (172.16.6.68) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 7 Jun
- 2023 10:04:37 +0800
-Received: from EXMBX067.cuchost.com ([fe80::a825:bd30:18ff:b2f8]) by
- EXMBX067.cuchost.com ([fe80::a825:bd30:18ff:b2f8%16]) with mapi id
- 15.00.1497.044; Wed, 7 Jun 2023 10:04:37 +0800
-From:   Mason Huo <mason.huo@starfivetech.com>
-To:     Conor Dooley <conor.dooley@microchip.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-CC:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor@kernel.org>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Shengyu Qu <wiagn233@outlook.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH v4 2/3] cpufreq: dt-platdev: Add JH7110 SOC to the
- allowlist
-Thread-Topic: [PATCH v4 2/3] cpufreq: dt-platdev: Add JH7110 SOC to the
- allowlist
-Thread-Index: AdmY3zKiK3gdrfFbSMGgpG/WG54SYA==
-Date:   Wed, 7 Jun 2023 02:04:37 +0000
-Message-ID: <f29a14dad3d744bba54e561a050bdfaa@EXMBX067.cuchost.com>
-References: <20230606105656.124355-1-mason.huo@starfivetech.com>
- <20230606105656.124355-3-mason.huo@starfivetech.com>
- <20230606110804.qns4rolrrj2gku6w@vireshk-i7>
- <20230606-unsmooth-slip-c80fab59c9b4@wendy>
-In-Reply-To: <20230606-unsmooth-slip-c80fab59c9b4@wendy>
-Accept-Language: en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [183.27.98.122]
-x-yovoleruleagent: yovoleflag
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Tue, 6 Jun 2023 22:05:48 -0400
+Received: from cstnet.cn (smtp80.cstnet.cn [159.226.251.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 611C410F0
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 19:05:47 -0700 (PDT)
+Received: from ed3e173716be.home.arpa (unknown [124.16.138.125])
+        by APP-01 (Coremail) with SMTP id qwCowAB3fxfr5X9kQYTMDA--.6398S2;
+        Wed, 07 Jun 2023 10:05:33 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     hyun.kwon@xilinx.com, laurent.pinchart@ideasonboard.com,
+        airlied@gmail.com, daniel@ffwll.ch, michal.simek@amd.com
+Cc:     dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] drm: xlnx: zynqmp_dpsub: Add missing check for dma_set_mask
+Date:   Wed,  7 Jun 2023 10:05:29 +0800
+Message-Id: <20230607020529.22934-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: qwCowAB3fxfr5X9kQYTMDA--.6398S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrKr1ktr1rJw47WF1xArWrZrb_yoWDWFc_Kr
+        1UCFyDXF4DAr1vqrsrCrySyr92k395XrZYvFs7Ka4FqryUGrnxX3y7ZFZ09r4DZ3W7ArWD
+        X3WjgrZxJrWIkjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbcxFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
+        Gr1UM28EF7xvwVC2z280aVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVCY1x0267AKxVWxJr
+        0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r4U
+        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0E
+        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
+        W8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
+        cVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbpwZ7UUUUU==
+X-Originating-IP: [124.16.138.125]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,40 +57,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Viresh & Conor,
+Add check for dma_set_mask() and return the error if it fails.
 
-Sorry for the confusion. 
-Should I re-send the patch series and remove this patch?
-Or you can just ignore it?
+Fixes: d76271d22694 ("drm: xlnx: DRM/KMS driver for Xilinx ZynqMP DisplayPort Subsystem")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ drivers/gpu/drm/xlnx/zynqmp_dpsub.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Thanks
-Mason
+diff --git a/drivers/gpu/drm/xlnx/zynqmp_dpsub.c b/drivers/gpu/drm/xlnx/zynqmp_dpsub.c
+index bab862484d42..068413be6527 100644
+--- a/drivers/gpu/drm/xlnx/zynqmp_dpsub.c
++++ b/drivers/gpu/drm/xlnx/zynqmp_dpsub.c
+@@ -227,7 +227,9 @@ static int zynqmp_dpsub_probe(struct platform_device *pdev)
+ 	dpsub->dev = &pdev->dev;
+ 	platform_set_drvdata(pdev, dpsub);
+ 
+-	dma_set_mask(dpsub->dev, DMA_BIT_MASK(ZYNQMP_DISP_MAX_DMA_BIT));
++	ret = dma_set_mask(dpsub->dev, DMA_BIT_MASK(ZYNQMP_DISP_MAX_DMA_BIT));
++	if (ret)
++		return ret;
+ 
+ 	/* Try the reserved memory. Proceed if there's none. */
+ 	of_reserved_mem_device_init(&pdev->dev);
+-- 
+2.25.1
 
-> On Tue, Jun 06, 2023 at 04:38:04PM +0530, Viresh Kumar wrote:
-> > On 06-06-23, 18:56, Mason Huo wrote:
-> > > Add the compatible strings for supporting the generic cpufreq driver 
-> > > on the StarFive JH7110 SoC.
-> > > 
-> > > Signed-off-by: Mason Huo <mason.huo@starfivetech.com>
-> > > ---
-> > >  drivers/cpufreq/cpufreq-dt-platdev.c | 2 ++
-> > >  1 file changed, 2 insertions(+)
-> > > 
-> > > diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c 
-> > > b/drivers/cpufreq/cpufreq-dt-platdev.c
-> > > index 338cf6cc6596..14aa8281c7f4 100644
-> > > --- a/drivers/cpufreq/cpufreq-dt-platdev.c
-> > > +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
-> > > @@ -85,6 +85,8 @@ static const struct of_device_id allowlist[] __initconst = {
-> > >  	{ .compatible = "st-ericsson,u9500", },
-> > >  	{ .compatible = "st-ericsson,u9540", },
-> > >  
-> > > +	{ .compatible = "starfive,jh7110", },
-> > > +
-> > >  	{ .compatible = "ti,omap2", },
-> > >  	{ .compatible = "ti,omap4", },
-> > >  	{ .compatible = "ti,omap5", },
-> > 
-> > I thought I already merged it ?
-> 
-> You did, 4b4c0d37164c ("cpufreq: dt-platdev: Add JH7110 SOC to the allowlist").
