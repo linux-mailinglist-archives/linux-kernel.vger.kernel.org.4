@@ -2,132 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BB437263C2
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 17:10:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E8737263C6
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 17:11:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241260AbjFGPKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 11:10:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54858 "EHLO
+        id S235179AbjFGPLi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 11:11:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239795AbjFGPKV (ORCPT
+        with ESMTP id S239458AbjFGPLf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 11:10:21 -0400
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 023101734;
-        Wed,  7 Jun 2023 08:10:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1686150616;
-        bh=EobN6Shy6YmwBECX8vJ30mW74AhlOJOLGmITM5vqgBQ=;
-        h=Date:To:From:Subject:From;
-        b=Yu9/VB3OLhLJzLk879e9NXBVbI4GZGtmSReAXb+vj5ZCxAssQ4q1InJ39WQN6KK/f
-         nagIFLqnMQECDD+4Vm5P37y0VEGl7fOhPU6kXscedr3VcYYW7hJo7TiuCgLGisZUDC
-         x1IPbZb7nxynMqKsnHDcQ3Vw1UxYvuZRIPZE0B4Gc5/XIix6JmzMCDfUcdbekXz0hq
-         YMc/ozVIBbmUU/g3MNq9/GVtfVM1i+v3U4pwFYhcGgK+FEwoLMoebhGFDBMhtSKUuW
-         bDxgdZk2z7CXa5P9smiknodxjCwfUhi8wzSz2u6Nwea8sBR6aB27521ekRGHZZLcCG
-         PBeBV6hepXIiA==
-Received: from [172.16.0.134] (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4QbrPN2ftJz16mt;
-        Wed,  7 Jun 2023 11:10:16 -0400 (EDT)
-Message-ID: <90f91bb9-e174-7e8e-6922-5a27cc0eede9@efficios.com>
-Date:   Wed, 7 Jun 2023 11:10:28 -0400
+        Wed, 7 Jun 2023 11:11:35 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E32521720;
+        Wed,  7 Jun 2023 08:11:33 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-977c8423dccso148608266b.1;
+        Wed, 07 Jun 2023 08:11:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686150692; x=1688742692;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fVGis/rTcZr0vzPZaXtByS8SSJioRsVHgE4mgu1eoWM=;
+        b=spq/RM/dNbFQuTXPY2sPsA/aibgvpksiop/LevkGp/FWybfXYU2k1nvoislNHdCw4W
+         wSdAHMDyz7EVjlm5OErhFBu/dybUozjzN00xXwhbrlyTeI3ZGzVRouvB+1WPEhkgF1Vr
+         OWiMFSwBv7N9IYdwU68QAeNgcda30cfuy66UiZHx3wEdmhLkMxBEJvTwU/ya6ncO1GmR
+         kqBqn0R+2HvlH6bGbBM4ndaFrTW1ak7eREiK0UFRUGJD4v+9+s/+isgtov/wT1+lxYmq
+         gW6ijZbyd8Zi49JyJ0tWW+sQsPWXoV8vlQjN2w8aaaEHVLsozhlbet2K752E6fDC3Xof
+         87Rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686150692; x=1688742692;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fVGis/rTcZr0vzPZaXtByS8SSJioRsVHgE4mgu1eoWM=;
+        b=UiyirWoMNWqUwwxzM1eDe+Sn8dsVecBCp4d3vBmbWxudE4DO/YJRdiPkd+lIpitgrg
+         IqCMObyDewQTXSsDN45NyyVDUnQC2V7IQr+PErkpXskMrjvArQtATxA0w6jezHlDEaae
+         Q4yW8jtrVmsUR1GikLoiVf73Ha9Q5FYkzqZmudUo22PI5dGFpwbbCOtgJWfglovKH0Kx
+         9T8Q+/psesS4SSUg817oMA8GbL+r96epFa+4emTuivSO6CPJ0HOiwr9jhSyyXR6nbV0K
+         KAUygtZBS8/Q8W6CwgbgKLTORPqoVheFU3JACntPmlI/wbm7pMXeFQsgHttO34RTD9PB
+         Ziyw==
+X-Gm-Message-State: AC+VfDxGipULk9gXQ7vMvLEZ8z110DB+UuWv4XoF9jDZ7juhVBYT8DuN
+        GF6PGlqcVa9wesLu7EMY5Oo=
+X-Google-Smtp-Source: ACHHUZ7b7bz7T9J2KeyxrecP+EhKZCCXFFupI1T8bkMfAEqF3RD87rlXw9HCzXySDal0y7jqrODRrQ==
+X-Received: by 2002:a17:906:5d07:b0:96a:2210:7dd8 with SMTP id g7-20020a1709065d0700b0096a22107dd8mr5206553ejt.38.1686150691954;
+        Wed, 07 Jun 2023 08:11:31 -0700 (PDT)
+Received: from fedora.. ([46.188.160.176])
+        by smtp.gmail.com with ESMTPSA id m19-20020a170906235300b00967a18df1easm7006222eja.117.2023.06.07.08.11.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 08:11:31 -0700 (PDT)
+From:   Paulo Pavacic <pavacic.p@gmail.com>
+To:     neil.armstrong@linaro.org, sam@ravnborg.org, airlied@gmail.com,
+        daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Paulo Pavacic <pavacic.p@gmail.com>
+Subject: [PATCH v4 0/3] drm/panel: add fannal c3004 panel
+Date:   Wed,  7 Jun 2023 17:11:24 +0200
+Message-Id: <20230607151127.1542024-1-pavacic.p@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Content-Language: en-US
-To:     lttng-dev@lists.lttng.org,
-        diamon-discuss@lists.linuxfoundation.org,
-        linux-trace-users@vger.kernel.org, linux-kernel@vger.kernel.org
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [RELEASE] LTTng UST 2.12.8/2.13.6 and LTTng modules 2.12.14/2.13.10
- tracers
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Fannal C3004 is a 2 lane MIPI DSI 480x800 panel which requires initialization with DSI DCS
+commands. After few initialization commands delay is required.
 
-This is a stable release announcement for the LTTng UST and LTTng modules tracer projects.
-Those contain mainly bug fixes and add support for recent distributions and upstream kernels.
+Paulo Pavacic (3):
+  dt-bindings: add fannal vendor prefix
+  dt-bindings: display: panel: add fannal,c3004
+  drm/panel-fannal-c3004: Add fannal c3004 DSI panel
 
-What's new in both LTTng-UST 2.12.8 and 2.13.6:
-
-- Fix: use unaligned pointer accesses for lttng_inline_memcpy
-     
-   lttng_inline_memcpy receives pointers which can be unaligned. This
-   causes issues (traps) specifically on arm 32-bit with 8-byte strings
-   (including \0).
-
-- Fix: trace events in C constructors/destructors
-
-   Adding a priority (150) to the tracepoint and tracepoint provider
-   constructors/destructors ensures that we trace tracepoints located
-   within C constructors/destructors with a higher priority value,
-   including the default init priority of 65535, when the tracepoint vs
-   tracepoint definition vs tracepoint probe provider are in different
-   compile units (and in various link order one compared to another).
-
-- Fix: Reevaluate LTTNG_UST_TRACEPOINT_DEFINE each time tracepoint.h is included
-
-   Fix issues with missing symbols in use-cases where tracef.h is included
-   before defining LTTNG_UST_TRACEPOINT_DEFINE
-
-- Fix: segmentation fault on filter interpretation in "switch" mode
-
-   Fix a bytecode interpreter crash when building with INTERPRETER_USE_SWITCH
-   defined (used mainly for debugging purposes).
-
-
-What's new specifically in LTTng-UST 2.13.6:
-
-- Fix: `ip` context is expressed as a base-10 field
-
-   The base for UST context field `ip` was changed from 16 (hexadecimal) to
-   10 (decimal), most likely an unintentional copy&paste error in 4e48b5d.
-
-- Various fixes to build with -std=c99.
-
-- Fix: trace events in C++ constructors/destructors
-
-   Wrap constructor and destructor functions to invoke them as functions with
-   the constructor/destructor GNU C attributes, which ensures that those
-   constructors/destructors are ordered before/after C++
-   constructors/destructors.
-
-
-What's new in LTTng modules 2.12.14 and 2.13.10:
-
-- fix: kallsyms wrapper on CONFIG_PPC64_ELF_ABI_V1
-
-   Work-around PPC64 ELF ABI v1 function descriptor issues when using kallsyms.
-
-- Add support for RHEL 9.0 and 9.1.
-
-
-What's new specifically in LTTng modules 2.12.14:
-
-- Various tracepoint instrumentation fixes to support kernel v5.18.
-
-
-What's new specifically in LTTng modules 2.13.10:
-
-- Various tracepoint instrumentation fixes to support kernel v6.3.
-
-
-Feedback is welcome!
-
-Thanks,
-
-Mathieu
+ .../bindings/display/panel/fannal,c3004.yaml  |  78 +++++
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ MAINTAINERS                                   |   6 +
+ drivers/gpu/drm/panel/Kconfig                 |  11 +
+ drivers/gpu/drm/panel/Makefile                |   1 +
+ drivers/gpu/drm/panel/panel-fannal-c3004.c    | 314 ++++++++++++++++++
+ 6 files changed, 412 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/display/panel/fannal,c3004.yaml
+ create mode 100644 drivers/gpu/drm/panel/panel-fannal-c3004.c
 
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
+2.40.1
+
