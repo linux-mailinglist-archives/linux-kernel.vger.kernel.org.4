@@ -2,103 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1906725D21
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 13:30:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 552CD725D1D
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 13:30:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236749AbjFGLat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 07:30:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32878 "EHLO
+        id S240072AbjFGLa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 07:30:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240361AbjFGLaq (ORCPT
+        with ESMTP id S238532AbjFGLaY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 07:30:46 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B2519A4;
-        Wed,  7 Jun 2023 04:30:41 -0700 (PDT)
-X-QQ-mid: bizesmtp88t1686137431txjb0ruo
-Received: from linux-lab-host.localdomain ( [61.141.77.49])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 07 Jun 2023 19:30:30 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: PS/N6jJLnDYwJEGZC7QAtJWPa/AlKwXo0vmdJ7kjq/mWA0tEQux5qfVTlr0zq
-        V0mQ4yl64VpUmbvnsqbSN7zmeSevRUHmbKOZoV2RqIOt8edl233rqbjgHL+q7xdbYk7qw0T
-        oDbzE70YdzBu94Fz3kB0Vxyk73oAMss5RRcIEMdMbDAKZGDHbrmqZ3shDB9YNI4GPLQbbyC
-        YpefZjfBLWxIf0z9U6lv0MnP+rAzGLTBXjOtyEUJdteCy8j1LYn7FPmZtLhHlVEj+dAmryn
-        bRmbdeOXlRWDFL3U2JhqQGtudiei24trgW3jAVgqAa8iUyA/xMvOA7v8ihmxArblu03CWvf
-        A7TJ2iCs1KR4AhETgTAsng5OTvPUqWD1dzD8jIRVnYXh9ApTgLCxOG2o/o+ts6irrjY3CNF
-        F0Q8oxfdQOU=
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 11378213777674272868
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de, w@1wt.eu
-Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [PATCH v3 1/3] tools/nolibc: sys.h: add a syscall return helper
-Date:   Wed,  7 Jun 2023 19:30:09 +0800
-Message-Id: <7cad207c4c4deb41151bd12fa658fb3fc64a5bf1.1686135913.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1686135913.git.falcon@tinylab.org>
-References: <cover.1686135913.git.falcon@tinylab.org>
+        Wed, 7 Jun 2023 07:30:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 245541707;
+        Wed,  7 Jun 2023 04:30:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B231163DE4;
+        Wed,  7 Jun 2023 11:30:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EEFD4C433A4;
+        Wed,  7 Jun 2023 11:30:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686137422;
+        bh=02ohk6uho+wdZeYJ3NbWDHfzlrRx7UjDJg/ozOIJ858=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=aJPzAKAWNoHnrRlCFfkwyFZkdKwr/8sC1yDwDvNni0dIaGnb9sZO1hMaTXWKP2/L6
+         cK6GToNOnBKU0X6ZV+QCuoRM63kpYqVP0k3FxdpDt6BKo4C4qiH8qf28kdTiNhnYWn
+         ZWvSYv3uIpRyPVBntWG6sgmS3+FgekjkNjHLeKWNFcKCn/hUrryq9uOk+7GxlhIqhK
+         urtW2UTZPuJMEPN31EoS6YMqxE/uKJTY8W/doJxNhXaa4mzDGKJHGNMKLNKjArSNRk
+         Gxcf+mCIb0PPeX2GmQkD2D0hO5FezHBxz6CP9kJz+Pis/HrsmA89wJigD4KVqEYjgs
+         6braM724ICC0w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D6B06E4F13A;
+        Wed,  7 Jun 2023 11:30:21 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Subject: Re: [PATCH net-next v2] net: liquidio: fix mixed module-builtin object
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168613742187.29815.12409173950657122077.git-patchwork-notify@kernel.org>
+Date:   Wed, 07 Jun 2023 11:30:21 +0000
+References: <20230606171849.2025648-1-masahiroy@kernel.org>
+In-Reply-To: <20230606171849.2025648-1-masahiroy@kernel.org>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, netdev@vger.kernel.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux-kernel@vger.kernel.org,
+        dchickles@marvell.com, sburla@marvell.com, fmanlunas@marvell.com,
+        simon.horman@corigine.com, terrelln@fb.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Most of the library routines share the same syscall return logic:
+Hello:
 
-  In general, a 0 return value indicates success.  A -1 return value
-  indicates an error, and an error number is stored in errno. [1]
+This patch was applied to netdev/net-next.git (main)
+by David S. Miller <davem@davemloft.net>:
 
-Let's add a __sysret() helper for the above logic to simplify the coding
-and shrink the code lines too.
+On Wed,  7 Jun 2023 02:18:49 +0900 you wrote:
+> With CONFIG_LIQUIDIO=m and CONFIG_LIQUIDIO_VF=y (or vice versa),
+> $(common-objs) are linked to a module and also to vmlinux even though
+> the expected CFLAGS are different between builtins and modules.
+> 
+> This is the same situation as fixed by commit 637a642f5ca5 ("zstd:
+> Fixing mixed module-builtin objects").
+> 
+> [...]
 
-Thomas suggested to use inline function instead of macro for __sysret().
+Here is the summary with links:
+  - [net-next,v2] net: liquidio: fix mixed module-builtin object
+    https://git.kernel.org/netdev/net-next/c/f71be9d084c9
 
-Willy suggested to make __sysret() be always inline.
-
-[1]: https://man7.org/linux/man-pages/man2/syscall.2.html
-
-Suggested-by: Willy Tarreau <w@1wt.eu>
-Link: https://lore.kernel.org/linux-riscv/ZH1+hkhiA2+ItSvX@1wt.eu/
-Suggested-by: Thomas Weißschuh <linux@weissschuh.net>
-Link: https://lore.kernel.org/linux-riscv/ea4e7442-7223-4211-ba29-70821e907888@t-8ch.de/
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
----
- tools/include/nolibc/sys.h | 10 ++++++++++
- 1 file changed, 10 insertions(+)
-
-diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-index 856249a11890..150777207468 100644
---- a/tools/include/nolibc/sys.h
-+++ b/tools/include/nolibc/sys.h
-@@ -28,6 +28,16 @@
- #include "errno.h"
- #include "types.h"
- 
-+/* Syscall return helper, set errno as -ret when ret < 0 */
-+static __inline__ __attribute__((unused, always_inline))
-+long __sysret(long ret)
-+{
-+	if (ret < 0) {
-+		SET_ERRNO(-ret);
-+		ret = -1;
-+	}
-+	return ret;
-+}
- 
- /* Functions in this file only describe syscalls. They're declared static so
-  * that the compiler usually decides to inline them while still being allowed
+You are awesome, thank you!
 -- 
-2.25.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
