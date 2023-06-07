@@ -2,217 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBB3C7269EC
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 21:38:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1EE87269F0
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 21:39:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230472AbjFGTii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 15:38:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51356 "EHLO
+        id S229529AbjFGTjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 15:39:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbjFGTih (ORCPT
+        with ESMTP id S230496AbjFGTjB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 15:38:37 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C43B11FE0;
-        Wed,  7 Jun 2023 12:38:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686166715; x=1717702715;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=wXRY2MWhyN40cXGeqTUXVBNIvAZOjMmb/ffcJ3vEpVo=;
-  b=LRVqfPLgvvXTSn3Rve5MKKUp18H2x3628NkSZZdiJZvuK2xBqOO2Fto3
-   uU/0ZORJE/ZRMWnN6O1fP1rpPChs7TywkjtQrNNi+rNH4hqcLRDhxjVbs
-   1yWihSbDIYX1NiJXXUjQwfy8CBbp+AvnZRoPiTaJNaPdAXWss+eOUM3qG
-   aOGcnpwrkbyl4NUkaCsba1BOR0Fkxn6o7aSHBaUWrL1VJqV4+34/p++EW
-   8nXTJ9BK6IE8DkpjSVb8pE3CcvKIZLxuMov/Qyj50CXi55RuvbW1HlsxL
-   /I7oyjdLsQts1qGFdzOfrU3w+lV+AD9huh2OHcXofCjkwdw08HduSm2pt
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="337452533"
-X-IronPort-AV: E=Sophos;i="6.00,225,1681196400"; 
-   d="scan'208";a="337452533"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 12:38:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="709667975"
-X-IronPort-AV: E=Sophos;i="6.00,225,1681196400"; 
-   d="scan'208";a="709667975"
-Received: from yjiang5-mobl.amr.corp.intel.com (HELO localhost) ([10.144.161.97])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 12:38:34 -0700
-Date:   Wed, 7 Jun 2023 12:38:34 -0700
-From:   Yunhong Jiang <yunhong.jiang@linux.intel.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Evgeniy Baskov <baskov@ispras.ru>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Peter Jones <pjones@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Dave Young <dyoung@redhat.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Kees Cook <keescook@chromium.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>
-Subject: Re: [PATCH v5 08/20] x86/decompressor: Use standard calling
- convention for trampoline
-Message-ID: <20230607193834.GC3110@yjiang5-mobl.amr.corp.intel.com>
-References: <20230607072342.4054036-1-ardb@kernel.org>
- <20230607072342.4054036-9-ardb@kernel.org>
+        Wed, 7 Jun 2023 15:39:01 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73BA71FF7;
+        Wed,  7 Jun 2023 12:38:57 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-977d55ac17bso714679066b.3;
+        Wed, 07 Jun 2023 12:38:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686166736; x=1688758736;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=v9mPghHb0zo1ioIAUBDYOj0SyzS0wuoa2sSWyDcE21Y=;
+        b=TMoCvkTXY/gjiABpDtpmoPrgs8TFK7QZ05E5+WWu6EBV7Gy0jTCyX33VxR8NHkQLKe
+         qlFitCGePxzK+aPNmEXd57dXg3IGTaoC7pUCtG3ERgqfwh8c99Lr32evc5+k9zi+1oZf
+         UEkjKGMFt5HcwLuAptRvkxZl1vgcH1zAeWMUiv8jGhDf2JvFPF8/MAlvNXOzRdlD6y7/
+         3SymvUlAjtm0dNSGbIOK+GKCEBLXAzwG94kFYYEsI9ZJ0isKV+dEB05ehfVCUcLVLC5B
+         XD1hgH8/RVkMQJRYVWJgBcjX9jzs6LT4PGOUfYnayYC06x3fRDBM/FrUqsQUf6HJSa5a
+         rGZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686166736; x=1688758736;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=v9mPghHb0zo1ioIAUBDYOj0SyzS0wuoa2sSWyDcE21Y=;
+        b=PcFD2Cp/3YaaFNl9lgjbbr6v0l8pDeR37pOUe52dK+Qpv9LPMxOzAOu9NUqwMusL6F
+         Y4cYx8ud9jTD7h45G7e+qkpj5FDD0p4UJi9Uwa+ZYKh3d5JaAYZ6PXuKWt8f0jmrWwrO
+         1ng1PW9G/1Sph6a/AAl65EZDnmuPD60LVfNfK4+8kHxp+u8u7QsXmJTqyJaZjW2hMHAi
+         MDoEAaO8jgfihh2atjtXdqQahi3+LJ/k5epsEaA8z4cMoTRsKpQP0cg3qjrxhXhFlR2r
+         SFNQC6GgUnCBKdZ94H1mvyYqK4KYxUxHgRQBaFivayIL+05f9tmwfJLJugZX3fg+fDhW
+         UsKg==
+X-Gm-Message-State: AC+VfDxgKwPD1UiwBNa+wsUK4S3/AbLyDmYBjDT+XDjPuS90UKMHBCyC
+        JiNHmry1/rdMdUQkiOmpeQE=
+X-Google-Smtp-Source: ACHHUZ4Y/8td78SY0svLXTall9qR9vpoyxxDO0P4VmvMlnMotCJwzc3XyvZ9UvHWTvlWNUXQocANjg==
+X-Received: by 2002:a17:907:7da3:b0:977:d676:d3ca with SMTP id oz35-20020a1709077da300b00977d676d3camr7458256ejc.33.1686166735589;
+        Wed, 07 Jun 2023 12:38:55 -0700 (PDT)
+Received: from tom-HP-ZBook-Fury-15-G7-Mobile-Workstation (net-188-217-50-121.cust.vodafonedsl.it. [188.217.50.121])
+        by smtp.gmail.com with ESMTPSA id a8-20020a17090682c800b0097889c33582sm688895ejy.215.2023.06.07.12.38.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 12:38:55 -0700 (PDT)
+Date:   Wed, 7 Jun 2023 21:38:52 +0200
+From:   Tommaso Merciai <tomm.merciai@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     jacopo.mondi@ideasonboard.com, laurent.pinchart@ideasonboard.com,
+        martin.hecht@avnet.eu, michael.roeder@avnet.eu,
+        linuxfancy@googlegroups.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Gerald Loacker <gerald.loacker@wolfvision.net>,
+        Mikhail Rudenko <mike.rudenko@gmail.com>,
+        Nicholas Roth <nicholas@rothemail.net>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Shawn Tu <shawnx.tu@intel.com>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 2/3] media: dt-bindings: alvium: add document YAML
+ binding
+Message-ID: <ZIDczFHCWCWyDSBo@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
+References: <20230607131936.382406-1-tomm.merciai@gmail.com>
+ <20230607131936.382406-3-tomm.merciai@gmail.com>
+ <17971357-523c-f907-13a9-8f7abce90c24@linaro.org>
+ <ZICgPUDv+GjK4C5t@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
+ <4673281c-0281-6fc5-97c3-b4ec821c81d5@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230607072342.4054036-9-ardb@kernel.org>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <4673281c-0281-6fc5-97c3-b4ec821c81d5@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 09:23:30AM +0200, Ard Biesheuvel wrote:
-> Update the trampoline code so its arguments are passed via RDI and RSI,
-> which matches the ordinary SysV calling convention for x86_64. This will
-> allow this code to be called directly from C.
+On Wed, Jun 07, 2023 at 06:11:54PM +0200, Krzysztof Kozlowski wrote:
+> On 07/06/2023 17:20, Tommaso Merciai wrote:
+> > Hi Krzysztof,
+> > 
+> > On Wed, Jun 07, 2023 at 04:18:48PM +0200, Krzysztof Kozlowski wrote:
+> >> On 07/06/2023 15:19, Tommaso Merciai wrote:
+> >>> Add documentation of device tree in YAML schema for the ALVIUM
+> >>> Camera from Allied Vision Inc.
+> >>>
+> >>> References:
+> >>>  - https://www.alliedvision.com/en/products/embedded-vision-solutions
+> >>>
+> >>> Signed-off-by: Tommaso Merciai <tomm.merciai@gmail.com>
+> >>> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> >>> ---
+> >>> Changes since v1:
+> >>>  - Fixed build error as suggested by RHerring bot
+> >>>
+> >>> Changes since v2:
+> >>>  - Fixed License as suggested by KKozlowski/CDooley
+> >>>  - Removed rotation property as suggested by CDooley/LPinchart
+> >>>  - Fixed example node name as suggested by CDooley
+> >>>  - Fixed title as suggested by LPinchart
+> >>>  - Fixed compatible name as suggested by LPinchart
+> >>>  - Removed clock as suggested by LPinchart
+> >>>  - Removed gpios not as suggested by LPinchart
+> >>>  - Renamed property name streamon-delay into alliedvision,lp2hs-delay-us
+> >>>  - Fixed vendor prefix, unit append as suggested by KKozlowski
+> >>>  - Fixed data-lanes
+> >>>  - Fixed blank space + example indentation (from 6 -> 4 space) as suggested by KKozlowski
+> >>>  - Dropped status into example  as suggested by KKozlowski
+> >>>  - Added vcc-ext-in supply as suggested by LPinchart
+> >>>  - Dropped pinctrl into example as suggested by LPinchart
+> >>>
+> >>> Changes since v3:
+> >>>  - Fixed vcc-ext-in-supply description as suggested by LPinchart
+> >>>  - Fixed alliedvision,lp2hs-delay-us description as suggested by LPinchart
+> >>>  - Added maximum to alliedvision,lp2hs-delay-us as suggested by LPinchart
+> >>>  - Collected Reviewed-by tag from LPinchart
+> >>
+> >> You still did not test it before sending. Four versions of which none
+> >> were tested :(
+> > 
+> > You are right.. my bad. :'(
+> > 
+> > After fixing id, as suggested by Laurent/bot into:
+> > 
+> > $id: http://devicetree.org/schemas/media/i2c/alliedvision,alvium-csi2.yaml#
+> > 
+> > I'm running the following test:
+> > 
+> > make dt_binding_check DT_SCHEMA_FILES=alliedvision,alvium-csi2.yaml
+> > 
+> > With the following result:
+> > 
+> >   LINT    Documentation/devicetree/bindings
+> >   CHKDT   Documentation/devicetree/bindings/processed-schema.json
+> >   SCHEMA  Documentation/devicetree/bindings/processed-schema.json
+> > /home/tom/work/mainline/linux/Documentation/devicetree/bindings/media/i2c/.alliedvision,alvium-csi2.example.dts.pre.yaml: ignoring, error parsing file
+> >   DTEX    Documentation/devicetree/bindings/media/i2c/alliedvision,alvium-csi2.example.dts
+> >   DTC_CHK Documentation/devicetree/bindings/media/i2c/alliedvision,alvium-csi2.example.dtb
+> > 
+> > Is that correct?
 > 
-> Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> ---
->  arch/x86/boot/compressed/head_64.S | 30 +++++++++-----------
->  arch/x86/boot/compressed/pgtable.h |  2 +-
->  2 files changed, 14 insertions(+), 18 deletions(-)
+> No, it doesn't look correct. You have error parsing your file. Check
+> your yaml file and its example DTSI.
 > 
-> diff --git a/arch/x86/boot/compressed/head_64.S b/arch/x86/boot/compressed/head_64.S
-> index af45ddd8297a4a07..a387cd80964e1a1e 100644
-> --- a/arch/x86/boot/compressed/head_64.S
-> +++ b/arch/x86/boot/compressed/head_64.S
-> @@ -443,9 +443,9 @@ SYM_CODE_START(startup_64)
->  	movq	%r15, %rdi		/* pass struct boot_params pointer */
->  	call	paging_prepare
->  
-> -	/* Save the trampoline address in RCX */
-> -	movq	%rax, %rcx
-> -
-> +	/* Pass the trampoline address and boolean flag as args #1 and #2 */
-> +	movq	%rax, %rdi
-> +	movq	%rdx, %rsi
->  	leaq	TRAMPOLINE_32BIT_CODE_OFFSET(%rax), %rax
->  	call	*%rax
->  
-> @@ -534,11 +534,11 @@ SYM_FUNC_END(.Lrelocated)
->  /*
->   * This is the 32-bit trampoline that will be copied over to low memory.
->   *
-> - * ECX contains the base address of the trampoline memory.
-> - * Non zero RDX means trampoline needs to enable 5-level paging.
-> + * EDI contains the base address of the trampoline memory.
-> + * Non-zero ESI means trampoline needs to enable 5-level paging.
->   */
->  SYM_CODE_START(trampoline_32bit_src)
+> Be sure you have also yamlling installed.
 
-After the whole patchset, this function now only switch the paging level, is my
-understanding correct? After all, it's converted to toggle_la57 directly in the
-followed patches. If that's the case, would it makes sense to rename it
-correspondingly?
+Thanks for the feedback!
 
-Also, to align with the toggle_la57, would we make the first parameter as just
-page table, instead of trampoline memory address?
+Regards,
+Tommaso
 
-> -	popq	%rdi
-> +	popq	%r8
->  	/* Switch to compatibility mode (CS.L = 0 CS.D = 1) via far return */
->  	pushq	$__KERNEL32_CS
->  	leaq	0f(%rip), %rax
-> @@ -552,7 +552,7 @@ SYM_CODE_START(trampoline_32bit_src)
->  	movl	%eax, %ss
->  
->  	/* Set up new stack */
-> -	leal	TRAMPOLINE_32BIT_STACK_END(%ecx), %esp
-> +	leal	TRAMPOLINE_32BIT_STACK_END(%edi), %esp
->  
->  	/* Disable paging */
->  	movl	%cr0, %eax
-> @@ -560,7 +560,7 @@ SYM_CODE_START(trampoline_32bit_src)
->  	movl	%eax, %cr0
->  
->  	/* Check what paging mode we want to be in after the trampoline */
-> -	testl	%edx, %edx
-> +	testl	%esi, %esi
->  	jz	1f
->  
->  	/* We want 5-level paging: don't touch CR3 if it already points to 5-level page tables */
-> @@ -575,21 +575,17 @@ SYM_CODE_START(trampoline_32bit_src)
->  	jz	3f
->  2:
->  	/* Point CR3 to the trampoline's new top level page table */
-> -	leal	TRAMPOLINE_32BIT_PGTABLE_OFFSET(%ecx), %eax
-> +	leal	TRAMPOLINE_32BIT_PGTABLE_OFFSET(%edi), %eax
->  	movl	%eax, %cr3
->  3:
->  	/* Set EFER.LME=1 as a precaution in case hypervsior pulls the rug */
-> -	pushl	%ecx
-> -	pushl	%edx
->  	movl	$MSR_EFER, %ecx
->  	rdmsr
->  	btsl	$_EFER_LME, %eax
->  	/* Avoid writing EFER if no change was made (for TDX guest) */
->  	jc	1f
->  	wrmsr
-> -1:	popl	%edx
-> -	popl	%ecx
-> -
-> +1:
->  #ifdef CONFIG_X86_MCE
->  	/*
->  	 * Preserve CR4.MCE if the kernel will enable #MC support.
-> @@ -606,14 +602,14 @@ SYM_CODE_START(trampoline_32bit_src)
->  
->  	/* Enable PAE and LA57 (if required) paging modes */
->  	orl	$X86_CR4_PAE, %eax
-> -	testl	%edx, %edx
-> +	testl	%esi, %esi
->  	jz	1f
->  	orl	$X86_CR4_LA57, %eax
->  1:
->  	movl	%eax, %cr4
->  
->  	/* Calculate address of paging_enabled() once we are executing in the trampoline */
-> -	leal	.Lpaging_enabled - trampoline_32bit_src + TRAMPOLINE_32BIT_CODE_OFFSET(%ecx), %eax
-> +	leal	.Lpaging_enabled - trampoline_32bit_src + TRAMPOLINE_32BIT_CODE_OFFSET(%edi), %eax
->  
->  	/* Prepare the stack for far return to Long Mode */
->  	pushl	$__KERNEL_CS
-> @@ -630,7 +626,7 @@ SYM_CODE_END(trampoline_32bit_src)
->  	.code64
->  SYM_FUNC_START_LOCAL_NOALIGN(.Lpaging_enabled)
->  	/* Return from the trampoline */
-> -	jmp	*%rdi
-> +	jmp	*%r8
->  SYM_FUNC_END(.Lpaging_enabled)
->  
->  	/*
-> diff --git a/arch/x86/boot/compressed/pgtable.h b/arch/x86/boot/compressed/pgtable.h
-> index 91dbb99203fbce2d..4e8cef135226bcbb 100644
-> --- a/arch/x86/boot/compressed/pgtable.h
-> +++ b/arch/x86/boot/compressed/pgtable.h
-> @@ -14,7 +14,7 @@
->  
->  extern unsigned long *trampoline_32bit;
->  
-> -extern void trampoline_32bit_src(void *return_ptr);
-> +extern void trampoline_32bit_src(void *trampoline, bool enable_5lvl);
->  
->  #endif /* __ASSEMBLER__ */
->  #endif /* BOOT_COMPRESSED_PAGETABLE_H */
-> -- 
-> 2.39.2
+> 
+> Best regards,
+> Krzysztof
 > 
