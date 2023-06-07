@@ -2,89 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7488B725AEF
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 11:44:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B7BC725B10
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 11:50:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239427AbjFGJod (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 05:44:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58640 "EHLO
+        id S239721AbjFGJui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 05:50:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234897AbjFGJob (ORCPT
+        with ESMTP id S234384AbjFGJug (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 05:44:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D345419AA
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 02:43:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686131026;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0QZ1hF21NiKTJobI8K1XAh5a08hU1n8m1daENZFoRs8=;
-        b=BsTfmNMHQn84w8Okj8MMcAI0BjBF8n/Ri1nz1bkCRIVpdEW5f6r08kTpCc6Pel3t5tPIHO
-        KrFlwW2NBv0apsJrXx7TxHByTf03w2XcIv90Ar2yBFFD51xA4UnyCnfBxvp+Djfq9liNo/
-        dmnRSQVGfEg4Srp5KT2vOWwqiLZLN6Q=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-655-nS0KdtDkM0OzaxsunvW9EQ-1; Wed, 07 Jun 2023 05:43:44 -0400
-X-MC-Unique: nS0KdtDkM0OzaxsunvW9EQ-1
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-30c5d31b567so2550254f8f.2
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 02:43:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686131023; x=1688723023;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0QZ1hF21NiKTJobI8K1XAh5a08hU1n8m1daENZFoRs8=;
-        b=DF3Z2B4oJb0FKA9X1EbQQbR5F7HhSnNQKzeaNOncQ+MLo/7OWOxA7lbo8O4wIYSmf2
-         4bZjQssPX4A8p5yQ4od4Jy/tjsD+F7gs32IrDaZLnA3BZeekTEevH/jrNtucMz1w+1uR
-         tlKsahyph6r50/tCyL29rSXEDeM8/lEwl2YiT6FADsFUQsNWIokDCd1A1H6zIqOixUe+
-         ewxToztEfbo1fdTM4NAo5DN3q9suraqzX3RRdZ7aCD3XnVBde1tTlQeW86EjwGVBtDyj
-         fUMX+bjqTts1bBqwZylsKVhnYUkFVdLYremTX8wesofTFc29L5mB2pQyXjmn74xmSaap
-         pMwA==
-X-Gm-Message-State: AC+VfDxbWODjI3jMTDT5gRx6XPtd887fcqtGtYW2xerU9sKTKqr38F2D
-        fRZHbMuG4MpZ6a2CbBpEjyxy3AaWlIOBtdI7lAY4xoy9/wMPlf1fGNwDnXAVsQBBuzTf5ayW0RU
-        XyMi7xL6a2f/lRf7xnFJdn11f
-X-Received: by 2002:adf:f752:0:b0:309:3b8d:16a8 with SMTP id z18-20020adff752000000b003093b8d16a8mr3811519wrp.50.1686131023289;
-        Wed, 07 Jun 2023 02:43:43 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5r8F++2zoGvW9X0FQgUyGuci7Faw6wUX9bX8XWZ5GmLoFQBI7RaLBvwAY8GuRxbZAJ6VSSdQ==
-X-Received: by 2002:adf:f752:0:b0:309:3b8d:16a8 with SMTP id z18-20020adff752000000b003093b8d16a8mr3811501wrp.50.1686131022945;
-        Wed, 07 Jun 2023 02:43:42 -0700 (PDT)
-Received: from redhat.com ([2.55.41.2])
-        by smtp.gmail.com with ESMTPSA id o1-20020a5d6841000000b003079c402762sm14993624wrw.19.2023.06.07.02.43.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 02:43:42 -0700 (PDT)
-Date:   Wed, 7 Jun 2023 05:43:39 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Stefano Garzarella <sgarzare@redhat.com>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        Shannon Nelson <shannon.nelson@amd.com>,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
-        Tiwei Bie <tiwei.bie@intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] vhost-vdpa: filter VIRTIO_F_RING_PACKED feature
-Message-ID: <20230607054246-mutt-send-email-mst@kernel.org>
-References: <20230605110644.151211-1-sgarzare@redhat.com>
- <20230605084104-mutt-send-email-mst@kernel.org>
- <24fjdwp44hovz3d3qkzftmvjie45er3g3boac7aezpvzbwvuol@lmo47ydvnqau>
- <20230605085840-mutt-send-email-mst@kernel.org>
- <gi2hngx3ndsgz5d2rpqjywdmou5vxhd7xgi5z2lbachr7yoos4@kpifz37oz2et>
- <20230605095404-mutt-send-email-mst@kernel.org>
- <32ejjuvhvcicv7wjuetkv34qtlpa657n4zlow4eq3fsi2twozk@iqnd2t5tw2an>
- <CACGkMEu3PqQ99UoKF5NHgVADD3q=BF6jhLiyumeT4S1QCqN1tw@mail.gmail.com>
- <20230606085643-mutt-send-email-mst@kernel.org>
- <CAGxU2F7fkgL-HpZdj=5ZEGNWcESCHQpgRAYQA3W2sPZaoEpNyQ@mail.gmail.com>
+        Wed, 7 Jun 2023 05:50:36 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D49E47
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 02:50:34 -0700 (PDT)
+Received: from dggpemm500003.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QbjBw5dV6zqTqN;
+        Wed,  7 Jun 2023 17:45:44 +0800 (CST)
+Received: from localhost.localdomain (10.28.77.120) by
+ dggpemm500003.china.huawei.com (7.185.36.56) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 7 Jun 2023 17:50:33 +0800
+From:   wangwudi <wangwudi@hisilicon.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     <liaochang1@huawei.com>, wangwudi <wangwudi@hisilicon.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>
+Subject: [PATCH v2] irqchip: gic-v3: Extend collection table
+Date:   Wed, 7 Jun 2023 17:45:13 +0800
+Message-ID: <1686131113-3611-1-git-send-email-wangwudi@hisilicon.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAGxU2F7fkgL-HpZdj=5ZEGNWcESCHQpgRAYQA3W2sPZaoEpNyQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain
+X-Originating-IP: [10.28.77.120]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500003.china.huawei.com (7.185.36.56)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,130 +46,142 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 10:39:15AM +0200, Stefano Garzarella wrote:
-> On Tue, Jun 6, 2023 at 2:58 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> >
-> > On Tue, Jun 06, 2023 at 09:29:22AM +0800, Jason Wang wrote:
-> > > On Mon, Jun 5, 2023 at 10:58 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
-> > > >
-> > > > On Mon, Jun 05, 2023 at 09:54:57AM -0400, Michael S. Tsirkin wrote:
-> > > > >On Mon, Jun 05, 2023 at 03:30:35PM +0200, Stefano Garzarella wrote:
-> > > > >> On Mon, Jun 05, 2023 at 09:00:25AM -0400, Michael S. Tsirkin wrote:
-> > > > >> > On Mon, Jun 05, 2023 at 02:54:20PM +0200, Stefano Garzarella wrote:
-> > > > >> > > On Mon, Jun 05, 2023 at 08:41:54AM -0400, Michael S. Tsirkin wrote:
-> > > > >> > > > On Mon, Jun 05, 2023 at 01:06:44PM +0200, Stefano Garzarella wrote:
-> > > > >> > > > > vhost-vdpa IOCTLs (eg. VHOST_GET_VRING_BASE, VHOST_SET_VRING_BASE)
-> > > > >> > > > > don't support packed virtqueue well yet, so let's filter the
-> > > > >> > > > > VIRTIO_F_RING_PACKED feature for now in vhost_vdpa_get_features().
-> > > > >> > > > >
-> > > > >> > > > > This way, even if the device supports it, we don't risk it being
-> > > > >> > > > > negotiated, then the VMM is unable to set the vring state properly.
-> > > > >> > > > >
-> > > > >> > > > > Fixes: 4c8cf31885f6 ("vhost: introduce vDPA-based backend")
-> > > > >> > > > > Cc: stable@vger.kernel.org
-> > > > >> > > > > Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
-> > > > >> > > > > ---
-> > > > >> > > > >
-> > > > >> > > > > Notes:
-> > > > >> > > > >     This patch should be applied before the "[PATCH v2 0/3] vhost_vdpa:
-> > > > >> > > > >     better PACKED support" series [1] and backported in stable branches.
-> > > > >> > > > >
-> > > > >> > > > >     We can revert it when we are sure that everything is working with
-> > > > >> > > > >     packed virtqueues.
-> > > > >> > > > >
-> > > > >> > > > >     Thanks,
-> > > > >> > > > >     Stefano
-> > > > >> > > > >
-> > > > >> > > > >     [1] https://lore.kernel.org/virtualization/20230424225031.18947-1-shannon.nelson@amd.com/
-> > > > >> > > >
-> > > > >> > > > I'm a bit lost here. So why am I merging "better PACKED support" then?
-> > > > >> > >
-> > > > >> > > To really support packed virtqueue with vhost-vdpa, at that point we would
-> > > > >> > > also have to revert this patch.
-> > > > >> > >
-> > > > >> > > I wasn't sure if you wanted to queue the series for this merge window.
-> > > > >> > > In that case do you think it is better to send this patch only for stable
-> > > > >> > > branches?
-> > > > >> > > > Does this patch make them a NOP?
-> > > > >> > >
-> > > > >> > > Yep, after applying the "better PACKED support" series and being
-> > > > >> > > sure that
-> > > > >> > > the IOCTLs of vhost-vdpa support packed virtqueue, we should revert this
-> > > > >> > > patch.
-> > > > >> > >
-> > > > >> > > Let me know if you prefer a different approach.
-> > > > >> > >
-> > > > >> > > I'm concerned that QEMU uses vhost-vdpa IOCTLs thinking that the kernel
-> > > > >> > > interprets them the right way, when it does not.
-> > > > >> > >
-> > > > >> > > Thanks,
-> > > > >> > > Stefano
-> > > > >> > >
-> > > > >> >
-> > > > >> > If this fixes a bug can you add Fixes tags to each of them? Then it's ok
-> > > > >> > to merge in this window. Probably easier than the elaborate
-> > > > >> > mask/unmask dance.
-> > > > >>
-> > > > >> CCing Shannon (the original author of the "better PACKED support"
-> > > > >> series).
-> > > > >>
-> > > > >> IIUC Shannon is going to send a v3 of that series to fix the
-> > > > >> documentation, so Shannon can you also add the Fixes tags?
-> > > > >>
-> > > > >> Thanks,
-> > > > >> Stefano
-> > > > >
-> > > > >Well this is in my tree already. Just reply with
-> > > > >Fixes: <>
-> > > > >to each and I will add these tags.
-> > > >
-> > > > I tried, but it is not easy since we added the support for packed
-> > > > virtqueue in vdpa and vhost incrementally.
-> > > >
-> > > > Initially I was thinking of adding the same tag used here:
-> > > >
-> > > > Fixes: 4c8cf31885f6 ("vhost: introduce vDPA-based backend")
-> > > >
-> > > > Then I discovered that vq_state wasn't there, so I was thinking of
-> > > >
-> > > > Fixes: 530a5678bc00 ("vdpa: support packed virtqueue for set/get_vq_state()")
-> > > >
-> > > > So we would have to backport quite a few patches into the stable branches.
-> > > > I don't know if it's worth it...
-> > > >
-> > > > I still think it is better to disable packed in the stable branches,
-> > > > otherwise I have to make a list of all the patches we need.
-> > > >
-> > > > Any other ideas?
-> > >
-> > > AFAIK, except for vp_vdpa, pds seems to be the first parent that
-> > > supports packed virtqueue. Users should not notice anything wrong if
-> > > they don't use packed virtqueue. And the problem of vp_vdpa + packed
-> > > virtqueue came since the day0 of vp_vdpa. It seems fine to do nothing
-> > > I guess.
-> > >
-> > > Thanks
-> >
-> >
-> > I have a question though, what if down the road there
-> > is a new feature that needs more changes? It will be
-> > broken too just like PACKED no?
-> > Shouldn't vdpa have an allowlist of features it knows how
-> > to support?
-> 
-> It looks like we had it, but we took it out (by the way, we were
-> enabling packed even though we didn't support it):
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6234f80574d7569444d8718355fa2838e92b158b
-> 
-> The only problem I see is that for each new feature we have to modify 
-> the kernel.
-> Could we have new features that don't require handling by vhost-vdpa?
-> 
-> Thanks,
-> Stefano
+Only single level table is supported to the collection table, and only
+one page is allocated.
 
-Jason what do you say to reverting this?
+Extend collection table to support more CPUs:
+1. Recalculate the page number of collection table based on the number of
+CPUs.
+2. Add 2 level tables to collection table.
+3. Add GITS_TYPER_CIDBITS macros.
 
+It is noticed in an internal simulation research:
+- the page_size of collection table is 4 KB
+- the entry_size of collection table is	 16 Byte
+- with 512 CPUs
+
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Marc Zyngier <maz@kernel.org>
+Signed-off-by: wangwudi <wangwudi@hisilicon.com>
+---
+
+ChangeLog:
+v1-->v2:
+	1. Support 2 level table
+	2. Rewrite the commit log
+
+ drivers/irqchip/irq-gic-v3-its.c   | 62 ++++++++++++++++++++++++++++++--------
+ include/linux/irqchip/arm-gic-v3.h |  3 ++
+ 2 files changed, 53 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
+index 0ec2b1e1df75..573ef26ad449 100644
+--- a/drivers/irqchip/irq-gic-v3-its.c
++++ b/drivers/irqchip/irq-gic-v3-its.c
+@@ -126,6 +126,7 @@ struct its_node {
+ #define is_v4(its)		(!!((its)->typer & GITS_TYPER_VLPIS))
+ #define is_v4_1(its)		(!!((its)->typer & GITS_TYPER_VMAPP))
+ #define device_ids(its)		(FIELD_GET(GITS_TYPER_DEVBITS, (its)->typer) + 1)
++#define collection_ids(its)	(FIELD_GET(GITS_TYPER_CIDBITS, (its)->typer) + 1)
+ 
+ #define ITS_ITT_ALIGN		SZ_256
+ 
+@@ -2626,6 +2627,10 @@ static int its_alloc_tables(struct its_node *its)
+ 			indirect = its_parse_indirect_baser(its, baser, &order,
+ 							    ITS_MAX_VPEID_BITS);
+ 			break;
++		case GITS_BASER_TYPE_COLLECTION:
++			indirect = its_parse_indirect_baser(its, baser, &order,
++							    order_base_2(num_possible_cpus()));
++			break;
+ 		}
+ 
+ 		err = its_setup_baser(its, baser, cache, shr, order, indirect);
+@@ -3230,18 +3235,6 @@ static void its_cpu_init_collection(struct its_node *its)
+ 	its_send_invall(its, &its->collections[cpu]);
+ }
+ 
+-static void its_cpu_init_collections(void)
+-{
+-	struct its_node *its;
+-
+-	raw_spin_lock(&its_lock);
+-
+-	list_for_each_entry(its, &its_nodes, entry)
+-		its_cpu_init_collection(its);
+-
+-	raw_spin_unlock(&its_lock);
+-}
+-
+ static struct its_device *its_find_device(struct its_node *its, u32 dev_id)
+ {
+ 	struct its_device *its_dev = NULL, *tmp;
+@@ -3316,6 +3309,51 @@ static bool its_alloc_table_entry(struct its_node *its,
+ 	return true;
+ }
+ 
++static bool its_alloc_collection_table(struct its_node *its, struct its_baser *baser)
++{
++	int cpu = smp_processor_id();
++	int cpu_ids = 16;
++
++	if (its->typer & GITS_TYPER_CIL)
++		cpu_ids = collection_ids(its);
++
++	if (!(ilog2(cpu) < cpu_ids)) {
++		pr_warn("ITS: CPU%d out of Collection ID range for %dbits", cpu, cpu_ids);
++		return false;
++	}
++
++	if (!its_alloc_table_entry(its, baser, cpu)) {
++		pr_warn("ITS: CPU%d failed to allocate collection l2 table", cpu);
++		return false;
++	}
++
++	return true;
++}
++
++static bool its_cpu_init_collections(void)
++{
++	struct its_node *its;
++	struct its_baser *baser;
++
++	raw_spin_lock(&its_lock);
++
++	list_for_each_entry(its, &its_nodes, entry) {
++		baser = its_get_baser(its, GITS_BASER_TYPE_COLLECTION);
++		if (!baser) {
++			raw_spin_unlock(&its_lock);
++			return false;
++		}
++
++		if (!its_alloc_collection_table(its, baser)) {
++			raw_spin_unlock(&its_lock);
++			return false;
++		}
++		its_cpu_init_collection(its);
++	}
++	raw_spin_unlock(&its_lock);
++	return true;
++}
++
+ static bool its_alloc_device_table(struct its_node *its, u32 dev_id)
+ {
+ 	struct its_baser *baser;
+diff --git a/include/linux/irqchip/arm-gic-v3.h b/include/linux/irqchip/arm-gic-v3.h
+index 728691365464..35e83da8961f 100644
+--- a/include/linux/irqchip/arm-gic-v3.h
++++ b/include/linux/irqchip/arm-gic-v3.h
+@@ -400,6 +400,9 @@
+ #define GITS_TYPER_PTA			(1UL << 19)
+ #define GITS_TYPER_HCC_SHIFT		24
+ #define GITS_TYPER_HCC(r)		(((r) >> GITS_TYPER_HCC_SHIFT) & 0xff)
++#define GITS_TYPER_CIDBITS_SHIFT	32
++#define GITS_TYPER_CIDBITS		GENMASK_ULL(35, 32)
++#define GITS_TYPER_CIL			(1ULL << 36)
+ #define GITS_TYPER_VMOVP		(1ULL << 37)
+ #define GITS_TYPER_VMAPP		(1ULL << 40)
+ #define GITS_TYPER_SVPET		GENMASK_ULL(42, 41)
 -- 
-MST
+2.7.4
 
