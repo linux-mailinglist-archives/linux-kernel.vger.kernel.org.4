@@ -2,563 +2,385 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D4787266DD
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 19:12:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C76A7266DF
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 19:12:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231544AbjFGRMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 13:12:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48638 "EHLO
+        id S231521AbjFGRMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 13:12:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231455AbjFGRMQ (ORCPT
+        with ESMTP id S229977AbjFGRMg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 13:12:16 -0400
-Received: from finn.localdomain (finn.gateworks.com [108.161.129.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A8E3E62;
-        Wed,  7 Jun 2023 10:12:14 -0700 (PDT)
-Received: from 068-189-091-139.biz.spectrum.com ([68.189.91.139] helo=tharvey.pdc.gateworks.com)
-        by finn.localdomain with esmtp (Exim 4.93)
-        (envelope-from <tharvey@gateworks.com>)
-        id 1q6whW-0069eU-Gz; Wed, 07 Jun 2023 17:12:02 +0000
-From:   Tim Harvey <tharvey@gateworks.com>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tim Harvey <tharvey@gateworks.com>
-Subject: [PATCH 2/2] arm64: dts: freescale: Add imx8mp-venice-gw73xx-2x
-Date:   Wed,  7 Jun 2023 10:11:59 -0700
-Message-Id: <20230607171159.2019417-2-tharvey@gateworks.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230607171159.2019417-1-tharvey@gateworks.com>
-References: <20230607171159.2019417-1-tharvey@gateworks.com>
+        Wed, 7 Jun 2023 13:12:36 -0400
+Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-ve1eur01on2054.outbound.protection.outlook.com [40.107.14.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0187F1FE3
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 10:12:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AUB9uO2504ZuFAgEMbHYcFxLTE+vBq5D4Ra9vkVIwJDq0eC+JcbhylumJJUPTw8kfMu1uwh1HXHKjy8MH9oDIvg9H5XgvvhGFBHdbRcksvgekJXcLexU/wgQkgrvwL5gmnaPpbBpCOd6NhWeCs6fCD+kL8iJvZcz3ba709jki2L4myM33qaXxdDE3duYkgeuK2NapkIag24+3Bkvh+TxRV0DEjQRUihInh2FvaPpcQI12lPFrpEPZA56zi8HJ4sc8nipL0itfB8UtHMooFPnSrlx6mfdA2HgKk1BJfBZLLJNO3MyBMMVNsy12Di8rFzHRdPrifLLjXL+rFMTIdoUuA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=s+UDAByv9MpoW/WKgPdMJ7qiZlgfv6+07MthkLQtJS0=;
+ b=SuPETJAni7SXKIiL03Wni7iUZBxDHNft2nTKebnoFIFibm5FkqBDD7tXY2Irey6nfBebNCgrM64V82a63xHZvNFiJjEJ9Ie7Sf6LuQ///McJ1l74TE0nUANzxXab6U5X1GhY4r7GL6NhtJGFSnSyEbZ4sdAo4vIo1dJE4lUv+DY/Vrf8TtrMVFx195DssQ9Qz3KoNy2NV7PfbgR6ofxuI898ceS9UdWme+54Zkg1spmTVHbQgP5WE027RTudDxxmtaiPi9JTyBivAC8l+44xssxQ/nxUtips3cDU2N4OIlWUCj6B9xjMtiUonWVH9iFtkgNpZ3wmt4Fk6/xB4XjEFg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
+ dkim=pass header.d=siemens.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=s+UDAByv9MpoW/WKgPdMJ7qiZlgfv6+07MthkLQtJS0=;
+ b=Rs/VbrBJaoGksFRl63DTaomYrZD1K2v92SGNFmHcFTr4zZPUWNTW7jca+ChFy05A7LtI9brJWHCj+yMdZYWGQwmC4T9giJASnRhlw8sEOedw9e7SGR1kBv6oKiiyqMxOciGVHv+tFw9XTxQcvU1z9DGr7t8lI4vfO1QP99U/Vj9QrGythvOehwjtYAcNqEx1VdvSvYrn9a8QOUCKbJIsBBEf/4R4A+GjN/XNXVAH1Rbzj2kITzcnucCpDPS/VtUoZS70oqQ41cqGPWMaPPptUBVtOTBfmMcY8i7jPw3RPxUfAyuPAE4aUvD1/ak8YxnhSkNgh4yrOas1joFtunA3Tg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=siemens.com;
+Received: from GV2PR10MB6186.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:150:76::15)
+ by DB8PR10MB3831.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:16b::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.36; Wed, 7 Jun
+ 2023 17:12:28 +0000
+Received: from GV2PR10MB6186.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::2d4a:d8d:d625:952c]) by GV2PR10MB6186.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::2d4a:d8d:d625:952c%3]) with mapi id 15.20.6455.030; Wed, 7 Jun 2023
+ 17:12:28 +0000
+Message-ID: <452472c5-ef30-ac30-6e4e-954f53b48315@siemens.com>
+Date:   Wed, 7 Jun 2023 19:12:24 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] tee: optee: Fix supplicant based device enumeration
+Content-Language: en-US
+To:     Sumit Garg <sumit.garg@linaro.org>,
+        op-tee@lists.trustedfirmware.org
+Cc:     jens.wiklander@linaro.org, arnd@linaro.org, ardb@kernel.org,
+        jerome.forissier@linaro.org, ilias.apalodimas@linaro.org,
+        masahisa.kojima@linaro.org, maxim.uvarov@linaro.org,
+        jarkko.sakkinen@linux.intel.com, linux-kernel@vger.kernel.org
+References: <20230607151435.92654-1-sumit.garg@linaro.org>
+From:   Jan Kiszka <jan.kiszka@siemens.com>
+In-Reply-To: <20230607151435.92654-1-sumit.garg@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR0P281CA0040.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:48::11) To GV2PR10MB6186.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:150:76::15)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: GV2PR10MB6186:EE_|DB8PR10MB3831:EE_
+X-MS-Office365-Filtering-Correlation-Id: c52288ae-eafb-4bd8-6999-08db677a5f5d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: rh3jhhk3Xqu28Bnee+VRoDtFJSgsZbltfLgSRYyQS9acV0ohVWAkvTuKcyuKzF1uI6ppfC1qVIwMXH7Q7oggX/+M3KHPPGD8QglNArB51iGYNslDHKNjmTx1EXD5LvzaXkCINtviFC87m6FRhnV70GWo2OuMmWocEX/ZSy1hpKCEX795qbnDD5VrU5epckCdkgvletz7GSvQbTTZRX+GWEmnoqDZXmtQsPuPDiZgFvACzb3RXqFoOvMXmb2QPDqRevB5aR7EPklCFwx9XxgzhNS+NfwU2+agitNQSR5ZZtL/H2Zx07mggvJ4eSfXmMko+Bpe/dMzOLi7ECEJAAGhoSi3NCcBpr3CiCnmwczjzFeizFomFXmIFqbpoXehCsMhzzWTnVdAHWQU+23TiD0ORdNzMoZszAhT8BBlM9T6mo6EL65SFYzjUOuQ6rO5tLcNO/aVI+x74OFGcHvC30eK6osSBjBv9d3pPAnAhjzhUV8lDtqqx3ieuf5gdCcnEI4NwEeFxnDGVHS/nm2jcypj9oafcHjGW22tHl9I6ctD9rlSJQLR+gwxyimrvxgn65xd/cW/j374gRF0azQ0z0tpDpFMYsaG2Q4Bm6dEJ7EZRLfaoZM4Uf1LrzSowqWivtmYoojJ94PVaiyarekmBw96PA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GV2PR10MB6186.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(346002)(366004)(39860400002)(376002)(451199021)(53546011)(26005)(6512007)(6506007)(31686004)(2616005)(966005)(83380400001)(186003)(6666004)(2906002)(82960400001)(66946007)(66476007)(66556008)(6486002)(38100700002)(5660300002)(7416002)(8936002)(86362001)(8676002)(44832011)(36756003)(478600001)(31696002)(41300700001)(316002)(4326008)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NDdCQmY3M3VkL3dmaUhrS3Z5SmI2c0oxVkFMYVJrUGJLV0pkN1hQTXFuV0ZM?=
+ =?utf-8?B?M0QzOFM5SnRudFdsN1VnZWFPSWxJVFJjZkptOXpMMkE1eXYyaUtENWhxTjBS?=
+ =?utf-8?B?cXNyK2E1T2pqODlPZDhBY0tKbjBuMTFEVUoyREhBb3pNKzk2K0l1cG54Szhs?=
+ =?utf-8?B?OWFOZE5Gd1VNTTdCZGxqNndPaEU2MXlxQzFDVk5GRUx1em5kdWVhNDRlWjYv?=
+ =?utf-8?B?ck0wVlljSHlUZk15SmFROU9nSTVpekpuZXdHVmY4dWFLQ0t1cjhzdDRSSS9q?=
+ =?utf-8?B?UXJqR0hLMU0vdlBmRURpdjJlVDYyb1MxMmlYTXQxN1ZyYzIzRS9NYVJIbnRs?=
+ =?utf-8?B?UXdpOGxkZG1qa2RWT3Z2SjJyckhoUlpNR25WL1RPNXdTb3hkVlAvUkxqaklj?=
+ =?utf-8?B?RERQQnBaNG1Kc04zellCb0orcEJOUEZJWUxQakVJYndCZTczRmNuNXp6a0dL?=
+ =?utf-8?B?K3Y1MmhaQ1F1bjBPOGhvektnd2VHQUMxOTJ0cm53NVZLNEdNMElpNWg3b3R5?=
+ =?utf-8?B?OGovSWV1NG9RUURva0lhaENHQlRzQkw1YkhiSmY4SXByUyttRkU2UkYyU3dq?=
+ =?utf-8?B?SmkvbDJKZFhZWHRsd3FtMENJMzE0R0JCL2VBam1QYmxPZ0NQcW5vbHFvQVJY?=
+ =?utf-8?B?YnlNOHp5S005Y3Awd3N5QUtCdTJEUUJGc0gxS1JpSkNReXhoaE9uVVhteHJh?=
+ =?utf-8?B?NWV5Qis2YWNhRW1Lelg3bkQzeWRabGc0N2NNOTVDcWQxL1VsZDBYSVM2NDRF?=
+ =?utf-8?B?c0hvV2E2NFE1WmgyRFk4Slc1ditncEJsVzY5cDFjdWU4ckFaQ1FCaXFTMy8z?=
+ =?utf-8?B?WDY4T0hTd1QvdlFZOXVzSGt1M3FUaDdIcTh4MEkxSHZmOWxNM0doZE5VeUxp?=
+ =?utf-8?B?UFc5ZXFsNVRsaTR0K1Nlc2h0d0lybUdJV2g4Tld3dHdUc1VKVWhxVFBtR0U3?=
+ =?utf-8?B?eWpXRm5heG0rejNublpBYzE0eFJMKzgrYjBnQjZRMUR6TUpoQ1g2QmZyQUty?=
+ =?utf-8?B?SHY0NTkzQTJsV1lJc2ZmdFhFV3lMdDQ0eGZBTHJ3VS9obU0ySURVeE5jQXF3?=
+ =?utf-8?B?SnIvZjJEZTVuZmp2eEZwWHA2bktRWFI3RXlPWThhYTRGdWZ3R3NhckhOMDVF?=
+ =?utf-8?B?NjFyclRiSFJlM1U3Qit5NW5VVzMzN0JnOEhlUHdiWUk2UEI3SC9mSEJzeGJt?=
+ =?utf-8?B?b0JZbVZUdU16L29DUEJtMldFZUExTWsrajE4WGNYMkFjSGMrOFpZOFBRc2Nv?=
+ =?utf-8?B?elhsditkYitXUHA3d0ZmOHI1a3RGMDhETWZteUg0UEh3ZGhYaEtzUjZiZnlG?=
+ =?utf-8?B?T00xNUhwRWhzdDlEK2JuclNLdWRzMUdYcFZzVjdQTkFLWEpNaWo3Y0VMRENS?=
+ =?utf-8?B?aHowMWtlZmxhWWpoVVJveHlxbThtdXZMbkhGUXpZSzYwdld4UkoyaWw5QXNZ?=
+ =?utf-8?B?anpTWmNkRlBVOEpyZnkwYWdMVnlrc0IzVDhyUlZWT0ZMT0V6Y3pzK2tpeVpn?=
+ =?utf-8?B?Nk94RlBGdkc0SUFyK29IUzhYU0ZjL0M1Y1VFV3VlWXF0c3kzOEFaVW1yV0tv?=
+ =?utf-8?B?WHozdkNQR2NwdFp0RktqcXQ2UEZOVzJrMjNJMm56eEk0aXZXd0pRS0dQSGF5?=
+ =?utf-8?B?MVVrMytFYVJUcEo0cGxJOS9rbGNIUjQ2R1l0S0c4cmRPRFNHeEJYZzVsMW1B?=
+ =?utf-8?B?TmZSWEJCVGF5R2l2WW84YlVKVnp2YWlFQ0EwTWw0MldwMHJFSmppeFhSNFpW?=
+ =?utf-8?B?MVNsK0lkd3NDN0d2UGN4em9zMmdBdUxvelJBRk5aL3FTcXBLWG5OWlhocVZk?=
+ =?utf-8?B?RmhuSzBMSFBMOXJTVjR6UU9ZREpzOGpGMHpFY05oZDRieWtDUEVRT3JyT1g1?=
+ =?utf-8?B?cjJ5WEYzMVdnczROTU1yWlB3QUY3czMwbXU0U0E4SVU5bFU3dGNWOGNFSnYv?=
+ =?utf-8?B?SWtsNG9tcUMvSDdoWWVvVUw4OGY1RUtScWZWOWJuTVNucUM1RWQyV3ZsdVJX?=
+ =?utf-8?B?TkN5WFMrdUx3aHZweVUzaVozOTV3VFdQSlBpZTB4cURIVEErZ3lSV1U2ckR2?=
+ =?utf-8?B?TjZTOWVRUTl3a2tHQmdoRjhweUJtSVhqTDZ1NVA0d1pkN0xxRmVvUUNOWW40?=
+ =?utf-8?B?MXlrN0hTWHBuYzVnNmtQVmROM2hyWjNXU2gwRjE2T0RXa0RWZ1dTRUpWZmNW?=
+ =?utf-8?B?c1E9PQ==?=
+X-OriginatorOrg: siemens.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c52288ae-eafb-4bd8-6999-08db677a5f5d
+X-MS-Exchange-CrossTenant-AuthSource: GV2PR10MB6186.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2023 17:12:28.7954
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 87tvyrC+g4eq49waptryZLeKy5ZTyJt22BssxbP4enlT2glJiFFL2tK60ajSV7O9AhC7ub51Rd3a6rx3boduVg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR10MB3831
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Gateworks imx8mp-venice-gw73xx-2x consists of a SOM + baseboard.
+On 07.06.23 17:14, Sumit Garg wrote:
+> Currently supplicant dependent optee device enumeration only registers
+> devices whenever tee-supplicant is invoked for the first time. But it
+> forgets to remove devices when tee-supplicant daemon stops running and
+> closes its context gracefully. This leads to following splats for fTPM
+> driver during reboot/shutdown:
+> 
+> [   73.466791] tpm tpm0: ftpm_tee_tpm_op_send: SUBMIT_COMMAND invoke error: 0xffff3024
+> [   73.474497] ------------[ cut here ]------------
+> [   73.479119] WARNING: CPU: 1 PID: 1 at drivers/char/tpm/tpm_ftpm_tee.c:135 ftpm_tee_tpm_op_send+0x200/0x25c
+> <snip>
+> [   73.539952] pstate: 60000005 (nZCv daif -PAN -UAO -TCO BTYPE=--)
+> [   73.545946] pc : ftpm_tee_tpm_op_send+0x200/0x25c
+> [   73.550640] lr : ftpm_tee_tpm_op_send+0x200/0x25c
+> [   73.555331] sp : ffff80001129baa0
+> [   73.558635] x29: ffff80001129baa0 x28: ffff00000646f000
+> [   73.563938] x27: ffff8000110f7000 x26: 0000000000000016
+> [   73.569241] x25: 0000000000000145 x24: ffff000005395000
+> [   73.574544] x23: ffff0000065a7280 x22: ffff00000646f000
+> [   73.579847] x21: ffff000006422080 x20: 000000000000000c
+> [   73.585149] x19: 0000000000000000 x18: 0000000000000000
+> [   73.590450] x17: 0000000000000000 x16: 0000000000000000
+> [   73.595753] x15: 0000000000000030 x14: ffffffffffffffff
+> [   73.601055] x13: ffff80001110e838 x12: 00000000000006d2
+> [   73.606357] x11: 0000000000000246 x10: ffff800011166838
+> [   73.611659] x9 : 00000000fffff000 x8 : ffff80001110e838
+> [   73.616962] x7 : ffff800011166838 x6 : 0000000000000000
+> [   73.622263] x5 : 0000000000000000 x4 : 0000000000000000
+> [   73.627565] x3 : 0000000000000000 x2 : 0000000000000000
+> [   73.632867] x1 : 0000000000000000 x0 : ffff0000000e8000
+> [   73.638170] Call trace:
+> [   73.640610]  ftpm_tee_tpm_op_send+0x200/0x25c
+> [   73.644960]  tpm_transmit+0xc8/0x33c
+> [   73.648528]  tpm_transmit_cmd+0x30/0xc0
+> [   73.652353]  tpm2_shutdown+0xa4/0x100
+> [   73.656007]  tpm_class_shutdown+0x60/0x90
+> [   73.660009]  device_shutdown+0x138/0x330
+> [   73.663926]  __do_sys_reboot+0x218/0x2a0
+> [   73.667839]  __arm64_sys_reboot+0x24/0x30
+> [   73.671842]  el0_svc_common.constprop.0+0x78/0x1c4
+> [   73.676622]  do_el0_svc+0x24/0x8c
+> [   73.679932]  el0_svc+0x14/0x20
+> [   73.682978]  el0_sync_handler+0xb0/0xb4
+> [   73.686806]  el0_sync+0x180/0x1c0
+> 
+> Fix this properly by removing supplicant dependent devices when the
+> supplicant closes gracefully. While at it use the global system
+> workqueue for OP-TEE bus scanning work rather than our own custom one.
+> 
+> Reported-by: Jan Kiszka <jan.kiszka@siemens.com>
+> Link: https://github.com/OP-TEE/optee_os/issues/6094
+> Fixes: 5f178bb71e3a ("optee: enable support for multi-stage bus enumeration")
+> Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
+> ---
+>  drivers/tee/optee/core.c          | 26 +++++++++++---------------
+>  drivers/tee/optee/device.c        | 27 ++++++++++++++++++++++++---
+>  drivers/tee/optee/optee_private.h |  7 ++-----
+>  3 files changed, 37 insertions(+), 23 deletions(-)
+> 
+> diff --git a/drivers/tee/optee/core.c b/drivers/tee/optee/core.c
+> index d01ca47f7bde..e0f2c9cb0073 100644
+> --- a/drivers/tee/optee/core.c
+> +++ b/drivers/tee/optee/core.c
+> @@ -15,7 +15,6 @@
+>  #include <linux/string.h>
+>  #include <linux/tee_drv.h>
+>  #include <linux/types.h>
+> -#include <linux/workqueue.h>
+>  #include "optee_private.h"
+>  
+>  int optee_pool_op_alloc_helper(struct tee_shm_pool *pool, struct tee_shm *shm,
+> @@ -84,6 +83,11 @@ static void optee_bus_scan(struct work_struct *work)
+>  	WARN_ON(optee_enumerate_devices(PTA_CMD_GET_DEVICES_SUPP));
+>  }
+>  
+> +static void optee_bus_remove(struct work_struct *work)
+> +{
+> +	optee_unregister_supp_devices();
+> +}
+> +
+>  int optee_open(struct tee_context *ctx, bool cap_memref_null)
+>  {
+>  	struct optee_context_data *ctxdata;
+> @@ -108,16 +112,8 @@ int optee_open(struct tee_context *ctx, bool cap_memref_null)
+>  			return -EBUSY;
+>  		}
+>  
+> -		if (!optee->scan_bus_done) {
+> -			INIT_WORK(&optee->scan_bus_work, optee_bus_scan);
+> -			optee->scan_bus_wq = create_workqueue("optee_bus_scan");
+> -			if (!optee->scan_bus_wq) {
+> -				kfree(ctxdata);
+> -				return -ECHILD;
+> -			}
+> -			queue_work(optee->scan_bus_wq, &optee->scan_bus_work);
+> -			optee->scan_bus_done = true;
+> -		}
+> +		INIT_WORK(&optee->scan_bus_work, optee_bus_scan);
+> +		schedule_work(&optee->scan_bus_work);
+>  	}
+>  	mutex_init(&ctxdata->mutex);
+>  	INIT_LIST_HEAD(&ctxdata->sess_list);
+> @@ -159,10 +155,10 @@ void optee_release_supp(struct tee_context *ctx)
+>  	struct optee *optee = tee_get_drvdata(ctx->teedev);
+>  
+>  	optee_release_helper(ctx, optee_close_session_helper);
+> -	if (optee->scan_bus_wq) {
+> -		destroy_workqueue(optee->scan_bus_wq);
+> -		optee->scan_bus_wq = NULL;
+> -	}
+> +
+> +	INIT_WORK(&optee->scan_bus_work, optee_bus_remove);
+> +	schedule_work(&optee->scan_bus_work);
+> +
+>  	optee_supp_release(&optee->supp);
+>  }
+>  
+> diff --git a/drivers/tee/optee/device.c b/drivers/tee/optee/device.c
+> index 64f0e047c23d..88e1c3feb15d 100644
+> --- a/drivers/tee/optee/device.c
+> +++ b/drivers/tee/optee/device.c
+> @@ -60,9 +60,10 @@ static void optee_release_device(struct device *dev)
+>  	kfree(optee_device);
+>  }
+>  
+> -static int optee_register_device(const uuid_t *device_uuid)
+> +static int optee_register_device(const uuid_t *device_uuid, u32 func)
+>  {
+>  	struct tee_client_device *optee_device = NULL;
+> +	const char *dev_name_fmt = NULL;
+>  	int rc;
+>  
+>  	optee_device = kzalloc(sizeof(*optee_device), GFP_KERNEL);
+> @@ -71,7 +72,13 @@ static int optee_register_device(const uuid_t *device_uuid)
+>  
+>  	optee_device->dev.bus = &tee_bus_type;
+>  	optee_device->dev.release = optee_release_device;
+> -	if (dev_set_name(&optee_device->dev, "optee-ta-%pUb", device_uuid)) {
+> +
+> +	if (func == PTA_CMD_GET_DEVICES_SUPP)
+> +		dev_name_fmt = "optee-ta-supp-%pUb";
+> +	else
+> +		dev_name_fmt = "optee-ta-%pUb";
+> +
+> +	if (dev_set_name(&optee_device->dev, dev_name_fmt, device_uuid)) {
+>  		kfree(optee_device);
+>  		return -ENOMEM;
+>  	}
+> @@ -142,7 +149,7 @@ static int __optee_enumerate_devices(u32 func)
+>  	num_devices = shm_size / sizeof(uuid_t);
+>  
+>  	for (idx = 0; idx < num_devices; idx++) {
+> -		rc = optee_register_device(&device_uuid[idx]);
+> +		rc = optee_register_device(&device_uuid[idx], func);
+>  		if (rc)
+>  			goto out_shm;
+>  	}
+> @@ -175,3 +182,17 @@ void optee_unregister_devices(void)
+>  	bus_for_each_dev(&tee_bus_type, NULL, NULL,
+>  			 __optee_unregister_device);
+>  }
+> +
+> +static int __optee_unregister_supp_device(struct device *dev, void *data)
+> +{
+> +	if (!strncmp(dev_name(dev), "optee-ta-supp", strlen("optee-ta-supp")))
+> +		device_unregister(dev);
+> +
+> +	return 0;
+> +}
+> +
+> +void optee_unregister_supp_devices(void)
+> +{
+> +	bus_for_each_dev(&tee_bus_type, NULL, NULL,
+> +			 __optee_unregister_supp_device);
+> +}
+> diff --git a/drivers/tee/optee/optee_private.h b/drivers/tee/optee/optee_private.h
+> index 6dcecb83c893..cb5eae6f797d 100644
+> --- a/drivers/tee/optee/optee_private.h
+> +++ b/drivers/tee/optee/optee_private.h
+> @@ -192,9 +192,7 @@ struct optee_ops {
+>   * @supp:		supplicant synchronization struct for RPC to supplicant
+>   * @pool:		shared memory pool
+>   * @rpc_param_count:	If > 0 number of RPC parameters to make room for
+> - * @scan_bus_done	flag if device registation was already done.
+> - * @scan_bus_wq		workqueue to scan optee bus and register optee drivers
+> - * @scan_bus_work	workq to scan optee bus and register optee drivers
+> + * @scan_bus_work	work to scan optee bus and register optee drivers
+>   */
+>  struct optee {
+>  	struct tee_device *supp_teedev;
+> @@ -211,8 +209,6 @@ struct optee {
+>  	struct optee_supp supp;
+>  	struct tee_shm_pool *pool;
+>  	unsigned int rpc_param_count;
+> -	bool   scan_bus_done;
+> -	struct workqueue_struct *scan_bus_wq;
+>  	struct work_struct scan_bus_work;
+>  };
+>  
+> @@ -280,6 +276,7 @@ int optee_cancel_req(struct tee_context *ctx, u32 cancel_id, u32 session);
+>  #define PTA_CMD_GET_DEVICES_SUPP	0x1
+>  int optee_enumerate_devices(u32 func);
+>  void optee_unregister_devices(void);
+> +void optee_unregister_supp_devices(void);
+>  
+>  int optee_pool_op_alloc_helper(struct tee_shm_pool *pool, struct tee_shm *shm,
+>  			       size_t size, size_t align,
 
-The GW702x SOM contains the following:
- - i.MX8M Plus SoC
- - LPDDR4 memory
- - eMMC Boot device
- - Gateworks System Controller (GSC) with integrated EEPROM, button
-   controller, and ADC's
- - PMIC
- - SOM connector providing:
-  - eQoS GbE MII
-  - 1x SPI
-  - 2x I2C
-  - 4x UART
-  - 2x USB 3.0
-  - 1x PCI
-  - 1x SDIO (4-bit 3.3V)
-  - 1x SDIO (4-bit 3.3V/1.8V)
-  - GPIO
+I had to backport to 5.10 to use this, but maybe this is still generic:
 
-The GW73xx Baseboard contains the following:
-  - GPS
-  - microSD
-  - off-board I/O connector with SPI
-  - off-board I/O connector with I2C, and GPIO
-  - off-board I/O connector with MIPI DSI, MIPI CSI, I2C, and GPIO
-  - off-board I/O connector with RS232 and RS485
-  - EERPOM
-  - USB 3.0 HUB
-  - USB 3.0 TypeA socket
-  - USB 2.0 Micro-B OTG socket
-  - Accelerometer
-  - 1x GbE (eQoS)
-  - 1x GbE (PCI)
-  - PCIe clock generator
-  - PCIe switch
-  - 2x full-length miniPCIe socket with PCI and USB2.0
-  - 1x full-length miniPCIe socket with PCI/USB3 (via mux) SIM, and USB2.0
-  - 1x half-length miniPCIe socket with USB2.0 and USB3.0
-  - USB Type-C with USB PD Sink capability and peripheral support
-  - USB Type-C with USB 3.0 host support
-  - on-board 802.11abgnac with Bluetooth 5.2
-  - Wide range DC input supply
+[  201.223833] Unregistered efivars operations
+[  201.228081] Registered efivars operations
+[  OK  ] Stopped TEE Supplicant.
+E/TC:? 0 get_rpc_alloc_res:645 RPC allocation failed. Non-secure world result: ret=0xffff000c ret_origin=0x2
+E/TC:? 0 get_rpc_alloc_res:645 RPC allocation failed. Non-secure world result: ret=0xffff000c ret_origin=0x2
+E/TC:? 0 
+E/TC:? 0 TA panicked with code 0xffff000c
+E/LD:  Status of TA bc50d971-d4c9-42c4-82cb-343fb7f37896
+E/LD:   arch: aarch64
+E/LD:  region  0: va 0x40004000 pa 0x9ee1a000 size 0x002000 flags rw-s (ldelf)
+E/LD:  region  1: va 0x40006000 pa 0x9ee1c000 size 0x008000 flags r-xs (ldelf)
+E/LD:  region  2: va 0x4000e000 pa 0x9ee24000 size 0x001000 flags rw-s (ldelf)
+E/LD:  region  3: va 0x4000f000 pa 0x9ee25000 size 0x004000 flags rw-s (ldelf)
+[  OK  ] Stopped Modem Manager.
+E/LD:  region  4: va 0x40013000 pa 0x9ee29000 size 0x001000 flags r--s
+E/LD:  region  5: va 0x40014000 pa 0x9eeb0000 size 0x011000 flags rw-s (stack)
+E/LD:  region  6: va 0x40025000 pa 0x8592e000 size 0x002000 flags rw-- (param)
+E/LD:  region  7: va 0x4004d000 pa 0x00001000 size 0x067000 flags r-xs [0]
+E/LD:  region  8: va 0x400b4000 pa 0x00068000 size 0x01f000 flags rw-s [0]
+E/LD:   [0] bc50d971-d4c9-42c4-82cb-343fb7f37896 @ 0x4004d000
+E/LD:  Call stack:
+E/LD:   0x4008af50
+E/LD:   0x4004dbb4
+E/LD:   0x4004e238
+E/LD:   0x4006cd5c
+E/LD:   0x40086014
+E/LD:   0x4004eae4
+E/LD:   0x4009109c
+E/LD:   0x400861c4
+[  201.359311] tpm tpm0: ftpm_tee_tpm_op_send: SUBMIT_COMMAND invoke error: 0xffff3024
+[  201.367031] tpm tpm0: tpm_try_transmit: send(): error -53212
 
-Signed-off-by: Tim Harvey <tharvey@gateworks.com>
----
- arch/arm64/boot/dts/freescale/Makefile        |   1 +
- .../dts/freescale/imx8mp-venice-gw73xx-2x.dts |  19 +
- .../dts/freescale/imx8mp-venice-gw73xx.dtsi   | 415 ++++++++++++++++++
- 3 files changed, 435 insertions(+)
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-venice-gw73xx-2x.dts
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-venice-gw73xx.dtsi
+tpm_ftpm_tee was built into the kernel, I dropped the rmmod workaround.
 
-diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
-index ca0c03bc2e9d..bd40dfa88d7d 100644
---- a/arch/arm64/boot/dts/freescale/Makefile
-+++ b/arch/arm64/boot/dts/freescale/Makefile
-@@ -103,6 +103,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mp-phyboard-pollux-rdk.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mp-tqma8mpql-mba8mpxl.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mp-venice-gw71xx-2x.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mp-venice-gw72xx-2x.dtb
-+dtb-$(CONFIG_ARCH_MXC) += imx8mp-venice-gw73xx-2x.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mp-venice-gw74xx.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mp-venice-gw7905-2x.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mp-verdin-nonwifi-dahlia.dtb
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp-venice-gw73xx-2x.dts b/arch/arm64/boot/dts/freescale/imx8mp-venice-gw73xx-2x.dts
-new file mode 100644
-index 000000000000..000fd15e0c07
---- /dev/null
-+++ b/arch/arm64/boot/dts/freescale/imx8mp-venice-gw73xx-2x.dts
-@@ -0,0 +1,19 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright 2023 Gateworks Corporation
-+ */
-+
-+/dts-v1/;
-+
-+#include "imx8mp.dtsi"
-+#include "imx8mp-venice-gw702x.dtsi"
-+#include "imx8mp-venice-gw73xx.dtsi"
-+
-+/ {
-+	model = "Gateworks Venice GW73xx-2x i.MX8MP Development Kit";
-+	compatible = "gateworks,imx8mp-gw73xx-2x", "fsl,imx8mp";
-+
-+	chosen {
-+		stdout-path = &uart2;
-+	};
-+};
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp-venice-gw73xx.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-venice-gw73xx.dtsi
-new file mode 100644
-index 000000000000..d96869c840f3
---- /dev/null
-+++ b/arch/arm64/boot/dts/freescale/imx8mp-venice-gw73xx.dtsi
-@@ -0,0 +1,415 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright 2023 Gateworks Corporation
-+ */
-+
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/leds/common.h>
-+#include <dt-bindings/phy/phy-imx8-pcie.h>
-+
-+/ {
-+	led-controller {
-+		compatible = "gpio-leds";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_gpio_leds>;
-+
-+		led-0 {
-+			function = LED_FUNCTION_STATUS;
-+			color = <LED_COLOR_ID_GREEN>;
-+			gpios = <&gpio4 1 GPIO_ACTIVE_HIGH>;
-+			default-state = "on";
-+			linux,default-trigger = "heartbeat";
-+		};
-+
-+		led-1 {
-+			function = LED_FUNCTION_STATUS;
-+			color = <LED_COLOR_ID_RED>;
-+			gpios = <&gpio4 5 GPIO_ACTIVE_HIGH>;
-+			default-state = "off";
-+		};
-+	};
-+
-+	pcie0_refclk: pcie0-refclk {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <100000000>;
-+	};
-+
-+	pps {
-+		compatible = "pps-gpio";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_pps>;
-+		gpios = <&gpio4 3 GPIO_ACTIVE_HIGH>;
-+		status = "okay";
-+	};
-+
-+	reg_usb1_vbus: regulator-usb1 {
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_reg_usb1_en>;
-+		compatible = "regulator-fixed";
-+		regulator-name = "usb1_vbus";
-+		gpio = <&gpio1 12 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+	};
-+
-+	reg_usb2_vbus: regulator-usb2 {
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_reg_usb2_en>;
-+		compatible = "regulator-fixed";
-+		regulator-name = "usb2_vbus";
-+		gpio = <&gpio4 12 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+	};
-+
-+	reg_wifi_en: regulator-wifi-en {
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_reg_wl>;
-+		compatible = "regulator-fixed";
-+		regulator-name = "wl";
-+		gpio = <&gpio4 19 GPIO_ACTIVE_HIGH>;
-+		startup-delay-us = <100>;
-+		enable-active-high;
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+	};
-+
-+	reg_usdhc2_vmmc: regulator-usdhc2-vmmc {
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_usdhc2_vmmc>;
-+		compatible = "regulator-fixed";
-+		regulator-name = "VDD_3V3_SD";
-+		enable-active-high;
-+		gpio = <&gpio2 19 0>; /* SD2_RESET */
-+		off-on-delay-us = <12000>;
-+		regulator-max-microvolt = <3300000>;
-+		regulator-min-microvolt = <3300000>;
-+		startup-delay-us = <100>;
-+	};
-+};
-+
-+/* off-board header */
-+&ecspi2 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_spi2>;
-+	cs-gpios = <&gpio5 13 GPIO_ACTIVE_LOW>;
-+	status = "okay";
-+};
-+
-+&gpio4 {
-+	gpio-line-names =
-+		"", "", "", "",
-+		"", "", "", "",
-+		"dio1", "", "", "dio0",
-+		"", "", "pci_usb_sel", "",
-+		"", "", "", "",
-+		"", "", "rs485_en", "rs485_term",
-+		"", "", "", "rs485_half",
-+		"pci_wdis#", "", "", "";
-+};
-+
-+&i2c2 {
-+	clock-frequency = <400000>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_i2c2>;
-+	status = "okay";
-+
-+	accelerometer@19 {
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_accel>;
-+		compatible = "st,lis2de12";
-+		reg = <0x19>;
-+		st,drdy-int-pin = <1>;
-+		interrupt-parent = <&gpio4>;
-+		interrupts = <21 IRQ_TYPE_LEVEL_LOW>;
-+		interrupt-names = "INT1";
-+	};
-+};
-+
-+&pcie_phy {
-+	fsl,refclk-pad-mode = <IMX8_PCIE_REFCLK_PAD_INPUT>;
-+	fsl,clkreq-unsupported;
-+	clocks = <&pcie0_refclk>;
-+	clock-names = "ref";
-+	status = "okay";
-+};
-+
-+&pcie {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_pcie0>;
-+	reset-gpio = <&gpio4 29 GPIO_ACTIVE_LOW>;
-+	status = "okay";
-+};
-+
-+/* GPS */
-+&uart1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_uart1>;
-+	status = "okay";
-+};
-+
-+/* bluetooth HCI */
-+&uart3 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_uart3>, <&pinctrl_bten>;
-+	cts-gpios = <&gpio5 8 GPIO_ACTIVE_LOW>;
-+	rts-gpios = <&gpio5 9 GPIO_ACTIVE_LOW>;
-+	uart-has-rtscts;
-+	status = "okay";
-+
-+	bluetooth {
-+		compatible = "brcm,bcm4330-bt";
-+		shutdown-gpios = <&gpio4 16 GPIO_ACTIVE_HIGH>;
-+	};
-+};
-+
-+/* RS232 */
-+&uart4 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_uart4>;
-+	status = "okay";
-+};
-+
-+/* USB1 - OTG */
-+&usb3_0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_usb1>;
-+	fsl,over-current-active-low;
-+	status = "okay";
-+};
-+
-+&usb3_phy0 {
-+	vbus-supply = <&reg_usb1_vbus>;
-+	status = "okay";
-+};
-+
-+&usb_dwc3_0 {
-+	/* dual role is implemented but not a full featured OTG */
-+	adp-disable;
-+	hnp-disable;
-+	srp-disable;
-+	dr_mode = "otg";
-+	usb-role-switch;
-+	role-switch-default-mode = "peripheral";
-+	status = "okay";
-+
-+	connector {
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_usbcon1>;
-+		compatible = "gpio-usb-b-connector", "usb-b-connector";
-+		type = "micro";
-+		label = "otg";
-+		id-gpios = <&gpio3 21 GPIO_ACTIVE_HIGH>;
-+	};
-+};
-+
-+/* USB2 - USB3.0 Hub */
-+&usb3_1 {
-+	fsl,permanently-attached;
-+	fsl,disable-port-power-control;
-+	status = "okay";
-+};
-+
-+&usb3_phy1 {
-+	vbus-supply = <&reg_usb2_vbus>;
-+	status = "okay";
-+};
-+
-+&usb_dwc3_1 {
-+	dr_mode = "host";
-+	status = "okay";
-+};
-+
-+/* SDIO WiFi */
-+&usdhc1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_usdhc1>;
-+	bus-width = <4>;
-+	non-removable;
-+	vmmc-supply = <&reg_wifi_en>;
-+	status = "okay";
-+};
-+
-+/* microSD */
-+&usdhc2 {
-+	pinctrl-names = "default", "state_100mhz", "state_200mhz";
-+	pinctrl-0 = <&pinctrl_usdhc2>, <&pinctrl_usdhc2_gpio>;
-+	pinctrl-1 = <&pinctrl_usdhc2_100mhz>, <&pinctrl_usdhc2_gpio>;
-+	pinctrl-2 = <&pinctrl_usdhc2_200mhz>, <&pinctrl_usdhc2_gpio>;
-+	cd-gpios = <&gpio2 12 GPIO_ACTIVE_LOW>;
-+	bus-width = <4>;
-+	vmmc-supply = <&reg_usdhc2_vmmc>;
-+	status = "okay";
-+};
-+
-+&iomuxc {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_hog>;
-+
-+	pinctrl_hog: hoggrp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_SAI1_RXD6__GPIO4_IO08	0x40000146 /* DIO1 */
-+			MX8MP_IOMUXC_SAI1_TXC__GPIO4_IO11	0x40000146 /* DIO0 */
-+			MX8MP_IOMUXC_SAI1_TXD2__GPIO4_IO14	0x40000106 /* PCIE_USBSEL */
-+			MX8MP_IOMUXC_SAI2_MCLK__GPIO4_IO27	0x40000106 /* RS485_HALF */
-+			MX8MP_IOMUXC_SAI2_RXC__GPIO4_IO22	0x40000106 /* RS485_EN */
-+			MX8MP_IOMUXC_SAI2_RXD0__GPIO4_IO23	0x40000106 /* RS485_TERM */
-+			MX8MP_IOMUXC_SAI3_RXFS__GPIO4_IO28	0x40000106 /* PCIE_WDIS# */
-+		>;
-+	};
-+
-+	pinctrl_accel: accelgrp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_SAI2_RXFS__GPIO4_IO21	0x150	/* IRQ */
-+		>;
-+	};
-+
-+	pinctrl_bten: btengrp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_SAI1_TXD4__GPIO4_IO16	0x146
-+		>;
-+	};
-+
-+	pinctrl_gpio_leds: gpioledgrp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_SAI1_RXC__GPIO4_IO01	0x6	/* LEDG */
-+			MX8MP_IOMUXC_SAI1_RXD3__GPIO4_IO05	0x6	/* LEDR */
-+		>;
-+	};
-+
-+	pinctrl_pcie0: pcie0grp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_SAI3_RXC__GPIO4_IO29	0x106
-+		>;
-+	};
-+
-+	pinctrl_pps: ppsgrp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_SAI1_RXD1__GPIO4_IO03	0x146
-+		>;
-+	};
-+
-+	pinctrl_reg_wl: regwlgrp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_SAI1_TXD7__GPIO4_IO19	0x146
-+		>;
-+	};
-+
-+	pinctrl_reg_usb1_en: regusb1grp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_GPIO1_IO12__GPIO1_IO12	0x146 /* USB1_EN */
-+		>;
-+	};
-+
-+	pinctrl_usb1: usb1grp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_GPIO1_IO13__USB1_OTG_OC	0x140 /* USB1_FLT# */
-+		>;
-+	};
-+
-+	pinctrl_usbcon1: usbcon1grp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_SAI5_RXD0__GPIO3_IO21	0x140 /* USB1_ID */
-+		>;
-+	};
-+
-+	pinctrl_reg_usb2_en: regusb2grp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_SAI1_TXD0__GPIO4_IO12	0x146 /* USBHUB_RST# */
-+		>;
-+	};
-+
-+	pinctrl_spi2: spi2grp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_ECSPI2_SCLK__ECSPI2_SCLK	0x140
-+			MX8MP_IOMUXC_ECSPI2_MOSI__ECSPI2_MOSI	0x140
-+			MX8MP_IOMUXC_ECSPI2_MISO__ECSPI2_MISO	0x140
-+			MX8MP_IOMUXC_ECSPI2_SS0__GPIO5_IO13	0x140
-+		>;
-+	};
-+
-+	pinctrl_uart1: uart1grp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_UART1_RXD__UART1_DCE_RX	0x140
-+			MX8MP_IOMUXC_UART1_TXD__UART1_DCE_TX	0x140
-+		>;
-+	};
-+
-+	pinctrl_uart3: uart3grp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_UART3_RXD__UART3_DCE_RX	0x140
-+			MX8MP_IOMUXC_UART3_TXD__UART3_DCE_TX	0x140
-+			MX8MP_IOMUXC_ECSPI1_MISO__GPIO5_IO08	0x140
-+			MX8MP_IOMUXC_ECSPI1_SS0__GPIO5_IO09	0x140
-+		>;
-+	};
-+
-+	pinctrl_uart4: uart4grp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_UART4_RXD__UART4_DCE_RX	0x140
-+			MX8MP_IOMUXC_UART4_TXD__UART4_DCE_TX	0x140
-+		>;
-+	};
-+
-+	pinctrl_usdhc1: usdhc1grp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_SD1_CLK__USDHC1_CLK	0x190
-+			MX8MP_IOMUXC_SD1_CMD__USDHC1_CMD	0x1d0
-+			MX8MP_IOMUXC_SD1_DATA0__USDHC1_DATA0	0x1d0
-+			MX8MP_IOMUXC_SD1_DATA1__USDHC1_DATA1	0x1d0
-+			MX8MP_IOMUXC_SD1_DATA2__USDHC1_DATA2	0x1d0
-+			MX8MP_IOMUXC_SD1_DATA3__USDHC1_DATA3	0x1d0
-+		>;
-+	};
-+
-+	pinctrl_usdhc2: usdhc2grp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_SD2_CLK__USDHC2_CLK	0x190
-+			MX8MP_IOMUXC_SD2_CMD__USDHC2_CMD	0x1d0
-+			MX8MP_IOMUXC_SD2_DATA0__USDHC2_DATA0	0x1d0
-+			MX8MP_IOMUXC_SD2_DATA1__USDHC2_DATA1	0x1d0
-+			MX8MP_IOMUXC_SD2_DATA2__USDHC2_DATA2	0x1d0
-+			MX8MP_IOMUXC_SD2_DATA3__USDHC2_DATA3	0x1d0
-+			MX8MP_IOMUXC_GPIO1_IO04__USDHC2_VSELECT	0xc1
-+		>;
-+	};
-+
-+	pinctrl_usdhc2_100mhz: usdhc2-100mhzgrp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_SD2_CLK__USDHC2_CLK	0x194
-+			MX8MP_IOMUXC_SD2_CMD__USDHC2_CMD	0x1d4
-+			MX8MP_IOMUXC_SD2_DATA0__USDHC2_DATA0	0x1d4
-+			MX8MP_IOMUXC_SD2_DATA1__USDHC2_DATA1	0x1d4
-+			MX8MP_IOMUXC_SD2_DATA2__USDHC2_DATA2	0x1d4
-+			MX8MP_IOMUXC_SD2_DATA3__USDHC2_DATA3	0x1d4
-+			MX8MP_IOMUXC_GPIO1_IO04__USDHC2_VSELECT	0xc1
-+		>;
-+	};
-+
-+	pinctrl_usdhc2_200mhz: usdhc2-200mhzgrp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_SD2_CLK__USDHC2_CLK	0x196
-+			MX8MP_IOMUXC_SD2_CMD__USDHC2_CMD	0x1d6
-+			MX8MP_IOMUXC_SD2_DATA0__USDHC2_DATA0	0x1d6
-+			MX8MP_IOMUXC_SD2_DATA1__USDHC2_DATA1	0x1d6
-+			MX8MP_IOMUXC_SD2_DATA2__USDHC2_DATA2	0x1d6
-+			MX8MP_IOMUXC_SD2_DATA3__USDHC2_DATA3	0x1d6
-+			MX8MP_IOMUXC_GPIO1_IO04__USDHC2_VSELECT	0xc1
-+		>;
-+	};
-+
-+	pinctrl_usdhc2_vmmc: usdhc2-vmmc-grp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_SD2_RESET_B__USDHC2_RESET_B	0x1d0
-+		>;
-+	};
-+
-+	pinctrl_usdhc2_gpio: usdhc2gpiogrp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_SD2_CD_B__GPIO2_IO12		0x1c4
-+		>;
-+	};
-+};
+If you suspect backporting issues, I need to look into getting upstream 
+running again (it does on our board but it's not commonly tested yet due 
+to some missing feature called Ethernet).
+
+Jan
+
 -- 
-2.25.1
+Siemens AG, Technology
+Competence Center Embedded Linux
 
