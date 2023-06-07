@@ -2,147 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FF2F72635F
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 16:53:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 445BB726358
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 16:53:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240407AbjFGOxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 10:53:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42318 "EHLO
+        id S241028AbjFGOxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 10:53:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241194AbjFGOx1 (ORCPT
+        with ESMTP id S240162AbjFGOxC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 10:53:27 -0400
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF3D1FE2;
-        Wed,  7 Jun 2023 07:53:23 -0700 (PDT)
-Received: by mail-qv1-xf2f.google.com with SMTP id 6a1803df08f44-6260b578097so57468066d6.3;
-        Wed, 07 Jun 2023 07:53:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686149602; x=1688741602;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9BZ3nTd09gXKywNR/B6BfXsK/SAkvfps+yetF3PKLmE=;
-        b=g5Noxau3TS0Qg27aaV/uM0E3U96cuuuxg5aX1n2SRdPGgYPmSNfEhKnM8CPqpbdcnr
-         YcjPoGaItYSIyhkDVDe7vqJczQXUxK0Y8sADSJDPEnGAMLlR5TNi9pCfPFhR5+FQ61Mx
-         y1HxKZ3JR4mZccNqlUjdZ2VFPTpKETv2q9b5d8t8y8N+dRLVUg7KJLXNkx2XP6JHpb+C
-         dYRCP5EpZGwRSLtZgoendcgwwi8RxkHkpYJb7CZrNHDGUb5svgWq9vEDaF2xJRjunxR6
-         AalbRhmOkr8B0LnPdcfVlk0GJNCjjlQ9nk2GgMVlK/Xe+z8tu8Guhb3pJ6yz/VleyERL
-         ixVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686149602; x=1688741602;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9BZ3nTd09gXKywNR/B6BfXsK/SAkvfps+yetF3PKLmE=;
-        b=Gnvrgf3+zToP9ehpC0winhQgAIDtLxkUBf2tT4+7+kUczqcgcs77RcY/kTFMyOSakp
-         mZMdKRKvFFa1b2pskFIWhjCWAEjezlVSSRqOoyfybyJqRi5Mncc4/mUPARAuDUBEsqgX
-         7MPRYSdgadjX13KKrIBreIlF0benRvj5ZUxmQqhUYwy+8Xlc1z94S5PHhBvNg8/t8tOp
-         JKUyfCY1Q9QTWifYfX7pFZEUMUiHf22EWKy/HLE0R/GBt4QiSvBr8VjqQME86mxCiP/i
-         /S2Y5u+F8zxZHP9PPnEmiIjPAtPCxUEwZ2Z4tvMR5cQw/FhH1KmyaeytePCzYcGs0XkS
-         93XQ==
-X-Gm-Message-State: AC+VfDwjAu/Zbig60laRLYj+qIzYl6nF7ySeQkFL9Zw2T+FMrevyUnGb
-        vzw1iiEabO10l9GtACWLJr5c0CjA1W+5JMnilEE=
-X-Google-Smtp-Source: ACHHUZ7kfUiJiwb3xiTcDZskY9uOa78FYg/TuXDxXkqzTa/XzDsVaQ+2r8uqafTwTNZKrRUyc8awuYHs7dPVKzmn1Fk=
-X-Received: by 2002:a05:6214:2266:b0:625:aa48:e625 with SMTP id
- gs6-20020a056214226600b00625aa48e625mr4610415qvb.53.1686149602171; Wed, 07
- Jun 2023 07:53:22 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230522163115.2592883-1-eblanc@baylibre.com> <20230522163115.2592883-4-eblanc@baylibre.com>
- <ZG0VHnEByyMW9i4a@surfacebook> <613601c2-cc98-526b-a9e3-2ad2abc68e1d@baylibre.com>
-In-Reply-To: <613601c2-cc98-526b-a9e3-2ad2abc68e1d@baylibre.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 7 Jun 2023 17:52:46 +0300
-Message-ID: <CAHp75VdTi4y9=XsjjQOBzUhSYf8jzV7mwguruqMZD0jV7VqZkw@mail.gmail.com>
-Subject: Re: [PATCH v5 3/3] regulator: tps6594-regulator: Add driver for TI
- TPS6594 regulators
-To:     jerome Neanne <jneanne@baylibre.com>
-Cc:     Esteban Blanc <eblanc@baylibre.com>, linus.walleij@linaro.org,
-        lgirdwood@gmail.com, broonie@kernel.org, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
-        jpanis@baylibre.com, aseketeli@baylibre.com, u-kumar1@ti.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 7 Jun 2023 10:53:02 -0400
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5522219BC;
+        Wed,  7 Jun 2023 07:53:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
+        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=roFvECUbc6N6VAVII+7bKbq9kRXHhpLc/txbGSzYYCc=; b=xUWTEBxSBf1g8JzGgRcqmbv/zw
+        PCH8Wxjd5bYNTI0WNhgKMgGXInBOB6OJTBJWDVxz5W1tySlFIbRNwWfg/xL7//UCU3d5uLEItYs5R
+        ohIwvXmuWRgeQwpguhK6qi7Oky430FziuSCUUoIo0gCStfSm0lyqogHGJJj5Sw61+f60=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:57980 helo=pettiford)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1q6uWo-000694-17; Wed, 07 Jun 2023 10:52:50 -0400
+Date:   Wed, 7 Jun 2023 10:52:49 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        jirislaby@kernel.org, jringle@gridpoint.com,
+        jesse.sung@canonical.com, isaac.true@canonical.com,
+        l.perczak@camlintechnologies.com, tomasz.mon@camlingroup.com,
+        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        stable@vger.kernel.org, Conor Dooley <conor.dooley@microchip.com>,
+        Lech Perczak <lech.perczak@camlingroup.com>
+Message-Id: <20230607105249.6dc95ed226e3578a3c9116aa@hugovil.com>
+In-Reply-To: <a6301c0e-b774-8963-8eb1-8e0948b1468c@linaro.org>
+References: <20230607140525.833982-1-hugo@hugovil.com>
+        <20230607140525.833982-6-hugo@hugovil.com>
+        <f5cfc81d-d8ae-d270-f29a-c2b45b07a651@linaro.org>
+        <20230607104100.0186b1afc872e583cb9466b8@hugovil.com>
+        <a6301c0e-b774-8963-8eb1-8e0948b1468c@linaro.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 70.80.174.168
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v8 05/10] dt-bindings: sc16is7xx: Add property to change
+ GPIO function
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 7, 2023 at 2:44=E2=80=AFPM jerome Neanne <jneanne@baylibre.com>=
- wrote:
+On Wed, 7 Jun 2023 16:46:56 +0200
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 
-...
-
-> >> +    enum {
-> >> +            MULTI_BUCK12,
-> >> +            MULTI_BUCK123,
-> >> +            MULTI_BUCK1234,
-> >> +            MULTI_BUCK12_34,
+> On 07/06/2023 16:41, Hugo Villeneuve wrote:
+> > On Wed, 7 Jun 2023 16:30:26 +0200
+> > Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+> > 
+> >> On 07/06/2023 16:05, Hugo Villeneuve wrote:
+> >>> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> >>>
+> >>> Some variants in this series of UART controllers have GPIO pins that
+> >>> are shared between GPIO and modem control lines.
+> >>>
+> >>> The pin mux mode (GPIO or modem control lines) can be set for each
+> >>> ports (channels) supported by the variant.
+> >>>
+> >>> This adds a property to the device tree to set the GPIO pin mux to
+> >>> modem control lines on selected ports if needed.
+> >>>
+> >>> Cc: <stable@vger.kernel.org> # 6.1.x
+> >>> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> >>> Acked-by: Conor Dooley <conor.dooley@microchip.com>
+> >>> Reviewed-by: Lech Perczak <lech.perczak@camlingroup.com>
+> >>> ---
+> >>>  .../bindings/serial/nxp,sc16is7xx.txt         | 46 +++++++++++++++++++
+> >>>  1 file changed, 46 insertions(+)
+> >>>
+> >>> diff --git a/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt b/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt
+> >>> index 0fa8e3e43bf8..1a7e4bff0456 100644
+> >>> --- a/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt
+> >>> +++ b/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.txt
+> >>> @@ -23,6 +23,9 @@ Optional properties:
+> >>>      1 = active low.
+> >>>  - irda-mode-ports: An array that lists the indices of the port that
+> >>>  		   should operate in IrDA mode.
+> >>> +- nxp,modem-control-line-ports: An array that lists the indices of the port that
+> >>> +				should have shared GPIO lines configured as
+> >>> +				modem control lines.
+> >>>  
+> >>>  Example:
+> >>>          sc16is750: sc16is750@51 {
+> >>> @@ -35,6 +38,26 @@ Example:
+> >>>                  #gpio-cells = <2>;
+> >>>          };
+> >>>  
+> >>> +	sc16is752: sc16is752@53 {
+> >>
+> >> Since you keep sending new versions, fix the names. nNode names should
+> >> be generic. See also explanation and list of examples in DT specification:
+> >> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+> > 
+> > Hi,
+> > by the way, I do not "keep sending new versions" just for the fun of
+> > it...
+> 
+> Sure, I know. So when the next version is necessary to send, fix also this.
+> 
 > >
-> >> +            MULTI_FIRST =3D MULTI_BUCK12,
-> >> +            MULTI_LAST =3D MULTI_BUCK12_34,
-> >> +            MULTI_NUM =3D MULTI_LAST - MULTI_FIRST + 1
+> > Even after reading your link, I cannot see what is wrong with that
+> > name.
+> 
+> They are not generic. They are specific.
 
-> >               MULT_NUM
-> >
-> > will suffice instead of all this.
+What do you mean by "They"? My patch adds only a new property...
 
-(1)
+This patch will not fix old names, but a future patch could do it.
 
-> >> +    };
-> >
-> > But why enum at all? See below.
-> Just for the switch case readability.
-> I have to iterate across the multiphases array for look up name into
-> device tree and evaluate in that order.
->
-> This can be reduced to:
->         enum {
->                 MULTI_BUCK12,
->                 MULTI_BUCK123,
->                 MULTI_BUCK1234,
->                 MULTI_BUCK12_34,
+And what do you mean by "They are not generic. They are specific". Of
+course the property is specific, because it relates to something very
+specific to this chip?
 
->                 MULTI_NUM =3D MULTI_BUCK12_34 - MULTI_BUCK12 + 1
 
-See (1) above.
-
->         };
-
-...
-
-> >> +                    continue;
-> >> +            delta =3D strcmp(npname, multiphases[multi]);
-> >> +            if (!delta) {
-> >> +                    switch (multi) {
-> >> +                    case MULTI_BUCK12:
-> >
-> > This all looks like match_string() reinvention.
-> I can go with match_string but this is not significantly changing the gam=
-e:
->
-> index =3D match_string(multiphases, ARRAY_SIZE(multiphases), npname);
-> if (index >=3D 0) {
->         switch (index) {
->
-> No question on all your other feedback. Just wondering if I missed
-> something with match_string use. Looks like a good idea indeed but this
-> is not drastically changing the code as you seem to expect... Let me
-> know if you think I'm doing it in a wrong way.
-
-I guess the entire big for-loop can be optimized, but I haven't looked
-at that. At least match_string() would help understanding what you are
-trying to do,
-
-In any case it seems Mark applied your version, so the follow ups can be ma=
-de.
-
---=20
-With Best Regards,
-Andy Shevchenko
+> > You are the first one since V1 to think it is inappropriate.
+> > 
+> > Please suggest what the name should be.
+> 
+> Depends what this is. I know nothing about this device, so I cannot
+> suggest you. Therefore I gave you link with ideas to choose from.
+> 
+> Best regards,
+> Krzysztof
+> 
+> 
