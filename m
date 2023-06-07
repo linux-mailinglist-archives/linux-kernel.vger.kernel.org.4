@@ -2,111 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F774725311
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 06:55:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82BAD725312
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 06:56:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234129AbjFGEzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 00:55:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54032 "EHLO
+        id S234216AbjFGE4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 00:56:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232478AbjFGEzd (ORCPT
+        with ESMTP id S234186AbjFGE4I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 00:55:33 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A6B8E49;
-        Tue,  6 Jun 2023 21:55:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686113732; x=1717649732;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=mhccuDVE7SPuvKA7LXWdrtyc6wtaKFhxLy133B99hgc=;
-  b=AxM4TpmnY9j7EfobSlEupMlxSsO2i3IeALg4g5fO/Lrj13aZ3CB+jFks
-   CPQSU0DojhiPCx9mYmy0Xjcc3N/iXGvOxMp4EHw+6/x6MWsRIBnFe8+U2
-   r+b26vbw0wJRK2SsxrGGwluukvrTbxItIZOhngQUtOYRKF0Nrywdsx3lU
-   l2MpUEviSwvUoikCxcehrR8YZBQ5ZLS1+a2H6prj5rklc9Chmu86RrRja
-   RRZU/4rVbX0mVrrgcWmpBceQBt+l0tlGYvmlSTD1g61Kk46hYorJJ9mjR
-   nHcuqQNP+sKXOCEajhErUA7YPIYRSEynE2aMAhAoZqTtx7ZMSkIZjBXBh
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="337240723"
-X-IronPort-AV: E=Sophos;i="6.00,222,1681196400"; 
-   d="scan'208";a="337240723"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 21:55:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="833502919"
-X-IronPort-AV: E=Sophos;i="6.00,222,1681196400"; 
-   d="scan'208";a="833502919"
-Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.238.9.17]) ([10.238.9.17])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 21:55:28 -0700
-Message-ID: <4c8c0d6e-8bb4-495f-3f41-6dee8c358124@linux.intel.com>
-Date:   Wed, 7 Jun 2023 12:55:27 +0800
+        Wed, 7 Jun 2023 00:56:08 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4522810F2
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 21:56:05 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-19f8af9aa34so7097182fac.1
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 21:56:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1686113764; x=1688705764;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ee1qHw85e1eBuIdTgig6finUlPCk2EHIHBldhRjpTW8=;
+        b=DiiCfwERoWx0zOUM6VadmUsxBffRWRnopnDGBblkb0ISRVgQEQf1pjTtTWHLCp4iXK
+         392f7jwCBXbbhXbsQCNqlRjb5DsCw7T6EMUo1cnqIkpgxWKeZfqy58+VUANGkE2lZ6/n
+         9TSdiCbv2gFVERoyfxjUq+5ZhULgFzZ9R42eIpISI+Xl/5pEbFzm2ctnfAFFGddWF+rE
+         a4AgthExR8lzUQetmql+RP4RJxiwD5dllYQqsl8HDwJmFxmjaPckUlSSHKOFTSeQ9WrQ
+         S4BS28CTZwwQA+det0+xGA0OkJe04KCxDIakCuSdih7STEs+c5atOkky8WiBWa7cRvSH
+         kInw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686113764; x=1688705764;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ee1qHw85e1eBuIdTgig6finUlPCk2EHIHBldhRjpTW8=;
+        b=ULiLFbtDpRVY0YhTceoar8Y8rUQ3vrUQ+frrW+ZpIc/WO+cN4NQgC5JS6Jhpzfy1nx
+         bqBpuE/smsm/NAwcehQl1RYo3y224n+kCbCBayaZOMqE+fbKGIYy9igu+VNJFLESMZNx
+         MD43FCb5M4OG3UwmA4uycDH6d9DdCvAjtRzCqv7+b+Yqz0Y8Mu3I4TrCvQRSoEegFLFr
+         8a1fJ/xtqNlfl3eJpgfN+PDTNd47EwWEHsn3y1h7tQjcni9NfZcZ3uXxInr6fU87tDRg
+         JX8icewSc782N2Ka1KB/uQqokAEwOnhf+4u0tUIx4gqTsEiioUUTV7zKw/FwHuwA+aZh
+         2UDg==
+X-Gm-Message-State: AC+VfDyRnxi0HByXdqj/3K4837SuJsOy4SiNkEpBNKWFuZO/PXmxGP9s
+        bYxP8P9nCf4S9IDsUUw7I4y0Cg==
+X-Google-Smtp-Source: ACHHUZ4Z/iohestmpyscDyMKSE2JiJGGdU65tjAlQFbm9eJHYAacPAnDBkWRMxzeQTL6/kERoYlX3w==
+X-Received: by 2002:a05:6870:c82b:b0:19f:1947:551 with SMTP id ee43-20020a056870c82b00b0019f19470551mr3995485oab.6.1686113763954;
+        Tue, 06 Jun 2023 21:56:03 -0700 (PDT)
+Received: from sunil-laptop ([106.51.83.242])
+        by smtp.gmail.com with ESMTPSA id ed43-20020a056870b7ab00b001726cfeea97sm5564537oab.29.2023.06.06.21.55.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Jun 2023 21:56:03 -0700 (PDT)
+Date:   Wed, 7 Jun 2023 10:25:56 +0530
+From:   Sunil V L <sunilvl@ventanamicro.com>
+To:     Conor Dooley <conor@kernel.org>
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Atish Patra <atishp@atishpatra.org>,
+        Anup Patel <anup@brainfault.org>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v1 -next 1/2] RISC-V: ACPI : Fix for usage of pointers in
+ different address space
+Message-ID: <ZIAN3OHhPbvgj0uV@sunil-laptop>
+References: <20230605143512.707533-1-sunilvl@ventanamicro.com>
+ <20230605143512.707533-2-sunilvl@ventanamicro.com>
+ <20230606-conduit-cupped-1791a640713b@spud>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v9 2/6] KVM: x86: Virtualize CR4.LAM_SUP
-To:     "Huang, Kai" <kai.huang@intel.com>
-Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "robert.hu@linux.intel.com" <robert.hu@linux.intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "Gao, Chao" <chao.gao@intel.com>,
-        "David.Laight@ACULAB.COM" <David.Laight@ACULAB.COM>
-References: <20230606091842.13123-1-binbin.wu@linux.intel.com>
- <20230606091842.13123-3-binbin.wu@linux.intel.com>
- <fbc522e315d261607869b1996adc05e3646e535e.camel@intel.com>
-From:   Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <fbc522e315d261607869b1996adc05e3646e535e.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230606-conduit-cupped-1791a640713b@spud>
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Conor,
 
+On Tue, Jun 06, 2023 at 04:35:29PM +0100, Conor Dooley wrote:
+> Hey Sunil,
+> 
+> On Mon, Jun 05, 2023 at 08:05:11PM +0530, Sunil V L wrote:
+> > The arch specific __acpi_map_table can be wrapper around either
+> > early_memremap or early_ioremap. But early_memremap
+> > routine works with normal pointers whereas __acpi_map_table expects
+> > pointers in iomem address space. This causes kernel test bot to fail
+> > while using the sparse tool. Fix the issue by using early_ioremap and
+> > similar fix done for __acpi_unmap_table.
+> > 
+> > Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Closes: https://lore.kernel.org/oe-kbuild-all/202305201427.I7QhPjNW-lkp@intel.com/
+> 
+> Is this
+> Fixes: a91a9ffbd3a5 ("RISC-V: Add support to build the ACPI core")
+> ?
+Yes, I missed it. Will add.
 
-On 6/7/2023 11:40 AM, Huang, Kai wrote:
-> On Tue, 2023-06-06 at 17:18 +0800, Binbin Wu wrote:
->> Move CR4.LAM_SUP out of CR4_RESERVED_BITS and its reservation depends on vcpu
->> supporting LAM feature or not. Leave the bit intercepted to avoid vmread every
->> time when KVM fetches its value, with the expectation that guest won't toggle
->> the bit frequently.
-> KVM only needs to do vmread once to cache guest's CR4, and presumable vmread is
-> a lot cheaper than a VMEXIT.  So I don't see the value of intercepting it if
-> there's no need to do.
-Here is the discussion about the general rule of interception of CR4 bit.
-Sean mentioned:  "As a base
-rule, KVM intercepts CR4 bits unless there's a reason not to, e.g. if 
-the CR4 bit
-in question is written frequently by real guests and/or never consumed 
-by KVM."
-https://lore.kernel.org/all/Y7xA53sLxCwzfvgD@google.com/
-
-And CR4.LAM_SUP value will be used to determin the LAM mode when apply 
-LAM masking in instruction emulations / VMExit handlers,
-and if the bit is passed-through, it will be a vmread in these pathes.
-
->
-> But presumably I think we cannot allow guest to own this bit because KVM wants
-> to return a valid CR4 if LAM isn't exposed to guest?  Otherwise guest can still
-> set this bit even LAM isn't exposed to guest.
->
-> Am I missing something?
-Right, this is also a reason why the CR4.LAM_SUP bit should be intercepted.
-Will update the justification.
-I suppose this reason is enough for justification, will remove the 
-performance part in changelog.
-
-Thanks.
->
-> If not, your justification of intercepting this bit isn't correct and needs
-> update.
->
-
+Thanks!
+Sunil
