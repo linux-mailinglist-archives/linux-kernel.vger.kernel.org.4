@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75B0A7251B6
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 03:46:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C98FA7251B7
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 03:46:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240657AbjFGBqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 21:46:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34444 "EHLO
+        id S240579AbjFGBqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 21:46:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240503AbjFGBoi (ORCPT
+        with ESMTP id S240557AbjFGBoi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 6 Jun 2023 21:44:38 -0400
 Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C181990
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 18:44:36 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-bacd408046cso10245385276.3
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 18:44:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED82219AC
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 18:44:37 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-ba88ec544ddso11090954276.1
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 18:44:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686102275; x=1688694275;
+        d=google.com; s=20221208; t=1686102277; x=1688694277;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=fshr5jLOyahMpvACdtGm+pjjbvWJsJPp9lrbSfOHRQ4=;
-        b=PqUIG6TC384eWp8yePeRY3y04FFjxR8xrrRlKe0sh94cVkvPpU1nj8UPwk5vlulYyI
-         bmqDSHAP8w3Wcsbgci9MuYV4Acb87bD58mlXADcVA8yn0riFxA6sGwAbcHbwotsDaZDN
-         1h1rQcVWjsLaJlCMbCFr3VFR3wj9PZ3/3vyqn8RXEB+dmVy5jOXvDhCNIXUJHDSQu2Nb
-         UXQX4drjVbDTCHgiR4LX6WLpHL+t4OJ2dJ0gc/QTIyJ6dJHfWUe0z5BnMDQitwOBrkDo
-         JYezMehZm8kF5/NdFzieGjoCdO+RcrMcoNkrmSqoILtxM7RLIcjfbaG0Maru1KEdWC5s
-         s/7g==
+        bh=w532lnbGp5anOsc290HQqo7yKb1jpgu9WE3T8mTec4I=;
+        b=4Ah77oIcW1fhi4PUaWNVyQCtlDy0ODJswvsNp12X68m9YC8jPYB0wJjfd6u9Nes/qM
+         WyyQujj/FsWMFXlvbodKx9omh3hxJTA8Uzg3HFoKmEIM/4ZXwapKkMv/J4GriQEMoMxK
+         YH6zmrmTRduNvHTbQI16cu3VXzfSd+04P8SdbixqbWrtaMQm+DPgD8pGSVIx6KnvG12E
+         /LsrP+9Ui0xoiwCUGBT8mDlfuLWX+nI5VPmXw+d4/M5gvRf4ahFqHPMpDTdJjkqfjB4r
+         lVY40iPLtZBNOI6+2oGaNs8iPKdw3FbkJaZxO/havOEgdW4CiJu+WhvCcJduPdjNd8TX
+         3Caw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686102275; x=1688694275;
+        d=1e100.net; s=20221208; t=1686102277; x=1688694277;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fshr5jLOyahMpvACdtGm+pjjbvWJsJPp9lrbSfOHRQ4=;
-        b=JUNlYSYXw/p6hGRkyfODxZPcfRtR8ccl5/MDWXo3Ai5CaoGD9EaFrfO40XXXFIHNGS
-         EFYbMFNC7KHwJVP2mj0mrHLg72K0Zpg4rYo4M3SLUaOxiaOZRGDl4J26uIzDNP6HrJUE
-         Fb2vAY8znxw/1pr9xD0in0d2n4TaplChSHFguCfE7xMRgtHnIjhu/uaBOG2fkfoDzf7z
-         SG7UfjvbEhJH2mX4rUd7CoZ2P/cYyZ1UVz/+KllMu/xXkQnRjkREjm1Eo2Xz58ilKjdo
-         HP1vKE2DAiSeVByHP3ijm8gWnApzIDjM862M0CvJM8vi8JS26vrIX9xyxnCzgL0QfHjQ
-         DRtA==
-X-Gm-Message-State: AC+VfDzt8BHUwqLmkH1GJVr2OBmhYs4ci5NvH3rXYJP8ZWRzD17r3JZY
-        YGKNyf44EkO6XDluWFZTRyr/5cCOkkTJ
-X-Google-Smtp-Source: ACHHUZ4dungIIgBmPrtJau2qDI0PSJma622cWj+i8l+PD1GxRjpw3bAGLjhUHn/JDRGI6ujvUT5RGVthXFg1
+        bh=w532lnbGp5anOsc290HQqo7yKb1jpgu9WE3T8mTec4I=;
+        b=jzrXznnJboGC7Kh2BDwSiD1UG98HmXaKLo42hU0bg43BXZ9b8Fwf8oK3pjaC4JXmat
+         yuiNOVUOKGKT+bxZ38yS1R4yUXWEhf4LSbi1rZU8KIeLMiyPMgO4oKnrZr7Y9rQlkVba
+         OeGyIKp1MzGnSbyurHZSxUQ0sIPvRX1Swr0soGKfCWh1O9jNxYSbVu2rQ2w/vq3CJnjZ
+         mpOIHvvNo9MRWnOw0yUox5V6DmdpEu5pr4XP54qXHov5QAOj9Z/3Epq0ErFeh717gNDy
+         UXrah0YRQG0Ipicq1RNe7hXgMkcPuc2KQb3Dojthh9ByqPWToY2VXUTxMkcHh0cwTU0j
+         JNGg==
+X-Gm-Message-State: AC+VfDy7tLIFMzYCbhbg2xqUKNbepN1ujOcamT9p2Ar3lTSgBMirJGga
+        /gIfKh0u1VTjcPDSdNOscbvMnxyjVIXm
+X-Google-Smtp-Source: ACHHUZ5K3q2BRZQ3BVaY4x+Gz/kg1NLcmTS5uYFGmWeNZGZJl9FEpVaiPom/EYkG6lni3/0N8BD8dY+UkiA/
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:3c35:209f:5d38:b7a1])
- (user=irogers job=sendgmr) by 2002:a25:40d:0:b0:ba7:d142:eada with SMTP id
- 13-20020a25040d000000b00ba7d142eadamr2053213ybe.7.1686102275411; Tue, 06 Jun
- 2023 18:44:35 -0700 (PDT)
-Date:   Tue,  6 Jun 2023 18:43:44 -0700
+ (user=irogers job=sendgmr) by 2002:a05:6902:1204:b0:bac:f582:ef18 with SMTP
+ id s4-20020a056902120400b00bacf582ef18mr2308600ybu.5.1686102277621; Tue, 06
+ Jun 2023 18:44:37 -0700 (PDT)
+Date:   Tue,  6 Jun 2023 18:43:45 -0700
 In-Reply-To: <20230607014353.3172466-1-irogers@google.com>
-Message-Id: <20230607014353.3172466-12-irogers@google.com>
+Message-Id: <20230607014353.3172466-13-irogers@google.com>
 Mime-Version: 1.0
 References: <20230607014353.3172466-1-irogers@google.com>
 X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Subject: [PATCH v1 11/20] perf stat: Avoid evlist leak
+Subject: [PATCH v1 12/20] perf intel-pt: Fix missed put and leak
 From:   Ian Rogers <irogers@google.com>
 To:     John Garry <john.g.garry@oracle.com>,
         Will Deacon <will@kernel.org>,
@@ -107,26 +107,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Free evlist before overwriting in "perf stat report" mode. Detected
-using leak sanitizer.
+Add missing put and free, detected with leak sanitizer.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/builtin-stat.c | 1 +
- 1 file changed, 1 insertion(+)
+ tools/perf/util/intel-pt.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
-index c87c6897edc9..fc615bdeed4f 100644
---- a/tools/perf/builtin-stat.c
-+++ b/tools/perf/builtin-stat.c
-@@ -2427,6 +2427,7 @@ static int __cmd_report(int argc, const char **argv)
+diff --git a/tools/perf/util/intel-pt.c b/tools/perf/util/intel-pt.c
+index 783ce61c6d25..dbf0bc71a63b 100644
+--- a/tools/perf/util/intel-pt.c
++++ b/tools/perf/util/intel-pt.c
+@@ -1280,6 +1280,7 @@ static void intel_pt_add_br_stack(struct intel_pt *pt,
+ 				     pt->kernel_start);
  
- 	perf_stat.session  = session;
- 	stat_config.output = stderr;
-+	evlist__delete(evsel_list);
- 	evsel_list         = session->evlist;
+ 	sample->branch_stack = pt->br_stack;
++	thread__put(thread);
+ }
  
- 	ret = perf_session__process_events(session);
+ /* INTEL_PT_LBR_0, INTEL_PT_LBR_1 and INTEL_PT_LBR_2 */
+@@ -3580,6 +3581,7 @@ static void intel_pt_free(struct perf_session *session)
+ 	zfree(&pt->chain);
+ 	zfree(&pt->filter);
+ 	zfree(&pt->time_ranges);
++	zfree(&pt->br_stack);
+ 	free(pt);
+ }
+ 
 -- 
 2.41.0.rc0.172.g3f132b7071-goog
 
