@@ -2,146 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E75BE726389
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 16:58:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9F7A72638C
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 16:59:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240877AbjFGO6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 10:58:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47170 "EHLO
+        id S240261AbjFGO7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 10:59:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234878AbjFGO6l (ORCPT
+        with ESMTP id S235140AbjFGO7T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 10:58:41 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EAF21702
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 07:58:34 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-973f78329e3so1214730466b.3
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 07:58:34 -0700 (PDT)
+        Wed, 7 Jun 2023 10:59:19 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E83851BD;
+        Wed,  7 Jun 2023 07:59:17 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f7368126a6so34281265e9.0;
+        Wed, 07 Jun 2023 07:59:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686149913; x=1688741913;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gJjTaZ/9cZA9GnMjrlFxN0BcpW9ecqXexzGH0t5m7pg=;
-        b=QZtp60wD+75gS8sutSysW1Gt5v97dtcxNep2QtjO8YjTnwodJlOnvSVKHI9xa8kYtr
-         DLvw+vYLWItGs39/ssYBe6cGf3k1K86bMckozzamLHDw8So1t81h1NuirKkpAACPOosL
-         3+IHpGoghgtv+K5fQNtJMk7KRb4NZrlVVeqDpDQiCwF45+OQdMYsf18vErJE0e4+o1qq
-         +99a7XbNwoEjshZltQVZbDB+bVs9ZuRjhEHU2xfzruJb/OMmzhUEsY87IASFlbxxnmPQ
-         tw3V+IR8IPYE4cTPSTNj+nmOoeuyIlRwASCc5eLMnhlRt6OyFR80XImfkn/TJ8UHOLtw
-         ebXA==
+        d=gmail.com; s=20221208; t=1686149956; x=1688741956;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mc32lgaIBhKotdDaWWQj793WD5Z51UEUi1uIpd7T5Lk=;
+        b=HElglTIyG8gzx4dMVUHPNdXZCuVgJaWMRrPD5UqN6A29NB+hpwnNFMU6CngFEvxjBc
+         lVvWfUejRGgSxjUsdH/fKBoa3IGhMaphs1cQrfLpnHs1i0xzk2KfVNeh/DG9m/MpI+EP
+         XcPMJPiAOC4wPpXs2JXzzTsX++dQPTsner8hPAIp56+nTltUiIrp+9zSfEhMXVqi99sU
+         TZKPzkQXzDEps0fgdpuJGIvDepIcjb6fhDIPFZ4eUS39qWtG0aGb3Ul933Ip6CnPAVTt
+         Keck3Wcicz/14xWPoNn4KSEDpnfZfMivnWWhquVe8pmrnddzzoUE2MK7mxL74K5vfwPG
+         hcnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686149913; x=1688741913;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gJjTaZ/9cZA9GnMjrlFxN0BcpW9ecqXexzGH0t5m7pg=;
-        b=hNW/1vKXoMO39OowuFXWNx3VYgL4N4QCC23Vhzcu4GP6oeuQLLr6VlXEeqNskGP7xA
-         TdTYctYVmvzv6+ehLhxLfc0EDr4XANKbrvpoocSkqV3JIPvgz/7bQ7lfI5kiyKDXZc0j
-         KKfukxzYuShNrGQFPcBydkARXWq/BZ14CNnywI6iATs5fS0lpeyECMfasbmQlzQRF1Fx
-         odGP+KqcDVI4jH+VhnXKEkUU2YEk7lQeAvvHVjdtevvL2jhdzIjGpTP1U7Yt0Ot0iEbx
-         tIvukUeMensxh2w4gJVEilAPGLzdGRSXiLT9ZbHQlf1B0gufExAY3N+8hwgEg7RSrder
-         v2AA==
-X-Gm-Message-State: AC+VfDw6cKI/4x0WKaZfAK+e8LCm1L05OoX8m892s6uTFOm/nAoww61t
-        MF9JJzs11EIa054NRFPUuw0l0w==
-X-Google-Smtp-Source: ACHHUZ6wzBYezPQx+NTgUt4QVORBO0tD9ssE0IbCfRYurBIDs8W2LBeRt9iNG8JBmBTHHs8zUMPPHA==
-X-Received: by 2002:a17:907:1c17:b0:971:2ead:e161 with SMTP id nc23-20020a1709071c1700b009712eade161mr6874357ejc.6.1686149912938;
-        Wed, 07 Jun 2023 07:58:32 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id bv13-20020a170906b1cd00b00978743b54bdsm1822713ejb.78.2023.06.07.07.58.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 07:58:32 -0700 (PDT)
-Message-ID: <9105207b-0dfb-346f-422f-984cf3454f90@linaro.org>
-Date:   Wed, 7 Jun 2023 16:58:30 +0200
+        d=1e100.net; s=20221208; t=1686149956; x=1688741956;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mc32lgaIBhKotdDaWWQj793WD5Z51UEUi1uIpd7T5Lk=;
+        b=IukcEWbKoaX/xb0xTFRs7hKUI/tZGgqcfAdDBR66XGNUXqqaLV1Dvyuv6M6wgKNpl/
+         I0Jt6KtREOCbO2zXyqZqZIVQaIfrmYv+iaf9tbzgGRWT3jT0c7RqM4k4aibJ9n26XzVs
+         JwCYid40TjC3bAcEy/QdU2hDQlxerrot6J0KS9I+3GUuCcwwd5oamO0N2SEsOFOKFvZg
+         8X3OHDDzSrLsglbvqHi98T5MwCUk+DC1jaBsYyxJjRDlg6VUmDMV6/+xHK8rZzAZwiHU
+         QXEpyUvmcwrRzVQyPCJ88eRtsQA7u1gEQtB8wWDCZNnrcXRE9XSSS3DCjc33Rvjw4RB5
+         vjWA==
+X-Gm-Message-State: AC+VfDzqGZfK84W4ZxY0rG0M4Hxva4q++e5QY/7xcVlCCBB7tKXmxr8J
+        rtzgTCIiqjjXk0IIwnIifjyq6p/+W6M=
+X-Google-Smtp-Source: ACHHUZ6xvD6uymas9CeOxoTcoNoQ20XmLZM6KF4Ov7xSqWao+W9YmDfOGQUlN239/sH1/FdCXJVm9Q==
+X-Received: by 2002:a05:600c:230f:b0:3f5:1241:6cfa with SMTP id 15-20020a05600c230f00b003f512416cfamr4837883wmo.37.1686149956066;
+        Wed, 07 Jun 2023 07:59:16 -0700 (PDT)
+Received: from suse.localnet (host-79-23-99-244.retail.telecomitalia.it. [79.23.99.244])
+        by smtp.gmail.com with ESMTPSA id f5-20020a7bcc05000000b003f18b942338sm2464011wmh.3.2023.06.07.07.59.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 07:59:15 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Benjamin LaHaise <bcrl@kvack.org>,
+        linux-fsdevel@vger.kernel.org, linux-aio@kvack.org,
+        linux-kernel@vger.kernel.org,
+        "Venkataramanan, Anirudh" <anirudh.venkataramanan@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Jeff Moyer <jmoyer@redhat.com>,
+        Kent Overstreet <kent.overstreet@linux.dev>
+Subject: Re: [PATCH v3] fs/aio: Replace kmap{,_atomic}() with kmap_local_page()
+Date:   Wed, 07 Jun 2023 16:59:13 +0200
+Message-ID: <2287966.ElGaqSPkdT@suse>
+In-Reply-To: <ZCGYps2z5IlaEaxU@casper.infradead.org>
+References: <20230119162055.20944-1-fmdefrancesco@gmail.com> <2114426.VsPgYW4pTa@suse>
+ <ZCGYps2z5IlaEaxU@casper.infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v1] dt-bindings: nand: meson: Fix 'nand-rb' property
-Content-Language: en-US
-To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Liang Yang <liang.yang@amlogic.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        oxffffaa@gmail.com, kernel@sberdevices.ru,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230606193507.35024-1-AVKrasnov@sberdevices.ru>
- <20230607095802.3adcd4f9@xps-13>
- <166bdc27-f77c-9076-f866-180cfa5bff76@sberdevices.ru>
- <08da4e86-433a-7d2e-25ff-ffa24221abdf@linaro.org>
- <835a3587-1e0f-64d7-1d1a-b639ae8b7307@sberdevices.ru>
- <2ca6e619-1d57-8fff-6176-9ee890e0d167@linaro.org>
- <5ca9eb2b-4bc8-5883-a029-3eeca905fe6e@sberdevices.ru>
- <20230607113605.50a992bb@xps-13>
- <6c1973d1-38c0-6048-90ad-da2f60df8238@sberdevices.ru>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <6c1973d1-38c0-6048-90ad-da2f60df8238@sberdevices.ru>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/06/2023 16:52, Arseniy Krasnov wrote:
-> 
-> 
-> On 07.06.2023 12:36, Miquel Raynal wrote:
->> Hi Arseniy,
->>
->> avkrasnov@sberdevices.ru wrote on Wed, 7 Jun 2023 12:04:29 +0300:
->>
->>> On 07.06.2023 12:08, Krzysztof Kozlowski wrote:
->>>> On 07/06/2023 10:57, Arseniy Krasnov wrote:  
->>>>>
->>>>>
->>>>> On 07.06.2023 11:53, Krzysztof Kozlowski wrote:  
->>>>>> On 07/06/2023 10:40, Arseniy Krasnov wrote:  
->>>>>>> Hello Miquel, 
->>>>>>>
->>>>>>> On 07.06.2023 10:58, Miquel Raynal wrote:
->>>>>>>  
->>>>>>>> Hi Arseniy,
->>>>>>>>
->>>>>>>> AVKrasnov@sberdevices.ru wrote on Tue, 6 Jun 2023 22:35:07 +0300:
->>>>>>>>  
->>>>>>>>> Add description of 'nand-rb' property. Use "Fixes" because this property
->>>>>>>>> must be supported since the beginning. For this controller 'nand-rb' is
->>>>>>>>> stored in the controller node (not in chip), because it has only single
->>>>>>>>> r/b wire for all chips.  
->>>>>>>>
->>>>>>>> Sorry if I mislead you in the first place, but you could definitely
->>>>>>>> have two chips and only one with RB wired. It needs to be defined in
->>>>>>>> the chips.  
->>>>>>>
->>>>>>> Ok, so to clarify: is it ok, that in bindings this property will be placed in the
->>>>>>> chip, but in driver, i'm trying to read it from the controller node (thus  in
->>>>>>> dts file it will be also in controller node)?  
->>
->> The bindings and your driver internal representation are two different
->> things. Anyway, as mentioned above, wiring the RB line to one die and
->> not the other would be valid hardware design and would require the rb
->> property to be in the chip node. Please perform a per-chip property read
->> in the driver as well.
-> 
-> Done, I resend both patches (bindings + driver update) as a single patchset. Your review comments
-> for driver code were also fixed.
+On luned=EC 27 marzo 2023 15:22:46 CEST Matthew Wilcox wrote:
+> On Mon, Mar 27, 2023 at 12:08:20PM +0200, Fabio M. De Francesco wrote:
+> > On gioved=EC 19 gennaio 2023 17:20:55 CEST Fabio M. De Francesco wrote:
+> > > The use of kmap() and kmap_atomic() are being deprecated in favor of
+> > > kmap_local_page().
+> > >
+> > > [...]
+> > >
+> > > Therefore, replace kmap() and kmap_atomic() with kmap_local_page() in
+> > > fs/aio.c.
+>
+> Or should we just stop allocating aio rings from HIGHMEM and remove
+> the calls to kmap()?  How much memory are we talking about here?
 
-No, please send new version, not the same. New version means with fixed
-comments and with patch changelog.
+Matthew,
 
-Best regards,
-Krzysztof
+Well, I'll do as you suggested. Actually, I should have made this change wh=
+en=20
+you suggested it but... well, I think you can easily guess why I did not.
+
+Here it seems that a call of find_or_create_pages() with the GFP_USER flag
+instead of GFP_HIGHUSER is all that is required. And then I'll get rid of t=
+he
+mappings in favor of some straight page_address().
+
+I just gave a look after months, so I could very well have missed something=
+=20
+else. If what I just saw it's all that must be changed, I'll send the new=20
+patch by tomorrow.
+
+Thanks,
+
+=46abio
+
+P.S.: I had sent other patches that must also be changed according to a=20
+similar comment you made. Obviously, I'll work also on them (no matter if y=
+ou=20
+can't probably recall the short series to fs/ufs I'm referring to).
+
+
 
