@@ -2,140 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1C42726AAD
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 22:19:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D05E726B09
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 22:22:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232650AbjFGUTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 16:19:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43802 "EHLO
+        id S232989AbjFGUV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 16:21:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232689AbjFGUTF (ORCPT
+        with ESMTP id S232991AbjFGUVr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 16:19:05 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A1F126A3
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 13:18:32 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-516a0105121so171904a12.0
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 13:18:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686169111; x=1688761111;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ag0Zb0tQVIKFhYpth7TyBzzfO6OzmNaWjp5H9Lmc/Y0=;
-        b=WW+HEszCeEXzYQpeXWWFQloQNhynhfuERyLc2J7luikQlFtPf0pA6kTvxcOPI1xQCy
-         m+USe2Urj4bpEGg+/xGiOCmggDf0yK8+gnu+7VVUoG5QVeHqeJbGX+E2jTtmRqk+J/QS
-         ggksPtASg//2NNylsky8RMD7JlZ6TaXVFmwGJoIeBbmegoFwiUqCiUpeTVAWhta+pqOp
-         S9xh3CkQLS3vs5B2ccmoqkJBHWZhYDXDa2Z35MlluN044/oiJ/Ju5RrtnPjIaS+vQ58x
-         hG99u4+wmOR57VU3GOWvoFmG2FEz9djdKn8n58HDWx1xAslqBjoRsKqtG4eUFe7RsNDh
-         54WQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686169111; x=1688761111;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ag0Zb0tQVIKFhYpth7TyBzzfO6OzmNaWjp5H9Lmc/Y0=;
-        b=cyhkRM/uC7a4OHSycYIpttpWSWb4ZTynquemyWJtWRsBqIxWJRXlErZSuWaM1dK6FS
-         KZPayvbkaUuhX7iIj6kQGuXDshPrki2y9QIte3TAnr1dbhgSx8ihFcTaiVev7mL4QEMX
-         flqe++Fx7OqqxYGURTvz8qJz014MBZAPgxBIQ4eBvwnoRkLlYjJ0iK7pH7JmEUHxYWuw
-         YaiuNirn1fNHjniKamWKgBl/vc4LFDMw8Ir172/Fo+jEcev058J8rEXsXJcv1F/eWBMh
-         MApDQ+4v7NjU/qTVV7gjcu/yJs9VU3+7BKkWZzRWRBG+HWV00BTUimLAcjiNwvAw2Ptu
-         60Mw==
-X-Gm-Message-State: AC+VfDyjwQwA7RzPugsjbaU41/o8RKJmjH1+oPfC7rzFzCbe/6TR0B1n
-        FMbxO9MfeSeYtWGYKg7EeW0=
-X-Google-Smtp-Source: ACHHUZ7J+CIUJAaMLo020VxRutLX59tFbcjvQ7T8LkZ1pXHKvEOOxrXchuTkN9KxVQDrQRGDnDeaRA==
-X-Received: by 2002:a05:6402:26c7:b0:506:6c2a:528f with SMTP id x7-20020a05640226c700b005066c2a528fmr2857967edd.4.1686169110639;
-        Wed, 07 Jun 2023 13:18:30 -0700 (PDT)
-Received: from [192.168.0.101] (p57ba2e0b.dip0.t-ipconnect.de. [87.186.46.11])
-        by smtp.gmail.com with ESMTPSA id f21-20020a05640214d500b00514b8d5eb29sm6471685edx.43.2023.06.07.13.18.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 13:18:29 -0700 (PDT)
-Message-ID: <90813181-02a1-b54f-132b-c68e7b797bb6@gmail.com>
-Date:   Wed, 7 Jun 2023 22:18:28 +0200
+        Wed, 7 Jun 2023 16:21:47 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3FB426B9;
+        Wed,  7 Jun 2023 13:21:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686169291; x=1717705291;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YkT8+Sc2+0x+AL1uYgdZYtuhJ444rhEZ4+GBz5TwQI0=;
+  b=hqQB5Lqm0XeHLAPWDyAtjooL6NZvGC8WY8j8JIpqppArjYEY3wMWGz4w
+   584+xbP8ddSVaJLsBIdTR2Bu7hQOpu9GgCmjWWp/EtQ41MF/mUFpoEf3h
+   CLZAScutgueHZxyhJMdKBH7fZp+qeWbCADkQVRYesP/78iHLXOWzxEAxN
+   YCoERslP2B3jg8LTG/oEZkwiAkOwwdhDcZg9yLKxKoizTE2eLubXT/g/m
+   qE2LWTlQZxoReXQDgxQMdjaGyKTjkvC2QyNQ5pUBostxawsbvh2IdEWEG
+   1z0naPL6ZdeGu5AgCECxtdLgT2NFVvRzXJIUX42ym+tQbBur4RhSlbQ4y
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="420657972"
+X-IronPort-AV: E=Sophos;i="6.00,225,1681196400"; 
+   d="scan'208";a="420657972"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 13:19:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="709677274"
+X-IronPort-AV: E=Sophos;i="6.00,225,1681196400"; 
+   d="scan'208";a="709677274"
+Received: from yjiang5-mobl.amr.corp.intel.com (HELO localhost) ([10.144.161.97])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 13:19:24 -0700
+Date:   Wed, 7 Jun 2023 13:19:24 -0700
+From:   Yunhong Jiang <yunhong.jiang@linux.intel.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Evgeniy Baskov <baskov@ispras.ru>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Peter Jones <pjones@redhat.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Dave Young <dyoung@redhat.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Kees Cook <keescook@chromium.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>
+Subject: Re: [PATCH v5 13/20] x86/efistub: Perform 4/5 level paging switch
+ from the stub
+Message-ID: <20230607201924.GD3110@yjiang5-mobl.amr.corp.intel.com>
+References: <20230607072342.4054036-1-ardb@kernel.org>
+ <20230607072342.4054036-14-ardb@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 1/5] staging: rtl8192e: Remove variable SetWirelessMode
-To:     Dan Carpenter <dan.carpenter@linaro.org>,
-        Yogesh Hegde <yogi.kernel@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <cover.1686149467.git.yogi.kernel@gmail.com>
- <fba56522e419351b05e33df8cd0ac31806534d8c.1686149467.git.yogi.kernel@gmail.com>
- <01a162c5-f0de-47b1-97e7-8a451a89df80@kadam.mountain>
-Content-Language: en-US
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <01a162c5-f0de-47b1-97e7-8a451a89df80@kadam.mountain>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230607072342.4054036-14-ardb@kernel.org>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/7/23 17:07, Dan Carpenter wrote:
-> On Wed, Jun 07, 2023 at 08:31:41PM +0530, Yogesh Hegde wrote:
->> The variable SetWirelessMode is set in only one place throughout the
->> driver. This patch removes the variable and calls the real function
->> directly instead, eliminating the unnecessary indirection.
->> Additionally, the removal of the variable aligns with the checkpatch
->> guidelines by removing the use of CamelCase.
->>
->> Signed-off-by: Yogesh Hegde <yogi.kernel@gmail.com>
->> ---
->>
->> v2: Removed the variable and called the function direction instead of
->>      just renaming the variable as suggested by Greg Kroah-Hartman
->>      <gregkh@linuxfoundation.org>.
+On Wed, Jun 07, 2023 at 09:23:35AM +0200, Ard Biesheuvel wrote:
+> In preparation for updating the EFI stub boot flow to avoid the bare
+> metal decompressor code altogether, implement the support code for
+> switching between 4 and 5 levels of paging before jumping to the kernel
+> proper.
 > 
-> Reviewed-by: Dan Carpenter <dan.carpenter@linaro.org>
+> This reuses the newly refactored trampoline that the bare metal
+> decompressor uses, but relies on EFI APIs to allocate 32-bit addressable
+> memory and remap it with the appropriate permissions. Given that the
+> bare metal decompressor will no longer call into the trampoline if the
+> number of paging levels is already set correctly, it is no longer needed
+> to remove NX restrictions from the memory range where this trampoline
+> may end up.
 > 
-> regards,
-> dan carpenter
+> Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> ---
+>  drivers/firmware/efi/libstub/Makefile          |  1 +
+>  drivers/firmware/efi/libstub/efi-stub-helper.c |  2 +
+>  drivers/firmware/efi/libstub/efistub.h         |  1 +
+>  drivers/firmware/efi/libstub/x86-5lvl.c        | 95 ++++++++++++++++++++
+>  drivers/firmware/efi/libstub/x86-stub.c        | 40 +++------
+>  drivers/firmware/efi/libstub/x86-stub.h        | 17 ++++
+>  6 files changed, 130 insertions(+), 26 deletions(-)
 > 
-> 
+> diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware/efi/libstub/Makefile
+> index 16d64a34d1e19465..ae8874401a9f1490 100644
+> --- a/drivers/firmware/efi/libstub/Makefile
+> +++ b/drivers/firmware/efi/libstub/Makefile
+> @@ -88,6 +88,7 @@ lib-$(CONFIG_EFI_GENERIC_STUB)	+= efi-stub.o string.o intrinsics.o systable.o \
+>  lib-$(CONFIG_ARM)		+= arm32-stub.o
+>  lib-$(CONFIG_ARM64)		+= arm64.o arm64-stub.o smbios.o
+>  lib-$(CONFIG_X86)		+= x86-stub.o
+> +lib-$(CONFIG_X86_64)		+= x86-5lvl.o
+>  lib-$(CONFIG_RISCV)		+= riscv.o riscv-stub.o
+>  lib-$(CONFIG_LOONGARCH)		+= loongarch.o loongarch-stub.o
+>  
+> diff --git a/drivers/firmware/efi/libstub/efi-stub-helper.c b/drivers/firmware/efi/libstub/efi-stub-helper.c
+> index 1e0203d74691ffcc..51779279fbff21b5 100644
+> --- a/drivers/firmware/efi/libstub/efi-stub-helper.c
+> +++ b/drivers/firmware/efi/libstub/efi-stub-helper.c
+> @@ -73,6 +73,8 @@ efi_status_t efi_parse_options(char const *cmdline)
+>  			efi_loglevel = CONSOLE_LOGLEVEL_QUIET;
+>  		} else if (!strcmp(param, "noinitrd")) {
+>  			efi_noinitrd = true;
+> +		} else if (IS_ENABLED(CONFIG_X86_64) && !strcmp(param, "no5lvl")) {
+> +			efi_no5lvl = true;
+>  		} else if (!strcmp(param, "efi") && val) {
+>  			efi_nochunk = parse_option_str(val, "nochunk");
+>  			efi_novamap |= parse_option_str(val, "novamap");
+> diff --git a/drivers/firmware/efi/libstub/efistub.h b/drivers/firmware/efi/libstub/efistub.h
+> index 6aa38a1bf1265d83..06b7abc92ced9e18 100644
+> --- a/drivers/firmware/efi/libstub/efistub.h
+> +++ b/drivers/firmware/efi/libstub/efistub.h
+> @@ -33,6 +33,7 @@
+>  #define EFI_ALLOC_LIMIT		ULONG_MAX
+>  #endif
+>  
+> +extern bool efi_no5lvl;
+>  extern bool efi_nochunk;
+>  extern bool efi_nokaslr;
+>  extern int efi_loglevel;
+> diff --git a/drivers/firmware/efi/libstub/x86-5lvl.c b/drivers/firmware/efi/libstub/x86-5lvl.c
+> new file mode 100644
+> index 0000000000000000..2428578a3ae08be7
+> --- /dev/null
+> +++ b/drivers/firmware/efi/libstub/x86-5lvl.c
+> @@ -0,0 +1,95 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +#include <linux/efi.h>
+> +
+> +#include <asm/boot.h>
+> +#include <asm/desc.h>
+> +#include <asm/efi.h>
+> +
+> +#include "efistub.h"
+> +#include "x86-stub.h"
+> +
+> +bool efi_no5lvl;
+> +
+> +static void (*la57_toggle)(void *trampoline, bool enable_5lvl);
 
-Hi Dan,
+As an ack to my comments to another patch, would it makes more sense to rename
+the trampoline parameter to newcr3 and pass the address of the new page table,
+instead of the trampoline start address?
 
-thanks for all the work you do. I always appreciate your comments.
+> +
+> +static const struct desc_struct gdt[] = {
+> +	[GDT_ENTRY_KERNEL32_CS] = GDT_ENTRY_INIT(0xc09b, 0, 0xfffff),
+> +	[GDT_ENTRY_KERNEL_CS]   = GDT_ENTRY_INIT(0xa09b, 0, 0xfffff),
+> +};
+> +
+> +/*
+> + * Enabling (or disabling) 5 level paging is tricky, because it can only be
+> + * done from 32-bit mode with paging disabled. This means not only that the
+> + * code itself must be running from 32-bit addressable physical memory, but
+> + * also that the root page table must be 32-bit addressable, as programming
+> + * a 64-bit value into CR3 when running in 32-bit mode is not supported.
+> + */
+> +efi_status_t efi_setup_5level_paging(void)
+> +{
+> +	u8 tmpl_size = (u8 *)&trampoline_ljmp_imm_offset - (u8 *)&trampoline_32bit_src;
+> +	efi_status_t status;
+> +	u8 *la57_code;
+> +
+> +	if (!efi_is_64bit())
+> +		return EFI_SUCCESS;
+> +
+> +	/* check for 5 level paging support */
+> +	if (native_cpuid_eax(0) < 7 ||
+> +	    !(native_cpuid_ecx(7) & (1 << (X86_FEATURE_LA57 & 31))))
+> +		return EFI_SUCCESS;
+> +
+Do we need to check the need_toggle here instead of at efi_5level_switch and
+skip the whole setup if no need to switch the paging level? Sorry if I missed
+any point.
 
-But I think it does not work because this driver is divided into two 
-modules.
+> +	/* allocate some 32-bit addressable memory for code and a page table */
+> +	status = efi_allocate_pages(2 * PAGE_SIZE, (unsigned long *)&la57_code,
+> +				    U32_MAX);
+> +	if (status != EFI_SUCCESS)
+> +		return status;
+> +
+> +	la57_toggle = memcpy(la57_code, trampoline_32bit_src, tmpl_size);
+> +	memset(la57_code + tmpl_size, 0x90, PAGE_SIZE - tmpl_size);
+> +
+> +	/*
+> +	 * To avoid the need to allocate a 32-bit addressable stack, the
+> +	 * trampoline uses a LJMP instruction to switch back to long mode.
+> +	 * LJMP takes an absolute destination address, which needs to be
+> +	 * fixed up at runtime.
+> +	 */
+> +	*(u32 *)&la57_code[trampoline_ljmp_imm_offset] += (unsigned long)la57_code;
+> +
+> +	efi_adjust_memory_range_protection((unsigned long)la57_toggle, PAGE_SIZE);
+> +
+> +	return EFI_SUCCESS;
+> +}
+> +
+> +void efi_5level_switch(void)
+> +{
+> +	bool want_la57 = IS_ENABLED(CONFIG_X86_5LEVEL) && !efi_no5lvl;
+> +	bool have_la57 = native_read_cr4() & X86_CR4_LA57;
+> +	bool need_toggle = want_la57 ^ have_la57;
+> +	u64 *pgt = (void *)la57_toggle + PAGE_SIZE;
 
-To load the driver I am using the following lines:
-sudo insmod drivers/staging/rtl8192e/rtllib.ko
-sudo insmod drivers/staging/rtl8192e/rtl8192e/r8192e_pci.ko
-
-So this line is required:
-priv->rtllib->SetWirelessMode = rtl92e_set_wireless_mode;
-as one name is used in one module and one in the other module.
-
-But the change was proposed by the masters so I thought that I must be 
-wrong.
-
-My compiler does not compile this patch:
-   LD [M]  drivers/staging/rtl8192e/rtl8192e/r8192e_pci.o
-   MODPOST drivers/staging/rtl8192e/Module.symvers
-ERROR: modpost: "rtl92e_set_wireless_mode" 
-[drivers/staging/rtl8192e/rtllib.ko] undefined!
-make[1]: *** [scripts/Makefile.modpost:136: 
-drivers/staging/rtl8192e/Module.symvers] Error 1
-make: *** [Makefile:1978: modpost] Error 2
-
-Did this compile on your system Yogesh?
-
-So I am looking forward to your response what I am doing wrong.
-
-Bye Philipp
-
-
-
-
-
-
-
+Not sure if we can decouple this address assumption of the pgt and la57_toggle,
+and keep the pgt as a variable, like la57_toggle, setup by
+efi_setup_5level_paging() too.
+Asking because with the Intel X86-S
+(https://cdrdv2-public.intel.com/776648/x86s-EAS-v1-4-17-23-1.pdf), no
+tramopline code is needed since the 4/5 level paging switch does not require
+paging disabling. Of course, it's ok to keep this as is, and we can change
+late when we begin working on X86-S support.
