@@ -2,204 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA7F172514A
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 02:57:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 524C4725153
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 03:02:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234826AbjFGA5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 20:57:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52714 "EHLO
+        id S240395AbjFGBCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 21:02:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234458AbjFGA5H (ORCPT
+        with ESMTP id S234076AbjFGBCK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 20:57:07 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B761728;
-        Tue,  6 Jun 2023 17:57:04 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QbTSn3mlLz4x2c;
-        Wed,  7 Jun 2023 10:56:57 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1686099422;
-        bh=k56jEU2ViEAn2/eGC8DhZ9t/fIq2mRoRRD7wYVTLs68=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=FGl+omh82Vv4jaVNMc+afltpnJ1JUx45tyoPHvWMYcjdt/LlDYElF5ZRuwC2KLZHX
-         t+x8uElM34LTJEQi0obzdLoTOkN8+in6RN6vxkNFtfLAQ9yNfNLMT5PKT+MQFDIjpq
-         MbRyiMkQdolx7g4SPeb41LrlltsrkM7sVyN3UzBxi0cJjMiDGJIFbPxWu+MOQ/bmTs
-         0q+r7K3tlAKA395fM0KJPDf5NJD4t5yJhq7OMl6N/SNr/DZ320Wm9pjxtg/M3I+3qw
-         W5DsGN6BNPKIPin5xyk/XTRCb/2eMrScoJ7vkHGLWQqIyPG4Tng+eal+GbYeutNFJV
-         UDPj8QNi1H7tg==
-Date:   Wed, 7 Jun 2023 10:56:56 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Ravi Bangoria <ravi.bangoria@amd.com>,
-        Peter Zijlstra <peterz@infradead.org>, irogers@google.com,
-        suzuki.poulose@arm.com, mike.leach@linaro.org, leo.yan@linaro.org,
-        john.g.garry@oracle.com, will@kernel.org, james.clark@arm.com,
-        mingo@redhat.com, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, adrian.hunter@intel.com, kjain@linux.ibm.com,
-        renyu.zj@linux.alibaba.com, kan.liang@linux.intel.com,
-        zhengjun.xing@linux.intel.com, maddy@linux.ibm.com,
-        atrajeev@linux.vnet.ibm.com, wangming01@loongson.cn,
-        chenhuacai@kernel.org, sandipan.das@amd.com, 9erthalion6@gmail.com,
-        seanjc@google.com, robh@kernel.org, tmricht@linux.ibm.com,
-        tegongkang@gmail.com, linux-kernel@vger.kernel.org,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH v2] perf test amd: Fix build failure with
- amd-ibs-via-core-pmu.c
-Message-ID: <20230607105656.1f2f8b89@canb.auug.org.au>
-In-Reply-To: <20230606142436.153750d9@canb.auug.org.au>
-References: <CAP-5=fUPZ7+nAcxBp5sFBfxzkOH8kzWkLV0uziHqxYC0cDbbDw@mail.gmail.com>
-        <20230603044650.286-1-ravi.bangoria@amd.com>
-        <ZH3w7TWRQZsPqhB2@kernel.org>
-        <20230606142436.153750d9@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ZpeoibezJ3cg31_biwxtWat";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 6 Jun 2023 21:02:10 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB014E5E
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 18:02:09 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id 98e67ed59e1d1-2553b096ddfso74109a91.1
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 18:02:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686099729; x=1688691729;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MIT3ff/KRX9uYGBg0xAZEe1w0qcnxFqLspYh4nHLJtE=;
+        b=5t8nBOdGj7l5n6Ly6kznD+x2R1G3ZUMw9J6OmtqcHV8YIb6fUMt6+Icsl4GPzP10N6
+         GlwkEdJuCWORZop/+mmvD0SDMustOKgsvi2K3RUoaYlCMRgKuZNeJRNmndiyMcOq1Ogn
+         wqVGW9n7fvdKv0tCTMb7Ac2heW5PXb6YrnHES3ChMzL1WPA/izL/ybSYPdHMfue7QR+C
+         0DlUZpy+jrEoKOdM/23zntC4y4EA45wY5gVylZJAKT0qklyFHtiGh3AXSC3JbOMm4jhH
+         Mfs/WtTEJj8io7i5r5lreR9jMNWgKMoqW/LM9XUYZwAGMsUoinc/yMqbUfFcEPxCmSK1
+         H5kA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686099729; x=1688691729;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MIT3ff/KRX9uYGBg0xAZEe1w0qcnxFqLspYh4nHLJtE=;
+        b=DCLNd4gAoVAyke0xvoo3zreBKiHS1Cf2HhzEmPTHZZRLsLH8pe3iXTRsAWW4EAOw0k
+         LNx/abo/V4WPVZ8e9T/+BCwUaEpkh/MN8dBgEWi5oI1d2YOYrBoaH9SQVWMGFoVG3LOz
+         iBGFyAorS1Q/S6ErrXrsgU6IIJsg/Zk7dHO39SivUL2zHnkVnjz4og33QdNvQOdDK5e0
+         zPh9lt1GHnvEYOGXUXy2dDAa+S3D4ptXCybF8XSuUbA5eGhbX3FAUniahBS5YpE6FMZu
+         umEqgSvjkgKe49LAYu2wilyIPmprnQQOPo1cpkggGvnbnasAc1BlqGUc4iBNLn1ujZW6
+         tvzg==
+X-Gm-Message-State: AC+VfDwPaW/SIqhuNZkerPVwL6D0i1Ol8he3RGjSnGEgRCzERsqYNOCu
+        7Abq5XAhmAlyZs+p0dH2MZuurHy5V98=
+X-Google-Smtp-Source: ACHHUZ4vcTop5qPJw/gOdcUR+2zqezwDhzCdEsDvsQmkgqL69MAIjoPt5M5KBjauPRGBToV8wNSPoj/iGBU=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:90a:e2cb:b0:256:bc5e:7d76 with SMTP id
+ fr11-20020a17090ae2cb00b00256bc5e7d76mr2994074pjb.3.1686099729200; Tue, 06
+ Jun 2023 18:02:09 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Tue,  6 Jun 2023 18:02:02 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+Message-ID: <20230607010206.1425277-1-seanjc@google.com>
+Subject: [PATCH 0/4] KVM: x86/pmu: Clean up arch/hw event handling
+From:   Sean Christopherson <seanjc@google.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Aaron Lewis <aaronlewis@google.com>,
+        Like Xu <like.xu.linux@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/ZpeoibezJ3cg31_biwxtWat
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Clean up KVM's handling of arch/hw events, and the related fixed counter
+usage.  KVM has far too many open coded magic numbers, and kludgy code
+that stems from the magic numbers.
 
-Hi all,
+Sean Christopherson (4):
+  KVM: x86/pmu: Use enums instead of hardcoded magic for arch event
+    indices
+  KVM: x86/pmu: Simplify intel_hw_event_available()
+  KVM: x86/pmu: Require nr fixed_pmc_events to match nr max fixed
+    counters
+  KVM: x86/pmu: Move .hw_event_available() check out of PMC filter
+    helper
 
-On Tue, 6 Jun 2023 14:24:36 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> On Mon, 5 Jun 2023 11:27:57 -0300 Arnaldo Carvalho de Melo <acme@kernel.o=
-rg> wrote:
-> >
-> > How are things like this resolved in linux-next? =20
->=20
-> Well, if it produces a conflict (or a build failure due to a semantic
-> conflict) I will fix it up (maybe using a separate patch such as this)
-> and report it so that the maintainers know that they need to let Linus
-> know about this when he merges their trees.
->=20
-> But since neither of those things has happened (it seems that an
-> allmodconfig build does not build the tests), I can still take this
-> patch and use it to fix up the tip tree merge (since that happens after
-> the perf tree merge) starting tomorrow and report it as above.  I will
-> then keep applying this patch to the merge until it is no longer needed.
->=20
-> Please send me the actual patch. (I am assuming that the patch applies
-> on top of a recent linux-next release?)
+ arch/x86/kvm/pmu.c           |  4 +-
+ arch/x86/kvm/vmx/pmu_intel.c | 81 ++++++++++++++++++++++++------------
+ 2 files changed, 56 insertions(+), 29 deletions(-)
 
-I fetched the patch from lore and have applied it to the tip tree merge
-from today.  So the tip and perf folks need to remember to tell Linus
-about this fix up patch when they send their pull requests during the
-merge window.  I have included the patch here just to be sure.
 
-From:   Ravi Bangoria <ravi.bangoria@amd.com>
-To:     <irogers@google.com>, <acme@kernel.org>, <sfr@canb.auug.org.au>
-CC:     <ravi.bangoria@amd.com>, <suzuki.poulose@arm.com>,
-        <mike.leach@linaro.org>, <leo.yan@linaro.org>,
-        <john.g.garry@oracle.com>, <will@kernel.org>,
-        <james.clark@arm.com>, <peterz@infradead.org>, <mingo@redhat.com>,
-        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
-        <jolsa@kernel.org>, <namhyung@kernel.org>,
-        <adrian.hunter@intel.com>, <kjain@linux.ibm.com>,
-        <renyu.zj@linux.alibaba.com>, <kan.liang@linux.intel.com>,
-        <zhengjun.xing@linux.intel.com>, <maddy@linux.ibm.com>,
-        <atrajeev@linux.vnet.ibm.com>, <wangming01@loongson.cn>,
-        <chenhuacai@kernel.org>, <sandipan.das@amd.com>,
-        <9erthalion6@gmail.com>, <seanjc@google.com>, <robh@kernel.org>,
-        <tmricht@linux.ibm.com>, <tegongkang@gmail.com>,
-        <linux-kernel@vger.kernel.org>, <coresight@lists.linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-perf-users@vger.kernel.org>
-Subject: [PATCH v2] perf test amd: Fix build failure with amd-ibs-via-core-=
-pmu.c
-Date:   Sat, 3 Jun 2023 10:16:50 +0530
-Message-ID: <20230603044650.286-1-ravi.bangoria@amd.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=3D"UTF-8"
-Content-Transfer-Encoding: 8bit
+base-commit: 31b4fc3bc64aadd660c5bfa5178c86a7ba61e0f7
+-- 
+2.41.0.162.gfafddb0af9-goog
 
-Since amd-ibs-via-core-pmu.c was applied via Peter's tree, some of
-the changes came via Arnaldo's tree did not reflect in this file,
-which is causing build failures.
-
-  arch/x86/tests/amd-ibs-via-core-pmu.c:47:25: error: =E2=80=98pmus=E2=80=
-=99 undeclared
-  (first use in this function)
-     47 |         if (list_empty(&pmus))
-        |                         ^~~~
-  arch/x86/tests/amd-ibs-via-core-pmu.c:48:17: error: implicit declaration
-  of function =E2=80=98perf_pmu__scan=E2=80=99; did you mean
-  perf_pmus__scan=E2=80=99? [-Werror=3Dimplicit-function-declaration]
-     48 |                 perf_pmu__scan(NULL);
-        |                 ^~~~~~~~~~~~~~
-        |                 perf_pmus__scan
-  arch/x86/tests/amd-ibs-via-core-pmu.c:50:19: error: implicit declaration
-  of function =E2=80=98perf_pmu__find=E2=80=99; did you mean
-  perf_pmus__find=E2=80=99? [-Werror=3Dimplicit-function-declaration]
-     50 |         ibs_pmu =3D perf_pmu__find("ibs_op");
-        |                   ^~~~~~~~~~~~~~
-        |                   perf_pmus__find
-
-Fix those.
-
-Fixes: 1eaf496ed386 ("perf pmu: Separate pmu and pmus")
-Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
----
-v1->v2:
-  - Remove unnecessary perf_pmus__scan(NULL) as suggested by Ian.
-
- tools/perf/arch/x86/tests/amd-ibs-via-core-pmu.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
-
-diff --git a/tools/perf/arch/x86/tests/amd-ibs-via-core-pmu.c b/tools/perf/=
-arch/x86/tests/amd-ibs-via-core-pmu.c
-index 2902798ca5c1..78b1902f6f59 100644
---- a/tools/perf/arch/x86/tests/amd-ibs-via-core-pmu.c
-+++ b/tools/perf/arch/x86/tests/amd-ibs-via-core-pmu.c
-@@ -44,10 +44,7 @@ int test__amd_ibs_via_core_pmu(struct test_suite *test _=
-_maybe_unused,
- 	int ret =3D TEST_OK;
- 	int fd, i;
-=20
--	if (list_empty(&pmus))
--		perf_pmu__scan(NULL);
--
--	ibs_pmu =3D perf_pmu__find("ibs_op");
-+	ibs_pmu =3D perf_pmus__find("ibs_op");
- 	if (!ibs_pmu)
- 		return TEST_SKIP;
-=20
---=20
-2.40.1
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/ZpeoibezJ3cg31_biwxtWat
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmR/1dgACgkQAVBC80lX
-0GwEqQgApkQtYT6BEX7UvGVKbn52sWwZYKrdQ1DWsGofGs+4lLUpn1xaSUlKzgti
-kToeuGImVORge1pkFEHQmqZdiAOgw3++JnysEXuqwDgENj6Ryqhxu+18ES+FESuN
-YKddRznS9/lDG/V2iO7VFRIYzTY1XJVkjmcmhJWFt/NnP3hjdXw63cvPaanb+3oj
-xShRuVdMifVYY9ApLM7gU4mCQhBWHp6n5VcihdSkI9+MevC63FJnDv+v6Bssq7oi
-qS3VoNouc/rZ7ZMxYDqRUVadH9f2O3PR74DZ7fx1c4hHQR3ee6x2wDLDjOURa0xl
-MS/l4I74SWG2fedTtFaY/l7wH+hFgA==
-=9mrs
------END PGP SIGNATURE-----
-
---Sig_/ZpeoibezJ3cg31_biwxtWat--
