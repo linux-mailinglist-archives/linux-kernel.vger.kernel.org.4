@@ -2,53 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 356CA726984
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 21:09:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4D44726988
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 21:10:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231848AbjFGTJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 15:09:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40194 "EHLO
+        id S233029AbjFGTKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 15:10:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbjFGTJm (ORCPT
+        with ESMTP id S229604AbjFGTKX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 15:09:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 909231721
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 12:09:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2DC1564300
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 19:09:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4955EC433EF;
-        Wed,  7 Jun 2023 19:09:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1686164980;
-        bh=6dtKuXV2nXZXQRpqAxbQFyVi9qyFYTAFk5MrNR013Ts=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=PnV1yt+iqLBH3jR5kuNY9n1RF0i8vSUcbzOkVpRudAVvqEVYDFHJWJv1sK0KcI8Fk
-         0Lei0xwn1WHAKmiGGcIZVSOj26BaWu8mtT3YvnG1b+sNZ/6t/78JM3wPhqZ5OM/0it
-         IQQ9hYseyVP2EFdHepJrgHG/pmqDmOT4tBxewju0=
-Date:   Wed, 7 Jun 2023 12:09:39 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Nhat Pham <nphamcs@gmail.com>, hannes@cmpxchg.org,
-        cerasuolodomenico@gmail.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, sjenning@redhat.com,
-        ddstreet@ieee.org, vitaly.wool@konsulko.com, kernel-team@meta.com
-Subject: Re: [PATCH] zswap: do not shrink when memory.zswap.max is 0
-Message-Id: <20230607120939.c1256fac4bb4e081811c02da@linux-foundation.org>
-In-Reply-To: <CAJD7tkZUc=h+h4f1a+nas8KruFBaGMuaq67jZLk+LkdbwZVqKQ@mail.gmail.com>
-References: <20230530162153.836565-1-nphamcs@gmail.com>
-        <CAJD7tkZJttvpYs4mgjL3pt8-jkX0fnWRJP7hVBZmm=i_Ef3Abg@mail.gmail.com>
-        <CAKEwX=OK5qK9DTYLKZUefE0eq8KooygT-nbkgUZaYjK72SKzFQ@mail.gmail.com>
-        <CAJD7tkZUc=h+h4f1a+nas8KruFBaGMuaq67jZLk+LkdbwZVqKQ@mail.gmail.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        Wed, 7 Jun 2023 15:10:23 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E62FC1721
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 12:10:21 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f6e1394060so64804275e9.3
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 12:10:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686165020; x=1688757020;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VFeShRA+Q6MS4Ek7wrmqu5wkSlrfRx+GR/9GaQRXmkc=;
+        b=kdRjS7QkftlEs2gNCywQCzAIY2DE7VuHmhIS9URwDm20q6NGx+XDjhkb47Aeyp/qbB
+         IdfdwT0mrfZhKGrS5MnbYShxFoL7wRG5D2cpKcCY/bleVHs/Kcip+Cnx/K4q/SyYgQZ/
+         B70ReBFlN4elHlR+m6eTqfKnjFRV9n8bBW/Ur0wLDBU4Kn4tCkDKdXF0nTbcKc56bAj2
+         shl4+DfFY8GuvCiapiwST0DPXcMtLYfw52dkTf4+pEEt7InleS7L2duPt7WfYNuK01UX
+         3l3ckyPy59gjkYXUz5X1fMRPC7WRTaVZjokbdeEL2/nlJI/GCba/bA+h9yXoRhqo/r+z
+         2r/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686165020; x=1688757020;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VFeShRA+Q6MS4Ek7wrmqu5wkSlrfRx+GR/9GaQRXmkc=;
+        b=EkIXubi04tquGWTYyz9XBWbPUAY0l+/7GnHdKglVWf3f925f1We3sg7LOrWnX+WBCN
+         jtBJKT5myC0dm9I9MpH00ka2A+JfHt3CdhXqE3KIQJbCE6NjQ58q1MUDnoREaoBERQKg
+         kaYGNACIpw6jg4EAMi+ISNHXcgymUaIamg5qf1X90yRXUq8pIg1kcqHmwQePDiGF9ybd
+         AnaLC3NGhCUfXugHKiLZkaLWMQRgAphZRvXkZZvBpnSX2FEEVWz3e3FAQ/TC/UpLFFVg
+         SAKuFU1GcoeggJIb1+qDyXvszyhJrl4Gdtcxzb9rsl+tfe/poFhXGfmI5buYp+UikLXs
+         GWKQ==
+X-Gm-Message-State: AC+VfDxI/6h7wDMQ8GkiUHmSJDGvH5YYBbED8hbSWAeDPht0iHhHKnAH
+        Ki9ZdTIYLlLcDo1TwcRtEIeT8A==
+X-Google-Smtp-Source: ACHHUZ6bg692mXS/KEoB17CJEgvXvyhDx0YLPnm4+gHv4fC9Ycdu8cTyHV10BHVxNOhbERj547inkg==
+X-Received: by 2002:a05:600c:287:b0:3f6:f7c:b3fa with SMTP id 7-20020a05600c028700b003f60f7cb3famr5372333wmk.31.1686165020277;
+        Wed, 07 Jun 2023 12:10:20 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:3a59:921c:4758:7db5? ([2a05:6e02:1041:c10:3a59:921c:4758:7db5])
+        by smtp.googlemail.com with ESMTPSA id n2-20020a05600c294200b003f7ba52eeccsm3039016wmd.7.2023.06.07.12.10.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Jun 2023 12:10:19 -0700 (PDT)
+Message-ID: <507b5daa-73e7-8d21-4f73-c56f88c6bf77@linaro.org>
+Date:   Wed, 7 Jun 2023 21:10:18 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 2/3] thermal: qoriq_thermal: only enable supported sensors
+Content-Language: en-US
+To:     Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
+        Peng Fan <peng.fan@nxp.com>,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
+Cc:     "amitk@kernel.org" <amitk@kernel.org>,
+        "rui.zhang@intel.com" <rui.zhang@intel.com>,
+        "andrew.smirnov@gmail.com" <andrew.smirnov@gmail.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Alice Guo <alice.guo@nxp.com>
+References: <20230516083746.63436-1-peng.fan@oss.nxp.com>
+ <21914890.EfDdHjke4D@pliszka>
+ <3120c2d5-4473-5b72-29bf-d841e806878f@linaro.org>
+ <1966575.usQuhbGJ8B@pliszka>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <1966575.usQuhbGJ8B@pliszka>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,75 +92,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's unclear (to me) whether we should proceed with this.  Thoughts, please?
+On 07/06/2023 19:42, Sebastian Krzyszkowiak wrote:
 
-Here's what I presently have in mm-hotfixes-unstable:
+[ ... ]
+
+>> Hence, the thermal_zone_device_register_with_trips() is not called, the
+>> thermal zone is not created neither updated.
+> 
+> Again - that's not the case the check is there for. It's there for zones that
+> do exist and that do get registered, because REGS_TMR only gets set *after*
+> all the zones are already registered (the driver as it is right now does not
+> know which sites it should enable before registering the zones). Because of
+> that, the first value a zone gets after being registered is always bogus,
+> because no monitoring site has been enabled yet at all.
+
+Ok, I misunderstood. I thought that was for failing registered thermal zone.
+
+Would enabling the site in ops->change_mode do the trick ?
 
 
-From: Nhat Pham <nphamcs@gmail.com>
-Subject: zswap: do not shrink if cgroup may not zswap
-Date: Tue, 30 May 2023 15:24:40 -0700
 
-Before storing a page, zswap first checks if the number of stored pages
-exceeds the limit specified by memory.zswap.max, for each cgroup in the
-hierarchy.  If this limit is reached or exceeded, then zswap shrinking is
-triggered and short-circuits the store attempt.
 
-However, since the zswap's LRU is not memcg-aware, this can create the
-following pathological behavior: the cgroup whose zswap limit is 0 will
-evict pages from other cgroups continually, without lowering its own zswap
-usage.  This means the shrinking will continue until the need for swap
-ceases or the pool becomes empty.
 
-As a result of this, we observe a disproportionate amount of zswap
-writeback and a perpetually small zswap pool in our experiments, even
-though the pool limit is never hit.
 
-More generally, a cgroup might unnecessarily evict pages from other
-cgroups before we drive the memcg back below its limit.
 
-This patch fixes the issue by rejecting zswap store attempt without
-shrinking the pool when obj_cgroup_may_zswap() returns false.
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-[akpm@linux-foundation.org: fix return of unintialized value]
-[akpm@linux-foundation.org: s/ENOSPC/ENOMEM/]
-Link: https://lkml.kernel.org/r/20230530222440.2777700-1-nphamcs@gmail.com
-Link: https://lkml.kernel.org/r/20230530232435.3097106-1-nphamcs@gmail.com
-Fixes: f4840ccfca25 ("zswap: memcg accounting")
-Signed-off-by: Nhat Pham <nphamcs@gmail.com>
-Cc: Dan Streetman <ddstreet@ieee.org>
-Cc: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-Cc: Johannes Weiner <hannes@cmpxchg.org>
-Cc: Seth Jennings <sjenning@redhat.com>
-Cc: Vitaly Wool <vitaly.wool@konsulko.com>
-Cc: Yosry Ahmed <yosryahmed@google.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
----
-
- mm/zswap.c |   11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
-
---- a/mm/zswap.c~zswap-do-not-shrink-if-cgroup-may-not-zswap
-+++ a/mm/zswap.c
-@@ -1174,9 +1174,16 @@ static int zswap_frontswap_store(unsigne
- 		goto reject;
- 	}
- 
-+	/*
-+	 * XXX: zswap reclaim does not work with cgroups yet. Without a
-+	 * cgroup-aware entry LRU, we will push out entries system-wide based on
-+	 * local cgroup limits.
-+	 */
- 	objcg = get_obj_cgroup_from_page(page);
--	if (objcg && !obj_cgroup_may_zswap(objcg))
--		goto shrink;
-+	if (objcg && !obj_cgroup_may_zswap(objcg)) {
-+		ret = -ENOMEM;
-+		goto reject;
-+	}
- 
- 	/* reclaim space if needed */
- 	if (zswap_is_full()) {
-_
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
