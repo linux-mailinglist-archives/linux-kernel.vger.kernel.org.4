@@ -2,147 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15794725465
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 08:36:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94EAD725469
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 08:37:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237927AbjFGGgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 02:36:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54670 "EHLO
+        id S233723AbjFGGh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 02:37:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237824AbjFGGgV (ORCPT
+        with ESMTP id S231470AbjFGGhy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 02:36:21 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ACA51BC6
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 23:35:59 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2b203360d93so1994621fa.3
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 23:35:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686119758; x=1688711758;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6EFrOABaDLpt7VYlTUqL5NsJz5X4d5SpsRmR/+h4/eU=;
-        b=zrmWamvQ3NIx3kxQvmqEpNBeEnJAHQDUu/bZmuRldmyopAs7kcnSeLHNBrfMgs/DUf
-         LwvpEhjtVbMAC914DwVypWF0zQRTS61IThhfy5X5jdVAR2RW0hofwanKWuI4YB/WS70x
-         qkcxSl/G/TwpnvHZOaZEUFwk57mkb6YyQoykP59tiGCLEh8FW67mwzCe1ObItq9Old0O
-         vOp30KmxVKJWFt0vEU4bFHcomlqfau0R2V4/WkKEpRJT2gSyEZqPrwhU0q9GDHTbUAsh
-         8khzqmfVHqMz8EuRkkVIrwmMYYQs3vppRPChSv7KPSGfKu9HjpOFFHwXhL03K0AavwJe
-         y+ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686119758; x=1688711758;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6EFrOABaDLpt7VYlTUqL5NsJz5X4d5SpsRmR/+h4/eU=;
-        b=mERoJEGzxISfR5FHIamK2FUf3akkZmPzTJbd3VwCtlMRelSUo1GWr8I7TVowZ2nFTG
-         A9VXrWoIRvpbX3PvfLy633RPTJ3CcmNdceVxT1VjAIoGhhmhSrj0yHwR5PTBpbfhT6mK
-         3AgMNIR0sWtuAVo2xLj76KYPoNo6njUOrlCc14xzgsQGa5bVOElDopUDnHjUquFwd8po
-         ZESt0Hflh+97gTEqLY5qcx7+TpSD0H+jWE0MvSxV9iefWUNnXZILhv24sLNJeJ6QUrxE
-         Uajaqd2lJD97MT60gGrCcoKf5WNwNuWMH24w8kl5a/f2+Zu+gIBKM8w1Fukshm9aQM12
-         +CHg==
-X-Gm-Message-State: AC+VfDylMkyrduo7bXFWha06DZFMsXpEh6eySaWZNG3rBqsKm7/q0Av2
-        Ru3wkNTT68Jp01K1jsuPh2Udwwjdf2UFGIQFgdij2A==
-X-Google-Smtp-Source: ACHHUZ50P4GwMwpVy/3E1kfflfT7/u++IWVGt8rvCPVQv9ibu4LaVmw1D0lXhPSu99Kuo+IyTcRTb+mYR4WbUz61hcE=
-X-Received: by 2002:a2e:9096:0:b0:2ad:dd7e:6651 with SMTP id
- l22-20020a2e9096000000b002addd7e6651mr2194957ljg.43.1686119757684; Tue, 06
- Jun 2023 23:35:57 -0700 (PDT)
+        Wed, 7 Jun 2023 02:37:54 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A94EF10C3;
+        Tue,  6 Jun 2023 23:37:50 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Qbd2217Skz4wgv;
+        Wed,  7 Jun 2023 16:37:46 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1686119866;
+        bh=ZUyUX8hoKxQ8IX9AXzCttqc3N8++oeZ0LmZx0MumW2U=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Un4yUpwr+iCyQ6ok48X7cyIf1apwF5FQrXyKxpNa3WWk71GbQhEcl1fPYc75SLfVz
+         rEqwqFYBASxu6O7frEZgpRpHTDn2gccMamasx6C5BJjnueJ+un4udn6xmLFix6mEyw
+         qUmmhTslKImRU8KvU/YEbxF2Wlq16RblFR3EGj2zCZw77btBrH3oyF9b6ZylUQi6Ud
+         yo0cA3zvzC1WbBFkxuwnImDSDA2FQGzIJsO52QIkt54Gbl5AnhM6phKCa4TG+w1yMr
+         nqqw2nmc1WXxw5y3bWoyJN36j2cLpPwN/y7zjC8iig7SQuiZ1n5oYOmfs+RV1nLoIf
+         zl2XadPG3zgmw==
+Date:   Wed, 7 Jun 2023 16:37:43 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>, Lee Jones <lee@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patch in the regulator tree
+Message-ID: <20230607163743.1c266a7f@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20230526010748.1222-1-masahisa.kojima@linaro.org>
- <20230526010748.1222-4-masahisa.kojima@linaro.org> <0d3e0370-eb76-010f-3d30-9acc9b59645c@siemens.com>
- <CAFA6WYPnWJNPvhT2JDkO-qXRUaJoxBGZEvSfhxcRynV7=VSdQA@mail.gmail.com>
- <CAMj1kXFM45PCTU--+CCed6Cq_N5XqDG6tTu6fnQTSCpW2BWA5A@mail.gmail.com>
- <4ff09002-e871-38b9-43ec-227a64bac731@siemens.com> <CAC_iWjJJ5E9Q1or5yTiDynzv_WAYH-g+N24aRdu9rvcsbWqnrg@mail.gmail.com>
-In-Reply-To: <CAC_iWjJJ5E9Q1or5yTiDynzv_WAYH-g+N24aRdu9rvcsbWqnrg@mail.gmail.com>
-From:   Ilias Apalodimas <ilias.apalodimas@linaro.org>
-Date:   Wed, 7 Jun 2023 09:35:21 +0300
-Message-ID: <CAC_iWjLm-2GVOn4QpoLBiCYLM1+zuQHttzEvrpNo1qt9AqXaUQ@mail.gmail.com>
-Subject: Re: [PATCH v5 3/3] efi: Add tee-based EFI variable driver
-To:     Jan Kiszka <jan.kiszka@siemens.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Masahisa Kojima <masahisa.kojima@linaro.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-efi@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        "Su, Bao Cheng (RC-CN DF FA R&D)" <baocheng.su@siemens.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/NwpFl.U/DxkQYj43Onpc6y7";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 7 Jun 2023 at 09:34, Ilias Apalodimas
-<ilias.apalodimas@linaro.org> wrote:
->
-> Hi Jan,
->
-> [...]
->
-> > >>>>
-> > > ...
-> > >>>
-> > >>> I think we have a probe ordering issue with this driver:
-> > >>> efivarfs_fill_super() may be called before the TEE bus was probed, thus
-> > >>> with the default efivar ops still registered. And that means
-> > >>> efivar_supports_writes() will return false, and the fs declares itself
-> > >>> as readonly. I've seen systemd mounting it r/o initialling, and you need
-> > >>> to remount the fs to enable writability.
-> > >>>
-> > >>> Is there anything that could be done to re-order things reliably, probe
-> > >>> the tee bus earlier etc.?
-> > >>
-> > >> This driver has a dependency on user-space daemon: tee-supplicant to
-> > >> be running for RPMB access. So once you start that daemon the
-> > >> corresponding device will be enumerated on the TEE bus and this driver
-> > >> probe will be invoked. So I would suggest you to load this daemon very
-> > >> early in the boot process or better to make it a part of initramfs.
-> > >>
-> > >
-> > > That is not the point, really.
-> > >
-> > > If this dependency exists, the code should be aware of that, and made
-> > > to work correctly in spite of it. Requiring a module to be part of
-> > > initramfs is not a reasonable fix.
-> >
-> > In fact, I've tested a non-modularized build as well, just to exclude
-> > that issue. The daemon dependency is more likely the problem here.
-> >
-> > >
-> > > IIUC, this also means that the efivar ops are updated while there is
-> > > already a client. This seems less than ideal as well
->
-> As Sumit pointed out, the 'device' won't be available from OP-TEE
-> until the supplicant is up and running and as a result, the module
-> _probe() function won't run.  Unfortunately, this isn't something we
-> can avoid since the supplicant is responsible for the RPMB writes.
-> The only thing I can think of is moving parts of the supplicant to the
-> kernel and wiring up the RPC calls for reading/writing data to the
-> eMMC subsystem.  There was another discussion here [0] requesting the
-> same thing for different reasons. But unless I am missing something
-> this won't solve the problem completely either.  You still have a
-> timing dependency of "when did the RT callbacks change" -- "when was
-> my efivarfs mounted".
->
+--Sig_/NwpFl.U/DxkQYj43Onpc6y7
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Forgot to attach the link... apologies for the noise.
-[0] https://lore.kernel.org/all/CAC_iWjLOhUvp5ggCCkHN5MRNfB_h6FZ2Z14yrtR3aqGn0Ovxig@mail.gmail.com/
+Hi all,
 
-> Thanks
-> /Ilias
-> >
-> > Jan
-> >
-> > --
-> > Siemens AG, Technology
-> > Competence Center Embedded Linux
-> >
+The following commit is also in the mfd tree as a different commit
+(but the same patch):
+
+  75c8cb2f4cb2 ("mfd: axp20x: Add support for AXP313a PMIC")
+
+This is commit
+
+  2f518d914bd3 ("mfd: axp20x: Add support for AXP313a PMIC")
+
+in the mfd tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/NwpFl.U/DxkQYj43Onpc6y7
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSAJbcACgkQAVBC80lX
+0Gyw9Qf6A7JQ69EEBiR9Ax4KnS3R1EBScgUvsapC2AEK8KVqe9uz7/dtDvuOZHBS
+gcjt+GQayoqNheC1OJ6RALq1YytEBCVlWUDMZkW2pLe00e0j9s3LHdTe+JDlVoKy
+h6auM0kuZUejetR8aUVCmb7xiY2lBYsruROQsXo+YMaijFma3qqX900krsNRsvJR
+NapwkWJruhfsosOVbFLbLitW3M7DsKVpUnS7JGLMfQ/9OGEBm7v35UDBY0bHzKXm
+LolcHmmOuy/thkS8CHwr0zVjLcykb1VBYyzNhmwlLjm0esLPWa1qFXWP5vlkykv+
+YFpAIPASOEPcP6476t/eaw1dn/sTRA==
+=WtgY
+-----END PGP SIGNATURE-----
+
+--Sig_/NwpFl.U/DxkQYj43Onpc6y7--
