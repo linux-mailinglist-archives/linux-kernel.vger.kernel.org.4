@@ -2,111 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20DC0726BDE
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 22:29:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC0F9726BE3
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 22:29:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233512AbjFGU3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 16:29:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55354 "EHLO
+        id S233540AbjFGU3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 16:29:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233485AbjFGU27 (ORCPT
+        with ESMTP id S233514AbjFGU3B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 16:28:59 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A28D72685
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 13:28:38 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-5149b63151aso2191930a12.3
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 13:28:38 -0700 (PDT)
+        Wed, 7 Jun 2023 16:29:01 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C6C4269E
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 13:28:41 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-65c6881df05so781841b3a.1
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 13:28:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686169715; x=1688761715;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=z9ayyxaoX4qIjtc/7/6qWWOoQptwj1p9/3ADMA+YnQM=;
-        b=3oQErBME6yP3Xtcu63Wq6r7w76n8eocbCaBwX4w+PfqtkjGozjtsw43ZX9BudnuyVA
-         d326IJZhfBojDzs2V/+Xhiw0IJq5gmSLD9xRvudm2OSNVEKWRgUmmsaNda8pMhPbdMwe
-         Q7VoKNrNYuYLLwcHpdjr4FghuqToQlDoyZbC07cTeHkBBMIO0LBT4T7YWYTGWa7x+OAn
-         8gUHyWtOxjjGeYvmXZf61GmuxQqxfAa3hLPN1PSfUmZlnkzk+e1DpKk27rB53R8BaYfS
-         Cv2BseTYphiInYzKtZwdv5rXlFOMspm6yluf/Ducoc5LOg95DceooIayLVF+li2eXjdO
-         1+Dw==
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1686169718; x=1688761718;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=g1NtfRKLBxewd34t5Gh6CqfpKexDHoQxzpKbSXODOss=;
+        b=hpH8J+RP6Lx2aCaOgiVhXeFACjtdhhQmTUYfxAHMCF+wJ3p2S2tMcmkixOxxQpDWTO
+         e3rGDzk+QEIzH0pfJGC3LM1e0YI/l7Jcp5l5MRb1P5MjgBq38h0dtJSS4dpW18bYDzjA
+         BdK6z2QXlcrO0sQ3we+AuWjuEL/KPmT3nSil5wDyzbwdZfE/2hZ1Mll9BjH+ckTvxe4m
+         oLKQGHnZ/cbg2Qhhijkeez+vSolIVI8VXNT/YzqhFdvO/u8pGdcrozv4ULslU+6VKGxP
+         vXg088Ig7qrznPB58ztwc1JZ/ZmDRYczE7fmjWZCqtQp0HXUiENC5hfy8NazPBsBnw4T
+         cA3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686169715; x=1688761715;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1686169718; x=1688761718;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=z9ayyxaoX4qIjtc/7/6qWWOoQptwj1p9/3ADMA+YnQM=;
-        b=gkT/4U5WcWUHobIJngHJ6vnZaVqEAzcgPMYLIMVSBxbhEJu8DGw16zudYPdegIkBdR
-         Go8vZ7DeGwnxhYhvcOMSVSH8FyzPCfE+2QUoTAvvBP8nRPX7qFkyaCh+zLpCr0g8nCji
-         qoeS78HwvRb9+lijxnCTWnxws+Cbg9pL9K5U6mq9CdMpg8YTLafvNx3aKJc5vBuPLMQw
-         IldozClk9ewBwRBRnJdkAubv8hltKhWMTHE3zHOPGNyMIZnSzvgX6UqGYUE5jNq1pRyV
-         9xv4dOCeTMyvN1r4lqFUBKtbm+sdTtMTJBSm1o5/6yalhCGG/ZWM/ALDxfV9xDLOn/Vn
-         VEiw==
-X-Gm-Message-State: AC+VfDxtrp+u3T5zPHYe54EF3KLTTdSqpjil6uQcMkmxX8yR9h5fHstx
-        GWOT7OA4g2AdRn+XcBFSgtHinjkvoloMLvkAn9hWGw==
-X-Google-Smtp-Source: ACHHUZ74WvSruuZwF9n+bJ5Hf6Py6tiEd9lvhuVVVansWoyYGtxB8g5egr2VYuQ+9+QI9JiLqA/PktQSQkgPct1HbOs=
-X-Received: by 2002:a17:907:6d8a:b0:973:ae80:a145 with SMTP id
- sb10-20020a1709076d8a00b00973ae80a145mr9200814ejc.43.1686169714634; Wed, 07
- Jun 2023 13:28:34 -0700 (PDT)
+        bh=g1NtfRKLBxewd34t5Gh6CqfpKexDHoQxzpKbSXODOss=;
+        b=HBncHMKsVU2pGWwM/7swjlCEY7yQ0+rQfwbBB/9+2gJJOe9OVTyINlHC+OfakKezla
+         QnefiwUORTfTcmMViAyWnU7yAitAIOyE2LQLI1uaLrmY2nfDzk9GnERaZYKLsGDGxxbz
+         XrIGLBoWzlDkGrj20eTwp5UV+jutNdXTCzahJurrhMeYmo6SntZ+FTKxD+ybug2zRxpR
+         zFs4dl9C4NUq3vGKzEMx64nCxuw3EbeVFHEtiAaE4lLY0W2Z3G2FZsW0kRYuKvj9U3zq
+         R5RFcwoZT+9tcbvdDT8QQK+m+whKRN9tlZAwBwMiNYO4BBTwgTGRcl8oZHBaeUdbPW3r
+         OcQQ==
+X-Gm-Message-State: AC+VfDyn9viuZlPihGiJd3zUXIt0W9VCoRmow8ezbifE6l9nfiIBbJbN
+        CCCcZm5IA1vGY/UW7gbj++ViGA==
+X-Google-Smtp-Source: ACHHUZ4U2oYKGpIcb8vlY9R5t+nDeGtzp/Blv5niP/qS7WsFMO8inGOI4BMBYdCMMh4UXRRgY/z2PQ==
+X-Received: by 2002:a05:6a00:2909:b0:662:a9c3:7b84 with SMTP id cg9-20020a056a00290900b00662a9c37b84mr1578756pfb.2.1686169718218;
+        Wed, 07 Jun 2023 13:28:38 -0700 (PDT)
+Received: from [127.0.0.1] ([2620:10d:c090:600::2:9b70])
+        by smtp.gmail.com with ESMTPSA id fe16-20020a056a002f1000b00653dc27acadsm7828231pfb.205.2023.06.07.13.28.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 13:28:36 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230310164549.22133-1-andriy.shevchenko@linux.intel.com>
+References: <20230310164549.22133-1-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v2 0/9] pktdvd: Clean up the driver
+Message-Id: <168616971619.107466.374645634630337878.b4-ty@kernel.dk>
+Date:   Wed, 07 Jun 2023 14:28:36 -0600
 MIME-Version: 1.0
-References: <20230602211602.3b7rfa252wliiszp@synopsys.com> <20230602220455.313801-1-arakesh@google.com>
- <2023060434-reveler-twice-d92e@gregkh> <20230604075504.GQ26944@pendragon.ideasonboard.com>
-In-Reply-To: <20230604075504.GQ26944@pendragon.ideasonboard.com>
-From:   Avichal Rakesh <arakesh@google.com>
-Date:   Wed, 7 Jun 2023 13:28:23 -0700
-Message-ID: <CAMHf4WJe3z6EEASPjpHbwUA=CZJEkz5_jzB=f8tey6nw3KUZFA@mail.gmail.com>
-Subject: Re: [PATCH v3] usb: gadget: uvc: clean up comments and styling in video_pump
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, dan.scally@ideasonboard.com,
-        thinh.nguyen@synopsys.com, etalvala@google.com,
-        jchowdhary@google.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-c6835
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 4, 2023 at 12:55=E2=80=AFAM Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
->
-> Hi Greg,
->
-> On Sun, Jun 04, 2023 at 09:43:40AM +0200, Greg KH wrote:
-> > On Fri, Jun 02, 2023 at 03:04:55PM -0700, Avichal Rakesh wrote:
-> > > This patch elaborates on some of the edge cases handled by
-> > > video_pump around setting no_interrupt flag, and brings the
-> > > code style in line with rest of the file.
-> >
-> > When you say "and" that usually means it should be a separate patch.
-> >
-> > But I really don't see what coding style changes you made here, what wa=
-s
-> > it?
-> >
-> > I can't see any logical changes made here, am I missing them?  Or is
-> > this all just a style-cleanup patch?
->
-> It's all style cleanup (variable declaration ordering), typo fixes, and
-> naming and documentation improvement, yes. I reviewed Avichal's original
-> patch when coming back from holidays, neither of us realizing that you
-> had merged it already. He sent a v2 and got told to rebase it on top of
-> your tree.  That's what v3 is, just handling the review comments.
->
-> I generally ask for patches to be split with one change per patch, but
-> given the small changes bundled here, and the fact that all of this just
-> incorporates the review comments, I think it would be a bit overkill.
->
-Apologies for the goof up. I hadn't realized that Linus' master wasn't
-the very tip of the Linux tree, and assumed the v1 merge had fallen
-behind. I am happy to split it up into smaller patches if you want,
-but as Laurent already mentioned: this is just documentation and
-styling cleanup from V1 with no logic fixes.
 
-- Avi.
+On Fri, 10 Mar 2023 18:45:40 +0200, Andy Shevchenko wrote:
+> Some cleanups to the recently resurrected driver.
+> 
+> v2:
+> - added tags (Greg)
+> 
+> Andy Shevchenko (9):
+>   pktcdvd: Get rid of custom printing macros
+>   pktcdvd: replace sscanf() by kstrtoul()
+>   pktcdvd: use sysfs_emit() to instead of scnprintf()
+>   pktcdvd: Get rid of pkt_seq_show() forward declaration
+>   pktcdvd: Drop redundant castings for sector_t
+>   pktcdvd: Use DEFINE_SHOW_ATTRIBUTE() to simplify code
+>   pktcdvd: Use put_unaligned_be16() and get_unaligned_be16()
+>   pktcdvd: Get rid of redundant 'else'
+>   pktcdvd: Sort headers
+> 
+> [...]
+
+Applied, thanks!
+
+[1/9] pktcdvd: Get rid of custom printing macros
+      commit: 3a41db531e5124adaa3a9ab9ca0c724aee85b10c
+[2/9] pktcdvd: replace sscanf() by kstrtoul()
+      commit: 1a0ddd56e545b743af510b5a1b8dbdfe7d35cd3b
+[3/9] pktcdvd: use sysfs_emit() to instead of scnprintf()
+      commit: 3bb5746c26cdfcc354af4867c02f1e0ec1131a62
+[4/9] pktcdvd: Get rid of pkt_seq_show() forward declaration
+      commit: f023faaa988671f0f1d1a965dc5d7e61d0f5e65e
+[5/9] pktcdvd: Drop redundant castings for sector_t
+      commit: 93c8f6f38be67e30adf8d8eb5e7e9ccb89326119
+[6/9] pktcdvd: Use DEFINE_SHOW_ATTRIBUTE() to simplify code
+      commit: 80d994d2a71f88e0809dcaccef2259c791d2e3ef
+[7/9] pktcdvd: Use put_unaligned_be16() and get_unaligned_be16()
+      commit: 046636a4bac575aff78e44c7e1cff84c83a345a9
+[8/9] pktcdvd: Get rid of redundant 'else'
+      commit: 6a5945a8eb5a626afe6feb341824e7e1d007c8ff
+[9/9] pktcdvd: Sort headers
+      commit: 7da15fb0318f18398feea2848d099a8d0d7b5965
+
+Best regards,
+-- 
+Jens Axboe
+
+
+
