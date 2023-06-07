@@ -2,192 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 192677259EA
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 11:18:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B7FF7259E8
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 11:18:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239425AbjFGJS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 05:18:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40822 "EHLO
+        id S239440AbjFGJSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 05:18:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239314AbjFGJSS (ORCPT
+        with ESMTP id S238542AbjFGJSG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 05:18:18 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E005C1720;
-        Wed,  7 Jun 2023 02:18:14 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3579HwtQ011001;
-        Wed, 7 Jun 2023 04:17:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1686129478;
-        bh=cnThIi8M92Ytp1qseMZ2eGmcOg2pipTSj99AMPH+Msg=;
-        h=Date:CC:Subject:To:References:From:In-Reply-To;
-        b=XxjdYhZYfKscd+ZonOtSsC08gUHBnhQEZc4SAm/+qIvTkAA38Bue3Zn3aWp6ZvLO7
-         fZYExSLZBZvIKr+MJBOL7oFrGbpWsBwx0PPxSCYP2kjqNAUPqqhx511l7Gixag8VqY
-         2crW8nlrC2rX1CwbzoDqAX4SeuqectAE5sW7ZIzU=
-Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3579Hw6q041607
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 7 Jun 2023 04:17:58 -0500
-Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 7
- Jun 2023 04:17:58 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 7 Jun 2023 04:17:58 -0500
-Received: from [172.24.145.61] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3579HrWR069713;
-        Wed, 7 Jun 2023 04:17:54 -0500
-Message-ID: <17637227-e3c0-9cf3-5d9a-dee95a76bbf1@ti.com>
-Date:   Wed, 7 Jun 2023 14:47:53 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-CC:     <tjoseph@cadence.com>, <lpieralisi@kernel.org>, <robh@kernel.org>,
-        <kw@linux.com>, <bhelgaas@google.com>, <nadeem@cadence.com>,
-        <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <vigneshr@ti.com>,
-        <srk@ti.com>, <nm@ti.com>, <s-vadapalli@ti.com>
-Subject: Re: [PATCH v2] PCI: cadence: Fix Gen2 Link Retraining process
-To:     Bjorn Helgaas <helgaas@kernel.org>
-References: <20230606162047.GA1127846@bhelgaas>
-Content-Language: en-US
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-In-Reply-To: <20230606162047.GA1127846@bhelgaas>
+        Wed, 7 Jun 2023 05:18:06 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED9383;
+        Wed,  7 Jun 2023 02:18:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=/N4iQQzhKXwMLpsqAX/ldRXHvjdWxI/sMibJLHmuUyE=;
+        t=1686129485; x=1687339085; b=tlLst//G60B0SndknUo2dNgUlP09MA53Vi92vpoCI+t2IgE
+        aGN87YSPykv3sH7mOv0WHHpnRALVFit/DkxQsm54BnUHh/0Sn/ACv3uifCJOUOS+TgvvQcBaPmGAc
+        RLH69C6n4cikB4Q78iLkzbUzd7aoE5cam6+7RJPAACYuuUTQj+x28ARU8DswpwWtccU479q5yFChW
+        qiBbMJ1XveJXcD/+5QrFdX2elKEhHxi9iK7GzaGfS+w5i50Zsq7kiOjna0P80O53yNsEWajKt1PvB
+        OPi5se5qgLzD5FzkyToGh5+19BPWCrGCNtMom8bvfxTnPGKJWrdlO77UjQtY+/5A==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.96)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1q6pIh-00GUej-1M;
+        Wed, 07 Jun 2023 11:17:55 +0200
+Message-ID: <a953b19efca20b470759b1d53beb957a11062ba1.camel@sipsolutions.net>
+Subject: Re: Reported-by/Closes tag for uncommitted issues (was: Re: [PATCH
+ v2] uml: Replace strlcpy with strscpy)
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     Philip Li <philip.li@intel.com>,
+        Richard Weinberger <richard@nod.at>
+Cc:     Eric Biggers <ebiggers@kernel.org>,
+        Azeem Shaikh <azeemshaikh38@gmail.com>,
+        Maxim Krasnyansky <maxk@qti.qualcomm.com>,
+        anton ivanov <anton.ivanov@cambridgegreys.com>,
+        linux-hardening <linux-hardening@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-um <linux-um@lists.infradead.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        kernel test robot <lkp@intel.com>
+Date:   Wed, 07 Jun 2023 11:17:54 +0200
+In-Reply-To: <ZIBJadzmheKWCErq@rli9-mobl>
+References: <20230606182410.3976487-1-azeemshaikh38@gmail.com>
+         <1833651082.3690424.1686084717406.JavaMail.zimbra@nod.at>
+         <CADmuW3WzC61-si1j61kzwfx5EcsvSt4QBaY9VHiybBRWAN3yyA@mail.gmail.com>
+         <20230607042340.GA941@sol.localdomain>
+         <57443d420183b7a0bcab8041c2dfe3ba44e054f4.camel@sipsolutions.net>
+         <2092891129.3692555.1686126895090.JavaMail.zimbra@nod.at>
+         <ZIBJadzmheKWCErq@rli9-mobl>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.2 (3.48.2-1.fc38) 
+MIME-Version: 1.0
+X-malware-bazaar: not-scanned
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Bjorn,
+On Wed, 2023-06-07 at 17:10 +0800, Philip Li wrote:
+> > > So it seems we should ask the robot maintainers to just stop suggesti=
+ng
+> > > those tags?
+> >=20
+> > Agreed.
+>=20
+> Thanks all for the feedback. We will carefully consider how to present th=
+e
+> suggestion clearly.
+>=20
+> For now, because the bot covers both upstream and developer repos, there
+> can be various situations, such as the bug is found in upstream.=C2=A0
 
-On 06/06/23 21:50, Bjorn Helgaas wrote:
-> On Wed, May 10, 2023 at 06:47:46PM +0530, Siddharth Vadapalli wrote:
->> On 09-05-2023 23:54, Bjorn Helgaas wrote:
->>> On Tue, May 09, 2023 at 12:37:31PM +0530, Siddharth Vadapalli wrote:
->>>> On 09/05/23 02:44, Bjorn Helgaas wrote:
->>>>> On Wed, Mar 15, 2023 at 12:38:00PM +0530, Siddharth Vadapalli wrote:
->>>>>> The Link Retraining process is initiated to account for the Gen2 defect in
->>>>>> the Cadence PCIe controller in J721E SoC. The errata corresponding to this
->>>>>> is i2085, documented at:
->>>>>> https://www.ti.com/lit/er/sprz455c/sprz455c.pdf
->>>>>>
->>>>>> The existing workaround implemented for the errata waits for the Data Link
->>>>>> initialization to complete and assumes that the link retraining process
->>>>>> at the Physical Layer has completed. However, it is possible that the
->>>>>> Physical Layer training might be ongoing as indicated by the
->>>>>> PCI_EXP_LNKSTA_LT bit in the PCI_EXP_LNKSTA register.
->>>>>>
->>>>>> Fix the existing workaround, to ensure that the Physical Layer training
->>>>>> has also completed, in addition to the Data Link initialization.
->>>>>>
->>>>>> Fixes: 4740b969aaf5 ("PCI: cadence: Retrain Link to work around Gen2 training defect")
->>>>>> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
->>>>>> Reviewed-by: Vignesh Raghavendra <vigneshr@ti.com>
->>>>>> ---
->>>>>> Changes from v1:
->>>>>> 1. Collect Reviewed-by tag from Vignesh Raghavendra.
->>>>>> 2. Rebase on next-20230315.
->>>>>>
->>>>>> v1:
->>>>>> https://lore.kernel.org/r/20230102075656.260333-1-s-vadapalli@ti.com
->>>>>>
->>>>>>  .../controller/cadence/pcie-cadence-host.c    | 27 +++++++++++++++++++
->>>>>>  1 file changed, 27 insertions(+)
->>>>>>
->>>>>> diff --git a/drivers/pci/controller/cadence/pcie-cadence-host.c b/drivers/pci/controller/cadence/pcie-cadence-host.c
->>>>>> index 940c7dd701d6..5b14f7ee3c79 100644
->>>>>> --- a/drivers/pci/controller/cadence/pcie-cadence-host.c
->>>>>> +++ b/drivers/pci/controller/cadence/pcie-cadence-host.c
->>>>>> @@ -12,6 +12,8 @@
->>>>>>  
->>>>>>  #include "pcie-cadence.h"
->>>>>>  
->>>>>> +#define LINK_RETRAIN_TIMEOUT HZ
->>>>>> +
->>>>>>  static u64 bar_max_size[] = {
->>>>>>  	[RP_BAR0] = _ULL(128 * SZ_2G),
->>>>>>  	[RP_BAR1] = SZ_2G,
->>>>>> @@ -77,6 +79,27 @@ static struct pci_ops cdns_pcie_host_ops = {
->>>>>>  	.write		= pci_generic_config_write,
->>>>>>  };
->>>>>>  
->>>>>> +static int cdns_pcie_host_training_complete(struct cdns_pcie *pcie)
->>>>>
->>>>> This is kind of weird because it's named like a predicate, i.e., "this
->>>>> function tells me whether link training is complete", but it returns
->>>>> *zero* for success.
->>>>>
->>>>> This is the opposite of j721e_pcie_link_up(), which returns "true"
->>>>> when the link is up, so code like this reads naturally:
->>>>>
->>>>>   if (pcie->ops->link_up(pcie))
->>>>>     /* do something if the link is up */
->>>>
->>>> I agree. The function name can be changed to indicate that it is
->>>> waiting for completion rather than indicating completion. If this is
->>>> the only change, I will post a patch to fix it. On the other hand,
->>>> based on your comments in the next section, I am thinking of an
->>>> alternative approach of merging the current
->>>> "cdns_pcie_host_training_complete()" function's operation as well
->>>> into the "cdns_pcie_host_wait_for_link()" function. If this is
->>>> acceptable, I will post a different patch and the name change patch
->>>> won't be necessary.
->>>
->>> Yeah, sorry, I meant to delete this part of my response after I wrote
->>> the one below.
->>>
->>>>>> @@ -118,6 +141,10 @@ static int cdns_pcie_retrain(struct cdns_pcie *pcie)
->>>>>>  		cdns_pcie_rp_writew(pcie, pcie_cap_off + PCI_EXP_LNKCTL,
->>>>>>  				    lnk_ctl);
->>>>>>  
->>>>>> +		ret = cdns_pcie_host_training_complete(pcie);
->>>>>> +		if (ret)
->>>>>> +			return ret;
->>>>>> +
->>>>>>  		ret = cdns_pcie_host_wait_for_link(pcie);
->>>>>
->>>>> It seems a little clumsy that we wait for two things in succession:
->>>>>
->>>>>   - cdns_pcie_host_training_complete() waits up to 1s for
->>>>>     PCI_EXP_LNKSTA_LT to be cleared
->>>>>
->>>>>   - cdns_pcie_host_wait_for_link() waits between .9s and 1s for
->>>>>     LINK_UP_DL_COMPLETED on j721e (and not at all for other platforms)
->>>>
->>>> Is it acceptable to merge "cdns_pcie_host_training_complete()" into
->>>> "cdns_pcie_host_wait_for_link()"?
->>>
->>> That's what I'm proposing.  Maybe someone who is more familiar with
->>> Cadence would have an argument against it, but I think making it
->>> structurally the same as dw_pcie_wait_for_link() would be a good
->>> thing.
->>
->> Thank you for the confirmation. I will work on it and post a patch.
-> 
-> Ping, do you still plan to do this?  Lorenzo currently has the
-> v2 patch on his pci/controller/cadence branch [1], but I haven't
-> merged it into -next yet on the assumption that a new version is
-> coming.
+Ah yes, that was actually in my mind, but I forgot to write about it,
+sorry.
 
-Sorry for the delay. I have posted the V3 patch at:
-https://lore.kernel.org/r/20230607091427.852473-1-s-vadapalli@ti.com/
+I agree completely, in case that you find a bug in an already committed
+tree, and there will be a separate commit to fix it, it's completely
+reasonable and useful to have those tags.
 
-> 
-> Bjorn
-> 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git/commit/?h=controller/cadence&id=0e12f8302369
+> So the bot
+> tries to let author decide how to apply the tags in appropriate way that
+> they feel comfortable.
 
--- 
-Regards,
-Siddharth.
+Right. It just seems that many authors aren't really all that familiar
+with the processes yet, and take the suggestion at face value.
+
+> In the report, we now uses phrases like below
+>=20
+> 	If you fix the issue, kindly add following tag where applicable
+> 	| Reported-by: kernel test robot <lkp@intel.com>
+> 	| Closes: https://lore.kernel.org/oe-kbuild-all/202305311135.zGMT1gYR-lk=
+p@intel.com/
+>=20
+> But this may be not clear enough or not the best way to suggest. We will
+> consider whether we can detect some situations (like RFC patch) which is
+> no need for such tags to avoid confusion.
+>=20
+
+Right. Maybe the only thing really needed would be to say something like
+
+"If you fix the issue in a separate patch/commit (i.e. not just a new
+version of the same patch/commit), kindly add ..."
+
+or even just
+
+"If you fix the issue in a separate commit, kindly add ..."
+
+so it's clear that if you're changing the commit, it's not really
+something that should be done? In which case probably even a Fixes tag
+should be there, but I wouldn't want to recommend adding that since the
+commits may still change etc.
+
+I don't know all the processes behind it, but I'm thinking that even if
+the bot picked up a patch from the list, it could get committed before
+and then fixed in a separate commit.
+
+johannes
