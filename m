@@ -2,102 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 466F1725BB5
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 12:38:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23131725BBA
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 12:40:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239343AbjFGKip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 06:38:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51622 "EHLO
+        id S239472AbjFGKkL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 06:40:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234932AbjFGKin (ORCPT
+        with ESMTP id S234932AbjFGKkI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 06:38:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B1921712
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 03:37:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686134275;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vq4iY/12EDFCis/q0y3yHnpWxZ9O8Sy8phj5VJevVR4=;
-        b=gsFt6puerqaD4wYESCv8+vdOvkeLqHIXELUFW0VcYE0XeXXi/tcj52xOy/tOQUzJhHmHdV
-        wzloVmhNrbl7Z3q96OPX/M1jUPQE2KIywAHRc5A/2gz+Zqb0IOS0nawY9AIBSXPOlydcos
-        tkeOhPRFwgVvI77aR/TiQkjUsFx7Qos=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-444-AedhZKB6MneadNw8t39Asg-1; Wed, 07 Jun 2023 06:37:54 -0400
-X-MC-Unique: AedhZKB6MneadNw8t39Asg-1
-Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-514a6909c35so792011a12.3
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 03:37:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686134273; x=1688726273;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vq4iY/12EDFCis/q0y3yHnpWxZ9O8Sy8phj5VJevVR4=;
-        b=c1SziSqZZkg0i7U5iXZm1qs6g0roF2ebuWEnfFsTd6DaxRdZlKogzOJ4N5GCYZ91av
-         kAaQNyoSLfUuVArQ46uyKqnfA94eE6DbUUX/gdZ3cVokAfbGpsTWQtyJlLd3b4jMdGAg
-         Wo1wKXCTW9XUu/iKgc04d+rG7iZYwgaxw+6RSBVkxVgjB7vvihpqEGb145ZRppeumnO0
-         G/jOTZ/xkzkVfJuoQwjH4W9kRXcPMujqQfu+3v5SmLvTjDFy7J7LcU62S6XDMohKO8AY
-         HK+MHOPkpMrz6qMyDBasbSL8SS6bCpGKgr/0lWyA//6TUFFAcjDy7REyvs/RC4yA84zg
-         mNSw==
-X-Gm-Message-State: AC+VfDxLz3S2tvpJG8x0O7hJsWdNb6qsTdIlKzlRI4YKs2xyeq8HkZAF
-        jF0c/60dx4VZrjasGpl5sNaaa/txTqL3zmfBFq9wmzKVjiO7lz07CgKBeoyjMZTRRmQue8Tu5nF
-        IzOsBPBQcSBsAciGfdk/OFf+F
-X-Received: by 2002:aa7:d7d1:0:b0:516:9f47:5390 with SMTP id e17-20020aa7d7d1000000b005169f475390mr807629eds.27.1686134273070;
-        Wed, 07 Jun 2023 03:37:53 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7A9F7RygbWZFa68FEkMZz7F3vyq3rRZdc9t9YQhLQsarizrxtkW3i6VktegV0WsNVP1BDN7w==
-X-Received: by 2002:aa7:d7d1:0:b0:516:9f47:5390 with SMTP id e17-20020aa7d7d1000000b005169f475390mr807618eds.27.1686134272818;
-        Wed, 07 Jun 2023 03:37:52 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
-        by smtp.googlemail.com with ESMTPSA id b13-20020a056402138d00b00516654bf182sm2841294edv.41.2023.06.07.03.37.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 03:37:52 -0700 (PDT)
-Message-ID: <5283b17c-185b-a37f-84e2-dcd08e042ec0@redhat.com>
-Date:   Wed, 7 Jun 2023 12:37:50 +0200
+        Wed, 7 Jun 2023 06:40:08 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EFD7172E
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 03:40:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686134406; x=1717670406;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=dXhQhpr65an843mzNgpNM3BfoFY8RKpdX33oWWzOawE=;
+  b=db+7+peq40D+OYIa2jLF0KzNm69hpHCr+e68GD1h1h8t9AqOrU586YJR
+   n9VPqX1sPNoeq0N7hB+2A23ZkfKKdAhAtteTZi6r5UmCcM98TOmyra5R6
+   yM8oqJI5TyYExOg3jeRKL1r14nvChk9Ac8suHa2XY5hEo4VjS359EbJWD
+   XILkJGh0TI2XEmbgaXOHS2OH8HeDq0Ohzis7b4DoFzOiz8t/h/k83ycWy
+   fH2lJcgk+r0E6Hn00jtu1Gu2iU63slyP7u6L8DmRMfTYCenN9Hqg4fMv8
+   1EAhu8AumEEgayQtfurQzOArr1q6Nu3INdsgCKkM2Z2n+UdEBolbOA1zY
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="341602003"
+X-IronPort-AV: E=Sophos;i="6.00,223,1681196400"; 
+   d="scan'208";a="341602003"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 03:40:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="1039561362"
+X-IronPort-AV: E=Sophos;i="6.00,223,1681196400"; 
+   d="scan'208";a="1039561362"
+Received: from byng-mobl.gar.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.209.159.27])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 03:40:03 -0700
+From:   Kai Huang <kai.huang@intel.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     dave.hansen@linux.intel.com, kirill.shutemov@linux.intel.com,
+        peterz@infradead.org, hpa@zytor.com, konrad.wilk@oracle.com,
+        rostedt@goodmis.org, jpoimboe@kernel.org,
+        Kai Huang <kai.huang@intel.com>
+Subject: [PATCH] x86/kexec: Add a comment to relocate_kernel() for better readability
+Date:   Wed,  7 Jun 2023 22:39:10 +1200
+Message-Id: <20230607103910.407779-1-kai.huang@intel.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [ANNOUNCE] KVM Microconference at LPC 2023
-To:     Babis Chalios <bchalios@amazon.es>, KVM list <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Marc Zyngier <maz@kernel.org>, Alexander Graf <graf@amazon.de>,
-        "Cali, Marco" <xmarcalx@amazon.co.uk>
-References: <2f19f26e-20e5-8198-294e-27ea665b706f@redhat.com>
- <150e1ad0-3d59-762b-6032-897d5630a3bf@amazon.es>
-Content-Language: en-US
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <150e1ad0-3d59-762b-6032-897d5630a3bf@amazon.es>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/7/23 12:13, Babis Chalios wrote:
-> 
-> 
-> On our side, we 've been working on providing ways to let VMs (kernel
->  and user space) know that they have been cloned/snapshotted/restored
-> from snapshots[1].
-> 
-> This is tightly coupled with PRNGs both in kernel and user space and
->  there needs to be some collaboration with random.c to tie everything
-> together [2][3]. It sounds like it could be a good fit for this MC
-> (?).
+The reason to save %rcx to %r11 before calling swap_pages isn't that
+obvious w/o looking into the swap_pages itself.  Add a comment to
+improve the readability.
 
-Does the VM generation ID ACPI device from Microsoft work for you?  It 
-is not tied to Hyper-V.
+Signed-off-by: Kai Huang <kai.huang@intel.com>
+---
+ arch/x86/kernel/relocate_kernel_64.S | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Paolo
+diff --git a/arch/x86/kernel/relocate_kernel_64.S b/arch/x86/kernel/relocate_kernel_64.S
+index 56cab1bb25f5..97deae3c5e6c 100644
+--- a/arch/x86/kernel/relocate_kernel_64.S
++++ b/arch/x86/kernel/relocate_kernel_64.S
+@@ -169,6 +169,10 @@ SYM_CODE_START_LOCAL_NOALIGN(identity_mapped)
+ 	wbinvd
+ 1:
+ 
++	/*
++	 * Save the preserve_context to %r11 as
++	 * swap_pages clobbers %rcx.
++	 */
+ 	movq	%rcx, %r11
+ 	call	swap_pages
+ 
+
+base-commit: 409bf2895d71bb68bc5b8589036e5ed1ca30bada
+-- 
+2.40.1
 
