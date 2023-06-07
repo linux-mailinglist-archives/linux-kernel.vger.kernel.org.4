@@ -2,81 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E70572667B
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 18:53:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7785726682
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 18:54:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231222AbjFGQxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 12:53:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38666 "EHLO
+        id S230245AbjFGQyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 12:54:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbjFGQxJ (ORCPT
+        with ESMTP id S231313AbjFGQx7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 12:53:09 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DE811FC2;
-        Wed,  7 Jun 2023 09:53:07 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 357EqEvj015863;
-        Wed, 7 Jun 2023 16:52:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=ccILPXJMNW+fazdoPQ/ZhN5RvSTJkO1d+AFoitKRVio=;
- b=lH9xrwGfpYqUrfdowM0r/PWLceeR4whKcFPVtucAFoe+VnzyhapF6eputI+o6SmHnnXi
- N8OlCbuIReCehaejqvpuxBbEnJTT8pUJmAODAxlSwNhB0jddjDnqQwsumvHvCteFWqLb
- Svduhq2LaMyCkFeoTi17eOhWK76c3uLFnVKc3ER3tG3Q5sOAVd1FBK6Sh0rHQPSBeniX
- Cq6y2whKcM2w/cBWsSyr15vycOR1JqM0d6nq7Qc4AnDiS1+/ZdVQif8Yazs1wvall3Zc
- Xaua9rSYIqZ5loDI4xqqH4/eTCxbvsvfwCvgbLwjqhwNd60q1xIDp/ucsscuEVQ29C1e jg== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r2a6yte6j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 07 Jun 2023 16:52:56 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 357Gqu8V011234
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 7 Jun 2023 16:52:56 GMT
-Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 7 Jun 2023
- 09:52:55 -0700
-Message-ID: <b5cfa726-b61e-90eb-7d4b-d81844189cf6@quicinc.com>
-Date:   Wed, 7 Jun 2023 10:52:54 -0600
+        Wed, 7 Jun 2023 12:53:59 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB6742115;
+        Wed,  7 Jun 2023 09:53:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686156832; x=1717692832;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=vwuRqso2oVc69+CbISXs68maDonYzyqO+lVLKpv174w=;
+  b=kvwQ2qyjtZZ6Oz7pTupSFf6C3FM2Mt6YoMtCpT4UORvsUsd/EbJkAgvt
+   UISUwGNZAAq/bCes7BAMeuh1BHetnKGIlVkPUgsE/bncZmRv3OBGW2TCP
+   rrk8Mi3RbesO6Vcn7rAUAtyl9rDzZyBr2Rj/7OWkFJ5S9302e6Ax1dSYI
+   e2zj8gZu4//NXBvPGhlw84nQ0EuqCUzluVay/l0Gf3nImHsopwIhAxlTE
+   iyqprxPE8Ndqjd5FeOdX51Dzd6UP84JiyAKsiIvrztaMpvkOMORdPf88X
+   gb2//IAHvVb+NYq8mNs0h93ZJNcus4ywInKX8xQwp+lNHdkDjL4qpMZLd
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="443411216"
+X-IronPort-AV: E=Sophos;i="6.00,224,1681196400"; 
+   d="scan'208";a="443411216"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 09:53:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="709623131"
+X-IronPort-AV: E=Sophos;i="6.00,224,1681196400"; 
+   d="scan'208";a="709623131"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga002.jf.intel.com with ESMTP; 07 Jun 2023 09:53:52 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 7 Jun 2023 09:53:51 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Wed, 7 Jun 2023 09:53:51 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.168)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Wed, 7 Jun 2023 09:53:51 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ObIICyvWT4su3Qy9RD9CzOsf4ZtBknqw2cL0Z98GL9L+GucZ5/Y40nkI3jfIW8+uwrN4viIf9nbNHcPhCM8RXpF2MhIZmORWRmBDVaFc/YIcuc2M/uXkCM+SBGVDXi+98Uwa78iH7M8N2dN8a9mE/Bttp6FIkSfPDyUi4JDoVrJUQ/ZWPydhDv9AytAe+tdkdloLTeY0WwWPaRx1pyKHWcn1euznkgRG+YmxKBUudZELeFj44+lbhk8Pgl6IK6Gs3kiE7AHiAs3OPuNoPNk734JRoNVmshwXQRyxMNRYQ87UUKNjZYv33xAfa2hWL7T18x+/kllVNJhhUxj1YtmD1Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Zy2DAOI9syseRM4AfpXq0DTBEBZF24gSbVgOFkRAW3c=;
+ b=J5iII6WiMS5g2u/wpB6CjBZsm3u8Ou7cL3r1WZDsYlDXPDuUA44IFP806QiNQtBDS8p/ke13S90uIzTZ7ffeYROIEtxXll4WAT/oLUdHWtGWUUxapkZxHS+eUhIKnNgSXe6tJSEMrY5sau2iQsvM3f+LoFjI/fr2X4unA+O5JPHLtIFOSWKVZ8RzPOIB8DXDYfXoO86NnO2iUGbHP9zZt9gj0BaYbcRFDk9FU/mF60jKYItgpNzIPTGO8+ECPgS9sZFTCTpsiqcxwgzDGpsHWOGggRH6difZcpmLMg+aKOYjaEXiAnNQ49no/5Npo3eRI6uWogG5Y6ypKZwudTh4wg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MW3PR11MB4729.namprd11.prod.outlook.com (2603:10b6:303:5d::24)
+ by CO1PR11MB4772.namprd11.prod.outlook.com (2603:10b6:303:97::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Wed, 7 Jun
+ 2023 16:53:45 +0000
+Received: from MW3PR11MB4729.namprd11.prod.outlook.com
+ ([fe80::2439:c11e:512b:9edf]) by MW3PR11MB4729.namprd11.prod.outlook.com
+ ([fe80::2439:c11e:512b:9edf%6]) with mapi id 15.20.6455.030; Wed, 7 Jun 2023
+ 16:53:45 +0000
+Date:   Wed, 7 Jun 2023 09:53:41 -0700
+From:   Abe Kohandel <abe.kohandel@intel.com>
+To:     Serge Semin <fancer.lancer@gmail.com>
+CC:     <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH] spi: dw: Remove misleading comment for Mount Evans SoC
+Message-ID: <ZIC2FYhcm4iGzlKI@ekohande-desk2>
+References: <20230606231844.726272-1-abe.kohandel@intel.com>
+ <20230607112711.alcspwuwpt7nqja7@mobilestation>
+ <ZICboAIZAcnYzyJr@ekohande-desk2>
+ <20230607152828.4nxefvimokamhgvu@mobilestation>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230607152828.4nxefvimokamhgvu@mobilestation>
+X-ClientProxiedBy: BYAPR02CA0010.namprd02.prod.outlook.com
+ (2603:10b6:a02:ee::23) To MW3PR11MB4729.namprd11.prod.outlook.com
+ (2603:10b6:303:5d::24)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH v2 1/2] net: Add MHI Endpoint network driver
-Content-Language: en-US
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>
-CC:     <mhi@lists.linux.dev>, <linux-arm-msm@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <loic.poulain@linaro.org>
-References: <20230607152427.108607-1-manivannan.sadhasivam@linaro.org>
- <20230607152427.108607-2-manivannan.sadhasivam@linaro.org>
- <26a85bae-1a33-dd1f-5e73-0ab6da100abf@quicinc.com>
-In-Reply-To: <26a85bae-1a33-dd1f-5e73-0ab6da100abf@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: XKIXGsCiUwRK55YVguS5wyCe6EWDdv6i
-X-Proofpoint-GUID: XKIXGsCiUwRK55YVguS5wyCe6EWDdv6i
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-07_09,2023-06-07_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1015
- bulkscore=0 priorityscore=1501 mlxlogscore=964 adultscore=0 suspectscore=0
- phishscore=0 lowpriorityscore=0 mlxscore=0 spamscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
- definitions=main-2306070144
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MW3PR11MB4729:EE_|CO1PR11MB4772:EE_
+X-MS-Office365-Filtering-Correlation-Id: bec41b10-edc8-4806-7b21-08db6777c1e5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: XugtMGVOEWTkOvLYJuxIXz1xW/ntQRE2ucCnm2oMUcF6GmBbKEENMr4bFCI4WbBJOD0dZnuOcw8aiBRkNkOhaXJ0GkSorBDCPndMhd+azIh6+hKAzcmO2aNgQjauO0tVlLLR64+1GJf0kWtzSo+wePCNDZhOFryPa90UKwQ6FAGXcUYxZjw3le8Zw7B4mfRvaVV+DiQW5MRcDyTLEwQZQcQ30L8VLiNaNFUIp4/w5sWVkz/TTNcS5p5Y20Rdi27ZkJWQXsBbqiWnb2QQRJGyvdr89Ct5ONW3o4ikMGdqZeZruzGJ8fmlRAobEpsElkwddkwanPb9MMCQx5/rRgPA8PemcNGRaRYpcOQ2PeHInjX//TOxuW4/KS1h6mXU+REPgcEMX0v0OK3mXEMsOUDe9OkJr6CMSsB8hHBajb3DZNrgGPoQMWsnCY9TiATLt/x73oQG33DGuM/GYgxtaGLYos1CVCOcovmXbMoF1LHUQVHhqVw6SIy+4cvup3wbcMW6rDx5pycXFAepXAdruG4SCaNwYgjHr16W/Lx6jgsY+TaPHp1tw2l30NsK8hzP4R/s
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW3PR11MB4729.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(396003)(136003)(39860400002)(366004)(376002)(346002)(451199021)(54906003)(66899021)(478600001)(6916009)(44832011)(8936002)(66556008)(8676002)(2906002)(33716001)(5660300002)(86362001)(4326008)(66476007)(66946007)(316002)(82960400001)(38100700002)(6506007)(41300700001)(6512007)(9686003)(26005)(83380400001)(186003)(6486002)(6666004);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?R3qZ6VYi/TMrdKbzFhFVJzDES49y5WmQVnl1EWxcYE3Nv6F5VP3zZw3Io4rx?=
+ =?us-ascii?Q?89jDHgoue9zTMXyBCpHTCcj28mBZ3llj17TBnYCmkc0z2XK29ttVVirsNq5W?=
+ =?us-ascii?Q?5s1a7/4ltOoi093fAA+477BGC4tejkh9GKBvhwwwFc5cSlgN/PBW6ae2tMSe?=
+ =?us-ascii?Q?7TWaRcZ4RnrYeh0MtppveDFfgYQ+plHp69pve8ElmTvlhxnj67l8D2XwGnov?=
+ =?us-ascii?Q?mgzjLjkqzkQMh/9HH9bu0IQ1wm/ZJdGdCI3EnLb30c/HQkrq/VleyLl6vjMD?=
+ =?us-ascii?Q?1RUyQsWAQzjyl9SZV8KwvtJAe/Eoy+CphmyP/MV9U41l9ZIXadwoVAft9wvR?=
+ =?us-ascii?Q?u0c0MlsIj3GMJp8kEFVk7Zoak6sE9xfTnojbdO/cTUUnvz1XLsB3TtzZ0ZHZ?=
+ =?us-ascii?Q?FuZRzFJKKCaw3526ohiQ7C+guFqau9GxAonqIVN8HVKog+ZbEGwAEx1fa+JV?=
+ =?us-ascii?Q?3copptgY7lzk6hNgZlWyuSv6S1EouWtqL5m7GEFz0pFXUhZHJTqOiIWVbr0g?=
+ =?us-ascii?Q?hbNDxwBMzKQaD2okGk49H5+rN6bezOUHssc0rO+TA17Psgafgv3m5sDiIGTB?=
+ =?us-ascii?Q?V1ldPrO3Q9po/xFQg36atisZgVp+/FCwG/RW3GAoXcEoTVj46zsG9jXPlQvs?=
+ =?us-ascii?Q?stiCbe/0zz7N2tdnbouL5w21YxqV0FfjPovhwXz6zloZ+qKkfkGR0DMWHrmw?=
+ =?us-ascii?Q?TGuQesmjPwHyQ6DlCn+0kDvJIpoJWnRnC9iVmOBdpiA2BqJBu1IrJxO7zc70?=
+ =?us-ascii?Q?YQDMIkNhltPLIXdZWl27RPIePi9hvbtlpsiEoYxia1KqMYmX6PglGsamAXBw?=
+ =?us-ascii?Q?CU9/JvDWJs2JO1JCpn68fMKbJuIBj8P9EftPczNVa10RyfQ5hHkv3GNJRnZJ?=
+ =?us-ascii?Q?DX9K8jgFFz4sXax8owQKRrhF0jRKnP8/q8iPvpSsvFlxYTRX3C8EtQF/I03h?=
+ =?us-ascii?Q?OktBjXr/vlZurRI7I6Jp/hnGmUIoDmFrnONe+ars+jnbl74tlBiAptWkMeuR?=
+ =?us-ascii?Q?uWrk2diHxXIrlKOoVkjf0C6EZHTLkZ696crrgmJR2qb3ijnhfgXkzRCoU+Vy?=
+ =?us-ascii?Q?DqzS8Govwu/k7w0h6BYpH5fLbyzgdMnnA0xg0XilrE/0nqDv9wkF0nGaHVcn?=
+ =?us-ascii?Q?ZCuqYcwCKWVEHe5Jc2X4Jw9hM522uC5+T/Nkj7wbxgz3lVV1qdaTT92iHRUl?=
+ =?us-ascii?Q?1sr5EkMMuje45Z2ThIctDVXMGPyInCa+fX6RMki4qw2J1YIjuFFaCnp+dNUK?=
+ =?us-ascii?Q?XqgmqEyTdmV43BMm81CDbv8Nm0RykJ72pju39p+/aqbyxtwSqIpUcuKhIUR2?=
+ =?us-ascii?Q?HGcjNiFxUk/e9fq7Zs/nQoGT1ziIfTPWdQ/et2kXL/AVftkEg87PW0FSkQkK?=
+ =?us-ascii?Q?T283Ij1icPkzDdRrzhmaFcZiRFVOnnWux+OGw6BrFhRX8daf2FKpLB53z/G7?=
+ =?us-ascii?Q?C/uvqDlUlS6FXnvtToKSWQGYzSGpRG+uJSWmtW9/qR9uZJL0EGMZLVVvitzd?=
+ =?us-ascii?Q?KWJgCrXhVgtfp8Oh1l/OcA/vxHErT6s00y/YqOtyRaYQBHVKirMnp4He37ZT?=
+ =?us-ascii?Q?Ys1ytsF8eaAktoGpSL3eaiUT9OnZdr1GIKPgdZOX6IOtmOp/sXSZAyhOqAK3?=
+ =?us-ascii?Q?Qw=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: bec41b10-edc8-4806-7b21-08db6777c1e5
+X-MS-Exchange-CrossTenant-AuthSource: MW3PR11MB4729.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2023 16:53:45.6069
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: +a++MSRJiHdOew0FGpJBOIE6k7TVPZc1ZeV8f6Opz+VrZ7bOr1KU/HswPArqWYOtcLHFbbJC/Hu8PHmasZ76Zw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB4772
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,132 +149,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/7/2023 10:27 AM, Jeffrey Hugo wrote:
-> On 6/7/2023 9:24 AM, Manivannan Sadhasivam wrote:
->> Add a network driver for the Modem Host Interface (MHI) endpoint devices
->> that provides network interfaces to the PCIe based Qualcomm endpoint
->> devices supporting MHI bus. This driver allows the MHI endpoint 
->> devices to
->> establish IP communication with the host machines (x86, ARM64) over MHI
->> bus.
->>
->> The driver currently supports only IP_SW0 MHI channel that can be used
->> to route IP traffic from the endpoint CPU to host machine.
->>
->> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
->> ---
->>   drivers/net/Kconfig      |   9 ++
->>   drivers/net/Makefile     |   1 +
->>   drivers/net/mhi_ep_net.c | 331 +++++++++++++++++++++++++++++++++++++++
->>   3 files changed, 341 insertions(+)
->>   create mode 100644 drivers/net/mhi_ep_net.c
->>
->> diff --git a/drivers/net/Kconfig b/drivers/net/Kconfig
->> index 368c6f5b327e..36b628e2e49f 100644
->> --- a/drivers/net/Kconfig
->> +++ b/drivers/net/Kconfig
->> @@ -452,6 +452,15 @@ config MHI_NET
->>         QCOM based WWAN modems for IP or QMAP/rmnet protocol (like 
->> SDX55).
->>         Say Y or M.
->> +config MHI_EP_NET
->> +    tristate "MHI Endpoint network driver"
->> +    depends on MHI_BUS_EP
->> +    help
->> +      This is the network driver for MHI bus implementation in endpoint
->> +      devices. It is used provide the network interface for QCOM 
->> endpoint
->> +      devices such as SDX55 modems.
->> +      Say Y or M.
-> 
-> What will the module be called if "m" is selected?
-> 
->> +
->>   endif # NET_CORE
->>   config SUNGEM_PHY
->> diff --git a/drivers/net/Makefile b/drivers/net/Makefile
->> index e26f98f897c5..b8e706a4150e 100644
->> --- a/drivers/net/Makefile
->> +++ b/drivers/net/Makefile
->> @@ -40,6 +40,7 @@ obj-$(CONFIG_NLMON) += nlmon.o
->>   obj-$(CONFIG_NET_VRF) += vrf.o
->>   obj-$(CONFIG_VSOCKMON) += vsockmon.o
->>   obj-$(CONFIG_MHI_NET) += mhi_net.o
->> +obj-$(CONFIG_MHI_EP_NET) += mhi_ep_net.o
->>   #
->>   # Networking Drivers
->> diff --git a/drivers/net/mhi_ep_net.c b/drivers/net/mhi_ep_net.c
->> new file mode 100644
->> index 000000000000..0d7939caefc7
->> --- /dev/null
->> +++ b/drivers/net/mhi_ep_net.c
->> @@ -0,0 +1,331 @@
->> +// SPDX-License-Identifier: GPL-2.0-or-later
->> +/*
->> + * MHI Endpoint Network driver
->> + *
->> + * Based on drivers/net/mhi_net.c
->> + *
->> + * Copyright (c) 2023, Linaro Ltd.
->> + * Author: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
->> + */
->> +
->> +#include <linux/if_arp.h>
->> +#include <linux/mhi_ep.h>
->> +#include <linux/mod_devicetable.h>
->> +#include <linux/module.h>
->> +#include <linux/netdevice.h>
->> +#include <linux/skbuff.h>
->> +#include <linux/u64_stats_sync.h>
->> +
->> +#define MHI_NET_MIN_MTU        ETH_MIN_MTU
->> +#define MHI_NET_MAX_MTU        0xffff
+On 23/06/07 06:28PM, Serge Semin wrote:
+> On Wed, Jun 07, 2023 at 08:00:48AM -0700, Abe Kohandel wrote:
+> > On 23/06/07 02:27PM, Serge Semin wrote:
+> > > On Tue, Jun 06, 2023 at 04:18:44PM -0700, Abe Kohandel wrote:
 
-ETH_MAX_MTU ?
-
-Personal preference thing.  If you think 0xffff is really the superior 
-option, so be it.  Personally, it takes me a second to figure out that 
-is 64k - 1 and then relate it to the MHI packet size limit.  Also seems 
-really odd with this line of code right next to, and related to, 
-ETH_MIN_MTU.  Feels like a non-magic number here will make things more 
-maintainable.
-
-Alternatively move MHI_MAX_MTU out of host/internal.h into something 
-that is convenient for this driver to include and use?  It is a 
-fundamental constant for the MHI protocol, we just haven't yet had a 
-need for it to be used outside of the MHI bus implementation code.
-
->> +
->> +struct mhi_ep_net_stats {
->> +    u64_stats_t rx_packets;
->> +    u64_stats_t rx_bytes;
->> +    u64_stats_t rx_errors;
->> +    u64_stats_t tx_packets;
->> +    u64_stats_t tx_bytes;
->> +    u64_stats_t tx_errors;
->> +    u64_stats_t tx_dropped;
->> +    struct u64_stats_sync tx_syncp;
->> +    struct u64_stats_sync rx_syncp;
->> +};
->> +
->> +struct mhi_ep_net_dev {
->> +    struct mhi_ep_device *mdev;
->> +    struct net_device *ndev;
->> +    struct mhi_ep_net_stats stats;
->> +    struct workqueue_struct *xmit_wq;
->> +    struct work_struct xmit_work;
->> +    struct sk_buff_head tx_buffers;
->> +    spinlock_t tx_lock; /* Lock for protecting tx_buffers */
->> +    u32 mru;
->> +};
->> +
->> +static void mhi_ep_net_dev_process_queue_packets(struct work_struct 
->> *work)
->> +{
->> +    struct mhi_ep_net_dev *mhi_ep_netdev = container_of(work,
->> +            struct mhi_ep_net_dev, xmit_work);
+> > > > - * The Intel Mount Evans SoC's Integrated Management Complex uses the
+> > > > - * SPI controller for access to a NOR SPI FLASH. However, the SoC doesn't
+> > > > - * provide a mechanism to override the native chip select signal.
+> > > 
+> > > I had nothing against this part of the comment but only about the
+> > > second chunk of the text.
+> > 
 > 
-> Looks like this can fit all on one line to me.
+> > Thinking about it a bit more there is nothing precluding this controller from
+> > being used for other purposes in the future. It is configured with two chip
+> > selects, only one of which is used today. I removed it to so it wouldn't become
+> > inaccurate if that happens.
 > 
-> 
+> Ok. Regarding the number of chip-selects. You could have overwritten
+> the dw_spi.num_cs field with value 2 then in the dw_spi_mountevans_imc_init()
+> method. Thus having a bit safer driver for your platform.
 
+I am currently setting dw_spi.num_cs via the num-cs property in the device
+tree. Is one preferred over the other? I guess setting the dw_spi.num_cs in
+code is safer than using the device tree. 
+
+> > > > + * DMA-based mem ops are not configured for this device and are not tested.
+> > > 
+> > > * Note mem-ops is just a feature of the DW APB/AHB SSI controllers
+> > > * which provides a way to perform write-then-read and write-only
+> > > * transfers (see Transmit only and EEPROM read transfer modes in the
+> > > * hw manual). It works irrespective of whether your controller has a
+> > > * DMA-engine connected or doesn't have. Modern DW SSI controllers
+> > > * support Enhanced SPI modes with the extended SPI-bus width
+> > > * capability. But it's a whole another story and such modes aren't
+> > > * currently supported by the driver.
+> > > 
+> > > Just a question for the sake of the discussion history. Does your
+> > > platform have a DMA-engine synthesized to work with this DW SSI
+> > > controller? That is does your controller has the DMA Controller
+> > > Interface (handshake signals) connected to any DMA-engine on your
+> > > platform? I am asking because if there is no such DMA-engine then
+> > > the last part of your statement is just redundant since you can't test
+> > > something which isn't supported by design.
+> > 
+> 
+> > The platform does have a DMA-engine synthesized but I have been having some
+> > challenges with getting it to work which may require some further quirks added
+> > to the DMA driver. 
+> 
+> The main question is whether that DMA-engine has the handshake signals
+> connected to the DW SSI controller. If it doesn't then adding such
+> engine support would be a great deal of challenge indeed because a
+> software-based handshaking interface would need to be added to the
+> DMA-engine subsystem first. Then the DW SSI driver would need to be
+> fixed to work with that interface. Taking a FIFO-size into account and
+> an amount of IRQs to handle on each handshaking round, the resultant
+> performance might get to be not worth all the efforts so a simple
+> IRQ-based transfers implementation may work better.
+
+Oh sorry, I wasn't explicit enough. The HW handshaking signals are connected to
+the DW SSI controller so we should be able to take advantage of that
+acceleration and not have to go through the challenging steps you have
+outlined.
+
+> > One example being the system uses 40-bit addressing but the
+> > DMA-engine is only synthesized with 32-bit address capability and is meant to
+> > only target a specific region of memory where it "knowns" the upper byte of the
+> > address.
+> 
+> That's a pretty much well known problem. The kernel has a solution for
+> it: DMA-mask set for the DMA-engine device (see dma_set_mask() and
+> dma_set_mask_and_coherent()) and SWIOTLB (formerly known as bounce
+> buffers).
+> 
+> Alternatively modern CPUs are normally equipped with a thing like
+> IOMMU, which can be used to remap the limited device address space to
+> any CPU/RAM address.
+
+Thanks for all the advice Serge, much appreciated! Hopefully I can come back
+with a patch to enable the DMA engine for this platform in the near future.
+
+Thanks,
+Abe
