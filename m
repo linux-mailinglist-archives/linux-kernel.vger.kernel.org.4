@@ -2,107 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61907726326
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 16:43:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D71F372653F
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 17:57:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241116AbjFGOnk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 10:43:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36420 "EHLO
+        id S234794AbjFGP5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 11:57:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235216AbjFGOni (ORCPT
+        with ESMTP id S241547AbjFGP44 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 10:43:38 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B14B21BD2;
-        Wed,  7 Jun 2023 07:43:28 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DC1EE2F4;
-        Wed,  7 Jun 2023 07:44:13 -0700 (PDT)
-Received: from e120937-lin (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E78683F587;
-        Wed,  7 Jun 2023 07:43:26 -0700 (PDT)
-Date:   Wed, 7 Jun 2023 15:43:24 +0100
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Nikunj Kela <nkela@quicinc.com>,
-        Prasad Sodagudi <psodagud@quicinc.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/16] arm_scmi/opp/dvfs: Add generic performance scaling
- support
-Message-ID: <ZICXjExmCRwcQ3BA@e120937-lin>
-References: <20230607124628.157465-1-ulf.hansson@linaro.org>
+        Wed, 7 Jun 2023 11:56:56 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 176EA1FCF
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 08:56:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686153413; x=1717689413;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=7nNTbx876l3a0dmbd1lJ09G1ovmqUK2cjUQUfZr1dsM=;
+  b=U3HwomazOB+OwqDwHqE72XJA0lfMxYv9WTW0uzIkiVou/QCYwhKFVQjf
+   ZQe42Jyl066Ir3btG/zc5FwnCBSyWwZj8SYto/iDgnZSCwET/TBnjjxwj
+   mU1q0J4+YhfFpygztEIZ/KYqSHUZsj6TK+a9ZGUSZFIEqU+QbicF/VcIO
+   dDXMBz3hQZwBdV9nl9KHVSgbNNKYyuI3f82gmVqCPFz9C+1SMa+1cfLL9
+   37ACNFp4xwMsBzaSi6VFBIW0c4Oq/DW1dx37wWYCh6BSS7/uwwpx7RXg+
+   frQtdTu/z2mDXY2IXo40xwZb3JoyGJy0O8ana8pE3PS3XJ3O0hxylO/HA
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="360360055"
+X-IronPort-AV: E=Sophos;i="6.00,224,1681196400"; 
+   d="scan'208";a="360360055"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 08:56:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="739335739"
+X-IronPort-AV: E=Sophos;i="6.00,224,1681196400"; 
+   d="scan'208";a="739335739"
+Received: from sorrin-mobl3.amr.corp.intel.com (HELO [10.209.124.63]) ([10.209.124.63])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 08:56:49 -0700
+Message-ID: <a00d401f-961a-bd1d-b344-5c234e87135b@linux.intel.com>
+Date:   Wed, 7 Jun 2023 09:45:10 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230607124628.157465-1-ulf.hansson@linaro.org>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.11.0
+Subject: Re: [PATCH v2 00/26] ASoC/soundwire: add support for ACE2.x
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>, alsa-devel@alsa-project.org,
+        tiwai@suse.de, linux-kernel@vger.kernel.org, bard.liao@intel.com
+References: <20230515071042.2038-1-yung-chuan.liao@linux.intel.com>
+ <ZHHdSjXwyHvBezkG@matsya>
+ <8f4a024d-a218-c4ed-925c-b74663b7e280@linux.intel.com>
+ <ZICA/YIYQ/DGhhdk@matsya>
+Content-Language: en-US
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <ZICA/YIYQ/DGhhdk@matsya>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 02:46:12PM +0200, Ulf Hansson wrote:
-> The current SCMI performance scaling support is limited to cpufreq. This series
-> extends the support, so it can be used for all kind of devices and not only for
-> CPUs.
+
+
+On 6/7/23 08:07, Vinod Koul wrote:
 > 
-> The changes are spread over a couple of different subsystems, although the
-> changes that affects the other subsystems than the arm_scmi directory are
-> mostly smaller. The series is based upon v6.4-rc5. That said, let's figure out
-> on how to best move forward with this. I am of course happy to help in any way.
+> Hi Pierre,
 > 
-> Note that, so far this is only be tested on the Qemu virt platform with Optee
-> running an SCMI server. If you want some more details about my test setup, I am
-> certainly open to share that with you!
+> On 02-06-23, 15:46, Pierre-Louis Bossart wrote:
+>> On 5/27/23 05:36, Vinod Koul wrote:
+>>> On 15-05-23, 15:10, Bard Liao wrote:
+>>>> This series uses the abstraction added in past kernel cycles to provide
+>>>> support for the ACE2.x integration. The existing SHIM and Cadence
+>>>> registers are now split in 3 (SHIM, IP, SHIM vendor-specific), with some
+>>>> parts also moved to the HDaudio Extended Multi link structures. Nothing
+>>>> fundamentally different except for the register map.
+>>>>
+>>>> This series only provides the basic mechanisms to expose SoundWire-based
+>>>> DAIs. The PCI parts and DSP management will be contributed later, and the
+>>>> DAI ops are now empty as well.
+>>>>
+>>>> The change is mainly on SoundWire. It would be better to go through
+>>>> SoundWire tree.
+>>>
+>>> Applied, thanks
+>>
+>> Hi Vinod, is there a way you could provide an immutable tag for Mark
+>> Brown, the patch1 in this set is required for my next set of ASoC
+>> LunarLake patches?
 > 
-> Looking forward to get your feedback!
+> Unfortunately, I have picked the whole series into next. If I was aware
+> I would have pushed them to a topic.
 > 
+> Mark can pull sdw/next but that would bring other things as well which
+> may not be preferred. I guess next best would be wait few weeks (rc1)
 
-Hi Ulf,
+Yeah, it's a miss on my side, I forgot about this one-line enum
+dependency for DMIC/SSP.
 
-thanks for this first of all.
+SoundWire has more dependencies so we expected to send the relevant
+patches in the next cycle. DMIC/SSP is quite simple and could have been
+part of 6.5.
 
-I'll have a look at this properly in the next weeks, in the meantime
-just a small minor remark after having had a quick look.
+Oh well.
 
-You expose a few new perf_ops to fit your needs and in fact PERF was
-still not exposing those data for (apparent) lack of users needing
-those. (and/or historical reason I think)
-
-My concern is that this would lead to a growing number of ops as soon as
-more data will be needed by future users; indeed other protocols do
-expose more data but use a different approach: instead of custom ops
-they let the user access a common static info structure like
-
-
-+       int (*num_domains_get)(const struct scmi_protocol_handle *ph);
-+       const struct scmi_perf_dom_info __must_check *(*info_get)
-+               (const struct scmi_protocol_handle *ph, u32 domain);
-
-and expose the related common info struct in scmi_protocol.h too.
-Another reason to stick to this aproach would be consistency with other
-protos (even though I think PERF is not the only lacking info_get)
-
-Now, since really there was already a hidden user for this perf data
-(that would be me :P ... in terms of an unpublished SCMI test-driver),
-I happen to have a tested patch that just expose those 2 above ops and
-exports scmi_perf_dom_info and related structures to scmi_protocol.h
-
-If you (and Sudeep) agree with this approach of limiting the number of
-exposed ops in favour of sharing upfront some static info data, I can
-quickly cleanup and post this patch for you to pick it up in your next
-iteration.
-
-(really I'd have more conversion of this kind also for other remaining
- protos but these are unrelated to your series and I'd post it later)
-
-Thanks,
-Cristian
+>> "ASoC: SOF: Intel: shim: add enum for ACE 2.0 IP used in LunarLake" adds
+>> the SOF_INTEL_ACE_2_0 definition to select different ops for LunarLake.
+>>
+>> Thank you
+>> -Pierre
+> 
