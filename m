@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C25A725446
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 08:32:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 253B9725449
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 08:33:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234165AbjFGGca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 02:32:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54392 "EHLO
+        id S235236AbjFGGcg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 02:32:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234458AbjFGGb4 (ORCPT
+        with ESMTP id S234663AbjFGGb5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 02:31:56 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5AEE1735
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 23:31:52 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f6e1394060so58493535e9.3
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 23:31:52 -0700 (PDT)
+        Wed, 7 Jun 2023 02:31:57 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD6DFAA
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 23:31:53 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f732d37d7cso41478415e9.2
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 23:31:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google; t=1686119511; x=1688711511;
+        d=amarulasolutions.com; s=google; t=1686119513; x=1688711513;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+N6ncdPhuJx70XZ6yjaTOtXW/wJdhXZgpqu86CyLnmg=;
-        b=iSFhC91P61leOakC3ZYDB1vfHeGButTdGDM1hW2MzuCfi7TC+dUY0TPp87E5Gwzxxo
-         h1o6UEBegakpxBiWmhOhHQNcKItVaIWq4KsvQsneKZ0iK3g19qU++mCSiiVscT1xka+X
-         S7IGHfHgN7WvF22pGm+WjoUgdt42UbaeJaUH8=
+        bh=QVzHDRPJNZ9IK1tuBeqT97BbWRZLa0+X8FPJl3jJUF8=;
+        b=UYvhY2b4HirdovbXfPtrGbUTJmn6mv0vjtYgUpqMd26yDC895U6FxmXqgAGGLQenPB
+         FYBFTQymCHZR9yDzHZpZtmUct4e7yOQVQxu9U1J+GoTgNqgB2sTkk86EzY+LrPiny4+E
+         xtH62ZWLxxlheBL841A43Q3wpYHfq0ZPA7qsY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686119511; x=1688711511;
+        d=1e100.net; s=20221208; t=1686119513; x=1688711513;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+N6ncdPhuJx70XZ6yjaTOtXW/wJdhXZgpqu86CyLnmg=;
-        b=Jb7xUPRziyl5JzNYA/DvYuc9/KDmtujLlP5nI7dHtqogHd0nqUloxgrZ7B6+BtxpS+
-         Euce3U2MTO6wbc7wru0PYEMUBRmv8ouJonDoD1Xc1/CpZRl9lW8h+9w1SYo609avN8lU
-         NrMpGm5BqLZLFUgKR0eZ5eEPqslHidG3OcPB2USEw9+yafVePOju27IpbDxv3itFqzyC
-         iz4jXMOV8iuBSa0M8BdIksRy0tsT5nMSqiE52sx/urraOe5rb73WmFL/v9e/H8nZVmCo
-         6A1u4GnUKNvQVfciD4gr/6ejX94RdyxyxeF09Jfm75WnTV+mfIZ3HrHup+BKqJAm9Dwe
-         YD9A==
-X-Gm-Message-State: AC+VfDwlZcWMI6/vjv5UripNgIrGkptMjWcSbhACfgNp14lQlElVtYHO
-        MMWqjA/GYNe9Siqjdx4fOKg83nmQRZaEV2k5coZEqg==
-X-Google-Smtp-Source: ACHHUZ5a8gfVu2axekyl+99oSLUzWfSPuWuaqcQZYuCkNPZ73b9TII++3uuK7xQc96qqlkKElumaFA==
-X-Received: by 2002:adf:e80f:0:b0:30e:59e9:5e1f with SMTP id o15-20020adfe80f000000b0030e59e95e1fmr732503wrm.65.1686119511073;
-        Tue, 06 Jun 2023 23:31:51 -0700 (PDT)
+        bh=QVzHDRPJNZ9IK1tuBeqT97BbWRZLa0+X8FPJl3jJUF8=;
+        b=AJSlhbG0s6AOFVShYuj67MKZwGznMNBoifr/dWFAsGTEr8M29LNfP+l4pkPAYm4Cnl
+         IBlJpoDxu1DlZroP0CvjpAaBmuKmX6/jgrmVpk2CvXc9MWewHkK0rAr71UfYhTjECC+Z
+         /Pz58HyEYx1WWdGHx9nuv8y6cpGizh/f9d4VumifqZ0KgQn/Dd1y3IBRfIcYLSErPs1G
+         KpYugLVkLRjFc7PSke5pMSqCjWVFjgSNHkbDeaQyLAdj+KDyc4tKl2SpTiJiqA5gRQMc
+         t3r/jJoHtHD+jvXDlLCk6D0K+PKfJoIZy/Y9nrno8G78ZTKIaM8ttlBB3bD9tyyNApTp
+         Pfuw==
+X-Gm-Message-State: AC+VfDyFuwavByAdfgJx/lATAdiw7GUjIA6pC9ZSQOKboH0ZRIdg4WSa
+        ckkC0RxNTRE7DOGmDXK8wBeigHFy8QeXofvInsnVSg==
+X-Google-Smtp-Source: ACHHUZ7femRg72fKhwkXtOViccaCRPhvLbf87oH15MUY/N6uqJKzd9GvRbot+SgLThtMLLZ1M23wWg==
+X-Received: by 2002:adf:eb88:0:b0:309:38f4:fb52 with SMTP id t8-20020adfeb88000000b0030938f4fb52mr5870830wrn.9.1686119512971;
+        Tue, 06 Jun 2023 23:31:52 -0700 (PDT)
 Received: from dario-ThinkPad-T14s-Gen-2i.. ([37.159.114.163])
-        by smtp.gmail.com with ESMTPSA id m6-20020adff386000000b0030630120e56sm14385127wro.57.2023.06.06.23.31.49
+        by smtp.gmail.com with ESMTPSA id m6-20020adff386000000b0030630120e56sm14385127wro.57.2023.06.06.23.31.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 23:31:50 -0700 (PDT)
+        Tue, 06 Jun 2023 23:31:52 -0700 (PDT)
 From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
@@ -59,19 +59,14 @@ Cc:     Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
         linux-stm32@st-md-mailman.stormreply.com,
         Alexandre Torgue <alexandre.torgue@foss.st.com>,
         Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Conor Dooley <conor+dt@kernel.org>,
+        kernel test robot <lkp@intel.com>,
         Daniel Vetter <daniel@ffwll.ch>,
         David Airlie <airlied@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Neil Armstrong <neil.armstrong@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        devicetree@vger.kernel.org
-Subject: [RESEND PATCH v2 4/6] dt-bindings: display: simple: add Rocktech RK043FN48H
-Date:   Wed,  7 Jun 2023 08:31:37 +0200
-Message-Id: <20230607063139.621351-5-dario.binacchi@amarulasolutions.com>
+        Sam Ravnborg <sam@ravnborg.org>
+Subject: [RESEND PATCH v2 5/6] drm/panel: simple: add support for Rocktech RK043FN48H panel
+Date:   Wed,  7 Jun 2023 08:31:38 +0200
+Message-Id: <20230607063139.621351-6-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20230607063139.621351-1-dario.binacchi@amarulasolutions.com>
 References: <20230607063139.621351-1-dario.binacchi@amarulasolutions.com>
@@ -87,33 +82,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add compatible to panel-simple for Rocktech Displays Limited
-RK043FN48H 4.3" 480x272 LCD-TFT panel.
+Add support for Rocktech RK043FN48H 4.3" (480x272) LCD-TFT panel.
 
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202306020343.jNTWeM0P-lkp@intel.com/
 
 ---
 
 Changes in v2:
-- Add 'Acked-by' tag of Conor Dooley.
+- Fix build warning reported by kernel test robot.
+- Add 'Reported-by' tag of kernel test robot.
 
- .../devicetree/bindings/display/panel/panel-simple.yaml         | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/gpu/drm/panel/panel-simple.c | 29 ++++++++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/display/panel/panel-simple.yaml b/Documentation/devicetree/bindings/display/panel/panel-simple.yaml
-index 01560fe226dd..bd6a92d2b41c 100644
---- a/Documentation/devicetree/bindings/display/panel/panel-simple.yaml
-+++ b/Documentation/devicetree/bindings/display/panel/panel-simple.yaml
-@@ -280,6 +280,8 @@ properties:
-       - rocktech,rk101ii01d-ct
-         # Rocktech Display Ltd. RK070ER9427 800(RGB)x480 TFT LCD panel
-       - rocktech,rk070er9427
-+        # Rocktech Display Ltd. RK043FN48H 4.3" 480x272 LCD-TFT panel
-+      - rocktech,rk043fn48h
-         # Samsung 13.3" FHD (1920x1080 pixels) eDP AMOLED panel
-       - samsung,atna33xc20
-         # Samsung 12.2" (2560x1600 pixels) TFT LCD panel
+diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c
+index 065f378bba9d..3b10e78d07d9 100644
+--- a/drivers/gpu/drm/panel/panel-simple.c
++++ b/drivers/gpu/drm/panel/panel-simple.c
+@@ -3188,6 +3188,32 @@ static const struct panel_desc qishenglong_gopher2b_lcd = {
+ 	.connector_type = DRM_MODE_CONNECTOR_DPI,
+ };
+ 
++static const struct display_timing rocktech_rk043fn48h_timing = {
++	.pixelclock = { 6000000, 9000000, 12000000 },
++	.hactive = { 480, 480, 480 },
++	.hback_porch = { 8, 43, 43 },
++	.hfront_porch = { 2, 8, 8 },
++	.hsync_len = { 1, 1, 1 },
++	.vactive = { 272, 272, 272 },
++	.vback_porch = { 2, 12, 12 },
++	.vfront_porch = { 1, 4, 4 },
++	.vsync_len = { 1, 10, 10 },
++	.flags = DISPLAY_FLAGS_VSYNC_LOW | DISPLAY_FLAGS_HSYNC_LOW |
++		 DISPLAY_FLAGS_DE_HIGH | DISPLAY_FLAGS_PIXDATA_POSEDGE,
++};
++
++static const struct panel_desc rocktech_rk043fn48h = {
++	.timings = &rocktech_rk043fn48h_timing,
++	.num_timings = 1,
++	.bpc = 8,
++	.size = {
++		.width = 95,
++		.height = 54,
++	},
++	.bus_format = MEDIA_BUS_FMT_RGB888_1X24,
++	.connector_type = DRM_MODE_CONNECTOR_DPI,
++};
++
+ static const struct display_timing rocktech_rk070er9427_timing = {
+ 	.pixelclock = { 26400000, 33300000, 46800000 },
+ 	.hactive = { 800, 800, 800 },
+@@ -4218,6 +4244,9 @@ static const struct of_device_id platform_of_match[] = {
+ 	}, {
+ 		.compatible = "qishenglong,gopher2b-lcd",
+ 		.data = &qishenglong_gopher2b_lcd,
++	}, {
++		.compatible = "rocktech,rk043fn48h",
++		.data = &rocktech_rk043fn48h,
+ 	}, {
+ 		.compatible = "rocktech,rk070er9427",
+ 		.data = &rocktech_rk070er9427,
 -- 
 2.32.0
 
