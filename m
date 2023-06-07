@@ -2,163 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A40297253B3
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 07:51:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2D677253B8
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 07:52:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234413AbjFGFvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 01:51:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40858 "EHLO
+        id S234474AbjFGFwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 01:52:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232050AbjFGFve (ORCPT
+        with ESMTP id S233780AbjFGFwQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 01:51:34 -0400
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BBCA19AE;
-        Tue,  6 Jun 2023 22:51:33 -0700 (PDT)
-Received: by mail-ot1-x335.google.com with SMTP id 46e09a7af769-6af6de9fb74so5938194a34.2;
-        Tue, 06 Jun 2023 22:51:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686117092; x=1688709092;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=O3rI6tnKxeARgopgF90YS7donPiDWh6Vu53ylR5OXg0=;
-        b=RmvWZQGtP3jLhos9gsUInx2oe9IIbwa3hwfhmzyWvsmnfF1tWBrX//YjcuHLCP7thf
-         BWk0scuAgJcutm2KIODyLq/Wt0CkMaDYBhmbrDMrarZ2ug9zGrfGkTgG383aEL9RDCYL
-         C7qU7KrWIs17ivI4/nMMuntO6vETS3JvQD8rnC8JMLG/oXYPi47K8fA0EEfZqHvM2Bw+
-         eHlJ5Jb2AEbc6hJcU+twVMSXXcs3q6R27Ott8mrAxYjB82Au7B11UImg3do/VnGxGy+c
-         czjsAFbihTl6iEybH8rzaHvTAfgPQTgo3+Ou0GAc1Qgh9XebDjacpVL5tWpcmd7cG9i9
-         vsYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686117092; x=1688709092;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=O3rI6tnKxeARgopgF90YS7donPiDWh6Vu53ylR5OXg0=;
-        b=GVpbo6uFJ3V2rcjUszMuGObXREFSRtUvvYQb35Qf9B9gtCEDY3KlnAmWrDhTKHgrmn
-         AgV0luHevHFUFvzW/DBKk6Q4LChTN5gG08eKrPLHly6J+Q4X8czDltJ7zwRoIMjOko2D
-         8XOn+aYQRdgpk4dzzqNv8K4TASR7dwe0hfgZYUKzki/5z1wWgTfAiyKz/RotsY2pbILr
-         LiOb8J881OQ2W1gdwxzD1ZPHYyjNSc8EtAa/1TVselH98C1frDGTZqrRh3eMlDDKLh6h
-         o8wdYbXn1zGJblODUdR7zW/5SprodtBLht5DPvZAKAvy7cGBM8ZZn4roMxUqjAms505Z
-         6fcA==
-X-Gm-Message-State: AC+VfDxDI2wekdOUp8QJLyyiw+c8L6QA9qF9X/bi1YB39HjrnjHGWIrw
-        wOPy++EZOv4EWqDd+VFETg4=
-X-Google-Smtp-Source: ACHHUZ7/d1dW7bob/8me+LolHy42civ7LW00G+Fcu7tlgp7+UFl1XGjOs3bfDFoj7EMeVlx+DOHOXg==
-X-Received: by 2002:a05:6830:13c9:b0:6ab:1b58:f408 with SMTP id e9-20020a05683013c900b006ab1b58f408mr3853451otq.19.1686117092582;
-        Tue, 06 Jun 2023 22:51:32 -0700 (PDT)
-Received: from [192.168.43.80] (subs28-116-206-12-58.three.co.id. [116.206.12.58])
-        by smtp.gmail.com with ESMTPSA id b16-20020aa78110000000b00660d80087a8sm1750425pfi.187.2023.06.06.22.51.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Jun 2023 22:51:32 -0700 (PDT)
-Message-ID: <653b3359-2005-21b1-039d-c55ca4cffdcc@gmail.com>
-Date:   Wed, 7 Jun 2023 12:51:26 +0700
+        Wed, 7 Jun 2023 01:52:16 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A60C483;
+        Tue,  6 Jun 2023 22:52:13 -0700 (PDT)
+X-QQ-mid: bizesmtp70t1686117122tlw2aohn
+Received: from linux-lab-host.localdomain ( [61.141.77.49])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 07 Jun 2023 13:52:00 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: 7L1V3dHhUFNwsCYRlWfHiijmi2tXCINUn3YioqGbuOxs/CPWofUR/InpqT49J
+        9b0cchLC0VK3ORkZ/8q/onk4NKY4mNzZCJaxDJu+EyFMxF5re0ekuIoPMp5wFYl6tYBVEj8
+        X+myOvogX1rqOB7aF76W6Mzr6O6jCfib+BpInN/83g+1nYuplhKIlCAzTuIphJG7c2RBfZq
+        12wdO26wIO08Y5LDCswdjH0U/5OKBpmqob3d6XTTI4dW1JtPmxwC96SQ20EdkaxHaVXruKx
+        nbF3H8KOyLwDs0GnIMlOFRpgQCNHFYDVt3wftQILgXQzRAHpOwlzSayojXwFnaYeVo9xapm
+        78TRVoBIoJKAKQHPl7ejgG6RYWjp66ZUDiOvSCPrese08cpbFHlp1Yt+mOqVAV1qfC7P8Ye
+        F+VzuWsvtfA=
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 18357036349121096708
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        thomas@t-8ch.de
+Subject: Re: [PATCH 1/4] selftests/nolibc: add a test-report target
+Date:   Wed,  7 Jun 2023 13:52:00 +0800
+Message-Id: <20230607055200.667447-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230605065459.153001-1-falcon@tinylab.org>
+References: <20230605065459.153001-1-falcon@tinylab.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Content-Language: en-US
-To:     Theodore Ts'o <tytso@mit.edu>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux ext4 Development <linux-ext4@vger.kernel.org>,
-        Nikolas Kraetzschmar <nikolas.kraetzschmar@sap.com>,
-        Linux Stable <stable@vger.kernel.org>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: Fwd: Remounting ext4 filesystem from ro to rw fails when quotas are
- enabled
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi, Willy
 
-I notice a regression report on Bugzilla [1]. Quoting from it:
+> > On Mon, Jun 05, 2023 at 11:48:52AM +0800, Zhangjin Wu wrote:
+> > > A standalone test-report target is added to let the run, run-user and
+> > > rerun targets share them.
+> > > 
+> > > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+> > > ---
+> > >  tools/testing/selftests/nolibc/Makefile | 26 ++++++++++++-------------
+> > >  1 file changed, 13 insertions(+), 13 deletions(-)
+> > > 
+> > > diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+> > > index be4159837494..8149ace2938a 100644
+> > > --- a/tools/testing/selftests/nolibc/Makefile
+> > > +++ b/tools/testing/selftests/nolibc/Makefile
+> > > @@ -127,14 +127,18 @@ nolibc-test: nolibc-test.c sysroot/$(ARCH)/include
+> > >  libc-test: nolibc-test.c
+> > >  	$(QUIET_CC)$(CC) -o $@ $<
+> > >  
+> > > -# qemu user-land test
+> > > -run-user: nolibc-test
+> > > -	$(Q)qemu-$(QEMU_ARCH) ./nolibc-test > "$(CURDIR)/run.out" || :
+> > > +test-report:
+> > >  	$(Q)awk '/\[OK\]$$/{p++} /\[FAIL\]$$/{f++} /\[SKIPPED\]$$/{s++} \
+> > >  	         END{ printf("%d test(s) passed, %d skipped, %d failed.", p, s, f); \
+> > >  	         if (s+f > 0) printf(" See all results in %s\n", ARGV[1]); else print; }' \
+> > >  	         $(CURDIR)/run.out
+> > >  
+> > > +# qemu user-land test
+> > > +_run-user: nolibc-test
+> > > +	$(Q)qemu-$(QEMU_ARCH) ./nolibc-test > "$(CURDIR)/run.out" || :
+> > > +
+> > > +run-user: _run-user test-report
+> > > +
+> > 
+> > This will not reliably work, there's no ordering here, nothing guarantees
+> > that test-report will run *after* _run-user (e.g. make -j). Another
+> > approach is needed if you want to factor this, but in general creating
+> > sequences in makefiles is difficult and often more painful than having
+> > 3 times the same 3 lines.
+> >
+> 
+> Ok, thanks, what about this?
+> 
+>     # LOG_REPORT: report the test results
+>     LOG_REPORT   := awk '/\[OK\][\r]*$$/{p++} /\[FAIL\][\r]*$$/{f++} /\[SKIPPED\][\r]*$$/{s++} \
+> 	                 END{ printf("%d test(s) passed, %d skipped, %d failed.", p, s, f); \
+> 	                 printf(" See all results in %s\n", ARGV[1]); }'
+> 
+>     run-user: nolibc-test
+> 	$(Q)qemu-$(QEMU_ARCH) ./nolibc-test > "$(CURDIR)/run.out" || :
+> 	$(Q)$(LOG_REPORT) $(CURDIR)/run.out
+> 
+>     run: kernel
+> 	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
+> 	$(Q)$(LOG_REPORT) $(CURDIR)/run.out
+> 
+>     rerun:
+> 	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
+> 	$(Q)$(LOG_REPORT) $(CURDIR)/run.out
+> 
+> Or we directly add a standalone test report script? something like
+> tools/testing/selftests/nolibc/report.sh
+> 
+>     #!/bin/sh
+>     #
+>     # report.sh -- report the test results of nolibc-test
+>     #
+>     
+>     LOG_FILE=$1
+>     [ ! -f "$LOG_FILE" ] && echo "Usage: $0 /path/to/run.out"
+>     
+>     awk '
+>         /\[OK\][\r]*$$/{ p++ }
+>         /\[FAIL\][\r]*$$/{ f++ }
+>         /\[SKIPPED\][\r]*$$/{ s++ }
+>     
+>         END {
+>             printf("%d test(s) passed, %d skipped, %d failed.", p, s, f);
+>             printf(" See all results in %s\n", ARGV[1]);
+>         }' $LOG_FILE
+> 
+> And use it like this:
+> 
+>     LOG_REPORT           = $(CURDIR)/report.sh
+>
 
-> Since commit a44be64, remounting a read-only ext4 filesystem to become read-write fails when quotas are enabled. The mount syscall returns -EROFS and outputs the following in dmesg:
-> 
-> ```
-> EXT4-fs warning (device loop0): ext4_enable_quotas:7028: Failed to enable quota tracking (type=0, err=-30, ino=3). Please run e2fsck
-> ```
-> 
-> 
-> Root cause
-> 
-> The problem can be traced back to the changes introduced in commit a44be64. It appears that the issue arises because the SB_RDONLY bit of the s_flags field is now only cleared after executing the ext4_enable_quotas function. However, the vfs_setup_quota_inode function, called by ext4_enable_quotas, checks whether this bit is set (fs/quota/dquot.c:2331):
-> 
-> ```
-> if (IS_RDONLY(inode))
-> 	return -EROFS;
-> ```
-> 
-> This condition therefore always triggers the -EROFS fail condition.
-> 
-> 
-> Steps to Reproduce
-> 
-> The bug can be reproduced by executing the following script on a current mainline kernel with defconfig:
-> 
-> ```
-> #!/bin/bash
-> 
-> set -ex
-> 
-> truncate -s 1G /tmp/img
-> mkfs.ext4 /tmp/img
-> tune2fs -Q usrquota,grpquota,prjquota /tmp/img
-> losetup /dev/loop0 /tmp/img
-> mount -o ro /dev/loop0 /mnt
-> mount -o remount,rw /mnt
-> ```
-> 
-> Executing the script results in the following output:
-> 
-> ```
-> + truncate -s 1G /tmp/img
-> + mkfs.ext4 /tmp/img
-> mke2fs 1.47.0 (5-Feb-2023)
-> Discarding device blocks: done
-> Creating filesystem with 262144 4k blocks and 65536 inodes
-> Filesystem UUID: b96a3da2-043f-11ee-b6f0-47c69db05231
-> Superblock backups stored on blocks:
-> 	32768, 98304, 163840, 229376
-> 
-> Allocating group tables: done
-> Writing inode tables: done
-> Creating journal (8192 blocks): done
-> Writing superblocks and filesystem accounting information: done
-> 
-> + tune2fs -Q usrquota,grpquota,prjquota /tmp/img
-> tune2fs 1.47.0 (5-Feb-2023)
-> + losetup /dev/loop0 /tmp/img
-> [    6.766763] loop0: detected capacity change from 0 to 2097152
-> + mount -o ro /dev/loop0 /mnt
-> [    6.791561] EXT4-fs (loop0): mounted filesystem b96a3da2-043f-11ee-b6f0-47c69db05231 ro with ordered data mode. Quota mode: journalled.
-> + mount -o remount,rw /mnt
-> [    6.805546] EXT4-fs warning (device loop0): ext4_enable_quotas:7028: Failed to enable quota tracking (type=0, err=-30, ino=3). Please run e2fsck to fix.
-> mount: /mnt: cannot remount /dev/loop0 read-write, is write-protected.
->        dmesg(1) may have more information after failed mount system call.
-> ```
+I plan to renew this patchset, which one of the above methods do you
+prefer?
 
-See Bugzilla for the full thread.
+For the always print statement:
 
-Ted, it looks like this regression is caused by your ext4_xattr_block_set()
-fix to earlier syzbot report. Would you like to take a look on it?
+    printf(" See all results in %s\n", ARGV[1]); }'
 
-Anyway, I'm adding it to regzbot:
+I will paste the reason why I need it, as mentioned in [1], if you still
+need a clean test report, I will give up this change ;-)
 
-#regzbot introduced: a44be64bbecb15 https://bugzilla.kernel.org/show_bug.cgi?id=217529
-#regzbot title: Remounting ext4 filesystem from ro to rw fails when quotas are enabled
+Thanks,
+Zhangjin
+---
+[1]: https://lore.kernel.org/linux-riscv/20230605070508.153407-1-falcon@tinylab.org/ 
 
-Thanks.
-
-[1]: https://bugzilla.kernel.org/show_bug.cgi?id=217529
-
--- 
-An old man doll... just what I always wanted! - Clara
+> Best regards,
+> Zhangjin
+>
+> > Willy
