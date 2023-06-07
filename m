@@ -2,67 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E678E7266D3
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 19:11:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B6E07266D4
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 19:11:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231334AbjFGRLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 13:11:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47194 "EHLO
+        id S231442AbjFGRLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 13:11:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbjFGRLF (ORCPT
+        with ESMTP id S229944AbjFGRLN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 13:11:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0A61FC2
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 10:10:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686157813;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=E/4eS/lJzQiNy8tMpqwPuOfCnp2B44jW2PUSyg6nSfU=;
-        b=XCDxYdsHL5jlCXrzQ63i+8mw3z245fziENv2t644LRJRdQmEa6JtZYT4jTn7C6T09odq7+
-        OD3PzHl0zgUDWZ+VpnxteQolKWwAKWY2+04ZMb3cAx8umxXcUy+Z6c9vFrfFVi+lNvqmmZ
-        575rVfZBnJ/mwoYKt5RBm4uxt6g6CCE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-628-iNfVzKGiMs6NtphSbkk2cg-1; Wed, 07 Jun 2023 13:10:12 -0400
-X-MC-Unique: iNfVzKGiMs6NtphSbkk2cg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1B6FF811E7F;
-        Wed,  7 Jun 2023 17:10:10 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.182])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 398402166B26;
-        Wed,  7 Jun 2023 17:10:06 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20230607160528.20078-1-kuniyu@amazon.com>
-References: <20230607160528.20078-1-kuniyu@amazon.com> <20230607140559.2263470-10-dhowells@redhat.com>
-To:     Kuniyuki Iwashima <kuniyu@amazon.com>
-Cc:     dhowells@redhat.com, axboe@kernel.dk, borisp@nvidia.com,
-        chuck.lever@oracle.com, cong.wang@bytedance.com,
-        davem@davemloft.net, dsahern@kernel.org, edumazet@google.com,
-        john.fastabend@gmail.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        netdev@vger.kernel.org, pabeni@redhat.com, tom@herbertland.com,
-        tom@quantonium.net, torvalds@linux-foundation.org,
-        willemdebruijn.kernel@gmail.com, willy@infradead.org
-Subject: Re: [PATCH net-next v5 09/14] kcm: Use splice_eof() to flush
+        Wed, 7 Jun 2023 13:11:13 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDA7A1BC2
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 10:11:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686157872; x=1717693872;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=nn861VFp35Q9ZBleEYgKaQLtJQsWGLX2Vj1qxZbrt3k=;
+  b=H1Uf/yfpRjn861OyFBqw0GPObq/mW4DmAVt/1y3VoXA12KyNklR7i9V+
+   +WRCriW3UZ9ZHWBRRfUY38Xdz9cQys2Xi+AmuDWuB8uExpZ2fbNn8DmeY
+   Xj8z4QYv2vLm35ZnJbDoYd5/zqmP0ABXcWEHqQ6Y275SaNTVO0j3wIDqx
+   TZVOR0YuMk3MC0s4002Me9dcscYMBj2V0acaSUCLtyZHSkmeKEqNNUDH8
+   WHs4M1utJsKYC0g4VNxeBLIPvLGRQ7jC6YzKIxQcdUKmusn/eVKv3UfQ4
+   8XlAdFzv30zuyzSBVParwRK9uLS66mElZRQsiHze/zjAuSknWUJek+i6c
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="443418006"
+X-IronPort-AV: E=Sophos;i="6.00,224,1681196400"; 
+   d="scan'208";a="443418006"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 10:11:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="779541683"
+X-IronPort-AV: E=Sophos;i="6.00,224,1681196400"; 
+   d="scan'208";a="779541683"
+Received: from jkrzyszt-mobl2.ger.corp.intel.com ([10.213.10.174])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 10:11:06 -0700
+From:   Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
+To:     Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@intel.com>
+Cc:     Juergen Gross <jgross@suse.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        Andi Shyti <andi.shyti@linux.intel.com>,
+        intel-gfx@lists.freedesktop.org,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
+Subject: Re: [PATCH v2] x86/mm: Fix PAT bit missing from page protection modify mask
+Date:   Wed, 07 Jun 2023 19:11:04 +0200
+Message-ID: <38324471.J2Yia2DhmK@jkrzyszt-mobl2.ger.corp.intel.com>
+Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173,
+ 80-298 Gdansk - KRS 101882 - NIP 957-07-52-316
+In-Reply-To: <a20344fd-8130-013e-e773-acae81aad55a@intel.com>
+References: <20230607152308.125787-2-janusz.krzysztofik@linux.intel.com>
+ <a20344fd-8130-013e-e773-acae81aad55a@intel.com>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2288535.1686157805.1@warthog.procyon.org.uk>
-Date:   Wed, 07 Jun 2023 18:10:05 +0100
-Message-ID: <2288536.1686157805@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,13 +71,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kuniyuki Iwashima <kuniyu@amazon.com> wrote:
-
-> > +	if (skb_queue_empty(&sk->sk_write_queue))
+On Wednesday, 7 June 2023 17:31:24 CEST Dave Hansen wrote:
+> On 6/7/23 08:23, Janusz Krzysztofik wrote:
+> > 
+> > Extend bitmask used by pgprot_modify() for selecting bits to be preserved
+> > with _PAGE_PAT bit.  However, since that bit can be reused as _PAGE_PSE,
+> > and the _PAGE_CHG_MASK symbol, primarly used by pte_modify(), is likely
+> > intentionally defined with that bit not set, keep that symbol unchanged.
 > 
-> nit: would be better to use skb_queue_empty_lockless().
+> I'm really having a hard time parsing what that last sentence is saying.
+> 
+> Could you try again, please?
 
-Ok.
+OK, but then I need to get my doubts addressed by someone first, otherwise I'm 
+not able to provide a better justification from my heart.
 
-David
+The issue needs to be fixed by including _PAGE_PAT bit into a bitmask used 
+by pgprot_modify() for selecting bits to be preserved.  We can either do 
+that internally to pgprot_modify() (my initial proposal, which my poorly 
+worded paragraph was still trying to describe and justify), or by making 
+_PAGE_PAT a part of _PAGE_CHG_MASK, as suggested by Borislav and reflected in 
+my v2 changelog.  But for the latter, I think we need to make sure that we 
+don't break other users of _PAGE_CHG_MASK.  Maybe Borislav can confirm that's 
+the case.
+
+Since _PAGE_PAT is the same as _PAGE_PSE, _HPAGE_CHG_MASK -- a huge pmds' 
+counterpart of _PAGE_CHG_MASK, introduced by commit c489f1257b8c ("thp: add 
+pmd_modify"), defined as (_PAGE_CHG_MASK | _PAGE_PSE) -- will no longer differ 
+from _PAGE_CHG_MASK as soon as we add _PAGE_PAT bit to the latter.  If such 
+modification of _PAGE_CHG_MASK was irrelevant to its users then one may ask 
+why a new symbol was introduced instead of reusing the existing one with that 
+otherwise irrelevant bit (_PAGE_PSE in that case) added.  I've initially 
+assumed that keeping _PAGE_CHG_MASK without _PAGE_PSE (vel _PAGE_PAT) included 
+into it was intentional for some reason.  Maybe Johannes Weiner, the author of 
+that patch (adding him to Cc:), could shed more light on that.
+
+Thanks,
+Janusz
+
+
+
+
 
