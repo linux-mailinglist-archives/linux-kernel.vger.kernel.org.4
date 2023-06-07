@@ -2,157 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46795726126
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 15:21:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F286272612C
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 15:23:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240667AbjFGNVk convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 7 Jun 2023 09:21:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48032 "EHLO
+        id S239785AbjFGNXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 09:23:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240067AbjFGNVg (ORCPT
+        with ESMTP id S235770AbjFGNXP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 09:21:36 -0400
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C691BFE;
-        Wed,  7 Jun 2023 06:21:17 -0700 (PDT)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-5659d85876dso78350457b3.2;
-        Wed, 07 Jun 2023 06:21:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686144077; x=1688736077;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rA2dk4Z+pOkq/jyOIvAGRXOvNoV7/kLeQDZUQrvL074=;
-        b=Xuc2BluMHxHXQCCBTAwWQ5MsaVCeOWiBHHOYAlU26FZMSqxCMxLmXK0nbRs6fSon98
-         9hZM5OqF2TjIuQOuEoyVKuZwveG/iqK9QLfnIP2nM7sxd97Bxup2x4MugUMVVUYMygcr
-         LYE81/DLewtbBKnNzn8h93Hq9+DRokhScsEaI/s/u2h3w5xgYdqrEoMEoi1gGRKuc/5x
-         ctQHmPNQ6h2KKIjGHzPW+wIDw2Sq1nDSbyhzzO/XSHhnHF1HuHtmlyQ2WU34XWnV+ZCi
-         jsJfvMIY37FFr6/98xKGyYk3SN4uvS6dLh9uzPK0FLmLtW2y6sD1g5jJvZqSSikQIW26
-         7eJA==
-X-Gm-Message-State: AC+VfDySuFGgo5PWbMQlp0U0ARn7Q+glrr1LixYkIZmg4LzcG1IKAEek
-        9I/yv6ZRjaQEF00R4ugqJ6IVNxp04d51yw==
-X-Google-Smtp-Source: ACHHUZ7KTFcUC3FyJndrCGLRaGpbn15xpKBxl+uQ5BssG8+rZBxT/uZ9tke/NsGI02yy5SHACsocHA==
-X-Received: by 2002:a0d:f343:0:b0:556:ceb2:c462 with SMTP id c64-20020a0df343000000b00556ceb2c462mr6457775ywf.2.1686144076634;
-        Wed, 07 Jun 2023 06:21:16 -0700 (PDT)
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com. [209.85.219.181])
-        by smtp.gmail.com with ESMTPSA id k126-20020a816f84000000b00565cf40238csm4720947ywc.110.2023.06.07.06.21.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 06:21:16 -0700 (PDT)
-Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-bab8f66d3a2so8619116276.3;
-        Wed, 07 Jun 2023 06:21:15 -0700 (PDT)
-X-Received: by 2002:a25:4889:0:b0:bac:748a:5759 with SMTP id
- v131-20020a254889000000b00bac748a5759mr5257149yba.37.1686144075629; Wed, 07
- Jun 2023 06:21:15 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230530112050.5635-1-aford173@gmail.com> <20230530112050.5635-3-aford173@gmail.com>
-In-Reply-To: <20230530112050.5635-3-aford173@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 7 Jun 2023 15:21:03 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXJaZCSN18aB1yBvhuTk=DQoe4B6aVHgoZvyLsZcRfrDA@mail.gmail.com>
-Message-ID: <CAMuHMdXJaZCSN18aB1yBvhuTk=DQoe4B6aVHgoZvyLsZcRfrDA@mail.gmail.com>
-Subject: Re: [RFC 3/3] arm64: dts: renesas: r8a774a1: Add GPU Node
-To:     Adam Ford <aford173@gmail.com>
-Cc:     linux-renesas-soc@vger.kernel.org, biju.das.jz@bp.renesas.com,
-        marek.vasut+renesas@gmail.com, cstevens@beaconembedded.com,
-        aford@beaconembedded.com,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
+        Wed, 7 Jun 2023 09:23:15 -0400
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6503995;
+        Wed,  7 Jun 2023 06:23:13 -0700 (PDT)
+X-GND-Sasl: herve.codina@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1686144191;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=upXsJBaOapv3HfJgv1RgsURS5W6Qd+6TPxSPKkAE5j8=;
+        b=jyfk1DMy8T+5r8MYSOQUudfcbk5sSXz5MeduU4Kee3pdk9FYRkqe9M7/Z7PZvEH0IpOZVG
+        dZFuCOQskx1e/WzL0LIjkwDW2kG2L13bG0KMLcYUb3y5VOjjs0k18C17jfGkGJap7wuDHm
+        F0qwd/wZyVlfhOHnZDqB51cFWB1Nz0y46LfhPiUacRrQxPYi19zNIfnC2a2lXo/dLsQK/k
+        C7UiW/tl3AWH55f6nX1gHlGy792zZA6c1obgpiR9NYYuhiVpkxJEo3q6Cj2SDtQk07SXMV
+        QcCtdd7gDT9P6zErA+YK7QicVFwQraPa6P9bli7/8OPC39m7MZWw0j2Wq1AcCQ==
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8F55940017;
+        Wed,  7 Jun 2023 13:23:09 +0000 (UTC)
+Date:   Wed, 7 Jun 2023 15:23:08 +0200
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     andy.shevchenko@gmail.com
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v2 7/9] ASoC: codecs: Add support for the generic IIO
+ auxiliary devices
+Message-ID: <20230607152308.02b404e1@bootlin.com>
+In-Reply-To: <20230606155404.28ada064@bootlin.com>
+References: <20230523151223.109551-1-herve.codina@bootlin.com>
+        <20230523151223.109551-8-herve.codina@bootlin.com>
+        <ZHuFywIrTnEFpX6e@surfacebook>
+        <20230606155404.28ada064@bootlin.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Adam,
+Hi Andy,
 
-On Tue, May 30, 2023 at 1:21 PM Adam Ford <aford173@gmail.com> wrote:
-> With the 3dge and ZG clocks now available, the generic GPU node can
-> be added.  Until proper firmware is made, it is not usable.
->
-> Signed-off-by: Adam Ford <aford173@gmail.com>
-> ---
-> This is based on the assumption that the Rogue 6250 could use
-> generic driver [1] and firmware [2] being implemebted by the Mesa group
-> and others.  In practice, the firmware isn't really compatible since
-> the 6250 in the RZ/G2M appears to be a different variant.
->
-> [1] - https://gitlab.freedesktop.org/frankbinns/powervr/-/tree/powervr-next
-> [2] - https://gitlab.freedesktop.org/frankbinns/linux-firmware/-/tree/powervr/powervr
+On Tue, 6 Jun 2023 15:54:04 +0200
+Herve Codina <herve.codina@bootlin.com> wrote:
 
-Thanks for your patch!
+...
+> >   
+> > > +	platform_set_drvdata(pdev, iio_aux);    
+> > 
+> > Which callback is using this driver data?  
+> 
+> None -> I will remove platform_set_drvdata().
+> 
 
-> --- a/arch/arm64/boot/dts/renesas/r8a774a1.dtsi
-> +++ b/arch/arm64/boot/dts/renesas/r8a774a1.dtsi
-> @@ -226,6 +226,27 @@ extalr_clk: extalr {
->                 clock-frequency = <0>;
->         };
->
-> +       gpu_opp_table: opp-table {
-> +               compatible = "operating-points-v2";
-> +
-> +               opp-200000000 {
-> +                       opp-hz = /bits/ 64 <200000000>;
-> +                       opp-microvolt = <830000>;
-> +               };
-> +               opp-300000000 {
-> +                       opp-hz = /bits/ 64 <300000000>;
-> +                       opp-microvolt = <830000>;
-> +               };
-> +               opp-400000000 {
-> +                       opp-hz = /bits/ 64 <400000000>;
-> +                       opp-microvolt = <830000>;
-> +               };
-> +               opp-600000000 {
-> +                       opp-hz = /bits/ 64 <600000000>;
-> +                       opp-microvolt = <830000>;
-> +               };
-> +       };
-> +
->         /* External PCIe clock - can be overridden by the board */
->         pcie_bus_clk: pcie_bus {
->                 compatible = "fixed-clock";
-> @@ -2347,6 +2368,18 @@ gic: interrupt-controller@f1010000 {
->                         resets = <&cpg 408>;
->                 };
->
-> +               gpu@fd000000 {
-> +                       compatible = "img,powervr-series6xt";
-> +                       reg = <0 0xfd000000 0 0x40000>;
-> +                       interrupts = <GIC_SPI 119 IRQ_TYPE_LEVEL_HIGH>;
-> +                       clocks = <&cpg CPG_MOD 112>, <&cpg CPG_MOD 112>,<&cpg CPG_MOD 112>;
-> +                       clock-names = "core", "mem", "sys";
-> +                       interrupt-names = "gpu";
-> +                       operating-points-v2 = <&gpu_opp_table>;
-> +                       power-domains = <&sysc R8A774A1_PD_3DG_B>;
-> +                       resets = <&cpg 112>;
-> +               };
-> +
->                 pciec0: pcie@fe000000 {
->                         compatible = "renesas,pcie-r8a774a1",
->                                      "renesas,pcie-rcar-gen3";
+My previous answer was not correct.
+The platform_set_drvdata() call is needed.
 
-LGTM.  But obviously I cannot take this as-is, as there are no DT bindings
-for this device, and it didn't work for you...
+In fact, the driver uses snd_soc_component_get_drvdata() 
+  https://elixir.bootlin.com/linux/v6.4-rc5/source/include/sound/soc-component.h#L425
+and this snd_soc_component_get_drvdata() get the driver data set by the
+platform_set_drvdata() call.
 
-Gr{oetje,eeting}s,
+I cannot use snd_soc_component_set_drvdata() to set the driver data because
+I haven't got the struct snd_soc_component instance when I need to set the
+driver data.
 
-                        Geert
+So, I will not remove the platform_set_drvdata() call.
+
+The sequence is:
+  --- 8< ---
+  static int audio_iio_aux_probe(struct platform_device *pdev)
+  {
+	struct audio_iio_aux *iio_aux;
+
+	iio_aux = devm_kzalloc(&pdev->dev, sizeof(*iio_aux), GFP_KERNEL);
+	if (!iio_aux)
+		return -ENOMEM;
+
+	...
+
+	platform_set_drvdata(pdev, iio_aux);
+
+	return devm_snd_soc_register_component(iio_aux->dev,
+					       &audio_iio_aux_component_driver,
+					       NULL, 0);
+  }
+  --- 8< ---
+
+The struct snd_soc_component instance will be create during the 
+devm_snd_soc_register_component() call.
+
+Regards,
+Hervé
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Hervé Codina, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
