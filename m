@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A837F726494
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 17:27:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6363D726497
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 17:27:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240578AbjFGP1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 11:27:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34320 "EHLO
+        id S241427AbjFGP1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 11:27:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240256AbjFGP0o (ORCPT
+        with ESMTP id S239237AbjFGP1A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 11:26:44 -0400
+        Wed, 7 Jun 2023 11:27:00 -0400
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82EEA210A;
-        Wed,  7 Jun 2023 08:26:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F4183213B;
+        Wed,  7 Jun 2023 08:26:23 -0700 (PDT)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id BB34221A0E;
-        Wed,  7 Jun 2023 15:25:54 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTP id 69C1621A0A;
+        Wed,  7 Jun 2023 15:26:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1686151554; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1686151565; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=67NrrjqknF8ncefZ0/QwRO7Z+UALOwaMyCh2wgbmdCE=;
-        b=RPVtsD20oF7xKx9lHHkuVEYOaHH0NVotS8ERgMRbGiYv9sNENCvHxcl86EgPfu4tpZlaES
-        +bFIrLcaRZhUB+SRGKrqLJyXd/vLcuFZa8QN85IWEttGngspIYlqL5HmN4sh3PRvAUaZ2t
-        vbu4DP4Wz2gOPmFgeP4Pm/pLgoanLy0=
+        bh=A3CgSzwsEXLc90cJanqFihmE6LXoKCUHuh/h90XQnTE=;
+        b=kzML994ZgBG3ossOC8+9yjHO8RHOyz8hbZzpcg9ma+UdcHUczrr/x1OIQ42iAngt9IVRJ1
+        kxpe7IwJ6HQ8T0pxLF4X36w0nvN7fkliq0gu+Fs3gxp7s7VvfXSPLdZylbnotNBQqm2O5b
+        ejAwedrW9fGl0BJw30aItF91kMzis20=
 Received: from alley.suse.cz (unknown [10.100.201.202])
-        by relay2.suse.de (Postfix) with ESMTP id 337092C141;
-        Wed,  7 Jun 2023 15:25:54 +0000 (UTC)
+        by relay2.suse.de (Postfix) with ESMTP id D68332C141;
+        Wed,  7 Jun 2023 15:26:04 +0000 (UTC)
 From:   Petr Mladek <pmladek@suse.com>
 To:     Andrew Morton <akpm@linux-foundation.org>,
         Douglas Anderson <dianders@chromium.org>
@@ -41,9 +41,9 @@ Cc:     kgdb-bugreport@lists.sourceforge.net, linux-kernel@vger.kernel.org,
         sparclinux@vger.kernel.org,
         "David S . Miller" <davem@davemloft.net>,
         linux-perf-users@vger.kernel.org, Petr Mladek <pmladek@suse.com>
-Subject: [PATCH 5/7] watchdog/sparc64: Rename HAVE_NMI_WATCHDOG to HAVE_HARDLOCKUP_WATCHDOG_SPARC64
-Date:   Wed,  7 Jun 2023 17:24:30 +0200
-Message-Id: <20230607152432.5435-6-pmladek@suse.com>
+Subject: [PATCH 6/7] watchdog/sparc64: Define HARDLOCKUP_DETECTOR_SPARC64
+Date:   Wed,  7 Jun 2023 17:24:31 +0200
+Message-Id: <20230607152432.5435-7-pmladek@suse.com>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20230607152432.5435-1-pmladek@suse.com>
 References: <20230607152432.5435-1-pmladek@suse.com>
@@ -59,97 +59,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The configuration variable HAVE_NMI_WATCHDOG has a generic name but
-it is selected only for SPARC64.
+The HAVE_ prefix means that the code could be enabled. Add another
+variable for HAVE_HARDLOCKUP_DETECTOR_SPARC64 without this prefix.
+It will be set when it should be built. It will make it compatible
+with the other hardlockup detectors.
 
-It should _not_ be used in general because it is not integrated with
-the other hardlockup detectors. Namely, it does not support the hardlockup
-specific command line parameters and systcl interface. Instead, it is
-enabled/disabled together with the softlockup detector by the global
-"watchdog" sysctl.
+Before, it is far from obvious that the SPARC64 variant is actually used:
 
-Rename it to HAVE_HARDLOCKUP_WATCHDOG_SPARC64 to make the special
-behavior more clear.
+$> make ARCH=sparc64 defconfig
+$> grep HARDLOCKUP_DETECTOR .config
+CONFIG_HAVE_HARDLOCKUP_DETECTOR_BUDDY=y
+CONFIG_HAVE_HARDLOCKUP_DETECTOR_SPARC64=y
 
-Also the variable is set only on sparc64. Move the definition
-from arch/Kconfig to arch/sparc/Kconfig.debug.
+After, it is more clear:
+
+$> make ARCH=sparc64 defconfig
+$> grep HARDLOCKUP_DETECTOR .config
+CONFIG_HAVE_HARDLOCKUP_DETECTOR_BUDDY=y
+CONFIG_HAVE_HARDLOCKUP_DETECTOR_SPARC64=y
+CONFIG_HARDLOCKUP_DETECTOR_SPARC64=y
 
 Signed-off-by: Petr Mladek <pmladek@suse.com>
 ---
- arch/Kconfig             | 12 ------------
- arch/sparc/Kconfig       |  2 +-
- arch/sparc/Kconfig.debug | 12 ++++++++++++
+ arch/sparc/Kconfig.debug | 10 +++++++++-
  include/linux/nmi.h      |  4 ++--
  kernel/watchdog.c        |  2 +-
- lib/Kconfig.debug        |  5 +----
- 6 files changed, 17 insertions(+), 20 deletions(-)
+ lib/Kconfig.debug        |  2 +-
+ 4 files changed, 13 insertions(+), 5 deletions(-)
 
-diff --git a/arch/Kconfig b/arch/Kconfig
-index 57f15babe188..6517e5477459 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -400,18 +400,6 @@ config HAVE_HARDLOCKUP_DETECTOR_PERF
- 	  The arch chooses to use the generic perf-NMI-based hardlockup
- 	  detector. Must define HAVE_PERF_EVENTS_NMI.
- 
--config HAVE_NMI_WATCHDOG
--	depends on HAVE_NMI
--	bool
--	help
--	  Sparc64 provides its own hardlockup detector implementation instead
--	  of the generic perf one.
--
--	  It does _not_ use the command line parameters and sysctl interface
--	  used by generic hardlockup detectors. Instead it is enabled/disabled
--	  by the top-level watchdog interface that is common for both softlockup
--	  and hardlockup detectors.
--
- config HAVE_HARDLOCKUP_DETECTOR_ARCH
- 	bool
- 	help
-diff --git a/arch/sparc/Kconfig b/arch/sparc/Kconfig
-index 8535e19062f6..7297f69635cb 100644
---- a/arch/sparc/Kconfig
-+++ b/arch/sparc/Kconfig
-@@ -33,7 +33,7 @@ config SPARC
- 	select ARCH_WANT_IPC_PARSE_VERSION
- 	select GENERIC_PCI_IOMAP
- 	select HAS_IOPORT
--	select HAVE_NMI_WATCHDOG if SPARC64
-+	select HAVE_HARDLOCKUP_DETECTOR_SPARC64 if SPARC64
- 	select HAVE_CBPF_JIT if SPARC32
- 	select HAVE_EBPF_JIT if SPARC64
- 	select HAVE_DEBUG_BUGVERBOSE
 diff --git a/arch/sparc/Kconfig.debug b/arch/sparc/Kconfig.debug
-index 6b2bec1888b3..b6695303b8d4 100644
+index b6695303b8d4..0bb95b0aacf4 100644
 --- a/arch/sparc/Kconfig.debug
 +++ b/arch/sparc/Kconfig.debug
-@@ -14,3 +14,15 @@ config FRAME_POINTER
- 	bool
- 	depends on MCOUNT
+@@ -16,8 +16,9 @@ config FRAME_POINTER
  	default y
-+
-+config HAVE_HARDLOCKUP_DETECTOR_SPARC64
+ 
+ config HAVE_HARDLOCKUP_DETECTOR_SPARC64
+-	depends on HAVE_NMI
+ 	bool
 +	depends on HAVE_NMI
-+	bool
-+	help
-+	  Sparc64 provides its own hardlockup detector implementation instead
-+	  of the generic perf one.
++	select HARDLOCKUP_DETECTOR_SPARC64
+ 	help
+ 	  Sparc64 provides its own hardlockup detector implementation instead
+ 	  of the generic perf one.
+@@ -26,3 +27,10 @@ config HAVE_HARDLOCKUP_DETECTOR_SPARC64
+ 	  used by generic hardlockup detectors. Instead it is enabled/disabled
+ 	  by the top-level watchdog interface that is common for both softlockup
+ 	  and hardlockup detectors.
 +
-+	  It does _not_ use the command line parameters and sysctl interface
-+	  used by generic hardlockup detectors. Instead it is enabled/disabled
-+	  by the top-level watchdog interface that is common for both softlockup
-+	  and hardlockup detectors.
++config HARDLOCKUP_DETECTOR_SPARC64
++	bool
++	depends on HAVE_HARDLOCKUP_DETECTOR_SPARC64
++
++	help
++	  The custom hardlockup detector is always built when possible.
 diff --git a/include/linux/nmi.h b/include/linux/nmi.h
-index 800196c78f65..7ee6c35d1f05 100644
+index 7ee6c35d1f05..515d6724f469 100644
 --- a/include/linux/nmi.h
 +++ b/include/linux/nmi.h
 @@ -9,7 +9,7 @@
  #include <asm/irq.h>
  
  /* Arch specific watchdogs might need to share extra watchdog-related APIs. */
--#if defined(CONFIG_HAVE_HARDLOCKUP_DETECTOR_ARCH) || defined(CONFIG_HAVE_NMI_WATCHDOG)
-+#if defined(CONFIG_HAVE_HARDLOCKUP_DETECTOR_ARCH) || defined(CONFIG_HAVE_HARDLOCKUP_DETECTOR_SPARC64)
+-#if defined(CONFIG_HAVE_HARDLOCKUP_DETECTOR_ARCH) || defined(CONFIG_HAVE_HARDLOCKUP_DETECTOR_SPARC64)
++#if defined(CONFIG_HAVE_HARDLOCKUP_DETECTOR_ARCH) || defined(CONFIG_HARDLOCKUP_DETECTOR_SPARC64)
  #include <asm/nmi.h>
  #endif
  
@@ -157,39 +130,34 @@ index 800196c78f65..7ee6c35d1f05 100644
  #endif
  
  /* Sparc64 has special implemetantion that is always enabled. */
--#if defined(CONFIG_HARDLOCKUP_DETECTOR) || defined(CONFIG_HAVE_NMI_WATCHDOG)
-+#if defined(CONFIG_HARDLOCKUP_DETECTOR) || defined(CONFIG_HAVE_HARDLOCKUP_DETECTOR_SPARC64)
+-#if defined(CONFIG_HARDLOCKUP_DETECTOR) || defined(CONFIG_HAVE_HARDLOCKUP_DETECTOR_SPARC64)
++#if defined(CONFIG_HARDLOCKUP_DETECTOR) || defined(CONFIG_HARDLOCKUP_DETECTOR_SPARC64)
  void arch_touch_nmi_watchdog(void);
  #else
  static inline void arch_touch_nmi_watchdog(void) { }
 diff --git a/kernel/watchdog.c b/kernel/watchdog.c
-index 437c198933cf..babd2f3c8b72 100644
+index babd2f3c8b72..a2154e753cb4 100644
 --- a/kernel/watchdog.c
 +++ b/kernel/watchdog.c
 @@ -29,7 +29,7 @@
  
  static DEFINE_MUTEX(watchdog_mutex);
  
--#if defined(CONFIG_HARDLOCKUP_DETECTOR) || defined(CONFIG_HAVE_NMI_WATCHDOG)
-+#if defined(CONFIG_HARDLOCKUP_DETECTOR) || defined(CONFIG_HAVE_HARDLOCKUP_DETECTOR_SPARC64)
+-#if defined(CONFIG_HARDLOCKUP_DETECTOR) || defined(CONFIG_HAVE_HARDLOCKUP_DETECTOR_SPARC64)
++#if defined(CONFIG_HARDLOCKUP_DETECTOR) || defined(CONFIG_HARDLOCKUP_DETECTOR_SPARC64)
  # define WATCHDOG_HARDLOCKUP_DEFAULT	1
  #else
  # define WATCHDOG_HARDLOCKUP_DEFAULT	0
 diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 4b4aa0f941f9..2d8d8ce7c2d7 100644
+index 2d8d8ce7c2d7..116904e65d9f 100644
 --- a/lib/Kconfig.debug
 +++ b/lib/Kconfig.debug
-@@ -1050,12 +1050,9 @@ config HAVE_HARDLOCKUP_DETECTOR_BUDDY
- #	sparc64: has a custom implementation which is not using the common
- #		hardlockup command line options and sysctl interface.
+@@ -1052,7 +1052,7 @@ config HAVE_HARDLOCKUP_DETECTOR_BUDDY
  #
--# Note that HAVE_NMI_WATCHDOG is set when the sparc64 specific implementation
--# is used.
--#
  config HARDLOCKUP_DETECTOR
  	bool "Detect Hard Lockups"
--	depends on DEBUG_KERNEL && !S390 && !HAVE_NMI_WATCHDOG
-+	depends on DEBUG_KERNEL && !S390 && !HAVE_HARDLOCKUP_DETECTOR_SPARC64
+-	depends on DEBUG_KERNEL && !S390 && !HAVE_HARDLOCKUP_DETECTOR_SPARC64
++	depends on DEBUG_KERNEL && !S390 && !HARDLOCKUP_DETECTOR_SPARC64
  	depends on HAVE_HARDLOCKUP_DETECTOR_PERF || HAVE_HARDLOCKUP_DETECTOR_BUDDY || HAVE_HARDLOCKUP_DETECTOR_ARCH
  	imply HARDLOCKUP_DETECTOR_PERF
  	imply HARDLOCKUP_DETECTOR_BUDDY
