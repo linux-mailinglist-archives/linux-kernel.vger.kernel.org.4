@@ -2,438 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A7FC725524
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 09:12:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F280725514
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 09:10:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238761AbjFGHMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 03:12:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47722 "EHLO
+        id S238689AbjFGHKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 03:10:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238815AbjFGHMt (ORCPT
+        with ESMTP id S238677AbjFGHKP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 03:12:49 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E21841BC5;
-        Wed,  7 Jun 2023 00:12:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1686121967; x=1717657967;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=XFr0imQSt+KEMbzAmSPeCg598h5t7DnW8EdP4TuVE1I=;
-  b=uOwEVRwNu4QKLRQDVgLiIYWfjbgTra/LKuevPqK5R6p5xbLqZIaIvi2T
-   yl01pIXcq13XZB6uVzXe0oTQBlsNwnHkR2/zwCeig5eWhcWyQ8D42S4w0
-   VYMxjAv50qvhOonvkX5cvOADPmUN+Cm+u7+V0zKB4dpAMieo96qaAy6G8
-   SJmneku5dilFUiCl4bBnE6gGW3oYA4zmlbEVfMKal70OvxpWRFf5666dr
-   2MxeIWtOioPLWpsvrIfrLToPpUaL9cB/hlBb15+AfwrqdSChg5XtXKTah
-   4UARArzGpBkj1ZpfKZBhd8vJ4f8OyCqaab8XaVbnXr8jzQs4xP0si42BC
-   Q==;
-X-IronPort-AV: E=Sophos;i="6.00,223,1681196400"; 
-   d="scan'208";a="217195103"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Jun 2023 00:12:47 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 7 Jun 2023 00:12:45 -0700
-Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.21 via Frontend Transport; Wed, 7 Jun 2023 00:12:43 -0700
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <andrew@lunn.ch>, <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <richardcochran@gmail.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>
-Subject: [PATCH net-next] net: micrel: Change to receive timestamp in the frame for lan8841
-Date:   Wed, 7 Jun 2023 09:09:48 +0200
-Message-ID: <20230607070948.1746768-1-horatiu.vultur@microchip.com>
-X-Mailer: git-send-email 2.38.0
+        Wed, 7 Jun 2023 03:10:15 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AB0E19B6
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 00:10:11 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-9745c5fed21so886935966b.3
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 00:10:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686121809; x=1688713809;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RNbd0rV0wgo4TlBHE0Z+HQIt/9tYb3WUn2Xisg5I4Vk=;
+        b=UOSj4A+2ZRDTz2ZtgutALrHXYmvxP82XQkIEWX5OyM4RK3+i2hw5jh9/t/vT+D6xP0
+         C5jQg/TV6Qk3cOSJgmDaFnNbkCcBkNSheyfauSsdM5ZP4o3gyWe6x85+0Cd2ntOe1kRe
+         yiWkhIGIpVEr35zhrEWAYou+0Q5j/0X3PPEkS1AT4MgWBVlHVRnfZdJTGypF0t6EgUIY
+         8am/szsW/5k//patGgsMyH3FCAqRqDe6o5tZnVgouzp68VDOppdXE2Jqh3EkIkXkjW6Y
+         JGAdMAWsWWRjZOIZ70i3I6JNz7RJtrMtaVaBM57nyZdhRHS3S/NlEJYLdyBVdS1Rp5YD
+         Ud9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686121809; x=1688713809;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RNbd0rV0wgo4TlBHE0Z+HQIt/9tYb3WUn2Xisg5I4Vk=;
+        b=dj/odBtP0ArX+PYmUzlh6fTCEuOirhigzvUAWCCNIF1wOB/jz8CNfHxYqI2BAtDEYs
+         LX+P8TZ5f7QUtUue4JqKgaSb1NvEsIidpQkkvI3M96NIns79na3y2Aem4TXi7byIXYM6
+         src/sLhSzstfKJUQODkSCDd22vTWDPtY53J+WJWWcYLycqLVJRDGyrXIWvO7LO0RvArn
+         +cRen/rzsZDo5lsuHkmfbTlqrOqkcx11NTwMDsM4453NwcrZ+K0by6d2fuD8pGachvmI
+         32URklFil4s8z3l69Pa17zlYxi6Ly2OJXnys2B6fj+W0x2Z/eayyYx7p8E01T0+8pqtt
+         opMQ==
+X-Gm-Message-State: AC+VfDwj6u+V8tRNVeKl0gJO1vhlqqRngd+K7ZtyLgNVvU1Q5ssc4zhy
+        hfSiA8OB5THT/Mh/6fEzl7EB2w==
+X-Google-Smtp-Source: ACHHUZ7aeESog1csl2k7sGYQ2vfcQCGBYNFejR21FOhToVA+9TBvt7DhY+vJamrZ7lva5yKLFFVEcA==
+X-Received: by 2002:a17:907:3f9a:b0:96f:8666:5fc4 with SMTP id hr26-20020a1709073f9a00b0096f86665fc4mr6012541ejc.50.1686121809565;
+        Wed, 07 Jun 2023 00:10:09 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id fx4-20020a170906b74400b00977d0f1c5bcsm4203514ejb.69.2023.06.07.00.10.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Jun 2023 00:10:09 -0700 (PDT)
+Message-ID: <742d3161-3a4d-ea77-7bd4-85f6636bf400@linaro.org>
+Date:   Wed, 7 Jun 2023 09:10:05 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [v5 3/5] dt-bindings: mfd: Add aspeed pwm-tach binding
+To:     Billy Tsai <billy_tsai@aspeedtech.com>,
+        Patrick Williams <patrick@stwcx.xyz>
+Cc:     "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "joel@jms.id.au" <joel@jms.id.au>,
+        "andrew@aj.id.au" <andrew@aj.id.au>,
+        "lee@kernel.org" <lee@kernel.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+References: <20230606094535.5388-1-billy_tsai@aspeedtech.com>
+ <20230606094535.5388-4-billy_tsai@aspeedtech.com>
+ <35bf0a69-bcf6-ae35-eb3c-e74cfcf9c571@linaro.org>
+ <ZH89fXknZlhGmM_H@heinlein.vulture-banana.ts.net>
+ <c28f963e-d13c-6b5c-c389-996e986f81d5@linaro.org>
+ <SG2PR06MB33652E18980E9CF8E4F0894D8B53A@SG2PR06MB3365.apcprd06.prod.outlook.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <SG2PR06MB33652E18980E9CF8E4F0894D8B53A@SG2PR06MB3365.apcprd06.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently for each timestamp frame, the SW needs to go and read the
-received timestamp over the MDIO bus. But the HW has the capability
-to store the received nanoseconds part and the least significant two
-bits of the seconds in the reserved field of the PTP header. In this
-way we could save few mdio transactions (actually a little more
-transactions because the access to the PTP registers are indirect)
-for each received frame. But is still required to read the seconds
-part of each received frame.
-Doing these changes to start to get the received timestamp in the
-reserved field of the header, will give a great CPU usage performance.
-Running ptp4l with logSyncInterval of -9 will give a ~50% CPU
-improvment.
+On 07/06/2023 08:26, Billy Tsai wrote:
+>         On 06/06/2023 16:06, Patrick Williams wrote:
+>         >> On Tue, Jun 06, 2023 at 12:49:04PM +0200, Krzysztof Kozlowski wrote:
+>         >>
+>         >> Hi Krzysztof,
+>         >>
+>         >> Thank you for reviewing this from Billy.
+>         >>
+>         >> The Aspeed chip is heavily used by the OpenBMC community and the 2600
+>         >> has been used in production systems for almost 2 years now.  Many
+>         >> companies are having to carry previous versions of these as patches, and
+>         >> some of the APIs changed since the last revision from Billy.  So, I had
+>         >> asked him to submit the latest patch set with as many revisions as he
+>         >> understood what to change, since the conversation seemed to have died
+>         >> since last time he submitted.
+>         >>
+>         >> I don't believe Billy is intentionally ignoring your feedback and he is
+>         >> motivated to get this patch set wrapped up into an acceptable state.
+>         >>
+>         >>> On 06/06/2023 11:45, Billy Tsai wrote:
+>         >>
+>         >>> NAK. You got here clear comment. You cannot have simple MFD with
+>         >>> resources. It is not simple anymore.
+>         >>>
+>         >>
+>         >> In fairness, Billy asked for clarification from you on this point and didn't
+>         >> receive it.
+>         >>
+>         >> https://lore.kernel.org/lkml/24DD1FEB-95F3-47BE-BE61-8B0E6FBDE20F@aspeedtech.com/
+> 
+>         > I gave the instruction what Billy should do:
+> 
+>         > https://lore.kernel.org/lkml/41500a04-b004-0e2c-20a1-3a3092b90e6d@linaro.org/
+> 
+>         > What about other ignored comments? About subject, quotes and more? Even
+>         > if this one was unclear, then why ignoring all the rest?
+> 
+> It's possible that there was some confusion regarding your message. I apologize for any misunderstanding.
+> About the subject: I apologize for the misunderstanding. I just drop the redundant "bindings" in the commit message.
 
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
----
- drivers/net/phy/micrel.c | 231 +++++++++++++++++++++++----------------
- 1 file changed, 139 insertions(+), 92 deletions(-)
+Read entire message, not some parts of it.
 
-diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
-index 0ff4fd9f1a183..28365006b2067 100644
---- a/drivers/net/phy/micrel.c
-+++ b/drivers/net/phy/micrel.c
-@@ -3502,6 +3502,9 @@ static int lan8814_probe(struct phy_device *phydev)
- #define LAN8841_PTP_CMD_CTL_PTP_RESET		BIT(0)
- #define LAN8841_PTP_RX_PARSE_CONFIG		368
- #define LAN8841_PTP_TX_PARSE_CONFIG		432
-+#define LAN8841_PTP_RX_MODE			381
-+#define LAN8841_PTP_INSERT_TS_EN		BIT(0)
-+#define LAN8841_PTP_INSERT_TS_32BIT		BIT(1)
- 
- static int lan8841_config_init(struct phy_device *phydev)
- {
-@@ -3650,68 +3653,18 @@ static void lan8841_ptp_process_tx_ts(struct kszphy_ptp_priv *ptp_priv)
- 		lan8814_match_tx_skb(ptp_priv, sec, nsec, seq);
- }
- 
--#define LAN8841_PTP_RX_INGRESS_SEC_LO			389
--#define LAN8841_PTP_RX_INGRESS_SEC_HI			388
--#define LAN8841_PTP_RX_INGRESS_NS_LO			387
--#define LAN8841_PTP_RX_INGRESS_NS_HI			386
--#define LAN8841_PTP_RX_INGRESS_NSEC_HI_VALID		BIT(15)
--#define LAN8841_PTP_RX_MSG_HEADER2			391
--
--static struct lan8814_ptp_rx_ts *lan8841_ptp_get_rx_ts(struct kszphy_ptp_priv *ptp_priv)
--{
--	struct phy_device *phydev = ptp_priv->phydev;
--	struct lan8814_ptp_rx_ts *rx_ts;
--	u32 sec, nsec;
--	u16 seq;
--
--	nsec = phy_read_mmd(phydev, 2, LAN8841_PTP_RX_INGRESS_NS_HI);
--	if (!(nsec & LAN8841_PTP_RX_INGRESS_NSEC_HI_VALID))
--		return NULL;
--
--	nsec = ((nsec & 0x3fff) << 16);
--	nsec = nsec | phy_read_mmd(phydev, 2, LAN8841_PTP_RX_INGRESS_NS_LO);
--
--	sec = phy_read_mmd(phydev, 2, LAN8841_PTP_RX_INGRESS_SEC_HI);
--	sec = sec << 16;
--	sec = sec | phy_read_mmd(phydev, 2, LAN8841_PTP_RX_INGRESS_SEC_LO);
--
--	seq = phy_read_mmd(phydev, 2, LAN8841_PTP_RX_MSG_HEADER2);
--
--	rx_ts = kzalloc(sizeof(*rx_ts), GFP_KERNEL);
--	if (!rx_ts)
--		return NULL;
--
--	rx_ts->seconds = sec;
--	rx_ts->nsec = nsec;
--	rx_ts->seq_id = seq;
--
--	return rx_ts;
--}
--
--static void lan8841_ptp_process_rx_ts(struct kszphy_ptp_priv *ptp_priv)
--{
--	struct lan8814_ptp_rx_ts *rx_ts;
--
--	while ((rx_ts = lan8841_ptp_get_rx_ts(ptp_priv)) != NULL)
--		lan8814_match_rx_ts(ptp_priv, rx_ts);
--}
--
- #define LAN8841_PTP_INT_STS			259
- #define LAN8841_PTP_INT_STS_PTP_TX_TS_OVRFL_INT	BIT(13)
- #define LAN8841_PTP_INT_STS_PTP_TX_TS_INT	BIT(12)
--#define LAN8841_PTP_INT_STS_PTP_RX_TS_OVRFL_INT	BIT(9)
--#define LAN8841_PTP_INT_STS_PTP_RX_TS_INT	BIT(8)
- #define LAN8841_PTP_INT_STS_PTP_GPIO_CAP_INT	BIT(2)
- 
--static void lan8841_ptp_flush_fifo(struct kszphy_ptp_priv *ptp_priv, bool egress)
-+static void lan8841_ptp_flush_fifo(struct kszphy_ptp_priv *ptp_priv)
- {
- 	struct phy_device *phydev = ptp_priv->phydev;
- 	int i;
- 
- 	for (i = 0; i < FIFO_SIZE; ++i)
--		phy_read_mmd(phydev, 2,
--			     egress ? LAN8841_PTP_TX_MSG_HEADER2 :
--				      LAN8841_PTP_RX_MSG_HEADER2);
-+		phy_read_mmd(phydev, 2, LAN8841_PTP_TX_MSG_HEADER2);
- 
- 	phy_read_mmd(phydev, 2, LAN8841_PTP_INT_STS);
- }
-@@ -3789,23 +3742,17 @@ static void lan8841_handle_ptp_interrupt(struct phy_device *phydev)
- 		if (status & LAN8841_PTP_INT_STS_PTP_TX_TS_INT)
- 			lan8841_ptp_process_tx_ts(ptp_priv);
- 
--		if (status & LAN8841_PTP_INT_STS_PTP_RX_TS_INT)
--			lan8841_ptp_process_rx_ts(ptp_priv);
--
- 		if (status & LAN8841_PTP_INT_STS_PTP_GPIO_CAP_INT)
- 			lan8841_gpio_process_cap(ptp_priv);
- 
- 		if (status & LAN8841_PTP_INT_STS_PTP_TX_TS_OVRFL_INT) {
--			lan8841_ptp_flush_fifo(ptp_priv, true);
-+			lan8841_ptp_flush_fifo(ptp_priv);
- 			skb_queue_purge(&ptp_priv->tx_queue);
- 		}
- 
--		if (status & LAN8841_PTP_INT_STS_PTP_RX_TS_OVRFL_INT) {
--			lan8841_ptp_flush_fifo(ptp_priv, false);
--			skb_queue_purge(&ptp_priv->rx_queue);
--		}
--
--	} while (status);
-+	} while (status & (LAN8841_PTP_INT_STS_PTP_TX_TS_INT |
-+			   LAN8841_PTP_INT_STS_PTP_GPIO_CAP_INT |
-+			   LAN8841_PTP_INT_STS_PTP_TX_TS_OVRFL_INT));
- }
- 
- #define LAN8841_INTS_PTP		BIT(9)
-@@ -3869,32 +3816,44 @@ static int lan8841_ts_info(struct mii_timestamper *mii_ts,
- #define LAN8841_PTP_INT_EN			260
- #define LAN8841_PTP_INT_EN_PTP_TX_TS_OVRFL_EN	BIT(13)
- #define LAN8841_PTP_INT_EN_PTP_TX_TS_EN		BIT(12)
--#define LAN8841_PTP_INT_EN_PTP_RX_TS_OVRFL_EN	BIT(9)
--#define LAN8841_PTP_INT_EN_PTP_RX_TS_EN		BIT(8)
- 
--static void lan8841_ptp_enable_int(struct kszphy_ptp_priv *ptp_priv,
--				   bool enable)
-+static void lan8841_ptp_enable_processing(struct kszphy_ptp_priv *ptp_priv,
-+					  bool enable)
- {
- 	struct phy_device *phydev = ptp_priv->phydev;
- 
--	if (enable)
--		/* Enable interrupts */
-+	if (enable) {
-+		/* Enable interrupts on the TX side */
- 		phy_modify_mmd(phydev, 2, LAN8841_PTP_INT_EN,
- 			       LAN8841_PTP_INT_EN_PTP_TX_TS_OVRFL_EN |
--			       LAN8841_PTP_INT_EN_PTP_RX_TS_OVRFL_EN |
--			       LAN8841_PTP_INT_EN_PTP_TX_TS_EN |
--			       LAN8841_PTP_INT_EN_PTP_RX_TS_EN,
-+			       LAN8841_PTP_INT_EN_PTP_TX_TS_EN,
- 			       LAN8841_PTP_INT_EN_PTP_TX_TS_OVRFL_EN |
--			       LAN8841_PTP_INT_EN_PTP_RX_TS_OVRFL_EN |
--			       LAN8841_PTP_INT_EN_PTP_TX_TS_EN |
--			       LAN8841_PTP_INT_EN_PTP_RX_TS_EN);
--	else
--		/* Disable interrupts */
-+			       LAN8841_PTP_INT_EN_PTP_TX_TS_EN);
-+
-+		/* Enable the modification of the frame on RX side,
-+		 * this will add the ns and 2 bits of sec in the reserved field
-+		 * of the PTP header
-+		 */
-+		phy_modify_mmd(phydev, KSZ9131RN_MMD_COMMON_CTRL_REG,
-+			       LAN8841_PTP_RX_MODE,
-+			       LAN8841_PTP_INSERT_TS_EN |
-+			       LAN8841_PTP_INSERT_TS_32BIT,
-+			       LAN8841_PTP_INSERT_TS_EN |
-+			       LAN8841_PTP_INSERT_TS_32BIT);
-+	} else {
-+		/* Disable interrupts on the TX side */
- 		phy_modify_mmd(phydev, 2, LAN8841_PTP_INT_EN,
- 			       LAN8841_PTP_INT_EN_PTP_TX_TS_OVRFL_EN |
--			       LAN8841_PTP_INT_EN_PTP_RX_TS_OVRFL_EN |
--			       LAN8841_PTP_INT_EN_PTP_TX_TS_EN |
--			       LAN8841_PTP_INT_EN_PTP_RX_TS_EN, 0);
-+			       LAN8841_PTP_INT_EN_PTP_TX_TS_EN, 0);
-+
-+		/* Disable modification of the RX frames */
-+		phy_modify_mmd(phydev, KSZ9131RN_MMD_COMMON_CTRL_REG,
-+			       LAN8841_PTP_RX_MODE,
-+			       LAN8841_PTP_INSERT_TS_EN |
-+			       LAN8841_PTP_INSERT_TS_32BIT, 0);
-+
-+		ptp_cancel_worker_sync(ptp_priv->ptp_clock);
-+	}
- }
- 
- #define LAN8841_PTP_RX_TIMESTAMP_EN		379
-@@ -3905,7 +3864,6 @@ static int lan8841_hwtstamp(struct mii_timestamper *mii_ts, struct ifreq *ifr)
- {
- 	struct kszphy_ptp_priv *ptp_priv = container_of(mii_ts, struct kszphy_ptp_priv, mii_ts);
- 	struct phy_device *phydev = ptp_priv->phydev;
--	struct lan8814_ptp_rx_ts *rx_ts, *tmp;
- 	struct hwtstamp_config config;
- 	int txcfg = 0, rxcfg = 0;
- 	int pkt_ts_enable;
-@@ -3969,24 +3927,47 @@ static int lan8841_hwtstamp(struct mii_timestamper *mii_ts, struct ifreq *ifr)
- 				PTP_TX_MOD_TX_PTP_SYNC_TS_INSERT_ : 0);
- 
- 	/* Now enable/disable the timestamping */
--	lan8841_ptp_enable_int(ptp_priv,
--			       config.rx_filter != HWTSTAMP_FILTER_NONE);
--
--	/* In case of multiple starts and stops, these needs to be cleared */
--	list_for_each_entry_safe(rx_ts, tmp, &ptp_priv->rx_ts_list, list) {
--		list_del(&rx_ts->list);
--		kfree(rx_ts);
--	}
-+	lan8841_ptp_enable_processing(ptp_priv,
-+				      config.rx_filter != HWTSTAMP_FILTER_NONE);
- 
- 	skb_queue_purge(&ptp_priv->rx_queue);
- 	skb_queue_purge(&ptp_priv->tx_queue);
- 
--	lan8841_ptp_flush_fifo(ptp_priv, false);
--	lan8841_ptp_flush_fifo(ptp_priv, true);
-+	lan8841_ptp_flush_fifo(ptp_priv);
- 
- 	return copy_to_user(ifr->ifr_data, &config, sizeof(config)) ? -EFAULT : 0;
- }
- 
-+#define LAN8841_SKB_CB(skb)	((struct lan8841_skb_cb *)(skb)->cb)
-+
-+struct lan8841_skb_cb {
-+	struct ptp_header *header;
-+};
-+
-+static bool lan8841_rxtstamp(struct mii_timestamper *mii_ts,
-+			     struct sk_buff *skb, int type)
-+{
-+	struct kszphy_ptp_priv *ptp_priv =
-+			container_of(mii_ts, struct kszphy_ptp_priv, mii_ts);
-+	struct ptp_header *header = ptp_parse_header(skb, type);
-+
-+	if (!header)
-+		return false;
-+
-+	if (ptp_priv->rx_filter == HWTSTAMP_FILTER_NONE ||
-+	    type == PTP_CLASS_NONE)
-+		return false;
-+
-+	if ((type & ptp_priv->version) == 0 || (type & ptp_priv->layer) == 0)
-+		return false;
-+
-+	LAN8841_SKB_CB(skb)->header = header;
-+	skb_queue_tail(&ptp_priv->rx_queue, skb);
-+	ptp_schedule_worker(ptp_priv->ptp_clock, 0);
-+
-+	return true;
-+}
-+
- #define LAN8841_EVENT_A		0
- #define LAN8841_EVENT_B		1
- #define LAN8841_PTP_LTC_TARGET_SEC_HI(event)	((event) == LAN8841_EVENT_A ? 278 : 288)
-@@ -4127,6 +4108,30 @@ static int lan8841_ptp_gettime64(struct ptp_clock_info *ptp,
- 	return 0;
- }
- 
-+static void lan8841_ptp_getseconds(struct ptp_clock_info *ptp,
-+				   struct timespec64 *ts)
-+{
-+	struct kszphy_ptp_priv *ptp_priv = container_of(ptp, struct kszphy_ptp_priv,
-+							ptp_clock_info);
-+	struct phy_device *phydev = ptp_priv->phydev;
-+	time64_t s;
-+
-+	mutex_lock(&ptp_priv->ptp_lock);
-+	/* Issue the command to read the LTC */
-+	phy_write_mmd(phydev, 2, LAN8841_PTP_CMD_CTL,
-+		      LAN8841_PTP_CMD_CTL_PTP_LTC_READ);
-+
-+	/* Read the LTC */
-+	s = phy_read_mmd(phydev, 2, LAN8841_PTP_LTC_RD_SEC_HI);
-+	s <<= 16;
-+	s |= phy_read_mmd(phydev, 2, LAN8841_PTP_LTC_RD_SEC_MID);
-+	s <<= 16;
-+	s |= phy_read_mmd(phydev, 2, LAN8841_PTP_LTC_RD_SEC_LO);
-+	mutex_unlock(&ptp_priv->ptp_lock);
-+
-+	set_normalized_timespec64(ts, s, 0);
-+}
-+
- #define LAN8841_PTP_LTC_STEP_ADJ_LO			276
- #define LAN8841_PTP_LTC_STEP_ADJ_HI			275
- #define LAN8841_PTP_LTC_STEP_ADJ_DIR			BIT(15)
-@@ -4629,6 +4634,37 @@ static int lan8841_ptp_enable(struct ptp_clock_info *ptp,
- 	return 0;
- }
- 
-+static long lan8841_ptp_do_aux_work(struct ptp_clock_info *ptp)
-+{
-+	struct kszphy_ptp_priv *ptp_priv = container_of(ptp, struct kszphy_ptp_priv,
-+							ptp_clock_info);
-+	struct skb_shared_hwtstamps *shhwtstamps;
-+	struct timespec64 ts;
-+	struct sk_buff *skb;
-+	u32 ts_header;
-+
-+	while ((skb = skb_dequeue(&ptp_priv->rx_queue)) != NULL) {
-+		lan8841_ptp_getseconds(ptp, &ts);
-+		ts_header = __be32_to_cpu(LAN8841_SKB_CB(skb)->header->reserved2);
-+
-+		shhwtstamps = skb_hwtstamps(skb);
-+		memset(shhwtstamps, 0, sizeof(*shhwtstamps));
-+
-+		/* Check for any wrap arounds for the second part */
-+		if ((ts.tv_sec & GENMASK(1, 0)) < ts_header >> 30)
-+			ts.tv_sec -= GENMASK(1, 0) + 1;
-+
-+		shhwtstamps->hwtstamp =
-+			ktime_set((ts.tv_sec & ~(GENMASK(1, 0))) | ts_header >> 30,
-+				  ts_header & GENMASK(29, 0));
-+		LAN8841_SKB_CB(skb)->header->reserved2 = 0;
-+
-+		netif_rx(skb);
-+	}
-+
-+	return -1;
-+}
-+
- static struct ptp_clock_info lan8841_ptp_clock_info = {
- 	.owner		= THIS_MODULE,
- 	.name		= "lan8841 ptp",
-@@ -4639,6 +4675,7 @@ static struct ptp_clock_info lan8841_ptp_clock_info = {
- 	.adjfine	= lan8841_ptp_adjfine,
- 	.verify         = lan8841_ptp_verify,
- 	.enable         = lan8841_ptp_enable,
-+	.do_aux_work	= lan8841_ptp_do_aux_work,
- 	.n_per_out      = LAN8841_PTP_GPIO_NUM,
- 	.n_ext_ts       = LAN8841_PTP_GPIO_NUM,
- 	.n_pins         = LAN8841_PTP_GPIO_NUM,
-@@ -4705,7 +4742,7 @@ static int lan8841_probe(struct phy_device *phydev)
- 	ptp_priv->phydev = phydev;
- 	mutex_init(&ptp_priv->ptp_lock);
- 
--	ptp_priv->mii_ts.rxtstamp = lan8814_rxtstamp;
-+	ptp_priv->mii_ts.rxtstamp = lan8841_rxtstamp;
- 	ptp_priv->mii_ts.txtstamp = lan8814_txtstamp;
- 	ptp_priv->mii_ts.hwtstamp = lan8841_hwtstamp;
- 	ptp_priv->mii_ts.ts_info = lan8841_ts_info;
-@@ -4715,6 +4752,16 @@ static int lan8841_probe(struct phy_device *phydev)
- 	return 0;
- }
- 
-+static int lan8841_suspend(struct phy_device *phydev)
-+{
-+	struct kszphy_priv *priv = phydev->priv;
-+	struct kszphy_ptp_priv *ptp_priv = &priv->ptp_priv;
-+
-+	ptp_cancel_worker_sync(ptp_priv->ptp_clock);
-+
-+	return genphy_suspend(phydev);
-+}
-+
- static struct phy_driver ksphy_driver[] = {
- {
- 	.phy_id		= PHY_ID_KS8737,
-@@ -4938,7 +4985,7 @@ static struct phy_driver ksphy_driver[] = {
- 	.get_sset_count = kszphy_get_sset_count,
- 	.get_strings	= kszphy_get_strings,
- 	.get_stats	= kszphy_get_stats,
--	.suspend	= genphy_suspend,
-+	.suspend	= lan8841_suspend,
- 	.resume		= genphy_resume,
- 	.cable_test_start	= lan8814_cable_test_start,
- 	.cable_test_get_status	= ksz886x_cable_test_get_status,
--- 
-2.38.0
+"Subject: drop second, redundant "bindings".
+Also use proper PATCH prefix."
+
+Where did you drop the bindings in the subject? I still see it, look:
+"dt-bindings: mfd: Add aspeed pwm-tach binding"
+                                       ^^^^^^^^ what is this?
+
+> About the quotes: I believe the issue was simply related to the order of the patches, and I have resolved it. Did I misunderstand?
+
+I still see them, so how did you solve them?
+
+> About the Missing description:
+> 
+>> +patternProperties:
+>> +  "^fan@[a-z0-9]+$":
+>> +    type: object
+> 
+>> Missing description. But more important - why do you have such child
+>> nodes? Your example does not have them. What's the point? Do you expect
+>> different number of fans per one device (one compatible)?
+> 
+> In this patch series, I have included examples and descriptions to provide additional information.
+> The child node is used to enable the channel of this tach controller.
+
+You do not need children for this.
+
+> I expect that the dts will include information regarding the number of fans connected to the board and their corresponding channels.
+
+Your example DTS must be complete and nothing like this was there. There
+is still no point in the children.
+
+> 
+>         >>
+>         >> He felt what he was trying to accomplish met the documented
+>         >> expectations.  Are there some changes that need to be done in mfd.txt to
+>         >> further clarify when to use it and when not to?
+> 
+>         > I think mfd.txt clearly states:
+>         > "For more complex devices, when the nexus driver has to
+>         > probe registers to figure out what child devices exist etc, this should
+>         > not be used. In the latter case the child devices will be determined by
+>         > the operating system."
+> 
+> About the mfd:
+> For our pwm and tach devices, there is no need to check/apply any hardware register from parent to determine child’s existence or functional.
+> They don’t have any dependency on the parent node. 
+
+You are joking right? The dependency is clearly visible in the driver.
+You are getting parent's node to get its resources. That's the
+dependency which is not allowed. Children should take care of their
+resources, not parent's!
+
+> In fact, it doesn’t require a specific driver to bind with the "aspeed,ast2600-pwm-tach" label. Their purpose is solely to share the same clock, reset phandle and base address.
+
+That's what the drivers are for, so you need it...
+
+> The main reason for using simple-mfd in this case is because these two independent devices share the same base address. In fact, I can relocate the clock and reset configurations to the child nodes rather than the parent node.
+
+How? These are clocks of parent. Don't create fake DTS to represent
+workarounds. Or you want to say that current DTS is fake and does not
+match the hardware?
+
+>  In this case, I still can't use simple-mfd?
+
+For the last time: No. You cannot, because you have resources needed for
+children.
+
+Best regards,
+Krzysztof
 
