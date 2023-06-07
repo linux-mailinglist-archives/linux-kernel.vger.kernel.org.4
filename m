@@ -2,143 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE580725226
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 04:40:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77DF5725228
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 04:43:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240775AbjFGCkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 22:40:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50582 "EHLO
+        id S240781AbjFGCnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 22:43:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240771AbjFGCkM (ORCPT
+        with ESMTP id S234906AbjFGCm6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 22:40:12 -0400
-Received: from out-8.mta0.migadu.com (out-8.mta0.migadu.com [91.218.175.8])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BE441990
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 19:40:10 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1686105608;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=sqUILCp46Jj47kiEIO7DRVGvfhl8JWDw877OJqEVvRU=;
-        b=vwIe7yWn2mHkbKvWsHxQjHndMddY6TdIFGCmdPfxJ6Sz2JzzNt4B8wik8kvRuMZd9J/H3u
-        23Xp4QxF5UC1pTejMotjmvMDZNQXtziAaEMybqPV8N91l6zY8qlxt1ZOVv8WueKLQ+5Hho
-        FhoqHpyRtf4loEK+nIT8Z6+vfqDrcxE=
-From:   Yajun Deng <yajun.deng@linux.dev>
-To:     akpm@linux-foundation.org, david@redhat.com, osalvador@suse.de
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Yajun Deng <yajun.deng@linux.dev>
-Subject: [PATCH] mm/sparse: remove unused parameters in sparse_remove_section()
-Date:   Wed,  7 Jun 2023 10:39:52 +0800
-Message-Id: <20230607023952.2247489-1-yajun.deng@linux.dev>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 6 Jun 2023 22:42:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28A6210D2;
+        Tue,  6 Jun 2023 19:42:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AF727639EC;
+        Wed,  7 Jun 2023 02:42:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB98BC433EF;
+        Wed,  7 Jun 2023 02:42:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1686105776;
+        bh=HPX7TTyNLy9QYOmc7IjiU6+RwLEOPn30MEW3zhLSVew=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ubl2ySokBAZpXZwrtyG/EsPwhz9RPRnQArXZM1uSLVtRQErDCIvCbrOlqlQwiZJuP
+         pvnpnlZM8Fymg8yhxYliosgbG7NmiKRNuWadMn+zpFbJJsQ6OsLL+4wc8Mu5PpiXv0
+         oOm9Q5g9thm7ySWqbMML8TYWZ0QyZSIF2UjCxWlM=
+Date:   Tue, 6 Jun 2023 19:42:54 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     John Hubbard <jhubbard@nvidia.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Jens Axboe <axboe@kernel.dk>, Peter Xu <peterx@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>, Jan Kara <jack@suse.cz>
+Subject: Re: [PATCH v1 2/3] selftests/mm: gup_longterm: new functional test
+ for FOLL_LONGTERM
+Message-Id: <20230606194254.5e26642b28dfbd0e198d24e8@linux-foundation.org>
+In-Reply-To: <e099e2c1-322c-0a64-0f5b-5da621fedca1@redhat.com>
+References: <20230519102723.185721-1-david@redhat.com>
+        <20230519102723.185721-3-david@redhat.com>
+        <ea3548ae-de27-fb67-5b2a-34aca006005c@nvidia.com>
+        <e099e2c1-322c-0a64-0f5b-5da621fedca1@redhat.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These parameters ms and map_offset are not used in
-sparse_remove_section(), so remove them.
+On Tue, 6 Jun 2023 09:10:22 +0200 David Hildenbrand <david@redhat.com> wrote:
 
-The __remove_section() is only called by __remove_pages(), remove it.
-And put the WARN_ON_ONCE() in sparse_remove_section().
+> On 06.06.23 08:23, John Hubbard wrote:
+> > On 5/19/23 03:27, David Hildenbrand wrote:
+> > ...
+> >> diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+> >> index 23af4633f0f4..95acb099315e 100644
+> >> --- a/tools/testing/selftests/mm/Makefile
+> >> +++ b/tools/testing/selftests/mm/Makefile
+> >> @@ -34,6 +34,7 @@ LDLIBS = -lrt -lpthread
+> >>   
+> >>   TEST_GEN_PROGS = cow
+> >>   TEST_GEN_PROGS += compaction_test
+> >> +TEST_GEN_PROGS += gup_longterm
+> > 
+> > Hi David,
+> > 
+> > Peter Xu just pointed out that we need a .gitignore entry for
+> > gup_longterm [1]. That logically belongs in this patch, I think.
+> 
+> Yes, although I don't care if it's in a follow-up patch (we're talking 
+> testcases after all).
+> 
+> @Andrew can you include that hunk in that patch or do you want a resend?
 
-Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
+I added this:
+
+From: Andrew Morton <akpm@linux-foundation.org>
+Subject: selftests-mm-gup_longterm-new-functional-test-for-foll_longterm-fix
+Date: Tue Jun  6 07:41:28 PM PDT 2023
+
+update .gitignore for gup_longterm, per Peter
+
+Cc: David Hildenbrand <david@redhat.com>
+Cc: Jan Kara <jack@suse.cz>
+Cc: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Jens Axboe <axboe@kernel.dk>
+Cc: John Hubbard <jhubbard@nvidia.com>
+Cc: Lorenzo Stoakes <lstoakes@gmail.com>
+Cc: Peter Xu <peterx@redhat.com>
+Cc: Shuah Khan <shuah@kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 ---
- include/linux/memory_hotplug.h |  5 ++---
- mm/memory_hotplug.c            | 18 +-----------------
- mm/sparse.c                    | 10 +++++++---
- 3 files changed, 10 insertions(+), 23 deletions(-)
 
-diff --git a/include/linux/memory_hotplug.h b/include/linux/memory_hotplug.h
-index 04bc286eed42..013c69753c91 100644
---- a/include/linux/memory_hotplug.h
-+++ b/include/linux/memory_hotplug.h
-@@ -344,9 +344,8 @@ extern void remove_pfn_range_from_zone(struct zone *zone,
- extern int sparse_add_section(int nid, unsigned long pfn,
- 		unsigned long nr_pages, struct vmem_altmap *altmap,
- 		struct dev_pagemap *pgmap);
--extern void sparse_remove_section(struct mem_section *ms,
--		unsigned long pfn, unsigned long nr_pages,
--		unsigned long map_offset, struct vmem_altmap *altmap);
-+extern void sparse_remove_section(unsigned long pfn, unsigned long nr_pages,
-+				  struct vmem_altmap *altmap);
- extern struct page *sparse_decode_mem_map(unsigned long coded_mem_map,
- 					  unsigned long pnum);
- extern struct zone *zone_for_pfn_range(int online_type, int nid,
-diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
-index 9061ac69b1b6..8877734b5f2f 100644
---- a/mm/memory_hotplug.c
-+++ b/mm/memory_hotplug.c
-@@ -492,18 +492,6 @@ void __ref remove_pfn_range_from_zone(struct zone *zone,
- 	set_zone_contiguous(zone);
- }
- 
--static void __remove_section(unsigned long pfn, unsigned long nr_pages,
--			     unsigned long map_offset,
--			     struct vmem_altmap *altmap)
--{
--	struct mem_section *ms = __pfn_to_section(pfn);
--
--	if (WARN_ON_ONCE(!valid_section(ms)))
--		return;
--
--	sparse_remove_section(ms, pfn, nr_pages, map_offset, altmap);
--}
--
- /**
-  * __remove_pages() - remove sections of pages
-  * @pfn: starting pageframe (must be aligned to start of a section)
-@@ -520,9 +508,6 @@ void __remove_pages(unsigned long pfn, unsigned long nr_pages,
- {
- 	const unsigned long end_pfn = pfn + nr_pages;
- 	unsigned long cur_nr_pages;
--	unsigned long map_offset = 0;
--
--	map_offset = vmem_altmap_offset(altmap);
- 
- 	if (check_pfn_span(pfn, nr_pages)) {
- 		WARN(1, "Misaligned %s start: %#lx end: %#lx\n", __func__, pfn, pfn + nr_pages - 1);
-@@ -534,8 +519,7 @@ void __remove_pages(unsigned long pfn, unsigned long nr_pages,
- 		/* Select all remaining pages up to the next section boundary */
- 		cur_nr_pages = min(end_pfn - pfn,
- 				   SECTION_ALIGN_UP(pfn + 1) - pfn);
--		__remove_section(pfn, cur_nr_pages, map_offset, altmap);
--		map_offset = 0;
-+		sparse_remove_section(pfn, cur_nr_pages, altmap);
- 	}
- }
- 
-diff --git a/mm/sparse.c b/mm/sparse.c
-index b8d5d58fe240..297a8b772e8d 100644
---- a/mm/sparse.c
-+++ b/mm/sparse.c
-@@ -922,10 +922,14 @@ int __meminit sparse_add_section(int nid, unsigned long start_pfn,
- 	return 0;
- }
- 
--void sparse_remove_section(struct mem_section *ms, unsigned long pfn,
--		unsigned long nr_pages, unsigned long map_offset,
--		struct vmem_altmap *altmap)
-+void sparse_remove_section(unsigned long pfn, unsigned long nr_pages,
-+			   struct vmem_altmap *altmap)
- {
-+	struct mem_section *ms = __pfn_to_section(pfn);
-+
-+	if (WARN_ON_ONCE(!valid_section(ms)))
-+		return;
-+
- 	section_deactivate(pfn, nr_pages, altmap);
- }
- #endif /* CONFIG_MEMORY_HOTPLUG */
--- 
-2.25.1
+ tools/testing/selftests/mm/.gitignore |    1 +
+ 1 file changed, 1 insertion(+)
+
+--- a/tools/testing/selftests/mm/.gitignore~selftests-mm-gup_longterm-new-functional-test-for-foll_longterm-fix
++++ a/tools/testing/selftests/mm/.gitignore
+@@ -39,3 +39,4 @@ local_config.h
+ local_config.mk
+ ksm_functional_tests
+ mdwe_test
++gup_longterm
+_
 
