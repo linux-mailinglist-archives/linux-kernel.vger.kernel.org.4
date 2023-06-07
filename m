@@ -2,175 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F2EC725783
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 10:26:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E390725787
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 10:27:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239142AbjFGI0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 04:26:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35892 "EHLO
+        id S239325AbjFGI1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 04:27:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238425AbjFGI0T (ORCPT
+        with ESMTP id S239263AbjFGI05 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 04:26:19 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05ECB95
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 01:26:18 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2b1b30445cfso64272201fa.1
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 01:26:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686126376; x=1688718376;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=meqyLpIa2eoOfIkaFe10EGZNXQ4rVkSgK0+HDZ26xns=;
-        b=ZF9p5u4hM9PFz+rRCKYlZoTUlbcYIxDgpTVxuZuiVVFOg/LdolKhBWBUAUQKQRa46+
-         3DYQkg0hk5CEIO3iWRBEJF4S7DRTfWuXV/UW32si/8CbDvnNN5pQgt/of+kV67Y3jaPP
-         rt4eHEz6FN/vj8pIB6s0uXTdAV6eeaIBamyD1Z5PmuVIkcC0r2W8LHJBo5VktSGZM3Am
-         3kc67vWS9Ghitg9knI+ULF6FuPOzg1dsiQHth+lH2XdKZSn/a/APkBgq00uutbLXV5Ht
-         t1B5ezcUGlevGxUyo6SMZ1jKBThmmMhZn3adfo363b35EgjK9jxhaZlij6GXxsLBwpja
-         fhZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686126376; x=1688718376;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=meqyLpIa2eoOfIkaFe10EGZNXQ4rVkSgK0+HDZ26xns=;
-        b=CN0Mv8uDufTo664U2EhFDIuwwmRWDRz38/lVC2fIZ+ioKTG5n0VK90seZMHuS3Cu6W
-         Dx5ja4wLk5xEcxMg6wVWoB7TYER2nAh7wDEsm8t/olxjqDHYXIMdVuzQkAKJcR74h6/q
-         t9Tue5xkYcHs0DS2mhreoDZoHKgp64gBEgM23kDn7VyiBwi40XaZqfY/wWlwNRvHR3iu
-         eUjT4/JCPHGqSEjjAkqFYOJA3EbOwZvTi/McJpuUOSOKpffnRMuYSXDrnj2Jt9bbf7R2
-         q09wu+Gx6zuOsK+YF9kP8rQ6g6WZ15SJO/8GhOoymAXOEhr6kOxXvwvvKFTbswHSDiV3
-         IEHQ==
-X-Gm-Message-State: AC+VfDyc0gXCcj3+JG/EmvY6lukjYtaULkZDRh7UnGSnWbUUXl+k2BjY
-        nsl7HZ9SjIFFjk2viET0lFhx9ppcG/iIykHi0V5axA==
-X-Google-Smtp-Source: ACHHUZ6rY7hwhROngrX3S6mKYk8pyY2vNRuLKLBfVKmc4MLTyNTLbfrhXuBN2UniToyQLzyYEgTqSFvqaZji+YzCtio=
-X-Received: by 2002:a2e:8517:0:b0:2a7:75aa:40c with SMTP id
- j23-20020a2e8517000000b002a775aa040cmr2037906lji.10.1686126376194; Wed, 07
- Jun 2023 01:26:16 -0700 (PDT)
+        Wed, 7 Jun 2023 04:26:57 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E8FAEE62;
+        Wed,  7 Jun 2023 01:26:54 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.170])
+        by gateway (Coremail) with SMTP id _____8DxyOlMP4BkBxMAAA--.210S3;
+        Wed, 07 Jun 2023 16:26:52 +0800 (CST)
+Received: from [10.20.42.170] (unknown [10.20.42.170])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxCOVKP4BknBoEAA--.14829S3;
+        Wed, 07 Jun 2023 16:26:50 +0800 (CST)
+Message-ID: <e8f80e1a-7f2e-bbff-4630-a04e6cc9c5fe@loongson.cn>
+Date:   Wed, 7 Jun 2023 16:26:50 +0800
 MIME-Version: 1.0
-References: <20230526010748.1222-1-masahisa.kojima@linaro.org>
- <20230526010748.1222-4-masahisa.kojima@linaro.org> <0d3e0370-eb76-010f-3d30-9acc9b59645c@siemens.com>
- <CAFA6WYPnWJNPvhT2JDkO-qXRUaJoxBGZEvSfhxcRynV7=VSdQA@mail.gmail.com>
- <CAMj1kXFM45PCTU--+CCed6Cq_N5XqDG6tTu6fnQTSCpW2BWA5A@mail.gmail.com>
- <4ff09002-e871-38b9-43ec-227a64bac731@siemens.com> <CAC_iWjJJ5E9Q1or5yTiDynzv_WAYH-g+N24aRdu9rvcsbWqnrg@mail.gmail.com>
- <CAFA6WYNFYB1LiOFB_iwTsdD5PmnDdSbtDSH2J4FVFPx3uik8rQ@mail.gmail.com>
-In-Reply-To: <CAFA6WYNFYB1LiOFB_iwTsdD5PmnDdSbtDSH2J4FVFPx3uik8rQ@mail.gmail.com>
-From:   Ilias Apalodimas <ilias.apalodimas@linaro.org>
-Date:   Wed, 7 Jun 2023 11:25:40 +0300
-Message-ID: <CAC_iWj+E7-XK6dCeSn4205K0O3EZCLxCaC+adu-14ST6sdudfA@mail.gmail.com>
-Subject: Re: [PATCH v5 3/3] efi: Add tee-based EFI variable driver
-To:     Sumit Garg <sumit.garg@linaro.org>
-Cc:     Jan Kiszka <jan.kiszka@siemens.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Masahisa Kojima <masahisa.kojima@linaro.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-efi@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        "Su, Bao Cheng (RC-CN DF FA R&D)" <baocheng.su@siemens.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v3] PCI: Align pci memory space base address with page
+ size
+Content-Language: en-US
+From:   "bibo, mao" <maobibo@loongson.cn>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        Jianmin Lv <lvjianmin@loongson.cn>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
+        loongarch@lists.linux.dev, loongson-kernel@lists.loongnix.cn,
+        Bjorn Helgaas <bhelgaas@google.com>
+References: <20230606204522.GA1142773@bhelgaas>
+ <685d3265-ac76-60a9-57b2-66da00b04b32@loongson.cn>
+In-Reply-To: <685d3265-ac76-60a9-57b2-66da00b04b32@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8CxCOVKP4BknBoEAA--.14829S3
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBj93XoW3WF17AryfWFWfur48KrW7Awc_yoW7Gw45pF
+        WxCF4qkF4DtryfGws2vwn8uFnaqw4I9rWYgrySkr90ka4DAFyxtry7JrW5CrykXr4rGF1j
+        qr45tr1xuas5ZagCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUP2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v2
+        6F4UJVW0owAaw2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0c
+        Ia020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_
+        JF1lYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrw
+        CYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48J
+        MxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI
+        0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y
+        0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxV
+        WUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1l
+        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0Urc3UUUU
+        U==
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sumit,
 
-On Wed, 7 Jun 2023 at 10:25, Sumit Garg <sumit.garg@linaro.org> wrote:
->
-> Hi Ilias,
->
-> On Wed, 7 Jun 2023 at 12:05, Ilias Apalodimas
-> <ilias.apalodimas@linaro.org> wrote:
-> >
-> > Hi Jan,
-> >
-> > [...]
-> >
-> > > >>>>
-> > > > ...
-> > > >>>
-> > > >>> I think we have a probe ordering issue with this driver:
-> > > >>> efivarfs_fill_super() may be called before the TEE bus was probed, thus
-> > > >>> with the default efivar ops still registered. And that means
-> > > >>> efivar_supports_writes() will return false, and the fs declares itself
-> > > >>> as readonly. I've seen systemd mounting it r/o initialling, and you need
-> > > >>> to remount the fs to enable writability.
-> > > >>>
-> > > >>> Is there anything that could be done to re-order things reliably, probe
-> > > >>> the tee bus earlier etc.?
-> > > >>
-> > > >> This driver has a dependency on user-space daemon: tee-supplicant to
-> > > >> be running for RPMB access. So once you start that daemon the
-> > > >> corresponding device will be enumerated on the TEE bus and this driver
-> > > >> probe will be invoked. So I would suggest you to load this daemon very
-> > > >> early in the boot process or better to make it a part of initramfs.
-> > > >>
-> > > >
-> > > > That is not the point, really.
-> > > >
-> > > > If this dependency exists, the code should be aware of that, and made
-> > > > to work correctly in spite of it. Requiring a module to be part of
-> > > > initramfs is not a reasonable fix.
-> > >
-> > > In fact, I've tested a non-modularized build as well, just to exclude
-> > > that issue. The daemon dependency is more likely the problem here.
-> > >
-> > > >
-> > > > IIUC, this also means that the efivar ops are updated while there is
-> > > > already a client. This seems less than ideal as well
-> >
-> > As Sumit pointed out, the 'device' won't be available from OP-TEE
-> > until the supplicant is up and running and as a result, the module
-> > _probe() function won't run.  Unfortunately, this isn't something we
-> > can avoid since the supplicant is responsible for the RPMB writes.
-> > The only thing I can think of is moving parts of the supplicant to the
-> > kernel and wiring up the RPC calls for reading/writing data to the
-> > eMMC subsystem.  There was another discussion here [0] requesting the
-> > same thing for different reasons. But unless I am missing something
-> > this won't solve the problem completely either.  You still have a
-> > timing dependency of "when did the RT callbacks change" -- "when was
-> > my efivarfs mounted".
->
-> With the RPMB writes wired through the kernel [1], the only dependency
-> left is when do you load the tee-stmm-efi driver to have real EFI
-> runtime variables support. IMO, tee-stmm-efi driver should be built-in
-> to support systems without initramfs. The distro installers may choose
-> to bundle it in initramfs. Do you still see a timing dependency with
-> this approach?
 
-No I don't, this will work reliably without the need to remount the efivarfs.
-As you point out you will still have this dependency if you end up
-building them as modules and you manage to mount the efivarfs before
-those get inserted.  Does anyone see a reasonable workaround?
-Deceiving the kernel and making the bootloader set the RT property bit
-to force the filesystem being mounted as rw is a nasty hack that we
-should avoid.  Maybe adding a kernel command line parameter that says
-"Ignore the RTPROP I know what I am doing"?  I don't particularly love
-this either, but it's not unreasonable.
+在 2023/6/7 09:42, bibo, mao 写道:
+> 
+> 
+> 在 2023/6/7 04:45, Bjorn Helgaas 写道:
+>> On Tue, Jun 06, 2023 at 06:06:04PM +0800, bibo, mao wrote:
+>>> Huacai,
+>>>
+>>> Although I post this patch, I think this should be arch specified
+>>> rather than general problem.  X86 has solved this problem, arm64
+>>> with 64K page size is not popular. However LoongArch has this
+>>> problem, page size is 16K rather than 4K. It is the problem of
+>>> LoongArch system rather than generic issue.
+>>
+>> I think this is only related to the page size, not to any
+>> LoongArch-specific details.  If that's the case, I don't think the
+>> change should be arch-specific.
+>>
+>>> There is such discussion before:
+>>> https://patchwork.kernel.org/project/linux-pci/patch/22400b8828ad44ddbccb876cc5ca3b11@FE-MBX1012.de.bosch.com/#19319457
+>>>
+>>> UEFI bios sets pci memory space 4K aligned, however Loongarch kernel rescans the pci
+>>> bus and reassigns pci memory resource. So it it strange like this, here is pci memory info on
+>>>  my 7A2000 board.
+>>> root@user-pc:~# lspci -vvv | grep Region
+>>>         Region 5: Memory at e003526e800 (32-bit, non-prefetchable) [size=1K]
+>>>         Region 0: Memory at e003526ec00 (64-bit, non-prefetchable) [size=1K]
+>>
+>> I guess these BARs are from different devices, and the problem you're
+>> pointing out is that both BARs end up in the same 16K page (actually
+>> even the same 4K page):
+>>
+>>   (gdb) p/x 0xe003526e800 >> 12
+>>   $1 = 0xe003526e
+>>   (gdb) p/x 0xe003526ec00 >> 12
+>>   $2 = 0xe003526e
+>>
+>> I agree that's a potential issue because a user mmap of the first
+>> device also gets access to the BAR of the second device.  But it
+>> doesn't seem to be a *new* or LoongArch-specific issue.
+>>
+>> So I *think* the point of this patch is to ensure that BARs of
+>> different devices never share a page.  Why is that suddenly an issue
+>> for LoongArch?  Is it only because you see more sharing with 16K pages
+>> than other arches do with 4K pages?
+> The UEFI BIOS has assigned the PCI device with minimal 4K aligned, I guest
+> Linux kernel on X86/ARM uses resource directly rather than reassign resource
+> again. So there is problem for hot-plug devices, however most hot-plug devices
+> are used for server system and they are high speed devices, PCI resource size
+> is larger than 4K. So it is not obvious on x86/ARM system.
+> 
+> However on LoongArch system with page size 16K, the problem is obvious since
+> pci devices with 4K resource size are popular.
+>>
+>>> 在 2023/6/6 16:45, Bibo Mao 写道:
+>>>> Some PCI devices have only 4K memory space size, it is normal in general
+>>>> machines and aligned with page size. However some architectures which
+>>>> support different page size, default page size on LoongArch is 16K, and
+>>>> ARM64 supports page size varying from 4K to 64K. On machines where larger
+>>>> page size is use, memory space region of two different pci devices may be
+>>>> in one page. It is not safe with mmu protection, also VFIO pci device
+>>>> driver requires base address of pci memory space page aligned, so that it
+>>>> can be memory mapped to qemu user space when it is passed-through to vm.
+>>
+>> The minimum memory BAR per spec is 128 bytes (not 4K).  You just
+>> demonstrated that even with 4K pages, different devices can share a
+>> page.
+>>
+>>>> It consumes more pci memory resource with page size alignment requirement,
+>>>> it should not be a problem on 64 bit system.
+>>>>
+>>>> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+>>>> ---
+>>>>  drivers/pci/setup-res.c | 8 ++++++++
+>>>>  1 file changed, 8 insertions(+)
+>>>>
+>>>> diff --git a/drivers/pci/setup-res.c b/drivers/pci/setup-res.c
+>>>> index 967f9a758923..55440ae0128d 100644
+>>>> --- a/drivers/pci/setup-res.c
+>>>> +++ b/drivers/pci/setup-res.c
+>>>> @@ -339,6 +339,14 @@ int pci_assign_resource(struct pci_dev *dev, int resno)
+>>>>  		return -EINVAL;
+>>>>  	}
+>>>>  
+>>>> +#ifdef CONFIG_64BIT
+>>>> +	/*
+>>>> +	 * force minimum page alignment for vfio pci usage
+>>>> +	 * supposing there is enough pci memory resource on 64bit system
+>>>> +	 */
+>>>> +	if (res->flags & IORESOURCE_MEM)
+>>>> +		align = max_t(resource_size_t, PAGE_SIZE, align);
+>>>> +#endif
+>>
+>> Why is this under CONFIG_64BIT?  That doesn't have anything to do with
+>> the BAR size.  The only reason I can see is that with CONFIG_64BIT=y,
+>> we *might* have more MMIO space to use for BARs.
+> yes, I assume that there is enough PCI memory resource with 64 bit system,
+> after all it consumes more memory resource and brings out negative effect.
+> For UIO and SRIOV requirements, they are most 64-bit server system, they
+> can suffer from wasting some PCI memory resource.
+Can we add extra config option and let architecture selects whether enable it?
+Here is piece of code:
 
-Thanks
-/Ilias
->
-> [1] Of Course here we need the eMMC and TEE/OPTEE drivers to be built-in too.
->
-> -Sumit
->
-> >
-> > Thanks
-> > /Ilias
-> > >
-> > > Jan
-> > >
-> > > --
-> > > Siemens AG, Technology
-> > > Competence Center Embedded Linux
-> > >
+#ifdef CONFIG_PCI_MEMRES_PAGE_ALIGN
+        /*
+         * force minimum page alignment for vfio pci usage
+         */
+        if (res->flags & IORESOURCE_MEM)
+                align = max_t(resource_size_t, PAGE_SIZE, align);
+#endif
+
+Regards
+Bibo, Mao
+> 
+> Regards
+> Bibo, Mao
+>>
+>>>>  	size = resource_size(res);
+>>>>  	ret = _pci_assign_resource(dev, resno, size, align);
+
