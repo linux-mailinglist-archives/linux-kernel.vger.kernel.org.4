@@ -2,90 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94EAD725469
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 08:37:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEFC572546E
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 08:38:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233723AbjFGGh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 02:37:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58624 "EHLO
+        id S235035AbjFGGiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 02:38:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231470AbjFGGhy (ORCPT
+        with ESMTP id S234201AbjFGGir (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 02:37:54 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A94EF10C3;
-        Tue,  6 Jun 2023 23:37:50 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Qbd2217Skz4wgv;
-        Wed,  7 Jun 2023 16:37:46 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1686119866;
-        bh=ZUyUX8hoKxQ8IX9AXzCttqc3N8++oeZ0LmZx0MumW2U=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Un4yUpwr+iCyQ6ok48X7cyIf1apwF5FQrXyKxpNa3WWk71GbQhEcl1fPYc75SLfVz
-         rEqwqFYBASxu6O7frEZgpRpHTDn2gccMamasx6C5BJjnueJ+un4udn6xmLFix6mEyw
-         qUmmhTslKImRU8KvU/YEbxF2Wlq16RblFR3EGj2zCZw77btBrH3oyF9b6ZylUQi6Ud
-         yo0cA3zvzC1WbBFkxuwnImDSDA2FQGzIJsO52QIkt54Gbl5AnhM6phKCa4TG+w1yMr
-         nqqw2nmc1WXxw5y3bWoyJN36j2cLpPwN/y7zjC8iig7SQuiZ1n5oYOmfs+RV1nLoIf
-         zl2XadPG3zgmw==
-Date:   Wed, 7 Jun 2023 16:37:43 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>, Lee Jones <lee@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the regulator tree
-Message-ID: <20230607163743.1c266a7f@canb.auug.org.au>
+        Wed, 7 Jun 2023 02:38:47 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13C51172B;
+        Tue,  6 Jun 2023 23:38:45 -0700 (PDT)
+X-QQ-mid: bizesmtp83t1686119915tg8q219l
+Received: from linux-lab-host.localdomain ( [61.141.77.49])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 07 Jun 2023 14:38:34 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: iDzLjIm7mlarxQ37HSKAlRkd6wcQobjGCjiAbDfTqoqi3jOnoDZE+XK6RTrbj
+        ObGHhN42g8PUfzZBPuXUpkjvQbCXiokReJGKITQvmx9NFIHzBMiof7y51esDkWycvc0Wx6T
+        qycIvqDxO8q+UvKHl1YuFjunWlujYL/1EGYBB3cE6/qAn+4KwLtPfgGfWyhhtxQBwIl4GHn
+        0A9k2ZhUxjBZqf8/TVPgga22YCZ1oxV/4ZrFqA5N20iLvuZYloklbV6AJj8eOKQwFjlPoLf
+        cadevjho7qWVHw12tmGvDk8YOw+IKwM7L3BNBvttDMrp2vf/W3SZjiUk+87UN4Lf2De2E/D
+        /Nd+gcq5qKYyOF4d4ShWPYRcBSwdYGx0vzm1n80Iel2wuQJDeMQfVIQzQgofg==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 5675149324483682908
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     thomas@t-8ch.de
+Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        w@1wt.eu
+Subject: Re: [PATCH v2 4/4] tools/nolibc: sys.h: apply __syscall() helper
+Date:   Wed,  7 Jun 2023 14:38:34 +0800
+Message-Id: <20230607063834.671562-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <793fc122-1409-4092-b39c-ea348de8ba14@t-8ch.de>
+References: <793fc122-1409-4092-b39c-ea348de8ba14@t-8ch.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/NwpFl.U/DxkQYj43Onpc6y7";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/NwpFl.U/DxkQYj43Onpc6y7
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+> Hi Zhangjin,
+> 
+> On 2023-06-07 13:39:20+0800, Zhangjin Wu wrote:
+> > 
+> > As a summary, will use 'sysret()' and something like:
+> > 
+> >    static __attribute__((unused))
+> >    int chdir(const char *path)
+> >    {
+> >    	return sysret(chdir(path));
+> >    }
+> > 
+> > to renew the syscall helper patchset, Thanks you very much.
+> 
+> But please to use the "__" prefix.
+> Otherwise it could conflict with user code.
+>
 
-Hi all,
+Ok, not yet to modify the code, will reserve the '__sysret()' and convert the
+left parts to this style: '__sysret(chdir(path))', a simple sed script may help
+to do so.
 
-The following commit is also in the mfd tree as a different commit
-(but the same patch):
+Thanks a lot.
+Zhangjin
 
-  75c8cb2f4cb2 ("mfd: axp20x: Add support for AXP313a PMIC")
-
-This is commit
-
-  2f518d914bd3 ("mfd: axp20x: Add support for AXP313a PMIC")
-
-in the mfd tree.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/NwpFl.U/DxkQYj43Onpc6y7
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSAJbcACgkQAVBC80lX
-0Gyw9Qf6A7JQ69EEBiR9Ax4KnS3R1EBScgUvsapC2AEK8KVqe9uz7/dtDvuOZHBS
-gcjt+GQayoqNheC1OJ6RALq1YytEBCVlWUDMZkW2pLe00e0j9s3LHdTe+JDlVoKy
-h6auM0kuZUejetR8aUVCmb7xiY2lBYsruROQsXo+YMaijFma3qqX900krsNRsvJR
-NapwkWJruhfsosOVbFLbLitW3M7DsKVpUnS7JGLMfQ/9OGEBm7v35UDBY0bHzKXm
-LolcHmmOuy/thkS8CHwr0zVjLcykb1VBYyzNhmwlLjm0esLPWa1qFXWP5vlkykv+
-YFpAIPASOEPcP6476t/eaw1dn/sTRA==
-=WtgY
------END PGP SIGNATURE-----
-
---Sig_/NwpFl.U/DxkQYj43Onpc6y7--
+> Thomas
