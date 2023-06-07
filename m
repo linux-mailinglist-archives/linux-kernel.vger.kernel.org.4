@@ -2,99 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFEE2726340
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 16:49:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 738C0726344
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 16:49:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239705AbjFGOtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 10:49:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39302 "EHLO
+        id S241085AbjFGOtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 10:49:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234794AbjFGOtK (ORCPT
+        with ESMTP id S240981AbjFGOtd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 10:49:10 -0400
-Received: from fgw20-7.mail.saunalahti.fi (fgw20-7.mail.saunalahti.fi [62.142.5.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2383392
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 07:49:09 -0700 (PDT)
-Received: from localhost (88-113-24-87.elisa-laajakaista.fi [88.113.24.87])
-        by fgw20.mail.saunalahti.fi (Halon) with ESMTP
-        id 7314a8b2-0542-11ee-b3cf-005056bd6ce9;
-        Wed, 07 Jun 2023 17:49:05 +0300 (EEST)
-From:   andy.shevchenko@gmail.com
-Date:   Wed, 7 Jun 2023 17:49:05 +0300
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     andy.shevchenko@gmail.com, oe-kbuild-all@lists.linux.dev,
-        linus.walleij@linaro.org, brgl@bgdev.pl, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, linux-gpio@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] gpio: ath79: Add missing check for platform_get_irq
-Message-ID: <ZICY4dTgZZGpiDPY@surfacebook>
-References: <20230607070819.48553-1-jiasheng@iscas.ac.cn>
+        Wed, 7 Jun 2023 10:49:33 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D75531FC3;
+        Wed,  7 Jun 2023 07:49:24 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Qbqwt0jznz6J7xn;
+        Wed,  7 Jun 2023 22:49:02 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Wed, 7 Jun
+ 2023 15:49:22 +0100
+Date:   Wed, 7 Jun 2023 15:49:21 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     "Paller, Kim Seer" <KimSeer.Paller@analog.com>
+CC:     Jonathan Cameron <jic23@kernel.org>,
+        "lars@metafoo.de" <lars@metafoo.de>,
+        "krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 2/2] iio: adc: max14001: New driver
+Message-ID: <20230607154921.00007efe@Huawei.com>
+In-Reply-To: <bdc11e51637e4249818be688e3cd7b59@analog.com>
+References: <20230605130755.92642-1-kimseer.paller@analog.com>
+        <20230605130755.92642-3-kimseer.paller@analog.com>
+        <20230605202413.5eb0c0f3@jic23-huawei>
+        <f62be66979db433eac86f32cc8587892@analog.com>
+        <20230606113550.00003634@Huawei.com>
+        <bdc11e51637e4249818be688e3cd7b59@analog.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230607070819.48553-1-jiasheng@iscas.ac.cn>
-X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml100002.china.huawei.com (7.191.160.241) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wed, Jun 07, 2023 at 03:08:19PM +0800, Jiasheng Jiang kirjoitti:
-> On Tue, 6 Jun 2023 17:46:36 +0800 Andy Shevchenko wrote:
-> > Tue, Jun 06, 2023 at 12:28:17PM +0300, andy.shevchenko@gmail.com kirjoitti:
-> >> Tue, Jun 06, 2023 at 11:18:41AM +0800, Jiasheng Jiang kirjoitti:
+On Wed, 7 Jun 2023 11:17:33 +0000
+"Paller, Kim Seer" <KimSeer.Paller@analog.com> wrote:
 
-...
-
-> >> > Add the missing check for platform_get_irq() and return error
-> >> > if it fails.
-> >> > The returned error code will be dealed with in
-> >> > module_platform_driver(ath79_gpio_driver) and the driver will not
-> >> > be registered.
-> >> 
-> >> No, this functional change and has not to be for the fixes unless _this_ is the
-> >> regression you are fixing. Did the driver work before at some point as after
-> >> this change?
-> 
-> I will remove the fixes tag in v4.
-> 
-> > To be more clear, answer to the following questions:
-> > 1) does driver work with wrong DT configuration?
-> > 2a) if yes, does it make sense, i.e. the hardware functioning usefully?
-> > 2b) if yes, can we guarantee there are no broken configurations in the wild?
+> > -----Original Message-----
+> > From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+> > Sent: Tuesday, June 6, 2023 6:36 PM
+> > To: Paller, Kim Seer <KimSeer.Paller@analog.com>
+> > Cc: Jonathan Cameron <jic23@kernel.org>; lars@metafoo.de;
+> > krzysztof.kozlowski@linaro.org; broonie@kernel.org; lgirdwood@gmail.com;
+> > linux-iio@vger.kernel.org; linux-kernel@vger.kernel.org
+> > Subject: Re: [PATCH v2 2/2] iio: adc: max14001: New driver
 > > 
-> > Depending on the answers correct your code and/or commit message.
-
-The above is a list of the questions you need to investigate.
-(Note, it takes several minutes on elixir.bootlin.com to check
- some of this, but I'm not the author of the code)
-
-> >> Otherwise you have to _justify_ that this functional change won't break
-> >> existing setups (with broked IRQ in Device Tree, for example).
+> > [External]
+> > 
+> > 
+> >   
+> > > >  
+> > > > > +	struct mutex		lock;
+> > > > > +	struct regmap		*regmap;
+> > > > > +	int			vref_mv;
+> > > > > +	/*
+> > > > > +	 * DMA (thus cache coherency maintenance) requires the
+> > > > > +	 * transfer buffers to live in their own cache lines.  
+> > > >
+> > > > You are looking at an old kernel I guess - we fixed all of these - and
+> > > > introduced IIO_DMA_MINALIGN for __aligned(IIO_DMA_MINALIGN) to
+> > > > make it easier to fix any such problems in future.
+> > > >
+> > > > Upshot is that ___cacheline_aligned aligns to the l1 cacheline length.
+> > > > Some fun systems (such as the big servers I use in my dayjob) have higher
+> > > > cacheline sizes for their larger / further from CPU caches.
+> > > > One group of SoCs out there is known to both do non coherent DMA and
+> > > > have a larger line size for the bit relevant to that than ___cacheline_aligned
+> > > > gives you. So on that rare platform this is currently broken.  
+> > >
+> > > It's good to know. Given this information, is there anything specific that I
+> > > need to change in the code or implementation related to
+> > > the ___cacheline_aligned part?  
+> > 
+> > Replace it with __aligned(IIO_DMA_MINALIGN) as has hopefully now been
+> > done
+> > in all upstream drivers.  
 > 
-> Sorry, I do not quite understand what you mean.
-> I have no idea how these questions are related to my patch.
+> When I attempted to implement this change, I encountered a checkpatch warning 
+> in the latest kernel version. The warning indicated that externs should be avoided 
+> in .c files and emphasized the need for an identifier name for the function 
+> definition argument 'IIO_DMA_MINALIGN'. I attempted to define a macro with an 
+> appropriate identifier name, but I still received the same checkpatch warning. 
+> It's possible that I may have overlooked something in my approach. I would 
+> appreciate your thoughts and insights on this matter. Thanks.
 
-The IRQ is usually provided by Device Tree or ACPI (here is DT only case).
-Then the platform code converts that to resource which this driver consumes.
-That resource is used when instantiating GPIO (IRQ) chip.
+Ignore checkpatch for this one. Check patch is miss handling of
+__aligned.
 
-> Do you mean I should not fail the ->probe() if there is wrong IRQ numbering in the DT?
+At a guess - needs an entry in this list:
+https://elixir.bootlin.com/linux/latest/source/scripts/checkpatch.pl#L513
 
-I don't know. The commit message of your change should elaborate this.
+Though I'm never great at understanding the perl so may have that wrong.
 
-> Please tell me the relationship between these questions and my patch.
-
-The tight relationship. The patch changes the flow. Either
-you shouldn't do that, or be aware and explain why it's not
-a problem. Or get it done differently.
-
--- 
-With Best Regards,
-Andy Shevchenko
+Jonathan
 
 
