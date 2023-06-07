@@ -2,137 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41355727332
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 01:39:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 319C0727338
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 01:40:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233476AbjFGXj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 19:39:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47724 "EHLO
+        id S233376AbjFGXka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 19:40:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233396AbjFGXjW (ORCPT
+        with ESMTP id S229775AbjFGXkU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 19:39:22 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DA8F26A8
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 16:39:09 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2b1b92845e1so59430321fa.0
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 16:39:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686181148; x=1688773148;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XONB9T8Mj7o/MLrEwoJSSBYj969JG7tPSlspH2W5BIw=;
-        b=GTSY7qEdobWh7LkTRnOAImvPKZUJQfgOgETcJ+tk6DI5sF/chuwr6uFDqqlVN23O2W
-         //yo7tNg480hQs0zkZINMpSZx3sk/T3RykwcV+TsgCqjcm6lxUr7OIiZgxIFpwSR5GDM
-         4G0wg5Ie0zBjwOhgMcBHNt5pPR8zWZkXbyFtqUc4AfJayZmsCu3RwDeCa8spwMuwj3kd
-         l7IFXSZtuqtnQi6PcQ7vFnWwXhpYhZaVzrLSjtc6apATcNyaMuyKL3dvg8eSImkt7HNR
-         s3HuH1jxWmY/bYrPhnN5PoHhxg9HXsMayW/9mjwSHTu08V8Fjpsb3fvDLgVQ95kyqjtA
-         HJ8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686181148; x=1688773148;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XONB9T8Mj7o/MLrEwoJSSBYj969JG7tPSlspH2W5BIw=;
-        b=kSh3LhGjSjEsYxBPNo8yqPYf+0TO1NYdUQ+ZETxQYj1MxOOg9PXhMtEYJri4ohyRmQ
-         T4yWZLGbpAUBiFI1Fv4N5LDco4qZk823wuYj17/69Cdhbed7j/4cWNtpgXNcmQWd1t3w
-         8iw+x6oWuNyOj4G7C7NX5WyLYQK/RQFbWMeY0db2upYMtWk1fJ+QmUUSUQwTio9LxK7v
-         qiM+Lu345mRImLD3VEoFa14zdMUPvYYzdtJt/+pNTdB7AgzvuMrKtPWsaAxZVu0Ovv6X
-         s6mtoam7ZxvmfXKHBpuURw/0A8FSGA38f1kduCS8Fl/ItQP0vMhGv+zUfWa5GLJ4q6r8
-         B4NQ==
-X-Gm-Message-State: AC+VfDzD2e3fLHGBs62Uf3fsMqYt/3A2RM0cDqhIzjbUtYHeL7CdUGUo
-        ydD+DjF89p+kPlyYHz7lZjHdtw==
-X-Google-Smtp-Source: ACHHUZ5Ti07xNp1+TYebI62vHoSL/r5taUDlEmn3ZQRy27Ik7N84bpsPjsq4VfKfSjqdaopI0zXg+A==
-X-Received: by 2002:a2e:730c:0:b0:2a7:7100:ff5a with SMTP id o12-20020a2e730c000000b002a77100ff5amr2976356ljc.6.1686181147775;
-        Wed, 07 Jun 2023 16:39:07 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id o15-20020a2e90cf000000b002b1b92910c8sm346ljg.86.2023.06.07.16.39.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 16:39:07 -0700 (PDT)
-Message-ID: <e70b266b-85bb-f23f-dac8-47702a2aaf37@linaro.org>
-Date:   Thu, 8 Jun 2023 02:39:06 +0300
+        Wed, 7 Jun 2023 19:40:20 -0400
+Received: from sonic311-31.consmr.mail.ne1.yahoo.com (sonic311-31.consmr.mail.ne1.yahoo.com [66.163.188.212])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7E6E26B8
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 16:39:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1686181198; bh=MLg3eEIQ6oxa5ubin2En3vP+BFYlpn63vPZqcYHn8/c=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=L/8MkD72LF/Lc0nlDvMsqldR6tGxbQz3xtUxMnnexoh4/yczWF813WrtkaYNqlNBwO834Bu8cJpigYShXpbYLcHyoOyyn69fGBwM9WnG1SEGj419LTUK5QsAtlFaUGTVxfo7bFKY3MoHw1BmflWrLg7ZiXIwB3FFigweISoJhMac99mHDl/aaRklQJ397FvsEuVptW0EhNRZOURnWXEUfPHep4ZX/jU1CB55Ae1AZ1mkqUbtY7YmaL0GUGzjeaARxHgq9WteMManQ1IW/+JAf7M/R+oK07TXWm4ce1QaM+Y8+C+lCeG2Xwk3uiEqimjFFMl4cw8E0T/wMFmiL4/pQQ==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1686181198; bh=T8klwkrVKqfnlECaKgGkKbooPwQxUIVUUHSupnXE/Fy=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=EYSNA8nZ62hxDRua+4mKwljUmw7Pvie0EdDDL3p4swLATTSJVJJCeKdcbDDA4sutujm4oLRTWVELJkbBxglHqB8vsww5njtMUS+zL8JvPdrSxuMQV3Thgsu8TCSWHK3XKKRpMOlG9ZVGqQBO4V11hwghzbqZ2uQhRQF5yEw0Hl9iX3sNadMJfotyydIkN7eQi69GWN1hZUsOwIRQkFSfHO4yttTJG0PrMR/qy6/5JRv71D71qTKD2CS89ah04544v/rqYQkPSzoDGEb2rIXvRDQ6CJJYMJKMl8t4FXUDTv+M72dEfgUyoNPSpAe6/+yOTRziURHScPcoYC6mghzp3Q==
+X-YMail-OSG: 9DZ00UIVM1nf7gHNoSEJ_nQWRcW9g8Xfe_zpCClhZWdUoGLj_c_czAmMX82snG.
+ EtXqu9.iP68RkKlYIDDaphvlBZCmGws9fbP4QhqaDyVLSzVGNWxXLVb2MOQVcAry.HF3I52WhI4D
+ PKG_tAo_sviZephuG5VTSLYTBMsMPY7xJvJk25w60qIqC62H6UXeYqeg0HdIVd.Us.aysoxmkPxf
+ ogF_ILbmys0RhgLlVtr.EhhS7BGJSVOkaTxA02G9S5n1lgQbBXqsedAJ64mkzCG3jQCOJjlmx.Dv
+ 6y_H7TQGYRRVQql5NQrONSRPZ2YpzkfmqxzDHMv_objgDooc_lrUUzf8UHdpuaPVqY6rpNeU8TOZ
+ e5mLjKbYPwp49p37sJpsBPcMNyGHBq7U6hkGLPix84zf1ipMbjOLYfpF7B5a3LHXjAAfHWrvqCcN
+ lMffFRTxLeBBjN.vsgm0nBrL5IJUQKGsaie0Q6oezroJWGJ.OR3NL2frCfA4cal9wDEGRkRWGcfW
+ iO24EvJ5RL8HkIaPN1DG3y2Io0kWag1b9epoONUrA6zggtd5U479RiczA0vul9evpicsvAMpHbbl
+ ITDGSLv5cEu69DRFUYMOGZf6DNhgBhH_Tor9.7gt.FCYxWjpL0rPtCO_CQv1dTSYnJqAY_ypMUad
+ hdqW2asKRPaC9dw0zJ22uYfuvf5GgkSfcFJFWzvsoG3eBywJF1rpSfcwKE45ppUV5rGRnJjvpXDQ
+ 9YFOhypYjgDgZyxH3Ewm.JKJF77YpUouBT9fDtWFqBqV7U5gsoQlW4Vg5Q3npVsnXm9C34lybazL
+ P_XpmC2d9NjTPUR3fpDLSYvH26OBYeetWh2ewrfV7kPWSNSOIy5SlP7iHv7_WaAxbsrtR2msS6AC
+ Qtb8yxIFH0TP2wE2hd5QJxaKIQGNJm34bej_u.2QpkjRUr1pgAnniF22_EWBrhrhDGqjB55eJZLt
+ jgIDr.eiHxoKMfKaBv9vwRs65eygNRDNqIVaAixkt7ho3DiqRTw5CJeJPIIjy8auG2t9iqEo.UcV
+ KOHF1yx.J.SL2aATCAltOtvp2uS.kPXV.DB..aaBSogrOBD2WdgGcjKcDrhZNrdy.2zvEObvi_DW
+ FvFj1lkvebih76k2HCiuOv_FfcriX48tFjqgAuAOW43.yFnk_PyvjKXBveAEHGIEnURD7jDFcDBY
+ yJyY.ndXsula46PI7Pc9Tra7cSC3AY6Ti5wi0fc0d.aJM9YVKQ1FPfjw8CL.q..lJULUpn1Uksk5
+ gn.wxf2KdRODJ0Tk7vSUBzHRpsHtuGGvZLnA8DPJypNEAOqbOgONzd5iwyhi8WRlR0OactKXuB3T
+ t5wVUbhSU9WLwyDUAxoDhScJLYK_eyiG_HiTh8I96ftIMPwYStsnRLQQt.3erIT31LU105kO0gwf
+ 1nDpz5vW6jtPcesr6lvz4xm95vysDUZr7_1z_fRF4DqY2vPsYuPsnBzhAXSBEleiGrdBZtt0lWtZ
+ P4qbTLNvvnrISQM6OmOUHXactFUmSLnqmgW80oUX9QFPqsb3DQWw5pxe0j7_4dECibAiaJPrUK5K
+ 8yowLBcUFs5iF5EhnPGh4.03qSKGEbah82axnlMqA.Xl.iPvq0vsDEfO8dWTfcWRkq1LaIkOo4lj
+ kuKI9JoK0P9MAdgThuSvlb6hp8s50ykZc_dc606j_HFoUXT_T2YaXWE1Y_gC1fpK53FfW8xrbgul
+ dvsVCquT88yypSo6va9qg42R3I3U7ks7yspn2CQodLJ8gu4NOe_Fwnt105YHjmWY9gZnvUmzwLJr
+ f5SLOU4QgvMsJ9lCMhRSJcS4cZ841PgNTes5Yx.mi1E3Kl0Lr7Ic40allvm.2TfbQqVovCjkvyq6
+ 7l.Ot0Im08EswnGuamVZUu6DiINcXAgx54rBdLdtqPOTnGZCbFe4KAclmZETJWuumgxWHyLva.Tb
+ 1Da6hr0DzkMSiw5IJr_xNJLJtuAkXgIxghOKuoZRP1uow0vJI2q2YEPdNdPw2MlGupEMOJA9hWqC
+ y9rohL3BVno3vrHQeyTklM8uzKagPnjJ2mvC7LFbGqqqFjRcmEmUyfHyhb7D33Pllt.a4iPvD5Yu
+ eiHRSt75FCH4EzEmyzwCMneLEDQKlfHoIYNDr7sc5po5FVzUIiQP2pVI1E_fMSj4y1h2wdLD3ovs
+ TVLef8m_Ug0gSLcpzFYt52HToxDS4pOwtBACGwxqOhczApOKFskW01vy1UVEyXdtV.PcYTwRqfWb
+ V_gZQdnheV3reVNzsB.CWOm16ZZPXQVi.VzGIpWDiSHsko9r2PMZ.ORE_bF6AG0OdJwdYwOa.auz
+ QPoT0s_qdpN4ooTJffd0v
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: aa61df0c-dead-4c2e-8f62-dac88edc3df4
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.ne1.yahoo.com with HTTP; Wed, 7 Jun 2023 23:39:58 +0000
+Received: by hermes--production-ne1-574d4b7954-xz2cn (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 722d8a43fe0be971fa9347acc11d3ac0;
+          Wed, 07 Jun 2023 23:39:57 +0000 (UTC)
+Message-ID: <3319126a-c5b5-c9db-dddb-7ed169ac7e83@schaufler-ca.com>
+Date:   Wed, 7 Jun 2023 16:39:55 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH v6 00/12] SM63(50|75) DPU support
-Content-Language: en-GB
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux.dev, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-References: <20230411-topic-straitlagoon_mdss-v6-0-dee6a882571b@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230411-topic-straitlagoon_mdss-v6-0-dee6a882571b@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH v10 10/11] SELinux: Add selfattr hooks
+Content-Language: en-US
+To:     Paul Moore <paul@paul-moore.com>,
+        linux-security-module@vger.kernel.org
+Cc:     jmorris@namei.org, keescook@chromium.org,
+        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
+        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org, mic@digikod.net,
+        selinux@vger.kernel.org, Casey Schaufler <casey@schaufler-ca.com>
+References: <20230428203417.159874-11-casey@schaufler-ca.com>
+ <b09b591926e0f297fe0a3e9d8fcf3a6a.paul@paul-moore.com>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <b09b591926e0f297fe0a3e9d8fcf3a6a.paul@paul-moore.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Mailer: WebService/1.1.21516 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/06/2023 15:43, Konrad Dybcio wrote:
+On 6/7/2023 3:32 PM, Paul Moore wrote:
+> On Apr 28, 2023 Casey Schaufler <casey@schaufler-ca.com> wrote:
+>> Add hooks for setselfattr and getselfattr. These hooks are not very
+>> different from their setprocattr and getprocattr equivalents, and
+>> much of the code is shared.
+>>
+>> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+>> Cc: selinux@vger.kernel.org
+>> Cc: Paul Moore <paul@paul-moore.com>
+>> ---
+>>  security/selinux/hooks.c | 154 +++++++++++++++++++++++++++++++--------
+>>  1 file changed, 124 insertions(+), 30 deletions(-)
+>>
+>> diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+>> index 2ee92d3fb79d..e78b955e04f8 100644
+>> --- a/security/selinux/hooks.c
+>> +++ b/security/selinux/hooks.c
+>> @@ -6542,6 +6559,81 @@ static int selinux_setprocattr(const char *name, void *value, size_t size)
+>>  	return error;
+>>  }
+>>  
+>> +static int selinux_getselfattr(unsigned int attr, struct lsm_ctx __user *ctx,
+>> +			       size_t *size, u32 flags)
+>> +{
+>> +	char *value;
+>> +	size_t total_len;
+>> +	int len;
+>> +	int rc;
+>> +
+>> +	len = selinux_lsm_getattr(attr, current, &value);
+>> +	if (len < 0)
+>> +		return len;
+>> +
+>> +	total_len = ALIGN(struct_size(ctx, ctx, len), 8);
+>> +
+>> +	if (total_len > *size)
+>> +		rc = -E2BIG;
+> Hmm.  Since we need to calculate the aligned @total_len value in the
+> LSM specific code, perhaps it doesn't make sense to also do the
+> alignment in lsm_fill_user_ctx().  My apologies, I know I was the one
+> who suggested doing the alignment in a common place previously.
 
-[skipped the changelog]
+Some future user of lsm_fill_user_ctx() may not need to do the
+calculation, so I would be inclined to leave it here. I'm thinking
+SO_PEERCONTEXT, or the like. But I'll go with whatever gets the
+patchset moving forward.
 
-> ---
-> Konrad Dybcio (12):
->        dt-bindings: display/msm: dsi-controller-main: Add SM6350
->        dt-bindings: display/msm: dsi-controller-main: Add SM6375
->        dt-bindings: display/msm: sc7180-dpu: Describe SM6350 and SM6375
->        dt-bindings: display/msm: Add SM6350 MDSS
->        dt-bindings: display/msm: Add SM6375 MDSS
->        drm/msm/dpu: Add SM6350 support
->        drm/msm: mdss: Add SM6350 support
->        drm/msm/dpu: Add SM6375 support
->        drm/msm: mdss: Add SM6375 support
-
-Will, we have finally picked up the display related patches. Could you 
-please pick up the IOMMU patches if they look fine to you.
-
->        iommu/arm-smmu-qcom: Sort the compatible list alphabetically
->        iommu/arm-smmu-qcom: Add SM6375 DPU compatible
->        iommu/arm-smmu-qcom: Add SM6350 DPU compatible
-> 
->   .../bindings/display/msm/dsi-controller-main.yaml  |   4 +
->   .../bindings/display/msm/qcom,sc7180-dpu.yaml      |  23 ++-
->   .../bindings/display/msm/qcom,sm6350-mdss.yaml     | 213 ++++++++++++++++++++
->   .../bindings/display/msm/qcom,sm6375-mdss.yaml     | 215 +++++++++++++++++++++
->   .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_4_sm6350.h | 173 +++++++++++++++++
->   .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_9_sm6375.h | 139 +++++++++++++
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     |   6 +
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h     |   2 +
->   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c            |   2 +
->   drivers/gpu/drm/msm/msm_mdss.c                     |  10 +
->   drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c         |   6 +-
->   11 files changed, 790 insertions(+), 3 deletions(-)
-> ---
-> base-commit: 6db29e14f4fb7bce9eb5290288e71b05c2b0d118
-> change-id: 20230411-topic-straitlagoon_mdss-8f34cacd5e26
-> 
-> Best regards,
-
--- 
-With best wishes
-Dmitry
-
+>
+>> +	else if (ctx)
+>> +		rc = lsm_fill_user_ctx(ctx, value, len, LSM_ID_SELINUX, 0);
+>> +	else
+>> +		rc = 1;
+>> +
+>> +	*size = total_len;
+>> +	if (rc < 0)
+>> +		return rc;
+>> +	return 1;
+>> +}
+> --
+> paul-moore.com
