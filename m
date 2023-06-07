@@ -2,75 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78BC87252D8
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 06:30:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BCA47252DF
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 06:33:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234254AbjFGE3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 00:29:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47106 "EHLO
+        id S231696AbjFGEdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 00:33:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233925AbjFGE3R (ORCPT
+        with ESMTP id S230125AbjFGEce (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 00:29:17 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D053F26B7
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 21:27:05 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id d75a77b69052e-3f828ee8ecdso14805161cf.0
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 21:27:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1686112025; x=1688704025;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WPSKz7WcmWYDoiWla/HjpfomHebC25lLZctCV/vLH4k=;
-        b=YoflSz/WWxi5+uAGhkj3VOsHqFcBqNc2/nJq9qn0WwAt7+Jb+cNtwE/5wehV4e5iNw
-         LjjKvgxxNAG2mjKSNdnhAogPK/DpK2l79V51b3G70hzwnsyGpAl4RrhLwcv3tJ9EDtTX
-         vVyjcp9QiLM9j3NjPKw4mX51UiG2kxTthhPf1vSOoiLxBP7Z5S70RCo4rIddBPIKcOCD
-         WrHV3kpK94KzFZ9ysDcqNaRe55bIxZC83YS8eiTw4bTv3rXdUcoG4vQY5M+7yfIm3Ysc
-         rGcl9SfpUW26IMk3MddsmlZHEzf2u3GAR9oUy1X3y7c21uche6LUoeCWj6EjRoJllgRk
-         zQSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686112025; x=1688704025;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WPSKz7WcmWYDoiWla/HjpfomHebC25lLZctCV/vLH4k=;
-        b=diwfzARb8ctmPWKIKwmIVCyExe5pc/BTXRPAuKXHovQGNpYLj1PuBGvcpN0oqhslKF
-         wAtfnOV9Yn3bm++T0sgyvcQIxKn3xcs/J2RUZgK3SPg3g4P+9jQKF43qSpf2yV5SouIg
-         YyMeHBBS70GeXyh9UioZgD3S9011o+3Y5r2DhplFTWcFKTuhDwSxo1lkLT3Zx7l4Hokl
-         KEc7TfpD2+ZhN80DWt1MCVvTa31E8h4keNwHFt84A5FapFe0D0UomZWJ6oLqds6/6Twt
-         k5MSSlrQpO9m57QKyyOpiJQbMBynJYbpKT2JP8QdVU8ib/2kQYydCUSqeAPdGwtNssu5
-         T9qQ==
-X-Gm-Message-State: AC+VfDznJ34qI49hZd09ow0lx6opd8lydQ0GgTtSp+CdQqzS/8Jl2n6T
-        SgzGeSNEZyQX3L2Fy3iVMqyxNg==
-X-Google-Smtp-Source: ACHHUZ7NSTxdF/ubgwDQxb7ez4TU1x57Ynb13u73yomi8AoMLRBZYFeKffKYiqjTywUrm5xkQXX/YQ==
-X-Received: by 2002:ac8:5c8c:0:b0:3f4:fdaa:8e14 with SMTP id r12-20020ac85c8c000000b003f4fdaa8e14mr5856641qta.2.1686112024916;
-        Tue, 06 Jun 2023 21:27:04 -0700 (PDT)
-Received: from [127.0.0.1] ([50.234.116.5])
-        by smtp.gmail.com with ESMTPSA id l16-20020ac81490000000b003f8685c403fsm4369867qtj.22.2023.06.06.21.27.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 21:27:04 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     linux-block@vger.kernel.org, Hou Tao <houtao@huaweicloud.com>
-Cc:     Bart Van Assche <bvanassche@acm.org>, Jan Kara <jack@suse.cz>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>, cgroups@vger.kernel.org,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, houtao1@huawei.com
-In-Reply-To: <20230428074404.280532-1-houtao@huaweicloud.com>
-References: <20230428074404.280532-1-houtao@huaweicloud.com>
-Subject: Re: [PATCH v4] blk-ioprio: Introduce promote-to-rt policy
-Message-Id: <168611202214.121141.17298993524876974749.b4-ty@kernel.dk>
-Date:   Tue, 06 Jun 2023 22:27:02 -0600
+        Wed, 7 Jun 2023 00:32:34 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 061B81FF7
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 21:30:46 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (om126233170111.36.openmobile.ne.jp [126.233.170.111])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D56332B6;
+        Wed,  7 Jun 2023 06:30:17 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1686112218;
+        bh=yOoSdsEWv7NH++TRQ7A5AmADmeDU2Han4n3O5WQdd6s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DvZo1H58PEsl6InTU6IxfFDp2EM0i5JqO9H2PALxEzwv5QTBy2CrSv4cboL7MwraX
+         /9NK+8D8Z8GzJpritnYhWXoTOrAbPDV16Co2PYPKUilY3tm+nfq/wwBVALvgbUjJy9
+         J1e9b+wsuI6fvc/1k+c0NTD2pBEJB4+AXLWv3pTo=
+Date:   Wed, 7 Jun 2023 07:30:41 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Siddh Raman Pant <code@siddh.me>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Suraj Upadhyay <usuraj35@gmail.com>
+Subject: Re: [PATCH v9 0/8] drm: Remove usage of deprecated DRM_* macros
+Message-ID: <20230607043041.GE14101@pendragon.ideasonboard.com>
+References: <cover.1686047727.git.code@siddh.me>
+ <20230606150545.GJ5197@pendragon.ideasonboard.com>
+ <18891c17458.393a54b1127185.1502341592143085000@siddh.me>
+ <20230606174928.GB14101@pendragon.ideasonboard.com>
+ <18891edf10b.42f0ffa4128414.8582548531031990480@siddh.me>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-c6835
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <18891edf10b.42f0ffa4128414.8582548531031990480@siddh.me>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,30 +63,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Fri, 28 Apr 2023 15:44:04 +0800, Hou Tao wrote:
-> Since commit a78418e6a04c ("block: Always initialize bio IO priority on
-> submit"), bio->bi_ioprio will never be IOPRIO_CLASS_NONE when calling
-> blkcg_set_ioprio(), so there will be no way to promote the io-priority
-> of one cgroup to IOPRIO_CLASS_RT, because bi_ioprio will always be
-> greater than or equals to IOPRIO_CLASS_RT.
+On Tue, Jun 06, 2023 at 11:47:50PM +0530, Siddh Raman Pant wrote:
+> On Tue, 06 Jun 2023 23:19:28 +0530, Laurent Pinchart wrote:
+> > The idea would be to include the drm_print_deprecated.h header in
+> > drivers that still use the deprecated macros.
 > 
-> It seems possible to call blkcg_set_ioprio() first then try to
-> initialize bi_ioprio later in bio_set_ioprio(), but this doesn't work
-> for bio in which bi_ioprio is already initialized (e.g., direct-io), so
-> introduce a new promote-to-rt policy to promote the iopriority of bio to
-> IOPRIO_CLASS_RT if the ioprio is not already RT.
+> Yeah, what I meant was in a "first pass" kind of sense.
 > 
-> [...]
+> > > Not every file can be seen at a case-by-case basis or by coccinelle
+> > > as far as I understand its usage. Consider the following:
+> > > 
+> > > DRM_INFO is used on line 210 of amd/amdgpu/amdgpu_acpi.c, but the
+> > > file does not even include drm_print.h directly. It includes the
+> > > amdgpu.h header, which includes the amdgpu_ring.h header, which
+> > > finally has the "#include " line.
+> > > 
+> > > If a simple find and replace has to be done, then that can be added
+> > > at the end of the series.
+> > 
+> > Maybe a simple grep for the deprecated macros would be enough to
+> > identify all the files that still use them ?
+> 
+> Hmm, so the drm_print_deprecated.h should be included individually on
+> all the files, regardless of whether they include drm_print.h directly
+> or not?
+> 
+> Actually that makes sense, so further inclusion of top-level header
+> would not automatically include the deprecated macros.
 
-Applied, thanks!
+That's the idea, yes. It would also clearly flag drivers that need to be
+converted to the new macros.
 
-[1/1] blk-ioprio: Introduce promote-to-rt policy
-      commit: ddf63516d8d37528dc6834c7f19b55084e956068
+> Since this needs some thought, I will be sending v10 without this.
+> This change can be sent later separately, as it will anyways be a
+> huge patch, and 10 is already a big enough revision number.
 
-Best regards,
+Sounds good to me.
+
 -- 
-Jens Axboe
+Regards,
 
-
-
+Laurent Pinchart
