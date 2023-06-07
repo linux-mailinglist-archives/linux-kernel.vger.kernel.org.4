@@ -2,159 +2,308 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94584727096
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 23:33:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1DDB72709B
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 23:39:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230269AbjFGVdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 17:33:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48570 "EHLO
+        id S231219AbjFGVjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 17:39:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbjFGVdN (ORCPT
+        with ESMTP id S230043AbjFGVjV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 17:33:13 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17E0F1FD5
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 14:33:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686173592; x=1717709592;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Hv8Np48zRKFQLTLqiGDrs2XR+FI1FZmUcE7+ntKNyA8=;
-  b=bKlMKfR+Z+LnDuKzam8CM5ZlVPQZzTQp80ASzlQB0V8x8BdImaQRhcCq
-   7MJsq1SNmHsKI5MXaWUbobnAS3+iWXWwBMx3UqSxAKMt/2TGyOhznw7wJ
-   ugi6EiRcHmvqc+4gioOt4UnY1mmJpCb9x9bgmbrhNBmCijvltoujr8qoh
-   Hj6jjZLZcK03vnM9326jYuCCTgsaRvKc4kaTGJwcaZEpp9Uh8x3zHYR60
-   Cq19i7KPNTxLx8fnF1yKgB/zN+AUDMFsnkoGhTlsi6dWXncUU48HS22gC
-   A20gsMQgBhNm/GToVRdyD2ozTn6uOY3K8vtD0t2J/BWNV2cI3g4x4xR9B
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="354605927"
-X-IronPort-AV: E=Sophos;i="6.00,225,1681196400"; 
-   d="scan'208";a="354605927"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 14:33:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="956449747"
-X-IronPort-AV: E=Sophos;i="6.00,225,1681196400"; 
-   d="scan'208";a="956449747"
-Received: from jkrzyszt-mobl2.ger.corp.intel.com ([10.213.10.174])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 14:33:08 -0700
-From:   Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
-To:     "Hansen, Dave" <dave.hansen@intel.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "Gross, Jurgen" <jgross@suse.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "andi.shyti@linux.intel.com" <andi.shyti@linux.intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "hannes@cmpxchg.org" <hannes@cmpxchg.org>
-Subject: Re: [PATCH v2] x86/mm: Fix PAT bit missing from page protection modify mask
-Date:   Wed, 07 Jun 2023 23:33:05 +0200
-Message-ID: <20819659.0c2gjJ1VT2@jkrzyszt-mobl2.ger.corp.intel.com>
-Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173,
- 80-298 Gdansk - KRS 101882 - NIP 957-07-52-316
-In-Reply-To: <ad762335fd209fd8c1555401bc03e196eb53caef.camel@intel.com>
-References: <20230607152308.125787-2-janusz.krzysztofik@linux.intel.com>
- <38324471.J2Yia2DhmK@jkrzyszt-mobl2.ger.corp.intel.com>
- <ad762335fd209fd8c1555401bc03e196eb53caef.camel@intel.com>
+        Wed, 7 Jun 2023 17:39:21 -0400
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 163C81BD6
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 14:39:20 -0700 (PDT)
+Received: by mail-qv1-xf2d.google.com with SMTP id 6a1803df08f44-62b67937a6cso12901546d6.3
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 14:39:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686173959; x=1688765959;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pGDCkbdGN1MhlLFnaI8S08OX/yFHe0s8kyjhWCk8H7w=;
+        b=mJEU7MyYWGTtC0MSZzP22m9UhOH+6qglKGonrIho8evgn8Qlzatxa8kwZz4sQM/s4V
+         vwKmprb4LMvOaorr1m+q+Wx3QPX97wad3ALtAY0Ba0BQnm1UFkiEuhougJltFW7QYx9j
+         qKFdFnXlq3uvYMg/qGJ6YU+g9PyEIr69nRWOlKV7LrIY4lybQ4iLaiufQw05ro+5I/BU
+         Ee6nzHBNsDYP1X16N6aiEg6082syMfOExN5woE0YPCBIxGmsFSzNjvM0wo+CWKF2yAUx
+         uPO5y02tYwKsbIavKH8zD3/T3iuKRDKLCZfITNWNAMT1zUC3/U6l+qDSICjfPZJ2JEO+
+         P1xg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686173959; x=1688765959;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pGDCkbdGN1MhlLFnaI8S08OX/yFHe0s8kyjhWCk8H7w=;
+        b=EW3jMKSQ/JAG7lz39/v4w2PpnwIbqD/KAPQMeHPX0V1xY0861W0QfO/vPViZ0Bhrwz
+         lrRmaZVE5KCNzS/9GpbRKePJqfSfl/aFqf4Oi1kUfsOrxLTW5Z/FbcnAvmVQgam27mQR
+         qyoH4kWIksGR6D8dhUYerBUoJdbQNI5LQAqRk2XENEU2Vhc5I9GFxkifUCPeWz8KsT2B
+         x8ej4pn/rs0DV6ELlxO/x9Ohzaw81KlskSClHGkgy9Yybzc34ZjvPtpSRHiSr+6sjXip
+         DKSSdUB8tHQvljIOqIpbl2THmCbwN7KjFjqGWEmuFBovrvPWl102JyQkihRAWXpy4TAM
+         AfQw==
+X-Gm-Message-State: AC+VfDytuWSshz/cDHG7M2Tm/ETvXtaHMOT7m5g8Wy/9jA7iUGvaiqq+
+        zJ6+7quL/vqvxZlJBEENKiPH1ovXjFGCmd6IVeE=
+X-Google-Smtp-Source: ACHHUZ6VTV6Ci31JbJ0RpEI0E3uasHmPWgr1Tpkojx8LJQVD4ywRNEC2r16bGrwsje/ImzEDs/qdz+Cmn7NcSY6gmOw=
+X-Received: by 2002:ad4:5747:0:b0:61a:197b:605 with SMTP id
+ q7-20020ad45747000000b0061a197b0605mr5575505qvx.1.1686173958985; Wed, 07 Jun
+ 2023 14:39:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230606145611.704392-1-cerasuolodomenico@gmail.com> <20230606145611.704392-2-cerasuolodomenico@gmail.com>
+In-Reply-To: <20230606145611.704392-2-cerasuolodomenico@gmail.com>
+From:   Nhat Pham <nphamcs@gmail.com>
+Date:   Wed, 7 Jun 2023 14:39:08 -0700
+Message-ID: <CAKEwX=Pb0knETq_46dzg+uviEHu7DXJY6MFn-VEsUJw8T5J3Pw@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 1/7] mm: zswap: add pool shrinking mechanism
+To:     Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+Cc:     vitaly.wool@konsulko.com, minchan@kernel.org,
+        senozhatsky@chromium.org, yosryahmed@google.com,
+        linux-mm@kvack.org, ddstreet@ieee.org, sjenning@redhat.com,
+        hannes@cmpxchg.org, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wednesday, 7 June 2023 23:12:13 CEST Edgecombe, Rick P wrote:
-> On Wed, 2023-06-07 at 19:11 +0200, Janusz Krzysztofik wrote:
-> > On Wednesday, 7 June 2023 17:31:24 CEST Dave Hansen wrote:
-> > > On 6/7/23 08:23, Janusz Krzysztofik wrote:
-> > > > 
-> > > > Extend bitmask used by pgprot_modify() for selecting bits to be
-> > > > preserved
-> > > > with _PAGE_PAT bit.  However, since that bit can be reused as
-> > > > _PAGE_PSE,
-> > > > and the _PAGE_CHG_MASK symbol, primarly used by pte_modify(), is
-> > > > likely
-> > > > intentionally defined with that bit not set, keep that symbol
-> > > > unchanged.
-> > > 
-> > > I'm really having a hard time parsing what that last sentence is
-> > > saying.
-> > > 
-> > > Could you try again, please?
-> > 
-> > OK, but then I need to get my doubts addressed by someone first,
-> > otherwise I'm 
-> > not able to provide a better justification from my heart.
-> > 
-> > The issue needs to be fixed by including _PAGE_PAT bit into a bitmask
-> > used 
-> > by pgprot_modify() for selecting bits to be preserved.  We can either
-> > do 
-> > that internally to pgprot_modify() (my initial proposal, which my
-> > poorly 
-> > worded paragraph was still trying to describe and justify), or by
-> > making 
-> > _PAGE_PAT a part of _PAGE_CHG_MASK, as suggested by Borislav and
-> > reflected in 
-> > my v2 changelog.  But for the latter, I think we need to make sure
-> > that we 
-> > don't break other users of _PAGE_CHG_MASK.  Maybe Borislav can
-> > confirm that's 
-> > the case.
-> > 
-> > Since _PAGE_PAT is the same as _PAGE_PSE, _HPAGE_CHG_MASK -- a huge
-> > pmds' 
-> > counterpart of _PAGE_CHG_MASK, introduced by commit c489f1257b8c
-> > ("thp: add 
-> > pmd_modify"), defined as (_PAGE_CHG_MASK | _PAGE_PSE) -- will no
-> > longer differ 
-> > from _PAGE_CHG_MASK as soon as we add _PAGE_PAT bit to the latter. 
-> > If such 
-> > modification of _PAGE_CHG_MASK was irrelevant to its users then one
-> > may ask 
-> > why a new symbol was introduced instead of reusing the existing one
-> > with that 
-> > otherwise irrelevant bit (_PAGE_PSE in that case) added.  I've
-> > initially 
-> > assumed that keeping _PAGE_CHG_MASK without _PAGE_PSE (vel _PAGE_PAT)
-> > included 
-> > into it was intentional for some reason.  Maybe Johannes Weiner, the
-> > author of 
-> > that patch (adding him to Cc:), could shed more light on that.
-> 
-> So since _PAGE_PSE is actually the same value as _PAGE_PAT, you don't
-> actually need to have _PAGE_PSE in _HPAGE_CHG_MASK in order to get
-> functional correctness. Is that right?
+On Tue, Jun 6, 2023 at 7:56=E2=80=AFAM Domenico Cerasuolo
+<cerasuolodomenico@gmail.com> wrote:
+>
+> Each zpool driver (zbud, z3fold and zsmalloc) implements its own shrink
+> function, which is called from zpool_shrink. However, with this commit,
+> a unified shrink function is added to zswap. The ultimate goal is to
+> eliminate the need for zpool_shrink once all zpool implementations have
+> dropped their shrink code.
+>
+> To ensure the functionality of each commit, this change focuses solely
+> on adding the mechanism itself. No modifications are made to
+> the backends, meaning that functionally, there are no immediate changes.
+> The zswap mechanism will only come into effect once the backends have
+> removed their shrink code. The subsequent commits will address the
+> modifications needed in the backends.
+>
+> Signed-off-by: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+> ---
+>  mm/zswap.c | 96 +++++++++++++++++++++++++++++++++++++++++++++++++++---
+>  1 file changed, 91 insertions(+), 5 deletions(-)
+>
+> diff --git a/mm/zswap.c b/mm/zswap.c
+> index bcb82e09eb64..c99bafcefecf 100644
+> --- a/mm/zswap.c
+> +++ b/mm/zswap.c
+> @@ -150,6 +150,12 @@ struct crypto_acomp_ctx {
+>         struct mutex *mutex;
+>  };
+>
+> +/*
+> + * The lock ordering is zswap_tree.lock -> zswap_pool.lru_lock.
+> + * The only case where lru_lock is not acquired while holding tree.lock =
+is
+> + * when a zswap_entry is taken off the lru for writeback, in that case i=
+t
+> + * needs to be verified that it's still valid in the tree.
+> + */
+>  struct zswap_pool {
+>         struct zpool *zpool;
+>         struct crypto_acomp_ctx __percpu *acomp_ctx;
+> @@ -159,6 +165,8 @@ struct zswap_pool {
+>         struct work_struct shrink_work;
+>         struct hlist_node node;
+>         char tfm_name[CRYPTO_MAX_ALG_NAME];
+> +       struct list_head lru;
+> +       spinlock_t lru_lock;
+>  };
+>
+>  /*
+> @@ -176,10 +184,12 @@ struct zswap_pool {
+>   *            be held while changing the refcount.  Since the lock must
+>   *            be held, there is no reason to also make refcount atomic.
+>   * length - the length in bytes of the compressed page data.  Needed dur=
+ing
+> - *          decompression. For a same value filled page length is 0.
+> + *          decompression. For a same value filled page length is 0, and=
+ both
+> + *          pool and lru are invalid and must be ignored.
+>   * pool - the zswap_pool the entry's data is in
+>   * handle - zpool allocation handle that stores the compressed page data
+>   * value - value of the same-value filled pages which have same content
+> + * lru - handle to the pool's lru used to evict pages.
+>   */
+>  struct zswap_entry {
+>         struct rb_node rbnode;
+> @@ -192,6 +202,7 @@ struct zswap_entry {
+>                 unsigned long value;
+>         };
+>         struct obj_cgroup *objcg;
+> +       struct list_head lru;
+>  };
+>
+>  struct zswap_header {
+> @@ -364,6 +375,12 @@ static void zswap_free_entry(struct zswap_entry *ent=
+ry)
+>         if (!entry->length)
+>                 atomic_dec(&zswap_same_filled_pages);
+>         else {
+> +       /* zpool_evictable will be removed once all 3 backends have migra=
+ted */
+> +               if (!zpool_evictable(entry->pool->zpool)) {
+> +                       spin_lock(&entry->pool->lru_lock);
+> +                       list_del(&entry->lru);
+> +                       spin_unlock(&entry->pool->lru_lock);
+> +               }
+>                 zpool_free(entry->pool->zpool, entry->handle);
+>                 zswap_pool_put(entry->pool);
+>         }
+> @@ -584,14 +601,70 @@ static struct zswap_pool *zswap_pool_find_get(char =
+*type, char *compressor)
+>         return NULL;
+>  }
+>
+> +static int zswap_shrink(struct zswap_pool *pool)
+> +{
+> +       struct zswap_entry *lru_entry, *tree_entry =3D NULL;
+> +       struct zswap_header *zhdr;
+> +       struct zswap_tree *tree;
+> +       int swpoffset;
+> +       int ret;
+> +
+> +       /* get a reclaimable entry from LRU */
+> +       spin_lock(&pool->lru_lock);
+> +       if (list_empty(&pool->lru)) {
+> +               spin_unlock(&pool->lru_lock);
+> +               return -EINVAL;
+> +       }
+> +       lru_entry =3D list_last_entry(&pool->lru, struct zswap_entry, lru=
+);
+> +       list_del_init(&lru_entry->lru);
+> +       zhdr =3D zpool_map_handle(pool->zpool, lru_entry->handle, ZPOOL_M=
+M_RO);
+> +       tree =3D zswap_trees[swp_type(zhdr->swpentry)];
+> +       zpool_unmap_handle(pool->zpool, lru_entry->handle);
+> +       /*
+> +        * Once the pool lock is dropped, the lru_entry might get freed. =
+The
+> +        * swpoffset is copied to the stack, and lru_entry isn't deref'd =
+again
+> +        * until the entry is verified to still be alive in the tree.
+> +        */
+> +       swpoffset =3D swp_offset(zhdr->swpentry);
+> +       spin_unlock(&pool->lru_lock);
+> +
+> +       /* hold a reference from tree so it won't be freed during writeba=
+ck */
+> +       spin_lock(&tree->lock);
+> +       tree_entry =3D zswap_entry_find_get(&tree->rbroot, swpoffset);
+> +       if (tree_entry !=3D lru_entry) {
+> +               if (tree_entry)
+> +                       zswap_entry_put(tree, tree_entry);
+> +               spin_unlock(&tree->lock);
+> +               return -EAGAIN;
+> +       }
+> +       spin_unlock(&tree->lock);
+> +
+> +       ret =3D zswap_writeback_entry(pool->zpool, lru_entry->handle);
+> +
+> +       spin_lock(&tree->lock);
+> +       if (ret) {
+> +               spin_lock(&pool->lru_lock);
+> +               list_move(&lru_entry->lru, &pool->lru);
+> +               spin_unlock(&pool->lru_lock);
+> +       }
+> +       zswap_entry_put(tree, tree_entry);
+> +       spin_unlock(&tree->lock);
+> +
+> +       return ret ? -EAGAIN : 0;
+> +}
+> +
+>  static void shrink_worker(struct work_struct *w)
+>  {
+>         struct zswap_pool *pool =3D container_of(w, typeof(*pool),
+>                                                 shrink_work);
+>         int ret, failures =3D 0;
+>
+> +       /* zpool_evictable will be removed once all 3 backends have migra=
+ted */
+>         do {
+> -               ret =3D zpool_shrink(pool->zpool, 1, NULL);
+> +               if (zpool_evictable(pool->zpool))
+> +                       ret =3D zpool_shrink(pool->zpool, 1, NULL);
+> +               else
+> +                       ret =3D zswap_shrink(pool);
+>                 if (ret) {
+>                         zswap_reject_reclaim_fail++;
+>                         if (ret !=3D -EAGAIN)
+> @@ -655,6 +728,8 @@ static struct zswap_pool *zswap_pool_create(char *typ=
+e, char *compressor)
+>          */
+>         kref_init(&pool->kref);
+>         INIT_LIST_HEAD(&pool->list);
+> +       INIT_LIST_HEAD(&pool->lru);
+> +       spin_lock_init(&pool->lru_lock);
+>         INIT_WORK(&pool->shrink_work, shrink_worker);
+>
+>         zswap_pool_debug("created", pool);
+> @@ -1270,7 +1345,7 @@ static int zswap_frontswap_store(unsigned type, pgo=
+ff_t offset,
+>         }
+>
+>         /* store */
+> -       hlen =3D zpool_evictable(entry->pool->zpool) ? sizeof(zhdr) : 0;
+> +       hlen =3D sizeof(zhdr);
+>         gfp =3D __GFP_NORETRY | __GFP_NOWARN | __GFP_KSWAPD_RECLAIM;
+>         if (zpool_malloc_support_movable(entry->pool->zpool))
+>                 gfp |=3D __GFP_HIGHMEM | __GFP_MOVABLE;
+> @@ -1313,6 +1388,12 @@ static int zswap_frontswap_store(unsigned type, pg=
+off_t offset,
+>                         zswap_entry_put(tree, dupentry);
+>                 }
+>         } while (ret =3D=3D -EEXIST);
+> +       /* zpool_evictable will be removed once all 3 backends have migra=
+ted */
+> +       if (entry->length && !zpool_evictable(entry->pool->zpool)) {
+> +               spin_lock(&entry->pool->lru_lock);
+> +               list_add(&entry->lru, &entry->pool->lru);
+> +               spin_unlock(&entry->pool->lru_lock);
+> +       }
+>         spin_unlock(&tree->lock);
+>
+>         /* update stats */
+> @@ -1384,8 +1465,7 @@ static int zswap_frontswap_load(unsigned type, pgof=
+f_t offset,
+>         /* decompress */
+>         dlen =3D PAGE_SIZE;
+>         src =3D zpool_map_handle(entry->pool->zpool, entry->handle, ZPOOL=
+_MM_RO);
+> -       if (zpool_evictable(entry->pool->zpool))
+> -               src +=3D sizeof(struct zswap_header);
+> +       src +=3D sizeof(struct zswap_header);
+>
+>         if (!zpool_can_sleep_mapped(entry->pool->zpool)) {
+>                 memcpy(tmp, src, entry->length);
+> @@ -1415,6 +1495,12 @@ static int zswap_frontswap_load(unsigned type, pgo=
+ff_t offset,
+>  freeentry:
+>         spin_lock(&tree->lock);
+>         zswap_entry_put(tree, entry);
+> +       /* zpool_evictable will be removed once all 3 backends have migra=
+ted */
+> +       if (entry->length && !zpool_evictable(entry->pool->zpool)) {
+> +               spin_lock(&entry->pool->lru_lock);
+> +               list_move(&entry->lru, &entry->pool->lru);
+> +               spin_unlock(&entry->pool->lru_lock);
+> +       }
+>         spin_unlock(&tree->lock);
+>
+>         return ret;
+> --
+> 2.34.1
+>
 
-As soon as we add _PAGE_PAT to _PAGE_CHG_MASK -- yes, that's right.  But we 
-may still want to add _PAGE_PSE to _HPAGE_CHG_MASK to have the need for that 
-bit explicitly documented.
-
-> 
-> I think it is still a little hidden (even before this) and I wonder
-> about separating out the common bits into, like, _COMMON_PAGE_CHG_MASK
-> or something. Then setting specific PAGE and HPAGE bits (like
-> _PAGE_PAT, _PAGE_PSE and _PAGE_PAT_LARGE) in their specific define.
-> Would it be more readable that way?
-
-Yes, I think that's a good idea, and I can use it in my patch.
-
-The question if _PAGE_PAT vel _PAGE_PSE added to _PAGE_CHG_MASK is really 
-harmless for pte_modify() and its users is still open for me though.
-
-Thanks,
-Janusz
-
-
+Looks real solid to me! Thanks, Domenico.
+Acked-by: Nhat Pham <nphamcs@gmail.com>
