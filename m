@@ -2,58 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 516ED726EC9
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 22:52:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 744E9726EEC
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 22:54:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235318AbjFGUwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 16:52:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53866 "EHLO
+        id S235428AbjFGUyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 16:54:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235310AbjFGUwl (ORCPT
+        with ESMTP id S235431AbjFGUx6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 16:52:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A6C10EA;
-        Wed,  7 Jun 2023 13:52:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D25C64771;
-        Wed,  7 Jun 2023 20:52:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A3FA4C433D2;
-        Wed,  7 Jun 2023 20:52:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686171159;
-        bh=dCvFve7GSz0i0nFV48jGI8InEz9kGV6Iym5GYtXJM+A=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=rBeZjv8vLpjQ4OmlBTROPlF+lkr5evwh/3FqwMKX1QTIkcL7FwysjDDlfX1tadV4s
-         esXMe/Edlo9PVCqwHvFhU2eDkYAmKs1qH0zWjqdCUQKhXbwPIcNpTs08TPBVn9laYs
-         4SdGKT0r9br74eseI5UEx5124cS4C8sbcax3mKM6qovoCXC00kNEpIZG6WBysEG6sh
-         TGjgg5DqnQq+3dQ2dOXxuMYEHpzOH55qyDk2LgUYvoFmfmwKc7rQJn/OmZwmmRJcft
-         H1PC8tvIbvkj++1WF0BmSVO7VGQFozvDpk6zl+Wc90NfKQUq5hk0MMOOhdLk4IQCEt
-         O54INxwR2ABMA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 927D3E29F39;
-        Wed,  7 Jun 2023 20:52:39 +0000 (UTC)
-Subject: Re: [git pull] Input updates for v6.4-rc5
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <ZH9zwxXvAd3kacKH@google.com>
-References: <ZH9zwxXvAd3kacKH@google.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <ZH9zwxXvAd3kacKH@google.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git tags/input-for-v6.4-rc5
-X-PR-Tracked-Commit-Id: feee70f4568650cf44c573488798ffc0a2faeea3
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 5f63595ebd82f56a2dd36ca013dd7f5ff2e2416a
-Message-Id: <168617115959.20085.9324608068327486591.pr-tracker-bot@kernel.org>
-Date:   Wed, 07 Jun 2023 20:52:39 +0000
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Wed, 7 Jun 2023 16:53:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53E292125
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 13:53:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686171186;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ft5xiF/Ta3lHBxFgPgTJpXvjBg2+fN90ep4jurEd3BE=;
+        b=HYqQy44yTPd3obRjQyvQ1G+KTMKa+urRv5HDgEHRyAon4tgJOutOfKwPwK2u0CNPUvzvgA
+        rLRijb9uTD2XAo7yCCQVqD1ma1E5sRP+GQwppbo8rvrs4Z9gJq2WMzIyaCYpRDLshBAIXZ
+        Km1iFlYHez6OxPooWWK6QDMUqT7usnU=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-57-UVz2uUInMTiUxX1tdAy29g-1; Wed, 07 Jun 2023 16:53:05 -0400
+X-MC-Unique: UVz2uUInMTiUxX1tdAy29g-1
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-30ae8a5006dso10669762f8f.2
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 13:53:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686171184; x=1688763184;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ft5xiF/Ta3lHBxFgPgTJpXvjBg2+fN90ep4jurEd3BE=;
+        b=B/xaNm6T3ITzG4V33P32yuYeLKI+TXYrLKQLqJJ4h7nTxWDoyHCNPK56KkCUAijEAW
+         HpFJ8wqcSbtkTAz1GtZgwr+Sml7WhokfMUlDQteBil3OY3Nq0p3VcIBnQf2BUIqV/KWB
+         YwpVEE6u/1hksaeGjZt0IlOH85Ry5SxTE7Cg7iZdC+yxaAXJ5nhHzvmRjXo6zpQZejSP
+         lPkv2nObzS8eo2L5o8Nr1nCkKxyMFgYSmAokRKC19wAowU7fGdbkfJXxNAjhqOFuv+Ha
+         B+Nh7s5Bl+C9dnBK7VlMlvjpZg+y3ScELSO+J/CsSbZAGMR6zMBQo/DjrQwbb2IQCA2o
+         zBbg==
+X-Gm-Message-State: AC+VfDwvp7lnI7JjbsfjRo8EEv938DWxAyFErh7GkQug676c36nrHPA7
+        nnA6iRk+qieXMbgZAnUWohYV7r1GIw84UDti0spUKSLgzSS43vILpctB5pC8U/uJxkIvEHmdmWK
+        8trEnRZLvcmuT9OJRclwBGLfJ
+X-Received: by 2002:a5d:58e7:0:b0:30a:e5b7:a290 with SMTP id f7-20020a5d58e7000000b0030ae5b7a290mr5386608wrd.15.1686171184001;
+        Wed, 07 Jun 2023 13:53:04 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7Uq6PcUd+YOTWXVp6ailbjy7D3AfyP/yNhUjsRFNK0FKM+EidonNaUBgJwfcpN5SMVyMEYIw==
+X-Received: by 2002:a5d:58e7:0:b0:30a:e5b7:a290 with SMTP id f7-20020a5d58e7000000b0030ae5b7a290mr5386597wrd.15.1686171183665;
+        Wed, 07 Jun 2023 13:53:03 -0700 (PDT)
+Received: from redhat.com ([2.55.41.2])
+        by smtp.gmail.com with ESMTPSA id j10-20020adff54a000000b003047ae72b14sm16389987wrp.82.2023.06.07.13.53.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 13:53:03 -0700 (PDT)
+Date:   Wed, 7 Jun 2023 16:52:59 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Stefano Garzarella <sgarzare@redhat.com>
+Cc:     Shannon Nelson <shannon.nelson@amd.com>,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        Jason Wang <jasowang@redhat.com>,
+        Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
+        Tiwei Bie <tiwei.bie@intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] vhost-vdpa: filter VIRTIO_F_RING_PACKED feature
+Message-ID: <20230607165205-mutt-send-email-mst@kernel.org>
+References: <20230605110644.151211-1-sgarzare@redhat.com>
+ <20230605084104-mutt-send-email-mst@kernel.org>
+ <24fjdwp44hovz3d3qkzftmvjie45er3g3boac7aezpvzbwvuol@lmo47ydvnqau>
+ <20230605085840-mutt-send-email-mst@kernel.org>
+ <gi2hngx3ndsgz5d2rpqjywdmou5vxhd7xgi5z2lbachr7yoos4@kpifz37oz2et>
+ <20230605095404-mutt-send-email-mst@kernel.org>
+ <32ejjuvhvcicv7wjuetkv34qtlpa657n4zlow4eq3fsi2twozk@iqnd2t5tw2an>
+ <20230605173958-mutt-send-email-mst@kernel.org>
+ <kpcujul6foyvw66qhy3wck5bzgedka2gzzixupnaog7byr4h45@6ddbvcy32db4>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <kpcujul6foyvw66qhy3wck5bzgedka2gzzixupnaog7byr4h45@6ddbvcy32db4>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,15 +89,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Tue, 6 Jun 2023 10:58:27 -0700:
+On Tue, Jun 06, 2023 at 12:09:11PM +0200, Stefano Garzarella wrote:
+> On Mon, Jun 05, 2023 at 05:44:50PM -0400, Michael S. Tsirkin wrote:
+> > On Mon, Jun 05, 2023 at 04:56:37PM +0200, Stefano Garzarella wrote:
+> > > On Mon, Jun 05, 2023 at 09:54:57AM -0400, Michael S. Tsirkin wrote:
+> > > > On Mon, Jun 05, 2023 at 03:30:35PM +0200, Stefano Garzarella wrote:
+> > > > > On Mon, Jun 05, 2023 at 09:00:25AM -0400, Michael S. Tsirkin wrote:
+> > > > > > On Mon, Jun 05, 2023 at 02:54:20PM +0200, Stefano Garzarella wrote:
+> > > > > > > On Mon, Jun 05, 2023 at 08:41:54AM -0400, Michael S. Tsirkin wrote:
+> > > > > > > > On Mon, Jun 05, 2023 at 01:06:44PM +0200, Stefano Garzarella wrote:
+> > > > > > > > > vhost-vdpa IOCTLs (eg. VHOST_GET_VRING_BASE, VHOST_SET_VRING_BASE)
+> > > > > > > > > don't support packed virtqueue well yet, so let's filter the
+> > > > > > > > > VIRTIO_F_RING_PACKED feature for now in vhost_vdpa_get_features().
+> > > > > > > > >
+> > > > > > > > > This way, even if the device supports it, we don't risk it being
+> > > > > > > > > negotiated, then the VMM is unable to set the vring state properly.
+> > > > > > > > >
+> > > > > > > > > Fixes: 4c8cf31885f6 ("vhost: introduce vDPA-based backend")
+> > > > > > > > > Cc: stable@vger.kernel.org
+> > > > > > > > > Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+> > > > > > > > > ---
+> > > > > > > > >
+> > > > > > > > > Notes:
+> > > > > > > > >     This patch should be applied before the "[PATCH v2 0/3] vhost_vdpa:
+> > > > > > > > >     better PACKED support" series [1] and backported in stable branches.
+> > > > > > > > >
+> > > > > > > > >     We can revert it when we are sure that everything is working with
+> > > > > > > > >     packed virtqueues.
+> > > > > > > > >
+> > > > > > > > >     Thanks,
+> > > > > > > > >     Stefano
+> > > > > > > > >
+> > > > > > > > >     [1] https://lore.kernel.org/virtualization/20230424225031.18947-1-shannon.nelson@amd.com/
+> > > > > > > >
+> > > > > > > > I'm a bit lost here. So why am I merging "better PACKED support" then?
+> > > > > > >
+> > > > > > > To really support packed virtqueue with vhost-vdpa, at that point we would
+> > > > > > > also have to revert this patch.
+> > > > > > >
+> > > > > > > I wasn't sure if you wanted to queue the series for this merge window.
+> > > > > > > In that case do you think it is better to send this patch only for stable
+> > > > > > > branches?
+> > > > > > > > Does this patch make them a NOP?
+> > > > > > >
+> > > > > > > Yep, after applying the "better PACKED support" series and being
+> > > > > > > sure that
+> > > > > > > the IOCTLs of vhost-vdpa support packed virtqueue, we should revert this
+> > > > > > > patch.
+> > > > > > >
+> > > > > > > Let me know if you prefer a different approach.
+> > > > > > >
+> > > > > > > I'm concerned that QEMU uses vhost-vdpa IOCTLs thinking that the kernel
+> > > > > > > interprets them the right way, when it does not.
+> > > > > > >
+> > > > > > > Thanks,
+> > > > > > > Stefano
+> > > > > > >
+> > > > > >
+> > > > > > If this fixes a bug can you add Fixes tags to each of them? Then it's ok
+> > > > > > to merge in this window. Probably easier than the elaborate
+> > > > > > mask/unmask dance.
+> > > > >
+> > > > > CCing Shannon (the original author of the "better PACKED support"
+> > > > > series).
+> > > > >
+> > > > > IIUC Shannon is going to send a v3 of that series to fix the
+> > > > > documentation, so Shannon can you also add the Fixes tags?
+> > > > >
+> > > > > Thanks,
+> > > > > Stefano
+> > > >
+> > > > Well this is in my tree already. Just reply with
+> > > > Fixes: <>
+> > > > to each and I will add these tags.
+> > > 
+> > > I tried, but it is not easy since we added the support for packed virtqueue
+> > > in vdpa and vhost incrementally.
+> > > 
+> > > Initially I was thinking of adding the same tag used here:
+> > > 
+> > > Fixes: 4c8cf31885f6 ("vhost: introduce vDPA-based backend")
+> > > 
+> > > Then I discovered that vq_state wasn't there, so I was thinking of
+> > > 
+> > > Fixes: 530a5678bc00 ("vdpa: support packed virtqueue for set/get_vq_state()")
+> > > 
+> > > So we would have to backport quite a few patches into the stable branches.
+> > > I don't know if it's worth it...
+> > > 
+> > > I still think it is better to disable packed in the stable branches,
+> > > otherwise I have to make a list of all the patches we need.
+> > > 
+> > > Any other ideas?
+> > > 
+> > > Thanks,
+> > > Stefano
+> > 
+> > OK so. You want me to apply this one now, and fixes in the next
+> > kernel?
+> 
+> Yep, it seems to me the least risky approach.
+> 
+> Thanks,
+> Stefano
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git tags/input-for-v6.4-rc5
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/5f63595ebd82f56a2dd36ca013dd7f5ff2e2416a
-
-Thank you!
+I'd like something more general though. Bring back the allowlist?
+Jason, your thoughts?
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+MST
+
