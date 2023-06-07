@@ -2,56 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F179725CEC
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 13:20:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 637E9725CED
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 13:20:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240236AbjFGLUD convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 7 Jun 2023 07:20:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54674 "EHLO
+        id S240273AbjFGLUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 07:20:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235315AbjFGLT6 (ORCPT
+        with ESMTP id S240227AbjFGLUD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 07:19:58 -0400
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE41E6C;
-        Wed,  7 Jun 2023 04:19:57 -0700 (PDT)
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-977c8baa86fso127275466b.0;
-        Wed, 07 Jun 2023 04:19:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686136796; x=1688728796;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vyfFJWQd9X29oCetBrv8kPxo6ktxzcpnkHRc+KxeSac=;
-        b=kMqZ2cN/QSFpaF8Qj6aGCMKBbhlYweDJgV1g0EH470pia2YdNMpHfOCRgIap9jyt6c
-         CoAbexsfGnMbsyNrKyFsohq6nyFbEKpUhZpp7RFwHjB/S7/o6spa1RCmntfvGVTV/QaG
-         4p2vGmSPozHUEORBtpHNghAIMNhexrGjNN4eip5LwMwgkuAOFLMkpgipu8YQiuLycQcY
-         gi/zJrC0A5I30zYSz3NqltKXqX4DsrTkwdnKVDh+FmJ2f6RitaX+zZPTaZBBmP6sXJS6
-         IsJ6voTK0sbyw4sP1bZZ1J43J1i2AD+03fe9LP9+9c57oBGJqbOBVV6OMYKmpcMWkAYh
-         Fk9Q==
-X-Gm-Message-State: AC+VfDxHFdo3qQnXjVuU0Ho6/vkZiOywT3xm1obxICTuMHu6Lqna7xHx
-        zIGN9kYUEB/J1JQtk3SW1fylfvUmWCA620V8qe4=
-X-Google-Smtp-Source: ACHHUZ6uB7lkwk0D1ggcEOKYyDgmBy+aW7rS19enPdaJbtrzImYvFeTsyk4SvxyDn9ZYhwpsacXs6kVJ97t/mKzLks8=
-X-Received: by 2002:a17:906:73cc:b0:977:cc87:62b5 with SMTP id
- n12-20020a17090673cc00b00977cc8762b5mr1374862ejl.4.1686136795531; Wed, 07 Jun
- 2023 04:19:55 -0700 (PDT)
+        Wed, 7 Jun 2023 07:20:03 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C9C192
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 04:20:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686136802; x=1717672802;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=D++EtAsb67eCSEHqH4SO48A7/dF6fCd1ln+2Ij7tkKI=;
+  b=RbU6C0YvbRgcq+HQYtXlnoL3YXuHYldzSXL+Tlk/o9weGNDofrNwd6A0
+   YXqVLHuOXLGhDMfJbFHBMdUo0VmYvBnahMUlgMzjZM9HQai+qTEWRlxe8
+   leieOuKBpudyWUICdHNQn3a8h+URURAWFxzNxJj4GUzbKD+SceIryw/p0
+   vywld/pIuJdUutKnKZ8jCL/4waMncZ/4AklUEU9cmUtjBoNeKX3+rET1i
+   AJK5RqNt8KJqjEuQOULP4X7ENPzdNuQsHB7EPCsU9PbXHm+jMrlK4Uj4A
+   7OBMgBf5dFh9AJ9VRQNpiS5gicCkSawhI9PID1P7b7SCVha/7fg3lGCQP
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="385276545"
+X-IronPort-AV: E=Sophos;i="6.00,223,1681196400"; 
+   d="scan'208";a="385276545"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 04:20:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="712570491"
+X-IronPort-AV: E=Sophos;i="6.00,223,1681196400"; 
+   d="scan'208";a="712570491"
+Received: from akuporos-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.251.211.72])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 04:20:00 -0700
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 34B2C10F0D2; Wed,  7 Jun 2023 14:19:57 +0300 (+03)
+Date:   Wed, 7 Jun 2023 14:19:57 +0300
+From:   kirill.shutemov@linux.intel.com
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     linux-kernel@vger.kernel.org, dave.hansen@linux.intel.com,
+        peterz@infradead.org, hpa@zytor.com, konrad.wilk@oracle.com,
+        rostedt@goodmis.org, jpoimboe@kernel.org
+Subject: Re: [PATCH] x86/kexec: Add a comment to relocate_kernel() for better
+ readability
+Message-ID: <20230607111957.sppocwpkhfb2e2vf@box.shutemov.name>
+References: <20230607103910.407779-1-kai.huang@intel.com>
 MIME-Version: 1.0
-References: <20230607034403.2885-1-james.liu@hpe.com>
-In-Reply-To: <20230607034403.2885-1-james.liu@hpe.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 7 Jun 2023 13:19:42 +0200
-Message-ID: <CAJZ5v0hTsEzFKvRf-MHpUxyJdFDUqc2ZL63s6BkyJyFtEzxvhw@mail.gmail.com>
-Subject: Re: [PATCH v1] ACPI: reboot: Increase the delay to avoid racing after
- writing to ACPI RESET_REG on AMD Milan platforms.
-To:     James Liu <james.liu@hpe.com>
-Cc:     rafael@kernel.org, lenb@kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hpelk@lists.osp.hpe.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230607103910.407779-1-kai.huang@intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,40 +66,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 7, 2023 at 5:44 AM James Liu <james.liu@hpe.com> wrote:
->
-> For AMD Milan platforms, the delay of 15ms is insufficient to avoid racing
-> of reboot mechanisms. That said, the AMD Milan processors don't reboot
-> in 15ms after invoking acpi_reset().
->
-> The proposed 50ms delay can effectively work around this issue.
-> This extended delay aligns better with ACPI v6.4 (i.e., sec. 4.8.4.6),
-> which indicates that ideally OSPM should execute spin loops on the CPUs
-> in the system following a write to this register.
->
-> Signed-off-by: James Liu <james.liu@hpe.com>
-
-Why do you want to affect everyone (including guest kernels running in
-virtual machines AFAICS) in order to address a problem specific to one
-platform?
-
-Wouldn't it be better to quirk that platform and document the quirk properly?
-
+On Wed, Jun 07, 2023 at 10:39:10PM +1200, Kai Huang wrote:
+> The reason to save %rcx to %r11 before calling swap_pages isn't that
+> obvious w/o looking into the swap_pages itself.  Add a comment to
+> improve the readability.
+> 
+> Signed-off-by: Kai Huang <kai.huang@intel.com>
 > ---
->  drivers/acpi/reboot.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/acpi/reboot.c b/drivers/acpi/reboot.c
-> index b79b7c99c237..002f7c7814a1 100644
-> --- a/drivers/acpi/reboot.c
-> +++ b/drivers/acpi/reboot.c
-> @@ -78,5 +78,5 @@ void acpi_reboot(void)
->          * The 15ms delay has been found to be long enough for the system
->          * to reboot on the affected platforms.
->          */
-> -       mdelay(15);
-> +       mdelay(50);
->  }
-> --
+>  arch/x86/kernel/relocate_kernel_64.S | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/arch/x86/kernel/relocate_kernel_64.S b/arch/x86/kernel/relocate_kernel_64.S
+> index 56cab1bb25f5..97deae3c5e6c 100644
+> --- a/arch/x86/kernel/relocate_kernel_64.S
+> +++ b/arch/x86/kernel/relocate_kernel_64.S
+> @@ -169,6 +169,10 @@ SYM_CODE_START_LOCAL_NOALIGN(identity_mapped)
+>  	wbinvd
+>  1:
+>  
+> +	/*
+> +	 * Save the preserve_context to %r11 as
+> +	 * swap_pages clobbers %rcx.
+> +	 */
+
+Line split is not needed. It fits nicely under 80-characters.
+
++	/* Save the preserve_context to %r11 as swap_pages clobbers %rcx. */
+
+Otherwise, LGTM.
+
+>  	movq	%rcx, %r11
+>  	call	swap_pages
+>  
+> 
+> base-commit: 409bf2895d71bb68bc5b8589036e5ed1ca30bada
+> -- 
 > 2.40.1
->
+> 
+
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
