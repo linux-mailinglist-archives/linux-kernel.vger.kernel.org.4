@@ -2,162 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A7657267A6
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 19:43:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA4FF7267A1
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 19:43:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231407AbjFGRnd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 13:43:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42746 "EHLO
+        id S232109AbjFGRnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 13:43:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232147AbjFGRn2 (ORCPT
+        with ESMTP id S232068AbjFGRnT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 13:43:28 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B0951FFA
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 10:43:24 -0700 (PDT)
-Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com [209.85.210.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 7 Jun 2023 13:43:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD5371BF7;
+        Wed,  7 Jun 2023 10:43:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 5AB553F199
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 17:43:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1686159801;
-        bh=29oAQXm1vubqWw6n+W3ki/F3nkC70PmxLYid2aXxsMY=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=gunoR96OY32OQEnMV7heg+DK0R2m0MUwZC3MIT5LE4erTMbSm4BP2yV+0MoGVVh4j
-         dp8Vo5tYKku0u7OYkm7xzlBslf0Lt07muL3OQ0NzCbooepluPaHi65UKhQk62Hcd4M
-         OophgjNq70T6NuDHAodmIN2+KZN2T3POcWW+PodejhrZNjdDFfSe+BIRIv3vZfWYbg
-         NOe/5ux4y9WSP5gxZQORzhdi5CXWV6nxFKQKO3WWRYLMH+kg/6585rljsl5ORdwZMq
-         6pLJXZ9iMaTOZYlhJUifXeeGtH2iKhy36NNiZ4JtbZzT4pu/0ZBTRGNDaWRcF6NfFn
-         NuSuWzIuT6htg==
-Received: by mail-ot1-f69.google.com with SMTP id 46e09a7af769-6b0f6e05ad7so6985041a34.3
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 10:43:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686159800; x=1688751800;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=29oAQXm1vubqWw6n+W3ki/F3nkC70PmxLYid2aXxsMY=;
-        b=IYpx+GLOZ1zWXznLGDKP3N6dtC4dbvGDqEACEvmfo1B1W5HyWadTyipRideflSMf9b
-         XtIsgO2iwDen4O5J7wov7LSI7awefBj/19mkFJBip7zYNbIRv7qB2RrPAj0l6Oz4jvv7
-         8J2c5Z+1PeyYQkYCDK1kOKo+jtwMqr34sVajcIrToD8ebIKht7yNx4DCEH8+RgfhBpSd
-         9lRO8jfQ+kvZuK5SkeBXw8NPow4HLl7wxThI4JUc9k7hthQ7SgbmKhAhcutKfhAsKy4f
-         T6/SdVtEP2HFbnPb0+MW1VQMKzeeg5WTmiiJNQOqksrFSwdPjv3aAFhQvu4/rIhRziG+
-         sDFA==
-X-Gm-Message-State: AC+VfDzfFLl2KcsEInZs4cPPLToeQiMX1x/nP1loSCvAScv/OX5U4jff
-        lm7xvuavnePNx3Q/Oo4UbcwU832e6DJ5AneYRb1uC+A0t0tr/WkMoILZJeAvBirKgWfnU814D/A
-        24MFql4JX9SPB2QL8J56DrDXMx0sk3ts/VBM+y3Bt7A==
-X-Received: by 2002:a05:6870:d343:b0:1a3:b43:9c88 with SMTP id h3-20020a056870d34300b001a30b439c88mr5870246oag.34.1686159800625;
-        Wed, 07 Jun 2023 10:43:20 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ766oAJ56zMbU7HSmkwtI2C3rOqyJHM8UGEwfRspDmam1gxj9T7PZk5HFQWFzUo+t+bKzFXUg==
-X-Received: by 2002:a05:6870:d343:b0:1a3:b43:9c88 with SMTP id h3-20020a056870d34300b001a30b439c88mr5870234oag.34.1686159800416;
-        Wed, 07 Jun 2023 10:43:20 -0700 (PDT)
-Received: from mingau.. ([2804:7f0:b443:8cea:efdc:2496:54f7:d884])
-        by smtp.gmail.com with ESMTPSA id c10-20020a9d75ca000000b006ac75cff491sm2176016otl.3.2023.06.07.10.43.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 10:43:20 -0700 (PDT)
-From:   Magali Lemes <magali.lemes@canonical.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, shuah@kernel.org, dsahern@gmail.com
-Cc:     andrei.gherzan@canonical.com, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net 3/3] selftests: net: fcnal-test: check if FIPS mode is enabled
-Date:   Wed,  7 Jun 2023 14:43:02 -0300
-Message-Id: <20230607174302.19542-4-magali.lemes@canonical.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230607174302.19542-1-magali.lemes@canonical.com>
-References: <20230607174302.19542-1-magali.lemes@canonical.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 56CDE616A8;
+        Wed,  7 Jun 2023 17:43:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FDCDC4339C;
+        Wed,  7 Jun 2023 17:43:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1686159794;
+        bh=q4PVStJooopCfB8r4NpuPzaJZNPVyKO/PVJffa5elvg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=gr2q8V1cj3uFpQtnQogaYaSsgPB/SaeDtKVJlNYzvloSjzvrTRCe4cx4JZSmZqSkM
+         3Tm46ZXv0PcDSdEdxL+Qf0Ayy+es5FSfsOzKLvY4NKKhBHtJcbMmaWJr6HWIGAUJph
+         qa0gRYvWhLHyxPP7Z/joqH8MA8DhNXivNnHmmiyc=
+Date:   Wed, 7 Jun 2023 10:43:13 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     hughd@google.com, linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        stable@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
+        David Howells <dhowells@redhat.com>
+Subject: Re: [PATCH] shmem: Use ramfs_kill_sb() for kill_sb method of
+ ramfs-based tmpfs
+Message-Id: <20230607104313.2909afb61021a1431dc56a28@linux-foundation.org>
+In-Reply-To: <20230607161523.2876433-1-roberto.sassu@huaweicloud.com>
+References: <20230607161523.2876433-1-roberto.sassu@huaweicloud.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are some MD5 tests which fail when the kernel is in FIPS mode,
-since MD5 is not FIPS compliant. Add a check and only run those tests
-if FIPS mode is not enabled.
+(cc's added)
 
-Fixes: f0bee1ebb5594 ("fcnal-test: Add TCP MD5 tests")
-Fixes: 5cad8bce26e01 ("fcnal-test: Add TCP MD5 tests for VRF")
-Signed-off-by: Magali Lemes <magali.lemes@canonical.com>
----
- tools/testing/selftests/net/fcnal-test.sh | 27 ++++++++++++++++-------
- 1 file changed, 19 insertions(+), 8 deletions(-)
+On Wed,  7 Jun 2023 18:15:23 +0200 Roberto Sassu <roberto.sassu@huaweicloud.com> wrote:
 
-diff --git a/tools/testing/selftests/net/fcnal-test.sh b/tools/testing/selftests/net/fcnal-test.sh
-index 21ca91473c09..ee6880ac3e5e 100755
---- a/tools/testing/selftests/net/fcnal-test.sh
-+++ b/tools/testing/selftests/net/fcnal-test.sh
-@@ -92,6 +92,13 @@ NSC_CMD="ip netns exec ${NSC}"
- 
- which ping6 > /dev/null 2>&1 && ping6=$(which ping6) || ping6=$(which ping)
- 
-+# Check if FIPS mode is enabled
-+if [ -f /proc/sys/crypto/fips_enabled ]; then
-+	fips_enabled=`cat /proc/sys/crypto/fips_enabled`
-+else
-+	fips_enabled=0
-+fi
-+
- ################################################################################
- # utilities
- 
-@@ -1216,7 +1223,7 @@ ipv4_tcp_novrf()
- 	run_cmd nettest -d ${NSA_DEV} -r ${a}
- 	log_test_addr ${a} $? 1 "No server, device client, local conn"
- 
--	ipv4_tcp_md5_novrf
-+	[ "$fips_enabled" = "1" ] || ipv4_tcp_md5_novrf
- }
- 
- ipv4_tcp_vrf()
-@@ -1270,9 +1277,11 @@ ipv4_tcp_vrf()
- 	log_test_addr ${a} $? 1 "Global server, local connection"
- 
- 	# run MD5 tests
--	setup_vrf_dup
--	ipv4_tcp_md5
--	cleanup_vrf_dup
-+	if [ "$fips_enabled" = "0" ]; then
-+		setup_vrf_dup
-+		ipv4_tcp_md5
-+		cleanup_vrf_dup
-+	fi
- 
- 	#
- 	# enable VRF global server
-@@ -2772,7 +2781,7 @@ ipv6_tcp_novrf()
- 		log_test_addr ${a} $? 1 "No server, device client, local conn"
- 	done
- 
--	ipv6_tcp_md5_novrf
-+	[ "$fips_enabled" = "1" ] || ipv6_tcp_md5_novrf
- }
- 
- ipv6_tcp_vrf()
-@@ -2842,9 +2851,11 @@ ipv6_tcp_vrf()
- 	log_test_addr ${a} $? 1 "Global server, local connection"
- 
- 	# run MD5 tests
--	setup_vrf_dup
--	ipv6_tcp_md5
--	cleanup_vrf_dup
-+	if [ "$fips_enabled" = "0" ]; then
-+		setup_vrf_dup
-+		ipv6_tcp_md5
-+		cleanup_vrf_dup
-+	fi
- 
- 	#
- 	# enable VRF global server
--- 
-2.34.1
-
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+> 
+> As the ramfs-based tmpfs uses ramfs_init_fs_context() for the
+> init_fs_context method, which allocates fc->s_fs_info, use ramfs_kill_sb()
+> to free it and avoid a memory leak.
+> 
+> Cc: stable@vger.kernel.org # v5.4.x
+> Fixes: f32356261d44 ("vfs: Convert ramfs, shmem, tmpfs, devtmpfs, rootfs to use the new mount API")
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>  fs/ramfs/inode.c      | 2 +-
+>  include/linux/ramfs.h | 1 +
+>  mm/shmem.c            | 2 +-
+>  3 files changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/fs/ramfs/inode.c b/fs/ramfs/inode.c
+> index 5ba580c7883..fef477c7810 100644
+> --- a/fs/ramfs/inode.c
+> +++ b/fs/ramfs/inode.c
+> @@ -278,7 +278,7 @@ int ramfs_init_fs_context(struct fs_context *fc)
+>  	return 0;
+>  }
+>  
+> -static void ramfs_kill_sb(struct super_block *sb)
+> +void ramfs_kill_sb(struct super_block *sb)
+>  {
+>  	kfree(sb->s_fs_info);
+>  	kill_litter_super(sb);
+> diff --git a/include/linux/ramfs.h b/include/linux/ramfs.h
+> index 917528d102c..d506dc63dd4 100644
+> --- a/include/linux/ramfs.h
+> +++ b/include/linux/ramfs.h
+> @@ -7,6 +7,7 @@
+>  struct inode *ramfs_get_inode(struct super_block *sb, const struct inode *dir,
+>  	 umode_t mode, dev_t dev);
+>  extern int ramfs_init_fs_context(struct fs_context *fc);
+> +extern void ramfs_kill_sb(struct super_block *sb);
+>  
+>  #ifdef CONFIG_MMU
+>  static inline int
+> diff --git a/mm/shmem.c b/mm/shmem.c
+> index e40a08c5c6d..74abb97ea55 100644
+> --- a/mm/shmem.c
+> +++ b/mm/shmem.c
+> @@ -4196,7 +4196,7 @@ static struct file_system_type shmem_fs_type = {
+>  	.name		= "tmpfs",
+>  	.init_fs_context = ramfs_init_fs_context,
+>  	.parameters	= ramfs_fs_parameters,
+> -	.kill_sb	= kill_litter_super,
+> +	.kill_sb	= ramfs_kill_sb,
+>  	.fs_flags	= FS_USERNS_MOUNT,
+>  };
+>  
+> -- 
+> 2.25.1
