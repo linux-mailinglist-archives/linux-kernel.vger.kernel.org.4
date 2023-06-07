@@ -2,78 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2405725D13
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 13:28:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AD9B725D09
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 13:27:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240031AbjFGL2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 07:28:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59552 "EHLO
+        id S239273AbjFGL1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 07:27:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235232AbjFGL2u (ORCPT
+        with ESMTP id S234872AbjFGL1R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 07:28:50 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D590110DE;
-        Wed,  7 Jun 2023 04:28:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686137328; x=1717673328;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=e7TMZ16KljFDcwznRpSLNhv1XRuSoLTaPVtloCJ3DK4=;
-  b=QJ+fe8LblpBaulRLijdKVDLvuUsyLyFZcsbowmpyUAjjSBkYMuo+hZdd
-   E41o2/hgOOc2OaR0D/hVu1z0nAYJP8uwtoZ5wKFrPNGyG6CnSNV1USqPn
-   Cl8KsoIn96CLrYYPsSQBGp351KFFKOHJS8X+7irnfdEo/1YGA7mA6r6uv
-   maha4kjOpuaeAv3gFBT/Py7068qEf/nmOjNQRMP8m+Iqt17z5cnfxFoNk
-   uipZHyd2cSrbKgpGaGUWbhpvJ2KuhM5sjWG6I4afz9QgzTxmUNwv27rZY
-   jKvAxavNzE5iHeQBmf3u2pnyZ1pTfqnoIoxZq7jS9uWE6z9UY/3MRp90y
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="337319816"
-X-IronPort-AV: E=Sophos;i="6.00,223,1681196400"; 
-   d="scan'208";a="337319816"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 04:27:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="739193982"
-X-IronPort-AV: E=Sophos;i="6.00,223,1681196400"; 
-   d="scan'208";a="739193982"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 07 Jun 2023 04:26:59 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q6rJa-0006VX-0m;
-        Wed, 07 Jun 2023 11:26:58 +0000
-Date:   Wed, 7 Jun 2023 19:26:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Stanley Chang <stanley_chang@realtek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Stanley Chang <stanley_chang@realtek.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Ray Chi <raychi@google.com>,
-        Flavio Suligoi <f.suligoi@asem.it>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3 2/5] phy: realtek: usb: Add driver for the Realtek SoC
- USB 2.0 PHY
-Message-ID: <202306071901.mhcH1Kcc-lkp@intel.com>
-References: <20230607062500.24669-2-stanley_chang@realtek.com>
+        Wed, 7 Jun 2023 07:27:17 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2118810DE;
+        Wed,  7 Jun 2023 04:27:16 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4f6255ad8aeso4559133e87.2;
+        Wed, 07 Jun 2023 04:27:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686137234; x=1688729234;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=1ICfspkyZWca0LZOq13OEa6zDvWLKaRi+WMrSLj/rPo=;
+        b=cccw+AWaGKsfh212sQorJjqLKwGtlvEV9mfHKZysy3qLQaiVWk+FOxfr9gNviBAtsx
+         COYKsasVa1cVDvXtd2Z1jeRv9kDW+lNcPUUlVjgIpo4ZNvKcctIqGodSjE5+WH07kG6l
+         e9mpkEm5oM8e8/Tu4QTcrgb6J05+y+wZ/ut78AVdeZoB5KVxo4a2XclQTPV5qsHigT7C
+         Q14VIh64SmpInk3EEujuvCPP0AhEdpwJ+9NUjrx0UMP50zuvSfFfzOK93tyR//nl7K0b
+         MR8/1XMoH1p7E2POSXd7eTq25Y2brN+bT9wxkm16xPEV4RU/c6hD50yotCo6td1m5Lyp
+         4Zew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686137234; x=1688729234;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1ICfspkyZWca0LZOq13OEa6zDvWLKaRi+WMrSLj/rPo=;
+        b=QV2r1I4k+h5slczfefQ1xOOTbKbImfLVQdlO+rQZRnk2JrUrh/gfxCHeqbGM6+fHM4
+         7ITcCO76dJRS/9IVw3NrSvtxyq9VwmD4EqVrUDGMuJVmQXFSWVIGVCCZbtzSsyCCwHCf
+         SuPwB8oxxtPzKlOnmI31ZIqaaCxIjmOsHBClewCWu7/2rS56L6YlXbF0G2vaGYmvb2vC
+         FRL+Ggojcp4Qm6p6xA/q05mqUawC4874ayo3Mx3Q8M4elE2DViGffRhqrb2xiZ7N+NA8
+         NpUaynsuXzFncCiM3gJWydeav9P99KKaqhDbAL1MBohMQwQzmJyK8mm9o6LR9t7jJiYg
+         IYIA==
+X-Gm-Message-State: AC+VfDypGhiu2QEIf/H0qzg5XnhW4TGJLPxwjXPTUrxIP3l/u32h1Rrc
+        ++XidxeP8chvSNpPCQc2ZPQ=
+X-Google-Smtp-Source: ACHHUZ6jOqRNo0AYZRsY7E1fWfS6v5cTd/z3jkBALVmJK38yvVi+H/CSXrSDnLyr7MFUXH3Pb1nzBg==
+X-Received: by 2002:ac2:491e:0:b0:4f6:25cb:5910 with SMTP id n30-20020ac2491e000000b004f625cb5910mr1763787lfi.42.1686137234045;
+        Wed, 07 Jun 2023 04:27:14 -0700 (PDT)
+Received: from mobilestation ([91.144.185.176])
+        by smtp.gmail.com with ESMTPSA id u14-20020ac248ae000000b004f3bb9f1068sm1772729lfg.225.2023.06.07.04.27.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 04:27:13 -0700 (PDT)
+Date:   Wed, 7 Jun 2023 14:27:11 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Abe Kohandel <abe.kohandel@intel.com>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH] spi: dw: Remove misleading comment for Mount Evans SoC
+Message-ID: <20230607112711.alcspwuwpt7nqja7@mobilestation>
+References: <20230606231844.726272-1-abe.kohandel@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230607062500.24669-2-stanley_chang@realtek.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+In-Reply-To: <20230606231844.726272-1-abe.kohandel@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,160 +72,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stanley,
+On Tue, Jun 06, 2023 at 04:18:44PM -0700, Abe Kohandel wrote:
+> Remove a misleading comment about the DMA operations of the Intel Mount
+> Evans SoC's SPI Controller as requested by Serge.
+> 
 
-kernel test robot noticed the following build errors:
+> Signed-off-by: Abe Kohandel <abe.kohandel@intel.com>
+> Link: https://lore.kernel.org/linux-spi/20230606191333.247ucbf7h3tlooxf@mobilestation/
+> Fixes: 0760d5d0e9f0 ("spi: dw: Add compatible for Intel Mount Evans SoC")
 
-[auto build test ERROR on usb/usb-testing]
-[also build test ERROR on usb/usb-next usb/usb-linus robh/for-next linus/master v6.4-rc5 next-20230607]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Note Fixes tag normally goes first. In this case it seems redundant
+though.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Stanley-Chang/phy-realtek-usb-Add-driver-for-the-Realtek-SoC-USB-2-0-PHY/20230607-142704
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20230607062500.24669-2-stanley_chang%40realtek.com
-patch subject: [PATCH v3 2/5] phy: realtek: usb: Add driver for the Realtek SoC USB 2.0 PHY
-config: sh-randconfig-r033-20230607 (https://download.01.org/0day-ci/archive/20230607/202306071901.mhcH1Kcc-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 12.3.0
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add usb https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
-        git fetch usb usb-testing
-        git checkout usb/usb-testing
-        b4 shazam https://lore.kernel.org/r/20230607062500.24669-2-stanley_chang@realtek.com
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir --shuffle=2827500481 ARCH=sh olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir --shuffle=2827500481 ARCH=sh SHELL=/bin/bash
+> ---
+>  drivers/spi/spi-dw-mmio.c | 9 +--------
+>  1 file changed, 1 insertion(+), 8 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
+> index c1d16157de61..a699ce496cc5 100644
+> --- a/drivers/spi/spi-dw-mmio.c
+> +++ b/drivers/spi/spi-dw-mmio.c
+> @@ -237,14 +237,7 @@ static int dw_spi_intel_init(struct platform_device *pdev,
+>  }
+>  
+>  /*
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306071901.mhcH1Kcc-lkp@intel.com/
+> - * The Intel Mount Evans SoC's Integrated Management Complex uses the
+> - * SPI controller for access to a NOR SPI FLASH. However, the SoC doesn't
+> - * provide a mechanism to override the native chip select signal.
 
-All errors (new ones prefixed by >>):
+I had nothing against this part of the comment but only about the
+second chunk of the text.
 
-   sh4-linux-ld: drivers/phy/realtek/phy-rtk-usb2.o: in function `rtk_usb2phy_remove':
->> drivers/phy/realtek/phy-rtk-usb2.c:1891: undefined reference to `usb_remove_phy'
-   sh4-linux-ld: drivers/phy/realtek/phy-rtk-usb2.o: in function `create_debug_files':
->> drivers/phy/realtek/phy-rtk-usb2.c:1378: undefined reference to `usb_debug_root'
-   sh4-linux-ld: drivers/phy/realtek/phy-rtk-usb2.o: in function `rtk_usb2phy_probe':
->> drivers/phy/realtek/phy-rtk-usb2.c:1882: undefined reference to `usb_add_phy_dev'
-   sh4-linux-ld: drivers/power/supply/wm831x_power.o: in function `wm831x_power_probe':
->> drivers/power/supply/wm831x_power.c:695: undefined reference to `devm_usb_get_phy_by_phandle'
-   sh4-linux-ld: drivers/power/supply/rt9455_charger.o: in function `rt9455_probe':
->> drivers/power/supply/rt9455_charger.c:1682: undefined reference to `devm_usb_get_phy'
-   sh4-linux-ld: drivers/power/supply/isp1704_charger.o: in function `isp1704_charger_probe':
->> drivers/power/supply/isp1704_charger.c:73: undefined reference to `devm_usb_get_phy_by_phandle'
->> sh4-linux-ld: drivers/power/supply/isp1704_charger.c:73: undefined reference to `devm_usb_get_phy'
-   sh4-linux-ld: drivers/power/supply/bq25890_charger.o: in function `bq25890_probe':
->> drivers/power/supply/bq25890_charger.c:1511: undefined reference to `devm_usb_get_phy'
-   sh4-linux-ld: drivers/power/supply/bq256xx_charger.o: in function `bq256xx_probe':
->> drivers/power/supply/bq256xx_charger.c:1743: undefined reference to `devm_usb_get_phy'
+> - *
+> - * This driver doesn't use DMA for memory operations when a chip select
+> - * override is not provided due to the native chip select timing behavior.
+> - * As a result no DMA configuration is done for the controller and this
+> - * configuration is not tested.
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for USB_PHY
-   Depends on [n]: USB_SUPPORT [=n]
-   Selected by [y]:
-   - PHY_RTK_RTD_USB2PHY [=y]
+> + * DMA-based mem ops are not configured for this device and are not tested.
 
+* Note mem-ops is just a feature of the DW APB/AHB SSI controllers
+* which provides a way to perform write-then-read and write-only
+* transfers (see Transmit only and EEPROM read transfer modes in the
+* hw manual). It works irrespective of whether your controller has a
+* DMA-engine connected or doesn't have. Modern DW SSI controllers
+* support Enhanced SPI modes with the extended SPI-bus width
+* capability. But it's a whole another story and such modes aren't
+* currently supported by the driver.
 
-vim +1891 drivers/phy/realtek/phy-rtk-usb2.c
+Just a question for the sake of the discussion history. Does your
+platform have a DMA-engine synthesized to work with this DW SSI
+controller? That is does your controller has the DMA Controller
+Interface (handshake signals) connected to any DMA-engine on your
+platform? I am asking because if there is no such DMA-engine then
+the last part of your statement is just redundant since you can't test
+something which isn't supported by design.
 
-  1802	
-  1803	static int rtk_usb2phy_probe(struct platform_device *pdev)
-  1804	{
-  1805		struct rtk_usb_phy *rtk_phy;
-  1806		struct device *dev = &pdev->dev;
-  1807		struct device_node *node;
-  1808		struct device_node *sub_node;
-  1809		struct phy *generic_phy;
-  1810		struct phy_provider *phy_provider;
-  1811		int phyN, ret = 0;
-  1812	
-  1813		rtk_phy = devm_kzalloc(dev, sizeof(*rtk_phy), GFP_KERNEL);
-  1814		if (!rtk_phy)
-  1815			return -ENOMEM;
-  1816	
-  1817		rtk_phy->dev			= &pdev->dev;
-  1818		rtk_phy->phy.dev		= rtk_phy->dev;
-  1819		rtk_phy->phy.label		= "rtk-usb2phy";
-  1820		rtk_phy->phy.notify_port_status = rtk_usb_phy_notify_port_status;
-  1821	
-  1822		if (!dev->of_node) {
-  1823			dev_err(dev, "%s %d No device node\n", __func__, __LINE__);
-  1824			goto err;
-  1825		}
-  1826	
-  1827		node = dev->of_node;
-  1828	
-  1829		rtk_phy->usb_ctrl_regs = syscon_regmap_lookup_by_phandle(node, "realtek,usb-ctrl");
-  1830		if (IS_ERR(rtk_phy->usb_ctrl_regs)) {
-  1831			dev_info(dev, "%s: DTS no support usb_ctrl regs syscon\n", __func__);
-  1832			rtk_phy->usb_ctrl_regs = NULL;
-  1833		}
-  1834	
-  1835		phyN = of_get_child_count(node);
-  1836		rtk_phy->phyN = phyN;
-  1837		dev_dbg(dev, "%s phyN=%d\n", __func__, rtk_phy->phyN);
-  1838	
-  1839		rtk_phy->reg_addr = devm_kzalloc(dev,
-  1840			    sizeof(struct reg_addr) * phyN, GFP_KERNEL);
-  1841		if (!rtk_phy->reg_addr)
-  1842			return -ENOMEM;
-  1843	
-  1844		rtk_phy->phy_data = devm_kzalloc(dev,
-  1845			    sizeof(struct phy_data) * phyN, GFP_KERNEL);
-  1846		if (!rtk_phy->phy_data)
-  1847			return -ENOMEM;
-  1848	
-  1849		for (sub_node = of_get_next_child(node, NULL); sub_node != NULL;
-  1850			    sub_node = of_get_next_child(node, sub_node)) {
-  1851			ret = get_phy_parameter(rtk_phy, sub_node);
-  1852			if (ret) {
-  1853				dev_err(dev, "%s: get_phy_parameter fail ret=%d\n",
-  1854					    __func__, ret);
-  1855				goto err;
-  1856			}
-  1857		}
-  1858	
-  1859		platform_set_drvdata(pdev, rtk_phy);
-  1860	
-  1861		generic_phy = devm_phy_create(rtk_phy->dev, NULL, &ops);
-  1862		if (IS_ERR(generic_phy))
-  1863			return PTR_ERR(generic_phy);
-  1864	
-  1865		phy_set_drvdata(generic_phy, rtk_phy);
-  1866	
-  1867		phy_provider = devm_of_phy_provider_register(rtk_phy->dev,
-  1868					    of_phy_simple_xlate);
-  1869		if (IS_ERR(phy_provider))
-  1870			return PTR_ERR(phy_provider);
-  1871	
-  1872		ret = usb_add_phy_dev(&rtk_phy->phy);
-  1873		if (ret)
-  1874			goto err;
-  1875	
-  1876		create_debug_files(rtk_phy);
-  1877	
-  1878	err:
-  1879		dev_dbg(dev, "Probe RTK USB 2.0 PHY (ret=%d)\n", ret);
-  1880	
-  1881		return ret;
-> 1882	}
-  1883	
-  1884	static void rtk_usb2phy_remove(struct platform_device *pdev)
-  1885	{
-  1886		struct rtk_usb_phy *rtk_phy = platform_get_drvdata(pdev);
-  1887	
-  1888		remove_debug_files(rtk_phy);
-  1889	
-  1890		usb_remove_phy(&rtk_phy->phy);
-> 1891	}
-  1892	
+Anyway the change in this patch looks good. Thanks for submitting it.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
+
+-Serge(y)
+
+>   */
+>  static int dw_spi_mountevans_imc_init(struct platform_device *pdev,
+>  				      struct dw_spi_mmio *dwsmmio)
+> -- 
+> 2.40.1
+> 
