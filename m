@@ -2,130 +2,313 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF832725DEE
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 14:03:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47AA2725DF1
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 14:04:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235370AbjFGMDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 08:03:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51320 "EHLO
+        id S234710AbjFGMEj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 08:04:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234497AbjFGMDv (ORCPT
+        with ESMTP id S238911AbjFGMEf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 08:03:51 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2047.outbound.protection.outlook.com [40.107.20.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5450619BF;
-        Wed,  7 Jun 2023 05:03:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BzMnTGWZ+MVSZbP2DehGRR2MgmNwj+Yi/ljhJpKxy6h0ZNb7pP/5v/pEkd3vQSp2I5357WZ77D5IAicNAotgbCbsoWZVzBY8K7ViE4ibfcrF8nCzChwX75WvpBn/eCwm/RtlzMG+/r2JWeUV2hyI4vSdZU6e5a40xmuQdDPAUhCE9Iymf4vH513MB+cvhMEJif4ZWp9mhfC/gmlmdGxNztQnb7U1qzNCc/4YSX0ybrSe6WeOvM7ywMJtxdkCFHy4cnM9XXs17U8bKXsCpyqk+ohYJipzE41sdmyBEs5nWSBfjABKJYs9UhyXAJTJ7Evf5LVS2txVDFXgybCwBPeGtA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dWxIlF5RU/NMGlL98tlfSK4bMftavk0c5PQDihu5VS8=;
- b=f+bRQEDpbx06C6v8SYkxOoFbjWrsVH5Zrss8hcjrXY46LvbQCfG5plhZzUJ/bWdd8o1RLTzspg90DtuYfUACAy77RjbFrfc/7RjKH6q/UABiRlFEqtPd0Oxoco/oQF4BN91wplZFIT6wR/fqN7/Dm2aRfPyrLFggNR6NYQLbO6yQWoDxQbSmJ01esW1/aUkLHHF+0f/einOUFjhhoCXPq2PWqt4HN37c9MMgHM9EiJK8j7zZtrtos8rSoX7CV51E2f6SnUIeiIWJX3QLlD1krhK8RUX9eMbJ6W41HEhaL6PeSI+BcSvThfxgsdzG+SBjZI4khcaWU/NqZWAm+Oaosg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dWxIlF5RU/NMGlL98tlfSK4bMftavk0c5PQDihu5VS8=;
- b=kSJF9j0iLLgivIvUZo+IRcHMihVH6N4itzh6SoceHDdOQhDFVda2Qe2vpnGCbHPPwB9JQVL1prwhQlPuoxGsElBOUU4umwfEwIt2NTkROZDm9pdwNnlvS4rORQ61hNG5d+9bWWQzHweHZRRCJokTJUFL91B/tM5Ht1gruuDWyOA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM0PR04MB6452.eurprd04.prod.outlook.com (2603:10a6:208:16d::21)
- by DU2PR04MB8677.eurprd04.prod.outlook.com (2603:10a6:10:2dc::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.32; Wed, 7 Jun
- 2023 12:03:47 +0000
-Received: from AM0PR04MB6452.eurprd04.prod.outlook.com
- ([fe80::c40e:d76:fd88:f460]) by AM0PR04MB6452.eurprd04.prod.outlook.com
- ([fe80::c40e:d76:fd88:f460%4]) with mapi id 15.20.6455.030; Wed, 7 Jun 2023
- 12:03:47 +0000
-Date:   Wed, 7 Jun 2023 15:03:44 +0300
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
-Cc:     Vladimir Oltean <olteanv@gmail.com>, linux-kernel@vger.kernel.org,
-        Lisa Chen <minjie.chen@geekplus.com>
-Subject: Re: [PATCH] spi: fsl-dspi: avoid SCK glitches with continuous
- transfers
-Message-ID: <20230607120344.ui2ubzdkb6cbjm5o@skbuf>
-References: <20230529223402.1199503-1-vladimir.oltean@nxp.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230529223402.1199503-1-vladimir.oltean@nxp.com>
-X-ClientProxiedBy: FR0P281CA0098.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a9::8) To AM0PR04MB6452.eurprd04.prod.outlook.com
- (2603:10a6:208:16d::21)
+        Wed, 7 Jun 2023 08:04:35 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 314291BC3
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 05:04:32 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f6148f9679so6723592e87.3
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 05:04:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686139470; x=1688731470;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=KZ6mcI1bKJ1Kz+T1ZnrarK0a6kbd0xZgbwjVj3l23gQ=;
+        b=QyNIyfZNjvs9IoORoZOHIWYIzs/i5XmcHk9EYJVDXS+JzHFp2tltW8FHlmN3Sg9g8y
+         hmIaMvv6uFlwRmY5iv+w7QkRqDzSkn5JYRvFvqcBd4loOW1d8Q14l2plZfWcAUO+n4IW
+         FkuCdTvX+r2gydNGGHI7Im42L/LicBYZK1BKAH1+e3dk8MP1+iJBYYLSjj8JQbVYZwbP
+         zpKeR6gtE7iXZlvDqnhUdc3Uf7R54JkbemoUv7uCyRe4x8Pj0u5HLqhKV5RKZjRr1xNv
+         q7PZPuZnPszQw1pRNO//YWeWi2lHZCx0AQ/bfQWmd9bu+928uyzC3GJbllU2hKdybS7E
+         oRCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686139470; x=1688731470;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KZ6mcI1bKJ1Kz+T1ZnrarK0a6kbd0xZgbwjVj3l23gQ=;
+        b=bQFZea+i++3n8MONxCjAjz6ekrv7s53qFEy73eM5r+6NZst1FsFa0IXlkT/FXmb6LO
+         T6tgpbSFp5IxS+aUT9LteTV8hsPe95GfVckBac9AUYL4adoPcUW7AVtB32LKJIxnm01V
+         CMrJ5vCSQWISQtwCEe8B5Ej0cSvdGAhhaK3+zeYKTNAqrvswpYJgVhtAwVQGy0l0ckRW
+         pYpqdaHORF/aomQFr70NZVAc3zxeiFS4N+LCtcJPnSjpkHfX/HIMQkOd2qRWr9VcUNc/
+         Uxl0C5MFa38KEwvDKB1KMYL3TK+cPZvzRITrWXlmYtp9ANAuHv3dVLV1qXHDuYE9PNKn
+         VRdA==
+X-Gm-Message-State: AC+VfDzPeBda50eU3LnG8JLcGSd5VHPU42mgPJzhltRZhqJqOZmMp/r0
+        +A9HOfnd5jkj6bOs8LjMplxm4g==
+X-Google-Smtp-Source: ACHHUZ65yqG1QTublwh1Yaw6Z8SsrNVJqtjy+wO7w5acN3E/o/a6FRCaVjvVnek45VpoZHg3PnLUmQ==
+X-Received: by 2002:ac2:5d2b:0:b0:4ec:8615:303e with SMTP id i11-20020ac25d2b000000b004ec8615303emr1855791lfb.33.1686139470262;
+        Wed, 07 Jun 2023 05:04:30 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id q22-20020aa7d456000000b0051631518aabsm6057200edr.93.2023.06.07.05.04.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Jun 2023 05:04:29 -0700 (PDT)
+Message-ID: <7cce1d72-6b4d-9fff-32bc-942193388134@linaro.org>
+Date:   Wed, 7 Jun 2023 14:04:26 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM0PR04MB6452:EE_|DU2PR04MB8677:EE_
-X-MS-Office365-Filtering-Correlation-Id: abbf311e-fbdd-45a1-bc2b-08db674f3fa4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: PURQeh5hUJfqYGUiBqW6ZzTFSXsrHvv0qOyn1T6ipOGFcPANVKvWVtLCQHvE0EAgbgGVqMPxQhG1viab+O8eEn4NrsCCq+ofRSlRL3Sf8/ComGkn3F2jAdchAFuNvYcVNK7JRZ8ICRMgIBcpwyrYF4IBxJHElO9WrXQW2Qccm3LYLsAJcEw7zIVg4Y6jZOmt+2USs1xjd/nySkqqtfeDQZ+axcldOR/GF98Q4kSIDSyVGv1Sdlfg6pCT+urC+sLjVKJsAH6A1uumMZ01W7wnx6+3AKUWFbsK8mqKcMJkDzD9dFEvIRLHFB8I9ZH0lOrFaH4qDI7VHtHNJAuKILG4tbSbeDVbs0Q5v1Q3i5pvAHcuF5IuyCYXfIc0lCWoTV3T7JajHrew3dtwBXyUkKzYzL6uT6xT0gIvHqbakxog6YrMlpsG36NFkp0BrOU2NZQcTEX7O3F/hmQHrdl+/Rj0pqAgHXQfxM938wiO9KL6BmDAIIIf4cZm8vbbM8CmpOsdzAZInllImB9/324HRv0RHT8ptYfkBZpFMGhDwLPmPYRcaXbV3nPPndGwbZkOAUJy
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6452.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(4636009)(366004)(376002)(346002)(39860400002)(396003)(136003)(451199021)(54906003)(478600001)(8676002)(5660300002)(44832011)(8936002)(33716001)(86362001)(4744005)(2906002)(66476007)(66946007)(66556008)(4326008)(316002)(38100700002)(41300700001)(26005)(186003)(9686003)(6486002)(6666004)(6506007)(6512007)(1076003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?+u/7DNGhfgXBihbBpt3+angrIfVEeV9Nqlk4SiiId7/7I2B9G4HpKSi4Y6m3?=
- =?us-ascii?Q?GgsCCwCFUhgcOSIYxQl2y04DAcY9lsWNNG6G0CvQui7eN3FOJEH1Iy6D2yrM?=
- =?us-ascii?Q?pN2muS8pDxMj0XOZDKm7mbwZvK08Oq1t9rTqa0rNHHbUooodgLlj86bSLz/e?=
- =?us-ascii?Q?Jro7ekDnmEhBh7mQgW0k9cg0MCHoL9jMl4j1vBC6MBUqj/ofpaNivOC21UL2?=
- =?us-ascii?Q?xqSLjHobJJ6Wzs5T4gQrub/uJvzimbulrD2BnnZ/yQLkkqrUmuEU0TBpSi6K?=
- =?us-ascii?Q?hjWTTGag4BHNVIYlOEHQ7b3187uRLdUPpR+v8T+QuPchJNUFhcKUxmL0DXSL?=
- =?us-ascii?Q?XVjjhRGe0MnTBK0TNCY9ci2xxECsSdbhkTkGSiePAllQeBX5J+Otnt7LzZmn?=
- =?us-ascii?Q?JEIhqh0rXQj4AKRxINEplUDLVtMQQnRNysrc8sEyacKJXngp/XKa/QuhezpI?=
- =?us-ascii?Q?jwZaivoA83pZapX8lvi08qNrKG3xuTojkkwbKwMXOKlEv0nJ0flWZ50hK5cS?=
- =?us-ascii?Q?1873LGym6f1PnVwbLOP3VgDUd/kXmrdYmddeyBdVtdr+VMd0siHqGM+QyuNv?=
- =?us-ascii?Q?z8HH/AJeP+mfLt0gg9wWST2geLTbRsWRLIzKNQ+BkmW4DEFrOzyvpGu9yyAW?=
- =?us-ascii?Q?vHS1nMuMJKEL47cpdZct7a1dTLKB6UT25ePAJBxIfZmlmuFHZdo4rqc8LQmH?=
- =?us-ascii?Q?1sHjhtLNoKJvLjq5ssIufXuSFeSNxZY+DrOk3lX6zRH4txkR0dNPiA65fcER?=
- =?us-ascii?Q?PRzPeSrlQFC2/A7MJ8RWrYaxxLW0BnHf6hYoP+nTLQLPvfFj4O8TsSiRlFRh?=
- =?us-ascii?Q?5ziuhfOXAe06rYMSdhzfIyPX/jX0nayK+5Mivz1Jv/2n8XScbYrxvC8Hr4in?=
- =?us-ascii?Q?5yVUglTeupQrDGV/FgrceJJQy/PIKjmOWasE16SUCoo7G7W741LuZUsZbCgT?=
- =?us-ascii?Q?iYGJBHVbpcP/uBIDl2Zq03vgNgdoellKBHkfCUhnEMyVWmPvNledijEGvcgt?=
- =?us-ascii?Q?SaceyAVb553iiSYfMhdAy0K8yd+/HDzmyOQQdayWOq3qD9lWVGDVK5FhjqNf?=
- =?us-ascii?Q?oSPWEwWRVRZPF6sxe2lo655BZmzoXFj6FhgpM5uskyOhmxLrtN/9nPMUt4Q+?=
- =?us-ascii?Q?NPDGXDIFrwzRtoWPddSAc5iTw64ZZOgxlE+2p35WqQjC49suinOBuVPOkLdY?=
- =?us-ascii?Q?2mzrDVupMJDeM1QI6ivDBHoPXvznFTPzI92xusCUNwadTcGNelQ/2PMcbIQ3?=
- =?us-ascii?Q?n7wDxd2p9YczKuETa9806kzKE/4FF0SigY0gfDJlup2ubG707RgUjS843MVw?=
- =?us-ascii?Q?dgKzYeC7uIKqrvFlmxQuHJDRZiuWfV+PjXrxTtnCE2Ye6kj5/3/8TZxHR87t?=
- =?us-ascii?Q?UJgMQbPFvxb3m9vhevEbTs3nlpzRnr2OJYRXuuioQfkH9pfUEzlL6SLRVIkc?=
- =?us-ascii?Q?mqgdZdPTLt9tUAmWKdzui0HR8C6DDvZRWrXunQ3TCgisEloNqxznTR4tcd3A?=
- =?us-ascii?Q?EqIB4opGVDHVd2FY2xLr0XvM6dL+fCJwvyTdRjrbnjFvqNo5mfjEIrl6be4+?=
- =?us-ascii?Q?Ern5PDVi7S7YbLV6G0ISLQ/YyzM+QuKky4ftwnecL2YTKU0o07dh9q83OT3+?=
- =?us-ascii?Q?Mg=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: abbf311e-fbdd-45a1-bc2b-08db674f3fa4
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6452.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2023 12:03:47.5617
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UuaeEQpXQBNjP5jbj0dTEfa8Tmvw2Bckm9LFxb6h5LYJAlWVTp2h5WVZ9Cd6nzab/3m59stJo1MbDq4djfU9RA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8677
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v3 4/5] dt-bindings: phy: realtek: Add the doc about the
+ Realtek SoC USB 2.0 PHY
+To:     Stanley Chang <stanley_chang@realtek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Ray Chi <raychi@google.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Flavio Suligoi <f.suligoi@asem.it>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20230607062500.24669-1-stanley_chang@realtek.com>
+ <20230607062500.24669-4-stanley_chang@realtek.com>
+Content-Language: en-US
+In-Reply-To: <20230607062500.24669-4-stanley_chang@realtek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
+On 07/06/2023 08:24, Stanley Chang wrote:
+> Add the documentation explain the property about Realtek USB PHY driver.
+> 
+> Realtek DHC (digital home center) RTD SoCs support DWC3 XHCI USB
+> controller. Added the driver to drive the USB 2.0 PHY transceivers.
+> 
+> Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
+> ---
+> v2 to v3 change:
+>     1. Broken down into two patches, one for each of USB 2 & 3.
+>     2. Add more description about Realtek RTD SoCs architecture.
+>     3. Removed parameter v1 support for simplification.
+>     4. Revised the compatible name for fallback compatible.
+>     5. Remove some properties that can be set in the driver.
+> v1 to v2 change:
+>     Add phy-cells for generic phy driver
+> ---
+>  .../bindings/phy/realtek,usb2phy.yaml         | 213 ++++++++++++++++++
+>  1 file changed, 213 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/phy/realtek,usb2phy.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/phy/realtek,usb2phy.yaml b/Documentation/devicetree/bindings/phy/realtek,usb2phy.yaml
+> new file mode 100644
+> index 000000000000..69911e20a561
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/phy/realtek,usb2phy.yaml
+> @@ -0,0 +1,213 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +# Copyright 2023 Realtek Semiconductor Corporation
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/phy/realtek,usb2phy.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Realtek DHC SoCs USB 2.0 PHY
+> +
+> +maintainers:
+> +  - Stanley Chang <stanley_chang@realtek.com>
+> +
+> +description:
+> +  Realtek USB 2.0 PHY support the digital home center (DHC) RTD series SoCs.
+> +  The USB 2.0 PHY driver is designed to support the XHCI controller. The SoCs
+> +  support multiple XHCI controllers. One PHY device node maps to one XHCI
+> +  controller.
+> +
+> +  RTD1295/RTD1619 SoCs USB
+> +  The USB architecture includes three XHCI controllers.
+> +  Each XHCI maps to one USB 2.0 PHY and map one USB 3.0 PHY on some
+> +  controllers.
+> +  XHCI controller#0 -- usb2phy -- phy#0
+> +                    |- usb3phy -- phy#0
+> +  XHCI controller#1 -- usb2phy -- phy#0
+> +  XHCI controller#2 -- usb2phy -- phy#0
+> +                    |- usb3phy -- phy#0
+> +
+> +  RTD1395 SoCs USB
+> +  The USB architecture includes two XHCI controllers.
+> +  The controller#0 has one USB 2.0 PHY. The controller#1 includes two USB 2.0
+> +  PHY.
+> +  XHCI controller#0 -- usb2phy -- phy#0
+> +  XHCI controller#1 -- usb2phy -- phy#0
+> +                               |- phy#1
+> +
+> +  RTD1319/RTD1619b SoCs USB
+> +  The USB architecture includes three XHCI controllers.
+> +  Each XHCI maps to one USB 2.0 PHY and map one USB 3.0 PHY on controllers#2.
+> +  XHCI controller#0 -- usb2phy -- phy#0
+> +  XHCI controller#1 -- usb2phy -- phy#0
+> +  XHCI controller#2 -- usb2phy -- phy#0
+> +                    |- usb3phy -- phy#0
+> +
+> +  RTD1319d SoCs USB
+> +  The USB architecture includes three XHCI controllers.
+> +  Each xhci maps to one USB 2.0 PHY and map one USB 3.0 PHY on controllers#0.
+> +  XHCI controller#0 -- usb2phy -- phy#0
+> +                    |- usb3phy -- phy#0
+> +  XHCI controller#1 -- usb2phy -- phy#0
+> +  XHCI controller#2 -- usb2phy -- phy#0
+> +
+> +  RTD1312c/RTD1315e SoCs USB
+> +  The USB architecture includes three XHCI controllers.
+> +  Each XHCI maps to one USB 2.0 PHY.
+> +  XHCI controller#0 -- usb2phy -- phy#0
+> +  XHCI controller#1 -- usb2phy -- phy#0
+> +  XHCI controller#2 -- usb2phy -- phy#0
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - realtek,rtd1295-usb2phy
+> +          - realtek,rtd1395-usb2phy
+> +          - realtek,rtd1619-usb2phy
+> +          - realtek,rtd1319-usb2phy
+> +          - realtek,rtd1619b-usb2phy
+> +          - realtek,rtd1312c-usb2phy
+> +          - realtek,rtd1319d-usb2phy
+> +          - realtek,rtd1315e-usb2phy
 
-On Tue, May 30, 2023 at 01:34:02AM +0300, Vladimir Oltean wrote:
-> In other words, the default values (of 0 and 0 ns) result in SCK
-> glitches where the SCK transition to the idle state, as well as the SCK
-> transition from the idle state, will have no delay in between, and it
-> may appear that a SCK cycle has simply gone missing. The resulting
-> timing violation might cause data corruption in many peripherals, as
-> their chip select is asserted.
+Keep entries ordered alphabetically.
 
-I know you don't appreciate content-free pings, but is this patch on
-your radar?
+> +      - const: realtek,usb2phy
+> +
+> +  reg:
+> +    items:
+> +      - description: PHY data registers
+> +      - description: PHY control registers
+> +
+> +  "#address-cells":
+> +    const: 1
+> +
+> +  "#size-cells":
+> +    const: 0
+> +
+> +  "#phy-cells":
+> +    const: 0
+> +
+> +  realtek,usb-ctrl:
+> +    description: The phandle of syscon used to control USB PHY power domain.
+> +    $ref: /schemas/types.yaml#/definitions/phandle
 
-Thanks,
-Vladimir
+No, we have power-domains for this.
+
+> +
+> +patternProperties:
+> +  "^phy@[0-3]+$":
+> +    type: object
+> +    description:
+> +      Each sub-node is a PHY device for one XHCI controller.
+
+I don't think it is true. You claim above that you have 0 as phy-cells,
+means you have one phy. Here you say you can have up to 4 phys.
+
+> +      For most Relatek SoCs, one XHCI controller only support one the USB 2.0
+> +      phy. For RTD1395 SoC, the one XHCI controller has two USB 2.0 PHYs.
+> +    properties:
+> +      realtek,page0-param:
+> +        description: PHY parameter at page 0. The data are the pair of the
+> +          offset and value.
+
+This needs to be specific. What the heck is "PHY parameter"?
+
+> +        $ref: /schemas/types.yaml#/definitions/uint32-array
+
+Array? Then maxItems.
+
+> +
+> +      realtek,page1-param:
+> +        description: PHY parameter at page 1. The data are the pair of the
+> +          offset and value.
+> +        $ref: /schemas/types.yaml#/definitions/uint32-array
+> +
+> +      realtek,page2-param:
+> +        description: PHY parameter at page 2. The data are the pair of the
+> +          offset and value. If the PHY support the page 2 parameter.
+> +        $ref: /schemas/types.yaml#/definitions/uint32-array
+> +
+> +      realtek,support-page2-param:
+> +        description: Set this flag if PHY support page 2 parameter.
+
+Why this cannot be deducted from compatible?
+
+> +        type: boolean
+> +
+> +      realtek,do-toggle:
+> +        description: Set this flag to enable PHY parameter toggle when port
+> +          status change.
+
+Do not instruct OS what to do. Explain why this is a hardware
+characteristic.
+
+> +        type: boolean
+> +
+> +      realtek,do-toggle-driving:
+> +        description: Set this flag to enable PHY parameter toggle for adjust
+> +          the driving when port status change.
+
+Do not instruct OS what to do. Explain why this is a hardware
+characteristic.
+
+
+> +        type: boolean
+> +
+> +      realtek,check-efuse:
+> +        description: Enable to update PHY parameter from reading otp table.
+
+Do not instruct OS what to do. Explain why this is a hardware
+characteristic.
+
+> +        type: boolean
+> +
+> +      realtek,use-default-parameter:
+> +        description: Don't set parameter and use default value in hardware.
+
+NAK, you are just making things up.
+
+> +        type: boolean
+> +
+> +      realtek,is-double-sensitivity-mode:
+> +        description: Set this flag to enable double sensitivity mode.
+
+All your descriptions copy the name of property. You basically say
+nothing more. I already mentioned this before. Don't ignore the
+feedback, but address it.
+
+> +        type: boolean
+> +
+> +      realtek,ldo-force-enable:
+> +        description: Set this flag to force enable ldo mode.
+
+Drop everywhere "Set this flag to", because it is redundant. Now compare
+what is left with property name.
+
+Property name: realtek,ldo-force-enable
+Your description: "force enable ldo mode"
+
+How is this helpful to anybody?
+
+
+Best regards,
+Krzysztof
+
