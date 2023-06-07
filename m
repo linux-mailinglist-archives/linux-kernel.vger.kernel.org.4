@@ -2,111 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5963A727089
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 23:25:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94584727096
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 23:33:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232836AbjFGVYy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 17:24:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47786 "EHLO
+        id S230269AbjFGVdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 17:33:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232792AbjFGVYs (ORCPT
+        with ESMTP id S229729AbjFGVdN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 17:24:48 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC6411BDF
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 14:24:47 -0700 (PDT)
+        Wed, 7 Jun 2023 17:33:13 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17E0F1FD5
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 14:33:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686173087; x=1717709087;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=zZ2DePtd/5n2kWZ3K/sTR9MXXW3+/h2OU665VEqhTss=;
-  b=lcrapp/rwqrs5I/b8/DHRm0FP2z1hqyHknrM7bc/Yp9vppYRWl74yfHK
-   XCo8JNtAIOCG8GPvfspwHse9mZalOdl21HHz4n10oX2ar4p5vx/0WBRKc
-   BCzldfgzBc1kwajnIJ2cnIpUXaGZbcVeebq/B34qf7sVnYM7qjvucx1DG
-   x3IJ208Edxym/l4y6vI/vFnjY4suIJq4WAPb4OW/t9W3U/C8iYMJfdkcu
-   /HPJxuRsguNCinrOctCVgXkWksx39J86HtoeI0CUgOu4Ka2XLCAULRV5O
-   X9xeeLpd3PMG2o4XezD9NTEL1EHXKxkNMGlGzDV2J/0UDVISeSx1dycDW
+  t=1686173592; x=1717709592;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Hv8Np48zRKFQLTLqiGDrs2XR+FI1FZmUcE7+ntKNyA8=;
+  b=bKlMKfR+Z+LnDuKzam8CM5ZlVPQZzTQp80ASzlQB0V8x8BdImaQRhcCq
+   7MJsq1SNmHsKI5MXaWUbobnAS3+iWXWwBMx3UqSxAKMt/2TGyOhznw7wJ
+   ugi6EiRcHmvqc+4gioOt4UnY1mmJpCb9x9bgmbrhNBmCijvltoujr8qoh
+   Hj6jjZLZcK03vnM9326jYuCCTgsaRvKc4kaTGJwcaZEpp9Uh8x3zHYR60
+   Cq19i7KPNTxLx8fnF1yKgB/zN+AUDMFsnkoGhTlsi6dWXncUU48HS22gC
+   A20gsMQgBhNm/GToVRdyD2ozTn6uOY3K8vtD0t2J/BWNV2cI3g4x4xR9B
    A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="360444614"
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="354605927"
 X-IronPort-AV: E=Sophos;i="6.00,225,1681196400"; 
-   d="scan'208";a="360444614"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 14:24:47 -0700
+   d="scan'208";a="354605927"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 14:33:11 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="774790166"
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="956449747"
 X-IronPort-AV: E=Sophos;i="6.00,225,1681196400"; 
-   d="scan'208";a="774790166"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 07 Jun 2023 14:24:45 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q70e5-0006w3-0I;
-        Wed, 07 Jun 2023 21:24:45 +0000
-Date:   Thu, 8 Jun 2023 05:24:07 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sergei Trofimovich <slyich@gmail.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: make[5]: *** No rule to make target 'scripts/module.lds', needed by
- 'tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.ko'.
-Message-ID: <202306080543.EJWQZYkE-lkp@intel.com>
+   d="scan'208";a="956449747"
+Received: from jkrzyszt-mobl2.ger.corp.intel.com ([10.213.10.174])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 14:33:08 -0700
+From:   Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
+To:     "Hansen, Dave" <dave.hansen@intel.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "Gross, Jurgen" <jgross@suse.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "andi.shyti@linux.intel.com" <andi.shyti@linux.intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "hannes@cmpxchg.org" <hannes@cmpxchg.org>
+Subject: Re: [PATCH v2] x86/mm: Fix PAT bit missing from page protection modify mask
+Date:   Wed, 07 Jun 2023 23:33:05 +0200
+Message-ID: <20819659.0c2gjJ1VT2@jkrzyszt-mobl2.ger.corp.intel.com>
+Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173,
+ 80-298 Gdansk - KRS 101882 - NIP 957-07-52-316
+In-Reply-To: <ad762335fd209fd8c1555401bc03e196eb53caef.camel@intel.com>
+References: <20230607152308.125787-2-janusz.krzysztofik@linux.intel.com>
+ <38324471.J2Yia2DhmK@jkrzyszt-mobl2.ger.corp.intel.com>
+ <ad762335fd209fd8c1555401bc03e196eb53caef.camel@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sergei,
+On Wednesday, 7 June 2023 23:12:13 CEST Edgecombe, Rick P wrote:
+> On Wed, 2023-06-07 at 19:11 +0200, Janusz Krzysztofik wrote:
+> > On Wednesday, 7 June 2023 17:31:24 CEST Dave Hansen wrote:
+> > > On 6/7/23 08:23, Janusz Krzysztofik wrote:
+> > > > 
+> > > > Extend bitmask used by pgprot_modify() for selecting bits to be
+> > > > preserved
+> > > > with _PAGE_PAT bit.  However, since that bit can be reused as
+> > > > _PAGE_PSE,
+> > > > and the _PAGE_CHG_MASK symbol, primarly used by pte_modify(), is
+> > > > likely
+> > > > intentionally defined with that bit not set, keep that symbol
+> > > > unchanged.
+> > > 
+> > > I'm really having a hard time parsing what that last sentence is
+> > > saying.
+> > > 
+> > > Could you try again, please?
+> > 
+> > OK, but then I need to get my doubts addressed by someone first,
+> > otherwise I'm 
+> > not able to provide a better justification from my heart.
+> > 
+> > The issue needs to be fixed by including _PAGE_PAT bit into a bitmask
+> > used 
+> > by pgprot_modify() for selecting bits to be preserved.  We can either
+> > do 
+> > that internally to pgprot_modify() (my initial proposal, which my
+> > poorly 
+> > worded paragraph was still trying to describe and justify), or by
+> > making 
+> > _PAGE_PAT a part of _PAGE_CHG_MASK, as suggested by Borislav and
+> > reflected in 
+> > my v2 changelog.  But for the latter, I think we need to make sure
+> > that we 
+> > don't break other users of _PAGE_CHG_MASK.  Maybe Borislav can
+> > confirm that's 
+> > the case.
+> > 
+> > Since _PAGE_PAT is the same as _PAGE_PSE, _HPAGE_CHG_MASK -- a huge
+> > pmds' 
+> > counterpart of _PAGE_CHG_MASK, introduced by commit c489f1257b8c
+> > ("thp: add 
+> > pmd_modify"), defined as (_PAGE_CHG_MASK | _PAGE_PSE) -- will no
+> > longer differ 
+> > from _PAGE_CHG_MASK as soon as we add _PAGE_PAT bit to the latter. 
+> > If such 
+> > modification of _PAGE_CHG_MASK was irrelevant to its users then one
+> > may ask 
+> > why a new symbol was introduced instead of reusing the existing one
+> > with that 
+> > otherwise irrelevant bit (_PAGE_PSE in that case) added.  I've
+> > initially 
+> > assumed that keeping _PAGE_CHG_MASK without _PAGE_PSE (vel _PAGE_PAT)
+> > included 
+> > into it was intentional for some reason.  Maybe Johannes Weiner, the
+> > author of 
+> > that patch (adding him to Cc:), could shed more light on that.
+> 
+> So since _PAGE_PSE is actually the same value as _PAGE_PAT, you don't
+> actually need to have _PAGE_PSE in _HPAGE_CHG_MASK in order to get
+> functional correctness. Is that right?
 
-First bad commit (maybe != root cause):
+As soon as we add _PAGE_PAT to _PAGE_CHG_MASK -- yes, that's right.  But we 
+may still want to add _PAGE_PSE to _HPAGE_CHG_MASK to have the need for that 
+bit explicitly documented.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   a27648c742104a833a01c54becc24429898d85bf
-commit: 82880283d7fcd0a1d20964a56d6d1a5cc0df0713 objtool: Fix truncated string warning
-date:   1 year, 4 months ago
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce:
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=82880283d7fcd0a1d20964a56d6d1a5cc0df0713
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 82880283d7fcd0a1d20964a56d6d1a5cc0df0713
-        make W=1 O=/tmp/kselftest headers
-        make W=1 O=/tmp/kselftest -C tools/testing/selftests
-        make W=1 O=/tmp/kselftest -C tools/testing/selftests/bpf
+> 
+> I think it is still a little hidden (even before this) and I wonder
+> about separating out the common bits into, like, _COMMON_PAGE_CHG_MASK
+> or something. Then setting specific PAGE and HPAGE bits (like
+> _PAGE_PAT, _PAGE_PSE and _PAGE_PAT_LARGE) in their specific define.
+> Would it be more readable that way?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306080543.EJWQZYkE-lkp@intel.com/
+Yes, I think that's a good idea, and I can use it in my patch.
 
-All error/warnings (new ones prefixed by >>):
+The question if _PAGE_PAT vel _PAGE_PSE added to _PAGE_CHG_MASK is really 
+harmless for pte_modify() and its users is still open for me though.
 
->> tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:19:1: warning: no previous prototype for 'bpf_testmod_test_mod_kfunc' [-Wmissing-prototypes]
-      19 | bpf_testmod_test_mod_kfunc(int i)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~
->> tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:24:14: warning: no previous prototype for 'bpf_testmod_loop_test' [-Wmissing-prototypes]
-      24 | noinline int bpf_testmod_loop_test(int n)
-         |              ^~~~~~~~~~~~~~~~~~~~~
->> tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:36:30: warning: no previous prototype for 'bpf_testmod_return_ptr' [-Wmissing-prototypes]
-      36 | __weak noinline struct file *bpf_testmod_return_ptr(int arg)
-         |                              ^~~~~~~~~~~~~~~~~~~~~~
-   tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:53:1: warning: no previous prototype for 'bpf_testmod_test_read' [-Wmissing-prototypes]
-      53 | bpf_testmod_test_read(struct file *file, struct kobject *kobj,
-         | ^~~~~~~~~~~~~~~~~~~~~
-   tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:89:1: warning: no previous prototype for 'bpf_testmod_test_write' [-Wmissing-prototypes]
-      89 | bpf_testmod_test_write(struct file *file, struct kobject *kobj,
-         | ^~~~~~~~~~~~~~~~~~~~~~
---
->> make[5]: *** No rule to make target 'scripts/module.lds', needed by 'tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.ko'.
-   make[5]: Target '__modfinal' not remade because of errors.
+Thanks,
+Janusz
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
