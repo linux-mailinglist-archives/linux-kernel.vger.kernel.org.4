@@ -2,83 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2A53725CF2
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 13:20:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D057725CF7
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 13:21:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240351AbjFGLUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 07:20:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54860 "EHLO
+        id S239862AbjFGLVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 07:21:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240227AbjFGLUN (ORCPT
+        with ESMTP id S240066AbjFGLVu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 07:20:13 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15DD91988
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 04:20:08 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4f60a27c4a2so8373267e87.2
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 04:20:07 -0700 (PDT)
+        Wed, 7 Jun 2023 07:21:50 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E85B91BD
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 04:21:48 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id 98e67ed59e1d1-256712e2be3so6205889a91.2
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 04:21:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686136806; x=1688728806;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BTBg9MyG6jhsl+u10WSeM0LsmdB54Dp+FeeVDwf+P1E=;
-        b=GqGvhfCD5CfG/i9PdEtiYtDORlS2hSYj/XdMUA6gwOK8QYt2DOpbQVjlH403owaCe1
-         lt2U1vB/X6Q7w6wsrTq+cvIdnX26i/HZvKpE5YJoX+GTLQcdhI8JXBPwryb7qPQMyEMU
-         XipEAQqFjEkejFo7Nr4oTddfOWdKj0frkMfRavbwap9iA+85xQEXxQjlNigBkP5nr/dP
-         0ywDsqvbzc0MGbhC37pE6yc3JUO0S6eAkpMYkhavE0Vbsz54D8dNOaWTbMlKHV2dLEv/
-         CrZNM3bNoMVLKZSfpx85+uyuxt4osLX51Td9LTfFkLvgjisW/b36SNH7JkiB89JbhNDM
-         IdZQ==
+        d=linaro.org; s=google; t=1686136908; x=1688728908;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=sXtu7T4BuQTlc5G2QE10guaIjIMheRY/q8IpaabYJXE=;
+        b=mJcJOtf9cKn2YYWGd/imMh8cq1rB3fGhC5WYLbJRmA79Z2r356m97G9o9T0VhQ42Or
+         dGQ2nwHsJ4TRNWy3H7od5UQpyhwG096mKD468OFXY99pwzrF2BSE37k0C9MnHN5it1nm
+         ToW6hfUtdLfQadVYPGvDPW5Ivrc7sHhY8MGVJ2NUL5A4butCHKYWvRDgmSgTBmSQC1Mf
+         9CtXIVdDDwEWlNZ7VV6Vwl74N4JWJreGrfVIKIY9ZMvjwZXHX6fsVQ2zE47tv4WQ2lj3
+         GOH0dad4BC210GQnP0xEuBUv17WSwMbwPDiPFrgoi2LXCp/laF6+QoADHUZH63rHXcRe
+         p49w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686136806; x=1688728806;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1686136908; x=1688728908;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BTBg9MyG6jhsl+u10WSeM0LsmdB54Dp+FeeVDwf+P1E=;
-        b=Vahl1vDgImnTj7gDc0lvu/w1iYXot7F7IRoMJn72Fms2/iIFOcmJtLEtqXLPc4H0I0
-         mqM4Wgl30nocB88XmTdx7KYuGMIYi/j/uai/sBgThA8A03bjBR45LeOZ1xYlhVKkZkGC
-         j+HAWlwgj5AEdwGuWF2uVVwL/VpLl6gMBT/BzWKSvOJgKTAV7UAMInV5yl9LNaT4i4CT
-         QfabhU1EO8BU56CUHPOQi33G6winHEYzkb6RSS+75c8fenzXxrbRsRluIYMY8JDYiQkC
-         s4Qt/Ywj6U8UiwvbYH4xctLSbuKTc4rc30XnUm+Dmz3F3YqfpUueL27iUiawYXm4wjfH
-         HeRw==
-X-Gm-Message-State: AC+VfDwrtMYJCEKEdh1w2vC5WEKO2QLqcUhCvfDRI0tD+FPWxflbbrLj
-        3yQkEVLwkdX5G7LX/EQChG22Nw==
-X-Google-Smtp-Source: ACHHUZ4dGJnb/Q4jQtanIF6np0lUFYJ9Kec/sjx85wUK5bWSOr8484OmnpVW6Ub4tegvaeUknGYZyQ==
-X-Received: by 2002:a2e:320c:0:b0:2b1:e966:b349 with SMTP id y12-20020a2e320c000000b002b1e966b349mr1944701ljy.31.1686136806130;
-        Wed, 07 Jun 2023 04:20:06 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id y19-20020a2e3213000000b002b1e6a78d3esm1096403ljy.82.2023.06.07.04.20.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 04:20:05 -0700 (PDT)
-Message-ID: <f007fbf0-b1a7-cb44-d662-c30bf114365e@linaro.org>
-Date:   Wed, 7 Jun 2023 14:20:04 +0300
+        bh=sXtu7T4BuQTlc5G2QE10guaIjIMheRY/q8IpaabYJXE=;
+        b=Dq2FI5gQy+qTX2cTurSRjeuQKKk1oSo7nGyWH9kVvtyuOvp8IOXHJH5ARWq0wnM/I4
+         lWtfgODXTKGwoi7EwZouOkoSR7TZO7GX1uUFjTD+5kGP3XAVxgHQYBRI8mqr7fqZIIWc
+         Iyfi9qbOnNur8OzOHpZlZ7Mr7tJy11hbU1X5F2YTnvpxATkDomuxCgZ/Me58yn58C+WI
+         4OAx8xW0qs3TG5awpBsSUOwYXOpRUCVn3AqD33Su+AEBbcDqPHJ3INQ2sLF9Qe373wr9
+         RW3FXlkBb8niVK3B5ElWhB6+XOo7TI85I4zk9ZuvKcUpOqaAN2xBUi+eRhSolyuK9Nnz
+         IjQQ==
+X-Gm-Message-State: AC+VfDwi3VEHzOMQxHWOGqrZ0Mg6ckzgo3jstRMqst1p9MCBM9sEndSd
+        iJhFrH7w8AiIBWN3A6eWM22z
+X-Google-Smtp-Source: ACHHUZ75KNTAVNCWXJU3GsKBzmblvZ/f6zZCceUwhTqXHVFfvpwuY3PBfdfhrO3xihSUnq5IJQZR0g==
+X-Received: by 2002:a17:90a:195b:b0:259:c015:9fa1 with SMTP id 27-20020a17090a195b00b00259c0159fa1mr1754510pjh.46.1686136908342;
+        Wed, 07 Jun 2023 04:21:48 -0700 (PDT)
+Received: from thinkpad ([59.92.97.244])
+        by smtp.gmail.com with ESMTPSA id 30-20020a17090a001e00b00250bf8495b3sm1217420pja.39.2023.06.07.04.21.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 04:21:47 -0700 (PDT)
+Date:   Wed, 7 Jun 2023 16:51:43 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Simon Horman <simon.horman@corigine.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, mhi@lists.linux.dev,
+        linux-arm-msm@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, loic.poulain@linaro.org
+Subject: Re: [PATCH 1/3] net: Add MHI Endpoint network driver
+Message-ID: <20230607112143.GE5025@thinkpad>
+References: <20230606123119.57499-1-manivannan.sadhasivam@linaro.org>
+ <20230606123119.57499-2-manivannan.sadhasivam@linaro.org>
+ <ZIA910jCjl+dxc/a@corigine.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 5/9] phy: qcom-m31: Introduce qcom,m31 USB phy
-Content-Language: en-GB
-To:     Varadarajan Narayanan <quic_varada@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, vkoul@kernel.org,
-        kishon@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        gregkh@linuxfoundation.org, catalin.marinas@arm.com,
-        will@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        p.zabel@pengutronix.de, arnd@arndb.de, geert+renesas@glider.be,
-        neil.armstrong@linaro.org, nfraprado@collabora.com,
-        broonie@kernel.org, rafal@milecki.pl, quic_srichara@quicinc.com,
-        quic_varada@quicinc.org, quic_wcheng@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-clk@vger.kernel.org
-References: <cover.1686126439.git.quic_varada@quicinc.com>
- <636308462efb579734de829fb6e9cbda81b982f7.1686126439.git.quic_varada@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <636308462efb579734de829fb6e9cbda81b982f7.1686126439.git.quic_varada@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZIA910jCjl+dxc/a@corigine.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -87,39 +77,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/06/2023 13:56, Varadarajan Narayanan wrote:
-> Introduce CONFIG_PHY_QCOM_M31_USB for including the M31 phy driver
+On Wed, Jun 07, 2023 at 10:20:39AM +0200, Simon Horman wrote:
+> On Tue, Jun 06, 2023 at 06:01:17PM +0530, Manivannan Sadhasivam wrote:
 > 
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-
-Is there any reason to keep Kconfig, Makefile and driver in different 
-commits?
-
-> ---
->   drivers/phy/qualcomm/Kconfig | 11 +++++++++++
->   1 file changed, 11 insertions(+)
+> ...
 > 
-> diff --git a/drivers/phy/qualcomm/Kconfig b/drivers/phy/qualcomm/Kconfig
-> index 67a45d9..8a363dd 100644
-> --- a/drivers/phy/qualcomm/Kconfig
-> +++ b/drivers/phy/qualcomm/Kconfig
-> @@ -188,3 +188,14 @@ config PHY_QCOM_IPQ806X_USB
->   	  This option enables support for the Synopsis PHYs present inside the
->   	  Qualcomm USB3.0 DWC3 controller on ipq806x SoC. This driver supports
->   	  both HS and SS PHY controllers.
-> +
-> +config PHY_QCOM_M31_USB
-> +	tristate "Qualcomm M31 HS PHY driver support"
-> +	depends on (USB || USB_GADGET) && ARCH_QCOM
-> +	select USB_PHY
-> +	help
-> +	  Enable this to support M31 HS PHY transceivers on Qualcomm chips
-> +	  with DWC3 USB core. It handles PHY initialization, clock
-> +	  management required after resetting the hardware and power
-> +	  management. This driver is required even for peripheral only or
-> +	  host only mode configurations.
+> > +static void mhi_ep_net_dev_process_queue_packets(struct work_struct *work)
+> > +{
+> > +	struct mhi_ep_net_dev *mhi_ep_netdev = container_of(work,
+> > +			struct mhi_ep_net_dev, xmit_work);
+> > +	struct mhi_ep_device *mdev = mhi_ep_netdev->mdev;
+> > +	struct sk_buff_head q;
+> > +	struct sk_buff *skb;
+> > +	int ret;
+> > +
+> > +	if (mhi_ep_queue_is_empty(mdev, DMA_FROM_DEVICE)) {
+> > +		netif_stop_queue(mhi_ep_netdev->ndev);
+> > +		return;
+> > +	}
+> > +
+> > +	__skb_queue_head_init(&q);
+> > +
+> > +	spin_lock_bh(&mhi_ep_netdev->tx_lock);
+> > +	skb_queue_splice_init(&mhi_ep_netdev->tx_buffers, &q);
+> > +	spin_unlock_bh(&mhi_ep_netdev->tx_lock);
+> > +
+> > +	while ((skb = __skb_dequeue(&q))) {
+> > +		ret = mhi_ep_queue_skb(mdev, skb);
+> > +		if (ret) {
+> 
+> Hi Manivannan,
+> 
+> I wonder if this should be kfree_skb(skb);
+> 
+
+Good catch! Will fix it.
+
+- Mani
+
+> > +			kfree(skb);
+> > +			goto exit_drop;
+> > +		}
+> 
+> ...
 
 -- 
-With best wishes
-Dmitry
-
+மணிவண்ணன் சதாசிவம்
