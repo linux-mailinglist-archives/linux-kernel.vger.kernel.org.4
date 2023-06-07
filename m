@@ -2,190 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3379E7270F6
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 23:54:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 219BE7270BC
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 23:52:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232582AbjFGVyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 17:54:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55322 "EHLO
+        id S232007AbjFGVwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 17:52:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232130AbjFGVxp (ORCPT
+        with ESMTP id S231975AbjFGVwJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 17:53:45 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF7A269A
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 14:53:30 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-652328c18d5so3865982b3a.1
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 14:53:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686174810; x=1688766810;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tXrYtUuCuWvkbV7L1gPu5v5c01AxUbntKP7msewlmBY=;
-        b=VPtavFwrSLAnsChx0O9sOQZYBq1ojrqZEAOSN9K2H5D+oyhkPzKm1AqgA4P47Pf5oh
-         O8BG7TF+uwHJXH1rO/mOL9Oga2y26MvCYhRwbSAF/7bdKs8d+B6F5pZXdFPrDqgi3EQP
-         EzWvrRr+x12vJ7tl4U0Canch7ihXb8a8DBjks=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686174810; x=1688766810;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tXrYtUuCuWvkbV7L1gPu5v5c01AxUbntKP7msewlmBY=;
-        b=RL/8/OZlG4ywOQP7a3zNGeriuguoboxAej8kz0kDSPI+oEBCD9zkOaYHnWEYNt76N4
-         Wy8b2IAKrdcvwyugBupVcT6I8VI/DCVpJWpc+Jlg1inQOx2hy56rEVkbJC0vCqOLJIYp
-         h7R9+xmu8LVpWMBPJh+Z80uCCuYhJZe5H4hBTk0pdEUoNxvuiQ6B2lrv2U2Qon/jNryn
-         kjnvYan9Hht5amQXeFjaaoQge5ZTPUSp5GfwrLGdQVzKK/IyaM2rMI/4WmE8xYMycg8X
-         +fhOt25ueU86L7yWB3sPB67STXS5spbxltkUJLd5qbgfg4eNGcneRPXNzrjnzO9X2fKN
-         wqig==
-X-Gm-Message-State: AC+VfDyy9mJt65t4/pFYVnAFODrVTL5VLmnZFZBf4iNrXcsxx6E8fxKR
-        QNzgs2MLSyv4Zk3WHvqopvyPpg==
-X-Google-Smtp-Source: ACHHUZ5bFX6isITbSdGTCwRLcU7Gw3ebiIVWNaaFurz8NR3mHaewyosZt0XNEE7p9+xHiFDr1q+2Qg==
-X-Received: by 2002:a05:6a20:9384:b0:111:92ef:314e with SMTP id x4-20020a056a20938400b0011192ef314emr2361644pzh.35.1686174810186;
-        Wed, 07 Jun 2023 14:53:30 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:34b2:b638:6b53:f6c2])
-        by smtp.gmail.com with ESMTPSA id j25-20020aa78d19000000b0065dd1e7c2c1sm1376486pfe.63.2023.06.07.14.53.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 14:53:29 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     dri-devel@lists.freedesktop.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-input@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
-        linux-kernel@vger.kernel.org, hsinyi@google.com,
-        cros-qcom-dts-watchers@chromium.org, devicetree@vger.kernel.org,
-        yangcong5@huaqin.corp-partner.google.com,
-        linux-arm-msm@vger.kernel.org,
-        Chris Morgan <macroalpha82@gmail.com>,
-        Douglas Anderson <dianders@chromium.org>
-Subject: [PATCH v2 10/10] arm64: dts: qcom: sc7180: Link trogdor touchscreens to the panels
-Date:   Wed,  7 Jun 2023 14:49:32 -0700
-Message-ID: <20230607144931.v2.10.Ia06c340e3482563e6bfd3106ecd0d3139f173ca4@changeid>
-X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-In-Reply-To: <20230607215224.2067679-1-dianders@chromium.org>
-References: <20230607215224.2067679-1-dianders@chromium.org>
+        Wed, 7 Jun 2023 17:52:09 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD141FFE
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 14:52:04 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1686174722;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0/D9r9Rsx5h2WLwSswODEIs7Q/AeCFP+mmWk4qws3RY=;
+        b=MNpVAEBkBygHg8Nu5K1Oe3/3ieh5/cUm/RVG1epO+qnPm7Odt9satWLarHBDTLKoudaqeH
+        k4YSShxUZk3+nDZT8i/X4fJD54L2c1iCNnqRLZlW8UPZ409UAsNDgQh3JqupI9zy4mSTBU
+        OlobqPDX8XAZSLKc0y1lRNO5nWuLeGcORhV9JCqVgLAQlv7bucmAeW7a2qnkXOqgl8vM23
+        BcOXDLbB3V+e+LvyN1Dfi0HHQVt8CYRHpfZg52g6ByKyMTtcj8Adiu9mJC/OOdZfLsBWIK
+        GGfZW0+BcyEj1+Qz57aY/fmN+nFqA1jtnNQziZzI/H8GzmfnRvLTyQRYgHbMyQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1686174722;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0/D9r9Rsx5h2WLwSswODEIs7Q/AeCFP+mmWk4qws3RY=;
+        b=9Zhy/OiZgYfcATlQ7eXNeuD0kBX6BJTYoKWAlcEkkB2Edhh3KwuA9XlbBq+MdNAk2eyJyl
+        avv2SNqIXOBaS+Cw==
+To:     Andrew Cooper <andrew.cooper3@citrix.com>,
+        Nikolay Borisov <nik.borisov@suse.com>, x86@kernel.org
+Cc:     linux-kernel@vger.kernel.org, mhocko@suse.com, jslaby@suse.cz
+Subject: Re: [PATCH 3/3] x86: Disable running 32bit processes if
+ ia32_disabled is passed
+In-Reply-To: <875d0ab7-4470-25e2-6c01-72e231aae515@citrix.com>
+References: <20230607072936.3766231-1-nik.borisov@suse.com>
+ <20230607072936.3766231-4-nik.borisov@suse.com> <87legvjxat.ffs@tglx>
+ <80f2045b-f276-e127-8e46-87fb6994fb41@suse.com> <87fs73juwa.ffs@tglx>
+ <ba15bccd-9580-c20e-ae9c-b8d60f49fa07@suse.com> <87a5xbjpk2.ffs@tglx>
+ <875d0ab7-4470-25e2-6c01-72e231aae515@citrix.com>
+Date:   Wed, 07 Jun 2023 23:52:01 +0200
+Message-ID: <874jnjj5z2.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Let's provide the proper link from the touchscreen to the panel on
-trogdor devices where the touchscreen support it. This allows the OS
-to power sequence the touchscreen more properly.
+On Wed, Jun 07 2023 at 18:25, Andrew Cooper wrote:
+> On 07/06/2023 3:49 pm, Thomas Gleixner wrote:
+>> Ergo fact is that clearing the present bit is a user space visible
+>> change, which can't be done nilly willy and burried into a patch
+>> which is about making CONFIG_IA32_EMULATION a boot time switch.
+>
+> Removing GDT_ENTRY_DEFAULT_USER32_CS is necessary but not sufficient to
+> block userspace getting into 32bit mode.
 
-For the most part, this is just expected to marginally improve power
-consumption while the screen is off. However, in at least one trogdor
-model (wormdingler) it's suspected that this will fix some behavorial
-corner cases when the panel power cycles (like for a modeset) without
-the touchscreen power cycling.
+Correct.
 
-NOTE: some trogdor variants use touchscreens that don't (yet) support
-linking the touchscreen and the panel. Those variants are left alone.
+> You also have to block Linux from taking any SYSRETL or SYSEXITL path
+> out of the kernel, as these will load fixed 32bit mode attributes into
+> %cs without reference to the GDT.
 
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
+That's non-trivial as there is no way to disable 32bit SYSCALL on AMD
+(Intel does not support 32bit syscall and you get #UD if CS.L != 1). So
+to be safe you'd need to make ignore_sysret() kill the process w/o
+returning to user space.
 
-(no changes since v1)
+Though arguably if GDT does not have USER32_CS and LDT is disabled (or
+the creation of code segments is blocked) then invoking SYSCALL from
+compat mode requires quite some advanced magic (assumed there are no CPU
+and kernel bugs), no?
 
- arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi        | 1 +
- arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi      | 1 +
- arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor.dtsi         | 1 +
- arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom.dtsi        | 1 +
- arch/arm64/boot/dts/qcom/sc7180-trogdor-quackingstick.dtsi | 1 +
- arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler.dtsi   | 1 +
- 6 files changed, 6 insertions(+)
+> And you need to prevent any userspace use of the LDT, which might be as
+> simple as just blocking SYS_modify_ldt, but it's been a while since I
+> last looked.
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi
-index 8b8ea8af165d..b4f328d3e1f6 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi
-@@ -104,6 +104,7 @@ ap_ts: touchscreen@5d {
- 		interrupt-parent = <&tlmm>;
- 		interrupts = <9 IRQ_TYPE_LEVEL_LOW>;
- 
-+		panel = <&panel>;
- 		reset-gpios = <&tlmm 8 GPIO_ACTIVE_LOW>;
- 
- 		vdd-supply = <&pp3300_ts>;
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi
-index b3ba23a88a0b..88aeb415bd5b 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi
-@@ -116,6 +116,7 @@ ap_ts: touchscreen@14 {
- 		interrupt-parent = <&tlmm>;
- 		interrupts = <9 IRQ_TYPE_LEVEL_LOW>;
- 
-+		panel = <&panel>;
- 		reset-gpios = <&tlmm 8 GPIO_ACTIVE_LOW>;
- 
- 		vdd-supply = <&pp3300_touch>;
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor.dtsi
-index 269007d73162..c65f18ea3e5c 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor.dtsi
-@@ -43,6 +43,7 @@ ap_ts: touchscreen@10 {
- 		interrupt-parent = <&tlmm>;
- 		interrupts = <9 IRQ_TYPE_LEVEL_LOW>;
- 
-+		panel = <&panel>;
- 		post-power-on-delay-ms = <20>;
- 		hid-descr-addr = <0x0001>;
- 
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom.dtsi
-index 6c5287bd27d6..d2aafd1ea672 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom.dtsi
-@@ -102,6 +102,7 @@ ap_ts: touchscreen@10 {
- 		interrupt-parent = <&tlmm>;
- 		interrupts = <9 IRQ_TYPE_LEVEL_LOW>;
- 
-+		panel = <&panel>;
- 		post-power-on-delay-ms = <20>;
- 		hid-descr-addr = <0x0001>;
- 
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-quackingstick.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-quackingstick.dtsi
-index 8e7b42f843d4..0785873d1345 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-quackingstick.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-quackingstick.dtsi
-@@ -99,6 +99,7 @@ ap_ts: touchscreen@10 {
- 		interrupt-parent = <&tlmm>;
- 		interrupts = <9 IRQ_TYPE_LEVEL_LOW>;
- 
-+		panel = <&panel>;
- 		post-power-on-delay-ms = <20>;
- 		hid-descr-addr = <0x0001>;
- 
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler.dtsi
-index 262d6691abd9..f70f5b42c845 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler.dtsi
-@@ -154,6 +154,7 @@ ap_ts: touchscreen@1 {
- 		interrupt-parent = <&tlmm>;
- 		interrupts = <9 IRQ_TYPE_EDGE_FALLING>;
- 
-+		panel = <&panel>;
- 		post-power-on-delay-ms = <70>;
- 		hid-descr-addr = <0x0001>;
- 
--- 
-2.41.0.162.gfafddb0af9-goog
+CONFIG_MODIFY_LDT_SYSCALL=n is the only in kernel option right now, but
+that could be made boottime disabled trivially. Extending LDT to reject
+the creation of code segments is not rocket science either.
+
+Though the real question is:
+
+       What is the benefit of such a change?
+
+So far I haven't seen any argument for that. Maybe there is none :)
+
+Thanks,
+
+        tglx
 
