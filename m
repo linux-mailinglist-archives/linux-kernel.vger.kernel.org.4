@@ -2,95 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 733DF7256D6
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 10:05:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91A957256D4
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 10:05:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239227AbjFGIF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 04:05:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50788 "EHLO
+        id S239208AbjFGIFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 04:05:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238750AbjFGIFM (ORCPT
+        with ESMTP id S238932AbjFGIFM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 7 Jun 2023 04:05:12 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A6761725
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82AB1172B
         for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 01:05:10 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f739ec88b2so27908095e9.1
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 01:05:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686125109; x=1688717109;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mLNlz/8+ewTofYujo4xBdn+VfsPe1NjsAkjdE+/T2lI=;
-        b=ltzXDn7Y0h3c5QJiFizvmY8s7eCJFPL7lapmgXhxaPz86txjaKlk06Ar94HqlIHAnc
-         oAVpv07pvcnizsmQdgR8T/px5cGvBO0GXCVMgC/duzw9YPcDb209ouzTrEN40JNkc8tA
-         x4p5T5lfvSzlat31m6XGSJuXwqpyfhzrGGCX82wv19Xl1rMe1bGsjhbezB8/SXhIsJ3t
-         WNCrn2Rsk973Ny1WtZWaIf3ywSW11Pgd2YVjVpvQOUAPbdhpAECoDJO54NmuJyfB1hPJ
-         lYgzNKHpAUGjCG1HYf6SPhTugYmj3pFpWS3g/XKFkAC/dXkPjPc+s33mtTOlvrNY3Bj3
-         1HsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686125109; x=1688717109;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mLNlz/8+ewTofYujo4xBdn+VfsPe1NjsAkjdE+/T2lI=;
-        b=iOxsS2/i5oYTJ578PhKE7Yz3WUcYDwUhDkcZ9257PnBp7MKjBysAxZrGD0lhycKgXm
-         ycwWaAeaLH8VI80NAMDz4qA8rwT2maR7i6LbtMrfHiDdGiAvp1YwMK3GnO3nXysLeTcy
-         WUWV0IMXPLqQpJ+kPXAYg2B54JMilY5h2tI5rLfxdYwXONLS0jYZZeOiH2pANkNaymAj
-         YX1f3dvzlz+Iad0+dBv2zE7NiE+GiizUsu8aiNDModh3tX3E3nOK5EHeAHiwwCXmBY3B
-         UzBNiGC2/VrYKkpcy5ytXyAy83+GFVFIg3Ffb5ZCQcIpL7OVZOhhPuV4MYE7YGd8rSjq
-         xtSw==
-X-Gm-Message-State: AC+VfDxjeAwTyMH6oLDtMKdJI04kXeUdoIxC65+aeEhvkNWGt7TquPTJ
-        dj/Fj6x1mjVSaALH0k8dGa5MVg==
-X-Google-Smtp-Source: ACHHUZ45/UYK6qnnIZbnI6LE7j6p8RIX7YbwyUI6sr2F3nvT0E969FUlC49PGEFOVua5HBvnfg3xXg==
-X-Received: by 2002:a7b:c7d4:0:b0:3f6:3497:aaaf with SMTP id z20-20020a7bc7d4000000b003f63497aaafmr3855885wmk.9.1686125108070;
-        Wed, 07 Jun 2023 01:05:08 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id h8-20020adfe988000000b0030ae5a0516csm14706269wrm.17.2023.06.07.01.05.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 01:05:07 -0700 (PDT)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Wed, 07 Jun 2023 10:05:01 +0200
-Subject: [PATCH v2 2/8] soc: qcom: pmic_glink_altmode: handle safe mode
- when disconnect
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q6oAC-0007vh-Fs; Wed, 07 Jun 2023 10:05:04 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q6oAA-005hQ1-F7; Wed, 07 Jun 2023 10:05:02 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q6oA9-00Bwjr-Ls; Wed, 07 Jun 2023 10:05:01 +0200
+Date:   Wed, 7 Jun 2023 10:05:01 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Nikita Shubin <nikita.shubin@maquefel.me>,
+        Thierry Reding <thierry.reding@gmail.com>
+Cc:     Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Michael Peters <mpeters@embeddedTS.com>,
+        Kris Bahnsen <kris@embeddedTS.com>, linux-pwm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 37/43] pwm: ep93xx: drop legacy pinctrl
+Message-ID: <20230607080501.3y3t7tswfoyhqep2@pengutronix.de>
+References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
+ <20230601054549.10843-19-nikita.shubin@maquefel.me>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230601-topic-sm8550-upstream-type-c-v2-2-3bbdf37575c3@linaro.org>
-References: <20230601-topic-sm8550-upstream-type-c-v2-0-3bbdf37575c3@linaro.org>
-In-Reply-To: <20230601-topic-sm8550-upstream-type-c-v2-0-3bbdf37575c3@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1767;
- i=neil.armstrong@linaro.org; h=from:subject:message-id;
- bh=gcoujHHWT0tH34VUiSmqNPPpiXV+hYxjsfgjgght78I=;
- b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBkgDotqlKqtbACOW+S1lPuWrn5q9cLM+OJluGtXozw
- ct9ZtHeJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZIA6LQAKCRB33NvayMhJ0eivD/
- 94fU8O8NILIct6qWLn5P5817afdb7h7CWrM71JMZ2UnlCI2KPR7HYrrJKsOr1i4ly4vk5BhASJX/gG
- bbzgmujMYOBp9Pi9tG8tt5AB5Cxbcwgc6CmeidzM0hR58zxn99Wf7Uda2ir11giLkNmDVX8ErcHptT
- MU4Dim33+ZlpP1AiEgeZtVagsrFiwHPe5Nvr7W3NddVs8QG1Nvj0aTjrv2hhZcrwBu/JZd78lfRqgX
- EloPfIKBwsd/Gm7XDKOAxFEkM8scIzTBl7KYihYLYUQicK3jzI0RKl5w75SjuEoFQnNKmhhFCn9s78
- tmFRYFR1pGruo4lU8cInJRZSrWl7rSNIDOM8Qgu8ojjCBx8aMn+aJ/zQCtCA1ab33fu/VjZ51QJYMm
- IFV8jbzjlYOpqrnQS3fK7YsEKC7EPZukanWxyRo+/3ZClzp0mvPcR0pRTph72QFAm4/xk/lfjLtOrb
- hCvTp2HJS4GDXg3+g7zHwd+AUCRvhilaLpb8F3D9HkOyx1ETU+ome4LThHjtBdjFFg4TlucjJz+s1e
- M2z1NSMI2HFC6tQxGoUW71mwYBB2ubCTFCCBrItD2zKdW6AvfaCVK04787NmJIio9hnkcH/0o4CqeS
- t8rSX09YEm4IOFHHoAJ3CETt1ifKosDjM3EgChDnIbYEOl9AyEeuNJmu9Mcw==
-X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
- fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="kvq3zup3qbya4ukn"
+Content-Disposition: inline
+In-Reply-To: <20230601054549.10843-19-nikita.shubin@maquefel.me>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -99,53 +59,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On some Qcom SoCs, the Altmode event mode is set to 0xff when
-the Type-C port is disconnected.
 
-Handle this specific mode and translate it as the SAFE mode.
+--kvq3zup3qbya4ukn
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
- drivers/soc/qcom/pmic_glink_altmode.c | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+Hello,
 
-diff --git a/drivers/soc/qcom/pmic_glink_altmode.c b/drivers/soc/qcom/pmic_glink_altmode.c
-index df48fbea4b68..007d308e2f15 100644
---- a/drivers/soc/qcom/pmic_glink_altmode.c
-+++ b/drivers/soc/qcom/pmic_glink_altmode.c
-@@ -173,6 +173,20 @@ static void pmic_glink_altmode_enable_usb(struct pmic_glink_altmode *altmode,
- 		dev_err(altmode->dev, "failed to switch mux to USB\n");
- }
- 
-+static void pmic_glink_altmode_safe(struct pmic_glink_altmode *altmode,
-+				    struct pmic_glink_altmode_port *port)
-+{
-+	int ret;
-+
-+	port->state.alt = NULL;
-+	port->state.data = NULL;
-+	port->state.mode = TYPEC_STATE_SAFE;
-+
-+	ret = typec_mux_set(port->typec_mux, &port->state);
-+	if (ret)
-+		dev_err(altmode->dev, "failed to switch mux to safe mode\n");
-+}
-+
- static void pmic_glink_altmode_worker(struct work_struct *work)
- {
- 	struct pmic_glink_altmode_port *alt_port = work_to_altmode_port(work);
-@@ -180,7 +194,9 @@ static void pmic_glink_altmode_worker(struct work_struct *work)
- 
- 	typec_switch_set(alt_port->typec_switch, alt_port->orientation);
- 
--	if (alt_port->svid == USB_TYPEC_DP_SID)
-+	if (alt_port->svid == USB_TYPEC_DP_SID && alt_port->mode == 0xff)
-+		pmic_glink_altmode_safe(altmode, alt_port);
-+	else if (alt_port->svid == USB_TYPEC_DP_SID)
- 		pmic_glink_altmode_enable_dp(altmode, alt_port, alt_port->mode,
- 					     alt_port->hpd_state, alt_port->hpd_irq);
- 	else
+On Thu, Jun 01, 2023 at 08:45:42AM +0300, Nikita Shubin wrote:
+> Drop legacy gpio request/free since we are using
+> pinctrl for this now.
+>=20
+> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
+> Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
 
--- 
-2.34.1
+I'm not aware of other changes to drivers/pwm/pwm-ep93xx.c so for me
+it's fine to merge this via arm-soc. But note that Thierry's Ack
+for that would be good.
 
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--kvq3zup3qbya4ukn
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSAOiwACgkQj4D7WH0S
+/k50VQf/Z0Z146yb8ZnA/hfzt8wtm2qPxk1WClIqQzrapySHezELFowBUNZa42g6
+1/xrOydBkQC5cRqAcbx/C8TOB3wwpdakVv6KQeN0WoR8PR5DBL4s/P5bQzPb+tMU
+AFirsmM/HX9t8DiTLprU+TSukLOhdsfvUU23U/48QNKJUWcXaSePH0aApRv+UNJE
+MO6ZPW7NpIdq31fJ7k5fEfDUUhW4kM/9LweT3xBQUFCAh5mLUaXuLFoA7zSkuLpC
+W9+Rtv4ehZW6gvIpf1CeOl/3N+S9b/lRQ2rIn3kbJU0qeXnsJc3J4a6/bmtRA4Go
+II19T1hCwJbHhl3GBp0pEDVf982SXw==
+=8rvR
+-----END PGP SIGNATURE-----
+
+--kvq3zup3qbya4ukn--
