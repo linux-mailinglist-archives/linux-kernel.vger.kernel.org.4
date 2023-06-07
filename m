@@ -2,73 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB7DA7272B0
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 01:05:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D95BC7272B3
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 01:06:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233322AbjFGXFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 19:05:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60108 "EHLO
+        id S231818AbjFGXGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 19:06:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233626AbjFGXFG (ORCPT
+        with ESMTP id S229958AbjFGXGj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 19:05:06 -0400
-Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72F6B10DE;
-        Wed,  7 Jun 2023 16:05:05 -0700 (PDT)
-Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-77a1cad6532so131455139f.1;
-        Wed, 07 Jun 2023 16:05:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686179104; x=1688771104;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SKlzSAskxYQjFMQrq1GcFEOvXKAgtJCbeNAdADGIZQM=;
-        b=ko/v1TjFCs19BEP2w8YXPul+VsvJUfxoz9+NS7yFPGKG1F4jb/ASGJWKQ8Ig05aQ4g
-         2usqjpEvgj2EHnm6QzIVt5T7E45+/trqQC4jY07/yjHAkNJjSVrHDPkXul6pZdeJF20g
-         KH5GI5Hl4kWavKnEFi2/o55VX8m+5AP82jwWMrvIlbmKKsdZbGK3UbiwBlPOold0/bNP
-         EvP5NyWCQU8vzi4OBrNb9kL/SNbjeYPXisDJhQzGh17IrDDe5nSTZiYL3brT2vKiKGrf
-         1UWRWX9alrcDKx9sLqnGjEuF5xG21L4Lr0jHv40fuk5zOiSLyy+WCJQ5PnBwMluMOLGy
-         8BYA==
-X-Gm-Message-State: AC+VfDwEziqGsMOOiVsJ8wtqJubJG6rwk5Or/QJUseFmwAxYJbsz5GKm
-        5HklvpKEfboqrNQ2+4IS0g==
-X-Google-Smtp-Source: ACHHUZ6tk+oTIhwIPYYov3AbcNbbjKddfdX4uFboDrcRsYwo3fRyb/y/XYtMePP7i5wgf8PrNnjPbw==
-X-Received: by 2002:a05:6602:2001:b0:776:fd07:3c96 with SMTP id y1-20020a056602200100b00776fd073c96mr9432362iod.7.1686179104733;
-        Wed, 07 Jun 2023 16:05:04 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id d26-20020a5d9bda000000b00763699c3d02sm4150726ion.0.2023.06.07.16.05.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 16:05:04 -0700 (PDT)
-Received: (nullmailer pid 153358 invoked by uid 1000);
-        Wed, 07 Jun 2023 23:04:59 -0000
-Date:   Wed, 7 Jun 2023 17:04:59 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Leonard =?iso-8859-1?Q?G=F6hrs?= <l.goehrs@pengutronix.de>
-Cc:     Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Marek Vasut <marex@denx.de>,
-        kernel@pengutronix.de,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 5/8] dt-bindings: net: dsa: microchip: add missing
- spi-{cpha,cpol} properties
-Message-ID: <20230607230459.GA151104-robh@kernel.org>
-References: <20230607115508.2964574-1-l.goehrs@pengutronix.de>
- <20230607115508.2964574-5-l.goehrs@pengutronix.de>
+        Wed, 7 Jun 2023 19:06:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8553D11A;
+        Wed,  7 Jun 2023 16:06:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 24A4364AF3;
+        Wed,  7 Jun 2023 23:06:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81E92C433D2;
+        Wed,  7 Jun 2023 23:06:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686179197;
+        bh=0m/PD+a5Q4hNH8VOTTNxtiGJuWQbyimWt10i3W7S5XU=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=T0QxSCUfYJwG7bdctzIZxKussCT3Nx8Hn5ZRY7LgDxmgY/IaFmSLsrkjzPa396tAj
+         XgMP9fmoRW6QV/KyLvJ0SbZrPlTlTNSc2DUV5q4q1lBsP7iP+XfgSXhGpv+4mwhxXM
+         KuatpxcsTAo5b+mNkeATRLEG0B+bcYJCzZohvjmZLSYVNlU77elADoIsIOr8v7TVWa
+         WV3CFfv33Z3BHrq5Loh1Hw9pRmSkqdFIIU70rkCIr9OqCqhwdGJIn0NlxN9K2mBP++
+         gMzzL1kzXoJ2zwt242AdmuSpMwYbPHWZpquIWbTl4YDR4A8pr5TOlnjn2hdj47BvzF
+         azfceEGlNqH5A==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 1B332CE3A6C; Wed,  7 Jun 2023 16:06:37 -0700 (PDT)
+Date:   Wed, 7 Jun 2023 16:06:37 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Zhangjin Wu <falcon@tinylab.org>, thomas@t-8ch.de,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: nolibc patches, still possible for 6.5 ?
+Message-ID: <208b317e-8553-4d0d-b97c-a0e808fe98f2@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <ZHyPi29q3MKiNAQZ@1wt.eu>
+ <5494ac68-b4b9-434f-92c1-7e197c92a4ab@paulmck-laptop>
+ <ZH1V21rhUQlvRgnU@1wt.eu>
+ <ec85bd36-9b39-458c-9618-af500656ca7b@paulmck-laptop>
+ <ZID1LnvAj1lamHhv@1wt.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230607115508.2964574-5-l.goehrs@pengutronix.de>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <ZID1LnvAj1lamHhv@1wt.eu>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,27 +61,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 01:55:04PM +0200, Leonard Göhrs wrote:
-> This patch allows setting the correct SPI phase and polarity for KSZ
-> switches.
+On Wed, Jun 07, 2023 at 11:22:54PM +0200, Willy Tarreau wrote:
+> On Wed, Jun 07, 2023 at 02:03:17PM -0700, Paul E. McKenney wrote:
+> > > > (There were some kernel test
+> > > > robot complaints as well, valid or not I am not sure.)
+> > > 
+> > > You mean in relation with nolibc stuff (or nolibc-test) or something
+> > > totally different ?
+> > 
+> > Apologies, this was me being confused and failing to look closely.
+> > 
+> > The complaints were not about nolibc, but rather about my patches that
+> > they were on top of.  Not your problem!
 > 
-> Signed-off-by: Leonard Göhrs <l.goehrs@pengutronix.de>
-> ---
->  Documentation/devicetree/bindings/net/dsa/microchip,ksz.yaml | 3 +++
->  1 file changed, 3 insertions(+)
+> Ah no problem :-)
 > 
-> diff --git a/Documentation/devicetree/bindings/net/dsa/microchip,ksz.yaml b/Documentation/devicetree/bindings/net/dsa/microchip,ksz.yaml
-> index e51be1ac03623..f7c620d9ee8b4 100644
-> --- a/Documentation/devicetree/bindings/net/dsa/microchip,ksz.yaml
-> +++ b/Documentation/devicetree/bindings/net/dsa/microchip,ksz.yaml
-> @@ -49,6 +49,9 @@ properties:
->        Set if the output SYNCLKO clock should be disabled. Do not mix with
->        microchip,synclko-125.
->  
-> +  spi-cpha: true
-> +  spi-cpol: true
+> > And please let me know when the next batch from your tree are ready to go.
+> > (You might have been saying that they were in your recent emails, but
+> > I thought I should double-check.)
+> 
+> No pb, I just sent it while you were writing and our emails have crossed :-)
+> 
+> In short, it's ready now with branch 20230606-nolibc-rv32+stkp7a but if you
+> need any more info (more detailed summary, a public repost of the whole
+> series etc), just let me know. And I faced 2 kernel build errors on s390x
+> and riscv about rcu_task something, though you might be interested :-/
 
-These should only be needed if the mode is configurable or variable. 
-Otherwise, the driver for the device should set the mode correctly.
+And I pulled them in and got this from "make run":
 
-Rob
+138 test(s) passed, 0 skipped, 0 failed.[    2.416045] reboot: Power down
+
+And this from "make run-user":
+
+136 test(s) passed, 2 skipped, 0 failed. See all results in /home/git/linux-rcu/tools/testing/selftests/nolibc/run.out
+
+And run.out looks as it has before, so all looks good at this end.
+
+Thus, unless you tell me otherwise, I will move these to my nolibc branch
+for the upcoming merge window.
+
+							Thanx, Paul
