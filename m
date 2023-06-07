@@ -2,108 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5505725E6C
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 14:15:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C863A725E77
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 14:16:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240572AbjFGMPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 08:15:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59000 "EHLO
+        id S240426AbjFGMQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 08:16:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240422AbjFGMPu (ORCPT
+        with ESMTP id S240043AbjFGMQb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 08:15:50 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C6D41BE3;
-        Wed,  7 Jun 2023 05:15:42 -0700 (PDT)
-Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 357Beb2f003316;
-        Wed, 7 Jun 2023 12:15:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=yJHvY3hCL79Iyv50TKe4uoJTIQAFMGCCmuzDrs2jJ4w=;
- b=pz+RVeZfod5JDMUOrSXDX8GbUpOvKHO0GjyyMNwfS47E46aJBUbCBw/nQf8lgPkfFfms
- y+9AIWjPe94aJ9Ns50JvUES9niDZeuuAigB0Fz85LrgBcdC8ylB7ZTJMowbOAKfVbQUK
- /QPf9HnrCjG4lj7yhwkmrMErO+CfIuvi828i5OGqemo1vExuOUAgy6VVMvIZ+X/brrK1
- 4bzWyuS7mBvuBcc/SY84p06juob44pGEhTEFpCPMtr6S4jzg32vjzz5K5eliBkZanelc
- DydRa2OUTxsu+cem9DOjHGZPQhhdqe0mtAw3Ry/Y0CfvUoYjET9kb2Lwnkuxw0+Xp3oL VA== 
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r2ry417qm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 07 Jun 2023 12:15:41 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3574SvrQ002721;
-        Wed, 7 Jun 2023 12:15:39 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-        by ppma05fra.de.ibm.com (PPS) with ESMTPS id 3r2a780amf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 07 Jun 2023 12:15:39 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 357CFabi33948196
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 7 Jun 2023 12:15:36 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0A5102004B;
-        Wed,  7 Jun 2023 12:15:36 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6BFCB20040;
-        Wed,  7 Jun 2023 12:15:35 +0000 (GMT)
-Received: from [9.179.8.138] (unknown [9.179.8.138])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Wed,  7 Jun 2023 12:15:35 +0000 (GMT)
-Message-ID: <923a1168-823b-6771-effc-e0d4d85751e8@linux.ibm.com>
-Date:   Wed, 7 Jun 2023 14:15:35 +0200
+        Wed, 7 Jun 2023 08:16:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B72531FD8;
+        Wed,  7 Jun 2023 05:16:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3CCA163E61;
+        Wed,  7 Jun 2023 12:16:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96B98C433D2;
+        Wed,  7 Jun 2023 12:16:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686140174;
+        bh=HlNz6Ado0d6eQj5JSweTVMGGnPL01vC2DAZcoI7FHFI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DEIITjoGO3GkItGqBWXi+9iVYCuWUzGrd4MGMROGP2tHYbHZGHCSNDYh3F7Ur5iOr
+         arxxLbdZK8FSXny3cFjY4tAuQcRzQ0kLuOVYOaEs5r/QA7KExTtdncgHrK8Vr1EFNv
+         X15TgSZWo7QAXQbzfJe4Hk8fGM/C4clgNTAFswMcURbqYXpupEG1cRYCIS1SfseOkn
+         f92TBG5umrejEA3df+L6E4ADb3a+PEfVauW1bpZnGsDaaPhzCF8NKDW3Ddky9EUDKN
+         /GxBUdefrvvI/c80fzza8se405I51Cjo27cCjqQUY+v0aU6jZ6wm+us7Ol/sB4gddV
+         2C+AvRBC+FLtg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1q6s5c-0001DA-JW; Wed, 07 Jun 2023 14:16:37 +0200
+Date:   Wed, 7 Jun 2023 14:16:36 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, quic_pkondeti@quicinc.com,
+        quic_ppratap@quicinc.com, quic_wcheng@quicinc.com,
+        quic_jackp@quicinc.com, quic_harshq@quicinc.com,
+        ahalaney@redhat.com
+Subject: Re: [PATCH v8 6/9] usb: dwc3: qcom: Add multiport controller support
+ for qcom wrapper
+Message-ID: <ZIB1JEmLCw41v_4e@hovoldconsulting.com>
+References: <20230514054917.21318-1-quic_kriskura@quicinc.com>
+ <20230514054917.21318-7-quic_kriskura@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v4 2/6] s390/uvdevice: Add 'Add Secret' UVC
-To:     Steffen Eiden <seiden@linux.ibm.com>, kvm@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Viktor Mihajlovski <mihajlov@linux.ibm.com>
-Cc:     Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Nico Boehr <nrb@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Hendrik Brueckner <brueckner@linux.ibm.com>
-References: <20230606180817.3019077-1-seiden@linux.ibm.com>
- <20230606180817.3019077-3-seiden@linux.ibm.com>
-Content-Language: en-US
-From:   Janosch Frank <frankja@linux.ibm.com>
-In-Reply-To: <20230606180817.3019077-3-seiden@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: idXSKCJhw5X1QwywlV-B3pg07yjZWdvg
-X-Proofpoint-GUID: idXSKCJhw5X1QwywlV-B3pg07yjZWdvg
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-07_06,2023-06-07_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
- mlxscore=0 clxscore=1015 impostorscore=0 spamscore=0 adultscore=0
- mlxlogscore=798 suspectscore=0 lowpriorityscore=0 bulkscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306070100
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230514054917.21318-7-quic_kriskura@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/6/23 20:08, Steffen Eiden wrote:
-> Userspace can call the Add Secret Ultravisor Call using IOCTLs on the
-> uvdevice. The Add Secret UV call sends an encrypted and
-> cryptographically verified request to the Ultravisor. The request
-> inserts a protected guest's secret into the Ultravisor for later use.
+On Sun, May 14, 2023 at 11:19:14AM +0530, Krishna Kurapati wrote:
+> QCOM SoC SA8295P's tertiary quad port controller supports 2 HS+SS
+> ports and 2 HS only ports. Add support for configuring PWR_EVENT_IRQ's
+> for all the ports during suspend/resume.
 > 
-> The uvdevice is merely transporting the request from userspace to the
-> Ultravisor. It's neither checking nor manipulating the request data.
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> ---
+>  drivers/usb/dwc3/dwc3-qcom.c | 28 ++++++++++++++++++++++------
+>  1 file changed, 22 insertions(+), 6 deletions(-)
 > 
-> Signed-off-by: Steffen Eiden <seiden@linux.ibm.com>
+> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> index 959fc925ca7c..7a9bce66295d 100644
+> --- a/drivers/usb/dwc3/dwc3-qcom.c
+> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> @@ -37,7 +37,10 @@
+>  #define PIPE3_PHYSTATUS_SW			BIT(3)
+>  #define PIPE_UTMI_CLK_DIS			BIT(8)
+>  
+> -#define PWR_EVNT_IRQ_STAT_REG			0x58
+> +#define PWR_EVNT_IRQ1_STAT_REG			0x58
+> +#define PWR_EVNT_IRQ2_STAT_REG			0x1dc
+> +#define PWR_EVNT_IRQ3_STAT_REG			0x228
+> +#define PWR_EVNT_IRQ4_STAT_REG			0x238
+>  #define PWR_EVNT_LPM_IN_L2_MASK			BIT(4)
+>  #define PWR_EVNT_LPM_OUT_L2_MASK		BIT(5)
+>  
+> @@ -93,6 +96,13 @@ struct dwc3_qcom {
+>  	struct icc_path		*icc_path_apps;
+>  };
+>  
+> +static u32 pwr_evnt_irq_stat_reg_offset[4] = {
+> +			PWR_EVNT_IRQ1_STAT_REG,
+> +			PWR_EVNT_IRQ2_STAT_REG,
+> +			PWR_EVNT_IRQ3_STAT_REG,
+> +			PWR_EVNT_IRQ4_STAT_REG,
+> +};
 
-Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
+Indentation is off, as I believe Bjorn pointed out.
 
+>  static inline void dwc3_qcom_setbits(void __iomem *base, u32 offset, u32 val)
+>  {
+>  	u32 reg;
+> @@ -413,13 +423,16 @@ static int dwc3_qcom_suspend(struct dwc3_qcom *qcom, bool wakeup)
+>  {
+>  	u32 val;
+>  	int i, ret;
+> +	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
+>  
+>  	if (qcom->is_suspended)
+>  		return 0;
+>  
+> -	val = readl(qcom->qscratch_base + PWR_EVNT_IRQ_STAT_REG);
+> -	if (!(val & PWR_EVNT_LPM_IN_L2_MASK))
+> -		dev_err(qcom->dev, "HS-PHY not in L2\n");
+> +	for (i = 0; i < dwc->num_usb2_ports; i++) {
+> +		val = readl(qcom->qscratch_base + pwr_evnt_irq_stat_reg_offset[i]);
+> +		if (!(val & PWR_EVNT_LPM_IN_L2_MASK))
+> +			dev_err(qcom->dev, "HS-PHY%d not in L2\n", i);
+> +	}
 
+You need check for NULL dwc as we just discussed and skip the above
+check if core has not probed yet.
+
+When testing this on the X13s I get:
+
+	dwc3-qcom a4f8800.usb: HS-PHY2 not in L2
+
+for the third port, whose status registers always seems to return zero
+(e.g. as if we're checking the wrong register?):
+
+dwc3-qcom a4f8800.usb: dwc3_qcom_suspend - phy 0, pwr_event_stat = 38103c
+dwc3-qcom a4f8800.usb: dwc3_qcom_suspend - phy 1, pwr_event_stat = 38103c
+dwc3-qcom a4f8800.usb: dwc3_qcom_suspend - phy 2, pwr_event_stat = 00
+dwc3-qcom a4f8800.usb: dwc3_qcom_suspend - phy 3, pwr_event_stat = 140030
+
+I verified that everything appears to work as expected on sa8295p-adp.
+
+Do you have any idea of what may be causing this?
+
+Johan
