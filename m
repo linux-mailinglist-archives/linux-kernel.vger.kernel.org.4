@@ -2,95 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 802507254E3
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 08:56:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CF2E7254E6
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 08:57:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234970AbjFGG4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 02:56:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40216 "EHLO
+        id S234924AbjFGG5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 02:57:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237478AbjFGG4T (ORCPT
+        with ESMTP id S238437AbjFGG5C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 02:56:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7D5C1BC3;
-        Tue,  6 Jun 2023 23:56:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7176D63B19;
-        Wed,  7 Jun 2023 06:56:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A50E0C433EF;
-        Wed,  7 Jun 2023 06:56:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686120967;
-        bh=kxTWU5cvbYPXD97OfkZe5ZmWUKr+C21Zw9jRkJYbsMY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BDEk6rrM+92tjnJUIo7PJ6PVQsXMHm1goz4upfVYo17T9b4OBgbYwWBKZ8MpADWpS
-         k34PbyoX2LXa5/BTSYCNa6XjLggLCYt9BFWVwkyXIr9DoEBug2nz7vGKcGgA3TII9w
-         D64O22jrrQGHK02YQphKJdoMXRS9fvr7fkheX4XtQG+P1gortbckgLeUyVSg34AcGe
-         V17l7nwTuMnhS6/GHMnKDb5oSHFQlHuNrGyJEvWkkFJZ2Q4KcWg491YMpxtykiXsGM
-         AcM5AktF0GA+mm1dL12KMYjfkgnSA5WMSqsCIdJTiKd+rrRAQ8yfgvzPKUsw47vYyR
-         +M58T5kpKH1Iw==
-Received: by pali.im (Postfix)
-        id A1989759; Wed,  7 Jun 2023 08:56:04 +0200 (CEST)
-Date:   Wed, 7 Jun 2023 08:56:04 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Matthew Garrett <mjg59@srcf.ucam.org>
-Cc:     AceLan Kao <acelan.kao@canonical.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Subject: Re: [PATCH] platform/x86: dell-laptop: Add drm module soft dependency
-Message-ID: <20230607065604.yaivqbbd3dkawxo4@pali>
-References: <20230607034331.576623-1-acelan.kao@canonical.com>
- <20230607042032.GA28835@srcf.ucam.org>
- <CAFv23QmDNUFcPwvSQt5aUxtmHasfr8wrF72ObvcO-X19gfn=LA@mail.gmail.com>
- <20230607052724.GA29834@srcf.ucam.org>
- <CAFv23QkEdGnEz1q7vbyFCa9S9Dqh-zec72nRGyZ3wAz-8wpbvA@mail.gmail.com>
- <20230607062341.GA30618@srcf.ucam.org>
+        Wed, 7 Jun 2023 02:57:02 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99BF4198B
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 23:56:58 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-64d24136685so221316b3a.1
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 23:56:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686121018; x=1688713018;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=BbZJHWFvG7e+6T+OE9cOP6p9FlABT7Ry2hM+Lk72cDc=;
+        b=AtcviKsaV0B4EF556reyoOW2LCZy7pRGbV+sJGDClAn2lPnwzATJsG5mpYhK8i8dNL
+         rseOQqvTvv4WaQ9N7c9S6/LsTJ0+q2eb0aJHEySbPdL/HoZRGpPjWszxwMTEu6IJGgYg
+         TbOrqzyeV99mw3VRkFrzlFP6Eh+bBw6cl00E0SMgqC2DAr13upNgOdCA2v6PYTuhdV8w
+         HS6yTwT1m9EBKM9aByNiND/7HvIDN/HsEXcXcfwY88XdpTj1g29XlNCAgEpiRcPdFjmA
+         DqRjQyzx3zQYZAyMm4kwEDgTdRGRhiljnDQVggkouQHgqkl/3zedF6ZIraXp78C21WsV
+         +3zw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686121018; x=1688713018;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BbZJHWFvG7e+6T+OE9cOP6p9FlABT7Ry2hM+Lk72cDc=;
+        b=E+xjFbzBYv1EUve/a0PROL+r1GqN/isGFR5cShVaEKmOy7moT3PSUTjyvm1OyAU7/x
+         ArgWgmwOlRCZF/cB4aY3/eXo5hUPjZw1XQYf17lkurfviRZ/zdmHyR81TiI7xOXbYdBK
+         G1a2XRyuLVTn33627qwpaaRhhNKhsiiZw7CR+YXpzTplk7Dn4WWOQv0Fu42hMQ3qzyW+
+         1EaoGHOTV5XYm9YLqA20GRtVjZbqb+f2KlRE83olvAt0IwvbNax9V16CuAqXdtkeCaqz
+         fzzkQd5kMQs0g1CQQKz63IdhnKY9RBVqUu2duVjdIXI8TkY+qBB2mgkLKi+3l8vMpK6M
+         rkeg==
+X-Gm-Message-State: AC+VfDx+R8d1IW33901BmTMqNoDmBnakV5m96Yfuo5NgipedStzqEZY0
+        rqTqoIM8EwdwBaUHth3f03I2
+X-Google-Smtp-Source: ACHHUZ6cWKiLSdxkl6dJrjEECAzxAPc6F+Sm5bcROs9nSVpcodcj9uJ9abskwUWFmI9Do8QHxlEdSg==
+X-Received: by 2002:a05:6a00:2e0e:b0:646:6e40:b421 with SMTP id fc14-20020a056a002e0e00b006466e40b421mr5004834pfb.1.1686121018003;
+        Tue, 06 Jun 2023 23:56:58 -0700 (PDT)
+Received: from thinkpad ([59.92.97.244])
+        by smtp.gmail.com with ESMTPSA id t17-20020a62ea11000000b0065c8c5b3a7dsm3962043pfh.13.2023.06.06.23.56.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Jun 2023 23:56:57 -0700 (PDT)
+Date:   Wed, 7 Jun 2023 12:26:52 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, mhi@lists.linux.dev,
+        linux-arm-msm@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, loic.poulain@linaro.org
+Subject: Re: [PATCH 0/3] Add MHI Endpoint network driver
+Message-ID: <20230607065652.GA5025@thinkpad>
+References: <20230606123119.57499-1-manivannan.sadhasivam@linaro.org>
+ <c769c95d-e8cb-4cf6-a41a-9bef5a786bb1@lunn.ch>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230607062341.GA30618@srcf.ucam.org>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <c769c95d-e8cb-4cf6-a41a-9bef5a786bb1@lunn.ch>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wednesday 07 June 2023 07:23:41 Matthew Garrett wrote:
-> On Wed, Jun 07, 2023 at 02:13:31PM +0800, AceLan Kao wrote:
-> > Matthew Garrett <mjg59@srcf.ucam.org> 於 2023年6月7日 週三 下午1:27寫道：
-> > >
-> > > On Wed, Jun 07, 2023 at 01:19:40PM +0800, AceLan Kao wrote:
-> > > > Gfx drivers(i915/amdgpu/nvidia) depend on the drm driver, so delaying
-> > > > the loading of dell_laptop after drm can ease the issue the most.
-> > > > Right, it's still possible to encounter the issue, unfortunately, we
-> > > > do not have a better solution for it at the moment.
-> > >
-> > > We could unregister inappropriate backlight drivers when a more
-> > > appropriate one is loaded, or the policy decision around which driver to
-> > > use could be made in userland?
-> > It's hard to decide which backlight driver is redundant, and it's kind of ugly
-> > to unregister the backlight driver which is registered by other driver and maybe
-> > problematic.
+On Tue, Jun 06, 2023 at 02:59:00PM +0200, Andrew Lunn wrote:
+> On Tue, Jun 06, 2023 at 06:01:16PM +0530, Manivannan Sadhasivam wrote:
+> > Hi,
+> > 
+> > This series adds a network driver for the Modem Host Interface (MHI) endpoint
+> > devices that provides network interfaces to the PCIe based Qualcomm endpoint
+> > devices supporting MHI bus (like Modems). This driver allows the MHI endpoint
+> > devices to establish IP communication with the host machines (x86, ARM64) over
+> > MHI bus.
+> > 
+> > On the host side, the existing mhi_net driver provides the network connectivity
+> > to the host.
+> > 
+> > - Mani
+> > 
+> > Manivannan Sadhasivam (3):
+> >   net: Add MHI Endpoint network driver
+> >   MAINTAINERS: Add entry for MHI networking drivers under MHI bus
+> >   net: mhi: Increase the default MTU from 16K to 32K
+> > 
+> >  MAINTAINERS              |   1 +
+> >  drivers/net/Kconfig      |   9 ++
+> >  drivers/net/Makefile     |   1 +
+> >  drivers/net/mhi_ep_net.c | 331 +++++++++++++++++++++++++++++++++++++++
+> >  drivers/net/mhi_net.c    |   2 +-
 > 
-> But you're relying on registering the working backlight first, which is 
-> an inherently racy thing? We shouldn't be relying on order of 
-> initialisation to make this work, either we should only export a working 
-> interface or we should expose enough information for whatever is using 
-> the interfaces to make an appropriate policy decision itself.
+> Should we add a drivers/net/modem directory? Maybe modem is too
+> generic, we want something which represents GSM, LTE, UMTS, 3G, 4G,
+> 5G, ... XG etc.
+> 
 
-IIRC, drm drivers unregister redundant fbcon drivers (vesafb), so cannot
-drm drivers use similar strategy also for backlight drivers and
-unregister the redundant? If every backlight driver would have some
-"flag" which say if it should be unregistered by drm then maybe it could
-work? Or are there some other pitfalls?
+The generic modem hierarchy sounds good to me because most of the times a
+single driver handles multiple technologies. The existing drivers supporting
+modems are already under different hierarchy like usb, wwan etc... So unifying
+them makes sense. But someone from networking community should take a call.
+
+- Mani
+
+>     Andrew
+
+-- 
+மணிவண்ணன் சதாசிவம்
