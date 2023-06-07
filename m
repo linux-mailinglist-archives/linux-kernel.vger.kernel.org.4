@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F397F7268E3
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 20:35:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BD937268E4
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 20:35:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232775AbjFGSf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 14:35:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50416 "EHLO
+        id S232906AbjFGSfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 14:35:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232659AbjFGSfY (ORCPT
+        with ESMTP id S232646AbjFGSf0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 14:35:24 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB2931FE2
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 11:35:18 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1b011cffe7fso35861465ad.1
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 11:35:18 -0700 (PDT)
+        Wed, 7 Jun 2023 14:35:26 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C52C1FF0
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 11:35:20 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1b00ecabdf2so71286045ad.2
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 11:35:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1686162918; x=1688754918;
-        h=mime-version:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Y12/KdUTXZPtVz1erwmHseWZVgCpa+t1llOc70/u30c=;
-        b=h/+/lggmMOVwrQvCWiHVKRwHUEUXPzonAx7+0w0iGo95Je0lyjB6LdnKGVFXb8aI4z
-         3wxZEsDAHx1sN+j0t/KIXUYA/9bExPQBxkAiDZvFJO/DvVehadvV1Cdo0nBWBKnBr5Y3
-         HkhM5uZNiN/thGAHB2xMBAtWUo5DhL3yum0go=
+        d=broadcom.com; s=google; t=1686162920; x=1688754920;
+        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LuCV3zRuP5lSuwMqB79xRHC2efPZkLuj33r30ZYj5pE=;
+        b=JIqWcO/Z8Tex+hA53tEtR8GSa3td8+ugMwb04wgGkm9QKomEzGbi9Nh9ViHRaS/YuW
+         lsqdqrEZRVxhf0ml2/YhHBS2jklt++0NNCjXJRkbQwcxr3EI23hbUO/uxn8uNcBLsdHa
+         ntNeSt1Fz1/nyMVXtGuPxjTK1lE1HIrSy+JgY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686162918; x=1688754918;
-        h=mime-version:message-id:date:subject:cc:to:from:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Y12/KdUTXZPtVz1erwmHseWZVgCpa+t1llOc70/u30c=;
-        b=TXTzRMWX+kQZFtlOa1R2Tu6hUrIalUoxR1N/gnYjMkGfjEWIBoJ1CTbtKTGwe4Az+4
-         vZ3/cFdKVKxspLQotsbQIeK9sOL2a1ytwemJKG/Te5buSAWkNtMmjOC8IncE09W5HARQ
-         Bp4yIHL1hXx0qZqQeZ4z78Pev3ID6gXn0yXZ5zLiGpGgLk9l44w0YIIJI25ZNbYRrXcJ
-         GSe8hR+19CPA1L+hXOA4ppQhm0zFJR0a17S8+7Jd2Ejzoy4S9Z8WOM68No1LdPidMKOQ
-         F4SuJhwxoJG62VTBHtOoAh90/Gdv4PY+nRE9JVwzjIv0JTXZnLt0P/AgymNi/NIJUm90
-         LJAw==
-X-Gm-Message-State: AC+VfDw4kIcGqDY4WQWieYUaAgebOOO47qPKpGwuGrfXJzsxjD0u7bdL
-        EacwmcEJzrfwe2UjwVbPTGJsfw==
-X-Google-Smtp-Source: ACHHUZ4IbXX6Qb3xDk0Enwfo+gW3JVb08X3q3ZerslSQlFRNt40nRYOr1YKshbADwbCyI9QY/ghmQQ==
-X-Received: by 2002:a17:903:2781:b0:1af:b97c:2353 with SMTP id jw1-20020a170903278100b001afb97c2353mr2424607plb.15.1686162918401;
-        Wed, 07 Jun 2023 11:35:18 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686162920; x=1688754920;
+        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LuCV3zRuP5lSuwMqB79xRHC2efPZkLuj33r30ZYj5pE=;
+        b=ITBpDYurwoai4U/4IVc1/yO/Z5QgI+3pyg8aE0aGzsZMXPbW4s5mo9I71j9Lj8jIpq
+         xKymmaLsvm/kOXNvOzphUr81JUI1PhhN5kB2oRHvq6Wkd94nkhMmbND6b+lhrYgW8MSC
+         /mf/e3r3+E2akKCEsUlMUctYQrhIS1urJSbX5h8l6U7PRipZ2vDJcq4B/cDuBtpagDdj
+         9R+ZFMg8j7xNOPfTDQD1z/3FdbUGb7mnEBBki9/q0G9eiD+Vglwm29tIeHkwl3GegbJh
+         GWhFo8ZIu+N4G0Xro38h4gNI2nnrTkS0OXYsRhwrzGQ1CIZmn6lozNXoicKou9/S58O5
+         fOQg==
+X-Gm-Message-State: AC+VfDw3MxFYfpZ+E+kqnaBwN8TiYJiDaGaca8nLrUpCXrpO4ruhKLns
+        Y7EJiQGqcSLKuD49aR9tahlFIA==
+X-Google-Smtp-Source: ACHHUZ4QE6eIoIvy0EpNGIEH38hTHzaiIHXx5LXq/Y70Do4Pc/zfgwH1S1QF+x5O3u1kSBAlWZQGqw==
+X-Received: by 2002:a17:902:e5c9:b0:1b0:637e:e25a with SMTP id u9-20020a170902e5c900b001b0637ee25amr7089787plf.67.1686162919834;
+        Wed, 07 Jun 2023 11:35:19 -0700 (PDT)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id je12-20020a170903264c00b001addf547a6esm10746876plb.17.2023.06.07.11.35.17
+        by smtp.gmail.com with ESMTPSA id je12-20020a170903264c00b001addf547a6esm10746876plb.17.2023.06.07.11.35.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 11:35:17 -0700 (PDT)
+        Wed, 07 Jun 2023 11:35:19 -0700 (PDT)
 From:   Florian Fainelli <florian.fainelli@broadcom.com>
 To:     netdev@vger.kernel.org
 Cc:     Florian Fainelli <florian.fainelli@broadcom.com>,
@@ -58,44 +58,84 @@ Cc:     Florian Fainelli <florian.fainelli@broadcom.com>,
         Heiner Kallweit <hkallweit1@gmail.com>,
         Russell King <linux@armlinux.org.uk>,
         linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 0/2] LED brightness support for Broadcom PHYs
-Date:   Wed,  7 Jun 2023 11:34:51 -0700
-Message-Id: <20230607183453.2587726-1-florian.fainelli@broadcom.com>
+Subject: [PATCH 1/2] net: phy: broadcom: Rename LED registers
+Date:   Wed,  7 Jun 2023 11:34:52 -0700
+Message-Id: <20230607183453.2587726-2-florian.fainelli@broadcom.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230607183453.2587726-1-florian.fainelli@broadcom.com>
+References: <20230607183453.2587726-1-florian.fainelli@broadcom.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000cda8a605fd8e656c"
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIME_NO_TEXT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+        boundary="000000000000e4203605fd8e65a5"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000cda8a605fd8e656c
+--000000000000e4203605fd8e65a5
 Content-Transfer-Encoding: 8bit
 
-This patch series adds support for controlling the LED brightness on
-Broadcom PHYs.
+These registers are common to most PHYs and are not specific to the
+BCM5482, renamed the constants accordingly, no functional change.
 
-Florian Fainelli (2):
-  net: phy: broadcom: Rename LED registers
-  net: phy: broadcom: Add support for setting LED brightness
+Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
+---
+ drivers/net/phy/broadcom.c | 10 +++++-----
+ include/linux/brcmphy.h    |  6 +++---
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
- drivers/net/phy/bcm-phy-lib.c | 27 +++++++++++++++++++++++++++
- drivers/net/phy/bcm-phy-lib.h |  3 +++
- drivers/net/phy/broadcom.c    | 25 ++++++++++++++++++++-----
- include/linux/brcmphy.h       |  9 ++++++---
- 4 files changed, 56 insertions(+), 8 deletions(-)
-
+diff --git a/drivers/net/phy/broadcom.c b/drivers/net/phy/broadcom.c
+index 822c8b01dc53..57a865aa1fe5 100644
+--- a/drivers/net/phy/broadcom.c
++++ b/drivers/net/phy/broadcom.c
+@@ -414,13 +414,13 @@ static int bcm54xx_config_init(struct phy_device *phydev)
+ 	 * these settings will cause LOS to malfunction.
+ 	 */
+ 	if (!phy_on_sfp(phydev)) {
+-		val = BCM5482_SHD_LEDS1_LED1(BCM_LED_SRC_MULTICOLOR1) |
+-			BCM5482_SHD_LEDS1_LED3(BCM_LED_SRC_MULTICOLOR1);
+-		bcm_phy_write_shadow(phydev, BCM5482_SHD_LEDS1, val);
++		val = BCM54XX_SHD_LEDS1_LED1(BCM_LED_SRC_MULTICOLOR1) |
++			BCM54XX_SHD_LEDS1_LED3(BCM_LED_SRC_MULTICOLOR1);
++		bcm_phy_write_shadow(phydev, BCM54XX_SHD_LEDS1, val);
+ 
+ 		val = BCM_LED_MULTICOLOR_IN_PHASE |
+-			BCM5482_SHD_LEDS1_LED1(BCM_LED_MULTICOLOR_LINK_ACT) |
+-			BCM5482_SHD_LEDS1_LED3(BCM_LED_MULTICOLOR_LINK_ACT);
++			BCM54XX_SHD_LEDS1_LED1(BCM_LED_MULTICOLOR_LINK_ACT) |
++			BCM54XX_SHD_LEDS1_LED3(BCM_LED_MULTICOLOR_LINK_ACT);
+ 		bcm_phy_write_exp(phydev, BCM_EXP_MULTICOLOR, val);
+ 	}
+ 
+diff --git a/include/linux/brcmphy.h b/include/linux/brcmphy.h
+index 251833ab271f..ab21b8a1b2c8 100644
+--- a/include/linux/brcmphy.h
++++ b/include/linux/brcmphy.h
+@@ -206,11 +206,11 @@
+ #define  BCM_NO_ANEG_APD_EN		0x0060 /* bits 5 & 6 */
+ #define  BCM_APD_SINGLELP_EN	0x0100 /* Bit 8 */
+ 
+-#define BCM5482_SHD_LEDS1	0x0d	/* 01101: LED Selector 1 */
++#define BCM54XX_SHD_LEDS1	0x0d	/* 01101: LED Selector 1 */
+ 					/* LED3 / ~LINKSPD[2] selector */
+-#define BCM5482_SHD_LEDS1_LED3(src)	((src & 0xf) << 4)
++#define BCM54XX_SHD_LEDS1_LED3(src)	((src & 0xf) << 4)
+ 					/* LED1 / ~LINKSPD[1] selector */
+-#define BCM5482_SHD_LEDS1_LED1(src)	((src & 0xf) << 0)
++#define BCM54XX_SHD_LEDS1_LED1(src)	((src & 0xf) << 0)
+ #define BCM54XX_SHD_RGMII_MODE	0x0b	/* 01011: RGMII Mode Selector */
+ #define BCM5482_SHD_SSD		0x14	/* 10100: Secondary SerDes control */
+ #define BCM5482_SHD_SSD_LEDM	0x0008	/* SSD LED Mode enable */
 -- 
 2.34.1
 
 
---000000000000cda8a605fd8e656c
+--000000000000e4203605fd8e65a5
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -166,14 +206,14 @@ kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
 NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
 AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
 LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
-/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIBMztrrz8Lc1UfxB
-KxopvsS6E4ug6an5njv2tEAtS/gQMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
-AQkFMQ8XDTIzMDYwNzE4MzUxOFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIJTMJUfr7888Gk2o
+pTIDDKyCIz7i6Am61JYVmZfFD9hkMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
+AQkFMQ8XDTIzMDYwNzE4MzUyMFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
 AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
-MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBLRkYlj92zgmVoLgMIkv8TbNAeh/kTm4lG
-tC9tO4WHQYOvUGqfqNLVtwkpK5r28tQfTvJRIKypWEg0oYoSqJLGJSwt6PBKndntrTaA6CblY973
-gkdQ1YOT7gsNIUbQCrssYlGl4cl6yCP/hhq/c90wAWt8yYa2OG6yQAXbk4R1gd/Hu9SX/LG+JIw+
-pIAaBSOhNXU5Ir9PNJlB1XZpx7IKT8wNJqoVPXPTyj6TvePt8EZB2ujlf0SaVZ/Y0vg8dGzop6x0
-9SjaERw2PqHInsgidUF1PkMjTiOvb1p4cdJvs7lEsZ2HZW0j4ASZF2zrrk+1O/WSkG0JGBg9CZIz
-8efM
---000000000000cda8a605fd8e656c--
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBihQkEpF/XExa465wp41URKAVwO51LluFN
+vhcpge2TPQClyRd1aCg6ZoCfCc0VR38ukXZyxhWSvAFI1LjahW5Zlk/7TQNrkVM8vKZFkETwFPDD
+xe5+y1/NukYqparwk0s4nJn6UDjxdRgu18To8kzcTBeg4mC/GvnTGRn92dL39tlfBiZ9KaA12vKw
+5HFCWUMUMaenR/FeZJVCHM+Chf1OKUTCWp6NlsD0fmXLC6Oea4R4Hpxnj9fVL30Er2GmFYSmI+Xe
+ki2OavuUqPdxpsRnfPaoDBq65Za+BJIFF5J6wD8yHjxZDOdZuKXMRg3WRC0+xOEfm7KU+MtZqwA3
+z/Hu
+--000000000000e4203605fd8e65a5--
