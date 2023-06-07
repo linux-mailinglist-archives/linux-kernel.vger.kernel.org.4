@@ -2,90 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2519725120
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 02:28:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E829725125
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 02:34:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240285AbjFGA23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 20:28:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43836 "EHLO
+        id S239746AbjFGAeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 20:34:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234478AbjFGA21 (ORCPT
+        with ESMTP id S233518AbjFGAeX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 20:28:27 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EF561994
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 17:28:26 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id 41be03b00d2f7-52857fc23b1so5942148a12.2
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 17:28:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686097705; x=1688689705;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=E64Iu3RjeQxnJOawkwVtMlHo7Qw2zMqB7rD6Gt59u6U=;
-        b=hbByc+eBc10oz1R0ZBfrJhka/Zfxs+Kmawl1wepq8hHgYMeC2Ja4xOeongIU/IHFWk
-         f4ZohHN9WizzgwghfY1CGQaU92e6tuTecCqGoy82F8EONiO3dqXVMrBH+6Y4cEcQFyRg
-         ydA7hvMvUMZqJy9nXwV8aZqLu64Njwyrt9SLZzMrzf6XO9XQLQvMX6WL3cjld5DivSpg
-         enGLPY5vulMF5Salfq08OWSpsUIzVfzIHZzDXvuYvPqn43S7vjSFORzSd6DQpC9saemd
-         tJ0U9WBZnlYWqZaLu35VNlT+6rmrfyj8NVeqClfGfYCswsoJyb+3U6ByDH2Gu3mx2AUm
-         8uwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686097705; x=1688689705;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=E64Iu3RjeQxnJOawkwVtMlHo7Qw2zMqB7rD6Gt59u6U=;
-        b=kcxOi8rzpHMJd8BNlSU7pKqW8+AbgjQvqepJWwprg5xeplsNKebv9cMd8QDZ6xfHeh
-         Vi8q8+vqEO1fNvoTJze4TGqOPvRzVIWFvMhxKrkdnipM05lJUgj3LsvJhNUdu1I+eN10
-         akXrVeOiNyL7syj/dFKTwyRbs196Wfe0nP+wa0XGRNJe2XZ7NLDgFUjzykykuVvs7C6O
-         4mrV9NZg555A3/1CymkIc7jBAdeRDOkLxrdkcj2k7PRXYWZHc8z1EnsHUp8/I2IQ/h+h
-         FM8pvMznCKY3VYFqt4yPlrkhe2WHh01M6u7/Yjc+sAfpFOAt9AKqKyixWyks/nvvfgSo
-         cvIA==
-X-Gm-Message-State: AC+VfDzNgGsPrTGxppyua9ubMu1hsMPi6EC010yUkMeRigWn7NnISPSU
-        +79hmImftvWEfeV0mngvb7xFtTYERTE=
-X-Google-Smtp-Source: ACHHUZ4H1GMMLOdzM0nl0MSpgdQMuxyFumoN3C9RMkvxCyDzeiO0M9Cv9zLue4cWxoMIT3NIRj9RTl0QHnE=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a65:400d:0:b0:53f:32cf:bcd1 with SMTP id
- f13-20020a65400d000000b0053f32cfbcd1mr822116pgp.5.1686097705646; Tue, 06 Jun
- 2023 17:28:25 -0700 (PDT)
-Date:   Tue, 6 Jun 2023 17:28:24 -0700
-In-Reply-To: <CAL715WJ1rHS9ORR2ttyAw+idqbaLnOhLveUhW8f4tB9o+ZsuiQ@mail.gmail.com>
-Mime-Version: 1.0
-References: <20230605004334.1930091-1-mizhang@google.com> <CALMp9eSQgcKd=SN4q2QRYbveKoayKzuYEQPM0Xu+FgQ_Mja8-g@mail.gmail.com>
- <CAL715WJowYL=W40SWmtPoz1F9WVBFDG7TQwbsV2Bwf9-cS77=Q@mail.gmail.com>
- <ZH4ofuj0qvKNO9Bz@google.com> <CAL715WKtsC=93Nqr7QJZxspWzF04_CLqN3FUxUaqTHWFRUrwBA@mail.gmail.com>
- <ZH+8GafaNLYPvTJI@google.com> <CAL715WJ1rHS9ORR2ttyAw+idqbaLnOhLveUhW8f4tB9o+ZsuiQ@mail.gmail.com>
-Message-ID: <ZH/PKMmWWgJQdcJQ@google.com>
-Subject: Re: [PATCH] KVM: x86/mmu: Remove KVM MMU write lock when accessing indirect_shadow_pages
-From:   Sean Christopherson <seanjc@google.com>
-To:     Mingwei Zhang <mizhang@google.com>
-Cc:     Jim Mattson <jmattson@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ben Gardon <bgardon@google.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Tue, 6 Jun 2023 20:34:23 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7231410EA;
+        Tue,  6 Jun 2023 17:34:20 -0700 (PDT)
+X-QQ-mid: bizesmtp80t1686098048tb6ncj0o
+Received: from linux-lab-host.localdomain ( [61.141.77.49])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 07 Jun 2023 08:34:07 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: 2qli6fYqcypcLY99/zUQyFc7OGvqHYqz5PiHI7yQ7HnWszpIoNcsoAMUj02ew
+        Wey8rV7CTOMl0Y+ApPuSc3Cbnpx7QkY2Wvjso2OA5T31VwSz4Nxa/gm77aJOQBY+6Cl/hEx
+        S/dvpbhonG0Fyips2ThCWreyj3PqH4IOmYOhaDoEqnqEDhW1i71CubLWPuuCrUzdMiFrLEn
+        gopznRXZeMfi3ZpUvVnsBfoXIR4zUPnH8FbvFr3ONszDpMgLeOePr7UCr9ZX/Fb1xQU0k4k
+        AnHSoiVH9o095/x6cDWNFOL0uZ1Yk0wXD3WOhMwW/J7SN8BF0fJSEAQNC1PIttK6Q0SPX1j
+        UDZBWvKMR72PNl7m9KYNbcf7RYxdQ==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 1982007782142480683
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     thomas@t-8ch.de, w@1wt.eu
+Cc:     arnd@arndb.de, falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v2 4/4] tools/nolibc: sys.h: apply __syscall() helper
+Date:   Wed,  7 Jun 2023 08:34:06 +0800
+Message-Id: <20230607003406.559638-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <7e76f099-4198-421c-8157-430201970c4c@t-8ch.de>
+References: <7e76f099-4198-421c-8157-430201970c4c@t-8ch.de>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 06, 2023, Mingwei Zhang wrote:
-> > > Hmm. I agree with both points above, but below, the change seems too
-> > > heavyweight. smp_wb() is a mfence(), i.e., serializing all
-> > > loads/stores before the instruction. Doing that for every shadow page
-> > > creation and destruction seems a lot.
-> >
-> > No, the smp_*b() variants are just compiler barriers on x86.
+> Hi Zhangjin,
 > 
-> hmm, it is a "lock addl" now for smp_mb(). Check this: 450cbdd0125c
-> ("locking/x86: Use LOCK ADD for smp_mb() instead of MFENCE")
+> On 2023-06-06 16:17:38+0800, Zhangjin Wu wrote:
+> > Use __syscall() helper to shrink 252 lines of code.
+> > 
+> >     $ git show HEAD^:tools/include/nolibc/sys.h | wc -l
+> >     1425
+> >     $ git show HEAD:tools/include/nolibc/sys.h | wc -l
+> >     1173
+> >     $ echo "1425-1173" | bc -l
+> >     252
+> > 
+> > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+> > ---
+> >  tools/include/nolibc/sys.h | 336 +++++--------------------------------
+> >  1 file changed, 42 insertions(+), 294 deletions(-)
+> > 
+> > diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+> > index f6e3168b3e50..0cfc5157845a 100644
+> > --- a/tools/include/nolibc/sys.h
+> > +++ b/tools/include/nolibc/sys.h
+> > @@ -108,13 +108,7 @@ int sys_chdir(const char *path)
+> >  static __attribute__((unused))
+> >  int chdir(const char *path)
+> >  {
+> > -	int ret = sys_chdir(path);
+> > -
+> > -	if (ret < 0) {
+> > -		SET_ERRNO(-ret);
+> > -		ret = -1;
+> > -	}
+> > -	return ret;
+> > +	return __syscall(chdir, path);
 > 
-> So this means smp_mb() is not a free lunch and we need to be a little
-> bit careful.
+> To be honest I'm still not a big fan of the __syscall macro.
+> It's a bit too magic for too little gain.
+> 
+> The commit message argues that the patches make the code shorter.
+> 
+> However doing 
+> 
+> __sysret(sys_chdir(path));
+> 
+> instead of
+> 
+> __syscall(chdir, path);
+> 
+> is only three characters longer and the same amout of lines.
+>
 
-Oh, those sneaky macros.  x86 #defines __smp_mb(), not the outer helper.  I'll
-take a closer look before posting to see if there's a way to avoid the runtime
-barrier.
+Yeah, I do like your version too, it looks consise too, the only not
+comfortable part is there are dual calls in one line.
+
+> Otherwise we would have syscall() _syscall() and __syscall() each doing
+> different things.
+>
+
+Yes, I'm worried about this too, although the compilers may help a
+little, but it is too later.
+
+Just brain storming, What about another non-similar name, for example,
+__syswrap() or __sysin() ?
+
+Or even convert __sysret() to __sysout() and __syscall() to __sysin(),
+do you like it? or even __sysexit(), __sysentry(), but the __sysexit()
+may be misused with sys_exit().
+
+    /* Syscall return helper, set errno as -ret when ret < 0 */
+    static __inline__ __attribute__((unused, always_inline))
+    long __sysout(long ret)
+    {
+    	if (ret < 0) {
+    		SET_ERRNO(-ret);
+    		ret = -1;
+    	}
+    	return ret;
+    }
+    
+    /* Syscall call helper, use syscall name instead of syscall number */
+    #define __sysin(name, ...) __sysout(sys_##name(__VA_ARGS__))
+
+    static __attribute__((unused))
+    int brk(void *addr)
+    {
+    	return __sysout(sys_brk(addr) ? 0 : -ENOMEM);
+    }
+
+    static __attribute__((unused))
+    int chdir(const char *path)
+    {
+    	return __sysin(chdir, path);
+    }
+
+If we really want something like __syscall()/__sysret(), I do think they
+should be a pair ;-)
+
+> And __syscall does not behave like a regular function.
+> 
+> The rest of the patchset looks great.
+>
+
+Thanks for your nice review.
+
+> Maybe Willy can break the tie?
+>
+
+If there is no better solution, I think your version is also a first
+step to go.
+
+> 
+> Thomas
+> 
+> 
+> Note: If we figure out a way to build syscall() without macros I would
+> like that also :-)
+
+Yes, but it is not easy to cope with the variable number of arguments
+without a macro.
+
+BTW, do you like to convert the my_syscallN() of sys.h to the syscall()
+you added? I do worry about it will make the checking of arguments
+mismatch, exspecially, the checking of number of them hardly.
+
+Best regards,
+Zhangjin
