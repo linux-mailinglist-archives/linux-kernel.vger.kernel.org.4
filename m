@@ -2,149 +2,277 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21AB17269A4
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 21:24:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 994B37269BD
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 21:27:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229575AbjFGTYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 15:24:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45186 "EHLO
+        id S229783AbjFGT0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 15:26:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229977AbjFGTYP (ORCPT
+        with ESMTP id S229556AbjFGT0T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 15:24:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8921FDA;
-        Wed,  7 Jun 2023 12:24:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DD15763C4E;
-        Wed,  7 Jun 2023 19:24:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DBF9C433D2;
-        Wed,  7 Jun 2023 19:24:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686165853;
-        bh=TEjozzWwHE+wg1B7u7MgRLMA+nls5RrK8Yf8ia9fueU=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=IIAZ+ErYABx5Ryg4r3dpBcWEGF2aGYh2aHQvbqx0s30X4PANX2GMFstg6gAwAb0TU
-         7gjETM9EEBuiVOCqud49fpiViiEb2ImCrCp2bgpqxTwWEs4g5boT5NPKuXeDM2H1A5
-         +4xUA5tJHvhqt1OX5pwVufoKQSrjBO45EmOoYcOAx9Uhd4MET05rxJ/oYaAjy2zVzv
-         0hX8d20mOi/DoYt3Dj7EfRL1JHrTiIm8gP9w9y02jwnn1YXTHSMcgpTftZKz72WAiA
-         4hY010rbk7gUJrYV+wFudW2qaKxIVE2aceBgY7Tiqk5aKnsXruQlptbBBCw/vnaOTW
-         D9RDqkTG4PUbw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id C451ECE0018; Wed,  7 Jun 2023 12:24:12 -0700 (PDT)
-Date:   Wed, 7 Jun 2023 12:24:12 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     "Jain, Ayush" <ayush.jain3@amd.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        sfr@canb.auug.org.au, rcu@vger.kernel.org,
-        Wyes Karny <wyes.karny@amd.com>, linux-kernel@vger.kernel.org,
-        peterz@infradead.org, void@manifault.com
-Subject: Re: Null pointer dereference during rcutorture test on linux-next
- from next-20230602
-Message-ID: <ff0dd6b8-884e-4bcb-b7d9-72a5a8940f0d@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <b8311fdc-2e71-f74f-159e-db7a86f27b9a@amd.com>
+        Wed, 7 Jun 2023 15:26:19 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B37801FDC;
+        Wed,  7 Jun 2023 12:26:17 -0700 (PDT)
+Received: from W11-BEAU-MD.localdomain (unknown [76.135.27.212])
+        by linux.microsoft.com (Postfix) with ESMTPSA id E0F3F20C1440;
+        Wed,  7 Jun 2023 12:26:16 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E0F3F20C1440
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1686165977;
+        bh=f1LMEbD3P/UcUgwpVy1pDfNCcNYjSOvLAPIcNYLpj5Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VuWFl3bcAqSiQg8bASdQ++6BkFmItki+WMWEN/gWWM3Lj9xRZdblFHi9vCYh8Za26
+         OYgy3uSMgh//J0tDf/XyrsjX/gOu4I8Bx7R8Tc5Ea66GJmkuFO2S3kDP8fv64h0Ndx
+         w7sSgpDxYSJf/sPo8NQThRGTTIeA/IHpRL0bi4XI=
+Date:   Wed, 7 Jun 2023 12:26:11 -0700
+From:   Beau Belgrave <beaub@linux.microsoft.com>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-trace-kernel@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        David Vernet <void@manifault.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Dave Thaler <dthaler@microsoft.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH] tracing/user_events: Run BPF program if attached
+Message-ID: <20230607192611.GA143@W11-BEAU-MD.localdomain>
+References: <20230516212658.2f5cc2c6@gandalf.local.home>
+ <20230517165028.GA71@W11-BEAU-MD.localdomain>
+ <CAADnVQK3-NBLSVRVsgArUEjqsuY2S_8mWsWmLEAtTzo+U49CKQ@mail.gmail.com>
+ <20230601-urenkel-holzofen-cd9403b9cadd@brauner>
+ <20230601152414.GA71@W11-BEAU-MD.localdomain>
+ <20230601-legten-festplatten-fe053c6f16a4@brauner>
+ <20230601162921.GA152@W11-BEAU-MD.localdomain>
+ <20230606223752.65dd725c04b11346b45e0546@kernel.org>
+ <20230606170549.GA71@W11-BEAU-MD.localdomain>
+ <20230607230702.03c6d3a213d527a221bdc533@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b8311fdc-2e71-f74f-159e-db7a86f27b9a@amd.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230607230702.03c6d3a213d527a221bdc533@kernel.org>
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 04:48:19PM +0530, Jain, Ayush wrote:
-> Hello All,
+On Wed, Jun 07, 2023 at 11:07:02PM +0900, Masami Hiramatsu wrote:
+> On Tue, 6 Jun 2023 10:05:49 -0700
+> Beau Belgrave <beaub@linux.microsoft.com> wrote:
 > 
-> Observed null pointer dereference during rcutorture test on linux-next tree
-> from next-20230602.
+> > On Tue, Jun 06, 2023 at 10:37:52PM +0900, Masami Hiramatsu wrote:
+> > > Hi Beau,
+> > > 
+> > > On Thu, 1 Jun 2023 09:29:21 -0700
+> > > Beau Belgrave <beaub@linux.microsoft.com> wrote:
+> > > 
+> > > > > > These are stubs to integrate namespace support. I've been working on a
+> > > > > > series that adds a tracing namespace support similiar to the IMA
+> > > > > > namespace work [1]. That series is ending up taking more time than I
+> > > > > 
+> > > > > Look, this is all well and nice but you've integrated user events with
+> > > > > tracefs. This is currently a single-instance global filesystem. So what
+> > > > > you're effectively implying is that you're namespacing tracefs by
+> > > > > hanging it off of struct user namespace making it mountable by
+> > > > > unprivileged users. Or what's the plan?
+> > > > > 
+> > > > 
+> > > > We don't have plans for unprivileged users currently. I think that is a
+> > > > great goal and requires a proper tracing namespace, which we currently
+> > > > don't have. I've done some thinking on this, but I would like to hear
+> > > > your thoughts and others on how to do this properly. We do talk about
+> > > > this in the tracefs meetings (those might be out of your time zone
+> > > > unfortunately).
+> > > > 
+> > > > > That alone is massive work with _wild_ security implications. My
+> > > > > appetite for exposing more stuff under user namespaces is very low given
+> > > > > the amount of CVEs we've had over the years.
+> > > > > 
+> > > > 
+> > > > Ok, I based that approach on the feedback given in LPC 2022 - Containers
+> > > > and Checkpoint/Retore MC [1]. I believe you gave feedback to use user
+> > > > namespaces to provide the encapsulation that was required :)
+> > > 
+> > > Even with the user namespace, I think we still need to provide separate
+> > > "eventname-space" for each application, since it may depend on the context
+> > > who and where it is launched. I think the easiest solution is (perhaps)
+> > > providing a PID-based new groups for each instance (the PID-prefix or 
+> > > suffix will be hidden from the application).
+> > > I think it may not good to allow unprivileged user processes to detect
+> > > the registered event name each other by default.
+> > > 
+> > 
+> > Regarding PID, are you referring the PID namespace the application
+> > resides within? Or the actual single PID of the process?
 > 
-> Commit ID: commit bc708bbd8260ee4eb3428b0109f5f3be661fae46 (HEAD, tag: next-20230602)
+> I meant the actual single PID of the process. That will be the safest
+> way by default.
 > 
-> Here I am attaching log trace
-> 
-> [12133.344278] rcu-torture: rcu_torture_read_exit: Start of test
-> [12133.344282] rcu-torture: rcu_torture_read_exit: Start of episode
-> [12138.350637] rcu-torture: rcu_torture_read_exit: End of episode
-> [12143.419412] smpboot: CPU 1 is now offline
-> [12143.427996] BUG: kernel NULL pointer dereference, address: 0000000000000128
-> [12143.435777] #PF: supervisor read access in kernel mode
-> [12143.441517] #PF: error_code(0x0000) - not-present page
-> [12143.447256] PGD 0 P4D 0
-> [12143.450087] Oops: 0000 [#1] PREEMPT SMP NOPTI
-> [12143.454955] CPU: 68 PID: 978653 Comm: rcu_torture_rea Kdump: loaded Not tainted 6.4.0-rc5-next-20230606-1686061107994 #1
-> [12143.467095] Hardware name: AMD Corporation Speedway/Speedway, BIOS RSW1009C 07/27/2018
-> [12143.475934] RIP: 0010:__bitmap_and+0x18/0x70
-> [12143.480713] Code: 00 00 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 f3 0f 1e fa 41 89 cb 49 89 f9 41 c1 eb 06 74 51 45 89 da 31 c0 45 31 c0 <48> 8b 3c c6 48 23 3c c2 49 89 3c c1 48 83 c0 01 49 09 f8 49 39 c2
-> [12143.501675] RSP: 0018:ffffa3a90db70d90 EFLAGS: 00010046
-> [12143.507510] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000080
-> [12143.515468] RDX: ffff8a1ec17a1d68 RSI: 0000000000000128 RDI: ffff8a1e800429c0
-> [12143.523425] RBP: ffff8a1ec17a1980 R08: 0000000000000000 R09: ffff8a1e800429c0
-> [12143.531385] R10: 0000000000000002 R11: 0000000000000002 R12: ffff8a1e800429c0
-> [12143.539352] R13: 0000000000000000 R14: 0000000000032580 R15: 0000000000000000
-> [12143.547320] FS:  0000000000000000(0000) GS:ffff8a2dbf100000(0000) knlGS:0000000000000000
-> [12143.556354] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [12143.562770] CR2: 0000000000000128 CR3: 0000003089e50000 CR4: 00000000003506e0
-> [12143.570729] Call Trace:
-> [12143.573463]  <IRQ>
-> [12143.575714]  ? __die+0x24/0x70
-> [12143.579130]  ? page_fault_oops+0x82/0x150
-> [12143.583615]  ? exc_page_fault+0x69/0x150
-> [12143.588001]  ? asm_exc_page_fault+0x26/0x30
-> [12143.592678]  ? __bitmap_and+0x18/0x70
-> [12143.596768]  select_idle_cpu+0x84/0x3d0
-> [12143.601059]  select_idle_sibling+0x1b7/0x500
-> [12143.605831]  select_task_rq_fair+0x1b2/0x2e0
-> [12143.610603]  select_task_rq+0x7a/0xc0
-> [12143.614696]  try_to_wake_up+0xe8/0x550
-> [12143.618885]  ? update_process_times+0x83/0x90
-> [12143.623747]  ? __pfx_hrtimer_wakeup+0x10/0x10
-> [12143.628615]  hrtimer_wakeup+0x22/0x30
-> [12143.632706]  __hrtimer_run_queues+0x112/0x2b0
-> [12143.637574]  hrtimer_interrupt+0x100/0x240
-> [12143.642152]  __sysvec_apic_timer_interrupt+0x63/0x130
-> [12143.647796]  sysvec_apic_timer_interrupt+0x71/0x90
-> [12143.653149]  </IRQ>
-> [12143.655493]  <TASK>
-> [12143.657834]  asm_sysvec_apic_timer_interrupt+0x1a/0x20
-> [12143.663573] RIP: 0010:rcu_torture_read_lock+0x4/0x20 [rcutorture]
-> [12143.670389] Code: 90 90 90 90 90 90 f3 0f 1e fa 0f 1f 44 00 00 e9 12 5a f6 d7 66 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 f3 0f 1e fa <0f> 1f 44 00 00 e8 b2 12 f6 d7 31 c0 e9 7b 9c a0 d8 66 66 2e 0f 1f
-> [12143.691351] RSP: 0018:ffffa3a90e3ebc40 EFLAGS: 00000202
-> [12143.697187] RAX: ffffffffc1dff0b0 RBX: 00000000ffffffff RCX: 0000000000000008
-> [12143.705155] RDX: 0000000000000060 RSI: 0000000000000060 RDI: ffffa3a90e3ebccc
-> [12143.713124] RBP: 0000000000000060 R08: 0000000000000060 R09: 0000000000000000
-> [12143.721091] R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000060
-> [12143.729057] R13: 0000000000000008 R14: 0000000000000000 R15: ffffa3a90e3ebe20
-> [12143.737027]  ? __pfx_rcu_torture_read_lock+0x10/0x10 [rcutorture]
-> [12143.743845]  rcutorture_one_extend+0xc2/0x3a0 [rcutorture]
-> [12143.749980]  rcu_torture_one_read+0x192/0x550 [rcutorture]
-> [12143.756115]  ? update_load_avg+0x7e/0x740
-> [12143.760593]  ? raw_spin_rq_lock_nested+0x15/0x30
-> [12143.765749]  ? newidle_balance+0x26e/0x400
-> [12143.770330]  ? __pfx_rcu_torture_reader+0x10/0x10 [rcutorture]
-> [12143.776854]  rcu_torture_reader+0xcd/0x280 [rcutorture]
-> [12143.782698]  ? __pfx_rcu_torture_timer+0x10/0x10 [rcutorture]
-> [12143.789124]  kthread+0xe6/0x120
-> [12143.792636]  ? __pfx_kthread+0x10/0x10
-> [12143.796823]  ret_from_fork+0x2c/0x50
-> [12143.800824]  </TASK>
-> 
-> Please let me know if any extra information is required.
 
-Could you please let us know which rcutorture scenario this is and/or
-what module parameters were supplied to modprobe (depending on how you
-initiated the test)?  One way to do this is to post the full console
-log somewhere, along with the .config.
+How do you feel about instead of single PID using the effective user ID?
 
-At first glance, the wakeup path got a NULL cpumask pointer somehow.
+That way we wouldn't have so many events on the system, and the user is
+controlling what runs and can share events.
 
-Is bisection a possibility?  It would be very helpful.
+I could see a way for admins to also override the user_event suffix on a
+per-user basis to allow for broader event name scopes if required (IE:
+Our k8s and production scenarios).
 
-							Thanx, Paul
+> > 
+> > In production we monitor things in sets that encompass more than a
+> > single application. A requirement we need is the ability to group
+> > like-processes together for monitoring purposes.
+> > 
+> > We really need a way to know these set of events are for this group, the
+> > easiest way to do that is by the system name provided on each event. If
+> > this were to be single PID (and not the PID namespace), then we wouldn't
+> > be able to achieve this requirement. Ideally an admin would be able to
+> > setup the name in some way that means something to them in user-space.
+> 
+> Would you mean using the same events between several different processes?
+> I think it needs more care about security concerns. More on this later.
+> 
+> If not, I think admin has a way to identify which processes are running in
+> the same group outside of ftrace, and can set the filter correctly.
+> 
+
+Agree that's possible, but it's going to be a massive amount of events
+for both tracefs and perf_event ring buffers to handle (we need a perf
+FD per trace_event ID).
+
+> > 
+> > IE: user_events_critical as a system name, vs knowing (user_events_5
+> > or user_events_6 or user_events_8) are "critical".
+> 
+> My thought is the latter. Then the process can not access to the
+> other process's namespace each other.
+> 
+> > 
+> > Another simple example is the same "application" but it gets exec'd more
+> > than once. Each time it execs the system name would change if it was
+> > really by the actual PID vs PID namespace. This would be very hard to
+> > manage on a perf_event or eBPF level for us. It would also vastly
+> > increase the number of trace_events that would get created on the
+> > system.
+> 
+> Indeed. But fundamentally allowing user to create (register) the new 
+> event means such DoS attack can happen. That's why we have a limitation
+> of the max number of user_events. (BTW, I want to make this number
+> controllable from sysctl or tracefs. Also, we need something against the
+> event-id space contamination by this DoS attack.) 
+> I also think it would be better to have some rate-limit about registering
+> new events.
+> 
+
+Totally agree here.
+
+> > 
+> > > > 
+> > > > > > anticipated.
+> > > > > 
+> > > > > Yet you were confident enough to leave the namespacing stubs for this
+> > > > > functionality in the code. ;)
+> > > > > 
+> > > > > What is the overall goal here? Letting arbitrary unprivileged containers
+> > > > > define their own custom user event type by mounting tracefs inside
+> > > > > unprivileged containers? If so, what security story is going to
+> > > > > guarantee that writing arbitrary tracepoints from random unprivileged
+> > > > > containers is safe?
+> > > > > 
+> > > > 
+> > > > Unprivileged containers is not a goal, however, having a per-pod
+> > > > user_event system name, such as user_event_<pod_name>, would be ideal
+> > > > for certain diagnostic scenarios, such as monitoring the entire pod.
+> > > 
+> > > That can be done in the user-space tools, not in the kernel.
+> > > 
+> > 
+> > Right, during k8s pod creation we would create the group and name it
+> > something that makes sense to the operator as an example. I'm sure there
+> > are lots of scenarios user-space can do. However, they almost always
+> > involve more than 1 application together in our scenarios.
+> 
+> Yeah, if it is always used with k8s in the backend servers, it maybe OK.
+> But if it is used in more unreliable environment, we need to consider
+> about malicious normal users.
+> 
+> > 
+> > > > When you have a lot of containers, you also want to limit how many
+> > > > tracepoints each container can create, even if they are given access to
+> > > > the tracefs file. The per-group can limit how many events/tracepoints
+> > > > that container can go create, since we currently only have 16-bit
+> > > > identifiers for trace_event's we need to be cautious we don't run out.
+> > > 
+> > > I agree, we need to have a knob to limit it to avoid DoS attack.
+> > > 
+> > > > user_events in general has tracepoint validators to ensure the payloads
+> > > > coming in are "safe" from what the kernel might do with them, such as
+> > > > filtering out data.
+> > > 
+> > > [...]
+> > > > > > changing the system name of user_events on a per-namespace basis.
+> > > > > 
+> > > > > What is the "system name" and how does it protect against namespaces
+> > > > > messing with each other?
+> > > > 
+> > > > trace_events in the tracing facility require both a system name and an
+> > > > event name. IE: sched/sched_waking, sched is the system name,
+> > > > sched_waking is the event name. For user_events in the root group, the
+> > > > system name is "user_events". When groups are introduced, the system
+> > > > name can be "user_events_<GUID>" for example.
+> > > 
+> > > So my suggestion is using PID in root pid namespace instead of GUID
+> > > by default.
+> > > 
+> > 
+> > By default this would be fine as long as admins can change this to a larger
+> > group before activation for our purposes. PID however, might be a bit
+> > too granular of an identifier for our scenarios as I've explained above.
+> > 
+> > I think these logical steps make sense:
+> > 1. Create "event namespace" (Default system name suffix, max count)
+> > 2. Setup "event namespace" (Change system name suffix, max count)
+> > 3. Attach "event namespace"
+> > 
+> > I'm not sure we know what to attach to in #3 yet, so far both a tracer
+> > namespace and user namespace have been proposed. I think we need to
+> > answer that. Right now everything is in the root "event namespace" and
+> > is simply referred to by default as "user_events" as the system name
+> > without a suffix, and with the boot configured max event count.
+> 
+> OK, so I think we are on the same page :)
+> 
+> I think the user namespace is not enough for protecting events on
+> multi-user system without containers. So it has less flexibility.
+> The new tracer namespace may be OK, we still need a helper user
+> program like 'user_eventd' for managing access based on some policy.
+> If we have a way to manage it with SELinux etc. it will be the best
+> I think. (Perhaps using UNIX domain socket will give us such flexibility.)
+> 
+
+I'm adding Mathieu to CC since I think he had a few cases where a static
+namespace wasn't enough and we might need hierarchy support.
+
+If we don't need hierarchy support, I think it's a lot easier to do. I
+like the idea of a per-user event namespace vs a per-PID event namespace
+knowing what we have to do to monitor all of this via perf. Like I said
+above, that will be a huge amount of events compared to a per-user or
+namespace approach.
+
+But I do like where this is headed and glad we are having this
+conversation :)
+
+Thanks,
+-Beau
