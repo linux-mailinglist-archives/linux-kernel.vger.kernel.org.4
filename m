@@ -2,144 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C5C77264A2
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 17:28:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53FEF726478
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 17:26:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241384AbjFGP2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 11:28:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37640 "EHLO
+        id S241479AbjFGP0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 11:26:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240785AbjFGP1l (ORCPT
+        with ESMTP id S241466AbjFGP0M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 11:27:41 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 081322116;
-        Wed,  7 Jun 2023 08:27:09 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 02A9B21A11;
-        Wed,  7 Jun 2023 15:26:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1686151576; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UpwWRWvSJqy3T03ZY2JlbzZD9kWCp/NCykWW9d7sd1g=;
-        b=ror0Tusl1A4DBNmBYTkOot8hbHrSVjNcZ9FY2pwERAt1+clj7LJkXRHFWMQ/23qz+0TP6T
-        L0Y2STOeyZIftm9lb1yBJvu8qGmXXlOBCaK3kgHnHLaI2SmmyG+svuxj+aX4dSbodUZupp
-        j9a3mj67Hm7ygPMkrSlCW5O0X/eWAyU=
-Received: from alley.suse.cz (unknown [10.100.201.202])
-        by relay2.suse.de (Postfix) with ESMTP id 823902C141;
-        Wed,  7 Jun 2023 15:26:15 +0000 (UTC)
-From:   Petr Mladek <pmladek@suse.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Douglas Anderson <dianders@chromium.org>
-Cc:     kgdb-bugreport@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev@lists.ozlabs.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        sparclinux@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        linux-perf-users@vger.kernel.org, Petr Mladek <pmladek@suse.com>
-Subject: [PATCH 7/7] watchdog/hardlockup: Define HARDLOCKUP_DETECTOR_ARCH
-Date:   Wed,  7 Jun 2023 17:24:32 +0200
-Message-Id: <20230607152432.5435-8-pmladek@suse.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20230607152432.5435-1-pmladek@suse.com>
-References: <20230607152432.5435-1-pmladek@suse.com>
+        Wed, 7 Jun 2023 11:26:12 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D619126A5
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 08:25:45 -0700 (PDT)
+Received: from mail-yb1-f199.google.com (mail-yb1-f199.google.com [209.85.219.199])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 41AB63F15A
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 15:25:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1686151503;
+        bh=UzyjLDSH3L83BUY14PzO6igurevkkcTAFURgUF3tbLc=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=fkxgZqGqHW+pi559AF3RM4Xqo4MsornXTpBlfpZWzdOkVpji690KH2eNnHJKhWqXG
+         6YMLQL4kY17Z964171EX+fLDe4qQ698rjANTla1OczbOaih3FzPh5KKKSGcT//Of9j
+         QE5eR8NxSCRyqO5KzqOCzxi9Jn87IO+W2nytRWmHlG0y0b/YOCZuxvy9Q0MjzEpv1Z
+         7iydsKfc8H77R8pDGekPYyxeGiwzFrofPw26xuu2OYOH5IZIt1j2r34q/88GUdOd+3
+         uGPwe8o+/tEY7YOmn5F63g4TxKo+6I971SZIRWCjZv6TTGXsno/ucxV6F2qr2665r3
+         4mFX7wOOfWpkQ==
+Received: by mail-yb1-f199.google.com with SMTP id 3f1490d57ef6-bac6a453dd5so8855868276.2
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 08:25:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686151502; x=1688743502;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UzyjLDSH3L83BUY14PzO6igurevkkcTAFURgUF3tbLc=;
+        b=Qv+rojlqFzkUs6z+yPNdF5Urrc0l38e4uDkIrQCN7wbXwFE+sKd0zDJ8i5CN7giQiF
+         qAujEqAifuLMSOPy2199nUZuMVg+OaBbvwPtm1u32AKRGhCZJMBZ3oIBUn1ahFVlQZ8U
+         4N2O+QS9FFu+PY1H9XBJZxEiMslZC/79pk0a+1A7GGudbi/3dePrfZAs1wu2balsNP8U
+         vIEsXp/DlGBHRa6oACvHFSNOUGgDNl2EnNANx4LbJcU2mN6EV01vgi0E7wQXCV4Zagdd
+         CHrFUsS87FCtBi7briW56ADhEEwYUpGSZ+J9PcNdIAK7NdEfljEJ3diJOM9yIZeCZrQe
+         8icg==
+X-Gm-Message-State: AC+VfDyjlmj7xi/qTiEX/5Rs4obXhE42Vl7usXjMdHx0hiv1tGpIOA3h
+        mtQ2TeDDHjirOl2Kr4IdAtqS4E8VhBH5/galBqp+RtRqa2q0HhcEWUOUHBcYyvDI6SpVjbBHA+t
+        CY0rJIZaCR+yEFvk72ZpYRmL4ajDuliDqObD2l+lMdErJ/4UD6bq+46KLeA==
+X-Received: by 2002:a25:d490:0:b0:bb3:cc80:ac4a with SMTP id m138-20020a25d490000000b00bb3cc80ac4amr4129207ybf.42.1686151502105;
+        Wed, 07 Jun 2023 08:25:02 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6IXvmlrtEA8JFTZYK+1pTV1djV0J8QwczyxESJ1HLlJOoHkSD4NIuDqcp3jr364rEsXU+wd6zZScC8KyQRz8w=
+X-Received: by 2002:a25:d490:0:b0:bb3:cc80:ac4a with SMTP id
+ m138-20020a25d490000000b00bb3cc80ac4amr4129185ybf.42.1686151501851; Wed, 07
+ Jun 2023 08:25:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230524153316.476973-1-aleksandr.mikhalitsyn@canonical.com>
+In-Reply-To: <20230524153316.476973-1-aleksandr.mikhalitsyn@canonical.com>
+From:   Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Date:   Wed, 7 Jun 2023 17:24:50 +0200
+Message-ID: <CAEivzxejMtctdEF2BHMBM5fU-5-Ps7Qt25_yLBTzDayUVNoErg@mail.gmail.com>
+Subject: Re: [PATCH v2 00/13] ceph: support idmapped mounts
+To:     xiubli@redhat.com
+Cc:     brauner@kernel.org, stgraber@ubuntu.com,
+        linux-fsdevel@vger.kernel.org, Ilya Dryomov <idryomov@gmail.com>,
+        Jeff Layton <jlayton@kernel.org>, ceph-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The HAVE_ prefix means that the code could be enabled. Add another
-variable for HAVE_HARDLOCKUP_DETECTOR_ARCH without this prefix.
-It will be set when it should be built. It will make it compatible
-with the other hardlockup detectors.
+version 3 was sent
+https://lore.kernel.org/lkml/20230607152038.469739-1-aleksandr.mikhalitsyn@=
+canonical.com/
 
-The change allows to clean up dependencies of PPC_WATCHDOG
-and HAVE_HARDLOCKUP_DETECTOR_PERF definitions for powerpc.
-
-As a result HAVE_HARDLOCKUP_DETECTOR_PERF has the same dependencies
-on arm, x86, powerpc architectures.
-
-Signed-off-by: Petr Mladek <pmladek@suse.com>
----
- arch/powerpc/Kconfig | 5 ++---
- include/linux/nmi.h  | 2 +-
- lib/Kconfig.debug    | 9 +++++++++
- 3 files changed, 12 insertions(+), 4 deletions(-)
-
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index 539d1f03ff42..987e730740d7 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -90,8 +90,7 @@ config NMI_IPI
- 
- config PPC_WATCHDOG
- 	bool
--	depends on HARDLOCKUP_DETECTOR
--	depends on HAVE_HARDLOCKUP_DETECTOR_ARCH
-+	depends on HARDLOCKUP_DETECTOR_ARCH
- 	default y
- 	help
- 	  This is a placeholder when the powerpc hardlockup detector
-@@ -240,7 +239,7 @@ config PPC
- 	select HAVE_GCC_PLUGINS			if GCC_VERSION >= 50200   # plugin support on gcc <= 5.1 is buggy on PPC
- 	select HAVE_GENERIC_VDSO
- 	select HAVE_HARDLOCKUP_DETECTOR_ARCH	if PPC_BOOK3S_64 && SMP
--	select HAVE_HARDLOCKUP_DETECTOR_PERF	if PERF_EVENTS && HAVE_PERF_EVENTS_NMI && !HAVE_HARDLOCKUP_DETECTOR_ARCH
-+	select HAVE_HARDLOCKUP_DETECTOR_PERF	if PERF_EVENTS && HAVE_PERF_EVENTS_NMI
- 	select HAVE_HW_BREAKPOINT		if PERF_EVENTS && (PPC_BOOK3S || PPC_8xx)
- 	select HAVE_IOREMAP_PROT
- 	select HAVE_IRQ_TIME_ACCOUNTING
-diff --git a/include/linux/nmi.h b/include/linux/nmi.h
-index 515d6724f469..ec808ebd36ba 100644
---- a/include/linux/nmi.h
-+++ b/include/linux/nmi.h
-@@ -9,7 +9,7 @@
- #include <asm/irq.h>
- 
- /* Arch specific watchdogs might need to share extra watchdog-related APIs. */
--#if defined(CONFIG_HAVE_HARDLOCKUP_DETECTOR_ARCH) || defined(CONFIG_HARDLOCKUP_DETECTOR_SPARC64)
-+#if defined(CONFIG_HARDLOCKUP_DETECTOR_ARCH) || defined(CONFIG_HARDLOCKUP_DETECTOR_SPARC64)
- #include <asm/nmi.h>
- #endif
- 
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 116904e65d9f..97853ca54dc7 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -1056,6 +1056,7 @@ config HARDLOCKUP_DETECTOR
- 	depends on HAVE_HARDLOCKUP_DETECTOR_PERF || HAVE_HARDLOCKUP_DETECTOR_BUDDY || HAVE_HARDLOCKUP_DETECTOR_ARCH
- 	imply HARDLOCKUP_DETECTOR_PERF
- 	imply HARDLOCKUP_DETECTOR_BUDDY
-+	imply HARDLOCKUP_DETECTOR_ARCH
- 	select LOCKUP_DETECTOR
- 
- 	help
-@@ -1102,6 +1103,14 @@ config HARDLOCKUP_DETECTOR_BUDDY
- 	depends on !HAVE_HARDLOCKUP_DETECTOR_ARCH
- 	select HARDLOCKUP_DETECTOR_COUNTS_HRTIMER
- 
-+config HARDLOCKUP_DETECTOR_ARCH
-+	bool
-+	depends on HARDLOCKUP_DETECTOR
-+	depends on HAVE_HARDLOCKUP_DETECTOR_ARCH
-+	help
-+	  The arch-specific implementation of the hardlockup detector is
-+	  available.
-+
- #
- # Both the "perf" and "buddy" hardlockup detectors count hrtimer
- # interrupts. This config enables functions managing this common code.
--- 
-2.35.3
-
+On Wed, May 24, 2023 at 5:33=E2=80=AFPM Alexander Mikhalitsyn
+<aleksandr.mikhalitsyn@canonical.com> wrote:
+>
+> Dear friends,
+>
+> This patchset was originally developed by Christian Brauner but I'll cont=
+inue
+> to push it forward. Christian allowed me to do that :)
+>
+> This feature is already actively used/tested with LXD/LXC project.
+>
+> v2 is just a rebased version of the original series with some small field=
+ naming change.
+>
+> Git tree (based on https://github.com/ceph/ceph-client.git master):
+> https://github.com/mihalicyn/linux/tree/fs.idmapped.ceph.v2
+>
+> Original description from Christian:
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> This patch series enables cephfs to support idmapped mounts, i.e. the
+> ability to alter ownership information on a per-mount basis.
+>
+> Container managers such as LXD support sharaing data via cephfs between
+> the host and unprivileged containers and between unprivileged containers.
+> They may all use different idmappings. Idmapped mounts can be used to
+> create mounts with the idmapping used for the container (or a different
+> one specific to the use-case).
+>
+> There are in fact more use-cases such as remapping ownership for
+> mountpoints on the host itself to grant or restrict access to different
+> users or to make it possible to enforce that programs running as root
+> will write with a non-zero {g,u}id to disk.
+>
+> The patch series is simple overall and few changes are needed to cephfs.
+> There is one cephfs specific issue that I would like to discuss and
+> solve which I explain in detail in:
+>
+> [PATCH 02/12] ceph: handle idmapped mounts in create_request_message()
+>
+> It has to do with how to handle mds serves which have id-based access
+> restrictions configured. I would ask you to please take a look at the
+> explanation in the aforementioned patch.
+>
+> The patch series passes the vfs and idmapped mount testsuite as part of
+> xfstests. To run it you will need a config like:
+>
+> [ceph]
+> export FSTYP=3Dceph
+> export TEST_DIR=3D/mnt/test
+> export TEST_DEV=3D10.103.182.10:6789:/
+> export TEST_FS_MOUNT_OPTS=3D"-o name=3Dadmin,secret=3D$password
+>
+> and then simply call
+>
+> sudo ./check -g idmapped
+>
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+> Alexander Mikhalitsyn (1):
+>   fs: export mnt_idmap_get/mnt_idmap_put
+>
+> Christian Brauner (12):
+>   ceph: stash idmapping in mdsc request
+>   ceph: handle idmapped mounts in create_request_message()
+>   ceph: allow idmapped mknod inode op
+>   ceph: allow idmapped symlink inode op
+>   ceph: allow idmapped mkdir inode op
+>   ceph: allow idmapped rename inode op
+>   ceph: allow idmapped getattr inode op
+>   ceph: allow idmapped permission inode op
+>   ceph: allow idmapped setattr inode op
+>   ceph/acl: allow idmapped set_acl inode op
+>   ceph/file: allow idmapped atomic_open inode op
+>   ceph: allow idmapped mounts
+>
+>  fs/ceph/acl.c                 |  2 +-
+>  fs/ceph/dir.c                 |  4 ++++
+>  fs/ceph/file.c                | 10 ++++++++--
+>  fs/ceph/inode.c               | 15 +++++++++++----
+>  fs/ceph/mds_client.c          | 29 +++++++++++++++++++++++++----
+>  fs/ceph/mds_client.h          |  1 +
+>  fs/ceph/super.c               |  2 +-
+>  fs/mnt_idmapping.c            |  2 ++
+>  include/linux/mnt_idmapping.h |  3 +++
+>  9 files changed, 56 insertions(+), 12 deletions(-)
+>
+> --
+> 2.34.1
+>
