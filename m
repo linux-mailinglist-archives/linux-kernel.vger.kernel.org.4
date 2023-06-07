@@ -2,65 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EA46725BBF
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 12:43:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8028D725BC1
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 12:43:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239623AbjFGKnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 06:43:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54946 "EHLO
+        id S238417AbjFGKnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 06:43:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233982AbjFGKnV (ORCPT
+        with ESMTP id S233982AbjFGKnq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 06:43:21 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27CAFAA
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 03:43:19 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 357Ah5Zk113481;
-        Wed, 7 Jun 2023 05:43:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1686134585;
-        bh=Qcz8DifrMVl6LnMzgJBxNEBKYKPqirKpYcU7aJJsXzE=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=xye/ZWHEl9jum62rp7w92Re4ownrpd5UP7zdoxG6cDo+H7Pfaxol853AVgOurwpuz
-         KVYFpN/uPfYY3wuzBsPwotftiJPP19Nnky9+U6JvQv95xvWPYv76Q9DLexz8/gAMSj
-         i+GbsANZw229ZfhFa0I/AuKS1PfjXFLf23vkrzw4=
-Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 357Ah4Hh003163
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 7 Jun 2023 05:43:04 -0500
-Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 7
- Jun 2023 05:43:04 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 7 Jun 2023 05:43:04 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 357Ah4In078118;
-        Wed, 7 Jun 2023 05:43:04 -0500
-Date:   Wed, 7 Jun 2023 05:43:04 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Thejasvi Konduru <t-konduru@ti.com>
-CC:     <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Tero Kristo <t-kristo@ti.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Lokesh Vutla <lokeshvutla@ti.com>,
-        Apurva Nandan <a-nandan@ti.com>, Udit Kumar <u-kumar1@ti.com>
-Subject: Re: [PATCH] soc: ti: k3-socinfo: Fix the silicon revision misprint
-Message-ID: <20230607104304.iengykppptr3fxe6@reflected>
-References: <20230607080349.26671-1-t-konduru@ti.com>
+        Wed, 7 Jun 2023 06:43:46 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7011B1BDC
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 03:43:45 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-56974f42224so67583587b3.1
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 03:43:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686134624; x=1688726624;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=dIVOmSfiAxNQnZtiT/RJR0F2pGN7zpHL20gWDVh0IKQ=;
+        b=DXNE6u2n3h/qryUePfFmk5H6iT9uzIO5BuDZ6XBSfsXRkGfZhwRvUYmCTikhu99JXG
+         bgnevo2SdKk6aIj+lZ8+GGEEMv3qBPJuBZqwLbe8UMIdbk9KRJcsDvInzJmAY8Igqop5
+         yafAhDgPwVSTJ/FV/+uNX0mWkVvWKh8m3G+azKfeac7gMukLEUS3JN3kxHBUP3uAlQUG
+         lBEwBp1ztxnk5Lirknev0kHP5UF1gXKp9meVHGLFWOxIwW6RKX7VMVpn0uwxOVDMXg5R
+         9SkoOFXmoRV4/mFHpiB1pQp4Dw2QXcfTWIspBomNl5k890iWPRzV90sNJUPmFtfpPM7i
+         L30Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686134624; x=1688726624;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dIVOmSfiAxNQnZtiT/RJR0F2pGN7zpHL20gWDVh0IKQ=;
+        b=EGM5LzfqeUzClb0RbxX39ut9KCULyG/5iYWkq04PVsKMmWcKcSDeJ8pEgXXONHTw6T
+         U7bsJM19/dDS7/LApbObsSY9U0hu8Fwl6EakCPPUqCDFTvRYAWjkAmwM5t/FZwhE5MZN
+         f2vRwGbqa2U5eeoFf6RIaZ2h7Mib6oLQLBd7hM6XmY3ZiJb8ZCX6O/a+oyN5u7hPG9La
+         fkfFhigtPJW/z1XCjE/NMyb17Gj4E53LPIiIHqdaUslPP1z1NOvNCzbpNbf3uGQrOl4k
+         +GKGIxYdiwH//B4eCsVlzecQd8uc/PrMa2bVBhrpFn/Tru96sI4QFdBJ0VNA/T+iDzXB
+         UQXg==
+X-Gm-Message-State: AC+VfDxpYA4vB3YMHC/otkRJEAHCljzerZpZDwyJHjaQc+8GRCZHVC1X
+        ZvFxE5HvzCoolqTfavfnGMVAXZjWQHtVWFwRGNPm+w==
+X-Google-Smtp-Source: ACHHUZ7iN6kCCfb7xer6RdaL3uoj+q1ymoQ6OuwykcqF1vL4PKge6pwtwhXnPW2ijjINKJRtZGMeuvXTPhwsJ5gC3Tc=
+X-Received: by 2002:a25:4e43:0:b0:bab:cd90:87be with SMTP id
+ c64-20020a254e43000000b00babcd9087bemr5366896ybb.51.1686134624597; Wed, 07
+ Jun 2023 03:43:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230607080349.26671-1-t-konduru@ti.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20230605133031.1827626-1-suzuki.poulose@arm.com>
+In-Reply-To: <20230605133031.1827626-1-suzuki.poulose@arm.com>
+From:   Mike Leach <mike.leach@linaro.org>
+Date:   Wed, 7 Jun 2023 11:43:33 +0100
+Message-ID: <CAJ9a7VjypLQr3qUA5=BMvvdzS=-eCEjeO7azxK5AKJ4TTM1YSA@mail.gmail.com>
+Subject: Re: [PATCH] coresight: etm4x: Match all ETM4 instances based on
+ DEVARCH and DEVTYPE
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Rob Herring <robh+dt@kernel.org>, frowand.list@gmail.com,
+        linux@armlinux.org.uk
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,111 +71,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13:33-20230607, Thejasvi Konduru wrote:
-> For J721E PG1.1 the silicon revision is reported as 2.0 instead of
-
-There is no PG1.1. There is SR1.1
-
-> 1.1. This is because the k3-socinfo.c code assumes the silicon revisions
-> are 1.0, 2.0 for every platform.
-> 
-> Fixed this by creating a separate list of silicon revisions for J721E.
-
-what we are doing is to add to the silicon revision detection.
-
-> 
-> Fixes: 907a2b7e2fc7 ("soc: ti: add k3 platforms chipid module driver")
-
-This is'nt a fixes.
-
-> Signed-off-by: Thejasvi Konduru <t-konduru@ti.com>
+On Mon, 5 Jun 2023 at 14:30, Suzuki K Poulose <suzuki.poulose@arm.com> wrote:
+>
+> Instead of adding the PIDs forever to the list for the new CPUs, let us detect
+> a component to be ETMv4 based on the CoreSight CID, DEVTYPE=PE_TRACE and
+> DEVARCH=ETMv4. This is already done for some of the ETMs. We can extend the PID
+> matching to match the PIDR2:JEDEC, BIT[3], which must be 1 (RA0) always.
+>
+> Link: https://lkml.kernel.org/r/20230317030501.1811905-1-anshuman.khandual@arm.com
+> Cc: Anshuman Khandual <anshuman.khandual@arm.com>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: frowand.list@gmail.com
+> Cc: linux@armlinux.org.uk
+> Cc: Mike Leach <mike.leach@linaro.org>
+> Signed-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>
 > ---
->  drivers/soc/ti/k3-socinfo.c | 33 +++++++++++++++++++++++++--------
->  1 file changed, 25 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/soc/ti/k3-socinfo.c b/drivers/soc/ti/k3-socinfo.c
-> index d15764e19d96..365bc37793a1 100644
-> --- a/drivers/soc/ti/k3-socinfo.c
-> +++ b/drivers/soc/ti/k3-socinfo.c
-> @@ -46,6 +46,8 @@ static const struct k3_soc_id {
->  	{ 0xBB8D, "AM62AX" },
+>  .../coresight/coresight-etm4x-core.c          |  5 +++++
+>  drivers/hwtracing/coresight/coresight-priv.h  | 19 +++++++++++++++++--
+>  2 files changed, 22 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+> index 4c15fae534f3..8a2e24d5686a 100644
+> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
+> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+> @@ -2260,6 +2260,11 @@ static const struct amba_id etm4_ids[] = {
+>         CS_AMBA_UCI_ID(0x000cc0af, uci_id_etm4),/* Marvell ThunderX2 */
+>         CS_AMBA_UCI_ID(0x000b6d01, uci_id_etm4),/* HiSilicon-Hip08 */
+>         CS_AMBA_UCI_ID(0x000b6d02, uci_id_etm4),/* HiSilicon-Hip09 */
+> +       /*
+> +        * Match all PIDs with ETM4 DEVARCH. No need for adding any of the new
+> +        * CPUs to the list here.
+> +        */
+> +       CS_AMBA_MATCH_ALL_UCI(uci_id_etm4),
+>         {},
 >  };
->  
-> +static char *soc_revision_j721e[] = {"1.0", "1.1"};
-> +
->  static int
->  k3_chipinfo_partno_to_names(unsigned int partno,
->  			    struct soc_device_attribute *soc_dev_attr)
-> @@ -61,6 +63,21 @@ k3_chipinfo_partno_to_names(unsigned int partno,
->  	return -EINVAL;
->  }
->  
-> +void
-> +k3_chipinfo_silicon_rev(unsigned int variant,
-> +			struct soc_device_attribute *soc_dev_attr)
-> +{
-> +	const char *family_name = soc_dev_attr->family;
-> +	int j721e_lookup_arr_size = ARRAY_SIZE(soc_revision_j721e);
-> +
-> +	if (!strcmp(family_name, "J721E") && variant < j721e_lookup_arr_size) {
-> +		soc_dev_attr->revision = kasprintf(GFP_KERNEL, "SR%s", soc_revision_j721e[variant]);
-> +	} else {
-> +		variant++;
-> +		soc_dev_attr->revision = kasprintf(GFP_KERNEL, "SR%x.0", variant);
-> +	}
-
-I am not comfortable with if else here. Why not extend k3_soc_id
-structure to include the variant LuT? Are there exceptions to this rule
-(Say AM65x?), those would make sense to handle with a compare against
-the partno?
-
-> +}
-> +
->  static int k3_chipinfo_probe(struct platform_device *pdev)
->  {
->  	struct device_node *node = pdev->dev.of_node;
-> @@ -92,7 +109,6 @@ static int k3_chipinfo_probe(struct platform_device *pdev)
->  
->  	variant = (jtag_id & CTRLMMR_WKUP_JTAGID_VARIANT_MASK) >>
->  		  CTRLMMR_WKUP_JTAGID_VARIANT_SHIFT;
-> -	variant++;
->  
->  	partno_id = (jtag_id & CTRLMMR_WKUP_JTAGID_PARTNO_MASK) >>
->  		 CTRLMMR_WKUP_JTAGID_PARTNO_SHIFT;
-> @@ -101,17 +117,18 @@ static int k3_chipinfo_probe(struct platform_device *pdev)
->  	if (!soc_dev_attr)
->  		return -ENOMEM;
->  
-> -	soc_dev_attr->revision = kasprintf(GFP_KERNEL, "SR%x.0", variant);
-> -	if (!soc_dev_attr->revision) {
-> -		ret = -ENOMEM;
-> -		goto err;
-> -	}
-> -
->  	ret = k3_chipinfo_partno_to_names(partno_id, soc_dev_attr);
->  	if (ret) {
->  		dev_err(dev, "Unknown SoC JTAGID[0x%08X]\n", jtag_id);
->  		ret = -ENODEV;
-> -		goto err_free_rev;
-> +		goto err;
-> +	}
-> +
-> +	k3_chipinfo_silicon_rev(variant, soc_dev_attr);
-> +
-> +	if (!soc_dev_attr->revision) {
-> +		ret = -ENOMEM;
-
--ENOMEM? I dont see a alloc in the changes.
-
-> +		goto err;
->  	}
->  
->  	node = of_find_node_by_path("/");
-> -- 
-> 2.40.1
-> 
+>
+> diff --git a/drivers/hwtracing/coresight/coresight-priv.h b/drivers/hwtracing/coresight/coresight-priv.h
+> index 595ce5862056..72ec36c9232c 100644
+> --- a/drivers/hwtracing/coresight/coresight-priv.h
+> +++ b/drivers/hwtracing/coresight/coresight-priv.h
+> @@ -193,12 +193,27 @@ extern void coresight_remove_cti_ops(void);
+>         }
+>
+>  /* coresight AMBA ID, full UCI structure: id table entry. */
+> -#define CS_AMBA_UCI_ID(pid, uci_ptr)           \
+> +#define __CS_AMBA_UCI_ID(pid, m, uci_ptr)      \
+>         {                                       \
+>                 .id     = pid,                  \
+> -               .mask   = 0x000fffff,           \
+> +               .mask   = m,                    \
+>                 .data   = (void *)uci_ptr       \
+>         }
+> +#define CS_AMBA_UCI_ID(pid, uci)       __CS_AMBA_UCI_ID(pid, 0x000fffff, uci)
+> +/*
+> + * PIDR2[JEDEC], BIT(3) must be 1 (Read As One) to indicate that rest of the
+> + * PIDR1, PIDR2 DES_* fields follow JEDEC encoding for the designer. Use that
+> + * as a match value for blanket matching all devices in the given CoreSight
+> + * device type and architecture.
+> + */
+> +#define PIDR2_JEDEC                    BIT(3)
+> +#define PID_PIDR2_JEDEC                        (PIDR2_JEDEC << 16)
+> +/*
+> + * Match all PIDs in a given CoreSight device type and architecture, defined
+> + * by the uci.
+> + */
+> +#define CS_AMBA_MATCH_ALL_UCI(uci)                                     \
+> +       __CS_AMBA_UCI_ID(PID_PIDR2_JEDEC, PID_PIDR2_JEDEC, uci)
+>
+>  /* extract the data value from a UCI structure given amba_id pointer. */
+>  static inline void *coresight_get_uci_data(const struct amba_id *id)
+> --
+> 2.34.1
+>
+Reviewed by:- Mike Leach <mike.leach@linaro.org>
 
 -- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+Mike Leach
+Principal Engineer, ARM Ltd.
+Manchester Design Centre. UK
