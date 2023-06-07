@@ -2,123 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5222E7253B6
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 07:51:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A40297253B3
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 07:51:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234604AbjFGFvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 01:51:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40876 "EHLO
+        id S234413AbjFGFvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 01:51:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234382AbjFGFvj (ORCPT
+        with ESMTP id S232050AbjFGFve (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 01:51:39 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C70FD19AE;
-        Tue,  6 Jun 2023 22:51:37 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 75D625C00F4;
-        Wed,  7 Jun 2023 01:51:35 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Wed, 07 Jun 2023 01:51:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1686117095; x=1686203495; bh=9J3jSJCpCm
-        e7RWOMozMLBOk4sbRbtGFt1bbFVlTtxFk=; b=kdnVMEecRHur8SDhGvc+AiUcbg
-        6CuVzaBhbaNYKkiifHiwJNEbY5kihWpZl1VWrcEDu8N/gfiEg0XjiXm+sAjXF+7S
-        VPnwEW9BE7XHaUQbsc7tIq5KMjqOokn3lK4oOw8s76F/y3lhIqHj/aAUEGPPYUuT
-        kOH5APim2c2JTV7QT5BzLoleXc/kqNY8lwfHsgtc4qRlfBmCzBbZnCGJ3GsSyEMY
-        snwI7JvWcWKb++b0ieyobp5M/a8BqP2dcb41VbFGWJC2KGCO5tE0P2K7waoc6F43
-        t1Sf/iFNwJpAfVQF3ihf5nE3VTZ/FOHvKQ9/0u3odAVyLQj/rtO+deJaU0aQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1686117095; x=1686203495; bh=9J3jSJCpCme7R
-        WOMozMLBOk4sbRbtGFt1bbFVlTtxFk=; b=i2Q1rVLIXtuggKOMpQcpxyd7GqQba
-        2O02gfhAPuIrLKS3NkS9AFyBScx6y9+y9eEg1BmPVb/AXizwNu3kMV+DAVvktK53
-        Sdn2+nMDrLSEYpd2PFDBi0cls5an1pfnRFOyxrfSj7Han0g51iqCsGGwry51xxok
-        2T4fwiFR60bAapvuZrwIbBZjRSbmOUJHMCJu0vbYyU/g9l4fEs4cDBDJ3B1+oLit
-        m6ANgb4o0J9p05VmC3IqPJVp2gM1LE5iADN41nRv1+jQEuDoPB5edEgJu+1jZuZr
-        EK1RYfpURBCtdLxSiUQhJjxiw+S+v1teCH7+nf6MbMdDT+W8s5nRw/0VA==
-X-ME-Sender: <xms:5xqAZHajrbiuCOGbjxyaYFDJnnBBsyEqy8dUXXmRurjkKuuuhPCmpw>
-    <xme:5xqAZGa5iO_mGT1ztIACayCeGDwAVKJH_6_Rv-VajB3a1BsHdw2WvErNbgOtHuOpv
-    VgE-XSDaFTANzqB0p0>
-X-ME-Received: <xmr:5xqAZJ_sMCncJAjssRqbkqVH6a2DV1p4WnBZ7_J8AvHwqf5t_waXFypCuyLVAvwHbyI5wULi6vKgUEEPWUo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedtfedgieduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
-    ertddtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghes
-    fhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhephfetuddtudevieeljeejte
-    ffheeujeduhefgffejudfhueelleduffefgfffveeknecuvehluhhsthgvrhfuihiivgep
-    tdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgoh
-    grthdrtghomh
-X-ME-Proxy: <xmx:5xqAZNoF48f3aQ12CfAfUDgLKp1sNbyR-B1YtYk0VdzE3FUilyXkHQ>
-    <xmx:5xqAZCoeJ8Dz0MotdtrIJ_7tlMZRx_KQfBGAbTGqxqdqh-TG1pr2CA>
-    <xmx:5xqAZDQwYLEenM7677LCcEujenSvzEmz-MgiEDuEUNjWkBwuLuDctw>
-    <xmx:5xqAZFXogsRNHLkTuKry7ZJG_AalLaASvhq-ahBPmtXxEQqsKQXcXQ>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 7 Jun 2023 01:51:32 -0400 (EDT)
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     linux-mips@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, tsbogend@alpha.franken.de,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>, stable@vger.kernel.org
-Subject: [PATCH] MIPS: cpu-features: Use boot_cpu_type for CPU type based features
-Date:   Wed,  7 Jun 2023 13:51:22 +0800
-Message-Id: <20230607055122.26175-1-jiaxun.yang@flygoat.com>
-X-Mailer: git-send-email 2.39.2 (Apple Git-143)
+        Wed, 7 Jun 2023 01:51:34 -0400
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BBCA19AE;
+        Tue,  6 Jun 2023 22:51:33 -0700 (PDT)
+Received: by mail-ot1-x335.google.com with SMTP id 46e09a7af769-6af6de9fb74so5938194a34.2;
+        Tue, 06 Jun 2023 22:51:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686117092; x=1688709092;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=O3rI6tnKxeARgopgF90YS7donPiDWh6Vu53ylR5OXg0=;
+        b=RmvWZQGtP3jLhos9gsUInx2oe9IIbwa3hwfhmzyWvsmnfF1tWBrX//YjcuHLCP7thf
+         BWk0scuAgJcutm2KIODyLq/Wt0CkMaDYBhmbrDMrarZ2ug9zGrfGkTgG383aEL9RDCYL
+         C7qU7KrWIs17ivI4/nMMuntO6vETS3JvQD8rnC8JMLG/oXYPi47K8fA0EEfZqHvM2Bw+
+         eHlJ5Jb2AEbc6hJcU+twVMSXXcs3q6R27Ott8mrAxYjB82Au7B11UImg3do/VnGxGy+c
+         czjsAFbihTl6iEybH8rzaHvTAfgPQTgo3+Ou0GAc1Qgh9XebDjacpVL5tWpcmd7cG9i9
+         vsYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686117092; x=1688709092;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=O3rI6tnKxeARgopgF90YS7donPiDWh6Vu53ylR5OXg0=;
+        b=GVpbo6uFJ3V2rcjUszMuGObXREFSRtUvvYQb35Qf9B9gtCEDY3KlnAmWrDhTKHgrmn
+         AgV0luHevHFUFvzW/DBKk6Q4LChTN5gG08eKrPLHly6J+Q4X8czDltJ7zwRoIMjOko2D
+         8XOn+aYQRdgpk4dzzqNv8K4TASR7dwe0hfgZYUKzki/5z1wWgTfAiyKz/RotsY2pbILr
+         LiOb8J881OQ2W1gdwxzD1ZPHYyjNSc8EtAa/1TVselH98C1frDGTZqrRh3eMlDDKLh6h
+         o8wdYbXn1zGJblODUdR7zW/5SprodtBLht5DPvZAKAvy7cGBM8ZZn4roMxUqjAms505Z
+         6fcA==
+X-Gm-Message-State: AC+VfDxDI2wekdOUp8QJLyyiw+c8L6QA9qF9X/bi1YB39HjrnjHGWIrw
+        wOPy++EZOv4EWqDd+VFETg4=
+X-Google-Smtp-Source: ACHHUZ7/d1dW7bob/8me+LolHy42civ7LW00G+Fcu7tlgp7+UFl1XGjOs3bfDFoj7EMeVlx+DOHOXg==
+X-Received: by 2002:a05:6830:13c9:b0:6ab:1b58:f408 with SMTP id e9-20020a05683013c900b006ab1b58f408mr3853451otq.19.1686117092582;
+        Tue, 06 Jun 2023 22:51:32 -0700 (PDT)
+Received: from [192.168.43.80] (subs28-116-206-12-58.three.co.id. [116.206.12.58])
+        by smtp.gmail.com with ESMTPSA id b16-20020aa78110000000b00660d80087a8sm1750425pfi.187.2023.06.06.22.51.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Jun 2023 22:51:32 -0700 (PDT)
+Message-ID: <653b3359-2005-21b1-039d-c55ca4cffdcc@gmail.com>
+Date:   Wed, 7 Jun 2023 12:51:26 +0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Content-Language: en-US
+To:     Theodore Ts'o <tytso@mit.edu>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux ext4 Development <linux-ext4@vger.kernel.org>,
+        Nikolas Kraetzschmar <nikolas.kraetzschmar@sap.com>,
+        Linux Stable <stable@vger.kernel.org>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: Fwd: Remounting ext4 filesystem from ro to rw fails when quotas are
+ enabled
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some CPU feature macros were using current_cpu_type to mark feature
-availability.
+Hi,
 
-However current_cpu_type will use smp_processor_id, which is prohibited
-under preemptable context.
+I notice a regression report on Bugzilla [1]. Quoting from it:
 
-Since those features are all uniform on all CPUs in a SMP system, use
-boot_cpu_type instead of current_cpu_type to fix preemptable kernel.
+> Since commit a44be64, remounting a read-only ext4 filesystem to become read-write fails when quotas are enabled. The mount syscall returns -EROFS and outputs the following in dmesg:
+> 
+> ```
+> EXT4-fs warning (device loop0): ext4_enable_quotas:7028: Failed to enable quota tracking (type=0, err=-30, ino=3). Please run e2fsck
+> ```
+> 
+> 
+> Root cause
+> 
+> The problem can be traced back to the changes introduced in commit a44be64. It appears that the issue arises because the SB_RDONLY bit of the s_flags field is now only cleared after executing the ext4_enable_quotas function. However, the vfs_setup_quota_inode function, called by ext4_enable_quotas, checks whether this bit is set (fs/quota/dquot.c:2331):
+> 
+> ```
+> if (IS_RDONLY(inode))
+> 	return -EROFS;
+> ```
+> 
+> This condition therefore always triggers the -EROFS fail condition.
+> 
+> 
+> Steps to Reproduce
+> 
+> The bug can be reproduced by executing the following script on a current mainline kernel with defconfig:
+> 
+> ```
+> #!/bin/bash
+> 
+> set -ex
+> 
+> truncate -s 1G /tmp/img
+> mkfs.ext4 /tmp/img
+> tune2fs -Q usrquota,grpquota,prjquota /tmp/img
+> losetup /dev/loop0 /tmp/img
+> mount -o ro /dev/loop0 /mnt
+> mount -o remount,rw /mnt
+> ```
+> 
+> Executing the script results in the following output:
+> 
+> ```
+> + truncate -s 1G /tmp/img
+> + mkfs.ext4 /tmp/img
+> mke2fs 1.47.0 (5-Feb-2023)
+> Discarding device blocks: done
+> Creating filesystem with 262144 4k blocks and 65536 inodes
+> Filesystem UUID: b96a3da2-043f-11ee-b6f0-47c69db05231
+> Superblock backups stored on blocks:
+> 	32768, 98304, 163840, 229376
+> 
+> Allocating group tables: done
+> Writing inode tables: done
+> Creating journal (8192 blocks): done
+> Writing superblocks and filesystem accounting information: done
+> 
+> + tune2fs -Q usrquota,grpquota,prjquota /tmp/img
+> tune2fs 1.47.0 (5-Feb-2023)
+> + losetup /dev/loop0 /tmp/img
+> [    6.766763] loop0: detected capacity change from 0 to 2097152
+> + mount -o ro /dev/loop0 /mnt
+> [    6.791561] EXT4-fs (loop0): mounted filesystem b96a3da2-043f-11ee-b6f0-47c69db05231 ro with ordered data mode. Quota mode: journalled.
+> + mount -o remount,rw /mnt
+> [    6.805546] EXT4-fs warning (device loop0): ext4_enable_quotas:7028: Failed to enable quota tracking (type=0, err=-30, ino=3). Please run e2fsck to fix.
+> mount: /mnt: cannot remount /dev/loop0 read-write, is write-protected.
+>        dmesg(1) may have more information after failed mount system call.
+> ```
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
----
- arch/mips/include/asm/cpu-features.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+See Bugzilla for the full thread.
 
-diff --git a/arch/mips/include/asm/cpu-features.h b/arch/mips/include/asm/cpu-features.h
-index 2a0b90077b50..8c6d4a87db37 100644
---- a/arch/mips/include/asm/cpu-features.h
-+++ b/arch/mips/include/asm/cpu-features.h
-@@ -125,7 +125,7 @@
- ({									\
- 	int __res;							\
- 									\
--	switch (current_cpu_type()) {					\
-+	switch (boot_cpu_type()) {					\
- 	case CPU_CAVIUM_OCTEON:						\
- 	case CPU_CAVIUM_OCTEON_PLUS:					\
- 	case CPU_CAVIUM_OCTEON2:					\
-@@ -373,7 +373,7 @@
- ({									\
- 	int __res;							\
- 									\
--	switch (current_cpu_type()) {					\
-+	switch (boot_cpu_type()) {					\
- 	case CPU_M14KC:							\
- 	case CPU_74K:							\
- 	case CPU_1074K:							\
+Ted, it looks like this regression is caused by your ext4_xattr_block_set()
+fix to earlier syzbot report. Would you like to take a look on it?
+
+Anyway, I'm adding it to regzbot:
+
+#regzbot introduced: a44be64bbecb15 https://bugzilla.kernel.org/show_bug.cgi?id=217529
+#regzbot title: Remounting ext4 filesystem from ro to rw fails when quotas are enabled
+
+Thanks.
+
+[1]: https://bugzilla.kernel.org/show_bug.cgi?id=217529
+
 -- 
-2.39.2 (Apple Git-143)
-
+An old man doll... just what I always wanted! - Clara
