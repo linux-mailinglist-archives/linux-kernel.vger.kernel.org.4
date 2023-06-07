@@ -2,159 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 648117271D6
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 00:38:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CA6E7271DF
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 00:41:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231742AbjFGWi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 18:38:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47612 "EHLO
+        id S231792AbjFGWlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 18:41:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231178AbjFGWiZ (ORCPT
+        with ESMTP id S231259AbjFGWlJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 18:38:25 -0400
-Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B299E;
-        Wed,  7 Jun 2023 15:38:18 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id 5876863CC10C;
-        Thu,  8 Jun 2023 00:38:17 +0200 (CEST)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id 2NQlVBlpCf14; Thu,  8 Jun 2023 00:38:16 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by lithops.sigma-star.at (Postfix) with ESMTP id D668963CC111;
-        Thu,  8 Jun 2023 00:38:16 +0200 (CEST)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-        by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id OnWj-RF31K1B; Thu,  8 Jun 2023 00:38:16 +0200 (CEST)
-Received: from foxxylove.corp.sigma-star.at (unknown [82.150.214.1])
-        by lithops.sigma-star.at (Postfix) with ESMTPSA id 2F98E63CC10C;
-        Thu,  8 Jun 2023 00:38:16 +0200 (CEST)
-From:   Richard Weinberger <richard@nod.at>
-To:     linux-hardening@vger.kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        keescook@chromium.org, Richard Weinberger <richard@nod.at>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>
-Subject: [RFC PATCH 1/1] vsprintf: Warn on integer scanning overflows
-Date:   Thu,  8 Jun 2023 00:37:55 +0200
-Message-Id: <20230607223755.1610-2-richard@nod.at>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20230607223755.1610-1-richard@nod.at>
-References: <20230607223755.1610-1-richard@nod.at>
+        Wed, 7 Jun 2023 18:41:09 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55EC91988;
+        Wed,  7 Jun 2023 15:41:04 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1b24eba185cso6943285ad.2;
+        Wed, 07 Jun 2023 15:41:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686177663; x=1688769663;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=EIF33hiMWS7/Vu/beuu7qZKGgIlJuBg/HJHP1JWkTXM=;
+        b=LIMMLb444SdimuyODXevX8HrxRcSUBeezgVcKskNlBnmkRy5xNf3Rt8kJgBtJrpqr+
+         3EoWw1d6voer+zr3GHZIXOzgTmITh+65zJKRBYjQIuOWXMHvH9I6HVQx2wnXV/WpS36P
+         p620u4LE0W6nnw2dGXdBan2NP+ypDvQ1Kpl4rCd98DmI+D86ikq1P4gLDu0c66gYNFM+
+         VPWj7dnHPDxEO2IGl5vcmmE4HShx6uTpZfaoy4dt7YWcbWhiulzTUIQwUph5ABOX4Nz3
+         RzMi0A6zxR0eNh7hBE5dBEZb3EuNR9JqpkI/0fnwkdDJ8m/RZdXTPxyYNH2EAMfOh1iZ
+         I8LQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686177663; x=1688769663;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=EIF33hiMWS7/Vu/beuu7qZKGgIlJuBg/HJHP1JWkTXM=;
+        b=Kz2fsPcLVTqmx1Z4I+8bHyREjkS9Bvy2419r1ChEqiG4G3LvRc2E6lHEkg9tkAkKuc
+         qlqrP4p0erqTMflhpcb4osqllxGLutGuj8K4VkWOReuKMxMopXBwhwE8Yc2QuWSKky4g
+         TRiDbvLeWCdt9NaITLy/4nTjJ3FBly+qv5zIaWRF+aG0jLndA7ckESPFG4HwtjkAwhPY
+         lDcJlX21sEcnzAL0H9ttSxMgiWP2X1tN4Cre0EdasLxGmdrgpSOji5dQM78lIQgoZLBT
+         HAjNL18dp+avjwJs8hTXDQyBkbbnnlyYFo4xgPmSBPEyr/ToBfnhBvPN0SIWHvzuPYcB
+         xkrQ==
+X-Gm-Message-State: AC+VfDy5vwoPzQtf5fx0xsGz2OlOUainuIwdFZyaJM1UlUcIWWzWnr01
+        6fYhfNDEl4zTXXDDADcUMYCyEclwlFvZ5al0q4MCBd1CT+s=
+X-Google-Smtp-Source: ACHHUZ4IrblhBhvZ0moOdjOb2WF7sR6JEjy8GsXoRmgolzjjz7KVMkrWzdUI7T7v03sMhq1RTkU0D84lV5z2Bb4zvN8=
+X-Received: by 2002:a17:903:228d:b0:1b2:4ece:55f1 with SMTP id
+ b13-20020a170903228d00b001b24ece55f1mr2010932plh.35.1686177663105; Wed, 07
+ Jun 2023 15:41:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=ham autolearn_force=no
-        version=3.4.6
+From:   Alexander Duyck <alexander.duyck@gmail.com>
+Date:   Wed, 7 Jun 2023 15:40:26 -0700
+Message-ID: <CAKgT0UezciLjHacOx372+v8MZkDf22D5Thn82n-07xxKy_0FTQ@mail.gmail.com>
+Subject: Question about reserved_regions w/ Intel IOMMU
+To:     LKML <linux-kernel@vger.kernel.org>,
+        "open list:INTEL IOMMU (VT-d)" <iommu@lists.linux-foundation.org>,
+        linux-pci <linux-pci@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The scanf function family has no way to indicate overflows
-while scanning. As consequence users of these function have to make
-sure their input cannot cause an overflow.
-Since this is not always the case add WARN_ON_ONCE() guards to
-trigger a warning upon an overflow.
+I am running into a DMA issue that appears to be a conflict between
+ACS and IOMMU. As per the documentation I can find, the IOMMU is
+supposed to create reserved regions for MSI and the memory window
+behind the root port. However looking at reserved_regions I am not
+seeing that. I only see the reservation for the MSI.
 
-Signed-off-by: Richard Weinberger <richard@nod.at>
----
- lib/vsprintf.c | 33 +++++++++++++++++++++++++--------
- 1 file changed, 25 insertions(+), 8 deletions(-)
+So for example with an enabled NIC and iommu enabled w/o passthru I am seeing:
+# cat /sys/bus/pci/devices/0000\:83\:00.0/iommu_group/reserved_regions
+0x00000000fee00000 0x00000000feefffff msi
 
-diff --git a/lib/vsprintf.c b/lib/vsprintf.c
-index 40f560959b169..3d8d751306cdc 100644
---- a/lib/vsprintf.c
-+++ b/lib/vsprintf.c
-@@ -70,6 +70,7 @@ static noinline unsigned long long simple_strntoull(con=
-st char *startp, size_t m
- 	prefix_chars =3D cp - startp;
- 	if (prefix_chars < max_chars) {
- 		rv =3D _parse_integer_limit(cp, base, &result, max_chars - prefix_char=
-s);
-+		WARN_ON_ONCE(rv & KSTRTOX_OVERFLOW);
- 		/* FIXME */
- 		cp +=3D (rv & ~KSTRTOX_OVERFLOW);
- 	} else {
-@@ -3657,22 +3658,34 @@ int vsscanf(const char *buf, const char *fmt, va_=
-list args)
-=20
- 		switch (qualifier) {
- 		case 'H':	/* that's 'hh' in format */
--			if (is_sign)
-+			if (is_sign) {
-+				WARN_ON_ONCE(val.s > 127);
-+				WARN_ON_ONCE(val.s < -128);
- 				*va_arg(args, signed char *) =3D val.s;
--			else
-+			} else {
-+				WARN_ON_ONCE(val.u > 255);
- 				*va_arg(args, unsigned char *) =3D val.u;
-+			}
- 			break;
- 		case 'h':
--			if (is_sign)
-+			if (is_sign) {
-+				WARN_ON_ONCE(val.s > SHRT_MAX);
-+				WARN_ON_ONCE(val.s < SHRT_MIN);
- 				*va_arg(args, short *) =3D val.s;
--			else
-+			} else {
-+				WARN_ON_ONCE(val.u > USHRT_MAX);
- 				*va_arg(args, unsigned short *) =3D val.u;
-+			}
- 			break;
- 		case 'l':
--			if (is_sign)
-+			if (is_sign) {
-+				WARN_ON_ONCE(val.s > LONG_MAX);
-+				WARN_ON_ONCE(val.s < LONG_MIN);
- 				*va_arg(args, long *) =3D val.s;
--			else
-+			} else {
-+				WARN_ON_ONCE(val.u > ULONG_MAX);
- 				*va_arg(args, unsigned long *) =3D val.u;
-+			}
- 			break;
- 		case 'L':
- 			if (is_sign)
-@@ -3684,10 +3697,14 @@ int vsscanf(const char *buf, const char *fmt, va_=
-list args)
- 			*va_arg(args, size_t *) =3D val.u;
- 			break;
- 		default:
--			if (is_sign)
-+			if (is_sign) {
-+				WARN_ON_ONCE(val.s > INT_MAX);
-+				WARN_ON_ONCE(val.s < INT_MIN);
- 				*va_arg(args, int *) =3D val.s;
--			else
-+			} else {
-+				WARN_ON_ONCE(val.u > UINT_MAX);
- 				*va_arg(args, unsigned int *) =3D val.u;
-+			}
- 			break;
- 		}
- 		num++;
---=20
-2.35.3
-
+Shouldn't there also be a memory window for the region behind the root
+port to prevent any possible peer-to-peer access?
