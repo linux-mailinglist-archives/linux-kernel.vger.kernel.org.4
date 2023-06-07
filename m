@@ -2,53 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 233187258EA
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 10:58:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FE317258FA
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 10:59:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239395AbjFGI6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 04:58:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54630 "EHLO
+        id S239685AbjFGI7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 04:59:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238868AbjFGI5k (ORCPT
+        with ESMTP id S234809AbjFGI6v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 04:57:40 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C205926AC
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 01:56:18 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686128156;
+        Wed, 7 Jun 2023 04:58:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56C931FC3
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 01:56:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686128176;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=DpvU/VMM03E2+eM90PuDFm3nk7nWddaXa439gEnZ/AU=;
-        b=kAZd/W3Zjl3r/u07MxqNf/Wu4R0A6Rb9QytM7xaOtUOTUFfvuAsEhvJN9HekERWAn+Y39p
-        kAKhlaoL/69fzL0o+XibhxdDmJk9KRVWI4Yo0mLGqAIUu6b9tgmNzW02vYmwILNsYKcbjz
-        ddQTGLN2EE9r6wtP1fuCXTLWKAo96BBBMBzWj1eRbtIlV3WE+NboIm5rUqNYPJ9YBCmvqE
-        36RnMLMTk/9IRtXLd9IQa0+5D+nxR271M1w+kOKl8MxLhk/I/8SG3YVZak9J/xMrNxjjA/
-        po/kr/RKWMVLiTD8QJYqWnRb6leAYACLLcdoOh2xUtxRCecfrsfbMCzja4Mu2w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686128156;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DpvU/VMM03E2+eM90PuDFm3nk7nWddaXa439gEnZ/AU=;
-        b=AM1EZgtY35YffOG8PbOlVGTpWyrKhnCLIGUTjS+pycFFXJVCuG4x/HCHvl+EuD9OWBtwQf
-        3yM0f3S5DgjMhACA==
-To:     Nikolay Borisov <nik.borisov@suse.com>, x86@kernel.org
-Cc:     linux-kernel@vger.kernel.org, mhocko@suse.com, jslaby@suse.cz,
-        Nikolay Borisov <nik.borisov@suse.com>
-Subject: Re: [PATCH 1/3] x86: Introduce ia32_disabled boot parameter
-In-Reply-To: <20230607072936.3766231-2-nik.borisov@suse.com>
-References: <20230607072936.3766231-1-nik.borisov@suse.com>
- <20230607072936.3766231-2-nik.borisov@suse.com>
-Date:   Wed, 07 Jun 2023 10:55:55 +0200
-Message-ID: <87r0qnk5wk.ffs@tglx>
+        bh=UgLKR9DHQdW/nvNpJofy29A1ogMEj2dq7gg1iVaHfDs=;
+        b=L3T4uvaCmAZ4r25Cc1d3MtyFNYmPVo/Bnv36ouz8sCI9fhLQEmJBC9/AMdyboP9g3zMvUx
+        QgESY9GvV+jUJE2OZvK66MSlQy7BfXIDVlwA4MaeVcbGyDLBth1qFYqy/LJZZjfNWD5d5Y
+        xiyu+s/kSEECdoL0ST6TiAjep1IomYI=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-317-LOjHeIkuOY6VsjXSIzsKbg-1; Wed, 07 Jun 2023 04:56:11 -0400
+X-MC-Unique: LOjHeIkuOY6VsjXSIzsKbg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A0D53380213A;
+        Wed,  7 Jun 2023 08:56:10 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.182])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B18902026D49;
+        Wed,  7 Jun 2023 08:56:05 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <2004570.1686127633@warthog.procyon.org.uk>
+References: <2004570.1686127633@warthog.procyon.org.uk>
+To:     torvalds@linux-foundation.org
+Cc:     dhowells@redhat.com, Jeffrey Altman <jaltman@auristor.com>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        linux-afs@lists.infradead.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] afs: Fix setting of mtime when creating a file/dir/symlink
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2078979.1686128164.1@warthog.procyon.org.uk>
+Date:   Wed, 07 Jun 2023 09:56:04 +0100
+Message-ID: <2078981.1686128164@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,31 +66,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07 2023 at 10:29, Nikolay Borisov wrote:
-> Distributions would like to reduce their attack surface as much as
-> possible but at the same time they have to cater to a wide variety of
-> legacy software. One such avenue where distros have to strike a balance
-> is the support for 32bit syscalls on a 64bit kernel. Ideally we'd have
-> the ability to disable the the compat support at boot time. This would
-> allow the decision whether it should be disabled/enabled can be
-> delegated to system administrators.
->
-> This patch simply introduces ia32_disable boot parameter which aims at
+Hi Linus,
 
-https://www.kernel.org/doc/html/latest/process/maintainer-tip.html
-
-> disabling 32 bit process support even if CONFIG_IA32_EMULATION has been
-> selected at build time.
->
-> Signed-off-by: Nikolay Borisov <nik.borisov@suse.com>
-> ---
->  arch/x86/entry/common.c      | 12 ++++++++++++
->  arch/x86/include/asm/traps.h |  4 ++++
-
-New command line parameters require documentation.
-
-https://www.kernel.org/doc/html/latest/process/
+Sorry, I forgot to say in the patch email, but could you apply this please?
 
 Thanks,
+David
 
-        tglx
