@@ -2,344 +2,336 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 009B67264BA
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 17:33:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DE8A7264BF
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 17:35:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240421AbjFGPdf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 11:33:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45522 "EHLO
+        id S240933AbjFGPfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 11:35:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241291AbjFGPdd (ORCPT
+        with ESMTP id S234921AbjFGPfi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 11:33:33 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5142D1FC3
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 08:33:24 -0700 (PDT)
-Received: from mail-yw1-f200.google.com (mail-yw1-f200.google.com [209.85.128.200])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id CB3BD3F15C
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 15:33:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1686152002;
-        bh=IWFv37c+eoG8tJI1JWj5okUGLZBX2yml/Xw7WCENPys=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=t/ldjzpw/R7gPa42tWKVISUAqjeIqZ6g6LmSPP59jjZnP5OGnIva5ppk5xaP4KmAR
-         OdqYaMpZ1915o9XmoYDzuB7Mm+M8V5ID1Y5bHOQ9eWAFuHf6mSxpLeWYDvc3cDSu++
-         mOOn4wro7J6AX9DJuxqLSRmlQTbKgoM/1f6LZ8e21rxHrsYTZY0cswSsqO0hhTdYBm
-         xuB18wbOUAyVQHfUri8f2KOSuSKJSpKiEtQ4dZHMH42QOlIWnerOb+ws4oQxRRQuRB
-         TtPwYUiWg330YHPA5rgJ9+Ayi+TqDrEZrR00pnymnKrI3GkRPIVUeavGtbAYQWkMV4
-         erWUw2RqNd4gw==
-Received: by mail-yw1-f200.google.com with SMTP id 00721157ae682-568960f4596so126889587b3.1
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 08:33:22 -0700 (PDT)
+        Wed, 7 Jun 2023 11:35:38 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EA7E83
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 08:35:37 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-65314ee05c6so3569334b3a.1
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 08:35:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686152137; x=1688744137;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WynTZywqtD9l/8Uu7YWD6wPNKsCzbnxA089t4XpU9S0=;
+        b=sz/Q/VZHuMNxLcYWBhr2CpgetfCyMTJPFOpENYTBz5m0omfdAXEmSB8LkK+b3cMOE+
+         o3gCZ+STSX+6lvIaq7CLfQj6d21MIsWfpb1at7x6PyYS0bPDCocYbG/tLQi5Kd6+wrhn
+         iQW/EA2QbKUoF5NkcAhxRvuUf1chRA1koJRFYljNOLwwhWY2FdO6NSxRAYHgs3TBsr06
+         BlF9zhGsSXt73gNwYCySpHJuxlOTZ+BiKNPIQBHYo9tG4nbIK2sZjfiGCOZxnufBH1RJ
+         y0BvOatmH2lBVpHpn+nNyEafKMzih8gScEUYfAaFaVW9hEprzzXilOkxRhRi3w4zoAe2
+         W74g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686152002; x=1688744002;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IWFv37c+eoG8tJI1JWj5okUGLZBX2yml/Xw7WCENPys=;
-        b=DWKKIauF/uV2OHuTj9C/qifKrrrBJppcMjvzQr0R+ZtTSaYkQnyJxz/+xsIDvVHZm8
-         FXjb3PWyAyO04GpHXxfApBfbrPfRotV3m2JUxXyYRkjJmE7rnFIE9BStnkCYc2CqUo6O
-         voJ4bAjuzhchn5w9QmX8TpdebeQGkqH9g3NrJQVOvYgTh45v+mkZDf0O/OuZ3sLELXiY
-         wlwWVQ61+KyRA8ds0M9yf4gF2yjMKfYIWfYdixcUSldwGEVMN211Bp4x16cQGjdQ8uLY
-         wtD82RFb8dMDNtg7U9QMk4NAltrdFqiRA9BhcY7ImDO7LJHmg0w5xBg3obh+Yx22zFLp
-         HOKA==
-X-Gm-Message-State: AC+VfDy5GZgLSxwTl6A58Gl3Ndq7lizQ0cKyaTK96i+YNtlSDm5aj5pI
-        6IGjet33CGNfO1OHQbfBavZ9tdxNH4eOQkGtW9SNY4IXeIfiReDRdAc3rrqi4ezXS1rlA7SN60E
-        2i+cmBcb1Mz/+fVVIvAQB3Wq8k1B+VelyUTKwhYhgGfVIjSIYWu19EHBUVQ==
-X-Received: by 2002:a81:9111:0:b0:561:da0d:6488 with SMTP id i17-20020a819111000000b00561da0d6488mr2028183ywg.50.1686152001633;
-        Wed, 07 Jun 2023 08:33:21 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ41ujZduYo0Tx4YuzMUoEUAiQUD7l1XN5FJidm3Unip3PVpHkcdztp37wOx6A8Ub0V0IIOsJeVrBs0yIakpb2w=
-X-Received: by 2002:a81:9111:0:b0:561:da0d:6488 with SMTP id
- i17-20020a819111000000b00561da0d6488mr2028126ywg.50.1686152000504; Wed, 07
- Jun 2023 08:33:20 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686152137; x=1688744137;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WynTZywqtD9l/8Uu7YWD6wPNKsCzbnxA089t4XpU9S0=;
+        b=Csc17TPK5fhSfoMIKtuZ33KNiYXVuCa+Aje/1DwhKCQRKT6y8FKJbhpB4R0AUn/2Pr
+         4EXcIjeTzAdrCsr61on/OFQEixucqvnESDWffaxYfzAbFuDfmImMhOIAzHBMmyoIVEBm
+         mHqGLU4jy55AHXwHNAU+wW+jEbM+qrXCbriPnVfJsNBEK03UIEJ85uiUL2oV23EcqbzX
+         EV8yTFPFlMKqYUoah4zgp4f1JDobsLpQtmVqVHb0/+UXVFC2Z4dCkhUcYfWedoN3XV3M
+         vESW4HRshW7yMvQoUUnQNilbkMPQjhM4brKh9QzWAyquV7T8xZiRMxKlTzcOUS0fyyR6
+         /pwA==
+X-Gm-Message-State: AC+VfDz6ECsfBwjt6t2BPmZCiNWR+9uynCXuRX/Eld3ykqlZP6adKoiw
+        PevUuHGVb6gOvEmtRRbDR6NjGw==
+X-Google-Smtp-Source: ACHHUZ6hPcb8IZWL+xcho5q6ecO8XViI22CKuZFj3x0r3uJBkmCsnZMaBvLw/ZH8qYTIrFp2CyB68A==
+X-Received: by 2002:a05:6a20:7484:b0:10b:7243:c212 with SMTP id p4-20020a056a20748400b0010b7243c212mr1540781pzd.42.1686152136646;
+        Wed, 07 Jun 2023 08:35:36 -0700 (PDT)
+Received: from p14s ([2604:3d09:148c:c800:daf4:d6b6:e616:7e23])
+        by smtp.gmail.com with ESMTPSA id a10-20020a62bd0a000000b0063b86aff031sm8564988pff.108.2023.06.07.08.35.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 08:35:36 -0700 (PDT)
+Date:   Wed, 7 Jun 2023 09:35:33 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
+Cc:     linux-remoteproc@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>,
+        linux-kernel@vger.kernel.org, Trilok Soni <quic_tsoni@quicinc.com>,
+        Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Elliot Berman <quic_eberman@quicinc.com>,
+        Guru Das Srinagesh <quic_gurus@quicinc.com>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Melody Olvera <quic_molvera@quicinc.com>
+Subject: Re: [PATCH v4 2/2] remoteproc: qcom: Add remoteproc tracing
+Message-ID: <ZICjxXSUkiHQH0IY@p14s>
+References: <cover.1685486994.git.quic_gokukris@quicinc.com>
+ <bd949ac8225abb842630bd7f4a2d45334c58f17f.1685486994.git.quic_gokukris@quicinc.com>
 MIME-Version: 1.0
-References: <20230607152038.469739-1-aleksandr.mikhalitsyn@canonical.com> <20230607152038.469739-4-aleksandr.mikhalitsyn@canonical.com>
-In-Reply-To: <20230607152038.469739-4-aleksandr.mikhalitsyn@canonical.com>
-From:   Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Date:   Wed, 7 Jun 2023 17:33:09 +0200
-Message-ID: <CAEivzxdkKENc=2a5gzyO6cX9+=XYnNHHj0NBi2fcC_2vEoaBPQ@mail.gmail.com>
-Subject: Re: [PATCH v3 03/14] ceph: handle idmapped mounts in create_request_message()
-To:     xiubli@redhat.com
-Cc:     brauner@kernel.org, stgraber@ubuntu.com,
-        linux-fsdevel@vger.kernel.org,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bd949ac8225abb842630bd7f4a2d45334c58f17f.1685486994.git.quic_gokukris@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 7, 2023 at 5:21=E2=80=AFPM Alexander Mikhalitsyn
-<aleksandr.mikhalitsyn@canonical.com> wrote:
->
-> From: Christian Brauner <christian.brauner@ubuntu.com>
->
-> Inode operations that create a new filesystem object such as ->mknod,
-> ->create, ->mkdir() and others don't take a {g,u}id argument explicitly.
-> Instead the caller's fs{g,u}id is used for the {g,u}id of the new
-> filesystem object.
->
-> Cephfs mds creation request argument structures mirror this filesystem
-> behavior. They don't encode a {g,u}id explicitly. Instead the caller's
-> fs{g,u}id that is always sent as part of any mds request is used by the
-> servers to set the {g,u}id of the new filesystem object.
->
-> In order to ensure that the correct {g,u}id is used map the caller's
-> fs{g,u}id for creation requests. This doesn't require complex changes.
-> It suffices to pass in the relevant idmapping recorded in the request
-> message. If this request message was triggered from an inode operation
-> that creates filesystem objects it will have passed down the relevant
-> idmaping. If this is a request message that was triggered from an inode
-> operation that doens't need to take idmappings into account the initial
-> idmapping is passed down which is an identity mapping and thus is
-> guaranteed to leave the caller's fs{g,u}id unchanged.,u}id is sent.
->
-> The last few weeks before Christmas 2021 I have spent time not just
-> reading and poking the cephfs kernel code but also took a look at the
-> ceph mds server userspace to ensure I didn't miss some subtlety.
->
-> This made me aware of one complication to solve. All requests send the
-> caller's fs{g,u}id over the wire. The caller's fs{g,u}id matters for the
-> server in exactly two cases:
->
-> 1. to set the ownership for creation requests
-> 2. to determine whether this client is allowed access on this server
->
-> Case 1. we already covered and explained. Case 2. is only relevant for
-> servers where an explicit uid access restriction has been set. That is
-> to say the mds server restricts access to requests coming from a
-> specific uid. Servers without uid restrictions will grant access to
-> requests from any uid by setting MDS_AUTH_UID_ANY.
->
-> Case 2. introduces the complication because the caller's fs{g,u}id is
-> not just used to record ownership but also serves as the {g,u}id used
-> when checking access to the server.
->
-> Consider a user mounting a cephfs client and creating an idmapped mount
-> from it that maps files owned by uid 1000 to be owned uid 0:
->
-> mount -t cephfs -o [...] /unmapped
-> mount-idmapped --map-mount 1000:0:1 /idmapped
->
-> That is to say if the mounted cephfs filesystem contains a file "file1"
-> which is owned by uid 1000:
->
-> - looking at it via /unmapped/file1 will report it as owned by uid 1000
->   (One can think of this as the on-disk value.)
-> - looking at it via /idmapped/file1 will report it as owned by uid 0
->
-> Now, consider creating new files via the idmapped mount at /idmapped.
-> When a caller with fs{g,u}id 1000 creates a file "file2" by going
-> through the idmapped mount mounted at /idmapped it will create a file
-> that is owned by uid 1000 on-disk, i.e.:
->
-> - looking at it via /unmapped/file2 will report it as owned by uid 1000
-> - looking at it via /idmapped/file2 will report it as owned by uid 0
->
-> Now consider an mds server that has a uid access restriction set and
-> only grants access to requests from uid 0.
->
-> If the client sends a creation request for a file e.g. /idmapped/file2
-> it will send the caller's fs{g,u}id idmapped according to the idmapped
-> mount. So if the caller has fs{g,u}id 1000 it will be mapped to {g,u}id
-> 0 in the idmapped mount and will be sent over the wire allowing the
-> caller access to the mds server.
->
-> However, if the caller is not issuing a creation request the caller's
-> fs{g,u}id will be send without the mount's idmapping applied. So if the
-> caller that just successfully created a new file on the restricted mds
-> server sends a request as fs{g,u}id 1000 access will be refused. This
-> however is inconsistent.
->
-> From my perspective the root of the problem lies in the fact that
-> creation requests implicitly infer the ownership from the {g,u}id that
-> gets sent along with every mds request.
->
-> I have thought of multiple ways of addressing this problem but the one I
-> prefer is to give all mds requests that create a filesystem object a
-> proper, separate {g,u}id field entry in the argument struct. This is,
-> for example how ->setattr mds requests work.
->
-> This way the caller's fs{g,u}id can be used consistenly for server
-> access checks and is separated from the ownership for new filesystem
-> objects.
->
-> Servers could then be updated to refuse creation requests whenever the
-> {g,u}id used for access checking doesn't match the {g,u}id used for
-> creating the filesystem object just as is done for setattr requests on a
-> uid restricted server. But I am, of course, open to other suggestions.
->
-> Cc: Xiubo Li <xiubli@redhat.com>
-> Cc: Jeff Layton <jlayton@kernel.org>
-> Cc: Ilya Dryomov <idryomov@gmail.com>
-> Cc: ceph-devel@vger.kernel.org
-> Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
-> Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com=
->
+Hi Gokul,
+
+On Wed, May 31, 2023 at 02:28:40PM -0700, Gokul krishna Krishnakumar wrote:
+> This change attempts to add traces for start, stop, crash
+> subsystem/subdevice events, these will serve as standard checkpoints in
+> code and could help in debugging the failures in subdevice/subsystem
+> prepare, start, stop and unprepare functions. This will also breakdown
+> the time taken for each step in remoteproc bootup/shutdown process.
+> 
+> Signed-off-by: Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
 > ---
->  fs/ceph/mds_client.c | 22 ++++++++++++++++++----
->  1 file changed, 18 insertions(+), 4 deletions(-)
->
-> diff --git a/fs/ceph/mds_client.c b/fs/ceph/mds_client.c
-> index 810c3db2e369..e4265843b838 100644
-> --- a/fs/ceph/mds_client.c
-> +++ b/fs/ceph/mds_client.c
-> @@ -2583,6 +2583,8 @@ static struct ceph_msg *create_request_message(stru=
-ct ceph_mds_session *session,
->         void *p, *end;
->         int ret;
->         bool legacy =3D !(session->s_con.peer_features & CEPH_FEATURE_FS_=
-BTIME);
-> +       kuid_t caller_fsuid;
-> +       kgid_t caller_fsgid;
->
->         ret =3D set_request_path_attr(req->r_inode, req->r_dentry,
->                               req->r_parent, req->r_path1, req->r_ino1.in=
-o,
-> @@ -2651,10 +2653,22 @@ static struct ceph_msg *create_request_message(st=
-ruct ceph_mds_session *session,
->
->         head->mdsmap_epoch =3D cpu_to_le32(mdsc->mdsmap->m_epoch);
->         head->op =3D cpu_to_le32(req->r_op);
-> -       head->caller_uid =3D cpu_to_le32(from_kuid(&init_user_ns,
-> -                                                req->r_cred->fsuid));
-> -       head->caller_gid =3D cpu_to_le32(from_kgid(&init_user_ns,
-> -                                                req->r_cred->fsgid));
-> +       /*
-> +        * Inode operations that create filesystem objects based on the
-> +        * caller's fs{g,u}id like ->mknod(), ->create(), ->mkdir() etc. =
-don't
-> +        * have separate {g,u}id fields in their respective structs in th=
-e
-> +        * ceph_mds_request_args union. Instead the caller_{g,u}id field =
-is
-> +        * used to set ownership of the newly created inode by the mds se=
-rver.
-> +        * For these inode operations we need to send the mapped fs{g,u}i=
-d over
-> +        * the wire. For other cases we simple set req->r_mnt_idmap to th=
-e
-> +        * initial idmapping meaning the unmapped fs{g,u}id is sent.
-> +        */
-> +       caller_fsuid =3D from_vfsuid(req->r_mnt_idmap, &init_user_ns,
-> +                                       VFSUIDT_INIT(req->r_cred->fsuid))=
-;
-> +       caller_fsgid =3D from_vfsgid(req->r_mnt_idmap, &init_user_ns,
-> +                                       VFSGIDT_INIT(req->r_cred->fsgid))=
-;
-> +       head->caller_uid =3D cpu_to_le32(from_kuid(&init_user_ns, caller_=
-fsuid));
-> +       head->caller_gid =3D cpu_to_le32(from_kgid(&init_user_ns, caller_=
-fsgid));
->         head->ino =3D cpu_to_le64(req->r_deleg_ino);
->         head->args =3D req->r_args;
->
-> --
-> 2.34.1
->
+>  drivers/remoteproc/qcom_common.c     | 37 ++++++++++++++++++++++++++++
+>  drivers/remoteproc/qcom_q6v5.c       |  9 +++++++
+>  drivers/remoteproc/remoteproc_core.c |  8 ++++++
+>  3 files changed, 54 insertions(+)
+> 
+> diff --git a/drivers/remoteproc/qcom_common.c b/drivers/remoteproc/qcom_common.c
+> index 020349f8979d..5bf6b8bc67c5 100644
+> --- a/drivers/remoteproc/qcom_common.c
+> +++ b/drivers/remoteproc/qcom_common.c
+> @@ -18,6 +18,7 @@
+>  #include <linux/slab.h>
+>  #include <linux/soc/qcom/mdt_loader.h>
+>  #include <linux/soc/qcom/smem.h>
+> +#include <trace/events/remoteproc_tracepoints.h>
+>  
+>  #include "remoteproc_internal.h"
+>  #include "qcom_common.h"
+> @@ -186,6 +187,10 @@ static int glink_subdev_start(struct rproc_subdev *subdev)
+>  
+>  	glink->edge = qcom_glink_smem_register(glink->dev, glink->node);
+>  
+> +	trace_rproc_subdev_event(dev_name(glink->dev->parent),
+> +					"glink", "start",
+> +					PTR_ERR_OR_ZERO(glink->edge));
+> +
+>  	return PTR_ERR_OR_ZERO(glink->edge);
+>  }
+>  
+> @@ -194,6 +199,11 @@ static void glink_subdev_stop(struct rproc_subdev *subdev, bool crashed)
+>  	struct qcom_rproc_glink *glink = to_glink_subdev(subdev);
+>  
+>  	qcom_glink_smem_unregister(glink->edge);
+> +
+> +	trace_rproc_subdev_event(dev_name(glink->dev->parent),
+> +					"glink", "stop",
+> +					PTR_ERR_OR_ZERO(glink->edge));
+> +
+>  	glink->edge = NULL;
+>  }
+>  
+> @@ -201,6 +211,10 @@ static void glink_subdev_unprepare(struct rproc_subdev *subdev)
+>  {
+>  	struct qcom_rproc_glink *glink = to_glink_subdev(subdev);
+>  
+> +	trace_rproc_subdev_event(dev_name(glink->dev->parent),
+> +					"glink", "unprepare",
+> +					PTR_ERR_OR_ZERO(glink->edge));
+> +
+>  	qcom_glink_ssr_notify(glink->ssr_name);
+>  }
+>  
+> @@ -295,6 +309,10 @@ static int smd_subdev_start(struct rproc_subdev *subdev)
+>  {
+>  	struct qcom_rproc_subdev *smd = to_smd_subdev(subdev);
+>  
+> +	trace_rproc_subdev_event(dev_name(smd->dev->parent),
+> +					"smd", "start",
+> +					PTR_ERR_OR_ZERO(smd->edge));
+> +
+>  	smd->edge = qcom_smd_register_edge(smd->dev, smd->node);
+>  
+>  	return PTR_ERR_OR_ZERO(smd->edge);
+> @@ -304,6 +322,10 @@ static void smd_subdev_stop(struct rproc_subdev *subdev, bool crashed)
+>  {
+>  	struct qcom_rproc_subdev *smd = to_smd_subdev(subdev);
+>  
+> +	trace_rproc_subdev_event(dev_name(smd->dev->parent),
+> +					"smd", "stop",
+> +					PTR_ERR_OR_ZERO(smd->edge));
+> +
+>  	qcom_smd_unregister_edge(smd->edge);
+>  	smd->edge = NULL;
+>  }
+> @@ -420,6 +442,10 @@ static int ssr_notify_prepare(struct rproc_subdev *subdev)
+>  		.crashed = false,
+>  	};
+>  
+> +	trace_rproc_subdev_event(ssr->info->name,
+> +					"ssr", "QCOM_SSR_BEFORE_POWERUP",
+> +					data.crashed);
+> +
+>  	srcu_notifier_call_chain(&ssr->info->notifier_list,
+>  				 QCOM_SSR_BEFORE_POWERUP, &data);
+>  	return 0;
+> @@ -432,6 +458,9 @@ static int ssr_notify_start(struct rproc_subdev *subdev)
+>  		.name = ssr->info->name,
+>  		.crashed = false,
+>  	};
+> +	trace_rproc_subdev_event(ssr->info->name,
+> +					"ssr", "QCOM_SSR_AFTER_POWERUP",
+> +					data.crashed);
+>  
+>  	srcu_notifier_call_chain(&ssr->info->notifier_list,
+>  				 QCOM_SSR_AFTER_POWERUP, &data);
+> @@ -446,6 +475,10 @@ static void ssr_notify_stop(struct rproc_subdev *subdev, bool crashed)
+>  		.crashed = crashed,
+>  	};
+>  
+> +	trace_rproc_subdev_event(ssr->info->name,
+> +					"ssr", "QCOM_SSR_BEFORE_SHUTDOWN",
+> +					data.crashed);
+> +
+>  	srcu_notifier_call_chain(&ssr->info->notifier_list,
+>  				 QCOM_SSR_BEFORE_SHUTDOWN, &data);
+>  }
+> @@ -458,6 +491,10 @@ static void ssr_notify_unprepare(struct rproc_subdev *subdev)
+>  		.crashed = false,
+>  	};
+>  
+> +	trace_rproc_subdev_event(ssr->info->name,
+> +					"ssr", "QCOM_SSR_AFTER_SHUTDOWN",
+> +					data.crashed);
+> +
+>  	srcu_notifier_call_chain(&ssr->info->notifier_list,
+>  				 QCOM_SSR_AFTER_SHUTDOWN, &data);
+>  }
+> diff --git a/drivers/remoteproc/qcom_q6v5.c b/drivers/remoteproc/qcom_q6v5.c
+> index 497acfb33f8f..cf3f322be65e 100644
+> --- a/drivers/remoteproc/qcom_q6v5.c
+> +++ b/drivers/remoteproc/qcom_q6v5.c
+> @@ -15,6 +15,7 @@
+>  #include <linux/soc/qcom/smem.h>
+>  #include <linux/soc/qcom/smem_state.h>
+>  #include <linux/remoteproc.h>
+> +#include <trace/events/remoteproc_tracepoints.h>
+>  #include "qcom_common.h"
+>  #include "qcom_q6v5.h"
+>  
+> @@ -113,6 +114,7 @@ static irqreturn_t q6v5_wdog_interrupt(int irq, void *data)
+>  		dev_err(q6v5->dev, "watchdog without message\n");
+>  
+>  	q6v5->running = false;
+> +	trace_rproc_interrupt_event(q6v5->rproc, "q6v5_wdog", msg);
+>  	rproc_report_crash(q6v5->rproc, RPROC_WATCHDOG);
+>  
+>  	return IRQ_HANDLED;
+> @@ -134,6 +136,7 @@ static irqreturn_t q6v5_fatal_interrupt(int irq, void *data)
+>  		dev_err(q6v5->dev, "fatal error without message\n");
+>  
+>  	q6v5->running = false;
+> +	trace_rproc_interrupt_event(q6v5->rproc, "fatal", msg);
+>  	rproc_report_crash(q6v5->rproc, RPROC_FATAL_ERROR);
+>  
+>  	return IRQ_HANDLED;
+> @@ -165,6 +168,8 @@ int qcom_q6v5_wait_for_start(struct qcom_q6v5 *q6v5, int timeout)
+>  	if (!ret)
+>  		disable_irq(q6v5->handover_irq);
+>  
+> +	trace_rproc_interrupt_event(q6v5->rproc, "Ready", !ret ? "-ETIMEDOUT":"done");
+> +
+>  	return !ret ? -ETIMEDOUT : 0;
+>  }
+>  EXPORT_SYMBOL_GPL(qcom_q6v5_wait_for_start);
+> @@ -180,6 +185,8 @@ static irqreturn_t q6v5_handover_interrupt(int irq, void *data)
+>  
+>  	q6v5->handover_issued = true;
+>  
+> +	trace_rproc_interrupt_event(q6v5->rproc, "handover", "Proxy votes removed");
+> +
+>  	return IRQ_HANDLED;
+>  }
+>  
+> @@ -216,6 +223,8 @@ int qcom_q6v5_request_stop(struct qcom_q6v5 *q6v5, struct qcom_sysmon *sysmon)
+>  
+>  	qcom_smem_state_update_bits(q6v5->state, BIT(q6v5->stop_bit), 0);
+>  
+> +	trace_rproc_interrupt_event(q6v5->rproc, "Stop", ret ? "done":"-EETIMEDOUT");
+> +
+>  	return ret == 0 ? -ETIMEDOUT : 0;
+>  }
+>  EXPORT_SYMBOL_GPL(qcom_q6v5_request_stop);
+> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+> index 1cd4815a6dd1..d8dc91a15477 100644
+> --- a/drivers/remoteproc/remoteproc_core.c
+> +++ b/drivers/remoteproc/remoteproc_core.c
+> @@ -38,6 +38,7 @@
+>  #include <linux/virtio_ring.h>
+>  #include <asm/byteorder.h>
+>  #include <linux/platform_device.h>
+> +#include <trace/events/remoteproc_tracepoints.h>
+>  
+>  #include "remoteproc_internal.h"
+>  
+> @@ -1270,6 +1271,7 @@ static int rproc_start(struct rproc *rproc, const struct firmware *fw)
+>  
+>  	/* load the ELF segments to memory */
+>  	ret = rproc_load_segments(rproc, fw);
+> +	trace_rproc_load_event(rproc, ret);
 
-Probably it's worth adding to a commit message or cover letter, but
-let it be there for now.
+I would move this trace point to function rproc_load_segments() and rename it to
+trace_rproc_load_segment_event().
 
-Explanation/demonstration from this thread:
-https://lore.kernel.org/lkml/CAEivzxefBRPozUPQxYgVh0gOpjsovtBuJ3w9BoqSizpST=
-_YxTA@mail.gmail.com/#t
+>  	if (ret) {
+>  		dev_err(dev, "Failed to load program segments: %d\n", ret);
+>  		return ret;
+> @@ -1305,6 +1307,7 @@ static int rproc_start(struct rproc *rproc, const struct firmware *fw)
+>  
+>  	/* Start any subdevices for the remote processor */
+>  	ret = rproc_start_subdevices(rproc);
+> +
 
-1. Mount cephfs
+Spurious change
 
-mount.ceph admin@XYZ.cephfs=3D/ /mnt/ceph -o
-mon_addr=3D127.0.0.1:6789,secret=3Dvery_secret_key
+>  	if (ret) {
+>  		dev_err(dev, "failed to probe subdevices for %s: %d\n",
+>  			rproc->name, ret);
+> @@ -1729,6 +1732,8 @@ static int rproc_stop(struct rproc *rproc, bool crashed)
+>  		return ret;
+>  	}
+>  
+> +	trace_rproc_stop_event(rproc, crashed ? "crash stop" : "stop");
+> +
+>  	rproc_unprepare_subdevices(rproc);
+>  
+>  	rproc->state = RPROC_OFFLINE;
+> @@ -1939,6 +1944,8 @@ int rproc_boot(struct rproc *rproc)
+>  		dev_info(dev, "attaching to %s\n", rproc->name);
+>  
+>  		ret = rproc_attach(rproc);
+> +		trace_rproc_start_event(rproc, ret);
 
-2. Make 1000:1000 a root dentry owner (it will be convenient because
-we want to use mapping 1000:0:1 for simplicity)
+Same here - please move the trace point to rproc_attach() and renamit it
+trace_rproc_attach_event().
 
-chown 1000:1000 /mnt/ceph
+> +
+>  	} else {
+>  		dev_info(dev, "powering up %s\n", rproc->name);
+>  
+> @@ -1950,6 +1957,7 @@ int rproc_boot(struct rproc *rproc)
+>  		}
+>  
+>  		ret = rproc_fw_boot(rproc, firmware_p);
+> +		trace_rproc_start_event(rproc, ret);
+> 
 
-3. create an idmapped mount based on a regular /mnt/ceph mount using a
-mount-idmapped tool that was written by Christian.
-[ taken from https://raw.githubusercontent.com/brauner/mount-idmapped/maste=
-r/mount-idmapped.c
-]
+Same
 
-./mount-idmapped --map-mount b:1000:0:1 /mnt/ceph /mnt/ceph_idmapped
+Thanks,
+Mathieu
 
-"b" stands for "both", so we are creating a mapping of length 1 for
-both UID and GID.
-1000 is a UID/GID "on-disk", 0 is a mapped UID/GID.
-
-4. Just to be precise, let's look at which UID/GID we have now.
-
-root@ubuntu:/home/ubuntu# ls -lan /mnt/ceph
-total 4
-drwxrwxrwx 2 1000 1000    0 Jun  1 17:51 .
-drwxr-xr-x 4    0    0 4096 Jun  1 16:55 ..
-
-root@ubuntu:/home/ubuntu# ls -lan /mnt/ceph_idmapped
-total 4
-drwxrwxrwx 2 0 0    0 Jun  1 17:51 .
-drwxr-xr-x 4 0 0 4096 Jun  1 16:55 ..
-
-5. Now let's create a bunch of files with different owners and through
-different mounts (idmapped/non-idmapped).
-
-5.1. Create a file from 0:0 through the idmapped mount (it should
-appear as 1000:1000 on disk)
-root@ubuntu:/home/ubuntu# sudo -u#0 -g#0 touch
-/mnt/ceph_idmapped/created_through_idmapped_mnt_with_uid0
-
-5.2. Create a file from 1000:1000 through the idmapped mount (should
-fail because 1000:1000 is not a valid UID/GID as it can't be mapped
-back to the "on-disk" UID/GID set).
-root@ubuntu:/home/ubuntu# sudo -u#1000 -g#1000 touch
-/mnt/ceph_idmapped/created_through_idmapped_mnt_with_uid1000
-touch: cannot touch
-'/mnt/ceph_idmapped/created_through_idmapped_mnt_with_uid1000': Value
-too large for defined data type
-
-... and we've got EOVERFLOW. That's correct!
-
-5.3. Create a file from 0:0 but through the regular mount. (it should
-appear as overflowuid(=3D65534) in idmapped mount, because 0:0 on-disk
-is not mapped to the UID/GID set).
-
-root@ubuntu:/home/ubuntu# sudo -u#0 -g#0 touch
-/mnt/ceph/created_directly_with_uid0
-
-5.4. Create a file from 1000:1000 but through the regular mount. (it
-should appear as 0:0 in idmapped mount, because 1000 (on-disk) mapped
-to 0).
-
-root@ubuntu:/home/ubuntu# sudo -u#1000 -g#1000 touch
-/mnt/ceph/created_directly_with_uid1000
-
-6. Now let's look on the result:
-
-root@ubuntu:/home/ubuntu# ls -lan /mnt/ceph
-total 4
-drwxrwxrwx 2 1000 1000    3 Jun  1 17:54 .
-drwxr-xr-x 4    0    0 4096 Jun  1 16:55 ..
--rw-r--r-- 1    0    0    0 Jun  1 17:54 created_directly_with_uid0
--rw-rw-r-- 1 1000 1000    0 Jun  1 17:54 created_directly_with_uid1000
--rw-r--r-- 1 1000 1000    0 Jun  1 17:53 created_through_idmapped_mnt_with_=
-uid0
-
-root@ubuntu:/home/ubuntu# ls -lan /mnt/ceph_idmapped
-total 4
-drwxrwxrwx 2     0     0    3 Jun  1 17:54 .
-drwxr-xr-x 4     0     0 4096 Jun  1 16:55 ..
--rw-r--r-- 1 65534 65534    0 Jun  1 17:54 created_directly_with_uid0
--rw-rw-r-- 1     0     0    0 Jun  1 17:54 created_directly_with_uid1000
--rw-r--r-- 1     0     0    0 Jun  1 17:53
-created_through_idmapped_mnt_with_uid0
+>  		release_firmware(firmware_p);
+>  	}
+> -- 
+> 2.40.1
+> 
