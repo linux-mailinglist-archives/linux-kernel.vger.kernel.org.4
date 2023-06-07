@@ -2,130 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 324137255BC
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 09:32:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BE557255C4
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 09:35:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236390AbjFGHcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 03:32:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59956 "EHLO
+        id S239279AbjFGHew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 03:34:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239137AbjFGHb7 (ORCPT
+        with ESMTP id S238403AbjFGHe3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 03:31:59 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 634DC4498
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 00:27:46 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-5147f7d045bso727029a12.2
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 00:27:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686122865; x=1688714865;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZrbBiasFytk1Nckd/DEhj6S74ay42QVWNjVsOI0QOaU=;
-        b=ga5a6+ukcKvhCnCPtrFzfCApYNa14klTsW9G8sLRCTHvPthZP3P8YCyGxcTksH8lzG
-         53OYquxkw+acOpZHWdq2fcXeAWcMYhPtbGx6X9PcRFYydCAPZ8RfjD8GTPhfqtXY136+
-         PRISb+AEWJEpljPJo9v+j9597drXfOhcuCBtHQPSNL5YuuBMVrKB7Oa+OTodJd8/G7TY
-         YDCpvHD6XruCv4jeMkhp1Hwc+H8RxYRGNZhMwXl+ivy/9fD5DfzvE5Y6VRsNF1M4Vfc+
-         G5vFnA9uObVtDCBhvrTqt57LmtX42e+eO98EGw3Il8U2GqqzkNd/ZuhyvV509Fre0Z8f
-         RivA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686122865; x=1688714865;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZrbBiasFytk1Nckd/DEhj6S74ay42QVWNjVsOI0QOaU=;
-        b=I+uzEFsn0MvegAR7RzxWDiklU2MIRhRWSn6u+riSPrESoixApdDI5IBHuZAYcc0TU8
-         S3L7wNGyb8T6lNrrMSDwmL65DMXy6AAMM/X1hp41lkSKjQnt4QO4wnw65WqAQvTdi3qf
-         aMsfSEbOgYQgMnX7QvsVInfTDwUp3LHC9d7usod8oAp/aywYhiblvSttPxiuE9j+ceTu
-         gKr5UPpR8D7yK87Qq2uzvBnoOFW6GChq4HvhDPl3NYgGfGRMGgPEbvYHfG/NgAaRyobK
-         jnAOfax/gLn0uQNvppg3o0p4gpQdCRACE2SGygaN58dp2JhXNec7fFhp9qxv0Za+JXJ6
-         ZARg==
-X-Gm-Message-State: AC+VfDwuLO0nV7J7ll5iye4DvG/2zH1cIMBoY8oYxAtNCSlWSuQbCX4p
-        7SsOg3DjoeUEeRRzoXoNBUvcYw==
-X-Google-Smtp-Source: ACHHUZ4HJUTQNoMCxDs0ERIn2tW+n96xfANYG3S01OWKfCvbG1Af6Z1YzmJVLqK8u+vpuyUSG8iYTg==
-X-Received: by 2002:aa7:d54e:0:b0:50b:c77e:b071 with SMTP id u14-20020aa7d54e000000b0050bc77eb071mr4135216edr.18.1686122864819;
-        Wed, 07 Jun 2023 00:27:44 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id p20-20020a056402075400b00514c4350243sm5748879edy.56.2023.06.07.00.27.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 00:27:44 -0700 (PDT)
-Message-ID: <93eb3e7d-eff5-b040-5290-2de13699ed95@linaro.org>
-Date:   Wed, 7 Jun 2023 09:27:42 +0200
+        Wed, 7 Jun 2023 03:34:29 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7E84E6B
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 00:29:42 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 868EB1FDA8;
+        Wed,  7 Jun 2023 07:29:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1686122981; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=2xz45jiB4HUD1RJdTPfmRcnsCKtUN8cV29Vg55Nf0vU=;
+        b=sPBeW+4QFQMUi1yyebZ0dSyaojzpnzxZ8Z4u9h5LD+E+wVHWpGgy8lBdEcLBkB+8lWmnVa
+        YJl04uy4qc11m3C1yjK0FmA+TKCHaV+J+43fSHvIOQCXIV3np4SA1JmZDsTqDnGafvfrwU
+        0ws4FKY00Ivccf68ZDYQdu2Rdh0eoJA=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3577413776;
+        Wed,  7 Jun 2023 07:29:41 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id X+4/CuUxgGSUIQAAMHmgww
+        (envelope-from <nik.borisov@suse.com>); Wed, 07 Jun 2023 07:29:41 +0000
+From:   Nikolay Borisov <nik.borisov@suse.com>
+To:     x86@kernel.org
+Cc:     linux-kernel@vger.kernel.org, mhocko@suse.com, jslaby@suse.cz,
+        Nikolay Borisov <nik.borisov@suse.com>
+Subject: [RFC PATCH 0/3] Add ability to disable ia32 at boot time
+Date:   Wed,  7 Jun 2023 10:29:33 +0300
+Message-Id: <20230607072936.3766231-1-nik.borisov@suse.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v1 2/6] dt-bindings: reset: mt8188: Add reset control bits
- for VDOSYS1
-Content-Language: en-US
-To:     Hsiao Chien Sung <shawn.sung@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Singo Chang <singo.chang@mediatek.com>,
-        Nancy Lin <nancy.lin@mediatek.com>,
-        Jason-JH Lin <jason-jh.lin@mediatek.com>,
-        Fei Shao <fshao@google.com>
-References: <20230607061121.6732-1-shawn.sung@mediatek.com>
- <20230607061121.6732-3-shawn.sung@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230607061121.6732-3-shawn.sung@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/06/2023 08:11, Hsiao Chien Sung wrote:
-> Add reset control bits for  MT8188 VDOSYS1.
+We at SUSE would like to have the ability to disable IA32 compat layer and to
+give users the ability to override this decision. The motivation behind this is
+the fact that the compat layer is not as thoroughly tested/exercised as the native
+64bit one. At the same time there are environments where 32bit is still in use
+and we'd like to cater to those as well.
 
-Double space -> one space.
+As a first step this patchset introduces the 'ia32_disabled' boot time parameter
+which breaks 32bit support. This is achieved mainly by setting the user32 cs in the
+GDT as not present (P bit set to 0) and making the int 0x80 call gate also not
+present. It also re-uses the existing code which makes sysenter defunct when
+IA32_EMULATION is not selected. Finally, it also ensures that 32bit processes
+can't be loaded by the compat elf loader.
 
-> 
-> Signed-off-by: Hsiao Chien Sung <shawn.sung@mediatek.com>
-> ---
->  include/dt-bindings/reset/mt8188-resets.h | 12 ++++++++++++
+I'm sending now to solicit opinions whether this is an acceptable solution, in the
+future likely the mechanism for enabling this would be changed. I.e instead of a
+boot time parameter to disable I think we'd ideally introduce a new Kconfig option
+which in the distro case might default to "ia32_disabled" whilst the upstream would
+retain the current behavior. But before getting into this discussion I'd like to
+get confirmation that what I'm doing w.r.t to x86 architecture is not completely
+bogus.
 
-This should be squashed with patch adding compatible.
+Nikolay Borisov (3):
+  x86: Introduce ia32_disabled boot parameter
+  x86/entry: Disable IA32 syscalls in the presence of ia32_disabled
+  x86: Disable running 32bit processes if ia32_disabled is passed
 
+ arch/x86/entry/common.c      | 12 ++++++++++++
+ arch/x86/entry/entry_64.S    |  2 --
+ arch/x86/include/asm/desc.h  |  5 +++++
+ arch/x86/include/asm/elf.h   |  5 +++--
+ arch/x86/include/asm/traps.h |  4 ++++
+ arch/x86/kernel/cpu/common.c | 37 +++++++++++++++++++++++++-----------
+ 6 files changed, 50 insertions(+), 15 deletions(-)
 
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/include/dt-bindings/reset/mt8188-resets.h b/include/dt-bindings/reset/mt8188-resets.h
-> index 377cdfda82a9..439a9a25ca19 100644
-> --- a/include/dt-bindings/reset/mt8188-resets.h
-> +++ b/include/dt-bindings/reset/mt8188-resets.h
-> @@ -33,4 +33,16 @@
-> 
->  #define MT8188_TOPRGU_SW_RST_NUM               24
-> 
-> +/* VDOSYS1 */
-> +#define MT8188_VDO1_RST_MERGE0_DL_ASYNC         9
-
-Indices start from 0.
-
-> +#define MT8188_VDO1_RST_MERGE1_DL_ASYNC         10
-> +#define MT8188_VDO1_RST_MERGE2_DL_ASYNC         11
-> +#define MT8188_VDO1_RST_MERGE3_DL_ASYNC         32
-
-... and are continuous.
-
-Commit explains here nothing that it is for existing reset, so you got
-such review.
-
-Best regards,
-Krzysztof
+--
+2.34.1
 
