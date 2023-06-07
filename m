@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DDDD72541F
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 08:26:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9515372541E
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 08:26:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235168AbjFGG0m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 02:26:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50560 "EHLO
+        id S235155AbjFGG0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 02:26:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234924AbjFGG0b (ORCPT
+        with ESMTP id S235011AbjFGG0b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 7 Jun 2023 02:26:31 -0400
 Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42908172B;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 428761726;
         Tue,  6 Jun 2023 23:26:25 -0700 (PDT)
 Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 3576OwrW6024091, This message is accepted by code: ctloc85258
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 3576P8KQ0024452, This message is accepted by code: ctloc85258
 Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 3576OwrW6024091
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 3576P8KQ0024452
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Wed, 7 Jun 2023 14:24:58 +0800
+        Wed, 7 Jun 2023 14:25:08 +0800
 Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
  RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Wed, 7 Jun 2023 14:25:14 +0800
+ 15.1.2507.17; Wed, 7 Jun 2023 14:25:23 +0800
 Received: from RTEXH36505.realtek.com.tw (172.21.6.25) by
  RTEXMBS01.realtek.com.tw (172.21.6.94) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Wed, 7 Jun 2023 14:25:12 +0800
+ 15.1.2375.7; Wed, 7 Jun 2023 14:25:23 +0800
 Received: from localhost.localdomain (172.21.252.101) by
  RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server id
- 15.1.2375.32 via Frontend Transport; Wed, 7 Jun 2023 14:25:12 +0800
+ 15.1.2375.32 via Frontend Transport; Wed, 7 Jun 2023 14:25:23 +0800
 From:   Stanley Chang <stanley_chang@realtek.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 CC:     Stanley Chang <stanley_chang@realtek.com>,
@@ -41,17 +41,16 @@ CC:     Stanley Chang <stanley_chang@realtek.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
         Alan Stern <stern@rowland.harvard.edu>,
-        "Michael Grzeschik" <m.grzeschik@pengutronix.de>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
         Ray Chi <raychi@google.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
         "Flavio Suligoi" <f.suligoi@asem.it>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        "Mathias Nyman" <mathias.nyman@linux.intel.com>,
         <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
-Subject: [PATCH v3 2/5] phy: realtek: usb: Add driver for the Realtek SoC USB 2.0 PHY
-Date:   Wed, 7 Jun 2023 14:24:38 +0800
-Message-ID: <20230607062500.24669-2-stanley_chang@realtek.com>
+Subject: [PATCH v3 3/5] phy: realtek: usb: Add driver for the Realtek SoC USB 3.0 PHY
+Date:   Wed, 7 Jun 2023 14:24:39 +0800
+Message-ID: <20230607062500.24669-3-stanley_chang@realtek.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230607062500.24669-1-stanley_chang@realtek.com>
 References: <20230607062500.24669-1-stanley_chang@realtek.com>
@@ -63,8 +62,8 @@ X-KSE-AntiSpam-Interceptor-Info: fallback
 X-KSE-Antivirus-Interceptor-Info: fallback
 X-KSE-AntiSpam-Interceptor-Info: fallback
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -72,14 +71,14 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Realtek DHC (digital home center) RTD SoCs support DWC3 XHCI USB
-controller. Added the driver to drive the USB 2.0 PHY transceivers.
+controller. Added the driver to drive the USB 3.0 PHY transceivers.
 
 Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
 ---
 v2 to v3 change:
     1. Broken down into two patches, one for each of USB 2 & 3 PHY.
     2. Removed parameter v1 support for simplification.
-    3. Use remove_new for driver remove callback.
+    3. Used remove_new for driver remove callback.
 v1 to v2 change:
     1. Move the drivers to drivers/phy/ for generic phy driver
     2. Use the generic phy driver api to initialize phy
@@ -88,78 +87,49 @@ v1 to v2 change:
     5. Revised some coding styles.
     6. fix the compiler warning for kernel test robot.
 ---
- drivers/phy/Kconfig                |    1 +
- drivers/phy/Makefile               |    1 +
- drivers/phy/realtek/Kconfig        |   13 +
- drivers/phy/realtek/Makefile       |    2 +
- drivers/phy/realtek/phy-rtk-usb2.c | 1914 ++++++++++++++++++++++++++++
- 5 files changed, 1931 insertions(+)
- create mode 100644 drivers/phy/realtek/Kconfig
- create mode 100644 drivers/phy/realtek/Makefile
- create mode 100644 drivers/phy/realtek/phy-rtk-usb2.c
+ drivers/phy/realtek/Kconfig        |   10 +
+ drivers/phy/realtek/Makefile       |    1 +
+ drivers/phy/realtek/phy-rtk-usb3.c | 1070 ++++++++++++++++++++++++++++
+ 3 files changed, 1081 insertions(+)
+ create mode 100644 drivers/phy/realtek/phy-rtk-usb3.c
 
-diff --git a/drivers/phy/Kconfig b/drivers/phy/Kconfig
-index f46e3148d286..6d04a0029c6c 100644
---- a/drivers/phy/Kconfig
-+++ b/drivers/phy/Kconfig
-@@ -86,6 +86,7 @@ source "drivers/phy/motorola/Kconfig"
- source "drivers/phy/mscc/Kconfig"
- source "drivers/phy/qualcomm/Kconfig"
- source "drivers/phy/ralink/Kconfig"
-+source "drivers/phy/realtek/Kconfig"
- source "drivers/phy/renesas/Kconfig"
- source "drivers/phy/rockchip/Kconfig"
- source "drivers/phy/samsung/Kconfig"
-diff --git a/drivers/phy/Makefile b/drivers/phy/Makefile
-index 54f312c10a40..ba7c100b14fc 100644
---- a/drivers/phy/Makefile
-+++ b/drivers/phy/Makefile
-@@ -26,6 +26,7 @@ obj-y					+= allwinner/	\
- 					   mscc/	\
- 					   qualcomm/	\
- 					   ralink/	\
-+					   realtek/	\
- 					   renesas/	\
- 					   rockchip/	\
- 					   samsung/	\
 diff --git a/drivers/phy/realtek/Kconfig b/drivers/phy/realtek/Kconfig
-new file mode 100644
-index 000000000000..76e31f6abdee
---- /dev/null
+index 76e31f6abdee..28ee3d9be568 100644
+--- a/drivers/phy/realtek/Kconfig
 +++ b/drivers/phy/realtek/Kconfig
-@@ -0,0 +1,13 @@
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Phy drivers for Realtek platforms
-+#
-+config PHY_RTK_RTD_USB2PHY
-+	tristate "Realtek RTD USB2 PHY Transceiver Driver"
+@@ -11,3 +11,13 @@ config PHY_RTK_RTD_USB2PHY
+ 	  The DHC (digital home center) RTD series SoCs used the Synopsys
+ 	  DWC3 USB IP. This driver will do the PHY initialization
+ 	  of the parameters.
++
++config PHY_RTK_RTD_USB3PHY
++	tristate "Realtek RTD USB3 PHY Transceiver Driver"
 +	select GENERIC_PHY
 +	select USB_PHY
 +	help
-+	  Enable this to support Realtek SoC USB2 phy transceiver.
++	  Enable this to support Realtek SoC USB3 phy transceiver.
 +	  The DHC (digital home center) RTD series SoCs used the Synopsys
 +	  DWC3 USB IP. This driver will do the PHY initialization
 +	  of the parameters.
 diff --git a/drivers/phy/realtek/Makefile b/drivers/phy/realtek/Makefile
-new file mode 100644
-index 000000000000..cf5d440841a2
---- /dev/null
+index cf5d440841a2..ed7b47ff8a26 100644
+--- a/drivers/phy/realtek/Makefile
 +++ b/drivers/phy/realtek/Makefile
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0
-+obj-$(CONFIG_PHY_RTK_RTD_USB2PHY)	+= phy-rtk-usb2.o
-diff --git a/drivers/phy/realtek/phy-rtk-usb2.c b/drivers/phy/realtek/phy-rtk-usb2.c
+@@ -1,2 +1,3 @@
+ # SPDX-License-Identifier: GPL-2.0
+ obj-$(CONFIG_PHY_RTK_RTD_USB2PHY)	+= phy-rtk-usb2.o
++obj-$(CONFIG_PHY_RTK_RTD_USB3PHY)	+= phy-rtk-usb3.o
+diff --git a/drivers/phy/realtek/phy-rtk-usb3.c b/drivers/phy/realtek/phy-rtk-usb3.c
 new file mode 100644
-index 000000000000..0538424b9cab
+index 000000000000..aae0525ce78d
 --- /dev/null
-+++ b/drivers/phy/realtek/phy-rtk-usb2.c
-@@ -0,0 +1,1914 @@
++++ b/drivers/phy/realtek/phy-rtk-usb3.c
+@@ -0,0 +1,1070 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ *  phy-rtk-usb2.c RTK usb2.0 PHY driver
++ *  phy-rtk-usb3.c RTK usb3.0 phy driver
 + *
-+ * Copyright (C) 2023 Realtek Semiconductor Corporation
++ * copyright (c) 2023 realtek semiconductor corporation
 + *
 + */
 +
@@ -175,96 +145,59 @@ index 000000000000..0538424b9cab
 +#include <linux/mfd/syscon.h>
 +#include <linux/phy/phy.h>
 +#include <linux/usb.h>
-+#include <linux/usb/phy.h>
 +#include <linux/usb/hcd.h>
++#include <linux/usb/phy.h>
 +
-+/* GUSB2PHYACCn register */
-+#define PHY_NEW_REG_REQ BIT(25)
-+#define PHY_VSTS_BUSY   BIT(23)
-+#define PHY_VCTRL_SHIFT 8
-+#define PHY_REG_DATA_MASK 0xff
++#define USB_MDIO_CTRL_PHY_BUSY BIT(7)
++#define USB_MDIO_CTRL_PHY_WRITE BIT(0)
++#define USB_MDIO_CTRL_PHY_ADDR_SHIFT 8
++#define USB_MDIO_CTRL_PHY_DATA_SHIFT 16
 +
-+#define GET_LOW_NIBBLE(addr) (addr & 0x0f)
-+#define GET_HIGH_NIBBLE(addr) ((addr & 0xf0)>>4)
++#define MAX_USB_PHY_DATA_SIZE 0x30
++#define PHY_ADDR_0x09 0x09
++#define PHY_ADDR_0x0B 0x0B
++#define PHY_ADDR_0x0D 0x0D
++#define PHY_ADDR_0x10 0x10
++#define PHY_ADDR_0x1F 0x1F
++#define PHY_ADDR_0x20 0x20
++#define PHY_ADDR_0x30 0x30
 +
-+#define EFUS_USB_DC_CAL_RATE 2
-+#define EFUS_USB_DC_CAL_MAX 7
++#define REG_0x0B_RX_OFFSET_RANGE_MASK 0xC
++#define REG_0x0D_RX_DEBUG_TEST_EN BIT(6)
++#define REG_0x10_DEBUG_MODE_SETTING 0x3C0
++#define REG_0x10_DEBUG_MODE_SETTING_MASK 0x3F8
++#define REG_0x1F_RX_OFFSET_CODE_MASK 0x1E
 +
-+#define EFUS_USB_DC_DIS_RATE 1
-+#define EFUS_USB_DC_DIS_MAX 7
++#define USB_U3_TX_LFPS_SWING_TRIM_SHIFT 4
++#define USB_U3_TX_LFPS_SWING_TRIM_MASK 0xF
 +
-+#define MAX_PHY_DATA_SIZE 20
-+#define OFFEST_PHY_READ 0x20
-+
-+#define MAX_USB_PHY_NUM_PORTS 4
-+#define MAX_USB_PHY_PAGE0_DATA_SIZE 16
-+#define MAX_USB_PHY_PAGE1_DATA_SIZE 8
-+#define MAX_USB_PHY_PAGE2_DATA_SIZE 8
-+
-+#define SET_PAGE_OFFSET 0xf4
-+#define SET_PAGE_0 0x9b
-+#define SET_PAGE_1 0xbb
-+#define SET_PAGE_2 0xdb
-+
-+#define PAGE_START 0xe0
-+#define PAGE0_0xE4 0xe4
-+#define PAGE0_0xE7 0xe7
-+#define PAGE1_0xE0 0xe0
-+#define PAGE1_0xE2 0xe2
-+
-+/* mapping 0xE0 to 0 ... 0xE7 to 7, 0xF0 to 8 ,,, 0xF7 to 15 */
-+#define PAGE_ADDR_MAP_ARRAY_INDEX(addr) \
-+	(((addr - PAGE_START)&0x7) + \
-+	(((addr - PAGE_START)&0x10)>>1))
-+#define ARRAY_INDEX_MAP_PAGE_ADDR(index) \
-+	(((index + PAGE_START)&0x7) + \
-+	(((index&0x8)<<1) + PAGE_START))
++#define PHY_ADDR_MAP_ARRAY_INDEX(addr) (addr)
++#define ARRAY_INDEX_MAP_PHY_ADDR(index) (index)
 +
 +struct reg_addr {
-+	void __iomem *reg_wrap_vstatus;
-+	void __iomem *reg_gusb2phyacc0;
-+	int vstatus_index;
++	void __iomem *reg_mdio_ctl;
 +};
 +
 +struct phy_parameter {
 +	u8 addr;
-+	u8 data;
++	u16 data;
 +};
 +
 +struct phy_data {
-+	int page0_size;
-+	struct phy_parameter *page0;
-+	int page1_size;
-+	struct phy_parameter *page1;
-+	int page2_size;
-+	struct phy_parameter *page2;
++	int size;
++	struct phy_parameter *parameter;
 +
 +	bool check_efuse;
-+	int check_efuse_version;
-+#define CHECK_EFUSE_V1 1
-+#define CHECK_EFUSE_V2 2
-+	int8_t efuse_usb_dc_cal;
-+	int efuse_usb_dc_cal_rate;
-+	int usb_dc_cal_mask;
-+	int8_t efuse_usb_dc_dis;
-+	int efuse_usb_dc_dis_rate;
-+	int usb_dc_dis_mask;
-+	bool usb_dc_dis_at_page0;
++	u8 efuse_usb_u3_tx_lfps_swing_trim;
 +	bool do_toggle;
-+	bool do_toggle_driving;
-+	int disconnect_driving_updated;
++	bool do_toggle_once;
 +	bool use_default_parameter;
-+	bool is_double_sensitivity_mode;
-+	bool ldo_force_enable;
-+	bool ldo_enable;
-+	s32 ldo_driving_compensate;
-+	s32 driving_compensate;
++	bool check_rx_front_end_offset;
 +};
 +
 +struct rtk_usb_phy {
 +	struct usb_phy phy;
 +	struct device *dev;
-+	struct regmap *usb_ctrl_regs;
 +
 +	int phyN;
 +	void *reg_addr;
@@ -291,656 +224,212 @@ index 000000000000..0538424b9cab
 +	return 0;
 +}
 +
-+static char rtk_usb_phy_read(struct reg_addr *regAddr, char addr)
++static int rtk_usb_phy3_wait_vbusy(struct reg_addr *regAddr)
 +{
-+	void __iomem *reg_gusb2phyacc0 = regAddr->reg_gusb2phyacc0;
-+	unsigned int regVal;
-+	int ret = 0;
-+
-+	addr -= OFFEST_PHY_READ;
-+
-+	/* polling until VBusy == 0 */
-+	ret = utmi_wait_register(reg_gusb2phyacc0, PHY_VSTS_BUSY, 0);
-+	if (ret)
-+		return (char)ret;
-+
-+	/* VCtrl = low nibble of addr, and set PHY_NEW_REG_REQ */
-+	regVal = PHY_NEW_REG_REQ | (GET_LOW_NIBBLE(addr) << PHY_VCTRL_SHIFT);
-+	writel(regVal, reg_gusb2phyacc0);
-+	ret = utmi_wait_register(reg_gusb2phyacc0, PHY_VSTS_BUSY, 0);
-+	if (ret)
-+		return (char)ret;
-+
-+	/* VCtrl = high nibble of addr, and set PHY_NEW_REG_REQ */
-+	regVal = PHY_NEW_REG_REQ | (GET_HIGH_NIBBLE(addr) << PHY_VCTRL_SHIFT);
-+	writel(regVal, reg_gusb2phyacc0);
-+	ret = utmi_wait_register(reg_gusb2phyacc0, PHY_VSTS_BUSY, 0);
-+	if (ret)
-+		return (char)ret;
-+
-+	regVal = readl(reg_gusb2phyacc0);
-+
-+	return (char) (regVal & PHY_REG_DATA_MASK);
++	return utmi_wait_register(regAddr->reg_mdio_ctl, USB_MDIO_CTRL_PHY_BUSY, 0);
 +}
 +
-+static int rtk_usb_phy_write(struct reg_addr *regAddr, char addr, char data)
++static u16 rtk_usb_phy_read(struct reg_addr *regAddr, char addr)
 +{
 +	unsigned int regVal;
-+	void __iomem *reg_wrap_vstatus = regAddr->reg_wrap_vstatus;
-+	void __iomem *reg_gusb2phyacc0 = regAddr->reg_gusb2phyacc0;
-+	int shift_bits = regAddr->vstatus_index * 8;
-+	int ret = 0;
++	u32 value;
 +
-+	/* write data to VStatusOut2 (data output to phy) */
-+	writel((u32)data<<shift_bits, reg_wrap_vstatus);
++	regVal = (addr << USB_MDIO_CTRL_PHY_ADDR_SHIFT);
 +
-+	ret = utmi_wait_register(reg_gusb2phyacc0, PHY_VSTS_BUSY, 0);
-+	if (ret)
-+		return ret;
++	writel(regVal, regAddr->reg_mdio_ctl);
 +
-+	/* VCtrl = low nibble of addr, set PHY_NEW_REG_REQ */
-+	regVal = PHY_NEW_REG_REQ | (GET_LOW_NIBBLE(addr) << PHY_VCTRL_SHIFT);
++	rtk_usb_phy3_wait_vbusy(regAddr);
 +
-+	writel(regVal, reg_gusb2phyacc0);
-+	ret = utmi_wait_register(reg_gusb2phyacc0, PHY_VSTS_BUSY, 0);
-+	if (ret)
-+		return ret;
++	value = readl(regAddr->reg_mdio_ctl);
++	value = value >> USB_MDIO_CTRL_PHY_DATA_SHIFT;
 +
-+	/* VCtrl = high nibble of addr, set PHY_NEW_REG_REQ */
-+	regVal = PHY_NEW_REG_REQ | (GET_HIGH_NIBBLE(addr) << PHY_VCTRL_SHIFT);
++	return (u16)value;
++}
 +
-+	writel(regVal, reg_gusb2phyacc0);
-+	ret = utmi_wait_register(reg_gusb2phyacc0, PHY_VSTS_BUSY, 0);
-+	if (ret)
-+		return ret;
++static int rtk_usb_phy_write(struct reg_addr *regAddr, char addr, u16 data)
++{
++	unsigned int regVal;
++
++	regVal = USB_MDIO_CTRL_PHY_WRITE |
++		    (addr << USB_MDIO_CTRL_PHY_ADDR_SHIFT) |
++		    (data << USB_MDIO_CTRL_PHY_DATA_SHIFT);
++
++	writel(regVal, regAddr->reg_mdio_ctl);
++
++	rtk_usb_phy3_wait_vbusy(regAddr);
 +
 +	return 0;
 +}
 +
-+static int rtk_usb_phy_set_page(struct reg_addr *regAddr, int page)
-+{
-+	switch (page) {
-+	case 0:
-+		return rtk_usb_phy_write(regAddr, SET_PAGE_OFFSET, SET_PAGE_0);
-+	case 1:
-+		return rtk_usb_phy_write(regAddr, SET_PAGE_OFFSET, SET_PAGE_1);
-+	case 2:
-+		return rtk_usb_phy_write(regAddr, SET_PAGE_OFFSET, SET_PAGE_2);
-+	default:
-+		pr_err("%s error page=%d\n", __func__, page);
-+	}
-+
-+	return -1;
-+}
-+
-+#define USB_CTRL 0x0 /* usb ctrl at 0x98007FB0 */
-+#define ISO_USB_U2PHY_REG_LDO_PW (BIT(20) | BIT(21) | BIT(22) | BIT(23))
-+
-+static int control_phy_power(struct rtk_usb_phy *rtk_phy,
-+	    struct phy_data *phy_data, struct reg_addr *regAddr)
-+{
-+	int use_ldo = 0;
-+	unsigned int val;
-+
-+	if (!rtk_phy->usb_ctrl_regs) {
-+		dev_info(rtk_phy->dev, "%s No usb_ctrl_regs can't set USB_CTRL\n",
-+			    __func__);
-+		return use_ldo;
-+	}
-+
-+	if (regmap_read(rtk_phy->usb_ctrl_regs, USB_CTRL, &val)) {
-+		dev_err(rtk_phy->dev, "%s Get USB_CTRL fail\n", __func__);
-+		return use_ldo;
-+	}
-+
-+	if ((val & ISO_USB_U2PHY_REG_LDO_PW) == ISO_USB_U2PHY_REG_LDO_PW) {
-+		dev_info(rtk_phy->dev, "%s phy use ldo power! (USB_CTRL val=0x%x)\n",
-+			    __func__, val);
-+		use_ldo = 1;
-+		goto out;
-+	}
-+
-+	if (phy_data->ldo_force_enable) {
-+		regmap_update_bits(rtk_phy->usb_ctrl_regs, USB_CTRL,
-+			    (unsigned int)ISO_USB_U2PHY_REG_LDO_PW,
-+			    (unsigned int)ISO_USB_U2PHY_REG_LDO_PW);
-+		use_ldo = 1;
-+
-+		dev_info(rtk_phy->dev, "%s phy %s then turn on ldo! USB_CTRL val=0x%x\n",
-+			    __func__,
-+			    phy_data->ldo_force_enable ?
-+			      "ldo_force_enable":"no power",
-+			    val);
-+	}
-+
-+out:
-+	return use_ldo;
-+}
-+
-+static u8 __updated_page0_0xe4_parameter(struct phy_data *phy_data, u8 data)
-+{
-+	u8 val;
-+	s32 __val;
-+	s32 driving_compensate = 0;
-+	s32 usb_dc_cal_mask = phy_data->usb_dc_cal_mask;
-+
-+	if (phy_data->check_efuse_version == CHECK_EFUSE_V1) {
-+		if (phy_data->ldo_enable)
-+			driving_compensate = phy_data->ldo_driving_compensate;
-+
-+		__val = (s32)(data & usb_dc_cal_mask) + driving_compensate
-+			    + phy_data->efuse_usb_dc_cal;
-+	} else { /* for CHECK_EFUSE_V2 or no efuse */
-+		driving_compensate = phy_data->driving_compensate;
-+
-+		if (phy_data->efuse_usb_dc_cal)
-+			__val = (s32)((phy_data->efuse_usb_dc_cal & usb_dc_cal_mask)
-+				    + driving_compensate);
-+		else
-+			__val = (s32)(data & usb_dc_cal_mask);
-+	}
-+
-+	if (__val > usb_dc_cal_mask)
-+		__val = usb_dc_cal_mask;
-+	else if (__val < 0)
-+		__val = 0;
-+
-+	val = (data & (~usb_dc_cal_mask)) | (__val & usb_dc_cal_mask);
-+
-+	return val;
-+}
-+
-+static u8 __updated_dc_disconnect_level_page0_0xe4(struct phy_data *phy_data,
-+	    u8 data)
-+{
-+	u8 val;
-+	s32 __val;
-+	s32 usb_dc_dis_mask = phy_data->usb_dc_dis_mask;
-+	int offset = 4;
-+
-+	__val = (s32)((data >> offset) & usb_dc_dis_mask)
-+		     + phy_data->efuse_usb_dc_dis;
-+
-+	if (__val > usb_dc_dis_mask)
-+		__val = usb_dc_dis_mask;
-+	else if (__val < 0)
-+		__val = 0;
-+
-+	val = (data & (~(usb_dc_dis_mask << offset))) |
-+		    (__val & usb_dc_dis_mask) << offset;
-+
-+	return val;
-+}
-+
-+/* updated disconnect level at page0 0xe4 */
-+static void update_dc_disconnect_level_at_page0(struct rtk_usb_phy *rtk_phy,
-+	    struct reg_addr *regAddr,
-+	    struct phy_data *phy_data, bool isUpdate)
-+{
-+	struct phy_parameter *phy_parameter_page;
-+	int i;
-+
-+	/* Set page 0 */
-+	phy_parameter_page = phy_data->page0;
-+	rtk_usb_phy_set_page(regAddr, 0);
-+
-+	i = PAGE_ADDR_MAP_ARRAY_INDEX(PAGE0_0xE4);
-+	if (i < phy_data->page0_size) {
-+		struct phy_parameter *phy_parameter = phy_parameter_page + i;
-+		u8 addr = phy_parameter->addr;
-+		u8 data = phy_parameter->data;
-+		u8 __data;
-+		int offset = 4;
-+		s32 usb_dc_dis_mask = phy_data->usb_dc_dis_mask;
-+
-+		__data = rtk_usb_phy_read(regAddr, addr);
-+
-+		/* keep default dc dis and real dc cal */
-+		data = (data & ((usb_dc_dis_mask << offset))) |
-+			    (__data & (~(usb_dc_dis_mask << offset)));
-+
-+		if (isUpdate)
-+			data = __updated_dc_disconnect_level_page0_0xe4(phy_data, data);
-+
-+		if (rtk_usb_phy_write(regAddr, addr, data)) {
-+			dev_err(rtk_phy->dev,
-+				    "[%s:%d] Error page1 addr=0x%x value=0x%x\n",
-+				    __func__, __LINE__,
-+				    addr, data);
-+			return;
-+		}
-+
-+		dev_info(rtk_phy->dev,
-+			    "%s to set Page0 0xE4=%x for dc disconnect level (%s)\n",
-+			    __func__,
-+			    rtk_usb_phy_read(regAddr, addr),
-+			    isUpdate?"Update":"restore");
-+	} else {
-+		dev_err(rtk_phy->dev,
-+			    "ERROR: %s %d index=%d addr Not PAGE0_0xE4\n",
-+			    __func__, __LINE__, i);
-+	}
-+}
-+
-+static u8 __updated_dc_disconnect_level_page1_0xe2(struct phy_data *phy_data,
-+	    u8 data)
-+{
-+	u8 val;
-+	s32 __val;
-+	s32 usb_dc_dis_mask = phy_data->usb_dc_dis_mask;
-+
-+	if (phy_data->check_efuse_version == CHECK_EFUSE_V1) {
-+		__val = (s32)(data & usb_dc_dis_mask)
-+			    + phy_data->efuse_usb_dc_dis;
-+	} else { /* for CHECK_EFUSE_V2 or no efuse */
-+		if (phy_data->efuse_usb_dc_dis)
-+			__val = (s32)(phy_data->efuse_usb_dc_dis & usb_dc_dis_mask);
-+		else
-+			__val = (s32)(data & usb_dc_dis_mask);
-+	}
-+
-+	if (__val > usb_dc_dis_mask)
-+		__val = usb_dc_dis_mask;
-+	else if (__val < 0)
-+		__val = 0;
-+
-+	val = (data & (~usb_dc_dis_mask)) | (__val & usb_dc_dis_mask);
-+
-+	return val;
-+}
-+
-+/* updated disconnect level at page1 0xe2 */
-+static void update_dc_disconnect_level_at_page1(struct rtk_usb_phy *rtk_phy,
-+	    struct reg_addr *regAddr,
-+	    struct phy_data *phy_data, bool isUpdate)
-+{
-+	struct phy_parameter *phy_parameter_page;
-+	int i;
-+
-+	/* Set page 1 */
-+	phy_parameter_page = phy_data->page1;
-+	rtk_usb_phy_set_page(regAddr, 1);
-+
-+	i = PAGE_ADDR_MAP_ARRAY_INDEX(PAGE1_0xE2);
-+	if (i < phy_data->page1_size) {
-+		struct phy_parameter *phy_parameter = phy_parameter_page + i;
-+		u8 addr = phy_parameter->addr;
-+		u8 data = phy_parameter->data;
-+		u8 __data;
-+		s32 usb_dc_dis_mask = phy_data->usb_dc_dis_mask;
-+
-+		__data = rtk_usb_phy_read(regAddr, addr);
-+
-+		data = (data & usb_dc_dis_mask) | (__data & ~(usb_dc_dis_mask));
-+
-+		if (isUpdate)
-+			data = __updated_dc_disconnect_level_page1_0xe2(phy_data, data);
-+
-+		if (rtk_usb_phy_write(regAddr, addr, data)) {
-+			dev_err(rtk_phy->dev,
-+				    "[%s:%d] Error page1 addr=0x%x value=0x%x\n",
-+				    __func__, __LINE__,
-+				    addr, data);
-+			return;
-+		}
-+
-+		dev_info(rtk_phy->dev,
-+			    "%s to set Page1 0xE2=%x for dc disconnect level (%s)\n",
-+			    __func__,
-+			    rtk_usb_phy_read(regAddr, addr),
-+			    isUpdate?"Update":"restore");
-+	} else {
-+		dev_err(rtk_phy->dev,
-+			    "ERROR: %s %d index=%d addr Not PAGE1_0xE2\n",
-+			    __func__, __LINE__, i);
-+	}
-+}
-+
-+static void update_dc_disconnect_level(struct rtk_usb_phy *rtk_phy,
-+	    struct reg_addr *regAddr,
-+	    struct phy_data *phy_data, bool isUpdate)
-+{
-+	if (phy_data->usb_dc_dis_at_page0)
-+		update_dc_disconnect_level_at_page0(
-+			    rtk_phy, regAddr, phy_data, isUpdate);
-+	else
-+		update_dc_disconnect_level_at_page1(
-+			    rtk_phy, regAddr, phy_data, isUpdate);
-+}
-+
-+static void do_rtk_usb_phy_toggle(struct rtk_usb_phy *rtk_phy,
-+	    int index, bool isConnect)
++static void do_rtk_usb3_phy_toggle(struct rtk_usb_phy *rtk_phy, int i,
++	    bool isConnect)
 +{
 +	struct reg_addr *regAddr;
 +	struct phy_data *phy_data;
-+	struct phy_parameter *phy_parameter_page;
-+	int i;
++	struct phy_parameter *phy_parameter;
++	size_t index;
 +
-+	regAddr = &((struct reg_addr *)rtk_phy->reg_addr)[index];
-+	phy_data = &((struct phy_data *)rtk_phy->phy_data)[index];
++	regAddr = &((struct reg_addr *)rtk_phy->reg_addr)[i];
++	phy_data = &((struct phy_data *)rtk_phy->phy_data)[i];
++
++	if (!phy_data) {
++		dev_err(rtk_phy->dev, "%s phy_data is NULL!\n", __func__);
++		return;
++	}
 +
 +	if (!phy_data->do_toggle)
-+		goto out;
++		return;
 +
-+	if (phy_data->is_double_sensitivity_mode)
-+		goto do_toggle_driving;
++	phy_parameter = phy_data->parameter;
 +
-+	/* Set page 0 */
-+	phy_parameter_page = phy_data->page0;
-+	rtk_usb_phy_set_page(regAddr, 0);
++	index = PHY_ADDR_MAP_ARRAY_INDEX(PHY_ADDR_0x09);
 +
-+	i = PAGE_ADDR_MAP_ARRAY_INDEX(PAGE0_0xE7);
-+	if (i < phy_data->page0_size) {
-+		struct phy_parameter *phy_parameter = phy_parameter_page + i;
-+		u8 addr = phy_parameter->addr;
-+		u8 data = phy_parameter->data;
++	if (index < phy_data->size) {
++		u8 addr = (phy_parameter + index)->addr;
++		u16 data = (phy_parameter + index)->data;
 +
-+		if (isConnect) {
-+			rtk_usb_phy_write(regAddr, addr, data &
-+				    (~(BIT(4) | BIT(5) | BIT(6))));
-+		} else {
-+			rtk_usb_phy_write(regAddr, addr, data |
-+				    (BIT(4) | BIT(5) | BIT(6)));
++		if (addr == 0xFF) {
++			addr = ARRAY_INDEX_MAP_PHY_ADDR(index);
++			data = rtk_usb_phy_read(regAddr, addr);
++			(phy_parameter + index)->addr = addr;
++			(phy_parameter + index)->data = data;
 +		}
-+		dev_info(rtk_phy->dev,
-+			    "%s %sconnect to set Page0 0xE7=%x\n",
-+			    __func__,
-+			    isConnect?"":"dis",
-+			    rtk_usb_phy_read(regAddr, addr));
-+	} else {
-+		dev_err(rtk_phy->dev,
-+			    "ERROR: %s %d index=%d addr Not PAGE0_0xE7\n",
-+			    __func__, __LINE__, i);
-+	}
-+
-+do_toggle_driving:
-+
-+	if (!phy_data->do_toggle_driving)
-+		goto do_toggle;
-+
-+	/* Page 0 addr 0xE4 driving capability */
-+
-+	/* Set page 0 */
-+	phy_parameter_page = phy_data->page0;
-+	rtk_usb_phy_set_page(regAddr, 0);
-+
-+	i = PAGE_ADDR_MAP_ARRAY_INDEX(PAGE0_0xE4);
-+	if (i < phy_data->page0_size) {
-+		struct phy_parameter *phy_parameter = phy_parameter_page + i;
-+		u8 addr = phy_parameter->addr;
-+		u8 data = phy_parameter->data;
-+
-+		data = __updated_page0_0xe4_parameter(phy_data, data);
-+
-+		if (isConnect) {
-+			rtk_usb_phy_write(regAddr, addr, data);
-+		} else {
-+			u8 val;
-+			s32 __val;
-+			s32 driving_updated =
-+				    phy_data->disconnect_driving_updated;
-+			s32 usb_dc_cal_mask = phy_data->usb_dc_cal_mask;
-+
-+			__val = (s32)(data & usb_dc_cal_mask) + driving_updated;
-+
-+			if (__val > usb_dc_cal_mask)
-+				__val = usb_dc_cal_mask;
-+			else if (__val < 0)
-+				__val = 0;
-+
-+			val = (data & (~usb_dc_cal_mask)) | (__val & usb_dc_cal_mask);
-+
-+			rtk_usb_phy_write(regAddr, addr, val);
-+		}
-+		dev_info(rtk_phy->dev,
-+			    "%s %sconnect to set Page0 0xE4=%x for driving\n",
-+			    __func__,
-+			    isConnect?"":"dis",
-+			    rtk_usb_phy_read(regAddr, addr));
-+	} else {
-+		dev_err(rtk_phy->dev,
-+			    "ERROR: %s %d index=%d addr Not PAGE0_0xE4\n",
-+			    __func__, __LINE__, i);
-+	}
-+
-+do_toggle:
-+	/* restore dc disconnect level before toggle */
-+	update_dc_disconnect_level(rtk_phy, regAddr, phy_data, false);
-+
-+	/* Set page 1 */
-+	phy_parameter_page = phy_data->page1;
-+	rtk_usb_phy_set_page(regAddr, 1);
-+
-+	i = PAGE_ADDR_MAP_ARRAY_INDEX(PAGE1_0xE0);
-+	if (i < phy_data->page1_size) {
-+		struct phy_parameter *phy_parameter = phy_parameter_page + i;
-+		u8 addr = phy_parameter->addr;
-+		u8 data = phy_parameter->data;
-+
-+		dev_info(rtk_phy->dev,
-+			    "%s ########## to toggle PAGE1_0xE0 BIT(2)\n",
-+			    __func__);
-+		rtk_usb_phy_write(regAddr, addr, data & (~BIT(2)));
 +		mdelay(1);
-+		rtk_usb_phy_write(regAddr, addr, data | (BIT(2)));
-+	} else {
-+		dev_err(rtk_phy->dev,
-+			    "ERROR: %s %d index=%d addr Not PAGE1_0xE0\n",
-+			    __func__, __LINE__, i);
++		dev_info(rtk_phy->dev,
++			    "%s ########## to toggle PHY addr 0x09 BIT(9)\n",
++			    __func__);
++		rtk_usb_phy_write(regAddr, addr, data&(~BIT(9)));
++		mdelay(1);
++		rtk_usb_phy_write(regAddr, addr, data);
 +	}
-+
-+	/* update dc disconnect level after toggle */
-+	update_dc_disconnect_level(rtk_phy, regAddr, phy_data, true);
-+
-+out:
-+	return;
++	dev_info(rtk_phy->dev, "%s ########## PHY addr 0x1f = 0x%04x\n",
++		    __func__, rtk_usb_phy_read(regAddr, PHY_ADDR_0x1F));
 +}
 +
-+/* Get default phy parameter for update */
-+static int __get_default_phy_parameter_for_updated(
-+	    struct rtk_usb_phy *rtk_phy, int index)
++static int do_rtk_usb_phy_init(struct rtk_usb_phy *rtk_phy, int phy_index)
 +{
-+	int i;
-+	struct reg_addr *regAddr;
-+	struct phy_data *phy_data;
-+	struct phy_parameter *phy_parameter_page;
++	struct reg_addr *regAddr =
++		    &((struct reg_addr *)rtk_phy->reg_addr)[phy_index];
++	struct phy_data *phy_data =
++		    &((struct phy_data *)rtk_phy->phy_data)[phy_index];
++	int index = 0;
++	struct phy_parameter *phy_parameter = phy_data->parameter;
 +
-+	regAddr = &((struct reg_addr *)rtk_phy->reg_addr)[index];
-+	phy_data = &((struct phy_data *)rtk_phy->phy_data)[index];
-+
-+	phy_parameter_page = phy_data->page0;
-+	rtk_usb_phy_set_page(regAddr, 0);
-+
-+	/* Get PAGE0_0xE4 default value */
-+	i = PAGE_ADDR_MAP_ARRAY_INDEX(PAGE0_0xE4);
-+	if (i < phy_data->page0_size) {
-+		struct phy_parameter *phy_parameter = phy_parameter_page + i;
-+		u8 addr = phy_parameter->addr;
-+		u8 data = phy_parameter->data;
-+
-+		if (!addr) {
-+			addr = ARRAY_INDEX_MAP_PAGE_ADDR(i);
-+			data = rtk_usb_phy_read(regAddr, addr);
-+
-+			phy_parameter->addr = addr;
-+			phy_parameter->data = data;
-+			dev_dbg(rtk_phy->dev,
-+				    "Get default addr %x value %x\n",
-+				    phy_parameter->addr,
-+				    phy_parameter->data);
-+		}
-+	}
-+
-+	/* Get PAGE0_0xE7 default value */
-+	i = PAGE_ADDR_MAP_ARRAY_INDEX(PAGE0_0xE7);
-+	if (i < phy_data->page0_size) {
-+		struct phy_parameter *phy_parameter = phy_parameter_page + i;
-+		u8 addr = phy_parameter->addr;
-+		u8 data = phy_parameter->data;
-+
-+		if (!addr) {
-+			addr = ARRAY_INDEX_MAP_PAGE_ADDR(i);
-+			data = rtk_usb_phy_read(regAddr, addr);
-+
-+			phy_parameter->addr = addr;
-+			phy_parameter->data = data;
-+			dev_dbg(rtk_phy->dev,
-+				    "Get default addr %x value %x\n",
-+				    phy_parameter->addr,
-+				    phy_parameter->data);
-+		}
-+	}
-+
-+	phy_parameter_page = phy_data->page1;
-+	rtk_usb_phy_set_page(regAddr, 1);
-+
-+	/* Get PAGE1_0xE0 default value */
-+	i = PAGE_ADDR_MAP_ARRAY_INDEX(PAGE1_0xE0);
-+	if (i < phy_data->page1_size) {
-+		struct phy_parameter *phy_parameter = phy_parameter_page + i;
-+		u8 addr = phy_parameter->addr;
-+		u8 data = phy_parameter->data;
-+
-+		if (!addr) {
-+			addr = ARRAY_INDEX_MAP_PAGE_ADDR(i);
-+			data = rtk_usb_phy_read(regAddr, addr);
-+
-+			phy_parameter->addr = addr;
-+			phy_parameter->data = data;
-+			dev_dbg(rtk_phy->dev,
-+				    "Get default page1 addr %x value %x\n",
-+				    phy_parameter->addr,
-+				    phy_parameter->data);
-+		}
-+	}
-+
-+	/* Get PAGE1_0xE2 default value */
-+	i = PAGE_ADDR_MAP_ARRAY_INDEX(PAGE1_0xE2);
-+	if (i < phy_data->page1_size) {
-+		struct phy_parameter *phy_parameter = phy_parameter_page + i;
-+		u8 addr = phy_parameter->addr;
-+		u8 data = phy_parameter->data;
-+
-+		if (!addr) {
-+			addr = ARRAY_INDEX_MAP_PAGE_ADDR(i);
-+			data = rtk_usb_phy_read(regAddr, addr);
-+
-+			phy_parameter->addr = addr;
-+			phy_parameter->data = data;
-+			dev_dbg(rtk_phy->dev,
-+				    "Get default page1 addr %x value %x\n",
-+				    phy_parameter->addr,
-+				    phy_parameter->data);
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static int do_rtk_usb_phy_init(struct rtk_usb_phy *rtk_phy, int index)
-+{
-+	struct reg_addr *regAddr;
-+	struct phy_data *phy_data;
-+	struct phy_parameter *phy_parameter_page;
-+	int i;
-+
-+	dev_dbg(rtk_phy->dev, "%s: init phy#%d\n", __func__, index);
-+
-+	regAddr = &((struct reg_addr *)rtk_phy->reg_addr)[index];
-+	phy_data = &((struct phy_data *)rtk_phy->phy_data)[index];
-+
-+	if (control_phy_power(rtk_phy, phy_data, regAddr)) {
-+		phy_data->ldo_enable = true;
-+		dev_info(rtk_phy->dev, "%s USB phy use ldo power compensate phy parameter (%d)\n",
-+		    __func__, phy_data->ldo_driving_compensate);
-+	}
-+
-+	__get_default_phy_parameter_for_updated(rtk_phy, index);
++	dev_dbg(rtk_phy->dev, "%s: init phy#%d\n", __func__, phy_index);
 +
 +	if (phy_data->use_default_parameter) {
 +		dev_info(rtk_phy->dev, "%s phy#%d use default parameter\n",
-+			    __func__, index);
++			    __func__, phy_index);
 +		goto do_toggle;
 +	}
 +
-+	/* Set page 0 */
-+	phy_parameter_page = phy_data->page0;
-+	rtk_usb_phy_set_page(regAddr, 0);
++	for (index = 0; index < phy_data->size; index++) {
++		u8 addr = (phy_parameter + index)->addr;
++		u16 data = (phy_parameter + index)->data;
 +
-+	for (i = 0; i < phy_data->page0_size; i++) {
-+		struct phy_parameter *phy_parameter = phy_parameter_page + i;
-+		u8 addr = phy_parameter->addr;
-+		u8 data = phy_parameter->data;
-+
-+		if (!addr)
++		if (addr == 0xFF)
 +			continue;
 +
-+		if (addr == PAGE0_0xE4)
-+			data = __updated_page0_0xe4_parameter(phy_data, data);
++		if (addr == PHY_ADDR_0x20) {
++			u8 efuse_val = phy_data->efuse_usb_u3_tx_lfps_swing_trim;
++			u16 val_mask = USB_U3_TX_LFPS_SWING_TRIM_MASK;
++			int val_shift = USB_U3_TX_LFPS_SWING_TRIM_SHIFT;
 +
-+		if (rtk_usb_phy_write(regAddr, addr, data)) {
-+			dev_err(rtk_phy->dev,
-+				    "[%s:%d] Error page0 addr=0x%x value=0x%x\n",
-+				    __func__, __LINE__, addr, data);
-+			return -EINVAL;
++			if (efuse_val) {
++				data &= ~(val_mask << val_shift);
++				data |= ((efuse_val & val_mask) << val_shift);
++			}
 +		}
-+		dev_dbg(rtk_phy->dev, "[%s:%d] Good page0 addr=0x%x value=0x%x\n",
-+			    __func__, __LINE__, addr,
-+			    rtk_usb_phy_read(regAddr, addr));
++
++		rtk_usb_phy_write(regAddr, addr, data);
 +	}
 +
-+	/* Set page 1 */
-+	phy_parameter_page = phy_data->page1;
-+	rtk_usb_phy_set_page(regAddr, 1);
++	for (index = 0; index < phy_data->size; index++) {
++		u8 addr = (phy_parameter + index)->addr;
++		u16 data = (phy_parameter + index)->data;
 +
-+	for (i = 0; i < phy_data->page1_size; i++) {
-+		struct phy_parameter *phy_parameter = phy_parameter_page + i;
-+		u8 addr = phy_parameter->addr;
-+		u8 data = phy_parameter->data;
-+
-+		if (!addr)
++		if (addr == 0xFF)
 +			continue;
 +
-+		if (rtk_usb_phy_write(regAddr, addr, data)) {
-+			dev_err(rtk_phy->dev,
-+				    "[%s:%d] Error page1 addr=0x%x value=0x%x\n",
-+				    __func__, __LINE__,
-+				    addr, data);
-+			return -EINVAL;
-+		}
-+		dev_dbg(rtk_phy->dev, "[%s:%d] Good page1 addr=0x%x value=0x%x\n",
-+			    __func__, __LINE__, addr,
-+			    rtk_usb_phy_read(regAddr, addr));
-+	}
-+
-+	if (phy_data->page2_size == 0)
-+		goto do_toggle;
-+
-+	/* Set page 2 */
-+	phy_parameter_page = phy_data->page2;
-+	rtk_usb_phy_set_page(regAddr, 2);
-+
-+	for (i = 0; i < phy_data->page2_size; i++) {
-+		struct phy_parameter *phy_parameter = phy_parameter_page + i;
-+		u8 addr = phy_parameter->addr;
-+		u8 data = phy_parameter->data;
-+
-+		if (!addr)
-+			continue;
-+
-+		if (rtk_usb_phy_write(regAddr, addr, data)) {
-+			dev_err(rtk_phy->dev,
-+				    "[%s:%d] Error page2 addr=0x%x value=0x%x\n",
-+				    __func__, __LINE__, addr, data);
-+			return -1;
-+		}
-+		dev_dbg(rtk_phy->dev, "[%s:%d] Good page2 addr=0x%x value=0x%x\n",
-+			    __func__, __LINE__, addr,
++		dev_dbg(rtk_phy->dev, "[USB3_PHY], addr = 0x%02x, data = 0x%04x ==> read value = 0x%04x\n",
++			    addr, data,
 +			    rtk_usb_phy_read(regAddr, addr));
 +	}
 +
 +do_toggle:
-+	do_rtk_usb_phy_toggle(rtk_phy, index, false);
++	if (phy_data->do_toggle_once)
++		phy_data->do_toggle = true;
++
++	do_rtk_usb3_phy_toggle(rtk_phy, phy_index, false);
++
++	if (phy_data->do_toggle_once) {
++		u16 check_value = 0;
++		int count = 10;
++		u16 value_0x0D, value_0x10;
++
++		/* Enable Debug mode by set 0x0D and 0x10 */
++		value_0x0D = rtk_usb_phy_read(regAddr, PHY_ADDR_0x0D);
++		value_0x10 = rtk_usb_phy_read(regAddr, PHY_ADDR_0x10);
++
++		rtk_usb_phy_write(regAddr, PHY_ADDR_0x0D,
++			    value_0x0D | REG_0x0D_RX_DEBUG_TEST_EN);
++		rtk_usb_phy_write(regAddr, PHY_ADDR_0x10,
++			    (value_0x10 & ~REG_0x10_DEBUG_MODE_SETTING_MASK) |
++			    REG_0x10_DEBUG_MODE_SETTING);
++
++		check_value = rtk_usb_phy_read(regAddr, PHY_ADDR_0x30);
++
++		while (!(check_value & BIT(15))) {
++			check_value = rtk_usb_phy_read(regAddr, PHY_ADDR_0x30);
++			mdelay(1);
++			if (count-- < 0)
++				break;
++		}
++
++		if (!(check_value & BIT(15)))
++			dev_info(rtk_phy->dev, "toggle fail addr=0x%02x, data=0x%04x\n",
++				    PHY_ADDR_0x30, check_value);
++		else
++			dev_info(rtk_phy->dev, "toggle okay addr=0x%02x, data=0x%04x\n",
++				    PHY_ADDR_0x30, check_value);
++
++		/* Disable Debug mode by set 0x0D and 0x10 to default*/
++		rtk_usb_phy_write(regAddr, PHY_ADDR_0x0D, value_0x0D);
++		rtk_usb_phy_write(regAddr, PHY_ADDR_0x10, value_0x10);
++
++		phy_data->do_toggle = false;
++	}
++
++
++	if (phy_data->check_rx_front_end_offset) {
++		u16 rx_offset_code, rx_offset_range;
++		bool do_update = false;
++
++		rx_offset_code = rtk_usb_phy_read(regAddr, PHY_ADDR_0x1F);
++		if (((rx_offset_code & REG_0x1F_RX_OFFSET_CODE_MASK) == 0x0) ||
++			    ((rx_offset_code & REG_0x1F_RX_OFFSET_CODE_MASK) ==
++			      REG_0x1F_RX_OFFSET_CODE_MASK))
++			do_update = true;
++
++		rx_offset_range = rtk_usb_phy_read(regAddr, PHY_ADDR_0x0B);
++		if (((rx_offset_range & REG_0x0B_RX_OFFSET_RANGE_MASK) ==
++				    REG_0x0B_RX_OFFSET_RANGE_MASK) && do_update) {
++			dev_warn(rtk_phy->dev, "Don't update rx_offset_range (rx_offset_code=0x%x, rx_offset_range=0x%x)\n",
++				    rx_offset_code, rx_offset_range);
++			do_update = false;
++		}
++
++		if (do_update) {
++			u16 tmp1, tmp2;
++
++			tmp1 = rx_offset_range & (~REG_0x0B_RX_OFFSET_RANGE_MASK);
++			tmp2 = rx_offset_range & REG_0x0B_RX_OFFSET_RANGE_MASK;
++			tmp2 += (1 << 2);
++			rx_offset_range = tmp1 | (tmp2 & REG_0x0B_RX_OFFSET_RANGE_MASK);
++			rtk_usb_phy_write(regAddr, PHY_ADDR_0x0B, rx_offset_range);
++			goto do_toggle;
++		}
++	}
 +
 +	return 0;
 +}
@@ -948,17 +437,20 @@ index 000000000000..0538424b9cab
 +static int rtk_usb_phy_init(struct phy *phy)
 +{
 +	struct rtk_usb_phy *rtk_phy = phy_get_drvdata(phy);
++	int ret = 0;
++	int i;
 +	unsigned long phy_init_time = jiffies;
-+	int i, ret = 0;
 +
-+	if (!rtk_phy)
-+		return -EINVAL;
++	if (!rtk_phy) {
++		pr_err("%s rtk_phy is NULL!\n", __func__);
++		return -ENODEV;
++	}
 +
-+	dev_dbg(rtk_phy->dev, "Init RTK USB 2.0 PHY\n");
++	dev_dbg(rtk_phy->dev, "Init RTK USB 3.0 PHY\n");
 +	for (i = 0; i < rtk_phy->phyN; i++)
 +		ret = do_rtk_usb_phy_init(rtk_phy, i);
 +
-+	dev_info(rtk_phy->dev, "Initialized RTK USB 2.0 PHY (take %dms)\n",
++	dev_info(rtk_phy->dev, "Initialized RTK USB 3.0 PHY (take %dms)\n",
 +		    jiffies_to_msecs(jiffies - phy_init_time));
 +	return ret;
 +}
@@ -967,10 +459,12 @@ index 000000000000..0538424b9cab
 +{
 +	struct rtk_usb_phy *rtk_phy = phy_get_drvdata(phy);
 +
-+	if (!rtk_phy)
-+		return -EINVAL;
++	if (!rtk_phy) {
++		pr_err("%s rtk_phy is NULL!\n", __func__);
++		return -ENODEV;
++	}
 +
-+	dev_info(rtk_phy->dev, "Exit RTK USB 2.0 PHY\n");
++	dev_dbg(rtk_phy->dev, "Exit RTK USB 3.0 PHY\n");
 +
 +	return 0;
 +}
@@ -981,25 +475,26 @@ index 000000000000..0538424b9cab
 +	.owner		= THIS_MODULE,
 +};
 +
-+static void rtk_usb_phy_toggle(struct usb_phy *usb2_phy, bool isConnect, int port)
++static void rtk_usb_phy_toggle(struct usb_phy *usb3_phy, bool isConnect, int port)
 +{
 +	int index = port;
 +	struct rtk_usb_phy *rtk_phy = NULL;
 +
-+	if (usb2_phy != NULL && usb2_phy->dev != NULL)
-+		rtk_phy = dev_get_drvdata(usb2_phy->dev);
++	if (usb3_phy != NULL && usb3_phy->dev != NULL)
++		rtk_phy = dev_get_drvdata(usb3_phy->dev);
 +
 +	if (rtk_phy == NULL) {
-+		pr_err("%s %d ERROR! NO this device\n", __func__, __LINE__);
++		pr_err("%s ERROR! NO this device\n", __func__);
 +		return;
 +	}
++
 +	if (index > rtk_phy->phyN) {
 +		pr_err("%s %d ERROR! port=%d > phyN=%d\n",
 +			    __func__, __LINE__, index, rtk_phy->phyN);
 +		return;
 +	}
 +
-+	do_rtk_usb_phy_toggle(rtk_phy, index, isConnect);
++	do_rtk_usb3_phy_toggle(rtk_phy, index, isConnect);
 +}
 +
 +static int rtk_usb_phy_notify_port_status(struct usb_phy *x, int port,
@@ -1035,130 +530,58 @@ index 000000000000..0538424b9cab
 +	return phy_debug_root;
 +}
 +
-+static int rtk_usb2_parameter_show(struct seq_file *s, void *unused)
++static int rtk_usb3_parameter_show(struct seq_file *s, void *unused)
 +{
 +	struct rtk_usb_phy		*rtk_phy = s->private;
 +	int i, index;
 +
-+	for (index = 0; index < rtk_phy->phyN; index++) {
++	for (i = 0; i < rtk_phy->phyN; i++) {
 +		struct reg_addr *regAddr =
-+			    &((struct reg_addr *)rtk_phy->reg_addr)[index];
++			    &((struct reg_addr *)rtk_phy->reg_addr)[i];
 +		struct phy_data *phy_data =
-+			    &((struct phy_data *)rtk_phy->phy_data)[index];
-+		struct phy_parameter *phy_parameter_page;
++			    &((struct phy_data *)rtk_phy->phy_data)[i];
++		struct phy_parameter *phy_parameter;
 +
-+		seq_printf(s, "PHY %d:\n", index);
++		phy_parameter = phy_data->parameter;
 +
-+		seq_puts(s, "Page 0:\n");
-+		/* Set page 0 */
-+		phy_parameter_page = phy_data->page0;
-+		rtk_usb_phy_set_page(regAddr, 0);
++		seq_printf(s, "[USB3_PHY] PHY %d\n", i);
 +
-+		for (i = 0; i < phy_data->page0_size; i++) {
-+			struct phy_parameter *phy_parameter = phy_parameter_page + i;
-+			u8 addr = ARRAY_INDEX_MAP_PAGE_ADDR(i);
-+			u8 data = phy_parameter->data;
-+			u8 value = rtk_usb_phy_read(regAddr, addr);
++		for (index = 0; index < phy_data->size; index++) {
++			u8 addr = ARRAY_INDEX_MAP_PHY_ADDR(index);
++			u16 data = (phy_parameter + index)->data;
 +
-+			if (phy_parameter->addr)
-+				seq_printf(s, "Page 0: addr=0x%x data=0x%02x ==> read value=0x%02x\n",
-+					    addr, data, value);
++			if ((phy_parameter + index)->addr == 0xFF)
++				seq_printf(s, "[USB3_PHY], addr = 0x%02x, data = none   ==> read value = 0x%04x\n",
++					    addr,
++					    rtk_usb_phy_read(regAddr, addr));
 +			else
-+				seq_printf(s, "Page 0: addr=0x%x data=none ==> read value=0x%02x\n",
-+					    addr, value);
++				seq_printf(s, "[USB3_PHY], addr = 0x%02x, data = 0x%04x ==> read value = 0x%04x\n",
++					    addr, data,
++					    rtk_usb_phy_read(regAddr, addr));
 +		}
 +
-+		seq_puts(s, "Page 1:\n");
-+		/* Set page 1 */
-+		phy_parameter_page = phy_data->page1;
-+		rtk_usb_phy_set_page(regAddr, 1);
-+
-+		for (i = 0; i < phy_data->page1_size; i++) {
-+			struct phy_parameter *phy_parameter = phy_parameter_page + i;
-+			u8 addr = ARRAY_INDEX_MAP_PAGE_ADDR(i);
-+			u8 data = phy_parameter->data;
-+			u8 value = rtk_usb_phy_read(regAddr, addr);
-+
-+			if (phy_parameter->addr)
-+				seq_printf(s, "Page 1: addr=0x%x data=0x%02x ==> read value=0x%02x\n",
-+					    addr, data, value);
-+			else
-+				seq_printf(s, "Page 1: addr=0x%x data=none ==> read value=0x%02x\n",
-+					    addr, value);
-+		}
-+
-+		if (phy_data->page2_size == 0)
-+			goto out;
-+
-+		seq_puts(s, "Page 2:\n");
-+		/* Set page 2 */
-+		phy_parameter_page = phy_data->page2;
-+		rtk_usb_phy_set_page(regAddr, 2);
-+
-+		for (i = 0; i < phy_data->page2_size; i++) {
-+			struct phy_parameter *phy_parameter = phy_parameter_page + i;
-+			u8 addr = ARRAY_INDEX_MAP_PAGE_ADDR(i);
-+			u8 data = phy_parameter->data;
-+			u8 value = rtk_usb_phy_read(regAddr, addr);
-+
-+			if (phy_parameter->addr)
-+				seq_printf(s, "Page 2: addr=0x%x data=0x%02x ==> read value=0x%02x\n",
-+					    addr, data, value);
-+			else
-+				seq_printf(s, "Page 2: addr=0x%x data=none ==> read value=0x%02x\n",
-+					    addr, value);
-+		}
-+
-+out:
 +		seq_puts(s, "Property:\n");
 +		seq_printf(s, "check_efuse: %s\n",
 +			    phy_data->check_efuse?"Enable":"Disable");
-+		seq_printf(s, "check_efuse_version: %d\n",
-+			    phy_data->check_efuse_version);
-+		seq_printf(s, "efuse_usb_dc_cal: %d\n",
-+			    (int)phy_data->efuse_usb_dc_cal);
-+		seq_printf(s, "efuse_usb_dc_cal_rate: %d\n",
-+			    phy_data->efuse_usb_dc_cal_rate);
-+		seq_printf(s, "usb_dc_cal_mask: 0x%x\n",
-+			    phy_data->usb_dc_cal_mask);
-+		seq_printf(s, "efuse_usb_dc_dis: %d\n",
-+			    (int)phy_data->efuse_usb_dc_dis);
-+		seq_printf(s, "efuse_usb_dc_dis_rate: %d\n",
-+			    phy_data->efuse_usb_dc_dis_rate);
-+		seq_printf(s, "usb_dc_dis_mask: 0x%x\n",
-+			    phy_data->usb_dc_dis_mask);
-+		seq_printf(s, "usb_dc_dis_at_page0: %s\n",
-+			    phy_data->usb_dc_dis_at_page0?"true":"false");
++		seq_printf(s, "efuse_usb_u3_tx_lfps_swing_trim: 0x%x\n",
++			    (int)phy_data->efuse_usb_u3_tx_lfps_swing_trim);
 +		seq_printf(s, "do_toggle: %s\n",
 +			    phy_data->do_toggle?"Enable":"Disable");
-+		seq_printf(s, "do_toggle_driving: %s\n",
-+			    phy_data->do_toggle_driving?"Enable":"Disable");
-+		seq_printf(s, "disconnect_driving_updated: 0x%x\n",
-+			    phy_data->disconnect_driving_updated);
++		seq_printf(s, "do_toggle_once: %s\n",
++			    phy_data->do_toggle_once?"Enable":"Disable");
 +		seq_printf(s, "use_default_parameter: %s\n",
 +			    phy_data->use_default_parameter?"Enable":"Disable");
-+		seq_printf(s, "is_double_sensitivity_mode: %s\n",
-+			    phy_data->is_double_sensitivity_mode?"Enable":"Disable");
-+		seq_printf(s, "ldo_force_enable: %s\n",
-+			    phy_data->ldo_force_enable?"Enable":"Disable");
-+		seq_printf(s, "ldo_enable: %s\n",
-+			    phy_data->ldo_enable?"Enable":"Disable");
-+		seq_printf(s, "ldo_driving_compensate: %d\n",
-+			    phy_data->ldo_driving_compensate);
-+		seq_printf(s, "driving_compensate: %d\n",
-+			    phy_data->driving_compensate);
 +	}
-+
 +	return 0;
 +}
 +
-+static int rtk_usb2_parameter_open(struct inode *inode, struct file *file)
++static int rtk_usb3_parameter_open(struct inode *inode, struct file *file)
 +{
-+	return single_open(file, rtk_usb2_parameter_show, inode->i_private);
++	return single_open(file, rtk_usb3_parameter_show, inode->i_private);
 +}
 +
-+static const struct file_operations rtk_usb2_parameter_fops = {
-+	.open			= rtk_usb2_parameter_open,
++static const struct file_operations rtk_usb3_parameter_fops = {
++	.open			= rtk_usb3_parameter_open,
 +	.read			= seq_read,
 +	.llseek			= seq_lseek,
 +	.release		= single_release,
@@ -1166,8 +589,8 @@ index 000000000000..0538424b9cab
 +
 +static int __get_parameter_at_page(struct seq_file *s,
 +	    struct rtk_usb_phy *rtk_phy,
-+	    struct phy_parameter *phy_parameter_page,
-+	    const char *phy_page, const char *phy_addr)
++	    struct phy_parameter *phy_parameter_array,
++	    const char *phy_addr)
 +{
 +	struct phy_parameter *phy_parameter;
 +	uint32_t addr;
@@ -1178,17 +601,18 @@ index 000000000000..0538424b9cab
 +		pr_err("%s::kstrtouint() failed\n", __func__);
 +		return -EINVAL;
 +	}
-+	i = PAGE_ADDR_MAP_ARRAY_INDEX(addr);
-+	phy_parameter = (phy_parameter_page + i);
 +
-+	if (phy_parameter->addr)
-+		seq_printf(s, "Now Parameter %s addr 0x%02x = 0x%02x\n",
-+			    phy_page, phy_parameter->addr, phy_parameter->data);
++	i = PHY_ADDR_MAP_ARRAY_INDEX(addr);
++	phy_parameter = (phy_parameter_array + i);
++
++	if (phy_parameter->addr != 0xFF)
++		seq_printf(s, "Now Parameter addr 0x%02x = 0x%04x\n",
++			    phy_parameter->addr, phy_parameter->data);
 +	else
-+		seq_printf(s, "Now Parameter %s addr 0x%02x is default\n",
-+			    phy_page, addr);
++		seq_printf(s, "Now Parameter addr 0x%02x is default\n",
++			    addr);
 +
-+	dev_dbg(rtk_phy->dev, "%s addr=0x%02x data=0x%02x\n",
++	dev_dbg(rtk_phy->dev, "%s addr=0x%02x data=0x%04x\n",
 +		    __func__, phy_parameter->addr, phy_parameter->data);
 +
 +	return 0;
@@ -1197,56 +621,58 @@ index 000000000000..0538424b9cab
 +static int __set_parameter_at_page(
 +	    struct rtk_usb_phy *rtk_phy,
 +	    struct reg_addr *regAddr, struct phy_data *phy_data,
-+	    struct phy_parameter *phy_parameter_page,
-+	    const char *phy_page, const char *phy_addr, const char *phy_value)
++	    struct phy_parameter *phy_parameter_array,
++	    const char *phy_addr, const char *phy_value)
 +{
 +	struct phy_parameter *phy_parameter;
 +	uint32_t addr, value;
 +	int i, ret;
 +
 +	ret = kstrtouint(phy_addr, 16, &addr);
-+	if (ret < 0)
++	if (ret < 0) {
++		pr_err("%s::kstrtouint() failed\n", __func__);
 +		return -EINVAL;
-+
++	}
 +	ret = kstrtouint(phy_value, 16, &value);
-+	if (ret < 0)
++	if (ret < 0) {
++		pr_err("%s::kstrtouint() failed\n", __func__);
 +		return -EINVAL;
++	}
 +
-+	i = PAGE_ADDR_MAP_ARRAY_INDEX(addr);
-+	phy_parameter = (phy_parameter_page + i);
++	i = PHY_ADDR_MAP_ARRAY_INDEX(addr);
++	phy_parameter = (phy_parameter_array + i);
 +
-+	if (phy_parameter->addr) {
++	if (phy_parameter->addr != 0xFF) {
 +		phy_parameter->data = value;
 +	} else {
 +		phy_parameter->addr = addr;
 +		phy_parameter->data = value;
 +	}
 +
-+	dev_dbg(rtk_phy->dev, "%s addr=0x%02x data=0x%02x\n",
++	dev_info(rtk_phy->dev, "%s addr=0x%02x data=0x%04x\n",
 +		    __func__, phy_parameter->addr, phy_parameter->data);
 +
-+	if (strcmp("page0", phy_page) == 0 && (addr == PAGE0_0xE4))
-+		value = __updated_page0_0xe4_parameter(phy_data, value);
++	if (addr == PHY_ADDR_0x20)
++		dev_info(rtk_phy->dev,
++			    "%s PHY_ADDR_0x20 NOT use efuse u3_tx_lfps_swing_trim value\n",
++			    __func__);
 +
 +	if (rtk_usb_phy_write(regAddr, addr, value))
 +		dev_err(rtk_phy->dev,
-+				    "[%s:%d] Error: addr=0x%02x value=0x%02x\n",
++				    "[%s:%d] Error: addr=0x%02x value=0x%04x\n",
 +				    __func__, __LINE__, addr, value);
 +
 +	return 0;
 +}
 +
-+static int rtk_usb2_set_parameter_show(struct seq_file *s, void *unused)
++static int rtk_usb3_set_parameter_show(struct seq_file *s, void *unused)
 +{
 +	struct rtk_usb_phy *rtk_phy = s->private;
 +	const struct file *file = s->file;
 +	const char *file_name = file_dentry(file)->d_iname;
 +	struct dentry *p_dentry = file_dentry(file)->d_parent;
-+	const char *dir_name = p_dentry->d_iname;
-+	struct dentry *pp_dentry = p_dentry->d_parent;
-+	const char *phy_dir_name = pp_dentry->d_iname;
-+	int ret = 0;
-+	int index;
++	const char *phy_dir_name = p_dentry->d_iname;
++	int ret, index;
 +	struct phy_data *phy_data = NULL;
 +
 +	for (index = 0; index < rtk_phy->phyN; index++) {
@@ -1261,44 +687,33 @@ index 000000000000..0538424b9cab
 +	}
 +	if (!phy_data) {
 +		dev_err(rtk_phy->dev,
-+				    "%s: No phy_data for %s/%s/%s\n",
-+				    __func__, phy_dir_name, dir_name, file_name);
++				    "%s: No phy_data for %s/%s\n",
++				    __func__, phy_dir_name, file_name);
 +		return -EINVAL;
 +	}
 +
-+	if (strcmp("page0", dir_name) == 0)
-+		ret = __get_parameter_at_page(s, rtk_phy, phy_data->page0,
-+			    dir_name, file_name);
-+	else if (strcmp("page1", dir_name) == 0)
-+		ret = __get_parameter_at_page(s, rtk_phy, phy_data->page1,
-+			    dir_name, file_name);
-+	else if (strcmp("page2", dir_name) == 0)
-+		ret = __get_parameter_at_page(s, rtk_phy, phy_data->page2,
-+			    dir_name, file_name);
-+
++	ret = __get_parameter_at_page(s, rtk_phy, phy_data->parameter, file_name);
 +	if (ret < 0)
 +		return ret;
 +
 +	seq_puts(s, "Set phy parameter by following command\n");
-+	seq_printf(s, "echo \"value\" > %s/%s/%s\n",
-+		    phy_dir_name, dir_name, file_name);
++	seq_printf(s, "echo \"value\" > %s/%s\n",
++		    phy_dir_name, file_name);
 +
 +	return 0;
 +}
 +
-+static int rtk_usb2_set_parameter_open(struct inode *inode, struct file *file)
++static int rtk_usb3_set_parameter_open(struct inode *inode, struct file *file)
 +{
-+	return single_open(file, rtk_usb2_set_parameter_show, inode->i_private);
++	return single_open(file, rtk_usb3_set_parameter_show, inode->i_private);
 +}
 +
-+static ssize_t rtk_usb2_set_parameter_write(struct file *file,
++static ssize_t rtk_usb3_set_parameter_write(struct file *file,
 +		const char __user *ubuf, size_t count, loff_t *ppos)
 +{
 +	const char *file_name = file_dentry(file)->d_iname;
 +	struct dentry *p_dentry = file_dentry(file)->d_parent;
-+	const char *dir_name = p_dentry->d_iname;
-+	struct dentry *pp_dentry = p_dentry->d_parent;
-+	const char *phy_dir_name = pp_dentry->d_iname;
++	const char *phy_dir_name = p_dentry->d_iname;
 +	struct seq_file		*s = file->private_data;
 +	struct rtk_usb_phy		*rtk_phy = s->private;
 +	struct reg_addr *regAddr = NULL;
@@ -1324,47 +739,36 @@ index 000000000000..0538424b9cab
 +	}
 +	if (!regAddr) {
 +		dev_err(rtk_phy->dev,
-+				    "%s: No regAddr for %s/%s/%s\n",
-+				    __func__, phy_dir_name, dir_name, file_name);
++				    "%s: No regAddr for %s/%s\n",
++				    __func__, phy_dir_name, file_name);
 +		return -EINVAL;
 +	}
 +	if (!phy_data) {
 +		dev_err(rtk_phy->dev,
-+				    "%s: No phy_data for %s/%s/%s\n",
-+				    __func__, phy_dir_name, dir_name, file_name);
++				    "%s: No phy_data for %s/%s\n",
++				    __func__, phy_dir_name, file_name);
 +		return -EINVAL;
 +	}
 +
-+	if (strcmp("page0", dir_name) == 0) {
-+		rtk_usb_phy_set_page(regAddr, 0);
-+		ret = __set_parameter_at_page(rtk_phy, regAddr, phy_data,
-+			    phy_data->page0, dir_name, file_name, buffer);
-+	} else if (strcmp("page1", dir_name) == 0) {
-+		rtk_usb_phy_set_page(regAddr, 1);
-+		ret = __set_parameter_at_page(rtk_phy, regAddr, phy_data,
-+			    phy_data->page1, dir_name, file_name, buffer);
-+	} else if (strcmp("page2", dir_name) == 0) {
-+		rtk_usb_phy_set_page(regAddr, 2);
-+		ret = __set_parameter_at_page(rtk_phy, regAddr, phy_data,
-+			    phy_data->page2, dir_name, file_name, buffer);
-+	}
++	ret = __set_parameter_at_page(rtk_phy, regAddr, phy_data,
++		    phy_data->parameter, file_name, buffer);
 +	if (ret < 0)
 +		return ret;
 +
 +	return count;
 +}
 +
-+static const struct file_operations rtk_usb2_set_parameter_fops = {
-+	.open			= rtk_usb2_set_parameter_open,
-+	.write			= rtk_usb2_set_parameter_write,
++static const struct file_operations rtk_usb3_set_parameter_fops = {
++	.open			= rtk_usb3_set_parameter_open,
++	.write			= rtk_usb3_set_parameter_write,
 +	.read			= seq_read,
 +	.llseek			= seq_lseek,
 +	.release		= single_release,
 +};
 +
-+static int rtk_usb2_toggle_show(struct seq_file *s, void *unused)
++static int rtk_usb3_toggle_show(struct seq_file *s, void *unused)
 +{
-+	struct rtk_usb_phy *rtk_phy = s->private;
++	struct rtk_usb_phy		*rtk_phy = s->private;
 +	struct phy_data *phy_data;
 +	int i;
 +
@@ -1378,12 +782,12 @@ index 000000000000..0538424b9cab
 +	return 0;
 +}
 +
-+static int rtk_usb2_toggle_open(struct inode *inode, struct file *file)
++static int rtk_usb3_toggle_open(struct inode *inode, struct file *file)
 +{
-+	return single_open(file, rtk_usb2_toggle_show, inode->i_private);
++	return single_open(file, rtk_usb3_toggle_show, inode->i_private);
 +}
 +
-+static ssize_t rtk_usb2_toggle_write(struct file *file,
++static ssize_t rtk_usb3_toggle_write(struct file *file,
 +		const char __user *ubuf, size_t count, loff_t *ppos)
 +{
 +	struct seq_file		*s = file->private_data;
@@ -1409,40 +813,31 @@ index 000000000000..0538424b9cab
 +	return count;
 +}
 +
-+static const struct file_operations rtk_usb2_toggle_fops = {
-+	.open			= rtk_usb2_toggle_open,
-+	.write			= rtk_usb2_toggle_write,
++static const struct file_operations rtk_usb3_toggle_fops = {
++	.open			= rtk_usb3_toggle_open,
++	.write			= rtk_usb3_toggle_write,
 +	.read			= seq_read,
 +	.llseek			= seq_lseek,
 +	.release		= single_release,
 +};
 +
 +static int create_debug_set_parameter_files(struct rtk_usb_phy *rtk_phy,
-+	    struct dentry *phy_dir, const char *page, size_t addr_size)
++	    struct dentry *phy_dir, size_t addr_size)
 +{
-+	struct dentry *page_dir;
 +	int i;
-+
-+	page_dir = debugfs_create_dir(page, phy_dir);
-+	if (!page_dir) {
-+		dev_err(rtk_phy->dev,
-+			    "%s Error create folder %s fail\n",
-+			    __func__, page);
-+		return -EINVAL;
-+	}
 +
 +	for (i = 0; i < addr_size; i++) {
 +		size_t sz = 30;
 +		char name[30] = {0};
 +
-+		snprintf(name, sz, "%x", ARRAY_INDEX_MAP_PAGE_ADDR(i));
++		snprintf(name, sz, "%02x", ARRAY_INDEX_MAP_PHY_ADDR(i));
 +
 +		if (!debugfs_create_file(name, 0644,
-+			    page_dir, rtk_phy,
-+			    &rtk_usb2_set_parameter_fops))
++			    phy_dir, rtk_phy,
++			    &rtk_usb3_set_parameter_fops))
 +			dev_err(rtk_phy->dev,
-+				    "%s Error create file %s/%s fail",
-+				    page, name, __func__);
++				    "%s Error create file %s fail",
++				    name, __func__);
 +	}
 +
 +	return 0;
@@ -1460,7 +855,6 @@ index 000000000000..0538424b9cab
 +			    __func__);
 +		return;
 +	}
-+
 +	rtk_phy->debug_dir = debugfs_create_dir(dev_name(rtk_phy->dev),
 +		    phy_debug_root);
 +	if (!rtk_phy->debug_dir) {
@@ -1468,8 +862,9 @@ index 000000000000..0538424b9cab
 +		return;
 +	}
 +
-+	if (!debugfs_create_file("parameter", 0444, rtk_phy->debug_dir, rtk_phy,
-+		    &rtk_usb2_parameter_fops))
++	if (!debugfs_create_file("parameter", 0444,
++		    rtk_phy->debug_dir, rtk_phy,
++		    &rtk_usb3_parameter_fops))
 +		goto file_error;
 +
 +	set_parameter_dir = debugfs_create_dir("set_parameter",
@@ -1496,36 +891,18 @@ index 000000000000..0538424b9cab
 +			}
 +
 +			ret = create_debug_set_parameter_files(rtk_phy, phy_dir,
-+				    "page0", phy_data->page0_size);
++				    phy_data->size);
 +			if (ret < 0) {
 +				dev_err(rtk_phy->dev,
-+					    "%s Error create files for page0 fail\n",
-+					    __func__);
-+				goto file_error;
-+			}
-+
-+			ret = create_debug_set_parameter_files(rtk_phy, phy_dir,
-+				    "page1", phy_data->page1_size);
-+			if (ret < 0) {
-+				dev_err(rtk_phy->dev,
-+					    "%s Error create files for page1 fail\n",
-+					    __func__);
-+				goto file_error;
-+			}
-+
-+			ret = create_debug_set_parameter_files(rtk_phy, phy_dir,
-+				    "page2", phy_data->page2_size);
-+			if (ret < 0) {
-+				dev_err(rtk_phy->dev,
-+					    "%s Error create files for page2 fail\n",
++					    "%s Error create files fail\n",
 +					    __func__);
 +				goto file_error;
 +			}
 +		}
 +	}
 +
-+	if (!debugfs_create_file("toggle", 0644,
-+		    rtk_phy->debug_dir, rtk_phy, &rtk_usb2_toggle_fops))
++	if (!debugfs_create_file("toggle", 0644, rtk_phy->debug_dir, rtk_phy,
++		    &rtk_usb3_toggle_fops))
 +		goto file_error;
 +
 +	return;
@@ -1548,74 +925,14 @@ index 000000000000..0538424b9cab
 +{
 +	u8 value = 0;
 +	struct nvmem_cell *cell;
-+	struct soc_device_attribute rtk_soc_groot[] = {
-+			{ .family = "Realtek Groot",},
-+			{ /* empty */ }
-+		};
-+	struct soc_device_attribute rtk_soc_hank[] = {
-+			{ .family = "Realtek Hank",},
-+			{ /* empty */ }
-+		};
-+	struct soc_device_attribute rtk_soc_efuse_v1[] = {
-+			{ .family = "Realtek Phoenix",},
-+			{ .family = "Realtek Kylin",},
-+			{ .family = "Realtek Hercules",},
-+			{ .family = "Realtek Thor",},
-+			{ .family = "Realtek Hank",},
-+			{ .family = "Realtek Groot",},
-+			{ .family = "Realtek Stark",},
-+			{ .family = "Realtek Parker",},
-+			{ /* empty */ }
-+		};
-+	struct soc_device_attribute rtk_soc_dis_level_at_page0[] = {
-+			{ .family = "Realtek Phoenix",},
-+			{ .family = "Realtek Kylin",},
-+			{ .family = "Realtek Hercules",},
-+			{ .family = "Realtek Thor",},
-+			{ .family = "Realtek Hank",},
-+			{ .family = "Realtek Groot",},
-+			{ /* empty */ }
-+		};
-+
-+	if (soc_device_match(rtk_soc_efuse_v1)) {
-+		dev_dbg(rtk_phy->dev, "Use efuse v1 to updated phy parameter\n");
-+		phy_data->check_efuse_version = CHECK_EFUSE_V1;
-+	} else {
-+		dev_dbg(rtk_phy->dev, "Use efuse v2 to updated phy parameter\n");
-+		phy_data->check_efuse_version = CHECK_EFUSE_V2;
-+	}
-+
-+	if (soc_device_match(rtk_soc_dis_level_at_page0)) {
-+		dev_dbg(rtk_phy->dev, "Use usb_dc_dis_at_page0\\n");
-+		phy_data->usb_dc_dis_at_page0 = true;
-+
-+		phy_data->usb_dc_cal_mask = 0xf;
-+		phy_data->usb_dc_dis_mask = 0xf;
-+
-+		phy_data->disconnect_driving_updated = 0xf;
-+	} else {
-+		dev_dbg(rtk_phy->dev, "No use usb_dc_dis_at_page0\n");
-+		phy_data->usb_dc_dis_at_page0 = false;
-+
-+		phy_data->usb_dc_cal_mask = 0x1f;
-+		phy_data->usb_dc_dis_mask = 0xf;
-+
-+		phy_data->disconnect_driving_updated = 0x8;
-+	}
-+
-+	phy_data->efuse_usb_dc_cal_rate = EFUS_USB_DC_CAL_RATE;
-+	phy_data->efuse_usb_dc_dis_rate = EFUS_USB_DC_DIS_RATE;
-+
-+	if (soc_device_match(rtk_soc_hank))
-+		phy_data->efuse_usb_dc_cal_rate = 1;
 +
 +	if (!phy_data->check_efuse)
 +		goto out;
 +
-+	/* Read efuse for usb dc cal */
-+	cell = nvmem_cell_get(rtk_phy->dev, "usb-dc-cal");
++	cell = nvmem_cell_get(rtk_phy->dev, "usb_u3_tx_lfps_swing_trim");
 +	if (IS_ERR(cell)) {
-+		dev_warn(rtk_phy->dev, "%s failed to get usb-dc-cal: %ld\n",
++		dev_warn(rtk_phy->dev,
++			    "%s failed to get usb_u3_tx_lfps_swing_trim: %ld\n",
 +			    __func__, PTR_ERR(cell));
 +	} else {
 +		unsigned char *buf;
@@ -1623,79 +940,22 @@ index 000000000000..0538424b9cab
 +
 +		buf = nvmem_cell_read(cell, &buf_size);
 +
-+		value = buf[0] & phy_data->usb_dc_cal_mask;
++		value = buf[0] & USB_U3_TX_LFPS_SWING_TRIM_MASK;
 +
 +		dev_dbg(rtk_phy->dev,
-+			    "buf=0x%x buf_size=%d value=0x%x\n",
-+			    buf[0], (int)buf_size, value);
-+
++			    "phy index=%d buf=0x%x buf_size=%d value=0x%x\n",
++			    index, buf[0], (int)buf_size, value);
 +		kfree(buf);
 +		nvmem_cell_put(cell);
 +	}
 +
-+	if (phy_data->check_efuse_version == CHECK_EFUSE_V1) {
-+		int rate = phy_data->efuse_usb_dc_cal_rate;
++	if ((value > 0) && (value < 0x8))
++		phy_data->efuse_usb_u3_tx_lfps_swing_trim = 0x8;
++	else
++		phy_data->efuse_usb_u3_tx_lfps_swing_trim = (u8)value;
 +
-+		if (value <= EFUS_USB_DC_CAL_MAX)
-+			phy_data->efuse_usb_dc_cal = (int8_t)(value * rate);
-+		else
-+			phy_data->efuse_usb_dc_cal = -(int8_t)(
-+				    (EFUS_USB_DC_CAL_MAX & value) * rate);
-+
-+		if (soc_device_match(rtk_soc_groot)) {
-+			dev_info(rtk_phy->dev, "For groot IC we need a workaround to adjust efuse_usb_dc_cal\n");
-+
-+			/* We don't multiple dc_cal_rate=2 for positive dc cal compensate */
-+			if (value <= EFUS_USB_DC_CAL_MAX)
-+				phy_data->efuse_usb_dc_cal = (int8_t)(value);
-+
-+			/* We set max dc cal compensate is 0x8 if otp is 0x7 */
-+			if (value == 0x7)
-+				phy_data->efuse_usb_dc_cal = (int8_t)(value + 1);
-+		}
-+	} else { /* for CHECK_EFUSE_V2 */
-+		phy_data->efuse_usb_dc_cal = value & phy_data->usb_dc_cal_mask;
-+	}
-+
-+	dev_dbg(rtk_phy->dev, "Get Efuse usb_dc_cal=%d for index=%d value=%x\n",
-+		    phy_data->efuse_usb_dc_cal, index, value);
-+
-+	/* Read efuse for usb dc disconnect level */
-+	value = 0;
-+	cell = nvmem_cell_get(rtk_phy->dev, "usb-dc-dis");
-+	if (IS_ERR(cell)) {
-+		dev_warn(rtk_phy->dev, "%s failed to get usb-dc-dis: %ld\n",
-+			    __func__, PTR_ERR(cell));
-+	} else {
-+		unsigned char *buf;
-+		size_t buf_size;
-+
-+		buf = nvmem_cell_read(cell, &buf_size);
-+
-+		value = buf[0] & phy_data->usb_dc_dis_mask;
-+
-+		dev_dbg(rtk_phy->dev,
-+			    "buf=0x%x buf_size=%d value=0x%x\n",
-+			    buf[0], (int)buf_size, value);
-+
-+		kfree(buf);
-+		nvmem_cell_put(cell);
-+	}
-+
-+	if (phy_data->check_efuse_version == CHECK_EFUSE_V1) {
-+		int rate = phy_data->efuse_usb_dc_dis_rate;
-+
-+		if (value <= EFUS_USB_DC_DIS_MAX)
-+			phy_data->efuse_usb_dc_dis = (int8_t)(value * rate);
-+		else
-+			phy_data->efuse_usb_dc_dis = -(int8_t)(
-+				    (EFUS_USB_DC_DIS_MAX & value) * rate);
-+	} else { /* for CHECK_EFUSE_V2 */
-+		phy_data->efuse_usb_dc_dis = value & phy_data->usb_dc_dis_mask;
-+	}
-+
-+	dev_dbg(rtk_phy->dev, "Get Efuse usb_dc_dis=%d for index=%d value=%x\n",
-+		    phy_data->efuse_usb_dc_dis, index, value);
++	dev_dbg(rtk_phy->dev, "Get Efuse usb_u3_tx_lfps_swing_trim=0x%x (value=0x%x)\n",
++		    phy_data->efuse_usb_u3_tx_lfps_swing_trim, value);
 +
 +out:
 +	return 0;
@@ -1704,173 +964,61 @@ index 000000000000..0538424b9cab
 +static int __get_phy_parameter(struct device *dev, struct phy_data *phy_data,
 +	    struct device_node *sub_node)
 +{
-+	u32 page_size = 0;
-+	u32 num_cells = 2; /*< addr value > */
-+	u32 data_size;
++	struct phy_parameter *phy_parameter;
 +	int i, ret = 0;
++	int data_size, num_cells = 2;
 +
-+	/* Page 0 */
-+	page_size = MAX_USB_PHY_PAGE0_DATA_SIZE;
-+	phy_data->page0_size = page_size;
-+	phy_data->page0 = devm_kzalloc(dev,
-+		    sizeof(struct phy_parameter) * page_size, GFP_KERNEL);
-+	if (!phy_data->page0) {
-+		ret = -ENOMEM;
-+		goto out;
-+	}
++	phy_data->size = MAX_USB_PHY_DATA_SIZE;
++	phy_data->parameter = devm_kzalloc(dev,
++		    sizeof(struct phy_parameter) * phy_data->size, GFP_KERNEL);
++	if (!phy_data->parameter)
++		return -ENOMEM;
 +
-+	if (!of_get_property(sub_node, "realtek,page0-param", &data_size)) {
-+		dev_dbg(dev, "%s No page0 parameter (data_size=%d)\n",
++	if (!of_get_property(sub_node, "realtek,param", &data_size)) {
++		dev_dbg(dev, "%s No parameter (data_size=%d)\n",
 +			    __func__, data_size);
 +		data_size = 0;
 +	}
 +
 +	if (!data_size)
-+		goto parse_page1;
++		goto out;
++
++	phy_parameter = phy_data->parameter;
++	/* Set default addr to 0xff for no data case */
++	for (i = 0; i < phy_data->size; i++)
++		(phy_parameter + i)->addr = 0xFF;
 +
 +	data_size = data_size / (sizeof(u32) * num_cells);
-+
 +	for (i = 0; i < data_size; i++) {
-+		struct phy_parameter *phy_parameter;
++		struct phy_parameter *parameter;
 +		u32 addr, data;
-+		int index, offset;
++		int offset, index;
 +
 +		offset = i * num_cells;
 +
-+		ret = of_property_read_u32_index(sub_node, "realtek,page0-param",
++		ret = of_property_read_u32_index(sub_node, "realtek,param",
 +			    offset, &addr);
 +		if (ret) {
-+			dev_err(dev, "ERROR: To get page0 i=%d addr=0x%x\n",
++			dev_err(dev, "ERROR: To get param i=%d addr=0x%x\n",
 +				    i, addr);
 +			break;
 +		}
 +
-+		ret = of_property_read_u32_index(sub_node, "realtek,page0-param",
++		ret = of_property_read_u32_index(sub_node, "realtek,param",
 +			    offset + 1, &data);
 +		if (ret) {
-+			dev_err(dev, "ERROR: To get page0 i=%d addr=0x%x\n",
++			dev_err(dev, "ERROR: To get param i=%d addr=0x%x\n",
 +				    i, data);
 +			break;
 +		}
 +
-+		index = PAGE_ADDR_MAP_ARRAY_INDEX(addr);
-+		phy_parameter = (phy_data->page0 + index);
-+		phy_parameter->addr = (char)addr;
-+		phy_parameter->data = (char)data;
++		index = PHY_ADDR_MAP_ARRAY_INDEX(addr);
++		parameter = (phy_parameter + index);
++		parameter->addr = (u8)addr;
++		parameter->data = (u16)data;
 +
-+		dev_dbg(dev, "page0 index=%d addr=0x%x data=0x%x\n",
-+			    index, phy_parameter->addr, phy_parameter->data);
-+	}
-+
-+parse_page1:
-+	/* Page 1 */
-+	page_size = MAX_USB_PHY_PAGE1_DATA_SIZE;
-+	phy_data->page1_size = page_size;
-+	phy_data->page1 = devm_kzalloc(dev,
-+		    sizeof(struct phy_parameter) * page_size, GFP_KERNEL);
-+	if (!phy_data->page1) {
-+		ret = -ENOMEM;
-+		goto out;
-+	}
-+
-+	if (!of_get_property(sub_node, "realtek,page1-param", &data_size)) {
-+		dev_dbg(dev, "%s No page1 parameter (data_size=%d)\n",
-+			    __func__,  data_size);
-+		data_size = 0;
-+	}
-+
-+	if (!data_size)
-+		goto parse_page2;
-+
-+	data_size = data_size / (sizeof(u32) * num_cells);
-+
-+	for (i = 0; i < data_size; i++) {
-+		struct phy_parameter *phy_parameter;
-+		u32 addr, data;
-+		int index, offset;
-+
-+		offset = i * num_cells;
-+
-+		ret = of_property_read_u32_index(sub_node, "realtek,page1-param",
-+			    offset, &addr);
-+		if (ret) {
-+			dev_err(dev, "ERROR: To get page1 i=%d addr=0x%x\n",
-+				    i, addr);
-+			break;
-+		}
-+
-+		ret = of_property_read_u32_index(sub_node, "realtek,page1-param",
-+			    offset + 1, &data);
-+		if (ret) {
-+			dev_err(dev, "ERROR: To get page1 i=%d addr=0x%x\n",
-+				    i, data);
-+			break;
-+		}
-+
-+		index = PAGE_ADDR_MAP_ARRAY_INDEX(addr);
-+		phy_parameter = phy_data->page1 + index;
-+		phy_parameter->addr = (char)addr;
-+		phy_parameter->data = (char)data;
-+
-+		dev_dbg(dev, "page1 index=%d addr=0x%x data=0x%x\n",
-+			    index, phy_parameter->addr, phy_parameter->data);
-+	}
-+
-+parse_page2:
-+	/* Page 2 */
-+	if (of_property_read_bool(sub_node, "realtek,support-page2-param"))
-+		page_size = MAX_USB_PHY_PAGE2_DATA_SIZE;
-+	else
-+		page_size = 0;
-+
-+	if (!page_size)
-+		goto out;
-+
-+	phy_data->page2_size = page_size;
-+	phy_data->page2 = devm_kzalloc(dev,
-+		    sizeof(struct phy_parameter) * page_size, GFP_KERNEL);
-+	if (!phy_data->page2) {
-+		ret = -ENOMEM;
-+		goto out;
-+	}
-+
-+	if (!of_get_property(sub_node, "realtek,page2-param", &data_size)) {
-+		dev_dbg(dev, "%s No page2 parameter (data_size=%d)\n",
-+			    __func__, data_size);
-+		data_size = 0;
-+	}
-+	data_size = data_size / (sizeof(u32) * num_cells);
-+
-+	for (i = 0; i < data_size; i++) {
-+		struct phy_parameter *phy_parameter;
-+		u32 addr, data;
-+		int index, offset;
-+
-+		offset = i * num_cells;
-+
-+		ret = of_property_read_u32_index(sub_node, "realtek,page2-param",
-+			    offset, &addr);
-+		if (ret) {
-+			dev_err(dev, "ERROR: To get page2 i=%d addr=0x%x\n",
-+				    i, addr);
-+			break;
-+		}
-+
-+		ret = of_property_read_u32_index(sub_node, "realtek,page2-param",
-+			    offset + 1, &data);
-+		if (ret) {
-+			dev_err(dev, "ERROR: To get page2 i=%d addr=0x%x\n",
-+				    i, data);
-+			break;
-+		}
-+
-+		index = PAGE_ADDR_MAP_ARRAY_INDEX(addr);
-+		phy_parameter = phy_data->page2 + index;
-+		phy_parameter->addr = (char)addr;
-+		phy_parameter->data = (char)data;
-+
-+		dev_dbg(dev, "page2 index=%d addr=0x%x data=0x%x\n",
-+			    index, phy_parameter->addr, phy_parameter->data);
++		dev_dbg(dev, "param index=%d addr=0x%x data=0x%x\n", index,
++			    parameter->addr, parameter->data);
 +	}
 +
 +out:
@@ -1893,63 +1041,46 @@ index 000000000000..0538424b9cab
 +
 +	dev_dbg(dev, "sub_node index=%d\n", index);
 +
-+	addr = &((struct reg_addr *)rtk_phy->reg_addr)[index];
++	addr =  &((struct reg_addr *)rtk_phy->reg_addr)[index];
 +	phy_data = &((struct phy_data *)rtk_phy->phy_data)[index];
 +
-+	addr->reg_wrap_vstatus = of_iomap(dev->of_node, 0);
-+	addr->reg_gusb2phyacc0 = of_iomap(dev->of_node, 1) + index;
-+	addr->vstatus_index = index;
-+	dev_dbg(dev, "%s %d #%d reg_wrap_vstatus=%p\n", __func__, __LINE__,
-+		    index, addr->reg_wrap_vstatus);
-+	dev_dbg(dev, "%s %d #%d reg_gusb2phyacc0=%p\n", __func__, __LINE__,
-+		    index, addr->reg_gusb2phyacc0);
++	addr->reg_mdio_ctl = of_iomap(dev->of_node, 0) + index;
++	dev_dbg(dev, "%s %d #%d reg_mdio_ctl=%p\n",
++		    __func__, __LINE__, index, addr->reg_mdio_ctl);
 +
-+	if (!sub_node)
++	if (!sub_node) {
++		dev_err(dev, "%s %d No device sub node\n", __func__, __LINE__);
 +		goto err;
++	}
 +
 +	ret = __get_phy_parameter(dev, phy_data, sub_node);
 +	if (ret)
 +		goto err;
++
++	if (of_property_read_bool(sub_node, "realtek,do-toggle-once"))
++		phy_data->do_toggle_once = true;
++	else
++		phy_data->do_toggle_once = false;
 +
 +	if (of_property_read_bool(sub_node, "realtek,do-toggle"))
 +		phy_data->do_toggle = true;
 +	else
 +		phy_data->do_toggle = false;
 +
-+	if (of_property_read_bool(sub_node, "realtek,do-toggle-driving"))
-+		phy_data->do_toggle_driving = true;
-+	else
-+		phy_data->do_toggle_driving = false;
-+
-+	if (of_property_read_bool(sub_node, "realtek,check-efuse"))
-+		phy_data->check_efuse = true;
-+	else
-+		phy_data->check_efuse = false;
-+
 +	if (of_property_read_bool(sub_node, "realtek,use-default-parameter"))
 +		phy_data->use_default_parameter = true;
 +	else
 +		phy_data->use_default_parameter = false;
 +
-+	if (of_property_read_bool(sub_node,
-+		    "realtek,is-double-sensitivity-mode"))
-+		phy_data->is_double_sensitivity_mode = true;
++	if (of_property_read_bool(sub_node, "realtek,check-rx-front-end-offset"))
++		phy_data->check_rx_front_end_offset = true;
 +	else
-+		phy_data->is_double_sensitivity_mode = false;
++		phy_data->check_rx_front_end_offset = false;
 +
-+	if (of_property_read_bool(sub_node,
-+		    "realtek,ldo-force-enable"))
-+		phy_data->ldo_force_enable = true;
++	if (of_property_read_bool(sub_node, "realtek,check-efuse"))
++		phy_data->check_efuse = true;
 +	else
-+		phy_data->ldo_force_enable = false;
-+
-+	if (of_property_read_s32(sub_node,
-+		 "realtek,ldo-driving-compensate", &phy_data->ldo_driving_compensate))
-+		phy_data->ldo_driving_compensate = 0;
-+
-+	if (of_property_read_s32(sub_node,
-+		 "realtek,driving-compensate", &phy_data->driving_compensate))
-+		phy_data->driving_compensate = 0;
++		phy_data->check_efuse = false;
 +
 +	__get_phy_parameter_by_efuse(rtk_phy, phy_data, index);
 +
@@ -1957,7 +1088,7 @@ index 000000000000..0538424b9cab
 +	return ret;
 +}
 +
-+static int rtk_usb2phy_probe(struct platform_device *pdev)
++static int rtk_usb3phy_probe(struct platform_device *pdev)
 +{
 +	struct rtk_usb_phy *rtk_phy;
 +	struct device *dev = &pdev->dev;
@@ -1965,7 +1096,7 @@ index 000000000000..0538424b9cab
 +	struct device_node *sub_node;
 +	struct phy *generic_phy;
 +	struct phy_provider *phy_provider;
-+	int phyN, ret = 0;
++	int ret, phyN;
 +
 +	rtk_phy = devm_kzalloc(dev, sizeof(*rtk_phy), GFP_KERNEL);
 +	if (!rtk_phy)
@@ -1973,21 +1104,16 @@ index 000000000000..0538424b9cab
 +
 +	rtk_phy->dev			= &pdev->dev;
 +	rtk_phy->phy.dev		= rtk_phy->dev;
-+	rtk_phy->phy.label		= "rtk-usb2phy";
++	rtk_phy->phy.label		= "rtk-usb3phy";
 +	rtk_phy->phy.notify_port_status = rtk_usb_phy_notify_port_status;
 +
 +	if (!dev->of_node) {
 +		dev_err(dev, "%s %d No device node\n", __func__, __LINE__);
++		ret = -ENODEV;
 +		goto err;
 +	}
 +
 +	node = dev->of_node;
-+
-+	rtk_phy->usb_ctrl_regs = syscon_regmap_lookup_by_phandle(node, "realtek,usb-ctrl");
-+	if (IS_ERR(rtk_phy->usb_ctrl_regs)) {
-+		dev_info(dev, "%s: DTS no support usb_ctrl regs syscon\n", __func__);
-+		rtk_phy->usb_ctrl_regs = NULL;
-+	}
 +
 +	phyN = of_get_child_count(node);
 +	rtk_phy->phyN = phyN;
@@ -2033,12 +1159,12 @@ index 000000000000..0538424b9cab
 +	create_debug_files(rtk_phy);
 +
 +err:
-+	dev_dbg(dev, "Probe RTK USB 2.0 PHY (ret=%d)\n", ret);
++	dev_dbg(&pdev->dev, "Probe RTK USB 3.0 PHY (ret=%d)\n", ret);
 +
 +	return ret;
 +}
 +
-+static void rtk_usb2phy_remove(struct platform_device *pdev)
++static void rtk_usb3phy_remove(struct platform_device *pdev)
 +{
 +	struct rtk_usb_phy *rtk_phy = platform_get_drvdata(pdev);
 +
@@ -2048,27 +1174,27 @@ index 000000000000..0538424b9cab
 +}
 +
 +static const struct of_device_id usbphy_rtk_dt_match[] = {
-+	{ .compatible = "realtek,usb2phy", },
++	{ .compatible = "realtek,usb3phy", },
 +	{},
 +};
 +MODULE_DEVICE_TABLE(of, usbphy_rtk_dt_match);
 +
-+static struct platform_driver rtk_usb2phy_driver = {
-+	.probe		= rtk_usb2phy_probe,
-+	.remove_new	= rtk_usb2phy_remove,
++static struct platform_driver rtk_usb3phy_driver = {
++	.probe		= rtk_usb3phy_probe,
++	.remove_new	= rtk_usb3phy_remove,
 +	.driver		= {
-+		.name	= "rtk-usb2phy",
++		.name	= "rtk-usb3phy",
 +		.owner	= THIS_MODULE,
 +		.of_match_table = usbphy_rtk_dt_match,
 +	},
 +};
 +
-+module_platform_driver(rtk_usb2phy_driver);
++module_platform_driver(rtk_usb3phy_driver);
 +
 +MODULE_LICENSE("GPL");
-+MODULE_ALIAS("platform: rtk-usb2phy");
++MODULE_ALIAS("platform: rtk-usb3phy");
 +MODULE_AUTHOR("Stanley Chang <stanley_chang@realtek.com>");
-+MODULE_DESCRIPTION("Realtek usb 2.0 phy driver");
++MODULE_DESCRIPTION("Realtek usb 3.0 phy driver");
 -- 
 2.34.1
 
