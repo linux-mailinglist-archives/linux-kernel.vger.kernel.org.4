@@ -2,130 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27ABB727359
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 01:52:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91B76727370
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 01:54:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231229AbjFGXwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 19:52:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52630 "EHLO
+        id S233470AbjFGXyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 19:54:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230445AbjFGXwc (ORCPT
+        with ESMTP id S233446AbjFGXyi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 19:52:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EAD19E;
-        Wed,  7 Jun 2023 16:52:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 05D4F61040;
-        Wed,  7 Jun 2023 23:52:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63BAEC433D2;
-        Wed,  7 Jun 2023 23:52:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686181950;
-        bh=6pgSFYsSsLqInvahVHsx2DhcY3kpo+fzL3XqW2yw6j8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=nuRuke7/uPMCJV6aj03GtBWYipIk9M7+oW9yOzrdF7+2jgSt39/Cxr8LJdQHkWmvZ
-         Evl73mMzWgH2VXonZIMiy34RpqyjWXfg6Gymry2ujKervcNXiQAxfNtyj+iYWz+/s+
-         mbZHMZEMlkxuustlp4DHyN8g+9GQAn5U/FpHel5xaUK9njsLD0vrF+N/8DSx7iR5xa
-         kRyMOunz0KztNjuVK5l+oIFJRoGE1bzTw1EW3gDKKWlOzy6w/QSFkl7tTJxe25USpx
-         /kZ6dVeIhlItdtzq0i5jC4WZQZ2ECwRUpcfLZFU/2GDyM1JbUqY2RnhFEIFdI15Ayp
-         VTH56dyhUV7dw==
-Received: by mail-oi1-f177.google.com with SMTP id 5614622812f47-38e04d1b2b4so43569b6e.3;
-        Wed, 07 Jun 2023 16:52:30 -0700 (PDT)
-X-Gm-Message-State: AC+VfDyKuVC2+2y9aasumhfDhXmCY+S0fCBL8pVkpAnJxxPlQDh1I5T5
-        hU2sEFn52oEGZDIjZ0OQR/0Ote+aBHgsVkhpcFU=
-X-Google-Smtp-Source: ACHHUZ49oZDE1kdugK2Y4GVA+zcXnkkevQUVWzQxvY3efR8O0jyI3gzgf7XgmvnqirHK93KhjHG4CuLJOwPw7uY+vgs=
-X-Received: by 2002:a05:6808:5ca:b0:39a:ba7e:33bd with SMTP id
- d10-20020a05680805ca00b0039aba7e33bdmr7513928oij.0.1686181949609; Wed, 07 Jun
- 2023 16:52:29 -0700 (PDT)
+        Wed, 7 Jun 2023 19:54:38 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BEBB212E;
+        Wed,  7 Jun 2023 16:54:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686182077; x=1717718077;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hbLrss7Fx86V/BsVZBJ2ItyCsnjeR/pNGcf//FjE1+s=;
+  b=XdAW6sGJnddEZaskTolp58kpAWGz20G7VLwhIOCg4jIKcqMS45iLMTYq
+   bhhAUz/HKQqrgvg+P3/Cffm6uJoKYHaZEgZD/dJe4ODSdxDxujbcx7idr
+   YeWc0AL0i7MLtUh7wBIsD1o+h3Q2rZ/jj6nQs289mp57eDoIk7YswT+hJ
+   p/aSu6kji9XDMFKpuNNSYBSU/zHbpHLceWkcXeFLgziUzpqIgUO/f1N+D
+   7AI5s3J+v1XoGPD41I4r+kTcZjSgu84BG6tjApFjP0TrGRYHn8eP3Shpj
+   Xmsf7s/zgiUzMV+Qw2p8E8lDkLPXjDFoXPBGK81ItwHNu0mBf1KEAzK7c
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="337503220"
+X-IronPort-AV: E=Sophos;i="6.00,225,1681196400"; 
+   d="scan'208";a="337503220"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 16:54:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="774826414"
+X-IronPort-AV: E=Sophos;i="6.00,225,1681196400"; 
+   d="scan'208";a="774826414"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 07 Jun 2023 16:54:34 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q72z3-000713-1z;
+        Wed, 07 Jun 2023 23:54:33 +0000
+Date:   Thu, 8 Jun 2023 07:54:19 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-efi@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Alexandre Ghiti <alexghiti@rivosinc.com>
+Subject: Re: [PATCH v3 3/5] arm64: libstub: Move KASLR handling functions to
+ efi-stub-helper.c
+Message-ID: <202306080741.ArdxyO6n-lkp@intel.com>
+References: <20230606123242.20804-4-alexghiti@rivosinc.com>
 MIME-Version: 1.0
-References: <20230606105706.60807b85ff79.I21ab3b54eeebd638676bead3b2f87417944e44f3@changeid>
- <CAK7LNASe+HWuufyANGJJ0dajzSC4LFy=x2N6erGis0+ZQkAAXA@mail.gmail.com> <2017a6dba12cc7cd05aec33e8066cb7038a89a31.camel@sipsolutions.net>
-In-Reply-To: <2017a6dba12cc7cd05aec33e8066cb7038a89a31.camel@sipsolutions.net>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Thu, 8 Jun 2023 08:51:53 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAROju1ob-5VKEsu_UOfCNoMRE-QU27JE3Ndh-M7pBraSw@mail.gmail.com>
-Message-ID: <CAK7LNAROju1ob-5VKEsu_UOfCNoMRE-QU27JE3Ndh-M7pBraSw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] kernel-doc: don't let V=1 change outcome
-To:     Johannes Berg <johannes@sipsolutions.net>
-Cc:     linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230606123242.20804-4-alexghiti@rivosinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 7, 2023 at 6:07=E2=80=AFAM Johannes Berg <johannes@sipsolutions=
-.net> wrote:
->
-> On Tue, 2023-06-06 at 20:15 +0900, Masahiro Yamada wrote:
-> > >
-> > >  ifneq ($(KBUILD_EXTRA_WARN),)
-> > > -  cmd_checkdoc =3D $(srctree)/scripts/kernel-doc -none $<
-> > > +  cmd_checkdoc =3D $(srctree)/scripts/kernel-doc -none \
-> > > +        $(if $(KDOC_WALL), -Wall) \
-> > > +        $(if $(KDOC_WRETURN), -Wreturn) \
-> > > +        $(if $(KDOC_WSHORT_DESC), -Wshort-desc) \
-> > > +        $(if $(KDOC_WSHORT_DESC), -Wcontents-before-sections) \
-> >
-> >
-> >
-> > Sorry, I misunderstood your intention.
-> > (I just thought existing env variables would be moved to Makefile)
-> >
-> >
-> > I do not want to proliferate env variables any more.
->
-> Oh, ok, sure.
->
-> > If you need per-flag control, maybe we can do like this?
->
-> Well honestly, I myself just want to pass -Wall, but not necessarily W=3D=
-2
-> since that adds more stuff from the C compiler.
->
-> > cmd_checkdoc =3D $(srctree)/scripts/kernel-doc -none \
-> >               $(KDOCFLAGS)
-> >
-> >
-> > Then, users can do
-> >
-> >   $ make KDOCFLAGS=3D-Wall
-> >   $ make KDOCFLAGS=3D-Wreturn
->
-> I'd rather call it KDOC_FLAGS if you don't mind to align with
-> KDOC_WERROR which we have already, but sure, can do.
+Hi Alexandre,
 
+kernel test robot noticed the following build errors:
 
-I just tried to be consistent with
-CPPFLAGS, CFLAGS, AFLAGS, CHECKFLAGS etc.
-(CHECKFLAGS is for sparse) because
-you apparently mimick compiler flags in kernel-doc.
+[auto build test ERROR on efi/next]
+[also build test ERROR on linus/master v6.4-rc5 next-20230607]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Alexandre-Ghiti/riscv-Introduce-virtual-kernel-mapping-KASLR/20230606-203849
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/efi/efi.git next
+patch link:    https://lore.kernel.org/r/20230606123242.20804-4-alexghiti%40rivosinc.com
+patch subject: [PATCH v3 3/5] arm64: libstub: Move KASLR handling functions to efi-stub-helper.c
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20230608/202306080741.ArdxyO6n-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.3.0
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add efi https://git.kernel.org/pub/scm/linux/kernel/git/efi/efi.git
+        git fetch efi next
+        git checkout efi/next
+        b4 shazam https://lore.kernel.org/r/20230606123242.20804-4-alexghiti@rivosinc.com
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306080741.ArdxyO6n-lkp@intel.com/
 
-BTW, kernel-doc is invoked from Documentation/Makefile too.
+All errors (new ones prefixed by >>):
 
-Do we need to pass the same flags to both of them?
+   aarch64-linux-ld: drivers/firmware/efi/libstub/efi-stub-helper.stub.o: in function `__efistub_efi_kaslr_relocate_kernel':
+>> __efistub_efi-stub-helper.c:(.init.text+0xfec): undefined reference to `__efistub__end'
+>> aarch64-linux-ld: __efistub_efi-stub-helper.c:(.init.text+0xff0): undefined reference to `__efistub__end'
+   aarch64-linux-ld: __efistub_efi-stub-helper.c:(.init.text+0x1058): undefined reference to `__efistub_caches_clean_inval_pou'
+   aarch64-linux-ld: arch/arm64/boot/vmlinuz.efi.elf: hidden symbol `__efistub__end' isn't defined
+   aarch64-linux-ld: final link failed: bad value
 
-
-
-> johannes
-
-
-
-
-
-
---
-Best Regards
-Masahiro Yamada
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
