@@ -2,99 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36E05725E66
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 14:15:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5505725E6C
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 14:15:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240344AbjFGMPj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 08:15:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58820 "EHLO
+        id S240572AbjFGMPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 08:15:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239884AbjFGMPd (ORCPT
+        with ESMTP id S240422AbjFGMPu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 08:15:33 -0400
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B3C1BD6;
-        Wed,  7 Jun 2023 05:15:31 -0700 (PDT)
-Received: by mail-qv1-xf2c.google.com with SMTP id 6a1803df08f44-626157a186bso2335226d6.1;
-        Wed, 07 Jun 2023 05:15:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686140131; x=1688732131;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=u8XZPPmOXy+covKv0eQSNPQLMzOY+EavY6mLoP79rZc=;
-        b=RGQvr3p04xUWWIeDw2dJD14fHUEH+t2fQJULdyu1HiFLPmDI93BCxfeKaEMR6OzRbd
-         2WdXR6a5p62AeHvJvwoV1ag5/VvKU+reaumHWcxfGhuRRQrpkLx+EUKwC9srrIxu445f
-         /AZ9jWJXl4MnmsS/bFhQbMOmnD8X2eUfGQzORHyDA6I5697PukxVm6Xmbud0o0CAxHK9
-         JfXOAKYktCDvSWwqUgzrd/jtv+e9Ed6IQcXReyd+np1mX+awYFT7eDnCIFt0s3vb740y
-         FSpTAzbTFF/jMXT3fcdJMStR4lwyafdpb0sOXTsAQEDI4VventjDj0eUBgHwXMVS0Agg
-         sxQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686140131; x=1688732131;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=u8XZPPmOXy+covKv0eQSNPQLMzOY+EavY6mLoP79rZc=;
-        b=Cvn5iXqrWDQsWKrPXmUZrsj7Hf/8jtKDTpcqGeNXr0h/BBnXWtVS1Dq0pwcYWOR5ES
-         2aJBr9h9VLWaUN9v6X+MYGuhdZOAMhnq7ODIBaVJ84Lq+NTTw09F4Moz8U4PlLRKXWCG
-         ZeWRJjUEiL5VOLxtqcXuq5mNBjKXWVYxe8FCkXsHu+lnfYoVx0r6SZoKN1VdVBPDQ88T
-         6idpLBG2guzpCgypnyjwZC+pjdS7r+VcG+zSpuff58MdUxkX8uPG2zdq4BA0of2UzSUT
-         +6RCPEtzxhOsW3hBgjJ/G7sbleekRlJf7MWP8CDSnZL+OjWfDRjxcSkVxQy+HHnLCK0L
-         WDKQ==
-X-Gm-Message-State: AC+VfDyJhiVQKwo8eXgiEXAZayEEsIJ/9kA5CnmF3b/CpoSQibkY1TmF
-        Bu2McYJMwDpAGr3yLWgcUFw=
-X-Google-Smtp-Source: ACHHUZ40wZwVfAH1nA4kaYq3UbMkylR8h6hcTZi3Wc3cqIzz8ZU0CMZc79z0MEk7u52LeM2nzhofNQ==
-X-Received: by 2002:a05:6214:518b:b0:621:65de:f600 with SMTP id kl11-20020a056214518b00b0062165def600mr3011629qvb.1.1686140130585;
-        Wed, 07 Jun 2023 05:15:30 -0700 (PDT)
-Received: from localhost (172.174.245.35.bc.googleusercontent.com. [35.245.174.172])
-        by smtp.gmail.com with ESMTPSA id bz5-20020ad44c05000000b005f227de6b1bsm6029533qvb.116.2023.06.07.05.15.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 05:15:29 -0700 (PDT)
-Date:   Wed, 07 Jun 2023 08:15:28 -0400
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To:     Breno Leitao <leitao@debian.org>,
-        Remi Denis-Courmont <courmisch@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexander Aring <alex.aring@gmail.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        David Ahern <dsahern@kernel.org>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Mat Martineau <martineau@kernel.org>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Xin Long <lucien.xin@gmail.com>
-Cc:     axboe@kernel.dk, asml.silence@gmail.com, leit@fb.com,
-        Martin KaFai Lau <martin.lau@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Jason Xing <kernelxing@tencent.com>,
-        Joanne Koong <joannelkoong@gmail.com>,
-        Hangyu Hua <hbh25y@gmail.com>,
-        Guillaume Nault <gnault@redhat.com>,
-        Andrea Righi <andrea.righi@canonical.com>,
-        Wojciech Drewek <wojciech.drewek@intel.com>,
-        linux-kernel@vger.kernel.org (open list),
-        netdev@vger.kernel.org (open list:NETWORKING [GENERAL]),
-        dccp@vger.kernel.org (open list:DCCP PROTOCOL),
-        linux-wpan@vger.kernel.org (open list:IEEE 802.15.4 SUBSYSTEM),
-        mptcp@lists.linux.dev (open list:NETWORKING [MPTCP]),
-        linux-sctp@vger.kernel.org (open list:SCTP PROTOCOL)
-Message-ID: <648074e0e52d9_143118294e0@willemb.c.googlers.com.notmuch>
-In-Reply-To: <20230606180045.827659-1-leitao@debian.org>
-References: <20230606180045.827659-1-leitao@debian.org>
-Subject: RE: [PATCH net-next v6] net: ioctl: Use kernel memory on protocol
- ioctl callbacks
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+        Wed, 7 Jun 2023 08:15:50 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C6D41BE3;
+        Wed,  7 Jun 2023 05:15:42 -0700 (PDT)
+Received: from pps.filterd (m0353723.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 357Beb2f003316;
+        Wed, 7 Jun 2023 12:15:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=yJHvY3hCL79Iyv50TKe4uoJTIQAFMGCCmuzDrs2jJ4w=;
+ b=pz+RVeZfod5JDMUOrSXDX8GbUpOvKHO0GjyyMNwfS47E46aJBUbCBw/nQf8lgPkfFfms
+ y+9AIWjPe94aJ9Ns50JvUES9niDZeuuAigB0Fz85LrgBcdC8ylB7ZTJMowbOAKfVbQUK
+ /QPf9HnrCjG4lj7yhwkmrMErO+CfIuvi828i5OGqemo1vExuOUAgy6VVMvIZ+X/brrK1
+ 4bzWyuS7mBvuBcc/SY84p06juob44pGEhTEFpCPMtr6S4jzg32vjzz5K5eliBkZanelc
+ DydRa2OUTxsu+cem9DOjHGZPQhhdqe0mtAw3Ry/Y0CfvUoYjET9kb2Lwnkuxw0+Xp3oL VA== 
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r2ry417qm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Jun 2023 12:15:41 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3574SvrQ002721;
+        Wed, 7 Jun 2023 12:15:39 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+        by ppma05fra.de.ibm.com (PPS) with ESMTPS id 3r2a780amf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Jun 2023 12:15:39 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 357CFabi33948196
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 7 Jun 2023 12:15:36 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0A5102004B;
+        Wed,  7 Jun 2023 12:15:36 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6BFCB20040;
+        Wed,  7 Jun 2023 12:15:35 +0000 (GMT)
+Received: from [9.179.8.138] (unknown [9.179.8.138])
+        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Wed,  7 Jun 2023 12:15:35 +0000 (GMT)
+Message-ID: <923a1168-823b-6771-effc-e0d4d85751e8@linux.ibm.com>
+Date:   Wed, 7 Jun 2023 14:15:35 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v4 2/6] s390/uvdevice: Add 'Add Secret' UVC
+To:     Steffen Eiden <seiden@linux.ibm.com>, kvm@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Viktor Mihajlovski <mihajlov@linux.ibm.com>
+Cc:     Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Nico Boehr <nrb@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Hendrik Brueckner <brueckner@linux.ibm.com>
+References: <20230606180817.3019077-1-seiden@linux.ibm.com>
+ <20230606180817.3019077-3-seiden@linux.ibm.com>
+Content-Language: en-US
+From:   Janosch Frank <frankja@linux.ibm.com>
+In-Reply-To: <20230606180817.3019077-3-seiden@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: idXSKCJhw5X1QwywlV-B3pg07yjZWdvg
+X-Proofpoint-GUID: idXSKCJhw5X1QwywlV-B3pg07yjZWdvg
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-07_06,2023-06-07_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
+ mlxscore=0 clxscore=1015 impostorscore=0 spamscore=0 adultscore=0
+ mlxlogscore=798 suspectscore=0 lowpriorityscore=0 bulkscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306070100
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -102,70 +93,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Breno Leitao wrote:
-> Most of the ioctls to net protocols operates directly on userspace
-> argument (arg). Usually doing get_user()/put_user() directly in the
-> ioctl callback.  This is not flexible, because it is hard to reuse these
-> functions without passing userspace buffers.
+On 6/6/23 20:08, Steffen Eiden wrote:
+> Userspace can call the Add Secret Ultravisor Call using IOCTLs on the
+> uvdevice. The Add Secret UV call sends an encrypted and
+> cryptographically verified request to the Ultravisor. The request
+> inserts a protected guest's secret into the Ultravisor for later use.
 > 
-> Change the "struct proto" ioctls to avoid touching userspace memory and
-> operate on kernel buffers, i.e., all protocol's ioctl callbacks is
-> adapted to operate on a kernel memory other than on userspace (so, no
-> more {put,get}_user() and friends being called in the ioctl callback).
+> The uvdevice is merely transporting the request from userspace to the
+> Ultravisor. It's neither checking nor manipulating the request data.
 > 
-> This changes the "struct proto" ioctl format in the following way:
-> 
->     int                     (*ioctl)(struct sock *sk, int cmd,
-> -                                        unsigned long arg);
-> +                                        int *karg);
-> 
-> (Important to say that this patch does not touch the "struct proto_ops"
-> protocols)
-> 
-> So, the "karg" argument, which is passed to the ioctl callback, is a
-> pointer allocated to kernel space memory (inside a function wrapper).
-> This buffer (karg) may contain input argument (copied from userspace in
-> a prep function) and it might return a value/buffer, which is copied
-> back to userspace if necessary. There is not one-size-fits-all format
-> (that is I am using 'may' above), but basically, there are three type of
-> ioctls:
-> 
-> 1) Do not read from userspace, returns a result to userspace
-> 2) Read an input parameter from userspace, and does not return anything
->   to userspace
-> 3) Read an input from userspace, and return a buffer to userspace.
-> 
-> The default case (1) (where no input parameter is given, and an "int" is
-> returned to userspace) encompasses more than 90% of the cases, but there
-> are two other exceptions. Here is a list of exceptions:
-> 
-> * Protocol RAW:
->    * cmd = SIOCGETVIFCNT:
->      * input and output = struct sioc_vif_req
->    * cmd = SIOCGETSGCNT
->      * input and output = struct sioc_sg_req
->    * Explanation: for the SIOCGETVIFCNT case, userspace passes the input
->      argument, which is struct sioc_vif_req. Then the callback populates
->      the struct, which is copied back to userspace.
-> 
-> * Protocol RAW6:
->    * cmd = SIOCGETMIFCNT_IN6
->      * input and output = struct sioc_mif_req6
->    * cmd = SIOCGETSGCNT_IN6
->      * input and output = struct sioc_sg_req6
-> 
-> * Protocol PHONET:
->   * cmd == SIOCPNADDRESOURCE | SIOCPNDELRESOURCE
->      * input int (4 bytes)
->   * Nothing is copied back to userspace.
-> 
-> For the exception cases, functions sock_sk_ioctl_inout() will
-> copy the userspace input, and copy it back to kernel space.
-> 
-> The wrapper that prepare the buffer and put the buffer back to user is
-> sk_ioctl(), so, instead of calling sk->sk_prot->ioctl(), the callee now
-> calls sk_ioctl(), which will handle all cases.
-> 
-> Signed-off-by: Breno Leitao <leitao@debian.org>
+> Signed-off-by: Steffen Eiden <seiden@linux.ibm.com>
 
-Reviewed-by: Willem de Bruijn <willemb@google.com>
+Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
+
+
