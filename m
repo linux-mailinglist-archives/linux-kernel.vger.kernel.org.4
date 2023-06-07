@@ -2,88 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5DF672553D
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 09:16:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 700BA725544
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 09:18:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238855AbjFGHQx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 03:16:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50106 "EHLO
+        id S234256AbjFGHSG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 03:18:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234897AbjFGHQu (ORCPT
+        with ESMTP id S233896AbjFGHSE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 03:16:50 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E8201732;
-        Wed,  7 Jun 2023 00:16:48 -0700 (PDT)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3575lsja030613;
-        Wed, 7 Jun 2023 09:16:19 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=I+GTYaBhnMXgZJKGUFKMgZqicUprU1BnubXsKkDBAC8=;
- b=Ew6Dc7KxpZO4DJGlBsUmRed+B3XAzulAOhzuTffReGuVaktFWEy4NHRPUiAGCyLBTbHU
- ZSq+Z6hmgf2MXWYq940oFqdVzomiEVMemrJwLu+4pNc/WesGvYBdbhlMrvUu/VLQVQsI
- 4uEAaL5xmvE6BTKSmE6CgeRgmkns6h9Gnu6PDcOWzb78NggsJYIyaN6zDdTJPh3UzpnU
- qyonGf4NhCpSTwrn0jTxhhsDhI/3K24t42O2t3Wb2z7KKYRmH14OufqjZpwDaIPgd/y0
- b1rvk7XivEEA4Nuo/VjHdbehhxgaAZXZSqPV5478PPP+GzW1X31fig7LFjyTejcrdhNR 0Q== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3r2m269882-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 07 Jun 2023 09:16:19 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D09AD10002A;
-        Wed,  7 Jun 2023 09:16:16 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C4B75212FDF;
-        Wed,  7 Jun 2023 09:16:16 +0200 (CEST)
-Received: from [10.129.178.187] (10.129.178.187) by SHFDAG1NODE2.st.com
- (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Wed, 7 Jun
- 2023 09:16:16 +0200
-Message-ID: <074d3e57-fd1b-22c4-eecb-71d9a85babdb@foss.st.com>
-Date:   Wed, 7 Jun 2023 09:16:16 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [RESEND PATCH v2 4/6] dt-bindings: display: simple: add Rocktech
- RK043FN48H
-Content-Language: en-US
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        <linux-kernel@vger.kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <dri-devel@lists.freedesktop.org>,
-        Philippe Cornu <philippe.cornu@foss.st.com>,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        <michael@amarulasolutions.com>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
+        Wed, 7 Jun 2023 03:18:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08387173B
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 00:17:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686122238;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=z8ZRfR4SbsRmuStbxG9wgKBb6rXoxZXDXcGM0Hiws6Y=;
+        b=YFonmdq7SjuXomE8iV0XwkqH2Wsu2nnynHUVs07wPZRUCj0yJL8S4x2erRFmbPPVXF85rj
+        q2C7Zg/F6hUgGWHKHZUGZHHLYJ7GXqISKeIToa/QWEKPSpfDFCeR5FdfgNIXNKRDPuAJCk
+        gtrJMgcsugAlL0tP1sGFg5js/ioEYak=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-190-WVvjZDOwPX2vNUmpJx2efQ-1; Wed, 07 Jun 2023 03:17:16 -0400
+X-MC-Unique: WVvjZDOwPX2vNUmpJx2efQ-1
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-3f7678c74beso20056565e9.3
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 00:17:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686122235; x=1688714235;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=z8ZRfR4SbsRmuStbxG9wgKBb6rXoxZXDXcGM0Hiws6Y=;
+        b=DyLLcEq7j52ba1UDQytPIZZoXUg8H9PCZs/ujkBc9RCuDOMcH/H7KH1SUw7LzeNW0l
+         Q02nzcywVUzzqWU1EI7lqnJ2HByqLvf77Gitag3yFFm5GLppaP1Uy7dCYO5jYURjgWo9
+         dwpPoEl6BMo5/srdl1FqQbNO1Y7ILaZhUwxr1BWanVxRHEYg16dZC1xfKVOIerFuwuAI
+         9ut6Cs/uaq1v86LEJB8SY6P3MoEKXCQdhwZArxlFJoBxboBvR+OpWdzZ0sEkkIxrLACT
+         7GwbTiZEvKLRozUO7LrE+gqSytClFl6WzAWr1XBVdkEcnSUUJnu145tg0O466flXL0IE
+         cXrQ==
+X-Gm-Message-State: AC+VfDyd3OCTvIIUb9ziVsxweLAnw++kzi5o1a2ySehTPzNGKfoiihtZ
+        kGwadASgn2GZBDkY3mzFVVsl7A3yiA06y5+eahOYqrSIaEHJ/7Kog4QKUXGyyOt1eyxnvWoyYAG
+        qnC5ef1i+dZ8QkYGAXGFVv/U9
+X-Received: by 2002:a7b:c7d4:0:b0:3f6:117:6ed7 with SMTP id z20-20020a7bc7d4000000b003f601176ed7mr3883284wmk.35.1686122235551;
+        Wed, 07 Jun 2023 00:17:15 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7+t4ruO68j5xRFuJyfpOU2/snN7eVdCEGUlFwfIVjPMhRolkXR3gPuON67Rkmj4YBG7RPArw==
+X-Received: by 2002:a7b:c7d4:0:b0:3f6:117:6ed7 with SMTP id z20-20020a7bc7d4000000b003f601176ed7mr3883273wmk.35.1686122235304;
+        Wed, 07 Jun 2023 00:17:15 -0700 (PDT)
+Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id m9-20020a7bcb89000000b003f72468833esm1113666wmi.26.2023.06.07.00.17.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 00:17:15 -0700 (PDT)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-kernel@vger.kernel.org
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Maxime Ripard <mripard@kernel.org>,
         Conor Dooley <conor+dt@kernel.org>,
         Daniel Vetter <daniel@ffwll.ch>,
         David Airlie <airlied@gmail.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        <devicetree@vger.kernel.org>
-References: <20230607063139.621351-1-dario.binacchi@amarulasolutions.com>
- <20230607063139.621351-5-dario.binacchi@amarulasolutions.com>
-From:   Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
-In-Reply-To: <20230607063139.621351-5-dario.binacchi@amarulasolutions.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.129.178.187]
-X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-07_04,2023-06-06_02,2023-05-22_02
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH 0/5] drm/ssd130x: A few enhancements and cleanups
+In-Reply-To: <6b0a12bf-a8d4-43df-860c-3aa271cfc624@suse.de>
+References: <20230605074753.562332-1-javierm@redhat.com>
+ <6b0a12bf-a8d4-43df-860c-3aa271cfc624@suse.de>
+Date:   Wed, 07 Jun 2023 09:17:14 +0200
+Message-ID: <87edmnhhc5.fsf@minerva.mail-host-address-is-not-set>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,17 +83,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Thomas Zimmermann <tzimmermann@suse.de> writes:
 
-On 6/7/23 08:31, Dario Binacchi wrote:
-> Add compatible to panel-simple for Rocktech Displays Limited
-> RK043FN48H 4.3" 480x272 LCD-TFT panel.
+Hello Thomas,
+
+> Hi Javierm,
 >
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
-Reviewed-by: Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
+> I've read through the patches and they look correct to me.
+>
+> Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
+>
 
+Thanks a lot for your review!
 
-Thanks,
+> But I had one question about the page size. You round up to multiples of 
+> page_size in several places. That could lead to an out-of-bounds access. 
+> Do you need to allocate GEM buffers to be multiples of page_size as well?
+>
 
-Raphaël
+That's a good point and I would need to have a closer look to the driver
+to determine if that's needed or not as well. If that's the case though,
+the issue is already present in the driver. We could fix it as follow-up.
+
+> Best regards
+> Thomas
+>
+
+-- 
+Best regards,
+
+Javier Martinez Canillas
+Core Platforms
+Red Hat
 
