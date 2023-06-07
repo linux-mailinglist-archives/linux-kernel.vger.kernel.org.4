@@ -2,122 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B09D725A6A
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 11:30:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEA56725A6E
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 11:30:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240008AbjFGJ3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 05:29:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49044 "EHLO
+        id S240006AbjFGJaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 05:30:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235626AbjFGJ3t (ORCPT
+        with ESMTP id S240009AbjFGJ3v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 05:29:49 -0400
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BA04AA;
-        Wed,  7 Jun 2023 02:29:47 -0700 (PDT)
-Received: by mail-oi1-x233.google.com with SMTP id 5614622812f47-394c7ba4cb5so4847492b6e.1;
-        Wed, 07 Jun 2023 02:29:47 -0700 (PDT)
+        Wed, 7 Jun 2023 05:29:51 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADB7C124
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 02:29:49 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-51494659d49so1109691a12.3
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 02:29:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686130187; x=1688722187;
+        d=szeredi.hu; s=google; t=1686130188; x=1688722188;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=OmfrPg999neWX9s3M1zxfSUyWf/prJhvEaWFAiQaaNY=;
-        b=IBsaOvK/uVHM3lREN8AMM9yEVo1Xd6I7yfSEz8mue99kPhB/8t8WanbqtRa7i8BdoO
-         SWQf6vsygtojPOj0AQmu6SNrkRD3jyKhTGtw383Qvncs+5gDHvpIcuuEa+rVZXny/IPT
-         pb8pAhz3frMOZLENbbZpwlXNlDdsHs00knMr8mSIo1EJWbcs/sR4QABohUkd5ZCftzlB
-         uVE8fvWsBdjY9Q0TYwu8Gw7iUWZnPxHbKSpa7VOp6QGqAPukdzLzYL0OWbXZIrOOjsk1
-         hPbYfFz+4LzkZPOoQnxQPzj6QmXzc124bK+/T2nKG9MHum1FeZNNMkxT4sLFW1+4d9HU
-         tE4A==
+        bh=2BLecNjxkMJZi1ruU8F6LcBaR2Y9Qu96nuXiY0dXPmk=;
+        b=isP58o13oLsDF+FT8fOKygUY77IyyakLSsuA714GY1lg0P+CeKzRvWMTlV1kuFQo2n
+         BWgCyp2VsQ8jpwmfvC+c9wAaYbmtRXwiOT5k7UIsn8xjVJTEMSGFVXZrLOGx4sWely/y
+         MhvK7A6e8b9M43nFQ4jFXejGtheuR34J3JgfY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686130187; x=1688722187;
+        d=1e100.net; s=20221208; t=1686130188; x=1688722188;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=OmfrPg999neWX9s3M1zxfSUyWf/prJhvEaWFAiQaaNY=;
-        b=X67b93UwcX/0cyMhtDQmtIyvXdMA+Wl46+8aXl8eTDZzDY0ibsL2kGuj2HW/bYL9Ib
-         iNxToGWXkVWSoYu8tu/8hzTqYTEVKv7XPrh7vWhNUo+gudzUmVxkLXlGcOKHqpVXYiXm
-         djGS/NV5chvBlfh7G7RD0evygo4onsO7zP/Tyf8vC3NYvRICmMzRySLNRAlYC/Xrwy/x
-         yA/HBm2s3kSYgLzsg7wsLtBg03DeMzqWWaydLEm9Y7heKpOpqiAvfz/bJxVjfhzKlxs2
-         ggVGRX4mUiVIN+nZqofgS7pG5hXPOCGI08CrVK1YU3SLrPlxp1DeIh/ul7/vOqk54jk0
-         V9uw==
-X-Gm-Message-State: AC+VfDxBbQ/RdoHBW6lgaFLTYomvIGqNjAmCPYRch3SITlgR8Y2QvWXs
-        G+o4xyakTofFjNHpe9EUBG+WE1WKFN65cDPWzUQ42ivYmAe+urAy
-X-Google-Smtp-Source: ACHHUZ7Qk+jpHAzTBaSr66IffeL7iiuj6egRj7ybLFDxSM222reY+UmlAVuzuWXXi32jct9e4nbPBvG5eT/9JeS1goc=
-X-Received: by 2002:aca:2b09:0:b0:386:d4f7:6791 with SMTP id
- i9-20020aca2b09000000b00386d4f76791mr4441087oik.37.1686130186597; Wed, 07 Jun
- 2023 02:29:46 -0700 (PDT)
+        bh=2BLecNjxkMJZi1ruU8F6LcBaR2Y9Qu96nuXiY0dXPmk=;
+        b=QT70p254T5YZRagzKeRv22KM/2LQAyVq9mZlNi/fFiNxF2IEAyfafytB4IvNEQB/0k
+         h2XRau1Slbu5ar/tyD9wg3h3utKbiIllcxvoI0J2VBn56aDrUzJadFJDdoYOaM2xrHRv
+         9Cf/IrQX3LjVxB6VigIF9VsmWgBZgse8N/XZ6ilDEphYc/oJUnltCWn/QTmSi/iVtBSu
+         Q5s7o1dchuLACB1j5pGMVDL8VAUxUwp/mebIm31RlIEQOX7fnA11dMperNeSypNDSuF/
+         d0oudD5ewHfvrTtTCzeh4aFBFWCfpM+xnoUlWJbDtI8ZeLWFAld4DpcP/2T2surczyQz
+         BF6w==
+X-Gm-Message-State: AC+VfDyKy29JC20DvYmVXJ/DeDcPmEimZO1ZbZKiMzmxsYlwHNrTLkiP
+        aazzk/1jvePN6NscpM+hoFjauziR7egnf88JuUfqlg==
+X-Google-Smtp-Source: ACHHUZ4RtZ8bbXfXPQLckp4Q6RLjZQVlrtyxd2G4isYyaOtvgQlLxX+BwNlbYVP/XvkkNne4dmBuvgtlrW/TnHr5DdE=
+X-Received: by 2002:a17:907:72d0:b0:94f:6218:191d with SMTP id
+ du16-20020a17090772d000b0094f6218191dmr5673140ejc.32.1686130188072; Wed, 07
+ Jun 2023 02:29:48 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230606140757.818705-1-pavacic.p@gmail.com> <20230606140757.818705-3-pavacic.p@gmail.com>
- <cac57af0-aa0f-0a60-3376-234e1da7f4eb@linaro.org>
-In-Reply-To: <cac57af0-aa0f-0a60-3376-234e1da7f4eb@linaro.org>
-From:   Paulo Pavacic <pavacic.p@gmail.com>
-Date:   Wed, 7 Jun 2023 11:29:35 +0200
-Message-ID: <CAO9szn3+u_yuWb5y_aQGWA8RhW2=qPVcxcZvGWz8MbHH_DamNg@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] dt-bindings: display: panel: add fannal,c3004
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     neil.armstrong@linaro.org, sam@ravnborg.org, airlied@gmail.com,
-        daniel@ffwll.ch, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
+References: <CAPnZJGDWUT0D7cT_kWa6W9u8MHwhG8ZbGpn=uY4zYRWJkzZzjA@mail.gmail.com>
+ <CAJfpeguZX5pF8-UNsSfJmMhpgeUFT5XyG_rDzMD-4pB+MjkhZA@mail.gmail.com>
+ <5d69a11e-c64e-25dd-a982-fd4c935f2bf3@fastmail.fm> <CAJfpeguQ87Vxdn-+c4yYy7=hKnSYwWJNe22f-6dG8FNAwjWBXA@mail.gmail.com>
+ <9f79a2b7-c3f4-9c42-e6f3-f3c77f75afa2@fastmail.fm>
+In-Reply-To: <9f79a2b7-c3f4-9c42-e6f3-f3c77f75afa2@fastmail.fm>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Wed, 7 Jun 2023 11:29:36 +0200
+Message-ID: <CAJfpeguXBpyr_3FV1u-VRA9ZSqmGKVWFWZsXPqB-Tqa_JAx=uw@mail.gmail.com>
+Subject: Re: [PATCH 0/6] vfs: provide automatic kernel freeze / resume
+To:     Bernd Schubert <bernd.schubert@fastmail.fm>
+Cc:     Askar Safin <safinaskar@gmail.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        fuse-devel <fuse-devel@lists.sourceforge.net>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Krzysztof,
+On Wed, 7 Jun 2023 at 10:13, Bernd Schubert <bernd.schubert@fastmail.fm> wrote:
 
-uto, 6. lip 2023. u 16:43 Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> napisao je:
->
-> On 06/06/2023 16:07, Paulo Pavacic wrote:
-> > Added fannal to vendor-prefixes and dt bindings for Fannal C3004.
-> > Fannal C3004 is a 480x800 MIPI DSI Panel which requires
-> > DCS initialization sequences with certain delays between certain
-> > commands.
-> >
-> > Signed-off-by: Paulo Pavacic <pavacic.p@gmail.com>
-> > ---
-> > v4 changelog:
-> >   - add spaces between properties
->
-> ???
+> Assuming a fuse server process is not handing over requests to other
+> threads/forked-processes, isn't the main issue that all fuse server
+> tasks are frozen and none is left to take requests? A single non-frozen
+> thread should be sufficient for that?
 
-Added empty lines between properties in yml file
+This *might* work.  But there could be auxiliary threads, or the
+initial thread could be killed, etc.  It would not be reliable.
 
->
-> I pointed out last incorrect versioning. This is v3, not v4. Or is it v4?
+> Ah, when all non flagged processes are frozen first no IO should come
+> in. Yeah, it mostly works, but I wonder if init/systemd is not going to
+> set that flag as well. And then you have an issue when fuse is on a file
+> system used by systemd. My long time ago initial interest on fuse is to
+> use fuse as root file system and I still do that for some cases - not
+> sure if a flag would be sufficient here. I think a freezing score would
+> solve more issues.
+> Although probably better to do step by step - flag first and score can
+> be added later.
 
-It is v4 of the patch but v3 of the patchset. I wasn't sure whether
-somebody would complain if I were to name [patch 2/3] in a patch set
-with different version. I will try to edit changelog to match patchset
-version.
+I'm not sure how systemd interacts with the freezing process.  If it
+does, then the only sane thing to do is to make sure it doesn't have
+any filesystem interaction during that time.
 
->
-> What about my tag?
->
-
-I have changed in MAINTAINERS file from "+C:
-matrix:r/mipi-dsi-bringup:matrix.org" to " +C:
-matrix:r/linux-drm:matrix.org". So I wasn't sure whether to add it.
-I will add it in future version of the patch.
-
-> What about my comment?
->
-
-I thought you wanted me to have more generalized MAINTAINERS community
-URI that's why I have changed it to linux-drm. I will remove community
-URI in future version of the patch.
-
-> Best regards,
-> Krzysztof
->
+Hibernation is a different matter, because it needs the filesystem to
+be in a working state while all userspace is frozen.  Hibernate to
+fuse would bring up a lot of interesting design questions.
 
 Thanks,
-Paulo
+Miklos
