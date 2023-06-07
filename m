@@ -2,126 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2732725536
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 09:16:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE212725539
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 09:16:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238833AbjFGHQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 03:16:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49486 "EHLO
+        id S238839AbjFGHQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 03:16:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233989AbjFGHQA (ORCPT
+        with ESMTP id S233989AbjFGHQU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 03:16:00 -0400
-Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98B9DE62;
-        Wed,  7 Jun 2023 00:15:59 -0700 (PDT)
-Received: by mail-io1-f49.google.com with SMTP id ca18e2360f4ac-77797beb42dso160211839f.2;
-        Wed, 07 Jun 2023 00:15:59 -0700 (PDT)
+        Wed, 7 Jun 2023 03:16:20 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F371720;
+        Wed,  7 Jun 2023 00:16:18 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-9745d99cfccso972445366b.1;
+        Wed, 07 Jun 2023 00:16:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686122177; x=1688714177;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=e/gwoeHymID/fcT19qADralB09hxkZWntjL9V3Ud4l4=;
+        b=StkB3zqSx/OCPwhn0e0d84kDu2x9uw9DzEGwlFCv6f7EkweFgYAegNjEhhyYUh28eI
+         L8VOdYVbF326oJYjCXKJXLK505eMfhg2mhqaezMYvtA81427uLlbysTGWOLxUgJct2Cj
+         MHsGb4a1jaMn6v+6P50kpkklodoyb5C4eoxMe3HfQ7R1X/F+NWFMI6U57SIminrqYOt8
+         zr6ED/5yxcvZVuC8OEPwGx3+PbCFJWpxkgTYzy/lpFH21s6gLo7w9tFtlSVZbyWA6Q9E
+         yygo4+WQYFYs1t7llUKsDD7e1XeK5w1zuWt7eBXlIyuwuXooIviSFRWpZBf9lwznxmD5
+         3PIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686122159; x=1688714159;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=WN0LwwbnyJgDu1njwGhpTrm7cgIrH6XMSJ7383SAvpU=;
-        b=F8kjs7ru0KzKeiZRzlNy9PtMGIz12w+nWl/ix7kwyGTfTdF3eHE3MONai5jgh1f5/S
-         r7jRHS5ScTf78Bh+NODFvZHd7AMtx39gINLtfUXGfzcNjvQ8QGSYpjr92kTs8DJFQM6l
-         EhRJT8BOxJmzM4ZAponEbuuXneAxpQrtaizt86qcD5jDGiiQXMhDfBE+LW/2aLtjd9/s
-         wRGkcA9wBjeMeeiNsyDLt6VLTlaZRjpB1zi6TCQyi1JuAvS6PRgD4+zhMsZ0PV5Lqr0A
-         euFdrlqI7WPFu5o9V1SOb1yjUSvBfNs3akN4a4IdtqXhG2F+h5kcookiRhKJIRLCqgga
-         KnlA==
-X-Gm-Message-State: AC+VfDzCBZpMHS8TQQ27OtRxX3JD9TkRivq1YGddNHo2BrDME/IDhCmj
-        DJwcbFMga86hIJsQX+vmdQ==
-X-Google-Smtp-Source: ACHHUZ6xKL81YYTu7AlmFDegrMRVLuXp0zLtAjHhlTwkvAEuS0iMElMEV0IQYbqqBXZAFPHbCYkqrg==
-X-Received: by 2002:a6b:e31a:0:b0:777:b409:fb67 with SMTP id u26-20020a6be31a000000b00777b409fb67mr5369669ioc.4.1686122158656;
-        Wed, 07 Jun 2023 00:15:58 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id el11-20020a0566384d8b00b0040bb600eb81sm3411663jab.149.2023.06.07.00.15.56
+        d=1e100.net; s=20221208; t=1686122177; x=1688714177;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=e/gwoeHymID/fcT19qADralB09hxkZWntjL9V3Ud4l4=;
+        b=fZDnHDUGYjEIudr5qyln5lSkwNn5f5p6hicBiPJmau3jdvNYgLeAbuqMoTorlzALen
+         me6AwhwfKqKdlzQb43JYHKNMebtg8BRbvQt8RAtZHr7QR7aBUJ8Pcv26UZexbirHyndh
+         Wqc5XoL9F3NIZ6hbQvuYpgj0zOnWYYDEpFF5AQXKCtqEhdkzbLQMjVe2EtTFn2/OSJaK
+         jBoZryEnfSjb+O/AACtyM+ug0VQELquaPjJ0ZdtW7Eo5T/5ja5OQ7Vg2elHrfMnApiEr
+         p+E8Sa0N3Gw/4D2BHjNKvFrHVRxa0IYtMabkFHBm3mSfgnvIzR2eFWkVDN9BUUuM3pOo
+         q9wg==
+X-Gm-Message-State: AC+VfDx7pszcpPneIYPuo6EvO2O3E4QnFyaqUW3qfD+IWwWPuiB7FAQz
+        eX/f1BjyvXwjZo0EkQLYMraJui1CaORv1g==
+X-Google-Smtp-Source: ACHHUZ6bNpT4RI3A0qNm26XLgzYqjoKDdT3/AiUwJvka5+rvPKtIa+Ji3R7DZtnVWudsnl+8FWC9Lw==
+X-Received: by 2002:a17:907:6d8a:b0:973:ae80:a145 with SMTP id sb10-20020a1709076d8a00b00973ae80a145mr6073609ejc.43.1686122177177;
+        Wed, 07 Jun 2023 00:16:17 -0700 (PDT)
+Received: from tom-HP-ZBook-Fury-15-G7-Mobile-Workstation (net-188-217-50-121.cust.vodafonedsl.it. [188.217.50.121])
+        by smtp.gmail.com with ESMTPSA id s20-20020a170906bc5400b009745b0cb326sm6408617ejv.109.2023.06.07.00.16.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 00:15:58 -0700 (PDT)
-Received: (nullmailer pid 2033408 invoked by uid 1000);
-        Wed, 07 Jun 2023 07:15:55 -0000
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Hsiao Chien Sung <shawn.sung@mediatek.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Singo Chang <singo.chang@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Wed, 07 Jun 2023 00:16:16 -0700 (PDT)
+Date:   Wed, 7 Jun 2023 09:16:14 +0200
+From:   Tommaso Merciai <tomm.merciai@gmail.com>
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        jacopo.mondi@ideasonboard.com, martin.hecht@avnet.eu,
+        michael.roeder@avnet.eu, linuxfancy@googlegroups.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Nancy Lin <nancy.lin@mediatek.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-mediatek@lists.infradead.org, Fei Shao <fshao@google.com>,
-        Jason-JH Lin <jason-jh.lin@mediatek.com>
-In-Reply-To: <20230607061121.6732-2-shawn.sung@mediatek.com>
-References: <20230607061121.6732-1-shawn.sung@mediatek.com>
- <20230607061121.6732-2-shawn.sung@mediatek.com>
-Message-Id: <168612215587.2033253.1998545929244911622.robh@kernel.org>
-Subject: Re: [PATCH v1 1/6] dt-bindings: display/mediatek: mt8188: Add
- documentations for VDOSYS1
-Date:   Wed, 07 Jun 2023 01:15:55 -0600
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+        Conor Dooley <conor+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Marco Felsch <m.felsch@pengutronix.de>,
+        Gerald Loacker <gerald.loacker@wolfvision.net>,
+        Mikhail Rudenko <mike.rudenko@gmail.com>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Nicholas Roth <nicholas@rothemail.net>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/3] media: dt-bindings: alvium: add document YAML
+ binding
+Message-ID: <ZIAuvjmyUpuY/eDk@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
+References: <20230606155416.260941-1-tomm.merciai@gmail.com>
+ <20230606155416.260941-3-tomm.merciai@gmail.com>
+ <20230606163656.GI25679@pendragon.ideasonboard.com>
+ <20230606-jaundice-womankind-7e583789fb7a@spud>
+ <20230606181752.GC14101@pendragon.ideasonboard.com>
+ <20230606-create-catchable-e16113afac82@spud>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230606-create-catchable-e16113afac82@spud>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Conor,
 
-On Wed, 07 Jun 2023 14:11:16 +0800, Hsiao Chien Sung wrote:
-> Add device tree documentations for MT8188 VDOSYS1.
+On Tue, Jun 06, 2023 at 07:23:32PM +0100, Conor Dooley wrote:
+> On Tue, Jun 06, 2023 at 09:17:52PM +0300, Laurent Pinchart wrote:
+> > On Tue, Jun 06, 2023 at 07:07:42PM +0100, Conor Dooley wrote:
+> > > Hey Laurent, Tommaso,
+> > > 
+> > > On Tue, Jun 06, 2023 at 07:36:56PM +0300, Laurent Pinchart wrote:
+> > > > On Tue, Jun 06, 2023 at 05:54:03PM +0200, Tommaso Merciai wrote:
+> > > 
+> > > > > +  alliedvision,lp2hs-delay-us:
+> > > > > +    maxItems: 1
+> > > > > +    description:
+> > > > > +      Low power to high speed delay time in microseconds.
+> > > > 
+> > > > You can drop "in microseconds", that's implied by the suffix.
+> > > > 
+> > > > > +      The purpose of this property is force a DPhy reset for the period
+> > > > > +      described by the microseconds on the property, before it starts
+> > > > > +      streaming. To be clear, with that value bigger than 0 the Alvium
+> > > > > +      forces a dphy-reset on all lanes for that period. That means all
+> > > > > +      lanes go up into low power state. This may help a csi2 rx ip to
+> > > > > +      reset if that IP can't deal with a continous clock.
+> > > > 
+> > > > I'd like to propose what I think is a clearer version:
+> > > > 
+> > > >     description: |
+> > > >       Low power to high speed delay time.
+> > > > 
+> > > >       If the value is larger than 0, the camera forces a reset of all
+> > > >       D-PHY lanes for the duration specified by this property. All lanes
+> > > >       will transition to the low-power state and back to the high-speed
+> > > >       state after the delay. Otherwise the lanes will transition to and
+> > > >       remain in the high-speed state immediately after power on.
+> > > > 
+> > > >       This is meant to help CSI-2 receivers synchronizing their D-PHY
+> > > >       RX.
+> > > 
+> > > Question about the property.
+> > > Why not make it have a minimum value of 1 and drop the special-case
+> > > behaviour for zero?
+> > 
+> > The property is optional, so it can indeed be omitted if no delay is
+> > desired. I have no strong preference on whether or not to allow 0 as a
+> > valid value.
 > 
-> Signed-off-by: Hsiao Chien Sung <shawn.sung@mediatek.com>
-> ---
->  .../bindings/arm/mediatek/mediatek,mmsys.yaml |  1 +
->  .../display/mediatek/mediatek,ethdr.yaml      |  5 +-
->  .../display/mediatek/mediatek,mdp-rdma.yaml   |  5 +-
->  .../display/mediatek/mediatek,merge.yaml      |  1 +
->  .../display/mediatek/mediatek,padding.yaml    | 80 +++++++++++++++++++
->  5 files changed, 90 insertions(+), 2 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,padding.yaml
+> FWIW, I prefer the semantics of the property if it doesn't have the
+> limbo state of being present but doing nothing.
 > 
+> Cheers,
+> Conor.
+> 
+> BTW, I seem to get bounces from shawnx.tu@intel.com, who is listed in
+> MAINTAINERS for several drivers. Do you know if they have a non-intel
+> address to replace those entries with, or should they be dropped?
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Same here! :)
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/display/mediatek/mediatek,ethdr.yaml:28:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
-./Documentation/devicetree/bindings/display/mediatek/mediatek,mdp-rdma.yaml:26:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
+Thanks,
+Tommaso
 
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/display/mediatek/mediatek,padding.example.dts:19:18: fatal error: dt-bindings/clock/mt8188-clk.h: No such file or directory
-   19 |         #include <dt-bindings/clock/mt8188-clk.h>
-      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make[1]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/display/mediatek/mediatek,padding.example.dtb] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1512: dt_binding_check] Error 2
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230607061121.6732-2-shawn.sung@mediatek.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
 
