@@ -2,181 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5820972640A
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 17:19:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47D007264F0
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 17:43:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241288AbjFGPTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 11:19:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60164 "EHLO
+        id S241491AbjFGPn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 11:43:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241290AbjFGPSx (ORCPT
+        with ESMTP id S235157AbjFGPnr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 11:18:53 -0400
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 823D61BFF
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 08:18:51 -0700 (PDT)
-Received: by mail-qt1-x82d.google.com with SMTP id d75a77b69052e-3f83971680eso4625601cf.0
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 08:18:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686151130; x=1688743130;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mTsukKw+BIS5VUrX2hZ7HJxEmat0w3WDB9Ehs58lLcs=;
-        b=v0JwFjF3phSowDl0fS5dmxunvl8Gs6shwjlrdjCjLHWeHEfCexXx+34/kpgEc33WNb
-         rSpSpeSWfD46k1frYJEcDqrMnfp07wcMri9RMpwfn+XB5mmJnJYPYHmcd3NFfAtMlryD
-         faKxikZcA6aHNdrRzfCBtEBRdzFB/sGw1G145erEuh2wj67V+trv5+s8mTZJRejq5yrx
-         xnhpdVIsfkbPaw+NEszd7QRLR1ujD1o0izxSZmIaORc7sQmc/HxidCWVaa77y+lDUVi1
-         szsTZQ0gjktBuy5t39kZIebzTcEYOu2UKui2NpecWUqfc9X54Tfskjtom++ivPCOV60Z
-         EX/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686151130; x=1688743130;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mTsukKw+BIS5VUrX2hZ7HJxEmat0w3WDB9Ehs58lLcs=;
-        b=A9G5BIH/+aB758M5M5COo4bnVqEzQ0AwuWN+yuuvnGk157fJS/xGNjItetXI8P//Da
-         3Wi5bNTLNkxJzUrbZFZdqLUZtosbNzx8o0HB9BHTlLJnV4r+Ns0vZ2cNaOjL6iffJa5F
-         8loOEAE0CxTDOgdSN5K1AcdWA79PYEALaDbrbw7tDRQJZy5yDiWGRsZugQB8WJGH/gfs
-         5H1uwss2pee5qFO7rnF1oyog1fuI2oQUgWVnu0RFhIaYiMTTe9yqLpDYq0PCnw0BudVZ
-         yPjN3dtlcJmWuQNWGtpQAukZu7sGO0SS+CQb8b2KyVJgr1uLtmPjPnqkdgcQPpr0PnFA
-         fzNw==
-X-Gm-Message-State: AC+VfDyHb7Tc4d2NINwhoJUmZWHZ6C3q3/E7FVpPWT0IKLT16Xgt07R7
-        AyyNlTMfnXV5Z3DNPCN+rRZzRQ0703ezmQ5nUSP48Q==
-X-Google-Smtp-Source: ACHHUZ7+xiReE2OVgwmqBeLUBU6ivvu05+bPglG1UtVJBcEijza5e+I8Q88yQ4qyEMWcCUl/HPxf7/2efC/JIbcQY6c=
-X-Received: by 2002:ad4:5bc4:0:b0:625:aa49:ea0a with SMTP id
- t4-20020ad45bc4000000b00625aa49ea0amr3393123qvt.29.1686151130576; Wed, 07 Jun
- 2023 08:18:50 -0700 (PDT)
+        Wed, 7 Jun 2023 11:43:47 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31EEB1BDC;
+        Wed,  7 Jun 2023 08:43:44 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 3E8765FD6E;
+        Wed,  7 Jun 2023 18:23:36 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1686151416;
+        bh=AKHvLZtrNDiHdcmWapONq/JHCTZbwhGGzWLU3S9Nz8o=;
+        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+        b=HGWY+8HwQqkgjUzQ+XzLOGB6mX1nCQrkWdB6f21Xz4GjIERJ0J+5sd0hKd26PoYRB
+         kIJXgxwlucvZOSU21WYmh2kanQ3NVh70d5INOuiE1soMV//hpeNhDYdAvCEbA182Jd
+         ADCfelaKPuONRD/C2XQaAT+ElhHWKJP+5X0trJfn+MkLpgu/suS25IxgHjULgbASL8
+         HMF1bbtyClN4hITUHjoUs9m+hqlJLRYPPsgrIAV3VDhOZiDF3+k0cFgis0R77QqZaF
+         fu6zlBwt9Lp4Prvfu3plN1iV8dHWN1+JSJzG3ERhB9RF/EWMSjUvr+GhgtLOX4jdAe
+         ueCHqSkYG2Ufw==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Wed,  7 Jun 2023 18:23:34 +0300 (MSK)
+Message-ID: <a1e048aa-ec64-bd0b-aa17-e3e9bdf18090@sberdevices.ru>
+Date:   Wed, 7 Jun 2023 18:18:39 +0300
 MIME-Version: 1.0
-References: <20230526010748.1222-1-masahisa.kojima@linaro.org>
- <20230526010748.1222-4-masahisa.kojima@linaro.org> <0d3e0370-eb76-010f-3d30-9acc9b59645c@siemens.com>
- <CAFA6WYPnWJNPvhT2JDkO-qXRUaJoxBGZEvSfhxcRynV7=VSdQA@mail.gmail.com>
- <CAMj1kXFM45PCTU--+CCed6Cq_N5XqDG6tTu6fnQTSCpW2BWA5A@mail.gmail.com>
- <4ff09002-e871-38b9-43ec-227a64bac731@siemens.com> <CAC_iWjJJ5E9Q1or5yTiDynzv_WAYH-g+N24aRdu9rvcsbWqnrg@mail.gmail.com>
- <CAFA6WYNFYB1LiOFB_iwTsdD5PmnDdSbtDSH2J4FVFPx3uik8rQ@mail.gmail.com>
- <CAC_iWj+E7-XK6dCeSn4205K0O3EZCLxCaC+adu-14ST6sdudfA@mail.gmail.com> <76da826f-b608-6add-5401-6de818b180e3@siemens.com>
-In-Reply-To: <76da826f-b608-6add-5401-6de818b180e3@siemens.com>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Wed, 7 Jun 2023 20:48:38 +0530
-Message-ID: <CAFA6WYPCDRjFzsUMU=SNzEt88nT7Fcm1eOFL8z4HiQO+=2JeVA@mail.gmail.com>
-Subject: Re: [PATCH v5 3/3] efi: Add tee-based EFI variable driver
-To:     Jan Kiszka <jan.kiszka@siemens.com>
-Cc:     Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Masahisa Kojima <masahisa.kojima@linaro.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-efi@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        "Su, Bao Cheng (RC-CN DF FA R&D)" <baocheng.su@siemens.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v1 0/2] Meson NAND: waiting w/o wired ready/busy pin
+Content-Language: en-US
+To:     Liang Yang <liang.yang@amlogic.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+CC:     <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
+        <linux-mtd@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+References: <20230607145026.2899547-1-AVKrasnov@sberdevices.ru>
+From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
+In-Reply-To: <20230607145026.2899547-1-AVKrasnov@sberdevices.ru>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/06/07 13:30:00 #21453197
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 7 Jun 2023 at 18:10, Jan Kiszka <jan.kiszka@siemens.com> wrote:
->
-> On 07.06.23 10:25, Ilias Apalodimas wrote:
-> > Hi Sumit,
-> >
-> > On Wed, 7 Jun 2023 at 10:25, Sumit Garg <sumit.garg@linaro.org> wrote:
-> >>
-> >> Hi Ilias,
-> >>
-> >> On Wed, 7 Jun 2023 at 12:05, Ilias Apalodimas
-> >> <ilias.apalodimas@linaro.org> wrote:
-> >>>
-> >>> Hi Jan,
-> >>>
-> >>> [...]
-> >>>
-> >>>>>>>>
-> >>>>> ...
-> >>>>>>>
-> >>>>>>> I think we have a probe ordering issue with this driver:
-> >>>>>>> efivarfs_fill_super() may be called before the TEE bus was probed, thus
-> >>>>>>> with the default efivar ops still registered. And that means
-> >>>>>>> efivar_supports_writes() will return false, and the fs declares itself
-> >>>>>>> as readonly. I've seen systemd mounting it r/o initialling, and you need
-> >>>>>>> to remount the fs to enable writability.
-> >>>>>>>
-> >>>>>>> Is there anything that could be done to re-order things reliably, probe
-> >>>>>>> the tee bus earlier etc.?
-> >>>>>>
-> >>>>>> This driver has a dependency on user-space daemon: tee-supplicant to
-> >>>>>> be running for RPMB access. So once you start that daemon the
-> >>>>>> corresponding device will be enumerated on the TEE bus and this driver
-> >>>>>> probe will be invoked. So I would suggest you to load this daemon very
-> >>>>>> early in the boot process or better to make it a part of initramfs.
-> >>>>>>
-> >>>>>
-> >>>>> That is not the point, really.
-> >>>>>
-> >>>>> If this dependency exists, the code should be aware of that, and made
-> >>>>> to work correctly in spite of it. Requiring a module to be part of
-> >>>>> initramfs is not a reasonable fix.
-> >>>>
-> >>>> In fact, I've tested a non-modularized build as well, just to exclude
-> >>>> that issue. The daemon dependency is more likely the problem here.
-> >>>>
-> >>>>>
-> >>>>> IIUC, this also means that the efivar ops are updated while there is
-> >>>>> already a client. This seems less than ideal as well
-> >>>
-> >>> As Sumit pointed out, the 'device' won't be available from OP-TEE
-> >>> until the supplicant is up and running and as a result, the module
-> >>> _probe() function won't run.  Unfortunately, this isn't something we
-> >>> can avoid since the supplicant is responsible for the RPMB writes.
-> >>> The only thing I can think of is moving parts of the supplicant to the
-> >>> kernel and wiring up the RPC calls for reading/writing data to the
-> >>> eMMC subsystem.  There was another discussion here [0] requesting the
-> >>> same thing for different reasons. But unless I am missing something
-> >>> this won't solve the problem completely either.  You still have a
-> >>> timing dependency of "when did the RT callbacks change" -- "when was
-> >>> my efivarfs mounted".
-> >>
-> >> With the RPMB writes wired through the kernel [1], the only dependency
-> >> left is when do you load the tee-stmm-efi driver to have real EFI
-> >> runtime variables support. IMO, tee-stmm-efi driver should be built-in
-> >> to support systems without initramfs. The distro installers may choose
-> >> to bundle it in initramfs. Do you still see a timing dependency with
-> >> this approach?
-> >
-> > No I don't, this will work reliably without the need to remount the efivarfs.
-> > As you point out you will still have this dependency if you end up
-> > building them as modules and you manage to mount the efivarfs before
-> > those get inserted.  Does anyone see a reasonable workaround?
-> > Deceiving the kernel and making the bootloader set the RT property bit
-> > to force the filesystem being mounted as rw is a nasty hack that we
-> > should avoid.  Maybe adding a kernel command line parameter that says
-> > "Ignore the RTPROP I know what I am doing"?  I don't particularly love
-> > this either, but it's not unreasonable.
->
-> In the context of https://github.com/OP-TEE/optee_os/issues/6094,
-> basically this issue mapped on reboot/shutdown, I would really love to
-> see the unhandy tee-supplicant daemon to be overcome.
 
-I have seen this error before and it has been on my todo list. So I
-have tried to fix it here [1]. Feel free to test it and let me know if
-you see any further issues.
 
-[1] https://lkml.org/lkml/2023/6/7/927
+On 07.06.2023 17:50, Arseniy Krasnov wrote:
+> Main thing that this patchset adds is support for waiting for command
+> completion when there is no wired ready/busy pin. This is implemented
+> by using Meson specific command which operates without wired pin, but
+> supports interrupt driven waiting (default way for waiting without
+> hardware pin is 'nand_soft_waitrdy()' which uses software loop instead
+> of interrupt). To select which mode to use during driver initialization,
+> common NAND controller property is used - 'nand-rb'. It is described in
+> 'nand-controller.yaml'. But for Meson, its description was missed in
+> 'amlogic,meson-nand.yaml', so this patchset also adds support for it.
+> 
+> Patch for bindings was tested with dt_binding_check and dtbs_check.
+> 
+> Arseniy Krasnov (2):
+>   dt-bindings: nand: meson: Fix 'nand-rb' property
+>   mtd: rawnand: meson: waiting w/o wired ready/busy pin
+> 
+>  .../bindings/mtd/amlogic,meson-nand.yaml      |  7 ++
+>  drivers/mtd/nand/raw/meson_nand.c             | 82 ++++++++++++++++++-
+>  2 files changed, 85 insertions(+), 4 deletions(-)
+> 
 
--Sumit
+Changelog:
+* Two separate patches:
+  For bindings: https://lore.kernel.org/linux-mtd/20230606193507.35024-1-AVKrasnov@sberdevices.ru/
+  For driver: https://lore.kernel.org/linux-mtd/20230607073015.1280085-1-AVKrasnov@sberdevices.ru/
+  Now fixed/updated and combined to this patchset with v1 version.
 
->
-> Jan
->
-> --
-> Siemens AG, Technology
-> Competence Center Embedded Linux
->
+* In binding patch:
+  * Invalid type of 'nand-rb' is fixed, it was 'bool', now it is 'uint32 array' as required. Also
+    new declaration of 'nand-rb' contains several restrictions like number of elements and min/max
+    value of elements.
+  * Location of 'nand-rb' is moved from the controller object to the chip object as required.
+
+* In driver patch:
+  * Update comment which describes when it is needed to send NAND_CMD_READ0 to
+    leave command waiting loop.
+  * Change type of 'no_rb_pin' to 'bool' as in v1. Now it is just a flag which selects
+    mode to wait for command completion.
+
+Thanks, Arseniy
+  
