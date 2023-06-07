@@ -2,124 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D057725CF7
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 13:21:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6522A725CFD
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 13:24:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239862AbjFGLVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 07:21:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55774 "EHLO
+        id S239378AbjFGLXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 07:23:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240066AbjFGLVu (ORCPT
+        with ESMTP id S240066AbjFGLX0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 07:21:50 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E85B91BD
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 04:21:48 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id 98e67ed59e1d1-256712e2be3so6205889a91.2
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 04:21:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686136908; x=1688728908;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=sXtu7T4BuQTlc5G2QE10guaIjIMheRY/q8IpaabYJXE=;
-        b=mJcJOtf9cKn2YYWGd/imMh8cq1rB3fGhC5WYLbJRmA79Z2r356m97G9o9T0VhQ42Or
-         dGQ2nwHsJ4TRNWy3H7od5UQpyhwG096mKD468OFXY99pwzrF2BSE37k0C9MnHN5it1nm
-         ToW6hfUtdLfQadVYPGvDPW5Ivrc7sHhY8MGVJ2NUL5A4butCHKYWvRDgmSgTBmSQC1Mf
-         9CtXIVdDDwEWlNZ7VV6Vwl74N4JWJreGrfVIKIY9ZMvjwZXHX6fsVQ2zE47tv4WQ2lj3
-         GOH0dad4BC210GQnP0xEuBUv17WSwMbwPDiPFrgoi2LXCp/laF6+QoADHUZH63rHXcRe
-         p49w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686136908; x=1688728908;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sXtu7T4BuQTlc5G2QE10guaIjIMheRY/q8IpaabYJXE=;
-        b=Dq2FI5gQy+qTX2cTurSRjeuQKKk1oSo7nGyWH9kVvtyuOvp8IOXHJH5ARWq0wnM/I4
-         lWtfgODXTKGwoi7EwZouOkoSR7TZO7GX1uUFjTD+5kGP3XAVxgHQYBRI8mqr7fqZIIWc
-         Iyfi9qbOnNur8OzOHpZlZ7Mr7tJy11hbU1X5F2YTnvpxATkDomuxCgZ/Me58yn58C+WI
-         4OAx8xW0qs3TG5awpBsSUOwYXOpRUCVn3AqD33Su+AEBbcDqPHJ3INQ2sLF9Qe373wr9
-         RW3FXlkBb8niVK3B5ElWhB6+XOo7TI85I4zk9ZuvKcUpOqaAN2xBUi+eRhSolyuK9Nnz
-         IjQQ==
-X-Gm-Message-State: AC+VfDwi3VEHzOMQxHWOGqrZ0Mg6ckzgo3jstRMqst1p9MCBM9sEndSd
-        iJhFrH7w8AiIBWN3A6eWM22z
-X-Google-Smtp-Source: ACHHUZ75KNTAVNCWXJU3GsKBzmblvZ/f6zZCceUwhTqXHVFfvpwuY3PBfdfhrO3xihSUnq5IJQZR0g==
-X-Received: by 2002:a17:90a:195b:b0:259:c015:9fa1 with SMTP id 27-20020a17090a195b00b00259c0159fa1mr1754510pjh.46.1686136908342;
-        Wed, 07 Jun 2023 04:21:48 -0700 (PDT)
-Received: from thinkpad ([59.92.97.244])
-        by smtp.gmail.com with ESMTPSA id 30-20020a17090a001e00b00250bf8495b3sm1217420pja.39.2023.06.07.04.21.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 04:21:47 -0700 (PDT)
-Date:   Wed, 7 Jun 2023 16:51:43 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, mhi@lists.linux.dev,
-        linux-arm-msm@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loic.poulain@linaro.org
-Subject: Re: [PATCH 1/3] net: Add MHI Endpoint network driver
-Message-ID: <20230607112143.GE5025@thinkpad>
-References: <20230606123119.57499-1-manivannan.sadhasivam@linaro.org>
- <20230606123119.57499-2-manivannan.sadhasivam@linaro.org>
- <ZIA910jCjl+dxc/a@corigine.com>
+        Wed, 7 Jun 2023 07:23:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19C8A1720
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 04:23:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A201B63394
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 11:23:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66A54C433EF;
+        Wed,  7 Jun 2023 11:23:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686137005;
+        bh=692XokvxKzDQrzsRY0aIK8Ow6Q63x8VkG9gKJSs7Pqc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=l9jqMmOfxNpxEBRsiMWKN3ziafDCD5xZkky5cqz2nXO3S7wnqKxVyyWuJA7hIer7U
+         COvHylReJPdxeFRNY+cmqpKZDl4N7F8jdVbnepnmtZi3eXUnJ4tH5zvBjPsb3vgtSr
+         JaZm2x/A6ACFuWHgYGRjqUHgM2ESd3APsRK9mZh5nPBVYRT4VD1X/HnhA0WdFIjGAn
+         Hgj7o6eWMn1y3J078IvIXo3cxFUAyhJG372oicTmwA1b9tM/oI1U0M+ZjFYCLPhzlC
+         wKsVkXXA8L5zefMFTV4ZceZbVwiQVf0ZWN8pdGmcZoYuBOjgO8RT5Luf4qtOyhmO89
+         MWOrQBAOssFpw==
+Date:   Wed, 7 Jun 2023 14:23:00 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Haifeng Xu <haifeng.xu@shopee.com>
+Cc:     david@redhat.com, mhocko@kernel.org, osalvador@suse.de,
+        akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] mm/memory_hotplug: remove
+ reset_node_managed_pages() in hotadd_init_pgdat()
+Message-ID: <20230607112300.GF52412@kernel.org>
+References: <f125f0db-30fe-5452-4669-3e48f7856569@redhat.com>
+ <20230607024548.1240-1-haifeng.xu@shopee.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZIA910jCjl+dxc/a@corigine.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230607024548.1240-1-haifeng.xu@shopee.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 10:20:39AM +0200, Simon Horman wrote:
-> On Tue, Jun 06, 2023 at 06:01:17PM +0530, Manivannan Sadhasivam wrote:
+On Wed, Jun 07, 2023 at 02:45:48AM +0000, Haifeng Xu wrote:
+> managed pages has already been set to 0 in free_area_init_core_hotplug(),
+> via zone_init_internals() on each zone. It's pointless to reset again.
 > 
-> ...
+> Furthermore, reset_node_managed_pages() no longer needs to be exposed
+> outside of mm/memblock.c. Remove declaration in include/linux/memblock.h
+> and define it as static.
 > 
-> > +static void mhi_ep_net_dev_process_queue_packets(struct work_struct *work)
-> > +{
-> > +	struct mhi_ep_net_dev *mhi_ep_netdev = container_of(work,
-> > +			struct mhi_ep_net_dev, xmit_work);
-> > +	struct mhi_ep_device *mdev = mhi_ep_netdev->mdev;
-> > +	struct sk_buff_head q;
-> > +	struct sk_buff *skb;
-> > +	int ret;
-> > +
-> > +	if (mhi_ep_queue_is_empty(mdev, DMA_FROM_DEVICE)) {
-> > +		netif_stop_queue(mhi_ep_netdev->ndev);
-> > +		return;
-> > +	}
-> > +
-> > +	__skb_queue_head_init(&q);
-> > +
-> > +	spin_lock_bh(&mhi_ep_netdev->tx_lock);
-> > +	skb_queue_splice_init(&mhi_ep_netdev->tx_buffers, &q);
-> > +	spin_unlock_bh(&mhi_ep_netdev->tx_lock);
-> > +
-> > +	while ((skb = __skb_dequeue(&q))) {
-> > +		ret = mhi_ep_queue_skb(mdev, skb);
-> > +		if (ret) {
+> In addtion to this, the only caller of reset_node_managed_pages() is
+> reset_all_zones_managed_pages(), which is annotated with __init, so it
+> should be safe to also mark reset_node_managed_pages() as __init.
 > 
-> Hi Manivannan,
-> 
-> I wonder if this should be kfree_skb(skb);
-> 
+> Signed-off-by: Haifeng Xu <haifeng.xu@shopee.com>
+> Suggested-by: David Hildenbrand <david@redhat.com>
 
-Good catch! Will fix it.
+Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
 
-- Mani
-
-> > +			kfree(skb);
-> > +			goto exit_drop;
-> > +		}
+> ---
+> v2:
+> - unexport reset_node_managed_pages()
+> - mark reset_node_managed_pages() as __init
+> - update commit message
+> ---
+>  include/linux/memblock.h | 1 -
+>  mm/memblock.c            | 2 +-
+>  mm/memory_hotplug.c      | 1 -
+>  3 files changed, 1 insertion(+), 3 deletions(-)
 > 
-> ...
+> diff --git a/include/linux/memblock.h b/include/linux/memblock.h
+> index f82ee3fac1cd..f71ff9f0ec81 100644
+> --- a/include/linux/memblock.h
+> +++ b/include/linux/memblock.h
+> @@ -128,7 +128,6 @@ int memblock_clear_nomap(phys_addr_t base, phys_addr_t size);
+>  
+>  void memblock_free_all(void);
+>  void memblock_free(void *ptr, size_t size);
+> -void reset_node_managed_pages(pg_data_t *pgdat);
+>  void reset_all_zones_managed_pages(void);
+>  
+>  /* Low level functions */
+> diff --git a/mm/memblock.c b/mm/memblock.c
+> index 3feafea06ab2..da4264528e1e 100644
+> --- a/mm/memblock.c
+> +++ b/mm/memblock.c
+> @@ -2122,7 +2122,7 @@ static unsigned long __init free_low_memory_core_early(void)
+>  
+>  static int reset_managed_pages_done __initdata;
+>  
+> -void reset_node_managed_pages(pg_data_t *pgdat)
+> +static void __init reset_node_managed_pages(pg_data_t *pgdat)
+>  {
+>  	struct zone *z;
+>  
+> diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
+> index 8e0fa209d533..65e385f34679 100644
+> --- a/mm/memory_hotplug.c
+> +++ b/mm/memory_hotplug.c
+> @@ -1210,7 +1210,6 @@ static pg_data_t __ref *hotadd_init_pgdat(int nid)
+>  	 * online_pages() and offline_pages().
+>  	 * TODO: should be in free_area_init_core_hotplug?
+>  	 */
+> -	reset_node_managed_pages(pgdat);
+>  	reset_node_present_pages(pgdat);
+>  
+>  	return pgdat;
+> -- 
+> 2.25.1
+> 
 
 -- 
-மணிவண்ணன் சதாசிவம்
+Sincerely yours,
+Mike.
