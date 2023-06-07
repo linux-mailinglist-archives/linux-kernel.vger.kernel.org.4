@@ -2,143 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 003E1726570
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 18:05:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D446B726572
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 18:07:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241227AbjFGQF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 12:05:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35834 "EHLO
+        id S241270AbjFGQHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 12:07:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241086AbjFGQFy (ORCPT
+        with ESMTP id S235944AbjFGQHA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 12:05:54 -0400
-Received: from smtp-fw-80008.amazon.com (smtp-fw-80008.amazon.com [99.78.197.219])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 220741BE8;
-        Wed,  7 Jun 2023 09:05:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1686153948; x=1717689948;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=afQPSzc3yF2P6Gyj9XEF07/hZuyAqwb1MSfDPmaFlck=;
-  b=B0cd0RHJVRt5IIou1ic8NNkoZWiEZrbZwTs69y4ZdUxxPqcR/Re4sQ+P
-   tR820YIH8WtixqEytbq2ybieZQ7Or61GClwN4QGdWcQyAcrjsPbxiR6Rf
-   EfSNPjRhNbPHogt+o6I6PbMbiEUvbvhoKVlA7m42A58ctm6ggRL+x6ABl
-   4=;
-X-IronPort-AV: E=Sophos;i="6.00,224,1681171200"; 
-   d="scan'208";a="8765929"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-7fa2de02.us-west-2.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-80008.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 16:05:45 +0000
-Received: from EX19MTAUWB002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2b-m6i4x-7fa2de02.us-west-2.amazon.com (Postfix) with ESMTPS id 5BF1D413CA;
-        Wed,  7 Jun 2023 16:05:42 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 7 Jun 2023 16:05:40 +0000
-Received: from 88665a182662.ant.amazon.com (10.119.185.127) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 7 Jun 2023 16:05:36 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.com>
-To:     <dhowells@redhat.com>
-CC:     <axboe@kernel.dk>, <borisp@nvidia.com>, <chuck.lever@oracle.com>,
-        <cong.wang@bytedance.com>, <davem@davemloft.net>,
-        <dsahern@kernel.org>, <edumazet@google.com>,
-        <john.fastabend@gmail.com>, <kuba@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        <netdev@vger.kernel.org>, <pabeni@redhat.com>,
-        <tom@herbertland.com>, <tom@quantonium.net>,
-        <torvalds@linux-foundation.org>, <willemdebruijn.kernel@gmail.com>,
-        <willy@infradead.org>, <kuniyu@amazon.com>
-Subject: Re: [PATCH net-next v5 09/14] kcm: Use splice_eof() to flush
-Date:   Wed, 7 Jun 2023 09:05:28 -0700
-Message-ID: <20230607160528.20078-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230607140559.2263470-10-dhowells@redhat.com>
-References: <20230607140559.2263470-10-dhowells@redhat.com>
+        Wed, 7 Jun 2023 12:07:00 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A3541BF7
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 09:06:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686153971;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dly7/nCBzZZXC5QhcTqk+CJwOsMviqDWt2wg2OFJMg4=;
+        b=fahrywINHLJ/rJ4Csko7oUXxB9Buv7tz7CPmdD20lkLWBLTNm0LsjeUVa86qMANWkKDb91
+        0cf5EpUsfGMfsf9Qf0T9/JStB0/gd2J40DSKXDlSjvwHVUzcpO1eOMR0W2VkylaC6a26hS
+        uIsjWN6SgP20OY6NavnplJ9vd7CBBiI=
+Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
+ [209.85.208.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-644-5pqzWyuaNBqYMHYSp5CUZQ-1; Wed, 07 Jun 2023 12:06:09 -0400
+X-MC-Unique: 5pqzWyuaNBqYMHYSp5CUZQ-1
+Received: by mail-lj1-f199.google.com with SMTP id 38308e7fff4ca-2b1bbe83720so27279581fa.0
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 09:06:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686153968; x=1688745968;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dly7/nCBzZZXC5QhcTqk+CJwOsMviqDWt2wg2OFJMg4=;
+        b=CCqZ+MPjEfC0fymWDpaUd2Oo7BOxsxLsYkym78imCLxhUypRwDY6LXZs2K1nrM7Hl4
+         XwAzdxaSfpUOFKvhnWNOyZVrs2LnrN5KPK7F1u47jXtVfkApJ2t3LtKnVyT2y+YyBG8c
+         4Slh5++5qrgcfi+O62+u8r5qOWkmwzhfpVU17gopxfGrrhmscs7fC/KzXmGpyxOrulxs
+         RNKpeQg/Lbd+1u7zyUCHgGph4U3x25oAC3Yg7m4sDFdoO/Qu2+IY/OYcbE4ges5KFSKe
+         JtZ1FjRoFTQzEnA2rzjUoBTzJ4QaV1gBW4yh9RTgxSwXfM6NvGc6aUkRw9XyIXrkAsPh
+         L0fw==
+X-Gm-Message-State: AC+VfDwhYq0HAniWgJwJ7B4U5ARYsGCMGuc26Bo4121x1hVXrBOZRbGv
+        bwB1rn/xOYAkO3mIqrqXw8FzMa+2ZK3kCu+92Fhcvg7eyg5SUhHduKWI2jus+5CCWS/PNckFDrA
+        uBu77sxkoCSQxVkEB4c7J9Qk=
+X-Received: by 2002:a2e:9d02:0:b0:2af:19dd:ecda with SMTP id t2-20020a2e9d02000000b002af19ddecdamr2192502lji.45.1686153967992;
+        Wed, 07 Jun 2023 09:06:07 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ72H24p2aVmEA9IsU80u724sMI1SEKXyYKX0eGrwkbztULL+CZPTfOOpYAT4LEIRcCJ2GK2aQ==
+X-Received: by 2002:a2e:9d02:0:b0:2af:19dd:ecda with SMTP id t2-20020a2e9d02000000b002af19ddecdamr2192494lji.45.1686153967707;
+        Wed, 07 Jun 2023 09:06:07 -0700 (PDT)
+Received: from [192.168.1.121] (62-78-130-207.bb.dnainternet.fi. [62.78.130.207])
+        by smtp.gmail.com with ESMTPSA id y12-20020ac2446c000000b004f388c5f25dsm1861049lfl.257.2023.06.07.09.06.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Jun 2023 09:06:07 -0700 (PDT)
+Message-ID: <20adfaff-054f-ab5e-0ff4-4ce3952fbd58@redhat.com>
+Date:   Wed, 7 Jun 2023 19:06:06 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3] mm/migrate_device: Try to handle swapcache pages
+Content-Language: en-US
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Alistair Popple <apopple@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        "Huang, Ying" <ying.huang@intel.com>
+References: <20230606050149.25699-1-mpenttil@redhat.com>
+ <ZICPx7RU0Qzh5zQY@infradead.org>
+From:   =?UTF-8?Q?Mika_Penttil=c3=a4?= <mpenttil@redhat.com>
+In-Reply-To: <ZICPx7RU0Qzh5zQY@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.119.185.127]
-X-ClientProxiedBy: EX19D038UWB003.ant.amazon.com (10.13.139.157) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Howells <dhowells@redhat.com>
-Date: Wed,  7 Jun 2023 15:05:54 +0100
-> Allow splice to undo the effects of MSG_MORE after prematurely ending a
-> splice/sendfile due to getting an EOF condition (->splice_read() returned
-> 0) after splice had called sendmsg() with MSG_MORE set when the user didn't
-> set MSG_MORE.
+
+
+On 7.6.2023 17.10, Christoph Hellwig wrote:
+> On Tue, Jun 06, 2023 at 08:01:49AM +0300, mpenttil@redhat.com wrote:
+>> From: Mika Penttilä <mpenttil@redhat.com>
+>>
+>> Migrating file pages and swapcache pages into device memory is not supported.
+>> The decision is done based on page_mapping(). For now, swapcache pages are not migrated.
 > 
-> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-> Link: https://lore.kernel.org/r/CAHk-=wh=V579PDYvkpnTobCLGczbgxpMgGmmhqiTyE34Cpi5Gg@mail.gmail.com/
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> cc: Tom Herbert <tom@herbertland.com>
-> cc: Tom Herbert <tom@quantonium.net>
-> cc: Cong Wang <cong.wang@bytedance.com>
-> cc: Jakub Kicinski <kuba@kernel.org>
-> cc: Eric Dumazet <edumazet@google.com>
-> cc: "David S. Miller" <davem@davemloft.net>
-> cc: Paolo Abeni <pabeni@redhat.com>
-> cc: Jens Axboe <axboe@kernel.dk>
-> cc: Matthew Wilcox <willy@infradead.org>
-> cc: netdev@vger.kernel.org
-> ---
->  net/kcm/kcmsock.c | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
-> 
-> diff --git a/net/kcm/kcmsock.c b/net/kcm/kcmsock.c
-> index ba22af16b96d..d0d8c54562d6 100644
-> --- a/net/kcm/kcmsock.c
-> +++ b/net/kcm/kcmsock.c
-> @@ -968,6 +968,19 @@ static int kcm_sendmsg(struct socket *sock, struct msghdr *msg, size_t len)
->  	return err;
->  }
->  
-> +static void kcm_splice_eof(struct socket *sock)
-> +{
-> +	struct sock *sk = sock->sk;
-> +	struct kcm_sock *kcm = kcm_sk(sk);
-> +
-> +	if (skb_queue_empty(&sk->sk_write_queue))
+> Please fix the commit log formatting, it should not exceed 7 lines.
 
-nit: would be better to use skb_queue_empty_lockless().
+Not sure what you mean should not exceed 7 lines..?
 
-
-> +		return;
-> +
-> +	lock_sock(sk);
-> +	kcm_write_msgs(kcm);
-> +	release_sock(sk);
-> +}
-> +
->  static ssize_t kcm_sendpage(struct socket *sock, struct page *page,
->  			    int offset, size_t size, int flags)
->  
-> @@ -1773,6 +1786,7 @@ static const struct proto_ops kcm_dgram_ops = {
->  	.sendmsg =	kcm_sendmsg,
->  	.recvmsg =	kcm_recvmsg,
->  	.mmap =		sock_no_mmap,
-> +	.splice_eof =	kcm_splice_eof,
->  	.sendpage =	kcm_sendpage,
->  };
->  
-> @@ -1794,6 +1808,7 @@ static const struct proto_ops kcm_seqpacket_ops = {
->  	.sendmsg =	kcm_sendmsg,
->  	.recvmsg =	kcm_recvmsg,
->  	.mmap =		sock_no_mmap,
-> +	.splice_eof =	kcm_splice_eof,
->  	.sendpage =	kcm_sendpage,
->  	.splice_read =	kcm_splice_read,
->  };
