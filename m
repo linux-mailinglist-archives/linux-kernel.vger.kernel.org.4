@@ -2,68 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA545726D07
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 22:38:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCDA1726D0A
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 22:38:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234251AbjFGUic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 16:38:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37892 "EHLO
+        id S234201AbjFGUif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 16:38:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234250AbjFGUi0 (ORCPT
+        with ESMTP id S234260AbjFGUi1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 16:38:26 -0400
-Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D1951706;
-        Wed,  7 Jun 2023 13:38:06 -0700 (PDT)
-Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-77ac30e95caso72989339f.2;
-        Wed, 07 Jun 2023 13:38:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686170247; x=1688762247;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+zgUfZbj8UgwFs6zorpXckRZL+p/Z8v5AChyDByc05I=;
-        b=dOKG64yR48vpx9BAa3+Ssnlqgi8R96GRo5f46JFafWEQsAKX25eLZFwX2NvYZQSYHu
-         LAZkoeR+2wyqSPdaODJl8Chk027ob3z4/xT6X9iRdJeSd7z4rNw2heuPwlF8c0mSKFrx
-         5D7O6kKKzzuuvqNYPAI3H9QYru4d4Oku2XAVHlCC1TjRIDlVb2DpH2bDIGc8lhLvmHu6
-         YcmKfCqvpyR380F6xcetaVVZtJq1+h2Z5N1u13parVKmXpeP8PDBXu69K0y0x0Ws5QOP
-         U2e0mA2i4S/Y54MWxq26OfImcx73ZzSiHy+XuZTatHLe+VNjkap3zEcqEq5t4/VAI+KH
-         5wwA==
-X-Gm-Message-State: AC+VfDx+By+NYP6ql/osi86Y2+Q0UFTBtjzKa0uaDicTqMiKZZDNLip4
-        vUOVkX07Bkxd7V+PpDZ3mw==
-X-Google-Smtp-Source: ACHHUZ4Gh0jUQjI7Mx3OVJyPWIKhQiVbqlhuwxeWKu1Od7VcNnyvF5RraLcM3DWUt/PYxm6w3oVW+g==
-X-Received: by 2002:a6b:dd13:0:b0:76c:898c:9b10 with SMTP id f19-20020a6bdd13000000b0076c898c9b10mr8694413ioc.0.1686170246861;
-        Wed, 07 Jun 2023 13:37:26 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id w7-20020a02cf87000000b00420c5d10c38sm611082jar.74.2023.06.07.13.37.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 13:37:25 -0700 (PDT)
-Received: (nullmailer pid 3979185 invoked by uid 1000);
-        Wed, 07 Jun 2023 20:37:23 -0000
-Date:   Wed, 7 Jun 2023 14:37:23 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>
-Cc:     khilman@baylibre.com, jian.hu@amlogic.com,
-        krzysztof.kozlowski+dt@linaro.org, sboyd@kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        martin.blumenstingl@googlemail.com, jbrunet@baylibre.com,
-        linux-clk@vger.kernel.org, robh+dt@kernel.org,
-        neil.armstrong@linaro.org, kernel@sberdevices.ru,
-        devicetree@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        rockosov@gmail.com, mturquette@baylibre.com
-Subject: Re: [PATCH v16 5/6] dt-bindings: clock: meson: add A1 Peripherals
- clock controller bindings
-Message-ID: <168617024273.3979125.14701905013273806999.robh@kernel.org>
-References: <20230523135351.19133-1-ddrokosov@sberdevices.ru>
- <20230523135351.19133-6-ddrokosov@sberdevices.ru>
+        Wed, 7 Jun 2023 16:38:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8008F26BB;
+        Wed,  7 Jun 2023 13:38:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 60C0B645B9;
+        Wed,  7 Jun 2023 20:38:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C530DC4339C;
+        Wed,  7 Jun 2023 20:38:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686170287;
+        bh=rPUHEPERLm0DXG4pXZwSjeSGww4CDsRDvqeL184e0ZI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=RwPiP0ZqgMhbmO69KJMWKgjyDmw2DU+Uq2Q+wsJ6Ykw6Iz9jKpPLGiP3PtocJpEzk
+         2CVKCmg4yT/KV6j4mPpeqQ23pJX4t5g0IkDUFpHdc4i1cV1pmGSKQFB66jnXtL8JKO
+         OM7gV87EK/USNmftlnhvilSKzUYjImtHxRXUeqLzMxa8R9GJKTCtJLRqF7Y7bC8zBh
+         DyA12yt13ok4+AX2LQ1uRQPbTTBv7DlsQvU6ValAs4WzvW2hZ9ttvURzadLgLxRv4S
+         S+MHRjWomI2NgIqke51H4XpJUh8it8RmcI3ild6mST+lr74KeC0Sj6RMUc7L8985s2
+         CJyy9k+p5Ymbw==
+Date:   Wed, 7 Jun 2023 13:38:05 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Haiyang Zhang <haiyangz@microsoft.com>
+Cc:     linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        decui@microsoft.com, kys@microsoft.com, paulros@microsoft.com,
+        olaf@aepfle.de, vkuznets@redhat.com, davem@davemloft.net,
+        wei.liu@kernel.org, edumazet@google.com, pabeni@redhat.com,
+        leon@kernel.org, longli@microsoft.com, ssengar@linux.microsoft.com,
+        linux-rdma@vger.kernel.org, daniel@iogearbox.net,
+        john.fastabend@gmail.com, bpf@vger.kernel.org, ast@kernel.org,
+        sharmaajay@microsoft.com, hawk@kernel.org, tglx@linutronix.de,
+        shradhagupta@linux.microsoft.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next,V2] net: mana: Add support for vlan tagging
+Message-ID: <20230607133805.58161672@kernel.org>
+In-Reply-To: <1686170042-10610-1-git-send-email-haiyangz@microsoft.com>
+References: <1686170042-10610-1-git-send-email-haiyangz@microsoft.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230523135351.19133-6-ddrokosov@sberdevices.ru>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,23 +61,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Tue, 23 May 2023 16:53:50 +0300, Dmitry Rokosov wrote:
-> Add documentation and dt bindings for the Amlogic A1 Peripherals clock
-> controller.
-> A1 PLL clock controller has references to A1 Peripherals clock
-> controller objects, so reflect them in the schema.
+On Wed,  7 Jun 2023 13:34:02 -0700 Haiyang Zhang wrote:
+> To support vlan, use MANA_LONG_PKT_FMT if vlan tag is present in TX
+> skb. Then extract the vlan tag from the skb struct, and save it to
+> tx_oob for the NIC to transmit. For vlan tags on the payload, they
+> are accepted by the NIC too.
 > 
-> Signed-off-by: Jian Hu <jian.hu@amlogic.com>
-> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> For RX, extract the vlan tag from CQE and put it into skb.
+> 
+> Signed-off-by: Haiyang Zhang <haiyangz@microsoft.com>
 > ---
->  .../clock/amlogic,a1-peripherals-clkc.yaml    |  73 +++++++++++
->  .../bindings/clock/amlogic,a1-pll-clkc.yaml   |   5 +-
->  .../clock/amlogic,a1-peripherals-clkc.h       | 115 ++++++++++++++++++
->  3 files changed, 191 insertions(+), 2 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/clock/amlogic,a1-peripherals-clkc.yaml
->  create mode 100644 include/dt-bindings/clock/amlogic,a1-peripherals-clkc.h
-> 
+> V2:
+> Removed the code that extracts inband tag, because our NIC accepts
+> inband tags too.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Please don't rush multiple versions, if your previous version is buggy
+you have to reply to it saying so and then wait before posting v2.
 
+Reviewing something just to find there is a v2 already posting is one
+of the more annoying experiences for maintainers and reviewers.
+
+Quoting documentation:
+
+  Resending after review
+  ~~~~~~~~~~~~~~~~~~~~~~
+  
+  Allow at least 24 hours to pass between postings. This will ensure reviewers
+  from all geographical locations have a chance to chime in. Do not wait
+  too long (weeks) between postings either as it will make it harder for reviewers
+  to recall all the context.
+  
+  Make sure you address all the feedback in your new posting. Do not post a new
+  version of the code if the discussion about the previous version is still
+  ongoing, unless directly instructed by a reviewer.
+  
+See: https://www.kernel.org/doc/html/next/process/maintainer-netdev.html#resending-after-review
