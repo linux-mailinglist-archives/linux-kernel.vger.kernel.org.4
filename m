@@ -2,194 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E687872661C
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 18:38:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 857FF726621
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 18:40:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229618AbjFGQiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 12:38:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58444 "EHLO
+        id S229669AbjFGQj6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 12:39:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjFGQiK (ORCPT
+        with ESMTP id S230219AbjFGQj5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 12:38:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A64A71FC0;
-        Wed,  7 Jun 2023 09:38:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 41B1763851;
-        Wed,  7 Jun 2023 16:38:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 381ACC433D2;
-        Wed,  7 Jun 2023 16:38:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686155887;
-        bh=Hfb9wB8iH5FYS1FqztE9NGFHXudeNhyrtq27e2tHhA8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=A+ZhSpUt7RKWlwwIsoSu4yB2e/DEOpHfrvszOnJKYXpSqly6BBdjnJvAse/6/W6tf
-         baxED2alLIt2DEXNFjXDZbHDZJmfalm3bfAPyZcqSqNNqbeMB4J88jF28UoQ70OeKS
-         tDLO/5iRvn4fjhQzULnZCqpdiItysoNSdll9NguETAEafVZJQV3Xr4430hX34IXxoq
-         EnBRSQhpYj+V+gfm4wfrXc/Wz1k0h+XtBEUpnPNe+WrL0HGK+3XgxvXvMjbtqvjjJZ
-         v5+r+lXXxO5D/uAZZER7kFgSvDJf3ZQjAYiDl4ZphKaeDah+ntzT0AK4VVGxmsv/Ls
-         /1SUFFRIyt1IA==
-Date:   Wed, 7 Jun 2023 09:38:05 -0700
-From:   Eduardo Valentin <evalenti@kernel.org>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Eduardo Valentin <evalenti@kernel.org>, eduval@amazon.com,
-        rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Subject: Re: [PATCH 1/1] thermal: sysfs: avoid actual readings from sysfs
-Message-ID: <ZICybSuZELhR1Ni5@uf8f119305bce5e.ant.amazon.com>
-References: <20230607003721.834038-1-evalenti@kernel.org>
- <f26ac9a9-60af-a0fe-fccc-25bcd306f5a1@linaro.org>
+        Wed, 7 Jun 2023 12:39:57 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1627B1BFE
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 09:39:56 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1b0201d9a9eso6447595ad.0
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 09:39:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686155995; x=1688747995;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=haXOY3QmS0fTsttw/m0QvphvkCV0nGYqGozTlwd/PLA=;
+        b=orm4BQQMfYCElS2J0K9B44CwqHOVtqq1UBdOIxiBGWU9Bv/G0xFghgAQ9ctWK68eTo
+         GPf2TzN7C2H7Ia2L/Onx3ppykoBtnpejiks57TqHoXrkvvOM+SLhrsZqGPD37lYmr01j
+         QdXpWfEM4eWE3RwiQzvKB1SL8t84Rkm8dq2owC7UGWtbcTK8qgr8eu/WnefjGJL/MzJ6
+         5J8AW5SkizWArXgvhTTkO7oTZc8umAjZeA04yNmNWjuDjHqm4nqM/uiAOQ/iMYiX9rqD
+         fNi4xLdEzXj+Krf8JbfmyXbzDQXzclVBSYeEBYE2FH7GYTxqWm7W3fezRqsTdFDZQ79q
+         HgjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686155995; x=1688747995;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=haXOY3QmS0fTsttw/m0QvphvkCV0nGYqGozTlwd/PLA=;
+        b=jrqn/ZxeVbswGjyX5eiitJ1GcecIJupK5uA3ApKKZ+AP5ikIu/zQi5wHQ35wSlvfCo
+         IDhfIduHFYNn1A819PIhBhbUY7oowzj8sEA3fJqQ3UravQcbjn5GwL7ipUILmiKjddNX
+         iKALWq/5KKLBoYyttcclMOzZNDECTuHcRtna7yrX3/Qe0TaDqW3Q64sol97A46seqvNz
+         fG6nmdsl48kIEaBICIzxIYCy5Azp02DdFA6z4i9z4iErdY2PTQ/iq4+pKKG0H2/595SG
+         xuuCKqBodo0hO5dH9kGz47WTxFmMDTn6uBqRbeSCZKlHJgyNzs+fBl+WR0mCTtSdu4Wo
+         dglQ==
+X-Gm-Message-State: AC+VfDxhvML5KJBjw15gPPjGkd8XTMo+2tW8b2F2V0GAwJeJF7Po52zj
+        AMtmOCkWGJqNzRKdKZAvc1q+Zpk/9EDwsHBLVEY=
+X-Google-Smtp-Source: ACHHUZ5ZajRbcgvECTPIMkPVc+zO5SV97dXF0sN2J3j3b0jxb1yHOOEGLewn0/yqz5ZJD/OkPXfUSJQqHx+5MBndtvo=
+X-Received: by 2002:a17:902:b18e:b0:1b0:7cc:982a with SMTP id
+ s14-20020a170902b18e00b001b007cc982amr6156551plr.5.1686155995416; Wed, 07 Jun
+ 2023 09:39:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f26ac9a9-60af-a0fe-fccc-25bcd306f5a1@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230602230552.350731-1-peterx@redhat.com> <ZICK3uqTeUxeIlc9@x1n>
+ <97b5657d-e09d-b3a9-c09d-eaff9fb7929d@redhat.com> <ZICukdhrxcaA74Pp@x1n>
+In-Reply-To: <ZICukdhrxcaA74Pp@x1n>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Wed, 7 Jun 2023 09:39:44 -0700
+Message-ID: <CAHbLzkoiSW3jOhFdEU5w567SyxhB05dBfTrJvKg4X59nPURz3Q@mail.gmail.com>
+Subject: Re: [PATCH 0/4] mm: Fix pmd_trans_unstable() call sites on retry
+To:     Peter Xu <peterx@redhat.com>
+Cc:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Alistair Popple <apopple@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Hugh Dickins <hughd@google.com>,
+        Mike Rapoport <rppt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Daniel,
+On Wed, Jun 7, 2023 at 9:21=E2=80=AFAM Peter Xu <peterx@redhat.com> wrote:
+>
+> On Wed, Jun 07, 2023 at 05:45:28PM +0200, David Hildenbrand wrote:
+> > On 07.06.23 15:49, Peter Xu wrote:
+> > > On Fri, Jun 02, 2023 at 07:05:48PM -0400, Peter Xu wrote:
+> > > > Please have a look, thanks.
+> > >
+> > > Hello, all,
+> > >
+> > > This one seems to have more or less conflict with Hugh's rework on pm=
+d
+> > > collapse.  Please hold off review or merging until I prepare another =
+one
+> > > (probably based on Hugh's, after I have a closer read).
+> > >
+> > > Sorry for the noise.
+> > >
+> >
+> > [did not have time to look yet]
+> >
+> > Are there any fixes buried in there that we'd like to have in earlier? =
+I
+> > skimmed over the patches and all read like "cleanup" + "consistency",
+> > correct?
+>
+> There are bug fixes when unluckily hitting unstable pmd I think, these on=
+es
+> worth mentioning:
+>
+>   - pagemap can be broken, causing read to be shifted over to the next
+>     (wrong data read)
 
-Thanks for taking the time to read the patch.
+Yes, it may corrupt the pagemap data. But anyway it seems like nobody
+was busted by this one as you said.
 
-On Wed, Jun 07, 2023 at 11:24:21AM +0200, Daniel Lezcano wrote:
-> 
-> 
-> 
-> Hi Eduardo,
-> 
-> On 07/06/2023 02:37, Eduardo Valentin wrote:
-> > From: Eduardo Valentin <eduval@amazon.com>
-> > 
-> > As the thermal zone caches the current and last temperature
-> > value, the sysfs interface can use that instead of
-> > forcing an actual update or read from the device.
-> 
-> If the read fails, userspace can handle that by using the previous
-> value. Do we really want to hide driver dysfunctions?
+>
+>   - memcg wrong accounting, e.g., moving one task from memcg1 to memcg2, =
+we
+>     can skip an unstable pmd while it could quickly contain something tha=
+t
+>     can belong to memcg1, I think.  This one needs some eyes from memcg
+>     developers.
 
-Good point.
+I don't think this is an important thing. There are plenty of other
+conditions that could make the accounting inaccurate, for example,
+isolating page from LRU fails, force charge, etc. And it seems like
+nobody was bothered by this either.
 
-In fact I thought of this exact problem. I sent only this patch,
-but it has more changes to come.
-
-The next changes will replicate the current design of
-storing last_temperature in the thermal zone to also store
-the last return value, success or error, on the thermal zone
-too so that we can use here at the front end to report back
-to userspace when the reads are failing.
-
-But yes, you are right, we do not want to keep reporting
-a successful read when the thermal zone thread has been
-failing to update the value, that needs to be reported
-up back to userspace.
-
-> 
-> > This way, if multiple userspace requests are coming
-> > in, we avoid storming the device with multiple reads
-> > and potentially clogging the timing requirement
-> > for the governors.
-> 
-> 
-> Can you elaborate 'the timing requirement for the governors' ? I'm
-> missing the point
-
-
-The point is to avoid contention on the device update path.
-Governor that use differential equations on temperature over time
-will be very time sensitive. Step wise, power allocator, or any
-PID will be very sensitive to time. So, If userspace is hitting
-this API too often we can see cases where the updates needed to
-service userspace may defer/delay the execution of the governor
-logic.
-
-Despite that, there is really no point to have more updates than
-what was configured for the thermal zone to support. Say that
-we configure a thermal zone to update itself every 500ms, yet
-userspace keeps sending reads every 100ms, we do not need necessarily
-to do a trip to the device every single time to update the temperature,
-as per the design for the thermal zone.
-
-> 
-> > Cc: "Rafael J. Wysocki" <rafael@kernel.org> (supporter:THERMAL)
-> > Cc: Daniel Lezcano <daniel.lezcano@linaro.org> (supporter:THERMAL)
-> > Cc: Amit Kucheria <amitk@kernel.org> (reviewer:THERMAL)
-> > Cc: Zhang Rui <rui.zhang@intel.com> (reviewer:THERMAL)
-> > Cc: linux-pm@vger.kernel.org (open list:THERMAL)
-> > Cc: linux-kernel@vger.kernel.org (open list)
-> > 
-> > Signed-off-by: Eduardo Valentin <eduval@amazon.com>
-> > ---
-> >   drivers/thermal/thermal_sysfs.c | 21 ++++++++++++++++-----
-> >   1 file changed, 16 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
-> > index b6daea2398da..a240c58d9e08 100644
-> > --- a/drivers/thermal/thermal_sysfs.c
-> > +++ b/drivers/thermal/thermal_sysfs.c
-> > @@ -35,12 +35,23 @@ static ssize_t
-> >   temp_show(struct device *dev, struct device_attribute *attr, char *buf)
-> >   {
-> >       struct thermal_zone_device *tz = to_thermal_zone(dev);
-> > -     int temperature, ret;
-> > -
-> > -     ret = thermal_zone_get_temp(tz, &temperature);
-> > +     int temperature;
-> > 
-> > -     if (ret)
-> > -             return ret;
-> > +     /*
-> > +      * don't force new update from external reads
-> > +      * This way we avoid messing up with time constraints.
-> > +      */
-> > +     if (tz->mode == THERMAL_DEVICE_DISABLED) {
-> > +             int r;
-> > +
-> > +             r = thermal_zone_get_temp(tz, &temperature); /* holds tz->lock*/
-> > +             if (r)
-> > +                     return r;
-> > +     } else {
-> > +             mutex_lock(&tz->lock);
-> > +             temperature = tz->temperature;
-> > +             mutex_unlock(&tz->lock);
-> > +     }
-> 
-> No please, we are pushing since several weeks a lot of changes to
-> encapsulate the thermal zone device structure and prevent external core
-> components to use the internals directly. Even if we can consider the
-> thermal_sysfs as part of the core code, that changes is not sysfs related.
-
-Can you clarify your concern, is it the direct access ? The lock ? 
-what is the concern?
-
-What is your suggestion here? Do you want me to write a helper
-function that gets tz->temperature without doing a ops->get_temp()?
-
-
-Let me know.
-
-> 
-> >       return sprintf(buf, "%d\n", temperature);
-> >   }
-> 
+>
+> I don't rush on having them because these are all theoretical and no bug
+> report I saw, no reproducer I wrote, only observed by my eyes.
+>
+> At least the pagemap issue should have been there for 10+ years without
+> being noticed even if rightfully spot this time.  Meanwhile this seems to
+> have conflict with Hugh's series which should have been posted earlier - =
+I
+> still need to check on how that will affect this series, but not yet.
+>
+> Said that, let me know if any of you hit any (potential) issue with above
+> or think that we should to move this in earlier.
+>
+> Thanks,
+>
 > --
-> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-> 
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
-> 
-
--- 
-All the best,
-Eduardo Valentin
+> Peter Xu
+>
+>
