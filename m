@@ -2,55 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F61772698D
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 21:14:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51751726995
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 21:17:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231866AbjFGTOX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 15:14:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41476 "EHLO
+        id S233056AbjFGTRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 15:17:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbjFGTOV (ORCPT
+        with ESMTP id S232462AbjFGTRX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 15:14:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97C5619D;
-        Wed,  7 Jun 2023 12:14:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2014164300;
-        Wed,  7 Jun 2023 19:14:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FB3BC433EF;
-        Wed,  7 Jun 2023 19:14:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1686165258;
-        bh=KfdYqS6DANNlBbav36OC1ZuYxEdBQAwyhbCKCDoNG5E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KnaFzIB+OqwZqu04p9+yaoxSSTokPr4R8WRtxmxDHOIAS9CMFBAgHmbzd2gg7bJQT
-         QC+rpNeU9wiyN3i0UZ5C2vJfS4Ce/dOaYtzMmPfl+1gqjKxPEe9Hmf9XOjDtcL0Mmq
-         0K11BlisoHeAmhH8uBos/mtUdEi5P/1w14J39gv0=
-Date:   Wed, 7 Jun 2023 21:14:15 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Maxime Ripard <mripard@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND 1/2] drivers: base: Add basic devm tests for root
- devices
-Message-ID: <2023060731-handwash-manager-9861@gregkh>
-References: <20230329-kunit-devm-inconsistencies-test-v1-0-015b1574d673@kernel.org>
- <20230329-kunit-devm-inconsistencies-test-v1-1-015b1574d673@kernel.org>
- <2023060339-unvaried-keenness-c14a@gregkh>
- <ngable7tvu3bpbxm4gjkposta73coii5f3w5myghqfysarrcvz@mdnczc33ixjc>
+        Wed, 7 Jun 2023 15:17:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 123C91BF8
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 12:16:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686165403;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cZNWBgFagXc/NX64lSZGo0BDhqymiWiaab1rV7vOvEQ=;
+        b=gwY+jmP1jUnlPFkTMg0vHw0WYiBVJhBldJCRko2elJA9qsrwAp9BMmeRcsmmFcZtNZ8Q2S
+        F3hLGiTiutJ1PZ25QMG2jRcH3+zPmc+zv5dp5DRkolxVCnstn3zeZCdzOFXgQ0kzJl3e4e
+        FqC/vlbXz8Q8pWNVbKcwdz9RJnKQN8E=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-323-2EuyWYTrNDys2-0u1CjtBQ-1; Wed, 07 Jun 2023 15:16:41 -0400
+X-MC-Unique: 2EuyWYTrNDys2-0u1CjtBQ-1
+Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-97888ed1982so85819266b.0
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 12:16:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686165400; x=1688757400;
+        h=in-reply-to:from:content-language:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=cZNWBgFagXc/NX64lSZGo0BDhqymiWiaab1rV7vOvEQ=;
+        b=fYon9xbsSqbk4pVBaQrxWbRlFFgZwYUgl988cbnkryxsEpAFz+oXGy9YcTcSwpWz2r
+         tqs/MafArKaEBuJgJUKAkEbmOt8+yDLkOC3CJ/3MgjgpWrIOEZtj8bDnWy/R85r+80hN
+         4w0rbmTKpeoE1szC0hwuaYTj4GQMdMfzowdwfEUbskur6wFZeLkYW/UAqiCGzQI1//mv
+         OCJn9WsrrJNVXCAJViR4oGlSLwGcw4G6MhiUWgBbYmMWh1MnHLsIzjXowN3LeQhGnT65
+         6h/2jMFAxV7hM3yZwczVNKeiiHaK39wt3umCpUDN9dGECyCCVAYGYjAibmS6Gw1Lh67c
+         tCoQ==
+X-Gm-Message-State: AC+VfDxLdE7iK3uI21hPOpxpIxbcYMbv/NIGUDpmobQH3RRiAkFNjTIu
+        TIOfbm9Z1qVyXJfVsfz2sPoMYf2xrg7JJ9Yh4XvVTK/xMRnoaxCbnBlhaIYV1CG70KFt18xJ2qh
+        KX3CY5UHp/xtvP4iztcRyOW1W
+X-Received: by 2002:a17:907:7e9f:b0:978:6e73:e833 with SMTP id qb31-20020a1709077e9f00b009786e73e833mr7227273ejc.45.1686165400475;
+        Wed, 07 Jun 2023 12:16:40 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7TOrdMfH+uDvM1JCqZARTMzGMSeLSS/8e4tAp59DNw1viAJkLxxdYvH0Eb88FUvnG9o30pYg==
+X-Received: by 2002:a17:907:7e9f:b0:978:6e73:e833 with SMTP id qb31-20020a1709077e9f00b009786e73e833mr7227254ejc.45.1686165400121;
+        Wed, 07 Jun 2023 12:16:40 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id y11-20020a17090668cb00b00977eb9957e9sm3523793ejr.128.2023.06.07.12.16.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Jun 2023 12:16:39 -0700 (PDT)
+Content-Type: multipart/mixed; boundary="------------vgbUXUgh5jkimy1I05UYkAvz"
+Message-ID: <457e2a4a-e28a-cd24-c129-4ff6162ccc36@redhat.com>
+Date:   Wed, 7 Jun 2023 21:16:38 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ngable7tvu3bpbxm4gjkposta73coii5f3w5myghqfysarrcvz@mdnczc33ixjc>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] platform/x86: dell-laptop: Add drm module soft dependency
+To:     Matthew Garrett <mjg59@srcf.ucam.org>,
+        AceLan Kao <acelan.kao@canonical.com>
+Cc:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        Mark Gross <markgross@kernel.org>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
+References: <20230607034331.576623-1-acelan.kao@canonical.com>
+ <20230607042032.GA28835@srcf.ucam.org>
+ <CAFv23QmDNUFcPwvSQt5aUxtmHasfr8wrF72ObvcO-X19gfn=LA@mail.gmail.com>
+ <20230607052724.GA29834@srcf.ucam.org>
+ <CAFv23QkEdGnEz1q7vbyFCa9S9Dqh-zec72nRGyZ3wAz-8wpbvA@mail.gmail.com>
+ <20230607062341.GA30618@srcf.ucam.org> <20230607065604.yaivqbbd3dkawxo4@pali>
+ <CAFv23Q==r4newMXE3OWavRSRt-bEi5-qR0Vo-5HGLw4r9J36MA@mail.gmail.com>
+ <20230607074732.GA31666@srcf.ucam.org>
+Content-Language: en-US, nl
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230607074732.GA31666@srcf.ucam.org>
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,291 +89,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 04, 2023 at 10:31:42AM +0200, Maxime Ripard wrote:
-> Hi,
+This is a multi-part message in MIME format.
+--------------vgbUXUgh5jkimy1I05UYkAvz
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+Hi,
+
+On 6/7/23 09:47, Matthew Garrett wrote:
+> On Wed, Jun 07, 2023 at 03:39:33PM +0800, AceLan Kao wrote:
 > 
-> On Sat, Jun 03, 2023 at 04:43:51PM +0200, Greg Kroah-Hartman wrote:
-> > On Fri, Jun 02, 2023 at 05:20:43PM +0200, Maxime Ripard wrote:
-> > > From: Maxime Ripard <maxime@cerno.tech>
-> > > 
-> > > The root devices show some odd behaviours compared to regular "bus" devices
-> > > that have been probed through the usual mechanism, so let's create kunit
-> > > tests to exercise those paths and odd cases.
-> > > 
-> > > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-> > > ---
-> > >  drivers/base/test/.kunitconfig       |   2 +
-> > >  drivers/base/test/Kconfig            |   4 ++
-> > >  drivers/base/test/Makefile           |   2 +
-> > >  drivers/base/test/root-device-test.c | 120 +++++++++++++++++++++++++++++++++++
-> > >  4 files changed, 128 insertions(+)
-> > > 
-> > > diff --git a/drivers/base/test/.kunitconfig b/drivers/base/test/.kunitconfig
-> > > new file mode 100644
-> > > index 000000000000..473923f0998b
-> > > --- /dev/null
-> > > +++ b/drivers/base/test/.kunitconfig
-> > > @@ -0,0 +1,2 @@
-> > > +CONFIG_KUNIT=y
-> > > +CONFIG_DM_KUNIT_TEST=y
-> > > diff --git a/drivers/base/test/Kconfig b/drivers/base/test/Kconfig
-> > > index 610a1ba7a467..9d42051f8f8e 100644
-> > > --- a/drivers/base/test/Kconfig
-> > > +++ b/drivers/base/test/Kconfig
-> > > @@ -9,6 +9,10 @@ config TEST_ASYNC_DRIVER_PROBE
-> > >  
-> > >  	  If unsure say N.
-> > >  
-> > > +config DM_KUNIT_TEST
-> > > +	tristate "KUnit Tests for the device model" if !KUNIT_ALL_TESTS
-> > > +	depends on KUNIT
-> > > +
-> > >  config DRIVER_PE_KUNIT_TEST
-> > >  	bool "KUnit Tests for property entry API" if !KUNIT_ALL_TESTS
-> > >  	depends on KUNIT=y
-> > > diff --git a/drivers/base/test/Makefile b/drivers/base/test/Makefile
-> > > index 7f76fee6f989..d589ca3fa8fc 100644
-> > > --- a/drivers/base/test/Makefile
-> > > +++ b/drivers/base/test/Makefile
-> > > @@ -1,5 +1,7 @@
-> > >  # SPDX-License-Identifier: GPL-2.0
-> > >  obj-$(CONFIG_TEST_ASYNC_DRIVER_PROBE)	+= test_async_driver_probe.o
-> > >  
-> > > +obj-$(CONFIG_DM_KUNIT_TEST)	+= root-device-test.o
-> > > +
-> > >  obj-$(CONFIG_DRIVER_PE_KUNIT_TEST) += property-entry-test.o
-> > >  CFLAGS_property-entry-test.o += $(DISABLE_STRUCTLEAK_PLUGIN)
-> > > diff --git a/drivers/base/test/root-device-test.c b/drivers/base/test/root-device-test.c
-> > > new file mode 100644
-> > > index 000000000000..fcb55d8882aa
-> > > --- /dev/null
-> > > +++ b/drivers/base/test/root-device-test.c
-> > > @@ -0,0 +1,120 @@
-> > > +// SPDX-License-Identifier: GPL-2.0
-> > > +// Copyright 2023 Maxime Ripard <mripard@kernel.org>
-> > > +
-> > > +#include <kunit/resource.h>
-> > > +
-> > > +#include <linux/device.h>
-> > > +
-> > > +#define DEVICE_NAME "test"
-> > > +
-> > > +struct test_priv {
-> > > +	bool probe_done;
-> > > +	bool release_done;
-> > > +	wait_queue_head_t release_wq;
-> > > +	struct device *dev;
-> > > +};
-> > > +
-> > > +static void devm_device_action(void *ptr)
-> > > +{
-> > > +	struct test_priv *priv = ptr;
-> > > +
-> > > +	priv->release_done = true;
-> > > +	wake_up_interruptible(&priv->release_wq);
-> > > +}
-> > > +
-> > > +static void devm_put_device_action(void *ptr)
-> > > +{
-> > > +	struct test_priv *priv = ptr;
-> > > +
-> > > +	put_device(priv->dev);
-> > > +	priv->release_done = true;
-> > > +	wake_up_interruptible(&priv->release_wq);
-> > > +}
-> > > +
-> > > +#define RELEASE_TIMEOUT_MS	500
-> > > +
-> > > +static void root_device_devm_register_unregister_test(struct kunit *test)
-> > > +{
-> > > +	struct test_priv *priv;
-> > > +	int ret;
-> > > +
-> > > +	priv = kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
-> > > +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv);
-> > > +	init_waitqueue_head(&priv->release_wq);
-> > > +
-> > > +	priv->dev = root_device_register(DEVICE_NAME);
-> > > +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv->dev);
-> > > +
-> > > +	ret = devm_add_action_or_reset(priv->dev, devm_device_action, priv);
-> > > +	KUNIT_ASSERT_EQ(test, ret, 0);
-> > > +
-> > > +	root_device_unregister(priv->dev);
-> > > +
-> > > +	ret = wait_event_interruptible_timeout(priv->release_wq, priv->release_done,
-> > > +					       msecs_to_jiffies(RELEASE_TIMEOUT_MS));
-> > > +	KUNIT_EXPECT_GT(test, ret, 0);
-> > > +}
-> > > +
-> > > +static void root_device_devm_register_get_put_unregister_test(struct kunit *test)
-> > > +{
-> > > +	struct test_priv *priv;
-> > > +	int ret;
-> > > +
-> > > +	priv = kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
-> > > +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv);
-> > > +	init_waitqueue_head(&priv->release_wq);
-> > > +
-> > > +	priv->dev = root_device_register(DEVICE_NAME);
-> > > +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv->dev);
-> > > +
-> > > +	get_device(priv->dev);
-> > 
-> > Why are you incrementing the reference here?
-> > 
-> > > +
-> > > +	ret = devm_add_action_or_reset(priv->dev, devm_device_action, priv);
-> > > +	KUNIT_ASSERT_EQ(test, ret, 0);
-> > > +
-> > > +	put_device(priv->dev);
-> > 
-> > And then dropping it here?
-> > 
-> > What did that accomplish?  You shouldn't have needed to do that at all,
-> > right?
-> > 
-> > THat's all the difference from the previous function?  What is this
-> > testing?
-> > 
-> > 
-> > > +
-> > > +	root_device_unregister(priv->dev);
-> > > +
-> > > +	ret = wait_event_interruptible_timeout(priv->release_wq, priv->release_done,
-> > > +					       msecs_to_jiffies(RELEASE_TIMEOUT_MS));
-> > > +	KUNIT_EXPECT_GT(test, ret, 0);
-> > > +}
-> > > +
-> > > +static void root_device_devm_register_get_unregister_with_devm_test(struct kunit *test)
-> > > +{
-> > > +	struct test_priv *priv;
-> > > +	int ret;
-> > > +
-> > > +	priv = kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
-> > > +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv);
-> > > +	init_waitqueue_head(&priv->release_wq);
-> > > +
-> > > +	priv->dev = root_device_register(DEVICE_NAME);
-> > > +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, priv->dev);
-> > > +
-> > > +	get_device(priv->dev);
-> > > +
-> > > +	ret = devm_add_action_or_reset(priv->dev, devm_put_device_action, priv);
-> > > +	KUNIT_ASSERT_EQ(test, ret, 0);
-> > > +
-> > > +	root_device_unregister(priv->dev);
-> > > +
-> > > +	ret = wait_event_interruptible_timeout(priv->release_wq, priv->release_done,
-> > > +					       msecs_to_jiffies(RELEASE_TIMEOUT_MS));
-> > > +	KUNIT_EXPECT_GT(test, ret, 0);
-> > > +}
-> > > +
-> > > +static struct kunit_case root_device_devm_tests[] = {
-> > > +	KUNIT_CASE(root_device_devm_register_unregister_test),
-> > > +	KUNIT_CASE(root_device_devm_register_get_put_unregister_test),
-> > > +	KUNIT_CASE(root_device_devm_register_get_unregister_with_devm_test),
-> > 
-> > I can't figure out what you are trying to test here at all, which
-> > doesn't bode well for this patchset.
-> > 
-> > Can you document it better?  What should be happening (or not happening)
-> > that you are trying to ensure works properly?
-> > 
-> > All I see is a register/devm_something/unregister sequence and then wait
-> > for the device to be freed.  Am I missing something else?
+>> What do you think if we unregister backlight devices if the backlight type
+>> is larger than the current registered one.
+>> Do this check in backlight_device_register() and unregister backlight
+>> devices by the order raw(1) > platform(2) > firmware(3)
+>> And maybe introduce a sticky bit into the backlight device if the backlight
+>> driver doesn't want to be removed.
 > 
-> So I guess most of the context was dropped since I first posted that
-> series (and I believe that the following will also answer the comment on
-> the other patch).
+> Hans looked at doing this, but there were some awkward corner cases. 
+> When we first introduced this functionality, firmware was preferred to 
+> platform was preferred to raw - but on Intel, at least, this behaviour 
+> changed with later versions of Windows. I don't think there's a single 
+> static policy that works, I think you need to pay attention to the hints 
+> the platform gives you. How does Windows know which interface to use on 
+> this platform? The simplest solution may actually just be for 
+> dell-laptop to refuse to register a backlight if the platform claims to 
+> be Windows 8 or later.
 
-You have to have the context in the patch changelog itself, otherwise it
-is useless (remember, some of us review hundreds of patches a week, and
-have the short-term-memory of a squirrel.)
+I like that idea.
 
-> It spawned from the discussion here:
-> https://lore.kernel.org/linux-kselftest/20230324123157.bbwvfq4gsxnlnfwb@houat/
-> 
-> Basically, depending on the bus (platform vs root devices), and whether
-> a driver was bound to the device or not, the device managed actions
-> might or might not run.
+AceLan, I guess that you hit this easy while testing on a (development)
+Meteor Lake platform ?
 
-And is that correct?  I don't remember if we said it was or not.
+I have had other/similar reports about Meteor Lake platforms.
 
-So why test something we don't know if it should be?
+On hw from the last 10 years dell-laptop will not register
+its vendor-type backlight class device because
+acpi_video_get_backlight_type() will return acpi_backlight_video
+there (1) so it does not matter if the GPU driver shows up only
+later (2).
 
-> This lead us in DRM to create helpers that will register a platform
-> device and bind it to a dumb driver so that we can have the proper
-> behaviour (ie, when we free the device, the device managed actions are
-> executed).
-> 
-> We wanted to create generic helpers for kunit to create a new device
-> instance to run a test on, and you were (not surprisingly) not really
-> along with it. We discussed the above fact that the bus and bind-ness of
-> a device was affecting device managed actions, I provided a bunch of
-> kunit tests showing the inconsistencies that led to what we did in DRM,
-> and you offered to fix it if I submitted the tests.
-> 
-> https://lore.kernel.org/linux-kselftest/ZB2a291P5abeah6s@kroah.com/
-> 
-> And so here we are :)
-> 
-> Those tests are not doing much indeed but checking whether a device
-> managed action would run in various scenarii. If you run them, you'll
-> end up with:
+But it seems that on Meteor Lake the ACPI tables will no longer
+contain acpi_video backlight control support which causes
+acpi_video_get_backlight_type() to return acpi_backlight_vendor (2).
+triggering the issue you are seeing.
 
-Then document them please.  You can't have tests that aren't obvious
-what they are actually supposed to be testing, otherwise we have no idea
-if the test is correct or not (or if the code it is testing is correct.)
+Can you give the attached patch a try please ?
 
-> $ ./tools/testing/kunit/kunit.py run --kunitconfig=drivers/base/test/
-> [10:28:39] Configuring KUnit Kernel ...
-> Regenerating .config ...
-> Populating config with:
-> $ make ARCH=um O=.kunit olddefconfig
-> [10:28:40] Building KUnit Kernel ...
-> Populating config with:
-> $ make ARCH=um O=.kunit olddefconfig
-> Building with:
-> $ make ARCH=um O=.kunit --jobs=32
-> [10:28:50] Starting KUnit Kernel (1/1)...
-> [10:28:50] ============================================================
-> [10:28:50] ============== root-device-devm (3 subtests) ===============
-> [10:28:50] [PASSED] root_device_devm_register_unregister_test
-> [10:28:50] [PASSED] root_device_devm_register_get_put_unregister_test
-> [10:28:50] # root_device_devm_register_get_unregister_with_devm_test: EXPECTATION FAILED at drivers/base/test/root-device-test.c:105
-> [10:28:50] Expected ret > 0, but
-> [10:28:50]     ret == 0 (0x0)
-> [10:28:50] [FAILED] root_device_devm_register_get_unregister_with_devm_test
-> [10:28:50] # root-device-devm: pass:2 fail:1 skip:0 total:3
-> [10:28:50] # Totals: pass:2 fail:1 skip:0 total:3
-> [10:28:50] ================ [FAILED] root-device-devm =================
-> [10:28:50] ============ platform-device-devm (6 subtests) =============
-> [10:28:50] [PASSED] platform_device_devm_register_unregister_test
-> [10:28:51] [PASSED] platform_device_devm_register_get_put_unregister_test
-> [10:28:51] # platform_device_devm_register_get_unregister_with_devm_test: EXPECTATION FAILED at drivers/base/test/platform-device-test.c:123
-> [10:28:51] Expected ret > 0, but
-> [10:28:51]     ret == 0 (0x0)
-> [10:28:51] [FAILED] platform_device_devm_register_get_unregister_with_devm_test
-> [10:28:51] [PASSED] probed_platform_device_devm_register_unregister_test
-> [10:28:51] [PASSED] probed_platform_device_devm_register_get_put_unregister_test
-> [10:28:51] [PASSED] probed_platform_device_devm_register_get_unregister_with_devm_test
-> [10:28:51] # platform-device-devm: pass:5 fail:1 skip:0 total:6
-> [10:28:51] # Totals: pass:5 fail:1 skip:0 total:6
-> [10:28:51] ============== [FAILED] platform-device-devm ===============
-> [10:28:51] ============================================================
-> [10:28:51] Testing complete. Ran 9 tests: passed: 7, failed: 2
-> [10:28:51] Elapsed time: 11.701s total, 0.979s configuring, 9.601s building, 1.087s running
-> 
-> So you can see (and test) those inconsistencies: if you're using devm,
-> you need to have a "bus" device bound to a driver. Failing that, devm
-> actions will not run, which we all believed was a bug in that thread
-> above.
+Regards,
 
-So, what is the correct thing to do here?  Fix the driver core?  Don't
-fix the driver core but document it?  Something else?  I don't think it
-is to create an undocumented test :)
+Hans
 
-thanks,
 
-greg k-h
+1) Starting with kernel >= 6.2 acpi_video.c will only register
+the /sys/class/backlight/acpi_video# node after a drm/kms drivers
+asks it to register it.
+
+2) The native GPU driver will tell the drivers/acpi/video_detect.c
+code that native backlight control is available changing
+the return of acpi_video_get_backlight_type() to native, which
+is what loading the native GPU driver first also fixes this issue.
+
+--------------vgbUXUgh5jkimy1I05UYkAvz
+Content-Type: text/x-patch; charset=UTF-8;
+ name="0001-ACPI-video-Stop-trying-to-use-vendor-backlight-contr.patch"
+Content-Disposition: attachment;
+ filename*0="0001-ACPI-video-Stop-trying-to-use-vendor-backlight-contr.pa";
+ filename*1="tch"
+Content-Transfer-Encoding: base64
+
+RnJvbSA1OWY0OGE4ZGViNTI1ZDljNzUxM2UyYzBkZmZjN2YzMGE0MzU2MDMwIE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBIYW5zIGRlIEdvZWRlIDxoZGVnb2VkZUByZWRoYXQu
+Y29tPgpEYXRlOiBXZWQsIDcgSnVuIDIwMjMgMjA6MzM6MTIgKzAyMDAKU3ViamVjdDogW1BB
+VENIXSBBQ1BJOiB2aWRlbzogU3RvcCB0cnlpbmcgdG8gdXNlIHZlbmRvciBiYWNrbGlnaHQg
+Y29udHJvbCBvbgogbGFwdG9wcyBmcm9tIGFmdGVyIH4yMDEyCgpUaGVyZSBoYXZlIGJlZW4g
+MiBzZXBhcmF0ZSByZXBvcnRzIG5vdyBhYm91dCBhIG5vbiB3b3JraW5nCiJkZWxsX2JhY2ts
+aWdodCIgZGV2aWNlIGdldHRpbmcgcmVnaXN0ZXJlZCB1bmRlciAvc3lzL2NsYXNzL2JhY2ts
+aWdodAp3aXRoIE1ldGVvckxha2UgKGRldmVsb3BtZW50KSBwbGF0Zm9ybXMuCgpPbiBodyBm
+cm9tIHRoZSBsYXN0IDEwIHllYXJzIGRlbGwtbGFwdG9wIHdpbGwgbm90IHJlZ2lzdGVyICJk
+ZWxsX2JhY2tsaWdodCIKYmVjYXVzZSBhY3BpX3ZpZGVvX2dldF9iYWNrbGlnaHRfdHlwZSgp
+IHdpbGwgcmV0dXJuIGFjcGlfYmFja2xpZ2h0X3ZpZGVvCnRoZXJlIGlmIGNhbGxlZCBiZWZv
+cmUgdGhlIEdQVS9rbXMgZHJpdmVyIGxvYWRzLiBTbyBpdCBkb2VzIG5vdCBtYXR0ZXIgaWYK
+dGhlIEdQVSBkcml2ZXIncyBuYXRpdmUgYmFja2xpZ2h0IGdldHMgcmVnaXN0ZXJlZCBhZnRl
+ciBkZWxsLWxhcHRvcCBsb2Fkcy4KCkJ1dCBpdCBzZWVtcyB0aGF0IG9uIE1ldGVvciBMYWtl
+IHRoZSBBQ1BJIHRhYmxlcyB3aWxsIG5vIGxvbmdlcgpjb250YWluIGFjcGlfdmlkZW8gYmFj
+a2xpZ2h0IGNvbnRyb2wgc3VwcG9ydCB3aGljaCBjYXVzZXMKYWNwaV92aWRlb19nZXRfYmFj
+a2xpZ2h0X3R5cGUoKSB0byByZXR1cm4gYWNwaV9iYWNrbGlnaHRfdmVuZG9yIGNhdXNpbmcK
+ImRlbGxfYmFja2xpZ2h0IiB0byBnZXQgcmVnaXN0ZXJlZCBpZiB0aGUgZGVsbC1sYXB0b3Ag
+bW9kdWxlIGlzIGxvYWRlZApiZWZvcmUgdGhlIEdQVS9rbXMgZHJpdmVyLgoKVmVuZG9yIHNw
+ZWNpZmljIGJhY2tsaWdodCBjb250cm9sIGxpa2UgdGhlICJkZWxsX2JhY2tsaWdodCIgZGV2
+aWNlIGlzCm9ubHkgbmVjZXNzYXJ5IG9uIHF1aXRlIG9sZCBodyAoZnJvbSBiZWZvcmUgYWNw
+aV92aWRlbyBiYWNrbGlnaHQgY29udHJvbAp3YXMgaW50cm9kdWNlZCkuIFdvcmsgYXJvdW5k
+ICJkZWxsX2JhY2tsaWdodCIgcmVnaXN0ZXJpbmcgb24gdmVyeSBuZXcKaHcgKHdoZXJlIGFj
+cGlfdmlkZW8gYmFja2xpZ2h0IGNvbnRyb2wgc2VlbXMgdG8gYmUgbm8gbW9yZSkgYnkgbWFr
+aW5nCmFjcGlfdmlkZW9fZ2V0X2JhY2tsaWdodF90eXBlKCkgdXNlIGFjcGlfYmFja2xpZ2h0
+X25vbmUgaW5zdGVhZApvZiBhY3BpX2JhY2tsaWdodF92ZW5kb3IgYXMgZmluYWwgZmFsbGJh
+Y2sgd2hlbiB0aGUgQUNQSSB0YWJsZXMgaGF2ZQpzdXBwb3J0IGZvciBXaW5kb3dzIDggb3Ig
+bGF0ZXIgKGxhcHRvcHMgZnJvbSBhZnRlciB+MjAxMikuCgpTdWdnZXN0ZWQtYnk6IE1hdHRo
+ZXcgR2FycmV0dCA8bWpnNTlAc3JjZi51Y2FtLm9yZz4KUmVwb3J0ZWQtYnk6IEFjZUxhbiBL
+YW8gPGFjZWxhbi5rYW9AY2Fub25pY2FsLmNvbT4KQ2xvc2VzOiBodHRwczovL2xvcmUua2Vy
+bmVsLm9yZy9wbGF0Zm9ybS1kcml2ZXIteDg2LzIwMjMwNjA3MDM0MzMxLjU3NjYyMy0xLWFj
+ZWxhbi5rYW9AY2Fub25pY2FsLmNvbS8KU2lnbmVkLW9mZi1ieTogSGFucyBkZSBHb2VkZSA8
+aGRlZ29lZGVAcmVkaGF0LmNvbT4KLS0tCiBkcml2ZXJzL2FjcGkvdmlkZW9fZGV0ZWN0LmMg
+fCAyMSArKysrKysrKysrKysrKysrKysrKysKIDEgZmlsZSBjaGFuZ2VkLCAyMSBpbnNlcnRp
+b25zKCspCgpkaWZmIC0tZ2l0IGEvZHJpdmVycy9hY3BpL3ZpZGVvX2RldGVjdC5jIGIvZHJp
+dmVycy9hY3BpL3ZpZGVvX2RldGVjdC5jCmluZGV4IGI4Nzc4M2M1ODcyZC4uZWIwMTRjMGVi
+YTQyIDEwMDY0NAotLS0gYS9kcml2ZXJzL2FjcGkvdmlkZW9fZGV0ZWN0LmMKKysrIGIvZHJp
+dmVycy9hY3BpL3ZpZGVvX2RldGVjdC5jCkBAIC04NDQsNiArODQ0LDI3IEBAIGVudW0gYWNw
+aV9iYWNrbGlnaHRfdHlwZSBfX2FjcGlfdmlkZW9fZ2V0X2JhY2tsaWdodF90eXBlKGJvb2wg
+bmF0aXZlLCBib29sICphdXRvCiAJaWYgKG5hdGl2ZV9hdmFpbGFibGUpCiAJCXJldHVybiBh
+Y3BpX2JhY2tsaWdodF9uYXRpdmU7CiAKKwkvKgorCSAqIFRoZSB2ZW5kb3Igc3BlY2lmaWMg
+QklPUyBpbnRlcmZhY2VzIGFyZSBvbmx5IG5lY2Vzc2FyeSBmb3IKKwkgKiBsYXB0b3BzIGZy
+b20gYmVmb3JlIH4yMDA4LgorCSAqCisJICogRm9yIGxhcHRvcHMgZnJvbSB+MjAwOCB0aWxs
+IH4yMDIzIHRoaXMgcG9pbnQgaXMgbmV2ZXIgcmVhY2hlZAorCSAqIGJlY2F1c2Ugb24gdGhv
+c2UgKHZpZGVvX2NhcHMgJiBBQ1BJX1ZJREVPX0JBQ0tMSUdIVCkgYWJvdmUgaXMgdHJ1ZS4K
+KwkgKgorCSAqIExhcHRvcHMgZnJvbSBhZnRlciB+MjAyMyBubyBsb25nZXIgc3VwcG9ydCBB
+Q1BJX1ZJREVPX0JBQ0tMSUdIVCwKKwkgKiBpZiB0aGlzIHBvaW50IGlzIHJlYWNoZWQgb24g
+dGhvc2UsIHRoaXMgbGlrZWx5IG1lYW5zIHRoYXQKKwkgKiB0aGUgR1BVIGttcyBkcml2ZXIg
+d2hpY2ggc2V0cyBuYXRpdmVfYXZhaWxhYmxlIGhhcyBub3QgbG9hZGVkIHlldC4KKwkgKgor
+CSAqIFJldHVybmluZyBhY3BpX2JhY2tsaWdodF92ZW5kb3IgaW4gdGhpcyBjYXNlIGlzIGtu
+b3duIHRvIHNvbWV0aW1lcworCSAqIGNhdXNlIGEgbm9uIHdvcmtpbmcgdmVuZG9yIHNwZWNp
+ZmljIC9zeXMvY2xhc3MvYmFja2xpZ2h0IGRldmljZSB0bworCSAqIGdldCByZWdpc3RlcmVk
+LgorCSAqCisJICogUmV0dXJuIGFjcGlfYmFja2xpZ2h0X25vbmUgb24gbGFwdG9wcyB3aXRo
+IEFDUEkgdGFibGVzIHdyaXR0ZW4KKwkgKiBmb3IgV2luZG93cyA4IChsYXB0b3BzIGZyb20g
+YWZ0ZXIgfjIwMTIpIHRvIGF2b2lkIHRoaXMgcHJvYmxlbS4KKwkgKi8KKwlpZiAoYWNwaV9v
+c2lfaXNfd2luOCgpKQorCQlyZXR1cm4gYWNwaV9iYWNrbGlnaHRfbm9uZTsKKwogCS8qIE5v
+IEFDUEkgdmlkZW8vbmF0aXZlIChvbGQgaHcpLCB1c2UgdmVuZG9yIHNwZWNpZmljIGZ3IG1l
+dGhvZHMuICovCiAJcmV0dXJuIGFjcGlfYmFja2xpZ2h0X3ZlbmRvcjsKIH0KLS0gCjIuNDAu
+MQoK
+
+--------------vgbUXUgh5jkimy1I05UYkAvz--
+
