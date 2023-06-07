@@ -2,408 +2,342 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58E167264B6
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 17:32:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7FC17264B8
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 17:33:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241185AbjFGPcc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 11:32:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44572 "EHLO
+        id S241311AbjFGPdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 11:33:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241052AbjFGPc2 (ORCPT
+        with ESMTP id S241320AbjFGPdC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 11:32:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7899F188;
-        Wed,  7 Jun 2023 08:32:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 062B961790;
-        Wed,  7 Jun 2023 15:32:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39A36C433D2;
-        Wed,  7 Jun 2023 15:32:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686151944;
-        bh=5hhZRxX2WWgW0sPLPamoyhkZr9xNbcuFiVquE58MnA4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=r5cyogrjCKLhqXI1ii7LXr6kUxd70C1Souo5RNpulj79nqY/szsqwu/hmhlkRJtLP
-         p1PYr5K4SQCY2C3RpCf2rVbMpxEScHPTRkJTU5iRRJB1JnDapPmTB3db60HSEQmFnR
-         SQGQTGPXu7aJaYaCXBAlCvm4Zc/lQCgxuhivyAPtfy9U2vyCE7R6+ALFgEBdI5oO2m
-         dVWXdgbiJtIjfOALESgsxfPADGBLRylbPGBxe0hEaaH1U2UGnumSyxsaKbw2MDCxdC
-         4LUuI5x5qJHo6uQ5o9Q/sdkyaAb0ZMFCUjhhZU7I4woVquAzJNKwt2mvCR56wF4qXX
-         75kGjRN+qPsAA==
-From:   Enric Balletbo i Serra <eballetbo@kernel.org>
-To:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Dana Elfassy <delfassy@redhat.com>,
-        linux-input@vger.kernel.org, phuttere@redhat.com,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Enric Balletbo i Serra <eballetbo@kernel.org>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>
-Subject: [PATCH v3] selftests/input: Introduce basic tests for evdev ioctls
-Date:   Wed,  7 Jun 2023 17:32:14 +0200
-Message-Id: <20230607153214.15933-1-eballetbo@kernel.org>
-X-Mailer: git-send-email 2.40.1
+        Wed, 7 Jun 2023 11:33:02 -0400
+Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 449E21BC6;
+        Wed,  7 Jun 2023 08:32:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1686151977; x=1717687977;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=QApyFybCc0hqZkg39fC3yOeu77CaRCOeQPkvCE9VX+E=;
+  b=kPb9IYalbjlPmqPC2iEYfyjhJ/9z4Y9Nbg0t0kFp7RhOayuXftGoF0Za
+   /4u6b6OwalX8FjEVu8aQrDCDXvaihQTvXWnKRD1YHDkFv3DAAxIGj9r5f
+   C1ZGHTE8PcFW2xW+5uPAEt5YUrBVmWrZ2wx7JnHuE0Ytws7vCczE6pr6c
+   A=;
+X-IronPort-AV: E=Sophos;i="6.00,224,1681171200"; 
+   d="scan'208";a="344248396"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2a-m6i4x-1cca8d67.us-west-2.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-9102.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 15:32:51 +0000
+Received: from EX19MTAUWC002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2a-m6i4x-1cca8d67.us-west-2.amazon.com (Postfix) with ESMTPS id 04F428B750;
+        Wed,  7 Jun 2023 15:32:49 +0000 (UTC)
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX19MTAUWC002.ant.amazon.com (10.250.64.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Wed, 7 Jun 2023 15:32:43 +0000
+Received: from 88665a182662.ant.amazon.com (10.119.185.127) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Wed, 7 Jun 2023 15:32:40 +0000
+From:   Kuniyuki Iwashima <kuniyu@amazon.com>
+To:     <dhowells@redhat.com>
+CC:     <axboe@kernel.dk>, <borisp@nvidia.com>, <chuck.lever@oracle.com>,
+        <davem@davemloft.net>, <dsahern@kernel.org>, <edumazet@google.com>,
+        <john.fastabend@gmail.com>, <kuba@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        <netdev@vger.kernel.org>, <pabeni@redhat.com>,
+        <torvalds@linux-foundation.org>, <willemdebruijn.kernel@gmail.com>,
+        <willy@infradead.org>, <kuniyu@amazon.com>
+Subject: Re: [PATCH net-next v5 07/14] ipv4, ipv6: Use splice_eof() to flush
+Date:   Wed, 7 Jun 2023 08:32:32 -0700
+Message-ID: <20230607153232.93980-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230607140559.2263470-8-dhowells@redhat.com>
+References: <20230607140559.2263470-8-dhowells@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.119.185.127]
+X-ClientProxiedBy: EX19D046UWA003.ant.amazon.com (10.13.139.18) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This provides a basic infrastructure for the creation of tests for the evdev
-interface. Most of this code is adapted from the libevdev wrapper library. While
-most of evdev ioctls are covered and tested using libevdev tests there are some
-evdev ioctls that aren't because are not supported (and will not be supported)
-by libevdev [1]. So, adding, at least those tests, would make sense.
+From: David Howells <dhowells@redhat.com>
+Date: Wed,  7 Jun 2023 15:05:52 +0100
+> Allow splice to undo the effects of MSG_MORE after prematurely ending a
+> splice/sendfile due to getting an EOF condition (->splice_read() returned
+> 0) after splice had called sendmsg() with MSG_MORE set when the user didn't
+> set MSG_MORE.
+> 
+> For UDP, a pending packet will not be emitted if the socket is closed
+> before it is flushed; with this change, it be flushed by ->splice_eof().
+> 
+> For TCP, it's not clear that MSG_MORE is actually effective.
+> 
+> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+> Link: https://lore.kernel.org/r/CAHk-=wh=V579PDYvkpnTobCLGczbgxpMgGmmhqiTyE34Cpi5Gg@mail.gmail.com/
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> cc: Eric Dumazet <edumazet@google.com>
+> cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+> cc: David Ahern <dsahern@kernel.org>
+> cc: "David S. Miller" <davem@davemloft.net>
+> cc: Jakub Kicinski <kuba@kernel.org>
+> cc: Paolo Abeni <pabeni@redhat.com>
+> cc: Jens Axboe <axboe@kernel.dk>
+> cc: Matthew Wilcox <willy@infradead.org>
+> cc: netdev@vger.kernel.org
+> ---
+>  include/net/inet_common.h |  1 +
+>  include/net/tcp.h         |  1 +
+>  include/net/udp.h         |  1 +
+>  net/ipv4/af_inet.c        | 18 ++++++++++++++++++
+>  net/ipv4/tcp.c            | 16 ++++++++++++++++
+>  net/ipv4/tcp_ipv4.c       |  1 +
+>  net/ipv4/udp.c            | 16 ++++++++++++++++
+>  net/ipv6/af_inet6.c       |  1 +
+>  net/ipv6/tcp_ipv6.c       |  1 +
+>  net/ipv6/udp.c            | 18 ++++++++++++++++++
+>  10 files changed, 74 insertions(+)
+> 
+> diff --git a/include/net/inet_common.h b/include/net/inet_common.h
+> index 77f4b0ef5b92..a75333342c4e 100644
+> --- a/include/net/inet_common.h
+> +++ b/include/net/inet_common.h
+> @@ -35,6 +35,7 @@ void __inet_accept(struct socket *sock, struct socket *newsock,
+>  		   struct sock *newsk);
+>  int inet_send_prepare(struct sock *sk);
+>  int inet_sendmsg(struct socket *sock, struct msghdr *msg, size_t size);
+> +void inet_splice_eof(struct socket *sock);
+>  ssize_t inet_sendpage(struct socket *sock, struct page *page, int offset,
+>  		      size_t size, int flags);
+>  int inet_recvmsg(struct socket *sock, struct msghdr *msg, size_t size,
+> diff --git a/include/net/tcp.h b/include/net/tcp.h
+> index 68990a8f556a..49611af31bb7 100644
+> --- a/include/net/tcp.h
+> +++ b/include/net/tcp.h
+> @@ -327,6 +327,7 @@ int tcp_sendmsg(struct sock *sk, struct msghdr *msg, size_t size);
+>  int tcp_sendmsg_locked(struct sock *sk, struct msghdr *msg, size_t size);
+>  int tcp_sendmsg_fastopen(struct sock *sk, struct msghdr *msg, int *copied,
+>  			 size_t size, struct ubuf_info *uarg);
+> +void tcp_splice_eof(struct socket *sock);
+>  int tcp_sendpage(struct sock *sk, struct page *page, int offset, size_t size,
+>  		 int flags);
+>  int tcp_sendpage_locked(struct sock *sk, struct page *page, int offset,
+> diff --git a/include/net/udp.h b/include/net/udp.h
+> index 5cad44318d71..4ed0b47c5582 100644
+> --- a/include/net/udp.h
+> +++ b/include/net/udp.h
+> @@ -278,6 +278,7 @@ int udp_get_port(struct sock *sk, unsigned short snum,
+>  int udp_err(struct sk_buff *, u32);
+>  int udp_abort(struct sock *sk, int err);
+>  int udp_sendmsg(struct sock *sk, struct msghdr *msg, size_t len);
+> +void udp_splice_eof(struct socket *sock);
+>  int udp_push_pending_frames(struct sock *sk);
+>  void udp_flush_pending_frames(struct sock *sk);
+>  int udp_cmsg_send(struct sock *sk, struct msghdr *msg, u16 *gso_size);
+> diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
+> index b5735b3551cf..6cfb78592836 100644
+> --- a/net/ipv4/af_inet.c
+> +++ b/net/ipv4/af_inet.c
+> @@ -831,6 +831,21 @@ int inet_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
+>  }
+>  EXPORT_SYMBOL(inet_sendmsg);
+>  
+> +void inet_splice_eof(struct socket *sock)
+> +{
+> +	const struct proto *prot;
+> +	struct sock *sk = sock->sk;
+> +
+> +	if (unlikely(inet_send_prepare(sk)))
+> +		return;
+> +
+> +	/* IPV6_ADDRFORM can change sk->sk_prot under us. */
+> +	prot = READ_ONCE(sk->sk_prot);
+> +	if (prot->splice_eof)
+> +		sk->sk_prot->splice_eof(sock);
 
-The test creates an uinput device (and an evdev device) so you can
-call the wanted ioctl from userspace. So, to run those tests you need
-to have support for uinput and evdev as well.
+We need to use prot here.
 
-[1] For example, libevdev doesn't support setting EV_REP because it's inherently
-racy - one libevdev context to set those values via the ioctl would cause all
-other libevdev contexts on the same device to be out of sync. Since we do not
-get notifications when the values changed, libevdev's buffered values for EV_REP
-will remain whatever they were initially.
 
-Signed-off-by: Enric Balletbo i Serra <eballetbo@kernel.org>
-Acked-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
-Test output:
+> +}
+> +EXPORT_SYMBOL_GPL(inet_splice_eof);
+> +
+>  ssize_t inet_sendpage(struct socket *sock, struct page *page, int offset,
+>  		      size_t size, int flags)
+>  {
+> @@ -1050,6 +1065,7 @@ const struct proto_ops inet_stream_ops = {
+>  #ifdef CONFIG_MMU
+>  	.mmap		   = tcp_mmap,
+>  #endif
+> +	.splice_eof	   = inet_splice_eof,
+>  	.sendpage	   = inet_sendpage,
+>  	.splice_read	   = tcp_splice_read,
+>  	.read_sock	   = tcp_read_sock,
+> @@ -1084,6 +1100,7 @@ const struct proto_ops inet_dgram_ops = {
+>  	.read_skb	   = udp_read_skb,
+>  	.recvmsg	   = inet_recvmsg,
+>  	.mmap		   = sock_no_mmap,
+> +	.splice_eof	   = inet_splice_eof,
+>  	.sendpage	   = inet_sendpage,
+>  	.set_peek_off	   = sk_set_peek_off,
+>  #ifdef CONFIG_COMPAT
+> @@ -1115,6 +1132,7 @@ static const struct proto_ops inet_sockraw_ops = {
+>  	.sendmsg	   = inet_sendmsg,
+>  	.recvmsg	   = inet_recvmsg,
+>  	.mmap		   = sock_no_mmap,
+> +	.splice_eof	   = inet_splice_eof,
+>  	.sendpage	   = inet_sendpage,
+>  #ifdef CONFIG_COMPAT
+>  	.compat_ioctl	   = inet_compat_ioctl,
+> diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+> index 53b7751b68e1..09f03221a6f1 100644
+> --- a/net/ipv4/tcp.c
+> +++ b/net/ipv4/tcp.c
+> @@ -1371,6 +1371,22 @@ int tcp_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
+>  }
+>  EXPORT_SYMBOL(tcp_sendmsg);
+>  
+> +void tcp_splice_eof(struct socket *sock)
+> +{
+> +	struct sock *sk = sock->sk;
+> +	struct tcp_sock *tp = tcp_sk(sk);
+> +	int mss_now, size_goal;
+> +
+> +	if (!tcp_write_queue_tail(sk))
+> +		return;
+> +
+> +	lock_sock(sk);
+> +	mss_now = tcp_send_mss(sk, &size_goal, 0);
+> +	tcp_push(sk, 0, mss_now, tp->nonagle, size_goal);
+> +	release_sock(sk);
+> +}
+> +EXPORT_SYMBOL_GPL(tcp_splice_eof);
+> +
+>  /*
+>   *	Handle reading urgent data. BSD has very simple semantics for
+>   *	this, no blocking and very strange errors 8)
+> diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
+> index 53e9ce2f05bb..84a5d557dc1a 100644
+> --- a/net/ipv4/tcp_ipv4.c
+> +++ b/net/ipv4/tcp_ipv4.c
+> @@ -3116,6 +3116,7 @@ struct proto tcp_prot = {
+>  	.keepalive		= tcp_set_keepalive,
+>  	.recvmsg		= tcp_recvmsg,
+>  	.sendmsg		= tcp_sendmsg,
+> +	.splice_eof		= tcp_splice_eof,
+>  	.sendpage		= tcp_sendpage,
+>  	.backlog_rcv		= tcp_v4_do_rcv,
+>  	.release_cb		= tcp_release_cb,
+> diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
+> index fd3dae081f3a..df5e407286d7 100644
+> --- a/net/ipv4/udp.c
+> +++ b/net/ipv4/udp.c
+> @@ -1324,6 +1324,21 @@ int udp_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
+>  }
+>  EXPORT_SYMBOL(udp_sendmsg);
+>  
+> +void udp_splice_eof(struct socket *sock)
+> +{
+> +	struct sock *sk = sock->sk;
+> +	struct udp_sock *up = udp_sk(sk);
+> +
+> +	if (!up->pending || READ_ONCE(up->corkflag))
+> +		return;
+> +
+> +	lock_sock(sk);
+> +	if (up->pending && !READ_ONCE(up->corkflag))
+> +		udp_push_pending_frames(sk);
+> +	release_sock(sk);
+> +}
+> +EXPORT_SYMBOL_GPL(udp_splice_eof);
+> +
+>  int udp_sendpage(struct sock *sk, struct page *page, int offset,
+>  		 size_t size, int flags)
+>  {
+> @@ -2918,6 +2933,7 @@ struct proto udp_prot = {
+>  	.getsockopt		= udp_getsockopt,
+>  	.sendmsg		= udp_sendmsg,
+>  	.recvmsg		= udp_recvmsg,
+> +	.splice_eof		= udp_splice_eof,
+>  	.sendpage		= udp_sendpage,
+>  	.release_cb		= ip4_datagram_release_cb,
+>  	.hash			= udp_lib_hash,
+> diff --git a/net/ipv6/af_inet6.c b/net/ipv6/af_inet6.c
+> index 2bbf13216a3d..564942bee067 100644
+> --- a/net/ipv6/af_inet6.c
+> +++ b/net/ipv6/af_inet6.c
+> @@ -695,6 +695,7 @@ const struct proto_ops inet6_stream_ops = {
+>  #ifdef CONFIG_MMU
+>  	.mmap		   = tcp_mmap,
+>  #endif
+> +	.splice_eof	   = inet_splice_eof,
+>  	.sendpage	   = inet_sendpage,
+>  	.sendmsg_locked    = tcp_sendmsg_locked,
+>  	.sendpage_locked   = tcp_sendpage_locked,
+> diff --git a/net/ipv6/tcp_ipv6.c b/net/ipv6/tcp_ipv6.c
+> index d657713d1c71..c17c8ff94b79 100644
+> --- a/net/ipv6/tcp_ipv6.c
+> +++ b/net/ipv6/tcp_ipv6.c
+> @@ -2150,6 +2150,7 @@ struct proto tcpv6_prot = {
+>  	.keepalive		= tcp_set_keepalive,
+>  	.recvmsg		= tcp_recvmsg,
+>  	.sendmsg		= tcp_sendmsg,
+> +	.splice_eof		= tcp_splice_eof,
+>  	.sendpage		= tcp_sendpage,
+>  	.backlog_rcv		= tcp_v6_do_rcv,
+>  	.release_cb		= tcp_release_cb,
+> diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
+> index e5a337e6b970..6c5975b13ae3 100644
+> --- a/net/ipv6/udp.c
+> +++ b/net/ipv6/udp.c
+> @@ -1653,6 +1653,23 @@ int udpv6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
+>  }
+>  EXPORT_SYMBOL(udpv6_sendmsg);
+>  
+> +static void udpv6_splice_eof(struct socket *sock)
+> +{
+> +	struct sock *sk = sock->sk;
+> +	struct udp_sock *up = udp_sk(sk);
+> +
+> +	if (!up->pending || READ_ONCE(up->corkflag))
+> +		return;
+> +
+> +	if (up->pending == AF_INET)
+> +		udp_splice_eof(sock);
 
-	TAP version 13
-	1..3
-	# Starting 3 tests from 1 test cases.
-	#  RUN           global.eviocgname_get_device_name ...
-	#            OK  global.eviocgname_get_device_name
-	ok 1 global.eviocgname_get_device_name
-	#  RUN           global.eviocgrep_get_repeat_settings ...
-	#            OK  global.eviocgrep_get_repeat_settings
-	ok 2 global.eviocgrep_get_repeat_settings
-	#  RUN           global.eviocsrep_set_repeat_settings ...
-	#            OK  global.eviocsrep_set_repeat_settings
-	ok 3 global.eviocsrep_set_repeat_settings
-	# PASSED: 3 / 3 tests passed.
-	# Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
+Do we need this ?
 
-Changes since v1:
-- As UI_GET_SYSNAME has been around 3.15 remove the fallback code that
-  pre-dates that ioctl.
-- Fix a bug in the va-args handling in selftest_uinput_create_device
-  calls.
-- Fix typo s/an/and
-- Implement a test case for EVIOCSREP.
 
-Changes since v2:
-- Fix a buf left in the va-args handling in
-  selftest_uinput_create_device calls.
-- Replace fetch_syspath_and_devnode() function to open_devnode()
-  function that return the openend file descriptor, so we can reduce the
-  code.
+> +
+> +	lock_sock(sk);
+> +	if (up->pending && !READ_ONCE(up->corkflag))
+> +		udp_push_pending_frames(sk);
 
- tools/testing/selftests/Makefile           |   1 +
- tools/testing/selftests/input/.gitignore   |   2 +
- tools/testing/selftests/input/Makefile     |   5 +
- tools/testing/selftests/input/config       |   3 +
- tools/testing/selftests/input/evioc-test.c | 237 +++++++++++++++++++++
- 5 files changed, 248 insertions(+)
- create mode 100644 tools/testing/selftests/input/.gitignore
- create mode 100644 tools/testing/selftests/input/Makefile
- create mode 100644 tools/testing/selftests/input/config
- create mode 100644 tools/testing/selftests/input/evioc-test.c
+We should use udp_v6_push_pending_frames(sk) as up->pending
+could be AF_INET even after the test above.
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 90a62cf75008..29fc77168aa7 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -28,6 +28,7 @@ TARGETS += futex
- TARGETS += gpio
- TARGETS += hid
- TARGETS += intel_pstate
-+TARGETS += input
- TARGETS += iommu
- TARGETS += ipc
- TARGETS += ir
-diff --git a/tools/testing/selftests/input/.gitignore b/tools/testing/selftests/input/.gitignore
-new file mode 100644
-index 000000000000..37f5dff3255b
---- /dev/null
-+++ b/tools/testing/selftests/input/.gitignore
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0
-+evioc-test
-diff --git a/tools/testing/selftests/input/Makefile b/tools/testing/selftests/input/Makefile
-new file mode 100644
-index 000000000000..031729be0628
---- /dev/null
-+++ b/tools/testing/selftests/input/Makefile
-@@ -0,0 +1,5 @@
-+# SPDX-License-Identifier: GPL-2.0
-+CFLAGS +=  -D_GNU_SOURCE -std=gnu99 -Wl,-no-as-needed -Wall $(KHDR_INCLUDES)
-+
-+TEST_GEN_PROGS := evioc-test
-+include ../lib.mk
-diff --git a/tools/testing/selftests/input/config b/tools/testing/selftests/input/config
-new file mode 100644
-index 000000000000..b7512f3e6d8d
---- /dev/null
-+++ b/tools/testing/selftests/input/config
-@@ -0,0 +1,3 @@
-+CONFIG_INPUT=y
-+CONFIG_INPUT_EVDEV=y
-+CONFIG_INPUT_UINPUT=m
-diff --git a/tools/testing/selftests/input/evioc-test.c b/tools/testing/selftests/input/evioc-test.c
-new file mode 100644
-index 000000000000..ad7b93fe39cf
---- /dev/null
-+++ b/tools/testing/selftests/input/evioc-test.c
-@@ -0,0 +1,237 @@
-+// SPDX-License-Identifier: MIT
-+/*
-+ * Copyright © 2023 Red Hat, Inc.
-+ *
-+ * Part of the code in this file is inspired and copied from the libevdev wrapper library
-+ * for evdev devices written by Peter Hutterer.
-+ */
-+
-+#include <dirent.h>
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <linux/uinput.h>
-+#include <poll.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/stat.h>
-+#include <time.h>
-+#include <unistd.h>
-+
-+#include "../kselftest_harness.h"
-+
-+#define TEST_DEVICE_NAME "selftest input device"
-+
-+struct selftest_uinput {
-+	int uinput_fd; /** file descriptor to uinput */
-+	int evdev_fd; /** file descriptor to evdev */
-+};
-+
-+static int is_event_device(const struct dirent *dent)
-+{
-+	return strncmp("event", dent->d_name, 5) == 0;
-+}
-+
-+static int open_devnode(struct selftest_uinput *uidev)
-+{
-+#define SYS_INPUT_DIR "/sys/devices/virtual/input/"
-+	char buf[sizeof(SYS_INPUT_DIR) + 64] = SYS_INPUT_DIR;
-+	struct dirent **namelist;
-+	char *devnode = NULL;
-+	int ndev, i;
-+	int rc;
-+
-+	rc = ioctl(uidev->uinput_fd,
-+		   UI_GET_SYSNAME(sizeof(buf) - strlen(SYS_INPUT_DIR)),
-+		   &buf[strlen(SYS_INPUT_DIR)]);
-+	if (rc == -1) {
-+		fprintf(stderr, "cannot get the sysfs name of the uinput device (%d)\n", rc);
-+		return rc;
-+	}
-+
-+	ndev = scandir(buf, &namelist, is_event_device, alphasort);
-+	if (ndev <= 0)
-+		return -1;
-+
-+	/* ndev should only ever be 1 */
-+
-+	for (i = 0; i < ndev; i++) {
-+		if (!devnode && asprintf(&devnode, "/dev/input/%s",
-+					 namelist[i]->d_name) == -1)
-+			devnode = NULL;
-+		free(namelist[i]);
-+	}
-+
-+	free(namelist);
-+
-+	return open(devnode, O_RDONLY);
-+#undef SYS_INPUT_DIR
-+}
-+
-+static void selftest_uinput_destroy(struct selftest_uinput *uidev)
-+{
-+	if (!uidev)
-+		return;
-+
-+	if (uidev->uinput_fd >= 0)
-+		ioctl(uidev->uinput_fd, UI_DEV_DESTROY, NULL);
-+
-+	close(uidev->evdev_fd);
-+	close(uidev->uinput_fd);
-+
-+	free(uidev);
-+}
-+
-+static int selftest_uinput_create_device(struct selftest_uinput **uidev, ...)
-+{
-+	struct selftest_uinput *new_device;
-+	struct uinput_setup setup;
-+	va_list args;
-+	int rc, fd;
-+	int type;
-+
-+	new_device = calloc(1, sizeof(struct selftest_uinput));
-+	if (!new_device)
-+		return -ENOMEM;
-+
-+	memset(&setup, 0, sizeof(setup));
-+	strncpy(setup.name, TEST_DEVICE_NAME, UINPUT_MAX_NAME_SIZE - 1);
-+	setup.id.vendor = 0x1234; /* sample vendor */
-+	setup.id.product = 0x5678; /* sample product */
-+	setup.id.bustype = BUS_USB;
-+
-+	fd = open("/dev/uinput", O_WRONLY | O_NONBLOCK);
-+	if (fd < 0) {
-+		fprintf(stderr, "cannot open uinput (%d): %m\n", errno);
-+		goto error;
-+	}
-+
-+	va_start(args, uidev);
-+	rc = 0;
-+	do {
-+		type = va_arg(args, int);
-+		if (type == -1)
-+			break;
-+		rc = ioctl(fd, UI_SET_EVBIT, type);
-+	} while (rc == 0);
-+	va_end(args);
-+
-+	rc = ioctl(fd, UI_DEV_SETUP, &setup);
-+	if (rc == -1)
-+		goto error;
-+
-+	rc = ioctl(fd, UI_DEV_CREATE, NULL);
-+	if (rc == -1)
-+		goto error;
-+
-+	new_device->uinput_fd = fd;
-+
-+	fd = open_devnode(new_device);
-+	if (fd < 0) {
-+		fprintf(stderr, "cannot open event device node (%d): %m\n", errno);
-+		goto error;
-+	}
-+
-+	new_device->evdev_fd = fd;
-+	*uidev = new_device;
-+
-+	return 0;
-+
-+error:
-+	rc = -errno;
-+	selftest_uinput_destroy(new_device);
-+	return rc;
-+}
-+
-+TEST(eviocgname_get_device_name)
-+{
-+	struct selftest_uinput *uidev;
-+	char buf[256];
-+	int rc;
-+
-+	rc = selftest_uinput_create_device(&uidev);
-+	ASSERT_EQ(0, rc);
-+	ASSERT_NE(NULL, uidev);
-+
-+	memset(buf, 0, sizeof(buf));
-+	/* ioctl to get the name */
-+	rc = ioctl(uidev->evdev_fd, EVIOCGNAME(sizeof(buf) - 1), buf);
-+	ASSERT_GE(rc, 0);
-+	ASSERT_STREQ(TEST_DEVICE_NAME, buf);
-+
-+	selftest_uinput_destroy(uidev);
-+}
-+
-+TEST(eviocgrep_get_repeat_settings)
-+{
-+	struct selftest_uinput *uidev;
-+	int rep_values[2];
-+	int rc;
-+
-+	memset(rep_values, 0, sizeof(rep_values));
-+
-+	rc = selftest_uinput_create_device(&uidev, -1);
-+	ASSERT_EQ(0, rc);
-+	ASSERT_NE(NULL, uidev);
-+
-+	/* ioctl to get the repeat rates values */
-+	rc = ioctl(uidev->evdev_fd, EVIOCGREP, rep_values);
-+	/* should fail because EV_REP is not set */
-+	ASSERT_EQ(-1, rc);
-+
-+	selftest_uinput_destroy(uidev);
-+
-+	rc = selftest_uinput_create_device(&uidev, EV_REP, -1);
-+	ASSERT_EQ(0, rc);
-+	ASSERT_NE(NULL, uidev);
-+
-+	/* ioctl to get the repeat rates values */
-+	rc = ioctl(uidev->evdev_fd, EVIOCGREP, rep_values);
-+	ASSERT_EQ(0, rc);
-+	/* should get the default delay and period values set by the kernel */
-+	ASSERT_EQ(rep_values[0], 250);
-+	ASSERT_EQ(rep_values[1], 33);
-+
-+	selftest_uinput_destroy(uidev);
-+}
-+
-+TEST(eviocsrep_set_repeat_settings)
-+{
-+	struct selftest_uinput *uidev;
-+	int rep_values[2];
-+	int rc;
-+
-+	memset(rep_values, 0, sizeof(rep_values));
-+
-+	rc = selftest_uinput_create_device(&uidev, -1);
-+	ASSERT_EQ(0, rc);
-+	ASSERT_NE(NULL, uidev);
-+
-+	/* ioctl to set the repeat rates values */
-+	rc = ioctl(uidev->evdev_fd, EVIOCSREP, rep_values);
-+	/* should fail because EV_REP is not set */
-+	ASSERT_EQ(-1, rc);
-+
-+	selftest_uinput_destroy(uidev);
-+
-+	rc = selftest_uinput_create_device(&uidev, EV_REP, -1);
-+	ASSERT_EQ(0, rc);
-+	ASSERT_NE(NULL, uidev);
-+
-+	/* ioctl to set the repeat rates values */
-+	rep_values[0] = 500;
-+	rep_values[1] = 200;
-+	rc = ioctl(uidev->evdev_fd, EVIOCSREP, rep_values);
-+	ASSERT_EQ(0, rc);
-+
-+	/* ioctl to get the repeat rates values */
-+	rc = ioctl(uidev->evdev_fd, EVIOCGREP, rep_values);
-+	ASSERT_EQ(0, rc);
-+	/* should get the delay and period values set previously */
-+	ASSERT_EQ(rep_values[0], 500);
-+	ASSERT_EQ(rep_values[1], 200);
-+
-+	selftest_uinput_destroy(uidev);
-+}
-+
-+TEST_HARNESS_MAIN
--- 
-2.40.1
 
+> +	release_sock(sk);
+> +}
+> +
+>  void udpv6_destroy_sock(struct sock *sk)
+>  {
+>  	struct udp_sock *up = udp_sk(sk);
+> @@ -1764,6 +1781,7 @@ struct proto udpv6_prot = {
+>  	.getsockopt		= udpv6_getsockopt,
+>  	.sendmsg		= udpv6_sendmsg,
+>  	.recvmsg		= udpv6_recvmsg,
+> +	.splice_eof		= udpv6_splice_eof,
+>  	.release_cb		= ip6_datagram_release_cb,
+>  	.hash			= udp_lib_hash,
+>  	.unhash			= udp_lib_unhash,
