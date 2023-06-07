@@ -2,97 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E407E725D15
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 13:29:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1906725D21
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 13:30:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240228AbjFGL3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 07:29:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59754 "EHLO
+        id S236749AbjFGLat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 07:30:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240174AbjFGL3J (ORCPT
+        with ESMTP id S240361AbjFGLaq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 07:29:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78BB41BC6;
-        Wed,  7 Jun 2023 04:29:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1338560C58;
-        Wed,  7 Jun 2023 11:29:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A729C433EF;
-        Wed,  7 Jun 2023 11:29:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686137345;
-        bh=0YWf+o7Xye4E9eXePegQbCM+6aymWifggrFVEC88RXI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uNhLA4VzEI2Mv5824IMpBMgv9KQd3RsVnpNduOHjv95cvSHi1QUGfHrsy71DCXQhT
-         zo1LnfOPw3joDanmv/x4Ikcousaum8xclOa6HSDPMS3Ze9OlLTzdA17Y+ZOTNnfW93
-         sgzdZc05IeR60rnzNI7K+N7Dw5EhS6xoMHvMVqVbi+DalDHR74eTczl9ogdk2OcXxP
-         8ZwLGwr3rUs83O0znJNieFHcfwxuJ/WxiiSe5NqhZphQ1jOOVkKFo5gAgZI+W7oxt+
-         GgL+Q+4KCIvGXW5TFDgUDsgquUv3wm+74r0twTozVm65hbI8d4lR6L6fU2QoiFYlfq
-         VdemOlVd7tGaw==
-Date:   Wed, 7 Jun 2023 12:29:00 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>, Lee Jones <lee@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patch in the regulator tree
-Message-ID: <38913e8e-4578-4c4f-a6cd-6f6e628957af@sirena.org.uk>
-References: <20230607163743.1c266a7f@canb.auug.org.au>
+        Wed, 7 Jun 2023 07:30:46 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B2519A4;
+        Wed,  7 Jun 2023 04:30:41 -0700 (PDT)
+X-QQ-mid: bizesmtp88t1686137431txjb0ruo
+Received: from linux-lab-host.localdomain ( [61.141.77.49])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 07 Jun 2023 19:30:30 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: PS/N6jJLnDYwJEGZC7QAtJWPa/AlKwXo0vmdJ7kjq/mWA0tEQux5qfVTlr0zq
+        V0mQ4yl64VpUmbvnsqbSN7zmeSevRUHmbKOZoV2RqIOt8edl233rqbjgHL+q7xdbYk7qw0T
+        oDbzE70YdzBu94Fz3kB0Vxyk73oAMss5RRcIEMdMbDAKZGDHbrmqZ3shDB9YNI4GPLQbbyC
+        YpefZjfBLWxIf0z9U6lv0MnP+rAzGLTBXjOtyEUJdteCy8j1LYn7FPmZtLhHlVEj+dAmryn
+        bRmbdeOXlRWDFL3U2JhqQGtudiei24trgW3jAVgqAa8iUyA/xMvOA7v8ihmxArblu03CWvf
+        A7TJ2iCs1KR4AhETgTAsng5OTvPUqWD1dzD8jIRVnYXh9ApTgLCxOG2o/o+ts6irrjY3CNF
+        F0Q8oxfdQOU=
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 11378213777674272868
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     thomas@t-8ch.de, w@1wt.eu
+Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Subject: [PATCH v3 1/3] tools/nolibc: sys.h: add a syscall return helper
+Date:   Wed,  7 Jun 2023 19:30:09 +0800
+Message-Id: <7cad207c4c4deb41151bd12fa658fb3fc64a5bf1.1686135913.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1686135913.git.falcon@tinylab.org>
+References: <cover.1686135913.git.falcon@tinylab.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3+bTFYwajOTKhLCl"
-Content-Disposition: inline
-In-Reply-To: <20230607163743.1c266a7f@canb.auug.org.au>
-X-Cookie: Keep away from edge.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Most of the library routines share the same syscall return logic:
 
---3+bTFYwajOTKhLCl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+  In general, a 0 return value indicates success.  A -1 return value
+  indicates an error, and an error number is stored in errno. [1]
 
-On Wed, Jun 07, 2023 at 04:37:43PM +1000, Stephen Rothwell wrote:
-> Hi all,
->=20
-> The following commit is also in the mfd tree as a different commit
-> (but the same patch):
->=20
->   75c8cb2f4cb2 ("mfd: axp20x: Add support for AXP313a PMIC")
->=20
-> This is commit
->=20
->   2f518d914bd3 ("mfd: axp20x: Add support for AXP313a PMIC")
->=20
-> in the mfd tree.
+Let's add a __sysret() helper for the above logic to simplify the coding
+and shrink the code lines too.
 
-Hrm, that was a tag I pulled from Lee rather than something I applied -
-not sure what's going on there.
+Thomas suggested to use inline function instead of macro for __sysret().
 
---3+bTFYwajOTKhLCl
-Content-Type: application/pgp-signature; name="signature.asc"
+Willy suggested to make __sysret() be always inline.
 
------BEGIN PGP SIGNATURE-----
+[1]: https://man7.org/linux/man-pages/man2/syscall.2.html
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSAafsACgkQJNaLcl1U
-h9DoSwf+JJPbmXcuO3ZRX8iXbL8BytPcrH8QUdoL3hM6XNkFaXN4KSaYugBJTM2w
-r2HvYEEa6NRHqGX5//NZFivo3hfqQbWIChbRF4a3ieVi/iwidaizI4OKYuoOy0+Z
-R1vkoTVZBV7IlhPvsnMHNxZE+3ja12C8RcoPmNfJylbnhcOnFpmcRoob0KR/LL38
-v8bR+x40gDnELyJmDQyXv1ereHr23PhdD1qan+tgOLaaIWDreIo3s0X1Wa04YdLu
-0uG4hS5eIT/fABYrYRX3uyFDzQPkMT9hkZ7HJMg7GEm8SN7pHeqAsVTHG7/1v4Sz
-ksP4c9exiwcoFIMJhW3r5t6U+ZMU5w==
-=IyWe
------END PGP SIGNATURE-----
+Suggested-by: Willy Tarreau <w@1wt.eu>
+Link: https://lore.kernel.org/linux-riscv/ZH1+hkhiA2+ItSvX@1wt.eu/
+Suggested-by: Thomas Weißschuh <linux@weissschuh.net>
+Link: https://lore.kernel.org/linux-riscv/ea4e7442-7223-4211-ba29-70821e907888@t-8ch.de/
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+---
+ tools/include/nolibc/sys.h | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
---3+bTFYwajOTKhLCl--
+diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+index 856249a11890..150777207468 100644
+--- a/tools/include/nolibc/sys.h
++++ b/tools/include/nolibc/sys.h
+@@ -28,6 +28,16 @@
+ #include "errno.h"
+ #include "types.h"
+ 
++/* Syscall return helper, set errno as -ret when ret < 0 */
++static __inline__ __attribute__((unused, always_inline))
++long __sysret(long ret)
++{
++	if (ret < 0) {
++		SET_ERRNO(-ret);
++		ret = -1;
++	}
++	return ret;
++}
+ 
+ /* Functions in this file only describe syscalls. They're declared static so
+  * that the compiler usually decides to inline them while still being allowed
+-- 
+2.25.1
+
