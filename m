@@ -2,213 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE94A72577E
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 10:25:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F2EC725783
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 10:26:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238994AbjFGIZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 04:25:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35480 "EHLO
+        id S239142AbjFGI0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 04:26:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238425AbjFGIZa (ORCPT
+        with ESMTP id S238425AbjFGI0T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 04:25:30 -0400
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92A3F184
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 01:25:28 -0700 (PDT)
-X-GND-Sasl: miquel.raynal@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1686126327;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HH/cng7bNv0Q6+Hy8DU1tyWKgJYv/7rMDAdOo17bcu8=;
-        b=hDR8CVNP6ZJPvLTqE6Op24qxDTLiBo7UozzNueq5MOgC3Ad9IlcFi/fi+lh2PUJOFX/Cze
-        JXlgs31bXcuRJBpJ5NHb4sE2+RPFUCaFVlhBDItyM2Ys6LV7Ej7dCUDZDR2b0QtRFvZZXq
-        NJBd3agDFDqOMP66UPwiAcrnOxebD/KMtxin/QBOxG531GCFBbfMci8MDYUxBt3bvZaxh5
-        69pPSolNkTYcr0zu9uac1psdVbD8IZsVL+7XXHLogE1qAv6d5ctcx7UtQKxqB7qdLsXF6D
-        3RkYI1BV2ifZSM+pLOiP/Xcm21FX4qf+kD2rMb9T2NZV+e4pUgZeA/ZP7EN8og==
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A1BC91C0002;
-        Wed,  7 Jun 2023 08:25:25 +0000 (UTC)
-Date:   Wed, 7 Jun 2023 10:25:24 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     William Zhang <william.zhang@broadcom.com>
-Cc:     Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        Linux MTD List <linux-mtd@lists.infradead.org>,
-        f.fainelli@gmail.com, rafal@milecki.pl, kursad.oney@broadcom.com,
-        joel.peshkin@broadcom.com, computersforpeace@gmail.com,
-        anand.gore@broadcom.com, dregan@mail.com, kamal.dasu@broadcom.com,
-        tomer.yacoby@broadcom.com, dan.beygelman@broadcom.com,
-        linux-kernel@vger.kernel.org,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Kamal Dasu <kdasu.kdev@gmail.com>
-Subject: Re: [PATCH 11/12] mtd: rawnand: brcmnand: Add support for getting
- ecc setting from strap
-Message-ID: <20230607102524.10a7a928@xps-13>
-In-Reply-To: <20230606231252.94838-12-william.zhang@broadcom.com>
-References: <20230606231252.94838-1-william.zhang@broadcom.com>
-        <20230606231252.94838-12-william.zhang@broadcom.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Wed, 7 Jun 2023 04:26:19 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05ECB95
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 01:26:18 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2b1b30445cfso64272201fa.1
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 01:26:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686126376; x=1688718376;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=meqyLpIa2eoOfIkaFe10EGZNXQ4rVkSgK0+HDZ26xns=;
+        b=ZF9p5u4hM9PFz+rRCKYlZoTUlbcYIxDgpTVxuZuiVVFOg/LdolKhBWBUAUQKQRa46+
+         3DYQkg0hk5CEIO3iWRBEJF4S7DRTfWuXV/UW32si/8CbDvnNN5pQgt/of+kV67Y3jaPP
+         rt4eHEz6FN/vj8pIB6s0uXTdAV6eeaIBamyD1Z5PmuVIkcC0r2W8LHJBo5VktSGZM3Am
+         3kc67vWS9Ghitg9knI+ULF6FuPOzg1dsiQHth+lH2XdKZSn/a/APkBgq00uutbLXV5Ht
+         t1B5ezcUGlevGxUyo6SMZ1jKBThmmMhZn3adfo363b35EgjK9jxhaZlij6GXxsLBwpja
+         fhZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686126376; x=1688718376;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=meqyLpIa2eoOfIkaFe10EGZNXQ4rVkSgK0+HDZ26xns=;
+        b=CN0Mv8uDufTo664U2EhFDIuwwmRWDRz38/lVC2fIZ+ioKTG5n0VK90seZMHuS3Cu6W
+         Dx5ja4wLk5xEcxMg6wVWoB7TYER2nAh7wDEsm8t/olxjqDHYXIMdVuzQkAKJcR74h6/q
+         t9Tue5xkYcHs0DS2mhreoDZoHKgp64gBEgM23kDn7VyiBwi40XaZqfY/wWlwNRvHR3iu
+         eUjT4/JCPHGqSEjjAkqFYOJA3EbOwZvTi/McJpuUOSOKpffnRMuYSXDrnj2Jt9bbf7R2
+         q09wu+Gx6zuOsK+YF9kP8rQ6g6WZ15SJO/8GhOoymAXOEhr6kOxXvwvvKFTbswHSDiV3
+         IEHQ==
+X-Gm-Message-State: AC+VfDyc0gXCcj3+JG/EmvY6lukjYtaULkZDRh7UnGSnWbUUXl+k2BjY
+        nsl7HZ9SjIFFjk2viET0lFhx9ppcG/iIykHi0V5axA==
+X-Google-Smtp-Source: ACHHUZ6rY7hwhROngrX3S6mKYk8pyY2vNRuLKLBfVKmc4MLTyNTLbfrhXuBN2UniToyQLzyYEgTqSFvqaZji+YzCtio=
+X-Received: by 2002:a2e:8517:0:b0:2a7:75aa:40c with SMTP id
+ j23-20020a2e8517000000b002a775aa040cmr2037906lji.10.1686126376194; Wed, 07
+ Jun 2023 01:26:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230526010748.1222-1-masahisa.kojima@linaro.org>
+ <20230526010748.1222-4-masahisa.kojima@linaro.org> <0d3e0370-eb76-010f-3d30-9acc9b59645c@siemens.com>
+ <CAFA6WYPnWJNPvhT2JDkO-qXRUaJoxBGZEvSfhxcRynV7=VSdQA@mail.gmail.com>
+ <CAMj1kXFM45PCTU--+CCed6Cq_N5XqDG6tTu6fnQTSCpW2BWA5A@mail.gmail.com>
+ <4ff09002-e871-38b9-43ec-227a64bac731@siemens.com> <CAC_iWjJJ5E9Q1or5yTiDynzv_WAYH-g+N24aRdu9rvcsbWqnrg@mail.gmail.com>
+ <CAFA6WYNFYB1LiOFB_iwTsdD5PmnDdSbtDSH2J4FVFPx3uik8rQ@mail.gmail.com>
+In-Reply-To: <CAFA6WYNFYB1LiOFB_iwTsdD5PmnDdSbtDSH2J4FVFPx3uik8rQ@mail.gmail.com>
+From:   Ilias Apalodimas <ilias.apalodimas@linaro.org>
+Date:   Wed, 7 Jun 2023 11:25:40 +0300
+Message-ID: <CAC_iWj+E7-XK6dCeSn4205K0O3EZCLxCaC+adu-14ST6sdudfA@mail.gmail.com>
+Subject: Re: [PATCH v5 3/3] efi: Add tee-based EFI variable driver
+To:     Sumit Garg <sumit.garg@linaro.org>
+Cc:     Jan Kiszka <jan.kiszka@siemens.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Masahisa Kojima <masahisa.kojima@linaro.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-efi@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        "Su, Bao Cheng (RC-CN DF FA R&D)" <baocheng.su@siemens.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi William,
+Hi Sumit,
 
-william.zhang@broadcom.com wrote on Tue,  6 Jun 2023 16:12:51 -0700:
+On Wed, 7 Jun 2023 at 10:25, Sumit Garg <sumit.garg@linaro.org> wrote:
+>
+> Hi Ilias,
+>
+> On Wed, 7 Jun 2023 at 12:05, Ilias Apalodimas
+> <ilias.apalodimas@linaro.org> wrote:
+> >
+> > Hi Jan,
+> >
+> > [...]
+> >
+> > > >>>>
+> > > > ...
+> > > >>>
+> > > >>> I think we have a probe ordering issue with this driver:
+> > > >>> efivarfs_fill_super() may be called before the TEE bus was probed, thus
+> > > >>> with the default efivar ops still registered. And that means
+> > > >>> efivar_supports_writes() will return false, and the fs declares itself
+> > > >>> as readonly. I've seen systemd mounting it r/o initialling, and you need
+> > > >>> to remount the fs to enable writability.
+> > > >>>
+> > > >>> Is there anything that could be done to re-order things reliably, probe
+> > > >>> the tee bus earlier etc.?
+> > > >>
+> > > >> This driver has a dependency on user-space daemon: tee-supplicant to
+> > > >> be running for RPMB access. So once you start that daemon the
+> > > >> corresponding device will be enumerated on the TEE bus and this driver
+> > > >> probe will be invoked. So I would suggest you to load this daemon very
+> > > >> early in the boot process or better to make it a part of initramfs.
+> > > >>
+> > > >
+> > > > That is not the point, really.
+> > > >
+> > > > If this dependency exists, the code should be aware of that, and made
+> > > > to work correctly in spite of it. Requiring a module to be part of
+> > > > initramfs is not a reasonable fix.
+> > >
+> > > In fact, I've tested a non-modularized build as well, just to exclude
+> > > that issue. The daemon dependency is more likely the problem here.
+> > >
+> > > >
+> > > > IIUC, this also means that the efivar ops are updated while there is
+> > > > already a client. This seems less than ideal as well
+> >
+> > As Sumit pointed out, the 'device' won't be available from OP-TEE
+> > until the supplicant is up and running and as a result, the module
+> > _probe() function won't run.  Unfortunately, this isn't something we
+> > can avoid since the supplicant is responsible for the RPMB writes.
+> > The only thing I can think of is moving parts of the supplicant to the
+> > kernel and wiring up the RPC calls for reading/writing data to the
+> > eMMC subsystem.  There was another discussion here [0] requesting the
+> > same thing for different reasons. But unless I am missing something
+> > this won't solve the problem completely either.  You still have a
+> > timing dependency of "when did the RT callbacks change" -- "when was
+> > my efivarfs mounted".
+>
+> With the RPMB writes wired through the kernel [1], the only dependency
+> left is when do you load the tee-stmm-efi driver to have real EFI
+> runtime variables support. IMO, tee-stmm-efi driver should be built-in
+> to support systems without initramfs. The distro installers may choose
+> to bundle it in initramfs. Do you still see a timing dependency with
+> this approach?
 
-> BCMBCA broadband SoC based board design does not specify ecc setting in
-> dts but rather use the SoC NAND strap info to obtain the ecc strength
-> and spare area size setting. Add brcm,nand-ecc-use-strap dts propety for
-> this purpose and update driver to support this option.
->=20
-> The generic nand ecc settings still take precedence over this flag. For
-> example, if nand-ecc-strength is set in the dts, the driver ignores the
-> strap setting and falls back to original behavior. This makes sure that
-> the existing BCMBCA board dts still works the old way even the strap
-> flag is set in the BCMBCA chip dtsi.
->=20
-> Signed-off-by: William Zhang <william.zhang@broadcom.com>
-> ---
->=20
->  drivers/mtd/nand/raw/brcmnand/brcmnand.c | 72 +++++++++++++++++++++---
->  1 file changed, 64 insertions(+), 8 deletions(-)
->=20
-> diff --git a/drivers/mtd/nand/raw/brcmnand/brcmnand.c b/drivers/mtd/nand/=
-raw/brcmnand/brcmnand.c
-> index 656be4d73016..8c7cea36ac71 100644
-> --- a/drivers/mtd/nand/raw/brcmnand/brcmnand.c
-> +++ b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
-> @@ -1076,6 +1076,38 @@ static void brcmnand_set_sector_size_1k(struct brc=
-mnand_host *host, int val)
->  	nand_writereg(ctrl, acc_control_offs, tmp);
->  }
-> =20
-> +static int brcmnand_get_spare_size(struct brcmnand_host *host)
-> +{
-> +	struct brcmnand_controller *ctrl =3D host->ctrl;
-> +	u16 acc_control_offs =3D brcmnand_cs_offset(ctrl, host->cs,
-> +						  BRCMNAND_CS_ACC_CONTROL);
-> +	u32 acc =3D nand_readreg(ctrl, acc_control_offs);
-> +
-> +	return (acc&brcmnand_spare_area_mask(ctrl));
-> +}
-> +
-> +static int brcmnand_get_ecc_strength(struct brcmnand_host *host)
-> +{
-> +	struct brcmnand_controller *ctrl =3D host->ctrl;
-> +	u16 acc_control_offs =3D brcmnand_cs_offset(ctrl, host->cs,
-> +						  BRCMNAND_CS_ACC_CONTROL);
-> +	int sector_size_1k =3D brcmnand_get_sector_size_1k(host);
-> +	int spare_area_size, ecc_level, ecc_strength;
-> +	u32 acc;
-> +
-> +	spare_area_size =3D brcmnand_get_spare_size(host);
-> +	acc =3D nand_readreg(ctrl, acc_control_offs);
-> +	ecc_level =3D (acc & brcmnand_ecc_level_mask(ctrl)) >> brcmnand_ecc_lev=
-el_shift(ctrl);
-> +	if (sector_size_1k)
-> +		ecc_strength =3D ecc_level<<1;
+No I don't, this will work reliably without the need to remount the efivarfs.
+As you point out you will still have this dependency if you end up
+building them as modules and you manage to mount the efivarfs before
+those get inserted.  Does anyone see a reasonable workaround?
+Deceiving the kernel and making the bootloader set the RT property bit
+to force the filesystem being mounted as rw is a nasty hack that we
+should avoid.  Maybe adding a kernel command line parameter that says
+"Ignore the RTPROP I know what I am doing"?  I don't particularly love
+this either, but it's not unreasonable.
 
-                                          ?
-
-If you mean "x2" then let the compiler do that.
-
-> +	else if (spare_area_size =3D=3D 16 && ecc_level =3D=3D 15)
-> +		ecc_strength =3D 1; /* hamming */
-> +	else
-> +		ecc_strength =3D ecc_level;
-> +
-> +	return ecc_strength;
-> +}
-> +
->  /***********************************************************************
->   * CS_NAND_SELECT
->   ***********************************************************************/
-> @@ -2656,19 +2688,43 @@ static int brcmnand_setup_dev(struct brcmnand_hos=
-t *host)
->  		nanddev_get_ecc_requirements(&chip->base);
->  	struct brcmnand_controller *ctrl =3D host->ctrl;
->  	struct brcmnand_cfg *cfg =3D &host->hwcfg;
-> -	char msg[128];
-> +	struct device_node *np =3D nand_get_flash_node(chip);
->  	u32 offs, tmp, oob_sector;
-> -	int ret;
-> +	int ret, sector_size_1k =3D 0;
-> +	bool use_strap =3D false;
-> +	char msg[128];
-> =20
->  	memset(cfg, 0, sizeof(*cfg));
-> +	use_strap =3D of_property_read_bool(np, "brcm,nand-ecc-use-strap");
-> +
-> +	/*
-> +	 * Set ECC size and strength based on hw configuration from strap
-> +	 * if device tree does not specify them and use strap property is set
-> +	 * If ecc strength is set in dts, don't use strap setting.
-> +	 */
-> +	if (chip->ecc.strength)
-> +		use_strap =3D 0;
-> +
-> +	if (use_strap) {
-> +		chip->ecc.strength =3D brcmnand_get_ecc_strength(host);
-> +		sector_size_1k =3D brcmnand_get_sector_size_1k(host);
-> +		if (chip->ecc.size =3D=3D 0) {
-> +			if (sector_size_1k < 0)
-> +				chip->ecc.size =3D 512;
-> +			else
-> +				chip->ecc.size =3D 512<<sector_size_1k;
-
-Please run checkpatch.pl --strict
-
-> +		}
-> +	}
-> =20
-> -	ret =3D of_property_read_u32(nand_get_flash_node(chip),
-> -				   "brcm,nand-oob-sector-size",
-> -				   &oob_sector);
-> +	ret =3D of_property_read_u32(np, "brcm,nand-oob-sector-size",
-> +			   &oob_sector);
->  	if (ret) {
-> -		/* Use detected size */
-> -		cfg->spare_area_size =3D mtd->oobsize /
-> -					(mtd->writesize >> FC_SHIFT);
-> +		if (use_strap)
-> +			cfg->spare_area_size =3D brcmnand_get_spare_size(host);
-> +		else
-> +			/* Use detected size */
-> +			cfg->spare_area_size =3D mtd->oobsize /
-> +						(mtd->writesize >> FC_SHIFT);
->  	} else {
->  		cfg->spare_area_size =3D oob_sector;
->  	}
-
-
-Thanks,
-Miqu=C3=A8l
+Thanks
+/Ilias
+>
+> [1] Of Course here we need the eMMC and TEE/OPTEE drivers to be built-in too.
+>
+> -Sumit
+>
+> >
+> > Thanks
+> > /Ilias
+> > >
+> > > Jan
+> > >
+> > > --
+> > > Siemens AG, Technology
+> > > Competence Center Embedded Linux
+> > >
