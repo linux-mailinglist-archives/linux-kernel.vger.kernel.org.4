@@ -2,96 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1CDA72627C
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 16:13:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FA8D72627E
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 16:14:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241048AbjFGON5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 10:13:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47846 "EHLO
+        id S241050AbjFGOOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 10:14:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239782AbjFGON4 (ORCPT
+        with ESMTP id S239782AbjFGOOB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 10:13:56 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40E77137;
-        Wed,  7 Jun 2023 07:13:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=KleB+ugHaYugKJ9gSA4qsXI2OvMw4kTkMupOcPrFgkc=; b=KgsJPTlcL74jg3sbLH88TCp8zP
-        H5aobn2X5sq+oDbRQfNmgF+1obpLKR9WADsbLjRtZU+oZu+gZq/cE6/TkVpn4XKSn5WQScCRzGFl4
-        BrHYrT+OAs9SodL2QDNP8bQmoOePwjkfxc6qyXUG6y+1uRLG/9W2TbKmmV4wuXE2M8bZRpsevnh3+
-        QoZu2hlL+7wXlgNZ+Z6SYtbl5PflXJnKWisugDC3KQEuGeDupn2nThBo9fwD0W3jXL1+T1rIZhSJe
-        92nED/hawtNl3qbrp2qdGknIUZjyYjM8y39rtcY92CS3wv3b6RKQj+E5CZx/60D0wQmtUbL4Zc3Ff
-        Nf+YS5TA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:49616)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1q6tv6-0007cF-Fo; Wed, 07 Jun 2023 15:13:52 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1q6tv4-0008IV-4b; Wed, 07 Jun 2023 15:13:50 +0100
-Date:   Wed, 7 Jun 2023 15:13:50 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Maxime Chevallier <maxime.chevallier@bootlin.com>
-Cc:     davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alexis.lothore@bootlin.com,
-        thomas.petazzoni@bootlin.com, Andrew Lunn <andrew@lunn.ch>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Feiyang Chen <chenfeiyang@loongson.cn>
-Subject: Re: [PATCH net-next v4 0/5] Followup fixes for the dwmac and altera
- lynx conversion
-Message-ID: <ZICQngRXett8g+gj@shell.armlinux.org.uk>
-References: <20230607135941.407054-1-maxime.chevallier@bootlin.com>
+        Wed, 7 Jun 2023 10:14:01 -0400
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0EA2137
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 07:13:59 -0700 (PDT)
+Received: by mail-qv1-xf2c.google.com with SMTP id 6a1803df08f44-62614a2ce61so63110686d6.3
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 07:13:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20221208.gappssmtp.com; s=20221208; t=1686147239; x=1688739239;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=hujtERsbr1y1Z0h2D+lsDsJnysg0r755K8W7fL2vlzU=;
+        b=Df5rDCZQESwjHEO+Uah+2lAx+ncZ/pSMBGHAB7jgWart+hv1h4s0QUfngJdWJ+Pn8K
+         iILaIApA9zVcMWGF6JyrvlNQ2I9xG3l2PiM6HyOJoKNv9E+6ijAoUbwiyfgwwmrAEzfc
+         ANxbLVbqEt97/N2QcUR7PC0XAVrCJATVwLyKSxRPZ9FFoLuWZ4kt26v2LV2e/RGCTiIs
+         /+JWuknkCiKVvH6V3uog4o1Sb50eQuAzt1cz/t18eIiHEIpOtHZjTpmi6RED+BESRA6V
+         EHkgOlfMdNL5qGfTD3YqzlMAPO9wvvotwaygK4DX8R2sJXVVuc/WZv4yi+Cr7DeIAshX
+         lNsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686147239; x=1688739239;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hujtERsbr1y1Z0h2D+lsDsJnysg0r755K8W7fL2vlzU=;
+        b=GFsnB85IXIrjz18uY4f8lXeD6fBcXis2XW6zXPjgS0vdUb+8ymfCACOgw6luAFrA1S
+         HnDp7Gq3FgOScgqEdy1vFF4aRVRIZY0P+vysaMsIG+FF14+rSOsqQcx/XxlQkczBxrZ7
+         P/RS4OJPU9EkCZbDmLFBIxaZsYM50HzTIGZpFfe8+5WU3JZfFqbtPSttcNYvaoBBIo9k
+         +6bnYqv5nhRnItLEySwNjgj7jLPFCX9hG2KoFi7cD3BrqaVWq2E16eWwnxRkWNDhb5Zf
+         Ho6qwQlvLsazT+Llvq+Ueu8P1iOhlpRSn/zRH9baKEjkLHrb6YztczOFJVjKdPa++0dY
+         oAUg==
+X-Gm-Message-State: AC+VfDzWk6rHsGOai6BaYTKcf8/9hJg7UQoCIJgM1u0vrIZjQGTzKhE7
+        5LJKWbH+T15fJTNRe966ayrneA==
+X-Google-Smtp-Source: ACHHUZ6C1PlaUoolC9qAy7RRteJreDjDP+HPCNptvM/K49WfcQemsYFute8jzy0/tbDwXcxDqT4IQA==
+X-Received: by 2002:a05:6214:ac9:b0:622:7b7f:ed46 with SMTP id g9-20020a0562140ac900b006227b7fed46mr3261958qvi.7.1686147238725;
+        Wed, 07 Jun 2023 07:13:58 -0700 (PDT)
+Received: from localhost (2603-7000-0c01-2716-8f57-5681-ccd3-4a2e.res6.spectrum.com. [2603:7000:c01:2716:8f57:5681:ccd3:4a2e])
+        by smtp.gmail.com with ESMTPSA id p8-20020a0cfd88000000b00623927281c2sm6077696qvr.40.2023.06.07.07.13.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 07:13:58 -0700 (PDT)
+Date:   Wed, 7 Jun 2023 10:13:57 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Seth Jennings <sjenning@redhat.com>,
+        Dan Streetman <ddstreet@ieee.org>,
+        Vitaly Wool <vitaly.wool@konsulko.com>,
+        Nhat Pham <nphamcs@gmail.com>,
+        Domenico Cerasuolo <cerasuolodomenico@gmail.com>,
+        Yu Zhao <yuzhao@google.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm: zswap: support exclusive loads
+Message-ID: <20230607141357.GA338934@cmpxchg.org>
+References: <20230530210251.493194-1-yosryahmed@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230607135941.407054-1-maxime.chevallier@bootlin.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230530210251.493194-1-yosryahmed@google.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 03:59:36PM +0200, Maxime Chevallier wrote:
-> Hello everyone,
-> 
-> Here's yet another version of the cleanup series for the TSE PCS replacement
-> by PCS Lynx. It includes Kconfig fixups, some missing initialisations
-> and a slight rework suggested by Russell for the dwmac cleanup sequence,
-> along with more explicit zeroing of local structures as per MAciej's
-> review.
+On Tue, May 30, 2023 at 09:02:51PM +0000, Yosry Ahmed wrote:
+> @@ -46,6 +46,19 @@ config ZSWAP_DEFAULT_ON
+>  	  The selection made here can be overridden by using the kernel
+>  	  command line 'zswap.enabled=' option.
+>  
+> +config ZSWAP_EXCLUSIVE_LOADS
+> +	bool "Invalidate zswap entries when pages are loaded"
+> +	depends on ZSWAP
+> +	help
+> +	  If selected, when a page is loaded from zswap, the zswap entry is
+> +	  invalidated at once, as opposed to leaving it in zswap until the
+> +	  swap entry is freed.
+> +
+> +	  This avoids having two copies of the same page in memory
+> +	  (compressed and uncompressed) after faulting in a page from zswap.
+> +	  The cost is that if the page was never dirtied and needs to be
+> +	  swapped out again, it will be re-compressed.
+> +
+>  choice
+>  	prompt "Default compressor"
+>  	depends on ZSWAP
+> diff --git a/mm/frontswap.c b/mm/frontswap.c
+> index 279e55b4ed87..e5d6825110f4 100644
+> --- a/mm/frontswap.c
+> +++ b/mm/frontswap.c
+> @@ -216,8 +216,13 @@ int __frontswap_load(struct page *page)
+>  
+>  	/* Try loading from each implementation, until one succeeds. */
+>  	ret = frontswap_ops->load(type, offset, page);
+> -	if (ret == 0)
+> +	if (ret == 0) {
+>  		inc_frontswap_loads();
+> +		if (frontswap_ops->exclusive_loads) {
+> +			SetPageDirty(page);
+> +			__frontswap_clear(sis, offset);
+> +		}
+> +	}
+>  	return ret;
 
-For the series, which brings an immediate fix to the problems people
-are noticing:
+This would be a much more accessible feature (distro kernels,
+experimenting, adapting to different workloads) if it were runtime
+switchable.
 
-Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+That should be possible, right? As long as frontswap and zswap are
+coordinated, this can be done on a per-entry basis:
 
-Thanks!
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+	exclusive = READ_ONCE(frontswap_ops->exclusive_loads);
+	ret = frontswap_ops->load(type, offset, page, exclusive);
+	if (ret == 0) {
+		if (exclusive) {
+			SetPageDirty(page);
+			__frontswap_clear(sis, offset);
+		}
+	}
