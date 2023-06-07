@@ -2,102 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 236AB725B13
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 11:51:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27FDC725B1C
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 11:56:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239745AbjFGJvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 05:51:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35508 "EHLO
+        id S239029AbjFGJ4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 05:56:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234384AbjFGJvm (ORCPT
+        with ESMTP id S234789AbjFGJ4V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 05:51:42 -0400
-X-Greylist: delayed 403 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 07 Jun 2023 02:51:39 PDT
-Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B55A7E49;
-        Wed,  7 Jun 2023 02:51:39 -0700 (PDT)
-Received: from ed3e173716be.home.arpa (unknown [124.16.138.125])
-        by APP-03 (Coremail) with SMTP id rQCowACniR4dU4BkidqzDA--.1731S2;
-        Wed, 07 Jun 2023 17:51:25 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     james.smart@broadcom.com, ram.vegesna@broadcom.com,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        chenzhongjin@huawei.com, dwagner@suse.de, hare@suse.de
-Cc:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH v2] scsi: efct: Add missing check for ioremap
-Date:   Wed,  7 Jun 2023 17:51:24 +0800
-Message-Id: <20230607095124.38414-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        Wed, 7 Jun 2023 05:56:21 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA8B6101
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 02:56:19 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-5169f920a9dso567896a12.0
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 02:56:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686131778; x=1688723778;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oKkGexFGpQmVCwwg8im28eJbpseNCLW3GXq5+ips1TY=;
+        b=KzwF1w2CYLTceYhK9vABATZI8CPzx4B2xas4KT85KDV9PxFTLHPmUOIWDaJNf2/LoL
+         KoL0fdBRoq4F09hgA4ss1qnuDcsWCOn+EjHeEfJc8WuicnPWhc8vER3xNllllckX8Pw4
+         ESTiKXN+kXvnDoA8jUV1LZ6HB8fAMywQgjGOdOin2jQcumb9DaqM8Z7bg/OC2qJwQUhQ
+         G+bJ5Hpc0O3XPB3JXeQrN3l3czYMOwuWFSspjU64VI8MlyDKwk4Wy66Jeu237mbGFBkD
+         rt0bDjp+41tKwC9qd2mZewQqVnhAWmnr2H3DSHmXjElU1jIkKwDhUdxlDYM7j4Bex/nh
+         cyAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686131778; x=1688723778;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oKkGexFGpQmVCwwg8im28eJbpseNCLW3GXq5+ips1TY=;
+        b=diHKszlO1iPVqhGJJjnxE60YIzvAdJN2P4FAngzL13hkMDf9gBHtPAXkyz/KGA1MXx
+         nRQ3Z0slKXtwvoNv9cw/yOts2jvu4rN2Slu/XDLZya2OWKM88oNxRu/Pd2ViQZ1TtD2l
+         C0/6QCSHjBljdMu+ZIWpAFc3I8JmUi/kDUeXBpSHQMjyHWHof+3kjxfZuOT7YEraApl2
+         Xhb3Y7CR+CTSg8JBQO8nHToUjPa3mXxEzSj4CvBAsHEZ7gAmatQyhqohEjJGPCeyV65S
+         xDLCRaCsflAlp1mCQw2Ns/kJWTQqL7i3CjOKuXXqS7QbtTStgj1f7v/MmiGbQfJ81F0k
+         wYjQ==
+X-Gm-Message-State: AC+VfDyQbJf+rQy2xk5B552FRIolaSBjLon60nvkAhvQX++DjNKMcVhw
+        PXmPvlIH1tn7OEB/HgB1X7y542sCTxzhevx2uOM=
+X-Google-Smtp-Source: ACHHUZ7XSrMQFYkhZEeeJtvnlLxFq2QdTjFeouEQqKbyi/ai3Lj+X3ZkmdTcG2SSjXnIaNwL3H6cTg==
+X-Received: by 2002:a05:6402:5204:b0:4fc:97d9:18ec with SMTP id s4-20020a056402520400b004fc97d918ecmr14186697edd.21.1686131778385;
+        Wed, 07 Jun 2023 02:56:18 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id j9-20020aa7c409000000b0050dfd7de30dsm5979095edq.94.2023.06.07.02.56.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Jun 2023 02:56:17 -0700 (PDT)
+Message-ID: <4b26898c-0751-14c4-1fdf-2c4e59d4f224@linaro.org>
+Date:   Wed, 7 Jun 2023 11:56:15 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: rQCowACniR4dU4BkidqzDA--.1731S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Xw4Utry8AF4fJF48ZFWDurg_yoW8JrW7pF
-        WSvay5uF4rtF45Kr1UAF1UCF1Fva40v3yDurWjg343uay0qFyrtFWfJFyakr15A3yktw17
-        tw15JFy8Xa4DJaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvC14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
-        Y2ka0xkIwI1lc2xSY4AK67AK6r4fMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r
-        1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
-        b7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0x
-        vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAI
-        cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2Kf
-        nxnUUI43ZEXa7VUjC385UUUUU==
-X-Originating-IP: [124.16.138.125]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v3 2/3] dt-bindings: display: panel: add fannal,c3004
+Content-Language: en-US
+To:     Paulo Pavacic <pavacic.p@gmail.com>
+Cc:     neil.armstrong@linaro.org, sam@ravnborg.org, airlied@gmail.com,
+        daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20230606140757.818705-1-pavacic.p@gmail.com>
+ <20230606140757.818705-3-pavacic.p@gmail.com>
+ <cac57af0-aa0f-0a60-3376-234e1da7f4eb@linaro.org>
+ <CAO9szn3+u_yuWb5y_aQGWA8RhW2=qPVcxcZvGWz8MbHH_DamNg@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAO9szn3+u_yuWb5y_aQGWA8RhW2=qPVcxcZvGWz8MbHH_DamNg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add check for ioremap() and return the error if it fails in order to
-guarantee the success of ioremap().
+On 07/06/2023 11:29, Paulo Pavacic wrote:
+> Hello Krzysztof,
+> 
+> uto, 6. lip 2023. u 16:43 Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> napisao je:
+>>
+>> On 06/06/2023 16:07, Paulo Pavacic wrote:
+>>> Added fannal to vendor-prefixes and dt bindings for Fannal C3004.
+>>> Fannal C3004 is a 480x800 MIPI DSI Panel which requires
+>>> DCS initialization sequences with certain delays between certain
+>>> commands.
+>>>
+>>> Signed-off-by: Paulo Pavacic <pavacic.p@gmail.com>
+>>> ---
+>>> v4 changelog:
+>>>   - add spaces between properties
+>>
+>> ???
+> 
+> Added empty lines between properties in yml file
+> 
+>>
+>> I pointed out last incorrect versioning. This is v3, not v4. Or is it v4?
+> 
+> It is v4 of the patch but v3 of the patchset. I wasn't sure whether
+> somebody would complain if I were to name [patch 2/3] in a patch set
+> with different version. I will try to edit changelog to match patchset
+> version.
 
-Fixes: 4df84e846624 ("scsi: elx: efct: Driver initialization routines")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
-Changelog:
+Please maintain consistent versioning. There is only one version -
+that's the version you are sending.
 
-v1 -> v2:
+> 
+>>
+>> What about my tag?
+>>
+> 
+> I have changed in MAINTAINERS file from "+C:
+> matrix:r/mipi-dsi-bringup:matrix.org" to " +C:
+> matrix:r/linux-drm:matrix.org". So I wasn't sure whether to add it.
+> I will add it in future version of the patch.
 
-1. Add "rc = -EINVAL;" in the error handling.
----
- drivers/scsi/elx/efct/efct_driver.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+Keep the tags you received.
 
-diff --git a/drivers/scsi/elx/efct/efct_driver.c b/drivers/scsi/elx/efct/efct_driver.c
-index 49fd2cfed70c..8cb6d42b7432 100644
---- a/drivers/scsi/elx/efct/efct_driver.c
-+++ b/drivers/scsi/elx/efct/efct_driver.c
-@@ -528,6 +528,10 @@ efct_pci_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 		if (pci_resource_flags(pdev, i) & IORESOURCE_MEM) {
- 			efct->reg[r] = ioremap(pci_resource_start(pdev, i),
- 					       pci_resource_len(pdev, i));
-+			if (!efct->reg[r]) {
-+				rc = -EINVAL;
-+				goto ioremap_out;
-+			}
- 			r++;
- 		}
- 
-@@ -580,7 +584,7 @@ efct_pci_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 	efct_teardown_msix(efct);
- dma_mask_out:
- 	pci_set_drvdata(pdev, NULL);
--
-+ioremap_out:
- 	for (i = 0; i < EFCT_PCI_MAX_REGS; i++) {
- 		if (efct->reg[i])
- 			iounmap(efct->reg[i]);
--- 
-2.25.1
+> 
+>> What about my comment?
+>>
+> 
+> I thought you wanted me to have more generalized MAINTAINERS community
+> URI that's why I have changed it to linux-drm. I will remove community
+> URI in future version of the patch.
+
+The chat should be in subsystem entry, not in individual drivers. People
+will not hop between 100 IRC rooms to figure out discussion. Just like
+we have only one mailing list dedicated to given topic.
+
+Best regards,
+Krzysztof
 
