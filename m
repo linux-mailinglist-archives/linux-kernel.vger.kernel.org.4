@@ -2,115 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA0E9725CD0
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 13:14:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1452725CD2
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 13:17:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240156AbjFGLOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 07:14:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50918 "EHLO
+        id S238734AbjFGLRB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 07:17:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238952AbjFGLN7 (ORCPT
+        with ESMTP id S234009AbjFGLQ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 07:13:59 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD604BA;
-        Wed,  7 Jun 2023 04:13:57 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-556f2c24a28so7730097b3.1;
-        Wed, 07 Jun 2023 04:13:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686136437; x=1688728437;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DrJxdATXyWpfUu9r5bzsGo7jpJOQRgXwendTd3rc1FE=;
-        b=aiOUFUqeLlVZtivXeuMxlIRytiQmCvbbISRdnDWJFCTV93pU6Tu8PVTdwB1vQ204pj
-         Ncbb/gjSOvN3SwyDs5PBb8nFOPtvlnJxNCv9qcofK+c7CoGUc75gKCUfnzZ+euu21qix
-         qn+o6BmItfsHrP7Ke5FxoI9QczQ5J3xPA5yXcp6wDBLBX4ZPx+gfuwp6Aw+o5r63n7Lu
-         pLQQU6ALFiPN+oz+II84PrUwpHYYJvML3M3gshbKrWgNIq5TeDMmprvPJOlevrR2Jpdf
-         DrydmW0E2rFBw9CDvqAySbCvaZJs1+GdU6qrV5xu0MWFz970EPZbZN2nWa5VS3gga0gB
-         P+BQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686136437; x=1688728437;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DrJxdATXyWpfUu9r5bzsGo7jpJOQRgXwendTd3rc1FE=;
-        b=MUz9jlyGvT1QZaB/HvU4OcVK0qO+M0kHrfPKfh6MI/xumKx1QFSuliobj+0OW3kI0z
-         ZlPap6Tw9YuiSro+8rLUpMbL6CgC6TuJE8KH9duSDzGH40NwHOxhyVDaWwM12pXHkQ0o
-         bLIMDyvpy/0HhacLMZ4cesLTIsTM0UpoB8rPv4xDw47EvSVS9z3YWxAuV+OZIu3jf5ih
-         ecC4Ds20haZ8CauwavuTaVOzpQnBC9dzZjSpTtH7QN+KS/vYBUTU53Dzdd9C+VP3G/zE
-         zh+7Htb9/fuuawsPCEiLGI+lduQr3t4QBf6XdjfPSG30sGqvjfXmXkCpSGvL2xe/58yA
-         h3yw==
-X-Gm-Message-State: AC+VfDz5v5yPclvNaqeicCaSQuP/vidZlwAV1lKWUjoTJFVLxuz1xEds
-        ZG/gQip0xjXfFG+aEmbQrD0ZAFL9amHRYXW5N90=
-X-Google-Smtp-Source: ACHHUZ5gEYpTZhSH45XyjcrNKKw+KEn1RjUYSZUD37fuwbaQJUo28O8P4HoP+LwveAAA9KED5RCP6pwa9Lqdt44TxA4=
-X-Received: by 2002:a81:7915:0:b0:569:e91c:ed8 with SMTP id
- u21-20020a817915000000b00569e91c0ed8mr1374564ywc.2.1686136436858; Wed, 07 Jun
- 2023 04:13:56 -0700 (PDT)
+        Wed, 7 Jun 2023 07:16:59 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE2A0192
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 04:16:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686136618; x=1717672618;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PiKSAp5BVygTV9wZE+ojPjExOYqMBatij4nulCuDqV8=;
+  b=H9PNDlMgL8OjrOaTi9Ch9V/i/K6+SZaXgYigPQ9RMezkQMIXLWDKybL/
+   SVGFSBs8aWp6gdl5mRc5f3lgny+pNhg08hBtG7a0Pi5nrwCf9lkecdgBm
+   rm3++FNtQE1e2uNtIqOzB2PWpi67ZDzfJT5gBUMmwDYgNrB8WJIEKUSV8
+   GtacUdWjQAKnoS/pPdzRYe9wGaVpJAnuDFKLdZ09KGPBnwgLJpNwb/7Az
+   6mGNDi2ufdyKKnyxA7qRZT/gFVAmSzN5BN4jYZHOu1Ca05RgvDTvseAjK
+   KGvpxYwIsgvk3iBnd4XXwd88Wn6VXwv/59AD8rrR/GkjOWFsZYzNtX+H2
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="356968095"
+X-IronPort-AV: E=Sophos;i="6.00,223,1681196400"; 
+   d="scan'208";a="356968095"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 04:16:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="853844424"
+X-IronPort-AV: E=Sophos;i="6.00,223,1681196400"; 
+   d="scan'208";a="853844424"
+Received: from akuporos-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.251.211.72])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 04:16:55 -0700
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 7550E10F0D2; Wed,  7 Jun 2023 14:16:52 +0300 (+03)
+Date:   Wed, 7 Jun 2023 14:16:52 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, decui@microsoft.com,
+        rick.p.edgecombe@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, seanjc@google.com,
+        thomas.lendacky@amd.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv3 2/3] x86/tdx: Fix race between set_memory_encrypted()
+ and load_unaligned_zeropad()
+Message-ID: <20230607111652.iydtlf2iqwg2zeid@box.shutemov.name>
+References: <20230606095622.1939-1-kirill.shutemov@linux.intel.com>
+ <20230606095622.1939-3-kirill.shutemov@linux.intel.com>
+ <f7f82377-6127-79e3-07d8-def490c4e35c@intel.com>
+ <20230606183718.i3iqwbk7gdomiq5s@box.shutemov.name>
+ <1eaf32e1-f808-320d-2643-387682cf7ea0@intel.com>
 MIME-Version: 1.0
-References: <CAPnZJGDWUT0D7cT_kWa6W9u8MHwhG8ZbGpn=uY4zYRWJkzZzjA@mail.gmail.com>
- <CAJfpeguZX5pF8-UNsSfJmMhpgeUFT5XyG_rDzMD-4pB+MjkhZA@mail.gmail.com>
-In-Reply-To: <CAJfpeguZX5pF8-UNsSfJmMhpgeUFT5XyG_rDzMD-4pB+MjkhZA@mail.gmail.com>
-From:   Askar Safin <safinaskar@gmail.com>
-Date:   Wed, 7 Jun 2023 14:13:20 +0300
-Message-ID: <CAPnZJGB8XKtv8W7KYtyZ7AFWWB-LTG_nP3wLAzus6jHFp_mWfg@mail.gmail.com>
-Subject: Re: [PATCH 0/6] vfs: provide automatic kernel freeze / resume
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bernd Schubert <bernd.schubert@fastmail.fm>,
-        linux-pm@vger.kernel.org,
-        fuse-devel <fuse-devel@lists.sourceforge.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1eaf32e1-f808-320d-2643-387682cf7ea0@intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I found a workaround for sshfs+suspend problem!
+On Tue, Jun 06, 2023 at 04:29:15PM -0700, Dave Hansen wrote:
+> On 6/6/23 11:37, Kirill A. Shutemov wrote:
+> >> Heh, that must be really important info to have it in the changelog twice!
+> >>
+> >> I'll fix it up when I apply it.
+> > Ouch. Please fix the comment in the code too.
+> 
+> I couldn't help myself and rewrote the changelog and comment.  Please
+> let me know if it looks OK:
+> 
+> > https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/log/?h=x86/tdx
 
-On Tue, Jun 6, 2023 at 5:38=E2=80=AFPM Miklos Szeredi <miklos@szeredi.hu> w=
-rote:
-> Issues remaining:
->
->  - if requests are stuck (e.g. network is down) then the requester
-> process can't be frozen and suspend will still fail.
+Looks good. Thank you.
 
-> Solution to both these are probably non-kernel: impacted servers need
-> to receive notification from systemd when suspend is starting and act
-> accordingly.
-
-Okay, so you said that the only way to solve the problem "network is
-down" is to fix the problem at the sshfs side. Unfortunately, sshfs
-project was closed ( https://github.com/libfuse/sshfs ). So the only
-remaining option is to use some hack. And I found such a hack!
-
-I simply added "-o ServerAliveInterval=3D10" to sshfs command. This will
-cause ssh process exit if remote side is unreachable. Thus the bug is
-prevented. I tested the fix and it works.
-
-But this will mean that ssh process will exit in such situation, and
-thus sshfs process will exit, too. If this is not what you want, then
-also add "-o reconnect" option, this will restart connection if ssh
-dies. So the final command will look like this:
-
-sshfs -o reconnect,ServerAliveInterval=3D10 ...
-
-This finally solved the problem for me.
-
-But one issue still remains: if the network goes down and then you
-immediately try to access sshfs filesystem and then you will try to
-suspend (and ssh doesn't yet noticed that the network gone down), then
-suspend will still fail. (I tested this situation, the suspend
-actually fails.) But I don't think I even will reach such situation.
-The lesser ServerAliveInterval you will set, the lower is probability
-that you will reach such situation
-
---=20
-Askar Safin
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
