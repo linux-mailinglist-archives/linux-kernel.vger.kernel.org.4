@@ -2,105 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 892CA725F40
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 14:25:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D92C0725F3D
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 14:25:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240799AbjFGMZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 08:25:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37956 "EHLO
+        id S240816AbjFGMZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 08:25:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240819AbjFGMYx (ORCPT
+        with ESMTP id S240851AbjFGMY6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 08:24:53 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8151735;
-        Wed,  7 Jun 2023 05:24:52 -0700 (PDT)
-Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 357CF20d019742;
-        Wed, 7 Jun 2023 12:24:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=RVjBk97CzqjGiGb+k13zICDADHCgSP9dUP+PFAVrSaY=;
- b=f5XkSwrLwrQpslxEaVT2TUXxS2EG0ta7XUpa0SWeuWPMwD07xByb0/EdAufyRxCQeanB
- RToqMG/murSX6kcTTZLM39tQDHrP7dhAUxap9PtKfQEo5dbmPAtyYDO9jCvo8nzRk5xX
- BgAoV5WrenzDpt0++Hv7ewh3HLAkfgwdnYpdpnr6zqfl9ZOPd85rMgm47209FCy+fyvZ
- G620v40rB9VrFxB7IkWpYUD02i/ys6zxECQDjKm4cqjRHnC8r1p+UAGewHVYHL7efrl2
- ln3Pazkh+2fBE6RQnhXomoSa+zF5KEMrFFdcTvXLUoDAY2oghne8t2gPND73JV/iztU/ Tw== 
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r2sr0r9kg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 07 Jun 2023 12:24:51 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3574kjZH005507;
-        Wed, 7 Jun 2023 12:24:48 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-        by ppma01fra.de.ibm.com (PPS) with ESMTPS id 3r2a77gawc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 07 Jun 2023 12:24:48 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 357COieI20513390
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 7 Jun 2023 12:24:45 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D009B20040;
-        Wed,  7 Jun 2023 12:24:44 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 55A3720043;
-        Wed,  7 Jun 2023 12:24:44 +0000 (GMT)
-Received: from [9.179.8.138] (unknown [9.179.8.138])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Wed,  7 Jun 2023 12:24:44 +0000 (GMT)
-Message-ID: <11b9ff22-1d18-5659-47d5-c30a3bfdf909@linux.ibm.com>
-Date:   Wed, 7 Jun 2023 14:24:44 +0200
+        Wed, 7 Jun 2023 08:24:58 -0400
+Received: from outbound-smtp36.blacknight.com (outbound-smtp36.blacknight.com [46.22.139.219])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C5191734
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 05:24:52 -0700 (PDT)
+Received: from mail.blacknight.com (pemlinmail04.blacknight.ie [81.17.254.17])
+        by outbound-smtp36.blacknight.com (Postfix) with ESMTPS id 7E2191CA3
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 13:24:50 +0100 (IST)
+Received: (qmail 5691 invoked from network); 7 Jun 2023 12:24:50 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.21.103])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 7 Jun 2023 12:24:50 -0000
+Date:   Wed, 7 Jun 2023 13:24:48 +0100
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Pedro Falcato <pedro.falcato@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Chuyi Zhou <zhouchuyi@bytedance.com>,
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 3/4] mm: compaction: Update pageblock skip when first
+ migration candidate is not at the start
+Message-ID: <20230607122448.nvyxtviyuawk3rfy@techsingularity.net>
+References: <20230515113344.6869-1-mgorman@techsingularity.net>
+ <20230515113344.6869-4-mgorman@techsingularity.net>
+ <e87a9797-c8ce-1959-884a-7f791adeaafc@suse.cz>
+ <20230529103342.esek6r5fvmft2nky@techsingularity.net>
+ <6695b7e5-9fa5-fae8-8a66-cc5985b0baaf@suse.cz>
+ <20230602111622.swtxhn6lu2qwgrwq@techsingularity.net>
+ <152e0730-0ddc-a1f8-7122-275d51741a1d@suse.cz>
+ <20230602124825.24a775kwwuf4rs6v@techsingularity.net>
+ <2c802986-3726-f79c-6383-cc03adb9fb0c@suse.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v4 4/6] s390/uvdevice: Add 'Lock Secret Store' UVC
-Content-Language: en-US
-To:     Steffen Eiden <seiden@linux.ibm.com>, kvm@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Viktor Mihajlovski <mihajlov@linux.ibm.com>
-Cc:     Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Nico Boehr <nrb@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Hendrik Brueckner <brueckner@linux.ibm.com>
-References: <20230606180817.3019077-1-seiden@linux.ibm.com>
- <20230606180817.3019077-5-seiden@linux.ibm.com>
-From:   Janosch Frank <frankja@linux.ibm.com>
-In-Reply-To: <20230606180817.3019077-5-seiden@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: eCVr0Kl0I_Nl7ObDxKx81d1kbZYG8MfZ
-X-Proofpoint-GUID: eCVr0Kl0I_Nl7ObDxKx81d1kbZYG8MfZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-07_06,2023-06-07_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=750
- impostorscore=0 lowpriorityscore=0 suspectscore=0 malwarescore=0
- adultscore=0 phishscore=0 mlxscore=0 spamscore=0 clxscore=1015
- priorityscore=1501 bulkscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2305260000 definitions=main-2306070100
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <2c802986-3726-f79c-6383-cc03adb9fb0c@suse.cz>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/6/23 20:08, Steffen Eiden wrote:
-> Userspace can call the Lock Secret Store Ultravisor Call
-> using IOCTLs on the uvdevice. The Lock Secret Store UV call
-> disables all additions of secrets for the future.
+On Tue, Jun 06, 2023 at 03:11:27PM +0200, Vlastimil Babka wrote:
+> On 6/2/23 14:48, Mel Gorman wrote:
+> > On Fri, Jun 02, 2023 at 02:19:00PM +0200, Vlastimil Babka wrote:
+> >> On 6/2/23 13:16, Mel Gorman wrote:
+> >> > On Mon, May 29, 2023 at 02:43:48PM +0200, Vlastimil Babka wrote:
+> >> >> On 5/29/23 12:33, Mel Gorman wrote:
+> >> >> > On Thu, May 25, 2023 at 03:37:43PM +0200, Vlastimil Babka wrote:
+> >> >> >> On 5/15/23 13:33, Mel Gorman wrote:
+> >> >> >> > isolate_migratepages_block should mark a pageblock as skip if scanning
+> >> >> >> > started on an aligned pageblock boundary but it only updates the skip
+> >> >> >> > flag if the first migration candidate is also aligned. Tracing during
+> >> >> >> > a compaction stress load (mmtests: workload-usemem-stress-numa-compact)
+> >> >> >> > that many pageblocks are not marked skip causing excessive scanning of
+> >> >> >> > blocks that had been recently checked. Update pageblock skip based on
+> >> >> >> > "valid_page" which is set if scanning started on a pageblock boundary.
+> >> >> >> > 
+> >> >> >> > Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
+> >> >> >> 
+> >> >> >> I wonder if this has an unintended side-effect that if we resume
+> >> >> >> isolate_migratepages_block() of a partially compacted pageblock to finish
+> >> >> >> it, test_and_set_skip() will now tell us to abort, because we already set
+> >> >> >> the skip bit in the previous call. This would include the
+> >> >> >> cc->finish_pageblock rescan cases.
+> >> >> >> 
+> >> >> >> So unless I miss something that already prevents that, I agree we should not
+> >> >> >> tie setting the skip bit to pageblock_aligned(pfn), but maybe if we are not
+> >> >> >> pageblock aligned, we should ignore the already-set skip bit, as it was most
+> >> >> >> likely being set by us in the previous iteration and should not prevent us
+> >> >> >> from finishing the pageblock?
+> >> >> >> 
+> >> >> > 
+> >> >> > Hmm, I think you're right. While it should not hit the original bug,
+> >> >> > migration candidates are missed until the next compaction scan which
+> >> >> > could be tricky to detect. Something like this as a separate patch?
+> >> >> > Build tested only but the intent is for an unaligned start to set the skip
+> >> >> > bet if already unset but otherwise complete the scan. Like earlier fixes,
+> >> >> > this might overscan some pageblocks in a given context but we are probably
+> >> >> > hitting the limits on how compaction can run efficiently in the current
+> >> >> > scheme without causing other side-effects :(
+> >> >> 
+> >> >> Yeah that should work! I think it should be even folded to 3/4 but if you
+> >> >> want separate, fine too.
+> >> >> 
+> >> > 
+> >> > I was not happy with the test results so limited the scope of the patch
+> >> > which performed much better both in terms of absolute performance and
+> >> > compaction activity.
+> >> 
+> >> That's surprising. Does that mean that if we isolate COMPACT_CLUSTER_MAX
+> >> pages, migrate them without failing, but it's not enough to succeed (i.e.
+> >> there are more pages we need to migrate to free up a whole pageblock), it's
+> >> better to give up on the rest of the pageblock rather than continue?
+> > 
+> > I don't have precise enough data to answer that with certainty but probably
+> > yes, at least in terms of scan activity. The first version had spikes of
+> > pages scanned for migration that are not always reproducible and not on
+> > all machines.
 > 
-> The uvdevice is merely transporting the request from userspace to the
-> Ultravisor.
+> Well, that kinda sucks. So for the patch (with adding the missing NOT below).
 > 
-> Signed-off-by: Steffen Eiden <seiden@linux.ibm.com>
+> Acked-by: Vlastimil Babka <vbabka@suse.cz>
+> 
+> But in raises a question whether we should terminate compaction under the
+> right conditions after a successful migration immediately, rather than
+> invoke another iteration of isolate_migratepages_block() where we could skip
+> over some pages uselessly only to abort at first valid page due to the skip bit.
+> It would save some cycles and be much more obvious than now, where anyone
+> trying to understand how it works in detail might conclude it's an oversight?
+> 
 
-Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
+It sounds like a solid idea and would be a good standalone patch with
+the usual supporting data. At a quick glance, the check for a page
+stored on compact_control happens surprisingly late which makes me think
+we probably over-compact in direct compaction in particular. It would
+need supporting data because it probably means that compaction cost gets
+spread over multiple tasks requiring high-order pages instead of one
+unlucky task doing compaction works that unrelated tasks indirectly
+benefit from. It's probably more sensible behaviour that tasks requiring
+high-order pages pay the cost if kcompactd cannot keep up but supporting
+data would tell us one way or the other.
+
+-- 
+Mel Gorman
+SUSE Labs
