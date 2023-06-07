@@ -2,727 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27F9A725D2E
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 13:33:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9DE5725D47
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 13:38:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239260AbjFGLdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 07:33:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34568 "EHLO
+        id S235301AbjFGLh7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 07:37:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234635AbjFGLdM (ORCPT
+        with ESMTP id S240163AbjFGLh4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 07:33:12 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C6A6198B;
-        Wed,  7 Jun 2023 04:33:09 -0700 (PDT)
-X-QQ-mid: bizesmtp87t1686137579t3lkl12f
-Received: from linux-lab-host.localdomain ( [61.141.77.49])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 07 Jun 2023 19:32:58 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: 3M0okmaRx3h8ywErXe7J/ln/Owwvw4BKb+68+heUi/xYXyTph8i0gRpAviEYq
-        4w+dizE1AiIiyAtXAciil5MnjtcYBDeyrfTMRXr94Eik6mnAZDKgiyn4qlYPd8TtI4DmtIf
-        2k89sC9eLgrVkJEke/o2+PJ7HcWCgOB0UW7kN0KtUXcwZWEvtOl6ImydIKGYE23gFgw/NAx
-        HVOOAG08cF5gmD4buzlFpTIW20ru95CGSPgMaNYGwBJxh29zIFHqfjQ6Zlc8HT+OFgJKagw
-        I86b6aky4ZzKP2avI34/RuK1KmwLzNL3NDvMakF3Q0lxxDkbMdV56E6hkE1n4qgsAuiOdyp
-        K+7P4YtCyi47mgdRBkudYGMVqcN5r/UGKzxVWPz/JE79IhF6hWMpldXlN1P6NkKwaDzIOyH
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 4620336373278213925
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     thomas@t-8ch.de, w@1wt.eu
-Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: [PATCH v3 3/3] tools/nolibc: sys.h: apply __sysret() helper
-Date:   Wed,  7 Jun 2023 19:32:54 +0800
-Message-Id: <e5acbce9d39a60085888befe929618a9cc4f7b42.1686135913.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1686135913.git.falcon@tinylab.org>
-References: <cover.1686135913.git.falcon@tinylab.org>
+        Wed, 7 Jun 2023 07:37:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D7B71730
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 04:37:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686137828;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Of8F7oP9DxodgyCzUqZAYENpIjCyox0604fXJEC1XUw=;
+        b=CX8jWQwlG/DTgo6Mi6STFjIFsxbRBbeLOHhFSh1db9uymTXAxgK5WOp45sk/ujq19fYMt0
+        p5tpPZzjodrsejmzHPc2WOM8JyxFVXZV9tnMXXcEpNnvphU9QKFZe35VuV9fGoByUpFK4O
+        qBevxNn7HHTqScgFXrDrSHmCT1LkUqA=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-149-MSE-PZTiP5OLH5IM9INVkA-1; Wed, 07 Jun 2023 07:37:07 -0400
+X-MC-Unique: MSE-PZTiP5OLH5IM9INVkA-1
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-30aeef6f601so3285248f8f.0
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 04:37:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686137826; x=1688729826;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Of8F7oP9DxodgyCzUqZAYENpIjCyox0604fXJEC1XUw=;
+        b=e3eCog3tU2nxHx78yKvABlHwxLGAPTQ1uczWY+bFF0CKmjGQ+IOufrLo3U1UDT3SbZ
+         NkWHZAqyWOMJbpcsNowo0ccZKrEGvJIRCClkNaIvGyo5Q8PgfTfVPx2ObRKK0YBat0PQ
+         zOREkFFzMqL0YejbrtqjRcuiJjJ9iUZCaiH0fIPR4k88ArcYEJ1XYZECKW/9hj7vE5mu
+         HArUWTekqLY85Mc4sQHYW94AOSvRdcNHDJHYwD88YCLnZ9Tns4sAxd0pOwolDoO0SqHK
+         +kBR2HvvBYRa+BJJ8heoMXnK+tw62hLYxbaORsRtlXPieNTAdSuatzlHXWtIKtCebfuC
+         NBQg==
+X-Gm-Message-State: AC+VfDyY0tFxSNmuk1vwdSKspa67uN2v639bQJgRl9eana56CaCHFvmQ
+        ghNBGGuFHjXo3iemkeFZf1pkqftBttmGHro5s04LLlBMvkZOtzK21ZqC8jmJZHNR9nD/ez7+uiG
+        QIBMa4gvgDc67EYrEFeOUa1KuKg+9XEQH
+X-Received: by 2002:a5d:480b:0:b0:30e:5b7c:de1c with SMTP id l11-20020a5d480b000000b0030e5b7cde1cmr1271456wrq.11.1686137826603;
+        Wed, 07 Jun 2023 04:37:06 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4MUOjtFrG5onWxT2DxxqjjxHSYc3VMSVJB1Wn+zwDFfZnCS5zfDSPT78n2RmXbz+ZcAbVfWw==
+X-Received: by 2002:a5d:480b:0:b0:30e:5b7c:de1c with SMTP id l11-20020a5d480b000000b0030e5b7cde1cmr1271442wrq.11.1686137826261;
+        Wed, 07 Jun 2023 04:37:06 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c70e:9c00:8d26:3031:d131:455c? (p200300cbc70e9c008d263031d131455c.dip0.t-ipconnect.de. [2003:cb:c70e:9c00:8d26:3031:d131:455c])
+        by smtp.gmail.com with ESMTPSA id h8-20020adfe988000000b0030ae5a0516csm15272856wrm.17.2023.06.07.04.37.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Jun 2023 04:37:05 -0700 (PDT)
+Message-ID: <6ff9bcb0-3fa8-59ab-418d-7a53714efafe@redhat.com>
+Date:   Wed, 7 Jun 2023 13:37:04 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 1/2] mm/memory_hotplug: remove
+ reset_node_managed_pages() in hotadd_init_pgdat()
+Content-Language: en-US
+To:     Haifeng Xu <haifeng.xu@shopee.com>
+Cc:     rppt@kernel.org, mhocko@kernel.org, osalvador@suse.de,
+        akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <f125f0db-30fe-5452-4669-3e48f7856569@redhat.com>
+ <20230607024548.1240-1-haifeng.xu@shopee.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230607024548.1240-1-haifeng.xu@shopee.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use __sysret() to shrink most of the library routines to oneline code.
+On 07.06.23 04:45, Haifeng Xu wrote:
+> managed pages has already been set to 0 in free_area_init_core_hotplug(),
+> via zone_init_internals() on each zone. It's pointless to reset again.
+> 
+> Furthermore, reset_node_managed_pages() no longer needs to be exposed
+> outside of mm/memblock.c. Remove declaration in include/linux/memblock.h
+> and define it as static.
+> 
+> In addtion to this, the only caller of reset_node_managed_pages() is
+> reset_all_zones_managed_pages(), which is annotated with __init, so it
+> should be safe to also mark reset_node_managed_pages() as __init.
+> 
+> Signed-off-by: Haifeng Xu <haifeng.xu@shopee.com>
+> Suggested-by: David Hildenbrand <david@redhat.com>
+> ---
+> v2:
+> - unexport reset_node_managed_pages()
+> - mark reset_node_managed_pages() as __init
+> - update commit message
+> ---
+>   include/linux/memblock.h | 1 -
+>   mm/memblock.c            | 2 +-
+>   mm/memory_hotplug.c      | 1 -
+>   3 files changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/include/linux/memblock.h b/include/linux/memblock.h
+> index f82ee3fac1cd..f71ff9f0ec81 100644
+> --- a/include/linux/memblock.h
+> +++ b/include/linux/memblock.h
+> @@ -128,7 +128,6 @@ int memblock_clear_nomap(phys_addr_t base, phys_addr_t size);
+>   
+>   void memblock_free_all(void);
+>   void memblock_free(void *ptr, size_t size);
+> -void reset_node_managed_pages(pg_data_t *pgdat);
+>   void reset_all_zones_managed_pages(void);
+>   
+>   /* Low level functions */
+> diff --git a/mm/memblock.c b/mm/memblock.c
+> index 3feafea06ab2..da4264528e1e 100644
+> --- a/mm/memblock.c
+> +++ b/mm/memblock.c
+> @@ -2122,7 +2122,7 @@ static unsigned long __init free_low_memory_core_early(void)
+>   
+>   static int reset_managed_pages_done __initdata;
+>   
+> -void reset_node_managed_pages(pg_data_t *pgdat)
+> +static void __init reset_node_managed_pages(pg_data_t *pgdat)
+>   {
+>   	struct zone *z;
+>   
+> diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
+> index 8e0fa209d533..65e385f34679 100644
+> --- a/mm/memory_hotplug.c
+> +++ b/mm/memory_hotplug.c
+> @@ -1210,7 +1210,6 @@ static pg_data_t __ref *hotadd_init_pgdat(int nid)
+>   	 * online_pages() and offline_pages().
+>   	 * TODO: should be in free_area_init_core_hotplug?
+>   	 */
+> -	reset_node_managed_pages(pgdat);
+>   	reset_node_present_pages(pgdat);
+>   
+>   	return pgdat;
 
-Removed 266 lines of duplicated code.
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
----
- tools/include/nolibc/sys.h | 354 +++++--------------------------------
- 1 file changed, 44 insertions(+), 310 deletions(-)
-
-diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-index 150777207468..4fbefe5adf93 100644
---- a/tools/include/nolibc/sys.h
-+++ b/tools/include/nolibc/sys.h
-@@ -76,13 +76,7 @@ void *sys_brk(void *addr)
- static __attribute__((unused))
- int brk(void *addr)
- {
--	void *ret = sys_brk(addr);
--
--	if (!ret) {
--		SET_ERRNO(ENOMEM);
--		return -1;
--	}
--	return 0;
-+	return __sysret(sys_brk(addr) ? 0 : -ENOMEM);
- }
- 
- static __attribute__((unused))
-@@ -112,13 +106,7 @@ int sys_chdir(const char *path)
- static __attribute__((unused))
- int chdir(const char *path)
- {
--	int ret = sys_chdir(path);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_chdir(path));
- }
- 
- 
-@@ -141,13 +129,7 @@ int sys_chmod(const char *path, mode_t mode)
- static __attribute__((unused))
- int chmod(const char *path, mode_t mode)
- {
--	int ret = sys_chmod(path, mode);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_chmod(path, mode));
- }
- 
- 
-@@ -170,13 +152,7 @@ int sys_chown(const char *path, uid_t owner, gid_t group)
- static __attribute__((unused))
- int chown(const char *path, uid_t owner, gid_t group)
- {
--	int ret = sys_chown(path, owner, group);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_chown(path, owner, group));
- }
- 
- 
-@@ -193,13 +169,7 @@ int sys_chroot(const char *path)
- static __attribute__((unused))
- int chroot(const char *path)
- {
--	int ret = sys_chroot(path);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_chroot(path));
- }
- 
- 
-@@ -216,13 +186,7 @@ int sys_close(int fd)
- static __attribute__((unused))
- int close(int fd)
- {
--	int ret = sys_close(fd);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_close(fd));
- }
- 
- 
-@@ -239,13 +203,7 @@ int sys_dup(int fd)
- static __attribute__((unused))
- int dup(int fd)
- {
--	int ret = sys_dup(fd);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_dup(fd));
- }
- 
- 
-@@ -268,13 +226,7 @@ int sys_dup2(int old, int new)
- static __attribute__((unused))
- int dup2(int old, int new)
- {
--	int ret = sys_dup2(old, new);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_dup2(old, new));
- }
- 
- 
-@@ -292,13 +244,7 @@ int sys_dup3(int old, int new, int flags)
- static __attribute__((unused))
- int dup3(int old, int new, int flags)
- {
--	int ret = sys_dup3(old, new, flags);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_dup3(old, new, flags));
- }
- #endif
- 
-@@ -316,13 +262,7 @@ int sys_execve(const char *filename, char *const argv[], char *const envp[])
- static __attribute__((unused))
- int execve(const char *filename, char *const argv[], char *const envp[])
- {
--	int ret = sys_execve(filename, argv, envp);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_execve(filename, argv, envp));
- }
- 
- 
-@@ -369,13 +309,7 @@ pid_t sys_fork(void)
- static __attribute__((unused))
- pid_t fork(void)
- {
--	pid_t ret = sys_fork();
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_fork());
- }
- 
- 
-@@ -392,13 +326,7 @@ int sys_fsync(int fd)
- static __attribute__((unused))
- int fsync(int fd)
- {
--	int ret = sys_fsync(fd);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_fsync(fd));
- }
- 
- 
-@@ -415,13 +343,7 @@ int sys_getdents64(int fd, struct linux_dirent64 *dirp, int count)
- static __attribute__((unused))
- int getdents64(int fd, struct linux_dirent64 *dirp, int count)
- {
--	int ret = sys_getdents64(fd, dirp, count);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_getdents64(fd, dirp, count));
- }
- 
- 
-@@ -459,13 +381,7 @@ pid_t sys_getpgid(pid_t pid)
- static __attribute__((unused))
- pid_t getpgid(pid_t pid)
- {
--	pid_t ret = sys_getpgid(pid);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_getpgid(pid));
- }
- 
- 
-@@ -545,15 +461,7 @@ static unsigned long getauxval(unsigned long key);
- static __attribute__((unused))
- long getpagesize(void)
- {
--	long ret;
--
--	ret = getauxval(AT_PAGESZ);
--	if (!ret) {
--		SET_ERRNO(ENOENT);
--		return -1;
--	}
--
--	return ret;
-+	return __sysret(getauxval(AT_PAGESZ) ?: -ENOENT);
- }
- 
- 
-@@ -570,13 +478,7 @@ int sys_gettimeofday(struct timeval *tv, struct timezone *tz)
- static __attribute__((unused))
- int gettimeofday(struct timeval *tv, struct timezone *tz)
- {
--	int ret = sys_gettimeofday(tv, tz);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_gettimeofday(tv, tz));
- }
- 
- 
-@@ -614,13 +516,7 @@ int sys_ioctl(int fd, unsigned long req, void *value)
- static __attribute__((unused))
- int ioctl(int fd, unsigned long req, void *value)
- {
--	int ret = sys_ioctl(fd, req, value);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_ioctl(fd, req, value));
- }
- 
- /*
-@@ -636,13 +532,7 @@ int sys_kill(pid_t pid, int signal)
- static __attribute__((unused))
- int kill(pid_t pid, int signal)
- {
--	int ret = sys_kill(pid, signal);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_kill(pid, signal));
- }
- 
- 
-@@ -665,13 +555,7 @@ int sys_link(const char *old, const char *new)
- static __attribute__((unused))
- int link(const char *old, const char *new)
- {
--	int ret = sys_link(old, new);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_link(old, new));
- }
- 
- 
-@@ -688,13 +572,7 @@ off_t sys_lseek(int fd, off_t offset, int whence)
- static __attribute__((unused))
- off_t lseek(int fd, off_t offset, int whence)
- {
--	off_t ret = sys_lseek(fd, offset, whence);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_lseek(fd, offset, whence));
- }
- 
- 
-@@ -717,13 +595,7 @@ int sys_mkdir(const char *path, mode_t mode)
- static __attribute__((unused))
- int mkdir(const char *path, mode_t mode)
- {
--	int ret = sys_mkdir(path, mode);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_mkdir(path, mode));
- }
- 
- 
-@@ -746,13 +618,7 @@ long sys_mknod(const char *path, mode_t mode, dev_t dev)
- static __attribute__((unused))
- int mknod(const char *path, mode_t mode, dev_t dev)
- {
--	int ret = sys_mknod(path, mode, dev);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_mknod(path, mode, dev));
- }
- 
- #ifndef MAP_SHARED
-@@ -810,13 +676,7 @@ int sys_munmap(void *addr, size_t length)
- static __attribute__((unused))
- int munmap(void *addr, size_t length)
- {
--	int ret = sys_munmap(addr, length);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_munmap(addr, length));
- }
- 
- /*
-@@ -836,13 +696,7 @@ int mount(const char *src, const char *tgt,
-           const char *fst, unsigned long flags,
-           const void *data)
- {
--	int ret = sys_mount(src, tgt, fst, flags, data);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_mount(src, tgt, fst, flags, data));
- }
- 
- 
-@@ -876,13 +730,7 @@ int open(const char *path, int flags, ...)
- 		va_end(args);
- 	}
- 
--	ret = sys_open(path, flags, mode);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_open(path, flags, mode));
- }
- 
- 
-@@ -902,13 +750,7 @@ static __attribute__((unused))
- int prctl(int option, unsigned long arg2, unsigned long arg3,
- 		      unsigned long arg4, unsigned long arg5)
- {
--	int ret = sys_prctl(option, arg2, arg3, arg4, arg5);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_prctl(option, arg2, arg3, arg4, arg5));
- }
- 
- 
-@@ -925,13 +767,7 @@ int sys_pivot_root(const char *new, const char *old)
- static __attribute__((unused))
- int pivot_root(const char *new, const char *old)
- {
--	int ret = sys_pivot_root(new, old);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_pivot_root(new, old));
- }
- 
- 
-@@ -960,13 +796,7 @@ int sys_poll(struct pollfd *fds, int nfds, int timeout)
- static __attribute__((unused))
- int poll(struct pollfd *fds, int nfds, int timeout)
- {
--	int ret = sys_poll(fds, nfds, timeout);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_poll(fds, nfds, timeout));
- }
- 
- 
-@@ -983,13 +813,7 @@ ssize_t sys_read(int fd, void *buf, size_t count)
- static __attribute__((unused))
- ssize_t read(int fd, void *buf, size_t count)
- {
--	ssize_t ret = sys_read(fd, buf, count);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_read(fd, buf, count));
- }
- 
- 
-@@ -1007,13 +831,7 @@ ssize_t sys_reboot(int magic1, int magic2, int cmd, void *arg)
- static __attribute__((unused))
- int reboot(int cmd)
- {
--	int ret = sys_reboot(LINUX_REBOOT_MAGIC1, LINUX_REBOOT_MAGIC2, cmd, 0);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_reboot(LINUX_REBOOT_MAGIC1, LINUX_REBOOT_MAGIC2, cmd, 0));
- }
- 
- 
-@@ -1030,13 +848,7 @@ int sys_sched_yield(void)
- static __attribute__((unused))
- int sched_yield(void)
- {
--	int ret = sys_sched_yield();
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_sched_yield());
- }
- 
- 
-@@ -1076,13 +888,7 @@ int sys_select(int nfds, fd_set *rfds, fd_set *wfds, fd_set *efds, struct timeva
- static __attribute__((unused))
- int select(int nfds, fd_set *rfds, fd_set *wfds, fd_set *efds, struct timeval *timeout)
- {
--	int ret = sys_select(nfds, rfds, wfds, efds, timeout);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_select(nfds, rfds, wfds, efds, timeout));
- }
- 
- 
-@@ -1099,13 +905,7 @@ int sys_setpgid(pid_t pid, pid_t pgid)
- static __attribute__((unused))
- int setpgid(pid_t pid, pid_t pgid)
- {
--	int ret = sys_setpgid(pid, pgid);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_setpgid(pid, pgid));
- }
- 
- 
-@@ -1122,13 +922,7 @@ pid_t sys_setsid(void)
- static __attribute__((unused))
- pid_t setsid(void)
- {
--	pid_t ret = sys_setsid();
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_setsid());
- }
- 
- #if defined(__NR_statx)
-@@ -1145,13 +939,7 @@ int sys_statx(int fd, const char *path, int flags, unsigned int mask, struct sta
- static __attribute__((unused))
- int statx(int fd, const char *path, int flags, unsigned int mask, struct statx *buf)
- {
--	int ret = sys_statx(fd, path, flags, mask, buf);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_statx(fd, path, flags, mask, buf));
- }
- #endif
- 
-@@ -1231,13 +1019,7 @@ int sys_stat(const char *path, struct stat *buf)
- static __attribute__((unused))
- int stat(const char *path, struct stat *buf)
- {
--	int ret = sys_stat(path, buf);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_stat(path, buf));
- }
- 
- 
-@@ -1260,13 +1042,7 @@ int sys_symlink(const char *old, const char *new)
- static __attribute__((unused))
- int symlink(const char *old, const char *new)
- {
--	int ret = sys_symlink(old, new);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_symlink(old, new));
- }
- 
- 
-@@ -1300,13 +1076,7 @@ int sys_umount2(const char *path, int flags)
- static __attribute__((unused))
- int umount2(const char *path, int flags)
- {
--	int ret = sys_umount2(path, flags);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_umount2(path, flags));
- }
- 
- 
-@@ -1329,13 +1099,7 @@ int sys_unlink(const char *path)
- static __attribute__((unused))
- int unlink(const char *path)
- {
--	int ret = sys_unlink(path);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_unlink(path));
- }
- 
- 
-@@ -1354,38 +1118,20 @@ pid_t sys_wait4(pid_t pid, int *status, int options, struct rusage *rusage)
- static __attribute__((unused))
- pid_t wait(int *status)
- {
--	pid_t ret = sys_wait4(-1, status, 0, NULL);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_wait4(-1, status, 0, NULL));
- }
- 
- static __attribute__((unused))
- pid_t wait4(pid_t pid, int *status, int options, struct rusage *rusage)
- {
--	pid_t ret = sys_wait4(pid, status, options, rusage);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_wait4(pid, status, options, rusage));
- }
- 
- 
- static __attribute__((unused))
- pid_t waitpid(pid_t pid, int *status, int options)
- {
--	pid_t ret = sys_wait4(pid, status, options, NULL);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_wait4(pid, status, options, NULL));
- }
- 
- 
-@@ -1402,13 +1148,7 @@ ssize_t sys_write(int fd, const void *buf, size_t count)
- static __attribute__((unused))
- ssize_t write(int fd, const void *buf, size_t count)
- {
--	ssize_t ret = sys_write(fd, buf, count);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_write(fd, buf, count));
- }
- 
- 
-@@ -1425,13 +1165,7 @@ int sys_memfd_create(const char *name, unsigned int flags)
- static __attribute__((unused))
- int memfd_create(const char *name, unsigned int flags)
- {
--	ssize_t ret = sys_memfd_create(name, flags);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_memfd_create(name, flags));
- }
- 
- /* make sure to include all global symbols */
 -- 
-2.25.1
+Cheers,
+
+David / dhildenb
 
