@@ -2,82 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 526DF725BBD
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 12:42:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EA46725BBF
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 12:43:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239638AbjFGKmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 06:42:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53560 "EHLO
+        id S239623AbjFGKnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 06:43:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239665AbjFGKm3 (ORCPT
+        with ESMTP id S233982AbjFGKnV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 06:42:29 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ABFD2122
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 03:42:19 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3f6ffc2b314so3474795e9.0
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 03:42:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1686134537; x=1688726537;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=N7LrhNNEdA24khblC9g8MfKa4jeWvLQ+nAT4hRuOUJI=;
-        b=XIPDoVV88MC7ohXtbTc2BCAz536FGMFDcu4rdZ5ndoe8/wbuZh2LJ8yFLgMkgqX5xS
-         vuNtpp04rDMuXb+tEbdw9+7DjSfzqX0KNlkMYA4fpekCV4J/KMpN3DPo1C6Hv7TSNhMC
-         GsiaGDA1rl0Tv2jzQ7g1Ndhrq/QALkjJP+drhZaztLD/jNveiLBziLAsCrH65+ufAN3A
-         2jBNTl3WUaFnzfWdmTs2XxvEcl/tZgfYEWYbejMAJbZ3S4V6hf1xIJyZz5zSJPUoFpDv
-         /08sr83xx/vF3wFWesTcnJ9+s60XwYIm+MESMCKWGv88MeIAFjuKC+ZUAJNBPZbKu2HY
-         SCNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686134537; x=1688726537;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=N7LrhNNEdA24khblC9g8MfKa4jeWvLQ+nAT4hRuOUJI=;
-        b=Ve/qtWIO/GSFWnMI1tBkLa0d3URiuGgU890D5IiEzR89ZL7AUgQTUy3JQrBN4lawU1
-         84cciuNmlBa1d3lBtuHONp6f7AFqeiO44l8eeG6zqGddVQ86yNBx5yiRgO0EnsNpkxs9
-         tjZAYbTRRxMx2KtoaKPXrYuVXOTZlOz1b/uTmYHJur12RKA+4QyoRYb9Q7DO8irsReps
-         yuGM0s8gUKhv2kGMhuMT6SK7Sv+dOolWioV4Gh6EYZzpVbcXLJ7GNyX15gkF4Oc8Qtay
-         5ooHjPLAZwnRL5a/43fB372oblO1k0s9j5KZSPoAHNn+17MmUphLScH8Lr4fVNtgx1D4
-         6MYg==
-X-Gm-Message-State: AC+VfDwLLTeyrDvE5sa4mHBGOxWx8wiu8Mr7DJEml8Pfvj9CQjVW9ya6
-        ToymxjOFhdDuVbuWgbSplHTK2g==
-X-Google-Smtp-Source: ACHHUZ4OhWn4Tb9E2A5DqtcylYLUxU5x86bnN3MT2KWvOc7EJ3AmkwX8cONOFSmSpNVgN9Yoho/ljw==
-X-Received: by 2002:a7b:c3d4:0:b0:3f4:1ce0:a606 with SMTP id t20-20020a7bc3d4000000b003f41ce0a606mr4065558wmj.1.1686134537631;
-        Wed, 07 Jun 2023 03:42:17 -0700 (PDT)
-Received: from ?IPV6:2a02:8011:e80c:0:3d52:65d8:7088:94e9? ([2a02:8011:e80c:0:3d52:65d8:7088:94e9])
-        by smtp.gmail.com with ESMTPSA id h18-20020a1ccc12000000b003f74eb308fasm1648829wmb.48.2023.06.07.03.42.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 03:42:17 -0700 (PDT)
-Message-ID: <a5d1512b-2c1b-1713-ae52-84fc148ecb5a@isovalent.com>
-Date:   Wed, 7 Jun 2023 11:42:16 +0100
+        Wed, 7 Jun 2023 06:43:21 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27CAFAA
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 03:43:19 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 357Ah5Zk113481;
+        Wed, 7 Jun 2023 05:43:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1686134585;
+        bh=Qcz8DifrMVl6LnMzgJBxNEBKYKPqirKpYcU7aJJsXzE=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=xye/ZWHEl9jum62rp7w92Re4ownrpd5UP7zdoxG6cDo+H7Pfaxol853AVgOurwpuz
+         KVYFpN/uPfYY3wuzBsPwotftiJPP19Nnky9+U6JvQv95xvWPYv76Q9DLexz8/gAMSj
+         i+GbsANZw229ZfhFa0I/AuKS1PfjXFLf23vkrzw4=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 357Ah4Hh003163
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 7 Jun 2023 05:43:04 -0500
+Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 7
+ Jun 2023 05:43:04 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Wed, 7 Jun 2023 05:43:04 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 357Ah4In078118;
+        Wed, 7 Jun 2023 05:43:04 -0500
+Date:   Wed, 7 Jun 2023 05:43:04 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Thejasvi Konduru <t-konduru@ti.com>
+CC:     <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Tero Kristo <t-kristo@ti.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Lokesh Vutla <lokeshvutla@ti.com>,
+        Apurva Nandan <a-nandan@ti.com>, Udit Kumar <u-kumar1@ti.com>
+Subject: Re: [PATCH] soc: ti: k3-socinfo: Fix the silicon revision misprint
+Message-ID: <20230607104304.iengykppptr3fxe6@reflected>
+References: <20230607080349.26671-1-t-konduru@ti.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v2 bpf 03/11] bpftool: use a local bpf_perf_event_value to
- fix accessing its fields
-Content-Language: en-GB
-To:     Nick Desaulniers <ndesaulniers@google.com>,
-        Alexander Lobakin <alobakin@pm.me>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Song Liu <songliubraving@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, tpgxyz@gmail.com,
-        Jiri Olsa <olsajiri@gmail.com>
-References: <20220421003152.339542-1-alobakin@pm.me>
- <20220421003152.339542-4-alobakin@pm.me> <ZH+e9IYk+DIZzUFL@google.com>
-From:   Quentin Monnet <quentin@isovalent.com>
-In-Reply-To: <ZH+e9IYk+DIZzUFL@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230607080349.26671-1-t-konduru@ti.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,58 +68,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2023-06-06 14:02 UTC-0700 ~ Nick Desaulniers <ndesaulniers@google.com>
-> On Thu, Apr 21, 2022 at 12:39:04AM +0000, Alexander Lobakin wrote:
->> Fix the following error when building bpftool:
->>
->>   CLANG   profiler.bpf.o
->>   CLANG   pid_iter.bpf.o
->> skeleton/profiler.bpf.c:18:21: error: invalid application of 'sizeof' to an incomplete type 'struct bpf_perf_event_value'
->>         __uint(value_size, sizeof(struct bpf_perf_event_value));
->>                            ^     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> tools/bpf/bpftool/bootstrap/libbpf/include/bpf/bpf_helpers.h:13:39: note: expanded from macro '__uint'
->> tools/bpf/bpftool/bootstrap/libbpf/include/bpf/bpf_helper_defs.h:7:8: note: forward declaration of 'struct bpf_perf_event_value'
->> struct bpf_perf_event_value;
->>        ^
->>
->> struct bpf_perf_event_value is being used in the kernel only when
->> CONFIG_BPF_EVENTS is enabled, so it misses a BTF entry then.
->> Define struct bpf_perf_event_value___local with the
->> `preserve_access_index` attribute inside the pid_iter BPF prog to
->> allow compiling on any configs. It is a full mirror of a UAPI
->> structure, so is compatible both with and w/o CO-RE.
->> bpf_perf_event_read_value() requires a pointer of the original type,
->> so a cast is needed.
->>
+On 13:33-20230607, Thejasvi Konduru wrote:
+> For J721E PG1.1 the silicon revision is reported as 2.0 instead of
+
+There is no PG1.1. There is SR1.1
+
+> 1.1. This is because the k3-socinfo.c code assumes the silicon revisions
+> are 1.0, 2.0 for every platform.
 > 
-> Hi Alexander,
-> What's the status of this series? I wasn't able to find a v3 on lore.
+> Fixed this by creating a separate list of silicon revisions for J721E.
+
+what we are doing is to add to the silicon revision detection.
+
 > 
-> We received a report that OpenMandriva is carrying around this patch.
-> https://github.com/ClangBuiltLinux/linux/issues/1805.
+> Fixes: 907a2b7e2fc7 ("soc: ti: add k3 platforms chipid module driver")
+
+This is'nt a fixes.
+
+> Signed-off-by: Thejasvi Konduru <t-konduru@ti.com>
+> ---
+>  drivers/soc/ti/k3-socinfo.c | 33 +++++++++++++++++++++++++--------
+>  1 file changed, 25 insertions(+), 8 deletions(-)
 > 
-> + Tomasz
+> diff --git a/drivers/soc/ti/k3-socinfo.c b/drivers/soc/ti/k3-socinfo.c
+> index d15764e19d96..365bc37793a1 100644
+> --- a/drivers/soc/ti/k3-socinfo.c
+> +++ b/drivers/soc/ti/k3-socinfo.c
+> @@ -46,6 +46,8 @@ static const struct k3_soc_id {
+>  	{ 0xBB8D, "AM62AX" },
+>  };
+>  
+> +static char *soc_revision_j721e[] = {"1.0", "1.1"};
+> +
+>  static int
+>  k3_chipinfo_partno_to_names(unsigned int partno,
+>  			    struct soc_device_attribute *soc_dev_attr)
+> @@ -61,6 +63,21 @@ k3_chipinfo_partno_to_names(unsigned int partno,
+>  	return -EINVAL;
+>  }
+>  
+> +void
+> +k3_chipinfo_silicon_rev(unsigned int variant,
+> +			struct soc_device_attribute *soc_dev_attr)
+> +{
+> +	const char *family_name = soc_dev_attr->family;
+> +	int j721e_lookup_arr_size = ARRAY_SIZE(soc_revision_j721e);
+> +
+> +	if (!strcmp(family_name, "J721E") && variant < j721e_lookup_arr_size) {
+> +		soc_dev_attr->revision = kasprintf(GFP_KERNEL, "SR%s", soc_revision_j721e[variant]);
+> +	} else {
+> +		variant++;
+> +		soc_dev_attr->revision = kasprintf(GFP_KERNEL, "SR%x.0", variant);
+> +	}
+
+I am not comfortable with if else here. Why not extend k3_soc_id
+structure to include the variant LuT? Are there exceptions to this rule
+(Say AM65x?), those would make sense to handle with a compare against
+the partno?
+
+> +}
+> +
+>  static int k3_chipinfo_probe(struct platform_device *pdev)
+>  {
+>  	struct device_node *node = pdev->dev.of_node;
+> @@ -92,7 +109,6 @@ static int k3_chipinfo_probe(struct platform_device *pdev)
+>  
+>  	variant = (jtag_id & CTRLMMR_WKUP_JTAGID_VARIANT_MASK) >>
+>  		  CTRLMMR_WKUP_JTAGID_VARIANT_SHIFT;
+> -	variant++;
+>  
+>  	partno_id = (jtag_id & CTRLMMR_WKUP_JTAGID_PARTNO_MASK) >>
+>  		 CTRLMMR_WKUP_JTAGID_PARTNO_SHIFT;
+> @@ -101,17 +117,18 @@ static int k3_chipinfo_probe(struct platform_device *pdev)
+>  	if (!soc_dev_attr)
+>  		return -ENOMEM;
+>  
+> -	soc_dev_attr->revision = kasprintf(GFP_KERNEL, "SR%x.0", variant);
+> -	if (!soc_dev_attr->revision) {
+> -		ret = -ENOMEM;
+> -		goto err;
+> -	}
+> -
+>  	ret = k3_chipinfo_partno_to_names(partno_id, soc_dev_attr);
+>  	if (ret) {
+>  		dev_err(dev, "Unknown SoC JTAGID[0x%08X]\n", jtag_id);
+>  		ret = -ENODEV;
+> -		goto err_free_rev;
+> +		goto err;
+> +	}
+> +
+> +	k3_chipinfo_silicon_rev(variant, soc_dev_attr);
+> +
+> +	if (!soc_dev_attr->revision) {
+> +		ret = -ENOMEM;
+
+-ENOMEM? I dont see a alloc in the changes.
+
+> +		goto err;
+>  	}
+>  
+>  	node = of_find_node_by_path("/");
+> -- 
+> 2.40.1
 > 
-> Tomasz, do you have more info which particular configs can reproduce
-> this issue? Is this patch still necessary?
-> 
->> Fixes: 47c09d6a9f67 ("bpftool: Introduce "prog profile" command")
 
-Hi Nick,
-
-This patch is still necessary if you attempt to compile bpftool with
-skeletons support, on a host with a kernel version lower than 5.15.
-
-I took over on the bpftool patches from this series, and sent a new
-version last month. Given that it only contains the bpftool patches, the
-series has a different title and is not tagged as v3, but you can find
-it here:
-
-https://lore.kernel.org/all/20230512103354.48374-1-quentin@isovalent.com/t/#u
-
-Jiri (+Cc) found an issue with this set when CONFIG_BPF_EVENTS is
-disabled. I need to replicate and investigate, but I've been short on
-time to do that over the last few weeks.
-
-Best,
-Quentin
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
