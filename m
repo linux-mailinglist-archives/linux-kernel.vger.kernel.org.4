@@ -2,159 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E07D725481
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 08:41:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C00D0725488
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 08:42:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237012AbjFGGlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 02:41:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60604 "EHLO
+        id S237542AbjFGGmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 02:42:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233989AbjFGGlJ (ORCPT
+        with ESMTP id S233989AbjFGGmN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 02:41:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1469AAA;
-        Tue,  6 Jun 2023 23:41:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A55F063AF8;
-        Wed,  7 Jun 2023 06:41:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90074C433EF;
-        Wed,  7 Jun 2023 06:41:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686120067;
-        bh=Px4yR+6OsZ1b/yH6ZdWEW0dyGLZ2w09Hzl1kzNrtJw0=;
+        Wed, 7 Jun 2023 02:42:13 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58FCF196;
+        Tue,  6 Jun 2023 23:42:12 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (om126233170111.36.openmobile.ne.jp [126.233.170.111])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9B0AF2B6;
+        Wed,  7 Jun 2023 08:41:43 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1686120104;
+        bh=cH1WjxZXB0Q95UrEgS6nQTqmxFYodH8lXytDlFCSxEU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bQg+1HP7Qdi4iQUKM9u6T9UtZIm5jIp8wQ9ZmIp5NRyJ86hGU+vePDRhiuSAYNRm6
-         Jqk3k+DVuCc5FGFzNbK5Rn2ivpsN+lXHm6xghGiAaTBw+vXoIb8b+rIQrhXf8LZe1D
-         FzfQShhS4fXXIzN2QaQKrcs2vOf4o+QNrU1ke91Petu2OhppYwnsN47DUoVLk+GuO1
-         YiT05Z7VfeTyJguCpkfDhKUfEdcHdRCHcQ2CZ1BEHDJysLT+AcRemIMpF/WoZkbiEj
-         ITOzCH9XmQGcZJTlesoEmjljCT20DtVddq8SEALOmI5RK4DGy2iRhf7brapBRnVvTY
-         SRomxqX/O+acQ==
-Date:   Wed, 7 Jun 2023 08:41:04 +0200
-From:   Maxime Ripard <mripard@kernel.org>
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Heiko =?utf-8?Q?St=C3=BCbner?= <heiko@sntech.de>,
-        Keith Zhao <keith.zhao@starfivetech.com>,
-        Shengyu Qu <wiagn233@outlook.com>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        christian.koenig@amd.com, Bjorn Andersson <andersson@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>, Jagan Teki <jagan@edgeble.ai>,
-        Chris Morgan <macromorgan@hotmail.com>,
-        Jack Zhu <jack.zhu@starfivetech.com>,
-        Shengyang Chen <shengyang.chen@starfivetech.com>,
-        Changhuang Liang <changhuang.liang@starfivetech.com>
-Subject: Re: [PATCH 1/9] dt-bindings: display: Add yamls for JH7110 display
- subsystem
-Message-ID: <ifgjvonhkzcwrklzch5efguor2x6az4m737dwte4uyow7ar5dr@z4glaxse6dou>
-References: <20230602074043.33872-1-keith.zhao@starfivetech.com>
- <20230602-uncommon-rejoicing-e73c0c475f9f@spud>
- <TY3P286MB26116576E3E502CAE53834599852A@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM>
- <1991848.PYKUYFuaPT@diego>
- <20230606-geometry-blurb-1f0f07d4bf6a@spud>
+        b=D9RXxatOayeh6jXiCSpYbaC7LmIXFRv/3LANilIw80P+KNO8TFTYyAcZaZItzJBjh
+         XCe1x8PWt51lldPTI3ePCxGaC774np+KvzIFiB3UFf5l93UCVRbStKGZHaPR02ZcG9
+         OGD3Z8ZNdbfYOJwVEe+5dZWdz5P9bnnfVJ7KhSms=
+Date:   Wed, 7 Jun 2023 09:42:07 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Michael Riesch <michael.riesch@wolfvision.net>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        libcamera-devel@lists.libcamera.org,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Matthias Fend <Matthias.Fend@wolfvision.net>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC v2 2/6] media: v4l2-ctrls: clarify documentation of
+ V4L2_CID_FOCUS_RELATIVE
+Message-ID: <20230607064207.GG14101@pendragon.ideasonboard.com>
+References: <20230406-feature-controls-lens-v2-0-faa8ad2bc404@wolfvision.net>
+ <20230406-feature-controls-lens-v2-2-faa8ad2bc404@wolfvision.net>
+ <20230606103618.GB25774@pendragon.ideasonboard.com>
+ <46e0aac3-e238-1f32-264c-eed8a849d156@wolfvision.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="fpldas4cn62wqe46"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230606-geometry-blurb-1f0f07d4bf6a@spud>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <46e0aac3-e238-1f32-264c-eed8a849d156@wolfvision.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Michael,
 
---fpldas4cn62wqe46
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Tue, Jun 06, 2023 at 03:15:33PM +0200, Michael Riesch wrote:
+> On 6/6/23 12:36, Laurent Pinchart wrote:
+> > On Tue, Apr 25, 2023 at 11:45:12AM +0200, Michael Riesch wrote:
+> >> The control V4L2_CID_FOCUS_RELATIVE only makes sense if the device cannot
+> >> handle absolute focal point positioning with V4L2_CID_FOCUS_ABSOLUTE.
+> >> Clarify this in the documentation.
+> >>
+> >> Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
+> >> ---
+> >>  Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst | 4 +++-
+> >>  1 file changed, 3 insertions(+), 1 deletion(-)
+> >>
+> >> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
+> >> index df29150dce7b..42cf4c3cda0c 100644
+> >> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
+> >> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
+> >> @@ -147,7 +147,9 @@ enum v4l2_exposure_metering -
+> >>      This control moves the focal point of the camera by the specified
+> >>      amount. The unit is undefined. Positive values move the focus closer
+> >>      to the camera, negative values towards infinity. This is a
+> >> -    write-only control.
+> >> +    write-only control. It should be implemented only if the device cannot
+> >> +    handle absolute values.
+> >> +
+> > 
+> > Extra blank line.
+> 
+> Will fix that.
+> 
+> > I don't think this is right. The control was added for the UVC driver,
+> > and there are devices that implement both absolute and relative focus.
+> 
+> I am by no means an expert here and just following Sakari's suggestion
+> here (see [0]). I can drop the patch, leave it as-is, or modify it.
+> Whatever makes sense to you guys. But maybe I should leave this to
+> someone more knowledgeable in this area and drop the patch from my
+> series. The changes above are completely orthogonal to my work.
 
-On Tue, Jun 06, 2023 at 11:37:53PM +0100, Conor Dooley wrote:
-> On Wed, Jun 07, 2023 at 12:22:33AM +0200, Heiko St=FCbner wrote:
-> > Am Dienstag, 6. Juni 2023, 20:41:17 CEST schrieb Shengyu Qu:
-> > > > On Fri, Jun 02, 2023 at 03:40:35PM +0800, Keith Zhao wrote:
-> > > >> Add bindings for JH7110 display subsystem which
-> > > >> has a display controller verisilicon dc8200
-> > > >> and an HDMI interface.
->=20
-> > > >> +description:
-> > > >> +  The StarFive SoC uses the HDMI signal transmiter based on innos=
-ilicon IP
-> > > > Is innosilicon the same thing as verisilicon? Also
-> > > > s/transmiter/transmitter/, both here and in the title.
-> > >=20
-> > > I think that is not the same, I remember Rockchip has used a HDMI=20
-> > > transmitter from
-> > >=20
-> > > Innosilicon, and there is a existing driver for that in mainline.
-> >=20
-> > Yep, I think Innosilicon is the company you turn to when you want to sa=
-ve
-> > a bit of money ;-) . In the bigger SoCs Rockchip most of the time uses
-> > Designware hdmi blocks and looking at the history only the rk3036 ever
-> > used an Innosilicon block.
-> >=20
-> > Looking at the history, 2016 really was a long time ago :-D.
-> >=20
-> > > So Keith, if that's true, I think it is better to seperate the HDMI=
-=20
-> > > stuff and reuse existing driver.
-> >=20
-> > I'm not so sure about that - at least from a cursory glance :-) .
-> >=20
-> > The registers do look slightly different and I don't know how much
-> > the IP changed between the rk3036-version and the jh7110 version.
-> >=20
-> > At the very least, I know my rk3036 board isn't booting right now, so
-> > I can't really provide help for generalizing the rockchip-driver.
-> >=20
-> > At the very least both the binding and driver could drop the "starfive-=
-hdmi"
-> > and actually use the Innosilicon in the naming somewhere, so that it's
-> > clear for future developers :-)
->=20
-> Seeing "based on" always makes me a little bit nervous to be honest when
-> it comes to using a compatible from the IP. Is it the IP? What version
-> is it? etc. Perhaps "starfive,jh7110-hdmi" & falling back to some sort
-> of "innosilicon,hdmi" would be more future/IP-silliness proof.
-> Driver can always be generic & bind against "innosilicon,hdmi" until
-> that becomes impossible.
+V4L2_CID_FOCUS_RELATIVE is an annoying control. It was introduced for
+UVC, and to my surprise, it turns out it has never been implemented in
+the uvcvideo driver. The 3 devices I know of that implement the UVC
+relative focus control also implement the UVC absolute focus control.
 
-Given that Neil was saying that there's at least two
-generations/revisions/models of an HDMI controller from Innosilicon, I'm
-not sure that compatible is enough to reach that goal anyway.
+I'm tempted to deprecate this control completely. Sakari, any opinion ?
 
-Maxime
+> >>  
+> >>  ``V4L2_CID_FOCUS_AUTO (boolean)``
+> >>      Enables continuous automatic focus adjustments. The effect of manual
+> >>
+> > 
+> 
+> [0] https://lore.kernel.org/all/ZDbChgZJHVaaX3%2Fx@kekkonen.localdomain/
 
---fpldas4cn62wqe46
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+Regards,
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZIAmgAAKCRDj7w1vZxhR
-xaQ+AQDViFCjrmBh/FOmfkZnsbFEZqUbyPu3G+ff5Kfs9al3LgEA4TGU5Z1tubCB
-079K0fi4BmqB2ZgKk65Uxw0vctIlIAE=
-=TcBS
------END PGP SIGNATURE-----
-
---fpldas4cn62wqe46--
+Laurent Pinchart
