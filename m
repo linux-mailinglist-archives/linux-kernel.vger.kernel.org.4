@@ -2,103 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AFA97254B9
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 08:50:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C1C77254BB
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 08:50:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237862AbjFGGuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 02:50:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35758 "EHLO
+        id S238110AbjFGGu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 02:50:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237851AbjFGGtu (ORCPT
+        with ESMTP id S238094AbjFGGuX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 02:49:50 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3E591723;
-        Tue,  6 Jun 2023 23:49:48 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (om126233170111.36.openmobile.ne.jp [126.233.170.111])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 98AE82B6;
-        Wed,  7 Jun 2023 08:49:20 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1686120561;
-        bh=KjFaGkzgKPn0rqVPEjvc32sm1Awsw/gV5qKp3dzqOMs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=I2Dqs7fjHNqRDUlghHGiItQqlIceJj4p4vt3VogeCV8ljxw5HRvqxsQ7J714h3D6X
-         2dMdjiKOaUhccqqLJ7+ZG7C6h3zrPPAtN8UstjzuJsD8GytKVdJQkc36XUTe/s/M+w
-         Ed8QtiF+NkMmUMhkpt9OMvkrYfaqakI1blN9ne5I=
-Date:   Wed, 7 Jun 2023 09:49:44 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Michael Riesch <michael.riesch@wolfvision.net>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        libcamera-devel@lists.libcamera.org,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Matthias Fend <Matthias.Fend@wolfvision.net>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC v2 1/6] media: v4l2-ctrls: fix documentation of
- V4L2_CID_FOCUS_ABSOLUTE unit
-Message-ID: <20230607064944.GA4663@pendragon.ideasonboard.com>
-References: <20230406-feature-controls-lens-v2-0-faa8ad2bc404@wolfvision.net>
- <20230406-feature-controls-lens-v2-1-faa8ad2bc404@wolfvision.net>
- <20230606103421.GA25774@pendragon.ideasonboard.com>
+        Wed, 7 Jun 2023 02:50:23 -0400
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8C941994;
+        Tue,  6 Jun 2023 23:50:22 -0700 (PDT)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-19f30256921so7736825fac.1;
+        Tue, 06 Jun 2023 23:50:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686120622; x=1688712622;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9pDlIdyeQah+nboO5HAEZGHCKY6oxRAm/f74A2r54DE=;
+        b=K/5+lX3Rx/b9mCkIad9707Zrdek3bum2r/NRWAiKd39cLn0hUsMr9qgeKQ7oBvHZy7
+         VLV3aV962rIbLV8A5Is/1e15Kx86HhfwzADXNEfQO46LGdU3uVmgv665GsW1YoJhQXk9
+         W8mAQfuVFyy+CeONIFJ/vaVcdQIuTsfZgGaflwWvqMpVAfjH+in1STpoTAl1TsM/aI/J
+         7uEba6ZzpMoGOueGivegCM0MGbHXuQq7vnM4zXYvUkzM1EvODmIOUNVZU4JsetaJPf+H
+         v+NX9jCiNo1VJ47dpvHSc5Oe2+IV6qzdo/jcraLWPSxnoXza7i5qGTzUv0NHq4lE3J2T
+         nQJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686120622; x=1688712622;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9pDlIdyeQah+nboO5HAEZGHCKY6oxRAm/f74A2r54DE=;
+        b=HIHiUwY67iY6mfHdtBsopFxFxjRfSMlpgZXcXrIAWZiC0/cyrJj5dlZTCqzGhm1+uw
+         9zG7jCS4xKzBSqY+dVNXbbBwbdBxgaN9t/PwNEh15XOLpS7V1YYYmzqYmWr7OIPSzg7F
+         vWzr/xdyhXBH1x09njpi9AjlWjYRiOhg20OMKg3mUBDckFwIRxdhdGFRHlIRu+XZpUc9
+         LgfWnfC/WGK8NxMdTbiEbcWXZ2fBWvtEZu0OiXQjiJh2hHAxYTy8LL+tXMfCl30jQCHH
+         WwLscxSx89Js8SjwdzWS7FeRH+CK8QbyrnwdBwU9AOPiZ8Sr18vXLBWL4wfoKUPKps1k
+         Jmgw==
+X-Gm-Message-State: AC+VfDyOkGy787rryvbPkYVQbZIs2dg9CFEDsFzMK0qdqT+MJrhBg0kv
+        RnSTY28if4TKeDYX1AIIEd3iwKFg8zE=
+X-Google-Smtp-Source: ACHHUZ4Rar7VJ5sL8BOFbamwHsckno07VzQu65vOeB1XPIAYpkKo5IxLKw3bVSbx4jRzPzx1b1mJAQ==
+X-Received: by 2002:a05:6871:84c5:b0:196:12ec:110a with SMTP id sw5-20020a05687184c500b0019612ec110amr6909714oab.48.1686120621991;
+        Tue, 06 Jun 2023 23:50:21 -0700 (PDT)
+Received: from sol.home.arpa (194-223-178-180.tpgi.com.au. [194.223.178.180])
+        by smtp.gmail.com with ESMTPSA id 200-20020a6301d1000000b0051ba9d772f9sm8504026pgb.59.2023.06.06.23.50.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Jun 2023 23:50:21 -0700 (PDT)
+From:   Kent Gibson <warthog618@gmail.com>
+To:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        brgl@bgdev.pl, linus.walleij@linaro.org
+Cc:     Kent Gibson <warthog618@gmail.com>
+Subject: [PATCH] gpio: sim: quietly ignore configured lines outside the bank
+Date:   Wed,  7 Jun 2023 14:50:04 +0800
+Message-Id: <20230607065004.37112-1-warthog618@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230606103421.GA25774@pendragon.ideasonboard.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 01:34:21PM +0300, Laurent Pinchart wrote:
-> On Tue, Apr 25, 2023 at 11:45:11AM +0200, Michael Riesch wrote:
-> > The current unit description of the V4L2_CID_FOCUS_ABSOLUTE does not
-> > make sense and was probably copy-pasted from V4L2_CID_FOCUS_RELATIVE.
-> > Fix the unit description in the documentation.
-> > 
-> > Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
-> > ---
-> >  Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
-> > index daa4f40869f8..df29150dce7b 100644
-> > --- a/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
-> > +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
-> > @@ -140,8 +140,8 @@ enum v4l2_exposure_metering -
-> >  
-> >  ``V4L2_CID_FOCUS_ABSOLUTE (integer)``
-> >      This control sets the focal point of the camera to the specified
-> > -    position. The unit is undefined. Positive values set the focus
-> > -    closer to the camera, negative values towards infinity.
-> > +    position. The unit is undefined. Larger values move the focus closer to
-> > +    the camera, smaller values move the focus to infinity.
-> 
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+The user-space policy of the gpio-sim is that configuration for lines
+with offsets outside the bounds of the corresponding bank is ignored,
+but gpio-sim is still using that configuration when constructing the
+sim.  In the case of named lines this results in temporarily allocating
+space for names that are not used, and for hogs results in errors being
+logged when the gpio-sim attempts to register the out of range hog with
+gpiolib:
 
-I just noticed that the UVC specification states
+gpiochip_machine_hog: unable to get GPIO desc: -22
 
-  4.2.2.1.6 Focus (Absolute) Control
+Add checks to filter out any line configuration outside the bounds
+of the bank when constructing the sim.
 
-  The Focus (Absolute) Control is used to specify the distance to the
-  optimally focused target. This value is expressed in millimeters. The
-  default value is implementation-specific.
+Signed-off-by: Kent Gibson <warthog618@gmail.com>
+---
 
-This is the opposite of the V4L2_CID_FOCUS_ABSOLUTE control :-( I
-suppose this will need to be solved in the uvcvideo driver by converting
-the value.
+This is based on for-next patched with my recent memory corruption fix,
+as it touches a bit of the same code.
 
-> >  
-> >  ``V4L2_CID_FOCUS_RELATIVE (integer)``
-> >      This control moves the focal point of the camera by the specified
-> > 
+Cheers,
+Kent.
 
+ drivers/gpio/gpio-sim.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/drivers/gpio/gpio-sim.c b/drivers/gpio/gpio-sim.c
+index fab67a5785d7..8b49b0abacd5 100644
+--- a/drivers/gpio/gpio-sim.c
++++ b/drivers/gpio/gpio-sim.c
+@@ -696,6 +696,9 @@ static char **gpio_sim_make_line_names(struct gpio_sim_bank *bank,
+ 	char **line_names;
+ 
+ 	list_for_each_entry(line, &bank->line_list, siblings) {
++		if (line->offset >= bank->num_lines)
++			continue;
++
+ 		if (line->name) {
+ 			if (line->offset > max_offset)
+ 				max_offset = line->offset;
+@@ -722,6 +725,9 @@ static char **gpio_sim_make_line_names(struct gpio_sim_bank *bank,
+ 		return ERR_PTR(-ENOMEM);
+ 
+ 	list_for_each_entry(line, &bank->line_list, siblings) {
++		if (line->offset >= bank->num_lines)
++			continue;
++
+ 		if (line->name && (line->offset <= max_offset))
+ 			line_names[line->offset] = line->name;
+ 	}
+@@ -756,6 +762,9 @@ static int gpio_sim_add_hogs(struct gpio_sim_device *dev)
+ 
+ 	list_for_each_entry(bank, &dev->bank_list, siblings) {
+ 		list_for_each_entry(line, &bank->line_list, siblings) {
++			if (line->offset >= bank->num_lines)
++				continue;
++
+ 			if (line->hog)
+ 				num_hogs++;
+ 		}
+@@ -771,6 +780,9 @@ static int gpio_sim_add_hogs(struct gpio_sim_device *dev)
+ 
+ 	list_for_each_entry(bank, &dev->bank_list, siblings) {
+ 		list_for_each_entry(line, &bank->line_list, siblings) {
++			if (line->offset >= bank->num_lines)
++				continue;
++
+ 			if (!line->hog)
+ 				continue;
+ 
+
+base-commit: ba65c79fbb813423e7d42d99375e2045b27958a6
+prerequisite-patch-id: d89da2e3b7511c5b8132a379b12e4996256ac214
 -- 
-Regards,
+2.40.1
 
-Laurent Pinchart
