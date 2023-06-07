@@ -2,57 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCDA1726D0A
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 22:38:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA0A8726D46
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 22:40:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234201AbjFGUif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 16:38:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37740 "EHLO
+        id S234300AbjFGUkz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 16:40:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234260AbjFGUi1 (ORCPT
+        with ESMTP id S234388AbjFGUkv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 16:38:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8008F26BB;
-        Wed,  7 Jun 2023 13:38:08 -0700 (PDT)
+        Wed, 7 Jun 2023 16:40:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF83D2694
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 13:40:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 60C0B645B9;
-        Wed,  7 Jun 2023 20:38:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C530DC4339C;
-        Wed,  7 Jun 2023 20:38:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AE3F3645FF
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 20:40:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 11881C433A0;
+        Wed,  7 Jun 2023 20:40:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686170287;
-        bh=rPUHEPERLm0DXG4pXZwSjeSGww4CDsRDvqeL184e0ZI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=RwPiP0ZqgMhbmO69KJMWKgjyDmw2DU+Uq2Q+wsJ6Ykw6Iz9jKpPLGiP3PtocJpEzk
-         2CVKCmg4yT/KV6j4mPpeqQ23pJX4t5g0IkDUFpHdc4i1cV1pmGSKQFB66jnXtL8JKO
-         OM7gV87EK/USNmftlnhvilSKzUYjImtHxRXUeqLzMxa8R9GJKTCtJLRqF7Y7bC8zBh
-         DyA12yt13ok4+AX2LQ1uRQPbTTBv7DlsQvU6ValAs4WzvW2hZ9ttvURzadLgLxRv4S
-         S+MHRjWomI2NgIqke51H4XpJUh8it8RmcI3ild6mST+lr74KeC0Sj6RMUc7L8985s2
-         CJyy9k+p5Ymbw==
-Date:   Wed, 7 Jun 2023 13:38:05 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Haiyang Zhang <haiyangz@microsoft.com>
-Cc:     linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
-        decui@microsoft.com, kys@microsoft.com, paulros@microsoft.com,
-        olaf@aepfle.de, vkuznets@redhat.com, davem@davemloft.net,
-        wei.liu@kernel.org, edumazet@google.com, pabeni@redhat.com,
-        leon@kernel.org, longli@microsoft.com, ssengar@linux.microsoft.com,
-        linux-rdma@vger.kernel.org, daniel@iogearbox.net,
-        john.fastabend@gmail.com, bpf@vger.kernel.org, ast@kernel.org,
-        sharmaajay@microsoft.com, hawk@kernel.org, tglx@linutronix.de,
-        shradhagupta@linux.microsoft.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next,V2] net: mana: Add support for vlan tagging
-Message-ID: <20230607133805.58161672@kernel.org>
-In-Reply-To: <1686170042-10610-1-git-send-email-haiyangz@microsoft.com>
-References: <1686170042-10610-1-git-send-email-haiyangz@microsoft.com>
+        s=k20201202; t=1686170423;
+        bh=BOLn3A57823G4qBo+ym8mgcosf66TbhUNu7uFQ63o34=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Vn94KhGlUumk436ycANz1+dZzKB4nm7+IZU9Iqm17MzNu5Ov41U0a5GbNEW+epRix
+         fLGAnjPtINH7rBEYu+dic7HHQyRHIxdfM+07UdsM69cqacN+/XAn6Frwmrr8OtF9vW
+         rCU5wB8V3izIHUEdFAYJy7/ql/D/2kMXKFSaDHH02mxLFgJXGZuy7wVBj131niUzbr
+         4UxUgQulWeYuwzxajdhHWLvMwOwiIeQUHaAAIuMYCPjNjQlexYabhJ3yQDxkwmKd9/
+         doIaGaObGDYwUjOJTkBDUwxcBnHclN53UrbQ2Ai+AknzRm1sAZ0IftqDxyyk2yySkz
+         vK+Mkst2lfpzA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E2550E29F3C;
+        Wed,  7 Jun 2023 20:40:22 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v4 0/5] Followup fixes for the dwmac and altera lynx
+ conversion
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168617042292.11974.2218551142896764762.git-patchwork-notify@kernel.org>
+Date:   Wed, 07 Jun 2023 20:40:22 +0000
+References: <20230607135941.407054-1-maxime.chevallier@bootlin.com>
+In-Reply-To: <20230607135941.407054-1-maxime.chevallier@bootlin.com>
+To:     Maxime Chevallier <maxime.chevallier@bootlin.com>
+Cc:     davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alexis.lothore@bootlin.com,
+        thomas.petazzoni@bootlin.com, andrew@lunn.ch, kuba@kernel.org,
+        edumazet@google.com, pabeni@redhat.com, f.fainelli@gmail.com,
+        hkallweit1@gmail.com, linux@armlinux.org.uk,
+        vladimir.oltean@nxp.com, ioana.ciornei@nxp.com,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, mcoquelin.stm32@gmail.com,
+        joabreu@synopsys.com, alexandre.torgue@foss.st.com,
+        peppe.cavallaro@st.com, simon.horman@corigine.com,
+        maciej.fijalkowski@intel.com, chenfeiyang@loongson.cn
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,38 +67,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed,  7 Jun 2023 13:34:02 -0700 Haiyang Zhang wrote:
-> To support vlan, use MANA_LONG_PKT_FMT if vlan tag is present in TX
-> skb. Then extract the vlan tag from the skb struct, and save it to
-> tx_oob for the NIC to transmit. For vlan tags on the payload, they
-> are accepted by the NIC too.
+Hello:
+
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Wed,  7 Jun 2023 15:59:36 +0200 you wrote:
+> Hello everyone,
 > 
-> For RX, extract the vlan tag from CQE and put it into skb.
+> Here's yet another version of the cleanup series for the TSE PCS replacement
+> by PCS Lynx. It includes Kconfig fixups, some missing initialisations
+> and a slight rework suggested by Russell for the dwmac cleanup sequence,
+> along with more explicit zeroing of local structures as per MAciej's
+> review.
 > 
-> Signed-off-by: Haiyang Zhang <haiyangz@microsoft.com>
-> ---
-> V2:
-> Removed the code that extracts inband tag, because our NIC accepts
-> inband tags too.
+> [...]
 
-Please don't rush multiple versions, if your previous version is buggy
-you have to reply to it saying so and then wait before posting v2.
+Here is the summary with links:
+  - [net-next,v4,1/5] net: altera-tse: Initialize local structs before using it
+    https://git.kernel.org/netdev/net-next/c/2d830f7a4134
+  - [net-next,v4,2/5] net: altera_tse: Use the correct Kconfig option for the PCS_LYNX dependency
+    https://git.kernel.org/netdev/net-next/c/fae555f5a56f
+  - [net-next,v4,3/5] net: stmmac: make the pcs_lynx cleanup sequence specific to dwmac_socfpga
+    https://git.kernel.org/netdev/net-next/c/a8dd7404c214
+  - [net-next,v4,4/5] net: altera_tse: explicitly disable autoscan on the regmap-mdio bus
+    https://git.kernel.org/netdev/net-next/c/fa19a5d9dcff
+  - [net-next,v4,5/5] net: dwmac_socfpga: initialize local data for mdio regmap configuration
+    https://git.kernel.org/netdev/net-next/c/06b9dede1e7d
 
-Reviewing something just to find there is a v2 already posting is one
-of the more annoying experiences for maintainers and reviewers.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Quoting documentation:
 
-  Resending after review
-  ~~~~~~~~~~~~~~~~~~~~~~
-  
-  Allow at least 24 hours to pass between postings. This will ensure reviewers
-  from all geographical locations have a chance to chime in. Do not wait
-  too long (weeks) between postings either as it will make it harder for reviewers
-  to recall all the context.
-  
-  Make sure you address all the feedback in your new posting. Do not post a new
-  version of the code if the discussion about the previous version is still
-  ongoing, unless directly instructed by a reviewer.
-  
-See: https://www.kernel.org/doc/html/next/process/maintainer-netdev.html#resending-after-review
