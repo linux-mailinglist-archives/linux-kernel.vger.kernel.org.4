@@ -2,137 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6CDB72539D
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 07:40:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1266F7253A4
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 07:45:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234777AbjFGFkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 01:40:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37254 "EHLO
+        id S234044AbjFGFpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 01:45:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234719AbjFGFkZ (ORCPT
+        with ESMTP id S229603AbjFGFp3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 01:40:25 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF51E19BA;
-        Tue,  6 Jun 2023 22:40:09 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id 3f1490d57ef6-ba81ded8d3eso8380200276.3;
-        Tue, 06 Jun 2023 22:40:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686116409; x=1688708409;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XdM99WYdQelOMGpMu+7j5o3NWZCSKwsXsFleMdKpHBQ=;
-        b=kl0HVpuG3bIsZZjUIhRHkDK9g56N+CpBPVg4yZIv0LFNmYpe6Eow4gleIygxXi7HtV
-         qaUkRbqfJt+Kw3r5/bn39/gCvV4PrmARyoO9dG85C/xW0Yqwfy32rFEog0BPU2L3ViWC
-         sC02bhS55fHUODgV90yXpG35Y0taOj+nGerWR63nmIKgiX09+k02akS1s9IVKK/7jKpA
-         0Qiq+tCWl7XTEzNFKKcFl3xFMXCgpasmy/t46BiM6+3FbDt58jr1VKXEpOQDJg+ovxzp
-         7ZmzYgzfRtEqIRTFRRYYORh9a6+1nclVqNBvNn7rMHw7Hy0Q0FlkzCOKkSa8pS+5Y3i5
-         eXjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686116409; x=1688708409;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XdM99WYdQelOMGpMu+7j5o3NWZCSKwsXsFleMdKpHBQ=;
-        b=dFvIIFGLHj5cNtH48/oaB3ZQelLt9f1DXsmCTy68v9dnd7ZxY+FgbGugzNCtGCC5n/
-         rBsUwYMe/PrvbHfvkW7pV/3mU+Sc46kKt19ol+rtGzAhF62waEh2EuuSeGZKxsDLvMw6
-         eJ2HH2QBGIQkGNDyN+7dT6osSys+0zYdjmZUopJuQs4S/DCIQwMKeCxH+efXPX13TKxk
-         yHaJmBpLE7Bh/0QHwXDJTJIeISXQnLeyzaCkHjKQMaCZjFEHEvT4J9fjFSBzIQjVOmGz
-         31gOim9svZAyxZQIylSRLk8gGyepVM7fgwO82J1u0sOxnupv4OxuLcWXvwquGg95pDfG
-         W9Uw==
-X-Gm-Message-State: AC+VfDxWUXPdlPKM1X89TaAoJl6U/frc/iybFYnQQFucI12/VANPiV4t
-        zYpif3t/bvrao2uPuO8a98U=
-X-Google-Smtp-Source: ACHHUZ4mCB3LsFvodVihfPVbGPUZtGL4+R7FasXounRJVMbq1AgF37C39CFk3Jq/lhG0KTzjGFbLUA==
-X-Received: by 2002:a25:1087:0:b0:bb3:ae54:9fcd with SMTP id 129-20020a251087000000b00bb3ae549fcdmr3584173ybq.23.1686116408773;
-        Tue, 06 Jun 2023 22:40:08 -0700 (PDT)
-Received: from debian.me (subs28-116-206-12-58.three.co.id. [116.206.12.58])
-        by smtp.gmail.com with ESMTPSA id bd5-20020a170902830500b001b06361a38dsm9419509plb.116.2023.06.06.22.40.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 22:40:08 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id E009D1069FD; Wed,  7 Jun 2023 12:40:00 +0700 (WIB)
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Franziska Naepelt <franziska.naepelt@googlemail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Linux SPDX Licenses <linux-spdx@vger.kernel.org>,
-        Linux Kernel Janitors <kernel-janitors@vger.kernel.org>,
-        Linux Crypto <linux-crypto@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: [PATCH 8/8] crypto: cts: Convert MIT boilerplate to corresponding SPDX license identifier
-Date:   Wed,  7 Jun 2023 12:39:49 +0700
-Message-ID: <20230607053940.39078-18-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230607053940.39078-10-bagasdotme@gmail.com>
-References: <20230607053940.39078-10-bagasdotme@gmail.com>
+        Wed, 7 Jun 2023 01:45:29 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC97719AE;
+        Tue,  6 Jun 2023 22:45:27 -0700 (PDT)
+Received: from [192.168.10.48] (unknown [119.152.150.198])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 25F176606EEC;
+        Wed,  7 Jun 2023 06:45:17 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686116726;
+        bh=v41rsZme1rrV0UDXeZHFRH87LHFl+vrfIF59dWd8644=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=Ln2fFhtz2qsFxNskc9DRPGajGdxp019E1vLoMvosoin3RKletQ2orcyC4YuLjdY01
+         JaU4b7GQoLlwbozJ1Pw7BhRChJhPo50bbAELcTyIfidtwcBQI5bSObpoECpaJNvmFv
+         1GN/DP6+j4yf0qwtmBvOl8tu6HNklqehJLGA+VVFtg5QbnukNQ0eYEj1XGJxg2p7AZ
+         eemWiFjsUaVBmknD97DhWLz899nKupk6A28+TQApefSnWZ8BqxCHd1rM9mQ1CpiFmf
+         +wWJxnECNVIIU9y7uSXuESRQqhuRGh72rzTCmti9Ian7gJJtJgNSYasZ25DJK3kZBS
+         bZbwZJONntqCw==
+Message-ID: <9d8b5b8e-47c9-16dd-050a-45d917d73c07@collabora.com>
+Date:   Wed, 7 Jun 2023 10:45:14 +0500
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2001; i=bagasdotme@gmail.com; h=from:subject; bh=EyrSqctQWk7uvoCz1uQF3lpzs3d6S+Uv5OFoI1+90Dk=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDCkNEnI3Xwi2X+f7qSJ0aF5rB7vNi2+XFxqwzFhi9WpLk Le674eVHaUsDGJcDLJiiiyTEvmaTu8yErnQvtYRZg4rE8gQBi5OAZiIzFeG/wlZxRE3Q1fm6aal 7Ilca5ZTrrRg/uQ65oNX+mMivwVP3MrI8O/o7lXfVQR53lrfzTJnETgeKSOR/cr8fkXGedHyuGn mrAA=
-X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        oe-kbuild-all@lists.linux.dev,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Greg KH <greg@kroah.com>,
+        kernel test robot <lkp@intel.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
+        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>
+Subject: Re: [PATCH v12 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+Content-Language: en-US
+To:     Vineet Gupta <vgupta@kernel.org>,
+        linux-snps-arc@lists.infradead.org
+References: <20230406074005.1784728-3-usama.anjum@collabora.com>
+ <202304061914.N1Hmx12N-lkp@intel.com>
+ <e3c82373-256a-6297-bcb4-5e1179a2cbe2@collabora.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <e3c82373-256a-6297-bcb4-5e1179a2cbe2@collabora.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-License boilerplate in CTS mode implementation (crypto/cts.c) looks like
-MIT license with advertising clause. Replace it with correspondig
-SPDX tag.
+On 4/6/23 5:56 PM, Muhammad Usama Anjum wrote:
+> On 4/6/23 4:40 PM, kernel test robot wrote:
+>> Hi Muhammad,
+>>
+>> kernel test robot noticed the following build errors:
+>>
+>> [auto build test ERROR on akpm-mm/mm-everything]
+>> [also build test ERROR on next-20230406]
+>> [cannot apply to linus/master v6.3-rc5]
+>> [If your patch is applied to the wrong git tree, kindly drop us a note.
+>> And when submitting patch, we suggest to use '--base' as documented in
+>> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>>
+>> url:    https://github.com/intel-lab-lkp/linux/commits/Muhammad-Usama-Anjum/userfaultfd-UFFD_FEATURE_WP_ASYNC/20230406-154314
+>> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+>> patch link:    https://lore.kernel.org/r/20230406074005.1784728-3-usama.anjum%40collabora.com
+>> patch subject: [PATCH v12 2/5] fs/proc/task_mmu: Implement IOCTL to get and optionally clear info about PTEs
+>> config: arc-randconfig-r023-20230405 (https://download.01.org/0day-ci/archive/20230406/202304061914.N1Hmx12N-lkp@intel.com/config)
+>> compiler: arceb-elf-gcc (GCC) 12.1.0
+>> reproduce (this is a W=1 build):
+>>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>>         chmod +x ~/bin/make.cross
+>>         # https://github.com/intel-lab-lkp/linux/commit/f13abb36f64c77913509da8ca157512d2fb9f031
+>>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>>         git fetch --no-tags linux-review Muhammad-Usama-Anjum/userfaultfd-UFFD_FEATURE_WP_ASYNC/20230406-154314
+>>         git checkout f13abb36f64c77913509da8ca157512d2fb9f031
+>>         # save the config file
+>>         mkdir build_dir && cp config build_dir/.config
+>>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc olddefconfig
+>>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash fs/proc/
+>>
+>> If you fix the issue, kindly add following tag where applicable
+>> | Reported-by: kernel test robot <lkp@intel.com>
+>> | Link: https://lore.kernel.org/oe-kbuild-all/202304061914.N1Hmx12N-lkp@intel.com/
+>>
+>> All error/warnings (new ones prefixed by >>):
+>>
+>>    fs/proc/task_mmu.c: In function 'pagemap_scan_pmd_entry':
+>>>> fs/proc/task_mmu.c:1921:37: error: 'HPAGE_SIZE' undeclared (first use in this function); did you mean 'PAGE_SIZE'?
+>>     1921 |                     ((end - start < HPAGE_SIZE) ||
+>>          |                                     ^~~~~~~~~~
+>>          |                                     PAGE_SIZE
+> It seems arc architecture supports CONFIG_TRANSPARENT_HUGEPAGE, but it
+> doesn't define HPAGE_SIZE. It only defines PAGE_SIZE in
+> include/uapi/asm/page.h? AFAIK HPAGE_SIZE must be defined when
+> CONFIG_TRANSPARENT_HUGEPAGE is enabled. What can be the solution here for arc?
+I'm still looking for solution. Vineet do you have some thoughts?
 
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- crypto/cts.c | 24 +-----------------------
- 1 file changed, 1 insertion(+), 23 deletions(-)
+> 
+> The remaining build failures are because the wrong tree. I base my patches
+> on latest next, while the bot has based patches on mm-everything. I guess
+> today's next would have latest mm stuff, a rebase would make things correct
+> or I'll shift to mm-everything.
+> 
+> 
 
-diff --git a/crypto/cts.c b/crypto/cts.c
-index 8f604f6554b1c3..9ec7e9787c0f6a 100644
---- a/crypto/cts.c
-+++ b/crypto/cts.c
-@@ -1,3 +1,4 @@
-+// SPDX-License-Identifier: MIT
- /*
-  * CTS: Cipher Text Stealing mode
-  *
-@@ -5,29 +6,6 @@
-  * The Regents of the University of Michigan
-  * ALL RIGHTS RESERVED
-  *
-- * Permission is granted to use, copy, create derivative works
-- * and redistribute this software and such derivative works
-- * for any purpose, so long as the name of The University of
-- * Michigan is not used in any advertising or publicity
-- * pertaining to the use of distribution of this software
-- * without specific, written prior authorization.  If the
-- * above copyright notice or any other identification of the
-- * University of Michigan is included in any copy of any
-- * portion of this software, then the disclaimer below must
-- * also be included.
-- *
-- * THIS SOFTWARE IS PROVIDED AS IS, WITHOUT REPRESENTATION
-- * FROM THE UNIVERSITY OF MICHIGAN AS TO ITS FITNESS FOR ANY
-- * PURPOSE, AND WITHOUT WARRANTY BY THE UNIVERSITY OF
-- * MICHIGAN OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING
-- * WITHOUT LIMITATION THE IMPLIED WARRANTIES OF
-- * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE
-- * REGENTS OF THE UNIVERSITY OF MICHIGAN SHALL NOT BE LIABLE
-- * FOR ANY DAMAGES, INCLUDING SPECIAL, INDIRECT, INCIDENTAL, OR
-- * CONSEQUENTIAL DAMAGES, WITH RESPECT TO ANY CLAIM ARISING
-- * OUT OF OR IN CONNECTION WITH THE USE OF THE SOFTWARE, EVEN
-- * IF IT HAS BEEN OR IS HEREAFTER ADVISED OF THE POSSIBILITY OF
-- * SUCH DAMAGES.
-  */
- 
- /* Derived from various:
 -- 
-An old man doll... just what I always wanted! - Clara
-
+BR,
+Muhammad Usama Anjum
