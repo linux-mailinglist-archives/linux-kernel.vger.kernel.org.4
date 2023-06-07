@@ -2,145 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F286272612C
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 15:23:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73067726137
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 15:26:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239785AbjFGNXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 09:23:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49498 "EHLO
+        id S240192AbjFGN0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 09:26:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235770AbjFGNXP (ORCPT
+        with ESMTP id S235032AbjFGN0U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 09:23:15 -0400
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6503995;
-        Wed,  7 Jun 2023 06:23:13 -0700 (PDT)
-X-GND-Sasl: herve.codina@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1686144191;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=upXsJBaOapv3HfJgv1RgsURS5W6Qd+6TPxSPKkAE5j8=;
-        b=jyfk1DMy8T+5r8MYSOQUudfcbk5sSXz5MeduU4Kee3pdk9FYRkqe9M7/Z7PZvEH0IpOZVG
-        dZFuCOQskx1e/WzL0LIjkwDW2kG2L13bG0KMLcYUb3y5VOjjs0k18C17jfGkGJap7wuDHm
-        F0qwd/wZyVlfhOHnZDqB51cFWB1Nz0y46LfhPiUacRrQxPYi19zNIfnC2a2lXo/dLsQK/k
-        C7UiW/tl3AWH55f6nX1gHlGy792zZA6c1obgpiR9NYYuhiVpkxJEo3q6Cj2SDtQk07SXMV
-        QcCtdd7gDT9P6zErA+YK7QicVFwQraPa6P9bli7/8OPC39m7MZWw0j2Wq1AcCQ==
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-X-GND-Sasl: herve.codina@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8F55940017;
-        Wed,  7 Jun 2023 13:23:09 +0000 (UTC)
-Date:   Wed, 7 Jun 2023 15:23:08 +0200
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     andy.shevchenko@gmail.com
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v2 7/9] ASoC: codecs: Add support for the generic IIO
- auxiliary devices
-Message-ID: <20230607152308.02b404e1@bootlin.com>
-In-Reply-To: <20230606155404.28ada064@bootlin.com>
-References: <20230523151223.109551-1-herve.codina@bootlin.com>
-        <20230523151223.109551-8-herve.codina@bootlin.com>
-        <ZHuFywIrTnEFpX6e@surfacebook>
-        <20230606155404.28ada064@bootlin.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+        Wed, 7 Jun 2023 09:26:20 -0400
+Received: from frasgout11.his.huawei.com (unknown [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB381AC;
+        Wed,  7 Jun 2023 06:26:19 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4QbnsK34lVz9xGgS;
+        Wed,  7 Jun 2023 21:15:49 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwCH9O9thYBk6e8aAw--.4240S2;
+        Wed, 07 Jun 2023 14:26:09 +0100 (CET)
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     akpm@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        stable@vger.kernel.org
+Subject: [PATCH] memfd: Check for non-NULL file_seals in memfd_create() syscall
+Date:   Wed,  7 Jun 2023 15:24:27 +0200
+Message-Id: <20230607132427.2867435-1-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: LxC2BwCH9O9thYBk6e8aAw--.4240S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrZF15tFW7JFW7uF4UWFykXwb_yoWkAwbEg3
+        y0qryrJr1DWw47CF4xAr13Zry8KFWDJrnxZF95tF4xAa98Ga1kWrZ3ur1fX348Gw4I9r1r
+        tFZrZF17Ar97GjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb7xYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20E
+        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x02
+        67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267
+        AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxVAaw2AFwI0_GFv_Wryl42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVW3JVWrJr1lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY
+        1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07jx3ktUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQABBF1jj45W0QAAs8
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        MAY_BE_FORGED,PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-On Tue, 6 Jun 2023 15:54:04 +0200
-Herve Codina <herve.codina@bootlin.com> wrote:
+Ensure that file_seals is non-NULL before using it in the memfd_create()
+syscall. One situation in which memfd_file_seals_ptr() could return a NULL
+pointer is when CONFIG_SHMEM=n.
 
-...
-> >   
-> > > +	platform_set_drvdata(pdev, iio_aux);    
-> > 
-> > Which callback is using this driver data?  
-> 
-> None -> I will remove platform_set_drvdata().
-> 
+Cc: stable@vger.kernel.org # 4.16.x
+Fixes: 47b9012ecdc7 ("shmem: add sealing support to hugetlb-backed memfd")
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+---
+ mm/memfd.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-My previous answer was not correct.
-The platform_set_drvdata() call is needed.
-
-In fact, the driver uses snd_soc_component_get_drvdata() 
-  https://elixir.bootlin.com/linux/v6.4-rc5/source/include/sound/soc-component.h#L425
-and this snd_soc_component_get_drvdata() get the driver data set by the
-platform_set_drvdata() call.
-
-I cannot use snd_soc_component_set_drvdata() to set the driver data because
-I haven't got the struct snd_soc_component instance when I need to set the
-driver data.
-
-So, I will not remove the platform_set_drvdata() call.
-
-The sequence is:
-  --- 8< ---
-  static int audio_iio_aux_probe(struct platform_device *pdev)
-  {
-	struct audio_iio_aux *iio_aux;
-
-	iio_aux = devm_kzalloc(&pdev->dev, sizeof(*iio_aux), GFP_KERNEL);
-	if (!iio_aux)
-		return -ENOMEM;
-
-	...
-
-	platform_set_drvdata(pdev, iio_aux);
-
-	return devm_snd_soc_register_component(iio_aux->dev,
-					       &audio_iio_aux_component_driver,
-					       NULL, 0);
-  }
-  --- 8< ---
-
-The struct snd_soc_component instance will be create during the 
-devm_snd_soc_register_component() call.
-
-Regards,
-Hervé
-
+diff --git a/mm/memfd.c b/mm/memfd.c
+index 69b90c31d38..e763e76f110 100644
+--- a/mm/memfd.c
++++ b/mm/memfd.c
+@@ -371,12 +371,15 @@ SYSCALL_DEFINE2(memfd_create,
+ 
+ 		inode->i_mode &= ~0111;
+ 		file_seals = memfd_file_seals_ptr(file);
+-		*file_seals &= ~F_SEAL_SEAL;
+-		*file_seals |= F_SEAL_EXEC;
++		if (file_seals) {
++			*file_seals &= ~F_SEAL_SEAL;
++			*file_seals |= F_SEAL_EXEC;
++		}
+ 	} else if (flags & MFD_ALLOW_SEALING) {
+ 		/* MFD_EXEC and MFD_ALLOW_SEALING are set */
+ 		file_seals = memfd_file_seals_ptr(file);
+-		*file_seals &= ~F_SEAL_SEAL;
++		if (file_seals)
++			*file_seals &= ~F_SEAL_SEAL;
+ 	}
+ 
+ 	fd_install(fd, file);
 -- 
-Hervé Codina, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.1
+
