@@ -2,77 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 239CE725463
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 08:36:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72ABD725461
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 08:36:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234376AbjFGGg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 02:36:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55584 "EHLO
+        id S234956AbjFGGgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 02:36:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235252AbjFGGgC (ORCPT
+        with ESMTP id S234753AbjFGGf4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 02:36:02 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F2C272B
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 23:35:08 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2b15a327c20so82446191fa.1
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 23:35:08 -0700 (PDT)
+        Wed, 7 Jun 2023 02:35:56 -0400
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4C762699;
+        Tue,  6 Jun 2023 23:35:04 -0700 (PDT)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-19f454bd2c8so7732371fac.3;
+        Tue, 06 Jun 2023 23:35:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686119701; x=1688711701;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=GDLhbIj1h1brePs46a8+9RVwoL3klUcsVNRfX5GYZHU=;
-        b=f+4fDFosW9vw+ywjmYnEr0xgmF/taWie23nQww982PJApOEAKYXdl/oqboBfDEL/xJ
-         HCyDxeVUOG66QN9GUNGUfqs6vZzkPmU3K8Bs1v7okPvHW197gxdLXBab3To9UiQsl6U1
-         FwvLmMB4mjIPN4yxUfhZR3fwZgX6GWKqScUBn28K36UDqtwgyL1KA0OrZYbgZDqM6dDH
-         4aSnwdV5uUUxUduonTIj1rOtYhwhQLtCRmpOVwTDrR5TZQdu+Nqc1QczEGi62jrmVMHU
-         ecuNlkE2o1HCadiYU000ULSL+DiFiOfBR4grYwxxY0rgAizA1datInUlNvvmya3k5GdI
-         W1Fw==
+        d=gmail.com; s=20221208; t=1686119698; x=1688711698;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8A+z7wlEdRYbHtO/dJJM54F9I60knJM0fwL0Pnl9OAY=;
+        b=CeBxyTw4/DL2b53rqIdeqOOwXvqJymfF8VJR9+4UcxpQFiyo+OwIMesotQRktUL9Rq
+         u5L3QTBiHepyPJlpGrL6cpCvR+c6cEzdJ9TI8Dth7G8GXQLDoiOEW4g7d36caUwBN8Pu
+         aGrvbWL2o/OfQ4KUGxa14WLqLBwaluW1sN6mQDTe6DGFZ6q3QNT/jXkgBmxH+7BgvvmR
+         m8ejb2V/SoD+kBtizSYQiqZ9dtpCOXJUsLlxZ5RMrNusNoP7eN4Ve/v43YFJPMkPCmqt
+         ACvjdOU29Y/YVVtTHiVOeyYyDrfxKFfcal1NCU1nYhLeT7Vdlu8D3udsxR3foPjveeaH
+         Rd9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686119701; x=1688711701;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GDLhbIj1h1brePs46a8+9RVwoL3klUcsVNRfX5GYZHU=;
-        b=TA2I9/DrmwSK435jBxHHjqO7TO/yZYHa5fv99mCHRKCyVTl/TT8m5uqZhTdqW3XWWt
-         wNGBLEYKKsnwbywNgJkPPSrBKiXaN6yZiiIAHvDELMlcne6C66/YowxwwBKy1pE4LZ/H
-         3S0/WgG4C1pxoBvIVi8qL4wGiKwOtwmowBc01Xq3Jc+PmtfJGmX2a+3bsP1wZSmjdPnF
-         /726BXfRDUcH/55szDc1VDV8AwNXq2Ga1AYglifynhXaJlMl588bGFw0M4NDq4yPMd/q
-         ZmBIerwikO/zDt5erOtebq0fueuKSZpv3VjrhK6O+6XTojUQtTkR63b+PL+0GioW7b66
-         ESvA==
-X-Gm-Message-State: AC+VfDyiUWS77/bTyhVpawCXcPRSrpqjBkZnxpXRIHng+5GMIJiKhcDy
-        n6BwIgQrAPeovDlCpKjPpIYi8aFCEZ3bIOvL+xlwSA==
-X-Google-Smtp-Source: ACHHUZ4qNZTRuYZfvCX9IX8YM10d8EPKEN5e8MFW2FKTx2mNeEnMkCQbqpMClq9fy9Dfjnp6o+QbK7+ZVYdMDETfezA=
-X-Received: by 2002:a05:651c:102b:b0:2a8:adc4:a928 with SMTP id
- w11-20020a05651c102b00b002a8adc4a928mr2042361ljm.18.1686119701151; Tue, 06
- Jun 2023 23:35:01 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686119698; x=1688711698;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8A+z7wlEdRYbHtO/dJJM54F9I60knJM0fwL0Pnl9OAY=;
+        b=fiikxvt1IiYEVQ5wjnEa7Pb+rE4a42wYpUmvQ3RR4/AhTVdEylOuOpP1ueP1dB1585
+         5zRBpaOsnTLmiDaLerwTapcS7tTzYwkIj5E2fOntSS7UR8RSW0H4jY17qsQS99hr+PZ4
+         jRGup6/V7J0FDTm8PVNdDL5psFNcznO1g/MYbK9GoBKfwJP1ATcNAmnb3UF60QxBhm46
+         2r/57xFByX20+CVvFYcmAsmeJl+vh36R8vgvt5yt/0ITcgRoRraMGtG1mClmn7GYHYJ6
+         2k1aG2GOvWDZ72i9uTkBJ6XSeYKAdYjWzpu1Leh2tEPwUzDY/9P5fUTkEOEen8B1ttNU
+         zgLw==
+X-Gm-Message-State: AC+VfDz3z0w3yD2NhKsn7oUlK8xuYtVIb4Uiq1v+2xNtOVbCPmuNN3Bo
+        YLnCrOQX2bkw08BYpFH0u8xJMVviZVgK7zD7YOsZv12P
+X-Google-Smtp-Source: ACHHUZ7QAMpiZYDHkdOXvZF5AcH1Av2L/av0UOiVWQKHozt0OEDoW4IMlurqAbfQqumtyxdobjJfLVit+WESRKIIMUo=
+X-Received: by 2002:a05:6870:c690:b0:19f:55f7:310e with SMTP id
+ cv16-20020a056870c69000b0019f55f7310emr5928554oab.13.1686119698271; Tue, 06
+ Jun 2023 23:34:58 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230526010748.1222-1-masahisa.kojima@linaro.org>
- <20230526010748.1222-4-masahisa.kojima@linaro.org> <0d3e0370-eb76-010f-3d30-9acc9b59645c@siemens.com>
- <CAFA6WYPnWJNPvhT2JDkO-qXRUaJoxBGZEvSfhxcRynV7=VSdQA@mail.gmail.com>
- <CAMj1kXFM45PCTU--+CCed6Cq_N5XqDG6tTu6fnQTSCpW2BWA5A@mail.gmail.com> <4ff09002-e871-38b9-43ec-227a64bac731@siemens.com>
-In-Reply-To: <4ff09002-e871-38b9-43ec-227a64bac731@siemens.com>
-From:   Ilias Apalodimas <ilias.apalodimas@linaro.org>
-Date:   Wed, 7 Jun 2023 09:34:25 +0300
-Message-ID: <CAC_iWjJJ5E9Q1or5yTiDynzv_WAYH-g+N24aRdu9rvcsbWqnrg@mail.gmail.com>
-Subject: Re: [PATCH v5 3/3] efi: Add tee-based EFI variable driver
-To:     Jan Kiszka <jan.kiszka@siemens.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Masahisa Kojima <masahisa.kojima@linaro.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-efi@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        "Su, Bao Cheng (RC-CN DF FA R&D)" <baocheng.su@siemens.com>
+References: <20230606211600.1601694-1-liviu@dudau.co.uk> <20230606211600.1601694-3-liviu@dudau.co.uk>
+In-Reply-To: <20230606211600.1601694-3-liviu@dudau.co.uk>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Wed, 7 Jun 2023 08:34:46 +0200
+Message-ID: <CAMhs-H-b-RmxSKsXpFjRby4XLTx3S0_M-dV-fffHueRSmebLRw@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] mips: dts: ralink: Add support for TP-Link HC220
+ G5 v1 board
+To:     Liviu Dudau <liviu@dudau.co.uk>
+Cc:     =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Burton <paulburton@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,61 +76,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jan,
+On Tue, Jun 6, 2023 at 11:16=E2=80=AFPM Liviu Dudau <liviu@dudau.co.uk> wro=
+te:
+>
+> This WiFi AP is based on a MT7621 SoC with 128MiB RAM, 128MiB NAND,
+> a MT7603 2.4GHz WiFi and a MT7613 5GHz WiFi chips integrated on the board=
+,
+> connected to the main SoC over PCIe.
+>
+> The device uses NMBM over NAND, which is not currently supported in the
+> mainline, so NAND node is skipped in this revision.
+>
+> Signed-off-by: Liviu Dudau <liviu@dudau.co.uk>
+> ---
+>  arch/mips/boot/dts/ralink/Makefile            |  3 +-
+>  .../dts/ralink/mt7621-tplink-hc220-g5-v1.dts  | 84 +++++++++++++++++++
+>  2 files changed, 86 insertions(+), 1 deletion(-)
 
-[...]
+Acked-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
 
-> >>>>
-> > ...
-> >>>
-> >>> I think we have a probe ordering issue with this driver:
-> >>> efivarfs_fill_super() may be called before the TEE bus was probed, thus
-> >>> with the default efivar ops still registered. And that means
-> >>> efivar_supports_writes() will return false, and the fs declares itself
-> >>> as readonly. I've seen systemd mounting it r/o initialling, and you need
-> >>> to remount the fs to enable writability.
-> >>>
-> >>> Is there anything that could be done to re-order things reliably, probe
-> >>> the tee bus earlier etc.?
-> >>
-> >> This driver has a dependency on user-space daemon: tee-supplicant to
-> >> be running for RPMB access. So once you start that daemon the
-> >> corresponding device will be enumerated on the TEE bus and this driver
-> >> probe will be invoked. So I would suggest you to load this daemon very
-> >> early in the boot process or better to make it a part of initramfs.
-> >>
-> >
-> > That is not the point, really.
-> >
-> > If this dependency exists, the code should be aware of that, and made
-> > to work correctly in spite of it. Requiring a module to be part of
-> > initramfs is not a reasonable fix.
->
-> In fact, I've tested a non-modularized build as well, just to exclude
-> that issue. The daemon dependency is more likely the problem here.
->
-> >
-> > IIUC, this also means that the efivar ops are updated while there is
-> > already a client. This seems less than ideal as well
-
-As Sumit pointed out, the 'device' won't be available from OP-TEE
-until the supplicant is up and running and as a result, the module
-_probe() function won't run.  Unfortunately, this isn't something we
-can avoid since the supplicant is responsible for the RPMB writes.
-The only thing I can think of is moving parts of the supplicant to the
-kernel and wiring up the RPC calls for reading/writing data to the
-eMMC subsystem.  There was another discussion here [0] requesting the
-same thing for different reasons. But unless I am missing something
-this won't solve the problem completely either.  You still have a
-timing dependency of "when did the RT callbacks change" -- "when was
-my efivarfs mounted".
-
-Thanks
-/Ilias
->
-> Jan
->
-> --
-> Siemens AG, Technology
-> Competence Center Embedded Linux
->
+Thanks,
+     Sergio Paracuellos
