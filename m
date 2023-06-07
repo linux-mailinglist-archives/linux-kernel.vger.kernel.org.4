@@ -2,84 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A40A9726391
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 17:00:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9636F726376
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 16:56:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241219AbjFGPAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 11:00:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48194 "EHLO
+        id S240423AbjFGO43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 10:56:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240878AbjFGPAw (ORCPT
+        with ESMTP id S241225AbjFGO4Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 11:00:52 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B011410F8;
-        Wed,  7 Jun 2023 08:00:50 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id E2F4D5FD6C;
-        Wed,  7 Jun 2023 18:00:48 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1686150048;
-        bh=yZw7OBt/wiNYBcIeHQpsh+rQgqcW0pEIZQT5EamZdeA=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=GTLnBO4GcM/5+3XBiS+Rz3HvXus4rlcOKXcCUw52CPge+vgRqQc2Pvlmoq/Wl5stg
-         8JCEaYFOiMiNJ0Zo821HaecH+hkjm3AvF84e7Yd5CWRA3omx6Cfc4pCW/I0rlBaPxw
-         nEEbDhEPFCLClETnVHhxOHFpIiZMX95TXRnlNkRKC+fOtWlhEIHgQr0DUIB6DGd2SX
-         YgeLwo70TYNrN7a9DyHA7/Zi9O41buRZd4ZUD3hZmwdYiArGLkrdMqLplla7LNo+06
-         ut2Y/dqr0lFEz0ulzoeD4RLVFxTByjccOwDrWgBHumfBE5cNbuo6wcpRT33Tvis8cr
-         HMetNTzoQ2WMg==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Wed,  7 Jun 2023 18:00:48 +0300 (MSK)
-Message-ID: <57ccf7ac-7d94-8a66-7a0e-abfe14f7df2c@sberdevices.ru>
-Date:   Wed, 7 Jun 2023 17:55:53 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v1] dt-bindings: nand: meson: Fix 'nand-rb' property
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-CC:     Liang Yang <liang.yang@amlogic.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
+        Wed, 7 Jun 2023 10:56:25 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 237681BF3;
+        Wed,  7 Jun 2023 07:56:07 -0700 (PDT)
+X-GND-Sasl: herve.codina@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1686149766;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=j7gbXd0RpYvnzNDsTkINk8jfZlfPM/h26L3sVpQBEA0=;
+        b=Nus40yw6Ykq619bNhbiuMgDNNxhkNfmD14Z5vbLwgY6hhW6sGzQVXPz6yezJQAuibm3fVO
+        USQ6p9kQVGiMdTwif/CdYD2GjvVboIox6YRehy8tDI61HntMDikWkce1PcJVgdIMcHsoj1
+        SUfk2tN6yjS8jCngvcOnWfEygLeQk1nahPZvS7J0mI9gTi+53l/wpCZK7XxIQiIDL85pfH
+        +Txfnc17HzzcMLgvfWxK/1bTwiA3qJ/q7eAYbsmvXXk/PizhuPbi/BAbIqXSLBGPG9uv/k
+        afYTjjGKV7DIoUeGnHd7fHO+vkAjz7HKlDvvbQB6UYBOvwYmXKScsQntRRXYdA==
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+X-GND-Sasl: herve.codina@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id CC4CEE000C;
+        Wed,  7 Jun 2023 14:56:01 +0000 (UTC)
+Date:   Wed, 7 Jun 2023 16:56:00 +0200
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
-        <linux-mtd@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-References: <20230606193507.35024-1-AVKrasnov@sberdevices.ru>
- <20230607095802.3adcd4f9@xps-13>
- <166bdc27-f77c-9076-f866-180cfa5bff76@sberdevices.ru>
- <08da4e86-433a-7d2e-25ff-ffa24221abdf@linaro.org>
- <835a3587-1e0f-64d7-1d1a-b639ae8b7307@sberdevices.ru>
- <2ca6e619-1d57-8fff-6176-9ee890e0d167@linaro.org>
- <5ca9eb2b-4bc8-5883-a029-3eeca905fe6e@sberdevices.ru>
- <20230607113605.50a992bb@xps-13>
- <6c1973d1-38c0-6048-90ad-da2f60df8238@sberdevices.ru>
- <9105207b-0dfb-346f-422f-984cf3454f90@linaro.org>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-In-Reply-To: <9105207b-0dfb-346f-422f-984cf3454f90@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/06/07 09:39:00 #21450961
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        Conor Dooley <conor+dt@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v2 7/9] ASoC: codecs: Add support for the generic IIO
+ auxiliary devices
+Message-ID: <20230607165600.535c8530@bootlin.com>
+In-Reply-To: <CAHp75Vd00N8z7kgTb=WTZHJW3XhsKbLfhTTKPjnCvKUSfL+xDQ@mail.gmail.com>
+References: <20230523151223.109551-1-herve.codina@bootlin.com>
+        <20230523151223.109551-8-herve.codina@bootlin.com>
+        <ZHuFywIrTnEFpX6e@surfacebook>
+        <20230606155404.28ada064@bootlin.com>
+        <CAHp75Vd00N8z7kgTb=WTZHJW3XhsKbLfhTTKPjnCvKUSfL+xDQ@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,64 +87,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Andy,
 
+On Tue, 6 Jun 2023 17:34:22 +0300
+Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
 
-On 07.06.2023 17:58, Krzysztof Kozlowski wrote:
-> On 07/06/2023 16:52, Arseniy Krasnov wrote:
->>
->>
->> On 07.06.2023 12:36, Miquel Raynal wrote:
->>> Hi Arseniy,
->>>
->>> avkrasnov@sberdevices.ru wrote on Wed, 7 Jun 2023 12:04:29 +0300:
->>>
->>>> On 07.06.2023 12:08, Krzysztof Kozlowski wrote:
->>>>> On 07/06/2023 10:57, Arseniy Krasnov wrote:  
->>>>>>
->>>>>>
->>>>>> On 07.06.2023 11:53, Krzysztof Kozlowski wrote:  
->>>>>>> On 07/06/2023 10:40, Arseniy Krasnov wrote:  
->>>>>>>> Hello Miquel, 
->>>>>>>>
->>>>>>>> On 07.06.2023 10:58, Miquel Raynal wrote:
->>>>>>>>  
->>>>>>>>> Hi Arseniy,
->>>>>>>>>
->>>>>>>>> AVKrasnov@sberdevices.ru wrote on Tue, 6 Jun 2023 22:35:07 +0300:
->>>>>>>>>  
->>>>>>>>>> Add description of 'nand-rb' property. Use "Fixes" because this property
->>>>>>>>>> must be supported since the beginning. For this controller 'nand-rb' is
->>>>>>>>>> stored in the controller node (not in chip), because it has only single
->>>>>>>>>> r/b wire for all chips.  
->>>>>>>>>
->>>>>>>>> Sorry if I mislead you in the first place, but you could definitely
->>>>>>>>> have two chips and only one with RB wired. It needs to be defined in
->>>>>>>>> the chips.  
->>>>>>>>
->>>>>>>> Ok, so to clarify: is it ok, that in bindings this property will be placed in the
->>>>>>>> chip, but in driver, i'm trying to read it from the controller node (thus  in
->>>>>>>> dts file it will be also in controller node)?  
->>>
->>> The bindings and your driver internal representation are two different
->>> things. Anyway, as mentioned above, wiring the RB line to one die and
->>> not the other would be valid hardware design and would require the rb
->>> property to be in the chip node. Please perform a per-chip property read
->>> in the driver as well.
->>
->> Done, I resend both patches (bindings + driver update) as a single patchset. Your review comments
->> for driver code were also fixed.
+...
+
+> > >
+> > > Btw, can you avoid using OF APIs? It's better to have device property/fwnode
+> > > API to be used from day 1.  
+> >
+> > Hum, this comment was raised in the previous iteration
+> >   https://lore.kernel.org/linux-kernel/20230501162456.3448c494@jic23-huawei/
+> >
+> > I didn't find any equivalent to of_property_read_u32_index() in the
+> > device_property_read_*() function family.
+> > I mean I did find anything available to get a value from an array using an index.  
 > 
-> No, please send new version, not the same. New version means with fixed
-> comments and with patch changelog.
-
-Sorry, Yes, I mean new version, here it is:
-https://lore.kernel.org/linux-mtd/20230607145026.2899547-1-AVKrasnov@sberdevices.ru/
-
-There I fixed bindings and tested it.
-
-Thanks, Arseniy
-
+> This is done by reading the entire array at once and then parsing as
+> you wish in the code, device_property_read_u32_array() is for that.
 > 
-> Best regards,
-> Krzysztof
+> > In the previous iteration it was concluded that keeping OF APIs in this series
+> > seemed "reasonable".  
 > 
+> Maybe, but consider the above.
+
+I see.
+Will switch to device_property_*() family in the next iteration.
+
+Thanks,
+Hervé
+
+-- 
+Hervé Codina, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
