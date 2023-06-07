@@ -2,72 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B435172601F
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 14:56:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6363F726024
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 14:59:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239089AbjFGM4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 08:56:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33984 "EHLO
+        id S239212AbjFGM7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 08:59:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235621AbjFGM4B (ORCPT
+        with ESMTP id S234402AbjFGM67 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 08:56:01 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E82A10DE
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 05:55:53 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686142552;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bO4Cr3xOuSS4p6uSUWgjKuKXxBCfM0OB3C5OihkHED4=;
-        b=vmArIk+AJKtb3HxDDiMaYwdaC++iJozeqxwax4UpIG4VX/LDEMcuG+J8jj3XpbXgLQhUH0
-        W8irNFkM0qmmQxOUuqdjNEK4f6kLZYLCPbsIo4RMftLAkP1VSOQh9la/iCdo0eFXrAfc4t
-        sizdM/RYlU4nU4lnCaIF29fTyfVZnQkJkhjFr+FsolgwIKa1dYOW3uiNdl+RTp1XSsQ+Ov
-        Pe6wbOcVO3DMy/J/ncZ9/3vN4JkoD6ru3Jqr8HWfTq0Ns9H6XXku4J5C63VR6b8ypK17IC
-        nJbLYXm7KQ+LQpTcKRVaX9LoIik5LSdnl5LCSXCGGWs4lnXTxT2kJLKlzhHWgQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686142552;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bO4Cr3xOuSS4p6uSUWgjKuKXxBCfM0OB3C5OihkHED4=;
-        b=yzOZGXRXTxAhDJ8fWqHc/m5At4P9gYrMf11BNvPDv0s5maeBU6NspdPI3/jJxjrBaKoCQk
-        eLrUG8dKK2uxy3AQ==
-To:     Nikolay Borisov <nik.borisov@suse.com>, x86@kernel.org
-Cc:     linux-kernel@vger.kernel.org, mhocko@suse.com, jslaby@suse.cz,
-        Nikolay Borisov <nik.borisov@suse.com>
-Subject: Re: [PATCH 3/3] x86: Disable running 32bit processes if
- ia32_disabled is passed
-In-Reply-To: <87legvjxat.ffs@tglx>
-References: <20230607072936.3766231-1-nik.borisov@suse.com>
- <20230607072936.3766231-4-nik.borisov@suse.com> <87legvjxat.ffs@tglx>
-Date:   Wed, 07 Jun 2023 14:55:51 +0200
-Message-ID: <87cz27juso.ffs@tglx>
+        Wed, 7 Jun 2023 08:58:59 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA0A7A6
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 05:58:57 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-30e53cacc10so974236f8f.0
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 05:58:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1686142736; x=1688734736;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VJowdc9e59oB9wLZyR+086niExyuveZY6dunY32SgSw=;
+        b=qYGg+N98bKzlnOSPs1w2WU3nsb+GHqRRgSHImrjk+cI7oLcG2JrvcdZENBR/LrxErj
+         CJ03F5EweLHhwLn/VZG9dRqx8pnZmwYX1hsu4ZJvoNMwfYu4bLI6becMzNzZouVxOPsF
+         DtM13TFnXRSQounOafPHJyFNSkuRogJ0byeSMwsOFxWckEdkJz6wZf97nGyE1QCgbIo1
+         gibaGN5I6O5VTp107lFVSW0BKXnSCwe3172yaicz42X+MT7xGq/mLjyIKZtO8cSZUlzh
+         JIvtwJEHhjhIC4vmIofAz6h2MWGZsRSD1ZR+B6l5cSLt4DISIxxFLtuQuPdoBgkbL0ZP
+         z+Lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686142736; x=1688734736;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VJowdc9e59oB9wLZyR+086niExyuveZY6dunY32SgSw=;
+        b=A/opAU6xeok0d6JQ5s036yrcWoLqwMnilWoBnx2FzFtFptmj7q/YLUZEcGFg43PiUt
+         +IXPJyUy9d452+dfo9Ddho2M40QvZxbQ383JYu6xuILMwuXaVrTNS5gf7ZtqpL0AUuwL
+         8m1gDPjS8TOizdZ1qARbyGzIMYJD9o+QiHACVXImwEu91dpv9hm9SJ7t8QDytcy6ejdB
+         ueHxZtDSjWDsDw82n4SZRlPE9QWgJgxnJfZo2j3PdY7syam7SVDtJjOjHK5o/qZRi7mq
+         Fe3xpzVddEueanz500ZIQZmPP+XJfWQA/OZ9iMmvCe2AqqSW7hRH03S9Nz9D/+lMBIIC
+         huFg==
+X-Gm-Message-State: AC+VfDxsP6FkaHxL5WBc8dM3RUYTH5amfepp3WBcAlRfoPnNTOEREwCQ
+        we8QZ6kJsHgGmwfgGKf671aRvg==
+X-Google-Smtp-Source: ACHHUZ4TWTfgOEoFeZVMqWAp8ZN/koVFrf7eHsf6VrJB/pLXD1S4I70XGWbwV2qVsNa3FRrfijmKDQ==
+X-Received: by 2002:a5d:558d:0:b0:30a:e00e:8af7 with SMTP id i13-20020a5d558d000000b0030ae00e8af7mr4621946wrv.63.1686142736136;
+        Wed, 07 Jun 2023 05:58:56 -0700 (PDT)
+Received: from localhost.localdomain (amontpellier-656-1-456-62.w92-145.abo.wanadoo.fr. [92.145.124.62])
+        by smtp.gmail.com with ESMTPSA id z10-20020a05600c220a00b003f42d8dd7d1sm2164096wml.7.2023.06.07.05.58.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 05:58:55 -0700 (PDT)
+From:   Alexandre Ghiti <alexghiti@rivosinc.com>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Rob Herring <robh@kernel.org>,
+        Anup Patel <anup@brainfault.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Song Shuai <songshuaishuai@tinylab.org>
+Subject: [PATCH -fixes] riscv: Check the virtual alignment before choosing a map size
+Date:   Wed,  7 Jun 2023 14:58:51 +0200
+Message-Id: <20230607125851.63370-1-alexghiti@rivosinc.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07 2023 at 14:01, Thomas Gleixner wrote:
-> On Wed, Jun 07 2023 at 10:29, Nikolay Borisov wrote:
->> @@ -2368,4 +2373,7 @@ void arch_smt_update(void)
->>  	cpu_bugs_smt_update();
->>  	/* Check whether IPI broadcasting can be enabled */
->>  	apic_smt_update();
->> +	if (ia32_disabled)
->> +		on_each_cpu(remove_user32cs_from_gdt, NULL, 1);
+We used to only check the alignment of the physical address to decide
+which mapping would fit for a certain region of the linear mapping, but
+it is not enough since the virtual address must also be aligned, so check
+that too.
 
-My brain based compiler tells me, that this breaks the 32bit build and
-the 64bit build with CONFIG_IA32_EMULATION=n. I'm pretty confident that
-a real compiler will agree.
+Fixes: 3335068f8721 ("riscv: Use PUD/P4D/PGD pages for the linear mapping")
+Reported-by: Song Shuai <songshuaishuai@tinylab.org>
+Link: https://lore.kernel.org/linux-riscv/tencent_7C3B580B47C1B17C16488EC1@qq.com/
+Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+---
+ arch/riscv/mm/init.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
+diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+index d42ea31c7de0..5143eef4c074 100644
+--- a/arch/riscv/mm/init.c
++++ b/arch/riscv/mm/init.c
+@@ -660,18 +660,19 @@ void __init create_pgd_mapping(pgd_t *pgdp,
+ 	create_pgd_next_mapping(nextp, va, pa, sz, prot);
+ }
+ 
+-static uintptr_t __init best_map_size(phys_addr_t base, phys_addr_t size)
++static uintptr_t __init best_map_size(phys_addr_t pa, uintptr_t va,
++				      phys_addr_t size)
+ {
+-	if (!(base & (PGDIR_SIZE - 1)) && size >= PGDIR_SIZE)
++	if (!(pa & (PGDIR_SIZE - 1)) && !(va & (PGDIR_SIZE - 1)) && size >= PGDIR_SIZE)
+ 		return PGDIR_SIZE;
+ 
+-	if (!(base & (P4D_SIZE - 1)) && size >= P4D_SIZE)
++	if (!(pa & (P4D_SIZE - 1)) && !(va & (P4D_SIZE - 1)) && size >= P4D_SIZE)
+ 		return P4D_SIZE;
+ 
+-	if (!(base & (PUD_SIZE - 1)) && size >= PUD_SIZE)
++	if (!(pa & (PUD_SIZE - 1)) && !(va & (PUD_SIZE - 1)) && size >= PUD_SIZE)
+ 		return PUD_SIZE;
+ 
+-	if (!(base & (PMD_SIZE - 1)) && size >= PMD_SIZE)
++	if (!(pa & (PMD_SIZE - 1)) && !(va & (PMD_SIZE - 1)) && size >= PMD_SIZE)
+ 		return PMD_SIZE;
+ 
+ 	return PAGE_SIZE;
+@@ -1177,7 +1178,7 @@ static void __init create_linear_mapping_range(phys_addr_t start,
+ 	for (pa = start; pa < end; pa += map_size) {
+ 		va = (uintptr_t)__va(pa);
+ 		map_size = fixed_map_size ? fixed_map_size :
+-					    best_map_size(pa, end - pa);
++					    best_map_size(pa, va, end - pa);
+ 
+ 		create_pgd_mapping(swapper_pg_dir, va, pa, map_size,
+ 				   pgprot_from_va(va));
+-- 
+2.39.2
 
