@@ -2,238 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92B1A7268C1
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 20:32:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1783472709F
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 23:40:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231977AbjFGScC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 14:32:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47194 "EHLO
+        id S231622AbjFGVkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 17:40:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231937AbjFGScA (ORCPT
+        with ESMTP id S230043AbjFGVkM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 14:32:00 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64F6610F8
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 11:31:56 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-514953b3aa6so1810662a12.1
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 11:31:56 -0700 (PDT)
+        Wed, 7 Jun 2023 17:40:12 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43D251BD6;
+        Wed,  7 Jun 2023 14:40:11 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f6dfc4e01fso78635595e9.0;
+        Wed, 07 Jun 2023 14:40:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686162715; x=1688754715;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6Z+U5ETKwaoIHltE2aiAd209awkqtpo2q3BiVL0nXYU=;
-        b=iUiL+koEOtPAccW4DAkC8uKKkLCRaCKzOoFR2FJlbkVPhX0BJH52rbIBFel/wEJi5n
-         OGSI2zocWFqKumJ7ZxFDcQwZbEvb1SZ5g5z7rej5gEpRa1zdfFnUHeUJyNJgrOjFuEYb
-         dY4HK37AOWyeJe1foqFmjD3e7nVJDONBSqPSAa4DGTL4aMjptAT5H7lhpZRmqiFyS6hL
-         PO5d1SbABORUMCK91wD4kEhJM6TDXlRJzE2w6M1mLl0l1tn9eySxCH9ao+/XJOdtIXNh
-         wZJSJaIIUPnfz2l4VXkPlJcaLHQhUAtiYPYvxNcpV5DhaMklDUUV015kRbZ7AeKnJoj1
-         gokw==
+        d=gmail.com; s=20221208; t=1686174009; x=1688766009;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=lmy4XW07oKHOzK9aUKxDjGz102EX0NciX9ngG/h5Op8=;
+        b=sMjiF6MA5LBXfcs4yX28hE18P801iKcAwW0xcFksygw4rnvT+zL5KGzA3oLFviaKul
+         SXLDKHuPAh1qrChJafS0iNwbqEs068eawutnLQI9B/sZFGEHB7CfiAzmx7UbtXm+EQQP
+         l5JlHfR3Zugj5hGqVy5FH/hchB+NE/DoeKYNvYT/g1yR20BIIcF/mshlFGni7hiYnaCt
+         dSalA2wX/xqm1OYrmsDZ73HEArh8+lGWNSn2xQ1IE+5Lt+R/hRhMJR8ZSkphENy/MHva
+         jPC81a3SamB5Cb5qUMc0Rskal2S2GA7+lI1E6DQlweIk36WfS4hHnAJOyqoTPLrnmemC
+         Yn9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686162715; x=1688754715;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6Z+U5ETKwaoIHltE2aiAd209awkqtpo2q3BiVL0nXYU=;
-        b=JJwbQEibMVQDcJTuJ6JZp1NNCisaLCfFxRfHKvOhL85HpoXYMJTrFNsQykRYfGO+DN
-         V4E6UPNUgW29V76cxezegCZ69Feq0TwZUL+gh80t4zu19POkjoS0Vm12Zmbs7RG3U5iX
-         f+BHlHurJvj0umTAQBQc2dDb+2nvcfSnq25lar4GJY6Nl4UODbm4APoocJSBNOXCbJTX
-         oegh1DgN0x6VZa7WcoD/dH3ueDz9FbW1kxtWuu0Gs6iab/ebCnJZP+moTpL2kcH3LFzo
-         8kmhoQfdqY+9Xc0R0mfxaHq6uhytzSQTsEZX+OVyPfSakATpuQ2yBH8uKdNak7iCNDQJ
-         McAQ==
-X-Gm-Message-State: AC+VfDzqKyQTFbsAEL5oQ4Vxlxj9GM7LeYMJbGcp+wJWjz+N+84v/CRV
-        vZl12pWw/si//q9yBc/SWI3EXQ==
-X-Google-Smtp-Source: ACHHUZ4zm6GVGkQczlCX9ubgue5IBbrzh8OwnXMHvbBaxgCxK5FXWNJMU50WbLRcua8aEYAUxOJlKQ==
-X-Received: by 2002:aa7:c7d5:0:b0:514:9df0:e3ec with SMTP id o21-20020aa7c7d5000000b005149df0e3ecmr5148935eds.0.1686162714757;
-        Wed, 07 Jun 2023 11:31:54 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id h26-20020aa7de1a000000b005148f0e8568sm6450019edv.39.2023.06.07.11.31.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 11:31:54 -0700 (PDT)
-Message-ID: <98960024-7dbc-91a3-75de-90b529637916@linaro.org>
-Date:   Wed, 7 Jun 2023 20:31:50 +0200
+        d=1e100.net; s=20221208; t=1686174009; x=1688766009;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lmy4XW07oKHOzK9aUKxDjGz102EX0NciX9ngG/h5Op8=;
+        b=i7lpRewUnFuZ7fUAGHxTFkpHnYrVnrxmE9GUlKVjXHwxoYCW58l3BuPEzID8GksOVn
+         DQabZdLCJKgbbaVEm9hw5oQXLIykNbyQxvYBtkSSS5lce57j/m6zR6GlNSfi5ZgJoxUQ
+         dIPrTbjE9ktkNaQ/5JU+cySY7qeAqmNprhZsMNolCUNgnwpEEhuJOtNCj9R4nk8l9wHx
+         CvLIC7JCWwwM1aNpxsyAwRduykFqC4Mtz7urBLt/XcIwnXTNSwVjOSbLvVUDfsXnJKYq
+         gqQmxCQty1FqCQcvrqCVaCVa8G7VhX+MhkhAUEpf3fVZKLza/QlTwHfPmUsCWlRcPQMh
+         GO5A==
+X-Gm-Message-State: AC+VfDwSGgRzYjMVvpVRrBo6q/3x7QQAsUejxqt85AUTgdyJxU5F7BME
+        KYTFQxgwP5bafkS1KUv+B+C+S5tykNM=
+X-Google-Smtp-Source: ACHHUZ4PWSrnMRmLSHjyewoXrXzTcg5ud1vYOcwQKJA99JC8o6Ria7mVmbfERcv5Q9z5T0bzHgQATg==
+X-Received: by 2002:a05:600c:28d0:b0:3f6:143:7c4b with SMTP id h16-20020a05600c28d000b003f601437c4bmr8370899wmd.6.1686174009205;
+        Wed, 07 Jun 2023 14:40:09 -0700 (PDT)
+Received: from Ansuel-xps. (93-34-93-173.ip49.fastwebnet.it. [93.34.93.173])
+        by smtp.gmail.com with ESMTPSA id p23-20020a1c7417000000b003f6f6a6e769sm3230521wmc.17.2023.06.07.14.40.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 14:40:08 -0700 (PDT)
+Message-ID: <6480f938.1c0a0220.17a3a.0e1e@mx.google.com>
+X-Google-Original-Message-ID: <ZIDNHjVEoSh8gtOh@Ansuel-xps.>
+Date:   Wed, 7 Jun 2023 20:31:58 +0200
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Mark Brown <broonie@kernel.org>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] binfmt_elf: dynamically allocate note.data in
+ parse_elf_properties
+References: <20230607144227.8956-1-ansuelsmth@gmail.com>
+ <202306071417.79F70AC@keescook>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 2/9] dt-bindings: phy: qcom,m31: Document qcom,m31 USB phy
-Content-Language: en-US
-To:     Varadarajan Narayanan <quic_varada@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, vkoul@kernel.org,
-        kishon@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        gregkh@linuxfoundation.org, catalin.marinas@arm.com,
-        will@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        p.zabel@pengutronix.de, arnd@arndb.de, geert+renesas@glider.be,
-        neil.armstrong@linaro.org, nfraprado@collabora.com,
-        broonie@kernel.org, rafal@milecki.pl, quic_srichara@quicinc.com,
-        quic_varada@quicinc.org, quic_wcheng@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-clk@vger.kernel.org
-References: <cover.1686126439.git.quic_varada@quicinc.com>
- <14f60578e2935c0844537eab162af3afa52ffe39.1686126439.git.quic_varada@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <14f60578e2935c0844537eab162af3afa52ffe39.1686126439.git.quic_varada@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202306071417.79F70AC@keescook>
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/06/2023 12:56, Varadarajan Narayanan wrote:
-> Document the M31 USB2 phy present in IPQ5332
-
-Full stop.
-
+On Wed, Jun 07, 2023 at 02:19:51PM -0700, Kees Cook wrote:
+> On Wed, Jun 07, 2023 at 04:42:27PM +0200, Christian Marangi wrote:
+> > Dynamically allocate note.data in parse_elf_properties to fix
+> > compilation warning on some arch.
 > 
-> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> ---
->  .../devicetree/bindings/phy/qcom,m31.yaml          | 69 ++++++++++++++++++++++
->  1 file changed, 69 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/phy/qcom,m31.yaml
+> I'd rather avoid dynamic allocation as much as possible in the exec
+> path, but we can balance it against how much it may happen.
+>
+
+I guess there isn't a good way to handle this other than static global
+variables and kmalloc. But check the arch question for additional info
+on the case.
+
+> > On some arch note.data exceed the stack limit for a single function and
+> > this cause the following compilation warning:
+> > fs/binfmt_elf.c: In function 'parse_elf_properties.isra':
+> > fs/binfmt_elf.c:821:1: error: the frame size of 1040 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
+> >   821 | }
+> >       | ^
+> > cc1: all warnings being treated as errors
 > 
-> diff --git a/Documentation/devicetree/bindings/phy/qcom,m31.yaml b/Documentation/devicetree/bindings/phy/qcom,m31.yaml
-> new file mode 100644
-> index 0000000..8ad4ba4
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/phy/qcom,m31.yaml
-> @@ -0,0 +1,69 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +
+> Which architectures see this warning?
+> 
 
-Drop stray blank lines.
+This is funny. On OpenWRT we are enforcing WERROR and we had FRAME_WARN
+hardcoded to 1024. (the option is set to 2048 on 64bit arch)
 
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/phy/qcom,m31.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm M31 USB PHY
+ARCH_USE_GNU_PROPERTY is set only on arm64 that have a FRAME_WARN set to
+2048.
 
-What is M31?
+So this was triggered by building arm64 with FRAME_WARN set to 1024.
 
-> +
-> +maintainers:
-> +  - Sricharan Ramabadhran <quic_srichara@quicinc.com>
-> +  - Varadarajan Narayanan <quic_varada@quicinc.org>
-> +
-> +description:
-> +  This file contains documentation for the USB M31 PHY found in Qualcomm
+Now with the configuration of 2048 the stack warn is not triggered, but
+I wonder if it may happen to have a 32bit system with
+ARCH_USE_GNU_PROPERTY. That would effectively trigger the warning.
 
-Drop redundant parts ("This file contains documentation for the").
+So this is effectively a patch that fix a currently not possible
+configuration, since:
 
-> +  IPQ5018, IPQ5332 SoCs.
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
+!IS_ENABLED(CONFIG_ARCH_USE_GNU_PROPERTY) will result in node.data
+effectively never allocated by the compiler are the function will return
+0 on everything that doesn't have CONFIG_ARCH_USE_GNU_PROPERTY.
 
-That's not oneOf.
+> > Fix this by dynamically allocating the array.
+> > Update the sizeof of the union to the biggest element allocated.
+> 
+> How common are these notes? I assume they're very common; I see them
+> even in /bin/true:
+> 
+> $ readelf -lW /bin/true | grep PROP
+>   GNU_PROPERTY   0x000338 0x0000000000000338 0x0000000000000338 0x000030 0x000030 R   0x8
+> 
+> -- 
 
-> +      - items:
+Is there a way to check if this kmalloc actually cause perf regression?
 
-No items.
-
-> +          - enum:
-> +              - qcom,m31-usb-hsphy
-
-I am confused what's this. If m31 is coming from some IP block provider,
-then you are using wrong vendor prefix.
-https://www.m31tech.com/download_file/M31_USB.pdf
-
-
-> +              - qcom,ipq5332-m31-usb-hsphy
-
-This confuses me even more. IPQ m31?
-
-> +
-> +  reg:
-> +    description:
-> +      Offset and length of the M31 PHY register set
-
-Drop description, obvious.
-
-> +    maxItems: 2
-> +
-> +  reg-names:
-> +    items:
-> +      - const: m31usb_phy_base
-> +      - const: qscratch_base
-
-Drop "_base" from both.
-
-> +
-> +  phy_type:
-> +    oneOf:
-> +      - items:
-> +          - enum:
-> +              - utmi
-> +              - ulpi
-
-This does not belong to phy, but to USB node.
-
-> +
-> +  resets:
-> +    maxItems: 1
-> +    description:
-> +      List of phandles and reset pairs, one for each entry in reset-names.
-
-Drop useless description.
-
-> +
-> +  reset-names:
-> +    items:
-> +      - const:
-> +          usb2_phy_reset
-
-Drop entire reset-names.
-
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/qcom,ipq5332-gcc.h>
-> +    hs_m31phy_0: hs_m31phy@5b00 {
-
-Node names should be generic. See also explanation and list of examples
-in DT specification:
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-
-Also, no underscores in node names.
-
-> +        compatible = "qcom,m31-usb-hsphy";
-> +        reg = <0x5b000 0x3000>,
-
-This is not what your unit address is saying.
-
-> +            <0x08af8800 0x400>;
-
-Align it.
-
-> +        reg-names = "m31usb_phy_base",
-> +                "qscratch_base";
-
-Align it.
-
-> +        phy_type = "utmi";
-> +        resets = <&gcc GCC_QUSB2_0_PHY_BCR>;
-> +        reset-names = "usb2_phy_reset";
-> +
-> +        status = "ok";
-
-Drop.
-
-> +    };
-
-Best regards,
-Krzysztof
-
+-- 
+	Ansuel
