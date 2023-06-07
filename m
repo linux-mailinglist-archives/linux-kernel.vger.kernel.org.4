@@ -2,363 +2,451 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 262FD7259F3
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 11:19:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A78E57259F5
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 11:19:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239936AbjFGJTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 05:19:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41030 "EHLO
+        id S239933AbjFGJTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 05:19:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239245AbjFGJSZ (ORCPT
+        with ESMTP id S238175AbjFGJTU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 05:18:25 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB50C1BCA;
-        Wed,  7 Jun 2023 02:18:19 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-30af56f5f52so5920649f8f.1;
-        Wed, 07 Jun 2023 02:18:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686129498; x=1688721498;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NQpeinNjTN0IF7+hO8InCuCzwrWYn1/vH2w52Qt2rd4=;
-        b=VzqHDl6lOMD3HiwAyg8OxPey2tZxHaf1steCEenzmBRJl8OVFpjV2Ot/ev4ZbqCxvz
-         DXkXkC0Go/j5oqs5kV158udvvw76vh/FfYVcRetNazxf48QldJ1DuOVpdpw0oVlS0ayd
-         HWDq/UxiRPpX8fvx6Mwo5FaMbc5RDF9KoklcIgR19NevlXK1S9U3Y4rVyUJSoFtNfMVo
-         RSBVBrua30Y0Wt864k/etgs247zGnSFHmS4A2n/C/LTEJJxH/6uLkkSr/+N4ft1VQiJB
-         6/t88SyMh5K0MbPWtoE1VlMH3i+hhDxL/94Sj2MU1V+E4hhNz9AWcR3/wZWSO1NmoxTg
-         bUeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686129498; x=1688721498;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NQpeinNjTN0IF7+hO8InCuCzwrWYn1/vH2w52Qt2rd4=;
-        b=EUcY2HMFyi+y4BF7Bio8qKvYqaxwYkMt64STA6KYYcwbSlK3a4XEOOLXA5lmszmuC+
-         y85gX5ZyvXroxKgvebkPd6Cx2yZB16e8ubNB25c0lkwJraowM6+Fq1RFehvpFt/az7dg
-         D2U60QvOJ2V9NAF8l7C5SouXtGJrwenDHaFSvW0fkYC+K8snWAdQrtydTSdErYB1Fvhn
-         uIuztFD+7b//TFNhepyCzy8ymr5RjLeLOT/oQ6odsRSu4DI/InwTH+h6lhZzCVCZm7ro
-         QzYnpk6n5p8Qvdv0QcwnwBebGfy/42Hth3oziN6Zm+JbWyZOXHjdLySLerYl4oiXRQRp
-         OGhA==
-X-Gm-Message-State: AC+VfDyKh9lltx56Cmp+ucjecELX0QNBOovR06aCgUuoPDY2yNZIrRZZ
-        vgyWt/JkA5EFyiHPoHnKT00=
-X-Google-Smtp-Source: ACHHUZ6AEdjKTyzCwtUFuQ2E095E6XSGXJ158xUnhKThyKAJY7Bn3UJugtNyXWJZsbekPMv2hN6LVg==
-X-Received: by 2002:a5d:4990:0:b0:30a:e8e8:c172 with SMTP id r16-20020a5d4990000000b0030ae8e8c172mr3496896wrq.26.1686129497527;
-        Wed, 07 Jun 2023 02:18:17 -0700 (PDT)
-Received: from ip-172-31-22-112.eu-west-1.compute.internal (ec2-54-74-169-43.eu-west-1.compute.amazonaws.com. [54.74.169.43])
-        by smtp.gmail.com with ESMTPSA id cx14-20020a056000092e00b003078681a1e8sm15141958wrb.54.2023.06.07.02.18.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 02:18:17 -0700 (PDT)
-From:   Puranjay Mohan <puranjay12@gmail.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, catalin.marinas@arm.com,
-        mark.rutland@arm.com, bpf@vger.kernel.org, kpsingh@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     puranjay12@gmail.com
-Subject: [PATCH bpf-next v2 3/3] bpf, arm64: use bpf_jit_binary_pack_alloc
-Date:   Wed,  7 Jun 2023 09:18:14 +0000
-Message-Id: <20230607091814.46080-4-puranjay12@gmail.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230607091814.46080-1-puranjay12@gmail.com>
-References: <20230607091814.46080-1-puranjay12@gmail.com>
+        Wed, 7 Jun 2023 05:19:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0797A2121
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 02:18:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 83A9763CC2
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 09:18:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0E92C4339B
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 09:18:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686129528;
+        bh=qrIG9avQ1YP8r3Y0SPd9NQVzpmprfhjnUb/fAC5rtKI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=dZsNqATPi3vxQvMPIfHiBvsBsQvS5TmUmflQiwM4FZG/2Mk5LV0AW2rnDgGYHeLtj
+         F+7a3V+/VTqa0W5l4uMxxLhv6aF/+t6EQhv2cfoP2mtvq6sdSmwe1xXkhpur1gKVdX
+         ju3BAbIuFJQs2yOfMfyEJbuW1weguzfSZKrjccJfLAq8yDvBZ085nsWdIcV3KaFjUO
+         HeB9W9TFcCYCHUPg6DDfzJrSPTRfwhZ8d+0jG71ZTwXpTws6Nuq2C+o2+45x9uo09x
+         ITEYSzn4wSc/kefXstF/iE6BpfIH0J943xfF+BmUTBpX5fAFjjlNyRo46dRQ/duEEf
+         JgW11S57lqFqQ==
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-97668583210so757757366b.1
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 02:18:48 -0700 (PDT)
+X-Gm-Message-State: AC+VfDyJezpQDUQHSb/3Z7u7hA0QNt9f8GOgMG8r1tP0dlydmvnQzmgj
+        ogexkrQFrDOL05S9650sbSBWgphvHpvmaKxrir8=
+X-Google-Smtp-Source: ACHHUZ5B2teGHL+1KBWSUcHAwX+ns15jkTjFBYHGCOVfepwdBPFBRs5caHewXdOZD+9qvUNYFXYCUXwwXQvzb2fsS3M=
+X-Received: by 2002:a17:906:9b96:b0:973:c999:d639 with SMTP id
+ dd22-20020a1709069b9600b00973c999d639mr6010472ejc.8.1686129526916; Wed, 07
+ Jun 2023 02:18:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <1685968410-5412-1-git-send-email-yangtiezhu@loongson.cn> <1685968410-5412-3-git-send-email-yangtiezhu@loongson.cn>
+In-Reply-To: <1685968410-5412-3-git-send-email-yangtiezhu@loongson.cn>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Wed, 7 Jun 2023 17:18:35 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H76kp+hoNUpN7znf9K6bmawShNkCVu2r=mFtAcq2xcVnQ@mail.gmail.com>
+Message-ID: <CAAhV-H76kp+hoNUpN7znf9K6bmawShNkCVu2r=mFtAcq2xcVnQ@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] LoongArch: Add support to clone a time namespace
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use bpf_jit_binary_pack_alloc for memory management of JIT binaries in
-ARM64 BPF JIT. The bpf_jit_binary_pack_alloc creates a pair of RW and RX
-buffers. The JIT writes the program into the RW buffer. When the JIT is
-done, the program is copied to the final RX buffer
-with bpf_jit_binary_pack_finalize.
+Queued for loongarch-next, thanks.
 
-Implement bpf_arch_text_copy() and bpf_arch_text_invalidate() for ARM64
-JIT as these functions are required by bpf_jit_binary_pack allocator.
+Huacai
 
-Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
----
-Changes in v1 => v2:
-- Made the naming of ro_ prefix consistent.
-   Now image/header/image_ptr are read/write and
-   ro_image/ro_header/ro_image_ptr are read-only.
-
- arch/arm64/net/bpf_jit_comp.c | 126 +++++++++++++++++++++++++++-------
- 1 file changed, 103 insertions(+), 23 deletions(-)
-
-diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-index 145b540ec34f..0e38fa63b551 100644
---- a/arch/arm64/net/bpf_jit_comp.c
-+++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -76,6 +76,7 @@ struct jit_ctx {
- 	int *offset;
- 	int exentry_idx;
- 	__le32 *image;
-+	__le32 *ro_image;
- 	u32 stack_size;
- 	int fpb_offset;
- };
-@@ -205,6 +206,20 @@ static void jit_fill_hole(void *area, unsigned int size)
- 		*ptr++ = cpu_to_le32(AARCH64_BREAK_FAULT);
- }
- 
-+int bpf_arch_text_invalidate(void *dst, size_t len)
-+{
-+	__le32 *ptr;
-+	int ret;
-+
-+	for (ptr = dst; len >= sizeof(u32); len -= sizeof(u32)) {
-+		ret = aarch64_insn_patch_text_nosync(ptr++, AARCH64_BREAK_FAULT);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	return 0;
-+}
-+
- static inline int epilogue_offset(const struct jit_ctx *ctx)
- {
- 	int to = ctx->epilogue_offset;
-@@ -701,7 +716,8 @@ static int add_exception_handler(const struct bpf_insn *insn,
- 				 struct jit_ctx *ctx,
- 				 int dst_reg)
- {
--	off_t offset;
-+	off_t ins_offset;
-+	off_t fixup_offset;
- 	unsigned long pc;
- 	struct exception_table_entry *ex;
- 
-@@ -717,12 +733,11 @@ static int add_exception_handler(const struct bpf_insn *insn,
- 		return -EINVAL;
- 
- 	ex = &ctx->prog->aux->extable[ctx->exentry_idx];
--	pc = (unsigned long)&ctx->image[ctx->idx - 1];
-+	pc = (unsigned long)&ctx->ro_image[ctx->idx - 1];
- 
--	offset = pc - (long)&ex->insn;
--	if (WARN_ON_ONCE(offset >= 0 || offset < INT_MIN))
-+	ins_offset = pc - (long)&ex->insn;
-+	if (WARN_ON_ONCE(ins_offset >= 0 || ins_offset < INT_MIN))
- 		return -ERANGE;
--	ex->insn = offset;
- 
- 	/*
- 	 * Since the extable follows the program, the fixup offset is always
-@@ -732,11 +747,20 @@ static int add_exception_handler(const struct bpf_insn *insn,
- 	 * modifying the upper bits because the table is already sorted, and
- 	 * isn't part of the main exception table.
- 	 */
--	offset = (long)&ex->fixup - (pc + AARCH64_INSN_SIZE);
--	if (!FIELD_FIT(BPF_FIXUP_OFFSET_MASK, offset))
-+	fixup_offset = (long)&ex->fixup - (pc + AARCH64_INSN_SIZE);
-+	if (!FIELD_FIT(BPF_FIXUP_OFFSET_MASK, fixup_offset))
- 		return -ERANGE;
- 
--	ex->fixup = FIELD_PREP(BPF_FIXUP_OFFSET_MASK, offset) |
-+	/*
-+	 * The offsets above have been calculated using the RO buffer but we
-+	 * need to use the R/W buffer for writes.
-+	 * switch ex to rw buffer for writing.
-+	 */
-+	ex = (void *)ctx->image + ((void *)ex - (void *)ctx->ro_image);
-+
-+	ex->insn = ins_offset;
-+
-+	ex->fixup = FIELD_PREP(BPF_FIXUP_OFFSET_MASK, fixup_offset) |
- 		    FIELD_PREP(BPF_FIXUP_REG_MASK, dst_reg);
- 
- 	ex->type = EX_TYPE_BPF;
-@@ -1446,7 +1470,8 @@ static inline void bpf_flush_icache(void *start, void *end)
- 
- struct arm64_jit_data {
- 	struct bpf_binary_header *header;
--	u8 *image;
-+	u8 *ro_image;
-+	struct bpf_binary_header *ro_header;
- 	struct jit_ctx ctx;
- };
- 
-@@ -1455,12 +1480,14 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
- 	int image_size, prog_size, extable_size, extable_align, extable_offset;
- 	struct bpf_prog *tmp, *orig_prog = prog;
- 	struct bpf_binary_header *header;
-+	struct bpf_binary_header *ro_header;
- 	struct arm64_jit_data *jit_data;
- 	bool was_classic = bpf_prog_was_classic(prog);
- 	bool tmp_blinded = false;
- 	bool extra_pass = false;
- 	struct jit_ctx ctx;
- 	u8 *image_ptr;
-+	u8 *ro_image_ptr;
- 
- 	if (!prog->jit_requested)
- 		return orig_prog;
-@@ -1487,8 +1514,11 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
- 	}
- 	if (jit_data->ctx.offset) {
- 		ctx = jit_data->ctx;
--		image_ptr = jit_data->image;
-+		ro_image_ptr = jit_data->ro_image;
-+		ro_header = jit_data->ro_header;
- 		header = jit_data->header;
-+		image_ptr = (void *)header + ((void *)ro_image_ptr
-+						 - (void *)ro_header);
- 		extra_pass = true;
- 		prog_size = sizeof(u32) * ctx.idx;
- 		goto skip_init_ctx;
-@@ -1533,18 +1563,27 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
- 	/* also allocate space for plt target */
- 	extable_offset = round_up(prog_size + PLT_TARGET_SIZE, extable_align);
- 	image_size = extable_offset + extable_size;
--	header = bpf_jit_binary_alloc(image_size, &image_ptr,
--				      sizeof(u32), jit_fill_hole);
--	if (header == NULL) {
-+	ro_header = bpf_jit_binary_pack_alloc(image_size, &ro_image_ptr,
-+					      sizeof(u32), &header, &image_ptr,
-+					      jit_fill_hole);
-+	if (!ro_header) {
- 		prog = orig_prog;
- 		goto out_off;
- 	}
- 
- 	/* 2. Now, the actual pass. */
- 
-+	/*
-+	 * Use the image(RW) for writing the JITed instructions. But also save
-+	 * the ro_image(RX) for calculating the offsets in the image. The RW
-+	 * image will be later copied to the RX image from where the program
-+	 * will run. The bpf_jit_binary_pack_finalize() will do this copy in the
-+	 * final step.
-+	 */
- 	ctx.image = (__le32 *)image_ptr;
-+	ctx.ro_image = (__le32 *)ro_image_ptr;
- 	if (extable_size)
--		prog->aux->extable = (void *)image_ptr + extable_offset;
-+		prog->aux->extable = (void *)ro_image_ptr + extable_offset;
- skip_init_ctx:
- 	ctx.idx = 0;
- 	ctx.exentry_idx = 0;
-@@ -1552,9 +1591,8 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
- 	build_prologue(&ctx, was_classic);
- 
- 	if (build_body(&ctx, extra_pass)) {
--		bpf_jit_binary_free(header);
- 		prog = orig_prog;
--		goto out_off;
-+		goto out_free_hdr;
- 	}
- 
- 	build_epilogue(&ctx);
-@@ -1562,34 +1600,37 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
- 
- 	/* 3. Extra pass to validate JITed code. */
- 	if (validate_ctx(&ctx)) {
--		bpf_jit_binary_free(header);
- 		prog = orig_prog;
--		goto out_off;
-+		goto out_free_hdr;
- 	}
- 
- 	/* And we're done. */
- 	if (bpf_jit_enable > 1)
- 		bpf_jit_dump(prog->len, prog_size, 2, ctx.image);
- 
--	bpf_flush_icache(header, ctx.image + ctx.idx);
-+	bpf_flush_icache(ro_header, ctx.ro_image + ctx.idx);
- 
- 	if (!prog->is_func || extra_pass) {
- 		if (extra_pass && ctx.idx != jit_data->ctx.idx) {
- 			pr_err_once("multi-func JIT bug %d != %d\n",
- 				    ctx.idx, jit_data->ctx.idx);
--			bpf_jit_binary_free(header);
- 			prog->bpf_func = NULL;
- 			prog->jited = 0;
- 			prog->jited_len = 0;
-+			goto out_free_hdr;
-+		}
-+		if (WARN_ON(bpf_jit_binary_pack_finalize(prog, ro_header,
-+							 header))) {
-+			ro_header = NULL;
- 			goto out_off;
- 		}
--		bpf_jit_binary_lock_ro(header);
- 	} else {
- 		jit_data->ctx = ctx;
--		jit_data->image = image_ptr;
-+		jit_data->ro_image = ro_image_ptr;
- 		jit_data->header = header;
-+		jit_data->ro_header = ro_header;
- 	}
--	prog->bpf_func = (void *)ctx.image;
-+	prog->bpf_func = (void *)ctx.ro_image;
- 	prog->jited = 1;
- 	prog->jited_len = prog_size;
- 
-@@ -1610,6 +1651,14 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
- 		bpf_jit_prog_release_other(prog, prog == orig_prog ?
- 					   tmp : orig_prog);
- 	return prog;
-+
-+out_free_hdr:
-+	if (header) {
-+		bpf_arch_text_copy(&ro_header->size, &header->size,
-+				   sizeof(header->size));
-+		bpf_jit_binary_pack_free(ro_header, header);
-+	}
-+	goto out_off;
- }
- 
- bool bpf_jit_supports_kfunc_call(void)
-@@ -1617,6 +1666,13 @@ bool bpf_jit_supports_kfunc_call(void)
- 	return true;
- }
- 
-+void *bpf_arch_text_copy(void *dst, void *src, size_t len)
-+{
-+	if (!aarch64_insn_copy(dst, src, len))
-+		return ERR_PTR(-EINVAL);
-+	return dst;
-+}
-+
- u64 bpf_jit_alloc_exec_limit(void)
- {
- 	return VMALLOC_END - VMALLOC_START;
-@@ -2221,3 +2277,27 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type poke_type,
- 
- 	return ret;
- }
-+
-+void bpf_jit_free(struct bpf_prog *prog)
-+{
-+	if (prog->jited) {
-+		struct arm64_jit_data *jit_data = prog->aux->jit_data;
-+		struct bpf_binary_header *hdr;
-+
-+		/*
-+		 * If we fail the final pass of JIT (from jit_subprogs),
-+		 * the program may not be finalized yet. Call finalize here
-+		 * before freeing it.
-+		 */
-+		if (jit_data) {
-+			bpf_jit_binary_pack_finalize(prog, jit_data->ro_header,
-+						     jit_data->header);
-+			kfree(jit_data);
-+		}
-+		hdr = bpf_jit_binary_pack_hdr(prog);
-+		bpf_jit_binary_pack_free(hdr, NULL);
-+		WARN_ON_ONCE(!bpf_prog_kallsyms_verify_off(prog));
-+	}
-+
-+	bpf_prog_unlock_free(prog);
-+}
--- 
-2.39.2
-
+On Mon, Jun 5, 2023 at 8:33=E2=80=AFPM Tiezhu Yang <yangtiezhu@loongson.cn>=
+ wrote:
+>
+> We can see that "Time namespaces are not supported" on LoongArch:
+>
+> (1) clone3 test
+>   # cd tools/testing/selftests/clone3 && make && ./clone3
+>   ...
+>   # Time namespaces are not supported
+>   ok 18 # SKIP Skipping clone3() with CLONE_NEWTIME
+>   # Totals: pass:17 fail:0 xfail:0 xpass:0 skip:1 error:0
+>
+> (2) timens test
+>   # cd tools/testing/selftests/timens && make && ./timens
+>   ...
+>   1..0 # SKIP Time namespaces are not supported
+>
+> The current kernel does not support CONFIG_TIME_NS which depends
+> on GENERIC_VDSO_TIME_NS, select GENERIC_VDSO_TIME_NS to enable
+> CONFIG_TIME_NS to build kernel/time/namespace.c.
+>
+> Additionally, it needs to define some arch dependent functions
+> such as __arch_get_timens_vdso_data(), arch_get_vdso_data() and
+> vdso_join_timens().
+>
+> At the same time, modify the layout of vvar to use a page size
+> for generic vdso data, expand a page size for timens vdso data
+> and assign LOONGARCH_VDSO_DATA_SIZE (maybe over a page size if
+> expand in the future) for loongarch vdso data, at last add the
+> callback function vvar_fault() and modify stack_top().
+>
+> With this patch under CONFIG_TIME_NS:
+>
+> (1) clone3 test
+>   # cd tools/testing/selftests/clone3 && make && ./clone3
+>   ...
+>   ok 18 [739] Result (0) matches expectation (0)
+>   # Totals: pass:18 fail:0 xfail:0 xpass:0 skip:0 error:0
+>
+> (2) timens test
+>   # cd tools/testing/selftests/timens && make && ./timens
+>   ...
+>   # Totals: pass:10 fail:0 xfail:0 xpass:0 skip:0 error:0
+>
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> ---
+>  arch/loongarch/Kconfig                         |  1 +
+>  arch/loongarch/include/asm/page.h              |  1 +
+>  arch/loongarch/include/asm/vdso/gettimeofday.h | 10 ++-
+>  arch/loongarch/include/asm/vdso/vdso.h         | 32 +++++++--
+>  arch/loongarch/kernel/process.c                |  2 +-
+>  arch/loongarch/kernel/vdso.c                   | 98 ++++++++++++++++++++=
++-----
+>  arch/loongarch/vdso/vgetcpu.c                  |  3 +-
+>  7 files changed, 123 insertions(+), 24 deletions(-)
+>
+> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+> index d38b066..93b167f 100644
+> --- a/arch/loongarch/Kconfig
+> +++ b/arch/loongarch/Kconfig
+> @@ -80,6 +80,7 @@ config LOONGARCH
+>         select GENERIC_SCHED_CLOCK
+>         select GENERIC_SMP_IDLE_THREAD
+>         select GENERIC_TIME_VSYSCALL
+> +       select GENERIC_VDSO_TIME_NS
+>         select GPIOLIB
+>         select HAS_IOPORT
+>         select HAVE_ARCH_AUDITSYSCALL
+> diff --git a/arch/loongarch/include/asm/page.h b/arch/loongarch/include/a=
+sm/page.h
+> index fb5338b..26e8dcc 100644
+> --- a/arch/loongarch/include/asm/page.h
+> +++ b/arch/loongarch/include/asm/page.h
+> @@ -81,6 +81,7 @@ typedef struct { unsigned long pgprot; } pgprot_t;
+>  #define __va(x)                ((void *)((unsigned long)(x) + PAGE_OFFSE=
+T - PHYS_OFFSET))
+>
+>  #define pfn_to_kaddr(pfn)      __va((pfn) << PAGE_SHIFT)
+> +#define sym_to_pfn(x)          __phys_to_pfn(__pa_symbol(x))
+>
+>  #define virt_to_pfn(kaddr)     PFN_DOWN(PHYSADDR(kaddr))
+>  #define virt_to_page(kaddr)    pfn_to_page(virt_to_pfn(kaddr))
+> diff --git a/arch/loongarch/include/asm/vdso/gettimeofday.h b/arch/loonga=
+rch/include/asm/vdso/gettimeofday.h
+> index 7b2cd37..3c3043b 100644
+> --- a/arch/loongarch/include/asm/vdso/gettimeofday.h
+> +++ b/arch/loongarch/include/asm/vdso/gettimeofday.h
+> @@ -91,9 +91,17 @@ static inline bool loongarch_vdso_hres_capable(void)
+>
+>  static __always_inline const struct vdso_data *__arch_get_vdso_data(void=
+)
+>  {
+> -       return get_vdso_data();
+> +       return (const struct vdso_data *)get_vdso_data();
+>  }
+>
+> +#ifdef CONFIG_TIME_NS
+> +static __always_inline
+> +const struct vdso_data *__arch_get_timens_vdso_data(const struct vdso_da=
+ta *vd)
+> +{
+> +       return (const struct vdso_data *)(get_vdso_data() +
+> +               VVAR_TIMENS_PAGE_OFFSET * PAGE_SIZE);
+> +}
+> +#endif
+>  #endif /* !__ASSEMBLY__ */
+>
+>  #endif /* __ASM_VDSO_GETTIMEOFDAY_H */
+> diff --git a/arch/loongarch/include/asm/vdso/vdso.h b/arch/loongarch/incl=
+ude/asm/vdso/vdso.h
+> index 3b55d32..7e9bceb 100644
+> --- a/arch/loongarch/include/asm/vdso/vdso.h
+> +++ b/arch/loongarch/include/asm/vdso/vdso.h
+> @@ -16,10 +16,33 @@ struct vdso_pcpu_data {
+>
+>  struct loongarch_vdso_data {
+>         struct vdso_pcpu_data pdata[NR_CPUS];
+> -       struct vdso_data data[CS_BASES]; /* Arch-independent data */
+>  };
+>
+> -#define VDSO_DATA_SIZE PAGE_ALIGN(sizeof(struct loongarch_vdso_data))
+> +/*
+> + * The layout of vvar:
+> + *
+> + *                      high
+> + * +---------------------+--------------------------+
+> + * | loongarch vdso data | LOONGARCH_VDSO_DATA_SIZE |
+> + * +---------------------+--------------------------+
+> + * | timens vdso data    | PAGE_SIZE                |
+> + * +---------------------+--------------------------+
+> + * | generic vdso data   | PAGE_SIZE                |
+> + * +---------------------+--------------------------+
+> + *                      low
+> + */
+> +#define LOONGARCH_VDSO_DATA_SIZE PAGE_ALIGN(sizeof(struct loongarch_vdso=
+_data))
+> +#define LOONGARCH_VDSO_DATA_PAGES (LOONGARCH_VDSO_DATA_SIZE >> PAGE_SHIF=
+T)
+> +
+> +enum vvar_pages {
+> +       VVAR_GENERIC_PAGE_OFFSET,
+> +       VVAR_TIMENS_PAGE_OFFSET,
+> +       VVAR_LOONGARCH_PAGES_START,
+> +       VVAR_LOONGARCH_PAGES_END =3D VVAR_LOONGARCH_PAGES_START + LOONGAR=
+CH_VDSO_DATA_PAGES - 1,
+> +       VVAR_NR_PAGES,
+> +};
+> +
+> +#define VVAR_SIZE (VVAR_NR_PAGES << PAGE_SHIFT)
+>
+>  static inline unsigned long get_vdso_base(void)
+>  {
+> @@ -34,10 +57,9 @@ static inline unsigned long get_vdso_base(void)
+>         return addr;
+>  }
+>
+> -static inline const struct vdso_data *get_vdso_data(void)
+> +static inline unsigned long get_vdso_data(void)
+>  {
+> -       return (const struct vdso_data *)(get_vdso_base()
+> -                       - VDSO_DATA_SIZE + SMP_CACHE_BYTES * NR_CPUS);
+> +       return get_vdso_base() - VVAR_SIZE;
+>  }
+>
+>  #endif /* __ASSEMBLY__ */
+> diff --git a/arch/loongarch/kernel/process.c b/arch/loongarch/kernel/proc=
+ess.c
+> index b71e17c..9535a06 100644
+> --- a/arch/loongarch/kernel/process.c
+> +++ b/arch/loongarch/kernel/process.c
+> @@ -285,7 +285,7 @@ unsigned long stack_top(void)
+>
+>         /* Space for the VDSO & data page */
+>         top -=3D PAGE_ALIGN(current->thread.vdso->size);
+> -       top -=3D PAGE_SIZE;
+> +       top -=3D VVAR_SIZE;
+>
+>         /* Space to randomize the VDSO base */
+>         if (current->flags & PF_RANDOMIZE)
+> diff --git a/arch/loongarch/kernel/vdso.c b/arch/loongarch/kernel/vdso.c
+> index eaebd2e..cb75863 100644
+> --- a/arch/loongarch/kernel/vdso.c
+> +++ b/arch/loongarch/kernel/vdso.c
+> @@ -14,6 +14,7 @@
+>  #include <linux/random.h>
+>  #include <linux/sched.h>
+>  #include <linux/slab.h>
+> +#include <linux/time_namespace.h>
+>  #include <linux/timekeeper_internal.h>
+>
+>  #include <asm/page.h>
+> @@ -26,12 +27,17 @@ extern char vdso_start[], vdso_end[];
+>
+>  /* Kernel-provided data used by the VDSO. */
+>  static union {
+> -       u8 page[VDSO_DATA_SIZE];
+> +       u8 page[PAGE_SIZE];
+> +       struct vdso_data data[CS_BASES];
+> +} generic_vdso_data __page_aligned_data;
+> +
+> +static union {
+> +       u8 page[LOONGARCH_VDSO_DATA_SIZE];
+>         struct loongarch_vdso_data vdata;
+>  } loongarch_vdso_data __page_aligned_data;
+>
+>  static struct page *vdso_pages[] =3D { NULL };
+> -struct vdso_data *vdso_data =3D loongarch_vdso_data.vdata.data;
+> +struct vdso_data *vdso_data =3D generic_vdso_data.data;
+>  struct vdso_pcpu_data *vdso_pdata =3D loongarch_vdso_data.vdata.pdata;
+>
+>  static int vdso_mremap(const struct vm_special_mapping *sm, struct vm_ar=
+ea_struct *new_vma)
+> @@ -41,6 +47,43 @@ static int vdso_mremap(const struct vm_special_mapping=
+ *sm, struct vm_area_struc
+>         return 0;
+>  }
+>
+> +static vm_fault_t vvar_fault(const struct vm_special_mapping *sm,
+> +                            struct vm_area_struct *vma, struct vm_fault =
+*vmf)
+> +{
+> +       struct page *timens_page =3D find_timens_vvar_page(vma);
+> +       unsigned long pfn;
+> +
+> +       switch (vmf->pgoff) {
+> +       case VVAR_GENERIC_PAGE_OFFSET:
+> +               if (timens_page)
+> +                       pfn =3D page_to_pfn(timens_page);
+> +               else
+> +                       pfn =3D sym_to_pfn(vdso_data);
+> +               break;
+> +#ifdef CONFIG_TIME_NS
+> +       case VVAR_TIMENS_PAGE_OFFSET:
+> +               /*
+> +                * If a task belongs to a time namespace then a namespace=
+ specific
+> +                * VVAR is mapped with the VVAR_GENERIC_PAGE_OFFSET and t=
+he real
+> +                * VVAR page is mapped with the VVAR_TIMENS_PAGE_OFFSET o=
+ffset.
+> +                * See also the comment near timens_setup_vdso_data().
+> +                */
+> +               if (!timens_page)
+> +                       return VM_FAULT_SIGBUS;
+> +               pfn =3D sym_to_pfn(vdso_data);
+> +               break;
+> +#endif /* CONFIG_TIME_NS */
+> +       case VVAR_LOONGARCH_PAGES_START ... VVAR_LOONGARCH_PAGES_END:
+> +               pfn =3D sym_to_pfn(&loongarch_vdso_data) +
+> +                     vmf->pgoff - VVAR_LOONGARCH_PAGES_START;
+> +               break;
+> +       default:
+> +               return VM_FAULT_SIGBUS;
+> +       }
+> +
+> +       return vmf_insert_pfn(vma, vmf->address, pfn);
+> +}
+> +
+>  struct loongarch_vdso_info vdso_info =3D {
+>         .vdso =3D vdso_start,
+>         .size =3D PAGE_SIZE,
+> @@ -51,6 +94,7 @@ struct loongarch_vdso_info vdso_info =3D {
+>         },
+>         .data_mapping =3D {
+>                 .name =3D "[vvar]",
+> +               .fault =3D vvar_fault,
+>         },
+>         .offset_sigreturn =3D vdso_offset_sigreturn,
+>  };
+> @@ -73,6 +117,37 @@ static int __init init_vdso(void)
+>  }
+>  subsys_initcall(init_vdso);
+>
+> +#ifdef CONFIG_TIME_NS
+> +struct vdso_data *arch_get_vdso_data(void *vvar_page)
+> +{
+> +       return (struct vdso_data *)(vvar_page);
+> +}
+> +
+> +/*
+> + * The vvar mapping contains data for a specific time namespace, so when=
+ a
+> + * task changes namespace we must unmap its vvar data for the old namesp=
+ace.
+> + * Subsequent faults will map in data for the new namespace.
+> + *
+> + * For more details see timens_setup_vdso_data().
+> + */
+> +int vdso_join_timens(struct task_struct *task, struct time_namespace *ns=
+)
+> +{
+> +       struct mm_struct *mm =3D task->mm;
+> +       struct vm_area_struct *vma;
+> +
+> +       VMA_ITERATOR(vmi, mm, 0);
+> +
+> +       mmap_read_lock(mm);
+> +       for_each_vma(vmi, vma) {
+> +               if (vma_is_special_mapping(vma, &vdso_info.data_mapping))
+> +                       zap_vma_pages(vma);
+> +       }
+> +       mmap_read_unlock(mm);
+> +
+> +       return 0;
+> +}
+> +#endif
+> +
+>  static unsigned long vdso_base(void)
+>  {
+>         unsigned long base =3D STACK_TOP;
+> @@ -88,7 +163,7 @@ static unsigned long vdso_base(void)
+>  int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_inte=
+rp)
+>  {
+>         int ret;
+> -       unsigned long vvar_size, size, data_addr, vdso_addr;
+> +       unsigned long size, data_addr, vdso_addr;
+>         struct mm_struct *mm =3D current->mm;
+>         struct vm_area_struct *vma;
+>         struct loongarch_vdso_info *info =3D current->thread.vdso;
+> @@ -100,32 +175,23 @@ int arch_setup_additional_pages(struct linux_binprm=
+ *bprm, int uses_interp)
+>          * Determine total area size. This includes the VDSO data itself
+>          * and the data pages.
+>          */
+> -       vvar_size =3D VDSO_DATA_SIZE;
+> -       size =3D vvar_size + info->size;
+> +       size =3D VVAR_SIZE + info->size;
+>
+>         data_addr =3D get_unmapped_area(NULL, vdso_base(), size, 0, 0);
+>         if (IS_ERR_VALUE(data_addr)) {
+>                 ret =3D data_addr;
+>                 goto out;
+>         }
+> -       vdso_addr =3D data_addr + VDSO_DATA_SIZE;
+>
+> -       vma =3D _install_special_mapping(mm, data_addr, vvar_size,
+> -                                      VM_READ | VM_MAYREAD,
+> +       vma =3D _install_special_mapping(mm, data_addr, VVAR_SIZE,
+> +                                      VM_READ | VM_MAYREAD | VM_PFNMAP,
+>                                        &info->data_mapping);
+>         if (IS_ERR(vma)) {
+>                 ret =3D PTR_ERR(vma);
+>                 goto out;
+>         }
+>
+> -       /* Map VDSO data page. */
+> -       ret =3D remap_pfn_range(vma, data_addr,
+> -                             virt_to_phys(&loongarch_vdso_data) >> PAGE_=
+SHIFT,
+> -                             vvar_size, PAGE_READONLY);
+> -       if (ret)
+> -               goto out;
+> -
+> -       /* Map VDSO code page. */
+> +       vdso_addr =3D data_addr + VVAR_SIZE;
+>         vma =3D _install_special_mapping(mm, vdso_addr, info->size,
+>                                        VM_READ | VM_EXEC | VM_MAYREAD | V=
+M_MAYWRITE | VM_MAYEXEC,
+>                                        &info->code_mapping);
+> diff --git a/arch/loongarch/vdso/vgetcpu.c b/arch/loongarch/vdso/vgetcpu.=
+c
+> index e02e775..e7884f88 100644
+> --- a/arch/loongarch/vdso/vgetcpu.c
+> +++ b/arch/loongarch/vdso/vgetcpu.c
+> @@ -21,7 +21,8 @@ static __always_inline int read_cpu_id(void)
+>
+>  static __always_inline const struct vdso_pcpu_data *get_pcpu_data(void)
+>  {
+> -       return (struct vdso_pcpu_data *)(get_vdso_base() - VDSO_DATA_SIZE=
+);
+> +       return (struct vdso_pcpu_data *)(get_vdso_data() +
+> +               VVAR_LOONGARCH_PAGES_START * PAGE_SIZE);
+>  }
+>
+>  extern
+> --
+> 2.1.0
+>
