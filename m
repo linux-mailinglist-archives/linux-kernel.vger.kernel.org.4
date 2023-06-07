@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 746A0726F61
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 22:58:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAEA1726F65
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 22:58:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235682AbjFGU56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 16:57:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59130 "EHLO
+        id S235667AbjFGU6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 16:58:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235662AbjFGU5y (ORCPT
+        with ESMTP id S235643AbjFGU5y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 7 Jun 2023 16:57:54 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BC142113;
-        Wed,  7 Jun 2023 13:57:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B5D22114;
+        Wed,  7 Jun 2023 13:57:38 -0700 (PDT)
 Received: from notapiano.myfiosgateway.com (zone.collabora.co.uk [167.235.23.81])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 95F0D6606F08;
-        Wed,  7 Jun 2023 21:57:32 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5631C6606F0B;
+        Wed,  7 Jun 2023 21:57:35 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1686171454;
-        bh=p/U679O+aC/H7H+CqRcp2tK9NBFgpymNdt1qg5tXhR0=;
+        s=mail; t=1686171457;
+        bh=KyOkgk88JgYi98xRL1GjOR9/RT/y1SQOg2IBFayUZcI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Qprx3F0+l6LD4cltZLZV0ciBVQ/u2OvCFwQpiknLGaVxcKthB1EVzOCkm8Cj/5xEu
-         pDGxNi2JrjK3TopSoRVL4p6LPQaDMk08urVEm8zxJcUEXR081L76orRRBwWNgMECbD
-         3Z5GoVcvACdO5QARlrPqfLNYT81gCnld2oEqwqi1hXhKugJst/47ztOWDIRapFBl+w
-         94LSoET34wMHWtBnMA9fzcev4RKN0A143IsJseGsL9dIjq5Y9HwGtfvrDhQkWr2RSl
-         Bl5+JgQkgFRG55z8OVrikywtttnO9d0fq4RkukevUnCurLsan/XMq19nJFY1Kh0Ghf
-         rsR9ybQexDRTQ==
+        b=ntuxpUy4W5smT35modxJscKpuD3WdBdTgX6d8uR+aV1AOWxy/HJU5HRZjhRyfRqMP
+         2riEo/kC6qhVw5IRduSgctCAQnHN1URPtQ76BRGHyc2STPc55cF4ZWDsSqQDC2Q4SA
+         4q/UGjpmgWtJm1TVrKPtKBQLaFg/ecccU8tBK+Lytg1x25dbXc8L2PzDHY31KE5C56
+         yAdzNv1YB/vRC02eMBj6G+bYag2QiPoo6//eTlaCnrBFx7nzh7XPijoKjh2+tHDmuK
+         GrO1Wq5/OYIC+c4u6b919Khroz8qvqYjzcxYqrIT8Y137CQ/Lvc1MarSURqoOPJiF4
+         FwIB8ZSONIfFg==
 From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
         <nfraprado@collabora.com>
 To:     Matthias Brugger <matthias.bgg@gmail.com>,
@@ -42,18 +42,14 @@ Cc:     kernel@collabora.com,
         =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
         <nfraprado@collabora.com>,
         Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
         Tiffany Lin <tiffany.lin@mediatek.com>,
         Yunfei Dong <yunfei.dong@mediatek.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH v2 2/5] media: dt-bindings: mediatek,vcodec: Remove VDEC_SYS for mt8183
-Date:   Wed,  7 Jun 2023 16:53:39 -0400
-Message-ID: <20230607205714.510012-3-nfraprado@collabora.com>
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org
+Subject: [PATCH v2 3/5] media: mediatek: vcodec: Read HW active status from clock
+Date:   Wed,  7 Jun 2023 16:53:40 -0400
+Message-ID: <20230607205714.510012-4-nfraprado@collabora.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230607205714.510012-1-nfraprado@collabora.com>
 References: <20230607205714.510012-1-nfraprado@collabora.com>
@@ -70,143 +66,224 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The binding expects the first register space to be VDEC_SYS. But on
-mt8183, which uses the stateless decoders, this space is used only for
-controlling clocks and resets, which are better described as separate
-clock-controller and reset-controller nodes.
+Remove the requirement of a VDEC_SYS reg iospace. To achieve that, rely
+on the "active" clock being passed through the DT, and read its status
+during IRQ handling to check whether the HW is active.
 
-In fact, in mt8173's devicetree there are already such separate
-clock-controller nodes, which cause duplicate addresses between the
-vdecsys node and the vcodec node. But for this SoC, since the stateful
-decoder code makes other uses of the VDEC_SYS register space, it's not
-straightforward to remove it.
-
-In order to avoid the same address conflict to happen on mt8183,
-since the only current use of the VDEC_SYS register space in
-the driver is to read the status of a clock that indicates the hardware
-is active, remove the VDEC_SYS register space from the binding and
-describe an extra clock that will be used to directly check the hardware
-status.
-
-While adding the active clock, split the mt8183 clocks since there are
-less of them than in mt8173. This is done in this same commit to avoid
-changing the number of clocks twice.
-
-Also add reg-names to be able to tell that this new register schema is
-used, so the driver can keep backward compatibility.
+The old behavior is still present when reg-names aren't supplied, as to
+keep backward compatibility.
 
 Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
 ---
 
-Changes in v2:
-- Merged with patch 1 (media: dt-bindings: mediatek,vcodec: Allow single
-  clock for mt8183) to avoid changing number of clocks twice
-- Added maxItems to reg-names
-- Constrained clocks for each compatible
-- Reordered properties for each compatible
+(no changes since v1)
 
- .../media/mediatek,vcodec-decoder.yaml        | 63 ++++++++++++++++---
- 1 file changed, 54 insertions(+), 9 deletions(-)
+ .../mediatek/vcodec/mtk_vcodec_dec_drv.c      | 59 +++++++++++++++----
+ .../mediatek/vcodec/mtk_vcodec_dec_hw.c       | 20 +++++--
+ .../mediatek/vcodec/mtk_vcodec_dec_pm.c       | 12 +++-
+ .../platform/mediatek/vcodec/mtk_vcodec_drv.h |  1 +
+ 4 files changed, 74 insertions(+), 18 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/media/mediatek,vcodec-decoder.yaml b/Documentation/devicetree/bindings/media/mediatek,vcodec-decoder.yaml
-index 63be42560948..2b29748b1d22 100644
---- a/Documentation/devicetree/bindings/media/mediatek,vcodec-decoder.yaml
-+++ b/Documentation/devicetree/bindings/media/mediatek,vcodec-decoder.yaml
-@@ -21,24 +21,23 @@ properties:
-       - mediatek,mt8183-vcodec-dec
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
+index 9c652beb3f19..8038472fb67b 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
+@@ -16,6 +16,7 @@
+ #include <media/v4l2-mem2mem.h>
+ #include <media/videobuf2-dma-contig.h>
+ #include <media/v4l2-device.h>
++#include <linux/clk-provider.h>
  
-   reg:
-+    minItems: 11
-     maxItems: 12
+ #include "mtk_vcodec_drv.h"
+ #include "mtk_vcodec_dec.h"
+@@ -38,22 +39,29 @@ static int mtk_vcodec_get_hw_count(struct mtk_vcodec_dev *dev)
+ 	}
+ }
  
-+  reg-names:
-+    minItems: 11
-+    maxItems: 11
++static bool mtk_vcodec_is_hw_active(struct mtk_vcodec_dev *dev)
++{
++	u32 cg_status = 0;
 +
-   interrupts:
-     maxItems: 1
- 
-   clocks:
-+    minItems: 2
-     maxItems: 8
- 
-   clock-names:
--    items:
--      - const: vcodecpll
--      - const: univpll_d2
--      - const: clk_cci400_sel
--      - const: vdec_sel
--      - const: vdecpll
--      - const: vencpll
--      - const: venc_lt_sel
--      - const: vdec_bus_clk_src
-+    minItems: 2
-+    maxItems: 8
- 
-   assigned-clocks: true
- 
-@@ -86,6 +85,33 @@ allOf:
-       required:
-         - mediatek,scp
- 
-+      properties:
-+        reg:
-+          maxItems: 11
++	if (!dev->reg_base[VDEC_SYS])
++		return __clk_is_enabled(dev->pm.vdec_active_clk);
 +
-+        reg-names:
-+          items:
-+            - const: misc
-+            - const: ld
-+            - const: top
-+            - const: cm
-+            - const: ad
-+            - const: av
-+            - const: pp
-+            - const: hwd
-+            - const: hwq
-+            - const: hwb
-+            - const: hwg
++	cg_status = readl(dev->reg_base[VDEC_SYS]);
++	return (cg_status & VDEC_HW_ACTIVE) == 0;
++}
 +
-+        clocks:
-+          minItems: 2
-+          maxItems: 2
-+
-+        clock-names:
-+          items:
-+            - const: vdec
-+            - const: active
-+
-   - if:
-       properties:
-         compatible:
-@@ -97,6 +123,25 @@ allOf:
-       required:
-         - mediatek,vpu
+ static irqreturn_t mtk_vcodec_dec_irq_handler(int irq, void *priv)
+ {
+ 	struct mtk_vcodec_dev *dev = priv;
+ 	struct mtk_vcodec_ctx *ctx;
+-	u32 cg_status = 0;
+ 	unsigned int dec_done_status = 0;
+ 	void __iomem *vdec_misc_addr = dev->reg_base[VDEC_MISC] +
+ 					VDEC_IRQ_CFG_REG;
  
-+      properties:
-+        reg:
-+          minItems: 12
-+
-+        clocks:
-+          minItems: 8
-+          maxItems: 8
-+
-+        clock-names:
-+          items:
-+            - const: vcodecpll
-+            - const: univpll_d2
-+            - const: clk_cci400_sel
-+            - const: vdec_sel
-+            - const: vdecpll
-+            - const: vencpll
-+            - const: venc_lt_sel
-+            - const: vdec_bus_clk_src
-+
- additionalProperties: false
+ 	ctx = mtk_vcodec_get_curr_ctx(dev, MTK_VDEC_CORE);
  
- examples:
+-	/* check if HW active or not */
+-	cg_status = readl(dev->reg_base[0]);
+-	if ((cg_status & VDEC_HW_ACTIVE) != 0) {
+-		mtk_v4l2_err("DEC ISR, VDEC active is not 0x0 (0x%08x)",
+-			     cg_status);
++	if (!mtk_vcodec_is_hw_active(dev)) {
++		mtk_v4l2_err("DEC ISR, VDEC active is not 0x0");
+ 		return IRQ_HANDLED;
+ 	}
+ 
+@@ -82,6 +90,25 @@ static int mtk_vcodec_get_reg_bases(struct mtk_vcodec_dev *dev)
+ {
+ 	struct platform_device *pdev = dev->plat_dev;
+ 	int reg_num, i;
++	struct resource *res;
++	bool no_vdecsys_reg = false;
++	static const char * const mtk_dec_reg_names[] = {
++		"misc",
++		"ld",
++		"top",
++		"cm",
++		"ad",
++		"av",
++		"pp",
++		"hwd",
++		"hwq",
++		"hwb",
++		"hwg"
++	};
++
++	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "misc");
++	if (res)
++		no_vdecsys_reg = true;
+ 
+ 	/* Sizeof(u32) * 4 bytes for each register base. */
+ 	reg_num = of_property_count_elems_of_size(pdev->dev.of_node, "reg",
+@@ -91,12 +118,22 @@ static int mtk_vcodec_get_reg_bases(struct mtk_vcodec_dev *dev)
+ 		return -EINVAL;
+ 	}
+ 
+-	for (i = 0; i < reg_num; i++) {
+-		dev->reg_base[i] = devm_platform_ioremap_resource(pdev, i);
+-		if (IS_ERR(dev->reg_base[i]))
+-			return PTR_ERR(dev->reg_base[i]);
++	if (!no_vdecsys_reg) {
++		for (i = 0; i < reg_num; i++) {
++			dev->reg_base[i] = devm_platform_ioremap_resource(pdev, i);
++			if (IS_ERR(dev->reg_base[i]))
++				return PTR_ERR(dev->reg_base[i]);
+ 
+-		mtk_v4l2_debug(2, "reg[%d] base=%p", i, dev->reg_base[i]);
++			mtk_v4l2_debug(2, "reg[%d] base=%p", i, dev->reg_base[i]);
++		}
++	} else {
++		for (i = 0; i < reg_num; i++) {
++			dev->reg_base[i+1] = devm_platform_ioremap_resource_byname(pdev, mtk_dec_reg_names[i]);
++			if (IS_ERR(dev->reg_base[i+1]))
++				return PTR_ERR(dev->reg_base[i+1]);
++
++			mtk_v4l2_debug(2, "reg[%d] base=%p", i+1, dev->reg_base[i+1]);
++		}
+ 	}
+ 
+ 	return 0;
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c
+index b753bf54ebd9..4e786821015d 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c
+@@ -11,6 +11,7 @@
+ #include <linux/of_device.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/slab.h>
++#include <linux/clk-provider.h>
+ 
+ #include "mtk_vcodec_drv.h"
+ #include "mtk_vcodec_dec.h"
+@@ -63,22 +64,29 @@ static int mtk_vdec_hw_prob_done(struct mtk_vcodec_dev *vdec_dev)
+ 	return 0;
+ }
+ 
++static bool mtk_vcodec_is_hw_active(struct mtk_vdec_hw_dev *dev)
++{
++	u32 cg_status;
++
++	if (!dev->reg_base[VDEC_HW_SYS])
++		return __clk_is_enabled(dev->pm.vdec_active_clk);
++
++	cg_status = readl(dev->reg_base[VDEC_HW_SYS]);
++	return (cg_status & VDEC_HW_ACTIVE) == 0;
++}
++
+ static irqreturn_t mtk_vdec_hw_irq_handler(int irq, void *priv)
+ {
+ 	struct mtk_vdec_hw_dev *dev = priv;
+ 	struct mtk_vcodec_ctx *ctx;
+-	u32 cg_status;
+ 	unsigned int dec_done_status;
+ 	void __iomem *vdec_misc_addr = dev->reg_base[VDEC_HW_MISC] +
+ 					VDEC_IRQ_CFG_REG;
+ 
+ 	ctx = mtk_vcodec_get_curr_ctx(dev->main_dev, dev->hw_idx);
+ 
+-	/* check if HW active or not */
+-	cg_status = readl(dev->reg_base[VDEC_HW_SYS]);
+-	if (cg_status & VDEC_HW_ACTIVE) {
+-		mtk_v4l2_err("vdec active is not 0x0 (0x%08x)",
+-			     cg_status);
++	if (!mtk_vcodec_is_hw_active(dev)) {
++		mtk_v4l2_err("vdec active is not 0x0");
+ 		return IRQ_HANDLED;
+ 	}
+ 
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_pm.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_pm.c
+index 777d445999e9..53e621965950 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_pm.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_pm.c
+@@ -51,6 +51,9 @@ int mtk_vcodec_init_dec_clk(struct platform_device *pdev, struct mtk_vcodec_pm *
+ 				clk_info->clk_name);
+ 			return PTR_ERR(clk_info->vcodec_clk);
+ 		}
++
++		if (strcmp(clk_info->clk_name, "active") == 0)
++			pm->vdec_active_clk = clk_info->vcodec_clk;
+ 	}
+ 
+ 	return 0;
+@@ -84,6 +87,9 @@ static void mtk_vcodec_dec_clock_on(struct mtk_vcodec_pm *pm)
+ 
+ 	dec_clk = &pm->vdec_clk;
+ 	for (i = 0; i < dec_clk->clk_num; i++) {
++		if (strcmp(dec_clk->clk_info[i].clk_name, "active") == 0)
++			continue;
++
+ 		ret = clk_prepare_enable(dec_clk->clk_info[i].vcodec_clk);
+ 		if (ret) {
+ 			mtk_v4l2_err("clk_prepare_enable %d %s fail %d", i,
+@@ -104,8 +110,12 @@ static void mtk_vcodec_dec_clock_off(struct mtk_vcodec_pm *pm)
+ 	int i;
+ 
+ 	dec_clk = &pm->vdec_clk;
+-	for (i = dec_clk->clk_num - 1; i >= 0; i--)
++	for (i = dec_clk->clk_num - 1; i >= 0; i--) {
++		if (strcmp(dec_clk->clk_info[i].clk_name, "active") == 0)
++			continue;
++
+ 		clk_disable_unprepare(dec_clk->clk_info[i].vcodec_clk);
++	}
+ }
+ 
+ static void mtk_vcodec_dec_enable_irq(struct mtk_vcodec_dev *vdec_dev, int hw_idx)
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
+index 9acab54fd650..180e74c69042 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_drv.h
+@@ -208,6 +208,7 @@ struct mtk_vcodec_pm {
+ 	struct mtk_vcodec_clk	vdec_clk;
+ 	struct mtk_vcodec_clk	venc_clk;
+ 	struct device	*dev;
++	struct clk *vdec_active_clk;
+ };
+ 
+ /**
 -- 
 2.41.0
 
