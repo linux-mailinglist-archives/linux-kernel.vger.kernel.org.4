@@ -2,243 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B590572636D
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 16:55:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17F31726542
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 17:57:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241212AbjFGOzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 10:55:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43982 "EHLO
+        id S239049AbjFGP5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 11:57:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241183AbjFGOzl (ORCPT
+        with ESMTP id S241375AbjFGP5A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 10:55:41 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 990F819BB;
-        Wed,  7 Jun 2023 07:55:36 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id DB3E95FD6F;
-        Wed,  7 Jun 2023 17:55:34 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1686149734;
-        bh=rYTGCAplnRx/Dki6x4xZvyofri8ryJP0w/zMyn2mG9Y=;
-        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
-        b=bAY84eRzKe8qtQzKu8mPTth0pmPT05Zhwk5cK5fGc36EFk8FXXylD4Q4H/tbLQ2Qx
-         e3fRfQ3Va9HCYbRCfuOsplfadTHCKX56CqY3YNM5UZ4U+OZC4NybXbwvc2fiA1qFuI
-         g1kmb32YRw8sm32ElgjJ2ibSUWoa5REjrHx4NP/MTd0JNtNWHTlI8wTZFXf2/K0HVk
-         2nIpunovUWxjbAfVpzB1mqgS82MDZXv/G781zbr7gBN0pWBE1DKXhXdmpdIw6bIXNs
-         cDSJNaWvNYPuhSswzIF60nVxZrCkCQ93zEVPcZj1RxEfn1U0YlS09pyn6JW5ixvYay
-         XfpiiZKCbMDzQ==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Wed,  7 Jun 2023 17:55:34 +0300 (MSK)
-From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-To:     Liang Yang <liang.yang@amlogic.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-CC:     <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
-        Arseniy Krasnov <AVKrasnov@sberdevices.ru>,
-        <linux-mtd@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v1 2/2] mtd: rawnand: meson: waiting w/o wired ready/busy pin
-Date:   Wed, 7 Jun 2023 17:50:25 +0300
-Message-ID: <20230607145026.2899547-3-AVKrasnov@sberdevices.ru>
-X-Mailer: git-send-email 2.35.0
-In-Reply-To: <20230607145026.2899547-1-AVKrasnov@sberdevices.ru>
-References: <20230607145026.2899547-1-AVKrasnov@sberdevices.ru>
+        Wed, 7 Jun 2023 11:57:00 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B42D91FE5;
+        Wed,  7 Jun 2023 08:56:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686153416; x=1717689416;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=cZe/eY9WGZFDdbzJxKfNGQkftH/W4BRuRruN4kLXhu0=;
+  b=PFavA8LIwNPmlbm5CY1FbpcE1sbNXmPCOurYPpvimN8CEyD5iZup/I7t
+   KeA5QTIwbH/sg8a9u2R9nzypxMSlQvMWOxY6StoBqK6l4zq9a0YbhqQDn
+   yuOQg1pkV7II3GwM8+nO6crsqiOWYS0ivjK/eqaRyuqLYXHajCbcKO6iU
+   QKk2qKmRgooCPmSJaZ16ubWyeTBPuXRKrqwQJEIhGFo816/MJwakj8V6R
+   SerxgeU4SqYz9eSl7E5+XM6XRzqpwZsa1jr4sXkox16RjNerzQZ/TN7oW
+   AjDX5JwSHyndv9iojwyO9EAXvokt5JLvNVerWG4GERCS6mS1hTbp1SD+5
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="360360060"
+X-IronPort-AV: E=Sophos;i="6.00,224,1681196400"; 
+   d="scan'208";a="360360060"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 08:56:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="739335786"
+X-IronPort-AV: E=Sophos;i="6.00,224,1681196400"; 
+   d="scan'208";a="739335786"
+Received: from sorrin-mobl3.amr.corp.intel.com (HELO [10.209.124.63]) ([10.209.124.63])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 08:56:50 -0700
+Message-ID: <5f647902-436a-ea1c-412e-30afbc4e71a8@linux.intel.com>
+Date:   Wed, 7 Jun 2023 09:51:44 -0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/06/07 09:39:00 #21450961
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.11.0
+Subject: Re: [PATCH] soundwire: qcom: fix storing port config out-of-bounds
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        kernel test robot <lkp@intel.com>,
+        Dan Carpenter <error27@gmail.com>
+References: <20230601102525.609627-1-krzysztof.kozlowski@linaro.org>
+ <ZICBvP33XyOswWFM@matsya> <c39dc157-bd3d-a627-4eb0-a34ff43ab664@linaro.org>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <c39dc157-bd3d-a627-4eb0-a34ff43ab664@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If there is no wired ready/busy pin, classic way to wait for command
-completion is to use function 'nand_soft_waitrdy()'. Meson NAND has
-special command which allows to wait for NAND_STATUS_READY bit without
-reading status in a software loop (as 'nand_soft_waitrdy()' does). To
-use it send this command along with NAND_CMD_STATUS, then wait for an
-interrupt, and after interrupt send NAND_CMD_READ0. So this feature
-allows to use interrupt driven waiting without wired ready/busy pin.
 
-Suggested-by: Liang Yang <liang.yang@amlogic.com>
-Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
----
- drivers/mtd/nand/raw/meson_nand.c | 82 +++++++++++++++++++++++++++++--
- 1 file changed, 78 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
-index 074e14225c06..935de8e4934d 100644
---- a/drivers/mtd/nand/raw/meson_nand.c
-+++ b/drivers/mtd/nand/raw/meson_nand.c
-@@ -38,6 +38,7 @@
- #define NFC_CMD_SCRAMBLER_DISABLE	0
- #define NFC_CMD_SHORTMODE_DISABLE	0
- #define NFC_CMD_RB_INT		BIT(14)
-+#define NFC_CMD_RB_INT_NO_PIN	((0xb << 10) | BIT(18) | BIT(16))
- 
- #define NFC_CMD_GET_SIZE(x)	(((x) >> 22) & GENMASK(4, 0))
- 
-@@ -179,6 +180,7 @@ struct meson_nfc {
- 	u32 info_bytes;
- 
- 	unsigned long assigned_cs;
-+	bool no_rb_pin;
- };
- 
- enum {
-@@ -392,7 +394,42 @@ static void meson_nfc_set_data_oob(struct nand_chip *nand,
- 	}
- }
- 
--static int meson_nfc_queue_rb(struct meson_nfc *nfc, int timeout_ms)
-+static int meson_nfc_wait_no_rb_pin(struct meson_nfc *nfc, int timeout_ms,
-+				    bool need_cmd_read0)
-+{
-+	u32 cmd, cfg;
-+
-+	meson_nfc_cmd_idle(nfc, nfc->timing.twb);
-+	meson_nfc_drain_cmd(nfc);
-+	meson_nfc_wait_cmd_finish(nfc, CMD_FIFO_EMPTY_TIMEOUT);
-+
-+	cfg = readl(nfc->reg_base + NFC_REG_CFG);
-+	cfg |= NFC_RB_IRQ_EN;
-+	writel(cfg, nfc->reg_base + NFC_REG_CFG);
-+
-+	reinit_completion(&nfc->completion);
-+	cmd = nfc->param.chip_select | NFC_CMD_CLE | NAND_CMD_STATUS;
-+	writel(cmd, nfc->reg_base + NFC_REG_CMD);
-+
-+	/* use the max erase time as the maximum clock for waiting R/B */
-+	cmd = NFC_CMD_RB | NFC_CMD_RB_INT_NO_PIN | nfc->timing.tbers_max;
-+	writel(cmd, nfc->reg_base + NFC_REG_CMD);
-+
-+	if (!wait_for_completion_timeout(&nfc->completion,
-+					 msecs_to_jiffies(timeout_ms)))
-+		return -ETIMEDOUT;
-+
-+	if (need_cmd_read0) {
-+		cmd = nfc->param.chip_select | NFC_CMD_CLE | NAND_CMD_READ0;
-+		writel(cmd, nfc->reg_base + NFC_REG_CMD);
-+		meson_nfc_drain_cmd(nfc);
-+		meson_nfc_wait_cmd_finish(nfc, CMD_FIFO_EMPTY_TIMEOUT);
-+	}
-+
-+	return 0;
-+}
-+
-+static int meson_nfc_wait_rb_pin(struct meson_nfc *nfc, int timeout_ms)
- {
- 	u32 cmd, cfg;
- 	int ret = 0;
-@@ -420,6 +457,27 @@ static int meson_nfc_queue_rb(struct meson_nfc *nfc, int timeout_ms)
- 	return ret;
- }
- 
-+static int meson_nfc_queue_rb(struct meson_nfc *nfc, int timeout_ms,
-+			      bool need_cmd_read0)
-+{
-+	if (nfc->no_rb_pin) {
-+		/* This mode is used when there is no wired R/B pin.
-+		 * It works like 'nand_soft_waitrdy()', but instead of
-+		 * polling NAND_CMD_STATUS bit in the software loop,
-+		 * it will wait for interrupt - controllers checks IO
-+		 * bus and when it detects NAND_CMD_STATUS on it, it
-+		 * raises interrupt. After interrupt, NAND_CMD_READ0 is
-+		 * sent as terminator of the ready waiting procedure if
-+		 * needed (for all cases except page programming - this
-+		 * is reason of 'need_cmd_read0' flag).
-+		 */
-+		return meson_nfc_wait_no_rb_pin(nfc, timeout_ms,
-+						need_cmd_read0);
-+	} else {
-+		return meson_nfc_wait_rb_pin(nfc, timeout_ms);
-+	}
-+}
-+
- static void meson_nfc_set_user_byte(struct nand_chip *nand, u8 *oob_buf)
- {
- 	struct meson_nfc_nand_chip *meson_chip = to_meson_nand(nand);
-@@ -623,7 +681,7 @@ static int meson_nfc_rw_cmd_prepare_and_execute(struct nand_chip *nand,
- 	if (in) {
- 		nfc->cmdfifo.rw.cmd1 = cs | NFC_CMD_CLE | NAND_CMD_READSTART;
- 		writel(nfc->cmdfifo.rw.cmd1, nfc->reg_base + NFC_REG_CMD);
--		meson_nfc_queue_rb(nfc, PSEC_TO_MSEC(sdr->tR_max));
-+		meson_nfc_queue_rb(nfc, PSEC_TO_MSEC(sdr->tR_max), true);
- 	} else {
- 		meson_nfc_cmd_idle(nfc, nfc->timing.tadl);
- 	}
-@@ -669,7 +727,7 @@ static int meson_nfc_write_page_sub(struct nand_chip *nand,
- 
- 	cmd = nfc->param.chip_select | NFC_CMD_CLE | NAND_CMD_PAGEPROG;
- 	writel(cmd, nfc->reg_base + NFC_REG_CMD);
--	meson_nfc_queue_rb(nfc, PSEC_TO_MSEC(sdr->tPROG_max));
-+	meson_nfc_queue_rb(nfc, PSEC_TO_MSEC(sdr->tPROG_max), false);
- 
- 	meson_nfc_dma_buffer_release(nand, data_len, info_len, DMA_TO_DEVICE);
- 
-@@ -952,7 +1010,8 @@ static int meson_nfc_exec_op(struct nand_chip *nand,
- 			break;
- 
- 		case NAND_OP_WAITRDY_INSTR:
--			meson_nfc_queue_rb(nfc, instr->ctx.waitrdy.timeout_ms);
-+			meson_nfc_queue_rb(nfc, instr->ctx.waitrdy.timeout_ms,
-+					   true);
- 			if (instr->delay_ns)
- 				meson_nfc_cmd_idle(nfc, delay_idle);
- 			break;
-@@ -1248,6 +1307,7 @@ meson_nfc_nand_chip_init(struct device *dev,
- 	struct mtd_info *mtd;
- 	int ret, i;
- 	u32 tmp, nsels;
-+	u32 nand_rb_val;
- 
- 	nsels = of_property_count_elems_of_size(np, "reg", sizeof(u32));
- 	if (!nsels || nsels > MAX_CE_NUM) {
-@@ -1287,6 +1347,20 @@ meson_nfc_nand_chip_init(struct device *dev,
- 	mtd->owner = THIS_MODULE;
- 	mtd->dev.parent = dev;
- 
-+	ret = of_property_read_u32(np, "nand-rb", &nand_rb_val);
-+	if (ret) {
-+		/* If property was not found, don't use rb pin. */
-+		if (ret == -EINVAL)
-+			nfc->no_rb_pin = true;
-+		else
-+			return -EINVAL;
-+	} else {
-+		if (nand_rb_val)
-+			return -EINVAL;
-+
-+		nfc->no_rb_pin = false;
-+	}
-+
- 	ret = nand_scan(nand, nsels);
- 	if (ret)
- 		return ret;
--- 
-2.35.0
+On 6/7/23 08:51, Krzysztof Kozlowski wrote:
+> On 07/06/2023 15:10, Vinod Koul wrote:
+>> On 01-06-23, 12:25, Krzysztof Kozlowski wrote:
+>>> The 'qcom_swrm_ctrl->pconfig' has size of QCOM_SDW_MAX_PORTS (14),
+>>> however we index it starting from 1, not 0, to match real port numbers.
+>>> This can lead to writing port config past 'pconfig' bounds and
+>>> overwriting next member of 'qcom_swrm_ctrl' struct.  Reported also by
+>>> smatch:
+>>>
+>>>   drivers/soundwire/qcom.c:1269 qcom_swrm_get_port_config() error: buffer overflow 'ctrl->pconfig' 14 <= 14
+>>>
+>>> Fixes: 9916c02ccd74 ("soundwire: qcom: cleanup internal port config indexing")
+>>> Cc: <stable@vger.kernel.org>
+>>> Reported-by: kernel test robot <lkp@intel.com>
+>>> Reported-by: Dan Carpenter <error27@gmail.com>
+>>> Link: https://lore.kernel.org/r/202305201301.sCJ8UDKV-lkp@intel.com/
+>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>> ---
+>>>  drivers/soundwire/qcom.c | 3 ++-
+>>>  1 file changed, 2 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
+>>> index 7cb1b7eba814..88a772075907 100644
+>>> --- a/drivers/soundwire/qcom.c
+>>> +++ b/drivers/soundwire/qcom.c
+>>> @@ -202,7 +202,8 @@ struct qcom_swrm_ctrl {
+>>>  	u32 intr_mask;
+>>>  	u8 rcmd_id;
+>>>  	u8 wcmd_id;
+>>> -	struct qcom_swrm_port_config pconfig[QCOM_SDW_MAX_PORTS];
+>>> +	/* Port numbers are 1 - 14 */
+>>> +	struct qcom_swrm_port_config pconfig[QCOM_SDW_MAX_PORTS + 1];
+>>
+>> Better use SDW_MAX_PORTS ?
+> 
+> That's interesting idea, but except of value, is the meaning actually
+> the same? Driver claims that port 0 is masked and max number of ports is
+> 14. Therefore it uses in all places constant QCOM_SDW_MAX_PORTS. We need
+> here +1, only because we index from 1, not 0, but we still index over
+> QCOM_SDW_MAX_PORTS, not SDW_MAX_PORTS. Wouldn't it be also confusing to
+> use here SDW_MAX_PORTS but then index over something else?
 
+SDW_MAX_PORTS only applies for the peripheral. DP0 is reserved for
+non-audio/Bulk request, DP15 is an alias for "all ports"
+
+There's nothing in the spec that restricts the ports on the manager
+side, be it to dedicate Port0 or Port15 to a specific purpose or even
+the number of ports.
+
+I would recommend using a vendor-specific definition rather than
+overloading a peripheral specification requirement.
