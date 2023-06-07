@@ -2,64 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A155C7261AE
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 15:52:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BF0D7261B1
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 15:52:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233859AbjFGNwk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 09:52:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34618 "EHLO
+        id S239710AbjFGNwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 09:52:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235116AbjFGNwf (ORCPT
+        with ESMTP id S235623AbjFGNwh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 09:52:35 -0400
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F911BD9
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 06:52:34 -0700 (PDT)
-Received: by mail-qk1-x72e.google.com with SMTP id af79cd13be357-75d4f06b302so62378285a.0
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 06:52:34 -0700 (PDT)
+        Wed, 7 Jun 2023 09:52:37 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C90D1BD9
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 06:52:36 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-3f6a695a0b8so9271281cf.1
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 06:52:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1686145953; x=1688737953;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1686145955; x=1688737955;
         h=content-transfer-encoding:mime-version:date:message-id:subject
          :references:in-reply-to:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0ATelbEey9YqITdBNEhlVknT1NxjwiMcqCvYxHbd4Ko=;
-        b=wMhwr1xfNlbDE70oKXzzLiEU+1vVgxU1IosZYD9QCdsLJketjJpcw9/+2UEVNdbyhO
-         mjez+vxtn4nOpS+3qUCAiq7PgJW2fPPpx0+Uv0XQJqBoN4yMoLrt2Rl9awgnH2XqQjk6
-         gNQvqEXTryqWlAW49owoodgWmsql0YrHRxj+uanNJEXDFgifyusJrBgJtLYkPQRbMUb9
-         w59Y6jF2jeUf9QkVGQbGcCqtc5V00MFJ5rnpgZcUoJnD9raRZz+B59Nui/QFnOFvSgIT
-         2jim8ft8cz+Ki/3p817pH8t6WP9TlHlZltm5bZ3z84CoSsBpvhorG9WvVW53z5wLoO1D
-         Pb1g==
+        bh=8pWjfG7YX2PU6lTg87BQzQgK5gQrtCZuLosIt3qtFrw=;
+        b=QMGMlVX9pT4+APXXvlD2HGaGEg55QMH0btBqGqRw+dtdVOGo1kh5q+IRJfikBCjoAZ
+         vafj+YrmGCGYaOtKcFzs/g7GriOKBIzWtZZeh8BfNxsIDJ7VseMMJPYoiNuQt7caTcMI
+         fbzdenPFcryIzgWI+zcXPps0vDUIFsZMliLzzzo2NMTbOU8IV+6GRTdzS4etu2E7bG1G
+         zZy5GDzKAFGL863kgCYdqdlrRhzG8ovq7gNP99KiwoUnVzy58N3hDEkaisdrZi9QqDvh
+         12nHG5VND02dBavngpMxFq36XYe5fvooIddYSP6a8+XPAVtLp/lIB0YMBjMBb3y/nBpV
+         Px9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686145953; x=1688737953;
+        d=1e100.net; s=20221208; t=1686145955; x=1688737955;
         h=content-transfer-encoding:mime-version:date:message-id:subject
          :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=0ATelbEey9YqITdBNEhlVknT1NxjwiMcqCvYxHbd4Ko=;
-        b=e9E53zcfVtcpP/wVkQ/8c/VksbuZmO0HgKWuf1TJzV+jnB5wDd8iJECwnXN1w1b9AF
-         AevBrDJrhv5QVJGfLSUMjnt5Iro6/gwJ89ANcgea7aYqslmKEsCsHc2Xpnl7iLjom1jx
-         5BZX9i9H9V1apcLZzzrK5/ptITTzvHLDeaFrpmWL+zFjZGDOERkRUUhMUfMPf/h8oebI
-         KclIU3iz4s45hKej4iMKD+rmeqVR2qHG0O7C2RF4UWiJaFdwkK7Vx9vRhOoiKBkuPFSd
-         O6eN1RGac2BxgNuHHAme+gvef27sfu+XSXxkiGu31SoIRSMWJx0y1Jf1yNxNakVf6yw8
-         sAKA==
-X-Gm-Message-State: AC+VfDw2DEkQKWmCbBn3Pv5Xzu5V+qOArk/cUPGXND+AcX3SA9LDlp3G
-        qIVc1GbkxwZIil4xq/jKaJGgoQ==
-X-Google-Smtp-Source: ACHHUZ49Oh3b7Y6iFWQKYu5DqKnGXEfj1mjRUktdPRfW2jeikSvwGrTUsu6pWhn2aXJbSK88m7oQzQ==
-X-Received: by 2002:a05:620a:1a89:b0:75e:da20:a10e with SMTP id bl9-20020a05620a1a8900b0075eda20a10emr2222379qkb.3.1686145953723;
-        Wed, 07 Jun 2023 06:52:33 -0700 (PDT)
+        bh=8pWjfG7YX2PU6lTg87BQzQgK5gQrtCZuLosIt3qtFrw=;
+        b=COcU4rYjLRszlWWr4AyCq/j7Pyclg2ei+xWTW7aBmFAPnN/KjUTzM+Y6LsaUNIQrsl
+         InO60JnratHeAmis25S8DebqdlytAW3ck5eB9h9C1wL88GnFJH2RIIllMqahkqbq5fw4
+         QWWsEvXaFMAq3ju7k7A7CawFXRHers+BdpeBKXMcOMoynEC/fUE1lyNcN9Glgwop3g+K
+         JO96ncBPcen4k21yUq6S+vUMgcRg+J2tDsXkF2xjOAy7itxacf7PifaDLof33JgT+VS5
+         H6IF5b9DMQ5k8prIT2iMdBQFf60qCXYvqzLwHuDNyd0MP4W9TapOGfQRYposrRoa0tBF
+         zWvQ==
+X-Gm-Message-State: AC+VfDxSK9/B+kWkiPIkFCIIja8YWWCHlKddopcCaKIBqspAs/p4U0ta
+        xCAnz1tfh08Gew2ZqWn7ajK1hA==
+X-Google-Smtp-Source: ACHHUZ5DwvtauaBvGPF/zgxanW0qGVda9dWL3S5jI/ddgyNov7yI8rfOmzvLFLxsl0kOx8qDfPrgNA==
+X-Received: by 2002:a05:622a:1899:b0:3f9:ab2c:8895 with SMTP id v25-20020a05622a189900b003f9ab2c8895mr2173118qtc.3.1686145955449;
+        Wed, 07 Jun 2023 06:52:35 -0700 (PDT)
 Received: from [127.0.0.1] ([50.234.116.5])
-        by smtp.gmail.com with ESMTPSA id s5-20020a05621412c500b0062119a7a7a3sm6141611qvv.4.2023.06.07.06.52.32
+        by smtp.gmail.com with ESMTPSA id s5-20020a05621412c500b0062119a7a7a3sm6141611qvv.4.2023.06.07.06.52.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 06:52:33 -0700 (PDT)
+        Wed, 07 Jun 2023 06:52:34 -0700 (PDT)
 From:   Jens Axboe <axboe@kernel.dk>
-To:     hch@lst.de, yukuai3@huawei.com, Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, yangerkun@huawei.com
-In-Reply-To: <20230606011438.3743440-1-yukuai1@huaweicloud.com>
-References: <20230606011438.3743440-1-yukuai1@huaweicloud.com>
-Subject: Re: [PATCH -next] blk-ioc: fix recursive spin_lock/unlock_irq() in
- ioc_clear_queue()
-Message-Id: <168614595209.134969.6798849940705397930.b4-ty@kernel.dk>
-Date:   Wed, 07 Jun 2023 07:52:32 -0600
+To:     Tejun Heo <tj@kernel.org>, Josef Bacik <josef@toxicpanda.com>,
+        Waiman Long <longman@redhat.com>
+Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ming Lei <ming.lei@redhat.com>
+In-Reply-To: <20230606180724.2455066-1-longman@redhat.com>
+References: <20230606180724.2455066-1-longman@redhat.com>
+Subject: Re: [PATCH] blk-cgroup: Reinit blkg_iostat_set after clearing in
+ blkcg_reset_stats()
+Message-Id: <168614595386.134969.17908041000836291196.b4-ty@kernel.dk>
+Date:   Wed, 07 Jun 2023 07:52:33 -0600
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -74,25 +75,21 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Tue, 06 Jun 2023 09:14:38 +0800, Yu Kuai wrote:
-> Recursive spin_lock/unlock_irq() is not safe, because spin_unlock_irq()
-> will enable irq unconditionally:
-> 
-> spin_lock_irq	queue_lock	-> disable irq
-> spin_lock_irq	ioc->lock
-> spin_unlock_irq ioc->lock	-> enable irq
-> /*
->  * AA dead lock will be triggered if current context is preempted by irq,
->  * and irq try to hold queue_lock again.
->  */
-> spin_unlock_irq queue_lock
+On Tue, 06 Jun 2023 14:07:24 -0400, Waiman Long wrote:
+> When blkg_alloc() is called to allocate a blkcg_gq structure
+> with the associated blkg_iostat_set's, there are 2 fields within
+> blkg_iostat_set that requires proper initialization - blkg & sync.
+> The former field was introduced by commit 3b8cc6298724 ("blk-cgroup:
+> Optimize blkcg_rstat_flush()") while the later one was introduced by
+> commit f73316482977 ("blk-cgroup: reimplement basic IO stats using
+> cgroup rstat").
 > 
 > [...]
 
 Applied, thanks!
 
-[1/1] blk-ioc: fix recursive spin_lock/unlock_irq() in ioc_clear_queue()
-      commit: a7cfa0af0c88353b4eb59db5a2a0fbe35329b3f9
+[1/1] blk-cgroup: Reinit blkg_iostat_set after clearing in blkcg_reset_stats()
+      commit: 3d2af77e31ade05ff7ccc3658c3635ec1bea0979
 
 Best regards,
 -- 
