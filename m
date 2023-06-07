@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8CC17251B5
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 03:45:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75B0A7251B6
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 03:46:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240547AbjFGBpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 21:45:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34238 "EHLO
+        id S240657AbjFGBqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 21:46:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240500AbjFGBoh (ORCPT
+        with ESMTP id S240503AbjFGBoi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 21:44:37 -0400
+        Tue, 6 Jun 2023 21:44:38 -0400
 Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA5CC1FCA
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 18:44:33 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-ba8338f20bdso9299112276.0
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 18:44:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C181990
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 18:44:36 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-bacd408046cso10245385276.3
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 18:44:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686102273; x=1688694273;
+        d=google.com; s=20221208; t=1686102275; x=1688694275;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=wUbHNYf/MJgzoTRlEaaugzHE4j52eJzTeoSuIJqBVp8=;
-        b=mDxFyn0QLcNsdiAzzx71y7UkQElsKG9LsfMOAKnDObqJJMZu0ZK1j0kIjqs0UOpm9N
-         0EFbZDkGlJa0hsar61LD7b/fh9s2uVuibl2RJgs0kmUuSFpGvN9ddolHCkyPzUP/Jpv6
-         Ys+lbFcAiZA6FsmmvDfoQpI1VR7oWaz++fm/4AUUzvQCUWLmIJT+kO5IP4yydQinNFxS
-         mxyTO5kmtqH4FIAIHYNtnC4Y2BeRosZzvfTJSLgdV5leI60GpuCS8sR0f7RerhMVOYwW
-         0el61bZcUrMJIdRgqLjB0KzhXHNYgvdSqBxvez/VXTp49VZkM+V6gTIQ+vFYQMIfB0Uo
-         a4iQ==
+        bh=fshr5jLOyahMpvACdtGm+pjjbvWJsJPp9lrbSfOHRQ4=;
+        b=PqUIG6TC384eWp8yePeRY3y04FFjxR8xrrRlKe0sh94cVkvPpU1nj8UPwk5vlulYyI
+         bmqDSHAP8w3Wcsbgci9MuYV4Acb87bD58mlXADcVA8yn0riFxA6sGwAbcHbwotsDaZDN
+         1h1rQcVWjsLaJlCMbCFr3VFR3wj9PZ3/3vyqn8RXEB+dmVy5jOXvDhCNIXUJHDSQu2Nb
+         UXQX4drjVbDTCHgiR4LX6WLpHL+t4OJ2dJ0gc/QTIyJ6dJHfWUe0z5BnMDQitwOBrkDo
+         JYezMehZm8kF5/NdFzieGjoCdO+RcrMcoNkrmSqoILtxM7RLIcjfbaG0Maru1KEdWC5s
+         s/7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686102273; x=1688694273;
+        d=1e100.net; s=20221208; t=1686102275; x=1688694275;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wUbHNYf/MJgzoTRlEaaugzHE4j52eJzTeoSuIJqBVp8=;
-        b=SU86X9fmO9f9Ou8n0oXGtR88AovFo/ghMTgLXXGF1WkH7DMBK9A6DyU2tI9C3jBE3G
-         t2UOqnIrkCFuwNe2nGGricGu6cSU0sQbrd8jBurrB8sKnUWi2oDuWxdChnnkvWOnQm39
-         /5UlPJqgDF7U8HefBBKGqLekYM1BPl25ROmOkuh8JLYk0/oF53Vwz0lrmhKGLUk226E7
-         MyPeJJO5SCU2fWCpQ/dS3S+0UV+Z9amMqDo+9wrcQsH3mNGkUkuK5RSv80nsbRfrFNkJ
-         GVStqyK1ry9NEZJwdPydOf7BRRFwr5Vv5x12wNUSaDBkeGfQ1l7pRcFxH7jApuLfltgs
-         NExw==
-X-Gm-Message-State: AC+VfDzWp9vN0ig3i7PSu1Q+40yzlHoU/Sr0HWXkZPM6hoHuvLaM0z92
-        uGbTjoEPFtLuDb+gBQL+Mege7HoCml9q
-X-Google-Smtp-Source: ACHHUZ5a+CpqfjKkQ7fqBxXnwKGqx/AECiFTCrwlTru0QiARSPI8xTMSovdhp5kwTAoMyL2CPyfnJ3qDtNpY
+        bh=fshr5jLOyahMpvACdtGm+pjjbvWJsJPp9lrbSfOHRQ4=;
+        b=JUNlYSYXw/p6hGRkyfODxZPcfRtR8ccl5/MDWXo3Ai5CaoGD9EaFrfO40XXXFIHNGS
+         EFYbMFNC7KHwJVP2mj0mrHLg72K0Zpg4rYo4M3SLUaOxiaOZRGDl4J26uIzDNP6HrJUE
+         Fb2vAY8znxw/1pr9xD0in0d2n4TaplChSHFguCfE7xMRgtHnIjhu/uaBOG2fkfoDzf7z
+         SG7UfjvbEhJH2mX4rUd7CoZ2P/cYyZ1UVz/+KllMu/xXkQnRjkREjm1Eo2Xz58ilKjdo
+         HP1vKE2DAiSeVByHP3ijm8gWnApzIDjM862M0CvJM8vi8JS26vrIX9xyxnCzgL0QfHjQ
+         DRtA==
+X-Gm-Message-State: AC+VfDzt8BHUwqLmkH1GJVr2OBmhYs4ci5NvH3rXYJP8ZWRzD17r3JZY
+        YGKNyf44EkO6XDluWFZTRyr/5cCOkkTJ
+X-Google-Smtp-Source: ACHHUZ4dungIIgBmPrtJau2qDI0PSJma622cWj+i8l+PD1GxRjpw3bAGLjhUHn/JDRGI6ujvUT5RGVthXFg1
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:3c35:209f:5d38:b7a1])
- (user=irogers job=sendgmr) by 2002:a05:6902:100c:b0:bad:155a:1004 with SMTP
- id w12-20020a056902100c00b00bad155a1004mr2290237ybt.2.1686102273011; Tue, 06
- Jun 2023 18:44:33 -0700 (PDT)
-Date:   Tue,  6 Jun 2023 18:43:43 -0700
+ (user=irogers job=sendgmr) by 2002:a25:40d:0:b0:ba7:d142:eada with SMTP id
+ 13-20020a25040d000000b00ba7d142eadamr2053213ybe.7.1686102275411; Tue, 06 Jun
+ 2023 18:44:35 -0700 (PDT)
+Date:   Tue,  6 Jun 2023 18:43:44 -0700
 In-Reply-To: <20230607014353.3172466-1-irogers@google.com>
-Message-Id: <20230607014353.3172466-11-irogers@google.com>
+Message-Id: <20230607014353.3172466-12-irogers@google.com>
 Mime-Version: 1.0
 References: <20230607014353.3172466-1-irogers@google.com>
 X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Subject: [PATCH v1 10/20] perf header: Ensure bitmaps are freed
+Subject: [PATCH v1 11/20] perf stat: Avoid evlist leak
 From:   Ian Rogers <irogers@google.com>
 To:     John Garry <john.g.garry@oracle.com>,
         Will Deacon <will@kernel.org>,
@@ -107,51 +107,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-memory_node bitmaps need a bitmap_free to avoid memory leaks. Caught
-by leak sanitizer.
+Free evlist before overwriting in "perf stat report" mode. Detected
+using leak sanitizer.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/header.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ tools/perf/builtin-stat.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/perf/util/header.c b/tools/perf/util/header.c
-index d85b39079c31..3db7c1fae71e 100644
---- a/tools/perf/util/header.c
-+++ b/tools/perf/util/header.c
-@@ -1389,6 +1389,14 @@ static int memory_node__read(struct memory_node *n, unsigned long idx)
- 	return 0;
- }
+diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
+index c87c6897edc9..fc615bdeed4f 100644
+--- a/tools/perf/builtin-stat.c
++++ b/tools/perf/builtin-stat.c
+@@ -2427,6 +2427,7 @@ static int __cmd_report(int argc, const char **argv)
  
-+static void memory_node__delete_nodes(struct memory_node *nodesp, u64 cnt)
-+{
-+	for (u64 i = 0; i < cnt; i++)
-+		bitmap_free(nodesp[i].set);
-+
-+	free(nodesp);
-+}
-+
- static int memory_node__sort(const void *a, const void *b)
- {
- 	const struct memory_node *na = a;
-@@ -1449,7 +1457,7 @@ static int build_mem_topology(struct memory_node **nodesp, u64 *cntp)
- 		*nodesp = nodes;
- 		qsort(nodes, cnt, sizeof(nodes[0]), memory_node__sort);
- 	} else
--		free(nodes);
-+		memory_node__delete_nodes(nodes, cnt);
+ 	perf_stat.session  = session;
+ 	stat_config.output = stderr;
++	evlist__delete(evsel_list);
+ 	evsel_list         = session->evlist;
  
- 	return ret;
- }
-@@ -1516,7 +1524,7 @@ static int write_mem_topology(struct feat_fd *ff __maybe_unused,
- 	}
- 
- out:
--	free(nodes);
-+	memory_node__delete_nodes(nodes, nr);
- 	return ret;
- }
- 
+ 	ret = perf_session__process_events(session);
 -- 
 2.41.0.rc0.172.g3f132b7071-goog
 
