@@ -2,104 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05D63727071
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 23:20:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7EFA727076
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 23:20:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231438AbjFGVUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 17:20:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44978 "EHLO
+        id S231926AbjFGVU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 17:20:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231917AbjFGVTy (ORCPT
+        with ESMTP id S231609AbjFGVUZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 17:19:54 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52C3D19BA
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 14:19:53 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1b0236ee816so8415915ad.1
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 14:19:53 -0700 (PDT)
+        Wed, 7 Jun 2023 17:20:25 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC3A62109
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 14:20:20 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-6563ccf5151so5407032b3a.0
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 14:20:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686172793; x=1688764793;
+        d=chromium.org; s=google; t=1686172820; x=1688764820;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2OwwAPTsX0YV3vUdxtjfpz4TiWLtJRU1D8tBxvGSgvM=;
-        b=Dn0wciA0nzHX/RcBPG9bXLiBsfDH0C8i9UN4h19QGoCN+lXz6j0TtaghmiYxiYlatz
-         dUC48YyfCOPEd3NaExvAy2oGXwf0DLKnjOsfdvOMBv9O3c7mgsdTf0l/eZf2dhkvtXNs
-         Tkx8GQi4UFiuncFvzm6eLIaGIDZtFMT/meXs0=
+        bh=5tumlTohvViLF4uk0FiFKpbTE6W6nPi6UHifHjjU7Gk=;
+        b=l+oNp6trT33uJEfbYO2yQNVEMsga29EFAMRxZNRXXq4drjYG5twLkw34RY0BhpiJsK
+         ZGeuBaA6sAJICfrCYDwjvpJcekW/fVjLkAUH/16viXRR1PZYsQ+krYBB/yry9EVGyccg
+         V3cibkhbEj/6Z/Uuz3s0A+90xtin1OipzBd7c=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686172793; x=1688764793;
+        d=1e100.net; s=20221208; t=1686172820; x=1688764820;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2OwwAPTsX0YV3vUdxtjfpz4TiWLtJRU1D8tBxvGSgvM=;
-        b=LHoCUCAjHM4Uu1f5I1GIJ0tC5Slc+Db779uw3hwXlz+pzSIKO1L3ArJNf64hIU74Rg
-         yk/6RJWi563sgs1q5hGn+77o4QBLyws5sv26JwSvbmz0IsbdXypwhVesZa5SW2UBiKFQ
-         Zzgwa7BK3Oj9v4qH7ilMJeRgbbQMU2YdNz320aig2TKh1NHwmks8yKTy7PHbKvi0mwNA
-         kNj8UMetcXU9VS72ggna5CPLTsH04F4KJ+Lttek3FINK2n2py5Cbn1mIVkUt8P3Pduhm
-         +D5HYu8O2sgqR60OE19gztLjkIznfYglnTAfEp6sOZnrD3E49t0bgJJz3Hj+LQd0i2d8
-         +4ZQ==
-X-Gm-Message-State: AC+VfDz/5qyf1YASYkIrTP72+GK+LGY5aS6mLgyf+OrIXO2Da4QnsRGJ
-        J2Z2yPUAx3wHoSE29P7DFScOJA==
-X-Google-Smtp-Source: ACHHUZ5V9nGQDkdGfxISQMBDH8TRICjsCW5LhXfjuFShBXzhX7gSXaKHOiWW4nMsxpBocxsJSkfahg==
-X-Received: by 2002:a17:903:2350:b0:1af:ac49:e048 with SMTP id c16-20020a170903235000b001afac49e048mr186444plh.25.1686172792827;
-        Wed, 07 Jun 2023 14:19:52 -0700 (PDT)
+        bh=5tumlTohvViLF4uk0FiFKpbTE6W6nPi6UHifHjjU7Gk=;
+        b=DiS+S3tnZ4LdRq8CmJg/4MjigQiQ7oom6C+tg7KYiMDNjryGfbj3XAye0x4cV8S0L8
+         fiTyH3uzcsDQH9ooqVwUauVrV3/8vnnYwhcb6t+iqzPyeUMEC/mP0ukHZp11pKOKq/4z
+         e6NjyfBcJuu5u+iVHvY+ctUSqCI7liMRREHbX1lczqe0WpByaqElUHyWwEIq775wlU4p
+         jK5Es+iBXIVeaWqEkqsCkOvbmKgl80T4ZmxdMgJDl9Um7VSvjPRQOsVbdBoYrr16bEXB
+         oERVuBkFm534qRiZ0OJEu97qHwjzfMoq9Ocz0aOB2tMZxF/bzM6FY2XkDHxbDq9a4czP
+         EwEw==
+X-Gm-Message-State: AC+VfDxTi4hLHmQsmcXLOefSacl+ygHGQRwOLtu5PN4NCThwzPBHpIB3
+        8oMWZWu4Wm3AzhpYjgbHhPy5Aw==
+X-Google-Smtp-Source: ACHHUZ5p5zdLANYUm4s7nZqX5ZmMyWB6WX5riR+Uw92Lpdl9+eZTnSluQMHGrhcfSKBVr5f2DHkWew==
+X-Received: by 2002:a05:6a00:18aa:b0:658:26a8:9d9e with SMTP id x42-20020a056a0018aa00b0065826a89d9emr8907841pfh.29.1686172820339;
+        Wed, 07 Jun 2023 14:20:20 -0700 (PDT)
 Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id f23-20020a170902ab9700b001a922d43779sm10846050plr.27.2023.06.07.14.19.52
+        by smtp.gmail.com with ESMTPSA id 9-20020aa79149000000b00652a72b89d1sm9058051pfi.170.2023.06.07.14.20.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 14:19:52 -0700 (PDT)
-Date:   Wed, 7 Jun 2023 14:19:51 -0700
+        Wed, 07 Jun 2023 14:20:19 -0700 (PDT)
+Date:   Wed, 7 Jun 2023 14:20:19 -0700
 From:   Kees Cook <keescook@chromium.org>
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Mark Brown <broonie@kernel.org>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] binfmt_elf: dynamically allocate note.data in
- parse_elf_properties
-Message-ID: <202306071417.79F70AC@keescook>
-References: <20230607144227.8956-1-ansuelsmth@gmail.com>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Borislav Petkov <bp@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jann Horn <jannh@google.com>, linux-alpha@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org
+Subject: Re: [PATCH] syscalls: add sys_ni_posix_timers prototype
+Message-ID: <202306071420.C4F0A99@keescook>
+References: <20230607142925.3126422-1-arnd@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230607144227.8956-1-ansuelsmth@gmail.com>
+In-Reply-To: <20230607142925.3126422-1-arnd@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 04:42:27PM +0200, Christian Marangi wrote:
-> Dynamically allocate note.data in parse_elf_properties to fix
-> compilation warning on some arch.
+On Wed, Jun 07, 2023 at 04:28:45PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The sys_ni_posix_timers() definition causes a warning when
+> the declaration is missing, so this needs to be added
+> along with the normal syscalls, outside of the #ifdef.
+> 
+> kernel/time/posix-stubs.c:26:17: error: no previous prototype for 'sys_ni_posix_timers' [-Werror=missing-prototypes]
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-I'd rather avoid dynamic allocation as much as possible in the exec
-path, but we can balance it against how much it may happen.
-
-> On some arch note.data exceed the stack limit for a single function and
-> this cause the following compilation warning:
-> fs/binfmt_elf.c: In function 'parse_elf_properties.isra':
-> fs/binfmt_elf.c:821:1: error: the frame size of 1040 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
->   821 | }
->       | ^
-> cc1: all warnings being treated as errors
-
-Which architectures see this warning?
-
-> Fix this by dynamically allocating the array.
-> Update the sizeof of the union to the biggest element allocated.
-
-How common are these notes? I assume they're very common; I see them
-even in /bin/true:
-
-$ readelf -lW /bin/true | grep PROP
-  GNU_PROPERTY   0x000338 0x0000000000000338 0x0000000000000338 0x000030 0x000030 R   0x8
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
 -- 
 Kees Cook
