@@ -2,154 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0DF1725D82
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 13:45:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC6C7725D8B
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 13:47:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240159AbjFGLpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 07:45:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39800 "EHLO
+        id S240402AbjFGLrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 07:47:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239901AbjFGLow (ORCPT
+        with ESMTP id S239970AbjFGLq6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 07:44:52 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB441BCC
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 04:44:49 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-30ae95c4e75so7326637f8f.2
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 04:44:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1686138287; x=1688730287;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pZF0bWbVqQomN3DSZfJF9QrCWL0o2iDr9KrxQLP2Njw=;
-        b=3RBQjFfyDmBSo1AlYjKhIdm1beEdbNpeWKrKMomP7swI46B5yjDO5BHhe1tyU1q8ky
-         t1CWplL20m0oi2y9YZQhsRKLhqNOV8jqzD8AdgCtLZSYm8GaahtxsNiV6+093izidZOc
-         sDjlMaU18OGfEobAFY9ZhXQMQu8vcx4i4pxIx0eHAc4xmC1VDgVQNxvtHYGYLQfJUiF/
-         QwuIQvmqz5jeI2Xrq3QtoGIG3MoKh+ZsizZHQESghrYuyfnjsEveUYtFwNYgPIELhx+F
-         pwQ7zAVRDv8r6l7rv6rtyfVBq9ZfWcnQY+3VXW4YVXU/C10L3zvHPz1MXI+obInazKwJ
-         EHnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686138287; x=1688730287;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pZF0bWbVqQomN3DSZfJF9QrCWL0o2iDr9KrxQLP2Njw=;
-        b=UWgOwNptkGTzXU/ApXXyN0ZO7vT+ees+0vbXEaujbOurJhMUf4qJQ5XtyJdCoWBnOF
-         Hudv+/xXPi1HxGYbqpB8zVZoUCvtSf1O1PgNk7Sm/EsNkYAYicttqCKWMTPv8e9Z+4mQ
-         TW7DXCgrhCtc8Z/8WhQqFZNkUOVi+mzEmkvZKx190o+TAbOSRAF3aDxV5f3KRzkjLoGk
-         Ek7D3GMD6VG9fQkYkgfuDjeq3TFO84KkKp1gyaftn+QbqRX4jZRFqrm3+rU4TEIYPZS6
-         XXDkOifiMkXzMS5YbW0juZfHKfeBe/r8n8xlUrA0JFwsnLUbSndFG6Hdfyry8xE/Dc/e
-         rPIQ==
-X-Gm-Message-State: AC+VfDxim6+7DEJibLtD1zP4GtNuQ+Ylpw03Omt/X+JAl7Hv/krXfKZh
-        f7bmeR3TsqkvQCLCCFcvBNDoCA==
-X-Google-Smtp-Source: ACHHUZ4ag2NB29YmYf2NEyem1AS1fBVfRnebEHbs1kVzFKODnpHwBnsEXbEBUs2kQ3ajwzKCBP//Cg==
-X-Received: by 2002:adf:efc7:0:b0:306:26d1:230a with SMTP id i7-20020adfefc7000000b0030626d1230amr3860283wrp.65.1686138287554;
-        Wed, 07 Jun 2023 04:44:47 -0700 (PDT)
-Received: from [192.168.1.91] (192.201.68.85.rev.sfr.net. [85.68.201.192])
-        by smtp.gmail.com with ESMTPSA id n18-20020a5d4c52000000b0030ae901bc54sm15135507wrt.62.2023.06.07.04.44.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 04:44:47 -0700 (PDT)
-Message-ID: <613601c2-cc98-526b-a9e3-2ad2abc68e1d@baylibre.com>
-Date:   Wed, 7 Jun 2023 13:44:46 +0200
+        Wed, 7 Jun 2023 07:46:58 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68DE719D;
+        Wed,  7 Jun 2023 04:46:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686138417; x=1717674417;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=CAxCp0NZH9ib+Y0yW8Toii1XTj8yFcdzSVLUE1ZSwIg=;
+  b=lDM4mPw6f/NC+eWOwG7nPjXvzRhRP8Y1OZekLAdPJODwWTTSp1fjbZZh
+   /2PW1GsvzOu5q6ZOJnUJfWDbL6mwIAHQ8D6tT9bUdZ9L/W4QaUnL3IjOg
+   dRqB3DhTWNHsUGbWX63h5Uxl4pacILn9RLd83c3hxp1Ow1FWhrSDt5CKz
+   SJiCa0qxsLU7kCPuSu+1coNupq6VsWXmy13poyw1IRDEb9j2c9ldDgfkR
+   RwXPO94ZZ9tS31DqNdL3TCdcaMhzQw/Mfv/sfLNlRT0rMAAj/A5ZOJ4w5
+   BLqMlvIxKiKtqt0zki8rVYPsksZ/f+isNwR25tGqMBsY36bdWvf4GCMrf
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="354453107"
+X-IronPort-AV: E=Sophos;i="6.00,223,1681196400"; 
+   d="scan'208";a="354453107"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 04:46:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="703606886"
+X-IronPort-AV: E=Sophos;i="6.00,223,1681196400"; 
+   d="scan'208";a="703606886"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga007.jf.intel.com with ESMTP; 07 Jun 2023 04:46:56 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 7 Jun 2023 04:46:56 -0700
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 7 Jun 2023 04:46:55 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Wed, 7 Jun 2023 04:46:55 -0700
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.107)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Wed, 7 Jun 2023 04:46:55 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ArjyqgZ01/FDzrmPqi9XbvQR0p9+Ckrhb/fComuD/MX7YPf7rcAQbnZIP5qi56qXY7KzhUGR9YvruubknTBAX4HJnm8L4t6ljnU2TeuwRJRPLMIiTtWhs5UcwWXLadnnmc2vQ4oE5grojsZMwcjpr/vbU/RE9mdgLmP4e/0Xq+lp67oNKjOd7VbpefHe/CUS8t43X13Q+ma6Eb7UZrzCqCEG333+Gpeii4x0fqyKd+Yk2Wc9vzXlvDfy4XQO2ardJ7YvMP4NS8+fIjDddTDdonpnLtlu/uagvDqL4usunThXon/m9zOJfohEMC9rVAfCuyxRxNpzmuNonQRy0zC7ZA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EO4m71TcmbElYEAR1VH7qqUCWdG4B9akkH+zc+WHNaQ=;
+ b=cmKvleRilp0f8lZQjFTsZltdYWvSAIE4L5Kk2ATDCmtyjx3UYtxqDBjQMUaTlFhf+MzZG86QvT+QhdQPTwBP93oagW1db64haLHfMm1FN+miTg0zfPATl3fuFMcK5kwiTA1YCzfHAYjUcXYzn7ykgyFaVolBTNbs/+suVdbtZYOPbbzt46cuXeVRAF4H0pcwHkTPhmziDgP8GZ5rNm8rRFtqivHX6DGYnWx1eAkUNW3MRKvcYxpHgXT5ParZ7h3Wsermabd2um1kwuOtbz4vNU4Rlmx5JnsEt4coX4FuQqa+DWTCXNmexL4UJcJtT7Aj0JtTcZWb2VhXvZqd5HnL0Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM4PR11MB6117.namprd11.prod.outlook.com (2603:10b6:8:b3::19) by
+ SA1PR11MB6870.namprd11.prod.outlook.com (2603:10b6:806:2b4::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Wed, 7 Jun
+ 2023 11:46:53 +0000
+Received: from DM4PR11MB6117.namprd11.prod.outlook.com
+ ([fe80::9e4f:80cc:e0aa:6809]) by DM4PR11MB6117.namprd11.prod.outlook.com
+ ([fe80::9e4f:80cc:e0aa:6809%2]) with mapi id 15.20.6477.016; Wed, 7 Jun 2023
+ 11:46:53 +0000
+Date:   Wed, 7 Jun 2023 13:46:41 +0200
+From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To:     Sai Krishna <saikrishnag@marvell.com>
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <sgoutham@marvell.com>,
+        <dan.carpenter@linaro.org>,
+        Naveen Mamindlapalli <naveenm@marvell.com>
+Subject: Re: [net PATCH] octeontx2-af: Fix pointer dereference before sanity
+ check
+Message-ID: <ZIBuIXH2M1KbCg06@boxer>
+References: <20230607070255.2013980-1-saikrishnag@marvell.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230607070255.2013980-1-saikrishnag@marvell.com>
+X-ClientProxiedBy: FR3P281CA0108.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a3::11) To DM4PR11MB6117.namprd11.prod.outlook.com
+ (2603:10b6:8:b3::19)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v5 3/3] regulator: tps6594-regulator: Add driver for TI
- TPS6594 regulators
-Content-Language: en-US
-To:     andy.shevchenko@gmail.com, Esteban Blanc <eblanc@baylibre.com>
-Cc:     linus.walleij@linaro.org, lgirdwood@gmail.com, broonie@kernel.org,
-        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, jpanis@baylibre.com,
-        aseketeli@baylibre.com, u-kumar1@ti.com
-References: <20230522163115.2592883-1-eblanc@baylibre.com>
- <20230522163115.2592883-4-eblanc@baylibre.com> <ZG0VHnEByyMW9i4a@surfacebook>
-From:   jerome Neanne <jneanne@baylibre.com>
-In-Reply-To: <ZG0VHnEByyMW9i4a@surfacebook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR11MB6117:EE_|SA1PR11MB6870:EE_
+X-MS-Office365-Filtering-Correlation-Id: 46bb870e-f686-47a3-2c15-08db674ce370
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5jhJxzzqhoQgwsZpcnbDfg/i03MJaMeu+sSFDZBJ8FBLuLg4xma6bwO3RiveCkZnqemJJZ6qBF+NQDxn9VJsg6GgwgzUKRMP2CqTJJ8U705AWw5jzBCfx+6Wr2IZM81eYNqGYLpUw3l5dXzvlGBEjrPXyLSAcZ2YremolqpQu88AkOzoQi9rPqvk16dO8sfK2A1xI1FnOoqTwtM3UDXl7O4an33NoaskLCuQqzlr80whT1LbcVqAU5ECg86z5kVm6+YTFErg08MshisSXCs7otBGFnGmBlpqyRq7vg2golsV1+VrvgKZK3mXw7sbMdVz/q3JO/9cgcHXl3UiYhPixRGgwNNC8m4gbf6yhHv+wxA2iqOiUbqNNjIBEPaFa/pt6Sk94AwDM+637vyk0dlV1fQIJozvAPfnMdPdL99UUTN9jfnJV7geUAopOi6vZWO/dOJ3rOrPF06Rqda9wCZWA6D12j8YVPTyeRBZe/8U4C5dxqgOcj/asAY0ki73+0/8pz+OsGamLowG073QyAkJ0rDE8n9hCbb3QMj4Nx8I6eL6DHCJxpCMx18IPJfgT8rj
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6117.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(396003)(376002)(136003)(366004)(346002)(39860400002)(451199021)(6486002)(6666004)(82960400001)(2906002)(66946007)(66556008)(66476007)(38100700002)(44832011)(8936002)(7416002)(86362001)(8676002)(5660300002)(41300700001)(6916009)(4326008)(316002)(478600001)(6506007)(6512007)(9686003)(26005)(186003)(33716001)(83380400001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?wrGWjmT+A/zZoEbiv6JnusSCx6xyky5AADLV41me1Klp4zs/RuCNcBKn2d+z?=
+ =?us-ascii?Q?YbuJll+DB8Dm5lgPSlRIl38dKNyq6J83y+pG3/7lQTk9A5WBZpGf6q3nEVMr?=
+ =?us-ascii?Q?8CFcSnIU1gzJ4TU/tiGe7If80vnKMLT+KIem4fKdyUuuuoZwSLR/OIVRNwEO?=
+ =?us-ascii?Q?77ENPExBW+b8Oz7x8qCVrOAYQM78PfsyTs9vPAkooTyE+rZoodnuzsTLIDQ6?=
+ =?us-ascii?Q?NZoyRmF82YzXUbMFQ7D2p5eLFkb8kw/Mts2UxgCJxFsS/RHVKFS7ucm0HHEo?=
+ =?us-ascii?Q?1+W/Ts8CheTczwzA7fuT7dv7TlCFIt5uwe5T2Skr5CXYxoJ3g/cy7GuZ32sw?=
+ =?us-ascii?Q?X58fk887r3faLpwwF/q7beOFAieP1fssMFltuVLfLSGA1hGwqyHafbpx5VQQ?=
+ =?us-ascii?Q?OcLgjqyM754kaKpz0YtHQwJwQYHKRDASAxbclPggSIKNeije8m+WqMZ4u5ET?=
+ =?us-ascii?Q?JQ6Nwp20HPu48ShNdiv4Mhb6Fq+6DnJK7xLZBfTdSIOyp+cftF2tK6TjmIxR?=
+ =?us-ascii?Q?hyUyyC6TQGeFVoXMdx18aDXEjbMr5zjsivvHiARgBevETmQafM8PFw2vV9Ap?=
+ =?us-ascii?Q?UleU+GJ+WhAvNKyj65N6xOjsgLaB1X19gNonIKYx6RwGcMkJpru+OBbS560W?=
+ =?us-ascii?Q?HW6hgN0pybGprEukhu3gBCyPt49CrNavEQgE9n6z1yVBQLWG1F/+f1lijVc8?=
+ =?us-ascii?Q?PohnjejKUge3OSA0fNtvZd8HbAz9dtrz2JKu2SSWqpCzE1TnEtlxVO52urhv?=
+ =?us-ascii?Q?DIsoLUnkVILJz6XiUUDyIxkAozznVlV8AOBIc/r17ylUWzhlN1+469C3hJnB?=
+ =?us-ascii?Q?7m4umvU8zVQuj5rqFCJiaoOkY8h3dgfhO19Er6iocFnAU5A9sd3NCc1glZG7?=
+ =?us-ascii?Q?Y1MrF8pZp0fuX6QYticVx6OqbAGD0z2cFk75/WbZqvbTvsuhyZCqSlsePrVi?=
+ =?us-ascii?Q?dJby3RSsQUJIf1J8qwXGAJ7ILm8MEOkkhQdtQ4MUYJyBs//ulreJdRfTUjFY?=
+ =?us-ascii?Q?oa3HPo1KKY1V9HTiiB5JbnhmxOuqXZeS5fInT4W5p/fNunBfwjFKfv4gxMbK?=
+ =?us-ascii?Q?8XPLvgQKUPNfV5L7KyVkyatkCQY6GZn4HRpvOLG74DCjETn8DSwjbIo1JBq1?=
+ =?us-ascii?Q?IsxouDjsTXmsdcuzUheOhGWs+/IdjTKI5VQOViHtym7WIuKTt6OTi+Yk/lRv?=
+ =?us-ascii?Q?nAND/IKFMkzVf6k1Zvzi0IxsWBmrAJ4ma8ukchZRX915QUF+c62OkSbkVI3p?=
+ =?us-ascii?Q?DMcs0bnzVKlrT8gplW0KubY0YIw9dRaCGCP3nCbQgENA5g5+XEnLItVbnVs3?=
+ =?us-ascii?Q?csPZq68T7DWV0/z13PKSBzmkiAb/FNRk01Py0jaDKFWAOsPWiEPi7hjysgLT?=
+ =?us-ascii?Q?r3w9+pG8xg/4hLw3oSVYuq6pn1lThOqP505wDJf4r/mySmklkM1Q8/rTF9h9?=
+ =?us-ascii?Q?6OO6jkF4EY+hR3yFvEMNXkpcapGchwvcr+gDeupeBlrDhDrK06NGvUI4DANY?=
+ =?us-ascii?Q?lLwvEoybYQ7UgyIB+bYdZQIhHDlyTue/83A33Ajd+jNYcJ/wgSkZcYBq9vbN?=
+ =?us-ascii?Q?IpkfLE6upB0W5N4ww5Di2imeHbVO8PB5AVZfLyP6e9Z0XHEDJEL1+5SMFnCH?=
+ =?us-ascii?Q?DUEw5yNwV2mMlvtjj4GQNQs=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 46bb870e-f686-47a3-2c15-08db674ce370
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6117.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2023 11:46:53.5415
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: lhqzAJPUzpaD4f/RrERceS6VfxS8InPu5hyffPQpQ1wZ8ED2phxIeXlZqmbWE2c/POdMwalX/FFxX0iggp6CVApVi9lrccYbWFXcKNJsYz8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB6870
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jun 07, 2023 at 12:32:55PM +0530, Sai Krishna wrote:
+> PTP pointer is being dereferenced before NULL, error check.
+> Fixed the same to avoid NULL dereference and smatch checker warning.
+
+please use imperative mood, you could say:
+Move validation of ptp pointer before its usage
 
 > 
->> +	enum {
->> +		MULTI_BUCK12,
->> +		MULTI_BUCK123,
->> +		MULTI_BUCK1234,
->> +		MULTI_BUCK12_34,
-> 
->> +		MULTI_FIRST = MULTI_BUCK12,
->> +		MULTI_LAST = MULTI_BUCK12_34,
->> +		MULTI_NUM = MULTI_LAST - MULTI_FIRST + 1
-> 
-> 		MULT_NUM
-> 
-> will suffice instead all this.
-> 
->> +	};
-> 
-> But why enum at all? See below.
-Just for the switch case readability.
-I have to iterate across the multiphases array for look up name into 
-device tree and evaluate in that order.
+> Fixes: 2ef4e45d99b1 ("octeontx2-af: Add PTP PPS Errata workaround on CN10K silicon")
+> Signed-off-by: Sai Krishna <saikrishnag@marvell.com>
+> Signed-off-by: Naveen Mamindlapalli <naveenm@marvell.com>
 
-This can be reduced to:
-	enum {
-		MULTI_BUCK12,
-		MULTI_BUCK123,
-		MULTI_BUCK1234,
-		MULTI_BUCK12_34,
-		MULTI_NUM = MULTI_BUCK12_34 - MULTI_BUCK12 + 1
-	};
+Reviewed-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 
+> ---
+>  drivers/net/ethernet/marvell/octeontx2/af/ptp.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> ...
-> 
->> +	/*
->> +	 * Switch case defines different possible multi phase config
->> +	 * This is based on dts buck node name.
->> +	 * Buck node name must be chosen accordingly.
->> +	 * Default case is no Multiphase buck.
->> +	 * In case of Multiphase configuration, value should be defined for
->> +	 * buck_configured to avoid creating bucks for every buck in multiphase
->> +	 */
->> +	for (multi = MULTI_FIRST; multi < MULTI_NUM; multi++) {
->> +		np = of_find_node_by_name(tps->dev->of_node, multiphases[multi]);
->> +		npname = of_node_full_name(np);
->> +		np_pmic_parent = of_get_parent(of_get_parent(np));
->> +		if (of_node_cmp(of_node_full_name(np_pmic_parent), tps->dev->of_node->full_name))
-> 
-> Why not of_node_full_name() in the second case?
-Sure.
-> 
-> 
->> +			continue;
->> +		delta = strcmp(npname, multiphases[multi]);
->> +		if (!delta) {
->> +			switch (multi) {
->> +			case MULTI_BUCK12:
-> 
-> This all looks like match_string() reinvention.
-I can go with match_string but this is not significantly changing the game:
+> diff --git a/drivers/net/ethernet/marvell/octeontx2/af/ptp.c b/drivers/net/ethernet/marvell/octeontx2/af/ptp.c
+> index 3411e2e47d46..6a7dfb181fa8 100644
+> --- a/drivers/net/ethernet/marvell/octeontx2/af/ptp.c
+> +++ b/drivers/net/ethernet/marvell/octeontx2/af/ptp.c
+> @@ -449,12 +449,12 @@ static void ptp_remove(struct pci_dev *pdev)
+>  	struct ptp *ptp = pci_get_drvdata(pdev);
+>  	u64 clock_cfg;
+>  
+> -	if (cn10k_ptp_errata(ptp) && hrtimer_active(&ptp->hrtimer))
+> -		hrtimer_cancel(&ptp->hrtimer);
+> -
+>  	if (IS_ERR_OR_NULL(ptp))
+>  		return;
+>  
+> +	if (cn10k_ptp_errata(ptp) && hrtimer_active(&ptp->hrtimer))
+> +		hrtimer_cancel(&ptp->hrtimer);
+> +
+>  	/* Disable PTP clock */
+>  	clock_cfg = readq(ptp->reg_base + PTP_CLOCK_CFG);
+>  	clock_cfg &= ~PTP_CLOCK_CFG_PTP_EN;
 
-index = match_string(multiphases, ARRAY_SIZE(multiphases), npname);
-if (index >= 0) {
-	switch (index) {
+i wonder if ptp_remove() would be able to free the struct ptp that
+ptp_probe() allocated - then you wouldn't have to use devm_kzalloc().
 
-No question on all your other feedback. Just wondering if I missed 
-something with match_string use. Looks like a good idea indeed but this 
-is not drastically changing the code as you seem to expect... Let me 
-know if you think I'm doing it in a wrong way.
-
-Regards,
-Jerome.
+> -- 
+> 2.25.1
+> 
+> 
