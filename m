@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 989F5725C6E
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 12:58:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D32FE725C72
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 12:58:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238349AbjFGK6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 06:58:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37286 "EHLO
+        id S239869AbjFGK6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 06:58:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240127AbjFGK5j (ORCPT
+        with ESMTP id S240030AbjFGK5k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 06:57:39 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1649510EC
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 03:57:03 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f735259fa0so42960685e9.1
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 03:57:03 -0700 (PDT)
+        Wed, 7 Jun 2023 06:57:40 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792811BFE
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 03:57:05 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f7368126a6so31916295e9.0
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 03:57:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686135396; x=1688727396;
+        d=linaro.org; s=google; t=1686135397; x=1688727397;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=xnMTB1gQyvEeZp7nZTAM6BVyhIRBWpY4lFqsFPGfZMM=;
-        b=yGS9r2A1xgdQzVP4dihVaE8lusnrMU9qumXIEZ+USwaQXiI/Y3/pw0wHKjtSKuOh/p
-         IIzwkTH1fhQ1R9gSAEl6xGUAAETAsr5aPVlflmcVeulAuNvYhDsZF940O/kmwThj9kTI
-         auSVKiOjFTuBT2g8zix67oQik+EJV+Rvmb3ACEeL/c5Xssa+5JQBIPfp7mHqrcedF3k/
-         CPbqF23LwDtOl8062CZsrn/0TTimpMTUNFJKn+TAeLum/Z5eBWfhBiKu95/F4UWOap5J
-         /WritJ9fe1hUrNATwQayvnFrsVxIOT/zhwiNzPspvk+Ujie26qhlnEySwHu9DdEDRcXx
-         Ehvg==
+        bh=+Lndesv8TY3zpBho5S2AngSkgWp3EvCO8f19S2YQJhs=;
+        b=DxaMTiMgIx5dN3zV+ZMqE8LLzYkYT1VN+1ne0nkw0Yl27ZmYWq9ZAKjwza+cBlfJIf
+         q0yWYSLNWVjc2GG9a0hyuwtziz7iioXGY5TCR6DJslIYSTw42Pu1UplRJermhQW1WZdj
+         3DQ1+St5ZWtbtBBmWNPDkgga9lS7ckl8ZCTzfo1z/stTpVRgxEbs8ziowpgFrAMjdWmx
+         aQOid92d/Ci+469aT0PPQY2KNgHtK5q0ZgLsNvxkj1UfOfiSEMuckjyn4XhvAIg0Z7PA
+         bxoPa6nXM960/5xkGurlFAUy8jZmN34VP299rLrmhXd8bnJl1AL67K1qqtRyR31vJt4m
+         gEUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686135396; x=1688727396;
+        d=1e100.net; s=20221208; t=1686135397; x=1688727397;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=xnMTB1gQyvEeZp7nZTAM6BVyhIRBWpY4lFqsFPGfZMM=;
-        b=N2RhZTN+1aK2WhkA1kNm5N7WDcZIl5i94dinHsnnSSoHvqEutcd3l6lvtcPcc4Gh34
-         GaNU8iRYXLghj4tVxmhoiwX+dRyo0sOMvfu66ZAr2+cXiyJL6YPVAqN4h/nLa+hVeZmZ
-         osstCaydUGuGaletGlis/X8i9MR3JDEUcdTkkRdOxKYfH4vdMcD6c8kqRIcQxGE9Ecxy
-         2iiVXHpenoYxZdXb7T1Hwm/qEvMsi4y2mLCo+rFVj1X1jDpFa4QiGf/AlXGeMnb3tvf2
-         jPKeMUK1+Ujm5xBXKqEBTfTGkRpW1nUpKo6m3sbaWnSAFCRbf3C6ehkybxfHgNqA/CLe
-         9xxQ==
-X-Gm-Message-State: AC+VfDyjJYh7htKIlNXb/bcz1J1ng+fdcWXLotX7z8bpANEdubWHCs11
-        ahCB680qpX4oBnVF+OCQsLnjSA==
-X-Google-Smtp-Source: ACHHUZ58EvoPYuC5nZs66WOAPONtdHAb797/8fHYHvmBuwVELAHZs9tvGj3wF0mebUj5GAurl5ARmg==
-X-Received: by 2002:a1c:7215:0:b0:3f7:dfdf:36ce with SMTP id n21-20020a1c7215000000b003f7dfdf36cemr6877223wmc.9.1686135396566;
-        Wed, 07 Jun 2023 03:56:36 -0700 (PDT)
+        bh=+Lndesv8TY3zpBho5S2AngSkgWp3EvCO8f19S2YQJhs=;
+        b=Gx3ngC6NCich3cGVwHcBle1GzUZmL0w+DGLeFgg5nLJDtIVXZIgFJIzM0vN+jMAEkd
+         4us9zjdHlg5hjpRzjBwC1S3xLE5OeOpgXTZUuaN+ouW17NtpxY9XWeVh0Hb2s1HLJK19
+         qkEIDtoGtfhG2bhUwnRGLtuna6A7DJ50tXpoh3jYCEUhuJvOUIp7mwLblpUt7/k7teg5
+         tv4gRwi0Uv2iJ/ISRgrohhFJ1unRZjjV+n4NtbRH4zHQFw4/VQrvOQZFzFrMHcZvnSP/
+         2t5otNfAkFb8Bc8nsgIjEScHSYZS58va1QSMmE58EeVBIqmQPdWow13WVtM9GCHsolLl
+         Dx4Q==
+X-Gm-Message-State: AC+VfDwHAOThHBxicoUPQFcczLSh+KXhMURGNc2XKe7BTqm2gJOxDIL2
+        cLo783drUqT4LSmECYjZBr+pUw==
+X-Google-Smtp-Source: ACHHUZ6qSi78NbG1hu2vzKtTf12eb69NQQtGbYW7nE0tFNONCsXLL3uknwiFhY9dZBDSdt34V45Iug==
+X-Received: by 2002:a1c:6a12:0:b0:3f0:b1c9:25d4 with SMTP id f18-20020a1c6a12000000b003f0b1c925d4mr4424961wmc.21.1686135397444;
+        Wed, 07 Jun 2023 03:56:37 -0700 (PDT)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id i10-20020a05600c290a00b003f60faa4612sm1761879wmd.22.2023.06.07.03.56.35
+        by smtp.gmail.com with ESMTPSA id i10-20020a05600c290a00b003f60faa4612sm1761879wmd.22.2023.06.07.03.56.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 03:56:36 -0700 (PDT)
+        Wed, 07 Jun 2023 03:56:37 -0700 (PDT)
 From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Wed, 07 Jun 2023 12:56:25 +0200
-Subject: [PATCH 14/18] clk: meson: aoclk: move bindings include to main
+Date:   Wed, 07 Jun 2023 12:56:26 +0200
+Subject: [PATCH 15/18] clk: meson: eeclk: move bindings include to main
  driver
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230607-topic-amlogic-upstream-clkid-public-migration-v1-14-9676afa6b22c@linaro.org>
+Message-Id: <20230607-topic-amlogic-upstream-clkid-public-migration-v1-15-9676afa6b22c@linaro.org>
 References: <20230607-topic-amlogic-upstream-clkid-public-migration-v1-0-9676afa6b22c@linaro.org>
 In-Reply-To: <20230607-topic-amlogic-upstream-clkid-public-migration-v1-0-9676afa6b22c@linaro.org>
 To:     Jerome Brunet <jbrunet@baylibre.com>,
@@ -73,26 +73,26 @@ Cc:     linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
         devicetree@vger.kernel.org,
         Neil Armstrong <neil.armstrong@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4058;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2909;
  i=neil.armstrong@linaro.org; h=from:subject:message-id;
- bh=FAGqTS28vY4TA8ryV7GfqsaTq2wyyajQNS171oDhvXo=;
- b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBkgGJT+mKi8cd1UlKPoKTBHBSQhYVzjPlpEaF7dsBc
- atUX7ZmJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZIBiUwAKCRB33NvayMhJ0S+YEA
- Ck1hq8jC1gcmtNViGR6dPVN0ot4jPzoiBmbWPOkJgGCzgXNbmuAhra566hDE+YEFexOU60REdOTyI1
- UkP/WerO+WdJTCK47r/kS7iouqLxYltUmujw5wlSNwuRgjG6NGC3fcS0MUjbfsONZhFexZjr1NM+uS
- H1+lVf+91M4wWUl8enMgPxsYEqqS7Hq3Al6/ALJUkjVN/Y4oaSH+vHZ55h46b+7jJZvNUTBUmclED9
- Tq3oJ6BY+uVCNDeCkdBR5dVZZwgIes2Acm2MUHpHUmrHsR4mhkm4EYef0PTYMqljjn8QevUw0cn87V
- DySnXu20dOFsiUqhfwXJnNPKuW7dnNOWTpi7NOnFVoUt5094la/m4ihv9zJZ/LW7pD06n1bJDZvHmA
- Rgy5xSbute20oPer2lBsx1R4j519ZmZ4uhHB9jgJAvcI9jF8u/eXkFdIFp0vhgALBSbp64j8jfDu8H
- 29g5a387liydAp1qmmM2gmn+Hl1M5dFP2Yw9eciMqbatZVw5tlzVnIFUznW4KT+19Y7TUGa0J+v054
- jJsmav68gNlK1kelh8j2wYozuW15TiNJh5BO8jI1GWQqgajCAYX60uUDX+Z4g5u3GVLiSCYlsDTgii
- ew7XaAlaSEVEeHSZCTxxeNn7YsIThHmjYu16If/Hco2qzh6vpv31TYzFCtIw==
+ bh=Foo+HUE/eeDMaQAqSm4Rc+RrlD9xCOzKuPcU4sFaqN8=;
+ b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBkgGJUPXYHLirTnD19GQyIsNf/oWC2voT8fLRY8cnN
+ urdOb+yJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZIBiVAAKCRB33NvayMhJ0aGaEA
+ CRfY8iUu4QckYLYREX9gjzW9IR1xEz7rQPyJNCSx63yWFhSTFUdg17+oH2gdZysKSO0RZuNj81yM/o
+ BO5/x3L506v1TtCXcK5suxuRRJC+BnQ/A8EqXxZXCOCEMgUDqEx0PQbywoPyH4muEsRRlVHi0uMkEo
+ pzIaD0cj8pyBM5obSanPuoqBXcy00gnzHF2Gx71EFaV2iUIdYrMEJW9dyfiIn1fG1nUgWVrLvPS0Sh
+ /ntViKcnd6lcWmsQFp7njQerYjBt//hNkjQ5Qemz2jbj0qYkxqqzxVJm3xxfx/a/5IMI4Cxh/vAGAT
+ QxN3/dJMetpkwTK1r69+TsQie3xj7ug7mKBOKOqMX4Y8xrCkrD4Ek7qF7M5jlKtTvFTYxeW1Sz2OdZ
+ 9gZtoBZYQk5RNgKAxNQ+9Jtk9Z00rdOrrKzFk6v9rUvr0jqNUFPltYJlftW4a3C52sOeXmxaROYZnn
+ ZPysxzcGy4a4uy/VCvzq1/NFgVT/sUiqzkaGfPk71+s/a1FrcTTQ3zAuyt5txvYYkzn9AhFe0HsQhM
+ Rheykp0rgEjj0kgn9pgyjKe6nlYuXMsB72lW56Jh5bp74/APuT4pgoXOgv/VlXLJGrCE4O2UstNe6H
+ r7o1oMHLDG5t/JaYDVPYyStW4FiLXvkNR2c5oeAYKV74BoxdIqG2lWgo8OLA==
 X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
  fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -105,131 +105,89 @@ driver file.
 
 Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 ---
- drivers/clk/meson/axg-aoclk.c  |  4 +++-
- drivers/clk/meson/axg-aoclk.h  | 16 ----------------
- drivers/clk/meson/g12a-aoclk.c |  4 +++-
- drivers/clk/meson/g12a-aoclk.h | 13 -------------
- drivers/clk/meson/gxbb-aoclk.c |  4 +++-
- drivers/clk/meson/gxbb-aoclk.h | 13 -------------
- 6 files changed, 9 insertions(+), 45 deletions(-)
+ drivers/clk/meson/axg.c  | 2 ++
+ drivers/clk/meson/axg.h  | 3 ---
+ drivers/clk/meson/g12a.c | 2 ++
+ drivers/clk/meson/g12a.h | 3 ---
+ drivers/clk/meson/gxbb.c | 2 ++
+ drivers/clk/meson/gxbb.h | 3 ---
+ 6 files changed, 6 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/clk/meson/axg-aoclk.c b/drivers/clk/meson/axg-aoclk.c
-index db5b53146bcc..fb470459aaf8 100644
---- a/drivers/clk/meson/axg-aoclk.c
-+++ b/drivers/clk/meson/axg-aoclk.c
-@@ -14,11 +14,13 @@
- #include <linux/mfd/syscon.h>
- #include <linux/module.h>
- #include "meson-aoclk.h"
--#include "axg-aoclk.h"
+diff --git a/drivers/clk/meson/axg.c b/drivers/clk/meson/axg.c
+index d159b47c7579..ddac23a5d535 100644
+--- a/drivers/clk/meson/axg.c
++++ b/drivers/clk/meson/axg.c
+@@ -21,6 +21,8 @@
+ #include "axg.h"
+ #include "meson-eeclk.h"
  
- #include "clk-regmap.h"
- #include "clk-dualdiv.h"
- 
-+#include <dt-bindings/clock/axg-aoclkc.h>
-+#include <dt-bindings/reset/axg-aoclkc.h>
++#include <dt-bindings/clock/axg-clkc.h>
 +
- /*
-  * AO Configuration Clock registers offsets
-  * Register offsets from the data sheet must be multiplied by 4.
-diff --git a/drivers/clk/meson/axg-aoclk.h b/drivers/clk/meson/axg-aoclk.h
-deleted file mode 100644
-index fe23dc53aa73..000000000000
---- a/drivers/clk/meson/axg-aoclk.h
-+++ /dev/null
-@@ -1,16 +0,0 @@
--/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
--/*
-- * Copyright (c) 2017 BayLibre, SAS
-- * Author: Neil Armstrong <narmstrong@baylibre.com>
-- *
-- * Copyright (c) 2018 Amlogic, inc.
-- * Author: Qiufang Dai <qiufang.dai@amlogic.com>
-- */
--
--#ifndef __AXG_AOCLKC_H
--#define __AXG_AOCLKC_H
--
--#include <dt-bindings/clock/axg-aoclkc.h>
--#include <dt-bindings/reset/axg-aoclkc.h>
--
--#endif /* __AXG_AOCLKC_H */
-diff --git a/drivers/clk/meson/g12a-aoclk.c b/drivers/clk/meson/g12a-aoclk.c
-index 52501ec709f7..392e1805f1c8 100644
---- a/drivers/clk/meson/g12a-aoclk.c
-+++ b/drivers/clk/meson/g12a-aoclk.c
-@@ -14,11 +14,13 @@
- #include <linux/mfd/syscon.h>
- #include <linux/module.h>
- #include "meson-aoclk.h"
--#include "g12a-aoclk.h"
+ static DEFINE_SPINLOCK(meson_clk_lock);
  
- #include "clk-regmap.h"
- #include "clk-dualdiv.h"
+ static struct clk_regmap axg_fixed_pll_dco = {
+diff --git a/drivers/clk/meson/axg.h b/drivers/clk/meson/axg.h
+index ed157532b4d7..624d8d3ce7c4 100644
+--- a/drivers/clk/meson/axg.h
++++ b/drivers/clk/meson/axg.h
+@@ -102,7 +102,4 @@
+ #define HHI_DPLL_TOP_I			0x318
+ #define HHI_DPLL_TOP2_I			0x31C
  
-+#include <dt-bindings/clock/g12a-aoclkc.h>
-+#include <dt-bindings/reset/g12a-aoclkc.h>
+-/* include the CLKIDs that have been made part of the DT binding */
+-#include <dt-bindings/clock/axg-clkc.h>
+-
+ #endif /* __AXG_H */
+diff --git a/drivers/clk/meson/g12a.c b/drivers/clk/meson/g12a.c
+index ee1ac3542ff4..4e218cbc457f 100644
+--- a/drivers/clk/meson/g12a.c
++++ b/drivers/clk/meson/g12a.c
+@@ -25,6 +25,8 @@
+ #include "meson-eeclk.h"
+ #include "g12a.h"
+ 
++#include <dt-bindings/clock/g12a-clkc.h>
 +
- /*
-  * AO Configuration Clock registers offsets
-  * Register offsets from the data sheet must be multiplied by 4.
-diff --git a/drivers/clk/meson/g12a-aoclk.h b/drivers/clk/meson/g12a-aoclk.h
-deleted file mode 100644
-index 9d6eeb24ae0c..000000000000
---- a/drivers/clk/meson/g12a-aoclk.h
-+++ /dev/null
-@@ -1,13 +0,0 @@
--/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
--/*
-- * Copyright (c) 2019 BayLibre, SAS
-- * Author: Neil Armstrong <narmstrong@baylibre.com>
-- */
--
--#ifndef __G12A_AOCLKC_H
--#define __G12A_AOCLKC_H
--
--#include <dt-bindings/clock/g12a-aoclkc.h>
--#include <dt-bindings/reset/g12a-aoclkc.h>
--
--#endif /* __G12A_AOCLKC_H */
-diff --git a/drivers/clk/meson/gxbb-aoclk.c b/drivers/clk/meson/gxbb-aoclk.c
-index b08f60f5a73d..f3723c0d6a01 100644
---- a/drivers/clk/meson/gxbb-aoclk.c
-+++ b/drivers/clk/meson/gxbb-aoclk.c
-@@ -7,11 +7,13 @@
- #include <linux/mfd/syscon.h>
- #include <linux/module.h>
- #include "meson-aoclk.h"
--#include "gxbb-aoclk.h"
+ static DEFINE_SPINLOCK(meson_clk_lock);
  
- #include "clk-regmap.h"
- #include "clk-dualdiv.h"
+ static struct clk_regmap g12a_fixed_pll_dco = {
+diff --git a/drivers/clk/meson/g12a.h b/drivers/clk/meson/g12a.h
+index 8e08af3c1476..f11ee3c59849 100644
+--- a/drivers/clk/meson/g12a.h
++++ b/drivers/clk/meson/g12a.h
+@@ -126,7 +126,4 @@
+ #define HHI_SYS1_PLL_CNTL5		0x394
+ #define HHI_SYS1_PLL_CNTL6		0x398
  
-+#include <dt-bindings/clock/gxbb-aoclkc.h>
-+#include <dt-bindings/reset/gxbb-aoclkc.h>
+-/* include the CLKIDs that have been made part of the DT binding */
+-#include <dt-bindings/clock/g12a-clkc.h>
+-
+ #endif /* __G12A_H */
+diff --git a/drivers/clk/meson/gxbb.c b/drivers/clk/meson/gxbb.c
+index 4849189cefbc..15b6c6c3114e 100644
+--- a/drivers/clk/meson/gxbb.c
++++ b/drivers/clk/meson/gxbb.c
+@@ -17,6 +17,8 @@
+ #include "meson-eeclk.h"
+ #include "vid-pll-div.h"
+ 
++#include <dt-bindings/clock/gxbb-clkc.h>
 +
- /* AO Configuration Clock registers offsets */
- #define AO_RTI_PWR_CNTL_REG1	0x0c
- #define AO_RTI_PWR_CNTL_REG0	0x10
-diff --git a/drivers/clk/meson/gxbb-aoclk.h b/drivers/clk/meson/gxbb-aoclk.h
-deleted file mode 100644
-index 94197b957512..000000000000
---- a/drivers/clk/meson/gxbb-aoclk.h
-+++ /dev/null
-@@ -1,13 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0+ */
--/*
-- * Copyright (c) 2017 BayLibre, SAS
-- * Author: Neil Armstrong <narmstrong@baylibre.com>
-- */
+ static DEFINE_SPINLOCK(meson_clk_lock);
+ 
+ static const struct pll_params_table gxbb_gp0_pll_params_table[] = {
+diff --git a/drivers/clk/meson/gxbb.h b/drivers/clk/meson/gxbb.h
+index 798ffb911103..ba5f39a8d746 100644
+--- a/drivers/clk/meson/gxbb.h
++++ b/drivers/clk/meson/gxbb.h
+@@ -112,7 +112,4 @@
+ #define HHI_BT656_CLK_CNTL		0x3D4 /* 0xf5 offset in data sheet */
+ #define HHI_SAR_CLK_CNTL		0x3D8 /* 0xf6 offset in data sheet */
+ 
+-/* include the CLKIDs that have been made part of the DT binding */
+-#include <dt-bindings/clock/gxbb-clkc.h>
 -
--#ifndef __GXBB_AOCLKC_H
--#define __GXBB_AOCLKC_H
--
--#include <dt-bindings/clock/gxbb-aoclkc.h>
--#include <dt-bindings/reset/gxbb-aoclkc.h>
--
--#endif /* __GXBB_AOCLKC_H */
+ #endif /* __GXBB_H */
 
 -- 
 2.34.1
