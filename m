@@ -2,177 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53FEF726478
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 17:26:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97F8F7264A1
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 17:28:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241479AbjFGP0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 11:26:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34018 "EHLO
+        id S241528AbjFGP2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 11:28:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241466AbjFGP0M (ORCPT
+        with ESMTP id S241513AbjFGP1j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 11:26:12 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D619126A5
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 08:25:45 -0700 (PDT)
-Received: from mail-yb1-f199.google.com (mail-yb1-f199.google.com [209.85.219.199])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 41AB63F15A
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 15:25:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1686151503;
-        bh=UzyjLDSH3L83BUY14PzO6igurevkkcTAFURgUF3tbLc=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=fkxgZqGqHW+pi559AF3RM4Xqo4MsornXTpBlfpZWzdOkVpji690KH2eNnHJKhWqXG
-         6YMLQL4kY17Z964171EX+fLDe4qQ698rjANTla1OczbOaih3FzPh5KKKSGcT//Of9j
-         QE5eR8NxSCRyqO5KzqOCzxi9Jn87IO+W2nytRWmHlG0y0b/YOCZuxvy9Q0MjzEpv1Z
-         7iydsKfc8H77R8pDGekPYyxeGiwzFrofPw26xuu2OYOH5IZIt1j2r34q/88GUdOd+3
-         uGPwe8o+/tEY7YOmn5F63g4TxKo+6I971SZIRWCjZv6TTGXsno/ucxV6F2qr2665r3
-         4mFX7wOOfWpkQ==
-Received: by mail-yb1-f199.google.com with SMTP id 3f1490d57ef6-bac6a453dd5so8855868276.2
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 08:25:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686151502; x=1688743502;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UzyjLDSH3L83BUY14PzO6igurevkkcTAFURgUF3tbLc=;
-        b=Qv+rojlqFzkUs6z+yPNdF5Urrc0l38e4uDkIrQCN7wbXwFE+sKd0zDJ8i5CN7giQiF
-         qAujEqAifuLMSOPy2199nUZuMVg+OaBbvwPtm1u32AKRGhCZJMBZ3oIBUn1ahFVlQZ8U
-         4N2O+QS9FFu+PY1H9XBJZxEiMslZC/79pk0a+1A7GGudbi/3dePrfZAs1wu2balsNP8U
-         vIEsXp/DlGBHRa6oACvHFSNOUGgDNl2EnNANx4LbJcU2mN6EV01vgi0E7wQXCV4Zagdd
-         CHrFUsS87FCtBi7briW56ADhEEwYUpGSZ+J9PcNdIAK7NdEfljEJ3diJOM9yIZeCZrQe
-         8icg==
-X-Gm-Message-State: AC+VfDyjlmj7xi/qTiEX/5Rs4obXhE42Vl7usXjMdHx0hiv1tGpIOA3h
-        mtQ2TeDDHjirOl2Kr4IdAtqS4E8VhBH5/galBqp+RtRqa2q0HhcEWUOUHBcYyvDI6SpVjbBHA+t
-        CY0rJIZaCR+yEFvk72ZpYRmL4ajDuliDqObD2l+lMdErJ/4UD6bq+46KLeA==
-X-Received: by 2002:a25:d490:0:b0:bb3:cc80:ac4a with SMTP id m138-20020a25d490000000b00bb3cc80ac4amr4129207ybf.42.1686151502105;
-        Wed, 07 Jun 2023 08:25:02 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6IXvmlrtEA8JFTZYK+1pTV1djV0J8QwczyxESJ1HLlJOoHkSD4NIuDqcp3jr364rEsXU+wd6zZScC8KyQRz8w=
-X-Received: by 2002:a25:d490:0:b0:bb3:cc80:ac4a with SMTP id
- m138-20020a25d490000000b00bb3cc80ac4amr4129185ybf.42.1686151501851; Wed, 07
- Jun 2023 08:25:01 -0700 (PDT)
+        Wed, 7 Jun 2023 11:27:39 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37AEB1FFD;
+        Wed,  7 Jun 2023 08:27:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686151624; x=1717687624;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=o9s+xCFEIMsJhr2kn88p0xT5DlNmtrw35RZsqUG2rrU=;
+  b=LshhY9PBYfvosCss8yw8CdbEtgefrB0rmy4IanW22T0Occbwnxw+5a70
+   VLMh2XG/jq6AM629JBkNhJU+yfSGqz8HygygvJB9R7s+Zq5RL7KZ5esfs
+   Xiy+P2vInbfXFyL/AP4I1myBZ5fakqNcBbDghs98y0FOZc6nFrh2snlz9
+   Oevebxh00RTu79047ltatfT7wpMuNwTXtAtWUSKB+kp/fFBQVNnXhHzJu
+   BOEZHI9RGLVVGfg3zgKg+saJ6vmtqowwyowWhljUIi5RU9ttdevlx/y0a
+   C1Aqeu70PrNpogn8Ybhq07vF/4Sjn6r1AnLmtk4vv8K5Z0TTJZIIDYx4F
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="422868708"
+X-IronPort-AV: E=Sophos;i="6.00,224,1681196400"; 
+   d="scan'208";a="422868708"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 08:25:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="822207952"
+X-IronPort-AV: E=Sophos;i="6.00,224,1681196400"; 
+   d="scan'208";a="822207952"
+Received: from vsmyers-mobl2.amr.corp.intel.com (HELO [10.212.146.233]) ([10.212.146.233])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 08:25:36 -0700
+Message-ID: <692d2345-914c-595c-1214-84c966f15aa6@intel.com>
+Date:   Wed, 7 Jun 2023 08:25:35 -0700
 MIME-Version: 1.0
-References: <20230524153316.476973-1-aleksandr.mikhalitsyn@canonical.com>
-In-Reply-To: <20230524153316.476973-1-aleksandr.mikhalitsyn@canonical.com>
-From:   Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Date:   Wed, 7 Jun 2023 17:24:50 +0200
-Message-ID: <CAEivzxejMtctdEF2BHMBM5fU-5-Ps7Qt25_yLBTzDayUVNoErg@mail.gmail.com>
-Subject: Re: [PATCH v2 00/13] ceph: support idmapped mounts
-To:     xiubli@redhat.com
-Cc:     brauner@kernel.org, stgraber@ubuntu.com,
-        linux-fsdevel@vger.kernel.org, Ilya Dryomov <idryomov@gmail.com>,
-        Jeff Layton <jlayton@kernel.org>, ceph-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v11 08/20] x86/virt/tdx: Get information about TDX module
+ and TDX-capable memory
+Content-Language: en-US
+To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     linux-mm@kvack.org, kirill.shutemov@linux.intel.com,
+        tony.luck@intel.com, peterz@infradead.org, tglx@linutronix.de,
+        seanjc@google.com, pbonzini@redhat.com, david@redhat.com,
+        dan.j.williams@intel.com, rafael.j.wysocki@intel.com,
+        ying.huang@intel.com, reinette.chatre@intel.com,
+        len.brown@intel.com, ak@linux.intel.com, isaku.yamahata@intel.com,
+        chao.gao@intel.com, sathyanarayanan.kuppuswamy@linux.intel.com,
+        bagasdotme@gmail.com, sagis@google.com, imammedo@redhat.com
+References: <cover.1685887183.git.kai.huang@intel.com>
+ <50386eddbb8046b0b222d385e56e8115ed566526.1685887183.git.kai.huang@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <50386eddbb8046b0b222d385e56e8115ed566526.1685887183.git.kai.huang@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-version 3 was sent
-https://lore.kernel.org/lkml/20230607152038.469739-1-aleksandr.mikhalitsyn@=
-canonical.com/
+On 6/4/23 07:27, Kai Huang wrote:
+> Start to transit out the "multi-steps" to initialize the TDX module.
+> 
+> TDX provides increased levels of memory confidentiality and integrity.
+> This requires special hardware support for features like memory
+> encryption and storage of memory integrity checksums.  Not all memory
+> satisfies these requirements.
+> 
+> As a result, TDX introduced the concept of a "Convertible Memory Region"
+> (CMR).  During boot, the firmware builds a list of all of the memory
+> ranges which can provide the TDX security guarantees.
+> 
+> CMRs tell the kernel which memory is TDX compatible.  The kernel takes
+> CMRs (plus a little more metadata) and constructs "TD Memory Regions"
+> (TDMRs).  TDMRs let the kernel grant TDX protections to some or all of
+> the CMR areas.
+> 
+> The TDX module also reports necessary information to let the kernel
+> build TDMRs and run TDX guests in structure 'tdsysinfo_struct'.  The
+> list of CMRs, along with the TDX module information, is available to
+> the kernel by querying the TDX module.
+> 
+> As a preparation to construct TDMRs, get the TDX module information and
+> the list of CMRs.  Print out CMRs to help user to decode which memory
+> regions are TDX convertible.
+> 
+> The 'tdsysinfo_struct' is fairly large (1024 bytes) and contains a lot
+> of info about the TDX module.  Fully define the entire structure, but
+> only use the fields necessary to build the TDMRs and pr_info() some
+> basics about the module.  The rest of the fields will get used by KVM.
+> 
+> For now both 'tdsysinfo_struct' and CMRs are only used during the module
+> initialization.  But because they are both relatively big, declare them
+> inside the module initialization function but as static variables.
+> 
+> Signed-off-by: Kai Huang <kai.huang@intel.com>
+> Reviewed-by: Isaku Yamahata <isaku.yamahata@intel.com>
 
-On Wed, May 24, 2023 at 5:33=E2=80=AFPM Alexander Mikhalitsyn
-<aleksandr.mikhalitsyn@canonical.com> wrote:
->
-> Dear friends,
->
-> This patchset was originally developed by Christian Brauner but I'll cont=
-inue
-> to push it forward. Christian allowed me to do that :)
->
-> This feature is already actively used/tested with LXD/LXC project.
->
-> v2 is just a rebased version of the original series with some small field=
- naming change.
->
-> Git tree (based on https://github.com/ceph/ceph-client.git master):
-> https://github.com/mihalicyn/linux/tree/fs.idmapped.ceph.v2
->
-> Original description from Christian:
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> This patch series enables cephfs to support idmapped mounts, i.e. the
-> ability to alter ownership information on a per-mount basis.
->
-> Container managers such as LXD support sharaing data via cephfs between
-> the host and unprivileged containers and between unprivileged containers.
-> They may all use different idmappings. Idmapped mounts can be used to
-> create mounts with the idmapping used for the container (or a different
-> one specific to the use-case).
->
-> There are in fact more use-cases such as remapping ownership for
-> mountpoints on the host itself to grant or restrict access to different
-> users or to make it possible to enforce that programs running as root
-> will write with a non-zero {g,u}id to disk.
->
-> The patch series is simple overall and few changes are needed to cephfs.
-> There is one cephfs specific issue that I would like to discuss and
-> solve which I explain in detail in:
->
-> [PATCH 02/12] ceph: handle idmapped mounts in create_request_message()
->
-> It has to do with how to handle mds serves which have id-based access
-> restrictions configured. I would ask you to please take a look at the
-> explanation in the aforementioned patch.
->
-> The patch series passes the vfs and idmapped mount testsuite as part of
-> xfstests. To run it you will need a config like:
->
-> [ceph]
-> export FSTYP=3Dceph
-> export TEST_DIR=3D/mnt/test
-> export TEST_DEV=3D10.103.182.10:6789:/
-> export TEST_FS_MOUNT_OPTS=3D"-o name=3Dadmin,secret=3D$password
->
-> and then simply call
->
-> sudo ./check -g idmapped
->
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->
-> Alexander Mikhalitsyn (1):
->   fs: export mnt_idmap_get/mnt_idmap_put
->
-> Christian Brauner (12):
->   ceph: stash idmapping in mdsc request
->   ceph: handle idmapped mounts in create_request_message()
->   ceph: allow idmapped mknod inode op
->   ceph: allow idmapped symlink inode op
->   ceph: allow idmapped mkdir inode op
->   ceph: allow idmapped rename inode op
->   ceph: allow idmapped getattr inode op
->   ceph: allow idmapped permission inode op
->   ceph: allow idmapped setattr inode op
->   ceph/acl: allow idmapped set_acl inode op
->   ceph/file: allow idmapped atomic_open inode op
->   ceph: allow idmapped mounts
->
->  fs/ceph/acl.c                 |  2 +-
->  fs/ceph/dir.c                 |  4 ++++
->  fs/ceph/file.c                | 10 ++++++++--
->  fs/ceph/inode.c               | 15 +++++++++++----
->  fs/ceph/mds_client.c          | 29 +++++++++++++++++++++++++----
->  fs/ceph/mds_client.h          |  1 +
->  fs/ceph/super.c               |  2 +-
->  fs/mnt_idmapping.c            |  2 ++
->  include/linux/mnt_idmapping.h |  3 +++
->  9 files changed, 56 insertions(+), 12 deletions(-)
->
-> --
-> 2.34.1
->
+Reviewed-by: Dave Hansen <dave.hansen@linux.intel.com>
