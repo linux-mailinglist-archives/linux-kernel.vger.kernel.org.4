@@ -2,61 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E7167259DD
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 11:15:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4296B725A29
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 11:23:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237934AbjFGJPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 05:15:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36564 "EHLO
+        id S237510AbjFGJXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 05:23:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239944AbjFGJOu (ORCPT
+        with ESMTP id S239673AbjFGJXS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 05:14:50 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51D3519BA;
-        Wed,  7 Jun 2023 02:14:48 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3579EWjW094829;
-        Wed, 7 Jun 2023 04:14:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1686129272;
-        bh=bedDUpRHU1I2zUEj6vuIlNfA4kkWDYv24G4OlTw6Dd0=;
-        h=From:To:CC:Subject:Date;
-        b=j4UmrmOs90MEX7Yb67RcVWwSESrVKb+bckrhJiwY1n+IEt6P02F9gywr12zVbsrPl
-         FFCxitY2XYQ+WIeZNn44uHHjn4ilvsKu399hfWlTc4XaUbj9Oa2rQAUJPnGySoiTq7
-         2JQEP8/pgD7eVD4s0wKRiO/E1M2gD1d1LdUkBoDs=
-Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3579EWhP015018
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 7 Jun 2023 04:14:32 -0500
-Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 7
- Jun 2023 04:14:32 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 7 Jun 2023 04:14:32 -0500
-Received: from uda0492258.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3579ESXf056801;
-        Wed, 7 Jun 2023 04:14:28 -0500
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-To:     <tjoseph@cadence.com>, <lpieralisi@kernel.org>, <robh@kernel.org>,
-        <kw@linux.com>, <bhelgaas@google.com>, <nadeem@cadence.com>
-CC:     <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <vigneshr@ti.com>,
-        <srk@ti.com>, <nm@ti.com>, <s-vadapalli@ti.com>
-Subject: [PATCH v3] PCI: cadence: Fix Gen2 Link Retraining process
-Date:   Wed, 7 Jun 2023 14:44:27 +0530
-Message-ID: <20230607091427.852473-1-s-vadapalli@ti.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 7 Jun 2023 05:23:18 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B581731
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 02:23:09 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2b1c5a6129eso43145131fa.2
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 02:23:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686129788; x=1688721788;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4TMhQ/p0kQE3tBKbaiCedT5vjfwFpJ54BprM1KGdd6w=;
+        b=p4ULbLJGXZBAaOZK0w/TjZvKvCaeykMkmTu2Gb2/Ey4bmnzn8H4GS0lteNLmwBX1xb
+         4E/kFbwJ7j5wiaLMvDsIuLNaSm1UfOeGCXoaffzV4a/J6HN5kIZo2CGYsfJKZ2OSpHvq
+         WFBtGvelO4+IvobP3yKi9Y3g6kvWDGVI4RU1wT0KKTpfY3Q0xKqrbKrIq9m83TpE3tFW
+         Hg7+p40jpYFVVXE2NaU9jKF7ovf/a0e1gxKC6i1cYrfTsKgXM6CzZACXHZKbjCMb/N47
+         F8aSQ0Gdx0jQVSuNbwfD8r/GVuRZ+UwVempUsJTXzTjaHkYjoiL/+hPw+kVZoQ9CM2lu
+         B6Sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686129788; x=1688721788;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4TMhQ/p0kQE3tBKbaiCedT5vjfwFpJ54BprM1KGdd6w=;
+        b=Gqefs7Hs8l3sFkEU4xGiUU9qgFJETemr9zveHpqjZcsx3VUhLv6IsdkZDqpNZo63uK
+         ClQ4OTXZ5Z1H5vSKD/Hzdu/pFqERQux4YVNLDpm0VdDlm8rJPKrUFimAVIng4OHcSs7y
+         oNsLtk0+p9bpLJgHTiQJfWtr38aJ2Y+dTD5hWnIJS/w6sx7tM+IcFEWdVBfgeiAgXMfp
+         X+lXnLBJ89EVz3bW6d2Ukqvn+4LptTkwXDJEVbYbZqEgBCR1jLoKpFwiGpQDIk99ZNhU
+         Dd5bGpUpkMz1UpDpa2nKm76obOows59O+7n0id9SikEvpTB+iiP4MrVIrvBk2hFhzKa6
+         dbhA==
+X-Gm-Message-State: AC+VfDxJCuQAy0G7nQ5L5iWoW/WqrcnPPc9tEP0pHOSAp+so17lsprLk
+        Rv6DaOWRTWxzP6lW0hpp5EXtBld3u9+dnWvWERnJJofih5hLvBp7k6gw3w==
+X-Google-Smtp-Source: ACHHUZ7I4Be34yWgXdUBEA9/iz5gm3cy/U6XxcFXqE5g8cm+WmKYXvfWdsqbCEB8yGMC/1fZ972YrlbnDUuj6+meeCA=
+X-Received: by 2002:a17:907:ea5:b0:96f:d780:5734 with SMTP id
+ ho37-20020a1709070ea500b0096fd7805734mr5573691ejc.65.1686129406516; Wed, 07
+ Jun 2023 02:16:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20230606145611.704392-1-cerasuolodomenico@gmail.com>
+In-Reply-To: <20230606145611.704392-1-cerasuolodomenico@gmail.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Wed, 7 Jun 2023 02:16:10 -0700
+Message-ID: <CAJD7tkad3cWs2CkZE2pV4kzNjn+0crmT2YYpSKU9SynQf7S24Q@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 0/7] mm: zswap: move writeback LRU from zpool to zswap
+To:     Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+Cc:     vitaly.wool@konsulko.com, minchan@kernel.org,
+        senozhatsky@chromium.org, linux-mm@kvack.org, ddstreet@ieee.org,
+        sjenning@redhat.com, nphamcs@gmail.com, hannes@cmpxchg.org,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,91 +73,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Link Retraining process is initiated to account for the Gen2 defect in
-the Cadence PCIe controller in J721E SoC. The errata corresponding to this
-is i2085, documented at:
-https://www.ti.com/lit/er/sprz455c/sprz455c.pdf
+On Tue, Jun 6, 2023 at 7:56=E2=80=AFAM Domenico Cerasuolo
+<cerasuolodomenico@gmail.com> wrote:
+>
+> This series aims to improve the zswap reclaim mechanism by reorganizing
+> the LRU management. In the current implementation, the LRU is maintained
+> within each zpool driver, resulting in duplicated code across the three
+> drivers. The proposed change consists in moving the LRU management from
+> the individual implementations up to the zswap layer.
+>
+> The primary objective of this refactoring effort is to simplify the
+> codebase. By unifying the reclaim loop and consolidating LRU handling
+> within zswap, we can eliminate redundant code and improve
+> maintainability. Additionally, this change enables the reclamation of
+> stored pages in their actual LRU order. Presently, the zpool drivers
+> link backing pages in an LRU, causing compressed pages with different
+> LRU positions to be written back simultaneously.
+>
+> The series consists of several patches. The first patch implements the
+> LRU and the reclaim loop in zswap, but it is not used yet because all
+> three driver implementations are marked as zpool_evictable.
+> The following three commits modify each zpool driver to be not
+> zpool_evictable, allowing the use of the reclaim loop in zswap.
+> As the drivers removed their shrink functions, the zpool interface is
+> then trimmed by removing zpool_evictable, zpool_ops, and zpool_shrink.
+> Finally, the code in zswap is further cleaned up by simplifying the
+> writeback function and removing the now unnecessary zswap_header.
+>
+> Based on mm-stable + commit 399ab221f3ff
+> ("mm: zswap: shrink until can accept") currently in mm-unstable.
 
-The existing workaround implemented for the errata waits for the Data Link
-initialization to complete and assumes that the link retraining process
-at the Physical Layer has completed. However, it is possible that the
-Physical Layer training might be ongoing as indicated by the
-PCI_EXP_LNKSTA_LT bit in the PCI_EXP_LNKSTA register.
+I tested this + commit fe1d1f7d0fb5 ("mm: zswap: support exclusive
+loads") currently in mm-unstable, using zsmalloc and
+CONFIG_ZSWAP_EXCLUSIVE_LOADS=3Dy. I only ran basic zswap tests with
+manual writeback induction and made sure everything is sane. I
+obviously hope you did more involved testing :)
 
-Fix the existing workaround, to ensure that the Physical Layer training
-has also completed, in addition to the Data Link initialization.
+The only problem I came across is the conflict with fe1d1f7d0fb5, and
+I suggested the fix in patch 1. With the fix, everything seems
+correct.
 
-Fixes: 4740b969aaf5 ("PCI: cadence: Retrain Link to work around Gen2 training defect")
-Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
-Reviewed-by: Vignesh Raghavendra <vigneshr@ti.com>
----
+So I guess, FWIW for all the patches except 2 & 3 (for zbud and z3fold):
+Tested-by: Yosry Ahmed <yosryahmed@google.com>
 
-Hello,
-
-This patch is based on linux-next tagged next-20230606.
-
-v2:
-https://lore.kernel.org/r/20230315070800.1615527-1-s-vadapalli@ti.com/
-Changes since v2:
-- Merge the cdns_pcie_host_training_complete() function with the
-  cdns_pcie_host_wait_for_link() function, as suggested by Bjorn
-  for the v2 patch.
-- Add dev_err() to notify when Link Training fails, since this is a
-  fatal error and proceeding from this point will almost always crash
-  the kernel.
-
-v1:
-https://lore.kernel.org/r/20230102075656.260333-1-s-vadapalli@ti.com/
-Changes since v1:
-- Collect Reviewed-by tag from Vignesh Raghavendra.
-- Rebase on next-20230315.
-
-Regards,
-Siddharth.
-
- .../controller/cadence/pcie-cadence-host.c    | 20 +++++++++++++++++++
- 1 file changed, 20 insertions(+)
-
-diff --git a/drivers/pci/controller/cadence/pcie-cadence-host.c b/drivers/pci/controller/cadence/pcie-cadence-host.c
-index 940c7dd701d6..70a5f581ff4f 100644
---- a/drivers/pci/controller/cadence/pcie-cadence-host.c
-+++ b/drivers/pci/controller/cadence/pcie-cadence-host.c
-@@ -12,6 +12,8 @@
- 
- #include "pcie-cadence.h"
- 
-+#define LINK_RETRAIN_TIMEOUT HZ
-+
- static u64 bar_max_size[] = {
- 	[RP_BAR0] = _ULL(128 * SZ_2G),
- 	[RP_BAR1] = SZ_2G,
-@@ -80,8 +82,26 @@ static struct pci_ops cdns_pcie_host_ops = {
- static int cdns_pcie_host_wait_for_link(struct cdns_pcie *pcie)
- {
- 	struct device *dev = pcie->dev;
-+	unsigned long end_jiffies;
-+	u16 link_status;
- 	int retries;
- 
-+	/* Wait for link training to complete */
-+	end_jiffies = jiffies + LINK_RETRAIN_TIMEOUT;
-+	do {
-+		link_status = cdns_pcie_rp_readw(pcie, CDNS_PCIE_RP_CAP_OFFSET + PCI_EXP_LNKSTA);
-+		if (!(link_status & PCI_EXP_LNKSTA_LT))
-+			break;
-+		usleep_range(0, 1000);
-+	} while (time_before(jiffies, end_jiffies));
-+
-+	if (!(link_status & PCI_EXP_LNKSTA_LT)) {
-+		dev_info(dev, "Link training complete\n");
-+	} else {
-+		dev_err(dev, "Fatal! Link training incomplete\n");
-+		return -ETIMEDOUT;
-+	}
-+
- 	/* Check if the link is up or not */
- 	for (retries = 0; retries < LINK_WAIT_MAX_RETRIES; retries++) {
- 		if (cdns_pcie_link_up(pcie)) {
--- 
-2.25.1
-
+>
+> V2:
+> - fixed lru list init/del/del_init (Johannes)
+> - renamed pool.lock to lru_lock and added lock ordering comment (Yosry)
+> - trimmed zsmalloc even more (Johannes | Nhat)
+> - moved ref drop out of writeback function  (Johannes)
+>
+> Domenico Cerasuolo (7):
+>   mm: zswap: add pool shrinking mechanism
+>   mm: zswap: remove page reclaim logic from zbud
+>   mm: zswap: remove page reclaim logic from z3fold
+>   mm: zswap: remove page reclaim logic from zsmalloc
+>   mm: zswap: remove shrink from zpool interface
+>   mm: zswap: simplify writeback function
+>   mm: zswap: remove zswap_header
+>
+>  include/linux/zpool.h |  19 +-
+>  mm/z3fold.c           | 249 +-------------------------
+>  mm/zbud.c             | 167 +-----------------
+>  mm/zpool.c            |  48 +----
+>  mm/zsmalloc.c         | 396 ++----------------------------------------
+>  mm/zswap.c            | 186 +++++++++++---------
+>  6 files changed, 130 insertions(+), 935 deletions(-)
+>
+> --
+> 2.34.1
+>
