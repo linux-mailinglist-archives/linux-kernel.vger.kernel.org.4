@@ -2,133 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 682937256F9
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 10:09:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49010725701
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 10:10:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235447AbjFGIJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 04:09:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55096 "EHLO
+        id S239350AbjFGIKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 04:10:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238665AbjFGIJL (ORCPT
+        with ESMTP id S234278AbjFGIKr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 04:09:11 -0400
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 395D710EC
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 01:09:07 -0700 (PDT)
-X-GND-Sasl: miquel.raynal@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1686125346;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Uvksj9+UTvDgflRsg73N5TFFbYS+sBxliu8X8GLsizk=;
-        b=G59dKWV0vhixhK+7vErxEEZ4NfcDztQRB6cB2HMGjROdt1v88OIGFy+8wrGrQv7FsgbzJf
-        2tk+pv6vqg1HIedGRioquJpX3vymzXs16pxp/r667GQXf+G9gxCaK7Kf+UNkwNlYuuMn1O
-        A57Jtz0psOH3fWW8tE8v+pIb/zObc3o7A+W3qs/sEPO7oHwBv2uAiKwwL0FwPZ4GnfucgV
-        EYmY+k/nNjiWprnS7mBaA4Wrj4WAdQ2pnytjHUyIKfQHGqP6oMulZ0Imp/KXJXqXrQm4LD
-        qzfBY7o3uxkC+qFTG11SNmABBplJpAHAdf9w+u85OAVBP8kffmdgvmuO7y1Q7A==
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 71A6EC0009;
-        Wed,  7 Jun 2023 08:09:03 +0000 (UTC)
-Date:   Wed, 7 Jun 2023 10:09:02 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     William Zhang <william.zhang@broadcom.com>
-Cc:     Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        Linux MTD List <linux-mtd@lists.infradead.org>,
-        f.fainelli@gmail.com, rafal@milecki.pl, kursad.oney@broadcom.com,
-        joel.peshkin@broadcom.com, computersforpeace@gmail.com,
-        anand.gore@broadcom.com, dregan@mail.com, kamal.dasu@broadcom.com,
-        tomer.yacoby@broadcom.com, dan.beygelman@broadcom.com,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        linux-kernel@vger.kernel.org,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Kamal Dasu <kdasu.kdev@gmail.com>
-Subject: Re: [PATCH 04/12] mtd: rawnand: brcmnand: Fix potential
- out-of-bounds access in oob write
-Message-ID: <20230607100902.4df2bc27@xps-13>
-In-Reply-To: <20230606231252.94838-5-william.zhang@broadcom.com>
-References: <20230606231252.94838-1-william.zhang@broadcom.com>
-        <20230606231252.94838-5-william.zhang@broadcom.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Wed, 7 Jun 2023 04:10:47 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5095095;
+        Wed,  7 Jun 2023 01:10:46 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3573hgoH013040;
+        Wed, 7 Jun 2023 08:10:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=zNC49izImKDUwPg+4hUyOkDmU+KHJ1XdXUa8gCnXKX8=;
+ b=fR6PmIelCrJjxOqw26q5umZ0gfPqa19W0Dvc+0TBtPRKn2H2MidblHCV1ALy+t3tLsaw
+ jqEvfLilrQte9w1Ry25t96K8eiNPMBotNIoVniguqCfL5Nm1kdfLaQQIYwFWJhz/GQH5
+ x1CxIFBtna6+EbGc3kDDuNYCeYyG6wU/ch9VhRKdgQAtnuQHXobFrdLoELEuZUIAfsaq
+ XXRRA6sjFFRbvADO0PCSN1XBN1NBS5TYAHTxyUYXBo8ws2wkxGg7TXR4Z/+v1DekzDKO
+ ufwEBvr9EnDGHJ8WNaFuuua60IJnG6+2G5gSKACHoQqeGQaURHm9R1JYwB6LXQetgzc5 Hw== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r2a7699yv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Jun 2023 08:10:35 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3578AYhs030018
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 7 Jun 2023 08:10:34 GMT
+Received: from [10.216.18.190] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 7 Jun 2023
+ 01:10:26 -0700
+Message-ID: <0555c089-9d0d-7d19-9646-f0f9b8630d12@quicinc.com>
+Date:   Wed, 7 Jun 2023 13:40:22 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH V2 01/13] dt-bindings: remoteproc: qcom: Add support for
+ multipd model
+Content-Language: en-US
+To:     Kalle Valo <kvalo@kernel.org>
+CC:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <jassisinghbrar@gmail.com>, <mathieu.poirier@linaro.org>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <quic_eberman@quicinc.com>, <quic_mojha@quicinc.com>,
+        <loic.poulain@linaro.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <quic_srichara@quicinc.com>, <quic_sjaganat@quicinc.com>,
+        <quic_kathirav@quicinc.com>, <quic_anusha@quicinc.com>,
+        <quic_poovendh@quicinc.com>, <quic_varada@quicinc.com>,
+        <quic_devipriy@quicinc.com>
+References: <20230521222852.5740-1-quic_mmanikan@quicinc.com>
+ <20230521222852.5740-2-quic_mmanikan@quicinc.com>
+ <7940c743-815f-f864-d015-43d7e916ecfa@linaro.org>
+ <a1456f62-d0a7-d5ec-b379-db1b6035c89c@quicinc.com>
+ <d187eafb-4a80-9479-d063-3a01b47d8efa@linaro.org>
+ <feb0d11d-0930-d0b8-ab6e-cf477bbf114b@quicinc.com>
+ <87edmoitu3.fsf@kernel.org>
+From:   Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
+In-Reply-To: <87edmoitu3.fsf@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: gqe4xl4c4R0xB_rjn82FRVjAJ6tko9eF
+X-Proofpoint-GUID: gqe4xl4c4R0xB_rjn82FRVjAJ6tko9eF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-07_04,2023-06-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ priorityscore=1501 malwarescore=0 lowpriorityscore=0 clxscore=1015
+ mlxscore=0 bulkscore=0 adultscore=0 phishscore=0 mlxlogscore=758
+ impostorscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2305260000 definitions=main-2306070066
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi William,
-
-william.zhang@broadcom.com wrote on Tue,  6 Jun 2023 16:12:44 -0700:
-
-> When the oob buffer length is not in multiple of words, the oob write
-> function does out-of-bounds read on the oob source buffer at the last
-> iteration. Fix that by always checking length limit on the oob buffer
-> read and fill with 0xff when reaching the end of the buffer to the oob
-> registers.
->=20
-> Fixes: 27c5b17cd1b1 ("mtd: nand: add NAND driver "library" for Broadcom S=
-TB NAND controller")
-> Signed-off-by: William Zhang <william.zhang@broadcom.com>
-> Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
-> ---
->=20
->  drivers/mtd/nand/raw/brcmnand/brcmnand.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->=20
-> diff --git a/drivers/mtd/nand/raw/brcmnand/brcmnand.c b/drivers/mtd/nand/=
-raw/brcmnand/brcmnand.c
-> index 20832857c4aa..d920e88c7f5b 100644
-> --- a/drivers/mtd/nand/raw/brcmnand/brcmnand.c
-> +++ b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
-> @@ -1486,10 +1486,10 @@ static int write_oob_to_regs(struct brcmnand_cont=
-roller *ctrl, int i,
-> =20
->  	for (j =3D 0; j < tbytes; j +=3D 4)
->  		oob_reg_write(ctrl, j,
-> -				(oob[j + 0] << 24) |
-> -				(oob[j + 1] << 16) |
-> -				(oob[j + 2] <<  8) |
-> -				(oob[j + 3] <<  0));
-> +				(((j < tbytes) ? oob[j] : 0xff) << 24) |
-> +				(((j + 1 < tbytes) ? oob[j + 1] : 0xff) << 16) |
-> +				(((j + 2 < tbytes) ? oob[j + 2] : 0xff) << 8) |
-> +				((j + 3 < tbytes) ? oob[j + 3] : 0xff));
-
-This is a lot of additional operations which most of the time are not
-relevant. I would instead got for one less iteration in the for loop
-when there is unaligned data, and then dedicated if/else to fill the
-missing bytes.
-
->  	return tbytes;
->  }
-> =20
 
 
-Thanks,
-Miqu=C3=A8l
+On 6/6/2023 7:19 PM, Kalle Valo wrote:
+> Manikanta Mylavarapu <quic_mmanikan@quicinc.com> writes:
+> 
+>>>>>> +
+>>>>>> +    properties:
+>>>>>> +      compatible:
+>>>>>> +        enum:
+>>>>>> +          - qcom,ipq5018-wcss-ahb-mpd
+>>>>>> +          - qcom,ipq9574-wcss-ahb-mpd
+>>>>>> +          - qcom,ipq5018-wcss-pcie-mpd
+>>>>>
+>>>>> Keep rather alphabetical order (so both 5018 together).
+>>>>>
+>>>>> I also do not understand these at all. Why adding bus type to
+>>>>> compatible? This rarely is allowed (unless it is PCIe controller within
+>>>>> soc).
+>>>>>
+>>>> IPQ5018 SOC has in-built PCIE controller. Here QDSP6 will bring up
+>>>> external(PCIE) and internal (AHB) wifi radio's. To separate AHB, PCIE
+>>>> radio's properties, i have added bus type to compatible.
+>>>
+>>> It's the same device - WCSS - right? We do not create multiple nodes and
+>>> compatibles for the same devices. Bus suffixes are almost never parts of
+>>> compatibles.
+>>
+>>
+>> No it's not the same device. WCSS on inside IPQ5018 and WCSS attached
+>> via pcie to IPQ5018. Here QDSP6 managing both WCSS's.
+>>
+>> So for better clarity i will use attached SOC ID in compatible.
+>> Below are the new compatible's.
+>>
+>> - qcom,ipq5018-wcss-mpd //IPQ5018 internal radio
+>> - qcom,ipq9574-wcss-mpd	//IPQ9574 internal radio
+>> - qcom,qcn6122-wcss-mpd //IPQ5018 attached radio
+> 
+> What mandates that there's just one QCN6122 device attached to PCI?
+> Assuming fixed PCI configurations like that makes me worried.
+> 
+
+IPQ5018 always has one internal radio, attached pcie radio's depends on 
+no of pcie ports. IPQ5018 has 2 pcie ports, so it supports max two 
+qcn6122 devices. One compatible (qcom,qcn6122-wcss-mpd) itself support's 
+number of pcie devices controlled by QDSP6.
+
+Thanks & Regards,
+Manikanta.
