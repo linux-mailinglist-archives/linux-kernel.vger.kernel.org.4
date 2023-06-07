@@ -2,64 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6126E725EDC
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 14:21:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DBDE725EE9
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 14:21:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240679AbjFGMU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 08:20:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34752 "EHLO
+        id S240698AbjFGMV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 08:21:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240340AbjFGMUz (ORCPT
+        with ESMTP id S240701AbjFGMVO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 08:20:55 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA4F21BE2;
-        Wed,  7 Jun 2023 05:20:45 -0700 (PDT)
-Date:   Wed, 07 Jun 2023 12:20:43 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686140444;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dpvlICurWarW51eR/TeI8KmBxKEzGBZ71h3PMPZpOKc=;
-        b=Q26+m38iLKJc9LXLX69KNUjTejrLWC9dqRfz7yJG559Lv5ENyaBouEzOKccpP4GodJ0Lst
-        FdXLVVyOMDVF0Jrnn9jdpBfAYwp5hPTjA/B8J3Rp+JR9StgepMkNs40OIceOvCDAv9ABn+
-        Ha1KyEYnGt34IQ0gO3M4SDu5gawpN/SIQWTL91u8njevimONHlTJBdGbmVADbvfjJTvYH6
-        bcGiOUgVXxQ8Lt7hw7L6hDB+S+yJLepT0b3y+pyRj8nAGjfhrpwkJpv1lp5ToKiuVChlrQ
-        a5IOGe4POn22IoYhJVp/zIQP1t0nrvGBZSGzG/Hod7NidsAZAN5sAGlEMKC1Jg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686140444;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dpvlICurWarW51eR/TeI8KmBxKEzGBZ71h3PMPZpOKc=;
-        b=MI56WvjtsdnYJ4oEqnCjhhbgUOUPR5M1wTaL+9kcouVyXdzrp7/Z9EmFuAPFZJO6jn7kcH
-        Kmkxs3GujbeeMbCA==
-From:   "tip-bot2 for Tetsuo Handa" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: core/debugobjects] debugobjects: Recheck debug_objects_enabled
- before reporting
-Cc:     syzbot <syzbot+7937ba6a50bdd00fffdf@syzkaller.appspotmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <492fe2ae-5141-d548-ebd5-62f5fe2e57f7@I-love.SAKURA.ne.jp>
-References: <492fe2ae-5141-d548-ebd5-62f5fe2e57f7@I-love.SAKURA.ne.jp>
+        Wed, 7 Jun 2023 08:21:14 -0400
+Received: from smtp-fw-80008.amazon.com (smtp-fw-80008.amazon.com [99.78.197.219])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F1241BFD;
+        Wed,  7 Jun 2023 05:21:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.es; i=@amazon.es; q=dns/txt; s=amazon201209;
+  t=1686140471; x=1717676471;
+  h=message-id:date:mime-version:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:subject;
+  bh=H+lCeGmcbHRGOxfwB4VQbIsL3x2USb4Et2eGWZ5GoBY=;
+  b=fM9M0cg/ohiKDT37b5MwJUJ/LqolH4qoq2rL904eo35BAu23WD5yiE5c
+   pQ1YRJBthnspYO4l/EMV86kG9iAjfUFzrqSKiIFjB0z+kU/BZDbBXPbVI
+   mYpgau7uEEy4u87LRgFZZ5PeJABgySKpQLgUsAvV2WJSfJPb64MPY3Q0+
+   s=;
+X-IronPort-AV: E=Sophos;i="6.00,224,1681171200"; 
+   d="scan'208";a="8708734"
+Subject: Re: [ANNOUNCE] KVM Microconference at LPC 2023
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-iad-1d-m6i4x-00fceed5.us-east-1.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-80008.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 12:21:08 +0000
+Received: from EX19D013EUA003.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1d-m6i4x-00fceed5.us-east-1.amazon.com (Postfix) with ESMTPS id AAD46A2A8C;
+        Wed,  7 Jun 2023 12:21:05 +0000 (UTC)
+Received: from EX19D037EUB003.ant.amazon.com (10.252.61.119) by
+ EX19D013EUA003.ant.amazon.com (10.252.50.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Wed, 7 Jun 2023 12:21:05 +0000
+Received: from [192.168.30.121] (10.1.212.27) by EX19D037EUB003.ant.amazon.com
+ (10.252.61.119) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Wed, 7 Jun
+ 2023 12:21:02 +0000
+Message-ID: <ce7689c9-1c23-68ff-9afb-7d0aeaa9c80a@amazon.es>
+Date:   Wed, 7 Jun 2023 14:20:57 +0200
 MIME-Version: 1.0
-Message-ID: <168614044350.404.4585037016201397086.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.2
+Content-Language: en-US
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        KVM list <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     Sean Christopherson <seanjc@google.com>,
+        Marc Zyngier <maz@kernel.org>, Alexander Graf <graf@amazon.de>,
+        "Cali, Marco" <xmarcalx@amazon.co.uk>
+References: <2f19f26e-20e5-8198-294e-27ea665b706f@redhat.com>
+ <150e1ad0-3d59-762b-6032-897d5630a3bf@amazon.es>
+ <5283b17c-185b-a37f-84e2-dcd08e042ec0@redhat.com>
+From:   Babis Chalios <bchalios@amazon.es>
+In-Reply-To: <5283b17c-185b-a37f-84e2-dcd08e042ec0@redhat.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.1.212.27]
+X-ClientProxiedBy: EX19D039UWA002.ant.amazon.com (10.13.139.32) To
+ EX19D037EUB003.ant.amazon.com (10.252.61.119)
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,75 +74,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the core/debugobjects branch of tip:
+On 7/6/23 12:37, Paolo Bonzini wrote:
+> CAUTION: This email originated from outside of the organization. Do 
+> not click links or open attachments unless you can confirm the sender 
+> and know the content is safe.
+>
+>
+>
+> On 6/7/23 12:13, Babis Chalios wrote:
+>>
+>>
+>> On our side, we 've been working on providing ways to let VMs (kernel
+>>  and user space) know that they have been cloned/snapshotted/restored
+>> from snapshots[1].
+>>
+>> This is tightly coupled with PRNGs both in kernel and user space and
+>>  there needs to be some collaboration with random.c to tie everything
+>> together [2][3]. It sounds like it could be a good fit for this MC
+>> (?).
+>
+> Does the VM generation ID ACPI device from Microsoft work for you?  It
+> is not tied to Hyper-V.
+>
+> Paolo
+>
 
-Commit-ID:     8b64d420fe2450f82848178506d3e3a0bd195539
-Gitweb:        https://git.kernel.org/tip/8b64d420fe2450f82848178506d3e3a0bd195539
-Author:        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-AuthorDate:    Wed, 07 Jun 2023 19:19:02 +09:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Wed, 07 Jun 2023 14:16:12 +02:00
+It's a long story :P
 
-debugobjects: Recheck debug_objects_enabled before reporting
+TLDR:
 
-syzbot is reporting false a positive ODEBUG message immediately after
-ODEBUG was disabled due to OOM.
+For some use-cases it should be enough [1]. For PRNGs though it doesn't 
+seem to work as is. (1) The Linux implementation of VMGENID is racy and 
+(2) last year there were long discussions related to the user-space
+ABI, which diverged us away from it.
 
-  [ 1062.309646][T22911] ODEBUG: Out of memory. ODEBUG disabled
-  [ 1062.886755][ T5171] ------------[ cut here ]------------
-  [ 1062.892770][ T5171] ODEBUG: assert_init not available (active state 0) object: ffffc900056afb20 object type: timer_list hint: process_timeout+0x0/0x40
+BTW, just saw that you have already submitted the proposal for the MC, 
+sorry for being late :)
 
-  CPU 0 [ T5171]                CPU 1 [T22911]
-  --------------                --------------
-  debug_object_assert_init() {
-    if (!debug_objects_enabled)
-      return;
-    db = get_bucket(addr);
-                                lookup_object_or_alloc() {
-                                  debug_objects_enabled = 0;
-                                  return NULL;
-                                }
-                                debug_objects_oom() {
-                                  pr_warn("Out of memory. ODEBUG disabled\n");
-                                  // all buckets get emptied here, and
-                                }
-    lookup_object_or_alloc(addr, db, descr, false, true) {
-      // this bucket is already empty.
-      return ERR_PTR(-ENOENT);
-    }
-    // Emits false positive warning.
-    debug_print_object(&o, "assert_init");
-  }
-
-Recheck debug_object_enabled in debug_print_object() to avoid that.
-
-Reported-by: syzbot <syzbot+7937ba6a50bdd00fffdf@syzkaller.appspotmail.com>
-Suggested-by: Thomas Gleixner <tglx@linutronix.de>
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lore.kernel.org/r/492fe2ae-5141-d548-ebd5-62f5fe2e57f7@I-love.SAKURA.ne.jp
-Closes: https://syzkaller.appspot.com/bug?extid=7937ba6a50bdd00fffdf
----
- lib/debugobjects.c |  9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/lib/debugobjects.c b/lib/debugobjects.c
-index 984985c..a517256 100644
---- a/lib/debugobjects.c
-+++ b/lib/debugobjects.c
-@@ -498,6 +498,15 @@ static void debug_print_object(struct debug_obj *obj, char *msg)
- 	const struct debug_obj_descr *descr = obj->descr;
- 	static int limit;
- 
-+	/*
-+	 * Don't report if lookup_object_or_alloc() by the current thread
-+	 * failed because lookup_object_or_alloc()/debug_objects_oom() by a
-+	 * concurrent thread turned off debug_objects_enabled and cleared
-+	 * the hash buckets.
-+	 */
-+	if (!debug_objects_enabled)
-+		return;
-+
- 	if (limit < 5 && descr != descr_test) {
- 		void *hint = descr->debug_hint ?
- 			descr->debug_hint(obj->object) : NULL;
+Cheers,
+Babis
