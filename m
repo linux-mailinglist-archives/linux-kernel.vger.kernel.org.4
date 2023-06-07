@@ -2,63 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FE317258FA
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 10:59:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CB8272594E
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 11:04:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239685AbjFGI7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 04:59:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53996 "EHLO
+        id S238623AbjFGJEA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 05:04:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234809AbjFGI6v (ORCPT
+        with ESMTP id S235490AbjFGJDa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 04:58:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56C931FC3
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 01:56:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686128176;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UgLKR9DHQdW/nvNpJofy29A1ogMEj2dq7gg1iVaHfDs=;
-        b=L3T4uvaCmAZ4r25Cc1d3MtyFNYmPVo/Bnv36ouz8sCI9fhLQEmJBC9/AMdyboP9g3zMvUx
-        QgESY9GvV+jUJE2OZvK66MSlQy7BfXIDVlwA4MaeVcbGyDLBth1qFYqy/LJZZjfNWD5d5Y
-        xiyu+s/kSEECdoL0ST6TiAjep1IomYI=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-317-LOjHeIkuOY6VsjXSIzsKbg-1; Wed, 07 Jun 2023 04:56:11 -0400
-X-MC-Unique: LOjHeIkuOY6VsjXSIzsKbg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A0D53380213A;
-        Wed,  7 Jun 2023 08:56:10 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.182])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B18902026D49;
-        Wed,  7 Jun 2023 08:56:05 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <2004570.1686127633@warthog.procyon.org.uk>
-References: <2004570.1686127633@warthog.procyon.org.uk>
-To:     torvalds@linux-foundation.org
-Cc:     dhowells@redhat.com, Jeffrey Altman <jaltman@auristor.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        linux-afs@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] afs: Fix setting of mtime when creating a file/dir/symlink
+        Wed, 7 Jun 2023 05:03:30 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FB7F1712;
+        Wed,  7 Jun 2023 02:02:06 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 57D3F5FD5E;
+        Wed,  7 Jun 2023 12:02:04 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1686128524;
+        bh=5YHjnHdc4w0WqSXG6LRBPLxgV5qAF+3W1vdiuEJtNBA=;
+        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+        b=LK/04025vKNQ3l5ynD9Hd5Zx0HMzS1Yfa0dcKtYd7RZMr3uZeGYlO/bBzXPQnSONE
+         IvagyofovFEKpH3iopSSeTu2NthwaNXwk9IrS2asdLx9ThfAH1C2nsyyOrkljhG+2Z
+         LlSyLWoOEnldajPWQ7fR/X6Pv+EzEEMTScg1uF8NlHpYoFHNOVqAbNz7we0q4cBERh
+         eH6C3QYHOBcTjhkY3rsNFbaBY78NwN5y6bHcHIrDYFieex4O3gtDhGAcs/FsevOzep
+         XJnnkgHx0l3FA07k2sc8uL+qD6E2WxGUyAWExxOSQkYedOulmADHo0S0XuwjFwY5KL
+         1yX072XfzHnRQ==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Wed,  7 Jun 2023 12:02:03 +0300 (MSK)
+Message-ID: <835a3587-1e0f-64d7-1d1a-b639ae8b7307@sberdevices.ru>
+Date:   Wed, 7 Jun 2023 11:57:09 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2078979.1686128164.1@warthog.procyon.org.uk>
-Date:   Wed, 07 Jun 2023 09:56:04 +0100
-Message-ID: <2078981.1686128164@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v1] dt-bindings: nand: meson: Fix 'nand-rb' property
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+CC:     Liang Yang <liang.yang@amlogic.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
+        <linux-mtd@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+References: <20230606193507.35024-1-AVKrasnov@sberdevices.ru>
+ <20230607095802.3adcd4f9@xps-13>
+ <166bdc27-f77c-9076-f866-180cfa5bff76@sberdevices.ru>
+ <08da4e86-433a-7d2e-25ff-ffa24221abdf@linaro.org>
+From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
+In-Reply-To: <08da4e86-433a-7d2e-25ff-ffa24221abdf@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/06/07 04:52:00 #21449589
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,10 +81,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
 
-Sorry, I forgot to say in the patch email, but could you apply this please?
 
-Thanks,
-David
+On 07.06.2023 11:53, Krzysztof Kozlowski wrote:
+> On 07/06/2023 10:40, Arseniy Krasnov wrote:
+>> Hello Miquel, 
+>>
+>> On 07.06.2023 10:58, Miquel Raynal wrote:
+>>
+>>> Hi Arseniy,
+>>>
+>>> AVKrasnov@sberdevices.ru wrote on Tue, 6 Jun 2023 22:35:07 +0300:
+>>>
+>>>> Add description of 'nand-rb' property. Use "Fixes" because this property
+>>>> must be supported since the beginning. For this controller 'nand-rb' is
+>>>> stored in the controller node (not in chip), because it has only single
+>>>> r/b wire for all chips.
+>>>
+>>> Sorry if I mislead you in the first place, but you could definitely
+>>> have two chips and only one with RB wired. It needs to be defined in
+>>> the chips.
+>>
+>> Ok, so to clarify: is it ok, that in bindings this property will be placed in the
+>> chip, but in driver, i'm trying to read it from the controller node (thus  in
+>> dts file it will be also in controller node)?
+> 
+> No, because how would your DTS pass validation? I understand you did not
+> test the bindings, but this will improve, right?
 
+Ok, i'll follow DTS layout in the driver, "test the bindings" You mean "make dt_binding_check"?
+
+> 
+>> Because in driver there is no sense
+>> to store this value in chip structure. 
+> 
+> Driver does not shape the DTS. Hardware does.
+
+Ok, Thanks
+
+Thanks, Arseniy
+
+> 
+> 
+> 
+> Best regards,
+> Krzysztof
+> 
