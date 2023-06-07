@@ -2,141 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35CCB725DBB
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 13:55:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD298725DC5
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 13:56:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235469AbjFGLzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 07:55:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45210 "EHLO
+        id S239543AbjFGL4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 07:56:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240493AbjFGLyw (ORCPT
+        with ESMTP id S238698AbjFGL4v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 07:54:52 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 161401BE8
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 04:54:46 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-9745d99cfccso1016915666b.1
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 04:54:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686138884; x=1688730884;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cMpYnd8K0KUjk943ETGb3pgLuWnp+NjqkKVfYBnfUjc=;
-        b=TvREFw8JmP7lNGG8Jt6YNMWuPvV8RkGsW/J3WtZVYPljX9xDYCUe1KvYqrloXDZ5+J
-         rsISilWx+sBnTrlQQI7B3UyBlAwoNC0AljGFxfFqge5LFrrLhoqKZlWTvylcV/HJoqZy
-         1AtYnLkmzL1jEPoMHO7GNxWepy7jWb+1ChIQPxo0CfxWGavPiD9SsJGgawHgPqsSKFdE
-         s+wxuEo5vqLIbBpiVEAfxtsUlsXlcsUqKJG871Jl5HOfZ6Whb/3o9dKKZ/fhrTDce4gZ
-         GLQxUtPXsDfC0SgOnEKr7SEs9nigRj5vV6g2xXbxY14S8icYwYvSuoptjzI7E7Vu32B+
-         WDVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686138884; x=1688730884;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cMpYnd8K0KUjk943ETGb3pgLuWnp+NjqkKVfYBnfUjc=;
-        b=Jh1u/QkylToAjUSH/cOPVzV2Ni5HXZvsypcvn5n/OrhH0XwetRLHW2RIqvhLDJSHjF
-         zgT+ZtFGJiB8EI+EF/ux1dIjlw5ZYaXq/wC6wu5eUrnIOGwbpgbe7CS6wyjn/KfXywLq
-         mvXkEsvWXPY7ObxXJrADQXwDElBk1fddBKikEo3lsVzo4oEX0VaIEMDY18C8Mb3zIhY1
-         0WYzcMQKPVA2xMPwW/Qjk8AZcZRbm4eFY2dRxDfYfbtGuI7AR4nJOwRWumlc9cm9/KSR
-         JZWQdDBZ5qJgH9RZKSlqDohtddsjSs96VMxtD+WvyGAyblib5i8L9JSVpUfq7NK96Wdh
-         qdFw==
-X-Gm-Message-State: AC+VfDxSw/lVzxblMBl+tA93hTGI0eQ/C+tE11uuLIb9ZCJSNSPbtluP
-        6lFV+uPqRJ9ZWXUBDNrx4Adedw==
-X-Google-Smtp-Source: ACHHUZ4lsNW7UB/AdIJhmQsRv/ujZHWy36LNehPBHbmBvk72viOS7FuDtFy6IDKDYzT1blLCXBb+VA==
-X-Received: by 2002:a17:906:6a1c:b0:96f:88a3:3a0e with SMTP id qw28-20020a1709066a1c00b0096f88a33a0emr6274061ejc.0.1686138884458;
-        Wed, 07 Jun 2023 04:54:44 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id oz17-20020a170906cd1100b009745edfb7cbsm6802817ejb.45.2023.06.07.04.54.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 04:54:44 -0700 (PDT)
-Message-ID: <79201bd6-6048-7013-aeb7-34d218139844@linaro.org>
-Date:   Wed, 7 Jun 2023 13:54:42 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v3 2/5] phy: realtek: usb: Add driver for the Realtek SoC
- USB 2.0 PHY
-Content-Language: en-US
-To:     Stanley Chang <stanley_chang@realtek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Wed, 7 Jun 2023 07:56:51 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A57D71BD4
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 04:56:48 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <lgo@pengutronix.de>)
+        id 1q6rm8-0008S2-31; Wed, 07 Jun 2023 13:56:28 +0200
+Received: from [2a0a:edc0:0:1101:1d::39] (helo=dude03.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <lgo@pengutronix.de>)
+        id 1q6rm6-005jFb-JT; Wed, 07 Jun 2023 13:56:26 +0200
+Received: from lgo by dude03.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <lgo@pengutronix.de>)
+        id 1q6rm5-00CStO-ML; Wed, 07 Jun 2023 13:56:25 +0200
+From:   =?UTF-8?q?Leonard=20G=C3=B6hrs?= <l.goehrs@pengutronix.de>
+To:     =?UTF-8?q?Noralf=20Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Ray Chi <raychi@google.com>,
-        Flavio Suligoi <f.suligoi@asem.it>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-References: <20230607062500.24669-1-stanley_chang@realtek.com>
- <20230607062500.24669-2-stanley_chang@realtek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230607062500.24669-2-stanley_chang@realtek.com>
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     kernel@pengutronix.de,
+        =?UTF-8?q?Leonard=20G=C3=B6hrs?= <l.goehrs@pengutronix.de>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1 1/8] dt-bindings: display: panel: mipi-dbi-spi: add shineworld lh133k compatible
+Date:   Wed,  7 Jun 2023 13:55:00 +0200
+Message-Id: <20230607115508.2964574-1-l.goehrs@pengutronix.de>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: lgo@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/06/2023 08:24, Stanley Chang wrote:
-> Realtek DHC (digital home center) RTD SoCs support DWC3 XHCI USB
-> controller. Added the driver to drive the USB 2.0 PHY transceivers.
-> 
-> Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
-> ---
-> v2 to v3 change:
->     1. Broken down into two patches, one for each of USB 2 & 3 PHY.
->     2. Removed parameter v1 support for simplification.
->     3. Use remove_new for driver remove callback.
+The Shineworld LH133K is a 1.3" 240x240px RGB LCD with a MIPI DBI
+compatible SPI interface.
+The initialization procedure is quite basic with the exception of
+requiring inverted colors.
+A basic mipi-dbi-cmd[1] script to get the display running thus looks
+like this:
 
+    $ cat shineworld,lh133k.txt
+    command 0x11 # exit sleep mode
+    delay 120
 
-...
+    # The display seems to require display color inversion, so enable it.
+    command 0x21 # INVON
 
-> +	platform_set_drvdata(pdev, rtk_phy);
-> +
-> +	generic_phy = devm_phy_create(rtk_phy->dev, NULL, &ops);
-> +	if (IS_ERR(generic_phy))
-> +		return PTR_ERR(generic_phy);
-> +
-> +	phy_set_drvdata(generic_phy, rtk_phy);
-> +
-> +	phy_provider = devm_of_phy_provider_register(rtk_phy->dev,
-> +				    of_phy_simple_xlate);
-> +	if (IS_ERR(phy_provider))
-> +		return PTR_ERR(phy_provider);
-> +
-> +	ret = usb_add_phy_dev(&rtk_phy->phy);
-> +	if (ret)
-> +		goto err;
-> +
-> +	create_debug_files(rtk_phy);
-> +
-> +err:
-> +	dev_dbg(dev, "Probe RTK USB 2.0 PHY (ret=%d)\n", ret);
+    # Enable normal display mode (in contrast to partial display mode).
+    command 0x13 # NORON
+    command 0x29 # MIPI_DCS_SET_DISPLAY_ON
 
-I commented on your second patch, but everything is applicable here as
-well. You have many useless debug messages. Many incorrect or useless
-"if() return" which point to broken driver design (e.g. concurrent
-access to half initialized structures where you substitute lack of
-synchronization with incorrect "if() return"). Undocumented user
-interface is one more big trouble.
+    $ mipi-dbi-cmd shineworld,lh133k.bin shineworld,lh133k.txt
 
-I doubt you run checkpatch on this (be sure to run it with --strict and
-fix almost everything).
+[1]: https://github.com/notro/panel-mipi-dbi
 
+Signed-off-by: Leonard Göhrs <l.goehrs@pengutronix.de>
+---
+ .../devicetree/bindings/display/panel/panel-mipi-dbi-spi.yaml   | 1 +
+ Documentation/devicetree/bindings/vendor-prefixes.yaml          | 2 ++
+ 2 files changed, 3 insertions(+)
 
-Best regards,
-Krzysztof
+diff --git a/Documentation/devicetree/bindings/display/panel/panel-mipi-dbi-spi.yaml b/Documentation/devicetree/bindings/display/panel/panel-mipi-dbi-spi.yaml
+index 9b701df5e9d28..c07da1a9e6288 100644
+--- a/Documentation/devicetree/bindings/display/panel/panel-mipi-dbi-spi.yaml
++++ b/Documentation/devicetree/bindings/display/panel/panel-mipi-dbi-spi.yaml
+@@ -67,6 +67,7 @@ properties:
+     items:
+       - enum:
+           - sainsmart18
++          - shineworld,lh133k
+       - const: panel-mipi-dbi-spi
+ 
+   write-only:
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+index 82d39ab0231b0..b0afa421bc4a5 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -1189,6 +1189,8 @@ patternProperties:
+     description: SHIFT GmbH
+   "^shimafuji,.*":
+     description: Shimafuji Electric, Inc.
++  "^shineworld,.*":
++    description: ShineWorld Innovations
+   "^shiratech,.*":
+     description: Shiratech Solutions
+   "^si-en,.*":
+
+base-commit: 9561de3a55bed6bdd44a12820ba81ec416e705a7
+-- 
+2.39.2
 
