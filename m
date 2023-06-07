@@ -2,62 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA8417257FA
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 10:37:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58353725807
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 10:40:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235640AbjFGIhw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 04:37:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42908 "EHLO
+        id S238498AbjFGIkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 04:40:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234162AbjFGIhr (ORCPT
+        with ESMTP id S237989AbjFGIkJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 04:37:47 -0400
+        Wed, 7 Jun 2023 04:40:09 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6E23172E
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 01:37:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6FD61707
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 01:39:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686127020;
+        s=mimecast20190719; t=1686127162;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=CGNGuZdb3YfUa/RgZYBAS20b4KQ6QaroF4WQ7qei7lo=;
-        b=g5ioPnQQ1hiX5qzgybMvDUvrYABzXSTttBExtem8anLCaX6F5FCdwwiTRlR/xPDxvrjd65
-        20L7RgY4Pi2rfH18XPdGYFRIENUQHgqyXPfHLnLYk7/uMBMKmO9pmVD0dpqxAiBeI4dhTV
-        9aG0nw7CENkWXSQphjxqSZoQpm9Fi1A=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-321-GM9I-4gjMCKvH9c3tuCwwQ-1; Wed, 07 Jun 2023 04:36:54 -0400
-X-MC-Unique: GM9I-4gjMCKvH9c3tuCwwQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9674D3801FF5;
-        Wed,  7 Jun 2023 08:36:53 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.182])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 10C6EC1603B;
-        Wed,  7 Jun 2023 08:36:49 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20230530232914.3689712-3-mcgrof@kernel.org>
-References: <20230530232914.3689712-3-mcgrof@kernel.org> <20230530232914.3689712-1-mcgrof@kernel.org>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     dhowells@redhat.com, keescook@chromium.org, yzaikin@google.com,
-        jarkko@kernel.org, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, j.granados@samsung.com, brauner@kernel.org,
-        ebiederm@xmission.com, patches@lists.linux.dev,
-        linux-fsdevel@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] sysctl: move security keys sysctl registration to its own file
+        bh=ljArIlCjiAk4raJisPzBpvdPPgGsnUJvYTJw2BtF6ok=;
+        b=S8zpOmU5De/a4E3TJ8+4huENyU0kYf8OOjGD/n31Z+XeMgAyExHdt6I2alhXbf0vqVTaIn
+        PKW+9Tx/UrAoiROWPOYjPPvQvIEHGFxvYswwWVsWO9/oo6M27ZyD4oCXTctjaBeaIYb3Xn
+        7DPmyIVQHVaNKU6nOpKa80meN/MPV18=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-591-M1_BAb_XPPKg1PFerbjBpw-1; Wed, 07 Jun 2023 04:39:20 -0400
+X-MC-Unique: M1_BAb_XPPKg1PFerbjBpw-1
+Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-94a348facbbso630065966b.1
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 01:39:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686127159; x=1688719159;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ljArIlCjiAk4raJisPzBpvdPPgGsnUJvYTJw2BtF6ok=;
+        b=Zabf1dNdewMmAWbHknP7455aLpEbuVES/y8Tg1k9oGuCMDE0bCgtHj4vF58yS/Z00K
+         ISQtrEI+mVGAJJYDz08p7TgTRH5tZ7AdojNCrMW1o5vJ69Lkmo5qNNDU3tgX/FNG4Xi2
+         VsUm2vKjf68YyUmWNEHan9WXzjPHVY6ONYSCuM7Yp/7TJ79xEwiveVHwmkPNeDq+zamG
+         uuyC0yuOG2YmYoNdPAjjxXQhZFa9JqRUV0Ig0CSTvZ//JqwA3hg4wqWbRthxk5Zuof8l
+         fTLAWX9hhhT/mnv7v9fD5NnvgkoXYlH/C0umxE+VJj+7pzA7c1Cn6g8hYgB+d6U9t2Yz
+         GMFg==
+X-Gm-Message-State: AC+VfDxgRgZjgNAHLZ5eyLtwduCJfoQqMeyilF56ytn8fsd7CZ3B87Qi
+        ohtbBQ3zZhx1aGbVagMmeL+cIFK8LG/RM4sK5Sl+4u8/QaJVxbVccCI3EbyGMmSX7SKBiGZ6Dtj
+        mMqavioq6xT1nHnp//Jq4SSRm
+X-Received: by 2002:a17:907:2d91:b0:8b1:7de3:cfaa with SMTP id gt17-20020a1709072d9100b008b17de3cfaamr5662274ejc.3.1686127159116;
+        Wed, 07 Jun 2023 01:39:19 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7btGdgIzKw5k5WmwW3L/Sj3hNi5PvtUs3V2LlGUM++yAslee+IT231SvTSKQcWeSSHb5giPg==
+X-Received: by 2002:a17:907:2d91:b0:8b1:7de3:cfaa with SMTP id gt17-20020a1709072d9100b008b17de3cfaamr5662257ejc.3.1686127158820;
+        Wed, 07 Jun 2023 01:39:18 -0700 (PDT)
+Received: from sgarzare-redhat (host-87-12-25-16.business.telecomitalia.it. [87.12.25.16])
+        by smtp.gmail.com with ESMTPSA id t15-20020a1709066bcf00b0096f7500502csm6655804ejs.199.2023.06.07.01.39.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 01:39:17 -0700 (PDT)
+Date:   Wed, 7 Jun 2023 10:39:15 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Jason Wang <jasowang@redhat.com>,
+        Shannon Nelson <shannon.nelson@amd.com>,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        Eugenio =?utf-8?B?UMOpcmV6?= <eperezma@redhat.com>,
+        Tiwei Bie <tiwei.bie@intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] vhost-vdpa: filter VIRTIO_F_RING_PACKED feature
+Message-ID: <CAGxU2F7fkgL-HpZdj=5ZEGNWcESCHQpgRAYQA3W2sPZaoEpNyQ@mail.gmail.com>
+References: <20230605110644.151211-1-sgarzare@redhat.com>
+ <20230605084104-mutt-send-email-mst@kernel.org>
+ <24fjdwp44hovz3d3qkzftmvjie45er3g3boac7aezpvzbwvuol@lmo47ydvnqau>
+ <20230605085840-mutt-send-email-mst@kernel.org>
+ <gi2hngx3ndsgz5d2rpqjywdmou5vxhd7xgi5z2lbachr7yoos4@kpifz37oz2et>
+ <20230605095404-mutt-send-email-mst@kernel.org>
+ <32ejjuvhvcicv7wjuetkv34qtlpa657n4zlow4eq3fsi2twozk@iqnd2t5tw2an>
+ <CACGkMEu3PqQ99UoKF5NHgVADD3q=BF6jhLiyumeT4S1QCqN1tw@mail.gmail.com>
+ <20230606085643-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2003476.1686127009.1@warthog.procyon.org.uk>
-Date:   Wed, 07 Jun 2023 09:36:49 +0100
-Message-ID: <2003477.1686127009@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230606085643-mutt-send-email-mst@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
@@ -68,28 +91,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Luis Chamberlain <mcgrof@kernel.org> wrote:
+On Tue, Jun 6, 2023 at 2:58 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+>
+> On Tue, Jun 06, 2023 at 09:29:22AM +0800, Jason Wang wrote:
+> > On Mon, Jun 5, 2023 at 10:58 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
+> > >
+> > > On Mon, Jun 05, 2023 at 09:54:57AM -0400, Michael S. Tsirkin wrote:
+> > > >On Mon, Jun 05, 2023 at 03:30:35PM +0200, Stefano Garzarella wrote:
+> > > >> On Mon, Jun 05, 2023 at 09:00:25AM -0400, Michael S. Tsirkin wrote:
+> > > >> > On Mon, Jun 05, 2023 at 02:54:20PM +0200, Stefano Garzarella wrote:
+> > > >> > > On Mon, Jun 05, 2023 at 08:41:54AM -0400, Michael S. Tsirkin wrote:
+> > > >> > > > On Mon, Jun 05, 2023 at 01:06:44PM +0200, Stefano Garzarella wrote:
+> > > >> > > > > vhost-vdpa IOCTLs (eg. VHOST_GET_VRING_BASE, VHOST_SET_VRING_BASE)
+> > > >> > > > > don't support packed virtqueue well yet, so let's filter the
+> > > >> > > > > VIRTIO_F_RING_PACKED feature for now in vhost_vdpa_get_features().
+> > > >> > > > >
+> > > >> > > > > This way, even if the device supports it, we don't risk it being
+> > > >> > > > > negotiated, then the VMM is unable to set the vring state properly.
+> > > >> > > > >
+> > > >> > > > > Fixes: 4c8cf31885f6 ("vhost: introduce vDPA-based backend")
+> > > >> > > > > Cc: stable@vger.kernel.org
+> > > >> > > > > Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+> > > >> > > > > ---
+> > > >> > > > >
+> > > >> > > > > Notes:
+> > > >> > > > >     This patch should be applied before the "[PATCH v2 0/3] vhost_vdpa:
+> > > >> > > > >     better PACKED support" series [1] and backported in stable branches.
+> > > >> > > > >
+> > > >> > > > >     We can revert it when we are sure that everything is working with
+> > > >> > > > >     packed virtqueues.
+> > > >> > > > >
+> > > >> > > > >     Thanks,
+> > > >> > > > >     Stefano
+> > > >> > > > >
+> > > >> > > > >     [1] https://lore.kernel.org/virtualization/20230424225031.18947-1-shannon.nelson@amd.com/
+> > > >> > > >
+> > > >> > > > I'm a bit lost here. So why am I merging "better PACKED support" then?
+> > > >> > >
+> > > >> > > To really support packed virtqueue with vhost-vdpa, at that point we would
+> > > >> > > also have to revert this patch.
+> > > >> > >
+> > > >> > > I wasn't sure if you wanted to queue the series for this merge window.
+> > > >> > > In that case do you think it is better to send this patch only for stable
+> > > >> > > branches?
+> > > >> > > > Does this patch make them a NOP?
+> > > >> > >
+> > > >> > > Yep, after applying the "better PACKED support" series and being
+> > > >> > > sure that
+> > > >> > > the IOCTLs of vhost-vdpa support packed virtqueue, we should revert this
+> > > >> > > patch.
+> > > >> > >
+> > > >> > > Let me know if you prefer a different approach.
+> > > >> > >
+> > > >> > > I'm concerned that QEMU uses vhost-vdpa IOCTLs thinking that the kernel
+> > > >> > > interprets them the right way, when it does not.
+> > > >> > >
+> > > >> > > Thanks,
+> > > >> > > Stefano
+> > > >> > >
+> > > >> >
+> > > >> > If this fixes a bug can you add Fixes tags to each of them? Then it's ok
+> > > >> > to merge in this window. Probably easier than the elaborate
+> > > >> > mask/unmask dance.
+> > > >>
+> > > >> CCing Shannon (the original author of the "better PACKED support"
+> > > >> series).
+> > > >>
+> > > >> IIUC Shannon is going to send a v3 of that series to fix the
+> > > >> documentation, so Shannon can you also add the Fixes tags?
+> > > >>
+> > > >> Thanks,
+> > > >> Stefano
+> > > >
+> > > >Well this is in my tree already. Just reply with
+> > > >Fixes: <>
+> > > >to each and I will add these tags.
+> > >
+> > > I tried, but it is not easy since we added the support for packed
+> > > virtqueue in vdpa and vhost incrementally.
+> > >
+> > > Initially I was thinking of adding the same tag used here:
+> > >
+> > > Fixes: 4c8cf31885f6 ("vhost: introduce vDPA-based backend")
+> > >
+> > > Then I discovered that vq_state wasn't there, so I was thinking of
+> > >
+> > > Fixes: 530a5678bc00 ("vdpa: support packed virtqueue for set/get_vq_state()")
+> > >
+> > > So we would have to backport quite a few patches into the stable branches.
+> > > I don't know if it's worth it...
+> > >
+> > > I still think it is better to disable packed in the stable branches,
+> > > otherwise I have to make a list of all the patches we need.
+> > >
+> > > Any other ideas?
+> >
+> > AFAIK, except for vp_vdpa, pds seems to be the first parent that
+> > supports packed virtqueue. Users should not notice anything wrong if
+> > they don't use packed virtqueue. And the problem of vp_vdpa + packed
+> > virtqueue came since the day0 of vp_vdpa. It seems fine to do nothing
+> > I guess.
+> >
+> > Thanks
+>
+>
+> I have a question though, what if down the road there
+> is a new feature that needs more changes? It will be
+> broken too just like PACKED no?
+> Shouldn't vdpa have an allowlist of features it knows how
+> to support?
 
-> The security keys sysctls are already declared on its own file,
-> just move the sysctl registration to its own file to help avoid
-> merge conflicts on sysctls.c, and help with clearing up sysctl.c
-> further.
-> 
-> This creates a small penalty of 23 bytes:
-> 
-> ./scripts/bloat-o-meter vmlinux.1 vmlinux.2
-> add/remove: 2/0 grow/shrink: 0/1 up/down: 49/-26 (23)
-> Function                                     old     new   delta
-> init_security_keys_sysctls                     -      33     +33
-> __pfx_init_security_keys_sysctls               -      16     +16
-> sysctl_init_bases                             85      59     -26
-> Total: Before=21256937, After=21256960, chg +0.00%
-> 
-> But soon we'll be saving tons of bytes anyway, as we modify the
-> sysctl registrations to use ARRAY_SIZE and so we get rid of all the
-> empty array elements so let's just clean this up now.
-> 
-> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+It looks like we had it, but we took it out (by the way, we were
+enabling packed even though we didn't support it):
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6234f80574d7569444d8718355fa2838e92b158b
 
-Acked-by: David Howells <dhowells@redhat.com>
+The only problem I see is that for each new feature we have to modify 
+the kernel.
+Could we have new features that don't require handling by vhost-vdpa?
+
+Thanks,
+Stefano
 
