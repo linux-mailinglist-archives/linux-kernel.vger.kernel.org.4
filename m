@@ -2,63 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2FC2725D78
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 13:42:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0C48725D7F
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 13:44:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240368AbjFGLm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 07:42:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38774 "EHLO
+        id S239731AbjFGLog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 07:44:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234932AbjFGLm1 (ORCPT
+        with ESMTP id S240159AbjFGLod (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 07:42:27 -0400
+        Wed, 7 Jun 2023 07:44:33 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 781B919BD;
-        Wed,  7 Jun 2023 04:42:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7DFF1BC2
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 04:44:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 134B861610;
-        Wed,  7 Jun 2023 11:42:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28AEDC433D2;
-        Wed,  7 Jun 2023 11:42:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 442EE616C0
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 11:44:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D93ADC433D2;
+        Wed,  7 Jun 2023 11:44:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686138144;
-        bh=KLtdS8YfUVeUIHmboqaXGQWETl5UWBvzrYSCepsSYQ0=;
+        s=k20201202; t=1686138270;
+        bh=ZIzmANL6SzlLASO7Q6YwNLFjhy6kknyeRB+38H5mVuU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ODkUrE1ZZL7RktgPYR1RuRY1/mao6dCbR5TofAsFB9BoZzWWgFy/Xfrt/gtW7DNis
-         2hFcKb0vkYD2Ck1VvMfgD8cul59R8upUoQitve+aBxmQ/l8PlVhZPQY+Uoc96REuvb
-         nOI9b/sk+pUDw1i6uTja6dhD2bldpWXla3vspk6ExiThxOcZPo2A/Kci9dYHA2obfq
-         dUmqDk/C3GkMWdsqW/fo1c88tV2+HEvE06oPXSABxvCSeu09fGSdoi3T3f7ZKVSVIc
-         iLkffTa7GAacQIH9QOVHzxWQwHRicKjZIeSYT/V4Cfq6vZ9OH40KK73IFtXIe4nv9l
-         gtxZj9lYxal0Q==
-Date:   Wed, 7 Jun 2023 13:42:21 +0200
-From:   Maxime Ripard <mripard@kernel.org>
-To:     Frank Oltmanns <frank@oltmanns.dev>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        Andre Przywara <andre.przywara@arm.com>,
-        Chen-Yu Tsai <wens@csie.org>, Icenowy Zheng <icenowy@aosc.io>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh@kernel.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Stephen Boyd <sboyd@kernel.org>
-Subject: Re: [RFC PATCH 0/3] clk: sunxi-ng: Optimize rate selection for NKM
- clocks
-Message-ID: <jscgfo3ydkjmthlsnkuaxkyztajxekz37wiq7zbdcfoievkbfn@ebr2lm6he6ku>
-References: <20230527132747.83196-1-frank@oltmanns.dev>
- <flngzi4henkzcpzwdexencdkw77h52g3nduup7pwctpwfiuznk@eewnnut5mvsq>
- <87mt1jbf18.fsf@oltmanns.dev>
- <uvjlkaq4drqsndpwwflmbfnxseiftkrhq5qqmpfx5vfmduazed@wcohoxcd23wc>
- <87edmq9m2m.fsf@oltmanns.dev>
- <xcgmqvdoip53yao4sfoznnppauhmsmdablwoewh43zjv3bhidp@d7pxqohxydve>
- <87sfb41fhl.fsf@oltmanns.dev>
+        b=hWCItiznTaIjXPD6oJgZdZ+a/+EUA7wwfpWE7eAQS+ozAXjokQoQv5JTGniOJ/3VT
+         QWqvvHqY2XnmQNRxi2FTyxwIqhgCp/HPrlsQx5Wao+umGdzrC34kHupiQrg8Kp8hAZ
+         KSlGv73cPqhN5FbpKRKMP81G3u0DkkgaJZwJnVg4Fs3Gm9W4NqKMq/yK8GN5VM9LUn
+         T1tid/FXlzl7436fSVkftHFdoQSgO1gRrIdyvIKcfbmsv5E5cyRSU1kmt8MeEYHVc/
+         MIL0j4yZj/RcTnkJdYa4WKV6cwTRGyV5RbLab9Sj4NaZc0VMqEjgNPqyE6UmNX0hzK
+         UBZMnDoCACm+Q==
+Date:   Wed, 7 Jun 2023 12:44:25 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Walker Chen <walker.chen@starfivetech.com>
+Cc:     Claudiu Beznea <Claudiu.Beznea@microchip.com>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Jaroslav Kysela <perex@perex.cz>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] ASoC: starfive: Cleanup and fix error check for
+ JH7110 TDM
+Message-ID: <3eb7ffc5-a16a-4ac2-93a0-260f7cb1f81c@sirena.org.uk>
+References: <20230607081439.1517-1-walker.chen@starfivetech.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="jjn4z4f2oj3kdsmu"
+        protocol="application/pgp-signature"; boundary="LfKPoAKPg/endcMK"
 Content-Disposition: inline
-In-Reply-To: <87sfb41fhl.fsf@oltmanns.dev>
+In-Reply-To: <20230607081439.1517-1-walker.chen@starfivetech.com>
+X-Cookie: Keep away from edge.
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -70,174 +62,64 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---jjn4z4f2oj3kdsmu
+--LfKPoAKPg/endcMK
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 06, 2023 at 10:40:34PM +0200, Frank Oltmanns wrote:
-> Hi Maxime,
+On Wed, Jun 07, 2023 at 04:14:39PM +0800, Walker Chen wrote:
+
+> Some minor issues were found during addtional testing and static
+> analysis. The patch fixed these minor issues.
+> 1.Use BIT() macro to indicate configuration for TDM registers.
 >=20
-> On 2023-06-06 at 16:02:58 +0200, Maxime Ripard <mripard@kernel.org> wrote:
-> > [[PGP Signed Part:Undecided]]
-> > On Mon, Jun 05, 2023 at 12:31:41PM +0200, Frank Oltmanns wrote:
-> >> Hi Maxime,
-> >>
-> >> On 2023-06-02 at 09:31:59 +0200, Maxime Ripard <mripard@kernel.org> wr=
-ote:
-> >> > [[PGP Signed Part:Undecided]]
-> >> > Hi,
-> >> >
-> >> > On Thu, Jun 01, 2023 at 07:16:45AM +0200, Frank Oltmanns wrote:
-> >> >> On 2023-05-31 at 15:48:43 +0200, Maxime Ripard <mripard@kernel.org>=
- wrote:
-> >> >> > [[PGP Signed Part:Undecided]]
-> >> >> > Hi Frank,
-> >> >> >
-> >> >> > On Sat, May 27, 2023 at 03:27:44PM +0200, Frank Oltmanns wrote:
-> >> >> >> I would like to bring your attention to the current process of s=
-etting
-> >> >> >> the rate of an NKM clock. As it stands, when setting the rate of=
- an
-> >> >> >> NKM clock, the rate nearest but less than or equal to the reques=
-ted
-> >> >> >> rate is found, instead of the nearest rate.
-> >> >> >
-> >> >> > Yeah, it's actually pretty common, see clk_mux_determine_rate_fla=
-gs()
-> >> >> > for example. Some devices require that we don't overshoot, while =
-some
-> >> >> > prefer to have the closest rate.
-> >> >> >
-> >> >> > Both are fine, and it's a bit context specific which one we should
-> >> >> > favour. If we were to do anything, it would be to support both an=
-d let
-> >> >> > the clock driver select which behaviour it wants.
-> >> >> >
-> >> >>
-> >> >> Ok, understood. Thank you for the explanation! Now, I'm wondering if
-> >> >> anyone would be using such a flag, if I added it.
-> >> >
-> >> > I guess that's another thing :) If no-one is going to use it, why sh=
-ould
-> >> > we do it in the first place?
-> >> >
-> >> > But most likely the display and audio clocks are usually fairly ok w=
-ith
-> >> > overshooting a bit, and a closest rate is usually better.
-> >>
-> >> Ok, I dived a bit deeper into this, but, as far as I can tell, the
-> >> closest rate is not used anywhere in the sunxi-ng ccu driver. So, when
-> >> extending, e.g., the NM or NKM clock to support, one must also extend =
-at
-> >> least the mux clocks, because they expect rates less than the requested
-> >> rate. That seems to be quite the undertaking for only a small gain in
-> >> precision.
-> >
-> > mux clocks are using __clk_mux_determine_rate which should have the
-> > behaviour you want when CLK_MUX_ROUND_CLOSEST is set.
->=20
-> https://elixir.bootlin.com/linux/v6.3.6/source/drivers/clk/sunxi-ng/ccu-s=
-un50i-a64.c#L539
-> is one example of a mux clock combined with a divider that is a bit more
-> complex. I didn't look too deeply, but it seemed to me, that it would
-> require two separate flags: One for the mux component and one for the
-> div component. Maybe I'm mistaken, but it seems to me that the concept
-> of having selected rates always be equal to or less than requested
-> rates, seems to be deeply ingrained in the sunxi-ng driver. I'm afraid
-> that I might miss some parts, therefore I abandoned that idea for now
-> (especially since I have only one board for testing).
+> 2.Fix the check for devm_reset_control_array_get_exclusive return
+> value. The devm_reset_control_array_get_exclusive() function may return
+> NULL if it's an optional request. If optional is intended then NULL
+> should not be treated as an error case, but as a special kind of success
+> case. So here the IS_ERR() is used to check better.
 
-All the implementations (afaik) of the "composite" clocks we have that
-combine a mux and dividers eventually use ccu_mux_helper_determine_rate
-and divider_round_rate_parent. The last one can use
-CLK_DIVIDER_ROUND_CLOSEST, and you covered the first one in your patch.
-Which one did you leave out?
+As covered in submitting-patches.rst please submit one patch per change
+rather than combining multiple changes into a single patch, it makes
+things much easier to review and handle.
 
-> >> >> >> Moreover, ccu_nkm_find_best() is called multiple times (footnote=
- [1])
-> >> >> >> when setting a rate, each time iterating over all combinations o=
-f n,
-> >> >> >> k, and m.
-> >> >> >
-> >> >> > Yeah, that's expected as well.
-> >> >>
-> >> >> I'm wondering though, if iterating over all combinations is set in
-> >> >> stone, or if some kind of optimization would be in order.
-> >> >
-> >> > The thing with optimization is that you need to optimize for somethi=
-ng.
-> >> > So you need to show that this code is suboptimal (by whatever metric=
- you
-> >> > want to optimize for), and that your code is more optimal that it us=
-ed
-> >> > to be.
-> >> >
-> >> > It means identifying a problem, writing benchmarks, and showing that=
- the
-> >> > new code performs better there.
-> >> >
-> >> > For example, your code might very well be faster, but it will increa=
-se
-> >> > the kernel image (and thus the RAM usage). One is not more optimal t=
-han
-> >> > the other in absolute, they both are, using a different metric.
-> >>
-> >> Sure, I get that. I'll submit a patchset that adds the functionality to
-> >> NKM clocks to set the rate of their parents.
-> >>
-> >> With the new patchset, the time for, e.g. setting DCLK increases from
-> >> ~0.5 ms to a whopping 30 - 37 ms. Those times were taken
-> >> unscientifically on my pinephone, i.e. kernel logging and a couple of
-> >> re-boots. But I think that still might give an idea of why I thought
-> >> about the need to increase performance.
-> >>
-> >> The reason for this massive increase is, that the patch iterates over
-> >> all combinations of NKM for pll-mipi, and for each combination it
-> >> iterates over all combinations of NM for pll-video0.
-> >>
-> >> Nevertheless, following your and Jernej's advice, I'll submit the
-> >> patchset first and then we can discuss if speed optimizations are need=
-ed
-> >> and what cost is acceptable.
-> >
-> > Honestly, for 40ms, it will be a hard sell :)
->=20
-> I'm not sure what part you think is the "hard-sell":
->  a. the patch itself because 30 to 40 ms is way too much
->  b. the optimization, because 30 to 40 ms isn't all that much.
-> I honestly don't know.
->=20
-> BTW, this is the patchset in case you missed it:
-> https://lore.kernel.org/lkml/20230605190745.366882-1-frank@oltmanns.dev/
->=20
-> Note, that I have a patch in the works, which is similar to the one in
-> this thread, but for ccu_nm. Doing a binary search for finding the
-> parent rate of pll-mipi, i.e., pll-video0, reduces the time from ~30 ms
-> to less than 2 ms. If combined with only iterating through meaningful
-> nkm combinations for pll-mipi, this should bring the time under 1 ms
-> again.
+> -	datarx =3D (tdm->rx.ifl << IFL_BIT) |
+> -		  (tdm->rx.wl << WL_BIT) |
+> -		  (tdm->rx.sscale << SSCALE_BIT) |
+> -		  (tdm->rx.sl << SL_BIT) |
+> -		  (tdm->rx.lrj << LRJ_BIT);
+> +	datarx =3D (tdm->rxwl << 8) |
+> +		  (tdm->rxsscale << 4) |
+> +		  (tdm->rxsl << 2) |
+> +		  TDM_PCMRXCR_LEFT_J;
 
-My point is that:
+I'm not sure this change to use numbers here is a win - the _BIT
+definitions look fine (I might've called them _SHIFT but whatever).
 
- * it's regression prone, so quite risky
+> -static const struct of_device_id jh7110_tdm_of_match[] =3D {
+> +static const struct of_device_id jh7110_tdm_match[] =3D {
+>  	{ .compatible =3D "starfive,jh7110-tdm", },
+>  	{}
+>  };
+> =20
+> -MODULE_DEVICE_TABLE(of, jh7110_tdm_of_match);
+> +MODULE_DEVICE_TABLE(of, jh7110_tdm_match);
 
- * but if the endgoal is to gain 40ms once, at boot, without any use
-   case to back that up, there's basically no reward.
+This rename wasn't mentioned in the changelog.
 
-a high risk, low reward patch is what's hard to sell.
-
-Maxime
-
---jjn4z4f2oj3kdsmu
+--LfKPoAKPg/endcMK
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZIBtHQAKCRDj7w1vZxhR
-xcbbAQDi9CqHyZ4Awx2jfBHXAwdVCXicmpGwuE4L9hIFEEdD2AEAshGCprSSUj7e
-GBrw4iJRatq6f1o32cOMY40VD9fBdQ8=
-=9gco
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSAbZgACgkQJNaLcl1U
+h9A99wf+NSaIxGIf4YZKSPJ7aahCikFSJ8QzZ93+jeCBXfB3MhCCrzVLVzFnUrv3
+SQWddp2m5MWKBSt4icNmTEmweGEtv2Ec6FtXgo8dRimVUCd6W1EFxtT4UvzKJbiT
+oFA3XyST93OE3gZxQpNehPIf6pXrgvtVfBlZLoqk4FdL1YS1VpD7EeOh5Y+afwYD
+rWilBo5XnXxhx8a0rexNC9N/aDx6m3JGItGftPghXqQpGutTp0mRse92+pCiH79A
+tfaG4ZEI9ugOXFuk+4uDhr5N2/6so5mS/ND5AHaFFSPLZ0AW0Q0Gr33vggAzxGCe
+2QvWgXdAEkJikvqwETOVosS0KMHehA==
+=CVs9
 -----END PGP SIGNATURE-----
 
---jjn4z4f2oj3kdsmu--
+--LfKPoAKPg/endcMK--
