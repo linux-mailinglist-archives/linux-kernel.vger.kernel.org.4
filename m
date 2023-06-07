@@ -2,129 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAFBB72591B
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 11:01:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5BF67258FE
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 11:00:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239195AbjFGJBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 05:01:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55242 "EHLO
+        id S239748AbjFGI7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 04:59:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239220AbjFGJAq (ORCPT
+        with ESMTP id S239655AbjFGI73 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 05:00:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 663E71FE1
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 01:58:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686128307;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Wed, 7 Jun 2023 04:59:29 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB6F2212E;
+        Wed,  7 Jun 2023 01:58:04 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 9B3C6219E7;
+        Wed,  7 Jun 2023 08:58:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1686128280; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=JZlBm9K/eDsGZdtktFZEDp+gLxlecPmXApRL0wxE0aA=;
-        b=UDuDU6bkzBp9Agzv7beQwWN7nfSf0zcyK0qH15V0wEKd51xRANpJs1KfPO46XgbMM/Kee5
-        dXuwlHO+KCjlLmwPF2EhtrtK0ZfXrtuYjHt/J2XY26L2flrJhLJZ3HXMaseQ/nMz/1U/EG
-        lDFvzS5R5gKSX5vkZTGSZdMl+4XG0o4=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-454-YeKdNyygNJa-7QjKY0ZgeA-1; Wed, 07 Jun 2023 04:58:26 -0400
-X-MC-Unique: YeKdNyygNJa-7QjKY0ZgeA-1
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-30ae7bd987dso3031477f8f.2
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 01:58:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686128305; x=1688720305;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JZlBm9K/eDsGZdtktFZEDp+gLxlecPmXApRL0wxE0aA=;
-        b=lH+jegFloGVepaiJxMIk7ymb9P8FkaJyKjsToa5ZRvyQWipHfrRLQ1Kdj/14MxRS9F
-         cTXrr8RSA4YxrY3KSsKII0XBpxqlAGyIe+sRxkUT+fyLM1peHfzTcLv99GsIirwYLiC8
-         DQXGmR7trNV+3S1KOg1X9zBUkJejpd5cxP79h6kmxPh4+iup+ywKhQakAu/cfaZ6wg9P
-         YiinYbaOtIlMhRie5bBF2+Gz8utdp4q38eH8judNogudEP2wMa7b447WLJDbC/W0U+6H
-         vKkFw748zlir2+WvZd7NgBJtAPcU2DTPb/e/DMoprxbRKTxcTks8fm7dU+WBr9GVmGYN
-         ehPA==
-X-Gm-Message-State: AC+VfDzwpkiwwXpSSZoRjUhivB/7YFgxr8oEnqiG+5wOjKjlrAoLmTEJ
-        PLO4CYr2JE26dbMzkt3YOn8Uj8iPsrZwoBiKxkpotbRMPuGyD0AWbMKjhYV6szr5oQMS3S6wew6
-        2R+d5aw9XIsBDkqSPb7eumTsu
-X-Received: by 2002:a5d:4573:0:b0:30d:efe0:5395 with SMTP id a19-20020a5d4573000000b0030defe05395mr3930898wrc.47.1686128304834;
-        Wed, 07 Jun 2023 01:58:24 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4gsMslc9ahJC8zUHAGJ/RP7BQSmGZi72AZv76jXK1i6rRbHtaqjZeOnSvI17kebHXmkLvWiw==
-X-Received: by 2002:a5d:4573:0:b0:30d:efe0:5395 with SMTP id a19-20020a5d4573000000b0030defe05395mr3930845wrc.47.1686128304503;
-        Wed, 07 Jun 2023 01:58:24 -0700 (PDT)
-Received: from vschneid.remote.csb ([208.178.8.98])
-        by smtp.gmail.com with ESMTPSA id u19-20020a05600c00d300b003f70a7b4537sm1382812wmm.36.2023.06.07.01.58.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 01:58:24 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     bigeasy@linutronix.de, mark.rutland@arm.com, maz@kernel.org,
-        catalin.marinas@arm.com, will@kernel.org, chenhuacai@kernel.org,
-        kernel@xen0n.name, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, pbonzini@redhat.com, wanpengli@tencent.com,
-        vkuznets@redhat.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, jgross@suse.com, boris.ostrovsky@oracle.com,
-        daniel.lezcano@linaro.org, kys@microsoft.com,
-        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
-        rafael@kernel.org, longman@redhat.com, boqun.feng@gmail.com,
-        pmladek@suse.com, senozhatsky@chromium.org, rostedt@goodmis.org,
-        john.ogness@linutronix.de, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        jstultz@google.com, sboyd@kernel.org, linux-kernel@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-s390@vger.kernel.org,
-        kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 04/13] arm64/arch_timer: Provide noinstr
- sched_clock_read() functions
-In-Reply-To: <20230602115451.GG620383@hirez.programming.kicks-ass.net>
-References: <20230519102058.581557770@infradead.org>
- <20230519102715.435618812@infradead.org>
- <xhsmho7m9ptrk.mognet@vschneid.remote.csb>
- <20230602115451.GG620383@hirez.programming.kicks-ass.net>
-Date:   Wed, 07 Jun 2023 09:58:22 +0100
-Message-ID: <xhsmhsfb3odht.mognet@vschneid.remote.csb>
+        bh=f2EaHZNH3FVf98U2Zt49rp0xBgq+B5+gRBpoNjGI/kw=;
+        b=VKdKTyDupbI/lT3/qoqpMf+DdGGlz1rGgLq3Nlnk4iaAP60d6DKzXyM1r6fUjwzM6KhIU+
+        OyGBAcEbfwTACq5+36XAKTvYRj4MhmiKGWNnBdyRPQAhBxgbE9mUKQ3UcW3qEN6WdvcZya
+        WF0fro/SpAEXH4pQppafVq1S7t//+ag=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1686128280;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=f2EaHZNH3FVf98U2Zt49rp0xBgq+B5+gRBpoNjGI/kw=;
+        b=xJrVAWouxDAcaosc7FbGy5ksgBFOjM7UaakoJSDYAVjU6z6aaK843gk52hZL4x8ovEvFBu
+        GjkfBJNyHByc1OCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4C4221346D;
+        Wed,  7 Jun 2023 08:58:00 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id aODREZhGgGS3TgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 07 Jun 2023 08:58:00 +0000
+Message-ID: <2a6fa9d6-53b8-93cd-16c8-309ce2b8e3ac@suse.cz>
+Date:   Wed, 7 Jun 2023 10:58:40 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH] mm/vmalloc: do not output a spurious warning when huge
+ vmalloc() fails
+To:     Lorenzo Stoakes <lstoakes@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Baoquan He <bhe@redhat.com>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Linux btrfs <linux-btrfs@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, a1bert@atlas.cz,
+        Forza <forza@tnonline.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Song Liu <song@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>
+References: <20230605201107.83298-1-lstoakes@gmail.com>
+ <cd47d6ac-69ce-0315-dd45-2cb9dce57f36@suse.cz>
+ <f6b42d95-09f1-48d6-8274-e6145febb31d@lucifer.local>
+Content-Language: en-US
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <f6b42d95-09f1-48d6-8274-e6145febb31d@lucifer.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/06/23 13:54, Peter Zijlstra wrote:
-> On Wed, May 24, 2023 at 05:40:47PM +0100, Valentin Schneider wrote:
->>
->> So this bit sent me on a little spelunking session :-)
->>
->> From a control flow perspective the initialization isn't required, but then
->> I looked into the comment and found it comes from the
->> arch_timer_read_counter() definition... Which itself doesn't get used by
->> sched_clock() until the sched_clock_register() below!
->>
->> So AFAICT that comment was true as of
->>
->>   220069945b29 ("clocksource: arch_timer: Add support for memory mapped timers")
->>
->> but not after a commit that came 2 months later:
->>
->>   65cd4f6c99c1 ("arch_timer: Move to generic sched_clock framework")
->>
->> which IIUC made arm/arm64 follow the default approach of using the
->> jiffy-based sched_clock() before probing DT/ACPI and registering a "proper"
->> sched_clock.
->>
->> All of that to say: the comment about arch_timer_read_counter() vs early
->> sched_clock() doesn't apply anymore, but I think we need to keep its
->> initalization around for stuff like get_cycles(). This initialization here
->> should be OK to put to the bin, though.
->
-> Something like the below folded in then?
->
 
-Much better, thank you!
+On 6/6/23 09:40, Lorenzo Stoakes wrote:
+> On Tue, Jun 06, 2023 at 09:13:24AM +0200, Vlastimil Babka wrote:
+>>
+>> On 6/5/23 22:11, Lorenzo Stoakes wrote:
+>>> In __vmalloc_area_node() we always warn_alloc() when an allocation
+>>> performed by vm_area_alloc_pages() fails unless it was due to a pending
+>>> fatal signal.
+>>>
+>>> However, huge page allocations instigated either by vmalloc_huge() or
+>>> __vmalloc_node_range() (or a caller that invokes this like kvmalloc() or
+>>> kvmalloc_node()) always falls back to order-0 allocations if the huge page
+>>> allocation fails.
+>>>
+>>> This renders the warning useless and noisy, especially as all callers
+>>> appear to be aware that this may fallback. This has already resulted in at
+>>> least one bug report from a user who was confused by this (see link).
+>>>
+>>> Therefore, simply update the code to only output this warning for order-0
+>>> pages when no fatal signal is pending.
+>>>
+>>> Link: https://bugzilla.suse.com/show_bug.cgi?id=1211410
+>>> Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
+>>
+>> I think there are more reports of same thing from the btrfs context, that
+>> appear to be a 6.3 regression
+>>
+>> https://bugzilla.kernel.org/show_bug.cgi?id=217466
+>> Link: https://lore.kernel.org/all/efa04d56-cd7f-6620-bca7-1df89f49bf4b@gmail.com/
+>>
+>> If this indeed helps, it would make sense to Cc: stable here. Although I
+>> don't see what caused the regression, the warning itself is not new, so is
+>> it new source of order-9 attempts in vmalloc() or new reasons why order-9
+>> pages would not be possible to allocate?
+> 
+> Linus updated kvmalloc() to use huge vmalloc() allocations in 9becb6889130
+> ("kvmalloc: use vmalloc_huge for vmalloc allocations") and Song update
+> alloc_large_system_hash() to as well in f2edd118d02d ("page_alloc: use
+> vmalloc_huge for large system hash") both of which are ~1y old, however
+> these would impact ~5.18, so it's weird to see reports citing 6.2 -> 6.3.
+> 
+> Will dig to see if something else changed that would increase the
+> prevalence of this.
 
+I think I found the commit from 6.3 that effectively exposed this warning.
+As this is a tracked regression I would really suggest moving the fix to
+mm-hotfixes instead of mm-unstable, and
+
+Fixes: 80b1d8fdfad1 ("mm: vmalloc: correct use of __GFP_NOWARN mask in __vmalloc_area_node()")
+Cc: <stable@vger.kernel.org>
+
+> Also while we're here, ugh at us immediately splitting the non-compound
+> (also ugh) huge page. Nicholas explains why in the patch that introduces it
+> - 3b8000ae185c ("mm/vmalloc: huge vmalloc backing pages should be split
+> rather than compound") - but it'd be nice if we could find a way to avoid
+> this.
+> 
+> If only there were a data type (perhaps beginning with 'f') that abstracted
+> the order of the page entirely and could be guaranteed to always be the one
+> with which you manipulated ref count, etc... ;)
+> 
+>>
+>>> ---
+>>>  mm/vmalloc.c | 17 +++++++++++++----
+>>>  1 file changed, 13 insertions(+), 4 deletions(-)
+>>>
+>>> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+>>> index ab606a80f475..e563f40ad379 100644
+>>> --- a/mm/vmalloc.c
+>>> +++ b/mm/vmalloc.c
+>>> @@ -3149,11 +3149,20 @@ static void *__vmalloc_area_node(struct vm_struct *area, gfp_t gfp_mask,
+>>>  	 * allocation request, free them via vfree() if any.
+>>>  	 */
+>>>  	if (area->nr_pages != nr_small_pages) {
+>>> -		/* vm_area_alloc_pages() can also fail due to a fatal signal */
+>>> -		if (!fatal_signal_pending(current))
+>>> +		/*
+>>> +		 * vm_area_alloc_pages() can fail due to insufficient memory but
+>>> +		 * also:-
+>>> +		 *
+>>> +		 * - a pending fatal signal
+>>> +		 * - insufficient huge page-order pages
+>>> +		 *
+>>> +		 * Since we always retry allocations at order-0 in the huge page
+>>> +		 * case a warning for either is spurious.
+>>> +		 */
+>>> +		if (!fatal_signal_pending(current) && page_order == 0)
+>>>  			warn_alloc(gfp_mask, NULL,
+>>> -				"vmalloc error: size %lu, page order %u, failed to allocate pages",
+>>> -				area->nr_pages * PAGE_SIZE, page_order);
+>>> +				"vmalloc error: size %lu, failed to allocate pages",
+>>> +				area->nr_pages * PAGE_SIZE);
+>>>  		goto fail;
+>>>  	}
+>>>
+>>
