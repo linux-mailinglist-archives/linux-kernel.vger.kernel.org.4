@@ -2,134 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85814726A71
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 22:10:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B21D1726A74
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 22:10:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232055AbjFGUKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 16:10:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39236 "EHLO
+        id S229984AbjFGUKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 16:10:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230046AbjFGUKO (ORCPT
+        with ESMTP id S230034AbjFGUKl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 16:10:14 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2688118F;
-        Wed,  7 Jun 2023 13:10:13 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id 98e67ed59e1d1-256422ad25dso3395804a91.0;
-        Wed, 07 Jun 2023 13:10:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686168612; x=1688760612;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qYBbVxG5qTvWtJpvG1GFdSzWMjaAkI3hKSe+dIzx3pQ=;
-        b=WtfDyXhz2c9B23otUHcznVCyEeGumOxVaBHOmoJj/VlFydX+O2M8X83iGvkqQks565
-         lOKZG2S83nN87F5KgGSaNQ1GYjtUDGSlRbGa7QGuCFnkMTjpvbCH1NSiMUIW/fek9rQ9
-         srkVO0fQH5kVuu7cBEehH3/lDd4RTMaAqeVHoSc7AHYZMZmmByicoyBaEsPqBMW98aDQ
-         HuOh9g/23bvvs+hvEQWriEeZsKKVLkaOo//HIcI5yD3lc3OVotkbxXPsqHnSNG1r4p01
-         3xDDxe2CORbxUBc8K07LsMjvXND5z7yGHW6K/DxZxS85X2H+aZjghB2x23a8KC+fKJv4
-         9Myg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686168612; x=1688760612;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qYBbVxG5qTvWtJpvG1GFdSzWMjaAkI3hKSe+dIzx3pQ=;
-        b=XmbwPRSgoqPWSqPP55zmiAbAxnu9Zcf9Kka/ASEfXPMKPCQqO9XRxwlEtI1NaJpvQ1
-         RDcjJelsdgvsIB7gZDQkX6nFVoESFxj4mxKctFTpIFMp/ekzr9a7aDM7S1BVjFl5k9qy
-         OAJ72Mj0KuOjZJQJUdLrkYYEWYqJxOkYj+nlMPp6S5isBXMOCRq81XzNia8/JJD2nb0v
-         ns6ZeoDr0OcaMmTCZnasPI+sbBPF/E+U9NSvZ0PLB55VXnsDNdu78TitF+sbVWic/X/i
-         HJyd6QP59DrXBTVAwsWaa9s2l0sygSw4EMYfjnZ5iCbjV9cYq9FRoTeAPMXnGIZwfPki
-         OBpQ==
-X-Gm-Message-State: AC+VfDx0HA1xVhY45EPCYizDa9lie/7n8GkFDz8+5mNLiIZTqDyJCs6o
-        U8CyX8z+vRgG+YaqDyck498=
-X-Google-Smtp-Source: ACHHUZ4h4suM9rAl/2fMKAeD8dDqnHEOTIlWctoaikfJw1mjnZNBjFADfaIGHYLBECxSkDuj4AnC2Q==
-X-Received: by 2002:a17:90a:6408:b0:255:b1d9:a206 with SMTP id g8-20020a17090a640800b00255b1d9a206mr2363761pjj.22.1686168612499;
-        Wed, 07 Jun 2023 13:10:12 -0700 (PDT)
-Received: from macbook-pro-8.dhcp.thefacebook.com ([2620:10d:c090:500::6:1c96])
-        by smtp.gmail.com with ESMTPSA id t3-20020a17090b018300b0023fcece8067sm1718674pjs.2.2023.06.07.13.10.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 13:10:12 -0700 (PDT)
-Date:   Wed, 7 Jun 2023 13:10:08 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     menglong8.dong@gmail.com
-Cc:     davem@davemloft.net, dsahern@kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@google.com, x86@kernel.org,
-        imagedong@tencent.com, benbjiang@tencent.com,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v3 3/3] selftests/bpf: add testcase for
- FENTRY/FEXIT with 6+ arguments
-Message-ID: <20230607201008.662mecxnksxiees3@macbook-pro-8.dhcp.thefacebook.com>
-References: <20230607125911.145345-1-imagedong@tencent.com>
- <20230607125911.145345-4-imagedong@tencent.com>
+        Wed, 7 Jun 2023 16:10:41 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D531210B;
+        Wed,  7 Jun 2023 13:10:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686168639; x=1717704639;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=VfslLwORsK733vSveOGYznR4Jbt1k5WrIGitcTmqWsI=;
+  b=SJt/CGSkG6k41B6a9p3dhX7obJve8RCp1B7V/lGyDIyHu8hCrZE+l8M3
+   r1FozH/cvsNHi8G7jLslrf416wksXtaROUrU100Kr+MTjfYYPCuKdsEag
+   h2uO1uQjvHhjNHBqyiX4HdzphLFIlsTzMGqgXb9xdN/G7IuXGRc0frZ8L
+   /o8k7IihOCEmXIC7VK561oM+lT+MGjWYU7lh4TAAdAv/1Xe17wwq8mxHY
+   gO8vMe86NwoMRtZsrzBnnRrU3qBd1Rt2fS/dJcmEYJbPkihOHns7vnRel
+   GYJFerZ+aDW90cK5MGFenFO6yS5MJ8WwWCk53XnKEYKCEu9SbDPvJZCXf
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="360427250"
+X-IronPort-AV: E=Sophos;i="6.00,225,1681196400"; 
+   d="scan'208";a="360427250"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 13:10:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="883929122"
+X-IronPort-AV: E=Sophos;i="6.00,225,1681196400"; 
+   d="scan'208";a="883929122"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga005.jf.intel.com with ESMTP; 07 Jun 2023 13:10:37 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1q6zUK-001zfm-0q;
+        Wed, 07 Jun 2023 23:10:36 +0300
+Date:   Wed, 7 Jun 2023 23:10:36 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: Re: [PATCH v1 1/1] pinctrl: intel: Add Intel Meteor Lake-S pin
+ controller support
+Message-ID: <ZIDkPPRpONQw/csZ@smile.fi.intel.com>
+References: <20230605164943.3641-1-andriy.shevchenko@linux.intel.com>
+ <CACRpkdbnHgqiXHFS+UnCrs5dPCwTd+g3NLyF-NcOq9ugdzZM=A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230607125911.145345-4-imagedong@tencent.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CACRpkdbnHgqiXHFS+UnCrs5dPCwTd+g3NLyF-NcOq9ugdzZM=A@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 08:59:11PM +0800, menglong8.dong@gmail.com wrote:
-> From: Menglong Dong <imagedong@tencent.com>
+On Wed, Jun 07, 2023 at 08:42:19AM +0200, Linus Walleij wrote:
+> On Mon, Jun 5, 2023 at 6:49 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
 > 
-> Add test9/test10 in fexit_test.c and fentry_test.c to test the fentry
-> and fexit whose target function have 7/12 arguments.
+> > This driver adds pinctrl/GPIO support for Intel Meteor Lake-S.
+> > The GPIO controller is based on the next generation GPIO hardware
+> > but still compatible with the one supported by the Intel pinctrl
+> > and GPIO core driver.
+> >
+> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > 
-> Correspondingly, add bpf_testmod_fentry_test7() and
-> bpf_testmod_fentry_test12() to bpf_testmod.c
-> 
-> And the testcases passed:
-> 
-> ./test_progs -t fexit
-> Summary: 5/12 PASSED, 0 SKIPPED, 0 FAILED
-> 
-> ./test_progs -t fentry
-> Summary: 3/0 PASSED, 0 SKIPPED, 0 FAILED
-> 
-> Reviewed-by: Jiang Biao <benbjiang@tencent.com>
-> Signed-off-by: Menglong Dong <imagedong@tencent.com>
-> ---
-> v3:
-> - move bpf_fentry_test{7,12} to bpf_testmod.c and rename them to
->   bpf_testmod_fentry_test{7,12} meanwhile
-> - get return value by bpf_get_func_ret() in
->   "fexit/bpf_testmod_fentry_test12", as we don't change ___bpf_ctx_cast()
->   in this version
-> ---
->  .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 19 ++++++++++-
->  .../selftests/bpf/prog_tests/fentry_fexit.c   |  4 ++-
->  .../selftests/bpf/prog_tests/fentry_test.c    |  2 ++
->  .../selftests/bpf/prog_tests/fexit_test.c     |  2 ++
->  .../testing/selftests/bpf/progs/fentry_test.c | 21 ++++++++++++
->  .../testing/selftests/bpf/progs/fexit_test.c  | 33 +++++++++++++++++++
->  6 files changed, 79 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-> index cf216041876c..66615fdbe3df 100644
-> --- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-> +++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-> @@ -191,6 +191,19 @@ noinline int bpf_testmod_fentry_test3(char a, int b, u64 c)
->  	return a + b + c;
->  }
->  
-> +noinline int bpf_testmod_fentry_test7(u64 a, void *b, short c, int d,
-> +				      void *e, u64 f, u64 g)
-> +{
-> +	return a + (long)b + c + d + (long)e + f + g;
-> +}
-> +
-> +noinline int bpf_testmod_fentry_test12(u64 a, void *b, short c, int d,
-> +				       void *e, u64 f, u64 g, u64 h,
-> +				       u64 i, u64 j, u64 k, u64 l)
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-Please switch args to a combination of u8,u16,u32,u64.
-u64 only args might hide bugs.
+Pushed to my review and testing queue, thanks!
+
+> I expect this to arrive by pull request with other Intel stuff
+> as usual.
+
+Yes, this week or beginning of the next one.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
