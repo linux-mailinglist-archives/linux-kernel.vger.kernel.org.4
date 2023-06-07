@@ -2,1077 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B7527262B5
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 16:23:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C32577262B9
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 16:23:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238595AbjFGOXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 10:23:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53048 "EHLO
+        id S238902AbjFGOXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 10:23:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239056AbjFGOX2 (ORCPT
+        with ESMTP id S240877AbjFGOXg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 10:23:28 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 970241BCA
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 07:23:25 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-561b7729a12so9620657b3.1
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 07:23:25 -0700 (PDT)
+        Wed, 7 Jun 2023 10:23:36 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C936C1BE6;
+        Wed,  7 Jun 2023 07:23:34 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id 41be03b00d2f7-53fb4ee9ba1so3605296a12.3;
+        Wed, 07 Jun 2023 07:23:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1686147805; x=1688739805;
+        d=gmail.com; s=20221208; t=1686147814; x=1688739814;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=MudwPseb1vFT3KbekN71nGHZEnBTkZP7t7FXAqejAPs=;
-        b=JeX+oC08w8j//OxeCuWJvjG6RbqujyMoMiKyBWddwB/vx3QkL39hw26d74/NaNaiXk
-         4+ggd0Uc/Q2xe708F7L9Gvk5DbfOD+7LlcNLVPQEfYDrZSTimoZvk8m3dhNnb9mu//lA
-         /JpSn4dJrZK5Iu6K7LQsuEcJYQimRbyVPspQZl8PbhSb2AllnUznzDMCkmpRSNCpFGO2
-         OCHJ3qkEOd7KMsvQeYpRmfnqVqAOOkC6Et0skhT605HGKG/yxG1WZ2m91c1S1nj0wJaz
-         5n0jln2i1KOP0GitkeTZ2FpFN4ZC1wTXdeW4kL9ZknbguZmYGsc70K9WeoeQxVo1QzwU
-         TbkA==
+        bh=y+BeJtXlFkE5viMltERILFoZ9Megcec+/xxDBDj3GRM=;
+        b=W6z8pzg7LSGWEXwzWSqRpb4CxOsYMn4m8Q6Nqb8zdMLZF7NKrNulpOePLfiDN06e78
+         PEyXdfRzlGYSxqlnkCu3G5BY05NDwo6fPjMxRgCGzl+kEOG79oURFQ53OzH+qInRT83Q
+         X9o0sCJlXS/xeSZQgS7GQ99XfOmDuyudppnUQcERA8N12FR0IpTDpnrGfmxESeMDrqk/
+         DVH4ml7WcaHTCsho3qBaOlQkWdbtkkn39yPK0AjUVJs9yhNkXFhJii+JmsbBxx66A7aH
+         DulGUsJTO7203Q6z8VT/4QKQBZTPvZVy6oPijdUWdvaS4kgj1ivU7RbN/aCjDazVnkYT
+         LHtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686147805; x=1688739805;
+        d=1e100.net; s=20221208; t=1686147814; x=1688739814;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=MudwPseb1vFT3KbekN71nGHZEnBTkZP7t7FXAqejAPs=;
-        b=gZUZs9/8eq4gqo1Rh1lQUCRy/3OD1Q39XUTyXGPT7UoX4hNY6c+5Kp80qZjN0/bQlb
-         6CZgJAT2g5ZDg0Sf0Yp1ZbrPCDeMPfZZbc9dbz9KV/XLD57L/eRqQWcmSDqJAYoopJDZ
-         KwqJnqVuZ2rBIclACfMwa+gbb3/fTyHJ2LU1lU5GyFgrCJvyC7UYoroEK2ePW/s3fil/
-         V2F6epn6wuUEZSB2Y3+c4avKFUeCu3hndxwgiQJTetldATdBxWTP+QQASGS3YIltxctU
-         9OwOI43Sb5YEMsPyuuS3n5F76+odpNEgTXV3RTFOBub2QvoAh/0DvpVdwyDStw0pAtMD
-         g7Tg==
-X-Gm-Message-State: AC+VfDx9kdRxYgwnVWIhnbwDjqFEd3Ei9I5s3QTbcdhZ3Zb5I6wq6JBm
-        yd0gLzLPCXLsLCTX61QxQDtX77Hl9LCDZDl8LSd27/I8FhHy8xVxb0M=
-X-Google-Smtp-Source: ACHHUZ5DK2DGZWP9n0vu2xwwvqyQ4N199xb5GTCbKdwG55VoGt9Keg453XVTSNPS9wD9oq0yFYODfLMerX8C8rEoorc=
-X-Received: by 2002:a81:61c6:0:b0:564:eb9a:689d with SMTP id
- v189-20020a8161c6000000b00564eb9a689dmr17868738ywb.13.1686147804420; Wed, 07
- Jun 2023 07:23:24 -0700 (PDT)
+        bh=y+BeJtXlFkE5viMltERILFoZ9Megcec+/xxDBDj3GRM=;
+        b=YsT2DgdBPNiLJknNGSFy5so/H2+2j65+vHU55u38Wg+0m7xVsc/ags/uyJIBIk+NdP
+         RkyaxaRAXZOjAc77ZAfycesvCxJXj8pqicqZ1t3YORH3Vgl0GpmBp9Ww8mmXrm02KlJH
+         wrEHooblOts/xSifkBzCUXkQedcOQDdXhG2J8POvKQKQ6g1HPevVWvHjTLgVtfBqQNZn
+         3mdDKNyFpR3gAt+aGTrcVpFdLjuN+QOkRwvD3P0TtNL1T1PV9upkxdBlZh7CesmGOebA
+         GV4eNIC9LcLuaB3/XhiOcmhrNEfPBSZUeoe5HfUNzDmTyHfOJ4QypVbI71z8zZj1IknI
+         UhNg==
+X-Gm-Message-State: AC+VfDzZXqS6iOBBQ6LoZWF8KYPHvpcGvpqkZOPu9U85oYfNpcd+g1eA
+        L6+PT5iN2Ml289ZbASrmaRStTR1OGPtQaFHhRdmVRUA/ttbxqQ==
+X-Google-Smtp-Source: ACHHUZ6+skY3wkNyiJ013XOEI50o3sMjpeIah6hLKtT6JZM3nsMfRM1HaOTj9dKeJGivUR68JYHuRgZ0dktuw9EcRfE=
+X-Received: by 2002:a17:90b:1d0e:b0:256:807e:6bd with SMTP id
+ on14-20020a17090b1d0e00b00256807e06bdmr2173657pjb.28.1686147814053; Wed, 07
+ Jun 2023 07:23:34 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230517105135.1871868-1-apatel@ventanamicro.com>
- <20230517105135.1871868-7-apatel@ventanamicro.com> <CAOnJCUKzN-s3iSfYYvSZsLmUDzYuJXSHOpv412+g1_9rw3QWMw@mail.gmail.com>
-In-Reply-To: <CAOnJCUKzN-s3iSfYYvSZsLmUDzYuJXSHOpv412+g1_9rw3QWMw@mail.gmail.com>
-From:   Anup Patel <apatel@ventanamicro.com>
-Date:   Wed, 7 Jun 2023 19:53:12 +0530
-Message-ID: <CAK9=C2WWf6z+B5TFc_x9rqC5Ls0cXqAYD-QG7rB3mRmn-SJadQ@mail.gmail.com>
-Subject: Re: [PATCH 06/10] RISC-V: KVM: Implement device interface for AIA irqchip
-To:     Atish Patra <atishp@atishpatra.org>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Andrew Jones <ajones@ventanamicro.com>, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
+References: <20230526030559.326566-1-aford173@gmail.com> <e1379d94-66a5-8538-abdf-de7770befb7d@prevas.dk>
+ <CAHCN7xK9RaLRSK_jSbbuGBUf14-FOHsrawi2J8G29iHSOj2Nyw@mail.gmail.com>
+In-Reply-To: <CAHCN7xK9RaLRSK_jSbbuGBUf14-FOHsrawi2J8G29iHSOj2Nyw@mail.gmail.com>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Wed, 7 Jun 2023 09:23:22 -0500
+Message-ID: <CAHCN7xJ65gv-n5VHYf3MeEBYDBHy07HMDL3LmYAwfYLPySrFnw@mail.gmail.com>
+Subject: Re: [PATCH V8 0/7] drm: bridge: samsung-dsim: Support variable clocking
+To:     Rasmus Villemoes <rasmus.villemoes@prevas.dk>
+Cc:     dri-devel@lists.freedesktop.org, aford@beaconembedded.com,
+        Inki Dae <inki.dae@samsung.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Marek Vasut <marex@denx.de>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 7, 2023 at 5:44=E2=80=AFAM Atish Patra <atishp@atishpatra.org> =
-wrote:
+On Wed, Jun 7, 2023 at 8:27=E2=80=AFAM Adam Ford <aford173@gmail.com> wrote=
+:
 >
-> On Wed, May 17, 2023 at 3:52=E2=80=AFAM Anup Patel <apatel@ventanamicro.c=
-om> wrote:
+> On Wed, Jun 7, 2023 at 8:15=E2=80=AFAM Rasmus Villemoes
+> <rasmus.villemoes@prevas.dk> wrote:
 > >
-> > We implement KVM device interface for in-kernel AIA irqchip so that
-> > user-space can use KVM device ioctls to create, configure, and destroy
-> > in-kernel AIA irqchip.
+> > On 26/05/2023 05.05, Adam Ford wrote:
+> > > This series fixes the blanking pack size and the PMS calculation.  It=
+ then
+> > > adds support to allows the DSIM to dynamically DPHY clocks, and suppo=
+rt
+> > > non-burst mode while allowing the removal of the hard-coded clock val=
+ues
+> > > for the PLL for imx8m mini/nano/plus, and it allows the removal of th=
+e
+> > > burst-clock device tree entry when burst-mode isn't supported by conn=
+ected
+> > > devices like an HDMI brige.  In that event, the HS clock is set to th=
+e
+> > > value requested by the bridge chip.
+> > >
+> > > This has been tested on both an i.MX8M Nano and i.MX8M Plus, and shou=
+ld
+> > > work on i.MX8M Mini as well. Marek Szyprowski has tested it on variou=
+s
+> > > Exynos boards.
 > >
-> > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> > ---
-> >  arch/riscv/include/asm/kvm_aia.h  | 132 +++++--
-> >  arch/riscv/include/uapi/asm/kvm.h |  36 ++
-> >  arch/riscv/kvm/Makefile           |   1 +
-> >  arch/riscv/kvm/aia.c              |  11 +
-> >  arch/riscv/kvm/aia_device.c       | 622 ++++++++++++++++++++++++++++++
-> >  include/uapi/linux/kvm.h          |   2 +
-> >  6 files changed, 762 insertions(+), 42 deletions(-)
-> >  create mode 100644 arch/riscv/kvm/aia_device.c
+> > Hi all
 > >
-> > diff --git a/arch/riscv/include/asm/kvm_aia.h b/arch/riscv/include/asm/=
-kvm_aia.h
-> > index 3bc0a0e47a15..a1281ebc9b92 100644
-> > --- a/arch/riscv/include/asm/kvm_aia.h
-> > +++ b/arch/riscv/include/asm/kvm_aia.h
-> > @@ -20,6 +20,33 @@ struct kvm_aia {
+> > We're testing this on top of v6.4-rc4 on our imx8mp board, which has a
+> > ti-sn65dsi86 DSI -> DisplayPort bridge. We do get an image at
+> > 1920x1200, but the monitor says it's only at 58Hz, and measuring on the
+> > DSI signals does seem to confirm that the update frequency is about 57.=
+7
+> > or 57.8Hz (it's pretty hard to get a good measurement). It looks like
+> > it's the lines that are too long, by a time that corresponds to about 8=
+0
+> > pixels. But all the frontporch/backporch/hsync values look sane and
+> > completely standard for that resolution.
 > >
-> >         /* In-kernel irqchip initialized */
-> >         bool            initialized;
-> > +
-> > +       /* Virtualization mode (Emulation, HW Accelerated, or Auto) */
-> > +       u32             mode;
-> > +
-> > +       /* Number of MSIs */
-> > +       u32             nr_ids;
-> > +
-> > +       /* Number of wired IRQs */
-> > +       u32             nr_sources;
-> > +
-> > +       /* Number of group bits in IMSIC address */
-> > +       u32             nr_group_bits;
-> > +
-> > +       /* Position of group bits in IMSIC address */
-> > +       u32             nr_group_shift;
-> > +
-> > +       /* Number of hart bits in IMSIC address */
-> > +       u32             nr_hart_bits;
-> > +
-> > +       /* Number of guest bits in IMSIC address */
-> > +       u32             nr_guest_bits;
-> > +
-> > +       /* Guest physical address of APLIC */
-> > +       gpa_t           aplic_addr;
-> > +
-> > +       /* Internal state of APLIC */
-> > +       void            *aplic_state;
-> >  };
+> > Setting samsung,burst-clock-frequency explicitly to something large
+> > enough or letting it be derived from the 154MHz pixel clock makes no
+> > difference.
 > >
-> >  struct kvm_vcpu_aia_csr {
-> > @@ -38,8 +65,19 @@ struct kvm_vcpu_aia {
-> >
-> >         /* CPU AIA CSR context upon Guest VCPU reset */
-> >         struct kvm_vcpu_aia_csr guest_reset_csr;
-> > +
-> > +       /* Guest physical address of IMSIC for this VCPU */
-> > +       gpa_t           imsic_addr;
-> > +
-> > +       /* HART index of IMSIC extacted from guest physical address */
-> > +       u32             hart_index;
-> > +
-> > +       /* Internal state of IMSIC for this VCPU */
-> > +       void            *imsic_state;
-> >  };
-> >
-> > +#define KVM_RISCV_AIA_UNDEF_ADDR       (-1)
-> > +
-> >  #define kvm_riscv_aia_initialized(k)   ((k)->arch.aia.initialized)
-> >
-> >  #define irqchip_in_kernel(k)           ((k)->arch.aia.in_kernel)
-> > @@ -50,10 +88,17 @@ DECLARE_STATIC_KEY_FALSE(kvm_riscv_aia_available);
-> >  #define kvm_riscv_aia_available() \
-> >         static_branch_unlikely(&kvm_riscv_aia_available)
-> >
-> > +extern struct kvm_device_ops kvm_riscv_aia_device_ops;
-> > +
-> >  static inline void kvm_riscv_vcpu_aia_imsic_release(struct kvm_vcpu *v=
-cpu)
-> >  {
-> >  }
-> >
-> > +static inline int kvm_riscv_vcpu_aia_imsic_update(struct kvm_vcpu *vcp=
-u)
-> > +{
-> > +       return 1;
-> > +}
-> > +
-> >  #define KVM_RISCV_AIA_IMSIC_TOPEI      (ISELECT_MASK + 1)
-> >  static inline int kvm_riscv_vcpu_aia_imsic_rmw(struct kvm_vcpu *vcpu,
-> >                                                unsigned long isel,
-> > @@ -64,6 +109,41 @@ static inline int kvm_riscv_vcpu_aia_imsic_rmw(stru=
-ct kvm_vcpu *vcpu,
-> >         return 0;
-> >  }
-> >
-> > +static inline void kvm_riscv_vcpu_aia_imsic_reset(struct kvm_vcpu *vcp=
-u)
-> > +{
-> > +}
-> > +
-> > +static inline int kvm_riscv_vcpu_aia_imsic_inject(struct kvm_vcpu *vcp=
-u,
-> > +                                                 u32 guest_index, u32 =
-offset,
-> > +                                                 u32 iid)
-> > +{
-> > +       return 0;
-> > +}
-> > +
-> > +static inline int kvm_riscv_vcpu_aia_imsic_init(struct kvm_vcpu *vcpu)
-> > +{
-> > +       return 0;
-> > +}
-> > +
-> > +static inline void kvm_riscv_vcpu_aia_imsic_cleanup(struct kvm_vcpu *v=
-cpu)
-> > +{
-> > +}
-> > +
-> > +static inline int kvm_riscv_aia_aplic_inject(struct kvm *kvm,
-> > +                                            u32 source, bool level)
-> > +{
-> > +       return 0;
-> > +}
-> > +
-> > +static inline int kvm_riscv_aia_aplic_init(struct kvm *kvm)
-> > +{
-> > +       return 0;
-> > +}
-> > +
-> > +static inline void kvm_riscv_aia_aplic_cleanup(struct kvm *kvm)
-> > +{
-> > +}
-> > +
-> >  #ifdef CONFIG_32BIT
-> >  void kvm_riscv_vcpu_aia_flush_interrupts(struct kvm_vcpu *vcpu);
-> >  void kvm_riscv_vcpu_aia_sync_interrupts(struct kvm_vcpu *vcpu);
-> > @@ -99,50 +179,18 @@ int kvm_riscv_vcpu_aia_rmw_ireg(struct kvm_vcpu *v=
-cpu, unsigned int csr_num,
-> >  { .base =3D CSR_SIREG,      .count =3D 1, .func =3D kvm_riscv_vcpu_aia=
-_rmw_ireg }, \
-> >  { .base =3D CSR_STOPEI,     .count =3D 1, .func =3D kvm_riscv_vcpu_aia=
-_rmw_topei },
-> >
-> > -static inline int kvm_riscv_vcpu_aia_update(struct kvm_vcpu *vcpu)
-> > -{
-> > -       return 1;
-> > -}
-> > -
-> > -static inline void kvm_riscv_vcpu_aia_reset(struct kvm_vcpu *vcpu)
-> > -{
-> > -}
-> > -
-> > -static inline int kvm_riscv_vcpu_aia_init(struct kvm_vcpu *vcpu)
-> > -{
-> > -       return 0;
-> > -}
-> > -
-> > -static inline void kvm_riscv_vcpu_aia_deinit(struct kvm_vcpu *vcpu)
-> > -{
-> > -}
-> > -
-> > -static inline int kvm_riscv_aia_inject_msi_by_id(struct kvm *kvm,
-> > -                                                u32 hart_index,
-> > -                                                u32 guest_index, u32 i=
-id)
-> > -{
-> > -       return 0;
-> > -}
-> > -
-> > -static inline int kvm_riscv_aia_inject_msi(struct kvm *kvm,
-> > -                                          struct kvm_msi *msi)
-> > -{
-> > -       return 0;
-> > -}
-> > +int kvm_riscv_vcpu_aia_update(struct kvm_vcpu *vcpu);
-> > +void kvm_riscv_vcpu_aia_reset(struct kvm_vcpu *vcpu);
-> > +int kvm_riscv_vcpu_aia_init(struct kvm_vcpu *vcpu);
-> > +void kvm_riscv_vcpu_aia_deinit(struct kvm_vcpu *vcpu);
-> >
-> > -static inline int kvm_riscv_aia_inject_irq(struct kvm *kvm,
-> > -                                          unsigned int irq, bool level=
-)
-> > -{
-> > -       return 0;
-> > -}
-> > +int kvm_riscv_aia_inject_msi_by_id(struct kvm *kvm, u32 hart_index,
-> > +                                  u32 guest_index, u32 iid);
-> > +int kvm_riscv_aia_inject_msi(struct kvm *kvm, struct kvm_msi *msi);
-> > +int kvm_riscv_aia_inject_irq(struct kvm *kvm, unsigned int irq, bool l=
-evel);
-> >
-> > -static inline void kvm_riscv_aia_init_vm(struct kvm *kvm)
-> > -{
-> > -}
-> > -
-> > -static inline void kvm_riscv_aia_destroy_vm(struct kvm *kvm)
-> > -{
-> > -}
-> > +void kvm_riscv_aia_init_vm(struct kvm *kvm);
-> > +void kvm_riscv_aia_destroy_vm(struct kvm *kvm);
-> >
-> >  int kvm_riscv_aia_alloc_hgei(int cpu, struct kvm_vcpu *owner,
-> >                              void __iomem **hgei_va, phys_addr_t *hgei_=
-pa);
-> > diff --git a/arch/riscv/include/uapi/asm/kvm.h b/arch/riscv/include/uap=
-i/asm/kvm.h
-> > index 332d4a274891..57f8d8bb498e 100644
-> > --- a/arch/riscv/include/uapi/asm/kvm.h
-> > +++ b/arch/riscv/include/uapi/asm/kvm.h
-> > @@ -204,6 +204,42 @@ enum KVM_RISCV_SBI_EXT_ID {
-> >  #define KVM_REG_RISCV_SBI_MULTI_REG_LAST       \
-> >                 KVM_REG_RISCV_SBI_MULTI_REG(KVM_RISCV_SBI_EXT_MAX - 1)
-> >
-> > +/* Device Control API: RISC-V AIA */
-> > +#define KVM_DEV_RISCV_APLIC_ALIGN              0x1000
-> > +#define KVM_DEV_RISCV_APLIC_SIZE               0x4000
-> > +#define KVM_DEV_RISCV_APLIC_MAX_HARTS          0x4000
-> > +#define KVM_DEV_RISCV_IMSIC_ALIGN              0x1000
-> > +#define KVM_DEV_RISCV_IMSIC_SIZE               0x1000
-> > +
-> > +#define KVM_DEV_RISCV_AIA_GRP_CONFIG           0
-> > +#define KVM_DEV_RISCV_AIA_CONFIG_MODE          0
-> > +#define KVM_DEV_RISCV_AIA_CONFIG_IDS           1
-> > +#define KVM_DEV_RISCV_AIA_CONFIG_SRCS          2
-> > +#define KVM_DEV_RISCV_AIA_CONFIG_GROUP_BITS    3
-> > +#define KVM_DEV_RISCV_AIA_CONFIG_GROUP_SHIFT   4
-> > +#define KVM_DEV_RISCV_AIA_CONFIG_HART_BITS     5
-> > +#define KVM_DEV_RISCV_AIA_CONFIG_GUEST_BITS    6
+> > Any ideas?
 >
-> nit: Space here and some comment about each mode would be useful.
+> What refresh rate are you trying to achieve?  It seems like 57.7 or
+> 57.8 is really close to the 58 the Monitor states.  I would expect the
+> refresh to be driven by whatever the monitor states it can handle.
+>
+> Have you tried using modetest to see what refresh rates are available?
+>  When I was doing this driver work, I would use modetest to determine
+> the connector ID, then use modetest -s
+> <connector-id>:<resolution>-<refresh> to display various resolutions
+> and refresh rates.
+>
+> The 8MP shares the video-pll clock with both disp1 and disp2 clocks,
+> and the imx-lcdif driver, which sends the display signals to the DSI,
+> uses the disp clock, so the video-pll needs to be an exact multiple of
+> the pixel clock or the output won't sink.  Modetest should also show
+> you the desired pixel clock for a given resolution and refresh.
+> My displays didn't show 19200x1200 as an option, so I wasn't able to
+> test that configuration.
 
-Okay, I will update.
+Another thing you could try would be this rounding patch that I'm
+experimenting with [1].
+
+From what I can see, some resolutions end up with math that end up
+rounding down, and this patch corrects the timings a bit to attempt to
+compensate.  I haven't tested this extensively yet, but you can try it
+to see if it helps.
+
+adam
+[1] - https://github.com/aford173/linux/commit/183cf6d154afeb9b0300500b09d7=
+b8ec53047a12
+
 
 >
-> > +#define KVM_DEV_RISCV_AIA_MODE_EMUL            0
-> > +#define KVM_DEV_RISCV_AIA_MODE_HWACCEL         1
-> > +#define KVM_DEV_RISCV_AIA_MODE_AUTO            2
->
->
-> > +#define KVM_DEV_RISCV_AIA_IDS_MIN              63
-> > +#define KVM_DEV_RISCV_AIA_IDS_MAX              2048
-> > +#define KVM_DEV_RISCV_AIA_SRCS_MAX             1024
-> > +#define KVM_DEV_RISCV_AIA_GROUP_BITS_MAX       8
-> > +#define KVM_DEV_RISCV_AIA_GROUP_SHIFT_MIN      24
-> > +#define KVM_DEV_RISCV_AIA_GROUP_SHIFT_MAX      56
-> > +#define KVM_DEV_RISCV_AIA_HART_BITS_MAX        16
-> > +#define KVM_DEV_RISCV_AIA_GUEST_BITS_MAX       8
-> > +
-> > +#define KVM_DEV_RISCV_AIA_GRP_ADDR             1
-> > +#define KVM_DEV_RISCV_AIA_ADDR_APLIC           0
-> > +#define KVM_DEV_RISCV_AIA_ADDR_IMSIC(__vcpu)   (1 + (__vcpu))
-> > +#define KVM_DEV_RISCV_AIA_ADDR_MAX             \
-> > +               (1 + KVM_DEV_RISCV_APLIC_MAX_HARTS)
-> > +
-> > +#define KVM_DEV_RISCV_AIA_GRP_CTRL             2
->
-> Why not keep all KVM_DEV_RISCV_AIA_GRP_* items together ?
-> There are two more KVM_DEV_RISCV_AIA_GRP_APLIC/IMSIC defined in the
-> other patches.
->
-> I think it would be good to keep the uapi changes in one patch if possibl=
-e.
-
-I have divided changes among patches based on where the
-defines are used.
-
->
-> > +#define KVM_DEV_RISCV_AIA_CTRL_INIT            0
-> > +
-> >  /* One single KVM irqchip, ie. the AIA */
-> >  #define KVM_NR_IRQCHIPS                        1
+> adam
 > >
-> > diff --git a/arch/riscv/kvm/Makefile b/arch/riscv/kvm/Makefile
-> > index 8031b8912a0d..dd69ebe098bd 100644
-> > --- a/arch/riscv/kvm/Makefile
-> > +++ b/arch/riscv/kvm/Makefile
-> > @@ -27,3 +27,4 @@ kvm-y +=3D vcpu_sbi_hsm.o
-> >  kvm-y +=3D vcpu_timer.o
-> >  kvm-$(CONFIG_RISCV_PMU_SBI) +=3D vcpu_pmu.o vcpu_sbi_pmu.o
-> >  kvm-y +=3D aia.o
-> > +kvm-y +=3D aia_device.o
-> > diff --git a/arch/riscv/kvm/aia.c b/arch/riscv/kvm/aia.c
-> > index 18c442c15ff2..585a3b42c52c 100644
-> > --- a/arch/riscv/kvm/aia.c
-> > +++ b/arch/riscv/kvm/aia.c
-> > @@ -631,6 +631,14 @@ int kvm_riscv_aia_init(void)
-> >         if (rc)
-> >                 return rc;
+> > Thanks,
+> > Rasmus
 > >
-> > +       /* Register device operations */
-> > +       rc =3D kvm_register_device_ops(&kvm_riscv_aia_device_ops,
-> > +                                    KVM_DEV_TYPE_RISCV_AIA);
-> > +       if (rc) {
-> > +               aia_hgei_exit();
-> > +               return rc;
-> > +       }
-> > +
-> >         /* Enable KVM AIA support */
-> >         static_branch_enable(&kvm_riscv_aia_available);
-> >
-> > @@ -642,6 +650,9 @@ void kvm_riscv_aia_exit(void)
-> >         if (!kvm_riscv_aia_available())
-> >                 return;
-> >
-> > +       /* Unregister device operations */
-> > +       kvm_unregister_device_ops(KVM_DEV_TYPE_RISCV_AIA);
-> > +
-> >         /* Cleanup the HGEI state */
-> >         aia_hgei_exit();
-> >  }
-> > diff --git a/arch/riscv/kvm/aia_device.c b/arch/riscv/kvm/aia_device.c
-> > new file mode 100644
-> > index 000000000000..a151fb357887
-> > --- /dev/null
-> > +++ b/arch/riscv/kvm/aia_device.c
-> > @@ -0,0 +1,622 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * Copyright (C) 2021 Western Digital Corporation or its affiliates.
-> > + * Copyright (C) 2022 Ventana Micro Systems Inc.
-> > + *
-> > + * Authors:
-> > + *     Anup Patel <apatel@ventanamicro.com>
-> > + */
-> > +
-> > +#include <linux/bits.h>
-> > +#include <linux/kvm_host.h>
-> > +#include <linux/uaccess.h>
-> > +#include <asm/kvm_aia_imsic.h>
-> > +
-> > +static void unlock_vcpus(struct kvm *kvm, int vcpu_lock_idx)
-> > +{
-> > +       struct kvm_vcpu *tmp_vcpu;
-> > +
-> > +       for (; vcpu_lock_idx >=3D 0; vcpu_lock_idx--) {
-> > +               tmp_vcpu =3D kvm_get_vcpu(kvm, vcpu_lock_idx);
-> > +               mutex_unlock(&tmp_vcpu->mutex);
-> > +       }
-> > +}
-> > +
-> > +static void unlock_all_vcpus(struct kvm *kvm)
-> > +{
-> > +       unlock_vcpus(kvm, atomic_read(&kvm->online_vcpus) - 1);
-> > +}
-> > +
-> > +static bool lock_all_vcpus(struct kvm *kvm)
-> > +{
-> > +       struct kvm_vcpu *tmp_vcpu;
-> > +       unsigned long c;
-> > +
-> > +       kvm_for_each_vcpu(c, tmp_vcpu, kvm) {
-> > +               if (!mutex_trylock(&tmp_vcpu->mutex)) {
-> > +                       unlock_vcpus(kvm, c - 1);
-> > +                       return false;
-> > +               }
-> > +       }
-> > +
-> > +       return true;
-> > +}
-> > +
-> > +static int aia_create(struct kvm_device *dev, u32 type)
-> > +{
-> > +       int ret;
-> > +       unsigned long i;
-> > +       struct kvm *kvm =3D dev->kvm;
-> > +       struct kvm_vcpu *vcpu;
-> > +
-> > +       if (irqchip_in_kernel(kvm))
-> > +               return -EEXIST;
-> > +
-> > +       ret =3D -EBUSY;
-> > +       if (!lock_all_vcpus(kvm))
-> > +               return ret;
-> > +
-> > +       kvm_for_each_vcpu(i, vcpu, kvm) {
-> > +               if (vcpu->arch.ran_atleast_once)
-> > +                       goto out_unlock;
-> > +       }
-> > +       ret =3D 0;
-> > +
-> > +       kvm->arch.aia.in_kernel =3D true;
-> > +
-> > +out_unlock:
-> > +       unlock_all_vcpus(kvm);
-> > +       return ret;
-> > +}
-> > +
-> > +static void aia_destroy(struct kvm_device *dev)
-> > +{
-> > +       kfree(dev);
-> > +}
-> > +
-> > +static int aia_config(struct kvm *kvm, unsigned long type,
-> > +                     u32 *nr, bool write)
-> > +{
-> > +       struct kvm_aia *aia =3D &kvm->arch.aia;
-> > +
-> > +       /* Writes can only be done before irqchip is initialized */
-> > +       if (write && kvm_riscv_aia_initialized(kvm))
-> > +               return -EBUSY;
-> > +
-> > +       switch (type) {
-> > +       case KVM_DEV_RISCV_AIA_CONFIG_MODE:
-> > +               if (write) {
-> > +                       switch (*nr) {
-> > +                       case KVM_DEV_RISCV_AIA_MODE_EMUL:
-> > +                               break;
-> > +                       case KVM_DEV_RISCV_AIA_MODE_HWACCEL:
-> > +                       case KVM_DEV_RISCV_AIA_MODE_AUTO:
-> > +                               /*
-> > +                                * HW Acceleration and Auto modes only
-> > +                                * supported on host with non-zero gues=
-t
-> > +                                * external interrupts (i.e. non-zero
-> > +                                * VS-level IMSIC pages).
-> > +                                */
-> > +                               if (!kvm_riscv_aia_nr_hgei)
-> > +                                       return -EINVAL;
-> > +                               break;
-> > +                       default:
-> > +                               return -EINVAL;
-> > +                       };
-> > +                       aia->mode =3D *nr;
-> > +               } else
-> > +                       *nr =3D aia->mode;
-> > +               break;
-> > +       case KVM_DEV_RISCV_AIA_CONFIG_IDS:
-> > +               if (write) {
-> > +                       if ((*nr < KVM_DEV_RISCV_AIA_IDS_MIN) ||
-> > +                           (*nr >=3D KVM_DEV_RISCV_AIA_IDS_MAX) ||
-> > +                           (*nr & KVM_DEV_RISCV_AIA_IDS_MIN) ||
-> > +                           (kvm_riscv_aia_max_ids <=3D *nr))
-> > +                               return -EINVAL;
-> > +                       aia->nr_ids =3D *nr;
-> > +               } else
-> > +                       *nr =3D aia->nr_ids;
-> > +               break;
-> > +       case KVM_DEV_RISCV_AIA_CONFIG_SRCS:
-> > +               if (write) {
-> > +                       if ((*nr >=3D KVM_DEV_RISCV_AIA_SRCS_MAX) ||
-> > +                           (*nr >=3D kvm_riscv_aia_max_ids))
-> > +                               return -EINVAL;
-> > +                       aia->nr_sources =3D *nr;
-> > +               } else
-> > +                       *nr =3D aia->nr_sources;
-> > +               break;
-> > +       case KVM_DEV_RISCV_AIA_CONFIG_GROUP_BITS:
-> > +               if (write) {
-> > +                       if (*nr >=3D KVM_DEV_RISCV_AIA_GROUP_BITS_MAX)
-> > +                               return -EINVAL;
-> > +                       aia->nr_group_bits =3D *nr;
-> > +               } else
-> > +                       *nr =3D aia->nr_group_bits;
-> > +               break;
-> > +       case KVM_DEV_RISCV_AIA_CONFIG_GROUP_SHIFT:
-> > +               if (write) {
-> > +                       if ((*nr < KVM_DEV_RISCV_AIA_GROUP_SHIFT_MIN) |=
-|
-> > +                           (*nr >=3D KVM_DEV_RISCV_AIA_GROUP_SHIFT_MAX=
-))
-> > +                               return -EINVAL;
-> > +                       aia->nr_group_shift =3D *nr;
-> > +               } else
-> > +                       *nr =3D aia->nr_group_shift;
-> > +               break;
-> > +       case KVM_DEV_RISCV_AIA_CONFIG_HART_BITS:
-> > +               if (write) {
-> > +                       if (*nr >=3D KVM_DEV_RISCV_AIA_HART_BITS_MAX)
-> > +                               return -EINVAL;
-> > +                       aia->nr_hart_bits =3D *nr;
-> > +               } else
-> > +                       *nr =3D aia->nr_hart_bits;
-> > +               break;
-> > +       case KVM_DEV_RISCV_AIA_CONFIG_GUEST_BITS:
-> > +               if (write) {
-> > +                       if (*nr >=3D KVM_DEV_RISCV_AIA_GUEST_BITS_MAX)
-> > +                               return -EINVAL;
-> > +                       aia->nr_guest_bits =3D *nr;
-> > +               } else
-> > +                       *nr =3D aia->nr_guest_bits;
-> > +               break;
-> > +       default:
-> > +               return -ENXIO;
-> > +       };
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > +static int aia_aplic_addr(struct kvm *kvm, u64 *addr, bool write)
-> > +{
-> > +       struct kvm_aia *aia =3D &kvm->arch.aia;
-> > +
-> > +       if (write) {
-> > +               /* Writes can only be done before irqchip is initialize=
-d */
-> > +               if (kvm_riscv_aia_initialized(kvm))
-> > +                       return -EBUSY;
-> > +
-> > +               if (*addr & (KVM_DEV_RISCV_APLIC_ALIGN - 1))
-> > +                       return -EINVAL;
-> > +
-> > +               aia->aplic_addr =3D *addr;
-> > +       } else
-> > +               *addr =3D aia->aplic_addr;
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > +static int aia_imsic_addr(struct kvm *kvm, u64 *addr,
-> > +                         unsigned long vcpu_idx, bool write)
-> > +{
-> > +       struct kvm_vcpu *vcpu;
-> > +       struct kvm_vcpu_aia *vcpu_aia;
-> > +
-> > +       vcpu =3D kvm_get_vcpu(kvm, vcpu_idx);
-> > +       if (!vcpu)
-> > +               return -EINVAL;
-> > +       vcpu_aia =3D &vcpu->arch.aia_context;
-> > +
-> > +       if (write) {
-> > +               /* Writes can only be done before irqchip is initialize=
-d */
-> > +               if (kvm_riscv_aia_initialized(kvm))
-> > +                       return -EBUSY;
-> > +
-> > +               if (*addr & (KVM_DEV_RISCV_IMSIC_ALIGN - 1))
-> > +                       return -EINVAL;
-> > +       }
-> > +
-> > +       mutex_lock(&vcpu->mutex);
-> > +       if (write)
-> > +               vcpu_aia->imsic_addr =3D *addr;
-> > +       else
-> > +               *addr =3D vcpu_aia->imsic_addr;
-> > +       mutex_unlock(&vcpu->mutex);
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > +static gpa_t aia_imsic_ppn(struct kvm_aia *aia, gpa_t addr)
-> > +{
-> > +       u32 h, l;
-> > +       gpa_t mask =3D 0;
-> > +
-> > +       h =3D aia->nr_hart_bits + aia->nr_guest_bits +
-> > +           IMSIC_MMIO_PAGE_SHIFT - 1;
-> > +       mask =3D GENMASK_ULL(h, 0);
-> > +
-> > +       if (aia->nr_group_bits) {
-> > +               h =3D aia->nr_group_bits + aia->nr_group_shift - 1;
-> > +               l =3D aia->nr_group_shift;
-> > +               mask |=3D GENMASK_ULL(h, l);
-> > +       }
-> > +
-> > +       return (addr & ~mask) >> IMSIC_MMIO_PAGE_SHIFT;
-> > +}
-> > +
-> > +static u32 aia_imsic_hart_index(struct kvm_aia *aia, gpa_t addr)
-> > +{
-> > +       u32 hart, group =3D 0;
-> > +
-> > +       hart =3D (addr >> (aia->nr_guest_bits + IMSIC_MMIO_PAGE_SHIFT))=
- &
-> > +               GENMASK_ULL(aia->nr_hart_bits - 1, 0);
-> > +       if (aia->nr_group_bits)
-> > +               group =3D (addr >> aia->nr_group_shift) &
-> > +                       GENMASK_ULL(aia->nr_group_bits - 1, 0);
-> > +
-> > +       return (group << aia->nr_hart_bits) | hart;
-> > +}
-> > +
-> > +static int aia_init(struct kvm *kvm)
-> > +{
-> > +       int ret, i;
-> > +       unsigned long idx;
-> > +       struct kvm_vcpu *vcpu;
-> > +       struct kvm_vcpu_aia *vaia;
-> > +       struct kvm_aia *aia =3D &kvm->arch.aia;
-> > +       gpa_t base_ppn =3D KVM_RISCV_AIA_UNDEF_ADDR;
-> > +
-> > +       /* Irqchip can be initialized only once */
-> > +       if (kvm_riscv_aia_initialized(kvm))
-> > +               return -EBUSY;
-> > +
-> > +       /* We might be in the middle of creating a VCPU? */
-> > +       if (kvm->created_vcpus !=3D atomic_read(&kvm->online_vcpus))
-> > +               return -EBUSY;
-> > +
-> > +       /* Number of sources should be less than or equals number of ID=
-s */
-> > +       if (aia->nr_ids < aia->nr_sources)
-> > +               return -EINVAL;
-> > +
-> > +       /* APLIC base is required for non-zero number of sources */
-> > +       if (aia->nr_sources && aia->aplic_addr =3D=3D KVM_RISCV_AIA_UND=
-EF_ADDR)
-> > +               return -EINVAL;
-> > +
-> > +       /* Initialize APLIC */
-> > +       ret =3D kvm_riscv_aia_aplic_init(kvm);
-> > +       if (ret)
-> > +               return ret;
-> > +
-> > +       /* Iterate over each VCPU */
-> > +       kvm_for_each_vcpu(idx, vcpu, kvm) {
-> > +               vaia =3D &vcpu->arch.aia_context;
-> > +
-> > +               /* IMSIC base is required */
-> > +               if (vaia->imsic_addr =3D=3D KVM_RISCV_AIA_UNDEF_ADDR) {
-> > +                       ret =3D -EINVAL;
-> > +                       goto fail_cleanup_imsics;
-> > +               }
-> > +
-> > +               /* All IMSICs should have matching base PPN */
-> > +               if (base_ppn =3D=3D KVM_RISCV_AIA_UNDEF_ADDR)
-> > +                       base_ppn =3D aia_imsic_ppn(aia, vaia->imsic_add=
-r);
-> > +               if (base_ppn !=3D aia_imsic_ppn(aia, vaia->imsic_addr))=
- {
-> > +                       ret =3D -EINVAL;
-> > +                       goto fail_cleanup_imsics;
-> > +               }
-> > +
-> > +               /* Update HART index of the IMSIC based on IMSIC base *=
-/
-> > +               vaia->hart_index =3D aia_imsic_hart_index(aia,
-> > +                                                       vaia->imsic_add=
-r);
-> > +
-> > +               /* Initialize IMSIC for this VCPU */
-> > +               ret =3D kvm_riscv_vcpu_aia_imsic_init(vcpu);
-> > +               if (ret)
-> > +                       goto fail_cleanup_imsics;
-> > +       }
-> > +
-> > +       /* Set the initialized flag */
-> > +       kvm->arch.aia.initialized =3D true;
-> > +
-> > +       return 0;
-> > +
-> > +fail_cleanup_imsics:
-> > +       for (i =3D idx - 1; i >=3D 0; i--) {
-> > +               vcpu =3D kvm_get_vcpu(kvm, i);
-> > +               if (!vcpu)
-> > +                       continue;
-> > +               kvm_riscv_vcpu_aia_imsic_cleanup(vcpu);
-> > +       }
-> > +       kvm_riscv_aia_aplic_cleanup(kvm);
-> > +       return ret;
-> > +}
-> > +
-> > +static int aia_set_attr(struct kvm_device *dev, struct kvm_device_attr=
- *attr)
-> > +{
-> > +       u32 nr;
-> > +       u64 addr;
-> > +       int nr_vcpus, r =3D -ENXIO;
-> > +       unsigned long type =3D (unsigned long)attr->attr;
-> > +       void __user *uaddr =3D (void __user *)(long)attr->addr;
-> > +
-> > +       switch (attr->group) {
-> > +       case KVM_DEV_RISCV_AIA_GRP_CONFIG:
-> > +               if (copy_from_user(&nr, uaddr, sizeof(nr)))
-> > +                       return -EFAULT;
-> > +
-> > +               mutex_lock(&dev->kvm->lock);
-> > +               r =3D aia_config(dev->kvm, type, &nr, true);
-> > +               mutex_unlock(&dev->kvm->lock);
-> > +
-> > +               break;
-> > +
-> > +       case KVM_DEV_RISCV_AIA_GRP_ADDR:
-> > +               if (copy_from_user(&addr, uaddr, sizeof(addr)))
-> > +                       return -EFAULT;
-> > +
-> > +               nr_vcpus =3D atomic_read(&dev->kvm->online_vcpus);
-> > +               mutex_lock(&dev->kvm->lock);
-> > +               if (type =3D=3D KVM_DEV_RISCV_AIA_ADDR_APLIC)
-> > +                       r =3D aia_aplic_addr(dev->kvm, &addr, true);
-> > +               else if (type < KVM_DEV_RISCV_AIA_ADDR_IMSIC(nr_vcpus))
-> > +                       r =3D aia_imsic_addr(dev->kvm, &addr,
-> > +                           type - KVM_DEV_RISCV_AIA_ADDR_IMSIC(0), tru=
-e);
-> > +               mutex_unlock(&dev->kvm->lock);
-> > +
-> > +               break;
-> > +
-> > +       case KVM_DEV_RISCV_AIA_GRP_CTRL:
-> > +               switch (type) {
-> > +               case KVM_DEV_RISCV_AIA_CTRL_INIT:
-> > +                       mutex_lock(&dev->kvm->lock);
-> > +                       r =3D aia_init(dev->kvm);
-> > +                       mutex_unlock(&dev->kvm->lock);
-> > +                       break;
-> > +               }
-> > +
-> > +               break;
-> > +       }
-> > +
-> > +       return r;
-> > +}
-> > +
-> > +static int aia_get_attr(struct kvm_device *dev, struct kvm_device_attr=
- *attr)
-> > +{
-> > +       u32 nr;
-> > +       u64 addr;
-> > +       int nr_vcpus, r =3D -ENXIO;
-> > +       void __user *uaddr =3D (void __user *)(long)attr->addr;
-> > +       unsigned long type =3D (unsigned long)attr->attr;
-> > +
-> > +       switch (attr->group) {
-> > +       case KVM_DEV_RISCV_AIA_GRP_CONFIG:
-> > +               if (copy_from_user(&nr, uaddr, sizeof(nr)))
-> > +                       return -EFAULT;
-> > +
-> > +               mutex_lock(&dev->kvm->lock);
-> > +               r =3D aia_config(dev->kvm, type, &nr, false);
-> > +               mutex_unlock(&dev->kvm->lock);
-> > +               if (r)
-> > +                       return r;
-> > +
-> > +               if (copy_to_user(uaddr, &nr, sizeof(nr)))
-> > +                       return -EFAULT;
-> > +
-> > +               break;
-> > +       case KVM_DEV_RISCV_AIA_GRP_ADDR:
-> > +               if (copy_from_user(&addr, uaddr, sizeof(addr)))
-> > +                       return -EFAULT;
-> > +
-> > +               nr_vcpus =3D atomic_read(&dev->kvm->online_vcpus);
-> > +               mutex_lock(&dev->kvm->lock);
-> > +               if (type =3D=3D KVM_DEV_RISCV_AIA_ADDR_APLIC)
-> > +                       r =3D aia_aplic_addr(dev->kvm, &addr, false);
-> > +               else if (type < KVM_DEV_RISCV_AIA_ADDR_IMSIC(nr_vcpus))
-> > +                       r =3D aia_imsic_addr(dev->kvm, &addr,
-> > +                           type - KVM_DEV_RISCV_AIA_ADDR_IMSIC(0), fal=
-se);
-> > +               mutex_unlock(&dev->kvm->lock);
-> > +               if (r)
-> > +                       return r;
-> > +
-> > +               if (copy_to_user(uaddr, &addr, sizeof(addr)))
-> > +                       return -EFAULT;
-> > +
-> > +               break;
-> > +       }
-> > +
-> > +       return r;
-> > +}
-> > +
-> > +static int aia_has_attr(struct kvm_device *dev, struct kvm_device_attr=
- *attr)
-> > +{
-> > +       int nr_vcpus;
-> > +
-> > +       switch (attr->group) {
-> > +       case KVM_DEV_RISCV_AIA_GRP_CONFIG:
-> > +               switch (attr->attr) {
-> > +               case KVM_DEV_RISCV_AIA_CONFIG_MODE:
-> > +               case KVM_DEV_RISCV_AIA_CONFIG_IDS:
-> > +               case KVM_DEV_RISCV_AIA_CONFIG_SRCS:
-> > +               case KVM_DEV_RISCV_AIA_CONFIG_GROUP_BITS:
-> > +               case KVM_DEV_RISCV_AIA_CONFIG_GROUP_SHIFT:
-> > +               case KVM_DEV_RISCV_AIA_CONFIG_HART_BITS:
-> > +               case KVM_DEV_RISCV_AIA_CONFIG_GUEST_BITS:
-> > +                       return 0;
-> > +               }
-> > +               break;
-> > +       case KVM_DEV_RISCV_AIA_GRP_ADDR:
-> > +               nr_vcpus =3D atomic_read(&dev->kvm->online_vcpus);
-> > +               if (attr->attr =3D=3D KVM_DEV_RISCV_AIA_ADDR_APLIC)
-> > +                       return 0;
-> > +               else if (attr->attr < KVM_DEV_RISCV_AIA_ADDR_IMSIC(nr_v=
-cpus))
-> > +                       return 0;
-> > +               break;
-> > +       case KVM_DEV_RISCV_AIA_GRP_CTRL:
-> > +               switch (attr->attr) {
-> > +               case KVM_DEV_RISCV_AIA_CTRL_INIT:
-> > +                       return 0;
-> > +               }
-> > +               break;
-> > +       }
-> > +
-> > +       return -ENXIO;
-> > +}
-> > +
-> > +struct kvm_device_ops kvm_riscv_aia_device_ops =3D {
-> > +       .name =3D "kvm-riscv-aia",
-> > +       .create =3D aia_create,
-> > +       .destroy =3D aia_destroy,
-> > +       .set_attr =3D aia_set_attr,
-> > +       .get_attr =3D aia_get_attr,
-> > +       .has_attr =3D aia_has_attr,
-> > +};
-> > +
-> > +int kvm_riscv_vcpu_aia_update(struct kvm_vcpu *vcpu)
-> > +{
-> > +       /* Proceed only if AIA was initialized successfully */
-> > +       if (!kvm_riscv_aia_initialized(vcpu->kvm))
-> > +               return 1;
-> > +
-> > +       /* Update the IMSIC HW state before entering guest mode */
-> > +       return kvm_riscv_vcpu_aia_imsic_update(vcpu);
-> > +}
-> > +
-> > +void kvm_riscv_vcpu_aia_reset(struct kvm_vcpu *vcpu)
-> > +{
-> > +       struct kvm_vcpu_aia_csr *csr =3D &vcpu->arch.aia_context.guest_=
-csr;
-> > +       struct kvm_vcpu_aia_csr *reset_csr =3D
-> > +                               &vcpu->arch.aia_context.guest_reset_csr=
-;
-> > +
-> > +       if (!kvm_riscv_aia_available())
-> > +               return;
-> > +       memcpy(csr, reset_csr, sizeof(*csr));
-> > +
-> > +       /* Proceed only if AIA was initialized successfully */
-> > +       if (!kvm_riscv_aia_initialized(vcpu->kvm))
-> > +               return;
-> > +
-> > +       /* Reset the IMSIC context */
-> > +       kvm_riscv_vcpu_aia_imsic_reset(vcpu);
-> > +}
-> > +
-> > +int kvm_riscv_vcpu_aia_init(struct kvm_vcpu *vcpu)
-> > +{
-> > +       struct kvm_vcpu_aia *vaia =3D &vcpu->arch.aia_context;
-> > +
-> > +       if (!kvm_riscv_aia_available())
-> > +               return 0;
-> > +
-> > +       /*
-> > +        * We don't do any memory allocations over here because these
-> > +        * will be done after AIA device is initialized by the user-spa=
-ce.
-> > +        *
-> > +        * Refer, aia_init() implementation for more details.
-> > +        */
-> > +
-> > +       /* Initialize default values in AIA vcpu context */
-> > +       vaia->imsic_addr =3D KVM_RISCV_AIA_UNDEF_ADDR;
-> > +       vaia->hart_index =3D vcpu->vcpu_idx;
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > +void kvm_riscv_vcpu_aia_deinit(struct kvm_vcpu *vcpu)
-> > +{
-> > +       /* Proceed only if AIA was initialized successfully */
-> > +       if (!kvm_riscv_aia_initialized(vcpu->kvm))
-> > +               return;
-> > +
-> > +       /* Cleanup IMSIC context */
-> > +       kvm_riscv_vcpu_aia_imsic_cleanup(vcpu);
-> > +}
-> > +
-> > +int kvm_riscv_aia_inject_msi_by_id(struct kvm *kvm, u32 hart_index,
-> > +                                  u32 guest_index, u32 iid)
-> > +{
-> > +       unsigned long idx;
-> > +       struct kvm_vcpu *vcpu;
-> > +
-> > +       /* Proceed only if AIA was initialized successfully */
-> > +       if (!kvm_riscv_aia_initialized(kvm))
-> > +               return -EBUSY;
-> > +
-> > +       /* Inject MSI to matching VCPU */
-> > +       kvm_for_each_vcpu(idx, vcpu, kvm) {
-> > +               if (vcpu->arch.aia_context.hart_index =3D=3D hart_index=
-)
-> > +                       return kvm_riscv_vcpu_aia_imsic_inject(vcpu,
-> > +                                                              guest_in=
-dex,
-> > +                                                              0, iid);
-> > +       }
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > +int kvm_riscv_aia_inject_msi(struct kvm *kvm, struct kvm_msi *msi)
-> > +{
-> > +       gpa_t tppn, ippn;
-> > +       unsigned long idx;
-> > +       struct kvm_vcpu *vcpu;
-> > +       u32 g, toff, iid =3D msi->data;
-> > +       struct kvm_aia *aia =3D &kvm->arch.aia;
-> > +       gpa_t target =3D (((gpa_t)msi->address_hi) << 32) | msi->addres=
-s_lo;
-> > +
-> > +       /* Proceed only if AIA was initialized successfully */
-> > +       if (!kvm_riscv_aia_initialized(kvm))
-> > +               return -EBUSY;
-> > +
-> > +       /* Convert target address to target PPN */
-> > +       tppn =3D target >> IMSIC_MMIO_PAGE_SHIFT;
-> > +
-> > +       /* Extract and clear Guest ID from target PPN */
-> > +       g =3D tppn & (BIT(aia->nr_guest_bits) - 1);
-> > +       tppn &=3D ~((gpa_t)(BIT(aia->nr_guest_bits) - 1));
-> > +
-> > +       /* Inject MSI to matching VCPU */
-> > +       kvm_for_each_vcpu(idx, vcpu, kvm) {
-> > +               ippn =3D vcpu->arch.aia_context.imsic_addr >>
-> > +                                       IMSIC_MMIO_PAGE_SHIFT;
-> > +               if (ippn =3D=3D tppn) {
-> > +                       toff =3D target & (IMSIC_MMIO_PAGE_SZ - 1);
-> > +                       return kvm_riscv_vcpu_aia_imsic_inject(vcpu, g,
-> > +                                                              toff, ii=
-d);
-> > +               }
-> > +       }
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > +int kvm_riscv_aia_inject_irq(struct kvm *kvm, unsigned int irq, bool l=
-evel)
-> > +{
-> > +       /* Proceed only if AIA was initialized successfully */
-> > +       if (!kvm_riscv_aia_initialized(kvm))
-> > +               return -EBUSY;
-> > +
-> > +       /* Inject interrupt level change in APLIC */
-> > +       return kvm_riscv_aia_aplic_inject(kvm, irq, level);
-> > +}
-> > +
-> > +void kvm_riscv_aia_init_vm(struct kvm *kvm)
-> > +{
-> > +       struct kvm_aia *aia =3D &kvm->arch.aia;
-> > +
-> > +       if (!kvm_riscv_aia_available())
-> > +               return;
-> > +
-> > +       /*
-> > +        * We don't do any memory allocations over here because these
-> > +        * will be done after AIA device is initialized by the user-spa=
-ce.
-> > +        *
-> > +        * Refer, aia_init() implementation for more details.
-> > +        */
-> > +
-> > +       /* Initialize default values in AIA global context */
-> > +       aia->mode =3D (kvm_riscv_aia_nr_hgei) ?
-> > +               KVM_DEV_RISCV_AIA_MODE_AUTO : KVM_DEV_RISCV_AIA_MODE_EM=
-UL;
-> > +       aia->nr_ids =3D kvm_riscv_aia_max_ids - 1;
-> > +       aia->nr_sources =3D 0;
-> > +       aia->nr_group_bits =3D 0;
-> > +       aia->nr_group_shift =3D KVM_DEV_RISCV_AIA_GROUP_SHIFT_MIN;
-> > +       aia->nr_hart_bits =3D 0;
-> > +       aia->nr_guest_bits =3D 0;
-> > +       aia->aplic_addr =3D KVM_RISCV_AIA_UNDEF_ADDR;
-> > +}
-> > +
-> > +void kvm_riscv_aia_destroy_vm(struct kvm *kvm)
-> > +{
-> > +       /* Proceed only if AIA was initialized successfully */
-> > +       if (!kvm_riscv_aia_initialized(kvm))
-> > +               return;
-> > +
-> > +       /* Cleanup APLIC context */
-> > +       kvm_riscv_aia_aplic_cleanup(kvm);
-> > +}
-> > diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-> > index 737318b1c1d9..27ccd07898e1 100644
-> > --- a/include/uapi/linux/kvm.h
-> > +++ b/include/uapi/linux/kvm.h
-> > @@ -1442,6 +1442,8 @@ enum kvm_device_type {
-> >  #define KVM_DEV_TYPE_XIVE              KVM_DEV_TYPE_XIVE
-> >         KVM_DEV_TYPE_ARM_PV_TIME,
-> >  #define KVM_DEV_TYPE_ARM_PV_TIME       KVM_DEV_TYPE_ARM_PV_TIME
-> > +       KVM_DEV_TYPE_RISCV_AIA,
-> > +#define KVM_DEV_TYPE_RISCV_AIA         KVM_DEV_TYPE_RISCV_AIA
-> >         KVM_DEV_TYPE_MAX,
-> >  };
-> >
-> > --
-> > 2.34.1
-> >
->
-> Apart from the above comments, LGTM.
->
-> --
-> Regards,
-> Atish
-
-Regards,
-Anup
