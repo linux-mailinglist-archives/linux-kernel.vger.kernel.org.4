@@ -2,56 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82A5B727288
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 00:58:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D016B72728F
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 00:59:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231487AbjFGW6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 18:58:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56456 "EHLO
+        id S232375AbjFGW7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 18:59:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbjFGW6E (ORCPT
+        with ESMTP id S231720AbjFGW67 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 18:58:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0630172E;
-        Wed,  7 Jun 2023 15:58:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B8C96155F;
-        Wed,  7 Jun 2023 22:58:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC0E3C433D2;
-        Wed,  7 Jun 2023 22:58:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686178681;
-        bh=A0HX1RU1GSuXaRTz85AGqKCyQ3aEmW4bTVShh6uh+us=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=u654hnPOwu3yv0r5oPOC05geLIuaqYHTSGEfNn+S98AuqAiF41Xfeu1NNbTjrMMBz
-         T9zh8zKmyAaxcyDFD+xyvW1vHp2jNsupflM5zNzcPuf5x0e0tC6AeMNud7lHnvvwQf
-         FP614UxphJJSbQGRac5rJPG0cN2+WJ7sIMbn4A8CqZ9JKUGB7TMjZsqKRlQSQOUcsw
-         W0yYDnBXbNwG1EhR/gok8UJz0jSLlnKw2cF1TRatrRgr8SPmzC8Yyt+6x4qt3h9BG+
-         3VkxUJ+CBDI81ucXlo6BUT9h7XU+Y5TZhulPYrifH3kammVfyobhl5E2okvzP3s2J0
-         n05Yll5tCp+MQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 44B77CE3A6C; Wed,  7 Jun 2023 15:58:01 -0700 (PDT)
-Date:   Wed, 7 Jun 2023 15:58:01 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     Zhangjin Wu <falcon@tinylab.org>, thomas@t-8ch.de,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: nolibc patches, still possible for 6.5 ?
-Message-ID: <66c0e446-846c-47a6-ab60-948dc0118cec@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <ZHyPi29q3MKiNAQZ@1wt.eu>
- <5494ac68-b4b9-434f-92c1-7e197c92a4ab@paulmck-laptop>
- <ZID0b+nIcypMjV0y@1wt.eu>
+        Wed, 7 Jun 2023 18:58:59 -0400
+Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 330B31FE3;
+        Wed,  7 Jun 2023 15:58:58 -0700 (PDT)
+Received: by mail-io1-f50.google.com with SMTP id ca18e2360f4ac-77499bf8e8bso337322139f.0;
+        Wed, 07 Jun 2023 15:58:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686178737; x=1688770737;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iB9XrQ+a6WIZmp+zbM7Qeq67vgXTSlPM9tziF9ThlVU=;
+        b=AzcAxLFNK9c24EE3wIwa/nUQNnX3AuUTXnlWxPTsjypJgoo4GjOiFORDCWp1vRIYr/
+         QH/crDOq3SQ0kfPLnLJG11cM00StF/SmrgIOTuGLR1pd1eLETpnTQNvYIZKCoHaKAfTe
+         4nXoI5MtnQ0cVaT+YEwW5Q1NTNjErLKqIAJ7xXmjXjiWpmT0aiFVRnN2QUZNUyfnRaDX
+         SEUHuoh53ymQCdR8oIXzQ6kjWDEVB0XIcRmA8jn2C1moPqZD3m/ZAjX9c0/oX3mVWuJf
+         Lx3KZgtipTNTJ0hJe9GONSn1hJHw6M4DWLu6VOWRxv3w8J55brUqo8F+dL2QLv759M/v
+         03Sg==
+X-Gm-Message-State: AC+VfDyqn+0/MgHe494Khr3uD0pSBFdwLyAkbJzBjKeMePPhYdhq1xZ+
+        FMABQqbdOpsCIPvrsQdYtUGBiGD1VA==
+X-Google-Smtp-Source: ACHHUZ7GyWclAIE0PzlN9Vgtpl3sBod7vdf2FQhPd2yqzwfylkGB++YMGy6fetz+l45NA7qKGSVwng==
+X-Received: by 2002:a6b:e609:0:b0:76c:826f:2188 with SMTP id g9-20020a6be609000000b0076c826f2188mr6026686ioh.6.1686178737285;
+        Wed, 07 Jun 2023 15:58:57 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id i24-20020a02c618000000b00411baa5ec5asm3665517jan.154.2023.06.07.15.58.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 15:58:56 -0700 (PDT)
+Received: (nullmailer pid 139626 invoked by uid 1000);
+        Wed, 07 Jun 2023 22:58:48 -0000
+Date:   Wed, 7 Jun 2023 16:58:48 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Noralf =?iso-8859-1?Q?Tr=F8nnes?= <noralf@tronnes.org>
+Cc:     Leonard =?iso-8859-1?Q?G=F6hrs?= <l.goehrs@pengutronix.de>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, kernel@pengutronix.de,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 2/8] dt-bindings: display: panel: mipi-dbi-spi: add
+ spi-3wire property
+Message-ID: <20230607225848.GA131389-robh@kernel.org>
+References: <20230607115508.2964574-1-l.goehrs@pengutronix.de>
+ <20230607115508.2964574-2-l.goehrs@pengutronix.de>
+ <69fdb6a2-12b6-547d-019b-c77dd2bd98cf@tronnes.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <ZID0b+nIcypMjV0y@1wt.eu>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <69fdb6a2-12b6-547d-019b-c77dd2bd98cf@tronnes.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,127 +74,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 11:19:43PM +0200, Willy Tarreau wrote:
-> Hello Paul,
+On Wed, Jun 07, 2023 at 09:59:47PM +0200, Noralf Trønnes wrote:
 > 
-> On Sun, Jun 04, 2023 at 03:57:54PM -0700, Paul E. McKenney wrote:
-> > On Sun, Jun 04, 2023 at 03:20:11PM +0200, Willy Tarreau wrote:
-> > > Hello Paul,
-> > > 
-> > > Thomas and Zhangjin have provided significant nolibc cleanups, and
-> > > fixes, as well as preparation work to later support riscv32.
-> > > 
-> > > These consist in the following main series:
-> > >   - generalization of stackprotector to other archs that were not
-> > >     previously supported (riscv, mips, loongarch, arm, arm64)
-> > > 
-> > >   - general cleanups of the makefile, test report output, deduplication
-> > >     of certain tests
-> > > 
-> > >   - slightly better compliance of some tests performed on certain syscalls
-> > >     (e.g. no longer pass (void*)1 to gettimeofday() since glibc hates it).
-> > > 
-> > >   - add support for nanoseconds in stat() and statx()
-> > > 
-> > >   - fixes for some syscalls (e.g. ppoll() has 5 arguments not 4)
-> > > 
-> > >   - fixes around limits.h and  INT_MAX / INT_FAST64_MAX
-> > > 
-> > > I rebased the whole series on top of your latest dev branch (d19a9ca3d5)
-> > > and it works fine for all archs.
-> > > 
-> > > I don't know if you're still planning on merging new stuff in this area
-> > > for 6.5 or not (since I know that it involves new series of tests on your
-> > > side as well), but given that Zhangjin will engage into deeper changes
-> > > later for riscv32 that will likely imply to update more syscalls to use
-> > > the time64 ones, I would prefer to split the cleanups from the hard stuff,
-> > > but I'll let you judge based on the current state of what's pending for
-> > > 6.5.
-> > > 
-> > > In any case I'm putting all this here for now (not for merge yet):
-> > > 
-> > >    git://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git 20230604-nolibc-rv32+stkp6
-> > > 
-> > > I'd like Thomas and Zhangjin to perform a last check to confirm they're
-> > > OK with this final integration.
+> 
+> On 6/7/23 13:55, Leonard Göhrs wrote:
+> > Some MIPI DBI panels support a three wire mode (clock, chip select,
+> > bidirectional data) that can be used to ask the panel if it is already set
+> > up by e.g. the bootloader and can thus skip the initialization.
+> > This enables a flicker-free boot.
 > > 
-> > Given that the testing converges by the end of this week, I can't see
-> > any reason why these cannot make v6.5.  (There were some kernel test
-> > robot complaints as well, valid or not I am not sure.)
+> > Signed-off-by: Leonard Göhrs <l.goehrs@pengutronix.de>
+> > ---
+> >  .../devicetree/bindings/display/panel/panel-mipi-dbi-spi.yaml   | 2 ++
+> >  1 file changed, 2 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/display/panel/panel-mipi-dbi-spi.yaml b/Documentation/devicetree/bindings/display/panel/panel-mipi-dbi-spi.yaml
+> > index c07da1a9e6288..2f0238b770eba 100644
+> > --- a/Documentation/devicetree/bindings/display/panel/panel-mipi-dbi-spi.yaml
+> > +++ b/Documentation/devicetree/bindings/display/panel/panel-mipi-dbi-spi.yaml
+> > @@ -87,6 +87,8 @@ properties:
+> >        Logic level supply for interface signals (Vddi).
+> >        No need to set if this is the same as power-supply.
+> >  
+> > +  spi-3wire: true
+> > +
 > 
-> After Thomas' and Zhangjin's reviews and checks, I could run a mostly
-> complete check:
->   - arm64, i386, x86_64 show 100% success
->   - arm, mips: 100% success, stackprotector skipped
->   - s390x, riscv64: run-user OK, kernel build fails (see below)
->   - loongarch: build OK, just not executed (need to upgrade my qemu
->     and I hate doing it late when some tests results are needed)
+> I don't think this should be added here. spi-cpha and spi-cpol are also
+> supported but they are not mentioned. Instead those are documented in
+> bindings/spi/spi-controller.yaml. Why they're not documented in
+> bindings/spi/spi-peripheral-props.yaml instead which this binding has a
+> ref to, I have no idea.
 
-Very good!
+spi-peripheral-props.yaml are properties of the controller in the 
+peripheral nodes. spi-cpha and spi-cpol are properties of the device 
+which are completely invalid on some devices. We can only check that by 
+documenting where they are valid. I think spi-3wire is similar. There 
+should be more explanation in the spi-peripheral-props.yaml commit 
+history.
 
-> Regarding the build failure affecting s390x and riscv64, it's a regular
-> kernel resulting from "make defconfig". For both archs, I'm getting this
-> failure:
-> 
->   In file included from kernel/rcu/update.c:649:
->   kernel/rcu/tasks.h: In function 'get_rcu_tasks_gp_kthread':
->     CC      fs/kernfs/dir.o
->     CC      security/bpf/hooks.o
->   kernel/rcu/tasks.h:1939:16: error: 'rcu_tasks' undeclared (first use in this function)
->    1939 |         return rcu_tasks.kthread_ptr;
->         |                ^~~~~~~~~
->   kernel/rcu/tasks.h:1939:16: note: each undeclared identifier is reported only once for each function it appears in
->   kernel/rcu/tasks.h:1940:1: error: control reaches end of non-void function [-Werror=return-type]
->    1940 | }
->         | ^
->   cc1: some warnings being treated as errors
-> 
-> I rebased the branch on top of 6.4-rc5 and got the same. I'm building
-> with gcc-11.3.0 from kernel.org. I'm not sure whether this comes from
-> my build environment or recent changes to the kernel, but I'm sure I
-> haven't seen that error during 6.3-rc cycle. However, given that
-> Zhangjin seems to have successfully built it for riscv, there might
-> be something odd on my side.
-
-That line of code is in rcu/dev but not in mainline yet.  In fact, it
-is not yet in -next.
-
-But it is a bug.  One that my Kconfig laziness hid from me.  Easy fix,
-but it is clearly time for me to stop being lazy about that part of the
-Kconfig setup.  :-/
-
-So thank you for reporting it!
-
-> Given that this build issue is not dependent on the selftest, I'm fine
-> with the branch getting merged as-is, and can provide feedback on this
-> build error if needed:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git 20230606-nolibc-rv32+stkp7a
-> 
-> Just let me know if you prefer that I resend the whole series or need
-> more info etc, as usual.
-
-I will pull it from your tree, test it, and if all goes well, rebase it
-on my existing nolibc stack.
-
-Longer term, both to avoid you having to deal with RCU bugs and to make
-it easier to have multiple administrative nolibc maintainers, it might
-work better for you to base your stack on vX.y-rc1.  That way, I could
-just pull directly from your tree.
-
-This works because you buffer up the commits and test them, which
-makes it completely reasonable for me to simply pull your new stack
-and merge them in.  Which also means that if there are multiple nolibc
-administrative maintainers, we have exactly the same set of nolibc
-commits in our respective trees, right down to the SHA-1 hashes.
-
-This approach is used a lot, for example, back when my RCU patches
-went through Ingo Molnar, he pulled from my tree so that mainline's RCU
-patches were identical to mine, again, right down to the SHA-1 hashes.
-
-This is something to think about for some upcoming cycle, given that
-we are already pretty much set up for the upcoming merge window.
-
-Your choice, either way works for me.
-
-							Thanx, Paul
+Rob
