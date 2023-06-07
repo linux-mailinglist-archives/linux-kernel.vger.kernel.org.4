@@ -2,72 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0901D726883
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 20:23:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3215A726898
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 20:24:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbjFGSXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 14:23:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37084 "EHLO
+        id S229682AbjFGSYy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 14:24:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232831AbjFGSXh (ORCPT
+        with ESMTP id S230479AbjFGSYi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 14:23:37 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CB34268C
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 11:23:14 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f6dfc4dffaso64310345e9.0
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 11:23:14 -0700 (PDT)
+        Wed, 7 Jun 2023 14:24:38 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F5A210E
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 11:24:17 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f640e48bc3so1510717e87.2
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 11:24:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686162190; x=1688754190;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=k/WwZsL8Wk0zor7bgL9dxnC1U3BE7RE1tVJNNSTXoZ8=;
-        b=IKS+x77+W8yohyWpqLtH2CJIh0hMEMuRJ8brnwg9TC5aNtkSJz/edDzaiPlI7j1l6E
-         3WyD5T+QqrHl+kDE10yNHnLUh/+5UnDsomDBrVRWn8sBnWgifJSYi2NhsjsEV7qsc+Vf
-         t1G1O/PWaCRGQeNXuAB9uUktRiQAaqkl/wL4hGMPyMj4q0oBeecltWKGghe63owYBpPs
-         ZD/CwwmODdJmSt6oKsbu3wjOpY6h2qb2csTg2dyTkwZgH8AP13KnINyNQWEKDXlSnSWD
-         BoSkakjWvo3lceieDL/md72GJ4zEvucrncdGdVSpfLBkOvvLVGuK4koul/y8IRbKYLPT
-         R1gg==
+        d=linaro.org; s=google; t=1686162248; x=1688754248;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GCynyLWoW2V3VpBJECgKopAvXwYKryE2bi0AEhbuOKc=;
+        b=UORlCDAJSTYZ4uIWUmqhcz5py1aYRNayzTtulmKmCRBhjbvUp5Sc4fYPJFnCb75juH
+         uWwpIburuUdUDyFMAIFi8TeiKQuQ6ndhBSsS5tOWCe3itNJG+EtJSRLhAPIX1MjX3f6n
+         oK6t/bVYLQ1CzirArOwccdOg/exui1KseunFxziTYoMvJqkLa8VvUdaH+edeqNCcOK25
+         dstAnZ5d9iOqhh4Vfo6OUP6MHv5/Oh7LrY4ClO8mkR6x0AAOXPd78wcv4HgUaEtAwvih
+         a0VEseZTwFw4fOa6vy/q6yFt2LPcjoswaEAKG2PUkOnoKRsZXXTYfiCsL7wDRFPlkX4C
+         9IrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686162190; x=1688754190;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1686162248; x=1688754248;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:to
+         :content-language:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=k/WwZsL8Wk0zor7bgL9dxnC1U3BE7RE1tVJNNSTXoZ8=;
-        b=JzZnImwks85l62q/q73CDYiH2HIQq6+s34oZxpt6b3X3aiaCMhsCFvU7n5F78a8j4N
-         kmv+ppg/+0BKMC/JEE5SxOrIzN+jYdfstTfPk0qQFsDjOgy9HUgL3UwZro6Iza/FkKeH
-         orU9U3Xk3/pYCylzw8gWZ7XIE+rjZ7bZSUqzNDrazCBO99ieektuwPdXp2xKu4nM97q+
-         OZaa1OUzNt+qdnp04hNgqWtwxoWvCmMzGPQDMSeoZEMm7QKFnyAa8bNsI4+Ko2EocqXW
-         o5ylq0seM87Mcr75OJ2Gz1rBnW2jTo4tUkgc8JgbGXkogSRy/I46n2gviUVJnU9evfXU
-         gsuQ==
-X-Gm-Message-State: AC+VfDy+RBCRoPEZEVlLq/nyPAXyI70HPjt6+C8kct6j2oDOGJR8dgP6
-        70ZY/FvW6jZjnd4KKAMd8APmww==
-X-Google-Smtp-Source: ACHHUZ75qjz+sk0uLKGgjVqEVzvXzEpItO/09gLKZP7kMwhrRUJgHlfhxIKvMEJAQwQGBcmTF9io/A==
-X-Received: by 2002:adf:e50e:0:b0:309:419b:925d with SMTP id j14-20020adfe50e000000b00309419b925dmr4535366wrm.70.1686162189685;
-        Wed, 07 Jun 2023 11:23:09 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:3a59:921c:4758:7db5? ([2a05:6e02:1041:c10:3a59:921c:4758:7db5])
-        by smtp.googlemail.com with ESMTPSA id b3-20020a5d4d83000000b0030c4d8930b1sm16108874wru.91.2023.06.07.11.23.08
+        bh=GCynyLWoW2V3VpBJECgKopAvXwYKryE2bi0AEhbuOKc=;
+        b=MDinDLdjOYaYyqyN3q3sETtKU74brFJYaYRUPJxjOGPOA8NiK1hD1DO6U2IGKO1lvx
+         C1MminvvzBUxn7v7Oy8yi513HFLF7pPR2zDv51Bpuh5LQafPw/+biFNYKrXxUqtEpmHv
+         B3/nqgnyi9gCpH6+mj3zef8t0qRY4OLwZ8YwzoPXR7tuOJhwsi+cGlMNewyTDSdoerc5
+         7Gm7UQmsqcwF+211BtzU8ooWwboTb9eXtdz2krm0Sju6uTevU/3CElX2psTSY3ISglTu
+         +1iqMXylS8Iiy6rO6IAsBq3NRkKhVw9niSF3dPf0TnKnBT8ZCwDxRDTJV/wYxZZ0ZN7w
+         LwtA==
+X-Gm-Message-State: AC+VfDw4u3PcTeFd47q0EBOAdD4z+s4dK4LtSHnbU8a/lAXJ9DC0d9mq
+        PVYDtXNQpNsU/WPfy3Vjck7xTMolgV/N4YUZnlc=
+X-Google-Smtp-Source: ACHHUZ7cQ53ZaeBJXCSc0n79qlL4eVvWwXaB9K9+BZIUq9VFZ/qoirsRWNkWsGjBsklIkcutqeGZhA==
+X-Received: by 2002:ac2:4c8e:0:b0:4f6:2629:6cf3 with SMTP id d14-20020ac24c8e000000b004f626296cf3mr2269056lfl.46.1686162247872;
+        Wed, 07 Jun 2023 11:24:07 -0700 (PDT)
+Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
+        by smtp.gmail.com with ESMTPSA id o5-20020ac24345000000b004f004c0498esm1879989lfl.71.2023.06.07.11.24.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 11:23:09 -0700 (PDT)
-Message-ID: <b2e93db5-e6f8-a9d8-53de-af5ea750f0f0@linaro.org>
-Date:   Wed, 7 Jun 2023 20:23:08 +0200
+        Wed, 07 Jun 2023 11:24:07 -0700 (PDT)
+Message-ID: <ff8c76e4-fb6c-106d-eae3-45edc06b0c0b@linaro.org>
+Date:   Wed, 7 Jun 2023 20:24:04 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 1/1] thermal: sysfs: avoid actual readings from sysfs
+ Thunderbird/102.11.2
 Content-Language: en-US
-To:     Eduardo Valentin <evalenti@kernel.org>
-Cc:     eduval@amazon.com, rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-References: <20230607003721.834038-1-evalenti@kernel.org>
- <f26ac9a9-60af-a0fe-fccc-25bcd306f5a1@linaro.org>
- <ZICybSuZELhR1Ni5@uf8f119305bce5e.ant.amazon.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <ZICybSuZELhR1Ni5@uf8f119305bce5e.ant.amazon.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, vkoul@kernel.org, kishon@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, gregkh@linuxfoundation.org,
+        catalin.marinas@arm.com, will@kernel.org, mturquette@baylibre.com,
+        sboyd@kernel.org, p.zabel@pengutronix.de, arnd@arndb.de,
+        geert+renesas@glider.be, neil.armstrong@linaro.org,
+        nfraprado@collabora.com, broonie@kernel.org, rafal@milecki.pl,
+        quic_srichara@quicinc.com, quic_varada@quicinc.org,
+        quic_wcheng@quicinc.com, linux-arm-msm@vger.kernel.org,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org
+References: <cover.1686126439.git.quic_varada@quicinc.com>
+ <1b48e737aa14f5b5539cbf04d473182121d5b1ad.1686126439.git.quic_varada@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: Re: [PATCH 7/9] arm64: dts: qcom: ipq5332: Add USB related nodes
+In-Reply-To: <1b48e737aa14f5b5539cbf04d473182121d5b1ad.1686126439.git.quic_varada@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -78,185 +86,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/06/2023 18:38, Eduardo Valentin wrote:
-> Hey Daniel,
+
+
+On 7.06.2023 12:56, Varadarajan Narayanan wrote:
+> Add USB phy and controller nodes
 > 
-> Thanks for taking the time to read the patch.
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> ---
+>  arch/arm64/boot/dts/qcom/ipq5332.dtsi | 55 +++++++++++++++++++++++++++++++++++
+>  1 file changed, 55 insertions(+)
 > 
-> On Wed, Jun 07, 2023 at 11:24:21AM +0200, Daniel Lezcano wrote:
->>
->>
->>
->> Hi Eduardo,
->>
->> On 07/06/2023 02:37, Eduardo Valentin wrote:
->>> From: Eduardo Valentin <eduval@amazon.com>
->>>
->>> As the thermal zone caches the current and last temperature
->>> value, the sysfs interface can use that instead of
->>> forcing an actual update or read from the device.
->>
->> If the read fails, userspace can handle that by using the previous
->> value. Do we really want to hide driver dysfunctions?
-> 
-> Good point.
-> 
-> In fact I thought of this exact problem. I sent only this patch,
-> but it has more changes to come.
-> 
-> The next changes will replicate the current design of
-> storing last_temperature in the thermal zone to also store
-> the last return value, success or error, on the thermal zone
-> too so that we can use here at the front end to report back
-> to userspace when the reads are failing.
- >
-> But yes, you are right, we do not want to keep reporting
-> a successful read when the thermal zone thread has been
-> failing to update the value, that needs to be reported
-> up back to userspace.
+> diff --git a/arch/arm64/boot/dts/qcom/ipq5332.dtsi b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+> index c2d6cc65..3183357 100644
+> --- a/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+> @@ -383,6 +383,61 @@
+>  				status = "disabled";
+>  			};
+>  		};
+> +
+> +		usb_0_m31phy: hs_m31phy@7b000 {
+> +			compatible = "qcom,ipq5332-m31-usb-hsphy";
+> +			reg = <0x0007b000 0x12C>,
+random uppercase hex
 
-IIUC, you want the temperature to be updated only by the polling thread 
-and when the userspace reads the temperature, it reads a cached value, 
-is that correct ?
+> +			      <0x08af8800 0x400>;
+> +			reg-names = "m31usb_phy_base",
+> +				    "qscratch_base";
+> +			phy_type= "utmi";
+Missing space before '='
 
->>> This way, if multiple userspace requests are coming
->>> in, we avoid storming the device with multiple reads
->>> and potentially clogging the timing requirement
->>> for the governors.
+> +
+> +			resets = <&gcc GCC_QUSB2_0_PHY_BCR>;
+> +			reset-names = "usb2_phy_reset";
+> +
+> +			status = "okay";
+If you're only defining the node, it's enabled by default
 
-Sorry, I'm not convinced :/
+In this case, you'd probably want to disable it by default.
 
->> Can you elaborate 'the timing requirement for the governors' ? I'm
->> missing the point
-> 
-> 
-> The point is to avoid contention on the device update path.
-> Governor that use differential equations on temperature over time
-> will be very time sensitive. Step wise, power allocator, or any
-> PID will be very sensitive to time. So, If userspace is hitting
-> this API too often we can see cases where the updates needed to
-> service userspace may defer/delay the execution of the governor
-> logic.
+> +		};
+> +
+> +		usb2: usb2@8a00000 {
+> +			compatible = "qcom,ipq5332-dwc3", "qcom,dwc3";
+> +			#address-cells = <1>;
+> +			#size-cells = <1>;
+> +			ranges;
+Please push these 3 properties to the end
 
-AFAIK, reading a temperature value is usually between less than 1us and 
-10us (depending on the sampling configuration in the driver).
+And add status = "disabled" below them.
 
-I've done some measurements to read a temperature through sysfs and 
-netlink. It is between 2us and 7us on a platforms where reading a 900ns 
-latency sensor, sysfs being faster.
+> +
+> +			reg = <0x08af8800 0x100>;
+> +
+> +			clocks = <&gcc GCC_USB0_MASTER_CLK>,
+> +				<&gcc GCC_SNOC_USB_CLK>,
+> +				<&gcc GCC_USB0_SLEEP_CLK>,
+> +				<&gcc GCC_USB0_MOCK_UTMI_CLK>;
+> +
+Please remove this newline.
 
-The time sensitive governor is the power allocator and usually, the 
-sampling period is between 100ms and 250ms.
+> +			clock-names = "core",
+> +				"iface",
+> +				"sleep",
+> +				"mock_utmi";
+Please align this, and all other similar lists.
 
-The thermal zones with fast thermal transitions may need faster sampling 
-period but the hardware offloads the mitigation in this case by sampling 
-every 100*us*, IIRC.
+> +
+> +			interrupts-extended = <&intc GIC_SPI 134 IRQ_TYPE_LEVEL_HIGH>;
+interrupts-extended is unnecessary with just a single interrupt
+source.. you can make it `interrupts` and drop the GIC reference.
 
-Given that, I'm not sure we are facing a design issue with thermal 
-framework.
+It would also be nice to push the interrupt properties below 'reg'.
+We're working on documenting and automating checking the preferred
+property order.
 
-Do you have a use case with some measurements to spot an issue or is it 
-a potential issue you identified ?
+> +			interrupt-names = "pwr_event";
+> +
+> +			resets = <&gcc GCC_USB_BCR>;
+> +
+> +			qcom,select-utmi-as-pipe-clk;
+> +
+> +			usb2_0_dwc: usb@8a00000 {
+> +				compatible = "snps,dwc3";
+> +				reg = <0x08a00000 0xe000>;
+> +				clocks = <&gcc GCC_USB0_MOCK_UTMI_CLK>;
+> +				clock-names = "ref";
+> +				interrupts = <GIC_SPI 64 IRQ_TYPE_LEVEL_HIGH>;
+> +				usb-phy = <&usb_0_m31phy>;
+> +				tx-fifo-resize;
+> +				snps,is-utmi-l1-suspend;
+> +				snps,hird-threshold = /bits/ 8 <0x0>;
+> +				snps,dis_u2_susphy_quirk;
+> +				snps,dis_u3_susphy_quirk;
+> +				snps,ref-clock-period-ns = <21>;
+1/21 is 0.0476..  that doesn't seem to correspond to the ref
+clk frequency?
 
-> Despite that, there is really no point to have more updates than
-> what was configured for the thermal zone to support. Say that
-> we configure a thermal zone to update itself every 500ms, yet
-> userspace keeps sending reads every 100ms, we do not need necessarily
-> to do a trip to the device every single time to update the temperature,
-> as per the design for the thermal zone.
-
-Sorry, I do not agree. The thermal zone is configured with a monitoring 
-sampling period to detect trip point crossing and it can be configured 
-without sampling period at all, just basing on trip point crossing 
-interrupt.
-
-The userspace has the right to read the current temperature it is 
-interested in. For instance, the 'thermometer' in 
-tools/thermal/thermometer may want to read the temperature at a high 
-rate in order to profile the thermal zones with/without the mitigation 
-kicking in.
-
-Caching the values just break the current behavior.
-
->>> Cc: "Rafael J. Wysocki" <rafael@kernel.org> (supporter:THERMAL)
->>> Cc: Daniel Lezcano <daniel.lezcano@linaro.org> (supporter:THERMAL)
->>> Cc: Amit Kucheria <amitk@kernel.org> (reviewer:THERMAL)
->>> Cc: Zhang Rui <rui.zhang@intel.com> (reviewer:THERMAL)
->>> Cc: linux-pm@vger.kernel.org (open list:THERMAL)
->>> Cc: linux-kernel@vger.kernel.org (open list)
->>>
->>> Signed-off-by: Eduardo Valentin <eduval@amazon.com>
->>> ---
->>>    drivers/thermal/thermal_sysfs.c | 21 ++++++++++++++++-----
->>>    1 file changed, 16 insertions(+), 5 deletions(-)
->>>
->>> diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
->>> index b6daea2398da..a240c58d9e08 100644
->>> --- a/drivers/thermal/thermal_sysfs.c
->>> +++ b/drivers/thermal/thermal_sysfs.c
->>> @@ -35,12 +35,23 @@ static ssize_t
->>>    temp_show(struct device *dev, struct device_attribute *attr, char *buf)
->>>    {
->>>        struct thermal_zone_device *tz = to_thermal_zone(dev);
->>> -     int temperature, ret;
->>> -
->>> -     ret = thermal_zone_get_temp(tz, &temperature);
->>> +     int temperature;
->>>
->>> -     if (ret)
->>> -             return ret;
->>> +     /*
->>> +      * don't force new update from external reads
->>> +      * This way we avoid messing up with time constraints.
->>> +      */
->>> +     if (tz->mode == THERMAL_DEVICE_DISABLED) {
->>> +             int r;
->>> +
->>> +             r = thermal_zone_get_temp(tz, &temperature); /* holds tz->lock*/
->>> +             if (r)
->>> +                     return r;
->>> +     } else {
->>> +             mutex_lock(&tz->lock);
->>> +             temperature = tz->temperature;
->>> +             mutex_unlock(&tz->lock);
->>> +     }
->>
->> No please, we are pushing since several weeks a lot of changes to
->> encapsulate the thermal zone device structure and prevent external core
->> components to use the internals directly. Even if we can consider the
->> thermal_sysfs as part of the core code, that changes is not sysfs related.
-> 
-> Can you clarify your concern, is it the direct access ? The lock ?
-> what is the concern?
-> 
-> What is your suggestion here? Do you want me to write a helper
-> function that gets tz->temperature without doing a ops->get_temp()?
-
-The concern is the thermal framework code is not really in a good shape 
-and the internals leaked around in the different drivers all around the 
-subsystems, that led to drivers tampering with the thermal zone device 
-structure data (including taking locks).
-
-There are ongoing efforts to do some house cleaning around the thermal 
-zone device structure encapsulation as well as getting ride of the 
-different ops get_trip* by replacing that with a generic trip point 
-structure to deal with in the thermal core code.
-
-Those with the final objective to have the trip points ordered and 
-handle the trip point crossing correctly detected (it is currently 
-somehow broken).
-
-Here the code does directly access tz->*.
-
-Even not being convinced by the change proposal, I would have handle 
-this value cache in the thermal_zone_get_temp() function directly in 
-order to preserve the code self-encapsulation.
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Konrad
+> +			};
+> +		};
+>  	};
+>  
+>  	timer {
