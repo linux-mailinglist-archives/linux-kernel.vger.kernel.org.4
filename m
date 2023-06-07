@@ -2,110 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1CED726AFA
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 22:21:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0A94726B01
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 22:21:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232580AbjFGUVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 16:21:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46250 "EHLO
+        id S232876AbjFGUVn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 16:21:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232708AbjFGUVQ (ORCPT
+        with ESMTP id S232934AbjFGUVg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 16:21:16 -0400
-Received: from smtp-fw-52003.amazon.com (smtp-fw-52003.amazon.com [52.119.213.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A39D726BF;
-        Wed,  7 Jun 2023 13:20:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1686169251; x=1717705251;
-  h=message-id:date:mime-version:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:subject;
-  bh=LR+ZpN+XlVuvL7Ovhnbf/G+Q1+/QPdwd50qySINBSrU=;
-  b=vxXzi1S7i+6AXsMQH8se6gGGtg+VquqY59SNbtZNY4FW71jhjxX89Mou
-   /CRDD1FPlx4pr+ILM8JKqHpFefYW7x9cCN88zMdIySzhB8jWYRJBfqkzQ
-   2eOSw06WoznrjmIQsIdwezd0kgscHkZx4zn7WmgLFqpZKpLp8L2jGH/Fq
-   Q=;
-X-IronPort-AV: E=Sophos;i="6.00,225,1681171200"; 
-   d="scan'208";a="589506602"
-Subject: Re: [PATCH 5.4 0/2] Backport few dfs related fixes to cifs
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-32fb4f1a.us-west-2.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-52003.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 20:20:27 +0000
-Received: from EX19MTAUWB002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2b-m6i4x-32fb4f1a.us-west-2.amazon.com (Postfix) with ESMTPS id A85F0C15D9;
-        Wed,  7 Jun 2023 20:20:26 +0000 (UTC)
-Received: from EX19D002UWC004.ant.amazon.com (10.13.138.186) by
- EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 7 Jun 2023 20:20:25 +0000
-Received: from [192.168.31.7] (10.187.170.39) by EX19D002UWC004.ant.amazon.com
- (10.13.138.186) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Wed, 7 Jun
- 2023 20:20:25 +0000
-Message-ID: <de36d593-5f1e-bb9b-6b70-8be0b783c5f4@amazon.com>
-Date:   Wed, 7 Jun 2023 13:20:23 -0700
+        Wed, 7 Jun 2023 16:21:36 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B5CD2695;
+        Wed,  7 Jun 2023 13:21:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686169269; x=1717705269;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Iy80am0IjcpZU5wkeaklTCrSRzUJtl7rEeZ5aEG4RTs=;
+  b=hV6T+AM77usMgUi5R3al4ehA6BX+o6w/J1ukHZk6tbevzhkwho5a2A9S
+   o8Gdi/JufHbm5GIzEKKWxIqA/Y48Xz6LonxEQOsej0XTaEQ3KxoLn6Qrm
+   vgimHPZewN1cbwEvknZX2Xb9Sof/dXSIFo1RiICKPmRmcmXQGM4f5Not2
+   DGTraAhRKpIIO1e4LjDzjS6l6Qm5QjNpTSWc9RQfpNO3B9qLDY9e8rLey
+   0MhtGH9SnWFWXA0Pd2ngtTlq9EnM+0vE3lyoSC3WkXdKrljw13ubquyjF
+   j1LD0NG76eZ1eouqb66aownbdQtnmg3YLaImFo8N3RmpWw1FBCp/6B02i
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="337460732"
+X-IronPort-AV: E=Sophos;i="6.00,225,1681196400"; 
+   d="scan'208";a="337460732"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 13:20:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="774766041"
+X-IronPort-AV: E=Sophos;i="6.00,225,1681196400"; 
+   d="scan'208";a="774766041"
+Received: from unknown (HELO desk) ([10.255.231.181])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 13:20:44 -0700
+Date:   Wed, 7 Jun 2023 13:20:38 -0700
+From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Chao Gao <chao.gao@intel.com>,
+        Xiaoyao Li <xiaoyao.li@intel.com>
+Subject: Re: [PATCH 2/2] KVM: VMX: Drop unnecessary
+ vmx_fb_clear_ctrl_available "cache"
+Message-ID: <20230607202038.5vsgsrt724qhxnjd@desk>
+References: <20230607004311.1420507-1-seanjc@google.com>
+ <20230607004311.1420507-3-seanjc@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.3.0
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     <sfrench@samba.org>, <stable@vger.kernel.org>,
-        <linux-cifs@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230607185313.11363-1-risbhat@amazon.com>
- <2023060750-unpledged-effective-bd95@gregkh>
-Content-Language: en-US
-From:   "Bhatnagar, Rishabh" <risbhat@amazon.com>
-In-Reply-To: <2023060750-unpledged-effective-bd95@gregkh>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.187.170.39]
-X-ClientProxiedBy: EX19D046UWB002.ant.amazon.com (10.13.139.181) To
- EX19D002UWC004.ant.amazon.com (10.13.138.186)
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230607004311.1420507-3-seanjc@google.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jun 06, 2023 at 05:43:10PM -0700, Sean Christopherson wrote:
+> Now that KVM snapshots the host's MSR_IA32_ARCH_CAPABILITIES, drop the
+> similar snapshot/cache of whether or not KVM is allowed to manipulate
+> ARCH_CAPABILITIES.FB_CLEAR_CTRL.  The motivation for the cache was
 
-On 6/7/23 12:07 PM, Greg KH wrote:
-> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
->
->
->
-> On Wed, Jun 07, 2023 at 06:53:11PM +0000, Rishabh Bhatnagar wrote:
->> Recently we have been seeing kernel panic in cifs_reconnect function
->> while accessing tgt_list. Looks like tgt_list is not initialized
->> correctly. There are fixes already present in 5.10 and later trees.
->> Backporting them to 5.4
->>
->>   CIFS VFS: \\172.30.1.14 cifs_reconnect: no target servers for DFS
->>   failover
->>   BUG: unable to handle page fault for address: fffffffffffffff8
->>   #PF: supervisor read access in kernel mode
->>   #PF: error_code(0x0000) - not-present page
->>   PGD 260e067 P4D 260e067 PUD 2610067 PMD 0
->>   Oops: 0000 [#1] SMP PTI
->>   RIP: 0010:cifs_reconnect+0x51d/0xef0 [cifs]
->>   RSP: 0018:ffffc90000693da0 EFLAGS: 00010282
->>   RAX: fffffffffffffff8 RBX: ffff8887fa63b800 RCX: fffffffffffffff8
->>   Call Trace:
->>   cifs_handle_standard+0x18d/0x1b0 [cifs]
->>   cifs_demultiplex_thread+0xa5c/0xc90 [cifs]
->>   kthread+0x113/0x130
->>
->> *** BLURB HERE ***
-> No blurb?
->
-> And this says 5.4, yet your patches say 5.10?
->
-> Totally confused...
->
-> greg k-h
+FB_CLEAR_CTRL is a read-only bit, I think you mean
+MSR_IA32_MCU_OPT_CTRL.FB_CLEAR_DIS.
 
-These patches are applicable for 5.4. Will send another version with 
-that fixed.
-Apologies for the mess.
+> presumably to avoid the RDMSR, e.g. boot_cpu_has_bug() is quite cheap, and
+> modifying the vCPU's MSR_IA32_ARCH_CAPABILITIES is an infrequent option
+> and a relatively slow path.
+> 
+> Cc: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 
+LGTM.
+
+Reviewed-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
