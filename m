@@ -2,86 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1118A726A1C
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 21:47:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A7D5726A1F
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 21:47:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231732AbjFGTrT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 15:47:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55708 "EHLO
+        id S231905AbjFGTra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 15:47:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231827AbjFGTrM (ORCPT
+        with ESMTP id S231596AbjFGTr1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 15:47:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F34F2102;
-        Wed,  7 Jun 2023 12:47:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AA86364337;
-        Wed,  7 Jun 2023 19:47:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22F2CC4339B;
-        Wed,  7 Jun 2023 19:47:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686167225;
-        bh=75h7WJz25lMPAMfQcgH7F+k6bNvFGYHYbc1gBOEj+p8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Mz/NBg0wNHHi2pQoYMUS9RwNafR0DA+zLFXI4QZiZA3SenqacejK7wGVJ9lsYN9rq
-         Q59sz/eSg9JOYqDLkOQOWfZPfLKLta8ySq4iljG/Au8wJZ8f6ZEp9QmzZlkwML0Cf3
-         kMXsV0TCPTRYqpQ/Uxvu2YzB5wQrwakRd0f3gLUiMbZBwgUrWFx23iGxSlpW6fhUmB
-         GWK2tgv9RkkCSOSZbjMcrNW0tSRL0Y2OIQjhkGIFALsG7jTnWYH9pZepH8PWi3xxrw
-         iiP54gvwt8iAm09ZpkxKlhZzsPxpPOnTA6bhDunThfeW1GL2adjQbgByu4+3nZXElx
-         MbAiCRMytsOgQ==
-From:   Christian Brauner <brauner@kernel.org>
-To:     =?utf-8?q?Thomas_Wei=C3=9Fschuh_=3Clinux=40weissschuh=2Enet=3E?=@vger.kernel.org
-Cc:     Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Howells <dhowells@redhat.com>,
-        Karel Zak <kzag@redhat.com>, stable@vger.kernel.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH] fs: avoid empty option when generating legacy mount string
-Date:   Wed,  7 Jun 2023 21:46:48 +0200
-Message-Id: <20230607-nussbaum-erleben-33b0998d9aa0@brauner>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230607-fs-empty-option-v1-1-20c8dbf4671b@weissschuh.net>
-References: <20230607-fs-empty-option-v1-1-20c8dbf4671b@weissschuh.net>
+        Wed, 7 Jun 2023 15:47:27 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C0AE101;
+        Wed,  7 Jun 2023 12:47:24 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id 41be03b00d2f7-51b4ef5378bso7011968a12.1;
+        Wed, 07 Jun 2023 12:47:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686167244; x=1688759244;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jcZW7HM4Z+VTpJgqxtgAswvzaTnMfZjVuQ9QEZa6vH4=;
+        b=IGFnu//niFMk5TiITkVoJUsAqE/6IcQ5sIU++gOt2HZ/2WOLAsyj9D9YiNEQvJxM7l
+         OxxP680fQmNGmkclthwx7/6esh6O5yyZ1JSEgHEdHN+SFwcW3LzgyhD1seTnQ2KRGBZV
+         0vBtS9DjAYkj4n8kjft0FQlxhd1U4ce+4ne0APWum+YX462FQUou6h+2g6nuDs23lK83
+         e9aEizsHeBcZHDYr34EGrqpwGEgfBLDy/YqkHRM3+CkVelzkfLCCslkaX5u8eKOJ2lFu
+         woFoOYystmK1Gxy5jrC1E7ZVbOLVcTfgjT/R7udmBChKvxgvYwJAcyZ8ic42oOoK3HMB
+         lshA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686167244; x=1688759244;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jcZW7HM4Z+VTpJgqxtgAswvzaTnMfZjVuQ9QEZa6vH4=;
+        b=Ck6DY0S0NhIgtHdjSqZT4EfBMfb3uTGPEvNdiGPdV6hV6NGecwPMCZeL2vEgarWTXD
+         +g3m7KM7rPbw1wpnRohDXxYC3T/UyqxxzahfHM84LVWrEWjltwsdYdm82TCMWbFAPUW0
+         i72TK+6k/EWHwOxKUqrK+ckOal30x6XeLMQyUJGVTOW22uY7t3V6/Phh317ABXA/BiXH
+         u2fSD/wAEO3/AnBu1vlh3t1HhX+h5E2NWenlvlRDqTvMRqZ4MPi5uk9HJRcYU52+Y4+O
+         bibV8NSkIgEVrnmLlbBHLpxrD9UZEle1kCd9Z2F2Nc1GeDeRBDLdKYws+ce6J93LjslT
+         iR7Q==
+X-Gm-Message-State: AC+VfDy8Jr9OItRF/krx3qU2ly2ps8FLlmjak1IrsZ8zlEY9RAysiD3V
+        xDRtD++EGX1t8xsRzkCgd4M=
+X-Google-Smtp-Source: ACHHUZ4iCwdXBq6qN9fQHvCx/Cnsqn/cVFFgxIJTLHi516LAiFZQLtd3kKIDR8MnHYa9wtTRSXQGpw==
+X-Received: by 2002:a05:6a20:a5a9:b0:10e:d134:d686 with SMTP id bc41-20020a056a20a5a900b0010ed134d686mr4352946pzb.6.1686167243612;
+        Wed, 07 Jun 2023 12:47:23 -0700 (PDT)
+Received: from localhost ([192.55.54.50])
+        by smtp.gmail.com with ESMTPSA id b20-20020aa78114000000b00660f0e4da6esm2758909pfi.183.2023.06.07.12.47.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 12:47:23 -0700 (PDT)
+Date:   Wed, 7 Jun 2023 12:47:21 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Isaku Yamahata <isaku.yamahata@gmail.com>,
+        Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-mm@kvack.org,
+        kirill.shutemov@linux.intel.com, tony.luck@intel.com,
+        peterz@infradead.org, tglx@linutronix.de, seanjc@google.com,
+        pbonzini@redhat.com, david@redhat.com, dan.j.williams@intel.com,
+        rafael.j.wysocki@intel.com, ying.huang@intel.com,
+        reinette.chatre@intel.com, len.brown@intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, chao.gao@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, bagasdotme@gmail.com,
+        sagis@google.com, imammedo@redhat.com
+Subject: Re: [PATCH v11 05/20] x86/virt/tdx: Add SEAMCALL infrastructure
+Message-ID: <20230607194721.GI2244082@ls.amr.corp.intel.com>
+References: <cover.1685887183.git.kai.huang@intel.com>
+ <ec640452a4385d61bec97f8b761ed1ff38898504.1685887183.git.kai.huang@intel.com>
+ <92e19d74-447f-19e0-d9ec-8a3f12f04927@intel.com>
+ <20230607185355.GH2244082@ls.amr.corp.intel.com>
+ <f7ef157e-8f26-8d7b-a9b8-cb8de7f7aa2b@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1037; i=brauner@kernel.org; h=from:subject:message-id; bh=75h7WJz25lMPAMfQcgH7F+k6bNvFGYHYbc1gBOEj+p8=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaQ03Fty98uBz277JlX2TOCLfy3JMT979vrvzeYL1FzsxNuD zj7731HKwiDGxSArpsji0G4SLrecp2KzUaYGzBxWJpAhDFycAjARnxuMDJMDmfqWTuD4subfR7b4S/ OY+K5eY7R6V3O6gvUtI1fuU2dGhn1Ks0/Z2av/PK32Yu3m8sVXbrd8lzsi0pHbdTzjr/yUw+wA
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <f7ef157e-8f26-8d7b-a9b8-cb8de7f7aa2b@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 07 Jun 2023 19:28:48 +0200, Thomas Weißschuh wrote:
-> As each option string fragment is always prepended with a comma it would
-> happen that the whole string always starts with a comma.
-> This could be interpreted by filesystem drivers as an empty option and
-> may produce errors.
+On Wed, Jun 07, 2023 at 12:27:33PM -0700,
+Dave Hansen <dave.hansen@intel.com> wrote:
+
+> On 6/7/23 11:53, Isaku Yamahata wrote:
+> >>> VMX enabling, and KVM is the only user of TDX.  This implementation
+> >>> chooses to make KVM itself responsible for enabling VMX before using
+> >>> TDX and let the rest of the kernel stay blissfully unaware of VMX.
+> >>>
+> >>> The current TDX_MODULE_CALL macro handles neither #GP nor #UD.  The
+> >>> kernel would hit Oops if SEAMCALL were mistakenly made w/o enabling VMX
+> >>> first.  Architecturally, there is no CPU flag to check whether the CPU
+> >>> is in VMX operation.  Also, if a BIOS were buggy, it could still report
+> >>> valid TDX private KeyIDs when TDX actually couldn't be enabled.
+> >> I'm not sure this is a great justification.  If the BIOS is lying to the
+> >> OS, we _should_ oops.
+> >>
+> >> How else can this happen other than silly kernel bugs.  It's OK to oops
+> >> in the face of silly kernel bugs.
+> > TDX KVM + reboot can hit #UD.  On reboot, VMX is disabled (VMXOFF) via
+> > syscore.shutdown callback.  However, guest TD can be still running to issue
+> > SEAMCALL resulting in #UD.
+> > 
+> > Or we can postpone the change and make the TDX KVM patch series carry a patch
+> > for it.
 > 
-> For example the NTFS driver from ntfs.ko behaves like this and fails when
-> mounted via the new API.
-> 
-> [...]
+> How does the existing KVM use of VMLAUNCH/VMRESUME avoid that problem?
 
-Applied to the vfs.misc branch of the vfs/vfs.git tree.
-Patches in the vfs.misc branch should appear in linux-next soon.
+extable. From arch/x86/kvm/vmx/vmenter.S
 
-Please report any outstanding bugs that were missed during review in a
-new review to the original patch series allowing us to drop it.
+.Lvmresume:
+        vmresume
+        jmp .Lvmfail
 
-It's encouraged to provide Acked-bys and Reviewed-bys even though the
-patch has now been applied. If possible patch trailers will be updated.
+.Lvmlaunch:
+        vmlaunch
+        jmp .Lvmfail
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-branch: vfs.misc
+        _ASM_EXTABLE(.Lvmresume, .Lfixup)
+        _ASM_EXTABLE(.Lvmlaunch, .Lfixup)
 
-[1/1] fs: avoid empty option when generating legacy mount string
-      https://git.kernel.org/vfs/vfs/c/de3824801c82
+
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>
