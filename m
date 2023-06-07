@@ -2,75 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8246F726A6A
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 22:09:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5A9E726A6D
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 22:09:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232216AbjFGUI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 16:08:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38068 "EHLO
+        id S229960AbjFGUJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 16:09:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231584AbjFGUIp (ORCPT
+        with ESMTP id S230401AbjFGUJN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 16:08:45 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7498B1BD5
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 13:08:41 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-bb24045f986so8346811276.2
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 13:08:41 -0700 (PDT)
+        Wed, 7 Jun 2023 16:09:13 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F70A2136;
+        Wed,  7 Jun 2023 13:09:09 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1b24eba184bso5634785ad.0;
+        Wed, 07 Jun 2023 13:09:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686168520; x=1688760520;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jgJbQ4s3E0ptV0J61xFQqdeD0UJeIxytYchnod3vyfo=;
-        b=GkWNBRV6t1YZMx4xdqZJQJwX7kJ0WBw5UzCt6VQht83tzs9v99hEKa28gsZVLS8Lpc
-         rmtNOhdK5FKaqiHM6l92mTz/IjTB+gqmHgR7QUsBQEZiMumo4PhSNY5s+K+O1aqZipjJ
-         qipL5YLQNjEEBgbTfkVKiPO8ks5b59YTER+ai+7epmaIEVQFH1FSm/vGPw+FAohfugWb
-         k3aBtk9WMfkoUi+eugsbMre6SbpIUJzW1upG/p3vPwZuN3haloXRHYwNNNdVk4p0bKq5
-         /5XusrILJ1buGjmFr/lmCCjqDHSGnJvsRGRUSsdwOW1FDwexSFscY125DLQjVSoiC2Uu
-         Porg==
+        d=gmail.com; s=20221208; t=1686168549; x=1688760549;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=5qptHqCMXzGr92OcCGw+NUswL0uIiSzuvq5Iat1n5jw=;
+        b=gEiuh/9JWcbTZ3emGzDZrybhhqc0aYhoJG14HCP08jqkX+TsqeCmV9yOnkn7CWdelC
+         GOsh8y7m0f9sx/FFsYSevF5rKCAWLrZ271YbdfcRyetUu+Z8B6z2hR37ZgxSVeEdlNZ+
+         Xn0HxWJF44SnNuBIS1F580muvGeGVlMKyLr9AhCe2rIh8iR9SlxS0E0A46oRV3rO/biF
+         eGKta9FvoYrQhWh1WPEhONcr5mt1OA05q2tETYSmpYW3triCi3w3ku/idiiE8DXU+/Ve
+         lkfIf4t9mWefzXHU38A7nj9EHMxcX1TgVyE7ezdZAJW7nX9wtw7S4BEP9p1ElESXOoZJ
+         O1cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686168520; x=1688760520;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jgJbQ4s3E0ptV0J61xFQqdeD0UJeIxytYchnod3vyfo=;
-        b=H7Nl2cjVvXsWLJ1i/CY+jqPdK4QsEgd07g9HEZ/j+LWDhmmznk3n+wWveOSDLSNdns
-         VR7JjixnMj7+NJRXdcPKGkGk3C3dfF6IaNK6nIwuxRTPd+lmma3CG6Ll3sF66DL2qYws
-         gKC2aXfXSrW9/T3aYNXaiimfjTs4hwrYyD8wsY0kbBghyrnRkHH/cJfoXJM4AamTXaSR
-         6XGuXwub3EsWUhhZETNv3hT/LFRcRBKBzHECJYPA65XdF7yf48dXOi3qSRdqp+gMNzos
-         TWwfRvg022jm5biFyhHYl4kw5rGsqamAdVOvnSoY8jsykDHG31XB4jGlGV4a5652n63/
-         ho8g==
-X-Gm-Message-State: AC+VfDzlgyG3hjBYDFbBXUHr4bqacySX3Tfj3iYTQ8X3snVx6ipH3MEl
-        fvMkRGwse6qq8wvCpVUPF/+yvZT2oDQ=
-X-Google-Smtp-Source: ACHHUZ4CWqZ7S6LmS14VmBgENlfpWqKaIe0/ag4iqXmtNl7mS/uCOoepaJdD5hQkkWrltaj+S1OMb1y3lbk=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6902:12cc:b0:ba7:8099:c5f2 with SMTP id
- j12-20020a05690212cc00b00ba78099c5f2mr2419940ybu.8.1686168520674; Wed, 07 Jun
- 2023 13:08:40 -0700 (PDT)
-Date:   Wed, 7 Jun 2023 13:08:39 -0700
-In-Reply-To: <20230607194721.GI2244082@ls.amr.corp.intel.com>
-Mime-Version: 1.0
-References: <cover.1685887183.git.kai.huang@intel.com> <ec640452a4385d61bec97f8b761ed1ff38898504.1685887183.git.kai.huang@intel.com>
- <92e19d74-447f-19e0-d9ec-8a3f12f04927@intel.com> <20230607185355.GH2244082@ls.amr.corp.intel.com>
- <f7ef157e-8f26-8d7b-a9b8-cb8de7f7aa2b@intel.com> <20230607194721.GI2244082@ls.amr.corp.intel.com>
-Message-ID: <ZIDjx4i2Z/OQgUra@google.com>
-Subject: Re: [PATCH v11 05/20] x86/virt/tdx: Add SEAMCALL infrastructure
-From:   Sean Christopherson <seanjc@google.com>
-To:     Isaku Yamahata <isaku.yamahata@gmail.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-mm@kvack.org,
-        kirill.shutemov@linux.intel.com, tony.luck@intel.com,
-        peterz@infradead.org, tglx@linutronix.de, pbonzini@redhat.com,
-        david@redhat.com, dan.j.williams@intel.com,
-        rafael.j.wysocki@intel.com, ying.huang@intel.com,
-        reinette.chatre@intel.com, len.brown@intel.com, ak@linux.intel.com,
-        isaku.yamahata@intel.com, chao.gao@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, bagasdotme@gmail.com,
-        sagis@google.com, imammedo@redhat.com
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        d=1e100.net; s=20221208; t=1686168549; x=1688760549;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5qptHqCMXzGr92OcCGw+NUswL0uIiSzuvq5Iat1n5jw=;
+        b=lmcE4pzABy25rVkd2r7pNZTdyZenU0xzaaNYbtBlCT/Shvp5yvXuzqV+7hs27SDgAV
+         hh+IWUA5P+bfcg8fHteX3WVPBNjYHVgevfUp5jjlj0Dku+X2nd5JXPz1ZwXL3R5JNwFb
+         ThSANySiZ6BuiU+cmxNCoeWGvtJylvw8WhxT0/RnYREW/u1JXzT/cNGdEbQL5sNVpfbQ
+         8CfDdTGciQgJVU3vdMWBZKv7Ug4R+s+k33spfK2HxxxnQ4xhUNigkJp2r/AoiQJA4K8R
+         or6a8nVHnv3b16/cSBRr/CzZoiLESgCBjds4IAV5mdvb2KmTDKAVGqbjLoCGevRVqpWI
+         esBw==
+X-Gm-Message-State: AC+VfDwdSlcFhqbtkPqfrM+CKquw7ShfkOJ7j9g4Y8hldwEGWXpRcV/q
+        jqL/R39LUWRutDIGI5Q5XFQ=
+X-Google-Smtp-Source: ACHHUZ5j08yldALpOGjJtYYr6aw3isuyoGP0QZ0OfCGbDVCZH2cM/OLOjKsAkM4SlXr9nYi0lp3AVQ==
+X-Received: by 2002:a17:902:e88a:b0:1b1:1168:654f with SMTP id w10-20020a170902e88a00b001b11168654fmr2985941plg.56.1686168548620;
+        Wed, 07 Jun 2023 13:09:08 -0700 (PDT)
+Received: from macbook-pro-8.dhcp.thefacebook.com ([2620:10d:c090:500::6:1c96])
+        by smtp.gmail.com with ESMTPSA id w23-20020a170902a71700b001b04dfbe5d0sm10701911plq.309.2023.06.07.13.09.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 13:09:08 -0700 (PDT)
+Date:   Wed, 7 Jun 2023 13:09:05 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     menglong8.dong@gmail.com
+Cc:     davem@davemloft.net, dsahern@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, x86@kernel.org,
+        imagedong@tencent.com, benbjiang@tencent.com,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next v3 1/3] bpf, x86: allow function arguments up to
+ 12 for TRACING
+Message-ID: <20230607200905.5tbosnupodvydezq@macbook-pro-8.dhcp.thefacebook.com>
+References: <20230607125911.145345-1-imagedong@tencent.com>
+ <20230607125911.145345-2-imagedong@tencent.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230607125911.145345-2-imagedong@tencent.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,83 +78,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023, Isaku Yamahata wrote:
-> On Wed, Jun 07, 2023 at 12:27:33PM -0700,
-> Dave Hansen <dave.hansen@intel.com> wrote:
+On Wed, Jun 07, 2023 at 08:59:09PM +0800, menglong8.dong@gmail.com wrote:
+> From: Menglong Dong <imagedong@tencent.com>
 > 
-> > On 6/7/23 11:53, Isaku Yamahata wrote:
-> > >>> VMX enabling, and KVM is the only user of TDX.  This implementation
-> > >>> chooses to make KVM itself responsible for enabling VMX before using
-> > >>> TDX and let the rest of the kernel stay blissfully unaware of VMX.
-> > >>>
-> > >>> The current TDX_MODULE_CALL macro handles neither #GP nor #UD.  The
-> > >>> kernel would hit Oops if SEAMCALL were mistakenly made w/o enabling VMX
-> > >>> first.  Architecturally, there is no CPU flag to check whether the CPU
-> > >>> is in VMX operation.  Also, if a BIOS were buggy, it could still report
-> > >>> valid TDX private KeyIDs when TDX actually couldn't be enabled.
-> > >> I'm not sure this is a great justification.  If the BIOS is lying to the
-> > >> OS, we _should_ oops.
-> > >>
-> > >> How else can this happen other than silly kernel bugs.  It's OK to oops
-> > >> in the face of silly kernel bugs.
-> > > TDX KVM + reboot can hit #UD.  On reboot, VMX is disabled (VMXOFF) via
-> > > syscore.shutdown callback.  However, guest TD can be still running to issue
-> > > SEAMCALL resulting in #UD.
-> > > 
-> > > Or we can postpone the change and make the TDX KVM patch series carry a patch
-> > > for it.
-> > 
-> > How does the existing KVM use of VMLAUNCH/VMRESUME avoid that problem?
+> For now, the BPF program of type BPF_PROG_TYPE_TRACING can only be used
+> on the kernel functions whose arguments count less than 6. This is not
+> friendly at all, as too many functions have arguments count more than 6.
 > 
-> extable. From arch/x86/kvm/vmx/vmenter.S
+> Therefore, let's enhance it by increasing the function arguments count
+> allowed in arch_prepare_bpf_trampoline(), for now, only x86_64.
 > 
-> .Lvmresume:
->         vmresume
->         jmp .Lvmfail
+> For the case that we don't need to call origin function, which means
+> without BPF_TRAMP_F_CALL_ORIG, we need only copy the function arguments
+> that stored in the frame of the caller to current frame. The arguments
+> of arg6-argN are stored in "$rbp + 0x18", we need copy them to
+> "$rbp - regs_off + (6 * 8)".
 > 
-> .Lvmlaunch:
->         vmlaunch
->         jmp .Lvmfail
-> 
->         _ASM_EXTABLE(.Lvmresume, .Lfixup)
->         _ASM_EXTABLE(.Lvmlaunch, .Lfixup)
+> For the case with BPF_TRAMP_F_CALL_ORIG, we need prepare the arguments
+> in stack before call origin function, which means we need alloc extra
+> "8 * (arg_count - 6)" memory in the top of the stack. Note, there should
+> not be any data be pushed to the stack before call the origin function.
+> Then, we have to store rbx with 'mov' instead of 'push'.
 
-More specifically, KVM eats faults on VMX and SVM instructions that occur after
-KVM forcefully disables VMX/SVM.
-
-E.g. with reboot -f, this will be reached without first stopping VMs:
-
-static void kvm_shutdown(void)
-{
-	/*
-	 * Disable hardware virtualization and set kvm_rebooting to indicate
-	 * that KVM has asynchronously disabled hardware virtualization, i.e.
-	 * that relevant errors and exceptions aren't entirely unexpected.
-	 * Some flavors of hardware virtualization need to be disabled before
-	 * transferring control to firmware (to perform shutdown/reboot), e.g.
-	 * on x86, virtualization can block INIT interrupts, which are used by
-	 * firmware to pull APs back under firmware control.  Note, this path
-	 * is used for both shutdown and reboot scenarios, i.e. neither name is
-	 * 100% comprehensive.
-	 */
-	pr_info("kvm: exiting hardware virtualization\n");
-	kvm_rebooting = true;
-	on_each_cpu(hardware_disable_nolock, NULL, 1);
-}
-
-which KVM x86 (VMX and SVM) then queries when deciding what to do with a spurious
-fault on a VMX/SVM instruction
-
-/*
- * Handle a fault on a hardware virtualization (VMX or SVM) instruction.
- *
- * Hardware virtualization extension instructions may fault if a reboot turns
- * off virtualization while processes are running.  Usually after catching the
- * fault we just panic; during reboot instead the instruction is ignored.
- */
-noinstr void kvm_spurious_fault(void)
-{
-	/* Fault while not rebooting.  We want the trace. */
-	BUG_ON(!kvm_rebooting);
-}
-EXPORT_SYMBOL_GPL(kvm_spurious_fault);
+x86-64 psABI requires stack to be 16-byte aligned when args are passed on the stack.
+I don't see this logic in the patch.
