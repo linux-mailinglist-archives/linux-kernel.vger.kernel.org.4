@@ -2,94 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 888577250FD
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 02:00:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C8C8725104
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 02:10:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239855AbjFGAAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 20:00:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37912 "EHLO
+        id S233836AbjFGAKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 20:10:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234601AbjFGAAW (ORCPT
+        with ESMTP id S233920AbjFGAKC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 20:00:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6945E1707
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 17:00:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0766A633D2
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 00:00:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6149DC4339C;
-        Wed,  7 Jun 2023 00:00:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686096020;
-        bh=gvvjUKQi4wiUt55k1lOIB90d9t2HHIpkJYXB1NoPZMg=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=BOTENdVUIQ/9A3Q3sAtj7l0NnIJZ5pXpfsTF3xMIz2IgbL8Xhao8FxsfjKOl/HZZr
-         G7ng77QseyQTklBhD4T4ZUmPG5nDyHrYrotzilEOmkMOLyNDuDMbX3L9WMn2+UWUoh
-         aOSTMW8aLsfEk+lyK5Pjc1v23MxFme2Wxdf2Zax289USGB7c7BqkZGewbuhEV8jU0w
-         frC5GMovgFQt7B1GGFxlxGjOwgm6HCYVUp6rRkM1osP5OzhrZ6i1/9mnnKF+ebGgMp
-         TqlJmP4i+ptSUgEZYJ1BEMsuTJE2xe97tTyqMSq9ZbhMn1OVAuRhddBMd5mYrTac2A
-         IgHotCqjyAOVw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 44DA4E8722F;
-        Wed,  7 Jun 2023 00:00:20 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v3 0/2] riscv: allow case-insensitive ISA string parsing
-From:   patchwork-bot+linux-riscv@kernel.org
-Message-Id: <168609602027.16436.14732118380879424687.git-patchwork-notify@kernel.org>
-Date:   Wed, 07 Jun 2023 00:00:20 +0000
-References: <tencent_E6911C8D71F5624E432A1AFDF86804C3B509@qq.com>
-In-Reply-To: <tencent_E6911C8D71F5624E432A1AFDF86804C3B509@qq.com>
-To:     Yangyu Chen <cyy@cyyself.name>
-Cc:     linux-riscv@lists.infradead.org, conor@kernel.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
-        ajones@ventanamicro.com, twd2.me@gmail.com, soha@lohu.info,
-        i@zenithal.me
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 6 Jun 2023 20:10:02 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 368DBA7
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 17:10:01 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-bacfa4ef059so10905986276.2
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 17:10:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686096600; x=1688688600;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=7jQ+xYt46hR10tWF91OPdd84A3fR3CneeXhyB7VEVfs=;
+        b=IOaGubraBVxN5KZKqG2ei+OyUjRB+hj5dAS1hlNbmUpIsU3SbJAnuS9cCUeiJPr5r8
+         5lLlB9jusTHmTSagqCMIDN3aES6NtMJC6xXmfDqyNkMzzrjtKLuX1OmC9AusXc5sGoIA
+         wEoH1AXK9oYAepZnLFFfvFv07//QlYUXv9FUqQ5sXvKxe3jmVmgav/76tn/JPKnCHRjq
+         yoghl5j9sWXcKEDBaZ+fCu2rXfWQROm47roJ6a6i7MylS6BhLYUkA9AHHIJhGf6VBFSU
+         SalXBMAop79PBNnk82YzxO8tBCKwClx5iN9rKDE4i+yvl6TwUXZcNiMtwd/CVCpZRqIT
+         zaxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686096600; x=1688688600;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7jQ+xYt46hR10tWF91OPdd84A3fR3CneeXhyB7VEVfs=;
+        b=ajrCp0NVtl7r/k70LrWrnozWWHHULhS1/8WyzE/Va0uBM+ax02kQZyuWx0S+RKZL9I
+         m6BVgjrXJhCHMl9xtpslJmPJfOKSmkept1m8K8gabZ9UrZHPOj1MuMMtYCus2xTpFSql
+         dkb4EoifnZWtFof7ZWfkcAY+xYL0Q11Xvts3vRZKR6ZmoadRdRrzQmE/jxsVjb4COp4o
+         4ju8/Ytbu2n1aFYWSEuDWm6DOJm7+x3QKFM73fgr5cJcLdU7SRusIl//nYkuPQfEPO4f
+         2+XevzUojbw/2sHFKdHxvcpCeJSC4h+FSDnee6C/ivgTHSw0LwSsbHP+7X84QM6n7tkj
+         ecKg==
+X-Gm-Message-State: AC+VfDwsLZhVDWP60cPYlYsZEm7kLuEiR7dVHawkcO0LgTXZlMLd8la7
+        TYkpEPonNhM+y9t4vrxVZcQUtmzqVOw=
+X-Google-Smtp-Source: ACHHUZ662owbssGP0R/z0eAEzt7J4mWnl43/VcibcXVGyAUtItJqI1nNUF/U1AoXhUK5o0Rk9wmIFM1EK1Q=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6902:1896:b0:ba8:929a:2073 with SMTP id
+ cj22-20020a056902189600b00ba8929a2073mr2190865ybb.1.1686096600527; Tue, 06
+ Jun 2023 17:10:00 -0700 (PDT)
+Date:   Tue, 6 Jun 2023 17:09:58 -0700
+In-Reply-To: <20230601184256.180413-1-peterx@redhat.com>
+Mime-Version: 1.0
+References: <20230601184256.180413-1-peterx@redhat.com>
+Message-ID: <ZH/K1uip/k0do9F2@google.com>
+Subject: Re: [PATCH v2] selftests/kvm: Allow specify physical cpu list in
+ demand paging test
+From:   Sean Christopherson <seanjc@google.com>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        James Houghton <jthoughton@google.com>,
+        Anish Moorthy <amoorthy@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This series was applied to riscv/linux.git (for-next)
-by Palmer Dabbelt <palmer@rivosinc.com>:
-
-On Tue,  2 May 2023 00:10:19 +0800 you wrote:
-> This patchset allows case-insensitive ISA string parsing, which is
-> needed in the ACPI environment. As the RISC-V Hart Capabilities Table
-> (RHCT) description in UEFI Forum ECR[1] shows the format of the ISA
-> string is defined in the RISC-V unprivileged specification[2]. However,
-> the RISC-V unprivileged specification defines the ISA naming strings are
-> case-insensitive while the current ISA string parser in the kernel only
-> accepts lowercase letters. In this case, the kernel should allow
-> case-insensitive ISA string parsing. Moreover, this reason has been
-> discussed in Conor's patch[3]. And I have also checked the current ISA
-> string parsing in the recent ACPI support patch[4] will also call
-> `riscv_fill_hwcap` function as DT we use now.
+On Thu, Jun 01, 2023, Peter Xu wrote:
+> Mimic dirty log test to allow specify physical cpu pinning for vcpu threads.
+> Put the help message into a general helper as suggested by Sean.
 > 
-> [...]
+> Signed-off-by: Peter Xu <peterx@redhat.com>
+> ---
+>  tools/testing/selftests/kvm/demand_paging_test.c  | 15 +++++++++++++--
+>  tools/testing/selftests/kvm/dirty_log_perf_test.c | 12 +-----------
+>  .../testing/selftests/kvm/include/kvm_util_base.h |  1 +
+>  tools/testing/selftests/kvm/lib/kvm_util.c        | 15 +++++++++++++++
+>  4 files changed, 30 insertions(+), 13 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/demand_paging_test.c b/tools/testing/selftests/kvm/demand_paging_test.c
+> index bdb8e0748154..8581478ed4eb 100644
+> --- a/tools/testing/selftests/kvm/demand_paging_test.c
+> +++ b/tools/testing/selftests/kvm/demand_paging_test.c
+> @@ -220,7 +220,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+>  static void help(char *name)
+>  {
+>  	puts("");
+> -	printf("usage: %s [-h] [-m vm_mode] [-u uffd_mode] [-a]\n"
+> +	printf("usage: %s [-h] [-m vm_mode] [-u uffd_mode] [-a] [-c cpu_list]\n"
 
-Here is the summary with links:
-  - [v3,1/2] riscv: allow case-insensitive ISA string parsing
-    https://git.kernel.org/riscv/c/255b34d799dd
-  - [v3,2/2] dt-bindings: riscv: drop invalid comment about riscv,isa lower-case reasoning
-    https://git.kernel.org/riscv/c/9e320d7ca46a
+This appears to be based on Anish's unmerged series.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+https://lore.kernel.org/all/20230602161921.208564-14-amoorthy@google.com
 
+>  		   "          [-d uffd_delay_usec] [-r readers_per_uffd] [-b memory]\n"
+>  		   "          [-s type] [-v vcpus] [-o]\n", name);
+>  	guest_modes_help();
+> @@ -229,6 +229,7 @@ static void help(char *name)
+>  	printf(" -a: Use a single userfaultfd for all of guest memory, instead of\n"
+>  		   "     creating one for each region paged by a unique vCPU\n"
+>  		   "     Set implicitly with -o, and no effect without -u.\n");
+> +	kvm_vcpu_pinning_help();
 
+The helper should have a verb, e.g. kvm_print_vcpu_pinning_help().
+
+>  	printf(" -d: add a delay in usec to the User Fault\n"
+>  	       "     FD handler to simulate demand paging\n"
+>  	       "     overheads. Ignored without -u.\n");
+> @@ -247,6 +248,7 @@ static void help(char *name)
+>  int main(int argc, char *argv[])
+>  {
+>  	int max_vcpus = kvm_check_cap(KVM_CAP_MAX_VCPUS);
+> +	const char *cpulist = NULL;
+>  	struct test_params p = {
+>  		.src_type = DEFAULT_VM_MEM_SRC,
+>  		.partition_vcpu_memory_access = true,
+> @@ -257,7 +259,7 @@ int main(int argc, char *argv[])
+>  
+>  	guest_modes_append_default();
+>  
+> -	while ((opt = getopt(argc, argv, "ahom:u:d:b:s:v:r:")) != -1) {
+> +	while ((opt = getopt(argc, argv, "ac:hom:u:d:b:s:v:r:")) != -1) {
+>  		switch (opt) {
+>  		case 'm':
+>  			guest_modes_cmdline(optarg);
+> @@ -272,6 +274,9 @@ int main(int argc, char *argv[])
+>  		case 'a':
+>  			p.single_uffd = true;
+>  			break;
+> +		case 'c':
+> +			cpulist = optarg;
+> +			break;
+
+I think it makes sense to put this after 'v' so that the vCPU pinning stuff
+directly follows the knobs for defining the number of vCPUs.  This test doesn't
+use alphabetical, so inserting here doesn't buy anything.
+
+>  		case 'd':
+>  			p.uffd_delay = strtoul(optarg, NULL, 0);
+>  			TEST_ASSERT(p.uffd_delay >= 0, "A negative UFFD delay is not supported.");
+> @@ -309,6 +314,12 @@ int main(int argc, char *argv[])
+>  		TEST_FAIL("userfaultfd MINOR mode requires shared memory; pick a different -s");
+>  	}
+>  
+> +	if (cpulist) {
+> +		kvm_parse_vcpu_pinning(cpulist, memstress_args.vcpu_to_pcpu,
+> +				       nr_vcpus);
+> +		memstress_args.pin_vcpus = true;
+> +	}
+> +
+>  	for_each_guest_mode(run_test, &p);
+>  
+>  	return 0;
+> diff --git a/tools/testing/selftests/kvm/dirty_log_perf_test.c b/tools/testing/selftests/kvm/dirty_log_perf_test.c
+> index e9d6d1aecf89..a17d4ebebe55 100644
+> --- a/tools/testing/selftests/kvm/dirty_log_perf_test.c
+> +++ b/tools/testing/selftests/kvm/dirty_log_perf_test.c
+> @@ -402,17 +402,7 @@ static void help(char *name)
+>  	       "     so -w X means each page has an X%% chance of writing\n"
+>  	       "     and a (100-X)%% chance of reading.\n"
+>  	       "     (default: 100 i.e. all pages are written to.)\n");
+> -	printf(" -c: Pin tasks to physical CPUs.  Takes a list of comma separated\n"
+> -	       "     values (target pCPU), one for each vCPU, plus an optional\n"
+> -	       "     entry for the main application task (specified via entry\n"
+> -	       "     <nr_vcpus + 1>).  If used, entries must be provided for all\n"
+> -	       "     vCPUs, i.e. pinning vCPUs is all or nothing.\n\n"
+> -	       "     E.g. to create 3 vCPUs, pin vCPU0=>pCPU22, vCPU1=>pCPU23,\n"
+> -	       "     vCPU2=>pCPU24, and pin the application task to pCPU50:\n\n"
+> -	       "         ./dirty_log_perf_test -v 3 -c 22,23,24,50\n\n"
+> -	       "     To leave the application task unpinned, drop the final entry:\n\n"
+> -	       "         ./dirty_log_perf_test -v 3 -c 22,23,24\n\n"
+
+This should print the actual program name.
+
+I've fixed up all of these and rebased.  I'll post a v3 shortly.
