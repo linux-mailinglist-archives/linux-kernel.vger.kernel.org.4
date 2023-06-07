@@ -2,186 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E0D1725546
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 09:19:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2732725536
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 09:16:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238881AbjFGHTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 03:19:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51154 "EHLO
+        id S238833AbjFGHQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 03:16:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233896AbjFGHS5 (ORCPT
+        with ESMTP id S233989AbjFGHQA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 03:18:57 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8CFBE6B;
-        Wed,  7 Jun 2023 00:18:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686122337; x=1717658337;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=U9BMiHlbFJNvV44cawwgmHJfPZst8d6vbpWFC5n0oo8=;
-  b=DPfg/cvvDwxBVEivyMQwRQ0WPPyBvlLjp4ze//cL0/mjsIiaY5gkT66F
-   HhKTJUsjb0yyD7DYQa39BSz2nai/Ux9Zuk/4+BkWbu844WlfJ2xezi/CF
-   t3MD+vcWTSJWt4md/m+j+r272Dq9FG+diRSEk45oijSYjimm7E+THvYSL
-   y24gJNomJqOGxb3PRmBI09P0/gO+HseDoeszH6th2pouQdHeLc95w2MbG
-   xXKEmy478++8jMqt+9N7hp35qL7raH2LcMedmC+sQn/Gzn8OcFbhVfdRp
-   UIhV5N6vctr3i4A9Yvx5PwL02hQePYsWFNhzk9KNyB+zE7EhkxCKrNh+e
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="420461772"
-X-IronPort-AV: E=Sophos;i="6.00,223,1681196400"; 
-   d="scan'208";a="420461772"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 00:18:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="833552774"
-X-IronPort-AV: E=Sophos;i="6.00,223,1681196400"; 
-   d="scan'208";a="833552774"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by orsmga004.jf.intel.com with ESMTP; 07 Jun 2023 00:18:55 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 7 Jun 2023 00:18:55 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 7 Jun 2023 00:18:55 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Wed, 7 Jun 2023 00:18:55 -0700
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.169)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Wed, 7 Jun 2023 00:18:53 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EG+zngTyWI0cZqfM1aH7ukOU9FomMOQwGW63s1glIRon1a7ghoKkRe++TduSYiwYF73yKSKyZiUGGwtQCkGstWU6ObS7P4sjunx7WG/WfD+C9Q8cn8n5gUwsca7VIbhg7NyhbP83d/J6myssv4LHKGkBXREKWhu0zUXwR3gruKkQw4GCYvcgJoU7OwQye1PNVgp/WGO8t0upyVyS2GUi5Jh+XFnRCW5z7sVo0wOjdYvnBEBhKZwoLdSrrnVM5e6NJtdnVgCXaGqpTRXU9n02IhWJ8WSh5FfltE2Q0rKEtH0mtOApQXMK5nC4NuPDSCZuiyxVEok8NuUI6S+z0AixDg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vLC0UU0PVcfkyTb3Axm+8MBdI/8sGCCCx1tjt6UiWIQ=;
- b=Z/qKrP9cEO4ZnQGDP7UUGVttcfjrB3/oecVDqgoi4Q5tRWJtQuRBn1ANl3vt10oKre38Wa3TpqD5CRokSDmUMFAEtDVCZVxm44WFA1hbqzjo6zrsRVYg1wJZTDcmavDVqn51xSTHKGjy1Bw/8xYJrhwoRMRYoe0hyJP7iEVb4KphE8qGySPaNMd1yZLgOHLJBuksna1UNWRgQVu5LXReZl3wiGt5ZCOsyZJxYWF/ojGZtCgeS9kwTa5Rs62XpHzXh9qSDH0keiaqJoxkt4pyvtVMCbOhCWVyDXM8E/1hmZoIW1K9so4O3wVh5TpXf13CYNQtc4JPmFETJhnxECP23Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SN7PR11MB7540.namprd11.prod.outlook.com (2603:10b6:806:340::7)
- by DS0PR11MB6351.namprd11.prod.outlook.com (2603:10b6:8:cc::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Wed, 7 Jun
- 2023 07:18:51 +0000
-Received: from SN7PR11MB7540.namprd11.prod.outlook.com
- ([fe80::9376:9c9d:424a:a0fe]) by SN7PR11MB7540.namprd11.prod.outlook.com
- ([fe80::9376:9c9d:424a:a0fe%5]) with mapi id 15.20.6455.030; Wed, 7 Jun 2023
- 07:18:51 +0000
-Date:   Wed, 7 Jun 2023 09:15:52 +0200
-From:   Larysa Zaremba <larysa.zaremba@intel.com>
-To:     Hangyu Hua <hbh25y@gmail.com>
-CC:     <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <simon.horman@corigine.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net v2] net: sched: fix possible refcount leak in
- tc_chain_tmplt_add()
-Message-ID: <ZIAuqHiemLrpH6Fr@lincoln>
-References: <20230607022301.6405-1-hbh25y@gmail.com>
+        Wed, 7 Jun 2023 03:16:00 -0400
+Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98B9DE62;
+        Wed,  7 Jun 2023 00:15:59 -0700 (PDT)
+Received: by mail-io1-f49.google.com with SMTP id ca18e2360f4ac-77797beb42dso160211839f.2;
+        Wed, 07 Jun 2023 00:15:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686122159; x=1688714159;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=WN0LwwbnyJgDu1njwGhpTrm7cgIrH6XMSJ7383SAvpU=;
+        b=F8kjs7ru0KzKeiZRzlNy9PtMGIz12w+nWl/ix7kwyGTfTdF3eHE3MONai5jgh1f5/S
+         r7jRHS5ScTf78Bh+NODFvZHd7AMtx39gINLtfUXGfzcNjvQ8QGSYpjr92kTs8DJFQM6l
+         EhRJT8BOxJmzM4ZAponEbuuXneAxpQrtaizt86qcD5jDGiiQXMhDfBE+LW/2aLtjd9/s
+         wRGkcA9wBjeMeeiNsyDLt6VLTlaZRjpB1zi6TCQyi1JuAvS6PRgD4+zhMsZ0PV5Lqr0A
+         euFdrlqI7WPFu5o9V1SOb1yjUSvBfNs3akN4a4IdtqXhG2F+h5kcookiRhKJIRLCqgga
+         KnlA==
+X-Gm-Message-State: AC+VfDzCBZpMHS8TQQ27OtRxX3JD9TkRivq1YGddNHo2BrDME/IDhCmj
+        DJwcbFMga86hIJsQX+vmdQ==
+X-Google-Smtp-Source: ACHHUZ6xKL81YYTu7AlmFDegrMRVLuXp0zLtAjHhlTwkvAEuS0iMElMEV0IQYbqqBXZAFPHbCYkqrg==
+X-Received: by 2002:a6b:e31a:0:b0:777:b409:fb67 with SMTP id u26-20020a6be31a000000b00777b409fb67mr5369669ioc.4.1686122158656;
+        Wed, 07 Jun 2023 00:15:58 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id el11-20020a0566384d8b00b0040bb600eb81sm3411663jab.149.2023.06.07.00.15.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 00:15:58 -0700 (PDT)
+Received: (nullmailer pid 2033408 invoked by uid 1000);
+        Wed, 07 Jun 2023 07:15:55 -0000
 Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230607022301.6405-1-hbh25y@gmail.com>
-X-ClientProxiedBy: FR0P281CA0125.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:97::20) To SN7PR11MB7540.namprd11.prod.outlook.com
- (2603:10b6:806:340::7)
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN7PR11MB7540:EE_|DS0PR11MB6351:EE_
-X-MS-Office365-Filtering-Correlation-Id: 674c6cc5-4ea9-49cc-7e88-08db6727717a
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /j0e4NncTXptfCdLHkEfKaEjaT4dZgNtxsd1zlv8PkLBxckzFQxC4ujFemppw7SIixhJooABiVq247GAFjlF1Q3jBMx6AKA+Tpdf7k57I19G5GIr/R/SfWqu4vMP8SbB+XjUUyMytm4Tgfrmtli/sFjbHb9h/cTuAwMyKb1M/nssvyoG0i8GUOUFuFS++b+zsPlhDS5tApenVMXTRhQSGRIcEZ4N5PU3M0JdJ7UV4gEfHot3ajE3Jv35oeGUvKkbQ348KJEvxxDC+Ra4AZKfPa9dx37oNSc8ibuMBxbN/yPdHbp4BLrGsOj4nwpU/nzUH0jsvRi4H6y8lrtQOwMVvyU/9ry8/Lg+1jorYQTQook2MnZJhJf+cyIuRLW4Vik69FgdfuX5HmjS45iqYLa67d6vPW7yuJCDZNRopNGEzSZ+5VZqWZRMHhhly3GG0nJ7lBZzeiIOAqdhb3Nm9d0TGI6itbKOhACRWNKc9fdPzd3jduwk1zbp452Ar6+rQMZHu1eW29vgADQCix2tcU+R5hW+bV6WFzqE18kUqNex5av0Mwx+O5UHfo9mqCEfpk/F
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN7PR11MB7540.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(39860400002)(136003)(346002)(366004)(376002)(396003)(451199021)(4744005)(2906002)(33716001)(86362001)(82960400001)(38100700002)(41300700001)(6486002)(316002)(5660300002)(8936002)(8676002)(478600001)(66946007)(66556008)(66476007)(6916009)(4326008)(6506007)(9686003)(6512007)(26005)(186003)(7416002)(44832011);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?fACWIt3uoGJ+qX1uakAq1C2/uSxDwymw/svzHDyxNDhUNdSDQmM5/zG9wGah?=
- =?us-ascii?Q?C+ZuEV530kPF1FoVp7fJHC9G9Pr5P3/ldHNUALYdD/aDSFOeeMbf+Pb9dSCy?=
- =?us-ascii?Q?BzjXL1mRK/VEhIivOGB87gszlxn/Ekc/JDEe1ppEfjIhwLe5WOunL0WUr15f?=
- =?us-ascii?Q?RaGOHqX5A1do2NDvZ/dxEcjIVL9hg+w1c8C40YeKG5vkDlf0EwnrU/f0IaID?=
- =?us-ascii?Q?FkP8nBw6pKueh7e0ds3zUe7/rvhowNUxQUkl7H+tdF+/feHBGAoFiiqW5TfC?=
- =?us-ascii?Q?jhgXmBKOs1I7unCzV8H1u0zhtq2Zv/MTDdcAUIRyOkqJMOh2q3DGnFy1SVyR?=
- =?us-ascii?Q?ANUIe4mHoyXd5zRx21KADkA6Cm2jYnEadEgGB+jQ3ekdKkkl5JJhCAwFrMoF?=
- =?us-ascii?Q?JBrV+xKw4nbXSXxhA5WIDmtOUQOsYZkamIKvLReG2jZAOcCd8OrViaHVvUQA?=
- =?us-ascii?Q?1KqK+T0ugzlVhzF6rx50pMdmCrHHtPxox6/jxUI+RaSn2HcVChhWPFt6GmRS?=
- =?us-ascii?Q?F0NT/4bgE038B/mEtDzhgDrX/Vp6No3TGapzRytq1QvLzDYqNtxmYabaKWRa?=
- =?us-ascii?Q?fPmB/wvTXKBq7zxt2PONBU3wUXOGNZ7Ulz3mVkn0ybzy+Yw+oyGMV/B5EJww?=
- =?us-ascii?Q?uQXJ8nApLmWSpblyp+KYozMmbb1uCVAyLL2lvxrvPm3XMgFoI9apnr49f2Xb?=
- =?us-ascii?Q?eCb+QmvIZqcTzeSucmQl3ivZQsm9vm5c3tsrto9TE75+piJfhrmqHUwNkLJR?=
- =?us-ascii?Q?FOKnkVUW4fiG4IYJMUTWCrRTd3wVgYwnS5jYCPotQl32qDLidCP/Owq9qpGI?=
- =?us-ascii?Q?/CcVXclfEtJ8UCE9Cbn28BsclrIICZArnDdy0XawPGbmJLPaIqYzdTkXKbu0?=
- =?us-ascii?Q?vQKDZTk/UO/fqjUW92OWL/+HHdu61kmwjM8Lw563Lw93mK0WRvTlsb4j2bRo?=
- =?us-ascii?Q?rwwOFfQ7Wx5BnLhXCxhZU40BA6FyiEvm9g+muBF88O+eHFXx9YMM9j4DwBc3?=
- =?us-ascii?Q?/YdWFUCzEj829dFxrQUui/Vua7O0JxMH7InAK4JkGMUntSFOzf8xDmrKkKYv?=
- =?us-ascii?Q?p7WC/tAP1oJIs/coNFTZPi5wG1px2LoBAqvosvsHuJbEbv5el8HTMi6DSMRN?=
- =?us-ascii?Q?Aag+hgjnFrQK8YMHIGLjmuLa5KyxtrF9mo3fmZrBkKvFj5Fo82IWNmf2eTNP?=
- =?us-ascii?Q?LI6lF+zA/lweD2G8YfzZ/UA/uwRDY8cXy5qAbPJYqkgCTdgzisHgFPvN1mIL?=
- =?us-ascii?Q?sVCeyC+VrIuuMPzsKM0K0syYMqwsJ79gIPkQkOusvTJXoyYmVuihDyXw2EzT?=
- =?us-ascii?Q?Dl+IfI6u9u5rsexKRVClIh6sxd4QbQVuZu8ATSa1XtAVwrzRE9b6MDrWQc/z?=
- =?us-ascii?Q?Z/979nd6EvmXbS90VeP1ROBC9rhENdzGeg4uftVy7lSE48CVnsSt0q9lU5Ed?=
- =?us-ascii?Q?+ACo3vX8kFtL+UtUVjrvBFeKvJ2GFBI65HYSv8EUO8dCacWNu3XWupzeS/7F?=
- =?us-ascii?Q?Lw9IIcyFU5rt1Ow4KVrvrjUU6l++e0syeTAN3Rjmvbn19fmT/pkIJNhoe/6j?=
- =?us-ascii?Q?FJIgPi8DI1BtvH8oHnjh78ggLwjyUyIb1BvSgPq4jBammOCmKnof8hLRJRMW?=
- =?us-ascii?Q?xg=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 674c6cc5-4ea9-49cc-7e88-08db6727717a
-X-MS-Exchange-CrossTenant-AuthSource: SN7PR11MB7540.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2023 07:18:50.9657
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: FVeYhCc6JO6vW6ClUrMQZ50Qh9POMj/6v+t46xdU795AhWS6NK74J6FVSzFnxOJgPeyDgTQlxuViig6afixL0qeMfA5Os6auGt43DHTeCmk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB6351
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Hsiao Chien Sung <shawn.sung@mediatek.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Singo Chang <singo.chang@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Nancy Lin <nancy.lin@mediatek.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-mediatek@lists.infradead.org, Fei Shao <fshao@google.com>,
+        Jason-JH Lin <jason-jh.lin@mediatek.com>
+In-Reply-To: <20230607061121.6732-2-shawn.sung@mediatek.com>
+References: <20230607061121.6732-1-shawn.sung@mediatek.com>
+ <20230607061121.6732-2-shawn.sung@mediatek.com>
+Message-Id: <168612215587.2033253.1998545929244911622.robh@kernel.org>
+Subject: Re: [PATCH v1 1/6] dt-bindings: display/mediatek: mt8188: Add
+ documentations for VDOSYS1
+Date:   Wed, 07 Jun 2023 01:15:55 -0600
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 10:23:01AM +0800, Hangyu Hua wrote:
-> try_module_get will be called in tcf_proto_lookup_ops. So module_put needs
-> to be called to drop the refcount if ops don't implement the required
-> function.
+
+On Wed, 07 Jun 2023 14:11:16 +0800, Hsiao Chien Sung wrote:
+> Add device tree documentations for MT8188 VDOSYS1.
 > 
-> Fixes: 9f407f1768d3 ("net: sched: introduce chain templates")
-
-Reviewed-by: Larysa Zaremba <larysa.zaremba@intel.com>
-
-> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+> Signed-off-by: Hsiao Chien Sung <shawn.sung@mediatek.com>
 > ---
-> 	
-> 	v2: fix the patch description.
+>  .../bindings/arm/mediatek/mediatek,mmsys.yaml |  1 +
+>  .../display/mediatek/mediatek,ethdr.yaml      |  5 +-
+>  .../display/mediatek/mediatek,mdp-rdma.yaml   |  5 +-
+>  .../display/mediatek/mediatek,merge.yaml      |  1 +
+>  .../display/mediatek/mediatek,padding.yaml    | 80 +++++++++++++++++++
+>  5 files changed, 90 insertions(+), 2 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,padding.yaml
 > 
->  net/sched/cls_api.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/net/sched/cls_api.c b/net/sched/cls_api.c
-> index 2621550bfddc..92bfb892e638 100644
-> --- a/net/sched/cls_api.c
-> +++ b/net/sched/cls_api.c
-> @@ -2952,6 +2952,7 @@ static int tc_chain_tmplt_add(struct tcf_chain *chain, struct net *net,
->  		return PTR_ERR(ops);
->  	if (!ops->tmplt_create || !ops->tmplt_destroy || !ops->tmplt_dump) {
->  		NL_SET_ERR_MSG(extack, "Chain templates are not supported with specified classifier");
-> +		module_put(ops->owner);
->  		return -EOPNOTSUPP;
->  	}
->  
-> -- 
-> 2.34.1
-> 
+
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
+
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/display/mediatek/mediatek,ethdr.yaml:28:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
+./Documentation/devicetree/bindings/display/mediatek/mediatek,mdp-rdma.yaml:26:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
+
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/display/mediatek/mediatek,padding.example.dts:19:18: fatal error: dt-bindings/clock/mt8188-clk.h: No such file or directory
+   19 |         #include <dt-bindings/clock/mt8188-clk.h>
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[1]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/display/mediatek/mediatek,padding.example.dtb] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1512: dt_binding_check] Error 2
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230607061121.6732-2-shawn.sung@mediatek.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
