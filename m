@@ -2,164 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E752D7270AF
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 23:44:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 725B37270B1
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 23:44:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231179AbjFGVoG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 17:44:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51760 "EHLO
+        id S231955AbjFGVoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 17:44:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229901AbjFGVoD (ORCPT
+        with ESMTP id S229901AbjFGVoI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 17:44:03 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63413E4A
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 14:44:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686174242; x=1717710242;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=aR0DH2sfsEXSUdSPNAHjRH0364GzGC4nCmOqVUpEPBs=;
-  b=IMgKsIFxjmOjQNJFJ7vTqTpdLIj7tUTIFs8GYJ2R2P3/0Rr4mjev8/Oy
-   OffRJhsW3W+VeT3wDquUsaR0gCqP8e1FIL8XoRDU+b/Ex7jt5/IZquu2E
-   evhYOGKo6UT3Vubt4918fAGVozj35S76Y1OdyNdDM6K2P/yK4O4K+jyUc
-   VmQGVmuZFUbm9wtqi5DUTL50YHXZ9ydiRSDQJz1t5rFYj7K487Hhin8op
-   ZMdSl1grldPaPnR5Rb7VHPztiNEksfAmTPDLulvQYP6aORi5eJLLXIH0c
-   nLQgPu82HXlxkwqxKrX6wKHbwuy0JbIH36zAJlS6Di4DymQC7u5mQnpYB
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="357128841"
-X-IronPort-AV: E=Sophos;i="6.00,225,1681196400"; 
-   d="scan'208";a="357128841"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 14:44:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="687136984"
-X-IronPort-AV: E=Sophos;i="6.00,225,1681196400"; 
-   d="scan'208";a="687136984"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by orsmga006.jf.intel.com with ESMTP; 07 Jun 2023 14:44:01 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 7 Jun 2023 14:44:00 -0700
-Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
- ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 7 Jun 2023 14:44:00 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Wed, 7 Jun 2023 14:44:00 -0700
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (104.47.73.40) by
- edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Wed, 7 Jun 2023 14:44:00 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VtIp0s6NfsAMTe9VupdI55v84bDjzVKTWE0kA6t2NUWBfNeCd1+JoypfZLeSma+Qjrw7Yb54xpXau87HVNHX7Jz91mbldC4act/WpMCa3B8VdT8A5L+7bzuHhLm/H1Sg+ikfz9g8ZmDApzPaQzWDiAyqts+hXk30kBochQbOe1CROHGjHxTsSYjKvUe0k4iYgLZLViqE8sPy1VQZ8IHJbRS/JOb0rlJsZ9SHnvm+OMqOwE3LJ7pbTA6yE8RcucdhJYFaOD4UywxaqIPfQBytqxkY7hCiU9DrlyxsmJk3v8uSH+nFaCTx5PYuaHFP7pWUzFSesPOeoZQYQmDl9Siq2g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pQ0ErgKdjC2sXl8+8cnMQnVOnIm0MOF579wj6d+t/Gs=;
- b=RJifg3OIjkb/P1RhWFiDqU84AP1uQl4eUQtAS5jswuDI+UNlfeuL4SFm9Khd/fSoq9C5OeGqG5A8MyOH3fczmZaXexf3Dpi+ybLGqNlqZYGO4GpjLK0yaghYyNwp/7PJCiXw/JRZRmX0bXleG8QpoqHySGldWxG7cxVy4BzN/V7LOKmaC7TCl4+iw1tC04wuZzgqQjCApdm/OXZkZ2VsjpJ4UzKThmXbdUBgvrsQhS7b9y8VGwI5xPKxU5bNprSBUbGUUpqaeRtKr2mnvMSMiOYdHX1lHXhXTybecDq3oiI4+Wm6Y8tUHTnzZbgU/9u0lz1jifL603DR1EbBY25BCw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from SJ1PR11MB6083.namprd11.prod.outlook.com (2603:10b6:a03:48a::9)
- by SA1PR11MB8447.namprd11.prod.outlook.com (2603:10b6:806:3ac::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.32; Wed, 7 Jun
- 2023 21:43:57 +0000
-Received: from SJ1PR11MB6083.namprd11.prod.outlook.com
- ([fe80::f232:e1a0:b936:2aed]) by SJ1PR11MB6083.namprd11.prod.outlook.com
- ([fe80::f232:e1a0:b936:2aed%6]) with mapi id 15.20.6455.030; Wed, 7 Jun 2023
- 21:43:57 +0000
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        "kan.liang@linux.intel.com" <kan.liang@linux.intel.com>
-CC:     "mingo@redhat.com" <mingo@redhat.com>,
-        "acme@kernel.org" <acme@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "alexander.shishkin@linux.intel.com" 
-        <alexander.shishkin@linux.intel.com>,
-        "jolsa@kernel.org" <jolsa@kernel.org>,
-        "namhyung@kernel.org" <namhyung@kernel.org>,
-        "irogers@google.com" <irogers@google.com>,
-        "Hunter, Adrian" <adrian.hunter@intel.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "alexey.v.bayduraev@linux.intel.com" 
-        <alexey.v.bayduraev@linux.intel.com>,
-        "Zhang, Tinghao" <tinghao.zhang@intel.com>
-Subject: RE: [PATCH V2 1/6] perf/x86/intel: Add Grand Ridge and Sierra Forest
-Thread-Topic: [PATCH V2 1/6] perf/x86/intel: Add Grand Ridge and Sierra Forest
-Thread-Index: AQHZjOvilcELal0kyUWRoqbVSrXbL69/9d7Q
-Date:   Wed, 7 Jun 2023 21:43:57 +0000
-Message-ID: <SJ1PR11MB608367DC5D25856073C86FCFFC53A@SJ1PR11MB6083.namprd11.prod.outlook.com>
-References: <20230522113040.2329924-1-kan.liang@linux.intel.com>
- <20230522202659.GC3334667@hirez.programming.kicks-ass.net>
-In-Reply-To: <20230522202659.GC3334667@hirez.programming.kicks-ass.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SJ1PR11MB6083:EE_|SA1PR11MB8447:EE_
-x-ms-office365-filtering-correlation-id: 7e847819-97fe-4dbe-a535-08db67a04c2b
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: o8ADv4hHugd2sKF1Pawk1yIWxeDHru3ji0E6YDOQtnejAj9FhhR1tnSAVFGZW9dNBDzfJStIdD3gTczdMsHv8zCX9qGEP587h1WaCI72Axh7YzpM5iWzks2KqMJ6AD9MTEqFe/BRmsSDol2fOcJwBiDFD45GRZVwnrq+kpKH+T9vFvxvQU19FY0FfQd8a2y5B0NVyaWJZmVczGv1rXOYcICCIwnQcgoCKKKnp53RGd2SHUtbj+j+b3hNkhKh2JClAwWFA/XuXRgHZhhkMotp0PwOtnkvZCYA8IdD7KE1YJs2Md+GeqCHmSQXeqcBbf9Yq3AkElVxBYjw4Z3ofvZacD05OfTFF196SFgNUxE4AWavGVrq2finbaRZwN9UqZw2n2iO5saZPDgqI6nGyJTaXeVO6mTLflzJ4nUXJIRZlsOStq6d8rGrIJb+xbeaEnoFcza8Xw5fXsHcr9VC/tkrP68uV1+NHIXhw4yMh8adABI5awSDGXi2LsfznkpB/4TRCLR2CoF5+eQhbbMUFwizlcFLoRKCBxJYhNtBKHQkGBz0Vlgjhla7P0axu1TxEZYlUkZCL8+CTXNLVZzSFc3qGMXH4UxbR/RLFctLjn0TD0BRBpIqIlVUnlEcDF4/By8C
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6083.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(39860400002)(376002)(366004)(396003)(346002)(451199021)(186003)(26005)(6506007)(9686003)(83380400001)(7416002)(7696005)(71200400001)(2906002)(4744005)(8676002)(8936002)(82960400001)(110136005)(54906003)(478600001)(55016003)(33656002)(38100700002)(122000001)(41300700001)(4326008)(86362001)(5660300002)(38070700005)(64756008)(66446008)(52536014)(66476007)(66556008)(316002)(66946007)(76116006);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?enkMniU7NgRL3iQz36gBBDv46E8bVZdM6tMF46CLKK0ZLZHwSc4W7m9vzz8E?=
- =?us-ascii?Q?jYV4CyFBXgwOCg1nKRum3t5ZAP/iIEE5e+cANMecNKcFgc0IyswzkmJDG4Kq?=
- =?us-ascii?Q?ffcmQ0w6OzipCOyjHG9hOiPad9qhsTxH4fOvUCAe+0sWGj5KsTPslLgk181w?=
- =?us-ascii?Q?K6bhEwszAXb2tIWijVA9kba2noRzWUf40ImF9va1cYXMawQ9m2enTdAEJEyY?=
- =?us-ascii?Q?eVQPyUsT0ZNNXuz62HJ37w7JpoOSeX+ggdSQ4B9M0OX6WiVAx3vX/goD11yP?=
- =?us-ascii?Q?QP/BETGn6MTow2Fz6IRh6XlL2oioEYBtQFPvU/oSzMINyfGIpXIVPQzE+kI/?=
- =?us-ascii?Q?XwM2yy92ocYWN4S81rGSAjefL/hi3VWj2CK567gZv6YxZdW4jLfawhgP23xq?=
- =?us-ascii?Q?DiLjJlsHWzqUbcO3+aR1oNz8zsFJkFgyLLQofzIJYNFK3cFx44AOice76CsK?=
- =?us-ascii?Q?fSH9VU6l4t8JyZ03xvkFHaTX1AFYWWqkcLSAj3ghBGbd9VAmiRUclC3QE8CB?=
- =?us-ascii?Q?khEU09UylW6DAA0mOJSETdrQ3yW6qI/YWAH7fmcq8DO3zLYQlexoPSC5qRHt?=
- =?us-ascii?Q?dI1Jjz7/pEV36gbisdZq5Q6iRzRvqkfMUne6O3a/uGmp5n7Q2/K1HOhzyvpz?=
- =?us-ascii?Q?219uN3GWEaWqyQGL5kA0/IH8YhY83LQbYczGc7qS3iLv/ll0+DNSRJNxk2Nw?=
- =?us-ascii?Q?DatfyJL0HpB4Fc9t7HXjOg6FcLtvRRlXDO5IsJAE7hgSar17oFT1eQWyoxaY?=
- =?us-ascii?Q?GRYDVxYJVu+qmgfGr4mCGDeuUKMWXJbq56sZj0hCuWS13wTybkFHGowwVIlJ?=
- =?us-ascii?Q?VPLc1IICNeMzzeifdBaP1bcTJehwTnTn2+RpX4Wb/yaSlvFZikuMm+n/CvC+?=
- =?us-ascii?Q?QLPOqVYCTggP8SucdyiYZ6crd5xpDwMSbgX5+JojJ1Anh4FQNJ45IiWAaU4H?=
- =?us-ascii?Q?Reiz0TKVD4HhWRgWA2ivwrGp8PQg+oR2SSlRgQUqOycbpWbiiJAw0KPvVE9P?=
- =?us-ascii?Q?l9i2VPXFejFIpTqwlfuT5caU/MyHKCeaGKJ3Aw/NbDs3fi7Y2PZdhglxybEB?=
- =?us-ascii?Q?ZqjjCzHkaJh+RGEasYfjvJShchtPiZT2IvxDB8oHss3FL8o3J4JmasYEMYri?=
- =?us-ascii?Q?vR7LqV+iFBpJl0QkVbx4r6EBUX1sd9/6gOWjttw3rUW1KnrsFoQWpaphQZO9?=
- =?us-ascii?Q?FdpN8WPrYKF7RJcYU5anG99YLcgkw80/VX8j55mIVExcNSsS0VQyrPdW23C2?=
- =?us-ascii?Q?njK6tLcO7pdEEIz2yyNT4KnaNNbq+KZu+BXgpQX77vs/vWnRm1/R+WloFxGE?=
- =?us-ascii?Q?ck6ivBwrJg8A64TXEBFj5esAIxx+4L//H66n3xdDBrvO1i4i9YP1whpU6eZI?=
- =?us-ascii?Q?OA0zSaN9nQZBhFnSXa8GcMvXKWCvJcbCHju8kEfa3jOZDzFrem/FLGhGLZPx?=
- =?us-ascii?Q?7UPeU0M4MYVYIZ83LH/SnUQyLi6I1uyYIwsP+wYn6V8icSb6erTHltipdmnL?=
- =?us-ascii?Q?W9qG+bxGXoRiJ6aYX5Ax/2lYDTfGTnueOQoyJzZIV8bByvjrb/UZrR4pzngc?=
- =?us-ascii?Q?9xaomb7SYFMbvCSA2b8=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 7 Jun 2023 17:44:08 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA1F11B0;
+        Wed,  7 Jun 2023 14:44:06 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f6195d2b3fso6560186e87.1;
+        Wed, 07 Jun 2023 14:44:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686174245; x=1688766245;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xupC05x57AARfKBIM1aZnUShYcwzVxBXINlBcMbP1PY=;
+        b=iccI07MU3UKtDN0cmJm9Kv0x8X0Sxr7Xp8LMLGiP8sUn8qqeogn3I6aXVl/HsM+1Ln
+         9F0FgFAhZ+d9BT0ZkwYO9kehc9x+Xv7NRbwEjh1kjoRqAsLJ820WF4X2AdqTO4zV8Vhm
+         EPE36KhkvF+Xa8B7k7guVf9Aust6qtAOB+uCQG8+sJAMojEXYeLTwFTtSGhjQyhybPz4
+         Kkx+4lA6NCYYsIakKr4dZwTmeZrgkwtSZhozSzwpgIs2Ek3MKJYezi+32HnYo1L5+5aj
+         ANcvCknDipoFRP0bwShNiIjO9J+x46BGio1zcan20hRUlCWObsAzb7t5PUa+W7vD+YV4
+         32RQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686174245; x=1688766245;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xupC05x57AARfKBIM1aZnUShYcwzVxBXINlBcMbP1PY=;
+        b=aiSIhBG7DoGzlJ+4OQChIRiPyjW+D/kfaTfc9MlTer5TYKH6Ew+RzLwGrUtBKHat0x
+         7BR3DY4hBxZ6sACBCiLklnw7SFoDT357IQS31UA96fQEqc1DWdArM2QdBgXjimyOocuQ
+         AlCALbjD7YJKZhBndcR07iTqFTZr8E5bHpoO6wf2G1qwxx1o0OdV5XtXvIAPAP5LJxqN
+         mWbam/8H+XCTzIP3N2LUBLYfx0uAWqPpaPbUW2R4LH55iOGFf6MpbMZ3AonEshRP53zb
+         H1IfMeG81aXkpYMp9z1LbYQD5UEgQS2i8QtJs/zx8jTlgs1qFwwZGq41GSEfz8XzZhn2
+         mPIA==
+X-Gm-Message-State: AC+VfDy+iTXl3l4+zwywpS4Pd6yf2D4zCkdMxugnTlJla2L3buFwT9td
+        G7t6rx4Wb1faltfPzKztRSvAHfswdmo=
+X-Google-Smtp-Source: ACHHUZ5WqzIvCvIRX0JExjIZNhveN7iCZscVh4wkQjTF9LdIWnon4Gx7AO/CrL7uMS5IsJpyanW0AQ==
+X-Received: by 2002:a19:ae0e:0:b0:4f3:895f:f3f5 with SMTP id f14-20020a19ae0e000000b004f3895ff3f5mr2324877lfc.61.1686174244794;
+        Wed, 07 Jun 2023 14:44:04 -0700 (PDT)
+Received: from mobilestation ([95.79.140.35])
+        by smtp.gmail.com with ESMTPSA id d15-20020ac25ecf000000b004eff1f7f206sm1935030lfq.9.2023.06.07.14.44.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 14:44:04 -0700 (PDT)
+Date:   Thu, 8 Jun 2023 00:44:02 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Abe Kohandel <abe.kohandel@intel.com>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH] spi: dw: Remove misleading comment for Mount Evans SoC
+Message-ID: <20230607214402.o2kfsvtn66ga7eth@mobilestation>
+References: <20230606231844.726272-1-abe.kohandel@intel.com>
+ <20230607112711.alcspwuwpt7nqja7@mobilestation>
+ <ZICboAIZAcnYzyJr@ekohande-desk2>
+ <20230607152828.4nxefvimokamhgvu@mobilestation>
+ <ZIC2FYhcm4iGzlKI@ekohande-desk2>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6083.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7e847819-97fe-4dbe-a535-08db67a04c2b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jun 2023 21:43:57.2854
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: c8C1k4giPFSO/kcwRWZQav6aevoM1S7tlXF+7OyGqr6Q+Kq79/1evWft9T+4EHv9TttylB/nj41chBd8coeR2A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB8447
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZIC2FYhcm4iGzlKI@ekohande-desk2>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -167,31 +76,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > Create a non-hybrid PMU setup for Grand Ridge and Sierra Forest.
->
-> Moo... Tony, did you sneak product names instead of uarch names in the
-> intel-family thing again?
->
-> That is; I'm thinking we want the below, no?
->
-> -#define INTEL_FAM6_SIERRAFOREST_X    0xAF
-> -
-> -#define INTEL_FAM6_GRANDRIDGE                0xB6
-> +#define INTEL_FAM6_ATOM_CRESTMONT_X  0xAF /* Sierra Forest */
-> +#define INTEL_FAM6_ATOM_CRESTMONT    0xB6 /* Grand Ridge */
+On Wed, Jun 07, 2023 at 09:53:41AM -0700, Abe Kohandel wrote:
+> On 23/06/07 06:28PM, Serge Semin wrote:
+> > On Wed, Jun 07, 2023 at 08:00:48AM -0700, Abe Kohandel wrote:
+> > > On 23/06/07 02:27PM, Serge Semin wrote:
+> > > > On Tue, Jun 06, 2023 at 04:18:44PM -0700, Abe Kohandel wrote:
+> 
+> > > > > - * The Intel Mount Evans SoC's Integrated Management Complex uses the
+> > > > > - * SPI controller for access to a NOR SPI FLASH. However, the SoC doesn't
+> > > > > - * provide a mechanism to override the native chip select signal.
+> > > > 
+> > > > I had nothing against this part of the comment but only about the
+> > > > second chunk of the text.
+> > > 
+> > 
+> > > Thinking about it a bit more there is nothing precluding this controller from
+> > > being used for other purposes in the future. It is configured with two chip
+> > > selects, only one of which is used today. I removed it to so it wouldn't become
+> > > inaccurate if that happens.
+> > 
+> > Ok. Regarding the number of chip-selects. You could have overwritten
+> > the dw_spi.num_cs field with value 2 then in the dw_spi_mountevans_imc_init()
+> > method. Thus having a bit safer driver for your platform.
+> 
 
-I don't think that's really any more helpful.
+> I am currently setting dw_spi.num_cs via the num-cs property in the device
+> tree. Is one preferred over the other? I guess setting the dw_spi.num_cs in
+> code is safer than using the device tree. 
 
-Using the code name of the model makes it easy to look things
-up in ark.intel.com. Using the "core" name doesn't even work for
-hybrid CPU models which have more than one core type.
-So I'd like to keep it as it is.
+Strictly speaking the "num-cs" property is supposed to be used for
+generic DW APB SSI devices (compatible with the snps,dw* string) only
+since the IP-core can be synthesized with up to 16 slave select lines
+and originally it was considered as impossible to auto-detect the
+number of lines (although it's actually possible just by test-writing
+to the SER register - another idea for the driver improvement ;) ).
+Meanwhile vendor-specific implementations of the DW APB/AHB SSI
+controller are synthesized with the particular parameters values
+including the number of slave-select signals. Thus the kernel driver
+can easily infer all device parameters (like reg-io-width, num-cs,
+etc) just based on the compatible string (that's what I did in the
+spi-dw-bt1.o driver). The problem is that historically nobody cared
+about too relaxed "num-cs" utilization and now we can't update the
+driver and the bindings to strictly follow that constraint. The only
+solution is to implement the SER-writability-based auto-detection
+procedure but it isn't free of risks to break some older devices
+(though this problem can be avoided by making it optional).
 
-But if you want to change to the core name, then please just
-do it now.
+To sum it up and answering to your question, it's preferable to
+directly initialize dw_spi.num_cs in driver if the value is known.
 
-There are folks internally worried that all upstream work for
-these two CPU models is going to be blocked while this
-is discussed.
+Note though that the DW APB SSI driver currently has a limitation of
+GPIO-based chip-selects usage: a total number of chip-selects must not
+exceed a number of the native chip select lines (except AMD Pensando
+Elba device). It's because in order to have the controller performing
+the SPI transfers at least one SER flag must be set. Since we can't
+predict which native CS is free from being utilized on a platform
+(SPI devices can be instantiated from user-space), the GPIO-based
+lines are activated together with the corresponding SER flag.
 
--Tony
+> 
+> > > > > + * DMA-based mem ops are not configured for this device and are not tested.
+> > > > 
+> > > > * Note mem-ops is just a feature of the DW APB/AHB SSI controllers
+> > > > * which provides a way to perform write-then-read and write-only
+> > > > * transfers (see Transmit only and EEPROM read transfer modes in the
+> > > > * hw manual). It works irrespective of whether your controller has a
+> > > > * DMA-engine connected or doesn't have. Modern DW SSI controllers
+> > > > * support Enhanced SPI modes with the extended SPI-bus width
+> > > > * capability. But it's a whole another story and such modes aren't
+> > > > * currently supported by the driver.
+> > > > 
+> > > > Just a question for the sake of the discussion history. Does your
+> > > > platform have a DMA-engine synthesized to work with this DW SSI
+> > > > controller? That is does your controller has the DMA Controller
+> > > > Interface (handshake signals) connected to any DMA-engine on your
+> > > > platform? I am asking because if there is no such DMA-engine then
+> > > > the last part of your statement is just redundant since you can't test
+> > > > something which isn't supported by design.
+> > > 
+> > 
+> > > The platform does have a DMA-engine synthesized but I have been having some
+> > > challenges with getting it to work which may require some further quirks added
+> > > to the DMA driver. 
+> > 
+> > The main question is whether that DMA-engine has the handshake signals
+> > connected to the DW SSI controller. If it doesn't then adding such
+> > engine support would be a great deal of challenge indeed because a
+> > software-based handshaking interface would need to be added to the
+> > DMA-engine subsystem first. Then the DW SSI driver would need to be
+> > fixed to work with that interface. Taking a FIFO-size into account and
+> > an amount of IRQs to handle on each handshaking round, the resultant
+> > performance might get to be not worth all the efforts so a simple
+> > IRQ-based transfers implementation may work better.
+> 
+> Oh sorry, I wasn't explicit enough. The HW handshaking signals are connected to
+> the DW SSI controller so we should be able to take advantage of that
+> acceleration and not have to go through the challenging steps you have
+> outlined.
+> 
+> > > One example being the system uses 40-bit addressing but the
+> > > DMA-engine is only synthesized with 32-bit address capability and is meant to
+> > > only target a specific region of memory where it "knowns" the upper byte of the
+> > > address.
+> > 
+> > That's a pretty much well known problem. The kernel has a solution for
+> > it: DMA-mask set for the DMA-engine device (see dma_set_mask() and
+> > dma_set_mask_and_coherent()) and SWIOTLB (formerly known as bounce
+> > buffers).
+> > 
+> > Alternatively modern CPUs are normally equipped with a thing like
+> > IOMMU, which can be used to remap the limited device address space to
+> > any CPU/RAM address.
+> 
+> Thanks for all the advice Serge, much appreciated! Hopefully I can come back
+> with a patch to enable the DMA engine for this platform in the near future.
+
+Always welcome. Feel free to ask should any question arise on that
+journey.
+
+-Serge(y)
+
+> 
+> Thanks,
+> Abe
