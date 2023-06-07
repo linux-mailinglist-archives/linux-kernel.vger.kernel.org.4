@@ -2,78 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CB8272594E
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 11:04:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAFBB72591B
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 11:01:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238623AbjFGJEA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 05:04:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58806 "EHLO
+        id S239195AbjFGJBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 05:01:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235490AbjFGJDa (ORCPT
+        with ESMTP id S239220AbjFGJAq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 05:03:30 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FB7F1712;
-        Wed,  7 Jun 2023 02:02:06 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 57D3F5FD5E;
-        Wed,  7 Jun 2023 12:02:04 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1686128524;
-        bh=5YHjnHdc4w0WqSXG6LRBPLxgV5qAF+3W1vdiuEJtNBA=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=LK/04025vKNQ3l5ynD9Hd5Zx0HMzS1Yfa0dcKtYd7RZMr3uZeGYlO/bBzXPQnSONE
-         IvagyofovFEKpH3iopSSeTu2NthwaNXwk9IrS2asdLx9ThfAH1C2nsyyOrkljhG+2Z
-         LlSyLWoOEnldajPWQ7fR/X6Pv+EzEEMTScg1uF8NlHpYoFHNOVqAbNz7we0q4cBERh
-         eH6C3QYHOBcTjhkY3rsNFbaBY78NwN5y6bHcHIrDYFieex4O3gtDhGAcs/FsevOzep
-         XJnnkgHx0l3FA07k2sc8uL+qD6E2WxGUyAWExxOSQkYedOulmADHo0S0XuwjFwY5KL
-         1yX072XfzHnRQ==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Wed,  7 Jun 2023 12:02:03 +0300 (MSK)
-Message-ID: <835a3587-1e0f-64d7-1d1a-b639ae8b7307@sberdevices.ru>
-Date:   Wed, 7 Jun 2023 11:57:09 +0300
+        Wed, 7 Jun 2023 05:00:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 663E71FE1
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 01:58:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686128307;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JZlBm9K/eDsGZdtktFZEDp+gLxlecPmXApRL0wxE0aA=;
+        b=UDuDU6bkzBp9Agzv7beQwWN7nfSf0zcyK0qH15V0wEKd51xRANpJs1KfPO46XgbMM/Kee5
+        dXuwlHO+KCjlLmwPF2EhtrtK0ZfXrtuYjHt/J2XY26L2flrJhLJZ3HXMaseQ/nMz/1U/EG
+        lDFvzS5R5gKSX5vkZTGSZdMl+4XG0o4=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-454-YeKdNyygNJa-7QjKY0ZgeA-1; Wed, 07 Jun 2023 04:58:26 -0400
+X-MC-Unique: YeKdNyygNJa-7QjKY0ZgeA-1
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-30ae7bd987dso3031477f8f.2
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 01:58:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686128305; x=1688720305;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JZlBm9K/eDsGZdtktFZEDp+gLxlecPmXApRL0wxE0aA=;
+        b=lH+jegFloGVepaiJxMIk7ymb9P8FkaJyKjsToa5ZRvyQWipHfrRLQ1Kdj/14MxRS9F
+         cTXrr8RSA4YxrY3KSsKII0XBpxqlAGyIe+sRxkUT+fyLM1peHfzTcLv99GsIirwYLiC8
+         DQXGmR7trNV+3S1KOg1X9zBUkJejpd5cxP79h6kmxPh4+iup+ywKhQakAu/cfaZ6wg9P
+         YiinYbaOtIlMhRie5bBF2+Gz8utdp4q38eH8judNogudEP2wMa7b447WLJDbC/W0U+6H
+         vKkFw748zlir2+WvZd7NgBJtAPcU2DTPb/e/DMoprxbRKTxcTks8fm7dU+WBr9GVmGYN
+         ehPA==
+X-Gm-Message-State: AC+VfDzwpkiwwXpSSZoRjUhivB/7YFgxr8oEnqiG+5wOjKjlrAoLmTEJ
+        PLO4CYr2JE26dbMzkt3YOn8Uj8iPsrZwoBiKxkpotbRMPuGyD0AWbMKjhYV6szr5oQMS3S6wew6
+        2R+d5aw9XIsBDkqSPb7eumTsu
+X-Received: by 2002:a5d:4573:0:b0:30d:efe0:5395 with SMTP id a19-20020a5d4573000000b0030defe05395mr3930898wrc.47.1686128304834;
+        Wed, 07 Jun 2023 01:58:24 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4gsMslc9ahJC8zUHAGJ/RP7BQSmGZi72AZv76jXK1i6rRbHtaqjZeOnSvI17kebHXmkLvWiw==
+X-Received: by 2002:a5d:4573:0:b0:30d:efe0:5395 with SMTP id a19-20020a5d4573000000b0030defe05395mr3930845wrc.47.1686128304503;
+        Wed, 07 Jun 2023 01:58:24 -0700 (PDT)
+Received: from vschneid.remote.csb ([208.178.8.98])
+        by smtp.gmail.com with ESMTPSA id u19-20020a05600c00d300b003f70a7b4537sm1382812wmm.36.2023.06.07.01.58.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 01:58:24 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     bigeasy@linutronix.de, mark.rutland@arm.com, maz@kernel.org,
+        catalin.marinas@arm.com, will@kernel.org, chenhuacai@kernel.org,
+        kernel@xen0n.name, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, pbonzini@redhat.com, wanpengli@tencent.com,
+        vkuznets@redhat.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, jgross@suse.com, boris.ostrovsky@oracle.com,
+        daniel.lezcano@linaro.org, kys@microsoft.com,
+        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+        rafael@kernel.org, longman@redhat.com, boqun.feng@gmail.com,
+        pmladek@suse.com, senozhatsky@chromium.org, rostedt@goodmis.org,
+        john.ogness@linutronix.de, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        jstultz@google.com, sboyd@kernel.org, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-s390@vger.kernel.org,
+        kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 04/13] arm64/arch_timer: Provide noinstr
+ sched_clock_read() functions
+In-Reply-To: <20230602115451.GG620383@hirez.programming.kicks-ass.net>
+References: <20230519102058.581557770@infradead.org>
+ <20230519102715.435618812@infradead.org>
+ <xhsmho7m9ptrk.mognet@vschneid.remote.csb>
+ <20230602115451.GG620383@hirez.programming.kicks-ass.net>
+Date:   Wed, 07 Jun 2023 09:58:22 +0100
+Message-ID: <xhsmhsfb3odht.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v1] dt-bindings: nand: meson: Fix 'nand-rb' property
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-CC:     Liang Yang <liang.yang@amlogic.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
-        <linux-mtd@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-References: <20230606193507.35024-1-AVKrasnov@sberdevices.ru>
- <20230607095802.3adcd4f9@xps-13>
- <166bdc27-f77c-9076-f866-180cfa5bff76@sberdevices.ru>
- <08da4e86-433a-7d2e-25ff-ffa24221abdf@linaro.org>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-In-Reply-To: <08da4e86-433a-7d2e-25ff-ffa24221abdf@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/06/07 04:52:00 #21449589
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,49 +96,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 07.06.2023 11:53, Krzysztof Kozlowski wrote:
-> On 07/06/2023 10:40, Arseniy Krasnov wrote:
->> Hello Miquel, 
+On 02/06/23 13:54, Peter Zijlstra wrote:
+> On Wed, May 24, 2023 at 05:40:47PM +0100, Valentin Schneider wrote:
 >>
->> On 07.06.2023 10:58, Miquel Raynal wrote:
+>> So this bit sent me on a little spelunking session :-)
 >>
->>> Hi Arseniy,
->>>
->>> AVKrasnov@sberdevices.ru wrote on Tue, 6 Jun 2023 22:35:07 +0300:
->>>
->>>> Add description of 'nand-rb' property. Use "Fixes" because this property
->>>> must be supported since the beginning. For this controller 'nand-rb' is
->>>> stored in the controller node (not in chip), because it has only single
->>>> r/b wire for all chips.
->>>
->>> Sorry if I mislead you in the first place, but you could definitely
->>> have two chips and only one with RB wired. It needs to be defined in
->>> the chips.
+>> From a control flow perspective the initialization isn't required, but then
+>> I looked into the comment and found it comes from the
+>> arch_timer_read_counter() definition... Which itself doesn't get used by
+>> sched_clock() until the sched_clock_register() below!
 >>
->> Ok, so to clarify: is it ok, that in bindings this property will be placed in the
->> chip, but in driver, i'm trying to read it from the controller node (thus  in
->> dts file it will be also in controller node)?
-> 
-> No, because how would your DTS pass validation? I understand you did not
-> test the bindings, but this will improve, right?
+>> So AFAICT that comment was true as of
+>>
+>>   220069945b29 ("clocksource: arch_timer: Add support for memory mapped timers")
+>>
+>> but not after a commit that came 2 months later:
+>>
+>>   65cd4f6c99c1 ("arch_timer: Move to generic sched_clock framework")
+>>
+>> which IIUC made arm/arm64 follow the default approach of using the
+>> jiffy-based sched_clock() before probing DT/ACPI and registering a "proper"
+>> sched_clock.
+>>
+>> All of that to say: the comment about arch_timer_read_counter() vs early
+>> sched_clock() doesn't apply anymore, but I think we need to keep its
+>> initalization around for stuff like get_cycles(). This initialization here
+>> should be OK to put to the bin, though.
+>
+> Something like the below folded in then?
+>
 
-Ok, i'll follow DTS layout in the driver, "test the bindings" You mean "make dt_binding_check"?
+Much better, thank you!
 
-> 
->> Because in driver there is no sense
->> to store this value in chip structure. 
-> 
-> Driver does not shape the DTS. Hardware does.
-
-Ok, Thanks
-
-Thanks, Arseniy
-
-> 
-> 
-> 
-> Best regards,
-> Krzysztof
-> 
