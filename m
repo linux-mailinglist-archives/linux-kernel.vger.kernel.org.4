@@ -2,121 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CEFD725522
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 09:12:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7939C725529
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 09:13:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234076AbjFGHMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 03:12:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47560 "EHLO
+        id S238821AbjFGHNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 03:13:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235095AbjFGHMi (ORCPT
+        with ESMTP id S238681AbjFGHNJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 03:12:38 -0400
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D4F0173B
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 00:12:37 -0700 (PDT)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-19f6f8c8283so7386600fac.3
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 00:12:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686121957; x=1688713957;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=448kJfx0P49/QlavcytCAcn+ROp1DkOsc8XIkFFDohc=;
-        b=F4oCDwUyfoV1OdJR1wEXY3toanGZYTwTSZswGSkG/Qk6fd1zE55rZr4c58azMzm844
-         I0Iyd9o5eUgpi4wLOR/kTe9lQlS6Rdg0MJ+OyO/KSHJUKULWL9Xy6HDNS8wxHDuRFLDT
-         bfwv8xOxwhwhWi1Ui064vvYaLTFtFPleGOaH/QblFoGPkux8tCXQESii4DXcKMTf3UDs
-         7f0eqMcZ6wDQoe5LLjKvQi/aTm2OZYw3nIixdJ8uwbPaB7fDRNxdpvfoJIUF//8i7x+U
-         wfKBVlC2yExFlZsV/W9Refc8oN0rmqLSOJ1joDYQzBaEq4oX0n5e3PC2m/3fg/x0s2nR
-         0pPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686121957; x=1688713957;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=448kJfx0P49/QlavcytCAcn+ROp1DkOsc8XIkFFDohc=;
-        b=IOAurzQiuTrCfynI960OM2i1+q0Itn6LsL2Um3+q7n8pjLAtDioIuiLEK8sqUlgXue
-         swjaOiQCrmdtvxr0RqR/Yybt2CxrRwWjPpq7oFi1X1UJpoujoIF7Tdgq+RZ4k8wDJGea
-         iDQmJ4qf1+/2jwuVP7/BPFvX2dyh8RgVOiq2c2/aAmdUFlyhZj1B/bJQVBideqhRWDRf
-         xbnODC2nIsqfs77CftBXnFQSt0XX8lFqEvwFDrUpEVf/wUAlwqcv4GiCZ/UrbViyAYRW
-         6dju+i7KhOKZkH6tSBUN63JzvBKd36BRaZhNlkwsNHYunLgMDEy9vl+Q9e6eHrlsAun9
-         PJ4g==
-X-Gm-Message-State: AC+VfDwTPsyXzKH2+yCuld0vjbZYfTc2zN6ZzTsP6RE5bAnqKWEmzHol
-        L5TBtB3ZpDhtZorbigVmvVrEXpktgUuBrCQ5c1MGeA==
-X-Google-Smtp-Source: ACHHUZ55XZ8n6rPguTjh4Pc2NQCXjiTAWuZ8fsxM5qyf71DyztoixFdpPmuzGD5p5MAGNLXWEijL56kaTVb4VPpr7as=
-X-Received: by 2002:a05:6870:44c5:b0:19f:698f:56a1 with SMTP id
- t5-20020a05687044c500b0019f698f56a1mr4397617oai.15.1686121956816; Wed, 07 Jun
- 2023 00:12:36 -0700 (PDT)
+        Wed, 7 Jun 2023 03:13:09 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C04C11720;
+        Wed,  7 Jun 2023 00:13:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=4CbgdtrMRU8SgCC/lj9k+w8TeWMG8R3cL1TBFp6UuqY=; b=hvjiRjbQ931WaCH5rTfNFZ43dF
+        7MB76TsmX5AAZsrITTyNmsY08/KqALkDgqg2ybIdFoPx+0KRcOqaGtnGD4Y4XdVJfjIXZZcxc/n2R
+        CRxH2cDLvRo07ZSmt+1U35fV22n1a0d5zDxD4Z7SjPd02ggrx2ENbFosvjOhkq/LNWw612Ykx7Pay
+        b8+aC4Rmb9lAjJRV7jYB25fCMsCLGRolxDysouwQz39Hjkif3EpTqgD0oud9OF2wNJGV33aSjcb9v
+        XUZhVXcJFLYijKWVedmkYvRDC0/VuhfDmjDiE/4Dtf+7UI4Gy8scv6ROC+Hc6wl3xvZMgPLhQwXCE
+        Z3Qsa4QA==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1q6nLa-004gCI-2l;
+        Wed, 07 Jun 2023 07:12:46 +0000
+Date:   Wed, 7 Jun 2023 00:12:46 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Nitesh Shetty <nj.shetty@samsung.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jonathan Corbet <corbet@lwn.net>,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com,
+        Keith Busch <kbusch@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        James Smart <james.smart@broadcom.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        willy@infradead.org, hare@suse.de, djwong@kernel.org,
+        bvanassche@acm.org, ming.lei@redhat.com, dlemoal@kernel.org,
+        nitheshshetty@gmail.com, gost.dev@samsung.com,
+        Kanchan Joshi <joshi.k@samsung.com>,
+        Javier =?iso-8859-1?Q?Gonz=E1lez?= <javier.gonz@samsung.com>,
+        Anuj Gupta <anuj20.g@samsung.com>, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v12 5/9] nvme: add copy offload support
+Message-ID: <ZIAt7vL+/isPJEl5@infradead.org>
+References: <20230605121732.28468-1-nj.shetty@samsung.com>
+ <CGME20230605122310epcas5p4aaebfc26fe5377613a36fe50423cf494@epcas5p4.samsung.com>
+ <20230605121732.28468-6-nj.shetty@samsung.com>
+ <ZH3mjUb+yqI11XD8@infradead.org>
+ <20230606113535.rjbhe6eqlyqk4pqq@green245>
 MIME-Version: 1.0
-References: <20230606123119.57499-1-manivannan.sadhasivam@linaro.org>
- <c769c95d-e8cb-4cf6-a41a-9bef5a786bb1@lunn.ch> <20230607065652.GA5025@thinkpad>
-In-Reply-To: <20230607065652.GA5025@thinkpad>
-From:   Loic Poulain <loic.poulain@linaro.org>
-Date:   Wed, 7 Jun 2023 09:12:00 +0200
-Message-ID: <CAMZdPi-xJAj_eFvosVTmSzA99m3eYhrwoKPfBk-qH87yZzNupQ@mail.gmail.com>
-Subject: Re: [PATCH 0/3] Add MHI Endpoint network driver
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        mhi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230606113535.rjbhe6eqlyqk4pqq@green245>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 7 Jun 2023 at 08:56, Manivannan Sadhasivam
-<manivannan.sadhasivam@linaro.org> wrote:
->
-> On Tue, Jun 06, 2023 at 02:59:00PM +0200, Andrew Lunn wrote:
-> > On Tue, Jun 06, 2023 at 06:01:16PM +0530, Manivannan Sadhasivam wrote:
-> > > Hi,
-> > >
-> > > This series adds a network driver for the Modem Host Interface (MHI) endpoint
-> > > devices that provides network interfaces to the PCIe based Qualcomm endpoint
-> > > devices supporting MHI bus (like Modems). This driver allows the MHI endpoint
-> > > devices to establish IP communication with the host machines (x86, ARM64) over
-> > > MHI bus.
-> > >
-> > > On the host side, the existing mhi_net driver provides the network connectivity
-> > > to the host.
-> > >
-> > > - Mani
-> > >
-> > > Manivannan Sadhasivam (3):
-> > >   net: Add MHI Endpoint network driver
-> > >   MAINTAINERS: Add entry for MHI networking drivers under MHI bus
-> > >   net: mhi: Increase the default MTU from 16K to 32K
-> > >
-> > >  MAINTAINERS              |   1 +
-> > >  drivers/net/Kconfig      |   9 ++
-> > >  drivers/net/Makefile     |   1 +
-> > >  drivers/net/mhi_ep_net.c | 331 +++++++++++++++++++++++++++++++++++++++
-> > >  drivers/net/mhi_net.c    |   2 +-
-> >
-> > Should we add a drivers/net/modem directory? Maybe modem is too
-> > generic, we want something which represents GSM, LTE, UMTS, 3G, 4G,
-> > 5G, ... XG etc.
-> >
->
-> The generic modem hierarchy sounds good to me because most of the times a
-> single driver handles multiple technologies. The existing drivers supporting
-> modems are already under different hierarchy like usb, wwan etc... So unifying
-> them makes sense. But someone from networking community should take a call.
+On Tue, Jun 06, 2023 at 05:05:35PM +0530, Nitesh Shetty wrote:
+> Downside will be duplicating checks which are present for read, write in
+> block layer, device-mapper and zoned devices.
+> But we can do this, shouldn't be an issue.
 
+Yes.  Please never overload operations, this is just causing problems
+everywhere, and that why I split the operations from the flag a few
+years ago.
 
-Yes, so there is already a drivers/net/wwan directory for this, in
-which there are drivers for control and data path, that together
-represent a given 'wwan' (modem) entity. So the generic mhi_net could
-be moved there, but the point is AFAIU, that MHI, despite his name, is
-not (more) used only for modem, but as a generic memory sharing based
-transport protocol, such as virtio. It would then not be necessarily
-true that a peripheral exposing MHI net channel is actually a modem?
+> The idea behind subsys is to prevent copy across different subsystem.
+> For example, copy across nvme subsystem and the scsi subsystem. [1]
+> At present, we don't support inter-namespace(copy across NVMe namespace),
+> but after community feedback for previous series we left scope for it.
 
-Regards,
-Loic
+Never leave scope for something that isn't actually added.  That just
+creates a giant maintainance nightmare.  Cross-device copies are giant
+nightmare in general, and in the case of NVMe completely unusable
+as currently done in the working group.  Messing up something that
+is entirely reasonable (local copy) for something like that is a sure
+way to never get this series in.
