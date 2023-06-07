@@ -2,244 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1AC1726DE9
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 22:46:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AEA5726A8B
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 22:17:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234675AbjFGUqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 16:46:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46726 "EHLO
+        id S230394AbjFGUQ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 16:16:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234893AbjFGUqO (ORCPT
+        with ESMTP id S229604AbjFGUQ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 16:46:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81AF826A5;
-        Wed,  7 Jun 2023 13:45:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0429764640;
-        Wed,  7 Jun 2023 20:45:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E387BC4339B;
-        Wed,  7 Jun 2023 20:45:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1686170755;
-        bh=b4oGrHUU4PlZn58yeBa1vTwhXg4J0f1XcSHjsV6FHiY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OanPyMD4jNvQqWbXRJsI/VPVTsUKqz/Db4UmpAZjNWIy7grP8EuiN1Btoz77lwYQ5
-         Q0NRcHP2vNYoiREuNIY38Pp+v8kzXnZyF/C3u3sEzLXxPuZ1KRjKzERgIhmSQB1zSh
-         Wq/eXElGlNhGXTHfMYpcnafvAgRUezitrXHu+OKo=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     stable@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        patches@lists.linux.dev,
-        Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
-        Dan Carpenter <error27@gmail.com>,
-        Takashi Iwai <tiwai@suse.de>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Tianfei zhang <tianfei.zhang@intel.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Zhengchao Shao <shaozhengchao@huawei.com>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        Scott Branden <sbranden@broadcom.com>,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH 6.1 205/225] test_firmware: fix the memory leak of the allocated firmware buffer
-Date:   Wed,  7 Jun 2023 22:16:38 +0200
-Message-ID: <20230607200921.070241596@linuxfoundation.org>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230607200913.334991024@linuxfoundation.org>
-References: <20230607200913.334991024@linuxfoundation.org>
-User-Agent: quilt/0.67
+        Wed, 7 Jun 2023 16:16:57 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6D3C1FC8;
+        Wed,  7 Jun 2023 13:16:54 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 1B3FA5FD70;
+        Wed,  7 Jun 2023 23:16:53 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1686169013;
+        bh=UTZcZ6SqBjR1YEd2msrtjkp6jUwOSc8GxBbCJ0Tz6Xk=;
+        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
+        b=f+vaPMXGOJFDqj1KS3+wyVqC1kzG+ieLA8Dm/owf1lIlUeXjJT7/ImErFX/5E4XsQ
+         LfvCGkqX3tgmD7Qp1YUTe8X/+Ie1Y1olNBCheCisMt71yJxI10I+CDkOqhpG20Iwpb
+         ANmZxAaCA8Fxi+nvnSxsSAo+MxzY9k3cJoCSe+CBaZ7nrcNIbKGdQvCC8lxItjSKtF
+         ALQ1iu6+tdAyLmh0pYpx33O+S7bBEy4UEnlw/DOmM5mK6AQoO793+9QUde5FbYL7Cp
+         DTSpgFenmMhjy5PLrE2VUdsJJvKQek+0S3f6f+Qb/6bgvLqihDMUP9QZdpBaUHCiow
+         O/NhnXkdGZLKA==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Wed,  7 Jun 2023 23:16:53 +0300 (MSK)
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     <neil.armstrong@linaro.org>, <jbrunet@baylibre.com>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <khilman@baylibre.com>, <martin.blumenstingl@googlemail.com>,
+        <conor+dt@kernel.org>
+CC:     <kernel@sberdevices.ru>, <sdfw_system_team@sberdevices.ru>,
+        <rockosov@gmail.com>, <linux-amlogic@lists.infradead.org>,
+        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Alexey Romanov <avromanov@sberdevices.ru>,
+        Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Subject: [PATCH v1 3/6] arm64: dts: meson: a1: enable efuse controller and setup its clk
+Date:   Wed, 7 Jun 2023 23:16:38 +0300
+Message-ID: <20230607201641.20982-4-ddrokosov@sberdevices.ru>
+X-Mailer: git-send-email 2.36.0
+In-Reply-To: <20230607201641.20982-1-ddrokosov@sberdevices.ru>
+References: <20230607201641.20982-1-ddrokosov@sberdevices.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/06/07 16:55:00 #21454472
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+From: Alexey Romanov <avromanov@sberdevices.ru>
 
-commit 48e156023059e57a8fc68b498439832f7600ffff upstream.
+EFUSE A1 controller uses CLKID_OTP clock and PWRC_OTP_ID power domain.
 
-The following kernel memory leak was noticed after running
-tools/testing/selftests/firmware/fw_run_tests.sh:
-
-[root@pc-mtodorov firmware]# cat /sys/kernel/debug/kmemleak
-.
-.
-.
-unreferenced object 0xffff955389bc3400 (size 1024):
-  comm "test_firmware-0", pid 5451, jiffies 4294944822 (age 65.652s)
-  hex dump (first 32 bytes):
-    47 48 34 35 36 37 0a 00 00 00 00 00 00 00 00 00  GH4567..........
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff962f5dec>] slab_post_alloc_hook+0x8c/0x3c0
-    [<ffffffff962fcca4>] __kmem_cache_alloc_node+0x184/0x240
-    [<ffffffff962704de>] kmalloc_trace+0x2e/0xc0
-    [<ffffffff9665b42d>] test_fw_run_batch_request+0x9d/0x180
-    [<ffffffff95fd813b>] kthread+0x10b/0x140
-    [<ffffffff95e033e9>] ret_from_fork+0x29/0x50
-unreferenced object 0xffff9553c334b400 (size 1024):
-  comm "test_firmware-1", pid 5452, jiffies 4294944822 (age 65.652s)
-  hex dump (first 32 bytes):
-    47 48 34 35 36 37 0a 00 00 00 00 00 00 00 00 00  GH4567..........
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff962f5dec>] slab_post_alloc_hook+0x8c/0x3c0
-    [<ffffffff962fcca4>] __kmem_cache_alloc_node+0x184/0x240
-    [<ffffffff962704de>] kmalloc_trace+0x2e/0xc0
-    [<ffffffff9665b42d>] test_fw_run_batch_request+0x9d/0x180
-    [<ffffffff95fd813b>] kthread+0x10b/0x140
-    [<ffffffff95e033e9>] ret_from_fork+0x29/0x50
-unreferenced object 0xffff9553c334f000 (size 1024):
-  comm "test_firmware-2", pid 5453, jiffies 4294944822 (age 65.652s)
-  hex dump (first 32 bytes):
-    47 48 34 35 36 37 0a 00 00 00 00 00 00 00 00 00  GH4567..........
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff962f5dec>] slab_post_alloc_hook+0x8c/0x3c0
-    [<ffffffff962fcca4>] __kmem_cache_alloc_node+0x184/0x240
-    [<ffffffff962704de>] kmalloc_trace+0x2e/0xc0
-    [<ffffffff9665b42d>] test_fw_run_batch_request+0x9d/0x180
-    [<ffffffff95fd813b>] kthread+0x10b/0x140
-    [<ffffffff95e033e9>] ret_from_fork+0x29/0x50
-unreferenced object 0xffff9553c3348400 (size 1024):
-  comm "test_firmware-3", pid 5454, jiffies 4294944822 (age 65.652s)
-  hex dump (first 32 bytes):
-    47 48 34 35 36 37 0a 00 00 00 00 00 00 00 00 00  GH4567..........
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff962f5dec>] slab_post_alloc_hook+0x8c/0x3c0
-    [<ffffffff962fcca4>] __kmem_cache_alloc_node+0x184/0x240
-    [<ffffffff962704de>] kmalloc_trace+0x2e/0xc0
-    [<ffffffff9665b42d>] test_fw_run_batch_request+0x9d/0x180
-    [<ffffffff95fd813b>] kthread+0x10b/0x140
-    [<ffffffff95e033e9>] ret_from_fork+0x29/0x50
-[root@pc-mtodorov firmware]#
-
-Note that the size 1024 corresponds to the size of the test firmware
-buffer. The actual number of the buffers leaked is around 70-110,
-depending on the test run.
-
-The cause of the leak is the following:
-
-request_partial_firmware_into_buf() and request_firmware_into_buf()
-provided firmware buffer isn't released on release_firmware(), we
-have allocated it and we are responsible for deallocating it manually.
-This is introduced in a number of context where previously only
-release_firmware() was called, which was insufficient.
-
-Reported-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Fixes: 7feebfa487b92 ("test_firmware: add support for request_firmware_into_buf")
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Dan Carpenter <error27@gmail.com>
-Cc: Takashi Iwai <tiwai@suse.de>
-Cc: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Russ Weight <russell.h.weight@intel.com>
-Cc: Tianfei zhang <tianfei.zhang@intel.com>
-Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc: Zhengchao Shao <shaozhengchao@huawei.com>
-Cc: Colin Ian King <colin.i.king@gmail.com>
-Cc: linux-kernel@vger.kernel.org
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Scott Branden <sbranden@broadcom.com>
-Cc: Luis R. Rodriguez <mcgrof@kernel.org>
-Cc: linux-kselftest@vger.kernel.org
-Cc: stable@vger.kernel.org # v5.4
-Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Link: https://lore.kernel.org/r/20230509084746.48259-3-mirsad.todorovac@alu.unizg.hr
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Alexey Romanov <avromanov@sberdevices.ru>
+Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
 ---
- lib/test_firmware.c |   19 ++++++++++++++++++-
- 1 file changed, 18 insertions(+), 1 deletion(-)
+ arch/arm64/boot/dts/amlogic/meson-a1.dtsi | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
---- a/lib/test_firmware.c
-+++ b/lib/test_firmware.c
-@@ -44,6 +44,7 @@ struct test_batched_req {
- 	bool sent;
- 	const struct firmware *fw;
- 	const char *name;
-+	const char *fw_buf;
- 	struct completion completion;
- 	struct task_struct *task;
- 	struct device *dev;
-@@ -174,8 +175,14 @@ static void __test_release_all_firmware(
+diff --git a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+index b2563c7d3842..63faccfc1134 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
++++ b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+@@ -44,6 +44,16 @@ l2: l2-cache0 {
+ 		};
+ 	};
  
- 	for (i = 0; i < test_fw_config->num_requests; i++) {
- 		req = &test_fw_config->reqs[i];
--		if (req->fw)
-+		if (req->fw) {
-+			if (req->fw_buf) {
-+				kfree_const(req->fw_buf);
-+				req->fw_buf = NULL;
-+			}
- 			release_firmware(req->fw);
-+			req->fw = NULL;
-+		}
- 	}
- 
- 	vfree(test_fw_config->reqs);
-@@ -651,6 +658,8 @@ static ssize_t trigger_request_store(str
- 
- 	mutex_lock(&test_fw_mutex);
- 	release_firmware(test_firmware);
-+	if (test_fw_config->reqs)
-+		__test_release_all_firmware();
- 	test_firmware = NULL;
- 	rc = request_firmware(&test_firmware, name, dev);
- 	if (rc) {
-@@ -751,6 +760,8 @@ static ssize_t trigger_async_request_sto
- 	mutex_lock(&test_fw_mutex);
- 	release_firmware(test_firmware);
- 	test_firmware = NULL;
-+	if (test_fw_config->reqs)
-+		__test_release_all_firmware();
- 	rc = request_firmware_nowait(THIS_MODULE, 1, name, dev, GFP_KERNEL,
- 				     NULL, trigger_async_request_cb);
- 	if (rc) {
-@@ -793,6 +804,8 @@ static ssize_t trigger_custom_fallback_s
- 
- 	mutex_lock(&test_fw_mutex);
- 	release_firmware(test_firmware);
-+	if (test_fw_config->reqs)
-+		__test_release_all_firmware();
- 	test_firmware = NULL;
- 	rc = request_firmware_nowait(THIS_MODULE, FW_ACTION_NOUEVENT, name,
- 				     dev, GFP_KERNEL, NULL,
-@@ -855,6 +868,8 @@ static int test_fw_run_batch_request(voi
- 						 test_fw_config->buf_size);
- 		if (!req->fw)
- 			kfree(test_buf);
-+		else
-+			req->fw_buf = test_buf;
- 	} else {
- 		req->rc = test_fw_config->req_firmware(&req->fw,
- 						       req->name,
-@@ -915,6 +930,7 @@ static ssize_t trigger_batched_requests_
- 		req->fw = NULL;
- 		req->idx = i;
- 		req->name = test_fw_config->name;
-+		req->fw_buf = NULL;
- 		req->dev = dev;
- 		init_completion(&req->completion);
- 		req->task = kthread_run(test_fw_run_batch_request, req,
-@@ -1019,6 +1035,7 @@ ssize_t trigger_batched_requests_async_s
- 	for (i = 0; i < test_fw_config->num_requests; i++) {
- 		req = &test_fw_config->reqs[i];
- 		req->name = test_fw_config->name;
-+		req->fw_buf = NULL;
- 		req->fw = NULL;
- 		req->idx = i;
- 		init_completion(&req->completion);
-
++	efuse: efuse {
++		compatible = "amlogic,meson-gxbb-efuse";
++		clocks = <&clkc_periphs CLKID_OTP>;
++		#address-cells = <1>;
++		#size-cells = <1>;
++		secure-monitor = <&sm>;
++		power-domains = <&pwrc PWRC_OTP_ID>;
++		status = "okay";
++	};
++
+ 	psci {
+ 		compatible = "arm,psci-1.0";
+ 		method = "smc";
+-- 
+2.36.0
 
