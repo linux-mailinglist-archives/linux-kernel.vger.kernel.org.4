@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90CC6726A93
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 22:17:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A29C726A95
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 22:17:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230220AbjFGURC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 16:17:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41844 "EHLO
+        id S232290AbjFGURF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 16:17:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbjFGUQ5 (ORCPT
+        with ESMTP id S230071AbjFGUQ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 7 Jun 2023 16:16:57 -0400
 Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACDE61BD3;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACE741BD6;
         Wed,  7 Jun 2023 13:16:53 -0700 (PDT)
 Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 6A6CD5FD05;
-        Wed,  7 Jun 2023 23:16:50 +0300 (MSK)
+        by mx.sberdevices.ru (Postfix) with ESMTP id 521065FD6E;
+        Wed,  7 Jun 2023 23:16:51 +0300 (MSK)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1686169010;
-        bh=M/we8RgDjwgR++pTBbcueO2YO/PO3K31bJrDaIQUUdE=;
+        s=mail; t=1686169011;
+        bh=RNbIjESD+IyeiwtGHiouI+gIk7LwD56yfGxWD9gzuYY=;
         h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
-        b=C+kUCvyF7gc57sZzG2y48Vr72/2ceS66RatT0BvhZU4hmzAD35j+MeraX6XBUD0Gf
-         FNhuU2RDsciP98n0kMvXG8BNzq+ZcrlZnGvWtvoK1xf2nYdGWGTcQQJJNNgu98NDOU
-         9k5yP3AEg0+vB0BSMk6gkKZb7peorcZ/g+yFfljCcSve5s1wmLlK0RIEBKueW9JAPj
-         7udk1RP0ceU0FUZGWouH2I4TGbss8cqFQSA3nOnqCW4vhBJZ1L0ZCqBE2IfocvBjeZ
-         wly0shj1NQH1yjQXO/OxZ4yX6G8XYEwCjh8YEojqac1/aE923pUePjq15iopLt0NEK
-         i4XPXXtViiiHQ==
+        b=ety0yB4LR209Ia4Tpu08KUqoQQDhbQZ+t2TyoGNxGor2mgGlh5hOLVskd/puVaQKA
+         ItakKRYwyFkzq5qGb6H3nTb02RtnQmbRZzRcLmFaSt9hMznVqEz/6LGOBKct7xvofk
+         8/XlN9HqYakI2nqi49c0GsYg8hGwiHU4y0dfxYOsjt1Dl13YZKi9cf5r7dqzrte9XL
+         KSi3VXTGXfG662hLgeYiF8N0u4iIXx7mAdKRe1GGcoxMwaSx3zt+PwKoFd2CUUavar
+         XRsaLv5zTQZaw+O4Q2knvowWPxZ3lgio6xQbC8R8Dpk/vz68+lH4+bWu/Ol3+JWRH+
+         fFQ72fbQsvg1Q==
 Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
         by mx.sberdevices.ru (Postfix) with ESMTP;
-        Wed,  7 Jun 2023 23:16:50 +0300 (MSK)
+        Wed,  7 Jun 2023 23:16:51 +0300 (MSK)
 From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
 To:     <neil.armstrong@linaro.org>, <jbrunet@baylibre.com>,
         <mturquette@baylibre.com>, <sboyd@kernel.org>,
@@ -43,10 +43,12 @@ CC:     <kernel@sberdevices.ru>, <sdfw_system_team@sberdevices.ru>,
         <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         Dmitry Rokosov <ddrokosov@sberdevices.ru>
-Subject: [PATCH v1 0/6] arm64: dts: meson: a1: introduce several peripheral IPs
-Date:   Wed, 7 Jun 2023 23:16:35 +0300
-Message-ID: <20230607201641.20982-1-ddrokosov@sberdevices.ru>
+Subject: [PATCH v1 1/6] arm64: dts: meson: a1: introduce PLL and Peripherals clk controllers
+Date:   Wed, 7 Jun 2023 23:16:36 +0300
+Message-ID: <20230607201641.20982-2-ddrokosov@sberdevices.ru>
 X-Mailer: git-send-email 2.36.0
+In-Reply-To: <20230607201641.20982-1-ddrokosov@sberdevices.ru>
+References: <20230607201641.20982-1-ddrokosov@sberdevices.ru>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -70,42 +72,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series introduces device tree declarations for various
-peripheral IPs of the A1 SoC family, including clock controllers, EFUSE,
-USB, SPI Flash Controller, SDIO, and UART_AO:
-    - CLK: A1 SoC has four types on the board, namely PLL, Peripherals,
-      CPU, and Audio, but only Amlogic A1 PLL and Peripherals clock
-      controllers are currently supported.
-    - EFUSE: consists of a 4k bit One Time Programmable (OTP) memory
-      divided into 32 128-bit blocks, and data is accessed using the APB
-      bus through software or the Key-ladder integrated with the EFUSE
-      block.
-    - USB: only one USB 2.0 high-speed port is available in the A1 SoC,
-      supporting both HOST and DEVICE modes for OTG.
-    - SPI Flash Controller: 4-bit QPI/SPI NOR Flash or NAND FLASH
-      controller.
-    - SDIO: for WiFi/IEEE802.11 connection.
-    - UART_AO: for Bluetooth connection.
+This patch adds clkc and clkc_pll dts nodes to A1 SoC main dtsi.
+The first one clk controller is responsible for all SoC peripherals
+clocks excluding audio clocks. The second one clk controller is used by
+A1 SoC PLLs. Actually, there are two different APB heads, so we have two
+different drivers.
 
-Alexey Romanov (1):
-  arm64: dts: meson: a1: enable efuse controller and setup its clk
+Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+---
+ arch/arm64/boot/dts/amlogic/meson-a1.dtsi | 26 +++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-Dmitry Rokosov (2):
-  arm64: dts: meson: a1: introduce PLL and Peripherals clk controllers
-  arm64: dts: meson: a1: support USB controller in OTG mode
-
-Jan Dakinevich (1):
-  arm64: dts: meson: a1: add eMMC controller and its pins
-
-Martin Kurbanov (1):
-  arm64: dts: meson: a1: introduce SPI Flash Controller
-
-Oleg Lyovin (1):
-  arm64: dts: meson: a1: introduce UART_AO mux definitions
-
- arch/arm64/boot/dts/amlogic/meson-a1.dtsi | 164 ++++++++++++++++++++++
- 1 file changed, 164 insertions(+)
-
+diff --git a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+index eed96f262844..a24228808c9c 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
++++ b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+@@ -6,6 +6,8 @@
+ #include <dt-bindings/interrupt-controller/irq.h>
+ #include <dt-bindings/interrupt-controller/arm-gic.h>
+ #include <dt-bindings/gpio/meson-a1-gpio.h>
++#include <dt-bindings/clock/amlogic,a1-pll-clkc.h>
++#include <dt-bindings/clock/amlogic,a1-peripherals-clkc.h>
+ 
+ / {
+ 	compatible = "amlogic,a1";
+@@ -126,6 +128,30 @@ uart_AO_B: serial@2000 {
+ 				status = "disabled";
+ 			};
+ 
++			clkc_periphs: clock-controller@800 {
++				compatible = "amlogic,a1-peripherals-clkc";
++				reg = <0 0x800 0 0x104>;
++				#clock-cells = <1>;
++				clocks = <&clkc_pll CLKID_FCLK_DIV2>,
++					 <&clkc_pll CLKID_FCLK_DIV3>,
++					 <&clkc_pll CLKID_FCLK_DIV5>,
++					 <&clkc_pll CLKID_FCLK_DIV7>,
++					 <&clkc_pll CLKID_HIFI_PLL>,
++					 <&xtal>;
++				clock-names = "fclk_div2", "fclk_div3",
++					      "fclk_div5", "fclk_div7",
++					      "hifi_pll", "xtal";
++			};
++
++			clkc_pll: pll-clock-controller@7c80 {
++				compatible = "amlogic,a1-pll-clkc";
++				reg = <0 0x7c80 0 0x18c>;
++				#clock-cells = <1>;
++				clocks = <&clkc_periphs CLKID_FIXPLL_IN>,
++					 <&clkc_periphs CLKID_HIFIPLL_IN>;
++				clock-names = "fixpll_in", "hifipll_in";
++			};
++
+ 			gpio_intc: interrupt-controller@0440 {
+ 				compatible = "amlogic,meson-a1-gpio-intc",
+ 					     "amlogic,meson-gpio-intc";
 -- 
 2.36.0
 
