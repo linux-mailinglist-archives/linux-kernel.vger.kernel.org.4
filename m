@@ -2,169 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24E66725663
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 09:51:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 815EF725664
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 09:51:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239441AbjFGHvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 03:51:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43696 "EHLO
+        id S238386AbjFGHvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 03:51:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239376AbjFGHvA (ORCPT
+        with ESMTP id S239388AbjFGHvB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 03:51:00 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 308AF2D59
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 00:49:10 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-973f78329e3so1139553666b.3
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 00:49:10 -0700 (PDT)
+        Wed, 7 Jun 2023 03:51:01 -0400
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2096.outbound.protection.outlook.com [40.107.101.96])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0489F1BF7;
+        Wed,  7 Jun 2023 00:49:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Tf3vqKUuYFMmmck5cR1sYjpS0qIt56gjXfrbf4gcpQfi2Rk1vyV4nKAL2DqnI4EJcY1Ed0QYcstZwFbze8nsr8hpkQgQQvUh27EHWUewbTYaPzZN4ntUhm+YTqEj0VWE9TAWUOU+TSyjdxGACrKRokBSmFFpa8EVSz/VlUVbvEcpGl4i6oc8eEHpva4tpP3rruuoLtmcFwAeQ/tlmXvP9J80iXqfN5T7I1V/4EAiq4Efms02c64s0RI91yxqqgeqFTVbAGPeUwsSR095AmFpFVsd5Zf1uAO3UYqJzQcFxnmfp+ZSO0ba9U0FcoLyQ7WY6K5o+hp2lf8RhMVt9NZibg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6nR6g/dHqSlEUTPJxIA769DgSw+KUeEekhqYUQfcXl8=;
+ b=ntv/+TOQvqq5nOrUJcUf8Bs7LVsRDr9a0vfqN9eGVrn2dH3R6UzJD7gWHgxqCtxg0++BheUca6ezDdzPGKjg7P5GtuTNoCgaApjZ8E2mplcfjPV4ZTY0I1l7ErORAZJOEDt0nqto4fCdlnr5tTdQEiuccOoHWHt4VlBRKnXRrRjPr5GhefEIzM4Qy0/UlwU5D6ASwbW5HdcVhEknpov4v+Z2X/UljG4tF479H5AvleHup1q/+W5nOrsm5x/xD7d3JHhMrOVheD1ihYOZ4gk0LpCH2xQLodpgJ9D8nF07PJM/lEUw1BdaSMb1G8sjFkSmguxvRhVRejsG2zky3RZwow==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686124148; x=1688716148;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sUmif8+PJuo1t9H5/fS1dgHw3TEAkR2eQjvlt4ezA7Y=;
-        b=P//BIhq2msQubwmODXxKb6JMeyvTjBvQ7lbTXY2gQ08CaAF0kghL3k6b9lqkt8FzMC
-         l5d1TtpqSOvfyUtwOs6t9fJGjGr6OAOOFCr8KdA/0CiuTDZGpOw9QcDvrVghXtVi5/Ua
-         jfBXi0gYHDWW8D+3aXrjQg47fdqv19wnx5RGN79FZcRb1uKUjriNk1SbCDUdcw944Mm7
-         eHpxaVbt/HIWxvO6ffpXA8QYIF9JLhWdqZIp8x00pl4dGrrFpm3Z/1Qdb/epsMjWiZra
-         hVk+egKKHJOATS9i7uAE2hJh02f8jyO5P3Y22+OSefH1M/AU6I9MT47/6vczZqSfdLbZ
-         UBvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686124148; x=1688716148;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sUmif8+PJuo1t9H5/fS1dgHw3TEAkR2eQjvlt4ezA7Y=;
-        b=X4ABAALQHRXU/XgSWPt89dnEKB7I0lCp4SThkUI/9fWUJrQ+tjcz8hMI56TCCmeXNN
-         cV6E2VoZNPlEGuIKoAXkgqudySWd0qnElm28XzVj4dsKebjw1wqD+5fXiC0cTopFfdma
-         HmJlMv0nVLookDeXAI5MeuD/rQmtG3vSvtN4iz0hCS9PvsY2OzI02Cz2WB8a1JgNkEzk
-         QLSoKw++/CbeZFKpQjufUfEhTtCCYhZR1+fDxNRwnP3FCirCu/vHmmgku3aoSK4Upnny
-         bOnZUqGyAYpnO68A7LZcGmiELa/kDWJk1Rvqvbxj0u0vBhqVL8UzYCLvLBhZl5gkuZIe
-         ckTg==
-X-Gm-Message-State: AC+VfDwmPQeGQW7n3xgXP3JxXFBnJPAWnumi8R++y1RrvA1nuBNXITxm
-        J1UgGG/pGHIXvQN3HKp/XUwDBw==
-X-Google-Smtp-Source: ACHHUZ4tHicUEQZZDx3qvkqytJ1UUjgre5Dp5VZ4TgLhAgMrJ77wvl2/vrm+tWipBTJaMBWuLCjwNw==
-X-Received: by 2002:a17:907:6e0d:b0:974:c32c:b485 with SMTP id sd13-20020a1709076e0d00b00974c32cb485mr4637812ejc.45.1686124148561;
-        Wed, 07 Jun 2023 00:49:08 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id x22-20020a1709060a5600b0096f6a131b9fsm6533605ejf.23.2023.06.07.00.49.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 00:49:08 -0700 (PDT)
-Message-ID: <d0dfdfba-7a70-7d12-2c30-ad32b3f95bb8@linaro.org>
-Date:   Wed, 7 Jun 2023 09:49:06 +0200
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6nR6g/dHqSlEUTPJxIA769DgSw+KUeEekhqYUQfcXl8=;
+ b=DoXRX1X08Gt6xV04TPLwVNZG9vRi7Qjlg+VTpXF+PhmKvLjMgpuQRDLBIcjs/X7ZyPySM8XLEo70lyy+alO/KCOxNSohj7mq15+tFbxC2qOvNcEjQwT+H8PGq/ED7Jt685NAD0YJ70s5QG+uTdYT/6J7vi0102SMRo5s+gIi4F4=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by SJ0PR13MB5317.namprd13.prod.outlook.com (2603:10b6:a03:3e0::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Wed, 7 Jun
+ 2023 07:49:32 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb8f:e482:76e0:fe6e]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb8f:e482:76e0:fe6e%4]) with mapi id 15.20.6455.030; Wed, 7 Jun 2023
+ 07:49:32 +0000
+Date:   Wed, 7 Jun 2023 09:49:24 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Shradha Gupta <shradhagupta@linux.microsoft.com>
+Cc:     linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Long Li <longli@microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Steen Hegelund <steen.hegelund@microchip.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>
+Subject: Re: [PATCH v6] hv_netvsc: Allocate rx indirection table size
+ dynamically
+Message-ID: <ZIA2hEhz0G8Oe5pf@corigine.com>
+References: <1685964606-24690-1-git-send-email-shradhagupta@linux.microsoft.com>
+ <ZH8Bv624GxCf1PKq@corigine.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZH8Bv624GxCf1PKq@corigine.com>
+X-ClientProxiedBy: AM8P189CA0013.EURP189.PROD.OUTLOOK.COM
+ (2603:10a6:20b:218::18) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH] arm64: dts: qcom: sdm845-db845c: Move LVS regulator nodes
- up
-Content-Language: en-US
-To:     Doug Anderson <dianders@chromium.org>,
-        Amit Pundir <amit.pundir@linaro.org>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        regressions <regressions@lists.linux.dev>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        dt <devicetree@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-References: <20230602161246.1855448-1-amit.pundir@linaro.org>
- <CAD=FV=U9xwxC4+wDYFMSoLWaj8vaLH_jettZ=nxEZP+1tNk=oA@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAD=FV=U9xwxC4+wDYFMSoLWaj8vaLH_jettZ=nxEZP+1tNk=oA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SJ0PR13MB5317:EE_
+X-MS-Office365-Filtering-Correlation-Id: 93c34a08-4287-4823-8bbf-08db672bbb41
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 3dmqf1cJ9aOPIvAzqKWkL5KmaMiCblVM5/AdF7AM/cU7GDShEFDmJ9u16cZ3WkLfwzqzFxgN3VBEPL+jUh/bmg8yYnpF1W0AJqNQGGyQ15jbVtCh9FcY+DRqllYJxS58+4XfeCzqUFreM2twDQrbcITNBV05+SJytGlbxhqafMOSOqE55XJOe2JIw+TWM66LOTSQVzeSmsFNot5EQqmvg1s+MaHkZtXxZm4CFDXnKyBqbnuUIPR1GmQKXP3hwnk/vk75PQdyX1maLhoFQr4Yi5Xmv9kTm5PJdRO7W84RoJ9BqzMYd1LhJRLmit/+wybIiC5OYTZDXkg8b4Nj5/YM0Hlyfnck/mOFTRiBgiVd1JkEukBVuepKthOZH5ST1er3RLDkbLmZYDcKZL1QItUoWvDnyuHgVlXaNkVF5NPLmOiUqkmSH4MYpXOkA0IvopZ2Ovnb8eEJDXV2PEm9gBE76BLHBeAYXTm6OQwXeeMG0mSd/+RHouLX+0W1MnBNd8ID2zm+lmJa9ShGCjFYzYJHk3v/blyT0aRKsTsBhS6BTcg=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(366004)(136003)(39840400004)(346002)(376002)(451199021)(966005)(6486002)(6666004)(83380400001)(186003)(36756003)(2616005)(86362001)(38100700002)(6512007)(6506007)(316002)(54906003)(8936002)(66946007)(66556008)(66476007)(6916009)(8676002)(4326008)(5660300002)(44832011)(41300700001)(45080400002)(2906002)(7416002)(478600001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?fnnTlFAZHLB2dbAUA4o4lzYlsMPypWRPTrRQuci+qlogVSDXX3en5ExV7jsm?=
+ =?us-ascii?Q?zXX6ZTKtU8XxczMY3ry/jNOZgo1VohlFQuLcOv2teKq5WTpAZm0d3yyhrwbK?=
+ =?us-ascii?Q?WVQ3if4USGWl2G6xdv9QSKemOVaHRc2pV84B6MEaXhag9R6oMOWIuwGaoCoH?=
+ =?us-ascii?Q?0kKmOdq5kmmxpyFLCBrnXsbyER8+MB+42YhbSPJQN0mpWpTdCATmZMzl3eYV?=
+ =?us-ascii?Q?lcsHS7bPyvnaUoMcdXQ4VhEnLlO2Ak1EPrSaROT0VtUUCjw/JC9S2qiYSGr3?=
+ =?us-ascii?Q?yHQPXtVqhC1nSzGWOqKIschYUVpBdSlHBxlCOxSrPHXXBjMh/f5WNHdHf57N?=
+ =?us-ascii?Q?FagCfqRbHsJe1YWuMeO6tdjj53QyV5cYuBpuE/8biCI49+ixm+lM6kjj6+h/?=
+ =?us-ascii?Q?m2U39ASFToNK1j15/evy5v/tROz6mLVIVG3tvbpIyCyvFTLGpl0vtKheQM8V?=
+ =?us-ascii?Q?vceyo2/xLAwVA5tjT7nz9YMMnT8de1EuwS/YIuy+VvLcDAEk5HXMQUkbQUsH?=
+ =?us-ascii?Q?UbW0U8/fA6WtGJnwvinilxucLngpmEseV0z4HyLCtxQZbFUEImhgl/i/q/jG?=
+ =?us-ascii?Q?O7iNK5Y3t4owMoQkdfA07hPCs7U9NSpTkSS/FyEb9j5Ppckil5z/DvOaAY2Q?=
+ =?us-ascii?Q?6FmZhKLHfaimj4Asx8fEq5Xq+bACxklgBGUBS91Gwp+z/Co7qtz2Lm+dXHU9?=
+ =?us-ascii?Q?bb9SVUi8fPznq578Rl4HZeNKyByhIvJk/wyz48JlssYKykNUJIYKjfNoXb3j?=
+ =?us-ascii?Q?0xtpgFucYPttvLjOIkao42F8hAmuboxUgqIxc7oAFbyDea2GtzxpwYUvLObl?=
+ =?us-ascii?Q?aJVRSrIxvg8UCEIKW/80f2HqcAbvK6mzGX5OemfgEoCkkMHV2SRr82jdXx1e?=
+ =?us-ascii?Q?EENst7c/bjvRg2v0SCWXR3UZcLIbcxeYLfMOy5xVmhAwsfZk58tO7rKOkpNT?=
+ =?us-ascii?Q?yKAlZ807ixoEoX/fS0q29orF6RNACJng9tADBIzx1vUbGp7GXt/pxKuYjHfd?=
+ =?us-ascii?Q?b7JdqXuw1+70ITJfaD2X8SoqME4CnCRWJ+Gfj3Mxqi6Lw6F8Oh6xrLx8toQu?=
+ =?us-ascii?Q?Qtf3dPbig1APggpNXRKqjvPVQFDLYZTMXNuQx3MUTw1VgNWM05BTZe8So+Rp?=
+ =?us-ascii?Q?jMLNulHQRbSySt3WVpj8WwdPbZrvF2zb7NxV2YvT01O00K5ZbtOL9LroSMAR?=
+ =?us-ascii?Q?vgNPMcNk0kv0SQhGlO9H4Ui50ZvPNR1/ZG70P+NwUfLF4RrmNdsD96RFCrv0?=
+ =?us-ascii?Q?oKNV5J+y1FjCcJgF2zEsGbqVIy8yvMKNWe3W5EKXeQpCefsQVzKsYc0QquaK?=
+ =?us-ascii?Q?AoG3QQovBFTW42hHK9olPnfafgYf/og0CD5xVOSnWaQDXear3VPlk9egsbyd?=
+ =?us-ascii?Q?2pkSSx8+jvw4NE1KFBnJAbZI/OAOIHHGJYm8X25CqWy7X2xtkl8y90C/LI91?=
+ =?us-ascii?Q?kbxl9mU5TWKafflkg0ObzD7+EZitn773VT9QrBu6bRX+3S/oNSicLjDOhMsT?=
+ =?us-ascii?Q?HcPo3h1hkV7rWUJ1fm4k9HEeQ4JwolLYkZYDc5kElRq6sJXSTfH/2fIeaYdp?=
+ =?us-ascii?Q?iZ7GDiaPTDaLPmJMMzkNC3AxNSgSCRjUvb10P+7Qtx/t2Z9BW+XC3gJ+i3f0?=
+ =?us-ascii?Q?b4WZY0+b+IKxU2wvRPNtv2IX3kY11ChKSVXyUaeISVlJ8/JgVBNnzlNkf4fE?=
+ =?us-ascii?Q?rgbcqg=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 93c34a08-4287-4823-8bbf-08db672bbb41
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2023 07:49:32.7460
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3Kj2lT5zGW8G4VtwvNgH02OFJOoM0a3WWsLLoYS0ay+14cZJPxj8I7Mup0RV2gx4R/PZvEZP06uZ8/JC+tNqFg2ADdkzpPw2D0gDCjY+J9o=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR13MB5317
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/06/2023 01:34, Doug Anderson wrote:
-> Hi,
+On Tue, Jun 06, 2023 at 11:52:06AM +0200, Simon Horman wrote:
+> + Praveen Kumar
 > 
-> On Fri, Jun 2, 2023 at 9:12 AM Amit Pundir <amit.pundir@linaro.org> wrote:
->>
->> Move lvs1 and lvs2 regulator nodes up in the rpmh-regulators
->> list to workaround a boot regression uncovered by the upstream
->> commit ad44ac082fdf ("regulator: qcom-rpmh: Revert "regulator:
->> qcom-rpmh: Use PROBE_FORCE_SYNCHRONOUS"").
->>
->> Without this fix DB845c fail to boot at times because one of the
->> lvs1 or lvs2 regulators fail to turn ON in time.
->>
->> Link: https://lore.kernel.org/all/CAMi1Hd1avQDcDQf137m2auz2znov4XL8YGrLZsw5edb-NtRJRw@mail.gmail.com/
->> Signed-off-by: Amit Pundir <amit.pundir@linaro.org>
->> ---
->>  arch/arm64/boot/dts/qcom/sdm845-db845c.dts | 24 +++++++++++-----------
->>  1 file changed, 12 insertions(+), 12 deletions(-)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
->> index e14fe9bbb386..df2fde9063dc 100644
->> --- a/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
->> +++ b/arch/arm64/boot/dts/qcom/sdm845-db845c.dts
->> @@ -301,6 +301,18 @@ regulators-0 {
->>                 vdd-l26-supply = <&vreg_s3a_1p35>;
->>                 vin-lvs-1-2-supply = <&vreg_s4a_1p8>;
->>
->> +               vreg_lvs1a_1p8: lvs1 {
->> +                       regulator-min-microvolt = <1800000>;
->> +                       regulator-max-microvolt = <1800000>;
->> +                       regulator-always-on;
->> +               };
->> +
->> +               vreg_lvs2a_1p8: lvs2 {
->> +                       regulator-min-microvolt = <1800000>;
->> +                       regulator-max-microvolt = <1800000>;
->> +                       regulator-always-on;
->> +               };
->> +
->>                 vreg_s3a_1p35: smps3 {
->>                         regulator-min-microvolt = <1352000>;
->>                         regulator-max-microvolt = <1352000>;
->> @@ -381,18 +393,6 @@ vreg_l26a_1p2: ldo26 {
->>                         regulator-max-microvolt = <1200000>;
->>                         regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
->>                 };
->> -
->> -               vreg_lvs1a_1p8: lvs1 {
->> -                       regulator-min-microvolt = <1800000>;
->> -                       regulator-max-microvolt = <1800000>;
->> -                       regulator-always-on;
->> -               };
->> -
->> -               vreg_lvs2a_1p8: lvs2 {
->> -                       regulator-min-microvolt = <1800000>;
->> -                       regulator-max-microvolt = <1800000>;
->> -                       regulator-always-on;
->> -               };
+> On Mon, Jun 05, 2023 at 04:30:06AM -0700, Shradha Gupta wrote:
+> > Allocate the size of rx indirection table dynamically in netvsc
+> > from the value of size provided by OID_GEN_RECEIVE_SCALE_CAPABILITIES
+> > query instead of using a constant value of ITAB_NUM.
+> > 
+> > Signed-off-by: Shradha Gupta <shradhagupta@linux.microsoft.com>
+> > Reviewed-by: Haiyang Zhang <haiyangz@microsoft.com>
+> > Tested-on: Ubuntu22 (azure VM, SKU size: Standard_F72s_v2)
+> > Testcases:
+> > 1. ethtool -x eth0 output
+> > 2. LISA testcase:PERF-NETWORK-TCP-THROUGHPUT-MULTICONNECTION-NTTTCP-Synthetic
+> > 3. LISA testcase:PERF-NETWORK-TCP-THROUGHPUT-MULTICONNECTION-NTTTCP-SRIOV
 > 
-> This is a hack, but it at least feels less bad than reverting the
-> async probe patch. I'll leave it to Bjorn to decide if he's OK with
-> it. Personally, it feels like this would deserve a comment in the dts
-> to document that these regulators need to be listed first.
+> Hi Praveen, all,
 > 
-> Ideally, we could still work towards a root cause. I added a few more
-> ideas to help with root causing in reply to the original thread about
-> this.
+> it seems that there has not been any non-trivial review of this
+> patchset since v3. But at that point there was some feedback
+> from you. So I'd like to ask if you have any feedback on v6 [1].
 > 
-> https://lore.kernel.org/r/CAD=FV=UKyjRNZG-ED2meUAR9aXdco+AbUTHiKixTzjCkaJbjTg@mail.gmail.com/
+> [1] https://lore.kernel.org/all/1685964606-24690-1-git-send-email-shradhagupta@linux.microsoft.com/
+> 
 
-We do not shape DTS based on given OS behavior. AOSP needs this, BSD
-needs that and Linux needs something else. Next time someone will move
-these regulators down because on his system probing is from end of list,
-not beginning and he has the same problem.
+For the record:
 
-No, really, are we going to reshuffle nodes because AOSP needs it?
+I see that Praveen has now provided a Reviewed-by for v3 [2], thanks!
 
-Best regards,
-Krzysztof
+I think this patch is clear now.
 
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
+
+[2] https://lore.kernel.org/all/bb461c30-3eb0-74c0-d637-c4a3bdf84565@linux.microsoft.com/
