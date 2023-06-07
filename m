@@ -2,131 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E21EE7259AB
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 11:11:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EB7272597A
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 11:06:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234738AbjFGJLE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 05:11:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33158 "EHLO
+        id S239105AbjFGJGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 05:06:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240165AbjFGJKd (ORCPT
+        with ESMTP id S238467AbjFGJFf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 05:10:33 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5AAB1BD6;
-        Wed,  7 Jun 2023 02:09:25 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 1F11E5FD63;
-        Wed,  7 Jun 2023 12:09:24 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1686128964;
-        bh=CumwjAyNcOyROazwWORMZqL/SIkAMktzdgFYOvd0NSA=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=IB7yP8h2qdh0bCixWjI5oZn9LGUy+PRnJS7dRyHwKW3sK/wVCDgbL4nhfYMJQpX3h
-         mC6z2HwjdcEBikV+mwCJs8uRoT+wICXFLt7nhaVhh0RTi4tJA/1UpYw80kh62Uq/zM
-         NX0o4F5zic0eU4W1hYSafCX2wNxIDSEfdcsXjPsa+M0IvBjcFeRewL4nqbbhdwdbZ9
-         YQePE4I43do8UExk4IGbL5m8EzUXc1tybLUKD+K8rofQjy5cxlntWchp1juebuthG2
-         PVwtr1fylnlCslB0pKiGTIF3Rfkzrqmcv1xhRZygsCphdt+knOkioMTPMWDA1PVrpF
-         0s5GtRsO6zSZw==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Wed,  7 Jun 2023 12:09:23 +0300 (MSK)
-Message-ID: <5ca9eb2b-4bc8-5883-a029-3eeca905fe6e@sberdevices.ru>
-Date:   Wed, 7 Jun 2023 12:04:29 +0300
+        Wed, 7 Jun 2023 05:05:35 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 94FE82137;
+        Wed,  7 Jun 2023 02:04:43 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 28CFEAB6;
+        Wed,  7 Jun 2023 02:05:28 -0700 (PDT)
+Received: from [10.57.25.235] (unknown [10.57.25.235])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2612D3F587;
+        Wed,  7 Jun 2023 02:04:40 -0700 (PDT)
+Message-ID: <95530dcc-aad3-cf4d-f5cc-9ba504ac7abf@arm.com>
+Date:   Wed, 7 Jun 2023 10:04:38 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v1] dt-bindings: nand: meson: Fix 'nand-rb' property
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-CC:     Liang Yang <liang.yang@amlogic.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.1
+Subject: Re: [PATCH V5 5/6] coresight: platform: acpi: Ignore the absence of
+ graph
+To:     Mike Leach <mike.leach@linaro.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
+        scclevenger@os.amperecomputing.com,
+        Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
-        <linux-mtd@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-References: <20230606193507.35024-1-AVKrasnov@sberdevices.ru>
- <20230607095802.3adcd4f9@xps-13>
- <166bdc27-f77c-9076-f866-180cfa5bff76@sberdevices.ru>
- <08da4e86-433a-7d2e-25ff-ffa24221abdf@linaro.org>
- <835a3587-1e0f-64d7-1d1a-b639ae8b7307@sberdevices.ru>
- <2ca6e619-1d57-8fff-6176-9ee890e0d167@linaro.org>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-In-Reply-To: <2ca6e619-1d57-8fff-6176-9ee890e0d167@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+        Frank Rowand <frowand.list@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>, devicetree@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230529062511.52016-1-anshuman.khandual@arm.com>
+ <20230529062511.52016-6-anshuman.khandual@arm.com>
+ <CAJ9a7ViWiSuabBVPASHO-MDs9z7wGSLuCLCpPezFrh6p3AOgyA@mail.gmail.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <CAJ9a7ViWiSuabBVPASHO-MDs9z7wGSLuCLCpPezFrh6p3AOgyA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/06/07 04:52:00 #21449589
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 07.06.2023 12:08, Krzysztof Kozlowski wrote:
-> On 07/06/2023 10:57, Arseniy Krasnov wrote:
+On 07/06/2023 09:58, Mike Leach wrote:
+> HI Ansuman,
+> 
+> On Mon, 29 May 2023 at 07:26, Anshuman Khandual
+> <anshuman.khandual@arm.com> wrote:
 >>
+>> From: Suzuki K Poulose <suzuki.poulose@arm.com>
 >>
->> On 07.06.2023 11:53, Krzysztof Kozlowski wrote:
->>> On 07/06/2023 10:40, Arseniy Krasnov wrote:
->>>> Hello Miquel, 
->>>>
->>>> On 07.06.2023 10:58, Miquel Raynal wrote:
->>>>
->>>>> Hi Arseniy,
->>>>>
->>>>> AVKrasnov@sberdevices.ru wrote on Tue, 6 Jun 2023 22:35:07 +0300:
->>>>>
->>>>>> Add description of 'nand-rb' property. Use "Fixes" because this property
->>>>>> must be supported since the beginning. For this controller 'nand-rb' is
->>>>>> stored in the controller node (not in chip), because it has only single
->>>>>> r/b wire for all chips.
->>>>>
->>>>> Sorry if I mislead you in the first place, but you could definitely
->>>>> have two chips and only one with RB wired. It needs to be defined in
->>>>> the chips.
->>>>
->>>> Ok, so to clarify: is it ok, that in bindings this property will be placed in the
->>>> chip, but in driver, i'm trying to read it from the controller node (thus  in
->>>> dts file it will be also in controller node)?
->>>
->>> No, because how would your DTS pass validation? I understand you did not
->>> test the bindings, but this will improve, right?
+>> Some components may not have graph connections for describing
+>> the trace path. e.g., ETE, where it could directly use the per
+>> CPU TRBE. Ignore the absence of graph connections
 >>
->> Ok, i'll follow DTS layout in the driver, "test the bindings" You mean "make dt_binding_check"?
+>> Signed-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+>> ---
+>>   drivers/hwtracing/coresight/coresight-platform.c | 6 +++++-
+>>   1 file changed, 5 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/hwtracing/coresight/coresight-platform.c b/drivers/hwtracing/coresight/coresight-platform.c
+>> index 475899714104..c4b4fbde8550 100644
+>> --- a/drivers/hwtracing/coresight/coresight-platform.c
+>> +++ b/drivers/hwtracing/coresight/coresight-platform.c
+>> @@ -692,8 +692,12 @@ static int acpi_coresight_parse_graph(struct acpi_device *adev,
+>>
+>>          pdata->nr_inport = pdata->nr_outport = 0;
+>>          graph = acpi_get_coresight_graph(adev);
+>> +       /*
+>> +        * There are no graph connections, which is fine for some components.
+>> +        * e.g., ETE
+>> +        */
+>>          if (!graph)
+>> -               return -ENOENT;
+>> +               return 0;
+>>
 > 
-> Yes. They were sent without testing.
-> 
-> But please also test your DTS with dtbs_check.
+> Should we not determine if it is valid for a particular component not
+> to have a graph connection?
+> Prior to this patch an incorrectly configured ETMv4 - which must have
+> a graph would return an error, after this it will fail silently
 
-Got it!
+I think it doesn't call for a failure. The ETM could still
+be probed but is not usable. We provide enough information via the
+sysfs, i.e., connection links, which should be sufficient for the
+user to detect this case. Also, this change is inline with what
+we do for ETMv4 with DT.
 
-Thanks, Arseniy
+Suzuki
 
-> 
-> 
-> Best regards,
-> Krzysztof
-> 
