@@ -2,121 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 566857254EF
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 08:58:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 493217254F0
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 08:58:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238563AbjFGG6X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 02:58:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41204 "EHLO
+        id S238536AbjFGG6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 02:58:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238532AbjFGG6U (ORCPT
+        with ESMTP id S238172AbjFGG6t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 02:58:20 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D28B19BD
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 23:58:15 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-652dd220d67so5933320b3a.3
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 23:58:15 -0700 (PDT)
+        Wed, 7 Jun 2023 02:58:49 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65A6E1730
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 23:58:47 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2b1bdfe51f8so3333151fa.0
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 23:58:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686121095; x=1688713095;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=nh4fHWBEz1Sr5TZZkrEsU0UWH1SdtjGoipfMtexv460=;
-        b=bnBzP0j8cMrMInZQJqBsvQThQ1CjUgDjBdvee1vofjBKqB3P7P/QYSPwz5EEvOiWP2
-         keVs4n6XcSdF6cTjCYzGq+/StlwCittJpYHPMBRbT/vcy6AArwOQm0h/7THFl1JeJ0Vg
-         I2bI/uigd+Ctccth+LZpsbEq6m7nI+DjcbDIxbssfS1+GcTcyebckEv01y20eX14Eyfc
-         lRBGrvynQq6UR35LU1MZuAn3NWmT5g1vJMkls1OZfxxBt/r63ClI4RQBb5zQCB93SyiN
-         hVb20EWDVrrlDACHfxIbA6/do4YYIzRnmMhK2XSV+IszkXAKXz+1IVEViYHBHM7yz+Xs
-         mnYg==
+        d=gmail.com; s=20221208; t=1686121125; x=1688713125;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=82Mu8QU4HigZydZK6DfsxJpMaVzvXeGB338dtPOY7lc=;
+        b=ci3FU/8Ywn3sJORB9+b8BmfaGsKCl5pt/0UliRmgmvFvOY8lecCDd6qiEFFrJkog39
+         e4Ti+y49/WlBtP7CARqhfDuVITEYKcv35NBmt7nkKU63tU2dSrGr+ir5G3q6b7sEoPfy
+         76wwyY+cOcCFZA+klvxrfQTHlk2kAWNxoondLl331cRz2g07xiYqrzcXuCj0rgf8hesA
+         aZhDE4CIHNqdkITdqdIe/KEqEoWtx5YgyT1/au1fh5SJBH5O67jIIoiTLrmCsipIgH9z
+         l8As81tUBAlzKfkwFxJ7vmgJjR9dqQv8H54QywLscqH+Yd7IOf97Hkce2XzhJQejWcyf
+         3VCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686121095; x=1688713095;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nh4fHWBEz1Sr5TZZkrEsU0UWH1SdtjGoipfMtexv460=;
-        b=RExnmdeHxP9BU5dQmcJYYMvLKi3IOxtiTfYsxf4UE1R7X8G80p9MsyaDmFMwKF4cJy
-         9D3lH179kRZViwcMz8WY5BaWnXi2Efp89DgNXg8rE4hCZ1brfyW91/h5mrp+6ik4cn1c
-         PTjsPrJSU2bJbHyuQccuMdbXL5ulu52lAtLSNqktxf0zZThFE3FltQWglPgUCLHgVk0Z
-         0ZO44rdvCksVxAQIIBM8pF51cxf5HgG46uT4+kUHJnMbO+B4SFuQMaLgBKPKQR5Vtgbp
-         r2tsYpVyQWzpOJ0rpTNPzPLPbaTb9ftIFNRd7j2D+7X8IYq0GVTFnzR3ALTbL5HQIop3
-         I93Q==
-X-Gm-Message-State: AC+VfDzUbu/ud9iEYzurrUD9+TciooZDmD7TC8HUdZFfWEGafrOMbuKL
-        YR3c14ORgmg5OujWFstCGb8Z
-X-Google-Smtp-Source: ACHHUZ7SORdiyujXnnRSGiVRS/CQfk/KmBM4qEEakzslTa7SK9spwRxfTllyzMqkaMeA45eOHSs3uQ==
-X-Received: by 2002:a05:6a21:3a84:b0:10a:fad7:43bf with SMTP id zv4-20020a056a213a8400b0010afad743bfmr2058569pzb.39.1686121094787;
-        Tue, 06 Jun 2023 23:58:14 -0700 (PDT)
-Received: from thinkpad ([59.92.97.244])
-        by smtp.gmail.com with ESMTPSA id h129-20020a636c87000000b0050f9b7e64fasm8482555pgc.77.2023.06.06.23.58.11
+        d=1e100.net; s=20221208; t=1686121125; x=1688713125;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=82Mu8QU4HigZydZK6DfsxJpMaVzvXeGB338dtPOY7lc=;
+        b=iJ+PWRo4qy84UrszudCJcJgpHkZQPD/2DDOd37VPy9SMnCIPSdfi2KNnXj3RXAibhF
+         cZ592B+qPjarLDUUdsYKtBAbpxX0qxL7iF5xmPPUQU/Sq9jVriLvN7l3DXzcgaowxoyR
+         5fIpa5O3PaIKrgBStjW7hgVXmldzCR/baYJrqD8s/TNX59rr5iu+K+nmHONyCIPNInGB
+         O7QRhrqcQo7i0INetyfUxzOiddXyAS8pI0G6C3CllBCpW9GjIikF30QDJlN2lSZwZUAI
+         jyzYrzUYQKzy9jC99zEC35mB41FyjiTzFFTOBUAsp1mRh/ouPGQRizCeRhGin8hXVKe3
+         qbuA==
+X-Gm-Message-State: AC+VfDydBWKQa3qtLPrUKuO4v2yfkPxiBJWuZQ2b7exzirZFeatIkGsY
+        P7Ewxc3vkO3fT/FztEF+UHw=
+X-Google-Smtp-Source: ACHHUZ5B2RdpfLHe8NDMciXzpd9hXBiT9WzxU7nqW7jVGDhWqel12HsOpeMGr/WkkkljEJcjMoA5oQ==
+X-Received: by 2002:a2e:2d02:0:b0:2ac:6f6d:aee4 with SMTP id t2-20020a2e2d02000000b002ac6f6daee4mr1635329ljt.6.1686121125258;
+        Tue, 06 Jun 2023 23:58:45 -0700 (PDT)
+Received: from pc636 (host-90-233-211-151.mobileonline.telia.com. [90.233.211.151])
+        by smtp.gmail.com with ESMTPSA id t17-20020a2e9c51000000b002ac7a25c001sm2109931ljj.24.2023.06.06.23.58.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 23:58:14 -0700 (PDT)
-Date:   Wed, 7 Jun 2023 12:28:09 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Jeffrey Hugo <quic_jhugo@quicinc.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, mhi@lists.linux.dev,
-        linux-arm-msm@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loic.poulain@linaro.org
-Subject: Re: [PATCH 3/3] net: mhi: Increase the default MTU from 16K to 32K
-Message-ID: <20230607065809.GB5025@thinkpad>
-References: <20230606123119.57499-1-manivannan.sadhasivam@linaro.org>
- <20230606123119.57499-4-manivannan.sadhasivam@linaro.org>
- <b8a25a70-8781-8b82-96d8-bc1ecf2d5468@quicinc.com>
+        Tue, 06 Jun 2023 23:58:44 -0700 (PDT)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
+Date:   Wed, 7 Jun 2023 08:58:42 +0200
+To:     Baoquan He <bhe@redhat.com>
+Cc:     Uladzislau Rezki <urezki@gmail.com>, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Dave Chinner <david@fromorbit.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
+Subject: Re: [PATCH 8/9] mm: vmalloc: Offload free_vmap_area_lock global lock
+Message-ID: <ZIAqojPKjChJTssg@pc636>
+References: <20230522110849.2921-1-urezki@gmail.com>
+ <20230522110849.2921-9-urezki@gmail.com>
+ <ZH0vuwaSddREy9dz@MiWiFi-R3L-srv>
+ <ZH7128Q0MiRh6S5f@pc638.lan>
+ <ZH8iWAgsDSF1I+B6@MiWiFi-R3L-srv>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b8a25a70-8781-8b82-96d8-bc1ecf2d5468@quicinc.com>
+In-Reply-To: <ZH8iWAgsDSF1I+B6@MiWiFi-R3L-srv>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 07:50:23AM -0600, Jeffrey Hugo wrote:
-> On 6/6/2023 6:31 AM, Manivannan Sadhasivam wrote:
-> > Most of the Qualcomm endpoint devices are supporting 32K MTU for the
-> > UL (Uplink) and DL (Downlink) channels. So let's use the same value
-> > in the MHI NET driver also. This gives almost 2x increase in the throughput
-> > for the UL channel.
+On Tue, Jun 06, 2023 at 08:11:04PM +0800, Baoquan He wrote:
+> On 06/06/23 at 11:01am, Uladzislau Rezki wrote:
+> > On Mon, Jun 05, 2023 at 08:43:39AM +0800, Baoquan He wrote:
+> > > On 05/22/23 at 01:08pm, Uladzislau Rezki (Sony) wrote:
+> > > ......  
+> > > > +static unsigned long
+> > > > +this_cpu_zone_alloc_fill(struct cpu_vmap_zone *z,
+> > > > +	unsigned long size, unsigned long align,
+> > > > +	gfp_t gfp_mask, int node)
+> > > > +{
+> > > > +	unsigned long addr = VMALLOC_END;
+> > > > +	struct vmap_area *va;
+> > > > +
+> > > > +	/*
+> > > > +	 * It still can race. One task sets a progress to
+> > > > +	 * 1 a second one gets preempted on entry, the first
+> > > > +	 * zeroed the progress flag and second proceed with
+> > > > +	 * an extra prefetch.
+> > > > +	 */
+> > > > +	if (atomic_xchg(&z->fill_in_progress, 1))
+> > > > +		return addr;
+> > > > +
+> > > > +	va = kmem_cache_alloc_node(vmap_area_cachep, gfp_mask, node);
+> > > > +	if (unlikely(!va))
+> > > > +		goto out;
+> > > > +
+> > > > +	spin_lock(&free_vmap_area_lock);
+> > > > +	addr = __alloc_vmap_area(&free_vmap_area_root, &free_vmap_area_list,
+> > > > +		cvz_size, 1, VMALLOC_START, VMALLOC_END);
+> > > > +	spin_unlock(&free_vmap_area_lock);
+> > > 
+> > > The 'z' is passed in from this_cpu_zone_alloc(), and it's got with
+> > > raw_cpu_ptr(&cpu_vmap_zone). Here when we try to get chunk of cvz_size
+> > > from free_vmap_area_root/free_vmap_area_list, how can we guarantee it
+> > > must belong to the 'z' zone? With my understanding, __alloc_vmap_area()
+> > > will get efficient address range sequentially bottom up from
+> > > free_vmap_area_root. Please correct me if I am wrong.
+> > > 
+> > We do not guarantee that and it does not worth it. The most important is:
 > > 
-> > Below is the comparision:
+> > If we search a zone that exactly match a CPU-id the usage of a global
+> > vmap space becomes more wider, i.e. toward a high address space. This is
+> > not good because we can affect other users which allocate within a specific
+> > range. On a big system it might be a problem. Therefore a pre-fetch is done 
+> > sequentially on demand.
 > > 
-> > iperf on the UL channel with 16K MTU:
-> > 
-> > [ ID] Interval       Transfer     Bandwidth
-> > [  3]  0.0-10.0 sec   353 MBytes   296 Mbits/sec
-> > 
-> > iperf on the UL channel with 32K MTU:
-> > 
-> > [ ID] Interval       Transfer     Bandwidth
-> > [  3]  0.0-10.0 sec   695 MBytes   583 Mbits/sec
-> > 
-> > Cc: Loic Poulain <loic.poulain@linaro.org>
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > ---
-> >   drivers/net/mhi_net.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/net/mhi_net.c b/drivers/net/mhi_net.c
-> > index 3d322ac4f6a5..eddc2c701da4 100644
-> > --- a/drivers/net/mhi_net.c
-> > +++ b/drivers/net/mhi_net.c
-> > @@ -14,7 +14,7 @@
-> >   #define MHI_NET_MIN_MTU		ETH_MIN_MTU
-> >   #define MHI_NET_MAX_MTU		0xffff
-> > -#define MHI_NET_DEFAULT_MTU	0x4000
-> > +#define MHI_NET_DEFAULT_MTU	0x8000
+> > Secondly, i do not see much difference in performance if we follow
+> > exactly CPU-zone-id.
 > 
-> Why not SZ_32K?
+> Ah, I see, the allocated range will be put into appropriate zone's
+> busy tree by calculating its zone via addr_to_cvz(va->va_start). The
+> cvz->free tree is only a percpu pre-fetch cache. This is smart, thanks a
+> lot for explanation. 
+> 
+Yes. The busy/lazy are placed per-cpu zone(using addr_to_cvz(addr)) whereas
+the allocated chunk on a current CPU.
 
-Makes sense. Will change it in next iteration.
+Thanks!
 
-- Mani
-
--- 
-மணிவண்ணன் சதாசிவம்
+--
+Uladzislau Rezki
