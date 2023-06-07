@@ -2,205 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 637B272644A
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 17:24:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80905726453
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 17:25:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241366AbjFGPYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 11:24:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33790 "EHLO
+        id S240106AbjFGPZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 11:25:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240106AbjFGPYS (ORCPT
+        with ESMTP id S241254AbjFGPYs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 11:24:18 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEBF31BE2;
-        Wed,  7 Jun 2023 08:23:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686151418; x=1717687418;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Ac2EGXwaf9hbH3WLYBdv8zMnn+CvdHzS452aCXzYo7k=;
-  b=YY5IUlTQTQcz0dlWG1aq5he9YVVQBVUSdfstII56/z8+2y5I6q/uXA/1
-   9QIYB8WcPvNPs6NthtaNo6JgDQKTG84160WnVsPqQHBg8X6VFx6jk9uRR
-   6IdPDEym+nxHqTrRSOS5idBuCd9p2rmqybGp2zM722vdaAdfroAjeh/mW
-   EaK9tqQ0qtQhh1XL9t5jCVq6Fxgj60VPrpQsITmUdQVvOU6S3p7V5ph5n
-   ix91kgK7qKHlJoKtbvazrAQuSJVUkufGl+T92RI2TWbWk7yKF4TUZ6LXJ
-   9yvRqDB+7UJiZqgooD5dduyxRUNQUmh+nsMNfIQP0PC8Ut5/WdPY4Foo2
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="341676661"
-X-IronPort-AV: E=Sophos;i="6.00,224,1681196400"; 
-   d="scan'208";a="341676661"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 08:22:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="822206808"
-X-IronPort-AV: E=Sophos;i="6.00,224,1681196400"; 
-   d="scan'208";a="822206808"
-Received: from vsmyers-mobl2.amr.corp.intel.com (HELO [10.212.146.233]) ([10.212.146.233])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 08:22:36 -0700
-Message-ID: <e7c21694-d31b-4dbe-f75b-5a7c0127f5c8@intel.com>
-Date:   Wed, 7 Jun 2023 08:22:36 -0700
+        Wed, 7 Jun 2023 11:24:48 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B71E2707;
+        Wed,  7 Jun 2023 08:24:13 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 54D205C0083;
+        Wed,  7 Jun 2023 11:23:09 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Wed, 07 Jun 2023 11:23:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        invisiblethingslab.com; h=cc:cc:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1686151389; x=1686237789; bh=Wv7B88fCXHMfzlDN3UtqKmkgxzrFTCsQxuL
+        FkzoPHro=; b=XHoJXnU2+Jkn+R2bLfxIbPT3bxyCMF5fQ0zS8CtDaGSqTker57P
+        +kWa087zeC5Ak/d9FH1sIyKJfOUWIEPH0W+iLtAAwje6RiZiNIzNHKAKLuZBcQzy
+        iSA8qh+dv3ecCR3pxKTD1QhHl76XcJUmsRH4JD2b3zdtTGSPFs+0BvS3My/btqlf
+        1QxY6VQJrkPBM/yDs5df/q66phXvfOxWuP60SCz0KAu0jOjFksl7ptO5Yad9+w91
+        3I4JMbOv0gOb/nITmlYw+i1RAmyT0ry3MSHecRMprLdXrSoOLf/0D/BFsVWFOM7k
+        45UTq+Lo+WOzCC+V7SKVWcYnC3Ie3qSwFkw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1686151389; x=1686237789; bh=Wv7B88fCXHMfz
+        lDN3UtqKmkgxzrFTCsQxuLFkzoPHro=; b=WfumrNaC/mT4OajhXHOPWdcfHkkRO
+        SZxV2GMvr7fjCKdu30Xlbk8xXeRJbI2KfUgBJ2UetKMClF6NadOWhoMVJbj1lEqp
+        cRJeUFo4/rxQ+zmQI/G68XmA8Tq6x8++apsN10xmDfBDdUxsJvR/3Vm9yWfMxQxK
+        4BSwzZdM7ZpVYXu7YH8mF9TuYgXHVSZ63yHwIJTGJmDzZXj1EEbqdpEt8N2cVELa
+        OC12kqNMT+udqBO0F9ZrEtpESzyCByu0HE1ih+9yzF/WBJ0vFiRfa+mw8bAHB91a
+        I0ZIjGVNV9DekVhFswsKhRMNNj+EygWawq/0HoK06rTHZlxXEA5iBzxdg==
+X-ME-Sender: <xms:3aCAZKIePnmYH3J5jOSqMNxXvAl_imf-4iBP7eI7sGwDDo1N4Fd42Q>
+    <xme:3aCAZCKzRnAX1EsopXNKY1hl1_lndEpGoS6tHm1M4cruxgXfpc0s2CLvPFGVBreZp
+    HEEznlA5akIP7c>
+X-ME-Received: <xmr:3aCAZKspw-lkDixv91bZzVjZ1rJrXPT5JfphLqFuvqcyQfgzQvv59PW1iQs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedtgedgkeejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtjeenucfhrhhomhepffgvmhhi
+    ucforghrihgvucfqsggvnhhouhhruceouggvmhhisehinhhvihhsihgslhgvthhhihhngh
+    hslhgrsgdrtghomheqnecuggftrfgrthhtvghrnhepvdejteegkefhteduhffgteffgeff
+    gfduvdfghfffieefieekkedtheegteehffelnecuvehluhhsthgvrhfuihiivgeptdenuc
+    frrghrrghmpehmrghilhhfrhhomhepuggvmhhisehinhhvihhsihgslhgvthhhihhnghhs
+    lhgrsgdrtghomh
+X-ME-Proxy: <xmx:3aCAZPbLD9jwZE94B875RYnbBA-THOuPZ6lpzR_jbGp8OkRaFT3dRA>
+    <xmx:3aCAZBagBMf94CsyL7OqQza8ILYscmGdY9fEXTkwXQP7GACLD-oZbA>
+    <xmx:3aCAZLCJ-g2hls9eWfKLhTzmcZKfZdH0igmijUnbFehtRrhRfVHzlg>
+    <xmx:3aCAZAwgnAlah1z8Ldh3loCdK-6XmzNQqI3Pc2Fvn1p3p4I8NW0f5w>
+Feedback-ID: iac594737:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 7 Jun 2023 11:23:08 -0400 (EDT)
+Date:   Wed, 7 Jun 2023 11:23:00 -0400
+From:   Demi Marie Obenour <demi@invisiblethingslab.com>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] block, loop: Increment diskseq when releasing a loop
+ device
+Message-ID: <ZICg2sxHQRRPW3Nc@itl-email>
+References: <20230601222656.2062-1-demi@invisiblethingslab.com>
+ <ZIA004HDuhoTQzY/@infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v11 07/20] x86/virt/tdx: Add skeleton to enable TDX on
- demand
-Content-Language: en-US
-To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     linux-mm@kvack.org, kirill.shutemov@linux.intel.com,
-        tony.luck@intel.com, peterz@infradead.org, tglx@linutronix.de,
-        seanjc@google.com, pbonzini@redhat.com, david@redhat.com,
-        dan.j.williams@intel.com, rafael.j.wysocki@intel.com,
-        ying.huang@intel.com, reinette.chatre@intel.com,
-        len.brown@intel.com, ak@linux.intel.com, isaku.yamahata@intel.com,
-        chao.gao@intel.com, sathyanarayanan.kuppuswamy@linux.intel.com,
-        bagasdotme@gmail.com, sagis@google.com, imammedo@redhat.com
-References: <cover.1685887183.git.kai.huang@intel.com>
- <21b3a45cb73b4e1917c1eba75b7769781a15aa14.1685887183.git.kai.huang@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <21b3a45cb73b4e1917c1eba75b7769781a15aa14.1685887183.git.kai.huang@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ciKbitYsLUhZP3Im"
+Content-Disposition: inline
+In-Reply-To: <ZIA004HDuhoTQzY/@infradead.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/4/23 07:27, Kai Huang wrote:
-...
-> +static int try_init_module_global(void)
-> +{
-> +	unsigned long flags;
-> +	int ret;
-> +
-> +	/*
-> +	 * The TDX module global initialization only needs to be done
-> +	 * once on any cpu.
-> +	 */
-> +	raw_spin_lock_irqsave(&tdx_global_init_lock, flags);
 
-Why is this "raw_"?
+--ciKbitYsLUhZP3Im
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 7 Jun 2023 11:23:00 -0400
+From: Demi Marie Obenour <demi@invisiblethingslab.com>
+To: Christoph Hellwig <hch@infradead.org>
+Cc: Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] block, loop: Increment diskseq when releasing a loop
+ device
 
-There's zero mention of it anywhere.
+On Wed, Jun 07, 2023 at 12:42:11AM -0700, Christoph Hellwig wrote:
+> > +++ b/block/genhd.c
+> > @@ -1502,3 +1502,4 @@ void inc_diskseq(struct gendisk *disk)
+> >  {
+> >  	disk->diskseq =3D atomic64_inc_return(&diskseq);
+> >  }
+> > +EXPORT_SYMBOL(inc_diskseq);
+>=20
+> I really do not like exporting this as a lowlevel function.  If we
+> increment the sequence it should be part of a higher level operation.
 
-> +	if (tdx_global_init_status & TDX_GLOBAL_INIT_DONE) {
-> +		ret = tdx_global_init_status & TDX_GLOBAL_INIT_FAILED ?
-> +			-EINVAL : 0;
-> +		goto out;
-> +	}
-> +
-> +	/* All '0's are just unused parameters. */
-> +	ret = seamcall(TDH_SYS_INIT, 0, 0, 0, 0, NULL, NULL);
-> +
-> +	tdx_global_init_status = TDX_GLOBAL_INIT_DONE;
-> +	if (ret)
-> +		tdx_global_init_status |= TDX_GLOBAL_INIT_FAILED;
-> +out:
-> +	raw_spin_unlock_irqrestore(&tdx_global_init_lock, flags);
-> +
-> +	return ret;
-> +}
-> +
-> +/**
-> + * tdx_cpu_enable - Enable TDX on local cpu
-> + *
-> + * Do one-time TDX module per-cpu initialization SEAMCALL (and TDX module
-> + * global initialization SEAMCALL if not done) on local cpu to make this
-> + * cpu be ready to run any other SEAMCALLs.
-> + *
-> + * Note this function must be called when preemption is not possible
-> + * (i.e. via SMP call or in per-cpu thread).  It is not IRQ safe either
-> + * (i.e. cannot be called in per-cpu thread and via SMP call from remote
-> + * cpu simultaneously).
+Fair!
 
-lockdep_assert_*() are your friends.  Unlike comments, they will
-actually tell you if this goes wrong.
+> > --- a/drivers/block/loop.c
+> > +++ b/drivers/block/loop.c
+> > @@ -1205,6 +1205,12 @@ static void __loop_clr_fd(struct loop_device *lo=
+, bool release)
+> >  	if (!part_shift)
+> >  		set_bit(GD_SUPPRESS_PART_SCAN, &lo->lo_disk->state);
+> >  	mutex_lock(&lo->lo_mutex);
+> > +
+> > +	/*
+> > +	 * Increment the disk sequence number, so that userspace knows this
+> > +	 * device now points to something else.
+> > +	 */
+> > +	inc_diskseq(lo->lo_disk);
+>=20
+> And I'm not sure why we even need this.  __loop_clr_fd
+> already calls disk_force_media_change, which calls inc_diskseq.
+> Why do we need an extra increment?
 
-> +int tdx_cpu_enable(void)
-> +{
-> +	unsigned int lp_status;
-> +	int ret;
-> +
-> +	if (!platform_tdx_enabled())
-> +		return -EINVAL;
-> +
-> +	lp_status = __this_cpu_read(tdx_lp_init_status);
-> +
-> +	/* Already done */
-> +	if (lp_status & TDX_LP_INIT_DONE)
-> +		return lp_status & TDX_LP_INIT_FAILED ? -EINVAL : 0;
-> +
-> +	/*
-> +	 * The TDX module global initialization is the very first step
-> +	 * to enable TDX.  Need to do it first (if hasn't been done)
-> +	 * before doing the per-cpu initialization.
-> +	 */
-> +	ret = try_init_module_global();
-> +
-> +	/*
-> +	 * If the module global initialization failed, there's no point
-> +	 * to do the per-cpu initialization.  Just mark it as done but
-> +	 * failed.
-> +	 */
-> +	if (ret)
-> +		goto update_status;
-> +
-> +	/* All '0's are just unused parameters */
-> +	ret = seamcall(TDH_SYS_LP_INIT, 0, 0, 0, 0, NULL, NULL);
-> +
-> +update_status:
-> +	lp_status = TDX_LP_INIT_DONE;
-> +	if (ret)
-> +		lp_status |= TDX_LP_INIT_FAILED;
-> +
-> +	this_cpu_write(tdx_lp_init_status, lp_status);
-> +
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(tdx_cpu_enable);
+How does disk_force_media_change() call inc_diskseq()?  I don=E2=80=99t see=
+ any
+calls in the source code.  I=E2=80=99m going to use systemtap to see if the=
+re is
+an indirect call chain.
+--=20
+Sincerely,
+Demi Marie Obenour (she/her/hers)
+Invisible Things Lab
 
-You danced around it in the changelog, but the reason for the exports is
-not clear.
+--ciKbitYsLUhZP3Im
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> +static int init_tdx_module(void)
-> +{
-> +	/*
-> +	 * TODO:
-> +	 *
-> +	 *  - Get TDX module information and TDX-capable memory regions.
-> +	 *  - Build the list of TDX-usable memory regions.
-> +	 *  - Construct a list of "TD Memory Regions" (TDMRs) to cover
-> +	 *    all TDX-usable memory regions.
-> +	 *  - Configure the TDMRs and the global KeyID to the TDX module.
-> +	 *  - Configure the global KeyID on all packages.
-> +	 *  - Initialize all TDMRs.
-> +	 *
-> +	 *  Return error before all steps are done.
-> +	 */
-> +	return -EINVAL;
-> +}
-> +
-> +static int __tdx_enable(void)
-> +{
-> +	int ret;
-> +
-> +	ret = init_tdx_module();
-> +	if (ret) {
-> +		pr_err("TDX module initialization failed (%d)\n", ret);
+-----BEGIN PGP SIGNATURE-----
 
-Have you actually gone any  looked at how this pr_*()'s look?
+iQIzBAEBCgAdFiEEdodNnxM2uiJZBxxxsoi1X/+cIsEFAmSAoNoACgkQsoi1X/+c
+IsHQlBAAkPrxFId08lsXJQUerNo6JNd7c3rnGL/J7C1RclnoXZvb2wTxTOU7SyAK
+Pm0DjJ+MkEbJPCtk4mhaA75ezfDNiA66cPmmaN3xBDb9VmuqwMSUgKhEDqpvMGyD
+r41wCIrMIv3daXrqMbdThLX8MN9nyLNFPG2VkLK71z7Yar/3jEhTVH7JkcrCZ79C
+STBv9mj8oG86ycCIUrKeWpI3zFZaniO0yUqlqXEuCt9x5LZ1WQ/EG6G9kiQyJIb1
+rdKyWeJg0al9eRWJT9xQxnBmPlGAj5l/C9NUk70WYWaer5r7xmhmVZhyazIAwf/I
+pz3huGDWEr7XEt7Nf6+3Xoyq4+koI9RnJtO3Hn5wYzQC/Xn6+JA1qcD1krJoLA2F
+fockSGh2BA7UtVXx+krv3tnC9xmayLJCxuFBYjzcoWFmzsJoXpgaQ2wR77qXtwnB
+SUbw55OBbOR2TCXmJajNIDhKc9WvqV46uFd15/Sq8S+xhyU5pkeZM/uK7QBxUT6j
+Wrb0iPLE6R5KOhDiE+TqfFfaUxMS9zi1sS4eu+KyZ7bQ42CN70SGH/1UDmwAk3x6
+rWtTna5azpbJbQO7y4TtOS1/7ieCXwFBbGESqJCOACdBWHNKCmoA4Krc1p16l3+k
+Qapw/TfC17dcL5X9rynQ238Hvvgwmu6tRFIQFonQVRaaKY9LeFk=
+=OUMI
+-----END PGP SIGNATURE-----
 
-Won't they say:
-
-	tdx: TDX module initialized
-
-Isn't that a _bit_ silly?  Why not just say:
-
-	pr_info("module initialized.\n");
+--ciKbitYsLUhZP3Im--
