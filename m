@@ -2,149 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61E06725344
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 07:19:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C554725347
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 07:20:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233715AbjFGFTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 01:19:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59298 "EHLO
+        id S234109AbjFGFUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 01:20:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230504AbjFGFT3 (ORCPT
+        with ESMTP id S232681AbjFGFT5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 01:19:29 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 808051735;
-        Tue,  6 Jun 2023 22:19:26 -0700 (PDT)
-X-QQ-mid: bizesmtp71t1686115155t27gq16b
-Received: from linux-lab-host.localdomain ( [61.141.77.49])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 07 Jun 2023 13:19:14 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: G46xFj+wOV9ykUVNNQSk0ai1FCe8wBOCLmMzZ7Pq9KMAMo+Ve+JiiOCA59xXL
-        LB+wGdNEQ5CzSFxziqNgxV9VzBrE8HihejgKfwc/We1fHyyT2wAfikXPh26ziGGx97VgxAR
-        83s5NEOIzdP0+/C0LsLXZqD2C7eJw9tWBBvEWyf5wILHUYui/R4KysjOnWWAkUrkyPZ/Ain
-        /+3yOZNyyrP9hKwwUj2867Yzp2MSXS7ySdlYuMGqfzxJjNZk6lj3LtDpHpadq6mIp1P4snf
-        A6h3q1T1eI1OCqfzYqaS17X89RyvzKsGlHkm3d0GjyktR60s98HEBmzD8vO+VKCUFK095h+
-        VO/5+WyaSOTdsgTnCHpjrCpEsbn4EmrUgfyPFlWN4JnWE0tQxvOotFuzblVkx648JDWe2HX
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 4025936494722067388
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     arnd@arndb.de, w@1wt.eu
-Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        thomas@t-8ch.de
-Subject: Re: [PATCH v3 1/3] tools/nolibc: fix up #error compile failures with -ENOSYS
-Date:   Wed,  7 Jun 2023 13:19:14 +0800
-Message-Id: <20230607051914.667047-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <4fcdd08c-e6fb-40b7-9f2b-77f96e798b37@app.fastmail.com>
-References: <4fcdd08c-e6fb-40b7-9f2b-77f96e798b37@app.fastmail.com>
+        Wed, 7 Jun 2023 01:19:57 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13321988
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 22:19:56 -0700 (PDT)
+Received: from mail-yw1-f197.google.com (mail-yw1-f197.google.com [209.85.128.197])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 2D3AF3F15D
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 05:19:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1686115193;
+        bh=Y3mm/I7x2vRn2j9GXKotLgetA+QT35DrsPpKt0Y+YPk=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=bqOLVVxsaPBshvIrGgD6FBrIxW/aRlPuT1CZ/X2ijgJZLG+5bIu8ZjTl0FdQoAvvH
+         3xIMKeaxjxksLNs/hPh3dOA7O//r83ir0E8dgCVj29DMk42Idy2ef38scU2wKCr4VB
+         pP3NRz+hljEVOpS8GCX1fij+CElw1FuwtLv4QPuE6nE+GU3r7Nl2YfafrWkIjwyda1
+         uqz2J8fC4iB+BY3S3BdM7aKObnoFZmrfvoZ23pbgBGLZ56hRyHOWQU8bkyUR09RrT0
+         NI7GNO8ap7HJOjxKAG/8OvpdQOl24Ag3EpuIRMQyhmLj473cVhypPKb3nzgGWB+8Iv
+         dE+So8XaKUUtw==
+Received: by mail-yw1-f197.google.com with SMTP id 00721157ae682-561ceb5b584so116861387b3.3
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 22:19:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686115193; x=1688707193;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Y3mm/I7x2vRn2j9GXKotLgetA+QT35DrsPpKt0Y+YPk=;
+        b=jBSJhM0OdHMliBYhr1o4Y90TN3uKip6bT3yGqaV7asEqzUoqdHsIhmxxWlkOO/FMLf
+         AqS66C5yyKrueYAWDSZZ+WzfR9naGTICtK2E3UImHfQdz4P7JXwZlT6IZld2Kdoyz5w3
+         s99ow4X6z16eI7GawXEySZznIYwr5RnLy2oOwbPmcla8utTObLp+A8V+2ry/VvO3tfWd
+         BVe6dgKDdJITY03x96OGW28IuakALHtt98Kf+Ipm686JgMVlpmct6Y0lghurct6iQ788
+         2nIuQ3Om/onn9HfwVrWBCRzCMhSaRCaQ5zUlYBRPZ6na7mVpazLi3mDFtX2LtdFHOSsM
+         +kkw==
+X-Gm-Message-State: AC+VfDxU6fESTvbXV01vsGt3rrHxPcgEJ3IokIu7NKNAAQ3oYHAWccqL
+        aTdFjCt7NxPG/yr29357TkLDdXbgCGPnIqbJqZvyopX9Wuo7DpgqWafAftsnG4M1m92mn5Qqjnc
+        nueQfmUsm72ZOeeGeqcNBwtcHg7tesSqbZ+5JQmNQ/Nq3zd1YfEeLYL2WPQ==
+X-Received: by 2002:a81:494f:0:b0:565:df97:4439 with SMTP id w76-20020a81494f000000b00565df974439mr4470003ywa.37.1686115192730;
+        Tue, 06 Jun 2023 22:19:52 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ40trCB1v0nQlIOadZnNVxmP8YW7DLNgQOAV86JMGej2W+a155jagc5TYTLR7MONXgf3+r3A2uU6DsBFyxrKhI=
+X-Received: by 2002:a81:494f:0:b0:565:df97:4439 with SMTP id
+ w76-20020a81494f000000b00565df974439mr4469990ywa.37.1686115192461; Tue, 06
+ Jun 2023 22:19:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230607034331.576623-1-acelan.kao@canonical.com> <20230607042032.GA28835@srcf.ucam.org>
+In-Reply-To: <20230607042032.GA28835@srcf.ucam.org>
+From:   AceLan Kao <acelan.kao@canonical.com>
+Date:   Wed, 7 Jun 2023 13:19:40 +0800
+Message-ID: <CAFv23QmDNUFcPwvSQt5aUxtmHasfr8wrF72ObvcO-X19gfn=LA@mail.gmail.com>
+Subject: Re: [PATCH] platform/x86: dell-laptop: Add drm module soft dependency
+To:     Matthew Garrett <mjg59@srcf.ucam.org>
+Cc:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Sat, Jun 3, 2023, at 11:01, Zhangjin Wu wrote:
+Gfx drivers(i915/amdgpu/nvidia) depend on the drm driver, so delaying
+the loading of dell_laptop after drm can ease the issue the most.
+Right, it's still possible to encounter the issue, unfortunately, we
+do not have a better solution for it at the moment.
+
+
+Matthew Garrett <mjg59@srcf.ucam.org> =E6=96=BC 2023=E5=B9=B46=E6=9C=887=E6=
+=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=8812:20=E5=AF=AB=E9=81=93=EF=BC=
+=9A
+>
+> On Wed, Jun 07, 2023 at 11:43:31AM +0800, AceLan Kao wrote:
+> > From: "Chia-Lin Kao (AceLan)" <acelan.kao@canonical.com>
 > >
-> > Suggested-by: Arnd Bergmann <arnd@arndb.de>
-> > Link:
-> > https://lore.kernel.org/linux-riscv/5e7d2adf-e96f-41ca-a4c6-5c87a25d4c9c@app.fastmail.com/
-> > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-> > ---
-> >  tools/include/nolibc/sys.h | 26 +++++++++++++-------------
-> >  1 file changed, 13 insertions(+), 13 deletions(-)
-> >
-> > diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-> > index 856249a11890..78c86f124335 100644
-> > --- a/tools/include/nolibc/sys.h
-> > +++ b/tools/include/nolibc/sys.h
-> > @@ -124,7 +124,7 @@ int sys_chmod(const char *path, mode_t mode)
-> >  #elif defined(__NR_chmod)
-> >  	return my_syscall2(__NR_chmod, path, mode);
-> >  #else
-> > -#error Neither __NR_fchmodat nor __NR_chmod defined, cannot implement
-> > sys_chmod()
-> > +	return -ENOSYS;
-> >  #endif
-> >  }
+> > dell_laptop is somethines loaded before nvidia driver, causing it to
+> > create its own backlight interface before native backlight is set.
+> > This results in the presence of 2 backlight interfaces in sysfs and
+> > leads to the backlight can't be adjusted.
 >
-> I think the most logical would be to have each syscall (chmod,
-> fchmodat, ...) have its own function that returns -ENOSYS if
-> that is not defined, and have the logic that decides which one
-> to use as a separate function.
->
-
-Yeah, agreed, we can clean up them one by one, If split them to their own
-syscalls, I have two questions (for Arnd, and Willy too):
-
-1. do we need to add the corresponding library routines at the same time?
-
-  Use llseek() as an example, there will be llseek() and lsee64(). If off_t
-  would be converted to 64bit, then, they can be simply added as follows:
-
-    #define lseek64 lseek
-    #define llseek lseek
-
-  Or something like this:
-
-    static __attribute__((unused))
-    loff_t lseek(int fd, loff_t offset, int whence)
-    {
-    	return lseek(fd, offset, whence);
-    }
-
-    static __attribute__((unused))
-    off64_t lseek(int fd, off64_t offset, int whence)
-    {
-    	return lseek(fd, offset, whence);
-    }
-
-  This one aligns with the other already added library routines.
-
-  Which one do you like more?
-
-2. If so, how to cope with the new types when add the library routines?
-
-  Still use the above llseek() as an example, If not use '#define' method,
-  We may need to declare loff_t and off64_t in std.h too:
-
-    #define off64_t off_t
-    #define loff_t off_t
-
-  Or align with the other new types, use 'typedef' instead of '#define'.
-
-  And further, use poll() as an example, in its manpage [1], there may be some
-  new types, such as 'nfds_t', but 'int' is used in tools/include/nolibc/sys.h
-  currently, do we need to add nfds_t?
-
-  The 'idtypes_t' and 'id_t' types used by waitid() [2] is similar, both
-  of them can simply use the 'int' type.
-
-The above two questions are important to the coming patches, it may determine
-how I should tune the new llseek() and waitid() syscalls and their library
-routines. very welcome your suggestions.
-
-> This patch is a step in that direction though, so I think that's
-> totally fine.
-
-Thanks, so, can I pick your Reviewed-by for the first two patches? I'm ready to
-send v4 now ;-)
-
-Best regards,
-Zhangjin
-
----
-[1]: https://linux.die.net/man/2/poll
-[2]: https://linux.die.net/man/2/waitid
-
->
->      Arnd
+> It seems like this approach would still be broken if the nvidia module
+> isn't available at the time the dell module is loaded?
