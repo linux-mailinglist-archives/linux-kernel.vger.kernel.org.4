@@ -2,308 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1DDB72709B
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 23:39:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE7EA7270A5
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 23:41:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231219AbjFGVjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 17:39:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49384 "EHLO
+        id S229996AbjFGVlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 17:41:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbjFGVjV (ORCPT
+        with ESMTP id S229683AbjFGVlJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 17:39:21 -0400
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 163C81BD6
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 14:39:20 -0700 (PDT)
-Received: by mail-qv1-xf2d.google.com with SMTP id 6a1803df08f44-62b67937a6cso12901546d6.3
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 14:39:20 -0700 (PDT)
+        Wed, 7 Jun 2023 17:41:09 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE04A1BF7;
+        Wed,  7 Jun 2023 14:41:08 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id 3f1490d57ef6-bacfa9fa329so5467276.0;
+        Wed, 07 Jun 2023 14:41:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686173959; x=1688765959;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pGDCkbdGN1MhlLFnaI8S08OX/yFHe0s8kyjhWCk8H7w=;
-        b=mJEU7MyYWGTtC0MSZzP22m9UhOH+6qglKGonrIho8evgn8Qlzatxa8kwZz4sQM/s4V
-         vwKmprb4LMvOaorr1m+q+Wx3QPX97wad3ALtAY0Ba0BQnm1UFkiEuhougJltFW7QYx9j
-         qKFdFnXlq3uvYMg/qGJ6YU+g9PyEIr69nRWOlKV7LrIY4lybQ4iLaiufQw05ro+5I/BU
-         Ee6nzHBNsDYP1X16N6aiEg6082syMfOExN5woE0YPCBIxGmsFSzNjvM0wo+CWKF2yAUx
-         uPO5y02tYwKsbIavKH8zD3/T3iuKRDKLCZfITNWNAMT1zUC3/U6l+qDSICjfPZJ2JEO+
-         P1xg==
+        d=gmail.com; s=20221208; t=1686174067; x=1688766067;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nGrbqkR+iLzazRj/5Eznoucnd0w6CLsNLWJLkMCRjmE=;
+        b=CJjLzbCxwiqomsb+jlDBuo4XtdzT0RRbk0bBi7sk+uwEbXCEV+5211UEpBoSeK7ddD
+         DfCZlyTN+ZHpQqT5+kTW4u3LJgyysWmHA5vfXUH65OoTNmtJVHOpq1nfuwvMq5GAw63Z
+         NkAE61S1L1WXzRmjR9vw1TfWJboQspQaDWdrVFu1AkEIL8+WjOAxl1FDWfktTheScczs
+         1bhFwwc9qG1j8NWRI2OoebHdEGipSto8Fa4EuxAis629dECIUtxLFq+gy9kJMOr1o+TM
+         sCwjQDJqtDl3VDSuSsBDI7XfY5QYGmM9fJpH/jQ6xfDB3sAi1DAaPeMQS922pCo7N7/t
+         sIpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686173959; x=1688765959;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pGDCkbdGN1MhlLFnaI8S08OX/yFHe0s8kyjhWCk8H7w=;
-        b=EW3jMKSQ/JAG7lz39/v4w2PpnwIbqD/KAPQMeHPX0V1xY0861W0QfO/vPViZ0Bhrwz
-         lrRmaZVE5KCNzS/9GpbRKePJqfSfl/aFqf4Oi1kUfsOrxLTW5Z/FbcnAvmVQgam27mQR
-         qyoH4kWIksGR6D8dhUYerBUoJdbQNI5LQAqRk2XENEU2Vhc5I9GFxkifUCPeWz8KsT2B
-         x8ej4pn/rs0DV6ELlxO/x9Ohzaw81KlskSClHGkgy9Yybzc34ZjvPtpSRHiSr+6sjXip
-         DKSSdUB8tHQvljIOqIpbl2THmCbwN7KjFjqGWEmuFBovrvPWl102JyQkihRAWXpy4TAM
-         AfQw==
-X-Gm-Message-State: AC+VfDytuWSshz/cDHG7M2Tm/ETvXtaHMOT7m5g8Wy/9jA7iUGvaiqq+
-        zJ6+7quL/vqvxZlJBEENKiPH1ovXjFGCmd6IVeE=
-X-Google-Smtp-Source: ACHHUZ6VTV6Ci31JbJ0RpEI0E3uasHmPWgr1Tpkojx8LJQVD4ywRNEC2r16bGrwsje/ImzEDs/qdz+Cmn7NcSY6gmOw=
-X-Received: by 2002:ad4:5747:0:b0:61a:197b:605 with SMTP id
- q7-20020ad45747000000b0061a197b0605mr5575505qvx.1.1686173958985; Wed, 07 Jun
- 2023 14:39:18 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686174067; x=1688766067;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nGrbqkR+iLzazRj/5Eznoucnd0w6CLsNLWJLkMCRjmE=;
+        b=anpFJG1QiZj7MKRyu1E+xMEWN4VMFg7GZGoF4lJka2404GaFExr9qBxClydIvmg/YH
+         m8b50yFCs1j9oFiydLjmaMsAkeMNgw0Zkw0UW0gFmzooVXVFXAbTN7BRzVyuv44q59KG
+         PTbYceChy1p/maMsKsV9qCPQ1uUKoOYrIUFZUJgfR53cWYSxoBvX8vR30jb+TyfJcx+p
+         ovEXdSFJjqkwbSWzrs/KxeR91d/OseRy7P58+sQrfjdTJp5zKZ53231so0sufxvKlS0z
+         lfun2SFFXlBGXh0Bwrr1DES8ZRZYSr5EdZ8Yt4/mnhd+vok9D0BCsAXETKyV43JMc1+o
+         k9rg==
+X-Gm-Message-State: AC+VfDwg1XKaagQWLN5mdOjFO+7Cm8X7NLioXDH7xJKrZKTnecMqbUzh
+        n375XO+NFqy22Q7i7TRj/LpaM+BdlsqFPg==
+X-Google-Smtp-Source: ACHHUZ58QT/d69mv9JhOkCKiAQq7JxdtSdfrT3g9kxfF6x5JcDQ6rcAbB2vfoB33GiVxVU+lfkOzbw==
+X-Received: by 2002:a25:fa09:0:b0:b9e:6d2c:ce2 with SMTP id b9-20020a25fa09000000b00b9e6d2c0ce2mr6629219ybe.46.1686174067588;
+        Wed, 07 Jun 2023 14:41:07 -0700 (PDT)
+Received: from horus.lan (75-164-186-145.ptld.qwest.net. [75.164.186.145])
+        by smtp.gmail.com with ESMTPSA id e18-20020a258912000000b00ba7c2112650sm172714ybl.30.2023.06.07.14.41.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 14:41:07 -0700 (PDT)
+From:   Jason Gerecke <killertofu@gmail.com>
+X-Google-Original-From: Jason Gerecke <jason.gerecke@wacom.com>
+To:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>
+Cc:     Ping Cheng <pinglinux@gmail.com>,
+        Aaron Armstrong Skomra <skomra@gmail.com>,
+        Joshua Dickens <Joshua@Joshua-Dickens.com>,
+        Jason Gerecke <jason.gerecke@wacom.com>
+Subject: [PATCH] HID: wacom: Use ktime_t rather than int when dealing with timestamps
+Date:   Wed,  7 Jun 2023 14:41:02 -0700
+Message-ID: <20230607214102.2113-1-jason.gerecke@wacom.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-References: <20230606145611.704392-1-cerasuolodomenico@gmail.com> <20230606145611.704392-2-cerasuolodomenico@gmail.com>
-In-Reply-To: <20230606145611.704392-2-cerasuolodomenico@gmail.com>
-From:   Nhat Pham <nphamcs@gmail.com>
-Date:   Wed, 7 Jun 2023 14:39:08 -0700
-Message-ID: <CAKEwX=Pb0knETq_46dzg+uviEHu7DXJY6MFn-VEsUJw8T5J3Pw@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 1/7] mm: zswap: add pool shrinking mechanism
-To:     Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-Cc:     vitaly.wool@konsulko.com, minchan@kernel.org,
-        senozhatsky@chromium.org, yosryahmed@google.com,
-        linux-mm@kvack.org, ddstreet@ieee.org, sjenning@redhat.com,
-        hannes@cmpxchg.org, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 6, 2023 at 7:56=E2=80=AFAM Domenico Cerasuolo
-<cerasuolodomenico@gmail.com> wrote:
->
-> Each zpool driver (zbud, z3fold and zsmalloc) implements its own shrink
-> function, which is called from zpool_shrink. However, with this commit,
-> a unified shrink function is added to zswap. The ultimate goal is to
-> eliminate the need for zpool_shrink once all zpool implementations have
-> dropped their shrink code.
->
-> To ensure the functionality of each commit, this change focuses solely
-> on adding the mechanism itself. No modifications are made to
-> the backends, meaning that functionally, there are no immediate changes.
-> The zswap mechanism will only come into effect once the backends have
-> removed their shrink code. The subsequent commits will address the
-> modifications needed in the backends.
->
-> Signed-off-by: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-> ---
->  mm/zswap.c | 96 +++++++++++++++++++++++++++++++++++++++++++++++++++---
->  1 file changed, 91 insertions(+), 5 deletions(-)
->
-> diff --git a/mm/zswap.c b/mm/zswap.c
-> index bcb82e09eb64..c99bafcefecf 100644
-> --- a/mm/zswap.c
-> +++ b/mm/zswap.c
-> @@ -150,6 +150,12 @@ struct crypto_acomp_ctx {
->         struct mutex *mutex;
->  };
->
-> +/*
-> + * The lock ordering is zswap_tree.lock -> zswap_pool.lru_lock.
-> + * The only case where lru_lock is not acquired while holding tree.lock =
-is
-> + * when a zswap_entry is taken off the lru for writeback, in that case i=
-t
-> + * needs to be verified that it's still valid in the tree.
-> + */
->  struct zswap_pool {
->         struct zpool *zpool;
->         struct crypto_acomp_ctx __percpu *acomp_ctx;
-> @@ -159,6 +165,8 @@ struct zswap_pool {
->         struct work_struct shrink_work;
->         struct hlist_node node;
->         char tfm_name[CRYPTO_MAX_ALG_NAME];
-> +       struct list_head lru;
-> +       spinlock_t lru_lock;
->  };
->
->  /*
-> @@ -176,10 +184,12 @@ struct zswap_pool {
->   *            be held while changing the refcount.  Since the lock must
->   *            be held, there is no reason to also make refcount atomic.
->   * length - the length in bytes of the compressed page data.  Needed dur=
-ing
-> - *          decompression. For a same value filled page length is 0.
-> + *          decompression. For a same value filled page length is 0, and=
- both
-> + *          pool and lru are invalid and must be ignored.
->   * pool - the zswap_pool the entry's data is in
->   * handle - zpool allocation handle that stores the compressed page data
->   * value - value of the same-value filled pages which have same content
-> + * lru - handle to the pool's lru used to evict pages.
->   */
->  struct zswap_entry {
->         struct rb_node rbnode;
-> @@ -192,6 +202,7 @@ struct zswap_entry {
->                 unsigned long value;
->         };
->         struct obj_cgroup *objcg;
-> +       struct list_head lru;
->  };
->
->  struct zswap_header {
-> @@ -364,6 +375,12 @@ static void zswap_free_entry(struct zswap_entry *ent=
-ry)
->         if (!entry->length)
->                 atomic_dec(&zswap_same_filled_pages);
->         else {
-> +       /* zpool_evictable will be removed once all 3 backends have migra=
-ted */
-> +               if (!zpool_evictable(entry->pool->zpool)) {
-> +                       spin_lock(&entry->pool->lru_lock);
-> +                       list_del(&entry->lru);
-> +                       spin_unlock(&entry->pool->lru_lock);
-> +               }
->                 zpool_free(entry->pool->zpool, entry->handle);
->                 zswap_pool_put(entry->pool);
->         }
-> @@ -584,14 +601,70 @@ static struct zswap_pool *zswap_pool_find_get(char =
-*type, char *compressor)
->         return NULL;
->  }
->
-> +static int zswap_shrink(struct zswap_pool *pool)
-> +{
-> +       struct zswap_entry *lru_entry, *tree_entry =3D NULL;
-> +       struct zswap_header *zhdr;
-> +       struct zswap_tree *tree;
-> +       int swpoffset;
-> +       int ret;
-> +
-> +       /* get a reclaimable entry from LRU */
-> +       spin_lock(&pool->lru_lock);
-> +       if (list_empty(&pool->lru)) {
-> +               spin_unlock(&pool->lru_lock);
-> +               return -EINVAL;
-> +       }
-> +       lru_entry =3D list_last_entry(&pool->lru, struct zswap_entry, lru=
-);
-> +       list_del_init(&lru_entry->lru);
-> +       zhdr =3D zpool_map_handle(pool->zpool, lru_entry->handle, ZPOOL_M=
-M_RO);
-> +       tree =3D zswap_trees[swp_type(zhdr->swpentry)];
-> +       zpool_unmap_handle(pool->zpool, lru_entry->handle);
-> +       /*
-> +        * Once the pool lock is dropped, the lru_entry might get freed. =
-The
-> +        * swpoffset is copied to the stack, and lru_entry isn't deref'd =
-again
-> +        * until the entry is verified to still be alive in the tree.
-> +        */
-> +       swpoffset =3D swp_offset(zhdr->swpentry);
-> +       spin_unlock(&pool->lru_lock);
-> +
-> +       /* hold a reference from tree so it won't be freed during writeba=
-ck */
-> +       spin_lock(&tree->lock);
-> +       tree_entry =3D zswap_entry_find_get(&tree->rbroot, swpoffset);
-> +       if (tree_entry !=3D lru_entry) {
-> +               if (tree_entry)
-> +                       zswap_entry_put(tree, tree_entry);
-> +               spin_unlock(&tree->lock);
-> +               return -EAGAIN;
-> +       }
-> +       spin_unlock(&tree->lock);
-> +
-> +       ret =3D zswap_writeback_entry(pool->zpool, lru_entry->handle);
-> +
-> +       spin_lock(&tree->lock);
-> +       if (ret) {
-> +               spin_lock(&pool->lru_lock);
-> +               list_move(&lru_entry->lru, &pool->lru);
-> +               spin_unlock(&pool->lru_lock);
-> +       }
-> +       zswap_entry_put(tree, tree_entry);
-> +       spin_unlock(&tree->lock);
-> +
-> +       return ret ? -EAGAIN : 0;
-> +}
-> +
->  static void shrink_worker(struct work_struct *w)
->  {
->         struct zswap_pool *pool =3D container_of(w, typeof(*pool),
->                                                 shrink_work);
->         int ret, failures =3D 0;
->
-> +       /* zpool_evictable will be removed once all 3 backends have migra=
-ted */
->         do {
-> -               ret =3D zpool_shrink(pool->zpool, 1, NULL);
-> +               if (zpool_evictable(pool->zpool))
-> +                       ret =3D zpool_shrink(pool->zpool, 1, NULL);
-> +               else
-> +                       ret =3D zswap_shrink(pool);
->                 if (ret) {
->                         zswap_reject_reclaim_fail++;
->                         if (ret !=3D -EAGAIN)
-> @@ -655,6 +728,8 @@ static struct zswap_pool *zswap_pool_create(char *typ=
-e, char *compressor)
->          */
->         kref_init(&pool->kref);
->         INIT_LIST_HEAD(&pool->list);
-> +       INIT_LIST_HEAD(&pool->lru);
-> +       spin_lock_init(&pool->lru_lock);
->         INIT_WORK(&pool->shrink_work, shrink_worker);
->
->         zswap_pool_debug("created", pool);
-> @@ -1270,7 +1345,7 @@ static int zswap_frontswap_store(unsigned type, pgo=
-ff_t offset,
->         }
->
->         /* store */
-> -       hlen =3D zpool_evictable(entry->pool->zpool) ? sizeof(zhdr) : 0;
-> +       hlen =3D sizeof(zhdr);
->         gfp =3D __GFP_NORETRY | __GFP_NOWARN | __GFP_KSWAPD_RECLAIM;
->         if (zpool_malloc_support_movable(entry->pool->zpool))
->                 gfp |=3D __GFP_HIGHMEM | __GFP_MOVABLE;
-> @@ -1313,6 +1388,12 @@ static int zswap_frontswap_store(unsigned type, pg=
-off_t offset,
->                         zswap_entry_put(tree, dupentry);
->                 }
->         } while (ret =3D=3D -EEXIST);
-> +       /* zpool_evictable will be removed once all 3 backends have migra=
-ted */
-> +       if (entry->length && !zpool_evictable(entry->pool->zpool)) {
-> +               spin_lock(&entry->pool->lru_lock);
-> +               list_add(&entry->lru, &entry->pool->lru);
-> +               spin_unlock(&entry->pool->lru_lock);
-> +       }
->         spin_unlock(&tree->lock);
->
->         /* update stats */
-> @@ -1384,8 +1465,7 @@ static int zswap_frontswap_load(unsigned type, pgof=
-f_t offset,
->         /* decompress */
->         dlen =3D PAGE_SIZE;
->         src =3D zpool_map_handle(entry->pool->zpool, entry->handle, ZPOOL=
-_MM_RO);
-> -       if (zpool_evictable(entry->pool->zpool))
-> -               src +=3D sizeof(struct zswap_header);
-> +       src +=3D sizeof(struct zswap_header);
->
->         if (!zpool_can_sleep_mapped(entry->pool->zpool)) {
->                 memcpy(tmp, src, entry->length);
-> @@ -1415,6 +1495,12 @@ static int zswap_frontswap_load(unsigned type, pgo=
-ff_t offset,
->  freeentry:
->         spin_lock(&tree->lock);
->         zswap_entry_put(tree, entry);
-> +       /* zpool_evictable will be removed once all 3 backends have migra=
-ted */
-> +       if (entry->length && !zpool_evictable(entry->pool->zpool)) {
-> +               spin_lock(&entry->pool->lru_lock);
-> +               list_move(&entry->lru, &entry->pool->lru);
-> +               spin_unlock(&entry->pool->lru_lock);
-> +       }
->         spin_unlock(&tree->lock);
->
->         return ret;
-> --
-> 2.34.1
->
+Code which interacts with timestamps needs to use the ktime_t type
+returned by functions like ktime_get. The int type does not offer
+enough space to store these values, and attempting to use it is a
+recipe for problems. In this particular case, overflows would occur
+when calculating/storing timestamps leading to incorrect values being
+reported to userspace. In some cases these bad timestamps cause input
+handling in userspace to appear hung.
 
-Looks real solid to me! Thanks, Domenico.
-Acked-by: Nhat Pham <nphamcs@gmail.com>
+Link: https://gitlab.freedesktop.org/libinput/libinput/-/issues/901
+Fixes: 17d793f3ed53 ("HID: wacom: insert timestamp to packed Bluetooth (BT) events")
+Signed-off-by: Jason Gerecke <jason.gerecke@wacom.com>
+---
+ drivers/hid/wacom_wac.c | 4 ++--
+ drivers/hid/wacom_wac.h | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/hid/wacom_wac.c b/drivers/hid/wacom_wac.c
+index 2ccf83837134..2f16e47e4b69 100644
+--- a/drivers/hid/wacom_wac.c
++++ b/drivers/hid/wacom_wac.c
+@@ -1314,7 +1314,7 @@ static void wacom_intuos_pro2_bt_pen(struct wacom_wac *wacom)
+ 	struct input_dev *pen_input = wacom->pen_input;
+ 	unsigned char *data = wacom->data;
+ 	int number_of_valid_frames = 0;
+-	int time_interval = 15000000;
++	ktime_t time_interval = 15000000;
+ 	ktime_t time_packet_received = ktime_get();
+ 	int i;
+ 
+@@ -1359,7 +1359,7 @@ static void wacom_intuos_pro2_bt_pen(struct wacom_wac *wacom)
+ 		bool range = frame[0] & 0x20;
+ 		bool invert = frame[0] & 0x10;
+ 		int frames_number_reversed = number_of_valid_frames - i - 1;
+-		int event_timestamp = time_packet_received - frames_number_reversed * time_interval;
++		ktime_t event_timestamp = time_packet_received - frames_number_reversed * time_interval;
+ 
+ 		if (!valid)
+ 			continue;
+diff --git a/drivers/hid/wacom_wac.h b/drivers/hid/wacom_wac.h
+index 1a40bb8c5810..ee21bb260f22 100644
+--- a/drivers/hid/wacom_wac.h
++++ b/drivers/hid/wacom_wac.h
+@@ -324,7 +324,7 @@ struct hid_data {
+ 	int ps_connected;
+ 	bool pad_input_event_flag;
+ 	unsigned short sequence_number;
+-	int time_delayed;
++	ktime_t time_delayed;
+ };
+ 
+ struct wacom_remote_data {
+-- 
+2.41.0
+
