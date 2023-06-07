@@ -2,66 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64B537253AD
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 07:49:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5222E7253B6
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 07:51:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234158AbjFGFtQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 01:49:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40310 "EHLO
+        id S234604AbjFGFvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 01:51:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232050AbjFGFtP (ORCPT
+        with ESMTP id S234382AbjFGFvj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 01:49:15 -0400
-Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E170B19AE;
-        Tue,  6 Jun 2023 22:49:11 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1686116940; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=VEhMVBN9aGFLHIUsjkCJsAmmq1hY9LlcPi4NTs8QnIfFDUZLisyLHzQNndvt7Jcl2ZmE1UQbz5VMdOSJi5quXggtSp41ZJVrlTfxdT91XC1C6hY+RKy9MKh7lFbz502EBGGnzeDS+FS8KUr7RuMNHEC4dwZ582KVx/IfrGFCwy0=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1686116940; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=YpBVU4VdjXVaFIx6uMck+En94E4xCQfD1LgCcdAVBrw=; 
-        b=kwjTJ16iJYmZ1a6+JLAohn4gDnmwePAOU6YKE7N/kGr2lXlyCG2MyISrk4qcqV9d3o9oFZh1tx1IFLBtB15st3/V44pQU4yEcSsYW0S918P6ywKSGHx1Z2UIL6+toZUGjGPjU2SyiYHoZfkP+/7uWx51w7xVuv5RCKPrL0LYRW8=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1686116940;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=YpBVU4VdjXVaFIx6uMck+En94E4xCQfD1LgCcdAVBrw=;
-        b=WjzMwp+ZtzJ72eJ/4gDLuMKn/It8FqguADId912ytu50lJ36d8cVc6feSCqvk+Mw
-        IkvriCMzmMLoXdkKTi+dxuRBnyvyxBCILdBSt5dzp643GgbPIG2OLq+DPf3TRB0lyU6
-        UTnnTOdHEc8Yckgi9o02O3azlJ791s1j9k/yRphM=
-Received: from [192.168.66.198] (178-147-169-233.haap.dm.cosmote.net [178.147.169.233]) by mx.zohomail.com
-        with SMTPS id 16861169387741020.6424216893087; Tue, 6 Jun 2023 22:48:58 -0700 (PDT)
-Message-ID: <4e1f7a46-1a29-8c57-a61a-14088e0c9fdc@arinc9.com>
-Date:   Wed, 7 Jun 2023 08:48:53 +0300
+        Wed, 7 Jun 2023 01:51:39 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C70FD19AE;
+        Tue,  6 Jun 2023 22:51:37 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 75D625C00F4;
+        Wed,  7 Jun 2023 01:51:35 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Wed, 07 Jun 2023 01:51:35 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1686117095; x=1686203495; bh=9J3jSJCpCm
+        e7RWOMozMLBOk4sbRbtGFt1bbFVlTtxFk=; b=kdnVMEecRHur8SDhGvc+AiUcbg
+        6CuVzaBhbaNYKkiifHiwJNEbY5kihWpZl1VWrcEDu8N/gfiEg0XjiXm+sAjXF+7S
+        VPnwEW9BE7XHaUQbsc7tIq5KMjqOokn3lK4oOw8s76F/y3lhIqHj/aAUEGPPYUuT
+        kOH5APim2c2JTV7QT5BzLoleXc/kqNY8lwfHsgtc4qRlfBmCzBbZnCGJ3GsSyEMY
+        snwI7JvWcWKb++b0ieyobp5M/a8BqP2dcb41VbFGWJC2KGCO5tE0P2K7waoc6F43
+        t1Sf/iFNwJpAfVQF3ihf5nE3VTZ/FOHvKQ9/0u3odAVyLQj/rtO+deJaU0aQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1686117095; x=1686203495; bh=9J3jSJCpCme7R
+        WOMozMLBOk4sbRbtGFt1bbFVlTtxFk=; b=i2Q1rVLIXtuggKOMpQcpxyd7GqQba
+        2O02gfhAPuIrLKS3NkS9AFyBScx6y9+y9eEg1BmPVb/AXizwNu3kMV+DAVvktK53
+        Sdn2+nMDrLSEYpd2PFDBi0cls5an1pfnRFOyxrfSj7Han0g51iqCsGGwry51xxok
+        2T4fwiFR60bAapvuZrwIbBZjRSbmOUJHMCJu0vbYyU/g9l4fEs4cDBDJ3B1+oLit
+        m6ANgb4o0J9p05VmC3IqPJVp2gM1LE5iADN41nRv1+jQEuDoPB5edEgJu+1jZuZr
+        EK1RYfpURBCtdLxSiUQhJjxiw+S+v1teCH7+nf6MbMdDT+W8s5nRw/0VA==
+X-ME-Sender: <xms:5xqAZHajrbiuCOGbjxyaYFDJnnBBsyEqy8dUXXmRurjkKuuuhPCmpw>
+    <xme:5xqAZGa5iO_mGT1ztIACayCeGDwAVKJH_6_Rv-VajB3a1BsHdw2WvErNbgOtHuOpv
+    VgE-XSDaFTANzqB0p0>
+X-ME-Received: <xmr:5xqAZJ_sMCncJAjssRqbkqVH6a2DV1p4WnBZ7_J8AvHwqf5t_waXFypCuyLVAvwHbyI5wULi6vKgUEEPWUo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedtfedgieduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
+    ertddtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghes
+    fhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhephfetuddtudevieeljeejte
+    ffheeujeduhefgffejudfhueelleduffefgfffveeknecuvehluhhsthgvrhfuihiivgep
+    tdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgoh
+    grthdrtghomh
+X-ME-Proxy: <xmx:5xqAZNoF48f3aQ12CfAfUDgLKp1sNbyR-B1YtYk0VdzE3FUilyXkHQ>
+    <xmx:5xqAZCoeJ8Dz0MotdtrIJ_7tlMZRx_KQfBGAbTGqxqdqh-TG1pr2CA>
+    <xmx:5xqAZDQwYLEenM7677LCcEujenSvzEmz-MgiEDuEUNjWkBwuLuDctw>
+    <xmx:5xqAZFXogsRNHLkTuKry7ZJG_AalLaASvhq-ahBPmtXxEQqsKQXcXQ>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 7 Jun 2023 01:51:32 -0400 (EDT)
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+To:     linux-mips@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, tsbogend@alpha.franken.de,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>, stable@vger.kernel.org
+Subject: [PATCH] MIPS: cpu-features: Use boot_cpu_type for CPU type based features
+Date:   Wed,  7 Jun 2023 13:51:22 +0800
+Message-Id: <20230607055122.26175-1-jiaxun.yang@flygoat.com>
+X-Mailer: git-send-email 2.39.2 (Apple Git-143)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v4 2/2] mips: dts: ralink: Add support for TP-Link HC220
- G5 v1 board
-To:     Liviu Dudau <liviu@dudau.co.uk>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230606211600.1601694-1-liviu@dudau.co.uk>
- <20230606211600.1601694-3-liviu@dudau.co.uk>
-Content-Language: en-US
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <20230606211600.1601694-3-liviu@dudau.co.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,16 +82,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7.06.2023 00:16, Liviu Dudau wrote:
-> This WiFi AP is based on a MT7621 SoC with 128MiB RAM, 128MiB NAND,
-> a MT7603 2.4GHz WiFi and a MT7613 5GHz WiFi chips integrated on the board,
-> connected to the main SoC over PCIe.
-> 
-> The device uses NMBM over NAND, which is not currently supported in the
-> mainline, so NAND node is skipped in this revision.
-> 
-> Signed-off-by: Liviu Dudau <liviu@dudau.co.uk>
+Some CPU feature macros were using current_cpu_type to mark feature
+availability.
 
-Reviewed-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+However current_cpu_type will use smp_processor_id, which is prohibited
+under preemptable context.
 
-Arınç
+Since those features are all uniform on all CPUs in a SMP system, use
+boot_cpu_type instead of current_cpu_type to fix preemptable kernel.
+
+Cc: stable@vger.kernel.org
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+---
+ arch/mips/include/asm/cpu-features.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/mips/include/asm/cpu-features.h b/arch/mips/include/asm/cpu-features.h
+index 2a0b90077b50..8c6d4a87db37 100644
+--- a/arch/mips/include/asm/cpu-features.h
++++ b/arch/mips/include/asm/cpu-features.h
+@@ -125,7 +125,7 @@
+ ({									\
+ 	int __res;							\
+ 									\
+-	switch (current_cpu_type()) {					\
++	switch (boot_cpu_type()) {					\
+ 	case CPU_CAVIUM_OCTEON:						\
+ 	case CPU_CAVIUM_OCTEON_PLUS:					\
+ 	case CPU_CAVIUM_OCTEON2:					\
+@@ -373,7 +373,7 @@
+ ({									\
+ 	int __res;							\
+ 									\
+-	switch (current_cpu_type()) {					\
++	switch (boot_cpu_type()) {					\
+ 	case CPU_M14KC:							\
+ 	case CPU_74K:							\
+ 	case CPU_1074K:							\
+-- 
+2.39.2 (Apple Git-143)
+
