@@ -2,87 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7075D726892
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 20:24:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A95A97268B9
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 20:30:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230456AbjFGSYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 14:24:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39088 "EHLO
+        id S231950AbjFGSaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 14:30:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231189AbjFGSYa (ORCPT
+        with ESMTP id S232906AbjFGSaC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 14:24:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9D162705
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 11:23:18 -0700 (PDT)
+        Wed, 7 Jun 2023 14:30:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76F5F10EA
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 11:29:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686162143;
+        s=mimecast20190719; t=1686162552;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=DQ6zuroINio1c01IojiuLixyZvJ+SrwsYpib8PCoHh4=;
-        b=d1O2FWlOG6BJtRKizvFo2Y1hyjU+N/rvpb/awxxLwQ/kwL92hlNnVS7h/h9FhqJDF/Cc5+
-        07dYWjkVOYMp6HBS0f9lJob0g8h0CLDDa/aSVE9RvPDeae5JZ4hakufdLQVBWw4VJZHGI1
-        vgipuvoZwEgOn+OepRIW0GNefK1m5Bs=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=Wlm0G7x30CnhSolBIx64+/Gh1I5IPiqWKD1I4nhgFYs=;
+        b=h/CTzP1KCtN2Gddlo3yEt/m6njZvcPm0m9WJBfhILuGawLpyAm/ULb8GtxdY7dF0cMtB1X
+        eGVipaic0Qou01/MjD8eHsVKfTp7VKJRrMlDBH19AL/fwBsyM7ywxMliJZSetJ9n8OnEs7
+        qhkp05Ld3Zgl/avUqqO8OxlDH1iquNU=
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com
+ [209.85.166.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-91-9lVTYLJmN3WY7zKXxk5KzA-1; Wed, 07 Jun 2023 14:22:21 -0400
-X-MC-Unique: 9lVTYLJmN3WY7zKXxk5KzA-1
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-75eb82ada06so89026885a.1
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 11:22:21 -0700 (PDT)
+ us-mta-596-pzIbERhgNZehTN70nBEmfg-1; Wed, 07 Jun 2023 14:23:07 -0400
+X-MC-Unique: pzIbERhgNZehTN70nBEmfg-1
+Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-77ac4aa24eeso56407839f.1
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 11:23:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686162140; x=1688754140;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DQ6zuroINio1c01IojiuLixyZvJ+SrwsYpib8PCoHh4=;
-        b=KygKoFl0liMQYTu1sQjeTpBC/M/+mngLUWBY/fJx6d5oqCjVGBNkTjLIi6fP646UtM
-         yc9TMx3cbuPaCS8IFybF87IiFTSM12I+q1MsvvZY9MaDkyYZUt6WvK+ityP1zfuaO9oI
-         Itot/SoLCO0Q3i1oTYGLqyz9fOoCbHkKbdW7pn82mNcQnlGTh3lT9Pd0lb8FBw6Yr1za
-         iFQwrLclDuvuhPSKNyZLUBI6mmMjB7SSmoQMZGdKNJm30jDh3rGYIfiBJusHnBaPp5DK
-         Ts6oIQ/65xgEInyOcGrHxDtMueBSzu61iSUY6NkQfG6OD4JqftA/8Tbst/mdssDUWSgJ
-         KlCw==
-X-Gm-Message-State: AC+VfDwSbv1e64lLZ41v0m/zYo3xwJUyCjOOYdv6ZpZ/ND6Xe0ucDgkx
-        5gYFxGCl1zMvJbEmQHMaXWlaD9S62SyK+ELM5dxjnAugzV+BseIGk72w0OmiJdjHHrjqfcWX5CW
-        6zU3/6taQ4ZRUFxFOy/hwhWDs0ipOLTyJ
-X-Received: by 2002:a05:622a:19a9:b0:3f6:b465:8ccc with SMTP id u41-20020a05622a19a900b003f6b4658cccmr3472034qtc.1.1686162140142;
-        Wed, 07 Jun 2023 11:22:20 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6VsarLh9zWccCzKu6NqQJaXaG487KhdkCDF7y3mDR8vRwifniTr+jEXmQxGJvbERcYk3iHvQ==
-X-Received: by 2002:a05:622a:19a9:b0:3f6:b465:8ccc with SMTP id u41-20020a05622a19a900b003f6b4658cccmr3472011qtc.1.1686162139901;
-        Wed, 07 Jun 2023 11:22:19 -0700 (PDT)
-Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
-        by smtp.gmail.com with ESMTPSA id l10-20020a05622a174a00b003ef2c959d1bsm85097qtk.67.2023.06.07.11.22.18
+        d=1e100.net; s=20221208; t=1686162186; x=1688754186;
+        h=content-transfer-encoding:mime-version:organization:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Wlm0G7x30CnhSolBIx64+/Gh1I5IPiqWKD1I4nhgFYs=;
+        b=G7JM7DzUXIYAKk7/plcuFKdDIvaY2UMZLzgdTCNw516JlDKaHfGTPNorKXrgM3hakJ
+         P6YjkooOOfR6nsl7Hp4d7gz1Q01Ddk1tCl8wIBnE+Lb7tbUCMtTh8mpQcJ3qEG2CnBgZ
+         sI3JI/V6K+iQ2eIiE3J7ZPfpJ84YeYwQAeYyono+LkSRLHQngMRCbgZMwR+hlZefrGxH
+         ZA8q8RtozZq/gZjiBO7Sz9gSN8fHc9hc5iCz27W2c30PWLoNAPj7aAeA0sf+awR4zSFq
+         6W9Mi1AELbfazwldCzyG6/H1VpbReYmLK+bDJaZcoRyk4CN423Vtqf+xfi/+xcK9hFzp
+         hieg==
+X-Gm-Message-State: AC+VfDxLNFGATU4MI0RR+jqAQpefL4vPFHLmzwUM0tlLQlF9AKteq1pa
+        op2LXwec3bHIGeJ2jhqXK/vuGJ1pqHyZhU+cUS26nHDLBjldlU/Cgck1CjBMPPaTwylA/2l4W7r
+        BqITzQOVSVkdpqMdI/2dxC01r
+X-Received: by 2002:a5d:938f:0:b0:774:934c:d178 with SMTP id c15-20020a5d938f000000b00774934cd178mr5210278iol.20.1686162186192;
+        Wed, 07 Jun 2023 11:23:06 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5NnizS34TbpUagSIXwDPCP0qM3+NYdzQsgsSosfRmD56iPfdUOhAeyB0ZfQSVww2ZTcFZqDQ==
+X-Received: by 2002:a5d:938f:0:b0:774:934c:d178 with SMTP id c15-20020a5d938f000000b00774934cd178mr5210256iol.20.1686162185789;
+        Wed, 07 Jun 2023 11:23:05 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id l22-20020a6bd116000000b0076c81bf2731sm3995712iob.20.2023.06.07.11.23.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 11:22:19 -0700 (PDT)
-Date:   Wed, 7 Jun 2023 14:22:17 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Yang Shi <shy828301@gmail.com>
-Cc:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Alistair Popple <apopple@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Hugh Dickins <hughd@google.com>,
-        Mike Rapoport <rppt@kernel.org>
-Subject: Re: [PATCH 0/4] mm: Fix pmd_trans_unstable() call sites on retry
-Message-ID: <ZIDK2a6qf1SYF/kW@x1n>
-References: <20230602230552.350731-1-peterx@redhat.com>
- <ZICK3uqTeUxeIlc9@x1n>
- <97b5657d-e09d-b3a9-c09d-eaff9fb7929d@redhat.com>
- <ZICukdhrxcaA74Pp@x1n>
- <CAHbLzkoiSW3jOhFdEU5w567SyxhB05dBfTrJvKg4X59nPURz3Q@mail.gmail.com>
+        Wed, 07 Jun 2023 11:23:05 -0700 (PDT)
+Date:   Wed, 7 Jun 2023 12:23:03 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     ankita@nvidia.com, aniketa@nvidia.com, cjia@nvidia.com,
+        kwankhede@nvidia.com, targupta@nvidia.com, vsethi@nvidia.com,
+        acurrid@nvidia.com, apopple@nvidia.com, jhubbard@nvidia.com,
+        danw@nvidia.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/1] vfio/nvgpu: Add vfio pci variant module for
+ grace hopper
+Message-ID: <20230607122303.5d25c973.alex.williamson@redhat.com>
+In-Reply-To: <ZH/LzyF/uttviRnQ@nvidia.com>
+References: <20230606025320.22647-1-ankita@nvidia.com>
+        <20230606083238.48ea50e9.alex.williamson@redhat.com>
+        <ZH9RfXhbuED2IUgJ@nvidia.com>
+        <20230606110510.0f87952c.alex.williamson@redhat.com>
+        <ZH9p+giEs6bCYfw8@nvidia.com>
+        <20230606121348.670229ff.alex.williamson@redhat.com>
+        <ZH+DdVIyZ6hHCDaK@nvidia.com>
+        <20230606153057.4cbc36a0.alex.williamson@redhat.com>
+        <ZH/LzyF/uttviRnQ@nvidia.com>
+Organization: Red Hat
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAHbLzkoiSW3jOhFdEU5w567SyxhB05dBfTrJvKg4X59nPURz3Q@mail.gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,64 +90,211 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 09:39:44AM -0700, Yang Shi wrote:
-> I don't think this is an important thing. There are plenty of other
-> conditions that could make the accounting inaccurate, for example,
-> isolating page from LRU fails, force charge, etc. And it seems like
-> nobody was bothered by this either.
+On Tue, 6 Jun 2023 21:14:07 -0300
+Jason Gunthorpe <jgg@nvidia.com> wrote:
 
-Yes, I read that a bit more and I agree.  So let me summarize after I read
-Hugh's series just now..
+> On Tue, Jun 06, 2023 at 03:30:57PM -0600, Alex Williamson wrote:
+> > > To emulate PCI, someone, somewhere, has to fix this mismatch up.
+> > > 
+> > > So given choices
+> > >   1) Qemu sees a special NVIDIA thing and fixes it
+> > >   2) Qemu sees a VFIO_PCI_BAR0_REGION with an odd size and fixes it
+> > >   3) Kernel lies and makes a power-2 size and it fixes it
+> > > 
+> > > 2 seems the most forward looking and reusable.  
+> > 
+> > What?!  It's not just a matter of fixing it.  The vfio-pci uAPI should
+> > never return a BAR region that's not compatible as a BAR.   
+> 
+> Why? But OK, if you don't like then then let's call it
+> VFIO_PCI_BAR0_REGION_NOT_POW2. Not seeing that it really helps so
+> much..
+> 
+> > It's incorrectly sized, it does special things with mmap under the
+> > covers, and it doesn't honor the memory enable bit.  
+> 
+> The mmap attributes stuff is not uAPI visible, so it doesn't matter.
+> 
+> Normal vfio-pci devices will SIGBUS on memory disable, this could do
+> that if it was really important (I don't think it is)
+> 
+> So we are left with.. The size is weird. Someone has to provide the
+> fixing to fit that into the PCI config space world because we are
+> emulating a real PCI device.
+> 
+> The fixing is generic, a generic function does not elevate to create a
+> vendor uAPI IMHO.
 
-With the pre-requisite of the new __pte_map_offset() that Hugh proposed
-here:
+Who else is trying to expose a non-power-of-2 region as a BAR right
+now?  We have neither a specification nor a complimentary implementation
+from which to derive generic support.  It's possible that the vendor
+uAPI could become the de facto implementation, at which point we still
+might share the code and generalize the interface, but I have no
+crystal ball to predict that.
 
-[PATCH 04/31] mm/pgtable: allow pte_offset_map[_lock]() to fail
-https://lore.kernel.org/r/8218ffdc-8be-54e5-0a8-83f5542af283@google.com
+GPUs seem to manage to have non-power-of-2 size VRAM while still
+providing BARs that are a power-of-2, ex. 6GB VRAM, 8GB BAR.  Why
+shouldn't the variant driver here extend the BAR region to a power-of-2
+and then we can decide the error handling should accesses exceed the
+implemented range? (as we know, calling remap_pfn_range() as done here
+from a fault handler is troublesome)  If you really want to eliminate
+VMM changes, it would be through this.
 
-We should not need pmd_trans_unstable() anymore as Hugh pointed out, which
-I fully agree.  I think Hugh has covered all the issues that this series
-wanted to address alongside, namely:
+If there's a requirement for providing the actual size, a vfio
+capability on the region or variant driver implementaiton of a device
+specific capability in config space of the device could provide that.
 
-  Patch 1 (mprotect) is covered in:
+> > And then QEMU goes on to ignore this peculiarity when setting up all
+> > the ACPI features, instead relying on the PCI vendor/device ID when
+> > it could be using a device specific region to initiate that support.  
+> 
+> We really should not rely on vendor regions to trigger device specific
+> VMM behaviors for a variant driver. If we want to do this better than
+> vendor/device ID we should have a VFIO ioctl report which variant
+> driver is running the device so userspace can do whatever.
 
-  [PATCH 18/31] mm/mprotect: delete pmd_none_or_clear_bad_unless_trans_huge()
-  https://lore.kernel.org/r/4a834932-9064-9ed7-3cd1-99466f549486@google.com
+Disagree, vendor specific regions or capabilities are the preferred way
+to trigger device specific behavior in QEMU.  Surely we don't really
+want to endorse a solution of exposing a driver name to infer the
+feature set when we have a means to explicitly report features through
+capabilities and device specific regions...
 
-  No way to move spinlock outside, so one -EAGAIN needed which makes sense.
+> > > I definately don't think this is important enough to stick a vendor
+> > > label on it.  
+> > 
+> > How high is the bar for a device specific region?  This certainly looks
+> > and smells like one to me.  
+> 
+> I would say if the thing that is showing up on the VM side is not PCI
+> then maybe a vendor label might make sense.
 
-  Patch 2 (migrate_device) is covered in:
+Well, how do you suppose a device with a non-power-of-2 BAR is PCI
+compliant?  You're asking the VMM to assume what the driver meant by
+providing that non-standard BAR, which sounds vendor specific to me.
 
-  [PATCH 24/31] mm/migrate_device: allow pte_offset_map_lock() to fail
-  https://lore.kernel.org/r/ea51bb69-189c-229b-fc0-9d3e7be5d6b@google.com
+> > > Broadly, we are looking toward a way for the kernel VFIO variant
+> > > driver to provide the majority of the "PCI emulation" and the VMM can
+> > > be general. It is not nice if every PCI emulation type driver needs
+> > > unique modifications to the VMM to support it. We are planning more
+> > > than one of these things already, and there are industry standards
+> > > afoot that will widly open the door here.  
+> > 
+> > Meanwhile every VMM needs a hook to extend non-compliant BAR sizes,
+> > assuming the kernel will fixup mappings beyond the region extent,  
+> 
+> Yes! It is a basically a new generic VFIO ability to allow this size
+> adaptation. If you don't like this version of the uAPI then lets tweak
+> it, but it still needs the same basic operation where the kernel tells
+> userspace that a certain mmap is to be placed in a certain BAR config
+> space.
 
-  By a direct retry, and more code unified so even better.
+"Size adaptation", that sounds like marketing spin for non-compliant.
 
-  Patch 3 () is covered in:
+> > pretend that none of this is a device bug?  It really is a very small
+> > amount of code in QEMU to setup a MemoryRegion based on a device
+> > specific region and register it as a PCI BAR.  The non-standard size is
+> > a factor here when mapping to the VM address space, but I'm a bit
+> > surprised to hear an argument for hacking that in the kernel rather
+> > than userspace.  
+> 
+> Well, I'd rather do it in userspace.
 
-  [PATCH 19/31] mm/mremap: retry if either pte_offset_map_*lock() fails
-  https://lore.kernel.org/r/2d3fbfea-5884-8211-0cc-954afe25ae9c@google.com
+A device specific region is the only way I see to do it in userspace.
+We should never be providing a non-standard size BAR through the vfio
+BAR region indexes.  Is your primary complaint here that you don't want
+that region to be labeled VFIO_PCI_NVGPU_BAR1?  We could certainly
+define VFIO_PCI_VENDOR_BAR0..5 where QEMU knows that it's supposed to
+relax expectations and mangle the region into a compliant BAR, but now
+you're adding complexity that may never be used elsewhere.
 
-  Instead of WARN_ON_ONCE(), it got dropped which looks all good, too.
+> > > The only special bit is emulating the weird Grace FW ACPI stuff.  
+> > 
+> > And a device specific region seems like the ideal jumping off point to
+> > create that memory-only node for this thing.  
+> 
+> It really has nothing to do with the regions, it is something that is
+> needed if this variant driver is being used at all. The vPCI device
+> will work without the ACPI, but the Linux drivers won't like it.
 
-  Most of patch 4's changes are done in:
+OTOH if the ACPI work is based on device specific regions, the list of
+device IDs in QEMU goes away and support for a new device requires no
+VMM changes.
 
-  [PATCH 09/31] mm/pagewalkers: ACTION_AGAIN if pte_offset_map_lock() fails
-  https://lore.kernel.org/r/6265ac58-6018-a8c6-cf38-69cba698471@google.com
+> > > So lets find a way to give these things appropriate generic names at
+> > > the ABI level please..  
+> > 
+> > What is the generic feature that "these things" implement?  
+> 
+> As far as I can see, non-power-2 size is the thing the VMM needs to
+> worry about.
+> 
+> And maybe a generic way to detect which variant driver is running.
 
-  There're some different handling on memcg changes, where in Hugh's
-  series it was put separately here:
+Technically a capability on the device info would allow for this, but I
+think it's the wrong approach.  Either expose a compliant BAR region
+and do whatever you want with device IDs to hook in the ACPI changes or
+make the VMM handle the emulation of a device specific region as a BAR,
+at which point not basing the ACPI hooks on those regions would be
+redundant and require more maintenance overhead.
 
-  [PATCH 17/31] mm/various: give up if pte_offset_map[_lock]() fails
-  https://lore.kernel.org/r/c299eba-4e17-c645-1115-ccd1fd9956bd@google.com
+> > There's a lot of vendor specific things going on here.  Not only is all
+> > that "weird Grace FW ACPI stuff" based on this region, but also if we
+> > are exposing it as a BAR, which BAR index(s) for a given device.  
+> 
+> The kernel decides the BAR indexes, not the vmm, because broadly we
+> want to have the kernel in charge of making the synthetic config
+> space.
+> 
+> The ACPI is not related to the region. It is just creating many empty
+> NUMA nodes. They should have no CPUs and no memory. The patch is
+> trying to make the insertion of the ACPI automatic. Keying it off a
+> region is not right for the purpose.
 
-  After double check, I agree with Yang's comment and Hugh's approach,
-  that no retry is needed for memcg.
+Why aren't the different NUMA nodes a machine type option?  If we start
+having each device mangle the machine in incompatible ways it seems
+like we're going to get conflicts not only with other devices, but also
+user specified NUMA configurations.  I'm struggling with whether I can
+set some bits in the root port devcap2 register[1] based on device
+capabilities and here this is fundamentally manipulating the VM
+topology.
 
-Let's ignore this series, not needed anymore.
+[1]https://lore.kernel.org/all/20230526231558.1660396-1-alex.williamson@redhat.com/
 
-Thanks,
+> > If "the industry" does come out with a spec for "these things",
+> > couldn't QEMU optionally plug a device specific region into the
+> > implementation of that spec, potentially along with some commonly
+> > defined region to make this device appear to honor that new spec?
+> > Versus with the in-kernel variant driver masquerading the BAR, we're
+> > stuck with what the kernel implements.  Would future hardware
+> > implementing to this new spec require a variant driver or would we
+> > extend vfio-pci to support them with extended regions and expect the
+> > VMM to compose them appropriately?    
+> 
+> Look at Intel's SIOV document for some idea, I expect devices like
+> that will be a VFIO driver (not a variant PCI driver) that largely
+> exposes the vfio-pci uAPI with the purpose of creating a vPCI device
+> in the VM.
+> 
+> There is no real PCI function under this so all the config space and
+> so on will be synthetic. It is convenient if the kernel driver does
+> this so that it works on all the VMMs generically.
+> 
+> Non-power-2 BAR is desirable in this world because address space is
+> precious at high scale and power2 scaling gets wasteful.
+> 
+> Further, I would expect there will be a generic CXL driver and generic
+> CXL related ACPI someday.
+> 
+> This device is sort of in the middle where it does have a real PCI
+> function but it is also synthesizing some config space. We have
+> another VFIO driver in progress that is also doing some modification
+> of the config space..
 
--- 
-Peter Xu
+Thanks for the background, but PCI is still a standard that requires
+power-of-2 BAR sizes, so either the in-kernel variant driver needs to
+round up and handle the empty space or the VMM does, and the VMM should
+specifically enable this for new region indexes and be allowed to
+assume PCI compliant BARs through the existing region indexes.  Thanks,
+
+Alex
 
