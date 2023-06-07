@@ -2,96 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DBE47268DC
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 20:35:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D0AE7268E2
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 20:35:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232564AbjFGSfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 14:35:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50126 "EHLO
+        id S232587AbjFGSfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 14:35:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231561AbjFGSfL (ORCPT
+        with ESMTP id S232584AbjFGSfU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 14:35:11 -0400
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 587051984;
-        Wed,  7 Jun 2023 11:35:10 -0700 (PDT)
-Received: by mail-il1-x12b.google.com with SMTP id e9e14a558f8ab-33b921e4e8fso5448765ab.3;
-        Wed, 07 Jun 2023 11:35:10 -0700 (PDT)
+        Wed, 7 Jun 2023 14:35:20 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C06BF1BF0
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 11:35:15 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-97460240863so1041296366b.0
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 11:35:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686162909; x=1688754909;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=linaro.org; s=google; t=1686162914; x=1688754914;
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=dJK4RHY5v+HRBfOjP3aLuKokpzUyOO/60QMxyFfMzQQ=;
-        b=LvW2sb7IoA33ETDQzUYm65E+Pt8ldwDzeN4s4Yvl8PJt0aQFSegN+FBFdnwnBoZvzd
-         AQHPeRzcppNVBITRKGgE0LLVJbwRsZltXRnI0KRJq1tVMiWhCx9pJsYeZX+FcHckPrgG
-         oCPphDP28tJ6Zu2GyDLsz91iONCbZ4O8pgg5sRmbdclJ+upg4M0FgchwjG8v3ayABicG
-         PzwpXm5AB+KY8fTlvVH1T+BLTWd9ke3USMT2ihqP90X1ubec2vXUu42dHd/IrEMHfSCB
-         ocyYNQ+CVkFWxW9iYREonpkwY7yvt3w1qswSz90PgK+ehSe7lImwotjCxxK8mIxJXe6p
-         eGiA==
+        bh=5oRVbakJKhxqzwhoXotbCqDyKWlJ4PhQpqo/n0s7L7k=;
+        b=SaHwxSTHyCK6ZLqMnQ2tRMbD/FXv8Q0MPpXiMqqMCSpcpygJNIx7kzZV5OPWY07Vjy
+         FNfE+d7sfzmTr7HFJ2d17pqik93wj5/uGHjMSMjx3IqY4yEYAEplaeUL6lxdldBJsmGV
+         3lOPMHbN3vb2qbIqkWHxuQku2kAOioy9Oxm6gmP/Jn5i+aquF5WnSS1P/pWvX5E247mM
+         UmFHLaAxaF7MoNbucuTv6if4W5N8Omu72Ktp9e9nqxwQfzic+T25VD0lr153Zc1J5rI+
+         FF/pLCcrHwXUIP4J4NszE6j9SV6nRjo4dPmh7PmGqz2uW2n4ZieJ8ejyaQl76gD5FgT/
+         xA8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686162909; x=1688754909;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=1e100.net; s=20221208; t=1686162914; x=1688754914;
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dJK4RHY5v+HRBfOjP3aLuKokpzUyOO/60QMxyFfMzQQ=;
-        b=fLYcjkoYJ5KvgnU08Mx8zvNwHtIzMuvaj91mmGd98mY+HrU2LZak6cZHREJfncSFfL
-         UDnAqvksXSAydK16UKVZFZY8Pik+m2s1WrITVoPeq0MI9ebnLnp2Q6qwKA820uE1ztZ8
-         sPeWT0YjMlPSjVDGioLA36I6jwiXPzj+4l5bqc+1CS82tArpp+9Sbj7vXEME8UTITl6K
-         UxyF4vlQ3kzKHaGyLGqu1q0jt4V8h088RkJJSIBHRV7s8aE7POWOefugIOT9bOK8WyuI
-         vqYoBri6Z7b8HIYIRUsy5NpHQfAI4dOdSVkRk3td9YfKMTuF1AQ0kKA9qdTGcBH4Z3Hv
-         fpWw==
-X-Gm-Message-State: AC+VfDy4lZfkDA1BQFxd2fJSwmBQ5IhZhM2nPhvsODZWLHpjaAkJx2DK
-        eEOnYVYZRNQ1i9jNzDqYtJ0=
-X-Google-Smtp-Source: ACHHUZ6Y5bg6tZwFIhadKRwAySjSh86iXnlFfuFpwLQpE0nLjCDet27fnvjRicBgXFSYid7JkdC8zg==
-X-Received: by 2002:a92:d08c:0:b0:33b:9f29:8928 with SMTP id h12-20020a92d08c000000b0033b9f298928mr5423547ilh.8.1686162909569;
-        Wed, 07 Jun 2023 11:35:09 -0700 (PDT)
-Received: from ?IPV6:2601:282:800:7ed0:6ca6:e764:8524:ec9f? ([2601:282:800:7ed0:6ca6:e764:8524:ec9f])
-        by smtp.googlemail.com with ESMTPSA id n7-20020a02cc07000000b0041cce10544dsm3653480jap.123.2023.06.07.11.35.08
+        bh=5oRVbakJKhxqzwhoXotbCqDyKWlJ4PhQpqo/n0s7L7k=;
+        b=Pbc5b73GJd16xXEgYWXLT6JD1Dsl9qD3R8LW/kSzB+hHY1RaheCAlc5K+0ujzGFu2Y
+         t+ZP3WJMu6yATubUNxI3XVOjjh8nAAiCfv2vBcxlvkS9OEwbTs6pChOo6KVrbAYAg/+r
+         5Wvy+oT5upq4gC+NKwU8c2Rx4iScrJH14v72lwYbuo1sS/B/anV7oUwUwU22Qy+Z0JVU
+         dMh9LfF0nMivVsIWoCVP5rknSiDDnOIhRpiFLVdgq0dZqVS3+4BwLNMCzhwg4wwVBSgm
+         p3N6+dl3iLtBC0OYkWUf1pSDdpnM3KDRPMfrg+F5+EVm2o8Im4EOmWk2S7NCZDhYQ0rH
+         GuUg==
+X-Gm-Message-State: AC+VfDx+8K1Mq3gaJWd9A5/qS6EelpzrG6vFe6g6xDr27D1l9SNWbPzM
+        UbmnnG9Kl4iB34lOPw2gMhMXEg==
+X-Google-Smtp-Source: ACHHUZ6kwcM0h6fzmYkLv2AwJVUv2wzM4110yS6KAONK+nyu/412lkMcwBU4G+no1drK2aF7E/JuPw==
+X-Received: by 2002:a17:907:9444:b0:973:d48a:bc20 with SMTP id dl4-20020a170907944400b00973d48abc20mr6138655ejc.19.1686162914007;
+        Wed, 07 Jun 2023 11:35:14 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id bq4-20020a170906d0c400b0096f7105b3a6sm7155657ejb.189.2023.06.07.11.35.10
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 11:35:08 -0700 (PDT)
-Message-ID: <379c5dfa-e7e7-3ef6-5e2e-3eb1113843d8@gmail.com>
-Date:   Wed, 7 Jun 2023 12:35:07 -0600
+        Wed, 07 Jun 2023 11:35:13 -0700 (PDT)
+Message-ID: <49258bcf-da13-78a9-8ea6-4fc7bd9a4b1d@linaro.org>
+Date:   Wed, 7 Jun 2023 20:35:09 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.2
-Subject: Re: [PATCH net 3/3] selftests: net: fcnal-test: check if FIPS mode is
- enabled
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 7/9] arm64: dts: qcom: ipq5332: Add USB related nodes
 Content-Language: en-US
-To:     Magali Lemes <magali.lemes@canonical.com>, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        shuah@kernel.org
-Cc:     andrei.gherzan@canonical.com, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230607174302.19542-1-magali.lemes@canonical.com>
- <20230607174302.19542-4-magali.lemes@canonical.com>
-From:   David Ahern <dsahern@gmail.com>
-In-Reply-To: <20230607174302.19542-4-magali.lemes@canonical.com>
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, vkoul@kernel.org,
+        kishon@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        gregkh@linuxfoundation.org, catalin.marinas@arm.com,
+        will@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        p.zabel@pengutronix.de, arnd@arndb.de, geert+renesas@glider.be,
+        neil.armstrong@linaro.org, nfraprado@collabora.com,
+        broonie@kernel.org, rafal@milecki.pl, quic_srichara@quicinc.com,
+        quic_varada@quicinc.org, quic_wcheng@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-clk@vger.kernel.org
+References: <cover.1686126439.git.quic_varada@quicinc.com>
+ <1b48e737aa14f5b5539cbf04d473182121d5b1ad.1686126439.git.quic_varada@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1b48e737aa14f5b5539cbf04d473182121d5b1ad.1686126439.git.quic_varada@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/7/23 11:43 AM, Magali Lemes wrote:
-> There are some MD5 tests which fail when the kernel is in FIPS mode,
-> since MD5 is not FIPS compliant. Add a check and only run those tests
-> if FIPS mode is not enabled.
+On 07/06/2023 12:56, Varadarajan Narayanan wrote:
+> Add USB phy and controller nodes
 > 
-> Fixes: f0bee1ebb5594 ("fcnal-test: Add TCP MD5 tests")
-> Fixes: 5cad8bce26e01 ("fcnal-test: Add TCP MD5 tests for VRF")
-> Signed-off-by: Magali Lemes <magali.lemes@canonical.com>
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
 > ---
->  tools/testing/selftests/net/fcnal-test.sh | 27 ++++++++++++++++-------
->  1 file changed, 19 insertions(+), 8 deletions(-)
+>  arch/arm64/boot/dts/qcom/ipq5332.dtsi | 55 +++++++++++++++++++++++++++++++++++
+>  1 file changed, 55 insertions(+)
 > 
+> diff --git a/arch/arm64/boot/dts/qcom/ipq5332.dtsi b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+> index c2d6cc65..3183357 100644
+> --- a/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+> @@ -383,6 +383,61 @@
+>  				status = "disabled";
+>  			};
+>  		};
+> +
+> +		usb_0_m31phy: hs_m31phy@7b000 {
 
-Reviewed-by: David Ahern <dsahern@kernel.org>
+Node names should be generic. See also explanation and list of examples
+in DT specification:
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
 
+> +			compatible = "qcom,ipq5332-m31-usb-hsphy";
+> +			reg = <0x0007b000 0x12C>,
+> +			      <0x08af8800 0x400>;
+
+Lowercase hex only.
+
+> +			reg-names = "m31usb_phy_base",
+> +				    "qscratch_base";
+> +			phy_type= "utmi";
+> +
+> +			resets = <&gcc GCC_QUSB2_0_PHY_BCR>;
+> +			reset-names = "usb2_phy_reset";
+> +
+> +			status = "okay";
+
+It's by default. Drop.
+
+> +		};
+> +
+> +		usb2: usb2@8a00000 {
+
+It does not look like you tested the DTS against bindings. Please run
+`make dtbs_check` (see
+Documentation/devicetree/bindings/writing-schema.rst for instructions).
+
+Node names should be generic. See also explanation and list of examples
+in DT specification:
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+
+> +			compatible = "qcom,ipq5332-dwc3", "qcom,dwc3";
+> +			#address-cells = <1>;
+> +			#size-cells = <1>;
+> +			ranges;
+> +
+> +			reg = <0x08af8800 0x100>;
+
+reg is always after compatible. Ranges is third. Then you will spot that
+address is wrong.
+
+> +
+> +			clocks = <&gcc GCC_USB0_MASTER_CLK>,
+> +				<&gcc GCC_SNOC_USB_CLK>,
+> +				<&gcc GCC_USB0_SLEEP_CLK>,
+> +				<&gcc GCC_USB0_MOCK_UTMI_CLK>;
+
+Fix alignment.
+
+> +
+> +			clock-names = "core",
+> +				"iface",
+> +				"sleep",
+> +				"mock_utmi";
+
+Fix alignment.
+
+> +
+> +			interrupts-extended = <&intc GIC_SPI 134 IRQ_TYPE_LEVEL_HIGH>;
+> +			interrupt-names = "pwr_event";
+> +
+
+
+Best regards,
+Krzysztof
 
