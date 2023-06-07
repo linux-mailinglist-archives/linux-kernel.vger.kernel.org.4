@@ -2,157 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45F667255B2
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 09:29:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 431E77255B4
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 09:30:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239129AbjFGH3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 03:29:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53860 "EHLO
+        id S239060AbjFGHa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 03:30:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239145AbjFGH2P (ORCPT
+        with ESMTP id S239273AbjFGH3m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 03:28:15 -0400
-Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FB3E30DE
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 00:25:31 -0700 (PDT)
-Received: by mail-vs1-xe2b.google.com with SMTP id ada2fe7eead31-43b57e0a76bso660184137.0
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 00:25:31 -0700 (PDT)
+        Wed, 7 Jun 2023 03:29:42 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 005F83596
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 00:26:14 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-5169f614977so366224a12.3
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 00:26:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686122730; x=1688714730;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZbZsMTtgivDoJEuH3IaNChHHrvk2Q0PtcwAfQDF1PA8=;
-        b=P+xL9+U37Z+N4Mg9/jK1h93OPPuF7gNd5e682jUXmulyGnYN7E2Lt1E0pV3vImjW6i
-         E+JGjPeeSkHP8lHcNLCr8FpcXhdFn63NHO3RRD9Uw58Rm8TX3nWeC0ypMRI7EQkHmcKg
-         kskP06M+dRD2l41gqVSq+ToUSy/qs/4jcme5Kw6bZbXm4ViBSiUP7+mcI667Q7ddZ3GF
-         h8Www7jgcJBNIIFrnpj8wOAzwHTqfKbAT+KMDzQjHnmfEzFOHVwF/QwwEjPzhHBoskeW
-         sshaKLWse0H+qPYbgIuRvS35+lpdvSzaAvxWmeStc+QJFjSiUQE8AViznEohsbl1zNBc
-         Tlxw==
+        d=linaro.org; s=google; t=1686122773; x=1688714773;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AHNOb3Vak93SE79cjJtlUcImdmBQ6YeOYklhRG0qb4M=;
+        b=YNNQbQZQPVdSzi20TxjAyRhsARcaBBpmpqvxoW15cjkG9qq/R+1RdWi++Z4I0q1RW/
+         GuoElk2FOp7isnbZVtUv7gf67LAQQHodGe2aCu8Kb9Q2mAz8Mdl66eX4rNmA/CLg1R5i
+         j2BbfjMBXFC2Ml4Q0crymEKqBcJZ5e/sEkyGBNXJZ8gG4Z08JvTthjsxyvZ6NIpkYlav
+         tJ3ahH3JuWr+wBtmp6ze2+gBFCMFtUHgUSVpYqCClUlLgcxgZoccM7sTKlLeLK6rJy0w
+         6cgHrK1GwuyfNvvHcDYBgGwEAPDzyBfb5a0msjkqQdEavjjho5b8SOI6I3OvXJIO/mV4
+         dW3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686122730; x=1688714730;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZbZsMTtgivDoJEuH3IaNChHHrvk2Q0PtcwAfQDF1PA8=;
-        b=hv7wCGB1BEF8c2wQWyFKYivLHiOtONx2udZgRdE2oqI0Pf94uSjIjeth4MG2SVBSkP
-         lIjtzV6Pzk9ZYPomxwilAQgIx1xzdk9GkH1iADQvUmFW/YRTkKZD1PPMSYPdB+dH6T6b
-         uG52NhE2kb/Z5DsjYF4pPdu+r/jknLlZ9hjz7keHjmvQ7jFaJmxL8VTpSZWeKlcGp7u/
-         kwvCW9+Gw2+G1kqtYr5rGArlwZ98apokCnkZjs4QxQV7rbSn1OQ6f2yLyC+e9PfojMZa
-         NcBsS3l5Ph+HrmvwrtcYEGUaZPRhxAmNy0lRka4zf+BjvWwih4BNkUia6Fa9wyPFm2+J
-         NjOg==
-X-Gm-Message-State: AC+VfDzl/I2ay1d0eZ5rizjG+i8tJuRLqp/YTJcFssTZIEJ1hDyJozkv
-        yJLxeuz+ZfRmf7buoHTIXv47tB88HiAH76cjU5VuXQ==
-X-Google-Smtp-Source: ACHHUZ7lv+GHV6l5ITHPctjVPOJkZIdheJ4gOyp3YHUlRvjuZo0mxUxrjHyb3hadANufXU4xhlBUxp357jZhrj1AJB0=
-X-Received: by 2002:a67:bd09:0:b0:426:b2d8:17e9 with SMTP id
- y9-20020a67bd09000000b00426b2d817e9mr634816vsq.20.1686122730438; Wed, 07 Jun
- 2023 00:25:30 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686122773; x=1688714773;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AHNOb3Vak93SE79cjJtlUcImdmBQ6YeOYklhRG0qb4M=;
+        b=bvE1NxiOs61SecGwiA5cZzkd6iksFGEPKswMcoFjfjP/QB1yIP5gfs4fGT1v87vBEY
+         7Dl199r1bSwDyZpqqDQeZJkbeTDgrDbg0Zjv2rPb+8I2GERkeg5yySPDYRG0NdYzG+LS
+         j2syjGdu4kOzXeoYdRubzUi75m75b+PK5yxGXp1gHppLx5GTYkUUb2CyXeBZvrkoj/2t
+         rtGCbfMUgYxKBUNCajJ3UDpvhD0GUWuP71LyQ/AfirR+w5yvpl7IdWj64WUp+ryZokyc
+         6k+o6SuA4RPIIAewSSWdOWOIv/dMIX4qO1HGH8Ovs+FakEbiRLhWAxW3V7Jk9YtV0Vqt
+         gvKw==
+X-Gm-Message-State: AC+VfDw2ojMPBLxxL9n8vjTQx7xviKd0bu9R01Ed96DdT0x2R40K/xzQ
+        FA2HwmjUwuXwvGcJtI7TWeMOHA==
+X-Google-Smtp-Source: ACHHUZ7xto1maHENeeGyjFEyLu5CAnG9dDPtJTkn0FmqIdA0AISmTQj25UoPyUB1ADeQrSC57nno+A==
+X-Received: by 2002:a05:6402:337:b0:514:a5fe:b304 with SMTP id q23-20020a056402033700b00514a5feb304mr4183702edw.38.1686122773327;
+        Wed, 07 Jun 2023 00:26:13 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id z15-20020aa7d40f000000b00514b2a9ce60sm5814096edq.81.2023.06.07.00.26.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Jun 2023 00:26:12 -0700 (PDT)
+Message-ID: <85713602-dfe1-c90b-174b-3678d91369aa@linaro.org>
+Date:   Wed, 7 Jun 2023 09:26:10 +0200
 MIME-Version: 1.0
-References: <20230526010748.1222-1-masahisa.kojima@linaro.org>
- <20230526010748.1222-4-masahisa.kojima@linaro.org> <0d3e0370-eb76-010f-3d30-9acc9b59645c@siemens.com>
- <CAFA6WYPnWJNPvhT2JDkO-qXRUaJoxBGZEvSfhxcRynV7=VSdQA@mail.gmail.com>
- <CAMj1kXFM45PCTU--+CCed6Cq_N5XqDG6tTu6fnQTSCpW2BWA5A@mail.gmail.com>
- <4ff09002-e871-38b9-43ec-227a64bac731@siemens.com> <CAC_iWjJJ5E9Q1or5yTiDynzv_WAYH-g+N24aRdu9rvcsbWqnrg@mail.gmail.com>
-In-Reply-To: <CAC_iWjJJ5E9Q1or5yTiDynzv_WAYH-g+N24aRdu9rvcsbWqnrg@mail.gmail.com>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Wed, 7 Jun 2023 12:55:19 +0530
-Message-ID: <CAFA6WYNFYB1LiOFB_iwTsdD5PmnDdSbtDSH2J4FVFPx3uik8rQ@mail.gmail.com>
-Subject: Re: [PATCH v5 3/3] efi: Add tee-based EFI variable driver
-To:     Ilias Apalodimas <ilias.apalodimas@linaro.org>
-Cc:     Jan Kiszka <jan.kiszka@siemens.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Masahisa Kojima <masahisa.kojima@linaro.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-efi@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        "Su, Bao Cheng (RC-CN DF FA R&D)" <baocheng.su@siemens.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v1 1/6] dt-bindings: display/mediatek: mt8188: Add
+ documentations for VDOSYS1
+Content-Language: en-US
+To:     Hsiao Chien Sung <shawn.sung@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Singo Chang <singo.chang@mediatek.com>,
+        Nancy Lin <nancy.lin@mediatek.com>,
+        Jason-JH Lin <jason-jh.lin@mediatek.com>,
+        Fei Shao <fshao@google.com>
+References: <20230607061121.6732-1-shawn.sung@mediatek.com>
+ <20230607061121.6732-2-shawn.sung@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230607061121.6732-2-shawn.sung@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ilias,
+On 07/06/2023 08:11, Hsiao Chien Sung wrote:
+> Add device tree documentations for MT8188 VDOSYS1.
 
-On Wed, 7 Jun 2023 at 12:05, Ilias Apalodimas
-<ilias.apalodimas@linaro.org> wrote:
->
-> Hi Jan,
->
-> [...]
->
-> > >>>>
-> > > ...
-> > >>>
-> > >>> I think we have a probe ordering issue with this driver:
-> > >>> efivarfs_fill_super() may be called before the TEE bus was probed, thus
-> > >>> with the default efivar ops still registered. And that means
-> > >>> efivar_supports_writes() will return false, and the fs declares itself
-> > >>> as readonly. I've seen systemd mounting it r/o initialling, and you need
-> > >>> to remount the fs to enable writability.
-> > >>>
-> > >>> Is there anything that could be done to re-order things reliably, probe
-> > >>> the tee bus earlier etc.?
-> > >>
-> > >> This driver has a dependency on user-space daemon: tee-supplicant to
-> > >> be running for RPMB access. So once you start that daemon the
-> > >> corresponding device will be enumerated on the TEE bus and this driver
-> > >> probe will be invoked. So I would suggest you to load this daemon very
-> > >> early in the boot process or better to make it a part of initramfs.
-> > >>
-> > >
-> > > That is not the point, really.
-> > >
-> > > If this dependency exists, the code should be aware of that, and made
-> > > to work correctly in spite of it. Requiring a module to be part of
-> > > initramfs is not a reasonable fix.
-> >
-> > In fact, I've tested a non-modularized build as well, just to exclude
-> > that issue. The daemon dependency is more likely the problem here.
-> >
-> > >
-> > > IIUC, this also means that the efivar ops are updated while there is
-> > > already a client. This seems less than ideal as well
->
-> As Sumit pointed out, the 'device' won't be available from OP-TEE
-> until the supplicant is up and running and as a result, the module
-> _probe() function won't run.  Unfortunately, this isn't something we
-> can avoid since the supplicant is responsible for the RPMB writes.
-> The only thing I can think of is moving parts of the supplicant to the
-> kernel and wiring up the RPC calls for reading/writing data to the
-> eMMC subsystem.  There was another discussion here [0] requesting the
-> same thing for different reasons. But unless I am missing something
-> this won't solve the problem completely either.  You still have a
-> timing dependency of "when did the RT callbacks change" -- "when was
-> my efivarfs mounted".
+It does not look like you tested the bindings, at least after quick
+look. Please run `make dt_binding_check` (see
+Documentation/devicetree/bindings/writing-schema.rst for instructions).
+Maybe you need to update your dtschema and yamllint.
 
-With the RPMB writes wired through the kernel [1], the only dependency
-left is when do you load the tee-stmm-efi driver to have real EFI
-runtime variables support. IMO, tee-stmm-efi driver should be built-in
-to support systems without initramfs. The distro installers may choose
-to bundle it in initramfs. Do you still see a timing dependency with
-this approach?
+> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,padding.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,padding.yaml
+> new file mode 100644
+> index 000000000000..8a9e74cbf6dc
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,padding.yaml
+> @@ -0,0 +1,80 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/display/mediatek/mediatek,padding.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MediaTek PADDING
+> +
+> +maintainers:
+> +  - Chun-Kuang Hu <chunkuang.hu@kernel.org>
+> +  - Philipp Zabel <p.zabel@pengutronix.de>
+> +
+> +description:
+> +  MediaTek PADDING provides ability to VDOSYS1 to fill pixels to
+> +  width and height of a layer with a specified color.
+> +  Since MIXER in VDOSYS1 requires the width of a layer to be 2-pixel-align, or
+> +  4-pixel-align when ETHDR is enabled, we need PADDING to deal with odd width.
+> +  Please notice that even if the PADDING is in bypass mode,
+> +  settings in the registers must be cleared to 0, otherwise
+> +  undeinfed behaviors could happen.
 
-[1] Of Course here we need the eMMC and TEE/OPTEE drivers to be built-in too.
+Typo, undefined
 
--Sumit
+> +
 
->
-> Thanks
-> /Ilias
-> >
-> > Jan
-> >
-> > --
-> > Siemens AG, Technology
-> > Competence Center Embedded Linux
-> >
+
+
+> +required:
+> +  - compatible
+> +  - reg
+> +  - power-domains
+> +  - clocks
+> +  - mediatek,gce-client-reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/clock/mt8188-clk.h>
+> +    #include <dt-bindings/power/mt8188-power.h>
+> +    #include <dt-bindings/gce/mt8188-gce.h>
+> +    #include <dt-bindings/memory/mt8188-memory-port.h>
+> +
+> +    soc {
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +
+> +        vdo1_padding0: vdo1_padding0@1c11d000 {
+
+No underscores in node names.
+
+Node names should be generic. See also explanation and list of examples
+in DT specification:
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+
+> +            compatible = "mediatek,mt8188-vdo1-padding";
+> +            reg = <0 0x1c11d000 0 0x1000>;
+> +            clocks = <&vdosys1 CLK_VDO1_PADDING0>;
+> +            power-domains = <&spm MT8188_POWER_DOMAIN_VDOSYS1>;
+> +            mediatek,gce-client-reg =
+> +                <&gce0 SUBSYS_1c11XXXX 0xd000 0x1000>;
+
+Wrong wrapping. It's one line. Properties should not be wrapped after '='.
+
+
+Best regards,
+Krzysztof
+
