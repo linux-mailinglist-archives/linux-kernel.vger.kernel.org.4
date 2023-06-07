@@ -2,140 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38FC8726529
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 17:56:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A704726527
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 17:55:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241029AbjFGP4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 11:56:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57706 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241534AbjFGPzx (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S241532AbjFGPzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Wed, 7 Jun 2023 11:55:53 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF7351FEE
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 08:55:40 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id ca18e2360f4ac-77a62a84855so60837039f.1
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 08:55:40 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57668 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235761AbjFGPzv (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 7 Jun 2023 11:55:51 -0400
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C32EA1FE3;
+        Wed,  7 Jun 2023 08:55:38 -0700 (PDT)
+Received: by mail-oi1-x22f.google.com with SMTP id 5614622812f47-38ede2e0e69so4761340b6e.2;
+        Wed, 07 Jun 2023 08:55:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686153339; x=1688745339;
+        d=gmail.com; s=20221208; t=1686153338; x=1688745338;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=shFCn1taKYYR4uXtcODKRu6RVrXZ9N+/Qi7dvctYzAc=;
-        b=IF++AEQA5yaSxAq98V3Vt7vWEnQdOIufTloie6dqjCCg+N81d3AXkkUYAL30urhNO1
-         Xd6sHbgTQEoRTWYkXFLU+yUb0D9s6H5cHn8neoYkuGYfHu8c0aHFcpGD6cIFkuhalVvS
-         uULnRxkVGVsarFTapMMKIHawMzQa08itXOYpo=
+        bh=RO0aJJovSF9bV+DSlg1gHqU0aawQtEHtPHuC3Z3Ckl4=;
+        b=AhVqhjUey60mWsf9lUma21vKf23qUGRrfdEixj1tR2ZS+pOWcS8XHHtUHcwrw5Cnb1
+         MwdaAG1H3s+mOH7ZUG61xLJ38kkS5PvciGnbqHZ+RVgmhbmbRDjt+sGsB6EsTvuRBLeR
+         w+8mFRyyYp8wBYe3Qnn6qzrNGt4I1DzhN3ueomwFvzvf4/zsZTqXVO32FAmsz6Um4Rqv
+         7mtiEtQh1sP/gvrFMS3xyPeDP3IabjEPjcIU9wdsyw8QGE+HZhvY0G5kOQSX/f6Oe4nD
+         LgOZtUfMpQ2aBvHvnmTGZ+hujPUM4wiG1HgvEtA6gcYI82kQzpk2U1LF73vzpPzE8BQZ
+         IZVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686153339; x=1688745339;
+        d=1e100.net; s=20221208; t=1686153338; x=1688745338;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=shFCn1taKYYR4uXtcODKRu6RVrXZ9N+/Qi7dvctYzAc=;
-        b=MTSv8bnu+DiYa33Z7S1Vs9wy791yvzd5kxcpsrlWxiKPMlsq2iHzOZPCmS01p8nr7M
-         AYXte5zzRlwY6teu7O9EaBXjxKY3Dt3NjzYs+iZUdSG0OYKHNq6vGYVbsPpdp/mmplmk
-         ZF80KHlIZO+n67E3m/SJ9LC4p2Mwal+9GHvHWaK8ikBekfvBlQOiI7gCUWAAb6O93XJu
-         O4LlSlzSTgQE8fdXtKj8Hte282LtQvSzy62akxx5QvQECXDWi1SvdeqgdrOWHZ5SjVGb
-         7OjeufJwpZ5WtA23Hyazf8JOy/vC0KJYmRPYYNK56mxxdo+BSR2w+siBhRMKF8hVZvA3
-         Q+Bw==
-X-Gm-Message-State: AC+VfDxbNaSwTyxHkvAW9XoMwvTCkhB7l/ZfEfSeb1L/0MaryMMqjdei
-        3rxH3Q8cwuODmK55d7IOs33Od2HJ7/xoPc3FqvA=
-X-Google-Smtp-Source: ACHHUZ6QE3Dyo5DHR7TUUWzq+jPNHBWnt1IdOw5FcDikLL6RG3MclZdEO0lxtHt1nN1Nx1X7hvGSIA==
-X-Received: by 2002:a5e:c80d:0:b0:774:91f6:9530 with SMTP id y13-20020a5ec80d000000b0077491f69530mr4675550iol.9.1686153338798;
-        Wed, 07 Jun 2023 08:55:38 -0700 (PDT)
-Received: from mail-il1-f175.google.com (mail-il1-f175.google.com. [209.85.166.175])
-        by smtp.gmail.com with ESMTPSA id u28-20020a02cbdc000000b004065707eb2bsm544570jaq.42.2023.06.07.08.55.37
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 08:55:38 -0700 (PDT)
-Received: by mail-il1-f175.google.com with SMTP id e9e14a558f8ab-33bf12b5fb5so123725ab.1
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 08:55:37 -0700 (PDT)
-X-Received: by 2002:a92:cda1:0:b0:33d:75d4:c83a with SMTP id
- g1-20020a92cda1000000b0033d75d4c83amr254713ild.16.1686153337336; Wed, 07 Jun
+        bh=RO0aJJovSF9bV+DSlg1gHqU0aawQtEHtPHuC3Z3Ckl4=;
+        b=IDZ0PSRALn9kdgpMFrEmmQ+65bhi5FoYZQ0yCrsiAw3UeB60/nKYRPwCgXpzflbM8Y
+         Cf0ldrSrNP0PARPOW+BfoA7lw4470203x15pFcar32rjD6clJtkTaarWqtOPHWGU/9Ax
+         e3arhgq/yCMHF5H4Y21XoOKcPgPO/gNLYv6bYAKsifPpLUb0O9N53+YMA1lQdOuW6nB/
+         3lA3k/XC6EqJx13ysrJWRq8qCGIGIf6rKtl+ZMnfnH67shgzbobGgcROVIP8l12rJCdO
+         42M9PTOgogwwsuOjbpVtYqNCxgFHsVPW0ZMQoPGGw3M/KcOU9AXrZN/4VEhNfFf+L3kG
+         Bu6g==
+X-Gm-Message-State: AC+VfDysflIwC6avI9+Xs80Ea/kJb6f7u86hhHFx8ikvNlSRHk6tb4cP
+        LQgMMaQdKe37VgoPYL/0iGHPOIO4NaCh3F4zTSI=
+X-Google-Smtp-Source: ACHHUZ6pz5aofLeiOdDelx6VrzDDlzr3Qt5LB9eY9BmZAU5x8a4xa5VHCo/bNeY56xEaC1WaI4YME1hiyU4Q088X60g=
+X-Received: by 2002:aca:1908:0:b0:398:30af:53b8 with SMTP id
+ l8-20020aca1908000000b0039830af53b8mr2841363oii.6.1686153337871; Wed, 07 Jun
  2023 08:55:37 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230524114233.RESEND.v4.2.I424e840ae6de3cdbd67394cf4efd24534f6434ba@changeid>
-In-Reply-To: <20230524114233.RESEND.v4.2.I424e840ae6de3cdbd67394cf4efd24534f6434ba@changeid>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 7 Jun 2023 08:55:25 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=VB9JgLhJjAirxBJaQZsCzD=R+6iGbYoHVB_FoE-HbNsA@mail.gmail.com>
-Message-ID: <CAD=FV=VB9JgLhJjAirxBJaQZsCzD=R+6iGbYoHVB_FoE-HbNsA@mail.gmail.com>
-Subject: Re: [PATCH RESEND v4 0/2] Fix Goodix touchscreen power leakage for
- MT8186 boards
-To:     Fei Shao <fshao@chromium.org>, Jiri Kosina <jikos@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Jeff LaBundy <jeff@labundy.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Stephen Kitt <steve@sk2.org>, devicetree@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230606051217.2064-1-iecedge@gmail.com> <6ad5fba3-926a-7a23-b21b-abffd33708be@acm.org>
+In-Reply-To: <6ad5fba3-926a-7a23-b21b-abffd33708be@acm.org>
+From:   Jianlin Lv <iecedge@gmail.com>
+Date:   Wed, 7 Jun 2023 23:55:26 +0800
+Message-ID: <CAFA-uR_Zn4MdFKs6U6dqPjuVS60yN4RcYU4jJzjknqy7-RWyEQ@mail.gmail.com>
+Subject: Re: [PATCH] scsi: sd: support specify probe type of build-in driver
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com, paulmck@kernel.org,
+        bp@suse.de, peterz@infradead.org, will@kernel.org,
+        rdunlap@infradead.org, kim.phillips@amd.com, rostedt@goodmis.org,
+        wyes.karny@amd.com, jianlv@ebay.com, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-scsi@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jiri
+On Wed, Jun 7, 2023 at 1:38=E2=80=AFAM Bart Van Assche <bvanassche@acm.org>=
+ wrote:
+>
+> On 6/5/23 22:12, Jianlin Lv wrote:
+> > In scenarios where SCSI disk name sensitivity is crucial, the probe typ=
+e
+> > of the build-in sd driver can be set to synchronous. As a result,
+> > the scsi disk names are deterministic.
+>
+> Which are these scenarios?
+>
+> Additionally, how can synchronous scanning of sd devices make a
+> difference if there are multiple host bus adapters that use an interface
+> type that is scanned asynchronously?
+>
+> Bart.
 
-On Tue, May 23, 2023 at 8:45=E2=80=AFPM Fei Shao <fshao@chromium.org> wrote=
-:
->
-> These changes are based on the series in [1], which modified the
-> i2c-hid-of-goodix driver and removed the workaround for a power leakage
-> issue, so the issue revisits on Mediatek MT8186 boards (Steelix).
->
-> The root cause is that the touchscreen can be powered in different ways
-> depending on the hardware designs, and it's not as easy to come up with
-> a solution that is both simple and elegant for all the known designs.
->
-> To address the issue, I ended up adding a new boolean property for the
-> driver so that we can control the power up/down sequence depending on
-> that.
->
-> Adding a new property might not be the cleanest approach for this, but
-> at least the intention would be easy enough to understand, and it
-> introduces relatively small change to the code and fully preserves the
-> original control flow.
->
-> [1] https://lore.kernel.org/all/20230207024816.525938-1-dianders@chromium=
-.org/
->
-> Changes in v4:
-> - Rebase on top of next-20230523
-> - Collect the review tags
-> - Minor coding style improvement
->
-> Changes in v3:
-> - In power-down, only skip the GPIO but not the regulator calls if the
->   flag is set
->
-> Changes in v2:
-> - Use a more accurate property name and with "goodix," prefix
-> - Drop the change to regulator_enable logic during power-up
->
-> Fei Shao (2):
->   dt-bindings: input: goodix: Add "goodix,no-reset-during-suspend"
->     property
->   HID: i2c-hid: goodix: Add support for "goodix,no-reset-during-suspend"
->     property
->
->  .../bindings/input/goodix,gt7375p.yaml           |  9 +++++++++
->  drivers/hid/i2c-hid/i2c-hid-of-goodix.c          | 16 +++++++++++++++-
->  2 files changed, 24 insertions(+), 1 deletion(-)
+The change was prompted by an issue with SCSI devices probing
+non-deterministic. On the issue node, there are two types of SCSI hosts:
 
-Just confirming that you're good to land these two patches as
-discussed previously [1]. Thanks! :-)
+1. MegaRAID adapters associated with 24 local disks. The disks are named
+sequentially as "sda," "sdb," and so on, up to "sdx."
+2. STAT controllers associated with the root disk, named "sdy."
 
+Both the MegaRAID adapters and the SATA controller (PCH) are accessed via
+the PCIe bus. In theory, depending on their PCIe bus ID in ascending order,
+the devices should be initialized in ascending order as well.
 
-[1] https://lore.kernel.org/r/nycvar.YFH.7.76.2305231510270.29760@cbobk.fhf=
-r.pm
+However, the SCSI driver currently probes devices asynchronously to allow
+for more parallelism.
+
+__driver_attach
+  ->if (driver_allows_async_probing(drv))
+      async_schedule_dev(__driver_attach_async_helper, dev);
+
+During the probing of SCSI disks attached to MegaRAID, root disk probing
+may occur, resulting in a disk naming inconsistency issue.
+For example, if root disk probing happens in the middle,it is named "sdq",
+The subsequent SCSI disks that are probed will have their names drift,
+starting from "sdr" up to "sdy."
+
+For cloud deployment, the local volume provisioner detects and creates PVs
+for each local disk (from sda to sdx) on the host, and it cleans up the
+disks when they are released.
+This requires the logical names of the disks to be deterministic.
+
+Therefore, I have submitted this patch to allow users to configure the
+SCSI disk probe type.
+If synchronous probing is configured, the SCSI disk probing order is
+deterministic and will follow the ascending order of the PCIe bus ID.
+
+Jianlin
