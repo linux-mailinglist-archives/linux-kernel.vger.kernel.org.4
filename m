@@ -2,59 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A8297259DC
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 11:15:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E7167259DD
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 11:15:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235562AbjFGJP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 05:15:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37256 "EHLO
+        id S237934AbjFGJPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 05:15:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239917AbjFGJOl (ORCPT
+        with ESMTP id S239944AbjFGJOu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 05:14:41 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4E57711F;
-        Wed,  7 Jun 2023 02:14:16 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4EC72AB6;
-        Wed,  7 Jun 2023 02:15:01 -0700 (PDT)
-Received: from [10.57.25.143] (unknown [10.57.25.143])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 732DE3F587;
-        Wed,  7 Jun 2023 02:14:13 -0700 (PDT)
-Message-ID: <9751fe01-a93a-176c-5280-67ae700468e0@arm.com>
-Date:   Wed, 7 Jun 2023 10:14:11 +0100
+        Wed, 7 Jun 2023 05:14:50 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51D3519BA;
+        Wed,  7 Jun 2023 02:14:48 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3579EWjW094829;
+        Wed, 7 Jun 2023 04:14:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1686129272;
+        bh=bedDUpRHU1I2zUEj6vuIlNfA4kkWDYv24G4OlTw6Dd0=;
+        h=From:To:CC:Subject:Date;
+        b=j4UmrmOs90MEX7Yb67RcVWwSESrVKb+bckrhJiwY1n+IEt6P02F9gywr12zVbsrPl
+         FFCxitY2XYQ+WIeZNn44uHHjn4ilvsKu399hfWlTc4XaUbj9Oa2rQAUJPnGySoiTq7
+         2JQEP8/pgD7eVD4s0wKRiO/E1M2gD1d1LdUkBoDs=
+Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3579EWhP015018
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 7 Jun 2023 04:14:32 -0500
+Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 7
+ Jun 2023 04:14:32 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Wed, 7 Jun 2023 04:14:32 -0500
+Received: from uda0492258.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3579ESXf056801;
+        Wed, 7 Jun 2023 04:14:28 -0500
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+To:     <tjoseph@cadence.com>, <lpieralisi@kernel.org>, <robh@kernel.org>,
+        <kw@linux.com>, <bhelgaas@google.com>, <nadeem@cadence.com>
+CC:     <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <vigneshr@ti.com>,
+        <srk@ti.com>, <nm@ti.com>, <s-vadapalli@ti.com>
+Subject: [PATCH v3] PCI: cadence: Fix Gen2 Link Retraining process
+Date:   Wed, 7 Jun 2023 14:44:27 +0530
+Message-ID: <20230607091427.852473-1-s-vadapalli@ti.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 4/4] perf cs-etm: Add exception level consistency check
-To:     Mike Leach <mike.leach@linaro.org>
-Cc:     Leo Yan <leo.yan@linaro.org>, coresight@lists.linaro.org,
-        denik@chromium.org, Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230524131958.2139331-1-james.clark@arm.com>
- <20230524131958.2139331-5-james.clark@arm.com>
- <CAJ9a7VioqoCTLOKmPPbS9ogs9n+2sV3szn-ZSDE3+mZTEgP0UQ@mail.gmail.com>
- <612885c1-b58f-5bce-59dc-bf84b057048d@arm.com>
- <CAJ9a7Vgi=309o+BxNW5YjukFoe+wuUp5oCmHfJHrASJfX2w6fw@mail.gmail.com>
-Content-Language: en-US
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <CAJ9a7Vgi=309o+BxNW5YjukFoe+wuUp5oCmHfJHrASJfX2w6fw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,234 +64,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The Link Retraining process is initiated to account for the Gen2 defect in
+the Cadence PCIe controller in J721E SoC. The errata corresponding to this
+is i2085, documented at:
+https://www.ti.com/lit/er/sprz455c/sprz455c.pdf
 
+The existing workaround implemented for the errata waits for the Data Link
+initialization to complete and assumes that the link retraining process
+at the Physical Layer has completed. However, it is possible that the
+Physical Layer training might be ongoing as indicated by the
+PCI_EXP_LNKSTA_LT bit in the PCI_EXP_LNKSTA register.
 
-On 30/05/2023 11:40, Mike Leach wrote:
-> Hi James,
-> 
-> Further thought here - this consistency check may be redundant.
-> 
-> You are setting the EL according to that in the traced context packet.
-> This is correct and sufficient to match the EL that OpenCSD is
-> expecting, if added to the security state from the same packet. The EL
-> memory space values that OpenCSD provides in the memory callback are
-> based on that same data from this context packet.
-> Thus it is not necessary to use the EL in the memory callback. This is
-> primarily used for matching when searching for a suitable memory
-> source - especially when clients register files etc with the library,
-> rather than provide a global callback as perf does.
-> 
-> Regards
-> 
+Fix the existing workaround, to ensure that the Physical Layer training
+has also completed, in addition to the Data Link initialization.
 
-It was supposed to be defensive coding against some future refactor
-where the Perf side tracking goes wrong. I think it makes sense to keep
-it as it could be quite easy to make a mistake there and extra tests
-can't be bad.
+Fixes: 4740b969aaf5 ("PCI: cadence: Retrain Link to work around Gen2 training defect")
+Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+Reviewed-by: Vignesh Raghavendra <vigneshr@ti.com>
+---
 
-For ETMv3 I did have to make this change because OpenCSD was returning
-the 'any' values so I made it skip the validation in that case:
+Hello,
 
-	if (!(mem_space == OCSD_MEM_SPACE_ANY ||
-	      mem_space == OCSD_MEM_SPACE_N ||
-	      mem_space == OCSD_MEM_SPACE_S)) {
-		if (mem_space & OCSD_MEM_SPACE_EL1N) {
-			/* Includes both non secure EL1 and EL0 */
-			assert(tidq->el == ocsd_EL1 || tidq->el == ocsd_EL0);
-		} else if (mem_space & OCSD_MEM_SPACE_EL2)
-			assert(tidq->el == ocsd_EL2);
-		else if (mem_space & OCSD_MEM_SPACE_EL3)
-			assert(tidq->el == ocsd_EL3);
-	}
+This patch is based on linux-next tagged next-20230606.
 
+v2:
+https://lore.kernel.org/r/20230315070800.1615527-1-s-vadapalli@ti.com/
+Changes since v2:
+- Merge the cdns_pcie_host_training_complete() function with the
+  cdns_pcie_host_wait_for_link() function, as suggested by Bjorn
+  for the v2 patch.
+- Add dev_err() to notify when Link Training fails, since this is a
+  fatal error and proceeding from this point will almost always crash
+  the kernel.
 
-> Mike
-> 
-> 
-> 
-> On Tue, 30 May 2023 at 10:12, James Clark <james.clark@arm.com> wrote:
->>
->>
->>
->> On 25/05/2023 12:39, Mike Leach wrote:
->>> Hi James,
->>>
->>> My concern here is that for etmv3 trace, OpenCSD will only provide
->>> memory spaces as either secure or non-secure, The ETMv3 does not
->>> trace, and hence OpenCSD cannot provide the different ELs.
->>> The memory callback will be either OCSD_MEM_SPACE_S or OCSD_MEM_SPACE_N.
->>>
->>
->> As long as none of the bits are set for EL1-EL3 then no validation will
->> be done so it should be fine. But I will try to test ETMv3.
->>
->>> Can this patch - and the set handle this. (assuming perf supports our
->>> ETMv3 coresight kernel driver)
->>
->> For the whole set, the tracked EL will stay as ocsd_EL_unknown and
->> cs_etm__get_machine() will return host so the behavior will be unchanged
->> from before. This is assuming OpenCSD will set the EL to unknown in
->> elem->context.exception_level in this case.
->>
->>>
->>> Regards
->>>
->>> Mike
->>>
->>> On Wed, 24 May 2023 at 14:20, James Clark <james.clark@arm.com> wrote:
->>>>
->>>> Assert that our own tracking of the exception level matches what
->>>> OpenCSD provides. OpenCSD doesn't distinguish between EL0 and EL1 in the
->>>> memory access callback so the extra tracking was required. But a rough
->>>> assert can still be done.
->>>>
->>>> Signed-off-by: James Clark <james.clark@arm.com>
->>>> ---
->>>>  .../perf/util/cs-etm-decoder/cs-etm-decoder.c |  6 +--
->>>>  .../perf/util/cs-etm-decoder/cs-etm-decoder.h |  4 +-
->>>>  tools/perf/util/cs-etm.c                      | 37 +++++++++++++------
->>>>  3 files changed, 32 insertions(+), 15 deletions(-)
->>>>
->>>> diff --git a/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c b/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
->>>> index ac227cd03eb0..50b3c248d1e5 100644
->>>> --- a/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
->>>> +++ b/tools/perf/util/cs-etm-decoder/cs-etm-decoder.c
->>>> @@ -52,15 +52,15 @@ struct cs_etm_decoder {
->>>>  static u32
->>>>  cs_etm_decoder__mem_access(const void *context,
->>>>                            const ocsd_vaddr_t address,
->>>> -                          const ocsd_mem_space_acc_t mem_space __maybe_unused,
->>>> +                          const ocsd_mem_space_acc_t mem_space,
->>>>                            const u8 trace_chan_id,
->>>>                            const u32 req_size,
->>>>                            u8 *buffer)
->>>>  {
->>>>         struct cs_etm_decoder *decoder = (struct cs_etm_decoder *) context;
->>>>
->>>> -       return decoder->mem_access(decoder->data, trace_chan_id,
->>>> -                                  address, req_size, buffer);
->>>> +       return decoder->mem_access(decoder->data, trace_chan_id, address,
->>>> +                                  req_size, buffer, mem_space);
->>>>  }
->>>>
->>>>  int cs_etm_decoder__add_mem_access_cb(struct cs_etm_decoder *decoder,
->>>> diff --git a/tools/perf/util/cs-etm-decoder/cs-etm-decoder.h b/tools/perf/util/cs-etm-decoder/cs-etm-decoder.h
->>>> index 21d403f55d96..272c2efe78ee 100644
->>>> --- a/tools/perf/util/cs-etm-decoder/cs-etm-decoder.h
->>>> +++ b/tools/perf/util/cs-etm-decoder/cs-etm-decoder.h
->>>> @@ -11,6 +11,7 @@
->>>>  #define INCLUDE__CS_ETM_DECODER_H__
->>>>
->>>>  #include <linux/types.h>
->>>> +#include <opencsd/ocsd_if_types.h>
->>>>  #include <stdio.h>
->>>>
->>>>  struct cs_etm_decoder;
->>>> @@ -19,7 +20,8 @@ struct cs_etm_packet_queue;
->>>>
->>>>  struct cs_etm_queue;
->>>>
->>>> -typedef u32 (*cs_etm_mem_cb_type)(struct cs_etm_queue *, u8, u64, size_t, u8 *);
->>>> +typedef u32 (*cs_etm_mem_cb_type)(struct cs_etm_queue *, u8, u64, size_t, u8 *,
->>>> +                                 const ocsd_mem_space_acc_t);
->>>>
->>>>  struct cs_etmv3_trace_params {
->>>>         u32 reg_ctrl;
->>>> diff --git a/tools/perf/util/cs-etm.c b/tools/perf/util/cs-etm.c
->>>> index b9ba19327f26..ccf34ed8ddf2 100644
->>>> --- a/tools/perf/util/cs-etm.c
->>>> +++ b/tools/perf/util/cs-etm.c
->>>> @@ -931,7 +931,8 @@ static u8 cs_etm__cpu_mode(struct cs_etm_queue *etmq, u64 address,
->>>>  }
->>>>
->>>>  static u32 cs_etm__mem_access(struct cs_etm_queue *etmq, u8 trace_chan_id,
->>>> -                             u64 address, size_t size, u8 *buffer)
->>>> +                             u64 address, size_t size, u8 *buffer,
->>>> +                             const ocsd_mem_space_acc_t mem_space)
->>>>  {
->>>>         u8  cpumode;
->>>>         u64 offset;
->>>> @@ -947,6 +948,20 @@ static u32 cs_etm__mem_access(struct cs_etm_queue *etmq, u8 trace_chan_id,
->>>>         if (!tidq)
->>>>                 return 0;
->>>>
->>>> +       /*
->>>> +        * We've already tracked EL along side the PID in cs_etm__set_thread()
->>>> +        * so double check that it matches what OpenCSD thinks as well. It
->>>> +        * doesn't distinguish between EL0 and EL1 for this mem access callback
->>>> +        * so we had to do the extra tracking.
->>>> +        */
->>>> +       if (mem_space & OCSD_MEM_SPACE_EL1N) {
->>>> +               /* Includes both non secure EL1 and EL0 */
->>>> +               assert(tidq->el == ocsd_EL1 || tidq->el == ocsd_EL0);
->>>> +       } else if (mem_space & OCSD_MEM_SPACE_EL2)
->>>> +               assert(tidq->el == ocsd_EL2);
->>>> +       else if (mem_space & OCSD_MEM_SPACE_EL3)
->>>> +               assert(tidq->el == ocsd_EL3);
->>>> +
->>>>         cpumode = cs_etm__cpu_mode(etmq, address, tidq->el);
->>>>
->>>>         if (!thread__find_map(tidq->thread, cpumode, address, &al))
->>>> @@ -1195,8 +1210,8 @@ static inline int cs_etm__t32_instr_size(struct cs_etm_queue *etmq,
->>>>  {
->>>>         u8 instrBytes[2];
->>>>
->>>> -       cs_etm__mem_access(etmq, trace_chan_id, addr,
->>>> -                          ARRAY_SIZE(instrBytes), instrBytes);
->>>> +       cs_etm__mem_access(etmq, trace_chan_id, addr, ARRAY_SIZE(instrBytes),
->>>> +                          instrBytes, 0);
->>>>         /*
->>>>          * T32 instruction size is indicated by bits[15:11] of the first
->>>>          * 16-bit word of the instruction: 0b11101, 0b11110 and 0b11111
->>>> @@ -1387,8 +1402,8 @@ static void cs_etm__copy_insn(struct cs_etm_queue *etmq,
->>>>         else
->>>>                 sample->insn_len = 4;
->>>>
->>>> -       cs_etm__mem_access(etmq, trace_chan_id, sample->ip,
->>>> -                          sample->insn_len, (void *)sample->insn);
->>>> +       cs_etm__mem_access(etmq, trace_chan_id, sample->ip, sample->insn_len,
->>>> +                          (void *)sample->insn, 0);
->>>>  }
->>>>
->>>>  u64 cs_etm__convert_sample_time(struct cs_etm_queue *etmq, u64 cs_timestamp)
->>>> @@ -1940,8 +1955,8 @@ static bool cs_etm__is_svc_instr(struct cs_etm_queue *etmq, u8 trace_chan_id,
->>>>                  * so below only read 2 bytes as instruction size for T32.
->>>>                  */
->>>>                 addr = end_addr - 2;
->>>> -               cs_etm__mem_access(etmq, trace_chan_id, addr,
->>>> -                                  sizeof(instr16), (u8 *)&instr16);
->>>> +               cs_etm__mem_access(etmq, trace_chan_id, addr, sizeof(instr16),
->>>> +                                  (u8 *)&instr16, 0);
->>>>                 if ((instr16 & 0xFF00) == 0xDF00)
->>>>                         return true;
->>>>
->>>> @@ -1956,8 +1971,8 @@ static bool cs_etm__is_svc_instr(struct cs_etm_queue *etmq, u8 trace_chan_id,
->>>>                  * +---------+---------+-------------------------+
->>>>                  */
->>>>                 addr = end_addr - 4;
->>>> -               cs_etm__mem_access(etmq, trace_chan_id, addr,
->>>> -                                  sizeof(instr32), (u8 *)&instr32);
->>>> +               cs_etm__mem_access(etmq, trace_chan_id, addr, sizeof(instr32),
->>>> +                                  (u8 *)&instr32, 0);
->>>>                 if ((instr32 & 0x0F000000) == 0x0F000000 &&
->>>>                     (instr32 & 0xF0000000) != 0xF0000000)
->>>>                         return true;
->>>> @@ -1973,8 +1988,8 @@ static bool cs_etm__is_svc_instr(struct cs_etm_queue *etmq, u8 trace_chan_id,
->>>>                  * +-----------------------+---------+-----------+
->>>>                  */
->>>>                 addr = end_addr - 4;
->>>> -               cs_etm__mem_access(etmq, trace_chan_id, addr,
->>>> -                                  sizeof(instr32), (u8 *)&instr32);
->>>> +               cs_etm__mem_access(etmq, trace_chan_id, addr, sizeof(instr32),
->>>> +                                  (u8 *)&instr32, 0);
->>>>                 if ((instr32 & 0xFFE0001F) == 0xd4000001)
->>>>                         return true;
->>>>
->>>> --
->>>> 2.34.1
->>>>
->>>
->>>
-> 
-> 
-> 
+v1:
+https://lore.kernel.org/r/20230102075656.260333-1-s-vadapalli@ti.com/
+Changes since v1:
+- Collect Reviewed-by tag from Vignesh Raghavendra.
+- Rebase on next-20230315.
+
+Regards,
+Siddharth.
+
+ .../controller/cadence/pcie-cadence-host.c    | 20 +++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+
+diff --git a/drivers/pci/controller/cadence/pcie-cadence-host.c b/drivers/pci/controller/cadence/pcie-cadence-host.c
+index 940c7dd701d6..70a5f581ff4f 100644
+--- a/drivers/pci/controller/cadence/pcie-cadence-host.c
++++ b/drivers/pci/controller/cadence/pcie-cadence-host.c
+@@ -12,6 +12,8 @@
+ 
+ #include "pcie-cadence.h"
+ 
++#define LINK_RETRAIN_TIMEOUT HZ
++
+ static u64 bar_max_size[] = {
+ 	[RP_BAR0] = _ULL(128 * SZ_2G),
+ 	[RP_BAR1] = SZ_2G,
+@@ -80,8 +82,26 @@ static struct pci_ops cdns_pcie_host_ops = {
+ static int cdns_pcie_host_wait_for_link(struct cdns_pcie *pcie)
+ {
+ 	struct device *dev = pcie->dev;
++	unsigned long end_jiffies;
++	u16 link_status;
+ 	int retries;
+ 
++	/* Wait for link training to complete */
++	end_jiffies = jiffies + LINK_RETRAIN_TIMEOUT;
++	do {
++		link_status = cdns_pcie_rp_readw(pcie, CDNS_PCIE_RP_CAP_OFFSET + PCI_EXP_LNKSTA);
++		if (!(link_status & PCI_EXP_LNKSTA_LT))
++			break;
++		usleep_range(0, 1000);
++	} while (time_before(jiffies, end_jiffies));
++
++	if (!(link_status & PCI_EXP_LNKSTA_LT)) {
++		dev_info(dev, "Link training complete\n");
++	} else {
++		dev_err(dev, "Fatal! Link training incomplete\n");
++		return -ETIMEDOUT;
++	}
++
+ 	/* Check if the link is up or not */
+ 	for (retries = 0; retries < LINK_WAIT_MAX_RETRIES; retries++) {
+ 		if (cdns_pcie_link_up(pcie)) {
+-- 
+2.25.1
+
