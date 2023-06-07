@@ -2,175 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D72FD72631B
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 16:42:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61907726326
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 16:43:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241176AbjFGOmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 10:42:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35472 "EHLO
+        id S241116AbjFGOnk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 10:43:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241156AbjFGOmf (ORCPT
+        with ESMTP id S235216AbjFGOni (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 10:42:35 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04CCA1BFB;
-        Wed,  7 Jun 2023 07:42:33 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-30ae141785bso7298823f8f.3;
-        Wed, 07 Jun 2023 07:42:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686148951; x=1688740951;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=bhU8rJcA/NcmdBFZbG66fI16dsKgmepn+1tYIFC8M3Y=;
-        b=bXFeImhQdmhi+fiXTrYziTug2rbzZLXJhrXLvGxWuoZ2j7UukUjIt8sAoeX/RF7xv1
-         UIJtUOm842Gd3oYnQ4uc1hb6B6+MA/hfg9r4H3Hd6U/vNOPgejThO0dav7DufAtYCl6M
-         OXksAOKE/B4XZh3jUtATnWfvmYd1VDBw/RG6ydD8TjwOGxCr0qRJpccgdXxC4PzOkW82
-         C172foUptIBBIPMcXeHlpmSncRBj4r7KkYtmXktu4geGFPXgytJEs/WoCzv66A8gl82e
-         cAzEr8z+geaUgs3Dh6Jpsl6ZP5g8P1kUAtcjHd9ee+vbQVvkFS3oh0pIi4d0mkaXUPkR
-         tPgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686148951; x=1688740951;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bhU8rJcA/NcmdBFZbG66fI16dsKgmepn+1tYIFC8M3Y=;
-        b=crtewVQk8Z8j86s3wql2vppzG2uJfC5QkicP7TLrPlOFkeQgX9qCOGX47zn5R+pbrE
-         M6r9XS76MUOpQ2GR5bLD8PsWbJXyIJ1NPuCQo54y+4BPinACkZzOZ/xZe3NcapolcvLx
-         OL76W8b/4n+PDLJAPCgH3etDlUmqmBz5XLTVXYdY+mP6v0GLRDWY+3xD2K0IgtoidJAS
-         weoy9V5Y+HXRwRNJF6MA4S3/V17IYvgZ81WD1JsftUSW0/0SH8c/tNJqIm6K5dXVGUib
-         ujN7OKRjXQWjlY1xgyIdly1oCflS5VN/iPcMRyORCqI2eZQC8eAqP+rk50x3yqqHUh9B
-         XmtQ==
-X-Gm-Message-State: AC+VfDxYHoPt/b5QbjZZjz41TOl42rfbuEaT/ZjV5rgJKaWPSNqMwGMK
-        aM1Z5t8w05I9OhZtwaW2e5dTEpNg7Ls=
-X-Google-Smtp-Source: ACHHUZ7FmpM3xOpynYg+M/k9K8xzWpLPv+zJIL90yhFnNkyAYSdt5QSHjwTQLv7gvto2a7w0M12KrQ==
-X-Received: by 2002:a5d:408f:0:b0:309:4368:a8a0 with SMTP id o15-20020a5d408f000000b003094368a8a0mr4476903wrp.68.1686148950971;
-        Wed, 07 Jun 2023 07:42:30 -0700 (PDT)
-Received: from localhost.localdomain (93-34-93-173.ip49.fastwebnet.it. [93.34.93.173])
-        by smtp.googlemail.com with ESMTPSA id z12-20020a5d4d0c000000b003068f5cca8csm15731342wrt.94.2023.06.07.07.42.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 07:42:30 -0700 (PDT)
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Mark Brown <broonie@kernel.org>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        Wed, 7 Jun 2023 10:43:38 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B14B21BD2;
+        Wed,  7 Jun 2023 07:43:28 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DC1EE2F4;
+        Wed,  7 Jun 2023 07:44:13 -0700 (PDT)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E78683F587;
+        Wed,  7 Jun 2023 07:43:26 -0700 (PDT)
+Date:   Wed, 7 Jun 2023 15:43:24 +0100
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nikunj Kela <nkela@quicinc.com>,
+        Prasad Sodagudi <psodagud@quicinc.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Cc:     Christian Marangi <ansuelsmth@gmail.com>, stable@vger.kernel.org
-Subject: [PATCH] binfmt_elf: dynamically allocate note.data in parse_elf_properties
-Date:   Wed,  7 Jun 2023 16:42:27 +0200
-Message-Id: <20230607144227.8956-1-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.39.2
+Subject: Re: [PATCH 00/16] arm_scmi/opp/dvfs: Add generic performance scaling
+ support
+Message-ID: <ZICXjExmCRwcQ3BA@e120937-lin>
+References: <20230607124628.157465-1-ulf.hansson@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230607124628.157465-1-ulf.hansson@linaro.org>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dynamically allocate note.data in parse_elf_properties to fix
-compilation warning on some arch.
+On Wed, Jun 07, 2023 at 02:46:12PM +0200, Ulf Hansson wrote:
+> The current SCMI performance scaling support is limited to cpufreq. This series
+> extends the support, so it can be used for all kind of devices and not only for
+> CPUs.
+> 
+> The changes are spread over a couple of different subsystems, although the
+> changes that affects the other subsystems than the arm_scmi directory are
+> mostly smaller. The series is based upon v6.4-rc5. That said, let's figure out
+> on how to best move forward with this. I am of course happy to help in any way.
+> 
+> Note that, so far this is only be tested on the Qemu virt platform with Optee
+> running an SCMI server. If you want some more details about my test setup, I am
+> certainly open to share that with you!
+> 
+> Looking forward to get your feedback!
+> 
 
-On some arch note.data exceed the stack limit for a single function and
-this cause the following compilation warning:
-fs/binfmt_elf.c: In function 'parse_elf_properties.isra':
-fs/binfmt_elf.c:821:1: error: the frame size of 1040 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
-  821 | }
-      | ^
-cc1: all warnings being treated as errors
+Hi Ulf,
 
-Fix this by dynamically allocating the array.
-Update the sizeof of the union to the biggest element allocated.
+thanks for this first of all.
 
-Fixes: 00e19ceec80b ("ELF: Add ELF program property parsing support")
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-Cc: stable@vger.kernel.org # v5.8+
----
- fs/binfmt_elf.c | 36 +++++++++++++++++++++++++-----------
- 1 file changed, 25 insertions(+), 11 deletions(-)
+I'll have a look at this properly in the next weeks, in the meantime
+just a small minor remark after having had a quick look.
 
-diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
-index 44b4c42ab8e8..90daa623ca13 100644
---- a/fs/binfmt_elf.c
-+++ b/fs/binfmt_elf.c
-@@ -768,7 +768,7 @@ static int parse_elf_properties(struct file *f, const struct elf_phdr *phdr,
- {
- 	union {
- 		struct elf_note nhdr;
--		char data[NOTE_DATA_SZ];
-+		char *data;
- 	} note;
- 	loff_t pos;
- 	ssize_t n;
-@@ -785,29 +785,41 @@ static int parse_elf_properties(struct file *f, const struct elf_phdr *phdr,
- 		return -ENOEXEC;
- 
- 	/* If the properties are crazy large, that's too bad (for now): */
--	if (phdr->p_filesz > sizeof(note))
-+	if (phdr->p_filesz > sizeof(*note.data) * NOTE_DATA_SZ)
- 		return -ENOEXEC;
- 
-+	note.data = kcalloc(NOTE_DATA_SZ, sizeof(*note.data), GFP_KERNEL);
-+	if (!note.data)
-+		return -ENOMEM;
-+
- 	pos = phdr->p_offset;
- 	n = kernel_read(f, &note, phdr->p_filesz, &pos);
- 
--	BUILD_BUG_ON(sizeof(note) < sizeof(note.nhdr) + NOTE_NAME_SZ);
--	if (n < 0 || n < sizeof(note.nhdr) + NOTE_NAME_SZ)
--		return -EIO;
-+	BUILD_BUG_ON(sizeof(*note.data) * NOTE_DATA_SZ < sizeof(note.nhdr) + NOTE_NAME_SZ);
-+	if (n < 0 || n < sizeof(note.nhdr) + NOTE_NAME_SZ) {
-+		ret = -EIO;
-+		goto exit;
-+	}
- 
- 	if (note.nhdr.n_type != NT_GNU_PROPERTY_TYPE_0 ||
- 	    note.nhdr.n_namesz != NOTE_NAME_SZ ||
- 	    strncmp(note.data + sizeof(note.nhdr),
--		    GNU_PROPERTY_TYPE_0_NAME, n - sizeof(note.nhdr)))
--		return -ENOEXEC;
-+		    GNU_PROPERTY_TYPE_0_NAME, n - sizeof(note.nhdr))) {
-+		ret = -ENOEXEC;
-+		goto exit;
-+	}
- 
- 	off = round_up(sizeof(note.nhdr) + NOTE_NAME_SZ,
- 		       ELF_GNU_PROPERTY_ALIGN);
--	if (off > n)
--		return -ENOEXEC;
-+	if (off > n) {
-+		ret = -ENOEXEC;
-+		goto exit;
-+	}
- 
--	if (note.nhdr.n_descsz > n - off)
--		return -ENOEXEC;
-+	if (note.nhdr.n_descsz > n - off) {
-+		ret = -ENOEXEC;
-+		goto exit;
-+	}
- 	datasz = off + note.nhdr.n_descsz;
- 
- 	have_prev_type = false;
-@@ -817,6 +829,8 @@ static int parse_elf_properties(struct file *f, const struct elf_phdr *phdr,
- 		have_prev_type = true;
- 	} while (!ret);
- 
-+exit:
-+	kfree(note.data);
- 	return ret == -ENOENT ? 0 : ret;
- }
- 
--- 
-2.39.2
+You expose a few new perf_ops to fit your needs and in fact PERF was
+still not exposing those data for (apparent) lack of users needing
+those. (and/or historical reason I think)
 
+My concern is that this would lead to a growing number of ops as soon as
+more data will be needed by future users; indeed other protocols do
+expose more data but use a different approach: instead of custom ops
+they let the user access a common static info structure like
+
+
++       int (*num_domains_get)(const struct scmi_protocol_handle *ph);
++       const struct scmi_perf_dom_info __must_check *(*info_get)
++               (const struct scmi_protocol_handle *ph, u32 domain);
+
+and expose the related common info struct in scmi_protocol.h too.
+Another reason to stick to this aproach would be consistency with other
+protos (even though I think PERF is not the only lacking info_get)
+
+Now, since really there was already a hidden user for this perf data
+(that would be me :P ... in terms of an unpublished SCMI test-driver),
+I happen to have a tested patch that just expose those 2 above ops and
+exports scmi_perf_dom_info and related structures to scmi_protocol.h
+
+If you (and Sudeep) agree with this approach of limiting the number of
+exposed ops in favour of sharing upfront some static info data, I can
+quickly cleanup and post this patch for you to pick it up in your next
+iteration.
+
+(really I'd have more conversion of this kind also for other remaining
+ protos but these are unrelated to your series and I'd post it later)
+
+Thanks,
+Cristian
