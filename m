@@ -2,93 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DF6D725712
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 10:13:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D819725707
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 10:12:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239389AbjFGINP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 04:13:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56796 "EHLO
+        id S238579AbjFGIMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 04:12:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238853AbjFGINM (ORCPT
+        with ESMTP id S234575AbjFGIMX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 04:13:12 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F73210D7;
-        Wed,  7 Jun 2023 01:13:11 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 3D38A5C007D;
-        Wed,  7 Jun 2023 04:11:52 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Wed, 07 Jun 2023 04:11:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.fm; h=
-        cc:cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1686125512; x=1686211912; bh=oehWi2mcNypSHEDOl07F4vFqlJbimL9Vc+E
-        tsRILVQI=; b=3tBEpoLaA/r3IvvvcW/Ed2Ro+VtkUlWTC3HJbGojPOqGYunM0JS
-        fBli8vZY8hdf+N7bcLFL8uDqD7dLkN50xvcw9lTLhIROeslktAco3SpOjqk8ijah
-        m2zsSotjAGXl/a7qbnCmZP8YrrbBPHeBkBWZ/hKJJlm31mR6QWG6fwhUgxokwjXm
-        C8b2GW0YLAeEAWez7P+jYL84+J82ZPYhz0GraGjJ2S8X7TJqX1d/TwKu6P3rr5TA
-        HIcjy0NVVi2ECCpuwDydofkwcK0Df6vYgABblaamoaTB5nqlkrh83HSw/XPkYLDn
-        2MvOFC7hlCQiJIwRtXYnaWDQKcCxHwq6gXw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1686125512; x=1686211912; bh=oehWi2mcNypSHEDOl07F4vFqlJbimL9Vc+E
-        tsRILVQI=; b=Fk3bJIbP/+nkkg/GJiocAqU1LnFGAzIkf94CX5g4uRIc/xbzz8d
-        /RJ05hrPkcCkPtvUC2tVjmBMrcWsfq65YNMk4vofncc1Y1vFKjZ5T8s6k34XhwPW
-        nY6pHbseKWtbmsbAF8Td3/L8//y7Yl0XgAwKatO7wzloJu4P2QeVF6SOqRZ0Tsvo
-        pRi0LVypSgVhOinnqvdcH3xC/JkY/HjJpMzghqinr1jiuOdZCB+xIXgen6bOeK6V
-        3j0UWNSPRPJJbQrlpUB91M7vzd8PZ8r6eVZ8hJpMUBrVcNwXp+Euk2m+jyQqXwTh
-        B4+W6LmRz4XuyHAQ+VnDimFiVCc4HoASuUg==
-X-ME-Sender: <xms:yDuAZAx33D9gHHgAbE5EHnbc9rm-PgkP1QIg7W8kEfjekSXbRJxTOA>
-    <xme:yDuAZESU2bKlWqdG9grNBUokueCtDDQs3DLcadYinmBNhfuqj20VDfblYDS_XLAQq
-    L4rnBFVF6pYDtiY>
-X-ME-Received: <xmr:yDuAZCWR6T_2EeU0iI9nEWDcCguaH-YSwyf5Al8LQdKOm0uA_jKB_MC45BocSi26OWuYAhohbhM0YCOBee7emNkAn96Vlg-7_gEdcStR-KgnETAWtabR>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedtfedgleduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepkfffgggfuffvvehfhfgjtgfgsehtjeertddtfeejnecuhfhrohhmpeeuvghr
-    nhguucfutghhuhgsvghrthcuoegsvghrnhgurdhstghhuhgsvghrthesfhgrshhtmhgrih
-    hlrdhfmheqnecuggftrfgrthhtvghrnheptdeujeffueehtdefjedtfeeltedvhffhteeh
-    ffevudelhfegiedtuddvteekgffhnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenuc
-    evlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsvghrnhgu
-    rdhstghhuhgsvghrthesfhgrshhtmhgrihhlrdhfmh
-X-ME-Proxy: <xmx:yDuAZOh22Tdjn1YdTNr0bxkTYpfIZikOAB7_CuX_IYojnXbUHeC8JQ>
-    <xmx:yDuAZCDVjzIHQy1nQQ2YdTQzgnEIJL8eOjyW1JNvBypbPibeTo0h6g>
-    <xmx:yDuAZPIaH3s3ssetJPgzm6W7uDuwFMfTRU2EqNTc6tsMRycLXpqGZA>
-    <xmx:yDuAZJ6zkx3gs4STOM1wLl0a5PeKaz2hIYlxCZS_u7Quh_h-o_M7tA>
-Feedback-ID: id8a24192:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 7 Jun 2023 04:11:51 -0400 (EDT)
-Message-ID: <9f79a2b7-c3f4-9c42-e6f3-f3c77f75afa2@fastmail.fm>
-Date:   Wed, 7 Jun 2023 10:11:49 +0200
+        Wed, 7 Jun 2023 04:12:23 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 882F295
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 01:12:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686125542; x=1717661542;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=MLXJN8f1wgeJvba3Z+b92UH3LzPWiFgfUtqTwlhYIpI=;
+  b=CW+ZTq3VAR6TPPRA4o7DDToqUczr7xR2VpjhV6PWdugecT5IAEFVLFKq
+   1Hxq40WXyCMPRnLKg+Dgq0L9nhFCfSzGPQs3j9p0ReluOSjoQDz7AM8M6
+   mQL+jbIAF8avph4Vy3LBsJnLMskgQyNAnWHWfrLBJ3WOum02lHP+1xq+r
+   Kpz1AygP25oatylBUck/iz6NFqQMWzLU0VUzVW+5msBw7r7alKLal6oLI
+   jjq6XzRcIjQ7VZcbkZWDycew9JsnBrlTJ6GgQRVZFNddpxheQlA7LeTNX
+   QNzbPkcn4swnfShHYPUPirgO8ELnOtDsazOtLwP4wowBhxo8MeXie120x
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="336544331"
+X-IronPort-AV: E=Sophos;i="6.00,223,1681196400"; 
+   d="scan'208";a="336544331"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 01:12:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="956122146"
+X-IronPort-AV: E=Sophos;i="6.00,223,1681196400"; 
+   d="scan'208";a="956122146"
+Received: from nnesher-mobl.ger.corp.intel.com (HELO localhost) ([10.252.57.222])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 01:12:18 -0700
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Siddh Raman Pant <code@siddh.me>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Suraj Upadhyay <usuraj35@gmail.com>
+Subject: Re: [PATCH v9 8/8] drm: Remove usage of deprecated DRM_DEBUG_KMS
+In-Reply-To: <20230607035351.GD14101@pendragon.ideasonboard.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <cover.1686047727.git.code@siddh.me>
+ <35bd95856a69f141640c27ea2b5e4073275032f7.1686047727.git.code@siddh.me>
+ <20230606150419.GI5197@pendragon.ideasonboard.com>
+ <87mt1ctgm7.fsf@intel.com>
+ <20230607035351.GD14101@pendragon.ideasonboard.com>
+Date:   Wed, 07 Jun 2023 11:12:16 +0300
+Message-ID: <87jzwfu1wf.fsf@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 0/6] vfs: provide automatic kernel freeze / resume
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     Askar Safin <safinaskar@gmail.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        fuse-devel <fuse-devel@lists.sourceforge.net>
-References: <CAPnZJGDWUT0D7cT_kWa6W9u8MHwhG8ZbGpn=uY4zYRWJkzZzjA@mail.gmail.com>
- <CAJfpeguZX5pF8-UNsSfJmMhpgeUFT5XyG_rDzMD-4pB+MjkhZA@mail.gmail.com>
- <5d69a11e-c64e-25dd-a982-fd4c935f2bf3@fastmail.fm>
- <CAJfpeguQ87Vxdn-+c4yYy7=hKnSYwWJNe22f-6dG8FNAwjWBXA@mail.gmail.com>
-Content-Language: en-US, de-DE
-From:   Bernd Schubert <bernd.schubert@fastmail.fm>
-In-Reply-To: <CAJfpeguQ87Vxdn-+c4yYy7=hKnSYwWJNe22f-6dG8FNAwjWBXA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,81 +76,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/7/23 09:21, Miklos Szeredi wrote:
-> On Tue, 6 Jun 2023 at 22:18, Bernd Schubert <bernd.schubert@fastmail.fm> wrote:
->>
->>
->>
->> On 6/6/23 16:37, Miklos Szeredi wrote:
->>> On Sun, 14 May 2023 at 00:04, Askar Safin <safinaskar@gmail.com> wrote:
->>>>
->>>> Will this patch fix a long-standing fuse vs suspend bug? (
->>>> https://bugzilla.kernel.org/show_bug.cgi?id=34932 )
->>>
->>> No.
->>>
->>> The solution to the fuse issue is to freeze processes that initiate
->>> fuse requests *before* freezing processes that serve fuse requests.
->>>
->>> The problem is finding out which is which.  This can be complicated by
->>> the fact that a process could be both serving requests *and*
->>> initiating them (even without knowing).
->>>
->>> The best idea so far is to let fuse servers set a process flag
->>> (PF_FREEZE_LATE) that is inherited across fork/clone.  For example the
->>> sshfs server would do the following before starting request processing
->>> or starting ssh:
->>>
->>>     echo 1 > /proc/self/freeze_late
->>>
->>> This would make the sshfs and ssh processes be frozen after processes
->>> that call into the sshfs mount.
->>
->> Hmm, why would this need to be done manually on the server (daemon)
->> side? It could be automated on the fuse kernel side, for example in
->> process_init_reply() using current task context?
-> 
-> Setting the flag for the current task wouldn't be sufficient, it would
-> need to set it for all threads of a process.  Even that wouldn't work
-> for e.g. sshfs, which forks off ssh before starting request
-> processing.
+On Wed, 07 Jun 2023, Laurent Pinchart <laurent.pinchart@ideasonboard.com> wrote:
+> Hi Jani,
+>
+> On Wed, Jun 07, 2023 at 12:39:44AM +0300, Jani Nikula wrote:
+>> On Tue, 06 Jun 2023, Laurent Pinchart wrote:
+>> > On Tue, Jun 06, 2023 at 04:15:22PM +0530, Siddh Raman Pant wrote:
+>> >> @@ -777,7 +793,7 @@ int drm_client_modeset_probe(struct drm_client_dev *client, unsigned int width,
+>> >>  	int i, ret = 0;
+>> >>  	bool *enabled;
+>> >>  
+>> >> -	DRM_DEBUG_KMS("\n");
+>> >> +	drm_dbg_kms(dev, "\n");
+>> >
+>> > This message is pretty useless, it could be dropped on top of this
+>> > series.
+>> 
+>> They do debug log the function being called.
+>
+> I overlooked the fact that ___drm_dbg() prints the caller's function
+> name using __builtin_return_address(). It thus has marginally more value
+> than I thought. Still, function tracing is best performed with ftrace().
 
-Assuming a fuse server process is not handing over requests to other 
-threads/forked-processes, isn't the main issue that all fuse server 
-tasks are frozen and none is left to take requests? A single non-frozen 
-thread should be sufficient for that?
+I'm not going to argue this one too much, but it can be quite a step
+getting a random bug reporter from providing dmesgs to running ftrace.
+
+BR,
+Jani.
 
 
-> 
-> So I'd prefer setting this explicitly.   This could be done from
-> libfuse, before starting threads.  Or, as in the case of sshfs, it
-> could be done by the filesystem itself.
-
-With a flag that should work, with my score proposal it would be difficult.
-
-> 
->>
->> A slightly better version would give scores, the later the daemon/server
->> is created the higher its freezing score - would help a bit with stacked
->> fuse file systems, although not perfectly. For that struct task would
->> need to be extended, though.
-> 
-> If we can quiesce the top of the stack, then hopefully all the lower
-> ones will also have no activity.   There could be special cases, but
-> that would need to be dealt with in the fuse server itself.
-
-
-Ah, when all non flagged processes are frozen first no IO should come 
-in. Yeah, it mostly works, but I wonder if init/systemd is not going to 
-set that flag as well. And then you have an issue when fuse is on a file 
-system used by systemd. My long time ago initial interest on fuse is to 
-use fuse as root file system and I still do that for some cases - not 
-sure if a flag would be sufficient here. I think a freezing score would 
-solve more issues.
-Although probably better to do step by step - flag first and score can 
-be added later.
-
-
-
-Thanks,
-Bernd
+-- 
+Jani Nikula, Intel Open Source Graphics Center
