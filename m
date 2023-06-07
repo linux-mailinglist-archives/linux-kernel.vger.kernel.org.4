@@ -2,267 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AB04726031
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 14:59:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43A2472605D
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 15:03:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239618AbjFGM7y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 08:59:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35536 "EHLO
+        id S239310AbjFGNDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 09:03:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239729AbjFGM7k (ORCPT
+        with ESMTP id S235391AbjFGNDH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 08:59:40 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F28C1BE3;
-        Wed,  7 Jun 2023 05:59:35 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id d2e1a72fcca58-654f8b56807so4681504b3a.1;
-        Wed, 07 Jun 2023 05:59:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686142775; x=1688734775;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LzyAUqPi0jCD511bOtwtey50eQwPuKWR3npw9bDqb6s=;
-        b=eXjk7uzRW7Of8O6cUG5k95c7/5m/nYTodODseD+vU+rqsAeUVthPCH9EHL9M25jXl2
-         cfV4t7eB++R4CMxoJ6MHbi8CUw+z5HQUxCZeqFYgOvE/5udqhI4OG+lkaW2vVqcZ3sTu
-         hOy5ARtmg798zw3XLkdNe2QgoZDh/d8mN1IT5FsvoaXF7cBws4j4TZeF0Fz7BtN+P6sf
-         gyglZkUTp6lBQOABgzajmYoszm2h8qecIT8kYeT+sDuErrmOh2IfKyYc7ghTLPbjH2NI
-         uD1k/kB75gz7bH2xiyb4LjLw1YC4c26Pv7tl2v3YsDSZeKcMXGctGNXNY1uJ4bXeuSto
-         T85w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686142775; x=1688734775;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LzyAUqPi0jCD511bOtwtey50eQwPuKWR3npw9bDqb6s=;
-        b=bxi3tb9jGp7Troz429HKHyoK97gS+B3PRR/Y0M+RjJtRSBS4E53ExoZVzXnoZPdypM
-         PYS8nXRAcp75V4XoBftOj8ZjdM+2iEDfJiAc3HaEg28Q4UQ0uU+6OajQFFcepz4NhBap
-         zuz/A2HmYi7k1t9YsQXyz16yy/W5kuuX6qV7LM6IW5VAgg9Y9NDffAezZ4Hln9yxCRjP
-         rLSmeBs3+pzZ00ewq2+ZVXHeVKQTubh4GUlgkLD1DMmWU30Hrna0feG7Gcq+y88O+DPQ
-         twGuJJF5cvTnnCo3M+1QoduEM2MZav8hNPJxv24ghRZsZxxjg3qCv6mISKufc0cJhHNq
-         7K8Q==
-X-Gm-Message-State: AC+VfDwceD6r4ocA7a3dJsmlhizbKvQjK9Fazy0AAG56WCzWV6cYUEnx
-        LKT8dJhXQkwZztKCusr8GBw=
-X-Google-Smtp-Source: ACHHUZ66nwg1AoocarqbRIVSR1BtzVHpjtfPeiIiDaXmxfUJ7/Q+QqeBiyRHBLnlhn9QHOjvbfSUKQ==
-X-Received: by 2002:a05:6a20:1456:b0:10a:e9ff:808d with SMTP id a22-20020a056a20145600b0010ae9ff808dmr3555119pzi.0.1686142775311;
-        Wed, 07 Jun 2023 05:59:35 -0700 (PDT)
-Received: from localhost.localdomain ([203.205.141.83])
-        by smtp.gmail.com with ESMTPSA id p1-20020a62ab01000000b0065434edd521sm7094982pff.196.2023.06.07.05.59.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 05:59:34 -0700 (PDT)
-From:   menglong8.dong@gmail.com
-X-Google-Original-From: imagedong@tencent.com
-To:     alexei.starovoitov@gmail.com
-Cc:     davem@davemloft.net, dsahern@kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@google.com, x86@kernel.org,
-        imagedong@tencent.com, benbjiang@tencent.com,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v3 3/3] selftests/bpf: add testcase for FENTRY/FEXIT with 6+ arguments
-Date:   Wed,  7 Jun 2023 20:59:11 +0800
-Message-Id: <20230607125911.145345-4-imagedong@tencent.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230607125911.145345-1-imagedong@tencent.com>
-References: <20230607125911.145345-1-imagedong@tencent.com>
+        Wed, 7 Jun 2023 09:03:07 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 097A110DE
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 06:03:06 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0F09E6606EE3;
+        Wed,  7 Jun 2023 14:03:05 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686142985;
+        bh=e/TcWFexSS25/QSsY9FatNi134IkwCf8Y7dHuRcIocg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=KffaGIX3FUVzJn+TLieenNkbY5jnFEe19rKkfLMYwaGhlVoXxgcxJS2jBiDk8FmUy
+         261nWSAuRok8BXocS3sGxGsgBGUix9PYASYlvfSEeyiSVAllZVwVXWipAepRAWukSh
+         0xRPzjsq+djj6eIHoRCOSwK4Ghf3YDj8yrD/Y9UvoC/jQm9M1HtYY4HNrw2C6BffYI
+         lZVF90VJjNu2+SSLi+4o3mS7Wv+zIaIjvFhQg0FjxXo+Y5oIto26X/dQxNahQSkJIx
+         P+VgpkW0T+7V5jZ0POjZc+UM4Qq66WGedcMBQUun0wWXs/7cNbB+W/aTBy11fBl+6p
+         Dmho7pr4TdFlA==
+Message-ID: <a1a2ca75-f542-47f6-19ea-5e96b8894632@collabora.com>
+Date:   Wed, 7 Jun 2023 15:03:02 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH] drm/panel-edp: Add AUO B116XAB01.4 edp panel entry
+To:     Laura Nao <laura.nao@collabora.com>,
+        Douglas Anderson <dianders@chromium.org>
+Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+References: <20230607102123.219862-1-laura.nao@collabora.com>
+Content-Language: en-US
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230607102123.219862-1-laura.nao@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Menglong Dong <imagedong@tencent.com>
+Il 07/06/23 12:21, Laura Nao ha scritto:
+> Add a panel entry for the AUO B116XAB01.4 edp panel, found in the Acer
+> Chromebook Spin 311 (CP311-3H) laptop.
+> 
+> Signed-off-by: Laura Nao <laura.nao@collabora.com>
 
-Add test9/test10 in fexit_test.c and fentry_test.c to test the fentry
-and fexit whose target function have 7/12 arguments.
-
-Correspondingly, add bpf_testmod_fentry_test7() and
-bpf_testmod_fentry_test12() to bpf_testmod.c
-
-And the testcases passed:
-
-./test_progs -t fexit
-Summary: 5/12 PASSED, 0 SKIPPED, 0 FAILED
-
-./test_progs -t fentry
-Summary: 3/0 PASSED, 0 SKIPPED, 0 FAILED
-
-Reviewed-by: Jiang Biao <benbjiang@tencent.com>
-Signed-off-by: Menglong Dong <imagedong@tencent.com>
----
-v3:
-- move bpf_fentry_test{7,12} to bpf_testmod.c and rename them to
-  bpf_testmod_fentry_test{7,12} meanwhile
-- get return value by bpf_get_func_ret() in
-  "fexit/bpf_testmod_fentry_test12", as we don't change ___bpf_ctx_cast()
-  in this version
----
- .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 19 ++++++++++-
- .../selftests/bpf/prog_tests/fentry_fexit.c   |  4 ++-
- .../selftests/bpf/prog_tests/fentry_test.c    |  2 ++
- .../selftests/bpf/prog_tests/fexit_test.c     |  2 ++
- .../testing/selftests/bpf/progs/fentry_test.c | 21 ++++++++++++
- .../testing/selftests/bpf/progs/fexit_test.c  | 33 +++++++++++++++++++
- 6 files changed, 79 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-index cf216041876c..66615fdbe3df 100644
---- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-@@ -191,6 +191,19 @@ noinline int bpf_testmod_fentry_test3(char a, int b, u64 c)
- 	return a + b + c;
- }
- 
-+noinline int bpf_testmod_fentry_test7(u64 a, void *b, short c, int d,
-+				      void *e, u64 f, u64 g)
-+{
-+	return a + (long)b + c + d + (long)e + f + g;
-+}
-+
-+noinline int bpf_testmod_fentry_test12(u64 a, void *b, short c, int d,
-+				       void *e, u64 f, u64 g, u64 h,
-+				       u64 i, u64 j, u64 k, u64 l)
-+{
-+	return a + (long)b + c + d + (long)e + f + g + h + i + j + k + l;
-+}
-+
- __diag_pop();
- 
- int bpf_testmod_fentry_ok;
-@@ -245,7 +258,11 @@ bpf_testmod_test_read(struct file *file, struct kobject *kobj,
- 
- 	if (bpf_testmod_fentry_test1(1) != 2 ||
- 	    bpf_testmod_fentry_test2(2, 3) != 5 ||
--	    bpf_testmod_fentry_test3(4, 5, 6) != 15)
-+	    bpf_testmod_fentry_test3(4, 5, 6) != 15 ||
-+	    bpf_testmod_fentry_test7(16, (void *)17, 18, 19, (void *)20,
-+				     21, 22) != 133 ||
-+	    bpf_testmod_fentry_test12(16, (void *)17, 18, 19, (void *)20,
-+				      21, 22, 23, 24, 25, 26, 27) != 258)
- 		goto out;
- 
- 	bpf_testmod_fentry_ok = 1;
-diff --git a/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c b/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
-index 130f5b82d2e6..5b99e6ce7dd2 100644
---- a/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
-+++ b/tools/testing/selftests/bpf/prog_tests/fentry_fexit.c
-@@ -31,10 +31,12 @@ void test_fentry_fexit(void)
- 	ASSERT_OK(err, "ipv6 test_run");
- 	ASSERT_OK(topts.retval, "ipv6 test retval");
- 
-+	ASSERT_OK(trigger_module_test_read(1), "trigger_read");
-+
- 	fentry_res = (__u64 *)fentry_skel->bss;
- 	fexit_res = (__u64 *)fexit_skel->bss;
- 	printf("%lld\n", fentry_skel->bss->test1_result);
--	for (i = 0; i < 8; i++) {
-+	for (i = 0; i < 10; i++) {
- 		ASSERT_EQ(fentry_res[i], 1, "fentry result");
- 		ASSERT_EQ(fexit_res[i], 1, "fexit result");
- 	}
-diff --git a/tools/testing/selftests/bpf/prog_tests/fentry_test.c b/tools/testing/selftests/bpf/prog_tests/fentry_test.c
-index c0d1d61d5f66..e1c0ce40febf 100644
---- a/tools/testing/selftests/bpf/prog_tests/fentry_test.c
-+++ b/tools/testing/selftests/bpf/prog_tests/fentry_test.c
-@@ -24,6 +24,8 @@ static int fentry_test(struct fentry_test_lskel *fentry_skel)
- 	ASSERT_OK(err, "test_run");
- 	ASSERT_EQ(topts.retval, 0, "test_run");
- 
-+	ASSERT_OK(trigger_module_test_read(1), "trigger_read");
-+
- 	result = (__u64 *)fentry_skel->bss;
- 	for (i = 0; i < sizeof(*fentry_skel->bss) / sizeof(__u64); i++) {
- 		if (!ASSERT_EQ(result[i], 1, "fentry_result"))
-diff --git a/tools/testing/selftests/bpf/prog_tests/fexit_test.c b/tools/testing/selftests/bpf/prog_tests/fexit_test.c
-index 101b7343036b..ea81fa913ec6 100644
---- a/tools/testing/selftests/bpf/prog_tests/fexit_test.c
-+++ b/tools/testing/selftests/bpf/prog_tests/fexit_test.c
-@@ -24,6 +24,8 @@ static int fexit_test(struct fexit_test_lskel *fexit_skel)
- 	ASSERT_OK(err, "test_run");
- 	ASSERT_EQ(topts.retval, 0, "test_run");
- 
-+	ASSERT_OK(trigger_module_test_read(1), "trigger_read");
-+
- 	result = (__u64 *)fexit_skel->bss;
- 	for (i = 0; i < sizeof(*fexit_skel->bss) / sizeof(__u64); i++) {
- 		if (!ASSERT_EQ(result[i], 1, "fexit_result"))
-diff --git a/tools/testing/selftests/bpf/progs/fentry_test.c b/tools/testing/selftests/bpf/progs/fentry_test.c
-index 52a550d281d9..e5fb79e4a147 100644
---- a/tools/testing/selftests/bpf/progs/fentry_test.c
-+++ b/tools/testing/selftests/bpf/progs/fentry_test.c
-@@ -77,3 +77,24 @@ int BPF_PROG(test8, struct bpf_fentry_test_t *arg)
- 		test8_result = 1;
- 	return 0;
- }
-+
-+__u64 test9_result = 0;
-+SEC("fentry/bpf_testmod_fentry_test7")
-+int BPF_PROG(test9, __u64 a, void *b, short c, int d, void *e, __u64 f,
-+	     __u64 g)
-+{
-+	test9_result = a == 16 && b == (void *)17 && c == 18 && d == 19 &&
-+		e == (void *)20 && f == 21 && g == 22;
-+	return 0;
-+}
-+
-+__u64 test10_result = 0;
-+SEC("fentry/bpf_testmod_fentry_test12")
-+int BPF_PROG(test10, __u64 a, void *b, short c, int d, void *e, __u64 f,
-+	     __u64 g, __u64 h, __u64 i, __u64 j, __u64 k, __u64 l)
-+{
-+	test10_result = a == 16 && b == (void *)17 && c == 18 && d == 19 &&
-+		e == (void *)20 && f == 21 && g == 22 && h == 23 &&
-+		i == 24 && j == 25 && k == 26 && l == 27;
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/bpf/progs/fexit_test.c b/tools/testing/selftests/bpf/progs/fexit_test.c
-index 8f1ccb7302e1..6279c535a1e8 100644
---- a/tools/testing/selftests/bpf/progs/fexit_test.c
-+++ b/tools/testing/selftests/bpf/progs/fexit_test.c
-@@ -78,3 +78,36 @@ int BPF_PROG(test8, struct bpf_fentry_test_t *arg)
- 		test8_result = 1;
- 	return 0;
- }
-+
-+__u64 test9_result = 0;
-+SEC("fexit/bpf_testmod_fentry_test7")
-+int BPF_PROG(test9, __u64 a, void *b, short c, int d, void *e, __u64 f,
-+	     __u64 g, int ret)
-+{
-+	test9_result = a == 16 && b == (void *)17 && c == 18 && d == 19 &&
-+		e == (void *)20 && f == 21 && g == 22 && ret == 133;
-+	return 0;
-+}
-+
-+__u64 test10_result = 0;
-+SEC("fexit/bpf_testmod_fentry_test12")
-+int BPF_PROG(test10, __u64 a, void *b, short c, int d, void *e, __u64 f,
-+	     __u64 g, __u64 h, __u64 i, __u64 j, __u64 k, __u64 l)
-+{
-+	__u64 ret;
-+	int err;
-+
-+	/* BPF_PROG() don't support 14 arguments, and ctx[12] can't be
-+	 * accessed yet. So we get the return value by bpf_get_func_ret()
-+	 * for now.
-+	 */
-+	err = bpf_get_func_ret(ctx, &ret);
-+	if (err)
-+		return 0;
-+
-+	test10_result = a == 16 && b == (void *)17 && c == 18 && d == 19 &&
-+		e == (void *)20 && f == 21 && g == 22 && h == 23 &&
-+		i == 24 && j == 25 && k == 26 && l == 27 &&
-+		(int)ret == 258;
-+	return 0;
-+}
--- 
-2.40.1
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
