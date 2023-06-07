@@ -2,128 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7844725F53
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 14:27:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC375725F57
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 14:28:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240864AbjFGM1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 08:27:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40434 "EHLO
+        id S240469AbjFGM2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 08:28:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240688AbjFGM1a (ORCPT
+        with ESMTP id S235218AbjFGM2D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 08:27:30 -0400
+        Wed, 7 Jun 2023 08:28:03 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D76CBE65;
-        Wed,  7 Jun 2023 05:27:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A113CE65;
+        Wed,  7 Jun 2023 05:28:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7283B6365F;
-        Wed,  7 Jun 2023 12:27:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4F4DC433EF;
-        Wed,  7 Jun 2023 12:27:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3CA9163706;
+        Wed,  7 Jun 2023 12:28:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2E73C4339E;
+        Wed,  7 Jun 2023 12:28:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686140848;
-        bh=rYNeihmRmo69wMB7UeZnTSVlzTtJvq708KV1rnsqrnc=;
+        s=k20201202; t=1686140881;
+        bh=Qz6crH1/lu7QrUiSsXrIu8DjMRSudtd/6XGjQPwOYPA=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=oXpCoGGid7jdVikkcxY8xeJ8jiCYaQZLC7F9dsWF6CpSKh0F7QkkurvIXSzvs6cul
-         ajTuYf4R+Hy09iqgG1QfHkpqa5RklWs2dPYutlVgtD4hS2rBGQvG4uo5LooDFRMeR6
-         zQUEy0g1iqn5m/VMFXqpm6AWwBmMLnAXAHaEc93S/KaQYfyyKxWclSmu/C8eNB4vC8
-         M6da9LjJVcSg+xKXw/apxsw3Uq0omXvpsmBLARrKXv6/Ro8EVTJq4kmOZE/x9q9UJ6
-         Gj+W4mYpvMbF4/MCcSqaX4xpnPIyYRIs2Qag2qPmuG7dX5ObIODB2qu8SYZTw2i6AQ
-         CXvNcs0oBoxmg==
-Received: by mail-oi1-f171.google.com with SMTP id 5614622812f47-39aa825c299so354669b6e.0;
-        Wed, 07 Jun 2023 05:27:28 -0700 (PDT)
-X-Gm-Message-State: AC+VfDzk7Emxm5L2xoTlU1sKAgSTS9CtewTOeU21+xIkSb6sbP5UL5ox
-        I47gtiBbZ9dWTwF3O5YQfwh05cmcu6D0n5LGbSk=
-X-Google-Smtp-Source: ACHHUZ6rwcFeBDf7wzuX6Rk34HUD7lebnW50R4mMJFC7FCEH4jrP3g0mg5xOjnQsBRZfttj9cIIuHhpDyRmkQHNWrxs=
-X-Received: by 2002:aca:b5c2:0:b0:39a:1ceb:3ec4 with SMTP id
- e185-20020acab5c2000000b0039a1ceb3ec4mr7264308oif.29.1686140848154; Wed, 07
- Jun 2023 05:27:28 -0700 (PDT)
+        b=YTvigh4q1ri4O4/J+XsDTg1Ew6QeO6/yA8s8DbHCFyT8fv6IC05mYdRNbEZCcIlow
+         co1P7LExNUF8kTW4hIAHJVQmzBf8JYUwrbGWKhX9DKI0b6Cu1JvGrDwcspRJjipoEA
+         gNZE37ntwkIyA3lkQk1WWXIQ3CrOrU5He14h7lGNSmygfVHnZJeE3pYtqGWAP0+6bR
+         S5ap4LlXF98lFx0opGLJ5cQqMOJuQBsuPQM5Qn0WJDW7TMMMdB4lsqcSRMZVjYWV/3
+         pB6rckGWTacDvd3SeCwHg2IMuSwu0kAqdUus9G1Ak/785jRPu0Q4VCXAQ9P4OK+ttt
+         Wak5XaGqwY1Uw==
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-19e7008a20aso6619682fac.1;
+        Wed, 07 Jun 2023 05:28:01 -0700 (PDT)
+X-Gm-Message-State: AC+VfDxhq8xRxRoP+Tp8xnPGSX/8QzwHBSvRgTUKCcR25RsrWpCtx6kv
+        ynyg5KvU8dV0FCKlwUurIJqp0aoP+syCJ/Dw5bU=
+X-Google-Smtp-Source: ACHHUZ720mjkzxcRx7Sj3r+kQPHquXZBh6ezdgblKHI+slS1YG8wfJ69KUR2pex7sjydJPjXqxSvnNQWOSMLu4LlrUc=
+X-Received: by 2002:a05:6870:3844:b0:19f:7312:79f2 with SMTP id
+ z4-20020a056870384400b0019f731279f2mr4179931oal.36.1686140880935; Wed, 07 Jun
+ 2023 05:28:00 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230606173553.v7lckyxrcsotanm5@google.com>
-In-Reply-To: <20230606173553.v7lckyxrcsotanm5@google.com>
+References: <20230606181936.bw62oyqswo7jomra@google.com>
+In-Reply-To: <20230606181936.bw62oyqswo7jomra@google.com>
 From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Wed, 7 Jun 2023 21:26:52 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQNTaTA8x-nNAGSOnYhZZUks_QY2VVNB-W1LJ2EnjUDDg@mail.gmail.com>
-Message-ID: <CAK7LNAQNTaTA8x-nNAGSOnYhZZUks_QY2VVNB-W1LJ2EnjUDDg@mail.gmail.com>
-Subject: Re: [PATCH] scripts/mksysmap: Fix badly escaped '$'
+Date:   Wed, 7 Jun 2023 21:27:24 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQ-0P7VwKknX5j=WKhrxXK0uz81srUHnrDO70zmM_O8eg@mail.gmail.com>
+Message-ID: <CAK7LNAQ-0P7VwKknX5j=WKhrxXK0uz81srUHnrDO70zmM_O8eg@mail.gmail.com>
+Subject: Re: [PATCH] scripts/mksysmap: Ignore __pi_ local arm64 symbols
 To:     =?UTF-8?Q?Pierre=2DCl=C3=A9ment_Tosi?= <ptosi@google.com>
 Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 7, 2023 at 2:36=E2=80=AFAM Pierre-Cl=C3=A9ment Tosi <ptosi@goog=
+On Wed, Jun 7, 2023 at 3:19=E2=80=AFAM Pierre-Cl=C3=A9ment Tosi <ptosi@goog=
 le.com> wrote:
 >
-> The backslash characters escaping '$' in the command to sed (intended to
-> prevent it from interpreting '$' as "end-of-line") are currently being
-> consumed by the Shell (where they mean that sh should not evaluate what
-> follows '$' as a variable name). This means that
+> Similarly to "__kvm_nvhe_", filter out any local symbol that was
+> prefixed with "__pi_" (generated when CONFIG_RANDOMIZE_BASE=3Dy) when
+> compiling System.map and in kallsyms.
 >
->     sed -e "/ \$/d"
->
-> executes the script
->
->     / $/d
->
-> instead of the intended
->
->     / \$/d
->
-> So escape twice in mksysmap any '$' that actually needs to reach sed
-> escaped so that the backslash survives the Shell.
+> Signed-off-by: Pierre-Cl=C3=A9ment Tosi <ptosi@google.com>
+> ---
 
-
-
-You are right. Thanks for catching this bug.
 
 Applied to linux-kbuild. Thanks.
 
 
 
-
->
-> Fixes: c4802044a0a7 ("scripts/mksysmap: use sed with in-line comments")
-> Fixes: 320e7c9d4494 ("scripts/kallsyms: move compiler-generated symbol pa=
-tterns to mksysmap")
-> Signed-off-by: Pierre-Cl=C3=A9ment Tosi <ptosi@google.com>
-> ---
->  scripts/mksysmap | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  scripts/mksysmap | 4 ++++
+>  1 file changed, 4 insertions(+)
 >
 > diff --git a/scripts/mksysmap b/scripts/mksysmap
-> index cb3b1fff3eee..ec3338526102 100755
+> index cb3b1fff3eee..a7de0f637cc7 100755
 > --- a/scripts/mksysmap
 > +++ b/scripts/mksysmap
-> @@ -32,7 +32,7 @@ ${NM} -n ${1} | sed >${2} -e "
->  #  (do not forget a space before each pattern)
->
->  # local symbols for ARM, MIPS, etc.
-> -/ \$/d
-> +/ \\$/d
->
->  # local labels, .LBB, .Ltmpxxx, .L__unnamed_xx, .LASANPC, etc.
->  / \.L/d
-> @@ -41,7 +41,7 @@ ${NM} -n ${1} | sed >${2} -e "
+> @@ -40,6 +40,10 @@ ${NM} -n ${1} | sed >${2} -e "
+>  # arm64 EFI stub namespace
 >  / __efistub_/d
 >
+> +# arm64 local symbols in PIE namespace
+> +/ __pi_\\$/d
+> +/ __pi_\.L/d
+> +
 >  # arm64 local symbols in non-VHE KVM namespace
-> -/ __kvm_nvhe_\$/d
-> +/ __kvm_nvhe_\\$/d
+>  / __kvm_nvhe_\$/d
 >  / __kvm_nvhe_\.L/d
->
->  # arm64 lld
 > --
 > 2.41.0.rc0.172.g3f132b7071-goog
 >
