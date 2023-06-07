@@ -2,160 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A728726A57
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 22:04:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E29BC726A5C
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 22:04:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231429AbjFGUD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 16:03:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35830 "EHLO
+        id S231942AbjFGUEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 16:04:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbjFGUDy (ORCPT
+        with ESMTP id S230006AbjFGUER (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 16:03:54 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E9AA18F;
-        Wed,  7 Jun 2023 13:03:53 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-6537d2a8c20so3758136b3a.2;
-        Wed, 07 Jun 2023 13:03:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686168232; x=1688760232;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bHKjzGwc0lyJg1vFqfFtVd9GS9Kft6p18Bc6rAwcZpY=;
-        b=PPezEEDAUHoR22KL+52rSryCqk0L2lWwGbb9sdngOl/RelbDtEsIfQKkfQ3pMtFY6H
-         ZtsVKSBesSMVHHVYbWc1E+8idpNEccXmz+D7iymjtNiDeBQXZzkVtNLQaUocziBs56pP
-         6S3tVC1Bj6LUpcQM5aWzpn6eJyeJMXNXg9ySyxsojecfYlgBIdSz9M2sGRAFwV003bdn
-         gcVoixNATS7rKcpkOc8x5TV8vF7b2qs2CkBQHi5T13ff35Z8h3qHvw5bfMfpJCg7fG40
-         erxhciVpnki0Xo6LduNp5BajjI27w1ihgwJkSJpMdn9BImsy/vd9JlCp7eYFz2kawVBk
-         GzMQ==
+        Wed, 7 Jun 2023 16:04:17 -0400
+Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7752E19AC;
+        Wed,  7 Jun 2023 13:04:08 -0700 (PDT)
+Received: by mail-io1-f54.google.com with SMTP id ca18e2360f4ac-77a62a84855so85602539f.1;
+        Wed, 07 Jun 2023 13:04:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686168232; x=1688760232;
+        d=1e100.net; s=20221208; t=1686168247; x=1688760247;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bHKjzGwc0lyJg1vFqfFtVd9GS9Kft6p18Bc6rAwcZpY=;
-        b=UX5oDTno2PbkrY2TwsdM1NIT+P0gTjbkz5t0GVI30Grxq61tVaIBvgIQvBXsw1KFyE
-         kLQz7lxd5fqg/Qi9kC+qIMhwMi1p6BxFCYSE5BmSYe42/exmE7coSK42b2+tL5zYnw52
-         5HjU/Eo1q2bYgldY+aN1x9OPbZCcKksBhAMY3ha5tDhEOAnQDU/ZdcA9hR2wujyapq5Y
-         eM+vFhF/dxpfv0qiokQd0FpCZLFGtVaKaj9QrYEXreOB+9vR4xnFsK1a3aT/PWttr0Q2
-         Cujg8j6GFtOqrfpYStAOKIsSi3mhJSX41kvuVWhcQA1DK+gWhU/UMtJ2bhQ6kwx79BgW
-         bFUw==
-X-Gm-Message-State: AC+VfDzyci9Gw22bRX1mVLYYoQBQk/SclWQjw9WFUCKOT1SawVbHTPes
-        Zg1ywMNnvVbfmFqLbCR6pl0=
-X-Google-Smtp-Source: ACHHUZ4cEI1Aezo0gDCSmMAHryAhSIaXaDeg1qlzjazwCTwZcZfh4VaquvPc440BrSplyEvViigb/g==
-X-Received: by 2002:a05:6a20:438b:b0:10c:5802:fce4 with SMTP id i11-20020a056a20438b00b0010c5802fce4mr1991827pzl.48.1686168232268;
-        Wed, 07 Jun 2023 13:03:52 -0700 (PDT)
-Received: from macbook-pro-8.dhcp.thefacebook.com ([2620:10d:c090:500::6:1c96])
-        by smtp.gmail.com with ESMTPSA id y23-20020a62b517000000b0064d2ad04cbesm8660972pfe.209.2023.06.07.13.03.50
+        bh=raWNAi0peUWVI3Y9OrLkCkchq3HuytUBPEeFbP0ENuk=;
+        b=RT/4Ansqnewawi4SZqN3dWQjT4XFkbrds9oSySi+YlzIbjd3NhBGhCubFhRokcLzBZ
+         50FN5hB0LC0VN9nVTtp18s+R+k5rDL7aGGP4Q+3bjylbEq209aHiujMFFT0mbP3ze/nC
+         H9XBWjEEhb7MkrZ5ViQSMIi66xgnXPC8Jx4rSRpshJ1q3YY0mv/P4avt7q+b2guKbOQf
+         5KY6kErl8Q/j1IosGYH6vsclY4givoxYL9TU5r9+Y4rSBWN+1OkPMUEAl7HQzoMIuP7q
+         0F/Y1215t9y6keFIb/JPp+Gi3EDD/F1Uct0DT5ny8My4SkRHBX8nHZwr9ZxdmYVJhOhR
+         vvJQ==
+X-Gm-Message-State: AC+VfDzxYHsebiOpfm6ad6csyxWuqnJgqpAyMhXNNGcA6DThD1zj37YM
+        mm4O1Fw5edYDmbgcpRuxCrb3Nl+TYg==
+X-Google-Smtp-Source: ACHHUZ45IDkIGT2Q9JMkxSSYM+aG/391kCQL1L54WXzc5BgP8ucqjIEn8nrFNK3DEjXExINnGSY8NQ==
+X-Received: by 2002:a5d:8703:0:b0:776:fc02:184e with SMTP id u3-20020a5d8703000000b00776fc02184emr6236322iom.14.1686168247383;
+        Wed, 07 Jun 2023 13:04:07 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id n7-20020a02cc07000000b0041cce10544dsm3696709jap.123.2023.06.07.13.04.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 13:03:51 -0700 (PDT)
-Date:   Wed, 7 Jun 2023 13:03:48 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     menglong8.dong@gmail.com
-Cc:     davem@davemloft.net, dsahern@kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@google.com, x86@kernel.org,
-        imagedong@tencent.com, benbjiang@tencent.com,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v3 2/3] bpf, x86: clean garbage value in the
- stack of trampoline
-Message-ID: <20230607200348.dprmfvpzdvk5ldpp@macbook-pro-8.dhcp.thefacebook.com>
-References: <20230607125911.145345-1-imagedong@tencent.com>
- <20230607125911.145345-3-imagedong@tencent.com>
+        Wed, 07 Jun 2023 13:04:06 -0700 (PDT)
+Received: (nullmailer pid 3931893 invoked by uid 1000);
+        Wed, 07 Jun 2023 20:04:03 -0000
+Date:   Wed, 7 Jun 2023 14:04:03 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Jisheng Zhang <jszhang@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-serial@vger.kernel.org,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Subject: Re: [PATCH v4 06/10] dt-bindings: riscv: Add bouffalolab bl808 board
+ compatibles
+Message-ID: <20230607200403.GA3909108-robh@kernel.org>
+References: <20230518152244.2178-1-jszhang@kernel.org>
+ <20230518152244.2178-7-jszhang@kernel.org>
+ <c6e44e14-35b2-da09-5e8c-4d47e7a7a055@sholland.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230607125911.145345-3-imagedong@tencent.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <c6e44e14-35b2-da09-5e8c-4d47e7a7a055@sholland.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 08:59:10PM +0800, menglong8.dong@gmail.com wrote:
-> From: Menglong Dong <imagedong@tencent.com>
+On Thu, May 18, 2023 at 10:31:35PM -0500, Samuel Holland wrote:
+> Hi Jisheng, DT maintainers,
 > 
-> There are garbage values in upper bytes when we store the arguments
-> into stack in save_regs() if the size of the argument less then 8.
+> On 5/18/23 10:22, Jisheng Zhang wrote:
+> > Several SoMs and boards are available that feature the Bouffalolab
+> > bl808 SoC. Document the compatible strings.
+> > 
+> > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> > Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+> > Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> > ---
+> >  .../bindings/riscv/bouffalolab.yaml           | 29 +++++++++++++++++++
+> >  1 file changed, 29 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/riscv/bouffalolab.yaml
+> > 
+> > diff --git a/Documentation/devicetree/bindings/riscv/bouffalolab.yaml b/Documentation/devicetree/bindings/riscv/bouffalolab.yaml
+> > new file mode 100644
+> > index 000000000000..3b25d1a5d04a
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/riscv/bouffalolab.yaml
+> > @@ -0,0 +1,29 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/riscv/bouffalolab.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Bouffalo Lab Technology SoC-based boards
+> > +
+> > +maintainers:
+> > +  - Jisheng Zhang <jszhang@kernel.org>
+> > +
+> > +description:
+> > +  Bouffalo Lab Technology SoC-based boards
+> > +
+> > +properties:
+> > +  $nodename:
+> > +    const: '/'
+> > +  compatible:
+> > +    oneOf:
+> > +      - description: Carrier boards for the Sipeed M1s SoM
+> > +        items:
+> > +          - enum:
+> > +              - sipeed,m1s-dock
+> > +          - const: sipeed,m1s
+> > +          - const: bouffalolab,bl808
 > 
-> As we already reserve 8 byte for the arguments in regs and stack,
-> it is ok to store/restore the regs in BPF_DW size. Then, the garbage
-> values in upper bytes will be cleaned.
+> As mentioned in the message for patch 5, "The Bouffalolab bl808 SoC
+> contains three riscv CPUs, namely M0, D0 and LP. The D0 is 64bit RISC-V
+> GC compatible, so can run linux."
 > 
-> Reviewed-by: Jiang Biao <benbjiang@tencent.com>
-> Signed-off-by: Menglong Dong <imagedong@tencent.com>
-> ---
->  arch/x86/net/bpf_jit_comp.c | 19 ++++++-------------
->  1 file changed, 6 insertions(+), 13 deletions(-)
+> I have also been running U-Boot and NOMMU Linux on the less powerful,
+> but still quite fast, "M0" core. However, this core needs a different
+> DTB because:
+>  1) The CPU is different (T-HEAD E907 instead of C906).
+>  2) The interrupt routing is completely different.
+>     a. The M0 core contains a CLIC instead of a PLIC.
+>     b. The peripherals in the SoC are split between two buses. Those
+>        on one bus have their IRQs directly connected to M0, and share
+>        a multiplexed IRQ connection to D0; and vice versa for the
+>        other bus. So each bus's interrupt-parent needs to be swapped.
+
+Can't you include the dts file and then just override 
+'interrupt-parent'? 
+
+> Using some preprocessor magic like we did for Allwinner and Renesas, I
+> was able to share most of the SoC and board DTs between the cores[1].
+> However, this still ends up with two DTs for each board. So here are my
+> questions:
+>  - Is this acceptable?
+>  - Is there precedent for how we should name the two board DTs?
+>  - How does this affect the board and SoC compatible strings?
+>    - Should there be a separate "bouffalolab,bl808-d0" in addition to
+>      "bouffalolab,bl808"?
+
+Probably. A DT is ultimately the view of the hardware from a CPU's 
+perspective. Different views, different compatibles.
+
+>    - Is it acceptable to use the same board compatible string for both,
+>      since the _board_ part of the DT does not change, only things
+>      inside the SoC?
+
+Yes.
+
 > 
-> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-> index 413b986b5afd..e9bc0b50656b 100644
-> --- a/arch/x86/net/bpf_jit_comp.c
-> +++ b/arch/x86/net/bpf_jit_comp.c
-> @@ -1878,20 +1878,16 @@ static void save_regs(const struct btf_func_model *m, u8 **prog, int nr_regs,
->  
->  		if (i <= 5) {
->  			/* copy function arguments from regs into stack */
-> -			emit_stx(prog, bytes_to_bpf_size(arg_size),
-> -				 BPF_REG_FP,
-> +			emit_stx(prog, BPF_DW, BPF_REG_FP,
->  				 i == 5 ? X86_REG_R9 : BPF_REG_1 + i,
->  				 -(stack_size - i * 8));
+> It would be possible to avoid having two DTs per board by guarding all
+> of the differences behind "#ifdef CONFIG_64BIT", but that seems wrong
+> because you would end up with two totally incompatible DTBs named the
+> same thing, depending on how the DTB was built.
 
-This is ok,
+You can't have CONFIG_ options in .dts files.
 
->  		} else {
->  			/* copy function arguments from origin stack frame
->  			 * into current stack frame.
->  			 */
-> -			emit_ldx(prog, bytes_to_bpf_size(arg_size),
-> -				 BPF_REG_0, BPF_REG_FP,
-> +			emit_ldx(prog, BPF_DW, BPF_REG_0, BPF_REG_FP,
->  				 (i - 6) * 8 + 0x18);
-> -			emit_stx(prog, bytes_to_bpf_size(arg_size),
-> -				 BPF_REG_FP,
-> -				 BPF_REG_0,
-> +			emit_stx(prog, BPF_DW, BPF_REG_FP, BPF_REG_0,
->  				 -(stack_size - i * 8));
-
-But this is not.
-See https://godbolt.org/z/qW17f6cYe
-mov dword ptr [rsp], 6
-
-the compiler will store 32-bit only. The upper 32-bit are still garbage.
-
->  		}
->  
-> @@ -1918,7 +1914,7 @@ static void restore_regs(const struct btf_func_model *m, u8 **prog, int nr_regs,
->  			next_same_struct = !next_same_struct;
->  		}
->  
-> -		emit_ldx(prog, bytes_to_bpf_size(arg_size),
-> +		emit_ldx(prog, BPF_DW,
->  			 i == 5 ? X86_REG_R9 : BPF_REG_1 + i,
->  			 BPF_REG_FP,
->  			 -(stack_size - i * 8));
-> @@ -1949,12 +1945,9 @@ static void prepare_origin_stack(const struct btf_func_model *m, u8 **prog,
->  		}
->  
->  		if (i > 5) {
-> -			emit_ldx(prog, bytes_to_bpf_size(arg_size),
-> -				 BPF_REG_0, BPF_REG_FP,
-> +			emit_ldx(prog, BPF_DW, BPF_REG_0, BPF_REG_FP,
->  				 (i - 6) * 8 + 0x18);
-> -			emit_stx(prog, bytes_to_bpf_size(arg_size),
-> -				 BPF_REG_FP,
-> -				 BPF_REG_0,
-> +			emit_stx(prog, BPF_DW, BPF_REG_FP, BPF_REG_0,
->  				 -(stack_size - (i - 6) * 8));
->  		}
->  
-> -- 
-> 2.40.1
-> 
+Rob
