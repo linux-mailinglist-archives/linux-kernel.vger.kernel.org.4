@@ -2,58 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8500725BEB
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 12:48:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63745725C08
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 12:50:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239739AbjFGKsg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 06:48:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57696 "EHLO
+        id S239847AbjFGKu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 06:50:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239309AbjFGKs2 (ORCPT
+        with ESMTP id S239930AbjFGKuB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 06:48:28 -0400
-Received: from mx.kernkonzept.com (serv1.kernkonzept.com [IPv6:2a01:4f8:1c1c:b490::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7B8F1BE6;
-        Wed,  7 Jun 2023 03:48:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kernkonzept.com; s=mx1; h=Cc:To:In-Reply-To:References:Message-Id:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From:
-        Reply-To:Content-ID:Content-Description;
-        bh=Du2Hg8eWo8TN3RCAEt+biisl8e0xVlaEapus0jGGoCI=; b=Z5U7dsmXqCONrNBw4MlGEy2Aqv
-        8zLJ35adAkobtcgjvV90nPNi+9DiAN947XETRd7nqrwDTiP7IG769rA+Sb7nHC/s57PU4CtqZ26aM
-        JTfjZ2WaSmvZDEPlWRDqbcblL0KkTlF/3J9tCMTkmUuBasIRWN3ce9ccU4oIJOrNwGHNQHJ+YNI3M
-        gBbwSIgAgKaYSq2pPgpVa1BlbR6x3iPMta97ZUL5hJN8rVvvqwuU+1eItqNUD4/GwoufpYknWaK/V
-        Hbz4YTrcEE2K0M9MV91451Ia9Z8Jw9Qn783vymLlMRFkTKb8KdR21955hf+dyKaM3A3XvEsLMBH/H
-        RJlLRl6w==;
-Received: from [10.22.3.24] (helo=serv1.dd1.int.kernkonzept.com)
-        by mx.kernkonzept.com with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim 4.94.2)
-        id 1q6qi8-0069NL-IF; Wed, 07 Jun 2023 12:48:16 +0200
-From:   Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-Date:   Wed, 07 Jun 2023 12:47:49 +0200
-Subject: [PATCH v5 6/6] thermal: qcom: tsens-v0_1: Add MSM8909 data
+        Wed, 7 Jun 2023 06:50:01 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D60931BFE;
+        Wed,  7 Jun 2023 03:49:32 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3576Biv4016909;
+        Wed, 7 Jun 2023 10:48:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=9sxarPHXLd8bx/rBkWXS4/QmMPTaQxp+IDTZk+ZE35E=;
+ b=liKSYaEQKvoLkMIfYTKu/fAIce00BB341n8Q8O0C13P6JWnE801ewdrnog+hFS+Qu2fV
+ zgoQKlWCclBq9yWGfzwYio13vkuaPL6UWn31AI0Sn5YQJ4LWcul25jOg6FITTNWUwKmY
+ wx4dXHkmSK/z01eFrvcwyJtev1DSBnNS8/hj2tBIjjIBvMm0ECunELVxKnyT0dDrGc9Z
+ N+q0te33Atl1hd65fzqNq7TgbXHyjpnkN9sYouepmQs1d2w+aZi/Sma4CwSduAlhhbzM
+ +rFeJOILe6gXhRbBvrsvHCXYiNsQifSa+/UvpAqfHqOHHGiHpJRH2z9UVUYBSxv1Q9IY qA== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r2a9thk0b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Jun 2023 10:48:55 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 357Amsst007449
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 7 Jun 2023 10:48:54 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Wed, 7 Jun 2023 03:48:48 -0700
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <gregkh@linuxfoundation.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <quic_wcheng@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>
+CC:     Varadarajan Narayanan <quic_varada@quicinc.com>
+Subject: [PATCH v12 0/5] Enable IPQ9754 USB
+Date:   Wed, 7 Jun 2023 16:18:38 +0530
+Message-ID: <cover.1686045347.git.quic_varada@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230508-msm8909-tsens-v5-6-5eb632235ba7@kernkonzept.com>
-References: <20230508-msm8909-tsens-v5-0-5eb632235ba7@kernkonzept.com>
-In-Reply-To: <20230508-msm8909-tsens-v5-0-5eb632235ba7@kernkonzept.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-X-Mailer: b4 0.12.2
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: DALom15sAkeWCqXrA-BJPipK-ej1GIbn
+X-Proofpoint-ORIG-GUID: DALom15sAkeWCqXrA-BJPipK-ej1GIbn
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-07_06,2023-06-07_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 mlxlogscore=783 bulkscore=0 mlxscore=0 adultscore=0
+ impostorscore=0 suspectscore=0 priorityscore=1501 clxscore=1011
+ phishscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306070088
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
@@ -64,112 +79,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The MSM8909 SoC has 5 thermal sensors in a TSENS v0.1 block. Like
-MDM9607 it uses a non-standard default slope value of 3000 [1] and needs
-per-sensor "correction factors" to workaround issues with the factory
-calibration [2].
+This patch series adds the relevant phy and controller
+configurations for enabling USB on IPQ9754
 
-[1]: https://git.codelinaro.org/clo/la/kernel/msm-3.18/-/blob/LA.UM.7.7.c26-09100-8x09.0/arch/arm/boot/dts/qcom/msm8909.dtsi#L476
-[2]: https://git.codelinaro.org/clo/la/kernel/msm-3.18/-/commit/6df022c6d0c2c1b4a5a6c2124dba4d57910c0911
+Portions of the patchset have been merged. Please see
+	https://lore.kernel.org/lkml/ZGN9gchu7dRb6QwC@matsya/
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
----
- drivers/thermal/qcom/tsens-v0_1.c | 36 +++++++++++++++++++++++++++++++++++-
- drivers/thermal/qcom/tsens.c      |  3 +++
- drivers/thermal/qcom/tsens.h      |  2 +-
- 3 files changed, 39 insertions(+), 2 deletions(-)
+[v12]:
+	- In dtsi usb@8a00000 -> usb@8af8800
 
-diff --git a/drivers/thermal/qcom/tsens-v0_1.c b/drivers/thermal/qcom/tsens-v0_1.c
-index 4a55a8ea0043..a941b4241b0a 100644
---- a/drivers/thermal/qcom/tsens-v0_1.c
-+++ b/drivers/thermal/qcom/tsens-v0_1.c
-@@ -219,6 +219,27 @@ static int __init init_8226(struct tsens_priv *priv)
- 	return init_common(priv);
- }
- 
-+static int __init init_8909(struct tsens_priv *priv)
-+{
-+	int i;
-+
-+	for (i = 0; i < priv->num_sensors; ++i)
-+		priv->sensor[i].slope = 3000;
-+
-+	priv->sensor[0].p1_calib_offset = 0;
-+	priv->sensor[0].p2_calib_offset = 0;
-+	priv->sensor[1].p1_calib_offset = -10;
-+	priv->sensor[1].p2_calib_offset = -6;
-+	priv->sensor[2].p1_calib_offset = 0;
-+	priv->sensor[2].p2_calib_offset = 0;
-+	priv->sensor[3].p1_calib_offset = -9;
-+	priv->sensor[3].p2_calib_offset = -9;
-+	priv->sensor[4].p1_calib_offset = -8;
-+	priv->sensor[4].p2_calib_offset = -10;
-+
-+	return init_common(priv);
-+}
-+
- static int __init init_8939(struct tsens_priv *priv) {
- 	priv->sensor[0].slope = 2911;
- 	priv->sensor[1].slope = 2789;
-@@ -255,7 +276,7 @@ static int __init init_9607(struct tsens_priv *priv)
- 	return init_common(priv);
- }
- 
--/* v0.1: 8226, 8916, 8939, 8974, 9607 */
-+/* v0.1: 8226, 8909, 8916, 8939, 8974, 9607 */
- 
- static struct tsens_features tsens_v0_1_feat = {
- 	.ver_major	= VER_0_1,
-@@ -323,6 +344,19 @@ struct tsens_plat_data data_8226 = {
- 	.fields	= tsens_v0_1_regfields,
- };
- 
-+static const struct tsens_ops ops_8909 = {
-+	.init		= init_8909,
-+	.calibrate	= tsens_calibrate_common,
-+	.get_temp	= get_temp_common,
-+};
-+
-+struct tsens_plat_data data_8909 = {
-+	.num_sensors	= 5,
-+	.ops		= &ops_8909,
-+	.feat		= &tsens_v0_1_feat,
-+	.fields	= tsens_v0_1_regfields,
-+};
-+
- static const struct tsens_ops ops_8916 = {
- 	.init		= init_common,
- 	.calibrate	= calibrate_8916,
-diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-index 9dd5e4b70911..1ab165370fb0 100644
---- a/drivers/thermal/qcom/tsens.c
-+++ b/drivers/thermal/qcom/tsens.c
-@@ -1112,6 +1112,9 @@ static const struct of_device_id tsens_table[] = {
- 	}, {
- 		.compatible = "qcom,msm8226-tsens",
- 		.data = &data_8226,
-+	}, {
-+		.compatible = "qcom,msm8909-tsens",
-+		.data = &data_8909,
- 	}, {
- 		.compatible = "qcom,msm8916-tsens",
- 		.data = &data_8916,
-diff --git a/drivers/thermal/qcom/tsens.h b/drivers/thermal/qcom/tsens.h
-index 1cd8f4fe0971..2805de1c6827 100644
---- a/drivers/thermal/qcom/tsens.h
-+++ b/drivers/thermal/qcom/tsens.h
-@@ -639,7 +639,7 @@ int get_temp_common(const struct tsens_sensor *s, int *temp);
- extern struct tsens_plat_data data_8960;
- 
- /* TSENS v0.1 targets */
--extern struct tsens_plat_data data_8226, data_8916, data_8939, data_8974, data_9607;
-+extern struct tsens_plat_data data_8226, data_8909, data_8916, data_8939, data_8974, data_9607;
- 
- /* TSENS v1 targets */
- extern struct tsens_plat_data data_tsens_v1, data_8976, data_8956;
+[v11]:
+	- Rename dwc_0 -> usb_0_dwc3
+	- Minor change in qcom,sc8280xp-qmp-usb3-uni-phy.yaml to factor in
+	  latest updates to the file
+
+[v10]:
+	- Fix regulator definitions
+	- Address couple of other comments
+
+[v9]:
+	- Update bindings to make power-domains as optional since
+	  IPQ9574 doesn't have GDSCs
+
+[v8]:
+	- Update bindings for the clock name change
+[v7]:
+	- com_aux -> cfg_ahb in patch 7
+
+[v6]:
+        - Incorporated review comments
+	- Resolve make dtbs_check messages
+	- Fixed pcs_usb offset
+	- Board dts file name changed
+
+[v5]:
+        - Incorporated review comments
+	- 'make dtbs_check' giving the following messages since
+	  ipq9574 doesn't have power domains. Hope this is ok
+
+		/local/mnt/workspace/varada/varda-linux/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dtb: phy@7d000: 'power-domains' is a required property
+        	From schema: /local/mnt/workspace/varada/varda-linux/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml
+		/local/mnt/workspace/varada/varda-linux/arch/arm64/boot/dts/qcom/ipq9574-al02-c7.dtb: usb@8a00000: 'power-domains' is a required property
+        	From schema: /local/mnt/workspace/varada/varda-linux/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+
+	- Move qmp phy DT node to newer specification
+
+[v4]:
+        - Incorporated review comments
+	- Address all 'make dtbs_check' errors
+
+[v3]:
+        - Incorporated review comments regarding coding style
+
+[v2]:
+        - Incorporated review comments regarding coding style,
+          maintaining sorted order of entries and unused phy register
+          offsets
+        - Removed NOC clock entries from DT node (will be implemented
+          later with interconnect support)
+        - Fixed 'make dtbs_check' errors/warnings
+
+[v1]:
+        https://lore.kernel.org/linux-arm-msm/5dac3aa4-8dc7-f9eb-5cf3-b361efdc9494@linaro.org/T/
+
+Varadarajan Narayanan (5):
+  dt-bindings: usb: dwc3: Add IPQ9574 compatible
+  clk: qcom: gcc-ipq9574: Add USB related clocks
+  arm64: dts: qcom: ipq9574: Add USB related nodes
+  arm64: dts: qcom: ipq9574: Add LDO regulator node
+  arm64: dts: qcom: ipq9574: Enable USB
+
+ .../devicetree/bindings/usb/qcom,dwc3.yaml         |   3 +-
+ arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts        |  30 ++++++
+ arch/arm64/boot/dts/qcom/ipq9574.dtsi              | 104 +++++++++++++++++++++
+ drivers/clk/qcom/gcc-ipq9574.c                     |  37 ++++++++
+ include/dt-bindings/clock/qcom,ipq9574-gcc.h       |   2 +
+ 5 files changed, 175 insertions(+), 1 deletion(-)
 
 -- 
-2.30.2
+2.7.4
 
