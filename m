@@ -2,136 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 310BB726018
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 14:53:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25ED072601B
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 14:55:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238362AbjFGMxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 08:53:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60862 "EHLO
+        id S235221AbjFGMzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 08:55:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233837AbjFGMxp (ORCPT
+        with ESMTP id S239335AbjFGMyz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 08:53:45 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F11161735
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 05:53:43 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686142422;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DJiQE9VDAnzwpOGaRO9ka3cmwowQMgWUxgmdirElyzs=;
-        b=wyk5TgCnsEOOQ6RGV1FaXTIPOvX3AlV8oHHk72CY2bIVJbDWT7mM78HOCDijWGd3+qAmG7
-        LfUJ4LIjAFcy06vnVB7QYCu11hlnrzbXu/68DYvCEwRK/iDPPVttS4pPdZuES5PvHTnkHd
-        hiEktIgJs3teq8cPdJAHmCGprm9+lhnTrS3JbCA9hDR8mqbUJ8SpS0238tI+YfsbHSYmMe
-        pIJNMDqSIByOSiDz94whdr53GE5M5MI+CKjrERUs5x28dFcULnsuQpArVDqJXEHfq3vJvA
-        lHR5/x+LtcRQaaMzglsfiWccdhdkpVVMv9mbVv8ucjoQ6ArwD47oRjXv8hbFfw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686142422;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DJiQE9VDAnzwpOGaRO9ka3cmwowQMgWUxgmdirElyzs=;
-        b=eYUIvSbbC1fBbB2LQUkgBTjnv1t0Qi5an0XfawoR5kvLwR9FgOJ4n5D8Mr5RzpxkrgEsB0
-        q8ZvcdskWZeoCCAA==
-To:     Nikolay Borisov <nik.borisov@suse.com>, x86@kernel.org
-Cc:     linux-kernel@vger.kernel.org, mhocko@suse.com, jslaby@suse.cz
-Subject: Re: [PATCH 3/3] x86: Disable running 32bit processes if
- ia32_disabled is passed
-In-Reply-To: <80f2045b-f276-e127-8e46-87fb6994fb41@suse.com>
-References: <20230607072936.3766231-1-nik.borisov@suse.com>
- <20230607072936.3766231-4-nik.borisov@suse.com> <87legvjxat.ffs@tglx>
- <80f2045b-f276-e127-8e46-87fb6994fb41@suse.com>
-Date:   Wed, 07 Jun 2023 14:53:41 +0200
-Message-ID: <87fs73juwa.ffs@tglx>
+        Wed, 7 Jun 2023 08:54:55 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 303F510DE;
+        Wed,  7 Jun 2023 05:54:55 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id 98e67ed59e1d1-2568caabfbfso3404055a91.3;
+        Wed, 07 Jun 2023 05:54:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686142494; x=1688734494;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=8CgmDlf0cq6Sqd4pFmRDUBPf1SwsQ8Z3qWJ2zWJJYlI=;
+        b=mGAb27BuXRnjDmFxpVNHVgmdIscLfF+6wBa7uRkDIxiJZg76NxzVt/EmHMxfc5/8HT
+         pg5C6kZ5rkzp8wzhMAE/lSUbeqQmH0sK1SFynW/dfyeFAwywjac3dvnmyScxros4SZGv
+         ZDTVeuBXVdJqyguBTAZFHNTrtgyBRgcwcw2l1qS4G8cMvfyf9VVDUkC4jBN1XAH64alc
+         tfc2ESEwWcNinutHcDfTEDXwfVesE3NFEg+RBua3fHbxCYfRRyruH3R67F3prIDhLKYy
+         LdbqhOCznVcnpES2TiWGbb3pme9rOWwr4vdaM58EMCXCFrnRwjzdGvipQ7C83mPQKsqx
+         7PDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686142494; x=1688734494;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8CgmDlf0cq6Sqd4pFmRDUBPf1SwsQ8Z3qWJ2zWJJYlI=;
+        b=HxtifKK5YF/DYziICxV4j06m1wg3mJrKDpkEddwkNXOaBTMFkldC/muXLOBDzcTxX8
+         +nQkXRG8eti/PMQrss5vM42cmUNIjWPg1VXk6mzEQtAYCC33ocIjz9E+dW8Twg6xkP+3
+         tUHho93VnGmDgv5VSVX0KRqgjtQCXFl7pl5VEyIARrEkm9dJo31aC7X91t7J46mQ3Oms
+         xAl1WKljJg2D7mwrjnpLjY/CWyDMv844ItlK350xC4xqre9JQFNKX7/c1hUXhQRBi4Kp
+         Nt47U5gRHdvYch5oLqLqOF2TOQKGT+Bg4Mw+Q+0L1svCiHGDdGScAIVIRKDjhKQrq3Jp
+         zhdQ==
+X-Gm-Message-State: AC+VfDzQVoT4j+uSZjPbnFor6XX+/GlF98MAXRn1GaM3ivUa8DerlXsz
+        jf9I3GdxgPCb0eBDpMV8RqjrX0tgF7s=
+X-Google-Smtp-Source: ACHHUZ7imbfoZSZall8P5De0TLfSC6MEwNYY3S8vU2re+uFFUVkeYibc3v8mjykbDK6r0VASNAGyTg==
+X-Received: by 2002:a17:90a:fe8c:b0:259:30e7:7348 with SMTP id co12-20020a17090afe8c00b0025930e77348mr1981379pjb.9.1686142494458;
+        Wed, 07 Jun 2023 05:54:54 -0700 (PDT)
+Received: from sol (194-223-178-180.tpgi.com.au. [194.223.178.180])
+        by smtp.gmail.com with ESMTPSA id m9-20020a17090a3f8900b0025645d118adsm1337877pjc.14.2023.06.07.05.54.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 05:54:53 -0700 (PDT)
+Date:   Wed, 7 Jun 2023 20:54:49 +0800
+From:   Kent Gibson <warthog618@gmail.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linus.walleij@linaro.org
+Subject: Re: [PATCH] gpio: sim: quietly ignore configured lines outside the
+ bank
+Message-ID: <ZIB+GUaa934A4sq6@sol>
+References: <20230607065004.37112-1-warthog618@gmail.com>
+ <CAMRc=Mf9K=_a=UzmazHF1Qc7XxWfP_qJH2gftPAT0Y=e_3FtyQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMRc=Mf9K=_a=UzmazHF1Qc7XxWfP_qJH2gftPAT0Y=e_3FtyQ@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07 2023 at 15:19, Nikolay Borisov wrote:
-> On 7.06.23 =D0=B3. 15:01 =D1=87., Thomas Gleixner wrote:
->>=20
->>> -	(elf_check_arch_ia32(x) ||					\
->>> -	 (IS_ENABLED(CONFIG_X86_X32_ABI) && (x)->e_machine =3D=3D EM_X86_64))
->>> +	(!ia32_disabled && (elf_check_arch_ia32(x) ||			\
->>> +	 (IS_ENABLED(CONFIG_X86_X32_ABI) && (x)->e_machine =3D=3D EM_X86_64)))
->>=20
->> If I'm reading this correctly then ia32_disabled also prevents binaries
->> with X32 ABI to be loaded.
->>=20
->> That might be intentional but I'm failing to find any explanation for
->> this in the changelog.
->>=20
->> X32_ABI !=3D IA32_EMULATION
->
-> Right, however given the other changes (i.e disabling sysenter/int 0x80)=
-=20
-> can we really have a working X32 abi when ia32_disabled is true? Now I'm=
-=20
-> thinking can we really have IA32_EMULATION && X32_ABI && ia32_disabled,=20
-> I guess the answer is no?
+On Wed, Jun 07, 2023 at 02:50:43PM +0200, Bartosz Golaszewski wrote:
+> On Wed, Jun 7, 2023 at 8:50 AM Kent Gibson <warthog618@gmail.com> wrote:
+> >
+> >
+> > base-commit: ba65c79fbb813423e7d42d99375e2045b27958a6
+> > prerequisite-patch-id: d89da2e3b7511c5b8132a379b12e4996256ac214
+> > --
+> > 2.40.1
+> >
+> 
+> I queued this for fixes, thanks!
+> 
 
-X32_ABI is completely _independent_ from IA32_EMULATION.
+Oh, ok.  I didn't think it was serious enough for fixes, or I would've
+made the two patches a series.  And included a Fixes on this one.
 
-It just shares some of the required compat code, but it does not use
-sysenter/int 0x80 at all. It uses the regular 64bit system call.
-
-You can build a working kernel with X32_ABI=3Dy and IA32_EMULATION=3Dn.
-
-So why would boottime disabling of IA32_EMULATION affect X32_ABI in any
-way?
-
->>=20
->> This issues a SMP function call on all online CPUs to set these entries
->> to 0 on _every_ CPU hotplug operation.
->>=20
->> I'm sure there is a reason why these bits need to be cleared over and
->> over. It's just not obvious to me why clearing them _ONCE_ per boot is
->> not sufficient. It's neither clear to me why CPU0 must do that ($NCPUS -
->> 1) times, but for the last CPU it's enough to do it once.
->
-> Actually clearing them once per-cpu is perfectly fine. Looking around=20
-> the code i saw arch_smt_update() to be the only place where a=20
-> on_each_cpu() call is being made hence I put the code there. Another=20
-> aspect I was thinking of is what if a cpu gets onlined at a later stage=20
-> and a 32bit process is scheduled on that cpu, if the gdt entry wasn't=20
-> cleared on that CPU then it would be possible to run 32bit processes on=20
-> it. I guess a better alternative is to use arch_initcall() ?
-
-Why do you need an on_each_cpu() function call at all? Why would you
-need an extra arch_initcall()?
-
-The obvious place to clear this is when a CPU is initialized, no?
-
->> That aside, what's the justification for doing this in the first place
->> and why is this again inconsistent vs. CONFIG_IA32_EMULATION=3Dn?
->
-> I'll put it under an ifdef CONFIG_IA32_EMULATION, unfortunately the=20
-> traps.h header can't be included in elf.h without causing build breakage.
-
-You are not answering my question at all and neither the elf nor the
-traps header have anything to do with it. I'm happy to rephrase it:
-
-  1) What is the justification for setting the 'present' bit of
-     GDT_ENTRY_DEFAULT_USER32_CS to 0?
-
-  2) Why is #1 inconsistent with CONFIG_IA32_EMULATION=3Dn?
-
-Thanks,
-
-        tglx
-
-
-
+Cheers,
+Kent.
