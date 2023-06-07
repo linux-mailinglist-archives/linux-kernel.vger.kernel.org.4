@@ -2,162 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94182725207
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 04:15:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AF5172520A
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 04:20:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240727AbjFGCPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 22:15:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46510 "EHLO
+        id S240730AbjFGCUj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 22:20:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240715AbjFGCPT (ORCPT
+        with ESMTP id S234730AbjFGCUg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 22:15:19 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B71111BC0
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 19:15:16 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1b24b34b59fso5059825ad.3
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 19:15:16 -0700 (PDT)
+        Tue, 6 Jun 2023 22:20:36 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3978A1732;
+        Tue,  6 Jun 2023 19:20:35 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id 41be03b00d2f7-53fbb3398c8so554587a12.1;
+        Tue, 06 Jun 2023 19:20:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1686104116; x=1688696116;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=oQUlCOcqt0tuXvcUCaoZv+EjOka/kZ7fKStDDBCleig=;
-        b=q+TsFLfQE4gn0cXqpEsWkLsNprKrqq8d0lYmxTWIi38uAFA2ziC8yx5o/30ncBczrn
-         zLmgXFV/zcNyl9FhreLy3L7DJsJ7E+hRoIj4bQznRSdPefG7jMnHzzoQ5Xn/0kfLegPL
-         hO3hfWhbjtLOYTpkZpFeXMikvagv4kvfPHiq2e0C7uDCC8qd9AJOIhPkTNhO1SJYJtAI
-         y+r3wMfkE/TExvpTLnn1QuvGByptzbVUv+EQEpzJ576IwooDMl/13BjSEYQKAqpmzwYD
-         Q91cRCAHRlV6YEuT/2Wy8hE1qV3spvT7z/V+UxhL8TXfaJmNPhgBfHDiJDovUX8a5e1e
-         eiXA==
+        d=gmail.com; s=20221208; t=1686104435; x=1688696435;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BKFbnWBQ9QpASxiIB9KMxVKCkkxXRNBDMQ/+Dbfr93o=;
+        b=bLdnD8t+AAulFU42EWbzhLFLnbvdsabwOChyzIgJCaKNY781zyWQuuaUXslvOla9py
+         fvYLSooxN6izeXYk0Xp1460TFjGc3W8uEd9cdciEYigkAiVhf8B0lq28mxWnvl3/aSuB
+         YFECfesJxGfkUKWBvYATOTSilomfJ6Qv7NOL81p2/nY6TXmk1N3ADqu7L+BhJ59CkCsD
+         rT3vclse2ncSq5zwdCtmB8xcYxi4N14ht2+9T1WsbALtMjd1OJSwjp0r8CWEV0yDQJbH
+         VQl5tnDHg5fI7xIqmIep/wg7+ki2cZXfbQ13wPDmSWr7YSZtuN9cytH69DQkxdTDfVzZ
+         idpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686104116; x=1688696116;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20221208; t=1686104435; x=1688696435;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oQUlCOcqt0tuXvcUCaoZv+EjOka/kZ7fKStDDBCleig=;
-        b=IjxUcx0UABGRLbD9WB9eYnoAdt9K6om9isYkZBA7S1r1BZz4T3sGygNEAkZFvsoNAo
-         VRk+UI3JhCrP6CjJYHKgIJdP6L8WYrjnts2ScpsDK/OFmlmommDG5H4pILdZxyVGgX/o
-         eT0l7sRDLWtvmZ1mxCSopFkztuj9iqktUr/7FZgJ/rmzH51JGm1xdChXWRZ1apKFyndv
-         cuuQyoSiNbBk1SnSCD00Dua2fR60PS2LTx+RQoJ9SUDV0lZyYrznpjB5UrnbJOd2sB5Y
-         nSf1bRZMxiSabNsKLHbA2YF6u0dYEFPLi4BMxxEWd1x8fkLH7ipbvQFUd+ok0idJPU5B
-         euFQ==
-X-Gm-Message-State: AC+VfDy2zXh6IBUFQavB6P7N4dG8H1yeV9CsKojLYcudfa5mA6IC4Vz0
-        uLX4hA132SI4lVXu43D0VT6DQg==
-X-Google-Smtp-Source: ACHHUZ6vvabNin59tYSUj++K9GAS9dwnlbxvpk5BtcC6SjhWGVfnYwarfgRhemu10fEWP5UF/cCASw==
-X-Received: by 2002:a17:902:db0f:b0:1b0:4bc7:31ee with SMTP id m15-20020a170902db0f00b001b04bc731eemr3975802plx.32.1686104116012;
-        Tue, 06 Jun 2023 19:15:16 -0700 (PDT)
-Received: from dread.disaster.area (pa49-179-79-151.pa.nsw.optusnet.com.au. [49.179.79.151])
-        by smtp.gmail.com with ESMTPSA id p21-20020a170902ead500b00199203a4fa3sm9173051pld.203.2023.06.06.19.15.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 19:15:15 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.96)
-        (envelope-from <david@fromorbit.com>)
-        id 1q6ihc-008ieJ-1f;
-        Wed, 07 Jun 2023 12:15:12 +1000
-Date:   Wed, 7 Jun 2023 12:15:12 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     Sarthak Kukreti <sarthakkukreti@chromium.org>
-Cc:     Mike Snitzer <snitzer@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        linux-block@vger.kernel.org, Joe Thornber <thornber@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Brian Foster <bfoster@redhat.com>,
-        Bart Van Assche <bvanassche@google.com>,
-        linux-kernel@vger.kernel.org,
-        Christoph Hellwig <hch@infradead.org>, dm-devel@redhat.com,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        linux-fsdevel@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
-        linux-ext4@vger.kernel.org, Joe Thornber <ejt@redhat.com>,
-        Alasdair Kergon <agk@redhat.com>
-Subject: Re: [PATCH v7 0/5] Introduce provisioning primitives
-Message-ID: <ZH/oMK7BoBo8a3Hu@dread.disaster.area>
-References: <CAJ0trDbspRaDKzTzTjFdPHdB9n0Q9unfu1cEk8giTWoNu3jP8g@mail.gmail.com>
- <ZHFEfngPyUOqlthr@dread.disaster.area>
- <CAJ0trDZJQwvAzngZLBJ1hB0XkQ1HRHQOdNQNTw9nK-U5i-0bLA@mail.gmail.com>
- <ZHYB/6l5Wi+xwkbQ@redhat.com>
- <CAJ0trDaUOevfiEpXasOESrLHTCcr=oz28ywJU+s+YOiuh7iWow@mail.gmail.com>
- <ZHYWAGmKhwwmTjW/@redhat.com>
- <CAG9=OMMnDfN++-bJP3jLmUD6O=Q_ApV5Dr392_5GqsPAi_dDkg@mail.gmail.com>
- <ZHqOvq3ORETQB31m@dread.disaster.area>
- <ZHti/MLnX5xGw9b7@redhat.com>
- <CAG9=OMNv80fOyVixEY01XESnOFzYyfj9j8etHMq_Ap52z4UWNQ@mail.gmail.com>
+        bh=BKFbnWBQ9QpASxiIB9KMxVKCkkxXRNBDMQ/+Dbfr93o=;
+        b=E22YYT4RL3hriZ/Dn8uOZl+NrR/lY/OyxYqxXJ6FNEqeKQ7+0tfZZjDzXj21+pBw6f
+         GyhyR9MzX8Os4GOee2Oc6CNCVkSKKAo9vqUYiHWdYgZkzcGq9FRSEyQyX8x2EpuGEcOe
+         McrsWxG2Cc3PzaTGLfvOxnNWowJx9aFYdQQM6CKWPDjZL6tcKXhpB2v4J29SntBYle05
+         BwLRl/7VyAdMLxnrd83OPk/DP2QGwtbZ+H41mdw1T4zrDc9k/8H41fTqAX7R1j39k8ld
+         WgmWaWLd8qX28CajweOaCxxCclrsTOk5vxx05eh8k8LW2JPORz4Aw4838G4NNy4qe0vz
+         Nkkg==
+X-Gm-Message-State: AC+VfDwzZEwwNR8Od28CzbkyW8NoVnks+IkmjEkwsuOXgWkS3rqGoGq8
+        Xq3JyArLxurCE7w+C4owQQZYa2gdo0ubXytO
+X-Google-Smtp-Source: ACHHUZ6PMh11kX98P/Kfl5fQa14Zzk89kRsNBaUn8WW/kQiojy8G+ZUKG7h6Y9JHtG3upBOMDbefRA==
+X-Received: by 2002:a17:903:32d1:b0:1ac:6b92:a775 with SMTP id i17-20020a17090332d100b001ac6b92a775mr4259202plr.6.1686104434650;
+        Tue, 06 Jun 2023 19:20:34 -0700 (PDT)
+Received: from [127.0.0.1] ([2404:c140:1f03::caf2])
+        by smtp.gmail.com with ESMTPSA id z11-20020a1709028f8b00b001b1f991a4e2sm5689684plo.20.2023.06.06.19.20.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Jun 2023 19:20:33 -0700 (PDT)
+Message-ID: <7a5e7377-4931-36e3-4102-8fcb1f7a81e8@gmail.com>
+Date:   Wed, 7 Jun 2023 10:20:28 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAG9=OMNv80fOyVixEY01XESnOFzYyfj9j8etHMq_Ap52z4UWNQ@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH net] net: sched: fix possible refcount leak in
+ tc_chain_tmplt_add()
+Content-Language: en-US
+To:     Larysa Zaremba <larysa.zaremba@intel.com>
+Cc:     jhs@mojatatu.com, xiyou.wangcong@gmail.com, jiri@resnulli.us,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230605070158.48403-1-hbh25y@gmail.com>
+ <ZH70I+yV66OpMxbo@lincoln>
+From:   Hangyu Hua <hbh25y@gmail.com>
+In-Reply-To: <ZH70I+yV66OpMxbo@lincoln>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 05, 2023 at 02:14:44PM -0700, Sarthak Kukreti wrote:
-> On Sat, Jun 3, 2023 at 8:57 AM Mike Snitzer <snitzer@kernel.org> wrote:
-> > On Fri, Jun 02 2023 at  8:52P -0400,
-> > Dave Chinner <david@fromorbit.com> wrote:
-> > > On Fri, Jun 02, 2023 at 11:44:27AM -0700, Sarthak Kukreti wrote:
-> > > > > The only way to distinquish the caller (between on-behalf of user data
-> > > > > vs XFS metadata) would be REQ_META?
-> > > > >
-> > > > > So should dm-thinp have a REQ_META-based distinction? Or just treat
-> > > > > all REQ_OP_PROVISION the same?
-> > > > >
-> > > > I'm in favor of a REQ_META-based distinction.
-> > >
-> > > Why? What *requirement* is driving the need for this distinction?
-> >
-> > Think I answered that above, XFS delalloc accounting parity on thinp.
-> >
-> I actually had a few different use-cases in mind (apart from the user
-> data provisioning 'fear' that you pointed out): in essence, there are
-> cases where userspace would benefit from having more control over how
-> much space a snapshot takes:
+On 6/6/2023 16:53, Larysa Zaremba wrote:
+> On Mon, Jun 05, 2023 at 03:01:58PM +0800, Hangyu Hua wrote:
+>> try_module_get can be called in tcf_proto_lookup_ops. So if ops don't
+>> implement the corresponding function we should call module_put to drop
+>> the refcount.
+>>
 > 
-> 1) In the original RFC patchset [1], I alluded to this being a
-> mechanism for pre-allocating space for preserving space for thin
-> logical volumes. The use-case I'd like to explore is delta updatable
-> read-only filesystems similar to systemd system extensions [2]: In
-> essence:
-> a) Preserve space for a 'base' thin logical volume that will contain a
-> read-only filesystem on over-the-air installation: for filesystems
-> like squashfs and erofs, pretty much the entire image is a compressed
-> file that I'd like to reserve space for before installation.
-> b) Before update, create a thin snapshot and preserve enough space to
-> ensure that a delta update will succeed (eg. block level diff of the
-> base image). Then, the update is guaranteed to have disk space to
-> succeed (similar to the A-B update guarantees on ChromeOS). On
-> success, we merge the snapshot and reserve an update snapshot for the
-> next possible update. On failure, we drop the snapshot.
+> Code seems reasonable. But commit message is pretty hard to understand.
+> Please, replace "corresponding" with "required".
+> Also change the first sentence, do not use "can". From what I see, successful
+> execution of tcf_proto_lookup_ops always means we now hold reference to module.
+> 
+> CC me in v2, I'll give you Reviewed-by.
+> 
 
-Sounds very similar to the functionality blksnap is supposed to
-provide....
+I apologize for my incorrect English expression. I will send a v2 later.
 
-https://lore.kernel.org/linux-fsdevel/20230404140835.25166-1-sergei.shtepa@veeam.com/
+Thanks,
+Hangyu
 
-
-> 2) The other idea I wanted to explore was rollback protection for
-> stateful filesystem features: in essence, if an update from kernel 4.x
-> to 5.y failed very quickly (due to unrelated reasons) and we enabled
-> some stateful filesystem features that are only supported on 5.y, we'd
-> be able to rollback to 4.x if we used short-lived snapshots (in the
-> ChromiumOS world, the lifetime of these snapshots would be < 10s per
-> boot).
-
-Not sure that blksnap has a "roll origin back to read-only snapshot"
-feature yet, but that's what you'd need for this. i.e. on success,
-drop the snapshot. On failure, "roll origin back to snapshot and
-reboot".
-
-Cheers,
-
-Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+>> Fixes: 9f407f1768d3 ("net: sched: introduce chain templates")
+>> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+>> ---
+>>   net/sched/cls_api.c | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/net/sched/cls_api.c b/net/sched/cls_api.c
+>> index 2621550bfddc..92bfb892e638 100644
+>> --- a/net/sched/cls_api.c
+>> +++ b/net/sched/cls_api.c
+>> @@ -2952,6 +2952,7 @@ static int tc_chain_tmplt_add(struct tcf_chain *chain, struct net *net,
+>>   		return PTR_ERR(ops);
+>>   	if (!ops->tmplt_create || !ops->tmplt_destroy || !ops->tmplt_dump) {
+>>   		NL_SET_ERR_MSG(extack, "Chain templates are not supported with specified classifier");
+>> +		module_put(ops->owner);
+>>   		return -EOPNOTSUPP;
+>>   	}
+>>   
+>> -- 
+>> 2.34.1
+>>
+>>
