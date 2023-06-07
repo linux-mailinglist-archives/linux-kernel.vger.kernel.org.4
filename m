@@ -2,52 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBD61725A41
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 11:25:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 690CA725A43
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 11:25:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239938AbjFGJZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 05:25:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46418 "EHLO
+        id S239974AbjFGJZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 05:25:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239961AbjFGJY6 (ORCPT
+        with ESMTP id S240134AbjFGJZX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 05:24:58 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E83381731
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 02:24:48 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-33bf12b5f95so5654075ab.3
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 02:24:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686129888; x=1688721888;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mcggyTbJQ4YNKwj8Ogeixygfc+iphiJKgvf+Reoaotc=;
-        b=AoVM7t4GeeIq872mmgqhYmMyoLzWpAaALLSv5m9+v0jWU/MYqKrLX+5ajmuzbq4wW1
-         yZCNL2efmO5UC69Nas6cgX5x+k6JNYn0uTknpkSRccfvXlOD92hr5y7ApASlbTFmEb4m
-         eLYuNGuHU90ZzhMQP2Dn9k/7DrvTCmDjDx+bA23g6y9UtamJt4m2Gh1q3wqA3Mpfq5UV
-         JvsF29s1nwlRmEjTIIJlntyuPljzEX+Mx5dS9SuXmuU5PoaoI3yde7nF6g1F1VmSFeA6
-         Tke5PjZ+1zqk7C09mDFFnErl6mnL9qicvQ1DX0dVsBt0QqU+OJ7lYINa6rsXgmmfwqNx
-         mxow==
-X-Gm-Message-State: AC+VfDzqmz2sVnuTabq/aUNo8UQw6Bpvyey3ggmWcnwcWRSMeDFI2lW9
-        8Cq62NU6cfEJcI+4/R+TCSFnV/jJPTQjyKnn/825sA3iRrN1
-X-Google-Smtp-Source: ACHHUZ5RZcxOpmqKxbGUxbzJ2zCn2ZEBzjJLkXQdew2w2kmDjRGnl73yEOy7ne/oRP/Ck6TOSj5yWkfzX5h/JE7dTBwRKER14GOQ
+        Wed, 7 Jun 2023 05:25:23 -0400
+Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 222A2192
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 02:25:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1686129922;
+  x=1717665922;
+  h=from:date:subject:mime-version:content-transfer-encoding:
+   message-id:to:cc;
+  bh=+hz7OrzMbUMcAoXtMSvTQCl5KtJyw3Bih09dQpX7TTs=;
+  b=kBw2lts1MPZT5iHlYoi6VtiCTdTs171UZCzHz2EZcDnlS+cLvShZHGw8
+   Zu9CpXf6g9/b6te123HTAlIQduFZZZEB9VivtK5cZRG+5CPr3zPp8KIWK
+   vxqrQdzejY9MD2xGBkZX59MMdcCjehI1YhX/Q3ItevgB5rvfm53qXuftp
+   1enAHQi+GPaAjRZbs0Wc/kwpqTtnrLTgah5TRZx59ui21QcWuXbJsLRkS
+   nrDB2RBIdmbwly1+TB+dxbJyS7p7xNZp9vC2z5ub7OiEbMtvXsEILUUrQ
+   3nk/n/2WV9udl4StVewACc877oVaVWtQx91Pz0FZY610jZGLEryN/oGdh
+   A==;
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+Date:   Wed, 7 Jun 2023 11:25:06 +0200
+Subject: [PATCH v2] ubi: block: Fix cleanup handling
 MIME-Version: 1.0
-X-Received: by 2002:a92:c709:0:b0:33a:e860:f9dd with SMTP id
- a9-20020a92c709000000b0033ae860f9ddmr2095374ilp.0.1686129888235; Wed, 07 Jun
- 2023 02:24:48 -0700 (PDT)
-Date:   Wed, 07 Jun 2023 02:24:48 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000000897b205fd86b576@google.com>
-Subject: [syzbot] Monthly xfs report (Jun 2023)
-From:   syzbot <syzbot+list020cf39d4baa3eb9d54e@syzkaller.appspotmail.com>
-To:     djwong@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-ID: <20230523-ubiblock-remove-v2-1-7671fc60ba49@axis.com>
+X-B4-Tracking: v=1; b=H4sIAPFMgGQC/3WNyw6CMBBFf4V0bU0pD9GV/2FYdMpUJkrHtNpgC
+ P9uYe/y3JuTs4iIgTCKS7GIgIkisc+gD4Wwo/F3lDRkFlrpSjW6kh8geLJ9yIATJ5RooC2ta7v
+ KKZEtMBElBOPtuHmOGUzQ2/MK6GjeW7c+80jxzeG7p1O5rf8rqZRK6loBDqemq89wNTPFo+VJ9
+ Ou6/gBYruakxwAAAA==
+To:     Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+CC:     <hch@infradead.org>, <linux-mtd@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <kernel@axis.com>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,40 +56,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello xfs maintainers/developers,
+ubiblock's remove handling has a couple of problems:
 
-This is a 31-day syzbot report for the xfs subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/xfs
+ - It uses the gendisk after put_disk(), resulting in a use-after-free.
 
-During the period, 2 new issues were detected and 0 were fixed.
-In total, 22 issues are still open and 21 have been fixed so far.
+ - There is a circular locking dependency between disk->open_mutex (used
+   from del_gendisk() and blkdev_open()) and dev->dev_mutex (used from
+   ubiblock_open() and ubiblock_remove()).
 
-Some of the still happening issues:
+Fix these by implementing ->free_disk() and moving the final cleanup
+there.
 
-Ref Crashes Repro Title
-<1> 1885    No    KMSAN: uninit-value in __crc32c_le_base (3)
-                  https://syzkaller.appspot.com/bug?extid=a6d6b8fffa294705dbd8
-<2> 188     Yes   KASAN: stack-out-of-bounds Read in xfs_buf_lock
-                  https://syzkaller.appspot.com/bug?extid=0bc698a422b5e4ac988c
-<3> 127     Yes   INFO: task hung in xfs_buf_item_unpin
-                  https://syzkaller.appspot.com/bug?extid=3f083e9e08b726fcfba2
-<4> 48      No    KCSAN: data-race in __filemap_remove_folio / folio_mapping (2)
-                  https://syzkaller.appspot.com/bug?extid=606f94dfeaaa45124c90
-<5> 13      No    KASAN: use-after-free Read in xfs_inode_item_push
-                  https://syzkaller.appspot.com/bug?extid=f0da51f81ea0b040c803
-<6> 7       Yes   KASAN: stack-out-of-bounds Read in xfs_buf_delwri_submit_buffers
-                  https://syzkaller.appspot.com/bug?extid=d2cdeba65d32ed1d2c4d
+Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+---
+Changes in v2:
+- Combine and rework patches to implement and use ->free_disk().
+- Link to v1: https://lore.kernel.org/r/20230523-ubiblock-remove-v1-0-240bed75849b@axis.com
+---
+ drivers/mtd/ubi/block.c | 27 ++++++++++++++++++++-------
+ 1 file changed, 20 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/mtd/ubi/block.c b/drivers/mtd/ubi/block.c
+index 3711d7f74600..570e660673ad 100644
+--- a/drivers/mtd/ubi/block.c
++++ b/drivers/mtd/ubi/block.c
+@@ -293,11 +293,23 @@ static int ubiblock_getgeo(struct block_device *bdev, struct hd_geometry *geo)
+ 	return 0;
+ }
+ 
++static void ubiblock_free_disk(struct gendisk *disk)
++{
++	struct ubiblock *dev = disk->private_data;
++
++	mutex_lock(&devices_mutex);
++	idr_remove(&ubiblock_minor_idr, disk->first_minor);
++	mutex_unlock(&devices_mutex);
++
++	kfree(dev);
++}
++
+ static const struct block_device_operations ubiblock_ops = {
+ 	.owner = THIS_MODULE,
+ 	.open = ubiblock_open,
+ 	.release = ubiblock_release,
+ 	.getgeo	= ubiblock_getgeo,
++	.free_disk = ubiblock_free_disk,
+ };
+ 
+ static blk_status_t ubiblock_queue_rq(struct blk_mq_hw_ctx *hctx,
+@@ -452,9 +464,8 @@ static void ubiblock_cleanup(struct ubiblock *dev)
+ 	del_gendisk(dev->gd);
+ 	/* Finally destroy the blk queue */
+ 	dev_info(disk_to_dev(dev->gd), "released");
+-	put_disk(dev->gd);
+ 	blk_mq_free_tag_set(&dev->tag_set);
+-	idr_remove(&ubiblock_minor_idr, dev->gd->first_minor);
++	put_disk(dev->gd);
+ }
+ 
+ int ubiblock_remove(struct ubi_volume_info *vi)
+@@ -478,11 +489,11 @@ int ubiblock_remove(struct ubi_volume_info *vi)
+ 
+ 	/* Remove from device list */
+ 	list_del(&dev->list);
+-	ubiblock_cleanup(dev);
+ 	mutex_unlock(&dev->dev_mutex);
+ 	mutex_unlock(&devices_mutex);
+ 
+-	kfree(dev);
++	ubiblock_cleanup(dev);
++
+ 	return 0;
+ 
+ out_unlock_dev:
+@@ -623,17 +634,19 @@ static void ubiblock_remove_all(void)
+ {
+ 	struct ubiblock *next;
+ 	struct ubiblock *dev;
++	LIST_HEAD(list);
+ 
+ 	mutex_lock(&devices_mutex);
+-	list_for_each_entry_safe(dev, next, &ubiblock_devices, list) {
++	list_splice_init(&ubiblock_devices, &list);
++	mutex_unlock(&devices_mutex);
++
++	list_for_each_entry_safe(dev, next, &list, list) {
+ 		/* The module is being forcefully removed */
+ 		WARN_ON(dev->desc);
+ 		/* Remove from device list */
+ 		list_del(&dev->list);
+ 		ubiblock_cleanup(dev);
+-		kfree(dev);
+ 	}
+-	mutex_unlock(&devices_mutex);
+ }
+ 
+ int __init ubiblock_init(void)
 
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+base-commit: 44c026a73be8038f03dbdeef028b642880cf1511
+change-id: 20230523-ubiblock-remove-eab61cf683f0
 
-To disable reminders for individual bugs, reply with the following command:
-#syz set <Ref> no-reminders
+Best regards,
+-- 
+Vincent Whitchurch <vincent.whitchurch@axis.com>
 
-To change bug's subsystems, reply with:
-#syz set <Ref> subsystems: new-subsystem
-
-You may send multiple commands in a single email message.
