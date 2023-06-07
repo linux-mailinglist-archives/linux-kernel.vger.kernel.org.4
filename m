@@ -2,62 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4500A726B2C
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 22:23:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC7AD726AEF
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 22:21:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233282AbjFGUXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 16:23:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48684 "EHLO
+        id S229379AbjFGUVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 16:21:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233090AbjFGUXH (ORCPT
+        with ESMTP id S232580AbjFGUUx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 16:23:07 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6257270A;
-        Wed,  7 Jun 2023 13:22:44 -0700 (PDT)
+        Wed, 7 Jun 2023 16:20:53 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DCEA213C;
+        Wed,  7 Jun 2023 13:20:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686169364; x=1717705364;
+  t=1686169232; x=1717705232;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ptcJdaHahJRD2fNGZZ0WMUGd3tX28UXr2OYz7pD6acg=;
-  b=lSD/SAdjjJOE5Zmq9fy1SBGhvrcmcQsTjP3huXF1mcXJsx9g2cH9+NIA
-   5YJx+BB1gqxUgjln/LJ1i2Um6du3Z3B5eD1aHvFQoMxg+S3KPjUaTtqfh
-   igtAPcFgIOKZBqMTmTSVXGCZev93CE/yaCQk5RB9H1I4+G4ytVYvVScq3
-   bBBZMJd4hlomIDJOH8abAK2frwuq2jZrHQx9TT09yBilxMDG1G+yNYkcW
-   XUE2lerTZnATw9emVao7wrOZAY1ps/TIzBC9Ei9AmjTKLYPx8dMN/ojBa
-   N0St160DQZ4Sby3WP+g74AL8lyfoI+DJWx/1CiVoeAy3HNDsZlfIw8L1A
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=wbuPh7uoz71kWZlfYlZFIXDMM491BC7Ay1rgJkxp/uA=;
+  b=eBBa8XRXbOvpaDL2GyEeDzVZzweHzJMDQqdIX3GieA3/ZH5o/uMIzJGJ
+   naSsD3Do9MARKWKLRgCaRtcz3/SXatKiCOAX7VR7ColHLVsdlUpESu/D7
+   YYGC8h6gHsdPNx4mh54QXXsn+ZTH/Fxi7jvS8OD3XrMc0izdThtp+K1Ji
+   cQmCgTYKJZF1i14eQmnkUahrLsq0pnpKVMOY7bZLgVhhUAs5YBuuHhQA3
+   ahzBnMbzgvTeGqjF4qPMW4KSDZrScO/HrTex9Ptd3BZa4Q7GxlX4IODDD
+   O5FBAMXM/phwEABUa1yxDZHXDgiN3xeJMTEtsmU7StSJn0xkhI2rThqUr
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="357109028"
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="354586472"
 X-IronPort-AV: E=Sophos;i="6.00,225,1681196400"; 
-   d="scan'208";a="357109028"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 13:20:44 -0700
+   d="scan'208";a="354586472"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 13:20:11 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="739418877"
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="712817834"
 X-IronPort-AV: E=Sophos;i="6.00,225,1681196400"; 
-   d="scan'208";a="739418877"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 07 Jun 2023 13:20:40 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q6ze4-0006tD-2X;
-        Wed, 07 Jun 2023 20:20:40 +0000
-Date:   Thu, 8 Jun 2023 04:19:52 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yang Li <yang.lee@linux.alibaba.com>, mani@kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, lpieralisi@kernel.org, kw@linux.com,
-        kishon@kernel.org, bhelgaas@google.com, mhi@lists.linux.dev,
-        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH -next] PCI: endpoint: Remove redundant dev_err().
-Message-ID: <202306080418.i64hTj5T-lkp@intel.com>
-References: <20230607093514.104012-1-yang.lee@linux.alibaba.com>
+   d="scan'208";a="712817834"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga007.fm.intel.com with ESMTP; 07 Jun 2023 13:20:07 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1q6zdV-001zlx-0Y;
+        Wed, 07 Jun 2023 23:20:05 +0300
+Date:   Wed, 7 Jun 2023 23:20:04 +0300
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Chen-Yu Tsai <wenst@chromium.org>
+Cc:     Tony Lindgren <tony@atomide.com>,
+        John Ogness <john.ogness@linutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, Dhruva Gole <d-gole@ti.com>,
+        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Johan Hovold <johan@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org,
+        =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
+        <nfraprado@collabora.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v12 1/1] serial: core: Start managing serial controllers
+ to enable runtime PM
+Message-ID: <ZIDmdLDNitoSJrUO@smile.fi.intel.com>
+References: <20230603054139.GR14287@atomide.com>
+ <20230603063533.GS14287@atomide.com>
+ <20230605061511.GW14287@atomide.com>
+ <CAGXv+5Fbx7eTxP0ep6DV+jyronAWxYvu2M-g=MjHGRhjSXUc=w@mail.gmail.com>
+ <20230605122447.GY14287@atomide.com>
+ <CAGXv+5HwL+R5QpO3pHGQd9qAxu2pCMDjYvdni1HjiC8eEE38mg@mail.gmail.com>
+ <20230605131803.GA14287@atomide.com>
+ <CAGXv+5GR9TEaNrj4B21H2iukS2kWW=rtoWkoVnWewVsrbcG0Hw@mail.gmail.com>
+ <20230606122059.GC14287@atomide.com>
+ <CAGXv+5ERwrFgpWBUBTkoawfyyTHU9w=Owiy-2BbCXHwEpZk1tA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230607093514.104012-1-yang.lee@linux.alibaba.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAGXv+5ERwrFgpWBUBTkoawfyyTHU9w=Owiy-2BbCXHwEpZk1tA@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -68,72 +90,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yang,
+On Wed, Jun 07, 2023 at 12:46:51PM +0800, Chen-Yu Tsai wrote:
+> On Tue, Jun 6, 2023 at 8:21 PM Tony Lindgren <tony@atomide.com> wrote:
 
-kernel test robot noticed the following build warnings:
+...
 
-[auto build test WARNING on next-20230607]
+> After a bit more testing, it seems the Bluetooth problem is more like
+> an undervolt issue.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Yang-Li/PCI-endpoint-Remove-redundant-dev_err/20230607-173708
-base:   next-20230607
-patch link:    https://lore.kernel.org/r/20230607093514.104012-1-yang.lee%40linux.alibaba.com
-patch subject: [PATCH -next] PCI: endpoint: Remove redundant dev_err().
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20230608/202306080418.i64hTj5T-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build):
-        git checkout next-20230607
-        b4 shazam https://lore.kernel.org/r/20230607093514.104012-1-yang.lee@linux.alibaba.com
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 olddefconfig
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/pci/endpoint/functions/
+Undercurrent I believe.
+Just my pedantic 2 cents and electronics engineer by education :-)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306080418.i64hTj5T-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   drivers/pci/endpoint/functions/pci-epf-mhi.c: In function 'pci_epf_mhi_bind':
->> drivers/pci/endpoint/functions/pci-epf-mhi.c:347:24: warning: unused variable 'dev' [-Wunused-variable]
-     347 |         struct device *dev = &epf->dev;
-         |                        ^~~
-
-
-vim +/dev +347 drivers/pci/endpoint/functions/pci-epf-mhi.c
-
-7db424a84d96b0 Manivannan Sadhasivam 2023-06-02  341  
-7db424a84d96b0 Manivannan Sadhasivam 2023-06-02  342  static int pci_epf_mhi_bind(struct pci_epf *epf)
-7db424a84d96b0 Manivannan Sadhasivam 2023-06-02  343  {
-7db424a84d96b0 Manivannan Sadhasivam 2023-06-02  344  	struct pci_epf_mhi *epf_mhi = epf_get_drvdata(epf);
-7db424a84d96b0 Manivannan Sadhasivam 2023-06-02  345  	struct pci_epc *epc = epf->epc;
-7db424a84d96b0 Manivannan Sadhasivam 2023-06-02  346  	struct platform_device *pdev = to_platform_device(epc->dev.parent);
-7db424a84d96b0 Manivannan Sadhasivam 2023-06-02 @347  	struct device *dev = &epf->dev;
-7db424a84d96b0 Manivannan Sadhasivam 2023-06-02  348  	struct resource *res;
-7db424a84d96b0 Manivannan Sadhasivam 2023-06-02  349  	int ret;
-7db424a84d96b0 Manivannan Sadhasivam 2023-06-02  350  
-7db424a84d96b0 Manivannan Sadhasivam 2023-06-02  351  	/* Get MMIO base address from Endpoint controller */
-7db424a84d96b0 Manivannan Sadhasivam 2023-06-02  352  	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "mmio");
-7db424a84d96b0 Manivannan Sadhasivam 2023-06-02  353  	epf_mhi->mmio_phys = res->start;
-7db424a84d96b0 Manivannan Sadhasivam 2023-06-02  354  	epf_mhi->mmio_size = resource_size(res);
-7db424a84d96b0 Manivannan Sadhasivam 2023-06-02  355  
-7db424a84d96b0 Manivannan Sadhasivam 2023-06-02  356  	epf_mhi->mmio = ioremap(epf_mhi->mmio_phys, epf_mhi->mmio_size);
-7db424a84d96b0 Manivannan Sadhasivam 2023-06-02  357  	if (IS_ERR(epf_mhi->mmio))
-7db424a84d96b0 Manivannan Sadhasivam 2023-06-02  358  		return PTR_ERR(epf_mhi->mmio);
-7db424a84d96b0 Manivannan Sadhasivam 2023-06-02  359  
-7db424a84d96b0 Manivannan Sadhasivam 2023-06-02  360  	ret = platform_get_irq_byname(pdev, "doorbell");
-7db424a84d96b0 Manivannan Sadhasivam 2023-06-02  361  	if (ret < 0) {
-7db424a84d96b0 Manivannan Sadhasivam 2023-06-02  362  		iounmap(epf_mhi->mmio);
-7db424a84d96b0 Manivannan Sadhasivam 2023-06-02  363  		return ret;
-7db424a84d96b0 Manivannan Sadhasivam 2023-06-02  364  	}
-7db424a84d96b0 Manivannan Sadhasivam 2023-06-02  365  
-7db424a84d96b0 Manivannan Sadhasivam 2023-06-02  366  	epf_mhi->irq = ret;
-7db424a84d96b0 Manivannan Sadhasivam 2023-06-02  367  
-7db424a84d96b0 Manivannan Sadhasivam 2023-06-02  368  	return 0;
-7db424a84d96b0 Manivannan Sadhasivam 2023-06-02  369  }
-7db424a84d96b0 Manivannan Sadhasivam 2023-06-02  370  
+> If I have WiFi and BT probe at the same time, Bluetooth
+> fails. If they probe separately, everything works fine.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+With Best Regards,
+Andy Shevchenko
+
+
