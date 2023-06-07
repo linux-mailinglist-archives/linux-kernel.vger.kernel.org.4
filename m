@@ -2,50 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F351A725F84
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 14:32:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E17A0725DEB
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 14:01:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235534AbjFGMcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 08:32:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44272 "EHLO
+        id S239169AbjFGMBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 08:01:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240945AbjFGMcS (ORCPT
+        with ESMTP id S234132AbjFGMBt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 08:32:18 -0400
-Received: from baidu.com (mx20.baidu.com [111.202.115.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F5FCE62;
-        Wed,  7 Jun 2023 05:32:16 -0700 (PDT)
-From:   "Duan,Muquan" <duanmuquan@baidu.com>
-To:     Simon Horman <simon.horman@corigine.com>
-CC:     "davem@davemloft.net" <davem@davemloft.net>,
-        "dsahern@kernel.org" <dsahern@kernel.org>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1] tcp: fix connection reset due to tw hashdance race.
-Thread-Topic: [PATCH v1] tcp: fix connection reset due to tw hashdance race.
-Thread-Index: AQHZl2EOPgCVvIYh+EyVtuZIPXSv7q989RIAgAHFnQA=
-Date:   Wed, 7 Jun 2023 12:01:23 +0000
-Message-ID: <A280D6B1-6CAE-4255-9542-21268D9F8997@baidu.com>
-References: <20230605035140.89106-1-duanmuquan@baidu.com>
- <ZH71DvVRewnmRdC9@corigine.com>
-In-Reply-To: <ZH71DvVRewnmRdC9@corigine.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.22.196.162]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <26401C5E3F057C4DBF421F6F2C8CB3FE@internal.baidu.com>
-Content-Transfer-Encoding: base64
+        Wed, 7 Jun 2023 08:01:49 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1EA6184
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 05:01:48 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1686139306;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YJJk4TXDby3/H2FkL9O8SbY7aXPkF4xS/ijxCWeHZYc=;
+        b=23keO+gIRuQkoGVs9Dp5mBh6FeswvanyDB7toCFGQnW6TRrIf2g0hPzvIZBb/Xr21wksHl
+        2q8Bf8f/KXURT/wd07PIzDGL92HfwFEJZ9btPmglwazZlFPqyfhRDdql8y5nzWObg715yp
+        TWnxPmpbuXtd5OG5FWZ3YIhEjgnEfP6Ui8Y0ObDgznfKkMy1mcTM0tNu5rMz7QS7EWzC61
+        l4nwgzOEBM6mM2vzqQE4119ZQSc/6B7ezrcNOPSM2yC3UHTREV8CHeB7+WFmlc42hHkbJC
+        kmx0s88RiM29ZJP9EaRztLSHvj9VR5+zAr+Lg7bafkadzHwFq8cxrqOhDkcmzQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1686139306;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YJJk4TXDby3/H2FkL9O8SbY7aXPkF4xS/ijxCWeHZYc=;
+        b=EP/aQEgTp5HXh14nWxMjHN3HJWL/EJ1oDWmG85+Yfbi2vbTRv+cIBsVeMZkLHHRArnW4Up
+        ftlMFLDwzduyrCCQ==
+To:     Nikolay Borisov <nik.borisov@suse.com>, x86@kernel.org
+Cc:     linux-kernel@vger.kernel.org, mhocko@suse.com, jslaby@suse.cz,
+        Nikolay Borisov <nik.borisov@suse.com>
+Subject: Re: [PATCH 3/3] x86: Disable running 32bit processes if
+ ia32_disabled is passed
+In-Reply-To: <20230607072936.3766231-4-nik.borisov@suse.com>
+References: <20230607072936.3766231-1-nik.borisov@suse.com>
+ <20230607072936.3766231-4-nik.borisov@suse.com>
+Date:   Wed, 07 Jun 2023 14:01:46 +0200
+Message-ID: <87legvjxat.ffs@tglx>
 MIME-Version: 1.0
-X-FEAS-Client-IP: 172.31.51.56
-X-FE-Last-Public-Client-IP: 100.100.100.49
-X-FE-Policy-ID: 15:10:21:SYSTEM
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,20 +57,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGksIFNpbW9uLA0KDQpUaGFuayB5b3UgZm9yIHBvaW50aW5nIG91dCB0aGUgZXJyb3IsIEkgd2ls
-bCBjb3JyZWN0IGl0IGluIG5leHQgcGF0Y2guDQoNCkJlc3QgUmVnYXJkcyENCkR1YW4NCg0KPiAy
-MDIz5bm0NuaciDbml6Ug5LiL5Y2INDo1N++8jFNpbW9uIEhvcm1hbiA8c2ltb24uaG9ybWFuQGNv
-cmlnaW5lLmNvbT4g5YaZ6YGT77yaDQo+IA0KPiBPbiBNb24sIEp1biAwNSwgMjAyMyBhdCAxMTo1
-MTo0MEFNICswODAwLCBEdWFuIE11cXVhbiB3cm90ZToNCj4gDQo+IC4uLg0KPiANCj4+IEJyaWVm
-IG9mIHRoZSBzY2VuYXJpbzoNCj4+IA0KPj4gMS4gU2VydmVyIHJ1bnMgb24gQ1BVIDAgYW5kIENs
-aWVudCBydW5zIG9uIENQVSAxLiBTZXJ2ZXIgY2xvc2VzDQo+PiBjb25uZWN0aW9uIGFjdGl2ZWx5
-IGFuZCBzZW5kcyBhIEZJTiB0byBjbGllbnQuIFRoZSBsb29rYmFjaydzIGRyaXZlcg0KPj4gZW5x
-dWV1ZXMgdGhlIEZJTiBzZWdtZW50IHRvIGJhY2tsb2cgcXVldWUgb2YgQ1BVIDAgdmlhDQo+PiBs
-b29wYmFja194bWl0KCktPm5ldGlmX3J4KCksIG9uZSBvZiB0aGUgY29uZGl0aW9ucyBmb3Igbm9u
-LWRlbGF5IGFjaw0KPj4gbWVldHMgaW4gX190Y3BfYWNrX3NuZF9jaGVjaygpLCBhbmQgdGhlIEFD
-SyBpcyBzZW50IGltbWVkaWF0ZWx5Lg0KPj4gDQo+PiAyLiBPbiBsb29wYmFjayBpbnRlcmZhY2Us
-IHRoZSBBQ0sgaXMgcmVjZWl2ZWQgYW5kIHByb2Nlc3NlZCBvbiBDUFUgMCwNCj4+IHRoZSAnZGFu
-Y2UnIGZyb20gb3JpZ2luYWwgc29jayB0byB0dyBzb2NrIHdpbGwgcGVyZnJvbSwgdHcgc29jayB3
-aWxsDQo+IA0KPiBIaSBEdWFuIE11cXVhbiwNCj4gDQo+IGEgbWlub3Igbml0IGZyb20gbXkgc2lk
-ZTogcGVyZnJvbSAtPiBwZXJmb3JtDQo+IA0KPj4gYmUgaW5zZXJ0ZWQgdG8gZWhhc2ggdGFibGUs
-IHRoZW4gdGhlIG9yaWdpbmFsIHNvY2sgd2lsbCBiZSByZW1vdmVkLg0KPiANCj4gLi4uDQoNCg==
+On Wed, Jun 07 2023 at 10:29, Nikolay Borisov wrote:
+> In addition to disabling 32bit syscall interface let's also disable the
+> ability to run 32bit processes altogether. This is achieved by setting
+> the GDT_ENTRY_DEFAULT_USER32_CS descriptor to not present which would
+> cause 32 bit processes to trap with a #NP exception. Furthermore,
+> forbid loading compat processes as well.
+
+This is obviously the wrong order of things. Prevent loading of compat
+processes is the first step, no?
+
+>  
+> +extern bool ia32_disabled;
+>  #define compat_elf_check_arch(x)					\
+
+So in patch 1 you add the declaration with #ifdef guards and now you add
+another one without. Fortunately this is the last patch otherwise we'd
+might end up with another incarnation in the next header file.
+
+> -	(elf_check_arch_ia32(x) ||					\
+> -	 (IS_ENABLED(CONFIG_X86_X32_ABI) && (x)->e_machine == EM_X86_64))
+> +	(!ia32_disabled && (elf_check_arch_ia32(x) ||			\
+> +	 (IS_ENABLED(CONFIG_X86_X32_ABI) && (x)->e_machine == EM_X86_64)))
+
+If I'm reading this correctly then ia32_disabled also prevents binaries
+with X32 ABI to be loaded.
+
+That might be intentional but I'm failing to find any explanation for
+this in the changelog.
+
+X32_ABI != IA32_EMULATION
+
+>  static inline void elf_common_init(struct thread_struct *t,
+>  				   struct pt_regs *regs, const u16 ds)
+> diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+> index 71f8b55f70c9..ddc301c09419 100644
+> --- a/arch/x86/kernel/cpu/common.c
+> +++ b/arch/x86/kernel/cpu/common.c
+> @@ -2359,6 +2359,11 @@ void microcode_check(struct cpuinfo_x86 *prev_info)
+>  }
+>  #endif
+>  
+> +static void remove_user32cs_from_gdt(void * __unused)
+> +{
+> +	get_current_gdt_rw()[GDT_ENTRY_DEFAULT_USER32_CS].p = 0;
+> +}
+> +
+>  /*
+>   * Invoked from core CPU hotplug code after hotplug operations
+>   */
+> @@ -2368,4 +2373,7 @@ void arch_smt_update(void)
+>  	cpu_bugs_smt_update();
+>  	/* Check whether IPI broadcasting can be enabled */
+>  	apic_smt_update();
+> +	if (ia32_disabled)
+> +		on_each_cpu(remove_user32cs_from_gdt, NULL, 1);
+> +
+>  }
+
+This issues a SMP function call on all online CPUs to set these entries
+to 0 on _every_ CPU hotplug operation.
+
+I'm sure there is a reason why these bits need to be cleared over and
+over. It's just not obvious to me why clearing them _ONCE_ per boot is
+not sufficient. It's neither clear to me why CPU0 must do that ($NCPUS -
+1) times, but for the last CPU it's enough to do it once.
+
+That aside, what's the justification for doing this in the first place
+and why is this again inconsistent vs. CONFIG_IA32_EMULATION=n?
+
+The changelog is full of void in that aspect.
+
+Thanks,
+
+        tglx
+        
