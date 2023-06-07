@@ -2,79 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3143C727356
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 01:51:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27ABB727359
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 01:52:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233319AbjFGXvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 19:51:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51662 "EHLO
+        id S231229AbjFGXwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 19:52:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233158AbjFGXvT (ORCPT
+        with ESMTP id S230445AbjFGXwc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 19:51:19 -0400
-Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 653F82696
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 16:50:28 -0700 (PDT)
-Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-62884fa0e53so705276d6.0
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 16:50:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686181827; x=1688773827;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mhikzEBmpROllrpUkG6N5rn5swH/R/MkyomEPj+0LRU=;
-        b=MM7nKN4yRCfIRa3/uqU0Hy7nm5MXGsO6WCWk8yeRqH9L/7Z4ZxrsGGkB91OoRKfQq0
-         HAzvJL6BnDdhcXQsIeXVmlJQIxMBXRvQ9fBnhMuwSm2uqJ69gjHODGttP/9veV2fWlgJ
-         h1N+ms7UcR3PiRflxIiicHNhfl45CR9+WNLdKqdsASNwE0Nkq9oG+vwhDiPMnNauDTwo
-         k5dOzjiq3mS/2cfXSGQFFY2iUma10HVDaFe3r4OjVO+USVV/lPKs0C88SaxUAlQiZ04N
-         QQT6nZR9n4WOAKLDVbwXHJShH+RJ/QAVfri8qax2m2DGOqzl7B7KVsTAikmcURq6l5Au
-         21pQ==
-X-Gm-Message-State: AC+VfDxp8ddgN6Tw2NN1ljTB84cX52GXM8jsuM8ru3ASrNmGQaEfo+VJ
-        Js5SxIT0FxgGlYFNzmIt7dlP
-X-Google-Smtp-Source: ACHHUZ6y+cOL+ZxgisiLenJjAOucQc9Wtuow/WkgwMRhUI55SkTWbqnmzTclMfUHnNVFzRSWwX/5Nw==
-X-Received: by 2002:a05:620a:2b4b:b0:75b:23a1:3651 with SMTP id dp11-20020a05620a2b4b00b0075b23a13651mr4139465qkb.18.1686181827499;
-        Wed, 07 Jun 2023 16:50:27 -0700 (PDT)
-Received: from localhost (pool-68-160-166-30.bstnma.fios.verizon.net. [68.160.166.30])
-        by smtp.gmail.com with ESMTPSA id x12-20020ae9f80c000000b0075ca4cd03d4sm245229qkh.64.2023.06.07.16.50.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 16:50:27 -0700 (PDT)
-Date:   Wed, 7 Jun 2023 19:50:25 -0400
-From:   Mike Snitzer <snitzer@kernel.org>
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Joe Thornber <thornber@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Jason Wang <jasowang@redhat.com>,
-        Bart Van Assche <bvanassche@google.com>,
-        linux-kernel@vger.kernel.org, Joe Thornber <ejt@redhat.com>,
-        linux-block@vger.kernel.org, dm-devel@redhat.com,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Sarthak Kukreti <sarthakkukreti@chromium.org>,
-        linux-fsdevel@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
-        linux-ext4@vger.kernel.org, Brian Foster <bfoster@redhat.com>,
-        Alasdair Kergon <agk@redhat.com>
-Subject: Re: [PATCH v7 0/5] Introduce provisioning primitives
-Message-ID: <ZIEXwTd17z0iYW4s@redhat.com>
-References: <CAJ0trDbspRaDKzTzTjFdPHdB9n0Q9unfu1cEk8giTWoNu3jP8g@mail.gmail.com>
- <ZHFEfngPyUOqlthr@dread.disaster.area>
- <CAJ0trDZJQwvAzngZLBJ1hB0XkQ1HRHQOdNQNTw9nK-U5i-0bLA@mail.gmail.com>
- <ZHYB/6l5Wi+xwkbQ@redhat.com>
- <CAJ0trDaUOevfiEpXasOESrLHTCcr=oz28ywJU+s+YOiuh7iWow@mail.gmail.com>
- <ZHYWAGmKhwwmTjW/@redhat.com>
- <CAG9=OMMnDfN++-bJP3jLmUD6O=Q_ApV5Dr392_5GqsPAi_dDkg@mail.gmail.com>
- <ZHqOvq3ORETQB31m@dread.disaster.area>
- <ZHti/MLnX5xGw9b7@redhat.com>
- <ZH/k9ss2Cg9HYrEV@dread.disaster.area>
+        Wed, 7 Jun 2023 19:52:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EAD19E;
+        Wed,  7 Jun 2023 16:52:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 05D4F61040;
+        Wed,  7 Jun 2023 23:52:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63BAEC433D2;
+        Wed,  7 Jun 2023 23:52:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686181950;
+        bh=6pgSFYsSsLqInvahVHsx2DhcY3kpo+fzL3XqW2yw6j8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=nuRuke7/uPMCJV6aj03GtBWYipIk9M7+oW9yOzrdF7+2jgSt39/Cxr8LJdQHkWmvZ
+         Evl73mMzWgH2VXonZIMiy34RpqyjWXfg6Gymry2ujKervcNXiQAxfNtyj+iYWz+/s+
+         mbZHMZEMlkxuustlp4DHyN8g+9GQAn5U/FpHel5xaUK9njsLD0vrF+N/8DSx7iR5xa
+         kRyMOunz0KztNjuVK5l+oIFJRoGE1bzTw1EW3gDKKWlOzy6w/QSFkl7tTJxe25USpx
+         /kZ6dVeIhlItdtzq0i5jC4WZQZ2ECwRUpcfLZFU/2GDyM1JbUqY2RnhFEIFdI15Ayp
+         VTH56dyhUV7dw==
+Received: by mail-oi1-f177.google.com with SMTP id 5614622812f47-38e04d1b2b4so43569b6e.3;
+        Wed, 07 Jun 2023 16:52:30 -0700 (PDT)
+X-Gm-Message-State: AC+VfDyKuVC2+2y9aasumhfDhXmCY+S0fCBL8pVkpAnJxxPlQDh1I5T5
+        hU2sEFn52oEGZDIjZ0OQR/0Ote+aBHgsVkhpcFU=
+X-Google-Smtp-Source: ACHHUZ49oZDE1kdugK2Y4GVA+zcXnkkevQUVWzQxvY3efR8O0jyI3gzgf7XgmvnqirHK93KhjHG4CuLJOwPw7uY+vgs=
+X-Received: by 2002:a05:6808:5ca:b0:39a:ba7e:33bd with SMTP id
+ d10-20020a05680805ca00b0039aba7e33bdmr7513928oij.0.1686181949609; Wed, 07 Jun
+ 2023 16:52:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZH/k9ss2Cg9HYrEV@dread.disaster.area>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+References: <20230606105706.60807b85ff79.I21ab3b54eeebd638676bead3b2f87417944e44f3@changeid>
+ <CAK7LNASe+HWuufyANGJJ0dajzSC4LFy=x2N6erGis0+ZQkAAXA@mail.gmail.com> <2017a6dba12cc7cd05aec33e8066cb7038a89a31.camel@sipsolutions.net>
+In-Reply-To: <2017a6dba12cc7cd05aec33e8066cb7038a89a31.camel@sipsolutions.net>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Thu, 8 Jun 2023 08:51:53 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAROju1ob-5VKEsu_UOfCNoMRE-QU27JE3Ndh-M7pBraSw@mail.gmail.com>
+Message-ID: <CAK7LNAROju1ob-5VKEsu_UOfCNoMRE-QU27JE3Ndh-M7pBraSw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] kernel-doc: don't let V=1 change outcome
+To:     Johannes Berg <johannes@sipsolutions.net>
+Cc:     linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,126 +64,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 06 2023 at 10:01P -0400,
-Dave Chinner <david@fromorbit.com> wrote:
-
-> On Sat, Jun 03, 2023 at 11:57:48AM -0400, Mike Snitzer wrote:
-> > On Fri, Jun 02 2023 at  8:52P -0400,
-> > Dave Chinner <david@fromorbit.com> wrote:
-> > 
-> > > Mike, I think you might have misunderstood what I have been proposing.
-> > > Possibly unintentionally, I didn't call it REQ_OP_PROVISION but
-> > > that's what I intended - the operation does not contain data at all.
-> > > It's an operation like REQ_OP_DISCARD or REQ_OP_WRITE_ZEROS - it
-> > > contains a range of sectors that need to be provisioned (or
-> > > discarded), and nothing else.
-> > 
-> > No, I understood that.
-> > 
-> > > The write IOs themselves are not tagged with anything special at all.
-> > 
-> > I know, but I've been looking at how to also handle the delalloc
-> > usecase (and yes I know you feel it doesn't need handling, the issue
-> > is XFS does deal nicely with ensuring it has space when it tracks its
-> > allocations on "thick" storage
-> 
-> Oh, no it doesn't. It -works for most cases-, but that does not mean
-> it provides any guarantees at all. We can still get ENOSPC for user
-> data when delayed allocation reservations "run out".
-> 
-> This may be news to you, but the ephemeral XFS delayed allocation
-> space reservation is not accurate. It contains a "fudge factor"
-> called "indirect length". This is a "wet finger in the wind"
-> estimation of how much new metadata will need to be allocated to
-> index the physical allocations when they are made. It assumes large
-> data extents are allocated, which is good enough for most cases, but
-> it is no guarantee when there are no large data extents available to
-> allocate (e.g. near ENOSPC!).
-> 
-> And therein lies the fundamental problem with ephemeral range
-> reservations: at the time of reservation, we don't know how many
-> individual physical LBA ranges the reserved data range is actually
-> going to span.
-> 
-> As a result, XFS delalloc reservations are a "close-but-not-quite"
-> reservation backed by a global reserve pool that can be dipped into
-> if we run out of delalloc reservation. If the reserve pool is then
-> fully depleted before all delalloc conversion completes, we'll still
-> give ENOSPC. The pool is sized such that the vast majority of
-> workloads will complete delalloc conversion successfully before the
-> pool is depleted.
-> 
-> Hence XFS gives everyone the -appearance- that it deals nicely with
-> ENOSPC conditions, but it never provides a -guarantee- that any
-> accepted write will always succeed without ENOSPC.
-> 
-> IMO, using this "close-but-not-quite" reservation as the basis of
-> space requirements for other layers to provide "won't ENOSPC"
-> guarantees is fraught with problems. We already know that it is
-> insufficient in important corner cases at the filesystem level, and
-> we also know that lower layers trying to do ephemeral space
-> reservations will have exactly the same problems providing a
-> guarantee. And these are problems we've been unable to engineer
-> around in the past, so the likelihood we can engineer around them
-> now or in the future is also very unlikely.
-
-Thanks for clarifying. Wasn't aware of XFS delalloc's "wet finger in
-the air" ;)
-
-So do you think it reasonable to require applications to fallocate
-their data files? Unaware if users are aware to take that extra step.
-
-> > -- so adding coordination between XFS
-> > and dm-thin layers provides comparable safety.. that safety is an
-> > expected norm).
+On Wed, Jun 7, 2023 at 6:07=E2=80=AFAM Johannes Berg <johannes@sipsolutions=
+.net> wrote:
+>
+> On Tue, 2023-06-06 at 20:15 +0900, Masahiro Yamada wrote:
+> > >
+> > >  ifneq ($(KBUILD_EXTRA_WARN),)
+> > > -  cmd_checkdoc =3D $(srctree)/scripts/kernel-doc -none $<
+> > > +  cmd_checkdoc =3D $(srctree)/scripts/kernel-doc -none \
+> > > +        $(if $(KDOC_WALL), -Wall) \
+> > > +        $(if $(KDOC_WRETURN), -Wreturn) \
+> > > +        $(if $(KDOC_WSHORT_DESC), -Wshort-desc) \
+> > > +        $(if $(KDOC_WSHORT_DESC), -Wcontents-before-sections) \
 > >
-> > But rather than discuss in terms of data vs metadata, the distinction
-> > is:
-> > 1) LBA range reservation (normal case, your proposal)
-> > 2) non-LBA reservation (absolute value, LBA range is known at later stage)
-> > 
-> > But I'm clearly going off script for dwelling on wanting to handle
-> > both.
-> 
-> Right, because if we do 1) then we don't need 2). :)
+> >
+> >
+> > Sorry, I misunderstood your intention.
+> > (I just thought existing env variables would be moved to Makefile)
+> >
+> >
+> > I do not want to proliferate env variables any more.
+>
+> Oh, ok, sure.
+>
+> > If you need per-flag control, maybe we can do like this?
+>
+> Well honestly, I myself just want to pass -Wall, but not necessarily W=3D=
+2
+> since that adds more stuff from the C compiler.
+>
+> > cmd_checkdoc =3D $(srctree)/scripts/kernel-doc -none \
+> >               $(KDOCFLAGS)
+> >
+> >
+> > Then, users can do
+> >
+> >   $ make KDOCFLAGS=3D-Wall
+> >   $ make KDOCFLAGS=3D-Wreturn
+>
+> I'd rather call it KDOC_FLAGS if you don't mind to align with
+> KDOC_WERROR which we have already, but sure, can do.
 
-Sure.
 
-> > My looking at (ab)using REQ_META being set (use 1) vs not (use 2) was
-> > a crude simplification for branching between the 2 approaches.
-> > 
-> > And I understand I made you nervous by expanding the scope to a much
-> > more muddled/shitty interface. ;)
-> 
-> Nervous? No, I'm simply trying to make sure that everyone is on the
-> same page. i.e. that if we water down the guarantee that 1) relies
-> on, then it's not actually useful to filesystems at all.
+I just tried to be consistent with
+CPPFLAGS, CFLAGS, AFLAGS, CHECKFLAGS etc.
+(CHECKFLAGS is for sparse) because
+you apparently mimick compiler flags in kernel-doc.
 
-Yeah, makes sense.
- 
-> > > Put simply: if we restrict REQ_OP_PROVISION guarantees to just
-> > > REQ_META writes (or any other specific type of write operation) then
-> > > it's simply not worth persuing at the filesystem level because the
-> > > guarantees we actually need just aren't there and the complexity of
-> > > discovering and handling those corner cases just isn't worth the
-> > > effort.
-> > 
-> > Here is where I get to say: I think you misunderstood me (but it was
-> > my fault for not being absolutely clear: I'm very much on the same
-> > page as you and Joe; and your visions need to just be implemented
-> > ASAP).
-> 
-> OK, good that we've clarified the misunderstandings on both sides
-> quickly :)
 
-Do you think you're OK to scope out, and/or implement, the XFS changes
-if you use v7 of this patchset as the starting point? (v8 should just
-be v7 minus the dm-thin.c and dm-snap.c changes).  The thinp
-support in v7 will work enough to allow XFS to issue REQ_OP_PROVISION
-and/or fallocate (via mkfs.xfs) to dm-thin devices.
 
-And Joe and I can make independent progress on the dm-thin.c changes
-needed to ensure the REQ_OP_PROVISION gaurantee you need.
+BTW, kernel-doc is invoked from Documentation/Makefile too.
 
-Thanks,
-Mike
+Do we need to pass the same flags to both of them?
+
+
+
+> johannes
+
+
+
+
+
+
+--
+Best Regards
+Masahiro Yamada
