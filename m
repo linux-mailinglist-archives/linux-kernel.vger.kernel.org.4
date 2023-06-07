@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 504CF7251B9
+	by mail.lfdr.de (Postfix) with ESMTP id 9EA977251BA
 	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 03:46:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240585AbjFGBqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 21:46:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35286 "EHLO
+        id S240672AbjFGBqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 21:46:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240566AbjFGBol (ORCPT
+        with ESMTP id S240571AbjFGBoo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 21:44:41 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B597219BE
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 18:44:40 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-bb3cb542875so994584276.1
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 18:44:40 -0700 (PDT)
+        Tue, 6 Jun 2023 21:44:44 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E1381BC8
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 18:44:43 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-565a33c35b1so102597737b3.0
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 18:44:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686102280; x=1688694280;
+        d=google.com; s=20221208; t=1686102282; x=1688694282;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Lh3ZPj+Wzo2hfjfSWit72WLXRXJmKCjosdWMK8GGHUA=;
-        b=3o9qJWhUHNoQNGjubcZF65jCf+kylBRuNrh/H8uqZh8T9IE7SSsDbQdJAJqkGygZ/M
-         XUmP4BGq/x9wgJBAhBViGncUpwNN2utiZ9qBzS74mgWQA9TAd1yT6PxKwrY6axXJfoka
-         xLBd+y1FTCyaQ8wtCWDkY7jTYi1N/aIH8fzG2ptJwcuGV1neC/CfhkzGgXRMnmez4ToI
-         7zfazA3RCOCqNCGwYQ3piafzBFPOCEl6Iiy3qDsgKJQSvSkzxH1q4Czl9Fgamm0CXqul
-         SQ8P0Iql/omNg2GbZcfLUD+dqe8nJ4RmJNzdOs2uPS4ts5K1aUmvO3nFu0WoPgZ4IAnz
-         QZzQ==
+        bh=h5i/HcXWZK6yNAnvq9kN2ruEXhS3nctm8EhXDDQYxW0=;
+        b=t7gIuC7RMSZxifslee8OkIZwaZvgm8eHWrgQsoRbPEqRSzohhLm5euXvuOaHTMGjTW
+         ZQClMPQyMlfx1RwmBzKAQvCsfJOaqsVeBK4ngDOTz1Eh7sRrslTD4+9cNSM5YFstL4p6
+         Pfeqp3G0SF2J6BRCKSbjLoM158ia7k30ps3q/fyd+LAg9RF5185Ion/Z4bs6ke9rs8uI
+         IhpznhPojPzY9Eyow9Ff4Jirl7l6AC6o9kttvqYEZsjSu2XeB9liT7TWhpi/47lQHrP1
+         Hw31TFt/y9n9bOl+SCCVm82dnuV+Yku5+kXZX0GNKqtGjMFHVVckk0jUGtRvSVOO2KX0
+         RpDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686102280; x=1688694280;
+        d=1e100.net; s=20221208; t=1686102282; x=1688694282;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Lh3ZPj+Wzo2hfjfSWit72WLXRXJmKCjosdWMK8GGHUA=;
-        b=Wi2tDUPt9R4iLrKpOXdV+muweXgAOkFIz1p0a+1YEoC7cNQWiKIFkO4YZ0oJP4iZtP
-         OXvhgP5Y2YrvKXk0SLzH19igKV5pIC3lBv9eUGIkW/J1Q3K+9dyZhQpxIvcWzc/5ruBw
-         sOI6b1OSzS8RAVw52/m6S8C5u7DTEC6UeW+4jTK4dHiigz/HwIFDF4x9p5y7mO0xUsjR
-         XhGXbrd2ef/zhO4Y1zwNx2IBis4w52KTKsVUaofGMr4r/wCynZKUPvT53PDmxQiUR4DL
-         82F35je4oxEUl9PDU3DgKLJbhYaqxZeTR2OR+g/SVCORGzFfoe/ITvW8+NuWAU+gSWAN
-         Vm3A==
-X-Gm-Message-State: AC+VfDzDxHVweIhVEhGP7my3fqWX2YmGVG0rpNKlgwRancIrXPU/jkog
-        QfvKcOpvl/BVpy29auVu5VOc3PNXe8sv
-X-Google-Smtp-Source: ACHHUZ5k0RG8X6zpnvumVsnIGTroi8c4VO2eafr6KT17+45l3nZ2TRcZyfvFyEu2jFiCKaPHKnGy224Junv5
+        bh=h5i/HcXWZK6yNAnvq9kN2ruEXhS3nctm8EhXDDQYxW0=;
+        b=f7Sww3I03s70HIUPKpAgYGgQKt8Z5drZiSsasNnHtoQ3h1ruQTHheZaHcbiTp2PA1i
+         ns1agbTPqOddLKmILs3CndP542Be/WnqcvGqKeCiuxenHmbT8Kqd8MMxKCB996uy/SlV
+         trgChZq2kbhE0LwG9Kaa7Tuk2aJBKBzyxzl3Xxmp5WhBvR/jCzUQuGPVTtdzs4ajWY/I
+         HzqIriOHa+Cubzn5iEaAq/W50hAvQ+mEmvMnbzk8IeyQ01u1bE++rC5Ze0+flvSrccw5
+         PHDWZy9kjmcQ79P5JrItBXMDP7V7ZGc6Rl8c+XaS9/c8C7ZX9pVx5RGeITRp90qedD/M
+         BUVQ==
+X-Gm-Message-State: AC+VfDwKwcPKjiKibyXYlmDKxzIaFFAtCDHQdJej42iffcnzfcjCaPBd
+        WOTF6ziOeqFct+j9dCfuEGM+O2ai3ols
+X-Google-Smtp-Source: ACHHUZ6sXa4pQEp7493QMMx/+lFm2yYaX/H67xkftwZIrCy4G77CgeVMKsJI+bSIONd37E/2O8+CJYx/NMxP
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:3c35:209f:5d38:b7a1])
- (user=irogers job=sendgmr) by 2002:a05:6902:1206:b0:bb1:f26d:b18d with SMTP
- id s6-20020a056902120600b00bb1f26db18dmr2138419ybu.13.1686102279962; Tue, 06
- Jun 2023 18:44:39 -0700 (PDT)
-Date:   Tue,  6 Jun 2023 18:43:46 -0700
+ (user=irogers job=sendgmr) by 2002:a81:ac57:0:b0:565:9bee:22e0 with SMTP id
+ z23-20020a81ac57000000b005659bee22e0mr2032744ywj.0.1686102282285; Tue, 06 Jun
+ 2023 18:44:42 -0700 (PDT)
+Date:   Tue,  6 Jun 2023 18:43:47 -0700
 In-Reply-To: <20230607014353.3172466-1-irogers@google.com>
-Message-Id: <20230607014353.3172466-14-irogers@google.com>
+Message-Id: <20230607014353.3172466-15-irogers@google.com>
 Mime-Version: 1.0
 References: <20230607014353.3172466-1-irogers@google.com>
 X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Subject: [PATCH v1 13/20] perf evlist: Free stats in all evlist destruction
+Subject: [PATCH v1 14/20] perf python: Avoid 2 leak sanitizer issues
 From:   Ian Rogers <irogers@google.com>
 To:     John Garry <john.g.garry@oracle.com>,
         Will Deacon <will@kernel.org>,
@@ -107,49 +107,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no evsel free stats, freeing in the evlist__delete ensures
-memory leaks are avoided. Issues detected with "perf stat report" and
-leak sanitizer, perf stat uses perf_session__delete to free the
-evlist. Add dummy symbol for python build.
+Leak sanitizer complains about the variable size bf allocation and
+store to bf if sized 0.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/evlist.c | 2 ++
- tools/perf/util/python.c | 4 ++++
- 2 files changed, 6 insertions(+)
+ tools/perf/util/scripting-engines/trace-event-python.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
-index 82c0b3d0c822..7ef43f72098e 100644
---- a/tools/perf/util/evlist.c
-+++ b/tools/perf/util/evlist.c
-@@ -31,6 +31,7 @@
- #include "util/pmu.h"
- #include "util/sample.h"
- #include "util/bpf-filter.h"
-+#include "util/stat.h"
- #include "util/util.h"
- #include <signal.h>
- #include <unistd.h>
-@@ -171,6 +172,7 @@ void evlist__delete(struct evlist *evlist)
- 	if (evlist == NULL)
- 		return;
+diff --git a/tools/perf/util/scripting-engines/trace-event-python.c b/tools/perf/util/scripting-engines/trace-event-python.c
+index 6b89eec98dd7..59944fef8108 100644
+--- a/tools/perf/util/scripting-engines/trace-event-python.c
++++ b/tools/perf/util/scripting-engines/trace-event-python.c
+@@ -735,6 +735,9 @@ static void regs_map(struct regs_dump *regs, uint64_t mask, const char *arch, ch
+ 	unsigned int i = 0, r;
+ 	int printed = 0;
  
-+	evlist__free_stats(evlist);
- 	evlist__munmap(evlist);
- 	evlist__close(evlist);
- 	evlist__purge(evlist);
-diff --git a/tools/perf/util/python.c b/tools/perf/util/python.c
-index 8de1b759bbaa..a7b2cb05dc86 100644
---- a/tools/perf/util/python.c
-+++ b/tools/perf/util/python.c
-@@ -1494,3 +1494,7 @@ void test_attr__open(struct perf_event_attr *attr, pid_t pid, struct perf_cpu cp
-                      int fd, int group_fd, unsigned long flags)
- {
- }
++	if (size <= 0)
++		return;
 +
-+void evlist__free_stats(struct evlist *evlist)
-+{
-+}
+ 	bf[0] = 0;
+ 
+ 	if (!regs || !regs->regs)
+@@ -764,7 +767,7 @@ static void set_regs_in_dict(PyObject *dict,
+ 	 * 10 chars is for register name.
+ 	 */
+ 	int size = __sw_hweight64(attr->sample_regs_intr) * 28;
+-	char bf[size];
++	char *bf = malloc(size);
+ 
+ 	regs_map(&sample->intr_regs, attr->sample_regs_intr, arch, bf, sizeof(bf));
+ 
+@@ -775,6 +778,7 @@ static void set_regs_in_dict(PyObject *dict,
+ 
+ 	pydict_set_item_string_decref(dict, "uregs",
+ 			_PyUnicode_FromString(bf));
++	free(bf);
+ }
+ 
+ static void set_sym_in_dict(PyObject *dict, struct addr_location *al,
 -- 
 2.41.0.rc0.172.g3f132b7071-goog
 
