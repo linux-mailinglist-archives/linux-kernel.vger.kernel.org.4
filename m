@@ -2,182 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0999C725B7D
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 12:21:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6820E725B86
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 12:23:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239013AbjFGKVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 06:21:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45266 "EHLO
+        id S235605AbjFGKXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 06:23:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233639AbjFGKVG (ORCPT
+        with ESMTP id S233837AbjFGKX3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 06:21:06 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B65C11D;
-        Wed,  7 Jun 2023 03:21:05 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Wed, 7 Jun 2023 06:23:29 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 205CF1BD6
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 03:23:27 -0700 (PDT)
+Received: from localhost.localdomain (unknown [IPv6:2001:b07:646b:e2:e4be:399f:af39:e0db])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id DD6EE219BF;
-        Wed,  7 Jun 2023 10:21:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1686133263; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=PaXymw7r2ADMno+XYANmnydgCB3s3HtZ/gj7X6DBhRc=;
-        b=J3RP1esx98O+TAK740ShbBSTIdlVpgioz65lkUHAjtbIGb8xy5WBt+lIrCV0r9OnDoHREg
-        9nlx7ksSd90DHLE1psfx9asLCpUaxyv4B1zTBIfJJuOZzZQ1Gjyy+fo4l6YYgieeuG6jtj
-        lTaqiPv1XJSX9WqlZNBz7gekdX1pDmk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1686133263;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=PaXymw7r2ADMno+XYANmnydgCB3s3HtZ/gj7X6DBhRc=;
-        b=pYvlyw5JxqoI7wvZHzcb/+G8R8ZEDK5z/bLPAcqkyLXRVeqfv+ukSRUdvw2FmhPAW25a4G
-        T2CBVTCsheQZ24CA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CE5FC13776;
-        Wed,  7 Jun 2023 10:21:03 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id a3peMg9agGSNfAAAMHmgww
-        (envelope-from <jack@suse.cz>); Wed, 07 Jun 2023 10:21:03 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 4FF65A0754; Wed,  7 Jun 2023 12:21:03 +0200 (CEST)
-Date:   Wed, 7 Jun 2023 12:21:03 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Ojaswin Mujoo <ojaswin@linux.ibm.com>
-Cc:     linux-ext4@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
-        Ritesh Harjani <riteshh@linux.ibm.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jan Kara <jack@suse.cz>,
-        Kemeng Shi <shikemeng@huaweicloud.com>,
-        Ritesh Harjani <ritesh.list@gmail.com>
-Subject: Re: [PATCH v2 11/12] ext4: Add allocation criteria 1.5 (CR1_5)
-Message-ID: <20230607102103.gavbiywdudx54opk@quack3>
-References: <cover.1685449706.git.ojaswin@linux.ibm.com>
- <150fdf65c8e4cc4dba71e020ce0859bcf636a5ff.1685449706.git.ojaswin@linux.ibm.com>
+        (Authenticated sender: laura.nao)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 037006606EF5;
+        Wed,  7 Jun 2023 11:23:24 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686133405;
+        bh=H9QRea/52RC21Ar3lTIH+dm/2YukdZI3RX7iffiI+wQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Ao4fa02gCcp1DGDY94o1y99+iPJ2GPtsYQL/IJdK+zPPbSauEIpVP0W6+TeQuRfYE
+         54mhRdKCcs+2rrJ+zn3w4KWAPdLVts1Mnk3kG3qrDy8khYzU76Sp3wHfXv6Q70ISN4
+         0gt23Y4bmJnCz5q8w0v/X+DCVDJ3ofIAp/ZIFb/JFACNZCPKrgfQ/NUSOrWCDqIYGn
+         SfZlRKqXOeFe/hgRu/vvQ/dVQiOmM5RpkmSx8eekb2rH23j6PwJnRsDjBLcMG2HbOx
+         yYXp9s5EkVFhk+pTSZRjb05VVmv8bNdWe+eOpX3C3a8VokTpAEzGfQiEk0xf0ckIhY
+         2dItHWPl51VSg==
+From:   Laura Nao <laura.nao@collabora.com>
+To:     Douglas Anderson <dianders@chromium.org>
+Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, Laura Nao <laura.nao@collabora.com>
+Subject: [PATCH] drm/panel-edp: Add AUO B116XAB01.4 edp panel entry
+Date:   Wed,  7 Jun 2023 12:21:23 +0200
+Message-Id: <20230607102123.219862-1-laura.nao@collabora.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <150fdf65c8e4cc4dba71e020ce0859bcf636a5ff.1685449706.git.ojaswin@linux.ibm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 30-05-23 18:03:49, Ojaswin Mujoo wrote:
-> CR1_5 aims to optimize allocations which can't be satisfied in CR1. The
-> fact that we couldn't find a group in CR1 suggests that it would be
-> difficult to find a continuous extent to compleltely satisfy our
-> allocations. So before falling to the slower CR2, in CR1.5 we
-> proactively trim the the preallocations so we can find a group with
-> (free / fragments) big enough.  This speeds up our allocation at the
-> cost of slightly reduced preallocation.
-> 
-> The patch also adds a new sysfs tunable:
-> 
-> * /sys/fs/ext4/<partition>/mb_cr1_5_max_trim_order
-> 
-> This controls how much CR1.5 can trim a request before falling to CR2.
-> For example, for a request of order 7 and max trim order 2, CR1.5 can
-> trim this upto order 5.
-> 
-> Suggested-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
-> Signed-off-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
-> Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
-> 
-> ext4 squash
+Add a panel entry for the AUO B116XAB01.4 edp panel, found in the Acer
+Chromebook Spin 311 (CP311-3H) laptop.
 
-Why is this here?
+Signed-off-by: Laura Nao <laura.nao@collabora.com>
+---
+ drivers/gpu/drm/panel/panel-edp.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-> +/*
-> + * We couldn't find a group in CR1 so try to find the highest free fragment
-> + * order we have and proactively trim the goal request length to that order to
-> + * find a suitable group faster.
-> + *
-> + * This optimizes allocation speed at the cost of slightly reduced
-> + * preallocations. However, we make sure that we don't trim the request too
-> + * much and fall to CR2 in that case.
-> + */
-> +static void ext4_mb_choose_next_group_cr1_5(struct ext4_allocation_context *ac,
-> +		enum criteria *new_cr, ext4_group_t *group, ext4_group_t ngroups)
-> +{
-> +	struct ext4_sb_info *sbi = EXT4_SB(ac->ac_sb);
-> +	struct ext4_group_info *grp = NULL;
-> +	int i, order, min_order;
-> +	unsigned long num_stripe_clusters = 0;
-> +
-> +	if (unlikely(ac->ac_flags & EXT4_MB_CR1_5_OPTIMIZED)) {
-> +		if (sbi->s_mb_stats)
-> +			atomic_inc(&sbi->s_bal_cr1_5_bad_suggestions);
-> +	}
-> +
-> +	/*
-> +	 * mb_avg_fragment_size_order() returns order in a way that makes
-> +	 * retrieving back the length using (1 << order) inaccurate. Hence, use
-> +	 * fls() instead since we need to know the actual length while modifying
-> +	 * goal length.
-> +	 */
-> +	order = fls(ac->ac_g_ex.fe_len);
-> +	min_order = order - sbi->s_mb_cr1_5_max_trim_order;
-> +	if (min_order < 0)
-> +		min_order = 0;
-> +
-> +	if (1 << min_order < ac->ac_o_ex.fe_len)
-> +		min_order = fls(ac->ac_o_ex.fe_len) + 1;
-> +
-> +	if (sbi->s_stripe > 0) {
-> +		/*
-> +		 * We are assuming that stripe size is always a multiple of
-> +		 * cluster ratio otherwise __ext4_fill_super exists early.
-> +		 */
-> +		num_stripe_clusters = EXT4_NUM_B2C(sbi, sbi->s_stripe);
-> +		if (1 << min_order < num_stripe_clusters)
-> +			min_order = fls(num_stripe_clusters);
-> +	}
-> +
-> +	for (i = order; i >= min_order; i--) {
-> +		int frag_order;
-> +		/*
-> +		 * Scale down goal len to make sure we find something
-> +		 * in the free fragments list. Basically, reduce
-> +		 * preallocations.
-> +		 */
-> +		ac->ac_g_ex.fe_len = 1 << i;
-
-I smell some off-by-one issues here. Look fls(1) == 1 so (1 << fls(n)) > n.
-Hence this loop will actually *grow* the goal allocation length. Also I'm
-not sure why you have +1 in min_order = fls(ac->ac_o_ex.fe_len) + 1.
-
-> +
-> +		if (num_stripe_clusters > 0) {
-> +			/*
-> +			 * Try to round up the adjusted goal to stripe size
-						        ^^^ goal length?
-
-> +			 * (in cluster units) multiple for efficiency.
-> +			 *
-> +			 * XXX: Is s->stripe always a power of 2? In that case
-> +			 * we can use the faster round_up() variant.
-> +			 */
-
-I don't think s->stripe has to be a power of 2. E.g. when you have three
-data disks in a RAID config.
-
-Otherwise the patch looks good to me.
-
-								Honza
+diff --git a/drivers/gpu/drm/panel/panel-edp.c b/drivers/gpu/drm/panel/panel-edp.c
+index fbd114b4f0be..5f6297531347 100644
+--- a/drivers/gpu/drm/panel/panel-edp.c
++++ b/drivers/gpu/drm/panel/panel-edp.c
+@@ -1867,6 +1867,7 @@ static const struct panel_delay delay_200_500_e200 = {
+ static const struct edp_panel_entry edp_panels[] = {
+ 	EDP_PANEL_ENTRY('A', 'U', 'O', 0x1062, &delay_200_500_e50, "B120XAN01.0"),
+ 	EDP_PANEL_ENTRY('A', 'U', 'O', 0x1e9b, &delay_200_500_e50, "B133UAN02.1"),
++	EDP_PANEL_ENTRY('A', 'U', 'O', 0x145c, &delay_200_500_e50, "B116XAB01.4"),
+ 	EDP_PANEL_ENTRY('A', 'U', 'O', 0x1ea5, &delay_200_500_e50, "B116XAK01.6"),
+ 	EDP_PANEL_ENTRY('A', 'U', 'O', 0x405c, &auo_b116xak01.delay, "B116XAK01"),
+ 	EDP_PANEL_ENTRY('A', 'U', 'O', 0x582d, &delay_200_500_e50, "B133UAN01.0"),
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+2.30.2
+
