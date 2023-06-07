@@ -2,82 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2629726544
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 17:57:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E761072654B
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 17:58:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241553AbjFGP5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 11:57:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59116 "EHLO
+        id S240887AbjFGP61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 11:58:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240958AbjFGP5M (ORCPT
+        with ESMTP id S241191AbjFGP6X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 11:57:12 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3C571BEA;
-        Wed,  7 Jun 2023 08:57:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686153431; x=1717689431;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=4WSpnJiCcc25uako5vnysuv35mXObG2rTQvLgVdCHmc=;
-  b=Wsc8cfUffaC+8gbkuNyME9z/7kPxfrbkiMuo8kaomjh5iBwZi/u9Xtkk
-   QpDWcerSd+sEFFZvdJrIJhPdcjowETaGbJhK7ifnAUEGEQEuW9oIg3jbK
-   u74blBWqmEVXyakqHObOrZ6yDmyRSyZD8ZZVUidabjsjtOsukfxj5GoAn
-   JH2vBB8lwsag7woxWxK61bABCe/LEEvasIjlYbbiu8odnxoQ3aZ5Buy7b
-   P/cIfb8s7DNYKjRGquea/vIRHE5t/4XKgYgwK2QIdDr0MBeBRGncRGZXQ
-   KMqKRSBtpE30Xtk9dYh222BfSToyV0Lu42YwOzElyVo5ZH/uay6XffcRB
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="360360133"
-X-IronPort-AV: E=Sophos;i="6.00,224,1681196400"; 
-   d="scan'208";a="360360133"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 08:57:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="739335890"
-X-IronPort-AV: E=Sophos;i="6.00,224,1681196400"; 
-   d="scan'208";a="739335890"
-Received: from vsmyers-mobl2.amr.corp.intel.com (HELO [10.212.146.233]) ([10.212.146.233])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 08:57:09 -0700
-Message-ID: <c1f6322a-eb27-3a3c-5d96-f0601c004a8d@intel.com>
-Date:   Wed, 7 Jun 2023 08:57:09 -0700
+        Wed, 7 Jun 2023 11:58:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171A91FF0
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 08:57:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686153448;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=C/MZw4Z/A0OlIBZIMGEeANKIMkHTcvImJLw3vUuATHI=;
+        b=V9BL/shkcu2uA/N60A7W3VNzSuWs6XH7Bh0XLGrRWKQRvKUuFPKqn6BoOQ+m3Uwp2Jz4DU
+        xJusRMhSKJoZgkxE2OngCOX7lZTfhliMY9Jrory7G6CLzyPhE7oJCsKL0uGZZI2MkzwNeX
+        8SpXnozB3A/br9/sx4+1wOQir3soQ08=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-497-v22FFbDeOrSamtbNeuRJJg-1; Wed, 07 Jun 2023 11:57:27 -0400
+X-MC-Unique: v22FFbDeOrSamtbNeuRJJg-1
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-75d54f2b6c4so469696685a.2
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 08:57:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686153446; x=1688745446;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=C/MZw4Z/A0OlIBZIMGEeANKIMkHTcvImJLw3vUuATHI=;
+        b=Cuq9+cdgnhFuUyTMYOVJafyZFUUMH3+YuMDw1eh4YRUkxeUyDFZHEMkVluEGv38ksD
+         ttLUZM7eajrMHdLtAyiNkcXDGwrf6l14UtnqDTUghJWo+VOKEEY2S2ZPPoWRmC7n35/u
+         PW5biaasUDWaXdjEfO7XDbwCvhWLvOy1mO6QIVjjArxMFseN85wyz6Rsrq4uxNLxA20U
+         zXha4Gd3wXkAgQAK86vSNPsEvBfW380Hu3qHhGg7Ob8DYzzQ2dySGSm94YxPsLVKSRTZ
+         53tIOYFyD6FWfk1G+c5UOIuduXazolP5iNRJQh2r4vr/ZFImrTuz6KR+asY1eBlDGgbu
+         hcNQ==
+X-Gm-Message-State: AC+VfDwRT50y+76VFAyBluI+3XIEZWKO274yYNl1NELyYSG5lKU40i2u
+        +N+I+bvW1SDL1NXzyeNnsfPWx/c/6KJKoLiaBagcFM/2b4LEq3iT3P5qnTYyq88V2DTq4PcyftT
+        N+aCTdpk9IoA17ZNNG4A4s6aFMGrxgWE=
+X-Received: by 2002:a05:620a:2541:b0:75e:86bc:1620 with SMTP id s1-20020a05620a254100b0075e86bc1620mr2656391qko.69.1686153446421;
+        Wed, 07 Jun 2023 08:57:26 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ49Qrz20wOSIiZOvpspbG4CNCfAa43c7AyLJLsnRJpByazcKkEi3BSqoYdfUZb90/Sxp18xUg==
+X-Received: by 2002:a05:620a:2541:b0:75e:86bc:1620 with SMTP id s1-20020a05620a254100b0075e86bc1620mr2656376qko.69.1686153446120;
+        Wed, 07 Jun 2023 08:57:26 -0700 (PDT)
+Received: from [192.168.9.16] (net-2-34-28-201.cust.vodafonedsl.it. [2.34.28.201])
+        by smtp.gmail.com with ESMTPSA id d10-20020a05620a158a00b0075d031ba684sm1339920qkk.99.2023.06.07.08.57.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Jun 2023 08:57:25 -0700 (PDT)
+Message-ID: <a9652cb5-3d73-f49f-6de3-a49d528e91ec@redhat.com>
+Date:   Wed, 7 Jun 2023 17:57:22 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v11 10/20] x86/virt/tdx: Add placeholder to construct
- TDMRs to cover all TDX memory regions
+ Thunderbird/102.10.0
+Subject: Re: [RFC PATCH v6 3/4] fpga: add an initial KUnit suite for the FPGA
+ Region
+To:     Xu Yilun <yilun.xu@intel.com>
+Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-fpga@vger.kernel.org
+References: <20230531095405.342080-1-marpagan@redhat.com>
+ <20230531095405.342080-4-marpagan@redhat.com>
+ <ZHuQc7WfN1zKOeTE@yilunxu-OptiPlex-7050>
+ <d1ef2f9a-f416-e7d6-7481-d81c1941702e@redhat.com>
+ <ZH8R5APukuZVkIv5@yilunxu-OptiPlex-7050>
 Content-Language: en-US
-To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     linux-mm@kvack.org, kirill.shutemov@linux.intel.com,
-        tony.luck@intel.com, peterz@infradead.org, tglx@linutronix.de,
-        seanjc@google.com, pbonzini@redhat.com, david@redhat.com,
-        dan.j.williams@intel.com, rafael.j.wysocki@intel.com,
-        ying.huang@intel.com, reinette.chatre@intel.com,
-        len.brown@intel.com, ak@linux.intel.com, isaku.yamahata@intel.com,
-        chao.gao@intel.com, sathyanarayanan.kuppuswamy@linux.intel.com,
-        bagasdotme@gmail.com, sagis@google.com, imammedo@redhat.com
-References: <cover.1685887183.git.kai.huang@intel.com>
- <f9148e67e968d7aed4707b67ea9b1aa761401255.1685887183.git.kai.huang@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <f9148e67e968d7aed4707b67ea9b1aa761401255.1685887183.git.kai.huang@intel.com>
+From:   Marco Pagani <marpagan@redhat.com>
+In-Reply-To: <ZH8R5APukuZVkIv5@yilunxu-OptiPlex-7050>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/4/23 07:27, Kai Huang wrote:
-> +struct tdmr_info_list {
-> +	void *tdmrs;	/* Flexible array to hold 'tdmr_info's */
-> +	int nr_consumed_tdmrs;	/* How many 'tdmr_info's are in use */
 
-I'm looking back here after seeing the weird cast in the next patch.
 
-Why is this a void* instead of a _real_ type?
+On 2023-06-06 13:00, Xu Yilun wrote:
+> On 2023-06-05 at 18:58:56 +0200, Marco Pagani wrote:
+>>
+>>
+>> On 2023-06-03 21:11, Xu Yilun wrote:
+>>> On 2023-05-31 at 11:54:04 +0200, Marco Pagani wrote:
+>>>> The suite tests the programming of an FPGA Region with a Bridge
+>>>> and the function for finding a particular Region.
+>>>>
+>>>> Signed-off-by: Marco Pagani <marpagan@redhat.com>
+>>>> ---
+>>>>  drivers/fpga/tests/fpga-region-test.c | 186 ++++++++++++++++++++++++++
+>>>>  1 file changed, 186 insertions(+)
+>>>>  create mode 100644 drivers/fpga/tests/fpga-region-test.c
+>>
+>> [...]
+>>
+>>  
+>>> Maybe better just put all tests in one module, and have unified
+>>> fake_mgr_ops/mgr_stats/fake_bridge_ops/bridge_stats across all tests.
+>>>
+>>> In previous thread, I said I'm good to the self-contained test module
+>>> but I didn't actually follow the idea. Sorry for that.
+>>>
+>>> The concern is why in this region test, the write_count and only the
+>>> write_count is taken care of.
+>>>
+>>> Although fpga_mgr_load() test covers all mgr_ops, but does that
+>>> means these ops are still good for more complex case like
+>>> fpga_region_program_fpga()? And there is no guarantee
+>>> fpga_region_program_fpga() would always call mgr_ops the same way
+>>> as fpga_mgr_load() in future.
+>>>
+>>> Similar for fpga_bridge. Maybe a complete setup for fpga_region is
+>>> still necessary.
+>>
+>> I think that putting all tests in a single module (like in previous
+>> versions) goes against the principles of unit testing, making the
+>> code more similar to an integration test.
+>>
+>> Unit tests should be focused on a single behavior. The programming
+>> test case included in the Region's suite should test only the behavior
+>> of the Region itself. Specifically, that fpga_region_program_fpga() calls
+>> get_bridges(), to get and control bridges, and then the Manager for the
+>> actual programming.
+>>
+>> The programming sequence itself is outside the responsibilities of the
+>> Region, and its correctness is already ensured by the Manager suite.
+>> Similarly, the correctness of the Bridge's methods used by the Region
+>> for getting and controlling multiple bridges is already ensured by the
+>> Bridge test suite.
+>>
+>> For this reason, the Manager and Bridge fakes used in the Region suite
+>> implement only the minimal set of operations necessary to ensure the
+>> correctness of the Region's behavior. If I used a "full" Manager (and
+>> tested all mgr_ops), then the test case would have become an integration
+>> test rather than a unit test for the Region.
+> 
+> I agree with you about a unit test should focus on a single behavior. But
+> I have concerns that each test suite uses different definitions of the
+> same structure, mgr/bridge stats, mgr/bridge ops, mgr/bridge ctx. Even
+> if we have full definitions for these structures to acommodate all
+> tests, it doesn't break the principle of unit test, just ignore the fields
+> and skip checks that you don't care. E.g. only checks mgr.write_count &
+> bridge.enable_count for region test.
+> 
+> And a single module simplifies the implementation.
+> 
+> struct mgr_stats {
+> 	...
+> };
+> 
+> struct mgr_ctx {
+> 	struct fpga_image_info *img_info;
+> 	struct fpga_manager *mgr;
+> 	struct platform_device *pdev;
+> 	struct mgr_stats stats;
+> };
+> 
+> struct bridge_stats {
+> 	...
+> };
+> 
+> struct bridge_ctx {
+> 	struct fpga_bridge *bridge;
+> 	struct platform_device *pdev;
+> 	struct bridge_stats stats;
+> };
+> 
+> struct region_ctx {
+> 	struct mgr_ctx mgr_ctx;
+> 	struct bridge_ctx bridge_ctx;
+> 
+> 	struct fpga_region *region;
+> 	struct platform_device *region_pdev;
+> };
+> 
+> How do you think?
+> 
+> Thanks,
+> Yilun
+>
+
+My concern with unified fakes having the same ops, stats, and context structs
+is that they would couple the test suites together. I think it's better to
+have multiple fakes, each with the single responsibility of providing minimal
+support for the component under test. Otherwise, we would end up having
+overcomplicated fakes that implement the union (in the set theory sense of
+the term) of all behaviors tested by all suites. By using these fakes, some
+test cases might implicitly exercise behaviors that are outside their scope
+(e.g., the Region programming test case calling all Manager ops). I feel
+this would go against the principle of limiting the amount of code under test
+to a single unit. 
+Thanks,
+Marco
+
+>>> BTW: I like the way that fake drivers are removed. Looks much straight
+>>> forward.
+>>
+>> I appreciate that.
+>>  
+>>> Thanks,
+>>> Yilun
+>>>
+>>
+>> Thanks,
+>> Marco
+>>
+>> [...]
+>>
+> 
+
