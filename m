@@ -2,159 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE212725539
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 09:16:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5DF672553D
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 09:16:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238839AbjFGHQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 03:16:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49772 "EHLO
+        id S238855AbjFGHQx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 03:16:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233989AbjFGHQU (ORCPT
+        with ESMTP id S234897AbjFGHQu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 03:16:20 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F371720;
-        Wed,  7 Jun 2023 00:16:18 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-9745d99cfccso972445366b.1;
-        Wed, 07 Jun 2023 00:16:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686122177; x=1688714177;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=e/gwoeHymID/fcT19qADralB09hxkZWntjL9V3Ud4l4=;
-        b=StkB3zqSx/OCPwhn0e0d84kDu2x9uw9DzEGwlFCv6f7EkweFgYAegNjEhhyYUh28eI
-         L8VOdYVbF326oJYjCXKJXLK505eMfhg2mhqaezMYvtA81427uLlbysTGWOLxUgJct2Cj
-         MHsGb4a1jaMn6v+6P50kpkklodoyb5C4eoxMe3HfQ7R1X/F+NWFMI6U57SIminrqYOt8
-         zr6ED/5yxcvZVuC8OEPwGx3+PbCFJWpxkgTYzy/lpFH21s6gLo7w9tFtlSVZbyWA6Q9E
-         yygo4+WQYFYs1t7llUKsDD7e1XeK5w1zuWt7eBXlIyuwuXooIviSFRWpZBf9lwznxmD5
-         3PIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686122177; x=1688714177;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=e/gwoeHymID/fcT19qADralB09hxkZWntjL9V3Ud4l4=;
-        b=fZDnHDUGYjEIudr5qyln5lSkwNn5f5p6hicBiPJmau3jdvNYgLeAbuqMoTorlzALen
-         me6AwhwfKqKdlzQb43JYHKNMebtg8BRbvQt8RAtZHr7QR7aBUJ8Pcv26UZexbirHyndh
-         Wqc5XoL9F3NIZ6hbQvuYpgj0zOnWYYDEpFF5AQXKCtqEhdkzbLQMjVe2EtTFn2/OSJaK
-         jBoZryEnfSjb+O/AACtyM+ug0VQELquaPjJ0ZdtW7Eo5T/5ja5OQ7Vg2elHrfMnApiEr
-         p+E8Sa0N3Gw/4D2BHjNKvFrHVRxa0IYtMabkFHBm3mSfgnvIzR2eFWkVDN9BUUuM3pOo
-         q9wg==
-X-Gm-Message-State: AC+VfDx7pszcpPneIYPuo6EvO2O3E4QnFyaqUW3qfD+IWwWPuiB7FAQz
-        eX/f1BjyvXwjZo0EkQLYMraJui1CaORv1g==
-X-Google-Smtp-Source: ACHHUZ6bNpT4RI3A0qNm26XLgzYqjoKDdT3/AiUwJvka5+rvPKtIa+Ji3R7DZtnVWudsnl+8FWC9Lw==
-X-Received: by 2002:a17:907:6d8a:b0:973:ae80:a145 with SMTP id sb10-20020a1709076d8a00b00973ae80a145mr6073609ejc.43.1686122177177;
-        Wed, 07 Jun 2023 00:16:17 -0700 (PDT)
-Received: from tom-HP-ZBook-Fury-15-G7-Mobile-Workstation (net-188-217-50-121.cust.vodafonedsl.it. [188.217.50.121])
-        by smtp.gmail.com with ESMTPSA id s20-20020a170906bc5400b009745b0cb326sm6408617ejv.109.2023.06.07.00.16.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 00:16:16 -0700 (PDT)
-Date:   Wed, 7 Jun 2023 09:16:14 +0200
-From:   Tommaso Merciai <tomm.merciai@gmail.com>
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        jacopo.mondi@ideasonboard.com, martin.hecht@avnet.eu,
-        michael.roeder@avnet.eu, linuxfancy@googlegroups.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Gerald Loacker <gerald.loacker@wolfvision.net>,
-        Mikhail Rudenko <mike.rudenko@gmail.com>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Nicholas Roth <nicholas@rothemail.net>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] media: dt-bindings: alvium: add document YAML
- binding
-Message-ID: <ZIAuvjmyUpuY/eDk@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
-References: <20230606155416.260941-1-tomm.merciai@gmail.com>
- <20230606155416.260941-3-tomm.merciai@gmail.com>
- <20230606163656.GI25679@pendragon.ideasonboard.com>
- <20230606-jaundice-womankind-7e583789fb7a@spud>
- <20230606181752.GC14101@pendragon.ideasonboard.com>
- <20230606-create-catchable-e16113afac82@spud>
+        Wed, 7 Jun 2023 03:16:50 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E8201732;
+        Wed,  7 Jun 2023 00:16:48 -0700 (PDT)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3575lsja030613;
+        Wed, 7 Jun 2023 09:16:19 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=I+GTYaBhnMXgZJKGUFKMgZqicUprU1BnubXsKkDBAC8=;
+ b=Ew6Dc7KxpZO4DJGlBsUmRed+B3XAzulAOhzuTffReGuVaktFWEy4NHRPUiAGCyLBTbHU
+ ZSq+Z6hmgf2MXWYq940oFqdVzomiEVMemrJwLu+4pNc/WesGvYBdbhlMrvUu/VLQVQsI
+ 4uEAaL5xmvE6BTKSmE6CgeRgmkns6h9Gnu6PDcOWzb78NggsJYIyaN6zDdTJPh3UzpnU
+ qyonGf4NhCpSTwrn0jTxhhsDhI/3K24t42O2t3Wb2z7KKYRmH14OufqjZpwDaIPgd/y0
+ b1rvk7XivEEA4Nuo/VjHdbehhxgaAZXZSqPV5478PPP+GzW1X31fig7LFjyTejcrdhNR 0Q== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3r2m269882-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Jun 2023 09:16:19 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id D09AD10002A;
+        Wed,  7 Jun 2023 09:16:16 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C4B75212FDF;
+        Wed,  7 Jun 2023 09:16:16 +0200 (CEST)
+Received: from [10.129.178.187] (10.129.178.187) by SHFDAG1NODE2.st.com
+ (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Wed, 7 Jun
+ 2023 09:16:16 +0200
+Message-ID: <074d3e57-fd1b-22c4-eecb-71d9a85babdb@foss.st.com>
+Date:   Wed, 7 Jun 2023 09:16:16 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230606-create-catchable-e16113afac82@spud>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [RESEND PATCH v2 4/6] dt-bindings: display: simple: add Rocktech
+ RK043FN48H
+Content-Language: en-US
+To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        <linux-kernel@vger.kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <dri-devel@lists.freedesktop.org>,
+        Philippe Cornu <philippe.cornu@foss.st.com>,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        <michael@amarulasolutions.com>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        <devicetree@vger.kernel.org>
+References: <20230607063139.621351-1-dario.binacchi@amarulasolutions.com>
+ <20230607063139.621351-5-dario.binacchi@amarulasolutions.com>
+From:   Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
+In-Reply-To: <20230607063139.621351-5-dario.binacchi@amarulasolutions.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.129.178.187]
+X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-07_04,2023-06-06_02,2023-05-22_02
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Conor,
 
-On Tue, Jun 06, 2023 at 07:23:32PM +0100, Conor Dooley wrote:
-> On Tue, Jun 06, 2023 at 09:17:52PM +0300, Laurent Pinchart wrote:
-> > On Tue, Jun 06, 2023 at 07:07:42PM +0100, Conor Dooley wrote:
-> > > Hey Laurent, Tommaso,
-> > > 
-> > > On Tue, Jun 06, 2023 at 07:36:56PM +0300, Laurent Pinchart wrote:
-> > > > On Tue, Jun 06, 2023 at 05:54:03PM +0200, Tommaso Merciai wrote:
-> > > 
-> > > > > +  alliedvision,lp2hs-delay-us:
-> > > > > +    maxItems: 1
-> > > > > +    description:
-> > > > > +      Low power to high speed delay time in microseconds.
-> > > > 
-> > > > You can drop "in microseconds", that's implied by the suffix.
-> > > > 
-> > > > > +      The purpose of this property is force a DPhy reset for the period
-> > > > > +      described by the microseconds on the property, before it starts
-> > > > > +      streaming. To be clear, with that value bigger than 0 the Alvium
-> > > > > +      forces a dphy-reset on all lanes for that period. That means all
-> > > > > +      lanes go up into low power state. This may help a csi2 rx ip to
-> > > > > +      reset if that IP can't deal with a continous clock.
-> > > > 
-> > > > I'd like to propose what I think is a clearer version:
-> > > > 
-> > > >     description: |
-> > > >       Low power to high speed delay time.
-> > > > 
-> > > >       If the value is larger than 0, the camera forces a reset of all
-> > > >       D-PHY lanes for the duration specified by this property. All lanes
-> > > >       will transition to the low-power state and back to the high-speed
-> > > >       state after the delay. Otherwise the lanes will transition to and
-> > > >       remain in the high-speed state immediately after power on.
-> > > > 
-> > > >       This is meant to help CSI-2 receivers synchronizing their D-PHY
-> > > >       RX.
-> > > 
-> > > Question about the property.
-> > > Why not make it have a minimum value of 1 and drop the special-case
-> > > behaviour for zero?
-> > 
-> > The property is optional, so it can indeed be omitted if no delay is
-> > desired. I have no strong preference on whether or not to allow 0 as a
-> > valid value.
-> 
-> FWIW, I prefer the semantics of the property if it doesn't have the
-> limbo state of being present but doing nothing.
-> 
-> Cheers,
-> Conor.
-> 
-> BTW, I seem to get bounces from shawnx.tu@intel.com, who is listed in
-> MAINTAINERS for several drivers. Do you know if they have a non-intel
-> address to replace those entries with, or should they be dropped?
+On 6/7/23 08:31, Dario Binacchi wrote:
+> Add compatible to panel-simple for Rocktech Displays Limited
+> RK043FN48H 4.3" 480x272 LCD-TFT panel.
+>
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Reviewed-by: Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>
 
-Same here! :)
 
 Thanks,
-Tommaso
 
+Raphaël
 
