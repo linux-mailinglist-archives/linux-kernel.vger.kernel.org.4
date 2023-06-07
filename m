@@ -2,99 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98091725977
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 11:06:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E21EE7259AB
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 11:11:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235556AbjFGJGD convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 7 Jun 2023 05:06:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58606 "EHLO
+        id S234738AbjFGJLE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 05:11:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237398AbjFGJFf (ORCPT
+        with ESMTP id S240165AbjFGJKd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 05:05:35 -0400
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F225A213A;
-        Wed,  7 Jun 2023 02:04:41 -0700 (PDT)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-568ba7abc11so92692397b3.3;
-        Wed, 07 Jun 2023 02:04:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686128681; x=1688720681;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TNEKaP7UVQJpZRtahYRlPOw3JCnkhMyaEr720NhUxp4=;
-        b=UiTsLu8aEUZnsPcrwJyYjFJUWWzeLRQuuaixny4S6NMUajkWequgCYA1KoSt0F6PFF
-         tDyPmUYAUtOwhPf4fElCgvfNeRQedwWel4QmUtvqZUTG0YXyVK28PBgzB/Xg6H4dZCUs
-         CUP9zh01m9+drC7lo3KTZhe+ZOWQ7eiApRX9y3c1Xtw0kWKhHcG+vm7i8fA6PwdOhUK6
-         kky8sEHlFXSWm9wRVXC1MvtZjnbSusMGXw+y0Ht6Eo3y1HacTWe4vvAidv5D0flKUqK0
-         S/ZlIxfbZY7Rx060J5mjkIcUjy6SIWRQeC+GgmEn+nlBMLiVPEUFrk/eDiPO4EgNx4oY
-         E8bg==
-X-Gm-Message-State: AC+VfDyikJ1YeRW0L32BvKdYW7iyI0ckeXi+TL7JLvbQ4qg5gNJ/dnhw
-        TNkj/qgqtdBQLbwuQMcarJ9fHh++/9SZ2w==
-X-Google-Smtp-Source: ACHHUZ6ziPtuMJubFT3g+33BIHcHeG/nAX5QuAXl3nB3Xq4YZjO4/eOuVWaFPJ5SceOgVJPJlns7YQ==
-X-Received: by 2002:a81:61d6:0:b0:561:3fb7:1333 with SMTP id v205-20020a8161d6000000b005613fb71333mr7171131ywb.43.1686128681034;
-        Wed, 07 Jun 2023 02:04:41 -0700 (PDT)
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
-        by smtp.gmail.com with ESMTPSA id d14-20020a81d34e000000b00568ab5dd873sm4573007ywl.65.2023.06.07.02.04.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 02:04:40 -0700 (PDT)
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-568ba7abc11so92692137b3.3;
-        Wed, 07 Jun 2023 02:04:39 -0700 (PDT)
-X-Received: by 2002:a0d:eb88:0:b0:55a:4a73:6177 with SMTP id
- u130-20020a0deb88000000b0055a4a736177mr6153827ywe.42.1686128679544; Wed, 07
- Jun 2023 02:04:39 -0700 (PDT)
+        Wed, 7 Jun 2023 05:10:33 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5AAB1BD6;
+        Wed,  7 Jun 2023 02:09:25 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 1F11E5FD63;
+        Wed,  7 Jun 2023 12:09:24 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1686128964;
+        bh=CumwjAyNcOyROazwWORMZqL/SIkAMktzdgFYOvd0NSA=;
+        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+        b=IB7yP8h2qdh0bCixWjI5oZn9LGUy+PRnJS7dRyHwKW3sK/wVCDgbL4nhfYMJQpX3h
+         mC6z2HwjdcEBikV+mwCJs8uRoT+wICXFLt7nhaVhh0RTi4tJA/1UpYw80kh62Uq/zM
+         NX0o4F5zic0eU4W1hYSafCX2wNxIDSEfdcsXjPsa+M0IvBjcFeRewL4nqbbhdwdbZ9
+         YQePE4I43do8UExk4IGbL5m8EzUXc1tybLUKD+K8rofQjy5cxlntWchp1juebuthG2
+         PVwtr1fylnlCslB0pKiGTIF3Rfkzrqmcv1xhRZygsCphdt+knOkioMTPMWDA1PVrpF
+         0s5GtRsO6zSZw==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Wed,  7 Jun 2023 12:09:23 +0300 (MSK)
+Message-ID: <5ca9eb2b-4bc8-5883-a029-3eeca905fe6e@sberdevices.ru>
+Date:   Wed, 7 Jun 2023 12:04:29 +0300
 MIME-Version: 1.0
-References: <20230527164452.64797-1-contact@artur-rojek.eu> <20230527164452.64797-2-contact@artur-rojek.eu>
-In-Reply-To: <20230527164452.64797-2-contact@artur-rojek.eu>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 7 Jun 2023 11:04:28 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXfeF9jttu7K5C1CMqb+wsGY5z3GzNaFzdQLWbOrgqicQ@mail.gmail.com>
-Message-ID: <CAMuHMdXfeF9jttu7K5C1CMqb+wsGY5z3GzNaFzdQLWbOrgqicQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] sh: dma: Fix dma channel offset calculation
-To:     Artur Rojek <contact@artur-rojek.eu>
-Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Rafael Ignacio Zurita <rafaelignacio.zurita@gmail.com>,
-        linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v1] dt-bindings: nand: meson: Fix 'nand-rb' property
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+CC:     Liang Yang <liang.yang@amlogic.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
+        <linux-mtd@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+References: <20230606193507.35024-1-AVKrasnov@sberdevices.ru>
+ <20230607095802.3adcd4f9@xps-13>
+ <166bdc27-f77c-9076-f866-180cfa5bff76@sberdevices.ru>
+ <08da4e86-433a-7d2e-25ff-ffa24221abdf@linaro.org>
+ <835a3587-1e0f-64d7-1d1a-b639ae8b7307@sberdevices.ru>
+ <2ca6e619-1d57-8fff-6176-9ee890e0d167@linaro.org>
+From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
+In-Reply-To: <2ca6e619-1d57-8fff-6176-9ee890e0d167@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/06/07 04:52:00 #21449589
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 27, 2023 at 6:45 PM Artur Rojek <contact@artur-rojek.eu> wrote:
-> Various SoCs of the SH3, SH4 and SH4A family, which use this driver,
-> feature a differing number of DMA channels, which can be distributed
-> between up to two DMAC modules. Existing implementation fails to
-> correctly accommodate for all those variations, resulting in wrong
-> channel offset calculations and leading to kernel panics.
->
-> Rewrite dma_base_addr() in order to properly calculate channel offsets
-> in a DMAC module. Fix dmaor_read_reg() and dmaor_write_reg(), so that
-> the correct DMAC module base is selected for the DMAOR register.
->
-> Fixes: 7f47c7189b3e8f19 ("sh: dma: More legacy cpu dma chainsawing.")
-> Signed-off-by: Artur Rojek <contact@artur-rojek.eu>
-> ---
->
-> v2: also handle differing numbers of DMAC modules and channels
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Gr{oetje,eeting}s,
+On 07.06.2023 12:08, Krzysztof Kozlowski wrote:
+> On 07/06/2023 10:57, Arseniy Krasnov wrote:
+>>
+>>
+>> On 07.06.2023 11:53, Krzysztof Kozlowski wrote:
+>>> On 07/06/2023 10:40, Arseniy Krasnov wrote:
+>>>> Hello Miquel, 
+>>>>
+>>>> On 07.06.2023 10:58, Miquel Raynal wrote:
+>>>>
+>>>>> Hi Arseniy,
+>>>>>
+>>>>> AVKrasnov@sberdevices.ru wrote on Tue, 6 Jun 2023 22:35:07 +0300:
+>>>>>
+>>>>>> Add description of 'nand-rb' property. Use "Fixes" because this property
+>>>>>> must be supported since the beginning. For this controller 'nand-rb' is
+>>>>>> stored in the controller node (not in chip), because it has only single
+>>>>>> r/b wire for all chips.
+>>>>>
+>>>>> Sorry if I mislead you in the first place, but you could definitely
+>>>>> have two chips and only one with RB wired. It needs to be defined in
+>>>>> the chips.
+>>>>
+>>>> Ok, so to clarify: is it ok, that in bindings this property will be placed in the
+>>>> chip, but in driver, i'm trying to read it from the controller node (thus  in
+>>>> dts file it will be also in controller node)?
+>>>
+>>> No, because how would your DTS pass validation? I understand you did not
+>>> test the bindings, but this will improve, right?
+>>
+>> Ok, i'll follow DTS layout in the driver, "test the bindings" You mean "make dt_binding_check"?
+> 
+> Yes. They were sent without testing.
+> 
+> But please also test your DTS with dtbs_check.
 
-                        Geert
+Got it!
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Thanks, Arseniy
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> 
+> 
+> Best regards,
+> Krzysztof
+> 
