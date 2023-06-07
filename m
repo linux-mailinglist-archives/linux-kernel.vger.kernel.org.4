@@ -2,280 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0804272576C
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 10:21:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6880872576F
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 10:22:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239409AbjFGIV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 04:21:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32982 "EHLO
+        id S238041AbjFGIWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 04:22:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239105AbjFGIVI (ORCPT
+        with ESMTP id S237506AbjFGIWG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 04:21:08 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 469BA170E
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 01:21:00 -0700 (PDT)
-X-GND-Sasl: miquel.raynal@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1686126058;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=n7aSSpMafjQfXsQ0zOp9drMD/UVBXrM6UFRM7kaghvQ=;
-        b=BgPHWPDe0Ez3V7rzNN716kKDLCBV9hP5Qc7KMRExaIaCNAxVXFkIQ/twlACn9R8jOmL5fG
-        YUjtiPfYBHIzQqCBWVFEi/lD7M45UAiJDJpmpczQzp8UCbNMhD24DWbLoJ6aUqD7h/0nmb
-        SrydL5QpiV/IDa9zNMDPXUNWORMrd4wAU6HH5p/827AzXdglHea7KHVajLiDsZMICFdWtx
-        yXt7tkNOzHR33JoluEo7f9PCnPRQ12Ph1P9Hwp/Anx+HVvYvbs4SHntdyuLY7aAx5s+jp8
-        kOmrBueJRrY+QJWMj5iOEX+dtuEJ7g+viod04e+ZlYUKPfsFJD9YRNIxt5oHvA==
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2701D6000E;
-        Wed,  7 Jun 2023 08:20:57 +0000 (UTC)
-Date:   Wed, 7 Jun 2023 10:20:56 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     William Zhang <william.zhang@broadcom.com>
-Cc:     Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        Linux MTD List <linux-mtd@lists.infradead.org>,
-        f.fainelli@gmail.com, rafal@milecki.pl, kursad.oney@broadcom.com,
-        joel.peshkin@broadcom.com, computersforpeace@gmail.com,
-        anand.gore@broadcom.com, dregan@mail.com, kamal.dasu@broadcom.com,
-        tomer.yacoby@broadcom.com, dan.beygelman@broadcom.com,
-        linux-kernel@vger.kernel.org,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 10/12] mtd: rawnand: brcmnand: Add BCMBCA read data bus
- interface
-Message-ID: <20230607102056.5b1bfa5b@xps-13>
-In-Reply-To: <20230606231252.94838-11-william.zhang@broadcom.com>
-References: <20230606231252.94838-1-william.zhang@broadcom.com>
-        <20230606231252.94838-11-william.zhang@broadcom.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Wed, 7 Jun 2023 04:22:06 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2098.outbound.protection.outlook.com [40.107.94.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D7301988;
+        Wed,  7 Jun 2023 01:21:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GPavvcWmk0uPkJcevt6+mhbjM/fUR18HQwrERVHKShvvGvdikKf29C0RTrbbVB4xL0w4hXhEl29Wkskru2NE9CIc0t6uDdHc+HKwjc8g1iGdaBOce/qawDtK1gvXSxyDMjV+PMfvskowDncQij/Gt80lrB7bMdRQSmTMliePN/wLAFD+23r4dbOqNYELa1C9hk5t7Ge4zgAZX6Obq/qbYNNQQPPw6yqQgLy32916qNwHoZpckj9y3WRTKXEMxlvw8eJsu/0Tfvn5gRxdFfv+opYWEFNbV0wHQ/7c602vZwSM7IpHL35pVwOEnQpZlmbgMY4CiJ30YKBmMEv5RTswzQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Ac6VM/voJRscAMNmU7QZr/vUjy/d9l5460n8THjvuCQ=;
+ b=ZEMfXZANkOcEKikwZJzHWsOE2Qaw6I/VdCntPymNNftUOm5UUUyWXI+FJ7v5eG4G4FvqbRIQl7gXvkt70SfJYlhWYDQ86DOBC/cL7Qz6Erxwm67VsLpxkJsqaIslx6Z4ml4KEU0Lwh0EGrxdN63QDytcSlDXxSlptWS8m7ahNOo9Bx4uU/V5NsC7IKQuwA8IyGioBKC9ncnf2NCxgTG5D4OPyPpCu3zh4Zf5t7cPy97VnHppg61ff5JCb+Fd49FJEwRz9NwCbo0pKElg4pAJV7ReWvL/JTY5fGWhasth3oDXxQYXV2sLbYizgyMzXQaNyf/EJo2r519o6qiavQuEBQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Ac6VM/voJRscAMNmU7QZr/vUjy/d9l5460n8THjvuCQ=;
+ b=awyOiT5JluzLSvp5bnZOdVTatoUm95W0uS1NYU5it+7vrKUIz5SHQnSr0s6Oow1NUqaldArUMsm66AJNaeOo0X82F37hUjB/sMBudNyGukVu7eE5rkg1dyBnq3yfvwF+8cMsc08UA8wvplIQIcRQfU92thxvlJwOdb7sO4rcn80=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by SA1PR13MB6053.namprd13.prod.outlook.com (2603:10b6:806:33a::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.19; Wed, 7 Jun
+ 2023 08:21:55 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb8f:e482:76e0:fe6e]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb8f:e482:76e0:fe6e%4]) with mapi id 15.20.6455.030; Wed, 7 Jun 2023
+ 08:21:55 +0000
+Date:   Wed, 7 Jun 2023 10:21:48 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, mhi@lists.linux.dev,
+        linux-arm-msm@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, loic.poulain@linaro.org
+Subject: Re: [PATCH 3/3] net: mhi: Increase the default MTU from 16K to 32K
+Message-ID: <ZIA+HMlUe7Dzt8Db@corigine.com>
+References: <20230606123119.57499-1-manivannan.sadhasivam@linaro.org>
+ <20230606123119.57499-4-manivannan.sadhasivam@linaro.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230606123119.57499-4-manivannan.sadhasivam@linaro.org>
+X-ClientProxiedBy: AM0PR01CA0157.eurprd01.prod.exchangelabs.com
+ (2603:10a6:208:aa::26) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SA1PR13MB6053:EE_
+X-MS-Office365-Filtering-Correlation-Id: 38a980aa-2147-434a-97ab-08db673040be
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 8ChlPJ+6m9dRA0k11wMy1nOfJq7Kqg4U7djAsgWbsLie1DIwGtolWrgH9Cl+3a4kGf4+TZWAKClLVALVoFNlSJnRQ9FmPpbOPR/4+2S1fZ46s4sg7P2rexJjTdOcp8BO+Doil46l0vrq+2lvLP67CWvvQP3EXsGLWRUWCHWT0ll6Ux2Q3bXxIVlgAyVBw1cj9Jlee1aLnBH5bq0KZhPGEqRcQ2X8TJC9YJLZB8iv+HqFTpJIrMnH+FE/0SXGIZO4FashMuLD9Jg9ZW61fBmi1aB6CvjjS+4O/RMqF/nXDxsa1FIArPfpSgQRbW/oxfBSrYY5DaKxXr1D77oUJltF7a1jf1Ph1ccPjOL+1GtBmQVgUDyP0cxZgZTmC1lX9E2Rv7FXXzspNvHuMhpWmEiz2mLRAXxfW0dd/XFYp4fSAQY0MRTGp+BKS/QONRkvfNCVhneWM44sJStknL4pxA6OGdrnK+jKRYImnRqopVKnvQ2BWNjd84MN7/sajpf70hBAvYd/d/syXFiOGdyCIlU69prLdXmtTSUn+5bLXEKNwI4uYGmckPbxjXiTShpoquIXZwKcfTDGdvgP3PZapdjyeC1w7IR/Ql8ENLbsQn8Awzg=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(376002)(346002)(39840400004)(366004)(451199021)(2906002)(8676002)(8936002)(7416002)(44832011)(5660300002)(6666004)(66476007)(4326008)(66556008)(6916009)(38100700002)(316002)(6486002)(66946007)(36756003)(41300700001)(86362001)(2616005)(478600001)(186003)(4744005)(6512007)(6506007)(67856001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6C8tiKXoDk56e06J/kARpRGUPd0l7+YD6OLXgT4Z3KKd60mfZ0DjX1iNnA6o?=
+ =?us-ascii?Q?uB66INLao7FbrzFXbnP+E1poVtSNzX5BTKGBgQchkatKrpNUvQ+EAv+yr1mC?=
+ =?us-ascii?Q?FfkOCyn0Mk95OAz618NUqPX0O/T+Te8SF/5xSDsXMiDlF/4RXrluj+JoNmnO?=
+ =?us-ascii?Q?chSWkqCWwKhmK36HRNj/QMYHClL8fWIMIaJoPpAgUXI8WwFTO2/+QQnZ01b7?=
+ =?us-ascii?Q?9SDg/Hublp1uno2qBUQ7/FHgcvME88iEKUg/WVZ12MH5n9SCHuqvCC0sSu6z?=
+ =?us-ascii?Q?PdRvjDxrH3lMgShrwDV+zPqMt9MoyLKaPg8l7yrNnDTqaBIMYhLnxXm67tiP?=
+ =?us-ascii?Q?l7s6m5yLczbghteiM4WYa/HIk53gy5IvGEqAVXDI7k2f1WtHknakOzByIRKF?=
+ =?us-ascii?Q?hosvJ7PoGOhrXNVEUWjw4ghmC9eufQrJXjLsencWzMjwiVjCxKx1oENTh7MK?=
+ =?us-ascii?Q?SJ+TjMtctf8W3zY01suoZarWEw0CnzKZHY6Cyeopi30OtkesOvKQ8xyPOjJq?=
+ =?us-ascii?Q?5oeIIWOooUNiXuafFIc4yjf4FhZrr2iJwEBqb4PPSNvknZT9PRtMEm3hTuAN?=
+ =?us-ascii?Q?nGtaTIYQ6jkcjQKPKOquIx9msAbacEYXm42gOLFDJLy9TOMPF6X+7CajMVC1?=
+ =?us-ascii?Q?6gXra9Zp+J/MbkFcjAA+Su7M4TgZf7XVWQ9kqwRuBjWv3y5gVT8My9r2EL+V?=
+ =?us-ascii?Q?y454iRREodIkq0W+eLNYwGaKVmseZPgeNzt8xaSM+9mj2E4C2ryskO7bXNAT?=
+ =?us-ascii?Q?LiStBFbeyHfHOkPQ+9S449HeOJ1ggM7JAC0+A2WGHZ+LhH7Q/3nxEYLJGlD0?=
+ =?us-ascii?Q?I0hIJkpAt6ha6XrcQSQptVoDH2h25gH/6vfCxbbt7syvThalYysktnHZVuwe?=
+ =?us-ascii?Q?K46sRuFsw9Y2ZHOc0vHWtaPiB7XJTX0LqsYZgqTkmUHOYKqjlYqdQDEvgOjc?=
+ =?us-ascii?Q?F2WGW2bbZzO1squFTWHfIIBxMjeIC7h/fLix9p6y3OSqrw1wER2Wiftsmuyh?=
+ =?us-ascii?Q?hkPU5pFyRYNI/qSsF994yl13KxlN0fxGKUvSlQolgmnFGj86yhWrLF33vE4z?=
+ =?us-ascii?Q?cLKs43tu2V8Vc7NBXprxLAs0jI9R20rP5HkkI9W6QBl69XiPg1tIsgNoWGa2?=
+ =?us-ascii?Q?afRYaBV9k7ItkUn9neNgXVppiu+vWpZe7aADXKiqYnQDPwHrHIB7hYAg82p/?=
+ =?us-ascii?Q?VJXqJ56xwgzky7dJV8owe/ybd5BiL+n+iYyPnO08T6jEIV/JV1AlMyhfIpmP?=
+ =?us-ascii?Q?yUHwxH1EEGZ/0DpeZHZFjYdI1QuoNFfUQxgZbzXRewNjh+mvHqXWBBHTcSj0?=
+ =?us-ascii?Q?x9nDCe/lUmaK3AiGKPlxigHzwaKck1RVRIIu8v/dhrkOHTQeOjrS4KBjpybx?=
+ =?us-ascii?Q?rf1ofmE/g/V4AoQgm/DyTMUBdRuxLfvcWRmMMbEc2h+Rnb/rQjqp5lxWpc7b?=
+ =?us-ascii?Q?hagMjCQFa5b6uK0EsAUsiaxWxfOMw/FEOSEzpQNHN25p8ZJDXpqkd+fQpm3W?=
+ =?us-ascii?Q?QFiJVJWSZELcCiGERFOSZGRL2a7g9icmU13JTBNlhPL6d97H3oqHiLUtxIGv?=
+ =?us-ascii?Q?QDvz40ch3IL0HVYePvvV1LzdnkZFkYkqZxTiscKzyL3yUvMUvzxPWOFoAkJt?=
+ =?us-ascii?Q?MbicxC6aZrDwxmy8NQkQ8/fhlzg1nhSKNbRt9E+JkKE4vxhqPHGLhoMxrUi1?=
+ =?us-ascii?Q?QLaReg=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 38a980aa-2147-434a-97ab-08db673040be
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2023 08:21:55.0257
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Zld5ihTfOyOLpAuWY1/uDyRO6AnTV+A9CLQncBXQdmvjRgKsQTViJAVbel5fkdYP4E+H4T4m7OfnVTtvNx5AJx4qOv16+mu35oGfgjniq0U=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR13MB6053
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi William,
+On Tue, Jun 06, 2023 at 06:01:19PM +0530, Manivannan Sadhasivam wrote:
+> Most of the Qualcomm endpoint devices are supporting 32K MTU for the
+> UL (Uplink) and DL (Downlink) channels. So let's use the same value
+> in the MHI NET driver also. This gives almost 2x increase in the throughput
+> for the UL channel.
+> 
+> Below is the comparision:
 
-william.zhang@broadcom.com wrote on Tue,  6 Jun 2023 16:12:50 -0700:
+Hi Manivannan,
 
-> The BCMBCA broadband SoC integrates the NAND controller differently than
-> STB, iProc and other SoCs.  It has different endianness for NAND cache
-> data and ONFI parameter data.
->=20
-> Add a SoC read data bus shim for BCMBCA to meet the specific SoC need
-> and performance improvement using the optimized memcpy function on NAND
-> cache memory.
->=20
-> Signed-off-by: William Zhang <william.zhang@broadcom.com>
-> ---
->=20
->  drivers/mtd/nand/raw/brcmnand/bcmbca_nand.c | 36 +++++++++++++++++
->  drivers/mtd/nand/raw/brcmnand/brcmnand.c    | 44 ++++++++++++++-------
->  drivers/mtd/nand/raw/brcmnand/brcmnand.h    |  2 +
->  3 files changed, 68 insertions(+), 14 deletions(-)
->=20
-> diff --git a/drivers/mtd/nand/raw/brcmnand/bcmbca_nand.c b/drivers/mtd/na=
-nd/raw/brcmnand/bcmbca_nand.c
-> index 7e48b6a0bfa2..899103a62c98 100644
-> --- a/drivers/mtd/nand/raw/brcmnand/bcmbca_nand.c
-> +++ b/drivers/mtd/nand/raw/brcmnand/bcmbca_nand.c
-> @@ -26,6 +26,18 @@ enum {
->  	BCMBCA_CTLRDY		=3D BIT(4),
->  };
-> =20
-> +#if defined(CONFIG_ARM64)
-> +#define ALIGN_REQ		8
-> +#else
-> +#define ALIGN_REQ		4
-> +#endif
-> +
-> +static inline bool bcmbca_nand_is_buf_aligned(void *flash_cache,  void *=
-buffer)
-> +{
-> +	return IS_ALIGNED((uintptr_t)buffer, ALIGN_REQ) &&
-> +				IS_ALIGNED((uintptr_t)flash_cache, ALIGN_REQ);
-> +}
-> +
->  static bool bcmbca_nand_intc_ack(struct brcmnand_soc *soc)
->  {
->  	struct bcmbca_nand_soc *priv =3D
-> @@ -56,6 +68,29 @@ static void bcmbca_nand_intc_set(struct brcmnand_soc *=
-soc, bool en)
->  	brcmnand_writel(val, mmio);
->  }
-> =20
-> +static void bcmbca_read_data_bus(struct brcmnand_soc *soc,
-> +				 void __iomem *flash_cache,  u32 *buffer,
-> +				 int fc_words, bool is_param)
-> +{
-> +	int i;
-> +
-> +	if (!is_param) {
-> +		/*
-> +		 * memcpy can do unaligned aligned access depending on source
-> +		 * and dest address, which is incompatible with nand cache. Fallback
-> +		 * to the memcpy for io version
-> +		 */
-> +		if (bcmbca_nand_is_buf_aligned(flash_cache, buffer))
-> +			memcpy((void *)buffer, (void *)flash_cache, fc_words * 4);
-> +		else
-> +			memcpy_fromio((void *)buffer, (void *)flash_cache, fc_words * 4);
-> +	} else {
-> +		/* Flash cache has same endian as the host for parameter pages */
-> +		for (i =3D 0; i < fc_words; i++, buffer++)
-> +			*buffer =3D __raw_readl(flash_cache + i * 4);
-> +	}
-> +}
-> +
->  static int bcmbca_nand_probe(struct platform_device *pdev)
->  {
->  	struct device *dev =3D &pdev->dev;
-> @@ -75,6 +110,7 @@ static int bcmbca_nand_probe(struct platform_device *p=
-dev)
-> =20
->  	soc->ctlrdy_ack =3D bcmbca_nand_intc_ack;
->  	soc->ctlrdy_set_enabled =3D bcmbca_nand_intc_set;
-> +	soc->read_data_bus =3D bcmbca_read_data_bus;
-> =20
->  	return brcmnand_probe(pdev, soc);
->  }
-> diff --git a/drivers/mtd/nand/raw/brcmnand/brcmnand.c b/drivers/mtd/nand/=
-raw/brcmnand/brcmnand.c
-> index d920e88c7f5b..656be4d73016 100644
-> --- a/drivers/mtd/nand/raw/brcmnand/brcmnand.c
-> +++ b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
-> @@ -814,6 +814,30 @@ static inline u32 edu_readl(struct brcmnand_controll=
-er *ctrl,
->  	return brcmnand_readl(ctrl->edu_base + offs);
->  }
-> =20
-> +static inline void brcmnand_read_data_bus(struct brcmnand_controller *ct=
-rl,
-> +					   void __iomem *flash_cache, u32 *buffer,
-> +					   int fc_words, bool is_param)
+as it looks like there will be a v2: comparision -> comparison
 
-I strongly dislike this "is_param" boolean.
-
-When is the data in host endianness? When is it not?
-
-If we think about an exec_op() conversion and drop cmdfunc(), what
-would be the discriminant?
-
-> +{
-> +	struct brcmnand_soc *soc =3D ctrl->soc;
-> +	int i;
-> +
-> +	if (soc->read_data_bus) {
-> +		soc->read_data_bus(soc, flash_cache, buffer, fc_words, is_param);
-> +	} else {
-> +		if (!is_param) {
-> +			for (i =3D 0; i < fc_words; i++, buffer++)
-> +				*buffer =3D brcmnand_read_fc(ctrl, i);
-> +		} else {
-> +			for (i =3D 0; i < fc_words; i++)
-> +				/*
-> +				 * Flash cache is big endian for parameter pages, at
-> +				 * least on STB SoCs
-> +				 */
-> +				buffer[i] =3D be32_to_cpu(brcmnand_read_fc(ctrl, i));
-> +		}
-> +	}
-> +}
-> +
->  static void brcmnand_clear_ecc_addr(struct brcmnand_controller *ctrl)
->  {
-> =20
-> @@ -1811,20 +1835,11 @@ static void brcmnand_cmdfunc(struct nand_chip *ch=
-ip, unsigned command,
->  			native_cmd =3D=3D CMD_PARAMETER_CHANGE_COL) {
->  		/* Copy flash cache word-wise */
->  		u32 *flash_cache =3D (u32 *)ctrl->flash_cache;
-> -		int i;
-> =20
->  		brcmnand_soc_data_bus_prepare(ctrl->soc, true);
-> =20
-> -		/*
-> -		 * Must cache the FLASH_CACHE now, since changes in
-> -		 * SECTOR_SIZE_1K may invalidate it
-> -		 */
-> -		for (i =3D 0; i < FC_WORDS; i++)
-> -			/*
-> -			 * Flash cache is big endian for parameter pages, at
-> -			 * least on STB SoCs
-> -			 */
-> -			flash_cache[i] =3D be32_to_cpu(brcmnand_read_fc(ctrl, i));
-> +		brcmnand_read_data_bus(ctrl, ctrl->nand_fc, flash_cache,
-> +				   FC_WORDS, true);
-> =20
->  		brcmnand_soc_data_bus_unprepare(ctrl->soc, true);
-> =20
-> @@ -2137,7 +2152,7 @@ static int brcmnand_read_by_pio(struct mtd_info *mt=
-d, struct nand_chip *chip,
->  {
->  	struct brcmnand_host *host =3D nand_get_controller_data(chip);
->  	struct brcmnand_controller *ctrl =3D host->ctrl;
-> -	int i, j, ret =3D 0;
-> +	int i, ret =3D 0;
-> =20
->  	brcmnand_clear_ecc_addr(ctrl);
-> =20
-> @@ -2150,8 +2165,9 @@ static int brcmnand_read_by_pio(struct mtd_info *mt=
-d, struct nand_chip *chip,
->  		if (likely(buf)) {
->  			brcmnand_soc_data_bus_prepare(ctrl->soc, false);
-> =20
-> -			for (j =3D 0; j < FC_WORDS; j++, buf++)
-> -				*buf =3D brcmnand_read_fc(ctrl, j);
-> +			brcmnand_read_data_bus(ctrl, ctrl->nand_fc, buf,
-> +					FC_WORDS, false);
-> +			buf +=3D FC_WORDS;
-> =20
->  			brcmnand_soc_data_bus_unprepare(ctrl->soc, false);
->  		}
-> diff --git a/drivers/mtd/nand/raw/brcmnand/brcmnand.h b/drivers/mtd/nand/=
-raw/brcmnand/brcmnand.h
-> index f1f93d85f50d..88819bc395f8 100644
-> --- a/drivers/mtd/nand/raw/brcmnand/brcmnand.h
-> +++ b/drivers/mtd/nand/raw/brcmnand/brcmnand.h
-> @@ -24,6 +24,8 @@ struct brcmnand_soc {
->  	void (*ctlrdy_set_enabled)(struct brcmnand_soc *soc, bool en);
->  	void (*prepare_data_bus)(struct brcmnand_soc *soc, bool prepare,
->  				 bool is_param);
-> +	void (*read_data_bus)(struct brcmnand_soc *soc, void __iomem *flash_cac=
-he,
-> +				 u32 *buffer, int fc_words, bool is_param);
->  	const struct brcmnand_io_ops *ops;
->  };
-> =20
-
-
-Thanks,
-Miqu=C3=A8l
+...
