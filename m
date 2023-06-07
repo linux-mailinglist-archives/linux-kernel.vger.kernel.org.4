@@ -2,67 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96899726FEE
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 23:03:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F612727008
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 23:04:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236020AbjFGVDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 17:03:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34778 "EHLO
+        id S236075AbjFGVEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 17:04:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235994AbjFGVC5 (ORCPT
+        with ESMTP id S236008AbjFGVDl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 17:02:57 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E7BD30E8;
-        Wed,  7 Jun 2023 14:02:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de;
- s=s31663417; t=1686171744; x=1686776544; i=rwarsow@gmx.de;
- bh=Er+zwqPxJ4eaj5y+E4fNQt8BY1zyZtWqItiyEDxWS68=;
- h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
- b=tS8K+Ui0lqMiJt3cMgAv6a5KvYhsrDvBbZpAS9k6PGlO37gws3I94KrXH37+NRWAbpak/VQ
- nUt5a+UrrN10H8MA+VJZj2vmbQ0RXcXE8H33boCt4zY54AfnKi4gwSR3alwdzAY9xcAPvU6Jc
- krpfqMIRJjEbJFYhz0E0GDnWsbzlex/tfrx1iB6AxZCJ1OHD7RRGtw1xHVHS2QqMR+SspnYcL
- esG+zXi+W63VtNWDr7CU4KMvGl23UArRpvAGVwNDkl8k+2D5XYEqF8GRB40VjV6BUrBIq2lu3
- FCejc9NrS3bN/CsdRzGCfITpnXopOu4BCaT/lwdEyVV9bPyQAT1A==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.100.20] ([94.134.2.93]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MdebB-1pXwf03ydt-00ZdlG; Wed, 07
- Jun 2023 23:02:24 +0200
-Message-ID: <3a07aeb3-a6e5-6ee6-7806-ba6363707d37@gmx.de>
-Date:   Wed, 7 Jun 2023 23:02:23 +0200
+        Wed, 7 Jun 2023 17:03:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8318F2711;
+        Wed,  7 Jun 2023 14:03:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 17CD764985;
+        Wed,  7 Jun 2023 21:03:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79F16C433A7;
+        Wed,  7 Jun 2023 21:03:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686171797;
+        bh=mKhJndr5Yz5FfUYWCqemdn7odbvtF6GeYOhtz3Hyooo=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=HnkuiumbRjGlMS/9s4j1QBjBgmZIvb4S9wxAXI5F05B7vr+zw2KUvsBcEQiD0wVmw
+         16I0WSw5yzN/m0KU6MNRvmo41HP3Tjl0XpPLS/0C1EXSVPXlyDMGZK1JpvVAOW+J7b
+         G1yBEBVjXQcd4PAZyg4cAD8sZQ4Pahpi9F9NThVR3PNoUVdpLN1GZGtR+SMHXUAz5i
+         hbTNPzDKQOx0GO8t9KH2ANidYYLsPjcP3vNZLQkYw0H+H5r4HS4Dd89Pas53v/RrQ4
+         Slthc7rzKGvspIgM2AVzlRaJovvTaSPWqFYl8K3iicNFXAj3uw9R48KhxHbE09UXZu
+         1irazWE7FpdlQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 19AB5CE3A6C; Wed,  7 Jun 2023 14:03:17 -0700 (PDT)
+Date:   Wed, 7 Jun 2023 14:03:17 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Zhangjin Wu <falcon@tinylab.org>, thomas@t-8ch.de,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: nolibc patches, still possible for 6.5 ?
+Message-ID: <ec85bd36-9b39-458c-9618-af500656ca7b@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <ZHyPi29q3MKiNAQZ@1wt.eu>
+ <5494ac68-b4b9-434f-92c1-7e197c92a4ab@paulmck-laptop>
+ <ZH1V21rhUQlvRgnU@1wt.eu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-From:   Ronald Warsow <rwarsow@gmx.de>
-To:     linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org
-Content-Language: de-DE, en-US
-Subject: Re: [PATCH 6.3 000/286] 6.3.7-rc1 review
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:RV4U3bkDOL+JAzDZ8PHKHuoQCkMLgZ21gzwK2CC6DQis7osTM0M
- SPYIoFXd/YvkDP/ykt/9g1utQoAdGbdWUU//kuyW6RtlJOVQ5+If48HnzeJNfYUzitqdUbc
- 7yL8qFDzHWqfHLv3pI4WM+mtqofCKJWMyoXI3QuAKu45R1paIqdEEEqHVcDr8roPWJVEb4m
- kEdHdzLfB3L4k7P6H6lng==
-UI-OutboundReport: notjunk:1;M01:P0:IwDKWaRE1RE=;IEIn4IVZF81Z5whseX9K3EJ2Zmr
- 9D88AFfVst75OhQpXdWlZt+QjxdNjozMwYt19wfRqTG3zVsMiB0tAQInpl61m6pPI6HrX0QBM
- Q9tBXezyDy+8dwft6f7Ahfk66P7tFoN6vm+ifh3Olxcu3XPSVfNeNROHHI+BSWaeg00aGCL0i
- MNxvVjmzDOp4ntLyENhzIZuVpwg8LlhhF9wP/H0o1Go92bq2xr6SVI0KCSiTpki/Q+Nj2qKnw
- 1UbiGXt+NnsBRz5H1Nf4o8tD5S95J1oUpnL75+5mlwPSXtAlGFrto+cj12PDF2EghEbW8r7/p
- Bk83SqHVhUzmQbcTmZeFeGLEUBl2ehl+saKx8s+xaxufl94TGXZMtyll09K6pTuE8x2d5gq8P
- rqWR0c6KmYF1YD0J53FFR6LCVs2PJLFBz4/Qos8h0YZDrLINMWbu8vAw0GrqlQ+fst2IOfe+2
- PLqjdE08wxnXPBuhwMz2DC0KCnpIW8VFRBKgjtF6BR1cW2S//34bzmDKLdsuR1TmHaCqc6DGA
- QXr9W1G17kS8xAwBIXMRAxYMNtogxOD5pQH3+Kw+LNTX0F5h+8au4PZfi9LOLQdLFZm8ZNJSv
- MXDKyAZsPEO6jLF/tyy1xRYLK8fzeb7Z+BpQUFcDoj28e/alB8ieydCVCxi4MfzQSTqcdDqeN
- NCOK3E1G9G9ByEu5mpG8vP/nqbKxXlozWc8erVv+UBl84Xtsl9NSKXwqFW6OXlzD696qwpMBu
- 5ONWktYvdIEebzQ3DOojr7emYiOTOjaZAXWYWco4euk3pjyb701PoB0ooGjg4C8OSA3mHM320
- r0Cr0af8EF1F7HWr/NgA7rHot5WnNHHBiEeoAu0za8lBnF3aujDZrfbCLhISiTBwhcH2XORwK
- emoSkOjZwI2Lb7Ip2kT5IhJziRVlWPxDKMZzZJzaghsanJkR6HgTbbiYKa8eradgtzSQWYdZ/
- DtaUeQ==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FAKE_REPLY_A1,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZH1V21rhUQlvRgnU@1wt.eu>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,14 +59,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg
+On Mon, Jun 05, 2023 at 05:26:19AM +0200, Willy Tarreau wrote:
+> On Sun, Jun 04, 2023 at 03:57:54PM -0700, Paul E. McKenney wrote:
+> > On Sun, Jun 04, 2023 at 03:20:11PM +0200, Willy Tarreau wrote:
+> > > Hello Paul,
+> > > 
+> > > Thomas and Zhangjin have provided significant nolibc cleanups, and
+> > > fixes, as well as preparation work to later support riscv32.
+> > > 
+> > > These consist in the following main series:
+> > >   - generalization of stackprotector to other archs that were not
+> > >     previously supported (riscv, mips, loongarch, arm, arm64)
+> > > 
+> > >   - general cleanups of the makefile, test report output, deduplication
+> > >     of certain tests
+> > > 
+> > >   - slightly better compliance of some tests performed on certain syscalls
+> > >     (e.g. no longer pass (void*)1 to gettimeofday() since glibc hates it).
+> > > 
+> > >   - add support for nanoseconds in stat() and statx()
+> > > 
+> > >   - fixes for some syscalls (e.g. ppoll() has 5 arguments not 4)
+> > > 
+> > >   - fixes around limits.h and  INT_MAX / INT_FAST64_MAX
+> > > 
+> > > I rebased the whole series on top of your latest dev branch (d19a9ca3d5)
+> > > and it works fine for all archs.
+> > > 
+> > > I don't know if you're still planning on merging new stuff in this area
+> > > for 6.5 or not (since I know that it involves new series of tests on your
+> > > side as well), but given that Zhangjin will engage into deeper changes
+> > > later for riscv32 that will likely imply to update more syscalls to use
+> > > the time64 ones, I would prefer to split the cleanups from the hard stuff,
+> > > but I'll let you judge based on the current state of what's pending for
+> > > 6.5.
+> > > 
+> > > In any case I'm putting all this here for now (not for merge yet):
+> > > 
+> > >    git://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git 20230604-nolibc-rv32+stkp6
+> > > 
+> > > I'd like Thomas and Zhangjin to perform a last check to confirm they're
+> > > OK with this final integration.
+> > 
+> > Given that the testing converges by the end of this week, I can't see
+> > any reason why these cannot make v6.5.
+> 
+> Perfect, thank you!
+> 
+> > (There were some kernel test
+> > robot complaints as well, valid or not I am not sure.)
+> 
+> You mean in relation with nolibc stuff (or nolibc-test) or something
+> totally different ?
 
-6.3.7-rc1
+Apologies, this was me being confused and failing to look closely.
 
-compiles, boots and runs here on x86_64
-(Intel Rocket Lake)
+The complaints were not about nolibc, but rather about my patches that
+they were on top of.  Not your problem!
 
-Thanks
+And please let me know when the next batch from your tree are ready to go.
+(You might have been saying that they were in your recent emails, but
+I thought I should double-check.)
 
-Tested-by: Ronald Warsow <rwarsow@gmx.de>
-
+							Thanx, Paul
