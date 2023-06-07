@@ -2,346 +2,430 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 182E9725726
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 10:15:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97945725724
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 10:15:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238988AbjFGIPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 04:15:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57614 "EHLO
+        id S235114AbjFGIPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 04:15:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239476AbjFGIPA (ORCPT
+        with ESMTP id S238935AbjFGIOw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 04:15:00 -0400
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 107D110EA
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 01:14:58 -0700 (PDT)
-Received: by mail-qv1-xf2c.google.com with SMTP id 6a1803df08f44-62606e67c0dso60470046d6.2
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 01:14:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686125697; x=1688717697;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8flZ91Hab9nU26QZFMLIP2yuNrFr8wIvvmC5oWYCK80=;
-        b=Y43u05ncuo5qs8NAKcg0N4wOfW1VAITNsfcW/om5+ZPRA6d2Q4BRXRX/jzs39xtmZS
-         wi8BehUcVylNS4QA+KOrBPc/LNlBjO7om+Ajm1tvAwa5B39Uy5RS5O7AH+GTTbFDJeDI
-         FLPcm4k2mwkKlCNrupN/A84klILIlycI7gqBpoQz86xBEU69Zsqw+CE717KBkozAvL4Q
-         ZXgRjCHJ7bNS7ST+wnX8nFUqdQkLEwjRE+iwSS9eE3i6dVYAvorx5fGV/2ln7+FQEivr
-         vMEZwp4kCjgwJt2UZcALAHS2pBO4bHSlyiq0sUV9jSTj7mcO05oKjrCi8NBmR2NxZSSy
-         MX3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686125697; x=1688717697;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8flZ91Hab9nU26QZFMLIP2yuNrFr8wIvvmC5oWYCK80=;
-        b=B91KWKHSrbz+2qxVXei3Cb7o8LAZu1luWxAw0wNtwLJ2AxGW3hOlFi8cgdS3LAYlii
-         Mv8ncql1XFgZDWbhDMLMC+7Lx1LTlabpMqCReu3mXx1O53cTx1yMnxLAI3cW4bvzf793
-         gFD4TXNZs3wBsxGXHgnKxCjP7zoVnqxhatJ9+R8i0xChkDykEnp5slBWPJwO3CJQeDPg
-         GSGezIJKHJZO4aYOF4DR2Y1ORbFCFJdYigqGcUDs+AJHK32P8ObEYr4rjt++kIQkqTzB
-         uOkoQNQ1EsjAAhpfnpiFwrmAnu2ltqZYr6KQxdFosoOW/7BGtkoNUiFYV2M0FxVZGFO6
-         Uw5w==
-X-Gm-Message-State: AC+VfDwXJS6iReHzynFBD5XOxtnTUmQUUTPSHnc07kdSaW2hvv4QqxXh
-        6XMrlNZtfM87fm4YMw7wSjTRRkST29DorK84PeZnvg==
-X-Google-Smtp-Source: ACHHUZ6Nub8JhRQrwolXBigkZdMGU6kSAgM4AoXOr6NQOHqi0cRN3POTluYy8mqwDYFviRhH/bHVhHPiHnH6l8Dz74Y=
-X-Received: by 2002:a05:6214:e48:b0:5f1:62d9:3368 with SMTP id
- o8-20020a0562140e4800b005f162d93368mr1882436qvc.30.1686125696889; Wed, 07 Jun
- 2023 01:14:56 -0700 (PDT)
+        Wed, 7 Jun 2023 04:14:52 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA79D10D7
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 01:14:47 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id B83747F8A;
+        Wed,  7 Jun 2023 16:14:40 +0800 (CST)
+Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 7 Jun
+ 2023 16:14:40 +0800
+Received: from SD-Server.starfivetech.com (183.27.98.122) by
+ EXMBX168.cuchost.com (172.16.6.78) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Wed, 7 Jun 2023 16:14:40 +0800
+From:   Walker Chen <walker.chen@starfivetech.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Claudiu Beznea <Claudiu.Beznea@microchip.com>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        "Jaroslav Kysela" <perex@perex.cz>,
+        Walker Chen <walker.chen@starfivetech.com>
+CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v1] ASoC: starfive: Cleanup and fix error check for JH7110 TDM
+Date:   Wed, 7 Jun 2023 16:14:39 +0800
+Message-ID: <20230607081439.1517-1-walker.chen@starfivetech.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20230606145611.704392-1-cerasuolodomenico@gmail.com> <20230606145611.704392-2-cerasuolodomenico@gmail.com>
-In-Reply-To: <20230606145611.704392-2-cerasuolodomenico@gmail.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Wed, 7 Jun 2023 01:14:18 -0700
-Message-ID: <CAJD7tkYvGeDMHobekqzJJOQuvZM3S6eNq-HCRJQ8UQE6_tmwSA@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 1/7] mm: zswap: add pool shrinking mechanism
-To:     Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-Cc:     vitaly.wool@konsulko.com, minchan@kernel.org,
-        senozhatsky@chromium.org, linux-mm@kvack.org, ddstreet@ieee.org,
-        sjenning@redhat.com, nphamcs@gmail.com, hannes@cmpxchg.org,
-        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [183.27.98.122]
+X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX168.cuchost.com
+ (172.16.6.78)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 6, 2023 at 7:56=E2=80=AFAM Domenico Cerasuolo
-<cerasuolodomenico@gmail.com> wrote:
->
-> Each zpool driver (zbud, z3fold and zsmalloc) implements its own shrink
-> function, which is called from zpool_shrink. However, with this commit,
-> a unified shrink function is added to zswap. The ultimate goal is to
-> eliminate the need for zpool_shrink once all zpool implementations have
-> dropped their shrink code.
->
-> To ensure the functionality of each commit, this change focuses solely
-> on adding the mechanism itself. No modifications are made to
-> the backends, meaning that functionally, there are no immediate changes.
-> The zswap mechanism will only come into effect once the backends have
-> removed their shrink code. The subsequent commits will address the
-> modifications needed in the backends.
->
-> Signed-off-by: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-> ---
->  mm/zswap.c | 96 +++++++++++++++++++++++++++++++++++++++++++++++++++---
->  1 file changed, 91 insertions(+), 5 deletions(-)
->
-> diff --git a/mm/zswap.c b/mm/zswap.c
-> index bcb82e09eb64..c99bafcefecf 100644
-> --- a/mm/zswap.c
-> +++ b/mm/zswap.c
-> @@ -150,6 +150,12 @@ struct crypto_acomp_ctx {
->         struct mutex *mutex;
->  };
->
-> +/*
-> + * The lock ordering is zswap_tree.lock -> zswap_pool.lru_lock.
-> + * The only case where lru_lock is not acquired while holding tree.lock =
-is
-> + * when a zswap_entry is taken off the lru for writeback, in that case i=
-t
-> + * needs to be verified that it's still valid in the tree.
-> + */
->  struct zswap_pool {
->         struct zpool *zpool;
->         struct crypto_acomp_ctx __percpu *acomp_ctx;
-> @@ -159,6 +165,8 @@ struct zswap_pool {
->         struct work_struct shrink_work;
->         struct hlist_node node;
->         char tfm_name[CRYPTO_MAX_ALG_NAME];
-> +       struct list_head lru;
-> +       spinlock_t lru_lock;
->  };
->
->  /*
-> @@ -176,10 +184,12 @@ struct zswap_pool {
->   *            be held while changing the refcount.  Since the lock must
->   *            be held, there is no reason to also make refcount atomic.
->   * length - the length in bytes of the compressed page data.  Needed dur=
-ing
-> - *          decompression. For a same value filled page length is 0.
-> + *          decompression. For a same value filled page length is 0, and=
- both
-> + *          pool and lru are invalid and must be ignored.
->   * pool - the zswap_pool the entry's data is in
->   * handle - zpool allocation handle that stores the compressed page data
->   * value - value of the same-value filled pages which have same content
-> + * lru - handle to the pool's lru used to evict pages.
->   */
->  struct zswap_entry {
->         struct rb_node rbnode;
-> @@ -192,6 +202,7 @@ struct zswap_entry {
->                 unsigned long value;
->         };
->         struct obj_cgroup *objcg;
-> +       struct list_head lru;
->  };
->
->  struct zswap_header {
-> @@ -364,6 +375,12 @@ static void zswap_free_entry(struct zswap_entry *ent=
-ry)
->         if (!entry->length)
->                 atomic_dec(&zswap_same_filled_pages);
->         else {
-> +       /* zpool_evictable will be removed once all 3 backends have migra=
-ted */
-> +               if (!zpool_evictable(entry->pool->zpool)) {
-> +                       spin_lock(&entry->pool->lru_lock);
-> +                       list_del(&entry->lru);
-> +                       spin_unlock(&entry->pool->lru_lock);
-> +               }
->                 zpool_free(entry->pool->zpool, entry->handle);
->                 zswap_pool_put(entry->pool);
->         }
-> @@ -584,14 +601,70 @@ static struct zswap_pool *zswap_pool_find_get(char =
-*type, char *compressor)
->         return NULL;
->  }
->
-> +static int zswap_shrink(struct zswap_pool *pool)
+Some minor issues were found during addtional testing and static
+analysis. The patch fixed these minor issues.
+1.Use BIT() macro to indicate configuration for TDM registers.
 
-Nit: rename to zswap_shrink_one() so that it's clear we always
-writeback one entry per call?
+2.Fix the check for devm_reset_control_array_get_exclusive return
+value. The devm_reset_control_array_get_exclusive() function may return
+NULL if it's an optional request. If optional is intended then NULL
+should not be treated as an error case, but as a special kind of success
+case. So here the IS_ERR() is used to check better.
 
-> +{
-> +       struct zswap_entry *lru_entry, *tree_entry =3D NULL;
-> +       struct zswap_header *zhdr;
-> +       struct zswap_tree *tree;
-> +       int swpoffset;
-> +       int ret;
-> +
-> +       /* get a reclaimable entry from LRU */
-> +       spin_lock(&pool->lru_lock);
-> +       if (list_empty(&pool->lru)) {
-> +               spin_unlock(&pool->lru_lock);
-> +               return -EINVAL;
-> +       }
-> +       lru_entry =3D list_last_entry(&pool->lru, struct zswap_entry, lru=
-);
-> +       list_del_init(&lru_entry->lru);
-> +       zhdr =3D zpool_map_handle(pool->zpool, lru_entry->handle, ZPOOL_M=
-M_RO);
-> +       tree =3D zswap_trees[swp_type(zhdr->swpentry)];
-> +       zpool_unmap_handle(pool->zpool, lru_entry->handle);
-> +       /*
-> +        * Once the pool lock is dropped, the lru_entry might get freed. =
-The
+Fixes: fd4762b6b5cf ("ASoC: starfive: Add JH7110 TDM driver")
+Signed-off-by: Walker Chen <walker.chen@starfivetech.com>
+---
+Fix the following issue:
+https://lore.kernel.org/all/ZH7t6Nc+NTcGpq%2F3@moroto/
+---
+ sound/soc/starfive/jh7110_tdm.c | 200 +++++++++++---------------------
+ 1 file changed, 68 insertions(+), 132 deletions(-)
 
-Nit: lru lock*
+diff --git a/sound/soc/starfive/jh7110_tdm.c b/sound/soc/starfive/jh7110_tdm.c
+index 973b910d2d3e..139ff091672e 100644
+--- a/sound/soc/starfive/jh7110_tdm.c
++++ b/sound/soc/starfive/jh7110_tdm.c
+@@ -24,63 +24,33 @@
+ #include <sound/soc.h>
+ #include <sound/soc-dai.h>
+ 
++/* Register offsets for JH7110 TDM device */
+ #define TDM_PCMGBCR			0x00
+-	#define PCMGBCR_MASK		0x1e
+-	#define PCMGBCR_ENABLE		BIT(0)
+-	#define PCMGBCR_TRITXEN		BIT(4)
+-	#define CLKPOL_BIT		5
+-	#define TRITXEN_BIT		4
+-	#define ELM_BIT			3
+-	#define SYNCM_BIT		2
+-	#define MS_BIT			1
+ #define TDM_PCMTXCR			0x04
+-	#define PCMTXCR_TXEN		BIT(0)
+-	#define IFL_BIT			11
+-	#define WL_BIT			8
+-	#define SSCALE_BIT		4
+-	#define SL_BIT			2
+-	#define LRJ_BIT			1
+ #define TDM_PCMRXCR			0x08
+-	#define PCMRXCR_RXEN		BIT(0)
+-	#define PCMRXCR_RXSL_MASK	0xc
+-	#define PCMRXCR_RXSL_16BIT	0x4
+-	#define PCMRXCR_RXSL_32BIT	0x8
+-	#define PCMRXCR_SCALE_MASK	0xf0
+-	#define PCMRXCR_SCALE_1CH	0x10
+ #define TDM_PCMDIV			0x0c
+ 
+-#define JH7110_TDM_FIFO			0x170c0000
+-#define JH7110_TDM_FIFO_DEPTH		32
++/* Bit definition for TDM_PCMGBCR */
++#define TDM_PCMGBCR_SYNCM_LONG		BIT(2)
++#define TDM_PCMGBCR_MS_SLAVE		BIT(1)
++#define TDM_PCMGBCR_EN			BIT(0)
+ 
+-enum TDM_MASTER_SLAVE_MODE {
+-	TDM_AS_MASTER = 0,
+-	TDM_AS_SLAVE,
+-};
++/* Bit definition for TDM_PCMTXCR */
++#define TDM_PCMTXCR_LEFT_J		BIT(1)
++#define TDM_PCMTXCR_TXEN		BIT(0)
+ 
+-enum TDM_CLKPOL {
+-	/* tx raising and rx falling */
+-	TDM_TX_RASING_RX_FALLING = 0,
+-	/* tx falling and rx raising */
+-	TDM_TX_FALLING_RX_RASING,
+-};
++/* Bit definition for TDM_PCMRXCR */
++#define TDM_PCMRXCR_LEFT_J		BIT(1)
++#define TDM_PCMRXCR_RXEN		BIT(0)
+ 
+-enum TDM_ELM {
+-	/* only work while SYNCM=0 */
+-	TDM_ELM_LATE = 0,
+-	TDM_ELM_EARLY,
+-};
+-
+-enum TDM_SYNCM {
+-	/* short frame sync */
+-	TDM_SYNCM_SHORT = 0,
+-	/* long frame sync */
+-	TDM_SYNCM_LONG,
+-};
++#define JH7110_TDM_FIFO			0x170c0000
++#define JH7110_TDM_FIFO_DEPTH		32
+ 
+-enum TDM_IFL {
+-	/* FIFO to send or received : half-1/2, Quarter-1/4 */
+-	TDM_FIFO_HALF = 0,
+-	TDM_FIFO_QUARTER,
++enum TDM_SL {
++	/* send or received slot length */
++	TDM_8BIT_SLOT_LEN = 0,
++	TDM_16BIT_SLOT_LEN,
++	TDM_32BIT_SLOT_LEN,
+ };
+ 
+ enum TDM_WL {
+@@ -92,43 +62,24 @@ enum TDM_WL {
+ 	TDM_32BIT_WORD_LEN,
+ };
+ 
+-enum TDM_SL {
+-	/* send or received slot length */
+-	TDM_8BIT_SLOT_LEN = 0,
+-	TDM_16BIT_SLOT_LEN,
+-	TDM_32BIT_SLOT_LEN,
+-};
+-
+-enum TDM_LRJ {
+-	/* left-justify or right-justify */
+-	TDM_RIGHT_JUSTIFY = 0,
+-	TDM_LEFT_JUSTIFT,
+-};
+-
+-struct tdm_chan_cfg {
+-	enum TDM_IFL ifl;
+-	enum TDM_WL  wl;
+-	unsigned char sscale;
+-	enum TDM_SL  sl;
+-	enum TDM_LRJ lrj;
+-	unsigned char enable;
+-};
+-
+ struct jh7110_tdm_dev {
+ 	void __iomem *tdm_base;
+ 	struct device *dev;
+ 	struct clk_bulk_data clks[6];
+ 	struct reset_control *resets;
+ 
+-	enum TDM_CLKPOL clkpolity;
+-	enum TDM_ELM	elm;
+-	enum TDM_SYNCM	syncm;
+-	enum TDM_MASTER_SLAVE_MODE ms_mode;
++	/* related to PCMTXCR */
++	u16 txwl;
++	u16 txsscale;
++	u16 txsl;
+ 
+-	struct tdm_chan_cfg tx;
+-	struct tdm_chan_cfg rx;
++	/* related to PCMRXCR */
++	u16 rxwl;
++	u16 rxsscale;
++	u16 rxsl;
+ 
+ 	u16 syncdiv;
++	u16 syncm;
+ 	u32 samplerate;
+ 	u32 pcmclk;
+ 
+@@ -166,13 +117,13 @@ static void jh7110_tdm_start(struct jh7110_tdm_dev *tdm,
+ 	u32 data;
+ 
+ 	data = jh7110_tdm_readl(tdm, TDM_PCMGBCR);
+-	jh7110_tdm_writel(tdm, TDM_PCMGBCR, data | PCMGBCR_ENABLE);
++	jh7110_tdm_writel(tdm, TDM_PCMGBCR, data | TDM_PCMGBCR_EN);
+ 
+ 	/* restore context */
+ 	if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK)
+-		jh7110_tdm_writel(tdm, TDM_PCMTXCR, tdm->saved_pcmtxcr | PCMTXCR_TXEN);
++		jh7110_tdm_writel(tdm, TDM_PCMTXCR, tdm->saved_pcmtxcr | TDM_PCMTXCR_TXEN);
+ 	else
+-		jh7110_tdm_writel(tdm, TDM_PCMRXCR, tdm->saved_pcmrxcr | PCMRXCR_RXEN);
++		jh7110_tdm_writel(tdm, TDM_PCMRXCR, tdm->saved_pcmrxcr | TDM_PCMRXCR_RXEN);
+ }
+ 
+ static void jh7110_tdm_stop(struct jh7110_tdm_dev *tdm,
+@@ -182,11 +133,11 @@ static void jh7110_tdm_stop(struct jh7110_tdm_dev *tdm,
+ 
+ 	if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK) {
+ 		val = jh7110_tdm_readl(tdm, TDM_PCMTXCR);
+-		val &= ~PCMTXCR_TXEN;
++		val &= ~TDM_PCMTXCR_TXEN;
+ 		jh7110_tdm_writel(tdm, TDM_PCMTXCR, val);
+ 	} else {
+ 		val = jh7110_tdm_readl(tdm, TDM_PCMRXCR);
+-		val &= ~PCMRXCR_RXEN;
++		val &= ~TDM_PCMRXCR_RXEN;
+ 		jh7110_tdm_writel(tdm, TDM_PCMRXCR, val);
+ 	}
+ }
+@@ -195,15 +146,15 @@ static int jh7110_tdm_syncdiv(struct jh7110_tdm_dev *tdm)
+ {
+ 	u32 sl, sscale, syncdiv;
+ 
+-	if (tdm->rx.sl >= tdm->tx.sl)
+-		sl = tdm->rx.sl;
++	if (tdm->rxsl >= tdm->txsl)
++		sl = tdm->rxsl;
+ 	else
+-		sl = tdm->tx.sl;
++		sl = tdm->txsl;
+ 
+-	if (tdm->rx.sscale >= tdm->tx.sscale)
+-		sscale = tdm->rx.sscale;
++	if (tdm->rxsscale >= tdm->txsscale)
++		sscale = tdm->rxsscale;
+ 	else
+-		sscale = tdm->tx.sscale;
++		sscale = tdm->txsscale;
+ 
+ 	syncdiv = tdm->pcmclk / tdm->samplerate - 1;
+ 
+@@ -212,10 +163,10 @@ static int jh7110_tdm_syncdiv(struct jh7110_tdm_dev *tdm)
+ 		return -EINVAL;
+ 	}
+ 
+-	if (tdm->syncm == TDM_SYNCM_LONG &&
+-	    (tdm->rx.sscale <= 1 || tdm->tx.sscale <= 1) &&
++	if (tdm->syncm == TDM_PCMGBCR_SYNCM_LONG &&
++	    (tdm->rxsscale <= 1 || tdm->txsscale <= 1) &&
+ 	    ((syncdiv + 1) <= sl)) {
+-		dev_err(tdm->dev, "Wrong syncdiv! It must be (syncdiv+1) > max[tx.sl, rx.sl]\n");
++		dev_err(tdm->dev, "Wrong syncdiv! It must be (syncdiv+1) > max[txsl, rxsl]\n");
+ 		return -EINVAL;
+ 	}
+ 
+@@ -233,17 +184,15 @@ static int jh7110_tdm_config(struct jh7110_tdm_dev *tdm,
+ 	if (ret)
+ 		return ret;
+ 
+-	datarx = (tdm->rx.ifl << IFL_BIT) |
+-		  (tdm->rx.wl << WL_BIT) |
+-		  (tdm->rx.sscale << SSCALE_BIT) |
+-		  (tdm->rx.sl << SL_BIT) |
+-		  (tdm->rx.lrj << LRJ_BIT);
++	datarx = (tdm->rxwl << 8) |
++		  (tdm->rxsscale << 4) |
++		  (tdm->rxsl << 2) |
++		  TDM_PCMRXCR_LEFT_J;
+ 
+-	datatx = (tdm->tx.ifl << IFL_BIT) |
+-		  (tdm->tx.wl << WL_BIT) |
+-		  (tdm->tx.sscale << SSCALE_BIT) |
+-		  (tdm->tx.sl << SL_BIT) |
+-		  (tdm->tx.lrj << LRJ_BIT);
++	datatx = (tdm->txwl << 8) |
++		  (tdm->txsscale << 4) |
++		  (tdm->txsl << 2) |
++		  TDM_PCMTXCR_LEFT_J;
+ 
+ 	if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK)
+ 		jh7110_tdm_writel(tdm, TDM_PCMTXCR, datatx);
+@@ -346,7 +295,8 @@ static int jh7110_tdm_hw_params(struct snd_pcm_substream *substream,
+ 				struct snd_soc_dai *dai)
+ {
+ 	struct jh7110_tdm_dev *tdm = snd_soc_dai_get_drvdata(dai);
+-	int chan_wl, chan_sl, chan_nr;
++	int chan_nr;
++	unsigned short chan_wl, chan_sl;
+ 	unsigned int data_width;
+ 	unsigned int dma_bus_width;
+ 	struct snd_dmaengine_dai_dma_data *dma_data = NULL;
+@@ -389,15 +339,15 @@ static int jh7110_tdm_hw_params(struct snd_pcm_substream *substream,
+ 	}
+ 
+ 	if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK) {
+-		tdm->tx.wl = chan_wl;
+-		tdm->tx.sl = chan_sl;
+-		tdm->tx.sscale = chan_nr;
++		tdm->txwl = chan_wl;
++		tdm->txsl = chan_sl;
++		tdm->txsscale = chan_nr;
+ 		tdm->play_dma_data.addr_width = dma_bus_width;
+ 		dma_data = &tdm->play_dma_data;
+ 	} else {
+-		tdm->rx.wl = chan_wl;
+-		tdm->rx.sl = chan_sl;
+-		tdm->rx.sscale = chan_nr;
++		tdm->rxwl = chan_wl;
++		tdm->rxsl = chan_sl;
++		tdm->rxsscale = chan_nr;
+ 		tdm->capture_dma_data.addr_width = dma_bus_width;
+ 		dma_data = &tdm->capture_dma_data;
+ 	}
+@@ -444,15 +394,17 @@ static int jh7110_tdm_set_dai_fmt(struct snd_soc_dai *cpu_dai,
+ 	struct jh7110_tdm_dev *tdm = snd_soc_dai_get_drvdata(cpu_dai);
+ 	unsigned int gbcr;
+ 
++	gbcr = tdm->syncm;
++
+ 	/* set master/slave audio interface */
+ 	switch (fmt & SND_SOC_DAIFMT_CLOCK_PROVIDER_MASK) {
+ 	case SND_SOC_DAIFMT_BP_FP:
+ 		/* cpu is master */
+-		tdm->ms_mode = TDM_AS_MASTER;
++		gbcr &= ~TDM_PCMGBCR_MS_SLAVE;
+ 		break;
+ 	case SND_SOC_DAIFMT_BC_FC:
+ 		/* codec is master */
+-		tdm->ms_mode = TDM_AS_SLAVE;
++		gbcr |= TDM_PCMGBCR_MS_SLAVE;
+ 		break;
+ 	case SND_SOC_DAIFMT_BC_FP:
+ 	case SND_SOC_DAIFMT_BP_FC:
+@@ -462,10 +414,6 @@ static int jh7110_tdm_set_dai_fmt(struct snd_soc_dai *cpu_dai,
+ 		return -EINVAL;
+ 	}
+ 
+-	gbcr = (tdm->clkpolity << CLKPOL_BIT) |
+-		(tdm->elm << ELM_BIT) |
+-		(tdm->syncm << SYNCM_BIT) |
+-		(tdm->ms_mode << MS_BIT);
+ 	jh7110_tdm_writel(tdm, TDM_PCMGBCR, gbcr);
+ 
+ 	return 0;
+@@ -537,18 +485,7 @@ static const struct snd_dmaengine_pcm_config jh7110_dmaengine_pcm_config = {
+ 
+ static void jh7110_tdm_init_params(struct jh7110_tdm_dev *tdm)
+ {
+-	tdm->clkpolity = TDM_TX_RASING_RX_FALLING;
+-	tdm->elm = TDM_ELM_LATE;
+-	tdm->syncm = TDM_SYNCM_SHORT;
+-
+-	tdm->rx.ifl = TDM_FIFO_HALF;
+-	tdm->tx.ifl = TDM_FIFO_HALF;
+-	tdm->rx.wl = TDM_16BIT_WORD_LEN;
+-	tdm->tx.wl = TDM_16BIT_WORD_LEN;
+-	tdm->rx.sscale = 2;
+-	tdm->tx.sscale = 2;
+-	tdm->rx.lrj = TDM_LEFT_JUSTIFT;
+-	tdm->tx.lrj = TDM_LEFT_JUSTIFT;
++	tdm->syncm = 0;
+ 
+ 	tdm->play_dma_data.addr = JH7110_TDM_FIFO;
+ 	tdm->play_dma_data.addr_width = DMA_SLAVE_BUSWIDTH_2_BYTES;
+@@ -580,10 +517,9 @@ static int jh7110_tdm_clk_reset_get(struct platform_device *pdev,
+ 	}
+ 
+ 	tdm->resets = devm_reset_control_array_get_exclusive(&pdev->dev);
+-	if (IS_ERR_OR_NULL(tdm->resets)) {
+-		ret = PTR_ERR(tdm->resets);
+-		dev_err(&pdev->dev, "Failed to get tdm resets");
+-		return ret;
++	if (IS_ERR(tdm->resets)) {
++		dev_err(&pdev->dev, "Failed to get tdm resets\n");
++		return PTR_ERR(tdm->resets);
+ 	}
+ 
+ 	return 0;
+@@ -649,12 +585,12 @@ static int jh7110_tdm_dev_remove(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
+-static const struct of_device_id jh7110_tdm_of_match[] = {
++static const struct of_device_id jh7110_tdm_match[] = {
+ 	{ .compatible = "starfive,jh7110-tdm", },
+ 	{}
+ };
+ 
+-MODULE_DEVICE_TABLE(of, jh7110_tdm_of_match);
++MODULE_DEVICE_TABLE(of, jh7110_tdm_match);
+ 
+ static const struct dev_pm_ops jh7110_tdm_pm_ops = {
+ 	RUNTIME_PM_OPS(jh7110_tdm_runtime_suspend,
+@@ -666,7 +602,7 @@ static const struct dev_pm_ops jh7110_tdm_pm_ops = {
+ static struct platform_driver jh7110_tdm_driver = {
+ 	.driver = {
+ 		.name = "jh7110-tdm",
+-		.of_match_table = jh7110_tdm_of_match,
++		.of_match_table = jh7110_tdm_match,
+ 		.pm = pm_ptr(&jh7110_tdm_pm_ops),
+ 	},
+ 	.probe = jh7110_tdm_probe,
+-- 
+2.17.1
 
-> +        * swpoffset is copied to the stack, and lru_entry isn't deref'd =
-again
-> +        * until the entry is verified to still be alive in the tree.
-> +        */
-> +       swpoffset =3D swp_offset(zhdr->swpentry);
-> +       spin_unlock(&pool->lru_lock);
-> +
-> +       /* hold a reference from tree so it won't be freed during writeba=
-ck */
-> +       spin_lock(&tree->lock);
-> +       tree_entry =3D zswap_entry_find_get(&tree->rbroot, swpoffset);
-> +       if (tree_entry !=3D lru_entry) {
-> +               if (tree_entry)
-> +                       zswap_entry_put(tree, tree_entry);
-> +               spin_unlock(&tree->lock);
-> +               return -EAGAIN;
-> +       }
-> +       spin_unlock(&tree->lock);
-> +
-> +       ret =3D zswap_writeback_entry(pool->zpool, lru_entry->handle);
-> +
-> +       spin_lock(&tree->lock);
-> +       if (ret) {
-> +               spin_lock(&pool->lru_lock);
-> +               list_move(&lru_entry->lru, &pool->lru);
-> +               spin_unlock(&pool->lru_lock);
-> +       }
-> +       zswap_entry_put(tree, tree_entry);
-> +       spin_unlock(&tree->lock);
-> +
-> +       return ret ? -EAGAIN : 0;
-> +}
-> +
->  static void shrink_worker(struct work_struct *w)
->  {
->         struct zswap_pool *pool =3D container_of(w, typeof(*pool),
->                                                 shrink_work);
->         int ret, failures =3D 0;
->
-> +       /* zpool_evictable will be removed once all 3 backends have migra=
-ted */
->         do {
-> -               ret =3D zpool_shrink(pool->zpool, 1, NULL);
-> +               if (zpool_evictable(pool->zpool))
-> +                       ret =3D zpool_shrink(pool->zpool, 1, NULL);
-> +               else
-> +                       ret =3D zswap_shrink(pool);
->                 if (ret) {
->                         zswap_reject_reclaim_fail++;
->                         if (ret !=3D -EAGAIN)
-> @@ -655,6 +728,8 @@ static struct zswap_pool *zswap_pool_create(char *typ=
-e, char *compressor)
->          */
->         kref_init(&pool->kref);
->         INIT_LIST_HEAD(&pool->list);
-> +       INIT_LIST_HEAD(&pool->lru);
-> +       spin_lock_init(&pool->lru_lock);
->         INIT_WORK(&pool->shrink_work, shrink_worker);
->
->         zswap_pool_debug("created", pool);
-> @@ -1270,7 +1345,7 @@ static int zswap_frontswap_store(unsigned type, pgo=
-ff_t offset,
->         }
->
->         /* store */
-> -       hlen =3D zpool_evictable(entry->pool->zpool) ? sizeof(zhdr) : 0;
-> +       hlen =3D sizeof(zhdr);
->         gfp =3D __GFP_NORETRY | __GFP_NOWARN | __GFP_KSWAPD_RECLAIM;
->         if (zpool_malloc_support_movable(entry->pool->zpool))
->                 gfp |=3D __GFP_HIGHMEM | __GFP_MOVABLE;
-> @@ -1313,6 +1388,12 @@ static int zswap_frontswap_store(unsigned type, pg=
-off_t offset,
->                         zswap_entry_put(tree, dupentry);
->                 }
->         } while (ret =3D=3D -EEXIST);
-> +       /* zpool_evictable will be removed once all 3 backends have migra=
-ted */
-> +       if (entry->length && !zpool_evictable(entry->pool->zpool)) {
-> +               spin_lock(&entry->pool->lru_lock);
-> +               list_add(&entry->lru, &entry->pool->lru);
-> +               spin_unlock(&entry->pool->lru_lock);
-> +       }
->         spin_unlock(&tree->lock);
->
->         /* update stats */
-> @@ -1384,8 +1465,7 @@ static int zswap_frontswap_load(unsigned type, pgof=
-f_t offset,
->         /* decompress */
->         dlen =3D PAGE_SIZE;
->         src =3D zpool_map_handle(entry->pool->zpool, entry->handle, ZPOOL=
-_MM_RO);
-> -       if (zpool_evictable(entry->pool->zpool))
-> -               src +=3D sizeof(struct zswap_header);
-> +       src +=3D sizeof(struct zswap_header);
->
->         if (!zpool_can_sleep_mapped(entry->pool->zpool)) {
->                 memcpy(tmp, src, entry->length);
-> @@ -1415,6 +1495,12 @@ static int zswap_frontswap_load(unsigned type, pgo=
-ff_t offset,
->  freeentry:
->         spin_lock(&tree->lock);
->         zswap_entry_put(tree, entry);
-> +       /* zpool_evictable will be removed once all 3 backends have migra=
-ted */
-> +       if (entry->length && !zpool_evictable(entry->pool->zpool)) {
-> +               spin_lock(&entry->pool->lru_lock);
-> +               list_move(&entry->lru, &entry->pool->lru);
-> +               spin_unlock(&entry->pool->lru_lock);
-> +       }
-
-It's not really this patch's fault, but when merged with commit
-fe1d1f7d0fb5 ("mm: zswap: support exclusive loads") from mm-unstable
-[1], and with CONFIG_ZSWAP_EXCLUSIVE_LOADS=3Dy, this causes a crash.
-
-This happens because fe1d1f7d0fb5 makes the loads exclusive, so
-zswap_entry_put(tree, entry) above the added code causes the entry to
-be freed, then we go ahead and deference multiple fields within it in
-the added chunk. Moving the chunk above zswap_entry_put() (and
-consequently also above zswap_invalidate_entry() from fe1d1f7d0fb5)
-makes this work correctly.
-
-Perhaps it would be useful to rebase on top of fe1d1f7d0fb5 for your
-next version(s), if any.
-
-Maybe the outcome would be something like:
-
-zswap_entry_put(tree, entry);
-if (!ret && IS_ENABLED(CONFIG_ZSWAP_EXCLUSIVE_LOADS)) {
-        zswap_invalidate_entry(tree, entry);
-} else if (entry->length && !zpool_evictable(entry->pool->zpool)) {
-        spin_lock(&entry->pool->lru_lock);
-        list_move(&entry->lru, &entry->pool->lru);
-        spin_unlock(&entry->pool->lru_lock);
-}
-
-I am assuming if we are going to invalidate the entry anyway there is
-no need to move it to the front of the lru -- but I didn't really
-think it through.
-
-[1]https://lore.kernel.org/lkml/20230530210251.493194-1-yosryahmed@google.c=
-om/
-
->         spin_unlock(&tree->lock);
->
->         return ret;
-> --
-> 2.34.1
->
