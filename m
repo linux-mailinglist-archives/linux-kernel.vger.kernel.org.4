@@ -2,145 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99CB1727327
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 01:38:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A9AF72732E
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 01:39:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233438AbjFGXi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 19:38:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46876 "EHLO
+        id S231987AbjFGXjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 19:39:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233353AbjFGXiV (ORCPT
+        with ESMTP id S229968AbjFGXjP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 19:38:21 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9630A270C
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 16:37:56 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-65311774e52so3288965b3a.3
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 16:37:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686181076; x=1688773076;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=q85ALpObps5sc/UCVblmdlmcE0aIZmHRuMxmvi7ZvV4=;
-        b=lV8syWtj43Ff/kNItqdKE8y9KFBRtz3T741CER394a4RMHngbFtuX1OVIX0rOLruXT
-         XkH5dqkCV3iSkoPeFmEZh8PwJCU/4Cdt3mBMneFJ3QGZyUUe1hEbZi9eVOiiXIZz4LRQ
-         ymAYcwB9baokNEZhdcnTBgqOSyGwxz97Y5k6k=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686181076; x=1688773076;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=q85ALpObps5sc/UCVblmdlmcE0aIZmHRuMxmvi7ZvV4=;
-        b=cXlX67W0eyA1tLrv1d8ZkFFQEm4KGvgPBl+0vU7WYI8y5nHoQ8s2D90GCWHK179LYT
-         fXzxmVB4Xr7EWuJ+ib8PsQ8tETAOndPkVZdMgPafxzv/jPvngFIOo0dJB2yoig8czjPA
-         WoFDkDcl/qpDC0DDNgPYjY/hv4kVXCgYjlNrmSKoUDW6JRKp6ipNsgKUH10Jm8Xny9FY
-         gq8ypL08qiFztO+Kfde/qXj9g56pIfiQomBScy0HOIUVLH05GiZnLDM7D89QHN3sYPJE
-         XsQ4QP4t1zd6MUiGxd4dgR+DVnRLXq4gt0jowrd/g/Bz4dMxQ4S86CDVDkyTKhafZMA/
-         PPqg==
-X-Gm-Message-State: AC+VfDyjTm8/UB8ruUWpDrdO9g0GZ26KzmXHaDRjZLevEPkoBveCVHcZ
-        CpIOFKv11+wrPtXVE7rrmKr1nA==
-X-Google-Smtp-Source: ACHHUZ6ZXC7p4DKrsltkZH4GRsEhK/UFVuZ7UJv1bOQaR6JO3aYQPtnsPqCAKXnWT3JJJ9X0TBo+zA==
-X-Received: by 2002:a05:6a20:394a:b0:117:51fe:9b4c with SMTP id r10-20020a056a20394a00b0011751fe9b4cmr2792096pzg.7.1686181076046;
-        Wed, 07 Jun 2023 16:37:56 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id p19-20020aa78613000000b006414b2c9efasm8859392pfn.123.2023.06.07.16.37.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 16:37:55 -0700 (PDT)
-Date:   Wed, 7 Jun 2023 16:37:55 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Mark Brown <broonie@kernel.org>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] binfmt_elf: dynamically allocate note.data in
- parse_elf_properties
-Message-ID: <202306071636.1C35171CC@keescook>
-References: <20230607144227.8956-1-ansuelsmth@gmail.com>
- <202306071417.79F70AC@keescook>
- <6480f938.1c0a0220.17a3a.0e1e@mx.google.com>
+        Wed, 7 Jun 2023 19:39:15 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A292212B;
+        Wed,  7 Jun 2023 16:38:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686181131; x=1717717131;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=KlCxXW3cettU4hkVoOWitZPtIUn44RhFROQOzqvvN6g=;
+  b=Z7CN/rA7g2YUusFukq0iSSbPUrX0o1v1p//tMd+CLKJCiDSxX5ly1+q0
+   pm6qx3bcoyr9nO22Xa1e1dJBMU3TkOEq5/UJKysbXM7wSeV10b4F2XmnD
+   sJAqiladYTukjGeNi9jjXfqthtNcFtZeYYOvZ9fGVIyhwfiukRwOZIJpZ
+   mqGlpyrGUmM0q91o7J3NuCKw25RyqMc3QPECYDU4HFobdE4OACTXjoH9O
+   XR9ddY4EO7tP7SuvdeHI2d1L9KM6wWYrlV7i3CxXd4IGqW3t6fkpWMVHz
+   HQ07AZ1UvuaFpByCzuImJlSgdFLnTESUavZqnYTj3kpWHFr1U9Vh6lyLl
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="354631544"
+X-IronPort-AV: E=Sophos;i="6.00,225,1681196400"; 
+   d="scan'208";a="354631544"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 16:38:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="739461201"
+X-IronPort-AV: E=Sophos;i="6.00,225,1681196400"; 
+   d="scan'208";a="739461201"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga008.jf.intel.com with ESMTP; 07 Jun 2023 16:38:50 -0700
+Received: from debox1-desk4.intel.com (unknown [10.251.3.221])
+        by linux.intel.com (Postfix) with ESMTP id 159CB580B54;
+        Wed,  7 Jun 2023 16:38:50 -0700 (PDT)
+From:   "David E. Box" <david.e.box@linux.intel.com>
+To:     linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org
+Cc:     david.e.box@linux.intel.com, markgross@kernel.org,
+        hdegoede@redhat.com, irenic.rajneesh@gmail.com,
+        ilpo.jarvinen@linux.intel.com, xi.pardee@intel.com,
+        rajvi.jingar@linux.intel.com
+Subject: [PATCH V2 1/2] platform/x86/intel/pmc: Add resume callback
+Date:   Wed,  7 Jun 2023 16:38:48 -0700
+Message-Id: <20230607233849.239047-1-david.e.box@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6480f938.1c0a0220.17a3a.0e1e@mx.google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 08:31:58PM +0200, Christian Marangi wrote:
-> On Wed, Jun 07, 2023 at 02:19:51PM -0700, Kees Cook wrote:
-> > On Wed, Jun 07, 2023 at 04:42:27PM +0200, Christian Marangi wrote:
-> > > Dynamically allocate note.data in parse_elf_properties to fix
-> > > compilation warning on some arch.
-> > 
-> > I'd rather avoid dynamic allocation as much as possible in the exec
-> > path, but we can balance it against how much it may happen.
-> >
-> 
-> I guess there isn't a good way to handle this other than static global
-> variables and kmalloc. But check the arch question for additional info
-> on the case.
-> 
-> > > On some arch note.data exceed the stack limit for a single function and
-> > > this cause the following compilation warning:
-> > > fs/binfmt_elf.c: In function 'parse_elf_properties.isra':
-> > > fs/binfmt_elf.c:821:1: error: the frame size of 1040 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
-> > >   821 | }
-> > >       | ^
-> > > cc1: all warnings being treated as errors
-> > 
-> > Which architectures see this warning?
-> > 
-> 
-> This is funny. On OpenWRT we are enforcing WERROR and we had FRAME_WARN
-> hardcoded to 1024. (the option is set to 2048 on 64bit arch)
+Add a resume callback to perform platform specific functions during resume
+from suspend.
 
-Ah-ha. Okay, I was wondering how you got that. :)
+Signed-off-by: David E. Box <david.e.box@linux.intel.com>
+---
 
-> ARCH_USE_GNU_PROPERTY is set only on arm64 that have a FRAME_WARN set to
-> 2048.
-> 
-> So this was triggered by building arm64 with FRAME_WARN set to 1024.
-> 
-> Now with the configuration of 2048 the stack warn is not triggered, but
-> I wonder if it may happen to have a 32bit system with
-> ARCH_USE_GNU_PROPERTY. That would effectively trigger the warning.
-> 
-> So this is effectively a patch that fix a currently not possible
-> configuration, since:
-> 
-> !IS_ENABLED(CONFIG_ARCH_USE_GNU_PROPERTY) will result in node.data
-> effectively never allocated by the compiler are the function will return
-> 0 on everything that doesn't have CONFIG_ARCH_USE_GNU_PROPERTY.
-> 
-> > > Fix this by dynamically allocating the array.
-> > > Update the sizeof of the union to the biggest element allocated.
-> > 
-> > How common are these notes? I assume they're very common; I see them
-> > even in /bin/true:
-> > 
-> > $ readelf -lW /bin/true | grep PROP
-> >   GNU_PROPERTY   0x000338 0x0000000000000338 0x0000000000000338 0x000030 0x000030 R   0x8
-> > 
-> > -- 
-> 
-> Is there a way to check if this kmalloc actually cause perf regression?
+V2 - Change resume_fixup to just resume and use it a a replacement for
+     the regular resume flow (now called pmc_core_resume_common) if it
+     exist. Suggested by Ilpo.
 
-I don't have a good benchmark besides just an exec loop. But since this
-isn't reachable in a regular config, I'd rather keep things how there
-already are.
+ drivers/platform/x86/intel/pmc/core.c | 14 ++++++++++++--
+ drivers/platform/x86/intel/pmc/core.h |  3 +++
+ 2 files changed, 15 insertions(+), 2 deletions(-)
 
--Kees
+diff --git a/drivers/platform/x86/intel/pmc/core.c b/drivers/platform/x86/intel/pmc/core.c
+index da6e7206d38b..bb2f11251f73 100644
+--- a/drivers/platform/x86/intel/pmc/core.c
++++ b/drivers/platform/x86/intel/pmc/core.c
+@@ -1223,11 +1223,11 @@ static inline bool pmc_core_is_s0ix_failed(struct pmc_dev *pmcdev)
+ 	return false;
+ }
+ 
+-static __maybe_unused int pmc_core_resume(struct device *dev)
++int pmc_core_resume_common(struct pmc_dev *pmcdev)
+ {
+-	struct pmc_dev *pmcdev = dev_get_drvdata(dev);
+ 	const struct pmc_bit_map **maps = pmcdev->map->lpm_sts;
+ 	int offset = pmcdev->map->lpm_status_offset;
++	struct device *dev = &pmcdev->pdev->dev;
+ 
+ 	/* Check if the syspend used S0ix */
+ 	if (pm_suspend_via_firmware())
+@@ -1257,6 +1257,16 @@ static __maybe_unused int pmc_core_resume(struct device *dev)
+ 	return 0;
+ }
+ 
++static __maybe_unused int pmc_core_resume(struct device *dev)
++{
++	struct pmc_dev *pmcdev = dev_get_drvdata(dev);
++
++	if (pmcdev->resume)
++		return pmcdev->resume(pmcdev);
++
++	return pmc_core_resume_common(pmcdev);
++}
++
+ static const struct dev_pm_ops pmc_core_pm_ops = {
+ 	SET_LATE_SYSTEM_SLEEP_PM_OPS(pmc_core_suspend, pmc_core_resume)
+ };
+diff --git a/drivers/platform/x86/intel/pmc/core.h b/drivers/platform/x86/intel/pmc/core.h
+index 9ca9b9746719..7c95586e742b 100644
+--- a/drivers/platform/x86/intel/pmc/core.h
++++ b/drivers/platform/x86/intel/pmc/core.h
+@@ -327,6 +327,7 @@ struct pmc_reg_map {
+  * @lpm_en_modes:	Array of enabled modes from lowest to highest priority
+  * @lpm_req_regs:	List of substate requirements
+  * @core_configure:	Function pointer to configure the platform
++ * @resume:		Function to perform platform specific resume
+  *
+  * pmc_dev contains info about power management controller device.
+  */
+@@ -345,6 +346,7 @@ struct pmc_dev {
+ 	int lpm_en_modes[LPM_MAX_NUM_MODES];
+ 	u32 *lpm_req_regs;
+ 	void (*core_configure)(struct pmc_dev *pmcdev);
++	int (*resume)(struct pmc_dev *pmcdev);
+ };
+ 
+ extern const struct pmc_bit_map msr_map[];
+@@ -398,6 +400,7 @@ extern const struct pmc_reg_map mtl_reg_map;
+ extern void pmc_core_get_tgl_lpm_reqs(struct platform_device *pdev);
+ extern int pmc_core_send_ltr_ignore(struct pmc_dev *pmcdev, u32 value);
+ 
++int pmc_core_resume_common(struct pmc_dev *pmcdev);
+ void spt_core_init(struct pmc_dev *pmcdev);
+ void cnp_core_init(struct pmc_dev *pmcdev);
+ void icl_core_init(struct pmc_dev *pmcdev);
 
+base-commit: 86f67fe2db439867f9476c9b78ea3ebd4a06a123
 -- 
-Kees Cook
+2.34.1
+
