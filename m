@@ -2,70 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8DEA726457
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 17:25:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48F2072646E
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 17:26:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241096AbjFGPZd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 11:25:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33650 "EHLO
+        id S241475AbjFGP02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 11:26:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241548AbjFGPZG (ORCPT
+        with ESMTP id S241313AbjFGP0H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 11:25:06 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 486CB2126
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 08:24:39 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1b0314f057cso39049435ad.1
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 08:24:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686151476; x=1688743476;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=skpFX1nvdUsEf5JIjZnFK8alGwuwceGPnoOmzX+YgHU=;
-        b=cDpNvxi9FBzqVAGVY796eJbBguJemD7B5gglGpbBlKjzEMrpCL8MLun/S+UbE1FAwg
-         0YfaMZK6remIZFPeAF3wh2IOQ1HYY9lv4OCzQVXJoC4iGSrBnn4BWJ8kxrwxGyDJ/u0H
-         XQi7nhIzZCeg9BiWQ04ZY3uIg5t9gvyLELfidoRbPA0vWKPeGsjZiSOmaPJkSLtttqJ+
-         mJu51mCuAUc/+WOI4r3nFx+nTAMYV9Y5moUC1TEel+fz+7nMm5Zplio2Z57Km3PSjFsg
-         clvxdq4YKE92/QvDrPpQWDs4HRZvFrbJRol6Rz+0+RgZXGvqWXz+F2KLBeM+VBB+DfCC
-         VeFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686151476; x=1688743476;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=skpFX1nvdUsEf5JIjZnFK8alGwuwceGPnoOmzX+YgHU=;
-        b=k900MrjfE/zRbECUwJqcJNR3UU7ZPGK3DEwbKqaIV8s6MPpSkg9gxfgpAO7tYQf0fe
-         f/p8HGD//4nDnE5A8M9m5Tzxlc7bT7/aPIh2oylC7hD1lsga65hfCUaIj32QC8ydIW+h
-         Mn2edJ30IX9+KqNESduSL2hg5upIKjtLIvY/ru6eSUyYVn5OHGaLB7Z96SHlC8PrLIZI
-         td26lwm429eIbHGEDFcVsDUKQDz/85caoXny3bsE15fPhPLBgQOhb5VB5v/R4Nd+ZujY
-         H6/uqIl3j9tyZrlm3uTBj3FMGZEmZn0MLJH3J2XDhNSUP2nzuuHIRt4JdGpipq+Sdxsw
-         UFhw==
-X-Gm-Message-State: AC+VfDy/egURN9qQOHbr4K/LcHSNdyEGuq+xSMuZSzVqj27HU/oCV1N/
-        7GJAaswphiwRAlFdWJIxtt39USHldGm96/MrmQ==
-X-Google-Smtp-Source: ACHHUZ5zf5rAv1fKEXmFsQebOWqchgQba8hRDIpdEbSVGrI6EbcLNT1CTOXSId6xmx2MKgLO+9fWMw==
-X-Received: by 2002:a17:902:db0e:b0:1ad:fc06:d7c0 with SMTP id m14-20020a170902db0e00b001adfc06d7c0mr2856601plx.1.1686151476521;
-        Wed, 07 Jun 2023 08:24:36 -0700 (PDT)
-Received: from localhost.localdomain ([59.92.97.244])
-        by smtp.gmail.com with ESMTPSA id q5-20020a170902788500b001aaf536b1e3sm10590958pll.123.2023.06.07.08.24.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 08:24:36 -0700 (PDT)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     mhi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loic.poulain@linaro.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v2 0/2] Add MHI Endpoint network driver
-Date:   Wed,  7 Jun 2023 20:54:25 +0530
-Message-Id: <20230607152427.108607-1-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
+        Wed, 7 Jun 2023 11:26:07 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C7892699;
+        Wed,  7 Jun 2023 08:25:34 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 764C421A0A;
+        Wed,  7 Jun 2023 15:25:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1686151501; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=3dXGf7k+4oTYlBaWumJNU4jR3nmmEHJWtnu0vSLVKpY=;
+        b=B+PBZJXThYIOntzOMYJN1M7HOWKlcyfHTjqwYAzKeYBeg7N4H53o02U8FpcHbdfxQS/12F
+        pD2SxjHz7edW0+GtChSdSrs+u54G5UDKluEkn024K10JO0UxcGtR6rRHIiyWQ7rmD6W5Wk
+        GvOPqUkg6P2Kqu+RevoP90n3lOrnJZQ=
+Received: from alley.suse.cz (unknown [10.100.201.202])
+        by relay2.suse.de (Postfix) with ESMTP id 6C3A12C141;
+        Wed,  7 Jun 2023 15:24:59 +0000 (UTC)
+From:   Petr Mladek <pmladek@suse.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Douglas Anderson <dianders@chromium.org>
+Cc:     kgdb-bugreport@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev@lists.ozlabs.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        sparclinux@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        linux-perf-users@vger.kernel.org, Petr Mladek <pmladek@suse.com>
+Subject: [PATCH 0/7] watchdog/hardlockup: Cleanup configuration of hardlockup detectors
+Date:   Wed,  7 Jun 2023 17:24:25 +0200
+Message-Id: <20230607152432.5435-1-pmladek@suse.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -74,37 +57,104 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
 
-This series adds a network driver for the Modem Host Interface (MHI) endpoint
-devices that provides network interfaces to the PCIe based Qualcomm endpoint
-devices supporting MHI bus (like Modems). This driver allows the MHI endpoint
-devices to establish IP communication with the host machines (x86, ARM64) over
-MHI bus.
+this patchset is supposed to replace the last patch in the patchset cleaning
+up after introducing the buddy detector, see
+https://lore.kernel.org/r/20230526184139.10.I821fe7609e57608913fe05abd8f35b343e7a9aae@changeid
 
-On the host side, the existing mhi_net driver provides the network connectivity
-to the host.
+There are four possible variants of hardlockup detectors:
 
-- Mani
+  + buddy: available when SMP is set.
 
-Changes in v2:
+  + perf: available when HAVE_HARDLOCKUP_DETECTOR_PERF is set.
 
-* Fixed kfree(skb) with kfree_skb(skb)
-* Reworded the Kconfig text slightly
-* Dropped the MTU increase patch as it turned out only few devices support 32K
-  MTU
+  + arch-specific: available when HAVE_HARDLOCKUP_DETECTOR_ARCH is set.
 
-Manivannan Sadhasivam (2):
-  net: Add MHI Endpoint network driver
-  MAINTAINERS: Add entry for MHI networking drivers under MHI bus
+  + sparc64 special variant: available when HAVE_NMI_WATCHDOG is set
+	and HAVE_HARDLOCKUP_DETECTOR_ARCH is not set.
 
- MAINTAINERS              |   1 +
- drivers/net/Kconfig      |   9 ++
- drivers/net/Makefile     |   1 +
- drivers/net/mhi_ep_net.c | 331 +++++++++++++++++++++++++++++++++++++++
- 4 files changed, 342 insertions(+)
- create mode 100644 drivers/net/mhi_ep_net.c
+Only one hardlockup detector can be compiled in. The selection is done
+using quite complex dependencies between several CONFIG variables.
+The following patches will try to make it more straightforward.
+
+Before, the decision was done using the following variables:
+
+	+ HAVE_HARDLOCKUP_DETECTOR_PERF
+	+ HAVE_HARDLOCKUP_DETECTOR_BUDDY
+	+ HAVE_HARDLOCKUP_DETECTOR_ARCH
+	+ HAVE_NMI_WATCHDOG
+ 
+	+ HARDLOCKUP_DETECTOR
+	+ HARDLOCKUP_DETECTOR_PREFER_BUDDY
+
+	+ HAVE_HARDLOCKUP_DETECTOR_NON_ARCH
+	+ HARDLOCKUP_DETECTOR_NON_ARCH
+
+	+ HARDLOCKUP_DETECTOR_PERF
+	+ HARDLOCKUP_DETECTOR_BUDDY
+
+   and the particular watchdog was used when the following variables were set:
+
+	+ perf:		 HARDLOCKUP_DETECTOR_PERF
+	+ buddy:	 HARDLOCKUP_DETECTOR_BUDDY
+	+ arch-specific: HAVE_HARDLOCKUP_DETECTOR_ARCH
+	+ sparc64:	 HAVE_NMI_WATCHDOG && !HAVE_HARDLOCKUP_DETECTOR_ARCH
 
 
-base-commit: e7214663e023be5e518e8d0d8f2dca6848731652
+After, the decision is done using the following variables:
+
+	+ HAVE_HARDLOCKUP_DETECTOR_PERF
+	+ HAVE_HARDLOCKUP_DETECTOR_BUDDY
+	+ HAVE_HARDLOCKUP_DETECTOR_ARCH
+	+ HAVE_HARDLOCKUP_DETECTOR_SPARC64
+ 
+	+ HARDLOCKUP_DETECTOR
+	+ HARDLOCKUP_DETECTOR_PREFER_BUDDY
+
+	+ HARDLOCKUP_DETECTOR_PERF
+	+ HARDLOCKUP_DETECTOR_BUDDY
+	+ HARDLOCKUP_DETECTOR_ARCH
+	+ HARDLOCKUP_DETECTOR_SPARC64
+
+   and the particular watchdog is used when one of these variables is set:
+
+	+ perf:		 HARDLOCKUP_DETECTOR_PERF
+	+ buddy:	 HARDLOCKUP_DETECTOR_BUDDY
+	+ arch-specific: HARDLOCKUP_DETECTOR_ARCH
+	+ sparc64:	 HARDLOCKUP_DETECTOR_SPARC64
+
+
+Plus, many checks are more straightforward and even self-explanatory.
+
+I build and run tested it on x86_64. I only checked the generated
+.config after using sparc_defconfig, sparc64_defconfig, ppc64_defconfig,
+and ppc40x_defconfig.
+
+Best Regards,
+Petr
+
+Petr Mladek (7):
+  watchdog/hardlockup: Sort hardlockup detector related config values a
+    logical way
+  watchdog/hardlockup: Make the config checks more straightforward
+  watchdog/hardlockup: Declare arch_touch_nmi_watchdog() only in
+    linux/nmi.h
+  watchdog/hardlockup: Enable HAVE_NMI_WATCHDOG only on sparc64
+  watchdog/sparc64: Rename HAVE_NMI_WATCHDOG to
+    HAVE_HARDLOCKUP_WATCHDOG_SPARC64
+  watchdog/sparc64: Define HARDLOCKUP_DETECTOR_SPARC64
+  watchdog/hardlockup: Define HARDLOCKUP_DETECTOR_ARCH
+
+ arch/Kconfig                   |  17 ++---
+ arch/powerpc/Kconfig           |   5 +-
+ arch/powerpc/include/asm/nmi.h |   2 -
+ arch/sparc/Kconfig             |   2 +-
+ arch/sparc/Kconfig.debug       |  20 ++++++
+ arch/sparc/include/asm/nmi.h   |   1 -
+ include/linux/nmi.h            |  14 ++--
+ kernel/watchdog.c              |   2 +-
+ lib/Kconfig.debug              | 115 +++++++++++++++++++--------------
+ 9 files changed, 104 insertions(+), 74 deletions(-)
+
 -- 
-2.25.1
+2.35.3
 
