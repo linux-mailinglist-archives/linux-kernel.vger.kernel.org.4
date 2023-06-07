@@ -2,157 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 419F1725792
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 10:27:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CB5772579C
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 10:28:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239454AbjFGI11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 04:27:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36762 "EHLO
+        id S239464AbjFGI2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 04:28:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239401AbjFGI10 (ORCPT
+        with ESMTP id S235169AbjFGI2C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 04:27:26 -0400
-Received: from first.geanix.com (first.geanix.com [116.203.34.67])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04DE6E60;
-        Wed,  7 Jun 2023 01:27:22 -0700 (PDT)
-Received: from xps.skovby (85.184.138.13.dynamic.dhcp.aura-net.dk [85.184.138.13])
-        by first.geanix.com (Postfix) with ESMTPSA id 9FB794E5FAC;
-        Wed,  7 Jun 2023 08:27:19 +0000 (UTC)
-Authentication-Results: ORIGINATING;
-        auth=pass smtp.auth=martin@geanix.com smtp.mailfrom=martin@geanix.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=geanix.com; s=first;
-        t=1686126439; bh=2eMiQLgQD/9nKKzqJMDwHwcTU9X0x8fIp1G9yAWOOlg=;
-        h=From:To:Cc:Subject:Date;
-        b=TtGoA9zU9lpibDRIM3aDNFNrxRnIwkOrgdkO2k2gc8vtM9pTKpROaI5bO8gBJvGvk
-         92sdMMzipGbcBN1RzvCRsHEkbZmE5AG3EpimE5KZcEuMYU6thfOcSTNVuTGOTfC4ap
-         iNl2WronG7BsYKsReUdimBavtb1Jer9Pkqkk3ebJV2LKz3qUZH7g4atFevGpgMgZhs
-         BVwP3YI8F2CEIVuAgu74UbRakxSH5kuJPX0hyKWW6Og93Cb9hFL7P8xZpQrpl4JlJo
-         c0+taRo/VeIBnzsd/ExOWecFl6EBlkZbB+cF2pdIhkkqM6ES+LC7QjdDCwkpxO8vkb
-         5qzoTVU7kBxLg==
-From:   =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <martin@geanix.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     =?UTF-8?q?Martin=20Hundeb=C3=B8ll?= <martin@geanix.com>,
-        stable@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCHv2] mmc: meson: remove redundant mmc_request_done() call from irq context
-Date:   Wed,  7 Jun 2023 10:27:12 +0200
-Message-Id: <20230607082713.517157-1-martin@geanix.com>
-X-Mailer: git-send-email 2.40.1
+        Wed, 7 Jun 2023 04:28:02 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17D64E49
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 01:28:01 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-977d6aa3758so576509866b.0
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 01:28:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686126479; x=1688718479;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=udzaaw6qDHSkruTSqapZilAwmBDTeRd1WqYkzLxfxKw=;
+        b=mCSLZ0SpTD8dM8IYBeH0NsSoPs/RoeEsK3Gz91De8m0o/bkR9A1JQfbDdPRCwXNkao
+         j/mft2XNI0lezzVQ1Cap/N2JFPUjdDIhTTCvRIKrDzoR2ad3g8QWoD6RNPiPwm01U9p8
+         wiY2wli1m7w3XwWE8qhD6lMF7711UkDsI5Cb/qGK2ngdGOMqY7y7ejLnMacZJ/13YmyE
+         WbO9efLR2U4tFZxeIMadh6qY7gdLmP2+n78s6lXZeBUR7Jz95SQq77xJE5tnVSqnAuJD
+         Y2ZJrNPTob5s5pGAakoVOXqp+EabmPcxfb5CjySIaRtfDqSX0TqngwuP2spaJBVNmvjw
+         2lVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686126479; x=1688718479;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=udzaaw6qDHSkruTSqapZilAwmBDTeRd1WqYkzLxfxKw=;
+        b=kG3yl/zOYF6CjrDRE0/VQkOHCnGNKpFyp46VdQr9ZiYr/1fCtdUdP0NEkytsCS29Uc
+         Z0iNsPP6E6khpdz4RRDF5F0bb5CaUh9FmiWajQ3WTUQwtP6aj6PbaudEmombpbFn9Fr1
+         Md+DlTltNfTfOqcKay92xiZgTYtD0Sw8uLlNSSW42yh2mIbQbH0Lc2+gLYMoc0g+R3E9
+         BFN3Ynz9OjierVa4t8hv6Yc5Tm1XFPzNQTi1ZFczU/RMLoFMYspX+lzSRdGgDGlnIteQ
+         7nONO2pqNvCZsKhrHlxamV3NV0jgcdcvIxZjzNuD0pi+C/pYtf67cpgEQ7kjM1wG4dup
+         w8uQ==
+X-Gm-Message-State: AC+VfDxFK5l4TjYb/7x6l+z1V24zr9S3aacDdR4zqUXo+FfoMo76O1OW
+        uvx0+HOtw9zI/25vgcb2ILX3CQ==
+X-Google-Smtp-Source: ACHHUZ551irlhGeCoLFUsmqhKcmyEYKhUagCEadWq9J9KXqoa5i4D87g/vHnCHUNgfj3GYF+SJNTGg==
+X-Received: by 2002:a17:907:7e9c:b0:96f:bcea:df87 with SMTP id qb28-20020a1709077e9c00b0096fbceadf87mr4846126ejc.42.1686126479436;
+        Wed, 07 Jun 2023 01:27:59 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id uz13-20020a170907118d00b009775eb0343bsm5439900ejb.79.2023.06.07.01.27.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Jun 2023 01:27:59 -0700 (PDT)
+Message-ID: <5f9cc367-eaa5-4c19-4e5e-7052b0259ccf@linaro.org>
+Date:   Wed, 7 Jun 2023 10:27:55 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH V2 01/13] dt-bindings: remoteproc: qcom: Add support for
+ multipd model
+To:     Manikanta Mylavarapu <quic_mmanikan@quicinc.com>,
+        Kalle Valo <kvalo@kernel.org>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, jassisinghbrar@gmail.com,
+        mathieu.poirier@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, quic_eberman@quicinc.com, quic_mojha@quicinc.com,
+        loic.poulain@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-clk@vger.kernel.org,
+        quic_srichara@quicinc.com, quic_sjaganat@quicinc.com,
+        quic_kathirav@quicinc.com, quic_anusha@quicinc.com,
+        quic_poovendh@quicinc.com, quic_varada@quicinc.com,
+        quic_devipriy@quicinc.com
+References: <20230521222852.5740-1-quic_mmanikan@quicinc.com>
+ <20230521222852.5740-2-quic_mmanikan@quicinc.com>
+ <7940c743-815f-f864-d015-43d7e916ecfa@linaro.org>
+ <a1456f62-d0a7-d5ec-b379-db1b6035c89c@quicinc.com>
+ <d187eafb-4a80-9479-d063-3a01b47d8efa@linaro.org>
+ <feb0d11d-0930-d0b8-ab6e-cf477bbf114b@quicinc.com>
+ <87edmoitu3.fsf@kernel.org>
+ <0555c089-9d0d-7d19-9646-f0f9b8630d12@quicinc.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <0555c089-9d0d-7d19-9646-f0f9b8630d12@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The call to mmc_request_done() can schedule, so it must not be called
-from irq context. Wake the irq thread if it needs to be called, and let
-its existing logic do its work.
+On 07/06/2023 10:10, Manikanta Mylavarapu wrote:
+> 
+> 
+> On 6/6/2023 7:19 PM, Kalle Valo wrote:
+>> Manikanta Mylavarapu <quic_mmanikan@quicinc.com> writes:
+>>
+>>>>>>> +
+>>>>>>> +    properties:
+>>>>>>> +      compatible:
+>>>>>>> +        enum:
+>>>>>>> +          - qcom,ipq5018-wcss-ahb-mpd
+>>>>>>> +          - qcom,ipq9574-wcss-ahb-mpd
+>>>>>>> +          - qcom,ipq5018-wcss-pcie-mpd
+>>>>>>
+>>>>>> Keep rather alphabetical order (so both 5018 together).
+>>>>>>
+>>>>>> I also do not understand these at all. Why adding bus type to
+>>>>>> compatible? This rarely is allowed (unless it is PCIe controller within
+>>>>>> soc).
+>>>>>>
+>>>>> IPQ5018 SOC has in-built PCIE controller. Here QDSP6 will bring up
+>>>>> external(PCIE) and internal (AHB) wifi radio's. To separate AHB, PCIE
+>>>>> radio's properties, i have added bus type to compatible.
+>>>>
+>>>> It's the same device - WCSS - right? We do not create multiple nodes and
+>>>> compatibles for the same devices. Bus suffixes are almost never parts of
+>>>> compatibles.
+>>>
+>>>
+>>> No it's not the same device. WCSS on inside IPQ5018 and WCSS attached
+>>> via pcie to IPQ5018. Here QDSP6 managing both WCSS's.
+>>>
+>>> So for better clarity i will use attached SOC ID in compatible.
+>>> Below are the new compatible's.
+>>>
+>>> - qcom,ipq5018-wcss-mpd //IPQ5018 internal radio
+>>> - qcom,ipq9574-wcss-mpd	//IPQ9574 internal radio
+>>> - qcom,qcn6122-wcss-mpd //IPQ5018 attached radio
+>>
+>> What mandates that there's just one QCN6122 device attached to PCI?
+>> Assuming fixed PCI configurations like that makes me worried.
+>>
+> 
+> IPQ5018 always has one internal radio, attached pcie radio's depends on 
+> no of pcie ports. IPQ5018 has 2 pcie ports, so it supports max two 
+> qcn6122 devices. One compatible (qcom,qcn6122-wcss-mpd) itself support's 
+> number of pcie devices controlled by QDSP6.
 
-Fixes the following kernel bug, which appears when running an RT patched
-kernel on the AmLogic Meson AXG A113X SoC:
-[   11.111407] BUG: scheduling while atomic: kworker/0:1H/75/0x00010001
-[   11.111438] Modules linked in:
-[   11.111451] CPU: 0 PID: 75 Comm: kworker/0:1H Not tainted 6.4.0-rc3-rt2-rtx-00081-gfd07f41ed6b4-dirty #1
-[   11.111461] Hardware name: RTX AXG A113X Linux Platform Board (DT)
-[   11.111469] Workqueue: kblockd blk_mq_run_work_fn
-[   11.111492] Call trace:
-[   11.111497]  dump_backtrace+0xac/0xe8
-[   11.111510]  show_stack+0x18/0x28
-[   11.111518]  dump_stack_lvl+0x48/0x60
-[   11.111530]  dump_stack+0x18/0x24
-[   11.111537]  __schedule_bug+0x4c/0x68
-[   11.111548]  __schedule+0x80/0x574
-[   11.111558]  schedule_loop+0x2c/0x50
-[   11.111567]  schedule_rtlock+0x14/0x20
-[   11.111576]  rtlock_slowlock_locked+0x468/0x730
-[   11.111587]  rt_spin_lock+0x40/0x64
-[   11.111596]  __wake_up_common_lock+0x5c/0xc4
-[   11.111610]  __wake_up+0x18/0x24
-[   11.111620]  mmc_blk_mq_req_done+0x68/0x138
-[   11.111633]  mmc_request_done+0x104/0x118
-[   11.111644]  meson_mmc_request_done+0x38/0x48
-[   11.111654]  meson_mmc_irq+0x128/0x1f0
-[   11.111663]  __handle_irq_event_percpu+0x70/0x114
-[   11.111674]  handle_irq_event_percpu+0x18/0x4c
-[   11.111683]  handle_irq_event+0x80/0xb8
-[   11.111691]  handle_fasteoi_irq+0xa4/0x120
-[   11.111704]  handle_irq_desc+0x20/0x38
-[   11.111712]  generic_handle_domain_irq+0x1c/0x28
-[   11.111721]  gic_handle_irq+0x8c/0xa8
-[   11.111735]  call_on_irq_stack+0x24/0x4c
-[   11.111746]  do_interrupt_handler+0x88/0x94
-[   11.111757]  el1_interrupt+0x34/0x64
-[   11.111769]  el1h_64_irq_handler+0x18/0x24
-[   11.111779]  el1h_64_irq+0x64/0x68
-[   11.111786]  __add_wait_queue+0x0/0x4c
-[   11.111795]  mmc_blk_rw_wait+0x84/0x118
-[   11.111804]  mmc_blk_mq_issue_rq+0x5c4/0x654
-[   11.111814]  mmc_mq_queue_rq+0x194/0x214
-[   11.111822]  blk_mq_dispatch_rq_list+0x3ac/0x528
-[   11.111834]  __blk_mq_sched_dispatch_requests+0x340/0x4d0
-[   11.111847]  blk_mq_sched_dispatch_requests+0x38/0x70
-[   11.111858]  blk_mq_run_work_fn+0x3c/0x70
-[   11.111865]  process_one_work+0x17c/0x1f0
-[   11.111876]  worker_thread+0x1d4/0x26c
-[   11.111885]  kthread+0xe4/0xf4
-[   11.111894]  ret_from_fork+0x10/0x20
+So this is hot-pluggable (or at least board-pluggable), then should not
+be a part of static DTS.
 
-Fixes: 51c5d8447bd7 ("MMC: meson: initial support for GX platforms")
-Cc: stable@vger.kernel.org
-Signed-off-by: Martin Hundebøll <martin@geanix.com>
----
-Version 1 of this patch:
-https://lore.kernel.org/linux-amlogic/20230606065918.460866-1-martin@geanix.com/
+Some concepts of virtual-processes is anyway far away from hardware
+description, thus does not fit into DTS. Adding now to the equation PCIe
+with variable number of such processes, brings us even further.
 
-Changes since v1:
- * remove redundant change to meson_mmc_irq_thread(), as per Martin's
-   review
- * return early instead of assigning to "ret" variable
- * change commit short-log to reflect code removal instead of it being
-   moved. (Was: "mmc: meson: move mmc_request_done() call to irq thread")
+This is not a DT property. Remember - DT describes hardware.
 
- drivers/mmc/host/meson-gx-mmc.c | 10 ++--------
- 1 file changed, 2 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/mmc/host/meson-gx-mmc.c b/drivers/mmc/host/meson-gx-mmc.c
-index b8514d9d5e736..f90b0fd8d8b00 100644
---- a/drivers/mmc/host/meson-gx-mmc.c
-+++ b/drivers/mmc/host/meson-gx-mmc.c
-@@ -991,11 +991,8 @@ static irqreturn_t meson_mmc_irq(int irq, void *dev_id)
- 
- 		if (data && !cmd->error)
- 			data->bytes_xfered = data->blksz * data->blocks;
--		if (meson_mmc_bounce_buf_read(data) ||
--		    meson_mmc_get_next_command(cmd))
--			ret = IRQ_WAKE_THREAD;
--		else
--			ret = IRQ_HANDLED;
-+
-+		return IRQ_WAKE_THREAD;
- 	}
- 
- out:
-@@ -1007,9 +1004,6 @@ static irqreturn_t meson_mmc_irq(int irq, void *dev_id)
- 		writel(start, host->regs + SD_EMMC_START);
- 	}
- 
--	if (ret == IRQ_HANDLED)
--		meson_mmc_request_done(host->mmc, cmd->mrq);
--
- 	return ret;
- }
- 
--- 
-2.40.1
+Best regards,
+Krzysztof
 
