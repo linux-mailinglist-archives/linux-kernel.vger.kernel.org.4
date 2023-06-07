@@ -2,159 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE24372650F
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 17:52:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 507EC726512
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 17:53:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241014AbjFGPwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 11:52:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55126 "EHLO
+        id S241504AbjFGPxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 11:53:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235607AbjFGPwb (ORCPT
+        with ESMTP id S235682AbjFGPx2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 11:52:31 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2128.outbound.protection.outlook.com [40.107.95.128])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 744C41988;
-        Wed,  7 Jun 2023 08:52:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VrbPKK/vYtb0SVOM1AUSdyrHAKMWpvWGiVwq9TR+5Qi25DpxWYFh3OI/F9qa40lG51gNHtGeci+dPAsFLuDi9jHGN1PsjTFU/76ZDHJUGn6a2xb7Y/ju39jIOFtx40p95cCXzIAoBPhED0pNKaS4zbHIVckbicRzTerYjIVizfxkTzxSMRtcxo8hYNk0B444Ep74PKoGWGZMwbFzEZr0X9CAoDxk8Qg6KkiU1aOGZJca3Nq4OAHwhXHqoWYGtwpm4u/uC//G/Lz4gN3JGLMlfXU4Rt26O0C1ir/X3O86+DSJC2nk0BjexkePJH7FN5DkWslYD+zBUFwxZmkcPS9mfQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vAjBODfWdZ0cEgqVEGbuqO/t+lqZsEnq+W+26Tu3W4w=;
- b=EJXWFs4bC4QFwUOBbRBFf9zjoU9Torj6nD+i6QIWVR/1c1q8vs4UAX8uWSJ11sUOn5m4UmtnMtglqH0mJ/6sVQn52lx/GRTEb6p+wDLjGL7kcVxrmRmEeGz7fnmjyMmxwNDaBIGkA4YPdxJYexUB0lyzPAtol5zn/vvcBjYlZnAP3dI3MO8IEmUGcGdi8WyVdMUJ/99EVQ3OUrNpfzQiLCBSmz+q0VESkQR79Y2uBiZ+VK3uA/iWSHbMDA+1Uc/TVaMxhuQFD3+RwpeEnKJ8na0t8J1hgYrAvxEWc00JNpvZeh2u8B/y+64p7pZvo/iqhk41n1MtsbiER+QG4IdSKw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vAjBODfWdZ0cEgqVEGbuqO/t+lqZsEnq+W+26Tu3W4w=;
- b=C7xAA+ydcS/RBYZCLcNqwneGxwDXiTPmBeIJmzVl/9hTA2TQ/EVhIFNQCG8AqXwZaln/UwwL4eX9hRpWCjf/WVDI4b00deaDXtxcihAYazCZhtyTIO4/P/eC73m2kMk/YQztYTGGq14IYOsOUV3dQpdKdnZFoM79Q7D1RGJfiyw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from BY3PR13MB4834.namprd13.prod.outlook.com (2603:10b6:a03:36b::10)
- by SN7PR13MB6302.namprd13.prod.outlook.com (2603:10b6:806:2e9::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.28; Wed, 7 Jun
- 2023 15:52:27 +0000
-Received: from BY3PR13MB4834.namprd13.prod.outlook.com
- ([fe80::9e79:5a11:b59:4e2e]) by BY3PR13MB4834.namprd13.prod.outlook.com
- ([fe80::9e79:5a11:b59:4e2e%7]) with mapi id 15.20.6455.037; Wed, 7 Jun 2023
- 15:52:27 +0000
-Date:   Wed, 7 Jun 2023 17:52:19 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Maxime Chevallier <maxime.chevallier@bootlin.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Bhadram Varka <vbhadram@nvidia.com>,
-        Samin Guo <samin.guo@starfivetech.com>, netdev@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] stmmac: fix pcs_lynx link failure
-Message-ID: <ZICns6xA6geSGobk@corigine.com>
-References: <20230607135638.1341101-1-arnd@kernel.org>
- <ZICQMHTowGQTzbxm@shell.armlinux.org.uk>
+        Wed, 7 Jun 2023 11:53:28 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B7A3199D;
+        Wed,  7 Jun 2023 08:53:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686153207; x=1717689207;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uPnMmCmZE1Xlj5mTktqTOUCGshsLZyVT68mlGsmxeg0=;
+  b=XFbzJ/uxYweMIZYbkTLFzWypo2Qh3Hq5At0V1qmfd7nONlRGQXpPqyKm
+   ziLCel2IA2b+Yvtr4NYoBxPb5TM3P8aoVQjDgMTxRYbUVhPd56Yu9g0QT
+   PtQ7qen6tDMGBY6c3BLZV43hOsTOoJQPp+SLlHUlkGOE7x/UblpZShwL4
+   EXL65rTd92PSJI9B9fCXnHTy2LdXORbqi0VnZ+0T2y0RzeLShGip9f+EB
+   HTlwx1sk852xl+ozqAPFHv2iyXkM+iW4rIHDdzJIAHQw5m6azoFAM8r/M
+   P0ZcWvJl1Vx+YiQjL2LKtr7qeL5YP7BC1QX1ntqTklyABSCQDDmdK1GeP
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="360359262"
+X-IronPort-AV: E=Sophos;i="6.00,224,1681196400"; 
+   d="scan'208";a="360359262"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 08:53:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="739333990"
+X-IronPort-AV: E=Sophos;i="6.00,224,1681196400"; 
+   d="scan'208";a="739333990"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 07 Jun 2023 08:53:20 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q6vTL-0006iF-31;
+        Wed, 07 Jun 2023 15:53:19 +0000
+Date:   Wed, 7 Jun 2023 23:52:59 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Danilo Krummrich <dakr@redhat.com>, airlied@gmail.com,
+        daniel@ffwll.ch, tzimmermann@suse.de, mripard@kernel.org,
+        corbet@lwn.net, christian.koenig@amd.com, bskeggs@redhat.com,
+        Liam.Howlett@oracle.com, matthew.brost@intel.com,
+        boris.brezillon@collabora.com, alexdeucher@gmail.com,
+        ogabbay@kernel.org, bagasdotme@gmail.com, willy@infradead.org,
+        jason@jlekstrand.net
+Cc:     oe-kbuild-all@lists.linux.dev, linux-doc@vger.kernel.org,
+        nouveau@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
+        Danilo Krummrich <dakr@redhat.com>
+Subject: Re: [PATCH drm-next v4 12/14] drm/nouveau: nvkm/vmm: implement raw
+ ops to manage uvmm
+Message-ID: <202306072317.vpcwyh1W-lkp@intel.com>
+References: <20230606223130.6132-13-dakr@redhat.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZICQMHTowGQTzbxm@shell.armlinux.org.uk>
-X-ClientProxiedBy: AM3PR07CA0075.eurprd07.prod.outlook.com
- (2603:10a6:207:4::33) To BY3PR13MB4834.namprd13.prod.outlook.com
- (2603:10b6:a03:36b::10)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY3PR13MB4834:EE_|SN7PR13MB6302:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9d9f4182-5338-449e-891b-08db676f314a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: wu8c71tazx6Znc0j7wlMYIcR53VoGPZiZSir7c48wbwIym6IjSOtoFMdSV1eSqLBNN0Uum6QQQ9QCQ/3+Igx6os6BlIK9efQyJu4oudmSlTPtSBkj0whK14xEyq678HZKXanwzGYmWgSFkxwioda7wG5RvThq8Yx0amQwyXAW9Z4hBkVO6kbrKS4grPq2Jvntu512Mt/f+RLUZJA+R1pSUlkJZoeuTffVCEJW8iFlNEs74xZlOV33FdgkJCXujOsDtuWx3fhZX4AWjWwrfssiqWG8qLG+w0NXh69rxc3/lKWPdbX8/bbb8wNBsPErojLyYqD/2rCEVYmslZm0tGWS7zDqUGT+6BnvC6ogUyBUbaB6Cbjn4XljNasBQLjOjqBh/9inXQAMhvw4VlwxuByPgJ4s864upoLDMlfF/GT3yK3ykC/VmaV9TuOUdESIMI+9U8PN42ENpfLRxYYdUZtZUYtum2rHPbDG5py1Jgomf3qTPJS5Q4FHjXt4l0rwL1lALqFxOSLIszMuDoRN+Qp5w/b8ujiN5lLF8n4f1aL+qc=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY3PR13MB4834.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39840400004)(346002)(366004)(376002)(136003)(451199021)(54906003)(478600001)(5660300002)(8676002)(44832011)(36756003)(86362001)(2906002)(66946007)(8936002)(4326008)(66476007)(66556008)(316002)(7416002)(6916009)(41300700001)(6666004)(83380400001)(38100700002)(6506007)(2616005)(6512007)(186003)(966005)(6486002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/bF8syT/pa0xNk/3bh8dx03kaljdHuQu9FNy844oacEGEqHxhD00n2Bi4+L6?=
- =?us-ascii?Q?2I67xsUwKWHKrO2nf8u95T8yjsjj2LZqyJvnZM4JiRmaOjNkctbo/VAEO9SG?=
- =?us-ascii?Q?evx8EaGbqbpbCTxdMluKHYjDJ8okaGFgCxN2QAuYoAne07aOhVv4a5VGmtQn?=
- =?us-ascii?Q?MrWgnPaUTk6/X+fh4ABi9ZSQMnN1bCAOrXOxBmRzFOwYPZReiqzi2zT9dAUJ?=
- =?us-ascii?Q?iQbDLARKUOexcO80a0GpA7aoUhl8OD/k1p1hP5P0UNyO5vianG6BQyu1Fny6?=
- =?us-ascii?Q?OFpe7vddPCiS7KXtGDIdIvxSR2sDGPiJqdcfet3LRwSUVwuqD6Z1DWMu47OW?=
- =?us-ascii?Q?XwbDE7LAxdgKbSIaNkw48tv4oohA3A627oy2jWQ5XvIUuAGUaLwkkRmlaq1r?=
- =?us-ascii?Q?ol9YoyDC6hxYTruzY9U4/gvn1FUtcmUQ9ZId5eypO1Q4arRGgqMCS5ILEwZr?=
- =?us-ascii?Q?bh94yDzSbdCUxFrgBkK5JiycD7de81HC3Bzy3sG28FwfVExfYkKAqNZ8bMcQ?=
- =?us-ascii?Q?V3dv/bYXpapwlP+YBHXYV7+VxtErzmRKossxq2s/BjU7Mif5VpPNCSmz40DY?=
- =?us-ascii?Q?kArG6pBnsJa5pGCRDlRK8Icz//4f48UN25O8yNDihxJgoHN3CjJpWE/xyQjt?=
- =?us-ascii?Q?N66onI6UxwGvKtAO1YnSw2rGEK27ZH2Q2bGcCq5qpe+1e8CExievKkulC+wE?=
- =?us-ascii?Q?ZYi9S4/cREJPa9bW0covQxCsQdqbGbzL/TfN8EEG1948ukmQOGJrdPL4Xk6d?=
- =?us-ascii?Q?EGzc3Q54AXEJme8r8wn929Ju0PU4Hj8BYDogO+6n9SwcOHrmDJGfQNIC0Y3K?=
- =?us-ascii?Q?7eljQ5xxqysjULhxOH8Le3E5cCHWadZ7Cqkrf+F3twYt6XQU/kbsmDGFmAy+?=
- =?us-ascii?Q?u2BWhtDPviGmx2x98o8rQIlJgTtBpnkLeXBDOu+EfRW4wLfMoAKB4e+bWa4k?=
- =?us-ascii?Q?jdAlMnrf3XmT4vvjjmEzA9SK7MJ0GxEa7SkX9VSIaGmEOQ8LZlL2RRMbqetX?=
- =?us-ascii?Q?agbgOwIzWMQhKISmL4d/IM8DvtYoTzUnAT4Ji+ZRvGOI63DXYKMhEiwGsl3D?=
- =?us-ascii?Q?5I90rTtxHa9aeOs5GrWqtBj2wP9nF6Xy32h28Fu19+ihFsqRG5NqW8vAEgdd?=
- =?us-ascii?Q?rIgwXUHKF9o6+6bIKTgIbPCfoIEPq6i5ouYPZxmoQMZTh0TPESE5QpIJC58u?=
- =?us-ascii?Q?rPbwLkxebmcu4FyzqLnYFsFn0+daew2/LWiDfBiKe03ZEPwppuxOhfasmEsJ?=
- =?us-ascii?Q?wwghzNjMc+smZsTgsixLyL6TTdKUiBkF80HRJ6ZpF66CnR+XCmkkK0p167Vu?=
- =?us-ascii?Q?zDStHPDFg4+eM9NIXX/RRURwRJpDTdAMCgkbi4wL/xE0NJME7G1bEOInhWZs?=
- =?us-ascii?Q?FMQ4F8wZjugUPBu0A+QqzFfJlGyPItUoNTa8FbvdWqtfjIE786MptkGhraIw?=
- =?us-ascii?Q?DhclnJGScv0Xp5uvR420gyUo4tJZgvfxfABnByY70/5UDKwgoY7yulSVW2wa?=
- =?us-ascii?Q?pqSxJGXDdtBtum4HppLHJf5VSMV5zlL3lR4Qek/f/gKUjLbfqHXrcCUKYuna?=
- =?us-ascii?Q?hXGBwE0mG8iCWbSse3NZZPhA7R6lmKKeJkxfKJQMOKNDNI3Jpx+Tt3N+PXSS?=
- =?us-ascii?Q?/xoHxdrhsdMILKhX2tbyeXvNf4iNJ4zAOqPPKaVIA2qttxnI2jma2A2D42e0?=
- =?us-ascii?Q?LMmE/w=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9d9f4182-5338-449e-891b-08db676f314a
-X-MS-Exchange-CrossTenant-AuthSource: BY3PR13MB4834.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2023 15:52:27.0765
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Xq3a9JN528NXtzcv/Mf5le5DeftEI87i+na1tYJAr8YR5bEmTPJ9NNDU86ZVMDhXbXm04WGJWASJCHkZmQ1RDPX9/91Nf/ywSisIt5adtBc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR13MB6302
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230606223130.6132-13-dakr@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 03:12:00PM +0100, Russell King (Oracle) wrote:
-> On Wed, Jun 07, 2023 at 03:56:32PM +0200, Arnd Bergmann wrote:
-> > From: Arnd Bergmann <arnd@arndb.de>
-> > 
-> > The mdio code in stmmac now directly links into both the lynx_pcs and
-> > the xpcs device drivers, but the lynx_pcs dependency is only enforced
-> > for the altera variant of stmmac, which is the one that actually uses it.
-> > 
-> > Building stmmac for a non-altera platform therefore causes a link
-> > failure:
-> > 
-> > arm-linux-gnueabi-ld: drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.o: in function `stmmac_mdio_unregister':
-> > stmmac_mdio.c:(.text+0x1418): undefined reference to `lynx_pcs_destroy'
-> > 
-> > I've tried to come up with a patch that moves this dependency back into
-> > the dwmac-socfpga.c file, but there was no easy and obvious way to
-> > do this. It also seems that this would not be a proper solution, but
-> > instead there should be a real abstraction for pcs drivers that lets
-> > device drivers handle this transparently.
-> 
-> There is already a patch set on netdev fixing this properly.
+Hi Danilo,
 
-Yes, let's focus on the solution proposed here:
-https://lore.kernel.org/netdev/20230607135941.407054-1-maxime.chevallier@bootlin.com/T/#t
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on 33a86170888b7e4aa0cea94ebb9c67180139cea9]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Danilo-Krummrich/drm-execution-context-for-GEM-buffers-v4/20230607-063442
+base:   33a86170888b7e4aa0cea94ebb9c67180139cea9
+patch link:    https://lore.kernel.org/r/20230606223130.6132-13-dakr%40redhat.com
+patch subject: [PATCH drm-next v4 12/14] drm/nouveau: nvkm/vmm: implement raw ops to manage uvmm
+config: riscv-rv32_defconfig (https://download.01.org/0day-ci/archive/20230607/202306072317.vpcwyh1W-lkp@intel.com/config)
+compiler: riscv32-linux-gcc (GCC) 12.3.0
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git checkout 33a86170888b7e4aa0cea94ebb9c67180139cea9
+        b4 shazam https://lore.kernel.org/r/20230606223130.6132-13-dakr@redhat.com
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/gpu/drm/
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306072317.vpcwyh1W-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/gpu/drm/nouveau/nvkm/subdev/mmu/vmm.h:4,
+                    from drivers/gpu/drm/nouveau/nvkm/subdev/mmu/uvmm.h:5,
+                    from drivers/gpu/drm/nouveau/nvkm/subdev/mmu/uvmm.c:22:
+   drivers/gpu/drm/nouveau/nvkm/subdev/mmu/uvmm.c: In function 'nvkm_uvmm_mthd_raw_map':
+>> drivers/gpu/drm/nouveau/nvkm/subdev/mmu/uvmm.c:422:31: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+     422 |                               (void *)args->argv, args->argc);
+         |                               ^
+   drivers/gpu/drm/nouveau/include/nvkm/core/memory.h:66:43: note: in definition of macro 'nvkm_memory_map'
+      66 |         (p)->func->map((p),(o),(vm),(va),(av),(ac))
+         |                                           ^~
+
+
+vim +422 drivers/gpu/drm/nouveau/nvkm/subdev/mmu/uvmm.c
+
+   388	
+   389	static int
+   390	nvkm_uvmm_mthd_raw_map(struct nvkm_uvmm *uvmm, struct nvif_vmm_raw_v0 *args)
+   391	{
+   392		struct nvkm_client *client = uvmm->object.client;
+   393		struct nvkm_vmm *vmm = uvmm->vmm;
+   394		struct nvkm_vma vma = {
+   395			.addr = args->addr,
+   396			.size = args->size,
+   397			.used = true,
+   398			.mapref = false,
+   399			.no_comp = true,
+   400		};
+   401		struct nvkm_memory *memory;
+   402		u64 handle = args->memory;
+   403		u8 refd;
+   404		int ret;
+   405	
+   406		if (!nvkm_vmm_in_managed_range(vmm, args->addr, args->size))
+   407			return -EINVAL;
+   408	
+   409		ret = nvkm_uvmm_page_index(uvmm, args->size, args->shift, &refd);
+   410		if (ret)
+   411			return ret;
+   412	
+   413		vma.page = vma.refd = refd;
+   414	
+   415		memory = nvkm_umem_search(client, args->memory);
+   416		if (IS_ERR(memory)) {
+   417			VMM_DEBUG(vmm, "memory %016llx %ld\n", handle, PTR_ERR(memory));
+   418			return PTR_ERR(memory);
+   419		}
+   420	
+   421		ret = nvkm_memory_map(memory, args->offset, vmm, &vma,
+ > 422				      (void *)args->argv, args->argc);
+   423	
+   424		nvkm_memory_unref(&vma.memory);
+   425		nvkm_memory_unref(&memory);
+   426		return ret;
+   427	}
+   428	
 
 -- 
-pw-bot: reject
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
