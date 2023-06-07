@@ -2,116 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AE3572659C
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 18:16:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D01472659D
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 18:16:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241575AbjFGQQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 12:16:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42044 "EHLO
+        id S238560AbjFGQQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 12:16:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240581AbjFGQP6 (ORCPT
+        with ESMTP id S234951AbjFGQQ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 12:15:58 -0400
-Received: from frasgout11.his.huawei.com (unknown [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9D39199D;
-        Wed,  7 Jun 2023 09:15:53 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4Qbscz46shz9v7N7;
-        Thu,  8 Jun 2023 00:05:23 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwDXhz4mrYBkJHoTAw--.4340S2;
-        Wed, 07 Jun 2023 17:15:39 +0100 (CET)
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     hughd@google.com, akpm@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        stable@vger.kernel.org
-Subject: [PATCH] shmem: Use ramfs_kill_sb() for kill_sb method of ramfs-based tmpfs
-Date:   Wed,  7 Jun 2023 18:15:23 +0200
-Message-Id: <20230607161523.2876433-1-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 7 Jun 2023 12:16:28 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5DC0199D
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 09:16:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686154586; x=1717690586;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Sda951hmfSKiZ/AELL7pEN0F9suZ+dZPxvXbA7bQukM=;
+  b=Cx2lq7ovexxr3Yy1o/XJo2O73h76ajHjSDafyrr57HQ72vjGOL5LMDMu
+   KXkPr0uImSi509/rAkhGVIWRHaTIkxMXFTH8EHMBGnTak24fSYQ6b7+Lz
+   F3+5mwqIdg5Vki0KEMFn5QBd6jqnPeGdaCN/tPoQia2TmDN35Q1LP2wGu
+   Ms2vV7rlc42IJ9gqcg1oUWV9RZ1V8F/9qVGBJN+79VBqa7BRVOwEF6rfg
+   PEEToW95t2Wn6Rjc2vWnTyz2kyIfapCfJZraRaS61g534/iGV193414pL
+   hnerZusisP3F1TmpeJlVNDs5jImNx2xxGhgbyzu4zuHBXNsnhD14nJ48O
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="357047519"
+X-IronPort-AV: E=Sophos;i="6.00,224,1681196400"; 
+   d="scan'208";a="357047519"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 09:16:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="742760826"
+X-IronPort-AV: E=Sophos;i="6.00,224,1681196400"; 
+   d="scan'208";a="742760826"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 07 Jun 2023 09:16:23 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q6vpe-0006jT-2e;
+        Wed, 07 Jun 2023 16:16:22 +0000
+Date:   Thu, 8 Jun 2023 00:15:40 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Yimin Gu <ustcymgu@gmail.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Jesse Taube <Mr.Bossman075@gmail.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Conor Dooley <conor.dooley@microchip.com>
+Subject: arch/riscv/mm/init.c:1204:48: sparse: sparse: cast truncates bits
+ from constant value (100000000 becomes 0)
+Message-ID: <202306080034.SLiCiOMn-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GxC2BwDXhz4mrYBkJHoTAw--.4340S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Kw17Gw17ArW8ZrW5JFy8AFb_yoW8Aw4xpF
-        1DAFyrCr40gFyUZ3s2ka1vy34fWaykKrWvk34kuw1fJa43tr1vqF1vyr4akryrXrW8WryF
-        qr4j9ryjka4jyrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I0En4kS14v26r4a6rW5MxAIw28IcxkI
-        7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
-        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY
-        6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6x
-        AIw20EY4v20xvaj40_Zr0_Wr1UMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxUInYwUUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgABBF1jj4pc5gAAsG
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+Hi Yimin,
 
-As the ramfs-based tmpfs uses ramfs_init_fs_context() for the
-init_fs_context method, which allocates fc->s_fs_info, use ramfs_kill_sb()
-to free it and avoid a memory leak.
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-Cc: stable@vger.kernel.org # v5.4.x
-Fixes: f32356261d44 ("vfs: Convert ramfs, shmem, tmpfs, devtmpfs, rootfs to use the new mount API")
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- fs/ramfs/inode.c      | 2 +-
- include/linux/ramfs.h | 1 +
- mm/shmem.c            | 2 +-
- 3 files changed, 3 insertions(+), 2 deletions(-)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   a4d7d701121981e3c3fe69ade376fe9f26324161
+commit: b5e2c507b06c9d36411845149162a804ae7b04a9 riscv: Kconfig: Allow RV32 to build with no MMU
+date:   2 months ago
+config: riscv-randconfig-s051-20230607 (https://download.01.org/0day-ci/archive/20230608/202306080034.SLiCiOMn-lkp@intel.com/config)
+compiler: riscv32-linux-gcc (GCC) 12.3.0
+reproduce:
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b5e2c507b06c9d36411845149162a804ae7b04a9
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout b5e2c507b06c9d36411845149162a804ae7b04a9
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/mm/ drivers/char/
 
-diff --git a/fs/ramfs/inode.c b/fs/ramfs/inode.c
-index 5ba580c7883..fef477c7810 100644
---- a/fs/ramfs/inode.c
-+++ b/fs/ramfs/inode.c
-@@ -278,7 +278,7 @@ int ramfs_init_fs_context(struct fs_context *fc)
- 	return 0;
- }
- 
--static void ramfs_kill_sb(struct super_block *sb)
-+void ramfs_kill_sb(struct super_block *sb)
- {
- 	kfree(sb->s_fs_info);
- 	kill_litter_super(sb);
-diff --git a/include/linux/ramfs.h b/include/linux/ramfs.h
-index 917528d102c..d506dc63dd4 100644
---- a/include/linux/ramfs.h
-+++ b/include/linux/ramfs.h
-@@ -7,6 +7,7 @@
- struct inode *ramfs_get_inode(struct super_block *sb, const struct inode *dir,
- 	 umode_t mode, dev_t dev);
- extern int ramfs_init_fs_context(struct fs_context *fc);
-+extern void ramfs_kill_sb(struct super_block *sb);
- 
- #ifdef CONFIG_MMU
- static inline int
-diff --git a/mm/shmem.c b/mm/shmem.c
-index e40a08c5c6d..74abb97ea55 100644
---- a/mm/shmem.c
-+++ b/mm/shmem.c
-@@ -4196,7 +4196,7 @@ static struct file_system_type shmem_fs_type = {
- 	.name		= "tmpfs",
- 	.init_fs_context = ramfs_init_fs_context,
- 	.parameters	= ramfs_fs_parameters,
--	.kill_sb	= kill_litter_super,
-+	.kill_sb	= ramfs_kill_sb,
- 	.fs_flags	= FS_USERNS_MOUNT,
- };
- 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306080034.SLiCiOMn-lkp@intel.com/
+
+sparse warnings: (new ones prefixed by >>)
+   WARNING: invalid argument to '-march': '_zihintpause'
+>> arch/riscv/mm/init.c:1204:48: sparse: sparse: cast truncates bits from constant value (100000000 becomes 0)
+--
+   WARNING: invalid argument to '-march': '_zihintpause'
+   drivers/char/random.c: note: in included file (through include/linux/timex.h, include/linux/time32.h, include/linux/time.h, ...):
+>> arch/riscv/include/asm/timex.h:25:16: sparse: sparse: cast removes address space '__iomem' of expression
+>> arch/riscv/include/asm/timex.h:25:16: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got unsigned int [usertype] * @@
+   arch/riscv/include/asm/timex.h:25:16: sparse:     expected void const volatile [noderef] __iomem *addr
+   arch/riscv/include/asm/timex.h:25:16: sparse:     got unsigned int [usertype] *
+>> arch/riscv/include/asm/timex.h:25:16: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got unsigned int [usertype] * @@
+   arch/riscv/include/asm/timex.h:25:16: sparse:     expected void const volatile [noderef] __iomem *addr
+   arch/riscv/include/asm/timex.h:25:16: sparse:     got unsigned int [usertype] *
+>> arch/riscv/include/asm/timex.h:25:16: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got unsigned int [usertype] * @@
+   arch/riscv/include/asm/timex.h:25:16: sparse:     expected void const volatile [noderef] __iomem *addr
+   arch/riscv/include/asm/timex.h:25:16: sparse:     got unsigned int [usertype] *
+>> arch/riscv/include/asm/timex.h:25:16: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got unsigned int [usertype] * @@
+   arch/riscv/include/asm/timex.h:25:16: sparse:     expected void const volatile [noderef] __iomem *addr
+   arch/riscv/include/asm/timex.h:25:16: sparse:     got unsigned int [usertype] *
+>> arch/riscv/include/asm/timex.h:25:16: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got unsigned int [usertype] * @@
+   arch/riscv/include/asm/timex.h:25:16: sparse:     expected void const volatile [noderef] __iomem *addr
+   arch/riscv/include/asm/timex.h:25:16: sparse:     got unsigned int [usertype] *
+>> arch/riscv/include/asm/timex.h:25:16: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got unsigned int [usertype] * @@
+   arch/riscv/include/asm/timex.h:25:16: sparse:     expected void const volatile [noderef] __iomem *addr
+   arch/riscv/include/asm/timex.h:25:16: sparse:     got unsigned int [usertype] *
+>> arch/riscv/include/asm/timex.h:25:16: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got unsigned int [usertype] * @@
+   arch/riscv/include/asm/timex.h:25:16: sparse:     expected void const volatile [noderef] __iomem *addr
+   arch/riscv/include/asm/timex.h:25:16: sparse:     got unsigned int [usertype] *
+>> arch/riscv/include/asm/timex.h:25:16: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got unsigned int [usertype] * @@
+   arch/riscv/include/asm/timex.h:25:16: sparse:     expected void const volatile [noderef] __iomem *addr
+   arch/riscv/include/asm/timex.h:25:16: sparse:     got unsigned int [usertype] *
+>> arch/riscv/include/asm/timex.h:25:16: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got unsigned int [usertype] * @@
+   arch/riscv/include/asm/timex.h:25:16: sparse:     expected void const volatile [noderef] __iomem *addr
+   arch/riscv/include/asm/timex.h:25:16: sparse:     got unsigned int [usertype] *
+>> arch/riscv/include/asm/timex.h:25:16: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got unsigned int [usertype] * @@
+   arch/riscv/include/asm/timex.h:25:16: sparse:     expected void const volatile [noderef] __iomem *addr
+   arch/riscv/include/asm/timex.h:25:16: sparse:     got unsigned int [usertype] *
+
+vim +1204 arch/riscv/mm/init.c
+
+671f9a3e2e24cd Anup Patel      2019-06-28  1154  
+e53d28180d4d0f Nick Kossifidis 2021-04-19  1155  /*
+e53d28180d4d0f Nick Kossifidis 2021-04-19  1156   * reserve_crashkernel() - reserves memory for crash kernel
+e53d28180d4d0f Nick Kossifidis 2021-04-19  1157   *
+e53d28180d4d0f Nick Kossifidis 2021-04-19  1158   * This function reserves memory area given in "crashkernel=" kernel command
+e53d28180d4d0f Nick Kossifidis 2021-04-19  1159   * line parameter. The memory reserved is used by dump capture kernel when
+e53d28180d4d0f Nick Kossifidis 2021-04-19  1160   * primary kernel is crashing.
+e53d28180d4d0f Nick Kossifidis 2021-04-19  1161   */
+e53d28180d4d0f Nick Kossifidis 2021-04-19  1162  static void __init reserve_crashkernel(void)
+e53d28180d4d0f Nick Kossifidis 2021-04-19  1163  {
+e53d28180d4d0f Nick Kossifidis 2021-04-19  1164  	unsigned long long crash_base = 0;
+e53d28180d4d0f Nick Kossifidis 2021-04-19  1165  	unsigned long long crash_size = 0;
+e53d28180d4d0f Nick Kossifidis 2021-04-19  1166  	unsigned long search_start = memblock_start_of_DRAM();
+e53d28180d4d0f Nick Kossifidis 2021-04-19  1167  	unsigned long search_end = memblock_end_of_DRAM();
+e53d28180d4d0f Nick Kossifidis 2021-04-19  1168  
+e53d28180d4d0f Nick Kossifidis 2021-04-19  1169  	int ret = 0;
+e53d28180d4d0f Nick Kossifidis 2021-04-19  1170  
+d414cb379ac35e Jisheng Zhang   2022-03-23  1171  	if (!IS_ENABLED(CONFIG_KEXEC_CORE))
+d414cb379ac35e Jisheng Zhang   2022-03-23  1172  		return;
+5640975003d023 Nick Kossifidis 2021-04-19  1173  	/*
+5640975003d023 Nick Kossifidis 2021-04-19  1174  	 * Don't reserve a region for a crash kernel on a crash kernel
+5640975003d023 Nick Kossifidis 2021-04-19  1175  	 * since it doesn't make much sense and we have limited memory
+5640975003d023 Nick Kossifidis 2021-04-19  1176  	 * resources.
+5640975003d023 Nick Kossifidis 2021-04-19  1177  	 */
+5640975003d023 Nick Kossifidis 2021-04-19  1178  	if (is_kdump_kernel()) {
+5640975003d023 Nick Kossifidis 2021-04-19  1179  		pr_info("crashkernel: ignoring reservation request\n");
+5640975003d023 Nick Kossifidis 2021-04-19  1180  		return;
+5640975003d023 Nick Kossifidis 2021-04-19  1181  	}
+5640975003d023 Nick Kossifidis 2021-04-19  1182  
+e53d28180d4d0f Nick Kossifidis 2021-04-19  1183  	ret = parse_crashkernel(boot_command_line, memblock_phys_mem_size(),
+e53d28180d4d0f Nick Kossifidis 2021-04-19  1184  				&crash_size, &crash_base);
+e53d28180d4d0f Nick Kossifidis 2021-04-19  1185  	if (ret || !crash_size)
+e53d28180d4d0f Nick Kossifidis 2021-04-19  1186  		return;
+e53d28180d4d0f Nick Kossifidis 2021-04-19  1187  
+e53d28180d4d0f Nick Kossifidis 2021-04-19  1188  	crash_size = PAGE_ALIGN(crash_size);
+e53d28180d4d0f Nick Kossifidis 2021-04-19  1189  
+a7259df7670240 Mike Rapoport   2021-09-02  1190  	if (crash_base) {
+a7259df7670240 Mike Rapoport   2021-09-02  1191  		search_start = crash_base;
+a7259df7670240 Mike Rapoport   2021-09-02  1192  		search_end = crash_base + crash_size;
+a7259df7670240 Mike Rapoport   2021-09-02  1193  	}
+a7259df7670240 Mike Rapoport   2021-09-02  1194  
+e53d28180d4d0f Nick Kossifidis 2021-04-19  1195  	/*
+e53d28180d4d0f Nick Kossifidis 2021-04-19  1196  	 * Current riscv boot protocol requires 2MB alignment for
+e53d28180d4d0f Nick Kossifidis 2021-04-19  1197  	 * RV64 and 4MB alignment for RV32 (hugepage size)
+decf89f86ecd3c Nick Kossifidis 2021-11-26  1198  	 *
+decf89f86ecd3c Nick Kossifidis 2021-11-26  1199  	 * Try to alloc from 32bit addressible physical memory so that
+decf89f86ecd3c Nick Kossifidis 2021-11-26  1200  	 * swiotlb can work on the crash kernel.
+e53d28180d4d0f Nick Kossifidis 2021-04-19  1201  	 */
+decf89f86ecd3c Nick Kossifidis 2021-11-26  1202  	crash_base = memblock_phys_alloc_range(crash_size, PMD_SIZE,
+decf89f86ecd3c Nick Kossifidis 2021-11-26  1203  					       search_start,
+decf89f86ecd3c Nick Kossifidis 2021-11-26 @1204  					       min(search_end, (unsigned long) SZ_4G));
+decf89f86ecd3c Nick Kossifidis 2021-11-26  1205  	if (crash_base == 0) {
+decf89f86ecd3c Nick Kossifidis 2021-11-26  1206  		/* Try again without restricting region to 32bit addressible memory */
+a7259df7670240 Mike Rapoport   2021-09-02  1207  		crash_base = memblock_phys_alloc_range(crash_size, PMD_SIZE,
+a7259df7670240 Mike Rapoport   2021-09-02  1208  						search_start, search_end);
+e53d28180d4d0f Nick Kossifidis 2021-04-19  1209  		if (crash_base == 0) {
+e53d28180d4d0f Nick Kossifidis 2021-04-19  1210  			pr_warn("crashkernel: couldn't allocate %lldKB\n",
+e53d28180d4d0f Nick Kossifidis 2021-04-19  1211  				crash_size >> 10);
+e53d28180d4d0f Nick Kossifidis 2021-04-19  1212  			return;
+e53d28180d4d0f Nick Kossifidis 2021-04-19  1213  		}
+decf89f86ecd3c Nick Kossifidis 2021-11-26  1214  	}
+e53d28180d4d0f Nick Kossifidis 2021-04-19  1215  
+e53d28180d4d0f Nick Kossifidis 2021-04-19  1216  	pr_info("crashkernel: reserved 0x%016llx - 0x%016llx (%lld MB)\n",
+e53d28180d4d0f Nick Kossifidis 2021-04-19  1217  		crash_base, crash_base + crash_size, crash_size >> 20);
+e53d28180d4d0f Nick Kossifidis 2021-04-19  1218  
+e53d28180d4d0f Nick Kossifidis 2021-04-19  1219  	crashk_res.start = crash_base;
+e53d28180d4d0f Nick Kossifidis 2021-04-19  1220  	crashk_res.end = crash_base + crash_size - 1;
+e53d28180d4d0f Nick Kossifidis 2021-04-19  1221  }
+e53d28180d4d0f Nick Kossifidis 2021-04-19  1222  
+
+:::::: The code at line 1204 was first introduced by commit
+:::::: decf89f86ecd3c3c3de81c562010d5797bea3de1 riscv: try to allocate crashkern region from 32bit addressible memory
+
+:::::: TO: Nick Kossifidis <mick@ics.forth.gr>
+:::::: CC: Palmer Dabbelt <palmer@rivosinc.com>
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
