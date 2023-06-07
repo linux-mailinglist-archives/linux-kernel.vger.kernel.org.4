@@ -2,280 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E46827251E6
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 04:01:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F24DB7251E9
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 04:02:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240437AbjFGCBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 22:01:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43006 "EHLO
+        id S240616AbjFGCCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 22:02:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240456AbjFGCBe (ORCPT
+        with ESMTP id S240078AbjFGCCp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 22:01:34 -0400
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 466D610F0
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 19:01:32 -0700 (PDT)
-Received: by mail-ot1-x332.google.com with SMTP id 46e09a7af769-6b15e510630so2500068a34.3
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 19:01:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1686103291; x=1688695291;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=j5Cy8tBCL9F/0/npHcEhwYUjt7WcWHdplqXcZoUtV+0=;
-        b=S38JhUY0rjGS8/ejnAM445GcScFR7303fsI7enooXy8aNW0507nQpNQhvO3u3E3lif
-         e60ZRwPp5ITPRpOhi6O7xOnkHrs3vMFzOOaqIzEvAs2Hxy3fCcjCl5yPImkw1L/tuZO3
-         rsgcvEWpJuoUxcbOGL9O4zkuhdrGp/WHrISPsZzNhhNFWYmFj9dsztrtXUgxqcFtpE8I
-         uWGXHvcab1fBbvJZWotAME4Z6VIN2YnnSEjsxv5DF0P3PcXeicy02gd3DQWsYBdR4Y/A
-         FroVS5zqewrJgH81ZL3YfdrvOWUJ98tTmrk04tCNxDyIpeJD1JKKXQvG1IPKG+PqFQPc
-         8PpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686103291; x=1688695291;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=j5Cy8tBCL9F/0/npHcEhwYUjt7WcWHdplqXcZoUtV+0=;
-        b=dMIKCvkFmvR2IhXPS50d+R51MjM/LnKAHGk2r7/CsbmQTmJgZ+FZanh3Mjj6wMQjEk
-         isIbQDuabX9KSKtWGTSHrD89wl52Jnr+TQ11890css1ZJgemC5bHdz9pnoTC0iDcHGu6
-         wrXKjvNYFG0LhJhSr9ai0n9vEusmCpeb2LazrY82Tm0YH2yxsoxG0Utx0GaQr1/g5zxf
-         JF+Rp4nwuw4fuMEfFasquzIOymQF/4to8FmoI0qeLKW51WY1p/8m5SkVGwQLozoQm6vV
-         iV7FW4MHPT8oLVlu7/5WlryD5lvHSfbN9/SkuHNtNiZFGKl5xp2fGvIJ5aDYxK2xcpMt
-         RL9A==
-X-Gm-Message-State: AC+VfDxvVobo48IevIIQ+RzEgvENKQFt2ZEuLBrf7qc2q8beh/lD+2/u
-        90bIoo8koqP3qN6GV13JL1WsQA==
-X-Google-Smtp-Source: ACHHUZ5VYVq+3IAbaiVsgoydY4WCLUW/jBSbIonSM1lHWrf78Rur1YGuoiyya2F8GsBWigs9zYnexA==
-X-Received: by 2002:a05:6358:c525:b0:123:4444:e5f8 with SMTP id fb37-20020a056358c52500b001234444e5f8mr141321rwb.18.1686103290958;
-        Tue, 06 Jun 2023 19:01:30 -0700 (PDT)
-Received: from dread.disaster.area (pa49-179-79-151.pa.nsw.optusnet.com.au. [49.179.79.151])
-        by smtp.gmail.com with ESMTPSA id q66-20020a17090a1b4800b002533ce5b261sm220132pjq.10.2023.06.06.19.01.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 19:01:29 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.96)
-        (envelope-from <david@fromorbit.com>)
-        id 1q6iUI-008iUT-2e;
-        Wed, 07 Jun 2023 12:01:26 +1000
-Date:   Wed, 7 Jun 2023 12:01:26 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     Mike Snitzer <snitzer@kernel.org>
-Cc:     Sarthak Kukreti <sarthakkukreti@chromium.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
-        Joe Thornber <thornber@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Brian Foster <bfoster@redhat.com>,
-        Bart Van Assche <bvanassche@google.com>,
-        linux-kernel@vger.kernel.org,
-        Christoph Hellwig <hch@infradead.org>, dm-devel@redhat.com,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        linux-fsdevel@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
-        linux-ext4@vger.kernel.org, Joe Thornber <ejt@redhat.com>,
-        Alasdair Kergon <agk@redhat.com>
-Subject: Re: [PATCH v7 0/5] Introduce provisioning primitives
-Message-ID: <ZH/k9ss2Cg9HYrEV@dread.disaster.area>
-References: <ZHB954zGG1ag0E/t@dread.disaster.area>
- <CAJ0trDbspRaDKzTzTjFdPHdB9n0Q9unfu1cEk8giTWoNu3jP8g@mail.gmail.com>
- <ZHFEfngPyUOqlthr@dread.disaster.area>
- <CAJ0trDZJQwvAzngZLBJ1hB0XkQ1HRHQOdNQNTw9nK-U5i-0bLA@mail.gmail.com>
- <ZHYB/6l5Wi+xwkbQ@redhat.com>
- <CAJ0trDaUOevfiEpXasOESrLHTCcr=oz28ywJU+s+YOiuh7iWow@mail.gmail.com>
- <ZHYWAGmKhwwmTjW/@redhat.com>
- <CAG9=OMMnDfN++-bJP3jLmUD6O=Q_ApV5Dr392_5GqsPAi_dDkg@mail.gmail.com>
- <ZHqOvq3ORETQB31m@dread.disaster.area>
- <ZHti/MLnX5xGw9b7@redhat.com>
+        Tue, 6 Jun 2023 22:02:45 -0400
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2040.outbound.protection.outlook.com [40.107.21.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A8E2D3;
+        Tue,  6 Jun 2023 19:02:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NDQmpwYz+f/Cf13ZoOTLtSsGpmOVH6eu8FviZAgLcrjYSjl6IH7LeKo4WvoFVBshq+cIe9kENxcpew5yvMdVHxSBGTQSPgNsIUeqdseVtcBT/tIO+OaM7Sh9cDX1jqlJhF3HZTSxQVWrP7pvatk1k+n2l3qG5ky7yymTnPnOC1Eaqty/PCcM8ze7JMKJPBU+G31MzUilOeq/EsZOXJl12V5ptI6s0bzU4GbC7zJ279K/CsCo/I4+nQv2V+XWNONySNi1L1GPGT/QilPVRBR47fMbSrVLi6ADI4GcCO9xrzMIg19BMQ3e4ndu4moZnEdVY21OV7wNo29y4EToNaIGbQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HdpEQWUMKWda8/8e8tinbqqzPFpoheAbwrU5LWAoyCs=;
+ b=MV6g+hj2KjwkTvDwWNl5ADy86DXH/Gyjy4SGA5HJ9J7QdSS9f8yRRNxKXEUtdWcChcceCauAxggvoG4X9BezpS0j9x2tZZcACj9ys8+jEwIfIX9OT9Ov7nq8dOTslwuLEjJDH1zDEREKgV5AGig929abwJ19vFbLy0/6i0sIIqx7uFuOplruPMF/7CQZiz9nSHn6ZTLSQiM/95CHi7mB7bSAE/ksOjl4lxMRRqQB3qDnvlV4eh7iyVaLiz9VLUww9/4KXZ9x+wjrVdnNps7RdX6eV5zbtFWb2tLZeFR4PlXMAdOaYpbiusCWFmL/YPoTd+VqqQlyVs8KX8+efKA4sQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HdpEQWUMKWda8/8e8tinbqqzPFpoheAbwrU5LWAoyCs=;
+ b=iHePGE1e8U3op24eGUrLrxKqKJphYNBGNrTFPQh1q/Pkhq90Qz5kGh0Xi4332r3iCarbvRHh+NCIiejlvi5XTsJH6+iXY//C9+o141NX5wuzFEnBSzQN38ncNPNVEhICxDClSjLbsSYBsDiNFxMbbH69W+Veo5mNZ0dpp8znvqM=
+Received: from DB6PR04MB3141.eurprd04.prod.outlook.com (2603:10a6:6:c::21) by
+ DB9PR04MB9580.eurprd04.prod.outlook.com (2603:10a6:10:307::5) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6455.33; Wed, 7 Jun 2023 02:02:41 +0000
+Received: from DB6PR04MB3141.eurprd04.prod.outlook.com
+ ([fe80::4fc7:994a:43c9:7058]) by DB6PR04MB3141.eurprd04.prod.outlook.com
+ ([fe80::4fc7:994a:43c9:7058%7]) with mapi id 15.20.6455.030; Wed, 7 Jun 2023
+ 02:02:41 +0000
+From:   Wei Fang <wei.fang@nxp.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+CC:     Claudiu Manoil <claudiu.manoil@nxp.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH net] net: enetc: correct the indexes of highest and 2nd
+ highest TCs
+Thread-Topic: [PATCH net] net: enetc: correct the indexes of highest and 2nd
+ highest TCs
+Thread-Index: AQHZmFQUAMDZTouDBkWfpQ3adjlaMK99foGAgAEV8xA=
+Date:   Wed, 7 Jun 2023 02:02:41 +0000
+Message-ID: <DB6PR04MB31419A2E70C34BC974EA7F7D8853A@DB6PR04MB3141.eurprd04.prod.outlook.com>
+References: <20230606084618.1126471-1-wei.fang@nxp.com>
+ <20230606091631.xqof3ponylrpnoo4@skbuf>
+In-Reply-To: <20230606091631.xqof3ponylrpnoo4@skbuf>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DB6PR04MB3141:EE_|DB9PR04MB9580:EE_
+x-ms-office365-filtering-correlation-id: ff48cc1c-5aa2-4a3c-f65e-08db66fb46bd
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: XwnVza46uRgALI0sz4lzB6FIsgi5YOGMQGgk545SSx6n+vHJomhiCvGcJFfzSmw5s8ywuGwsourF4HCKE2oObub6Fl17va8vV0aDgdRGPK9bj8l5UUAh38lwwWxJE8zI16fL82KX6U2uueqWyIlvQd7ZWLsWenfhOhvzzq79fUkIUUHRQYyPjfshKCyuL8eqaAEKvz0cAgozLG77shTGZSFSVmIlR2ZfWBt6i9fGgBGnyeDcWe9elhGoBWZueQoKSY8Ttui8zK2ZDFO6NhSde8y+wxWE7pF+eOEw7XSLYCUMBa+qGzBUvS2/h8MDB/MvYhJ+L+icB75Bn04RvkBEiUvaQ3nlXgxWvMcyto5KyqJtiax97nT1eKKh0bezVDudyknRzWGsi86f7aVoz6K2UijlpNSFE/wwqDCVtktmlXY/XL6mB78SPZwJbVM6lBUBsFqAl9u/17RLDGPE4K/brQ2DmS0yj5JUNb/w7RBL3yZE5soi4KKdz2z4BWw2wP24SqQ61cW+g3g/WsPhmDy4EVzmox3YJDOLtmjCSi/tIjTu91BakRid7t/AF89tMENZXn5RqZ6e9Eg9DxsjLdww4ex9C9rXN8Vcs7kK8kquuq9+Iw6LJZsNYdx+inRGtG8W
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB6PR04MB3141.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(396003)(366004)(346002)(39860400002)(451199021)(41300700001)(2906002)(478600001)(38070700005)(83380400001)(53546011)(9686003)(186003)(6506007)(86362001)(26005)(122000001)(38100700002)(33656002)(7696005)(55016003)(71200400001)(5660300002)(52536014)(6636002)(4326008)(316002)(6862004)(8676002)(8936002)(66476007)(66446008)(64756008)(76116006)(66556008)(54906003)(66946007)(44832011);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?gb2312?B?NlRCNVVMSzd4UmZNVnZwWVlqQXkwckZRV2ptT255cHExdDQycERCcXE4d2RY?=
+ =?gb2312?B?NHp0RGluNmtnV3lIRDZndW9mcVdHbzJveTM4Q0EwdXlMZHUyWCs5SEg2ZWRh?=
+ =?gb2312?B?RWp5YVJhUjRxU2QxMDVYSkFGOFRoVmNlTTlsV2IvNlRSVllFd2lmMEV3RGdY?=
+ =?gb2312?B?eHVMcENGQnBLMW1ydEJQTFBHWlZBQ1JpVVlESzZ4L1l0TWFxdnJzV2dKdW9F?=
+ =?gb2312?B?ajdPSE5yM3REdWZxb0dzOFFxREpnOGw5OGR4aEhKYXN3aGZqSW93WUtmd25S?=
+ =?gb2312?B?ekk5cHhpVWh0cE1ORjZDVldZak1qWm9vTytvbXdXV0ZnQjE1WmdaTEZyY2tY?=
+ =?gb2312?B?ZHlaMjdmWmNiSlBUVzhTcTAvV0lmVjFlTGFRZ1cweURmbGJkSFQ3WmN6eWZM?=
+ =?gb2312?B?VGhzZ1Y4VndGeWh0TnNxRjBNTFpJWFB5N2hLNGFRMG1kcDNtb25mN3J0UFI0?=
+ =?gb2312?B?S2pXZ1Vrd08xZW1aTU84elFDWFN1ZWRZVFpUMEpxKzhuQUF0eUxZSG1PTWZo?=
+ =?gb2312?B?aVR3aE8zRWhOKy9CaEQyWjNqOGFyTU4vUFUzU1hGWThvSHdibkhwOW1iT2NP?=
+ =?gb2312?B?VGpZbDVYVUtYSkRpdDdUOGxpaVZiMXhYU3Nhb3ZuSUhUS0xvMFk3MWM3Rlpj?=
+ =?gb2312?B?SGdsbkxYR3JSNWQwb0V3empzbGNiN2doQTFROS9Fek1oQTE3YnZtckRWbVVN?=
+ =?gb2312?B?ZHlGMTZXcnRibm5GckhVdmROQjNYSTlWMUhmK3JENE9VK3BqYVJvMy9SZmtv?=
+ =?gb2312?B?N1JtQW51c3dWS3JnQXQ5bGVibzhlK2kySk85STU1RHQ3cWU3N0NtOVZkbFgz?=
+ =?gb2312?B?ckd5RWR4a204amlJUnc3eFZrWi9ZVlZlWWIwSEJNWVdQOTNlbEU5eVVBNUdO?=
+ =?gb2312?B?a3poVUN1ajh0aDZZOEVVV2sxcXFTMDl3THcvRjVndGoySGlrN0xmTHZ2V04z?=
+ =?gb2312?B?ZXdqSGMvUE5SQlYxNi9LM3N1dlBJNUREdGsxN3U1UTNLYzRHR3FJaExLNlN5?=
+ =?gb2312?B?N1hhcklscDR6UFFSMUFzcVBYQW40MHNpd0VocnUrOThSek5JdWVXSStwQmFh?=
+ =?gb2312?B?K3hUdmswdW1UU2YzUnRQNGt5ZnZNRUxQSE5HVGp6NCtDNnkwTml4cUFMTlBx?=
+ =?gb2312?B?dE9xaTNVZk52SGJPdjBTcWMxaWxyMVRMUk1oQXVSUi8zRE4vc1U5SDMyTEJt?=
+ =?gb2312?B?cUhOWWllcys0R3pGbWhWOEZCY0hwbDBDSXZXbXc4eHhzMVp0Tkt3SGR2T280?=
+ =?gb2312?B?RzZCaEJNSVVMVHduelJTd1ZyclBDTTRXU210aDA2VFJDamg1UXZsMVR4WlhW?=
+ =?gb2312?B?bXdXa0h5N1BLY3JSbWJFNFZXZVFWOW1UL3Njc09tbTVYZWJjeFRaL3JRamlB?=
+ =?gb2312?B?YldMcUIyclFaeEhsWW9JL3VScEd3a0YvTTIrVGJNWXU4c0tMZ0dDeWY4OFZ0?=
+ =?gb2312?B?SmxhMXdsQ0hVSUtVWmI1MC9wZktYQmtsMndtTWdSNmx2TVFjRTBQc3IyV2FY?=
+ =?gb2312?B?c1RzNk9uM09ZRWhCNHBGdWtKWC84TDBueHN0SEx4bi9IMG10S09WVUNzWFZX?=
+ =?gb2312?B?c2VQWlRQdSs2TVBydkNnYlhCemdpVk5UL3NuaXpFM0czMCthMGpJSURCME5u?=
+ =?gb2312?B?NjRnT01oLzI3Z2c2Zzh4Qk9MOWVGUkczKzhJWDVtdTBnQmJWNkhaQTFpcGVQ?=
+ =?gb2312?B?UkhFdHpReEUzT2MvN0lFK0tXYkZRUW8yOEhpNFh5cE50aEoxbGloQk9QNDJY?=
+ =?gb2312?B?d0FmQjBGKy9PbXlMYW5XUTRyRGRGYWZIMWV2dDhteWoydW1WMXFFSWlQVFFq?=
+ =?gb2312?B?Tm4ySVNoQkdla0s2OE40Tks4ZE9QcGs3aDNIVUFIaUo1YkRHSCtSa2REQUJk?=
+ =?gb2312?B?QlFRaGE1ZXlMSk0yWUVKcERlVm9qV2hBKzhiRlJkQmtXVUt1SlhqU0t3SUdr?=
+ =?gb2312?B?dmVuSDZUWExwWWdIM09SQk1MQi9uWkNseTdEcG5sOVd2eThWc0FiN0FvUllD?=
+ =?gb2312?B?VXdZc09ZU1Uray93dnluam1mc1V3VVFmMzFNdTBzdWcya2JHZ2VYQi96Nmx6?=
+ =?gb2312?B?RytVVkZLaW1FSWJnWS85SUFhS2Z2cVhobEVKblMzeXZSKysyaGUzR08zRW1L?=
+ =?gb2312?Q?Q0WU=3D?=
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZHti/MLnX5xGw9b7@redhat.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DB6PR04MB3141.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ff48cc1c-5aa2-4a3c-f65e-08db66fb46bd
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jun 2023 02:02:41.2734
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: JzfyLa8vtuV5B+pSMjcRGQk6/+9tLQe0WkR7siIm++d1RDvqiWoL4nM1pkswWl/3ZXXTOMdiJPxuSct6ymTa0w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB9580
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 03, 2023 at 11:57:48AM -0400, Mike Snitzer wrote:
-> On Fri, Jun 02 2023 at  8:52P -0400,
-> Dave Chinner <david@fromorbit.com> wrote:
-> 
-> > On Fri, Jun 02, 2023 at 11:44:27AM -0700, Sarthak Kukreti wrote:
-> > > On Tue, May 30, 2023 at 8:28 AM Mike Snitzer <snitzer@kernel.org> wrote:
-> > > >
-> > > > On Tue, May 30 2023 at 10:55P -0400,
-> > > > Joe Thornber <thornber@redhat.com> wrote:
-> > > >
-> > > > > On Tue, May 30, 2023 at 3:02 PM Mike Snitzer <snitzer@kernel.org> wrote:
-> > > > >
-> > > > > >
-> > > > > > Also Joe, for you proposed dm-thinp design where you distinquish
-> > > > > > between "provision" and "reserve": Would it make sense for REQ_META
-> > > > > > (e.g. all XFS metadata) with REQ_PROVISION to be treated as an
-> > > > > > LBA-specific hard request?  Whereas REQ_PROVISION on its own provides
-> > > > > > more freedom to just reserve the length of blocks? (e.g. for XFS
-> > > > > > delalloc where LBA range is unknown, but dm-thinp can be asked to
-> > > > > > reserve space to accomodate it).
-> > > > > >
-> > > > >
-> > > > > My proposal only involves 'reserve'.  Provisioning will be done as part of
-> > > > > the usual io path.
-> > > >
-> > > > OK, I think we'd do well to pin down the top-level block interfaces in
-> > > > question. Because this patchset's block interface patch (2/5) header
-> > > > says:
-> > > >
-> > > > "This patch also adds the capability to call fallocate() in mode 0
-> > > > on block devices, which will send REQ_OP_PROVISION to the block
-> > > > device for the specified range,"
-> > > >
-> > > > So it wires up blkdev_fallocate() to call blkdev_issue_provision(). A
-> > > > user of XFS could then use fallocate() for user data -- which would
-> > > > cause thinp's reserve to _not_ be used for critical metadata.
-> > 
-> > Mike, I think you might have misunderstood what I have been proposing.
-> > Possibly unintentionally, I didn't call it REQ_OP_PROVISION but
-> > that's what I intended - the operation does not contain data at all.
-> > It's an operation like REQ_OP_DISCARD or REQ_OP_WRITE_ZEROS - it
-> > contains a range of sectors that need to be provisioned (or
-> > discarded), and nothing else.
-> 
-> No, I understood that.
-> 
-> > The write IOs themselves are not tagged with anything special at all.
-> 
-> I know, but I've been looking at how to also handle the delalloc
-> usecase (and yes I know you feel it doesn't need handling, the issue
-> is XFS does deal nicely with ensuring it has space when it tracks its
-> allocations on "thick" storage
-
-Oh, no it doesn't. It -works for most cases-, but that does not mean
-it provides any guarantees at all. We can still get ENOSPC for user
-data when delayed allocation reservations "run out".
-
-This may be news to you, but the ephemeral XFS delayed allocation
-space reservation is not accurate. It contains a "fudge factor"
-called "indirect length". This is a "wet finger in the wind"
-estimation of how much new metadata will need to be allocated to
-index the physical allocations when they are made. It assumes large
-data extents are allocated, which is good enough for most cases, but
-it is no guarantee when there are no large data extents available to
-allocate (e.g. near ENOSPC!).
-
-And therein lies the fundamental problem with ephemeral range
-reservations: at the time of reservation, we don't know how many
-individual physical LBA ranges the reserved data range is actually
-going to span.
-
-As a result, XFS delalloc reservations are a "close-but-not-quite"
-reservation backed by a global reserve pool that can be dipped into
-if we run out of delalloc reservation. If the reserve pool is then
-fully depleted before all delalloc conversion completes, we'll still
-give ENOSPC. The pool is sized such that the vast majority of
-workloads will complete delalloc conversion successfully before the
-pool is depleted.
-
-Hence XFS gives everyone the -appearance- that it deals nicely with
-ENOSPC conditions, but it never provides a -guarantee- that any
-accepted write will always succeed without ENOSPC.
-
-IMO, using this "close-but-not-quite" reservation as the basis of
-space requirements for other layers to provide "won't ENOSPC"
-guarantees is fraught with problems. We already know that it is
-insufficient in important corner cases at the filesystem level, and
-we also know that lower layers trying to do ephemeral space
-reservations will have exactly the same problems providing a
-guarantee. And these are problems we've been unable to engineer
-around in the past, so the likelihood we can engineer around them
-now or in the future is also very unlikely.
-
-> -- so adding coordination between XFS
-> and dm-thin layers provides comparable safety.. that safety is an
-> expected norm).
->
-> But rather than discuss in terms of data vs metadata, the distinction
-> is:
-> 1) LBA range reservation (normal case, your proposal)
-> 2) non-LBA reservation (absolute value, LBA range is known at later stage)
-> 
-> But I'm clearly going off script for dwelling on wanting to handle
-> both.
-
-Right, because if we do 1) then we don't need 2). :)
-
-> My looking at (ab)using REQ_META being set (use 1) vs not (use 2) was
-> a crude simplification for branching between the 2 approaches.
-> 
-> And I understand I made you nervous by expanding the scope to a much
-> more muddled/shitty interface. ;)
-
-Nervous? No, I'm simply trying to make sure that everyone is on the
-same page. i.e. that if we water down the guarantee that 1) relies
-on, then it's not actually useful to filesystems at all.
-
-> > It's just not practical for the block device to add arbitrary
-> > constraints based on the type of IO because we then have to add
-> > mechanisms to userspace APIs to allow them to control the IO context
-> > so the block device will do the right thing. Especially considering
-> > we really only need one type of guarantee regardless of where the IO
-> > originates from or what type of data the IO contains....
-> 
-> If anything my disposition on the conditional to require a REQ_META
-> (or some fallocate generated REQ_UNSHARE ditto to reflect the same) to
-> perform your approach to REQ_OP_PROVISION and honor fallocate()
-> requirements is a big problem.  Would be much better to have a flag to
-> express "this reservation does not have an LBA range _yet_,
-> nevertheless try to be mindful of this expected near-term block
-> allocation".
-
-And that's where all the complexity starts ;)
-
-> > Put simply: if we restrict REQ_OP_PROVISION guarantees to just
-> > REQ_META writes (or any other specific type of write operation) then
-> > it's simply not worth persuing at the filesystem level because the
-> > guarantees we actually need just aren't there and the complexity of
-> > discovering and handling those corner cases just isn't worth the
-> > effort.
-> 
-> Here is where I get to say: I think you misunderstood me (but it was
-> my fault for not being absolutely clear: I'm very much on the same
-> page as you and Joe; and your visions need to just be implemented
-> ASAP).
-
-OK, good that we've clarified the misunderstandings on both sides
-quickly :)
-
-> I was taking your designs as a given, but looking further at: how do
-> we also handle the non-LBA (delalloc) usecase _before_ we include
-> REQ_OP_PROVISION in kernel.
-> 
-> But I'm happy to let the delalloc case go (we can revisit addressing
-> it if/when needed).
-
-Again, I really don't think filesystem delalloc ranges ever need to
-be covered by block device provisioning guarantees because the
-filesystem itself provides no guarantees for unprovisioned writes.
-
-I suspect that if, in future, we want to manage unprovisioned space
-in different ways, we're better off taking this sort of approach:
-
-https://lore.kernel.org/linux-xfs/20171026083322.20428-1-david@fromorbit.com/
-
-because using grow/shrink to manage the filesystem's unprovisioned
-space if far, far simpler than trying to use dynamic, cross layer
-ephemeral reservations.  Indeed, with the block device filesystem
-shutdown path Christoph recently posted, we have a model for adding
-in-kernel filesystem control interfaces for block devices...
-
-There's something to be said for turning everything upside down
-occasionally. :)
-
-Cheers,
-
-Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBWbGFkaW1pciBPbHRlYW4gPHZs
+YWRpbWlyLm9sdGVhbkBueHAuY29tPg0KPiBTZW50OiAyMDIzxOo21MI2yNUgMTc6MTcNCj4gVG86
+IFdlaSBGYW5nIDx3ZWkuZmFuZ0BueHAuY29tPg0KPiBDYzogQ2xhdWRpdSBNYW5vaWwgPGNsYXVk
+aXUubWFub2lsQG54cC5jb20+OyBkYXZlbUBkYXZlbWxvZnQubmV0Ow0KPiBlZHVtYXpldEBnb29n
+bGUuY29tOyBrdWJhQGtlcm5lbC5vcmc7IHBhYmVuaUByZWRoYXQuY29tOw0KPiBuZXRkZXZAdmdl
+ci5rZXJuZWwub3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnDQo+IFN1YmplY3Q6IFJl
+OiBbUEFUQ0ggbmV0XSBuZXQ6IGVuZXRjOiBjb3JyZWN0IHRoZSBpbmRleGVzIG9mIGhpZ2hlc3Qg
+YW5kIDJuZA0KPiBoaWdoZXN0IFRDcw0KPiANCj4gT24gVHVlLCBKdW4gMDYsIDIwMjMgYXQgMDQ6
+NDY6MThQTSArMDgwMCwgd2VpLmZhbmdAbnhwLmNvbSB3cm90ZToNCj4gPiBGcm9tOiBXZWkgRmFu
+ZyA8d2VpLmZhbmdAbnhwLmNvbT4NCj4gPg0KPiA+IEZvciBFTkVUQyBoYXJkd2FyZSwgdGhlIFRD
+cyBhcmUgbnVtYmVyZWQgZnJvbSAwIHRvIE4tMSwgd2hlcmUgTg0KPiA+IGlzIHRoZSBudW1iZXIg
+b2YgVENzLiBOdW1lcmljYWxseSBoaWdoZXIgVEMgaGFzIGhpZ2hlciBwcmlvcml0eS4NCj4gPiBJ
+dCdzIG9idmlvdXMgdGhhdCB0aGUgaGlnaGVzdCBwcmlvcml0eSBUQyBpbmRleCBzaG91bGQgYmUg
+Ti0xIGFuZA0KPiA+IHRoZSAybmQgaGlnaGVzdCBwcmlvcml0eSBUQyBpbmRleCBzaG91bGQgYmUg
+Ti0yLg0KPiA+IEhvd2V2ZXIsIHRoZSBwcmV2aW91cyBsb2dpYyB1c2VzIG5ldGRldl9nZXRfcHJp
+b190Y19tYXAoKSB0byBnZXQNCj4gPiB0aGUgaW5kZXhlcyBvZiBoaWdoZXN0IHByaW9yaXR5IGFu
+ZCAybmQgaGlnaGVzdCBwcmlvcml0eSBUQ3MsIGl0DQo+ID4gZG9lcyBub3QgbWFrZSBzZW5zZSBh
+bmQgaXMgaW5jb3JyZWN0LiBJdCBtYXkgZ2V0IHdyb25nIGluZGV4ZXMgb2YNCj4gPiB0aGUgdHdv
+IFRDcyBhbmQgbWFrZSB0aGUgQ0JTIHVuY29uZmlndXJhYmxlLiBlLmcuDQo+IA0KPiBXZWxsLCB5
+b3UgbmVlZCB0byBjb25zaWRlciB0aGF0IHByaW9yIHRvIGNvbW1pdCAxYTM1MzExMWI2ZDQgKCJu
+ZXQ6DQo+IGVuZXRjOiBhY3QgdXBvbiB0aGUgcmVxdWVzdGVkIG1xcHJpbyBxdWV1ZSBjb25maWd1
+cmF0aW9uIiksIHRoZSBkcml2ZXINCj4gd291bGQgYWx3YXlzIHNldCB1cCBhbiBpZGVudGl0eSBt
+YXBwaW5nIGJldHdlZW4gcHJpb3JpdGllcywgdHJhZmZpYw0KPiBjbGFzc2VzLCByaW5ncyBhbmQg
+bmV0ZGV2IHF1ZXVlcy4NCj4gDQpJIGFsc28gY29uc2lkZXJlZCB0aGUgc2l0dWF0aW9uIHByaW9y
+IHRvIHRoZSBjb21taXQgMWEzNTMxMTFiNmQ0LiBUaGUNCnByb2JsZW0gYWxzbyBleGlzdGVkLg0K
+ZS5nLg0KJCB0YyBxZGlzYyBhZGQgZGV2IGVubzAgcm9vdCBoYW5kbGUgMTogbXFwcmlvIG51bV90
+YyA4IFwNCgltYXAgMCAxIDIgMyA2IDcgNCA1IHF1ZXVlcyAxQDAgMUAxIFwNCgkJCSAgXiBeIF4g
+Xg0KCTFAMiAxQDMgMUA0IDFANSAxQDYgMUA3IGh3IDENClRoZSBkcml2ZXIgd291bGQgZGVlbSB0
+aGUgaW5kZXhlcyBvZiB0aGUgdHdvIGhpZ2hlc3QgVENzIGFyZSA1IGFuZCA0LA0KcmF0aGVyIHRo
+YW4gNyBhbmQgNi4NCg0KPiBTbywgeWVzLCBnaXZpbmcgYSAidGMiIGFyZ3VtZW50IHRvIG5ldGRl
+dl9nZXRfcHJpb190Y19tYXAoKSBpcw0KPiBzZW1hbnRpY2FsbHkgaW5jb3JyZWN0LCBidXQgaXQg
+b25seSBzdGFydGVkIGJlaW5nIGEgcHJvYmxlbSB3aGVuIHRoZQ0KPiBpZGVudGl0eSBtYXBwaW5n
+IHN0YXJ0ZWQgYmVpbmcgY29uZmlndXJhYmxlLg0KPiANCkluIG15IG9waW5pb24sICJ1bmNvbmZp
+Z3VyYWJsZSIgaXMgYWxzbyBhIHByb2JsZW0uDQoNCj4gPiAkIHRjIHFkaXNjIGFkZCBkZXYgZW5v
+MCBwYXJlbnQgcm9vdCBoYW5kbGUgMTAwOiBtcXByaW8gbnVtX3RjIDYgXA0KPiA+IAltYXAgMCAw
+IDEgMSAyIDMgNCA1IHF1ZXVlcyAxQDAgMUAxIDFAMiAxQDMgMkA0IDJANiBodyAxDQo+ID4gJCB0
+YyBxZGlzYyByZXBsYWNlIGRldiBlbm8wIHBhcmVudCAxMDA6NiBjYnMgaWRsZXNsb3BlIDEwMDAw
+MCBcDQo+ID4gCXNlbmRzbG9wZSAtOTAwMDAwIGhpY3JlZGl0IDEyIGxvY3JlZGl0IC0xMTMgb2Zm
+bG9hZCAxDQo+ID4gJCBFcnJvcjogU3BlY2lmaWVkIGRldmljZSBmYWlsZWQgdG8gc2V0dXAgY2Jz
+IGhhcmR3YXJlIG9mZmxvYWQuDQo+ID4gICBeXl5eXg0KPiANCj4gb2suDQo+IA0KPiA+DQo+ID4g
+Rml4ZXM6IGM0MzEwNDdjNGVmZSAoImVuZXRjOiBhZGQgc3VwcG9ydCBDcmVkaXQgQmFzZWQgU2hh
+cGVyKENCUykgZm9yDQo+IGhhcmR3YXJlIG9mZmxvYWQiKQ0KPiANCj4gSW4gcHJpbmNpcGxlLCB0
+aGVyZSBzaG91bGRuJ3QgYmUgYW4gaXNzdWUgd2l0aCBiYWNrcG9ydGluZyB0aGUgZml4IHRoYXQN
+Cj4gZmFyICh2NS41KSwgZXZlbiBpZiBpdCBpcyB1bm5lY2Vzc2FyeSBiZXlvbmQgY29tbWl0IDFh
+MzUzMTExYjZkNCAodjYuMykuDQo+IElmIHlvdSB3YW50IHRvIHJlc3BpbiB0aGUgcGF0Y2ggdG8g
+Y2xhcmlmeSB0aGUgc2l0dWF0aW9uLCBmaW5lLiBJZiBub3QsDQo+IGFsc28gZmluZS4NCj4gDQo+
+ID4gU2lnbmVkLW9mZi1ieTogV2VpIEZhbmcgPHdlaS5mYW5nQG54cC5jb20+DQo+ID4gLS0tDQo+
+IA0KPiBSZXZpZXdlZC1ieTogVmxhZGltaXIgT2x0ZWFuIDx2bGFkaW1pci5vbHRlYW5AbnhwLmNv
+bT4NCg==
