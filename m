@@ -2,58 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97A20725A73
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 11:31:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C217725A74
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 11:31:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240022AbjFGJbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 05:31:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49748 "EHLO
+        id S240044AbjFGJb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 05:31:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240141AbjFGJaz (ORCPT
+        with ESMTP id S239877AbjFGJb4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 05:30:55 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8781F19BA
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 02:30:42 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-977d7bdde43so83312366b.0
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 02:30:42 -0700 (PDT)
+        Wed, 7 Jun 2023 05:31:56 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DFA9EB
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 02:31:54 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-9745baf7c13so907922066b.1
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 02:31:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686130241; x=1688722241;
+        d=google.com; s=20221208; t=1686130312; x=1688722312;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=N0zgFaNuQcABlLa+CTwGXRDPJZJRvb9S50Rqfd30V94=;
-        b=dd7szx7k41G43KBm/a86dAGJAaPQLmdJdamkHxlEJzb0d0kNobqsdlaxAnL5DcK2TP
-         B9mzPxvBcNE1fycquQg0sC/KmTkguVAAv7fBxhZIvTs89TehT7e8jzOhIVYx2gwCibIO
-         ZOR1a/Kln82tfx5u4wEGSV715+5cA6nldnUNeJ2QJiIWPSC0+D3Vuk545GtzZMsblqBc
-         VY+c4C5/A/KAgMhiTMNVIwyV0R8udwbxHzs37hsHxY4rWb+TXyj+NXqL/5uGQReVkE0P
-         c0XnnWFHFDF/axno6XSYA8wEhJ5dLCXe74GqH2Ca8IU+f1UyNydlqvOaNIQtCf0ZTcim
-         +wqQ==
+        bh=vwYzR2o8WcAa8FfzYaLSns1WLIjgOiUcygsuRU8mknw=;
+        b=d1YSvvcAKQjI9TUdpM+UopsaTzWP2zetxJBwq5hkUwpByIItXy5b/+xShV3YaahRD9
+         Z/1/zxiXuLzdSakyQMHE9A8freGIRNnWw4X4WCWvTRxP26Qc09jZKhq61H6FIvcvTFwK
+         oIw9iA0KtCyRtNRohz/LnWIjZnXKZ0h8HQx0UspymZavnEI+ruyjzJ5hCO+QOMYz+C4D
+         MTJfMfoeFcV8m8MYiQlEb0TBODo8SCrUirO8fp4sfKEQ6sKg+ebTCul13hhNdpgvHfCC
+         wNsbovZGE+OeNf7dRmuLPJbC5hctx/YpSwAG4MgThLG8Mkd4B++enai1lwADU6dpjIjN
+         PbtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686130241; x=1688722241;
+        d=1e100.net; s=20221208; t=1686130312; x=1688722312;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=N0zgFaNuQcABlLa+CTwGXRDPJZJRvb9S50Rqfd30V94=;
-        b=kO9ykIa/sT/btoHkmWzMpTBq04ZCNSJklCHD/Xbj1Eh7Lhu8aMJl4RtXgYs7sSAq7b
-         sOcULSeLog21nXf0qSV6jM8InQ+qv600ZFzDfpy7N9OdqTIAvu49kMyZ/lvMiYHWGnca
-         Xsx6+QLbzaMQrnDdf/WVwDkJ1JOXjCPdVqZM4/PrfuA74pw29KVmoa6lFPwfm2VoGzSv
-         2Xej1S5SPdjKWHpd59oHTI5x4iA/8XeVGB2xNB+afXLM78ZJLUsIORm47IW60NIPj0RJ
-         0Tew6evXLYtsf38f1qQVhl2N61KxuK+0qJcM0qRUnHBgGVJG4J44yzXgNJzrE+b7WVQh
-         xvPg==
-X-Gm-Message-State: AC+VfDx81N2IiLZCWuL3+T2DWLE5K0FpcYpUoJPRa22wzFzp6NV/Viqp
-        XFM0z/xQY0P1aCF8LcJFa111X5prihXZyRrQo1trOA==
-X-Google-Smtp-Source: ACHHUZ6dP0+GRDVU3RS0pq3FfZaKfF9ok/JvpmsJGnYI4zVk5QLA0qcIdaA2ON/hto583ordiiISon8g+1gfeCvCkeQ=
-X-Received: by 2002:a17:907:9810:b0:94e:4285:390c with SMTP id
- ji16-20020a170907981000b0094e4285390cmr5445077ejc.10.1686130240644; Wed, 07
- Jun 2023 02:30:40 -0700 (PDT)
+        bh=vwYzR2o8WcAa8FfzYaLSns1WLIjgOiUcygsuRU8mknw=;
+        b=Sf2HGoj+i3MN5zRSQj1r8vmhEDD4dxIwi6hdabjaqcVzP7XEcfHaCgJcyCwqOoVf3i
+         RiYNCLI3Toy4n8JiBhB9TnCnm3c/w5Am5GpKBWj+xHZguqEiOQ7DybcS1AgXoQxvZ+e4
+         +oOdhFPOcmEI51rG2wFMiK539LDYIlO71cbEBn294uLwinynhZz0nh0gDsE1OBdQCfSh
+         NvXkCG7Fra0WPcJExgf+myYI2+RZfjVnbyuchSm8swTESsr49//+kXpjaXUrTUwqjrdt
+         WjZXZMP1eTVKX2ak0ZTZvDDPnBG78QJf0rwaiAFnl8IuG03FIL15VILiEhC+MOzYX/q1
+         B2hQ==
+X-Gm-Message-State: AC+VfDzmlzt4AO03TNIx9O71oCTDN7T/0G0dCVKQnMPSr1NbvYQlYJFM
+        7S9h7eB7sfLwxBwC274to7T+9p+Ug8xkQaaU3Xj+RQ==
+X-Google-Smtp-Source: ACHHUZ7QY+KBO9LyrQdx7ajNY2km1lfdMJ0tZIqwSdP7UlZ1kFzU0bYIEnBN7e3JcPAunccbhOnZoiosXw494Bl8JtE=
+X-Received: by 2002:a17:907:d93:b0:959:5407:3e65 with SMTP id
+ go19-20020a1709070d9300b0095954073e65mr5702271ejc.55.1686130312231; Wed, 07
+ Jun 2023 02:31:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230606145611.704392-1-cerasuolodomenico@gmail.com> <20230606145611.704392-8-cerasuolodomenico@gmail.com>
-In-Reply-To: <20230606145611.704392-8-cerasuolodomenico@gmail.com>
+References: <20230606145611.704392-1-cerasuolodomenico@gmail.com>
+ <20230606145611.704392-2-cerasuolodomenico@gmail.com> <CAJD7tkYvGeDMHobekqzJJOQuvZM3S6eNq-HCRJQ8UQE6_tmwSA@mail.gmail.com>
+ <CA+CLi1g6wa7PW8zCSbpxLj=CwS534MHKbN0v6ZLPWnuHaDVf_Q@mail.gmail.com>
+In-Reply-To: <CA+CLi1g6wa7PW8zCSbpxLj=CwS534MHKbN0v6ZLPWnuHaDVf_Q@mail.gmail.com>
 From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Wed, 7 Jun 2023 02:30:04 -0700
-Message-ID: <CAJD7tkY2+PgCzViFEH2W3YefnrLx66HiN_MnkZg=usdt_E1Eqw@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 7/7] mm: zswap: remove zswap_header
+Date:   Wed, 7 Jun 2023 02:31:15 -0700
+Message-ID: <CAJD7tkYxuO+sixDCdv7pLjtTtNa-AzL8pn5EkkvYr5Fc+oZfeQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 1/7] mm: zswap: add pool shrinking mechanism
 To:     Domenico Cerasuolo <cerasuolodomenico@gmail.com>
 Cc:     vitaly.wool@konsulko.com, minchan@kernel.org,
         senozhatsky@chromium.org, linux-mm@kvack.org, ddstreet@ieee.org,
@@ -73,253 +75,311 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 6, 2023 at 7:56=E2=80=AFAM Domenico Cerasuolo
+On Wed, Jun 7, 2023 at 2:22=E2=80=AFAM Domenico Cerasuolo
 <cerasuolodomenico@gmail.com> wrote:
 >
-> Previously, zswap_header served the purpose of storing the swpentry
-> within zpool pages. This allowed zpool implementations to pass relevant
-> information to the writeback function. However, with the current
-> implementation, writeback is directly handled within zswap.
-> Consequently, there is no longer a necessity for zswap_header, as the
-> swp_entry_t can be stored directly in zswap_entry.
+> On Wed, Jun 7, 2023 at 10:14=E2=80=AFAM Yosry Ahmed <yosryahmed@google.co=
+m> wrote:
+> >
+> > On Tue, Jun 6, 2023 at 7:56=E2=80=AFAM Domenico Cerasuolo
+> > <cerasuolodomenico@gmail.com> wrote:
+> > >
+> > > Each zpool driver (zbud, z3fold and zsmalloc) implements its own shri=
+nk
+> > > function, which is called from zpool_shrink. However, with this commi=
+t,
+> > > a unified shrink function is added to zswap. The ultimate goal is to
+> > > eliminate the need for zpool_shrink once all zpool implementations ha=
+ve
+> > > dropped their shrink code.
+> > >
+> > > To ensure the functionality of each commit, this change focuses solel=
+y
+> > > on adding the mechanism itself. No modifications are made to
+> > > the backends, meaning that functionally, there are no immediate chang=
+es.
+> > > The zswap mechanism will only come into effect once the backends have
+> > > removed their shrink code. The subsequent commits will address the
+> > > modifications needed in the backends.
+> > >
+> > > Signed-off-by: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+> > > ---
+> > >  mm/zswap.c | 96 +++++++++++++++++++++++++++++++++++++++++++++++++++-=
+--
+> > >  1 file changed, 91 insertions(+), 5 deletions(-)
+> > >
+> > > diff --git a/mm/zswap.c b/mm/zswap.c
+> > > index bcb82e09eb64..c99bafcefecf 100644
+> > > --- a/mm/zswap.c
+> > > +++ b/mm/zswap.c
+> > > @@ -150,6 +150,12 @@ struct crypto_acomp_ctx {
+> > >         struct mutex *mutex;
+> > >  };
+> > >
+> > > +/*
+> > > + * The lock ordering is zswap_tree.lock -> zswap_pool.lru_lock.
+> > > + * The only case where lru_lock is not acquired while holding tree.l=
+ock is
+> > > + * when a zswap_entry is taken off the lru for writeback, in that ca=
+se it
+> > > + * needs to be verified that it's still valid in the tree.
+> > > + */
+> > >  struct zswap_pool {
+> > >         struct zpool *zpool;
+> > >         struct crypto_acomp_ctx __percpu *acomp_ctx;
+> > > @@ -159,6 +165,8 @@ struct zswap_pool {
+> > >         struct work_struct shrink_work;
+> > >         struct hlist_node node;
+> > >         char tfm_name[CRYPTO_MAX_ALG_NAME];
+> > > +       struct list_head lru;
+> > > +       spinlock_t lru_lock;
+> > >  };
+> > >
+> > >  /*
+> > > @@ -176,10 +184,12 @@ struct zswap_pool {
+> > >   *            be held while changing the refcount.  Since the lock m=
+ust
+> > >   *            be held, there is no reason to also make refcount atom=
+ic.
+> > >   * length - the length in bytes of the compressed page data.  Needed=
+ during
+> > > - *          decompression. For a same value filled page length is 0.
+> > > + *          decompression. For a same value filled page length is 0,=
+ and both
+> > > + *          pool and lru are invalid and must be ignored.
+> > >   * pool - the zswap_pool the entry's data is in
+> > >   * handle - zpool allocation handle that stores the compressed page =
+data
+> > >   * value - value of the same-value filled pages which have same cont=
+ent
+> > > + * lru - handle to the pool's lru used to evict pages.
+> > >   */
+> > >  struct zswap_entry {
+> > >         struct rb_node rbnode;
+> > > @@ -192,6 +202,7 @@ struct zswap_entry {
+> > >                 unsigned long value;
+> > >         };
+> > >         struct obj_cgroup *objcg;
+> > > +       struct list_head lru;
+> > >  };
+> > >
+> > >  struct zswap_header {
+> > > @@ -364,6 +375,12 @@ static void zswap_free_entry(struct zswap_entry =
+*entry)
+> > >         if (!entry->length)
+> > >                 atomic_dec(&zswap_same_filled_pages);
+> > >         else {
+> > > +       /* zpool_evictable will be removed once all 3 backends have m=
+igrated */
+> > > +               if (!zpool_evictable(entry->pool->zpool)) {
+> > > +                       spin_lock(&entry->pool->lru_lock);
+> > > +                       list_del(&entry->lru);
+> > > +                       spin_unlock(&entry->pool->lru_lock);
+> > > +               }
+> > >                 zpool_free(entry->pool->zpool, entry->handle);
+> > >                 zswap_pool_put(entry->pool);
+> > >         }
+> > > @@ -584,14 +601,70 @@ static struct zswap_pool *zswap_pool_find_get(c=
+har *type, char *compressor)
+> > >         return NULL;
+> > >  }
+> > >
+> > > +static int zswap_shrink(struct zswap_pool *pool)
+> >
+> > Nit: rename to zswap_shrink_one() so that it's clear we always
+> > writeback one entry per call?
 >
-> Suggested-by: Yosry Ahmed <yosryahmed@google.com>
-> Signed-off-by: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+> I named it like that to mirror zpool_shrink but I think that you've got a=
+ point
+> in that it might not be very clear that it is shrinking by one page only.
+> What about zswap_reclaim_entry? I'm not a native speaker, but with
+> zswap_shrink_one I wouldn't obviously intend that the "one" refers to an
+> entry.
 
-Thanks for this cleanup. It gives us back some of the memory used by
-list_head in zswap entry, and remove an unnecessary zpool map
-operation.
+I am not a native speaker either, but zswap_reclaim_entry() sounds
+much better :)
 
-> ---
->  mm/zswap.c | 52 ++++++++++++++++++++++------------------------------
->  1 file changed, 22 insertions(+), 30 deletions(-)
 >
-> diff --git a/mm/zswap.c b/mm/zswap.c
-> index ef8604812352..f689444dd5a7 100644
-> --- a/mm/zswap.c
-> +++ b/mm/zswap.c
-> @@ -193,7 +193,7 @@ struct zswap_pool {
->   */
->  struct zswap_entry {
->         struct rb_node rbnode;
-> -       pgoff_t offset;
-> +       swp_entry_t swpentry;
->         int refcount;
->         unsigned int length;
->         struct zswap_pool *pool;
-> @@ -205,10 +205,6 @@ struct zswap_entry {
->         struct list_head lru;
->  };
->
-> -struct zswap_header {
-> -       swp_entry_t swpentry;
-> -};
-> -
->  /*
->   * The tree lock in the zswap_tree struct protects a few things:
->   * - the rbtree
-> @@ -250,7 +246,7 @@ static bool zswap_has_pool;
->         pr_debug("%s pool %s/%s\n", msg, (p)->tfm_name,         \
->                  zpool_get_type((p)->zpool))
->
-> -static int zswap_writeback_entry(struct zswap_entry *entry, struct zswap=
-_header *zhdr,
-> +static int zswap_writeback_entry(struct zswap_entry *entry,
->                                  struct zswap_tree *tree);
->  static int zswap_pool_get(struct zswap_pool *pool);
->  static void zswap_pool_put(struct zswap_pool *pool);
-> @@ -311,12 +307,14 @@ static struct zswap_entry *zswap_rb_search(struct r=
-b_root *root, pgoff_t offset)
->  {
->         struct rb_node *node =3D root->rb_node;
->         struct zswap_entry *entry;
-> +       pgoff_t entry_offset;
->
->         while (node) {
->                 entry =3D rb_entry(node, struct zswap_entry, rbnode);
-> -               if (entry->offset > offset)
-> +               entry_offset =3D swp_offset(entry->swpentry);
-> +               if (entry_offset > offset)
->                         node =3D node->rb_left;
-> -               else if (entry->offset < offset)
-> +               else if (entry_offset < offset)
->                         node =3D node->rb_right;
->                 else
->                         return entry;
-> @@ -333,13 +331,15 @@ static int zswap_rb_insert(struct rb_root *root, st=
-ruct zswap_entry *entry,
->  {
->         struct rb_node **link =3D &root->rb_node, *parent =3D NULL;
->         struct zswap_entry *myentry;
-> +       pgoff_t myentry_offset, entry_offset =3D swp_offset(entry->swpent=
-ry);
->
->         while (*link) {
->                 parent =3D *link;
->                 myentry =3D rb_entry(parent, struct zswap_entry, rbnode);
-> -               if (myentry->offset > entry->offset)
-> +               myentry_offset =3D swp_offset(myentry->swpentry);
-> +               if (myentry_offset > entry_offset)
->                         link =3D &(*link)->rb_left;
-> -               else if (myentry->offset < entry->offset)
-> +               else if (myentry_offset < entry_offset)
-
-This whole myentry thing is very confusing to me. I initially thought
-myentry would be the entry passed in as an argument. Can we change the
-naming here to make it more consistent with zswap_rb_search() naming?
-
->                         link =3D &(*link)->rb_right;
->                 else {
->                         *dupentry =3D myentry;
-> @@ -598,7 +598,6 @@ static struct zswap_pool *zswap_pool_find_get(char *t=
-ype, char *compressor)
->  static int zswap_shrink(struct zswap_pool *pool)
->  {
->         struct zswap_entry *lru_entry, *tree_entry =3D NULL;
-> -       struct zswap_header *zhdr;
->         struct zswap_tree *tree;
->         int swpoffset;
->         int ret;
-> @@ -611,15 +610,13 @@ static int zswap_shrink(struct zswap_pool *pool)
->         }
->         lru_entry =3D list_last_entry(&pool->lru, struct zswap_entry, lru=
-);
->         list_del_init(&lru_entry->lru);
-> -       zhdr =3D zpool_map_handle(pool->zpool, lru_entry->handle, ZPOOL_M=
-M_RO);
-> -       tree =3D zswap_trees[swp_type(zhdr->swpentry)];
-> -       zpool_unmap_handle(pool->zpool, lru_entry->handle);
->         /*
->          * Once the pool lock is dropped, the lru_entry might get freed. =
-The
->          * swpoffset is copied to the stack, and lru_entry isn't deref'd =
-again
->          * until the entry is verified to still be alive in the tree.
->          */
-> -       swpoffset =3D swp_offset(zhdr->swpentry);
-> +       swpoffset =3D swp_offset(lru_entry->swpentry);
-> +       tree =3D zswap_trees[swp_type(lru_entry->swpentry)];
->         spin_unlock(&pool->lru_lock);
->
->         /* hold a reference from tree so it won't be freed during writeba=
-ck */
-> @@ -633,7 +630,7 @@ static int zswap_shrink(struct zswap_pool *pool)
->         }
->         spin_unlock(&tree->lock);
->
-> -       ret =3D zswap_writeback_entry(lru_entry, zhdr, tree);
-> +       ret =3D zswap_writeback_entry(lru_entry, tree);
->
->         spin_lock(&tree->lock);
->         if (ret) {
-> @@ -1046,10 +1043,10 @@ static int zswap_get_swap_cache_page(swp_entry_t =
-entry,
->   * the swap cache, the compressed version stored by zswap can be
->   * freed.
->   */
-> -static int zswap_writeback_entry(struct zswap_entry *entry, struct zswap=
-_header *zhdr,
-> +static int zswap_writeback_entry(struct zswap_entry *entry,
->                                  struct zswap_tree *tree)
->  {
-> -       swp_entry_t swpentry =3D zhdr->swpentry;
-> +       swp_entry_t swpentry =3D entry->swpentry;
->         struct page *page;
->         struct scatterlist input, output;
->         struct crypto_acomp_ctx *acomp_ctx;
-> @@ -1089,7 +1086,7 @@ static int zswap_writeback_entry(struct zswap_entry=
- *entry, struct zswap_header
->                  * writing.
->                  */
->                 spin_lock(&tree->lock);
-> -               if (zswap_rb_search(&tree->rbroot, entry->offset) !=3D en=
-try) {
-> +               if (zswap_rb_search(&tree->rbroot, swp_offset(entry->swpe=
-ntry)) !=3D entry) {
->                         spin_unlock(&tree->lock);
->                         delete_from_swap_cache(page_folio(page));
->                         ret =3D -ENOMEM;
-> @@ -1101,8 +1098,7 @@ static int zswap_writeback_entry(struct zswap_entry=
- *entry, struct zswap_header
->                 acomp_ctx =3D raw_cpu_ptr(entry->pool->acomp_ctx);
->                 dlen =3D PAGE_SIZE;
->
-> -               zhdr =3D zpool_map_handle(pool, entry->handle, ZPOOL_MM_R=
-O);
-> -               src =3D (u8 *)zhdr + sizeof(struct zswap_header);
-> +               src =3D zpool_map_handle(pool, entry->handle, ZPOOL_MM_RO=
-);
->                 if (!zpool_can_sleep_mapped(pool)) {
->                         memcpy(tmp, src, entry->length);
->                         src =3D tmp;
-> @@ -1196,11 +1192,10 @@ static int zswap_frontswap_store(unsigned type, p=
-goff_t offset,
->         struct obj_cgroup *objcg =3D NULL;
->         struct zswap_pool *pool;
->         int ret;
-> -       unsigned int hlen, dlen =3D PAGE_SIZE;
-> +       unsigned int dlen =3D PAGE_SIZE;
->         unsigned long handle, value;
->         char *buf;
->         u8 *src, *dst;
-> -       struct zswap_header zhdr =3D { .swpentry =3D swp_entry(type, offs=
-et) };
->         gfp_t gfp;
->
->         /* THP isn't supported */
-> @@ -1245,7 +1240,7 @@ static int zswap_frontswap_store(unsigned type, pgo=
-ff_t offset,
->                 src =3D kmap_atomic(page);
->                 if (zswap_is_page_same_filled(src, &value)) {
->                         kunmap_atomic(src);
-> -                       entry->offset =3D offset;
-> +                       entry->swpentry =3D swp_entry(type, offset);
->                         entry->length =3D 0;
->                         entry->value =3D value;
->                         atomic_inc(&zswap_same_filled_pages);
-> @@ -1299,11 +1294,10 @@ static int zswap_frontswap_store(unsigned type, p=
-goff_t offset,
->         }
->
->         /* store */
-> -       hlen =3D sizeof(zhdr);
->         gfp =3D __GFP_NORETRY | __GFP_NOWARN | __GFP_KSWAPD_RECLAIM;
->         if (zpool_malloc_support_movable(entry->pool->zpool))
->                 gfp |=3D __GFP_HIGHMEM | __GFP_MOVABLE;
-> -       ret =3D zpool_malloc(entry->pool->zpool, hlen + dlen, gfp, &handl=
-e);
-> +       ret =3D zpool_malloc(entry->pool->zpool, dlen, gfp, &handle);
->         if (ret =3D=3D -ENOSPC) {
->                 zswap_reject_compress_poor++;
->                 goto put_dstmem;
-> @@ -1313,13 +1307,12 @@ static int zswap_frontswap_store(unsigned type, p=
-goff_t offset,
->                 goto put_dstmem;
->         }
->         buf =3D zpool_map_handle(entry->pool->zpool, handle, ZPOOL_MM_WO)=
+> >
+> > > +{
+> > > +       struct zswap_entry *lru_entry, *tree_entry =3D NULL;
+> > > +       struct zswap_header *zhdr;
+> > > +       struct zswap_tree *tree;
+> > > +       int swpoffset;
+> > > +       int ret;
+> > > +
+> > > +       /* get a reclaimable entry from LRU */
+> > > +       spin_lock(&pool->lru_lock);
+> > > +       if (list_empty(&pool->lru)) {
+> > > +               spin_unlock(&pool->lru_lock);
+> > > +               return -EINVAL;
+> > > +       }
+> > > +       lru_entry =3D list_last_entry(&pool->lru, struct zswap_entry,=
+ lru);
+> > > +       list_del_init(&lru_entry->lru);
+> > > +       zhdr =3D zpool_map_handle(pool->zpool, lru_entry->handle, ZPO=
+OL_MM_RO);
+> > > +       tree =3D zswap_trees[swp_type(zhdr->swpentry)];
+> > > +       zpool_unmap_handle(pool->zpool, lru_entry->handle);
+> > > +       /*
+> > > +        * Once the pool lock is dropped, the lru_entry might get fre=
+ed. The
+> >
+> > Nit: lru lock*
+> >
+> > > +        * swpoffset is copied to the stack, and lru_entry isn't dere=
+f'd again
+> > > +        * until the entry is verified to still be alive in the tree.
+> > > +        */
+> > > +       swpoffset =3D swp_offset(zhdr->swpentry);
+> > > +       spin_unlock(&pool->lru_lock);
+> > > +
+> > > +       /* hold a reference from tree so it won't be freed during wri=
+teback */
+> > > +       spin_lock(&tree->lock);
+> > > +       tree_entry =3D zswap_entry_find_get(&tree->rbroot, swpoffset)=
 ;
-> -       memcpy(buf, &zhdr, hlen);
-> -       memcpy(buf + hlen, dst, dlen);
-> +       memcpy(buf, dst, dlen);
->         zpool_unmap_handle(entry->pool->zpool, handle);
->         mutex_unlock(acomp_ctx->mutex);
+> > > +       if (tree_entry !=3D lru_entry) {
+> > > +               if (tree_entry)
+> > > +                       zswap_entry_put(tree, tree_entry);
+> > > +               spin_unlock(&tree->lock);
+> > > +               return -EAGAIN;
+> > > +       }
+> > > +       spin_unlock(&tree->lock);
+> > > +
+> > > +       ret =3D zswap_writeback_entry(pool->zpool, lru_entry->handle)=
+;
+> > > +
+> > > +       spin_lock(&tree->lock);
+> > > +       if (ret) {
+> > > +               spin_lock(&pool->lru_lock);
+> > > +               list_move(&lru_entry->lru, &pool->lru);
+> > > +               spin_unlock(&pool->lru_lock);
+> > > +       }
+> > > +       zswap_entry_put(tree, tree_entry);
+> > > +       spin_unlock(&tree->lock);
+> > > +
+> > > +       return ret ? -EAGAIN : 0;
+> > > +}
+> > > +
+> > >  static void shrink_worker(struct work_struct *w)
+> > >  {
+> > >         struct zswap_pool *pool =3D container_of(w, typeof(*pool),
+> > >                                                 shrink_work);
+> > >         int ret, failures =3D 0;
+> > >
+> > > +       /* zpool_evictable will be removed once all 3 backends have m=
+igrated */
+> > >         do {
+> > > -               ret =3D zpool_shrink(pool->zpool, 1, NULL);
+> > > +               if (zpool_evictable(pool->zpool))
+> > > +                       ret =3D zpool_shrink(pool->zpool, 1, NULL);
+> > > +               else
+> > > +                       ret =3D zswap_shrink(pool);
+> > >                 if (ret) {
+> > >                         zswap_reject_reclaim_fail++;
+> > >                         if (ret !=3D -EAGAIN)
+> > > @@ -655,6 +728,8 @@ static struct zswap_pool *zswap_pool_create(char =
+*type, char *compressor)
+> > >          */
+> > >         kref_init(&pool->kref);
+> > >         INIT_LIST_HEAD(&pool->list);
+> > > +       INIT_LIST_HEAD(&pool->lru);
+> > > +       spin_lock_init(&pool->lru_lock);
+> > >         INIT_WORK(&pool->shrink_work, shrink_worker);
+> > >
+> > >         zswap_pool_debug("created", pool);
+> > > @@ -1270,7 +1345,7 @@ static int zswap_frontswap_store(unsigned type,=
+ pgoff_t offset,
+> > >         }
+> > >
+> > >         /* store */
+> > > -       hlen =3D zpool_evictable(entry->pool->zpool) ? sizeof(zhdr) :=
+ 0;
+> > > +       hlen =3D sizeof(zhdr);
+> > >         gfp =3D __GFP_NORETRY | __GFP_NOWARN | __GFP_KSWAPD_RECLAIM;
+> > >         if (zpool_malloc_support_movable(entry->pool->zpool))
+> > >                 gfp |=3D __GFP_HIGHMEM | __GFP_MOVABLE;
+> > > @@ -1313,6 +1388,12 @@ static int zswap_frontswap_store(unsigned type=
+, pgoff_t offset,
+> > >                         zswap_entry_put(tree, dupentry);
+> > >                 }
+> > >         } while (ret =3D=3D -EEXIST);
+> > > +       /* zpool_evictable will be removed once all 3 backends have m=
+igrated */
+> > > +       if (entry->length && !zpool_evictable(entry->pool->zpool)) {
+> > > +               spin_lock(&entry->pool->lru_lock);
+> > > +               list_add(&entry->lru, &entry->pool->lru);
+> > > +               spin_unlock(&entry->pool->lru_lock);
+> > > +       }
+> > >         spin_unlock(&tree->lock);
+> > >
+> > >         /* update stats */
+> > > @@ -1384,8 +1465,7 @@ static int zswap_frontswap_load(unsigned type, =
+pgoff_t offset,
+> > >         /* decompress */
+> > >         dlen =3D PAGE_SIZE;
+> > >         src =3D zpool_map_handle(entry->pool->zpool, entry->handle, Z=
+POOL_MM_RO);
+> > > -       if (zpool_evictable(entry->pool->zpool))
+> > > -               src +=3D sizeof(struct zswap_header);
+> > > +       src +=3D sizeof(struct zswap_header);
+> > >
+> > >         if (!zpool_can_sleep_mapped(entry->pool->zpool)) {
+> > >                 memcpy(tmp, src, entry->length);
+> > > @@ -1415,6 +1495,12 @@ static int zswap_frontswap_load(unsigned type,=
+ pgoff_t offset,
+> > >  freeentry:
+> > >         spin_lock(&tree->lock);
+> > >         zswap_entry_put(tree, entry);
+> > > +       /* zpool_evictable will be removed once all 3 backends have m=
+igrated */
+> > > +       if (entry->length && !zpool_evictable(entry->pool->zpool)) {
+> > > +               spin_lock(&entry->pool->lru_lock);
+> > > +               list_move(&entry->lru, &entry->pool->lru);
+> > > +               spin_unlock(&entry->pool->lru_lock);
+> > > +       }
+> >
+> > It's not really this patch's fault, but when merged with commit
+> > fe1d1f7d0fb5 ("mm: zswap: support exclusive loads") from mm-unstable
+> > [1], and with CONFIG_ZSWAP_EXCLUSIVE_LOADS=3Dy, this causes a crash.
+> >
+> > This happens because fe1d1f7d0fb5 makes the loads exclusive, so
+> > zswap_entry_put(tree, entry) above the added code causes the entry to
+> > be freed, then we go ahead and deference multiple fields within it in
+> > the added chunk. Moving the chunk above zswap_entry_put() (and
+> > consequently also above zswap_invalidate_entry() from fe1d1f7d0fb5)
+> > makes this work correctly.
+> >
+> > Perhaps it would be useful to rebase on top of fe1d1f7d0fb5 for your
+> > next version(s), if any.
 >
->         /* populate entry */
-> -       entry->offset =3D offset;
-> +       entry->swpentry =3D swp_entry(type, offset);
->         entry->handle =3D handle;
->         entry->length =3D dlen;
+> Will definitely rebase, I just now saw that you tested the suggested reso=
+lution
+> below, thanks, it does make sense.
 >
-> @@ -1418,7 +1411,6 @@ static int zswap_frontswap_load(unsigned type, pgof=
-f_t offset,
->         /* decompress */
->         dlen =3D PAGE_SIZE;
->         src =3D zpool_map_handle(entry->pool->zpool, entry->handle, ZPOOL=
-_MM_RO);
-> -       src +=3D sizeof(struct zswap_header);
->
->         if (!zpool_can_sleep_mapped(entry->pool->zpool)) {
->                 memcpy(tmp, src, entry->length);
-> --
-> 2.34.1
->
+> >
+> > Maybe the outcome would be something like:
+> >
+> > zswap_entry_put(tree, entry);
+> > if (!ret && IS_ENABLED(CONFIG_ZSWAP_EXCLUSIVE_LOADS)) {
+> >         zswap_invalidate_entry(tree, entry);
+> > } else if (entry->length && !zpool_evictable(entry->pool->zpool)) {
+> >         spin_lock(&entry->pool->lru_lock);
+> >         list_move(&entry->lru, &entry->pool->lru);
+> >         spin_unlock(&entry->pool->lru_lock);
+> > }
+> >
+> > I am assuming if we are going to invalidate the entry anyway there is
+> > no need to move it to the front of the lru -- but I didn't really
+> > think it through.
+> >
+> > [1]https://lore.kernel.org/lkml/20230530210251.493194-1-yosryahmed@goog=
+le.com/
+> >
+> > >         spin_unlock(&tree->lock);
+> > >
+> > >         return ret;
+> > > --
+> > > 2.34.1
+> > >
