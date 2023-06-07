@@ -2,188 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CA0B725CE0
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 13:17:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95D50725CE2
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 13:18:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239989AbjFGLRt convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 7 Jun 2023 07:17:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52910 "EHLO
+        id S239961AbjFGLSZ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 7 Jun 2023 07:18:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239782AbjFGLRn (ORCPT
+        with ESMTP id S240284AbjFGLSO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 07:17:43 -0400
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 488EF2111;
-        Wed,  7 Jun 2023 04:17:25 -0700 (PDT)
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-50a20bfe366so1765334a12.0;
-        Wed, 07 Jun 2023 04:17:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686136643; x=1688728643;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nAdye/bk1h2dIXos4Zo0jp3AibrW3ouux0Tr4Db9GAM=;
-        b=ZksJmvmtGtQM4I1ltSZ4j4ezElTmQeg4i1HwkS00tcO5qcg/zyWYiityz5DD0jZuJt
-         SwdkA2o2PnuJtwQiCy1QEOkOZriWEjFJFVz5xPWjAg1tTv/2mMf+ikXfYjzs4zuwOlA+
-         7din0WKKmJqPw4KzcXE/PSf3doFDEVqIA6PdbvvKIlOBLgnVV9LVr440MEjOcjiNTsPE
-         egZFrjerQLR5oPGnb+YChD9ypnBSFIR0wwmjw3IzUQqmNSAHzkuKxcwLom4cF3Ul2XoY
-         uEwkMR8qQLXo04ZQnlB6unrtNZe3SC+5J/h0ezeIxPpPgVKZdGspR0sB7vnVf9FC6nLG
-         3EMw==
-X-Gm-Message-State: AC+VfDxu5itY3NWgjWfnbpgnme3yeZ9qaSnYJ0ViLLiplwIKNFjtvmKa
-        tG9qpTAsLfngT4WJdFnrkpKSzwRIGEG+yu+Gnp8=
-X-Google-Smtp-Source: ACHHUZ5DIcEt0d2n6c8SIyFLi/GqVaUxL5U6bOfuVIEvp31nKrxyH26E8oVp7xnDiLb/OSg1KAiRN6hLQkRP190F26c=
-X-Received: by 2002:a17:906:1ce:b0:976:50a4:ac49 with SMTP id
- 14-20020a17090601ce00b0097650a4ac49mr4930349ejj.6.1686136643281; Wed, 07 Jun
- 2023 04:17:23 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230606195847.GA1142401@bhelgaas> <1d920ce5-8279-65e9-db6b-7cc8a9cb4779@amd.com>
-In-Reply-To: <1d920ce5-8279-65e9-db6b-7cc8a9cb4779@amd.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 7 Jun 2023 13:17:10 +0200
-Message-ID: <CAJZ5v0jqxGnQTHqS2TynLQb5H9we=dxOMH696wgSKrJNYgSVUw@mail.gmail.com>
-Subject: Re: [PATCH v2] PCI: Call _REG when saving/restoring PCI state
-To:     "Limonciello, Mario" <mario.limonciello@amd.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Wed, 7 Jun 2023 07:18:14 -0400
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED93C1FEA;
+        Wed,  7 Jun 2023 04:17:57 -0700 (PDT)
+Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3579wPgK008898;
+        Wed, 7 Jun 2023 07:17:36 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3r2a9dmu4p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Jun 2023 07:17:36 -0400
+Received: from m0167088.ppops.net (m0167088.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 357BHEDG022790;
+        Wed, 7 Jun 2023 07:17:35 -0400
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3r2a9dmu4e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Jun 2023 07:17:35 -0400
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 357BHYmN046634
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 7 Jun 2023 07:17:34 -0400
+Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by ASHBMBX9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Wed, 7 Jun 2023
+ 07:17:33 -0400
+Received: from ASHBMBX8.ad.analog.com ([fe80::30b9:230c:9621:902f]) by
+ ASHBMBX8.ad.analog.com ([fe80::30b9:230c:9621:902f%9]) with mapi id
+ 15.02.0986.014; Wed, 7 Jun 2023 07:17:33 -0400
+From:   "Paller, Kim Seer" <KimSeer.Paller@analog.com>
+To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+CC:     Jonathan Cameron <jic23@kernel.org>,
+        "lars@metafoo.de" <lars@metafoo.de>,
+        "krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v2 2/2] iio: adc: max14001: New driver
+Thread-Topic: [PATCH v2 2/2] iio: adc: max14001: New driver
+Thread-Index: AQHZl67Y+VuDoLqrgE+gZ2yoOVHpUq982k+AgAA5dsCAAMU+AIABVP+Q
+Date:   Wed, 7 Jun 2023 11:17:33 +0000
+Message-ID: <bdc11e51637e4249818be688e3cd7b59@analog.com>
+References: <20230605130755.92642-1-kimseer.paller@analog.com>
+        <20230605130755.92642-3-kimseer.paller@analog.com>
+        <20230605202413.5eb0c0f3@jic23-huawei>
+        <f62be66979db433eac86f32cc8587892@analog.com>
+ <20230606113550.00003634@Huawei.com>
+In-Reply-To: <20230606113550.00003634@Huawei.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-dg-ref: =?us-ascii?Q?PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNca3BhbGxlcjJc?=
+ =?us-ascii?Q?YXBwZGF0YVxyb2FtaW5nXDA5ZDg0OWI2LTMyZDMtNGE0MC04NWVlLTZiODRi?=
+ =?us-ascii?Q?YTI5ZTM1Ylxtc2dzXG1zZy1lNDA5NjM4ZC0wNTI0LTExZWUtYWU3Yi1mOGNk?=
+ =?us-ascii?Q?Yjg5MGJlNDdcYW1lLXRlc3RcZTQwOTYzOGYtMDUyNC0xMWVlLWFlN2ItZjhj?=
+ =?us-ascii?Q?ZGI4OTBiZTQ3Ym9keS50eHQiIHN6PSI3MDI0IiB0PSIxMzMzMDYxMDI1MDc5?=
+ =?us-ascii?Q?NjI5ODEiIGg9InVWaUt6R0prU0RBNzhHUEZ4VjE2L1FvZkdLWT0iIGlkPSIi?=
+ =?us-ascii?Q?IGJsPSIwIiBibz0iMSIgY2k9ImNBQUFBRVJIVTFSU1JVRk5DZ1VBQUVvQ0FB?=
+ =?us-ascii?Q?QmxBbUdtTVpuWkFZSGJsbDRLZzYzaGdkdVdYZ3FEcmVFREFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFIQUFBQURhQVFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFFQUFRQUJBQUFBU2pFWHh3QUFBQUFBQUFBQUFBQUFBSjRBQUFCaEFHUUFh?=
+ =?us-ascii?Q?UUJmQUhNQVpRQmpBSFVBY2dCbEFGOEFjQUJ5QUc4QWFnQmxBR01BZEFCekFG?=
+ =?us-ascii?Q?OEFaZ0JoQUd3QWN3QmxBRjhBWmdCdkFITUFhUUIwQUdrQWRnQmxBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUVBQUFBQUFBQUFBZ0FBQUFBQW5nQUFBR0VBWkFCcEFGOEFjd0JsQUdNQWRR?=
+ =?us-ascii?Q?QnlBR1VBWHdCd0FISUFid0JxQUdVQVl3QjBBSE1BWHdCMEFHa0FaUUJ5QURF?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFRQUFBQUFBQUFBQ0FB?=
+ =?us-ascii?Q?QUFBQUNlQUFBQVlRQmtBR2tBWHdCekFHVUFZd0IxQUhJQVpRQmZBSEFBY2dC?=
+ =?us-ascii?Q?dkFHb0FaUUJqQUhRQWN3QmZBSFFBYVFCbEFISUFNZ0FBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFCQUFBQUFBQUFBQUlBQUFBQUFBPT0iLz48L21l?=
+ =?us-ascii?Q?dGE+?=
+x-dg-rorf: true
+x-originating-ip: [10.116.185.7]
+x-adiruleop-newscl: Rule Triggered
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+MIME-Version: 1.0
+X-Proofpoint-GUID: s54yFnXdL3v4SIg8fCDha6Go_9aI74qt
+X-Proofpoint-ORIG-GUID: D4PDoTXc7nwNYboKWoSG1fSxoLfoqmBz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-07_06,2023-06-07_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 malwarescore=0
+ priorityscore=1501 clxscore=1015 mlxscore=0 spamscore=0 lowpriorityscore=0
+ phishscore=0 bulkscore=0 adultscore=0 impostorscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306070092
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 6, 2023 at 10:26 PM Limonciello, Mario
-<mario.limonciello@amd.com> wrote:
->
->
-> On 6/6/2023 2:58 PM, Bjorn Helgaas wrote:
-> > On Tue, Jun 06, 2023 at 02:40:45PM -0500, Limonciello, Mario wrote:
-> >> On 6/6/2023 2:23 PM, Bjorn Helgaas wrote:
-> >>> On Tue, Jun 06, 2023 at 11:23:21AM -0500, Mario Limonciello wrote:
-> >>>> ASMedia PCIe GPIO controllers fail functional tests after returning from
-> >>>> suspend (S3 or s2idle). This is because the BIOS checks whether the
-> >>>> OSPM has called the `_REG` method to determine whether it can interact with
-> >>>> the OperationRegion assigned to the device.
-> >>>>
-> >>>> As described in 6.5.4 in the APCI spec, `_REG` is used to inform the AML
-> >>>> code on the availability of an operation region.
-> >>>>
-> >>>> To fix this issue, call acpi_evaluate_reg() when saving and restoring the
-> >>>> state of PCI devices.
-> >>>>
-> >>>> Link: https://uefi.org/htmlspecs/ACPI_Spec_6_4_html/06_Device_Configuration/Device_Configuration.html#reg-region
-> >>>> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> >>>> ---
-> >>>> v1->v2:
-> >>>>    * Handle case of no CONFIG_ACPI
-> >>>>    * Rename function
-> >>>>    * Update commit message
-> >>>>    * Move ACPI calling code into pci-acpi.c instead
-> >>>>    * Cite the ACPI spec
-> >>> Thanks for the spec reference (s/APCI/ACPI/ and add the revision if
-> >>> you rev this (r6.5 is the latest, AFAIK) if you rev this).
-> >>>
-> >>> I don't see text in that section that connects S3 with _REG.  If it's
-> >>> there, you might have to quote the relevant sentence or two in the
-> >>> commit log.
-> >> I don't think there is anything the spec connecting this
-> >> with S3.  At least from my perspective S3 is the reason
-> >> this was exposed but there is a deficiency that exists
-> >> that _REG is not being called by Linux.
-> >>
-> >> I intend to re-word the commit message something to the
-> >> effect of explaining what _REG does and why _REG should be
-> >> called, along with citations.
-> >>
-> >> Then in another paragraph "Fixing this resolves an issue ...".
-> >>
-> >>> You mentioned _REG being sort of a mutex to synchronize OSPM vs
-> >>> platform access; if there's spec language to that effect, let's cite
-> >>> it.
-> >> That sentence I included was cited from the spec.
-> > If it's necessary to justify the commit, include the citation in the
-> > commit log.
-> >
-> >>> Ideally we should have been able to read the PCI and ACPI specs and
-> >>> implement this without tripping over problem on this particular
-> >>> hardware.  I'm looking for the text that enables that "clean-room"
-> >>> implementation.  If the spec doesn't have that text, it's either a
-> >>> hole in the spec or a BIOS defect that depends on something the spec
-> >>> doesn't require.
-> >> IMO both the spec and BIOS are correct, it's a Linux
-> >> issue that _REG wasn't used.
-> > What tells Linux that _REG needs to be used here?  If there's nothing
-> > that tells Linux to use _REG here, I claim it's a BIOS defect.  I'm
-> > happy to be convinced otherwise; the way to convince me is to point to
-> > the spec.
->  From the spec it says "control methods must assume
-> all operation regions are inaccessible until the
-> _REG(RegionSpace, 1) method is executed"
->
-> It also points out the opposite: "Conversely,
-> control methods must not access fields in
-> operation regions when _REG method execution
-> has not indicated that the operation region
-> handler is ready."
->
-> The ACPI spec doesn't refer to D3 in this context, but
-> it does make an allusion to power off in an example case.
->
-> "Also, when the host controller or bridge controller
-> is turned off or disabled, PCI Config Space Operation
-> Regions for child devices are no longer available.
-> As such, ETH0’s _REG method will be run when it is
-> turned off and will again be run when PCI1 is
-> turned off."
->
-> >
-> > If it's a BIOS defect, it's fine to work around it, but we need to
-> > understand that, own up to it, and make the exact requirements very
-> > clear.  Otherwise we're likely to break this in the future because
-> > future developers and maintainers will rely on the specs.
->  From my discussions with BIOS developers, this is entirely
-> intended behavior based on the _REG section in the spec.
-> >>> Doing this in pci_save_state() still seems wrong to me.  For example,
-> >>> e1000_probe() calls pci_save_state(), but this is not part of suspend.
-> >>> IIUC, this patch will disconnect the opregion when we probe an e1000
-> >>> NIC.  Is that what you intend?
-> >> Thanks for pointing this one out.  I was narrowly focused
-> >> on callers in PCI core.  This was a caller I wasn't
-> >> aware of; I agree it doesn't make sense.
-> >>
-> >> I think pci_set_power_state() might be another good
-> >> candidate to use.  What do you think of this?
-> > I can't suggest a call site because (1) I'm not a power management
-> > person, and (2) I don't think we have a clear statement of when it is
-> > required.  This must be expressed in terms of PCI power state
-> > transitions, or at least something discoverable from a pci_dev, not
-> > "s2idle" or even "S3" because those are meaningless in the PCI
-> > context.
-> >
-> > Bjorn
-> Right; I'm with you on not putting it with a suspend
-> transition.
->
-> The spec indicates that control methods can't access
-> the regions until _REG is called, so
-> my leaning is to keep the call at init time, and
-> then add another call for the D3 and D0 transitions
-> which is why I think pci_set_power_state() is probably
-> best.
 
-Except that it is not used in all transitions; see the callers oif
-pci_power_up() for example.
+> -----Original Message-----
+> From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+> Sent: Tuesday, June 6, 2023 6:36 PM
+> To: Paller, Kim Seer <KimSeer.Paller@analog.com>
+> Cc: Jonathan Cameron <jic23@kernel.org>; lars@metafoo.de;
+> krzysztof.kozlowski@linaro.org; broonie@kernel.org; lgirdwood@gmail.com;
+> linux-iio@vger.kernel.org; linux-kernel@vger.kernel.org
+> Subject: Re: [PATCH v2 2/2] iio: adc: max14001: New driver
+> 
+> [External]
+> 
+> 
+> 
+> > >
+> > > > +	struct mutex		lock;
+> > > > +	struct regmap		*regmap;
+> > > > +	int			vref_mv;
+> > > > +	/*
+> > > > +	 * DMA (thus cache coherency maintenance) requires the
+> > > > +	 * transfer buffers to live in their own cache lines.
+> > >
+> > > You are looking at an old kernel I guess - we fixed all of these - and
+> > > introduced IIO_DMA_MINALIGN for __aligned(IIO_DMA_MINALIGN) to
+> > > make it easier to fix any such problems in future.
+> > >
+> > > Upshot is that ___cacheline_aligned aligns to the l1 cacheline length.
+> > > Some fun systems (such as the big servers I use in my dayjob) have higher
+> > > cacheline sizes for their larger / further from CPU caches.
+> > > One group of SoCs out there is known to both do non coherent DMA and
+> > > have a larger line size for the bit relevant to that than ___cacheline_aligned
+> > > gives you. So on that rare platform this is currently broken.
+> >
+> > It's good to know. Given this information, is there anything specific that I
+> > need to change in the code or implementation related to
+> > the ___cacheline_aligned part?
+> 
+> Replace it with __aligned(IIO_DMA_MINALIGN) as has hopefully now been
+> done
+> in all upstream drivers.
 
-Technically, the config space should become accessible right after
-acpi_pci_set_power_state() has transitioned the device into D0 and it
-should be accessible still right before acpi_pci_set_power_state()
-attempts to transition the device into a low-power state, so it looks
-like _REG could be evaluated from there.
+When I attempted to implement this change, I encountered a checkpatch warning 
+in the latest kernel version. The warning indicated that externs should be avoided 
+in .c files and emphasized the need for an identifier name for the function 
+definition argument 'IIO_DMA_MINALIGN'. I attempted to define a macro with an 
+appropriate identifier name, but I still received the same checkpatch warning. 
+It's possible that I may have overlooked something in my approach. I would 
+appreciate your thoughts and insights on this matter. Thanks.
+
+> 
+> > >
+> 
+> > > > +}
+> > > > +
+> > > > +static int max14001_reg_update(struct max14001_state *st,
+> > > > +				unsigned int reg_addr,
+> > > > +				unsigned int mask,
+> > > > +				unsigned int val)
+> > > > +{
+> > > > +	int ret;
+> > > > +
+> > > > +	/* Enable SPI Registers Write */
+> > > > +	ret = max14001_write(st, MAX14001_WEN,
+> > > MAX14001_WRITE_WEN);
+> > >
+> > > Mixing regmap and non regmap rather defeats the point of having a
+> standard
+> > > interface.  Use regmap_read and regmap_write throughout or not at all.
+> >
+> > I found it difficult to implement the regmap interface due to the timing
+> diagram
+> > requirements. The chip select needs to be changed between transfers, which,
+> > as far as I know, does not work with regmap. Perhaps, I will consider sticking
+> > to the non-regmap approach.
+> 
+> That may be sensible if there are odd requirements or just call regmap_write()
+> which will call your max14001_write() anyway and opencode the timing
+> requirements etc by multiple remap calls.  Obviously benefits of regmap
+> reduced
+> though so may not be worth bothering unless it is worth using the caching or
+> similar.
+> 
+> Jonathan
+> 
+> 
+
