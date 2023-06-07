@@ -2,123 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D0EF7264EF
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 17:43:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 637B272644A
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 17:24:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241458AbjFGPnu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 11:43:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50672 "EHLO
+        id S241366AbjFGPYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 11:24:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240794AbjFGPnr (ORCPT
+        with ESMTP id S240106AbjFGPYS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 11:43:47 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F6471BD9;
-        Wed,  7 Jun 2023 08:43:44 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 24EB75FD6F;
-        Wed,  7 Jun 2023 18:26:45 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1686151605;
-        bh=0H1VfG+WwRagxPnCOr1EoEXeHg70Bxoo+8m46PTHcVw=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=m1ahG5VJKRuSw14B2T7kAr90dKEzHZAC65e2ev+klnDs11HUqGRlHm9tiyumQuqQl
-         YLeyb/ydLYnsaeItX34wx19yyF8q9jfkhUC9tzYSO3/HoFdzleiu6fvRVsKkxhxcpq
-         HDO/ItS7em96e+horSHjnPzKEQJZ0jmQBF7AfUKxSFgDk/Z/pDrvAdVy/HlnGqwDXY
-         Tv/pjwKZBSZlqcMvrYi9k/qkhHv1yjbjjrlrT317WEtPRp4KMsoBaM6IoOy5XiW51w
-         eujmSpxH2HY83DvI6cMrXxLSoro0ZDSfz33gt9A0AkUat9+gEl5PMca0Zz12gfE3sO
-         SXfUkSnGrlyCw==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Wed,  7 Jun 2023 18:26:44 +0300 (MSK)
-Message-ID: <a6d96280-e222-1aaa-4e07-5fc4f0cde866@sberdevices.ru>
-Date:   Wed, 7 Jun 2023 18:21:50 +0300
+        Wed, 7 Jun 2023 11:24:18 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEBF31BE2;
+        Wed,  7 Jun 2023 08:23:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686151418; x=1717687418;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Ac2EGXwaf9hbH3WLYBdv8zMnn+CvdHzS452aCXzYo7k=;
+  b=YY5IUlTQTQcz0dlWG1aq5he9YVVQBVUSdfstII56/z8+2y5I6q/uXA/1
+   9QIYB8WcPvNPs6NthtaNo6JgDQKTG84160WnVsPqQHBg8X6VFx6jk9uRR
+   6IdPDEym+nxHqTrRSOS5idBuCd9p2rmqybGp2zM722vdaAdfroAjeh/mW
+   EaK9tqQ0qtQhh1XL9t5jCVq6Fxgj60VPrpQsITmUdQVvOU6S3p7V5ph5n
+   ix91kgK7qKHlJoKtbvazrAQuSJVUkufGl+T92RI2TWbWk7yKF4TUZ6LXJ
+   9yvRqDB+7UJiZqgooD5dduyxRUNQUmh+nsMNfIQP0PC8Ut5/WdPY4Foo2
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="341676661"
+X-IronPort-AV: E=Sophos;i="6.00,224,1681196400"; 
+   d="scan'208";a="341676661"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 08:22:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="822206808"
+X-IronPort-AV: E=Sophos;i="6.00,224,1681196400"; 
+   d="scan'208";a="822206808"
+Received: from vsmyers-mobl2.amr.corp.intel.com (HELO [10.212.146.233]) ([10.212.146.233])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 08:22:36 -0700
+Message-ID: <e7c21694-d31b-4dbe-f75b-5a7c0127f5c8@intel.com>
+Date:   Wed, 7 Jun 2023 08:22:36 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v1] dt-bindings: nand: meson: Fix 'nand-rb' property
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v11 07/20] x86/virt/tdx: Add skeleton to enable TDX on
+ demand
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-CC:     Liang Yang <liang.yang@amlogic.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
-        <linux-mtd@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-References: <20230606193507.35024-1-AVKrasnov@sberdevices.ru>
- <20230607095802.3adcd4f9@xps-13>
- <166bdc27-f77c-9076-f866-180cfa5bff76@sberdevices.ru>
- <08da4e86-433a-7d2e-25ff-ffa24221abdf@linaro.org>
- <835a3587-1e0f-64d7-1d1a-b639ae8b7307@sberdevices.ru>
- <2ca6e619-1d57-8fff-6176-9ee890e0d167@linaro.org>
- <5ca9eb2b-4bc8-5883-a029-3eeca905fe6e@sberdevices.ru>
- <20230607113605.50a992bb@xps-13>
- <6c1973d1-38c0-6048-90ad-da2f60df8238@sberdevices.ru>
- <9105207b-0dfb-346f-422f-984cf3454f90@linaro.org>
- <57ccf7ac-7d94-8a66-7a0e-abfe14f7df2c@sberdevices.ru>
- <88740a95-d7b0-e5d0-62db-65b41c66c5bc@linaro.org>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-In-Reply-To: <88740a95-d7b0-e5d0-62db-65b41c66c5bc@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     linux-mm@kvack.org, kirill.shutemov@linux.intel.com,
+        tony.luck@intel.com, peterz@infradead.org, tglx@linutronix.de,
+        seanjc@google.com, pbonzini@redhat.com, david@redhat.com,
+        dan.j.williams@intel.com, rafael.j.wysocki@intel.com,
+        ying.huang@intel.com, reinette.chatre@intel.com,
+        len.brown@intel.com, ak@linux.intel.com, isaku.yamahata@intel.com,
+        chao.gao@intel.com, sathyanarayanan.kuppuswamy@linux.intel.com,
+        bagasdotme@gmail.com, sagis@google.com, imammedo@redhat.com
+References: <cover.1685887183.git.kai.huang@intel.com>
+ <21b3a45cb73b4e1917c1eba75b7769781a15aa14.1685887183.git.kai.huang@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <21b3a45cb73b4e1917c1eba75b7769781a15aa14.1685887183.git.kai.huang@intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/06/07 13:30:00 #21453197
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 6/4/23 07:27, Kai Huang wrote:
+...
+> +static int try_init_module_global(void)
+> +{
+> +	unsigned long flags;
+> +	int ret;
+> +
+> +	/*
+> +	 * The TDX module global initialization only needs to be done
+> +	 * once on any cpu.
+> +	 */
+> +	raw_spin_lock_irqsave(&tdx_global_init_lock, flags);
 
+Why is this "raw_"?
 
-On 07.06.2023 18:07, Krzysztof Kozlowski wrote:
-> On 07/06/2023 16:55, Arseniy Krasnov wrote:
->>>>> The bindings and your driver internal representation are two different
->>>>> things. Anyway, as mentioned above, wiring the RB line to one die and
->>>>> not the other would be valid hardware design and would require the rb
->>>>> property to be in the chip node. Please perform a per-chip property read
->>>>> in the driver as well.
->>>>
->>>> Done, I resend both patches (bindings + driver update) as a single patchset. Your review comments
->>>> for driver code were also fixed.
->>>
->>> No, please send new version, not the same. New version means with fixed
->>> comments and with patch changelog.
->>
->> Sorry, Yes, I mean new version, here it is:
->> https://lore.kernel.org/linux-mtd/20230607145026.2899547-1-AVKrasnov@sberdevices.ru/
->>
->> There I fixed bindings and tested it.
-> 
-> I still see v1 and there is no changelog. So it's the same?
+There's zero mention of it anywhere.
 
-No, v1 is for new patchset from the link above. Both patches (bindings and driver) are updated there.
-I attached changelog here as reply for cover letter of the patchset:
-https://lore.kernel.org/linux-mtd/a1e048aa-ec64-bd0b-aa17-e3e9bdf18090@sberdevices.ru/
+> +	if (tdx_global_init_status & TDX_GLOBAL_INIT_DONE) {
+> +		ret = tdx_global_init_status & TDX_GLOBAL_INIT_FAILED ?
+> +			-EINVAL : 0;
+> +		goto out;
+> +	}
+> +
+> +	/* All '0's are just unused parameters. */
+> +	ret = seamcall(TDH_SYS_INIT, 0, 0, 0, 0, NULL, NULL);
+> +
+> +	tdx_global_init_status = TDX_GLOBAL_INIT_DONE;
+> +	if (ret)
+> +		tdx_global_init_status |= TDX_GLOBAL_INIT_FAILED;
+> +out:
+> +	raw_spin_unlock_irqrestore(&tdx_global_init_lock, flags);
+> +
+> +	return ret;
+> +}
+> +
+> +/**
+> + * tdx_cpu_enable - Enable TDX on local cpu
+> + *
+> + * Do one-time TDX module per-cpu initialization SEAMCALL (and TDX module
+> + * global initialization SEAMCALL if not done) on local cpu to make this
+> + * cpu be ready to run any other SEAMCALLs.
+> + *
+> + * Note this function must be called when preemption is not possible
+> + * (i.e. via SMP call or in per-cpu thread).  It is not IRQ safe either
+> + * (i.e. cannot be called in per-cpu thread and via SMP call from remote
+> + * cpu simultaneously).
 
-Thanks, Arseniy
+lockdep_assert_*() are your friends.  Unlike comments, they will
+actually tell you if this goes wrong.
 
-> 
-> Best regards,
-> Krzysztof
-> 
+> +int tdx_cpu_enable(void)
+> +{
+> +	unsigned int lp_status;
+> +	int ret;
+> +
+> +	if (!platform_tdx_enabled())
+> +		return -EINVAL;
+> +
+> +	lp_status = __this_cpu_read(tdx_lp_init_status);
+> +
+> +	/* Already done */
+> +	if (lp_status & TDX_LP_INIT_DONE)
+> +		return lp_status & TDX_LP_INIT_FAILED ? -EINVAL : 0;
+> +
+> +	/*
+> +	 * The TDX module global initialization is the very first step
+> +	 * to enable TDX.  Need to do it first (if hasn't been done)
+> +	 * before doing the per-cpu initialization.
+> +	 */
+> +	ret = try_init_module_global();
+> +
+> +	/*
+> +	 * If the module global initialization failed, there's no point
+> +	 * to do the per-cpu initialization.  Just mark it as done but
+> +	 * failed.
+> +	 */
+> +	if (ret)
+> +		goto update_status;
+> +
+> +	/* All '0's are just unused parameters */
+> +	ret = seamcall(TDH_SYS_LP_INIT, 0, 0, 0, 0, NULL, NULL);
+> +
+> +update_status:
+> +	lp_status = TDX_LP_INIT_DONE;
+> +	if (ret)
+> +		lp_status |= TDX_LP_INIT_FAILED;
+> +
+> +	this_cpu_write(tdx_lp_init_status, lp_status);
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(tdx_cpu_enable);
+
+You danced around it in the changelog, but the reason for the exports is
+not clear.
+
+> +static int init_tdx_module(void)
+> +{
+> +	/*
+> +	 * TODO:
+> +	 *
+> +	 *  - Get TDX module information and TDX-capable memory regions.
+> +	 *  - Build the list of TDX-usable memory regions.
+> +	 *  - Construct a list of "TD Memory Regions" (TDMRs) to cover
+> +	 *    all TDX-usable memory regions.
+> +	 *  - Configure the TDMRs and the global KeyID to the TDX module.
+> +	 *  - Configure the global KeyID on all packages.
+> +	 *  - Initialize all TDMRs.
+> +	 *
+> +	 *  Return error before all steps are done.
+> +	 */
+> +	return -EINVAL;
+> +}
+> +
+> +static int __tdx_enable(void)
+> +{
+> +	int ret;
+> +
+> +	ret = init_tdx_module();
+> +	if (ret) {
+> +		pr_err("TDX module initialization failed (%d)\n", ret);
+
+Have you actually gone any  looked at how this pr_*()'s look?
+
+Won't they say:
+
+	tdx: TDX module initialized
+
+Isn't that a _bit_ silly?  Why not just say:
+
+	pr_info("module initialized.\n");
