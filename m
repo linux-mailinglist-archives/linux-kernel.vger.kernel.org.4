@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D572725CDD
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 13:17:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE800725CDA
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 13:17:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240116AbjFGLRR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 07:17:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52128 "EHLO
+        id S239975AbjFGLRI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 07:17:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239049AbjFGLRG (ORCPT
+        with ESMTP id S239471AbjFGLRF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 07:17:06 -0400
+        Wed, 7 Jun 2023 07:17:05 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2C0D1BD;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A42641702;
         Wed,  7 Jun 2023 04:17:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 36DF763DBA;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3FB5263DBD;
         Wed,  7 Jun 2023 11:17:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 865BFC43444;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90665C43442;
         Wed,  7 Jun 2023 11:17:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1686136623;
-        bh=SWgB+GJxunV8+GIcdNuLA2VAu98d93P4jlBSJxTcTc8=;
+        bh=PqT7b3LTt1IrPaGyiAZXtxPqgt4zXro8Gw7CXf+6hyg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dCocfCn5G6R1dJgV4Mmgd6QmoqMqRFKA44H9gGa/fGqbDWMqfznlnu83eU4rX3cpv
-         2g3YmLmKhzdK4uBPsKEf5RRJy2gDbmp3VzLjfoipyHazynVJbqidDhMtYqzgdoEmdE
-         hAQSBAK6dLwMOUWcB4LV6Fn39BYBcLwNJUr9X4uiMCKDyZ3UG25cqpgZDhiYHCgV1N
-         qEiiv2znG3AMjklFQRR021NlKqKMNAhGwtv7xM71Bn2dkvgxHcTKYuNAmnD9NWk+8V
-         BX9bCPRAjwtMTs4eSxvQ2DD8l0t1+mWji/1z4wHfAqtoNNTCp0uxrnbgg+6xhe4Wan
-         ZW0mkD4+vxNXQ==
+        b=hcwjIfmEFTIUXuUtcgpBMJ4jzU5AmLI03k+n5e24wAmMp/W1YkBJLXXTTEK2axz/9
+         T5RVxoff/v2jBz79Uir+LB8uZkFWRyks6Q+F30CwBDcQJgIdEyNWW3cIDPa2R4P5RS
+         J6MUJGfI6Q5HqyfmcIrRIak5MNt6+Gi2BtNAXDLaMvzT52dS4jt9jvEjC1v37a5E9e
+         zTdlZJPWBugDtMCH7X3aNaLw8VUD97ukmGLTWHyKuF/02Zq/Zhyl2QX0IQrQjqcdpb
+         euJakyPqO/MwXQV5UurRMzyB6zDzRIo/gm81awExyAXteEMiR11fFc+lkCITXenblb
+         05+boh6s8h1Bg==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1q6rAM-0008LS-ET; Wed, 07 Jun 2023 13:17:26 +0200
+        id 1q6rAM-0008LU-Gz; Wed, 07 Jun 2023 13:17:26 +0200
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -46,10 +46,11 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>, stable@vger.kernel.org,
+        Li Jun <jun.li@nxp.com>,
         Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Subject: [PATCH 1/2] USB: dwc3: qcom: fix NULL-deref on suspend
-Date:   Wed,  7 Jun 2023 12:05:39 +0200
-Message-Id: <20230607100540.31045-2-johan+linaro@kernel.org>
+Subject: [PATCH 2/2] USB: dwc3: fix use-after-free on core driver unbind
+Date:   Wed,  7 Jun 2023 12:05:40 +0200
+Message-Id: <20230607100540.31045-3-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.39.3
 In-Reply-To: <20230607100540.31045-1-johan+linaro@kernel.org>
 References: <20230607100540.31045-1-johan+linaro@kernel.org>
@@ -65,57 +66,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Qualcomm dwc3 glue driver is currently accessing the driver data of
-the child core device during suspend and on wakeup interrupts. This is
-clearly a bad idea as the child may not have probed yet or could have
-been unbound from its driver.
+Some dwc3 glue drivers are currently accessing the driver data of the
+child core device directly, which is clearly a bad idea as the child may
+not have probed yet or may have been unbound from its driver.
 
-The first such layering violation was part of the initial version of the
-driver, but this was later made worse when the hack that accesses the
-driver data of the grand child xhci device to configure the wakeup
-interrupts was added.
+As a workaround until the glue drivers have been fixed, clear the driver
+data pointer before allowing the glue parent device to runtime suspend
+to prevent its driver from accessing data that has been freed during
+unbind.
 
-Fixing this properly is not that easily done, so add a sanity check to
-make sure that the child driver data is non-NULL before dereferencing it
-for now.
-
-Note that this relies on subtleties like the fact that driver core is
-making sure that the parent is not suspended while the child is probing.
-
-Reported-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Link: https://lore.kernel.org/all/20230325165217.31069-4-manivannan.sadhasivam@linaro.org/
-Fixes: d9152161b4bf ("usb: dwc3: Add Qualcomm DWC3 glue layer driver")
+Fixes: 6dd2565989b4 ("usb: dwc3: add imx8mp dwc3 glue layer driver")
 Fixes: 6895ea55c385 ("usb: dwc3: qcom: Configure wakeup interrupts during suspend")
-Cc: stable@vger.kernel.org	# 3.18: a872ab303d5d: "usb: dwc3: qcom: fix use-after-free on runtime-PM wakeup"
+Cc: stable@vger.kernel.org      # 5.12
+Cc: Li Jun <jun.li@nxp.com>
 Cc: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
 Cc: Krishna Kurapati <quic_kriskura@quicinc.com>
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- drivers/usb/dwc3/dwc3-qcom.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ drivers/usb/dwc3/core.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-index 959fc925ca7c..79b22abf9727 100644
---- a/drivers/usb/dwc3/dwc3-qcom.c
-+++ b/drivers/usb/dwc3/dwc3-qcom.c
-@@ -308,7 +308,16 @@ static void dwc3_qcom_interconnect_exit(struct dwc3_qcom *qcom)
- /* Only usable in contexts where the role can not change. */
- static bool dwc3_qcom_is_host(struct dwc3_qcom *qcom)
- {
--	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
-+	struct dwc3 *dwc;
-+
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index 7b2ce013cc5b..d68958e151a7 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -1929,6 +1929,11 @@ static int dwc3_remove(struct platform_device *pdev)
+ 	pm_runtime_disable(&pdev->dev);
+ 	pm_runtime_dont_use_autosuspend(&pdev->dev);
+ 	pm_runtime_put_noidle(&pdev->dev);
 +	/*
-+	 * FIXME: Fix this layering violation.
++	 * HACK: Clear the driver data, which is currently accessed by parent
++	 * glue drivers, before allowing the parent to suspend.
 +	 */
-+	dwc = platform_get_drvdata(qcom->dwc3);
-+
-+	/* Core driver may not have probed yet. */
-+	if (!dwc)
-+		return false;
++	platform_set_drvdata(pdev, NULL);
+ 	pm_runtime_set_suspended(&pdev->dev);
  
- 	return dwc->xhci;
- }
+ 	dwc3_free_event_buffers(dwc);
 -- 
 2.39.3
 
