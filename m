@@ -2,275 +2,374 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B37AE726640
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 18:46:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF711726643
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 18:47:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230080AbjFGQqP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 12:46:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34470 "EHLO
+        id S230117AbjFGQrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 12:47:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229965AbjFGQqO (ORCPT
+        with ESMTP id S229917AbjFGQrb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 12:46:14 -0400
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A55BA1FC8
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 09:46:12 -0700 (PDT)
-Received: by mail-qk1-x72d.google.com with SMTP id af79cd13be357-75b14216386so693969385a.0
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 09:46:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1686156371; x=1688748371;
-        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=FUVU/G91IA7YuyfqkOJoiaRMGIIl26A/IsuzOh22KQk=;
-        b=RAYgH3Km9RQtoIK+ZbRlQvETba25DQvXRJI6sqmOKOqacof8JeeFFnXJWUmyDvkB9F
-         o10K255EQEvDMkPqXMyDb8D6fsZ+ijp6xH8/lHKdujW9bCsKQhUXzI5FLL7Is4Itv9v5
-         mh5teAapgx/VROD3B9KTRJJwm0X87nifwV1Ro=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686156371; x=1688748371;
-        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FUVU/G91IA7YuyfqkOJoiaRMGIIl26A/IsuzOh22KQk=;
-        b=it7ysr/jAUO2OQFkqZ2WMLmFuu8i35I8/sjyxz+UP5KOf9EuG+LvQy+ZSUxD9m7gBr
-         ZJgClwX9MPelsKCl07BDEFfv2864eZ1iHwN45yxORl78np1XV7n0BONi73wsm88o66yH
-         D1nBLNKx4+l3SsKm9q42RiQZMuxdlHSXaWcP8iHnkcvmDNUGTKKYIN3eVzecG+ByFgcd
-         Z6xmTm4YXwbkYvTFwOKGea/cysirv8AZfDcZ6qKus/9UiQqQr0dfM0b/bOZ4bpdBtSm/
-         dzRntZbYnp3ieBhmmHagfBYOZgnqOXTZZWqxLTRCvFO+REJcVRmpyGO2kNMNPllb4rnf
-         QqOg==
-X-Gm-Message-State: AC+VfDwQfBRUCPH2wa1/97G7icdW371JMc2g9VW2jMZQWhgTdD/G3ARb
-        qi34joKpiItYUHeJt67i3TOfzA==
-X-Google-Smtp-Source: ACHHUZ6g0zQ+QhyeOUkpe8vMNBjxoZdNqAGgocN22cgGPGJ8Tcu2J3gtULh6DC7fs5ngD2uh2+oJ2g==
-X-Received: by 2002:a05:620a:1aa8:b0:75b:23a0:e7be with SMTP id bl40-20020a05620a1aa800b0075b23a0e7bemr3117150qkb.31.1686156371139;
-        Wed, 07 Jun 2023 09:46:11 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id v15-20020ae9e30f000000b0075b23e55640sm3851qkf.123.2023.06.07.09.46.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 09:46:10 -0700 (PDT)
-Message-ID: <77cc2923-99fa-49e4-8e3d-7c525a88a2a3@broadcom.com>
-Date:   Wed, 7 Jun 2023 09:45:58 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH net] net: bcmgenet: Fix EEE implementation
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     netdev@vger.kernel.org, o.rempel@pengutronix.de, andrew@lunn.ch,
-        hkallweit1@gmail.com, Doug Berger <opendmb@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
+        Wed, 7 Jun 2023 12:47:31 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2080.outbound.protection.outlook.com [40.107.94.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0E351FC8
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 09:47:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Vx9NSkClkBcYeZxbT+uO1A86BW99q/MLBaPYZqnP9YuxT1zl5FigyTGiPunihLIT9ouJSZlJ66/jpNTQOPxbMxd8xR1gbfJK3GI7CxLj+wsx35oPQfbYD++Wf1SAENFtrTzacymw1zWW8DqD4s7hxmm99/tZ9SLL6WJ30dsK3G6yYe2ehH0rj9+6mPJoNovu9kmIOh7koo1+1vchUmfs0agschqIQZ5yooi9dt4CuIvIKaUGUZPBNuPaVlhAnG7aSy0Lrnd6HoXFAqDT7xdU1IOduRpu38EPCVzW4i0X+XiWoolBSDlYfcOl3PM79Ja8iMYgjpoyud6hbS54KLTynA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=89CnDAVi4deKZBhijlQiYB3aNKa1R/QFagmBHqOvW5Q=;
+ b=Fe540J8Nq40phXls//Axt2GFiFAVFI3yMcvgyMb6XSuDn5JPEUKIhzS6PL8rwjOC2/V8klMStrrix1sLfipraxR5Vtmn/HdIbJvFaokvlsYI+zFUT6kAibmUuCQua7rsCSsfFPCcLiTYG4q/wrCf/7nvAYLmRaOvxL+vQ6uCALpRq/C9YE0YwW55YUol4I1Pl+HaW3JObmiboOSVr0oZ4J+TkBWb2GrZu2pKlLRLPaRygkhA985CcVZc840ZYssnolxIDtZRzYzbhoMKlWA6DJuiHBDkFbJp7ork/PchnhMA77VvGNgfVPNTt1No8pc+JwcqTZXiSuO4nwTIKUEKgA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=89CnDAVi4deKZBhijlQiYB3aNKa1R/QFagmBHqOvW5Q=;
+ b=vHlQiSyJU/+c7o2vYn6MtQ5ct/iN7BcxgAtH/th+AaMhu0+zclRaLXTBRuFGPS105y/nBSgZqON47OPj7nr+Jyr2obP2S6goLpEGnlknaWBdldus2oEuqXsZcq6xyreXOM9nSep5Vbn9YOVm1v+TGVMGWkAFBBvW5tiJDiRvU0o=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by MN2PR12MB4173.namprd12.prod.outlook.com (2603:10b6:208:1d8::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.19; Wed, 7 Jun
+ 2023 16:47:23 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::43b2:55d7:9958:390e]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::43b2:55d7:9958:390e%5]) with mapi id 15.20.6455.030; Wed, 7 Jun 2023
+ 16:47:23 +0000
+Message-ID: <ff163aff-6071-f323-0a6b-825b5b394dbf@amd.com>
+Date:   Wed, 7 Jun 2023 11:47:19 -0500
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH V3 1/9] ASoC: amd: ps: create platform devices based on
+ acp config
+To:     "Mukunda,Vijendar" <vijendar.mukunda@amd.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        broonie@kernel.org
+Cc:     alsa-devel@alsa-project.org, Basavaraj.Hiregoudar@amd.com,
+        Sunil-kumar.Dommati@amd.com, Mastan.Katragadda@amd.com,
+        Arungopal.kondaveeti@amd.com, Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Syed Saba Kareem <Syed.SabaKareem@amd.com>,
         open list <linux-kernel@vger.kernel.org>
-References: <20230606214348.2408018-1-florian.fainelli@broadcom.com>
- <ZH+tAKg4hqlosb2N@shell.armlinux.org.uk>
- <1074c668-3e75-dff7-9d23-d43fbeb98d84@broadcom.com>
- <ZIBD7B8cwSjjFWuq@shell.armlinux.org.uk>
-From:   Florian Fainelli <florian.fainelli@broadcom.com>
-In-Reply-To: <ZIBD7B8cwSjjFWuq@shell.armlinux.org.uk>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000008eedb205fd8cdfa2"
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230606060724.2038680-1-Vijendar.Mukunda@amd.com>
+ <20230606060724.2038680-2-Vijendar.Mukunda@amd.com>
+ <00aeb130-b3d0-ebab-51da-4e590eef8c7b@linux.intel.com>
+ <10f38131-bf85-dce4-fedd-15f0859d46f3@amd.com>
+Content-Language: en-US
+From:   "Limonciello, Mario" <mario.limonciello@amd.com>
+In-Reply-To: <10f38131-bf85-dce4-fedd-15f0859d46f3@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SA1PR02CA0008.namprd02.prod.outlook.com
+ (2603:10b6:806:2cf::13) To MN0PR12MB6101.namprd12.prod.outlook.com
+ (2603:10b6:208:3cb::10)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|MN2PR12MB4173:EE_
+X-MS-Office365-Filtering-Correlation-Id: 825eeb65-626b-4bca-ac60-08db6776de02
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: pQQrLctCE3XBnXXUO/k5MXKHTq5j+WMxct+2HJ4HT6G+Jmr7Ho/aJuBIMEez51Tsyt076mIfPOZqCvHoQ+nzEOL1rE/bekAs+FI7FYY3ySTkKCpLhCSuQS7dGBk+CaFqUruqJh1hCfp1DHRRH1NO1frcRisYcYDEuWPrErOvK9J7r1jOMSLLX9E3p+xy0lJsxmrSJCDZ9HUE2jaEDXHQLrSbZj22KODI/n4O2xoEA71Ov4XDKc1NnhEZ8txUNRggdv+O3jifDiBOlPXSP6qEif3f1vGVSljoY51beDmMVF8Fp2a2hrt7hpF6SjxelC8PrX+czG0IGp5MsWz2d4XFuA+Lji4OAooE8xvS7hCZ6wgBMbPuofDp1iR2vksehGdomE0XxixCqtGSMTb+VbHPVrTkLH5izCys98MqwcLhTe1U9KIR8rR3ymHcArZOlTb+oOsCU7BFVNNaSWdDaUjgL/KeJTfGCi7tzhtiK2KS/5GoMe+dP1+VLJXUg0WgPqd8LFFHaFv0vKjGPMLNlWD/AYainKreNCip8NdsNQTwzaguoh9uqPKMGYJttKAyZO4NwXTqVQiKyQE343ZCw756xE45erM2OUrp7mZ5SC4LJQQo65dfnUGCy9Zst/aqpgw2BvD2P323yYTSQGf3thFikw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(346002)(39860400002)(136003)(376002)(451199021)(54906003)(110136005)(478600001)(5660300002)(8936002)(8676002)(36756003)(2906002)(86362001)(31696002)(66556008)(4326008)(66946007)(66476007)(316002)(38100700002)(41300700001)(6506007)(26005)(53546011)(6512007)(186003)(2616005)(31686004)(6486002)(83380400001)(6666004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RUk4MkZqMEVGd3NzcXZPT3lURTQxSVZyK2UyblhKOGJXaGtwTGRDNUJhMERY?=
+ =?utf-8?B?RVhYQkJnZGhtNnFzaE5yUzNKS1U0MzdGUUVBOVdXS2JsZzNFbmc1RUZnTmlL?=
+ =?utf-8?B?T0ZYcjVJRU1tbXBlZ210QVRKRStXVjFsbWJGYjJyZUYrZmxFM1hEMk1RY2Zj?=
+ =?utf-8?B?c1pTL2ZWZEVJbmwvcG45UStTbmJQV0RUWGZGUHdDMXdETXVOb2FjanFhMGgy?=
+ =?utf-8?B?NjNMT2ltQWNZazRyWFlDVEdIQXA1TnNzM0ZqK0dVOU92Z2tmMXRlT0F1NjZZ?=
+ =?utf-8?B?STZzNlNleGo1WVdoTGE5MVFmZUJ0aUNlN1BSdksrQnhVOXA0c29nV3RXS1R3?=
+ =?utf-8?B?L1FYUVhKUXhzcCtZbzQyMVoycWtWbVNhMjRnWkM3WlRNN3hOT1YvWmxjcFJD?=
+ =?utf-8?B?RzhsSFdaNEIrOEtBOFhQZEpzeVV3enZ4bnQrS1pJcEwwSEsxdDFtdkhqejl4?=
+ =?utf-8?B?ejJpSys1SXNmVXdqajllZzNJbTlEVHJtM1RIZS9BUXZJRFE1MWs1VTkxaGEz?=
+ =?utf-8?B?WisrUkJLOE1ETDF2V2lsOWl2NkRHalYwM0x5SmZVRlpYM1d3cTRhZzVoV2Rp?=
+ =?utf-8?B?eXYxbCtaRVpkYjBnL2RRRm1wK3RveFB2Tm1HRDJPUlZOaG9DbzZhSjE1WHpk?=
+ =?utf-8?B?WlhLK2Q2MGw4N29kMVZMamgvMDBmbVhqNzkzQ2xheUdmcjdjS05hWVVOQWNr?=
+ =?utf-8?B?VUlCbW05VzU2UEF6R2Q4dzBPa28yYnZsQ3BvSGx3UVdUNUFSVkJDS05ISVpF?=
+ =?utf-8?B?RHRZOGZnYXI5TnU0cW1uelBQSVFKT2U3Q3d5a1o2Z3YwdG9FaXFBd3FScUF2?=
+ =?utf-8?B?dklVdVRsZ0pYSTI2dFhkRDhidENrbW1QSWlXVS8rbGhFWnA2VmI5RXMzYTU3?=
+ =?utf-8?B?SnF6MEZ0OEp1Z1dyZlN0bkttbFdCRS9tdW9FNVloYnlQUEpXb2twcyt4cnhy?=
+ =?utf-8?B?Rm9WekRKRnZMSCtKZWkzMFdETXpyUFQrVitYNkpEOGlJcDJlUWluNE5PNzdK?=
+ =?utf-8?B?UzRIckN2dllpbGUwdzhmZDI0U2RLTGNzSzNaQWFrUVdVd1dFL3pNTDBFNkNU?=
+ =?utf-8?B?WStINUlTWU1wVE9pUkg4djYwSXJqY08zUjJ4bkZHek5wS3R4UEJHNkFJcVU4?=
+ =?utf-8?B?bGNuMUdrbkhWUTlKQmxNNTdmS1lVT3dDZ3RuSDBlOWtna1J6WlVFWGlPeWZq?=
+ =?utf-8?B?WGhHM0d5dE9ZVnZlYXBieTdoMWNNTld2UkJYbDBPYmdGaCtHa0FTTjZ5RXk5?=
+ =?utf-8?B?ei9HUnllTnRpRVpMb2VoNTBOOW9RNjFhak5hbmJMbjVVc1VmMHA2NkRiMm5l?=
+ =?utf-8?B?VGFXZENoWFFBZXMybHFzd255VE5Sai9GV1B3bXJveG5PbENuUnRUbGZzeFlB?=
+ =?utf-8?B?bHpKRE9UNkhZdFh5YlFvUnhId1FTNVROYVpIdklhQU4xUm1za3RMQ09yZUh4?=
+ =?utf-8?B?Z1IzNlhqOXZuU2UxbEpsMGYyWVc0d2hLdTVTZmVuV21xc3JlY1htYkt0TEl0?=
+ =?utf-8?B?WmM4dGx0YUVwMjVuTWRnMy9nN0pNdWFOMGk5ZHM5NFMrV1dYZ0ZBbnBQcmJq?=
+ =?utf-8?B?S2pYMFFNRXJTMThSV0UzSkg2RXZvZ283bkljRm5HbzVOZ2lnS05SQTJ3RStk?=
+ =?utf-8?B?VEdiMlFiNzUxWFE4K2lJNmUyZ21jV3dack1FMlp0RkhYUm1qU0pCRkxCZG8y?=
+ =?utf-8?B?ellVRjQwRDhuRVpOa2owSUM3ays3NFBnNHJWVjRPeDhDZmdoeFBlc3lzbmJ6?=
+ =?utf-8?B?NXhjbTVlZFBLaWhDbnMyK0VwanZ1a0p1eVZYRDVneWZDdmFjYXc2alZwNTEx?=
+ =?utf-8?B?QVFGZE44VWZWQXhjdktZODdJL2F0M292aDJnSFZldmZsM2tjK1BiVTVURDBO?=
+ =?utf-8?B?Y0VhTStuYUtHNkRjcFhZTmxYNUJkWTVOQmEwOHJ2a2pDY25wdVoxL25QTkRn?=
+ =?utf-8?B?SGZFT2hQbzFsYm9uazJRM0M5RlRKVEc5NThObkU2ZVFqTlpiMUg2QmkybEkz?=
+ =?utf-8?B?T3VmMExWUzZrZnNkdzd5L0lLL3FZbDhtVVF0a3JKdnpJbllLUEJYTy9Qckds?=
+ =?utf-8?B?VlBTTjg3NmdnM3E4OUlBMHVmN2I2bmJRSENlUTdrSDUxOG0zMVNKS25jSnVj?=
+ =?utf-8?Q?r8mmuPb2SzVTu2e/0YqOXHqCL?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 825eeb65-626b-4bca-ac60-08db6776de02
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jun 2023 16:47:23.3249
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Qug589s8qf5+ZM6GHmu8pMY64YYETgbWdixyswNLOmMwj8NaQWcS1y775CrMVBuBxu6li+IxStsHExZGzGEfNg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4173
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000008eedb205fd8cdfa2
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-On 6/7/23 01:46, Russell King (Oracle) wrote:
-> On Tue, Jun 06, 2023 at 03:16:03PM -0700, Florian Fainelli wrote:
->> On 6/6/23 15:02, Russell King (Oracle) wrote:
->>> On Tue, Jun 06, 2023 at 02:43:47PM -0700, Florian Fainelli wrote:
->>>> We had a number of short comings:
->>>>
->>>> - EEE must be re-evaluated whenever the state machine detects a link
->>>>     change as wight be switching from a link partner with EEE
->>>>     enabled/disabled
->>>>
->>>> - tx_lpi_enabled controls whether EEE should be enabled/disabled for the
->>>>     transmit path, which applies to the TBUF block
->>>>
->>>> - We do not need to forcibly enable EEE upon system resume, as the PHY
->>>>     state machine will trigger a link event that will do that, too
->>>>
->>>> Fixes: 6ef398ea60d9 ("net: bcmgenet: add EEE support")
->>>> Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
->>>> ---
->>>> netdev maintainers, please do not apply without Andrew, Russell and
->>>> Oleksij reviewing first since this relates to the on-going EEE rework
->>>> from Andrew.
->>>
->>> Hi Florian,
->>>
->>> Please could you include some information on the UMAC_EEE_CTRL EEE_EN
->>> bit - is this like the main switch for EEE which needs to be set
->>> along with the bits in the tbuf register for the transmit side to
->>> signal LPI?
+On 6/7/2023 1:35 AM, Mukunda,Vijendar wrote:
+> On 06/06/23 19:30, Pierre-Louis Bossart wrote:
 >>
->> EEE_EN is described as:
+>>> +/**
+>>> + * acp_pdev_mask corresponds to platform device mask based on audio endpoint combinations.
+>>> + * acp_pdev_mask will be calculated based on ACPI Scan under ACP PCI device and
+>>> + * ACP PIN Configuration.
+>>> + * Based acp_pdev_mask, platform devices will be created.
+>>> + * Below are possible platform device combinations.
+>>> + * 1) ACP PDM Controller, dmic-codec, machine driver platform device node
+>>> + * 2) ACP PDM Controller , dmic-codec, SW0 SoundWire manager instance, platform device for
+>>> + *    SoundWire DMA driver
+>>> + * 3) SW0, SW1 SoundWire manager instances, platform device for SoundWire DMA driver
+>>> + * 4) ACP PDM Controller, dmic-codec, SDW0, SDW1 manager instances, platform device for
+>>> + *    SoundWire DMA driver
+>>> + * ACP63_PDM_DEV_MASK corresponds to platform device mask for ACP PDM controller.
+>>> + * ACP63_SDW_DEV_MASK corresponds to platform device mask for SDW manager instances.
+>>> + * ACP63_SDW_PDM_DEV_MASK corresponds to platform device mask for ACP PDM + SDW manager combination
+>>> + */
+>>> +enum acp_pdev_mask {
+>>> +	ACP63_PDM_DEV_MASK = 1,
+>>> +	ACP63_SDW_DEV_MASK,
+>>> +	ACP63_SDW_PDM_DEV_MASK,
+>>> +};
+>> This does not look like a mask, the definitions prevent bit-wise
+>> operations from happening.
 >>
->> If set, the TX LPI policy control engine is enabled and the MAC inserts
->> LPI_idle codes if the link is idle. The rx_lpi_detect assertion is
->> independent of this configuration.
->>
->> in the RBUF, EEE_EN is described as:
->>
->> 1: to enable Energy Efficient feature between Unimac and PHY for Rx Path
->>
->> and in the TBUF, EEE_EN is described as:
->>
->> 1: to enable Energy Efficient feature between Unimac and PHY for Tx Path
->>
->> The documentation is unfortunately scare about how these two signals connect
->> :/
-> 
-> Thanks for the clarification. Squaring this with my understanding of
-> EEE, the transmit side makes sense. LPI on the transmit side is only
-> asserted only when EEE_EN and TBUF_EEE_EN are both set, so this is
-> the behaviour we want. If we were evaluating this in software, my
-> understanding is it would be:
-> 
-> 	if (eee_enabled && eee_active && tx_lpi_enabled)
-> 		enable LPI generation at MAC;
-> 	else
-> 		disable LPI generation at MAC;
-> 
-> and the code here treats eee_enabled && eee_active as the "enabled"
-> flag controlling EEE_EN, and tx_lpi_enabled controls TBUF_EEE_EN.
-> The hardware effectively does the last && operation for us. So
-> this all seems fine.
-> 
-> On the receive side, if the link partner successfully negotiates
-> EEE, then it can assert LPI, and the local end will see that
-> assertion (hence, rx_lpi_detect may become true.) If the transmit
-> side doesn't generate LPI, then this won't have any effect other
-> than maybe setting status bits, so I don't see that setting
-> RBUF_EEE_EN when eee_enabled && eee_active would be wrong.
-> 
-> Moving the phy_init_eee() (as it currently stands) into the adjust_link
-> path is definitely the right thing, since it provides the resolution
-> of the negotiated EEE state.
-> 
-> So, all round, I think your patch makes complete sense as far as the
-> logic goes.
-> 
-> Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-> 
-> However, one thing I will ask is whether the hardware has any
-> configuration of the various timers for EEE operation, and if it does,
-> are they dependent on the negotiated speed of the interface? In
-> Marvell's neta and pp2 drivers, the timers scale with link speed and
-> thus need reprogramming accordingly. In any case, 802.3 specifies
-> different timer settings depending on link speed and media type.
+>> Either use BIT(0), BIT(1), BIT(2) or GENMASK(1, 0), or demote this to a
+>> regular enum (e.g. pdev_config or something)
+> ACP63_PDM_DEV_MASK - Will be set only PDM config is selected.
+> ACP63_SDW_DEV_MASK - will be set only when SDW config is selected.
+> ACP63_SDW_PDM_DEV_MASK - will be set only when ACP PDM + SDW config is selected.
+>
+> We have already added comments for above masks definitions in code.
+> Our intention is to use it as a mask.
+> We don't think it breaks anything.
+> Currently, we have only one extra check for SDW case, in suspend/resume scenario.
+> Based on SoundWire power mode, ACP PCI driver should invoke acp_deinit/acp_init()
+> calls in suspend/resume callbacks.
+> For this, we have added check for pdev_mask. If pdev_mask is set to ACP63_SDW_DEV_MASK
+> (2) or ACP63_SDW_PDM_DEV_MASK(3), in this case only by checking SoundWire power mode
+> invoke acp_deinit/acp_init() sequence. This is already in place.
+>
+> There won't be any extra checks will be added in the future.
+> As per our understanding, it's good to go.
+>
+I think the problem is in use of the word "mask" in this context.
+That usually means that you can do a bitwise operation on it.
+Really it's behaving more like an "enum" does.
 
-There are a couple of timers that are available:
+In patch 9 you have the following code:
 
-- LPI timer (EEE_LPI_TIMER register)
-- WAKE_TIMER (EEE_WAKE_TIMER register)
++	if (adata->pdev_mask & ACP63_SDW_DEV_MASK) {
 
-both are dependent upon the EEE_REF_COUNT register which is described as:
+That's checking if bits 0 and 1 are both set.
 
-Clock divider for 1 us quanta count in EEE. This field controls clock 
-divider used to generate ~1us reference pulses used by EEE timers.
-It specifies integer number of system clock cycles contained within 1us.
+But if in the future a new set of hypothetical device types was introduced
+that mapped out to values "4" and "5" then you might end up with matches
+in the code that don't make sense.
 
-the value is currently set to 0x7d (125) which does make some sense 
-given that the system clock is considered stable and is provided at the 
-same frequency irrespective of the link speed.
+So it makes more sense to do one of these solutions:
 
-Hope this helps.
--- 
-Florian
+1) rename this adev->pdev_mask to be adev->pdev_config and then in patch 9
+to use something like this:
 
+if (adev->pdev_config == ACP63_SDW_DEV_CONFIG)
 
---0000000000008eedb205fd8cdfa2
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+2) re-assign it so each config gets a single bit and keep the patch 9 
+behavior.
+PDM is BIT(0), SDW is BIT(1) PDM + SDW is BIT(2) etc.
 
-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
-riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
-QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
-UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
-M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
-Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
-14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
-a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
-XzCCBVgwggRAoAMCAQICDBP8P9hKRVySg3Qv5DANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
-RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
-UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAxMjE4MTFaFw0yNTA5MTAxMjE4MTFaMIGW
-MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
-BgNVBAoTDUJyb2FkY29tIEluYy4xGTAXBgNVBAMTEEZsb3JpYW4gRmFpbmVsbGkxLDAqBgkqhkiG
-9w0BCQEWHWZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOC
-AQ8AMIIBCgKCAQEA+oi3jMmHltY4LMUy8Up5+1zjd1iSgUBXhwCJLj1GJQF+GwP8InemBbk5rjlC
-UwbQDeIlOfb8xGqHoQFGSW8p9V1XUw+cthISLkycex0AJ09ufePshLZygRLREU0H4ecNPMejxCte
-KdtB4COST4uhBkUCo9BSy1gkl8DJ8j/BQ1KNUx6oYe0CntRag+EnHv9TM9BeXBBLfmMRnWNhvOSk
-nSmRX0J3d9/G2A3FIC6WY2XnLW7eAZCQPa1Tz3n2B5BGOxwqhwKLGLNu2SRCPHwOdD6e0drURF7/
-Vax85/EqkVnFNlfxtZhS0ugx5gn2pta7bTdBm1IG4TX+A3B1G57rVwIDAQABo4IB3jCCAdowDgYD
-VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
-ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
-CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
-MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
-d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
-hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
-bDAoBgNVHREEITAfgR1mbG9yaWFuLmZhaW5lbGxpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggr
-BgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUUwwfJ6/F
-KL0fRdVROal/Lp4lAF0wDQYJKoZIhvcNAQELBQADggEBAKBgfteDc1mChZjKBY4xAplC6uXGyBrZ
-kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
-2s1RH00JOkO5SkYdwCHj4DB9B7KEnLatJtD8MBorvt+QxTuSh4ze96Jz3kEIoHMvwGFkgObWblsc
-3/YcLBmCgaWpZ3Ksev1vJPr5n8riG3/N4on8gO5qinmmr9Y7vGeuf5dmZrYMbnb+yCBalkUmZQwY
-NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
-AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
-LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
-/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIJHItUvKGOp1qGfD
-fxOPrCxjLY29v7caCnQlSbTeLmSdMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
-AQkFMQ8XDTIzMDYwNzE2NDYxMVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
-AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
-MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQC9nTFbVLl4pZB+aaZEuppwIepeuQXoMfGH
-ghdoOPKZWcll0xRgm34g2AzWc+iZ7mDK5pPgwht/Se6I+hcSYxMh+0bxhNBFQwAC9BUBn/XAXl+g
-fxR1OsLVHRS8PD4dXcIHfOmBWH7jwP9q6NtprCiBd3RUB0cfQVOPOx4FfiIHJhK96c+ZkaRo/NZA
-lbUQ4bkD5LAA2NLMkT17Cyq5X3F8JyIsJgBvJQAQOmW9ssbD7VsXpONHPs+9ne+lKmnVmyaytcOe
-JN2xAVdMOOFRExb7E5/24rdB71aUEtVW0j+RrNdAO779zxNaUJ+TmkA9qGjzoUGck00pb/oGbv9I
-2g6L
---0000000000008eedb205fd8cdfa2--
+Either way that will ensure that you never have an unexpected match.
+Unexpected matches can be more likely as the code base grows and it's 
+used for
+more platforms and configs.
+
+>
+>
+>>> +
+>>>   struct pdm_stream_instance {
+>>>   	u16 num_pages;
+>>>   	u16 channels;
+>>> @@ -95,14 +144,38 @@ struct pdm_dev_data {
+>>>   	struct snd_pcm_substream *capture_stream;
+>>>   };
+>>>   
+>>> +/**
+>>> + * struct acp63_dev_data - acp pci driver context
+>>> + * @acp63_base: acp mmio base
+>>> + * @res: resource
+>>> + * @pdev: array of child platform device node structures
+>>> + * @acp_lock: used to protect acp common registers
+>>> + * @sdw_fw_node: SoundWire controller fw node handle
+>>> + * @pdev_mask: platform device mask
+>>> + * @pdev_count: platform devices count
+>>> + * @pdm_dev_index: pdm platform device index
+>>> + * @sdw_manager_count: SoundWire manager instance count
+>>> + * @sdw0_dev_index: SoundWire Manager-0 platform device index
+>>> + * @sdw1_dev_index: SoundWire Manager-1 platform device index
+>>> + * @sdw_dma_dev_index: SoundWire DMA controller platform device index
+>>> + * @acp_reset: flag set to true when bus reset is applied across all
+>>> + * the active SoundWire manager instances
+>>> + */
+>>> +
+>>>   struct acp63_dev_data {
+>>>   	void __iomem *acp63_base;
+>>>   	struct resource *res;
+>>>   	struct platform_device *pdev[ACP63_DEVS];
+>>>   	struct mutex acp_lock; /* protect shared registers */
+>>> +	struct fwnode_handle *sdw_fw_node;
+>>>   	u16 pdev_mask;
+>>>   	u16 pdev_count;
+>>>   	u16 pdm_dev_index;
+>>> +	u8 sdw_manager_count;
+>>> +	u16 sdw0_dev_index;
+>>> +	u16 sdw1_dev_index;
+>>> +	u16 sdw_dma_dev_index;
+>>> +	bool acp_reset;
+>>>   };
+>>>   
+>>>   int snd_amd_acp_find_config(struct pci_dev *pci);
+>>> diff --git a/sound/soc/amd/ps/pci-ps.c b/sound/soc/amd/ps/pci-ps.c
+>>> index 54752d6040d6..816c22e7f1ab 100644
+>>> --- a/sound/soc/amd/ps/pci-ps.c
+>>> +++ b/sound/soc/amd/ps/pci-ps.c
+>>> @@ -6,6 +6,7 @@
+>>>    */
+>>>   
+>>>   #include <linux/pci.h>
+>>> +#include <linux/bitops.h>
+>>>   #include <linux/module.h>
+>>>   #include <linux/io.h>
+>>>   #include <linux/delay.h>
+>>> @@ -15,6 +16,7 @@
+>>>   #include <sound/pcm_params.h>
+>>>   #include <linux/pm_runtime.h>
+>>>   #include <linux/iopoll.h>
+>>> +#include <linux/soundwire/sdw_amd.h>
+>>>   
+>>>   #include "acp63.h"
+>>>   
+>>> @@ -119,37 +121,162 @@ static irqreturn_t acp63_irq_handler(int irq, void *dev_id)
+>>>   	return IRQ_NONE;
+>>>   }
+>>>   
+>>> -static void get_acp63_device_config(u32 config, struct pci_dev *pci,
+>>> -				    struct acp63_dev_data *acp_data)
+>>> +static int sdw_amd_scan_controller(struct device *dev)
+>>> +{
+>>> +	struct acp63_dev_data *acp_data;
+>>> +	struct fwnode_handle *link;
+>>> +	char name[32];
+>>> +	u32 sdw_manager_bitmap;
+>>> +	u8 count = 0;
+>>> +	u32 acp_sdw_power_mode = 0;
+>>> +	int index;
+>>> +	int ret;
+>>> +
+>>> +	acp_data = dev_get_drvdata(dev);
+>>> +	acp_data->acp_reset = true;
+>>> +	/* Found controller, find links supported */
+>>> +	ret = fwnode_property_read_u32_array((acp_data->sdw_fw_node), "mipi-sdw-manager-list",
+>>> +					     &sdw_manager_bitmap, 1);
+>> IIRC this is only defined in the DisCo 2.0 spec, previous editions had a
+>> 'mipi-master-count'. A comment would not hurt to point to the minimal
+>> DisCo spec version.
+> We will add comment.
+>>> +
+>>> +	if (ret) {
+>>> +		dev_err(dev, "Failed to read mipi-sdw-manager-list: %d\n", ret);
+>>> +		return -EINVAL;
+>>> +	}
+>>> +	count = hweight32(sdw_manager_bitmap);
+>>> +	/* Check count is within bounds */
+>>> +	if (count > AMD_SDW_MAX_MANAGERS) {
+>>> +		dev_err(dev, "Manager count %d exceeds max %d\n", count, AMD_SDW_MAX_MANAGERS);
+>>> +		return -EINVAL;
+>>> +	}
+>>> +
+>>> +	if (!count) {
+>>> +		dev_dbg(dev, "No SoundWire Managers detected\n");
+>>> +		return -EINVAL;
+>>> +	}
+>>> +	dev_dbg(dev, "ACPI reports %d SoundWire Manager devices\n", count);
+>>> +	acp_data->sdw_manager_count = count;
+>>> +	for (index = 0; index < count; index++) {
+>>> +		snprintf(name, sizeof(name), "mipi-sdw-link-%d-subproperties", index);
+>>> +		link = fwnode_get_named_child_node(acp_data->sdw_fw_node, name);
+>>> +		if (!link) {
+>>> +			dev_err(dev, "Manager node %s not found\n", name);
+>>> +			return -EIO;
+>>> +		}
+>>> +
+>>> +		ret = fwnode_property_read_u32(link, "amd-sdw-power-mode", &acp_sdw_power_mode);
+>>> +		if (ret)
+>>> +			return ret;
+>>> +		/*
+>>> +		 * when SoundWire configuration is selected from acp pin config,
+>>> +		 * based on manager instances count, acp init/de-init sequence should be
+>>> +		 * executed as part of PM ops only when Bus reset is applied for the active
+>>> +		 * SoundWire manager instances.
+>>> +		 */
+>>> +		if (acp_sdw_power_mode != AMD_SDW_POWER_OFF_MODE) {
+>>> +			acp_data->acp_reset = false;
+>>> +			return 0;
+>>> +		}
+>>> +	}
+>>> +	return 0;
+>>> +}
+>>> +
+>>> +static int get_acp63_device_config(u32 config, struct pci_dev *pci, struct acp63_dev_data *acp_data)
+>>>   {
+>>>   	struct acpi_device *dmic_dev;
+>>> +	struct acpi_device *sdw_dev;
+>>>   	const union acpi_object *obj;
+>>>   	bool is_dmic_dev = false;
+>>> +	bool is_sdw_dev = false;
+>>> +	int ret;
+>>>   
+>>>   	dmic_dev = acpi_find_child_device(ACPI_COMPANION(&pci->dev), ACP63_DMIC_ADDR, 0);
+>>>   	if (dmic_dev) {
+>>> +		/* is_dmic_dev flag will be set when ACP PDM controller device exists */
+>>>   		if (!acpi_dev_get_property(dmic_dev, "acp-audio-device-type",
+>> usually properties start with the 'mipi-' or 'vendor-' prefix. Is there
+>> a missing 'amd-' here or is 'acp-' unique enough?
+> It's not SoundWire related MIPI/Vendor property.
+> Our BIOS changes are freeze. We can't modify this one as of this moment.
+> We will consider it for next platform.
+
+Besides impact to BIOS it also has impact to drivers in other
+operating systems as well.  So changing a property name is not
+something that can be taken lightly.
+
+I'd also point out the use of the ACPI property is localized to
+an AMD specific driver not generic code.
+
