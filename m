@@ -2,70 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BC5A72719E
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 00:26:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D5AD72720B
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 00:50:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232982AbjFGW0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 18:26:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41206 "EHLO
+        id S232854AbjFGWu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 18:50:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232958AbjFGW0W (ORCPT
+        with ESMTP id S229651AbjFGWuX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 18:26:22 -0400
-Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20F772738;
-        Wed,  7 Jun 2023 15:25:48 -0700 (PDT)
-Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-33b3cfb9495so9836205ab.2;
-        Wed, 07 Jun 2023 15:25:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686176656; x=1688768656;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AxfRqxa7wvCqUms2E38nnMVQFutEDvjD8qThmFlsqqQ=;
-        b=DdNuy2ECmX8fcc3dWWMvEN+x+yuh74aV8LlPQoQoFf+jAWgWkpCAMhfrGcFQliUo9i
-         /sfIWyGNf5EBZs7tIqhHFRpz0MSJmQFpoBi+7b7kElGODNBLBmqS4iBea2ceWD9oDGbp
-         lSGYhFmUBHMAElcUICRVfvKULgfZmz7guAk3Zq4WU++d1a/0epChoPn8t1BqTdsT3RTN
-         mvZPzWlzSM5peyp3zGLAu0bL+voDfse625EwFM5BH5a0i4zCR4pJqVh+Fnnw+GCGb7tr
-         3rSocUTRoDUwaYsoAdqEMeBt3Uo5CcobaGOMdoOIhuF31dRb+1cGoG9d8t+8n9EKXFto
-         UtDg==
-X-Gm-Message-State: AC+VfDwgolyEeecx5zicXtEoSkg050d0+9rum7KUv/Glc7kgnjbBBNVX
-        FqienDwolmJDACHFUGIQEA==
-X-Google-Smtp-Source: ACHHUZ6g3hXuPC4eptqJpM9Vm8vqGL9XoBgHJL+4Z05vG5yQgGzwgK5jP92Mg64iLxbMmF/99uNaQg==
-X-Received: by 2002:a92:d341:0:b0:331:1834:7494 with SMTP id a1-20020a92d341000000b0033118347494mr9400434ilh.20.1686176656039;
-        Wed, 07 Jun 2023 15:24:16 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id dq31-20020a0566384d1f00b0041f5061884asm2602719jab.29.2023.06.07.15.24.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 15:24:15 -0700 (PDT)
-Received: (nullmailer pid 88530 invoked by uid 1000);
-        Wed, 07 Jun 2023 22:24:13 -0000
-Date:   Wed, 7 Jun 2023 16:24:13 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Justin Chen <justin.chen@broadcom.com>
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        florian.fainelli@broadcom.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        opendmb@gmail.com, andrew@lunn.ch, hkallweit1@gmail.com,
-        linux@armlinux.org.uk, richardcochran@gmail.com,
-        sumit.semwal@linaro.org, christian.koenig@amd.com,
-        simon.horman@corigine.com
-Subject: Re: [PATCH net-next v6 2/6] dt-bindings: net: Brcm ASP 2.0 Ethernet
- controller
-Message-ID: <20230607222413.GA84415-robh@kernel.org>
-References: <1685657551-38291-1-git-send-email-justin.chen@broadcom.com>
- <1685657551-38291-3-git-send-email-justin.chen@broadcom.com>
+        Wed, 7 Jun 2023 18:50:23 -0400
+X-Greylist: delayed 901 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 07 Jun 2023 15:50:21 PDT
+Received: from schatzi.steelbluetech.co.uk (james.steelbluetech.co.uk [92.63.139.228])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13C421BE8;
+        Wed,  7 Jun 2023 15:50:20 -0700 (PDT)
+Received: from [10.0.5.25] (tv.ehuk.net [10.0.5.25])
+        by schatzi.steelbluetech.co.uk (Postfix) with ESMTP id 9B303BFC0A;
+        Wed,  7 Jun 2023 23:24:44 +0100 (BST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 schatzi.steelbluetech.co.uk 9B303BFC0A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ehuk.net; s=default;
+        t=1686176684; bh=58edecI1dvqmoO6hSffmg4G7qFjkGAjLJvpFPrr3KWA=;
+        h=Date:Reply-To:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=p5kOdPKNq6SSnTVRbir3eTOIdp6kjSwBueX1UtDR8uGHqbEwwya+JoA4CtTfB/Giu
+         YNQtvvmTMPSrYNSV3EjNLqKZhuowjwiVGZarknPeZxS5vXIHr1m4j2qLzFBxCKWWOF
+         Vu4AMhZp0TITKv7n8hGpycDu+g1mngRnBT6FxXr6C90E+DOyyCvg2y+LdQ4ZUbz1dl
+         6FRGTtSSFc+YTxHAdRiKCs/LfMQm8ZjkNQYeoMVcMdd49dj3v+7/KUqWpKo5B1qeJ8
+         lrPoJfMkLzb1nh2A83Ja/bhMTLY06yW3TR/y7AFARoBwZ3KXgABGD4T25osawKx+mS
+         WKjkCbpsOlFdw==
+Message-ID: <fac961cf-7fa8-3ad9-f4b7-4701d864d015@ehuk.net>
+Date:   Wed, 7 Jun 2023 23:24:44 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1685657551-38291-3-git-send-email-justin.chen@broadcom.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Reply-To: eddie@ehuk.net
+Subject: Re: [PATCH 5.15 00/93] 5.15.107-rc1 review (possible amdgpu
+ regression)
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230412082823.045155996@linuxfoundation.org>
+ <97c9d345-b57c-8024-be35-357c8842115a@ehuk.net>
+ <2023041326-esophagus-spoils-4c3f@gregkh>
+Content-Language: en-GB
+From:   Eddie Chapman <eddie@ehuk.net>
+In-Reply-To: <2023041326-esophagus-spoils-4c3f@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,124 +63,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 01, 2023 at 03:12:27PM -0700, Justin Chen wrote:
-> From: Florian Fainelli <florian.fainelli@broadcom.com>
+On 13/04/2023 15:46, Greg Kroah-Hartman wrote:
+> On Wed, Apr 12, 2023 at 10:47:13PM +0100, Eddie Chapman wrote:
+>> Greg Kroah-Hartman wrote:
+>>> This is the start of the stable review cycle for the 5.15.107 release.
+>>> There are 93 patches in this series, all will be posted as a response
+>>> to this one.  If anyone has any issues with these being applied, please let
+>>> me know.
+>>>
+>>> Responses should be made by Fri, 14 Apr 2023 08:28:02 +0000.
+>>> Anything received after that time might be too late.
+>>>
+>>
+>> I think I'm seeing a regression here in the amdgpu driver, though not being
+>> a kernel dev I could be wrong.
+>>
+>> I built and booted this today on an x86_64 machine (AMD Ryzen 7 3700X,
+>> Gigabyte X570 UD motherboard) with 3 x AMD graphics cards (using names from
+>> lspci output):
+>> - Cape Verde GL [FirePro W4100]
+>> - Oland XT [Radeon HD 8670 / R5 340X OEM / R7 250/350/350X OEM] (rev 83)
+>> - Bonaire [Radeon R7 200 Series]
+>>
+>> All three using the amdgpu driver (radeon module blacklisted).
+>>
+>> This machine has been running vanilla 5.15 stable releases for a good while,
+>> with the kernel updated with whatever the latest 5.15 release is every 6
+>> weeks or so. Never had any amdgpu problems.
+>>
+>> To build 5.15.107-rc1 I applied the contents of the queue-5.15 directory on
+>> top of 5.15.106, having synced the stable queue git repo up until commit
+>> 344d8ad1b5dde387d1ce4d1be2641753b89dd10d (still the latest commit as a
+>> type). This is what I have done for years running vanilla stable kernels.
+>>
+>> There was nothing out of the ordinary in the build output, but on rebooting
+>> into 5.15.107-rc1 I had the following error in dmesg from 1 card only:
+>>
+>> amdgpu 0000:0d:00.0: [drm:amdgpu_ib_ring_tests [amdgpu]] *ERROR* IB test
+>> failed on vce0 (-110).
+>> [drm:process_one_work] *ERROR* ib ring test failed (-110).
+>>
+>> This was during bootup immediately after driver loading. X is not running.
+>> 0000:0d:00.0 is the Bonaire card.
+>>
+>> I then shutdown and fully powered off for a few minutes, booted 5.15.107-rc1
+>> again, but the error on that card persisted exactly the same.
+>>
+>> This was a regression for me as I've never had that error before on any
+>> kernel release (I grepped through old kernel logs to check).
+>>
+>> I then rebuilt 5.15.107-rc1 but without applying the following 4 patches:
+>>
+>> drm-panfrost-fix-the-panfrost_mmu_map_fault_addr-error-path.patch
+>> drm-amdgpu-fix-amdgpu_job_free_resources-v2.patch
+>> drm-amdgpu-prevent-race-between-late-signaled-fences.patch
+>> drm-bridge-lt9611-fix-pll-being-unable-to-lock.patch
+>>
+>> On booting into the newly built kernel there was no error anymore, amdgpu
+>> dmesg output was as normal, and the machine is running fine now on that.
+>>
+>> So I'm quite confident one of those patches introduced the error for me.
+>> Having now looked at the contents of them I see the lt9611 is entirely
+>> different hardware and I'm guessing the panfrost one probably is as well, so
+>> most likely I didn't need to remove those 2.
+>>
+>> This is not a great report and maybe not helpful (sorry) as unfortunately I
+>> cannot try and narrow it down further to a single patch as this machine has
+>> to stay running now for a while. I just crudely tried yanking those 4 to
+>> hopefully get rid of the error and get the machine running again. Also I
+>> didn't go on to test whether the card actually worked as expected, maybe the
+>> error is harmless after all, though it doesn't look insignificant.
+>>
+>> As the error was only output for the Bonaire card (the other two were fine),
+>> below is lspci -vvv output for that card only in case it helps. If anyone
+>> would like further info just let me know.
 > 
-> Add a binding document for the Broadcom ASP 2.0 Ethernet
-> controller.
+> Ok, I've dropped the two drm-amdgpu-* patches from the tree for now.
+> Let me know if the release works properly for you or not.
 > 
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
-> Signed-off-by: Justin Chen <justin.chen@broadcom.com>
-> ---
-> v6
-> 	- Moved compatible to the top
-> 	- Changed quotes to be consistent
-> 	- Elaborated on brcm,channel description
+> thanks for testing and letting us know!
 > 
-> v5
-> 	- Fix compatible string yaml format to properly capture what we want
-> 
-> v4
->         - Adjust compatible string example to reference SoC and HW ver
-> 
-> v3
->         - Minor formatting issues
->         - Change channel prop to brcm,channel for vendor specific format
->         - Removed redundant v2.0 from compat string
->         - Fix ranges field
-> 
-> v2
->         - Minor formatting issues
-> 
->  .../devicetree/bindings/net/brcm,asp-v2.0.yaml     | 153 +++++++++++++++++++++
->  1 file changed, 153 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/net/brcm,asp-v2.0.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/net/brcm,asp-v2.0.yaml b/Documentation/devicetree/bindings/net/brcm,asp-v2.0.yaml
-> new file mode 100644
-> index 000000000000..3f2bf64b65c0
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/brcm,asp-v2.0.yaml
-> @@ -0,0 +1,153 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/net/brcm,asp-v2.0.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Broadcom ASP 2.0 Ethernet controller
-> +
-> +maintainers:
-> +  - Justin Chen <justin.chen@broadcom.com>
-> +  - Florian Fainelli <florian.fainelli@broadcom.com>
-> +
-> +description: Broadcom Ethernet controller first introduced with 72165
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - items:
-> +          - enum:
-> +              - brcm,bcm74165-asp
-> +          - const: brcm,asp-v2.1
-> +      - items:
-> +          - enum:
-> +              - brcm,bcm72165-asp
-> +          - const: brcm,asp-v2.0
-> +
-> +  "#address-cells":
-> +    const: 1
-> +  "#size-cells":
-> +    const: 1
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  ranges: true
-> +
-> +  interrupts:
-> +    minItems: 1
-> +    items:
-> +      - description: RX/TX interrupt
-> +      - description: Port 0 Wake-on-LAN
-> +      - description: Port 1 Wake-on-LAN
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  ethernet-ports:
-> +    type: object
-> +    properties:
-> +      "#address-cells":
-> +        const: 1
-> +      "#size-cells":
-> +        const: 0
-> +
-> +    patternProperties:
-> +      "^port@[0-9]+$":
-> +        type: object
-> +
-> +        $ref: ethernet-controller.yaml#
+> greg k-h
 
-           unevaluatedProperties: false
+Hello Greg,
 
-> +
-> +        properties:
-> +          reg:
-> +            maxItems: 1
-> +            description: Port number
-> +
-> +          brcm,channel:
-> +            $ref: /schemas/types.yaml#/definitions/uint32
-> +            description: |
-> +              ASP Channel Number
-> +
-> +              The depacketizer channel that consumes packets from
-> +              the unimac/port.
-> +
-> +        required:
-> +          - reg
-> +          - brcm,channel
-> +
-> +    additionalProperties: false
+My apologies just realised I never got back to you, as requested, to 
+confirm that, yes, that final release of 5.15.107 as well as other 
+5.15.x releases I've tried since then (including 5.15.115) have booted 
+up fine, without any unexpected errors, with these 3 AMD cards all using 
+the amdgpu driver, each with monitors connected.
+
+Eddie
