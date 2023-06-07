@@ -2,130 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6522A725CFD
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 13:24:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34F2B725CFB
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 13:23:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239378AbjFGLXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 07:23:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56496 "EHLO
+        id S239122AbjFGLX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 07:23:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240066AbjFGLX0 (ORCPT
+        with ESMTP id S235030AbjFGLXZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 07:23:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19C8A1720
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 04:23:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A201B63394
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 11:23:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66A54C433EF;
-        Wed,  7 Jun 2023 11:23:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686137005;
-        bh=692XokvxKzDQrzsRY0aIK8Ow6Q63x8VkG9gKJSs7Pqc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=l9jqMmOfxNpxEBRsiMWKN3ziafDCD5xZkky5cqz2nXO3S7wnqKxVyyWuJA7hIer7U
-         COvHylReJPdxeFRNY+cmqpKZDl4N7F8jdVbnepnmtZi3eXUnJ4tH5zvBjPsb3vgtSr
-         JaZm2x/A6ACFuWHgYGRjqUHgM2ESd3APsRK9mZh5nPBVYRT4VD1X/HnhA0WdFIjGAn
-         Hgj7o6eWMn1y3J078IvIXo3cxFUAyhJG372oicTmwA1b9tM/oI1U0M+ZjFYCLPhzlC
-         wKsVkXXA8L5zefMFTV4ZceZbVwiQVf0ZWN8pdGmcZoYuBOjgO8RT5Luf4qtOyhmO89
-         MWOrQBAOssFpw==
-Date:   Wed, 7 Jun 2023 14:23:00 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Haifeng Xu <haifeng.xu@shopee.com>
-Cc:     david@redhat.com, mhocko@kernel.org, osalvador@suse.de,
-        akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] mm/memory_hotplug: remove
- reset_node_managed_pages() in hotadd_init_pgdat()
-Message-ID: <20230607112300.GF52412@kernel.org>
-References: <f125f0db-30fe-5452-4669-3e48f7856569@redhat.com>
- <20230607024548.1240-1-haifeng.xu@shopee.com>
+        Wed, 7 Jun 2023 07:23:25 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3521A10DE
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 04:23:24 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f4b2bc1565so8861902e87.2
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 04:23:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686137002; x=1688729002;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zYWjVSSUNQy2OIvRzT+DCkE2WygimSZ/7ktVYRvNicw=;
+        b=ut1l0xhdvA0jDNgaIFbJL6WY0litUWHGkN3/F7y+kRqLwEKWv1DEhaQBr4U6mVlK/+
+         BGgF6RQIMKuHXnZnPgCLP66k45lwaHR9sK5ZdZT2yogZoSZ/PrgcWuBo5z2C0ySNOtmR
+         3bogr32wDzzLCqrjcOjMaZnayYP71zrKMRypXK/a+ES13Esh6mEC5TNEztHTzawv0OGJ
+         3+9BvEJPMj1M9imHdq5CHtRNHoazHEjRVTOY9qE2X+JRK9RaJpWYyvjAt5qY7hiPfCjx
+         lLyHyEuoatjWEVkJhvTPk+nE6aH0uxNFMzdfBbThIZbiM7C8nGHZ+AoNYa1mxbVQpPGp
+         A7iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686137002; x=1688729002;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zYWjVSSUNQy2OIvRzT+DCkE2WygimSZ/7ktVYRvNicw=;
+        b=THck3rwW3ZABYvjbw+VJFbgFijm0Tu+j7NiLBBhLP+7xJ6fTLMRZXgovM2KPb3HjV0
+         9WlCf/CbLo/VI0jFksUNL2byHNgOhqq4pYW6XiVISAf2Y4Lv7O0cMK4yf3dn8Sn6vnqJ
+         AX8TjFbY1by9pczT39Se8G6M1B31HPkFwfLtpTuVvmG419YnCMruVvTTe/UqssFvuRyh
+         Jj2/IPbatyLDk//dwWbzixW87hwSvJAwsXSiqQobE8rXy1nRc+CAP7KfTzeUXlDo9jXL
+         5Iv+0pnPR6v2VxWHCXEmPvxvW40PyG4NfZu7pJVfkyQZ+zOWWHQaqO+eR+OuKJIXCbxA
+         AkrA==
+X-Gm-Message-State: AC+VfDwDTAUUhooK9Yyn+OHRRDjBzRs3Av3jbhvu86IUEdlf3ANyDk3k
+        1vSc1JG9e97INCTJyzL9okS+BQ==
+X-Google-Smtp-Source: ACHHUZ4aydeqTRm2woMwjuX3xGYPzWA8qO84H3tMVn0lkLC1A1gjqkq20mduf4N1CkRL+Px2KE7u7g==
+X-Received: by 2002:ac2:4a7a:0:b0:4f2:6bc3:5e33 with SMTP id q26-20020ac24a7a000000b004f26bc35e33mr1969465lfp.9.1686137002414;
+        Wed, 07 Jun 2023 04:23:22 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id q11-20020ac2514b000000b004f63739e2f1sm552855lfd.255.2023.06.07.04.23.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Jun 2023 04:23:21 -0700 (PDT)
+Message-ID: <8e21fef3-5ae4-673a-dce2-4ebf1dd0eb66@linaro.org>
+Date:   Wed, 7 Jun 2023 14:23:20 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230607024548.1240-1-haifeng.xu@shopee.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 7/9] arm64: dts: qcom: ipq5332: Add USB related nodes
+Content-Language: en-GB
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, vkoul@kernel.org,
+        kishon@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        gregkh@linuxfoundation.org, catalin.marinas@arm.com,
+        will@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        p.zabel@pengutronix.de, arnd@arndb.de, geert+renesas@glider.be,
+        neil.armstrong@linaro.org, nfraprado@collabora.com,
+        broonie@kernel.org, rafal@milecki.pl, quic_srichara@quicinc.com,
+        quic_varada@quicinc.org, quic_wcheng@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-clk@vger.kernel.org
+References: <cover.1686126439.git.quic_varada@quicinc.com>
+ <1b48e737aa14f5b5539cbf04d473182121d5b1ad.1686126439.git.quic_varada@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1b48e737aa14f5b5539cbf04d473182121d5b1ad.1686126439.git.quic_varada@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 02:45:48AM +0000, Haifeng Xu wrote:
-> managed pages has already been set to 0 in free_area_init_core_hotplug(),
-> via zone_init_internals() on each zone. It's pointless to reset again.
+On 07/06/2023 13:56, Varadarajan Narayanan wrote:
+> Add USB phy and controller nodes
 > 
-> Furthermore, reset_node_managed_pages() no longer needs to be exposed
-> outside of mm/memblock.c. Remove declaration in include/linux/memblock.h
-> and define it as static.
-> 
-> In addtion to this, the only caller of reset_node_managed_pages() is
-> reset_all_zones_managed_pages(), which is annotated with __init, so it
-> should be safe to also mark reset_node_managed_pages() as __init.
-> 
-> Signed-off-by: Haifeng Xu <haifeng.xu@shopee.com>
-> Suggested-by: David Hildenbrand <david@redhat.com>
-
-Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
-
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
 > ---
-> v2:
-> - unexport reset_node_managed_pages()
-> - mark reset_node_managed_pages() as __init
-> - update commit message
-> ---
->  include/linux/memblock.h | 1 -
->  mm/memblock.c            | 2 +-
->  mm/memory_hotplug.c      | 1 -
->  3 files changed, 1 insertion(+), 3 deletions(-)
+>   arch/arm64/boot/dts/qcom/ipq5332.dtsi | 55 +++++++++++++++++++++++++++++++++++
+>   1 file changed, 55 insertions(+)
 > 
-> diff --git a/include/linux/memblock.h b/include/linux/memblock.h
-> index f82ee3fac1cd..f71ff9f0ec81 100644
-> --- a/include/linux/memblock.h
-> +++ b/include/linux/memblock.h
-> @@ -128,7 +128,6 @@ int memblock_clear_nomap(phys_addr_t base, phys_addr_t size);
->  
->  void memblock_free_all(void);
->  void memblock_free(void *ptr, size_t size);
-> -void reset_node_managed_pages(pg_data_t *pgdat);
->  void reset_all_zones_managed_pages(void);
->  
->  /* Low level functions */
-> diff --git a/mm/memblock.c b/mm/memblock.c
-> index 3feafea06ab2..da4264528e1e 100644
-> --- a/mm/memblock.c
-> +++ b/mm/memblock.c
-> @@ -2122,7 +2122,7 @@ static unsigned long __init free_low_memory_core_early(void)
->  
->  static int reset_managed_pages_done __initdata;
->  
-> -void reset_node_managed_pages(pg_data_t *pgdat)
-> +static void __init reset_node_managed_pages(pg_data_t *pgdat)
->  {
->  	struct zone *z;
->  
-> diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
-> index 8e0fa209d533..65e385f34679 100644
-> --- a/mm/memory_hotplug.c
-> +++ b/mm/memory_hotplug.c
-> @@ -1210,7 +1210,6 @@ static pg_data_t __ref *hotadd_init_pgdat(int nid)
->  	 * online_pages() and offline_pages().
->  	 * TODO: should be in free_area_init_core_hotplug?
->  	 */
-> -	reset_node_managed_pages(pgdat);
->  	reset_node_present_pages(pgdat);
->  
->  	return pgdat;
-> -- 
-> 2.25.1
-> 
+> diff --git a/arch/arm64/boot/dts/qcom/ipq5332.dtsi b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+> index c2d6cc65..3183357 100644
+> --- a/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+> @@ -383,6 +383,61 @@
+>   				status = "disabled";
+>   			};
+>   		};
+> +
+> +		usb_0_m31phy: hs_m31phy@7b000 {
+> +			compatible = "qcom,ipq5332-m31-usb-hsphy";
+> +			reg = <0x0007b000 0x12C>,
+> +			      <0x08af8800 0x400>;
+> +			reg-names = "m31usb_phy_base",
+> +				    "qscratch_base";
+> +			phy_type= "utmi";
+> +
+> +			resets = <&gcc GCC_QUSB2_0_PHY_BCR>;
+> +			reset-names = "usb2_phy_reset";
+> +
+> +			status = "okay";
+> +		};
+> +
+> +		usb2: usb2@8a00000 {
+> +			compatible = "qcom,ipq5332-dwc3", "qcom,dwc3";
+> +			#address-cells = <1>;
+> +			#size-cells = <1>;
+> +			ranges;
+> +
+> +			reg = <0x08af8800 0x100>;
+> +
+> +			clocks = <&gcc GCC_USB0_MASTER_CLK>,
+> +				<&gcc GCC_SNOC_USB_CLK>,
+> +				<&gcc GCC_USB0_SLEEP_CLK>,
+> +				<&gcc GCC_USB0_MOCK_UTMI_CLK>;
+
+Please indent these values.
+
+> +
+> +			clock-names = "core",
+> +				"iface",
+> +				"sleep",
+> +				"mock_utmi";
+
+Please indent these values.
+
+> +
+> +			interrupts-extended = <&intc GIC_SPI 134 IRQ_TYPE_LEVEL_HIGH>;
+
+No PHY IRQs?
+
+> +			interrupt-names = "pwr_event";
+> +
+> +			resets = <&gcc GCC_USB_BCR>;
+> +
+> +			qcom,select-utmi-as-pipe-clk;
+> +
+> +			usb2_0_dwc: usb@8a00000 {
+> +				compatible = "snps,dwc3";
+> +				reg = <0x08a00000 0xe000>;
+> +				clocks = <&gcc GCC_USB0_MOCK_UTMI_CLK>;
+> +				clock-names = "ref";
+> +				interrupts = <GIC_SPI 64 IRQ_TYPE_LEVEL_HIGH>;
+> +				usb-phy = <&usb_0_m31phy>;
+> +				tx-fifo-resize;
+> +				snps,is-utmi-l1-suspend;
+> +				snps,hird-threshold = /bits/ 8 <0x0>;
+> +				snps,dis_u2_susphy_quirk;
+> +				snps,dis_u3_susphy_quirk;
+> +				snps,ref-clock-period-ns = <21>;
+> +			};
+> +		};
+>   	};
+>   
+>   	timer {
 
 -- 
-Sincerely yours,
-Mike.
+With best wishes
+Dmitry
+
