@@ -2,103 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA8A0726122
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 15:21:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46795726126
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 15:21:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240751AbjFGNVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 09:21:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47562 "EHLO
+        id S240667AbjFGNVk convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 7 Jun 2023 09:21:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240719AbjFGNVL (ORCPT
+        with ESMTP id S240067AbjFGNVg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 09:21:11 -0400
-Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A6D41BD3
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 06:21:00 -0700 (PDT)
-Received: by mail-qv1-xf2e.google.com with SMTP id 6a1803df08f44-6260e771419so2926046d6.1
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 06:21:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686144059; x=1688736059;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RsTzCKh8bvjj+7fsJLeOfrhDNQ0r+NadzbD6gaCLLhc=;
-        b=kTCFPjMtJCYuc3Xyn+idFTjzmqCrIbyLSHl43occoExeNvdtHn0uxJFqQH0MVUdvXL
-         q2sgzGgWdz36/9mJlIYH2PYcy3kFYqdHdOARKrmcGJ2lff5ZRzVCy6jL7rqF22VgktyB
-         JTma4OfPCwQG15Qgbr/LseFdk0PDgYNvFkt960fNL+MRv07V8No6T54fue7BtAEv6RMW
-         iBKrBPB59l08l8Urw0Q2WGNqiMbBKlg7Rzf0wdsxX74C74uCcNeIcbARTkkuz6kx4GDm
-         F4ptQFnF73uemhio4xOzqR2jw7+xCnTyOzW0vR32f/LJfOoCU7nNoEvdMLJbGX7EJskF
-         JPnw==
+        Wed, 7 Jun 2023 09:21:36 -0400
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C691BFE;
+        Wed,  7 Jun 2023 06:21:17 -0700 (PDT)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-5659d85876dso78350457b3.2;
+        Wed, 07 Jun 2023 06:21:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686144059; x=1688736059;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RsTzCKh8bvjj+7fsJLeOfrhDNQ0r+NadzbD6gaCLLhc=;
-        b=Uc5serhnjcqEODzy8xJKfgH4fTEcqqT5eIfkVkJFZNew/VNkReMWSd8erYUORury1k
-         Uw1m8f2Tq1/szGGZRl6LNBNsUDypMab/HWK0qtYRadc71m+4jL6jHGwo/bnOt/2vUk/V
-         GBecGQbdN1KUEPjb4D7jyMcTiBjMfN9gRP7vgPKYtT7pgfJj1YU5sIKqO2q0pv9hVj3m
-         wKLKNINUyMigPRCGyjRX2Dy/KE9kn7O9sWkLqOZjAB0R1WslOkhsg/x9L+YVbo8l9qk/
-         oUz+OrgPpT7/0V1cTuBuxGpyIjfKu2S9s4E+cwRsvwfTfteiSgf7PrYubrs574k9Ugt3
-         m1rg==
-X-Gm-Message-State: AC+VfDya1Vle8SsscONGihzH3w4WcoJfTF4o8hmzNDuPUIvpmkflNrWX
-        uQdnwAvoFr44xcl/AYsEkUhJrFwJaCvt0v6DQ7M=
-X-Google-Smtp-Source: ACHHUZ5+oZoaNWjvjpzb/8PE91QEVDfSlSLrzUUEnkjZwjY/CEckPPiSRMi9ChDLBSbKe0cudjqnvKU9A0mir+ZGuAg=
-X-Received: by 2002:a05:6214:cc3:b0:5ef:5be2:f6d0 with SMTP id
- 3-20020a0562140cc300b005ef5be2f6d0mr3933626qvx.6.1686144059375; Wed, 07 Jun
- 2023 06:20:59 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686144077; x=1688736077;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rA2dk4Z+pOkq/jyOIvAGRXOvNoV7/kLeQDZUQrvL074=;
+        b=Xuc2BluMHxHXQCCBTAwWQ5MsaVCeOWiBHHOYAlU26FZMSqxCMxLmXK0nbRs6fSon98
+         9hZM5OqF2TjIuQOuEoyVKuZwveG/iqK9QLfnIP2nM7sxd97Bxup2x4MugUMVVUYMygcr
+         LYE81/DLewtbBKnNzn8h93Hq9+DRokhScsEaI/s/u2h3w5xgYdqrEoMEoi1gGRKuc/5x
+         ctQHmPNQ6h2KKIjGHzPW+wIDw2Sq1nDSbyhzzO/XSHhnHF1HuHtmlyQ2WU34XWnV+ZCi
+         jsJfvMIY37FFr6/98xKGyYk3SN4uvS6dLh9uzPK0FLmLtW2y6sD1g5jJvZqSSikQIW26
+         7eJA==
+X-Gm-Message-State: AC+VfDySuFGgo5PWbMQlp0U0ARn7Q+glrr1LixYkIZmg4LzcG1IKAEek
+        9I/yv6ZRjaQEF00R4ugqJ6IVNxp04d51yw==
+X-Google-Smtp-Source: ACHHUZ7KTFcUC3FyJndrCGLRaGpbn15xpKBxl+uQ5BssG8+rZBxT/uZ9tke/NsGI02yy5SHACsocHA==
+X-Received: by 2002:a0d:f343:0:b0:556:ceb2:c462 with SMTP id c64-20020a0df343000000b00556ceb2c462mr6457775ywf.2.1686144076634;
+        Wed, 07 Jun 2023 06:21:16 -0700 (PDT)
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com. [209.85.219.181])
+        by smtp.gmail.com with ESMTPSA id k126-20020a816f84000000b00565cf40238csm4720947ywc.110.2023.06.07.06.21.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Jun 2023 06:21:16 -0700 (PDT)
+Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-bab8f66d3a2so8619116276.3;
+        Wed, 07 Jun 2023 06:21:15 -0700 (PDT)
+X-Received: by 2002:a25:4889:0:b0:bac:748a:5759 with SMTP id
+ v131-20020a254889000000b00bac748a5759mr5257149yba.37.1686144075629; Wed, 07
+ Jun 2023 06:21:15 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a59:aba7:0:b0:3d6:c925:2155 with HTTP; Wed, 7 Jun 2023
- 06:20:56 -0700 (PDT)
-Reply-To: borismayor1967@gmail.com
-From:   Boris Esq <mrborismayor57@gmail.com>
-Date:   Wed, 7 Jun 2023 13:20:56 +0000
-Message-ID: <CAOOr8dV7sBQqJNb-bE8hT9Ch+1qChnDVetkYwCR44Q5aNXHH9A@mail.gmail.com>
-Subject: From Boris Ayiete Esq
-To:     undisclosed-recipients:;
+References: <20230530112050.5635-1-aford173@gmail.com> <20230530112050.5635-3-aford173@gmail.com>
+In-Reply-To: <20230530112050.5635-3-aford173@gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 7 Jun 2023 15:21:03 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXJaZCSN18aB1yBvhuTk=DQoe4B6aVHgoZvyLsZcRfrDA@mail.gmail.com>
+Message-ID: <CAMuHMdXJaZCSN18aB1yBvhuTk=DQoe4B6aVHgoZvyLsZcRfrDA@mail.gmail.com>
+Subject: Re: [RFC 3/3] arm64: dts: renesas: r8a774a1: Add GPU Node
+To:     Adam Ford <aford173@gmail.com>
+Cc:     linux-renesas-soc@vger.kernel.org, biju.das.jz@bp.renesas.com,
+        marek.vasut+renesas@gmail.com, cstevens@beaconembedded.com,
+        aford@beaconembedded.com,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=6.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM,UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:f2e listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [mrborismayor57[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [mrborismayor57[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [borismayor1967[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  1.3 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: ******
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-My name is Mr Boris Ayiete. I will be waiting for your reply to pass
-you the information about a relative of yours in our country who died
-in Turkey some months ago kindly reply urgently.
+Hi Adam,
 
-Have a good day
-Boris Ayiete Esq
+On Tue, May 30, 2023 at 1:21 PM Adam Ford <aford173@gmail.com> wrote:
+> With the 3dge and ZG clocks now available, the generic GPU node can
+> be added.  Until proper firmware is made, it is not usable.
+>
+> Signed-off-by: Adam Ford <aford173@gmail.com>
+> ---
+> This is based on the assumption that the Rogue 6250 could use
+> generic driver [1] and firmware [2] being implemebted by the Mesa group
+> and others.  In practice, the firmware isn't really compatible since
+> the 6250 in the RZ/G2M appears to be a different variant.
+>
+> [1] - https://gitlab.freedesktop.org/frankbinns/powervr/-/tree/powervr-next
+> [2] - https://gitlab.freedesktop.org/frankbinns/linux-firmware/-/tree/powervr/powervr
+
+Thanks for your patch!
+
+> --- a/arch/arm64/boot/dts/renesas/r8a774a1.dtsi
+> +++ b/arch/arm64/boot/dts/renesas/r8a774a1.dtsi
+> @@ -226,6 +226,27 @@ extalr_clk: extalr {
+>                 clock-frequency = <0>;
+>         };
+>
+> +       gpu_opp_table: opp-table {
+> +               compatible = "operating-points-v2";
+> +
+> +               opp-200000000 {
+> +                       opp-hz = /bits/ 64 <200000000>;
+> +                       opp-microvolt = <830000>;
+> +               };
+> +               opp-300000000 {
+> +                       opp-hz = /bits/ 64 <300000000>;
+> +                       opp-microvolt = <830000>;
+> +               };
+> +               opp-400000000 {
+> +                       opp-hz = /bits/ 64 <400000000>;
+> +                       opp-microvolt = <830000>;
+> +               };
+> +               opp-600000000 {
+> +                       opp-hz = /bits/ 64 <600000000>;
+> +                       opp-microvolt = <830000>;
+> +               };
+> +       };
+> +
+>         /* External PCIe clock - can be overridden by the board */
+>         pcie_bus_clk: pcie_bus {
+>                 compatible = "fixed-clock";
+> @@ -2347,6 +2368,18 @@ gic: interrupt-controller@f1010000 {
+>                         resets = <&cpg 408>;
+>                 };
+>
+> +               gpu@fd000000 {
+> +                       compatible = "img,powervr-series6xt";
+> +                       reg = <0 0xfd000000 0 0x40000>;
+> +                       interrupts = <GIC_SPI 119 IRQ_TYPE_LEVEL_HIGH>;
+> +                       clocks = <&cpg CPG_MOD 112>, <&cpg CPG_MOD 112>,<&cpg CPG_MOD 112>;
+> +                       clock-names = "core", "mem", "sys";
+> +                       interrupt-names = "gpu";
+> +                       operating-points-v2 = <&gpu_opp_table>;
+> +                       power-domains = <&sysc R8A774A1_PD_3DG_B>;
+> +                       resets = <&cpg 112>;
+> +               };
+> +
+>                 pciec0: pcie@fe000000 {
+>                         compatible = "renesas,pcie-r8a774a1",
+>                                      "renesas,pcie-rcar-gen3";
+
+LGTM.  But obviously I cannot take this as-is, as there are no DT bindings
+for this device, and it didn't work for you...
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
