@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEB0E7255C9
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 09:35:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 201D27255CA
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 09:36:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237969AbjFGHfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 03:35:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33554 "EHLO
+        id S239225AbjFGHgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 03:36:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238440AbjFGHe3 (ORCPT
+        with ESMTP id S239137AbjFGHea (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 03:34:29 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AEAF1732
+        Wed, 7 Jun 2023 03:34:30 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6B4B1BE6
         for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 00:29:43 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id E50891FDAA;
-        Wed,  7 Jun 2023 07:29:41 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 50D1F1FDAB;
+        Wed,  7 Jun 2023 07:29:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1686122981; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1686122982; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=vqq6UhRIP8V5iprW/mRk4CtPTff+2A8nkYP1uvN5Ufk=;
-        b=J13oiSBuySdL0XZnaC2j/NGbglep5cLPbEzW87z2t/fZFd51RaIx3uI+TXjdOTeSMDMfkM
-        01TXfZY3GqA4y3OSrSQBSxasos2+p5lA0FEwiqyfEJSi6d33N+aUp6T2mWKP47KUUDcgYn
-        LnqFergeIjaZdQpGuBy2+I8vWFY55mg=
+        bh=Fgln+qtfcOS9OaYmx79Yvw6h1nzJ4Orl6OHLx73NA9A=;
+        b=QLIX0oZ2VqwvpnaHV3gS3aOGFzS/bYa/3bWLdKLxrfCbtNFSX6BA72rcW/4uanPoHK5DWL
+        pIsghoCb+dq8MSnnEjb/LRbiCSVFXRTrs/SouG6t9hwtOgje6kOn9cIr7qJ+Nd6zd/Ctqq
+        L8HY0N7nrYcsReRVMz1Xn65wbOFm/4U=
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 96ECC13776;
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0168413776;
         Wed,  7 Jun 2023 07:29:41 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id kJ9OIuUxgGSUIQAAMHmgww
+        id AF1QOeUxgGSUIQAAMHmgww
         (envelope-from <nik.borisov@suse.com>); Wed, 07 Jun 2023 07:29:41 +0000
 From:   Nikolay Borisov <nik.borisov@suse.com>
 To:     x86@kernel.org
 Cc:     linux-kernel@vger.kernel.org, mhocko@suse.com, jslaby@suse.cz,
         Nikolay Borisov <nik.borisov@suse.com>
-Subject: [PATCH 1/3] x86: Introduce ia32_disabled boot parameter
-Date:   Wed,  7 Jun 2023 10:29:34 +0300
-Message-Id: <20230607072936.3766231-2-nik.borisov@suse.com>
+Subject: [PATCH 2/3] x86/entry: Disable IA32 syscalls in the presence of ia32_disabled
+Date:   Wed,  7 Jun 2023 10:29:35 +0300
+Message-Id: <20230607072936.3766231-3-nik.borisov@suse.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230607072936.3766231-1-nik.borisov@suse.com>
 References: <20230607072936.3766231-1-nik.borisov@suse.com>
@@ -62,69 +62,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Distributions would like to reduce their attack surface as much as
-possible but at the same time they have to cater to a wide variety of
-legacy software. One such avenue where distros have to strike a balance
-is the support for 32bit syscalls on a 64bit kernel. Ideally we'd have
-the ability to disable the the compat support at boot time. This would
-allow the decision whether it should be disabled/enabled can be
-delegated to system administrators.
-
-This patch simply introduces ia32_disable boot parameter which aims at
-disabling 32 bit process support even if CONFIG_IA32_EMULATION has been
-selected at build time.
+First stage of disabling ia32 compat layer is to disable 32bit syscall
+entry points. Legacy int 0x80 vector is disabled by setting its gate
+descriptor to "not present" and the sysenter vector is disabled by
+re-using the existing code in case IA32_EMULATION is disabled.
 
 Signed-off-by: Nikolay Borisov <nik.borisov@suse.com>
 ---
- arch/x86/entry/common.c      | 12 ++++++++++++
- arch/x86/include/asm/traps.h |  4 ++++
- 2 files changed, 16 insertions(+)
+ arch/x86/entry/entry_64.S    |  2 --
+ arch/x86/include/asm/desc.h  |  5 +++++
+ arch/x86/kernel/cpu/common.c | 29 ++++++++++++++++++-----------
+ 3 files changed, 23 insertions(+), 13 deletions(-)
 
-diff --git a/arch/x86/entry/common.c b/arch/x86/entry/common.c
-index 6c2826417b33..817518768ba2 100644
---- a/arch/x86/entry/common.c
-+++ b/arch/x86/entry/common.c
-@@ -19,6 +19,7 @@
- #include <linux/nospec.h>
- #include <linux/syscalls.h>
- #include <linux/uaccess.h>
-+#include <linux/init.h>
+diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
+index f31e286c2977..5e0e8a5e05ca 100644
+--- a/arch/x86/entry/entry_64.S
++++ b/arch/x86/entry/entry_64.S
+@@ -1514,7 +1514,6 @@ SYM_CODE_START(asm_exc_nmi)
+ 	iretq
+ SYM_CODE_END(asm_exc_nmi)
  
- #ifdef CONFIG_XEN_PV
- #include <xen/xen-ops.h>
-@@ -96,6 +97,17 @@ static __always_inline int syscall_32_enter(struct pt_regs *regs)
- 	return (int)regs->orig_ax;
+-#ifndef CONFIG_IA32_EMULATION
+ /*
+  * This handles SYSCALL from 32-bit code.  There is no way to program
+  * MSRs to fully disable 32-bit SYSCALL.
+@@ -1525,7 +1524,6 @@ SYM_CODE_START(ignore_sysret)
+ 	mov	$-ENOSYS, %eax
+ 	sysretl
+ SYM_CODE_END(ignore_sysret)
+-#endif
+ 
+ .pushsection .text, "ax"
+ 	__FUNC_ALIGN
+diff --git a/arch/x86/include/asm/desc.h b/arch/x86/include/asm/desc.h
+index ab97b22ac04a..618b428586d1 100644
+--- a/arch/x86/include/asm/desc.h
++++ b/arch/x86/include/asm/desc.h
+@@ -8,6 +8,7 @@
+ #include <asm/fixmap.h>
+ #include <asm/irq_vectors.h>
+ #include <asm/cpu_entry_area.h>
++#include <asm/traps.h>
+ 
+ #include <linux/debug_locks.h>
+ #include <linux/smp.h>
+@@ -429,6 +430,10 @@ static inline void idt_init_desc(gate_desc *gate, const struct idt_data *d)
+ 	gate->offset_high	= (u32) (addr >> 32);
+ 	gate->reserved		= 0;
+ #endif
++#ifdef CONFIG_IA32_EMULATION
++	if (ia32_disabled && d->vector == IA32_SYSCALL_VECTOR)
++		gate->bits.p = 0;
++#endif
  }
  
-+#ifdef CONFIG_IA32_EMULATION
-+bool ia32_disabled = false;
-+
-+static int ia32_disabled_cmdline(char *arg)
-+{
-+	ia32_disabled = true;
-+	return 1;
-+}
-+__setup("ia32_disabled", ia32_disabled_cmdline);
-+#endif
-+
- /*
-  * Invoke a 32-bit syscall.  Called with IRQs on in CONTEXT_KERNEL.
-  */
-diff --git a/arch/x86/include/asm/traps.h b/arch/x86/include/asm/traps.h
-index 47ecfff2c83d..dd93aac3718b 100644
---- a/arch/x86/include/asm/traps.h
-+++ b/arch/x86/include/asm/traps.h
-@@ -20,6 +20,10 @@ asmlinkage __visible noinstr struct pt_regs *vc_switch_off_ist(struct pt_regs *e
+ extern unsigned long system_vectors[];
+diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+index 80710a68ef7d..71f8b55f70c9 100644
+--- a/arch/x86/kernel/cpu/common.c
++++ b/arch/x86/kernel/cpu/common.c
+@@ -2054,17 +2054,24 @@ void syscall_init(void)
+ 	wrmsrl(MSR_LSTAR, (unsigned long)entry_SYSCALL_64);
  
- extern bool ibt_selftest(void);
- 
-+#ifdef CONFIG_IA32_EMULATION
-+extern bool ia32_disabled;
-+#endif
-+
- #ifdef CONFIG_X86_F00F_BUG
- /* For handling the FOOF bug */
- void handle_invalid_op(struct pt_regs *regs);
+ #ifdef CONFIG_IA32_EMULATION
+-	wrmsrl_cstar((unsigned long)entry_SYSCALL_compat);
+-	/*
+-	 * This only works on Intel CPUs.
+-	 * On AMD CPUs these MSRs are 32-bit, CPU truncates MSR_IA32_SYSENTER_EIP.
+-	 * This does not cause SYSENTER to jump to the wrong location, because
+-	 * AMD doesn't allow SYSENTER in long mode (either 32- or 64-bit).
+-	 */
+-	wrmsrl_safe(MSR_IA32_SYSENTER_CS, (u64)__KERNEL_CS);
+-	wrmsrl_safe(MSR_IA32_SYSENTER_ESP,
+-		    (unsigned long)(cpu_entry_stack(smp_processor_id()) + 1));
+-	wrmsrl_safe(MSR_IA32_SYSENTER_EIP, (u64)entry_SYSENTER_compat);
++	if (ia32_disabled) {
++		wrmsrl_cstar((unsigned long)ignore_sysret);
++		wrmsrl_safe(MSR_IA32_SYSENTER_CS, (u64)GDT_ENTRY_INVALID_SEG);
++		wrmsrl_safe(MSR_IA32_SYSENTER_ESP, 0ULL);
++		wrmsrl_safe(MSR_IA32_SYSENTER_EIP, 0ULL);
++	} else {
++		wrmsrl_cstar((unsigned long)entry_SYSCALL_compat);
++		/*
++		 * This only works on Intel CPUs.
++		 * On AMD CPUs these MSRs are 32-bit, CPU truncates MSR_IA32_SYSENTER_EIP.
++		 * This does not cause SYSENTER to jump to the wrong location, because
++		 * AMD doesn't allow SYSENTER in long mode (either 32- or 64-bit).
++		 */
++		wrmsrl_safe(MSR_IA32_SYSENTER_CS, (u64)__KERNEL_CS);
++		wrmsrl_safe(MSR_IA32_SYSENTER_ESP,
++			    (unsigned long)(cpu_entry_stack(smp_processor_id()) + 1));
++		wrmsrl_safe(MSR_IA32_SYSENTER_EIP, (u64)entry_SYSENTER_compat);
++	}
+ #else
+ 	wrmsrl_cstar((unsigned long)ignore_sysret);
+ 	wrmsrl_safe(MSR_IA32_SYSENTER_CS, (u64)GDT_ENTRY_INVALID_SEG);
 -- 
 2.34.1
 
