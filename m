@@ -2,61 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B4AE725FA3
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 14:37:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC27B725F8E
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 14:37:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240975AbjFGMhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 08:37:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46660 "EHLO
+        id S235429AbjFGMgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 08:36:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240895AbjFGMhK (ORCPT
+        with ESMTP id S235243AbjFGMgq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 08:37:10 -0400
-Received: from frasgout13.his.huawei.com (unknown [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D01F173B;
-        Wed,  7 Jun 2023 05:37:09 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4Qbmmf4yRxz9y9xH;
-        Wed,  7 Jun 2023 20:26:42 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwCnJgLMeYBkSckaAw--.4176S7;
-        Wed, 07 Jun 2023 13:36:55 +0100 (CET)
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     casey@schaufler-ca.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com
-Cc:     linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [RFC][PATCH 5/5] ramfs: Initialize security of in-memory inodes
-Date:   Wed,  7 Jun 2023 14:36:12 +0200
-Message-Id: <20230607123612.2791303-6-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230607123612.2791303-1-roberto.sassu@huaweicloud.com>
-References: <20230607123612.2791303-1-roberto.sassu@huaweicloud.com>
+        Wed, 7 Jun 2023 08:36:46 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E63310F8
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 05:36:44 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 3DFF21FDB0;
+        Wed,  7 Jun 2023 12:36:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1686141403; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=PGvn6ZdohOOtVUUdOvyiYpScXO3VVCt1a9Kf6pUq/oo=;
+        b=c+AMWVzZLkboDs3i9HYvNVea+80TZY8OLFt31HnDAQD8RVVGlB/WU3txkylDnJV+TljaBf
+        Uuxyhud9XLrbu6MzRg6uAjrkRJnWOHLj9hpjrtFfE4ZBWBMvoFRH7OoVldnlUA0WhSjxoI
+        Onf1if4shMM1/GQMrW0D95Yx3gFqGFw=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 19A4713776;
+        Wed,  7 Jun 2023 12:36:43 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ubJ8Bdt5gGQySgAAMHmgww
+        (envelope-from <petr.pavlu@suse.com>); Wed, 07 Jun 2023 12:36:43 +0000
+From:   Petr Pavlu <petr.pavlu@suse.com>
+To:     jgross@suse.com, sstabellini@kernel.org,
+        oleksandr_tyshchenko@epam.com
+Cc:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
+        Petr Pavlu <petr.pavlu@suse.com>
+Subject: [PATCH] xen/xenbus: Avoid a lockdep warning when adding a watch
+Date:   Wed,  7 Jun 2023 14:36:24 +0200
+Message-Id: <20230607123624.15739-1-petr.pavlu@suse.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LxC2BwCnJgLMeYBkSckaAw--.4176S7
-X-Coremail-Antispam: 1UD129KBjvJXoW7WrWUKFWkXw13Jry5AF13Jwb_yoW8tF15pF
-        4Iqas8Grn5WFZrWr1SyFWUuw1ftayfKrsrJrs7uw17A3Z7Jr1Dtr4Syr13uFyrGrW8Gw1S
-        qF4Y9r45C3W7ArJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBab4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-        Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-        rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-        AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E
-        14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrV
-        C2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE
-        7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262kKe7AKxVW8ZVWrXwCF04k20xvY0x
-        0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E
-        7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcV
-        C0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwCI42IY
-        6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aV
-        CY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07j7GYLUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgABBF1jj4pZzgAAsr
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,PDS_RDNS_DYNAMIC_FP,RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_L3,
-        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,80 +59,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+The following lockdep warning appears during boot on a Xen dom0 system:
 
-Add a call security_inode_init_security() after ramfs_get_inode(), to let
-LSMs initialize the inode security field. Skip ramfs_fill_super(), as the
-initialization is done through the sb_set_mnt_opts hook.
+[   96.388794] ======================================================
+[   96.388797] WARNING: possible circular locking dependency detected
+[   96.388799] 6.4.0-rc5-default+ #8 Tainted: G            EL
+[   96.388803] ------------------------------------------------------
+[   96.388804] xenconsoled/1330 is trying to acquire lock:
+[   96.388808] ffffffff82acdd10 (xs_watch_rwsem){++++}-{3:3}, at: register_xenbus_watch+0x45/0x140
+[   96.388847]
+               but task is already holding lock:
+[   96.388849] ffff888100c92068 (&u->msgbuffer_mutex){+.+.}-{3:3}, at: xenbus_file_write+0x2c/0x600
+[   96.388862]
+               which lock already depends on the new lock.
 
-Calling security_inode_init_security() call inside ramfs_get_inode() is
-not possible since, for CONFIG_SHMEM=n, tmpfs also calls the former after
-the latter.
+[   96.388864]
+               the existing dependency chain (in reverse order) is:
+[   96.388866]
+               -> #2 (&u->msgbuffer_mutex){+.+.}-{3:3}:
+[   96.388874]        __mutex_lock+0x85/0xb30
+[   96.388885]        xenbus_dev_queue_reply+0x48/0x2b0
+[   96.388890]        xenbus_thread+0x1d7/0x950
+[   96.388897]        kthread+0xe7/0x120
+[   96.388905]        ret_from_fork+0x2c/0x50
+[   96.388914]
+               -> #1 (xs_response_mutex){+.+.}-{3:3}:
+[   96.388923]        __mutex_lock+0x85/0xb30
+[   96.388930]        xenbus_backend_ioctl+0x56/0x1c0
+[   96.388935]        __x64_sys_ioctl+0x90/0xd0
+[   96.388942]        do_syscall_64+0x5c/0x90
+[   96.388950]        entry_SYSCALL_64_after_hwframe+0x72/0xdc
+[   96.388957]
+               -> #0 (xs_watch_rwsem){++++}-{3:3}:
+[   96.388965]        __lock_acquire+0x1538/0x2260
+[   96.388972]        lock_acquire+0xc6/0x2b0
+[   96.388976]        down_read+0x2d/0x160
+[   96.388983]        register_xenbus_watch+0x45/0x140
+[   96.388990]        xenbus_file_write+0x53d/0x600
+[   96.388994]        vfs_write+0xe4/0x490
+[   96.389003]        ksys_write+0xb8/0xf0
+[   96.389011]        do_syscall_64+0x5c/0x90
+[   96.389017]        entry_SYSCALL_64_after_hwframe+0x72/0xdc
+[   96.389023]
+               other info that might help us debug this:
 
-Pass NULL as initxattrs() callback to security_inode_init_security(), since
-the purpose of the call is only to initialize the in-memory inodes.
+[   96.389025] Chain exists of:
+                 xs_watch_rwsem --> xs_response_mutex --> &u->msgbuffer_mutex
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+[   96.413429]  Possible unsafe locking scenario:
+
+[   96.413430]        CPU0                    CPU1
+[   96.413430]        ----                    ----
+[   96.413431]   lock(&u->msgbuffer_mutex);
+[   96.413432]                                lock(xs_response_mutex);
+[   96.413433]                                lock(&u->msgbuffer_mutex);
+[   96.413434]   rlock(xs_watch_rwsem);
+[   96.413436]
+                *** DEADLOCK ***
+
+[   96.413436] 1 lock held by xenconsoled/1330:
+[   96.413438]  #0: ffff888100c92068 (&u->msgbuffer_mutex){+.+.}-{3:3}, at: xenbus_file_write+0x2c/0x600
+[   96.413446]
+
+An ioctl call IOCTL_XENBUS_BACKEND_SETUP (record #1 in the report)
+results in calling xenbus_alloc() -> xs_suspend() which introduces
+ordering xs_watch_rwsem --> xs_response_mutex. The xenbus_thread()
+operation (record #2) creates xs_response_mutex --> &u->msgbuffer_mutex.
+An XS_WATCH write to the xenbus file then results in a complain about
+the opposite lock order &u->msgbuffer_mutex --> xs_watch_rwsem.
+
+The dependency xs_watch_rwsem --> xs_response_mutex is spurious. Avoid
+it and the warning by changing the ordering in xs_suspend(), first
+acquire xs_response_mutex and then xs_watch_rwsem. Reverse also the
+unlocking order in xs_suspend_cancel() for consistency, but keep
+xs_resume() as is because it needs to have xs_watch_rwsem unlocked only
+after exiting xs suspend and re-adding all watches.
+
+Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
 ---
- fs/ramfs/inode.c | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ drivers/xen/xenbus/xenbus_xs.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/fs/ramfs/inode.c b/fs/ramfs/inode.c
-index 5ba580c7883..e6b5f04b2b2 100644
---- a/fs/ramfs/inode.c
-+++ b/fs/ramfs/inode.c
-@@ -102,6 +102,14 @@ ramfs_mknod(struct mnt_idmap *idmap, struct inode *dir,
- 	int error = -ENOSPC;
- 
- 	if (inode) {
-+		error = security_inode_init_security(inode, dir,
-+						     &dentry->d_name, NULL,
-+						     NULL);
-+		if (error && error != -EOPNOTSUPP) {
-+			iput(inode);
-+			return error;
-+		}
-+
- 		d_instantiate(dentry, inode);
- 		dget(dentry);	/* Extra count - pin the dentry in core */
- 		error = 0;
-@@ -134,6 +142,15 @@ static int ramfs_symlink(struct mnt_idmap *idmap, struct inode *dir,
- 	inode = ramfs_get_inode(dir->i_sb, dir, S_IFLNK|S_IRWXUGO, 0);
- 	if (inode) {
- 		int l = strlen(symname)+1;
-+
-+		error = security_inode_init_security(inode, dir,
-+						     &dentry->d_name, NULL,
-+						     NULL);
-+		if (error && error != -EOPNOTSUPP) {
-+			iput(inode);
-+			return error;
-+		}
-+
- 		error = page_symlink(inode, symname, l);
- 		if (!error) {
- 			d_instantiate(dentry, inode);
-@@ -149,10 +166,20 @@ static int ramfs_tmpfile(struct mnt_idmap *idmap,
- 			 struct inode *dir, struct file *file, umode_t mode)
+diff --git a/drivers/xen/xenbus/xenbus_xs.c b/drivers/xen/xenbus/xenbus_xs.c
+index 12e02eb01f59..028a182bcc9e 100644
+--- a/drivers/xen/xenbus/xenbus_xs.c
++++ b/drivers/xen/xenbus/xenbus_xs.c
+@@ -840,8 +840,8 @@ void xs_suspend(void)
  {
- 	struct inode *inode;
-+	int error;
+ 	xs_suspend_enter();
  
- 	inode = ramfs_get_inode(dir->i_sb, dir, mode, 0);
- 	if (!inode)
- 		return -ENOSPC;
-+
-+	error = security_inode_init_security(inode, dir,
-+					     &file_dentry(file)->d_name, NULL,
-+					     NULL);
-+	if (error && error != -EOPNOTSUPP) {
-+		iput(inode);
-+		return error;
-+	}
-+
- 	d_tmpfile(file, inode);
- 	return finish_open_simple(file, 0);
+-	down_write(&xs_watch_rwsem);
+ 	mutex_lock(&xs_response_mutex);
++	down_write(&xs_watch_rwsem);
+ }
+ 
+ void xs_resume(void)
+@@ -866,8 +866,8 @@ void xs_resume(void)
+ 
+ void xs_suspend_cancel(void)
+ {
+-	mutex_unlock(&xs_response_mutex);
+ 	up_write(&xs_watch_rwsem);
++	mutex_unlock(&xs_response_mutex);
+ 
+ 	xs_suspend_exit();
  }
 -- 
-2.25.1
+2.35.3
 
