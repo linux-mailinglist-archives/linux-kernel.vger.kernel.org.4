@@ -2,101 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A128725171
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 03:17:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D939B725173
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 03:18:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240450AbjFGBRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 21:17:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57236 "EHLO
+        id S240376AbjFGBSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 21:18:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234661AbjFGBRi (ORCPT
+        with ESMTP id S234417AbjFGBSg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 21:17:38 -0400
-Received: from mail.nfschina.com (unknown [42.101.60.195])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 726C4E6B
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 18:17:36 -0700 (PDT)
-Received: from [172.30.38.103] (unknown [180.167.10.98])
-        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPSA id 1C8101800F838B;
-        Wed,  7 Jun 2023 09:17:21 +0800 (CST)
-Message-ID: <126ba315-196d-ee1e-a781-bf8b510f1ddb@nfschina.com>
-Date:   Wed, 7 Jun 2023 09:17:20 +0800
+        Tue, 6 Jun 2023 21:18:36 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2C9BE6B
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 18:18:35 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-30ae9cb91a3so980145f8f.0
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 18:18:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686100714; x=1688692714;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=I1KgDHaOI1Us1uVdvmrUMFfMciSCryMc/a4pLaA9Lhg=;
+        b=I2ghSAq3JDT4gj7Uf+IncMN0ipTmkzdn/4Yv5r4OjGYZKNar5OSApbCuLtKpwgaaog
+         2ZoEIa9s8vQMupST9rS7w/tpwanQboypHhI87vF+mi84EHtmDaVK8vVxpg6PyUdfK5uI
+         ab+7EDkMd8SddEeu0b4zwawV5ph6mNXZh3ymCoecgLkthdhkE4FX0dUgL9XhMbm04haN
+         oG6rxssFsRg4TGy5yCrDqA0fJoI7bXbOXRAN6/E0Xtxyaw0oHLxz9qntXstDd2LGXRZB
+         2clZB3Fj7s6uXhe3a+5qIkRzXMxjFiI8lOjRJz0Yd9PZymQpoVRRNyaNbmO57/FrpZCd
+         GUuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686100714; x=1688692714;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=I1KgDHaOI1Us1uVdvmrUMFfMciSCryMc/a4pLaA9Lhg=;
+        b=DN/vWZFiWTU2na0pe+RQF0pxInrUYrke31uIHHnqarPrjJ6yr9brpFo6N1Z5jsR6sm
+         sdyAMU2tfLCIko2Zfg+eSJTnWIGqfeT50ROXKYi6YG9+sAmBW7tRJ5qMc2wAcd8KcPZd
+         MGKWk21aS04glRjWQxZZi+7QawMah2LyJNgjzq5wYfF4uBauBcnRD2HoneuhsMRslDbh
+         XTEI3+U3lpD0zTINipEIHvPkHtTOfZ6DHbtiUGcAYwEe0w6F21fzptoWpbF0LoEWT2HC
+         hQB9PB/KKENY+09Qh/2JvbFglpEJCNCu1AvBEOk84TAloxxz5fIZ8F5+pVF9h++Ugcve
+         Z+MA==
+X-Gm-Message-State: AC+VfDwszfmdpLUw7BOXgGTPb3BQqVh4ANJE/mHhFCAcMVyV5DHtP+QY
+        ao3I9Pg/BCScfG5hZTjRiJ9+bBY2XxcGwy91YTwQKZZ5
+X-Google-Smtp-Source: ACHHUZ7/cuO+TEChxTs+dXb7rNdJomNMj0QOWI0kWSVci+W1pvM3G3ccLLQvp1XZweD4REkWnWlEo8tN3KIEeW2PImU=
+X-Received: by 2002:adf:eac5:0:b0:30c:2bd4:5141 with SMTP id
+ o5-20020adfeac5000000b0030c2bd45141mr2614850wrn.4.1686100713726; Tue, 06 Jun
+ 2023 18:18:33 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] drm/bridge: ti-sn65dsi86: Avoid possible buffer overflow
-Content-Language: en-US
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, andersson@kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        u.kleine-koenig@pengutronix.de
-X-MD-Sfrom: suhui@nfschina.com
-X-MD-Bcc: suhui@nfschina.com
-X-MD-SrcIP: 180.167.10.98
-From:   Su Hui <suhui@nfschina.com>
-In-Reply-To: <CAD=FV=X_n4Si3k4iQ0yRJZRqX2DuhGF2pjPqEzbiKqBY3ZCNHg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20230606143247.433018-1-nunes.erico@gmail.com>
+In-Reply-To: <20230606143247.433018-1-nunes.erico@gmail.com>
+From:   Vasily Khoruzhick <anarsoul@gmail.com>
+Date:   Tue, 6 Jun 2023 18:18:06 -0700
+Message-ID: <CA+E=qVcv4CrGki1cTYb53p5Ys0AgF=qfrK7XYB7X0gvu9knD-g@mail.gmail.com>
+Subject: Re: [Lima] [PATCH] drm/lima: fix sched context destroy
+To:     Erico Nunes <nunes.erico@gmail.com>
+Cc:     yuq825@gmail.com, dri-devel@lists.freedesktop.org,
+        lima@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        luben.tuikov@amd.com, daniel@ffwll.ch, airlied@gmail.com,
+        christian.koenig@amd.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, Jun 6, 2023 at 7:33=E2=80=AFAM Erico Nunes <nunes.erico@gmail.com> =
+wrote:
+>
+> The drm sched entity must be flushed before finishing, to account for
+> jobs potentially still in flight at that time.
+> Lima did not do this flush until now, so switch the destroy call to the
+> drm_sched_entity_destroy() wrapper which will take care of that.
+>
+> This fixes a regression on lima which started since the rework in
+> commit 2fdb8a8f07c2 ("drm/scheduler: rework entity flush, kill and fini")
+> where some specific types of applications may hang indefinitely.
+>
+> Fixes: 2fdb8a8f07c2 ("drm/scheduler: rework entity flush, kill and fini")
+> Signed-off-by: Erico Nunes <nunes.erico@gmail.com>
 
-On 2023/6/6 23:28, Doug Anderson wrote:
-> Hi,
->
-> On Tue, Jun 6, 2023 at 12:56 AM Su Hui <suhui@nfschina.com> wrote:
->> Smatch error:buffer overflow 'ti_sn_bridge_refclk_lut' 5 <= 5.
->>
->> Fixes: cea86c5bb442 ("drm/bridge: ti-sn65dsi86: Implement the pwm_chip")
->> Signed-off-by: Su Hui <suhui@nfschina.com>
->> ---
->>   drivers/gpu/drm/bridge/ti-sn65dsi86.c | 3 ++-
->>   1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/gpu/drm/bridge/ti-sn65dsi86.c b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
->> index 7a748785c545..952aae4221e7 100644
->> --- a/drivers/gpu/drm/bridge/ti-sn65dsi86.c
->> +++ b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
->> @@ -305,7 +305,8 @@ static void ti_sn_bridge_set_refclk_freq(struct ti_sn65dsi86 *pdata)
->>           * The PWM refclk is based on the value written to SN_DPPLL_SRC_REG,
->>           * regardless of its actual sourcing.
->>           */
->> -       pdata->pwm_refclk_freq = ti_sn_bridge_refclk_lut[i];
->> +       if (i < refclk_lut_size)
->> +               pdata->pwm_refclk_freq = ti_sn_bridge_refclk_lut[i];
-> I don't think this is quite the right fix. I don't think we can just
-> skip assigning "pdata->pwm_refclk_freq". In general I think we're in
-> pretty bad shape if we ever fail to match a refclk from the table and
-> I'm not quite sure how the bridge chip could work at all in this case.
-> Probably that at least deserves a warning message in the logs. There's
-> no place to return an error though, so I guess the warning is the best
-> we can do and then we can do our best to do something reasonable.
->
-> In this case, I think "reasonable" might be that if the for loop exits
-> and "i == refclk_lut_size" that we should set "i" to 1. According to
-> the datasheet [1] setting a value of 5 (which the existing code does)
-> is the same as setting a value of 1 (the default) and if it's 1 then
-> we'll be able to look this up in the table.
-I think you are right, set i to 1 if i >= refclk_lut_size. I will resend 
-this patch soon.
-Thanks for your reply!
+Reviewed-by: Vasily Khoruzhick <anarsoul@gmail.com>
 
-Su Hui
-
+> ---
+>  drivers/gpu/drm/lima/lima_sched.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> [1] https://www.ti.com/lit/gpn/sn65dsi86
+> diff --git a/drivers/gpu/drm/lima/lima_sched.c b/drivers/gpu/drm/lima/lim=
+a_sched.c
+> index ff003403fbbc..ffd91a5ee299 100644
+> --- a/drivers/gpu/drm/lima/lima_sched.c
+> +++ b/drivers/gpu/drm/lima/lima_sched.c
+> @@ -165,7 +165,7 @@ int lima_sched_context_init(struct lima_sched_pipe *p=
+ipe,
+>  void lima_sched_context_fini(struct lima_sched_pipe *pipe,
+>                              struct lima_sched_context *context)
+>  {
+> -       drm_sched_entity_fini(&context->base);
+> +       drm_sched_entity_destroy(&context->base);
+>  }
 >
-> -Doug
+>  struct dma_fence *lima_sched_context_queue_task(struct lima_sched_task *=
+task)
+> --
+> 2.40.1
+>
