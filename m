@@ -2,84 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E761072654B
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 17:58:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5955F72654A
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 17:58:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240887AbjFGP61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 11:58:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59652 "EHLO
+        id S240355AbjFGP6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 11:58:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241191AbjFGP6X (ORCPT
+        with ESMTP id S239935AbjFGP57 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 11:58:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171A91FF0
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 08:57:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686153448;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=C/MZw4Z/A0OlIBZIMGEeANKIMkHTcvImJLw3vUuATHI=;
-        b=V9BL/shkcu2uA/N60A7W3VNzSuWs6XH7Bh0XLGrRWKQRvKUuFPKqn6BoOQ+m3Uwp2Jz4DU
-        xJusRMhSKJoZgkxE2OngCOX7lZTfhliMY9Jrory7G6CLzyPhE7oJCsKL0uGZZI2MkzwNeX
-        8SpXnozB3A/br9/sx4+1wOQir3soQ08=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-497-v22FFbDeOrSamtbNeuRJJg-1; Wed, 07 Jun 2023 11:57:27 -0400
-X-MC-Unique: v22FFbDeOrSamtbNeuRJJg-1
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-75d54f2b6c4so469696685a.2
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 08:57:27 -0700 (PDT)
+        Wed, 7 Jun 2023 11:57:59 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2CF8199D;
+        Wed,  7 Jun 2023 08:57:43 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-514859f3ffbso1603800a12.1;
+        Wed, 07 Jun 2023 08:57:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686153462; x=1688745462;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iHtYOKWjXE4LNBHmSRISovcNXkXYAO+Eyv40xIPPG9k=;
+        b=UmTnMb0IeP5nrNarQDqeInEpB9GQV+6xbAgySdcKusGk7/15Y/Rgqu53ADIeiEL9Kf
+         SU5pqvJdldXL26hQWBSzOJRAyA856Knqp5nUuUqHAwjbvsxRAAXRhfmDCbqCaiUMGsPu
+         L0kTnMuUnR6azxnKImPO1vzw8uZsyHeedQjqDXhWpkAIlHM5FNBGXZYyGd5kqSreOV9n
+         4792yvzZmKc4D2AVygogBwuiO/gUa3qqnKSW5O1aWG/fADp42gvahpp2bBY+3rNz9nYG
+         RvmdDU6/8Xx991szzAFdCSv+voh4DDOYZ4lSA4GXdsF1WUmvVwI/e5WC4APTuvXqS04c
+         94jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686153446; x=1688745446;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=C/MZw4Z/A0OlIBZIMGEeANKIMkHTcvImJLw3vUuATHI=;
-        b=Cuq9+cdgnhFuUyTMYOVJafyZFUUMH3+YuMDw1eh4YRUkxeUyDFZHEMkVluEGv38ksD
-         ttLUZM7eajrMHdLtAyiNkcXDGwrf6l14UtnqDTUghJWo+VOKEEY2S2ZPPoWRmC7n35/u
-         PW5biaasUDWaXdjEfO7XDbwCvhWLvOy1mO6QIVjjArxMFseN85wyz6Rsrq4uxNLxA20U
-         zXha4Gd3wXkAgQAK86vSNPsEvBfW380Hu3qHhGg7Ob8DYzzQ2dySGSm94YxPsLVKSRTZ
-         53tIOYFyD6FWfk1G+c5UOIuduXazolP5iNRJQh2r4vr/ZFImrTuz6KR+asY1eBlDGgbu
-         hcNQ==
-X-Gm-Message-State: AC+VfDwRT50y+76VFAyBluI+3XIEZWKO274yYNl1NELyYSG5lKU40i2u
-        +N+I+bvW1SDL1NXzyeNnsfPWx/c/6KJKoLiaBagcFM/2b4LEq3iT3P5qnTYyq88V2DTq4PcyftT
-        N+aCTdpk9IoA17ZNNG4A4s6aFMGrxgWE=
-X-Received: by 2002:a05:620a:2541:b0:75e:86bc:1620 with SMTP id s1-20020a05620a254100b0075e86bc1620mr2656391qko.69.1686153446421;
-        Wed, 07 Jun 2023 08:57:26 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ49Qrz20wOSIiZOvpspbG4CNCfAa43c7AyLJLsnRJpByazcKkEi3BSqoYdfUZb90/Sxp18xUg==
-X-Received: by 2002:a05:620a:2541:b0:75e:86bc:1620 with SMTP id s1-20020a05620a254100b0075e86bc1620mr2656376qko.69.1686153446120;
-        Wed, 07 Jun 2023 08:57:26 -0700 (PDT)
-Received: from [192.168.9.16] (net-2-34-28-201.cust.vodafonedsl.it. [2.34.28.201])
-        by smtp.gmail.com with ESMTPSA id d10-20020a05620a158a00b0075d031ba684sm1339920qkk.99.2023.06.07.08.57.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 08:57:25 -0700 (PDT)
-Message-ID: <a9652cb5-3d73-f49f-6de3-a49d528e91ec@redhat.com>
-Date:   Wed, 7 Jun 2023 17:57:22 +0200
+        d=1e100.net; s=20221208; t=1686153462; x=1688745462;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iHtYOKWjXE4LNBHmSRISovcNXkXYAO+Eyv40xIPPG9k=;
+        b=DjW8b5uxZD2VkgbfOz2AurlNUgvD+1ySXYYjBAosjPNKZTtj5/c+cSZFIp66sQG9c7
+         ZDGL+Hnkq3zrs7K5/UZxhxtxCC+4wkigvGvZdBwhqrU8yys0ePmVv86gGaXqmr9V9ikE
+         GdWcsqMrLRsi++zML7J7uPyg5uAzHIdziD1EvYrkV8w1O4YBBYXut/TWGCGqflRXagvJ
+         WhJxrNX7XLWvEPAHt0iHKUF2yjqlSiXYE9tj/4CUnhaPXjuHNt7xynDpUQsElc1Gv7xt
+         V0b4wsGmhZ3W7x5/sNGbWu8AGiws+pwAI3ZR7TwA9Saj4DLyNfu2KvN7sTEygV1D8UUW
+         i9hg==
+X-Gm-Message-State: AC+VfDzvx6bgNxCA/lMzorrLreHBNMo0po96K+LVp2IcXIJwsyswhbhf
+        X7eK0tZTqrXh/D80HEe3Nfn8V3rxXD0=
+X-Google-Smtp-Source: ACHHUZ440OktHbvcRSQlHCV6PoPnUOV8yGww7BdxQ6bF3JhMhC75Gc/Kz8wpWp4EO9w9QSZBf4SDoQ==
+X-Received: by 2002:a17:907:6d11:b0:978:6c0e:354e with SMTP id sa17-20020a1709076d1100b009786c0e354emr6606213ejc.4.1686153461898;
+        Wed, 07 Jun 2023 08:57:41 -0700 (PDT)
+Received: from orome (p200300e41f305300f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f30:5300:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id c8-20020a170906924800b00977cc473b41sm5157196ejx.142.2023.06.07.08.57.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 08:57:41 -0700 (PDT)
+Date:   Wed, 7 Jun 2023 17:57:39 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Peter De Schrijver <pdeschrijver@nvidia.com>
+Cc:     jonathanh@nvidia.com, mperttunen@nvidia.com, sudeep.holla@arm.com,
+        talho@nvidia.com, robh@kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stefank@nvidia.com,
+        krzysztof.kozlowski@linaro.org
+Subject: Re: [PATCH v4 6/6] firmware: tegra: bpmp: Add support for DRAM MRQ
+ GSCs
+Message-ID: <ZICo8wYqM8tmCEob@orome>
+References: <20230511132048.1122075-1-pdeschrijver@nvidia.com>
+ <20230511132048.1122075-7-pdeschrijver@nvidia.com>
+ <ZGNOXO3rRtFx_12R@orome>
+ <ZGNS9w+i9Y9gpz6R@44189d9-lcedt>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [RFC PATCH v6 3/4] fpga: add an initial KUnit suite for the FPGA
- Region
-To:     Xu Yilun <yilun.xu@intel.com>
-Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-fpga@vger.kernel.org
-References: <20230531095405.342080-1-marpagan@redhat.com>
- <20230531095405.342080-4-marpagan@redhat.com>
- <ZHuQc7WfN1zKOeTE@yilunxu-OptiPlex-7050>
- <d1ef2f9a-f416-e7d6-7481-d81c1941702e@redhat.com>
- <ZH8R5APukuZVkIv5@yilunxu-OptiPlex-7050>
-Content-Language: en-US
-From:   Marco Pagani <marpagan@redhat.com>
-In-Reply-To: <ZH8R5APukuZVkIv5@yilunxu-OptiPlex-7050>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="gObwIVTIUUFZASFm"
+Content-Disposition: inline
+In-Reply-To: <ZGNS9w+i9Y9gpz6R@44189d9-lcedt>
+User-Agent: Mutt/2.2.10 (2023-03-25)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,136 +81,130 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--gObwIVTIUUFZASFm
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 2023-06-06 13:00, Xu Yilun wrote:
-> On 2023-06-05 at 18:58:56 +0200, Marco Pagani wrote:
->>
->>
->> On 2023-06-03 21:11, Xu Yilun wrote:
->>> On 2023-05-31 at 11:54:04 +0200, Marco Pagani wrote:
->>>> The suite tests the programming of an FPGA Region with a Bridge
->>>> and the function for finding a particular Region.
->>>>
->>>> Signed-off-by: Marco Pagani <marpagan@redhat.com>
->>>> ---
->>>>  drivers/fpga/tests/fpga-region-test.c | 186 ++++++++++++++++++++++++++
->>>>  1 file changed, 186 insertions(+)
->>>>  create mode 100644 drivers/fpga/tests/fpga-region-test.c
->>
->> [...]
->>
->>  
->>> Maybe better just put all tests in one module, and have unified
->>> fake_mgr_ops/mgr_stats/fake_bridge_ops/bridge_stats across all tests.
->>>
->>> In previous thread, I said I'm good to the self-contained test module
->>> but I didn't actually follow the idea. Sorry for that.
->>>
->>> The concern is why in this region test, the write_count and only the
->>> write_count is taken care of.
->>>
->>> Although fpga_mgr_load() test covers all mgr_ops, but does that
->>> means these ops are still good for more complex case like
->>> fpga_region_program_fpga()? And there is no guarantee
->>> fpga_region_program_fpga() would always call mgr_ops the same way
->>> as fpga_mgr_load() in future.
->>>
->>> Similar for fpga_bridge. Maybe a complete setup for fpga_region is
->>> still necessary.
->>
->> I think that putting all tests in a single module (like in previous
->> versions) goes against the principles of unit testing, making the
->> code more similar to an integration test.
->>
->> Unit tests should be focused on a single behavior. The programming
->> test case included in the Region's suite should test only the behavior
->> of the Region itself. Specifically, that fpga_region_program_fpga() calls
->> get_bridges(), to get and control bridges, and then the Manager for the
->> actual programming.
->>
->> The programming sequence itself is outside the responsibilities of the
->> Region, and its correctness is already ensured by the Manager suite.
->> Similarly, the correctness of the Bridge's methods used by the Region
->> for getting and controlling multiple bridges is already ensured by the
->> Bridge test suite.
->>
->> For this reason, the Manager and Bridge fakes used in the Region suite
->> implement only the minimal set of operations necessary to ensure the
->> correctness of the Region's behavior. If I used a "full" Manager (and
->> tested all mgr_ops), then the test case would have become an integration
->> test rather than a unit test for the Region.
-> 
-> I agree with you about a unit test should focus on a single behavior. But
-> I have concerns that each test suite uses different definitions of the
-> same structure, mgr/bridge stats, mgr/bridge ops, mgr/bridge ctx. Even
-> if we have full definitions for these structures to acommodate all
-> tests, it doesn't break the principle of unit test, just ignore the fields
-> and skip checks that you don't care. E.g. only checks mgr.write_count &
-> bridge.enable_count for region test.
-> 
-> And a single module simplifies the implementation.
-> 
-> struct mgr_stats {
-> 	...
-> };
-> 
-> struct mgr_ctx {
-> 	struct fpga_image_info *img_info;
-> 	struct fpga_manager *mgr;
-> 	struct platform_device *pdev;
-> 	struct mgr_stats stats;
-> };
-> 
-> struct bridge_stats {
-> 	...
-> };
-> 
-> struct bridge_ctx {
-> 	struct fpga_bridge *bridge;
-> 	struct platform_device *pdev;
-> 	struct bridge_stats stats;
-> };
-> 
-> struct region_ctx {
-> 	struct mgr_ctx mgr_ctx;
-> 	struct bridge_ctx bridge_ctx;
-> 
-> 	struct fpga_region *region;
-> 	struct platform_device *region_pdev;
-> };
-> 
-> How do you think?
-> 
-> Thanks,
-> Yilun
->
+On Tue, May 16, 2023 at 12:55:03PM +0300, Peter De Schrijver wrote:
+> On Tue, May 16, 2023 at 11:35:24AM +0200, Thierry Reding wrote:
+> > On Thu, May 11, 2023 at 04:20:51PM +0300, Peter De Schrijver wrote:
+> > > Implement support for DRAM MRQ GSCs.
+> > >=20
+> > > Signed-off-by: Peter De Schrijver <pdeschrijver@nvidia.com>
+> > > ---
+> > >  drivers/firmware/tegra/bpmp-tegra186.c | 232 ++++++++++++++++++-----=
+--
+> > >  drivers/firmware/tegra/bpmp.c          |   4 +-
+> > >  2 files changed, 168 insertions(+), 68 deletions(-)
+> > >=20
+> > > diff --git a/drivers/firmware/tegra/bpmp-tegra186.c b/drivers/firmwar=
+e/tegra/bpmp-tegra186.c
+> > > index 2e26199041cd..74575c9f0014 100644
+> > > --- a/drivers/firmware/tegra/bpmp-tegra186.c
+> > > +++ b/drivers/firmware/tegra/bpmp-tegra186.c
+> > > @@ -4,7 +4,9 @@
+> > >   */
+> > > =20
+> > >  #include <linux/genalloc.h>
+> > > +#include <linux/io.h>
+> > >  #include <linux/mailbox_client.h>
+> > > +#include <linux/of_address.h>
+> > >  #include <linux/platform_device.h>
+> > > =20
+> > >  #include <soc/tegra/bpmp.h>
+> > > @@ -13,12 +15,21 @@
+> > > =20
+> > >  #include "bpmp-private.h"
+> > > =20
+> > > +enum tegra_bpmp_mem_type { TEGRA_INVALID, TEGRA_SRAM, TEGRA_DRAM };
+> >=20
+> > Still not convinced about this one.
+> >=20
+> > > +
+> > >  struct tegra186_bpmp {
+> > >  	struct tegra_bpmp *parent;
+> > > =20
+> > >  	struct {
+> > > -		struct gen_pool *pool;
+> > > -		void __iomem *virt;
+> > > +		union {
+> > > +			struct {
+> > > +				void __iomem *virt;
+> > > +				struct gen_pool *pool;
+> > > +			} sram;
+> > > +			struct {
+> > > +				void *virt;
+> > > +			} dram;
+> > > +		};
+> >=20
+> > The drawback of these unions is that they can lead to ambiguity, so you
+> > need the tegra_bpmp_mem_type enum to differentiate between the two.
+> >=20
+>=20
+> No, on the contrary, now it's clear you can either have void __iomem *
+> and struct gen_pool * or void *virt but not both.
 
-My concern with unified fakes having the same ops, stats, and context structs
-is that they would couple the test suites together. I think it's better to
-have multiple fakes, each with the single responsibility of providing minimal
-support for the component under test. Otherwise, we would end up having
-overcomplicated fakes that implement the union (in the set theory sense of
-the term) of all behaviors tested by all suites. By using these fakes, some
-test cases might implicitly exercise behaviors that are outside their scope
-(e.g., the Region programming test case calling all Manager ops). I feel
-this would go against the principle of limiting the amount of code under test
-to a single unit. 
-Thanks,
-Marco
+No, it's not clear. You can have one part of your driver write the
+sram.virt field and another read dram.virt and they'll end up pointing
+at the same memory location but with different meaning. That's why you
+need to introduce the enumeration in order to specify which one of the
+two you want to pick.
 
->>> BTW: I like the way that fake drivers are removed. Looks much straight
->>> forward.
->>
->> I appreciate that.
->>  
->>> Thanks,
->>> Yilun
->>>
->>
->> Thanks,
->> Marco
->>
->> [...]
->>
-> 
+And that's exactly where you start introducing the potential for
+inconsistency: now you need to be extra careful that the enumeration and
+the unions are set correctly. You effectively have two sources of truth
+and they don't necessarily match. You can also end up (at least
+theoretically) with the invalid value, so you need an extra check for
+that too.
 
+You can avoid all of those inconsistencies if you reduce this to one
+source of truth, namely the pointers that you're going to use.
+
+Your variant would be slightly better if you omitted the invalid value
+because then you could still have an internal inconsistency, but the
+likelihood is much reduced.
+
+> > If you change this to something like:
+> >=20
+> > 	struct {
+> > 		struct gen_pool *pool;
+> > 		void __iomem *sram;
+> > 		void *dram;
+> > 		dma_addr_t phys;
+> > 	} tx, rx;
+> >=20
+> > you eliminate all ambiguity because you can either have pool and sram
+> > set, or you can have dram set, and depending on which are set you know
+> > which type of memory you're dealing with.
+> >=20
+>=20
+> No. You just add ambiguity. It's not clear from looking at the data
+> structure which fields are valid for which case.
+
+That's easily fixed by adding comments explaining what you use them for.
+But the code should make that pretty clear already.
+
+Thierry
+
+--gObwIVTIUUFZASFm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmSAqPEACgkQ3SOs138+
+s6Frrg//ZrJkuxlHWAd1z2xHHXEIOkzdtcXyHgaIXwEUyUHlIpOt3KWDRuDLJcNt
+9eD/zPyD/P+FKoqmzf9GmhINi90pGVsiegEU6bMIoOdEtgnujiqwyhw18eNT70Cv
+1aEIaDs0ZAd9G30Y3TTt7GknBdLqecGSv9p1CLrtGTEew2J6dXgb+cT7cYuawK8B
+W7nl05lQYd2oxzBTGwncy3MyoVhyx11R6Cmb37DDZK4fA7KsJylZgRFlaj8jZtZq
+A8vHkzvk6r2l9VyEUezPP18OXDVpoqRaE1geOHj9RAzuee5XiUMjtn4UYmGxqS2b
+qfQkMiLqSMaFulQLqIiKiOuWs5So339UVYygx/Jb0qGdmU2fEH69SZghazbtm0IM
+SiluRtBtDdCaOZzu8aYxdF+fcqNCMaAxSzBF+7WLJeHSx+6smaFWjXRsOIBg2kBd
+CpcoTG8kBIMxfEJiwgQfPOvFWp8jy5lg6f+uiJQLltTK16oZGSS7fUOM1sDBHlnC
+SsITSkSSbQQ0hpk3UBU0/URrIf7L/aH84VkmvrrrP1r8ZX/O75U4a33+GAoQUxH7
+g2cDpKxx20VdCMcTUk2Xtyk/DSFAby1JkVckjK/Mp9XeI7bDPAiYBLOkWF/dpMwi
+X0EX0yJt66hcs64bGmt7Jhut64KxM6bV8/HfXMaS+sIrkuyGm14=
+=0L5G
+-----END PGP SIGNATURE-----
+
+--gObwIVTIUUFZASFm--
