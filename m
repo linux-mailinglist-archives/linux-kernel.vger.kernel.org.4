@@ -2,147 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 857FF726621
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 18:40:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C4BD726631
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 18:42:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbjFGQj6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 12:39:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59092 "EHLO
+        id S229834AbjFGQmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 12:42:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230219AbjFGQj5 (ORCPT
+        with ESMTP id S229641AbjFGQmJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 12:39:57 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1627B1BFE
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 09:39:56 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1b0201d9a9eso6447595ad.0
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 09:39:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686155995; x=1688747995;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=haXOY3QmS0fTsttw/m0QvphvkCV0nGYqGozTlwd/PLA=;
-        b=orm4BQQMfYCElS2J0K9B44CwqHOVtqq1UBdOIxiBGWU9Bv/G0xFghgAQ9ctWK68eTo
-         GPf2TzN7C2H7Ia2L/Onx3ppykoBtnpejiks57TqHoXrkvvOM+SLhrsZqGPD37lYmr01j
-         QdXpWfEM4eWE3RwiQzvKB1SL8t84Rkm8dq2owC7UGWtbcTK8qgr8eu/WnefjGJL/MzJ6
-         5J8AW5SkizWArXgvhTTkO7oTZc8umAjZeA04yNmNWjuDjHqm4nqM/uiAOQ/iMYiX9rqD
-         fNi4xLdEzXj+Krf8JbfmyXbzDQXzclVBSYeEBYE2FH7GYTxqWm7W3fezRqsTdFDZQ79q
-         HgjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686155995; x=1688747995;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=haXOY3QmS0fTsttw/m0QvphvkCV0nGYqGozTlwd/PLA=;
-        b=jrqn/ZxeVbswGjyX5eiitJ1GcecIJupK5uA3ApKKZ+AP5ikIu/zQi5wHQ35wSlvfCo
-         IDhfIduHFYNn1A819PIhBhbUY7oowzj8sEA3fJqQ3UravQcbjn5GwL7ipUILmiKjddNX
-         iKALWq/5KKLBoYyttcclMOzZNDECTuHcRtna7yrX3/Qe0TaDqW3Q64sol97A46seqvNz
-         fG6nmdsl48kIEaBICIzxIYCy5Azp02DdFA6z4i9z4iErdY2PTQ/iq4+pKKG0H2/595SG
-         xuuCKqBodo0hO5dH9kGz47WTxFmMDTn6uBqRbeSCZKlHJgyNzs+fBl+WR0mCTtSdu4Wo
-         dglQ==
-X-Gm-Message-State: AC+VfDxhvML5KJBjw15gPPjGkd8XTMo+2tW8b2F2V0GAwJeJF7Po52zj
-        AMtmOCkWGJqNzRKdKZAvc1q+Zpk/9EDwsHBLVEY=
-X-Google-Smtp-Source: ACHHUZ5ZajRbcgvECTPIMkPVc+zO5SV97dXF0sN2J3j3b0jxb1yHOOEGLewn0/yqz5ZJD/OkPXfUSJQqHx+5MBndtvo=
-X-Received: by 2002:a17:902:b18e:b0:1b0:7cc:982a with SMTP id
- s14-20020a170902b18e00b001b007cc982amr6156551plr.5.1686155995416; Wed, 07 Jun
- 2023 09:39:55 -0700 (PDT)
+        Wed, 7 Jun 2023 12:42:09 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FA911FC4;
+        Wed,  7 Jun 2023 09:42:08 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 194615C007C;
+        Wed,  7 Jun 2023 12:42:08 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Wed, 07 Jun 2023 12:42:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        invisiblethingslab.com; h=cc:cc:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1686156128; x=1686242528; bh=42y1EYFXvq4hYeXlSpmVr7gmNpbInmaS7tg
+        G+Ss9F5U=; b=CHxsNu/TLuBvPTG0yHh4WOq5QJN1It8U4K4Mt15g1FIi6vpL6Ad
+        4SNv/41uiq14W8leF4UWTsz72Su5CRbXiIRYEnHIDHBx9oDZqT6ymIagHkd2CQwm
+        wNifs0xXvmsiFF3ncmrudJvXcMTwLJELPyOnernFr6t3hASMW0zPB0PfLDwC0BW0
+        uHq3ry34wEAUTA3EsUXoZvNluvYHvcmg1lIB0QJ7a3DfUUW9bYOQ3lM4uFz62ezH
+        Prl2L8QV+COLB0QySNuIbWY+j9m6wIwBBTmIGRXwua/wfc+B9Lhpp6LKDxOCNs1A
+        bvTFZlTojHJl6zVroypQ8HtiXc5lAVlS+rQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1686156128; x=1686242528; bh=42y1EYFXvq4hY
+        eXlSpmVr7gmNpbInmaS7tgG+Ss9F5U=; b=CsL/olnib/EC7s2AniVOsID2RnvaO
+        gHEE1/PviC87GXlrK2jQrtRUoDiIUCd3PtoZMt1pM2/PfxbOkOjWQjNVZkVe/Lvr
+        KUlvOi1I9n0bCjNREsjfXNTcuAmGB3wZUYXeFyqAUFyLIH0XI/ZdN2tZRXyBDIDw
+        Q0OybDNsW02ypxRMnzz6nL11B8Pm6rec3hbwVmEFrw+0ZpslcCIJJN3Q1grAWypJ
+        LgceyJdxSEpqDgSvmOPuPPq4XxJZ5J0z5qm3GBh9GhG88SW3k3wKeKyHBl/WLKwK
+        9wEObMIJ7i8awdQgzUCQQmLUcfv6L9lHBdVfEyqqz1sK1byku2VFQmGKg==
+X-ME-Sender: <xms:X7OAZM1ueUtCZdO5gXwRqFsrTiESkIoCnY3pNx4WgbAYO0oyzbY1PA>
+    <xme:X7OAZHF3Mm8dFQfIxCWk2Q2sncJ1ilMSCg4BcG3qR59V5ItJEHxuGXhmWfURtWr79
+    0K3DL6PsGWuCx4>
+X-ME-Received: <xmr:X7OAZE65WME9hDYCcsiCzgK011Z8Vz86jMcNQVl3Ypi6IuTe6Ryys5wXUsw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedtgedguddtgecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehgtderredttdejnecuhfhrohhmpeffvghm
+    ihcuofgrrhhivgcuqfgsvghnohhurhcuoeguvghmihesihhnvhhishhisghlvghthhhinh
+    hgshhlrggsrdgtohhmqeenucggtffrrghtthgvrhhnpedvjeetgeekhfetudfhgfetffeg
+    fffguddvgffhffeifeeikeektdehgeetheffleenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpeguvghmihesihhnvhhishhisghlvghthhhinhhg
+    shhlrggsrdgtohhm
+X-ME-Proxy: <xmx:X7OAZF1mDsYgwtD-fK8d8Ln8N-NhaJ-ZqD3je5aBQiOsM5VgdG175w>
+    <xmx:X7OAZPHnGIQFnU7zGkQzx5MOEv1iOX-kwemrqJUS1fOPh52IJyHP7A>
+    <xmx:X7OAZO_jD_APgbz570axrPJPE4wcAJWB3FlObPxftl1hiSmRcMkhFA>
+    <xmx:YLOAZFMANyMVDb7AixBzA8LP_hT_vpDIINqDbQ6YIw0Uxp04beErWA>
+Feedback-ID: iac594737:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 7 Jun 2023 12:42:07 -0400 (EDT)
+Date:   Wed, 7 Jun 2023 12:42:00 -0400
+From:   Demi Marie Obenour <demi@invisiblethingslab.com>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] block, loop: Increment diskseq when releasing a loop
+ device
+Message-ID: <ZICzXbJeLj56NRYB@itl-email>
+References: <20230601222656.2062-1-demi@invisiblethingslab.com>
+ <ZIA004HDuhoTQzY/@infradead.org>
+ <ZICg2sxHQRRPW3Nc@itl-email>
 MIME-Version: 1.0
-References: <20230602230552.350731-1-peterx@redhat.com> <ZICK3uqTeUxeIlc9@x1n>
- <97b5657d-e09d-b3a9-c09d-eaff9fb7929d@redhat.com> <ZICukdhrxcaA74Pp@x1n>
-In-Reply-To: <ZICukdhrxcaA74Pp@x1n>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Wed, 7 Jun 2023 09:39:44 -0700
-Message-ID: <CAHbLzkoiSW3jOhFdEU5w567SyxhB05dBfTrJvKg4X59nPURz3Q@mail.gmail.com>
-Subject: Re: [PATCH 0/4] mm: Fix pmd_trans_unstable() call sites on retry
-To:     Peter Xu <peterx@redhat.com>
-Cc:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Alistair Popple <apopple@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Hugh Dickins <hughd@google.com>,
-        Mike Rapoport <rppt@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Lhc+hn0jVRR2V+8y"
+Content-Disposition: inline
+In-Reply-To: <ZICg2sxHQRRPW3Nc@itl-email>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 7, 2023 at 9:21=E2=80=AFAM Peter Xu <peterx@redhat.com> wrote:
->
-> On Wed, Jun 07, 2023 at 05:45:28PM +0200, David Hildenbrand wrote:
-> > On 07.06.23 15:49, Peter Xu wrote:
-> > > On Fri, Jun 02, 2023 at 07:05:48PM -0400, Peter Xu wrote:
-> > > > Please have a look, thanks.
-> > >
-> > > Hello, all,
-> > >
-> > > This one seems to have more or less conflict with Hugh's rework on pm=
-d
-> > > collapse.  Please hold off review or merging until I prepare another =
-one
-> > > (probably based on Hugh's, after I have a closer read).
-> > >
-> > > Sorry for the noise.
-> > >
-> >
-> > [did not have time to look yet]
-> >
-> > Are there any fixes buried in there that we'd like to have in earlier? =
-I
-> > skimmed over the patches and all read like "cleanup" + "consistency",
-> > correct?
->
-> There are bug fixes when unluckily hitting unstable pmd I think, these on=
-es
-> worth mentioning:
->
->   - pagemap can be broken, causing read to be shifted over to the next
->     (wrong data read)
 
-Yes, it may corrupt the pagemap data. But anyway it seems like nobody
-was busted by this one as you said.
+--Lhc+hn0jVRR2V+8y
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 7 Jun 2023 12:42:00 -0400
+From: Demi Marie Obenour <demi@invisiblethingslab.com>
+To: Christoph Hellwig <hch@infradead.org>
+Cc: Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] block, loop: Increment diskseq when releasing a loop
+ device
 
->
->   - memcg wrong accounting, e.g., moving one task from memcg1 to memcg2, =
-we
->     can skip an unstable pmd while it could quickly contain something tha=
-t
->     can belong to memcg1, I think.  This one needs some eyes from memcg
->     developers.
+On Wed, Jun 07, 2023 at 11:23:00AM -0400, Demi Marie Obenour wrote:
+> > > --- a/drivers/block/loop.c
+> > > +++ b/drivers/block/loop.c
+> > > @@ -1205,6 +1205,12 @@ static void __loop_clr_fd(struct loop_device *=
+lo, bool release)
+> > >  	if (!part_shift)
+> > >  		set_bit(GD_SUPPRESS_PART_SCAN, &lo->lo_disk->state);
+> > >  	mutex_lock(&lo->lo_mutex);
+> > > +
+> > > +	/*
+> > > +	 * Increment the disk sequence number, so that userspace knows this
+> > > +	 * device now points to something else.
+> > > +	 */
+> > > +	inc_diskseq(lo->lo_disk);
+> >=20
+> > And I'm not sure why we even need this.  __loop_clr_fd
+> > already calls disk_force_media_change, which calls inc_diskseq.
+> > Why do we need an extra increment?
+>=20
+> How does disk_force_media_change() call inc_diskseq()?  I don=E2=80=99t s=
+ee any
+> calls in the source code.  I=E2=80=99m going to use systemtap to see if t=
+here is
+> an indirect call chain.
 
-I don't think this is an important thing. There are plenty of other
-conditions that could make the accounting inaccurate, for example,
-isolating page from LRU fails, force charge, etc. And it seems like
-nobody was bothered by this either.
+Were you thinking of bdev_check_media_change()?  That can call
+inc_diskseq() via this call chain:
 
->
-> I don't rush on having them because these are all theoretical and no bug
-> report I saw, no reproducer I wrote, only observed by my eyes.
->
-> At least the pagemap issue should have been there for 10+ years without
-> being noticed even if rightfully spot this time.  Meanwhile this seems to
-> have conflict with Hugh's series which should have been posted earlier - =
-I
-> still need to check on how that will affect this series, but not yet.
->
-> Said that, let me know if any of you hit any (potential) issue with above
-> or think that we should to move this in earlier.
->
-> Thanks,
->
-> --
-> Peter Xu
->
->
+  bdev_check_media_change()
+    disk_clear_events()
+      disk_check_events()
+        inc_diskseq()
+
+disk_force_media_change() does not call inc_diskseq(), and I checked
+that calling losetup -D does not change the diskseq of a loop device.
+=46rom what you have writte, I=E2=80=99m pretty sure that=E2=80=99s a bug in
+disk_force_media_change(), though.  I=E2=80=99ll send a v3 that adds this c=
+all.
+--=20
+Sincerely,
+Demi Marie Obenour (she/her/hers)
+Invisible Things Lab
+
+--Lhc+hn0jVRR2V+8y
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEdodNnxM2uiJZBxxxsoi1X/+cIsEFAmSAs10ACgkQsoi1X/+c
+IsGbBBAAoZxDjSSs9J+siCWh0MMyGUEwddaQhnOqS6hH//JuLOHDb71mJVF51gZR
+ayDHrJnYDhxsSpb02lxWKKPfo0plXSnTwb8gt2ZX+HUIXR+QteXUpfXzKi45ZwT7
+p70ZnygsFNmn24ePKu5RS491F3n/Kz51PPdacIE429QBLi5YRAAlTTan4pOJRvRt
+bgliY4CSe63mDrCJ4GMd7614e4mTPrsaJYbAAx5ri1xJBNy8pKjbyUMcSfR5VQnu
+ujJgAXImHu3mzEeJlHKusofkCA43rWdhLsrZvrjArGXEXOcK7Qk4zkVUGh/dG7Ta
+QxljW+MD+foQRsFmsrc+XMfIpPuWy/AigkYi7a+jINyzwfmNqfnWwuxW4Q3mQlhu
+eJ7inplmVJ7xsPJKbRL/DcqiHvE+KgGU5GHuZPCwu7e9G+pkcEJ1kTqzHZrRTAJW
+WXhLxBLajojgzKCrbTusEmLuodkVMZpqM1VPsSBeGjYwV+BvVlymK15DWtlxffC4
+XdsQHu88yG8rdDe4TO7GgSWfNXDGuIQOtmHTsvrvLR/XVduEByxaXdsYj5k5JO/V
+A7h0LAnLqTZo2+0tYqaFHHUjUHWua8edZYrdVvXTsNgkMfDol8/SGSSsbstvEbGz
+8WGMKF+Qp8uA8T9fUDq95d6QDXwdg1E5NLawy7Yg9CfYScpy1Mg=
+=AmeY
+-----END PGP SIGNATURE-----
+
+--Lhc+hn0jVRR2V+8y--
