@@ -2,57 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80B03725B70
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 12:19:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0999C725B7D
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 12:21:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239004AbjFGKTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 06:19:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44162 "EHLO
+        id S239013AbjFGKVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 06:21:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239569AbjFGKTO (ORCPT
+        with ESMTP id S233639AbjFGKVG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 06:19:14 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29C2F1FC2
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 03:19:06 -0700 (PDT)
-Received: from fsav414.sakura.ne.jp (fsav414.sakura.ne.jp [133.242.250.113])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 357AJ45u053811;
-        Wed, 7 Jun 2023 19:19:04 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav414.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav414.sakura.ne.jp);
- Wed, 07 Jun 2023 19:19:04 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav414.sakura.ne.jp)
-Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 357AJ49C053807
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Wed, 7 Jun 2023 19:19:04 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <492fe2ae-5141-d548-ebd5-62f5fe2e57f7@I-love.SAKURA.ne.jp>
-Date:   Wed, 7 Jun 2023 19:19:02 +0900
+        Wed, 7 Jun 2023 06:21:06 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B65C11D;
+        Wed,  7 Jun 2023 03:21:05 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id DD6EE219BF;
+        Wed,  7 Jun 2023 10:21:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1686133263; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PaXymw7r2ADMno+XYANmnydgCB3s3HtZ/gj7X6DBhRc=;
+        b=J3RP1esx98O+TAK740ShbBSTIdlVpgioz65lkUHAjtbIGb8xy5WBt+lIrCV0r9OnDoHREg
+        9nlx7ksSd90DHLE1psfx9asLCpUaxyv4B1zTBIfJJuOZzZQ1Gjyy+fo4l6YYgieeuG6jtj
+        lTaqiPv1XJSX9WqlZNBz7gekdX1pDmk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1686133263;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PaXymw7r2ADMno+XYANmnydgCB3s3HtZ/gj7X6DBhRc=;
+        b=pYvlyw5JxqoI7wvZHzcb/+G8R8ZEDK5z/bLPAcqkyLXRVeqfv+ukSRUdvw2FmhPAW25a4G
+        T2CBVTCsheQZ24CA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CE5FC13776;
+        Wed,  7 Jun 2023 10:21:03 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id a3peMg9agGSNfAAAMHmgww
+        (envelope-from <jack@suse.cz>); Wed, 07 Jun 2023 10:21:03 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 4FF65A0754; Wed,  7 Jun 2023 12:21:03 +0200 (CEST)
+Date:   Wed, 7 Jun 2023 12:21:03 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Ojaswin Mujoo <ojaswin@linux.ibm.com>
+Cc:     linux-ext4@vger.kernel.org, Theodore Ts'o <tytso@mit.edu>,
+        Ritesh Harjani <riteshh@linux.ibm.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jan Kara <jack@suse.cz>,
+        Kemeng Shi <shikemeng@huaweicloud.com>,
+        Ritesh Harjani <ritesh.list@gmail.com>
+Subject: Re: [PATCH v2 11/12] ext4: Add allocation criteria 1.5 (CR1_5)
+Message-ID: <20230607102103.gavbiywdudx54opk@quack3>
+References: <cover.1685449706.git.ojaswin@linux.ibm.com>
+ <150fdf65c8e4cc4dba71e020ce0859bcf636a5ff.1685449706.git.ojaswin@linux.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: [PATCH v2] debugobjects: recheck debug_objects_enabled before
- reporting
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        syzbot <syzbot+7937ba6a50bdd00fffdf@syzkaller.appspotmail.com>,
-        syzkaller-bugs@googlegroups.com
-Cc:     linux-kernel@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        wuchi <wuchi.zero@gmail.com>
-References: <0000000000003a2f8505fcd5f06b@google.com>
- <1af29817-4698-c5ac-cf63-0dad289e740f@I-love.SAKURA.ne.jp>
- <871qiokyma.ffs@tglx>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <871qiokyma.ffs@tglx>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <150fdf65c8e4cc4dba71e020ce0859bcf636a5ff.1685449706.git.ojaswin@linux.ibm.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,67 +76,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot is reporting false positive ODEBUG message immediately after
-ODEBUG was disabled due to OOM. We should recheck debug_objects_enabled
-before reporting.
+On Tue 30-05-23 18:03:49, Ojaswin Mujoo wrote:
+> CR1_5 aims to optimize allocations which can't be satisfied in CR1. The
+> fact that we couldn't find a group in CR1 suggests that it would be
+> difficult to find a continuous extent to compleltely satisfy our
+> allocations. So before falling to the slower CR2, in CR1.5 we
+> proactively trim the the preallocations so we can find a group with
+> (free / fragments) big enough.  This speeds up our allocation at the
+> cost of slightly reduced preallocation.
+> 
+> The patch also adds a new sysfs tunable:
+> 
+> * /sys/fs/ext4/<partition>/mb_cr1_5_max_trim_order
+> 
+> This controls how much CR1.5 can trim a request before falling to CR2.
+> For example, for a request of order 7 and max trim order 2, CR1.5 can
+> trim this upto order 5.
+> 
+> Suggested-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
+> Signed-off-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
+> Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
+> 
+> ext4 squash
 
-  [ 1062.309646][T22911] ODEBUG: Out of memory. ODEBUG disabled
-  [ 1062.886755][ T5171] ------------[ cut here ]------------
-  [ 1062.892770][ T5171] ODEBUG: assert_init not available (active state 0) object: ffffc900056afb20 object type: timer_list hint: process_timeout+0x0/0x40
+Why is this here?
 
-  CPU 0 [ T5171]                CPU 1 [T22911]
-  --------------                --------------
-  debug_object_assert_init() {
-    if (!debug_objects_enabled)
-      return;
-    db = get_bucket((unsigned long) addr); // Finds a bucket, but...
-                                lookup_object_or_alloc() {
-                                  debug_objects_enabled = 0;
-                                  return NULL;
-                                }
-                                debug_objects_oom() {
-                                  pr_warn("Out of memory. ODEBUG disabled\n");
-                                  // all buckets get emptied here, and
-                                }
-    lookup_object_or_alloc(addr, db, descr, false, true) {
-      // this bucket is already empty.
-      return ERR_PTR(-ENOENT);
-    }
-    // Emits false positive warning.
-    debug_print_object(&o, "assert_init");
-  }
+> +/*
+> + * We couldn't find a group in CR1 so try to find the highest free fragment
+> + * order we have and proactively trim the goal request length to that order to
+> + * find a suitable group faster.
+> + *
+> + * This optimizes allocation speed at the cost of slightly reduced
+> + * preallocations. However, we make sure that we don't trim the request too
+> + * much and fall to CR2 in that case.
+> + */
+> +static void ext4_mb_choose_next_group_cr1_5(struct ext4_allocation_context *ac,
+> +		enum criteria *new_cr, ext4_group_t *group, ext4_group_t ngroups)
+> +{
+> +	struct ext4_sb_info *sbi = EXT4_SB(ac->ac_sb);
+> +	struct ext4_group_info *grp = NULL;
+> +	int i, order, min_order;
+> +	unsigned long num_stripe_clusters = 0;
+> +
+> +	if (unlikely(ac->ac_flags & EXT4_MB_CR1_5_OPTIMIZED)) {
+> +		if (sbi->s_mb_stats)
+> +			atomic_inc(&sbi->s_bal_cr1_5_bad_suggestions);
+> +	}
+> +
+> +	/*
+> +	 * mb_avg_fragment_size_order() returns order in a way that makes
+> +	 * retrieving back the length using (1 << order) inaccurate. Hence, use
+> +	 * fls() instead since we need to know the actual length while modifying
+> +	 * goal length.
+> +	 */
+> +	order = fls(ac->ac_g_ex.fe_len);
+> +	min_order = order - sbi->s_mb_cr1_5_max_trim_order;
+> +	if (min_order < 0)
+> +		min_order = 0;
+> +
+> +	if (1 << min_order < ac->ac_o_ex.fe_len)
+> +		min_order = fls(ac->ac_o_ex.fe_len) + 1;
+> +
+> +	if (sbi->s_stripe > 0) {
+> +		/*
+> +		 * We are assuming that stripe size is always a multiple of
+> +		 * cluster ratio otherwise __ext4_fill_super exists early.
+> +		 */
+> +		num_stripe_clusters = EXT4_NUM_B2C(sbi, sbi->s_stripe);
+> +		if (1 << min_order < num_stripe_clusters)
+> +			min_order = fls(num_stripe_clusters);
+> +	}
+> +
+> +	for (i = order; i >= min_order; i--) {
+> +		int frag_order;
+> +		/*
+> +		 * Scale down goal len to make sure we find something
+> +		 * in the free fragments list. Basically, reduce
+> +		 * preallocations.
+> +		 */
+> +		ac->ac_g_ex.fe_len = 1 << i;
 
-Reported-by: syzbot <syzbot+7937ba6a50bdd00fffdf@syzkaller.appspotmail.com>
-Closes: https://syzkaller.appspot.com/bug?extid=7937ba6a50bdd00fffdf
-Suggested-by: Thomas Gleixner <tglx@linutronix.de>
-Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
----
-Changes in v2:
-  No need to turn off debug_objects_enabled from debug_objects_oom().
+I smell some off-by-one issues here. Look fls(1) == 1 so (1 << fls(n)) > n.
+Hence this loop will actually *grow* the goal allocation length. Also I'm
+not sure why you have +1 in min_order = fls(ac->ac_o_ex.fe_len) + 1.
 
- lib/debugobjects.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+> +
+> +		if (num_stripe_clusters > 0) {
+> +			/*
+> +			 * Try to round up the adjusted goal to stripe size
+						        ^^^ goal length?
 
-diff --git a/lib/debugobjects.c b/lib/debugobjects.c
-index 984985c39c9b..ab3bbcb78471 100644
---- a/lib/debugobjects.c
-+++ b/lib/debugobjects.c
-@@ -498,6 +498,15 @@ static void debug_print_object(struct debug_obj *obj, char *msg)
- 	const struct debug_obj_descr *descr = obj->descr;
- 	static int limit;
- 
-+	/*
-+	 * Don't report if lookup_object_or_alloc() by the current thread
-+	 * failed because lookup_object_or_alloc()/debug_objects_oom() by
-+	 * concurrent thread turned off debug_objects_enabled and cleared
-+	 * the hash buckets.
-+	 */
-+	if (!debug_objects_enabled)
-+		return;
-+
- 	if (limit < 5 && descr != descr_test) {
- 		void *hint = descr->debug_hint ?
- 			descr->debug_hint(obj->object) : NULL;
+> +			 * (in cluster units) multiple for efficiency.
+> +			 *
+> +			 * XXX: Is s->stripe always a power of 2? In that case
+> +			 * we can use the faster round_up() variant.
+> +			 */
+
+I don't think s->stripe has to be a power of 2. E.g. when you have three
+data disks in a RAID config.
+
+Otherwise the patch looks good to me.
+
+								Honza
 -- 
-2.18.4
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
