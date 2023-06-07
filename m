@@ -2,73 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06D55727087
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 23:23:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44D0572706F
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 23:20:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232701AbjFGVXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 17:23:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47406 "EHLO
+        id S230411AbjFGVTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 17:19:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232672AbjFGVXi (ORCPT
+        with ESMTP id S229536AbjFGVTp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 17:23:38 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB03B1BE2
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 14:23:35 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id B87C75FD05;
-        Thu,  8 Jun 2023 00:23:33 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1686173013;
-        bh=K0aBaIg4zf2P0UykGVbyuQblC6R5Fsbn4jzYeUZ5cVA=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=RJPwrIG+MQIcHsO9Nhu/gQ58DIm+894yvtHrU+Q92KU82XOp8UpwOW82+Gqp1XEua
-         Z8KtPzwPfPnmtxBi9nGAwp+Th6kTbHl6mLYEJZuM114XwwEztLHnupn20lJuQJFQca
-         x8154u7ZjXbRKLeuNfpGhLL6yvGT5U09qhsL65WW1y4pMPw9TEzs/T79r7uuyJFTaj
-         EgrEsECVXw2dhLQoJZfEg7ANHLzzBuitbrb7QPTHO5FN/FRZ07nCZhWSOvwG6Iwsbr
-         E5lo5yCk5KFo2uHP4y3zMZXlFQTzLw9gTQcpaKaqqFSukPG+Vy2hy2NcGaT/T3J02T
-         s60QzUGD8A9QA==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Thu,  8 Jun 2023 00:23:33 +0300 (MSK)
-Message-ID: <9319a8f6-3774-0dc8-2262-8033f8016a50@sberdevices.ru>
-Date:   Thu, 8 Jun 2023 00:18:38 +0300
+        Wed, 7 Jun 2023 17:19:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A23401984;
+        Wed,  7 Jun 2023 14:19:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 30F31648D3;
+        Wed,  7 Jun 2023 21:19:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B2D3C433D2;
+        Wed,  7 Jun 2023 21:19:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686172783;
+        bh=kPvir4ZLGQOIvoukeOAmyBe+ZNEwToynta1WPvI98us=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=l0CWu4k/EmTG+pvWHcMifGGTMeSBy+7GNaDZcly9c4fJJrCNY3+c8SQ929wWq+Zkq
+         nUMXR9LMAA743dHVIn0MPJlPa9rwlZK39iV7jcl5BIebw+tst0VGShLGvnhuRWX/jc
+         ncaXWegQgYqBAH0ZKzPZatAhQNug6N3wDoriNzzZ0JLF8mtaUZk4M0RpKVys5wED28
+         Y43yN4sHHvVyoZ+Wt0k1Xd4ZACEI4gUQa6SzLuEIbhT2xGM6k9YtDgPZp0TL4l+veF
+         y8LorTecMe69Qduynnv0EbaFPuMOxxJTwdhtQXWU0V/GwW06Y2Q7lYdhNxTZGQDJZ4
+         oxWfQNKKOgTvQ==
+Date:   Wed, 7 Jun 2023 16:19:41 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     lpieralisi@kernel.org, kw@linux.com, kishon@kernel.org,
+        bhelgaas@google.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        dlemoal@kernel.org, Yang Li <yang.lee@linux.alibaba.com>
+Subject: Re: [PATCH v6 8/9] PCI: endpoint: Add PCI Endpoint function driver
+ for MHI bus
+Message-ID: <20230607211941.GA1176583@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v1] mtd: rawnand: meson: remove unneeded bitwise OR with
- zeroes
-Content-Language: en-US
-To:     Liang Yang <liang.yang@amlogic.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-CC:     <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
-        <linux-mtd@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-References: <20230605191508.1826853-1-AVKrasnov@sberdevices.ru>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-In-Reply-To: <20230605191508.1826853-1-AVKrasnov@sberdevices.ru>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/06/07 16:55:00 #21454472
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230607204923.GA1174664@bhelgaas>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,36 +56,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi again Miquel, Liang!
+[+cc Yang Li, sorry I didn't notice your patch earlier:
+https://lore.kernel.org/r/20230607093514.104012-1-yang.lee@linux.alibaba.com]
 
-What do You think about this patch?
+I think we can squash this into the original commit since it hasn't
+gone upstream yet.  Also note that removing the dev_err() apparently
+makes "dev" unused, so we'd have to remove that as well, based on this
+report [2].
 
-Thanks, Arseniy
+[2] https://lore.kernel.org/r/202306080418.i64hTj5T-lkp@intel.com
 
-On 05.06.2023 22:15, Arseniy Krasnov wrote:
-> Both operations have no effect.
+On Wed, Jun 07, 2023 at 03:49:25PM -0500, Bjorn Helgaas wrote:
+> On Fri, Jun 02, 2023 at 05:17:55PM +0530, Manivannan Sadhasivam wrote:
+> > Add PCI Endpoint driver for the Qualcomm MHI (Modem Host Interface) bus.
+> > The driver implements the MHI function over PCI in the endpoint device
+> > such as SDX55 modem. The MHI endpoint function driver acts as a
+> > controller driver for the MHI Endpoint stack and carries out all PCI
+> > related activities like mapping the host memory using iATU, triggering
+> > MSIs etc...
+> > ...
 > 
-> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-> ---
->  drivers/mtd/nand/raw/meson_nand.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> > +static int pci_epf_mhi_bind(struct pci_epf *epf)
+> > +{
+> > ...
 > 
-> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
-> index 074e14225c06..50d3110ad321 100644
-> --- a/drivers/mtd/nand/raw/meson_nand.c
-> +++ b/drivers/mtd/nand/raw/meson_nand.c
-> @@ -595,12 +595,12 @@ static int meson_nfc_rw_cmd_prepare_and_execute(struct nand_chip *nand,
->  	cmd0 = in ? NAND_CMD_READ0 : NAND_CMD_SEQIN;
->  	nfc->cmdfifo.rw.cmd0 = cs | NFC_CMD_CLE | cmd0;
->  
-> -	addrs[0] = cs | NFC_CMD_ALE | 0;
-> +	addrs[0] = cs | NFC_CMD_ALE;
->  	if (mtd->writesize <= 512) {
->  		cmd_num--;
->  		row_start = 1;
->  	} else {
-> -		addrs[1] = cs | NFC_CMD_ALE | 0;
-> +		addrs[1] = cs | NFC_CMD_ALE;
->  		row_start = 2;
->  	}
->  
+> > +	ret = platform_get_irq_byname(pdev, "doorbell");
+> > +	if (ret < 0) {
+> > +		dev_err(dev, "Failed to get Doorbell IRQ\n");
+> 
+> This dev_err() causes this new warning from the 0-day robot [1]:
+> 
+>   drivers/pci/endpoint/functions/pci-epf-mhi.c:362:2-9: line 362 is redundant because platform_get_irq() already prints an error
+> 
+> Maybe we could drop it?
+> 
+> Bjorn
+> 
+> [1] https://lore.kernel.org/all/20230607163937.ZTc-D%25lkp@intel.com/
