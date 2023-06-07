@@ -2,65 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B7FF7259E8
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 11:18:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D0F47259ED
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 11:18:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239440AbjFGJSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 05:18:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40706 "EHLO
+        id S239486AbjFGJSc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 05:18:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238542AbjFGJSG (ORCPT
+        with ESMTP id S239593AbjFGJSX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 05:18:06 -0400
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED9383;
-        Wed,  7 Jun 2023 02:18:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=/N4iQQzhKXwMLpsqAX/ldRXHvjdWxI/sMibJLHmuUyE=;
-        t=1686129485; x=1687339085; b=tlLst//G60B0SndknUo2dNgUlP09MA53Vi92vpoCI+t2IgE
-        aGN87YSPykv3sH7mOv0WHHpnRALVFit/DkxQsm54BnUHh/0Sn/ACv3uifCJOUOS+TgvvQcBaPmGAc
-        RLH69C6n4cikB4Q78iLkzbUzd7aoE5cam6+7RJPAACYuuUTQj+x28ARU8DswpwWtccU479q5yFChW
-        qiBbMJ1XveJXcD/+5QrFdX2elKEhHxi9iK7GzaGfS+w5i50Zsq7kiOjna0P80O53yNsEWajKt1PvB
-        OPi5se5qgLzD5FzkyToGh5+19BPWCrGCNtMom8bvfxTnPGKJWrdlO77UjQtY+/5A==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.96)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1q6pIh-00GUej-1M;
-        Wed, 07 Jun 2023 11:17:55 +0200
-Message-ID: <a953b19efca20b470759b1d53beb957a11062ba1.camel@sipsolutions.net>
-Subject: Re: Reported-by/Closes tag for uncommitted issues (was: Re: [PATCH
- v2] uml: Replace strlcpy with strscpy)
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     Philip Li <philip.li@intel.com>,
-        Richard Weinberger <richard@nod.at>
-Cc:     Eric Biggers <ebiggers@kernel.org>,
-        Azeem Shaikh <azeemshaikh38@gmail.com>,
-        Maxim Krasnyansky <maxk@qti.qualcomm.com>,
-        anton ivanov <anton.ivanov@cambridgegreys.com>,
-        linux-hardening <linux-hardening@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        kernel test robot <lkp@intel.com>
-Date:   Wed, 07 Jun 2023 11:17:54 +0200
-In-Reply-To: <ZIBJadzmheKWCErq@rli9-mobl>
-References: <20230606182410.3976487-1-azeemshaikh38@gmail.com>
-         <1833651082.3690424.1686084717406.JavaMail.zimbra@nod.at>
-         <CADmuW3WzC61-si1j61kzwfx5EcsvSt4QBaY9VHiybBRWAN3yyA@mail.gmail.com>
-         <20230607042340.GA941@sol.localdomain>
-         <57443d420183b7a0bcab8041c2dfe3ba44e054f4.camel@sipsolutions.net>
-         <2092891129.3692555.1686126895090.JavaMail.zimbra@nod.at>
-         <ZIBJadzmheKWCErq@rli9-mobl>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.2 (3.48.2-1.fc38) 
+        Wed, 7 Jun 2023 05:18:23 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D236172E;
+        Wed,  7 Jun 2023 02:18:17 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-30d5931d17aso3426168f8f.3;
+        Wed, 07 Jun 2023 02:18:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686129496; x=1688721496;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MtMQ/nGfSguBTH/fnJCG/BZKK2MvsVclTLF6KR44o7Q=;
+        b=mKFNfeE1x5dO0MrHNtPLOQyU9VKLcb/HNfA4YnRbqeZzNQA8nsDiNEg+OY50nVZg3o
+         3SvQlMxskAHYUd7FYwAH4UTN4XPB8HE24EuRKoykKJf/kB4T9o5kBbEJekJYE1khNJXn
+         9bczr0iQlXAIRaW4idjei+5q7LAfmX9ptfZnH4+5Wcol33gAv00rDH8DzpMP/KXdfdxv
+         A1GReP+li1Wm5hawNn6AX2qjWEd4gAeL2oMiR+lbivaDFAljjzHS+9TO7caqZjXIPtR2
+         CYRPeTV8sBAbyS5KupwrTLUruKqKYJuIIRIXbEt0+tbm+2zk22aUGzi+dOzgv5iHEPiK
+         atwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686129496; x=1688721496;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MtMQ/nGfSguBTH/fnJCG/BZKK2MvsVclTLF6KR44o7Q=;
+        b=DtPiyihpDlvPF6PJK5WEqzhFfo7Dj8S38ty0n/p2nH4o6vMk5bTYbfEPvNEmrLtcvx
+         gtFsqaAEHWAybFbADBqCPUeL5z/RmTrE6/AKm4M8xaXpRTg+bLsxvQjecN8/6cylJK+u
+         Q9Nr6yKAsI+4alQ0qykOiBZrencH8SiQOw40lypykOd6d/COdxDyZV6ljanKHymJOxpq
+         s5NMZqXCav2caDjaPs73VpOS3T9mJK02OzoKHDrr7T3fZRji4Ys3lJHMeLxRxuBdeTbc
+         ELk+iAvOT8MbsZurTPTliuni2x8MIZ1zauA5p5wP/6wVqOrw8+SbDp3Icl5qikupXYpq
+         ArKg==
+X-Gm-Message-State: AC+VfDy0a08/gw4IaMcSovxZWlBBJxmhNFUPv0erMVhMotXFEb8hgib8
+        6M+OovcALRloR/iiieVtEfo=
+X-Google-Smtp-Source: ACHHUZ725VID59JvCB6v3Gf7AjFernyrsIXI5AhUqGGXgo4gONN4bsPg1xdoDRz0537zlzGqZ8lHsQ==
+X-Received: by 2002:a5d:5092:0:b0:30d:44a1:99a with SMTP id a18-20020a5d5092000000b0030d44a1099amr3690368wrt.54.1686129495590;
+        Wed, 07 Jun 2023 02:18:15 -0700 (PDT)
+Received: from ip-172-31-22-112.eu-west-1.compute.internal (ec2-54-74-169-43.eu-west-1.compute.amazonaws.com. [54.74.169.43])
+        by smtp.gmail.com with ESMTPSA id cx14-20020a056000092e00b003078681a1e8sm15141958wrb.54.2023.06.07.02.18.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 02:18:15 -0700 (PDT)
+From:   Puranjay Mohan <puranjay12@gmail.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, catalin.marinas@arm.com,
+        mark.rutland@arm.com, bpf@vger.kernel.org, kpsingh@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     puranjay12@gmail.com
+Subject: [PATCH bpf-next v2 0/3] bpf, arm64: use BPF prog pack allocator in BPF JIT
+Date:   Wed,  7 Jun 2023 09:18:11 +0000
+Message-Id: <20230607091814.46080-1-puranjay12@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,62 +72,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-06-07 at 17:10 +0800, Philip Li wrote:
-> > > So it seems we should ask the robot maintainers to just stop suggesti=
-ng
-> > > those tags?
-> >=20
-> > Agreed.
->=20
-> Thanks all for the feedback. We will carefully consider how to present th=
-e
-> suggestion clearly.
->=20
-> For now, because the bot covers both upstream and developer repos, there
-> can be various situations, such as the bug is found in upstream.=C2=A0
+BPF programs currently consume a page each on ARM64. For systems with many BPF
+programs, this adds significant pressure to instruction TLB. High iTLB pressure
+usually causes slow down for the whole system.
 
-Ah yes, that was actually in my mind, but I forgot to write about it,
-sorry.
+Song Liu introduced the BPF prog pack allocator[1] to mitigate the above issue.
+It packs multiple BPF programs into a single huge page. It is currently only
+enabled for the x86_64 BPF JIT.
 
-I agree completely, in case that you find a bug in an already committed
-tree, and there will be a separate commit to fix it, it's completely
-reasonable and useful to have those tags.
+This patch series enables the BPF prog pack allocator for the ARM64 BPF JIT.
 
-> So the bot
-> tries to let author decide how to apply the tags in appropriate way that
-> they feel comfortable.
+====================================================
+Performance Analysis of prog pack allocator on ARM64
+====================================================
 
-Right. It just seems that many authors aren't really all that familiar
-with the processes yet, and take the suggestion at face value.
+To test the performance of the BPF prog pack allocator on ARM64, a stresser
+tool[2] was built. This tool loads 8 BPF programs on the system and triggers
+5 of them in an infinite loop by doing system calls.
 
-> In the report, we now uses phrases like below
->=20
-> 	If you fix the issue, kindly add following tag where applicable
-> 	| Reported-by: kernel test robot <lkp@intel.com>
-> 	| Closes: https://lore.kernel.org/oe-kbuild-all/202305311135.zGMT1gYR-lk=
-p@intel.com/
->=20
-> But this may be not clear enough or not the best way to suggest. We will
-> consider whether we can detect some situations (like RFC patch) which is
-> no need for such tags to avoid confusion.
->=20
+The runner script starts 20 instances of the above which loads 8*20=160 BPF
+programs on the system, 5*20=100 of which are being constantly triggered.
 
-Right. Maybe the only thing really needed would be to say something like
+In the above environment we try to build Python-3.8.4 and try to find different
+iTLB metrics for the compilation done by gcc-12.2.0.
 
-"If you fix the issue in a separate patch/commit (i.e. not just a new
-version of the same patch/commit), kindly add ..."
+The source code[3] is  configured with the following command:
+./configure --enable-optimizations --with-ensurepip=install
 
-or even just
+Then the runner script is executed with the following command:
+./run.sh "perf stat -e ITLB_WALK,L1I_TLB,INST_RETIRED,iTLB-load-misses -a make -j32"
 
-"If you fix the issue in a separate commit, kindly add ..."
+This builds Python while 160 BPF programs are loaded and 100 are being constantly
+triggered and measures iTLB related metrics.
 
-so it's clear that if you're changing the commit, it's not really
-something that should be done? In which case probably even a Fixes tag
-should be there, but I wouldn't want to recommend adding that since the
-commits may still change etc.
+The output of the above command is discussed below before and after enabling the
+BPF prog pack allocator.
 
-I don't know all the processes behind it, but I'm thinking that even if
-the bot picked up a patch from the list, it could get committed before
-and then fixed in a separate commit.
+The tests were run on qemu-system-aarch64 with 32 cpus, 4G memory, -machine virt,
+-cpu host, and -enable-kvm.
 
-johannes
+Results
+-------
+
+Before enabling prog pack allocator:
+------------------------------------
+
+Performance counter stats for 'system wide':
+
+         333278635      ITLB_WALK
+     6762692976558      L1I_TLB
+    25359571423901      INST_RETIRED
+       15824054789      iTLB-load-misses
+
+     189.029769053 seconds time elapsed
+
+After enabling prog pack allocator:
+-----------------------------------
+
+Performance counter stats for 'system wide':
+
+         190333544      ITLB_WALK
+     6712712386528      L1I_TLB
+    25278233304411      INST_RETIRED
+        5716757866      iTLB-load-misses
+
+     185.392650561 seconds time elapsed
+
+Improvements in metrics
+-----------------------
+
+Compilation time                             ---> 1.92% faster
+iTLB-load-misses/Sec (Less is better)        ---> 63.16% decrease
+ITLB_WALK/1000 INST_RETIRED (Less is better) ---> 42.71% decrease
+ITLB_Walk/L1I_TLB (Less is better)           ---> 42.47% decrease
+
+[1] https://lore.kernel.org/bpf/20220204185742.271030-1-song@kernel.org/
+[2] https://github.com/puranjaymohan/BPF-Allocator-Bench
+[3] https://www.python.org/ftp/python/3.8.4/Python-3.8.4.tgz
+
+Changes in v1 => v2:
+1. Make the naming consistent in the 3rd patch:
+   ro_image and image
+   ro_header and header
+   ro_image_ptr and image_ptr
+2. Use names dst/src in place of addr/opcode in second patch.
+3. Add Acked-by: Song Liu <song@kernel.org> in 1st and 2nd patch.
+
+Puranjay Mohan (3):
+  bpf: make bpf_prog_pack allocator portable
+  arm64: patching: Add aarch64_insn_copy()
+  bpf, arm64: use bpf_jit_binary_pack_alloc
+
+ arch/arm64/include/asm/patching.h |   1 +
+ arch/arm64/kernel/patching.c      |  39 +++++++++
+ arch/arm64/net/bpf_jit_comp.c     | 126 ++++++++++++++++++++++++------
+ kernel/bpf/core.c                 |   8 +-
+ 4 files changed, 147 insertions(+), 27 deletions(-)
+
+-- 
+2.39.2
+
