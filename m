@@ -2,80 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DE967262A2
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 16:20:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3E6C7262AC
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 16:21:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241083AbjFGOUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 10:20:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51342 "EHLO
+        id S240478AbjFGOVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 10:21:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234809AbjFGOUu (ORCPT
+        with ESMTP id S234939AbjFGOVv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 10:20:50 -0400
-Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA75D137;
-        Wed,  7 Jun 2023 07:20:48 -0700 (PDT)
-Received: by mail-io1-f46.google.com with SMTP id ca18e2360f4ac-7747df5b674so314526139f.3;
-        Wed, 07 Jun 2023 07:20:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686147648; x=1688739648;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Qwtf9R9VSv+Y8I0XvnZ+/3g2Cp2SZQu2rYgqlynwAcI=;
-        b=OfCTvRpgmm4+vLkaf/NQpTveRc3FCOvpofRwetlXTa8hb7U56rdlBwPGgVpIbe9vyf
-         53zQtHOhJNQ7SNtli7yz9tv3D5BzU1OcJMthTuEnzjP6rnChDu3MRnegYOK0JdIm8Mnb
-         vkSeXDjLTGLRJLigV1kCNX2HpjMsQPo/39bO0K1+jiQ8J7M2zlUHHzZ6wGH9MTgoG8CV
-         ZlN8p9F2ezAZ9wuk5Sk/cL/4/+y7gZsQnUPD09Su9gEr7SpMcBgLqaGqAwvN72rWDx87
-         yog16Hzaqm7jwBo5SG4+4c5bDCF4kR9wUzEcHI/NqNWP7Oq9WxSem01Y4I7kKCDtfXUy
-         QNEw==
-X-Gm-Message-State: AC+VfDzr9h13OuZQ1twPQYyI9xpRbCc2Ts6Pk/IVk+4uPQNQ1D5hMLsb
-        jjCjNpZH1rAg9EgDAPX/nL0GCwj5fA==
-X-Google-Smtp-Source: ACHHUZ5xYGAA8MJty/IEsZp0yPmtoVPUUviakCuG4nBM9YuwbDWA56sxdqrmdni+Sf4I48rT/OXrqg==
-X-Received: by 2002:a5e:a909:0:b0:74c:c6ed:6de with SMTP id c9-20020a5ea909000000b0074cc6ed06demr8800515iod.12.1686147648114;
-        Wed, 07 Jun 2023 07:20:48 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id f9-20020a056638118900b00418ad0ca629sm1427219jas.49.2023.06.07.07.20.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 07:20:47 -0700 (PDT)
-Received: (nullmailer pid 3072441 invoked by uid 1000);
-        Wed, 07 Jun 2023 14:20:44 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        Wed, 7 Jun 2023 10:21:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ABCD1BCA;
+        Wed,  7 Jun 2023 07:21:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B62C163FF0;
+        Wed,  7 Jun 2023 14:21:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC328C433EF;
+        Wed,  7 Jun 2023 14:21:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686147709;
+        bh=C8jieTFPTbsf9bXiIj2WuYDozebdE9lj2pgU/0k568M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MHUCVX66HBImmMVu/k8/R3nf3ivqv4Men24IaG+b6dqTcXzEbPs7Qoc3etA3z6XPr
+         /wG+y2KMH0bc/LFm3qXqESSGD4geXZjkVj8LPQCLpdWIlRIO8yvgLq7vSf8hnRbklZ
+         p0MRpUPlVTwwvbbYm9d+aMqdSVU5z4dFMcfJCWKpFVyhS3Bzd0iHYL8t624Cz2O8L/
+         wnEb6uqZAD/ktqNwjbRX6f16hrDMJkplo/BJz7WYi+m8/8JtA1s5SZ/Oqh/FHiA3L6
+         kucXSC5NOAgzqe8BJvlzODUZs+Nlk9q2odEwl3bXYaSKeQHvJr7knDsqc2bIeiAQrl
+         sTCoAiixF7xmw==
+Date:   Wed, 7 Jun 2023 15:21:43 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux@ew.tq-group.com
+Subject: Re: [PATCH 1/2] spi: dt-bindings: introduce linux,use-rt-queue flag
+Message-ID: <8416d36f-ae13-43c0-8267-e86ef3c8a75a@sirena.org.uk>
+References: <20230602115201.415718-1-matthias.schiffer@ew.tq-group.com>
+ <628b7411-7d12-4915-80c8-cabb74ac6590@sirena.org.uk>
+ <CACRpkdYhFmG-Cb-5+dt1Huktnm+tkOjSGO5ZFPjGeOXRott6Dw@mail.gmail.com>
+ <a1a1bf95-6333-40a8-9f08-4c952cd070df@sirena.org.uk>
+ <6a0abd6bba2f8f940e695dfa9fd0c5f8ee19064f.camel@ew.tq-group.com>
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Tommaso Merciai <tomm.merciai@gmail.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Mark Brown <broonie@kernel.org>, michael.roeder@avnet.eu,
-        martin.hecht@avnet.eu, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>,
-        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-media@vger.kernel.org,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, linuxfancy@googlegroups.com,
-        jacopo.mondi@ideasonboard.com, Conor Dooley <conor+dt@kernel.org>,
-        Gerald Loacker <gerald.loacker@wolfvision.net>,
-        Nicholas Roth <nicholas@rothemail.net>,
-        =?utf-8?q?Krzysztof_Ha=C5=82asa?= <khalasa@piap.pl>,
-        laurent.pinchart@ideasonboard.com,
-        Mikhail Rudenko <mike.rudenko@gmail.com>
-In-Reply-To: <20230607131936.382406-3-tomm.merciai@gmail.com>
-References: <20230607131936.382406-1-tomm.merciai@gmail.com>
- <20230607131936.382406-3-tomm.merciai@gmail.com>
-Message-Id: <168614764466.3072404.16058504735971429157.robh@kernel.org>
-Subject: Re: [PATCH v4 2/3] media: dt-bindings: alvium: add document YAML
- binding
-Date:   Wed, 07 Jun 2023 08:20:44 -0600
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="WJwu/n+x+jLcVhiw"
+Content-Disposition: inline
+In-Reply-To: <6a0abd6bba2f8f940e695dfa9fd0c5f8ee19064f.camel@ew.tq-group.com>
+X-Cookie: Keep away from edge.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,69 +65,52 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Wed, 07 Jun 2023 15:19:24 +0200, Tommaso Merciai wrote:
-> Add documentation of device tree in YAML schema for the ALVIUM
-> Camera from Allied Vision Inc.
-> 
-> References:
->  - https://www.alliedvision.com/en/products/embedded-vision-solutions
-> 
-> Signed-off-by: Tommaso Merciai <tomm.merciai@gmail.com>
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> ---
-> Changes since v1:
->  - Fixed build error as suggested by RHerring bot
-> 
-> Changes since v2:
->  - Fixed License as suggested by KKozlowski/CDooley
->  - Removed rotation property as suggested by CDooley/LPinchart
->  - Fixed example node name as suggested by CDooley
->  - Fixed title as suggested by LPinchart
->  - Fixed compatible name as suggested by LPinchart
->  - Removed clock as suggested by LPinchart
->  - Removed gpios not as suggested by LPinchart
->  - Renamed property name streamon-delay into alliedvision,lp2hs-delay-us
->  - Fixed vendor prefix, unit append as suggested by KKozlowski
->  - Fixed data-lanes
->  - Fixed blank space + example indentation (from 6 -> 4 space) as suggested by KKozlowski
->  - Dropped status into example  as suggested by KKozlowski
->  - Added vcc-ext-in supply as suggested by LPinchart
->  - Dropped pinctrl into example as suggested by LPinchart
-> 
-> Changes since v3:
->  - Fixed vcc-ext-in-supply description as suggested by LPinchart
->  - Fixed alliedvision,lp2hs-delay-us description as suggested by LPinchart
->  - Added maximum to alliedvision,lp2hs-delay-us as suggested by LPinchart
->  - Collected Reviewed-by tag from LPinchart
-> 
->  .../media/i2c/alliedvision,alvium-csi2.yaml   | 96 +++++++++++++++++++
->  1 file changed, 96 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/i2c/alliedvision,alvium-csi2.yaml
-> 
+--WJwu/n+x+jLcVhiw
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+On Wed, Jun 07, 2023 at 02:55:31PM +0200, Matthias Schiffer wrote:
 
-yamllint warnings/errors:
+> It is not clear to me what alternative options we currently have if we
+> want a setting to be effective from the very beginning, before
+> userspace is running. Of course adding a cmdline option would work, but
+> that seems worse than having it in the DT in every possible way.
 
-dtschema/dtc warnings/errors:
-./Documentation/devicetree/bindings/media/i2c/alliedvision,alvium-csi2.yaml: $id: relative path/filename doesn't match actual path or filename
-	expected: http://devicetree.org/schemas/media/i2c/alliedvision,alvium-csi2.yaml#
+Is it *really* that important that this be configured before userspace
+is running?  With an initramfs you'd be able to do configuration before
+even trying to mount filesystems if your primary storage is flash.  I'd
+not expect the pre-userspace period to be under particular pressure
+here.
 
-doc reference errors (make refcheckdocs):
+Frankly I don't see the command line as being particularly worse here,
+it's more tasteful and if you're doing some device specific
+configuration it doesn't seem to make much difference.  Userspace looks
+even better though.
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230607131936.382406-3-tomm.merciai@gmail.com
+> Requiring such tuning for specific drivers or driver instances is
+> however a common issue for embedded systems, which is why we are seeing
+> (and occasionally writing) such patches - setting things up from
+> userspace may happen too late, or may not be possible at all if a
+> setting needs to be available during probe. And even when deferring
+> things to userspace is possible, making things configurable at runtime
+> always adds some complexity, even though it is often not a requirement
+> at all for embedded systems.
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+Using DT is all about adding complexity.
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+--WJwu/n+x+jLcVhiw
+Content-Type: application/pgp-signature; name="signature.asc"
 
-pip3 install dtschema --upgrade
+-----BEGIN PGP SIGNATURE-----
 
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSAknYACgkQJNaLcl1U
+h9D+kAf/awycT8XVBCnr0kCiYWtoYgzT/oQXfsZKlKT9dOd7BxKN/NhDj7QIorwh
+0fNqrzEV/jfc/py4sjfMlDaf/stbPohsNrvYiNZFoFXfexH+pPAydQJdefoxYb1u
+sLPGl3r3P1BxExWtXI21mkzFZqowP/YhwkYkqC30WfE6pz6G7mbVaKiLCCklLYWo
+keBIKxcJlS8ZEZl/wTTuJnhiCfJYMuhSLJhWfJEhHoBN+ptjbP21DbSnoKCL/x0O
+KZEHcJh+sIrxfC7EXmbEl8RXp5eQJ/Ukd4usthaIZ4VCF8RqSIYVBqSVUfWiIi9j
+i++y+VulJkx0LeF7bz1tox4yaRLVLA==
+=VVkr
+-----END PGP SIGNATURE-----
 
+--WJwu/n+x+jLcVhiw--
