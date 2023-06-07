@@ -2,59 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F6927263A9
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 17:05:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 469227263A1
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 17:03:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236336AbjFGPFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 11:05:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49536 "EHLO
+        id S236376AbjFGPDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 11:03:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241249AbjFGPC7 (ORCPT
+        with ESMTP id S235973AbjFGPDN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 11:02:59 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C47821FC1
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 08:02:54 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-53fbf2c42bfso6713282a12.3
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 08:02:54 -0700 (PDT)
+        Wed, 7 Jun 2023 11:03:13 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719411FF7
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 08:03:12 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-662b85f4640so146604b3a.0
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 08:03:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686150174; x=1688742174;
+        d=gmail.com; s=20221208; t=1686150192; x=1688742192;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ciCWuo7mkukE2uWGAYr6I0+J8XwMl63aYshkUdvmROQ=;
-        b=VCxEtwdUm8HLNHQcljdU0bHwGkU554jQ9c9dorWKjf7VEN+f0JQeiDrT0d8aIgdBoN
-         ssCPxv4w0oIcMiuOB25ZSy4jxoJc6BdNi0gjR8oJ9T2tSRYX8CxiR4GZck0qC3LvU1mc
-         2wtdVzce0PnIs7CErGRS3EP8l4VAFSeIao8Y+HNAJKGZc6oK/nvcPgrOb9f1rVpyih7I
-         hqU0Mv2k0lVHOjN/vKKaGgJ/S4nxQaPDZR+fCrLJKS/pcSZRASNWCdjLhuLjl/DU+y+I
-         VEeqg185Kio6zQl52dkxPSPNtJ/AoKjAwZo7Zj03NO044l57kDn0+PMAVtvsEt6Sztls
-         3n/w==
+        bh=Msfw3FZTKqUZwLFrkysjS96Cdf9AFaQ0r06ieq0j1EI=;
+        b=ae8/YKfoLrOaxVyfBu/iJH3C6PAtvFYaQurwvNiYf1D9kRVaGAfUs0+4s1rxmS0/f1
+         QAWo9JqKmCam0wf0B/CDYNnWcMId90CBErwYs1nGzPp6KLjyfu/699sLJqpmxt44Ju2j
+         y3EvTLYYI9qZZKAJEawMh9XwfYCBcNYwTt/kJGrhTlbB+GTP+xgjgi3dW9JE74V1jvPM
+         rktd/zKC2Ndwf0oe7MKoP0os2CLh4V3jyJRzSrZNZftsDfqNwp1+siCwC2y1pw4Nn3Bh
+         I/ZlWvthFgDf27Ix00KcIyLDulsUnkl4rWRBXM1+FZIOMt/KRPwxvapLDLA0E/0P60z6
+         R2ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686150174; x=1688742174;
+        d=1e100.net; s=20221208; t=1686150192; x=1688742192;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ciCWuo7mkukE2uWGAYr6I0+J8XwMl63aYshkUdvmROQ=;
-        b=eyfvK0X61P5Gz/cOl5e+aoNB+XtAhOfxVXMwWZsBJVznBa09RqKA5Y9fdo69S9ZB+R
-         Eyqmpmnt8VoSI2WQvBMmEXta5Evrxdj5O57c7U7nIq2yvVBxGtCcYfmJyuSg4NquJ2QK
-         M34+clsN3/Vt3WbebGh7wjjn8tNsM/oJh+nobcfxXNBUks4q1sRkbj7iQv/GVGHtlCzC
-         CXmYfgZwwmap4r9Z05POoqIT0iXSuWBNigQR2o2Fu7zkrBmtg6l3oClNxEzG8ZojftaG
-         dKZnusMg3GctGl2LnJeuR2kgnNf1FKlLtpquxCugQel/tyMgOB3wG3M/0L5yMyBvz7j4
-         glNA==
-X-Gm-Message-State: AC+VfDwAo8gL6iZBjN4GYaz7iV+hL8H4BAkg0MTtv0uPZcP83ZHB0dKo
-        KCE9G1MLXn2xna0gh8o6M80=
-X-Google-Smtp-Source: ACHHUZ4l5u97Jt7CCXzYWcOorreKz2dWoum4LQB1l3ensFhK3vI4lOOlDXpEYPrzw0rgb1vJ0Qj8uQ==
-X-Received: by 2002:a17:90a:598b:b0:253:26e5:765a with SMTP id l11-20020a17090a598b00b0025326e5765amr4456240pji.48.1686150174229;
-        Wed, 07 Jun 2023 08:02:54 -0700 (PDT)
+        bh=Msfw3FZTKqUZwLFrkysjS96Cdf9AFaQ0r06ieq0j1EI=;
+        b=TO3zJ7cVBz0ItF300BrMDwFdrN12vbLRc/doY5BC/GT17r5KTCR4tsmAhFsioe/Fvv
+         K7BcOHwDiU3rCOEbFAWTQuIoYt8VXDQfG4hRe6ugZCE/44AKP49JdKIhbAE9nhZlyIUZ
+         6Oei7N+Sr4vSCN04yR+fE7rHPxUlN63t4Ago1enpskkH33gx5/RP7w0v9BqkwVsklhbe
+         rkg9XBhEJR74kHywNUAn/Iauc7F2inA07h6pi/9midTWaLjduAgultfktgTLZ76wQLkD
+         184wLYW3k3UZ7DVn6RR7EdxYlXGY2UjDHzl0SEf277MbIXFfom+OHkqH0cOuPVmIVUlM
+         +lbA==
+X-Gm-Message-State: AC+VfDxG0JaNZ1z7sxHmE1xkqV+iNJmJrRvKiduyxp0Zkgug+mp/1Dls
+        qWu1QVQElGYHVRDnm3fCcZw=
+X-Google-Smtp-Source: ACHHUZ5zTs8y/Itlfgfy+8u0sBdZokuQYGHRt7t3asqdPwB0slrZgugbMII/lgbtqzi09ALnSjxDnQ==
+X-Received: by 2002:a17:903:234c:b0:1ae:1659:bfe2 with SMTP id c12-20020a170903234c00b001ae1659bfe2mr2531711plh.34.1686150191792;
+        Wed, 07 Jun 2023 08:03:11 -0700 (PDT)
 Received: from yogi-Zephyrus ([103.251.210.211])
-        by smtp.gmail.com with ESMTPSA id nn4-20020a17090b38c400b002562cfb81dfsm1486061pjb.28.2023.06.07.08.02.52
+        by smtp.gmail.com with ESMTPSA id ld6-20020a170902fac600b001b04c2023e3sm10569143plb.218.2023.06.07.08.03.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 08:02:53 -0700 (PDT)
-Date:   Wed, 7 Jun 2023 20:32:50 +0530
+        Wed, 07 Jun 2023 08:03:11 -0700 (PDT)
+Date:   Wed, 7 Jun 2023 20:33:07 +0530
 From:   Yogesh Hegde <yogi.kernel@gmail.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 4/5] staging: rtl8192e: Remove variable InitialGainHandler
-Message-ID: <15852c9ce64695e60b8dfa3d459ad5b1d26ba07e.1686149467.git.yogi.kernel@gmail.com>
+Subject: [PATCH v2 5/5] staging: rtl8192e: Remove DRV_NAME definition in
+ rtllib_debug.h
+Message-ID: <41c6c24e703eedf6fb4febcf4cc7ef180af1db58.1686149467.git.yogi.kernel@gmail.com>
 References: <cover.1686149467.git.yogi.kernel@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -70,66 +71,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The variable InitialGainHandler is set in only one place throughout the
-driver. This patch removes the variable and calls the real function
-directly instead, eliminating the unnecessary indirection.
-Additionally, the removal of the variable aligns with the checkpatch
-guidelines by removing the use of CamelCase.
+The macro DRV_NAME is defined twice within the driver, once in
+"rtl_core.h" and again in "rtllib_debug.h". The definition in
+"rtllib_debug.h" overrides the definition in "rtl_core.h", resulting in
+warnings during compilation. This patch removes the redundant definition in
+"rtllib_debug.h" to avoid the warnings.
 
 Signed-off-by: Yogesh Hegde <yogi.kernel@gmail.com>
 ---
 
-v2: Removed the variable and called the function direction instead of
-    just renaming the variable as suggested by Greg Kroah-Hartman
-    <gregkh@linuxfoundation.org>
+v2: No changes.
 ---
- drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c | 4 ++--
- drivers/staging/rtl8192e/rtl8192e/rtl_core.c   | 1 -
- drivers/staging/rtl8192e/rtllib.h              | 1 -
- 3 files changed, 2 insertions(+), 4 deletions(-)
+ drivers/staging/rtl8192e/rtllib_debug.h | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
-index 641e993aaa86..5385bb099c56 100644
---- a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
-@@ -1129,11 +1129,11 @@ void rtl92e_scan_op_backup(struct net_device *dev, u8 Operation)
- 	if (priv->up) {
- 		switch (Operation) {
- 		case SCAN_OPT_BACKUP:
--			priv->rtllib->InitialGainHandler(dev, IG_Backup);
-+			rtl92e_init_gain(dev, IG_Backup);
- 			break;
+diff --git a/drivers/staging/rtl8192e/rtllib_debug.h b/drivers/staging/rtl8192e/rtllib_debug.h
+index f6b23defe225..ab8bd5fc4ca0 100644
+--- a/drivers/staging/rtl8192e/rtllib_debug.h
++++ b/drivers/staging/rtl8192e/rtllib_debug.h
+@@ -9,11 +9,6 @@
  
- 		case SCAN_OPT_RESTORE:
--			priv->rtllib->InitialGainHandler(dev, IG_Restore);
-+			rtl92e_init_gain(dev, IG_Restore);
- 			break;
- 		}
- 	}
-diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-index 231903002233..8218319ad834 100644
---- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-@@ -731,7 +731,6 @@ static void _rtl92e_init_priv_handler(struct net_device *dev)
+ #include <linux/bits.h>
  
- 	priv->rtllib->SetHwRegHandler = rtl92e_set_reg;
- 	priv->rtllib->AllowAllDestAddrHandler = rtl92e_set_monitor_mode;
--	priv->rtllib->InitialGainHandler = rtl92e_init_gain;
- 	priv->rtllib->rtllib_ips_leave_wq = rtl92e_rtllib_ips_leave_wq;
- 	priv->rtllib->rtllib_ips_leave = rtl92e_rtllib_ips_leave;
- 	priv->rtllib->ScanOperationBackupHandler = rtl92e_scan_op_backup;
-diff --git a/drivers/staging/rtl8192e/rtllib.h b/drivers/staging/rtl8192e/rtllib.h
-index f7fd8b77db99..92ed1b493f6b 100644
---- a/drivers/staging/rtl8192e/rtllib.h
-+++ b/drivers/staging/rtl8192e/rtllib.h
-@@ -1709,7 +1709,6 @@ struct rtllib_device {
- 	bool (*GetNmodeSupportBySecCfg)(struct net_device *dev);
- 	bool (*GetHalfNmodeSupportByAPsHandler)(struct net_device *dev);
- 	u8   (*rtllib_ap_sec_type)(struct rtllib_device *ieee);
--	void (*InitialGainHandler)(struct net_device *dev, u8 Operation);
- 	void (*ScanOperationBackupHandler)(struct net_device *dev,
- 					   u8 Operation);
- 	void (*SetHwRegHandler)(struct net_device *dev, u8 variable, u8 *val);
+-/* Allow files to override DRV_NAME */
+-#ifndef DRV_NAME
+-#define DRV_NAME "rtllib_92e"
+-#endif
+-
+ extern u32 rt_global_debug_component;
+ 
+ /* These are the defines for rt_global_debug_component */
 -- 
 2.25.1
 
