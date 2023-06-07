@@ -2,70 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67D6C725133
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 02:43:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FBA5725136
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 02:44:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240235AbjFGAnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 20:43:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47040 "EHLO
+        id S240223AbjFGAox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 20:44:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240083AbjFGAnV (ORCPT
+        with ESMTP id S240199AbjFGAow (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 20:43:21 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C34DC19A1
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 17:43:19 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-bb39316a68eso2472523276.0
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 17:43:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686098599; x=1688690599;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=iWpx+RfSpqGCjC/645vo3rjaj4FpsSPwYJ169RAHthE=;
-        b=pxetOLQocTqwrPnV3EV/w5idyhiG8XYmDrXsHQd2U14s8p5u2EVCgIgk+8I7dqiP93
-         aOmgTbqkfnkFBItWeLUE9Ow9WgnuTiUuSudnCyfK99s4mHpzPT41YEILu+uZ1ZLpste+
-         obA95rKvnjRhTB4EeAZMn5VWUGX/TQqhqGdwDSRbo4frz/xTu3GGfK1BVHyimWV/rUcT
-         xhNPGlhvhL3IyT1I8eNtErpOoK1MozEEPby6B2okd253BCEY0Bsr/DBfGQLUwAGZ9ppT
-         oB6J2x+3FOG/A80GYb6uAFqSmGu8sl8qGMxvFPDvQPdkNZFgFyBNgkuBGTxMZoSSDelM
-         NEzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686098599; x=1688690599;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iWpx+RfSpqGCjC/645vo3rjaj4FpsSPwYJ169RAHthE=;
-        b=lUGbfX708beo3uw4MzG2YA6cv8Bc2nhDaSRSjTZoIpv16+dzHGeQkLfZ4OsvxSqV4C
-         uJjyxWjJhekk5gMbj3cksrnBFjH9fcfnWXuH/RLos40dYdtbV9NokmrvaZBp8iak4Nv6
-         3P3ip2P8xYFzCaiMcxivJqeBVfOd1Jd8qEBp6zHMHJIsBu/vCKWQc0rh8koDFf3tgUxq
-         JeTvrfOS3WLlUN1D24bplI0fRgEZwqDtIAF++8v8Cjo21zJNaSVdYKbt/VCeIBN6vRlA
-         rF65u1QQPXrLF+n8Uj2n4T1G8/QGbQT9Ul/VMss5azfbyhK6cuDgSKt+ueINpZHGwyI8
-         NtLw==
-X-Gm-Message-State: AC+VfDxUQYs4TBsat2pFwQDtGf/McTolth8/KO1JUSwiXoCMOEz01jMZ
-        dp7bxp5mJDHLvwVS8a3D2i/yHYzAchE=
-X-Google-Smtp-Source: ACHHUZ6WDGc6dSyAYqCWbMICZuWNSAvkeozfOxaiyprE0dooA/9MBteFyjCTI2p5nz/KcLZhnd8fMUGpMOE=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:a7c3:0:b0:568:ee83:d87d with SMTP id
- e186-20020a81a7c3000000b00568ee83d87dmr1857439ywh.5.1686098599082; Tue, 06
- Jun 2023 17:43:19 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue,  6 Jun 2023 17:43:10 -0700
-In-Reply-To: <20230607004311.1420507-1-seanjc@google.com>
+        Tue, 6 Jun 2023 20:44:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A642189;
+        Tue,  6 Jun 2023 17:44:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 05FC563883;
+        Wed,  7 Jun 2023 00:44:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26C02C433D2;
+        Wed,  7 Jun 2023 00:44:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1686098689;
+        bh=3EeHZ4T5sQYFK1X65ZcRtfRnTzjIOr2uear3tASVXN0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=PPdlf6pcwZN6x7/s/Op8E7m9lBP4cBra/8eILhxHxOP3HSHyRQ62T1r31Gy9qqi6C
+         9eDK0CcB4/pKaItcoIMILjKdue0f528MQJyQVtyYm7xSS6Dn02JT6a2q5yXASCmjtP
+         ABpdXgJvg4gYjsmHrNSOz9XxkPPUvW8JziaxczMQ=
+Date:   Tue, 6 Jun 2023 17:44:48 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Rafael Aquini <aquini@redhat.com>
+Cc:     Yafang Shao <laoar.shao@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, linux-mm@kvack.org,
+        stable@vger.kernel.org, Aristeu Rozanski <aris@redhat.com>
+Subject: Re: [PATCH] writeback: fix dereferencing NULL mapping->host on
+ writeback_page_template
+Message-Id: <20230606174448.ba45510067bcb35b9ac7e739@linux-foundation.org>
+In-Reply-To: <20230606233613.1290819-1-aquini@redhat.com>
+References: <20230606233613.1290819-1-aquini@redhat.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Mime-Version: 1.0
-References: <20230607004311.1420507-1-seanjc@google.com>
-X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-Message-ID: <20230607004311.1420507-3-seanjc@google.com>
-Subject: [PATCH 2/2] KVM: VMX: Drop unnecessary vmx_fb_clear_ctrl_available "cache"
-From:   Sean Christopherson <seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chao Gao <chao.gao@intel.com>,
-        Xiaoyao Li <xiaoyao.li@intel.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,68 +54,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that KVM snapshots the host's MSR_IA32_ARCH_CAPABILITIES, drop the
-similar snapshot/cache of whether or not KVM is allowed to manipulate
-ARCH_CAPABILITIES.FB_CLEAR_CTRL.  The motivation for the cache was
-presumably to avoid the RDMSR, e.g. boot_cpu_has_bug() is quite cheap, and
-modifying the vCPU's MSR_IA32_ARCH_CAPABILITIES is an infrequent option
-and a relatively slow path.
+On Tue,  6 Jun 2023 19:36:13 -0400 Rafael Aquini <aquini@redhat.com> wrote:
 
-Cc: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/vmx/vmx.c | 17 +++--------------
- 1 file changed, 3 insertions(+), 14 deletions(-)
+> When commit 19343b5bdd16 ("mm/page-writeback: introduce tracepoint for
+> wait_on_page_writeback()") repurposed the writeback_dirty_page trace event
+> as a template to create its new wait_on_page_writeback trace event, it
+> ended up opening a window to NULL pointer dereference crashes due to
+> the (infrequent) occurrence of a race where an access to a page in the
+> swap-cache happens concurrently with the moment this page is being
+> written to disk and the tracepoint is enabled:
 
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 42d1148f933c..17003660138a 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -237,9 +237,6 @@ static const struct {
- #define L1D_CACHE_ORDER 4
- static void *vmx_l1d_flush_pages;
- 
--/* Control for disabling CPU Fill buffer clear */
--static bool __read_mostly vmx_fb_clear_ctrl_available;
--
- static int vmx_setup_l1d_flush(enum vmx_l1d_flush_state l1tf)
- {
- 	struct page *page;
-@@ -366,14 +363,6 @@ static int vmentry_l1d_flush_get(char *s, const struct kernel_param *kp)
- 	return sprintf(s, "%s\n", vmentry_l1d_param[l1tf_vmx_mitigation].option);
- }
- 
--static void vmx_setup_fb_clear_ctrl(void)
--{
--	if ((host_arch_capabilities & ARCH_CAP_FB_CLEAR_CTRL) &&
--	    !boot_cpu_has_bug(X86_BUG_MDS) &&
--	    !boot_cpu_has_bug(X86_BUG_TAA))
--		vmx_fb_clear_ctrl_available = true;
--}
--
- static __always_inline void vmx_disable_fb_clear(struct vcpu_vmx *vmx)
- {
- 	u64 msr;
-@@ -399,7 +388,9 @@ static __always_inline void vmx_enable_fb_clear(struct vcpu_vmx *vmx)
- 
- static void vmx_update_fb_clear_dis(struct kvm_vcpu *vcpu, struct vcpu_vmx *vmx)
- {
--	vmx->disable_fb_clear = vmx_fb_clear_ctrl_available;
-+	vmx->disable_fb_clear = (host_arch_capabilities & ARCH_CAP_FB_CLEAR_CTRL) &&
-+				!boot_cpu_has_bug(X86_BUG_MDS) &&
-+				!boot_cpu_has_bug(X86_BUG_TAA);
- 
- 	/*
- 	 * If guest will not execute VERW, there is no need to set FB_CLEAR_DIS
-@@ -8580,8 +8571,6 @@ static int __init vmx_init(void)
- 	if (r)
- 		goto err_l1d_flush;
- 
--	vmx_setup_fb_clear_ctrl();
--
- 	for_each_possible_cpu(cpu) {
- 		INIT_LIST_HEAD(&per_cpu(loaded_vmcss_on_cpu, cpu));
- 
--- 
-2.41.0.162.gfafddb0af9-goog
+I don't see what the race is, or why a race is involved.
+
+>     BUG: kernel NULL pointer dereference, address: 0000000000000040
+>     #PF: supervisor read access in kernel mode
+>     #PF: error_code(0x0000) - not-present page
+>     PGD 800000010ec0a067 P4D 800000010ec0a067 PUD 102353067 PMD 0
+>     Oops: 0000 [#1] PREEMPT SMP PTI
+>     CPU: 1 PID: 1320 Comm: shmem-worker Kdump: loaded Not tainted 6.4.0-rc5+ #13
+>     Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS edk2-20230301gitf80f052277c8-1.fc37 03/01/2023
+>     RIP: 0010:trace_event_raw_event_writeback_folio_template+0x76/0xf0
+>     Code: 4d 85 e4 74 5c 49 8b 3c 24 e8 06 98 ee ff 48 89 c7 e8 9e 8b ee ff ba 20 00 00 00 48 89 ef 48 89 c6 e8 fe d4 1a 00 49 8b 04 24 <48> 8b 40 40 48 89 43 28 49 8b 45 20 48 89 e7 48 89 43 30 e8 a2 4d
+>     RSP: 0000:ffffaad580b6fb60 EFLAGS: 00010246
+>     RAX: 0000000000000000 RBX: ffff90e38035c01c RCX: 0000000000000000
+>     RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff90e38035c044
+>     RBP: ffff90e38035c024 R08: 0000000000000002 R09: 0000000000000006
+>     R10: ffff90e38035c02e R11: 0000000000000020 R12: ffff90e380bac000
+>     R13: ffffe3a7456d9200 R14: 0000000000001b81 R15: ffffe3a7456d9200
+>     FS:  00007f2e4e8a15c0(0000) GS:ffff90e3fbc80000(0000) knlGS:0000000000000000
+>     CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>     CR2: 0000000000000040 CR3: 00000001150c6003 CR4: 0000000000170ee0
+>     Call Trace:
+>      <TASK>
+>      ? __die+0x20/0x70
+>      ? page_fault_oops+0x76/0x170
+>      ? kernelmode_fixup_or_oops+0x84/0x110
+>      ? exc_page_fault+0x65/0x150
+>      ? asm_exc_page_fault+0x22/0x30
+>      ? trace_event_raw_event_writeback_folio_template+0x76/0xf0
+>      folio_wait_writeback+0x6b/0x80
+>      shmem_swapin_folio+0x24a/0x500
+
+shmem_swapin_folio->folio_wait_writeback will always pass in a page
+which has ->mapping==NULL, won't it?  So why doesn't it crash every
+time?
+
+>      ? filemap_get_entry+0xe3/0x140
+>      shmem_get_folio_gfp+0x36e/0x7c0
+>      ? find_busiest_group+0x43/0x1a0
+>      shmem_fault+0x76/0x2a0
+>      ? __update_load_avg_cfs_rq+0x281/0x2f0
+>      __do_fault+0x33/0x130
+>      do_read_fault+0x118/0x160
+>      do_pte_missing+0x1ed/0x2a0
+>      __handle_mm_fault+0x566/0x630
+>      handle_mm_fault+0x91/0x210
+>      do_user_addr_fault+0x22c/0x740
+>      exc_page_fault+0x65/0x150
+>      asm_exc_page_fault+0x22/0x30
+> 
+> This problem arises from the fact that the repurposed writeback_dirty_page
+> trace event code was written assuming that every pointer to mapping
+> (struct address_space) would come from a file-mapped page-cache object,
+> thus mapping->host would always be populated, and that was a valid case
+> before commit 19343b5bdd16. The swap-cache address space (swapper_spaces),
+> however, doesn't populate its ->host (struct inode) pointer, thus leading
+> to the crashes in the corner-case aforementioned.
+> 
+> commit 19343b5bdd16 ended up breaking the assignment of __entry->name and
+> __entry->ino for the wait_on_page_writeback tracepoint -- both dependent
+> on mapping->host carrying a pointer to a valid inode. The assignment of
+> __entry->name was fixed by commit 68f23b89067f ("memcg: fix a crash in
+> wb_workfn when a device disappears"), and this commit fixes the remaining
+> case, for __entry->ino.
 
