@@ -2,123 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 738C0726344
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 16:49:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A27472634A
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 16:50:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241085AbjFGOtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 10:49:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39800 "EHLO
+        id S231876AbjFGOuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 10:50:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240981AbjFGOtd (ORCPT
+        with ESMTP id S240256AbjFGOto (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 10:49:33 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D75531FC3;
-        Wed,  7 Jun 2023 07:49:24 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Qbqwt0jznz6J7xn;
-        Wed,  7 Jun 2023 22:49:02 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Wed, 7 Jun
- 2023 15:49:22 +0100
-Date:   Wed, 7 Jun 2023 15:49:21 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     "Paller, Kim Seer" <KimSeer.Paller@analog.com>
-CC:     Jonathan Cameron <jic23@kernel.org>,
-        "lars@metafoo.de" <lars@metafoo.de>,
-        "krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 2/2] iio: adc: max14001: New driver
-Message-ID: <20230607154921.00007efe@Huawei.com>
-In-Reply-To: <bdc11e51637e4249818be688e3cd7b59@analog.com>
-References: <20230605130755.92642-1-kimseer.paller@analog.com>
-        <20230605130755.92642-3-kimseer.paller@analog.com>
-        <20230605202413.5eb0c0f3@jic23-huawei>
-        <f62be66979db433eac86f32cc8587892@analog.com>
-        <20230606113550.00003634@Huawei.com>
-        <bdc11e51637e4249818be688e3cd7b59@analog.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Wed, 7 Jun 2023 10:49:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 964C71BF3;
+        Wed,  7 Jun 2023 07:49:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 28E546402C;
+        Wed,  7 Jun 2023 14:49:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADBE0C433EF;
+        Wed,  7 Jun 2023 14:49:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686149381;
+        bh=UZXWmyrdgPrq2KVSeFy+H+GEAHfry3pcDwYgm6TYohA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=o7wQukWrtH47OJFIQHX8NdIWqXZmAaQ81SHn4hOcRBv1jgsTf3Sc91pX2znhks/wK
+         lQofQpY/jkk7Xy7DZ+hGL/SkmqMBc0YK4WfqdN7HuiYmwP7+gKqsEdeX0r5FnEanBF
+         TLAKLRmNAjnMxbme1d708XaRy+l3VbU9olEzIFocbk0G8JKLnpmp4EDTkwMNLnwDQu
+         /0hTsQ6R6b9OAXZ7BSmCoKGwU6+ceAbksusCPPzTL7DjewH0EYQaokxI1gTMHYGprZ
+         gUIhk+IKZAsXHsBVBgkra05278/C9Vt1hjrcvZePQSFuyepPJbujWX+6Im8UT22Rg/
+         99HcFiZ7pnTfA==
+Message-ID: <6ffa4d1b-0015-effc-2b7a-4426eadea84b@kernel.org>
+Date:   Wed, 7 Jun 2023 16:49:35 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v1 1/2] dt-bindings: misc: fastrpc: add fastrpc group IDs
+ property
+Content-Language: en-US
+To:     Ekansh Gupta <quic_ekangupt@quicinc.com>,
+        srinivas.kandagatla@linaro.org, linux-arm-msm@vger.kernel.org
+Cc:     ekangupt@qti.qualcomm.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, fastrpc.upstream@qti.qualcomm.com
+References: <1686138864-17136-1-git-send-email-quic_ekangupt@quicinc.com>
+ <1686138864-17136-2-git-send-email-quic_ekangupt@quicinc.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <1686138864-17136-2-git-send-email-quic_ekangupt@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml100002.china.huawei.com (7.191.160.241) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 7 Jun 2023 11:17:33 +0000
-"Paller, Kim Seer" <KimSeer.Paller@analog.com> wrote:
-
-> > -----Original Message-----
-> > From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-> > Sent: Tuesday, June 6, 2023 6:36 PM
-> > To: Paller, Kim Seer <KimSeer.Paller@analog.com>
-> > Cc: Jonathan Cameron <jic23@kernel.org>; lars@metafoo.de;
-> > krzysztof.kozlowski@linaro.org; broonie@kernel.org; lgirdwood@gmail.com;
-> > linux-iio@vger.kernel.org; linux-kernel@vger.kernel.org
-> > Subject: Re: [PATCH v2 2/2] iio: adc: max14001: New driver
-> > 
-> > [External]
-> > 
-> > 
-> >   
-> > > >  
-> > > > > +	struct mutex		lock;
-> > > > > +	struct regmap		*regmap;
-> > > > > +	int			vref_mv;
-> > > > > +	/*
-> > > > > +	 * DMA (thus cache coherency maintenance) requires the
-> > > > > +	 * transfer buffers to live in their own cache lines.  
-> > > >
-> > > > You are looking at an old kernel I guess - we fixed all of these - and
-> > > > introduced IIO_DMA_MINALIGN for __aligned(IIO_DMA_MINALIGN) to
-> > > > make it easier to fix any such problems in future.
-> > > >
-> > > > Upshot is that ___cacheline_aligned aligns to the l1 cacheline length.
-> > > > Some fun systems (such as the big servers I use in my dayjob) have higher
-> > > > cacheline sizes for their larger / further from CPU caches.
-> > > > One group of SoCs out there is known to both do non coherent DMA and
-> > > > have a larger line size for the bit relevant to that than ___cacheline_aligned
-> > > > gives you. So on that rare platform this is currently broken.  
-> > >
-> > > It's good to know. Given this information, is there anything specific that I
-> > > need to change in the code or implementation related to
-> > > the ___cacheline_aligned part?  
-> > 
-> > Replace it with __aligned(IIO_DMA_MINALIGN) as has hopefully now been
-> > done
-> > in all upstream drivers.  
+On 07/06/2023 13:54, Ekansh Gupta wrote:
+> Add "qcom,fastrpc-gids" property to the list of optional properties.
+> This property contains the list of privileged group IDs which is
+> used to offload process to remote subsystem with increased privileges.
 > 
-> When I attempted to implement this change, I encountered a checkpatch warning 
-> in the latest kernel version. The warning indicated that externs should be avoided 
-> in .c files and emphasized the need for an identifier name for the function 
-> definition argument 'IIO_DMA_MINALIGN'. I attempted to define a macro with an 
-> appropriate identifier name, but I still received the same checkpatch warning. 
-> It's possible that I may have overlooked something in my approach. I would 
-> appreciate your thoughts and insights on this matter. Thanks.
+> Signed-off-by: Ekansh Gupta <quic_ekangupt@quicinc.com>
 
-Ignore checkpatch for this one. Check patch is miss handling of
-__aligned.
+Please use scripts/get_maintainers.pl to get a list of necessary people
+and lists to CC.  It might happen, that command when run on an older
+kernel, gives you outdated entries.  Therefore please be sure you base
+your patches on recent Linux kernel.
 
-At a guess - needs an entry in this list:
-https://elixir.bootlin.com/linux/latest/source/scripts/checkpatch.pl#L513
+You missed at least DT list (maybe more), so this won't be tested.
+Please resend and include all necessary entries.
 
-Though I'm never great at understanding the perl so may have that wrong.
-
-Jonathan
-
+Best regards,
+Krzysztof
 
