@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3BDF72685F
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 20:21:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42C9E72685A
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 20:20:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231346AbjFGSUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 14:20:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36740 "EHLO
+        id S231253AbjFGSUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 14:20:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233137AbjFGSUT (ORCPT
+        with ESMTP id S233134AbjFGSUT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 7 Jun 2023 14:20:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55723101
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 11:19:39 -0700 (PDT)
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAC77173B
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 11:19:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686161978;
+        s=mimecast20190719; t=1686161982;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=oJUkpOQ7e9hBKCJRUR3yZoWIoUWj9MtOId6LGPzA6h0=;
-        b=GxQZ29y/Dv4+K+wPNcL7Z2G012VXzXSGidvd/IrKjaOf1aWixcTJULymfcnj6opqRvZs2E
-        Ztyuo+dr34n4/zo6CNMnCERRRFGEXJ4eaQ0kKG2czNqTMHUn/mUy8zo7vzOkCWOgFkRao6
-        3CYmQ5sltFxVkIHh3EosBFcLTRrQrzU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=JYxfz2KU2rDSnmTtDbyA2cmeEZ/0Wy2M8yN6PdMuUwk=;
+        b=RRTmfeEuDMfDtqrp3GYvH4GpgIZ+nwORDeXUtxoM7Bg0MG2m3TO0+it64p4yEG5g6emFxU
+        BVvr8P7p8EwOI6Qz3sERqfif5Od1/sTc2i1KnaQ3R+W80J7Anmgpsbgfn4pfiSHuef60Dj
+        7QtFK82gunnwsQtT+NtgJStfHNL/cko=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-412-TTybqZy5N2KGRf1jLAwqPg-1; Wed, 07 Jun 2023 14:19:35 -0400
-X-MC-Unique: TTybqZy5N2KGRf1jLAwqPg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+ us-mta-507-hsnqYwbtNHan5Bnn4xTm2w-1; Wed, 07 Jun 2023 14:19:37 -0400
+X-MC-Unique: hsnqYwbtNHan5Bnn4xTm2w-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0B408101A58B;
-        Wed,  7 Jun 2023 18:19:33 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 104C13802139;
+        Wed,  7 Jun 2023 18:19:37 +0000 (UTC)
 Received: from warthog.procyon.org.uk (unknown [10.42.28.182])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 94E792026D49;
-        Wed,  7 Jun 2023 18:19:30 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 15D3C9E8D;
+        Wed,  7 Jun 2023 18:19:33 +0000 (UTC)
 From:   David Howells <dhowells@redhat.com>
 To:     netdev@vger.kernel.org,
         Linus Torvalds <torvalds@linux-foundation.org>
@@ -54,14 +54,14 @@ Cc:     David Howells <dhowells@redhat.com>,
         Matthew Wilcox <willy@infradead.org>,
         Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v6 02/14] tls: Allow MSG_SPLICE_PAGES but treat it as normal sendmsg
-Date:   Wed,  7 Jun 2023 19:19:08 +0100
-Message-ID: <20230607181920.2294972-3-dhowells@redhat.com>
+Subject: [PATCH net-next v6 03/14] splice, net: Use sendmsg(MSG_SPLICE_PAGES) rather than ->sendpage()
+Date:   Wed,  7 Jun 2023 19:19:09 +0100
+Message-ID: <20230607181920.2294972-4-dhowells@redhat.com>
 In-Reply-To: <20230607181920.2294972-1-dhowells@redhat.com>
 References: <20230607181920.2294972-1-dhowells@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -72,51 +72,324 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allow MSG_SPLICE_PAGES to be specified to sendmsg() but treat it as normal
-sendmsg for now.  This means the data will just be copied until
-MSG_SPLICE_PAGES is handled.
+Replace generic_splice_sendpage() + splice_from_pipe + pipe_to_sendpage()
+with a net-specific handler, splice_to_socket(), that calls sendmsg() with
+MSG_SPLICE_PAGES set instead of calling ->sendpage().
+
+MSG_MORE is used to indicate if the sendmsg() is expected to be followed
+with more data.
+
+This allows multiple pipe-buffer pages to be passed in a single call in a
+BVEC iterator, allowing the processing to be pushed down to a loop in the
+protocol driver.  This helps pave the way for passing multipage folios down
+too.
+
+Protocols that haven't been converted to handle MSG_SPLICE_PAGES yet should
+just ignore it and do a normal sendmsg() for now - although that may be a
+bit slower as it may copy everything.
 
 Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Chuck Lever <chuck.lever@oracle.com>
-cc: Boris Pismenny <borisp@nvidia.com>
-cc: John Fastabend <john.fastabend@gmail.com>
-cc: Jakub Kicinski <kuba@kernel.org>
-cc: Eric Dumazet <edumazet@google.com>
+Reviewed-by: Jakub Kicinski <kuba@kernel.org>
 cc: "David S. Miller" <davem@davemloft.net>
+cc: Eric Dumazet <edumazet@google.com>
 cc: Paolo Abeni <pabeni@redhat.com>
 cc: Jens Axboe <axboe@kernel.dk>
 cc: Matthew Wilcox <willy@infradead.org>
 cc: netdev@vger.kernel.org
 ---
- net/tls/tls_device.c | 3 ++-
- net/tls/tls_sw.c     | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/net/tls/tls_device.c b/net/tls/tls_device.c
-index a959572a816f..9ef766e41c7a 100644
---- a/net/tls/tls_device.c
-+++ b/net/tls/tls_device.c
-@@ -447,7 +447,8 @@ static int tls_push_data(struct sock *sk,
- 	long timeo;
+Notes:
+    ver #5)
+     - Preclear ret just in case len is 0.
+
+ fs/splice.c            | 158 +++++++++++++++++++++++++++++++++--------
+ include/linux/fs.h     |   2 -
+ include/linux/splice.h |   2 +
+ net/socket.c           |  26 +------
+ 4 files changed, 131 insertions(+), 57 deletions(-)
+
+diff --git a/fs/splice.c b/fs/splice.c
+index 3e06611d19ae..e337630aed64 100644
+--- a/fs/splice.c
++++ b/fs/splice.c
+@@ -33,6 +33,7 @@
+ #include <linux/fsnotify.h>
+ #include <linux/security.h>
+ #include <linux/gfp.h>
++#include <linux/net.h>
+ #include <linux/socket.h>
+ #include <linux/sched/signal.h>
  
- 	if (flags &
--	    ~(MSG_MORE | MSG_DONTWAIT | MSG_NOSIGNAL | MSG_SENDPAGE_NOTLAST))
-+	    ~(MSG_MORE | MSG_DONTWAIT | MSG_NOSIGNAL | MSG_SENDPAGE_NOTLAST |
-+	      MSG_SPLICE_PAGES))
- 		return -EOPNOTSUPP;
+@@ -448,30 +449,6 @@ const struct pipe_buf_operations nosteal_pipe_buf_ops = {
+ };
+ EXPORT_SYMBOL(nosteal_pipe_buf_ops);
  
- 	if (unlikely(sk->sk_err))
-diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
-index 1a53c8f481e9..38acc27a0dd0 100644
---- a/net/tls/tls_sw.c
-+++ b/net/tls/tls_sw.c
-@@ -955,7 +955,7 @@ int tls_sw_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
- 	int pending;
+-/*
+- * Send 'sd->len' bytes to socket from 'sd->file' at position 'sd->pos'
+- * using sendpage(). Return the number of bytes sent.
+- */
+-static int pipe_to_sendpage(struct pipe_inode_info *pipe,
+-			    struct pipe_buffer *buf, struct splice_desc *sd)
+-{
+-	struct file *file = sd->u.file;
+-	loff_t pos = sd->pos;
+-	int more;
+-
+-	if (!likely(file->f_op->sendpage))
+-		return -EINVAL;
+-
+-	more = (sd->flags & SPLICE_F_MORE) ? MSG_MORE : 0;
+-
+-	if (sd->len < sd->total_len &&
+-	    pipe_occupancy(pipe->head, pipe->tail) > 1)
+-		more |= MSG_SENDPAGE_NOTLAST;
+-
+-	return file->f_op->sendpage(file, buf->page, buf->offset,
+-				    sd->len, &pos, more);
+-}
+-
+ static void wakeup_pipe_writers(struct pipe_inode_info *pipe)
+ {
+ 	smp_mb();
+@@ -652,7 +629,7 @@ static void splice_from_pipe_end(struct pipe_inode_info *pipe, struct splice_des
+  * Description:
+  *    This function does little more than loop over the pipe and call
+  *    @actor to do the actual moving of a single struct pipe_buffer to
+- *    the desired destination. See pipe_to_file, pipe_to_sendpage, or
++ *    the desired destination. See pipe_to_file, pipe_to_sendmsg, or
+  *    pipe_to_user.
+  *
+  */
+@@ -833,8 +810,9 @@ iter_file_splice_write(struct pipe_inode_info *pipe, struct file *out,
  
- 	if (msg->msg_flags & ~(MSG_MORE | MSG_DONTWAIT | MSG_NOSIGNAL |
--			       MSG_CMSG_COMPAT))
-+			       MSG_CMSG_COMPAT | MSG_SPLICE_PAGES))
- 		return -EOPNOTSUPP;
+ EXPORT_SYMBOL(iter_file_splice_write);
  
- 	ret = mutex_lock_interruptible(&tls_ctx->tx_lock);
++#ifdef CONFIG_NET
+ /**
+- * generic_splice_sendpage - splice data from a pipe to a socket
++ * splice_to_socket - splice data from a pipe to a socket
+  * @pipe:	pipe to splice from
+  * @out:	socket to write to
+  * @ppos:	position in @out
+@@ -846,13 +824,131 @@ EXPORT_SYMBOL(iter_file_splice_write);
+  *    is involved.
+  *
+  */
+-ssize_t generic_splice_sendpage(struct pipe_inode_info *pipe, struct file *out,
+-				loff_t *ppos, size_t len, unsigned int flags)
++ssize_t splice_to_socket(struct pipe_inode_info *pipe, struct file *out,
++			 loff_t *ppos, size_t len, unsigned int flags)
+ {
+-	return splice_from_pipe(pipe, out, ppos, len, flags, pipe_to_sendpage);
+-}
++	struct socket *sock = sock_from_file(out);
++	struct bio_vec bvec[16];
++	struct msghdr msg = {};
++	ssize_t ret = 0;
++	size_t spliced = 0;
++	bool need_wakeup = false;
++
++	pipe_lock(pipe);
++
++	while (len > 0) {
++		unsigned int head, tail, mask, bc = 0;
++		size_t remain = len;
++
++		/*
++		 * Check for signal early to make process killable when there
++		 * are always buffers available
++		 */
++		ret = -ERESTARTSYS;
++		if (signal_pending(current))
++			break;
+ 
+-EXPORT_SYMBOL(generic_splice_sendpage);
++		while (pipe_empty(pipe->head, pipe->tail)) {
++			ret = 0;
++			if (!pipe->writers)
++				goto out;
++
++			if (spliced)
++				goto out;
++
++			ret = -EAGAIN;
++			if (flags & SPLICE_F_NONBLOCK)
++				goto out;
++
++			ret = -ERESTARTSYS;
++			if (signal_pending(current))
++				goto out;
++
++			if (need_wakeup) {
++				wakeup_pipe_writers(pipe);
++				need_wakeup = false;
++			}
++
++			pipe_wait_readable(pipe);
++		}
++
++		head = pipe->head;
++		tail = pipe->tail;
++		mask = pipe->ring_size - 1;
++
++		while (!pipe_empty(head, tail)) {
++			struct pipe_buffer *buf = &pipe->bufs[tail & mask];
++			size_t seg;
++
++			if (!buf->len) {
++				tail++;
++				continue;
++			}
++
++			seg = min_t(size_t, remain, buf->len);
++			seg = min_t(size_t, seg, PAGE_SIZE);
++
++			ret = pipe_buf_confirm(pipe, buf);
++			if (unlikely(ret)) {
++				if (ret == -ENODATA)
++					ret = 0;
++				break;
++			}
++
++			bvec_set_page(&bvec[bc++], buf->page, seg, buf->offset);
++			remain -= seg;
++			if (seg >= buf->len)
++				tail++;
++			if (bc >= ARRAY_SIZE(bvec))
++				break;
++		}
++
++		if (!bc)
++			break;
++
++		msg.msg_flags = MSG_SPLICE_PAGES;
++		if (flags & SPLICE_F_MORE)
++			msg.msg_flags |= MSG_MORE;
++		if (remain && pipe_occupancy(pipe->head, tail) > 0)
++			msg.msg_flags |= MSG_MORE;
++
++		iov_iter_bvec(&msg.msg_iter, ITER_SOURCE, bvec, bc,
++			      len - remain);
++		ret = sock_sendmsg(sock, &msg);
++		if (ret <= 0)
++			break;
++
++		spliced += ret;
++		len -= ret;
++		tail = pipe->tail;
++		while (ret > 0) {
++			struct pipe_buffer *buf = &pipe->bufs[tail & mask];
++			size_t seg = min_t(size_t, ret, buf->len);
++
++			buf->offset += seg;
++			buf->len -= seg;
++			ret -= seg;
++
++			if (!buf->len) {
++				pipe_buf_release(pipe, buf);
++				tail++;
++			}
++		}
++
++		if (tail != pipe->tail) {
++			pipe->tail = tail;
++			if (pipe->files)
++				need_wakeup = true;
++		}
++	}
++
++out:
++	pipe_unlock(pipe);
++	if (need_wakeup)
++		wakeup_pipe_writers(pipe);
++	return spliced ?: ret;
++}
++#endif
+ 
+ static int warn_unsupported(struct file *file, const char *op)
+ {
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index 133f0640fb24..df92f4b3d122 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -2759,8 +2759,6 @@ extern ssize_t generic_file_splice_read(struct file *, loff_t *,
+ 		struct pipe_inode_info *, size_t, unsigned int);
+ extern ssize_t iter_file_splice_write(struct pipe_inode_info *,
+ 		struct file *, loff_t *, size_t, unsigned int);
+-extern ssize_t generic_splice_sendpage(struct pipe_inode_info *pipe,
+-		struct file *out, loff_t *, size_t len, unsigned int flags);
+ extern long do_splice_direct(struct file *in, loff_t *ppos, struct file *out,
+ 		loff_t *opos, size_t len, unsigned int flags);
+ 
+diff --git a/include/linux/splice.h b/include/linux/splice.h
+index a55179fd60fc..991ae318b6eb 100644
+--- a/include/linux/splice.h
++++ b/include/linux/splice.h
+@@ -84,6 +84,8 @@ extern long do_splice(struct file *in, loff_t *off_in,
+ 
+ extern long do_tee(struct file *in, struct file *out, size_t len,
+ 		   unsigned int flags);
++extern ssize_t splice_to_socket(struct pipe_inode_info *pipe, struct file *out,
++				loff_t *ppos, size_t len, unsigned int flags);
+ 
+ /*
+  * for dynamic pipe sizing
+diff --git a/net/socket.c b/net/socket.c
+index 3df96e9ba4e2..c4d9104418c8 100644
+--- a/net/socket.c
++++ b/net/socket.c
+@@ -57,6 +57,7 @@
+ #include <linux/mm.h>
+ #include <linux/socket.h>
+ #include <linux/file.h>
++#include <linux/splice.h>
+ #include <linux/net.h>
+ #include <linux/interrupt.h>
+ #include <linux/thread_info.h>
+@@ -126,8 +127,6 @@ static long compat_sock_ioctl(struct file *file,
+ 			      unsigned int cmd, unsigned long arg);
+ #endif
+ static int sock_fasync(int fd, struct file *filp, int on);
+-static ssize_t sock_sendpage(struct file *file, struct page *page,
+-			     int offset, size_t size, loff_t *ppos, int more);
+ static ssize_t sock_splice_read(struct file *file, loff_t *ppos,
+ 				struct pipe_inode_info *pipe, size_t len,
+ 				unsigned int flags);
+@@ -162,8 +161,7 @@ static const struct file_operations socket_file_ops = {
+ 	.mmap =		sock_mmap,
+ 	.release =	sock_close,
+ 	.fasync =	sock_fasync,
+-	.sendpage =	sock_sendpage,
+-	.splice_write = generic_splice_sendpage,
++	.splice_write = splice_to_socket,
+ 	.splice_read =	sock_splice_read,
+ 	.show_fdinfo =	sock_show_fdinfo,
+ };
+@@ -1066,26 +1064,6 @@ int kernel_recvmsg(struct socket *sock, struct msghdr *msg,
+ }
+ EXPORT_SYMBOL(kernel_recvmsg);
+ 
+-static ssize_t sock_sendpage(struct file *file, struct page *page,
+-			     int offset, size_t size, loff_t *ppos, int more)
+-{
+-	struct socket *sock;
+-	int flags;
+-	int ret;
+-
+-	sock = file->private_data;
+-
+-	flags = (file->f_flags & O_NONBLOCK) ? MSG_DONTWAIT : 0;
+-	/* more is a combination of MSG_MORE and MSG_SENDPAGE_NOTLAST */
+-	flags |= more;
+-
+-	ret = kernel_sendpage(sock, page, offset, size, flags);
+-
+-	if (trace_sock_send_length_enabled())
+-		call_trace_sock_send_length(sock->sk, ret, 0);
+-	return ret;
+-}
+-
+ static ssize_t sock_splice_read(struct file *file, loff_t *ppos,
+ 				struct pipe_inode_info *pipe, size_t len,
+ 				unsigned int flags)
 
