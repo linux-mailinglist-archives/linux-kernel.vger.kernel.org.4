@@ -2,81 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33FE1725F49
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 14:26:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54146725F4B
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 14:26:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240825AbjFGM0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 08:26:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38920 "EHLO
+        id S240854AbjFGM01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 08:26:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240837AbjFGM0L (ORCPT
+        with ESMTP id S240837AbjFGM0Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 08:26:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81AFA1FD4
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 05:26:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1282163E7B
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 12:26:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71747C433D2
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 12:26:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686140760;
-        bh=Hejwqi6FBhLDJdlbjy5YX5ddU3z1wSekyGkZ/FAMHQs=;
-        h=References:In-Reply-To:From:Date:Subject:To:From;
-        b=lVMFvjHfHmZOUp40QJcIRdRKOopnpdahIcx/ouNZ9a83AloFXSSRlnch9oaJebxnq
-         FGg0bE4kwGHTIGM2oe/76CXkhZ7pXZ/GluUfK+WWzFW6ZQkQtKufzwsjyrZGOBcKH5
-         X11tHjkDeW7/8HfPU4k1p4HlWiSuwmDUoC39t7OS8wN4e7COqCw2N+jYtObxCSyZ9Z
-         joZmSJMsUpV7obtPwUaG9QGyPb9A4nyi1ckEAA7DJfmoAOUKNpcKUDBj6S8VoZ80HS
-         8VMm5eMb1nzorr03R8nkzC0CZXHQbh4Es9q+1VErDCVAdbG3Tq0PlsYDp4nWeZGmkA
-         Aeb9RnpaFJ94w==
-Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-39c68a3c5b9so485817b6e.0
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 05:26:00 -0700 (PDT)
-X-Gm-Message-State: AC+VfDw8DPyUZnV4pct2KA+R1E13HGs/bEstvLIJTkSxp2ueqBNm+1fN
-        lELEjDkzs2p34blNgYwXKh+s7uvalwCNLCvsmMER4g==
-X-Google-Smtp-Source: ACHHUZ7TWJ2NcDJr/cxQbuGmMmmwWCCOcyvvJg4RZIubr7St0+CT82SvbIhXjRjm6U4dj7pTP9a2wPqMdgQbidTEkYY=
-X-Received: by 2002:a05:6358:4e83:b0:127:db0e:395a with SMTP id
- ce3-20020a0563584e8300b00127db0e395amr3370873rwb.7.1686140759753; Wed, 07 Jun
- 2023 05:25:59 -0700 (PDT)
+        Wed, 7 Jun 2023 08:26:25 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC231FDF;
+        Wed,  7 Jun 2023 05:26:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=Jr+xg2ifRRVhPjCfW2O7H0sIHcq4ucFfwT2EMs2VVTE=; b=2z8/1eUIu0eed8kJ/uXWr08jvx
+        Xam4MlAiQ55jRHKUtQ8okSusP1RUXmzcKVaZIEL60WAjgyRq/pWhXxYhUjM4XpfUhfy/z+9hd5sJj
+        h//tAkzPEvewHhtUpEwPqAqpjkOs9lsoVbOW1WwWcBehjokAldnb9S4QgytaYofRxaTA=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1q6sEY-00F8yM-R8; Wed, 07 Jun 2023 14:25:50 +0200
+Date:   Wed, 7 Jun 2023 14:25:50 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     Jeffrey Hugo <quic_jhugo@quicinc.com>, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        mhi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loic.poulain@linaro.org
+Subject: Re: [PATCH 3/3] net: mhi: Increase the default MTU from 16K to 32K
+Message-ID: <f96d4956-6b69-4809-9461-9157e32b3865@lunn.ch>
+References: <20230606123119.57499-1-manivannan.sadhasivam@linaro.org>
+ <20230606123119.57499-4-manivannan.sadhasivam@linaro.org>
+ <b8a25a70-8781-8b82-96d8-bc1ecf2d5468@quicinc.com>
+ <20230607065809.GB5025@thinkpad>
 MIME-Version: 1.0
-References: <20230306144522.15699-1-quic_mdalam@quicinc.com> <ZIBdN/16vizJqNZp@shikoro>
-In-Reply-To: <ZIBdN/16vizJqNZp@shikoro>
-From:   Robert Foss <rfoss@kernel.org>
-Date:   Wed, 7 Jun 2023 14:25:48 +0200
-X-Gmail-Original-Message-ID: <CAN6tsi4X7+OAY3Bhc2ud1RVBZUd5fSOLOeWLNXWhMtptxUWTWA@mail.gmail.com>
-Message-ID: <CAN6tsi4X7+OAY3Bhc2ud1RVBZUd5fSOLOeWLNXWhMtptxUWTWA@mail.gmail.com>
-Subject: Re: [PATCH 3/5] i2c: qcom-cci:Use devm_platform_get_and_ioremap_resource()
-To:     Wolfram Sang <wsa@kernel.org>,
-        Md Sadre Alam <quic_mdalam@quicinc.com>,
-        loic.poulain@linaro.org, rfoss@kernel.org,
-        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_sjaganat@quicinc.com,
-        quic_srichara@quicinc.com, quic_varada@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230607065809.GB5025@thinkpad>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 7, 2023 at 12:34=E2=80=AFPM Wolfram Sang <wsa@kernel.org> wrote=
-:
->
-> On Mon, Mar 06, 2023 at 08:15:22PM +0530, Md Sadre Alam wrote:
-> > Convert platform_get_resource(), devm_ioremap_resource() to a single
-> > call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> > what this function does.
-> >
-> > Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
->
-> Loic, Robert, do you agree with this patch?
->
+On Wed, Jun 07, 2023 at 12:28:09PM +0530, Manivannan Sadhasivam wrote:
+> On Tue, Jun 06, 2023 at 07:50:23AM -0600, Jeffrey Hugo wrote:
+> > On 6/6/2023 6:31 AM, Manivannan Sadhasivam wrote:
+> > > Most of the Qualcomm endpoint devices are supporting 32K MTU for the
+> > > UL (Uplink) and DL (Downlink) channels. So let's use the same value
+> > > in the MHI NET driver also. This gives almost 2x increase in the throughput
+> > > for the UL channel.
 
-Acked-by: Robert Foss <rfoss@kernel.org>
+You say here 'Most'. What happens on those which do not support 32K?
+Do the packets get dropped and it turns into a black hole?
+
+   Andrew
