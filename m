@@ -2,63 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE800725CDA
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 13:17:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDF48725B48
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 12:08:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239975AbjFGLRI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 07:17:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52118 "EHLO
+        id S235790AbjFGKIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 06:08:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239471AbjFGLRF (ORCPT
+        with ESMTP id S234009AbjFGKIS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 07:17:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A42641702;
-        Wed,  7 Jun 2023 04:17:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3FB5263DBD;
-        Wed,  7 Jun 2023 11:17:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90665C43442;
-        Wed,  7 Jun 2023 11:17:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686136623;
-        bh=PqT7b3LTt1IrPaGyiAZXtxPqgt4zXro8Gw7CXf+6hyg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hcwjIfmEFTIUXuUtcgpBMJ4jzU5AmLI03k+n5e24wAmMp/W1YkBJLXXTTEK2axz/9
-         T5RVxoff/v2jBz79Uir+LB8uZkFWRyks6Q+F30CwBDcQJgIdEyNWW3cIDPa2R4P5RS
-         J6MUJGfI6Q5HqyfmcIrRIak5MNt6+Gi2BtNAXDLaMvzT52dS4jt9jvEjC1v37a5E9e
-         zTdlZJPWBugDtMCH7X3aNaLw8VUD97ukmGLTWHyKuF/02Zq/Zhyl2QX0IQrQjqcdpb
-         euJakyPqO/MwXQV5UurRMzyB6zDzRIo/gm81awExyAXteEMiR11fFc+lkCITXenblb
-         05+boh6s8h1Bg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1q6rAM-0008LU-Gz; Wed, 07 Jun 2023 13:17:26 +0200
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>, stable@vger.kernel.org,
-        Li Jun <jun.li@nxp.com>,
-        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Subject: [PATCH 2/2] USB: dwc3: fix use-after-free on core driver unbind
-Date:   Wed,  7 Jun 2023 12:05:40 +0200
-Message-Id: <20230607100540.31045-3-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.39.3
-In-Reply-To: <20230607100540.31045-1-johan+linaro@kernel.org>
-References: <20230607100540.31045-1-johan+linaro@kernel.org>
+        Wed, 7 Jun 2023 06:08:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F37199A
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 03:07:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686132454;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=EvYvWP/dmRw7dcP93qz9byoXzFOKtvhvKrmHdFETiw8=;
+        b=S4V54KCmKtG43bb7GWAp4G8kVtnqWkmv8erZ9NUvOz653CHV3FMzWMVrNnOXyC/CowxlEH
+        jxLy8mKoPVTcMCijL7mzMiF7DrguCMx1Rj+UTNJSdC7Ai1f/zKVg9ZAzDoSyNOGB7r/znj
+        U61i0Bm3xJ5g1GYqoq7mWAJszcnXb4Q=
+Received: from mail-yb1-f200.google.com (mail-yb1-f200.google.com
+ [209.85.219.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-461-hoPI2V0YMs20GsLvFyp_jQ-1; Wed, 07 Jun 2023 06:07:32 -0400
+X-MC-Unique: hoPI2V0YMs20GsLvFyp_jQ-1
+Received: by mail-yb1-f200.google.com with SMTP id 3f1490d57ef6-bb0cb2e67c5so10375099276.0
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 03:07:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686132452; x=1688724452;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EvYvWP/dmRw7dcP93qz9byoXzFOKtvhvKrmHdFETiw8=;
+        b=kcUvRiZ+tYRGdfn+DRqumKj0GftF8HPUReCjXJ+IEAuvL3rZ6qEMSHz7XLIquHTJDq
+         8qcpWf87i9sSbXoQ+IQTEj9/XlupgbfuJdXYGQgsRtEzZl3vazECGnD3MIrQggzuoiiP
+         5jo+oCVwW6vPx3Lw2doXoA6FSqHVw5DYYQ0pjTsRqTxqk9km7haElH4mSp/VqqrWE3xu
+         5gIb8XaPv/P9XuZm2wA2T7swXJcByd8XcnT2DhV/owgVczkBY+LNy/1KpiPppovq9P2n
+         7EL8t5dbMFKDqyPgqZ1fmMHZ6fN8QyGvZ0srtr3aWQQgHPYwOPTSVaR+n0553jQF/bZC
+         dkQw==
+X-Gm-Message-State: AC+VfDz5ji7Mg6Z4bXaRNv9woPB3Aa2CdNjnrp9dwi2w7lEK+AM942IE
+        epEQBffhF2U8UcVJ03LNm35KZXf24Fn05aTV1CQ39N+6MaczCF9iQgV3wSuXhWz7o/jhP2ZDcMh
+        JQ5xwKZ6JBfU0QK/pziiW3fvt6keK9xx6gRvsFP7Y
+X-Received: by 2002:a25:b90e:0:b0:b9e:5055:ce7e with SMTP id x14-20020a25b90e000000b00b9e5055ce7emr5436820ybj.55.1686132452439;
+        Wed, 07 Jun 2023 03:07:32 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5qr+y7gbTb42/JGVX0Drco0Mo+DgGu0Fu1MKsKD0cM9YVxkXtnAWRmjd4kaGRA2Sy+E6o6RFSwWPGuilreMio=
+X-Received: by 2002:a25:b90e:0:b0:b9e:5055:ce7e with SMTP id
+ x14-20020a25b90e000000b00b9e5055ce7emr5436799ybj.55.1686132452198; Wed, 07
+ Jun 2023 03:07:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20230531082428.21763-1-hadess@hadess.net> <nycvar.YFH.7.76.2305311606160.29760@cbobk.fhfr.pm>
+ <nycvar.YFH.7.76.2306031440380.29760@cbobk.fhfr.pm> <15bb2507-a145-7f1b-8e84-58aeb02484b9@leemhuis.info>
+ <nycvar.YFH.7.76.2306061527080.29760@cbobk.fhfr.pm> <42b6e582-f642-7521-135a-449140984211@leemhuis.info>
+ <CAO-hwJL3RcfOxQvhqDFTwgfY=oAJqR5rsHmO5qDVwNUEh3K58Q@mail.gmail.com> <2023060703-colony-shakily-3514@gregkh>
+In-Reply-To: <2023060703-colony-shakily-3514@gregkh>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Wed, 7 Jun 2023 12:07:21 +0200
+Message-ID: <CAO-hwJJxZuXP=kgTxEc-F+OtcFsR59iGE3Vw3ptZs48+MotNtA@mail.gmail.com>
+Subject: Re: [PATCH] HID: logitech-hidpp: Handle timeout differently from busy
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
+        Jiri Kosina <jikos@kernel.org>,
+        Bastien Nocera <hadess@hadess.net>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Peter F . Patel-Schneider" <pfpschneider@gmail.com>,
+        =?UTF-8?Q?Filipe_La=C3=ADns?= <lains@riseup.net>,
+        Nestor Lopez Casado <nlopezcasad@logitech.com>,
+        Mark Lord <mlord@pobox.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,42 +84,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some dwc3 glue drivers are currently accessing the driver data of the
-child core device directly, which is clearly a bad idea as the child may
-not have probed yet or may have been unbound from its driver.
+On Wed, Jun 7, 2023 at 11:46=E2=80=AFAM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Tue, Jun 06, 2023 at 08:37:26PM +0200, Benjamin Tissoires wrote:
+> > On Tue, Jun 6, 2023 at 8:18=E2=80=AFPM Linux regression tracking (Thors=
+ten
+> > Leemhuis) <regressions@leemhuis.info> wrote:
+> > >
+> > >
+> > >
+> > > On 06.06.23 15:27, Jiri Kosina wrote:
+> > > > On Mon, 5 Jun 2023, Linux regression tracking (Thorsten Leemhuis) w=
+rote:
+> > > >
+> > > >>>>> If an attempt at contacting a receiver or a device fails becaus=
+e the
+> > > >>>>> receiver or device never responds, don't restart the communicat=
+ion, only
+> > > >>>>> restart it if the receiver or device answers that it's busy, as=
+ originally
+> > > >>>>> intended.
+> > > >>>>>
+> > > >>>>> This was the behaviour on communication timeout before commit 5=
+86e8fede795
+> > > >>>>> ("HID: logitech-hidpp: Retry commands when device is busy").
+> > > >>>>>
+> > > >>>>> This fixes some overly long waits in a critical path on boot, w=
+hen
+> > > >>>>> checking whether the device is connected by getting its HID++ v=
+ersion.
+> > > >>>>>
+> > > >>>>> Signed-off-by: Bastien Nocera <hadess@hadess.net>
+> > > >>>>> Suggested-by: Mark Lord <mlord@pobox.com>
+> > > >>>>> Fixes: 586e8fede795 ("HID: logitech-hidpp: Retry commands when =
+device is busy")
+> > > >>>>> Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D217412
+> > > >>> [...]
+> > > >>>>
+> > > >>>> I have applied this even before getting confirmation from the re=
+porters in
+> > > >>>> bugzilla, as it's the right thing to do anyway.
+> > > >>>
+> > > >>> Unfortunately it doesn't seem to cure the reported issue (while r=
+everting
+> > > >>> 586e8fede79 does):
+> > > >>
+> > > >> BTW, remind me again: was fixing this by reverting 586e8fede79 for=
+ now a
+> > > >> option? I guess it's not, but if I'm wrong I wonder if that might =
+at
+> > > >> this point be the best way forward.
+> > > >
+> > > > This should now all be fixed by
+> > > >
+> > > >     https://git.kernel.org/linus/7c28afd5512e371773dbb2bf95a31ed562=
+5651d9
+> > >
+> > > Jiri, Benjamin, many many thx for working on this.
+> > >
+> > > Hmmm. No CC: <stable... tag.
+> > >
+> > > Should we ask Greg to pick this up for 6.3 now, or better wait a few
+> > > days? He currently already has 6199d23c91ce ("HID: logitech-hidpp:
+> > > Handle timeout differently from busy") in his queue for the next 6.3.=
+y
+> > > release.
+> >
+> > Well, the Fixes: tag supposedly is enough to let the stable folks to
+> > pick it up.
+>
+> No, not at all, please see:
+>     https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.ht=
+ml
+> for how to do this properly.
+>
+> (hint, we need a cc: stable@ in the signed-off-by area.)
+>
+> We only pick up stuff with "Fixes:" semi-often, sometimes never,
+> depending on our workload.  Never rely on that.
 
-As a workaround until the glue drivers have been fixed, clear the driver
-data pointer before allowing the glue parent device to runtime suspend
-to prevent its driver from accessing data that has been freed during
-unbind.
+Oh right. Given that those patches eventually end up in stable sooner
+or later I made the shortcut in my head. Thanks for correcting that :)
 
-Fixes: 6dd2565989b4 ("usb: dwc3: add imx8mp dwc3 glue layer driver")
-Fixes: 6895ea55c385 ("usb: dwc3: qcom: Configure wakeup interrupts during suspend")
-Cc: stable@vger.kernel.org      # 5.12
-Cc: Li Jun <jun.li@nxp.com>
-Cc: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
-Cc: Krishna Kurapati <quic_kriskura@quicinc.com>
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- drivers/usb/dwc3/core.c | 5 +++++
- 1 file changed, 5 insertions(+)
+>
+> It's been this way for 18+ years now, nothing new :)
+>
+> > But you are right, let's Cc Greg for a quicker inclusion
+> > in the 6.3 tree.
+> >
+> > Greg, would you mind adding the commit above (7c28afd5512e37) onto the
+> > 6.3 stable queue? Thanks!
+>
+> Now queued up, thanks.
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 7b2ce013cc5b..d68958e151a7 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -1929,6 +1929,11 @@ static int dwc3_remove(struct platform_device *pdev)
- 	pm_runtime_disable(&pdev->dev);
- 	pm_runtime_dont_use_autosuspend(&pdev->dev);
- 	pm_runtime_put_noidle(&pdev->dev);
-+	/*
-+	 * HACK: Clear the driver data, which is currently accessed by parent
-+	 * glue drivers, before allowing the parent to suspend.
-+	 */
-+	platform_set_drvdata(pdev, NULL);
- 	pm_runtime_set_suspended(&pdev->dev);
- 
- 	dwc3_free_event_buffers(dwc);
--- 
-2.39.3
+Great thanks!
+
+Cheers,
+Benjamin
 
