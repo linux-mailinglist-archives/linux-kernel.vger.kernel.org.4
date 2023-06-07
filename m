@@ -2,342 +2,344 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7FC17264B8
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 17:33:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 009B67264BA
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 17:33:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241311AbjFGPdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 11:33:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45044 "EHLO
+        id S240421AbjFGPdf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 11:33:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241320AbjFGPdC (ORCPT
+        with ESMTP id S241291AbjFGPdd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 11:33:02 -0400
-Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 449E21BC6;
-        Wed,  7 Jun 2023 08:32:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1686151977; x=1717687977;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=QApyFybCc0hqZkg39fC3yOeu77CaRCOeQPkvCE9VX+E=;
-  b=kPb9IYalbjlPmqPC2iEYfyjhJ/9z4Y9Nbg0t0kFp7RhOayuXftGoF0Za
-   /4u6b6OwalX8FjEVu8aQrDCDXvaihQTvXWnKRD1YHDkFv3DAAxIGj9r5f
-   C1ZGHTE8PcFW2xW+5uPAEt5YUrBVmWrZ2wx7JnHuE0Ytws7vCczE6pr6c
-   A=;
-X-IronPort-AV: E=Sophos;i="6.00,224,1681171200"; 
-   d="scan'208";a="344248396"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2a-m6i4x-1cca8d67.us-west-2.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-9102.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 15:32:51 +0000
-Received: from EX19MTAUWC002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2a-m6i4x-1cca8d67.us-west-2.amazon.com (Postfix) with ESMTPS id 04F428B750;
-        Wed,  7 Jun 2023 15:32:49 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX19MTAUWC002.ant.amazon.com (10.250.64.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 7 Jun 2023 15:32:43 +0000
-Received: from 88665a182662.ant.amazon.com (10.119.185.127) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 7 Jun 2023 15:32:40 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.com>
-To:     <dhowells@redhat.com>
-CC:     <axboe@kernel.dk>, <borisp@nvidia.com>, <chuck.lever@oracle.com>,
-        <davem@davemloft.net>, <dsahern@kernel.org>, <edumazet@google.com>,
-        <john.fastabend@gmail.com>, <kuba@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        <netdev@vger.kernel.org>, <pabeni@redhat.com>,
-        <torvalds@linux-foundation.org>, <willemdebruijn.kernel@gmail.com>,
-        <willy@infradead.org>, <kuniyu@amazon.com>
-Subject: Re: [PATCH net-next v5 07/14] ipv4, ipv6: Use splice_eof() to flush
-Date:   Wed, 7 Jun 2023 08:32:32 -0700
-Message-ID: <20230607153232.93980-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230607140559.2263470-8-dhowells@redhat.com>
-References: <20230607140559.2263470-8-dhowells@redhat.com>
+        Wed, 7 Jun 2023 11:33:33 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5142D1FC3
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 08:33:24 -0700 (PDT)
+Received: from mail-yw1-f200.google.com (mail-yw1-f200.google.com [209.85.128.200])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id CB3BD3F15C
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 15:33:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1686152002;
+        bh=IWFv37c+eoG8tJI1JWj5okUGLZBX2yml/Xw7WCENPys=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=t/ldjzpw/R7gPa42tWKVISUAqjeIqZ6g6LmSPP59jjZnP5OGnIva5ppk5xaP4KmAR
+         OdqYaMpZ1915o9XmoYDzuB7Mm+M8V5ID1Y5bHOQ9eWAFuHf6mSxpLeWYDvc3cDSu++
+         mOOn4wro7J6AX9DJuxqLSRmlQTbKgoM/1f6LZ8e21rxHrsYTZY0cswSsqO0hhTdYBm
+         xuB18wbOUAyVQHfUri8f2KOSuSKJSpKiEtQ4dZHMH42QOlIWnerOb+ws4oQxRRQuRB
+         TtPwYUiWg330YHPA5rgJ9+Ayi+TqDrEZrR00pnymnKrI3GkRPIVUeavGtbAYQWkMV4
+         erWUw2RqNd4gw==
+Received: by mail-yw1-f200.google.com with SMTP id 00721157ae682-568960f4596so126889587b3.1
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 08:33:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686152002; x=1688744002;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IWFv37c+eoG8tJI1JWj5okUGLZBX2yml/Xw7WCENPys=;
+        b=DWKKIauF/uV2OHuTj9C/qifKrrrBJppcMjvzQr0R+ZtTSaYkQnyJxz/+xsIDvVHZm8
+         FXjb3PWyAyO04GpHXxfApBfbrPfRotV3m2JUxXyYRkjJmE7rnFIE9BStnkCYc2CqUo6O
+         voJ4bAjuzhchn5w9QmX8TpdebeQGkqH9g3NrJQVOvYgTh45v+mkZDf0O/OuZ3sLELXiY
+         wlwWVQ61+KyRA8ds0M9yf4gF2yjMKfYIWfYdixcUSldwGEVMN211Bp4x16cQGjdQ8uLY
+         wtD82RFb8dMDNtg7U9QMk4NAltrdFqiRA9BhcY7ImDO7LJHmg0w5xBg3obh+Yx22zFLp
+         HOKA==
+X-Gm-Message-State: AC+VfDy5GZgLSxwTl6A58Gl3Ndq7lizQ0cKyaTK96i+YNtlSDm5aj5pI
+        6IGjet33CGNfO1OHQbfBavZ9tdxNH4eOQkGtW9SNY4IXeIfiReDRdAc3rrqi4ezXS1rlA7SN60E
+        2i+cmBcb1Mz/+fVVIvAQB3Wq8k1B+VelyUTKwhYhgGfVIjSIYWu19EHBUVQ==
+X-Received: by 2002:a81:9111:0:b0:561:da0d:6488 with SMTP id i17-20020a819111000000b00561da0d6488mr2028183ywg.50.1686152001633;
+        Wed, 07 Jun 2023 08:33:21 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ41ujZduYo0Tx4YuzMUoEUAiQUD7l1XN5FJidm3Unip3PVpHkcdztp37wOx6A8Ub0V0IIOsJeVrBs0yIakpb2w=
+X-Received: by 2002:a81:9111:0:b0:561:da0d:6488 with SMTP id
+ i17-20020a819111000000b00561da0d6488mr2028126ywg.50.1686152000504; Wed, 07
+ Jun 2023 08:33:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.119.185.127]
-X-ClientProxiedBy: EX19D046UWA003.ant.amazon.com (10.13.139.18) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230607152038.469739-1-aleksandr.mikhalitsyn@canonical.com> <20230607152038.469739-4-aleksandr.mikhalitsyn@canonical.com>
+In-Reply-To: <20230607152038.469739-4-aleksandr.mikhalitsyn@canonical.com>
+From:   Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Date:   Wed, 7 Jun 2023 17:33:09 +0200
+Message-ID: <CAEivzxdkKENc=2a5gzyO6cX9+=XYnNHHj0NBi2fcC_2vEoaBPQ@mail.gmail.com>
+Subject: Re: [PATCH v3 03/14] ceph: handle idmapped mounts in create_request_message()
+To:     xiubli@redhat.com
+Cc:     brauner@kernel.org, stgraber@ubuntu.com,
+        linux-fsdevel@vger.kernel.org,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Howells <dhowells@redhat.com>
-Date: Wed,  7 Jun 2023 15:05:52 +0100
-> Allow splice to undo the effects of MSG_MORE after prematurely ending a
-> splice/sendfile due to getting an EOF condition (->splice_read() returned
-> 0) after splice had called sendmsg() with MSG_MORE set when the user didn't
-> set MSG_MORE.
-> 
-> For UDP, a pending packet will not be emitted if the socket is closed
-> before it is flushed; with this change, it be flushed by ->splice_eof().
-> 
-> For TCP, it's not clear that MSG_MORE is actually effective.
-> 
-> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-> Link: https://lore.kernel.org/r/CAHk-=wh=V579PDYvkpnTobCLGczbgxpMgGmmhqiTyE34Cpi5Gg@mail.gmail.com/
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> cc: Eric Dumazet <edumazet@google.com>
-> cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-> cc: David Ahern <dsahern@kernel.org>
-> cc: "David S. Miller" <davem@davemloft.net>
-> cc: Jakub Kicinski <kuba@kernel.org>
-> cc: Paolo Abeni <pabeni@redhat.com>
-> cc: Jens Axboe <axboe@kernel.dk>
-> cc: Matthew Wilcox <willy@infradead.org>
-> cc: netdev@vger.kernel.org
+On Wed, Jun 7, 2023 at 5:21=E2=80=AFPM Alexander Mikhalitsyn
+<aleksandr.mikhalitsyn@canonical.com> wrote:
+>
+> From: Christian Brauner <christian.brauner@ubuntu.com>
+>
+> Inode operations that create a new filesystem object such as ->mknod,
+> ->create, ->mkdir() and others don't take a {g,u}id argument explicitly.
+> Instead the caller's fs{g,u}id is used for the {g,u}id of the new
+> filesystem object.
+>
+> Cephfs mds creation request argument structures mirror this filesystem
+> behavior. They don't encode a {g,u}id explicitly. Instead the caller's
+> fs{g,u}id that is always sent as part of any mds request is used by the
+> servers to set the {g,u}id of the new filesystem object.
+>
+> In order to ensure that the correct {g,u}id is used map the caller's
+> fs{g,u}id for creation requests. This doesn't require complex changes.
+> It suffices to pass in the relevant idmapping recorded in the request
+> message. If this request message was triggered from an inode operation
+> that creates filesystem objects it will have passed down the relevant
+> idmaping. If this is a request message that was triggered from an inode
+> operation that doens't need to take idmappings into account the initial
+> idmapping is passed down which is an identity mapping and thus is
+> guaranteed to leave the caller's fs{g,u}id unchanged.,u}id is sent.
+>
+> The last few weeks before Christmas 2021 I have spent time not just
+> reading and poking the cephfs kernel code but also took a look at the
+> ceph mds server userspace to ensure I didn't miss some subtlety.
+>
+> This made me aware of one complication to solve. All requests send the
+> caller's fs{g,u}id over the wire. The caller's fs{g,u}id matters for the
+> server in exactly two cases:
+>
+> 1. to set the ownership for creation requests
+> 2. to determine whether this client is allowed access on this server
+>
+> Case 1. we already covered and explained. Case 2. is only relevant for
+> servers where an explicit uid access restriction has been set. That is
+> to say the mds server restricts access to requests coming from a
+> specific uid. Servers without uid restrictions will grant access to
+> requests from any uid by setting MDS_AUTH_UID_ANY.
+>
+> Case 2. introduces the complication because the caller's fs{g,u}id is
+> not just used to record ownership but also serves as the {g,u}id used
+> when checking access to the server.
+>
+> Consider a user mounting a cephfs client and creating an idmapped mount
+> from it that maps files owned by uid 1000 to be owned uid 0:
+>
+> mount -t cephfs -o [...] /unmapped
+> mount-idmapped --map-mount 1000:0:1 /idmapped
+>
+> That is to say if the mounted cephfs filesystem contains a file "file1"
+> which is owned by uid 1000:
+>
+> - looking at it via /unmapped/file1 will report it as owned by uid 1000
+>   (One can think of this as the on-disk value.)
+> - looking at it via /idmapped/file1 will report it as owned by uid 0
+>
+> Now, consider creating new files via the idmapped mount at /idmapped.
+> When a caller with fs{g,u}id 1000 creates a file "file2" by going
+> through the idmapped mount mounted at /idmapped it will create a file
+> that is owned by uid 1000 on-disk, i.e.:
+>
+> - looking at it via /unmapped/file2 will report it as owned by uid 1000
+> - looking at it via /idmapped/file2 will report it as owned by uid 0
+>
+> Now consider an mds server that has a uid access restriction set and
+> only grants access to requests from uid 0.
+>
+> If the client sends a creation request for a file e.g. /idmapped/file2
+> it will send the caller's fs{g,u}id idmapped according to the idmapped
+> mount. So if the caller has fs{g,u}id 1000 it will be mapped to {g,u}id
+> 0 in the idmapped mount and will be sent over the wire allowing the
+> caller access to the mds server.
+>
+> However, if the caller is not issuing a creation request the caller's
+> fs{g,u}id will be send without the mount's idmapping applied. So if the
+> caller that just successfully created a new file on the restricted mds
+> server sends a request as fs{g,u}id 1000 access will be refused. This
+> however is inconsistent.
+>
+> From my perspective the root of the problem lies in the fact that
+> creation requests implicitly infer the ownership from the {g,u}id that
+> gets sent along with every mds request.
+>
+> I have thought of multiple ways of addressing this problem but the one I
+> prefer is to give all mds requests that create a filesystem object a
+> proper, separate {g,u}id field entry in the argument struct. This is,
+> for example how ->setattr mds requests work.
+>
+> This way the caller's fs{g,u}id can be used consistenly for server
+> access checks and is separated from the ownership for new filesystem
+> objects.
+>
+> Servers could then be updated to refuse creation requests whenever the
+> {g,u}id used for access checking doesn't match the {g,u}id used for
+> creating the filesystem object just as is done for setattr requests on a
+> uid restricted server. But I am, of course, open to other suggestions.
+>
+> Cc: Xiubo Li <xiubli@redhat.com>
+> Cc: Jeff Layton <jlayton@kernel.org>
+> Cc: Ilya Dryomov <idryomov@gmail.com>
+> Cc: ceph-devel@vger.kernel.org
+> Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+> Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com=
+>
 > ---
->  include/net/inet_common.h |  1 +
->  include/net/tcp.h         |  1 +
->  include/net/udp.h         |  1 +
->  net/ipv4/af_inet.c        | 18 ++++++++++++++++++
->  net/ipv4/tcp.c            | 16 ++++++++++++++++
->  net/ipv4/tcp_ipv4.c       |  1 +
->  net/ipv4/udp.c            | 16 ++++++++++++++++
->  net/ipv6/af_inet6.c       |  1 +
->  net/ipv6/tcp_ipv6.c       |  1 +
->  net/ipv6/udp.c            | 18 ++++++++++++++++++
->  10 files changed, 74 insertions(+)
-> 
-> diff --git a/include/net/inet_common.h b/include/net/inet_common.h
-> index 77f4b0ef5b92..a75333342c4e 100644
-> --- a/include/net/inet_common.h
-> +++ b/include/net/inet_common.h
-> @@ -35,6 +35,7 @@ void __inet_accept(struct socket *sock, struct socket *newsock,
->  		   struct sock *newsk);
->  int inet_send_prepare(struct sock *sk);
->  int inet_sendmsg(struct socket *sock, struct msghdr *msg, size_t size);
-> +void inet_splice_eof(struct socket *sock);
->  ssize_t inet_sendpage(struct socket *sock, struct page *page, int offset,
->  		      size_t size, int flags);
->  int inet_recvmsg(struct socket *sock, struct msghdr *msg, size_t size,
-> diff --git a/include/net/tcp.h b/include/net/tcp.h
-> index 68990a8f556a..49611af31bb7 100644
-> --- a/include/net/tcp.h
-> +++ b/include/net/tcp.h
-> @@ -327,6 +327,7 @@ int tcp_sendmsg(struct sock *sk, struct msghdr *msg, size_t size);
->  int tcp_sendmsg_locked(struct sock *sk, struct msghdr *msg, size_t size);
->  int tcp_sendmsg_fastopen(struct sock *sk, struct msghdr *msg, int *copied,
->  			 size_t size, struct ubuf_info *uarg);
-> +void tcp_splice_eof(struct socket *sock);
->  int tcp_sendpage(struct sock *sk, struct page *page, int offset, size_t size,
->  		 int flags);
->  int tcp_sendpage_locked(struct sock *sk, struct page *page, int offset,
-> diff --git a/include/net/udp.h b/include/net/udp.h
-> index 5cad44318d71..4ed0b47c5582 100644
-> --- a/include/net/udp.h
-> +++ b/include/net/udp.h
-> @@ -278,6 +278,7 @@ int udp_get_port(struct sock *sk, unsigned short snum,
->  int udp_err(struct sk_buff *, u32);
->  int udp_abort(struct sock *sk, int err);
->  int udp_sendmsg(struct sock *sk, struct msghdr *msg, size_t len);
-> +void udp_splice_eof(struct socket *sock);
->  int udp_push_pending_frames(struct sock *sk);
->  void udp_flush_pending_frames(struct sock *sk);
->  int udp_cmsg_send(struct sock *sk, struct msghdr *msg, u16 *gso_size);
-> diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
-> index b5735b3551cf..6cfb78592836 100644
-> --- a/net/ipv4/af_inet.c
-> +++ b/net/ipv4/af_inet.c
-> @@ -831,6 +831,21 @@ int inet_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
->  }
->  EXPORT_SYMBOL(inet_sendmsg);
->  
-> +void inet_splice_eof(struct socket *sock)
-> +{
-> +	const struct proto *prot;
-> +	struct sock *sk = sock->sk;
-> +
-> +	if (unlikely(inet_send_prepare(sk)))
-> +		return;
-> +
-> +	/* IPV6_ADDRFORM can change sk->sk_prot under us. */
-> +	prot = READ_ONCE(sk->sk_prot);
-> +	if (prot->splice_eof)
-> +		sk->sk_prot->splice_eof(sock);
+>  fs/ceph/mds_client.c | 22 ++++++++++++++++++----
+>  1 file changed, 18 insertions(+), 4 deletions(-)
+>
+> diff --git a/fs/ceph/mds_client.c b/fs/ceph/mds_client.c
+> index 810c3db2e369..e4265843b838 100644
+> --- a/fs/ceph/mds_client.c
+> +++ b/fs/ceph/mds_client.c
+> @@ -2583,6 +2583,8 @@ static struct ceph_msg *create_request_message(stru=
+ct ceph_mds_session *session,
+>         void *p, *end;
+>         int ret;
+>         bool legacy =3D !(session->s_con.peer_features & CEPH_FEATURE_FS_=
+BTIME);
+> +       kuid_t caller_fsuid;
+> +       kgid_t caller_fsgid;
+>
+>         ret =3D set_request_path_attr(req->r_inode, req->r_dentry,
+>                               req->r_parent, req->r_path1, req->r_ino1.in=
+o,
+> @@ -2651,10 +2653,22 @@ static struct ceph_msg *create_request_message(st=
+ruct ceph_mds_session *session,
+>
+>         head->mdsmap_epoch =3D cpu_to_le32(mdsc->mdsmap->m_epoch);
+>         head->op =3D cpu_to_le32(req->r_op);
+> -       head->caller_uid =3D cpu_to_le32(from_kuid(&init_user_ns,
+> -                                                req->r_cred->fsuid));
+> -       head->caller_gid =3D cpu_to_le32(from_kgid(&init_user_ns,
+> -                                                req->r_cred->fsgid));
+> +       /*
+> +        * Inode operations that create filesystem objects based on the
+> +        * caller's fs{g,u}id like ->mknod(), ->create(), ->mkdir() etc. =
+don't
+> +        * have separate {g,u}id fields in their respective structs in th=
+e
+> +        * ceph_mds_request_args union. Instead the caller_{g,u}id field =
+is
+> +        * used to set ownership of the newly created inode by the mds se=
+rver.
+> +        * For these inode operations we need to send the mapped fs{g,u}i=
+d over
+> +        * the wire. For other cases we simple set req->r_mnt_idmap to th=
+e
+> +        * initial idmapping meaning the unmapped fs{g,u}id is sent.
+> +        */
+> +       caller_fsuid =3D from_vfsuid(req->r_mnt_idmap, &init_user_ns,
+> +                                       VFSUIDT_INIT(req->r_cred->fsuid))=
+;
+> +       caller_fsgid =3D from_vfsgid(req->r_mnt_idmap, &init_user_ns,
+> +                                       VFSGIDT_INIT(req->r_cred->fsgid))=
+;
+> +       head->caller_uid =3D cpu_to_le32(from_kuid(&init_user_ns, caller_=
+fsuid));
+> +       head->caller_gid =3D cpu_to_le32(from_kgid(&init_user_ns, caller_=
+fsgid));
+>         head->ino =3D cpu_to_le64(req->r_deleg_ino);
+>         head->args =3D req->r_args;
+>
+> --
+> 2.34.1
+>
 
-We need to use prot here.
+Probably it's worth adding to a commit message or cover letter, but
+let it be there for now.
 
+Explanation/demonstration from this thread:
+https://lore.kernel.org/lkml/CAEivzxefBRPozUPQxYgVh0gOpjsovtBuJ3w9BoqSizpST=
+_YxTA@mail.gmail.com/#t
 
-> +}
-> +EXPORT_SYMBOL_GPL(inet_splice_eof);
-> +
->  ssize_t inet_sendpage(struct socket *sock, struct page *page, int offset,
->  		      size_t size, int flags)
->  {
-> @@ -1050,6 +1065,7 @@ const struct proto_ops inet_stream_ops = {
->  #ifdef CONFIG_MMU
->  	.mmap		   = tcp_mmap,
->  #endif
-> +	.splice_eof	   = inet_splice_eof,
->  	.sendpage	   = inet_sendpage,
->  	.splice_read	   = tcp_splice_read,
->  	.read_sock	   = tcp_read_sock,
-> @@ -1084,6 +1100,7 @@ const struct proto_ops inet_dgram_ops = {
->  	.read_skb	   = udp_read_skb,
->  	.recvmsg	   = inet_recvmsg,
->  	.mmap		   = sock_no_mmap,
-> +	.splice_eof	   = inet_splice_eof,
->  	.sendpage	   = inet_sendpage,
->  	.set_peek_off	   = sk_set_peek_off,
->  #ifdef CONFIG_COMPAT
-> @@ -1115,6 +1132,7 @@ static const struct proto_ops inet_sockraw_ops = {
->  	.sendmsg	   = inet_sendmsg,
->  	.recvmsg	   = inet_recvmsg,
->  	.mmap		   = sock_no_mmap,
-> +	.splice_eof	   = inet_splice_eof,
->  	.sendpage	   = inet_sendpage,
->  #ifdef CONFIG_COMPAT
->  	.compat_ioctl	   = inet_compat_ioctl,
-> diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-> index 53b7751b68e1..09f03221a6f1 100644
-> --- a/net/ipv4/tcp.c
-> +++ b/net/ipv4/tcp.c
-> @@ -1371,6 +1371,22 @@ int tcp_sendmsg(struct sock *sk, struct msghdr *msg, size_t size)
->  }
->  EXPORT_SYMBOL(tcp_sendmsg);
->  
-> +void tcp_splice_eof(struct socket *sock)
-> +{
-> +	struct sock *sk = sock->sk;
-> +	struct tcp_sock *tp = tcp_sk(sk);
-> +	int mss_now, size_goal;
-> +
-> +	if (!tcp_write_queue_tail(sk))
-> +		return;
-> +
-> +	lock_sock(sk);
-> +	mss_now = tcp_send_mss(sk, &size_goal, 0);
-> +	tcp_push(sk, 0, mss_now, tp->nonagle, size_goal);
-> +	release_sock(sk);
-> +}
-> +EXPORT_SYMBOL_GPL(tcp_splice_eof);
-> +
->  /*
->   *	Handle reading urgent data. BSD has very simple semantics for
->   *	this, no blocking and very strange errors 8)
-> diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
-> index 53e9ce2f05bb..84a5d557dc1a 100644
-> --- a/net/ipv4/tcp_ipv4.c
-> +++ b/net/ipv4/tcp_ipv4.c
-> @@ -3116,6 +3116,7 @@ struct proto tcp_prot = {
->  	.keepalive		= tcp_set_keepalive,
->  	.recvmsg		= tcp_recvmsg,
->  	.sendmsg		= tcp_sendmsg,
-> +	.splice_eof		= tcp_splice_eof,
->  	.sendpage		= tcp_sendpage,
->  	.backlog_rcv		= tcp_v4_do_rcv,
->  	.release_cb		= tcp_release_cb,
-> diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
-> index fd3dae081f3a..df5e407286d7 100644
-> --- a/net/ipv4/udp.c
-> +++ b/net/ipv4/udp.c
-> @@ -1324,6 +1324,21 @@ int udp_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
->  }
->  EXPORT_SYMBOL(udp_sendmsg);
->  
-> +void udp_splice_eof(struct socket *sock)
-> +{
-> +	struct sock *sk = sock->sk;
-> +	struct udp_sock *up = udp_sk(sk);
-> +
-> +	if (!up->pending || READ_ONCE(up->corkflag))
-> +		return;
-> +
-> +	lock_sock(sk);
-> +	if (up->pending && !READ_ONCE(up->corkflag))
-> +		udp_push_pending_frames(sk);
-> +	release_sock(sk);
-> +}
-> +EXPORT_SYMBOL_GPL(udp_splice_eof);
-> +
->  int udp_sendpage(struct sock *sk, struct page *page, int offset,
->  		 size_t size, int flags)
->  {
-> @@ -2918,6 +2933,7 @@ struct proto udp_prot = {
->  	.getsockopt		= udp_getsockopt,
->  	.sendmsg		= udp_sendmsg,
->  	.recvmsg		= udp_recvmsg,
-> +	.splice_eof		= udp_splice_eof,
->  	.sendpage		= udp_sendpage,
->  	.release_cb		= ip4_datagram_release_cb,
->  	.hash			= udp_lib_hash,
-> diff --git a/net/ipv6/af_inet6.c b/net/ipv6/af_inet6.c
-> index 2bbf13216a3d..564942bee067 100644
-> --- a/net/ipv6/af_inet6.c
-> +++ b/net/ipv6/af_inet6.c
-> @@ -695,6 +695,7 @@ const struct proto_ops inet6_stream_ops = {
->  #ifdef CONFIG_MMU
->  	.mmap		   = tcp_mmap,
->  #endif
-> +	.splice_eof	   = inet_splice_eof,
->  	.sendpage	   = inet_sendpage,
->  	.sendmsg_locked    = tcp_sendmsg_locked,
->  	.sendpage_locked   = tcp_sendpage_locked,
-> diff --git a/net/ipv6/tcp_ipv6.c b/net/ipv6/tcp_ipv6.c
-> index d657713d1c71..c17c8ff94b79 100644
-> --- a/net/ipv6/tcp_ipv6.c
-> +++ b/net/ipv6/tcp_ipv6.c
-> @@ -2150,6 +2150,7 @@ struct proto tcpv6_prot = {
->  	.keepalive		= tcp_set_keepalive,
->  	.recvmsg		= tcp_recvmsg,
->  	.sendmsg		= tcp_sendmsg,
-> +	.splice_eof		= tcp_splice_eof,
->  	.sendpage		= tcp_sendpage,
->  	.backlog_rcv		= tcp_v6_do_rcv,
->  	.release_cb		= tcp_release_cb,
-> diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
-> index e5a337e6b970..6c5975b13ae3 100644
-> --- a/net/ipv6/udp.c
-> +++ b/net/ipv6/udp.c
-> @@ -1653,6 +1653,23 @@ int udpv6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
->  }
->  EXPORT_SYMBOL(udpv6_sendmsg);
->  
-> +static void udpv6_splice_eof(struct socket *sock)
-> +{
-> +	struct sock *sk = sock->sk;
-> +	struct udp_sock *up = udp_sk(sk);
-> +
-> +	if (!up->pending || READ_ONCE(up->corkflag))
-> +		return;
-> +
-> +	if (up->pending == AF_INET)
-> +		udp_splice_eof(sock);
+1. Mount cephfs
 
-Do we need this ?
+mount.ceph admin@XYZ.cephfs=3D/ /mnt/ceph -o
+mon_addr=3D127.0.0.1:6789,secret=3Dvery_secret_key
 
+2. Make 1000:1000 a root dentry owner (it will be convenient because
+we want to use mapping 1000:0:1 for simplicity)
 
-> +
-> +	lock_sock(sk);
-> +	if (up->pending && !READ_ONCE(up->corkflag))
-> +		udp_push_pending_frames(sk);
+chown 1000:1000 /mnt/ceph
 
-We should use udp_v6_push_pending_frames(sk) as up->pending
-could be AF_INET even after the test above.
+3. create an idmapped mount based on a regular /mnt/ceph mount using a
+mount-idmapped tool that was written by Christian.
+[ taken from https://raw.githubusercontent.com/brauner/mount-idmapped/maste=
+r/mount-idmapped.c
+]
 
+./mount-idmapped --map-mount b:1000:0:1 /mnt/ceph /mnt/ceph_idmapped
 
-> +	release_sock(sk);
-> +}
-> +
->  void udpv6_destroy_sock(struct sock *sk)
->  {
->  	struct udp_sock *up = udp_sk(sk);
-> @@ -1764,6 +1781,7 @@ struct proto udpv6_prot = {
->  	.getsockopt		= udpv6_getsockopt,
->  	.sendmsg		= udpv6_sendmsg,
->  	.recvmsg		= udpv6_recvmsg,
-> +	.splice_eof		= udpv6_splice_eof,
->  	.release_cb		= ip6_datagram_release_cb,
->  	.hash			= udp_lib_hash,
->  	.unhash			= udp_lib_unhash,
+"b" stands for "both", so we are creating a mapping of length 1 for
+both UID and GID.
+1000 is a UID/GID "on-disk", 0 is a mapped UID/GID.
+
+4. Just to be precise, let's look at which UID/GID we have now.
+
+root@ubuntu:/home/ubuntu# ls -lan /mnt/ceph
+total 4
+drwxrwxrwx 2 1000 1000    0 Jun  1 17:51 .
+drwxr-xr-x 4    0    0 4096 Jun  1 16:55 ..
+
+root@ubuntu:/home/ubuntu# ls -lan /mnt/ceph_idmapped
+total 4
+drwxrwxrwx 2 0 0    0 Jun  1 17:51 .
+drwxr-xr-x 4 0 0 4096 Jun  1 16:55 ..
+
+5. Now let's create a bunch of files with different owners and through
+different mounts (idmapped/non-idmapped).
+
+5.1. Create a file from 0:0 through the idmapped mount (it should
+appear as 1000:1000 on disk)
+root@ubuntu:/home/ubuntu# sudo -u#0 -g#0 touch
+/mnt/ceph_idmapped/created_through_idmapped_mnt_with_uid0
+
+5.2. Create a file from 1000:1000 through the idmapped mount (should
+fail because 1000:1000 is not a valid UID/GID as it can't be mapped
+back to the "on-disk" UID/GID set).
+root@ubuntu:/home/ubuntu# sudo -u#1000 -g#1000 touch
+/mnt/ceph_idmapped/created_through_idmapped_mnt_with_uid1000
+touch: cannot touch
+'/mnt/ceph_idmapped/created_through_idmapped_mnt_with_uid1000': Value
+too large for defined data type
+
+... and we've got EOVERFLOW. That's correct!
+
+5.3. Create a file from 0:0 but through the regular mount. (it should
+appear as overflowuid(=3D65534) in idmapped mount, because 0:0 on-disk
+is not mapped to the UID/GID set).
+
+root@ubuntu:/home/ubuntu# sudo -u#0 -g#0 touch
+/mnt/ceph/created_directly_with_uid0
+
+5.4. Create a file from 1000:1000 but through the regular mount. (it
+should appear as 0:0 in idmapped mount, because 1000 (on-disk) mapped
+to 0).
+
+root@ubuntu:/home/ubuntu# sudo -u#1000 -g#1000 touch
+/mnt/ceph/created_directly_with_uid1000
+
+6. Now let's look on the result:
+
+root@ubuntu:/home/ubuntu# ls -lan /mnt/ceph
+total 4
+drwxrwxrwx 2 1000 1000    3 Jun  1 17:54 .
+drwxr-xr-x 4    0    0 4096 Jun  1 16:55 ..
+-rw-r--r-- 1    0    0    0 Jun  1 17:54 created_directly_with_uid0
+-rw-rw-r-- 1 1000 1000    0 Jun  1 17:54 created_directly_with_uid1000
+-rw-r--r-- 1 1000 1000    0 Jun  1 17:53 created_through_idmapped_mnt_with_=
+uid0
+
+root@ubuntu:/home/ubuntu# ls -lan /mnt/ceph_idmapped
+total 4
+drwxrwxrwx 2     0     0    3 Jun  1 17:54 .
+drwxr-xr-x 4     0     0 4096 Jun  1 16:55 ..
+-rw-r--r-- 1 65534 65534    0 Jun  1 17:54 created_directly_with_uid0
+-rw-rw-r-- 1     0     0    0 Jun  1 17:54 created_directly_with_uid1000
+-rw-r--r-- 1     0     0    0 Jun  1 17:53
+created_through_idmapped_mnt_with_uid0
