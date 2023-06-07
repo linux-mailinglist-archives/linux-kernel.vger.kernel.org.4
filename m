@@ -2,332 +2,275 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5C5A72663D
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 18:45:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B37AE726640
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 18:46:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbjFGQpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 12:45:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33952 "EHLO
+        id S230080AbjFGQqP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 12:46:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229641AbjFGQpG (ORCPT
+        with ESMTP id S229965AbjFGQqO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 12:45:06 -0400
-Received: from fgw20-7.mail.saunalahti.fi (fgw20-7.mail.saunalahti.fi [62.142.5.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F7391FC0
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 09:45:03 -0700 (PDT)
-Received: from localhost (88-113-24-87.elisa-laajakaista.fi [88.113.24.87])
-        by fgw20.mail.saunalahti.fi (Halon) with ESMTP
-        id a4297c9e-0552-11ee-b3cf-005056bd6ce9;
-        Wed, 07 Jun 2023 19:45:00 +0300 (EEST)
-From:   andy.shevchenko@gmail.com
-Date:   Wed, 7 Jun 2023 19:44:59 +0300
-To:     Jerome Neanne <jneanne@baylibre.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Tony Lindgren <tony@atomide.com>, Lee Jones <lee@kernel.org>,
-        khilman@baylibre.com, msp@baylibre.com, francesco@dolcini.it,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-omap@vger.kernel.org,
-        Jonathan Cormier <jcormier@criticallink.com>
-Subject: Re: [PATCH v5 1/2] gpio: tps65219: add GPIO support for TPS65219 PMIC
-Message-ID: <ZIC0C9r6U35NBFL9@surfacebook>
-References: <20230511-tps65219-add-gpio-support-v5-0-ebb94281c854@baylibre.com>
- <20230511-tps65219-add-gpio-support-v5-1-ebb94281c854@baylibre.com>
+        Wed, 7 Jun 2023 12:46:14 -0400
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A55BA1FC8
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 09:46:12 -0700 (PDT)
+Received: by mail-qk1-x72d.google.com with SMTP id af79cd13be357-75b14216386so693969385a.0
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 09:46:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1686156371; x=1688748371;
+        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=FUVU/G91IA7YuyfqkOJoiaRMGIIl26A/IsuzOh22KQk=;
+        b=RAYgH3Km9RQtoIK+ZbRlQvETba25DQvXRJI6sqmOKOqacof8JeeFFnXJWUmyDvkB9F
+         o10K255EQEvDMkPqXMyDb8D6fsZ+ijp6xH8/lHKdujW9bCsKQhUXzI5FLL7Is4Itv9v5
+         mh5teAapgx/VROD3B9KTRJJwm0X87nifwV1Ro=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686156371; x=1688748371;
+        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FUVU/G91IA7YuyfqkOJoiaRMGIIl26A/IsuzOh22KQk=;
+        b=it7ysr/jAUO2OQFkqZ2WMLmFuu8i35I8/sjyxz+UP5KOf9EuG+LvQy+ZSUxD9m7gBr
+         ZJgClwX9MPelsKCl07BDEFfv2864eZ1iHwN45yxORl78np1XV7n0BONi73wsm88o66yH
+         D1nBLNKx4+l3SsKm9q42RiQZMuxdlHSXaWcP8iHnkcvmDNUGTKKYIN3eVzecG+ByFgcd
+         Z6xmTm4YXwbkYvTFwOKGea/cysirv8AZfDcZ6qKus/9UiQqQr0dfM0b/bOZ4bpdBtSm/
+         dzRntZbYnp3ieBhmmHagfBYOZgnqOXTZZWqxLTRCvFO+REJcVRmpyGO2kNMNPllb4rnf
+         QqOg==
+X-Gm-Message-State: AC+VfDwQfBRUCPH2wa1/97G7icdW371JMc2g9VW2jMZQWhgTdD/G3ARb
+        qi34joKpiItYUHeJt67i3TOfzA==
+X-Google-Smtp-Source: ACHHUZ6g0zQ+QhyeOUkpe8vMNBjxoZdNqAGgocN22cgGPGJ8Tcu2J3gtULh6DC7fs5ngD2uh2+oJ2g==
+X-Received: by 2002:a05:620a:1aa8:b0:75b:23a0:e7be with SMTP id bl40-20020a05620a1aa800b0075b23a0e7bemr3117150qkb.31.1686156371139;
+        Wed, 07 Jun 2023 09:46:11 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id v15-20020ae9e30f000000b0075b23e55640sm3851qkf.123.2023.06.07.09.46.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Jun 2023 09:46:10 -0700 (PDT)
+Message-ID: <77cc2923-99fa-49e4-8e3d-7c525a88a2a3@broadcom.com>
+Date:   Wed, 7 Jun 2023 09:45:58 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230511-tps65219-add-gpio-support-v5-1-ebb94281c854@baylibre.com>
-X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH net] net: bcmgenet: Fix EEE implementation
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     netdev@vger.kernel.org, o.rempel@pengutronix.de, andrew@lunn.ch,
+        hkallweit1@gmail.com, Doug Berger <opendmb@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230606214348.2408018-1-florian.fainelli@broadcom.com>
+ <ZH+tAKg4hqlosb2N@shell.armlinux.org.uk>
+ <1074c668-3e75-dff7-9d23-d43fbeb98d84@broadcom.com>
+ <ZIBD7B8cwSjjFWuq@shell.armlinux.org.uk>
+From:   Florian Fainelli <florian.fainelli@broadcom.com>
+In-Reply-To: <ZIBD7B8cwSjjFWuq@shell.armlinux.org.uk>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="0000000000008eedb205fd8cdfa2"
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wed, Jun 07, 2023 at 04:39:31PM +0200, Jerome Neanne kirjoitti:
-> Add support for TPS65219 PMICs GPIO interface.
-> 
-> 3 GPIO pins:
-> - GPIO0 only is IO but input mode reserved for MULTI_DEVICE_ENABLE usage.
-> - GPIO1 and GPIO2 are Output only and referred as GPO1 and GPO2 in spec.
-> 
-> GPIO0 is statically configured as input or output prior to Linux boot.
-> it is used for MULTI_DEVICE_ENABLE function.
-> This setting is statically configured by NVM.
-> GPIO0 can't be used as a generic GPIO (specification Table 8-34).
-> It's either a GPO when MULTI_DEVICE_EN=0 or a GPI when MULTI_DEVICE_EN=1.
-> 
-> Datasheet describes specific usage for non standard GPIO.
+--0000000000008eedb205fd8cdfa2
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-
-I forgot if I asked about gpio-regmap use possibility, but it can be done
-as a followup if seems valuable.
-
-> Datasheet: https://www.ti.com/lit/ds/symlink/tps65219.pdf
-> Co-developed-by: Jonathan Cormier <jcormier@criticallink.com>
-> Signed-off-by: Jonathan Cormier <jcormier@criticallink.com>
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> Signed-off-by: Jerome Neanne <jneanne@baylibre.com>
-> ---
->  MAINTAINERS                  |   1 +
->  drivers/gpio/Kconfig         |  16 ++++
->  drivers/gpio/Makefile        |   1 +
->  drivers/gpio/gpio-tps65219.c | 185 +++++++++++++++++++++++++++++++++++++++++++
->  4 files changed, 203 insertions(+)
+On 6/7/23 01:46, Russell King (Oracle) wrote:
+> On Tue, Jun 06, 2023 at 03:16:03PM -0700, Florian Fainelli wrote:
+>> On 6/6/23 15:02, Russell King (Oracle) wrote:
+>>> On Tue, Jun 06, 2023 at 02:43:47PM -0700, Florian Fainelli wrote:
+>>>> We had a number of short comings:
+>>>>
+>>>> - EEE must be re-evaluated whenever the state machine detects a link
+>>>>     change as wight be switching from a link partner with EEE
+>>>>     enabled/disabled
+>>>>
+>>>> - tx_lpi_enabled controls whether EEE should be enabled/disabled for the
+>>>>     transmit path, which applies to the TBUF block
+>>>>
+>>>> - We do not need to forcibly enable EEE upon system resume, as the PHY
+>>>>     state machine will trigger a link event that will do that, too
+>>>>
+>>>> Fixes: 6ef398ea60d9 ("net: bcmgenet: add EEE support")
+>>>> Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
+>>>> ---
+>>>> netdev maintainers, please do not apply without Andrew, Russell and
+>>>> Oleksij reviewing first since this relates to the on-going EEE rework
+>>>> from Andrew.
+>>>
+>>> Hi Florian,
+>>>
+>>> Please could you include some information on the UMAC_EEE_CTRL EEE_EN
+>>> bit - is this like the main switch for EEE which needs to be set
+>>> along with the bits in the tbuf register for the transmit side to
+>>> signal LPI?
+>>
+>> EEE_EN is described as:
+>>
+>> If set, the TX LPI policy control engine is enabled and the MAC inserts
+>> LPI_idle codes if the link is idle. The rx_lpi_detect assertion is
+>> independent of this configuration.
+>>
+>> in the RBUF, EEE_EN is described as:
+>>
+>> 1: to enable Energy Efficient feature between Unimac and PHY for Rx Path
+>>
+>> and in the TBUF, EEE_EN is described as:
+>>
+>> 1: to enable Energy Efficient feature between Unimac and PHY for Tx Path
+>>
+>> The documentation is unfortunately scare about how these two signals connect
+>> :/
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index c0cde28c62c6..d912b7465e84 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -15398,6 +15398,7 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linux-omap.git
->  F:	arch/arm/configs/omap2plus_defconfig
->  F:	arch/arm/mach-omap2/
->  F:	drivers/bus/ti-sysc.c
-> +F:	drivers/gpio/gpio-tps65219.c
->  F:	drivers/i2c/busses/i2c-omap.c
->  F:	drivers/irqchip/irq-omap-intc.c
->  F:	drivers/mfd/*omap*.c
-> diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-> index 5521f060d58e..047af064335d 100644
-> --- a/drivers/gpio/Kconfig
-> +++ b/drivers/gpio/Kconfig
-> @@ -1440,6 +1440,22 @@ config GPIO_TPS65218
->  	  Select this option to enable GPIO driver for the TPS65218
->  	  chip family.
->  
-> +config GPIO_TPS65219
-> +	tristate "TPS65219 GPIO"
-> +	depends on MFD_TPS65219
-> +	default MFD_TPS65219
-> +	help
-> +	  Select this option to enable GPIO driver for the TPS65219 chip
-> +	  family.
-> +	  GPIO0 is statically configured as either input or output prior to
-> +	  Linux boot. It is used for MULTI_DEVICE_ENABLE function. This setting
-> +	  is statically configured by NVM. GPIO0 can't be used as a generic
-> +	  GPIO. It's either a GPO when MULTI_DEVICE_EN=0 or a GPI when
-> +	  MULTI_DEVICE_EN=1.
-> +
-> +	  This driver can also be built as a module. If so, the module will be
-> +	  called gpio_tps65219.
-> +
->  config GPIO_TPS6586X
->  	bool "TPS6586X GPIO"
->  	depends on MFD_TPS6586X
-> diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
-> index 20036af3acb1..7843b16f5d59 100644
-> --- a/drivers/gpio/Makefile
-> +++ b/drivers/gpio/Makefile
-> @@ -160,6 +160,7 @@ obj-$(CONFIG_GPIO_TN48M_CPLD)		+= gpio-tn48m.o
->  obj-$(CONFIG_GPIO_TPIC2810)		+= gpio-tpic2810.o
->  obj-$(CONFIG_GPIO_TPS65086)		+= gpio-tps65086.o
->  obj-$(CONFIG_GPIO_TPS65218)		+= gpio-tps65218.o
-> +obj-$(CONFIG_GPIO_TPS65219)		+= gpio-tps65219.o
->  obj-$(CONFIG_GPIO_TPS6586X)		+= gpio-tps6586x.o
->  obj-$(CONFIG_GPIO_TPS65910)		+= gpio-tps65910.o
->  obj-$(CONFIG_GPIO_TPS65912)		+= gpio-tps65912.o
-> diff --git a/drivers/gpio/gpio-tps65219.c b/drivers/gpio/gpio-tps65219.c
-> new file mode 100644
-> index 000000000000..7b38aa360112
-> --- /dev/null
-> +++ b/drivers/gpio/gpio-tps65219.c
-> @@ -0,0 +1,185 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * GPIO driver for TI TPS65219 PMICs
-> + *
-> + * Copyright (C) 2022 Texas Instruments Incorporated - http://www.ti.com/
-> + */
-> +
-> +#include <linux/bits.h>
-> +#include <linux/gpio/driver.h>
-> +#include <linux/mfd/tps65219.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +
-> +#define TPS65219_GPIO0_DIR_MASK		BIT(3)
-> +#define TPS65219_GPIO0_OFFSET		2
-> +#define TPS65219_GPIO0_IDX		0
-> +#define TPS65219_GPIO_DIR_IN		1
-> +#define TPS65219_GPIO_DIR_OUT		0
-> +
-> +struct tps65219_gpio {
-> +	struct gpio_chip gpio_chip;
-> +	struct tps65219 *tps;
-> +};
-> +
-> +static int tps65219_gpio_get_direction(struct gpio_chip *gc, unsigned int offset)
-> +{
-> +	struct tps65219_gpio *gpio = gpiochip_get_data(gc);
-> +	int ret, val;
-> +
-> +	if (offset != TPS65219_GPIO0_IDX)
-> +		return GPIO_LINE_DIRECTION_OUT;
-> +
-> +	ret = regmap_read(gpio->tps->regmap, TPS65219_REG_MFP_1_CONFIG, &val);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return !!(val & TPS65219_GPIO0_DIR_MASK);
-> +}
-> +
-> +static int tps65219_gpio_get(struct gpio_chip *gc, unsigned int offset)
-> +{
-> +	struct tps65219_gpio *gpio = gpiochip_get_data(gc);
-> +	struct device *dev = gpio->tps->dev;
-> +	int ret, val;
-> +
-> +	if (offset != TPS65219_GPIO0_IDX) {
-> +		dev_err(dev, "GPIO%d is output only, cannot get\n", offset);
-> +		return -ENOTSUPP;
-> +	}
-> +
-> +	ret = regmap_read(gpio->tps->regmap, TPS65219_REG_MFP_CTRL, &val);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = !!(val & BIT(TPS65219_MFP_GPIO_STATUS_MASK));
-> +	dev_warn(dev, "GPIO%d = %d, MULTI_DEVICE_ENABLE, not a standard GPIO\n", offset, ret);
-> +
-> +	/*
-> +	 * Depending on NVM config, return an error if direction is output, otherwise the GPIO0
-> +	 * status bit.
-> +	 */
-> +
-> +	if (tps65219_gpio_get_direction(gc, offset) == TPS65219_GPIO_DIR_OUT)
-> +		return -ENOTSUPP;
-> +
-> +	return ret;
-> +}
-> +
-> +static void tps65219_gpio_set(struct gpio_chip *gc, unsigned int offset, int value)
-> +{
-> +	struct tps65219_gpio *gpio = gpiochip_get_data(gc);
-> +	struct device *dev = gpio->tps->dev;
-> +	int v, mask, bit;
-> +
-> +	bit = (offset == TPS65219_GPIO0_IDX) ? TPS65219_GPIO0_OFFSET : offset - 1;
-> +
-> +	mask = BIT(bit);
-> +	v = value ? mask : 0;
-> +
-> +	if (regmap_update_bits(gpio->tps->regmap, TPS65219_REG_GENERAL_CONFIG, mask, v))
-> +		dev_err(dev, "GPIO%d, set to value %d failed.\n", offset, value);
-> +}
-> +
-> +static int tps65219_gpio_change_direction(struct gpio_chip *gc, unsigned int offset,
-> +					  unsigned int direction)
-> +{
-> +	struct tps65219_gpio *gpio = gpiochip_get_data(gc);
-> +	struct device *dev = gpio->tps->dev;
-> +
-> +	/*
-> +	 * Documentation is stating that GPIO0 direction must not be changed in Linux:
-> +	 * Table 8-34. MFP_1_CONFIG(3): MULTI_DEVICE_ENABLE, should only be changed in INITIALIZE
-> +	 * state (prior to ON Request).
-> +	 * Set statically by NVM, changing direction in application can cause a hang.
-> +	 * Below can be used for test purpose only.
-> +	 */
-> +
-> +	if (IS_ENABLED(CONFIG_DEBUG_GPIO)) {
-> +		int ret = regmap_update_bits(gpio->tps->regmap, TPS65219_REG_MFP_1_CONFIG,
-> +					     TPS65219_GPIO0_DIR_MASK, direction);
-> +		if (ret) {
-> +			dev_err(dev,
-> +				"GPIO DEBUG enabled: Fail to change direction to %u for GPIO%d.\n",
-> +				direction, offset);
-> +			return ret;
-> +		}
-> +	}
-> +
-> +	dev_err(dev,
-> +		"GPIO%d direction set by NVM, change to %u failed, not allowed by specification\n",
-> +		 offset, direction);
-> +
-> +	return -ENOTSUPP;
-> +}
-> +
-> +static int tps65219_gpio_direction_input(struct gpio_chip *gc, unsigned int offset)
-> +{
-> +	struct tps65219_gpio *gpio = gpiochip_get_data(gc);
-> +	struct device *dev = gpio->tps->dev;
-> +
-> +	if (offset != TPS65219_GPIO0_IDX) {
-> +		dev_err(dev, "GPIO%d is output only, cannot change to input\n", offset);
-> +		return -ENOTSUPP;
-> +	}
-> +
-> +	if (tps65219_gpio_get_direction(gc, offset) == TPS65219_GPIO_DIR_IN)
-> +		return 0;
-> +
-> +	return tps65219_gpio_change_direction(gc, offset, TPS65219_GPIO_DIR_IN);
-> +}
-> +
-> +static int tps65219_gpio_direction_output(struct gpio_chip *gc, unsigned int offset, int value)
-> +{
-> +	tps65219_gpio_set(gc, offset, value);
-> +	if (offset != TPS65219_GPIO0_IDX)
-> +		return 0;
-> +
-> +	if (tps65219_gpio_get_direction(gc, offset) == TPS65219_GPIO_DIR_OUT)
-> +		return 0;
-> +
-> +	return tps65219_gpio_change_direction(gc, offset, TPS65219_GPIO_DIR_OUT);
-> +}
-> +
-> +static const struct gpio_chip tps65219_template_chip = {
-> +	.label			= "tps65219-gpio",
-> +	.owner			= THIS_MODULE,
-> +	.get_direction		= tps65219_gpio_get_direction,
-> +	.direction_input	= tps65219_gpio_direction_input,
-> +	.direction_output	= tps65219_gpio_direction_output,
-> +	.get			= tps65219_gpio_get,
-> +	.set			= tps65219_gpio_set,
-> +	.base			= -1,
-> +	.ngpio			= 3,
-> +	.can_sleep		= true,
-> +};
-> +
-> +static int tps65219_gpio_probe(struct platform_device *pdev)
-> +{
-> +	struct tps65219 *tps = dev_get_drvdata(pdev->dev.parent);
-> +	struct tps65219_gpio *gpio;
-> +
-> +	gpio = devm_kzalloc(&pdev->dev, sizeof(*gpio), GFP_KERNEL);
-> +	if (!gpio)
-> +		return -ENOMEM;
-> +
-> +	gpio->tps = tps;
-> +	gpio->gpio_chip = tps65219_template_chip;
-> +	gpio->gpio_chip.parent = tps->dev;
-> +
-> +	return devm_gpiochip_add_data(&pdev->dev, &gpio->gpio_chip, gpio);
-> +}
-> +
-> +static struct platform_driver tps65219_gpio_driver = {
-> +	.driver = {
-> +		.name = "tps65219-gpio",
-> +	},
-> +	.probe = tps65219_gpio_probe,
-> +};
-> +module_platform_driver(tps65219_gpio_driver);
-> +
-> +MODULE_ALIAS("platform:tps65219-gpio");
-> +MODULE_AUTHOR("Jonathan Cormier <jcormier@criticallink.com>");
-> +MODULE_DESCRIPTION("TPS65219 GPIO driver");
-> +MODULE_LICENSE("GPL");
+> Thanks for the clarification. Squaring this with my understanding of
+> EEE, the transmit side makes sense. LPI on the transmit side is only
+> asserted only when EEE_EN and TBUF_EEE_EN are both set, so this is
+> the behaviour we want. If we were evaluating this in software, my
+> understanding is it would be:
 > 
-> -- 
-> 2.34.1
+> 	if (eee_enabled && eee_active && tx_lpi_enabled)
+> 		enable LPI generation at MAC;
+> 	else
+> 		disable LPI generation at MAC;
 > 
+> and the code here treats eee_enabled && eee_active as the "enabled"
+> flag controlling EEE_EN, and tx_lpi_enabled controls TBUF_EEE_EN.
+> The hardware effectively does the last && operation for us. So
+> this all seems fine.
+> 
+> On the receive side, if the link partner successfully negotiates
+> EEE, then it can assert LPI, and the local end will see that
+> assertion (hence, rx_lpi_detect may become true.) If the transmit
+> side doesn't generate LPI, then this won't have any effect other
+> than maybe setting status bits, so I don't see that setting
+> RBUF_EEE_EN when eee_enabled && eee_active would be wrong.
+> 
+> Moving the phy_init_eee() (as it currently stands) into the adjust_link
+> path is definitely the right thing, since it provides the resolution
+> of the negotiated EEE state.
+> 
+> So, all round, I think your patch makes complete sense as far as the
+> logic goes.
+> 
+> Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> 
+> However, one thing I will ask is whether the hardware has any
+> configuration of the various timers for EEE operation, and if it does,
+> are they dependent on the negotiated speed of the interface? In
+> Marvell's neta and pp2 drivers, the timers scale with link speed and
+> thus need reprogramming accordingly. In any case, 802.3 specifies
+> different timer settings depending on link speed and media type.
 
+There are a couple of timers that are available:
+
+- LPI timer (EEE_LPI_TIMER register)
+- WAKE_TIMER (EEE_WAKE_TIMER register)
+
+both are dependent upon the EEE_REF_COUNT register which is described as:
+
+Clock divider for 1 us quanta count in EEE. This field controls clock 
+divider used to generate ~1us reference pulses used by EEE timers.
+It specifies integer number of system clock cycles contained within 1us.
+
+the value is currently set to 0x7d (125) which does make some sense 
+given that the system clock is considered stable and is provided at the 
+same frequency irrespective of the link speed.
+
+Hope this helps.
 -- 
-With Best Regards,
-Andy Shevchenko
+Florian
 
 
+--0000000000008eedb205fd8cdfa2
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
+QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
+UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
+M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
+Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
+14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
+a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
+XzCCBVgwggRAoAMCAQICDBP8P9hKRVySg3Qv5DANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
+RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
+UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAxMjE4MTFaFw0yNTA5MTAxMjE4MTFaMIGW
+MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
+BgNVBAoTDUJyb2FkY29tIEluYy4xGTAXBgNVBAMTEEZsb3JpYW4gRmFpbmVsbGkxLDAqBgkqhkiG
+9w0BCQEWHWZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOC
+AQ8AMIIBCgKCAQEA+oi3jMmHltY4LMUy8Up5+1zjd1iSgUBXhwCJLj1GJQF+GwP8InemBbk5rjlC
+UwbQDeIlOfb8xGqHoQFGSW8p9V1XUw+cthISLkycex0AJ09ufePshLZygRLREU0H4ecNPMejxCte
+KdtB4COST4uhBkUCo9BSy1gkl8DJ8j/BQ1KNUx6oYe0CntRag+EnHv9TM9BeXBBLfmMRnWNhvOSk
+nSmRX0J3d9/G2A3FIC6WY2XnLW7eAZCQPa1Tz3n2B5BGOxwqhwKLGLNu2SRCPHwOdD6e0drURF7/
+Vax85/EqkVnFNlfxtZhS0ugx5gn2pta7bTdBm1IG4TX+A3B1G57rVwIDAQABo4IB3jCCAdowDgYD
+VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
+ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
+CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
+MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
+d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
+hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
+bDAoBgNVHREEITAfgR1mbG9yaWFuLmZhaW5lbGxpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggr
+BgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUUwwfJ6/F
+KL0fRdVROal/Lp4lAF0wDQYJKoZIhvcNAQELBQADggEBAKBgfteDc1mChZjKBY4xAplC6uXGyBrZ
+kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
+2s1RH00JOkO5SkYdwCHj4DB9B7KEnLatJtD8MBorvt+QxTuSh4ze96Jz3kEIoHMvwGFkgObWblsc
+3/YcLBmCgaWpZ3Ksev1vJPr5n8riG3/N4on8gO5qinmmr9Y7vGeuf5dmZrYMbnb+yCBalkUmZQwY
+NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
+AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
+LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
+/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIJHItUvKGOp1qGfD
+fxOPrCxjLY29v7caCnQlSbTeLmSdMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
+AQkFMQ8XDTIzMDYwNzE2NDYxMVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQC9nTFbVLl4pZB+aaZEuppwIepeuQXoMfGH
+ghdoOPKZWcll0xRgm34g2AzWc+iZ7mDK5pPgwht/Se6I+hcSYxMh+0bxhNBFQwAC9BUBn/XAXl+g
+fxR1OsLVHRS8PD4dXcIHfOmBWH7jwP9q6NtprCiBd3RUB0cfQVOPOx4FfiIHJhK96c+ZkaRo/NZA
+lbUQ4bkD5LAA2NLMkT17Cyq5X3F8JyIsJgBvJQAQOmW9ssbD7VsXpONHPs+9ne+lKmnVmyaytcOe
+JN2xAVdMOOFRExb7E5/24rdB71aUEtVW0j+RrNdAO779zxNaUJ+TmkA9qGjzoUGck00pb/oGbv9I
+2g6L
+--0000000000008eedb205fd8cdfa2--
