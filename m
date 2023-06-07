@@ -2,272 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5D1772551D
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 09:11:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09DB972551E
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 09:11:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238786AbjFGHLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 03:11:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46678 "EHLO
+        id S238806AbjFGHLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 03:11:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238778AbjFGHLK (ORCPT
+        with ESMTP id S238810AbjFGHLd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 03:11:10 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B02EE1BD3;
-        Wed,  7 Jun 2023 00:11:05 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-9745ba45cd1so914970266b.1;
-        Wed, 07 Jun 2023 00:11:05 -0700 (PDT)
+        Wed, 7 Jun 2023 03:11:33 -0400
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8CBB1BE8
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 00:11:29 -0700 (PDT)
+Received: by mail-il1-x136.google.com with SMTP id e9e14a558f8ab-33bf12b5fb5so62615ab.1
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 00:11:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686121864; x=1688713864;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VJzfy5eblmHMAnYTZMJdGzXUEHB9EWtkIYZ53Ch+qrk=;
-        b=OfVEunsHbhVUrhNtpJyPKzsFqJE0SRmJ9ypLkN2J2AKtbwLVX8POS7eo+rrklus0us
-         9frqZb8dEpv35aZBx6NSsVE6dMa/zv7SNztY8DMU2ZVrLOPJ+41Y3OuvRgSsBzZ/gDaK
-         uqDJvByazmWJDdPefOuySagXrCZ9odZzyc8v6XWAyr4FFMOEIhuRYVN5ab20Rxe/aXyz
-         c0j3S/6ZoO74UGD7Wk+L0a/HDgwUpWIdJdCL24qbotkaLqT8o8+pivxmSKWceC6Ad3/B
-         LwEK78piyyveBJCoTIk6ih86NvviSGbroOrFO95J9rx4ZCyvwMsBwRXyHArd8BFgnta9
-         qRDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686121864; x=1688713864;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20221208; t=1686121889; x=1688713889;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VJzfy5eblmHMAnYTZMJdGzXUEHB9EWtkIYZ53Ch+qrk=;
-        b=i4N+0CaItMUQtnF8KqtpaMiPWACkTXE08xorq3LM1ROTjIieSWTxVj+B6sRo/6uRct
-         7TzUmoO6BCLVm3mgrwurhNq4HlSqSmhn1iaIRL21gxw+vd+Cf0lItFSsEfHKXJslhPd+
-         69hEkwsDm6q3WqUEfjb0lSnZys/8gStpGnzGj28ZcV5C5JN40/dBBuHjt3WItt+piYsv
-         A2agCF5kBHv6HOhrGuAtUDBXXQQZ6KFkzXhkXc4s77zRgy62lJGUYRSSquvtoRQXCDjn
-         Mow8MTNHzL6rLEDEvvvVCSmrDPR1Mn0wpLQHgsco7OaG3k8vOileV+hdmydErXHbPrT+
-         FXaw==
-X-Gm-Message-State: AC+VfDy4ymPxZvIgU4QL7ole9dreNDCtVB5+4Mk39crakR7rGs59gUSg
-        Bz1wfmC8b948Vuj72Pmy1UgchsGyulexKg==
-X-Google-Smtp-Source: ACHHUZ7PTdxwk71fUiJ1Q+HMBR9GLNOQDCtsn9d4EO3SY9wN59cnb4esRqGd8W9QLGdoPNtJvJUDpg==
-X-Received: by 2002:a17:907:3f8f:b0:969:f54c:dee2 with SMTP id hr15-20020a1709073f8f00b00969f54cdee2mr5249112ejc.26.1686121863834;
-        Wed, 07 Jun 2023 00:11:03 -0700 (PDT)
-Received: from tom-HP-ZBook-Fury-15-G7-Mobile-Workstation (net-188-217-50-121.cust.vodafonedsl.it. [188.217.50.121])
-        by smtp.gmail.com with ESMTPSA id n19-20020a1709067b5300b00977fb2fb44asm2539374ejo.28.2023.06.07.00.11.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 00:11:03 -0700 (PDT)
-Date:   Wed, 7 Jun 2023 09:11:00 +0200
-From:   Tommaso Merciai <tomm.merciai@gmail.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     jacopo.mondi@ideasonboard.com, martin.hecht@avnet.eu,
-        michael.roeder@avnet.eu, linuxfancy@googlegroups.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Gerald Loacker <gerald.loacker@wolfvision.net>,
-        Mikhail Rudenko <mike.rudenko@gmail.com>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Nicholas Roth <nicholas@rothemail.net>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] media: dt-bindings: alvium: add document YAML
- binding
-Message-ID: <ZIAthFSk+RrRAeN0@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
-References: <20230606155416.260941-1-tomm.merciai@gmail.com>
- <20230606155416.260941-3-tomm.merciai@gmail.com>
- <20230606163656.GI25679@pendragon.ideasonboard.com>
+        bh=PGUTPYhgHVq7tjYGlPQBicKEoIBr6v5/fU5n0hbGTrI=;
+        b=OvXHLUmNzM4BI0TQ7LDb6i5kkuRVUOSUhd4VMwgVF4fy/BUvxgd1CPNFfT8ZIjTl05
+         32kZUrjfGpw8qkUWloq5scwiSkvTRE06xJXmlO5d7J5VTzHUXLGgQ192HglJaYLVLPwZ
+         6l9y4crsmvcA7tLYoIwwfjeiv7KW5AxNG8MzALmyunp8omXcMly1vinxkuNBiifMhYMK
+         ywVHFFuLdPwqSfHCs4PjZUS23EGN5Hd4t1sa1di7snzkarxYZjrSjL3IUAqskAKAwNSX
+         yXPMr626M6jSs2PWUfT6ZX+WSPDH7k3Xy4YrA+U0KzeSWW9h7chVOPbCkki3sFSw1Fsn
+         46fQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686121889; x=1688713889;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PGUTPYhgHVq7tjYGlPQBicKEoIBr6v5/fU5n0hbGTrI=;
+        b=CUmTuUGi56kFBfECvZ5gtjkDhSJ9uunBkfPlKGUu1k/qwzyU0NnRfNnNVPO17FH2xH
+         GOVuTD5AeMSIzm5K3go/fgqREyt3tUlqrru1D8xrbAld3v3sjMvx7rOT+VySvZsughIQ
+         j9r0wetDeGvgQX2nULC6biicX8bu2jtCp4wqgjVfk34uLGWYc3OW/Xsvk0ELO8cgGIwe
+         M6H2YfKqgX/heCjNSMx0VXQAo2UJNu6Bkti8/OhYalV8gCq7krsR8qPk0sqzHDcILJG/
+         4se5C/KDZrlPDAA0ORy1U6KUbDSwAJdRANQcg4xENM2hZlg3MSKqk0PUUQ2JKj1oSm7/
+         XPDg==
+X-Gm-Message-State: AC+VfDzLffqzsaEafPfxA/LeNjJrpXJWNjw+ySD5NqlfvpLzsd72mT5l
+        e5gxq/6kVpDKCgrNU64Za8zjuqcXFlUrXki6q0bbKQ==
+X-Google-Smtp-Source: ACHHUZ64HmjkncqN/Uw4dzL9OH0TZk2U52RRwNcZMU9Q2Q7FzCVbkh7mqzoadlw+Dm8EwEvusUhfelYS7RxorIT+RJ0=
+X-Received: by 2002:a05:6e02:170d:b0:32f:7715:4482 with SMTP id
+ u13-20020a056e02170d00b0032f77154482mr188090ill.4.1686121888943; Wed, 07 Jun
+ 2023 00:11:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230606163656.GI25679@pendragon.ideasonboard.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230605202712.1690876-1-irogers@google.com> <20230605202712.1690876-5-irogers@google.com>
+ <CAM9d7cj9k_FYxmAymHG5Nn6-dhjPT95wrqbHZ_YZSx=oZX7YXQ@mail.gmail.com>
+In-Reply-To: <CAM9d7cj9k_FYxmAymHG5Nn6-dhjPT95wrqbHZ_YZSx=oZX7YXQ@mail.gmail.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 7 Jun 2023 00:11:17 -0700
+Message-ID: <CAP-5=fVeehz=qyL-eFgc8aa+Q8inmN_mA7N+sGY0z4Sj6Bd9dQ@mail.gmail.com>
+Subject: Re: [PATCH v2 4/4] perf build: Filter out BTF sources without a .BTF section
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        James Clark <james.clark@arm.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Laurent,
-
-On Tue, Jun 06, 2023 at 07:36:56PM +0300, Laurent Pinchart wrote:
-> Hi Tommaso,
-> 
-> Thank you for the patch.
-> 
-> On Tue, Jun 06, 2023 at 05:54:03PM +0200, Tommaso Merciai wrote:
-> > Add documentation of device tree in YAML schema for the ALVIUM
-> > Camera from Allied Vision Inc.
-> > 
-> > References:
-> >  - https://www.alliedvision.com/en/products/embedded-vision-solutions
-> > 
-> > Signed-off-by: Tommaso Merciai <tomm.merciai@gmail.com>
+On Mon, Jun 5, 2023 at 4:35=E2=80=AFPM Namhyung Kim <namhyung@kernel.org> w=
+rote:
+>
+> Hi Ian,
+>
+> On Mon, Jun 5, 2023 at 1:28=E2=80=AFPM Ian Rogers <irogers@google.com> wr=
+ote:
+> >
+> > If generating vmlinux.h, make the code to generate it more tolerant by
+> > filtering out paths to kernels that lack a .BTF section.
+> >
+> > Signed-off-by: Ian Rogers <irogers@google.com>
 > > ---
-> > Changes since v1:
-> >  - Fixed build error as suggested by RHerring bot
-> > 
-> > Changes since v2:
-> >  - Fixed License as suggested by KKozlowski/CDooley
-> >  - Removed rotation property as suggested by CDooley/LPinchart
-> >  - Fixed example node name as suggested by CDooley
-> >  - Fixed title as suggested by LPinchart
-> >  - Fixed compatible name as suggested by LPinchart
-> >  - Removed clock as suggested by LPinchart
-> >  - Removed gpios not as suggested by LPinchart
-> >  - Renamed property name streamon-delay into alliedvision,lp2hs-delay-us
-> >  - Fixed vendor prefix, unit append as suggested by KKozlowski
-> >  - Fixed data-lanes
-> >  - Fixed blank space + example indentation (from 6 -> 4 space) as suggested by KKozlowski
-> >  - Dropped status into example  as suggested by KKozlowski
-> >  - Added vcc-ext-in supply as suggested by LPinchart
-> >  - Dropped pinctrl into example as suggested by LPinchart
-> > 
-> >  .../media/i2c/alliedvision,alvium-csi2.yaml   | 93 +++++++++++++++++++
-> >  1 file changed, 93 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/media/i2c/alliedvision,alvium-csi2.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/media/i2c/alliedvision,alvium-csi2.yaml b/Documentation/devicetree/bindings/media/i2c/alliedvision,alvium-csi2.yaml
-> > new file mode 100644
-> > index 000000000000..191534e2f7bd
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/media/i2c/alliedvision,alvium-csi2.yaml
-> > @@ -0,0 +1,93 @@
-> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/media/i2c/alliedvision,alvium.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> >  tools/perf/Makefile.perf | 23 ++++++++++++++++++++---
+> >  1 file changed, 20 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+> > index f1840af195c0..c3bb27a912b0 100644
+> > --- a/tools/perf/Makefile.perf
+> > +++ b/tools/perf/Makefile.perf
+> > @@ -193,6 +193,7 @@ FLEX    ?=3D flex
+> >  BISON   ?=3D bison
+> >  STRIP   =3D strip
+> >  AWK     =3D awk
+> > +READELF ?=3D readelf
+> >
+> >  # include Makefile.config by default and rule out
+> >  # non-config cases
+> > @@ -1080,12 +1081,28 @@ $(BPFTOOL): | $(SKEL_TMP_OUT)
+> >         $(Q)CFLAGS=3D $(MAKE) -C ../bpf/bpftool \
+> >                 OUTPUT=3D$(SKEL_TMP_OUT)/ bootstrap
+> >
+> > -VMLINUX_BTF_PATHS ?=3D $(if $(O),$(O)/vmlinux)                        =
+   \
+> > +# Paths to search for a kernel to generate vmlinux.h from.
+> > +VMLINUX_BTF_ELF_PATHS ?=3D $(if $(O),$(O)/vmlinux)                    =
+   \
+> >                      $(if $(KBUILD_OUTPUT),$(KBUILD_OUTPUT)/vmlinux)   =
+ \
+> >                      ../../vmlinux                                     =
+ \
+> > -                    /sys/kernel/btf/vmlinux                           =
+ \
+> >                      /boot/vmlinux-$(shell uname -r)
+> > -VMLINUX_BTF ?=3D $(abspath $(firstword $(wildcard $(VMLINUX_BTF_PATHS)=
+)))
 > > +
-> > +title: Allied Vision Alvium Camera
+> > +# Paths to BTF information.
+> > +VMLINUX_BTF_BTF_PATHS ?=3D /sys/kernel/btf/vmlinux
 > > +
-> > +maintainers:
-> > +  - Tommaso Merciai <tomm.merciai@gmail.com>
-> > +  - Martin Hecht <martin.hecht@avnet.eu>
-> > +
-> > +allOf:
-> > +  - $ref: /schemas/media/video-interface-devices.yaml#
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: alliedvision,alvium-csi2
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  vcc-ext-in-supply:
-> > +    description:
-> > +      Definition of the regulator used as interface power supply.
-> 
->       The regulator that supplies power to the VCC_EXT_IN pins.
+> > +# Filter out kernels that don't exist or without a BTF section.
+> > +VMLINUX_BTF_ELF_ABSPATHS ?=3D $(abspath $(wildcard $(VMLINUX_BTF_ELF_P=
+ATHS)))
+> > +VMLINUX_BTF_PATHS ?=3D $(shell for file in $(VMLINUX_BTF_ELF_ABSPATHS)=
+; \
+> > +                       do \
+> > +                               if [ -f $$file ] && ($(READELF) -t "$$f=
+ile" | grep .BTF); \
+>
+> Wouldn't it be `readelf -S` instead?  Also I think grep needs -q to
+> suppress output.
 
-Oks. Ty.
+Makes sense, I can change it in v3.
 
-> 
-> > +
-> > +  alliedvision,lp2hs-delay-us:
-> > +    maxItems: 1
-> > +    description:
-> > +      Low power to high speed delay time in microseconds.
-> 
-> You can drop "in microseconds", that's implied by the suffix.
+> > +                               then \
+> > +                                       echo "$$file"; \
+> > +                               fi; \
+> > +                       done) \
+> > +                       $(wildcard $(VMLINUX_BTF_BTF_PATHS))
+>
+> This changes the order of processing the sysfs file.
+> But I'm not sure it matters much as both /boot/vmlinux and sysfs
+> should refer to the running kernel.
 
-Oks.
+Agreed. readelf fails for /sys/kernel/btf/vmlinux as it isn't an elf
+file and I'm not sure it is worth worrying too much about the order
+here.
 
-> 
-> > +      The purpose of this property is force a DPhy reset for the period
-> > +      described by the microseconds on the property, before it starts
-> > +      streaming. To be clear, with that value bigger than 0 the Alvium
-> > +      forces a dphy-reset on all lanes for that period. That means all
-> > +      lanes go up into low power state. This may help a csi2 rx ip to
-> > +      reset if that IP can't deal with a continous clock.
-> 
-> I'd like to propose what I think is a clearer version:
-> 
->     description: |
->       Low power to high speed delay time.
-> 
->       If the value is larger than 0, the camera forces a reset of all
->       D-PHY lanes for the duration specified by this property. All lanes
->       will transition to the low-power state and back to the high-speed
->       state after the delay. Otherwise the lanes will transition to and
->       remain in the high-speed state immediately after power on.
-> 
->       This is meant to help CSI-2 receivers synchronizing their D-PHY
->       RX.
+Thanks,
+Ian
 
-Thanks!
-I'll fix this in v4 :)
-
-Regards,
-Tommaso
-
-> 
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> 
+> Thanks,
+> Namhyung
+>
+>
 > > +
-> > +  port:
-> > +    description: Digital Output Port
-> > +    $ref: /schemas/graph.yaml#/$defs/port-base
-> > +    additionalProperties: false
-> > +
-> > +    properties:
-> > +      endpoint:
-> > +        $ref: /schemas/media/video-interfaces.yaml#
-> > +        unevaluatedProperties: false
-> > +
-> > +        properties:
-> > +          link-frequencies: true
-> > +
-> > +          data-lanes:
-> > +            minItems: 1
-> > +            items:
-> > +              - const: 1
-> > +              - const: 2
-> > +              - const: 3
-> > +              - const: 4
-> > +
-> > +        required:
-> > +          - data-lanes
-> > +          - link-frequencies
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - vcc-ext-in-supply
-> > +  - port
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    i2c {
-> > +        #address-cells = <1>;
-> > +        #size-cells = <0>;
-> > +
-> > +        alvium: camera@3c {
-> > +            compatible = "alliedvision,alvium-csi2";
-> > +            reg = <0x3c>;
-> > +            vcc-ext-in-supply = <&reg_vcc_ext_in>;
-> > +            alliedvision,lp2hs-delay-us = <20>;
-> > +
-> > +            port {
-> > +                alvium_out: endpoint {
-> > +                    remote-endpoint = <&mipi_csi_0_in>;
-> > +                    data-lanes = <1 2 3 4>;
-> > +                    link-frequencies = /bits/ 64 <681250000>;
-> > +                };
-> > +            };
-> > +        };
-> > +    };
-> > +
-> > +...
-> 
-> -- 
-> Regards,
-> 
-> Laurent Pinchart
+> > +# Select the first as the source of vmlinux.h.
+> > +VMLINUX_BTF ?=3D $(firstword $(VMLINUX_BTF_PATHS))
+> >
+> >  $(SKEL_OUT)/vmlinux.h: $(VMLINUX_BTF) $(BPFTOOL)
+> >  ifeq ($(VMLINUX_H),)
+> > --
+> > 2.41.0.rc0.172.g3f132b7071-goog
+> >
