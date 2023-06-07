@@ -2,107 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 637E9725CED
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 13:20:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2A53725CF2
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 13:20:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240273AbjFGLUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 07:20:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54684 "EHLO
+        id S240351AbjFGLUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 07:20:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240227AbjFGLUD (ORCPT
+        with ESMTP id S240227AbjFGLUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 07:20:03 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C9C192
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 04:20:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686136802; x=1717672802;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=D++EtAsb67eCSEHqH4SO48A7/dF6fCd1ln+2Ij7tkKI=;
-  b=RbU6C0YvbRgcq+HQYtXlnoL3YXuHYldzSXL+Tlk/o9weGNDofrNwd6A0
-   YXqVLHuOXLGhDMfJbFHBMdUo0VmYvBnahMUlgMzjZM9HQai+qTEWRlxe8
-   leieOuKBpudyWUICdHNQn3a8h+URURAWFxzNxJj4GUzbKD+SceIryw/p0
-   vywld/pIuJdUutKnKZ8jCL/4waMncZ/4AklUEU9cmUtjBoNeKX3+rET1i
-   AJK5RqNt8KJqjEuQOULP4X7ENPzdNuQsHB7EPCsU9PbXHm+jMrlK4Uj4A
-   7OBMgBf5dFh9AJ9VRQNpiS5gicCkSawhI9PID1P7b7SCVha/7fg3lGCQP
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="385276545"
-X-IronPort-AV: E=Sophos;i="6.00,223,1681196400"; 
-   d="scan'208";a="385276545"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 04:20:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="712570491"
-X-IronPort-AV: E=Sophos;i="6.00,223,1681196400"; 
-   d="scan'208";a="712570491"
-Received: from akuporos-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.251.211.72])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 04:20:00 -0700
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 34B2C10F0D2; Wed,  7 Jun 2023 14:19:57 +0300 (+03)
-Date:   Wed, 7 Jun 2023 14:19:57 +0300
-From:   kirill.shutemov@linux.intel.com
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     linux-kernel@vger.kernel.org, dave.hansen@linux.intel.com,
-        peterz@infradead.org, hpa@zytor.com, konrad.wilk@oracle.com,
-        rostedt@goodmis.org, jpoimboe@kernel.org
-Subject: Re: [PATCH] x86/kexec: Add a comment to relocate_kernel() for better
- readability
-Message-ID: <20230607111957.sppocwpkhfb2e2vf@box.shutemov.name>
-References: <20230607103910.407779-1-kai.huang@intel.com>
+        Wed, 7 Jun 2023 07:20:13 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15DD91988
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 04:20:08 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4f60a27c4a2so8373267e87.2
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 04:20:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686136806; x=1688728806;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BTBg9MyG6jhsl+u10WSeM0LsmdB54Dp+FeeVDwf+P1E=;
+        b=GqGvhfCD5CfG/i9PdEtiYtDORlS2hSYj/XdMUA6gwOK8QYt2DOpbQVjlH403owaCe1
+         lt2U1vB/X6Q7w6wsrTq+cvIdnX26i/HZvKpE5YJoX+GTLQcdhI8JXBPwryb7qPQMyEMU
+         XipEAQqFjEkejFo7Nr4oTddfOWdKj0frkMfRavbwap9iA+85xQEXxQjlNigBkP5nr/dP
+         0ywDsqvbzc0MGbhC37pE6yc3JUO0S6eAkpMYkhavE0Vbsz54D8dNOaWTbMlKHV2dLEv/
+         CrZNM3bNoMVLKZSfpx85+uyuxt4osLX51Td9LTfFkLvgjisW/b36SNH7JkiB89JbhNDM
+         IdZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686136806; x=1688728806;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BTBg9MyG6jhsl+u10WSeM0LsmdB54Dp+FeeVDwf+P1E=;
+        b=Vahl1vDgImnTj7gDc0lvu/w1iYXot7F7IRoMJn72Fms2/iIFOcmJtLEtqXLPc4H0I0
+         mqM4Wgl30nocB88XmTdx7KYuGMIYi/j/uai/sBgThA8A03bjBR45LeOZ1xYlhVKkZkGC
+         j+HAWlwgj5AEdwGuWF2uVVwL/VpLl6gMBT/BzWKSvOJgKTAV7UAMInV5yl9LNaT4i4CT
+         QfabhU1EO8BU56CUHPOQi33G6winHEYzkb6RSS+75c8fenzXxrbRsRluIYMY8JDYiQkC
+         s4Qt/Ywj6U8UiwvbYH4xctLSbuKTc4rc30XnUm+Dmz3F3YqfpUueL27iUiawYXm4wjfH
+         HeRw==
+X-Gm-Message-State: AC+VfDwrtMYJCEKEdh1w2vC5WEKO2QLqcUhCvfDRI0tD+FPWxflbbrLj
+        3yQkEVLwkdX5G7LX/EQChG22Nw==
+X-Google-Smtp-Source: ACHHUZ4dGJnb/Q4jQtanIF6np0lUFYJ9Kec/sjx85wUK5bWSOr8484OmnpVW6Ub4tegvaeUknGYZyQ==
+X-Received: by 2002:a2e:320c:0:b0:2b1:e966:b349 with SMTP id y12-20020a2e320c000000b002b1e966b349mr1944701ljy.31.1686136806130;
+        Wed, 07 Jun 2023 04:20:06 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id y19-20020a2e3213000000b002b1e6a78d3esm1096403ljy.82.2023.06.07.04.20.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Jun 2023 04:20:05 -0700 (PDT)
+Message-ID: <f007fbf0-b1a7-cb44-d662-c30bf114365e@linaro.org>
+Date:   Wed, 7 Jun 2023 14:20:04 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230607103910.407779-1-kai.huang@intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 5/9] phy: qcom-m31: Introduce qcom,m31 USB phy
+Content-Language: en-GB
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, vkoul@kernel.org,
+        kishon@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        gregkh@linuxfoundation.org, catalin.marinas@arm.com,
+        will@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        p.zabel@pengutronix.de, arnd@arndb.de, geert+renesas@glider.be,
+        neil.armstrong@linaro.org, nfraprado@collabora.com,
+        broonie@kernel.org, rafal@milecki.pl, quic_srichara@quicinc.com,
+        quic_varada@quicinc.org, quic_wcheng@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-clk@vger.kernel.org
+References: <cover.1686126439.git.quic_varada@quicinc.com>
+ <636308462efb579734de829fb6e9cbda81b982f7.1686126439.git.quic_varada@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <636308462efb579734de829fb6e9cbda81b982f7.1686126439.git.quic_varada@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 10:39:10PM +1200, Kai Huang wrote:
-> The reason to save %rcx to %r11 before calling swap_pages isn't that
-> obvious w/o looking into the swap_pages itself.  Add a comment to
-> improve the readability.
+On 07/06/2023 13:56, Varadarajan Narayanan wrote:
+> Introduce CONFIG_PHY_QCOM_M31_USB for including the M31 phy driver
 > 
-> Signed-off-by: Kai Huang <kai.huang@intel.com>
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+
+Is there any reason to keep Kconfig, Makefile and driver in different 
+commits?
+
 > ---
->  arch/x86/kernel/relocate_kernel_64.S | 4 ++++
->  1 file changed, 4 insertions(+)
+>   drivers/phy/qualcomm/Kconfig | 11 +++++++++++
+>   1 file changed, 11 insertions(+)
 > 
-> diff --git a/arch/x86/kernel/relocate_kernel_64.S b/arch/x86/kernel/relocate_kernel_64.S
-> index 56cab1bb25f5..97deae3c5e6c 100644
-> --- a/arch/x86/kernel/relocate_kernel_64.S
-> +++ b/arch/x86/kernel/relocate_kernel_64.S
-> @@ -169,6 +169,10 @@ SYM_CODE_START_LOCAL_NOALIGN(identity_mapped)
->  	wbinvd
->  1:
->  
-> +	/*
-> +	 * Save the preserve_context to %r11 as
-> +	 * swap_pages clobbers %rcx.
-> +	 */
-
-Line split is not needed. It fits nicely under 80-characters.
-
-+	/* Save the preserve_context to %r11 as swap_pages clobbers %rcx. */
-
-Otherwise, LGTM.
-
->  	movq	%rcx, %r11
->  	call	swap_pages
->  
-> 
-> base-commit: 409bf2895d71bb68bc5b8589036e5ed1ca30bada
-> -- 
-> 2.40.1
-> 
+> diff --git a/drivers/phy/qualcomm/Kconfig b/drivers/phy/qualcomm/Kconfig
+> index 67a45d9..8a363dd 100644
+> --- a/drivers/phy/qualcomm/Kconfig
+> +++ b/drivers/phy/qualcomm/Kconfig
+> @@ -188,3 +188,14 @@ config PHY_QCOM_IPQ806X_USB
+>   	  This option enables support for the Synopsis PHYs present inside the
+>   	  Qualcomm USB3.0 DWC3 controller on ipq806x SoC. This driver supports
+>   	  both HS and SS PHY controllers.
+> +
+> +config PHY_QCOM_M31_USB
+> +	tristate "Qualcomm M31 HS PHY driver support"
+> +	depends on (USB || USB_GADGET) && ARCH_QCOM
+> +	select USB_PHY
+> +	help
+> +	  Enable this to support M31 HS PHY transceivers on Qualcomm chips
+> +	  with DWC3 USB core. It handles PHY initialization, clock
+> +	  management required after resetting the hardware and power
+> +	  management. This driver is required even for peripheral only or
+> +	  host only mode configurations.
 
 -- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+With best wishes
+Dmitry
+
