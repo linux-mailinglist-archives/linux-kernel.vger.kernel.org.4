@@ -2,155 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B584B72684C
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 20:18:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78D4772685E
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 20:21:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231610AbjFGSSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 14:18:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36070 "EHLO
+        id S229611AbjFGSUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 14:20:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231712AbjFGSSl (ORCPT
+        with ESMTP id S233044AbjFGSUL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 14:18:41 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF1551FD7
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 11:18:30 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2b1b66a8fd5so64164551fa.0
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 11:18:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686161909; x=1688753909;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZZ/p0iLnlO9hRGL6F3e88TDXKCDJ3Ln5sjh3/Y6FySE=;
-        b=zDSxFnUbIcCjqY5ly3/D4UTfuVwXpVyLZrw7RvR1qPR5BIGmN9aat/Y68xabimzaUY
-         3M7aOc5RUo5y8Jorgp9FtZqmAtFvfWhXe2Q9IJjp6+zyUVw1/P4SNfGWSp6YcY2v+Gly
-         ymQRaIWlAjqyFEWHYtETDUE9a6OIjVSvcK1cHjd+B1qDDYmCL4R6qUDjysbpZ20d6g2U
-         latCjJ4S/Dfy2SaE1Zc3YjHUkDC+TXDYzJSYiBMDCqdCcxY2xYnnWQF0oIdl38qA5YLT
-         U6By/Jq4Dny7Zfxr8PSW958EUNkW3uxA3U8YKQ6SGY+lA5T9LjuA7zJ+2qYCsWSHx6cb
-         jfvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686161909; x=1688753909;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZZ/p0iLnlO9hRGL6F3e88TDXKCDJ3Ln5sjh3/Y6FySE=;
-        b=JDoZNYaTVge5ObQjUP0kQG0t/pCOeB+zHWXo9uJlreaYLRvw7dihE20VwuA4zXDu0J
-         SAWatz4452cFLvFPk1Dy9LOtyxnY8agfJ9xJuh0YKP/LfYe5b+S4kOfClRbHv2rU8kBP
-         KHi6jMQeNd+nnwh+l/Vnbp5kOOkBpow/zZvt4yxVZIC8VpH+gM9SnIwPMUynJQ2nr2lf
-         9DacwJ4z4EAP9Zacmt04GeFIo+bI0moLzr7raOqycOkuKcY59ezJ5LeOG1VKppEUSFhw
-         276Pzi1H99KaHpRmXMLup8c3xGteD99u9qjw9MS27b1aYt0mbpOInlSSZ1gcP1uG/vG8
-         Kv/w==
-X-Gm-Message-State: AC+VfDzqPMpvZYT7hFo0xsVOtZECZjv8UubnoYTvgN/1xt8hugnYnNNB
-        XHcrYX/tTf+wa7Xi4kszSHpfPHKMYns9DSj6gL9RCg==
-X-Google-Smtp-Source: ACHHUZ7O/DzwvluFFUAPOsziiJROquhW9PuTOb0JgHUU4X3wehygZbwll0mktA0KGDG2rx48BQYxIaF9Qy7l5t/4fx4=
-X-Received: by 2002:a2e:730c:0:b0:2b1:ed29:7c47 with SMTP id
- o12-20020a2e730c000000b002b1ed297c47mr2455880ljc.8.1686161909028; Wed, 07 Jun
- 2023 11:18:29 -0700 (PDT)
+        Wed, 7 Jun 2023 14:20:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 825D610EA
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 11:19:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686161970;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=zjBZGOWeC2+j8rdZ1VNcBc7uMi5724ZRd7M0xAXNpHw=;
+        b=g4iUDqW3oWYF1loonFFnquoaTYBuRC5bA0Yk68vH0cDq9RZN+bRLSzDX6y/g5E0flS4Njk
+        uJ6ZyMRVNFsvVywYYu5HQ5x3rIKonH1lR4mc3cS8rPbYTwWoaXmy7erI2sMQKwN+DUw7M/
+        QJNX3W7ZPX9vC3YhqwjA9jvgUlyFsXA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-659-whvtqlXhPLWtG6JzyDFNIw-1; Wed, 07 Jun 2023 14:19:26 -0400
+X-MC-Unique: whvtqlXhPLWtG6JzyDFNIw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7AFAA101A53A;
+        Wed,  7 Jun 2023 18:19:25 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.182])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 40E7C2166B25;
+        Wed,  7 Jun 2023 18:19:23 +0000 (UTC)
+From:   David Howells <dhowells@redhat.com>
+To:     netdev@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     David Howells <dhowells@redhat.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Boris Pismenny <borisp@nvidia.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v6 00/14] splice, net: Rewrite splice-to-socket, fix SPLICE_F_MORE and handle MSG_SPLICE_PAGES in AF_TLS
+Date:   Wed,  7 Jun 2023 19:19:06 +0100
+Message-ID: <20230607181920.2294972-1-dhowells@redhat.com>
 MIME-Version: 1.0
-References: <20230526010748.1222-1-masahisa.kojima@linaro.org>
- <20230526010748.1222-4-masahisa.kojima@linaro.org> <0d3e0370-eb76-010f-3d30-9acc9b59645c@siemens.com>
- <CAFA6WYPnWJNPvhT2JDkO-qXRUaJoxBGZEvSfhxcRynV7=VSdQA@mail.gmail.com>
- <CAMj1kXFM45PCTU--+CCed6Cq_N5XqDG6tTu6fnQTSCpW2BWA5A@mail.gmail.com>
- <4ff09002-e871-38b9-43ec-227a64bac731@siemens.com> <CAC_iWjJJ5E9Q1or5yTiDynzv_WAYH-g+N24aRdu9rvcsbWqnrg@mail.gmail.com>
- <CAFA6WYNFYB1LiOFB_iwTsdD5PmnDdSbtDSH2J4FVFPx3uik8rQ@mail.gmail.com>
- <CAC_iWj+E7-XK6dCeSn4205K0O3EZCLxCaC+adu-14ST6sdudfA@mail.gmail.com>
- <76da826f-b608-6add-5401-6de818b180e3@siemens.com> <CAFA6WYPCDRjFzsUMU=SNzEt88nT7Fcm1eOFL8z4HiQO+=2JeVA@mail.gmail.com>
- <cc6bd203-83ea-c247-0986-7fec6f327ee8@siemens.com> <CAC_iWjKZNHJxq4VMFnV7oQngwBBCQveh=s34u1LZ59YUqViPbw@mail.gmail.com>
- <CAC_iWjJMv68yLC606SBhMmBYkR4wVC8SvUcPvNM=RX_qL=9Bvw@mail.gmail.com> <b9b8c1d3-fc8e-df94-d12b-a9e3debf3418@siemens.com>
-In-Reply-To: <b9b8c1d3-fc8e-df94-d12b-a9e3debf3418@siemens.com>
-From:   Ilias Apalodimas <ilias.apalodimas@linaro.org>
-Date:   Wed, 7 Jun 2023 21:17:52 +0300
-Message-ID: <CAC_iWj+cP4RfDNu_n-ZOp7A62W34drLpPszN_hrkqF_aPTLtMg@mail.gmail.com>
-Subject: Re: [PATCH v5 3/3] efi: Add tee-based EFI variable driver
-To:     Jan Kiszka <jan.kiszka@siemens.com>
-Cc:     Sumit Garg <sumit.garg@linaro.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Masahisa Kojima <masahisa.kojima@linaro.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-efi@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        "Su, Bao Cheng (RC-CN DF FA R&D)" <baocheng.su@siemens.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 7 Jun 2023 at 20:14, Jan Kiszka <jan.kiszka@siemens.com> wrote:
->
-> On 07.06.23 18:59, Ilias Apalodimas wrote:
-> > On Wed, 7 Jun 2023 at 19:09, Ilias Apalodimas
-> > <ilias.apalodimas@linaro.org> wrote:
-> >>
-> >> Hi Jan,
-> >>
-> >> [...]
-> >>>>>> No I don't, this will work reliably without the need to remount the efivarfs.
-> >>>>>> As you point out you will still have this dependency if you end up
-> >>>>>> building them as modules and you manage to mount the efivarfs before
-> >>>>>> those get inserted.  Does anyone see a reasonable workaround?
-> >>>>>> Deceiving the kernel and making the bootloader set the RT property bit
-> >>>>>> to force the filesystem being mounted as rw is a nasty hack that we
-> >>>>>> should avoid.  Maybe adding a kernel command line parameter that says
-> >>>>>> "Ignore the RTPROP I know what I am doing"?  I don't particularly love
-> >>>>>> this either, but it's not unreasonable.
-> >>>>>
-> >>>>> In the context of https://github.com/OP-TEE/optee_os/issues/6094,
-> >>>>> basically this issue mapped on reboot/shutdown, I would really love to
-> >>>>> see the unhandy tee-supplicant daemon to be overcome.
-> >>>>
-> >>>> I have seen this error before and it has been on my todo list. So I
-> >>>> have tried to fix it here [1]. Feel free to test it and let me know if
-> >>>> you see any further issues.
-> >>>>
-> >>>> [1] https://lkml.org/lkml/2023/6/7/927
-> >>>>
-> >>>
-> >>> Ah, nice, will test ASAP!
-> >>>
-> >>> Meanwhile more food: I managed to build a firmware that was missing
-> >>> STMM. But the driver loaded, and I got this:
-> >>
-> >> Thanks for the testing. I'll try to reproduce it locally and get back to you
-> >
-> > Can you provide a bit more info on how that was triggered btw? I would
-> > be helpful to know
-> >
-> > - OP-TEE version
->
-> Today's master, 145953d55.
->
-> > - was it compiled as a module or built-in?
->
-> Sorry, not sure anymore, switching back and forth right now. I think it
-> was built-in.
->
-> > - was the supplicant running?
->
-> Yes.
->
+Here are patches to do the following:
 
-Ok thanks, that helps.  I guess this also means U-Boot was compiled to
-store the variables in a file in the ESP instead of the RPMB right?
-Otherwise, I can't see how the device booted in the first place.
+ (1) Block MSG_SENDPAGE_* flags from leaking into ->sendmsg() from
+     userspace, whilst allowing splice_to_socket() to pass them in.
 
-Thanks
-/Ilias
+ (2) Allow MSG_SPLICE_PAGES to be passed into tls_*_sendmsg().  Until
+     support is added, it will be ignored and a splice-driven sendmsg()
+     will be treated like a normal sendmsg().  TCP, UDP, AF_UNIX and
+     Chelsio-TLS already handle the flag in net-next.
+
+ (3) Replace a chain of functions to splice-to-sendpage with a single
+     function to splice via sendmsg() with MSG_SPLICE_PAGES.  This allows a
+     bunch of pages to be spliced from a pipe in a single call using a
+     bio_vec[] and pushes the main processing loop down into the bowels of
+     the protocol driver rather than repeatedly calling in with a page at a
+     time.
+
+ (4) Provide a ->splice_eof() op[2] that allows splice to signal to its
+     output that the input observed a premature EOF and that the caller
+     didn't flag SPLICE_F_MORE, thereby allowing a corked socket to be
+     flushed.  This attempts to maintain the current behaviour.  It is also
+     not called if we didn't manage to read any data and so didn't called
+     the actor function.
+
+     This needs routing though several layers to get it down to the network
+     protocol.
+
+     [!] Note that I chose not to pass in any flags - I'm not sure it's
+     	 particularly useful to pass in the splice flags; I also elected
+     	 not to return any error code - though we might actually want to do
+     	 that.
+
+ (5) Provide tls_{device,sw}_splice_eof() to flush a pending TLS record if
+     there is one.
+
+ (6) Provide splice_eof() for UDP, TCP, Chelsio-TLS and AF_KCM.  AF_UNIX
+     doesn't seem to pay attention to the MSG_MORE or MSG_SENDPAGE_NOTLAST
+     flags.
+
+ (7) Alter the behaviour of sendfile() and fix SPLICE_F_MORE/MSG_MORE
+     signalling[1] such SPLICE_F_MORE is always signalled until we have
+     read sufficient data to finish the request.  If we get a zero-length
+     before we've managed to splice sufficient data, we now leave the
+     socket expecting more data and leave it to userspace to deal with it.
+
+ (8) Make AF_TLS handle the MSG_SPLICE_PAGES internal sendmsg flag.
+     MSG_SPLICE_PAGES is an internal hint that tells the protocol that it
+     should splice the pages supplied if it can.  Its sendpage
+     implementations are then turned into wrappers around that.
 
 
-> Jan
->
-> --
-> Siemens AG, Technology
-> Competence Center Embedded Linux
->
+I've pushed the patches here also:
+
+	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=sendpage-2-tls
+
+David
+
+Changes
+=======
+ver #6)
+ - In inet_splice_eof(), use prot after deref of sk->sk_prot.
+ - In udpv6_splice_eof(), use udp_v6_push_pending_frames().
+ - In udpv6_splice_eof(), don't check for AF_INET.
+ - In kcm_splice_eof(), use skb_queue_empty_lockless().
+ - In tls_sw_sendmsg_splice(), remove unused put_page.
+ - In tls_sw_sendmsg(), don't set pending_open_record_frags twice.
+
+ver #5)
+ - In splice_to_socket(), preclear ret in case len == 0.
+ - Provide ->splice_eof() for UDP, TCP, Chelsio-TLS and AF_KCM.
+
+ver #4)
+ - Switch to using ->splice_eof() to signal premature EOF to the splice
+   output[2].
+
+ver #3)
+ - Include the splice-to-socket rewrite patch.
+ - Fix SPLICE_F_MORE/MSG_MORE signalling.
+ - Allow AF_TLS to accept sendmsg() with MSG_SPLICE_PAGES before it is
+   handled.
+ - Allow a zero-length send() to a TLS socket to flush an outstanding
+   record.
+ - Address TLS kselftest failure.
+
+ver #2)
+ - Dropped the slab data copying.
+ - "rls_" should be "tls_".
+ - Attempted to fix splice_direct_to_actor().
+ - Blocked MSG_SENDPAGE_* from being set by userspace.
+
+Link: https://lore.kernel.org/r/499791.1685485603@warthog.procyon.org.uk/ [1]
+Link: https://lore.kernel.org/r/CAHk-=wh=V579PDYvkpnTobCLGczbgxpMgGmmhqiTyE34Cpi5Gg@mail.gmail.com/ [2]
+Link: https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/commit/?id=51c78a4d532efe9543a4df019ff405f05c6157f6 # part 1
+Link: https://lore.kernel.org/r/20230524153311.3625329-1-dhowells@redhat.com/ # v1
+
+David Howells (14):
+  net: Block MSG_SENDPAGE_* from being passed to sendmsg() by userspace
+  tls: Allow MSG_SPLICE_PAGES but treat it as normal sendmsg
+  splice, net: Use sendmsg(MSG_SPLICE_PAGES) rather than ->sendpage()
+  splice, net: Add a splice_eof op to file-ops and socket-ops
+  tls/sw: Use splice_eof() to flush
+  tls/device: Use splice_eof() to flush
+  ipv4, ipv6: Use splice_eof() to flush
+  chelsio/chtls: Use splice_eof() to flush
+  kcm: Use splice_eof() to flush
+  splice, net: Fix SPLICE_F_MORE signalling in splice_direct_to_actor()
+  tls/sw: Support MSG_SPLICE_PAGES
+  tls/sw: Convert tls_sw_sendpage() to use MSG_SPLICE_PAGES
+  tls/device: Support MSG_SPLICE_PAGES
+  tls/device: Convert tls_device_sendpage() to use MSG_SPLICE_PAGES
+
+ .../chelsio/inline_crypto/chtls/chtls.h       |   1 +
+ .../chelsio/inline_crypto/chtls/chtls_io.c    |   9 +
+ .../chelsio/inline_crypto/chtls/chtls_main.c  |   1 +
+ fs/splice.c                                   | 207 ++++++++++++---
+ include/linux/fs.h                            |   3 +-
+ include/linux/net.h                           |   1 +
+ include/linux/socket.h                        |   4 +-
+ include/linux/splice.h                        |   3 +
+ include/net/inet_common.h                     |   1 +
+ include/net/sock.h                            |   1 +
+ include/net/tcp.h                             |   1 +
+ include/net/udp.h                             |   1 +
+ net/ipv4/af_inet.c                            |  18 ++
+ net/ipv4/tcp.c                                |  16 ++
+ net/ipv4/tcp_ipv4.c                           |   1 +
+ net/ipv4/udp.c                                |  16 ++
+ net/ipv6/af_inet6.c                           |   1 +
+ net/ipv6/tcp_ipv6.c                           |   1 +
+ net/ipv6/udp.c                                |  15 ++
+ net/kcm/kcmsock.c                             |  15 ++
+ net/socket.c                                  |  36 +--
+ net/tls/tls.h                                 |   2 +
+ net/tls/tls_device.c                          | 110 ++++----
+ net/tls/tls_main.c                            |   4 +
+ net/tls/tls_sw.c                              | 248 +++++++++---------
+ 25 files changed, 478 insertions(+), 238 deletions(-)
+
