@@ -2,99 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F104972695A
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 21:01:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DDA372695D
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 21:03:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233036AbjFGTBi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 15:01:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35328 "EHLO
+        id S231651AbjFGTDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 15:03:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231534AbjFGTBe (ORCPT
+        with ESMTP id S229481AbjFGTDP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 15:01:34 -0400
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C4411BF5;
-        Wed,  7 Jun 2023 12:01:33 -0700 (PDT)
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-256531ad335so6278335a91.0;
-        Wed, 07 Jun 2023 12:01:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686164493; x=1688756493;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PCQq6w9tCTxruq8TeYqlXmiFHaDLEPuIhfTxDFbYYTc=;
-        b=D9tsg7eYz9LA0t/XxCoAGHrSqjx+QOZPpP2nMESXzVBmndmajRqJ7sXkbcGKZ0A+F9
-         H3oEatV+ihAVLusDq979XheOCes12jkTrYwwKGRPGcG6SRJkFh5y9oC6jrt+CZP9g5xS
-         Zfxvbf/MZdsR6bQ94TQReGYDU/++QKpXXvAgk9/v70K96z1zgXa9lQWllN7uI9M4j4gg
-         btsWpbFFe1fvjYSVkO4tLJhhQCA7FpgPYV3zbHMcLAxVpZpUmVRv0dd4IWpRPd7cDebN
-         PnE045GlE9TbEpM9WTZ5NKBP4Fnha3tUdU0s+sC90zBo7we4e2+M3WRh0pTiiWoW8csv
-         xeNw==
-X-Gm-Message-State: AC+VfDy8xEWdGG2caUBSCY6hA3OlrVjm+S0VhC75VFzVlStijegt+i8z
-        kp0KqFrRq/Y783ziWPKSz+0=
-X-Google-Smtp-Source: ACHHUZ4qE8S8kRcHpYdvqrqxt90mHEl/0I3nOB5vucdJRUzg00YMqmvTsBjdgsTA6SxJB6vhamNuGQ==
-X-Received: by 2002:a17:90a:1996:b0:255:c061:9e5b with SMTP id 22-20020a17090a199600b00255c0619e5bmr5778380pji.37.1686164492844;
-        Wed, 07 Jun 2023 12:01:32 -0700 (PDT)
-Received: from [192.168.51.14] ([98.51.102.78])
-        by smtp.gmail.com with ESMTPSA id u10-20020a17090ae00a00b00256bbfbabcfsm1696996pjy.48.2023.06.07.12.01.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 12:01:32 -0700 (PDT)
-Message-ID: <4eda6575-c124-3ca3-e772-567a7014d895@acm.org>
-Date:   Wed, 7 Jun 2023 12:01:31 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 3/3] ufs: poll pmc until another pa request is
- completed
-Content-Language: en-US
-To:     Kiwoong Kim <kwmad.kim@samsung.com>, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alim.akhtar@samsung.com,
-        avri.altman@wdc.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, beanhuo@micron.com,
-        adrian.hunter@intel.com, sc.suh@samsung.com, hy50.seo@samsung.com,
-        sh425.lee@samsung.com, kwangwon.min@samsung.com,
-        junwoo80.lee@samsung.com
-References: <cover.1685927620.git.kwmad.kim@samsung.com>
- <CGME20230605012508epcas2p140e42906361b870e20b1e734e9e4df06@epcas2p1.samsung.com>
- <67ce698df39ca0c277c078dca729d7f607b9feb2.1685927620.git.kwmad.kim@samsung.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <67ce698df39ca0c277c078dca729d7f607b9feb2.1685927620.git.kwmad.kim@samsung.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        Wed, 7 Jun 2023 15:03:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EA21193
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 12:03:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EEB1061779
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 19:03:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D38B2C433D2;
+        Wed,  7 Jun 2023 19:03:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1686164593;
+        bh=6rM3c0MzWmypFl9SNFBILYmJFrC7/yHDs2cmHU7fDRE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Ssml13aGyZyJ3ub78D/30u0UL0IB0MjCmCDTGHBI1B8L+zNeaRQzmtYap1KIiZzbx
+         iwFHzqzJ92fkaq893W+6Uo0nFRdBZC7b8EpitBAsS/01f3s27OicNfWuDXwzFKTj1R
+         gw6wXPo7gPLbJ2AOYwKqRyVsaoO4q6ZVJ3EHYaIc=
+Date:   Wed, 7 Jun 2023 12:03:12 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     Gerd Hoffmann <kraxel@redhat.com>,
+        Junxiao Chang <junxiao.chang@intel.com>,
+        kirill.shutemov@linux.intel.com, mhocko@suse.com,
+        jmarchan@redhat.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, muchun.song@linux.dev,
+        Vivek Kasireddy <vivek.kasireddy@intel.com>,
+        Dongwon Kim <dongwon.kim@intel.com>,
+        James Houghton <jthoughton@google.com>,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH] mm: fix hugetlb page unmap count balance issue
+Message-Id: <20230607120312.6da5cea7677ec1a3da35b92c@linux-foundation.org>
+In-Reply-To: <20230516223440.GA30624@monkey>
+References: <20230512072036.1027784-1-junxiao.chang@intel.com>
+        <CADrL8HV25JyeaT=peaR7NWhUiaBz8LzpyFosYZ3_0ACt+twU6w@mail.gmail.com>
+        <20230512232947.GA3927@monkey>
+        <20230515170259.GA3848@monkey>
+        <20230516223440.GA30624@monkey>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/4/23 18:15, Kiwoong Kim wrote:
-> v2 -> v3
-> 1) check time in the loop with jiffies, instead of miliseconds.
-> 2) change a variable's name and fix a typo and wrong alignment.
+On Tue, 16 May 2023 15:34:40 -0700 Mike Kravetz <mike.kravetz@oracle.com> wrote:
+
+> On 05/15/23 10:04, Mike Kravetz wrote:
+> > On 05/12/23 16:29, Mike Kravetz wrote:
+> > > On 05/12/23 14:26, James Houghton wrote:
+> > > > On Fri, May 12, 2023 at 12:20 AM Junxiao Chang <junxiao.chang@intel.com> wrote:
+> > > > 
+> > > > This alone doesn't fix mapcounting for PTE-mapped HugeTLB pages. You
+> > > > need something like [1]. I can resend it if that's what we should be
+> > > > doing, but this mapcounting scheme doesn't work when the page structs
+> > > > have been freed.
+> > > > 
+> > > > It seems like it was a mistake to include support for hugetlb memfds in udmabuf.
+> > > 
+> > > IIUC, it was added with commit 16c243e99d33 udmabuf: Add support for mapping
+> > > hugepages (v4).  Looks like it was never sent to linux-mm?  That is unfortunate
+> > > as hugetlb vmemmap freeing went in at about the same time.  And, as you have
+> > > noted udmabuf will not work if hugetlb vmemmap freeing is enabled.
+> > > 
+> > > Sigh!
+> > > 
+> > > Trying to think of a way forward.
+> > > -- 
+> > > Mike Kravetz
+> > > 
+> > > > 
+> > > > [1]: https://lore.kernel.org/linux-mm/20230306230004.1387007-2-jthoughton@google.com/
+> > > > 
+> > > > - James
+> > 
+> > Adding people and list on Cc: involved with commit 16c243e99d33.
+> > 
+> > There are several issues with trying to map tail pages of hugetllb pages
+> > not taken into account with udmabuf.  James spent quite a bit of time trying
+> > to understand and address all the issues with the HGM code.  While using
+> > the scheme proposed by James, may be an approach to the mapcount issue there
+> > are also other issues that need attention.  For example, I do not see how
+> > the fault code checks the state of the hugetlb page (such as poison) as none
+> > of that state is carried in tail pages.
+> > 
+> > The more I think about it, the more I think udmabuf should treat hugetlb
+> > pages as hugetlb pages.  They should be mapped at the appropriate level
+> > in the page table.  Of course, this would impose new restrictions on the
+> > API (mmap and ioctl) that may break existing users.  I have no idea how
+> > extensively udmabuf is being used with hugetlb mappings.
 > 
-> v1 -> v2
-> 1) remove clearing hba->active_uic_cmd at the end of __ufshcd_poll_uic_pwr
-> 2) change commit message on the cited clause: 5.7.12.11 -> 5.7.12.1.1
-> 3) add mdelay to avoid too many issueing
-> 4) change the timeout for the polling to 100ms because I found it
-> sometimes takes much longer than expected.
+> Verified that using udmabug on a hugetlb mapping with vmemmap optimization will
+> BUG as:
 
-A change history like the above should either occur below the "---" 
-separator or in a cover letter instead of in the patch description.
+BUGs aren't good.  Can we please find a way to push this along?
 
-> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-[ ... ]
+Have we heard anything from any udmabuf people?
 
-There are two changes in this patch: the introduction of the 
-__ufshcd_poll_uic_pwr() helper function and also the introduction of a 
-wait loop. Please split this patch into two patches - one patch that 
-introduces the helper function and a second patch that introduces the 
-wait loop. That will make this patch series easier to review.
 
-Thanks,
-
-Bart.
