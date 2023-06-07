@@ -2,102 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1941F725BAE
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 12:34:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 466F1725BB5
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 12:38:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239323AbjFGKei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 06:34:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50736 "EHLO
+        id S239343AbjFGKip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 06:38:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234352AbjFGKeg (ORCPT
+        with ESMTP id S234932AbjFGKin (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 06:34:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD976EA;
-        Wed,  7 Jun 2023 03:34:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3831C62DEF;
-        Wed,  7 Jun 2023 10:34:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1670BC433D2;
-        Wed,  7 Jun 2023 10:34:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686134074;
-        bh=EnWyL/RGZVIPRednPxgadT7R3he2GlukPWhgaMHT7gw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Hd0GZexWOXSaSGDZT9lqrMXsp4ss4me/8CSkbFA0Zl09kEn295vV5t7omARWN+yF+
-         TNjYnTS4TbdjxxFVdTrzdep/OEfveLzAbfuIXw9aGcuxe4a8Xr4KOSKNnQ7hTRlhk5
-         0seKiKVRAPQuOurxVu24CUrVKUJswMa0fKyN2OKcKEA/5AzxB9uQujexZFbjYbkNXP
-         XxgQw4i0h0xHQIgo42//4c1o80Mrr6hdpfEcff5ccSScHpuqIFX7qahwIAPUhvg7bM
-         Yox5OQKitnZTFGtVhOaAxhmztxyYADhZ8cW/pg+aIxQLrAfJv7Ecf4ZPtLXO06CfHM
-         NSWYZNiTSfxYg==
-Date:   Wed, 7 Jun 2023 12:34:31 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Md Sadre Alam <quic_mdalam@quicinc.com>
-Cc:     loic.poulain@linaro.org, rfoss@kernel.org,
-        linux-i2c@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_sjaganat@quicinc.com,
-        quic_srichara@quicinc.com, quic_varada@quicinc.com
-Subject: Re: [PATCH 3/5] i2c: qcom-cci:Use
- devm_platform_get_and_ioremap_resource()
-Message-ID: <ZIBdN/16vizJqNZp@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Md Sadre Alam <quic_mdalam@quicinc.com>, loic.poulain@linaro.org,
-        rfoss@kernel.org, linux-i2c@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_sjaganat@quicinc.com, quic_srichara@quicinc.com,
-        quic_varada@quicinc.com
-References: <20230306144522.15699-1-quic_mdalam@quicinc.com>
+        Wed, 7 Jun 2023 06:38:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B1921712
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 03:37:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686134275;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vq4iY/12EDFCis/q0y3yHnpWxZ9O8Sy8phj5VJevVR4=;
+        b=gsFt6puerqaD4wYESCv8+vdOvkeLqHIXELUFW0VcYE0XeXXi/tcj52xOy/tOQUzJhHmHdV
+        wzloVmhNrbl7Z3q96OPX/M1jUPQE2KIywAHRc5A/2gz+Zqb0IOS0nawY9AIBSXPOlydcos
+        tkeOhPRFwgVvI77aR/TiQkjUsFx7Qos=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-444-AedhZKB6MneadNw8t39Asg-1; Wed, 07 Jun 2023 06:37:54 -0400
+X-MC-Unique: AedhZKB6MneadNw8t39Asg-1
+Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-514a6909c35so792011a12.3
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 03:37:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686134273; x=1688726273;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vq4iY/12EDFCis/q0y3yHnpWxZ9O8Sy8phj5VJevVR4=;
+        b=c1SziSqZZkg0i7U5iXZm1qs6g0roF2ebuWEnfFsTd6DaxRdZlKogzOJ4N5GCYZ91av
+         kAaQNyoSLfUuVArQ46uyKqnfA94eE6DbUUX/gdZ3cVokAfbGpsTWQtyJlLd3b4jMdGAg
+         Wo1wKXCTW9XUu/iKgc04d+rG7iZYwgaxw+6RSBVkxVgjB7vvihpqEGb145ZRppeumnO0
+         G/jOTZ/xkzkVfJuoQwjH4W9kRXcPMujqQfu+3v5SmLvTjDFy7J7LcU62S6XDMohKO8AY
+         HK+MHOPkpMrz6qMyDBasbSL8SS6bCpGKgr/0lWyA//6TUFFAcjDy7REyvs/RC4yA84zg
+         mNSw==
+X-Gm-Message-State: AC+VfDxLz3S2tvpJG8x0O7hJsWdNb6qsTdIlKzlRI4YKs2xyeq8HkZAF
+        jF0c/60dx4VZrjasGpl5sNaaa/txTqL3zmfBFq9wmzKVjiO7lz07CgKBeoyjMZTRRmQue8Tu5nF
+        IzOsBPBQcSBsAciGfdk/OFf+F
+X-Received: by 2002:aa7:d7d1:0:b0:516:9f47:5390 with SMTP id e17-20020aa7d7d1000000b005169f475390mr807629eds.27.1686134273070;
+        Wed, 07 Jun 2023 03:37:53 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7A9F7RygbWZFa68FEkMZz7F3vyq3rRZdc9t9YQhLQsarizrxtkW3i6VktegV0WsNVP1BDN7w==
+X-Received: by 2002:aa7:d7d1:0:b0:516:9f47:5390 with SMTP id e17-20020aa7d7d1000000b005169f475390mr807618eds.27.1686134272818;
+        Wed, 07 Jun 2023 03:37:52 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
+        by smtp.googlemail.com with ESMTPSA id b13-20020a056402138d00b00516654bf182sm2841294edv.41.2023.06.07.03.37.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Jun 2023 03:37:52 -0700 (PDT)
+Message-ID: <5283b17c-185b-a37f-84e2-dcd08e042ec0@redhat.com>
+Date:   Wed, 7 Jun 2023 12:37:50 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="bsZdphsPPiw7WIHD"
-Content-Disposition: inline
-In-Reply-To: <20230306144522.15699-1-quic_mdalam@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [ANNOUNCE] KVM Microconference at LPC 2023
+To:     Babis Chalios <bchalios@amazon.es>, KVM list <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Marc Zyngier <maz@kernel.org>, Alexander Graf <graf@amazon.de>,
+        "Cali, Marco" <xmarcalx@amazon.co.uk>
+References: <2f19f26e-20e5-8198-294e-27ea665b706f@redhat.com>
+ <150e1ad0-3d59-762b-6032-897d5630a3bf@amazon.es>
+Content-Language: en-US
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <150e1ad0-3d59-762b-6032-897d5630a3bf@amazon.es>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 6/7/23 12:13, Babis Chalios wrote:
+> 
+> 
+> On our side, we 've been working on providing ways to let VMs (kernel
+>  and user space) know that they have been cloned/snapshotted/restored
+> from snapshots[1].
+> 
+> This is tightly coupled with PRNGs both in kernel and user space and
+>  there needs to be some collaboration with random.c to tie everything
+> together [2][3]. It sounds like it could be a good fit for this MC
+> (?).
 
---bsZdphsPPiw7WIHD
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Does the VM generation ID ACPI device from Microsoft work for you?  It 
+is not tied to Hyper-V.
 
-On Mon, Mar 06, 2023 at 08:15:22PM +0530, Md Sadre Alam wrote:
-> Convert platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> what this function does.
->=20
-> Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
+Paolo
 
-Loic, Robert, do you agree with this patch?
-
-
---bsZdphsPPiw7WIHD
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmSAXTcACgkQFA3kzBSg
-KbarcQ//Y+9HmY6t53QDwVMuvc4Z8203aKAUdHggYnJ6n5kwNoCcutIFR8+/AYIT
-rz5uytUYJg956cMgaqSk8eAJJTZf+/8JOyWIWkawDEwG710RDjDj1+ULYGe1h77U
-o7a52fRi+88AMG7V2COvq3umsxVKecjyMQtJ7ysTR+Up0vaLF0Nq7p/nvM2l583o
-h/VwWxwrd8NbPIzaEAlczrQPJXwxQymkNK2QQm3x0tWxZXm6ZzYAzduKpRMX3JXT
-+g/n5obKYtqDl/GCB+vMzzoDh/144H34KTZYZN6IpQeuTkh/nJMp6xdGJ6pfZRc5
-TtKzvrHreKu6pYVxuxCzkbOzt56knibv/EDpFlF3ckzW9SC3AIPAjHkBV+70ChMh
-kgVuk9z6zlI2h8BykYQHF46SJTdZS03msfHg+ROXgkeffMt0JV0gZCYYnP3ZB6y6
-2oI4/gd3W4h+IWQxAFhfGFLVheLIDnnuamb5F/cXPwzfv0oSXNblkD2uSif5uOxh
-X3D4FyjJ0G2P5xkcjpvMLYqGRFfdVDW9lW/wTK5vICXBywjGCZhMqEIQYjgGgJaV
-7h4NEscOfSmqkRbE2DMEBN+z/Nzf8tIUPSixf1j0CgwLVZFGbvnwLJEn4tgNu0zP
-rPSNx3VxXEH/Miu7qFbF8o8VWt43H4otn5AIbj8gh4mjvdbhZqo=
-=83z4
------END PGP SIGNATURE-----
-
---bsZdphsPPiw7WIHD--
