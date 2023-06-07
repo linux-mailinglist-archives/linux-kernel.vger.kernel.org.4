@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBE1C725FA5
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 14:37:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B4AE725FA3
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 14:37:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240291AbjFGMhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 08:37:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46658 "EHLO
+        id S240975AbjFGMhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 08:37:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240817AbjFGMhK (ORCPT
+        with ESMTP id S240895AbjFGMhK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 7 Jun 2023 08:37:10 -0400
-Received: from frasgout11.his.huawei.com (unknown [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65E45E6B;
-        Wed,  7 Jun 2023 05:37:07 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4QbmmX19Rkz9xFQv;
-        Wed,  7 Jun 2023 20:26:36 +0800 (CST)
+Received: from frasgout13.his.huawei.com (unknown [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D01F173B;
+        Wed,  7 Jun 2023 05:37:09 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4Qbmmf4yRxz9y9xH;
+        Wed,  7 Jun 2023 20:26:42 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwCnJgLMeYBkSckaAw--.4176S6;
-        Wed, 07 Jun 2023 13:36:51 +0100 (CET)
+        by APP1 (Coremail) with SMTP id LxC2BwCnJgLMeYBkSckaAw--.4176S7;
+        Wed, 07 Jun 2023 13:36:55 +0100 (CET)
 From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
 To:     casey@schaufler-ca.com, paul@paul-moore.com, jmorris@namei.org,
         serge@hallyn.com
 Cc:     linux-kernel@vger.kernel.org,
         linux-security-module@vger.kernel.org,
         Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [RFC][PATCH 4/5] smack: Initialize the in-memory inode in smack_inode_init_security()
-Date:   Wed,  7 Jun 2023 14:36:11 +0200
-Message-Id: <20230607123612.2791303-5-roberto.sassu@huaweicloud.com>
+Subject: [RFC][PATCH 5/5] ramfs: Initialize security of in-memory inodes
+Date:   Wed,  7 Jun 2023 14:36:12 +0200
+Message-Id: <20230607123612.2791303-6-roberto.sassu@huaweicloud.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230607123612.2791303-1-roberto.sassu@huaweicloud.com>
 References: <20230607123612.2791303-1-roberto.sassu@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: LxC2BwCnJgLMeYBkSckaAw--.4176S6
-X-Coremail-Antispam: 1UD129KBjvJXoWxCry8WFWfGF4kAw18GFW5Awb_yoW5Zw1xpF
-        Zxt3W7KwnYyF97urW0yr47Ww1SkFWrKr4UGrZ8Jw17A3Zrtw1xKF1rXr45ZF15Xr4kZa1F
-        va1j9ry3WFn0y3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID: LxC2BwCnJgLMeYBkSckaAw--.4176S7
+X-Coremail-Antispam: 1UD129KBjvJXoW7WrWUKFWkXw13Jry5AF13Jwb_yoW8tF15pF
+        4Iqas8Grn5WFZrWr1SyFWUuw1ftayfKrsrJrs7uw17A3Z7Jr1Dtr4Syr13uFyrGrW8Gw1S
+        qF4Y9r45C3W7ArJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
         9KBjDU0xBIdaVrnRJUUUBab4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
         6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
         Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
@@ -52,11 +52,12 @@ X-Coremail-Antispam: 1UD129KBjvJXoWxCry8WFWfGF4kAw18GFW5Awb_yoW5Zw1xpF
         C0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwCI42IY
         6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aV
         CY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07j7GYLUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQABBF1jj45V3AAAsy
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgABBF1jj4pZzgAAsr
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        MAY_BE_FORGED,PDS_RDNS_DYNAMIC_FP,RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_L3,
+        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -65,77 +66,78 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Currently, Smack initializes in-memory new inodes in three steps. It first
-sets the xattrs in smack_inode_init_security(), fetches them in
-smack_d_instantiate() and finally, in the same function, sets the in-memory
-inodes depending on xattr values, unless they are in specially-handled
-filesystems.
+Add a call security_inode_init_security() after ramfs_get_inode(), to let
+LSMs initialize the inode security field. Skip ramfs_fill_super(), as the
+initialization is done through the sb_set_mnt_opts hook.
 
-Other than being inefficient, this also prevents filesystems not supporting
-xattrs from working properly since, without xattrs, there is no way to pass
-the label determined in smack_inode_init_security() to
-smack_d_instantiate().
+Calling security_inode_init_security() call inside ramfs_get_inode() is
+not possible since, for CONFIG_SHMEM=n, tmpfs also calls the former after
+the latter.
 
-Since the LSM infrastructure allows setting and getting the security field
-without xattrs through the inode_setsecurity and inode_getsecurity hooks,
-make the inode creation work too, by initializing the in-memory inode
-earlier in smack_inode_init_security().
-
-Also mark the inode as instantiated, to prevent smack_d_instantiate() from
-overwriting the security field. As mentioned above, this potentially has
-impact for inodes in specially-handled filesystems in
-smack_d_instantiate(), if they are not handled in the same way in
-smack_inode_init_security().
-
-Filesystems other than tmpfs don't call security_inode_init_security(), so
-they would be always initialized in smack_d_instantiate(), as before. For
-tmpfs, the current behavior is to assign to inodes the label '*', but
-actually that label is overwritten with the one fetched from the SMACK64
-xattr, set in smack_inode_init_security() (default: '_').
-
-Initializing the in-memory inode is straightforward: if not transmuting,
-nothing more needs to be done; if transmuting, overwrite the current inode
-label with the one from the parent directory, and set SMK_INODE_TRANSMUTE.
-Finally, set SMK_INODE_INSTANT for all cases, to mark the inode as
-instantiated.
+Pass NULL as initxattrs() callback to security_inode_init_security(), since
+the purpose of the call is only to initialize the in-memory inodes.
 
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
- security/smack/smack_lsm.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ fs/ramfs/inode.c | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
-index f7382448e12..1373c6d49ff 100644
---- a/security/smack/smack_lsm.c
-+++ b/security/smack/smack_lsm.c
-@@ -942,6 +942,7 @@ static int smack_inode_init_security(struct inode *inode, struct inode *dir,
- 				     struct xattr *xattrs, int *xattr_count)
+diff --git a/fs/ramfs/inode.c b/fs/ramfs/inode.c
+index 5ba580c7883..e6b5f04b2b2 100644
+--- a/fs/ramfs/inode.c
++++ b/fs/ramfs/inode.c
+@@ -102,6 +102,14 @@ ramfs_mknod(struct mnt_idmap *idmap, struct inode *dir,
+ 	int error = -ENOSPC;
+ 
+ 	if (inode) {
++		error = security_inode_init_security(inode, dir,
++						     &dentry->d_name, NULL,
++						     NULL);
++		if (error && error != -EOPNOTSUPP) {
++			iput(inode);
++			return error;
++		}
++
+ 		d_instantiate(dentry, inode);
+ 		dget(dentry);	/* Extra count - pin the dentry in core */
+ 		error = 0;
+@@ -134,6 +142,15 @@ static int ramfs_symlink(struct mnt_idmap *idmap, struct inode *dir,
+ 	inode = ramfs_get_inode(dir->i_sb, dir, S_IFLNK|S_IRWXUGO, 0);
+ 	if (inode) {
+ 		int l = strlen(symname)+1;
++
++		error = security_inode_init_security(inode, dir,
++						     &dentry->d_name, NULL,
++						     NULL);
++		if (error && error != -EOPNOTSUPP) {
++			iput(inode);
++			return error;
++		}
++
+ 		error = page_symlink(inode, symname, l);
+ 		if (!error) {
+ 			d_instantiate(dentry, inode);
+@@ -149,10 +166,20 @@ static int ramfs_tmpfile(struct mnt_idmap *idmap,
+ 			 struct inode *dir, struct file *file, umode_t mode)
  {
- 	struct task_smack *tsp = smack_cred(current_cred());
-+	struct inode_smack *issp = smack_inode(inode);
- 	struct smack_known *skp = smk_of_task(tsp);
- 	struct smack_known *isp = smk_of_inode(inode);
- 	struct smack_known *dsp = smk_of_inode(dir);
-@@ -977,7 +978,9 @@ static int smack_inode_init_security(struct inode *inode, struct inode *dir,
- 		 * smack_inode_alloc_security().
- 		 */
- 		if (tsp->smk_task != tsp->smk_transmuted)
--			isp = dsp;
-+			isp = issp->smk_inode = dsp;
-+
-+		issp->smk_flags |= SMK_INODE_TRANSMUTE;
+ 	struct inode *inode;
++	int error;
  
- 		xattr_transmute = lsm_get_xattr_slot(xattrs, xattr_count);
- 		if (xattr_transmute) {
-@@ -992,6 +995,8 @@ static int smack_inode_init_security(struct inode *inode, struct inode *dir,
- 		}
- 	}
- 
-+	issp->smk_flags |= SMK_INODE_INSTANT;
+ 	inode = ramfs_get_inode(dir->i_sb, dir, mode, 0);
+ 	if (!inode)
+ 		return -ENOSPC;
 +
- 	if (xattr) {
- 		xattr->value = kstrdup(isp->smk_known, GFP_NOFS);
- 		if (xattr->value == NULL)
++	error = security_inode_init_security(inode, dir,
++					     &file_dentry(file)->d_name, NULL,
++					     NULL);
++	if (error && error != -EOPNOTSUPP) {
++		iput(inode);
++		return error;
++	}
++
+ 	d_tmpfile(file, inode);
+ 	return finish_open_simple(file, 0);
+ }
 -- 
 2.25.1
 
