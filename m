@@ -2,101 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEA56725A6E
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 11:30:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EE00725A6F
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 11:30:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240006AbjFGJaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 05:30:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49062 "EHLO
+        id S240051AbjFGJaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 05:30:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240009AbjFGJ3v (ORCPT
+        with ESMTP id S240080AbjFGJaE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 05:29:51 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADB7C124
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 02:29:49 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-51494659d49so1109691a12.3
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 02:29:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google; t=1686130188; x=1688722188;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2BLecNjxkMJZi1ruU8F6LcBaR2Y9Qu96nuXiY0dXPmk=;
-        b=isP58o13oLsDF+FT8fOKygUY77IyyakLSsuA714GY1lg0P+CeKzRvWMTlV1kuFQo2n
-         BWgCyp2VsQ8jpwmfvC+c9wAaYbmtRXwiOT5k7UIsn8xjVJTEMSGFVXZrLOGx4sWely/y
-         MhvK7A6e8b9M43nFQ4jFXejGtheuR34J3JgfY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686130188; x=1688722188;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2BLecNjxkMJZi1ruU8F6LcBaR2Y9Qu96nuXiY0dXPmk=;
-        b=QT70p254T5YZRagzKeRv22KM/2LQAyVq9mZlNi/fFiNxF2IEAyfafytB4IvNEQB/0k
-         h2XRau1Slbu5ar/tyD9wg3h3utKbiIllcxvoI0J2VBn56aDrUzJadFJDdoYOaM2xrHRv
-         9Cf/IrQX3LjVxB6VigIF9VsmWgBZgse8N/XZ6ilDEphYc/oJUnltCWn/QTmSi/iVtBSu
-         Q5s7o1dchuLACB1j5pGMVDL8VAUxUwp/mebIm31RlIEQOX7fnA11dMperNeSypNDSuF/
-         d0oudD5ewHfvrTtTCzeh4aFBFWCfpM+xnoUlWJbDtI8ZeLWFAld4DpcP/2T2surczyQz
-         BF6w==
-X-Gm-Message-State: AC+VfDyKy29JC20DvYmVXJ/DeDcPmEimZO1ZbZKiMzmxsYlwHNrTLkiP
-        aazzk/1jvePN6NscpM+hoFjauziR7egnf88JuUfqlg==
-X-Google-Smtp-Source: ACHHUZ4RtZ8bbXfXPQLckp4Q6RLjZQVlrtyxd2G4isYyaOtvgQlLxX+BwNlbYVP/XvkkNne4dmBuvgtlrW/TnHr5DdE=
-X-Received: by 2002:a17:907:72d0:b0:94f:6218:191d with SMTP id
- du16-20020a17090772d000b0094f6218191dmr5673140ejc.32.1686130188072; Wed, 07
- Jun 2023 02:29:48 -0700 (PDT)
+        Wed, 7 Jun 2023 05:30:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 786E6AA;
+        Wed,  7 Jun 2023 02:30:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1334261549;
+        Wed,  7 Jun 2023 09:30:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDD7BC433EF;
+        Wed,  7 Jun 2023 09:30:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686130202;
+        bh=PMoboR6cDCTb92LA07ax+qaUKEEVVOPUJBaQR1KJASk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dYZGC0loXe6yWW4O1NSXLWR2/fDG3GfhrFUjmF8a7bYRG7Hw93UuO/I4LVmgxPn7S
+         feG+l4FI4fUPDlAtE9nooTzPqfN6DTXpW45mNO/2SKai8Wf5kl6YfltA8hhVFI+iiq
+         y0EQLvlEdcivimYIYf1RmT+7CI2pFAZXbOgdIuUuWXQfwnDLq2immQ5DhBEmupjmk9
+         N2WhrBAchLQcDG1tVYfXHHU8pRchnjL5tVA2uh5MK6+VpP5B1rq8N+LHbE4qbke5Jh
+         8de1ZTf8F7TPQxkiOlLs7nq1fdRYHvagOyNDeA/WdZQZiT8neEovB5vw1kx64Le5vb
+         PP3Sei5lwoY/g==
+Date:   Wed, 7 Jun 2023 11:29:59 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Andrew Davis <afd@ti.com>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] i2c: davinci: Use struct name not type with
+ devm_kzalloc()
+Message-ID: <ZIBOF181se8lzU+8@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>, Andrew Davis <afd@ti.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230515175042.495377-1-afd@ti.com>
+ <20230515175042.495377-2-afd@ti.com>
 MIME-Version: 1.0
-References: <CAPnZJGDWUT0D7cT_kWa6W9u8MHwhG8ZbGpn=uY4zYRWJkzZzjA@mail.gmail.com>
- <CAJfpeguZX5pF8-UNsSfJmMhpgeUFT5XyG_rDzMD-4pB+MjkhZA@mail.gmail.com>
- <5d69a11e-c64e-25dd-a982-fd4c935f2bf3@fastmail.fm> <CAJfpeguQ87Vxdn-+c4yYy7=hKnSYwWJNe22f-6dG8FNAwjWBXA@mail.gmail.com>
- <9f79a2b7-c3f4-9c42-e6f3-f3c77f75afa2@fastmail.fm>
-In-Reply-To: <9f79a2b7-c3f4-9c42-e6f3-f3c77f75afa2@fastmail.fm>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Wed, 7 Jun 2023 11:29:36 +0200
-Message-ID: <CAJfpeguXBpyr_3FV1u-VRA9ZSqmGKVWFWZsXPqB-Tqa_JAx=uw@mail.gmail.com>
-Subject: Re: [PATCH 0/6] vfs: provide automatic kernel freeze / resume
-To:     Bernd Schubert <bernd.schubert@fastmail.fm>
-Cc:     Askar Safin <safinaskar@gmail.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        fuse-devel <fuse-devel@lists.sourceforge.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="yHXXX5liZv5D9qih"
+Content-Disposition: inline
+In-Reply-To: <20230515175042.495377-2-afd@ti.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 7 Jun 2023 at 10:13, Bernd Schubert <bernd.schubert@fastmail.fm> wrote:
 
-> Assuming a fuse server process is not handing over requests to other
-> threads/forked-processes, isn't the main issue that all fuse server
-> tasks are frozen and none is left to take requests? A single non-frozen
-> thread should be sufficient for that?
+--yHXXX5liZv5D9qih
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This *might* work.  But there could be auxiliary threads, or the
-initial thread could be killed, etc.  It would not be reliable.
+On Mon, May 15, 2023 at 12:50:42PM -0500, Andrew Davis wrote:
+> This reduces chance of error if the type of "dev" changes. While here
+> remove extra error print out, this is not usually done for memory
+> allocation failures.
+>=20
+> Signed-off-by: Andrew Davis <afd@ti.com>
 
-> Ah, when all non flagged processes are frozen first no IO should come
-> in. Yeah, it mostly works, but I wonder if init/systemd is not going to
-> set that flag as well. And then you have an issue when fuse is on a file
-> system used by systemd. My long time ago initial interest on fuse is to
-> use fuse as root file system and I still do that for some cases - not
-> sure if a flag would be sufficient here. I think a freezing score would
-> solve more issues.
-> Although probably better to do step by step - flag first and score can
-> be added later.
+Applied to for-next, thanks!
 
-I'm not sure how systemd interacts with the freezing process.  If it
-does, then the only sane thing to do is to make sure it doesn't have
-any filesystem interaction during that time.
 
-Hibernation is a different matter, because it needs the filesystem to
-be in a working state while all userspace is frozen.  Hibernate to
-fuse would bring up a lot of interesting design questions.
+--yHXXX5liZv5D9qih
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Thanks,
-Miklos
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmSAThIACgkQFA3kzBSg
+Kbb0pg/8CRFjcIVwkXXd4Rgp/k/nu0sadutPB77XVcCJQ5sAPnwEExchc+R4lnnb
+7HBZkNYXU/2Rc/IdoAjOBxeVQdLlf+PIayuESQXk9M7Ak2zZwXTyW+Pn2cwYcHB5
+hb6bq+SPScmPHQCybcny6zeD4zZ6VLG5HDfSVOK4b2w6hbF/EKvbFWb50BS5ELhR
+DJlNGKPOTptTqBIL9RMzQtZq6KGWCxaC+xlqYw2aFyGfRUBbUNAltylXKz/YiqIc
+iek4nH9t8r02UdzvYBIOkj24AdFUgwQl/mp4++mYTwUXshXK5Cu2pKiJuI42YZuy
+MWqo1atpCwIi3zMw4kk331uiDaiLr4lC5oC2UQ+Q4WX+GNkwloLWHNGYQVwZqsUe
+h2Si9eO5Y+uyjfw7W5iHQyUstAAIUnJMmWuofIZKT1txlCZWNbYWxGGKMYERRfvt
+cvRAZx3nNi7UnWNkWtQVsMDBijKJgxj4lefQRXzaleLOKWOv/w3HoJZekJNnPgLo
+AqE4r1lE9pNpB1vVqyjV38JO5MulSDLqOsdDJedfp6BF32RLxjamwRi4750dVhuX
+yNHgW8qXw88oTIX8nHFwgVnDOoCA4Gew24VBSJz1fmeJx7vInu0TlRRu80Hv3dUh
+oQ8WTNP0f2+FBBjhM6V+gRGaGd0XodCNX2gPfd04pUTsrxNTrAM=
+=0OOy
+-----END PGP SIGNATURE-----
+
+--yHXXX5liZv5D9qih--
