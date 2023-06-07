@@ -2,49 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31F0B7251CB
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 03:52:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B5897251C9
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 03:52:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240612AbjFGBwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Jun 2023 21:52:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39446 "EHLO
+        id S240592AbjFGBwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Jun 2023 21:52:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240640AbjFGBvx (ORCPT
+        with ESMTP id S240632AbjFGBvv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Jun 2023 21:51:53 -0400
-Received: from m126.mail.126.com (m126.mail.126.com [220.181.12.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 703FA19AB;
-        Tue,  6 Jun 2023 18:50:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id; bh=rL1HLDDH3DxRNYdCLi
-        8SStgCPzr3ccNzmCjay25S1pI=; b=JhSJATmsxmhweNciXU4nx0M4bWnxbGMAPj
-        hnc3z+n2qnVCThplNvPr1AsL13BZ7yrgJm1bOMaFNJsE5M6CwLH2EN1CjHbXkRal
-        Uocr0fQJF7aKyXP4xtjXvnJ5OkzZekpuDFNNC4nvdTQkg4Nl8pwaIrQ3P86p+Ns0
-        9stvxSbqI=
-Received: from wh-chevronli-w10.bayhubtech.com (unknown [58.48.115.170])
-        by zwqz-smtp-mta-g1-1 (Coremail) with SMTP id _____wDnPj374X9k3iQtAw--.54119S3;
-        Wed, 07 Jun 2023 09:48:44 +0800 (CST)
-From:   Chevron Li <chevron_li@126.com>
-To:     adrian.hunter@intel.com, ulf.hansson@linaro.org,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     shaper.liu@bayhubtech.com, xiaoguang.yu@bayhubtech.com,
-        shirley.her@bayhubtech.com, chevron.li@bayhubtech.com
-Subject: [PATCH V1 2/2] mmc: sdhci-pci-o2micro: add Bayhub new chip GG8 support
-Date:   Wed,  7 Jun 2023 09:48:12 +0800
-Message-Id: <20230607014812.30104-2-chevron_li@126.com>
-X-Mailer: git-send-email 2.18.0.windows.1
-In-Reply-To: <20230607014812.30104-1-chevron_li@126.com>
-References: <20230607014812.30104-1-chevron_li@126.com>
-X-CM-TRANSID: _____wDnPj374X9k3iQtAw--.54119S3
-X-Coremail-Antispam: 1Uf129KBjvJXoWxGw47Jw4fJF1kCryUtw1rXrb_yoW5tFyfpF
-        4Fvas8Gr4rKFW3Z39xGw4vvr1S9r1vvrWqkF43Jw4Fvw1jkF4rWr97CFy5XryUXrZaqw1f
-        Xa1vqFyUGFyUAwUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UCjgcUUUUU=
-X-Originating-IP: [58.48.115.170]
-X-CM-SenderInfo: hfkh42xrqbzxa6rslhhfrp/1tbiFwCHAVpEGcH9fQAAsX
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        Tue, 6 Jun 2023 21:51:51 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F37A61BF3
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 18:50:42 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-565eb83efe4so87683127b3.0
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 18:50:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686102642; x=1688694642;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LPx7Ne3yd4lv/xb5FbWV+NGodWH250aFCWbyJxGGksw=;
+        b=KKQoy3VdsAFYGIsHGhIldfg5BDOBO0LwNN2Yk6JZI3rcxwiQumymRahtfFGUTz0bhG
+         X0SUy8JwmK3MIlTjwoh4MAYURrJidIW1EG7MdaeeRE2eB8DanlP8Qmpa5gkR207AtvJg
+         +j6zZXPePjXwXkBUmqJDFuo9US1Hdt1fwzzWAJLfM1gZilZbuaoyNwjXD0uwjkbZ7N05
+         fOtqpqznGrgZ5iKgGy4+zyfizWZ4ZLWtgntQpT+ndLrOOBbywLLz/FrYulAAb0xWPLul
+         JZh8Tevbn+ekGfMBrSgULv0mMdNsV5dVjB+XuRi6vJlVVZZ911uixECa67riBsbCOI53
+         /hTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686102642; x=1688694642;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LPx7Ne3yd4lv/xb5FbWV+NGodWH250aFCWbyJxGGksw=;
+        b=FRLRMYjuCXRSS/N3j7RsXzPIn733yxUSrBTTXa9Kud1/7oSerzqUBnuwiIxHXT7XRE
+         g3GmlP3oYyuYThG5dh9VlcmKaQDjN/2K1I26Jd4IWtO1VwV5WZBx7gCmbUcWhvX97FmJ
+         GSwcMfC4uBQz+qvCqyXQZj7Xf+691H30IQTvzPr0KgdOIxdyfBXbtwgX5vcHB3xF56ON
+         h/6tWHjjoIA5+b9VKK4TRcPn3dtbmf88W05+sjgUjdx8xZ3E/htDy/IMTrTlabgQ52OI
+         GVydyJVncWZ9uzbMitYI58Odj4zsdYMCTrD6KTn2FnDvl+4Le64SDmARSOCcne+3USw3
+         yM/g==
+X-Gm-Message-State: AC+VfDyrSR0rNGcEZ+uEnnY8qO7UGaYtASnWldlPJoX92W4kaxg6PFO5
+        +KWaSaNnmXkema3fXJZBLp4=
+X-Google-Smtp-Source: ACHHUZ4g4F297YV7GbnIWFS3xmGASHOSO39NOBNg5hjORyWt221e61r+aCDvb8BCEtrrr4CzSBu41w==
+X-Received: by 2002:a5b:6c4:0:b0:bb2:ff31:b376 with SMTP id r4-20020a5b06c4000000b00bb2ff31b376mr4442376ybq.17.1686102641732;
+        Tue, 06 Jun 2023 18:50:41 -0700 (PDT)
+Received: from localhost (dhcp-72-235-13-41.hawaiiantel.net. [72.235.13.41])
+        by smtp.gmail.com with ESMTPSA id q5-20020a170902788500b001aaf536b1e3sm9151176pll.123.2023.06.06.18.50.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Jun 2023 18:50:40 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 6 Jun 2023 15:50:39 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     K Prateek Nayak <kprateek.nayak@amd.com>
+Cc:     jiangshanlai@gmail.com, torvalds@linux-foundation.org,
+        peterz@infradead.org, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com, joshdon@google.com, brho@google.com,
+        briannorris@chromium.org, nhuck@google.com, agk@redhat.com,
+        snitzer@kernel.org, void@manifault.com
+Subject: Re: [PATCH 14/24] workqueue: Generalize unbound CPU pods
+Message-ID: <ZH_ib0TeWvzF9Kqg@slm.duckdns.org>
+References: <20230519001709.2563-1-tj@kernel.org>
+ <20230519001709.2563-15-tj@kernel.org>
+ <30625cdd-4d61-594b-8db9-6816b017dde3@amd.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <30625cdd-4d61-594b-8db9-6816b017dde3@amd.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,109 +79,191 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chevron Li <chevron.li@bayhubtech.com>
+Sorry about the delay. We moved last week and that ended up being a lot more
+disruptive than I expected.
 
-Add Bayhub new chip GG8 support for SD express card.
-This patch depends on patch 1/2.
+On Tue, May 30, 2023 at 01:36:13PM +0530, K Prateek Nayak wrote:
+> I ran into a NULL pointer dereferencing issue when trying to test a build
+> of the "affinity-scopes-v1" branch from your workqueue tree
+> (https://git.kernel.org/pub/scm/linux/kernel/git/tj/wq.git/?h=affinity-scopes-v1)
+> Inlining the splat, some debug details, and workaround I used below.
+...
+>     [    4.280321] BUG: kernel NULL pointer dereference, address: 0000000000000004
+...
+>     [    4.284172]  wq_update_pod+0x89/0x1e0
+>     [    4.284172]  workqueue_online_cpu+0x1fc/0x250
+>     [    4.284172]  cpuhp_invoke_callback+0x165/0x4b0
+>     [    4.284172]  cpuhp_thread_fun+0xc4/0x1b0
+>     [    4.284172]  smpboot_thread_fn+0xe7/0x1e0
+>     [    4.284172]  kthread+0xfb/0x130
+>     [    4.284172]  ret_from_fork+0x2c/0x50
+>     [    4.284172]  </TASK>
+>     [    4.284172] Modules linked in:
+>     [    4.284172] CR2: 0000000000000004
+>     [    4.284172] ---[ end trace 0000000000000000 ]---
+> 
+> I was basically hitting the following, seemingly impossible scenario in
+> wqattrs_pod_type():
+> 
+> --- a/kernel/workqueue.c
+> +++ b/kernel/workqueue.c
+> @@ -3825,8 +3825,10 @@ wqattrs_pod_type(const struct workqueue_attrs *attrs)
+>  {
+>         struct wq_pod_type *pt = &wq_pod_types[attrs->affn_scope];
+> 
+> -       if (likely(pt->nr_pods))
+> +       if (likely(pt->nr_pods)) {
+> +               BUG_ON(!pt->cpu_pod); /* No pods despite thinking we have? */
+>                 return pt;
+> +       }
+> 
+>         /*
+>          * Before workqueue_init_topology(), only SYSTEM is available which is
+> --
+> 
+> Logging the value of "attrs->affn_scope" when hitting the scenario gave
+> me "5" which corresponds to "WQ_AFFN_NR_TYPES". The kernel was reading a
+> value beyond the wq_pod_types[] bounds.
+> 
+> This value for "affn_scope" is only set in the above hunk and I got the
+> kernel to boot by making the following change:
+> 
+> --- a/kernel/workqueue.c
+> +++ b/kernel/workqueue.c
+> @@ -4069,7 +4071,7 @@ static struct worker_pool *get_unbound_pool(const struct workqueue_attrs *attrs)
+>         pool->node = node;
+> 
+>         /* clear wq-only attr fields. See 'struct workqueue_attrs' comments */
+> -       pool->attrs->affn_scope = WQ_AFFN_NR_TYPES;
+> +       pool->attrs->affn_scope = wq_affn_dfl;
+>         pool->attrs->localize = false;
+>         pool->attrs->ordered = false;
 
-Signed-off-by: Chevron Li <chevron.li@bayhubtech.com>
+I see. The code is a bit too subtle. wq_update_pod() is abusing dfl_pwq's
+attrs to access its wq_unbound_cpumask filtered cpumask but
+wqattrs_pod_type() now expects to (rightfully) get the attrs of the
+workqueue in question, not its dfl_pwq's.
+
+A proper fix follows. This goes right before
+0014-workqueue-Generalize-unbound-CPU-pods.patch. Some of the subsequent
+patches need to be updated. I'll post an updated patch series later.
+
+Thanks.
+
+From: Tejun Heo <tj@kernel.org>
+Subject: workqueue: Factor out actual cpumask calculation to reduce subtlety in wq_update_pod()
+
+For an unbound pool, multiple cpumasks are involved.
+
+U: The user-specified cpumask (may be filtered with cpu_possible_mask).
+
+A: The actual cpumask filtered by wq_unbound_cpumask. If the filtering
+   leaves no CPU, wq_unbound_cpumask is used.
+
+P: Per-pod subsets of #A.
+
+wq->attrs stores #U, wq->dfl_pwq->pool->attrs->cpumask #A, and
+wq->cpu_pwq[CPU]->pool->attrs->cpumask #P.
+
+wq_update_pod() is called to update per-pod pwq's during CPU hotplug. To
+calculate the new #P for each workqueue, it needs to call
+wq_calc_pod_cpumask() with @attrs that contains #A. Currently,
+wq_update_pod() achieves this by calling wq_calc_pod_cpumask() with
+wq->dfl_pwq->pool->attrs.
+
+This is rather fragile because we're calling wq_calc_pod_cpumask() with
+@attrs of a worker_pool rather than the workqueue's actual attrs when what
+we want to calculate is the workqueue's cpumask on the pod. While this works
+fine currently, future changes will add fields which are used differently
+between workqueues and worker_pools and this subtlety will bite us.
+
+This patch factors out #U -> #A calculation from apply_wqattrs_prepare()
+into wqattrs_actualize_cpumask and updates wq_update_pod() to copy
+wq->unbound_attrs and use the new helper to obtain #A freshly instead of
+abusing wq->dfl_pwq->pool_attrs.
+
+This shouldn't cause any behavior changes in the current code.
+
+Signed-off-by: Tejun Heo <tj@kernel.org>
+Reported-by: K Prateek Nayak <kprateek.nayak@amd.com>
+Reference: http://lkml.kernel.org/r/30625cdd-4d61-594b-8db9-6816b017dde3@amd.com
 ---
-Change in V1:
-1.Implement the SD express card callback routine.
-2.Add SD express card support for Bayhub GG8 chip.
----
- drivers/mmc/host/sdhci-pci-o2micro.c | 61 +++++++++++++++++++++++++++-
- 1 file changed, 60 insertions(+), 1 deletion(-)
+ kernel/workqueue.c |   43 ++++++++++++++++++++++++-------------------
+ 1 file changed, 24 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/mmc/host/sdhci-pci-o2micro.c b/drivers/mmc/host/sdhci-pci-o2micro.c
-index 8243a63b3c81..b2d8ddbb4095 100644
---- a/drivers/mmc/host/sdhci-pci-o2micro.c
-+++ b/drivers/mmc/host/sdhci-pci-o2micro.c
-@@ -21,6 +21,7 @@
-  * O2Micro device registers
-  */
- 
-+#define O2_SD_PCIE_SWITCH	0x54
- #define O2_SD_MISC_REG5		0x64
- #define O2_SD_LD0_CTRL		0x68
- #define O2_SD_DEV_CTRL		0x88
-@@ -631,6 +632,63 @@ static void sdhci_pci_o2_set_clock(struct sdhci_host *host, unsigned int clock)
- 	sdhci_o2_enable_clk(host, clk);
+--- a/kernel/workqueue.c
++++ b/kernel/workqueue.c
+@@ -3681,6 +3681,20 @@ static bool wqattrs_equal(const struct w
+ 	return true;
  }
  
-+static u8 sdhci_o2_sd_express_clkq_assert(struct sdhci_host *host)
++/* Update @attrs with actually available CPUs */
++static void wqattrs_actualize_cpumask(struct workqueue_attrs *attrs,
++				      const cpumask_t *unbound_cpumask)
 +{
-+	return sdhci_readb(host, O2_SD_EXP_INT_REG);
++	/*
++	 * Calculate the effective CPU mask of @attrs given @unbound_cpumask. If
++	 * @attrs->cpumask doesn't overlap with @unbound_cpumask, we fallback to
++	 * @unbound_cpumask.
++	 */
++	cpumask_and(attrs->cpumask, attrs->cpumask, unbound_cpumask);
++	if (unlikely(cpumask_empty(attrs->cpumask)))
++		cpumask_copy(attrs->cpumask, unbound_cpumask);
 +}
 +
-+static int sdhci_pci_o2_init_sd_express(struct mmc_host *mmc, struct mmc_ios *ios)
-+{
-+	struct sdhci_host *host = mmc_priv(mmc);
-+	struct sdhci_pci_slot *slot = sdhci_priv(host);
-+	struct sdhci_pci_chip *chip = slot->chip;
-+	u8 scratch8 = 0;
-+	u16 scratch16 = 0;
-+	bool ret = false;
+ /**
+  * init_worker_pool - initialize a newly zalloc'd worker_pool
+  * @pool: worker_pool to initialize
+@@ -4206,32 +4220,22 @@ apply_wqattrs_prepare(struct workqueue_s
+ 		goto out_free;
+ 
+ 	/*
+-	 * Calculate the attrs of the default pwq with unbound_cpumask
+-	 * which is wq_unbound_cpumask or to set to wq_unbound_cpumask.
+-	 * If the user configured cpumask doesn't overlap with the
+-	 * wq_unbound_cpumask, we fallback to the wq_unbound_cpumask.
+-	 */
+-	copy_workqueue_attrs(new_attrs, attrs);
+-	cpumask_and(new_attrs->cpumask, new_attrs->cpumask, unbound_cpumask);
+-	if (unlikely(cpumask_empty(new_attrs->cpumask)))
+-		cpumask_copy(new_attrs->cpumask, unbound_cpumask);
+-
+-	/*
+-	 * We may create multiple pwqs with differing cpumasks.  Make a
+-	 * copy of @new_attrs which will be modified and used to obtain
+-	 * pools.
+-	 */
+-	copy_workqueue_attrs(tmp_attrs, new_attrs);
+-
+-	/*
+ 	 * If something goes wrong during CPU up/down, we'll fall back to
+ 	 * the default pwq covering whole @attrs->cpumask.  Always create
+ 	 * it even if we don't use it immediately.
+ 	 */
++	copy_workqueue_attrs(new_attrs, attrs);
++	wqattrs_actualize_cpumask(new_attrs, unbound_cpumask);
+ 	ctx->dfl_pwq = alloc_unbound_pwq(wq, new_attrs);
+ 	if (!ctx->dfl_pwq)
+ 		goto out_free;
+ 
++	/*
++	 * We may create multiple pwqs with differing cpumasks. Make a copy of
++	 * @new_attrs which will be modified and used to obtain pools.
++	 */
++	copy_workqueue_attrs(tmp_attrs, new_attrs);
 +
-+	/* Disable clock */
-+	sdhci_writeb(host, 0, SDHCI_CLOCK_CONTROL);
-+
-+	/* Set VDD2 voltage*/
-+	scratch8 = sdhci_readb(host, SDHCI_POWER_CONTROL);
-+	scratch8 &= 0x0F;
-+	if ((host->mmc->ios.timing == MMC_TIMING_SD_EXP_1_2V) &&
-+		(host->mmc->caps2 & MMC_CAP2_SD_EXP_1_2V)) {
-+		scratch8 |= BIT(4) | BIT(7);
-+	} else
-+		scratch8 |= BIT(4) | BIT(5) | BIT(7);
-+	sdhci_writeb(host, scratch8, SDHCI_POWER_CONTROL);
-+
-+	/* UnLock WP */
-+	pci_read_config_byte(chip->pdev, O2_SD_LOCK_WP, &scratch8);
-+	scratch8 &= 0x7f;
-+	pci_write_config_byte(chip->pdev, O2_SD_LOCK_WP, scratch8);
-+
-+	ret = readx_poll_timeout(sdhci_o2_sd_express_clkq_assert, host,
-+		scratch8, !(scratch8 & BIT(0)), 1, 30000) == 0 ? 0 : 1;
-+
-+	if (!ret) {
-+		/* switch to PCIe mode */
-+		scratch16 = sdhci_readw(host, O2_SD_PCIE_SWITCH);
-+		scratch16 |= BIT(8);
-+		sdhci_writew(host, scratch16, O2_SD_PCIE_SWITCH);
-+	} else {
-+		/* keep mode as USHI */
-+		pci_read_config_word(chip->pdev,
-+						O2_SD_PARA_SET_REG1, &scratch16);
-+		scratch16 &= ~BIT(11);
-+		pci_write_config_word(chip->pdev,
-+						O2_SD_PARA_SET_REG1, scratch16);
-+	}
-+	/* Lock WP */
-+	pci_read_config_byte(chip->pdev,
-+					O2_SD_LOCK_WP, &scratch8);
-+	scratch8 |= 0x80;
-+	pci_write_config_byte(chip->pdev, O2_SD_LOCK_WP, scratch8);
-+
-+	return ret;
-+}
-+
- static int sdhci_pci_o2_probe_slot(struct sdhci_pci_slot *slot)
- {
- 	struct sdhci_pci_chip *chip;
-@@ -703,10 +761,11 @@ static int sdhci_pci_o2_probe_slot(struct sdhci_pci_slot *slot)
- 	case PCI_DEVICE_ID_O2_GG8_9861:
- 	case PCI_DEVICE_ID_O2_GG8_9862:
- 	case PCI_DEVICE_ID_O2_GG8_9863:
--		host->mmc->caps2 |= MMC_CAP2_NO_SDIO;
-+		host->mmc->caps2 |= MMC_CAP2_NO_SDIO | MMC_CAP2_SD_EXP | MMC_CAP2_SD_EXP_1_2V;
- 		host->mmc->caps |= MMC_CAP_HW_RESET;
- 		host->quirks2 |= SDHCI_QUIRK2_PRESET_VALUE_BROKEN;
- 		slot->host->mmc_host_ops.get_cd = sdhci_o2_get_cd;
-+		host->mmc_host_ops.init_sd_express = sdhci_pci_o2_init_sd_express;
- 		break;
- 	default:
- 		break;
--- 
-2.25.1
-
+ 	for_each_possible_cpu(cpu) {
+ 		if (new_attrs->ordered) {
+ 			ctx->dfl_pwq->refcnt++;
+@@ -4398,9 +4402,10 @@ static void wq_update_pod(struct workque
+ 	cpumask = target_attrs->cpumask;
+ 
+ 	copy_workqueue_attrs(target_attrs, wq->unbound_attrs);
++	wqattrs_actualize_cpumask(target_attrs, wq_unbound_cpumask);
+ 
+ 	/* nothing to do if the target cpumask matches the current pwq */
+-	wq_calc_pod_cpumask(wq->dfl_pwq->pool->attrs, pod, cpu_off, cpumask);
++	wq_calc_pod_cpumask(target_attrs, pod, cpu_off, cpumask);
+ 	pwq = rcu_dereference_protected(*per_cpu_ptr(wq->cpu_pwq, cpu),
+ 					lockdep_is_held(&wq_pool_mutex));
+ 	if (cpumask_equal(cpumask, pwq->pool->attrs->cpumask))
