@@ -2,215 +2,288 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD9357272DF
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 01:22:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D94377272EB
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 01:26:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232912AbjFGXWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 19:22:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38970 "EHLO
+        id S233041AbjFGX02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 19:26:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbjFGXW2 (ORCPT
+        with ESMTP id S232984AbjFGX0Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 19:22:28 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77AC12109;
-        Wed,  7 Jun 2023 16:22:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686180147; x=1717716147;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=u17I1q3CeaEOTUpP30yLvuoGOYahdkc7pqIIkexxTpM=;
-  b=WGMrrf6kVh7vZhtGuVN3SbGy8M4jJr9c5RmqYdgg1hJT+JsHy2H9bec/
-   hexf5VCtVBwKQpkwTmkUvLr4no8NR3r1W81AGxGKDaR4UWv/RR+bCOvZh
-   ggWLK7N00eTkKixhs+uBwFuq9XrPCBAIf2Jh3/aK2YReznCJ2IBJsSlBW
-   W4lHXRZsgQ+smn7XPIff/PpLqS2RecM09Spw9XE/KqHqSOt5Bqw8qY9B5
-   RtPHpQGdwafGhYjlKUmhHq2/BnTC2XTgNmVIPzzPWf7WizSGLlfKqgJxa
-   8O0jSdcyScV2cYt2a4smrvLtcLguwMoc8egdRPyEPZOdlhHJIwnW3LuHZ
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="341792556"
-X-IronPort-AV: E=Sophos;i="6.00,225,1681196400"; 
-   d="scan'208";a="341792556"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 16:22:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="956476720"
-X-IronPort-AV: E=Sophos;i="6.00,225,1681196400"; 
-   d="scan'208";a="956476720"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by fmsmga006.fm.intel.com with ESMTP; 07 Jun 2023 16:22:26 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 7 Jun 2023 16:22:26 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 7 Jun 2023 16:22:25 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Wed, 7 Jun 2023 16:22:25 -0700
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (104.47.73.45) by
- edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Wed, 7 Jun 2023 16:22:25 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cDeYRvoZt5pTWr7zdhuLhFBKZt3gVQeBVEq1HiBQfpDEkaqHubB7BG+Q+2OeHyjTfdjwFI/EyIS/BeKmipx+zkWWuO7NS87i3HunN1U03ccprXubzLQQYUzxus4IJP4K/rLP3ifB4yI1y4oCTNRtskuWowFfS/vkPdW6TDiA7qQOuwg/xB389qUOhL5kWUvceyMxUHheIcPYdGlPjH3SJZXP4x7xiLoNtdqEBSbPq3cS77w1WgE3MgH0mqCqpykKcl7irvUoaPmqeoyfcn2LUriFxfV7CEinFX80b+kR1m6Jkphq6BD7e8j7o1gL/FdDCvW/Qa11hQOMq2oOqOctJQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=u17I1q3CeaEOTUpP30yLvuoGOYahdkc7pqIIkexxTpM=;
- b=MADdaz15qPsZoNrYbnHu6PsICQg38IcUyHHAciEvppkHILw6E0jUqtQsfwtqOTAMFbMmVPKfw+4D8XH5cdhKpiw5WAQxUi4tslvt6vWdMhISRI12npgGKrtYTMv+mwggz3GnBQp6oavC/Nnx4I4FfrNeyJJW/KyjLZ9tCWZKgfsUMl9jYmRUR1rOmVBsdWBRizrGNwb5ZO0cOS5cunQC96yeBURmqQ32aZKoVn+ZZugxu7MZPSBaAsQHf8dPnZbaDj9joqsIFzcw5Zh6x+uVg8JoqVNA7N73TMe5anZTp9IkJt8yCTG9Rw7q1s5mDi7tswX7tv5ktXa68LhZFPK9GA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
- by DS0PR11MB7831.namprd11.prod.outlook.com (2603:10b6:8:de::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.19; Wed, 7 Jun
- 2023 23:22:21 +0000
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::19b7:466f:32ac:b764]) by BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::19b7:466f:32ac:b764%3]) with mapi id 15.20.6455.030; Wed, 7 Jun 2023
- 23:22:21 +0000
-From:   "Huang, Kai" <kai.huang@intel.com>
-To:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "Luck, Tony" <tony.luck@intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "imammedo@redhat.com" <imammedo@redhat.com>,
-        "Gao, Chao" <chao.gao@intel.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>
-Subject: Re: [PATCH v11 09/20] x86/virt/tdx: Use all system memory when
- initializing TDX module as TDX memory
-Thread-Topic: [PATCH v11 09/20] x86/virt/tdx: Use all system memory when
- initializing TDX module as TDX memory
-Thread-Index: AQHZlu+vpFsQWL0JukCYZOxCt4kBRq9/gQOAgAB+6YA=
-Date:   Wed, 7 Jun 2023 23:22:20 +0000
-Message-ID: <85a73d9b48e385389479f3e9e2d29ceca611e6f9.camel@intel.com>
-References: <cover.1685887183.git.kai.huang@intel.com>
-         <468533166590ff5ed11730350c4af8cdb0b99165.1685887183.git.kai.huang@intel.com>
-         <97b239b4-7d0d-e5e9-43f5-b9c26d6cd846@intel.com>
-In-Reply-To: <97b239b4-7d0d-e5e9-43f5-b9c26d6cd846@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.48.2 (3.48.2-1.fc38) 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BL1PR11MB5978:EE_|DS0PR11MB7831:EE_
-x-ms-office365-filtering-correlation-id: 02e9f36d-f5d5-4394-2bb8-08db67ae0ab3
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: VCYHMYnsSKmYf7tG8MDCpbmQBY+IslFMSumqQVAU3XToOMOyM9kaaLFPWgfa50Q1PIbIiJDigoqNe4q/4Ohl0S/XDnsN4yxFUb8iVbHHZhS2y/A4QivkSHFUIsNBTvGAgKzJ4nPGHInU+WUgUBzsiOYsRPI7vnvDiX4ETl97tM74z+h8HQxMLvbeZChgC8XrZCDTcW4F9eNRMH1AEgzx/Tehj5G+wbR3IijNRaCXLf1aggSVTZAnZHbpRlVX72W9A8GGHhQuyD6tOX4eJAsJrngEghpTPWnaXb7DBRjYd4PtnG3MouDSyZ5Sl3Hb34fmRJyey+QNMcD21NjwUW9l7FlUvKPhSe5H+6RtotbITGngra10Pcha0sA8Z1WDYSUaxvgaO9awwTyWCoPalsf/Y3LSqY/E5JONGD2j1PNWpXibVjHx8bywkXnjYDi1b0G1wM2QJ8jQutERM9wYAB2/r73OmTwCLe/RVFeTYhRYOshlBWxcv0HRISJ4XOWzZC3dGLhbrkY6fJYfOkmhDoXlWAPWD7HstWqsJJlosxN4M7zBcBHOWJ5MQtTJ5kFPb3/2BEIUffSdNMX/o1q2TjAHQ8eqlxbrZh/qL2J4ATkOwU4=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(366004)(136003)(376002)(396003)(39860400002)(451199021)(36756003)(5660300002)(478600001)(38070700005)(54906003)(110136005)(8936002)(71200400001)(8676002)(316002)(76116006)(4326008)(122000001)(66476007)(66446008)(66556008)(64756008)(41300700001)(66946007)(91956017)(38100700002)(2906002)(7416002)(82960400001)(26005)(6506007)(6512007)(53546011)(86362001)(186003)(2616005)(966005)(6486002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?KytUUVZjYnZyWklTd1cvZGdGL21uS2praTh1ZzdZRFY4NUxvOXM5MzNWVE5p?=
- =?utf-8?B?QTZoSXByclhHYkcvNnZTSEllRm5vMmRzOXd1bFFudzZHSUZUQXg0cHF1WUJZ?=
- =?utf-8?B?bHRPc29tMEtkd2Ftc1VLcnRYWHRnaDFlYmZMYXdiM0RFQzlzZXJhRHVFZFRh?=
- =?utf-8?B?N0lMOVFjMFJITFBmRDY4SHBSa2g3UDJOYkVjL0Y0SVJSSk5DT1hpZ1pHVy9a?=
- =?utf-8?B?YjJQNmx5ald6MFNIaFZVR0Fkeno2aTRkaVB6NGVKQ2Z5SUdMUWRPR29nOXJQ?=
- =?utf-8?B?dTl6SWlHTHJzby9XbzlhWlBXKzcwN1pzNTFKRW9ySEZOQ1doTW1WNS91ZEZx?=
- =?utf-8?B?c3g3Qkp2YkdzR1hjMENpbXFjR2UvMng4Y2toT0FRNmRlSzRzY3VlTnBSK0RF?=
- =?utf-8?B?UGpzcHpqamlXWTRzR2JPS1E0dktvUVZqcER4TEhiVXJpZFZTdlJDZ2JkQnlJ?=
- =?utf-8?B?YTZTWjVjVTdRdG91Y0JVMVBmQ3ZjcVNKTnkyZFY0ci9IWDU4Q1M4MVIremty?=
- =?utf-8?B?VFRTeHJ5K2h0QllKWWJoeE1VTXNOUnhmQmVoUGFCOHFWcWthSnVBeWhDREYz?=
- =?utf-8?B?eUkxWEQ0elN1T2ZaT2dESGhtYWhFV21lVXg5dlIrM0NyVUFnYmFQRHYvQmxv?=
- =?utf-8?B?aGFlSDZrdkEvRDZxakdQWVgvQWdpLzJDQUs0THJnLzR4b3hqc09RcEZObFBK?=
- =?utf-8?B?d2Y5VTI4U1NZY2ZxaFFjaERYZDdIWDlOUUhpQ20wRk9wNUNGRHkxSXN1VUox?=
- =?utf-8?B?RU9ab09rbDFpZFBxYlI1WG5YeTB3dUp6VjhFNDBjNFRoSjYyY3Zvbjd5R1Vv?=
- =?utf-8?B?MXYwMXJXODlBZ1BUM3lCdzBPSDJPVHZOTFp2eW5GYzYyU3lrYXMwMGpJZkd3?=
- =?utf-8?B?WXlIbWdIZWllZ0N1VGVHbmRhR0twUlloaEFhQXJhTFNDSzVhTzJyR0dOYXUw?=
- =?utf-8?B?Nllibm1RSzR2cGE0cWhnbGh1NzF5VDZxR2l6MEJkQyt2d2FucFluOXl4N0RS?=
- =?utf-8?B?SnUrRVpCcUU5VnptYUcrZ2Fid0xHcFRoQTg2c25VT1g4U293SHl5eVlQbEdx?=
- =?utf-8?B?WFpEQnFwY2d1bjhvc1RDUGVHbVYwRFpvd2x0TkZtdEh1dFhtcFRiaWQxaE51?=
- =?utf-8?B?cUFTNDF3eS83SHhxazVSeTVjakZzclBZcjBRSW1mVkVsTW50SThpc0hoK0U5?=
- =?utf-8?B?d0xXQmVlSGtTczIwdFBBZFRBTWV4eEVqTmUzclJNcHdBblhNQVA3dk1zbDB6?=
- =?utf-8?B?VktQdTF6a2dWc0hFYm5LN1Z4U3lVbjlQSVpjSTdGRDdkRG9yTkJmTzNJa3FX?=
- =?utf-8?B?YXNISzIzbUZqc3R0YU92RlpaTDJkOUZVN003bmpjS0FQWDd5RHhCMjlmRlZm?=
- =?utf-8?B?WU1ncmNyakhabUFLQXZPRGxJeG9ZUUQ3MnAxUy9EeFRuNFd5ODVGOVp2YnZ2?=
- =?utf-8?B?RDJMaFBYNEhNck1DclJ4K0JGdlFOWjlkRStrdnpwUGZJaGczRk5yZDFnSGFR?=
- =?utf-8?B?OUc4UVZmdTVFZ3RFQTNuTnduR1RvQzQ5RTdzWUl6VDdTTzJoOUVnOWk2b2Uz?=
- =?utf-8?B?TUd3T3hRcHdNMFlwQmFWZ0llKzFwc0JzemRzNlVubzN0WlgvM0NpRXVOdGtq?=
- =?utf-8?B?Tk41bHprWm10dHNoWFJCcHViRHRkbTluTnhCZFJCNjcyVmdrZlIyRkVVSVp1?=
- =?utf-8?B?OTY3MUJ0aWkzNWdZSUFyUE9tVG5nOUJRTEZYV3dJSU1lQWsxcDFlNEZiSEsz?=
- =?utf-8?B?RHRDR01ML3FqU3g0KzJ1Vm11aElWUVRNOXZTYTlMMVUxdTVrQkJOSG44NXZj?=
- =?utf-8?B?a0g5YVhpZ0hXdGVqUGZDdmF4dmx1aGp5M3VLY0NDZmRKTjlXMlkyLzN6cnBW?=
- =?utf-8?B?RUlGMmtlNVN3RHBOL1Fqc0hkSlBBUitsNk9kdzZwMUxPUEY1WEVDcjNkcU9O?=
- =?utf-8?B?YlhDcnZ1cGlPYWJqTHpOVTdzV0JMdUlzMXJQcUY4Qjd5aHFRNkp4WjZOd3N2?=
- =?utf-8?B?bm96cyt3YkVNbFhValJvOWVSa1lqd09henYwRXdPWmVVUEsxNmYza01wZDVE?=
- =?utf-8?B?VUl1UzZNT0pyWk5yeExnNDFENVVaSDZHYmp4b0diN3dWaTBQU290MnNjKzlm?=
- =?utf-8?Q?7eVRo8Mvf7TJ8W6ORYyLjtqDX?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <9452A33AA2273547B4091401F06EFDCB@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Wed, 7 Jun 2023 19:26:25 -0400
+Received: from sonic313-15.consmr.mail.ne1.yahoo.com (sonic313-15.consmr.mail.ne1.yahoo.com [66.163.185.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAD86212E
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 16:26:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1686180382; bh=58+OuVBGiwtTJ7F0rUcvXahP+dPB+lPXSghR/JOMQMk=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=GyYa26gbfmfLEYAW/IllP7QoIzdsuPMNS07RjUO4ly5qW+iorM1VJHN5QSf+cbzHxj/sCC9HOEQKQTUWqURwxGeyXzYQgtK0gONeIIdIFS+DvbeA3qNN9SvBF5EkT2xSDlXqK7s6ke5el978j7DHXg1XgSJHsmlIpnAhgmMykqqz0t4vvtUQnYsire/X3fugxnIioX2d1qChcARqpt3FtQ8MZ+ML0xDzlJ2aN1QXFf9kc5mxoYSbQmegySvO4ujOpVh7NLzmXJ02Ar5hhlCQBxNePOQKy2/GJyANLhrJRJvs3kJJ4aZgoYBGC4ixCpcAdgdRUyJH1jRkZVw3jq5jXQ==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1686180382; bh=yaOeF+/Ktx3bC/EH2m2ouMRRG2bAxJ5nzK6RPpk0Ckv=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=Zh2y0JyLkUfrlSXeQCMUxB98lb9y9mdmmUQatSciH6GvBbTgdd2YKs6plqPN88VT+JGxl0b8yRxzcGpUBAeGHK2AQJpDWfxvpjH3M7s0rKxSJNhBWF+3WeIQ2OL3uUJsy2ASr2YOYMsINSQK03/jsMDbQnlbanhSdVumeJT+6CtiD8P8EfxcWgFS/vvPQAqWNS9mPmIZfYjNGRoTyN5e6ATjdPuHKpaHyeaeHMEMGrtE5kdTALctKLacrRq2GLOR9qcrYqPEtjycXO3X04JYKh4KHf9hT+5f+Cce16q39bypjLmP9Th7YkHhJjtG/5jLfwP8kqPiE2VAZV8iyzz5xQ==
+X-YMail-OSG: V5gBNFUVM1lVYHsUBze84NItyB9mdHskGnLvW9ywe86H.Ml4F3CcJKFHU7X9xfC
+ MAVXCjApcg0jURNyY4PCTR0IpfKQCTcE2.UI1VsyVbzbdomud5Z378TD7782cvs2sAxM.0lwUbaO
+ 1Pxg7xAM8_P.Eg9cjXNP2yQH3AEfZLHCP12t7reCNtsbWZPciGLUkp57Y_5QXsFrdr7yuznySovY
+ qouqLz9Ttkppg.sBnDi.PmtCXKFkZrJOUI8KjlgCCOPG.JVXtd67LLmdSMx9XB9qR1lAmA5bVV_l
+ Q_gmmwK8IbDAlxA_dKm23TWsZC13kz0TNDqv_UqxHIp_X7mO4yVjt58L2K7uF1JRjFkj5.d7wSaP
+ 3dg4VXQnmF9RQKSSJW868d4gJpVSMQeM09rK2Nn2nNpNHQ9HsTurqss9eI881YckaYkgUmkglV8g
+ .r2sRXmKlzxVaxQNUK9eCS_nFc13Hciln8MRIYZmFpE0D7h4CG7_7A14XHisVLRsIMoEDGAAXYTi
+ NTb45lDVHijGhPPlM4CQ8wYlakb50vGPrzJTbItMVh4b2rSWGQ3xjVZcNyxAyHjzymsqTooyFH3c
+ yI3TYwUfXEgjkLnxIBIrD.uL847vICIWjtt1oz.mbPaOV.Bw2qUDf7FeBlrhb50j7AWYMuWaJkiH
+ THMCaA5L76fMGoT9n8YTVWmjQTPRk9o2fvw4J2heLQd015lF6MhmTeA11MRVsN6LeVi8SxTtQ1hc
+ y7fCXypA8d5zw94rePJGb9T8pAOVDHP4pLAYo5YJ79eG.kNmAJ0TbCjY1mTO6GjcKqm22IMxOiIp
+ a9JdtfekQ7XhClieBYhl1fJjhkSk_x.nRz1nlDHANC6bP5DyQ7HlBukr_oKr_wlDhCPGNgP6dASd
+ _dvfqjVS1AzGh6si2G4SYr5eEWqg9QnegY2YX9T55piCq6ZR3Gp4UvGQfqQAng9bf4M5nADnEACx
+ t7D7jsD8MRg9jw_CcZHFr0pupKSw0lf87fYxYvanqdsjJfmftDbnJb82B_ZajO61v4EdQU0JoiZj
+ TaJMK5RsWWIAOOmk6MY3_yesHE8HTGzPlPyMbw2XoamkeK63f9T4oTWGshFzT0Z0vA79t5Oi3SU5
+ M6gxe.KOiutiUQ3yWOnzGN7ljrX3VcmJQ.UOMFw0n09CY5IyviLBLXbwNSbsGEWApqz9.2ax3D1_
+ fqiSKLqy08VGQq7m6XqMvJaMkWZu82BndpRP82OX7fhxx5C4uaTZvaQa.RlwK_I9kd3hjNs1teXt
+ gs9DQQ_XXWHsqXHyyX5LMbzX60qLZOciy_UYfN4Q_RyrN1BEGRQ3WXudycdxAr3t9UI7ci6sZPY2
+ p5N9YQxj3dyEKq4apRl.v2SbhNnFEvn_0Km2jlL9vGZOB7.DKGafQyhAdar3Phxj3VyxJV0YEmCk
+ 8i2G0LNIflaB.WttimvnpMdi.W7HibwcJss3cRiJOV1rwcSoP_Q58HDO6VRFgnps5vx4fEYa10g0
+ mBIPFre98i76fEMs6qMgHJiiB_7WkY8ejo2A49iyWCKR4EHMlx9qtJ_wGloAOE6EG65UTw6Ez35V
+ pH6Y6UOOEctuIF1_x.8DHJIe269DTSCHHRprWqQPCIFNfvWpiK_GVGjEPn8dkKf0999ksNHQQX6W
+ TDMwwezq8rXfmHduu9rGtjm.jpDaCA8X_omnB3919zEgUjqpCgJwO1tmdpGxVJ769WIUSCpfJnOU
+ joeiwHb_Cy7t.hmWYcgxr2QdBn6BmU8IZCyKC27vuvce6aKI1F7_7MHT4qnEg2189zHISLzfbsHH
+ AQA.fEIMtN9tN9oVvBj88ZYjFHc49EcjHc.Jde3RUIdbQEzPmBKGkpsrcAkFbMaRK7tcfEv7lkGL
+ L6nqyOcioVqlajrAHJRKX_V83R1XZ8qYnRMLhfKSvCmzsrDUYmywYbjADGs53HbGdz6zDGMV_q.e
+ KTESSneY1C_YkdPHucoyIU7Ejho7aPQ2bCL0_3G4Pfc8UiCbolaAoxrZgMAUxb15nUv83fySfKyf
+ sS6K9AyethHLbtf2RcRue7en8leJdgAE3lrnBwrz4Vx0YGD4OE0Z.a3_2YekK9..n04zk_o14K7f
+ 715fj13Pacvbw.sV2W.QKk2irAGWeDogg_JCWMwhDm99wdkhYe8uAoKpgkJMf5Q2dc2rOqtgv.mN
+ Pxi_pjx3CskfvDiBxPk1ynWPnbHx9ndjRHb_fjxvCkpaQkwS6j2aZJCHchs4Sqb7tR4vn8PVPXn7
+ Fvx_W_Xy2KpjLcMsqYeSrtFdOFv.tNg7u1gtsXpu1h3JHwd7Y7wfEMaMojeRaeNfcKjYZ.x54.cb
+ NVu6UfYKBVw--
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: 29693f2b-bcc3-483c-9f56-9e08dd086dc5
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic313.consmr.mail.ne1.yahoo.com with HTTP; Wed, 7 Jun 2023 23:26:22 +0000
+Received: by hermes--production-ne1-574d4b7954-wtfnl (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID ca6bf50bc6b7ef6d3ef9b0aa6c9b35aa;
+          Wed, 07 Jun 2023 23:26:19 +0000 (UTC)
+Message-ID: <c00759ec-52a9-2fb7-e7b7-683257a5c25b@schaufler-ca.com>
+Date:   Wed, 7 Jun 2023 16:26:18 -0700
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 02e9f36d-f5d5-4394-2bb8-08db67ae0ab3
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jun 2023 23:22:20.4107
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: wzLtRVwQELoTBdwuTAQrU/wRMhEka6a3Res1nlQX38O0K+9qAYtAU9/sjoO8UIlQJVj012eaMzttNECY01I7zg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB7831
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v10 4/11] LSM: syscalls for current process attributes
+Content-Language: en-US
+To:     Paul Moore <paul@paul-moore.com>,
+        linux-security-module@vger.kernel.org
+Cc:     jmorris@namei.org, keescook@chromium.org,
+        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
+        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org, mic@digikod.net,
+        Casey Schaufler <casey@schaufler-ca.com>
+References: <20230428203417.159874-5-casey@schaufler-ca.com>
+ <76f37cf7b20b8c63cf78d4ddca5a7375.paul@paul-moore.com>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <76f37cf7b20b8c63cf78d4ddca5a7375.paul@paul-moore.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.21516 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gV2VkLCAyMDIzLTA2LTA3IGF0IDA4OjQ4IC0wNzAwLCBEYXZlIEhhbnNlbiB3cm90ZToNCj4g
-T24gNi80LzIzIDA3OjI3LCBLYWkgSHVhbmcgd3JvdGU6DQo+ID4gQXMgYSBzdGVwIG9mIGluaXRp
-YWxpemluZyB0aGUgVERYIG1vZHVsZSwgdGhlIGtlcm5lbCBuZWVkcyB0byB0ZWxsIHRoZQ0KPiA+
-IFREWCBtb2R1bGUgd2hpY2ggbWVtb3J5IHJlZ2lvbnMgY2FuIGJlIHVzZWQgYnkgdGhlIFREWCBt
-b2R1bGUgYXMgVERYDQo+ID4gZ3Vlc3QgbWVtb3J5Lg0KPiAuLi4NCj4gPiBTaWduZWQtb2ZmLWJ5
-OiBLYWkgSHVhbmcgPGthaS5odWFuZ0BpbnRlbC5jb20+DQo+ID4gUmV2aWV3ZWQtYnk6ICJIdWFu
-ZywgWWluZyIgPHlpbmcuaHVhbmdAaW50ZWwuY29tPg0KPiA+IFJldmlld2VkLWJ5OiBJc2FrdSBZ
-YW1haGF0YSA8aXNha3UueWFtYWhhdGFAaW50ZWwuY29tPg0KPiANCj4gVGhpcyBpcyByYXRoZXIg
-c2hvcnQgb24gcmV2aWV3cyBmcm9tIGZvbGtzIHdobyBkbyBhIGxvdCBvZiBtZW1vcnkNCj4gaG90
-cGx1ZyB3b3JrLiAgUGFydGx5IGJlY2F1c2UgSSBkb24ndCBzZWUgYW55IG9mIHRoZW0gY2MnZC4N
-Cg0KRGF2aWQgYW5kIEtpcmlsbCBhcmUgQ2MnZWQgOikgbGludXgtbW0gbGlzdCBpcyBDYydlZCB0
-b28uDQoNCj4gDQo+IENhbiB5b3Ugd3JhbmdsZSBzb21lIG1tIHJldmlld3Mgb24gdGhpcywgcGxl
-YXNlPw0KDQpZZXMgaW4gdjggSSBmb2xsb3dlZCB5b3VyIHN1Z2dlc3Rpb24gdG8gYXNrIENjIE1N
-IHBlb3BsZSAoRGF2aWQvT3NjYXIvQW5kcmV3KSB0bw0KdGFrZSBhIGxvb2ssIGFuZCBEYXZpZCBz
-YWlkIGl0IGxvb2tlZCBnb29kIHRvIGhpbS4NCg0KaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvbGtt
-bC9jb3Zlci4xNjcwNTY2ODYxLmdpdC5rYWkuaHVhbmdAaW50ZWwuY29tL1QvI21mZmI5NzhkMTU3
-Yzk5ZGE1OThkNjM1NGQ1NTY1MDk1MmM0MjVjNmZkDQoNCkkgdGhlbiByZW1vdmVkIE9zY2FyIGFu
-ZCBBbmRyZXcgZnJvbSBDYyBsaXN0IHNpbmNlIHRoaXMgcGF0Y2ggZG9lc24ndCB0b3VjaA0KY29y
-ZS1NTSBtZW1vcnkgaG90cGx1ZyBidXQgb25seSB1c2VzIG1lbW9yeSBub3RpZmllci4NCg0KSSds
-bCBhc2sgS2lyaWxsIHRvIGhlbHAgdG8gcmV2aWV3Lg0KDQpIaSBEYXZpZCwNCg0KSSBhcHByZWNp
-YXRlIGlmIHlvdSBjb3VsZCBnaXZlIHlvdXIgQWNrZWQtYnkgb3IgUmV2aWV3ZWQtYnkgaWYgdGhp
-cyBwYXRjaCBsb29rcw0KZ29vZCB0byB5b3U/IFRoYW5rcyA6KQ0KDQo+IA0KPiBGb3IgdGhlIHg4
-NiBzaWRlIChhbmQgPHNpZ2g+IGJlY2F1c2UgdGhpcyBwYXRjaCBwcm9iYWJseSB0b29rIHR3byB5
-ZWFycw0KPiB0byBjb2FsZXNjZSA8ZG91YmxlIHNpZ2g+KToNCj4gDQo+IFJldmlld2VkLWJ5OiBE
-YXZlIEhhbnNlbiA8ZGF2ZS5oYW5zZW5AbGludXguaW50ZWwuY29tPg0KDQpUaGFua3MhDQo=
+On 6/7/2023 3:32 PM, Paul Moore wrote:
+> On Apr 28, 2023 Casey Schaufler <casey@schaufler-ca.com> wrote:
+>> Create a system call lsm_get_self_attr() to provide the security
+>> module maintained attributes of the current process.
+>> Create a system call lsm_set_self_attr() to set a security
+>> module maintained attribute of the current process.
+>> Historically these attributes have been exposed to user space via
+>> entries in procfs under /proc/self/attr.
+>>
+>> The attribute value is provided in a lsm_ctx structure. The structure
+>> identifies the size of the attribute, and the attribute value. The format
+>> of the attribute value is defined by the security module. A flags field
+>> is included for LSM specific information. It is currently unused and must
+>> be 0. The total size of the data, including the lsm_ctx structure and any
+>> padding, is maintained as well.
+>>
+>> struct lsm_ctx {
+>>         __u64 id;
+>>         __u64 flags;
+>>         __u64 len;
+>>         __u64 ctx_len;
+>>         __u8 ctx[];
+>> };
+>>
+>> Two new LSM hooks are used to interface with the LSMs.
+>> security_getselfattr() collects the lsm_ctx values from the
+>> LSMs that support the hook, accounting for space requirements.
+>> security_setselfattr() identifies which LSM the attribute is
+>> intended for and passes it along.
+>>
+>> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+>> Reviewed-by: Kees Cook <keescook@chromium.org>
+>> ---
+>>  Documentation/userspace-api/lsm.rst |  15 ++++
+>>  include/linux/lsm_hook_defs.h       |   4 +
+>>  include/linux/lsm_hooks.h           |   9 +++
+>>  include/linux/security.h            |  19 +++++
+>>  include/linux/syscalls.h            |   5 ++
+>>  include/uapi/linux/lsm.h            |  36 +++++++++
+>>  kernel/sys_ni.c                     |   4 +
+>>  security/Makefile                   |   1 +
+>>  security/lsm_syscalls.c             |  55 ++++++++++++++
+>>  security/security.c                 | 112 ++++++++++++++++++++++++++++
+>>  10 files changed, 260 insertions(+)
+>>  create mode 100644 security/lsm_syscalls.c
+> ..
+>
+>> diff --git a/security/security.c b/security/security.c
+>> index 5a48b1b539e5..94b78bfd06b9 100644
+>> --- a/security/security.c
+>> +++ b/security/security.c
+>> @@ -2176,6 +2176,118 @@ void security_d_instantiate(struct dentry *dentry, struct inode *inode)
+>>  }
+>>  EXPORT_SYMBOL(security_d_instantiate);
+>>  
+>> +/**
+>> + * security_getselfattr - Read an LSM attribute of the current process.
+>> + * @attr: which attribute to return
+>> + * @ctx: the user-space destination for the information, or NULL
+>> + * @size: the size of space available to receive the data
+>> + * @flags: special handling options. LSM_FLAG_SINGLE indicates that only
+>> + * attributes associated with the LSM identified in the passed @ctx be
+>> + * reported
+>> + *
+>> + * Returns the number of attributes found on success, negative value
+>> + * on error. @size is reset to the total size of the data.
+>> + * If @size is insufficient to contain the data -E2BIG is returned.
+>> + */
+>> +int security_getselfattr(unsigned int attr, struct lsm_ctx __user *ctx,
+>> +			 size_t __user *size, u32 flags)
+>> +{
+>> +	struct security_hook_list *hp;
+>> +	struct lsm_ctx lctx = { .id = LSM_ID_UNDEF, };
+>> +	u8 __user *base = (u8 __user *)ctx;
+>> +	size_t total = 0;
+>> +	size_t entrysize;
+>> +	size_t left;
+>> +	bool toobig = false;
+>> +	int count = 0;
+>> +	int rc;
+>> +
+>> +	if (attr == 0)
+>> +		return -EINVAL;
+>> +	if (size == NULL)
+>> +		return -EINVAL;
+>> +	if (get_user(left, size))
+>> +		return -EFAULT;
+>> +
+>> +	if ((flags & LSM_FLAG_SINGLE) == LSM_FLAG_SINGLE) {
+>> +		if (!ctx)
+>> +			return -EINVAL;
+>> +		if (copy_struct_from_user(&lctx, sizeof(lctx), ctx, left))
+>> +			return -EFAULT;
+>> +		if (lctx.id == LSM_ID_UNDEF)
+>> +			return -EINVAL;
+>> +	} else if (flags) {
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	hlist_for_each_entry(hp, &security_hook_heads.getselfattr, list) {
+>> +		if (lctx.id != LSM_ID_UNDEF && lctx.id != hp->lsmid->id)
+>> +			continue;
+> I think we're missing a copy_struct_from_user() call somewhere; how
+> does @lctx get populated in the non-LSM_FLAG_SINGLE case?  How does
+> it move to the next entry in the buffer?
+
+@lctx.id is initialized to LSM_ID_UNDEF in the declaration. In the
+non-LSM_FLAG_SINGLE case the lsmctx.id != LSM_ID_UNDEF test will always
+fail, thus avoiding the continue. It is only necessary to do the
+copy_struct_from_user() call in the LSM_FLAG_SINGLE case.
+
+> Am I missing something obvious?
+
+Yes.
+
+>   Was this code tested?
+
+Yes. See patch 11/11.
+
+>
+>> +		entrysize = left;
+>> +		if (base)
+>> +			ctx = (struct lsm_ctx __user *)(base + total);
+>> +		rc = hp->hook.getselfattr(attr, ctx, &entrysize, flags);
+>> +		if (rc == -EOPNOTSUPP) {
+>> +			rc = 0;
+>> +			continue;
+>> +		}
+>> +		if (rc == -E2BIG) {
+>> +			toobig = true;
+>> +			left = 0;
+>> +			continue;
+>> +		}
+>> +		if (rc < 0)
+>> +			return rc;
+>> +
+>> +		left -= entrysize;
+>> +		total += entrysize;
+>> +		count += rc;
+>> +	}
+>> +	if (put_user(total, size))
+>> +		return -EFAULT;
+>> +	if (toobig)
+>> +		return -E2BIG;
+>> +	if (count == 0)
+>> +		return LSM_RET_DEFAULT(getselfattr);
+>> +	return count;
+>> +}
+>> +
+>> +/**
+>> + * security_setselfattr - Set an LSM attribute on the current process.
+>> + * @attr: which attribute to set
+>> + * @ctx: the user-space source for the information
+>> + * @size: the size of the data
+>> + * @flags: reserved for future use, must be 0
+>> + *
+>> + * Set an LSM attribute for the current process. The LSM, attribute
+>> + * and new value are included in @ctx.
+>> + *
+>> + * Returns 0 on success, -EINVAL if the input is inconsistent, -EFAULT
+>> + * if the user buffer is inaccessible or an LSM specific failure.
+>> + */
+>> +int security_setselfattr(unsigned int attr, struct lsm_ctx __user *ctx,
+>> +			 size_t size, u32 flags)
+>> +{
+>> +	struct security_hook_list *hp;
+>> +	struct lsm_ctx lctx;
+>> +
+>> +	if (flags)
+>> +		return -EINVAL;
+> Once again, I don't see a reasonable way to support setting an
+> attribute across multiple LSMs, but for the sake of consistency
+> across both the getselfattr and setselfattr syscalls, what do
+> people think about *requiring* the LSM_FLAG_SINGLE flag here in
+> the setselfattr syscalls since it can only operate on a single
+> LSM at a time?  A zero flag value would return -EINVAL.
+
+Requiring a pointless flag seems like an API no-no to me.
+
+>
+>> +	if (size < sizeof(*ctx))
+>> +		return -EINVAL;
+>> +	if (copy_from_user(&lctx, ctx, sizeof(*ctx)))
+>> +		return -EFAULT;
+>> +	if (size < lctx.len || size < lctx.ctx_len + sizeof(ctx) ||
+>> +	    lctx.len < lctx.ctx_len + sizeof(ctx))
+>> +		return -EINVAL;
+>> +
+>> +	hlist_for_each_entry(hp, &security_hook_heads.setselfattr, list)
+>> +		if ((hp->lsmid->id) == lctx.id)
+>> +			return hp->hook.setselfattr(attr, ctx, size, flags);
+>> +
+>> +	return LSM_RET_DEFAULT(setselfattr);
+>> +}
+>> +
+>>  int security_getprocattr(struct task_struct *p, int lsmid, const char *name,
+>>  			 char **value)
+>>  {
+>> -- 
+>> 2.39.2
+> --
+> paul-moore.com
