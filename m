@@ -2,104 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E94F7253EF
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 08:14:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D0207253F1
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Jun 2023 08:14:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233897AbjFGGOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 02:14:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47434 "EHLO
+        id S234492AbjFGGOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 02:14:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235040AbjFGGOD (ORCPT
+        with ESMTP id S234075AbjFGGO3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 02:14:03 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FD8C1BCE
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Jun 2023 23:13:46 -0700 (PDT)
-Received: from mail-yw1-f198.google.com (mail-yw1-f198.google.com [209.85.128.198])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 7 Jun 2023 02:14:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF681BD6;
+        Tue,  6 Jun 2023 23:14:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 140D33F0F8
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 06:13:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1686118424;
-        bh=z2S8w94wmO6gro0MOA3TrsuV0coxncdiS+T7jLmq+Vg=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=HZCXsNewWWWExbEKznaJ2w6AUilDsEmzOcsiyH93Hg7h9O1+zNQxRp9VcbKku3y2H
-         0xDhzLhTDWEW/mpSvqcRlK27k+vRTOLwSaccNGKitkXS5z15Ex0WQqlNUgJzJfeRNq
-         oTrjdmt+9aB6UrlI+ksAQJDXn2SdrodgOLe748VGpd1kKSfSJwglHSBtUjeiAh8gkr
-         CfzFttrMylgM09YJXCzmwV7sX+Z3eGQBqulFvlSPxcjgpBJqaCy6CdnYeJZVr5tZ4I
-         Bdt9ovQSYJaTEddQM6updNwJt6O5yX4Tvur/Ven9qhF51vZuOqWOhpjJjlh70xwh0a
-         tDrzDlr6xmtCQ==
-Received: by mail-yw1-f198.google.com with SMTP id 00721157ae682-565a33c35b1so105680147b3.0
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Jun 2023 23:13:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686118423; x=1688710423;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=z2S8w94wmO6gro0MOA3TrsuV0coxncdiS+T7jLmq+Vg=;
-        b=Rbl4qi0qe6ewKyWzwRKv10af9cGUBNazy2hvVKHuc4iZsAWsllrUAB6BJyMm/DrfBk
-         d4q+oxwjazOzuKHETTo98ye65wQas5TuFvrN6uAgi0iFyuoarxWfKyDde3MsEnfUx7QG
-         siAxS0hDteiIZ+TXAvcHSD4XcsTslvH6gslsZwY8RyBR9y4qHZHRH8A+7OdbTo3efZiO
-         ozXdUsX9x4LNH1k0KrfG6pAITe6MI8gvtNQg2sEpHmNMakWnqZV1yUYlJtMyUhrhOy9z
-         e6QTpa67O7vnioe6AwHCMD4sGUlxTkjDKqGChh/WpOP09ujTQqzwpMD5uabr3IHTsSUW
-         CNpw==
-X-Gm-Message-State: AC+VfDxRNHRxU6/6qokEIZ66/JjXBq2T+yWu2uSimOjAp3b6GTYNKQzS
-        XDyKs2LWRb7JoX5DLxwvNBo7cDVfB1g02fXPnuhoH1nCsITaxiiIly0wnl+aPbD7/4dVkDwr53V
-        T9JAfAYHJalSxd4oOLXjUcrD0uu1xv7Zf/82sOQ0Ob3bA5ODzgaAgeMHiLg==
-X-Received: by 2002:a81:a511:0:b0:565:9105:d043 with SMTP id u17-20020a81a511000000b005659105d043mr6024557ywg.9.1686118423000;
-        Tue, 06 Jun 2023 23:13:43 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4rqvSoUhUn313mKwOLENsS5/zsi+enZgGIKlhgSKjCfVKJNE7d+wcq6fSsidRJ7F0ZeuQPx9J9eS9I3TEuY1U=
-X-Received: by 2002:a81:a511:0:b0:565:9105:d043 with SMTP id
- u17-20020a81a511000000b005659105d043mr6024548ywg.9.1686118422733; Tue, 06 Jun
- 2023 23:13:42 -0700 (PDT)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E5998632E7;
+        Wed,  7 Jun 2023 06:14:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5206BC433D2;
+        Wed,  7 Jun 2023 06:14:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686118462;
+        bh=lx1FaogfADbvWr9OYO5AKNT2RPL89rJ/j4JUwZ6KOUE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ILMLPSm0gVE1Z51RSSgVijfxtGAjAhB8JyFKfx6eysmuSe144qumW4LeZd3TnKa/F
+         PahJ5jXTElh+kAe2mLSjSWT/bQcyBlm0YUlQ5sjwLPpJODrSvmm6/naNlsvZErjQNs
+         K2HoCmY642J08RV3d5Vunnmgaergy6pVx7p5EAMo6TQ/ib19UGgIWW172VQZ06F3bw
+         yaY+JaJux7+1zNCxOm+WuEdvTug0P5PcsID6IhwkvqkVM3Hjzoqji2E9C4I/JmbIEs
+         4GlkCLVXII3/ekrt7IJrhAKF2QC7WWv2UDkGBuTUwHqa0Gbird05twAHPAPPxsBcVl
+         gmGfrUzm8YGCg==
+From:   "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+To:     masahiroy@kernel.org
+Cc:     linux-kernel@vger.kernel.org, Jiri Slaby <jslaby@suse.cz>,
+        andreas.noever@gmail.com, michael.jamet@intel.com,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        YehezkelShB@gmail.com, Steven Rostedt <rostedt@goodmis.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Subject: [PATCH] streamline_config.pl: handle also ${CONFIG_FOO}
+Date:   Wed,  7 Jun 2023 08:14:17 +0200
+Message-ID: <20230607061417.13636-1-jirislaby@kernel.org>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-References: <20230607034331.576623-1-acelan.kao@canonical.com>
- <20230607042032.GA28835@srcf.ucam.org> <CAFv23QmDNUFcPwvSQt5aUxtmHasfr8wrF72ObvcO-X19gfn=LA@mail.gmail.com>
- <20230607052724.GA29834@srcf.ucam.org>
-In-Reply-To: <20230607052724.GA29834@srcf.ucam.org>
-From:   AceLan Kao <acelan.kao@canonical.com>
-Date:   Wed, 7 Jun 2023 14:13:31 +0800
-Message-ID: <CAFv23QkEdGnEz1q7vbyFCa9S9Dqh-zec72nRGyZ3wAz-8wpbvA@mail.gmail.com>
-Subject: Re: [PATCH] platform/x86: dell-laptop: Add drm module soft dependency
-To:     Matthew Garrett <mjg59@srcf.ucam.org>
-Cc:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Matthew Garrett <mjg59@srcf.ucam.org> =E6=96=BC 2023=E5=B9=B46=E6=9C=887=E6=
-=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=881:27=E5=AF=AB=E9=81=93=EF=BC=9A
->
-> On Wed, Jun 07, 2023 at 01:19:40PM +0800, AceLan Kao wrote:
-> > Gfx drivers(i915/amdgpu/nvidia) depend on the drm driver, so delaying
-> > the loading of dell_laptop after drm can ease the issue the most.
-> > Right, it's still possible to encounter the issue, unfortunately, we
-> > do not have a better solution for it at the moment.
->
-> We could unregister inappropriate backlight drivers when a more
-> appropriate one is loaded, or the policy decision around which driver to
-> use could be made in userland?
-It's hard to decide which backlight driver is redundant, and it's kind of u=
-gly
-to unregister the backlight driver which is registered by other driver and =
-maybe
-problematic.
+From: Jiri Slaby <jslaby@suse.cz>
 
-I'm not familiar with userland, but I think we should handle this
-issue within the
-kernel and aim to register only one functional backlight driver.
+streamline_config.pl currently searches for CONFIG options in Kconfig
+files as $(CONFIG_FOO). But some Kconfigs (e.g. thunderbolt) use
+${CONFIG_FOO}. So fix up the regex to accept both.
+
+This fixes:
+$ make LSMOD=`pwd/`/lsmod localmodconfig
+using config: '.config'
+thunderbolt config not found!!
+
+Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+Cc: andreas.noever@gmail.com
+Cc: michael.jamet@intel.com
+Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: YehezkelShB@gmail.com
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+---
+ scripts/kconfig/streamline_config.pl | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/scripts/kconfig/streamline_config.pl b/scripts/kconfig/streamline_config.pl
+index 3387ad7508f7..d51cd7ac15d2 100755
+--- a/scripts/kconfig/streamline_config.pl
++++ b/scripts/kconfig/streamline_config.pl
+@@ -317,7 +317,7 @@ foreach my $makefile (@makefiles) {
+ 	$_ = convert_vars($_, %make_vars);
+ 
+ 	# collect objects after obj-$(CONFIG_FOO_BAR)
+-	if (/obj-\$\((CONFIG_[^\)]*)\)\s*[+:]?=\s*(.*)/) {
++	if (/obj-\$[({](CONFIG_[^})]*)[)}]\s*[+:]?=\s*(.*)/) {
+ 	    $var = $1;
+ 	    $objs = $2;
+ 
+-- 
+2.41.0
+
