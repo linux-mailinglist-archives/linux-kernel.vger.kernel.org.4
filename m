@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 160E27288B5
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 21:35:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E6DD7288C1
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 21:36:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236621AbjFHTfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 15:35:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48802 "EHLO
+        id S234336AbjFHTgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 15:36:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236332AbjFHTfU (ORCPT
+        with ESMTP id S235282AbjFHTgd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 15:35:20 -0400
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E90172D51
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 12:35:14 -0700 (PDT)
-Received: by mail-oi1-x234.google.com with SMTP id 5614622812f47-390723f815fso41003b6e.3
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 12:35:14 -0700 (PDT)
+        Thu, 8 Jun 2023 15:36:33 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 905C82733
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 12:36:31 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-565c3aa9e82so9448347b3.2
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 12:36:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686252914; x=1688844914;
+        d=google.com; s=20221208; t=1686252991; x=1688844991;
         h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kr0PEHV5OnE+EEUWt8DnaCebmsfgt0XKMU/SCuO3z3o=;
-        b=IGMMSO5mseD7tMe+rRtOIzITR5LLF6gSj6DDkJB5GA4sfv+l0xQcNm+4SRn9cSTA+K
-         bzPDoNl4QAtanNBNtw4EO4Jh9TOBqBvtAeMzqVR0kpqSUA/L/bvTchhidEBh3MP4oHsE
-         7zzo3x/NewiOg3sZOatxsUi0TcVM8A38QB4oSQfrmI5m9Mp6eOh1v9F27aPIV0BM3Y9m
-         jqm85o0LQ0rhNRucFZ0i7HQcaeWJpsz64iPtGPt0XsZOnDRNlY3xajIra5PnrJSK9OoE
-         jKjJyQ6PxwcJN3nFoobZxXBieXcQTT3OQ2VZ4F5eEeV/iMRllpjt6DpnkAeaktGC324Y
-         dn+w==
+        bh=UmemeLuI+WpEQXgz9TQT0mwehV8FTU9BDTa5EhoH+Rw=;
+        b=7iZl7qFoE643/vqqfaylOOM4UugSzxQOXfGxIkvhFgrLBJMpREbmLbhzK1Dfpeq7sW
+         vLxMNbMxtYruESXi/vLA/FRPFy86oy/Rlv/K+QRhWyPjxrgHE6clF71I8HICL+Wbu4D8
+         52TIPF5OsTmaSTlVcpOmlJ2hXgN4iVitvobit3uBB1+XryThJwAiK1B3ovBLWTXnWBEi
+         ML7bTpBpfErXrO5jZn41yk5x35HzdiBPWQx9RrfkGfIWSKYY13HndzOzcbi8dz53N7Pe
+         Ykc3xEYKN/aDtb36dEI3aYN9owd5brP5GXTjP0NKjFTbVVbOSNnZMLMGudJLdaSlcXEi
+         8u1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686252914; x=1688844914;
+        d=1e100.net; s=20221208; t=1686252991; x=1688844991;
         h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kr0PEHV5OnE+EEUWt8DnaCebmsfgt0XKMU/SCuO3z3o=;
-        b=N3SH54DnlCPlG7hklAlvtv91NHn7yWujypfq8D/o8rUYseOHoUG6vH3M9o6nErTWJ0
-         NzDYglXGsZ+fto08ddKlH0oNkqmPOo5wwcjdHFWXhQSF44tfmxGnw/AG7zSxFNDmP4Xm
-         KCWyumnkwbaZzyU4+ivRWdR33cmHDHSFMJIyox5mx8kjlP0vuIe08/kKGH/Xqd1d5dgj
-         7EwppJ06U8Q53UlS8gpF5AIQ3TkQnucM/9TEjFmaE7nFHaewxRJibVGR1npCIn+1SMBp
-         vo743TuMYHZs9UIclG/U3/B6KiXRCqgZktRdW8xRKfPtjXu/AC5kzz+MfLf04xI1Eiz8
-         goxA==
-X-Gm-Message-State: AC+VfDxIWCL2LsC/XcwhEViIY54gKjEuj1KQ8C1wyyfgYM43c9qJKhBb
-        ppg3vBXx6iwlF4j2Zu5jEN9UZQ==
-X-Google-Smtp-Source: ACHHUZ7gdIjuH/6E76ySqRN8WufhpANLQ+j2jIa26lg+ERfDlrQvd+huECUh9/LluoEXiOqTeuRs9w==
-X-Received: by 2002:a05:6808:cd:b0:39a:519c:2a6a with SMTP id t13-20020a05680800cd00b0039a519c2a6amr6836715oic.43.1686252914190;
-        Thu, 08 Jun 2023 12:35:14 -0700 (PDT)
+        bh=UmemeLuI+WpEQXgz9TQT0mwehV8FTU9BDTa5EhoH+Rw=;
+        b=GR8NkwAIfwDGJb8ViRrsuw++iOjUgvtoV5uXzaHoxfnL81r1ezvIyxcvWuFapKB2om
+         0wyKnzzgPyH34Leu1FkdyvfO3oAGeHruoVnTlZQkx46Y/Zpopapdnzb2VuJ4Rz0nygAo
+         cCNsYsEgMsW+OyJK/o1eQdCUo+kd6/NpJwnjNRgJIyzEhFdIXA/dZJuNipkvxAQ4VfKL
+         3dOAwlaRI2MSqGGEeFfsQACFoA7p3MC0DlOqkY2257g/7K6hmcQ8s1U7a7lbc7A38YRn
+         IY7QZ1356x+6HRLXEz4ECpL5lHLGq2Dlu1aEv5eoYu78woB+VGAeFBCn/I58qv3rGESi
+         2+ig==
+X-Gm-Message-State: AC+VfDy9AckfDHckSaszms+W29F7JoZzaLD1ajNAoPSd7Ae2MXEN86Jt
+        qtoFSpvkyktpNYUwqmG3o/0dHg==
+X-Google-Smtp-Source: ACHHUZ5QdxKuy9jo3MUvUBLJWa7hkCRN4WqLqFRikF/N35P5/sjJc9i1Jxr6DqBjKGQqjHCt1+UtTA==
+X-Received: by 2002:a0d:ef01:0:b0:568:d586:77bb with SMTP id y1-20020a0def01000000b00568d58677bbmr743298ywe.14.1686252990588;
+        Thu, 08 Jun 2023 12:36:30 -0700 (PDT)
 Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id g137-20020a0ddd8f000000b0055d8768408dsm108055ywe.105.2023.06.08.12.35.10
+        by smtp.gmail.com with ESMTPSA id a11-20020a81bb4b000000b00545dc7c4a9esm108298ywl.111.2023.06.08.12.36.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 12:35:13 -0700 (PDT)
-Date:   Thu, 8 Jun 2023 12:35:09 -0700 (PDT)
+        Thu, 08 Jun 2023 12:36:30 -0700 (PDT)
+Date:   Thu, 8 Jun 2023 12:36:26 -0700 (PDT)
 From:   Hugh Dickins <hughd@google.com>
 X-X-Sender: hugh@ripple.attlocal.net
 To:     Andrew Morton <akpm@linux-foundation.org>
@@ -87,9 +87,9 @@ cc:     Mike Kravetz <mike.kravetz@oracle.com>,
         linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
         linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH v2 21/23] x86: Allow get_locked_pte() to fail
+Subject: [PATCH v2 22/23] x86: sme_populate_pgd() use pte_offset_kernel()
 In-Reply-To: <a4963be9-7aa6-350-66d0-2ba843e1af44@google.com>
-Message-ID: <b7fa8547-4f28-ec82-9893-1b2eb58e40b4@google.com>
+Message-ID: <497d7777-736e-85f2-c37-aa6bcf155e4@google.com>
 References: <a4963be9-7aa6-350-66d0-2ba843e1af44@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -104,31 +104,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In rare transient cases, not yet made possible, pte_offset_map() and
-pte_offset_map_lock() may not find a page table: handle appropriately.
+sme_populate_pgd() is an __init function for sme_encrypt_kernel():
+it should use pte_offset_kernel() instead of pte_offset_map(), to avoid
+the question of whether a pte_unmap() will be needed to balance.
 
 Signed-off-by: Hugh Dickins <hughd@google.com>
 ---
- arch/x86/kernel/ldt.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ arch/x86/mm/mem_encrypt_identity.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/kernel/ldt.c b/arch/x86/kernel/ldt.c
-index 525876e7b9f4..adc67f98819a 100644
---- a/arch/x86/kernel/ldt.c
-+++ b/arch/x86/kernel/ldt.c
-@@ -367,8 +367,10 @@ static void unmap_ldt_struct(struct mm_struct *mm, struct ldt_struct *ldt)
+diff --git a/arch/x86/mm/mem_encrypt_identity.c b/arch/x86/mm/mem_encrypt_identity.c
+index c6efcf559d88..a1ab542bdfd6 100644
+--- a/arch/x86/mm/mem_encrypt_identity.c
++++ b/arch/x86/mm/mem_encrypt_identity.c
+@@ -188,7 +188,7 @@ static void __init sme_populate_pgd(struct sme_populate_pgd_data *ppd)
+ 	if (pmd_large(*pmd))
+ 		return;
  
- 		va = (unsigned long)ldt_slot_va(ldt->slot) + offset;
- 		ptep = get_locked_pte(mm, va, &ptl);
--		pte_clear(mm, va, ptep);
--		pte_unmap_unlock(ptep, ptl);
-+		if (!WARN_ON_ONCE(!ptep)) {
-+			pte_clear(mm, va, ptep);
-+			pte_unmap_unlock(ptep, ptl);
-+		}
- 	}
- 
- 	va = (unsigned long)ldt_slot_va(ldt->slot);
+-	pte = pte_offset_map(pmd, ppd->vaddr);
++	pte = pte_offset_kernel(pmd, ppd->vaddr);
+ 	if (pte_none(*pte))
+ 		set_pte(pte, __pte(ppd->paddr | ppd->pte_flags));
+ }
 -- 
 2.35.3
 
