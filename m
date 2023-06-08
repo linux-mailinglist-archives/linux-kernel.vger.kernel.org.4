@@ -2,94 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8F267281AE
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 15:48:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE5F57281B3
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 15:49:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236504AbjFHNsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 09:48:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33368 "EHLO
+        id S236330AbjFHNtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 09:49:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235625AbjFHNsH (ORCPT
+        with ESMTP id S234372AbjFHNtK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 09:48:07 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1F081FD6;
-        Thu,  8 Jun 2023 06:48:06 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 7FFAF219A2;
-        Thu,  8 Jun 2023 13:48:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1686232085; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yP9xLPyYFMGMpi467QcNnB+YH/wlZqcYZh3EWd4dmcY=;
-        b=m63+KFvTBQEoswSYPzhIsHPn1FjqqayGRiQzC/FIKdmwxak8gkx7w9F9rldbURg/etSpZc
-        BICnIf8C0z7eVZcnDvN4FdSPCN3o9oRJ9oMQtLZEJ/cLQcCi3cF2Tr8r9iBwWpkH8zBjE5
-        J6OpJnSRXarKOZcGInmiJWE83pipteA=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 45B052C142;
-        Thu,  8 Jun 2023 13:48:05 +0000 (UTC)
-Date:   Thu, 8 Jun 2023 15:48:04 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        kgdb-bugreport@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev@lists.ozlabs.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        sparclinux@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH 7/7] watchdog/hardlockup: Define HARDLOCKUP_DETECTOR_ARCH
-Message-ID: <ZIHcFDnQPuVe1vAc@alley>
-References: <20230607152432.5435-1-pmladek@suse.com>
- <20230607152432.5435-8-pmladek@suse.com>
- <CAD=FV=U8CTttqz9jL6TockdKTd1dM1ApR4Nw+X3OF5tgoagfRQ@mail.gmail.com>
+        Thu, 8 Jun 2023 09:49:10 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5682C269F;
+        Thu,  8 Jun 2023 06:49:07 -0700 (PDT)
+X-QQ-mid: bizesmtp79t1686232141t0on9mbo
+Received: from linux-lab-host.localdomain ( [61.141.77.49])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 08 Jun 2023 21:49:00 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: dKvkn8qoLrHX2kyqnrYho7cQbBc3aGmxlr88m80b30yXO7ydaIN30Hk6UCOwu
+        8pWLVIoteFj+l4Yl+/kDBNG3taUKs8iJGnRQuqVmRb0YjALmUJOiwQOLdG7wlTCWRT1HFV4
+        DMfGHyvUrkAoPFnLZec20GGYOmaRtg0CmNc5cQKPaipeQUPbqEaPe30phdt2F7/PdjCIqch
+        BPSkKw48p10bXqY9TVX4qKHQ89cGTjimwv1kG1oXDxBEw0Fr0RA35N36VkhcILpAyGgRtym
+        sqzYddNLz3Q7Xw98NrMYssRaEOVZ/N3z04nSouVFSEdRJKGWnVBbP2v6tjPTdPUFIHlXNB8
+        req1FVCk5pKErNtF5SvLMf/58jUdSkp3JhNRE/zzKwKyhfR3Lo=
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 16134034703996412553
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, paulmck@kernel.org,
+        thomas@t-8ch.de
+Subject: [PATCH 1/1] tools/nolibc: fix up typo _sycall_narg -> _syscall_narg
+Date:   Thu,  8 Jun 2023 21:48:58 +0800
+Message-Id: <64f663e9e024564a7baca6769394f1e7d5a0422c.1686230738.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1686230738.git.falcon@tinylab.org>
+References: <cover.1686230738.git.falcon@tinylab.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAD=FV=U8CTttqz9jL6TockdKTd1dM1ApR4Nw+X3OF5tgoagfRQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 2023-06-07 16:37:10, Doug Anderson wrote:
-> Hi,
-> 
-> On Wed, Jun 7, 2023 at 8:26 AM Petr Mladek <pmladek@suse.com> wrote:
-> >
-> > @@ -1102,6 +1103,14 @@ config HARDLOCKUP_DETECTOR_BUDDY
-> >         depends on !HAVE_HARDLOCKUP_DETECTOR_ARCH
-> >         select HARDLOCKUP_DETECTOR_COUNTS_HRTIMER
-> >
-> > +config HARDLOCKUP_DETECTOR_ARCH
-> > +       bool
-> > +       depends on HARDLOCKUP_DETECTOR
-> > +       depends on HAVE_HARDLOCKUP_DETECTOR_ARCH
-> > +       help
-> > +         The arch-specific implementation of the hardlockup detector is
-> > +         available.
-> 
-> nit: "is available" makes it sound a bit too much like a "have"
-> version. Maybe "The arch-specific implementation of the hardlockup
-> detector will be used" or something like that?
+Fixes: 8e3ab529bef9 ("tools/nolibc/unistd: add syscall()")
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+---
 
-Makes sense. Will do this change in v2.
+Hi, Willy
 
-> Otherise:
-> 
-> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Since this may be ok for v6.5, so, directly based it on your
+20230606-nolibc-rv32+stkp7a branch.
 
-Thanks,
-Petr
+This may conflict with the reviewed series [1], if require, I can renew
+that series too.
+
+[1]: https://lore.kernel.org/linux-riscv/cover.1686135913.git.falcon@tinylab.org/
+
+ tools/include/nolibc/unistd.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tools/include/nolibc/unistd.h b/tools/include/nolibc/unistd.h
+index c20b2fbf065e..0e832e10a0b2 100644
+--- a/tools/include/nolibc/unistd.h
++++ b/tools/include/nolibc/unistd.h
+@@ -66,10 +66,10 @@ int tcsetpgrp(int fd, pid_t pid)
+ 	_ret;                                                                 \
+ })
+ 
+-#define _sycall_narg(...) __syscall_narg(__VA_ARGS__, 6, 5, 4, 3, 2, 1, 0)
++#define _syscall_narg(...) __syscall_narg(__VA_ARGS__, 6, 5, 4, 3, 2, 1, 0)
+ #define __syscall_narg(_0, _1, _2, _3, _4, _5, _6, N, ...) N
+ #define _syscall_n(N, ...) _syscall(N, __VA_ARGS__)
+-#define syscall(...) _syscall_n(_sycall_narg(__VA_ARGS__), ##__VA_ARGS__)
++#define syscall(...) _syscall_n(_syscall_narg(__VA_ARGS__), ##__VA_ARGS__)
+ 
+ /* make sure to include all global symbols */
+ #include "nolibc.h"
+-- 
+2.25.1
+
