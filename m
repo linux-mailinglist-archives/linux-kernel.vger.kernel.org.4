@@ -2,92 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E1F9727B07
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 11:18:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E389D727B15
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 11:20:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234421AbjFHJSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 05:18:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59470 "EHLO
+        id S235220AbjFHJU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 05:20:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233738AbjFHJSF (ORCPT
+        with ESMTP id S232272AbjFHJU0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 05:18:05 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DB5918F
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 02:18:04 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id DE61921A16;
-        Thu,  8 Jun 2023 09:18:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1686215882; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Sq4jU/k60jCVqjA4NKdWPht6bOFZJdg9eSAA9JH9D08=;
-        b=WE72ZnGf7+kpC2HvEMTxu2ZJfE7PGl7iLN4T4mqtpy+KHCCrXMLvisvtuPdYf7zDGFcO+r
-        yj4BAm5v/9BdILYpN00MAHS+gAgLe6dh86XxAFFelzaXFUxFB6LMzonmAiWNAHtkLAboKY
-        XqfMsvEyrFmHTHE6wYUsE46lnKk5pKI=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C323113480;
-        Thu,  8 Jun 2023 09:18:02 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id yuNTLcqcgWTRaQAAMHmgww
-        (envelope-from <mhocko@suse.com>); Thu, 08 Jun 2023 09:18:02 +0000
-Date:   Thu, 8 Jun 2023 11:18:02 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Haifeng Xu <haifeng.xu@shopee.com>
-Cc:     David Hildenbrand <david@redhat.com>, rppt@kernel.org,
-        akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/mm_init.c: add debug messsge for dma zone
-Message-ID: <ZIGcyku+DN5IHtwp@dhcp22.suse.cz>
-References: <20230607090734.1259-1-haifeng.xu@shopee.com>
- <ZIBY5niJ/7vvwdHC@dhcp22.suse.cz>
- <ccc68b26-0896-2f2d-ba54-038f34e9eaa2@redhat.com>
- <34f32148-24c3-09a3-8bec-9515139e15b1@shopee.com>
+        Thu, 8 Jun 2023 05:20:26 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ACF718F;
+        Thu,  8 Jun 2023 02:20:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1686216025; x=1717752025;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ImvKob1XLuKksnBkKdSIUMhiZFOJa0LRyXm3owOpFFY=;
+  b=wSerHhqUUwjM2WcctY2xGwEUuasUaqJf95a+HKK7r8y4TpObR+lVuqMs
+   auFPKlYHj4gaf+YDTFKVu/axF2hoZDRerFjMuLVBZ2hAPlEOO2lUbIh2g
+   BtK6GLme3CBJduKIIzLF2T32us/4U+HXLjyG+DJb9y5ruzu/NkvGDOHcf
+   RbPNfsHCwK/ZSznmirYTsJm4NJbfe5pQFhQ0fOTeGJOW7hkrUcNynw5Ve
+   i05UYidO8ZX6zU6spc/0ILzgqT3Fmcj2Lnp8NXBYurUsYI3jg8lbljNF5
+   Uvu9LteoHzzqR5Z164W2nizvXBz25i1s99wOtigWsx7g/SMV9f/bUODV9
+   g==;
+X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
+   d="asc'?scan'208";a="216828071"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Jun 2023 02:20:24 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 8 Jun 2023 02:20:24 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Thu, 8 Jun 2023 02:20:22 -0700
+Date:   Thu, 8 Jun 2023 10:19:58 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Tushar Nimkar <quic_tnimkar@quicinc.com>
+CC:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_lsrao@quicinc.com>,
+        <quic_mkshah@quicinc.com>, <devicetree@vger.kernel.org>
+Subject: Re: [PATCH 1/2] dt-bindings: arm: idle-states: Add
+ idle-state-disabled property
+Message-ID: <20230608-steadying-idealism-1f8a97db1491@wendy>
+References: <20230608085544.16211-1-quic_tnimkar@quicinc.com>
+ <20230608085544.16211-2-quic_tnimkar@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="vtCTEnlvLCD5pXov"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <34f32148-24c3-09a3-8bec-9515139e15b1@shopee.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230608085544.16211-2-quic_tnimkar@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 08-06-23 15:38:48, Haifeng Xu wrote:
-> 
-> 
-> On 2023/6/7 18:22, David Hildenbrand wrote:
-> > On 07.06.23 12:16, Michal Hocko wrote:
-> >> On Wed 07-06-23 09:07:34, Haifeng Xu wrote:
-> >>> If freesize is less than dma_reserve, print warning message to report
-> >>> this case.
-> >>
-> >> Why?
-> > 
-> > I'd like to second that question, and add
-> > 
-> > a) Did you run into that scenario?
-> > b) What can an admin do in that case with that error messages?
-> 
-> In theory，dma_reserve shouldn't exceed freesize, so the error messages can remind us
-> to verify whether the configuration of reserved memory is correct.
+--vtCTEnlvLCD5pXov
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I am not really convinced this is worth touching the code TBH.
+Hey Tushar,
 
--- 
-Michal Hocko
-SUSE Labs
+On Thu, Jun 08, 2023 at 02:25:42PM +0530, Tushar Nimkar wrote:
+> This change adds idle-state-disabled property using which certain or all
+> idle-states can be kept disabled during boot-up. Once boot-up is completed
+> same can be enabled using below command.
+>=20
+> echo N > /sys/devices/system/cpu/cpuX/cpuidle/stateX/disable
+>=20
+> Cc: devicetree@vger.kernel.org
+
+Firstly, you should CC the dt-bindings maintainers like
+get_maintainer.pl would tell you.
+Secondly, there are two 1/2 patches in this series.
+
+> Signed-off-by: Tushar Nimkar <quic_tnimkar@quicinc.com>
+> ---
+>  Documentation/devicetree/bindings/cpu/idle-states.yaml | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/cpu/idle-states.yaml b/Doc=
+umentation/devicetree/bindings/cpu/idle-states.yaml
+> index b8cc826c9501..f999bc666bbd 100644
+> --- a/Documentation/devicetree/bindings/cpu/idle-states.yaml
+> +++ b/Documentation/devicetree/bindings/cpu/idle-states.yaml
+> @@ -358,6 +358,13 @@ patternProperties:
+>            systems entry-latency-us + exit-latency-us will exceed
+>            wakeup-latency-us by this duration.
+> =20
+> +      idle-state-disabled:
+> +        description: |
+> +          If present the idle state stays disabled.
+
+> It can be enabled back from
+> +          shell using below command.
+> +          echo N > /sys/devices/system/cpu/cpuX/cpuidle/stateX/disable
+
+Thirdly, this is operating system specific behaviour, tied to Linux, and
+has no place in a binding.
+
+Cheers,
+Conor.
+
+> +        type: boolean
+> +
+>        idle-state-name:
+>          $ref: /schemas/types.yaml#/definitions/string
+>          description:
+> @@ -548,6 +555,7 @@ examples:
+>              CPU_SLEEP_0_0: cpu-sleep-0-0 {
+>                  compatible =3D "arm,idle-state";
+>                  local-timer-stop;
+> +                idle-state-disabled;
+>                  arm,psci-suspend-param =3D <0x0010000>;
+>                  entry-latency-us =3D <250>;
+>                  exit-latency-us =3D <500>;
+> --=20
+> 2.17.1
+>=20
+
+--vtCTEnlvLCD5pXov
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIGdPgAKCRB4tDGHoIJi
+0jYeAQD2vq8CAZyZPfQBYO0XGcZgS5CZfIokwYmVJvMluNX5FgD/VKSusjjBHh15
+cAJDaI7n/Zxpka9ImfjHO1sN2deJHgs=
+=tiyx
+-----END PGP SIGNATURE-----
+
+--vtCTEnlvLCD5pXov--
