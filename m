@@ -2,107 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80269728B6A
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 00:55:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18404728B71
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 00:56:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235116AbjFHWzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 18:55:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36880 "EHLO
+        id S236653AbjFHW4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 18:56:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232119AbjFHWyx (ORCPT
+        with ESMTP id S229771AbjFHW4h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 18:54:53 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D7B62D74;
-        Thu,  8 Jun 2023 15:54:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686264891; x=1717800891;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dd0u2N723fxNFuDaKsE3otcHiK0R6lSa4aGmdjcByVU=;
-  b=QRT81HlAlK892k+x7Cc1yNiythGi1EkDW2Wq4koxy0Qf77hAsN7aPfaz
-   hxetCbM2duYnMVHxvbYu+VDZGTVCu43mD/eqcPrHuZm06fDRZ8275LBIC
-   Ar/V4fVweXENhnm3ycjJNkkEdl6SZYnYXLYV18NCqzbwvrAJZPV4X5nDv
-   BTVOhYmqOjlFcE8M3RzC8Xupe+zxms7IThTsRI7/wXYDzoCdUmH7o0HWI
-   jF9zvoPMYuqPHmGeZygchsO5iZ3tQbVdxdT7up9sdJMDKWryDOon2kn2+
-   QSRvGFV3KAl7YHGeyx4F45YifrbJcfoUwoMR8zV7Lqp6P4ni18dvEHfWl
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="347100901"
-X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
-   d="scan'208";a="347100901"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 15:54:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="956914069"
-X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
-   d="scan'208";a="956914069"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 08 Jun 2023 15:54:46 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q7OWk-0008KC-0g;
-        Thu, 08 Jun 2023 22:54:46 +0000
-Date:   Fri, 9 Jun 2023 06:54:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Terry Bowman <terry.bowman@amd.com>, alison.schofield@intel.com,
-        vishal.l.verma@intel.com, ira.weiny@intel.com, bwidawsk@kernel.org,
-        dan.j.williams@intel.com, dave.jiang@intel.com,
-        Jonathan.Cameron@huawei.com, linux-cxl@vger.kernel.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        rrichter@amd.com, terry.bowman@amd.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Oliver O'Halloran <oohall@gmail.com>,
-        bhelgaas@google.com, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v5 25/26] PCI/AER: Forward RCH downstream port-detected
- errors to the CXL.mem dev handler
-Message-ID: <202306090637.9E2ezbR4-lkp@intel.com>
-References: <20230607221651.2454764-26-terry.bowman@amd.com>
+        Thu, 8 Jun 2023 18:56:37 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6456D2D74;
+        Thu,  8 Jun 2023 15:56:36 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-652d76be8c2so1197102b3a.3;
+        Thu, 08 Jun 2023 15:56:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686264995; x=1688856995;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NRNO5qzF8eIMBLEORTWc2Zg/96WMOLy0Rgq4CTjwY7Y=;
+        b=gHz9I3IzpLLN8CrMdUMHYnAgiA8egk2/MnVJWFrS1R9WjtUVwhkBcv3XFWbDarbqgo
+         nR99aGWvBXQ9iU57zC/ZoU6Sb7x+dVwBK/o8tWjo/IYDq1Z/HITpz9xYYIZBgU7LNnfe
+         lu6w+DAsD9/WoJvPPeK1XLcq5rPNnVam/Jf9PvgWbZ5FauNb6/OWh9TnQBACU6gqoCHm
+         5AFqgS4jh9KjAdVUUlmF0W2TGry9YBUaGs4qovnk/OVkQUQDWGTShNMm+FvNW1lu5Mu+
+         4ck52MheYrNO+vWLViUFZKvLfFFEf/bEaRHsb6vs6IvjBfzzmvSOscULyUA/Ol4enNxj
+         OWkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686264995; x=1688856995;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NRNO5qzF8eIMBLEORTWc2Zg/96WMOLy0Rgq4CTjwY7Y=;
+        b=BAM3mhCU1+5tGn3K0dgRZWXIG9A+f9DbwpwFSQFfM2xy3prfU7InrNRqMoor9kZ8yr
+         +sSpqoPQj3qvqCKidl+09HvD8TWytKAa3laVB1UiXQaAWQbeduEn/oVT+pnbM8voDYNw
+         2B5GoQf4ko4vkjWNjC7YyHx4lgBiR+FIROvjQ7LItifUXJ/iIUvcDsu4hTMJj6YZT5Df
+         k90P3gx1tLYIIbJY1ysSDvO8AccDLYS2TJ9EbWzeo2/+RJ4J2mVHW+I1H5/Ts4AH/IcP
+         sw3sJbtwa/74vsnt8GuV2Y7hPr80oRX+N94hmtv+VpdY8pHobAPSeV/OzYzXpGIcP8At
+         R0YA==
+X-Gm-Message-State: AC+VfDzv3IlyHiY8rvv1B+OLAWvo6mcvCxH/JV3Ssgvfq8JhAVtSS1/9
+        KIAGXfeiELHcSJ5LpCjH/Aw=
+X-Google-Smtp-Source: ACHHUZ77VN7E88WqlWGh8sKsojka8rd00FTKk6Lr12PhF70Rn3rnq8Jv17dYSJw6zuquF+FYNZ6MZQ==
+X-Received: by 2002:a05:6a21:6d8d:b0:10b:58f1:7a6f with SMTP id wl13-20020a056a216d8d00b0010b58f17a6fmr9109480pzb.41.1686264995417;
+        Thu, 08 Jun 2023 15:56:35 -0700 (PDT)
+Received: from localhost (dhcp-72-235-13-41.hawaiiantel.net. [72.235.13.41])
+        by smtp.gmail.com with ESMTPSA id k4-20020aa790c4000000b0063b8d21be5asm1581319pfk.147.2023.06.08.15.56.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 15:56:35 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Thu, 8 Jun 2023 12:56:35 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Chengming Zhou <chengming.zhou@linux.dev>
+Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Chengming Zhou <zhouchengming@bytedance.com>
+Subject: Re: [PATCH] blk-mq: fix incorrect rq start_time_ns and alloc_time_ns
+ after throttled
+Message-ID: <ZIJco7_jaVaxpxSR@slm.duckdns.org>
+References: <20230601053919.3639954-1-chengming.zhou@linux.dev>
+ <ZH4p8tqFc57_OYoH@slm.duckdns.org>
+ <c82d6bab-36d0-0403-9304-4415f6ffd972@linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230607221651.2454764-26-terry.bowman@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <c82d6bab-36d0-0403-9304-4415f6ffd972@linux.dev>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Terry,
+Hello,
 
-kernel test robot noticed the following build errors:
+On Tue, Jun 06, 2023 at 06:22:28PM +0800, Chengming Zhou wrote:
+...
+> But for plug batched allocation introduced by the commit 47c122e35d7e
+> ("block: pre-allocate requests if plug is started and is a batch"), we can
+> rq_qos_throttle() after the allocation of the request. This is what the
+> blk_mq_get_cached_request() does.
+> 
+> In this case, the cached request alloc_time_ns or start_time_ns is much ahead
+> if block in any qos ->throttle().
 
-[auto build test ERROR on a70fc4ed20a6118837b0aecbbf789074935f473b]
+Ah, okay, that's problematic.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Terry-Bowman/cxl-acpi-Probe-RCRB-later-during-RCH-downstream-port-creation/20230608-062818
-base:   a70fc4ed20a6118837b0aecbbf789074935f473b
-patch link:    https://lore.kernel.org/r/20230607221651.2454764-26-terry.bowman%40amd.com
-patch subject: [PATCH v5 25/26] PCI/AER: Forward RCH downstream port-detected errors to the CXL.mem dev handler
-config: x86_64-randconfig-r005-20230607 (https://download.01.org/0day-ci/archive/20230609/202306090637.9E2ezbR4-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git checkout a70fc4ed20a6118837b0aecbbf789074935f473b
-        b4 shazam https://lore.kernel.org/r/20230607221651.2454764-26-terry.bowman@amd.com
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+> >> This patch add nr_flush counter in blk_plug, so we can tell if the task
+> >> has throttled in any qos ->throttle(), in which case we need to correct
+> >> the rq start_time_ns and alloc_time_ns.
+> >>
+> >> Another solution may be make rq_qos_throttle() return bool to indicate
+> >> if it has throttled in any qos ->throttle(). But this need more changes.
+> >>
+> >> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+> > 
+> > Depending on the flush behavior and adjusting alloc_time_ns seems fragile to
+> > me and will likely confuse other users of alloc_time_ns too.
+> 
+> I agree with you, this code is not good. My basic idea is to adjust the cached
+> request alloc_time_ns and start_time_ns when throttled.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306090637.9E2ezbR4-lkp@intel.com/
+Would it make sense to skip setting the alloc_time_ns during pre-allocation
+and set it later when the pre-allocated rq is actually used? That should
+jive better.
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
->> ERROR: modpost: module cxl_core uses symbol pci_print_aer from namespace CXL, but does not import it.
+Thanks.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+tejun
