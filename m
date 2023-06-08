@@ -2,82 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D9C4727699
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 07:18:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69A50727693
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 07:18:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234275AbjFHFSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 01:18:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35388 "EHLO
+        id S234039AbjFHFSW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 01:18:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233573AbjFHFSi (ORCPT
+        with ESMTP id S233573AbjFHFSV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 01:18:38 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D9C526B8;
-        Wed,  7 Jun 2023 22:18:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686201514; x=1717737514;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cHXrEY01bYvheOLH7fG7jjiblWcaaSIEo6dV4ZMjUe0=;
-  b=LocKE1V9IsHhQOMmoyx+6Xu8aCJCT/IkxHeS2XhU57zhfTKCKzMh0F6K
-   ABCuJQnaPti6QoMosND/6tIMxAfGI4Yn13SbcAGAGOOxlWODFSHP26bjr
-   klQJuQjwkkMnCJDcy6A/uIkYD8QxlEHcYyIcbLMCXKsD92JbJ/Dzp3coc
-   Y5qifYizJtpJb3hHlV+GJQ8ATxksDpXpk6cH6ha4CwP7IEzt4LDQFlt7j
-   drpdnplxb2dTLH/N/gb7RgQV3jeq0/g+j6xG8BtBE/R7ILouEqzD9sAqZ
-   ZNb9xUqE6UG00LLAY6L5kysA27BIGgBss9NfhhtzsLn7A8x5oFBTqlEaA
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="357213723"
-X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
-   d="scan'208";a="357213723"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 22:18:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="703942649"
-X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
-   d="scan'208";a="703942649"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 07 Jun 2023 22:18:27 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q782U-0007Ih-2L;
-        Thu, 08 Jun 2023 05:18:26 +0000
-Date:   Thu, 8 Jun 2023 13:18:07 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Douglas Anderson <dianders@chromium.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Douglas Anderson <dianders@chromium.org>,
-        devicetree@vger.kernel.org, cros-qcom-dts-watchers@chromium.org,
-        linux-arm-msm@vger.kernel.org,
-        yangcong5@huaqin.corp-partner.google.com,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Chris Morgan <macroalpha82@gmail.com>,
-        linux-input@vger.kernel.org, hsinyi@google.com
-Subject: Re: [PATCH v2 08/10] HID: i2c-hid: Support being a panel follower
-Message-ID: <202306081344.M0jNn0Ce-lkp@intel.com>
-References: <20230607144931.v2.8.Ib1a98309c455cd7e26b931c69993d4fba33bbe15@changeid>
+        Thu, 8 Jun 2023 01:18:21 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54DCB10EA
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 22:18:20 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id 5614622812f47-39c7f5706f0so87597b6e.3
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 22:18:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686201499; x=1688793499;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=cero/nNmUyyTgbddJ18ROOGs9bd2i20p7IPIh5GwALY=;
+        b=sJAzPiDAKc2OSCHZVzx3H0wpsmp/FJHYaIIEZAgwY1kpL4alxyP3pc7oBnw4k/dz+V
+         NWTEyv1Jy+Et3u3kOB0JZexCi/0r6WUvAE4vlpfSrCJzOvvgvYuf7MURiLKlL998U8LB
+         PykSgw36P4KLWwnlUwneNMoJDVqyQQFrubVe7J1nW1hODvl/+qOKlMuVaUcowBj3o7SO
+         b3MyLJprq2jFSmqH5p8zgE+8vrf7TLtg1T4I2POirHBL/pOvtLavAFZPVQUGM0LHWzRP
+         Fhww+p+MbEl4yBZBYE2zxtLh3R6821S3ZW0x81figdxQbBPJknY6vW54gsQ80khr3gEa
+         ADDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686201499; x=1688793499;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cero/nNmUyyTgbddJ18ROOGs9bd2i20p7IPIh5GwALY=;
+        b=X8Y1+SSOip3sDxi6GFlRAKRoK9S5KQSJtmngha0Ii3L7q8socESFDXsu6/Payn1g8+
+         zm9x1UbJwmMexk/oY8BtNhiRxBnBHLuvalmhz9LBo1uQgTlH165TGv5ADhhLYIp6MtTS
+         gfv5qkVGVzKLNJO147E6sVDhba7Fs8DeHxuMMnHZlbaDLIzFgNiE2ieoFZVN2Ky07oiH
+         EbWP7NQ0ClTUcBCR4LTBJ+OeZhidcmxCEak0PmAKAtkvu4LpV7oH011/HywUdMZmpAT7
+         XEgDTB5OXuMVSOAXTWTZmmywkRH085U+kda7bsEqKkwJWOrTXb6AUOaPaZD5R58sYOLA
+         WVmQ==
+X-Gm-Message-State: AC+VfDxv7dBerRAp3+Mg+DERLkz2FMWfzAJtRXE+ql79jS7AKqZ5RN50
+        391axlpT50m9lHsRK9+HtYQXNQ==
+X-Google-Smtp-Source: ACHHUZ5rn21cbWOU6lHWA9Ma4Ci1eR/2PI2FFfCu7VnVX/7t5MXa1P6VbXK9vLrFVhvjiq4AU48z4Q==
+X-Received: by 2002:a05:6808:a96:b0:39a:babe:a7e with SMTP id q22-20020a0568080a9600b0039ababe0a7emr4581980oij.35.1686201499410;
+        Wed, 07 Jun 2023 22:18:19 -0700 (PDT)
+Received: from localhost ([122.172.87.195])
+        by smtp.gmail.com with ESMTPSA id m4-20020a17090a71c400b0025671de4606sm2192660pjs.4.2023.06.07.22.18.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 22:18:18 -0700 (PDT)
+Date:   Thu, 8 Jun 2023 10:48:16 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Beata Michalska <beata.michalska@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
+        mark.rutland@arm.com, will@kernel.org, rafael@kernel.org,
+        sudeep.holla@arm.com, ionela.voinescu@arm.com, sumitg@nvidia.com,
+        yang@os.amperecomputing.com, Len Brown <len.brown@intel.com>,
+        vincent.guittot@linaro.org
+Subject: Re: [PATCH] arm64: Provide an AMU-based version of
+ arch_freq_get_on_cpu
+Message-ID: <20230608051816.2ww7ncg65qo7kcuk@vireshk-i7>
+References: <20230606155754.245998-1-beata.michalska@arm.com>
+ <20230608051509.h4a6gn572mjgdusv@vireshk-i7>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230607144931.v2.8.Ib1a98309c455cd7e26b931c69993d4fba33bbe15@changeid>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20230608051509.h4a6gn572mjgdusv@vireshk-i7>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,55 +77,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Douglas,
++Vincent
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on hid/for-next dtor-input/next dtor-input/for-linus]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Douglas-Anderson/dt-bindings-HID-i2c-hid-Add-panel-property-to-i2c-hid-backed-touchscreens/20230608-055515
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20230607144931.v2.8.Ib1a98309c455cd7e26b931c69993d4fba33bbe15%40changeid
-patch subject: [PATCH v2 08/10] HID: i2c-hid: Support being a panel follower
-config: arc-randconfig-r021-20230607 (https://download.01.org/0day-ci/archive/20230608/202306081344.M0jNn0Ce-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 12.3.0
-reproduce (this is a W=1 build):
-        mkdir -p ~/bin
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        git remote add robh https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git
-        git fetch robh for-next
-        git checkout robh/for-next
-        b4 shazam https://lore.kernel.org/r/20230607144931.v2.8.Ib1a98309c455cd7e26b931c69993d4fba33bbe15@changeid
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=arc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306081344.M0jNn0Ce-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   `.exit.text' referenced in section `__jump_table' of lib/test_dynamic_debug.o: defined in discarded section `.exit.text' of lib/test_dynamic_debug.o
-   `.exit.text' referenced in section `__jump_table' of lib/test_dynamic_debug.o: defined in discarded section `.exit.text' of lib/test_dynamic_debug.o
-   `.exit.text' referenced in section `__jump_table' of drivers/misc/phantom.o: defined in discarded section `.exit.text' of drivers/misc/phantom.o
-   `.exit.text' referenced in section `__jump_table' of drivers/misc/phantom.o: defined in discarded section `.exit.text' of drivers/misc/phantom.o
-   `.exit.text' referenced in section `__jump_table' of drivers/target/target_core_configfs.o: defined in discarded section `.exit.text' of drivers/target/target_core_configfs.o
-   `.exit.text' referenced in section `__jump_table' of drivers/target/target_core_configfs.o: defined in discarded section `.exit.text' of drivers/target/target_core_configfs.o
-   arceb-elf-ld: drivers/hid/i2c-hid/i2c-hid-core.o: in function `i2c_hid_core_remove':
-   drivers/hid/i2c-hid/i2c-hid-core.c:1218: undefined reference to `drm_panel_remove_follower'
->> arceb-elf-ld: drivers/hid/i2c-hid/i2c-hid-core.c:1218: undefined reference to `drm_panel_remove_follower'
-   arceb-elf-ld: drivers/hid/i2c-hid/i2c-hid-core.o: in function `i2c_hid_core_probe':
-   drivers/hid/i2c-hid/i2c-hid-core.c:1159: undefined reference to `drm_panel_add_follower'
->> arceb-elf-ld: drivers/hid/i2c-hid/i2c-hid-core.c:1159: undefined reference to `drm_panel_add_follower'
+On 08-06-23, 10:45, Viresh Kumar wrote:
+> +Len
+> 
+> On 06-06-23, 16:57, Beata Michalska wrote:
+> > diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
+> > +unsigned int arch_freq_get_on_cpu(int cpu)
+> > +{
+> > +	unsigned int freq;
+> > +	u64 scale;
+> > +
+> > +	if (!cpumask_test_cpu(cpu, amu_fie_cpus))
+> > +		return 0;
+> > +
+> > +	if (!housekeeping_cpu(cpu, HK_TYPE_TICK)) {
+> 
+> I am not sure what we are doing in the `if` block here, at least a comment would
+> be useful.
+> 
+> > +		struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
+> > +		int ref_cpu = nr_cpu_ids;
+> > +
+> > +		if (cpumask_intersects(housekeeping_cpumask(HK_TYPE_TICK),
+> > +				       policy->cpus))
+> > +			ref_cpu = cpumask_nth_and(cpu, policy->cpus,
+> > +						  housekeeping_cpumask(HK_TYPE_TICK));
+> > +		cpufreq_cpu_put(policy);
+> > +		if (ref_cpu >= nr_cpu_ids)
+> > +			return 0;
+> > +		cpu = ref_cpu;
+> > +	}
+> 
+> A blank line here please.
+> 
+> > +	/*
+> > +	 * Reversed computation to the one used to determine
+> > +	 * the arch_freq_scale value
+> > +	 * (see amu_scale_freq_tick for details)
+> > +	 */
+> > +	scale = per_cpu(arch_freq_scale, cpu);
+> > +	scale *= cpufreq_get_hw_max_freq(cpu);
+> > +	freq = scale >> SCHED_CAPACITY_SHIFT;
+> > +
+> > +	return freq;
+> > +}
+> > +
+> >  #ifdef CONFIG_ACPI_CPPC_LIB
+> >  #include <acpi/cppc_acpi.h>
+> >  
+> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> > index 6b52ebe5a890..9f2cf45bf190 100644
+> > --- a/drivers/cpufreq/cpufreq.c
+> > +++ b/drivers/cpufreq/cpufreq.c
+> > @@ -710,7 +710,8 @@ static ssize_t show_scaling_cur_freq(struct cpufreq_policy *policy, char *buf)
+> >  	ssize_t ret;
+> >  	unsigned int freq;
+> >  
+> > -	freq = arch_freq_get_on_cpu(policy->cpu);
+> > +	freq = !cpufreq_driver->get ? arch_freq_get_on_cpu(policy->cpu)
+> > +				    : 0;
+> 
+> You may have changed the logic for X86 parts as well here. For a x86 platform
+> with setpolicy() and get() callbacks, we will not call arch_freq_get_on_cpu()
+> anymore ?
+> 
+> >  	if (freq)
+> >  		ret = sprintf(buf, "%u\n", freq);
+> >  	else if (cpufreq_driver->setpolicy && cpufreq_driver->get)
+> > @@ -747,7 +748,11 @@ store_one(scaling_max_freq, max);
+> >  static ssize_t show_cpuinfo_cur_freq(struct cpufreq_policy *policy,
+> >  					char *buf)
+> >  {
+> > -	unsigned int cur_freq = __cpufreq_get(policy);
+> > +	unsigned int cur_freq;
+> > +
+> > +	cur_freq = arch_freq_get_on_cpu(policy->cpu);
+> > +	if (!cur_freq)
+> > +		cur_freq = __cpufreq_get(policy);
+> 
+> For this and the above change, I am not sure what is the right thing to do.
+> 
+> >From Len's commit [1]:
+> 
+>     Here we provide an x86 routine to make this calculation
+>     on supported hardware, and use it in preference to any
+>     driver driver-specific cpufreq_driver.get() routine.
+> 
+> I am not sure why Len updated `show_scaling_cur_freq()` and not
+> `show_cpuinfo_cur_freq()` ? Maybe we should update both these routines ?
+> 
+> Also, I don't think this is something that should have different logic for ARM
+> and X86, we should be consistent here as a cpufreq decision. Since both these
+> routines are reached via a read operation to a sysfs file, we shouldn't be
+> concerned about performance too.
+> 
+> What about doing this for both the routines, for all platforms now:
+> 
+> 	cur_freq = arch_freq_get_on_cpu(policy->cpu);
+> 	if (!cur_freq)
+>                 ... get freq via policy->get() or policy->cur;
+> 
+> -- 
+> viresh
+> 
+> [1] commit f8475cef9008 ("x86: use common aperfmperf_khz_on_cpu() to calculate KHz using APERF/MPERF")
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+viresh
