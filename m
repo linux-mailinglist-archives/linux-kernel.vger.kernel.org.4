@@ -2,272 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBCD77283D3
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 17:37:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24C907283D9
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 17:40:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236916AbjFHPhw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 11:37:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58742 "EHLO
+        id S237075AbjFHPk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 11:40:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236656AbjFHPhu (ORCPT
+        with ESMTP id S237007AbjFHPk2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 11:37:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01C8C2D56
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 08:37:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686238627;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dnOFROsF7B7sQwXM8eGHqjnV3KCLoennVYcraYtkdpA=;
-        b=e9BrpgHUeRqsYVDbOKgDaffvvq4qTHKi34eoWczxH6cH0mGCPnVMC6Z3TlNAo8Z7x1Xb30
-        NK9ixhg9yw4SNKbnkEkGYeCVIPbaqvZgW/klnjibRtEicP0GAzVFEwpM1CWUAgiH9BIHLC
-        MU9JpbDcQLB2odW10rMh1l2sk4lUU6E=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-361-dWYUHhdGMQGx6oW_hdGnxQ-1; Thu, 08 Jun 2023 11:37:05 -0400
-X-MC-Unique: dWYUHhdGMQGx6oW_hdGnxQ-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 09B34282CCAA;
-        Thu,  8 Jun 2023 15:37:04 +0000 (UTC)
-Received: from mail.corp.redhat.com (unknown [10.45.224.77])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6216B492B0A;
-        Thu,  8 Jun 2023 15:36:59 +0000 (UTC)
-Date:   Thu, 8 Jun 2023 17:36:56 +0200
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        dri-devel@lists.freedesktop.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-input@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
-        linux-kernel@vger.kernel.org, hsinyi@google.com,
-        cros-qcom-dts-watchers@chromium.org, devicetree@vger.kernel.org,
-        yangcong5@huaqin.corp-partner.google.com,
-        linux-arm-msm@vger.kernel.org,
-        Chris Morgan <macroalpha82@gmail.com>
-Subject: Re: [PATCH v2 08/10] HID: i2c-hid: Support being a panel follower
-Message-ID: <y3l4x3kv7jgog3miexati5wbveaynnryzqvj6sc4ul6625f2if@w7nqgojfavfw>
-References: <20230607215224.2067679-1-dianders@chromium.org>
- <20230607144931.v2.8.Ib1a98309c455cd7e26b931c69993d4fba33bbe15@changeid>
+        Thu, 8 Jun 2023 11:40:28 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53B072D47;
+        Thu,  8 Jun 2023 08:40:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686238826; x=1717774826;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=76q0pz9uYJGQjyuhbeXuJKxSn4Jgx8OqTCzaDPYghZk=;
+  b=FmerjxWosD8uQ3FdESqOHQEwz2tT1IHt3VcI7bhtrdjwwMEwINabg2CR
+   5ojulD+DUIqI+HahI9e/Kfb/WrC6plmQ0zAhqKLaTyGPoZ70OUK9mqPRG
+   nNXsEMOyvT8F6540ZdrJcJgczq1n5Dj8G5HnDAquF3X1umrZwDFnUJ3Ys
+   GEau0FxRyMbnOWf4dorTH2JFvIB+HrX4UPfzlPMetIoT9GPlnBoQWxXfo
+   ZJd8xK/64pQp3ZuE5gUYaNZkskRwTO101oNdoAZBfo23fgmV5JyoYCb51
+   cCXHD0Oa0SXuab66ODXyxtTdVVb8HcMYzNSuRJ8u/hVkKta75ivlmdwAr
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="354830428"
+X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
+   d="scan'208";a="354830428"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 08:40:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="884244181"
+X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
+   d="scan'208";a="884244181"
+Received: from araj-dh-work.jf.intel.com (HELO araj-dh-work) ([10.165.157.158])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 08:40:08 -0700
+Date:   Thu, 8 Jun 2023 08:38:37 -0700
+From:   Ashok Raj <ashok_raj@linux.intel.com>
+To:     Alexander Duyck <alexander.duyck@gmail.com>
+Cc:     Baolu Lu <baolu.lu@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>, iommu@lists.linux.dev,
+        Ashok Raj <ashok.raj@intel.com>
+Subject: Re: Question about reserved_regions w/ Intel IOMMU
+Message-ID: <ZIH1/e2OcCuD7DEi@araj-dh-work>
+References: <CAKgT0UezciLjHacOx372+v8MZkDf22D5Thn82n-07xxKy_0FTQ@mail.gmail.com>
+ <CAKgT0UfMeVOz6AOqSvVvzpsedGDiXCNQrjM+4KDv7qJJ1orpsw@mail.gmail.com>
+ <a1cff65b-b390-3872-25b5-dd6bbfb3524c@linux.intel.com>
+ <CAKgT0UcE5bUe7ChytSyUWEkyqdwnNR1k_rcfyykPPWJ=ZzsdRg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230607144931.v2.8.Ib1a98309c455cd7e26b931c69993d4fba33bbe15@changeid>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKgT0UcE5bUe7ChytSyUWEkyqdwnNR1k_rcfyykPPWJ=ZzsdRg@mail.gmail.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Jun 07 2023, Douglas Anderson wrote:
+On Thu, Jun 08, 2023 at 07:33:31AM -0700, Alexander Duyck wrote:
+> On Wed, Jun 7, 2023 at 8:05 PM Baolu Lu <baolu.lu@linux.intel.com> wrote:
+> >
+> > On 6/8/23 7:03 AM, Alexander Duyck wrote:
+> > > On Wed, Jun 7, 2023 at 3:40 PM Alexander Duyck
+> > > <alexander.duyck@gmail.com> wrote:
+> > >>
+> > >> I am running into a DMA issue that appears to be a conflict between
+> > >> ACS and IOMMU. As per the documentation I can find, the IOMMU is
+> > >> supposed to create reserved regions for MSI and the memory window
+> > >> behind the root port. However looking at reserved_regions I am not
+> > >> seeing that. I only see the reservation for the MSI.
+> > >>
+> > >> So for example with an enabled NIC and iommu enabled w/o passthru I am seeing:
+> > >> # cat /sys/bus/pci/devices/0000\:83\:00.0/iommu_group/reserved_regions
+> > >> 0x00000000fee00000 0x00000000feefffff msi
+> > >>
+> > >> Shouldn't there also be a memory window for the region behind the root
+> > >> port to prevent any possible peer-to-peer access?
+> > >
+> > > Since the iommu portion of the email bounced I figured I would fix
+> > > that and provide some additional info.
+> > >
+> > > I added some instrumentation to the kernel to dump the resources found
+> > > in iova_reserve_pci_windows. From what I can tell it is finding the
+> > > correct resources for the Memory and Prefetchable regions behind the
+> > > root port. It seems to be calling reserve_iova which is successfully
+> > > allocating an iova to reserve the region.
+> > >
+> > > However still no luck on why it isn't showing up in reserved_regions.
+> >
+> > Perhaps I can ask the opposite question, why it should show up in
+> > reserve_regions? Why does the iommu subsystem block any possible peer-
+> > to-peer DMA access? Isn't that a decision of the device driver.
+> >
+> > The iova_reserve_pci_windows() you've seen is for kernel DMA interfaces
+> > which is not related to peer-to-peer accesses.
 > 
-> As talked about in the patch ("drm/panel: Add a way for other devices
-> to follow panel state"), we really want to keep the power states of a
-> touchscreen and the panel it's attached to in sync with each other. In
-> that spirit, add support to i2c-hid to be a panel follower. This will
-> let the i2c-hid driver get informed when the panel is powered on and
-> off. From there we can match the i2c-hid device's power state to that
-> of the panel.
-> 
-> NOTE: this patch specifically _doesn't_ use pm_runtime to keep track
-> of / manage the power state of the i2c-hid device, even though my
-> first instinct said that would be the way to go. Specific problems
-> with using pm_runtime():
-> * The initial power up couldn't happen in a runtime resume function
->   since it create sub-devices and, apparently, that's not good to do
->   in your resume function.
-> * Managing our power state with pm_runtime meant fighting to make the
->   right thing happen at system suspend to prevent the system from
->   trying to resume us only to suspend us again. While this might be
->   able to be solved, it added complexity.
-> Overall the code without pm_runtime() ended up being smaller and
-> easier to understand.
+> The problem is if the IOVA overlaps with the physical addresses of
+> other devices that can be routed to via ACS redirect. As such if ACS
+> redirect is enabled a host IOVA could be directed to another device on
+> the switch instead. To prevent that we need to reserve those addresses
+> to avoid address space collisions.
 
-Generally speaking, I'm not that happy when we need to coordinate with
-other subsystems for bringing up resources...
-
-Anyway, a remark inlined (at least):
+Any untranslated address from a device must be forwarded to the IOMMU when
+ACS is enabled correct? I guess if you want true p2p, then you would need
+to map so that the hpa turns into the peer address.. but its always a round
+trip to IOMMU. 
 
 > 
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
+> From what I can tell it looks like the IOVA should be reserved, but I
+> don't see it showing up anywhere in reserved_regions. What I am
+> wondering is if iova_reserve_pci_windows() should be taking some steps
+> so that it will appear, or if  intel_iommu_get_resv_regions() needs to
+> have some code similar to iova_reserve_pci_windows() to get the ranges
+> and verify they are reserved in the IOVA.
 > 
-> Changes in v2:
-> - i2c_hid_core_panel_prepared() and ..._unpreparing() are now static.
-> 
->  drivers/hid/i2c-hid/i2c-hid-core.c | 82 +++++++++++++++++++++++++++++-
->  1 file changed, 81 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hid/i2c-hid/i2c-hid-core.c b/drivers/hid/i2c-hid/i2c-hid-core.c
-> index fa8a1ca43d7f..368db3ae612f 100644
-> --- a/drivers/hid/i2c-hid/i2c-hid-core.c
-> +++ b/drivers/hid/i2c-hid/i2c-hid-core.c
-> @@ -38,6 +38,8 @@
->  #include <linux/mutex.h>
->  #include <asm/unaligned.h>
->  
-> +#include <drm/drm_panel.h>
-> +
->  #include "../hid-ids.h"
->  #include "i2c-hid.h"
->  
-> @@ -107,6 +109,8 @@ struct i2c_hid {
->  	struct mutex		reset_lock;
->  
->  	struct i2chid_ops	*ops;
-> +	struct drm_panel_follower panel_follower;
-> +	bool			is_panel_follower;
->  };
->  
->  static const struct i2c_hid_quirks {
-> @@ -1058,6 +1062,34 @@ static int i2c_hid_core_initial_power_up(struct i2c_hid *ihid)
->  	return ret;
->  }
->  
-> +static int i2c_hid_core_panel_prepared(struct drm_panel_follower *follower)
-> +{
-> +	struct i2c_hid *ihid = container_of(follower, struct i2c_hid, panel_follower);
-> +	struct hid_device *hid = ihid->hid;
-> +
-> +	/*
-> +	 * hid->version is set on the first power up. If it's still zero then
-> +	 * this is the first power on so we should perform initial power up
-> +	 * steps.
-> +	 */
-> +	if (!hid->version)
-> +		return i2c_hid_core_initial_power_up(ihid);
-> +
-> +	return i2c_hid_core_resume(ihid);
-> +}
-> +
-> +static int i2c_hid_core_panel_unpreparing(struct drm_panel_follower *follower)
-> +{
-> +	struct i2c_hid *ihid = container_of(follower, struct i2c_hid, panel_follower);
-> +
-> +	return i2c_hid_core_suspend(ihid);
-> +}
-> +
-> +static const struct drm_panel_follower_funcs i2c_hid_core_panel_follower_funcs = {
-> +	.panel_prepared = i2c_hid_core_panel_prepared,
-> +	.panel_unpreparing = i2c_hid_core_panel_unpreparing,
-> +};
-
-Can we make that above block at least behind a Kconfig?
-
-i2c-hid is often used for touchpads, and the notion of drm panel has
-nothing to do with them. So I'd be more confident if we could disable
-that code if not required.
-
-Actually, I'd be even more happier if it were in a different compilation
-unit. Not necessary a different module, but at least a different file.
-
-Cheers,
-Benjamin
-
-> +
->  int i2c_hid_core_probe(struct i2c_client *client, struct i2chid_ops *ops,
->  		       u16 hid_descriptor_address, u32 quirks)
->  {
-> @@ -1119,6 +1151,41 @@ int i2c_hid_core_probe(struct i2c_client *client, struct i2chid_ops *ops,
->  	hid->bus = BUS_I2C;
->  	hid->initial_quirks = quirks;
->  
-> +	/*
-> +	 * See if we're following a panel. If drm_panel_add_follower()
-> +	 * returns no error then we are.
-> +	 */
-> +	ihid->panel_follower.funcs = &i2c_hid_core_panel_follower_funcs;
-> +	ret = drm_panel_add_follower(&client->dev, &ihid->panel_follower);
-> +	if (!ret) {
-> +		/* We're a follower. That means we'll power things up later. */
-> +		ihid->is_panel_follower = true;
-> +
-> +		/*
-> +		 * If we're not in control of our own power up/power down then
-> +		 * we can't do the logic to manage wakeups. Give a warning if
-> +		 * a user thought that was possible then force the capability
-> +		 * off.
-> +		 */
-> +		if (device_can_wakeup(&client->dev)) {
-> +			dev_warn(&client->dev, "Can't wakeup if following panel\n");
-> +			device_set_wakeup_capable(&client->dev, false);
-> +		}
-> +
-> +		return 0;
-> +	}
-> +
-> +	/*
-> +	 * -ENODEV means that we're not following a panel, so any other error
-> +	 * is a real problem (like -EPROBE_DEFER, -ENOMEM, ...).
-> +	 */
-> +	if (ret != -ENODEV)
-> +		goto err_mem_free;
-> +
-> +	/*
-> +	 * We're not following a panel. That's fine and means that we
-> +	 * can power up right away.
-> +	 */
->  	ret = i2c_hid_core_initial_power_up(ihid);
->  	if (ret)
->  		goto err_mem_free;
-> @@ -1143,7 +1210,14 @@ void i2c_hid_core_remove(struct i2c_client *client)
->  	struct i2c_hid *ihid = i2c_get_clientdata(client);
->  	struct hid_device *hid;
->  
-> -	i2c_hid_core_power_down(ihid);
-> +	/*
-> +	 * If we're a follower, the act of unfollowing will cause us to be
-> +	 * powered down. Otherwise we need to manually do it.
-> +	 */
-> +	if (ihid->is_panel_follower)
-> +		drm_panel_remove_follower(&ihid->panel_follower);
-> +	else
-> +		i2c_hid_core_power_down(ihid);
->  
->  	hid = ihid->hid;
->  	hid_destroy_device(hid);
-> @@ -1171,6 +1245,9 @@ static int i2c_hid_core_pm_suspend(struct device *dev)
->  	struct i2c_client *client = to_i2c_client(dev);
->  	struct i2c_hid *ihid = i2c_get_clientdata(client);
->  
-> +	if (ihid->is_panel_follower)
-> +		return 0;
-> +
->  	return i2c_hid_core_suspend(ihid);
->  }
->  
-> @@ -1179,6 +1256,9 @@ static int i2c_hid_core_pm_resume(struct device *dev)
->  	struct i2c_client *client = to_i2c_client(dev);
->  	struct i2c_hid *ihid = i2c_get_clientdata(client);
->  
-> +	if (ihid->is_panel_follower)
-> +		return 0;
-> +
->  	return i2c_hid_core_resume(ihid);
->  }
->  
-> -- 
-> 2.41.0.162.gfafddb0af9-goog
-> 
-
