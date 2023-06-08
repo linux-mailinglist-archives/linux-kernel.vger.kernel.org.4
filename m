@@ -2,139 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A299728888
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 21:30:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E60172888A
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 21:30:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234534AbjFHTad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 15:30:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45438 "EHLO
+        id S235589AbjFHTaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 15:30:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235589AbjFHTa2 (ORCPT
+        with ESMTP id S230096AbjFHTau (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 15:30:28 -0400
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF9312134
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 12:30:19 -0700 (PDT)
-Received: by mail-il1-x130.google.com with SMTP id e9e14a558f8ab-33b04c8f3eeso4381495ab.0
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 12:30:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686252619; x=1688844619;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mCwP+3tlZqvvMSbN25I242CI8N2o4w3/6RVIlVlj13g=;
-        b=Z+1ROWx9LnxdX5nt3Yo9Gw9A1LjKJHFc2WtgcRAYaFIpj6m1+MueknjL2tetH/Yt/E
-         Jkma5NMQVv2CGzmJBnvKYmHLILgxFTZBZe29Vg5F330+u2fSbBPVEtX3NRx2YFJBGUmp
-         kCJjjc7KvjHhyEDucY5j+/eHT1OpuVlzl/VgAMVyKWRQ9P9ksfEE7oKQrQHB2ZVzogis
-         AlGkparAM9e3I8OX/wc+UGRKJ9WTDNWGaUDF7YaTiCVpSxpo1NNn2hyrTeXSAmMOPutQ
-         TUN3B1UmJFKBBqlJCwM8cMmQBeV6xJ4ogL/1WbFBc8kxJTJPQLfJ0hWbM0sLcNxIcm/D
-         dTzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686252619; x=1688844619;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mCwP+3tlZqvvMSbN25I242CI8N2o4w3/6RVIlVlj13g=;
-        b=HOM2GwKIR67WYuX8Vnyx9M97cqzy+DLF/lehMWxTlMG6vRJLbyGM+isz6mngd/lG74
-         4aeTewjkJ1LAt+z5nBVCWsUm0033HsWl2ugHlYFgfEJhltf/EP/+g2aQDzzzyn2d/Qhv
-         AVWNtz0NuVaEGsy69/s33Og7MampQaZsjd/5VP6hVUF8RlfhnwR0zfn9NdU+Yr8aMKZb
-         29jfU8ma7sE3sH5odE0OGN6Aje5AM3tjc/Wb4XYsRw9rhlpYq84KB8piRl9kubXrS8Mw
-         8dO55eFj0E8w7bQGgFOqEV0vuuiGUx/m46aDPCSQxS3KYp21mXbM9OEkFAwTAZ8QE/pz
-         IQSA==
-X-Gm-Message-State: AC+VfDwuRIV4q0SYiDOiUkRWFYpZZe4cp92MUg+JlkBWtSxSpcsYpcYa
-        P7m8GhFqz4Ny/HLSsDCdahMnWQ==
-X-Google-Smtp-Source: ACHHUZ5FLPawoStHwp2n90KOP3LMuG/l1wNARr8CXyW4COytL00Jtvx4PAa220fnQj49mz7p+WoCNQ==
-X-Received: by 2002:a92:d34a:0:b0:33b:820:41ad with SMTP id a10-20020a92d34a000000b0033b082041admr8096921ilh.9.1686252619199;
-        Thu, 08 Jun 2023 12:30:19 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id h184-20020a256cc1000000b00bad07875d9bsm450282ybc.11.2023.06.08.12.30.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 12:30:18 -0700 (PDT)
-Date:   Thu, 8 Jun 2023 12:30:14 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Andrew Morton <akpm@linux-foundation.org>
-cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Helge Deller <deller@gmx.de>,
-        John David Anglin <dave.anglin@bell.net>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH v2 17/23] sh/hugetlb: pte_alloc_huge() pte_offset_huge()
-In-Reply-To: <a4963be9-7aa6-350-66d0-2ba843e1af44@google.com>
-Message-ID: <ee885978-7355-624b-cfe2-c3d75672b842@google.com>
-References: <a4963be9-7aa6-350-66d0-2ba843e1af44@google.com>
+        Thu, 8 Jun 2023 15:30:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 916D82D55;
+        Thu,  8 Jun 2023 12:30:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D3F3650BB;
+        Thu,  8 Jun 2023 19:30:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC148C4339B;
+        Thu,  8 Jun 2023 19:30:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686252634;
+        bh=Sn9hAi2Kyf0okzCneZ3amJPSCNVbUHG48YWRl4CGl/M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lfdr8/t7jAH4glSpjV2KYZiJ23pFC02NUTTTkCYlLGOvVOrmDCcRICN1I7ckFGeAQ
+         TPGCO5Yx6pvnH5XLP1XTniYRePwwraYyUDpYJqCXzS6uNl5YuDSEtEqzaa6vast+yd
+         AMjS+CzLVMzQGuWTQNRSM0Ufd/re+R18iMYOl+Biy/Afeke4T74nR7ID5P7Lx82b2L
+         1/KMCBpD/NbyjEYVOdgT3myEqZ9cUkkHXTTjYCo/FHA0ZWQmct3tB4tNdElz8hzlKD
+         dMXMAC24mzOI1YV/emxTct+WnhjV22drqsWa8YBbOCsThta5By4dLh6opE8JHBZsev
+         ojK/xAa+VBS6A==
+Date:   Thu, 8 Jun 2023 20:30:28 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        Sean Anderson <sean.anderson@seco.com>,
+        Anup Patel <anup@brainfault.org>,
+        Andrew Jones <ajones@ventanamicro.com>, palmer@dabbelt.com,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alistair Francis <alistair.francis@wdc.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Jessica Clarke <jrtc27@jrtc27.com>,
+        Rick Chen <rick@andestech.com>, Leo <ycliang@andestech.com>,
+        linux-riscv@lists.infradead.org, qemu-riscv@nongnu.org,
+        u-boot@lists.denx.de, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] dt-bindings: riscv: deprecate riscv,isa
+Message-ID: <20230608-cobbler-giving-e0fac2185e11@spud>
+References: <20230518-thermos-sanitary-cf3fbc777ea1@wendy>
+ <20230518-4050231ca8dbe93c08cf9c9a@orel>
+ <CAAhSdy07Mg_JBF+4ucGFiWdBKh-Ass5G_aUWqBqTnDSFp7S=0A@mail.gmail.com>
+ <20230518-hammock-doornail-478e8ea8e6a7@wendy>
+ <f7c20090-220c-2805-86ba-b174a89f65b3@seco.com>
+ <20230518-monkhood-dispersal-6749b1228b0d@spud>
+ <20230530-duller-reset-a34ae111f207@wendy>
+ <20230608191537.GA3233857-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="J8Z0GTvlCQGm2lQj"
+Content-Disposition: inline
+In-Reply-To: <20230608191537.GA3233857-robh@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pte_alloc_map() expects to be followed by pte_unmap(), but hugetlb omits
-that: to keep balance in future, use the recently added pte_alloc_huge()
-instead; with pte_offset_huge() a better name for pte_offset_kernel().
 
-Signed-off-by: Hugh Dickins <hughd@google.com>
----
- arch/sh/mm/hugetlbpage.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+--J8Z0GTvlCQGm2lQj
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/arch/sh/mm/hugetlbpage.c b/arch/sh/mm/hugetlbpage.c
-index 999ab5916e69..6cb0ad73dbb9 100644
---- a/arch/sh/mm/hugetlbpage.c
-+++ b/arch/sh/mm/hugetlbpage.c
-@@ -38,7 +38,7 @@ pte_t *huge_pte_alloc(struct mm_struct *mm, struct vm_area_struct *vma,
- 			if (pud) {
- 				pmd = pmd_alloc(mm, pud, addr);
- 				if (pmd)
--					pte = pte_alloc_map(mm, pmd, addr);
-+					pte = pte_alloc_huge(mm, pmd, addr);
- 			}
- 		}
- 	}
-@@ -63,7 +63,7 @@ pte_t *huge_pte_offset(struct mm_struct *mm,
- 			if (pud) {
- 				pmd = pmd_offset(pud, addr);
- 				if (pmd)
--					pte = pte_offset_map(pmd, addr);
-+					pte = pte_offset_huge(pmd, addr);
- 			}
- 		}
- 	}
--- 
-2.35.3
+On Thu, Jun 08, 2023 at 01:15:37PM -0600, Rob Herring wrote:
+> On Tue, May 30, 2023 at 03:12:12PM +0100, Conor Dooley wrote:
+> > On Thu, May 18, 2023 at 10:42:34PM +0100, Conor Dooley wrote:
+> > > On Thu, May 18, 2023 at 02:30:53PM -0400, Sean Anderson wrote:
+> >=20
+> > > >=20
+> > > > Why not just have something like
+> > > >=20
+> > > > mycpu {
+> > > > 	...
+> > > > 	riscv,isa {
+> > > > 		i;
+> > > > 		m;
+> > > > 		a;
+> > > > 		zicsr;
+> > > > 		...
+>=20
+> I prefer property names be globally unique. The tools are geared towards=
+=20
+> that too. That's largely a symptom of having 0 type information in the=20
+> DT.
+>=20
+> For example if you had an extension called 'reg', it would be a problem.
 
+Per the current ISA rules, that'd not be valid. But then again, I do
+have trust issues & it's not like "reg" is the only property name in DT
+land.
+
+> > > Naming of the node aside (perhaps that could be riscv,isa-extensions)
+> > > there's not something hitting me immediately as to why that is a no-n=
+o.
+> > > If the size is a concern, this would certainly be more efficient & not
+> > > like the probing would be anything other than trivial more difficult
+> > > what I have in my proposal.
+> >=20
+> > Having started messing around with this, one of the main advantages, to
+> > me, of this approach is proper validation.
+> > cpus.yaml has additionalProperties: true in it, which would have had to
+> > be sorted out, or worked around, but creating a child-node with the
+> > properties in it allows setting additionalProperties: false.
+>=20
+> That's an issue on my radar to fix. I started that for the Arm cpus.yaml=
+=20
+> a while back. Sadly it involves adding all the misc properties vendors=20
+> added. It's not a lot, but still better to get in front of that for=20
+> Risc-V.
+
+Yeah, guess I can append that to my todo list.
+
+> > > Rob's AFK at the moment, and I was hoping that he would take a look at
+> > > the idea, so I won't respin til he is back, but I'll give this a go in
+> > > the interim.
+> >=20
+> > Mechanically, the conversion of the patch isn't difficult, but I'll sti=
+ll
+> > wait for Rob to come back before sending a v2. But that v2 will more
+> > than likely implement your suggestion.
+>=20
+> I haven't read the whole thread, but the initial proposal looks okay to=
+=20
+> me.
+>=20
+> Another way you could do this is a list of strings:
+>=20
+> riscv,isa-ext =3D "i", "m", "zicsr";
+>=20
+> I think we have a helper to test is a string in the list.
+
+Perhaps I should've waited a bit longer than a month for a v2 - I sent
+one this afternoon doing what Sean suggested:
+https://lore.kernel.org/all/20230608-sitting-bath-31eddc03c5a5@spud/
+
+I'll do some poking at the strings and see what I think of it.
+
+Cheers,
+Conor.
+
+--J8Z0GTvlCQGm2lQj
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIIsVAAKCRB4tDGHoIJi
+0g5YAQC9F/U/qWJxcOhejKFcF7fDmwOe+gCq0sgnacuq/Vu+ZAEAwAZ9EAwNs4oF
+aCnC2JOfp//gPzZTwmsYjjFeeLhAkwA=
+=KmSP
+-----END PGP SIGNATURE-----
+
+--J8Z0GTvlCQGm2lQj--
