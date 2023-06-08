@@ -2,78 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C3B77278DE
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 09:32:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7CC47278E1
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 09:34:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234921AbjFHHcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 03:32:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36218 "EHLO
+        id S235431AbjFHHeP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 03:34:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234391AbjFHHcn (ORCPT
+        with ESMTP id S230106AbjFHHeN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 03:32:43 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86209E;
-        Thu,  8 Jun 2023 00:32:42 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 3587VjrS6005923, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 3587VjrS6005923
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Thu, 8 Jun 2023 15:31:45 +0800
-Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Thu, 8 Jun 2023 15:32:01 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Thu, 8 Jun 2023 15:32:01 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
- RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
- 15.01.2375.007; Thu, 8 Jun 2023 15:32:01 +0800
-From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
-        <stanley_chang@realtek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Ray Chi <raychi@google.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        "Flavio Suligoi" <f.suligoi@asem.it>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: [PATCH v3 5/5] dt-bindings: phy: realtek: Add the doc about the Realtek SoC USB 3.0 PHY
-Thread-Topic: [PATCH v3 5/5] dt-bindings: phy: realtek: Add the doc about the
- Realtek SoC USB 3.0 PHY
-Thread-Index: AQHZmQjklnRAOra5tUWspHWKA9A7xK9+uVYAgAG7/iA=
-Date:   Thu, 8 Jun 2023 07:32:01 +0000
-Message-ID: <1f13680401e449a3b9384710206cc2b0@realtek.com>
-References: <20230607062500.24669-1-stanley_chang@realtek.com>
- <20230607062500.24669-5-stanley_chang@realtek.com>
- <58aea31d-8f47-a558-6e17-17b55059bb23@linaro.org>
-In-Reply-To: <58aea31d-8f47-a558-6e17-17b55059bb23@linaro.org>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.190.159]
-x-kse-serverinfo: RTEXMBS03.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Thu, 8 Jun 2023 03:34:13 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 439BD9E;
+        Thu,  8 Jun 2023 00:34:12 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0DFB56606F10;
+        Thu,  8 Jun 2023 08:34:10 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686209650;
+        bh=xJ+I3bcwd9Bg/yM7l1pEkI+rXFRK/dFMKrA5l7XRALw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=km6m0nsnZRM5AqYkLkmQK8jZf+krqDHQTD5jwbqzg9CEN8j1ZTkuIZpfO+jPNL9uI
+         xo6weoeh4iJWh/ox5PKnHfQd42Pny82ooWWQHeE2zzMO9hS6CTPPy9J3Xf70I6BHM7
+         fBHYrPnq2xWOZyv3IPJODjh3HfjT4NUnXI4MeYHsmn4PBX5YWq73BmtsV028Pj4zxK
+         HsMH+JGnVkVGSIfZBfOTsdZv+M9arh1g1hXPri3yEfF+tO/Xz86iJR4NqEnAP5wzKJ
+         KmxJBy1o5J3NlJmlqtMx5DSHAyG/X1tvAqDuM3j4BGM1K62w9I1X4lTsBetMNU9mRz
+         uLeWf4WG0lOQQ==
+Message-ID: <b40de764-3673-fe5c-1eba-c17e63af55f5@collabora.com>
+Date:   Thu, 8 Jun 2023 09:34:07 +0200
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v2 3/5] media: mediatek: vcodec: Read HW active status
+ from clock
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     kernel@collabora.com, Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org
+References: <20230607205714.510012-1-nfraprado@collabora.com>
+ <20230607205714.510012-4-nfraprado@collabora.com>
+Content-Language: en-US
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230607205714.510012-4-nfraprado@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,47 +67,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgS3J6eXN6dG9mLA0KDQo+IA0KPiAxIHBoeSBvciA0PyBEZWNpZGUuDQoNCkluIGFjdHVhbGx5
-LCB3ZSBoYXZlIG9uZSBwaHkgZm9yIG9uZSBjb250cm9sbGVyLg0KSSBtZWFuIHRoZSBkcml2ZXIg
-Y2FuIHN1cHBvcnQgdXAgdG8gNCBwaHlzLg0KSSBjYW4gcmV2aXNlZCBhcw0KIl5waHlAWzBdKyQi
-DQpPciBvbmx5ICJwaHkiDQoNCj4gPiArDQo+ID4gK3BhdHRlcm5Qcm9wZXJ0aWVzOg0KPiA+ICsg
-ICJecGh5QFswLTNdKyQiOg0KPiA+ICsgICAgZGVzY3JpcHRpb246IEVhY2ggc3ViLW5vZGUgaXMg
-YSBQSFkgZGV2aWNlIGZvciBvbmUgWEhDSSBjb250cm9sbGVyLg0KPiA+ICsgICAgdHlwZTogb2Jq
-ZWN0DQo+ID4gKyAgICBwcm9wZXJ0aWVzOg0KPiA+ICsgICAgICByZWFsdGVrLHBhcmFtOg0KPiA+
-ICsgICAgICAgIGRlc2NyaXB0aW9uOiBUaGUgZGF0YSBvZiBQSFkgcGFyYW1ldGVyIGFyZSB0aGUg
-cGFpciBvZiB0aGUNCj4gPiArICAgICAgICAgIG9mZnNldCBhbmQgdmFsdWUuDQo+ID4gKyAgICAg
-ICAgJHJlZjogL3NjaGVtYXMvdHlwZXMueWFtbCMvZGVmaW5pdGlvbnMvdWludDgtYXJyYXkNCj4g
-DQo+IFlvdXIgY2hvaWNlIG9mIHR5cGVzIGlzIHN1cnByaXNpbmcuIElmIHRoaXMgaXMgYXJyYXks
-IHRoYW4gbWF4SXRlbXMgKGFuZCBwbGVhc2UNCj4gZG9uJ3QgdGVsbCBtZSBpdCBpcyBtYXhJdGVt
-czogMSkuIEFueXdheSwgd2h5IDggYml0cyBsb25nPw0KDQpJdCBzaG91bGQgYmUgYSB1aW50MzIt
-bWF0cml4Lg0KDQo+ID4gKw0KPiA+ICsgICAgICByZWFsdGVrLGRvLXRvZ2dsZToNCj4gPiArICAg
-ICAgICBkZXNjcmlwdGlvbjogU2V0IHRoaXMgZmxhZyB0byBlbmFibGUgdGhlIFBIWSBwYXJhbWV0
-ZXIgdG9nZ2xlDQo+ID4gKyAgICAgICAgICB3aGVuIHBvcnQgc3RhdHVzIGNoYW5nZS4NCj4gPiAr
-ICAgICAgICB0eXBlOiBib29sZWFuDQo+ID4gKw0KPiA+ICsgICAgICByZWFsdGVrLGRvLXRvZ2ds
-ZS1vbmNlOg0KPiA+ICsgICAgICAgIGRlc2NyaXB0aW9uOiBTZXQgdGhpcyBmbGFnIHRvIGRvIFBI
-WSBwYXJhbWV0ZXIgdG9nZ2xlIG9ubHkgb24NCj4gPiArICAgICAgICAgIFBIWSBpbml0Lg0KPiA+
-ICsgICAgICAgIHR5cGU6IGJvb2xlYW4NCj4gPiArDQo+ID4gKyAgICAgIHJlYWx0ZWssY2hlY2st
-ZWZ1c2U6DQo+ID4gKyAgICAgICAgZGVzY3JpcHRpb246IEVuYWJsZSB0byB1cGRhdGUgUEhZIHBh
-cmFtZXRlciBmcm9tIHJlYWRpbmcgb3RwDQo+IHRhYmxlLg0KPiA+ICsgICAgICAgIHR5cGU6IGJv
-b2xlYW4NCj4gPiArDQo+ID4gKyAgICAgIHJlYWx0ZWssdXNlLWRlZmF1bHQtcGFyYW1ldGVyOg0K
-PiA+ICsgICAgICAgIGRlc2NyaXB0aW9uOiBEb24ndCBzZXQgcGFyYW1ldGVyIGFuZCB1c2UgZGVm
-YXVsdCB2YWx1ZSBpbg0KPiBoYXJkd2FyZS4NCj4gPiArICAgICAgICB0eXBlOiBib29sZWFuDQo+
-ID4gKw0KPiA+ICsgICAgICByZWFsdGVrLGNoZWNrLXJ4LWZyb250LWVuZC1vZmZzZXQ6DQo+ID4g
-KyAgICAgICAgZGVzY3JpcHRpb246IEVuYWJsZSB0byBjaGVjayByeCBmcm9udCBlbmQgb2Zmc2V0
-Lg0KPiA+ICsgICAgICAgIHR5cGU6IGJvb2xlYW4NCj4gPiArDQo+ID4gK3JlcXVpcmVkOg0KPiA+
-ICsgIC0gY29tcGF0aWJsZQ0KPiA+ICsgIC0gcmVnDQo+ID4gKyAgLSAiI2FkZHJlc3MtY2VsbHMi
-DQo+ID4gKyAgLSAiI3NpemUtY2VsbHMiDQo+ID4gKyAgLSAiI3BoeS1jZWxscyINCj4gPiArDQo+
-ID4gK2FkZGl0aW9uYWxQcm9wZXJ0aWVzOiBmYWxzZQ0KPiA+ICsNCj4gPiArZXhhbXBsZXM6DQo+
-ID4gKyAgLSB8DQo+ID4gKyAgICB1c2JfcG9ydDJfdXNiM3BoeTogdXNiLXBoeUAxM2UxMCB7DQo+
-ID4gKyAgICAgICAgY29tcGF0aWJsZSA9ICJyZWFsdGVrLHJ0ZDEzMTlkLXVzYjNwaHkiLCAicmVh
-bHRlayx1c2IzcGh5IjsNCj4gPiArICAgICAgICByZWcgPSA8MHgxM2UxMCAweDQ+Ow0KPiA+ICsg
-ICAgICAgICNhZGRyZXNzLWNlbGxzID0gPDE+Ow0KPiA+ICsgICAgICAgICNzaXplLWNlbGxzID0g
-PDA+Ow0KPiA+ICsgICAgICAgICNwaHktY2VsbHMgPSA8MD47DQo+ID4gKw0KPiA+ICsgICAgICAg
-IHBoeUAwIHsNCj4gPiArICAgICAgICAgICAgcmVnID0gPDA+Ow0KPiA+ICsgICAgICAgICAgICBy
-ZWFsdGVrLHBhcmFtID0NCj4gPiArICAgICAgICAgICAgICAgICAgICA8MHgwMSAweGFjOGM+LA0K
-PiA+ICsgICAgICAgICAgICAgICAgICAgIDwweDA2IDB4MDAxNz4sDQo+IA0KPiBGaXJzdCwgdGhp
-cyBpcyBtYXRyaXgsIG5vdCB1aW50OCBhcnJheS4gU2Vjb25kLCAweGFjOGMgaXMgcGFzdCAxNiBi
-aXRzIGxvbmcsIG5vdCA4Lg0KPiBUaGlyZCwgeW91IHB1dCBzb21lIG1hZ2ljIHJlZ2lzdGVyIHBy
-b2dyYW1taW5nIHRvIERULg0KPiBQbGVhc2UgZG9uJ3QuIERyb3AgYWxsIHRoaXMgZnJvbSBEVC4N
-Cg0KcmVhbHRlayxwYXJhbSBpcyBhbiB1aW50MzItbWF0cnguDQpJIHdpbGwgcmV2aXNlZCB0aGUg
-dHlwZS4NCg0KVGhhbmtzLA0KU3RhbmxleQ0KDQo=
+Il 07/06/23 22:53, Nícolas F. R. A. Prado ha scritto:
+> Remove the requirement of a VDEC_SYS reg iospace. To achieve that, rely
+> on the "active" clock being passed through the DT, and read its status
+> during IRQ handling to check whether the HW is active.
+> 
+> The old behavior is still present when reg-names aren't supplied, as to
+> keep backward compatibility.
+> 
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
+
