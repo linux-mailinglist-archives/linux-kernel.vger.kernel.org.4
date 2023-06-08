@@ -2,68 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9D887283D7
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 17:40:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D90817283DD
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 17:42:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236942AbjFHPkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 11:40:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59246 "EHLO
+        id S237097AbjFHPmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 11:42:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236386AbjFHPkA (ORCPT
+        with ESMTP id S235932AbjFHPmO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 11:40:00 -0400
-Received: from cau.edu.cn (mx4.cau.edu.cn [211.82.93.97])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1B3282D47
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 08:39:58 -0700 (PDT)
+        Thu, 8 Jun 2023 11:42:14 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AFDF26B2
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 08:42:13 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-651ffcc1d3dso489811b3a.3
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 08:42:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cau.edu.cn; s=dkim; h=Received:Content-Type:MIME-Version:
-        Content-Transfer-Encoding:Content-Description:Subject:To:From:
-        Date:Reply-To:Message-Id; bh=3zfvbm3iRpbhnSma4AEzNVZJYT38cdJE1Hc
-        jirq8ThA=; b=KD1TwCDYYoky4KDriLgAYeboHDWB9RhfOFGDm4TdyLTlHNDhI6D
-        Efcq8a8EBcgTKwemfd2lpljKLwTLDafpR4Hz6x8ThXmlhxun0357gAhibrl0uIFu
-        UTUyB4heqvZTWNJUEGzFULp+QkFqfj0e6unxO/fsn9FZuNR6zSjBjsqA=
-Received: from [103.179.185.190] (unknown [103.179.185.190])
-        by mailapp4 (Coremail) with SMTP id YV1S0wA3yvop9oFkb7k0AA--.37394S6;
-        Thu, 08 Jun 2023 23:39:38 +0800 (CST)
-Content-Type: text/plain; charset="iso-8859-1"
+        d=linaro.org; s=google; t=1686238933; x=1688830933;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=3+rKvrAD/3nB2Hd54+Q6FhE04OWPXzOgHlJeP4uTSYI=;
+        b=EW/FEZ1hRNriBFCYTSUYpdyPARm5xrJF7p1xRkAq83W3FeD5hEjd7PdvLMr6Bsk8ax
+         d4gl1hEcJVl3FI8+o/OKhqyGNfDWNL5JBBl5kZceFrh7PcbSq6Nzf2gZR6lmUDx+3g1F
+         yoOf20mC0MSZ4RH04jW4FxTH+2YHdp6IcKlFEPoK896I2W8Hc5hM3HYO/qiGnBXx6O3Q
+         TIAzSNETwdeGiljphhUaMTHZ6LFJ/JQXGfYrRQrmeW82Y4pTOOpjvkFXSlZQ8PvKTIUs
+         zwZLHChmK7brJu9o9A+K5dujaVkUElnA/Yuby4hFZKuB7oG60tQJ2yBw/QQhd9O9pg/U
+         ioYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686238933; x=1688830933;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3+rKvrAD/3nB2Hd54+Q6FhE04OWPXzOgHlJeP4uTSYI=;
+        b=W+QvZUnGD1HVE5Qq58cKpbpLTGc2soeAM+JFhC37or8zzCgXM3Ja0OKxXHFZjvddkF
+         jUUDkUAbpCG5eM3e6L4Sj0FLk/W03AtMHPmF235MauB88uFiaH1W1FHPPBkH1tRbGERg
+         2RAYlmU15Q7RdcopWsAOtMzjD1aUdh1yn8q61+LYEpbmCfss343FZcIx2DE369uwhtcs
+         +k2LOs9B23VAilwics+2s97GtrPZQFuuaZ2RgAU1Np0mVfr5LYJVwdBuUY+ipyT6XzKL
+         X8Pt85a1viDEuvwZ+1l9IW6u677cVLu9y8cv7eslJ4/tGQxlh/YJ+5XN8ht697DSVvHj
+         QRkg==
+X-Gm-Message-State: AC+VfDyfTuXWM3BMs9wR2RDrlqRoba3i6qWlo4GNCqm64qkvdY6ycVRB
+        YKbwCsRRzFUXDxZ8OlQkTJst
+X-Google-Smtp-Source: ACHHUZ45EfcovmCH6MJOJnFO9JOWnolDTC/51ybxq4NN+brr8ImWPVqwLSrTA4MMnvdD3XGrzuY0/g==
+X-Received: by 2002:a05:6a20:3d03:b0:114:7637:3451 with SMTP id y3-20020a056a203d0300b0011476373451mr5498027pzi.37.1686238932752;
+        Thu, 08 Jun 2023 08:42:12 -0700 (PDT)
+Received: from thinkpad ([117.202.186.138])
+        by smtp.gmail.com with ESMTPSA id b4-20020a170902d50400b001ae0a4b1d3fsm1601927plg.153.2023.06.08.08.42.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 08:42:12 -0700 (PDT)
+Date:   Thu, 8 Jun 2023 21:12:06 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Siddharth Vadapalli <s-vadapalli@ti.com>
+Cc:     tjoseph@cadence.com, lpieralisi@kernel.org, robh@kernel.org,
+        kw@linux.com, bhelgaas@google.com, nadeem@cadence.com,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, vigneshr@ti.com, srk@ti.com,
+        nm@ti.com
+Subject: Re: [PATCH v3] PCI: cadence: Fix Gen2 Link Retraining process
+Message-ID: <20230608154206.GI5672@thinkpad>
+References: <20230607091427.852473-1-s-vadapalli@ti.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Re:Investment ??
-To:     Recipients <syuan@cau.edu.cn>
-From:   "Mrs. E. Al-Hashimi" <syuan@cau.edu.cn>
-Date:   Thu, 08 Jun 2023 08:39:21 -0700
-Reply-To: nationalbureau@kakao.com
-X-CM-TRANSID: YV1S0wA3yvop9oFkb7k0AA--.37394S6
-Message-Id: <6481F63B.0C41EE.30693@cau.edu.cn>
-Authentication-Results: mailapp4; spf=neutral smtp.mail=syuan@cau.edu.
-        cn;
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRUUUUUUUUU
-        =
-X-CM-SenderInfo: pv1xt0o6fd3hxhgxhubq/
-X-Spam-Status: No, score=1.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_NAME_MR_MRS,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230607091427.852473-1-s-vadapalli@ti.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Sir/Ma,
+On Wed, Jun 07, 2023 at 02:44:27PM +0530, Siddharth Vadapalli wrote:
+> The Link Retraining process is initiated to account for the Gen2 defect in
+> the Cadence PCIe controller in J721E SoC. The errata corresponding to this
+> is i2085, documented at:
+> https://www.ti.com/lit/er/sprz455c/sprz455c.pdf
+> 
+> The existing workaround implemented for the errata waits for the Data Link
+> initialization to complete and assumes that the link retraining process
+> at the Physical Layer has completed. However, it is possible that the
+> Physical Layer training might be ongoing as indicated by the
+> PCI_EXP_LNKSTA_LT bit in the PCI_EXP_LNKSTA register.
+> 
+> Fix the existing workaround, to ensure that the Physical Layer training
+> has also completed, in addition to the Data Link initialization.
+> 
 
-My name is Mrs. Reem E. Al-Hashimi, The Emirates Minister of State  United =
-Arab Emirates.I have a great business proposal to discuss with you, if you =
-are interested in Foreign Investment/Partnership please reply with your lin=
-e of interest.
+cdns_pcie_host_wait_for_link() function is called even for the non-quirky cases
+as well, so does this patch. But if your patch is only targeting the link
+retraining case, you should move the logic to cdns_pcie_retrain().
 
 
-I can invest with  BTC, Banince and All Cryptocurrencies
+> Fixes: 4740b969aaf5 ("PCI: cadence: Retrain Link to work around Gen2 training defect")
+> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+> Reviewed-by: Vignesh Raghavendra <vigneshr@ti.com>
+> ---
+> 
+> Hello,
+> 
+> This patch is based on linux-next tagged next-20230606.
+> 
+> v2:
+> https://lore.kernel.org/r/20230315070800.1615527-1-s-vadapalli@ti.com/
+> Changes since v2:
+> - Merge the cdns_pcie_host_training_complete() function with the
+>   cdns_pcie_host_wait_for_link() function, as suggested by Bjorn
+>   for the v2 patch.
+> - Add dev_err() to notify when Link Training fails, since this is a
+>   fatal error and proceeding from this point will almost always crash
+>   the kernel.
+> 
+> v1:
+> https://lore.kernel.org/r/20230102075656.260333-1-s-vadapalli@ti.com/
+> Changes since v1:
+> - Collect Reviewed-by tag from Vignesh Raghavendra.
+> - Rebase on next-20230315.
+> 
+> Regards,
+> Siddharth.
+> 
+>  .../controller/cadence/pcie-cadence-host.c    | 20 +++++++++++++++++++
+>  1 file changed, 20 insertions(+)
+> 
+> diff --git a/drivers/pci/controller/cadence/pcie-cadence-host.c b/drivers/pci/controller/cadence/pcie-cadence-host.c
+> index 940c7dd701d6..70a5f581ff4f 100644
+> --- a/drivers/pci/controller/cadence/pcie-cadence-host.c
+> +++ b/drivers/pci/controller/cadence/pcie-cadence-host.c
+> @@ -12,6 +12,8 @@
+>  
+>  #include "pcie-cadence.h"
+>  
+> +#define LINK_RETRAIN_TIMEOUT HZ
+> +
+>  static u64 bar_max_size[] = {
+>  	[RP_BAR0] = _ULL(128 * SZ_2G),
+>  	[RP_BAR1] = SZ_2G,
+> @@ -80,8 +82,26 @@ static struct pci_ops cdns_pcie_host_ops = {
+>  static int cdns_pcie_host_wait_for_link(struct cdns_pcie *pcie)
+>  {
+>  	struct device *dev = pcie->dev;
+> +	unsigned long end_jiffies;
+> +	u16 link_status;
+>  	int retries;
+>  
+> +	/* Wait for link training to complete */
+> +	end_jiffies = jiffies + LINK_RETRAIN_TIMEOUT;
+> +	do {
+> +		link_status = cdns_pcie_rp_readw(pcie, CDNS_PCIE_RP_CAP_OFFSET + PCI_EXP_LNKSTA);
+> +		if (!(link_status & PCI_EXP_LNKSTA_LT))
+> +			break;
+> +		usleep_range(0, 1000);
+> +	} while (time_before(jiffies, end_jiffies));
+> +
+> +	if (!(link_status & PCI_EXP_LNKSTA_LT)) {
+> +		dev_info(dev, "Link training complete\n");
 
-PLEASE REPLY ME : rrrhashimi2022@kakao.com
+This info is not needed.
 
-Reem
+> +	} else {
+> +		dev_err(dev, "Fatal! Link training incomplete\n");
 
+This could be, "Link retraining incomplete".
+
+- Mani
+
+> +		return -ETIMEDOUT;
+> +	}
+> +
+>  	/* Check if the link is up or not */
+>  	for (retries = 0; retries < LINK_WAIT_MAX_RETRIES; retries++) {
+>  		if (cdns_pcie_link_up(pcie)) {
+> -- 
+> 2.25.1
+> 
+
+-- 
+மணிவண்ணன் சதாசிவம்
