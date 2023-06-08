@@ -2,117 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D3DE7281EF
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 15:58:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEC2A728209
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 16:00:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236770AbjFHN6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 09:58:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39052 "EHLO
+        id S235792AbjFHOAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 10:00:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234447AbjFHN6h (ORCPT
+        with ESMTP id S235130AbjFHOAU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 09:58:37 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C77B26AB
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 06:58:36 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id 5614622812f47-38dec65ab50so414949b6e.2
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 06:58:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1686232715; x=1688824715;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UNu2/S7sKOt+ubQCHoHXnO+tkZORQ3Sbd1tjf3f4Mr4=;
-        b=c3kx8K7tTcukv+anoLR5JE3/ubg8q5CO3nzZOO6SU5CXIix8vczuprLx4rXVDWTdEX
-         hs+E+zzja4ua8gGSjBrbVm6Ep8+L0fOEvdhrqVYJLxFv130wvOZzdjAaB2Flhgb2TRRb
-         uqPK/7XI63a9Wl2IZQN4DEejxckFyPyr0xFuvLWArVQ/+f9ud9V5FeMXJ6bonL6nPSkP
-         ZAWsLq+XfvZHPiGRN/xo7lAPtKsiLx+Q72RSIJ86pzS9EcuyNwtp9F9J96kqArgULjkv
-         3GfO6CrfSEhxuYeCqGRvjyHkvsZI1BdV24dd8bBsMQRPPswYuaCUpkJe5qj8Iwetk/KI
-         UiSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686232715; x=1688824715;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UNu2/S7sKOt+ubQCHoHXnO+tkZORQ3Sbd1tjf3f4Mr4=;
-        b=hxNeH8VZk0srKpEQXks3zOdCzjJl8/4k1I9LQnpEvwooTN4OqDOtcAnNLVsnWGF1T1
-         1DFfiaYfaoS0P2T1y9q5VLrK8IgVzZRSjHF6DPH4hwO+W/+O3mJh02BjZ2B1qekDKDNJ
-         GJL8tqZYMBNHc2zPvK7omTm3BEF2qenOSyn7P6D7TkxAGBu5eBtu1435OCpoeN0dprRH
-         7iCWxMOEomvWzSJDMk2qsp5la0536R1YwBUpSYgtJ5decIoqEnw/FEMbKJSKo0XgLu5C
-         AHlYSoVxuif4+P6kpRIZlUHJWs++NEkxYYSwMKMMt+2wUYLn9f99hsLPKB0D0xe4TPTl
-         qerw==
-X-Gm-Message-State: AC+VfDw33CKJQxL1Ar62JGyNkkF4cvQaMnmmNM2MlIlkjTPIdsOsKVXI
-        KbKWZEYhT2dg8YRzLRrSq2gO7Q==
-X-Google-Smtp-Source: ACHHUZ79SDvHlQrsY3n06C+42lQZ8V3VBEDt3rX4FxqxgeXDKorKznGSCHqgRSC89Wx2XwVPR9xrlA==
-X-Received: by 2002:aca:90e:0:b0:397:f9f2:76b with SMTP id 14-20020aca090e000000b00397f9f2076bmr8071851oij.30.1686232715650;
-        Thu, 08 Jun 2023 06:58:35 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-68-25-194.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.25.194])
-        by smtp.gmail.com with ESMTPSA id pg4-20020a17090b1e0400b00256a4d59bfasm3119836pjb.23.2023.06.08.06.58.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 06:58:34 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1q7G9o-003TSq-VU;
-        Thu, 08 Jun 2023 10:58:32 -0300
-Date:   Thu, 8 Jun 2023 10:58:32 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Peter Xu <peterx@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Steven Price <steven.price@arm.com>,
-        SeongJae Park <sj@kernel.org>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Zack Rusin <zackr@vmware.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Song Liu <song@kernel.org>,
-        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Jann Horn <jannh@google.com>,
-        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH 07/12] s390: add pte_free_defer(), with use of
- mmdrop_async()
-Message-ID: <ZIHeiDf9srvRagfr@ziepe.ca>
-References: <35e983f5-7ed3-b310-d949-9ae8b130cdab@google.com>
- <6dd63b39-e71f-2e8b-7e0-83e02f3bcb39@google.com>
- <175ebec8-761-c3f-2d98-6c3bd87161c8@google.com>
- <20230606214037.09c6b280@thinkpad-T15>
- <dbed4c5-1d-f278-d03a-66f5eff5e48e@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <dbed4c5-1d-f278-d03a-66f5eff5e48e@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        Thu, 8 Jun 2023 10:00:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A9726AB;
+        Thu,  8 Jun 2023 07:00:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E97564C79;
+        Thu,  8 Jun 2023 14:00:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94B75C433D2;
+        Thu,  8 Jun 2023 14:00:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686232818;
+        bh=9D5wCgWDsvqhe68Ss5JsgTkkHCuqZ4CotewKlUNqRh8=;
+        h=Date:To:Subject:From:References:In-Reply-To:From;
+        b=uRKfV27O7tVqQ0KiHeplwVmB9eb95iwq9BEBdoCrOTlDhELHYL4389US+pdKASaJe
+         VuDh8fHKOcEGZ4Yn4sCq+3Tbsyhe2qYDN9djdvr/UcwEowTJ8GG/pwvGU7G5rOZhmq
+         Ai/hFBNotrzUaz8si1BnUw1j5/QWSATivRlk96L23PB7nlU4GaYu2GhURNEiOV6+e4
+         8U0c3EI62MfKTQSZMrfzlzykisBJzSTTi1qRnRu6nQyYzbqJ24zZYM6Vkb34j6zABW
+         mlYwlzun/35gBzkx844cg2SlTPRUHyrEBSD8+s1vl+9yejYBcGqsCv0epIZTk6f4VV
+         btJEMKdeuShIg==
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Thu, 08 Jun 2023 17:00:15 +0300
+Message-Id: <CT7BN97ICGN7.37I0H14NKKMYR@suppilovahvero>
+To:     "Alexander Steffen" <Alexander.Steffen@infineon.com>,
+        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 3/4] tpm_tis: Use responseRetry to recover from data
+ transfer errors
+From:   "Jarkko Sakkinen" <jarkko@kernel.org>
+X-Mailer: aerc 0.14.0
+References: <20230605175959.2131-1-Alexander.Steffen@infineon.com>
+ <20230605175959.2131-4-Alexander.Steffen@infineon.com>
+ <CT5VOWDNIK5S.1549VUD23JWWB@suppilovahvero>
+ <34f01f17-3091-0ce2-f0c3-b0cd25ea61ce@infineon.com>
+In-Reply-To: <34f01f17-3091-0ce2-f0c3-b0cd25ea61ce@infineon.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -121,68 +58,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 08:35:05PM -0700, Hugh Dickins wrote:
+On Wed Jun 7, 2023 at 8:14 PM EEST, Alexander Steffen wrote:
+> >> -     if (status & TPM_STS_DATA_AVAIL) {      /* retry? */
+> >> +     if (status & TPM_STS_DATA_AVAIL) {
+> >=20
+> > Please remove (no-op).
+>
+> You mean I shouldn't change the line and leave the comment in? To me it=
+=20
+> looked like a very brief TODO comment "should we retry here?", and since=
+=20
+> with this change it now actually does retry, I removed it.
 
-> My current thinking (but may be proved wrong) is along the lines of:
-> why does something on its way to being freed need to be on any list
-> than the rcu_head list?  I expect the current answer is, that the
-> other half is allocated, so the page won't be freed; but I hope that
-> we can put it back on that list once we're through with the rcu_head.
+Right, ok, point taken, you can keep it.
 
-I was having the same thought. It is pretty tricky, but if this was
-made into some core helper then PPC and S390 could both use it and PPC
-would get a nice upgrade to have the S390 frag re-use instead of
-leaking frags.
+> >>                dev_err(&chip->dev, "Error left over data\n");
+> >>                size =3D -EIO;
+> >>                goto out;
+> >> @@ -396,10 +391,39 @@ static int tpm_tis_recv(struct tpm_chip *chip, u=
+8 *buf, size_t count)
+> >>        }
+> >>
+> >>   out:
+> >> -     tpm_tis_ready(chip);
+> >>        return size;
+> >>   }
+> >>
+> >> +static int tpm_tis_recv_with_retries(struct tpm_chip *chip, u8 *buf, =
+size_t count)
+> >=20
+> > This *substitutes* the curent tpm_tis_recv(), right?
+> >=20
+> > So it *is* tpm_tis_recv(), i.e. no renames thank you :-)
+> >=20
+> >> +{
+> >> +     struct tpm_tis_data *priv =3D dev_get_drvdata(&chip->dev);
+> >> +     unsigned int try;
+> >> +     int rc =3D 0;
+> >> +
+> >> +     if (count < TPM_HEADER_SIZE) {
+> >> +             rc =3D -EIO;
+> >> +             goto out;
+> >> +     }
+> >> +
+> >> +     for (try =3D 0; try < TPM_RETRY; try++) {
+> >> +             rc =3D tpm_tis_recv(chip, buf, count);
+> >=20
+> > I would rename single shot tpm_tis_recv() as tpm_tis_try_recv().
+> >=20
+> >> +
+> >> +             if (rc =3D=3D -EIO) {
+> >> +                     /* Data transfer errors, indicated by EIO, can b=
+e
+> >> +                      * recovered by rereading the response.
+> >> +                      */
+> >> +                     tpm_tis_write8(priv, TPM_STS(priv->locality),
+> >> +                                    TPM_STS_RESPONSE_RETRY);
+> >> +             } else {
+> >> +                     break;
+> >> +             }
+> >=20
+> > And if this should really be managed inside tpm_tis_try_recv(), and
+> > then return zero (as the code block consumes the return value).
+>
+> What exactly should be done in tpm_tis_try_recv()? It could set=20
+> TPM_STS_RESPONSE_RETRY, but then it would still need to return an error=
+=20
+> code, so that this loop knows whether to call it again or not.
 
-Broadly we have three states:
+So my thinking was to:
 
- all frags free
- at least one frag free
- all frags used
+- Rename tpm_tis_recv() as tpm_tis_try_recv()
+- Rename this new function as tpm_tis_recv().
 
-'all frags free' should be returned to the allocator
-'at least one frag free' should have the struct page on the mmu_struct's list
-'all frags used' should be on no list.
-
-So if we go from 
-  all frags used -> at least one frag free
-Then we put it on the RCU then the RCU puts it on the mmu_struct list
-
-If we go from 
-   at least one frag free -> all frags free
-Then we take it off the mmu_struct list, put it on the RCU, and RCU
-frees it.
-
-Your trick to put the list_head for the mm_struct list into the frag
-memory looks like the right direction. So 'at least one frag free' has
-a single already RCU free'd frag hold the list head pointer. Thus we
-never use the LRU and the rcu_head is always available.
-
-The struct page itself can contain the actual free frag bitmask.
-
-I think if we split up the memory used for pt_frag_refcount we can get
-enough bits to keep track of everything. With only 2-4 frags we should
-be OK.
-
-So we track this data in the struct page:
-  - Current RCU free TODO bitmask - if non-zero then a RCU is already
-    triggered
-  - Next RCU TODO bitmaks - If an RCU is already triggrered then we
-    accumulate more free'd frags here
-  - Current Free Bits - Only updated by the RCU callback
-
-?
-
-We'd also need to store the mmu_struct pointer in the struct page for
-the RCU to be able to add/remove from the mm_struct list.
-
-I'm not sure how much of the work can be done with atomics and how
-much would need to rely on spinlock inside the mm_struct.
-
-It feels feasible and not so bad. :)
-
-Figure it out and test it on S390 then make power use the same common
-code, and we get full RCU page table freeing using a reliable rcu_head
-on both of these previously troublesome architectures :) Yay
-
-Jason
+BR, Jarkko
