@@ -2,168 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2E03728414
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 17:47:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99EEC728452
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 17:55:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236234AbjFHPru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 11:47:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36176 "EHLO
+        id S236170AbjFHPz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 11:55:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234372AbjFHPrr (ORCPT
+        with ESMTP id S236355AbjFHPzx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 11:47:47 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E19F435BC
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 08:47:17 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-510d6b939bfso1404618a12.0
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 08:47:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1686239171; x=1688831171;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ikLyVGzKcEMuSqUp/nI13OAR5DV5p124KJuoTG/oIAE=;
-        b=GYKQIuQgjsVrmT3tlSDLb2UFU7H6aZhNmRSdQLE3cqdlTHsPgAzy0sD98ItbZQOz42
-         oSThFhAsKJB6ohC03mananbZfmtFI8OpYtuzh3P4b7qS1g4INhWNz5I2zJM7RgEvTXM+
-         8NE6DQBw858AqBhOQDeTtfwuWYQmum1fWawa8=
+        Thu, 8 Jun 2023 11:55:53 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF73A2D69
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 08:55:23 -0700 (PDT)
+Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com [209.85.161.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id E4C4D3F33C
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 15:46:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1686239198;
+        bh=RyaR97gkxxeix1gmKAnfIKIlV/8H2Db9pN/XXiJh8ZU=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=PZdVp3enSwiG82cVrHyHYTrredXTYZSmCrmTMUH13vZY9foelMCEhYMYd/R3FhLCG
+         FKdxYYHGel2+NtOmYJySkXPlR9xlxWmLkwXkxikEtPLKO02XicowEdVr2C1tc1+Tal
+         zZYX6Icb6i0uIVTdUNsSnVSjqP2rlFjaR5z2BBbQjej6S5Buy4Fg3Udn+Q+Ar1yrT1
+         MvFoMBZDfCOgQwv2EXi+kxbKC/ynXkcFav8pJz7th8+XrM8o53MYnBNtCk/5jasB1M
+         L4DJZ3X9xcbKdMoXjOhfLRnWdoKPjLew4k4S+k94LdAQHfy2DX6WZyklqcdt3HKMa2
+         yTpzVYe9pE0ZA==
+Received: by mail-oo1-f71.google.com with SMTP id 006d021491bc7-5595551495aso700181eaf.3
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 08:46:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686239171; x=1688831171;
+        d=1e100.net; s=20221208; t=1686239198; x=1688831198;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ikLyVGzKcEMuSqUp/nI13OAR5DV5p124KJuoTG/oIAE=;
-        b=D8priT2J02uGrvSMT4QxSkf8XFoCST8aYJkMCxgWWNYFHJN/uYKpJV39D0whHpdGdK
-         RiayQe/OdIG2LHkn0U/kp+NVnUC8Z/n5Lsv4gy3PxR6l0BiVvu4+XL7/ojeyx9E4wPXD
-         LRWRxDWxwq7Kt2yUlA7Dcfqj+xYSh2G7npAdDSAOYjQdQU95mMabK3hgesQ61Zwu2A3A
-         ksQkRfCIXvoWupPDeJTUG3n6h4y5nY4KN29c97FnBWsjfE7tg9FiulCihqUuNkgdI5tL
-         lG1C61/RYMCeGrs2pZdX3AAq4kkjU5zn2cHgGdcmJT8kQR9Z6I9mIsEWtTnk23D8A/ix
-         ujfg==
-X-Gm-Message-State: AC+VfDzcR2Uh2pRntBV0J5yt7LrBdi3X5+8Y5p/MebelL5BNC9tV8CTu
-        ECSEMBmW04eUziHMQvVLpgKXeCA8wVVLj+OrWTV8Mw==
-X-Google-Smtp-Source: ACHHUZ67D9WATe6vg/FzN2FfOw6kHxkvfxNlJl0geRhbjaBazTpSv4sDvdm+6AGi0LNklOpleK9w1Q==
-X-Received: by 2002:a17:907:26cc:b0:974:1c90:b3d3 with SMTP id bp12-20020a17090726cc00b009741c90b3d3mr194169ejc.12.1686239170820;
-        Thu, 08 Jun 2023 08:46:10 -0700 (PDT)
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com. [209.85.218.51])
-        by smtp.gmail.com with ESMTPSA id lj12-20020a170906f9cc00b009786b73974fsm843306ejb.145.2023.06.08.08.46.10
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jun 2023 08:46:10 -0700 (PDT)
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-977d6aa3758so146757766b.0
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 08:46:10 -0700 (PDT)
-X-Received: by 2002:a17:907:8a15:b0:961:2956:2ed9 with SMTP id
- sc21-20020a1709078a1500b0096129562ed9mr197548ejc.25.1686239169847; Thu, 08
- Jun 2023 08:46:09 -0700 (PDT)
+        bh=RyaR97gkxxeix1gmKAnfIKIlV/8H2Db9pN/XXiJh8ZU=;
+        b=f5a6tdRU4ghfdVx+HUfh0IxZd1XNBKdFspIO+zz6ozpS2EYJYr6EJQFUTNBJY/KgVP
+         kwAVvY/WtKaH9GIbnZahlJ0mMdPuPPfGh+Txqjjb3D6EJPnAGFwhO2OuJW6b6qN/Dawh
+         SaOBxFZIvnUMmnaYz5WXrMZnjII/VX4s4/fJmaCnenZKjh5Poxm3GGdObFcA9vWdydjO
+         fSmGrxPpP7e8Qa0SSg0BjckdOZbyke8+a2pOGcLlUFeb2QEXQ+95Iseqpmne5BfwWVpk
+         guAl1Jo2mclluH1/Pvl+Nt9z/b9Z6TtFTP+RWzkojnVfp73zfD7FdONZGoCUW60xH4Ib
+         Hl+g==
+X-Gm-Message-State: AC+VfDwqNLiE7NgCWB0LQysRkbcwEUDfW+2MHJr3ioE1n1HHl21gw/F7
+        MCjcb9zBVhEROjKq6iHeyFErOkasDdpEIekRvBu7SAOpBdftLCsnO37Wg1xXHgDsjyshyubeH/z
+        t/zI7nHqDOhFkdQQW7qMjaYSaxr7IL56je/YmioGjX7xYqhYEFUXABV8XsQ==
+X-Received: by 2002:a05:6358:e95:b0:129:cb51:7efe with SMTP id 21-20020a0563580e9500b00129cb517efemr6593620rwg.14.1686239197793;
+        Thu, 08 Jun 2023 08:46:37 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5GrdwVlP788/m18FCJp3Hn8m8zO6nyX5cRUmH7sqvVSfU1RnwCMmPWmJgyf7zsTIVIlJdT0E9ti0o+vkF1GsE=
+X-Received: by 2002:a05:6358:e95:b0:129:cb51:7efe with SMTP id
+ 21-20020a0563580e9500b00129cb517efemr6593615rwg.14.1686239197471; Thu, 08 Jun
+ 2023 08:46:37 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230526205204.861311518@infradead.org> <CAHk-=wg2RHZKTN29Gr7MhgYfaNtzz58wry9jCNP75LAmQ9t8-A@mail.gmail.com>
- <20230530092342.GA149947@hirez.programming.kicks-ass.net> <20230606094251.GA907347@hirez.programming.kicks-ass.net>
- <CAHk-=wi-RyoUhbChiVaJZoZXheAwnJ7OO=Gxe85BkPAd93TwDA@mail.gmail.com>
- <20230606134005.GE905437@hirez.programming.kicks-ass.net> <CAHk-=wgQ5m+SnWTYGHu0JgYXTk2dkGF+msX=ARfYoo3t1_fX9g@mail.gmail.com>
- <20230606180806.GA942082@hirez.programming.kicks-ass.net> <CAHk-=wgXN1YxGMUFeuC135aeUvqduF8zJJiZZingzS1Pao5h0A@mail.gmail.com>
- <20230607094101.GA964354@hirez.programming.kicks-ass.net> <20230608085248.GA1002251@hirez.programming.kicks-ass.net>
-In-Reply-To: <20230608085248.GA1002251@hirez.programming.kicks-ass.net>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 8 Jun 2023 08:45:53 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wj-BGgTF0YgY+L7_G8Jb0UO38Cd8dwrfMqFMEh93B3D7g@mail.gmail.com>
-Message-ID: <CAHk-=wj-BGgTF0YgY+L7_G8Jb0UO38Cd8dwrfMqFMEh93B3D7g@mail.gmail.com>
-Subject: Re: [PATCH v2 0/2] Lock and Pointer guards
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     keescook@chromium.org, gregkh@linuxfoundation.org,
-        pbonzini@redhat.com, linux-kernel@vger.kernel.org,
-        ojeda@kernel.org, ndesaulniers@google.com, mingo@redhat.com,
-        will@kernel.org, longman@redhat.com, boqun.feng@gmail.com,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-        joel@joelfernandes.org, josh@joshtriplett.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-        rcu@vger.kernel.org, tj@kernel.org, tglx@linutronix.de,
-        linux-toolchains@vger.kernel.org
+References: <20230607180958.645115-1-aleksandr.mikhalitsyn@canonical.com>
+ <20230607180958.645115-12-aleksandr.mikhalitsyn@canonical.com> <f1e81edf-595b-3f7c-3f00-2c96718fbb69@redhat.com>
+In-Reply-To: <f1e81edf-595b-3f7c-3f00-2c96718fbb69@redhat.com>
+From:   Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Date:   Thu, 8 Jun 2023 17:46:26 +0200
+Message-ID: <CAEivzxeH1rBezS=+gMaEg4_2A9jweLgW7CCc7paaa=MRhh3VXQ@mail.gmail.com>
+Subject: Re: [PATCH v4 11/14] ceph: allow idmapped setattr inode op
+To:     Xiubo Li <xiubli@redhat.com>
+Cc:     brauner@kernel.org, stgraber@ubuntu.com,
+        linux-fsdevel@vger.kernel.org,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 8, 2023 at 1:53=E2=80=AFAM Peter Zijlstra <peterz@infradead.org=
-> wrote:
+On Thu, Jun 8, 2023 at 4:50=E2=80=AFAM Xiubo Li <xiubli@redhat.com> wrote:
 >
-> Or perhaps use the smart-pointer concept applied to our classes like:
 >
-> #define smart_ptr(name, var) \
->         __INSTANTIATE_VAR(name, var)
+> On 6/8/23 02:09, Alexander Mikhalitsyn wrote:
+> > From: Christian Brauner <christian.brauner@ubuntu.com>
+> >
+> > Enable __ceph_setattr() to handle idmapped mounts. This is just a matte=
+r
+> > of passing down the mount's idmapping.
+> >
+> > Cc: Xiubo Li <xiubli@redhat.com>
+> > Cc: Jeff Layton <jlayton@kernel.org>
+> > Cc: Ilya Dryomov <idryomov@gmail.com>
+> > Cc: ceph-devel@vger.kernel.org
+> > Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+> > [ adapted to b27c82e12965 ("attr: port attribute changes to new types")=
+ ]
+> > Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.c=
+om>
+> > ---
+> > v4:
+> >       - introduced fsuid/fsgid local variables
+> > v3:
+> >       - reworked as Christian suggested here:
+> >       https://lore.kernel.org/lkml/20230602-vorzeichen-praktikum-f17931=
+692301@brauner/
+> > ---
+> >   fs/ceph/inode.c | 20 ++++++++++++--------
+> >   1 file changed, 12 insertions(+), 8 deletions(-)
+> >
+> > diff --git a/fs/ceph/inode.c b/fs/ceph/inode.c
+> > index bcd9b506ec3b..ca438d1353b2 100644
+> > --- a/fs/ceph/inode.c
+> > +++ b/fs/ceph/inode.c
+> > @@ -2052,31 +2052,35 @@ int __ceph_setattr(struct mnt_idmap *idmap, str=
+uct inode *inode,
+> >       dout("setattr %p issued %s\n", inode, ceph_cap_string(issued));
+> >
+> >       if (ia_valid & ATTR_UID) {
+> > +             kuid_t fsuid =3D from_vfsuid(idmap, i_user_ns(inode), att=
+r->ia_vfsuid);
+> > +
+> >               dout("setattr %p uid %d -> %d\n", inode,
+> >                    from_kuid(&init_user_ns, inode->i_uid),
+> >                    from_kuid(&init_user_ns, attr->ia_uid));
+> >               if (issued & CEPH_CAP_AUTH_EXCL) {
+> > -                     inode->i_uid =3D attr->ia_uid;
+> > +                     inode->i_uid =3D fsuid;
+> >                       dirtied |=3D CEPH_CAP_AUTH_EXCL;
+> >               } else if ((issued & CEPH_CAP_AUTH_SHARED) =3D=3D 0 ||
+> > -                        !uid_eq(attr->ia_uid, inode->i_uid)) {
+> > +                        !uid_eq(fsuid, inode->i_uid)) {
+> >                       req->r_args.setattr.uid =3D cpu_to_le32(
+> > -                             from_kuid(&init_user_ns, attr->ia_uid));
+> > +                             from_kuid(&init_user_ns, fsuid));
+> >                       mask |=3D CEPH_SETATTR_UID;
+> >                       release |=3D CEPH_CAP_AUTH_SHARED;
+> >               }
+> >       }
+> >       if (ia_valid & ATTR_GID) {
+> > +             kgid_t fsgid =3D from_vfsgid(idmap, i_user_ns(inode), att=
+r->ia_vfsgid);
+> > +
+> >               dout("setattr %p gid %d -> %d\n", inode,
+> >                    from_kgid(&init_user_ns, inode->i_gid),
+> >                    from_kgid(&init_user_ns, attr->ia_gid));
+> >               if (issued & CEPH_CAP_AUTH_EXCL) {
+> > -                     inode->i_gid =3D attr->ia_gid;
+> > +                     inode->i_gid =3D fsgid;
+> >                       dirtied |=3D CEPH_CAP_AUTH_EXCL;
+> >               } else if ((issued & CEPH_CAP_AUTH_SHARED) =3D=3D 0 ||
+> > -                        !gid_eq(attr->ia_gid, inode->i_gid)) {
+> > +                        !gid_eq(fsgid, inode->i_gid)) {
+> >                       req->r_args.setattr.gid =3D cpu_to_le32(
+> > -                             from_kgid(&init_user_ns, attr->ia_gid));
+> > +                             from_kgid(&init_user_ns, fsgid));
+> >                       mask |=3D CEPH_SETATTR_GID;
+> >                       release |=3D CEPH_CAP_AUTH_SHARED;
+> >               }
+> > @@ -2241,7 +2245,7 @@ int ceph_setattr(struct mnt_idmap *idmap, struct =
+dentry *dentry,
+> >       if (ceph_inode_is_shutdown(inode))
+> >               return -ESTALE;
+> >
+> > -     err =3D setattr_prepare(&nop_mnt_idmap, dentry, attr);
+> > +     err =3D setattr_prepare(idmap, dentry, attr);
+> >       if (err !=3D 0)
+> >               return err;
+> >
+> > @@ -2256,7 +2260,7 @@ int ceph_setattr(struct mnt_idmap *idmap, struct =
+dentry *dentry,
+> >       err =3D __ceph_setattr(idmap, inode, attr);
+> >
+> >       if (err >=3D 0 && (attr->ia_valid & ATTR_MODE))
+> > -             err =3D posix_acl_chmod(&nop_mnt_idmap, dentry, attr->ia_=
+mode);
+> > +             err =3D posix_acl_chmod(idmap, dentry, attr->ia_mode);
+> >
+> >       return err;
+> >   }
 
-So this is the only situation where I think "ptr" makes sense (your
-"fat pointer" argument is nonsensical - sure, you can treat anything
-as a pointer if you're brave enough, but that just means that
-"pointer" becomes a meaningless word).
+Hi Xiubo,
 
-However, I think that for "smart pointers", we don't need any of this
-complexity at all, and we don't need that ugly syntax.
-
-> Then we can write:
 >
-> DEFINE_CLASS(kfree, void *, kfree(THIS), p, void *p)
+> You should also do 'req->r_mnt_idmap =3D idmap;' for sync setattr request=
+.
 >
->         smart_ptr(kfree, mem) =3D kzalloc_node(...);
->         if (!mem)
->                 return -ENOMEM;
+> the setattr will just cache the change locally in client side if the 'x'
+> caps are issued and returns directly or will set a sync setattr reqeust.
 
-No, the above is broken, and would result in us using "void *" in
-situations where we really *really* don't want that.
+Have done in v5:
+("ceph: pass idmap to __ceph_setattr")
+https://lore.kernel.org/lkml/20230608154256.562906-8-aleksandr.mikhalitsyn@=
+canonical.com/
 
-For automatic freeing, you want something that can handle different
-types properly, and without having to constantly declare the types
-somewhere else before use.
+Kind regards,
+Alex
 
-And no, you do *not* want that "kfree(THIS)" kind of interface,
-because you want the compiler to inline the freeing function wrapper,
-and notice _statically_ when somebody zeroed the variable and not even
-call "kfree()", because otherwise you'd have a pointless call to
-kfree(NULL) in the success path too.
-
-So for convenient automatic pointer freeing, you want an interface
-much more akin to
-
-        struct whatever *ptr __automatic_kfree =3D kmalloc(...);
-
-which is much more legible, doesn't have any type mis-use issues, and
-is also just trivially dealt with by a
-
-  static inline void automatic_kfree_wrapper(void *pp)
-  { void *p =3D *(void **)pp; if (p) kfree(p); }
-  #define __automatic_kfree \
-        __attribute__((__cleanup__(automatic_kfree_wrapper)))
-  #define no_free_ptr(p) \
-        ({ __auto_type __ptr =3D (p); (p) =3D NULL; __ptr; })
-
-which I just tested generates the sane code even for the "set the ptr
-to NULL and return success" case.
-
-The above allows you to trivially do things like
-
-        struct whatever *p __automatic_kfree =3D kmalloc(..);
-
-        if (!do_something(p))
-                return -ENOENT;
-
-        return no_free_ptr(p);
-
-and it JustWorks(tm).
-
-And yes, it needs a couple of different versions of that
-"__automatic_kfree()" wrapper for the different freeing cases (kvfree,
-rcu_free, whatever), but those are all trivial one-liners.
-
-And no, I didn't think too much about those names. "__automatic_kfree"
-is too damn long to type, but you hated "auto". And "no_free_ptr()" is
-not wonderful name either. But I tried to make the naming at least be
-obvious, if not wonderful.
-
-               Linus
+>
+> Thanks
+>
+> - Xiubo
+>
