@@ -2,293 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43DC772772C
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 08:18:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC897727737
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 08:22:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234259AbjFHGSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 02:18:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52766 "EHLO
+        id S234661AbjFHGWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 02:22:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234086AbjFHGS1 (ORCPT
+        with ESMTP id S234521AbjFHGWV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 02:18:27 -0400
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4147E1BD3
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 23:18:25 -0700 (PDT)
-X-GND-Sasl: miquel.raynal@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1686205103;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZBph/fxT2399OO/NgDACkdHPcHG/E5AHNbxytMOUvjo=;
-        b=BxXywoy32gVAYmo8v0EBWUCpfiTlEXz1RG4n6ocpkeHQPVz4Ew/GBUO7Geeo0AOAuBFGp+
-        12w1ly/8UgfvxdRUN89ovqTz3DrH3X8lhTGl4SNj85xfzPp1791WOavgyilHYFblpGBSV7
-        GyAoz7OBaMVWVXGhhhRV95OIbdXzcwNWV+6N0XKPKd9NQpDSeNSESWj+7j8F0NbvWF1S3B
-        BAqIDbsdRdByZLHu0IwT1j7xjgYcuVLGmV6BOO4kFlpnmmitifvUcdUxAFDCdXNV1igrY3
-        8ffrBA1iQRPd05Vv1qJl4tI1h97JWD9H6dYkrrnZrGal+Cdh+AJZPjBV/pu2Kw==
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 28CF020002;
-        Thu,  8 Jun 2023 06:18:21 +0000 (UTC)
-Date:   Thu, 8 Jun 2023 08:18:21 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     William Zhang <william.zhang@broadcom.com>
-Cc:     Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        Linux MTD List <linux-mtd@lists.infradead.org>,
-        f.fainelli@gmail.com, rafal@milecki.pl, kursad.oney@broadcom.com,
-        joel.peshkin@broadcom.com, computersforpeace@gmail.com,
-        anand.gore@broadcom.com, dregan@mail.com, kamal.dasu@broadcom.com,
-        tomer.yacoby@broadcom.com, dan.beygelman@broadcom.com,
-        linux-kernel@vger.kernel.org,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 10/12] mtd: rawnand: brcmnand: Add BCMBCA read data bus
- interface
-Message-ID: <20230608081821.1de5a50b@xps-13>
-In-Reply-To: <7b393f47-4053-a8c7-f32e-3881d8130d80@broadcom.com>
-References: <20230606231252.94838-1-william.zhang@broadcom.com>
-        <20230606231252.94838-11-william.zhang@broadcom.com>
-        <20230607102232.17c4a27b@xps-13>
-        <7b393f47-4053-a8c7-f32e-3881d8130d80@broadcom.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Thu, 8 Jun 2023 02:22:21 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF6E1706
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 23:22:18 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2b1a86cdec6so1536231fa.3
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 23:22:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686205336; x=1688797336;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=G0VwUCmEnGX86ZCMjrjzf2n2n4i6He7mE7SapcE39jQ=;
+        b=zNzdPClVFDBPvA/Sd0tnWU4q+9TDxtptLUXsJI1uzuIKW7CepO/B7U20Akb2sVNjUf
+         iChrVgfRdbCukBM3ZRmwq4tdN7GbqTVNPm4Xox66Jduri+joXchA/FrGDmJBY9C72PoA
+         9JoGjTa2qwQ8C/TagifFEu2pfvGsBppwIR4LCSL+HFIa45MERVcco2p7fbwRnAa7TA2u
+         lx0OfDfvg2T2IMAMc0UEWdjcz1rk4DUFcQykgrPDKjlQyM0DlDvxRlbdJM7eblnLZyLs
+         AKluKMuIfFTK1Co091kHLyCIp3XxSv6ZKpTdiRftP7uL9CGY9b+Y4s7r1XHzLTn+P78i
+         OfUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686205336; x=1688797336;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=G0VwUCmEnGX86ZCMjrjzf2n2n4i6He7mE7SapcE39jQ=;
+        b=KvOYSmkehALtY9vQ9NK6INui8LABxWlZivBmiXtgPkK7ekCp7iMlYSkSYPhNo8nPaX
+         Rhfl6E2j71jrBETlyuQTrjs2+a5PKicJlEohv43usWTvG9lFe/hP6DgH2b+UIimUCAuV
+         5IK9TSFVyYL5gywd6DZxu+o1EBA8/R+tzFzTpPdNYAb75d560bYngFb5QQ98dPrLpByK
+         e0AnEOLXmPKxLcB1Jly508o99N3Npkh+L1Csh3RJnaZlaIb0YxGFfPAcgBZiuIaFsItl
+         M4ks+Rjx18n6M9Ne8sTa9Spxnpz4XFZ94ggrB2ef5FCvzKXUifU6NInJxpIYP29FUhew
+         tuZw==
+X-Gm-Message-State: AC+VfDyOuJUTBUj/sXihYx4CRiFxZ/grPDC1NEEQnT0+LEsSc5ygqsF7
+        FtyR/Nvj7D3agaINL8TGTFFtZXuQwGXqHXObh+Ttuw==
+X-Google-Smtp-Source: ACHHUZ7NSvEUlT8UhkX/QkQM8okQgMSoDdPNJPAgRN0eGgLLO3YmB8/MiPHPVGgliaXCkm+PDURvo1SR5U1XDuifDtY=
+X-Received: by 2002:a2e:9d5a:0:b0:2af:32a7:4eef with SMTP id
+ y26-20020a2e9d5a000000b002af32a74eefmr2576295ljj.35.1686205336661; Wed, 07
+ Jun 2023 23:22:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230526010748.1222-1-masahisa.kojima@linaro.org>
+ <20230526010748.1222-4-masahisa.kojima@linaro.org> <0d3e0370-eb76-010f-3d30-9acc9b59645c@siemens.com>
+ <CAFA6WYPnWJNPvhT2JDkO-qXRUaJoxBGZEvSfhxcRynV7=VSdQA@mail.gmail.com>
+ <CAMj1kXFM45PCTU--+CCed6Cq_N5XqDG6tTu6fnQTSCpW2BWA5A@mail.gmail.com>
+ <4ff09002-e871-38b9-43ec-227a64bac731@siemens.com> <CAC_iWjJJ5E9Q1or5yTiDynzv_WAYH-g+N24aRdu9rvcsbWqnrg@mail.gmail.com>
+ <CAFA6WYNFYB1LiOFB_iwTsdD5PmnDdSbtDSH2J4FVFPx3uik8rQ@mail.gmail.com>
+ <CAC_iWj+E7-XK6dCeSn4205K0O3EZCLxCaC+adu-14ST6sdudfA@mail.gmail.com>
+ <76da826f-b608-6add-5401-6de818b180e3@siemens.com> <CAFA6WYPCDRjFzsUMU=SNzEt88nT7Fcm1eOFL8z4HiQO+=2JeVA@mail.gmail.com>
+ <cc6bd203-83ea-c247-0986-7fec6f327ee8@siemens.com> <CAC_iWjKZNHJxq4VMFnV7oQngwBBCQveh=s34u1LZ59YUqViPbw@mail.gmail.com>
+ <CAC_iWjJMv68yLC606SBhMmBYkR4wVC8SvUcPvNM=RX_qL=9Bvw@mail.gmail.com>
+ <b9b8c1d3-fc8e-df94-d12b-a9e3debf3418@siemens.com> <CAC_iWj+cP4RfDNu_n-ZOp7A62W34drLpPszN_hrkqF_aPTLtMg@mail.gmail.com>
+ <871ece13-7d6e-44d4-3bda-317658202f6f@siemens.com>
+In-Reply-To: <871ece13-7d6e-44d4-3bda-317658202f6f@siemens.com>
+From:   Ilias Apalodimas <ilias.apalodimas@linaro.org>
+Date:   Thu, 8 Jun 2023 09:21:40 +0300
+Message-ID: <CAC_iWjKgCJWgKU8tC3Nfn-0CgwGhw89B3JpTgsjkjDDOcWZEdw@mail.gmail.com>
+Subject: Re: [PATCH v5 3/3] efi: Add tee-based EFI variable driver
+To:     Jan Kiszka <jan.kiszka@siemens.com>
+Cc:     Sumit Garg <sumit.garg@linaro.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Masahisa Kojima <masahisa.kojima@linaro.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-efi@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        "Su, Bao Cheng (RC-CN DF FA R&D)" <baocheng.su@siemens.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi William,
+Hi Jan
 
-william.zhang@broadcom.com wrote on Wed, 7 Jun 2023 13:24:23 -0700:
 
-> Hi Miquel,
->=20
-> On 06/07/2023 01:22 AM, Miquel Raynal wrote:
-> > Hi William,
-> >=20
-> > william.zhang@broadcom.com wrote on Tue,  6 Jun 2023 16:12:50 -0700:
-> >  =20
-> >> The BCMBCA broadband SoC integrates the NAND controller differently th=
-an
-> >> STB, iProc and other SoCs.  It has different endianness for NAND cache
-> >> data and ONFI parameter data.
+On Wed, 7 Jun 2023 at 22:46, Jan Kiszka <jan.kiszka@siemens.com> wrote:
+>
+> On 07.06.23 20:17, Ilias Apalodimas wrote:
+> > On Wed, 7 Jun 2023 at 20:14, Jan Kiszka <jan.kiszka@siemens.com> wrote:
 > >>
-> >> Add a SoC read data bus shim for BCMBCA to meet the specific SoC need
-> >> and performance improvement using the optimized memcpy function on NAND
-> >> cache memory.
+> >> On 07.06.23 18:59, Ilias Apalodimas wrote:
+> >>> On Wed, 7 Jun 2023 at 19:09, Ilias Apalodimas
+> >>> <ilias.apalodimas@linaro.org> wrote:
+> >>>>
+> >>>> Hi Jan,
+> >>>>
+> >>>> [...]
+> >>>>>>>> No I don't, this will work reliably without the need to remount the efivarfs.
+> >>>>>>>> As you point out you will still have this dependency if you end up
+> >>>>>>>> building them as modules and you manage to mount the efivarfs before
+> >>>>>>>> those get inserted.  Does anyone see a reasonable workaround?
+> >>>>>>>> Deceiving the kernel and making the bootloader set the RT property bit
+> >>>>>>>> to force the filesystem being mounted as rw is a nasty hack that we
+> >>>>>>>> should avoid.  Maybe adding a kernel command line parameter that says
+> >>>>>>>> "Ignore the RTPROP I know what I am doing"?  I don't particularly love
+> >>>>>>>> this either, but it's not unreasonable.
+> >>>>>>>
+> >>>>>>> In the context of https://github.com/OP-TEE/optee_os/issues/6094,
+> >>>>>>> basically this issue mapped on reboot/shutdown, I would really love to
+> >>>>>>> see the unhandy tee-supplicant daemon to be overcome.
+> >>>>>>
+> >>>>>> I have seen this error before and it has been on my todo list. So I
+> >>>>>> have tried to fix it here [1]. Feel free to test it and let me know if
+> >>>>>> you see any further issues.
+> >>>>>>
+> >>>>>> [1] https://lkml.org/lkml/2023/6/7/927
+> >>>>>>
+> >>>>>
+> >>>>> Ah, nice, will test ASAP!
+> >>>>>
+> >>>>> Meanwhile more food: I managed to build a firmware that was missing
+> >>>>> STMM. But the driver loaded, and I got this:
+> >>>>
+> >>>> Thanks for the testing. I'll try to reproduce it locally and get back to you
+> >>>
+> >>> Can you provide a bit more info on how that was triggered btw? I would
+> >>> be helpful to know
+> >>>
+> >>> - OP-TEE version
 > >>
-> >> Signed-off-by: William Zhang <william.zhang@broadcom.com>
-> >> ---
+> >> Today's master, 145953d55.
 > >>
-> >>   drivers/mtd/nand/raw/brcmnand/bcmbca_nand.c | 36 +++++++++++++++++
-> >>   drivers/mtd/nand/raw/brcmnand/brcmnand.c    | 44 ++++++++++++++-----=
---
-> >>   drivers/mtd/nand/raw/brcmnand/brcmnand.h    |  2 +
-> >>   3 files changed, 68 insertions(+), 14 deletions(-)
+> >>> - was it compiled as a module or built-in?
 > >>
-> >> diff --git a/drivers/mtd/nand/raw/brcmnand/bcmbca_nand.c b/drivers/mtd=
-/nand/raw/brcmnand/bcmbca_nand.c
-> >> index 7e48b6a0bfa2..899103a62c98 100644
-> >> --- a/drivers/mtd/nand/raw/brcmnand/bcmbca_nand.c
-> >> +++ b/drivers/mtd/nand/raw/brcmnand/bcmbca_nand.c
-> >> @@ -26,6 +26,18 @@ enum {
-> >>   	BCMBCA_CTLRDY		=3D BIT(4),
-> >>   }; =20
-> >>   >> +#if defined(CONFIG_ARM64) =20
-> >> +#define ALIGN_REQ		8
-> >> +#else
-> >> +#define ALIGN_REQ		4
-> >> +#endif
-> >> +
-> >> +static inline bool bcmbca_nand_is_buf_aligned(void *flash_cache,  voi=
-d *buffer)
-> >> +{
-> >> +	return IS_ALIGNED((uintptr_t)buffer, ALIGN_REQ) &&
-> >> +				IS_ALIGNED((uintptr_t)flash_cache, ALIGN_REQ);
-> >> +}
-> >> +
-> >>   static bool bcmbca_nand_intc_ack(struct brcmnand_soc *soc)
-> >>   {
-> >>   	struct bcmbca_nand_soc *priv =3D
-> >> @@ -56,6 +68,29 @@ static void bcmbca_nand_intc_set(struct brcmnand_so=
-c *soc, bool en)
-> >>   	brcmnand_writel(val, mmio);
-> >>   } =20
-> >>   >> +static void bcmbca_read_data_bus(struct brcmnand_soc *soc, =20
-> >> +				 void __iomem *flash_cache,  u32 *buffer,
-> >> +				 int fc_words, bool is_param)
-> >> +{
-> >> +	int i;
-> >> +
-> >> +	if (!is_param) {
-> >> +		/*
-> >> +		 * memcpy can do unaligned aligned access depending on source
-> >> +		 * and dest address, which is incompatible with nand cache. Fallback
-> >> +		 * to the memcpy for io version
-> >> +		 */
-> >> +		if (bcmbca_nand_is_buf_aligned(flash_cache, buffer))
-> >> +			memcpy((void *)buffer, (void *)flash_cache, fc_words * 4);
-> >> +		else
-> >> +			memcpy_fromio((void *)buffer, (void *)flash_cache, fc_words * 4);
-> >> +	} else {
-> >> +		/* Flash cache has same endian as the host for parameter pages */
-> >> +		for (i =3D 0; i < fc_words; i++, buffer++)
-> >> +			*buffer =3D __raw_readl(flash_cache + i * 4);
-> >> +	}
-> >> +}
-> >> +
-> >>   static int bcmbca_nand_probe(struct platform_device *pdev)
-> >>   {
-> >>   	struct device *dev =3D &pdev->dev;
-> >> @@ -75,6 +110,7 @@ static int bcmbca_nand_probe(struct platform_device=
- *pdev) =20
-> >>   >>   	soc->ctlrdy_ack =3D bcmbca_nand_intc_ack; =20
-> >>   	soc->ctlrdy_set_enabled =3D bcmbca_nand_intc_set;
-> >> +	soc->read_data_bus =3D bcmbca_read_data_bus; =20
-> >>   >>   	return brcmnand_probe(pdev, soc); =20
-> >>   }
-> >> diff --git a/drivers/mtd/nand/raw/brcmnand/brcmnand.c b/drivers/mtd/na=
-nd/raw/brcmnand/brcmnand.c
-> >> index d920e88c7f5b..656be4d73016 100644
-> >> --- a/drivers/mtd/nand/raw/brcmnand/brcmnand.c
-> >> +++ b/drivers/mtd/nand/raw/brcmnand/brcmnand.c
-> >> @@ -814,6 +814,30 @@ static inline u32 edu_readl(struct brcmnand_contr=
-oller *ctrl,
-> >>   	return brcmnand_readl(ctrl->edu_base + offs);
-> >>   } =20
-> >>   >> +static inline void brcmnand_read_data_bus(struct brcmnand_contro=
-ller *ctrl, =20
-> >> +					   void __iomem *flash_cache, u32 *buffer,
-> >> +					   int fc_words, bool is_param)
-> >> +{
-> >> +	struct brcmnand_soc *soc =3D ctrl->soc;
-> >> +	int i;
-> >> +
-> >> +	if (soc->read_data_bus) {
-> >> +		soc->read_data_bus(soc, flash_cache, buffer, fc_words, is_param);
-> >> +	} else {
-> >> +		if (!is_param) {
-> >> +			for (i =3D 0; i < fc_words; i++, buffer++)
-> >> +				*buffer =3D brcmnand_read_fc(ctrl, i);
-> >> +		} else {
-> >> +			for (i =3D 0; i < fc_words; i++)
-> >> +				/*
-> >> +				 * Flash cache is big endian for parameter pages, at
-> >> +				 * least on STB SoCs
-> >> +				 */
-> >> +				buffer[i] =3D be32_to_cpu(brcmnand_read_fc(ctrl, i));
-> >> +		}
-> >> +	} =20
-> >=20
-> > Perhaps we could have a single function that is statically assigned at
-> > probe time instead of a first helper with two conditions which calls in
-> > one case another hook... This can be simplified I guess.
-> >  =20
-> Well this will need to be done at the SoC specific implementation level (=
-bcm<xxx>_nand.c) and each SoC will need to have either general data bus rea=
-d func with is_param option or data_bus_read_page, data_bus_read_param.
+> >> Sorry, not sure anymore, switching back and forth right now. I think it
+> >> was built-in.
+> >>
+> >>> - was the supplicant running?
+> >>
+> >> Yes.
+> >>
+> >
+> > Ok thanks, that helps.  I guess this also means U-Boot was compiled to
+> > store the variables in a file in the ESP instead of the RPMB right?
+> > Otherwise, I can't see how the device booted in the first place.
+>
+> U-Boot was not configured to perform secure booting in this case. It had
+> RPMB support enabled, just didn't have to use it.
 
-You told me in case we would use exec_op we could avoid the param
-cache. If that's true then the whole support can be simplified.
+In your initial mail you said you managed to build a firmware without
+StMM.  If U-boot isn't reconfigured accordingly -- iow skip the EFI
+variable storage in an RPMB, the EFI subsystem will fail to start.
 
->  Not sure how much this can be simplified... Or we have default
-> implementation in brcmnand.c but then there is one condition check
-> too. Page read is done at 512 bytes burst. One or two conditions
-> check outside of the per 512 bytes read loop does not sounds too bad
-> if performance is concern.
+In any case, I don't think the ooops you are seeing is not connected
+to this patchset.  Looking at the kernel EFI stub we only set the
+SetVariableRT if the RTPROP table is set accordingly by the firmware.
+U-Boot never sets the EFI_RT_SUPPORTED_SET_VARIABLE property since it
+can't support it.  What you are doing is remount the efivarfs as rw
+and then trying to set a variable, but the callback for it is  NULL.
+I think you'll be able to replicate the same behavior on the kernel
+without even inserting the new module.
 
-It is unreadable. That is my main concern.
+Thanks
+/Ilias
 
->=20
-> >> +}
-> >> +
-> >>   static void brcmnand_clear_ecc_addr(struct brcmnand_controller *ctrl)
-> >>   { =20
-> >>   >> @@ -1811,20 +1835,11 @@ static void brcmnand_cmdfunc(struct nand_=
-chip *chip, unsigned command, =20
-> >>   			native_cmd =3D=3D CMD_PARAMETER_CHANGE_COL) {
-> >>   		/* Copy flash cache word-wise */
-> >>   		u32 *flash_cache =3D (u32 *)ctrl->flash_cache;
-> >> -		int i; =20
-> >>   >>   		brcmnand_soc_data_bus_prepare(ctrl->soc, true);
-> >>   >> -		/* =20
-> >> -		 * Must cache the FLASH_CACHE now, since changes in
-> >> -		 * SECTOR_SIZE_1K may invalidate it
-> >> -		 */
-> >> -		for (i =3D 0; i < FC_WORDS; i++)
-> >> -			/*
-> >> -			 * Flash cache is big endian for parameter pages, at
-> >> -			 * least on STB SoCs
-> >> -			 */
-> >> -			flash_cache[i] =3D be32_to_cpu(brcmnand_read_fc(ctrl, i));
-> >> +		brcmnand_read_data_bus(ctrl, ctrl->nand_fc, flash_cache,
-> >> +				   FC_WORDS, true); =20
-> >>   >>   		brcmnand_soc_data_bus_unprepare(ctrl->soc, true);
-> >>   >> @@ -2137,7 +2152,7 @@ static int brcmnand_read_by_pio(struct mtd_=
-info *mtd, struct nand_chip *chip, =20
-> >>   {
-> >>   	struct brcmnand_host *host =3D nand_get_controller_data(chip);
-> >>   	struct brcmnand_controller *ctrl =3D host->ctrl;
-> >> -	int i, j, ret =3D 0;
-> >> +	int i, ret =3D 0; =20
-> >>   >>   	brcmnand_clear_ecc_addr(ctrl);
-> >>   >> @@ -2150,8 +2165,9 @@ static int brcmnand_read_by_pio(struct mtd_=
-info *mtd, struct nand_chip *chip, =20
-> >>   		if (likely(buf)) {
-> >>   			brcmnand_soc_data_bus_prepare(ctrl->soc, false); =20
-> >>   >> -			for (j =3D 0; j < FC_WORDS; j++, buf++) =20
-> >> -				*buf =3D brcmnand_read_fc(ctrl, j);
-> >> +			brcmnand_read_data_bus(ctrl, ctrl->nand_fc, buf,
-> >> +					FC_WORDS, false);
-> >> +			buf +=3D FC_WORDS; =20
-> >>   >>   			brcmnand_soc_data_bus_unprepare(ctrl->soc, false); =20
-> >>   		}
-> >> diff --git a/drivers/mtd/nand/raw/brcmnand/brcmnand.h b/drivers/mtd/na=
-nd/raw/brcmnand/brcmnand.h
-> >> index f1f93d85f50d..88819bc395f8 100644
-> >> --- a/drivers/mtd/nand/raw/brcmnand/brcmnand.h
-> >> +++ b/drivers/mtd/nand/raw/brcmnand/brcmnand.h
-> >> @@ -24,6 +24,8 @@ struct brcmnand_soc {
-> >>   	void (*ctlrdy_set_enabled)(struct brcmnand_soc *soc, bool en);
-> >>   	void (*prepare_data_bus)(struct brcmnand_soc *soc, bool prepare,
-> >>   				 bool is_param);
-> >> +	void (*read_data_bus)(struct brcmnand_soc *soc, void __iomem *flash_=
-cache,
-> >> +				 u32 *buffer, int fc_words, bool is_param);
-> >>   	const struct brcmnand_io_ops *ops;
-> >>   }; =20
-> >>   > >  =20
-> > Thanks,
-> > Miqu=C3=A8l
-> >  =20
-
-
-Thanks,
-Miqu=C3=A8l
+>
+> Jan
+>
+> --
+> Siemens AG, Technology
+> Competence Center Embedded Linux
+>
