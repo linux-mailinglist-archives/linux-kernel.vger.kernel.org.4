@@ -2,149 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 822B9727749
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 08:34:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68A5A72774B
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 08:34:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234723AbjFHGeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 02:34:02 -0400
+        id S234807AbjFHGeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 02:34:14 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234782AbjFHGd6 (ORCPT
+        with ESMTP id S234751AbjFHGeG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 02:33:58 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 650511BE8
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 23:33:53 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id 98e67ed59e1d1-2565b864f9aso132241a91.1
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 23:33:53 -0700 (PDT)
+        Thu, 8 Jun 2023 02:34:06 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A74E26B3
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 23:34:05 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id 98e67ed59e1d1-25669acf1b0so208607a91.0
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 23:34:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1686206033; x=1688798033;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1686206045; x=1688798045;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1YqsjZstkNId62swixNvbney3wfAymRF6traYgOxlKU=;
-        b=VvAzPvj6ETKo1K1LNWU9SVbXwvfpAx1H6zx3BKkWoA7PyMTwrXW+LDqkF6ly951H/w
-         rIKa0AF1kufFYHjUlDDTIr677+Twj+lu5cThh0IHA+/JDCSxq0ccn8A+ttolieNs2V7R
-         wFK42BqwjHZsZyqJzb4aH/XpH6cSKIiXxGJxcOmXyD166sPLApKSuDglhUH+rEC6bY8L
-         sCoYRB0tNTmEpUiSYxA9gbeEMgiiYixFpAIOvQlJoCHo3IK2aBvk0YbW5H19T/Gdfpjr
-         odlKyORp3XTGOEVHGblNoI5XaJ300pMrs5CMl5i1wle6dPg2TNFlfqmK7GijpTvSolrb
-         D4iw==
+        bh=YnDSSdACAPeHcVg5eItuX+dGNcC+IfJYwfHJBUCvSt8=;
+        b=X/3i2uFWMS40I9rQGsF1U6JUah0z761GEy+ZWFwvKzt9bS8vtMgJeg/OOBV4qL5VK8
+         Kvqs5ppIlLErUznnnK+EEzpX2eUz9Hfvq1Zouh6B8ScJYlAgqWjX4KwmPkuNYpzzB7mw
+         vfo0Z9871bt+ig3rT+8SXkROd2adNvMgHxHT6W/KEJ+Ae9vuLjeJ3C38zLV9tu23uDUG
+         /MKxNh3C+S5JnEpRYPjEjkM17ZpCfmFjGySk1h5CiuBJC0hgGysjtxQ2We/vjTqJ+Wxy
+         YJ0js2EnSvh09Q8ZwYLBxqy/vFQyuqVUn4khH60uNxUZSHZt1T+y4wd+RXecmNe7BanN
+         cSWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686206033; x=1688798033;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1686206045; x=1688798045;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1YqsjZstkNId62swixNvbney3wfAymRF6traYgOxlKU=;
-        b=byN8YlPUHHc6apevOYb1oLfeUNtgLYvcOg3vTxjDQcKyXhGxZucGJ4c/764zrA0YGV
-         XM5OYLtRnQhruQwK30qQqEqDj3I8FofUpYOaqxHAhqWN0nElIS54KvfJZne8UXO0aGlL
-         JB5WiFfnUkQM4qSo7n8Tm63jYTdqhMmUaZokjz7TVpRbLpRVJUygcBgiyb9SWAp8sj8x
-         hodnFqSyU+SjV3Low0FkuyOeNkFSleIloZ2RyR228xGt/f/JlgjNE5Eg59x6egQmQSDo
-         n9rrSkqjTZLoUdfjhDbtR7kF2QzPGnucttEueidnpsRvdSSErmk2ziT2dAtHCQ33/NEG
-         Arpg==
-X-Gm-Message-State: AC+VfDxbnmC1LO5SSWN+m+FBVm1SXo/6w7Tid2pnis+kXgE592mH4RKh
-        SUxmQ+0Wom7KB8XhuNULokJuTg==
-X-Google-Smtp-Source: ACHHUZ5ZjZyJ1ghbLTjSbNlK3NgdDJ9G7hTbFf37+0CCB+RimOwK850659eXZoG5UnoGtO+zYo7xWA==
-X-Received: by 2002:a17:90a:c581:b0:256:16e:e9dd with SMTP id l1-20020a17090ac58100b00256016ee9ddmr4027769pjt.32.1686206032922;
-        Wed, 07 Jun 2023 23:33:52 -0700 (PDT)
-Received: from C02G87K0MD6R.bytedance.net ([203.208.167.147])
-        by smtp.gmail.com with ESMTPSA id c15-20020a17090abf0f00b0025645d118adsm542039pjs.14.2023.06.07.23.33.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 23:33:52 -0700 (PDT)
-From:   Hao Jia <jiahao.os@bytedance.com>
-To:     mingo@redhat.com, peterz@infradead.org, mingo@kernel.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        mgorman@techsingularity.net
-Cc:     linux-kernel@vger.kernel.org, Hao Jia <jiahao.os@bytedance.com>
-Subject: [PATCH v4 4/4] sched/core: Avoid multiple calling update_rq_clock() in unthrottle_offline_cfs_rqs()
-Date:   Thu,  8 Jun 2023 14:33:12 +0800
-Message-Id: <20230608063312.79440-5-jiahao.os@bytedance.com>
-X-Mailer: git-send-email 2.37.0 (Apple Git-136)
-In-Reply-To: <20230608063312.79440-1-jiahao.os@bytedance.com>
-References: <20230608063312.79440-1-jiahao.os@bytedance.com>
+        bh=YnDSSdACAPeHcVg5eItuX+dGNcC+IfJYwfHJBUCvSt8=;
+        b=YerhZVx+BAFjT3DyMcr7S/TyCoHBkNVjgdkE+CgXZZzDzHLAfxoWBe+SGQ8CLRivgB
+         CR42AVhES3aTvIRd7dLw8v+48D+FfUodZEbPkWOA3k801D8XQmJ/X1x3fatzgvBfn/HK
+         5tpkfRoJTwvlpkMyOvHIDXcgJ03mtZQVRRPGP4CTbSmcdkUJEs8vbrt4H39sTbAGh3V7
+         07aFHMnUuIqKlYNtQYM+SAlZhW0Wu5CeEtTHrh9ffEgz+2DKM5wcDqYZermdyZlItIrQ
+         AdbkoNK1HxEcOcs+5iBIhWmyqsr04p6L+GY62rwvVzep0SLnHcO0zx0s6Zq7U7cqqcaX
+         M+Tg==
+X-Gm-Message-State: AC+VfDwSy1aaqE/60MI+yQinhi6M8uR7+AkPcGNt8qcD9SdTqfFQd8jl
+        hKzHRhv+s91sEIZ+f7EBxwLzAZRIsVI6AEEWAaC68RRo27Q=
+X-Google-Smtp-Source: ACHHUZ5KM2mQY8wxTlqQixP+J13KMX/s5tR0IsAdq7orD/aCXjVj8X0I+e5e4rE+O2uTJAuErHD+BtISR1zcOgFIDbM=
+X-Received: by 2002:a17:90a:8417:b0:256:c632:9848 with SMTP id
+ j23-20020a17090a841700b00256c6329848mr6787437pjn.29.1686206044764; Wed, 07
+ Jun 2023 23:34:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230606093135.GA9077@didi-ThinkCentre-M930t-N000>
+In-Reply-To: <20230606093135.GA9077@didi-ThinkCentre-M930t-N000>
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+Date:   Thu, 8 Jun 2023 14:33:53 +0800
+Message-ID: <CAJhGHyA_Z67mF9R6zAGorC13p1r1TeT1525Vgs1CUonv21+G2Q@mail.gmail.com>
+Subject: Re: [PATCH] workqueue: introduce queue_work_cpumask to queue work
+ onto a given cpumask
+To:     tj@kernel.org, jiangshanlai@gmail.com,
+        linux-kernel@vger.kernel.org, pmladek@suse.com,
+        zyhtheonly@gmail.com, zyhtheonly@yeah.net, zwp10758@gmail.com
+Cc:     tiozhang@didiglobal.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This WARN_DOUBLE_CLOCK warning is triggered during cpu offline.
-------------[ cut here ]------------
-rq->clock_update_flags & RQCF_UPDATED
-WARNING: CPU: 0 PID: 3323 at kernel/sched/core.c:741
-update_rq_clock+0xaf/0x180
-Call Trace:
- <TASK>
- unthrottle_cfs_rq+0x4b/0x300
- rq_offline_fair+0x89/0x90
- set_rq_offline.part.118+0x28/0x60
- rq_attach_root+0xc4/0xd0
- cpu_attach_domain+0x3dc/0x7f0
- partition_sched_domains_locked+0x2a5/0x3c0
- rebuild_sched_domains_locked+0x477/0x830
- rebuild_sched_domains+0x1b/0x30
- cpuset_hotplug_workfn+0x2ca/0xc90
- ? balance_push+0x56/0xf0
- ? _raw_spin_unlock+0x15/0x30
- ? finish_task_switch+0x98/0x2f0
- ? __switch_to+0x291/0x410
- ? __schedule+0x65e/0x1310
- process_one_work+0x1bc/0x3d0
- worker_thread+0x4c/0x380
- ? preempt_count_add+0x92/0xa0
- ? rescuer_thread+0x310/0x310
- kthread+0xe6/0x110
- ? kthread_complete_and_exit+0x20/0x20
- ret_from_fork+0x1f/0x30
+On Tue, Jun 6, 2023 at 5:31=E2=80=AFPM Tio Zhang <tiozhang@didiglobal.com> =
+wrote:
+>
+> Introduce queue_work_cpumask to queue work on a "random" CPU onto a given
+> cpumask. It would be helpful when devices/modules want to assign works on
+> different cpusets but do not want to maintain extra workqueues, since the=
+y
+> have to alloc different workqueues and set different
+> workqueue_attrs->cpumask in the past times.
+>
+> For now only available for unbound workqueues, We will try to further
+> patch it.
+> And default to the first CPU that is in the intersection of the cpumask
+> given and the online cpumask.
+> The only exception is if the CPU is local in the cpuset we will just use
+> the current CPU.
+>
+> The implementation and comments are referenced from
+> 'commit 8204e0c1113d ("workqueue: Provide queue_work_node to queue work
+> near a given NUMA node")'
+>
 
-The rq clock has been updated before the set_rq_offline()
-function runs, so we don't need to call update_rq_clock() in
-unthrottle_offline_cfs_rqs().
-We only need to call rq_clock_start_loop_update() before the
-loop starts and rq_clock_stop_loop_update() after the loop
-to avoid this warning.
-
-Suggested-by: Vincent Guittot <vincent.guittot@linaro.org>
-Signed-off-by: Hao Jia <jiahao.os@bytedance.com>
-Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
----
- kernel/sched/fair.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index af9604f4b135..9e961e0ec971 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -6124,6 +6124,13 @@ static void __maybe_unused unthrottle_offline_cfs_rqs(struct rq *rq)
- 
- 	lockdep_assert_rq_held(rq);
- 
-+	/*
-+	 * The rq clock has already been updated before the
-+	 * set_rq_offline() runs, so we should skip updating
-+	 * the rq clock again in unthrottle_cfs_rq().
-+	 */
-+	rq_clock_start_loop_update(rq);
-+
- 	rcu_read_lock();
- 	list_for_each_entry_rcu(tg, &task_groups, list) {
- 		struct cfs_rq *cfs_rq = tg->cfs_rq[cpu_of(rq)];
-@@ -6146,6 +6153,8 @@ static void __maybe_unused unthrottle_offline_cfs_rqs(struct rq *rq)
- 			unthrottle_cfs_rq(cfs_rq);
- 	}
- 	rcu_read_unlock();
-+
-+	rq_clock_stop_loop_update(rq);
- }
- 
- #else /* CONFIG_CFS_BANDWIDTH */
--- 
-2.37.0 (Apple Git-136)
-
+The code seems duplicated too. Could you do a little refactoring and make
+they (queue_work_cpumask() & queue_work_node()) share some code?
