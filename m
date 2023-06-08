@@ -2,141 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 459AB727C1B
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 12:01:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C52C727C1C
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 12:01:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235907AbjFHKA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 06:00:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55972 "EHLO
+        id S235967AbjFHKBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 06:01:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234560AbjFHKAz (ORCPT
+        with ESMTP id S234052AbjFHKBC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 06:00:55 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D03F32700;
-        Thu,  8 Jun 2023 03:00:40 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8BxL_DHpoFkYHwAAA--.1906S3;
-        Thu, 08 Jun 2023 18:00:39 +0800 (CST)
-Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxFOTEpoFk2DcHAA--.23000S3;
-        Thu, 08 Jun 2023 18:00:38 +0800 (CST)
-Subject: Re: [PATCH v12 1/2] spi: add loongson spi bindings
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
-        Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
-References: <20230608072819.25930-1-zhuyinbo@loongson.cn>
- <20230608072819.25930-2-zhuyinbo@loongson.cn>
- <6ebed84c-2b42-c981-7b3f-e71cc88e4c2c@linaro.org>
- <4bf747c4-b767-b20c-e00f-724b50f44edb@loongson.cn>
- <6bfc2a22-6901-0858-7b90-bc4c52c66810@linaro.org>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <bd2d7830-3ab6-0906-b06a-83d3e0a96749@loongson.cn>
-Date:   Thu, 8 Jun 2023 18:00:36 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Thu, 8 Jun 2023 06:01:02 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 443CF26BB
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 03:00:57 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4f4b2bc1565so530781e87.2
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 03:00:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1686218455; x=1688810455;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bsOWfs49wC5N4v4NWtXmUnjFbzqZWXOVySuGPn3htMg=;
+        b=4tyzkukruKe8ZPA7RPnB00YrCnc3YfBJt40uG0nLFHL/S2MxEM1ID/0mg1wM6qR0Ap
+         O6/bzxhLWfWakDYYZSaELapb2cid4mN9Qnf2sxD64w4Inu9p5V0q7j0Kb3j5FjK6MiEi
+         9rSVcTKSTVnpx2CbhZ1k9pwKoDK+tf+kjFRRemHmgKPM8VlM5XJXahH2nLusHzlp1cL2
+         lJ+1UPZmC9MQjEgSw97kO1BYmj2wLUR5IIp58Ih7u9fTwzaxTuQ6ZQQfqXUg6UNVatUT
+         AKCn8JIS+6M9f9RI39+UNwbBbt1dKCMmz6jGVlDbdIifcAXhzBsnbyl6U4DkjmiB+V+E
+         C6uQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686218455; x=1688810455;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bsOWfs49wC5N4v4NWtXmUnjFbzqZWXOVySuGPn3htMg=;
+        b=A1f+t+mT9UxXcRBPLOhgXs2uL+g3c5o6cx1pbSljp3JWjDlHP6GfAfQM2YXSVR2spz
+         CeFz49kV/AnBdg/s1WYOUT5OpivMxBwIdw24w2gprYzXMDupaZgtfd4vZl8Ox06XT4W+
+         g2L4QJIQssTkL7srdBHVrsaN+jdE/IHgZQnyQJRnAzhV8WDxxryDS+5XH6g+SYxwft2U
+         CXHk5O5P/tM5XZ7QyrKOewpQdctdhavcudPFujCYQnE6Afud8FQ2Xj7UkRHVGAcJ0aYo
+         xaGZ2jpJhh5zIJfhsobSS0KfX1sVRmFS8J8tQGika/OAj29k/yk0mbgITknBR0FzKfrg
+         vaFw==
+X-Gm-Message-State: AC+VfDxaVzF01nwEc2bHCsA5uMNrhpuQoKO3ns8ZYmBWXSUthP2doi9C
+        W7yPHOeDnuW7xC2LKb1Vzr0tjA==
+X-Google-Smtp-Source: ACHHUZ7LlWK64M5lFh/5PM74dhnqSCP79zYgwvl4PUklZhQtn1sfsWVhk/BVkBSv4bhXZyQ+/Lckrg==
+X-Received: by 2002:a19:a40e:0:b0:4f1:4504:2679 with SMTP id q14-20020a19a40e000000b004f145042679mr2891573lfc.41.1686218455474;
+        Thu, 08 Jun 2023 03:00:55 -0700 (PDT)
+Received: from [192.168.1.172] (158.22.5.93.rev.sfr.net. [93.5.22.158])
+        by smtp.gmail.com with ESMTPSA id p23-20020a1c7417000000b003f60eb72cf5sm4786261wmc.2.2023.06.08.03.00.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Jun 2023 03:00:55 -0700 (PDT)
+Message-ID: <f4547bf6-5e95-331b-5d8e-b6d71209859d@baylibre.com>
+Date:   Thu, 8 Jun 2023 12:00:53 +0200
 MIME-Version: 1.0
-In-Reply-To: <6bfc2a22-6901-0858-7b90-bc4c52c66810@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 5/5] ASoC: mediatek: mt8188-mt6359: Use bitfield macros
+ for registers
 Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, broonie@kernel.org
+Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
+        matthias.bgg@gmail.com, trevor.wu@mediatek.com,
+        dan.carpenter@linaro.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, kernel@collabora.com
+References: <20230608084727.74403-1-angelogioacchino.delregno@collabora.com>
+ <20230608084727.74403-6-angelogioacchino.delregno@collabora.com>
+ <8bbbc852-6139-29d4-417c-a2d9c77c192f@baylibre.com>
+ <a8b454e3-dded-02d6-b97a-6a7aa3420cf1@collabora.com>
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+In-Reply-To: <a8b454e3-dded-02d6-b97a-6a7aa3420cf1@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxFOTEpoFk2DcHAA--.23000S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
-        ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
-        nUUI43ZEXa7xR_UUUUUUUUU==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-在 2023/6/8 下午4:53, Krzysztof Kozlowski 写道:
-> On 08/06/2023 10:39, zhuyinbo wrote:
->>>>
->>>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->>>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>> ---
->>>>    .../bindings/spi/loongson,ls2k-spi.yaml       | 41 +++++++++++++++++++
->>>>    MAINTAINERS                                   |  6 +++
->>>>    2 files changed, 47 insertions(+)
->>>>    create mode 100644 Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml b/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
->>>> new file mode 100644
->>>> index 000000000000..423ee851edd5
->>>> --- /dev/null
->>>> +++ b/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
->>>
->>> Filename based on compatible.
+On 08/06/2023 11:57, AngeloGioacchino Del Regno wrote:
+>>> -    int test_done_1, test_done_2;
+>>> +    u8 test_done_1, test_done_2;
+>>>       int cycle_1, cycle_2;
 >>
+>> Shouldn't be unsigned too ?
 >>
->> There will be more ls2k series SoC spi device in the future thus I still
->> use "loongson,ls2k-spi.yaml" for cover it.
+>> I'm wondering if it would be better (probably in another patch) to 
+>> change the data type of the other variables too, to match their 
+>> use-case. (maybe it's already the case, I'm just wondering)
+>>
 > 
-> Add them now.
+> In theory, yes, cycle_1 and 2 should be unsigned, but the signedness of 
+> this
+> variable is getting used in the calibration logic later, as in the for loop
+> they are both being reinitialized to -1 ... so I couldn't just switch 
+> 'em to
+> unsigned.
 
+Understood, thanks for your explanation.
 
-The 2k0500 doesn't support CCF and not use CCF to gain clock and We
-internally tend to prioritize supporting 2k1000.
-
-> 
->>
->>>
->>>> @@ -0,0 +1,41 @@
->>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->>>> +%YAML 1.2
->>>> +---
->>>> +$id: http://devicetree.org/schemas/spi/loongson,ls2k-spi.yaml#
->>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>> +
->>>> +title: Loongson SPI controller
->>>> +
->>>> +maintainers:
->>>> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
->>>> +
->>>> +allOf:
->>>> +  - $ref: /schemas/spi/spi-controller.yaml#
->>>> +
->>>> +properties:
->>>> +  compatible:
->>>> +    enum:
->>>> +      - loongson,ls2k1000-spi
->>>
->>> No compatibles for other devices? Didn't we have big discussion about this?
->>>
->>> https://elixir.bootlin.com/linux/v6.1-rc1/source/Documentation/devicetree/bindings/writing-bindings.rst#L42
->>
->>
->> There are other ls2k SPI devices compatible, such as,
->> "loongson,ls2k0500-spi", "loongson,ls2k2000-spi" but currently I plan to
->> add ls2k1000 spi device first, Other ls2k SoC spi device adaptation may
->> require some additional work and I will add it later.
-> 
-> Previously you claimed this serves entire family, so I don't understand
-> why you need to fix something. Why previously it was working for entire
-> family but now it does not?
-
-
-It can work was for ls2k1000 and ls2k0500 and it specifically refers to
-spi driver. but 2k0500 doesn't implementing a clock driver and doesn't
-use CCF to gain clock but can use "clock-frequency".  Is it necessary to
-obtain a clock based on CCF? If it's necessary, then it seems that it
-can only added 2k1000 spi first.
-
-Thanks,
-Yinbo
-
-
+-- 
+Regards,
+Alexandre
 
