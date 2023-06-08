@@ -2,115 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E68E47278AF
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 09:24:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C799D7278B9
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 09:25:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234907AbjFHHYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 03:24:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59190 "EHLO
+        id S235165AbjFHHZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 03:25:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234380AbjFHHYi (ORCPT
+        with ESMTP id S235365AbjFHHYx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 03:24:38 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D611AE
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 00:24:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=qn0Y26j1I3K5ZOtrwpc71K3c8JF0q5T3JqtjyhJNb7o=; b=b2qXHUx4bjWFGSj1mw8H4zXmXl
-        B5SKmpzA7xpkqPyygEJUyHR3ZjznoJBPCTYsmaBQodr4E05r2uZzptPC31SCZM4ojKSXUdT477sPm
-        36kEV2uif3OQXMynXhhMjijhdSrDXzNyPmb2IfmtAItVU4pDPaGM4APKjBLlb6UTITstIgpUyRczr
-        lMgavzM/+L+0QPUltUpMEdEErYO3DRAcyQYZl7Hzk5C5RgqBwydfeHXGKiVUX6jRTcXYdLZ1jlT3z
-        DKvHt9ZnvqNHXE4UpuhoIZES3+3oihaTHLQs9vfkPaO1DORoD0frGMlxfADM7Wv+Anx8+OYlaeHWU
-        5NCBmFxg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1q7A0M-0068fn-1W;
-        Thu, 08 Jun 2023 07:24:22 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1D94F3001E7;
-        Thu,  8 Jun 2023 09:24:20 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id CE6A523FF6ACF; Thu,  8 Jun 2023 09:24:20 +0200 (CEST)
-Date:   Thu, 8 Jun 2023 09:24:20 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     "kan.liang@linux.intel.com" <kan.liang@linux.intel.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "acme@kernel.org" <acme@kernel.org>,
+        Thu, 8 Jun 2023 03:24:53 -0400
+Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2128.outbound.protection.outlook.com [40.107.114.128])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC4E3E4A;
+        Thu,  8 Jun 2023 00:24:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aQqEcstw/LfJtr89PNdook4/QjT46Bhxedw2NIZaEO63BKOahi4obMbTKM2Sgb6W9YWS/RWUBnPGdyXhWzY0oBMv3LFuR7/TxBOn/CHS3w0yWOHjadbRGOLs7b0LKZKZEy5Byo2kCoT1k1axMKheXdysOB89Z38dQbKZvJ2UG6rQaz8TH+g1ManTd9hGHteEp2yAOudkk8kai/PSdYQeHIqe+Dpbw22nsEEkBD5ZCr7oSxLt8B/w1RvJQMAgEIjJahZIgTZCH5EfjAYO+LGKy/N3mytdwidI8lnyEldHFJBcrBHtRttSKMnc8q+z4okO8pde1YK98jZoz4nGgOsDnQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MvBl7vszmkdxtB/G/BwrRPAkZLe3yjtIMMX4yL1e2ok=;
+ b=h+rRjtDbEfA+7YKbEvOWkn46I6vvUSjo4J8B6OjPILhTUlkYKkW1fBJJtJ/dyr80SnJR97c6igIMWhOHzdfNr3VURRCai0aA4ttAMRjOvyn/rE/9ReyMiHHHE8mcNUOuKUNOCdfPql6yauuKv2VTBoO0adfMGA+9Q5KTM01614Kzk+LBMKRsksR9L2CIrMkM2MOHV4Fw6sMkdJlgG2HyQAzTTQe0DAYnWax6QS7YQuLKVw9riSap4et8n18tiVavQWULIsfdtrUPAIk1wIAR1i9cmZhGH8HKhdmqfBiWOPAYV1i7V4FSftIZzEZOxi+BnhQ2PQNUxLwvflUO9fQPhA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MvBl7vszmkdxtB/G/BwrRPAkZLe3yjtIMMX4yL1e2ok=;
+ b=bgiCSKT7hIRvSWsJK4DhBeqqv0iGQUB2mdNFO7YtHwiYmMI+/ppPok4dVkibGxU5bWDYubSR+J3SfqbSbYMYm3sdcxfa2oUHfOhVK1NVH9i3ejGj/ew7F+u/y7iE/k+FRu0hBezNfpsO6e9n4mBCQIParNgU8UM1j3hrE2LlckM=
+Received: from TY2PR01MB3788.jpnprd01.prod.outlook.com (2603:1096:404:dd::14)
+ by OS0PR01MB5907.jpnprd01.prod.outlook.com (2603:1096:604:bd::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Thu, 8 Jun
+ 2023 07:24:49 +0000
+Received: from TY2PR01MB3788.jpnprd01.prod.outlook.com
+ ([fe80::a4f8:4204:cbe6:6cb3]) by TY2PR01MB3788.jpnprd01.prod.outlook.com
+ ([fe80::a4f8:4204:cbe6:6cb3%3]) with mapi id 15.20.6455.030; Thu, 8 Jun 2023
+ 07:24:48 +0000
+From:   Chris Paterson <Chris.Paterson2@renesas.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+CC:     "patches@lists.linux.dev" <patches@lists.linux.dev>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "alexander.shishkin@linux.intel.com" 
-        <alexander.shishkin@linux.intel.com>,
-        "jolsa@kernel.org" <jolsa@kernel.org>,
-        "namhyung@kernel.org" <namhyung@kernel.org>,
-        "irogers@google.com" <irogers@google.com>,
-        "Hunter, Adrian" <adrian.hunter@intel.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "alexey.v.bayduraev@linux.intel.com" 
-        <alexey.v.bayduraev@linux.intel.com>,
-        "Zhang, Tinghao" <tinghao.zhang@intel.com>
-Subject: Re: [PATCH V2 1/6] perf/x86/intel: Add Grand Ridge and Sierra Forest
-Message-ID: <20230608072420.GB998233@hirez.programming.kicks-ass.net>
-References: <20230522113040.2329924-1-kan.liang@linux.intel.com>
- <20230522202659.GC3334667@hirez.programming.kicks-ass.net>
- <SJ1PR11MB608367DC5D25856073C86FCFFC53A@SJ1PR11MB6083.namprd11.prod.outlook.com>
+        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "patches@kernelci.org" <patches@kernelci.org>,
+        "lkft-triage@lists.linaro.org" <lkft-triage@lists.linaro.org>,
+        "pavel@denx.de" <pavel@denx.de>,
+        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
+        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
+        "sudipm.mukherjee@gmail.com" <sudipm.mukherjee@gmail.com>,
+        "srw@sladewatkins.net" <srw@sladewatkins.net>,
+        "rwarsow@gmx.de" <rwarsow@gmx.de>
+Subject: RE: [PATCH 6.1 000/225] 6.1.33-rc1 review
+Thread-Topic: [PATCH 6.1 000/225] 6.1.33-rc1 review
+Thread-Index: AQHZmYAVASJDhYSmwE+fmLSrT6MUMK+Aae4Q
+Date:   Thu, 8 Jun 2023 07:24:48 +0000
+Message-ID: <TY2PR01MB3788FA9EB3D8EAC669C3F623B750A@TY2PR01MB3788.jpnprd01.prod.outlook.com>
+References: <20230607200913.334991024@linuxfoundation.org>
+In-Reply-To: <20230607200913.334991024@linuxfoundation.org>
+Accept-Language: en-US, en-GB
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=renesas.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TY2PR01MB3788:EE_|OS0PR01MB5907:EE_
+x-ms-office365-filtering-correlation-id: 2cf49975-0eee-494b-c965-08db67f1712e
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: daD0ojWTpf5f2xCLnVLOnfWv3U0gcR175iND7GQ9Ffw1oY4lb5XqdCiBFOx28IEVTjBchGZj+eWQ0bxcyeSWmKbYjZ6dv5ZFLTcCc9QFmvgcvdV9bYCrb/8hmiPB1WGbsqkpfpS/RzaNr9J73IgfrIqoLXPEL9041gYfgel1vJdRNwMkIy316UezQbMUSAvWk9/gcYAMJwZBDYA+Y02PkiY0bTHVTQ8ATDmqYbGNyb+dTbIVPeWYs6ybba/AaakKd62cVMIG2y3uz3ZSzhwLI3MXC+uAVVUvDLEwfVDMj3eto0MR67bJBqjqlGQaVYWWS2uXYVhCR6Qje4LBUE7WqYi6dIED/BrXLLpZzK0StKP8OqH9YtJ+ZJY3aKiMWV+cEcwG4yYNyT7fd7YC8wIYXiykqKjbdkLbLBjxfC6ZdgUE7VWukS7smKZaLB+ZCI8HyTDRNFSJ3Vf8RSHrtglV1E7PSAp2kf94QGdl//awTzweeXF0lgBTdbmj734x0X2QkdzbLMFcZ6i8qyadiNFDWWaKiTHsPb+Kuhazq54iQpMzAOBjLQ4CBeuX78QiZFgBCzrFzNMV+Lmp8YCnCF8KEXbBID2XE46LAgpHFEsMrEktUJHukaQqDisgeOsCcGzg7vyK09Xhb1wZ/GHI82LFIg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY2PR01MB3788.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(136003)(396003)(366004)(376002)(451199021)(186003)(9686003)(6506007)(26005)(966005)(86362001)(7416002)(7696005)(4744005)(2906002)(71200400001)(8676002)(8936002)(478600001)(110136005)(55016003)(33656002)(316002)(38100700002)(5660300002)(66446008)(76116006)(122000001)(4326008)(64756008)(66476007)(41300700001)(38070700005)(66946007)(54906003)(52536014)(66556008);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-2?Q?ig3Hn+2v36GwgzMHQgx5oD2ryJMtiJr6yVv3ysdQNbycCEKX+h/TqHNN8B?=
+ =?iso-8859-2?Q?oxj8Jhrit50f5nZhtfkTp7PddvsYAzYS68j8y0age/RVdiuv2N4sd488Sq?=
+ =?iso-8859-2?Q?8ujFDmUCAn80zYOXkFwkUMdMhClMCnUjm6+7rNIqbFC2/PTxe6k3fIrZVv?=
+ =?iso-8859-2?Q?TTJjX9SoRz0kkEuq/6HE/xsba2DxtaXOfc+28IxacYQw2f15cXmohH7oh7?=
+ =?iso-8859-2?Q?i3JVOiWhk+TUPlzt6tl1d13V3xMImCO98Yrpp7Q70SFkpM/ehSC0Cw3nBv?=
+ =?iso-8859-2?Q?3XzDzDAVDTpPh2JIweUUA+/ThTq6vEkjKBpPy0kblX/JJ0+5EDXHw/ys2b?=
+ =?iso-8859-2?Q?puwQGiHJ2MA0K4/jFSCMpIu8WGMiYx1BhhEizs8svy+IkzVgvxlFFxxKag?=
+ =?iso-8859-2?Q?xvnVxEga9MRRT5YFVs/8UnGzOF3oCIcDSJSjnJ+Ds3Xw2VOtjXcVM/TBEK?=
+ =?iso-8859-2?Q?3LTcTZiNgM4KwVPwePZmjiku1kKpmnAMjw4d+Z/ESxvLEcQzlxyM3f9itP?=
+ =?iso-8859-2?Q?73G30PLL/Z5T4x4MgIxKleH0JlXcGisZ2U3ooxz+pnxzziQhMy76ePpnbo?=
+ =?iso-8859-2?Q?RJ9LIxyqCQ9rnmpi5iIfTiZTnxaErcYnaVjsr7D90HZCWwkwZW0CyfaMbx?=
+ =?iso-8859-2?Q?Tdw0/AN7xH7ONprfbctT8U0FIYJ0OrPrhKcKFSldclRVSPWqNiiJBdzeon?=
+ =?iso-8859-2?Q?X1PKSPqChvooARB3zEuErUbR2KVSqFmXP/mnNLrtKSlT30HYzS7oym98KF?=
+ =?iso-8859-2?Q?qqaDVkNMjPEq2C6SE5l1qDRLlXeCkUbVFA5vmnojWRtVjjpTJ5/vnLlo++?=
+ =?iso-8859-2?Q?1zPsrn6cmxBJ7hpBw7akyVHRGw8zJGhki0JHgvIAt+DzmIFbT4LzBO+zNA?=
+ =?iso-8859-2?Q?N4kDuRHFJEP848OlI7VmqufjARxBV16VXTnJkE1FrNhMSGaCy5wnBVVssX?=
+ =?iso-8859-2?Q?FWfLSdExXZztjd1gSGbPMA00QaJDCfBBMsg/F0v0CIc2EnWOqnuvKn1DCG?=
+ =?iso-8859-2?Q?RrT/5Z8GwkwiJBXY/fbvxiXHv9Qqx2AKQZ6vIsKRyMcdS4wUOZx66Am84d?=
+ =?iso-8859-2?Q?c07R5BUREcDDp/GYbCei/S3DuQkjXqFekRH+3k5Wgv9szvarx+pEP0hdTq?=
+ =?iso-8859-2?Q?4kJS38Xc7sdUtuLUS3ctx/6EZgh7K96JOaLbtbORemtVZP8Mm7tijMs3W4?=
+ =?iso-8859-2?Q?/CaNgj9nkg2ZZiCvqE4VK+8hvrhkKr0WeBZVcdd2al5f2K0NV+RQfIDpTd?=
+ =?iso-8859-2?Q?ipYBrRPQHeT75dhHISBT89d6nMTcINNvFiV1QyFkfkx0M2cHyc6WFQxhYv?=
+ =?iso-8859-2?Q?812UaZxWHJZXGVDQ/TWjotR9nAcy/jbYopV2w/w2d5uYal/hf70It+zhT+?=
+ =?iso-8859-2?Q?GARnFkjcsZPgEbCFXojPnH4pLp9+KcNSCfe500XZ7VxMI3OZu2wmAoadrt?=
+ =?iso-8859-2?Q?7mkPbuhr4wAZMBPRnOwTGdJsZFR4EzsAy4wmFdsJcFQoKcVoC4UREX0SWr?=
+ =?iso-8859-2?Q?MaxQ4b8URnag0PXJo9fnPqWy9uMrWZerM5XuXRXmGqOU/w4i8G0JjBNn/m?=
+ =?iso-8859-2?Q?+5XISC155KsKDPqJ7bK/PavuXWErkMpobRoF2rCFSTB7dlO4g7wCdlRT6/?=
+ =?iso-8859-2?Q?BET4L9zw5cNp4/BHLGNRCojWPhDugBT1fGYPoCMmlEbrjMwLfpZBhkmw?=
+ =?iso-8859-2?Q?=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-2"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <SJ1PR11MB608367DC5D25856073C86FCFFC53A@SJ1PR11MB6083.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TY2PR01MB3788.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2cf49975-0eee-494b-c965-08db67f1712e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Jun 2023 07:24:48.6220
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: hTT/32Supd8wfk/aB41VJN7V5e/q05ZEGaHv+nebZYKDiUFXtnmK4aIoRoxLtcRAi5+6J1Z+vxG2Ip97/Yz0gnZreYr1Zlm2S7pESbALkhw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS0PR01MB5907
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 09:43:57PM +0000, Luck, Tony wrote:
-> > > Create a non-hybrid PMU setup for Grand Ridge and Sierra Forest.
-> >
-> > Moo... Tony, did you sneak product names instead of uarch names in the
-> > intel-family thing again?
-> >
-> > That is; I'm thinking we want the below, no?
-> >
-> > -#define INTEL_FAM6_SIERRAFOREST_X    0xAF
-> > -
-> > -#define INTEL_FAM6_GRANDRIDGE                0xB6
-> > +#define INTEL_FAM6_ATOM_CRESTMONT_X  0xAF /* Sierra Forest */
-> > +#define INTEL_FAM6_ATOM_CRESTMONT    0xB6 /* Grand Ridge */
-> 
-> I don't think that's really any more helpful.
+Hello Greg,
 
-Well, it clearly shows why these two are grouped together. They are the
-same bloody uarch. OTOH 'Sierra Forest' and 'Grand Ridge' is just random
-gibberish that nobody can relate without looking up some website.
+> From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Sent: Wednesday, June 7, 2023 9:13 PM
+>=20
+> This is the start of the stable review cycle for the 6.1.33 release.
+> There are 225 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
+> Responses should be made by Fri, 09 Jun 2023 20:07:31 +0000.
+> Anything received after that time might be too late.
 
-> Using the code name of the model makes it easy to look things
-> up in ark.intel.com. Using the "core" name doesn't even work for
-> hybrid CPU models which have more than one core type.
-> So I'd like to keep it as it is.
+CIP configurations built and booted okay with Linux 6.1.33-rc1 (8f4f686e321=
+c):
+https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/pipelines/8=
+93074084
+https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/commits/lin=
+ux-6.1.y
 
-ark.intel.com is a travesty anyway... if I get it as a result to a
-Google query I will almost always avoid it because it is not useful.
+Tested-by: Chris Paterson (CIP) <chris.paterson2@renesas.com>
 
-Wikipedia and Wikichip are by far more useful.
-
-> But if you want to change to the core name, then please just
-> do it now.
-> 
-> There are folks internally worried that all upstream work for
-> these two CPU models is going to be blocked while this
-> is discussed.
-
-Then I'm hoping their take-away is that random gibberish names don't
-help anybody. The whole Intel naming scheme is impenetrable crap.
+Kind regards, Chris
