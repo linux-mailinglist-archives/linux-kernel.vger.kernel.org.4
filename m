@@ -2,154 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5790172763F
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 06:41:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80233727646
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 06:44:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234133AbjFHEl2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 00:41:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53594 "EHLO
+        id S234163AbjFHEoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 00:44:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234090AbjFHElX (ORCPT
+        with ESMTP id S234170AbjFHEoP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 00:41:23 -0400
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CCDD26BF
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 21:41:22 -0700 (PDT)
-Received: from cwcc.thunk.org (pool-173-48-82-39.bstnma.fios.verizon.net [173.48.82.39])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 3584euUk006748
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 8 Jun 2023 00:40:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1686199259; bh=PrkgoFChjjS/t6u7nUUd0Q1FegS/n9GQDkTMlzso8ts=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=WUEiQBUhZRUSLgSW0x2RfgsormeTtlzVD+EQpDXfT5Y/Lzc2XYFpkskpUkfDqSlJY
-         7ZPipKOJ20PMDF1x8IMRURM5Rd9sjAS5v29ym1pH6IBxbWG8qJ4QEjqJG5YYaDUKR/
-         ux8/P6p2b1Wo2yJblHp0SkLV4DOPxFunChWzUsjCWO7L6ZpMB5Q4HbTIMBNR9QVJtR
-         xlE4Fy1yDXHIUT8h04Hm6ypp9f4f7rC1KUWVcEJHQz8kYnAtwwl0oYqbde8DzTnP6+
-         tDupzFEWWFOv9c5b4zpUm+6Xmqp0XdgFXnRWcabtybrpUFDxNZsBJpjpa9ruTPQbvB
-         8l6gghFuRk+hQ==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 73EA615C04C3; Thu,  8 Jun 2023 00:40:56 -0400 (EDT)
-Date:   Thu, 8 Jun 2023 00:40:56 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux ext4 Development <linux-ext4@vger.kernel.org>,
-        Nikolas Kraetzschmar <nikolas.kraetzschmar@sap.com>,
-        Linux Stable <stable@vger.kernel.org>, Jan Kara <jack@suse.cz>,
-        syzbot+6385d7d3065524c5ca6d@syzkaller.appspotmail.com,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: Fwd: Remounting ext4 filesystem from ro to rw fails when quotas
- are enabled
-Message-ID: <20230608044056.GA1418535@mit.edu>
-References: <653b3359-2005-21b1-039d-c55ca4cffdcc@gmail.com>
+        Thu, 8 Jun 2023 00:44:15 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5ECF26BF
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 21:44:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686199454; x=1717735454;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=uJG3eTt0JuHv7zXtogVQuSguc7eZkGvYbWxX+0ig0h4=;
+  b=k6gClHed6MPGpvLHXfbOcBcPNX8HJ72S4Jl/VtGPNn35d2yatQqXWJLX
+   uQQkX5MdvdcTbjaJ4nkxSqgOK4ulA/C4bh5B7QtStX5Wn65n6xFOZvXgt
+   IienFCrH+v99alS5E0CzCK4EdXBEquqxKsaoiZsBHX5PvnzKE2ckJj5ss
+   xXPzta7DV2m0GxRe74lkkLUdTZSa8IastAgHBOKafKNt4HgZaoo649b4z
+   X8mwfw5vnhVvpZgceJsxnhwGtK6UifbX4OvVXsnOjeuOx+Ni9nZhr6cRt
+   meDr3PEBJ+/rJOgqTU+lQ3yXEtR3Rs4OfdXieRfQyPH7lTUdFoLL4BQ1l
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="359670846"
+X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
+   d="scan'208";a="359670846"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 21:41:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="956574120"
+X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
+   d="scan'208";a="956574120"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by fmsmga006.fm.intel.com with ESMTP; 07 Jun 2023 21:41:41 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 7 Jun 2023 21:41:41 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 7 Jun 2023 21:41:40 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Wed, 7 Jun 2023 21:41:40 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.172)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Wed, 7 Jun 2023 21:41:40 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=POubXyW5xcn3Nfo3sNBSNOpCsOqGXI6LbvSnnhDaJi6gmsRNxFTNeECQeVOaJKUpPj4CbCnwyD/9+akws920DZIQTyNfD+prTclJE1TicCEV1Up9nVj44lJODBeIO0QGj4wwqHOXvyND/bQkvMXZtzNUQGmm7eYTj+E++loK00W/6Riq3TYDxqcN1SF1LnTaaXjTSfUqGN0zQeF4JgQ3IvLZD00yJozo/1azeOm9JXgx1zu14g4aJdwPeGd3T5cvhHRY4T3lK00ZzTtEvEspjP1Cy5vPe22GHgV3SvS8Shya7RZPUrGlbak2CMpeSSCJ9zWvZB2+MeGhUqkoFScByw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=uJG3eTt0JuHv7zXtogVQuSguc7eZkGvYbWxX+0ig0h4=;
+ b=Rkg2k/kWPf3w82yUcmyPmSRvUF75JTZXjJ74RkiYrZ3pOibjVTsR6KRJKNw9tWtEATBBAtRNnoDBjIT36532sLVSG2p0VzkNU1NnkW7YFwAtyMIEUF8aHhifLq6GcLRxwh35O+YJueHIMEGfVP2YjbodGa4XLfTSRhucxQXaPNKH88nTAXfLeVU2xWk6mb8zDpbqtgIY0DDJ0Fo8VUsuXKKMyRdd/Jx2o4Jy9dvuY8hykPabeh5zHYjpZg5sbo4Je72M0kJP01wnBX79rE8vHaARQA1XnWmJSCta9p4m1KBnly7SJqCBp/apbMJH+IxfZ4RUfKcKp89E7eYwV3myZg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
+ by SN7PR11MB6703.namprd11.prod.outlook.com (2603:10b6:806:268::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Thu, 8 Jun
+ 2023 04:41:38 +0000
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::19b7:466f:32ac:b764]) by BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::19b7:466f:32ac:b764%3]) with mapi id 15.20.6455.030; Thu, 8 Jun 2023
+ 04:41:38 +0000
+From:   "Huang, Kai" <kai.huang@intel.com>
+To:     "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>
+CC:     "hpa@zytor.com" <hpa@zytor.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "jpoimboe@kernel.org" <jpoimboe@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "Wilk, Konrad" <konrad.wilk@oracle.com>
+Subject: Re: [PATCH] x86/kexec: Add a comment to relocate_kernel() for better
+ readability
+Thread-Topic: [PATCH] x86/kexec: Add a comment to relocate_kernel() for better
+ readability
+Thread-Index: AQHZmSxwVbvprrp+B0KPOXpdXFKc9a9/MaKAgAEjB4A=
+Date:   Thu, 8 Jun 2023 04:41:37 +0000
+Message-ID: <538335b164bf8b84b8a55c5654ed15d849479388.camel@intel.com>
+References: <20230607103910.407779-1-kai.huang@intel.com>
+         <20230607111957.sppocwpkhfb2e2vf@box.shutemov.name>
+In-Reply-To: <20230607111957.sppocwpkhfb2e2vf@box.shutemov.name>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.48.2 (3.48.2-1.fc38) 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BL1PR11MB5978:EE_|SN7PR11MB6703:EE_
+x-ms-office365-filtering-correlation-id: ad5be917-7303-4d88-614e-08db67daa54b
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: wT7avMwBjFr1StU1QzRTk+wHhYzOZdR97S9BQnk23q8OjdNVdiIRTbjzlH7bHC08xM/9x8oMzNY3wpWg6nSfD53Jo5jc560k630Q1FsE4s93ov4GGo+7IyDWnLyxlFx2y4sZw0Xld9ubH+XUmuLFqHL4HG1QL17of0jzwxIb5Kl2AeI8oqvopVSjcREsvQP6Ji3VPKlr+jtMty++q1lgwP/I2r8IkdLUPHvRJjh3NRCDiehYEUo8LA0xU0pIjU/xrPl0S39xaMJ8VEkPH8eYmYMbmJTTznZtYWNLaKqVE8bae/Hip5LebZg6h0woGffVAttFFcWKiCDmOnVU2X0uPpzMJDDmcFs4zA+pSuEX+n/X+IfO905FeQaiToqZPo3FmB2DrSpXlwcBGXzLOFLxRvIrUECsa2KeWN8z074USQnIzvO18DTs4VlKiria4JSwq1/2+sIncngf4OGNmQODQlb6nuhIvOGZlDT25y4mnhx2tlq4G+Qk6Vqig9joMKhj1svEh51uqt//ybHT+mSwUsywyWL7JoH2ESo02ayEYFW8PxOZZEOHvXACx6glHbC5wIM1aVqLR55dj0GKVWZ3r2+Z1IgmTZ+QB29G0O+P8pUjYVPwCAPiFE0eSqaR5PUE
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(136003)(366004)(346002)(396003)(376002)(451199021)(76116006)(2616005)(26005)(66446008)(6506007)(6512007)(6916009)(316002)(64756008)(4326008)(66556008)(91956017)(122000001)(66476007)(66946007)(6486002)(186003)(478600001)(71200400001)(36756003)(54906003)(38070700005)(2906002)(5660300002)(8676002)(8936002)(82960400001)(86362001)(41300700001)(38100700002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dUpsVUZveVIzYlNhMkV1SjRCejJkQnZCckt3MG93aFpNeVVTTVdLUG5ldUJa?=
+ =?utf-8?B?Y080bDNwRGNWUGEyNnFZNzdod2VvbFo4dVpHWWhmZ1M0Z3NuQy9iV0RYTTZu?=
+ =?utf-8?B?OCsvK0dybXhMMmRjM0lxbzAzTGk0TzlQY0crczFpQ2IvZW5uSHRmVEhQSzlo?=
+ =?utf-8?B?RU01YUs5K0N2ZzE0ZjJPZFlWU0NNT1FybmxxWnJrdUFHZjUyWXh6SVdBajU2?=
+ =?utf-8?B?UjJDcVVlWXp6dWZzUmZNSGY3TXhBN3N5SEpIU0xwMThvYnlJbnpBYk93ajdR?=
+ =?utf-8?B?L09rZjlTbU1jZ1J5VTJJT3RsVjMyaEk1UDk4TzltbFhZNEw2cUhHVUpsRGxa?=
+ =?utf-8?B?Z3VadllxM1FUR3g1N010cUExSzVFSnhZWHhPck9qdWhBUGpOdVVBOGpPWDI1?=
+ =?utf-8?B?R21wc3dLa0NxYURCYThtNENKQ1ZVZ1ROdnRBUXNtK3hhbk45Q1g5V1I0QUZ6?=
+ =?utf-8?B?L2p4K1ZNM3RvL2hTNmt6NXdiRm51SlVjRGdEeFRsbStkamwwWEwrck4vWTZE?=
+ =?utf-8?B?ZTFCTERlSFlWU25aVVNxaURBcDcrS3VnL3dPSDlRQ3hFWmc1cjViVTJsYXdz?=
+ =?utf-8?B?am8zbXFLNWt5YmRlaHgxUTBnblFhYnpPNXlIRmhqdGFhcEZSOSs4RFNHVUw1?=
+ =?utf-8?B?Y1NiL3VHS2FNaVNDS3BnWFN4K3FwTU0xY3dJV0Nvd1NMMVZNQWx1MEVkVnk4?=
+ =?utf-8?B?UWYyUnYyRzI2T01lNDE3VU1maVQyYlU2Y21CZTc0ek1SRnJDN0xwaTBqYTFL?=
+ =?utf-8?B?ck5wYXlBK2JkeGF2enYwcmFvQTNLNEw2R2pGeUwzSmhFMHJtaStjRHFhelF2?=
+ =?utf-8?B?VkVhZHBGdUdaVFpCVHRkbHdKajBRa3BpUkdUUEVOMFpSeW5XTjNWUDQyNERa?=
+ =?utf-8?B?dCtSOGNsK3R6RUNqMnhPVHB1d1NabnQzaVAySFliTXN2MkxrcXFNRDdxb1c0?=
+ =?utf-8?B?MVNEdGcyc3JoQ3cwbWRoQUNobDRBaDJnQ3NFcWRiS2NqbVJjZFBPK0c4L0o0?=
+ =?utf-8?B?MC9tbW85S2YvK2k3MTd3aEZCdjREYVpGMk4rTFhkMUdNVk9uOUZSNkJMQnh6?=
+ =?utf-8?B?Y2xlRExQT2hORjJjUFVLdUpUZ0FiZ3FENGNSTzBzMmlobEpvQlhjbGYvZmsw?=
+ =?utf-8?B?OVdGZ2VZNGxGMEdqa2VpOUc4WGcvWTdSeGtYd0NQNFJSZno5UkwyV1M1MGZT?=
+ =?utf-8?B?ck9JdCtUeHd1NlZtMGVIUmIrT0p4SjJWUjl6SlNjM0k3VzExZDB6NEIvY3A2?=
+ =?utf-8?B?N1R1TFpiajJkNHdRS1liVzFybVRiSGdIM1dWbTZhUkZsRmREN3R6MTRTQW1L?=
+ =?utf-8?B?WnBoT1ZIalN0cHlwaHBvQk4vajNvU0xkTDkycUY3SWlZSi9GcERPb3JtRFNm?=
+ =?utf-8?B?ZTRXY1R5NFgreXpWV25HSFFadjI0MENzSnZnMk54akZsSGxlMHNjRmw1YjJW?=
+ =?utf-8?B?VFJ4R0hBUklyNlJuOEljMDRyY3VhbFlGV1RnalZqMGVENS8wVzRKUHpNSlZt?=
+ =?utf-8?B?OGY0eUhEWGg0NEpHME9ibnN3ZHhrODBxRGtXb0JSVDNWeXdyenZVdmRLbzB1?=
+ =?utf-8?B?SnpYcHpsV1NFZ0g5aHZxQXJveGg1VG4vcnhZcGZZRzVqNGU3YlhsaEhJSkVL?=
+ =?utf-8?B?VHRlZEFJRTgrMjgvY3FVbWttK0ZveXhCbUIrMzB3MHNZM2g0VFhnWUJYSkNK?=
+ =?utf-8?B?T2F1SWNQOHlaSnNIaFJkZ0Rmcnl0QS8rUEFWeFRSTWN1RWMvbmRBd0dpZWp4?=
+ =?utf-8?B?czlPQkdJTDJOMlA0eVk1NVpLQkR2dy9hcXRzK01GYzVhc2xnU0dDZlg5MDNS?=
+ =?utf-8?B?MmtMR1E1NTh3c3pCRzFyRTVhc0tQZTBlcHN1U0tMaDRPYVhSd0srckVPZTgy?=
+ =?utf-8?B?VkNMNDhiOEJ0dElkMjZ4c2hsbUNMZTZqa2NYNGc1UUFYU29lY3JqQkkxYklH?=
+ =?utf-8?B?cnBhd1ZWMTZ0cVN3aHU5Q1FIdEViZ2ZzMXlva3h0eDF0dkJEUi9WR29zQTFz?=
+ =?utf-8?B?Y2hMZGFGR3BNYVdYRllaS0FQWXRBSEZzU0MzMEx1cVRGdHMwV1c2MEg0MVVT?=
+ =?utf-8?B?c200L2JDSjdmQkJuUEdkM1FkMFRKbU1ySng0N1NpWHJBeHJmNmdtZkZMVm5n?=
+ =?utf-8?B?Z1pSdlJSTlJnUmZFaW5iOEZLOUw1YTZaSGNSNklDRTViOEh3OWM2VHlFaEhH?=
+ =?utf-8?B?Tnc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <C5D69D6439F42840A6D435FDD003CCA0@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <653b3359-2005-21b1-039d-c55ca4cffdcc@gmail.com>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ad5be917-7303-4d88-614e-08db67daa54b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Jun 2023 04:41:37.6288
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 2YGmA19bWbyhBY5dsElQ3G91P4K2M61NSYXPj8oPnD0VePzJNXyL5+A81NAZCUUyzXY+MsB37U6/g2tUW7INPA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB6703
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 12:51:26PM +0700, Bagas Sanjaya wrote:
-> I notice a regression report on Bugzilla [1]. Quoting from it:
-> 
-> > Since commit a44be64, remounting a read-only ext4 filesystem to
-> > become read-write fails when quotas are enabled. The mount syscall
-> > returns -EROFS and outputs the following in dmesg:
-
-Yeah, and I think all we can do is revert this commit:
-
-    ext4: don't clear SB_RDONLY when remounting r/w until quota is re-enabled
-
-I think I saw some messages go by about this getting queued for the
-stable kernel; if so, could it please be dropped?
-
-> > 
-> > The problem can be traced back to the changes introduced in commit
-> > a44be64. It appears that the issue arises because the SB_RDONLY
-> > bit of the s_flags field is now only cleared after executing the
-> > ext4_enable_quotas function. However, the vfs_setup_quota_inode
-> > function, called by ext4_enable_quotas, checks whether this bit is
-> > set (fs/quota/dquot.c:2331):
-
-The problem that we're trying to solve is the malicious syzbot
-reproducer is in one thread, twiddling the file system state from r/o
-to rw and back.  In another thread, it's attempt to create files and
-directories.   And occasionally, we're tripping this warning:
-
-	WARN_ON_ONCE(dquot_initialize_needed(inode));
-
-That's because we're racing with the quota getting initialized, and
-the moment we clear the SB_RDONLY bit the thread which is trying to
-create a directory or file will proceed with the operation --- even
-though the quota subsystem hasn't been initialized yet.  That's why
-the patch attempted to move the clearing the SB_RDONLY bit ahead of
-reiniitalization of the quota subsystem.
-
-Since this is screwing up the ability to remount the file system rw,
-we need to revert this commit, at which point, we'll be able to
-trigger this warning again.
-
-So how do we fix the warning?  Well, we could just drop the
-WARN_ON_ONCE(); the downside is that when this race gets hit, the
-quota operations to allocate the block and inode will silently become
-a no-op, which means the quota will get out of sync with reality.
-
-Alternatively, we could add a call to the beginning to
-ext4_xattr_block_Set():
-
-	if (dquot_initialize_needed(inode))
-		reutrn -EROFS;
-
-... on the theory that the only time we should hit this is when there
-is a quota setup racing with inode creation, and it's better that we
-just let the mkdir or open with O_CREAT fail than to succeed, and
-allocate blocks before the quota subsystem has been initialized.  I'm
-not sure how safe this would be on older quota setups (pre-ext4 quota
-feature), since I suspect the race window is a quite a bit bigger if I
-understand correctly how things worked with the legacy quota support.
-
-The final really hacky thing I could imagine is to hack
-dquot_initialize() to something like this:
-
-int dquot_initialize(struct inode *inode)
-{
-	ret = __dquot_initialize(inode, -1);
-	if (ret)
-		return ret;
-	if (dquot_initialize_needed(inode)) {
-		msleep(1000)
-		return __dquot_initialize(inode, -1);
-	}
-	return 0;
-}
-
-But I threw up a little in my mouth while writing it....
-
-So I'm tempted to just remove the WARN_ON's, and just accept that if
-superuser wants to twiddle the read/only state of a file system with
-quota, at high rates, while something else is trying to create
-files/directories, most of which will fail while the file system is
-read-only, then the quota may gets out of sync, and... ¯\_(ツ)_/¯
-
-Since this is only something that crazy people or malicious Syzbot
-reproducers would try to do, I'm really having a hard time bringing
-myself to care.  Especially since we have plenty of other places where
-we aren't doing the dquot_initialize_needed() check, so the
-opportunities for the quota to get out of sync already exist in other
-code paths.
-
-Jan, what do you think?
-
-					- Ted
+T24gV2VkLCAyMDIzLTA2LTA3IGF0IDE0OjE5ICswMzAwLCBraXJpbGwuc2h1dGVtb3ZAbGludXgu
+aW50ZWwuY29tIHdyb3RlOg0KPiBPbiBXZWQsIEp1biAwNywgMjAyMyBhdCAxMDozOToxMFBNICsx
+MjAwLCBLYWkgSHVhbmcgd3JvdGU6DQo+ID4gVGhlIHJlYXNvbiB0byBzYXZlICVyY3ggdG8gJXIx
+MSBiZWZvcmUgY2FsbGluZyBzd2FwX3BhZ2VzIGlzbid0IHRoYXQNCj4gPiBvYnZpb3VzIHcvbyBs
+b29raW5nIGludG8gdGhlIHN3YXBfcGFnZXMgaXRzZWxmLiAgQWRkIGEgY29tbWVudCB0bw0KPiA+
+IGltcHJvdmUgdGhlIHJlYWRhYmlsaXR5Lg0KPiA+IA0KPiA+IFNpZ25lZC1vZmYtYnk6IEthaSBI
+dWFuZyA8a2FpLmh1YW5nQGludGVsLmNvbT4NCj4gPiAtLS0NCj4gPiAgYXJjaC94ODYva2VybmVs
+L3JlbG9jYXRlX2tlcm5lbF82NC5TIHwgNCArKysrDQo+ID4gIDEgZmlsZSBjaGFuZ2VkLCA0IGlu
+c2VydGlvbnMoKykNCj4gPiANCj4gPiBkaWZmIC0tZ2l0IGEvYXJjaC94ODYva2VybmVsL3JlbG9j
+YXRlX2tlcm5lbF82NC5TIGIvYXJjaC94ODYva2VybmVsL3JlbG9jYXRlX2tlcm5lbF82NC5TDQo+
+ID4gaW5kZXggNTZjYWIxYmIyNWY1Li45N2RlYWUzYzVlNmMgMTAwNjQ0DQo+ID4gLS0tIGEvYXJj
+aC94ODYva2VybmVsL3JlbG9jYXRlX2tlcm5lbF82NC5TDQo+ID4gKysrIGIvYXJjaC94ODYva2Vy
+bmVsL3JlbG9jYXRlX2tlcm5lbF82NC5TDQo+ID4gQEAgLTE2OSw2ICsxNjksMTAgQEAgU1lNX0NP
+REVfU1RBUlRfTE9DQUxfTk9BTElHTihpZGVudGl0eV9tYXBwZWQpDQo+ID4gIAl3YmludmQNCj4g
+PiAgMToNCj4gPiAgDQo+ID4gKwkvKg0KPiA+ICsJICogU2F2ZSB0aGUgcHJlc2VydmVfY29udGV4
+dCB0byAlcjExIGFzDQo+ID4gKwkgKiBzd2FwX3BhZ2VzIGNsb2JiZXJzICVyY3guDQo+ID4gKwkg
+Ki8NCj4gDQo+IExpbmUgc3BsaXQgaXMgbm90IG5lZWRlZC4gSXQgZml0cyBuaWNlbHkgdW5kZXIg
+ODAtY2hhcmFjdGVycy4NCj4gDQo+ICsJLyogU2F2ZSB0aGUgcHJlc2VydmVfY29udGV4dCB0byAl
+cjExIGFzIHN3YXBfcGFnZXMgY2xvYmJlcnMgJXJjeC4gKi8NCj4gDQo+IE90aGVyd2lzZSwgTEdU
+TS4NCg0KU3VyZS4gIFdpbGwgZG8uDQoNCldpdGggYWJvdmUgY2hhbmdlLCBtYXkgSSBhZGQgeW91
+ciBBY2tlZC1ieSA/IDopDQoNCj4gDQo+ID4gIAltb3ZxCSVyY3gsICVyMTENCj4gPiAgCWNhbGwJ
+c3dhcF9wYWdlcw0KPiA+ICANCj4gPiANCj4gPiBiYXNlLWNvbW1pdDogNDA5YmYyODk1ZDcxYmI2
+OGJjNWI4NTg5MDM2ZTVlZDFjYTMwYmFkYQ0KPiA+IC0tIA0KPiA+IDIuNDAuMQ0KPiA+IA0KPiAN
+Cg0K
