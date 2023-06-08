@@ -2,108 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D047728038
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 14:40:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B88D672803B
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 14:41:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236154AbjFHMkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 08:40:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56446 "EHLO
+        id S236282AbjFHMlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 08:41:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231626AbjFHMkt (ORCPT
+        with ESMTP id S230033AbjFHMlE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 08:40:49 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B61A726B3;
-        Thu,  8 Jun 2023 05:40:46 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AF8F31042;
-        Thu,  8 Jun 2023 05:41:31 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.24.103])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 895CD3F663;
-        Thu,  8 Jun 2023 05:40:44 -0700 (PDT)
-Date:   Thu, 8 Jun 2023 13:40:39 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Junhao He <hejunhao3@huawei.com>, will@kernel.org
-Cc:     jonathan.cameron@huawei.com, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linuxarm@huawei.com, yangyicong@huawei.com, shenyang39@huawei.com,
-        prime.zeng@hisilicon.com
-Subject: Re: [PATCH] drivers/perf: hisi: Don't migrate perf to the CPU going
- to teardown
-Message-ID: <ZIHMRzLcff8lx6cE@FVFF77S0Q05N>
-References: <20230608114326.27649-1-hejunhao3@huawei.com>
+        Thu, 8 Jun 2023 08:41:04 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB85E43
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 05:41:03 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id 41be03b00d2f7-5440e98616cso1218703a12.0
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 05:41:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686228062; x=1688820062;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=o6uvPLwieY5RkBOZk+PD7M8YvflhokrnPtugOrS3QNE=;
+        b=Mx3sJVE2F1ORzjGqe3xy6X7wsCEApK1+VCCgRvjXycaGUApi2Tp0szjSn8M0PPbOrY
+         L6ZT2JbB809hrtAlSMLtJWgI0nHKoi/twmYAH9M+c9GMxpGAo8IGutngAyddmrMKefPf
+         RCBU4mnCL8+y9Yt8bpiSs2ZXdu8RQpYfL+zv2Gdo/ZaxOJSXFBTVqBrjamKKAnk98XpL
+         A7o0ukDCFy0RxCHOvs0/9rVuq8Zu9N2PmEmZ1tpwMEr4hiD84QamxF/SauHaF9MhLS8B
+         H5kQh9NyXsLSH3lUag3Ko/bg3fjlMsun8spM10a3OnrUJn+QiGsJ/VHlyT4g7Qu0l+ww
+         rEGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686228062; x=1688820062;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=o6uvPLwieY5RkBOZk+PD7M8YvflhokrnPtugOrS3QNE=;
+        b=b7qnQZHKQs2rCGk2Ki+65mVLruLUN8S684qTkdee1QKET+cRemuua+C2S67z6vR6l3
+         9wIgz7nIWC2tAvX4+orYfWtmf2YC2oAcVO7SZfEa8yeA8p58EfthcMgaV9azB0R7hhsi
+         PodSlCw1BhHuyWXH4+usqVXI5/Auyo3nJln7iVuaEINRyPbRA8+E7qvG44WuEM6Jcb+e
+         nUOLepMnhgajCLu9vs5og7mz6Jm5hF/CkuQyZaF20iQVXaCUogHgHkpMbdLQBoOGshCh
+         fUmxQONgSEs3o9RbApoaIIEbfKJDQtlChp5h75c/676FeKHnnW6dF63Ln9bHMWWrLpsE
+         sYdQ==
+X-Gm-Message-State: AC+VfDxnnjlVCmXvazHNSSiHOoFbr36/n0mT34YJAyV8pAmjnRW3i4+Y
+        KvDH2zTgyh/sxLgJvCvRB4tO
+X-Google-Smtp-Source: ACHHUZ5poAB/V7RXQ3dOzoAJckBX+G4y1Bj7UJT9KsKdnWi22t9GzGjV2GyemH6S7dwhra7PXiL1qQ==
+X-Received: by 2002:a17:90b:314c:b0:25b:83ca:2b75 with SMTP id ip12-20020a17090b314c00b0025b83ca2b75mr176896pjb.3.1686228062475;
+        Thu, 08 Jun 2023 05:41:02 -0700 (PDT)
+Received: from thinkpad ([117.202.186.138])
+        by smtp.gmail.com with ESMTPSA id 30-20020a17090a01de00b00259a3c99978sm1285622pjd.17.2023.06.08.05.40.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 05:41:02 -0700 (PDT)
+Date:   Thu, 8 Jun 2023 18:10:57 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net,
+        edumazet@google.com, pabeni@redhat.com, mhi@lists.linux.dev,
+        linux-arm-msm@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, loic.poulain@linaro.org
+Subject: Re: [PATCH v2 0/2] Add MHI Endpoint network driver
+Message-ID: <20230608124057.GD5672@thinkpad>
+References: <20230607152427.108607-1-manivannan.sadhasivam@linaro.org>
+ <20230607094922.43106896@kernel.org>
+ <eb4b45ab-1f51-47e9-a286-a9e26461ebed@lunn.ch>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230608114326.27649-1-hejunhao3@huawei.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <eb4b45ab-1f51-47e9-a286-a9e26461ebed@lunn.ch>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 08, 2023 at 07:43:26PM +0800, Junhao He wrote:
-> The driver needs to migrate the perf context if the current using CPU going
-> to teardown. By the time calling the cpuhp::teardown() callback the
-> cpu_online_mask() hasn't updated yet and still includes the CPU going to
-> teardown. In current driver's implementation we may migrate the context
-> to the teardown CPU and leads to the below calltrace:
+On Wed, Jun 07, 2023 at 08:13:32PM +0200, Andrew Lunn wrote:
+> On Wed, Jun 07, 2023 at 09:49:22AM -0700, Jakub Kicinski wrote:
+> > On Wed,  7 Jun 2023 20:54:25 +0530 Manivannan Sadhasivam wrote:
+> > > This series adds a network driver for the Modem Host Interface (MHI) endpoint
+> > > devices that provides network interfaces to the PCIe based Qualcomm endpoint
+> > > devices supporting MHI bus (like Modems). This driver allows the MHI endpoint
+> > > devices to establish IP communication with the host machines (x86, ARM64) over
+> > > MHI bus.
+> > > 
+> > > On the host side, the existing mhi_net driver provides the network connectivity
+> > > to the host.
+> > 
+> > Why are you posting the next version before the discussion on the
+> > previous one concluded? :|
+> > 
+> > In any case, I'm opposed to reuse of the networking stack to talk
+> > to firmware. It's a local device. The networking subsystem doesn't
+> > have to cater to fake networks. Please carry:
+> > 
+> > Nacked-by: Jakub Kicinski <kuba@kernel.org>
 > 
-> ...
-> [  368.104662][  T932] task:cpuhp/0         state:D stack:    0 pid:   15 ppid:     2 flags:0x00000008
-> [  368.113699][  T932] Call trace:
-> [  368.116834][  T932]  __switch_to+0x7c/0xbc
-> [  368.120924][  T932]  __schedule+0x338/0x6f0
-> [  368.125098][  T932]  schedule+0x50/0xe0
-> [  368.128926][  T932]  schedule_preempt_disabled+0x18/0x24
-> [  368.134229][  T932]  __mutex_lock.constprop.0+0x1d4/0x5dc
-> [  368.139617][  T932]  __mutex_lock_slowpath+0x1c/0x30
-> [  368.144573][  T932]  mutex_lock+0x50/0x60
-> [  368.148579][  T932]  perf_pmu_migrate_context+0x84/0x2b0
-> [  368.153884][  T932]  hisi_pcie_pmu_offline_cpu+0x90/0xe0 [hisi_pcie_pmu]
-> [  368.160579][  T932]  cpuhp_invoke_callback+0x2a0/0x650
-> [  368.165707][  T932]  cpuhp_thread_fun+0xe4/0x190
-> [  368.170316][  T932]  smpboot_thread_fn+0x15c/0x1a0
-> [  368.175099][  T932]  kthread+0x108/0x13c
-> [  368.179012][  T932]  ret_from_fork+0x10/0x18
-> ...
+> Remote Processor Messaging (rpmsg) Framework does seem to be what is
+> supposed to be used for these sorts of situations. Not that i know
+> much about it.
 > 
-> Use function cpumask_any_but() to find one correct active cpu to fixes
-> this issue.
-> 
-> Fixes: 8404b0fbc7fb ("drivers/perf: hisi: Add driver for HiSilicon PCIe PMU")
-> Signed-off-by: Junhao He <hejunhao3@huawei.com>
 
-Acked-by: Mark Rutland <mark.rutland@arm.com>
+Rpmsg is another messaging protocol used for talking to the remote processor.
+MHI is somewhat similar in terms of usecase but it is a proprietary protocol
+used by Qcom for their devices.
 
-I assume that Will can pick this up.
+- Mani
 
-I did a quick check, and all other perf drivers seem to do the right thing
-here, either using cpumask_any_but(), or generating a temporary mask with the
-cpu being offlined removed.
+>      Andrew
 
-Mark.
-
-> ---
->  drivers/perf/hisilicon/hisi_pcie_pmu.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/perf/hisilicon/hisi_pcie_pmu.c b/drivers/perf/hisilicon/hisi_pcie_pmu.c
-> index 0bc8dc36aff5..14f8b4b03337 100644
-> --- a/drivers/perf/hisilicon/hisi_pcie_pmu.c
-> +++ b/drivers/perf/hisilicon/hisi_pcie_pmu.c
-> @@ -683,7 +683,7 @@ static int hisi_pcie_pmu_offline_cpu(unsigned int cpu, struct hlist_node *node)
->  
->  	pcie_pmu->on_cpu = -1;
->  	/* Choose a new CPU from all online cpus. */
-> -	target = cpumask_first(cpu_online_mask);
-> +	target = cpumask_any_but(cpu_online_mask, cpu);
->  	if (target >= nr_cpu_ids) {
->  		pci_err(pcie_pmu->pdev, "There is no CPU to set\n");
->  		return 0;
-> -- 
-> 2.30.0
-> 
+-- 
+மணிவண்ணன் சதாசிவம்
