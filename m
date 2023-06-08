@@ -2,180 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78A39727783
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 08:42:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FFEA72778C
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 08:44:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234610AbjFHGmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 02:42:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33744 "EHLO
+        id S234932AbjFHGoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 02:44:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233781AbjFHGmV (ORCPT
+        with ESMTP id S234865AbjFHGoS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 02:42:21 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A16128;
-        Wed,  7 Jun 2023 23:42:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686206540; x=1717742540;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=w9rLXufmRzCTwEvoIvZ68n7kOsn0KAfi6bYJJm338ss=;
-  b=Za4pgQcF5tT8AbimWHiXba8IgtfLFEss9Fu0MwMxpRn5/pdBdnx8m8cP
-   DvSirowmRj5Su98y04OsDgrGO9/W/wx8teQRZitmo3k74xR7dOf6McSge
-   /a1GSE7+fi1f6oY8HT2pUi1frBTRGAnmQMcLquxZqZxrR3ztKxUeJFQzJ
-   w4/SXP+6Djj3lX73DUpjK+JmWWPAFwl5mWnZ5W+OOoQQM96p8E0IzL9PR
-   3pViJa9L2EJH+bZJ/rXIm2dgMlJNV07oiAkUrCn+7jp/Qjg7f9KKA62HC
-   bUi1cw/ttUd3GtPI4OW/frjyqR1VOdmB0qxLsSJP+FWZipG5gk6yz/pVS
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="357232471"
-X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
-   d="scan'208";a="357232471"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 23:42:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="822477276"
-X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
-   d="scan'208";a="822477276"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by fmsmga002.fm.intel.com with ESMTP; 07 Jun 2023 23:42:20 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 7 Jun 2023 23:42:19 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 7 Jun 2023 23:42:19 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Wed, 7 Jun 2023 23:42:19 -0700
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.168)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Wed, 7 Jun 2023 23:42:19 -0700
+        Thu, 8 Jun 2023 02:44:18 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2128.outbound.protection.outlook.com [40.107.215.128])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C87212129
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 23:43:29 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Dxyk/guq4SWMrkR7eMA+aiYenA8x1YqYoYiFrs6luusEt7HVs5UhBQMBb9PNsNuI0fiNJIdL1VWIpLhohhcN2Fx7yCXJKHY6M4O0AB4Tlz/Q1p9MMydR7GY2/YZ9Mu0A/LBheRmKrPdDsmcob8qYRWZbHLU78ztnjvowQRM8W0u6VuunxaEcVP8zzLa96kbD71N6nC2zr1yR07wEEfJnC1MtZQYcSW2tYeaPQhVAevpSHlvb/BIOlYKlUNT4nbOxrmGV6gpFfq284UI2UxupgyKiXnk5ZGe1lYBmRsj4DFfuZkHeu10Jee47ur0AUsdYGbXjXtjsg+NesM70xT5vow==
+ b=EFQj1Yz81dAKFUu78+kIMUIlhFXUaYgYmYe6KBlTbltM/UPOvMcaQOWnQyT3U1xwJEAA1AEUlhsnSDI14RRk9fkOXYeBOvQPP7HFeDUxNysPc0b8oKEpmDDYLvaETV7TD45ac3SSWrjQT9KHBe8y6tr1SaPi5eXaRKPU2z2xsRHZNTKHcmcLEhGnwmtEfFWCEt5QxcQ2TVvZZeTzaRvy557bQtLiEmTceYSQDTZCFfDn+lZl1dWQuwrgG9J80VcadxpISvcXCpb4i6QqLEOisEQEW/U+bl71xmlTrY3zIq5Sm45ljVPM1uH0yPBFicgUsFDNChh1vH+JxsxFTnuUkw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1zXQFXWfpXoT+dwF4Zgq5OPgihbBiE3lxeYKCwIWXcE=;
- b=L9iNVpIVbIvIRtiwkRAS/aQtM9qiAtqEk84D9sXgXVHYapSv5mYN+s3ai2j7nsyEnrHKyF0EVKF592gC9ZZS8RTp59IX8Be4fOq2gGyJQpbQ5NBIk9HaRyC1B9AaOnI9mi/5ZWqYd4wYk7k4PBw3ZV0pa0e32V/KSATIgD78QWXvVrRrqsIoAcpdllhataibPvy/0gLOYdjhh2B8+ONBHtSfSk6h8cyVp2sPvd2pS2k8rswj9VlcgelJYb+LarOqtFMMilqS1XFow97J1Rf5uU6XrPbOVL5HHL/mII4Xg1KaoNW1pqlUIsUcvbVVzKUbU7gZ9l172V56GmNyDtt/kw==
+ bh=eFwOEKaA/SLfc2Yix3v4w1VzWbBRbLdRXjvx6iOLHuw=;
+ b=bn8YCFY2MEd+jnC436MlrVbLw5xiieSBE5qQKLY/XCo0FUkAW385mW5fWOPt0XNxcGMlRUVi3K9EBF3Qug1qE5QE5aqM/CvqoqIpKZtEHgH+AceaRXgssXgERmRc/Yiedur+9n5b3oZKVYquRjaDi7tEjzQ42/D0XAwqjHAJCRIJAakyJ6f+zKFlYBlEe81FZh1hR4ynH5NzdIKGPRCERiEO1m2FATR2PXmG3V5fh2CC8joJqwZoBZCEF5hzysnPbnHZvS7c/INcs8NXl1SuITPmj3UgVTC4mcLvVn9C3H4tzsosNS1v7BqTLZVpUYDVYdeGkETQ2NEzb0fP3r0cHA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
+ smtp.mailfrom=amlogic.com; dmarc=pass action=none header.from=amlogic.com;
+ dkim=pass header.d=amlogic.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amlogic.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eFwOEKaA/SLfc2Yix3v4w1VzWbBRbLdRXjvx6iOLHuw=;
+ b=Vs5bI793XGD4UPkrDIIuRDeA3sqRPV4VVNyWpvl7wmHChTOee2poFkbfZsN9pnBzkmN+gDZ17S2+UNXPqkNWlosX6C8wt+xPeqKpn0RKK60kJd7j8cFcxqSgvkVaeYourDiXJ4OB2ePTXmDGHzPdN3uRJTxMJ/T4r0EH8eFZi1kNBhX2YAs8A4leuZwxg9a2F+1TTFforfaDhviHcj7Ds7pAgS3YhCi3Fcac6VnNpqIzoLxpkmRPgnLKEs4NoGDrrSAMFYc9GF1whmbMY/CjfBlb5eHbw5eXu6wB1HxFT9IzcBDj/q3WqjvYWuAQKDgpMWs1tjy2FwhPpnI5mFJINg==
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from PH8PR11MB8107.namprd11.prod.outlook.com (2603:10b6:510:256::6)
- by SN7PR11MB7637.namprd11.prod.outlook.com (2603:10b6:806:340::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.24; Thu, 8 Jun
- 2023 06:42:17 +0000
-Received: from PH8PR11MB8107.namprd11.prod.outlook.com
- ([fe80::95c6:c77e:733b:eee5]) by PH8PR11MB8107.namprd11.prod.outlook.com
- ([fe80::95c6:c77e:733b:eee5%5]) with mapi id 15.20.6455.030; Thu, 8 Jun 2023
- 06:42:17 +0000
-Date:   Wed, 7 Jun 2023 23:42:14 -0700
-From:   Dan Williams <dan.j.williams@intel.com>
-To:     Terry Bowman <terry.bowman@amd.com>, <alison.schofield@intel.com>,
-        <vishal.l.verma@intel.com>, <ira.weiny@intel.com>,
-        <bwidawsk@kernel.org>, <dan.j.williams@intel.com>,
-        <dave.jiang@intel.com>, <Jonathan.Cameron@huawei.com>,
-        <linux-cxl@vger.kernel.org>
-CC:     <terry.bowman@amd.com>, <rrichter@amd.com>,
-        <linux-kernel@vger.kernel.org>, <bhelgaas@google.com>
-Subject: RE: [PATCH v5 03/26] cxl: Rename member @dport of struct cxl_dport
- to @dev
-Message-ID: <64817846759c9_e067a294f5@dwillia2-xfh.jf.intel.com.notmuch>
-References: <20230607221651.2454764-1-terry.bowman@amd.com>
- <20230607221651.2454764-4-terry.bowman@amd.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230607221651.2454764-4-terry.bowman@amd.com>
-X-ClientProxiedBy: SJ0PR13CA0019.namprd13.prod.outlook.com
- (2603:10b6:a03:2c0::24) To PH8PR11MB8107.namprd11.prod.outlook.com
- (2603:10b6:510:256::6)
+ header.d=none;dmarc=none action=none header.from=amlogic.com;
+Received: from JH0PR03MB7495.apcprd03.prod.outlook.com (2603:1096:990:9::6) by
+ TYZPR03MB5485.apcprd03.prod.outlook.com (2603:1096:400:5c::14) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6455.32; Thu, 8 Jun 2023 06:43:25 +0000
+Received: from JH0PR03MB7495.apcprd03.prod.outlook.com
+ ([fe80::5e9e:bcd4:e9d8:548a]) by JH0PR03MB7495.apcprd03.prod.outlook.com
+ ([fe80::5e9e:bcd4:e9d8:548a%6]) with mapi id 15.20.6455.028; Thu, 8 Jun 2023
+ 06:43:25 +0000
+Message-ID: <7903580d-685c-14e6-5572-81a4cb31cced@amlogic.com>
+Date:   Thu, 8 Jun 2023 14:42:53 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v2] mtd: rawnand: meson: check buffer length
+To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     oxffffaa@gmail.com, kernel@sberdevices.ru,
+        linux-mtd@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230606101644.3297859-1-AVKrasnov@sberdevices.ru>
+ <9adef6da-5930-dcaa-f148-e4a398d39f2d@sberdevices.ru>
+ <3a9470ed-d7ad-6cae-0d58-732399590272@sberdevices.ru>
+From:   Liang Yang <liang.yang@amlogic.com>
+In-Reply-To: <3a9470ed-d7ad-6cae-0d58-732399590272@sberdevices.ru>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: TYCP286CA0014.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:400:26c::8) To JH0PR03MB7495.apcprd03.prod.outlook.com
+ (2603:1096:990:9::6)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH8PR11MB8107:EE_|SN7PR11MB7637:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6bf18843-6f44-4f42-771e-08db67eb801f
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-TrafficTypeDiagnostic: JH0PR03MB7495:EE_|TYZPR03MB5485:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3fa2be64-2065-4a1b-d5ce-08db67eba8c0
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 9Xx3KB3q/o5wZ4ZUnYrxmQoZwSWtBVaepOcsTpCtD9JP7umiPFcjKG7T9yYID0e+dmWNTLcS5saEa0pBp7fmgaMOcCiQE31QAbiPqtvLKi8RSSs1VMxXU7q9jECENpsYnWadCQtW/kqVpVUhCptgpWvrNymsGaTAA2cFF4Wc05Z3SpXpMq0ft6FtJZO0Sllg3Ib+8fDwAqHhixCQn8/NRjUmv3P0zmRF0MwvKrIFZmYONEzWkhel+fsaYg4opSOqrEJjURl5ehX/ELtn89mk8V/nwGFwc3vS4coPh4v6Xir2gSx81jSCj9EayU7sIi9UY4pKtmLpNw/JsAvXEqAvjNnjwfiujfynwEH/bHMy8dqs+QHaWcihHUH0/z+w7F7cyyRvy3w7kPm6otsEm+RpLsUu4ynX2EutQA6HLJv53JlkILyFgb1MmggLhqxubHijRcaWXqY7ePulo/HefiNRndXuPWJWjhq8Vz5+0M3rRxvzQciFriN0Xchoup9XGIzTDCYG6ms1XqxhhXCaty5OIw6Iq+APffu6P7OPDwK4+BkutWsGzos+47GgJlFaaQkH
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB8107.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(136003)(346002)(396003)(366004)(39860400002)(451199021)(26005)(186003)(6506007)(6512007)(9686003)(83380400001)(38100700002)(86362001)(82960400001)(316002)(2906002)(478600001)(4326008)(4744005)(66556008)(66476007)(8936002)(8676002)(66946007)(5660300002)(41300700001)(6486002)(6666004);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: B8hhp/KNj6wG+fitXkkoNV7jNIDl9LsAxniAexMJfeHgF/hs/NfqEJANOwuU50GrlszVax4nLoP+HimqlgNLaqeJ1k3JzrQxdt+PO4JUMjI1eQf5WTldrn9r6VtcuzIwPy2pPmBPcUDo85sncDFr1+0ay21lwHj6LxrMUJ5JGZs5Cy+ZD/j1WtrjvFNo3xfKC2ajkg+HhPCLegMAPpEIWkk834I9XPUqgxNYB46JmiMVTnZ7diNp70nRgjI32BXr/L6bY38bP6AV6E9eOKyocsys0Rh9/YQ8LIl4tWzoT0JEDHf4w/4s5P/Yv/CCMIRYzOKpRwbH70a9+M1BgUK056RdSDgBQs5U3r5iNuo5B9BKFCS2dx/BuDmqnKlJhGs1jgCi/AhLjllt+qcI+3CLk+JZhpILC7x4X5njzQEQ0J1RyFwiZI/XEAILwzBQVopWPeXg/TWs0t98bDwTGW3AaAPAB+/W32qJ27ub2LdoqxFQEn8EWp2P+lN8rM7E6if5rLz6QVEKNptq25wXSAZKc2Bu/ZeQK/iVvZyA88d0gdM+WKO241yxtXV1wtz/KQHRsQeYvQixW6ugLxFuXb7pptA3hbX6oOJkPKpqr2RlYGcdQ8fe4QASD2seFMQ+7IVii7U7mxfzMPGroq1GtqNqBi834hs3CrxhqryjX4CWWcODr52lSFZOh6IiKJkE0GgynTm1LvCOkA2s0goH1KtM8LzM31ZxKp1sYNZOlAitEFU=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:JH0PR03MB7495.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(366004)(376002)(396003)(346002)(39850400004)(451199021)(478600001)(2906002)(36756003)(52116002)(6486002)(6666004)(2616005)(83380400001)(31696002)(6506007)(86362001)(186003)(38100700002)(6512007)(53546011)(26005)(38350700002)(31686004)(316002)(8936002)(7416002)(8676002)(66946007)(66556008)(66476007)(4326008)(5660300002)(44832011)(110136005)(41300700001)(43740500002)(45980500001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?uuj4WqfUfiWAQnM7aNjLfWxE4gh8A2BliuKGoUhu7fHI60uNVZVdVcEDHyOP?=
- =?us-ascii?Q?Ke/nzjgF96eVeCwM+ghNlsmCgY1xcDS5jOuR6ZiplCWXU88Am34kXk9jmsW4?=
- =?us-ascii?Q?cmDToE09eYOocx1oOjysMmMIP9Ns+OyWAZAQK6Dhpdxnirf3wAAj+7pQKnjq?=
- =?us-ascii?Q?W/BGi4ewF+b35F5vem7fGHBLBxReJaV0mQHDKjcUsWFHW9igtHLLaiKti3e8?=
- =?us-ascii?Q?EgaJlUyPbwxZphDHp2DwdjhYPEP8WVWIGNvKjWbysFLjp9yO/l6Tmode9S3s?=
- =?us-ascii?Q?4rY49UUtHZ9PNfsNQPgosQPCw7CXuyvFxjkRt7/fHBvTaOjNXjJG6wBnyKlD?=
- =?us-ascii?Q?gFA1kkPYWst/v8/BjswRl/jVSpvFy3EI59yabKrdWRmNuGAle/CJiZpSQDxP?=
- =?us-ascii?Q?hyGyEfgVJe/w/u2D8BQwiTYjyzN3BuBvCQgNgfR4gLH8tEzxM0f3p0Y3GGoK?=
- =?us-ascii?Q?zz+pubfA70KwPNKrZwpZ96zB4A0M9hVeKHYjcWWtr5QTQPIxCM10OI1Y2j98?=
- =?us-ascii?Q?9yTJmXNCeWgK85lbqsWZrL22NxT0wacpRW36Mwrq3wtbbyW1XRei2featrSR?=
- =?us-ascii?Q?8ocpqcIZBdC8pzFowJVWX6TdOH4sBAppbuszURmIZgYPYmZXsXxucR0c7tL1?=
- =?us-ascii?Q?XM9WvuywGF0DSb17JCIZNl1mMvV6CWPSCZm4mWrXJJwnR3UqvO16UzZcC/Av?=
- =?us-ascii?Q?ynHmN00bz8kEt0mZtMcLyrdkPXOxtJIJaRtoS+fIW0wi4y6/1fQgKoUB1Sjo?=
- =?us-ascii?Q?ooxjy/gjPCpBaEoJCJzIYMUI5mQC2a1h3B0HjM2HMrFN/ksC6s6HWmWVvmdo?=
- =?us-ascii?Q?DZy0UOfkUkPMU69Ak+nD5YNq9xZilUh5QePwgiOmBXVDgn09sC7HmyihDeKn?=
- =?us-ascii?Q?pGBj+IK3Pf/YXHHO7Az/Vn7c3rvKSh9lx7rjP4VmAxqQAtMj2vAWudN3HBef?=
- =?us-ascii?Q?WL7/mVYQ04cgWBa+zCivfMEKr234KOdwA5+TNlBocOi3P7QO/AXy/Xn60NmR?=
- =?us-ascii?Q?ehpaJXttkLs8orqLJIPf7c+i4rLhJicpsQEitH50APJ0+Gb+tY5d+F6m2pcY?=
- =?us-ascii?Q?13P2IIc6hdZ9sh7eL6C7zlJ3d1gVKVd/gdvv/TZSY1VxRrJuhnBkM7QwAuHP?=
- =?us-ascii?Q?u5oZ//UX0hXLtRS0fTNK8JmVrNAoO3l2mkUnMVVjvyiqCUQ4V/80q1i0DdwH?=
- =?us-ascii?Q?AuWtR/pv88AMTYO8XiKGagzCrHBlLrL6Y677EaIDwdLx1zZ1UjqA9eBJIQx2?=
- =?us-ascii?Q?9WlYRVp/009+F5cg8KYbxo/9yBAI4SnolTVRgdRF3F+YJdGgtmXcILeFxlqj?=
- =?us-ascii?Q?J3CX7os3sQyjWOG7lRjJG+twaZDHy7jsUphKJG+GRiciMCfon+G9zXcNx/Pd?=
- =?us-ascii?Q?s7QCJylD/w5FbgWsjkbB/WcOEaelMCUEZGEwcWvYugxJJgdAeYWO7X8do71B?=
- =?us-ascii?Q?EPr4hNvs5kpzWr6h7jDgLpPb2ImIvktg/DNjeHivLgooLd+5MTbRUKztY4Ve?=
- =?us-ascii?Q?MTFIRBElVU3dSum+5AE5Li30RZBGKj04mPPjowRGzPzdkPFt7QUpoaaSU2HA?=
- =?us-ascii?Q?u254xvcQHT7+abN1gzoDIYqxqi9tb7bTy0Ow00+i4MYqdiEZUtRJKM2AduK4?=
- =?us-ascii?Q?yQ=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6bf18843-6f44-4f42-771e-08db67eb801f
-X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB8107.namprd11.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?S08weWFEWEJ0TjZVQ3IzT0xmTDdkQk5iTTR3KzBUUjJ1N1NaWnc1WGsyNmRx?=
+ =?utf-8?B?YTRnQm82eEczaStkQVVWbTc2OXRXOVNVblFLS3dyVFg4RHNOajlSSTh4S0Ri?=
+ =?utf-8?B?RW45eDU2K09ieWdMUjZCMm5Yb04rVEl2QlZubHVMK1FvdlM5WUtqNjFsOVN6?=
+ =?utf-8?B?Nm9VRGsvSWdnLzdGNThLOUE2RG51NUNCZ05YVDdxMGQxNVMwSU11QUpVVnoy?=
+ =?utf-8?B?QzNjeDVRNy91ZFhrWnhYdGxKVy9FR3ZYZFVoMFVsb21hZE41RmJBUEhGdDZt?=
+ =?utf-8?B?MjZnRm5aK2xQZVlhSjFWNU9aMnQyeUttK0llQldUc2ZlTkZqU0JmaDVyTWpm?=
+ =?utf-8?B?cjVKVmdHa29BTXNMOWF5WG53dnF3Ukp3OHA0RWZBWUVoWUVSUzEyL3B3bzcy?=
+ =?utf-8?B?cEpyYWlnT1YzQnh0Y0dXUk1OTDlsdWF6eCtNMjk0S3FLdTNKbHRDeTl4ZGFO?=
+ =?utf-8?B?eGZkV0ZlRWVZS1NJbVZvbzg3YXJaN0pFd1Fyb2w4Kys4dmFhdW5lLzM1S2N2?=
+ =?utf-8?B?ZGIzSlppMXBTaklLcW5kZ1VDc2cra3FCdDJadVJmeEtOOE5iM1pBcEpmajZ6?=
+ =?utf-8?B?NUVXVDc4M0ZqempVZnZGNzVvTXNVQjRCZlNQQW8zSGlWZnB5WVRSR3BlYWtp?=
+ =?utf-8?B?NVp6ays2NnR1RXh4elE0dGtqQ3dGd3VQNnFZZTJjNC9UbU5odWFqM012WDN2?=
+ =?utf-8?B?RmVDb2VjYlh1S1kxRGtuN25NVG9NWUNBUFVJb3p0dDlndFl0QnhNY0RoL2Mv?=
+ =?utf-8?B?dm5oeUppR3RuREtlTUU5Z3RTaCtqczF4b3loblVwTkdEck82TlV2VXVFWnk0?=
+ =?utf-8?B?UHp0ZVVDM1dHNkh1YU9SbmJZTkpjWTJmazJEeGFUNEFTRFRqZXE4SWYzUStD?=
+ =?utf-8?B?S3BXeDlJSVhsZVZ6SmJ0dkp2VlB3NjhZV3gwRUFYRUg2ZHVRVEs0N1llM3Jt?=
+ =?utf-8?B?VGxGejBHNUtKUDZQNVF5QytKRVFmM2o0bWpwU1MrT0tHUGtBUVlFZUV6MzVz?=
+ =?utf-8?B?ZnBRZEpNZGU3ZkRrWUFHV0o4eXp1V2Y4allMQzBFTm9vWVRoU21tbW92eC9L?=
+ =?utf-8?B?bzY2cXVqc2VGcnM4ZjQ4VFpOa1FqejJWRjdnWTU1KzUvWmZhaDRIaVRGeGF0?=
+ =?utf-8?B?S09zc3Z3UkFzUHVuMGQvSWRRMmNxSStVUFI2VENGNXluUTRmSjlpeElwc3VH?=
+ =?utf-8?B?TU1hRTd3dTFDOHJkWVliQ1dNWHRKRlRZaEorbFM3L2VKWitvZnE4UVBURmdi?=
+ =?utf-8?B?R0swT01MclVTSlRJaFVYQUxKWHptVi9ueHZsbEc0RSszbVljVzJTY3c4Tksx?=
+ =?utf-8?B?akFwY1c5Wm5mcVpvUmVkNHFLMVdYWnVIWWhZMkhMbTk1c25EdlQvaWlGTUdD?=
+ =?utf-8?B?WGdua2N4WUI5WUxLd25mRUVZZm04OXMxQURMbDl1OE5kb2h6WVpMaGEwTkRs?=
+ =?utf-8?B?aHVWNFNsL3VINmZzZENObDYwcnJwdHNxM0ZITHN2djI4ZE5RZ3dtZUI5S1F5?=
+ =?utf-8?B?S3dRTlpUSUdla2MzNXZ2dEZ2NXpReVd0bll4TW12WnVJcFZ6QS9YRk1hS3VI?=
+ =?utf-8?B?UW4ya3VtaHQ3TkFEbFhSRnRraEQyNm5sTHdFZmkyVTFkeGZrT0V6RkJveWpu?=
+ =?utf-8?B?cXdNaVFWNGpoU1lBYWIvLzJCZ1JOWDBPWGhEanNDeWVBQTBCbHphTEphWGxB?=
+ =?utf-8?B?MCs5UlFud1d1akNtM2NOZVp4aG5aRjBwemJZSDVBZG14bkoxVit5NEN1amMv?=
+ =?utf-8?B?SHZSclJhcWY2TU10bzFJQzJQMzdwYWJSNjFxUGVEdUV3YnE0d09LWmFkUTZj?=
+ =?utf-8?B?eHhVZGZ4b2l5eDAwZnlaOXpiVm1KaEg3MjJjL2Nwd2ZsVFB1ZTd3V0JEaGVx?=
+ =?utf-8?B?eDNNVTliWVlDUHhyaHkxUk9TYi9LSEpwQVhUNXJCUUN3SDZFblIwOVArRmty?=
+ =?utf-8?B?QUIzTDNyTDlWTGZPcjRPWHpTZW1qNFIvaTVaN2U1YWpaVllKVVVMVXZHQnRu?=
+ =?utf-8?B?OSs0VXEwd3dhWGhJczRwSHZaa2x4SnVqUWc3WkpkeFE2QnNoTEVSYXRKWXFN?=
+ =?utf-8?B?ZFZXNkRQOUVpVk9HZU5vYXNmZmtKRlg5aVpmTzI0UjdvSnhuUmNURXREbXg0?=
+ =?utf-8?Q?uP9EBq3q/SrhAs8omghiwe9RA?=
+X-OriginatorOrg: amlogic.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3fa2be64-2065-4a1b-d5ce-08db67eba8c0
+X-MS-Exchange-CrossTenant-AuthSource: JH0PR03MB7495.apcprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jun 2023 06:42:16.9846
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jun 2023 06:43:25.1339
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-Id: 0df2add9-25ca-4b3a-acb4-c99ddf0b1114
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: R8lZoNFy/YCysUVOlmuR/B/WbYPjjWKbzXrwnAFwOG8c3vSuci/WafHQw+3RIjTumPkTxIzW2yQ+rcwBVDNH6J478Qimgw8dlTWCWrAFZkg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB7637
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: cZF0x5lKUfKkdm8A0mjjbA2px0nwY9HuCBSJmJGa2vu1rObYWAPzHn7XuOwAzhWMT5sT4IktUGFnnpN7qErviw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR03MB5485
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Terry Bowman wrote:
-> From: Robert Richter <rrichter@amd.com>
+Hi Arseniy,
+
+On 2023/6/8 5:17, Arseniy Krasnov wrote:
+> [ EXTERNAL EMAIL ]
 > 
-> Reading code like dport->dport does not immediately suggest that this
-> points to the corresponding device structure of the dport. Rename
-> struct member @dport to @dev.
-
-This one I don't agree with.
-
-This can switch to ->dport_dev if you like. The reason for ->dport was
-for symmetry with the ->uport of a 'struct cxl_port'. So if you change
-this to ->dport_dev then also make the ->uport_dev change for symmetry.
-
-Unlike a 'struct cxl_port' a 'struct cxl_dport' is not a device in its
-own right which is what I see when I read dport->dev.
-
+> Hi again Miquel, Liang!
 > 
-> While at it, also rename @new argument of add_dport() to @dport. This
-> better describes the variable as a dport (e.g. new->dport becomes to
-> dport->dev).
+> What do You think about this patch?
+> 
+> Thanks, Arseniy
+> 
+> On 06.06.2023 19:29, Arseniy Krasnov wrote:
+>> Sorry, here is changelog:
+>> v1 -> v2:
+>> * Move checks from 'switch/case' which executes commands in 'meson_nfc_exec_op()' to a special
+>>    separated function 'meson_nfc_check_op()' which is called before commands processing.
+>>
+>> On 06.06.2023 13:16, Arseniy Krasnov wrote:
+>>> Meson NAND controller has limited buffer length, so check it before
+>>> command execution to avoid length trim. Also check MTD write size on
+>>> chip attach.
+>>>
+>>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>>> ---
+>>>   drivers/mtd/nand/raw/meson_nand.c | 47 +++++++++++++++++++++++++++----
+>>>   1 file changed, 42 insertions(+), 5 deletions(-)
+>>>
+>>> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
+>>> index 23a73268421b..db6b18753071 100644
+>>> --- a/drivers/mtd/nand/raw/meson_nand.c
+>>> +++ b/drivers/mtd/nand/raw/meson_nand.c
+>>> @@ -111,6 +111,8 @@
+>>>
+>>>   #define PER_INFO_BYTE               8
+>>>
+>>> +#define NFC_CMD_RAW_LEN     GENMASK(13, 0)
+>>> +
+>>>   struct meson_nfc_nand_chip {
+>>>       struct list_head node;
+>>>       struct nand_chip nand;
+>>> @@ -284,7 +286,7 @@ static void meson_nfc_cmd_access(struct nand_chip *nand, int raw, bool dir,
+>>>
+>>>       if (raw) {
+>>>               len = mtd->writesize + mtd->oobsize;
+>>> -            cmd = (len & GENMASK(13, 0)) | scrambler | DMA_DIR(dir);
+>>> +            cmd = len | scrambler | DMA_DIR(dir);
+>>>               writel(cmd, nfc->reg_base + NFC_REG_CMD);
 
-There is already other occurrences of dport_dev as an argument, so I
-think that works here too.
+I think we could keep "& GENMASK(13, 0)". it is better here to indicate 
+how many bits of length in this command and don't destory the command 
+once we don't check the "len" outside of this function. or the code "if 
+(len >  NFC_CMD_RAW_LEN)" is better to put inside this function nearly. 
+Thanks.
+
+>>>               return;
+>>>       }
+>>> @@ -573,7 +575,7 @@ static int meson_nfc_read_buf(struct nand_chip *nand, u8 *buf, int len)
+>>>       if (ret)
+>>>               goto out;
+>>>
+>>> -    cmd = NFC_CMD_N2M | (len & GENMASK(13, 0));
+>>> +    cmd = NFC_CMD_N2M | len;
+>>>       writel(cmd, nfc->reg_base + NFC_REG_CMD);
+>>>
+>>>       meson_nfc_drain_cmd(nfc);
+>>> @@ -597,7 +599,7 @@ static int meson_nfc_write_buf(struct nand_chip *nand, u8 *buf, int len)
+>>>       if (ret)
+>>>               return ret;
+>>>
+>>> -    cmd = NFC_CMD_M2N | (len & GENMASK(13, 0));
+>>> +    cmd = NFC_CMD_M2N | len;
+>>>       writel(cmd, nfc->reg_base + NFC_REG_CMD);
+>>>
+>>>       meson_nfc_drain_cmd(nfc);
+>>> @@ -1007,6 +1009,31 @@ meson_nand_op_put_dma_safe_output_buf(const struct nand_op_instr *instr,
+>>>               kfree(buf);
+>>>   }
+>>>
+>>> +static int meson_nfc_check_op(struct nand_chip *chip,
+>>> +                          const struct nand_operation *op)
+>>> +{
+>>> +    int op_id;
+>>> +
+>>> +    for (op_id = 0; op_id < op->ninstrs; op_id++) {
+>>> +            const struct nand_op_instr *instr;
+>>> +
+>>> +            instr = &op->instrs[op_id];
+>>> +
+>>> +            switch (instr->type) {
+>>> +            case NAND_OP_DATA_IN_INSTR:
+>>> +            case NAND_OP_DATA_OUT_INSTR:
+>>> +                    if (instr->ctx.data.len > NFC_CMD_RAW_LEN)
+>>> +                            return -ENOTSUPP;
+>>> +
+>>> +                    break;
+>>> +            default:
+>>> +                    break;
+>>> +            }
+>>> +    }
+>>> +
+>>> +    return 0;
+>>> +}
+>>> +
+>>>   static int meson_nfc_exec_op(struct nand_chip *nand,
+>>>                            const struct nand_operation *op, bool check_only)
+>>>   {
+>>> @@ -1015,10 +1042,12 @@ static int meson_nfc_exec_op(struct nand_chip *nand,
+>>>       const struct nand_op_instr *instr = NULL;
+>>>       void *buf;
+>>>       u32 op_id, delay_idle, cmd;
+>>> +    int err;
+>>>       int i;
+>>>
+>>> -    if (check_only)
+>>> -            return 0;
+>>> +    err = meson_nfc_check_op(nand, op);
+>>> +    if (err || check_only)
+>>> +            return err;
+>>>
+>>>       meson_nfc_select_chip(nand, op->cs);
+>>>       for (op_id = 0; op_id < op->ninstrs; op_id++) {
+>>> @@ -1293,6 +1322,7 @@ static int meson_nand_attach_chip(struct nand_chip *nand)
+>>>       struct meson_nfc_nand_chip *meson_chip = to_meson_nand(nand);
+>>>       struct mtd_info *mtd = nand_to_mtd(nand);
+>>>       int nsectors = mtd->writesize / 1024;
+>>> +    int raw_writesize;
+>>>       int ret;
+>>>
+>>>       if (!mtd->name) {
+>>> @@ -1304,6 +1334,13 @@ static int meson_nand_attach_chip(struct nand_chip *nand)
+>>>                       return -ENOMEM;
+>>>       }
+>>>
+>>> +    raw_writesize = mtd->writesize + mtd->oobsize;
+>>> +    if (raw_writesize > NFC_CMD_RAW_LEN) {
+>>> +            dev_err(nfc->dev, "too big write size in raw mode: %d > %ld\n",
+>>> +                    raw_writesize, NFC_CMD_RAW_LEN);
+>>> +            return -EINVAL;
+>>> +    }
+>>> +
+>>>       if (nand->bbt_options & NAND_BBT_USE_FLASH)
+>>>               nand->bbt_options |= NAND_BBT_NO_OOB;
+>>>
