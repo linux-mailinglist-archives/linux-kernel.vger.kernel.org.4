@@ -2,99 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D91DF728A76
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 23:55:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F1C5728A79
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 23:56:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235282AbjFHVzf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 17:55:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42964 "EHLO
+        id S236873AbjFHV42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 17:56:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbjFHVzd (ORCPT
+        with ESMTP id S233252AbjFHV4Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 17:55:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD9B61FE9
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 14:55:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 8 Jun 2023 17:56:25 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91370272A;
+        Thu,  8 Jun 2023 14:56:24 -0700 (PDT)
+Received: from mercury (unknown [185.254.75.28])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 51E5A65130
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 21:55:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92874C433D2;
-        Thu,  8 Jun 2023 21:55:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686261331;
-        bh=jLLIY+6XSJEnROaCzPa2cWfvfUfImfLErJ0cuoIYyGM=;
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 488C06606F20;
+        Thu,  8 Jun 2023 22:56:23 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686261383;
+        bh=x5VntQaA+tuAFmLXB1rfjBfTidinGnasCptCipBvRqI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PY2OcR2XIqmjOkJa9pEgbQUEQtTTesBr8kBDccpp+O9oUuJZarlgUG2A/BKmmrYfZ
-         a42HZQ0ESa5M2JKbDiQ40tREnJzfUk9mKKZbkyoLKHYuN2YiVBBdJmSWemmmuvzvG9
-         ZNHfAwdY9gtdTLkSRfbeHkDukF87wFfCe1Aya3mPo6sfgChzHDJRxrRJ3bCb09AYTQ
-         SDNsT2KXlyU1rm9xCFQ2qW9nSyS4/lz3x3oCQ6O5fcfNwrrHEPc67d/V2x2stK7m6k
-         nmWyp1PDWfA7yrZzWIz+ZazhJhIFmeggvTNA3Z0q2jdXEoL6SDG32yhz4tPIoEtIZ0
-         6gNggbFSCE1lQ==
-Date:   Thu, 8 Jun 2023 22:55:26 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Mostafa Saleh <smostafa@google.com>
-Cc:     Oliver Upton <oliver.upton@linux.dev>, maz@kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, tabba@google.com,
-        kaleshsingh@google.com, catalin.marinas@arm.com,
-        yuzenghui@huawei.com, suzuki.poulose@arm.com, james.morse@arm.com
-Subject: Re: [PATCH] KVM: arm64: Use different pointer authentication keys
- for pKVM
-Message-ID: <20230608215525.GA2742@willie-the-truck>
-References: <20230516141531.791492-1-smostafa@google.com>
- <ZHEa+HAixbYijQTA@linux.dev>
- <ZHSJ38WATzgJF7SR@google.com>
+        b=LzVXwdPlvyWcD7ilk1+ueLu+XEOvYVBaSEIcpVQqJmFag7AMKXNuJS/UBu/wA6to9
+         fIqKRb7Pd4h3xaGabbSM03YLfZCTyapvxmU9dpXKU8h4xqBXcO6KGLc54OL0YU86Uc
+         VKlvLCmsUmhyYGZQMPCWcTN/RydaBxaKHNbo0vhGYYJxe0QCEbWrekrvywrcv6q2Cs
+         QNtDqoZSGVbFNHVki2q2KnISyda/lyc+39sGHzDxrwxg5Q7kATVLwByXtPJZ0pV2pS
+         NokXtGt6gOuS5xtSoFM8/scwM8lTHdnpegq7IopJdhVlbVrbwmZFyoaex8cl/81Sss
+         hIlEvYalAZG6w==
+Received: by mercury (Postfix, from userid 1000)
+        id 65F571060A24; Thu,  8 Jun 2023 23:56:21 +0200 (CEST)
+Date:   Thu, 8 Jun 2023 23:56:21 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Florian Fainelli <florian.fainelli@broadcom.com>
+Cc:     Stanislav Jakubek <stano.jakubek@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: power: reset: bcm21664-resetmgr: convert to
+ YAML
+Message-ID: <20230608215621.yprgpposj7u2vqye@mercury.elektranox.org>
+References: <20230527141222.GA5048@standask-GA-A55M-S2HP>
+ <b577b194-cd11-fcfd-fe03-87b892047ea5@broadcom.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="of4pwpxx2iye3ss6"
 Content-Disposition: inline
-In-Reply-To: <ZHSJ38WATzgJF7SR@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <b577b194-cd11-fcfd-fe03-87b892047ea5@broadcom.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 29, 2023 at 11:17:51AM +0000, Mostafa Saleh wrote:
-> On Fri, May 26, 2023 at 08:47:52PM +0000, Oliver Upton wrote:
-> > On Tue, May 16, 2023 at 02:15:31PM +0000, Mostafa Saleh wrote:
-> > > When the kernel is compiled with CONFIG_ARM64_PTR_AUTH_KERNEL, it
-> > > uses Armv8.3-Pauth for return address protection for the kernel code
-> > > including nvhe code in EL2.
-> > > 
-> > > Same keys are used in both kernel(EL1) and nvhe code(EL2), this is
-> > > fine for nvhe but not when running in protected mode(pKVM) as the host
-> > > can't be trusted.
-> > 
-> > But we trust it enough to hand pKVM a fresh set of keys before firing
-> > off? I understand there is some degree of initialization required to get
-> > pKVM off the ground, but I question in this case if key handoff is
-> > strictly necessary.
-> >
-> > There are potentially other sources of random directly available at EL2,
-> > such as the SMCCC TRNG ABI or FEAT_RNG. Should pKVM prefer one of these
-> > random implementations and only fall back to host-provided keys if
-> > absolutely necessary?
-> > 
-> According to my understanding, the kernel is still completely trusted at
-> this point (it sets the initial page table for the hypervisor), so I
-> believe it should be fine to trust it for ptrauth keys. However, I agree,
-> it would be better if the hypervisor can get its own keys through
-> firmware/hardware if supported. I will add this in V2.
 
-I appreciate the sentiment, but I think we should avoid adding additional
-complexity here if it adds no security benefit. If nothing else, it adds
-pointless overhead, but beyond that it gives the false illusion of a
-security boundary.
+--of4pwpxx2iye3ss6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Prior to deprivilege, the kernel can write to the hypervisor text, modify
-its stage-1 page-table and change its data values. I think the pointer
-auth keys are the least of our worries if it's compromised...
+Hi,
 
-Will
+On Mon, Jun 05, 2023 at 11:15:59AM -0700, Florian Fainelli wrote:
+> On 5/27/23 07:12, Stanislav Jakubek wrote:
+> > Convert Broadcom Kona family reset manager bindings to DT schema.
+> >=20
+> > Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
+>=20
+> Sebastian, do you want me to pick this up in the Broadcom ARM SoC tree?
+
+Fine with me,
+
+Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+
+-- Sebastian
+
+--of4pwpxx2iye3ss6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmSCToQACgkQ2O7X88g7
++powCxAAmLtHonaH1KfGQ9EUBVwjFd/aQmSc/Cly1hXMj0XDf3uMI1OAvKh5uicJ
+Mr0G+i/RxaVfUkghYcv4AqMYBWC9ZWfyIaNmPjqxvj6YDFdOPFQ9IrA2lrSYcV8G
+8LcCTckMALfllZnkNj6MMSs7xGFXwltgFLL8BS2Czjvj5XYAAs6JpWNKQSUkh+95
+5lYl81PxPBaAFVpN7Q+dA6yAqPisRLMdAUreNqhK5E+Ti0dURllOtSbylqPlKeiS
+4gzttIzUNoqteCouZIoqPIX6pI+wZGRiT+knqUq6IhU+GlZC490JQc38GrTbI497
+mUE8NUH/2cUzLinY52bji4zYy5qfg62l4HUlmKahoAYXEd3gUIGrdxMIafKCO36U
+KGV7+O4edtIMpEu0NYOAsbZcAc1RgZnZDyuVFFLFYaP0hr/cTn30vJqUQ6lOxU5F
+JqS5Npd4W4GT4RiApY/C71JWmUj3mio41/baa926eEY97qD/zN8SPj0pRZ0R0eNV
+/snGeCD9A1I047SdC1bzMIvVwWHUGra75sWVQduSGvc+1P2oZFPT6I2FvWKIIfZY
+kvDE3hEkQJmA5xCwgSO4j9GtRf7Hu/NYuxSoD4cxP04J03XEikQefJC1Or7PgHTC
+zL9MazNDVifw8vtx0UbOS21AXZNj73cSBtXDp6cwzi0qgRD10fI=
+=P5uj
+-----END PGP SIGNATURE-----
+
+--of4pwpxx2iye3ss6--
