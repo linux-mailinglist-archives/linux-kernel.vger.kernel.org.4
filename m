@@ -2,120 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09EF07282D3
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 16:36:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D9087282D5
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 16:36:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234306AbjFHOf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 10:35:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35732 "EHLO
+        id S237028AbjFHOgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 10:36:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235991AbjFHOf5 (ORCPT
+        with ESMTP id S236947AbjFHOf6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 10:35:57 -0400
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF1872D58;
-        Thu,  8 Jun 2023 07:35:52 -0700 (PDT)
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-3f732d37d7cso6156945e9.2;
-        Thu, 08 Jun 2023 07:35:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686234951; x=1688826951;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=40BlcYIOiCiG2tmKHXdb8ewCMjsbNxSjJq3O+2btqpQ=;
-        b=LVrKO6oUKvcg8/2nyEi5q5+WzyFpfXLtC9snIpVkUhAF/im6GPJ9K1UHCkpj3grB7i
-         Tga1U0dBib2zApXx2OAuv4qnBbIRYP+Zp+pQz7juSH74Bqv2ggKKvImI9gi1dyKxO+a0
-         WZ8K8GJyV2pElh6tPS0H7FvPJNgRTmk36qRWGy07BY6JbkvMtBhsjLiRHNortriPPEiK
-         tVV4VYD3ELDTAvCL8LgkQsqudKFsOlczE1r9jY07Pu2PwvTyX2pMxNKpDV/72LDtsVJD
-         9DUmRM0itaOUoPRDPLce+z26UaJx5r7RtLoiwHt1ZspbI/fw7SIZ3zSHB0f+CLjMDF+y
-         Hmqg==
-X-Gm-Message-State: AC+VfDzFYv4Os6ikUPuim7meOkSrFWoM2rHKy33n8MVaIGSVIiDuocVf
-        SZ2E+4ruHgz0f6tcVjzENdY=
-X-Google-Smtp-Source: ACHHUZ7lcmNByqTAh5kYMjYbTAGup97yib7alUhZBsoWDIpWRK0lV++ETpqXpbGcOWVV1+uiD32naw==
-X-Received: by 2002:a05:600c:21cf:b0:3f6:143:7c4b with SMTP id x15-20020a05600c21cf00b003f601437c4bmr1728617wmj.6.1686234951071;
-        Thu, 08 Jun 2023 07:35:51 -0700 (PDT)
-Received: from gmail.com (fwdproxy-cln-027.fbsv.net. [2a03:2880:31ff:1b::face:b00c])
-        by smtp.gmail.com with ESMTPSA id s5-20020a7bc385000000b003f7e60622f0sm2212389wmj.6.2023.06.08.07.35.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 07:35:50 -0700 (PDT)
-Date:   Thu, 8 Jun 2023 07:35:48 -0700
-From:   Breno Leitao <leitao@debian.org>
-To:     Paolo Abeni <pabeni@redhat.com>
-Cc:     Kuniyuki Iwashima <kuniyu@amazon.com>, alex.aring@gmail.com,
-        andrea.righi@canonical.com, asml.silence@gmail.com, ast@kernel.org,
-        axboe@kernel.dk, courmisch@gmail.com, davem@davemloft.net,
-        dccp@vger.kernel.org, dsahern@kernel.org, edumazet@google.com,
-        gnault@redhat.com, hbh25y@gmail.com, joannelkoong@gmail.com,
-        kernelxing@tencent.com, kuba@kernel.org, leit@fb.com,
-        linux-kernel@vger.kernel.org, linux-sctp@vger.kernel.org,
-        linux-wpan@vger.kernel.org, lucien.xin@gmail.com,
-        marcelo.leitner@gmail.com, martin.lau@kernel.org,
-        martineau@kernel.org, matthieu.baerts@tessares.net,
-        miquel.raynal@bootlin.com, mptcp@lists.linux.dev,
-        netdev@vger.kernel.org, stefan@datenfreihafen.org,
-        willemdebruijn.kernel@gmail.com, wojciech.drewek@intel.com
-Subject: Re: [PATCH net-next v6] net: ioctl: Use kernel memory on protocol
- ioctl callbacks
-Message-ID: <ZIHnRFu0ceUxOOvg@gmail.com>
-References: <20230606180045.827659-1-leitao@debian.org>
- <20230607173142.86395-1-kuniyu@amazon.com>
- <ZIGUofpP4k24qfQs@gmail.com>
- <5bd6ced877e97ac674d1308eab0b8d2107b7ab85.camel@redhat.com>
+        Thu, 8 Jun 2023 10:35:58 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3F5B2D65
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 07:35:55 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-267-NXZg-_eNOaO8RckaE_lZ0g-1; Thu, 08 Jun 2023 15:35:52 +0100
+X-MC-Unique: NXZg-_eNOaO8RckaE_lZ0g-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Thu, 8 Jun
+ 2023 15:35:49 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Thu, 8 Jun 2023 15:35:49 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Zhangjin Wu' <falcon@tinylab.org>,
+        "thomas@t-8ch.de" <thomas@t-8ch.de>, "w@1wt.eu" <w@1wt.eu>
+CC:     "arnd@arndb.de" <arnd@arndb.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        =?utf-8?B?VGhvbWFzIFdlacOfc2NodWg=?= <linux@weissschuh.net>
+Subject: RE: [PATCH v2 1/4] tools/nolibc: sys.h: add __syscall() and
+ __sysret() helpers
+Thread-Topic: [PATCH v2 1/4] tools/nolibc: sys.h: add __syscall() and
+ __sysret() helpers
+Thread-Index: AQHZmE5QSUsfyUxi2UiZnouHjWtcta+A+37Q
+Date:   Thu, 8 Jun 2023 14:35:49 +0000
+Message-ID: <94dd5170929f454fbc0a10a2eb3b108d@AcuMS.aculab.com>
+References: <cover.1686036862.git.falcon@tinylab.org>
+ <a42fb9e1bbe0daf7d8a48ea8f44135ef851030d7.1686036862.git.falcon@tinylab.org>
+In-Reply-To: <a42fb9e1bbe0daf7d8a48ea8f44135ef851030d7.1686036862.git.falcon@tinylab.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5bd6ced877e97ac674d1308eab0b8d2107b7ab85.camel@redhat.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,FSL_HELO_FAKE,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 08, 2023 at 03:57:48PM +0200, Paolo Abeni wrote:
-> On Thu, 2023-06-08 at 01:43 -0700, Breno Leitao wrote:
-> > Hello Kuniyuki,
-> > On Wed, Jun 07, 2023 at 10:31:42AM -0700, Kuniyuki Iwashima wrote:
-> > > > +/* This is the most common ioctl prep function, where the result (4 bytes) is
-> > > > + * copied back to userspace if the ioctl() returns successfully. No input is
-> > > > + * copied from userspace as input argument.
-> > > > + */
-> > > > +static int sock_ioctl_out(struct sock *sk, unsigned int cmd, void __user *arg)
-> > > > +{
-> > > > +	int ret, karg = 0;
-> > > > +
-> > > > +	ret = sk->sk_prot->ioctl(sk, cmd, &karg);
-> > > 
-> > > We need READ_ONCE(sk->sk_prot) as IPv4 conversion or ULP chnage could
-> > > occur at the same time.
-> > 
-> > Thanks for the heads-up. I would like to pick you brain and understand
-> > a bit more about READ_ONCE() and what is the situation that READ_ONCE()
-> > will solve.
-> 
-> AFAICS, in this specific case READ_ONCE() should not address any "real"
-> bug causing visible issue.
-> 
-> Still the lack of it will likely cause syzkaller report for (harmless,
-> AFAICS) 'data races' around sk->sk_prot. We want to avoid such reports,
-> even if harmless, because they can end-up hiding more relevant bugs.
-> 
-> > Is the situation related to when sock_ioctl_out() start to execute, and
-> > "sk->sk_prot" changes in a different thread? If that is the case, the
-> > arguments (cmd and arg) will be from the "previous" instance.
-> > 
-> > Also, grepping for "sk->sk_prot->", I see more than a bunch of calls
-> > that do not use READ_ONCE() barrier. Why is this case different?
-> 
-> Races on sk->sk_prot can happen only on inet6_stream_ops (due to ulp
-> and/or ADDRFORM) inet6_dgram_ops (due to ADDRFORM). AFAICS here
-> READ_ONCE() is  needed as we can reach here via inet6_stream_ops-
-> >inet6_ioctl
+RnJvbTogWmhhbmdqaW4gV3UNCj4gU2VudDogMDYgSnVuZSAyMDIzIDA5OjEwDQo+IA0KPiBtb3N0
+IG9mIHRoZSBsaWJyYXJ5IHJvdXRpbmVzIHNoYXJlIHRoZSBzYW1lIGNvZGUgbW9kZWwsIGxldCdz
+IGFkZCB0d28NCj4gaGVscGVycyB0byBzaW1wbGlmeSB0aGUgY29kaW5nIGFuZCBzaHJpbmsgdGhl
+IGNvZGUgbGluZXMgdG9vLg0KPiANCi4uLg0KPiArLyogU3lzY2FsbCByZXR1cm4gaGVscGVyLCBz
+ZXQgZXJybm8gYXMgLXJldCB3aGVuIHJldCA8IDAgKi8NCj4gK3N0YXRpYyBpbmxpbmUgX19hdHRy
+aWJ1dGVfXygoYWx3YXlzX2lubGluZSkpIGxvbmcgX19zeXNyZXQobG9uZyByZXQpDQo+ICt7DQo+
+ICsJaWYgKHJldCA8IDApIHsNCj4gKwkJU0VUX0VSUk5PKC1yZXQpOw0KPiArCQlyZXQgPSAtMTsN
+Cj4gKwl9DQo+ICsJcmV0dXJuIHJldDsNCj4gK30NCg0KSWYgdGhhdCByaWdodD8NCkkgdGhvdWdo
+dCB0aGF0IHRoYXQgb25seSB0aGUgZmlyc3QgZmV3ICgxMDI0PykgbmVnYXRpdmUgdmFsdWVzDQpn
+b3QgdXNlZCBhcyBlcnJubyB2YWx1ZXMuDQoNCkRvIGFsbCBMaW51eCBhcmNoaXRlY3R1cmVzIGV2
+ZW4gdXNlIG5lZ2F0aXZlcyBmb3IgZXJyb3I/DQpJIHRob3VnaHQgYXQgbGVhc3Qgc29tZSB1c2Vk
+IHRoZSBjYXJyeSBmbGFnLg0KKEl0IGlzIHRoZSBoaXN0b3JpYyBtZXRob2Qgb2YgaW5kaWNhdGlu
+ZyBhIHN5c3RlbSBjYWxsIGZhaWx1cmUuKQ0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRy
+ZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1L
+MSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
 
-Thanks for the clarification, I will send a v6 with the READ_ONCE().
-
-Breno
