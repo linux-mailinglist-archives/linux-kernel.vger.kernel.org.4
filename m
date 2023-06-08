@@ -2,119 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4A19727A1F
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 10:39:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 789C1727A29
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 10:40:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233158AbjFHIjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 04:39:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39670 "EHLO
+        id S231674AbjFHIkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 04:40:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233839AbjFHIjW (ORCPT
+        with ESMTP id S235527AbjFHIjt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 04:39:22 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D23F926B8;
-        Thu,  8 Jun 2023 01:39:20 -0700 (PDT)
-Received: from [192.168.10.48] (unknown [119.152.150.198])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1F54F6605733;
-        Thu,  8 Jun 2023 09:39:15 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1686213559;
-        bh=PRBO+SGpGVNVyEZwkfuIfWdn28x8QrprhmLGoj83lEI=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=knWIgt8GxFoafW6fQ7Gl2m9yA19hEzmpTCohAkDxUxO3y4WLgFJok0+mq5Vj5hpkT
-         Zz2M5hRNHViLxADau0oS5yIiFUtDREYVj+w6KTHJMWyPw6sB2KG4c0gWpi+551QzWU
-         /fh5Zlgpkak976cefjfBisBG84cXboeSJtp32WppNWYfBBRMy7irzJsZfb521evnl4
-         5655kYkjZBu2Mh9X2GhtxItA8AsB6QLA9uoMqjkaxT44XKsLvXqZd8U2qUflTw7nQo
-         vbh7hEzc1vjwnccGviigLcrl0aczTRwpKqBTYGckmZqzf3hREvD7SrjWr9KejJpitc
-         g7mZOGyHDvM4w==
-Message-ID: <11b94ce7-d7e3-1935-307b-5a0a0f32739f@collabora.com>
-Date:   Thu, 8 Jun 2023 13:39:11 +0500
+        Thu, 8 Jun 2023 04:39:49 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 71F0B26B2;
+        Thu,  8 Jun 2023 01:39:39 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8Ax3erGk4Fkz3cAAA--.1753S3;
+        Thu, 08 Jun 2023 16:39:34 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxPMrBk4FkkwgHAA--.13964S3;
+        Thu, 08 Jun 2023 16:39:31 +0800 (CST)
+Subject: Re: [PATCH v12 1/2] spi: add loongson spi bindings
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
+References: <20230608072819.25930-1-zhuyinbo@loongson.cn>
+ <20230608072819.25930-2-zhuyinbo@loongson.cn>
+ <6ebed84c-2b42-c981-7b3f-e71cc88e4c2c@linaro.org>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <4bf747c4-b767-b20c-e00f-724b50f44edb@loongson.cn>
+Date:   Thu, 8 Jun 2023 16:39:29 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, Peter Xu <peterx@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: Re: selftests: -e error: missing kernel header files. Please run this
- and try again
+In-Reply-To: <6ebed84c-2b42-c981-7b3f-e71cc88e4c2c@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, lkft-triage@lists.linaro.org
-References: <CA+G9fYueMV2gFF0sYR4Lf3btcEoxMpOy0_YvpjvS26WFZ2pcBA@mail.gmail.com>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <CA+G9fYueMV2gFF0sYR4Lf3btcEoxMpOy0_YvpjvS26WFZ2pcBA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-CM-TRANSID: AQAAf8AxPMrBk4FkkwgHAA--.13964S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+        ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
+        nUUI43ZEXa7xR_UUUUUUUUU==
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/8/23 1:21 PM, Naresh Kamboju wrote:
-> The make kselftest-install failed on Linux next 20230608.
+
+
+在 2023/6/8 下午3:45, Krzysztof Kozlowski 写道:
+> On 08/06/2023 09:28, Yinbo Zhu wrote:
+>> Add the Loongson platform spi binding with DT schema format using
+>> json-schema.
 > 
-> make --silent --keep-going --jobs=8
-> O=/home/tuxbuild/.cache/tuxmake/builds/1/build
-> INSTALL_PATH=/home/tuxbuild/.cache/tuxmake/builds/1/build/kselftest_install
-> ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- 'HOSTCC=sccache clang'
-> 'CC=sccache clang' LLVM=1 LLVM_IAS=1 kselftest-install
-Around 6-8 months ago, selftests used to build kernel headers from the
-source tree automatically and were using those to build all applications.
-But this behavior got changed where user need to build header manually
-first before building kselftest because auto header build was in-consistent
-in some cases.
+> Please use subject prefixes matching the subsystem. You can get them for
+> example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+> your patch is touching.
+> 
+> The prefix for SPI should be: "spi: dt-bindings: ". In the same time
+> last "bindings" are redundant.
 
-So from several months people, who were unaware of this are building
-kselftests with installed kernel headers in their distro. This was creating
-failure for some newer tests for people. They didn't know that selftests
-are supposed to build with kernel headers from source instead from locally
-installed headers in distro. So a patch has been introduced which spits
-error if kernel headers aren't built already:
-https://lore.kernel.org/all/20230606071637.267103-12-jhubbard@nvidia.com
 
-To fix things for your case, please build kernel headers by `make headers
-...` and then build kselftests. The error is trying to say the same thing.
+okay, I got it.
 
 > 
-> make[3]: Entering directory '/builds/linux/tools/testing/selftests/alsa'
+>>
+>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+>>   .../bindings/spi/loongson,ls2k-spi.yaml       | 41 +++++++++++++++++++
+>>   MAINTAINERS                                   |  6 +++
+>>   2 files changed, 47 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml b/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
+>> new file mode 100644
+>> index 000000000000..423ee851edd5
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
 > 
-> -e error: missing kernel header files.
-> Please run this and try again:
-> 
->     cd /builds/linux/tools/testing/selftests/../../..
->     make headers
-> 
-> make[3]: Leaving directory '/builds/linux/tools/testing/selftests/alsa'
-> make[3]: *** [../lib.mk:77: kernel_header_files] Error 1
-> 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> 
-> Links,
-> ===
-> https://storage.tuxsuite.com/public/linaro/lkft/builds/2QsWmEgSFF9iwodTUrWsdopV4Qp/
-> 
-> --
-> Linaro LKFT
-> https://lkft.linaro.org
+> Filename based on compatible.
 
--- 
-BR,
-Muhammad Usama Anjum
+
+There will be more ls2k series SoC spi device in the future thus I still
+use "loongson,ls2k-spi.yaml" for cover it.
+
+> 
+>> @@ -0,0 +1,41 @@
+>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/spi/loongson,ls2k-spi.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Loongson SPI controller
+>> +
+>> +maintainers:
+>> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
+>> +
+>> +allOf:
+>> +  - $ref: /schemas/spi/spi-controller.yaml#
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - loongson,ls2k1000-spi
+> 
+> No compatibles for other devices? Didn't we have big discussion about this?
+> 
+> https://elixir.bootlin.com/linux/v6.1-rc1/source/Documentation/devicetree/bindings/writing-bindings.rst#L42
+
+
+There are other ls2k SPI devices compatible, such as,
+"loongson,ls2k0500-spi", "loongson,ls2k2000-spi" but currently I plan to
+add ls2k1000 spi device first, Other ls2k SoC spi device adaptation may
+require some additional work and I will add it later.
+
+Thanks
+
