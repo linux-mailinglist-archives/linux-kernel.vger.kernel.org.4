@@ -2,145 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB898728B59
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 00:54:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80269728B6A
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 00:55:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232859AbjFHWyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 18:54:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36512 "EHLO
+        id S235116AbjFHWzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 18:55:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbjFHWyJ (ORCPT
+        with ESMTP id S232119AbjFHWyx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 18:54:09 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 879772D63
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 15:54:08 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q7OW0-00013w-5z; Fri, 09 Jun 2023 00:54:00 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q7OVy-0064OJ-Gg; Fri, 09 Jun 2023 00:53:58 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q7OVx-00CRF7-Lm; Fri, 09 Jun 2023 00:53:57 +0200
-Date:   Fri, 9 Jun 2023 00:53:55 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Leo Li <leoyang.li@nxp.com>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>
-Subject: Re: [PATCH 4/6] bus: fsl-mc: fsl-mc-allocator: Improve error
- reporting
-Message-ID: <20230608225355.3raozoq3v6teft7q@pengutronix.de>
-References: <20230310224128.2638078-1-u.kleine-koenig@pengutronix.de>
- <20230310224128.2638078-5-u.kleine-koenig@pengutronix.de>
- <20230601154101.GA2368233@dev-arch.thelio-3990X>
- <20230601165945.f7itlyso4rbp2nbb@pengutronix.de>
- <AM0PR04MB6289C7212F52C7A9DA4951D38F50A@AM0PR04MB6289.eurprd04.prod.outlook.com>
+        Thu, 8 Jun 2023 18:54:53 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D7B62D74;
+        Thu,  8 Jun 2023 15:54:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686264891; x=1717800891;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dd0u2N723fxNFuDaKsE3otcHiK0R6lSa4aGmdjcByVU=;
+  b=QRT81HlAlK892k+x7Cc1yNiythGi1EkDW2Wq4koxy0Qf77hAsN7aPfaz
+   hxetCbM2duYnMVHxvbYu+VDZGTVCu43mD/eqcPrHuZm06fDRZ8275LBIC
+   Ar/V4fVweXENhnm3ycjJNkkEdl6SZYnYXLYV18NCqzbwvrAJZPV4X5nDv
+   BTVOhYmqOjlFcE8M3RzC8Xupe+zxms7IThTsRI7/wXYDzoCdUmH7o0HWI
+   jF9zvoPMYuqPHmGeZygchsO5iZ3tQbVdxdT7up9sdJMDKWryDOon2kn2+
+   QSRvGFV3KAl7YHGeyx4F45YifrbJcfoUwoMR8zV7Lqp6P4ni18dvEHfWl
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="347100901"
+X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
+   d="scan'208";a="347100901"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 15:54:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="956914069"
+X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
+   d="scan'208";a="956914069"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 08 Jun 2023 15:54:46 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q7OWk-0008KC-0g;
+        Thu, 08 Jun 2023 22:54:46 +0000
+Date:   Fri, 9 Jun 2023 06:54:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Terry Bowman <terry.bowman@amd.com>, alison.schofield@intel.com,
+        vishal.l.verma@intel.com, ira.weiny@intel.com, bwidawsk@kernel.org,
+        dan.j.williams@intel.com, dave.jiang@intel.com,
+        Jonathan.Cameron@huawei.com, linux-cxl@vger.kernel.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        rrichter@amd.com, terry.bowman@amd.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Oliver O'Halloran <oohall@gmail.com>,
+        bhelgaas@google.com, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH v5 25/26] PCI/AER: Forward RCH downstream port-detected
+ errors to the CXL.mem dev handler
+Message-ID: <202306090637.9E2ezbR4-lkp@intel.com>
+References: <20230607221651.2454764-26-terry.bowman@amd.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="m53nyjv77nkhb4ke"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <AM0PR04MB6289C7212F52C7A9DA4951D38F50A@AM0PR04MB6289.eurprd04.prod.outlook.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230607221651.2454764-26-terry.bowman@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Terry,
 
---m53nyjv77nkhb4ke
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+kernel test robot noticed the following build errors:
 
-Hello,
+[auto build test ERROR on a70fc4ed20a6118837b0aecbbf789074935f473b]
 
-On Thu, Jun 08, 2023 at 10:00:13PM +0000, Leo Li wrote:
-> > Hmm, clang seems to be right, and I just confirmed that gcc (arm-linux-
-> > gnueabihf-gcc (Debian 12.2.0-14) 12.2.0) doesn't emit a warning. :-\
-> >=20
-> > My approach would be:
-> >=20
-> > diff --git a/drivers/bus/fsl-mc/fsl-mc-allocator.c b/drivers/bus/fsl-mc=
-/fsl-mc-
-> > allocator.c
-> > index 0ad68099684e..991273f956ce 100644
-> > --- a/drivers/bus/fsl-mc/fsl-mc-allocator.c
-> > +++ b/drivers/bus/fsl-mc/fsl-mc-allocator.c
-> > @@ -103,14 +103,15 @@ static int __must_check
-> > fsl_mc_resource_pool_remove_device(struct fsl_mc_device
-> >  	struct fsl_mc_resource *resource;
-> >  	int error =3D -EINVAL;
-> >=20
-> > +	mc_bus_dev =3D to_fsl_mc_device(mc_dev->dev.parent);
-> > +	mc_bus =3D to_fsl_mc_bus(mc_bus_dev);
-> > +
-> >  	resource =3D mc_dev->resource;
-> >  	if (!resource || resource->data !=3D mc_dev) {
-> >  		dev_err(&mc_bus_dev->dev, "resource mismatch\n");
-> >  		goto out;
-> >  	}
-> >=20
-> > -	mc_bus_dev =3D to_fsl_mc_device(mc_dev->dev.parent);
-> > -	mc_bus =3D to_fsl_mc_bus(mc_bus_dev);
-> >  	res_pool =3D resource->parent_pool;
-> >  	if (res_pool !=3D &mc_bus->resource_pools[resource->type]) {
-> >  		dev_err(&mc_bus_dev->dev, "pool mismatch\n");
-> >=20
-> >=20
-> > Should I prepare a proper patch, or is it possible to squash this chang=
-e into
-> > b3134039c5b3cf879841e3ec84c8cbf7675554ec?
-> >=20
-> > @Li Yang: Please advice.
->=20
-> This looks fine.  Please send a new patch and I can squash it to the orig=
-inal commit.
+url:    https://github.com/intel-lab-lkp/linux/commits/Terry-Bowman/cxl-acpi-Probe-RCRB-later-during-RCH-downstream-port-creation/20230608-062818
+base:   a70fc4ed20a6118837b0aecbbf789074935f473b
+patch link:    https://lore.kernel.org/r/20230607221651.2454764-26-terry.bowman%40amd.com
+patch subject: [PATCH v5 25/26] PCI/AER: Forward RCH downstream port-detected errors to the CXL.mem dev handler
+config: x86_64-randconfig-r005-20230607 (https://download.01.org/0day-ci/archive/20230609/202306090637.9E2ezbR4-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git checkout a70fc4ed20a6118837b0aecbbf789074935f473b
+        b4 shazam https://lore.kernel.org/r/20230607221651.2454764-26-terry.bowman@amd.com
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-I did send a proper patch already, see=20
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306090637.9E2ezbR4-lkp@intel.com/
 
-	https://lore.kernel.org/all/20230605112025.80061-1-u.kleine-koenig@pengutr=
-onix.de
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-You can apply that on top of the broken commit, or if you prefer also
-squash it into the offending commit. Note that in the above thread there
-is another fix for an older commit.
+>> ERROR: modpost: module cxl_core uses symbol pci_print_aer from namespace CXL, but does not import it.
 
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---m53nyjv77nkhb4ke
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSCXAIACgkQj4D7WH0S
-/k5/5wf8DGlJwZYFYcc47hF6t2PxNG6THgaqO/YKmcRqPnXo/9Zag0rBz8iAjVAi
-JGhnAECibEsDkFltWPjG4Uq/eBoMb8bY1zXTahbeglyJyXitkL+L8Btuf7eXs+CB
-jUPeVGZwLpGk/hhKHI95JLCcxKHBbf1L4WJ11hJ9nDm6H3PXqcmXUflE+Tc4BbrQ
-6oFOs1X+nBf7oepALE9odIxmqBapkkQ5hd7zf3JNLatwLxr7omnwT3ZBzrJc+p/e
-kBslHcFSFgALPA1fsRwj/ytqf/QeU0oS7boscRu0r+Rnyo0IV5fO6o5frjZ6Zlk6
-j+MjCEQyIYmcEqrDlZnRRfP9Ll/QpQ==
-=tye5
------END PGP SIGNATURE-----
-
---m53nyjv77nkhb4ke--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
