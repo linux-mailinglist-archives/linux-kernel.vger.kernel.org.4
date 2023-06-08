@@ -2,99 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37547728B01
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 00:14:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36CB8728B09
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 00:19:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236697AbjFHWOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 18:14:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51838 "EHLO
+        id S234463AbjFHWTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 18:19:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232715AbjFHWOX (ORCPT
+        with ESMTP id S229539AbjFHWTj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 18:14:23 -0400
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 399B212E
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 15:14:22 -0700 (PDT)
-Received: by mail-il1-x12c.google.com with SMTP id e9e14a558f8ab-33bf12b5fb5so154425ab.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 15:14:22 -0700 (PDT)
+        Thu, 8 Jun 2023 18:19:39 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6F27269A
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 15:19:36 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id 3f1490d57ef6-bacf685150cso1100037276.3
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 15:19:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686262461; x=1688854461;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3VvOVkeoZOg8bLOTHO/XPAd+duFpOWtxmm7bgNMjwIY=;
-        b=SMu023XUb3hUwIzFGWt7VF8BORxCe6qv0OHg6vdrhD5Q4hLPfovNAjr0cpYZV8z2I/
-         qHID6Y26hyv84vgV4sRxmcjOHqHB9zneqOuERsO+QZqGoJD6EuPi/tCWSD6tbQaA3fou
-         PwdFkNkXuG3YYckZyScVzMBNineCRvCgVZisP4yKzy8widSfC3WO5Rdswlha0rTnzQ5x
-         lApzjhUZW0UOMN1V5LrmyLByurKV6qUtslTaxRWs0xEvEXHZg8EXB/xjasb5LBpcVLJj
-         MnAkI+Foz+xbPY49w7StsDbIO5zpJ8/FSA44sxcMv/ksNtaKeDsul2wT1XNl9XBpGcC8
-         /O2w==
+        d=linaro.org; s=google; t=1686262776; x=1688854776;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=j/jRcCEptoZI15vQwyuL4KhtNKdIrJWJkuXvDmpbN+4=;
+        b=EkfVCq9sJIsMknG6KTGNg+hUMS11bdJZBnewr8xWr8dtNkKPrFc7+hTVxpqDFDnhml
+         6NhsvRxK+si1Iohm/LGBHilN7d2sZRAJWMKoEMGjlU0GAlYKfqNIIVlnUYw3hs6Xqo3X
+         +BWi6y31JR09ZUKUV5Zs016hfM6rknmaRpkz+V+cyDUreIvrEVOtLEi8Qxcc0gYk3D2e
+         50mQ8YUXJcOOVtFMyYnXiORGxaxNkS2YwL+2yEFYyrm1Fiyx2sN74J2IaA+M/vMeqqIe
+         IhlNBz/uo7CE9w3kScX//0MTSmRhddj7TarLJ3bZ8qROdw/N9BDGxB9mqusR3Uu474VX
+         YN3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686262461; x=1688854461;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3VvOVkeoZOg8bLOTHO/XPAd+duFpOWtxmm7bgNMjwIY=;
-        b=gQaN0ZSZToAmZwMvZXpL1m2kDdqC6F1bOOwsUbePYUgRBq79+CKyf7iOCZVEgQXXaT
-         0KhISup/CUrToj5Xf2TwHfQtFhB65a0h3uXPEeJ+n5PVZHPk6RhRcjuU01/N1sXySCC4
-         wgtVd2hA16wgeg5w8neZ+p1WIqVfAub4XXq5/ZeJUfCxYHfPZjtrcmVcrujDqOiln4JD
-         cANEnpxPyL+apJA1SMYjzQu3a+ECi5GMR9FJKaS9sA9NKCKXXLnj9+0PgFytbxPyccVb
-         ihDQGY9BhT/6bVQO2mWUg1/WWZZPYrF4GQbXLslz/Kr+hqLcbbZZxm1Qbv5wO0za+gFN
-         eHDw==
-X-Gm-Message-State: AC+VfDyvuj0o8x94Kb2XwX1Of0NGzb+PNAkW2fs0Bzzn0jz3OZDV/wG5
-        eZE1oZf7RX4JfHfQ4aELW6LHcTNALl9EP8yElch/ag==
-X-Google-Smtp-Source: ACHHUZ5SxX7JBSREEC9RUhJHHbRZp5/FKA22DLCloyyUQOmkMcWK0C3/vAV2Gz47nH3Lc8iVEjZJCz7r4IZtJz/+T4g=
-X-Received: by 2002:a05:6e02:1bac:b0:33b:5343:c1d6 with SMTP id
- n12-20020a056e021bac00b0033b5343c1d6mr215059ili.21.1686262461249; Thu, 08 Jun
- 2023 15:14:21 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686262776; x=1688854776;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=j/jRcCEptoZI15vQwyuL4KhtNKdIrJWJkuXvDmpbN+4=;
+        b=UMzbzTcH+fuT1l33moAcE/ccXoYJEYwaEIFhWoW6QnK/eLbyuiJ11xPTMVMNE2E7FJ
+         abb597K+QSauEV2w8HKR28ckANDq1tG8haQvHtUHKtB/l5ptpG7dvRoWLzGYHnAEHkVw
+         Jwcj8fRImWs0bUmUmiK/DwHeMtr9YVINomvrcaV1Xb8FhyPlehcdnHXwXM21OBSM4+KI
+         oxgYM0J43CgryVvdcz7jvJZlhn1pc1AdwtlusogR63cxQ1Qdo7AE7f0VaaR7zzBFiZZy
+         90ken56yUKSv/VV1Jcg8ddLrKdxvZgnDEbU+Flilq7I8ReTpoXAA0MafG6HCiSA0MUGJ
+         r82w==
+X-Gm-Message-State: AC+VfDzJzcuhhPY34xJ6rT4HyQsh4nfwwaNjSHtISIaobIFOoWgTyy9a
+        SvlBfKsMCI8iGwYn2uL1LmvbpWNqp+XCC8sw/0IIgA==
+X-Google-Smtp-Source: ACHHUZ62auTsiML+0ZiCG8qXdSraTRPV2M8+diFeDLEoFONXwLvluzI1lc2xcnrdHjAO2RNFkxsVMT6fvwms9Ppfqfg=
+X-Received: by 2002:a0d:e607:0:b0:565:e87f:a78f with SMTP id
+ p7-20020a0de607000000b00565e87fa78fmr1021175ywe.25.1686262775907; Thu, 08 Jun
+ 2023 15:19:35 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230608220558.39094-1-ctshao@google.com>
-In-Reply-To: <20230608220558.39094-1-ctshao@google.com>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Thu, 8 Jun 2023 16:13:44 -0600
-Message-ID: <CAOUHufbik3N9+K78=yGMZyERfD2o1o3kNgVoR73qKxWyQ2_3VQ@mail.gmail.com>
-Subject: Re: [PATCH v1 1/3] KVM: arm64: Consistently use free_removed_table()
- for stage-2
-To:     Chun-Tse Shao <ctshao@google.com>
-Cc:     linux-kernel@vger.kernel.org, oliver.upton@linux.dev,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Ben Gardon <bgardon@google.com>,
-        Gavin Shan <gshan@redhat.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
+References: <20230530213259.1776512-1-robimarko@gmail.com>
+In-Reply-To: <20230530213259.1776512-1-robimarko@gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 9 Jun 2023 00:18:59 +0200
+Message-ID: <CAPDyKForsVQ_inZG9+8mWdWM6-_T6O23AiwndLg33Yh7rPYTpA@mail.gmail.com>
+Subject: Re: [PATCH] mmc: core: disable TRIM on Micron MTFC4GACAJCN-1M
+To:     Robert Marko <robimarko@gmail.com>,
+        "Luca Porzio (lporzio)" <lporzio@micron.com>
+Cc:     windhl@126.com, avri.altman@wdc.com, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 8, 2023 at 4:06=E2=80=AFPM Chun-Tse Shao <ctshao@google.com> wr=
-ote:
->
-> From: Oliver Upton <oliver.upton@linux.dev>
->
-> free_removed_table() is essential to the RCU-protected parallel walking
-> scheme, as behind the scenes the cleanup is deferred until an RCU grace
-> period. Nonetheless, the stage-2 unmap path calls put_page() directly,
-> which leads to table memory being freed inline with the table walk.
->
-> This is safe for the time being, as the stage-2 unmap walker is called
-> while holding the write lock. A future change to KVM will further relax
-> the locking mechanics around the stage-2 page tables to allow lock-free
-> walkers protected only by RCU. As such, switch to the RCU-safe mechanism
-> for freeing table memory.
->
-> Signed-off-by: Oliver Upton <oliver.upton@linux.dev>
-> Signed-off-by: Chun-Tse Shao <ctshao@google.com>
++ Luca (Bean was added by Avri in another thread)
 
-Acked-by: Yu Zhao <yuzhao@google.com>
+On Tue, 30 May 2023 at 23:33, Robert Marko <robimarko@gmail.com> wrote:
+>
+> It seems that Micron MTFC4GACAJCN-1M despite advertising TRIM support does
+> not work when the core is trying to use REQ_OP_WRITE_ZEROES.
+>
+> We are seeing the following errors in OpenWrt under 6.1 on Qnap Qhora 301W
+> that we did not previously have and tracked it down to REQ_OP_WRITE_ZEROES:
+> [   18.085950] I/O error, dev loop0, sector 596 op 0x9:(WRITE_ZEROES) flags 0x800 phys_seg 0 prio class 2
+>
+> Disabling TRIM makes the error go away, so lets add a quirk for this eMMC
+> to disable TRIM.
+
+Let's leave this another week or so, to allow Micron folkz to confirm
+before applying.
+
+>
+> Signed-off-by: Robert Marko <robimarko@gmail.com>
+
+Kind regards
+Uffe
+
+> ---
+>  drivers/mmc/core/quirks.h | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>
+> diff --git a/drivers/mmc/core/quirks.h b/drivers/mmc/core/quirks.h
+> index 29b9497936df..77caa0c903f8 100644
+> --- a/drivers/mmc/core/quirks.h
+> +++ b/drivers/mmc/core/quirks.h
+> @@ -100,6 +100,13 @@ static const struct mmc_fixup __maybe_unused mmc_blk_fixups[] = {
+>         MMC_FIXUP("V10016", CID_MANFID_KINGSTON, CID_OEMID_ANY, add_quirk_mmc,
+>                   MMC_QUIRK_TRIM_BROKEN),
+>
+> +       /*
+> +        * Micron MTFC4GACAJCN-1M advertises TRIM but it does not seems to
+> +        * support being used to offload WRITE_ZEROES.
+> +        */
+> +       MMC_FIXUP("Q2J54A", CID_MANFID_MICRON, 0x014e, add_quirk_mmc,
+> +                 MMC_QUIRK_TRIM_BROKEN),
+> +
+>         /*
+>          * Some SD cards reports discard support while they don't
+>          */
+> --
+> 2.40.1
+>
