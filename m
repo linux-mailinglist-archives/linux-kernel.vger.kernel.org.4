@@ -2,92 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C6A77283B7
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 17:27:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0393F7283B9
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 17:28:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236155AbjFHP1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 11:27:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54498 "EHLO
+        id S233424AbjFHP1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 11:27:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234497AbjFHP1L (ORCPT
+        with ESMTP id S234497AbjFHP1r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 11:27:11 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 9314B2D46
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 08:27:09 -0700 (PDT)
-Received: (qmail 265539 invoked by uid 1000); 8 Jun 2023 11:27:08 -0400
-Date:   Thu, 8 Jun 2023 11:27:08 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Badhri Jagan Sridharan <badhri@google.com>
-Cc:     gregkh@linuxfoundation.org, colin.i.king@gmail.com,
-        xuetao09@huawei.com, quic_eserrao@quicinc.com,
-        water.zhangjiantao@huawei.com, francesco@dolcini.it,
-        alistair@alistair23.me, stephan@gerhold.net, bagasdotme@gmail.com,
-        luca@z3ntu.xyz, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v6 2/2] usb: gadget: udc: core: Prevent
- soft_connect_store() race
-Message-ID: <66a886aa-4b3d-421d-a229-8bb400c6fc8b@rowland.harvard.edu>
-References: <20230601031028.544244-1-badhri@google.com>
- <20230601031028.544244-2-badhri@google.com>
- <0bea99f1-cf66-4e80-b89b-41007c2ccfee@rowland.harvard.edu>
- <CAPTae5+EG+neDj=z4vC-r88Ai9Ha9n6FGU3dJi34NY+bka0zvQ@mail.gmail.com>
+        Thu, 8 Jun 2023 11:27:47 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B42A172E;
+        Thu,  8 Jun 2023 08:27:43 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 2496D1FDE6;
+        Thu,  8 Jun 2023 15:27:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1686238062; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YjexGMdyJWeBEjd6xCsB5dyXSs2Z5hB+eEW3odtxG74=;
+        b=SfueeyNYTBrTihKqx8oxJyfXgJUEO72qrEaWzKN9n/xvcrRpUuC7wTlr5iQ5JU20AoKVk+
+        RIlBFvY+Q+Do9PokOXqyijq2TF/CAdHol/tiqVodfAgEosBNsgNhjvbDhDhwUi/3kUlSxU
+        tJXq1cRpat2EYGkHF7TOihaLs/AntV8=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 162EF2C141;
+        Thu,  8 Jun 2023 15:27:41 +0000 (UTC)
+Date:   Thu, 8 Jun 2023 17:27:40 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Richard Weinberger <richard@nod.at>,
+        linux-hardening@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>
+Subject: Re: [RFC PATCH 0/1] Integer overflows while scanning for integers
+Message-ID: <ZIHzbBXlxEz6As9N@alley>
+References: <20230607223755.1610-1-richard@nod.at>
+ <202306071634.51BBAFD14@keescook>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAPTae5+EG+neDj=z4vC-r88Ai9Ha9n6FGU3dJi34NY+bka0zvQ@mail.gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <202306071634.51BBAFD14@keescook>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 10:17:04PM -0700, Badhri Jagan Sridharan wrote:
-> On Wed, Jun 7, 2023 at 11:26 AM Alan Stern <stern@rowland.harvard.edu>
-> wrote:
-> > > @@ -756,10 +772,12 @@ int usb_gadget_disconnect(struct usb_gadget
-> > *gadget)
-> > >       if (!gadget->connected)
-> > >               goto out;
-> > >
-> > > -     if (gadget->deactivated) {
-> > > +     if (gadget->deactivated || !gadget->udc->started) {
-> >
-> > Do you really need to add this extra test?  After all, if the gadget
-> > isn't started then how could the previous test of gadget->connected
-> > possibly succeed?
-> >
-> > In fact, I suspect this entire section of code was always useless, since
-> > the gadget couldn't be connected now if it was already deactivated.
-> >
+On Wed 2023-06-07 16:36:12, Kees Cook wrote:
+> On Thu, Jun 08, 2023 at 12:37:54AM +0200, Richard Weinberger wrote:
+> > Hi!
+> > 
+> > Lately I wondered whether users of integer scanning functions check
+> > for overflows.
+> > To detect such overflows around scanf I came up with the following
+> > patch. It simply triggers a WARN_ON_ONCE() upon an overflow.
+> > 
+> > After digging into various scanf users I found that the network device
+> > naming code can trigger an overflow.
+> > 
+> > e.g:
+> > $ ip link add 1 type veth peer name 9999999999
+> > $ ip link set name "%d" dev 1
+> > 
+> > It will trigger the following WARN_ON_ONCE():
+> > ------------[ cut here ]------------
+> > WARNING: CPU: 2 PID: 433 at lib/vsprintf.c:3701 vsscanf+0x6ce/0x990
 > 
-> Thanks Alan ! Will fix all other comments in v7 but not sure about this one.
-> Although the ->pullup() function will not be called,
-> -> connected flag could actually be set when the gadget is not started.
-> 
-> - if (gadget->deactivated || !gadget->udc->allow_connect) {
-> + if (gadget->deactivated || !gadget->udc->allow_connect ||
-> !gadget->udc->started) {
->   /*
->   * If gadget is deactivated we only save new state.
->   * Gadget will be connected automatically after activation.
-> + *
-> + * udc first needs to be started before gadget can be pulled up.
->   */
->   gadget->connected = true;
-> 
-> This could happen, for instance, when  usb_udc_vbus_handler()  is invoked
-> after soft_connect_store() disconnects the gadget.
-> Same applies to when usb_gadget_connect() is called after the gadget has
-> been deactivated through usb_gadget_deactivate().
-> 
-> This implies that the checks should be there, right ?
+> Hm, it's considered a bug if a WARN or BUG can be reached from
+> userspace,
 
-Yes, you're right; the checks do need to be there.  I had forgotten
-about these possible cases.  Ignore that comment.
+Good point. WARN() does not look like the right way in this case.
 
-Alan Stern
+Another problem is that some users use panic_on_warn. In this case,
+the above "ip" command calls would trigger panic(). And it does not
+look like an optimal behavior.
+
+I know there already are some WARN_ONs for similar situations, e.g.
+set_field_width() or set_precision(). But these do not get random
+values. And it would actually be nice to introduce something like
+INFO() that would be usable for these less serious problems where
+the backtrace is useful but they should never trigger panic().
+
+> so this probably needs to be rearranged (or callers fixed).
+> Do we need to change the scanf API for sane use inside the kernel?
+
+It seems that userspace implementation of sscanf() and vsscanf()
+returns -ERANGE in this case. It might be a reasonable solution.
+
+Well, there is a risk of introducing security problems. The error
+value might cause an underflow/overflow when the caller does not expect
+a negative value.
+
+Alternative solution would be to update the "ip" code so that it
+reads the number separately and treat zero return value as
+-EINVAL.
+
+Best Regards,
+Petr
