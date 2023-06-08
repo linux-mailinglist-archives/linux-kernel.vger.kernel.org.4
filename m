@@ -2,90 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0213C727B88
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 11:35:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 596B2727B8E
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 11:36:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235966AbjFHJfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 05:35:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41286 "EHLO
+        id S234751AbjFHJgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 05:36:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236135AbjFHJey (ORCPT
+        with ESMTP id S232262AbjFHJgX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 05:34:54 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B1911730
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 02:34:53 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-30ae61354fbso269216f8f.3
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 02:34:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1686216891; x=1688808891;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6orbtq17lQKjI9Icb5c6jZzUdG10XE40HYo5IhwyFNQ=;
-        b=WrlC02M0T6mrZAv6GxmUy2UCBV9sf40gKGoNcw+gAKVsv+UVlMfBfPLqHGTgiUbUGA
-         15Si5VnX3hMyAurhjup1Ff8JtS6/xS/zgwJ7AkOi//bMZ+Csu63ck6Uu80HkFVzMCPlq
-         +mMi0PPRDhm2lzgAqfy47HkaqxRFnZk7cClWhBYDUANdyAdWU1oibYUQkw5+IgKyRh2g
-         SitroCQ8lkHaw13o6uv/LW/hseTspMkBvei2ACbHKGFh9uKNsSklgUY4LDbRo2NSqctv
-         SCBpxGRrBb56OSOrJGpKyEA+2YqMpw1JxQxHK79K97MkQ8YpobUgj4BNHSSnX9TCqtUH
-         5Tng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686216891; x=1688808891;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6orbtq17lQKjI9Icb5c6jZzUdG10XE40HYo5IhwyFNQ=;
-        b=UtCVibsiDpcY5/OaRT+M4SP2QmSBE+DJD1wwCTkQrUqnvOcTiIzeB5xozNHuQMuq/S
-         adtj3Ld44YQwfe291N78h95guG3EjNGEUGqVgb5kDeAQiu3pRjw+9kdjXIettqApZrp1
-         Geppiakec7/izXSbK1gW4iyr6FHArDN8rENiwgu2R1SKGOnl+kqb7faZ0mPlJPnRnTD0
-         OxY+mKNKsd271tGhnjXVkt+6hGm44Xzuw6RrfJmR0iA3KDqGy2AUSfxTA7xHrhYrvzkW
-         8pIla8dbR9HQBTHTZb/NmoLJah6G0f6bd8gronki9YXBkrz28bm6oKySQwMRAp6Yx4II
-         7Meg==
-X-Gm-Message-State: AC+VfDyTcsW3XOXQX076D6ez+umir138M6q+i+sxFmx1E8qlrQuqq6+W
-        imuwXH3qNCHS1ZmnMxxsJeZeOA==
-X-Google-Smtp-Source: ACHHUZ5UVQSczbkfardAghLYw8rGvYBCqD9G/YSIbOG+ijQ2ZPpGa/a32Zq9oHH2OrmLw0nLnbDPMA==
-X-Received: by 2002:a5d:684e:0:b0:30e:5b63:7487 with SMTP id o14-20020a5d684e000000b0030e5b637487mr3188877wrw.58.1686216891475;
-        Thu, 08 Jun 2023 02:34:51 -0700 (PDT)
-Received: from [192.168.1.172] (158.22.5.93.rev.sfr.net. [93.5.22.158])
-        by smtp.gmail.com with ESMTPSA id bf3-20020a0560001cc300b003063a1cdaf2sm1025954wrb.48.2023.06.08.02.34.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jun 2023 02:34:51 -0700 (PDT)
-Message-ID: <578cc882-527f-5367-942a-d3d187786780@baylibre.com>
-Date:   Thu, 8 Jun 2023 11:34:49 +0200
+        Thu, 8 Jun 2023 05:36:23 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D28B1730
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 02:36:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686216982; x=1717752982;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HYd/0mKAxYgi+DtdTdHaJ5Xya+xD28SSU1Pm+jP8lpk=;
+  b=Fzw6AJz9dXFaqxDqF9fFyFzwZwzb+KYoYbsR8c23Aq92IbEZv3ZpwwAe
+   sn+HPACHqQOel2APvmAktmXnntxNo4r2XYhks2e0tcWS/1wY3kNmC5285
+   v9vEC70HE0qFcJhcMnv0rI9Sqj6pyJmUL5hzNFz8mkq3R9Va5H4ThyzVW
+   e79PzQas5eC3luCd3x6NV9tDk6Ya9E4fkpSJtj5+ngN9CqD9MtT9RnIMZ
+   QjHY8uR+Ko4n+qRsR63ZfsG/8IJRzXnyiompKfzzGj5axO6m88/5h107k
+   QcNDRO2+xwg93wF+f8EijnQ4GqJukidWomrUXLaj34GBjqeZvw7zfi35S
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="356116266"
+X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
+   d="scan'208";a="356116266"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 02:36:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="713051554"
+X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
+   d="scan'208";a="713051554"
+Received: from operepel-mobl1.ger.corp.intel.com (HELO intel.com) ([10.252.58.149])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 02:36:17 -0700
+Date:   Thu, 8 Jun 2023 11:36:06 +0200
+From:   Andi Shyti <andi.shyti@linux.intel.com>
+To:     Wang Jianzheng <wangjianzheng@vivo.com>
+Cc:     Artur Weber <aweber.kernel@gmail.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "open list:DRM PANEL DRIVERS" <dri-devel@lists.freedesktop.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        opensource.kernel@vivo.com
+Subject: Re: [PATCH] drm/panel: s6d7aa0: remove the unneeded variable in
+ s6d7aa0_lock
+Message-ID: <ZIGhBvFlHwVmKJG4@ashyti-mobl2.lan>
+References: <20230608033446.18412-1-wangjianzheng@vivo.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 4/5] ASoC: mediatek: mt8188-mt6359: Clean up log levels
-Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, broonie@kernel.org
-Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
-        matthias.bgg@gmail.com, trevor.wu@mediatek.com,
-        dan.carpenter@linaro.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, kernel@collabora.com
-References: <20230608084727.74403-1-angelogioacchino.delregno@collabora.com>
- <20230608084727.74403-5-angelogioacchino.delregno@collabora.com>
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-In-Reply-To: <20230608084727.74403-5-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230608033446.18412-1-wangjianzheng@vivo.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/06/2023 10:47, AngeloGioacchino Del Regno wrote:
-> Change some dev_info prints to dev_err() and some to dev_dbg(),
-> depending on the actual severity of them.
+Hi Jianzheng,
 
-Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
+On Thu, Jun 08, 2023 at 11:34:46AM +0800, Wang Jianzheng wrote:
+> Remove unneeded variable and directly return 0.
+> 
+> Signed-off-by: Wang Jianzheng <wangjianzheng@vivo.com>
+> ---
+>  drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c b/drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c
+> index 102e1fc7ee38..fec0d014fd0e 100644
+> --- a/drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c
+> +++ b/drivers/gpu/drm/panel/panel-samsung-s6d7aa0.c
+> @@ -66,7 +66,6 @@ static void s6d7aa0_reset(struct s6d7aa0 *ctx)
+>  static int s6d7aa0_lock(struct s6d7aa0 *ctx, bool lock)
 
--- 
-Regards,
-Alexandre
+actually this function can completely made void.
 
+>  {
+>  	struct mipi_dsi_device *dsi = ctx->dsi;
+> -	int ret = 0;
+>  
+>  	if (lock) {
+>  		mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD1, 0xa5, 0xa5);
+> @@ -80,7 +79,7 @@ static int s6d7aa0_lock(struct s6d7aa0 *ctx, bool lock)
+>  			mipi_dsi_dcs_write_seq(dsi, MCS_PASSWD3, 0xa5, 0xa5);
+>  	}
+>  
+> -	return ret;
+> +	return 0;
+
+Anyway the patch is fine:
+
+Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com> 
+
+Andi
+
+>  }
+>  
+>  static int s6d7aa0_on(struct s6d7aa0 *ctx)
+> -- 
+> 2.39.0
