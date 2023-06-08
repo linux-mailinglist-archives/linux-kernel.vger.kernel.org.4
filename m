@@ -2,203 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46C5A728233
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 16:06:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3372C72823D
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 16:07:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236790AbjFHOG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 10:06:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44452 "EHLO
+        id S236821AbjFHOHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 10:07:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235944AbjFHOG0 (ORCPT
+        with ESMTP id S236756AbjFHOHB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 10:06:26 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CDF52722
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 07:06:25 -0700 (PDT)
-Received: from dude05.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::54])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1q7GHK-0007QF-H0; Thu, 08 Jun 2023 16:06:18 +0200
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-Date:   Thu, 08 Jun 2023 16:06:02 +0200
-Subject: [PATCH] pwm: stm32: Implement .get_state()
+        Thu, 8 Jun 2023 10:07:01 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55F5C2D6B;
+        Thu,  8 Jun 2023 07:06:54 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D7C866606EC6;
+        Thu,  8 Jun 2023 15:06:51 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686233212;
+        bh=kjaR2FllOAiVWb1avCR9mHDwOW3pyNO/oWSCjV78BAc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=TVvR7iryuWlbkSiuF6gLKPyzY0lkWiW0S4sfQbmL9Ot735qZKnwu7q8Y4m9dy+qNz
+         /A8VY9pXimTXQxsP6gmHHAuoIqhBrgdajJGJIPEs149yISjp5O5f9+f4IC+yseut3T
+         YX/ciQyFzQN8oeSctF4/or4Gb4OUBCsxyZ9DMgAfinyqCd08/5N08AzL9cOxwiU6Xz
+         KPLR3O5cjKx79z2kkuTi3cRsnqpkkPYPACWVqIdSfMzfGwZbT5OvRTy3yktyKzYLvT
+         NaPnF8L4ojB0uORsCxJfEACWlKL3mx50QJ6IsMsb/kARqWD7i+L+lDn+ON+7HC9h5I
+         9fz8uWy3BERlg==
+Message-ID: <925956db-9001-7a4f-700e-c84220103201@collabora.com>
+Date:   Thu, 8 Jun 2023 16:06:48 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230608-pwm-stm32-get-state-v1-1-db7e58a7461b@pengutronix.de>
-X-B4-Tracking: v=1; b=H4sIAErggWQC/x2N0QqDMAxFf0XyvECtQ2W/MvaQtpkGtJOmbgPx3
- xf2ds+FwzlAuQgr3JoDCr9F5ZUN2ksDcaY8MUoyBu9853o34vZZUevaeZy42qLKeG3dECKlNIw9
- mBlIGUOhHGdz874sdm6Fn/L9p+6P8/wBf0QZ1HoAAAA=
-To:     Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?utf-8?q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc:     linux-pwm@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Philipp Zabel <p.zabel@pengutronix.de>
-X-Mailer: b4 0.12-dev-aab37
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:1101:1d::54
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v2,04/10] media: mediatek: vcodec: remove the dependency
+ of debug log
+Content-Language: en-US
+To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        =?UTF-8?B?WXVuZmVpIERvbmcgKOiRo+S6kemjnik=?= 
+        <Yunfei.Dong@mediatek.com>,
+        "nhebert@chromium.org" <nhebert@chromium.org>,
+        "wenst@chromium.org" <wenst@chromium.org>,
+        "nfraprado@collabora.com" <nfraprado@collabora.com>,
+        "benjamin.gaignard@collabora.com" <benjamin.gaignard@collabora.com>,
+        "hverkuil-cisco@xs4all.nl" <hverkuil-cisco@xs4all.nl>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "frkoenig@chromium.org" <frkoenig@chromium.org>,
+        "stevecho@chromium.org" <stevecho@chromium.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        "hsinyi@chromium.org" <hsinyi@chromium.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+References: <20230607084901.28021-1-yunfei.dong@mediatek.com>
+ <20230607084901.28021-5-yunfei.dong@mediatek.com>
+ <ad28c125d9efca1f7e422fffe42dd56cef66b349.camel@collabora.com>
+ <6bb7e4b283332f1b76c1550347cb245a57eee90b.camel@mediatek.com>
+ <ac3f4becf89d909503caeb8a05883fc38afccd41.camel@collabora.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <ac3f4becf89d909503caeb8a05883fc38afccd41.camel@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Stop stm32_pwm_detect_channels() from disabling all channels and count
-the number of enabled PWMs to keep the clock running. Implement the
-&pwm_ops->get_state callback so drivers can inherit PWM state set by
-the bootloader.
+Il 08/06/23 15:11, Nicolas Dufresne ha scritto:
+> Le jeudi 08 juin 2023 à 07:27 +0000, Yunfei Dong (董云飞) a écrit :
+>> Hi Nicolas,
+>>
+>> Thanks for your review.
+>> On Wed, 2023-06-07 at 21:41 -0400, Nicolas Dufresne wrote:
+>>>   	
+>>> External email : Please do not click links or open attachments until
+>>> you have verified the sender or the content.
+>>>   Hi Yunfei,
+>>>
+>>> Le mercredi 07 juin 2023 à 16:48 +0800, Yunfei Dong a écrit :
+>>>> 'mtk_vcodec_debug' and 'mtk_vcodec_err' depends on 'mtk_vcodec_ctx'
+>>>> to get the index of each instance, using the index directly instead
+>>>> of with 'mtk_vcodec_ctx'.
+>>>>
+>>>> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+>>>> ---
+>>>>   .../mediatek/vcodec/mtk_vcodec_util.h         |  26 ++-
+>>>>   .../vcodec/vdec/vdec_av1_req_lat_if.c         | 105 +++++++-----
+>>>>   .../mediatek/vcodec/vdec/vdec_h264_if.c       |  62 ++++---
+>>>>   .../mediatek/vcodec/vdec/vdec_h264_req_if.c   |  39 +++--
+>>>>   .../vcodec/vdec/vdec_h264_req_multi_if.c      |  80 +++++----
+>>>>   .../vcodec/vdec/vdec_hevc_req_multi_if.c      |  67 ++++----
+>>>>   .../mediatek/vcodec/vdec/vdec_vp8_if.c        |  54 ++++---
+>>>>   .../mediatek/vcodec/vdec/vdec_vp8_req_if.c    |  46 +++---
+>>>>   .../mediatek/vcodec/vdec/vdec_vp9_if.c        | 152 ++++++++++--
+>>> ------
+>>>>   .../vcodec/vdec/vdec_vp9_req_lat_if.c         |  84 ++++++----
+>>>>   .../platform/mediatek/vcodec/vdec_vpu_if.c    |  59 ++++---
+>>>>   .../mediatek/vcodec/venc/venc_h264_if.c       |  86 +++++-----
+>>>>   .../mediatek/vcodec/venc/venc_vp8_if.c        |  48 +++---
+>>>>   .../platform/mediatek/vcodec/venc_vpu_if.c    |  64 ++++----
+>>>>   14 files changed, 565 insertions(+), 407 deletions(-)
+>>>>
+>>>> diff --git
+>>> a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.h
+>>> b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.h
+>>>> index ecb0bdf3a4f4..ddc12c3e2983 100644
+>>>> --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.h
+>>>> +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_util.h
+>>>> @@ -31,9 +31,8 @@ struct mtk_vcodec_dev;
+>>>>   #define mtk_v4l2_err(fmt, args...)                \
+>>>>   pr_err("[MTK_V4L2][ERROR] " fmt "\n", ##args)
+>>>>   
+>>>> -#define mtk_vcodec_err(h, fmt, args...)\
+>>>> -pr_err("[MTK_VCODEC][ERROR][%d]: " fmt "\n",\
+>>>> -       ((struct mtk_vcodec_ctx *)(h)->ctx)->id, ##args)
+>>>> +#define mtk_vcodec_err(plat_dev, inst_id, fmt,
+>>> args...)                                 \
+>>>> +dev_err(&(plat_dev)->dev, "[MTK_VCODEC][ERROR][%d]: " fmt "\n",
+>>> inst_id, ##args)
+>>>>   
+>>>>   #if defined(CONFIG_DEBUG_FS)
+>>>>   extern int mtk_v4l2_dbg_level;
+>>>> @@ -46,27 +45,24 @@ extern int mtk_vcodec_dbg;
+>>>>    __func__, __LINE__, ##args);        \
+>>>>   } while (0)
+>>>>   
+>>>> -#define mtk_vcodec_debug(h, fmt, args...)                      \
+>>>> -do {                      \
+>>>> -if (mtk_vcodec_dbg)                      \
+>>>> -dev_dbg(&(((struct mtk_vcodec_ctx *)(h)->ctx)->dev->plat_dev-
+>>>> dev),   \
+>>>> -"[MTK_VCODEC][%d]: %s, %d " fmt "\n",                         \
+>>>> -((struct mtk_vcodec_ctx *)(h)->ctx)->id,                      \
+>>>> -__func__, __LINE__, ##args);                                  \
+>>>> +#define mtk_vcodec_debug(plat_dev, inst_id, fmt,
+>>> args...)                               \
+>>>> +do
+>>> {
+>>>          \
+>>>> +if
+>>> (mtk_vcodec_dbg)
+>>> \
+>>>> +dev_dbg(&(plat_dev)->dev, "[MTK_VCODEC][%d]: %s, %d " fmt "\n", \
+>>>
+>>> At least in this patch, you systematically pass plat_dev as
+>>> <something>->ctx->dev->plat_dev, which is quite long and verbose, any
+>>> reason we
+>>> can't just pass that <something> here ? We can follow the same
+>>> structure path
+>>> for both encoder/decoder ?
+>>>
+>>
+>> In order to separate encode and decoder, need to define two different
+>> struct mtk_vcodec_dec_ctx and struct mtk_vcodec_enc_ctx.
+>>
+>> struct mtk_vcodec_ctx won't be used again, need to use platform device
+>> to print dev_dbg and dev_err.
+>>
+>> encoder and decoder using the same interface to print log message.
+> 
+> Just a reminder, I'm just making suggestions, there is no strict action required
+> here other then a discussion to try and make the logging a bit more light.
+> 
+> My points was that C macros don't care about types, so if you keep the path to
+> the platform device the same (ctx->dev->plat_dev), you could just pass the ctx
+> as argument. What I don't know though myself, is if this is actually feasible in
+> all code path, but considering you had access to the instance previously, I
+> thought it should.
+> 
 
-Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
----
-Make the necessary changes to allow inheriting PWM state set by the
-bootloader, for example to avoid flickering with a pre-enabled PWM
-backlight.
----
- drivers/pwm/pwm-stm32.c | 75 ++++++++++++++++++++++++++++++++++++++-----------
- 1 file changed, 59 insertions(+), 16 deletions(-)
+One macro used to access two different structures?
 
-diff --git a/drivers/pwm/pwm-stm32.c b/drivers/pwm/pwm-stm32.c
-index 62e397aeb9aa..e0677c954bdf 100644
---- a/drivers/pwm/pwm-stm32.c
-+++ b/drivers/pwm/pwm-stm32.c
-@@ -52,6 +52,21 @@ static u32 active_channels(struct stm32_pwm *dev)
- 	return ccer & TIM_CCER_CCXE;
- }
- 
-+static int read_ccrx(struct stm32_pwm *dev, int ch, u32 *value)
-+{
-+	switch (ch) {
-+	case 0:
-+		return regmap_read(dev->regmap, TIM_CCR1, value);
-+	case 1:
-+		return regmap_read(dev->regmap, TIM_CCR2, value);
-+	case 2:
-+		return regmap_read(dev->regmap, TIM_CCR3, value);
-+	case 3:
-+		return regmap_read(dev->regmap, TIM_CCR4, value);
-+	}
-+	return -EINVAL;
-+}
-+
- static int write_ccrx(struct stm32_pwm *dev, int ch, u32 value)
- {
- 	switch (ch) {
-@@ -486,9 +501,40 @@ static int stm32_pwm_apply_locked(struct pwm_chip *chip, struct pwm_device *pwm,
- 	return ret;
- }
- 
-+static int stm32_pwm_get_state(struct pwm_chip *chip,
-+			       struct pwm_device *pwm, struct pwm_state *state)
-+{
-+	struct stm32_pwm *priv = to_stm32_pwm_dev(chip);
-+	int ch = pwm->hwpwm;
-+	unsigned long rate;
-+	u32 ccer, psc, arr, ccr;
-+	u64 dty, prd;
-+	int ret;
-+
-+	ret = regmap_read(priv->regmap, TIM_CCER, &ccer);
-+	if (ret)
-+		return ret;
-+
-+	state->enabled = ccer & (TIM_CCER_CC1E << (ch * 4));
-+	state->polarity = (ccer & (TIM_CCER_CC1P << (ch * 4))) ?
-+			  PWM_POLARITY_INVERSED : PWM_POLARITY_NORMAL;
-+	regmap_read(priv->regmap, TIM_PSC, &psc);
-+	regmap_read(priv->regmap, TIM_ARR, &arr);
-+	read_ccrx(priv, ch, &ccr);
-+	rate = clk_get_rate(priv->clk);
-+
-+	prd = (u64)NSEC_PER_SEC * (psc + 1) * (arr + 1);
-+	state->period = DIV_ROUND_UP_ULL(prd, rate);
-+	dty = (u64)NSEC_PER_SEC * (psc + 1) * ccr;
-+	state->duty_cycle = DIV_ROUND_UP_ULL(dty, rate);
-+
-+	return ret;
-+}
-+
- static const struct pwm_ops stm32pwm_ops = {
- 	.owner = THIS_MODULE,
- 	.apply = stm32_pwm_apply_locked,
-+	.get_state = stm32_pwm_get_state,
- 	.capture = IS_ENABLED(CONFIG_DMA_ENGINE) ? stm32_pwm_capture : NULL,
- };
- 
-@@ -579,30 +625,22 @@ static void stm32_pwm_detect_complementary(struct stm32_pwm *priv)
- 	priv->have_complementary_output = (ccer != 0);
- }
- 
--static int stm32_pwm_detect_channels(struct stm32_pwm *priv)
-+static int stm32_pwm_detect_channels(struct stm32_pwm *priv, int *n_enabled)
- {
--	u32 ccer;
--	int npwm = 0;
-+	u32 ccer, ccer_backup;
-+	int npwm;
- 
- 	/*
- 	 * If channels enable bits don't exist writing 1 will have no
- 	 * effect so we can detect and count them.
- 	 */
-+	regmap_read(priv->regmap, TIM_CCER, &ccer_backup);
- 	regmap_set_bits(priv->regmap, TIM_CCER, TIM_CCER_CCXE);
- 	regmap_read(priv->regmap, TIM_CCER, &ccer);
--	regmap_clear_bits(priv->regmap, TIM_CCER, TIM_CCER_CCXE);
-+	regmap_write(priv->regmap, TIM_CCER, ccer_backup);
- 
--	if (ccer & TIM_CCER_CC1E)
--		npwm++;
--
--	if (ccer & TIM_CCER_CC2E)
--		npwm++;
--
--	if (ccer & TIM_CCER_CC3E)
--		npwm++;
--
--	if (ccer & TIM_CCER_CC4E)
--		npwm++;
-+	npwm = hweight32(ccer & TIM_CCER_CCXE);
-+	*n_enabled = hweight32(ccer_backup & TIM_CCER_CCXE);
- 
- 	return npwm;
- }
-@@ -613,7 +651,9 @@ static int stm32_pwm_probe(struct platform_device *pdev)
- 	struct device_node *np = dev->of_node;
- 	struct stm32_timers *ddata = dev_get_drvdata(pdev->dev.parent);
- 	struct stm32_pwm *priv;
-+	int n_enabled;
- 	int ret;
-+	int i;
- 
- 	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
- 	if (!priv)
-@@ -635,7 +675,10 @@ static int stm32_pwm_probe(struct platform_device *pdev)
- 
- 	priv->chip.dev = dev;
- 	priv->chip.ops = &stm32pwm_ops;
--	priv->chip.npwm = stm32_pwm_detect_channels(priv);
-+	priv->chip.npwm = stm32_pwm_detect_channels(priv, &n_enabled);
-+
-+	for (i = 0; i < n_enabled; i++)
-+		clk_enable(priv->clk);
- 
- 	ret = pwmchip_add(&priv->chip);
- 	if (ret < 0)
+Please, no.
 
----
-base-commit: ac9a78681b921877518763ba0e89202254349d1b
-change-id: 20230608-pwm-stm32-get-state-4107bcadd786
+Regards,
+Angelo
 
-Best regards,
--- 
-Philipp Zabel <p.zabel@pengutronix.de>
+> regards,
+> Nicolas
+> 
+>>
+>> Best Regards,
+>> Yunfei Dong
+>>>> +inst_id, __func__, __LINE__, ##args);                   \
+>>>>   } while (0)
+>>>>   #else
+>>>>   #define mtk_v4l2_debug(level, fmt, args...) pr_debug(fmt, ##args)
+>>>>   
+>>>> -#define mtk_vcodec_debug(h, fmt, args...)\
+>>>> -pr_debug("[MTK_VCODEC][%d]: " fmt "\n",\
+>>>
+>> ...snip...
+> 
+
