@@ -2,129 +2,318 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76F3C7273B0
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 02:25:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 455B97273B1
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 02:26:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231420AbjFHAZd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 20:25:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59452 "EHLO
+        id S232012AbjFHA0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 20:26:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbjFHAZa (ORCPT
+        with ESMTP id S229589AbjFHA0B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 20:25:30 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B6422128
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 17:25:29 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1686183927;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=T3IsuGe1cP1d+2QPn1Q6+xwy68kc7U8w805Dy6Ua/hE=;
-        b=ZFClPd4tRCul9T8BUKeqcTsAsYe6/fKo9B2DJRr8Vr+oVOkU8l8+vvuV+FcCMYGaqH6dDS
-        cT792DOscb9OwWx2yYYGeAFB7CtNDYKD/2JKw1zwXQ/2Z4kuoQ326uZfsHQhPdY559WT+1
-        sDt01DoB0qorzrfZw+8Gg1pa8EWAD2SFISm+vtW1nREBCs6ChD/298GryMHj70+ZJhUzVq
-        nlkHK/Q7P/yBdIWKje73ucfovMITzLyLAHEgfMxYYm7RzCnQCQ+Infhpq7K0CzMZQ5ztDZ
-        sPvIAAiBlbaEvAz96x1sV3CoOd5r1bCduogvhJCWQyBqiy/cEsENp/AkgXV0FQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1686183927;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=T3IsuGe1cP1d+2QPn1Q6+xwy68kc7U8w805Dy6Ua/hE=;
-        b=J7cAZ4NAfozz0nk3T/RN+PyKAe/5G3ifwZncupfnP0ZePoCQ0pyZiVHvoiXvlmC61Ve3qd
-        3EZwJRDDYDx3M+Bg==
-To:     Andrew Cooper <andrew.cooper3@citrix.com>,
-        Nikolay Borisov <nik.borisov@suse.com>, x86@kernel.org
-Cc:     linux-kernel@vger.kernel.org, mhocko@suse.com, jslaby@suse.cz
-Subject: Re: [PATCH 3/3] x86: Disable running 32bit processes if
- ia32_disabled is passed
-In-Reply-To: <278d7231-ee27-602f-4ba7-45d45d6772b3@citrix.com>
-References: <20230607072936.3766231-1-nik.borisov@suse.com>
- <20230607072936.3766231-4-nik.borisov@suse.com> <87legvjxat.ffs@tglx>
- <80f2045b-f276-e127-8e46-87fb6994fb41@suse.com> <87fs73juwa.ffs@tglx>
- <ba15bccd-9580-c20e-ae9c-b8d60f49fa07@suse.com> <87a5xbjpk2.ffs@tglx>
- <875d0ab7-4470-25e2-6c01-72e231aae515@citrix.com> <874jnjj5z2.ffs@tglx>
- <278d7231-ee27-602f-4ba7-45d45d6772b3@citrix.com>
-Date:   Thu, 08 Jun 2023 02:25:26 +0200
-Message-ID: <871qimkdft.ffs@tglx>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 7 Jun 2023 20:26:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 202832128;
+        Wed,  7 Jun 2023 17:26:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 983E26418B;
+        Thu,  8 Jun 2023 00:25:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F30C6C433D2;
+        Thu,  8 Jun 2023 00:25:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686183959;
+        bh=740oLFl6KOxb2WVmh9iX8854m0FdqLwbIEptbd6/PdA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=RhsZR+ZRhLNMYTFEzvnyuOruwGMARDw+3aNQFfZlQPGxC2D8NZERShBMYvOCGcTw8
+         GNEXuSmN4kkcoFvKFSIg/IU1T8ZmJF1m+oJdczK0kKbd4NAFuIr8iYEu9iFg8wSrAb
+         uulUdvQjnUBl9cRDtZvzHc5DrJQgCnHH+CzlEOZokRPiK2wVF+08f47+ntCK3CffzH
+         8GF11ZmmKnG/T/andTDdvfMnmVPr55SrKoUIHIfZ7Nai+5SD9WHfG/YnCszXFFl+2M
+         zNvpelZ6iu1J4d6y1I+nTywkwc8qLQe7QDyki4n36fEG99BvLuPGojOdMAWeQ/7wi0
+         K7aCltu2CKleg==
+Date:   Thu, 8 Jun 2023 09:25:54 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Beau Belgrave <beaub@linux.microsoft.com>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-trace-kernel@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        David Vernet <void@manifault.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Dave Thaler <dthaler@microsoft.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH] tracing/user_events: Run BPF program if attached
+Message-Id: <20230608092554.4b6f7f2c7fb0db9fb359ef0d@kernel.org>
+In-Reply-To: <20230607192611.GA143@W11-BEAU-MD.localdomain>
+References: <20230516212658.2f5cc2c6@gandalf.local.home>
+        <20230517165028.GA71@W11-BEAU-MD.localdomain>
+        <CAADnVQK3-NBLSVRVsgArUEjqsuY2S_8mWsWmLEAtTzo+U49CKQ@mail.gmail.com>
+        <20230601-urenkel-holzofen-cd9403b9cadd@brauner>
+        <20230601152414.GA71@W11-BEAU-MD.localdomain>
+        <20230601-legten-festplatten-fe053c6f16a4@brauner>
+        <20230601162921.GA152@W11-BEAU-MD.localdomain>
+        <20230606223752.65dd725c04b11346b45e0546@kernel.org>
+        <20230606170549.GA71@W11-BEAU-MD.localdomain>
+        <20230607230702.03c6d3a213d527a221bdc533@kernel.org>
+        <20230607192611.GA143@W11-BEAU-MD.localdomain>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 08 2023 at 00:43, Andrew Cooper wrote:
-> On 07/06/2023 10:52 pm, Thomas Gleixner wrote:
->> On Wed, Jun 07 2023 at 18:25, Andrew Cooper wrote:
->>> You also have to block Linux from taking any SYSRETL or SYSEXITL path
->>> out of the kernel, as these will load fixed 32bit mode attributes into
->>> %cs without reference to the GDT.
->> That's non-trivial as there is no way to disable 32bit SYSCALL on AMD
->> (Intel does not support 32bit syscall and you get #UD if CS.L !=3D 1). So
->> to be safe you'd need to make ignore_sysret() kill the process w/o
->> returning to user space.
->
-> ignore_sysret() desperately needs renaming to entry_SYSCALL32_ignore()
-> or similar.
+On Wed, 7 Jun 2023 12:26:11 -0700
+Beau Belgrave <beaub@linux.microsoft.com> wrote:
 
-No argument about that.
+> On Wed, Jun 07, 2023 at 11:07:02PM +0900, Masami Hiramatsu wrote:
+> > On Tue, 6 Jun 2023 10:05:49 -0700
+> > Beau Belgrave <beaub@linux.microsoft.com> wrote:
+> > 
+> > > On Tue, Jun 06, 2023 at 10:37:52PM +0900, Masami Hiramatsu wrote:
+> > > > Hi Beau,
+> > > > 
+> > > > On Thu, 1 Jun 2023 09:29:21 -0700
+> > > > Beau Belgrave <beaub@linux.microsoft.com> wrote:
+> > > > 
+> > > > > > > These are stubs to integrate namespace support. I've been working on a
+> > > > > > > series that adds a tracing namespace support similiar to the IMA
+> > > > > > > namespace work [1]. That series is ending up taking more time than I
+> > > > > > 
+> > > > > > Look, this is all well and nice but you've integrated user events with
+> > > > > > tracefs. This is currently a single-instance global filesystem. So what
+> > > > > > you're effectively implying is that you're namespacing tracefs by
+> > > > > > hanging it off of struct user namespace making it mountable by
+> > > > > > unprivileged users. Or what's the plan?
+> > > > > > 
+> > > > > 
+> > > > > We don't have plans for unprivileged users currently. I think that is a
+> > > > > great goal and requires a proper tracing namespace, which we currently
+> > > > > don't have. I've done some thinking on this, but I would like to hear
+> > > > > your thoughts and others on how to do this properly. We do talk about
+> > > > > this in the tracefs meetings (those might be out of your time zone
+> > > > > unfortunately).
+> > > > > 
+> > > > > > That alone is massive work with _wild_ security implications. My
+> > > > > > appetite for exposing more stuff under user namespaces is very low given
+> > > > > > the amount of CVEs we've had over the years.
+> > > > > > 
+> > > > > 
+> > > > > Ok, I based that approach on the feedback given in LPC 2022 - Containers
+> > > > > and Checkpoint/Retore MC [1]. I believe you gave feedback to use user
+> > > > > namespaces to provide the encapsulation that was required :)
+> > > > 
+> > > > Even with the user namespace, I think we still need to provide separate
+> > > > "eventname-space" for each application, since it may depend on the context
+> > > > who and where it is launched. I think the easiest solution is (perhaps)
+> > > > providing a PID-based new groups for each instance (the PID-prefix or 
+> > > > suffix will be hidden from the application).
+> > > > I think it may not good to allow unprivileged user processes to detect
+> > > > the registered event name each other by default.
+> > > > 
+> > > 
+> > > Regarding PID, are you referring the PID namespace the application
+> > > resides within? Or the actual single PID of the process?
+> > 
+> > I meant the actual single PID of the process. That will be the safest
+> > way by default.
+> > 
+> 
+> How do you feel about instead of single PID using the effective user ID?
+> 
+> That way we wouldn't have so many events on the system, and the user is
+> controlling what runs and can share events.
 
-> And yes, wiring this into SIGSEGV/etc would be a sensible move.
+I think that is another option, and maybe good for some application which
+does not use thread but forking worker process for data isolation. And
+also, I think that can be covered by the tracer namespace too.
 
-The only option is to wire it into die_hard_crash_and_burn(). There is
-no sane way to deliver a signal to the process which managed to run into
-this. Appropriate info to parent or ptracer will still be delivered.
+One concern is that if the system uses finer grained access control like
+SELinux, it will still be problematic, because one of those processes is
+compromised, the event-name is detected.
+(In this case, the events still needs to be separated for each process?)
 
-> The same applies to 32bit SYSENTER if configured. (Linux doesn't, but
-> other OSes do.)
+I think there are two points: allowing users to choose the most secure or 
+relaxed method, and which should be the default behavior.
 
-Why the heck are they doing that?
+> 
+> I could see a way for admins to also override the user_event suffix on a
+> per-user basis to allow for broader event name scopes if required (IE:
+> Our k8s and production scenarios).
+> 
+> > > 
+> > > In production we monitor things in sets that encompass more than a
+> > > single application. A requirement we need is the ability to group
+> > > like-processes together for monitoring purposes.
+> > > 
+> > > We really need a way to know these set of events are for this group, the
+> > > easiest way to do that is by the system name provided on each event. If
+> > > this were to be single PID (and not the PID namespace), then we wouldn't
+> > > be able to achieve this requirement. Ideally an admin would be able to
+> > > setup the name in some way that means something to them in user-space.
+> > 
+> > Would you mean using the same events between several different processes?
+> > I think it needs more care about security concerns. More on this later.
+> > 
+> > If not, I think admin has a way to identify which processes are running in
+> > the same group outside of ftrace, and can set the filter correctly.
+> > 
+> 
+> Agree that's possible, but it's going to be a massive amount of events
+> for both tracefs and perf_event ring buffers to handle (we need a perf
+> FD per trace_event ID).
 
-I really wish that we could disable syscall32 reliably on AMD and make
-it raise #UD as it does on Intal.
+So, for that case, it will need "sharing" events among the different
+processes.
 
->> Though the real question is:
->>
->>        What is the benefit of such a change?
->>
->> So far I haven't seen any argument for that. Maybe there is none :)
->
-> Hardening.=C2=A0 The general purpose distros definitely won't care, but
-> special purpose ones will.
->
-> An x86 bytestream is decoded differently in different modes, and malware
-> can hide in the differences.=C2=A0 Standard tooling can't cope with
-> multi-mode binaries, and if it happens by accident you tend get very
-> obscure crash to diagnose.
+> 
+> > > 
+> > > IE: user_events_critical as a system name, vs knowing (user_events_5
+> > > or user_events_6 or user_events_8) are "critical".
+> > 
+> > My thought is the latter. Then the process can not access to the
+> > other process's namespace each other.
+> > 
+> > > 
+> > > Another simple example is the same "application" but it gets exec'd more
+> > > than once. Each time it execs the system name would change if it was
+> > > really by the actual PID vs PID namespace. This would be very hard to
+> > > manage on a perf_event or eBPF level for us. It would also vastly
+> > > increase the number of trace_events that would get created on the
+> > > system.
+> > 
+> > Indeed. But fundamentally allowing user to create (register) the new 
+> > event means such DoS attack can happen. That's why we have a limitation
+> > of the max number of user_events. (BTW, I want to make this number
+> > controllable from sysctl or tracefs. Also, we need something against the
+> > event-id space contamination by this DoS attack.) 
+> > I also think it would be better to have some rate-limit about registering
+> > new events.
+> > 
+> 
+> Totally agree here.
+> 
+> > > 
+> > > > > 
+> > > > > > > anticipated.
+> > > > > > 
+> > > > > > Yet you were confident enough to leave the namespacing stubs for this
+> > > > > > functionality in the code. ;)
+> > > > > > 
+> > > > > > What is the overall goal here? Letting arbitrary unprivileged containers
+> > > > > > define their own custom user event type by mounting tracefs inside
+> > > > > > unprivileged containers? If so, what security story is going to
+> > > > > > guarantee that writing arbitrary tracepoints from random unprivileged
+> > > > > > containers is safe?
+> > > > > > 
+> > > > > 
+> > > > > Unprivileged containers is not a goal, however, having a per-pod
+> > > > > user_event system name, such as user_event_<pod_name>, would be ideal
+> > > > > for certain diagnostic scenarios, such as monitoring the entire pod.
+> > > > 
+> > > > That can be done in the user-space tools, not in the kernel.
+> > > > 
+> > > 
+> > > Right, during k8s pod creation we would create the group and name it
+> > > something that makes sense to the operator as an example. I'm sure there
+> > > are lots of scenarios user-space can do. However, they almost always
+> > > involve more than 1 application together in our scenarios.
+> > 
+> > Yeah, if it is always used with k8s in the backend servers, it maybe OK.
+> > But if it is used in more unreliable environment, we need to consider
+> > about malicious normal users.
+> > 
+> > > 
+> > > > > When you have a lot of containers, you also want to limit how many
+> > > > > tracepoints each container can create, even if they are given access to
+> > > > > the tracefs file. The per-group can limit how many events/tracepoints
+> > > > > that container can go create, since we currently only have 16-bit
+> > > > > identifiers for trace_event's we need to be cautious we don't run out.
+> > > > 
+> > > > I agree, we need to have a knob to limit it to avoid DoS attack.
+> > > > 
+> > > > > user_events in general has tracepoint validators to ensure the payloads
+> > > > > coming in are "safe" from what the kernel might do with them, such as
+> > > > > filtering out data.
+> > > > 
+> > > > [...]
+> > > > > > > changing the system name of user_events on a per-namespace basis.
+> > > > > > 
+> > > > > > What is the "system name" and how does it protect against namespaces
+> > > > > > messing with each other?
+> > > > > 
+> > > > > trace_events in the tracing facility require both a system name and an
+> > > > > event name. IE: sched/sched_waking, sched is the system name,
+> > > > > sched_waking is the event name. For user_events in the root group, the
+> > > > > system name is "user_events". When groups are introduced, the system
+> > > > > name can be "user_events_<GUID>" for example.
+> > > > 
+> > > > So my suggestion is using PID in root pid namespace instead of GUID
+> > > > by default.
+> > > > 
+> > > 
+> > > By default this would be fine as long as admins can change this to a larger
+> > > group before activation for our purposes. PID however, might be a bit
+> > > too granular of an identifier for our scenarios as I've explained above.
+> > > 
+> > > I think these logical steps make sense:
+> > > 1. Create "event namespace" (Default system name suffix, max count)
+> > > 2. Setup "event namespace" (Change system name suffix, max count)
+> > > 3. Attach "event namespace"
+> > > 
+> > > I'm not sure we know what to attach to in #3 yet, so far both a tracer
+> > > namespace and user namespace have been proposed. I think we need to
+> > > answer that. Right now everything is in the root "event namespace" and
+> > > is simply referred to by default as "user_events" as the system name
+> > > without a suffix, and with the boot configured max event count.
+> > 
+> > OK, so I think we are on the same page :)
+> > 
+> > I think the user namespace is not enough for protecting events on
+> > multi-user system without containers. So it has less flexibility.
+> > The new tracer namespace may be OK, we still need a helper user
+> > program like 'user_eventd' for managing access based on some policy.
+> > If we have a way to manage it with SELinux etc. it will be the best
+> > I think. (Perhaps using UNIX domain socket will give us such flexibility.)
+> > 
+> 
+> I'm adding Mathieu to CC since I think he had a few cases where a static
+> namespace wasn't enough and we might need hierarchy support.
+> 
+> If we don't need hierarchy support, I think it's a lot easier to do. I
+> like the idea of a per-user event namespace vs a per-PID event namespace
+> knowing what we have to do to monitor all of this via perf. Like I said
+> above, that will be a huge amount of events compared to a per-user or
+> namespace approach.
 
-IOW, you are talking about defense in depth, right? I can buy that one.
+I think we can start with non hierarchy, but just grouping it. Adding
+hierarchy can be done afterwards.
 
-> Furthermore, despite CET-SS explicitly trying to account for and protect
-> against accidental mismatches, there are errata in some parts which let
-> userspace forge legal return addresses on the shadow stack by dropping
-> into 32bit mode because, there's a #GP check missing in a microflow.
+> 
+> But I do like where this is headed and glad we are having this
+> conversation :)
 
-Didn't we assume that there are no CPU bugs? :)
+Yeah, me too :)
 
-> For usecases where there ought not to be any 32bit code at all (and
-> there absolutely are), it would be lovely if this could be enforced,
-> rather than relying on blind hope that it doesn't happen.
+Thank you!
 
-I think it's rather clear what needs to be done here to achieve that,
-but that's completely orthogonal to the intent of the patch series in
-question which aims to make CONFIG_IA32_EMULATION a boot time decision.
+> 
+> Thanks,
+> -Beau
 
-Thanks,
 
-        tglx
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
