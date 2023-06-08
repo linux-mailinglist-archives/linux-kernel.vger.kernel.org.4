@@ -2,131 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2121A7287BD
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 21:12:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA6767287BC
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 21:12:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236114AbjFHTMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 15:12:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58896 "EHLO
+        id S236157AbjFHTMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 15:12:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235928AbjFHTML (ORCPT
+        with ESMTP id S232139AbjFHTML (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 8 Jun 2023 15:12:11 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3572F2D7C
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 12:12:05 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-565de553de1so14703657b3.0
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 12:12:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686251524; x=1688843524;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zVLRceEeXaiGvlgxdYbIgAo+AcDyW1dS+jDGBb+h1UA=;
-        b=1l3g323zHExDgYGww0zFXmVgic3jDwyc0JAOaU14MB4NUoruSezWtFEVocvA8VR+wP
-         D+bOPBhVpeN5TR7Q94HiD/7UXFwgvkn75HwqVtdM3hi/WhalPJUwiHRXSp3bpeKIuRdm
-         orIqBvL0rae06pUEOxuRX8a0MpgqpKjI5TTzLJ98WQmBBEIDz4RhToD7qotfuISdygmL
-         gKqyyQ61v8JQcZhpfriPzCyTWiXBbfQnLuFCKxtspZkjhV60I7fgSoyr0iHs2+KGMqLW
-         csaRWwWg7YMEgY5GV8POPk7y+6y3olAQXOM6liWFfJYYRJ0sFo+4jM2u98tnCjYnFP0Y
-         93kg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686251524; x=1688843524;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zVLRceEeXaiGvlgxdYbIgAo+AcDyW1dS+jDGBb+h1UA=;
-        b=KDqAl8fhTocZHQ7v36L0meK+90AQBiFK3i5OBsuYNl/EGTu03L2VpilEmSZkXD6/9v
-         nSVG9KHOjHobW2wdpSrYpEtsN2wu85kMDt0LDQLYepYF2mxbDaqRGKPt1wDOQi2mKLJ9
-         qlIXQmZrqYFfs85HN7zskIpt7//OqQuDHYcoshxwWqQiG33gidauETAhDnWW+1L8rAlJ
-         Wbnme/Zj8a4mm9fAoHYUIedjvsWChsmrrgLnNbpIv6K9/x+qRD+jzT5vxHos7QvLGQKw
-         nSKhW10M4O3W5paTCpIMPFkvb2SXm7o2IPLrSrLXpZOtvj2XLGlu5UrKd5YDDJCO1mRd
-         hVfQ==
-X-Gm-Message-State: AC+VfDz0668+H7YCE4Q9uBScD0PwfP8EBxpM77j/NAv6vhhl82FGeYSa
-        dUTyNi6OH14GJ9wHdS81mIGBlQ==
-X-Google-Smtp-Source: ACHHUZ6kOJKeygbedx9f6pcNR03LNZvYC4ZecjCRxiqOz1IuKMf5mVIHIRdEhOcWlcOzm+o3M8bu5Q==
-X-Received: by 2002:a0d:ead2:0:b0:569:ec03:14eb with SMTP id t201-20020a0dead2000000b00569ec0314ebmr668029ywe.23.1686251523870;
-        Thu, 08 Jun 2023 12:12:03 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id d144-20020a814f96000000b00559f1cb8444sm106718ywb.70.2023.06.08.12.12.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 12:12:03 -0700 (PDT)
-Date:   Thu, 8 Jun 2023 12:11:59 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Andrew Morton <akpm@linux-foundation.org>
-cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Helge Deller <deller@gmx.de>,
-        John David Anglin <dave.anglin@bell.net>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH v2 02/23] arm64: allow pte_offset_map() to fail
-In-Reply-To: <a4963be9-7aa6-350-66d0-2ba843e1af44@google.com>
-Message-ID: <35e46485-8499-4337-c51f-b8fa495a1a93@google.com>
-References: <a4963be9-7aa6-350-66d0-2ba843e1af44@google.com>
+Received: from smtp.smtpout.orange.fr (smtp-13.smtpout.orange.fr [80.12.242.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F27552D56
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 12:12:04 -0700 (PDT)
+Received: from pop-os.home ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id 7L3Bqt4nXtjdE7L3Cqf3FS; Thu, 08 Jun 2023 21:12:03 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1686251523;
+        bh=hqcGyIGMqLhHLJ6KCJoyUKD++6o+2VySY5s7lD2Ospo=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=adYpnyWIsE+lirv6ljQWvlWdzTp6I48lT1yTbJYGXniMO5ygVe0wz0PnqAlRXM/Cq
+         2WqQ0HOxhI0ls4xsKOAasQ9k6NMHnQAiOI4oANs4ZuaX0prxGpcxU5IHZ+kCN+QLcX
+         dBnmgq0UWPkHF14yyG/0UgsHV/a5KI+NKBchUZEc2nMf8eCM4UOTnyWiFBo12P/dKO
+         FHXPIww/myOobUQoYv96RI3DWHadN+c0/PudBPpvbIWJ+lBeq7NNVpPhO4WIHIaF89
+         mweY/oxObL4dc1prmtq4IwUSFc1jPIFecI+Sk0uNSr5qgT8zanhSQ5y1X+z9KR7qM3
+         8+pwSBOSsYnTQ==
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Thu, 08 Jun 2023 21:12:03 +0200
+X-ME-IP: 86.243.2.178
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Patrice Chotard <patrice.chotard@foss.st.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org
+Subject: [PATCH 2/2] rtc: st-lpc: Simplify clk handling in st_rtc_probe()
+Date:   Thu,  8 Jun 2023 21:12:00 +0200
+Message-Id: <992dd8c31be0bb5b8a9d8b5e8e94807ab0848a66.1686251455.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <866af6adbc7454a7b4505eb6c28fbdc86ccff39e.1686251455.git.christophe.jaillet@wanadoo.fr>
+References: <866af6adbc7454a7b4505eb6c28fbdc86ccff39e.1686251455.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In rare transient cases, not yet made possible, pte_offset_map() and
-pte_offset_map_lock() may not find a page table: handle appropriately.
+Use devm_clk_get_enabled() instead of hand writing it. This simplifies
+error handling and removes some lines of code.
 
-Signed-off-by: Hugh Dickins <hughd@google.com>
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+Also use dev_err_probe() which filters -EPROBE_DEFER.
+
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
- arch/arm64/mm/fault.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/rtc/rtc-st-lpc.c | 16 +++++-----------
+ 1 file changed, 5 insertions(+), 11 deletions(-)
 
-diff --git a/arch/arm64/mm/fault.c b/arch/arm64/mm/fault.c
-index cb21ccd7940d..f3aaba853547 100644
---- a/arch/arm64/mm/fault.c
-+++ b/arch/arm64/mm/fault.c
-@@ -177,6 +177,9 @@ static void show_pte(unsigned long addr)
- 			break;
+diff --git a/drivers/rtc/rtc-st-lpc.c b/drivers/rtc/rtc-st-lpc.c
+index d04d46f9cc65..d492a2d26600 100644
+--- a/drivers/rtc/rtc-st-lpc.c
++++ b/drivers/rtc/rtc-st-lpc.c
+@@ -228,17 +228,13 @@ static int st_rtc_probe(struct platform_device *pdev)
+ 	enable_irq_wake(rtc->irq);
+ 	disable_irq(rtc->irq);
  
- 		ptep = pte_offset_map(pmdp, addr);
-+		if (!ptep)
-+			break;
-+
- 		pte = READ_ONCE(*ptep);
- 		pr_cont(", pte=%016llx", pte_val(pte));
- 		pte_unmap(ptep);
+-	rtc->clk = devm_clk_get(&pdev->dev, NULL);
+-	if (IS_ERR(rtc->clk)) {
+-		dev_err(&pdev->dev, "Unable to request clock\n");
+-		return PTR_ERR(rtc->clk);
+-	}
+-
+-	clk_prepare_enable(rtc->clk);
++	rtc->clk = devm_clk_get_enabled(&pdev->dev, NULL);
++	if (IS_ERR(rtc->clk))
++		return dev_err_probe(&pdev->dev, PTR_ERR(rtc->clk),
++				     "Unable to request clock\n");
+ 
+ 	rtc->clkrate = clk_get_rate(rtc->clk);
+ 	if (!rtc->clkrate) {
+-		clk_disable_unprepare(rtc->clk);
+ 		dev_err(&pdev->dev, "Unable to fetch clock rate\n");
+ 		return -EINVAL;
+ 	}
+@@ -252,10 +248,8 @@ static int st_rtc_probe(struct platform_device *pdev)
+ 	do_div(rtc->rtc_dev->range_max, rtc->clkrate);
+ 
+ 	ret = devm_rtc_register_device(rtc->rtc_dev);
+-	if (ret) {
+-		clk_disable_unprepare(rtc->clk);
++	if (ret)
+ 		return ret;
+-	}
+ 
+ 	return 0;
+ }
 -- 
-2.35.3
+2.34.1
 
