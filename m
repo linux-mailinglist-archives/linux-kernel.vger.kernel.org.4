@@ -2,67 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 614E272800F
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 14:32:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8084E728016
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 14:33:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235769AbjFHMcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 08:32:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51686 "EHLO
+        id S235367AbjFHMdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 08:33:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234608AbjFHMc3 (ORCPT
+        with ESMTP id S234825AbjFHMc7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 08:32:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC211E43;
-        Thu,  8 Jun 2023 05:32:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 587EB64D26;
-        Thu,  8 Jun 2023 12:32:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54A26C433D2;
-        Thu,  8 Jun 2023 12:32:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686227547;
-        bh=fOIh00zUsqrqEdfNZOGPcviNsKUmrWFA0cvT+HdU7bw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cXQ9YLYUnV4G4NTQ7+9pYEtShpe+uwTuwZu9W29GrYrGtu7DW/fOJWZsDoyRObAVo
-         EF4xcLQUCauJa/cRtxi5iEevrYqaf+CbaZttx2sdz5s1f65yZuEx4/rFEo2J9BwajU
-         QThEzJiIu9c4X5N3bx0hQ83pnGqaBGZ/7TVCZKJwS4adFFTlDnx2xJ2Ioh2VpgIG/v
-         sRFs0ZK+/QdlVHQ67W9x6RVbrDgCWrC42TWHTADFFQ5qH0+3jnG/tA8svRFSP1CBxW
-         dPp0QYElm6BwCNkAlpbl4qp9Q00nP/JdT5vaxB4d1bga/2pJmTM6GY9gg4F1zm43se
-         3vj8mdiY3iY0A==
-Date:   Thu, 8 Jun 2023 13:32:18 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Julien Panis <jpanis@baylibre.com>,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        corbet@lwn.net, arnd@arndb.de, gregkh@linuxfoundation.org,
-        derek.kiernan@xilinx.com, dragan.cvetic@xilinx.com,
-        macro@orcam.me.uk, baolu.lu@linux.intel.com, yi.l.liu@intel.com,
-        jirislaby@kernel.org, rostedt@goodmis.org, revest@chromium.org,
-        gehao@kylinos.cn, akpm@linux-foundation.org, jgg@ziepe.ca,
-        razor@blackwall.org, stephen@networkplumber.org,
-        prabhakar.csengg@gmail.com, contact@emersion.fr,
-        alex.williamson@redhat.com, akrowiak@linux.ibm.com,
-        mark.rutland@arm.com, ye.xingchen@zte.com.cn, ojeda@kernel.org,
-        me@kloenk.de, milan@mdaverde.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        sterzik@ti.com, u-kumar1@ti.com, eblanc@baylibre.com,
-        jneanne@baylibre.com, aseketeli@baylibre.com
-Subject: Re: [PATCH v7 2/6] mfd: tps6594: Add driver for TI TPS6594 PMIC
-Message-ID: <20230608123218.GF1930705@google.com>
-References: <20230511095126.105104-1-jpanis@baylibre.com>
- <20230511095126.105104-3-jpanis@baylibre.com>
- <20230518150740.GN404509@google.com>
- <20230607173351.GA3605615-robh@kernel.org>
+        Thu, 8 Jun 2023 08:32:59 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF171FDF;
+        Thu,  8 Jun 2023 05:32:51 -0700 (PDT)
+Received: from dggpemm500011.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4QcNlg1r92z18M19;
+        Thu,  8 Jun 2023 20:27:59 +0800 (CST)
+Received: from localhost.huawei.com (10.137.16.203) by
+ dggpemm500011.china.huawei.com (7.185.36.110) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 8 Jun 2023 20:32:47 +0800
+From:   renmingshuai <renmingshuai@huawei.com>
+To:     <pctammela@mojatatu.com>
+CC:     <caowangbao@huawei.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <jhs@mojatatu.com>, <jiri@resnulli.us>,
+        <kuba@kernel.org>, <liaichun@huawei.com>,
+        <linux-kernel@vger.kernel.org>, <liubo335@huawei.com>,
+        <netdev@vger.kernel.org>, <pabeni@redhat.com>,
+        <renmingshuai@huawei.com>, <xiyou.wangcong@gmail.com>,
+        <yanan@huawei.com>
+Subject: [PATCH v2] net/sched: Set the flushing flags to false to prevent an infinite loop and add one test to tdc
+Date:   Thu, 8 Jun 2023 20:32:24 +0800
+Message-ID: <20230608123224.3191731-1-renmingshuai@huawei.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <3679ed57-a0b9-4af2-cf83-e8aaa4bbd29e@mojatatu.com>
+References: <3679ed57-a0b9-4af2-cf83-e8aaa4bbd29e@mojatatu.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230607173351.GA3605615-robh@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.137.16.203]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500011.china.huawei.com (7.185.36.110)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,40 +53,210 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 07 Jun 2023, Rob Herring wrote:
+>On 07/06/2023 01:19, renmingshuai wrote:
+>>> On 06/06/2023 11:45, renmingshuai wrote:
+>>>> When a new chain is added by using tc, one soft lockup alarm will
+>>>> be
+>>>>    generated after delete the prio 0 filter of the chain. To
+>>>>    reproduce
+>>>>    the problem, perform the following steps:
+>>>> (1) tc qdisc add dev eth0 root handle 1: htb default 1
+>>>> (2) tc chain add dev eth0
+>>>> (3) tc filter del dev eth0 chain 0 parent 1: prio 0
+>>>> (4) tc filter add dev eth0 chain 0 parent 1:
+>>>
+>>> This seems like it could be added to tdc or 3 and 4 must be run in
+>>> parallel?
+>> 3 and 4 do not need to be run inparallel. When a new chain is added
+>> by the
+>>   way as step 1 and the step 3 is completed, this problem always
+>>   occurs
+>>   whenever step 4 is run.
+>
+>Got it,
+>The test still hangs with the provided patch.
+>
+>+ tc qdisc add dev lo root handle 1: htb default 1
+>+ tc chain add dev lo
+>+ tc filter del dev lo chain 0 parent 1: prio 0
+>[   68.790030][ T6704] [+]
+>[   68.790060][ T6704] chain refcnt 2
+>[   68.790951][ T6704] [-]
+>+ tc filter add dev lo chain 0 parent 1:
+><hangs>
+>
+>Also please add this test to tdc, it should be straightforward.
+>
+Sorry for not testing before. I forgot that the chain->refcnt was
+increased by 1 when tcf_chain_get() is called in tc_del_tfilter().
+ The value of chain->refcnt is 2 after chain flush. The test
+ result is as follows:
+[root@localhost ~]# tc qdisc add dev eth2 root handle 1: htb default 1
+[root@localhost ~]# tc chain add dev eth2
+[root@localhost ~]# tc filter del dev eth2 chain 0 parent 1: prio 0
+[root@localhost ~]# tc filter add dev eth2 chain 0 parent 1:
+Error: Filter kind and protocol must be specified.
+We have an error talking to the kernel
 
-> On Thu, May 18, 2023 at 04:07:40PM +0100, Lee Jones wrote:
-> > On Thu, 11 May 2023, Julien Panis wrote:
-> > 
-> > > This patch adds support for TPS6594 PMIC MFD core. It provides
-> > > communication through the I2C and SPI interfaces, and supports
-> > > protocols with embedded CRC data fields for safety applications.
-> > > 
-> > > Signed-off-by: Julien Panis <jpanis@baylibre.com>
-> > > Acked-for-MFD-by: Lee Jones <lee@kernel.org>
-> > > ---
-> > >  drivers/mfd/Kconfig         |   32 ++
-> > >  drivers/mfd/Makefile        |    3 +
-> > >  drivers/mfd/tps6594-core.c  |  462 ++++++++++++++++
-> > >  drivers/mfd/tps6594-i2c.c   |  244 +++++++++
-> > >  drivers/mfd/tps6594-spi.c   |  129 +++++
-> > >  include/linux/mfd/tps6594.h | 1020 +++++++++++++++++++++++++++++++++++
-> > >  6 files changed, 1890 insertions(+)
-> > >  create mode 100644 drivers/mfd/tps6594-core.c
-> > >  create mode 100644 drivers/mfd/tps6594-i2c.c
-> > >  create mode 100644 drivers/mfd/tps6594-spi.c
-> > >  create mode 100644 include/linux/mfd/tps6594.h
-> > 
-> > Applied - current being build tested.
-> > 
-> > Once complete, I'll send out a pull-request for the other maintainers.
-> 
-> Some reason the binding wasn't applied too? The compatible strings are 
-> now reported as undocumented (make dt_compatible_check).
+And I have add this test to tdc:
+[root@localhost tc-testing]# ./tdc.py -f tc-tests/filters/tests.json
+ok 7 c2b4 - Adding a new fiter after deleting a filter in a chain does
+not cause  an infinite loop
 
-Good call.
+Fixes: 726d061286ce ("net: sched: prevent insertion of new classifiers during chain flush")
+Signed-off-by: renmingshuai <renmingshuai@huawei.com>
+---
+ net/sched/cls_api.c                           |  7 +++++
+ .../tc-testing/tc-tests/filters/tests.json    | 26 ++++++++++++++++---
+ 2 files changed, 30 insertions(+), 3 deletions(-)
 
-Applied now, thanks.
-
--- 
-Lee Jones [李琼斯]
+diff --git a/net/sched/cls_api.c b/net/sched/cls_api.c
+index 2621550bfddc..3ea054e03fbf 100644
+--- a/net/sched/cls_api.c
++++ b/net/sched/cls_api.c
+@@ -2442,6 +2442,13 @@ static int tc_del_tfilter(struct sk_buff *skb, struct nlmsghdr *n,
+ 		tfilter_notify_chain(net, skb, block, q, parent, n,
+ 				     chain, RTM_DELTFILTER, extack);
+ 		tcf_chain_flush(chain, rtnl_held);
++		/* Set the flushing flags to false to prevent an infinite loop
++		 * when a new filter is added.
++		 */
++		mutex_lock(&chain->filter_chain_lock);
++		if (chain->refcnt == 2)
++			chain->flushing = false;
++		mutex_unlock(&chain->filter_chain_lock);
+ 		err = 0;
+ 		goto errout;
+ 	}
+diff --git a/tools/testing/selftests/tc-testing/tc-tests/filters/tests.json b/tools/testing/selftests/tc-testing/tc-tests/filters/tests.json
+index 361235ad574b..f165ca091109 100644
+--- a/tools/testing/selftests/tc-testing/tc-tests/filters/tests.json
++++ b/tools/testing/selftests/tc-testing/tc-tests/filters/tests.json
+@@ -125,5 +125,25 @@
+         "teardown": [
+             "$TC qdisc del dev $DEV2 ingress"
+         ]
++    },
++    {
++        "id": "c2b4",
++        "name": "Adding a new fiter after deleting a filter in a chain does not cause an infinite loop",
++        "category": [
++            "filter",
++            "prio"
++        ],
++        "setup": [
++            "$TC qdisc add dev $DEV1 root handle 1: htb default 1",
++            "$TC chain add dev $DEV1"
++        ],
++        "cmdUnderTest": "$TC filter del dev $DEV1 chain 0 parent 1: prio 0",
++        "expExitCode": "0",
++        "verifyCmd": "$TC filter add dev $DEV1 chain 0 parent 1:",
++        "matchPattern": "Error: Filter kind and protocol must be specified.",
++        "matchCount": "1",
++        "teardown": [
++            "$TC qdisc del dev $DEV1 root handle 1: htb default 1"
++        ]
+     }
+ ]
+--
+2.27.0
+>>>>
+>>>>
+>>>> The refcnt of the chain added by step 2 is equal to 1. After step
+>>>> 3,
+>>>>    the flushing flag of the chain is set to true in the
+>>>>    tcf_chain_flush()
+>>>>    called by tc_del_tfilter() because the prio is 0. In this case,
+>>>>    if
+>>>>    we add a new filter to this chain, it will never succeed and try
+>>>>    again
+>>>>    and again because the refresh flash is always true and refcnt is
+>>>>    1.
+>>>>    A soft lock alarm is generated 20 seconds later.
+>>>> The stack is show as below:
+>>>>
+>>>> Kernel panic - not syncing: softlockup: hung tasks
+>>>> CPU: 2 PID: 3321861 Comm: tc Kdump: loaded Tainted: G
+>>>> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996)
+>>>> Call Trace:
+>>>>    <IRQ>
+>>>>    dump_stack+0x57/0x6e
+>>>>    panic+0x196/0x3ec
+>>>>    watchdog_timer_fn.cold+0x16/0x5c
+>>>>    __run_hrtimer+0x5e/0x190
+>>>>    __hrtimer_run_queues+0x8a/0xe0
+>>>>    hrtimer_interrupt+0x110/0x2c0
+>>>>    ? irqtime_account_irq+0x49/0xf0
+>>>>    __sysvec_apic_timer_interrupt+0x5f/0xe0
+>>>>    asm_call_irq_on_stack+0x12/0x20
+>>>>    </IRQ>
+>>>>    sysvec_apic_timer_interrupt+0x72/0x80
+>>>>    asm_sysvec_apic_timer_interrupt+0x12/0x20
+>>>> RIP: 0010:mutex_lock+0x24/0x70
+>>>> RSP: 0018:ffffa836004ab9a8 EFLAGS: 00000246
+>>>> RAX: 0000000000000000 RBX: ffff95bb02d76700 RCX: 0000000000000000
+>>>> RDX: ffff95bb27462100 RSI: 0000000000000000 RDI: ffff95ba5b527000
+>>>> RBP: ffff95ba5b527000 R08: 0000000000000001 R09: ffffa836004abbb8
+>>>> R10: 000000000000000f R11: 0000000000000000 R12: 0000000000000000
+>>>> R13: ffff95ba5b527000 R14: ffffa836004abbb8 R15: 0000000000000001
+>>>>    __tcf_chain_put+0x27/0x200
+>>>>    tc_new_tfilter+0x5e8/0x810
+>>>>    ? tc_setup_cb_add+0x210/0x210
+>>>>    rtnetlink_rcv_msg+0x2e3/0x380
+>>>>    ? rtnl_calcit.isra.0+0x120/0x120
+>>>>    netlink_rcv_skb+0x50/0x100
+>>>>    netlink_unicast+0x12d/0x1d0
+>>>>    netlink_sendmsg+0x286/0x490
+>>>>    sock_sendmsg+0x62/0x70
+>>>>    ____sys_sendmsg+0x24c/0x2c0
+>>>>    ? import_iovec+0x17/0x20
+>>>>    ? sendmsg_copy_msghdr+0x80/0xa0
+>>>>    ___sys_sendmsg+0x75/0xc0
+>>>>    ? do_fault_around+0x118/0x160
+>>>>    ? do_read_fault+0x68/0xf0
+>>>>    ? __handle_mm_fault+0x3f9/0x6f0
+>>>>    __sys_sendmsg+0x59/0xa0
+>>>>    do_syscall_64+0x33/0x40
+>>>>    entry_SYSCALL_64_after_hwframe+0x61/0xc6
+>>>> RIP: 0033:0x7f96705b8247
+>>>> RSP: 002b:00007ffe552e9dc8 EFLAGS: 00000246 ORIG_RAX:
+>>>> 000000000000002e
+>>>> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f96705b8247
+>>>> RDX: 0000000000000000 RSI: 00007ffe552e9e40 RDI: 0000000000000003
+>>>> RBP: 0000000000000001 R08: 0000000000000001 R09: 0000558113f678b0
+>>>> R10: 00007f967069ab00 R11: 0000000000000246 R12: 00000000647ea089
+>>>> R13: 00007ffe552e9f30 R14: 0000000000000001 R15: 0000558113175f00
+>>>>
+>>>> To avoid this case, set chain->flushing to be false if the
+>>>> chain->refcnt
+>>>>    is 1 after flushing the chain when prio is 0.
+>>>>
+>>>> Fixes: 726d061286ce ("net: sched: prevent insertion of new
+>>>> classifiers during chain flush")
+>>>> Signed-off-by: Ren Mingshuai <renmingshuai@huawei.com>
+>>>> ---
+>>>>    net/sched/cls_api.c | 7 +++++++
+>>>>    1 file changed, 7 insertions(+)
+>>>>
+>>>> diff --git a/net/sched/cls_api.c b/net/sched/cls_api.c
+>>>> index 2621550bfddc..68be55d75831 100644
+>>>> --- a/net/sched/cls_api.c
+>>>> +++ b/net/sched/cls_api.c
+>>>> @@ -2442,6 +2442,13 @@ static int tc_del_tfilter(struct sk_buff
+>>>> *skb, struct nlmsghdr *n,
+>>>>    		tfilter_notify_chain(net, skb, block, q, parent,
+>>>>    		n,
+>>>>    				     chain, RTM_DELTFILTER,
+>>>>    				     extack);
+>>>>    		tcf_chain_flush(chain, rtnl_held);
+>>>> +		/* Set the flushing flags to false to prevent an
+>>>> infinite loop
+>>>> +		 * when a new filter is added.
+>>>> +		 */
+>>>> +		mutex_lock(&chain->filter_chain_lock);
+>>>> +		if (chain->refcnt == 1)
+>>>> +			chain->flushing = false;
+>>>> +		mutex_unlock(&chain->filter_chain_lock);
+>>>>    		err = 0;
+>>>>    		goto errout;
+>>>>    	}
