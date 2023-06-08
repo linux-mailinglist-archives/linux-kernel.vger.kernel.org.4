@@ -2,108 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D27B7276C1
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 07:35:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CBB57276C4
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 07:37:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233153AbjFHFfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 01:35:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39804 "EHLO
+        id S234385AbjFHFhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 01:37:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234146AbjFHFeu (ORCPT
+        with ESMTP id S233977AbjFHFhY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 01:34:50 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51D34E4D
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 22:34:49 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1b011cffe7fso472175ad.1
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 22:34:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686202489; x=1688794489;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Hi3h3STrD8nAW7/sg6jcuBzQ5Kz2zlpfMrjH0c93LuE=;
-        b=t3Csx9jDOUGENAtJPJP0Bujqdp02H1al9yUYvJhgfDb5TYN7yPNiQ53mifoKoBQSW5
-         XRL+1BDN4BBdaz+F7j6Aa1TZIrEPMH2IfCi3aAXWrJ81JqsUDN3lTE3vYclFSkSXXjyh
-         rT4rlUEHxODl6nFE7lQ9QRPdETQq+FfWZbXW9Ef8hBjDhSzU5Q+hsZQ3y3mZw5WdyiEH
-         EuP0B60BiEtYEJB8UbFkBEWBk9qNx7XLg6SHllGl3V8yyCA57+kRlalVsRMjU0Px0CN+
-         u2zfS0lftayqESTQ4rUk9VUlYnB7df1oDDteQQ+siDAqVIQ9c6TBIS+sXcn5Yzi2P3xV
-         +iLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686202489; x=1688794489;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Hi3h3STrD8nAW7/sg6jcuBzQ5Kz2zlpfMrjH0c93LuE=;
-        b=Cr3YkwZfY04cjd6oaayi5jawRdqRFjTwGjhpSOT1j6U4/eijIIFm8IIxbjNosaMLt+
-         73bFArkBfLZ+YJFGauHosbI1NmpSWDtfgtXZArAc8wTDgtVwECxyr7k9uKX16HaDIiXq
-         fz4+BzR5DbGA4VElRnO7hWhP7Bej1mOStOocM+WLqUfvoc1uqNB3PZZqVGmniXkZLlO0
-         qjt/yHTcyWEEZrddCbEu29N74uaRrzUzvuj2q0v2ngO1FU9IgAliT0xQg3jwC28VtYi3
-         vB2EgRsoqNmfoaWzldqPZcmaIolidR/t1K0R6ITgZB+SkTQ1CWtU+ndBKEIxyzFrJGkO
-         El4A==
-X-Gm-Message-State: AC+VfDyvlOM3uf0gJgk12auRuIZqUDat0z9E8RPMvxfSlgdHDsEgE/su
-        GNKnI/WlqFJdJ4DZwanHmXJLlg==
-X-Google-Smtp-Source: ACHHUZ69DUeIZySrAUAki+m1E/uiJQzSlLA8X20Zfy3gPcqX9L/hc9WeD08FTtkNJ1y0TBB4FQQQgg==
-X-Received: by 2002:a17:903:493:b0:1ae:55c8:6b60 with SMTP id jj19-20020a170903049300b001ae55c86b60mr3174132plb.1.1686202488870;
-        Wed, 07 Jun 2023 22:34:48 -0700 (PDT)
-Received: from localhost ([122.172.87.195])
-        by smtp.gmail.com with ESMTPSA id k1-20020a170902694100b00199203a4fa3sm446622plt.203.2023.06.07.22.34.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 22:34:48 -0700 (PDT)
-Date:   Thu, 8 Jun 2023 11:04:46 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Nikunj Kela <nkela@quicinc.com>,
-        Prasad Sodagudi <psodagud@quicinc.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 13/16] OPP: Extend dev_pm_opp_data with OPP provider
- support
-Message-ID: <20230608053446.ngoxh7zo7drnr32z@vireshk-i7>
-References: <20230607124628.157465-1-ulf.hansson@linaro.org>
- <20230607124628.157465-14-ulf.hansson@linaro.org>
+        Thu, 8 Jun 2023 01:37:24 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74121268F;
+        Wed,  7 Jun 2023 22:37:22 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 33B7F601B6;
+        Thu,  8 Jun 2023 07:37:19 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1686202639; bh=uTDCBRGWFZj2rXUOSuVG33tAlkl9SSqaEVboHArCRX0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=DIB525C5/mnLgvTfiMOV8ndRKKSw3U8kOxi3esDwqNFfDJ8Rji5NXK9N6UaX250Z0
+         Drpa+Q+O2Blc3HzmU4IbqyyxzjFhJ8HAR2k4g4lzmTgv/7XILzJtrcJl1kPuM+/Gah
+         gthOtpN5ciw0dJoRM/XOJ9R0cHhRC8bT80Z1x240MLZgsO/ZR1+9rr7x2IBi55XpMQ
+         PeMgJlDZLK+drXIa7So1bv21m/DwCMnsQfCUuPP6K7AWhnbPhI9MkM4kEP4fcy3iBC
+         AH+oGP69X0K+4dFuO6t5BgV0DJfMK2gyR0F7byOS+hVbpAeC2VmWH0EV94/BpDVia/
+         E7JBUrbQ8oOwg==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id iL6RA8KfVPru; Thu,  8 Jun 2023 07:37:16 +0200 (CEST)
+Received: from [192.168.1.6] (unknown [77.237.113.62])
+        by domac.alu.hr (Postfix) with ESMTPSA id 21D3B601B5;
+        Thu,  8 Jun 2023 07:37:16 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1686202636; bh=uTDCBRGWFZj2rXUOSuVG33tAlkl9SSqaEVboHArCRX0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=oy2IoqRo6QUb0OcyiqlYcMy+CEUdhR+sAs2IXEdF7ab+yDvgCRF3lPL0vEtPEBsGD
+         0kZWE4EP9ezZEBkzAsfe79tVhRiKgQPp7+muGz8aS5b2LGCGHMrN/g9v0G57tIhsHq
+         1NWePiXsacwZfLZo30Xew358qnGF7CUmXZR+Uv53BgAgTdxxhMX/q5Ai84MS2XGNBi
+         wy8RNusufUdRdb8hLeVFEhy7L3Y908AsnNf1vvA4kIhrIYwWFoknIbPWg40F5ck/nr
+         fz5+UmZeyGEiVaqJYoqKKUwpdq4NWAFV1m5Ob7Phxj/ZsPrzOhP5bHFGLuHYcLHmUM
+         NeO4mugU2ieJg==
+Message-ID: <884d9eb7-0e8e-3e59-cf6d-2c6931da35ee@alu.unizg.hr>
+Date:   Thu, 8 Jun 2023 07:37:15 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230607124628.157465-14-ulf.hansson@linaro.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: POSSIBLE BUG: selftests/net/fcnal-test.sh: [FAIL][FIX TESTED] in
+ vrf "bind - ns-B IPv6 LLA" test
+Content-Language: en-US
+To:     Guillaume Nault <gnault@redhat.com>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <b6191f90-ffca-dbca-7d06-88a9788def9c@alu.unizg.hr>
+ <ZHeN3bg28pGFFjJN@debian> <a379796a-5cd6-caa7-d11d-5ffa7419b90e@alu.unizg.hr>
+ <ZH84zGEODT97TEXG@debian> <48cfd903-ad2f-7da7-e5a6-a22392dc8650@alu.unizg.hr>
+ <ZH+BhFzvJkWyjBE0@debian> <a3b2891d-d355-dacd-24ec-af9f8aacac57@alu.unizg.hr>
+ <ZIC1r6IHOM5nr9QD@debian>
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <ZIC1r6IHOM5nr9QD@debian>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07-06-23, 14:46, Ulf Hansson wrote:
-> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-> index 79b4b44ced3e..81a3418e2eaf 100644
-> --- a/drivers/opp/core.c
-> +++ b/drivers/opp/core.c
-> @@ -1112,6 +1112,15 @@ static int _set_opp(struct device *dev, struct opp_table *opp_table,
->  			return ret;
->  		}
->  
-> +		if (opp->provider == DEV_PM_OPP_TYPE_GENPD) {
-> +			ret = dev_pm_genpd_set_performance_state(dev, opp->level);
-> +			if (ret) {
-> +				dev_err(dev, "Failed to set performance level: %d\n",
-> +					ret);
-> +				return ret;
-> +			}
-> +		}
-> +
+On 6/7/23 18:51, Guillaume Nault wrote:
+> On Wed, Jun 07, 2023 at 12:04:52AM +0200, Mirsad Goran Todorovac wrote:
+>> I cannot tell if those are new for the architecture (Ubuntu 22.04 + AMD Ryzen)
+>>
+>> However, Ubuntu's unsigned 6.3.1 generic mainline kernel is also affected.
+>> So, it might seem like an old problem.
+>>
+>> (If you could isolate the exact tests, I could try a bisect.)
+>>
+>> [...]
+>> TEST: ping local, VRF bind - ns-A IP                                          [ OK ]
+>> TEST: ping local, VRF bind - VRF IP                                           [FAIL]
+>> TEST: ping local, VRF bind - loopback                                         [ OK ]
+>> TEST: ping local, device bind - ns-A IP                                       [FAIL]
+>> TEST: ping local, device bind - VRF IP                                        [ OK ]
+>> [...]
+>>
+>> SYSCTL: net.ipv4.raw_l3mdev_accept=1
+>>
+>> [...]
+>> TEST: ping local, VRF bind - ns-A IP                                          [ OK ]
+>> TEST: ping local, VRF bind - VRF IP                                           [FAIL]
+>> TEST: ping local, VRF bind - loopback                                         [ OK ]
+>> TEST: ping local, device bind - ns-A IP                                       [FAIL]
+>> TEST: ping local, device bind - VRF IP                                        [ OK ]
+>> [...]
+>>
+>> Yes, just tested, w commit 42510dffd0e2 these are still present
+>> in fcnal-test.sh output:
+>>
+>> [...]
+>> TEST: ping local, VRF bind - ns-A IP                                          [ OK ]
+>> TEST: ping local, VRF bind - VRF IP                                           [FAIL]
+>> TEST: ping local, VRF bind - loopback                                         [ OK ]
+>> TEST: ping local, device bind - ns-A IP                                       [FAIL]
+>> TEST: ping local, device bind - VRF IP                                        [ OK ]
+>> [...]
+>> TEST: ping local, VRF bind - ns-A IP                                          [ OK ]
+>> TEST: ping local, VRF bind - VRF IP                                           [FAIL]
+>> TEST: ping local, VRF bind - loopback                                         [ OK ]
+>> TEST: ping local, device bind - ns-A IP                                       [FAIL]
+>> TEST: ping local, device bind - VRF IP                                        [ OK ]
+>> [...]
+> 
+> I have the same failures here. They don't seem to be recent.
+> I'll take a look.
 
-I don't like this :)
+Certainly. I thought it might be something architecture-specific?
 
-We already have these calls in place from within _set_required_opps(), and we
-should try to get this done in a way that those calls themselves get the
-performance state configured.
+I have reproduced it also on a Lenovo IdeaPad 3 with Ubuntu 22.10,
+but on Lenovo desktop with AlmaLinux 8.8 (CentOS fork), the result
+was "888/888 passed".
 
--- 
-viresh
+However, I have a question:
+
+In the ping + "With VRF" section, the tests with net.ipv4.raw_l3mdev_accept=1
+are repeated twice, while "No VRF" section has the versions:
+
+SYSCTL: net.ipv4.raw_l3mdev_accept=0
+
+and
+
+SYSCTL: net.ipv4.raw_l3mdev_accept=1
+
+The same happens with the IPv6 ping tests.
+
+In that case, it could be that we have only 2 actual FAIL cases,
+because the error is reported twice.
+
+Is this intentional?
+
+Thanks,
+Mirsad
+
+   74 #################################################################
+   75 With VRF
+   76
+   77 SYSCTL: net.ipv4.raw_l3mdev_accept=1
+   78
+   79 TEST: ping out, VRF bind - ns-B IP                                            [ OK ]
+   80 TEST: ping out, device bind - ns-B IP                                         [ OK ]
+   81 TEST: ping out, vrf device + dev address bind - ns-B IP                       [ OK ]
+   82 TEST: ping out, vrf device + vrf address bind - ns-B IP                       [ OK ]
+   83 TEST: ping out, VRF bind - ns-B loopback IP                                   [ OK ]
+   84 TEST: ping out, device bind - ns-B loopback IP                                [ OK ]
+   85 TEST: ping out, vrf device + dev address bind - ns-B loopback IP              [ OK ]
+   86 TEST: ping out, vrf device + vrf address bind - ns-B loopback IP              [ OK ]
+   87 TEST: ping in - ns-A IP                                                       [ OK ]
+   88 TEST: ping in - VRF IP                                                        [ OK ]
+   89 TEST: ping local, VRF bind - ns-A IP                                          [ OK ]
+   90 TEST: ping local, VRF bind - VRF IP                                           [FAIL]
+   91 TEST: ping local, VRF bind - loopback                                         [ OK ]
+   92 TEST: ping local, device bind - ns-A IP                                       [FAIL]
+   93 TEST: ping local, device bind - VRF IP                                        [ OK ]
+   94 TEST: ping local, device bind - loopback                                      [ OK ]
+   95 TEST: ping out, vrf bind, blocked by rule - ns-B loopback IP                  [ OK ]
+   96 TEST: ping out, device bind, blocked by rule - ns-B loopback IP               [ OK ]
+   97 TEST: ping in, blocked by rule - ns-A loopback IP                             [ OK ]
+   98 TEST: ping out, vrf bind, unreachable route - ns-B loopback IP                [ OK ]
+   99 TEST: ping out, device bind, unreachable route - ns-B loopback IP             [ OK ]
+  100 TEST: ping in, unreachable route - ns-A loopback IP                           [ OK ]
+  101 SYSCTL: net.ipv4.ping_group_range=0 2147483647
+  102
+  103 SYSCTL: net.ipv4.raw_l3mdev_accept=1
+  104
+  105 TEST: ping out, VRF bind - ns-B IP                                            [ OK ]
+  106 TEST: ping out, device bind - ns-B IP                                         [ OK ]
+  107 TEST: ping out, vrf device + dev address bind - ns-B IP                       [ OK ]
+  108 TEST: ping out, vrf device + vrf address bind - ns-B IP                       [ OK ]
+  109 TEST: ping out, VRF bind - ns-B loopback IP                                   [ OK ]
+  110 TEST: ping out, device bind - ns-B loopback IP                                [ OK ]
+  111 TEST: ping out, vrf device + dev address bind - ns-B loopback IP              [ OK ]
+  112 TEST: ping out, vrf device + vrf address bind - ns-B loopback IP              [ OK ]
+  113 TEST: ping in - ns-A IP                                                       [ OK ]
+  114 TEST: ping in - VRF IP                                                        [ OK ]
+  115 TEST: ping local, VRF bind - ns-A IP                                          [ OK ]
+  116 TEST: ping local, VRF bind - VRF IP                                           [FAIL]
+  117 TEST: ping local, VRF bind - loopback                                         [ OK ]
+  118 TEST: ping local, device bind - ns-A IP                                       [FAIL]
+  119 TEST: ping local, device bind - VRF IP                                        [ OK ]
+  
