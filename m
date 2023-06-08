@@ -2,81 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 221BC727C20
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 12:03:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59E2B727C22
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 12:03:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234064AbjFHKDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 06:03:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56930 "EHLO
+        id S234218AbjFHKDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 06:03:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233943AbjFHKDE (ORCPT
+        with ESMTP id S234126AbjFHKDm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 06:03:04 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A357D26BB
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 03:03:01 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-977c72b116fso68039366b.3
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 03:03:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686218580; x=1688810580;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Bmfylh5K7Rt8fwaEveI7BoiN+8WWrTg97yj2ME0kBOA=;
-        b=HuHCeQujCHnipvUAT2lRl1oyB8ETir3dsAst+qalpan3hTm3dbcJYUw1fYJZPR7fhr
-         JnTVtuP8MTgCoBW9pu2CuE5u2ACRp7A3/2SauSTBowDgUvUc1zyA7cECUHCBwzvdHWup
-         Hbza4RhjuvENcGLmsfzui9Dx9g5vTTCpUqRXMToLCGqXO4Gziaa15VQIRbYsY0jHSENb
-         jblfoDk1rGwGmnJsOy56b9N1WlyiFNP62Qxmqm4+o5dSY4kTazbK/xS3osT/pr6a4PSu
-         l4EXdhywI1kBT2Hwq05MMTbj7QsC86Zz4McxozUGB3r08FA7bFCyyUnUmT5kRTkwhT7p
-         AFqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686218580; x=1688810580;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Bmfylh5K7Rt8fwaEveI7BoiN+8WWrTg97yj2ME0kBOA=;
-        b=h+Yddzfht9aZx4WMlXCUbJ4d7I4DjR8PXdZj9qAeKYOoZcErEIF+fORsKAfaQPHByR
-         opXPwweAkT2V2TY01g40/nkiaHALN4pJiT20laaxsgx0Gr9485igFpuE4UgebG3YAjXE
-         EWVA10mbdw+1S/8MI8+4NdYJrcc+NvHgX4q3hizv6fF5UC4IQhNUT06uQk4lb0dTD86g
-         rgMcW8Vw5HDfmN7ZCaFWFgs1Fp2Ghuu7VHK+CYNFPMnsghFDaQr/AP6QR+E5IQt5WkPd
-         j5Zmrp4pyMWY0oexvz2qPZqe+hpz636CtM0rwdpREjmc7AGHP89v860YH5JjPaUJRKao
-         /mwA==
-X-Gm-Message-State: AC+VfDwzwPB8aWCOxiBuyywDs4fF2Yn2MEmbfyd34K2Pahv2j99BnUNu
-        EJ+R126BmghAVTKIjAV//P/R+w==
-X-Google-Smtp-Source: ACHHUZ6pBOMzByvbtvZPrdTxWmoF4m+8oSlWRMC84p9V8IFo1xhkQWFoGjxpwZnnyAcuoUy+PwJBLQ==
-X-Received: by 2002:a17:907:94d6:b0:974:1c90:4c02 with SMTP id dn22-20020a17090794d600b009741c904c02mr9192948ejc.5.1686218580135;
-        Thu, 08 Jun 2023 03:03:00 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id t11-20020a17090616cb00b009745b0cb326sm475258ejd.109.2023.06.08.03.02.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jun 2023 03:02:59 -0700 (PDT)
-Message-ID: <11ca2b90-544d-18c2-fb15-7909ca60507f@linaro.org>
-Date:   Thu, 8 Jun 2023 12:02:57 +0200
+        Thu, 8 Jun 2023 06:03:42 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 385BE26BA
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 03:03:41 -0700 (PDT)
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3589lT5t016495;
+        Thu, 8 Jun 2023 10:03:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : in-reply-to : references : date : message-id : mime-version :
+ content-type; s=pp1; bh=NMCDrIEjeqQt3g9jyHRz2b+33HhyRjMpvM6Mnx4gPM8=;
+ b=H5RltpcI/VGIjF2tualunxEnzkhE20Qt+p9NRvNML5rhi5DB49zGjTLgAW7S0ga8H9qz
+ FlAqYKEWq+Y2rTKloTHH/UgUFw0bGDTZdDRvR5zx2PVZcoukSfYkQnuv9YZEPsjAEz+d
+ 9YmGxjq4cNMSTLqJJWF3MVhbSauaLD+mJ8a2yrSyQuldftSeaT2fQAU1vDHLHzE/zjqs
+ oiMZEqaMwEtUi9wfxS/6on4tdArpiOohh8GGnZgffNwh0hK2gLxK5R2QVE/mdylz7YE8
+ n/E6pvJN0cUgr77xu82HuOovscJpQARlIU6KTTAl5KwA3lHoc4uXKotQv+0o7EXrvGbW hA== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r3cnt0a0s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 08 Jun 2023 10:03:24 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 357Mo1vp031959;
+        Thu, 8 Jun 2023 10:03:22 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3r2a78s6nf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 08 Jun 2023 10:03:22 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 358A3JrY43451080
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 8 Jun 2023 10:03:19 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E624320040;
+        Thu,  8 Jun 2023 10:03:18 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A837D20043;
+        Thu,  8 Jun 2023 10:03:16 +0000 (GMT)
+Received: from tarunpc (unknown [9.199.157.25])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Thu,  8 Jun 2023 10:03:16 +0000 (GMT)
+From:   Tarun Sahu <tsahu@linux.ibm.com>
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        muchun.song@linux.dev, aneesh.kumar@linux.ibm.com,
+        willy@infradead.org, sidhartha.kumar@oracle.com,
+        gerald.schaefer@linux.ibm.com, linux-kernel@vger.kernel.org,
+        jaypatel@linux.ibm.com
+Subject: Re: [PATCH v2] mm/folio: Avoid special handling for order value 0
+ in folio_set_order
+In-Reply-To: <20230606155853.GA4150@monkey>
+References: <20230515170809.284680-1-tsahu@linux.ibm.com>
+ <20230606155853.GA4150@monkey>
+Date:   Thu, 08 Jun 2023 15:33:14 +0530
+Message-ID: <873532jmot.fsf@linux.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v12 1/2] spi: add loongson spi bindings
-Content-Language: en-US
-To:     zhuyinbo <zhuyinbo@loongson.cn>, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
-        Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn
-References: <20230608072819.25930-1-zhuyinbo@loongson.cn>
- <20230608072819.25930-2-zhuyinbo@loongson.cn>
- <6ebed84c-2b42-c981-7b3f-e71cc88e4c2c@linaro.org>
- <4bf747c4-b767-b20c-e00f-724b50f44edb@loongson.cn>
- <6bfc2a22-6901-0858-7b90-bc4c52c66810@linaro.org>
- <bd2d7830-3ab6-0906-b06a-83d3e0a96749@loongson.cn>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <bd2d7830-3ab6-0906-b06a-83d3e0a96749@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 87w6SABi58B6ofwgrTDDN8oy51g7oihs
+X-Proofpoint-ORIG-GUID: 87w6SABi58B6ofwgrTDDN8oy51g7oihs
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-08_06,2023-06-07_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 mlxscore=0
+ lowpriorityscore=0 suspectscore=0 bulkscore=0 phishscore=0 adultscore=0
+ clxscore=1011 spamscore=0 priorityscore=1501 impostorscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306080081
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -85,92 +87,161 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/06/2023 12:00, zhuyinbo wrote:
-> 
-> 
-> 在 2023/6/8 下午4:53, Krzysztof Kozlowski 写道:
->> On 08/06/2023 10:39, zhuyinbo wrote:
->>>>>
->>>>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->>>>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>>> ---
->>>>>    .../bindings/spi/loongson,ls2k-spi.yaml       | 41 +++++++++++++++++++
->>>>>    MAINTAINERS                                   |  6 +++
->>>>>    2 files changed, 47 insertions(+)
->>>>>    create mode 100644 Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
->>>>>
->>>>> diff --git a/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml b/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
->>>>> new file mode 100644
->>>>> index 000000000000..423ee851edd5
->>>>> --- /dev/null
->>>>> +++ b/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
->>>>
->>>> Filename based on compatible.
->>>
->>>
->>> There will be more ls2k series SoC spi device in the future thus I still
->>> use "loongson,ls2k-spi.yaml" for cover it.
->>
->> Add them now.
-> 
-> 
-> The 2k0500 doesn't support CCF and not use CCF to gain clock and We
-> internally tend to prioritize supporting 2k1000.
+Hi Mike,
 
-Don't you refer now to drivers? Because how hardware can not support
-clocks if it has them? How CCF is anyhow related to hardware?
+Please find my comments inline.
 
-> 
->>
->>>
->>>>
->>>>> @@ -0,0 +1,41 @@
->>>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->>>>> +%YAML 1.2
->>>>> +---
->>>>> +$id: http://devicetree.org/schemas/spi/loongson,ls2k-spi.yaml#
->>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>>> +
->>>>> +title: Loongson SPI controller
->>>>> +
->>>>> +maintainers:
->>>>> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
->>>>> +
->>>>> +allOf:
->>>>> +  - $ref: /schemas/spi/spi-controller.yaml#
->>>>> +
->>>>> +properties:
->>>>> +  compatible:
->>>>> +    enum:
->>>>> +      - loongson,ls2k1000-spi
->>>>
->>>> No compatibles for other devices? Didn't we have big discussion about this?
->>>>
->>>> https://elixir.bootlin.com/linux/v6.1-rc1/source/Documentation/devicetree/bindings/writing-bindings.rst#L42
->>>
->>>
->>> There are other ls2k SPI devices compatible, such as,
->>> "loongson,ls2k0500-spi", "loongson,ls2k2000-spi" but currently I plan to
->>> add ls2k1000 spi device first, Other ls2k SoC spi device adaptation may
->>> require some additional work and I will add it later.
->>
->> Previously you claimed this serves entire family, so I don't understand
->> why you need to fix something. Why previously it was working for entire
->> family but now it does not?
-> 
-> 
-> It can work was for ls2k1000 and ls2k0500 and it specifically refers to
-> spi driver. but 2k0500 doesn't implementing a clock driver and doesn't
+Mike Kravetz <mike.kravetz@oracle.com> writes:
 
-We do not discuss here drivers, but bindings. Whatever your drivers are
-not supporting, matters less.
+> On 06/06/23 10:32, Tarun Sahu wrote:
+>>                                        
+>> Hi Mike,              
+>>     
+>> Thanks for your inputs.                          
+>> I wanted to know if you find it okay, Can I send it again adding your Reviewed-by?
+>
+> Hi Tarun,
+>
+> Just a few more comments/questions.
+>
+> On 05/15/23 22:38, Tarun Sahu wrote:
+>> folio_set_order(folio, 0) is used in kernel at two places
+>> __destroy_compound_gigantic_folio and __prep_compound_gigantic_folio.
+>> Currently, It is called to clear out the folio->_folio_nr_pages and
+>> folio->_folio_order.
+>> 
+>> For __destroy_compound_gigantic_folio:
+>> In past, folio_set_order(folio, 0) was needed because page->mapping used
+>> to overlap with _folio_nr_pages and _folio_order. So if these fields were
+>> left uncleared during freeing gigantic hugepages, they were causing
+>> "BUG: bad page state" due to non-zero page->mapping. Now, After
+>> Commit a01f43901cfb ("hugetlb: be sure to free demoted CMA pages to
+>> CMA") page->mapping has explicitly been cleared out for tail pages. Also,
+>> _folio_order and _folio_nr_pages no longer overlaps with page->mapping.
+>
+> I believe the same logic/reasoning as above also applies to
+> __prep_compound_gigantic_folio.
+> Why?
+> In __prep_compound_gigantic_folio we only call folio_set_order(folio, 0)
+> in the case of error.  If __prep_compound_gigantic_folio fails, the caller
+> will then call free_gigantic_folio() on the "gigantic page".  However, it is
+> not really a gigantic  at this point in time, and we are simply calling
+> cma_release() or free_contig_range().
+> The end result is that I do not believe the existing call to
+> folio_set_order(folio, 0) in __prep_compound_gigantic_folio is actually
+> required.  ???
+No, there is a difference. IIUC, __destroy_compound_gigantic_folio
+explicitly reset page->mapping for each page of compound page which
+makes sure, even if in future some fields of struct page/folio overlaps
+with page->mapping, it won't cause `BUG: bad page state` error. But If we
+just remove folio_set_order(folio, 0) from __prep_compound_gigantic_folio
+without moving folio_set_order(folio, order), this will cause extra
+maintenance overhead to track if page->_folio_order overlaps with
+page->mapping everytime struct page fields are changed. As in case of
+overlapping page->mapping will be non-zero. IMHO, To avoid it,
+moving the folio_set_order(folio, order) after all error checks are
+done on tail pages. So, _folio_order is either set on success and not
+set in case of error. (which is the original proposal). But for
+folio_set_head, I agree the way you suggested below.
 
-> use CCF to gain clock but can use "clock-frequency".  Is it necessary to
-> obtain a clock based on CCF? If it's necessary, then it seems that it
-> can only added 2k1000 spi first.
+WDYT?
 
-Not related to bindings...
+>
+> If my reasoning above is correct, then we could just have one patch to
+> remove the folio_set_order(folio, 0) calls and remove special casing for
+> order 0 in folio_set_order.
+>
+> However, I still believe your restructuring of __prep_compound_gigantic_folio,
+> is of value.  I do not believe there is an issue as questioned by Matthew.  My
+> reasoning has been stated previously.  We could make changes like the following
+> to retain the same order of operations in __prep_compound_gigantic_folio and
+> totally avoid Matthew's question.  Totally untested.
+>
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index ea24718db4af..a54fee663cb1 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -1950,10 +1950,8 @@ static bool __prep_compound_gigantic_folio(struct folio *folio,
+>  	int nr_pages = 1 << order;
+>  	struct page *p;
+>  
+> -	__folio_clear_reserved(folio);
+> -	__folio_set_head(folio);
+>  	/* we rely on prep_new_hugetlb_folio to set the destructor */
+> -	folio_set_order(folio, order);
+> +
+>  	for (i = 0; i < nr_pages; i++) {
+>  		p = folio_page(folio, i);
+>  
+> @@ -1969,7 +1967,7 @@ static bool __prep_compound_gigantic_folio(struct folio *folio,
+>  		 * on the head page when they need know if put_page() is needed
+>  		 * after get_user_pages().
+>  		 */
+> -		if (i != 0)	/* head page cleared above */
+> +		if (i != 0)	/* head page cleared below */
+>  			__ClearPageReserved(p);
+>  		/*
+>  		 * Subtle and very unlikely
+> @@ -1996,8 +1994,14 @@ static bool __prep_compound_gigantic_folio(struct folio *folio,
+>  		} else {
+>  			VM_BUG_ON_PAGE(page_count(p), p);
+>  		}
+> -		if (i != 0)
+> +
+> +		if (i == 0) {
+> +			__folio_clear_reserved(folio);
+> +			__folio_set_head(folio);
+> +			folio_set_order(folio, order);
+With folio_set_head, I agree to this, But does not feel good with
+folio_set_order as per my above reasoning. WDYT?
 
-Best regards,
-Krzysztof
-
+> +		} else {
+>  			set_compound_head(p, &folio->page);
+> +		}
+>  	}
+>  	atomic_set(&folio->_entire_mapcount, -1);
+>  	atomic_set(&folio->_nr_pages_mapped, 0);
+> @@ -2017,7 +2021,6 @@ static bool __prep_compound_gigantic_folio(struct folio *folio,
+>  		p = folio_page(folio, j);
+>  		__ClearPageReserved(p);
+>  	}
+> -	folio_set_order(folio, 0);
+>  	__folio_clear_head(folio);
+>  	return false;
+>  }
+>
+>
+>> 
+>> struct page {
+>> ...
+>>    struct address_space * mapping;  /* 24     8 */
+>> ...
+>> }
+>> 
+>> struct folio {
+>> ...
+>>     union {
+>>         struct {
+>>         	long unsigned int _flags_1;      /* 64    8 */
+>>         	long unsigned int _head_1;       /* 72    8 */
+>>         	unsigned char _folio_dtor;       /* 80    1 */
+>>         	unsigned char _folio_order;      /* 81    1 */
+>> 
+>>         	/* XXX 2 bytes hole, try to pack */
+>> 
+>>         	atomic_t   _entire_mapcount;     /* 84    4 */
+>>         	atomic_t   _nr_pages_mapped;     /* 88    4 */
+>>         	atomic_t   _pincount;            /* 92    4 */
+>>         	unsigned int _folio_nr_pages;    /* 96    4 */
+>>         };                                       /* 64   40 */
+>>         struct page __page_1 __attribute__((__aligned__(8))); /* 64   64 */
+>>     }
+>> ...
+>> }
+>
+> I do not think the copy of page/folio definitions adds much value to the
+> commit message.
+Yeah, Will remove it.
+>
+> -- 
+> Mike Kravetz
