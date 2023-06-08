@@ -2,100 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96D147289CA
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 23:00:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5B6C7289B7
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 22:55:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235157AbjFHVAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 17:00:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53268 "EHLO
+        id S236191AbjFHUzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 16:55:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235943AbjFHVAT (ORCPT
+        with ESMTP id S229927AbjFHUzI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 17:00:19 -0400
-X-Greylist: delayed 344 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 08 Jun 2023 14:00:17 PDT
-Received: from mx.manguebit.com (mx.manguebit.com [167.235.159.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE9DAE61;
-        Thu,  8 Jun 2023 14:00:17 -0700 (PDT)
-Message-ID: <a664029640828958e152e9a4c11c4b9a.pc@manguebit.com>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manguebit.com;
-        s=dkim; t=1686257671;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yugc47XhE4TEXrwH5C7vyMDJJHrlVFt40w7KU/PJ/TE=;
-        b=GPHoIsc9HOLN9ekZ/lB29IAezz2ZRK7IzZVsNJlbKJytUsqpNdL+QEyg7GvPOmDEcVyR6V
-        a10C/Io+PqX7/XHYVrS+t+zAtGyLF2BoVwYWiwn7ro0damxvI8kO/EgC0mIVzAsmT6RybC
-        g11SWgP/+LKcDnvV8tv5MG4GuVT6oF5fxeDxG3PVmRL9PQAuRQu/Mla6NO4vXfPexw9dJl
-        rUhGDXanSnKSlqfTXz2ajpbuDW7T43Q/g93ZqoJxlvTQN3/9+EmTr0WnbwYbjQanl6YajQ
-        CX9baayflBJMeBE7WXN9Bsk/WfTlZ5KoeMwz8/Nix/SqvsAfoOhmk+1L+6EpBw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=manguebit.com;
-        s=dkim; t=1686257671;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yugc47XhE4TEXrwH5C7vyMDJJHrlVFt40w7KU/PJ/TE=;
-        b=Ola0AhVztQVlxiW8QnBqIgeEsz7JXIzZ9AxPumI6JNANd4+xCT9LcaM05JadYO2aLcAWrT
-        uSTDIPU8J1WMv5ydZcWgu1I/KKhsvXj8/eCte0FBpcHReypA/7dOiK/CLYwW+lrPJdQPaQ
-        UVytvu0+SnkizGCov1YCk9ymKVIvpgs9x7PUWCBxMHRgbQBnbDTCN+Ti25RAUNFbprkOCc
-        WpwK5Wvgp2v0n9KjN3zGJqd63VhdJDiIW1dlyXdAvxTNl6HAM9T4XXZC6SnA64arx9f03+
-        fArfQSEufBMWOXlY2iyQHiim/Py4rknDiRifq0Wrw4VSGzdIkfRSZ0mbr/hxIg==
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=pc@manguebit.com smtp.mailfrom=pc@manguebit.com
-ARC-Seal: i=1; s=dkim; d=manguebit.com; t=1686257671; a=rsa-sha256;
-        cv=none;
-        b=mJrjHVb1G3xHgnChtFJ8tFhmt7gEcAXrzPlCzB6bigME2q52vJ3yXD+FtgpI4B1ni00V0I
-        LZ5j180bD7wjc7BYJkvbmmwvOJXpzljkQdm5O7AHo7Ek5Masob7aM2QyO8VgTScBxQhmVZ
-        hkYR068kbz2BwaabirwShxzhKSx0Iau9ABxQagpzLZxvwYlyWUNrRM6yoUWsdUPdPU8doU
-        mYl0lECpi2nU/ihL3Svl5de1EdgTnigJBZsm8vTAjETI1owD9esysngHwOcWfjejbqQSb2
-        5H2+9SdmpluLXURDDb494BxwwtJ0ubTCEnMP/nYEEuhrutyOnOwtI1TEBc56ag==
-From:   Paulo Alcantara <pc@manguebit.com>
-To:     Rishabh Bhatnagar <risbhat@amazon.com>, gregkh@linuxfoundation.org
-Cc:     sfrench@amazon.com, stable@vger.kernel.org,
-        linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rishabh Bhatnagar <risbhat@amazon.com>
-Subject: Re: [PATCH v2 5.4 0/2] Backport few dfs related fixes to cifs
-In-Reply-To: <20230607203333.26669-1-risbhat@amazon.com>
-References: <20230607203333.26669-1-risbhat@amazon.com>
-Date:   Thu, 08 Jun 2023 17:54:26 -0300
+        Thu, 8 Jun 2023 16:55:08 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C5A133;
+        Thu,  8 Jun 2023 13:55:07 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id 41be03b00d2f7-53fa455cd94so110174a12.2;
+        Thu, 08 Jun 2023 13:55:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686257706; x=1688849706;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=6oWrHsl4d9N87fafwcjt6WPe/4TeEPsaBiFgd+6930M=;
+        b=nq8AaAsGA71zvWXKV0bCclZE1ncs4V6jl3FXcw0S1vk/1waURyQRsDA4Zbc1QyAnQD
+         YkTIr9cyAzhKoMq4fRi9cJ+gzlvIO7UH6djIYVw+8KIiM/I4OcI+lGb1yengwlt9lACH
+         eSUuUQtwboeBwqYMdDmOV5q9PwF43isu+hwPBUh1EpjglEpVFz3Zz5bclUsyOWxd/bfb
+         es3rKeHSdz7ZzNbTvODd2nbn0uuE9xHVp/j4kxOXStMOXr+rwNH5ZOQhzmTRCa8oaplm
+         X8iVzZmnjolukj+Ydp59sSnM/zRQB1+QNpTud+BLoxgojKMcavcKFFGVZKOWgtMSO3wC
+         HymQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686257706; x=1688849706;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6oWrHsl4d9N87fafwcjt6WPe/4TeEPsaBiFgd+6930M=;
+        b=DMajDgMDmOtxCJ9ztzd9GsyzY5u68c4I99jQZbsinMH+ZZpNRSHjn6KyVKp8bCGvQl
+         kzyiMRe5aV16qg+StlKAdS6xZn+TES/Q6MD/JxSVX3Z02RtBx7Vo1n/Sr8rwKyx1mb9c
+         1fJA6yo9aE5HE0zwOlqmBiSPVu6PJN57SGq69lXP5UHU6hy+s8J75R6L9r/Z3BSzzCAl
+         0ekPJKCCAmwmu8XakexdXOCGqt89xlzuBtTWObE3LtSU5oDEVCG58h35em+LM1+CI14O
+         rgyiIKm5DRgoOS+JUvTjejKunkyc8O670AJKRYN37uFXFu7ra/c2P4uFoTew8IpIg87b
+         BPYw==
+X-Gm-Message-State: AC+VfDxInQH/G72lHubFoLz4N8AaotCGuCJ0FLALOUSM3OLGLrKDAzvC
+        DTscIdbEXGvekP5xRymyFQI=
+X-Google-Smtp-Source: ACHHUZ4gbObRZDrvgIXT/8eQTVGSpbJ+KVNHWHPfvNroTSiN8l2IHf0LuTF7mtwbQ8JQa31BuQfxsA==
+X-Received: by 2002:a17:90a:6348:b0:253:727e:4b41 with SMTP id v8-20020a17090a634800b00253727e4b41mr4683052pjs.34.1686257706282;
+        Thu, 08 Jun 2023 13:55:06 -0700 (PDT)
+Received: from localhost ([192.55.54.50])
+        by smtp.gmail.com with ESMTPSA id nn4-20020a17090b38c400b002562cfb81dfsm3430923pjb.28.2023.06.08.13.55.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 13:55:05 -0700 (PDT)
+Date:   Thu, 8 Jun 2023 13:55:03 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Erdem Aktas <erdemaktas@google.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Sagi Shahar <sagis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Zhi Wang <zhi.wang.linux@gmail.com>, chen.bo@intel.com,
+        Vishal Annapurve <vannapurve@google.com>
+Subject: Re: [PATCH v14 055/113] KVM: TDX: TDP MMU TDX support
+Message-ID: <20230608205503.GL2244082@ls.amr.corp.intel.com>
+References: <cover.1685333727.git.isaku.yamahata@intel.com>
+ <a7fc71f5d30676e9360f3db040feb7e6ac18203f.1685333728.git.isaku.yamahata@intel.com>
+ <CAAYXXYzR6JZq8OOD2qqC_vVGiCa3e5KmZZ+36YffGW6JFK4+Hw@mail.gmail.com>
+ <CAAYXXYyUbqjmrezTw=p_yBkkB-o9H-Xg_J5rBCe1CXUpF5PM+A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAAYXXYyUbqjmrezTw=p_yBkkB-o9H-Xg_J5rBCe1CXUpF5PM+A@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rishabh Bhatnagar <risbhat@amazon.com> writes:
+On Thu, Jun 08, 2023 at 04:29:35AM -0700,
+Erdem Aktas <erdemaktas@google.com> wrote:
 
-> Recently we have been seeing kernel panic in cifs_reconnect function
-> while accessing tgt_list. Looks like tgt_list is not initialized
-> correctly. There are fixes already present in 5.10 and later trees.
-> Backporting them to 5.4
->
->  CIFS VFS: \\172.30.1.14 cifs_reconnect: no target servers for DFS
->  failover
->  BUG: unable to handle page fault for address: fffffffffffffff8
->  #PF: supervisor read access in kernel mode
->  #PF: error_code(0x0000) - not-present page
->  PGD 260e067 P4D 260e067 PUD 2610067 PMD 0
->  Oops: 0000 [#1] SMP PTI
->  RIP: 0010:cifs_reconnect+0x51d/0xef0 [cifs]
->  RSP: 0018:ffffc90000693da0 EFLAGS: 00010282
->  RAX: fffffffffffffff8 RBX: ffff8887fa63b800 RCX: fffffffffffffff8
->  Call Trace:
->  cifs_handle_standard+0x18d/0x1b0 [cifs]
->  cifs_demultiplex_thread+0xa5c/0xc90 [cifs]
->  kthread+0x113/0x130
->
-> Paulo Alcantara (2):
->   cifs: get rid of unused parameter in reconn_setup_dfs_targets()
->   cifs: handle empty list of targets in cifs_reconnect()
->
->  fs/cifs/connect.c | 15 ++++++++-------
->  1 file changed, 8 insertions(+), 7 deletions(-)
+> On Sun, May 28, 2023 at 9:21 PM <isaku.yamahata@intel.com> wrote:
+> >
+> > From: Isaku Yamahata <isaku.yamahata@intel.com>
+> >
+> > +static int tdx_sept_drop_private_spte(struct kvm *kvm, gfn_t gfn,
+> > +                                      enum pg_level level, kvm_pfn_t pfn)
+> > +{
+> > +       int tdx_level = pg_level_to_tdx_sept_level(level);
+> > +       struct kvm_tdx *kvm_tdx = to_kvm_tdx(kvm);
+> > +       struct tdx_module_output out;
+> > +       gpa_t gpa = gfn_to_gpa(gfn);
+> > +       hpa_t hpa = pfn_to_hpa(pfn);
+> > +       hpa_t hpa_with_hkid;
+> > +       u64 err;
+> > +
+> > +       /* TODO: handle large pages. */
+> > +       if (KVM_BUG_ON(level != PG_LEVEL_4K, kvm))
+> > +               return -EINVAL;
+> > +
+> > +       if (unlikely(!is_hkid_assigned(kvm_tdx))) {
+> > +               /*
+> > +                * The HKID assigned to this TD was already freed and cache
+> > +                * was already flushed. We don't have to flush again.
+> > +                */
+> > +               err = tdx_reclaim_page(hpa, false, 0);
+> > +               if (KVM_BUG_ON(err, kvm))
+> > +                       return -EIO;
+> > +               tdx_unpin(kvm, pfn);
+> > +               return 0;
+> > +       }
+> > +
+> > +       do {
+> > +               /*
+> > +                * When zapping private page, write lock is held. So no race
+> > +                * condition with other vcpu sept operation.  Race only with
+> > +                * TDH.VP.ENTER.
+> > +                */
+> > +               err = tdh_mem_page_remove(kvm_tdx->tdr_pa, gpa, tdx_level, &out);
+> > +       } while (unlikely(err == TDX_ERROR_SEPT_BUSY));
+> > +       if (KVM_BUG_ON(err, kvm)) {
+> > +               pr_tdx_error(TDH_MEM_PAGE_REMOVE, err, &out);
+> > +               return -EIO;
+> > +       }
+> > +
+> > +       hpa_with_hkid = set_hkid_to_hpa(hpa, (u16)kvm_tdx->hkid);
+> > +       do {
+> > +               /*
+> > +                * TDX_OPERAND_BUSY can happen on locking PAMT entry.  Because
+> > +                * this page was removed above, other thread shouldn't be
+> > +                * repeatedly operating on this page.  Just retry loop.
+> > +                */
+> > +               err = tdh_phymem_page_wbinvd(hpa_with_hkid);
+> > +       } while (unlikely(err == (TDX_OPERAND_BUSY | TDX_OPERAND_ID_RCX)));
+> > +       if (KVM_BUG_ON(err, kvm)) {
+> > +               pr_tdx_error(TDH_PHYMEM_PAGE_WBINVD, err, NULL);
+> > +               return -EIO;
+> > +       }
+> 
+> 
+> It seems like when the TD is destroyed, all the TD private pages are
+> removed with tdx_reclaim_page which also clears the page with
+> movdir64b instruction. But when the page is removed while the TD is
+> alive (in this case), the page content is never cleared with movdir64b
+> which causes any poisoned cache line to be consumed by the host
+> resulting in #MC exceptions in the host context.
+> 
+> We should clear the page before returning it back to the free pool by
+> calling tdx_clear_page((unsigned long)__va(hpa)) here.
 
-Looks good.
+Thank you for catching it up. I'll fix tdx_sept_drop_private_spte(),
+tdx_sept_free_private_spt() (and tdx_sept_merge_private_spt() for large page
+support).  We should clear the page for Not only guest memory, but also
+secure-ept.
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>
