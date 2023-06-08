@@ -2,105 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C5C7727D22
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 12:45:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D781727D26
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 12:48:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235066AbjFHKpr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 06:45:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53676 "EHLO
+        id S233170AbjFHKsq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 06:48:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234678AbjFHKpp (ORCPT
+        with ESMTP id S234678AbjFHKsm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 06:45:45 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C55882712
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 03:45:43 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-652426346bbso217279b3a.3
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 03:45:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686221143; x=1688813143;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rUyy/GrqGNRxuHb6z4wBkLlQC/O2oYYKUkcrhwukrc4=;
-        b=eRlfkc2n7TFxfGl8Z0Fzj64L0T4w2SUykEQ1FAf1HkZq0XDyjS3rwpby2CkqakBvtX
-         iXYwMO7yS8eDQjdiEHTh8zHSD5i8oyw/6fL5vAe2IcYshU1MCcjHNTLso/9OTy87hjTU
-         pOSOgGwD62rUDXB+ohYNazwHQ5DuIyHhrnXD43x6Glpq218XglL5Lt2XCndOW5akS2Db
-         gE0tAGseqDNmz05Hsve/ueQumW+pq7jLDYg31IBRtEZZovl+wrS10uHWqAHV6m77G3M2
-         7R1DeoCm5Qv2V349Vm6W6fm8xlPdyn5axcdPgAU6MXCY43JI7nwLNMe917X3WOm0Xrru
-         Yw/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686221143; x=1688813143;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rUyy/GrqGNRxuHb6z4wBkLlQC/O2oYYKUkcrhwukrc4=;
-        b=g0lNL92da0P6dqYQyDBJwNf/V+af2lAJzhuP9Js14kEwDdxUf1e5C/yNqbe6v9731c
-         PByOKu5CxjNKT7mpoU3iZAR6DwIAdS1TdS1wMfQkv4sARLxZNd64zdNVZo1ZPBk9qYXz
-         6hMRuwAZLOB7BoWPcmH0RHtrFJuxYhzP2PCVItgR7HAJMsNpqFCfgQ1ckU3GhgvToYXZ
-         zHsZyk/Y9WWh+PtGutSg32r+9X5skRSztYNb2JR0W17EW1+A9luKB9ylEDmdu/txcjLS
-         ZPQ1wYPmZCWmhGf0c6oZm3LYjZuwKEFKV+pGlvjK14ND3KNYg7Ysx/5YPpoyGEgxwUA6
-         wk2Q==
-X-Gm-Message-State: AC+VfDx4JQesiKOTSGD20ybWBKOc9PHIqHlikdarKlBrDMC8ZnjS1Jmj
-        MTlnM1co+ITkPj1jjZQNI02NqA==
-X-Google-Smtp-Source: ACHHUZ4+g9lBm0jyZ+3Jf2CFgzBqBNWh8+iBo/nATUyparPSQqNxu9ZH4hyWpHoj9rAQSr4CC8Kz1Q==
-X-Received: by 2002:a05:6a00:3988:b0:662:c4ca:65c2 with SMTP id fi8-20020a056a00398800b00662c4ca65c2mr2793489pfb.0.1686221143266;
-        Thu, 08 Jun 2023 03:45:43 -0700 (PDT)
-Received: from localhost ([122.172.87.195])
-        by smtp.gmail.com with ESMTPSA id j1-20020aa78001000000b0064d6f4c8b05sm876301pfi.93.2023.06.08.03.45.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 03:45:42 -0700 (PDT)
-Date:   Thu, 8 Jun 2023 16:15:40 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Nikunj Kela <nkela@quicinc.com>,
-        Prasad Sodagudi <psodagud@quicinc.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 13/16] OPP: Extend dev_pm_opp_data with OPP provider
- support
-Message-ID: <20230608104540.tykxtvwhoyogthw5@vireshk-i7>
-References: <20230607124628.157465-1-ulf.hansson@linaro.org>
- <20230607124628.157465-14-ulf.hansson@linaro.org>
- <20230608053446.ngoxh7zo7drnr32z@vireshk-i7>
- <CAPDyKFqUWhdmctKRpQoqwZ2nsx_P2FiWvLzfm_d39QdECWoytA@mail.gmail.com>
+        Thu, 8 Jun 2023 06:48:42 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CBCFE6C;
+        Thu,  8 Jun 2023 03:48:40 -0700 (PDT)
+X-QQ-mid: bizesmtp83t1686221314tkp66wzp
+Received: from linux-lab-host.localdomain ( [61.141.77.49])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 08 Jun 2023 18:48:33 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: tzTosAI5sKG9/AD2qzkS+TcfGVzdBYGznP13Vz9P+A9CFhz3e0QgveSKV4BBa
+        2SLQ4GODkDKdStbPXqTq0XjbEXJ5XfT97k6C/IGA7SLQE4KMoITriJh6SXcqzEXFsEmO3vP
+        UYAo4dO1FqrdaZ5CRyYn+TPO7/Bbt1Z2LEGCZCdjBJ6X563sH89mRqqAcDepVpnRiMi/2q2
+        +Twpqfh15uZrCJvzzzppu5t2HM0n/yxOEzVAFyGDpWD8WyExZxJL3rFcYt2LxvSW6XDTEiy
+        88zqsPSb3T3X+jkGKeDC5uOVVTIr8yd9eg/hfB7xIONzB8Qf0Qqr/qv1T8A7He+8Y/Krh/R
+        TwumgtnvrW91Ig5K0pUywLl3LqLLbfO8uQqjHeNtguqj9rWUfA=
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 14232647922915751446
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     thomas@t-8ch.de
+Cc:     falcon@tinylab.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, w@1wt.eu
+Subject: nolibc: KTAP output and test reports
+Date:   Thu,  8 Jun 2023 18:48:28 +0800
+Message-Id: <20230608104828.38797-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cc03380f-594f-431b-941d-aea879a0c084@t-8ch.de>
+References: <cc03380f-594f-431b-941d-aea879a0c084@t-8ch.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPDyKFqUWhdmctKRpQoqwZ2nsx_P2FiWvLzfm_d39QdECWoytA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08-06-23, 11:37, Ulf Hansson wrote:
-> The required opps are also different, as it's getting parsed from DT
-> both for the genpd provider and the consumer. The point is, there are
-> more code involved but just _set_required_opps().
+Hi, Thomas
+
+> Hi Willy, Zhangjin,
 > 
-> For example, _set_performance_state() (which is the one that calls
-> dev_pm_genpd_set_performance_state()) is designed to be used for
-> required opps. Does it really make sense to rework
-> _set_performance_state() so it can be used for this case too, just to
-> avoid another call to dev_pm_genpd_set_performance_state() somewhere
-> in the code?
+> after your recent discussions about the test output and report I
+> wondered if it would make sense to switch nolibc-test to KTAP output
+> format [0].
 
-What we need here, in you case, is really the required-opp thing, without the
-DT parsing. The genpd will have an OPP table here, and devices (you are adding
-OPP table dynamically for) shall have the genpd's OPPs as their required OPPs,
-since for setting OPPs of the device, it is *required* to have OPP of the genpd
-set too. Just like how it happens with DT. No special handling will be required
-in dev_pm_opp_set_opp() path in this case and existing code will just work. You
-just need to set the required-opp tables properly.
+Just read the doc, it looks really good.
 
--- 
-viresh
+> 
+> With this it would be possible to have a wrapper script run each
+> architecture test as its own test subcomponent.
+> A (K)TAP parser/runner could then directly recognize and report failing
+> testcases, making it easier to validate.
+>
+
+Yeah, this is what can we benefit from the standard format.
+
+> Also maybe we can hook it up into the regular kselftests setup and have
+> the bots run it as part of that.
+>
+
+I did take a look at the other kselftests cases, seems lots of cases use
+qemu to run the tests, perhaps we can share some of them. Not sure if
+there are some libraries work on qemu test support, therefore, we can
+reuse them.
+
+> The kernel even includes a header-only library to implement the format [1].
+> It also should be fairly easy to emit the format without a library.
+>
+
+Perhaps we can learn and discuss on how to use them at first, I'm a newbie to
+both of them, but I'm really interested in running nolibc in the kselftest
+framework ;-)
+
+Thanks,
+Zhangjin
+
+> Thomas
+> 
+> [0] Documentation/dev-tools/ktap.rst
+> [1] Documentation/dev-tools/kselftest.rst (Test harness)
