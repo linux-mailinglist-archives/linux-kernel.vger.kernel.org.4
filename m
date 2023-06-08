@@ -2,242 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CAE172859A
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 18:43:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B8577285A9
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 18:46:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236189AbjFHQnz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 12:43:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52482 "EHLO
+        id S234120AbjFHQqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 12:46:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231580AbjFHQnw (ORCPT
+        with ESMTP id S230418AbjFHQp7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 12:43:52 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E83B43590
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 09:43:32 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id ca18e2360f4ac-777b4716673so24673239f.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 09:43:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686242577; x=1688834577;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lm0NPXeSllB+Ruuyhki9CYskDouHV5Cnz0fcBZ5jUqQ=;
-        b=naw1Ma2viBaJyjtuUwEh22IEpPN+PHLAQBeCRR2WL38fW1lDfDGoQseJHlBSJiJc0m
-         PNFhhqRazE6+UFKEdp6+17kRagdpKQTp+I/AMOaXRzDyZEkhlR4u/ANPvh/rXSe37UPI
-         VsH9JRS9dlC0iJdQUPMXyupl3W5Zb14EVJiAE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686242577; x=1688834577;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lm0NPXeSllB+Ruuyhki9CYskDouHV5Cnz0fcBZ5jUqQ=;
-        b=F0r6VOjQhU202PXfwaKZs7fy3h3WSuwEgCsgGVss20IBxOnTyUQGzKTat3l3ThWqTu
-         8zFkCarWYzNpYdgJTYX39sO45/o6qkovJsElaiWN8JPgY0RcFguhD5dE7y+yv+xZtJ9Z
-         zEQXC6cvCXrjjW2RrZnK0Xepxl2uBwKGb8P7fY5eg0h8uf5zTrGm7rLWHfTpNsLuSBWe
-         wUS1v7kZIZbhaVdhr6DRbqxtciqBwjK2jC9HIC7bgBozyfGRCeWB3e87ZML36GajkFwq
-         /3AKF27wjz2s0caY52ssyr7hHXjQCUHY8EeBdnq051mkAz2qkhfOZ7h5S3u/V+40Pln8
-         38AA==
-X-Gm-Message-State: AC+VfDwdU9711GuialhqT3QT5pWvAiHrhZ2Q6Qb+ZynoZ3qjr8tgQ98o
-        5AI/4cB0uPUfP2EO7839H/ktV6KxnN5I2pxape/WSQ==
-X-Google-Smtp-Source: ACHHUZ6e3GlGI8DpOLzG4IqRT+T0wnKGbr2qkFqtQewY7Sn1c5TDqAO8LIFe6cyc6Yey6T8Vs7/0fg==
-X-Received: by 2002:a05:6602:3985:b0:774:9415:bed8 with SMTP id bw5-20020a056602398500b007749415bed8mr1731715iob.10.1686242576747;
-        Thu, 08 Jun 2023 09:42:56 -0700 (PDT)
-Received: from mail-il1-f173.google.com (mail-il1-f173.google.com. [209.85.166.173])
-        by smtp.gmail.com with ESMTPSA id f13-20020a5ec60d000000b007749b74ab18sm475265iok.15.2023.06.08.09.42.55
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jun 2023 09:42:55 -0700 (PDT)
-Received: by mail-il1-f173.google.com with SMTP id e9e14a558f8ab-33d928a268eso143575ab.0
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 09:42:55 -0700 (PDT)
-X-Received: by 2002:a05:6e02:214a:b0:32a:f2a9:d1b7 with SMTP id
- d10-20020a056e02214a00b0032af2a9d1b7mr139231ilv.10.1686242575095; Thu, 08 Jun
- 2023 09:42:55 -0700 (PDT)
+        Thu, 8 Jun 2023 12:45:59 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D184125
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 09:45:33 -0700 (PDT)
+Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 358GbIQs000372;
+        Thu, 8 Jun 2023 16:45:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=X36n1Ub6Wok83kfuRc6al1XAx2kj5zm7pu2n9i67kZ4=;
+ b=lKZiZYkTxg5c3AWJjwnyxA/5x4edN0ylH+4OlrjTysWhBl0eWuc5g6REXdRdrPKe7Q5c
+ YtRby9zahcqvnCY8eWXYU64JlqaBqyvIzFPRaF4rACOUUMcL/F/5ufzOGHN4cwkANJQZ
+ MhK6t90DhKRrICl/wfIeyhEJ5h30qC26ApwThSEfqU7HXIFd9oBBNdMjZ9tXjOyMIF4s
+ H0E1EaZziUjGjsBX5Z0839ZgNcBvPYRADO5FxKDCY9u6NJdG79gSFuD6bpZalkeXzg6+
+ sbSpKidtzgpGWMPbbFxKG5hab3Gf0/C0Jm2c7+ucKkULNuDESFBOWIPjqcIhouqHBTXZ 1Q== 
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r3jnrrj88-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 08 Jun 2023 16:45:19 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 358D4L8r022067;
+        Thu, 8 Jun 2023 16:44:20 GMT
+Received: from smtprelay07.dal12v.mail.ibm.com ([9.208.130.99])
+        by ppma02wdc.us.ibm.com (PPS) with ESMTPS id 3r2a781n6b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 08 Jun 2023 16:44:20 +0000
+Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
+        by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 358GiJbA38928934
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 8 Jun 2023 16:44:19 GMT
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6E2CB5805A;
+        Thu,  8 Jun 2023 16:44:19 +0000 (GMT)
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3BB2458063;
+        Thu,  8 Jun 2023 16:44:19 +0000 (GMT)
+Received: from [9.61.102.249] (unknown [9.61.102.249])
+        by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Thu,  8 Jun 2023 16:44:19 +0000 (GMT)
+Message-ID: <c494b420-21de-eb96-aa29-859c9418e887@linux.ibm.com>
+Date:   Thu, 8 Jun 2023 11:44:19 -0500
 MIME-Version: 1.0
-References: <20230607215224.2067679-1-dianders@chromium.org>
- <20230607144931.v2.8.Ib1a98309c455cd7e26b931c69993d4fba33bbe15@changeid> <y3l4x3kv7jgog3miexati5wbveaynnryzqvj6sc4ul6625f2if@w7nqgojfavfw>
-In-Reply-To: <y3l4x3kv7jgog3miexati5wbveaynnryzqvj6sc4ul6625f2if@w7nqgojfavfw>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 8 Jun 2023 09:42:42 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=W-fXpm4JCczrNgAS2M9u2VLd2jAkJvE9XJgQpvoE5rjA@mail.gmail.com>
-Message-ID: <CAD=FV=W-fXpm4JCczrNgAS2M9u2VLd2jAkJvE9XJgQpvoE5rjA@mail.gmail.com>
-Subject: Re: [PATCH v2 08/10] HID: i2c-hid: Support being a panel follower
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        dri-devel@lists.freedesktop.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-input@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
-        linux-kernel@vger.kernel.org, hsinyi@google.com,
-        cros-qcom-dts-watchers@chromium.org, devicetree@vger.kernel.org,
-        yangcong5@huaqin.corp-partner.google.com,
-        linux-arm-msm@vger.kernel.org,
-        Chris Morgan <macroalpha82@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] fsi: core: Fix legacy minor numbering
+To:     Joel Stanley <joel@jms.id.au>
+Cc:     linux-fsi@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        jk@ozlabs.org, alistair@popple.id.au
+References: <20230413162440.3313036-1-eajames@linux.ibm.com>
+ <CACPK8Xdzjh3YATzuA+JB_PpzE-uJsbD+vL2Q3tUf83xYbto8vw@mail.gmail.com>
+Content-Language: en-US
+From:   Eddie James <eajames@linux.ibm.com>
+In-Reply-To: <CACPK8Xdzjh3YATzuA+JB_PpzE-uJsbD+vL2Q3tUf83xYbto8vw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Xz4FzYr_w0392fTnNeEQ6L3VcIxMDDzV
+X-Proofpoint-ORIG-GUID: Xz4FzYr_w0392fTnNeEQ6L3VcIxMDDzV
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-08_12,2023-06-08_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ priorityscore=1501 impostorscore=0 bulkscore=0 mlxscore=0 mlxlogscore=999
+ suspectscore=0 spamscore=0 lowpriorityscore=0 clxscore=1011 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306080145
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On Thu, Jun 8, 2023 at 8:37=E2=80=AFAM Benjamin Tissoires
-<benjamin.tissoires@redhat.com> wrote:
+On 5/30/23 20:54, Joel Stanley wrote:
+> On Thu, 13 Apr 2023 at 16:24, Eddie James <eajames@linux.ibm.com> wrote:
+>> FSI reserves the first 64 minor numbers for the legacy numbering
+>> based on the chip id. However the legacy number shifts the chip
+>> id too much, resulting in overlap between legacy and non-legacy
+>> numbers. Reduce the chip id bit shift since the type field only
+>> takes 2 bits.
+> I don't know much about the legacy numbering. Was that something we
+> used before the device tree descriptions were in place? Do we still
+> need it if we have updated device trees?
+
+
+Its a way to number the devices based on the "chip id", which came from 
+the device tree anyway. Now with the aliasing patch we could do away 
+with it I believe, but we would need to update older system device trees 
+(and scom devices on p10) to not break stuff.
+
 >
+>> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+>> ---
+>>   drivers/fsi/fsi-core.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/fsi/fsi-core.c b/drivers/fsi/fsi-core.c
+>> index 0b927c9f4267..b9f410170655 100644
+>> --- a/drivers/fsi/fsi-core.c
+>> +++ b/drivers/fsi/fsi-core.c
+>> @@ -950,7 +950,7 @@ static int __fsi_get_new_minor(struct fsi_slave *slave, enum fsi_dev_type type,
+>>          /* Check if we qualify for legacy numbering */
+>>          if (cid >= 0 && cid < 16 && type < 4) {
+>>                  /* Try reserving the legacy number */
+> Would it help to put some of your commit message info in this comment,
+> so we know what the magic shift is doing?
+
+
+Sure thing.
+
+Thanks,
+
+Eddie
+
+
 >
-> On Jun 07 2023, Douglas Anderson wrote:
-> >
-> > As talked about in the patch ("drm/panel: Add a way for other devices
-> > to follow panel state"), we really want to keep the power states of a
-> > touchscreen and the panel it's attached to in sync with each other. In
-> > that spirit, add support to i2c-hid to be a panel follower. This will
-> > let the i2c-hid driver get informed when the panel is powered on and
-> > off. From there we can match the i2c-hid device's power state to that
-> > of the panel.
-> >
-> > NOTE: this patch specifically _doesn't_ use pm_runtime to keep track
-> > of / manage the power state of the i2c-hid device, even though my
-> > first instinct said that would be the way to go. Specific problems
-> > with using pm_runtime():
-> > * The initial power up couldn't happen in a runtime resume function
-> >   since it create sub-devices and, apparently, that's not good to do
-> >   in your resume function.
-> > * Managing our power state with pm_runtime meant fighting to make the
-> >   right thing happen at system suspend to prevent the system from
-> >   trying to resume us only to suspend us again. While this might be
-> >   able to be solved, it added complexity.
-> > Overall the code without pm_runtime() ended up being smaller and
-> > easier to understand.
->
-> Generally speaking, I'm not that happy when we need to coordinate with
-> other subsystems for bringing up resources...
-
-Yeah, I'd agree that it's not amazingly elegant. Unfortunately, I
-couldn't find any existing clean frameworks that would do what was
-needed, which is (presumably) why this problem hasn't been solved
-before. I could try to come up with a grand abstraction / new
-framework, but that doesn't seem like a great choice either unless we
-expect more users...
-
-
-> Anyway, a remark inlined (at least):
->
-> >
-> > Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> > ---
-> >
-> > Changes in v2:
-> > - i2c_hid_core_panel_prepared() and ..._unpreparing() are now static.
-> >
-> >  drivers/hid/i2c-hid/i2c-hid-core.c | 82 +++++++++++++++++++++++++++++-
-> >  1 file changed, 81 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/hid/i2c-hid/i2c-hid-core.c b/drivers/hid/i2c-hid/i=
-2c-hid-core.c
-> > index fa8a1ca43d7f..368db3ae612f 100644
-> > --- a/drivers/hid/i2c-hid/i2c-hid-core.c
-> > +++ b/drivers/hid/i2c-hid/i2c-hid-core.c
-> > @@ -38,6 +38,8 @@
-> >  #include <linux/mutex.h>
-> >  #include <asm/unaligned.h>
-> >
-> > +#include <drm/drm_panel.h>
-> > +
-> >  #include "../hid-ids.h"
-> >  #include "i2c-hid.h"
-> >
-> > @@ -107,6 +109,8 @@ struct i2c_hid {
-> >       struct mutex            reset_lock;
-> >
-> >       struct i2chid_ops       *ops;
-> > +     struct drm_panel_follower panel_follower;
-> > +     bool                    is_panel_follower;
-> >  };
-> >
-> >  static const struct i2c_hid_quirks {
-> > @@ -1058,6 +1062,34 @@ static int i2c_hid_core_initial_power_up(struct =
-i2c_hid *ihid)
-> >       return ret;
-> >  }
-> >
-> > +static int i2c_hid_core_panel_prepared(struct drm_panel_follower *foll=
-ower)
-> > +{
-> > +     struct i2c_hid *ihid =3D container_of(follower, struct i2c_hid, p=
-anel_follower);
-> > +     struct hid_device *hid =3D ihid->hid;
-> > +
-> > +     /*
-> > +      * hid->version is set on the first power up. If it's still zero =
-then
-> > +      * this is the first power on so we should perform initial power =
-up
-> > +      * steps.
-> > +      */
-> > +     if (!hid->version)
-> > +             return i2c_hid_core_initial_power_up(ihid);
-> > +
-> > +     return i2c_hid_core_resume(ihid);
-> > +}
-> > +
-> > +static int i2c_hid_core_panel_unpreparing(struct drm_panel_follower *f=
-ollower)
-> > +{
-> > +     struct i2c_hid *ihid =3D container_of(follower, struct i2c_hid, p=
-anel_follower);
-> > +
-> > +     return i2c_hid_core_suspend(ihid);
-> > +}
-> > +
-> > +static const struct drm_panel_follower_funcs i2c_hid_core_panel_follow=
-er_funcs =3D {
-> > +     .panel_prepared =3D i2c_hid_core_panel_prepared,
-> > +     .panel_unpreparing =3D i2c_hid_core_panel_unpreparing,
-> > +};
->
-> Can we make that above block at least behind a Kconfig?
->
-> i2c-hid is often used for touchpads, and the notion of drm panel has
-> nothing to do with them. So I'd be more confident if we could disable
-> that code if not required.
-
-Happy to put it behind a Kconfig. I'll plan on that for v3. I'll stub
-the functions out if there is no Kconfig, but plan to still leave
-structure members just to avoid uglifying the sources too much.
-
-
-> Actually, I'd be even more happier if it were in a different compilation
-> unit. Not necessary a different module, but at least a different file.
-
-I suspect that it's not worth it, but I'll do this if you feel
-strongly about it.
-
-I guess the simplest way I can think of to move this to its own file
-would be to put the whole private data structure (struct i2c_hid) in a
-private header file and then add prototypes for i2c_hid_core_resume()
-and i2c_hid_core_suspend() there. Then I could add something like
-i2c_hid_core_handle_panel_follower() that would have all the
-registration logic. I'd still need special cases in the core
-suspend/resume/remove code unless I add a level of abstraction. While
-the level of abstraction is more "pure", it also would make the code
-harder to follow.
-
-Unless I hear a strong opinion (or if this series changes
-significantly), I'll plan to keep things in the same file and just use
-a Kconfig.
+>> -               id = (cid << 4) | type;
+>> +               id = (cid << 2) | type;
+>>                  id = ida_simple_get(&fsi_minor_ida, id, id + 1, GFP_KERNEL);
+>>                  if (id >= 0) {
+>>                          *out_index = fsi_adjust_index(cid);
+>> --
+>> 2.31.1
+>>
