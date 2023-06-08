@@ -2,81 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D833728291
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 16:23:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B27B8728296
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 16:24:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236938AbjFHOXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 10:23:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54792 "EHLO
+        id S236876AbjFHOYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 10:24:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236034AbjFHOXK (ORCPT
+        with ESMTP id S236877AbjFHOYQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 10:23:10 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F54D2D4B
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 07:23:09 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f6dfc4e01fso6069755e9.0
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 07:23:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686234187; x=1688826187;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yDI2LBlFR8sITE2QFoLi3AUonttlw9k/UkWS9UEYZTk=;
-        b=lC10Wy9gPzHJ6NnRAsIwUXnVpDb4XlofuxCgQjtk/rjWYr8LaqO/4tZz5jBjg1dy0+
-         i1d3+ywhfHP/z3TZRxyse48aQV29v6+ymP9Y2xfOnmsafHMF7OU8MFnqh5OG4j2SI4Eh
-         gr6xDrGNBIF3R9PSPaIiuAOfpjwKg6Nn+7FWN+I7nK8rvfsJ6HxZm5n3z6XTRDebz5BH
-         9Xwg9rdveV0wz/Ifywl/ek2ibxhIpCOKIl7fbLZZmMMFrdH3sFjzbjIa2QdEDsfCfR3u
-         jSBlxUnUgG9q8tLuHOE6oGt3K+oW2rRrra3zBg+hQsLkYSpNhbWkWZlNdh1Jpy8MMu4C
-         uCXw==
+        Thu, 8 Jun 2023 10:24:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BD922D57
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 07:23:29 -0700 (PDT)
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-513-El9sXypZOSya_lPJ7oBg-A-1; Thu, 08 Jun 2023 10:23:27 -0400
+X-MC-Unique: El9sXypZOSya_lPJ7oBg-A-1
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-30ae4ed92eeso309780f8f.1
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 07:23:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686234187; x=1688826187;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1686234206; x=1688826206;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yDI2LBlFR8sITE2QFoLi3AUonttlw9k/UkWS9UEYZTk=;
-        b=lMrkx/qt4bIVbgGEzrEoUIto06E70J1MFBui1UIdPoTuE4QhJHY4yIsA5xaeESWAya
-         6tMSylaaMgXhOeoay27fJOTfkG2VP6y4E13JNgS8KVL4ZlJ0E2IrA6TsrX6wLCYqFSFc
-         NvyhqPPmvMucbZIwRpwHH77BnHo4niKB66JW3SaSrDT9c4RZH55WLdVKNhpQPzNiCn8m
-         ekAT5c35d1+gmLXQoMil3B3JQzzuqdqHASWj11FWkMiBlS9i3pUWwHF6l4b+vyR4dlny
-         QW3TDSWciOH28QqXk3Zc0I2dWMH61qf2G9etqoavMQLBW4+KMduV3YM+mCd2iXcKy3re
-         bc4A==
-X-Gm-Message-State: AC+VfDw5E5lxDlnxjR1X7TcMDmdsUtZ3uiOJZSpMCIDP3C1Ogd3vH98v
-        3lECYWtwxl9yvtjvMQwVtyG6gw==
-X-Google-Smtp-Source: ACHHUZ70DZ36Tht5HkFG+bq4gQE4IqNFTe2YyyowzeRiFrZVN+Uf+ci5LYbWchKC8QNsI1RTxeAM6w==
-X-Received: by 2002:a7b:cc84:0:b0:3f7:2323:e012 with SMTP id p4-20020a7bcc84000000b003f72323e012mr1498068wma.5.1686234187535;
-        Thu, 08 Jun 2023 07:23:07 -0700 (PDT)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id b14-20020adfe30e000000b00307a86a4bcesm1737355wrj.35.2023.06.08.07.23.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jun 2023 07:23:06 -0700 (PDT)
-Message-ID: <71712242-ffc3-69d0-6abe-6ee61d3630bf@linaro.org>
-Date:   Thu, 8 Jun 2023 15:23:06 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 0/4] soundwire: qcom: stablity fixes
-Content-Language: en-US
-To:     Johan Hovold <johan@kernel.org>
-Cc:     vkoul@kernel.org, andersson@kernel.org,
-        yung-chuan.liao@linux.intel.com,
-        pierre-louis.bossart@linux.intel.com, sanyog.r.kale@intel.com,
-        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
+        bh=Ylaz4EsLWG8gT+tyBhiFM3PeWqHKsVLZz02Gzuw52i8=;
+        b=VcFUFLg1Q8vc56tDo9nn3G0oxYlAKBbSEwpll0auKSpnxxxyxzoHEA86PKrnHb/CfN
+         dB8XvECzUiOPYVipVbHiCyHKllT4Ber3KveeZf6HdBSkdRY0JqPxH3HEVJXnioOHPRFP
+         UP/nJO1q0kXAEUHaEYWHMuGY3h6GKJHAlBN+00+wwMwXNpdOi47TgZ3oNu3nlQMST8N7
+         h/9hG/feJZc31/3eAkC4Dfbsgv1OEKf0eoDr4oHZ21NFFM+Q3XDHkyP+yPB8BKXMGoGK
+         3RcW/0AjC4FrYLnqUDTE7g/xhPc+BMsfzU19Csr7RztAXmCZvJGPj9TrZCxEwg+F5xu+
+         z/lw==
+X-Gm-Message-State: AC+VfDz9gxdwB8HEUUiGxIUMZnTVfYph8BuHNmFD06TQLsJTlflkOqAJ
+        ldvRW7DC6JRyUmA/63U1evEWLI5VoppEpqRmJEmjpvlch99gyrRTI/ivYdntEsvW8LIjnnimAPP
+        RtGBSMsBImMMKawRAMrgl5+I+
+X-Received: by 2002:adf:dfc1:0:b0:30e:4886:3533 with SMTP id q1-20020adfdfc1000000b0030e48863533mr7800344wrn.34.1686234206023;
+        Thu, 08 Jun 2023 07:23:26 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6c9mr4sGROJv3wpcDBq+xuHW3beEKuX1wsKDRXlb1F7uOxTNYgZiIdVFsqG1xx2NOA7F1/fA==
+X-Received: by 2002:adf:dfc1:0:b0:30e:4886:3533 with SMTP id q1-20020adfdfc1000000b0030e48863533mr7800329wrn.34.1686234205650;
+        Thu, 08 Jun 2023 07:23:25 -0700 (PDT)
+Received: from redhat.com ([2.55.41.2])
+        by smtp.gmail.com with ESMTPSA id 26-20020a05600c021a00b003f7f475c3c7sm2175514wmi.8.2023.06.08.07.23.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 07:23:25 -0700 (PDT)
+Date:   Thu, 8 Jun 2023 10:23:21 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     Stefano Garzarella <sgarzare@redhat.com>,
+        Shannon Nelson <shannon.nelson@amd.com>,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
+        Tiwei Bie <tiwei.bie@intel.com>, kvm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20230525133812.30841-1-srinivas.kandagatla@linaro.org>
- <ZH2l-UbMyLi5Uwph@hovoldconsulting.com>
- <5d6bcc6a-151e-ac21-2dd2-f72a91f562d5@linaro.org>
- <ZIGpYPrNYDlkRQIf@hovoldconsulting.com>
- <ZIHMMFtuDtvdpFAZ@hovoldconsulting.com>
- <a236e2f6-0fd7-f814-f68d-ae0a3e3dfc92@linaro.org>
- <ZIHSGf18w7htb9o8@hovoldconsulting.com>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <ZIHSGf18w7htb9o8@hovoldconsulting.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Subject: Re: [PATCH] vhost-vdpa: filter VIRTIO_F_RING_PACKED feature
+Message-ID: <20230608102259-mutt-send-email-mst@kernel.org>
+References: <20230606085643-mutt-send-email-mst@kernel.org>
+ <CAGxU2F7fkgL-HpZdj=5ZEGNWcESCHQpgRAYQA3W2sPZaoEpNyQ@mail.gmail.com>
+ <20230607054246-mutt-send-email-mst@kernel.org>
+ <CACGkMEuUapKvUYiJiLwtsN+x941jafDKS9tuSkiNrvkrrSmQkg@mail.gmail.com>
+ <20230608020111-mutt-send-email-mst@kernel.org>
+ <CACGkMEt4=3BRVNX38AD+mJU8v3bmqO-CdNj5NkFP-SSvsuy2Hg@mail.gmail.com>
+ <5giudxjp6siucr4l3i4tggrh2dpqiqhhihmdd34w3mq2pm5dlo@mrqpbwckpxai>
+ <CACGkMEtqn1dbrQZn3i-W_7sVikY4sQjwLRC5xAhMnyqkc3jwOw@mail.gmail.com>
+ <lw3nmkdszqo6jjtneyp4kjlmutooozz7xj2fqyxgh4v2ralptc@vkimgnbfafvi>
+ <CACGkMEt1yRV9qOLBqtQQmJA_UoRLCpznT=Gvd5D51Uaz2jakHA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CACGkMEt1yRV9qOLBqtQQmJA_UoRLCpznT=Gvd5D51Uaz2jakHA@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,32 +81,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 08/06/2023 14:05, Johan Hovold wrote:
-> On Thu, Jun 08, 2023 at 01:45:22PM +0100, Srinivas Kandagatla wrote:
->> On 08/06/2023 13:40, Johan Hovold wrote:
+On Thu, Jun 08, 2023 at 05:29:58PM +0800, Jason Wang wrote:
+> On Thu, Jun 8, 2023 at 5:21 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
+> >
+> > On Thu, Jun 08, 2023 at 05:00:00PM +0800, Jason Wang wrote:
+> > >On Thu, Jun 8, 2023 at 4:00 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
+> > >>
+> > >> On Thu, Jun 08, 2023 at 03:46:00PM +0800, Jason Wang wrote:
+> > >>
+> > >> [...]
+> > >>
+> > >> >> > > > > I have a question though, what if down the road there
+> > >> >> > > > > is a new feature that needs more changes? It will be
+> > >> >> > > > > broken too just like PACKED no?
+> > >> >> > > > > Shouldn't vdpa have an allowlist of features it knows how
+> > >> >> > > > > to support?
+> > >> >> > > >
+> > >> >> > > > It looks like we had it, but we took it out (by the way, we were
+> > >> >> > > > enabling packed even though we didn't support it):
+> > >> >> > > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6234f80574d7569444d8718355fa2838e92b158b
+> > >> >> > > >
+> > >> >> > > > The only problem I see is that for each new feature we have to modify
+> > >> >> > > > the kernel.
+> > >> >> > > > Could we have new features that don't require handling by vhost-vdpa?
+> > >> >> > > >
+> > >> >> > > > Thanks,
+> > >> >> > > > Stefano
+> > >> >> > >
+> > >> >> > > Jason what do you say to reverting this?
+> > >> >> >
+> > >> >> > I may miss something but I don't see any problem with vDPA core.
+> > >> >> >
+> > >> >> > It's the duty of the parents to advertise the features it has. For example,
+> > >> >> >
+> > >> >> > 1) If some kernel version that is packed is not supported via
+> > >> >> > set_vq_state, parents should not advertise PACKED features in this
+> > >> >> > case.
+> > >> >> > 2) If the kernel has support packed set_vq_state(), but it's emulated
+> > >> >> > cvq doesn't support, parents should not advertise PACKED as well
+> > >> >> >
+> > >> >> > If a parent violates the above 2, it looks like a bug of the parents.
+> > >> >> >
+> > >> >> > Thanks
+> > >> >>
+> > >> >> Yes but what about vhost_vdpa? Talking about that not the core.
+> > >> >
+> > >> >Not sure it's a good idea to workaround parent bugs via vhost-vDPA.
+> > >>
+> > >> Sorry, I'm getting lost...
+> > >> We were talking about the fact that vhost-vdpa doesn't handle
+> > >> SET_VRING_BASE/GET_VRING_BASE ioctls well for packed virtqueue before
+> > >> that series [1], no?
+> > >>
+> > >> The parents seem okay, but maybe I missed a few things.
+> > >>
+> > >> [1] https://lore.kernel.org/virtualization/20230424225031.18947-1-shannon.nelson@amd.com/
+> > >
+> > >Yes, more below.
+> > >
+> > >>
+> > >> >
+> > >> >> Should that not have a whitelist of features
+> > >> >> since it interprets ioctls differently depending on this?
+> > >> >
+> > >> >If there's a bug, it might only matter the following setup:
+> > >> >
+> > >> >SET_VRING_BASE/GET_VRING_BASE + VDUSE.
+> > >> >
+> > >> >This seems to be broken since VDUSE was introduced. If we really want
+> > >> >to backport something, it could be a fix to filter out PACKED in
+> > >> >VDUSE?
+> > >>
+> > >> mmm it doesn't seem to be a problem in VDUSE, but in vhost-vdpa.
+> > >> I think VDUSE works fine with packed virtqueue using virtio-vdpa
+> > >> (I haven't tried), so why should we filter PACKED in VDUSE?
+> > >
+> > >I don't think we need any filtering since:
+> > >
+> > >PACKED features has been advertised to userspace via uAPI since
+> > >6234f80574d7569444d8718355fa2838e92b158b. Once we relax in uAPI, it
+> > >would be very hard to restrict it again. For the userspace that tries
+> > >to negotiate PACKED:
+> > >
+> > >1) if it doesn't use SET_VRING_BASE/GET_VRING_BASE, everything works well
+> > >2) if it uses SET_VRING_BASE/GET_VRING_BASE. it might fail or break silently
+> > >
+> > >If we backport the fixes to -stable, we may break the application at
+> > >least in the case 1).
+> >
+> > Okay, I see now, thanks for the details!
+> >
+> > Maybe instead of "break silently", we can return an explicit error for
+> > SET_VRING_BASE/GET_VRING_BASE in stable branches.
+> > But if there are not many cases, we can leave it like that.
 > 
->>> Looking at the above log it seems like we hit a probe deferral somewhere
->>> as some resource is not available yet, and this is eventually turned
->>> into a hard failure that breaks audio as the error is propagated up the
->>> stack.
->>
->> I was looking at this too, And I think this change should help..
->> Not tried it though
+> A second thought, if we need to do something for stable. is it better
+> if we just backport Shannon's series to stable?
 > 
->>    	ret = snd_soc_tplg_component_load(component, &audioreach_tplg_ops, fw);
->> -	if (ret < 0) {
->> +	if (ret < 0)
->>    		dev_err(dev, "tplg component load failed%d\n", ret);
->> -		ret = -EINVAL;
->> -	}
+> >
+> > I was just concerned about how does the user space understand that it
+> > can use SET_VRING_BASE/GET_VRING_BASE for PACKED virtqueues in a given
+> > kernel or not.
 > 
-> That in itself only seems to make the problem worse with new follow-on
-> errors. Looks like a dereference of an error pointer in a codec driver:
+> My understanding is that if packed is advertised, the application
+> should assume SET/GET_VRING_BASE work.
+> 
+> Thanks
 
-Thanks Johan,
 
-I will try to see if we can fix this properly.
+Let me ask you this. This is a bugfix yes? What is the appropriate Fixes
+tag?
 
---srini
+> >
+> > Thanks,
+> > Stefano
+> >
+
