@@ -2,102 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7456F727F10
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 13:42:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45776727F17
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 13:43:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236343AbjFHLme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 07:42:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56724 "EHLO
+        id S235836AbjFHLnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 07:43:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236331AbjFHLma (ORCPT
+        with ESMTP id S236372AbjFHLnQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 07:42:30 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E6A92709;
-        Thu,  8 Jun 2023 04:42:22 -0700 (PDT)
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35838MFo023496;
-        Thu, 8 Jun 2023 04:42:14 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=pfpt0220;
- bh=wcseGuDaoNRD1SW7h1dV0i2ofVn/Kiq/5Knj0cV+MkY=;
- b=IpB8ztal7RVMibujnI7AHyVEuSjOAxDOeTDqvHKBkveTLr6tkanjjj1/e8tmglXWSPIF
- b1mIOoEvrNYaK7Xkz+YOSkhRLUk6IeRKj1QEF7ajNXE0BLf6SjHIDPwyMZG2cpEu+6Iz
- J/z620RlIlsDI1PiUtxaGMlB0Ti2vMXVSFEfeDFsew0BxECBOQtMkxDd/zLwi6Wynw/7
- YzBkyb943nka92MSqGXXG6nFvgWsuJVsse1RmCPFM2peS/jWNEhJ4lxYNxzpkXgUcgwi
- 7CgPGWdBnwfql6QGyrhQJ9q/icYfNjzOcQFOEinzuhC3ZBAbZGAn+ClDMd23zuirfyJp lw== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3r30eu2csh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Thu, 08 Jun 2023 04:42:14 -0700
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Thu, 8 Jun
- 2023 04:42:11 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
- Transport; Thu, 8 Jun 2023 04:42:12 -0700
-Received: from #hyd1583.marvell.com (unknown [10.29.37.44])
-        by maili.marvell.com (Postfix) with ESMTP id 9898B3F703F;
-        Thu,  8 Jun 2023 04:42:09 -0700 (PDT)
-From:   Naveen Mamindlapalli <naveenm@marvell.com>
-To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <sgoutham@marvell.com>
-CC:     Nithin Dabilpuram <ndabilpuram@marvell.com>,
-        Naveen Mamindlapalli <naveenm@marvell.com>
-Subject: [net PATCH 2/2] octeontx2-af: fix lbk link credits on cn10k
-Date:   Thu, 8 Jun 2023 17:12:01 +0530
-Message-ID: <20230608114201.31112-3-naveenm@marvell.com>
-X-Mailer: git-send-email 2.39.0.198.ga38d39a4c5
-In-Reply-To: <20230608114201.31112-1-naveenm@marvell.com>
-References: <20230608114201.31112-1-naveenm@marvell.com>
+        Thu, 8 Jun 2023 07:43:16 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B0FCB2712;
+        Thu,  8 Jun 2023 04:42:53 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8BxL_C8voFkyIIAAA--.1963S3;
+        Thu, 08 Jun 2023 19:42:52 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxluS5voFkFHQHAA--.23621S3;
+        Thu, 08 Jun 2023 19:42:49 +0800 (CST)
+Subject: Re: [PATCH v12 1/2] spi: add loongson spi bindings
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
+References: <20230608072819.25930-1-zhuyinbo@loongson.cn>
+ <20230608072819.25930-2-zhuyinbo@loongson.cn>
+ <6ebed84c-2b42-c981-7b3f-e71cc88e4c2c@linaro.org>
+ <4bf747c4-b767-b20c-e00f-724b50f44edb@loongson.cn>
+ <6bfc2a22-6901-0858-7b90-bc4c52c66810@linaro.org>
+ <bd2d7830-3ab6-0906-b06a-83d3e0a96749@loongson.cn>
+ <11ca2b90-544d-18c2-fb15-7909ca60507f@linaro.org>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <f6d4ecb5-e9df-346e-4aab-772fd01689c8@loongson.cn>
+Date:   Thu, 8 Jun 2023 19:42:49 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
+In-Reply-To: <11ca2b90-544d-18c2-fb15-7909ca60507f@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 6__liSOp03p0dUkP1E4Ix1FcIJpYZZQS
-X-Proofpoint-GUID: 6__liSOp03p0dUkP1E4Ix1FcIJpYZZQS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-08_08,2023-06-08_01,2023-05-22_02
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-CM-TRANSID: AQAAf8DxluS5voFkFHQHAA--.23621S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+        ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
+        nUUI43ZEXa7xR_UUUUUUUUU==
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nithin Dabilpuram <ndabilpuram@marvell.com>
 
-Fix LBK link credits on CN10K to be same as CN9K i.e
-16 * MAX_LBK_DATA_RATE instead of current scheme of
-calculation based on LBK buf length / FIFO size.
 
-Fixes: 6e54e1c5399a ("octeontx2-af: cn10K: Add MTU configuration")
-Signed-off-by: Nithin Dabilpuram <ndabilpuram@marvell.com>
-Signed-off-by: Naveen Mamindlapalli <naveenm@marvell.com>
----
- drivers/net/ethernet/marvell/octeontx2/af/rvu_nix.c | 4 ----
- 1 file changed, 4 deletions(-)
+在 2023/6/8 下午6:02, Krzysztof Kozlowski 写道:
+> On 08/06/2023 12:00, zhuyinbo wrote:
+>>
+>>
+>> 在 2023/6/8 下午4:53, Krzysztof Kozlowski 写道:
+>>> On 08/06/2023 10:39, zhuyinbo wrote:
+>>>>>>
+>>>>>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>>>>>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>>>>> ---
+>>>>>>     .../bindings/spi/loongson,ls2k-spi.yaml       | 41 +++++++++++++++++++
+>>>>>>     MAINTAINERS                                   |  6 +++
+>>>>>>     2 files changed, 47 insertions(+)
+>>>>>>     create mode 100644 Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
+>>>>>>
+>>>>>> diff --git a/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml b/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
+>>>>>> new file mode 100644
+>>>>>> index 000000000000..423ee851edd5
+>>>>>> --- /dev/null
+>>>>>> +++ b/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
+>>>>>
+>>>>> Filename based on compatible.
+>>>>
+>>>>
+>>>> There will be more ls2k series SoC spi device in the future thus I still
+>>>> use "loongson,ls2k-spi.yaml" for cover it.
+>>>
+>>> Add them now.
+>>
+>>
+>> The 2k0500 doesn't support CCF and not use CCF to gain clock and We
+>> internally tend to prioritize supporting 2k1000.
+> 
+> Don't you refer now to drivers? Because how hardware can not support
+> clocks if it has them? How CCF is anyhow related to hardware?
 
-diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu_nix.c b/drivers/net/ethernet/marvell/octeontx2/af/rvu_nix.c
-index 967370c0a649..cbb6d7e62d90 100644
---- a/drivers/net/ethernet/marvell/octeontx2/af/rvu_nix.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu_nix.c
-@@ -4067,10 +4067,6 @@ int rvu_mbox_handler_nix_set_rx_cfg(struct rvu *rvu, struct nix_rx_cfg *req,
- 
- static u64 rvu_get_lbk_link_credits(struct rvu *rvu, u16 lbk_max_frs)
- {
--	/* CN10k supports 72KB FIFO size and max packet size of 64k */
--	if (rvu->hw->lbk_bufsize == 0x12000)
--		return (rvu->hw->lbk_bufsize - lbk_max_frs) / 16;
--
- 	return 1600; /* 16 * max LBK datarate = 16 * 100Gbps */
- }
- 
--- 
-2.39.0.198.ga38d39a4c5
+
+The CCF (common clock framework) driver only affects the clock parameter
+pass method and isn't related to clock hardware. and if dts pass a
+"clock-frequency" that not need a clock driver but if dts pass a
+"clocks" that need a clock driver. Currently, only 2k1000 has
+implemented a clock driver.
+
+> 
+>>
+>>>
+>>>>
+>>>>>
+>>>>>> @@ -0,0 +1,41 @@
+>>>>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>>>>>> +%YAML 1.2
+>>>>>> +---
+>>>>>> +$id: http://devicetree.org/schemas/spi/loongson,ls2k-spi.yaml#
+>>>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>>>> +
+>>>>>> +title: Loongson SPI controller
+>>>>>> +
+>>>>>> +maintainers:
+>>>>>> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
+>>>>>> +
+>>>>>> +allOf:
+>>>>>> +  - $ref: /schemas/spi/spi-controller.yaml#
+>>>>>> +
+>>>>>> +properties:
+>>>>>> +  compatible:
+>>>>>> +    enum:
+>>>>>> +      - loongson,ls2k1000-spi
+>>>>>
+>>>>> No compatibles for other devices? Didn't we have big discussion about this?
+>>>>>
+>>>>> https://elixir.bootlin.com/linux/v6.1-rc1/source/Documentation/devicetree/bindings/writing-bindings.rst#L42
+>>>>
+>>>>
+>>>> There are other ls2k SPI devices compatible, such as,
+>>>> "loongson,ls2k0500-spi", "loongson,ls2k2000-spi" but currently I plan to
+>>>> add ls2k1000 spi device first, Other ls2k SoC spi device adaptation may
+>>>> require some additional work and I will add it later.
+>>>
+>>> Previously you claimed this serves entire family, so I don't understand
+>>> why you need to fix something. Why previously it was working for entire
+>>> family but now it does not?
+>>
+>>
+>> It can work was for ls2k1000 and ls2k0500 and it specifically refers to
+>> spi driver. but 2k0500 doesn't implementing a clock driver and doesn't
+> 
+> We do not discuss here drivers, but bindings. Whatever your drivers are
+> not supporting, matters less.
+> 
+>> use CCF to gain clock but can use "clock-frequency".  Is it necessary to
+>> obtain a clock based on CCF? If it's necessary, then it seems that it
+>> can only added 2k1000 spi first.
+> 
+> Not related to bindings...
+
+
+I may understand that what you said, and the dt-bindings only cover 
+hardware and not involve the drivers. if so, I will add following:
+
+
+--- a/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
++++ b/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
+@@ -16,6 +16,7 @@ properties:
+    compatible:
+      enum:
+        - loongson,ls2k1000-spi
++      - loongson,ls2k0500-spi
+
+
+Thanks,
+Yinbo
 
