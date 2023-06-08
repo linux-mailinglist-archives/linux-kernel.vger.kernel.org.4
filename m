@@ -2,113 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DED44727BCF
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 11:46:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDD0F727BCD
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 11:45:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236073AbjFHJqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 05:46:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47772 "EHLO
+        id S235339AbjFHJpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 05:45:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236074AbjFHJqD (ORCPT
+        with ESMTP id S235383AbjFHJps (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 05:46:03 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2A1A2D6D;
-        Thu,  8 Jun 2023 02:45:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1686217548; x=1717753548;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PQkE2PYehE/OtNnnTVBrgbg7pftXa1dsb+nlKsXbZTU=;
-  b=2sALQxKz8gPZZ27/97gNIBkKM6NE8U7HqRxH88S16mHo2aNEumZeQrn1
-   96Hh6ONQX4ux5YFZuE08ctyQWEoA6jG65zihzdVEeDLJPvn/YHDfcYzjV
-   a0HTzWAmiT1dyxfNtbSUhCw0RieydXflmsAvP190+ggMKw1cSr7UAb34T
-   R31ackarMnkghmLIqbfLp7DFYnGv4iHbDW+wlqGBjFwpmmaGHOoEH+6Us
-   B0f8KkgV5dtr/HuKoIdlimbrE8nLjVCQewHP+So2LhsCrtMXJp93Rf2CB
-   9wauaHeMQv3dx5/a5XrRltpVS+uk8HLvbXGzjL5ml6u8T3aZQ/jqVw+mb
-   g==;
-X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
-   d="asc'?scan'208";a="217433426"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Jun 2023 02:45:46 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 8 Jun 2023 02:45:41 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Thu, 8 Jun 2023 02:45:39 -0700
-Date:   Thu, 8 Jun 2023 10:45:15 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     <stable@vger.kernel.org>, <patches@lists.linux.dev>,
-        <linux-kernel@vger.kernel.org>, <torvalds@linux-foundation.org>,
-        <akpm@linux-foundation.org>, <linux@roeck-us.net>,
-        <shuah@kernel.org>, <patches@kernelci.org>,
-        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
-        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
-        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>,
-        <rwarsow@gmx.de>
-Subject: Re: [PATCH 6.3 000/286] 6.3.7-rc1 review
-Message-ID: <20230608-frame-yearbook-f025e1184e90@wendy>
-References: <20230607200922.978677727@linuxfoundation.org>
+        Thu, 8 Jun 2023 05:45:48 -0400
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8A94213C;
+        Thu,  8 Jun 2023 02:45:33 -0700 (PDT)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-19f268b1d83so334794fac.1;
+        Thu, 08 Jun 2023 02:45:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686217533; x=1688809533;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KWfXcI9qpNRXyZ49c1qVkzQX/sqIlGyUNHOIKGAzDQA=;
+        b=OoOYd2Yl2fvO4CeoY9SXHmrdO/GnjLe13sWCrJ7lGe1yhDuyXVDlqo0aUAKF0FKt9F
+         uEbaKxjDxSqxqK3VGqMeVp/mo6E9VAG1KNWCB0Y1+PWB/moUVnUjS1NHX3MLj8gLWZ6z
+         SsE9OQSfsUMJoyg9sQB2EtUigZho4LxaKSjdF4sCvz6wVdlD4AGj9a0TH/W8c5cYCVQP
+         4kTNx9yq3tD7FM3+jK+lGWxjLs98WKyMsVCvksXQYHXH/ArNdQ0oQUlPlOSpbl04LXv5
+         8Urqn++vTFktCKLCVxhFq0WA7NQuJmzpA31w40ViBGkfOQ8lMcSiN/BxLM8WpSOTLZL5
+         6DiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686217533; x=1688809533;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KWfXcI9qpNRXyZ49c1qVkzQX/sqIlGyUNHOIKGAzDQA=;
+        b=VnAMV3JHdzpAQMJU6260SpIBIlG2aajNoebrUXeiqLhYiYOucXyggdTiFxTg2vR7zc
+         77fVkRxt9YzSl4ceYPbWGG08WEqi4uVndWkXrDJWz9tLoOZ1Rxu9KhXHqZbj8VLy/HzK
+         nLlY6ZhLwO1nGRQNS8WTmPgMl5OVwVKabERFa8MMB3ktIg8goJMsQVaOi7Wex+wGwOV4
+         1EgAk5RLHwgNHXiUNNy1CGm3LE2edQhjOE7sdiVBh4PIyf8qx9X1sonWGjfD7B1j6lu6
+         1l2vuFNuph/lyabQMdjy/YrE1CUPfj6uXUR0CEzvT1q0OURy6SEyuLN3JNLUK9XDKo4Q
+         CneA==
+X-Gm-Message-State: AC+VfDzeBamlQKYWvt63YKUW/+DcGcjTj65x8yDAM703QRi2vsuIjseX
+        f6mfjApxLDEdd2XHFYG6AEjF5JzIXVBbNsbb+Mo=
+X-Google-Smtp-Source: ACHHUZ5IWgmj+LEHtiTJyB5L+4nONSN43H9fR9QcrJW/5jde8UjA7NnpuuS9XpaB5O5YV3svfxnb3boBreWg1R1DcOk=
+X-Received: by 2002:a05:6808:315:b0:39a:62f7:9463 with SMTP id
+ i21-20020a056808031500b0039a62f79463mr4776127oie.41.1686217532902; Thu, 08
+ Jun 2023 02:45:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Hu9W2xJ8P+sr9RsU"
-Content-Disposition: inline
-In-Reply-To: <20230607200922.978677727@linuxfoundation.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <cover.1684999824.git.haibo1.xu@intel.com> <da390e6200e838fce320a2a43b2f87951b4e0bbb.1684999824.git.haibo1.xu@intel.com>
+ <20230525-2bab5376987792eab73507ac@orel>
+In-Reply-To: <20230525-2bab5376987792eab73507ac@orel>
+From:   Haibo Xu <xiaobo55x@gmail.com>
+Date:   Thu, 8 Jun 2023 17:45:21 +0800
+Message-ID: <CAJve8okR_iH4vF9DV9zTkDaeYe25kP7KUcKQphmjG5q-iVb-KA@mail.gmail.com>
+Subject: Re: [PATCH v2 11/11] KVM: riscv: selftests: Add get-reg-list test
+To:     Andrew Jones <ajones@ventanamicro.com>
+Cc:     Haibo Xu <haibo1.xu@intel.com>, maz@kernel.org,
+        oliver.upton@linux.dev, seanjc@google.com,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Shuah Khan <shuah@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Vipin Sharma <vipinsh@google.com>,
+        Colton Lewis <coltonlewis@google.com>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kselftest@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UPPERCASE_50_75 autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Hu9W2xJ8P+sr9RsU
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Fri, May 26, 2023 at 1:18=E2=80=AFAM Andrew Jones <ajones@ventanamicro.c=
+om> wrote:
+>
 
-On Wed, Jun 07, 2023 at 10:11:39PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.3.7 release.
-> There are 286 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
-> Responses should be made by Fri, 09 Jun 2023 20:07:31 +0000.
-> Anything received after that time might be too late.
->=20
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.3.7-r=
-c1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git=
- linux-6.3.y
-> and the diffstat can be found below.
+> > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CORE | KVM_REG_R=
+ISCV_CORE_REG(mode),
+> > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RI=
+SCV_CSR_REG(sstatus),
+> > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RI=
+SCV_CSR_REG(sie),
+> > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RI=
+SCV_CSR_REG(stvec),
+> > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RI=
+SCV_CSR_REG(sscratch),
+> > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RI=
+SCV_CSR_REG(sepc),
+> > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RI=
+SCV_CSR_REG(scause),
+> > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RI=
+SCV_CSR_REG(stval),
+> > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RI=
+SCV_CSR_REG(sip),
+> > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RI=
+SCV_CSR_REG(satp),
+> > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RI=
+SCV_CSR_REG(scounteren),
+> > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_TIMER | KVM_REG_=
+RISCV_TIMER_REG(frequency),
+> > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_TIMER | KVM_REG_=
+RISCV_TIMER_REG(time),
+> > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_TIMER | KVM_REG_=
+RISCV_TIMER_REG(compare),
+> > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_TIMER | KVM_REG_=
+RISCV_TIMER_REG(state),
+> > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_ISA_EXT | KVM_RI=
+SCV_ISA_EXT_A,
+> > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_ISA_EXT | KVM_RI=
+SCV_ISA_EXT_C,
+> > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_ISA_EXT | KVM_RI=
+SCV_ISA_EXT_D,
+> > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_ISA_EXT | KVM_RI=
+SCV_ISA_EXT_F,
+> > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_ISA_EXT | KVM_RI=
+SCV_ISA_EXT_H,
+> > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_ISA_EXT | KVM_RI=
+SCV_ISA_EXT_I,
+> > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_ISA_EXT | KVM_RI=
+SCV_ISA_EXT_M,
+>
+> I think all the above should have the size KVM_REG_SIZE_ULONG. Please als=
+o
+> test with a 32-bit host.
+>
 
-Ditto here, looks good on our RISC-V stuff.
+Hi Andrew,
 
-Tested-by: Conor Dooley <conor.dooley@microchip.com>
+Just noticed the RISC-V 32-bit kvm selftests was not supported currently.
+Even though I tried to remove the below check for 32-bit, there were
+still many warning and error messages during compiling.
+It seems 32-bit KVM selftests was not supported either for ARM/x86. Do
+we have a plan to support it on risc-v?
 
-Cheers,
-Conor.
+Regards,
+Haibo
 
---Hu9W2xJ8P+sr9RsU
-Content-Type: application/pgp-signature; name="signature.asc"
+diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h
+b/tools/testing/selftests/kvm/include/kvm_util_base.h
+index ac4aaa21deee..a32ccc06435b 100644
+--- a/tools/testing/selftests/kvm/include/kvm_util_base.h
++++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
+@@ -205,9 +205,9 @@ extern enum vm_guest_mode vm_mode_default;
 
------BEGIN PGP SIGNATURE-----
+ #elif defined(__riscv)
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIGjKgAKCRB4tDGHoIJi
-0iWLAQDhDTzHhs0XMdhwppgi+IBIOT2Rd4g2UTps+YqVEVGzowD7BC6g96yQvYXo
-XZ6UMEL5rBTk291/VR+YL9RZRG0xYws=
-=zc8P
------END PGP SIGNATURE-----
+-#if __riscv_xlen =3D=3D 32
+-#error "RISC-V 32-bit kvm selftests not supported"
+-#endif
++//#if __riscv_xlen =3D=3D 32
++//#error "RISC-V 32-bit kvm selftests not supported"
++//#endif
 
---Hu9W2xJ8P+sr9RsU--
+>
+> Thanks,
+> drew
