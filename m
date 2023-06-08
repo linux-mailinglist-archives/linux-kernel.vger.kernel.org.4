@@ -2,130 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BD2C727F8D
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 13:59:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5868727F93
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 14:02:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236513AbjFHL7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 07:59:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39104 "EHLO
+        id S234268AbjFHMCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 08:02:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236501AbjFHL7i (ORCPT
+        with ESMTP id S229965AbjFHMCK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 07:59:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 860F52113
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 04:59:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 21C4D64CE9
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 11:59:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96A83C433EF;
-        Thu,  8 Jun 2023 11:59:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686225574;
-        bh=kqj+AnBwnPPQKa4kzE0ArmNg7GgENWk2/+XafiMcx5g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ShsluX5d4ZlHzfqTkZLdoPZBxhpZcjulNtqKiPyvLfOFldMuyZRaBqS8VsiweyA51
-         YNHEaBAA/InLeOtEo07ZiCploLCoXMWfEvkj0PSWD0+TWlUuZ/0BLzuZCOU3giTIZR
-         sF+xPlNzefUTZ87VeWWpIfUPY4Z7TSJQefk8VEZHAJcaYLvAel5OjTNwAZF9pbJAIQ
-         aWL3+5FRnJMXiws5nnodAruR7tn6JE6s0QcEXih9XEJlGOrDQNp8mDOTIeUXuxhuVT
-         +plZk0SdCa705FgMjgMb9VPaoxe4jP6kh013tmsG7cFC4ewDKyxPhbx7/nkKF6pt3K
-         wBXqnmXruZJfg==
-Date:   Thu, 8 Jun 2023 17:29:28 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Jeffrey Hugo <quic_jhugo@quicinc.com>
-Cc:     mani@kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, mhi@lists.linux.dev
-Subject: Re: [PATCH v2 0/2] Add MHI quirk for QAIC
-Message-ID: <20230608115928.GA5672@thinkpad>
-References: <20230519163902.4170-1-quic_jhugo@quicinc.com>
+        Thu, 8 Jun 2023 08:02:10 -0400
+Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33A221FD5
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 05:02:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1686225730; x=1717761730;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=8rQt5sb+SnoZ1UdA02p3GMjDXxrIX+iZxf+jpM8LHPw=;
+  b=awvETnF3J9/6VPlaqX3hUuCGKJIHxtoZtAvs7KoVTaYJrlp5WOUd1HxA
+   cAU7qPwDVNmsjn5u+mJKNYy9jimtkfRj9N/AGLODXwc/dYC0dBqK0TmdH
+   RErzNx3ebpkroaUH+eeGfXx9k+coBGa2WhPneHsS7Uz1aWxNMf+1CH/39
+   8=;
+X-IronPort-AV: E=Sophos;i="6.00,226,1681171200"; 
+   d="scan'208";a="219684897"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1d-m6i4x-d23e07e8.us-east-1.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 12:02:07 +0000
+Received: from EX19D014EUC004.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1d-m6i4x-d23e07e8.us-east-1.amazon.com (Postfix) with ESMTPS id 2A79280D9F;
+        Thu,  8 Jun 2023 12:02:04 +0000 (UTC)
+Received: from u5d18b891348c5b.ant.amazon.com (10.146.13.221) by
+ EX19D014EUC004.ant.amazon.com (10.252.51.182) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Thu, 8 Jun 2023 12:02:00 +0000
+From:   James Gowans <jgowans@amazon.com>
+To:     Thomas Gleixner <tglx@linutronix.de>, <liaochang1@huawei.com>,
+        Marc Zyngier <maz@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, James Gowans <jgowans@amazon.com>
+Subject: [PATCH 0/3] Resend GIC-v3 LPIs on concurrent invoke
+Date:   Thu, 8 Jun 2023 14:00:18 +0200
+Message-ID: <20230608120021.3273400-1-jgowans@amazon.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230519163902.4170-1-quic_jhugo@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.146.13.221]
+X-ClientProxiedBy: EX19D032UWB002.ant.amazon.com (10.13.139.190) To
+ EX19D014EUC004.ant.amazon.com (10.252.51.182)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 19, 2023 at 10:39:00AM -0600, Jeffrey Hugo wrote:
-> With the QAIC driver in -next, I'd like to suggest some MHI changes that
-> specific to AIC100 devices, but perhaps provide a framework for other
-> device oddities.
-> 
-> AIC100 devices technically violate the MHI spec in two ways. Sadly, these
-> issues comes from the device hardware, so host SW needs to work around
-> them.
-> 
-> Thie first issue, presented in this series, has to do with the
-> SOC_HW_VERSION register. This register is suposed to be initialized by the
-> hardware prior to the MHI being accessable by the host to contain a
-> version string for the SoC of the device. This could be used by the host
-> MHI controller software to identify and handle version to version changes.
-> The AIC100 hardware does not initialize this register, and thus it
-> contains garbage.
-> 
-> This would not be much of a problem normally - the QAIC driver would just
-> never use it. However the MHI stack uses this register as part of the init
-> sequence and if the controller reports that the register is inaccessable
-> then the init sequence fails.  On some AIC100 cards, the garbage value
-> ends up being 0xFFFFFFFF which is PCIe spec defined to be a special value
-> indicating the access failed.  The MHI controller cannot tell if that
-> value is a PCIe link issue, or just garbage.
-> 
-> QAIC needs a way to tell MHI not to use this register. Other buses have a
-> quirk mechanism - a way to describe oddities in a particular
-> implementation that have some kind of workaround. Since this seems to be
-> the first need for such a thing in MHI, introduce a quirk framework.
-> 
-> The second issue AIC100 has involves the PK Hash registers. A solution for
-> this is expected to be proposed in the near future and is anticipated to
-> make use of the quirk framework proposed here. With PK Hash, there are two
-> oddities to handle. AIC100 does not initialize these registers until the
-> SBL is running, which is later than the spec indicates, and in practice
-> is after MHI reads/caches them. Also, AIC100 does not have enough
-> registers defined to fully report the 5 PK Hash slots, so a custom
-> reporting format is defined by the device.
-> 
+If interrupts do not have global active states it is possible for
+the next interrupt to arrive on a new CPU if an affinity change happens
+while the original CPU is still running the handler. This specifically
+impacts GIC-v3.
 
-Looking at the two issues you reported above, it looks to me that they can be
-handled inside the aic100 mhi_controller driver itself. Since the MHI stack
-exports the read_reg callback to controller drivers, if some registers are not
-supported by the device, then the callback can provide some fixed dummy data
-emulating the register until the issue is fixed in the device (if at all).
+In this series, generic functionality is added to handle_fast_eoi() to
+support resending the interrupt when this race happens, and that generic
+functionality is enabled specifically for the GIC-v3 which is impacted
+by this issue. GIC-v3 uses the handle_fast_eoi() generic handler, hence
+that is the handler getting the functionality.
 
-Quirk framework could be useful if the device misbehaves against the protocol
-itself but for the register issues like this, I think the controller driver can
-handle itself.
+Also adding a bit more details to the IRQD flags docs to help future
+readers know when/why flags should be used and what they mean.
 
-What do you think?
+== Testing: ==
 
-- Mani
+TL;DR: Run a virt using QEMU on a EC2 R6g.metal host with a ENA device
+passed through using VFIO - bounce IRQ affinity between two CPUs. Before
+this change an interrupt can get lost and the device stalls; after this
+change the interrupt is not lost.
 
-> v2:
-> -Fix build error
-> -Fix typo in commit text
-> 
-> Jeffrey Hugo (2):
->   bus: mhi: host: Add quirk framework and initial quirk
->   accel/qaic: Add MHI_QUIRK_SOC_HW_VERSION_UNRELIABLE
-> 
->  drivers/accel/qaic/mhi_controller.c |  1 +
->  drivers/bus/mhi/host/init.c         | 13 +++++++++----
->  include/linux/mhi.h                 | 18 ++++++++++++++++++
->  3 files changed, 28 insertions(+), 4 deletions(-)
-> 
-> -- 
-> 2.40.1
-> 
-> 
+=== Details: ===
 
+Intentionally slow down the IRQ injection a bit, to turn this from a
+rare race condition which to something which can easily be flushed out
+in testing:
+
+@@ -763,6 +764,7 @@ int vgic_its_inject_cached_translation(struct kvm *kvm, struct kvm_msi *msi)
+        raw_spin_lock_irqsave(&irq->irq_lock, flags);
+        irq->pending_latch = true;
+        vgic_queue_irq_unlock(kvm, irq, flags);
++       udelay(10);
+
+        return 0;
+ }
+
+Also sprinkle a print to make it clear when the race described here is
+hit:
+
+@@ -698,6 +698,7 @@ void handle_fasteoi_irq(struct irq_desc *desc)
+         * handling the previous one - it may need to be resent.
+         */
+        if (!irq_may_run(desc)) {
++               printk("!irq_may_run %i\n", desc->irq_data.irq);
+                if (irqd_needs_resend_when_in_progress(&desc->irq_data))
+                        desc->istate |= IRQS_PENDING;
+                goto out;
+
+Launch QEMU in your favourite way, with an ENA device passed through via
+VFIO (VFIO driver re-binding needs to be done before this):
+
+qemu-system-aarch64 -enable-kvm  -machine virt,gic_version=3 -device vfio-pci,host=04:00.0 ...
+
+In the VM, generate network traffic to get interrupts flowing:
+
+ping -f -i 0.001 10.0.3.1 > /dev/null
+
+On the host, change affinity of the interrupt around to flush out the race:
+
+while true; do
+	echo 1 > /proc/irq/71/smp_affinity ; sleep 0.01;
+	echo 2 > /proc/irq/71/smp_affinity ; sleep 0.01;
+done
+
+In host dmesg the printk indicates that the race is hit:
+
+[  102.215801] !irq_may_run 71
+[  105.426413] !irq_may_run 71
+[  105.586462] !irq_may_run 71
+
+Before this change, an interrupt is lost and this manifests as a driver
+watchdog timeout in the guest device driver:
+
+[   35.124441] ena 0000:00:02.0 enp0s2: Found a Tx that wasn't completed on time,...
+...
+[   37.124459] ------------[ cut here ]------------
+[   37.124791] NETDEV WATCHDOG: enp0s2 (ena): transmit queue 0 timed out
+
+After this change, even though the !irq_may_run print is still shown
+(indicating that the race is still hit) the driver no longer times out
+because the interrupt now gets resent when the race occurs.
+
+James Gowans (3):
+  genirq: Expand doc for PENDING and REPLAY flags
+  genirq: fasteoi supports resend on concurrent invoke
+  irqchip/gic-v3-its: Enable RESEND_WHEN_IN_PROGRESS for LPIs
+
+ drivers/irqchip/irq-gic-v3-its.c |  2 ++
+ include/linux/irq.h              | 13 +++++++++++++
+ kernel/irq/chip.c                | 16 +++++++++++++++-
+ kernel/irq/debugfs.c             |  2 ++
+ kernel/irq/internals.h           |  7 +++++--
+ 5 files changed, 37 insertions(+), 3 deletions(-)
+
+
+base-commit: 5f63595ebd82f56a2dd36ca013dd7f5ff2e2416a
 -- 
-மணிவண்ணன் சதாசிவம்
+2.25.1
+
