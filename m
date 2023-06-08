@@ -2,157 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E147D728043
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 14:43:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3539A72804C
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 14:43:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236311AbjFHMnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 08:43:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57628 "EHLO
+        id S236315AbjFHMnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 08:43:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232898AbjFHMnI (ORCPT
+        with ESMTP id S234860AbjFHMnj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 08:43:08 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C26926B1;
-        Thu,  8 Jun 2023 05:43:07 -0700 (PDT)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3589A91B001978;
-        Thu, 8 Jun 2023 14:42:50 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=73FqTMHLfZiM2PDdNj01tEfDAdrx6SjM7RVnmCFe2B8=;
- b=4U+Z3T3jg8g0fU7KYtC97DzZXEbG/CAEbEU6Ff39w/KzY01TVklN0VgZfSesjS6ImUIE
- cR9q12YfpIQ/ZO+prvC0PTY57NcV+wQL5vAJdmDN6ZfQbLYv6VusPCHP1vRz3VKuCoPW
- LZ9wEDDOJ3d1Bp6aj9qQT/qJXk43jqh5jZrY8CmR/uBCBRn/nMXMtdNNlVc54fG3i/HP
- ndfZz0jJXQor7SWg28LhXAh8AJX1oVO3aoF9JGnqGz5K6x9v+gWmkZFy6K/M9HWO119R
- BVypJk1UkpS6nTOl1e/w4c9QEhg8EMIYBx4mF5s1KivCcRLWtbeFvmANioXVkdW32qJ4 5g== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3r3c4ahc5e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 08 Jun 2023 14:42:50 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 1458610003D;
-        Thu,  8 Jun 2023 14:42:44 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 06624209BA9;
-        Thu,  8 Jun 2023 14:42:44 +0200 (CEST)
-Received: from [10.201.21.93] (10.201.21.93) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Thu, 8 Jun
- 2023 14:42:43 +0200
-Message-ID: <7139fb21-6a1d-a26f-fef3-d3154d234ca2@foss.st.com>
-Date:   Thu, 8 Jun 2023 14:42:43 +0200
+        Thu, 8 Jun 2023 08:43:39 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEDCA26B3
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 05:43:37 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-94ea38c90ccso15508966b.1
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 05:43:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686228216; x=1688820216;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1kF14myJ9coZ4lMq/FbV5XcnhvclWxzYZwqJzREvQWY=;
+        b=WKkEy3Q4+ewVvNCmCIvX6aT5c3OVhyIXQz9HE+qi+rUrQwcSqx+AuMHmCu8wVkupcu
+         2jqaH0XBQuD67KubFyPpnCFIp+EYLfKy0OfFuE0Xhwf3mDQocLcx9aEzsu/58Yc/lkz/
+         vhnrLU85DQlSxlLkFL/KRVRuLbpcW6zM4K/HZb7/qtNf2nLceu2wivUT8C7v3gQroWeQ
+         0P1r7sCa3v5Oee5buRIWWmlmhPCTMfKqzL0p55iq19vqbNHuV/yximZDrkAliL0h/EZQ
+         lzbJH4k149D3I12R8+q7+OROC10vmMwQWyNbSXT1upnp+53m6r6RdvPxokuLqvTgjPO1
+         QM9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686228216; x=1688820216;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1kF14myJ9coZ4lMq/FbV5XcnhvclWxzYZwqJzREvQWY=;
+        b=iWK8HuJz2GIpSijP3vW9xPS3G1vGscy316en7GaLh95Bk6dWEGJw42OD16eGOw+3UO
+         IWHQ+OX3ApX5CKbCjoHQpjlTR2nVK+hDdRe4012j16hwxnNzpVTPCWtaB6FbTgp456L0
+         KKWBBSybVmYO9IhDzurgPTmECTLNeDuRRewon4poOy6jXPWzJB61FriO7Y+HCnP2OylO
+         pGJSqXceG4r4N5ije4UCWMYuurZM+ZPFqYY6nPWQ3kvfJgsGWbh0L81kMCY5K2xVUQBB
+         1kIfR1VkHgwUcA8/Z+Y0KuZP2oIBOQO/k39KwxaNAXciYxaE/yN9c6jTbIi4HJyIOnMY
+         cC0w==
+X-Gm-Message-State: AC+VfDyd62Iz82o+M589Ycn78uHMQwxc40/3QFwS2Y0j/g1dbvsSSckH
+        xIH+7lqtotb4rf/OBl5r3Mc=
+X-Google-Smtp-Source: ACHHUZ52cbzXPOGxsnd9kqnQxzY/ckFBG6Q9SQKeEbtINPN+3gclg7J/BnPytMoAdBRnwdumtUmkug==
+X-Received: by 2002:a17:906:51d3:b0:977:eabf:c103 with SMTP id v19-20020a17090651d300b00977eabfc103mr4943959ejk.5.1686228216172;
+        Thu, 08 Jun 2023 05:43:36 -0700 (PDT)
+Received: from [192.168.0.105] (p57ba2e0b.dip0.t-ipconnect.de. [87.186.46.11])
+        by smtp.gmail.com with ESMTPSA id d13-20020a170906370d00b00977d0f1c5bcsm647234ejc.69.2023.06.08.05.43.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Jun 2023 05:43:35 -0700 (PDT)
+Message-ID: <b0480060-a7df-255a-4965-a48dac793960@gmail.com>
+Date:   Thu, 8 Jun 2023 14:43:34 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [RESEND PATCH v2 2/6] ARM: dts: stm32: add pin map for LTDC on
- stm32f7
+Subject: Re: [PATCH v2 1/5] staging: rtl8192e: Remove variable SetWirelessMode
 Content-Language: en-US
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        <linux-kernel@vger.kernel.org>
-CC:     Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <dri-devel@lists.freedesktop.org>,
-        Philippe Cornu <philippe.cornu@foss.st.com>,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        <michael@amarulasolutions.com>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, <devicetree@vger.kernel.org>
-References: <20230607063139.621351-1-dario.binacchi@amarulasolutions.com>
- <20230607063139.621351-3-dario.binacchi@amarulasolutions.com>
-From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
-In-Reply-To: <20230607063139.621351-3-dario.binacchi@amarulasolutions.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Yogesh Hegde <yogi.kernel@gmail.com>
+Cc:     Dan Carpenter <dan.carpenter@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <cover.1686149467.git.yogi.kernel@gmail.com>
+ <fba56522e419351b05e33df8cd0ac31806534d8c.1686149467.git.yogi.kernel@gmail.com>
+ <01a162c5-f0de-47b1-97e7-8a451a89df80@kadam.mountain>
+ <90813181-02a1-b54f-132b-c68e7b797bb6@gmail.com>
+ <20230608095938.GA598514@yogi-Zephyrus>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <20230608095938.GA598514@yogi-Zephyrus>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.201.21.93]
-X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-08_09,2023-06-08_01,2023-05-22_02
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dario
+On 6/8/23 11:59, Yogesh Hegde wrote:
+> On Wed, Jun 07, 2023 at 10:18:28PM +0200, Philipp Hortmann wrote:
+>> My compiler does not compile this patch:
+>>    LD [M]  drivers/staging/rtl8192e/rtl8192e/r8192e_pci.o
+>>    MODPOST drivers/staging/rtl8192e/Module.symvers
+>> ERROR: modpost: "rtl92e_set_wireless_mode"
+>> [drivers/staging/rtl8192e/rtllib.ko] undefined!
+>> make[1]: *** [scripts/Makefile.modpost:136:
+>> drivers/staging/rtl8192e/Module.symvers] Error 1
+>> make: *** [Makefile:1978: modpost] Error 2
+>>
+>> Did this compile on your system Yogesh?
+> No, while sending the patch I partially compiled it
+> `make drivers/staging/rtl8192e` but when I fully compile it `make all` it gives
+> me the same error. It is a mistake on my part.
+To build one module you need to use:
+make -C . M=drivers/staging/rtl8192e
 
-On 6/7/23 08:31, Dario Binacchi wrote:
-> Add pin configurations for using LTDC (LCD-tft Display Controller) on
-> stm32f746-disco board.
 > 
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> ---
+>> But I think it does not work because this driver is divided into two
+>> modules.
+>>
+>> To load the driver I am using the following lines:
+>> sudo insmod drivers/staging/rtl8192e/rtllib.ko
+>> sudo insmod drivers/staging/rtl8192e/rtl8192e/r8192e_pci.ko
+> I was not aware of this and assumed that ideally the driver has only one (PCI)
+> interface so all the files should be compiled into one `.ko` file and loaded.
 > 
-> (no changes since v1)
+>> So this line is required:
+>> priv->rtllib->SetWirelessMode = rtl92e_set_wireless_mode;
+>> as one name is used in one module and one in the other module.
+> Yes, this makes sense now.
 > 
->   arch/arm/boot/dts/stm32f7-pinctrl.dtsi | 35 ++++++++++++++++++++++++++
->   1 file changed, 35 insertions(+)
+> Moving forward,
+> Dan, Greg and Philipp what would be the best fix for this issue,
+> 1.  Patchset to combine both the modules into one module
+I had a look for this and it was not difficult at all to combine. But a 
+patch long ago divided the two modules, to make it more like the driver 
+this one should be merged to, in the wireless subsystem. Please see TODO 
+file.
+
+> 2.  Revert back this patchset to v1.
 > 
-> diff --git a/arch/arm/boot/dts/stm32f7-pinctrl.dtsi b/arch/arm/boot/dts/stm32f7-pinctrl.dtsi
-> index 9f65403295ca..f3f90b9bcd61 100644
-> --- a/arch/arm/boot/dts/stm32f7-pinctrl.dtsi
-> +++ b/arch/arm/boot/dts/stm32f7-pinctrl.dtsi
-> @@ -365,6 +365,41 @@ pins2 {
->   					bias-pull-up;
->   				};
->   			};
-> +
-> +
-> +			ltdc_pins_a: ltdc-pins-a-0 {
+> Looking forward for your response.
+> 
+> Regards
+> Yogesh
 
-  ltdc-pins-a-0 -->  ltdc-pins-0 is a bit cleaner. I know that I have to 
-fix sdio pins nodes in this file to keep the same spirit for all group 
-names.
-
-If there is no V3 I wil do it directly when I'll apply DT patches if you 
-agree.
-
-Alex
-
-
-> +				pins {
-> +					pinmux = <STM32_PINMUX('E', 4, AF14)>, /* LCD_B0 */
-> +						 <STM32_PINMUX('G',12, AF9)>,  /* LCD_B4 */
-> +						 <STM32_PINMUX('I', 9, AF14)>, /* LCD_VSYNC */
-> +						 <STM32_PINMUX('I',10, AF14)>, /* LCD_HSYNC */
-> +						 <STM32_PINMUX('I',14, AF14)>, /* LCD_CLK */
-> +						 <STM32_PINMUX('I',15, AF14)>, /* LCD_R0 */
-> +						 <STM32_PINMUX('J', 0, AF14)>, /* LCD_R1 */
-> +						 <STM32_PINMUX('J', 1, AF14)>, /* LCD_R2 */
-> +						 <STM32_PINMUX('J', 2, AF14)>, /* LCD_R3 */
-> +						 <STM32_PINMUX('J', 3, AF14)>, /* LCD_R4 */
-> +						 <STM32_PINMUX('J', 4, AF14)>, /* LCD_R5 */
-> +						 <STM32_PINMUX('J', 5, AF14)>, /* LCD_R6 */
-> +						 <STM32_PINMUX('J', 6, AF14)>, /* LCD_R7 */
-> +						 <STM32_PINMUX('J', 7, AF14)>, /* LCD_G0 */
-> +						 <STM32_PINMUX('J', 8, AF14)>, /* LCD_G1 */
-> +						 <STM32_PINMUX('J', 9, AF14)>, /* LCD_G2 */
-> +						 <STM32_PINMUX('J',10, AF14)>, /* LCD_G3 */
-> +						 <STM32_PINMUX('J',11, AF14)>, /* LCD_G4 */
-> +						 <STM32_PINMUX('J',13, AF14)>, /* LCD_B1 */
-> +						 <STM32_PINMUX('J',14, AF14)>, /* LCD_B2 */
-> +						 <STM32_PINMUX('J',15, AF14)>, /* LCD_B3 */
-> +						 <STM32_PINMUX('K', 0, AF14)>, /* LCD_G5 */
-> +						 <STM32_PINMUX('K', 1, AF14)>, /* LCD_G6 */
-> +						 <STM32_PINMUX('K', 2, AF14)>, /* LCD_G7 */
-> +						 <STM32_PINMUX('K', 4, AF14)>, /* LCD_B5 */
-> +						 <STM32_PINMUX('K', 5, AF14)>, /* LCD_B6 */
-> +						 <STM32_PINMUX('K', 6, AF14)>, /* LCD_B7 */
-> +						 <STM32_PINMUX('K', 7, AF14)>; /* LCD_DE */
-> +					slew-rate = <2>;
-> +				};
-> +			};
->   		};
->   	};
->   };
-
+Bye Philipp
