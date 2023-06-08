@@ -2,121 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C386E728665
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 19:32:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F5C972866D
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 19:37:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233583AbjFHRcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 13:32:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52774 "EHLO
+        id S232542AbjFHRhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 13:37:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231673AbjFHRcq (ORCPT
+        with ESMTP id S231308AbjFHRhD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 13:32:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B012B2115
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 10:32:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C81B64FCC
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 17:32:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82203C433D2;
-        Thu,  8 Jun 2023 17:32:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686245564;
-        bh=9pSHIKmpleefHxtGguaaooqKIkgzxLhqomz+9DI+SdY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=B4p4zzAL+tFEVx0n54Y5PAT+tyazEj9bP16Ck71X9kbDLAim/wHHwT9/8sKlHqZRv
-         4kc2feFR284iUQVMZsQh+MuYOkJzapetY0ZDfg+ZLh6FOWBfCzj6zm3f6EaNxoKeNW
-         XU+/KJGJwNu0RVNpjR2eXk815M6etlYXLyK66e5JsSU3XO+j86a/OQkDbVcFSMueCI
-         1fdQc/vlOzhqNkHP2AtJx+uvmkE1UJ2S5B1zFEsTyRnl0PccI+OGCm8zi3EElk/fl8
-         qh/uISCNyY6oDi9BSfPk7ZcjOWC11degePdEO5/sPRXv8COv3h8+9syaQJwcByjmI8
-         qldhWlyTCrdFQ==
-Date:   Thu, 8 Jun 2023 12:32:43 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Sui Jingfeng <15330273260@189.cn>
-Cc:     Lucas Stach <l.stach@pengutronix.de>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Li Yi <liyi@loongson.cn>,
-        linux-kernel@vger.kernel.org, etnaviv@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org,
-        Sui Jingfeng <suijingfeng@loongson.cn>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH v8 6/8] drm/etnaviv: add driver support for the PCI
- devices
-Message-ID: <20230608173243.GA1207429@bhelgaas>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230607105551.568639-7-15330273260@189.cn>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 8 Jun 2023 13:37:03 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC8CC270B
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 10:37:02 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id 98e67ed59e1d1-258b62c7a6bso768221a91.3
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 10:37:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686245822; x=1688837822;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=A5HMiXJj25/0cs+VQWx8wtIMazP9D7ttY2YMsSjDM3k=;
+        b=e/c15UQDeZn5gVYdCP1WTVUOnES+ksevPkbz0RqG+FbeFuOa1OmqHpbYb7HMmwiBRg
+         L01Vbb2O2AvFXQNR4FCyB+Z9OG6phe8RA0XyHjgmByAbCi+XN/GT+5GoOPENmUEqQ122
+         wLZw9SzLsBYt5PhJrdVvPfUKM1q/jzBTj0qfx05ZbA51cuJVlTrlAzxLvd3cXcCoostm
+         fRzqaAmJ0T5a6qVQ105CVZGLjDrGqZY/q2PRL0OUW+aI4txyNqqaD+yZKOHf//MKVbxZ
+         ARC/YEkAmMSg7PjqR6YxTFdSm6Z6wuz8A1ZipIaSzu5kP5otynNe2Uu40jpWpEI/v2TP
+         OiLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686245822; x=1688837822;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=A5HMiXJj25/0cs+VQWx8wtIMazP9D7ttY2YMsSjDM3k=;
+        b=Y/kv9J8bBqZIoZTMVNhtgQbHk5qE/1a0W1/1CAW1pnnHPXQLkV7J3yETI1EuckOwpf
+         aQly66V/RTeP+cSyT6hMt5I8E20kFvUIOpLPVNe/GXg6XD2N4q4dudrzsDce1g9sto7f
+         xflFS7Lw4l3EYKIuWcl7kUxFf9aHLNjEZ5Faia7Z6FGPk11d1rfSYtmTJHGE/Zmc+W4A
+         pLX3O9YrvIb4W3fkMmjP5iEpsNh+qEVSJESOAdwufTY3P4SXrKJqMc+BATRerkw9jK+R
+         69gxY117XGlWvUvNhMDuocw4Bm89XCe5ZP7VK+zwvz8qApjMnJTcAvyyPMwUIBVVIrS5
+         PQhg==
+X-Gm-Message-State: AC+VfDxQyfaB0uf0B6xXCLFNdTORnVhVXdOi2i06Jq78L/cC7DdN8V/c
+        yENE0EC0uLdVsgDuU7YLL+FDKGZLvGPpJA==
+X-Google-Smtp-Source: ACHHUZ74G/VJbIfySxv6uBggTimaPqijqNP4UNpTFxQCf/GcIiJkljU1WVA4BLSOA08kPiDEVcYA+854RqbX2Q==
+X-Received: from shakeelb.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:262e])
+ (user=shakeelb job=sendgmr) by 2002:a17:90b:f95:b0:256:b9d1:4e34 with SMTP id
+ ft21-20020a17090b0f9500b00256b9d14e34mr2339447pjb.5.1686245822177; Thu, 08
+ Jun 2023 10:37:02 -0700 (PDT)
+Date:   Thu, 8 Jun 2023 17:37:00 +0000
+In-Reply-To: <20230608111408.s2minsenlcjow7q3@quack3>
+Mime-Version: 1.0
+References: <20221024052841.3291983-1-shakeelb@google.com> <20230608111408.s2minsenlcjow7q3@quack3>
+Message-ID: <20230608173700.wafw5tyw52gwoicu@google.com>
+Subject: Re: [PATCH] mm: convert mm's rss stats into percpu_counter
+From:   Shakeel Butt <shakeelb@google.com>
+To:     Jan Kara <jack@suse.cz>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, mhocko@suse.cz, vbabka@suse.cz,
+        regressions@lists.linux.dev, Yu Ma <yu.ma@intel.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 06:55:49PM +0800, Sui Jingfeng wrote:
-> From: Sui Jingfeng <suijingfeng@loongson.cn>
+On Thu, Jun 08, 2023 at 01:14:08PM +0200, Jan Kara wrote:
+[...]
 > 
-> This patch adds PCI driver support on top of what we already have. Take
-> the GC1000 in LS7A1000/LS2K1000 as the first instance of the PCI device
-> driver. There is only one GPU core for the GC1000 in the LS7A1000 and
-> LS2K1000. Therefore, component frameworks can be avoided.
+> Somewhat late to the game but our performance testing grid has noticed this
+> commit causes a performance regression on shell-heavy workloads. For
+> example running 'make test' in git sources on our test machine with 192
+> CPUs takes about 4% longer, system time is increased by about 9%:
+> 
+>                        before (9cd6ffa6025)  after (f1a7941243c1)
+> Amean     User         471.12 *   0.30%*     481.77 *  -1.96%*
+> Amean     System       244.47 *   0.90%*     269.13 *  -9.09%*
+> Amean     Elapsed      709.22 *   0.45%*     742.27 *  -4.19%*
+> Amean     CPU          100.00 (   0.20%)     101.00 *  -0.80%*
+> 
+> Essentially this workload spawns in sequence a lot of short-lived tasks and
+> the task startup + teardown cost is what this patch increases. To
+> demonstrate this more clearly, I've written trivial (and somewhat stupid)
+> benchmark shell_bench.sh:
+> 
+> for (( i = 0; i < 20000; i++ )); do
+> 	/bin/true
+> done
+> 
+> And when run like:
+> 
+> numactl -C 1 ./shell_bench.sh
+> 
+> (I've forced physical CPU binding to avoid task migrating over the machine
+> and cpu frequency scaling interfering which makes the numbers much more
+> noisy) I get the following elapsed times:
+> 
+>          9cd6ffa6025    f1a7941243c1
+> Avg      6.807429       7.631571
+> Stddev   0.021797       0.016483
+> 
+> So some 12% regression in elapsed time. Just to be sure I've verified that
+> per-cpu allocator patch [1] does not improve these numbers in any
+> significant way.
+> 
+> Where do we go from here? I think in principle the problem could be fixed
+> by being clever and when the task has only a single thread, we don't bother
+> with allocating pcpu counter (and summing it at the end) and just account
+> directly in mm_struct. When the second thread is spawned, we bite the
+> bullet, allocate pcpu counter and start with more scalable accounting.
+> These shortlived tasks in shell workloads or similar don't spawn any
+> threads so this should fix the regression. But this is obviously easier
+> said than done...
+> 
 
-> +#ifdef CONFIG_DRM_ETNAVIV_PCI_DRIVER
-> +#include "etnaviv_pci_drv.h"
-> +#endif
+Thanks Jan for the report. I wanted to improve the percpu allocation to
+eliminate this regression as it was reported by intel test bot as well.
+However your suggestion seems seems targetted and reasonable as well. At
+the moment I am travelling, so not sure when I will get to this. Do you
+want to take a stab at it or you want me to do it? Also how urgent and
+sensitive this regression is for you?
 
-With trivial stubs for etnaviv_register_pci_driver() and
-etnaviv_unregister_pci_driver(), I think you could get rid of all
-these #ifdefs.
+thanks,
+Shakeel
 
-> +void etnaviv_drm_unbind(struct device *dev, bool component)
->  {
->  	struct etnaviv_drm_private *priv = etna_private_ptr;
->  	struct drm_device *drm = priv->drm;
-> @@ -746,6 +750,12 @@ static int __init etnaviv_init(void)
->  	if (ret != 0)
->  		goto unregister_gpu_driver;
->  
-> +#ifdef CONFIG_DRM_ETNAVIV_PCI_DRIVER
-> +	ret = etnaviv_register_pci_driver();
-> +	if (ret != 0)
-> +		goto unregister_platform_driver;
-> +#endif
-> +
->  	/*
->  	 * If the DT contains at least one available GPU device, instantiate
->  	 * the DRM platform device.
-> @@ -763,7 +773,7 @@ static int __init etnaviv_init(void)
->  		break;
->  	}
->  
-> -	return 0;
-> +	return ret;
->  
->  unregister_platform_driver:
->  	platform_driver_unregister(&etnaviv_platform_driver);
-> @@ -778,6 +788,10 @@ static void __exit etnaviv_exit(void)
->  	etnaviv_destroy_platform_device(&etnaviv_platform_device);
->  	platform_driver_unregister(&etnaviv_platform_driver);
->  	platform_driver_unregister(&etnaviv_gpu_driver);
-> +
-> +#ifdef CONFIG_DRM_ETNAVIV_PCI_DRIVER
-> +	etnaviv_unregister_pci_driver();
-> +#endif
-
-> +static const struct pci_device_id etnaviv_pci_id_lists[] = {
-> +	{PCI_VENDOR_ID_LOONGSON, 0x7a15, PCI_ANY_ID, PCI_ANY_ID, 0, 0, 0},
-> +	{PCI_VENDOR_ID_LOONGSON, 0x7a05, PCI_ANY_ID, PCI_ANY_ID, 0, 0, 0},
-
-PCI_VDEVICE()
-
-Bjorn
