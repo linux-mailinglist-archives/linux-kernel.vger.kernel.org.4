@@ -2,134 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 281D6727965
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 10:00:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 017AE727967
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 10:00:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234186AbjFHIAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 04:00:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49178 "EHLO
+        id S234134AbjFHIAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 04:00:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234124AbjFHH7v (ORCPT
+        with ESMTP id S234431AbjFHH77 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 03:59:51 -0400
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2F8A2733
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 00:59:26 -0700 (PDT)
-Received: by mail-qv1-xf2f.google.com with SMTP id 6a1803df08f44-6261d4ea5f0so2456276d6.0
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 00:59:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1686211165; x=1688803165;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hZI03Cx2EY1sdWTSmlFdME9tStwh4n+KWL1+nYy0WC8=;
-        b=u2lkZs0DGHOkdhYckKh0vEmvah3mtcUdCmEiM9iXyPblop5XpmI9V2CgRiqW0jtbGV
-         reK5FwiItuCG6+d63dQrJiv1YAltYFcixhf3BClc1sq7/GkfKOxDGLziQ9p32emOQ5wp
-         vFd0z7XXebB2KBeLEa3YGfFTTJ15GBqRq7Cyc31lqh6GZCWsSIfJFfyzloc4gHGYkWBy
-         ww/YKeXgj5vQENHB73hyBy5MFfEUMWxx+Slw4MSxv1++d/Jj4RlLPaCSKAbQgJmQOM+R
-         Pbj8aiB+yf4XOMIFOX9SC45h3BsmfRlDyvKSXoQ0Aa2y8giPk41G4iZYJ+UUC3RX+mZQ
-         7gzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686211165; x=1688803165;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hZI03Cx2EY1sdWTSmlFdME9tStwh4n+KWL1+nYy0WC8=;
-        b=LSx8fJFOvStvKR9lQKP802r6fuy1IdXn2ppp0YhwzUL6ZEAe3nO/I9cnxAy5NxSaYE
-         lO7CXSSo+kvLS++kcJSZS3UzENI6MqD7bn9cYwSPn+Sbw5QY/8pCKHxI9FB6OJmfd5O/
-         5JeHW0Neozhi3XdrZdi0kNEaqgOl6ZJQtTWkXjvjgWW1xvJ5300C5IsqxTGbx79Dz0eK
-         34kt0G3TcYnr8q9P+vsbkg5l5mZ+K07HKvhgOIAT3R682ZjHbTf/+mGwp0sSAO40CZIA
-         8DWIBIVy4yJEefzD/IOQGMaB1UEgucHLfdJhC6sXEY9+3KRoNfBCLKnlSdP/jPKLHJwj
-         prPQ==
-X-Gm-Message-State: AC+VfDxF/67YX825sZF1cnwQS49b1USvYmueR/1idKDkqxuJMfSoCgLe
-        NGdqmMhRjwTFplT5hBvIG471xSMQGWo3CzMQ3TcWtw==
-X-Google-Smtp-Source: ACHHUZ5d+KjHBE3nn6IbQfTfPODDpmdVKrp2o+VWenaYC3pqaAqWhAb1Zwc6F2zu1aZB2hIhws1GsEELHYPrhnaMvp0=
-X-Received: by 2002:ac8:58c1:0:b0:3f9:aa9f:84f5 with SMTP id
- u1-20020ac858c1000000b003f9aa9f84f5mr6032848qta.65.1686211165115; Thu, 08 Jun
- 2023 00:59:25 -0700 (PDT)
+        Thu, 8 Jun 2023 03:59:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B622D66
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 00:59:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 07E2C649E8
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 07:59:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E548BC433D2;
+        Thu,  8 Jun 2023 07:59:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1686211171;
+        bh=QZuWevEGbS7eH2QLlHDqrU/R3vNNbwBkMxJ4axuXrX0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dF3xz25m+LQkLdlwXOwbZZjt1/wv+xR4bFflH2QjCLC+7NriFigEBzeRodOtmVBhJ
+         v2yYDfpCcf02TcZrie+aIln2HvEM9QmHJcxtTKElYUGlHKrf9CRezjgXJ9GKaYjbtg
+         czaVrAG6gxS/9Ulo3AwVRZbPDlD6x9AfQYMDu23I=
+Date:   Thu, 8 Jun 2023 09:59:28 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Junxiao Chang <junxiao.chang@intel.com>,
+        kirill.shutemov@linux.intel.com, mhocko@suse.com,
+        jmarchan@redhat.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, muchun.song@linux.dev,
+        Vivek Kasireddy <vivek.kasireddy@intel.com>,
+        Dongwon Kim <dongwon.kim@intel.com>,
+        James Houghton <jthoughton@google.com>,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH] mm: fix hugetlb page unmap count balance issue
+Message-ID: <2023060803-trailing-ladder-2d53@gregkh>
+References: <20230512072036.1027784-1-junxiao.chang@intel.com>
+ <CADrL8HV25JyeaT=peaR7NWhUiaBz8LzpyFosYZ3_0ACt+twU6w@mail.gmail.com>
+ <20230512232947.GA3927@monkey>
+ <20230515170259.GA3848@monkey>
+ <20230516223440.GA30624@monkey>
+ <20230607120312.6da5cea7677ec1a3da35b92c@linux-foundation.org>
+ <20230607205310.GA4122@monkey>
+ <20230607140001.6685b0a058511f125a005da4@linux-foundation.org>
 MIME-Version: 1.0
-References: <20230608025424.29033-1-rdunlap@infradead.org>
-In-Reply-To: <20230608025424.29033-1-rdunlap@infradead.org>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Thu, 8 Jun 2023 09:59:14 +0200
-Message-ID: <CAMRc=Me1U_SznMfsVzYxoD7De1iBJjHzzTtNhvVi=pd+ekKGxQ@mail.gmail.com>
-Subject: Re: [PATCH] eeprom: at24: also select REGMAP
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        linux-i2c@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230607140001.6685b0a058511f125a005da4@linux-foundation.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 8, 2023 at 4:54=E2=80=AFAM Randy Dunlap <rdunlap@infradead.org>=
- wrote:
->
-> Selecting only REGMAP_I2C can leave REGMAP unset, causing build errors,
-> so also select REGMAP to prevent the build errors.
->
-> ../drivers/misc/eeprom/at24.c:540:42: warning: 'struct regmap_config' dec=
-lared inside parameter list will not be visible outside of this definition =
-or declaration
->   540 |                                   struct regmap_config *regmap_co=
-nfig)
-> ../drivers/misc/eeprom/at24.c: In function 'at24_make_dummy_client':
-> ../drivers/misc/eeprom/at24.c:552:18: error: implicit declaration of func=
-tion 'devm_regmap_init_i2c' [-Werror=3Dimplicit-function-declaration]
->   552 |         regmap =3D devm_regmap_init_i2c(dummy_client, regmap_conf=
-ig);
-> ../drivers/misc/eeprom/at24.c:552:16: warning: assignment to 'struct regm=
-ap *' from 'int' makes pointer from integer without a cast [-Wint-conversio=
-n]
->   552 |         regmap =3D devm_regmap_init_i2c(dummy_client, regmap_conf=
-ig);
-> ../drivers/misc/eeprom/at24.c: In function 'at24_probe':
-> ../drivers/misc/eeprom/at24.c:586:16: error: variable 'regmap_config' has=
- initializer but incomplete type
->   586 |         struct regmap_config regmap_config =3D { };
-> ../drivers/misc/eeprom/at24.c:586:30: error: storage size of 'regmap_conf=
-ig' isn't known
->   586 |         struct regmap_config regmap_config =3D { };
-> ../drivers/misc/eeprom/at24.c:586:30: warning: unused variable 'regmap_co=
-nfig' [-Wunused-variable]
->
-> Fixes: 5c015258478e ("eeprom: at24: add basic regmap_i2c support")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Heiner Kallweit <hkallweit1@gmail.com>
-> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
-> Cc: linux-i2c@vger.kernel.org
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Masahiro Yamada <masahiroy@kernel.org>
-> ---
->  drivers/misc/eeprom/Kconfig |    1 +
->  1 file changed, 1 insertion(+)
->
-> diff -- a/drivers/misc/eeprom/Kconfig b/drivers/misc/eeprom/Kconfig
-> --- a/drivers/misc/eeprom/Kconfig
-> +++ b/drivers/misc/eeprom/Kconfig
-> @@ -6,6 +6,7 @@ config EEPROM_AT24
->         depends on I2C && SYSFS
->         select NVMEM
->         select NVMEM_SYSFS
-> +       select REGMAP
->         select REGMAP_I2C
->         help
->           Enable this driver to get read/write support to most I2C EEPROM=
-s
+On Wed, Jun 07, 2023 at 02:00:01PM -0700, Andrew Morton wrote:
+> On Wed, 7 Jun 2023 13:53:10 -0700 Mike Kravetz <mike.kravetz@oracle.com> wrote:
+> 
+> > > 
+> > > BUGs aren't good.  Can we please find a way to push this along?
+> > > 
+> > > Have we heard anything from any udmabuf people?
+> > > 
+> > 
+> > I have not heard anything.  When this issue popped up, it took me by surprise.
+> > 
+> > udmabuf maintainer (Gerd Hoffmann), the people who added hugetlb support and
+> > the list where udmabuf was developed (dri-devel@lists.freedesktop.org) have
+> > been on cc.
+> 
+> Maybe Greg can suggest a way forward.
 
-Applied, thanks!
+I'm guessing that no one is using this code then, so why don't we just
+remove it entirely?
 
-Bart
+thanks,
+
+greg k-h
