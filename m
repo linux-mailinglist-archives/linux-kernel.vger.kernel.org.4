@@ -2,121 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B17AC7285DC
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 18:55:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B2C07285DE
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 18:57:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236719AbjFHQz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 12:55:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33884 "EHLO
+        id S236110AbjFHQ47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 12:56:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236607AbjFHQzZ (ORCPT
+        with ESMTP id S233583AbjFHQ44 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 12:55:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33B6D1FDA
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 09:54:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686243278;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=C7Gzsm4c5VDydfTjmb7wRGtHYG5sGvTAth2UOQdT5as=;
-        b=WHvumast3Yql+mAsor7+oT1js8jXMLNVJDj4B45uTvSPbdloGI2dNAwCxGhbkGNwAqSzgB
-        JV9cWiS8XeBzkVdYyjVW0Gxd0fpPIx+Dbrh8S81lWxdKD5rZ0K6dzo9VzP8aGVXG9sp7Tl
-        7ip1xzT9zAf0aE7KWXD22stW/in8D2c=
-Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com
- [209.85.161.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-516-NVCaYbAPPeWlweo5TKW4mw-1; Thu, 08 Jun 2023 12:54:27 -0400
-X-MC-Unique: NVCaYbAPPeWlweo5TKW4mw-1
-Received: by mail-oo1-f70.google.com with SMTP id 006d021491bc7-558af72a3e2so685491eaf.3
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 09:54:27 -0700 (PDT)
+        Thu, 8 Jun 2023 12:56:56 -0400
+Received: from mail-io1-f78.google.com (mail-io1-f78.google.com [209.85.166.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D8CD2119
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 09:56:55 -0700 (PDT)
+Received: by mail-io1-f78.google.com with SMTP id ca18e2360f4ac-777a93b3277so66636239f.3
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 09:56:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686243267; x=1688835267;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=C7Gzsm4c5VDydfTjmb7wRGtHYG5sGvTAth2UOQdT5as=;
-        b=LHV7gxgzJ7L7ESuMXHbhq43FzDSJETXEdyXdqxYOYFuQdJstjR3lOuibDltq1IQST0
-         O2WpJQT6+R2RNUDUblHXx/k8m0Q36O1fU1lyu9aJIDB3fqdGAqs3HD73r5Dc9v4BSXeP
-         vsLcVZzD7eUeaT8XuExNJVqI/f8+1Eza/5K0hNpCsjvMxB+GFNUZecOtMAq796xZeAXR
-         ZwdFfG/vXhM9kx8abdbtj6oxQ7No4EJsVTXwHa4VFgbapysP1S8s4PTGvNH7I3V0g6az
-         KXsCku25EoqsZvbAMkZNKXbZ8N7eHA/gfjOLU55EGGncs8H7iOCTW2RBhvC2cGBQ7tUi
-         sEAQ==
-X-Gm-Message-State: AC+VfDynSw9bfCmW2AP28lroM5wqPF59soRVEI9j6I/3UEVb640zni5c
-        mCigHwgInIeKbeEw9TAcW1a7CbwL4C2/JeZTh6SPw6Wc4YPPG4S0ZHpPIIt+aQo9E47Q4Uf7mMA
-        b2AVmBY6W/qywWqnCJxwSpC47
-X-Received: by 2002:a4a:d8c2:0:b0:558:fd2b:8232 with SMTP id c2-20020a4ad8c2000000b00558fd2b8232mr177811oov.9.1686243266856;
-        Thu, 08 Jun 2023 09:54:26 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6JTBAHmdb92kjvDywymq4EZWiP3V+16ZVHXuhLLjDlkHPWSSDhtIhwSdfuR/7p2MS+ahpNvw==
-X-Received: by 2002:a4a:d8c2:0:b0:558:fd2b:8232 with SMTP id c2-20020a4ad8c2000000b00558fd2b8232mr177798oov.9.1686243266617;
-        Thu, 08 Jun 2023 09:54:26 -0700 (PDT)
-Received: from halaney-x13s ([2600:1700:1ff0:d0e0::22])
-        by smtp.gmail.com with ESMTPSA id z2-20020aca3302000000b0038ee0c3b38esm599397oiz.44.2023.06.08.09.54.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 09:54:25 -0700 (PDT)
-Date:   Thu, 8 Jun 2023 11:54:23 -0500
-From:   Andrew Halaney <ahalaney@redhat.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawn.guo@linaro.org>, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: dwc3: qcom: Fix an error handling path in
- dwc3_qcom_probe()
-Message-ID: <20230608165423.gvcwvmgiojuvjahv@halaney-x13s>
-References: <b69fa8dd68d816e7d24c88d3eda776ceb28c5dc5.1685890571.git.christophe.jaillet@wanadoo.fr>
+        d=1e100.net; s=20221208; t=1686243414; x=1688835414;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZvkErGDG8q4I6B6SAMHYoXshOeNz/BP52Cqr8deJdX8=;
+        b=idG6TN0rfINiEI1/4/I2/JGKVEVerK+Q/Q+Yheeo8ZM2mcoAV7Yve2HSZjamkJnz3R
+         QTFd10nI3Ea9pD5BbhxcvmrYgW+ore5LG50VzLXnpTU46syqYTY4GVwIW5nXzldxElNN
+         T4obJJ9fTT2XooqqswqAlxni8/fLVeEW0DYNi9jIHnrBwXkYumMTOlY4M39sbSenJunj
+         H0KNVkq2n9glPjaOBOam4FRvz9DuaZngfp09mPb3+t+J94DsG7L5Hnwax0AJP/pmkjvm
+         DA8c3BqBu2nIdZ54Tps/NFcmqClnaWD6IiVUrl0lXQ8ySJPNcAGVPkdHvxMG3ygBfbtz
+         wNLg==
+X-Gm-Message-State: AC+VfDx62bu2/BUHAUyXUdaNFBZtyUm7JZtucjEn47Oce+zUZ42n6ja2
+        qRHGXJ+vdSBgntkWRQMvFaqNi0VTEz8ZBXpKur5/hmTFtwk9
+X-Google-Smtp-Source: ACHHUZ7pqid1LP/7VE6xphzDnh55GoUNGvTCEPgbZnslx8JlQQ3kMLckf28gda+yelz3mev7u0hUNroQZqukfaBul7yxXiSgMhhb
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b69fa8dd68d816e7d24c88d3eda776ceb28c5dc5.1685890571.git.christophe.jaillet@wanadoo.fr>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a02:a14c:0:b0:420:ced6:a88a with SMTP id
+ m12-20020a02a14c000000b00420ced6a88amr46037jah.6.1686243414719; Thu, 08 Jun
+ 2023 09:56:54 -0700 (PDT)
+Date:   Thu, 08 Jun 2023 09:56:54 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000bd448705fda123f5@google.com>
+Subject: [syzbot] [cgroups?] possible deadlock in static_key_slow_inc (3)
+From:   syzbot <syzbot+2ab700fe1829880a2ec6@syzkaller.appspotmail.com>
+To:     cgroups@vger.kernel.org, hannes@cmpxchg.org,
+        linux-kernel@vger.kernel.org, lizefan.x@bytedance.com,
+        syzkaller-bugs@googlegroups.com, tj@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 04, 2023 at 04:56:34PM +0200, Christophe JAILLET wrote:
-> If dwc3_qcom_create_urs_usb_platdev() fails, some resources still need to
-> be released, as already done in the other error handling path of the
-> probe.
-> 
-> Fixes: c25c210f590e ("usb: dwc3: qcom: add URS Host support for sdm845 ACPI boot")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Hello,
 
-Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
+syzbot found the following issue on:
 
-> ---
->  drivers/usb/dwc3/dwc3-qcom.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index 822735814050..aa96c473f839 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> @@ -856,9 +856,10 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
->  			if (IS_ERR_OR_NULL(qcom->urs_usb)) {
->  				dev_err(dev, "failed to create URS USB platdev\n");
->  				if (!qcom->urs_usb)
-> -					return -ENODEV;
-> +					ret = -ENODEV;
->  				else
-> -					return PTR_ERR(qcom->urs_usb);
-> +					ret = PTR_ERR(qcom->urs_usb);
-> +				goto clk_disable;
->  			}
->  		}
->  	}
-> -- 
-> 2.34.1
-> 
+HEAD commit:    5f63595ebd82 Merge tag 'input-for-v6.4-rc5' of git://git.k..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=153fcc63280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=7474de833c217bf4
+dashboard link: https://syzkaller.appspot.com/bug?extid=2ab700fe1829880a2ec6
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1321e2fd280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11946afd280000
 
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/d12b9e46ffe8/disk-5f63595e.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/c9044ded7edd/vmlinux-5f63595e.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/09f0fd3926e8/bzImage-5f63595e.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+2ab700fe1829880a2ec6@syzkaller.appspotmail.com
+
+======================================================
+WARNING: possible circular locking dependency detected
+6.4.0-rc5-syzkaller-00024-g5f63595ebd82 #0 Not tainted
+------------------------------------------------------
+syz-executor324/4995 is trying to acquire lock:
+ffffffff8cdc3ff0 (cpu_hotplug_lock){++++}-{0:0}, at: static_key_slow_inc+0x12/0x30 kernel/jump_label.c:185
+
+but task is already holding lock:
+ffffffff8cf5a688 (freezer_mutex){+.+.}-{3:3}, at: freezer_css_online+0x4f/0x150 kernel/cgroup/legacy_freezer.c:111
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #1 (freezer_mutex){+.+.}-{3:3}:
+       lock_acquire+0x1e3/0x520 kernel/locking/lockdep.c:5705
+       __mutex_lock_common+0x1d8/0x2530 kernel/locking/mutex.c:603
+       __mutex_lock kernel/locking/mutex.c:747 [inline]
+       mutex_lock_nested+0x1b/0x20 kernel/locking/mutex.c:799
+       freezer_change_state kernel/cgroup/legacy_freezer.c:389 [inline]
+       freezer_write+0xa8/0x3f0 kernel/cgroup/legacy_freezer.c:429
+       cgroup_file_write+0x2ca/0x6a0 kernel/cgroup/cgroup.c:4071
+       kernfs_fop_write_iter+0x3a6/0x4f0 fs/kernfs/file.c:334
+       call_write_iter include/linux/fs.h:1868 [inline]
+       new_sync_write fs/read_write.c:491 [inline]
+       vfs_write+0x790/0xb20 fs/read_write.c:584
+       ksys_write+0x1a0/0x2c0 fs/read_write.c:637
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #0 (cpu_hotplug_lock){++++}-{0:0}:
+       check_prev_add kernel/locking/lockdep.c:3113 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3232 [inline]
+       validate_chain+0x166b/0x58f0 kernel/locking/lockdep.c:3847
+       __lock_acquire+0x1316/0x2070 kernel/locking/lockdep.c:5088
+       lock_acquire+0x1e3/0x520 kernel/locking/lockdep.c:5705
+       percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
+       cpus_read_lock+0x42/0x150 kernel/cpu.c:310
+       static_key_slow_inc+0x12/0x30 kernel/jump_label.c:185
+       freezer_css_online+0xc6/0x150 kernel/cgroup/legacy_freezer.c:117
+       online_css+0xba/0x260 kernel/cgroup/cgroup.c:5491
+       css_create kernel/cgroup/cgroup.c:5562 [inline]
+       cgroup_apply_control_enable+0x7d1/0xae0 kernel/cgroup/cgroup.c:3249
+       cgroup_mkdir+0xd8f/0x1000 kernel/cgroup/cgroup.c:5758
+       kernfs_iop_mkdir+0x279/0x400 fs/kernfs/dir.c:1219
+       vfs_mkdir+0x29d/0x450 fs/namei.c:4115
+       do_mkdirat+0x264/0x520 fs/namei.c:4138
+       __do_sys_mkdirat fs/namei.c:4153 [inline]
+       __se_sys_mkdirat fs/namei.c:4151 [inline]
+       __x64_sys_mkdirat+0x89/0xa0 fs/namei.c:4151
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+other info that might help us debug this:
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(freezer_mutex);
+                               lock(cpu_hotplug_lock);
+                               lock(freezer_mutex);
+  rlock(cpu_hotplug_lock);
+
+ *** DEADLOCK ***
+
+4 locks held by syz-executor324/4995:
+ #0: ffff88807da6c460 (sb_writers#10){.+.+}-{0:0}, at: mnt_want_write+0x3f/0x90 fs/namespace.c:394
+ #1: ffff888075c6eee0 (&type->i_mutex_dir_key#7/1){+.+.}-{3:3}, at: inode_lock_nested include/linux/fs.h:810 [inline]
+ #1: ffff888075c6eee0 (&type->i_mutex_dir_key#7/1){+.+.}-{3:3}, at: filename_create+0x260/0x530 fs/namei.c:3884
+ #2: ffffffff8cf4f768 (cgroup_mutex){+.+.}-{3:3}, at: cgroup_lock include/linux/cgroup.h:370 [inline]
+ #2: ffffffff8cf4f768 (cgroup_mutex){+.+.}-{3:3}, at: cgroup_kn_lock_live+0xe9/0x290 kernel/cgroup/cgroup.c:1683
+ #3: ffffffff8cf5a688 (freezer_mutex){+.+.}-{3:3}, at: freezer_css_online+0x4f/0x150 kernel/cgroup/legacy_freezer.c:111
+
+stack backtrace:
+CPU: 0 PID: 4995 Comm: syz-executor324 Not tainted 6.4.0-rc5-syzkaller-00024-g5f63595ebd82 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
+ check_noncircular+0x2fe/0x3b0 kernel/locking/lockdep.c:2188
+ check_prev_add kernel/locking/lockdep.c:3113 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3232 [inline]
+ validate_chain+0x166b/0x58f0 kernel/locking/lockdep.c:3847
+ __lock_acquire+0x1316/0x2070 kernel/locking/lockdep.c:5088
+ lock_acquire+0x1e3/0x520 kernel/locking/lockdep.c:5705
+ percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
+ cpus_read_lock+0x42/0x150 kernel/cpu.c:310
+ static_key_slow_inc+0x12/0x30 kernel/jump_label.c:185
+ freezer_css_online+0xc6/0x150 kernel/cgroup/legacy_freezer.c:117
+ online_css+0xba/0x260 kernel/cgroup/cgroup.c:5491
+ css_create kernel/cgroup/cgroup.c:5562 [inline]
+ cgroup_apply_control_enable+0x7d1/0xae0 kernel/cgroup/cgroup.c:3249
+ cgroup_mkdir+0xd8f/0x1000 kernel/cgroup/cgroup.c:5758
+ kernfs_iop_mkdir+0x279/0x400 fs/kernfs/dir.c:1219
+ vfs_mkdir+0x29d/0x450 fs/namei.c:4115
+ do_mkdirat+0x264/0x520 fs/namei.c:4138
+ __do_sys_mkdirat fs/namei.c:4153 [inline]
+ __se_sys_mkdirat fs/namei.c:4151 [inline]
+ __x64_sys_mkdirat+0x89/0xa0 fs/namei.c:4151
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f7e55624e09
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 51 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fff7236ac98 EFLAGS: 00000246 ORIG_RAX: 0000000000000102
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f7e55624e09
+RDX: 00000000000001ff RSI: 0000000020000180 RDI: 0000000000000003
+RBP: 0000000000000000 R08: 00007fff7236acc0 R09: 00007fff7236acc0
+R10: 00007fff7236acc0 R11: 0000000000000246 R12: 00007fff7236acbc
+R13: 00007fff7236acd0 R14: 00007fff7236ad10 R15: 0000000000000000
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
