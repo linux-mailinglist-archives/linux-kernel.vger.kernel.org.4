@@ -2,138 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9947C7282B3
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 16:26:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A5637282B5
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 16:27:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234893AbjFHO0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 10:26:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56712 "EHLO
+        id S236123AbjFHO1q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 10:27:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236781AbjFHO0i (ORCPT
+        with ESMTP id S234566AbjFHO1o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 10:26:38 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEBED2D68
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 07:26:15 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-65292f79456so394507b3a.2
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 07:26:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686234361; x=1688826361;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OnoedkoiLsL0tLJYDXF1NYn5Qb4R2gxxmXGm3HjM2kw=;
-        b=H7UvU4+Cu5Ls9GovjGu5sw+DLDlo+SEQ7Pj9pFQUXI+arPhcc/rG6cgn/N04MyMs4g
-         rNQDDrHeQEAEQhh46HR8VhzW5Rhnff1RzC+72uF/cLXyudXFzJb9cftciLyMcKrEdh0E
-         8SAUuyNHD7Jy/w/ZaSbSTczyJaut2ZvBHXUYyfNC75FKC5QUUBNZN14Gd3XVPiZJRq2A
-         Jwi4iH766Mw4gDvXULcD2y+YEX28oVJ6pr9BmgruKyukSHrrYnC8Hm6EXnqX/Fz/D+iW
-         WnNEEb+LCoRqSwTryWnImZe7fp8L7hUSqa0zOH2FBTCM7VItFk4oGlf78WRkHG150ztx
-         pxVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686234361; x=1688826361;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OnoedkoiLsL0tLJYDXF1NYn5Qb4R2gxxmXGm3HjM2kw=;
-        b=ZWnIO8JJ2/cDbNdUNFlF+Jau9hCUEKy+pJglVYT4si33XH6ZAx5xH1jI7Fy+3uDEXw
-         AfLZEwcWk9U5KsIjiL67uqc9YoCOuhHLjgSQ9bCpllagHsI4YXDwHv7nH99AqDwJRAkE
-         zN+FDN8dhpRbLmWYyCQMldkvu9Kt9FTLJUlJR0bWt5b1SHEfVUAg1yuv14iPxwsbbq8o
-         DSQOUqG7tUB7Jj/zlC17ASzx1RMuUwRQoNeK5jHlvFw45YDyxre0AX2sfM8RFECqaLY6
-         8zqU0xbQKcQERAA/lDNwjm07Dm8OW2C4eIwzP3a0+v3jyxEHhg7m+FTM2ZNFF20T3fch
-         EFng==
-X-Gm-Message-State: AC+VfDyIGOHpI1s/s/P3rOhD5LxWljp07NwFRzlj11KQGMbRhsvoH81n
-        wmfz2vzq2ZtglHZgHsFS/VU=
-X-Google-Smtp-Source: ACHHUZ6MOG1Hd2uceavhD8Eb8zbsWGFQuQO+S1FpmJYxHNmRX/oBQu53oSWEWJIECUiRyik1J3RvCQ==
-X-Received: by 2002:a17:902:da8c:b0:1b0:5ca0:41a8 with SMTP id j12-20020a170902da8c00b001b05ca041a8mr5134985plx.39.1686234360542;
-        Thu, 08 Jun 2023 07:26:00 -0700 (PDT)
-Received: from sumitra.com ([117.255.153.95])
-        by smtp.gmail.com with ESMTPSA id x21-20020a17090300d500b001a221d14179sm1483052plc.302.2023.06.08.07.25.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 07:26:00 -0700 (PDT)
-Date:   Thu, 8 Jun 2023 07:25:53 -0700
-From:   Sumitra Sharma <sumitraartsy@gmail.com>
-To:     =?iso-8859-1?B?Suly9G1l?= Glisse <jglisse@redhat.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc:     Deepak R Varma <drv@mailo.com>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Ira Weiny <ira.weiny@intel.com>
-Subject: [PATCH] staging: lib: Use memcpy_to/from_page()
-Message-ID: <20230608142553.GA341787@sumitra.com>
+        Thu, 8 Jun 2023 10:27:44 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC2F52D53;
+        Thu,  8 Jun 2023 07:27:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686234439; x=1717770439;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=AOHF8Rb86ntesAI/yE6eOPe27CYMX9ghGd4LAdbYQLs=;
+  b=FkS2ZiNKdRzafecRs5vfoQum0utUn6s8Qgs4pzsCv5c7XJNAcBQVdKjH
+   KXWjjUihSYegMQrUzV4kdoLWqVZFOyXOeEI6afZEAT/rsrLNW40IRoIgQ
+   G4gC2FBMA9dkx+nY7qSLJIgBD77Vt0kadshfZDsCeL8wES+1uwAyj13ap
+   Zrom0wwnbG2SEhqO7j1cyyyx/P8yKBBHNOd/j5rUP3tewm8cW8e2uj9Dx
+   oYPRUwckeGD9fZoMzP0ovqWkPOWBmvYvLBQ+VHqJl1+MzAjwmV8+jNkMI
+   TSviLiIWm3PTNmL1EALH0wmmSqpIE37m9VcyTlDIfAD81M60/f45Sxi73
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="356177428"
+X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
+   d="scan'208";a="356177428"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 07:26:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="956736343"
+X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
+   d="scan'208";a="956736343"
+Received: from rirwin-mobl3.ger.corp.intel.com (HELO [10.213.239.227]) ([10.213.239.227])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 07:26:28 -0700
+Message-ID: <77587046-aede-f625-6a35-55bf9c5f1179@linux.intel.com>
+Date:   Thu, 8 Jun 2023 15:26:26 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [RFC 02/10] drm: Update file owner during use
+Content-Language: en-US
+To:     Emil Velikov <emil.l.velikov@gmail.com>
+Cc:     Intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        Rob Clark <robdclark@chromium.org>,
+        Brian Welty <brian.welty@intel.com>, Kenny.Ho@amd.com,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?Q?St=c3=a9phane_Marchesin?= <marcheu@chromium.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Dave Airlie <airlied@redhat.com>, Tejun Heo <tj@kernel.org>,
+        cgroups@vger.kernel.org, "T . J . Mercier" <tjmercier@google.com>
+References: <20230314141904.1210824-1-tvrtko.ursulin@linux.intel.com>
+ <20230314141904.1210824-3-tvrtko.ursulin@linux.intel.com>
+ <CACvgo52Bb3kBua8dh+eac6dhSwiJLMGAdGDAa+LQYoOwCLPLNA@mail.gmail.com>
+From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Organization: Intel Corporation UK Plc
+In-Reply-To: <CACvgo52Bb3kBua8dh+eac6dhSwiJLMGAdGDAa+LQYoOwCLPLNA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Deprecate kmap() in favor of kmap_local_page() due to high
-cost, restricted mapping space, the overhead of a global lock
-for synchronization, and making the process sleep in the
-absence of free slots.
 
-kmap_local_page() offers thread-local and CPU-local mappings,
-take pagefaults in a local kmap region and preserves preemption
-by saving the mappings of outgoing task and restoring those of
-the incoming one during a context switch.
+On 21/04/2023 13:13, Emil Velikov wrote:
+> Greetings everyone,
+> 
+> Above all - hell yeah. Thank you Tvrtko, this has been annoying the
+> hell out of me for ages.
 
-It is faster than kmap(), and in functions "dmirror_do_read" and
-"dmirror_do_write" the mappings are kept local to the thread.
+Yay!
 
-Therefore, replace kmap/mem*()/kunmap pattern with
-memcpy_to/from_page() and remove the unused variable "tmp".
+> On Tue, 14 Mar 2023 at 14:19, Tvrtko Ursulin
+> <tvrtko.ursulin@linux.intel.com> wrote:
+>>
+>> From: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+>>
+>> With the typical model where the display server opends the file descriptor
+>> and then hands it over to the client we were showing stale data in
+>> debugfs.
+> 
+> s/opends/opens/
 
-Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
----
+Thanks!
 
-Suggested-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> But as a whole the sentence is fairly misleading. Story time:
+> 
+> The traditional model, the server was the orchestrator managing the
+> primary device node. From the fd, to the master status and
+> authentication. But looking at the fd alone, this has varied across
+> the years.
+> 
+> IIRC in the DRI1 days, Xorg (libdrm really) would have a list of open
+> fd(s) and reuse those whenever needed, DRI2 the client was responsible
+> for open() themselves and with DRI3 the fd was passed to the client.
+> 
+> Around the inception of DRI3 and systemd-logind, the latter became
+> another possible orchestrator. Whereby Xorg and Wayland compositors
+> could ask it for the fd. For various reasons (hysterical and genuine
+> ones) Xorg has a fallback path going the open(), whereas Wayland
+> compositors are moving to solely relying on logind... some never had
+> fallback even.
+> 
+> Over the past few years, more projects have emerged which provide
+> functionality similar (be that on API level, Dbus, or otherwise) to
+> systemd-logind.
+> 
+> 
+> Apart from that, the commit is spot on. I like the use of rcu and the
+> was_master handling is correct. With some message polish this commit
+> is:
+> Reviewed-by: Emil Velikov <emil.l.velikov@gmail.com>
 
- lib/test_hmm.c | 10 ++--------
- 1 file changed, 2 insertions(+), 8 deletions(-)
+Are you okay if I just paste your very fine explanation verbatim, with 
+credits?
 
-diff --git a/lib/test_hmm.c b/lib/test_hmm.c
-index 67e6f83fe0f8..cc96dfa54122 100644
---- a/lib/test_hmm.c
-+++ b/lib/test_hmm.c
-@@ -368,16 +368,13 @@ static int dmirror_do_read(struct dmirror *dmirror, unsigned long start,
- 	for (pfn = start >> PAGE_SHIFT; pfn < (end >> PAGE_SHIFT); pfn++) {
- 		void *entry;
- 		struct page *page;
--		void *tmp;
- 
- 		entry = xa_load(&dmirror->pt, pfn);
- 		page = xa_untag_pointer(entry);
- 		if (!page)
- 			return -ENOENT;
- 
--		tmp = kmap(page);
--		memcpy(ptr, tmp, PAGE_SIZE);
--		kunmap(page);
-+		memcpy_from_page((char *)ptr, page, 0, PAGE_SIZE);
- 
- 		ptr += PAGE_SIZE;
- 		bounce->cpages++;
-@@ -437,16 +434,13 @@ static int dmirror_do_write(struct dmirror *dmirror, unsigned long start,
- 	for (pfn = start >> PAGE_SHIFT; pfn < (end >> PAGE_SHIFT); pfn++) {
- 		void *entry;
- 		struct page *page;
--		void *tmp;
- 
- 		entry = xa_load(&dmirror->pt, pfn);
- 		page = xa_untag_pointer(entry);
- 		if (!page || xa_pointer_tag(entry) != DPT_XA_TAG_WRITE)
- 			return -ENOENT;
- 
--		tmp = kmap(page);
--		memcpy(tmp, ptr, PAGE_SIZE);
--		kunmap(page);
-+		memcpy_to_page(page, 0, (char *)ptr, PAGE_SIZE);
- 
- 		ptr += PAGE_SIZE;
- 		bounce->cpages++;
--- 
-2.25.1
+> I also had a brief look at 01/10, although I cannot find many
+> references for the pid <> tguid mappings. Be that on the kernel side
+> or userspace - do you have any links that I can educate myself?
+
+TGID or thread group leader. For single threaded userspace TGID equals 
+to PID, while for multi-threaded first thread TGID equals PID/TID, while 
+additional threads PID/TID does not equal TGID. Clear, as mud? :) My 
+POSIX book is misplaced somewhere having not consulted it years... :)
+
+Regards,
+
+Tvrtko
 
