@@ -2,61 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3D4D727C94
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 12:17:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1484727C98
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 12:18:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235863AbjFHKRo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 06:17:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39708 "EHLO
+        id S233544AbjFHKSK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 06:18:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235067AbjFHKRl (ORCPT
+        with ESMTP id S235852AbjFHKSF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 06:17:41 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 932A3272A;
-        Thu,  8 Jun 2023 03:17:38 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 607406606E80;
-        Thu,  8 Jun 2023 11:17:36 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1686219457;
-        bh=8wEtLq+k1gpOUloiODBgmlAG8KGRJX9TF1jNJ/Nv8js=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=H0Sf5wzWDIx0dtyIlUX0Ej8yasaRyBn+OjU44dyImkOagbqJHRynkV9IYpME92tkW
-         5IaPR7qh4z6xulH72soV+bUoBG3qOE3XftTKUqa8Ry6xr0XebMI433O3KNMm/8xRpW
-         mhwCS7OqQDpoHfBpGbH8PIWxaY/lemPW/NdCd8IxhnISypNph6CvgAJrHdfLo5gdhs
-         jXVLKkevPsmjfPxF5WrNSyWN7r9Ak5NCSZ/OjR6Vt864U5cmrzmTVcwLnBiJoITapQ
-         gpUqFVKdQcUIe1SJQGZCWgajaN/0POAuQj7dhjFFrGr7t+p5zpdBOQqv7kcjaUEySI
-         idXbPdSQUnXbA==
-Message-ID: <6d31e143-1b8f-21ba-8ffe-cee9cac324ea@collabora.com>
-Date:   Thu, 8 Jun 2023 12:17:34 +0200
+        Thu, 8 Jun 2023 06:18:05 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DF4C2D4F;
+        Thu,  8 Jun 2023 03:17:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686219479; x=1717755479;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=wkfUea5iBEpBashTvelasn3tuZ4SoK0LqgduwN/VK8k=;
+  b=XOqSjZV0oF7Q0SlANcNd+koEgfi8S8fqLACnvQQBlgWhjdNcMCD8GAy2
+   EL7pIhDZ3jxDqQrODTKUOfu85oA0j9k9YVwehHejftCAgqP3mCFTPRREq
+   OKbzpaHkuqioto4o+s75IbQtTDAv4Mh9oXw0eJUDUmrPlkJgA86OuImT8
+   cpsbRJCMIyc0i/r/I/5uGfZzr7Yc97+mAnT4NLp2KHfMBGHXi0G+mJ/YO
+   LcflWLU31QK9KjR/s6eEGbUM4hGtU3ADQUsowQC04Wyf7cem7wHDk5qYY
+   n+P7VvwHH8GJ+zXAwj0cQbUik0KdYt+gmHgCFn2bw8aQFIyHoeAeRe7jq
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="360603152"
+X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
+   d="scan'208";a="360603152"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 03:17:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="687331946"
+X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
+   d="scan'208";a="687331946"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 03:17:56 -0700
+Received: from kekkonen.localdomain (localhost [IPv6:::1])
+        by kekkonen.fi.intel.com (Postfix) with SMTP id 07D11120BE1;
+        Thu,  8 Jun 2023 13:17:54 +0300 (EEST)
+Date:   Thu, 8 Jun 2023 10:17:53 +0000
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     linux-media@vger.kernel.org, Conor Dooley <conor@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] MAINTAINERS: Assign Shawn Tu's sensor drivers to
+ myself
+Message-ID: <ZIGq0bXuumhL9R5V@kekkonen.localdomain>
+References: <20230608094257.4054914-1-sakari.ailus@linux.intel.com>
+ <20230608-blaspheme-goofball-8a11ac2c7118@wendy>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 1/2] PCI: mediatek-gen3: Stop acquiring spinlocks in
- {suspend,resume}_noirq
-Content-Language: en-US
-To:     Oliver Neukum <oneukum@suse.com>, ryder.lee@mediatek.com
-Cc:     jianjun.wang@mediatek.com, lpieralisi@kernel.org, kw@linux.com,
-        robh@kernel.org, bhelgaas@google.com, p.zabel@pengutronix.de,
-        matthias.bgg@gmail.com, linux-pci@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230504113509.184633-1-angelogioacchino.delregno@collabora.com>
- <20230504113509.184633-2-angelogioacchino.delregno@collabora.com>
- <479acc85-2349-d0ac-851c-f57b1bf6aa9e@suse.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <479acc85-2349-d0ac-851c-f57b1bf6aa9e@suse.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230608-blaspheme-goofball-8a11ac2c7118@wendy>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,78 +70,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 08/05/23 09:44, Oliver Neukum ha scritto:
-> On 04.05.23 13:35, AngeloGioacchino Del Regno wrote:
-> 
-> Hi,
-> 
-> looking at your patch I am afraid there is an issue.
-> 
->> In mtk_pcie_suspend_noirq() and mtk_pcie_resume_noirq() we are,
->> respectively, disabling and enabling generation of interrupts and
->> then saving and restoring the enabled interrupts register: since
->> we're using noirq PM callbacks, that can be safely done without
->> holding any spin lock.
-> 
-> Why? You can still race with another CPU in task context.
-> That is if you say that you do not need locking to touch
-> PCIE_INT_ENABLE_REG that is fine, but then why do you remove
-> it from one place only?
-> It is also touched in mtk_pcie_probe() at a minimum.
-> 
-> 
->> That was noticed because of, and solves, the following issue:
->>
->> <4>[   74.185982] ========================================================
->> <4>[   74.192629] WARNING: possible irq lock inversion dependency detected
->> <4>[   74.199276] 6.3.0-next-20230428+ #51 Tainted: G        W
->> <4>[   74.205664] --------------------------------------------------------
->> <4>[   74.212309] systemd-sleep/809 just changed the state of lock:
->> <4>[   74.218347] ffff65a5c34c65a0 (&pcie->irq_lock){+...}-{2:2}, at: 
->> mtk_pcie_resume+0x50/0xa8
->> <4>[   74.226870] but this lock was taken by another, HARDIRQ-safe lock in the past:
->> <4>[   74.234389]  (&irq_desc_lock_class){-.-.}-{2:2}
->> <4>[   74.234409]
->> <4>[   74.234409]
->> <4>[   74.234409] and interrupts could create inverse lock ordering between them.
->> <4>[   74.234409]
->> <4>[   74.251704]
->> <4>[   74.251704] other info that might help us debug this:
->> <4>[   74.258785]  Possible interrupt unsafe locking scenario:
->> <4>[   74.258785]
->> <4>[   74.266126]        CPU0                    CPU1
->> <4>[   74.270942]        ----                    ----
->> <4>[   74.275758]   lock(&pcie->irq_lock);
-> 
-> Lock A
-> 
->> <4>[   74.279627]                                local_irq_disable();
-> 
-> strictly speaking irrelevant
-> 
->> <4>[   74.285836]                                lock(&irq_desc_lock_class);
-> 
-> lock B
-> 
->> <4>[   74.292667]                                lock(&pcie->irq_lock);
-> 
-> lock A
-> 
->> <4>[   74.299061]   <Interrupt>
-> 
-> You do not need that interrupt.
-> 
->> <4>[   74.301960]     lock(&irq_desc_lock_class);
-> 
-> lock B
-> 
->> <4>[   74.306438]
->> <4>[   74.306438]  *** DEADLOCK ***
+Hi Conor,
 
+On Thu, Jun 08, 2023 at 10:55:51AM +0100, Conor Dooley wrote:
+> On Thu, Jun 08, 2023 at 12:42:57PM +0300, Sakari Ailus wrote:
+> > Shawn Tu's e-mail address is bouncing and he hasn't told he has a new one:
+> > 
+> >    shawnx.tu@intel.com
+> >    Remote Server returned '550 5.1.10 RESOLVER.ADR.RecipientNotFound;
+> >    Recipient not found by SMTP address lookup'
+> > 
+> > Assign the sensor drivers Shawn maintained to myself.
+> 
+> Sweet, much better than orphaning stuff, thanks!
+> 
+> > Reported-by: Conor Dooley <conor@kernel.org>
+> 
+> Not really important for a reported-by, but if someone gets the chance
+> while applying could please you do a
+> s/conor@kernel.org/conor.dooley@microchip.com/
+> Doesn't really matter if that isn't done though since it is just a
+> reported-by, so nw if not.
 
-Sorry for the very late reply. I just noticed this.
+I've changed that for the patch I'll eventually include in the PR for
+Mauro.
 
-I'm unsure, at this point, about how to solve this warning; ideas?
+-- 
+Kind regards,
 
-Thanks,
-Angelo
+Sakari Ailus
