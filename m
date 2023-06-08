@@ -2,115 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7EAE7284BD
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 18:21:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 394527284C3
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 18:22:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233738AbjFHQVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 12:21:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60816 "EHLO
+        id S233838AbjFHQWr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 12:22:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233578AbjFHQVe (ORCPT
+        with ESMTP id S229488AbjFHQWo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 12:21:34 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EDC611A;
-        Thu,  8 Jun 2023 09:21:33 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Thu, 8 Jun 2023 12:22:44 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B4582119;
+        Thu,  8 Jun 2023 09:22:43 -0700 (PDT)
+Received: from jupiter.universe (dyndsl-091-248-189-092.ewe-ip-backbone.de [91.248.189.92])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 4AE9421A77;
-        Thu,  8 Jun 2023 16:21:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1686241292; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Civ667UQ8fwevWftFe2wG8O2eACHxqqQ5lCSI9TWYew=;
-        b=G47wYF+u6AAVM2Sk8k+YW082RJjORT0h5pE9BcdFNOzg+ItjMRdqsOy+UOGZq9ydDSEwvg
-        J/gzdnHC0zzAMfYcs9fZPobRhucEpId8nGQ/HxQBgwzZGJ77nxIToOyQq53iBVGwpHUW8d
-        e8YXN/RqdOcEAjDqMX0XdhBjFta9/AM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1686241292;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Civ667UQ8fwevWftFe2wG8O2eACHxqqQ5lCSI9TWYew=;
-        b=8oMJG4pqt/sf9ulFNcM63hCkr5TkAYlUe4nrtcfo4T+uyiWLYkbvJIGoMRlL+mRoxvOZz3
-        Otqv2L1NCZyzScDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3DB5C138E6;
-        Thu,  8 Jun 2023 16:21:32 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id zZsNDwwAgmTNMgAAMHmgww
-        (envelope-from <jack@suse.cz>); Thu, 08 Jun 2023 16:21:32 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id C5895A0749; Thu,  8 Jun 2023 18:21:31 +0200 (CEST)
-Date:   Thu, 8 Jun 2023 18:21:31 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Lu Hongfei <luhongfei@vivo.com>
-Cc:     Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        "open list:EXT4 FILE SYSTEM" <linux-ext4@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        opensource.kernel@vivo.com
-Subject: Re: [PATCH] ext4: Fix traditional comparison using max/min method
-Message-ID: <20230608162131.kduwoemmbeowmfg4@quack3>
-References: <20230529070930.37949-1-luhongfei@vivo.com>
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D5F2C6606F20;
+        Thu,  8 Jun 2023 17:22:41 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686241362;
+        bh=FUovyx4uZxMWc91RhE6Xo+afuqEOehrwcyAViHLU/HU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Yk8lAERkgxCLZNAqSBy1hIwruaRpomWHSkmnjueVD2xRurgWIKlFfR7MklkAJzcql
+         l/ccXmgzN9Ovua+guJXIfaUt9fz9BUw8i8oZF4aXiQyESB5kicYSy3xxwViHRB70iR
+         hVyVyVl4D2fuoWnJpk5THwUNvwWmEkfF5EhIcuy65zcZZBczmxWW8AfTlWcZj6ZYsi
+         emshVIjAMw6ZtlfvRvpQM45eaVaB38Nlbda/0by76tuN1QJDflWDGpK/X5RghUWZ7r
+         3Hm15WPlVce2dtRRxx8tVXorV8KQ1W4r+I2fNfwq0p0DFyqjat51PH69g/5rkz2OfH
+         ZyXjyuX98gWKQ==
+Received: by jupiter.universe (Postfix, from userid 1000)
+        id C848F4805CC; Thu,  8 Jun 2023 18:22:39 +0200 (CEST)
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        linux-ide@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        kernel@collabora.com
+Subject: [PATCH v3 0/5] Add RK3588 SATA support
+Date:   Thu,  8 Jun 2023 18:22:33 +0200
+Message-Id: <20230608162238.50078-1-sebastian.reichel@collabora.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230529070930.37949-1-luhongfei@vivo.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 29-05-23 15:09:30, Lu Hongfei wrote:
-> It would be better to replace the traditional ternary conditional
-> operator with max()/min()
-> 
-> Signed-off-by: Lu Hongfei <luhongfei@vivo.com>
+Hi,
 
-Looks good. Feel free to add:
+This enables SATA support for RK3588.
 
-Reviewed-by: Jan Kara <jack@suse.cz>
+Changes since PATCHv2:
+ * https://lore.kernel.org/all/20230522173423.64691-1-sebastian.reichel@collabora.com/
+ * Drop patch 1 (applied by Heiko)
+ * Update SATA DT binding to split Rockchip into its own file
+ * Enforce correct resets numbers for the rk3568/rk3588 combo PHY
 
-								Honza
+Changes since PATCHv1:
+ * https://lore.kernel.org/all/20230413182345.92557-1-sebastian.reichel@collabora.com/
+ * Rebase to v6.4-rc1
+ * Collect Acked-by for syscon DT binding update
+ * Use ASIC clock description suggested by Serge Semin
+ * Also add RBC clock (not used by RK3588)
+ * Add extra patch narrowing down the allowed clocks for RK356x and RK3588
 
-> ---
->  fs/ext4/balloc.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
->  mode change 100644 => 100755 fs/ext4/balloc.c
-> 
-> diff --git a/fs/ext4/balloc.c b/fs/ext4/balloc.c
-> index c1edde817be8..82124045d187
-> --- a/fs/ext4/balloc.c
-> +++ b/fs/ext4/balloc.c
-> @@ -111,10 +111,8 @@ static unsigned ext4_num_overhead_clusters(struct super_block *sb,
->  	itbl_blk_start = ext4_inode_table(sb, gdp);
->  	itbl_blk_end = itbl_blk_start + sbi->s_itb_per_group - 1;
->  	if (itbl_blk_start <= end && itbl_blk_end >= start) {
-> -		itbl_blk_start = itbl_blk_start >= start ?
-> -			itbl_blk_start : start;
-> -		itbl_blk_end = itbl_blk_end <= end ?
-> -			itbl_blk_end : end;
-> +		itbl_blk_start = max(itbl_blk_start, start);
-> +		itbl_blk_end = min(itbl_blk_end, end);
->  
->  		itbl_cluster_start = EXT4_B2C(sbi, itbl_blk_start - start);
->  		itbl_cluster_end = EXT4_B2C(sbi, itbl_blk_end - start);
-> -- 
-> 2.39.0
-> 
+-- Sebastian
+
+Sebastian Reichel (5):
+  dt-bindings: ata: dwc-ahci: add PHY clocks
+  dt-bindings: ata: dwc-ahci: add Rockchip RK3588
+  dt-bindings: phy: rockchip: rk3588 has two reset lines
+  arm64: dts: rockchip: rk3588: add combo PHYs
+  arm64: dts: rockchip: rk3588: add SATA support
+
+ .../bindings/ata/rockchip,dwc-ahci.yaml       | 114 ++++++++++++++++++
+ .../bindings/ata/snps,dwc-ahci-common.yaml    |   8 +-
+ .../bindings/ata/snps,dwc-ahci.yaml           |  17 ++-
+ .../phy/phy-rockchip-naneng-combphy.yaml      |  34 +++++-
+ arch/arm64/boot/dts/rockchip/rk3588.dtsi      |  44 +++++++
+ arch/arm64/boot/dts/rockchip/rk3588s.dtsi     |  90 ++++++++++++++
+ 6 files changed, 298 insertions(+), 9 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/ata/rockchip,dwc-ahci.yaml
+
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+2.39.2
+
