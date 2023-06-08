@@ -2,212 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D738F728BE8
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 01:39:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E5A3728BEF
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 01:43:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237132AbjFHXi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 19:38:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55334 "EHLO
+        id S229498AbjFHXnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 19:43:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230118AbjFHXi4 (ORCPT
+        with ESMTP id S229541AbjFHXnr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 19:38:56 -0400
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D5A3583
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 16:38:19 -0700 (PDT)
-Received: by mail-il1-x131.google.com with SMTP id e9e14a558f8ab-33ed16b1360so50985ab.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 16:38:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686267498; x=1688859498;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yp/9POZM+KSk/Puo0CGh5BoXNxCg9MCE79dJ8CyzMbY=;
-        b=x89+2IXEYnuJJWvQFBoh7DUc7GNmBRPm9m51Vqtza/mu4rdXKmTdXTOln4O2qtITKD
-         7ufD7QV4ZR4ArOl5vs0OVL7emQeXdJudgYA4ZHQyB4lt05jqRZfxhO1MidSpGzkKsGKa
-         TFlYmwn6wnWXpq/GgLqM7Z1FI6/XdGIiccd9BsMxsPY1VLInXwj+8/NpGXiYmAJdCiK1
-         3OluSFEvkfycgMZMRQy6wQoG3cKI65YXh4iaG9mJqro6ji0mI1lUPSTnll13FgtD/FAo
-         T6AxJ8TdX/SqLRz9O4U8JYa1RoI/XD14Ekwh+EFhOHcAbGHrhfM3tarZuf37BLAUguJc
-         jjZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686267498; x=1688859498;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yp/9POZM+KSk/Puo0CGh5BoXNxCg9MCE79dJ8CyzMbY=;
-        b=QGO4/NWdErLZD5VgpSZU+4mDnHjRU1tmISxVkflPNCdN7I8ymhDQpUHvD4sC7A54QG
-         ZHV0R3YIzLEuYX2BhnZC2af/KP3Ou9lDe3VwRJVTnfXZtMqJV1Za8Li7eqRzcYoWtitK
-         2aZ9y5O2X41fzo54QoYkfn7Xaldu28nglGhQKAkMJbvXlR1Xz9SaSEAjpgNpHTUByehq
-         ZJBDztP0pC/D1ClCOws5emMZ9uEpOzInyBBM1Mh+TgC1h/PBpxh43k4szhCDYKK8RszK
-         uPi3PK+17/rlBoiDWPGghge//MW3pqBrvmFkRoCcGN5ImMn7sRe4jjLY4ETG9lMbQP8d
-         pkPQ==
-X-Gm-Message-State: AC+VfDyHp0cHv7yYAQfvIzShX99Bn3QJsE+5NmBX8dKmhVgQ6Iv9Fs4j
-        9xGRf0nk+BkDAVs2DQChmPkO5RmoNRM8RCa3aGwVDw==
-X-Google-Smtp-Source: ACHHUZ6qQ/McoXLXbStSsmkU55JfqWAXYeqrjmAtBC3ocJ41T89r47nouNbqQc0tweH1DBPXNdWyLgYiuooFRXGPcNI=
-X-Received: by 2002:a92:c24a:0:b0:338:9f6a:d547 with SMTP id
- k10-20020a92c24a000000b003389f6ad547mr386966ilo.21.1686267498281; Thu, 08 Jun
- 2023 16:38:18 -0700 (PDT)
+        Thu, 8 Jun 2023 19:43:47 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC484A2;
+        Thu,  8 Jun 2023 16:43:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686267825; x=1717803825;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=cWSWqOALQFKrNwE8jAhiXlR36iGyYWGvMKM0DXTmNyU=;
+  b=aV41ohrtNip8/9mVJjeEDoky9DCEpja2SIZOYhZKGta2Pd5beK4MUK9E
+   NOhY0YFiASXKdrQOEzGQDs779zqaXW1azrTYm9f0Tw5lIunHD7v31Gt5V
+   XsAhvAcBkFeVed9oE9WV0AptmlpNmGanOIK9LMm7KjUjWvhKppqgnr1+n
+   J+Jt8L3Ne8gT5apMKYybsqAPepyLTU7nj6WBX4W/BFNOKvvQBkuWhuc98
+   oJ1pcv/83Fi+EORb09zaLwELAFuoScssLBs0y77C8WlnuChzO5W+3SGWb
+   hUF0ayC5iR6LaNcAtccLXm47hOhaLbF9el/+bDtssboT5N2UOZdNLwgVg
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="347110914"
+X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
+   d="scan'208";a="347110914"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 16:43:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="704327805"
+X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
+   d="scan'208";a="704327805"
+Received: from goels-mobl.ger.corp.intel.com (HELO [10.209.86.239]) ([10.209.86.239])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 16:43:44 -0700
+Message-ID: <b456ea7c-18be-3397-0115-fa25007741bf@intel.com>
+Date:   Thu, 8 Jun 2023 16:43:43 -0700
 MIME-Version: 1.0
-References: <20230608232400.3056312-1-namhyung@kernel.org> <20230608232400.3056312-2-namhyung@kernel.org>
-In-Reply-To: <20230608232400.3056312-2-namhyung@kernel.org>
-From:   Ian Rogers <irogers@google.com>
-Date:   Thu, 8 Jun 2023 16:38:06 -0700
-Message-ID: <CAP-5=fVmhdnRipBFZz++OzYB_8tMSQjPXQ1L9pJ1WZHTdErsBQ@mail.gmail.com>
-Subject: Re: [PATCH 1/3] perf list: Check if libpfm4 event is supported
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v11 12/20] x86/virt/tdx: Allocate and set up PAMTs for
+ TDMRs
+Content-Language: en-US
+To:     kirill.shutemov@linux.intel.com, Kai Huang <kai.huang@intel.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-mm@kvack.org, tony.luck@intel.com, peterz@infradead.org,
+        tglx@linutronix.de, seanjc@google.com, pbonzini@redhat.com,
+        david@redhat.com, dan.j.williams@intel.com,
+        rafael.j.wysocki@intel.com, ying.huang@intel.com,
+        reinette.chatre@intel.com, len.brown@intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, chao.gao@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, bagasdotme@gmail.com,
+        sagis@google.com, imammedo@redhat.com
+References: <cover.1685887183.git.kai.huang@intel.com>
+ <4e108968c3294189ad150f62df1f146168036342.1685887183.git.kai.huang@intel.com>
+ <20230608232452.yrx2tekugkvral4z@box>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20230608232452.yrx2tekugkvral4z@box>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 8, 2023 at 4:24=E2=80=AFPM Namhyung Kim <namhyung@kernel.org> w=
-rote:
->
-> Some of its event info cannot be used directly due to missing default
-> attributes.  Let's check if the event is supported before printing
-> like we do for hw and cache events.
->
-> Cc: Stephane Eranian <eranian@google.com>
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+On 6/8/23 16:24, kirill.shutemov@linux.intel.com wrote:
+>>  	ret = -EINVAL;
+>> +	if (ret)
+>> +		tdmrs_free_pamt_all(&tdx_tdmr_list);
+>> +	else
+>> +		pr_info("%lu KBs allocated for PAMT.\n",
+>> +				tdmrs_count_pamt_pages(&tdx_tdmr_list) * 4);
+> "* 4"? This is very cryptic. procfs uses "<< (PAGE_SHIFT - 10)" which
+> slightly less magic to me. And just make the helper that returns kilobytes
+> to begin with, if it is the only caller.
 
-Acked-by: Ian Rogers <irogers>@google.com>
+Let's look at where this data comes from:
 
-Thanks,
-Ian
++static unsigned long tdmrs_count_pamt_pages(struct tdmr_info_list
+*tdmr_list)
++{
++	unsigned long pamt_npages = 0;
++	int i;
++
++	for (i = 0; i < tdmr_list->nr_consumed_tdmrs; i++) {
++		unsigned long pfn, npages;
++
++		tdmr_get_pamt(tdmr_entry(tdmr_list, i), &pfn, &npages);
++		pamt_npages += npages;
++	}
 
-> ---
->  tools/perf/util/pfm.c | 58 +++++++++++++++++++++++++++++++++++++------
->  1 file changed, 50 insertions(+), 8 deletions(-)
->
-> diff --git a/tools/perf/util/pfm.c b/tools/perf/util/pfm.c
-> index 076aecc22c16..4c1024c343dd 100644
-> --- a/tools/perf/util/pfm.c
-> +++ b/tools/perf/util/pfm.c
-> @@ -13,6 +13,8 @@
->  #include "util/pmus.h"
->  #include "util/pfm.h"
->  #include "util/strbuf.h"
-> +#include "util/cpumap.h"
-> +#include "util/thread_map.h"
->
->  #include <string.h>
->  #include <linux/kernel.h>
-> @@ -123,6 +125,36 @@ int parse_libpfm_events_option(const struct option *=
-opt, const char *str,
->         return -1;
->  }
->
-> +static bool is_libpfm_event_supported(const char *name, struct perf_cpu_=
-map *cpus,
-> +                                     struct perf_thread_map *threads)
-> +{
-> +       struct perf_pmu *pmu;
-> +       struct evsel *evsel;
-> +       struct perf_event_attr attr =3D {};
-> +       bool result =3D true;
-> +       int ret;
-> +
-> +       ret =3D pfm_get_perf_event_encoding(name, PFM_PLM0|PFM_PLM3,
-> +                                         &attr, NULL, NULL);
-> +       if (ret !=3D PFM_SUCCESS)
-> +               return false;
-> +
-> +       pmu =3D perf_pmus__find_by_type((unsigned int)attr.type);
-> +       evsel =3D parse_events__add_event(0, &attr, name, /*metric_id=3D*=
-/NULL, pmu);
-> +       if (evsel =3D=3D NULL)
-> +               return false;
-> +
-> +       evsel->is_libpfm_event =3D true;
-> +
-> +       if (evsel__open(evsel, cpus, threads) < 0)
-> +               result =3D false;
-> +
-> +       evsel__close(evsel);
-> +       evsel__delete(evsel);
-> +
-> +       return result;
-> +}
-> +
->  static const char *srcs[PFM_ATTR_CTRL_MAX] =3D {
->         [PFM_ATTR_CTRL_UNKNOWN] =3D "???",
->         [PFM_ATTR_CTRL_PMU] =3D "PMU",
-> @@ -146,6 +178,8 @@ print_libpfm_event(const struct print_callbacks *prin=
-t_cb, void *print_state,
->  {
->         int j, ret;
->         char topic[80], name[80];
-> +       struct perf_cpu_map *cpus =3D perf_cpu_map__empty_new(1);
-> +       struct perf_thread_map *threads =3D thread_map__new_by_tid(0);
->
->         strbuf_setlen(buf, 0);
->         snprintf(topic, sizeof(topic), "pfm %s", pinfo->name);
-> @@ -185,14 +219,15 @@ print_libpfm_event(const struct print_callbacks *pr=
-int_cb, void *print_state,
->                                     ainfo.name, ainfo.desc);
->                 }
->         }
-> -       print_cb->print_event(print_state,
-> -                       pinfo->name,
-> -                       topic,
-> -                       name, info->equiv,
-> -                       /*scale_unit=3D*/NULL,
-> -                       /*deprecated=3D*/NULL, "PFM event",
-> -                       info->desc, /*long_desc=3D*/NULL,
-> -                       /*encoding_desc=3D*/buf->buf);
-> +
-> +       if (is_libpfm_event_supported(name, cpus, threads)) {
-> +               print_cb->print_event(print_state, pinfo->name, topic,
-> +                                     name, info->equiv,
-> +                                     /*scale_unit=3D*/NULL,
-> +                                     /*deprecated=3D*/NULL, "PFM event",
-> +                                     info->desc, /*long_desc=3D*/NULL,
-> +                                     /*encoding_desc=3D*/buf->buf);
-> +       }
->
->         pfm_for_each_event_attr(j, info) {
->                 pfm_event_attr_info_t ainfo;
-> @@ -215,6 +250,10 @@ print_libpfm_event(const struct print_callbacks *pri=
-nt_cb, void *print_state,
->                         print_attr_flags(buf, &ainfo);
->                         snprintf(name, sizeof(name), "%s::%s:%s",
->                                  pinfo->name, info->name, ainfo.name);
-> +
-> +                       if (!is_libpfm_event_supported(name, cpus, thread=
-s))
-> +                               continue;
-> +
->                         print_cb->print_event(print_state,
->                                         pinfo->name,
->                                         topic,
-> @@ -225,6 +264,9 @@ print_libpfm_event(const struct print_callbacks *prin=
-t_cb, void *print_state,
->                                         /*encoding_desc=3D*/buf->buf);
->                 }
->         }
-> +
-> +       perf_cpu_map__put(cpus);
-> +       perf_thread_map__put(threads);
->  }
->
->  void print_libpfm_events(const struct print_callbacks *print_cb, void *p=
-rint_state)
-> --
-> 2.41.0.162.gfafddb0af9-goog
->
+OK, so tdmr_get_pamt() is getting it in pages.  How is it *stored*?
+
++static void tdmr_get_pamt(struct tdmr_info *tdmr, unsigned long *pamt_pfn,
++			  unsigned long *pamt_npages)
++{
+...
++	pamt_sz = tdmr->pamt_4k_size + tdmr->pamt_2m_size + tdmr->pamt_1g_size;
+++	*pamt_pfn = PHYS_PFN(pamt_base);
++	*pamt_npages = pamt_sz >> PAGE_SHIFT;
++}
+
+Oh, it's actually stored in bytes.  So to print it out you actually
+convert it from bytes->pages->kbytes.  Not the best.
+
+If tdmr_get_pamt() just returned 'pamt_size_bytes', you could do one
+conversion at:
+
+	free_contig_range(pamt_pfn, pamt_size_bytes >> PAGE_SIZE);
+
+and since tdmrs_count_pamt_pages() has only one caller you can just make
+it:  tdmrs_count_pamt_kb().  The print becomes:
+
+	pr_info("%lu KBs allocated for PAMT.\n",
+		tdmrs_count_pamt_kb(&tdx_tdmr_list) * 4);
+
+and tdmrs_count_pamt_kb() does something super fancy like:
+
+	return pamt_size_bytes / 1024;
+
+which makes total complete obvious sense and needs zero explanation.
