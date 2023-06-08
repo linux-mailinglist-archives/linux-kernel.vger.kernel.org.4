@@ -2,142 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4AF77281A8
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 15:46:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CDD572824B
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 16:07:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236385AbjFHNqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 09:46:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60862 "EHLO
+        id S236864AbjFHOH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 10:07:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235440AbjFHNqp (ORCPT
+        with ESMTP id S236830AbjFHOHZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 09:46:45 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CC8026B3;
-        Thu,  8 Jun 2023 06:46:44 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 103221FDCA;
-        Thu,  8 Jun 2023 13:46:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1686232003; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2KBbWiKkW090r6xpGGTvZasEo61erYv6UtVsy3logoc=;
-        b=HqK/AlDpvfGbTNDmGl55bMAaRj6QwKTZptYCWk/8avkFYFqLmq4bw6Sw0GLb/IrsNS/G57
-        8gK1NfadlvJi1Meb9tkQezNlillNl9LFNkb33uQxqs8z0wBiQjM/DsuMQveTjApYL/MMhg
-        MqyEbMnJuAYDNVYk5+VBUPnksHEqbWY=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 46C822C141;
-        Thu,  8 Jun 2023 13:46:41 +0000 (UTC)
-Date:   Thu, 8 Jun 2023 15:46:38 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        kgdb-bugreport@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev@lists.ozlabs.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        sparclinux@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH 4/7] watchdog/hardlockup: Enable HAVE_NMI_WATCHDOG only
- on sparc64
-Message-ID: <ZIHbvlw05razk-oJ@alley>
-References: <20230607152432.5435-1-pmladek@suse.com>
- <20230607152432.5435-5-pmladek@suse.com>
- <CAD=FV=VV3Y7KoZWPtZfmfRsUCftAgo_CLRDazrYSgbR2XJKf=g@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAD=FV=VV3Y7KoZWPtZfmfRsUCftAgo_CLRDazrYSgbR2XJKf=g@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 8 Jun 2023 10:07:25 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 419D02738
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 07:07:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686233241; x=1717769241;
+  h=date:from:to:cc:subject:message-id;
+  bh=HTzUgktECfsiwM9iKU6xvl9Hr3SOb6iyZpxxKJtn1uA=;
+  b=QtnSftTyPCp7YTne08Q0qDSVsS4RCBZN/7+JZppAEb5SGlMJKW034f2L
+   PNfkvcTeoQSMULWMBhgTsRM9ocT1g/73exW3laceN5IAFWdCbDt5gHJEb
+   yr5enxgBVk6zdkjEmlmjVSpH7xCT5yqGhYaDtrLebGqaGkG+SI3fGQUWd
+   3pJAGOpetE2etcki0o1ITj3WuL6dqPTuY2BjVq/xlp0gaedIURMjq2ntT
+   tHG+02HVQNMWYbphWuv0kFDoFKfxeTi5DP5jz/v8EUUj05iS9g4xOaLBu
+   mKb4zjxyR39uJ/4TPqZN0uK7CXTqRKZsNGtAGBfYRoPBgyFhue9YaetI3
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="360659408"
+X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
+   d="scan'208";a="360659408"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 06:47:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="779861256"
+X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
+   d="scan'208";a="779861256"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 08 Jun 2023 06:47:14 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q7Fyr-0007qg-20;
+        Thu, 08 Jun 2023 13:47:13 +0000
+Date:   Thu, 08 Jun 2023 21:47:12 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:dev.2023.06.01a] BUILD SUCCESS
+ 8eb836f2dd44cb1e80dfc603cf47c03603dadcdb
+Message-ID: <202306082110.cADGJxsF-lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 2023-06-07 16:36:35, Doug Anderson wrote:
-> Hi,
-> 
-> On Wed, Jun 7, 2023 at 8:25 AM Petr Mladek <pmladek@suse.com> wrote:
-> >
-> > diff --git a/arch/Kconfig b/arch/Kconfig
-> > index 13c6e596cf9e..57f15babe188 100644
-> > --- a/arch/Kconfig
-> > +++ b/arch/Kconfig
-> > @@ -404,10 +404,9 @@ config HAVE_NMI_WATCHDOG
-> >         depends on HAVE_NMI
-> >         bool
-> >         help
-> > -         The arch provides its own hardlockup detector implementation instead
-> > +         Sparc64 provides its own hardlockup detector implementation instead
-> >           of the generic perf one.
-> 
-> It's a little weird to document generic things with the specifics of
-> the user. The exception, IMO, is when something is deprecated.
-> Personally, it would sound less weird to me to say something like:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2023.06.01a
+branch HEAD: 8eb836f2dd44cb1e80dfc603cf47c03603dadcdb  clocksource: Handle negative skews in "skew is too large" messages
 
-Or I could replace "The arch" by "Sparc64" in the 5th patch which
-renames the variable to HAVE_HARDLOCKUP_DETECTOR_SPARC64. It will
-not longer be a generic thing...
+elapsed time: 724m
 
-Or I could squash the two patches. I did not want to do too many
-changes at the same time. But it might actually make sense to
-do this in one step.
+configs tested: 129
+configs skipped: 8
 
-> 
-> > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> > index d201f5d3876b..4b4aa0f941f9 100644
-> > --- a/lib/Kconfig.debug
-> > +++ b/lib/Kconfig.debug
-> > @@ -1050,15 +1050,13 @@ config HAVE_HARDLOCKUP_DETECTOR_BUDDY
-> >  #      sparc64: has a custom implementation which is not using the common
-> >  #              hardlockup command line options and sysctl interface.
-> >  #
-> > -# Note that HAVE_NMI_WATCHDOG is used to distinguish the sparc64 specific
-> > -# implementaion. It is automatically enabled also for other arch-specific
-> > -# variants which set HAVE_HARDLOCKUP_DETECTOR_ARCH. It makes the check
-> > -# of avaialable and supported variants quite tricky.
-> > +# Note that HAVE_NMI_WATCHDOG is set when the sparc64 specific implementation
-> > +# is used.
-> >  #
-> >  config HARDLOCKUP_DETECTOR
-> >         bool "Detect Hard Lockups"
-> > -       depends on DEBUG_KERNEL && !S390
-> > -       depends on ((HAVE_HARDLOCKUP_DETECTOR_PERF || HAVE_HARDLOCKUP_DETECTOR_BUDDY) && !HAVE_NMI_WATCHDOG) || HAVE_HARDLOCKUP_DETECTOR_ARCH
-> > +       depends on DEBUG_KERNEL && !S390 && !HAVE_NMI_WATCHDOG
-> > +       depends on HAVE_HARDLOCKUP_DETECTOR_PERF || HAVE_HARDLOCKUP_DETECTOR_BUDDY || HAVE_HARDLOCKUP_DETECTOR_ARCH
-> 
-> If you add the "!HAVE_NMI_WATCHDOG" as a dependency to
-> HAVE_HARDLOCKUP_DETECTOR_BUDDY, as discussed in a previous patch, you
-> can skip adding it here.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-It it related to the 2nd patch. Let's discuss it there.
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha        buildonly-randconfig-r003-20230608   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r004-20230608   gcc  
+alpha                randconfig-r015-20230608   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r043-20230608   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r046-20230608   gcc  
+arm64                            allyesconfig   gcc  
+arm64        buildonly-randconfig-r002-20230608   gcc  
+arm64                               defconfig   gcc  
+csky                                defconfig   gcc  
+csky                 randconfig-r024-20230608   gcc  
+hexagon              randconfig-r023-20230608   clang
+hexagon              randconfig-r041-20230608   clang
+hexagon              randconfig-r045-20230608   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-i001-20230608   gcc  
+i386                 randconfig-i002-20230608   gcc  
+i386                 randconfig-i003-20230608   gcc  
+i386                 randconfig-i004-20230608   gcc  
+i386                 randconfig-i005-20230608   gcc  
+i386                 randconfig-i006-20230608   gcc  
+i386                 randconfig-i011-20230608   clang
+i386                 randconfig-i012-20230608   clang
+i386                 randconfig-i013-20230608   clang
+i386                 randconfig-i014-20230608   clang
+i386                 randconfig-i015-20230608   clang
+i386                 randconfig-i016-20230608   clang
+i386                 randconfig-i051-20230608   gcc  
+i386                 randconfig-i052-20230608   gcc  
+i386                 randconfig-i053-20230608   gcc  
+i386                 randconfig-i054-20230608   gcc  
+i386                 randconfig-i055-20230608   gcc  
+i386                 randconfig-i056-20230608   gcc  
+i386                 randconfig-i061-20230608   gcc  
+i386                 randconfig-i062-20230608   gcc  
+i386                 randconfig-i063-20230608   gcc  
+i386                 randconfig-i064-20230608   gcc  
+i386                 randconfig-i065-20230608   gcc  
+i386                 randconfig-i066-20230608   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch    buildonly-randconfig-r004-20230608   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r036-20230608   gcc  
+m68k                             allmodconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r006-20230608   gcc  
+m68k                 randconfig-r036-20230608   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                 randconfig-r031-20230608   clang
+nios2                               defconfig   gcc  
+nios2                randconfig-r003-20230608   gcc  
+nios2                randconfig-r012-20230608   gcc  
+nios2                randconfig-r032-20230608   gcc  
+nios2                randconfig-r034-20230608   gcc  
+openrisc             randconfig-r011-20230608   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r021-20230608   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc              randconfig-r013-20230608   clang
+powerpc              randconfig-r033-20230608   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv        buildonly-randconfig-r006-20230608   clang
+riscv                               defconfig   gcc  
+riscv                randconfig-r042-20230608   clang
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r044-20230608   clang
+sh                               allmodconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r016-20230608   gcc  
+sparc                randconfig-r025-20230608   gcc  
+sparc                randconfig-r035-20230608   gcc  
+sparc64      buildonly-randconfig-r001-20230608   gcc  
+sparc64              randconfig-r026-20230608   gcc  
+sparc64              randconfig-r031-20230608   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   clang
+um                           x86_64_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a001-20230608   gcc  
+x86_64               randconfig-a002-20230608   gcc  
+x86_64               randconfig-a003-20230608   gcc  
+x86_64               randconfig-a004-20230608   gcc  
+x86_64               randconfig-a005-20230608   gcc  
+x86_64               randconfig-a006-20230608   gcc  
+x86_64               randconfig-a011-20230608   clang
+x86_64               randconfig-a012-20230608   clang
+x86_64               randconfig-a013-20230608   clang
+x86_64               randconfig-a014-20230608   clang
+x86_64               randconfig-a015-20230608   clang
+x86_64               randconfig-a016-20230608   clang
+x86_64               randconfig-r034-20230608   gcc  
+x86_64               randconfig-x051-20230608   clang
+x86_64               randconfig-x052-20230608   clang
+x86_64               randconfig-x053-20230608   clang
+x86_64               randconfig-x054-20230608   clang
+x86_64               randconfig-x055-20230608   clang
+x86_64               randconfig-x056-20230608   clang
+x86_64               randconfig-x061-20230608   clang
+x86_64               randconfig-x062-20230608   clang
+x86_64               randconfig-x063-20230608   clang
+x86_64               randconfig-x064-20230608   clang
+x86_64               randconfig-x065-20230608   clang
+x86_64               randconfig-x066-20230608   clang
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa               randconfig-r002-20230608   gcc  
+xtensa               randconfig-r033-20230608   gcc  
+xtensa               randconfig-r035-20230608   gcc  
 
-> 
-> >         imply HARDLOCKUP_DETECTOR_PERF
-> >         imply HARDLOCKUP_DETECTOR_BUDDY
-> >         select LOCKUP_DETECTOR
-> > @@ -1079,7 +1077,7 @@ config HARDLOCKUP_DETECTOR_PREFER_BUDDY
-> >         bool "Prefer the buddy CPU hardlockup detector"
-> >         depends on HARDLOCKUP_DETECTOR
-> >         depends on HAVE_HARDLOCKUP_DETECTOR_PERF && HAVE_HARDLOCKUP_DETECTOR_BUDDY
-> > -       depends on !HAVE_NMI_WATCHDOG
-> > +       depends on !HAVE_HARLOCKUP_DETECTOR_ARCH
-> 
-> Don't need this. Architectures never are allowed to define
-> HAVE_HARDLOCKUP_DETECTOR_PERF and HAVE_HARLOCKUP_DETECTOR_ARCH
-
-Same here...
-
-Best Regards,
-Petr
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
