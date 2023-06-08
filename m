@@ -2,192 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1853A7281AB
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 15:47:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4AF77281A8
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 15:46:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235440AbjFHNrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 09:47:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60840 "EHLO
+        id S236385AbjFHNqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 09:46:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235625AbjFHNrU (ORCPT
+        with ESMTP id S235440AbjFHNqp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 09:47:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38A2A1FD6
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 06:46:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686231996;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Thu, 8 Jun 2023 09:46:45 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CC8026B3;
+        Thu,  8 Jun 2023 06:46:44 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 103221FDCA;
+        Thu,  8 Jun 2023 13:46:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1686232003; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=73nshEeWhw2n5gdRpaAAi9lUSo+UIEZBfmddmf0WSo8=;
-        b=QW7DacbZLKltZ0A87clNL628uRPcUz25ngxSTalGoe4kh7W4hThrZprVZLTvrIdxlZUHY6
-        a8WjDEgQNGAeZG5Aqw4qqIt77yKZeliVZY+QfZ89uZI3X7orHm3cTBfUL6At2rRJmZIQVB
-        srdwxCfB446gOJaEpjTBRohRdZOixrs=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-484-CFvb6UQhNViOW_dtRlNrbA-1; Thu, 08 Jun 2023 09:46:35 -0400
-X-MC-Unique: CFvb6UQhNViOW_dtRlNrbA-1
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-30ade645c59so254258f8f.2
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 06:46:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686231994; x=1688823994;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=73nshEeWhw2n5gdRpaAAi9lUSo+UIEZBfmddmf0WSo8=;
-        b=bnjcilHr8BMgIMzsz3cUK7AzKLfnGxOWcq2h0nklKr5a9w05y8uYYbC8TzxLen6u+m
-         z5Gaks8EGznPvXIeQaqHc4uGaggUA5nlu6e3TvpwnstN7bKCzr6Udi++HRB3hJ3Lniss
-         BQUbzsTyds2hqSafWKoBGnfmbP6pj3RuV2ZkXwm2eBwnKR1ogbukMaD6DrUOOSAbIQl4
-         e8ilbejCdCitzKDMnMqSx/RkYhJHaraca5Jx38fO4catJUlBxIyvxMxJJjs79s9UCXjV
-         hj2P1XpopjAWcaqe9RvRDkg8g3KXIQxkBkuGttKx6HDeCCyBeGlVNyDoYhRexmPn9mJa
-         XL6A==
-X-Gm-Message-State: AC+VfDzkX5Q6P7G99sCWP3nR2BFG+u2gRZy+FnhvsrrZ6SDr8Nvep6aM
-        4SQ0FNSltsv90CY3JbnJHRBROn6Xaug4RDjC4S9bJc6o/+G0SEkDA8KGVJ/g7U2V5XjwKim77Cn
-        EFXIgxI8ImQLcVN3DujNV9oA5
-X-Received: by 2002:adf:f547:0:b0:309:38af:91c6 with SMTP id j7-20020adff547000000b0030938af91c6mr7519235wrp.68.1686231994185;
-        Thu, 08 Jun 2023 06:46:34 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6nvd4pWYZsLG/t7CXB3KRL7ulTzo9Pl/yJm2BKU29KvWQFi9FA8ZY1S13xxeI6s5mULDgI/w==
-X-Received: by 2002:adf:f547:0:b0:309:38af:91c6 with SMTP id j7-20020adff547000000b0030938af91c6mr7519218wrp.68.1686231993887;
-        Thu, 08 Jun 2023 06:46:33 -0700 (PDT)
-Received: from redhat.com ([2.55.41.2])
-        by smtp.gmail.com with ESMTPSA id i1-20020adfefc1000000b0030647449730sm1671162wrp.74.2023.06.08.06.46.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 06:46:33 -0700 (PDT)
-Date:   Thu, 8 Jun 2023 09:46:28 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     Stefano Garzarella <sgarzare@redhat.com>,
-        Shannon Nelson <shannon.nelson@amd.com>,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
-        Tiwei Bie <tiwei.bie@intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] vhost-vdpa: filter VIRTIO_F_RING_PACKED feature
-Message-ID: <20230608094528-mutt-send-email-mst@kernel.org>
-References: <32ejjuvhvcicv7wjuetkv34qtlpa657n4zlow4eq3fsi2twozk@iqnd2t5tw2an>
- <CACGkMEu3PqQ99UoKF5NHgVADD3q=BF6jhLiyumeT4S1QCqN1tw@mail.gmail.com>
- <20230606085643-mutt-send-email-mst@kernel.org>
- <CAGxU2F7fkgL-HpZdj=5ZEGNWcESCHQpgRAYQA3W2sPZaoEpNyQ@mail.gmail.com>
- <20230607054246-mutt-send-email-mst@kernel.org>
- <CACGkMEuUapKvUYiJiLwtsN+x941jafDKS9tuSkiNrvkrrSmQkg@mail.gmail.com>
- <20230608020111-mutt-send-email-mst@kernel.org>
- <CACGkMEt4=3BRVNX38AD+mJU8v3bmqO-CdNj5NkFP-SSvsuy2Hg@mail.gmail.com>
- <5giudxjp6siucr4l3i4tggrh2dpqiqhhihmdd34w3mq2pm5dlo@mrqpbwckpxai>
- <CACGkMEtqn1dbrQZn3i-W_7sVikY4sQjwLRC5xAhMnyqkc3jwOw@mail.gmail.com>
+        bh=2KBbWiKkW090r6xpGGTvZasEo61erYv6UtVsy3logoc=;
+        b=HqK/AlDpvfGbTNDmGl55bMAaRj6QwKTZptYCWk/8avkFYFqLmq4bw6Sw0GLb/IrsNS/G57
+        8gK1NfadlvJi1Meb9tkQezNlillNl9LFNkb33uQxqs8z0wBiQjM/DsuMQveTjApYL/MMhg
+        MqyEbMnJuAYDNVYk5+VBUPnksHEqbWY=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 46C822C141;
+        Thu,  8 Jun 2023 13:46:41 +0000 (UTC)
+Date:   Thu, 8 Jun 2023 15:46:38 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        kgdb-bugreport@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev@lists.ozlabs.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        sparclinux@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH 4/7] watchdog/hardlockup: Enable HAVE_NMI_WATCHDOG only
+ on sparc64
+Message-ID: <ZIHbvlw05razk-oJ@alley>
+References: <20230607152432.5435-1-pmladek@suse.com>
+ <20230607152432.5435-5-pmladek@suse.com>
+ <CAD=FV=VV3Y7KoZWPtZfmfRsUCftAgo_CLRDazrYSgbR2XJKf=g@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACGkMEtqn1dbrQZn3i-W_7sVikY4sQjwLRC5xAhMnyqkc3jwOw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAD=FV=VV3Y7KoZWPtZfmfRsUCftAgo_CLRDazrYSgbR2XJKf=g@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 08, 2023 at 05:00:00PM +0800, Jason Wang wrote:
-> On Thu, Jun 8, 2023 at 4:00 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
-> >
-> > On Thu, Jun 08, 2023 at 03:46:00PM +0800, Jason Wang wrote:
-> >
-> > [...]
-> >
-> > >> > > > > I have a question though, what if down the road there
-> > >> > > > > is a new feature that needs more changes? It will be
-> > >> > > > > broken too just like PACKED no?
-> > >> > > > > Shouldn't vdpa have an allowlist of features it knows how
-> > >> > > > > to support?
-> > >> > > >
-> > >> > > > It looks like we had it, but we took it out (by the way, we were
-> > >> > > > enabling packed even though we didn't support it):
-> > >> > > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6234f80574d7569444d8718355fa2838e92b158b
-> > >> > > >
-> > >> > > > The only problem I see is that for each new feature we have to modify
-> > >> > > > the kernel.
-> > >> > > > Could we have new features that don't require handling by vhost-vdpa?
-> > >> > > >
-> > >> > > > Thanks,
-> > >> > > > Stefano
-> > >> > >
-> > >> > > Jason what do you say to reverting this?
-> > >> >
-> > >> > I may miss something but I don't see any problem with vDPA core.
-> > >> >
-> > >> > It's the duty of the parents to advertise the features it has. For example,
-> > >> >
-> > >> > 1) If some kernel version that is packed is not supported via
-> > >> > set_vq_state, parents should not advertise PACKED features in this
-> > >> > case.
-> > >> > 2) If the kernel has support packed set_vq_state(), but it's emulated
-> > >> > cvq doesn't support, parents should not advertise PACKED as well
-> > >> >
-> > >> > If a parent violates the above 2, it looks like a bug of the parents.
-> > >> >
-> > >> > Thanks
-> > >>
-> > >> Yes but what about vhost_vdpa? Talking about that not the core.
-> > >
-> > >Not sure it's a good idea to workaround parent bugs via vhost-vDPA.
-> >
-> > Sorry, I'm getting lost...
-> > We were talking about the fact that vhost-vdpa doesn't handle
-> > SET_VRING_BASE/GET_VRING_BASE ioctls well for packed virtqueue before
-> > that series [1], no?
-> >
-> > The parents seem okay, but maybe I missed a few things.
-> >
-> > [1] https://lore.kernel.org/virtualization/20230424225031.18947-1-shannon.nelson@amd.com/
+On Wed 2023-06-07 16:36:35, Doug Anderson wrote:
+> Hi,
 > 
-> Yes, more below.
-> 
+> On Wed, Jun 7, 2023 at 8:25 AM Petr Mladek <pmladek@suse.com> wrote:
 > >
-> > >
-> > >> Should that not have a whitelist of features
-> > >> since it interprets ioctls differently depending on this?
-> > >
-> > >If there's a bug, it might only matter the following setup:
-> > >
-> > >SET_VRING_BASE/GET_VRING_BASE + VDUSE.
-> > >
-> > >This seems to be broken since VDUSE was introduced. If we really want
-> > >to backport something, it could be a fix to filter out PACKED in
-> > >VDUSE?
-> >
-> > mmm it doesn't seem to be a problem in VDUSE, but in vhost-vdpa.
-> > I think VDUSE works fine with packed virtqueue using virtio-vdpa
-> > (I haven't tried), so why should we filter PACKED in VDUSE?
+> > diff --git a/arch/Kconfig b/arch/Kconfig
+> > index 13c6e596cf9e..57f15babe188 100644
+> > --- a/arch/Kconfig
+> > +++ b/arch/Kconfig
+> > @@ -404,10 +404,9 @@ config HAVE_NMI_WATCHDOG
+> >         depends on HAVE_NMI
+> >         bool
+> >         help
+> > -         The arch provides its own hardlockup detector implementation instead
+> > +         Sparc64 provides its own hardlockup detector implementation instead
+> >           of the generic perf one.
 > 
-> I don't think we need any filtering since:
-> 
-> PACKED features has been advertised to userspace via uAPI since
-> 6234f80574d7569444d8718355fa2838e92b158b. Once we relax in uAPI, it
-> would be very hard to restrict it again. For the userspace that tries
-> to negotiate PACKED:
-> 
-> 1) if it doesn't use SET_VRING_BASE/GET_VRING_BASE, everything works well
-> 2) if it uses SET_VRING_BASE/GET_VRING_BASE. it might fail or break silently
-> 
-> If we backport the fixes to -stable, we may break the application at
-> least in the case 1).
-> 
-> Thanks
+> It's a little weird to document generic things with the specifics of
+> the user. The exception, IMO, is when something is deprecated.
+> Personally, it would sound less weird to me to say something like:
 
+Or I could replace "The arch" by "Sparc64" in the 5th patch which
+renames the variable to HAVE_HARDLOCKUP_DETECTOR_SPARC64. It will
+not longer be a generic thing...
 
-I am less concerned about stable, and much more concerned about the
-future. Assume we add a new ring format. It will be silently passed
-to vhost-vdpa and things break again.
-This is why I think we need an allowlist in vhost-vdpa.
+Or I could squash the two patches. I did not want to do too many
+changes at the same time. But it might actually make sense to
+do this in one step.
 
+> 
+> > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> > index d201f5d3876b..4b4aa0f941f9 100644
+> > --- a/lib/Kconfig.debug
+> > +++ b/lib/Kconfig.debug
+> > @@ -1050,15 +1050,13 @@ config HAVE_HARDLOCKUP_DETECTOR_BUDDY
+> >  #      sparc64: has a custom implementation which is not using the common
+> >  #              hardlockup command line options and sysctl interface.
+> >  #
+> > -# Note that HAVE_NMI_WATCHDOG is used to distinguish the sparc64 specific
+> > -# implementaion. It is automatically enabled also for other arch-specific
+> > -# variants which set HAVE_HARDLOCKUP_DETECTOR_ARCH. It makes the check
+> > -# of avaialable and supported variants quite tricky.
+> > +# Note that HAVE_NMI_WATCHDOG is set when the sparc64 specific implementation
+> > +# is used.
+> >  #
+> >  config HARDLOCKUP_DETECTOR
+> >         bool "Detect Hard Lockups"
+> > -       depends on DEBUG_KERNEL && !S390
+> > -       depends on ((HAVE_HARDLOCKUP_DETECTOR_PERF || HAVE_HARDLOCKUP_DETECTOR_BUDDY) && !HAVE_NMI_WATCHDOG) || HAVE_HARDLOCKUP_DETECTOR_ARCH
+> > +       depends on DEBUG_KERNEL && !S390 && !HAVE_NMI_WATCHDOG
+> > +       depends on HAVE_HARDLOCKUP_DETECTOR_PERF || HAVE_HARDLOCKUP_DETECTOR_BUDDY || HAVE_HARDLOCKUP_DETECTOR_ARCH
+> 
+> If you add the "!HAVE_NMI_WATCHDOG" as a dependency to
+> HAVE_HARDLOCKUP_DETECTOR_BUDDY, as discussed in a previous patch, you
+> can skip adding it here.
 
-> >
-> > Thanks,
-> > Stefano
-> >
+It it related to the 2nd patch. Let's discuss it there.
 
+> 
+> >         imply HARDLOCKUP_DETECTOR_PERF
+> >         imply HARDLOCKUP_DETECTOR_BUDDY
+> >         select LOCKUP_DETECTOR
+> > @@ -1079,7 +1077,7 @@ config HARDLOCKUP_DETECTOR_PREFER_BUDDY
+> >         bool "Prefer the buddy CPU hardlockup detector"
+> >         depends on HARDLOCKUP_DETECTOR
+> >         depends on HAVE_HARDLOCKUP_DETECTOR_PERF && HAVE_HARDLOCKUP_DETECTOR_BUDDY
+> > -       depends on !HAVE_NMI_WATCHDOG
+> > +       depends on !HAVE_HARLOCKUP_DETECTOR_ARCH
+> 
+> Don't need this. Architectures never are allowed to define
+> HAVE_HARDLOCKUP_DETECTOR_PERF and HAVE_HARLOCKUP_DETECTOR_ARCH
+
+Same here...
+
+Best Regards,
+Petr
