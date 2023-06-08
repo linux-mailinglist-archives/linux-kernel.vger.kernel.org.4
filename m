@@ -2,140 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EE57728837
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 21:21:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A47F472883A
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 21:22:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233833AbjFHTV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 15:21:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38798 "EHLO
+        id S236959AbjFHTWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 15:22:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235928AbjFHTVw (ORCPT
+        with ESMTP id S236946AbjFHTWa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 15:21:52 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 604D930C4
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 12:21:18 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-565cd2fc9acso9199057b3.0
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 12:21:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686252072; x=1688844072;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=alKFmwAdxdkIViw1WjkjX/OCKeQtR2IpGs2zcY6rd0M=;
-        b=HKd31LqvAwT3pdB9H8RTJjakAJAT9HvglTvKC+OkvKmv5VhsoaZHAtLpo2tFkCpDhK
-         eaJn1uAawotb3pLd5xLGg7DzD6kDQrKAHxas7kU/r2KN0gO+8LwEgaLotjlfcSI+ExXP
-         OsTJ1O2tfGB1hyPd2BGfO1Hv0XjmUpnPR5LgmonoIasqGq2fAG/aN3V/iTrXbCwGdrUM
-         I50yE5ZJKvbdrlam2CeJEmfXKvbJkG9Wl49W11ZHf6B9xR5DJRVBfUy3eWMAtZhLeFU3
-         MFev89ALFBnRCYsOlrl0s+V0pK/HvUPQhOTjtpCkmArqzAHuVaF4G3AF2HiTPrlcql5n
-         hmyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686252072; x=1688844072;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=alKFmwAdxdkIViw1WjkjX/OCKeQtR2IpGs2zcY6rd0M=;
-        b=mBi/91iAv6hG8C1SnzgCzqkgUHCIw53Usi8wBiAygpVzV0IQys+3YrzBDtrP8iOB0k
-         eiTWtJqPYgAJrY7KN8jmp6gk4ir4wMIT02rDyjjHFd8w8zHPxuRFHOmBI1youSotgm04
-         /9SbfqPirPQI0xbJ52RVxu+YQ2eQwClatv1rxp9ifXz9zDfPObVxfdkNdCJBB7c2ykjc
-         6bhXqnYgFTCN35moj4AbjkBOF1+NjADk+VPoe3RHEOvzi83ptpS60/a1+BoiXXBG4TgR
-         r0ySbsJ2HTweNDBV1LgnHCfyjQYFOB4gEaw5lglWDp2f4Z83RVdQfkgsn4mCHjN82KC3
-         kSsA==
-X-Gm-Message-State: AC+VfDzwnNay7q6syx+NO1VRrrp/TqFgfwMvAun2oMTjN2q0JIMe5X90
-        HB/dLwV0pAmlW9veUDgNLA7wAw==
-X-Google-Smtp-Source: ACHHUZ6osQDL46P3M+nFsTgwfoyN2ZCBLpMaIBhxVjRNKZnry7+6/FcNKdRpu6hPkSNVLheeDpiVWQ==
-X-Received: by 2002:a0d:d98f:0:b0:565:ba4b:aa81 with SMTP id b137-20020a0dd98f000000b00565ba4baa81mr612161ywe.45.1686252072277;
-        Thu, 08 Jun 2023 12:21:12 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id f184-20020a0ddcc1000000b00552ccda9bb3sm108635ywe.92.2023.06.08.12.21.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 12:21:11 -0700 (PDT)
-Date:   Thu, 8 Jun 2023 12:21:07 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Andrew Morton <akpm@linux-foundation.org>
-cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Helge Deller <deller@gmx.de>,
-        John David Anglin <dave.anglin@bell.net>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH v2 10/23] parisc/hugetlb: pte_alloc_huge()
- pte_offset_huge()
-In-Reply-To: <a4963be9-7aa6-350-66d0-2ba843e1af44@google.com>
-Message-ID: <7963aeed-f7d2-e0-f3c6-3680c5572444@google.com>
-References: <a4963be9-7aa6-350-66d0-2ba843e1af44@google.com>
+        Thu, 8 Jun 2023 15:22:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 523C12D75;
+        Thu,  8 Jun 2023 12:21:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 876EC64FE4;
+        Thu,  8 Jun 2023 19:21:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC0D7C433D2;
+        Thu,  8 Jun 2023 19:21:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686252090;
+        bh=iE7aCCGB8rGz6ONiIsoW2lt23ahnVYXAdMXiH4My450=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=szREKW3Wd80cpQuUmlQqsqLRgZbPGoww8W5R2pZ1Tk0Mboee0gX3LQCVANiYa8jcG
+         pRl97NDUi0SEGb5ryiYY/8PGKVi0AUTC3J8DfEJxiytMdd3B9YJR8r/RTxc3/RdFyV
+         G+YuS4HOWVzxaeD7VUsyDGTHhtV7onl0gEcx02syfN08qI5zCgmv4XCm1bJLzrwfed
+         7QOGB2Aa3cB7kLdfE4sRGDEzR6VB4Kh8g4Wdb7yK8I5UIYQH6JqsV7QmiCwaiDIU2q
+         0zl26OO3Ke/up4CpsKl4tiOC+Bj0dPbJhBxUCS1qzObhH+Z4Uq9HrTEIobtzIEg3N5
+         zoRT2flWkVqmA==
+Date:   Thu, 8 Jun 2023 14:21:28 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Terry Bowman <terry.bowman@amd.com>
+Cc:     alison.schofield@intel.com, vishal.l.verma@intel.com,
+        ira.weiny@intel.com, bwidawsk@kernel.org, dan.j.williams@intel.com,
+        dave.jiang@intel.com, Jonathan.Cameron@huawei.com,
+        linux-cxl@vger.kernel.org, rrichter@amd.com,
+        linux-kernel@vger.kernel.org, bhelgaas@google.com
+Subject: Re: [PATCH v5 26/26] PCI/AER: Unmask RCEC internal errors to enable
+ RCH downstream port error handling
+Message-ID: <20230608192128.GA1210443@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230607221651.2454764-27-terry.bowman@amd.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pte_alloc_map() expects to be followed by pte_unmap(), but hugetlb omits
-that: to keep balance in future, use the recently added pte_alloc_huge()
-instead; with pte_offset_huge() a better name for pte_offset_kernel().
+On Wed, Jun 07, 2023 at 05:16:51PM -0500, Terry Bowman wrote:
+> From: Robert Richter <rrichter@amd.com>
+> 
+> AER corrected and uncorrectable internal errors (CIE/UIE) are masked
+> in their corresponding mask registers per default once in power-up
+> state. [1][2] Enable internal errors for RCECs to receive CXL
+> downstream port errors of Restricted CXL Hosts (RCHs).
+> 
+> [1] CXL 3.0 Spec, 12.2.1.1 - RCH Downstream Port Detected Errors
+> [2] PCIe Base Spec r6.0, 7.8.4.3 Uncorrectable Error Mask Register,
+>     7.8.4.6 Correctable Error Mask Register
+> 
+> Co-developed-by: Terry Bowman <terry.bowman@amd.com>
+> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
+> Signed-off-by: Robert Richter <rrichter@amd.com>
 
-Signed-off-by: Hugh Dickins <hughd@google.com>
----
- arch/parisc/mm/hugetlbpage.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Acked-by: Bjorn Helgaas <bhelgaas@google.com>
 
-diff --git a/arch/parisc/mm/hugetlbpage.c b/arch/parisc/mm/hugetlbpage.c
-index d1d3990b83f6..a8a1a7c1e16e 100644
---- a/arch/parisc/mm/hugetlbpage.c
-+++ b/arch/parisc/mm/hugetlbpage.c
-@@ -66,7 +66,7 @@ pte_t *huge_pte_alloc(struct mm_struct *mm, struct vm_area_struct *vma,
- 	if (pud) {
- 		pmd = pmd_alloc(mm, pud, addr);
- 		if (pmd)
--			pte = pte_alloc_map(mm, pmd, addr);
-+			pte = pte_alloc_huge(mm, pmd, addr);
- 	}
- 	return pte;
- }
-@@ -90,7 +90,7 @@ pte_t *huge_pte_offset(struct mm_struct *mm,
- 			if (!pud_none(*pud)) {
- 				pmd = pmd_offset(pud, addr);
- 				if (!pmd_none(*pmd))
--					pte = pte_offset_map(pmd, addr);
-+					pte = pte_offset_huge(pmd, addr);
- 			}
- 		}
- 	}
--- 
-2.35.3
-
+> ---
+>  drivers/pci/pcie/aer.c | 57 ++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 57 insertions(+)
+> 
+> diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
+> index c354ca5e8f2b..4f9203e27c62 100644
+> --- a/drivers/pci/pcie/aer.c
+> +++ b/drivers/pci/pcie/aer.c
+> @@ -948,6 +948,30 @@ static bool find_source_device(struct pci_dev *parent,
+>  
+>  #ifdef CONFIG_PCIEAER_CXL
+>  
+> +/**
+> + * pci_aer_unmask_internal_errors - unmask internal errors
+> + * @dev: pointer to the pcie_dev data structure
+> + *
+> + * Unmasks internal errors in the Uncorrectable and Correctable Error
+> + * Mask registers.
+> + *
+> + * Note: AER must be enabled and supported by the device which must be
+> + * checked in advance, e.g. with pcie_aer_is_native().
+> + */
+> +static void pci_aer_unmask_internal_errors(struct pci_dev *dev)
+> +{
+> +	int aer = dev->aer_cap;
+> +	u32 mask;
+> +
+> +	pci_read_config_dword(dev, aer + PCI_ERR_UNCOR_MASK, &mask);
+> +	mask &= ~PCI_ERR_UNC_INTN;
+> +	pci_write_config_dword(dev, aer + PCI_ERR_UNCOR_MASK, mask);
+> +
+> +	pci_read_config_dword(dev, aer + PCI_ERR_COR_MASK, &mask);
+> +	mask &= ~PCI_ERR_COR_INTERNAL;
+> +	pci_write_config_dword(dev, aer + PCI_ERR_COR_MASK, mask);
+> +}
+> +
+>  static bool is_cxl_mem_dev(struct pci_dev *dev)
+>  {
+>  	/*
+> @@ -1027,7 +1051,39 @@ static void cxl_rch_handle_error(struct pci_dev *dev, struct aer_err_info *info)
+>  		pcie_walk_rcec(dev, cxl_rch_handle_error_iter, info);
+>  }
+>  
+> +static int handles_cxl_error_iter(struct pci_dev *dev, void *data)
+> +{
+> +	int *handles_cxl = data;
+> +
+> +	if (!*handles_cxl)
+> +		*handles_cxl = is_cxl_mem_dev(dev) && cxl_error_is_native(dev);
+> +
+> +	/* Non-zero terminates iteration */
+> +	return *handles_cxl;
+> +}
+> +
+> +static bool handles_cxl_errors(struct pci_dev *rcec)
+> +{
+> +	int handles_cxl = 0;
+> +
+> +	if (pci_pcie_type(rcec) == PCI_EXP_TYPE_RC_EC &&
+> +	    pcie_aer_is_native(rcec))
+> +		pcie_walk_rcec(rcec, handles_cxl_error_iter, &handles_cxl);
+> +
+> +	return !!handles_cxl;
+> +}
+> +
+> +static void cxl_rch_enable_rcec(struct pci_dev *rcec)
+> +{
+> +	if (!handles_cxl_errors(rcec))
+> +		return;
+> +
+> +	pci_aer_unmask_internal_errors(rcec);
+> +	pci_info(rcec, "CXL: Internal errors unmasked");
+> +}
+> +
+>  #else
+> +static inline void cxl_rch_enable_rcec(struct pci_dev *dev) { }
+>  static inline void cxl_rch_handle_error(struct pci_dev *dev,
+>  					struct aer_err_info *info) { }
+>  #endif
+> @@ -1428,6 +1484,7 @@ static int aer_probe(struct pcie_device *dev)
+>  		return status;
+>  	}
+>  
+> +	cxl_rch_enable_rcec(port);
+>  	aer_enable_rootport(rpc);
+>  	pci_info(port, "enabled with IRQ %d\n", dev->irq);
+>  	return 0;
+> -- 
+> 2.34.1
+> 
