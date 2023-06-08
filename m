@@ -2,117 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FEA472838D
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 17:18:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 947B8728394
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 17:19:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236830AbjFHPSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 11:18:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50534 "EHLO
+        id S237016AbjFHPTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 11:19:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236223AbjFHPSq (ORCPT
+        with ESMTP id S236960AbjFHPSx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 11:18:46 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65D64E2;
-        Thu,  8 Jun 2023 08:18:45 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-654f8b56807so654258b3a.1;
-        Thu, 08 Jun 2023 08:18:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686237525; x=1688829525;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pfmWXGoHuPXdu5coFsqQXedQPyhL6v7p78yOG0R6v0s=;
-        b=qsCXrd6G3Hszwd0S5q43Ga5tOGt43g6pNYbCr5UCEe3SKiTTWbOBOBfZQmlHr4WxRX
-         FFJtLM4ByTtDnNHz74eDXW1k6twllp3Efldd6F/71oQQErRy5OmYOa4bxRADJQLaap4c
-         jgl96c49Ia6Dv3PXlf1WKSGO67CLJ1MbS4AdKL9ce5u5uBaLK9eZe9cWDOcQlcROnwBo
-         GmjMTipdUWPOgEjV0tFoM1eYyNwSevGIFjMuqh/AqcBLrrNlQewINURVsWyjqkzfp6M4
-         REY1FRZp6v1LHNNhw/sM4KvPWzZ7OyB/WrG/EqhwyYOb5/EErx19K5qP/riEVOnnVebw
-         Lcwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686237525; x=1688829525;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=pfmWXGoHuPXdu5coFsqQXedQPyhL6v7p78yOG0R6v0s=;
-        b=eWluEdsFfh5ulKLFQho9N++8qF/ekQDBTfaIDlxcA77rH6CsqdMtEL1MNcBP3BjD8b
-         xPXu/D/Oty8YkoLPw72UzChN35xtmld3g7xtAwJ1T6g3wvJYqcaU4WEuij/L6+ZyEbTe
-         /M1T/HwPJb+81V11++gNNUADqnill461p0iEtL779oQzlKrI8I0tM70R1mZ5GMLoT+vm
-         VhfTU4OVp/qFTiSwBO5GWA9M2njgwgYyRbGUDXN1Y++b1n4wXPU4i9UH+W1nb8tCUqgQ
-         Bkm5hbtdsKVf6r0dQWzmD4580qdFg3O66sMFMUobsk02F3MF4r2peytEimlNYylmnkue
-         g8Wg==
-X-Gm-Message-State: AC+VfDxO9qVocV/irZfFD8yutqLRtQHK/ND6Di4+fSHqMabXoCu7PVJp
-        NGm9o5qF5Pb2vhA3hbEHZ0A=
-X-Google-Smtp-Source: ACHHUZ44Fw7yXO28Kkb6ujVeCtHugcY8yRxF4c5Agojd9bA4r0AoqSzyjiMGv8muJevVDmVl/Dk0dA==
-X-Received: by 2002:a05:6a00:134b:b0:640:f313:efba with SMTP id k11-20020a056a00134b00b00640f313efbamr11442084pfu.19.1686237524787;
-        Thu, 08 Jun 2023 08:18:44 -0700 (PDT)
-Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:18:efec::75b])
-        by smtp.gmail.com with ESMTPSA id 21-20020aa79215000000b0063a04905379sm1227423pfo.137.2023.06.08.08.18.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jun 2023 08:18:44 -0700 (PDT)
-Message-ID: <c051f8cd-9743-4beb-9887-18894c46e909@gmail.com>
-Date:   Thu, 8 Jun 2023 23:18:34 +0800
+        Thu, 8 Jun 2023 11:18:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 335A72D5F;
+        Thu,  8 Jun 2023 08:18:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C3B8060FAB;
+        Thu,  8 Jun 2023 15:18:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D19EC433D2;
+        Thu,  8 Jun 2023 15:18:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686237530;
+        bh=/A54Gy0vU98edPnbqK2o8zydJ92zi9Oi8moAunyOrJE=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=RdrtpfvpzdGY8WkZ0yvWsGoaLstSARmD7jyc/8yluqGlgzTEUiib2fkv88fsFTwzt
+         VI0ugZcV7T46reJCxWdJP49kC98i6KrF1VDSRTrx0a8YXLvXBwYBpHShvV2XcfjwuC
+         PBtIASy0kct7WqQaV3CBy9zDKSY1CVdiUuNP7ht1SvF597BP95UxTyx71Rht2IrZ1i
+         xvrSIVjcj191w/VV5jb43kVBKMoj3fBHHc/RRaivw8TN7XrcYhSGWYA32hSIoqSFuM
+         Qtulm4/YMMgaxMJ61jE5WU8vConoEvRAd4bnIwBPUxbOZizfKzBfwCWVlbTFSTIqcG
+         TyTU0X4THN/vw==
+From:   Mark Brown <broonie@kernel.org>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-tegra@vger.kernel.org
+In-Reply-To: <53f928290f08f50ff43031e17fe1d88443c2c441.1686202022.git.christophe.jaillet@wanadoo.fr>
+References: <53f928290f08f50ff43031e17fe1d88443c2c441.1686202022.git.christophe.jaillet@wanadoo.fr>
+Subject: Re: [PATCH] ASoC: tegra: Simplify code around clk_get_rate()
+ handling
+Message-Id: <168623752796.1002486.3534848547952230494.b4-ty@kernel.org>
+Date:   Thu, 08 Jun 2023 16:18:47 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 7/9] x86/hyperv: Initialize cpu and memory for SEV-SNP
- enlightened guest
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "arnd@arndb.de" <arnd@arndb.de>
-Cc:     Tianyu Lan <Tianyu.Lan@microsoft.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>
-References: <20230601151624.1757616-1-ltykernel@gmail.com>
- <20230601151624.1757616-8-ltykernel@gmail.com>
- <BYAPR21MB16882DC67EAF87B518D5D72ED750A@BYAPR21MB1688.namprd21.prod.outlook.com>
-From:   Tianyu Lan <ltykernel@gmail.com>
-In-Reply-To: <BYAPR21MB16882DC67EAF87B518D5D72ED750A@BYAPR21MB1688.namprd21.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Mailer: b4 0.13-dev-bfdf5
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/8/2023 10:09 PM, Michael Kelley (LINUX) wrote:
->> +static __init void hv_snp_get_smp_config(unsigned int early)
->> +{
->> +	/*
->> +	 * The "early" is only to be true when there is AMD
->> +	 * numa support. Hyper-V AMD SEV-SNP guest may not
->> +	 * have numa support. To make sure smp config is
->> +	 * always initialized, do that when early is false.
->> +	 */
-> I didn't really understand this comment.  After doing a little research, let
-> me suggest this wording:
+On Thu, 08 Jun 2023 07:27:22 +0200, Christophe JAILLET wrote:
+> clk_get_rate() returns an unsigned long, so there is no point in storing it
+> in a long, and test for negative values.
 > 
-> 	/*
-> 	 * The "early" parameter can be true only if old-style AMD
-> 	 * Opteron NUMA detection is enabled, which should never be
-> 	 * the case for an SEV-SNP guest.  See CONFIG_AMD_NUMA.
-> 	 * For safety, just do nothing if "early" is true.
-> 	 */
+> So, turn 'parent_rate' into an unsigned long, simplify the sanity check,
+> the error message and the return value, in case of error (i.e. 0).
 > 
-> Let me know if this new wording makes sense based on your understanding.
+> Doing so also turns 'i' and 'valid_rates' into unsigned long, but it is
+> fine and harmless.
 > 
+> [...]
 
-Yes, it makes sense. Will update. Thanks.
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+
+Thanks!
+
+[1/1] ASoC: tegra: Simplify code around clk_get_rate() handling
+      commit: 41a343cd6b7f8d0f70dd90c236086ccf8a84a7de
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
