@@ -2,137 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A1E1727C0A
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 11:58:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CC01727C0C
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 11:59:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235779AbjFHJ6x convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 8 Jun 2023 05:58:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54246 "EHLO
+        id S235818AbjFHJ6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 05:58:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231439AbjFHJ6v (ORCPT
+        with ESMTP id S235603AbjFHJ6w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 05:58:51 -0400
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D36D026B9;
-        Thu,  8 Jun 2023 02:58:49 -0700 (PDT)
-Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-bad05c6b389so527416276.2;
-        Thu, 08 Jun 2023 02:58:49 -0700 (PDT)
+        Thu, 8 Jun 2023 05:58:52 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A10652709
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 02:58:50 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-30af20f5f67so421481f8f.1
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 02:58:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1686218329; x=1688810329;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=bro8SCdRCjEHWuDcBtldZHsndfar0M9rwEdZ8SQ0W0s=;
+        b=DWLlXBMjR+In9QMk6WByU+4r6ZJwRxIdZLTZafSYiCKOJbbbT6swcxcbDLzxBWXjSp
+         1fbhQV7xgyvNNKARmYmQiulH1nZx4WLvUTDj3K4StImn2hgIxDj2+ikZyPIKdWisMOTf
+         POkUvZLouPzWG0TFB+pG8Fqpf4v308cP9MheL82rSXAkIQHV8FTqswIFUo3ofKEZH1T5
+         gBAYnPnURVTOhHfQfMReB4ybwIfvFPWb9VgzTP9BzQ4nEZKp69qw8Fh1mVAeJnQ4O6Qb
+         hvdyiWTomMIhVCmxq/xcYY3sZSRGDpAgFxYDyLLQmROw3quJagxDYH4kZcjPI1PfZRLY
+         vJdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20221208; t=1686218329; x=1688810329;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uzz3OZh3QB/d2SKcrr0d8uZ9dUBpMs9PB0O6tVeC/Ug=;
-        b=hNJUcA2ydfjedY295HDN7qc51uPSU9rnzQd3dAd1mNy4ZUMGQjHLu0myksw3JQwBb0
-         EuVzPqCcrOEIZAdojenozcEiUdZio4nb42oGV6KVYJ7xG0weJ6Et+nTCA/hs+VW6hFPu
-         2d3nXk3DDZ7c+qDPA7I6pPoN/lpoAwCw+LM52ioh2Oqj+gUsDDeOLubM4XR8rfPIyqsZ
-         7kjPrJhXQDbnlAzijEXN6ONGKw3G9Dz7AUzg395wNXfoRd5O2o6090XXKC/rhx7g6E7t
-         HLM0Mizm0WHe+CsNu8eYPYTKtej39c5jzgl1uKfZBV5pGiXTg74jSN/ywKXU/VnTjnAq
-         /FbA==
-X-Gm-Message-State: AC+VfDy+F59A6py899IKrSSiMuSDgAeA9f9xj8lttjJpuz3lu2Vv/4hE
-        yxjL3r+W+9Po1Cgd1r32f68FUrTGkGptrA==
-X-Google-Smtp-Source: ACHHUZ4u46GNap8T+b+tokBe1BF3/Gt8dAsZjpMNWkmaXJGjLocTU6ogawm8QVNarzqjn911pNTxYg==
-X-Received: by 2002:a81:6583:0:b0:56a:3b3e:bc7 with SMTP id z125-20020a816583000000b0056a3b3e0bc7mr5129485ywb.16.1686218328766;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bro8SCdRCjEHWuDcBtldZHsndfar0M9rwEdZ8SQ0W0s=;
+        b=Nb7d54hFuOPN1V7IG/gOpXXpmGvA6cmI0gTppaVYoyBJZ5UUI3c3i4Dbnb8LwxqgQc
+         S0UQVcZMnI0SPVzBzgQkSxfqdh9x9snoN4r24Swq8LTYwl92/z6jKk82Nrk5uPOFVTe8
+         0gn/y7LcCHbMu+yJ0weA/RYvzD0qeNkdR4gf2DUK4b87LwPStdghGfUYQpLPOZ0GQIXi
+         QlbEIVQdoJTpJcKwTwMGn8+TFymotbKLmYT8oruMnyQZ3UnCsFDr+/MgLlyB1MQjN4iu
+         5B5IOTDEv1mir46V7IzQAO9gZ9tQDKMRgKt1Ld8vAOwtpBGngNVxfLeEkLGPPRJdZuLK
+         C8Rg==
+X-Gm-Message-State: AC+VfDyYZZnGY9Yps/mtTQZEiYIvommH1OBeI79MGVecChTmsSvi6RHC
+        3zc88f4A8UseOitPpIlL4KEEOw==
+X-Google-Smtp-Source: ACHHUZ6f6RLGsz44l11hXuy9AWjs8GZ3O0KJYqBLOUqFSQ6jSeZDCKr+qhXxSeHoE89ty7CpeH4xmQ==
+X-Received: by 2002:a5d:6550:0:b0:30a:9014:838d with SMTP id z16-20020a5d6550000000b0030a9014838dmr6419901wrv.11.1686218329062;
+        Thu, 08 Jun 2023 02:58:49 -0700 (PDT)
+Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
+        by smtp.gmail.com with ESMTPSA id q12-20020a05600000cc00b002ff2c39d072sm1065586wrx.104.2023.06.08.02.58.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Thu, 08 Jun 2023 02:58:48 -0700 (PDT)
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
-        by smtp.gmail.com with ESMTPSA id x23-20020a25acd7000000b00bb1d8f2a593sm185261ybd.45.2023.06.08.02.58.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jun 2023 02:58:48 -0700 (PDT)
-Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-bad05c6b389so527400276.2;
-        Thu, 08 Jun 2023 02:58:48 -0700 (PDT)
-X-Received: by 2002:a0d:dd47:0:b0:568:b0f6:ce8a with SMTP id
- g68-20020a0ddd47000000b00568b0f6ce8amr9980204ywe.24.1686218327937; Thu, 08
- Jun 2023 02:58:47 -0700 (PDT)
+Date:   Thu, 8 Jun 2023 11:58:47 +0200
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Haibo Xu <xiaobo55x@gmail.com>
+Cc:     Haibo Xu <haibo1.xu@intel.com>, maz@kernel.org,
+        oliver.upton@linux.dev, seanjc@google.com,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Shuah Khan <shuah@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Vipin Sharma <vipinsh@google.com>,
+        Colton Lewis <coltonlewis@google.com>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kselftest@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
+Subject: Re: [PATCH v2 11/11] KVM: riscv: selftests: Add get-reg-list test
+Message-ID: <20230608-344953a953eeb63ef6c26fb8@orel>
+References: <cover.1684999824.git.haibo1.xu@intel.com>
+ <da390e6200e838fce320a2a43b2f87951b4e0bbb.1684999824.git.haibo1.xu@intel.com>
+ <20230525-2bab5376987792eab73507ac@orel>
+ <CAJve8okR_iH4vF9DV9zTkDaeYe25kP7KUcKQphmjG5q-iVb-KA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230527164452.64797-1-contact@artur-rojek.eu>
- <20230527164452.64797-4-contact@artur-rojek.eu> <CAMuHMdV3gn8g-gKam71K=WfT3CVNwvz5eKPSh2Fqi3wVg7ZwNw@mail.gmail.com>
- <f7b9ceb9739f8ae5cbee4f6073ce3af3921a2540.camel@physik.fu-berlin.de>
-In-Reply-To: <f7b9ceb9739f8ae5cbee4f6073ce3af3921a2540.camel@physik.fu-berlin.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 8 Jun 2023 11:58:36 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVFBo+KMNQ6gzh3rZrZ+_Wfg=UJ4XOW4Uqibnjm6T7CdA@mail.gmail.com>
-Message-ID: <CAMuHMdVFBo+KMNQ6gzh3rZrZ+_Wfg=UJ4XOW4Uqibnjm6T7CdA@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] sh: dma: Correct the number of DMA channels in SH7709
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc:     Artur Rojek <contact@artur-rojek.eu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Rafael Ignacio Zurita <rafaelignacio.zurita@gmail.com>,
-        linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJve8okR_iH4vF9DV9zTkDaeYe25kP7KUcKQphmjG5q-iVb-KA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Adrian,
-
-On Thu, Jun 8, 2023 at 11:54 AM John Paul Adrian Glaubitz
-<glaubitz@physik.fu-berlin.de> wrote:
-> On Wed, 2023-06-07 at 11:16 +0200, Geert Uytterhoeven wrote:
-> > On Sat, May 27, 2023 at 6:45 PM Artur Rojek <contact@artur-rojek.eu> wrote:
-> > > According to the hardware manual [1], the DMAC found in SH7709 features
-> > > only 4 channels.
-> > >
-> > > While at it, also sort the existing targets and clarify that
-> > > NR_ONCHIP_DMA_CHANNELS must be a multiply of two.
-> > >
-> > > [1] https://www.renesas.com/us/en/document/mah/sh7709s-group-hardware-manual (p. 373)
-> > >
-> > > Signed-off-by: Artur Rojek <contact@artur-rojek.eu>
-> > > ---
-> > >
-> > > v2: - sort existing targets
+On Thu, Jun 08, 2023 at 05:45:21PM +0800, Haibo Xu wrote:
+> On Fri, May 26, 2023 at 1:18 AM Andrew Jones <ajones@ventanamicro.com> wrote:
 > >
-> > Thanks for the update!
+> 
+> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CORE | KVM_REG_RISCV_CORE_REG(mode),
+> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_REG(sstatus),
+> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_REG(sie),
+> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_REG(stvec),
+> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_REG(sscratch),
+> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_REG(sepc),
+> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_REG(scause),
+> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_REG(stval),
+> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_REG(sip),
+> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_REG(satp),
+> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_REG(scounteren),
+> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_TIMER | KVM_REG_RISCV_TIMER_REG(frequency),
+> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_TIMER | KVM_REG_RISCV_TIMER_REG(time),
+> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_TIMER | KVM_REG_RISCV_TIMER_REG(compare),
+> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_TIMER | KVM_REG_RISCV_TIMER_REG(state),
+> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_A,
+> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_C,
+> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_D,
+> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_F,
+> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_H,
+> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_I,
+> > > +     KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_M,
 > >
-> > >     - clarify that the value must be a multiply of two
+> > I think all the above should have the size KVM_REG_SIZE_ULONG. Please also
+> > test with a 32-bit host.
 > >
-> > That's only true when there are two DMACs, right?
-> >
-> > Even in that case, you could mitigate that by avoiding the division by
-> >
-> >     #ifdef SH_DMAC_BASE1
-> >    -#define        SH_DMAC_NR_MD_CH        (CONFIG_NR_ONCHIP_DMA_CHANNELS / 2)
-> >    +#define        SH_DMAC_NR_MD_CH        6
-> >     #else
-> >     #define        SH_DMAC_NR_MD_CH        CONFIG_NR_ONCHIP_DMA_CHANNELS
-> >     #endif
->
-> Aren't we dropping SH_DMAC_BASE1 in the other patch anyway?
+> 
+> Hi Andrew,
+> 
+> Just noticed the RISC-V 32-bit kvm selftests was not supported currently.
 
-Only for the SH4 parts that do not have it.
-It is still set in arch/sh/include/cpu-sh4a/cpu/dma.h for the SH4a parts with
-12 channels and 2 DMACs.
+Oh, right.
 
-> > That is actually safer, as the user can override NR_ONCHIP_DMA_CHANNELS
-> > when configuring his kernel, thus breaking DMA  due to an incorrect
-> > value of SH_DMAC_NR_MD_CH.
-> >
-> > Unfortunately we cannot protect against that when using a single DMAC,
-> > as SH_DMAC_NR_MD_CH can be either 4, 6, or 8.
-> >
-> > Perhaps this configuration should be moved from Kconfig to <cpu/dma.h>,
-> > to protect against a user overriding this value?
->
-> Isn't SH_DMAC_NR_MD_CH already hardwired to the SoC being used?
+> Even though I tried to remove the below check for 32-bit, there were
+> still many warning and error messages during compiling.
+> It seems 32-bit KVM selftests was not supported either for ARM/x86. Do
+> we have a plan to support it on risc-v?
 
-It depends on CONFIG_NR_ONCHIP_DMA_CHANNELS, while it
-should be fixed based on the SoC.
+No plan and, if there was, it would be super low priority. So for stuff
+like using KVM_REG_SIZE_ULONG, we'll just have to try and get it right
+without testing. If somebody adds 32-bit support to these tests someday,
+then, hopefully, it'll just work (I'm allowed one overly optimistic
+comment per day).
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Thanks,
+drew
