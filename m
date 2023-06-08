@@ -2,57 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BA57727AC7
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 11:05:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DEA1727ABB
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 11:04:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232908AbjFHJFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 05:05:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53258 "EHLO
+        id S235751AbjFHJEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 05:04:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235776AbjFHJE5 (ORCPT
+        with ESMTP id S231359AbjFHJEM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 05:04:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1F7BE50
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 02:04:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1686215051;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=dagrqDiq3A7dkc7gq9vL9zi12EhyXb6jT5d9cSUCfXk=;
-        b=NYCg1rzPTwiS/aCavnUZtEl4gLkS9NLpi2ef/euDZukufEQRNAXTSVGX1uTiGIFamFE5RZ
-        +AbArl62pOAyiIJwNVYlj22tr/zdiggbLoZ0J6QiP0R5LqHbo88YbzKUWqSR9obMif1b0M
-        roBRhebpB2OCjc7gQBYu7GZy6h+x5A4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-481-uYlwIiBtPiGpmZWNBjNLZA-1; Thu, 08 Jun 2023 05:04:06 -0400
-X-MC-Unique: uYlwIiBtPiGpmZWNBjNLZA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 8 Jun 2023 05:04:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE61E61;
+        Thu,  8 Jun 2023 02:04:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 079FF185A78E;
-        Thu,  8 Jun 2023 09:04:06 +0000 (UTC)
-Received: from gshan.redhat.com (vpn2-54-168.bne.redhat.com [10.64.54.168])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 1C3DC40D1B66;
-        Thu,  8 Jun 2023 09:04:02 +0000 (UTC)
-From:   Gavin Shan <gshan@redhat.com>
-To:     kvmarm@lists.linux.dev
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pbonzini@redhat.com, seanjc@google.com, oliver.upton@linux.dev,
-        maz@kernel.org, hshuai@redhat.com, zhenyzha@redhat.com,
-        shan.gavin@gmail.com
-Subject: [PATCH] KVM: Avoid illegal stage2 mapping on invalid memory slot
-Date:   Thu,  8 Jun 2023 19:03:48 +1000
-Message-Id: <20230608090348.414990-1-gshan@redhat.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F2BE661737;
+        Thu,  8 Jun 2023 09:04:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFEAAC433EF;
+        Thu,  8 Jun 2023 09:04:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1686215049;
+        bh=ar2xnge7uTjidn2C7qc0VkqgJuiPo+8zNzrlooQb2Ao=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qjFY2bjerz+iWuvvKI54tr50nfB/nObVbtOpfA23SBHApaklkXGdtCDx6ZabiFO9f
+         oQS/r34aSdzeIlcwS9rImx35CqwvWqUZ47DACQqVkN7XQFkv6eVVxbjlZQN2aWHbcA
+         605IXA+ryjdjFcb5YdGlN/1tHtHFBf2Ah3ba6JFk=
+Date:   Thu, 8 Jun 2023 11:04:06 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        keescook@chromium.org, pbonzini@redhat.com,
+        linux-kernel@vger.kernel.org, ojeda@kernel.org,
+        ndesaulniers@google.com, mingo@redhat.com, will@kernel.org,
+        longman@redhat.com, boqun.feng@gmail.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, paulmck@kernel.org,
+        frederic@kernel.org, quic_neeraju@quicinc.com,
+        joel@joelfernandes.org, josh@joshtriplett.org,
+        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
+        rcu@vger.kernel.org, tj@kernel.org, tglx@linutronix.de,
+        linux-toolchains@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] Lock and Pointer guards
+Message-ID: <2023060857-trading-albatross-f46f@gregkh>
+References: <CAHk-=wg2RHZKTN29Gr7MhgYfaNtzz58wry9jCNP75LAmQ9t8-A@mail.gmail.com>
+ <20230530092342.GA149947@hirez.programming.kicks-ass.net>
+ <20230606094251.GA907347@hirez.programming.kicks-ass.net>
+ <CAHk-=wi-RyoUhbChiVaJZoZXheAwnJ7OO=Gxe85BkPAd93TwDA@mail.gmail.com>
+ <20230606134005.GE905437@hirez.programming.kicks-ass.net>
+ <CAHk-=wgQ5m+SnWTYGHu0JgYXTk2dkGF+msX=ARfYoo3t1_fX9g@mail.gmail.com>
+ <20230606180806.GA942082@hirez.programming.kicks-ass.net>
+ <CAHk-=wgXN1YxGMUFeuC135aeUvqduF8zJJiZZingzS1Pao5h0A@mail.gmail.com>
+ <20230607094101.GA964354@hirez.programming.kicks-ass.net>
+ <20230608085248.GA1002251@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230608085248.GA1002251@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,66 +71,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We run into guest hang in edk2 firmware when KSM is kept as running
-on the host. The edk2 firmware is waiting for status 0x80 from QEMU's
-pflash device (TYPE_PFLASH_CFI01) during the operation for sector
-erasing or buffered write. The status is returned by reading the
-memory region of the pflash device and the read request should
-have been forwarded to QEMU and emulated by it. Unfortunately, the
-read request is covered by an illegal stage2 mapping when the guest
-hang issue occurs. The read request is completed with QEMU bypassed and
-wrong status is fetched.
+On Thu, Jun 08, 2023 at 10:52:48AM +0200, Peter Zijlstra wrote:
+> On Wed, Jun 07, 2023 at 11:41:01AM +0200, Peter Zijlstra wrote:
+> 
+> 
+> > > I'm sure there's something horribly wrong in the above, but my point
+> > > is that I'd really like this to make naming and conceptual sense.
+> > 
+> > Right, I hear ya. So the asymmetric case (iow destructor only) could be
+> > seen as using the copy-constructor.
+> > 
+> > #define DEFINE_CLASS(name, type, exit, init, init_args...)		\
+> > typedef type class_##name##_t;						\
+> > static inline void class_##name##_destructor(type *this)		\
+> > { type THIS = *this; exit; }						\
+> > static inline type class_##name##_constructor(init_args)		\
+> > { type THIS = init; return THIS; }
+> > 
+> > #define __INSTANTIATE_VAR(name, var)					\
+> > 	class_##name##_t var __cleanup(class_##name##_destructor)
+> > 
+> > #define INSTANTIATE_CLASS(name, var)					\
+> > 	__INSTANTIATE_VAR(name, var) = class_##name##_constructor
+> > 
+> > 
+> > DEFINE_CLASS(fd, struct fd, fdput(THIS), f, struct fd f)
+> > 
+> > 	INSTANTIATE_CLASS(fd, f)(perf_fget_light(fd));
+> > 
+> > 
+> > Alternatively, you be OK with exposing INSTANTIATE_VAR() to easily
+> > circumvent the default constructor?
+> 
+> Or perhaps use the smart-pointer concept applied to our classes like:
+> 
+> #define smart_ptr(name, var) \
+> 	__INSTANTIATE_VAR(name, var)
+> 
+> To mean a pointer that calls the destructor for class 'name'. I think
+> the nearest thing C++ has is std::unique_ptr<>.
+> 
+> 
+> Then we can write:
+> 
+> 
+> DEFINE_CLASS(kfree, void *, kfree(THIS), p, void *p)
+> 
+> 
+> 	smart_ptr(kfree, mem) = kzalloc_node(...);
+> 	if (!mem)
+> 		return -ENOMEM;
+> 
+> 	object = mem;
+> 
+> 	// further initiatlize object with error cases etc..
+> 
+> 	mem = NULL; // success, we keep it.
+> 	return object;
 
-The illegal stage2 mapping is populated due to same page mering by
-KSM at (C) even the associated memory slot has been marked as invalid
-at (B).
+I like the idea, as we need a way to say "don't clean this up, it was
+passed to somewhere else" for these types of allocations, but have it
+"automatically" cleaned up on the error paths.
 
-  CPU-A                    CPU-B
-  -----                    -----
-                           ioctl(kvm_fd, KVM_SET_USER_MEMORY_REGION)
-                           kvm_vm_ioctl_set_memory_region
-                           kvm_set_memory_region
-                           __kvm_set_memory_region
-                           kvm_set_memslot(kvm, old, NULL, KVM_MR_DELETE)
-                             kvm_invalidate_memslot
-                               kvm_copy_memslot
-                               kvm_replace_memslot
-                               kvm_swap_active_memslots        (A)
-                               kvm_arch_flush_shadow_memslot   (B)
-  same page merging by KSM
-  kvm_mmu_notifier_change_pte
-  kvm_handle_hva_range
-  __kvm_handle_hva_range       (C)
+I have no say in the naming, though I always disliked the idea of a
+pointer being "smart" as they are just a dumb memory register :)
 
-Fix the issue by skipping the invalid memory slot at (C) to avoid the
-illegal stage2 mapping. Without the illegal stage2 mapping, the read
-request for the pflash's status is forwarded to QEMU and emulated by
-it. The correct pflash's status can be returned from QEMU to break
-the infinite wait in edk2 firmware.
+thanks,
 
-Cc: stable@vger.kernel.org # v5.13+
-Fixes: 3039bcc74498 ("KVM: Move x86's MMU notifier memslot walkers to generic code")
-Reported-by: Shuai Hu <hshuai@redhat.com>
-Reported-by: Zhenyu Zhang <zhenyzha@redhat.com>
-Signed-off-by: Gavin Shan <gshan@redhat.com>
----
- virt/kvm/kvm_main.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 479802a892d4..7f81a3a209b6 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -598,6 +598,9 @@ static __always_inline int __kvm_handle_hva_range(struct kvm *kvm,
- 			unsigned long hva_start, hva_end;
- 
- 			slot = container_of(node, struct kvm_memory_slot, hva_node[slots->node_idx]);
-+			if (slot->flags & KVM_MEMSLOT_INVALID)
-+				continue;
-+
- 			hva_start = max(range->start, slot->userspace_addr);
- 			hva_end = min(range->end, slot->userspace_addr +
- 						  (slot->npages << PAGE_SHIFT));
--- 
-2.23.0
-
+greg k-h
