@@ -2,129 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2DB5728BDE
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 01:32:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4346728BCA
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 01:31:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237702AbjFHXb7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 19:31:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48044 "EHLO
+        id S237209AbjFHX3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 19:29:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237308AbjFHXbV (ORCPT
+        with ESMTP id S229653AbjFHX3X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 19:31:21 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4FB53AB2
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 16:30:28 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-565ef5a707dso15472497b3.3
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 16:30:28 -0700 (PDT)
+        Thu, 8 Jun 2023 19:29:23 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5787030F0;
+        Thu,  8 Jun 2023 16:29:22 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-65311774e52so905951b3a.3;
+        Thu, 08 Jun 2023 16:29:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686267016; x=1688859016;
-        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tvDaWeTNK3WSoU7RxteMJWYjgKCzqqKrMU8SOHl6IsA=;
-        b=zq7n0FG6q55kI1lknHAHE1lHuS0TVc2SIL7xiqJwpHFzQgHoHR7VyUNJvMJLM7LqZK
-         PReM7k5azlxan7GYT1OEQt6A9BGBbAC3OZKpRnVe2PD57AM/SvI0WBHohv4qVe4lmE8e
-         XM8+/NASVm3hFIJF3NtAK4Z98KBICfnux+nLsiXJ4NUp463Ykl0ZkWzFvMFlk/BFoSD9
-         DPIiedqbcOjh/XwcM6s3MbzY8xp8RCXeqbF2SA9G2Lb7D5ayo8igY25wrzJmVtqrLy4K
-         akYi8T8ZNXtjwn6ejlcluxF5wrXbxLo1nhT5TB0nexOVLZO/9jIWD3tBE3eT80vTS7OY
-         rL3A==
+        d=gmail.com; s=20221208; t=1686266962; x=1688858962;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6RGbjUYsdaohPZQXqH0ffB3I+/zH7l+P+guRk55pY3o=;
+        b=GKUqaxYpA9sPWVTJUqhY/WvUJd0oMJh68pPhWRdgURVT0nWmLLk+PH0CZGMNu9NA5Z
+         bRiLFi1+g5t3OToeIuLBoxouHAfU/mDzBROQ7M/Tsef1mypcXnCe8LHxoBxLOrnM6ZbM
+         4qfiJ87XgvvzdG45loNAZ4ywZD1ZcvLtxj+IIyoilamuFhZLXVq+SmbFp1cwklOXpCuI
+         yEEPvPJpyQ5KGkMGD6k2sp8h4rNxvLBHg68PEehqHNEXuLkCIioiOmhVzjyKekLNCh4n
+         fp6Ni/Frzf10PCiBBZbi7+BkpecMiiJJcRMZP40H3H/+HasliRX+d3grVqDxmZpSIs9v
+         CZKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686267016; x=1688859016;
-        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tvDaWeTNK3WSoU7RxteMJWYjgKCzqqKrMU8SOHl6IsA=;
-        b=bYoFG20lpIrHD+RohVdFHwio8uf8f3E9waV6uRJdKpl+FSnPY/tOl/U1BzmbQs/vsR
-         BcYUvN+JSrtkB6xLJrmTo8Ff9rgTnnRWuaKBo4DCxJvWUXpQeeG3/rZVuW06RoOMYZW/
-         wYBhJfpuzV4ZN/2/imi9akJyvRhArVFZkSm+ZYmzKpxWa7V+Y821f2/n/Kl4rSGNQOgr
-         4mRJwHqP3kTTKKusK1c++YvYyPO9T9mPltFiTyPgaPCh0ML1HD8dfSuxspMdCRKUPgfA
-         u2O0iTGTUlBkBcgEC/VMtlV0nqsTe09cvRXTDRS8E2hsMuWRu5xbp7CBWct7MvvZ0NjJ
-         KovA==
-X-Gm-Message-State: AC+VfDzmtBgetWqAbd8S8X95yBUTOSooBm5ki7HmbnHWxLyg40Sxtqr7
-        UA28yYUnuVOP0Q9U19MwHxDuLQLaKNJQ
-X-Google-Smtp-Source: ACHHUZ5mehvIfiWPsR3FMIB5AYIB4oykjMARcMG88ABn1UYKXC7tDYxPh/EBCaYSpCh78GjCUjEvdjauAAmr
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:c3e5:ebc6:61e5:c73f])
- (user=irogers job=sendgmr) by 2002:a25:b116:0:b0:ba8:4c16:78b7 with SMTP id
- g22-20020a25b116000000b00ba84c1678b7mr600676ybj.12.1686267015833; Thu, 08 Jun
- 2023 16:30:15 -0700 (PDT)
-Date:   Thu,  8 Jun 2023 16:28:23 -0700
-In-Reply-To: <20230608232823.4027869-1-irogers@google.com>
-Message-Id: <20230608232823.4027869-27-irogers@google.com>
-Mime-Version: 1.0
-References: <20230608232823.4027869-1-irogers@google.com>
-X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-Subject: [PATCH v2 26/26] perf hist: Fix srcline memory leak
-From:   Ian Rogers <irogers@google.com>
-To:     John Garry <john.g.garry@oracle.com>,
-        Will Deacon <will@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        German Gomez <german.gomez@arm.com>,
-        Ali Saidi <alisaidi@amazon.com>,
-        Jing Zhang <renyu.zj@linux.alibaba.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        Liam Howlett <liam.howlett@oracle.com>,
-        Dmitrii Dolgov <9erthalion6@gmail.com>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        K Prateek Nayak <kprateek.nayak@amd.com>,
-        Changbin Du <changbin.du@huawei.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Steinar H. Gunderson" <sesse@google.com>,
-        Yuan Can <yuancan@huawei.com>,
-        Brian Robbins <brianrob@linux.microsoft.com>,
-        liuwenyu <liuwenyu7@huawei.com>,
-        Ivan Babrou <ivan@cloudflare.com>,
-        Fangrui Song <maskray@google.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, coresight@lists.linaro.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1686266962; x=1688858962;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6RGbjUYsdaohPZQXqH0ffB3I+/zH7l+P+guRk55pY3o=;
+        b=MiE5LnXODgV5mhJxBZDTIka27DotXVcxRQFyg6FKH3EK7TJCtTqzNTe4h4IWUFMhmI
+         PvlBd5FNYtXfr8GqonUNF9hNfemc0gjtPoDD+SFM+ArbtUtnisVuRPme684Llew5o+N3
+         +FFHbxAJOCOVrQxawwYFyu7pHWIiGtvO3UdV3LCAa7EtoOgE5rCNvxNFnhKUralf2VAp
+         +YPGUhS+OAvDwoB5AK9W9T98ryZ+LY4wTFXaLB8j4SK7oE91YqLKBHykevFvBgMSq/22
+         s34BE5PLegLgGfVoy39h/wuThp+6P4arovCfDkpJ3xJXpxNG71GRDtq5+Tzp4TuXOgQp
+         +FDw==
+X-Gm-Message-State: AC+VfDxOd0Pxg0fgTEQvOJwyrZ7dcebMBrGhu1dfGdw2579MeVxFGBSl
+        aN2StNjsSV2ElSW9MHegiS0=
+X-Google-Smtp-Source: ACHHUZ5BemoIUtUyIQMWaimD9moPUg4gS1XMy0WBlsJ68BJAUvGHQpvMYcO3s/oFNl28ctNzJaryZw==
+X-Received: by 2002:a05:6a20:e617:b0:105:dafa:fec2 with SMTP id my23-20020a056a20e61700b00105dafafec2mr4523293pzb.53.1686266961618;
+        Thu, 08 Jun 2023 16:29:21 -0700 (PDT)
+Received: from localhost ([192.55.54.50])
+        by smtp.gmail.com with ESMTPSA id q24-20020a62e118000000b0063b85893633sm1535576pfh.197.2023.06.08.16.29.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 16:29:20 -0700 (PDT)
+Date:   Thu, 8 Jun 2023 16:29:19 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>
+Cc:     "Huang, Kai" <kai.huang@intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "imammedo@redhat.com" <imammedo@redhat.com>,
+        "Gao, Chao" <chao.gao@intel.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        isaku.yamahata@gmail.com
+Subject: Re: [PATCH v11 08/20] x86/virt/tdx: Get information about TDX module
+ and TDX-capable memory
+Message-ID: <20230608232919.GM2244082@ls.amr.corp.intel.com>
+References: <cover.1685887183.git.kai.huang@intel.com>
+ <50386eddbb8046b0b222d385e56e8115ed566526.1685887183.git.kai.huang@intel.com>
+ <20230608002725.xc25dantcwdxsuil@box.shutemov.name>
+ <19ea7470e9d6fa698f9ad7caff3279873e530a0b.camel@intel.com>
+ <20230608114128.vu75wlcojpyjak22@box.shutemov.name>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230608114128.vu75wlcojpyjak22@box.shutemov.name>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-srcline isn't freed if it is SRCLINE_UNKNOWN. Avoid strduping in this
-case as such strdups are redundant and leak memory.
+On Thu, Jun 08, 2023 at 02:41:28PM +0300,
+"kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com> wrote:
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/util/hist.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> On Thu, Jun 08, 2023 at 02:40:27AM +0000, Huang, Kai wrote:
+> > On Thu, 2023-06-08 at 03:27 +0300, kirill.shutemov@linux.intel.com wrote:
+> > > On Mon, Jun 05, 2023 at 02:27:21AM +1200, Kai Huang wrote:
+> > > > For now both 'tdsysinfo_struct' and CMRs are only used during the module
+> > > > initialization.  But because they are both relatively big, declare them
+> > > > inside the module initialization function but as static variables.
+> > > 
+> > > This justification does not make sense to me. static variables will not be
+> > > freed after function returned. They will still consume memory.
+> > > 
+> > > I think you need to allocate/free memory dynamically, if they are too big
+> > > for stack.
+> > 
+> > 
+> > I do need to keep tdsysinfo_struct as it will be used by KVM too.
+> 
+> Will you pass it down to KVM from this function? Will KVM use the struct
+> after the function returns?
 
-diff --git a/tools/perf/util/hist.c b/tools/perf/util/hist.c
-index 77cb2cc83bb9..cc6f7f51faa5 100644
---- a/tools/perf/util/hist.c
-+++ b/tools/perf/util/hist.c
-@@ -484,7 +484,7 @@ static int hist_entry__init(struct hist_entry *he,
- 			goto err_infos;
- 	}
- 
--	if (he->srcline) {
-+	if (he->srcline && strcmp(he->srcline, SRCLINE_UNKNOWN)) {
- 		he->srcline = strdup(he->srcline);
- 		if (he->srcline == NULL)
- 			goto err_rawdata;
+KVM needs tdsysinfo_struct to create guest TD.  It doesn't require
+1024-alignment.
 -- 
-2.41.0.162.gfafddb0af9-goog
-
+Isaku Yamahata <isaku.yamahata@gmail.com>
