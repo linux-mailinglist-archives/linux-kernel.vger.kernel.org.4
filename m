@@ -2,113 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B82E727EB9
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 13:29:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9985A727EBB
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 13:29:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235643AbjFHL3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 07:29:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45998 "EHLO
+        id S235509AbjFHL3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 07:29:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235509AbjFHL3i (ORCPT
+        with ESMTP id S235115AbjFHL3w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 07:29:38 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC7926B9;
-        Thu,  8 Jun 2023 04:29:37 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id 98e67ed59e1d1-256712d65ceso241129a91.1;
-        Thu, 08 Jun 2023 04:29:37 -0700 (PDT)
+        Thu, 8 Jun 2023 07:29:52 -0400
+Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B252719
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 04:29:47 -0700 (PDT)
+Received: by mail-vk1-xa2b.google.com with SMTP id 71dfb90a1353d-461b408594fso367981e0c.1
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 04:29:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686223777; x=1688815777;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CdZkN37ZILcUA0SzaoHvQXMR2eu2xrCGId0Fwo9xSEM=;
-        b=mmeQy0RxY3/m9n1Tc/6VyHFiFtTESs1UzwRqgXK7qiT3exDguzfoKKIexdCPiK0rqC
-         9QsZ0DBFkJ3R8actzla4TmiF/nJI9x5YzWwBMqOq+2HogXS9Rrg3S3a+Crp1/kfC6Gms
-         9rzFvxa+ZCQrfPDU1SgjlvIaNFTS1TuDw+KhiCseC43oMAEGMDLRKvssihIl5hkDdxwY
-         fhsX9LckTuvWmnfXAH7JTCwqBkE2rUmCRohxl/NMD1AZvvdMNgB/UYvQS/5pgqtJeOwA
-         YR6m2OfSY3Dw9UgLFgI3GFfFgtVSN1W1ija+cNjJObff0tM3ncirGZhZZintVbsjfN5k
-         rU4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686223777; x=1688815777;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20221208; t=1686223786; x=1688815786;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=CdZkN37ZILcUA0SzaoHvQXMR2eu2xrCGId0Fwo9xSEM=;
-        b=WLFdz6FR7sNlx2pGyyAK7pAGw7AFyYrx8iI8PvK3j6IeZ1trfxcB97eZq7E3vgLVyg
-         Ryq3G5lCAargftXDxOkyhTwBxt2J25bmigwfR8q/VqyduBC3TMvcqwILcLghccgW/mTg
-         PsytuV09WDNqxH5vukNoN/w+0tjUb44FnmFGrh4ZkUYyJNZvR5zEnv4J33/beD+48NeR
-         d9ADnhxVSgeiLHhO501F2MMT6YlEeu7DMfCnR2t0/lt4FayE03YOZ4GQ6pas4Fou9gpr
-         HWoBkBXp580qWsomGWNt8xsYKUp7WusBz818cKTTYkibz4mAICNaLbAXRiFhYi95IOJt
-         PgPg==
-X-Gm-Message-State: AC+VfDwld7QIflnjDTN3D5cQc6bmE7Gx7D9M0oQmDUHaPlU4bTbzUTyb
-        tg6QFZufRfGNqLgQRSRFvP0=
-X-Google-Smtp-Source: ACHHUZ7eDxuCuVIbcSWQGxEzT4I4LHuPHji8GPVD8NARhMMZTVM5qicIZ1HtLmCdXawNWuo0J8BHXA==
-X-Received: by 2002:a17:90a:6c42:b0:253:749d:205 with SMTP id x60-20020a17090a6c4200b00253749d0205mr3303630pjj.35.1686223776885;
-        Thu, 08 Jun 2023 04:29:36 -0700 (PDT)
-Received: from debian.me (subs03-180-214-233-16.three.co.id. [180.214.233.16])
-        by smtp.gmail.com with ESMTPSA id p11-20020a17090a284b00b0025621aa4c6bsm3056840pjf.25.2023.06.08.04.29.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 04:29:36 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id A571C106A0E; Thu,  8 Jun 2023 18:29:33 +0700 (WIB)
-Date:   Thu, 8 Jun 2023 18:29:33 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.3 000/286] 6.3.7-rc1 review
-Message-ID: <ZIG7nTLICXoVn_08@debian.me>
-References: <20230607200922.978677727@linuxfoundation.org>
+        bh=Ti5W00fHo5+54ZqpdE6ywmJj9WVEs3HQLqx+j7roPaM=;
+        b=j9UYTd2O2XcooRATGj467HxZMPDB0Cg9aL5LSEvNsyNB/167ogbccoVHPhVnlpSZWG
+         DGwjl1hc1Ht3q63sDOZhBv2Y45SGTynRUYRh5yFf3RlUig17UAEktGlYlnqcm4oQJnu9
+         EwkDn+GxHlJgT2KLU1Fm8mKpcSDSJ1ZetNRe3im8cpFlisVRRXkPIrdCxhkQ48MOZ8En
+         0jzTx3+HB2NWZTUCIH3hhTe8lbbnFOLk86qxbqhL/NKgdUY4Oxj1jox+hmOQNH8nAwJH
+         0GxW+q4EVMUgSH0pehUz4k0JBJDdxb71mDBqBr/0pTE4JZ7YLQWpu9+OWP/1Z7mOFYlf
+         uHww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686223786; x=1688815786;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Ti5W00fHo5+54ZqpdE6ywmJj9WVEs3HQLqx+j7roPaM=;
+        b=LxitlTXxrcRjxmk1UNC0bSE8OsvAzf8KsiIdq1CWCVqw90JXMvNNWkf1fK5zJocV2i
+         S9K+iNbe7TJRHW4ABYWaOxIG45YbRNv6aokely94aXw8aRcSVMhx6hH4xushF/tIvCn9
+         SZUNz3rVmZNvgrkQaWDBnd0gzA7XmpnvHn/GpvfoMzr51fQgX+nFMHH34hd98LRvrRH6
+         XDF0tA2nhQ59xGJA0XYkMD1Dbz8zC0IZIzHuU6L8FqWs0JpsVcRo7S+0uXIHas/ic8A4
+         I6Fwjg7eaE/mUnUrP0ZzDj8eUVQGT7ZYu9yDUppg3MB2NMPHS/F1O19n/i0XdcJfWFZy
+         r//Q==
+X-Gm-Message-State: AC+VfDzg/EmqwId8V2yPKqOKYTwRTI4iyNHcHZuuangmtVyV91SHj6kJ
+        L+eXrn65/+mHO53jwsFXPzgw969ETMJM+bj98MFh3A==
+X-Google-Smtp-Source: ACHHUZ5zcnDOZfoYJbivv3/58L+IR70zNlCg7fYw4RIRpY5qWv0mfo+fyDF1mW7Z5LjTsSSYSKdgWltSjIajTRyIdnE=
+X-Received: by 2002:a1f:4103:0:b0:43f:e623:952 with SMTP id
+ o3-20020a1f4103000000b0043fe6230952mr837973vka.2.1686223786516; Thu, 08 Jun
+ 2023 04:29:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="DXfqkyGF6d67kcHE"
-Content-Disposition: inline
-In-Reply-To: <20230607200922.978677727@linuxfoundation.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <cover.1685333727.git.isaku.yamahata@intel.com>
+ <a7fc71f5d30676e9360f3db040feb7e6ac18203f.1685333728.git.isaku.yamahata@intel.com>
+ <CAAYXXYzR6JZq8OOD2qqC_vVGiCa3e5KmZZ+36YffGW6JFK4+Hw@mail.gmail.com>
+In-Reply-To: <CAAYXXYzR6JZq8OOD2qqC_vVGiCa3e5KmZZ+36YffGW6JFK4+Hw@mail.gmail.com>
+From:   Erdem Aktas <erdemaktas@google.com>
+Date:   Thu, 8 Jun 2023 04:29:35 -0700
+Message-ID: <CAAYXXYyUbqjmrezTw=p_yBkkB-o9H-Xg_J5rBCe1CXUpF5PM+A@mail.gmail.com>
+Subject: Re: [PATCH v14 055/113] KVM: TDX: TDP MMU TDX support
+To:     isaku.yamahata@intel.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Sagi Shahar <sagis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Zhi Wang <zhi.wang.linux@gmail.com>, chen.bo@intel.com,
+        Vishal Annapurve <vannapurve@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, May 28, 2023 at 9:21=E2=80=AFPM <isaku.yamahata@intel.com> wrote:
+>
+> From: Isaku Yamahata <isaku.yamahata@intel.com>
+>
+> +static int tdx_sept_drop_private_spte(struct kvm *kvm, gfn_t gfn,
+> +                                      enum pg_level level, kvm_pfn_t pfn=
+)
+> +{
+> +       int tdx_level =3D pg_level_to_tdx_sept_level(level);
+> +       struct kvm_tdx *kvm_tdx =3D to_kvm_tdx(kvm);
+> +       struct tdx_module_output out;
+> +       gpa_t gpa =3D gfn_to_gpa(gfn);
+> +       hpa_t hpa =3D pfn_to_hpa(pfn);
+> +       hpa_t hpa_with_hkid;
+> +       u64 err;
+> +
+> +       /* TODO: handle large pages. */
+> +       if (KVM_BUG_ON(level !=3D PG_LEVEL_4K, kvm))
+> +               return -EINVAL;
+> +
+> +       if (unlikely(!is_hkid_assigned(kvm_tdx))) {
+> +               /*
+> +                * The HKID assigned to this TD was already freed and cac=
+he
+> +                * was already flushed. We don't have to flush again.
+> +                */
+> +               err =3D tdx_reclaim_page(hpa, false, 0);
+> +               if (KVM_BUG_ON(err, kvm))
+> +                       return -EIO;
+> +               tdx_unpin(kvm, pfn);
+> +               return 0;
+> +       }
+> +
+> +       do {
+> +               /*
+> +                * When zapping private page, write lock is held. So no r=
+ace
+> +                * condition with other vcpu sept operation.  Race only w=
+ith
+> +                * TDH.VP.ENTER.
+> +                */
+> +               err =3D tdh_mem_page_remove(kvm_tdx->tdr_pa, gpa, tdx_lev=
+el, &out);
+> +       } while (unlikely(err =3D=3D TDX_ERROR_SEPT_BUSY));
+> +       if (KVM_BUG_ON(err, kvm)) {
+> +               pr_tdx_error(TDH_MEM_PAGE_REMOVE, err, &out);
+> +               return -EIO;
+> +       }
+> +
+> +       hpa_with_hkid =3D set_hkid_to_hpa(hpa, (u16)kvm_tdx->hkid);
+> +       do {
+> +               /*
+> +                * TDX_OPERAND_BUSY can happen on locking PAMT entry.  Be=
+cause
+> +                * this page was removed above, other thread shouldn't be
+> +                * repeatedly operating on this page.  Just retry loop.
+> +                */
+> +               err =3D tdh_phymem_page_wbinvd(hpa_with_hkid);
+> +       } while (unlikely(err =3D=3D (TDX_OPERAND_BUSY | TDX_OPERAND_ID_R=
+CX)));
+> +       if (KVM_BUG_ON(err, kvm)) {
+> +               pr_tdx_error(TDH_PHYMEM_PAGE_WBINVD, err, NULL);
+> +               return -EIO;
+> +       }
 
---DXfqkyGF6d67kcHE
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 07, 2023 at 10:11:39PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.3.7 release.
-> There are 286 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
+It seems like when the TD is destroyed, all the TD private pages are
+removed with tdx_reclaim_page which also clears the page with
+movdir64b instruction. But when the page is removed while the TD is
+alive (in this case), the page content is never cleared with movdir64b
+which causes any poisoned cache line to be consumed by the host
+resulting in #MC exceptions in the host context.
 
-Successfully compiled and installed bindeb-pkgs on my computer (Acer
-Aspire E15, Intel Core i3 Haswell). No noticeable regressions.
+We should clear the page before returning it back to the free pool by
+calling tdx_clear_page((unsigned long)__va(hpa)) here.
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---DXfqkyGF6d67kcHE
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZIG7nQAKCRD2uYlJVVFO
-o43fAQCRl0BKECL0R96Z8JXOY9Sgh8i39Rf4//oqKfag3g38VgEA/L3FNS78m5nt
-0otloeCVR4Y4yfbim8cQulyUDD1SPAI=
-=yZft
------END PGP SIGNATURE-----
-
---DXfqkyGF6d67kcHE--
+>
+> +       tdx_unpin(kvm, pfn);
+> +       return 0;
+> +}
+> +
+>
