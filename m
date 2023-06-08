@@ -2,111 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34547728A75
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 23:54:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D91DF728A76
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 23:55:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235770AbjFHVyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 17:54:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42548 "EHLO
+        id S235282AbjFHVzf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 17:55:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232503AbjFHVyK (ORCPT
+        with ESMTP id S229920AbjFHVzd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 17:54:10 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2F9D2D56;
-        Thu,  8 Jun 2023 14:54:08 -0700 (PDT)
-Received: from mercury (unknown [185.254.75.28])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Thu, 8 Jun 2023 17:55:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD9B61FE9
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 14:55:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id BDF4F6606F20;
-        Thu,  8 Jun 2023 22:54:07 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1686261247;
-        bh=Wszifdf7HuRIPKRMgIdm6D0LY7Ej+ODbMyZF6avenLw=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 51E5A65130
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 21:55:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92874C433D2;
+        Thu,  8 Jun 2023 21:55:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686261331;
+        bh=jLLIY+6XSJEnROaCzPa2cWfvfUfImfLErJ0cuoIYyGM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JgwpYBZ7xHNmhkrdmhq+rh8ZZLrJpIL0osF8+noxtXwFPf+W1teh8z+iqN2w0UJaB
-         C8orH0FRMba1El56OOjXRsONutwE55o4FQs3D68rOvvtNrHGhKyPxPnjFeaCjG/FTS
-         zk6YcwewiKzjl0Q7timPY5sjheGyWnck5lohPf7rO+vLTj5IGDEX2S1W+/0x0kUTmD
-         RvhHGcW31w8ClMVN7uVfRv4telPtxmAPMUfqlG6b+Bq8LWiL2VAthucLFM0zpSwnPZ
-         vRxVjlIg1tTscZPnhYpvMMpK2Oc3tomEUDm8X0REGMpCKC7a76KXQNTcl1luxfMOrj
-         gkkVwvf9rgcUA==
-Received: by mercury (Postfix, from userid 1000)
-        id 071531060A24; Thu,  8 Jun 2023 23:54:04 +0200 (CEST)
-Date:   Thu, 8 Jun 2023 23:54:04 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     cy_huang@richtek.com, krzysztof.kozlowski+dt@linaro.org,
-        chiaen_wu@richtek.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] power: supply: rt9467: Make charger-enable control as
- logic level
-Message-ID: <20230608215404.oiklnbbsbykv72zc@mercury.elektranox.org>
-References: <1685600676-25124-1-git-send-email-cy_huang@richtek.com>
- <3843deaf-2913-d850-0422-d411031947b4@linaro.org>
+        b=PY2OcR2XIqmjOkJa9pEgbQUEQtTTesBr8kBDccpp+O9oUuJZarlgUG2A/BKmmrYfZ
+         a42HZQ0ESa5M2JKbDiQ40tREnJzfUk9mKKZbkyoLKHYuN2YiVBBdJmSWemmmuvzvG9
+         ZNHfAwdY9gtdTLkSRfbeHkDukF87wFfCe1Aya3mPo6sfgChzHDJRxrRJ3bCb09AYTQ
+         SDNsT2KXlyU1rm9xCFQ2qW9nSyS4/lz3x3oCQ6O5fcfNwrrHEPc67d/V2x2stK7m6k
+         nmWyp1PDWfA7yrZzWIz+ZazhJhIFmeggvTNA3Z0q2jdXEoL6SDG32yhz4tPIoEtIZ0
+         6gNggbFSCE1lQ==
+Date:   Thu, 8 Jun 2023 22:55:26 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Mostafa Saleh <smostafa@google.com>
+Cc:     Oliver Upton <oliver.upton@linux.dev>, maz@kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, tabba@google.com,
+        kaleshsingh@google.com, catalin.marinas@arm.com,
+        yuzenghui@huawei.com, suzuki.poulose@arm.com, james.morse@arm.com
+Subject: Re: [PATCH] KVM: arm64: Use different pointer authentication keys
+ for pKVM
+Message-ID: <20230608215525.GA2742@willie-the-truck>
+References: <20230516141531.791492-1-smostafa@google.com>
+ <ZHEa+HAixbYijQTA@linux.dev>
+ <ZHSJ38WATzgJF7SR@google.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ssk5gaztslys2g72"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3843deaf-2913-d850-0422-d411031947b4@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ZHSJ38WATzgJF7SR@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, May 29, 2023 at 11:17:51AM +0000, Mostafa Saleh wrote:
+> On Fri, May 26, 2023 at 08:47:52PM +0000, Oliver Upton wrote:
+> > On Tue, May 16, 2023 at 02:15:31PM +0000, Mostafa Saleh wrote:
+> > > When the kernel is compiled with CONFIG_ARM64_PTR_AUTH_KERNEL, it
+> > > uses Armv8.3-Pauth for return address protection for the kernel code
+> > > including nvhe code in EL2.
+> > > 
+> > > Same keys are used in both kernel(EL1) and nvhe code(EL2), this is
+> > > fine for nvhe but not when running in protected mode(pKVM) as the host
+> > > can't be trusted.
+> > 
+> > But we trust it enough to hand pKVM a fresh set of keys before firing
+> > off? I understand there is some degree of initialization required to get
+> > pKVM off the ground, but I question in this case if key handoff is
+> > strictly necessary.
+> >
+> > There are potentially other sources of random directly available at EL2,
+> > such as the SMCCC TRNG ABI or FEAT_RNG. Should pKVM prefer one of these
+> > random implementations and only fall back to host-provided keys if
+> > absolutely necessary?
+> > 
+> According to my understanding, the kernel is still completely trusted at
+> this point (it sets the initial page table for the hypervisor), so I
+> believe it should be fine to trust it for ptrauth keys. However, I agree,
+> it would be better if the hypervisor can get its own keys through
+> firmware/hardware if supported. I will add this in V2.
 
---ssk5gaztslys2g72
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I appreciate the sentiment, but I think we should avoid adding additional
+complexity here if it adds no security benefit. If nothing else, it adds
+pointless overhead, but beyond that it gives the false illusion of a
+security boundary.
 
-Hi,
+Prior to deprivilege, the kernel can write to the hypervisor text, modify
+its stage-1 page-table and change its data values. I think the pointer
+auth keys are the least of our worries if it's compromised...
 
-On Thu, Jun 01, 2023 at 08:31:28AM +0200, Krzysztof Kozlowski wrote:
-> On 01/06/2023 08:24, cy_huang@richtek.com wrote:
-> > From: ChiYuan Huang <cy_huang@richtek.com>
-> >=20
-> > The current coding make 'charger-enable-gpio' control as real hardware
-> > level. This conflicts with the default binding example. For driver
-> > behavior, no need to use real hardware level, just logic level is
-> > enough. This change can make this flexibility keep in dts gpio active
-> > level about this pin.
-> >=20
-> > Fixes: 6f7f70e3a8dd ("power: supply: rt9467: Add Richtek RT9467 charger=
- driver")
-> > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> > ---
-> > Hi,
->=20
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Thanks, queued.
-
--- Sebastian
-
---ssk5gaztslys2g72
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmSCTfwACgkQ2O7X88g7
-+poB0hAAip4G5Lih7H91h4epC0Egs53vOzTSTzwFkjpn+V88Vhysu/aoAjYFQBwi
-OPMMPziKE5Lv9BeYAkEwrBFLov478+VCAvQBL8/E40JLhaaGM1+rrZHgYw96Gv8i
-CaJmdpkRdRHJ/HGFIwJir+p72pjfZW3i/eLxY4IIeFTXVxA7Rw2JFEqX48YV5hh7
-F9XbAinkESmmnzWF/6v4jaIunW2NRVRguSK+FQ9IfTvVgWHnOcuceLIcQ719LT/y
-TdwqCvoXkz0TbXxW0/jXOQ+fChCeeqzVK0Tv+JOMf+A+FP4m3QJ1nOEeKbrUivhH
-UvCxFroyer7nPsFqabM3QV/UPEvKgMbvfy48yPwnkWjIMVzF4fDSRvsnbC59PEM/
-8Qd7yeYfdCqYbRMextW+08DQ3RkgvrD7Okajpx50s09h2igyc9JxU3JHEBqfVkZR
-Vpcuz3PQQrASd3syJkN0lChVIrh0/IajDczxPM8P9rlCyFKE7/n3jvr7bayU4f4a
-F4pmnDtGm6DoIRMiSZTpxIGc6UwrgPrUTtmTuuZgX84YM0X+f9nbkkaAkwjccZRj
-+BYLoIX2PjU/M1gQZXDLMYZ2xOxpKASiZIMA36nBRatH99iw7LrEzXM2P3sS6Xyq
-UKMAndUmTKB1osIG51LKlvM34mGSck1BBDG4xWpfk0w58xsbtEM=
-=xZYs
------END PGP SIGNATURE-----
-
---ssk5gaztslys2g72--
+Will
