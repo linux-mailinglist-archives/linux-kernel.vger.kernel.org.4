@@ -2,159 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 918E772839F
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 17:20:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9355A7283A8
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 17:23:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237042AbjFHPUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 11:20:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52034 "EHLO
+        id S236793AbjFHPXT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 11:23:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236957AbjFHPUv (ORCPT
+        with ESMTP id S232018AbjFHPXS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 11:20:51 -0400
-Received: from BN6PR00CU002.outbound.protection.outlook.com (mail-eastus2azon11021024.outbound.protection.outlook.com [52.101.57.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD9802D61;
-        Thu,  8 Jun 2023 08:20:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MdrfM+FmPUebNovZZYWsO+mh/eyhnRwHpSshij6cvN52pvWP0nJrzGXMC8Z1ppRld/2FxomG+kXLeccBTaWKDlXnOm8+AW3gN5yV1UoLK1d1+9gaF7vZkMeJT0rcqdC6BKKpFzS9HX+ieFf0WUfsXgR4z7b7p0GzSO5HPHZWqdnibMZ9hjZgygBu0qagtHCEw39QD5IfdBtUtp509Bbky/72S+aUptdJzX77rhLcBh/bCkDHIpzjuD3Gc750Iyp99I7bsYiOzv0KjLKMWO888SD4hLSXb+IrA6TnEy3nF9NObTcx2nsfr9l1Wft4/Y141rqfnTYGuc/YE6Gviqm1+g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=apQakb7opuLnG3Qw16fgxdPqc4zIfJ2eVYT40iuACq8=;
- b=eNK6ma2QzxokZhBbXpAOIBC2ltBM0BRqb6/IArQC3jGP/RUlHNi0g43YJxzDIznUp+o9kcGsGCYlEdiGJwRWhJgNPIJgLRSq6a3ONHtdBrFsYQXPc2OmINtssD+S7mYvLgXWQH12b1YgRf0nkt8BkcC4jadJYHUhMPQPIXJrIQCG6neeRyFrSVArY51Zj0AY+pxvD7qy3cgexacR4XdTXE3stoPxIZHqOdPaMY8xz7+l/imAIiyTR1/IfIwS80zbEL6s1M6xJcAJfJg39hFDVJn4l8qJmwOooHc1ugMucVjvlBKUmync5MaHrhcFomzSqywVoJ94JbFjrIrhfP8DJQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=apQakb7opuLnG3Qw16fgxdPqc4zIfJ2eVYT40iuACq8=;
- b=jiRs4OCpL7ax/OcItUPxzYVhvDIxXR8Obhuz3H2YjAc18XXtl0k083WBlv4eUrva/55PehmZY+7Ay/7xu0X/cYJJN+foyQGWjW83xSu4cx7fVpNTlu1kt1ynCtIH8f7sdSTHKASbNRs4CML37g717ijjsAFY9n4+7E/I0eh9DE0=
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
- by DS0PR21MB3949.namprd21.prod.outlook.com (2603:10b6:8:115::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.14; Thu, 8 Jun
- 2023 15:20:46 +0000
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::7d5d:3139:cf68:64b]) by BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::7d5d:3139:cf68:64b%3]) with mapi id 15.20.6500.004; Thu, 8 Jun 2023
- 15:20:46 +0000
-From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>, "x86@kernel.org" <x86@kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 1/1] x86/irq: Add hardcoded hypervisor interrupts to
- /proc/stat
-Thread-Topic: [PATCH 1/1] x86/irq: Add hardcoded hypervisor interrupts to
- /proc/stat
-Thread-Index: AQHZStvOKEpex/oSu0efNAklHfBImK8HPJyAgHpmqwA=
-Date:   Thu, 8 Jun 2023 15:20:46 +0000
-Message-ID: <BYAPR21MB1688C273172834D7107F6F22D750A@BYAPR21MB1688.namprd21.prod.outlook.com>
-References: <1677523568-50263-1-git-send-email-mikelley@microsoft.com>
- <dce372bd-e63c-f24c-5b79-1ef65fd1e59a@intel.com>
-In-Reply-To: <dce372bd-e63c-f24c-5b79-1ef65fd1e59a@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=82d7c1ce-fb85-4faa-835f-c6363bd6e2b5;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-06-08T15:18:36Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|DS0PR21MB3949:EE_
-x-ms-office365-filtering-correlation-id: 5f815c0d-6fc1-4611-f77c-08db6833eec6
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: k6R1pG11tObgeNnf1izCSqsSIfiSSFRzpn630tYu0dNpsUXS4YagUjbNmw8zz5okVNvY28+f/6vt7uVrpE4mTA9oDVrsTY2cOCMOtbPgslMf1iRZa1AaKuxyI7Sy6LIrVH+d0lk7HiodXm2CWD4pSdL0IqBn3pypZlmLKTTNScBFcHUDgB9pGjThwLUu/PeI9NZn2vKJYyqSYqf1lq40wbeGcXzvaUkVf4e34aPQCGyQr3zhTOI6NdK1/VSmfKUc4bu+1xv9TGXSNL7pUzX7yvlIxZTyh/5mmrx02czgnHsH+uCJixjOGf1folfxKOkbyHepBEcV9wbBhmllCvvQ+clu+FHE/b37ajOpscvccRyDMKCvXItU0C4nsp/jzAJSg8ljbB32m/nvvrxlhmxSow/nzR3Zc7bM0v74Twjx4KKzb3MLLGv7Yvao4/k235zOgh11jDUmS0LfvfDhjVDMGagIVK4x4vRqAlw6829M+NU+VQTaCm5975Y8ln+9oA6GoFoQS06Zx3V1ostww4ctnHXtL73Zqiuzd/ArZVdcZdpBmC8IyONCS6Z4EWSRVBLBWAzd91QoqQYz/mzI318mfCf+mFc7NH8sStUu9crtch3HSAF+9e+OJrHLSJWY0+SqrjQJRTWpAvalGVBUuB9jZ3nH8lpKfOeH/NMn6VB7DR0=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(39860400002)(136003)(366004)(346002)(451199021)(66946007)(66556008)(66446008)(66476007)(64756008)(76116006)(478600001)(54906003)(10290500003)(8676002)(52536014)(8936002)(5660300002)(71200400001)(6916009)(4326008)(316002)(41300700001)(7696005)(38100700002)(82950400001)(82960400001)(122000001)(55016003)(9686003)(53546011)(38070700005)(26005)(186003)(6506007)(8990500004)(86362001)(33656002)(2906002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SWRlcWg3V2tKa3NDS25Vd2lYZG1JcG9NK3FyVzBtb3BWOTI3L3NLR1hkSE00?=
- =?utf-8?B?WXhLUmxLWXVaaHBTVmlyYWZrK2JPd2toTFFHcUJHMzgyblFQWEJBSUlVSWtU?=
- =?utf-8?B?QWRTQnZ1ckxoOUFWSGVwSWJISzA2dHU0VmNFcmZiblNUU2NUUUFKZTBkSTZG?=
- =?utf-8?B?VmNzY0F3S1ViOVhTQVNsUFYvdnpiSk9OcUppUnpXUzA3S09ubEVRakJhanNL?=
- =?utf-8?B?ZWtSZVg4Rk9rMHprcEc4YUxtQlhkUi9xT3V2ZzM0YVpmbzdkdDFha3RLYmlK?=
- =?utf-8?B?MjJJWFZhKytoOExKcE1odjZpSVF4aTBYYUlUZXB3NkRUNmdDRy9BWU1tSHY0?=
- =?utf-8?B?YmZicHBCWFJqb2FvaE1ucDAvWC9Ld2hYVjdUa3pnckRtT0FBUXU5NGdkRnNJ?=
- =?utf-8?B?ZmwzcUNTMzFocHI3L3N4cVYyVW1EMklLaEpVbWEyTThkb2FRUDJBWERRbGx0?=
- =?utf-8?B?RzBKMkhpU0ZmRzlBMFVLdVJ0YUtMZ3NBa3VxRi9DL2FzVitaMWE2SThCVzFC?=
- =?utf-8?B?cGFHckdaUW1yRUc4QXl3UTBLUVBvQ1BxVlp1NUhnenh6Znl0eW1idklXUTBv?=
- =?utf-8?B?Y1FOeWRQRktCMitxZ01iTWlvZW84a3NYS3dqTk9jNTN0TWFiSjB0VTdKUnE4?=
- =?utf-8?B?d3RRZS82VWdlQ2c4K011RG5WZ29IWjh5ZXMwNGt2ektkaFhjM3VmbUpqYkVS?=
- =?utf-8?B?Q1FYK2tCU3BENnkwQ3lEQUFTU28zemY0T09iekdnMWVtdVhvT2lnU3FnNGY3?=
- =?utf-8?B?TXV5VnEva1NOYXZ4Vk9aQ0ZoUzFYMFpsZTREd2hQbnozcis1bEY1dXdRQ3Fu?=
- =?utf-8?B?M0pFenhCT1VHVlFvdnlYRGRvTFVVeGF6cFVjeFEzbEJBeWdXajA5TmRLQUdr?=
- =?utf-8?B?aHFpUWxVTFBhWFRsOWtvSVZVSEtQUlBBZGxaeHJyQjM0UGszUTBBZis0RFFz?=
- =?utf-8?B?QU9uM2F6WUVLbjlzNzRsdmJDVnJzQUkyRVpnVWNsWmNmbW9sd0JwYkVleGd6?=
- =?utf-8?B?VjVLQ3MwY3VRTG41blFoYm13MkwvYlRMbVdGNnZ1THREOGNwaXk4SnRtcUda?=
- =?utf-8?B?bDUvSjF6WjBzVDM0YTY2SzVpbU1LUDNRclFBNFgydnZkRHhXNFIwSkdZMHdj?=
- =?utf-8?B?WkxYa0lmbWNwd2I1S2F4ZTZJdjNQRGhpeURqSDgvNEozK2JtcWJYd3U2dVdB?=
- =?utf-8?B?YWtEcWVmNHc0MWhlQkl2WkQrb0IrN2hrUENjS2ZjcFJkTnd4VUtmeTdYY3li?=
- =?utf-8?B?WVIwUlVBM1VBMTMrajE2LzhNbnkrOEZkU0JwZG00NFlpclkvUzh5bnU2cFpv?=
- =?utf-8?B?ZzhzZ2lWYkpLbVBvL0NhYnRJNE1CeTB4T0pTRmozekoxWU8ydDROcXgzeWp4?=
- =?utf-8?B?ekRIb1hRbW5qQkNQTEMzNHpSUjVqRVdzRWpERGxaeW56cU1hT3VzekFQKzhD?=
- =?utf-8?B?ZzNPdUFlTEEybGZldThUQ2FlT3l4bW0wOHRNSFJSVE9sNmMwUmV5ZmRJSW9z?=
- =?utf-8?B?MEJVVXUzNncxS1Nwd21QU1BoOHJKb0Vwb3k5amFkTmd4d1dGMEo0QUMwN3Zv?=
- =?utf-8?B?UkRTYjhiMEsyc1psbCtPblJmODhnOTJWQzhEbjd0Y3BCS1ljN29sWTRDamVE?=
- =?utf-8?B?UVVoTUhkbVFLYWR6WHJ0N3RpMTU0K29ONFcyMzI0d2FLY1pjSDF1TDkvSThB?=
- =?utf-8?B?dUp3bGptQU16ZGxBUmRweGdSejNUSG9qdU9xOHVVYStseUVYMWlmV1VSQnp3?=
- =?utf-8?B?MklEV1pORkpiVWltVWxTNWIzL0d2NFNvVldWR01VR0dGc1RtOWEwTFdDWGJR?=
- =?utf-8?B?MGpmZlBvZGtQNi9GT05ubXhDM1Z1UHNTTXcvdlM3TFlsdEVkY0JGVDJ5OG9m?=
- =?utf-8?B?TWVEOHo4bGJLNkRyQ2RnL0NxNGl1dmlVZS9VbU1wZ21JLzZuc3JzR3B0N1BG?=
- =?utf-8?B?dlFDWjEwRFB3QUZscTJmZE9GZkF4UW9aempvcGRxZVVJMXUzNlAxbEZqM0R3?=
- =?utf-8?B?cHc4Q3dxemdHa3kvNEZ4RUN5TVN2SzVEcWd1U0Yyc1FOSnd6UUlKWGZSdHd1?=
- =?utf-8?B?NGk5cVIyNTlwVytFTDZ0Z2JHMlpQdml4bERWZTFFS2xNajRvUGhsaE5nNjZC?=
- =?utf-8?B?Y3pySFRQbDhra0dhNDIyQWdlUXNmT0ZRMkJucjhzaGx0TXJsV3gyd3JjYmV3?=
- =?utf-8?B?aGc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Thu, 8 Jun 2023 11:23:18 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 943AB26AD;
+        Thu,  8 Jun 2023 08:23:16 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 47EE85C01C4;
+        Thu,  8 Jun 2023 11:23:13 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Thu, 08 Jun 2023 11:23:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        invisiblethingslab.com; h=cc:cc:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1686237793; x=1686324193; bh=8NQR1QgWkz5FJshx76hkwpBKXiFIu2ZBcaz
+        eZgfU2HU=; b=RNr33zvInGlHpMqFqPaWlax+/J8+13RX1z3cGoqD0m0mN6T9KFG
+        uTT4/u3eB4me0Falzaq63/Eemzr1qJtHm5R4bTa8/r21DQf3Yy7mwtd6p44inMtv
+        0JFHYicLUv9e4toFh/H+7UvqWYmznpmzIV8bwPZGVgN1aAjulb6mWWGTf5WDsgkG
+        rZwYYXi71/jw29GnspjgKa4nND6h73b7Z45UJ+V1JeDMzWDWboGXkrnkjvcMfrRv
+        zLPcHRFbZ3s/gvU0VvNCzIiLatTypTI+C2CnkczM93CuSEorSSoiJSOIjD8Lkb3V
+        yhBs5btMqhSesOtB0QYdVIDZfxKD7tLgL6w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1686237793; x=1686324193; bh=8NQR1QgWkz5FJ
+        shx76hkwpBKXiFIu2ZBcazeZgfU2HU=; b=yqh6JQeZP2OslVaaN0b9gaJwAlpTD
+        X84n2uEtVHFyB3O6aAGEmbiRHVdgmgZ1eZfw1LHyV/naZqMA4EWAQblH1eYvCfIp
+        1ILnCXQdTmPHGuBrkgAf4XOyMsdanOPcdhRJj3AgqmEBTNgHBZ6jW5o9mkBd78cP
+        iQB6nWQxUxd58M93OJIJPp21F9ntgyYSSVlATbT34ifDAcfcHb4U4tRTbO3/ttRq
+        8ZoiGHF714dhLWiQSBSv3sFvK2s2f3O1uT5BZhKq/1jH3cxvVSj1tmIje4cfQl4N
+        niXqwKld7slr8EPB4FvoLVPY6HzzBH+naNWCw/er4ElkDhh+l/n4pilOw==
+X-ME-Sender: <xms:YPKBZOe8-xo8s7Dfgt-AopesjR3IiAnC_W2hN5O7lh0Ia4keVlAS0w>
+    <xme:YPKBZIMU0WdxOItx84HVTp_nkTI_YvTFLAg9KKjvI2NS8-HMhqr4wzcPgqTyqbAc3
+    6qaALGQ_ppjUCY>
+X-ME-Received: <xmr:YPKBZPjFl4bpETpiF7W5ZGmwjx3XfxDnoL9zJrMElrBIuJ_XWfd9AQk_U_E>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedtiedgkeejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtjeenucfhrhhomhepffgvmhhi
+    ucforghrihgvucfqsggvnhhouhhruceouggvmhhisehinhhvihhsihgslhgvthhhihhngh
+    hslhgrsgdrtghomheqnecuggftrfgrthhtvghrnhepvdejteegkefhteduhffgteffgeff
+    gfduvdfghfffieefieekkedtheegteehffelnecuvehluhhsthgvrhfuihiivgeptdenuc
+    frrghrrghmpehmrghilhhfrhhomhepuggvmhhisehinhhvihhsihgslhgvthhhihhnghhs
+    lhgrsgdrtghomh
+X-ME-Proxy: <xmx:YPKBZL-G_3_Ci0GJw6XrystQz7a7FePvF3QI7x0lBogsLIuVP4tAvw>
+    <xmx:YPKBZKu9MyksjpE4khqAqJYtJqiMPbirkUanGOh9zy-mIl1kKRKmvQ>
+    <xmx:YPKBZCEA-qutMj487Mpgc9AYYvjqXp9tZZJa7O1Uq_Ao_6jBUQPupw>
+    <xmx:YfKBZOgpfrXR2AJL2GZsTVjPWsw6q3cdbRyGuIOAbUx1E3udWcBmpA>
+Feedback-ID: iac594737:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 8 Jun 2023 11:23:12 -0400 (EDT)
+Date:   Thu, 8 Jun 2023 11:23:07 -0400
+From:   Demi Marie Obenour <demi@invisiblethingslab.com>
+To:     Roger Pau =?utf-8?B?TW9ubsOp?= <roger.pau@citrix.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com,
+        Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= 
+        <marmarek@invisiblethingslab.com>, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org
+Subject: Re: [PATCH v2 16/16] xen-blkback: Inform userspace that device has
+ been opened
+Message-ID: <ZIHyXrAj5+DXAblD@itl-email>
+References: <20230530203116.2008-1-demi@invisiblethingslab.com>
+ <20230530203116.2008-17-demi@invisiblethingslab.com>
+ <ZH75OTMA6N3zYrH2@Air-de-Roger>
+ <ZH9tcGh0N2fEcwjH@itl-email>
+ <ZIBDgKKDhDj+//Q0@Air-de-Roger>
+ <ZICwaWidZxhaGp8v@itl-email>
+ <ZIGbUDpqjwbR5zmz@Air-de-Roger>
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5f815c0d-6fc1-4611-f77c-08db6833eec6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Jun 2023 15:20:46.1487
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 2lMxs2BpiC0lsIodvI7W8iSQZx4mDCPZ3IOIBxpardWpa8gm2pUCXK0BNRGZlTP83xlGKZTpOkT9tjJH4esMK9jaesYnTAzWQxdMtFUhZhc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR21MB3949
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="PU98An8gDVvBtzYA"
+Content-Disposition: inline
+In-Reply-To: <ZIGbUDpqjwbR5zmz@Air-de-Roger>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogRGF2ZSBIYW5zZW4gPGRhdmUuaGFuc2VuQGludGVsLmNvbT4gU2VudDogV2VkbmVzZGF5
-LCBNYXJjaCAyMiwgMjAyMyAxMTowNyBBTQ0KPiANCj4gT24gMi8yNy8yMyAxMDo0NiwgTWljaGFl
-bCBLZWxsZXkgd3JvdGU6DQo+ID4gZGlmZiAtLWdpdCBhL2FyY2gveDg2L2tlcm5lbC9pcnEuYyBi
-L2FyY2gveDg2L2tlcm5lbC9pcnEuYw0KPiA+IGluZGV4IDc2NmZmZTMuLjlmNjY4ZDIgMTAwNjQ0
-DQo+ID4gLS0tIGEvYXJjaC94ODYva2VybmVsL2lycS5jDQo+ID4gKysrIGIvYXJjaC94ODYva2Vy
-bmVsL2lycS5jDQo+ID4gQEAgLTIxMSw2ICsyMTEsMTMgQEAgdTY0IGFyY2hfaXJxX3N0YXRfY3B1
-KHVuc2lnbmVkIGludCBjcHUpDQo+ID4gICNpZmRlZiBDT05GSUdfWDg2X01DRV9USFJFU0hPTEQN
-Cj4gPiAgCXN1bSArPSBpcnFfc3RhdHMoY3B1KS0+aXJxX3RocmVzaG9sZF9jb3VudDsNCj4gPiAg
-I2VuZGlmDQo+ID4gKyNpZmRlZiBDT05GSUdfWDg2X0hWX0NBTExCQUNLX1ZFQ1RPUg0KPiA+ICsJ
-c3VtICs9IGlycV9zdGF0cyhjcHUpLT5pcnFfaHZfY2FsbGJhY2tfY291bnQ7DQo+ID4gKyNlbmRp
-Zg0KPiA+ICsjaWYgSVNfRU5BQkxFRChDT05GSUdfSFlQRVJWKQ0KPiA+ICsJc3VtICs9IGlycV9z
-dGF0cyhjcHUpLT5pcnFfaHZfcmVlbmxpZ2h0ZW5tZW50X2NvdW50Ow0KPiA+ICsJc3VtICs9IGly
-cV9zdGF0cyhjcHUpLT5oeXBlcnZfc3RpbWVyMF9jb3VudDsNCj4gPiArI2VuZGlmDQo+ID4gICNp
-ZmRlZiBDT05GSUdfWDg2X01DRQ0KPiA+ICAJc3VtICs9IHBlcl9jcHUobWNlX2V4Y2VwdGlvbl9j
-b3VudCwgY3B1KTsNCj4gPiAgCXN1bSArPSBwZXJfY3B1KG1jZV9wb2xsX2NvdW50LCBjcHUpOw0K
-PiANCj4gVGhpcyBzZWVtcyBmaW5lLCBlc3BlY2lhbGx5IHNpbmNlIGFyY2hfc2hvd19pbnRlcnJ1
-cHRzKCkgaGFzIHRoZW0uICBCdXQsDQo+IHdoYXQncyB3aXRoIHRoZSAiI2lmIElTX0VOQUJMRUQi
-IHZlcnN1cyB0aGUgcGxhaW4gI2lmZGVmPyAgSXMgdGhlcmUgc29tZQ0KPiBkaWZmZXJlbmNlIEkn
-bSBtaXNzaW5nPyAgV2h5IG5vdCBqdXN0IGJlIGNvbnNpc3RlbnQgd2l0aCB0aGUgb3RoZXIgY29k
-ZQ0KPiBhbmQgdXNlIGEgcGxhaW4gI2lmZGVmIGZvciBib3RoPw0KDQpEYXZlIC0tDQoNCldpdGgg
-U2VhbidzIGV4cGxhbmF0aW9uIGZvciAjaWYgSVNfRU5BQkxFRCwgYXJlIHlvdSBPSyB3aXRoIGdp
-dmluZyB0aGlzDQphbiBBQ0sgYXMgYW4geDg2IG1haW50YWluZXI/ICAgVGhpcyBwYXRjaCBoYXMg
-YmVlbiBoYW5naW5nIGFyb3VuZCBmb3IgYQ0Kd2hpbGUgbm93IC4uLg0KDQpNaWNoYWVsDQo=
+
+--PU98An8gDVvBtzYA
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 8 Jun 2023 11:23:07 -0400
+From: Demi Marie Obenour <demi@invisiblethingslab.com>
+To: Roger Pau =?utf-8?B?TW9ubsOp?= <roger.pau@citrix.com>
+Cc: Jens Axboe <axboe@kernel.dk>, Alasdair Kergon <agk@redhat.com>,
+	Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com,
+	Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>,
+	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+	xen-devel@lists.xenproject.org
+Subject: Re: [PATCH v2 16/16] xen-blkback: Inform userspace that device has
+ been opened
+
+On Thu, Jun 08, 2023 at 11:11:44AM +0200, Roger Pau Monn=C3=A9 wrote:
+> On Wed, Jun 07, 2023 at 12:29:26PM -0400, Demi Marie Obenour wrote:
+> > On Wed, Jun 07, 2023 at 10:44:48AM +0200, Roger Pau Monn=C3=A9 wrote:
+> > > On Tue, Jun 06, 2023 at 01:31:25PM -0400, Demi Marie Obenour wrote:
+> > > > On Tue, Jun 06, 2023 at 11:15:37AM +0200, Roger Pau Monn=C3=A9 wrot=
+e:
+> > > > > On Tue, May 30, 2023 at 04:31:16PM -0400, Demi Marie Obenour wrot=
+e:
+> > > > > > Set "opened" to "0" before the hotplug script is called.  Once =
+the
+> > > > > > device node has been opened, set "opened" to "1".
+> > > > > >=20
+> > > > > > "opened" is used exclusively by userspace.  It serves two purpo=
+ses:
+> > > > > >=20
+> > > > > > 1. It tells userspace that the diskseq Xenstore entry is suppor=
+ted.
+> > > > > >=20
+> > > > > > 2. It tells userspace that it can wait for "opened" to be set t=
+o 1.
+> > > > > >    Once "opened" is 1, blkback has a reference to the device, so
+> > > > > >    userspace doesn't need to keep one.
+> > > > > >=20
+> > > > > > Together, these changes allow userspace to use block devices wi=
+th
+> > > > > > delete-on-close behavior, such as loop devices with the autocle=
+ar flag
+> > > > > > set or device-mapper devices with the deferred-remove flag set.
+> > > > >=20
+> > > > > There was some work in the past to allow reloading blkback as a
+> > > > > module, it's clear that using delete-on-close won't work if attem=
+pting
+> > > > > to reload blkback.
+> > > >=20
+> > > > Should blkback stop itself from being unloaded if delete-on-close i=
+s in
+> > > > use?
+> > >=20
+> > > Hm, maybe.  I guess that's the best we can do right now.
+> >=20
+> > I=E2=80=99ll implement this.
+>=20
+> Let's make this a separate patch.
+
+Good idea.
+
+> > > > > Isn't there some existing way to check whether a device is opened?
+> > > > > (stat syscall maybe?).
+> > > >=20
+> > > > Knowing that the device has been opened isn=E2=80=99t enough.  The =
+block script
+> > > > needs to be able to wait for blkback (and not something else) to op=
+en
+> > > > the device.  Otherwise it will be confused if the device is opened =
+by
+> > > > e.g. udev.
+> > >=20
+> > > Urg, no, the block script cannot wait indefinitely for blkback to open
+> > > the device, as it has an execution timeout.  blkback is free to only
+> > > open the device upon guest frontend connection, and that (when using
+> > > libxl) requires the hotplug scripts execution to be finished so the
+> > > guest can be started.
+> >=20
+> > I=E2=80=99m a bit confused here.  My understanding is that blkdev_get_b=
+y_dev()
+> > already opens the device, and that happens in the xenstore watch
+> > handler.  I have tested this with delete-on-close device-mapper devices,
+> > and it does work.
+>=20
+> Right, but on a very contended system there's no guarantee of when
+> blkback will pick up the update to "physical-device" and open the
+> device, so far the block script only writes the physical-device node
+> and exits.  With the proposed change the block script will also wait
+> for blkback to react to the physcal-device write, hence making VM
+> creation slower.
+
+Only block scripts that choose to wait for device open suffer
+this performance penalty.  My current plan is to only do so for
+delete-on-close devices which are managed by the block script
+itself.  Other devices will not suffer a performance hit.
+
+In the long term, I would like to solve this problem entirely by using
+an ioctl to configure blkback.  The ioctl would take a file descriptor
+argument, avoiding the need for a round-trip through xenstore.  This
+also solves a security annoyance with the current design, which is that
+the device is opened by a kernel thread and so the security context of
+whoever requested the device to be opened is lost.
+
+> > > > > I would like to avoid adding more xenstore blkback state if such
+> > > > > information can be fetched from other methods.
+> > > >=20
+> > > > I don=E2=80=99t think it can be, unless the information is passed v=
+ia a
+> > > > completely different method.  Maybe netlink(7) or ioctl(2)?  Arguab=
+ly
+> > > > this information should not be stored in Xenstore at all, as it exp=
+oses
+> > > > backend implementation details to the frontend.
+> > >=20
+> > > Could you maybe use sysfs for this information?
+> >=20
+> > Probably?  This would involve adding a new file in sysfs.
+> >=20
+> > > We have all sorts of crap in xenstore, but it would be best if we can
+> > > see of placing stuff like this in another interface.
+> >=20
+> > Fair.
+>=20
+> Let's see if that's a suitable approach, and we can avoid having to
+> add an extra node to xenstore.
+
+I thought about this some more and realized that in Qubes OS, we might
+want to include the diskseq in the information dom0 gets about each
+exported block device.  This would allow dom0 to write the xenstore node
+itself, but it would require some way for dom0 to be informed about
+blkback having this feature.
+--=20
+Sincerely,
+Demi Marie Obenour (she/her/hers)
+Invisible Things Lab
+
+--PU98An8gDVvBtzYA
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEdodNnxM2uiJZBxxxsoi1X/+cIsEFAmSB8l4ACgkQsoi1X/+c
+IsFSYA//XhC38a6SDufwf6y+xaRXnVDYSdUsP21JYKyDgiz9s6lEag0nuPNrUkLt
++pQdAxPoPq99fFKrhleiVEbr1GtEBonRU6qMCe/cUJ/BqTkUyJ75EOeRtxFjr7DI
+QC9dbaly+Q+WkiLwmtHiaWgk56TaGp+GqYrG2Zj6w0fmIwOmZ59IRaDeIqwJYA6p
+T4vagAEMK+f3poK6sWfEhZE2IJ5tGqyZwxvpVPY3ldnm5wS9n5WmNZF0rM7lKGzF
+J8S8ITQut9DtW9NicTQfFz1jjIMDs3KFReSPchQ41+IRUx6nM3sjr6RnE2kBCER8
+io/OtNbe6TVv5LxDe2bDLpEzPesjl3RNrx+mgC/LpIaO8JhvZEYpF49XmgQbXRhe
+HMob73O0quNIUMQLqQ18zunfqE4wIq8Yfv4E146jRaItTN+AZT4oAFZZJb8f43BS
+c95GNTtjdguBVeLKb3Vi9dH9bgqtO9CbDop9PeP1T05q2VHxMTEGhf2XkZoOCCxI
+oMIV9IEbkBcVQT/nVZa56Suqgp6XKy/llGIrvk45bhraLT8ljpoHUeZnjQaJxJEO
+YWr7ImrznVH+57dQbSlkQrWKZcp8f0dzzfoDGGWXP6UTTA9JiiVMkqjmk6YZEyQL
+VGban/xP4mC8GD10OtAsc/b3n0w87wxVYjYT9hdDtgIBUzjcGP4=
+=1nZV
+-----END PGP SIGNATURE-----
+
+--PU98An8gDVvBtzYA--
