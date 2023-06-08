@@ -2,67 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B69E72844B
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 17:54:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BDAC72844C
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 17:54:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237515AbjFHPyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 11:54:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42654 "EHLO
+        id S236300AbjFHPyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 11:54:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237054AbjFHPyK (ORCPT
+        with ESMTP id S237511AbjFHPyL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 11:54:10 -0400
-Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35A5B30F8
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 08:53:45 -0700 (PDT)
-Received: by mail-oo1-xc35.google.com with SMTP id 006d021491bc7-559409cc490so456098eaf.3
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 08:53:45 -0700 (PDT)
+        Thu, 8 Jun 2023 11:54:11 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12EEC11A
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 08:53:48 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-565de553de1so11561797b3.0
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 08:53:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686239620; x=1688831620;
+        d=linaro.org; s=google; t=1686239623; x=1688831623;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=pxePCXhbkXDkGLZszuq4c29muOAB+INqMiCN3qHM0SM=;
-        b=WzaTNE+2AyDdAiv4hIj6pu6kIJRvQQbxLsvHBdBrMu2hTP3olWmRJ0STyfyIrPLcrK
-         w1lhJJOaseGCvxWcn3GGjbXfSP16U6dolkqAjc1qMxEDa7Rnvnz31cbV6B93vxXVTwFX
-         ALijgHlJexuCb7j46KfX14okNdAXqpqlUHfvswzpjD/Y3ql+EWBPpu+s+WbDJJDMyfWy
-         wXHeSeD9pt930/YbmuOPRq4lIpsb5iA6FMQ39SyCQXL18PbumCSEeoSIR8nLhdA7axbh
-         w1cnbvu9EXw5mRghXN7VecD5YEBZOOuWcC/km75GQr1IaxmcsbWX2qB7gkUbTkXjB5P0
-         f/vQ==
+        bh=LtDK807cWu25+ZWD4p2mPiRke5/KbH6pzz8Izn+8M88=;
+        b=bKFfe1UzeXsuj7UXSDZ74VbTqvJep4IALpVfyydksV2DoZxST1mj386nEwE89m2GZs
+         sllw/G69t6OwY8I2fizivGEKRCq++DKH3XKeKmxqPH5InyTToE+WnqLeURWAoShgOh17
+         zWTDzZS/ZbcFwUEDAsY62cUd7HIxZi3dTn2PxrRdr2XFkdHjTaUzSK+/GSOia9ROSdHz
+         woze1xRdNscHVeWlxavLYqv2RR6r443oUiiMDD0EQRj2ovIu1o1957gUPYetV4P4Ao8J
+         572SvlgwQpx0GyYhxeegetTygUXlbr70hn3PbXWNPcBCm0aBcCWTh7s2SRUY2/yJ00oL
+         b1QA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686239620; x=1688831620;
+        d=1e100.net; s=20221208; t=1686239623; x=1688831623;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=pxePCXhbkXDkGLZszuq4c29muOAB+INqMiCN3qHM0SM=;
-        b=M+fjOCo7VyNnIMJvnzSBkqng9E/HkaCR/Gq3SoZNSqScnvZmPuAaw5HOlZvH9zd3NK
-         gvYrc9ERZ8CGFPmj2RvIyctY2IMlJPHrLWISdvdUOaHae6Qkhgh97o2JE3pNpnCJSG+I
-         NiDFKhEfM97qBM+NVmac7mpacOymTZWOCbYyfCOmGLkBLhqlwFXDwETO2fq9NjwG1mXL
-         qjase90weksMxWZ4JCCrrmsaVzNyLMRNElSQEaqhoGxhWBGDq6Sk/25blaoyD92i7jzH
-         cu8PzK1R2461SfZfw2u9VwhPOimJdooVryKrb4o0ryH51+Bh1uhhFMXhGwcIH4H1eYwM
-         16TA==
-X-Gm-Message-State: AC+VfDyVV1omCgWcTjeSGmL2h2p5DzvHAKzoMqSdflYwyGxZ072XgqpD
-        UREaa0Q/uouv2zLPZEC8DcWu4sAtytKUUEOkgrTiFg5qIAI3FNFr
-X-Google-Smtp-Source: ACHHUZ5YF3Ao/7acozgV6L51hJxYa/6ScWl1+FQJ9Sv8c4ZIP5hX4Xekiyrud6NhTqgG7h4SrXBaT/cTIprI5VqwTls=
-X-Received: by 2002:a54:480e:0:b0:39a:bcbd:d0d5 with SMTP id
- j14-20020a54480e000000b0039abcbdd0d5mr6349007oij.51.1686239620304; Thu, 08
- Jun 2023 08:53:40 -0700 (PDT)
+        bh=LtDK807cWu25+ZWD4p2mPiRke5/KbH6pzz8Izn+8M88=;
+        b=jatA5BODTs5U4AXqZ1giPLfvvK3w+Zb7/XpJugJuhGAABkKeyz7TWWZyamQr1OVsZn
+         3gHEUKr8YaNR948X5lPMI5oZslbtZces/ettl2DQxedUEIDeBgY23v5mvOFY30bWz0P6
+         SSCAMuKcCKRlQkMbgr4eTdyRwdjXMQ19zuq2KG9fZLl8fl/F59hHBHd0DVJLswjflcHd
+         lhP/Z/vSVyzTyfmBFe0zzjg2cfZcejsIKn6KwyvZ3VSCw/jClNlIhbIjhPoGxsPiAs2t
+         KE4VWzRhAV8u8l0T2MtNSUfIcuJ/bF+MK0CJ7uo490MD2Xw9XJE4aPIXDyHKKa+7q2al
+         EEFA==
+X-Gm-Message-State: AC+VfDy5DKipCppZDvhhOjTrV9PdJf8KebIY2BEwQUnOUy7MpdYmov1N
+        iQtZWel3m8ZV1/+emTFEJ0xj/Ae9osm/oo28PD4Ugg==
+X-Google-Smtp-Source: ACHHUZ6hDDsS6kObKDwaaHM+E4MXBVpxcbHkEUo/DnPMO0OSAxvknsk1eVHW9vuwG2DLJP5tGPC9AqmbLE5I9hSkwdM=
+X-Received: by 2002:a0d:d7c9:0:b0:561:fc3a:30f3 with SMTP id
+ z192-20020a0dd7c9000000b00561fc3a30f3mr191024ywd.8.1686239623279; Thu, 08 Jun
+ 2023 08:53:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230523111114.18124-1-chevron_li@126.com>
-In-Reply-To: <20230523111114.18124-1-chevron_li@126.com>
+References: <55920f880c9742f486f64aa44e25508e@hyperstone.com>
+In-Reply-To: <55920f880c9742f486f64aa44e25508e@hyperstone.com>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 8 Jun 2023 17:53:04 +0200
-Message-ID: <CAPDyKFrAi04_4d-F+kNncE183ZZuD9ERL2qTb+M-nj_dNfojGA@mail.gmail.com>
-Subject: Re: [PATCH V1 1/1] mmc: sdhci: fix DMA configure compatibility issue
- when 64bit DMA mode is used.
-To:     Chevron Li <chevron_li@126.com>
-Cc:     adrian.hunter@intel.com, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, shirley.her@bayhubtech.com,
-        xiaoguang.yu@bayhubtech.com, shaper.liu@bayhubtech.com,
-        justin.wang@bayhubtech.com, Chevron Li <chevron.li@bayhubtech.com>
+Date:   Thu, 8 Jun 2023 17:53:07 +0200
+Message-ID: <CAPDyKFpBeAHSk1-XJoBAFPS_hecOpq4Ceeq4qnokeD=zjvParQ@mail.gmail.com>
+Subject: Re: [PATCHv2 1/2] mmc: block: ioctl: do write error check for spi
+To:     Christian Loehle <CLoehle@hyperstone.com>
+Cc:     "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Avri Altman <avri.altman@wdc.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,70 +69,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 23 May 2023 at 13:12, Chevron Li <chevron_li@126.com> wrote:
+On Thu, 25 May 2023 at 11:56, Christian Loehle <CLoehle@hyperstone.com> wrote:
 >
-> From: Chevron Li <chevron.li@bayhubtech.com>
+> SPI doesn't have the usual PROG path we can check for error bits
+> after moving back to TRAN. Instead it holds the line LOW until
+> completion. We can then check if the card shows any errors or
+> is in IDLE state, indicating the line is no longer LOW because
+> the card was reset.
 >
-> Bayhub SD host has hardware limitation:
-> 1.The upper 32bit address is inhibited to be written at SD Host Register
->   [03E][13]=0 (32bits addressing) mode, is admitted to be written only at
->   SD Host Register [03E][13]=1 (64bits addressing) mode.
-> 2.Because of above item#1, need to configure SD Host Register [03E][13] to
->   1(64bits addressing mode) before set 64bit ADMA system address's higher
->   32bits SD Host Register [05F~05C] if 64 bits addressing mode is used.
->
-> The hardware limitation is reasonable for below reasons:
-> 1.Normal flow should set DMA working mode first, then do
->   DMA-transfer-related configuration, such as system address.
-> 2.The hardware limitation may avoid the software to configure wrong higher
->   32bit address at 32bits addressing mode although it is redundant.
->
-> The change that set 32bits/64bits addressing mode before set ADMA address,
->   has no side-effect to other host IPs for below reason:
-> The setting order is reasonable and standard: DMA Mode setting first and
->   then DMA address setting. It meets all DMA setting sequence.
->
-> Signed-off-by: Chevron Li <chevron.li@bayhubtech.com>
+> Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
 
-Applied for next, thanks!
-
-Is this material for stable kernels too, as it fixes a real problem, no?
+Applied for next and by adding stable tag, thanks!
 
 Kind regards
 Uffe
 
 
 > ---
-> Change in V1:
-> Set dma mode configure before set dma address
-> ---
->  drivers/mmc/host/sdhci.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  drivers/mmc/core/block.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
 >
-> diff --git a/drivers/mmc/host/sdhci.c b/drivers/mmc/host/sdhci.c
-> index 3241916141d7..ff41aa56564e 100644
-> --- a/drivers/mmc/host/sdhci.c
-> +++ b/drivers/mmc/host/sdhci.c
-> @@ -1167,6 +1167,8 @@ static void sdhci_prepare_data(struct sdhci_host *host, struct mmc_command *cmd)
->                 }
->         }
+> diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
+> index d920c4178389..e46330815484 100644
+> --- a/drivers/mmc/core/block.c
+> +++ b/drivers/mmc/core/block.c
+> @@ -178,6 +178,7 @@ static void mmc_blk_rw_rq_prep(struct mmc_queue_req *mqrq,
+>                                int recovery_mode,
+>                                struct mmc_queue *mq);
+>  static void mmc_blk_hsq_req_done(struct mmc_request *mrq);
+> +static int mmc_spi_err_check(struct mmc_card *card);
 >
-> +       sdhci_config_dma(host);
-> +
->         if (host->flags & SDHCI_REQ_USE_DMA) {
->                 int sg_cnt = sdhci_pre_dma_transfer(host, data, COOKIE_MAPPED);
+>  static struct mmc_blk_data *mmc_blk_get(struct gendisk *disk)
+>  {
+> @@ -608,6 +609,11 @@ static int __mmc_blk_ioctl_cmd(struct mmc_card *card, struct mmc_blk_data *md,
+>         if ((card->host->caps & MMC_CAP_WAIT_WHILE_BUSY) && use_r1b_resp)
+>                 return 0;
 >
-> @@ -1186,8 +1188,6 @@ static void sdhci_prepare_data(struct sdhci_host *host, struct mmc_command *cmd)
->                 }
->         }
->
-> -       sdhci_config_dma(host);
-> -
->         if (!(host->flags & SDHCI_REQ_USE_DMA)) {
->                 int flags;
->
->
-> base-commit: cc3c44c9fda264c6d401be04e95449a57c1231c6
+> +       if (mmc_host_is_spi(card->host)) {
+> +               if (idata->ic.write_flag || r1b_resp || cmd.flags & MMC_RSP_SPI_BUSY)
+> +                       return mmc_spi_err_check(card);
+> +               return err;
+> +       }
+>         /* Ensure RPMB/R1B command has completed by polling with CMD13. */
+>         if (idata->rpmb || r1b_resp)
+>                 err = mmc_poll_for_busy(card, busy_timeout_ms, false,
 > --
-> 2.25.1
+> 2.37.3
+>
+>
+> Hyperstone GmbH | Reichenaustr. 39a  | 78467 Konstanz
+> Managing Director: Dr. Jan Peter Berns.
+> Commercial register of local courts: Freiburg HRB381782
 >
