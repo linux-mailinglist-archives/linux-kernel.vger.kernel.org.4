@@ -2,88 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDCD1727621
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 06:32:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8617F727624
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 06:36:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233845AbjFHEcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 00:32:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50338 "EHLO
+        id S233906AbjFHEg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 00:36:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232805AbjFHEcS (ORCPT
+        with ESMTP id S232528AbjFHEgX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 00:32:18 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1416D83;
-        Wed,  7 Jun 2023 21:32:15 -0700 (PDT)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 3584W4FQ015692;
-        Thu, 8 Jun 2023 06:32:04 +0200
-Date:   Thu, 8 Jun 2023 06:32:04 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Zhangjin Wu <falcon@tinylab.org>, thomas@t-8ch.de,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: nolibc patches, still possible for 6.5 ?
-Message-ID: <ZIFZxLvMlUXxLGJE@1wt.eu>
-References: <ZHyPi29q3MKiNAQZ@1wt.eu>
- <5494ac68-b4b9-434f-92c1-7e197c92a4ab@paulmck-laptop>
- <ZH1V21rhUQlvRgnU@1wt.eu>
- <ec85bd36-9b39-458c-9618-af500656ca7b@paulmck-laptop>
- <ZID1LnvAj1lamHhv@1wt.eu>
- <208b317e-8553-4d0d-b97c-a0e808fe98f2@paulmck-laptop>
+        Thu, 8 Jun 2023 00:36:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 166B91988;
+        Wed,  7 Jun 2023 21:36:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 951326478D;
+        Thu,  8 Jun 2023 04:36:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A0E3C433D2;
+        Thu,  8 Jun 2023 04:36:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686198981;
+        bh=L/74qyYmuC5m/lS+AJK+0bRD2NenVahTw3pHvJavynU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=CjZ2FR/NVSEAmxfxC6it73ZkPHCC0KNq7ODRXgfwkeQnYARfnvcFfnZDHEz4j7iKQ
+         N43RK9KGXoYn1ZYCQL4T3jAQS1hUZKZ1+cJEjI1BO2QjXGtR5L2nQQAa3faFE7WHyp
+         q6Z+wKRF0odV0nvZzqvl+OkJyHMLTmPblr6uZzBL3+XCEtfn7ara+V3ld95F2Ftyjy
+         3nzVsFs72rddqA5Rsn4YQkyUzgSH69OcWbv+Z5mHBaZaildab4JBAZKr4C1JzTJK6F
+         G5pPo+j7me2d+h7ODJEwq5pR6eY7hUb9ZI51KZYTyVL7EhXUsb3fZFE4GpJtWVALGJ
+         8CzPRrjsZTeTw==
+Date:   Wed, 7 Jun 2023 21:36:20 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Raymond Hackley <raymondhackley@protonmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Michael Walle <michael@walle.cc>,
+        Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Jeremy Kerr <jk@codeconstruct.com.au>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 2/2] NFC: nxp-nci: Add pad supply voltage pvdd-supply
+Message-ID: <20230607213620.4087b0e2@kernel.org>
+In-Reply-To: <20230606072454.145106-1-raymondhackley@protonmail.com>
+References: <20230606071824.144990-1-raymondhackley@protonmail.com>
+        <20230606072454.145106-1-raymondhackley@protonmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <208b317e-8553-4d0d-b97c-a0e808fe98f2@paulmck-laptop>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 04:06:37PM -0700, Paul E. McKenney wrote:
-> On Wed, Jun 07, 2023 at 11:22:54PM +0200, Willy Tarreau wrote:
-> > On Wed, Jun 07, 2023 at 02:03:17PM -0700, Paul E. McKenney wrote:
-> > > > > (There were some kernel test
-> > > > > robot complaints as well, valid or not I am not sure.)
-> > > > 
-> > > > You mean in relation with nolibc stuff (or nolibc-test) or something
-> > > > totally different ?
-> > > 
-> > > Apologies, this was me being confused and failing to look closely.
-> > > 
-> > > The complaints were not about nolibc, but rather about my patches that
-> > > they were on top of.  Not your problem!
-> > 
-> > Ah no problem :-)
-> > 
-> > > And please let me know when the next batch from your tree are ready to go.
-> > > (You might have been saying that they were in your recent emails, but
-> > > I thought I should double-check.)
-> > 
-> > No pb, I just sent it while you were writing and our emails have crossed :-)
-> > 
-> > In short, it's ready now with branch 20230606-nolibc-rv32+stkp7a but if you
-> > need any more info (more detailed summary, a public repost of the whole
-> > series etc), just let me know. And I faced 2 kernel build errors on s390x
-> > and riscv about rcu_task something, though you might be interested :-/
-> 
-> And I pulled them in and got this from "make run":
-> 
-> 138 test(s) passed, 0 skipped, 0 failed.[    2.416045] reboot: Power down
-> 
-> And this from "make run-user":
-> 
-> 136 test(s) passed, 2 skipped, 0 failed. See all results in /home/git/linux-rcu/tools/testing/selftests/nolibc/run.out
-> 
-> And run.out looks as it has before, so all looks good at this end.
-> 
-> Thus, unless you tell me otherwise, I will move these to my nolibc branch
-> for the upcoming merge window.
+On Tue, 06 Jun 2023 07:25:55 +0000 Raymond Hackley wrote:
+> +			if (r != -EPROBE_DEFER)
+> +				dev_err(dev,
+> +					"Failed to get regulator pvdd: %d\n",
+> +					r);
+> +			return r;
 
-Perfect, thank you very much Paul!
+dev_err_probe() ?
 
-Willy
+> +	r = devm_add_action_or_reset(dev, nxp_nci_i2c_poweroff, phy);
+> +	if (r < 0) {
+> +		nfc_err(dev, "Failed to install poweroff handler: %d\n",
+> +			r);
+> +		nxp_nci_i2c_poweroff(phy);
+
+The _or_reset() stands for "we'll call the action for you if we can't
+add it". Don't call poweroff again.
+-- 
+pw-bot: cr
