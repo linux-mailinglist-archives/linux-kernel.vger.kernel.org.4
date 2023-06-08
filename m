@@ -2,161 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62C8C7284F3
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 18:28:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 202AA7284F4
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 18:29:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229544AbjFHQ25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 12:28:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38714 "EHLO
+        id S235075AbjFHQ3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 12:29:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233801AbjFHQ2l (ORCPT
+        with ESMTP id S234854AbjFHQ3E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 12:28:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0BF81FDC
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 09:28:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6CAF664EF5
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 16:28:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9C10C433A0;
-        Thu,  8 Jun 2023 16:28:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686241719;
-        bh=5zH08XUfq+18tqlmHVWvpEAsjeO5Ce/XxzLXbX4gVVQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=JfmL+BlSm6q41L0gLNUh+FbjT1O6SVwiKrCWfDK5VghY/IietAuCdGmVkGDKyc+CG
-         ecpOIKaMpvJnuiNhsBKzEBEjbvzJH/VuMpaXgoBGyX18dddWlw4/yGwEqlzbD13nkj
-         OQhYkpRm0nqGO1ab4Nr4rt0H9LDMwNyE42ZLM5C+WqcJ2VpJLrbluEOuNyA0aOE4RN
-         oV8afTD79QjLpzYe3AOyUvNlg+Ulxy+NQ7aIeHswbV7m12UMQ+OvQcQBR5CIW8fNVj
-         nSACJAYPj2pX+aCIoXHKCVUYkWHUt83FwCjYoZzVWGFZGerON2bm3iV9MozSok0Vko
-         kz5Fe4Zs+uEpA==
-Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2b1b084620dso7989071fa.0;
-        Thu, 08 Jun 2023 09:28:39 -0700 (PDT)
-X-Gm-Message-State: AC+VfDwCGZnHOtYXQ6x5tdGksK+Km5Ohz9CHLDox72UK6XLyYuehcP74
-        2tzFK+/GfD5yq4fIU2AEiqbGl/wGYgucFK9lA3M=
-X-Google-Smtp-Source: ACHHUZ4YX0Ne++b7K0Iz0nPYwgBxAk5ute7QPeyjEc/PvBcXTPrezWlpefSE0BZKqQyRuzaIQ6x+FLzllBH98pluu/c=
-X-Received: by 2002:a2e:9cd1:0:b0:2b1:e943:8abe with SMTP id
- g17-20020a2e9cd1000000b002b1e9438abemr3393233ljj.47.1686241717897; Thu, 08
- Jun 2023 09:28:37 -0700 (PDT)
+        Thu, 8 Jun 2023 12:29:04 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65E211FDC
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 09:29:03 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-5162d2373cdso1436476a12.3
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 09:29:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686241741; x=1688833741;
+        h=content-transfer-encoding:content-language:cc:to:subject:from
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Dx4wceDFekjvHQM4pccArhhP8EnGfveOZfWbZuBe+f4=;
+        b=Otqmw9EGJd5t1uv5fv8KZRxZePZr9DZNDWIh55VF/587TOI8kFdiE/QE6+ETULucEK
+         p0tAH7ty9kWtVyNcOUQ3zz7AYF5XNdM6ZP6NTYMXZfjOrzEBtKz5y5fPaY3zKUI+O+Hh
+         EYVKVx8f3CkCmFH3oN37RqsxJlf5Fj//JUv1yoFJnBLUt0+g5aK5fSeVLrJf60KSL0OA
+         nhTf7KCM813C7YbALdL9ELTScqhQfmVHu6CWghvdtYLVrN+EwHq7GbhIiH2qYD5rzrR5
+         V2GAecNjvvClofUTMkPvePEEt8m6fLmOGFWs4LMhhAnrl/K4KQy4Yo4b8lGPElNEY5oi
+         /WrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686241741; x=1688833741;
+        h=content-transfer-encoding:content-language:cc:to:subject:from
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Dx4wceDFekjvHQM4pccArhhP8EnGfveOZfWbZuBe+f4=;
+        b=fX3SXC1Pd7pAYHd+oOrLd5TenLlTMXNTn2JrLDoxACurNuW/HurcszSkq98UPkcChE
+         VGbE529s6DK224hCMrmE881Az57M90DAxyeh+5c7DvrNK970PGsy1p1y02QiSV6fxJx2
+         nnc4Y5K52igwB1ZC0WDb7l5HQmdubZ8HcYO4zD26ms5TldfE83U04JeD2UVLk2dGqMuZ
+         58lC274KqM1OFACi4Vx7R4hm5vpBNYIJ0ZGebPFCEx3lAGC8OSfHaL1BBKriMS2s4Q+Z
+         ChhZdGjz1pWevneBGsxqiZa7N2rR4CDPN7+3dLWtxuvQC2Dm/n5ireTm5vemCEEeq3Qo
+         vdYg==
+X-Gm-Message-State: AC+VfDwjyqO2K7MLX/BayBpFmoIGEwXvqD/yHuklbVWGAT3QAcRgn2Ep
+        myzjsvwX0sSWt9cRARVstLUY2GUoABY=
+X-Google-Smtp-Source: ACHHUZ58XomZ/FJB12G2xiLboOeaIJooEA/AyVgjnXFUz+JFy6MuLckqbWnzXxmmupqlqPf2AWUBUQ==
+X-Received: by 2002:aa7:d986:0:b0:514:97dc:9d4e with SMTP id u6-20020aa7d986000000b0051497dc9d4emr8175409eds.7.1686241741138;
+        Thu, 08 Jun 2023 09:29:01 -0700 (PDT)
+Received: from [192.168.2.2] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id ba7-20020a0564021ac700b0050bc6983041sm716463edb.96.2023.06.08.09.29.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Jun 2023 09:29:00 -0700 (PDT)
+Message-ID: <19bf714a-43f9-c30a-8197-91aaaf4a6e5d@gmail.com>
+Date:   Thu, 8 Jun 2023 18:28:59 +0200
 MIME-Version: 1.0
-References: <20230607091814.46080-1-puranjay12@gmail.com> <20230607091814.46080-4-puranjay12@gmail.com>
-In-Reply-To: <20230607091814.46080-4-puranjay12@gmail.com>
-From:   Song Liu <song@kernel.org>
-Date:   Thu, 8 Jun 2023 09:28:25 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW7soOQasGw5fHB2qTeJnqR4ZrGBodyO87k=vg=TYqCsWA@mail.gmail.com>
-Message-ID: <CAPhsuW7soOQasGw5fHB2qTeJnqR4ZrGBodyO87k=vg=TYqCsWA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 3/3] bpf, arm64: use bpf_jit_binary_pack_alloc
-To:     Puranjay Mohan <puranjay12@gmail.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, catalin.marinas@arm.com,
-        mark.rutland@arm.com, bpf@vger.kernel.org, kpsingh@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+From:   Johan Jonker <jbx6244@gmail.com>
+Subject: [PATCH v1 0/5] Fixes for Rockchip NAND controller driver
+To:     miquel.raynal@bootlin.com
+Cc:     richard@nod.at, vigneshr@ti.com, heiko@sntech.de,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, yifeng.zhao@rock-chips.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 7, 2023 at 2:18=E2=80=AFAM Puranjay Mohan <puranjay12@gmail.com=
-> wrote:
->
-[...]
-> +
->  static inline int epilogue_offset(const struct jit_ctx *ctx)
->  {
->         int to =3D ctx->epilogue_offset;
-> @@ -701,7 +716,8 @@ static int add_exception_handler(const struct bpf_ins=
-n *insn,
->                                  struct jit_ctx *ctx,
->                                  int dst_reg)
->  {
-> -       off_t offset;
-> +       off_t ins_offset;
-> +       off_t fixup_offset;
+This serie contains various fixes for the Rockchip NAND controller
+driver that showed up while testing boot block writing.
 
-Please add some comments for these two offsets.
+Fixed are:
+  Always copy hwecc PA data to/from oob_poi buffer in order to be able
+  to read/write the various boot block layouts.
+  Add option to safely probe the driver on a NAND with unknown data layout.
+  Fix default timing.
+  Fix oobfree layout.
+  Add missing chip ID.
 
->         unsigned long pc;
->         struct exception_table_entry *ex;
->
-> @@ -717,12 +733,11 @@ static int add_exception_handler(const struct bpf_i=
-nsn *insn,
->                 return -EINVAL;
->
->         ex =3D &ctx->prog->aux->extable[ctx->exentry_idx];
-> -       pc =3D (unsigned long)&ctx->image[ctx->idx - 1];
-> +       pc =3D (unsigned long)&ctx->ro_image[ctx->idx - 1];
->
-> -       offset =3D pc - (long)&ex->insn;
-> -       if (WARN_ON_ONCE(offset >=3D 0 || offset < INT_MIN))
-> +       ins_offset =3D pc - (long)&ex->insn;
-> +       if (WARN_ON_ONCE(ins_offset >=3D 0 || ins_offset < INT_MIN))
->                 return -ERANGE;
-> -       ex->insn =3D offset;
->
->         /*
->          * Since the extable follows the program, the fixup offset is alw=
-ays
-> @@ -732,11 +747,20 @@ static int add_exception_handler(const struct bpf_i=
-nsn *insn,
->          * modifying the upper bits because the table is already sorted, =
-and
->          * isn't part of the main exception table.
->          */
-> -       offset =3D (long)&ex->fixup - (pc + AARCH64_INSN_SIZE);
-> -       if (!FIELD_FIT(BPF_FIXUP_OFFSET_MASK, offset))
-> +       fixup_offset =3D (long)&ex->fixup - (pc + AARCH64_INSN_SIZE);
-> +       if (!FIELD_FIT(BPF_FIXUP_OFFSET_MASK, fixup_offset))
->                 return -ERANGE;
->
-> -       ex->fixup =3D FIELD_PREP(BPF_FIXUP_OFFSET_MASK, offset) |
-> +       /*
-> +        * The offsets above have been calculated using the RO buffer but=
- we
-> +        * need to use the R/W buffer for writes.
-> +        * switch ex to rw buffer for writing.
-> +        */
-> +       ex =3D (void *)ctx->image + ((void *)ex - (void *)ctx->ro_image);
-> +
-> +       ex->insn =3D ins_offset;
-> +
-> +       ex->fixup =3D FIELD_PREP(BPF_FIXUP_OFFSET_MASK, fixup_offset) |
->                     FIELD_PREP(BPF_FIXUP_REG_MASK, dst_reg);
->
->         ex->type =3D EX_TYPE_BPF;
-[...]
->         /* And we're done. */
->         if (bpf_jit_enable > 1)
->                 bpf_jit_dump(prog->len, prog_size, 2, ctx.image);
->
-> -       bpf_flush_icache(header, ctx.image + ctx.idx);
-> +       bpf_flush_icache(ro_header, ctx.ro_image + ctx.idx);
->
->         if (!prog->is_func || extra_pass) {
->                 if (extra_pass && ctx.idx !=3D jit_data->ctx.idx) {
->                         pr_err_once("multi-func JIT bug %d !=3D %d\n",
->                                     ctx.idx, jit_data->ctx.idx);
-> -                       bpf_jit_binary_free(header);
->                         prog->bpf_func =3D NULL;
->                         prog->jited =3D 0;
->                         prog->jited_len =3D 0;
-> +                       goto out_free_hdr;
-> +               }
-> +               if (WARN_ON(bpf_jit_binary_pack_finalize(prog, ro_header,
-> +                                                        header))) {
-> +                       ro_header =3D NULL;
+Johan Jonker (4):
+  mtd: nand: raw: rockchip-nand-controller: copy hwecc PA data to
+    oob_poi buffer
+  mtd: nand: raw: rockchip-nand-controller: add skipbbt option
+  mtd: nand: raw: rockchip-nand-controller: fix nand timing default
+  mtd: nand: raw: rockchip-nand-controller: fix oobfree offset and
+    description
 
-I think we need
-       prog =3D orig_prog;
-here.
+Paweł Jarosz (1):
+  mtd: nand: add support for the Sandisk SDTNQGAMA chip
 
-Thanks,
-Song
+ drivers/mtd/nand/raw/nand_ids.c               |  3 +
+ .../mtd/nand/raw/rockchip-nand-controller.c   | 59 ++++++++++++-------
+ 2 files changed, 40 insertions(+), 22 deletions(-)
+
+--
+2.30.2
+
