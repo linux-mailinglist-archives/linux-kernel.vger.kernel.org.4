@@ -2,177 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45776727F17
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 13:43:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82ADC727F1D
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 13:43:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235836AbjFHLnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 07:43:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57642 "EHLO
+        id S236224AbjFHLng (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 07:43:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236372AbjFHLnQ (ORCPT
+        with ESMTP id S234521AbjFHLnd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 07:43:16 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B0FCB2712;
-        Thu,  8 Jun 2023 04:42:53 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8BxL_C8voFkyIIAAA--.1963S3;
-        Thu, 08 Jun 2023 19:42:52 +0800 (CST)
-Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxluS5voFkFHQHAA--.23621S3;
-        Thu, 08 Jun 2023 19:42:49 +0800 (CST)
-Subject: Re: [PATCH v12 1/2] spi: add loongson spi bindings
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
-        Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
-References: <20230608072819.25930-1-zhuyinbo@loongson.cn>
- <20230608072819.25930-2-zhuyinbo@loongson.cn>
- <6ebed84c-2b42-c981-7b3f-e71cc88e4c2c@linaro.org>
- <4bf747c4-b767-b20c-e00f-724b50f44edb@loongson.cn>
- <6bfc2a22-6901-0858-7b90-bc4c52c66810@linaro.org>
- <bd2d7830-3ab6-0906-b06a-83d3e0a96749@loongson.cn>
- <11ca2b90-544d-18c2-fb15-7909ca60507f@linaro.org>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <f6d4ecb5-e9df-346e-4aab-772fd01689c8@loongson.cn>
-Date:   Thu, 8 Jun 2023 19:42:49 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Thu, 8 Jun 2023 07:43:33 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 980D8E6C;
+        Thu,  8 Jun 2023 04:43:30 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.41:48916.660287130
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.41])
+        by 189.cn (HERMES) with SMTP id BE9E61001E1;
+        Thu,  8 Jun 2023 19:43:24 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-75648544bd-xwndj with ESMTP id 7729ef043a1042388f426189986bb73b for alexander.deucher@amd.com;
+        Thu, 08 Jun 2023 19:43:27 CST
+X-Transaction-ID: 7729ef043a1042388f426189986bb73b
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+From:   Sui Jingfeng <15330273260@189.cn>
+To:     Alex Deucher <alexander.deucher@amd.com>,
+        Christian Konig <christian.koenig@amd.com>,
+        Pan Xinhui <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Hawking Zhang <Hawking.Zhang@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Lijo Lazar <lijo.lazar@amd.com>,
+        YiPeng Chai <YiPeng.Chai@amd.com>,
+        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
+        Somalapuram Amaranath <Amaranath.Somalapuram@amd.com>,
+        Bokun Zhang <Bokun.Zhang@amd.com>,
+        Ville Syrjala <ville.syrjala@linux.intel.com>,
+        Li Yi <liyi@loongson.cn>,
+        Sui Jingfeng <suijingfeng@loongson.cn>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        Abhishek Sahu <abhsahu@nvidia.com>, Yi Liu <yi.l.liu@intel.com>
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        nouveau@lists.freedesktop.org, linux-pci@vger.kernel.org,
+        kvm@vger.kernel.org, loongson-kernel@lists.loongnix.cn
+Subject: [PATCH v3 0/4] PCI/VGA: introduce is_boot_device function callback to vga_client_register
+Date:   Thu,  8 Jun 2023 19:43:18 +0800
+Message-Id: <20230608114322.604887-1-15330273260@189.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <11ca2b90-544d-18c2-fb15-7909ca60507f@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxluS5voFkFHQHAA--.23621S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
-        ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
-        nUUI43ZEXa7xR_UUUUUUUUU==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Sui Jingfeng <suijingfeng@loongson.cn>
 
+Patch 1,2 and 3 do basic clean up to the vgaarb module.
+Patch 4 introduce is_boot_device function callback to vga_client_register
 
-在 2023/6/8 下午6:02, Krzysztof Kozlowski 写道:
-> On 08/06/2023 12:00, zhuyinbo wrote:
->>
->>
->> 在 2023/6/8 下午4:53, Krzysztof Kozlowski 写道:
->>> On 08/06/2023 10:39, zhuyinbo wrote:
->>>>>>
->>>>>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->>>>>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>>>> ---
->>>>>>     .../bindings/spi/loongson,ls2k-spi.yaml       | 41 +++++++++++++++++++
->>>>>>     MAINTAINERS                                   |  6 +++
->>>>>>     2 files changed, 47 insertions(+)
->>>>>>     create mode 100644 Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
->>>>>>
->>>>>> diff --git a/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml b/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
->>>>>> new file mode 100644
->>>>>> index 000000000000..423ee851edd5
->>>>>> --- /dev/null
->>>>>> +++ b/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
->>>>>
->>>>> Filename based on compatible.
->>>>
->>>>
->>>> There will be more ls2k series SoC spi device in the future thus I still
->>>> use "loongson,ls2k-spi.yaml" for cover it.
->>>
->>> Add them now.
->>
->>
->> The 2k0500 doesn't support CCF and not use CCF to gain clock and We
->> internally tend to prioritize supporting 2k1000.
-> 
-> Don't you refer now to drivers? Because how hardware can not support
-> clocks if it has them? How CCF is anyhow related to hardware?
+Sui Jingfeng (4):
+  PCI/VGA: tidy up the code and comment format
+  PCI/VGA: Use unsigned type for the io_state variable
+  PCI/VGA: only deal with VGA class devices
+  PCI/VGA: introduce is_boot_device function callback to
+    vga_client_register
 
+ drivers/gpu/drm/amd/amdgpu/amdgpu_device.c |  2 +-
+ drivers/gpu/drm/i915/display/intel_vga.c   |  3 +-
+ drivers/gpu/drm/nouveau/nouveau_vga.c      |  2 +-
+ drivers/gpu/drm/radeon/radeon_device.c     |  2 +-
+ drivers/pci/vgaarb.c                       | 72 +++++++++++++---------
+ drivers/vfio/pci/vfio_pci_core.c           |  2 +-
+ include/linux/vgaarb.h                     | 16 ++---
+ 7 files changed, 57 insertions(+), 42 deletions(-)
 
-The CCF (common clock framework) driver only affects the clock parameter
-pass method and isn't related to clock hardware. and if dts pass a
-"clock-frequency" that not need a clock driver but if dts pass a
-"clocks" that need a clock driver. Currently, only 2k1000 has
-implemented a clock driver.
-
-> 
->>
->>>
->>>>
->>>>>
->>>>>> @@ -0,0 +1,41 @@
->>>>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->>>>>> +%YAML 1.2
->>>>>> +---
->>>>>> +$id: http://devicetree.org/schemas/spi/loongson,ls2k-spi.yaml#
->>>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>>>> +
->>>>>> +title: Loongson SPI controller
->>>>>> +
->>>>>> +maintainers:
->>>>>> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
->>>>>> +
->>>>>> +allOf:
->>>>>> +  - $ref: /schemas/spi/spi-controller.yaml#
->>>>>> +
->>>>>> +properties:
->>>>>> +  compatible:
->>>>>> +    enum:
->>>>>> +      - loongson,ls2k1000-spi
->>>>>
->>>>> No compatibles for other devices? Didn't we have big discussion about this?
->>>>>
->>>>> https://elixir.bootlin.com/linux/v6.1-rc1/source/Documentation/devicetree/bindings/writing-bindings.rst#L42
->>>>
->>>>
->>>> There are other ls2k SPI devices compatible, such as,
->>>> "loongson,ls2k0500-spi", "loongson,ls2k2000-spi" but currently I plan to
->>>> add ls2k1000 spi device first, Other ls2k SoC spi device adaptation may
->>>> require some additional work and I will add it later.
->>>
->>> Previously you claimed this serves entire family, so I don't understand
->>> why you need to fix something. Why previously it was working for entire
->>> family but now it does not?
->>
->>
->> It can work was for ls2k1000 and ls2k0500 and it specifically refers to
->> spi driver. but 2k0500 doesn't implementing a clock driver and doesn't
-> 
-> We do not discuss here drivers, but bindings. Whatever your drivers are
-> not supporting, matters less.
-> 
->> use CCF to gain clock but can use "clock-frequency".  Is it necessary to
->> obtain a clock based on CCF? If it's necessary, then it seems that it
->> can only added 2k1000 spi first.
-> 
-> Not related to bindings...
-
-
-I may understand that what you said, and the dt-bindings only cover 
-hardware and not involve the drivers. if so, I will add following:
-
-
---- a/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
-+++ b/Documentation/devicetree/bindings/spi/loongson,ls2k-spi.yaml
-@@ -16,6 +16,7 @@ properties:
-    compatible:
-      enum:
-        - loongson,ls2k1000-spi
-+      - loongson,ls2k0500-spi
-
-
-Thanks,
-Yinbo
+-- 
+2.25.1
 
