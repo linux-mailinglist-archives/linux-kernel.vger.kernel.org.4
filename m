@@ -2,69 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 285FE727ACC
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 11:05:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D4F4727ACE
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 11:05:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235442AbjFHJFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 05:05:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54162 "EHLO
+        id S235156AbjFHJFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 05:05:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235746AbjFHJFk (ORCPT
+        with ESMTP id S232139AbjFHJFt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 05:05:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A02AEE50;
-        Thu,  8 Jun 2023 02:05:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 392FA64B1C;
-        Thu,  8 Jun 2023 09:05:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27BEAC433EF;
-        Thu,  8 Jun 2023 09:05:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1686215133;
-        bh=b/HhhLn8tA5xrBrydV1Af1DGSHM7acWjZVlMLxM9uro=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=wx+Ytz28FmOSrtoOj0sYpKdPCfHo7/V7si2xru3lCENMHSox1yvRNu2+3HF8SW7Om
-         bRGeeMjINHGIaDXuxAVasZ5j4vUmfITRq6dXuCl6wII8GPZKZTP0taIa5G/KbnCc7P
-         R7oZ76z31qQc0r5gniCFz7Dr70yDEgifTkSfWe/A=
-Date:   Thu, 8 Jun 2023 11:05:30 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Richard Fontana <rfontana@redhat.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Franziska Naepelt <franziska.naepelt@googlemail.com>,
-        Linux SPDX Licenses <linux-spdx@vger.kernel.org>,
-        Linux Kernel Janitors <kernel-janitors@vger.kernel.org>,
-        Linux Crypto <linux-crypto@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        Alexander Kjeldaas <astor@fast.no>,
-        Herbert Valerio Riedel <hvr@hvrlab.org>,
-        Kyle McMartin <kyle@debian.org>,
-        "Adam J . Richter" <adam@yggdrasil.com>,
-        Dr Brian Gladman <brg@gladman.me.uk>,
-        Stephan Mueller <smueller@chronox.de>
-Subject: Re: [PATCH 1/8] crypto: Convert dual BSD 3-Clause/GPL 2.0
- boilerplate to SPDX identifier
-Message-ID: <2023060850-shakable-dynamite-c4ff@gregkh>
-References: <20230607053940.39078-10-bagasdotme@gmail.com>
- <20230607053940.39078-11-bagasdotme@gmail.com>
- <CAC1cPGxD6xOLksyMHCcreFyEv5Yoo50LY=xM9BmOEP=oECoNww@mail.gmail.com>
- <CAMj1kXGnzphm5Wyz7RfZdWVxPnEihR0NGy5mFs4neQM+7EfEGQ@mail.gmail.com>
+        Thu, 8 Jun 2023 05:05:49 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A344D1BF0;
+        Thu,  8 Jun 2023 02:05:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1686215147; x=1717751147;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yf4CcN2E3OFNl2sqMvdX0I8YC7KPN8Kso0doViaOOUo=;
+  b=WbPpCHxU2+kKgoQsV5hLKmQvyq3SEOCastaVjbN6TeT4Co1r3KKpBkPE
+   RBfHh8vh0CidD+h6oGUE6DXwUVzESEOZrnJ039Vue7BSgae+rUlFhr8ym
+   YMp8O9tkxXugOXrCfinW9Rw0RMsxnern61bTtzO0IGvAbdNjdGfkEYwkj
+   4TerhDTSVmPHy7/78qcGaw9nrYZ8gpQOfQRRIGFzLQlY5Eu3r66PHFjti
+   cY0PiYFMZ2gU+R3uT/ZuHcvPx2uEEv6Ww6TYPCe7KQf7GJ7Xbo95RXndS
+   0xZSWfBqsGxnt/ZTqKNjuBn/Pl6Pwxj8mwc5qTedqp5lVtdUPRuvAKgg0
+   g==;
+X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
+   d="scan'208";a="219393888"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Jun 2023 02:05:42 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 8 Jun 2023 02:05:42 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
+ Transport; Thu, 8 Jun 2023 02:05:42 -0700
+Date:   Thu, 8 Jun 2023 11:05:41 +0200
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Richard Cochran <richardcochran@gmail.com>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <andrew@lunn.ch>, <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>
+Subject: Re: [PATCH net-next] net: micrel: Change to receive timestamp in the
+ frame for lan8841
+Message-ID: <20230608090541.23ldnmzr5r56bgf7@soft-dev3-1>
+References: <20230607070948.1746768-1-horatiu.vultur@microchip.com>
+ <ZIDCpPbCFCxKBV2k@hoboy.vegasvil.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMj1kXGnzphm5Wyz7RfZdWVxPnEihR0NGy5mFs4neQM+7EfEGQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <ZIDCpPbCFCxKBV2k@hoboy.vegasvil.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,49 +66,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 08, 2023 at 10:37:33AM +0200, Ard Biesheuvel wrote:
-> On Wed, 7 Jun 2023 at 16:38, Richard Fontana <rfontana@redhat.com> wrote:
-> >
-> > On Wed, Jun 7, 2023 at 1:42 AM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
-> > >
-> > > Replace license boilerplate for dual BSD-3-Clause/GPL 2.0 (only or
-> > > later) with corresponding SPDX license identifier.
-> >
-> > This is at least the fourth or fifth time (I'm losing track) where you
-> > have incorrectly assumed a particular non-GPL license text matches a
-> > particular SPDX identifier without (apparently) checking.
-> >
-> 
-> What exactly does 'checking' entail here? There is no guidance in
-> Documentation/process/license-rules.rst on how to perform this
-> comparison.
-> 
-> Also, checkpatch now complains about missing SPDX identifiers, which
-> is what triggered this effort. Should it stop doing that?
-> 
-> > Bagas, I urge that you learn more about the nature of SPDX identifiers
-> > before submitting any further patches at least involving replacement
-> > of non-GPL notices with SPDX identifiers. For this unprecedented
-> > license notice replacement initiative to have any legitimacy it must
-> > attempt to apply SPDX identifiers correctly.
-> >
-> 
-> Since we're in language pedantic mode: it must do more than attempt,
-> it must apply them correctly, period.
-> 
-> Arguably, this is an 'attempt to apply SPDX identifiers correctly' on
-> Bagas's part, which apparently falls short (and I may be guilty of the
-> same for some arch crypto code)
-> 
-> So what is the ambition here: do we just leave the ambiguous ones as-is?
+Hi Richard,
 
-I recommend yes, leave them as-is until the legal people who actually
-care about having SPDX lines in all of the files take the time to do the
-work to resolve these issues.
+The 06/07/2023 10:47, Richard Cochran wrote:
+> 
+> On Wed, Jun 07, 2023 at 09:09:48AM +0200, Horatiu Vultur wrote:
+> 
+> > Doing these changes to start to get the received timestamp in the
+> > reserved field of the header, will give a great CPU usage performance.
+> > Running ptp4l with logSyncInterval of -9 will give a ~50% CPU
+> > improvment.
+> 
+> Really?
 
-Remember, they are the ones asking for it, no need for us to do their
-work for them :)
+I have run a simple top on the PC while running ptp4l.
 
-thanks,
+This is the output without this patch:
+  PID  PPID USER     STAT   VSZ %VSZ %CPU COMMAND
+  136     2 root     DW       0   0%  58% [irq/33-e2004118]
+  141   133 root     R     2232   0%  23% ptp4l -f /tmp/linux.cfg
 
-greg k-h
+And this is the output with the patch:
+  142   134 root     S     2232   0%  15% ptp4l -f /tmp/linux.cfg
+   36     2 root     DW       0   0%  15% [ptp0]
+  137     2 root     SW       0   0%   0% [irq/33-e2004118]
+
+If you think I should do better measurements, I am open to suggestions.
+
+> 
+> > -static struct lan8814_ptp_rx_ts *lan8841_ptp_get_rx_ts(struct kszphy_ptp_priv *ptp_priv)
+> > -{
+> > -     struct phy_device *phydev = ptp_priv->phydev;
+> > -     struct lan8814_ptp_rx_ts *rx_ts;
+> > -     u32 sec, nsec;
+> > -     u16 seq;
+> > -
+> > -     nsec = phy_read_mmd(phydev, 2, LAN8841_PTP_RX_INGRESS_NS_HI);
+> > -     if (!(nsec & LAN8841_PTP_RX_INGRESS_NSEC_HI_VALID))
+> > -             return NULL;
+> > -
+> > -     nsec = ((nsec & 0x3fff) << 16);
+> > -     nsec = nsec | phy_read_mmd(phydev, 2, LAN8841_PTP_RX_INGRESS_NS_LO);
+> > -
+> > -     sec = phy_read_mmd(phydev, 2, LAN8841_PTP_RX_INGRESS_SEC_HI);
+> > -     sec = sec << 16;
+> > -     sec = sec | phy_read_mmd(phydev, 2, LAN8841_PTP_RX_INGRESS_SEC_LO);
+> > -
+> > -     seq = phy_read_mmd(phydev, 2, LAN8841_PTP_RX_MSG_HEADER2);
+> 
+> Before: 5x phy_read_mmd() per frame ...
+> 
+> > -     rx_ts = kzalloc(sizeof(*rx_ts), GFP_KERNEL);
+> > -     if (!rx_ts)
+> > -             return NULL;
+> > -
+> > -     rx_ts->seconds = sec;
+> > -     rx_ts->nsec = nsec;
+> > -     rx_ts->seq_id = seq;
+> > -
+> > -     return rx_ts;
+> > -}
+> 
+> > +static void lan8841_ptp_getseconds(struct ptp_clock_info *ptp,
+> > +                                struct timespec64 *ts)
+> > +{
+> > +     struct kszphy_ptp_priv *ptp_priv = container_of(ptp, struct kszphy_ptp_priv,
+> > +                                                     ptp_clock_info);
+> > +     struct phy_device *phydev = ptp_priv->phydev;
+> > +     time64_t s;
+> > +
+> > +     mutex_lock(&ptp_priv->ptp_lock);
+> > +     /* Issue the command to read the LTC */
+> > +     phy_write_mmd(phydev, 2, LAN8841_PTP_CMD_CTL,
+> > +                   LAN8841_PTP_CMD_CTL_PTP_LTC_READ);
+> > +
+> > +     /* Read the LTC */
+> > +     s = phy_read_mmd(phydev, 2, LAN8841_PTP_LTC_RD_SEC_HI);
+> > +     s <<= 16;
+> > +     s |= phy_read_mmd(phydev, 2, LAN8841_PTP_LTC_RD_SEC_MID);
+> > +     s <<= 16;
+> > +     s |= phy_read_mmd(phydev, 2, LAN8841_PTP_LTC_RD_SEC_LO);
+> 
+> After: 4x phy_read_mmd() per frame.  How does that save 50% cpu?
+> 
+> > +     mutex_unlock(&ptp_priv->ptp_lock);
+> > +
+> > +     set_normalized_timespec64(ts, s, 0);
+> > +}
+> 
+> 
+> > +static long lan8841_ptp_do_aux_work(struct ptp_clock_info *ptp)
+> > +{
+> > +     struct kszphy_ptp_priv *ptp_priv = container_of(ptp, struct kszphy_ptp_priv,
+> > +                                                     ptp_clock_info);
+> > +     struct skb_shared_hwtstamps *shhwtstamps;
+> > +     struct timespec64 ts;
+> > +     struct sk_buff *skb;
+> > +     u32 ts_header;
+> > +
+> > +     while ((skb = skb_dequeue(&ptp_priv->rx_queue)) != NULL) {
+> > +             lan8841_ptp_getseconds(ptp, &ts);
+> 
+> No need to call this once per frame.  It would be sufficent to call it
+> once every 2 seconds and cache the result.
+> 
+> > +             ts_header = __be32_to_cpu(LAN8841_SKB_CB(skb)->header->reserved2);
+> > +
+> > +             shhwtstamps = skb_hwtstamps(skb);
+> > +             memset(shhwtstamps, 0, sizeof(*shhwtstamps));
+> > +
+> > +             /* Check for any wrap arounds for the second part */
+> > +             if ((ts.tv_sec & GENMASK(1, 0)) < ts_header >> 30)
+> > +                     ts.tv_sec -= GENMASK(1, 0) + 1;
+> > +
+> > +             shhwtstamps->hwtstamp =
+> > +                     ktime_set((ts.tv_sec & ~(GENMASK(1, 0))) | ts_header >> 30,
+> > +                               ts_header & GENMASK(29, 0));
+> > +             LAN8841_SKB_CB(skb)->header->reserved2 = 0;
+> > +
+> > +             netif_rx(skb);
+> > +     }
+> > +
+> > +     return -1;
+> > +}
+> 
+> Thanks,
+> Richard
+
+-- 
+/Horatiu
