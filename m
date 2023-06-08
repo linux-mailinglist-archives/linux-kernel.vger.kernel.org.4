@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EDA9728AE2
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 00:06:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAD79728AE3
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 00:06:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236839AbjFHWG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 18:06:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46908 "EHLO
+        id S237024AbjFHWGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 18:06:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231445AbjFHWGY (ORCPT
+        with ESMTP id S236909AbjFHWGr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 18:06:24 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCB1A30D4
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 15:06:23 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-babb79a17b8so1596280276.0
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 15:06:23 -0700 (PDT)
+        Thu, 8 Jun 2023 18:06:47 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB81430D4
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 15:06:39 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id 98e67ed59e1d1-25b79a5cf1aso78046a91.1
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 15:06:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686261982; x=1688853982;
+        d=google.com; s=20221208; t=1686261999; x=1688853999;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=tdKizssFsMQJzj8/wSt0vRuPFuTT8IrX+6c5/ZqQtUU=;
-        b=pYi5twzK16pe/u6UpDUsq5/gZ7VstFYaQpSoVInd6hIj+oSGhYPXPylVFxcNSuyTfw
-         wCt/PuskPgVKlLP4RTlX1/zs0+7HkXHCX4XS7if1kU6ECFkPaPA6XhFNVqu9JjsX2WO/
-         6WqFpH3dBOcrzKhywdtBIapeXoWXFx6aay6wJ/Qn7Ov7MwhcjCvIcth7YseBLy8rA6Ov
-         3DWI59xmNFppvf7woPF6SLT4FB7lfdwPzuUsRo9pwvg0hPnS8pOlnHx7+zVUdbb0FVld
-         p5m22USbLg8gn8rqzTBnF1FE/reHbyRKFfM6g+eovhC7zK7inCcLfL8yF7dcAeB22C5F
-         IZfg==
+        bh=RLQAgYf8iBGNcj/RlWRJvdUP+LxzH+dVMP3y494+MG8=;
+        b=jiucnEhHBHr3c6BmEzMcwGJYY5q/sfwTNMPWWLYqVidMy1ACgG+F4SMLbQC+sxFx8P
+         MgXO/ls1Qh9ojSIi9fREuHQLVDtJVbbXNSGrAHqjqmXunrWoPXQioFgwqITHfRC2RF7S
+         krksZEMjv8T4fZD9ohzoli64PNBHIoR7RtjjXhBKm+ILTUHJIsjF6bBVFHudjFQ43RAJ
+         QjLnUGQxwAWUeWUK76k33+fR9B50+FAd8nHuH4gYW55RNEa1TK7TgaOcSaYfQfQ/yqEU
+         gTerywae+9jvND4TfEQNeVGBNRP4j8FT/9XDIlbTQL9SfcEMzU0DbA+854khObUx4iA2
+         DkyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686261982; x=1688853982;
+        d=1e100.net; s=20221208; t=1686261999; x=1688853999;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tdKizssFsMQJzj8/wSt0vRuPFuTT8IrX+6c5/ZqQtUU=;
-        b=WJK81RO4QJxEcIZ+MCCiWKHOKfvFq8WC2NY29gbb9w126XhNE6Q62TC+eVyQBRc6zD
-         WL1EJJ7MrZSGQ4rKde3IDYbCrOyMXgPZ7N9b8RPh8uOVTTVi2KIpsBZjjHNqgtc+isjs
-         HhCAJGqAwULgD6rwVAVBmxWDZEQO9yZ/3W3j+sXoDxp2aPGFE8HoxS63z1nOIVdIXJ66
-         uIaTLA9rF8nRLcfW1BKF/Eudcha05ncl1zkMpxShfOFAiiP2NxmQ7y+L8QmiI2B82dJx
-         Dyq9wSRn+RRfLPqCDTmyrA7M4xGvdPT4cPZhwxgoA+F6vwpkr8y4ZCCqT/G2P/MjPeP3
-         EdHw==
-X-Gm-Message-State: AC+VfDzfrAl3mI8oh0ilHccyRX2NXoNkUwKIq8S3aKDKYd08Fv7O58VK
-        5ZtG142shCe63LjdeyqJxh5u9FBytlSsOO/4o8x4Sfv1b9UWi/LMxqcNoGg+737solIfSaDBqUX
-        MpOmgdtJcHh9x5XzN7ZiwStYeqkMn3mubHi0WEvCb4pBebtCTjkEQUYsiyIll7+4LIE+Njw==
-X-Google-Smtp-Source: ACHHUZ4KfiB8l1+dUoVGrkHr93Y38MLg1AxejqBfztTpsuysMtbSy6a+JxAixUHY2sVHAQ46IvK3wvSRaY8=
+        bh=RLQAgYf8iBGNcj/RlWRJvdUP+LxzH+dVMP3y494+MG8=;
+        b=X8mmyC9ov26xYev9s/JPtg4vBJlGZqgwpVxRuQUcXU3r/RfYpWpNru+rHTSNXU+LU0
+         zC9GCUwga42VTu4JmP93WeaUzJgBqyTaZ7ymZl0zMAD2yGCFUkbFWCtVxbfdEGRAXV3i
+         pOAFKZ08oKQubCAdd5y4T99mFdNDhzll7rzrzGYCNHc1agz8fM3M2bI4oChpazu2EXNK
+         5T+IKa2uTN81YdC3TPcfhxb711JBc51JK5NB+BPt+G419a8PVoQWkuzXHSzmLccmiSFU
+         uiEP8/Kzh3JLLcbpGdIvXr3a84MfTOoQxwVD71GECk4ijmTt8dyD2YHv6+oS5bz1ESoo
+         wYeg==
+X-Gm-Message-State: AC+VfDzDBdIvrYwLDlavSBjxykDPQ9lHNv0KpPHTAEM/SHDMV7XJhx7u
+        J/vmaHp5EG2SMR+f7xcm/apmppq9oaL+aRrqWiHm5rSfhnWTWJmSAsH2bZTr4g+kEik6lPLO+jR
+        S9o3JfZINN6RBGNi7Z+Q9bGpImw9x9qvUa6kAyGb2ifJoy7q18tYNDSgIJfS0NcWd2msjdQ==
+X-Google-Smtp-Source: ACHHUZ4BB7wc/3PLgyJlfh6FiXwuAOEqUsspFVK4qOkYedUMSsY2SeUi7aLElhIVZxfm8OeC1VsqR/loduM=
 X-Received: from colette.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:5cff])
- (user=ctshao job=sendgmr) by 2002:a05:6902:691:b0:ba8:1f20:ff4f with SMTP id
- i17-20020a056902069100b00ba81f20ff4fmr517992ybt.12.1686261982675; Thu, 08 Jun
- 2023 15:06:22 -0700 (PDT)
-Date:   Thu,  8 Jun 2023 15:05:39 -0700
+ (user=ctshao job=sendgmr) by 2002:a17:90a:7886:b0:253:4800:438b with SMTP id
+ x6-20020a17090a788600b002534800438bmr786194pjk.2.1686261997920; Thu, 08 Jun
+ 2023 15:06:37 -0700 (PDT)
+Date:   Thu,  8 Jun 2023 15:05:41 -0700
 In-Reply-To: <20230608220558.39094-1-ctshao@google.com>
 Mime-Version: 1.0
 References: <20230608220558.39094-1-ctshao@google.com>
 X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-Message-ID: <20230608220558.39094-2-ctshao@google.com>
-Subject: [PATCH v1 2/3] KVM: arm64: Only initiate walk if page_count() > 1 in free_removed_table()
+Message-ID: <20230608220558.39094-4-ctshao@google.com>
+Subject: [PATCH v1 3/3] KVM: arm64: Using rcu_read_lock() for kvm_pgtable_stage2_mkyoung()
 From:   Chun-Tse Shao <ctshao@google.com>
 To:     linux-kernel@vger.kernel.org, yuzhao@google.com,
         oliver.upton@linux.dev
@@ -76,32 +76,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Page table walk is unnecessary in free_removed_table() being called from
-the stage-2 unmap path while PTEs on the table is empty. It can be
-fast-pathed by only initiating a walk if page_count() > 1
+Access bit is RCU safe and can be set without taking kvm->mmu_lock().
+Replacing existing kvm->mmu_lock() with rcu_read_lock() for better
+performance.
 
 Original disussion can be found in:
-https://lore.kernel.org/kvmarm/ZHfWzX04GlcNngdU@linux.dev/
+https://lore.kernel.org/kvmarm/CAOUHufZrfnfcbrqSzmHkejR5MA2gmGKZ3LMRhbLHV+1427z=Tw@mail.gmail.com/
 
 Suggested-by: Yu Zhao <yuzhao@google.com>
-Suggested-by: Oliver Upton <oliver.upton@linux.dev>
 Signed-off-by: Chun-Tse Shao <ctshao@google.com>
 ---
- arch/arm64/kvm/hyp/pgtable.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ arch/arm64/kvm/mmu.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
-index cc1af0286755..d8e570263388 100644
---- a/arch/arm64/kvm/hyp/pgtable.c
-+++ b/arch/arm64/kvm/hyp/pgtable.c
-@@ -1319,5 +1319,6 @@ void kvm_pgtable_stage2_free_removed(struct kvm_pgtable_mm_ops *mm_ops, void *pg
- 		.end	= kvm_granule_size(level),
- 	};
+diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+index 3b9d4d24c361..0f7ea66fb894 100644
+--- a/arch/arm64/kvm/mmu.c
++++ b/arch/arm64/kvm/mmu.c
+@@ -1437,10 +1437,10 @@ static void handle_access_fault(struct kvm_vcpu *vcpu, phys_addr_t fault_ipa)
  
--	WARN_ON(__kvm_pgtable_walk(&data, mm_ops, ptep, level + 1));
-+	if (mm_ops->page_count(pgtable) > 1)
-+		WARN_ON(__kvm_pgtable_walk(&data, mm_ops, ptep, level + 1));
- }
+ 	trace_kvm_access_fault(fault_ipa);
+ 
+-	read_lock(&vcpu->kvm->mmu_lock);
++	rcu_read_lock();
+ 	mmu = vcpu->arch.hw_mmu;
+ 	pte = kvm_pgtable_stage2_mkyoung(mmu->pgt, fault_ipa);
+-	read_unlock(&vcpu->kvm->mmu_lock);
++	rcu_read_unlock();
+ 
+ 	if (kvm_pte_valid(pte))
+ 		kvm_set_pfn_accessed(kvm_pte_to_pfn(pte));
 -- 
 2.41.0.162.gfafddb0af9-goog
 
