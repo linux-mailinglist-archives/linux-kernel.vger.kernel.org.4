@@ -2,75 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99BED7283BD
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 17:28:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFD767283BE
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 17:28:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235703AbjFHP2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 11:28:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54990 "EHLO
+        id S235947AbjFHP2n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 11:28:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237092AbjFHP2D (ORCPT
+        with ESMTP id S237100AbjFHP2X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 11:28:03 -0400
-Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C0572D46;
-        Thu,  8 Jun 2023 08:28:03 -0700 (PDT)
-Received: by mail-io1-f45.google.com with SMTP id ca18e2360f4ac-777b4716673so18918239f.1;
-        Thu, 08 Jun 2023 08:28:03 -0700 (PDT)
+        Thu, 8 Jun 2023 11:28:23 -0400
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7863D2D7E
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 08:28:18 -0700 (PDT)
+Received: by mail-qv1-xf2b.google.com with SMTP id 6a1803df08f44-62884fa0e53so6035036d6.0
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 08:28:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686238097; x=1688830097;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=yVT+E1lTqgVRqOMiUmOOqGCFZYtg8Gx2wGfwkHkIhvU=;
+        b=OFvpyrq/lBDNV1vdcmrMuXjLEhmg/ybSi729m+uNossAYd0shYaefVa/nGTQGZUN+I
+         4UlLlEQq/1ayEmGII7lyf8sKBD0xYfs3Hq1EDnrH+RfoDddi2B66B6s6czcPF9Fjtmuh
+         g5nu+hCcDcmPNYD8jX8AtcU7MLzNbWZQBVLkRaQOlcDTLe9KAfiC1fKd+A4E/dBaGgvC
+         joHvAcWMV1365pR1u+FHY7dEPZyuLOlUh2K3SOMKn/Rmn/MUwLpDXp6dvZa87DDuWR2H
+         PVOUXIA4X1heq4LRcsD+0n0VTrAfurE+cgotRdo8G6Vfsxoa8U7gHfLqus6aupkp6rNz
+         dwIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686238082; x=1688830082;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Qr000rxGLVuWJZz2D0ArKGwSzq3Pa8ar0xjysheU/dU=;
-        b=WZRyiS3E0fuXwFPwXxtml2KtMBlbYjKiX4r0KFnMs/NxwkCrIiEzqBGOXq4eGfrubo
-         +zox4goabq5d5yBcVdqOyAgw9JvtwaK0MTT7/aldXjDDdDHE+z2IWKuiN1k5v/ODE7+M
-         F6y3D2bQUtlLeOdmrj/vbawdezcOUiMOFHRaNXNAZdYNZwLKYK7bRBI1vxowBAWcsop6
-         2qfy4w2wDXmbXwHebmRdeV1CrNMI1YxwdV9JMc5i748Li3PaXQWnDUorE8k4vutI4efm
-         LnmNGlz/mIZz56jaFB4SD2SpDC0UW289cbXItgqhtMPzI605u8aGT5789+B4C0kllA6M
-         pLFA==
-X-Gm-Message-State: AC+VfDzq4DFklGgJNJGxMGhMa30bdf6KclW9La33cLz7cTuT1XZyc3o0
-        XMXImi7alI+MI6wsw4EK4Q==
-X-Google-Smtp-Source: ACHHUZ7yIzpDskqBVsSZugxdatsLxV3rNEEOXYrrNCOawofOsVApP7TUr7KrKg+IbkgmirE1X6UUNw==
-X-Received: by 2002:a05:6602:2d01:b0:777:a4d2:8871 with SMTP id c1-20020a0566022d0100b00777a4d28871mr1838491iow.5.1686238082262;
-        Thu, 08 Jun 2023 08:28:02 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id t5-20020a028785000000b0040fa5258658sm332660jai.77.2023.06.08.08.28.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 08:28:01 -0700 (PDT)
-Received: (nullmailer pid 2724383 invoked by uid 1000);
-        Thu, 08 Jun 2023 15:27:59 -0000
-Date:   Thu, 8 Jun 2023 09:27:59 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krishna chaitanya chundru <quic_krichai@quicinc.com>
-Cc:     manivannan.sadhasivam@linaro.org, quic_vbadigan@quicinc.com,
-        quic_ramkri@quicinc.com, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>,
-        "open list:PCIE ENDPOINT DRIVER FOR QUALCOMM" 
-        <linux-pci@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/3] dt-bindings: PCI: qcom: ep: Add interconnects path
-Message-ID: <20230608152759.GA2721945-robh@kernel.org>
-References: <1686154687-29356-1-git-send-email-quic_krichai@quicinc.com>
- <1686154687-29356-2-git-send-email-quic_krichai@quicinc.com>
+        d=1e100.net; s=20221208; t=1686238097; x=1688830097;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yVT+E1lTqgVRqOMiUmOOqGCFZYtg8Gx2wGfwkHkIhvU=;
+        b=TBrcq+nmxmFVMykKTkuZHONK0k67ELFzh8mLDa2J7DHmQgFvLR6xiDKAeE7/6L609F
+         Z3nNLyO5HiGJSDTkseu4QO8Gu+BsPeB6+0RmoFefD2LON7QuwJv8J+Om26YaBrjOvI+d
+         VosoL56+qWQJ8CxH1GBD77d/NQThiKBJNJUSPMZKwM8qxB62PoZL9eaVXIeA0pziHnf1
+         vXzZnehVFgmwpl3mPTznb1eUd9NDxBXa0jYH9Ld1npUiUSY4n9i59zMY7HyhB153U79m
+         qPqSwDOZR7nIFZhPTp9qyYSkEzpjF+jtcPhQlY6RO+pDbOnbs/Zk+Qe4KDywrZasipvB
+         rMCA==
+X-Gm-Message-State: AC+VfDzW/xQEPhWCe/h71PeSknyAUChzYkwXPeLAn4AyCBBZazWL3TTl
+        fKLqXJ+foj4pZOdm0SRVprAScvioFI++DYmHgTzRYw==
+X-Google-Smtp-Source: ACHHUZ6P2k2Tgyu/59Khxh6JHCZIquDvMKZdtfOoKcWOpAmaVJ+SduwImO/96dcKIS5uRClkC7pY3wVfpuk4MWCqgaU=
+X-Received: by 2002:a05:6214:5010:b0:62b:4e33:a16f with SMTP id
+ jo16-20020a056214501000b0062b4e33a16fmr2439142qvb.28.1686238097551; Thu, 08
+ Jun 2023 08:28:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1686154687-29356-2-git-send-email-quic_krichai@quicinc.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+References: <20230607-arm64-flush-svcr-v1-1-7821a6199e0a@kernel.org>
+In-Reply-To: <20230607-arm64-flush-svcr-v1-1-7821a6199e0a@kernel.org>
+From:   Anders Roxell <anders.roxell@linaro.org>
+Date:   Thu, 8 Jun 2023 17:28:06 +0200
+Message-ID: <CADYN=9+OckUJ2x4FuMKAgxekhWibySZzMz=r-JbaCVZWyG8_GA@mail.gmail.com>
+Subject: Re: [PATCH] arm64/fpsimd: Exit streaming mode when flushing tasks
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Naresh Kamboju <naresh.kamboju@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,46 +69,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 09:48:05PM +0530, Krishna chaitanya chundru wrote:
-> Add the "pcie-mem" interconnect path to the bindings.
-> 
-> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
+On Wed, 7 Jun 2023 at 22:42, Mark Brown <broonie@kernel.org> wrote:
+>
+> Ensure there is no path where we might attempt to save SME state after we
+> flush a task by updating the SVCR register state as well as updating our
+> in memory state. I haven't seen a specific case where this is happening or
+> seen a path where it might happen but for the cost of a single low overhead
+> instruction it seems sensible to close the potential gap.
+>
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+
+Applied this onto todays next tag next-20230608 and ran
+kselftest-arm64 on a FVP model.
+I still see the "BUG: KFENCE: memory corruption in
+fpsimd_release_task+0x1c/0x3c".
+
+I'm trying to use the latest kselftest from today with older next tags
+trying to find when
+this issue started to happen.
+
+Cheers,
+Anders
+
+
 > ---
->  Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml
-> index b3c22eb..6fc5440 100644
-> --- a/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml
-> +++ b/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml
-> @@ -70,6 +70,13 @@ properties:
->      description: GPIO used as WAKE# output signal
->      maxItems: 1
->  
-> +  interconnects:
-> +    maxItems: 1
-> +
-> +  interconnect-names:
-> +    items:
-> +      - const: pcie-mem
-> +
->    resets:
->      maxItems: 1
->  
-> @@ -97,6 +104,8 @@ required:
->    - interrupts
->    - interrupt-names
->    - reset-gpios
-> +  - interconnects
-> +  - interconnect-names
-
-You can't add required properties. That's an ABI break. Up to the 
-platform whether that's acceptible, but you have to explain all this in 
-the commmit msg.
-
->    - resets
->    - reset-names
->    - power-domains
-> -- 
-> 2.7.4
-> 
+>  arch/arm64/kernel/fpsimd.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/arch/arm64/kernel/fpsimd.c b/arch/arm64/kernel/fpsimd.c
+> index 2fbafa5cc7ac..1627e0efe39a 100644
+> --- a/arch/arm64/kernel/fpsimd.c
+> +++ b/arch/arm64/kernel/fpsimd.c
+> @@ -1649,6 +1649,7 @@ void fpsimd_flush_thread(void)
+>
+>                 fpsimd_flush_thread_vl(ARM64_VEC_SME);
+>                 current->thread.svcr = 0;
+> +               sme_smstop_sm();
+>         }
+>
+>         current->thread.fp_type = FP_STATE_FPSIMD;
+>
+> ---
+> base-commit: 44c026a73be8038f03dbdeef028b642880cf1511
+> change-id: 20230607-arm64-flush-svcr-47cc76a8cbbc
+>
+> Best regards,
+> --
+> Mark Brown <broonie@kernel.org>
+>
