@@ -2,170 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E60172888A
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 21:30:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2EAA728892
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 21:31:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235589AbjFHTaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 15:30:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45726 "EHLO
+        id S232281AbjFHTbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 15:31:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230096AbjFHTau (ORCPT
+        with ESMTP id S233539AbjFHTbm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 15:30:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 916D82D55;
-        Thu,  8 Jun 2023 12:30:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D3F3650BB;
-        Thu,  8 Jun 2023 19:30:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC148C4339B;
-        Thu,  8 Jun 2023 19:30:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686252634;
-        bh=Sn9hAi2Kyf0okzCneZ3amJPSCNVbUHG48YWRl4CGl/M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lfdr8/t7jAH4glSpjV2KYZiJ23pFC02NUTTTkCYlLGOvVOrmDCcRICN1I7ckFGeAQ
-         TPGCO5Yx6pvnH5XLP1XTniYRePwwraYyUDpYJqCXzS6uNl5YuDSEtEqzaa6vast+yd
-         AMjS+CzLVMzQGuWTQNRSM0Ufd/re+R18iMYOl+Biy/Afeke4T74nR7ID5P7Lx82b2L
-         1/KMCBpD/NbyjEYVOdgT3myEqZ9cUkkHXTTjYCo/FHA0ZWQmct3tB4tNdElz8hzlKD
-         dMXMAC24mzOI1YV/emxTct+WnhjV22drqsWa8YBbOCsThta5By4dLh6opE8JHBZsev
-         ojK/xAa+VBS6A==
-Date:   Thu, 8 Jun 2023 20:30:28 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        Sean Anderson <sean.anderson@seco.com>,
-        Anup Patel <anup@brainfault.org>,
-        Andrew Jones <ajones@ventanamicro.com>, palmer@dabbelt.com,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alistair Francis <alistair.francis@wdc.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Jessica Clarke <jrtc27@jrtc27.com>,
-        Rick Chen <rick@andestech.com>, Leo <ycliang@andestech.com>,
-        linux-riscv@lists.infradead.org, qemu-riscv@nongnu.org,
-        u-boot@lists.denx.de, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] dt-bindings: riscv: deprecate riscv,isa
-Message-ID: <20230608-cobbler-giving-e0fac2185e11@spud>
-References: <20230518-thermos-sanitary-cf3fbc777ea1@wendy>
- <20230518-4050231ca8dbe93c08cf9c9a@orel>
- <CAAhSdy07Mg_JBF+4ucGFiWdBKh-Ass5G_aUWqBqTnDSFp7S=0A@mail.gmail.com>
- <20230518-hammock-doornail-478e8ea8e6a7@wendy>
- <f7c20090-220c-2805-86ba-b174a89f65b3@seco.com>
- <20230518-monkhood-dispersal-6749b1228b0d@spud>
- <20230530-duller-reset-a34ae111f207@wendy>
- <20230608191537.GA3233857-robh@kernel.org>
+        Thu, 8 Jun 2023 15:31:42 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FDC52D72
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 12:31:16 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-5664b14966bso8804877b3.1
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 12:31:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1686252675; x=1688844675;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=LRrENG7fj4nSEA3qiqmp7KZ6RwcG7U0j5SldGyBNlNI=;
+        b=xraoP+ub8QawPiBDd1NtmoCJ7Yde5e/+U+FNO1p7rYE1UZXZOAo1PDwcjZq5EwJthR
+         dV+vHCNMFKAoTdxBpkTX1DtrPJTkyYQzzcTJ6+Hvz6BbVAyle5wD2VnxGl+fo8KRjuW1
+         6lph5KG8FATG8Els+mnLkzVfzKtCZbvKkrDIrFy8tA1swRHwRpg7mlfmIfHBFYp2tEz0
+         /MtFJlEM4CazKliayJD7LKXK8RlITlLW8oxbTF1Qs6fFP4vrk+enY/g6/q9Fbkg7+DmC
+         flfsqeHeLuLJ1bEDqfGSKk77gUrt/I37di/bcF7XR9pfVd+mrCw58/52flYr3BiOm9us
+         kFmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686252675; x=1688844675;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LRrENG7fj4nSEA3qiqmp7KZ6RwcG7U0j5SldGyBNlNI=;
+        b=P3E3Gh2GxTFGjSIgw4VyeqGMmBundosxNwyieNExClAI5KIgocVOxreoMXLIZ9mARB
+         ss9jpbXDQXUCppjj3rbrRvVUCFZxzlfj10sZtVQs9PcgdNFnnEd2+MNILoq868xDskIg
+         ffwxTthWRA+B5/8bJAkGFt8L3Y4/GX1UEGvmsqVuJfgABQ9f2cIe3NHLbvFjdeM5jbh7
+         dg4ZMpYICKuF/fkTY3p+dEp2/oamj9zJqt4gEC1DwRc39mkQKuNmXl/8JPGMWUq77VKE
+         GOiGxPIjoixvjKitgbS0gkTozQ4NMwLWMabmW4o1YaEj9jLaXL96acT3M3iIDKEPxsXx
+         81fw==
+X-Gm-Message-State: AC+VfDzIlV1TZaW9SE7KWj2CNlQx8FUjLlVUTJPym3x/xBj1e4zGb8qI
+        PG2iSMJOlioPYC5kWE+VIiq0YA==
+X-Google-Smtp-Source: ACHHUZ7QSwZkgLD2hJa5LAg1G48lqiWohJ5hVZ29HKnSz0REpapDpLCYy6czmfzJtz/zE4Z2iELuXA==
+X-Received: by 2002:a81:8986:0:b0:561:d1ef:3723 with SMTP id z128-20020a818986000000b00561d1ef3723mr688963ywf.38.1686252675399;
+        Thu, 08 Jun 2023 12:31:15 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id a6-20020a816606000000b0055aaccfa2c7sm114090ywc.91.2023.06.08.12.31.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 12:31:14 -0700 (PDT)
+Date:   Thu, 8 Jun 2023 12:31:10 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Andrew Morton <akpm@linux-foundation.org>
+cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Helge Deller <deller@gmx.de>,
+        John David Anglin <dave.anglin@bell.net>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH v2 18/23] sparc/hugetlb: pte_alloc_huge() pte_offset_huge()
+In-Reply-To: <a4963be9-7aa6-350-66d0-2ba843e1af44@google.com>
+Message-ID: <c2aeb62f-58f9-d014-ddcd-266267bd97b@google.com>
+References: <a4963be9-7aa6-350-66d0-2ba843e1af44@google.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="J8Z0GTvlCQGm2lQj"
-Content-Disposition: inline
-In-Reply-To: <20230608191537.GA3233857-robh@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+pte_alloc_map() expects to be followed by pte_unmap(), but hugetlb omits
+that: to keep balance in future, use the recently added pte_alloc_huge()
+instead; with pte_offset_huge() a better name for pte_offset_kernel().
 
---J8Z0GTvlCQGm2lQj
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Hugh Dickins <hughd@google.com>
+---
+ arch/sparc/mm/hugetlbpage.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-On Thu, Jun 08, 2023 at 01:15:37PM -0600, Rob Herring wrote:
-> On Tue, May 30, 2023 at 03:12:12PM +0100, Conor Dooley wrote:
-> > On Thu, May 18, 2023 at 10:42:34PM +0100, Conor Dooley wrote:
-> > > On Thu, May 18, 2023 at 02:30:53PM -0400, Sean Anderson wrote:
-> >=20
-> > > >=20
-> > > > Why not just have something like
-> > > >=20
-> > > > mycpu {
-> > > > 	...
-> > > > 	riscv,isa {
-> > > > 		i;
-> > > > 		m;
-> > > > 		a;
-> > > > 		zicsr;
-> > > > 		...
->=20
-> I prefer property names be globally unique. The tools are geared towards=
-=20
-> that too. That's largely a symptom of having 0 type information in the=20
-> DT.
->=20
-> For example if you had an extension called 'reg', it would be a problem.
+diff --git a/arch/sparc/mm/hugetlbpage.c b/arch/sparc/mm/hugetlbpage.c
+index d8e0e3c7038d..d7018823206c 100644
+--- a/arch/sparc/mm/hugetlbpage.c
++++ b/arch/sparc/mm/hugetlbpage.c
+@@ -298,7 +298,7 @@ pte_t *huge_pte_alloc(struct mm_struct *mm, struct vm_area_struct *vma,
+ 		return NULL;
+ 	if (sz >= PMD_SIZE)
+ 		return (pte_t *)pmd;
+-	return pte_alloc_map(mm, pmd, addr);
++	return pte_alloc_huge(mm, pmd, addr);
+ }
+ 
+ pte_t *huge_pte_offset(struct mm_struct *mm,
+@@ -325,7 +325,7 @@ pte_t *huge_pte_offset(struct mm_struct *mm,
+ 		return NULL;
+ 	if (is_hugetlb_pmd(*pmd))
+ 		return (pte_t *)pmd;
+-	return pte_offset_map(pmd, addr);
++	return pte_offset_huge(pmd, addr);
+ }
+ 
+ void set_huge_pte_at(struct mm_struct *mm, unsigned long addr,
+-- 
+2.35.3
 
-Per the current ISA rules, that'd not be valid. But then again, I do
-have trust issues & it's not like "reg" is the only property name in DT
-land.
-
-> > > Naming of the node aside (perhaps that could be riscv,isa-extensions)
-> > > there's not something hitting me immediately as to why that is a no-n=
-o.
-> > > If the size is a concern, this would certainly be more efficient & not
-> > > like the probing would be anything other than trivial more difficult
-> > > what I have in my proposal.
-> >=20
-> > Having started messing around with this, one of the main advantages, to
-> > me, of this approach is proper validation.
-> > cpus.yaml has additionalProperties: true in it, which would have had to
-> > be sorted out, or worked around, but creating a child-node with the
-> > properties in it allows setting additionalProperties: false.
->=20
-> That's an issue on my radar to fix. I started that for the Arm cpus.yaml=
-=20
-> a while back. Sadly it involves adding all the misc properties vendors=20
-> added. It's not a lot, but still better to get in front of that for=20
-> Risc-V.
-
-Yeah, guess I can append that to my todo list.
-
-> > > Rob's AFK at the moment, and I was hoping that he would take a look at
-> > > the idea, so I won't respin til he is back, but I'll give this a go in
-> > > the interim.
-> >=20
-> > Mechanically, the conversion of the patch isn't difficult, but I'll sti=
-ll
-> > wait for Rob to come back before sending a v2. But that v2 will more
-> > than likely implement your suggestion.
->=20
-> I haven't read the whole thread, but the initial proposal looks okay to=
-=20
-> me.
->=20
-> Another way you could do this is a list of strings:
->=20
-> riscv,isa-ext =3D "i", "m", "zicsr";
->=20
-> I think we have a helper to test is a string in the list.
-
-Perhaps I should've waited a bit longer than a month for a v2 - I sent
-one this afternoon doing what Sean suggested:
-https://lore.kernel.org/all/20230608-sitting-bath-31eddc03c5a5@spud/
-
-I'll do some poking at the strings and see what I think of it.
-
-Cheers,
-Conor.
-
---J8Z0GTvlCQGm2lQj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIIsVAAKCRB4tDGHoIJi
-0g5YAQC9F/U/qWJxcOhejKFcF7fDmwOe+gCq0sgnacuq/Vu+ZAEAwAZ9EAwNs4oF
-aCnC2JOfp//gPzZTwmsYjjFeeLhAkwA=
-=KmSP
------END PGP SIGNATURE-----
-
---J8Z0GTvlCQGm2lQj--
