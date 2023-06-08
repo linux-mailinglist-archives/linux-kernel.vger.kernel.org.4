@@ -2,164 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E16B7285B3
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 18:47:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5E9F7285BA
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 18:48:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236406AbjFHQr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 12:47:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56640 "EHLO
+        id S236490AbjFHQsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 12:48:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236285AbjFHQrZ (ORCPT
+        with ESMTP id S234202AbjFHQsV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 12:47:25 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB402D7F
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 09:47:06 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id 41be03b00d2f7-5343c3daff0so464384a12.0
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 09:47:06 -0700 (PDT)
+        Thu, 8 Jun 2023 12:48:21 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDDA513D
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 09:48:19 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-30c4c1fd511so843100f8f.1
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 09:48:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686242826; x=1688834826;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OJsvMRKIa90U27B2LLPA2h9ptE2WW+eeuczb6BgewxM=;
-        b=iOBR7D2sFjrEbRKFG0OeEOxkKBZNlx2Fy/pk1NDlvDETBke0MQzcf5kdf5qF8iIeB/
-         wr5gEpzbAW6MvX+SDonFRvL1NPRerCQu1vl4f33O1SDkfk54vUKVsGh/uljGluyleX60
-         pwTHU8mLxld02HVUhM5lj0AqiPKYjfE/pyxwk=
+        d=gmail.com; s=20221208; t=1686242898; x=1688834898;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zQLEV575N+KrNUGlsZrmx4zC48HUkepNutbY0RXCnbk=;
+        b=ISUlowyJjuLK125JQcOXVHEa2QeAgCdOj4C8MAGqYt7vr0t5LECt5PYKZ8XvtYHa/f
+         /jcGG0yITgrSx3ZzeH/RA+yJlQYKG+JF3qEckajkfu/8g5A8UodMP37O2GuDhJfYiC32
+         s+WRvq+3t8uPqJo5C25EYlZGDeY43Xp3xUwb5RdWahvk5iuoBMVEmeSbIHvo5rk4yEa7
+         f/XxcdTbh/6e6Kr6J3r6NBMuuNxx6H1UKOR1oP3FCyTWcGcrEH4c6FWWwrrRNFF5HyFA
+         99PMUVtltuQLEHUzouvdxGezr9nk8JiKbYrQpNE69pfOW7dKa6x17mUFEfuIBTloWhss
+         vy0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686242826; x=1688834826;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OJsvMRKIa90U27B2LLPA2h9ptE2WW+eeuczb6BgewxM=;
-        b=KybkDDfC5NCYk9ydLQPP/wlJzGhe+7W/ku2/7CBZJKCVhndMz4RlFzeNR68fHac6y7
-         TwnVCrX71sT9nRGPRheT3BgSAHalG9qxMCFw8LOtylARDR9vjtfIJvDbKVGbj3UxDBm5
-         wbrbI/iKBOgLXBI/ezQUMS2U7G+61bhlK8/nhdESM3BottKuCMgTELUFtS4WIXuWmVc8
-         Gu2bcPksbNwKMTfrJwZLLZ388YZqmo7vPZrmvRZ9HhuXvVUnhCo5uzHny7hABbKgh+Yz
-         aCSun2qKesPjWVklAx2D/vfUcZgSaLgosBa69DO1pkPODbgnpBXRPaPzR/FalzTkPiIr
-         pPDg==
-X-Gm-Message-State: AC+VfDzAq3QVaV80+9fErmd5ze5wP+x53mN6DWqLxoidCQzGIMS1lq4T
-        kLQKGPGhYqBaGP4MRyfOyEHEFg==
-X-Google-Smtp-Source: ACHHUZ4UbTHVcubFGu4XHpAJIwx+d0InrJnKvc2R0TYuslnc/skpcNPkNC/UBQ03/nHJFZ42/RP/4g==
-X-Received: by 2002:a17:902:9a94:b0:1ac:859a:5b5a with SMTP id w20-20020a1709029a9400b001ac859a5b5amr4346093plp.0.1686242825778;
-        Thu, 08 Jun 2023 09:47:05 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id w16-20020a170902a71000b001b061dcdb6bsm1670872plq.28.2023.06.08.09.47.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 09:47:05 -0700 (PDT)
-Date:   Thu, 8 Jun 2023 09:47:04 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>, gregkh@linuxfoundation.org,
-        pbonzini@redhat.com, linux-kernel@vger.kernel.org,
-        ojeda@kernel.org, ndesaulniers@google.com, mingo@redhat.com,
-        will@kernel.org, longman@redhat.com, boqun.feng@gmail.com,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-        joel@joelfernandes.org, josh@joshtriplett.org,
-        mathieu.desnoyers@efficios.com, jiangshanlai@gmail.com,
-        rcu@vger.kernel.org, tj@kernel.org, tglx@linutronix.de,
-        linux-toolchains@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] Lock and Pointer guards
-Message-ID: <202306080917.C0B16C8@keescook>
-References: <20230530092342.GA149947@hirez.programming.kicks-ass.net>
- <20230606094251.GA907347@hirez.programming.kicks-ass.net>
- <CAHk-=wi-RyoUhbChiVaJZoZXheAwnJ7OO=Gxe85BkPAd93TwDA@mail.gmail.com>
- <20230606134005.GE905437@hirez.programming.kicks-ass.net>
- <CAHk-=wgQ5m+SnWTYGHu0JgYXTk2dkGF+msX=ARfYoo3t1_fX9g@mail.gmail.com>
- <20230606180806.GA942082@hirez.programming.kicks-ass.net>
- <CAHk-=wgXN1YxGMUFeuC135aeUvqduF8zJJiZZingzS1Pao5h0A@mail.gmail.com>
- <20230607094101.GA964354@hirez.programming.kicks-ass.net>
- <20230608085248.GA1002251@hirez.programming.kicks-ass.net>
- <CAHk-=wj-BGgTF0YgY+L7_G8Jb0UO38Cd8dwrfMqFMEh93B3D7g@mail.gmail.com>
+        d=1e100.net; s=20221208; t=1686242898; x=1688834898;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zQLEV575N+KrNUGlsZrmx4zC48HUkepNutbY0RXCnbk=;
+        b=bhhCF/HSXdTU/BxkiOyYIBub8xM3gvEaYOsfKfD8Z4nP65g93TGgRMTw/VTrbm6uJQ
+         PeL4hkgEEG4Y8KzSSN/y1rzTCyc5bGxA9f//PHXSkeuK2SFLqhkCz2sw0kqYAwUC7Krd
+         TtyLXbl+hPhlaO8iVja/hJrhZXKhRUl4Wf9QxIqG7xeIB8RhnUEQqUB3vew4qM9Pz3tW
+         aegS/LGSlR5FFesHeBDWHXa9VBMimWCO5+ZTqRrIVxaC53mkeCwy2iAlgkIXB6NaPtvG
+         bc6YtuB2Utx8cqaPJloj2OYBAC1l/foeRTGALbw3YRgmIEk93W3SDl2LIFkNoHYVcaI+
+         7AmA==
+X-Gm-Message-State: AC+VfDzk5hJkXRW92hIHoPHVOamZBa+KDnhYdAOkjwTVtdlMPADBY0Aw
+        7IjoxwCcKEb09JQYDivO94g=
+X-Google-Smtp-Source: ACHHUZ4dJo9Yhk6pVGkaDe0tPdKFCQhHLtZW7L57ZwBBoQ377VxaNTldMtwjWar/LJ3Y+f0Y+1PTPw==
+X-Received: by 2002:adf:ea8c:0:b0:2f9:a798:602f with SMTP id s12-20020adfea8c000000b002f9a798602fmr10422192wrm.48.1686242898149;
+        Thu, 08 Jun 2023 09:48:18 -0700 (PDT)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id q11-20020a056000136b00b002f9e04459desm2023010wrz.109.2023.06.08.09.48.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Jun 2023 09:48:16 -0700 (PDT)
+Message-ID: <b7a19bb7-94e9-4837-c1dd-0ca891995efb@gmail.com>
+Date:   Thu, 8 Jun 2023 18:48:15 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wj-BGgTF0YgY+L7_G8Jb0UO38Cd8dwrfMqFMEh93B3D7g@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 1/5] ASoC: mediatek: mt8188-mt6359: Compress of_device_id
+ entries
+Content-Language: en-US, ca-ES, es-ES
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, broonie@kernel.org
+Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
+        trevor.wu@mediatek.com, amergnat@baylibre.com,
+        dan.carpenter@linaro.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, kernel@collabora.com
+References: <20230608084727.74403-1-angelogioacchino.delregno@collabora.com>
+ <20230608084727.74403-2-angelogioacchino.delregno@collabora.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20230608084727.74403-2-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 08, 2023 at 08:45:53AM -0700, Linus Torvalds wrote:
-> So for convenient automatic pointer freeing, you want an interface
-> much more akin to
+
+
+On 08/06/2023 10:47, AngeloGioacchino Del Regno wrote:
+> Those entries fit in one line: compress them to reduce line count.
+> While at it, also add the sentinel comment to the last entry.
 > 
->         struct whatever *ptr __automatic_kfree = kmalloc(...);
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
+Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+
+> ---
+>   sound/soc/mediatek/mt8188/mt8188-mt6359.c | 12 +++---------
+>   1 file changed, 3 insertions(+), 9 deletions(-)
 > 
-> which is much more legible, doesn't have any type mis-use issues, and
-> is also just trivially dealt with by a
-> 
->   static inline void automatic_kfree_wrapper(void *pp)
->   { void *p = *(void **)pp; if (p) kfree(p); }
->   #define __automatic_kfree \
->         __attribute__((__cleanup__(automatic_kfree_wrapper)))
->   #define no_free_ptr(p) \
->         ({ __auto_type __ptr = (p); (p) = NULL; __ptr; })
-> 
-> which I just tested generates the sane code even for the "set the ptr
-> to NULL and return success" case.
-> 
-> The above allows you to trivially do things like
-> 
->         struct whatever *p __automatic_kfree = kmalloc(..);
-> 
->         if (!do_something(p))
->                 return -ENOENT;
-> 
->         return no_free_ptr(p);
-
-I am a little worried about how (any version so far of) this API could go
-wrong, e.g. if someone uses this and does "return p" instead of "return
-no_free_ptr(p)", it'll return a freed pointer. I was hoping we could do
-something like this to the end of automatic_kfree_wrapper():
-
-	*(void **)pp = NULL;
-
-i.e. if no_free_ptr() goes missing, "return p" will return NULL, which
-is much easier to track down that dealing with later use-after-free bugs,
-etc. Unfortunately, the __cleanup ordering is _after_ the compiler stores
-the return value...
-
-static inline void cleanup_info(struct info **p)
-{
-	free(*p);
-	*p = NULL; /* this is effectively ignored */
-}
-
-struct info *do_something(int f)
-{
-	struct info *var __attribute__((__cleanup__(cleanup_info))) =
-		malloc(1024);
-
-	process(var);
-
-	return var; /* oops, forgot to disable cleanup */
-}
-
-compile down to:
-
-do_something:
-        pushq   %rbx
-        movl    $1024, %edi
-        call    malloc
-        movq    %rax, %rbx
-        movq    %rax, %rdi
-        call    process
-        movq    %rbx, %rdi
-        call    free
-        movq    %rbx, %rax	; uses saved copy of malloc return
-        popq    %rbx
-        ret
-
-The point being, if we can proactively make this hard to shoot ourselves in
-the foot, that would be nice. :)
-
--- 
-Kees Cook
+> diff --git a/sound/soc/mediatek/mt8188/mt8188-mt6359.c b/sound/soc/mediatek/mt8188/mt8188-mt6359.c
+> index bc4b74970a46..643a7a12a96b 100644
+> --- a/sound/soc/mediatek/mt8188/mt8188-mt6359.c
+> +++ b/sound/soc/mediatek/mt8188/mt8188-mt6359.c
+> @@ -1117,15 +1117,9 @@ static struct mt8188_card_data mt8188_nau8825_card = {
+>   };
+>   
+>   static const struct of_device_id mt8188_mt6359_dt_match[] = {
+> -	{
+> -		.compatible = "mediatek,mt8188-mt6359-evb",
+> -		.data = &mt8188_evb_card,
+> -	},
+> -	{
+> -		.compatible = "mediatek,mt8188-nau8825",
+> -		.data = &mt8188_nau8825_card,
+> -	},
+> -	{},
+> +	{ .compatible = "mediatek,mt8188-mt6359-evb", .data = &mt8188_evb_card, },
+> +	{ .compatible = "mediatek,mt8188-nau8825", .data = &mt8188_nau8825_card, },
+> +	{ /* sentinel */ },
+>   };
+>   MODULE_DEVICE_TABLE(of, mt8188_mt6359_dt_match);
+>   
