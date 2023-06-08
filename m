@@ -2,65 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F534727BB1
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 11:43:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A28E727BC8
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 11:45:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231384AbjFHJnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 05:43:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45344 "EHLO
+        id S234849AbjFHJpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 05:45:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233746AbjFHJni (ORCPT
+        with ESMTP id S236127AbjFHJox (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 05:43:38 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 58E5226AF
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 02:43:35 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8Bxa+rFooFkT3sAAA--.1850S3;
-        Thu, 08 Jun 2023 17:43:33 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bx+OTEooFkYS0HAA--.23186S3;
-        Thu, 08 Jun 2023 17:43:33 +0800 (CST)
-Message-ID: <6d5b5538-6ef3-a409-4a8f-bb9b54eb478c@loongson.cn>
-Date:   Thu, 8 Jun 2023 17:43:32 +0800
+        Thu, 8 Jun 2023 05:44:53 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930732720;
+        Thu,  8 Jun 2023 02:44:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1686217479; x=1717753479;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=N8BM0i5rppABoxdZHrQfySlcFcT+hRHiqGkgHCysC3w=;
+  b=yJtETtgTUK8XKpDatjdyWKaXZpW99/OOhy65lpZVdW8eeQaQ61DRM/zz
+   8boAVoqyqtypC3GYcdgt0An1E/Z0fk3BOKBZ4BqC0jWq6o2eSy92Fq+dd
+   n23AJstN+anuHqe6yW8k7plXCbedTLHGrr5PtsTYq48ZORWMficOtn2LQ
+   hbmjxdGuTXg4Wvci+8SiQrJRytAe8/v77TUrl601evlwZu+eFUTtBV9XJ
+   4SGY7Jg2M/8mx1HvFuXUJmLVqWMkpcSwGbpC5S/tEbqAK2YfXt01BOaJo
+   5aLy0nj4t3TfcqP2QafOEvkmUPQu+pKYwDy1xEFeEuPplub1vL/FBkHQX
+   Q==;
+X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
+   d="asc'?scan'208";a="219398130"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Jun 2023 02:44:38 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 8 Jun 2023 02:44:00 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Thu, 8 Jun 2023 02:43:57 -0700
+Date:   Thu, 8 Jun 2023 10:43:33 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     <stable@vger.kernel.org>, <patches@lists.linux.dev>,
+        <linux-kernel@vger.kernel.org>, <torvalds@linux-foundation.org>,
+        <akpm@linux-foundation.org>, <linux@roeck-us.net>,
+        <shuah@kernel.org>, <patches@kernelci.org>,
+        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
+        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
+        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>,
+        <rwarsow@gmx.de>
+Subject: Re: [PATCH 6.1 000/225] 6.1.33-rc1 review
+Message-ID: <20230608-boss-municipal-75220d1158f9@wendy>
+References: <20230607200913.334991024@linuxfoundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2] drm/logicvc: Kconfig: select REGMAP and REGMAP_MMIO
-To:     Andi Shyti <andi.shyti@linux.intel.com>
-Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20230608024207.581401-1-suijingfeng@loongson.cn>
- <ZIGAEZTJvq1GqFVD@aptenodytes>
- <aff664c7-b692-4fcf-ad61-8030cc648501@loongson.cn>
- <ZIGf6mKwX9RIm5a5@ashyti-mobl2.lan>
-Content-Language: en-US
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-Organization: Loongson
-In-Reply-To: <ZIGf6mKwX9RIm5a5@ashyti-mobl2.lan>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Bx+OTEooFkYS0HAA--.23186S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj93XoW7Xr13KFyrtw1DXF47GFy5KFX_yoW8JrWrpF
-        W8Ka4qyFs2vrWYkrn2yr12qFyYqr1rKrWaqr1q9rnrAFn0vr1Dtrs7ZrWUWr13WwnrKr4Y
-        vanrKay3Ga17C3gCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUU9Sb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-        xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx
-        1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv
-        67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07
-        AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C2
-        67AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI
-        8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWU
-        CwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r
-        1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBI
-        daVFxhVjvjDU0xZFpf9x07jYSoJUUUUU=
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="ZEKmY72Ta3DxAanB"
+Content-Disposition: inline
+In-Reply-To: <20230607200913.334991024@linuxfoundation.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,43 +71,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,  thanks for your reply and help.
+--ZEKmY72Ta3DxAanB
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 2023/6/8 17:31, Andi Shyti wrote:
-> Hi Jingfeng,
->
-> On Thu, Jun 08, 2023 at 03:24:54PM +0800, Sui Jingfeng wrote:
->> Hi,
->>
->> thanks a lot
->>
->> On 2023/6/8 15:15, Paul Kocialkowski wrote:
->>> Hi,
->>>
->>> On Thu 08 Jun 23, 10:42, Sui Jingfeng wrote:
->>>> drm/logicvc driver is depend on REGMAP and REGMAP_MMIO, should select this
->>>> two kconfig option, otherwise the driver failed to compile on platform
->>>> without REGMAP_MMIO selected:
->>>>
->>>> ERROR: modpost: "__devm_regmap_init_mmio_clk" [drivers/gpu/drm/logicvc/logicvc-drm.ko] undefined!
->>>> make[1]: *** [scripts/Makefile.modpost:136: Module.symvers] Error 1
->>>> make: *** [Makefile:1978: modpost] Error 2
->>>>
->>>> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
->>> Thanks for the fix, looks good to me!
->>>
->>> Acked-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
->> After received this Acked-by, do a need append this tag to the patch, and
->> resend this again?
->>
->> I don't know about this.
->>
->> I don't need to do anythings ales, you will push it to your repository,
->> right?
-> no need... someone will pick it up and add the needed tags.
-Thanks a lot. Happy coding! :-)
-> Andi
+On Wed, Jun 07, 2023 at 10:13:13PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.33 release.
+> There are 225 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 
--- 
-Jingfeng
+LGTM chief,
+Tested-by: Conor Dooley <conor.dooley@microchip.com>
 
+Thanks,
+Conor.
+
+--ZEKmY72Ta3DxAanB
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIGixQAKCRB4tDGHoIJi
+0g4OAP0admz+rz+U1D9Q80IclWoci4XliKC4AEdi2qw1ND5MJgD9FdaHOjJIjp8a
+bFi+2tRcU1mZvtECVwFIXKMrkwMRGwM=
+=OqD+
+-----END PGP SIGNATURE-----
+
+--ZEKmY72Ta3DxAanB--
