@@ -2,141 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60B267276CC
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 07:40:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 493157276D1
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 07:43:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234412AbjFHFkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 01:40:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41268 "EHLO
+        id S234418AbjFHFna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 01:43:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232715AbjFHFkq (ORCPT
+        with ESMTP id S230300AbjFHFn2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 01:40:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 068A326BF;
-        Wed,  7 Jun 2023 22:40:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 902836418E;
-        Thu,  8 Jun 2023 05:40:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 752AEC433EF;
-        Thu,  8 Jun 2023 05:40:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1686202844;
-        bh=POfumCNkG4/eHV7VEorM2PSmzQ4+NtSR08OkMtf7AdE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hq5eaEhbVrbY4qG8WYPW9iBJDazr+/a0fBtjAUb1Zob9G92vpEj3hm0Fx3R4Qxnl0
-         pwi3+YHZWQvdlwCdiQNCoa7mcq3bgHbZ7FZJQ7sZ09blCTwhKGasD3xdVEZokLCtfS
-         8QfaEr9H421++P4dWE7CCNxcrbnskSha9xAu6xjA=
-Date:   Thu, 8 Jun 2023 07:40:41 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Richard Fontana <rfontana@redhat.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Franziska Naepelt <franziska.naepelt@googlemail.com>,
-        Linux SPDX Licenses <linux-spdx@vger.kernel.org>,
-        Linux Kernel Janitors <kernel-janitors@vger.kernel.org>,
-        Linux Crypto <linux-crypto@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dan Carpenter <dan.carpenter@linaro.org>
-Subject: Re: [PATCH 8/8] crypto: cts: Convert MIT boilerplate to
- corresponding SPDX license identifier
-Message-ID: <2023060839-limpness-vessel-ccc7@gregkh>
-References: <20230607053940.39078-10-bagasdotme@gmail.com>
- <20230607053940.39078-18-bagasdotme@gmail.com>
- <CAC1cPGx-mD0DAEanCFtoxoGRyHkcu-GTTNX=ePzjhb8XM+73mg@mail.gmail.com>
- <ZIFn8mNXVcI0SGTR@debian.me>
+        Thu, 8 Jun 2023 01:43:28 -0400
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06F752690;
+        Wed,  7 Jun 2023 22:43:27 -0700 (PDT)
+Received: by mail-io1-xd2b.google.com with SMTP id ca18e2360f4ac-777ac4344f9so6293439f.0;
+        Wed, 07 Jun 2023 22:43:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686203006; x=1688795006;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XtolSZaJdXUNvdM4Rjo5o9rL0OX1LHOcqWzmGyfnXNs=;
+        b=P3Nk1tOCSxsMZ44I2T6MohGzDc4RG3rvbvMb972fw/dJOnk/VR6+0q5BolxNoYwDP5
+         y6PoAzcgjbWC1fPMy+yyx3GtPqFVawlkTap4+2zH71s90sfLrI5a5bbHzq6LG96W0jCe
+         laqTn8pVRk7AJnC6AvtZSAteNbRLuaZGLQJQt8mekLc86xCPrtQJYSkJqwcWioxsHJ0p
+         tKMxymLw5rrrJCehfxqWZtw8uIrIcnqtbGpRx7xgTqlvzXJCy73FF6h6OvhQqHfNeKGg
+         IHDDiYcE11j15RaDfeuonTiUVyXi1voTxODhUh0w+n4YmXNUugjqxQrzflo3O3vrLR1w
+         wv2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686203006; x=1688795006;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XtolSZaJdXUNvdM4Rjo5o9rL0OX1LHOcqWzmGyfnXNs=;
+        b=G0fX1DEwj4Vp8e3j+1wq3bDArAb+Eh81InapbR/InrCzrYgr8XlL1QcMnTsseinWGN
+         qCrOBl4fv7ErzBS3H85npixNzHW4SGQP1klAEAwrtgtVWQ/mWpj4GDMiKnEaPZZL69lq
+         dN0JzwOOi6UZEqSx8wVD+ZmH+c4kH+fFK9SEiyugXKfH0DwZn+u/Hw+iKLdV0OwngiJe
+         Z0PYyaZo8HDpGDIf7EQK9b99EhP732qxx36Jsv7qzokx9UeQGVbq03p/wHWwrZjdLDur
+         grirk2TipTGA8IEu6Mg3gNTIuNjUIuxwssryaSSkgznozAjYhGA2ojJiCbtekv9YAEAN
+         4Z6Q==
+X-Gm-Message-State: AC+VfDyVJAdwqaUYjbnlGOGlHXjWq3H/+vNbwHogO/RYOgZJ9FmJFJS9
+        tvmQPGST6ECIumrwsCw6dRQ=
+X-Google-Smtp-Source: ACHHUZ7+bfFyU+fEd9s1V1vdPHDfQF1iA8u1ua3PGiwhj/TUrkLp6wgyS4cycp/OFscGL5El97acMA==
+X-Received: by 2002:a92:da0d:0:b0:335:5bb2:6262 with SMTP id z13-20020a92da0d000000b003355bb26262mr7730875ilm.27.1686203006244;
+        Wed, 07 Jun 2023 22:43:26 -0700 (PDT)
+Received: from ryan-ThinkPad-T470.. (c-24-6-63-212.hsd1.ca.comcast.net. [24.6.63.212])
+        by smtp.gmail.com with ESMTPSA id v24-20020a62a518000000b0064d2ad04cbesm249641pfm.209.2023.06.07.22.43.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jun 2023 22:43:25 -0700 (PDT)
+From:   =?UTF-8?q?=E2=80=9CRyan?= <ryan.lee.analog@gmail.com>
+To:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, perex@perex.cz, tiwai@suse.com,
+        rf@opensource.cirrus.com, ryans.lee@analog.com,
+        wangweidong.a@awinic.com, shumingf@realtek.com,
+        herve.codina@bootlin.com, ckeepax@opensource.cirrus.com,
+        doug@schmorgal.com, ajye_huang@compal.corp-partner.google.com,
+        kiseok.jo@irondevice.com, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     venkataprasad.potturu@amd.com
+Subject: [PATCH 1/2] ASoC: dt-bindings: max98388: add amplifier driver
+Date:   Wed,  7 Jun 2023 22:42:29 -0700
+Message-Id: <20230608054230.344014-1-ryan.lee.analog@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZIFn8mNXVcI0SGTR@debian.me>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 08, 2023 at 12:32:34PM +0700, Bagas Sanjaya wrote:
-> On Wed, Jun 07, 2023 at 09:47:33AM -0400, Richard Fontana wrote:
-> > On Wed, Jun 7, 2023 at 1:41 AM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
-> > >
-> > > License boilerplate in CTS mode implementation (crypto/cts.c) looks like
-> > > MIT license with advertising clause. Replace it with correspondig
-> > > SPDX tag.
-> > >
-> > > Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
-> > > ---
-> > >  crypto/cts.c | 24 +-----------------------
-> > >  1 file changed, 1 insertion(+), 23 deletions(-)
-> > >
-> > > diff --git a/crypto/cts.c b/crypto/cts.c
-> > > index 8f604f6554b1c3..9ec7e9787c0f6a 100644
-> > > --- a/crypto/cts.c
-> > > +++ b/crypto/cts.c
-> > > @@ -1,3 +1,4 @@
-> > > +// SPDX-License-Identifier: MIT
-> > >  /*
-> > >   * CTS: Cipher Text Stealing mode
-> > >   *
-> > > @@ -5,29 +6,6 @@
-> > >   * The Regents of the University of Michigan
-> > >   * ALL RIGHTS RESERVED
-> > >   *
-> > > - * Permission is granted to use, copy, create derivative works
-> > > - * and redistribute this software and such derivative works
-> > > - * for any purpose, so long as the name of The University of
-> > > - * Michigan is not used in any advertising or publicity
-> > > - * pertaining to the use of distribution of this software
-> > > - * without specific, written prior authorization.  If the
-> > > - * above copyright notice or any other identification of the
-> > > - * University of Michigan is included in any copy of any
-> > > - * portion of this software, then the disclaimer below must
-> > > - * also be included.
-> > > - *
-> > > - * THIS SOFTWARE IS PROVIDED AS IS, WITHOUT REPRESENTATION
-> > > - * FROM THE UNIVERSITY OF MICHIGAN AS TO ITS FITNESS FOR ANY
-> > > - * PURPOSE, AND WITHOUT WARRANTY BY THE UNIVERSITY OF
-> > > - * MICHIGAN OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING
-> > > - * WITHOUT LIMITATION THE IMPLIED WARRANTIES OF
-> > > - * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE
-> > > - * REGENTS OF THE UNIVERSITY OF MICHIGAN SHALL NOT BE LIABLE
-> > > - * FOR ANY DAMAGES, INCLUDING SPECIAL, INDIRECT, INCIDENTAL, OR
-> > > - * CONSEQUENTIAL DAMAGES, WITH RESPECT TO ANY CLAIM ARISING
-> > > - * OUT OF OR IN CONNECTION WITH THE USE OF THE SOFTWARE, EVEN
-> > > - * IF IT HAS BEEN OR IS HEREAFTER ADVISED OF THE POSSIBILITY OF
-> > > - * SUCH DAMAGES.
-> > >   */
-> > 
-> > This is not the MIT license (as defined by SPDX) - there may not be an
-> > SPDX identifier covering this license text.
-> > 
-> > This is at least the second time in your recent patches where you have
-> > assumed that a non-GPL license corresponds to a particular SPDX
-> > identifier without (apparently) checking.
-> > 
-> 
-> I was thought of interpolating license tags (heuristic matching) in
-> cases like this. In this case, the UoMi license was adapted from
-> (and roughly resembled) MIT (hence I thought of MIT variant).
+From: Ryan Lee <ryans.lee@analog.com>
 
-Nope, licenses don't always work that way, sorry.
+Add dt-bindings information for Analog Devices MAX98388 I2S Amplifier
 
-> Greg, is Richard's comment right? If so, I'll drop this patch.
+Signed-off-by: Ryan Lee <ryans.lee@analog.com>
+---
+ .../bindings/sound/adi,max98388.yaml          | 79 +++++++++++++++++++
+ 1 file changed, 79 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/sound/adi,max98388.yaml
 
-Yes it is, please ask for all of these to not be applied.
+diff --git a/Documentation/devicetree/bindings/sound/adi,max98388.yaml b/Documentation/devicetree/bindings/sound/adi,max98388.yaml
+new file mode 100644
+index 000000000000..fc0ac8d8c3ae
+--- /dev/null
++++ b/Documentation/devicetree/bindings/sound/adi,max98388.yaml
+@@ -0,0 +1,79 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/sound/adi,max98388.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Analog Devices MAX98388 Speaker Amplifier
++
++maintainers:
++  - Ryan Lee <ryans.lee@analog.com>
++
++description:
++  The MAX98388 is a mono Class-D speaker amplifier with I/V feedback.
++  The device provides a PCM interface for audio data and a standard
++  I2C interface for control data communication.
++
++allOf:
++  - $ref: dai-common.yaml#
++
++properties:
++  compatible:
++    enum:
++      - adi,max98388
++  reg:
++    maxItems: 1
++    description: I2C address of the device.
++
++  '#sound-dai-cells':
++    const: 0
++
++  adi,vmon-slot-no:
++    description: slot number of the voltage feedback monitor
++    $ref: "/schemas/types.yaml#/definitions/uint32"
++    minimum: 0
++    maximum: 15
++    default: 0
++
++  adi,imon-slot-no:
++    description: slot number of the current feedback monitor
++    $ref: "/schemas/types.yaml#/definitions/uint32"
++    minimum: 0
++    maximum: 15
++    default: 1
++
++  adi,interleave-mode:
++    description:
++      For cases where a single combined channel for the I/V feedback data
++      is not sufficient, the device can also be configured to share
++      a single data output channel on alternating frames.
++      In this configuration, the current and voltage data will be frame
++      interleaved on a single output channel.
++    type: boolean
++
++  reset-gpios:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - "#sound-dai-cells"
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++        max98388: amplifier@39 {
++            compatible = "adi,max98388";
++            reg = <0x39>;
++            #sound-dai-cells = <0>;
++            adi,vmon-slot-no = <0>;
++            adi,imon-slot-no = <1>;
++            adi,interleave-mode;
++            reset-gpios = <&gpio 4 GPIO_ACTIVE_LOW>;
++        };
++    };
+-- 
+2.34.1
 
-There's a reason that we didn't do all of these in the first big sweep
-of the kernel tree, as you are finding out :(
-
-thanks,
-
-greg k-h
