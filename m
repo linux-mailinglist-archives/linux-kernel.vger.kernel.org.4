@@ -2,144 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 214D57288A6
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 21:34:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7978F7288AF
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 21:34:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235748AbjFHTdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 15:33:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47548 "EHLO
+        id S229753AbjFHTex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 15:34:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233740AbjFHTds (ORCPT
+        with ESMTP id S236744AbjFHTes (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 15:33:48 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A142129
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 12:33:46 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id 3f1490d57ef6-bad1ae90c2eso1048596276.2
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 12:33:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686252825; x=1688844825;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Tza8VZpBdDATlz3Dj70XvbHnC1ZhEpBq1MlG3gUrqGw=;
-        b=1MipXBHlCgYLfuzhfDW5ZwUI8FUsKSE60AsqsEXw+S0tSnJg5UOmjRzYFHDLdCAJt8
-         yMkipeQIgxyZw78rcQRYlMT5UpzdJcWoIksfCpz/ydUZz6ZkI9xKVrX6kds0LvhIjEzt
-         HS+XptOf+RYBmq4zm9J7IFzhbS7dVhum1cFHfBZOiQ+s0XEOXeKn/G9+gcrTCmXECFnx
-         8UoS3IHRM3ERDzeB2SU7OV6jhVelmg9iMKHzFrc8fJmEIq5uTYUBI9N7JZJvtQPChnnD
-         4+2NEzxtpjJGm4NjJthMMPpAkAfI8kDJwzbA28gjtv0iKudNeA4e3nFqgNhPbC/JEIjR
-         C7cA==
+        Thu, 8 Jun 2023 15:34:48 -0400
+Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 320FA1FEB;
+        Thu,  8 Jun 2023 12:34:47 -0700 (PDT)
+Received: by mail-io1-f43.google.com with SMTP id ca18e2360f4ac-77abe33790dso48775439f.2;
+        Thu, 08 Jun 2023 12:34:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686252825; x=1688844825;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Tza8VZpBdDATlz3Dj70XvbHnC1ZhEpBq1MlG3gUrqGw=;
-        b=Twer0s44dElTE3uNPUEoqE5JQ1P7NO04rkW6LjQTMWbYcqV1HtZU/OXQLueyoVd8YR
-         UBThm0Kt2+MseRv09KO0T/wTC7uDQevW9oSol5QsqVFg3EPem1w5ez2OmIOpGa5xSm7X
-         7R2h4SxhF5hGQcSFgMR46r6EIqtTJG3ATnK6MEJfu4wibUAMNSWI3S3JOV6jLZ6aVt87
-         +4U9VzT9+c3LPrAZQlUeVA0R1tM5kgQkBFEzTEb9R6LXzFatZmGHcRlDo23vfz8VGCZ1
-         Mh75niEOB90NkOEwDzrBkslVF8mBZm/nXusIyjttS9efDDhAht/2eqf/e6FV8fVt8XN9
-         1gdw==
-X-Gm-Message-State: AC+VfDxMNCOQRDDBil23XPwoUJhL8yuSTmSpIqmDTB9VwfS1R1gTybXX
-        APD7EnH6X2ymKUAb84qw08NUmg==
-X-Google-Smtp-Source: ACHHUZ5fRes1KtQJuT48o2Wy/FuADD12yA75OXTij0wfUrs7MG5//8NY8cIlqChq28IRelwNgydDPg==
-X-Received: by 2002:a25:868e:0:b0:bad:1055:c9fd with SMTP id z14-20020a25868e000000b00bad1055c9fdmr569763ybk.49.1686252825296;
-        Thu, 08 Jun 2023 12:33:45 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id e188-20020a251ec5000000b00baca49c80dcsm448503ybe.28.2023.06.08.12.33.41
+        d=1e100.net; s=20221208; t=1686252886; x=1688844886;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=y/Dn/9w//ldnFJmGHUjdUeSElg5i3vFl3qGg/nc2Jxo=;
+        b=ADDcqn0tQa2izY5l+VRDppHXV+ePze/6fD2iSqy9YIv1ewBo98vA+ieqpZvuHh99MI
+         fueqUeZScSJz1VeZc8oGccPRwmdGQnMNlIEBvTu7h0Q5fyb717ArXL2iHvopz+JrUnrD
+         hc5zhq4A/7psgNzJ0vc/f6xzXucPWQBiQ1OsNUGmSH1goKFrnmHnvXvIVa7cNINm0/Nt
+         QEX5vkS1n8LkXhyMKq0zXLAV+deX1/bQGFuDDJhkIZTrGh2m93mP0nN0EYsDOGmlOoNx
+         R1rzCQZ79j7m8GPXFmR+nVqTiBAHDdwiyWfJlpv1JhDXXcDel3TpS+Y+MMHGcZiMo0wE
+         8fHA==
+X-Gm-Message-State: AC+VfDwE2TKx1Niph92ajRjvkMwCBCnwv9rhJnnYGnF55c26vbZ4r87H
+        EhWNKkN2H7DrzBL+1rkB0r/mi4X87Q==
+X-Google-Smtp-Source: ACHHUZ6iNVMDWj26J2ozDnsxCBhdo+w3DbXacc5k85jb6cr0VrqHuO3JXb6s15YRW3o4BzD24cU+ig==
+X-Received: by 2002:a5e:8d0d:0:b0:76c:595a:6b5f with SMTP id m13-20020a5e8d0d000000b0076c595a6b5fmr7700426ioj.20.1686252886418;
+        Thu, 08 Jun 2023 12:34:46 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id t25-20020a6b0919000000b0077a1d1029fcsm549664ioi.28.2023.06.08.12.34.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 12:33:44 -0700 (PDT)
-Date:   Thu, 8 Jun 2023 12:33:40 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Andrew Morton <akpm@linux-foundation.org>
-cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Helge Deller <deller@gmx.de>,
-        John David Anglin <dave.anglin@bell.net>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH v2 20/23] sparc: iounit and iommu use pte_offset_kernel()
-In-Reply-To: <a4963be9-7aa6-350-66d0-2ba843e1af44@google.com>
-Message-ID: <99962272-12ff-975d-bf7f-7fd5d95a2df5@google.com>
-References: <a4963be9-7aa6-350-66d0-2ba843e1af44@google.com>
+        Thu, 08 Jun 2023 12:34:45 -0700 (PDT)
+Received: (nullmailer pid 3274931 invoked by uid 1000);
+        Thu, 08 Jun 2023 19:34:43 -0000
+Date:   Thu, 8 Jun 2023 13:34:43 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Conor Dooley <conor@kernel.org>, marius.cristea@microchip.com,
+        lars@metafoo.de, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: iio: adc: adding MCP3564 ADC
+Message-ID: <20230608193443.GA3261675-robh@kernel.org>
+References: <20230519160145.44208-1-marius.cristea@microchip.com>
+ <20230519160145.44208-2-marius.cristea@microchip.com>
+ <20230519-variably-direction-cfa9a034e844@spud>
+ <20230520161753.28a8c128@jic23-huawei>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230520161753.28a8c128@jic23-huawei>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-iounit_alloc() and sbus_iommu_alloc() are working from pmd_off_k(),
-so should use pte_offset_kernel() instead of pte_offset_map(), to avoid
-the question of whether a pte_unmap() will be needed to balance.
+On Sat, May 20, 2023 at 04:17:53PM +0100, Jonathan Cameron wrote:
+> On Fri, 19 May 2023 19:29:15 +0100
+> Conor Dooley <conor@kernel.org> wrote:
+> 
+> > Hey Marius,
+> > 
+> > On Fri, May 19, 2023 at 07:01:44PM +0300, marius.cristea@microchip.com wrote:
+> > > From: Marius Cristea <marius.cristea@microchip.com>
+> > > 
+> > > This is the device tree schema for iio driver for
+> > > Microchip family of 153.6 ksps, Low-Noise 16/24-Bit
+> > > Delta-Sigma ADCs with an SPI interface.  
+> > 
+> > Just one quick process bit, please try to CC all of the maintainers
+> > listed by get_maintainer.pl - you unfortunately managed to miss 2 of the
+> > 3 dt-binding maintainers :/ Perhaps you ran get_maintainer.pl using our
+> > vendor tree?
+> > 
+> > > Signed-off-by: Marius Cristea <marius.cristea@microchip.com>
+> > > ---  
+> > 
+> > > +  vref-supply:
+> > > +    description:
+> > > +      Some devices have a specific reference voltage supplied on a different
+> > > +      pin to the other supplies. Needed to be able to establish channel scaling
+> > > +      unless there is also an internal reference available (e.g. mcp3564r)  
+> > 
+> > Should this be marked as a required property for the non-r devices that
+> > do not have an internal reference?
+> > 
+> > > +  microchip,hw-device-address:  
+> > 
+> > Hopefully Rob or Jonathan etc can chime in as to whether a common
+> > property exists for this type of thing...
+> > 
+> Nope. This is a new one for me - there are devices that work on a daisy chain
+> principle but I think this one works by encoding stuff in the actual message
+> which is unusual for SPI.
 
-Signed-off-by: Hugh Dickins <hughd@google.com>
----
- arch/sparc/mm/io-unit.c | 2 +-
- arch/sparc/mm/iommu.c   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Not something I've seen either.
 
-diff --git a/arch/sparc/mm/io-unit.c b/arch/sparc/mm/io-unit.c
-index bf3e6d2fe5d9..133dd42570d6 100644
---- a/arch/sparc/mm/io-unit.c
-+++ b/arch/sparc/mm/io-unit.c
-@@ -244,7 +244,7 @@ static void *iounit_alloc(struct device *dev, size_t len,
- 			long i;
- 
- 			pmdp = pmd_off_k(addr);
--			ptep = pte_offset_map(pmdp, addr);
-+			ptep = pte_offset_kernel(pmdp, addr);
- 
- 			set_pte(ptep, mk_pte(virt_to_page(page), dvma_prot));
- 
-diff --git a/arch/sparc/mm/iommu.c b/arch/sparc/mm/iommu.c
-index 9e3f6933ca13..3a6caef68348 100644
---- a/arch/sparc/mm/iommu.c
-+++ b/arch/sparc/mm/iommu.c
-@@ -358,7 +358,7 @@ static void *sbus_iommu_alloc(struct device *dev, size_t len,
- 				__flush_page_to_ram(page);
- 
- 			pmdp = pmd_off_k(addr);
--			ptep = pte_offset_map(pmdp, addr);
-+			ptep = pte_offset_kernel(pmdp, addr);
- 
- 			set_pte(ptep, mk_pte(virt_to_page(page), dvma_prot));
- 		}
--- 
-2.35.3
+> 
+> > > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > > +    minimum: 0
+> > > +    maximum: 3
+> > > +    description:
+> > > +      The address is set on a per-device basis by fuses in the factory,
+> > > +      configured on request. If not requested, the fuses are set for 0x1.
+> > > +      The device address is part of the device markings to avoid
+> > > +      potential confusion. This address is coded on two bits, so four possible
+> > > +      addresses are available when multiple devices are present on the same
+> > > +      SPI bus with only one Chip Select line for all devices.  
 
+What's this going to look like with more than one device? It would need 
+to be incorporated into 'reg' and the unit-address to work. Something 
+like this is 
+
+spi {
+  device0@0 {
+    reg = <0>;
+    microchip,hw-device-address = <0>;
+  };
+
+  device1@0 {
+    reg = <0>;
+    microchip,hw-device-address = <1>;
+  };
+};
+
+That should throw warnings because you have 2 nodes at the same address 
+which is not good practice.
+
+I think you need a spi mux in here with the mux addresses being the 
+microchip,hw-device-address values.
+
+Rob
