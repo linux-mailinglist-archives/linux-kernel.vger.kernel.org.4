@@ -2,129 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22442727547
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 04:51:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C68E8727548
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 04:51:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233807AbjFHCv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 22:51:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51534 "EHLO
+        id S233852AbjFHCvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 22:51:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233803AbjFHCvU (ORCPT
+        with ESMTP id S233812AbjFHCvV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 22:51:20 -0400
-Received: from mail-vk1-xa34.google.com (mail-vk1-xa34.google.com [IPv6:2607:f8b0:4864:20::a34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 064BA1FF7;
-        Wed,  7 Jun 2023 19:51:16 -0700 (PDT)
-Received: by mail-vk1-xa34.google.com with SMTP id 71dfb90a1353d-463fdee669cso147754e0c.0;
-        Wed, 07 Jun 2023 19:51:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686192675; x=1688784675;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+4iCMufvU+mSHmPOmnXMCrZIm6v3t8Nrs/bcmlqQqCU=;
-        b=JKRyNhZ8bTG0BgOBUtLCvd/63nTwEAMUi/YoZ+JabRgc64hK9Jc+/4gll1b5cpxVJL
-         waD71aWa0V2zpn9hL3NEPyYfvpn7+P89wrGyqNBS0zicSX1lktF+PYXW3KPFICXk+4aG
-         6wm2GA80Vg53vRio3rR9tahUCTNPr9d1RerNYpnYjmgmIyWqlOnXgCYmKEIj4htcq/DP
-         Wf9tEpi0xGKs6DG/OCxjNKHEhPLRnz2IQE2X4aXwAwORBeRfuweY5cQ+4cdKkvUrt/HV
-         olB7OkwTLiY6CdMtC9eZ3xqDqD/VcctKbhvpilS2X6K/zlhil9ucXV4Zfo7eRjXfnw1c
-         nzRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686192675; x=1688784675;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+4iCMufvU+mSHmPOmnXMCrZIm6v3t8Nrs/bcmlqQqCU=;
-        b=agmBw+imyaYEfFTqpsDeqmjOm2XIrUWVlU2I2F+M1m6WJQfKC9qYBSq8XG/ChgUMQt
-         crosi2b7E7sp4JpBGuDNiSLtFWny6sOBsmDsb+QKcY6eEGPX3MysDxe07LEwhiAxwe+q
-         l3iZj0xxu4oO0wQ5CWAlbP7tUn3zm1yTXMxPAsUCS1nlpYrP7r3oAmkP3+sbkatA3VeF
-         k1z/hWEGFb+J5dMDtFiTfAdCNC7i47IBp6hl+mmKRyPXeSca++SOBv+bvTsFpq3GzuyJ
-         mZonERQQ3iyGhg1n1OsE+gjvrovh/5i/T/V/g/CkWKAueGG8oC/eArLlSJoq3haxXye/
-         LwEw==
-X-Gm-Message-State: AC+VfDwWoVRRkg0JmxVwf0ND3/J+cLr3PmyUHCBbx1uKp25JBIvaJKTB
-        OobtJ+i4wuJxYPgobFgKzeWBtNgfsGUrZ6n+IGShD/g+jIk=
-X-Google-Smtp-Source: ACHHUZ45xdz52r6mci4tsf4hW5WjVNgXix00zbT41XCQNvK3y33Ok0aCpKw5aIYWRfWbw+QdwBYs5ZW/gUGomuqLCp0=
-X-Received: by 2002:a1f:4551:0:b0:440:4946:fac with SMTP id
- s78-20020a1f4551000000b0044049460facmr407809vka.4.1686192674953; Wed, 07 Jun
- 2023 19:51:14 -0700 (PDT)
+        Wed, 7 Jun 2023 22:51:21 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A16E31BDF;
+        Wed,  7 Jun 2023 19:51:17 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id AD50832007BE;
+        Wed,  7 Jun 2023 22:51:15 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Wed, 07 Jun 2023 22:51:16 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=who-t.net; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1686192675; x=1686279075; bh=fe
+        G13tHn2eFFa/kfOQnMAGH3Yu0x2pEJQhtv4nEbQgY=; b=oGSi83rhDGLe3v8JDu
+        hvAZ6SSI/Rj1lort7dp9CaDIuwuJOtfd4sM1idvqDee/bvTgpHUm76q5wKliAay5
+        14+rkSI8xc8mof0elbKdBA12/yNFSUuxEKGRAhzmeTzxqxrnce+Rao3hI9j7rlH2
+        nxQACgTw2T1vwa0pFrY8iw+VRjlAOoKjXQan4c77avGk+siJYBat3R8E6c0qj3s1
+        RFHKhFmznH20qgGAWwBpNhpCBl8r7GnvePwDYIySSHXfhGJo/XT4yiquyuXMEQ9g
+        AgTebApTlFcMm6/0izRFoX8gB21MZqwWvVn7/XPIJags0ku+5EbTFBdngb1KBewl
+        HEsQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1686192675; x=1686279075; bh=feG13tHn2eFFa
+        /kfOQnMAGH3Yu0x2pEJQhtv4nEbQgY=; b=EoIgrdkOh/4UTUBOd/IsLvhFDhfNz
+        PqlxYPnmzEffPTME77d205NcE28ebANJ2uw1usiQv76+Inv4T8BtaS+MOdH3q6i/
+        8hEyfGm1Tbs+XSWhJt99+xvKVxtgb2A+qT6wT4gGpLXtDqNX5k3/kZ5pCH0q9gNv
+        GHs65Nnc4VJTgI7vbdLkN1xVKWdjmzTLogSZ3SmrI05dnWoZeCWZyaIDZXXV5ED5
+        bikx6+1YFsPNMTYS/LmtWJIQp8lnP4nmX6kL4T80pjolnVhIsrIirGl02ylWKzua
+        k8m5rSW8KuT5Loqpuv+StmP0t1j36JuKyOtcDbsPjFkVSKzmRv+1b9beA==
+X-ME-Sender: <xms:I0KBZPYUwZUi_jJc2AlClMK4xWOkuzPaeJQ6l8iFxqqlQk1sM-R1sA>
+    <xme:I0KBZOYMySpr2kyYK_mX3MVx4Dv97HlZNZIt_eocZbIgW6TgOwNP_v3pXQ5SCi2b5
+    o6tTMNscLbHunAw6WQ>
+X-ME-Received: <xmr:I0KBZB96mSiPonHl8Mgk7gOhOOvHuEugtykpubXHvN_57Li6ALO1KOkqnkFn5Sg1HppcN-HaNFSHyTQS60LXhtaQ04hEka2LQAJO>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedthedgieefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomheprfgvthgv
+    rhcujfhuthhtvghrvghruceophgvthgvrhdrhhhuthhtvghrvghrseifhhhoqdhtrdhnvg
+    htqeenucggtffrrghtthgvrhhnpeefgfejvefgudfhfeevudekueegtdeutdejhffhhfdv
+    keejhfehheefgfehteejffenucffohhmrghinhepfhhrvggvuggvshhkthhophdrohhrgh
+    enucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehpvght
+    vghrrdhhuhhtthgvrhgvrhesfihhohdqthdrnhgvth
+X-ME-Proxy: <xmx:I0KBZFpFiOh9JY8VoFEgngsxAix05PFdCk1qvSLxIg7NcGhmBzhHHQ>
+    <xmx:I0KBZKonkKce1iWDK9ii14ds5jWX8NwOlXAQ7Por3FMO3k8waRaGjQ>
+    <xmx:I0KBZLQ7olkUZQApq3fNcSyHR68Kk7qnliE_cf4A_E0Rrb77SQ_Edg>
+    <xmx:I0KBZKKcx3nGlpxkBKL6HtWkyzmOcNtA1MqkLdpc9MQCuudEZSBZJg>
+Feedback-ID: i7ce144cd:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 7 Jun 2023 22:51:12 -0400 (EDT)
+Date:   Thu, 8 Jun 2023 12:51:06 +1000
+From:   Peter Hutterer <peter.hutterer@who-t.net>
+To:     Jason Gerecke <killertofu@gmail.com>
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Ping Cheng <pinglinux@gmail.com>,
+        Aaron Armstrong Skomra <skomra@gmail.com>,
+        Joshua Dickens <Joshua@joshua-dickens.com>,
+        Jason Gerecke <jason.gerecke@wacom.com>
+Subject: Re: [PATCH] HID: wacom: Use ktime_t rather than int when dealing
+ with timestamps
+Message-ID: <20230608025106.GA4142460@quokka>
+References: <20230607214102.2113-1-jason.gerecke@wacom.com>
 MIME-Version: 1.0
-References: <20230606051217.2064-1-iecedge@gmail.com> <6ad5fba3-926a-7a23-b21b-abffd33708be@acm.org>
- <CAFA-uR_Zn4MdFKs6U6dqPjuVS60yN4RcYU4jJzjknqy7-RWyEQ@mail.gmail.com> <e9b8b9c5-f400-9152-0f4b-537b05203dd2@acm.org>
-In-Reply-To: <e9b8b9c5-f400-9152-0f4b-537b05203dd2@acm.org>
-From:   Jianlin Lv <iecedge@gmail.com>
-Date:   Thu, 8 Jun 2023 10:51:03 +0800
-Message-ID: <CAFA-uR83jHJsDXnn-3LWcrw251S4MizHC_JPJssYrgoD6kLoAg@mail.gmail.com>
-Subject: Re: [PATCH] scsi: sd: support specify probe type of build-in driver
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com, paulmck@kernel.org,
-        bp@suse.de, peterz@infradead.org, will@kernel.org,
-        rdunlap@infradead.org, kim.phillips@amd.com, rostedt@goodmis.org,
-        wyes.karny@amd.com, jianlv@ebay.com, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-scsi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230607214102.2113-1-jason.gerecke@wacom.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 8, 2023 at 1:07=E2=80=AFAM Bart Van Assche <bvanassche@acm.org>=
- wrote:
->
-> On 6/7/23 08:55, Jianlin Lv wrote:
-> > 1. MegaRAID adapters associated with 24 local disks. The disks are name=
-d
-> > sequentially as "sda," "sdb," and so on, up to "sdx."
-> > 2. STAT controllers associated with the root disk, named "sdy."
-> >
-> > Both the MegaRAID adapters and the SATA controller (PCH) are accessed v=
-ia
-> > the PCIe bus. In theory, depending on their PCIe bus ID in ascending or=
-der,
-> > the devices should be initialized in ascending order as well.
->
-> Hmm ... I don't think there is anything that prevents the PCIe maintainer
-> from changing the PCIe probing behavior from synchronous to asynchronous?
-> In other words, I don't think it is safe to assume that PCIe devices are
-> always scanned in the same order.
->
-> > For cloud deployment, the local volume provisioner detects and creates =
-PVs
-> > for each local disk (from sda to sdx) on the host, and it cleans up the
-> > disks when they are released.
-> > This requires the logical names of the disks to be deterministic.
->
-> I see two possible solutions:
-> - Change the volume provisioner such that it uses disk references that do
->    not depend on the probing order, e.g. /dev/disk/by-id/...
+On Wed, Jun 07, 2023 at 02:41:02PM -0700, Jason Gerecke wrote:
+> Code which interacts with timestamps needs to use the ktime_t type
+> returned by functions like ktime_get. The int type does not offer
+> enough space to store these values, and attempting to use it is a
+> recipe for problems. In this particular case, overflows would occur
+> when calculating/storing timestamps leading to incorrect values being
+> reported to userspace. In some cases these bad timestamps cause input
+> handling in userspace to appear hung.
+> 
+> Link: https://gitlab.freedesktop.org/libinput/libinput/-/issues/901
+> Fixes: 17d793f3ed53 ("HID: wacom: insert timestamp to packed Bluetooth (BT) events")
+> Signed-off-by: Jason Gerecke <jason.gerecke@wacom.com>
 
-Yes, The "/dev/disk/by-id/" can uniquely identify SCSI devices. However,
-I don't think it is suitable for the volume provisioner workflow.
-For nodes of the same SKU , a unified YAML file will be defined to instruct
-the volume provisioner on how to manage the local disks.
-If use WWID, it would mean that a unique YAML file needs to be defined
-for each node. This approach becomes impractical when dealing with a large
-number of work nodes.
+Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
 
-Jianlin
+Cheers,
+  Peter
 
-> - Implement an algorithm in systemd that makes disk names predictable.
->    An explanation of how predictable names work for network interfaces is
->    available here: https://wiki.debian.org/NetworkInterfaceNames. The
->    systemd documentation about predictable network names is available her=
-e:
->    https://www.freedesktop.org/software/systemd/man/systemd.net-naming-sc=
-heme.html
->
-> These alternatives have the advantage that disk scanning remains asynchro=
-nous.
->
-> Thanks,
->
-> Bart.
->
+> ---
+>  drivers/hid/wacom_wac.c | 4 ++--
+>  drivers/hid/wacom_wac.h | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/hid/wacom_wac.c b/drivers/hid/wacom_wac.c
+> index 2ccf83837134..2f16e47e4b69 100644
+> --- a/drivers/hid/wacom_wac.c
+> +++ b/drivers/hid/wacom_wac.c
+> @@ -1314,7 +1314,7 @@ static void wacom_intuos_pro2_bt_pen(struct wacom_wac *wacom)
+>  	struct input_dev *pen_input = wacom->pen_input;
+>  	unsigned char *data = wacom->data;
+>  	int number_of_valid_frames = 0;
+> -	int time_interval = 15000000;
+> +	ktime_t time_interval = 15000000;
+>  	ktime_t time_packet_received = ktime_get();
+>  	int i;
+>  
+> @@ -1359,7 +1359,7 @@ static void wacom_intuos_pro2_bt_pen(struct wacom_wac *wacom)
+>  		bool range = frame[0] & 0x20;
+>  		bool invert = frame[0] & 0x10;
+>  		int frames_number_reversed = number_of_valid_frames - i - 1;
+> -		int event_timestamp = time_packet_received - frames_number_reversed * time_interval;
+> +		ktime_t event_timestamp = time_packet_received - frames_number_reversed * time_interval;
+>  
+>  		if (!valid)
+>  			continue;
+> diff --git a/drivers/hid/wacom_wac.h b/drivers/hid/wacom_wac.h
+> index 1a40bb8c5810..ee21bb260f22 100644
+> --- a/drivers/hid/wacom_wac.h
+> +++ b/drivers/hid/wacom_wac.h
+> @@ -324,7 +324,7 @@ struct hid_data {
+>  	int ps_connected;
+>  	bool pad_input_event_flag;
+>  	unsigned short sequence_number;
+> -	int time_delayed;
+> +	ktime_t time_delayed;
+>  };
+>  
+>  struct wacom_remote_data {
+> -- 
+> 2.41.0
+> 
