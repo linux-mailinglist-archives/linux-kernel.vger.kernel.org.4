@@ -2,87 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EDB5728BAC
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 01:20:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E566728BAF
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Jun 2023 01:24:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237008AbjFHXUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 19:20:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42658 "EHLO
+        id S237023AbjFHXYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 19:24:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236744AbjFHXUC (ORCPT
+        with ESMTP id S229888AbjFHXYE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 19:20:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA97B30D0;
-        Thu,  8 Jun 2023 16:20:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 63A5C60B9C;
-        Thu,  8 Jun 2023 23:20:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9452C433EF;
-        Thu,  8 Jun 2023 23:19:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686266399;
-        bh=gNWzo0d9k285yqJ8343FYMMw+n7NS2BmOugvX2V0Ji4=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=CA4pzCm+6mlNQVfNfEDag0XzljC6cfKu+PqT5l6t8GKJ6NGlZeiHGUJr+CnONQDlA
-         Cxj2Zobn+zQbQQO27nvBbTBMNKzC8ytYlap3oYrEOTmLQi7KWIj8Tw97hZW8jSseLB
-         u+Y2Ze8goJdUkgMec9T+K3L8O+hZ6/9KzJupowAaBHXhRuHNYxp7+HkQJ0+RsS0SeK
-         0AiPMeQK1FAFe1GZXfFMhW+tx9L+nM4htHuYSuEMQcP/b+tBzecABFuAHR2LzR+Mxi
-         Q2onTKpdzdjG3vJa2OFjL9C2FKAr4shGeW45NcYgFUg1MOTDCmJHOtsNZrHoRBKldq
-         A2dG2IxKIrfpw==
-Message-ID: <0447c70d63e13d239bdda839e966bd89.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+        Thu, 8 Jun 2023 19:24:04 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91D5330D4;
+        Thu,  8 Jun 2023 16:24:03 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-65055aa4ed7so958577b3a.3;
+        Thu, 08 Jun 2023 16:24:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686266643; x=1688858643;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=42lC7HZoHlaRfJs1qoI4qNHKms+PSYJbqmg+6blMOYY=;
+        b=DNo8whDsFUiMToVM3Bwqf+kXF3x7FsXdfRsNq/8q4gBi7A7GeWFgkzedfEU9asiDs9
+         9EeIc84YvhYQKytu3/mNmFK8fxd/aCO8UWAlQdN1FI7SJl3rNwB1a5uzMLKrDHg1gNNy
+         zhPRLRHI7+I8W15YLqNArfi87mAUlari46ZX+SAlgCYtLZ09EVkMgtVE3X3BtpAr41At
+         /QBOCyYuTOewz76ZD7R9ygAmgf75Edq3yKEDMenKPFkhThjoOQ/VUJ3nbkJurjGPJmSH
+         2oW3rMbuySaa4yaCfwPvq0fFEE68ycE/Zwcs7mO5v4I5klx10tbFBIGdQvcc/LHqKeR6
+         FYvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686266643; x=1688858643;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=42lC7HZoHlaRfJs1qoI4qNHKms+PSYJbqmg+6blMOYY=;
+        b=VnHVMDgm5HwS1FV4KE9bOiVW0F1JrNNSk0QcCytmifJN9Ufd1EHK5YSC9MyK1CCyn+
+         tC9uHSN16zqU1RFEy4spmZU9ymiSfLmvUPtPe3EP/5RlW38G9HVxwIZ5tTnBl2/Bd4i0
+         0LTby/+vQL7Or17dBacRf001oPd+bDkg4RGQeVPUYPKNhbrbOeArRfSQOtcVhz3yqMB/
+         s+wQi8swK6ez3v00pYZ0b9gErWBxv+wabPT/zk8Enmkgs+WWya8rDHbbhiuuk/2DVl+e
+         ia2RgNWN2us/Bl7uceDe+mRTZiG2ky0iOx6diDK+h1zm9C5D1N+A117gPZ45BZlCzqUE
+         7jLQ==
+X-Gm-Message-State: AC+VfDw/1lAIwlMWtudfZEJ3MXsna/TcUdtV+9zRNaRWBhoF7JY4gvGx
+        nEUVlATvH5ZnXwraxzvUD3M=
+X-Google-Smtp-Source: ACHHUZ5fFp1H3S4MLxKcxBj3sqNmsIstWNVMMcfCMB5TPt98WNt8pZsv4xzFnze0ykQsqlz8W7zqQA==
+X-Received: by 2002:a17:902:efcc:b0:1b3:7de7:f852 with SMTP id ja12-20020a170902efcc00b001b37de7f852mr977043plb.55.1686266642605;
+        Thu, 08 Jun 2023 16:24:02 -0700 (PDT)
+Received: from bangji.hsd1.ca.comcast.net ([2601:647:6700:7f00:c14c:6e39:cb7d:ad66])
+        by smtp.gmail.com with ESMTPSA id e18-20020a656792000000b0053f1d55676fsm1618203pgr.2.2023.06.08.16.24.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 16:24:02 -0700 (PDT)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Subject: [PATCH 0/3] perf list: Improve libpfm4 event support
+Date:   Thu,  8 Jun 2023 16:23:57 -0700
+Message-ID: <20230608232400.3056312-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <96004048-0ba5-4cd6-406f-e1235c819c97@topic.nl>
-References: <1b153bce-a66a-45ee-a5c6-963ea6fb1c82.949ef384-8293-46b8-903f-40a477c056ae.1d0217a8-661f-4359-b77b-02222c761b01@emailsignatures365.codetwo.com> <20230605133410.15076-1-mike.looijmans@topic.nl> <5d1f08f1-792b-255b-89f0-dd5fa2f0baa4@linaro.org> <96004048-0ba5-4cd6-406f-e1235c819c97@topic.nl>
-Subject: Re: [PATCH v3 1/2] dt-bindings: clock: fixed-clock: Add nvmem support
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Conor Dooley <conor+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Mike Looijmans <mike.looijmans@topic.nl>,
-        devicetree@vger.kernel.org, linux-clk@vger.kernel.org
-Date:   Thu, 08 Jun 2023 16:19:57 -0700
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Mike Looijmans (2023-06-05 07:00:16)
-> On 05-06-2023 15:38, Krzysztof Kozlowski wrote:
-> > On 05/06/2023 15:34, Mike Looijmans wrote:
-> >> diff --git a/Documentation/devicetree/bindings/clock/fixed-clock.yaml =
-b/Documentation/devicetree/bindings/clock/fixed-clock.yaml
-> >> index b0a4fb8256e2..23e4df96d3b0 100644
-> >> --- a/Documentation/devicetree/bindings/clock/fixed-clock.yaml
-> >> +++ b/Documentation/devicetree/bindings/clock/fixed-clock.yaml
-> >> @@ -12,7 +12,9 @@ maintainers:
-> >>  =20
-> >>   properties:
-> >>     compatible:
-> >> -    const: fixed-clock
-> >> +    enum:
-> >> +      - fixed-clock
-> >> +      - fixed-clock-nvmem
-> > Do you even need new compatible? Isn't this the same clock from the
-> > hardware point of view?
->=20
-> I need a new compatible because a "fixed-clock" only loads at init time. =
+Hello,
 
-> It registers using CLK_OF_DECLARE, which requires the clock to register=20
-> early. NVMEM providers are typical devices like I2C EEPROMs that won't=20
-> be available at that point, hence I needed to create a clock that=20
-> registers as a regular clock driver and can handle deferral and similar.
+Ian and I found that some of libpfm4 events don't work well and it makes
+confusing that perf list shows those unsupported events too.  Let's check
+if the event is supported like other events and skip if it's not.
 
-What is builtin_platform_driver(of_fixed_clk_driver)?
+Also add a new test for it.  On my laptop, it runs ok like below:
+
+  $ ./perf test -v 102
+  102: perf all libpfm4 events test                                    :
+  --- start ---
+  test child forked, pid 3039688
+  Testing ix86arch::UNHALTED_CORE_CYCLES
+  Testing ix86arch::INSTRUCTION_RETIRED
+  Testing ix86arch::UNHALTED_REFERENCE_CYCLES
+  Testing ix86arch::LLC_REFERENCES
+  Testing ix86arch::LLC_MISSES
+  Testing ix86arch::BRANCH_INSTRUCTIONS_RETIRED
+  Testing ix86arch::MISPREDICTED_BRANCH_RETIRED
+  Testing perf_raw::r0000
+  Testing icl::UNHALTED_CORE_CYCLES
+  Testing icl::UNHALTED_REFERENCE_CYCLES
+  Testing icl::INSTRUCTION_RETIRED
+  Testing INSTRUCTION_RETIRED
+  Testing icl::SQ_MISC
+  Testing icl::SQ_MISC:SQ_FULL
+  ...
+  Testing icl::OCR:DEMAND_DATA_RD_L3_HIT_ANY
+  Testing icl::OCR:DEMAND_DATA_RD_L3_HIT_SNOOP_HITM
+  Testing icl::OCR:DEMAND_DATA_RD_L3_HIT_SNOOP_HIT_NO_FWD
+  Testing icl::OCR:DEMAND_DATA_RD_L3_HIT_SNOOP_MISS
+  Testing icl::OCR:DEMAND_DATA_RD_L3_HIT_SNOOP_NOT_NEEDED
+  test child finished with 0
+  ---- end ----
+  perf all libpfm4 events test: Ok
+  
+Thanks,
+Namhyung
+
+
+Ian Rogers (2):
+  perf list: Check arguments to show libpfm4 events
+  perf test: Add test of libpfm4 events
+
+Namhyung Kim (1):
+  perf list: Check if libpfm4 event is supported
+
+ tools/perf/builtin-list.c              | 12 +++++-
+ tools/perf/tests/shell/stat_all_pfm.sh | 51 ++++++++++++++++++++++
+ tools/perf/util/pfm.c                  | 58 ++++++++++++++++++++++----
+ 3 files changed, 112 insertions(+), 9 deletions(-)
+ create mode 100755 tools/perf/tests/shell/stat_all_pfm.sh
+
+base-commit: 634c694de4cb2d050dc312ea43e0371d84c585a5
+-- 
+2.41.0.162.gfafddb0af9-goog
+
