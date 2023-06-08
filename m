@@ -2,198 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D49F727952
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 09:57:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 281D6727965
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 10:00:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233835AbjFHH5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 03:57:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47304 "EHLO
+        id S234186AbjFHIAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 04:00:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233833AbjFHH5A (ORCPT
+        with ESMTP id S234124AbjFHH7v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 03:57:00 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0EC8128
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 00:56:58 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id 41be03b00d2f7-5428f63c73aso99062a12.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 00:56:58 -0700 (PDT)
+        Thu, 8 Jun 2023 03:59:51 -0400
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2F8A2733
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 00:59:26 -0700 (PDT)
+Received: by mail-qv1-xf2f.google.com with SMTP id 6a1803df08f44-6261d4ea5f0so2456276d6.0
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 00:59:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686211018; x=1688803018;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=M3C2rZMSJTRmrGY5FMhPctSUiD2DaIbQz7WMkwiTo0k=;
-        b=W9Fk7kTqHjlNbIkLxtiJZDuIaWG9/lhXNTmDhenukiwNm3sA5KRD1XX/qJiuylhBQ3
-         WTXuDtCcKf4C4j+iOE7BJlDN3OMffsG6I/wy7TdkXJYAdEtTnwBb7elNNquJhc3LDomC
-         z9LWC4g/FaHq2BTXFhb7Db5ETO+pRXnYOnoG0=
+        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1686211165; x=1688803165;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hZI03Cx2EY1sdWTSmlFdME9tStwh4n+KWL1+nYy0WC8=;
+        b=u2lkZs0DGHOkdhYckKh0vEmvah3mtcUdCmEiM9iXyPblop5XpmI9V2CgRiqW0jtbGV
+         reK5FwiItuCG6+d63dQrJiv1YAltYFcixhf3BClc1sq7/GkfKOxDGLziQ9p32emOQ5wp
+         vFd0z7XXebB2KBeLEa3YGfFTTJ15GBqRq7Cyc31lqh6GZCWsSIfJFfyzloc4gHGYkWBy
+         ww/YKeXgj5vQENHB73hyBy5MFfEUMWxx+Slw4MSxv1++d/Jj4RlLPaCSKAbQgJmQOM+R
+         Pbj8aiB+yf4XOMIFOX9SC45h3BsmfRlDyvKSXoQ0Aa2y8giPk41G4iZYJ+UUC3RX+mZQ
+         7gzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686211018; x=1688803018;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=M3C2rZMSJTRmrGY5FMhPctSUiD2DaIbQz7WMkwiTo0k=;
-        b=N4ARAyW4tal20HKmJJnQkl+SM5TKAdCbAnJMvc9jdoa5Y6RMlBwpvMsSiNQRS+UsN3
-         I+EOytTT+BMaL3mD6uvwum66tLe7vMaM7mPOa6CF2lS0eLky9W41TYzQpMsNECb8ECq1
-         YkzmOO6inqdmT5z3ldbx60AO0FJ7MwdWa1CA+lkczqzmm0Sf+fG3AZZgVQQO1qm/RY44
-         rgIRSVRDGVZm12H7VjE/V+TEY5iGh9Pt+/rnhkIKRmbcExPtSmbIdJda0UlX4KeGOmQ4
-         Ai4duckmlbwHlGfmIBR9AHsO4IHE0MdyvxVhQ0WLcth5+/eabSiXQL9Bw4YO5KpB+xWV
-         /PlA==
-X-Gm-Message-State: AC+VfDyFXylXAc0B2S4NlHPI8yn/iIMJY3mvQkLzQCk07MHDd4eXHGut
-        U+7oXzHGsE58aX6taplQvsAN79Kb9CVtobLhrrA=
-X-Google-Smtp-Source: ACHHUZ5SUB2pJGp9fQxYxHJIipc/QQtHgRQqSV57BcyBggtmdpJcyg8shXknV1PFQwOgOfjfe4mzRA==
-X-Received: by 2002:a17:902:bcc1:b0:1ac:482e:ed4d with SMTP id o1-20020a170902bcc100b001ac482eed4dmr4643518pls.18.1686211018431;
-        Thu, 08 Jun 2023 00:56:58 -0700 (PDT)
-Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:9700:4b43:59b4:fde3])
-        by smtp.gmail.com with ESMTPSA id j3-20020a170902da8300b001b045c9ababsm771441plx.264.2023.06.08.00.56.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 00:56:58 -0700 (PDT)
-From:   Chen-Yu Tsai <wenst@chromium.org>
-To:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Cristian Ciocaltea <cristian.ciocaltea@gmail.com>,
-        Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Chen-Yu Tsai <wenst@chromium.org>,
-        linux-actions@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] regulator: Use bitfield values for range selectors
-Date:   Thu,  8 Jun 2023 15:56:48 +0800
-Message-ID: <20230608075651.3214540-1-wenst@chromium.org>
-X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
+        d=1e100.net; s=20221208; t=1686211165; x=1688803165;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hZI03Cx2EY1sdWTSmlFdME9tStwh4n+KWL1+nYy0WC8=;
+        b=LSx8fJFOvStvKR9lQKP802r6fuy1IdXn2ppp0YhwzUL6ZEAe3nO/I9cnxAy5NxSaYE
+         lO7CXSSo+kvLS++kcJSZS3UzENI6MqD7bn9cYwSPn+Sbw5QY/8pCKHxI9FB6OJmfd5O/
+         5JeHW0Neozhi3XdrZdi0kNEaqgOl6ZJQtTWkXjvjgWW1xvJ5300C5IsqxTGbx79Dz0eK
+         34kt0G3TcYnr8q9P+vsbkg5l5mZ+K07HKvhgOIAT3R682ZjHbTf/+mGwp0sSAO40CZIA
+         8DWIBIVy4yJEefzD/IOQGMaB1UEgucHLfdJhC6sXEY9+3KRoNfBCLKnlSdP/jPKLHJwj
+         prPQ==
+X-Gm-Message-State: AC+VfDxF/67YX825sZF1cnwQS49b1USvYmueR/1idKDkqxuJMfSoCgLe
+        NGdqmMhRjwTFplT5hBvIG471xSMQGWo3CzMQ3TcWtw==
+X-Google-Smtp-Source: ACHHUZ5d+KjHBE3nn6IbQfTfPODDpmdVKrp2o+VWenaYC3pqaAqWhAb1Zwc6F2zu1aZB2hIhws1GsEELHYPrhnaMvp0=
+X-Received: by 2002:ac8:58c1:0:b0:3f9:aa9f:84f5 with SMTP id
+ u1-20020ac858c1000000b003f9aa9f84f5mr6032848qta.65.1686211165115; Thu, 08 Jun
+ 2023 00:59:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230608025424.29033-1-rdunlap@infradead.org>
+In-Reply-To: <20230608025424.29033-1-rdunlap@infradead.org>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Thu, 8 Jun 2023 09:59:14 +0200
+Message-ID: <CAMRc=Me1U_SznMfsVzYxoD7De1iBJjHzzTtNhvVi=pd+ekKGxQ@mail.gmail.com>
+Subject: Re: [PATCH] eeprom: at24: also select REGMAP
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        linux-i2c@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Right now the regulator helpers expect raw register values for the range
-selectors. This is different from the voltage selectors, which are
-normalized as bitfield values. This leads to a bit of confusion. Also,
-raw values are harder to copy from datasheets or match up with them,
-as datasheets will typically have bitfield values.
+On Thu, Jun 8, 2023 at 4:54=E2=80=AFAM Randy Dunlap <rdunlap@infradead.org>=
+ wrote:
+>
+> Selecting only REGMAP_I2C can leave REGMAP unset, causing build errors,
+> so also select REGMAP to prevent the build errors.
+>
+> ../drivers/misc/eeprom/at24.c:540:42: warning: 'struct regmap_config' dec=
+lared inside parameter list will not be visible outside of this definition =
+or declaration
+>   540 |                                   struct regmap_config *regmap_co=
+nfig)
+> ../drivers/misc/eeprom/at24.c: In function 'at24_make_dummy_client':
+> ../drivers/misc/eeprom/at24.c:552:18: error: implicit declaration of func=
+tion 'devm_regmap_init_i2c' [-Werror=3Dimplicit-function-declaration]
+>   552 |         regmap =3D devm_regmap_init_i2c(dummy_client, regmap_conf=
+ig);
+> ../drivers/misc/eeprom/at24.c:552:16: warning: assignment to 'struct regm=
+ap *' from 'int' makes pointer from integer without a cast [-Wint-conversio=
+n]
+>   552 |         regmap =3D devm_regmap_init_i2c(dummy_client, regmap_conf=
+ig);
+> ../drivers/misc/eeprom/at24.c: In function 'at24_probe':
+> ../drivers/misc/eeprom/at24.c:586:16: error: variable 'regmap_config' has=
+ initializer but incomplete type
+>   586 |         struct regmap_config regmap_config =3D { };
+> ../drivers/misc/eeprom/at24.c:586:30: error: storage size of 'regmap_conf=
+ig' isn't known
+>   586 |         struct regmap_config regmap_config =3D { };
+> ../drivers/misc/eeprom/at24.c:586:30: warning: unused variable 'regmap_co=
+nfig' [-Wunused-variable]
+>
+> Fixes: 5c015258478e ("eeprom: at24: add basic regmap_i2c support")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Heiner Kallweit <hkallweit1@gmail.com>
+> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
+> Cc: linux-i2c@vger.kernel.org
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Masahiro Yamada <masahiroy@kernel.org>
+> ---
+>  drivers/misc/eeprom/Kconfig |    1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff -- a/drivers/misc/eeprom/Kconfig b/drivers/misc/eeprom/Kconfig
+> --- a/drivers/misc/eeprom/Kconfig
+> +++ b/drivers/misc/eeprom/Kconfig
+> @@ -6,6 +6,7 @@ config EEPROM_AT24
+>         depends on I2C && SYSFS
+>         select NVMEM
+>         select NVMEM_SYSFS
+> +       select REGMAP
+>         select REGMAP_I2C
+>         help
+>           Enable this driver to get read/write support to most I2C EEPROM=
+s
 
-Make the helpers expect bitfield values, and convert existing users.
-Include bitops.h explicitly for ffs(), and reorder the header include
-statements. While at it, also replace module.h with export.h, since the
-only use is EXPORT_SYMBOL_GPL.
+Applied, thanks!
 
-Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
----
- drivers/regulator/atc260x-regulator.c  | 2 +-
- drivers/regulator/bd718x7-regulator.c  | 8 ++++----
- drivers/regulator/helpers.c            | 9 ++++++---
- drivers/regulator/tps6287x-regulator.c | 2 +-
- 4 files changed, 12 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/regulator/atc260x-regulator.c b/drivers/regulator/atc260x-regulator.c
-index 87e237d740bc..0bba33955a1a 100644
---- a/drivers/regulator/atc260x-regulator.c
-+++ b/drivers/regulator/atc260x-regulator.c
-@@ -37,7 +37,7 @@ static const struct linear_range atc2609a_ldo_voltage_ranges1[] = {
- };
- 
- static const unsigned int atc260x_ldo_voltage_range_sel[] = {
--	0x0, 0x20,
-+	0x0, 0x1,
- };
- 
- static int atc260x_dcdc_set_voltage_time_sel(struct regulator_dev *rdev,
-diff --git a/drivers/regulator/bd718x7-regulator.c b/drivers/regulator/bd718x7-regulator.c
-index b0b9938c20a1..da1eea1207e5 100644
---- a/drivers/regulator/bd718x7-regulator.c
-+++ b/drivers/regulator/bd718x7-regulator.c
-@@ -289,7 +289,7 @@ static const struct linear_range bd71837_buck5_volts[] = {
-  * and 0x1 for last 3 ranges.
-  */
- static const unsigned int bd71837_buck5_volt_range_sel[] = {
--	0x0, 0x0, 0x0, 0x80, 0x80, 0x80
-+	0x0, 0x0, 0x0, 0x1, 0x1, 0x1
- };
- 
- /*
-@@ -309,7 +309,7 @@ static const struct linear_range bd71847_buck3_volts[] = {
- };
- 
- static const unsigned int bd71847_buck3_volt_range_sel[] = {
--	0x0, 0x0, 0x0, 0x40, 0x80, 0x80, 0x80
-+	0x0, 0x0, 0x0, 0x1, 0x2, 0x2, 0x2
- };
- 
- static const struct linear_range bd71847_buck4_volts[] = {
-@@ -360,7 +360,7 @@ static const struct linear_range bd718xx_ldo1_volts[] = {
- 	REGULATOR_LINEAR_RANGE(1600000, 0x00, 0x03, 100000),
- };
- 
--static const unsigned int bd718xx_ldo1_volt_range_sel[] = { 0x0, 0x20 };
-+static const unsigned int bd718xx_ldo1_volt_range_sel[] = { 0x0, 0x1 };
- 
- /*
-  * LDO2
-@@ -403,7 +403,7 @@ static const struct linear_range bd71847_ldo5_volts[] = {
- 	REGULATOR_LINEAR_RANGE(800000, 0x00, 0x0F, 100000),
- };
- 
--static const unsigned int bd71847_ldo5_volt_range_sel[] = { 0x0, 0x20 };
-+static const unsigned int bd71847_ldo5_volt_range_sel[] = { 0x0, 0x1 };
- 
- /*
-  * LDO6
-diff --git a/drivers/regulator/helpers.c b/drivers/regulator/helpers.c
-index 586f42e378ee..8bdafea70d36 100644
---- a/drivers/regulator/helpers.c
-+++ b/drivers/regulator/helpers.c
-@@ -5,13 +5,14 @@
- // Copyright 2007, 2008 Wolfson Microelectronics PLC.
- // Copyright 2008 SlimLogic Ltd.
- 
--#include <linux/kernel.h>
--#include <linux/err.h>
-+#include <linux/bitops.h>
- #include <linux/delay.h>
-+#include <linux/err.h>
-+#include <linux/export.h>
-+#include <linux/kernel.h>
- #include <linux/regmap.h>
- #include <linux/regulator/consumer.h>
- #include <linux/regulator/driver.h>
--#include <linux/module.h>
- 
- #include "internal.h"
- 
-@@ -108,6 +109,7 @@ static int regulator_range_selector_to_index(struct regulator_dev *rdev,
- 		return -EINVAL;
- 
- 	rval &= rdev->desc->vsel_range_mask;
-+	rval >>= ffs(rdev->desc->vsel_range_mask) - 1;
- 
- 	for (i = 0; i < rdev->desc->n_linear_ranges; i++) {
- 		if (rdev->desc->linear_range_selectors[i] == rval)
-@@ -195,6 +197,7 @@ int regulator_set_voltage_sel_pickable_regmap(struct regulator_dev *rdev,
- 	sel += rdev->desc->linear_ranges[i].min_sel;
- 
- 	range = rdev->desc->linear_range_selectors[i];
-+	range <<= ffs(rdev->desc->vsel_mask) - 1;
- 
- 	if (rdev->desc->vsel_reg == rdev->desc->vsel_range_reg) {
- 		ret = regmap_update_bits(rdev->regmap,
-diff --git a/drivers/regulator/tps6287x-regulator.c b/drivers/regulator/tps6287x-regulator.c
-index 870e63ce3ff2..3139a0cbb6f7 100644
---- a/drivers/regulator/tps6287x-regulator.c
-+++ b/drivers/regulator/tps6287x-regulator.c
-@@ -41,7 +41,7 @@ static const struct linear_range tps6287x_voltage_ranges[] = {
- };
- 
- static const unsigned int tps6287x_voltage_range_sel[] = {
--	0x0, 0x4, 0x8, 0xC
-+	0x0, 0x1, 0x2, 0x3
- };
- 
- static const unsigned int tps6287x_ramp_table[] = {
--- 
-2.41.0.rc0.172.g3f132b7071-goog
-
+Bart
