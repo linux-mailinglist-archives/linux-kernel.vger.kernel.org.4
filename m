@@ -2,105 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B37B7283C0
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 17:28:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02A607283C3
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 17:30:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229848AbjFHP2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 11:28:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55498 "EHLO
+        id S236704AbjFHPam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 11:30:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235704AbjFHP2p (ORCPT
+        with ESMTP id S236372AbjFHPaj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 11:28:45 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E3CAF2D70;
-        Thu,  8 Jun 2023 08:28:36 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 32679AB6;
-        Thu,  8 Jun 2023 08:29:22 -0700 (PDT)
-Received: from [10.57.83.198] (unknown [10.57.83.198])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CB8B53F6C4;
-        Thu,  8 Jun 2023 08:28:35 -0700 (PDT)
-Message-ID: <b24a6c7b-27fc-41c0-5c82-15696b4a7dc1@arm.com>
-Date:   Thu, 8 Jun 2023 16:28:24 +0100
+        Thu, 8 Jun 2023 11:30:39 -0400
+Received: from mx.gpxsee.org (mx.gpxsee.org [37.205.14.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 43B941FE6;
+        Thu,  8 Jun 2023 08:30:30 -0700 (PDT)
+Received: from [192.168.4.25] (unknown [62.77.71.229])
+        by mx.gpxsee.org (Postfix) with ESMTPSA id 0AAB3A419;
+        Thu,  8 Jun 2023 17:30:19 +0200 (CEST)
+Message-ID: <c34db414-159a-313f-90eb-2bfc0f4496fa@gpxsee.org>
+Date:   Thu, 8 Jun 2023 17:30:17 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: Question about reserved_regions w/ Intel IOMMU
-To:     Baolu Lu <baolu.lu@linux.intel.com>,
-        Alexander Duyck <alexander.duyck@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>, iommu@lists.linux.dev
-References: <CAKgT0UezciLjHacOx372+v8MZkDf22D5Thn82n-07xxKy_0FTQ@mail.gmail.com>
- <CAKgT0UfMeVOz6AOqSvVvzpsedGDiXCNQrjM+4KDv7qJJ1orpsw@mail.gmail.com>
- <a1cff65b-b390-3872-25b5-dd6bbfb3524c@linux.intel.com>
-Content-Language: en-GB
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <a1cff65b-b390-3872-25b5-dd6bbfb3524c@linux.intel.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [RESEND PATCH v6 1/1] Added Digiteq Automotive MGB4 driver
+Content-Language: en-US
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?Q?Martin_T=c5=afma?= <martin.tuma@digiteqautomotive.com>
+References: <20230524112126.2242-1-tumic@gpxsee.org>
+ <20230524112126.2242-2-tumic@gpxsee.org>
+ <3a7da3cd-8d03-a2c4-0534-a75565aefc13@xs4all.nl>
+ <7072a8f3-5c9e-1170-e480-6fb57b95110f@gpxsee.org>
+ <6b792de3-bb2c-d2b5-a652-eca6d20dad20@xs4all.nl>
+From:   =?UTF-8?Q?Martin_T=c5=afma?= <tumic@gpxsee.org>
+In-Reply-To: <6b792de3-bb2c-d2b5-a652-eca6d20dad20@xs4all.nl>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-06-08 04:03, Baolu Lu wrote:
-> On 6/8/23 7:03 AM, Alexander Duyck wrote:
->> On Wed, Jun 7, 2023 at 3:40 PM Alexander Duyck
->> <alexander.duyck@gmail.com> wrote:
->>>
->>> I am running into a DMA issue that appears to be a conflict between
->>> ACS and IOMMU. As per the documentation I can find, the IOMMU is
->>> supposed to create reserved regions for MSI and the memory window
->>> behind the root port. However looking at reserved_regions I am not
->>> seeing that. I only see the reservation for the MSI.
->>>
->>> So for example with an enabled NIC and iommu enabled w/o passthru I 
->>> am seeing:
->>> # cat /sys/bus/pci/devices/0000\:83\:00.0/iommu_group/reserved_regions
->>> 0x00000000fee00000 0x00000000feefffff msi
->>>
->>> Shouldn't there also be a memory window for the region behind the root
->>> port to prevent any possible peer-to-peer access?
->>
->> Since the iommu portion of the email bounced I figured I would fix
->> that and provide some additional info.
->>
->> I added some instrumentation to the kernel to dump the resources found
->> in iova_reserve_pci_windows. From what I can tell it is finding the
->> correct resources for the Memory and Prefetchable regions behind the
->> root port. It seems to be calling reserve_iova which is successfully
->> allocating an iova to reserve the region.
->>
->> However still no luck on why it isn't showing up in reserved_regions.
+On 08. 06. 23 12:23, Hans Verkuil wrote:
+
+> Can you make a list of which sysfs properties correspond to existing V4L2
+> format or timing fields and which are 'new'?
 > 
-> Perhaps I can ask the opposite question, why it should show up in
-> reserve_regions? Why does the iommu subsystem block any possible peer-
-> to-peer DMA access? Isn't that a decision of the device driver.
-> 
-> The iova_reserve_pci_windows() you've seen is for kernel DMA interfaces
-> which is not related to peer-to-peer accesses.
 
-Right, in general the IOMMU driver cannot be held responsible for 
-whatever might happen upstream of the IOMMU input. The DMA layer carves 
-PCI windows out of its IOVA space unconditionally because we know that 
-they *might* be problematic, and we don't have any specific constraints 
-on our IOVA layout so it's no big deal to just sacrifice some space for 
-simplicity. We don't want to have to go digging any further into 
-bus-specific code to reason about whether the right ACS capabilities are 
-present and enabled everywhere to prevent direct P2P or not. Other 
-use-cases may have different requirements, though, so it's up to them 
-what they want to do.
+On the left all the current mgb4 sysfs properties (see the admin-guide 
+doc from the patch for description), on the right v4l2 structures where 
+they could be mapped (may not be true for all of them in the patch, I 
+will check it and update the code in v7)
 
-It's conceptually pretty much the same as the case where the device (or 
-indeed a PCI host bridge or other interconnect segment in-between) has a 
-constrained DMA address width - the device may not be able to access all 
-of the address space that the IOMMU provides, but the IOMMU itself can't 
-tell you that.
 
-Thanks,
-Robin.
+--- PCIE CARD ---
+
+module_type		-
+module_version		-
+fw_type			-
+fw_version		-
+serial_number		-
+temperature		hwmon
+
+--- INPUTS ---
+
+input_id		-
+oldi_lane_width		-
+color_mapping		-
+link_status		v4l2_input.status (V4L2_IN_ST_NO_SYNC)
+stream_status		v4l2_input.status (V4L2_IN_ST_NO_SIGNAL)
+video_width		v4l2_bt_timings.width
+video_height		v4l2_bt_timings.height
+vsync_status		v4l2_bt_timings.polarities
+hsync_status		v4l2_bt_timings.polarities
+vsync_gap_length	-
+hsync_gap_length	-
+pclk_frequency		v4l2_bt_timings.pixelclock
+hsync_width		v4l2_bt_timings.hsync
+vsync_width		v4l2_bt_timings.vsync
+hback_porch		v4l2_bt_timings.hbackporch
+hfront_porch		v4l2_bt_timings.hfrontporch
+vback_porch		v4l2_bt_timings.vbackporch
+vfront_porch		v4l2_bt_timings.vfrontporch
+frequency_range		-
+alignment		v4l2_pix_format.bytesperline
+fpdl3_input_width	-
+gmsl_mode		-
+gmsl_stream_id		-
+gmsl_fec		-
+
+--- OUTPUTS ---
+
+output_id		-
+video_source		-
+display_width		v4l2_bt_timings.width
+display_height		v4l2_bt_timings.height
+frame_rate		v4l2_frmivalenum
+hsync_polarity		v4l2_bt_timings.polarities
+vsync_polarity		v4l2_bt_timings.polarities
+de_polarity		-
+pclk_frequency		v4l2_bt_timings.pixelclock
+hsync_width		v4l2_bt_timings.hsync
+vsync_width		v4l2_bt_timings.vsync
+vsync_width		v4l2_bt_timings.vsync
+hback_porch		v4l2_bt_timings.hbackporch
+hfront_porch		v4l2_bt_timings.hfrontporch
+vback_porch		v4l2_bt_timings.vbackporch
+vfront_porch		v4l2_bt_timings.vfrontporch
+alignment		v4l2_pix_format.bytesperline
+fpdl3_output_width	-
+
+
+M.
