@@ -2,135 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CF55727581
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 05:15:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D60FF727587
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 05:18:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233796AbjFHDPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 23:15:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59646 "EHLO
+        id S232539AbjFHDSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 23:18:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231753AbjFHDPG (ORCPT
+        with ESMTP id S231753AbjFHDR6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 23:15:06 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2FBE2685;
-        Wed,  7 Jun 2023 20:15:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686194104; x=1717730104;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=X6ZWze42QVYOX8vk6mTf1shylq+/RkSUfBYN41GBkO4=;
-  b=KcgmiLfIEwPr2rv2UacWGQ13Rsgk2SSy8dH/SniBR79+TexX4pCe7jma
-   LUkjX30QhWMcaKdIuAD9R+eWrwX/UYNbq4x/BUbGKjEbIhrijECH1KzIw
-   7vgCG1r45zX2nzERsDqHhBFV5IVE+S7bJ7WV324phNDGjh1PnyIme8WvN
-   Bm+SvWKDFl3zJdJoHNkJ/QUt5V148puj3jurCixgQAdR3ZlTQteCppvZC
-   oN5OZesedSayBn3dvuYx/UVFd3mhUtI6YlPRRfKUfwnbjVjftL+h0c8MP
-   vcsTgib9ZzLPAv7bekJmLva0QHhvc5oRwArrGi8JWAcv3cpVBH4H84psj
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="354673081"
-X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
-   d="scan'208";a="354673081"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 20:15:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="712941328"
-X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
-   d="scan'208";a="712941328"
-Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.254.214.110]) ([10.254.214.110])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 20:15:02 -0700
-Message-ID: <217febbf-07fd-32dd-de6b-2e767de6a9eb@intel.com>
-Date:   Thu, 8 Jun 2023 11:15:00 +0800
+        Wed, 7 Jun 2023 23:17:58 -0400
+Received: from mail-yw1-x1141.google.com (mail-yw1-x1141.google.com [IPv6:2607:f8b0:4864:20::1141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B9EFE43;
+        Wed,  7 Jun 2023 20:17:57 -0700 (PDT)
+Received: by mail-yw1-x1141.google.com with SMTP id 00721157ae682-565de553de1so3138997b3.0;
+        Wed, 07 Jun 2023 20:17:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686194276; x=1688786276;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=V7fMdE8eaW7BeuJ297fgloLKjwJdfmPyym4SYRcLyPI=;
+        b=gIimOiJmtBiXZ/AfGv9nbO9GUOUxWMjMHVDRQMd8A7YFdE8Dk/pmt/ao6FozOnablT
+         F7uU/1ol0VP7EEzjNS80q8nrViUR6/VoRT3dkTGUStdVjAQ2k0/LMN0GQ5WpJ34pRtMC
+         yxkmwGi8jPVDb/7pHSxyno9EDCyBpjjUagh9PxB88BS4TAJqScbUXBTYFaWXuR5SPSkl
+         8H/cphHwNeEZKS94o/sg/g85q93Ka0Cwa3L1XpWzgHoNfp2saysc8FWyvjnM/aZoMTqH
+         dFKdJQTnYHgny1px4n1+UyNLk1CJbSkh0Q3WmHOu4M43M0sHrJ7XmUpay7orEF/9VXpM
+         GTiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686194276; x=1688786276;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=V7fMdE8eaW7BeuJ297fgloLKjwJdfmPyym4SYRcLyPI=;
+        b=cZ55G5YIQsN7n4sVeB1nAfdsbiK2m6iNzA7lnCQhHRrdh5iR0zcHq7H5Xa4rFzBvdU
+         OYnlvm1z162YoYjVKKhoM7kI4c5b/SkKSu4xzQzaw31mBpyB/dtdrEPpLXQ3OWY0zzEl
+         ZMHaZETmX7dt7B3iX/tKaaHnkMHfFWss16PLdfvBku5gTgZWqFt6RnFxk3T8AhirZH0G
+         E03GJKEHFMyEo5Vzlt/j0hh8cJSqrUwF1GmcJSsbrjRMe/kEiRkfOhi1awplYueZWDWI
+         MaCoEHQFKENdeMWo64qxHT8oKsY2+Na4gD0Ok8JM0PrCseoDGMit+lVMQxN/6RgxJGpc
+         WjYA==
+X-Gm-Message-State: AC+VfDxI/h13Lmrd6YMbBuvc+xMP9IGJl9sOh1qjauT1R16kiS6gbyC3
+        jkFs35EhEH3EgJ4AIHO6aH9c3J+x/aaZWEwrlYgIUxQuIzwAfJ66
+X-Google-Smtp-Source: ACHHUZ5dPBEvyBVjI47c0kbRPC2Y0VkP2Lilanf4uyMojOYEDQLHVku5t53NLCaZ3cNkXLbvQCdyYer6yxkBkHGAyGQ=
+X-Received: by 2002:a0d:e8d2:0:b0:561:9bcc:6c81 with SMTP id
+ r201-20020a0de8d2000000b005619bcc6c81mr1218726ywe.24.1686194276278; Wed, 07
+ Jun 2023 20:17:56 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.11.2
-Subject: Re: [PATCH 2/2] KVM: VMX: Drop unnecessary
- vmx_fb_clear_ctrl_available "cache"
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chao Gao <chao.gao@intel.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-References: <20230607004311.1420507-1-seanjc@google.com>
- <20230607004311.1420507-3-seanjc@google.com>
-From:   Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <20230607004311.1420507-3-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230607125911.145345-1-imagedong@tencent.com>
+ <20230607125911.145345-2-imagedong@tencent.com> <20230607200905.5tbosnupodvydezq@macbook-pro-8.dhcp.thefacebook.com>
+In-Reply-To: <20230607200905.5tbosnupodvydezq@macbook-pro-8.dhcp.thefacebook.com>
+From:   Menglong Dong <menglong8.dong@gmail.com>
+Date:   Thu, 8 Jun 2023 11:17:45 +0800
+Message-ID: <CADxym3abYOZ5JVa4FP5R-Vi7HAk=n_0vTmMGveDH8xvFtuaBDw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/3] bpf, x86: allow function arguments up to
+ 12 for TRACING
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     davem@davemloft.net, dsahern@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, x86@kernel.org,
+        imagedong@tencent.com, benbjiang@tencent.com,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/7/2023 8:43 AM, Sean Christopherson wrote:
-> Now that KVM snapshots the host's MSR_IA32_ARCH_CAPABILITIES, drop the
-> similar snapshot/cache of whether or not KVM is allowed to manipulate
-> ARCH_CAPABILITIES.FB_CLEAR_CTRL.  The motivation for the cache was
-> presumably to avoid the RDMSR, e.g. boot_cpu_has_bug() is quite cheap, and
-> modifying the vCPU's MSR_IA32_ARCH_CAPABILITIES is an infrequent option
-> and a relatively slow path.
+On Thu, Jun 8, 2023 at 4:09=E2=80=AFAM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Wed, Jun 07, 2023 at 08:59:09PM +0800, menglong8.dong@gmail.com wrote:
+> > From: Menglong Dong <imagedong@tencent.com>
+> >
+> > For now, the BPF program of type BPF_PROG_TYPE_TRACING can only be used
+> > on the kernel functions whose arguments count less than 6. This is not
+> > friendly at all, as too many functions have arguments count more than 6=
+.
+> >
+> > Therefore, let's enhance it by increasing the function arguments count
+> > allowed in arch_prepare_bpf_trampoline(), for now, only x86_64.
+> >
+> > For the case that we don't need to call origin function, which means
+> > without BPF_TRAMP_F_CALL_ORIG, we need only copy the function arguments
+> > that stored in the frame of the caller to current frame. The arguments
+> > of arg6-argN are stored in "$rbp + 0x18", we need copy them to
+> > "$rbp - regs_off + (6 * 8)".
+> >
+> > For the case with BPF_TRAMP_F_CALL_ORIG, we need prepare the arguments
+> > in stack before call origin function, which means we need alloc extra
+> > "8 * (arg_count - 6)" memory in the top of the stack. Note, there shoul=
+d
+> > not be any data be pushed to the stack before call the origin function.
+> > Then, we have to store rbx with 'mov' instead of 'push'.
+>
+> x86-64 psABI requires stack to be 16-byte aligned when args are passed on=
+ the stack.
+> I don't see this logic in the patch.
 
-Reviewed-by: Xiaoyao Li <xiaoyao.li@intel.com>
+Yeah, it seems I missed this logic......:)
 
-> Cc: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->   arch/x86/kvm/vmx/vmx.c | 17 +++--------------
->   1 file changed, 3 insertions(+), 14 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index 42d1148f933c..17003660138a 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -237,9 +237,6 @@ static const struct {
->   #define L1D_CACHE_ORDER 4
->   static void *vmx_l1d_flush_pages;
->   
-> -/* Control for disabling CPU Fill buffer clear */
-> -static bool __read_mostly vmx_fb_clear_ctrl_available;
-> -
->   static int vmx_setup_l1d_flush(enum vmx_l1d_flush_state l1tf)
->   {
->   	struct page *page;
-> @@ -366,14 +363,6 @@ static int vmentry_l1d_flush_get(char *s, const struct kernel_param *kp)
->   	return sprintf(s, "%s\n", vmentry_l1d_param[l1tf_vmx_mitigation].option);
->   }
->   
-> -static void vmx_setup_fb_clear_ctrl(void)
-> -{
-> -	if ((host_arch_capabilities & ARCH_CAP_FB_CLEAR_CTRL) &&
-> -	    !boot_cpu_has_bug(X86_BUG_MDS) &&
-> -	    !boot_cpu_has_bug(X86_BUG_TAA))
-> -		vmx_fb_clear_ctrl_available = true;
-> -}
-> -
->   static __always_inline void vmx_disable_fb_clear(struct vcpu_vmx *vmx)
->   {
->   	u64 msr;
-> @@ -399,7 +388,9 @@ static __always_inline void vmx_enable_fb_clear(struct vcpu_vmx *vmx)
->   
->   static void vmx_update_fb_clear_dis(struct kvm_vcpu *vcpu, struct vcpu_vmx *vmx)
->   {
-> -	vmx->disable_fb_clear = vmx_fb_clear_ctrl_available;
-> +	vmx->disable_fb_clear = (host_arch_capabilities & ARCH_CAP_FB_CLEAR_CTRL) &&
-> +				!boot_cpu_has_bug(X86_BUG_MDS) &&
-> +				!boot_cpu_has_bug(X86_BUG_TAA);
->   
->   	/*
->   	 * If guest will not execute VERW, there is no need to set FB_CLEAR_DIS
-> @@ -8580,8 +8571,6 @@ static int __init vmx_init(void)
->   	if (r)
->   		goto err_l1d_flush;
->   
-> -	vmx_setup_fb_clear_ctrl();
-> -
->   	for_each_possible_cpu(cpu) {
->   		INIT_LIST_HEAD(&per_cpu(loaded_vmcss_on_cpu, cpu));
->   
+I have not figure out the rule of the alignment, but after
+observing the behavior of the compiler, the stack seems
+should be like this:
 
+------ stack frame begin
+rbp
+
+xxx   -- this part should be aligned in 16-byte
+
+------ end of arguments in stack
+xxx
+------ begin of arguments in stack
+
+So the code should be:
+
++       if (nr_regs > 6 && (flags & BPF_TRAMP_F_CALL_ORIG)) {
++                stack_size =3D ALIGN(stack_size, 16);
++                stack_size +=3D (nr_regs - 6) * 8;
++       }
+
+Am I right?
+
+Thanks!
+Menglong Dong
