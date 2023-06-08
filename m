@@ -2,162 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5636728363
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 17:15:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 088F0728369
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 17:16:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236124AbjFHPPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 11:15:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48330 "EHLO
+        id S236779AbjFHPQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 11:16:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230033AbjFHPPn (ORCPT
+        with ESMTP id S236198AbjFHPP6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 11:15:43 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06F662D65;
-        Thu,  8 Jun 2023 08:15:42 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-653fcd58880so504979b3a.0;
-        Thu, 08 Jun 2023 08:15:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686237341; x=1688829341;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=55lU3irJzSJsczewYDUgMmkeCe1yQwAopk76mACRoR8=;
-        b=bSovjVo5+79ACX4vm6JKqNPLYD4eh3+dh5dMYGQV+oC8Bpqk1J4Y9TM7YsRau2OLk8
-         YuHmAxY6xVmI4FZvpwFVSlMokszfSXsExm9JggO3lHIQbcb7i3LqsoK0YJ+zN1CKMwzz
-         Oc6J4WV4lX67xNuRNSOX62JOGQ7yjmFMq+nLq9sX/4H3qes1PYjN1ouH4l+g3RckprVY
-         NEsWlS0huBmstEvgHDhVp+8YcyYQqnN3gT6yQirbRAeRaX/DKIvLqsKFt5oiXJ2TKHtf
-         0hf43xR5VxUx+Cx5BnC17lc/JyKBWMuDov4/4SzeqE0xT+Yq4VcQck/hE3EvpVC9rC8k
-         yBxQ==
+        Thu, 8 Jun 2023 11:15:58 -0400
+Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 102012D6D;
+        Thu,  8 Jun 2023 08:15:56 -0700 (PDT)
+Received: by mail-il1-f182.google.com with SMTP id e9e14a558f8ab-33cb82122c7so2282125ab.1;
+        Thu, 08 Jun 2023 08:15:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686237341; x=1688829341;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=55lU3irJzSJsczewYDUgMmkeCe1yQwAopk76mACRoR8=;
-        b=hbL/IL8tbYzZ0sPxeBkLQQFJCTi2DtjfIP9mE+OQstBddlpLveHxQ7V8tttrInAsW4
-         /KJx0EJSAutPLgAUgIccrq3BTh99YHBbbq1oJ52WfYEJ/vGU9eOyffM4wew8mokMBQDB
-         MbEycWBBSFXJMeMg0EoWT8ejEXqS8wdBh0jk9NNAF1NRjYg7ZfeVbbgA4NziWHz5b+RC
-         tf2nBYQUIT48UZUl7j+Xks9nw1DXAm6ME2ta9bZdlqBIY4C2ZSIZRJXowQzgUVyQOB2s
-         +dvwcgh0TuqUcmNfPz/lGR3HQ6mnvqMsCkpQzIKoJt2CkSXNXA2geQXDfoTgCsFmd6Ei
-         tNKw==
-X-Gm-Message-State: AC+VfDwc0/psRp3Cv/yvgolNV684GZHPq3Ws3xMVHC3W8qmGG2KYLSXT
-        zuT07dNSh04kX7cQ0I8L/j/GILoefRTruw==
-X-Google-Smtp-Source: ACHHUZ42h/CI+r2MG29MXq+ydxY3pg+noX5hvO26RUOoZxcPPTVrrTYRI/PXAtIB3z3/6eLFy951Ug==
-X-Received: by 2002:a05:6a00:24cc:b0:64c:c453:244f with SMTP id d12-20020a056a0024cc00b0064cc453244fmr7200998pfv.15.1686237341053;
-        Thu, 08 Jun 2023 08:15:41 -0700 (PDT)
-Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:18:efec::75b])
-        by smtp.gmail.com with ESMTPSA id u1-20020aa78481000000b0064fd8b3dd10sm1230826pfn.109.2023.06.08.08.15.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jun 2023 08:15:40 -0700 (PDT)
-Message-ID: <8b93aa93-903f-3a69-77f9-0c6b694d826b@gmail.com>
-Date:   Thu, 8 Jun 2023 23:15:25 +0800
+        d=1e100.net; s=20221208; t=1686237355; x=1688829355;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Bdr6h3xlT0s10AAMIzoAd0fqH1qnHaQu9PS8cpJiPSU=;
+        b=jarnKjIqsYvgxl/IkgdduBmz13z8sxbvRir//061kbroV05hNBBndpX7cpVR07x+bf
+         +DGoo5Xq5QyvJV1xkbKsbXYuv5P06JiTkq3pocObfDMrV+3ufNaXlfNoZePgPOWEq12o
+         vh7MCnGrZzpE0uoymPBGb7nnahOkyL6zrnEDltp620sq/kYf3nlgWzIZTwHIIVb4U75t
+         esuqrOvViseoG40KUD73nmw5RK42SfTLyQUGnHYDEyR88SBcHQfPwqnPQnxaDmDKA7PB
+         7U9HPvCm8oFB9Ba3bIXAaYMSGOcV8NPtUldI8yTSkl3dMboUtFM26MvaHRosCs3bbrtK
+         q39g==
+X-Gm-Message-State: AC+VfDzDjqPwELqJ5w99qV9XMkiRi6EkKijxJrZewWbkFLBIJh4cG3VP
+        z4WqulDRqkGaQpGk62pRPA==
+X-Google-Smtp-Source: ACHHUZ6c2mDobEqawXg5KuKKk2m3x3XmcmpQemI8k7rhvj+ZPU82e1c5pml2iLfIZD4VQEX7S6da+g==
+X-Received: by 2002:a92:c98f:0:b0:331:1f0e:79b8 with SMTP id y15-20020a92c98f000000b003311f0e79b8mr6879652iln.0.1686237355131;
+        Thu, 08 Jun 2023 08:15:55 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id p5-20020a92d285000000b00333b5ae4ab7sm439825ilp.87.2023.06.08.08.15.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 08:15:54 -0700 (PDT)
+Received: (nullmailer pid 2700534 invoked by uid 1000);
+        Thu, 08 Jun 2023 15:15:52 -0000
+Date:   Thu, 8 Jun 2023 09:15:52 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Billy Tsai <billy_tsai@aspeedtech.com>
+Cc:     Patrick Williams <patrick@stwcx.xyz>, jdelvare@suse.com,
+        linux@roeck-us.net, krzysztof.kozlowski+dt@linaro.org,
+        joel@jms.id.au, andrew@aj.id.au, lee@kernel.org,
+        thierry.reding@gmail.com, u.kleine-koenig@pengutronix.de,
+        corbet@lwn.net, p.zabel@pengutronix.de,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [v5 3/5] dt-bindings: mfd: Add aspeed pwm-tach binding
+Message-ID: <20230608151552.GA2637361-robh@kernel.org>
+References: <20230606094535.5388-1-billy_tsai@aspeedtech.com>
+ <20230606094535.5388-4-billy_tsai@aspeedtech.com>
+ <35bf0a69-bcf6-ae35-eb3c-e74cfcf9c571@linaro.org>
+ <ZH89fXknZlhGmM_H@heinlein.vulture-banana.ts.net>
+ <c28f963e-d13c-6b5c-c389-996e986f81d5@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [EXTERNAL] Re: [PATCH 5/9] x86/hyperv: Use vmmcall to implement
- Hyper-V hypercall in sev-snp enlightened guest
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, daniel.lezcano@linaro.org, arnd@arndb.de,
-        michael.h.kelley@microsoft.com, Tianyu Lan <tiala@microsoft.com>,
-        linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, vkuznets@redhat.com
-References: <20230601151624.1757616-1-ltykernel@gmail.com>
- <20230601151624.1757616-6-ltykernel@gmail.com>
- <20230608132127.GK998233@hirez.programming.kicks-ass.net>
-From:   Tianyu Lan <ltykernel@gmail.com>
-In-Reply-To: <20230608132127.GK998233@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c28f963e-d13c-6b5c-c389-996e986f81d5@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/8/2023 9:21 PM, Peter Zijlstra wrote:
-> On Thu, Jun 01, 2023 at 11:16:18AM -0400, Tianyu Lan wrote:
->> From: Tianyu Lan <tiala@microsoft.com>
->>
->> In sev-snp enlightened guest, Hyper-V hypercall needs
->> to use vmmcall to trigger vmexit and notify hypervisor
->> to handle hypercall request.
->>
->> There is no x86 SEV SNP feature flag support so far and
->> hardware provides MSR_AMD64_SEV register to check SEV-SNP
->> capability with MSR_AMD64_SEV_ENABLED bit. ALTERNATIVE can't
->> work without SEV-SNP x86 feature flag. May add later when
->> the associated flag is introduced.
->>
->> Signed-off-by: Tianyu Lan <tiala@microsoft.com>
->> ---
->>   arch/x86/include/asm/mshyperv.h | 44 ++++++++++++++++++++++++---------
->>   1 file changed, 33 insertions(+), 11 deletions(-)
->>
->> diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
->> index 31c476f4e656..d859d7c5f5e8 100644
->> --- a/arch/x86/include/asm/mshyperv.h
->> +++ b/arch/x86/include/asm/mshyperv.h
->> @@ -61,16 +61,25 @@ static inline u64 hv_do_hypercall(u64 control, void *input, void *output)
->>   	u64 hv_status;
->>   
->>   #ifdef CONFIG_X86_64
->> -	if (!hv_hypercall_pg)
->> -		return U64_MAX;
->> +	if (hv_isolation_type_en_snp()) {
->> +		__asm__ __volatile__("mov %4, %%r8\n"
->> +				     "vmmcall"
->> +				     : "=a" (hv_status), ASM_CALL_CONSTRAINT,
->> +				       "+c" (control), "+d" (input_address)
->> +				     :  "r" (output_address)
->> +				     : "cc", "memory", "r8", "r9", "r10", "r11");
->> +	} else {
->> +		if (!hv_hypercall_pg)
->> +			return U64_MAX;
->>   
->> -	__asm__ __volatile__("mov %4, %%r8\n"
->> -			     CALL_NOSPEC
->> -			     : "=a" (hv_status), ASM_CALL_CONSTRAINT,
->> -			       "+c" (control), "+d" (input_address)
->> -			     :  "r" (output_address),
->> -				THUNK_TARGET(hv_hypercall_pg)
->> -			     : "cc", "memory", "r8", "r9", "r10", "r11");
->> +		__asm__ __volatile__("mov %4, %%r8\n"
->> +				     CALL_NOSPEC
->> +				     : "=a" (hv_status), ASM_CALL_CONSTRAINT,
->> +				       "+c" (control), "+d" (input_address)
->> +				     :  "r" (output_address),
->> +					THUNK_TARGET(hv_hypercall_pg)
->> +				     : "cc", "memory", "r8", "r9", "r10", "r11");
->> +	}
->>   #else
+On Tue, Jun 06, 2023 at 04:23:52PM +0200, Krzysztof Kozlowski wrote:
+> On 06/06/2023 16:06, Patrick Williams wrote:
+> > On Tue, Jun 06, 2023 at 12:49:04PM +0200, Krzysztof Kozlowski wrote:
+> > 
+> > Hi Krzysztof,
+> > 
+> > Thank you for reviewing this from Billy.
+> > 
+> > The Aspeed chip is heavily used by the OpenBMC community and the 2600
+> > has been used in production systems for almost 2 years now.  Many
+> > companies are having to carry previous versions of these as patches, and
+> > some of the APIs changed since the last revision from Billy.  So, I had
+> > asked him to submit the latest patch set with as many revisions as he
+> > understood what to change, since the conversation seemed to have died
+> > since last time he submitted.  
+> > 
+> > I don't believe Billy is intentionally ignoring your feedback and he is
+> > motivated to get this patch set wrapped up into an acceptable state.
+> > 
+> >> On 06/06/2023 11:45, Billy Tsai wrote:
+> >  
+> >> NAK. You got here clear comment. You cannot have simple MFD with
+> >> resources. It is not simple anymore.
+> >>
+> > 
+> > In fairness, Billy asked for clarification from you on this point and didn't
+> > receive it.
+> > 
+> > https://lore.kernel.org/lkml/24DD1FEB-95F3-47BE-BE61-8B0E6FBDE20F@aspeedtech.com/
 > 
-> Remains unanswered:
+> I gave the instruction what Billy should do:
 > 
-> https://nam06.safelinks.protection.outlook.com/?url=https%3A%2F%2Flkml.kernel.org%2Fr%2F20230516102912.GG2587705%2540hirez.programming.kicks-ass.net&data=05%7C01%7CTianyu.Lan%40microsoft.com%7C60a576eb67634ffa27b108db68234d5a%7C72f988bf86f141af91ab2d7cd011db47%7C1%7C0%7C638218273105649705%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=MFj67DON0K%2BUoUJbeaIA5oVTxyrzO3fb5DbxYgDWwX0%3D&reserved=0
+> https://lore.kernel.org/lkml/41500a04-b004-0e2c-20a1-3a3092b90e6d@linaro.org/
 > 
-> Would this not generate better code with an alternative?
+> What about other ignored comments? About subject, quotes and more? Even
+> if this one was unclear, then why ignoring all the rest?
+> 
+> > 
+> > He felt what he was trying to accomplish met the documented
+> > expectations.  Are there some changes that need to be done in mfd.txt to
+> > further clarify when to use it and when not to?
+> 
+> I think mfd.txt clearly states:
+> "For more complex devices, when the nexus driver has to
+> probe registers to figure out what child devices exist etc, this should
+> not be used. In the latter case the child devices will be determined by
+> the operating system."
+> 
+> Also, repeated many times:
+> https://lore.kernel.org/all/YXhINE00HG6hbQI4@robh.at.kernel.org/
+> https://lore.kernel.org/all/20220701000959.GA3588170-robh@kernel.org/
+> https://osseu2022.sched.com/event/15z0W
 
+I've probably said this already, but any 'fan controller' needs to 
+define a common fan binding that works for multiple scenarios. There's 
+been some attempts in the last year which seems to have stalled out.
 
-Hi Peter:
-	Thanks to review. I put the explaination in the change log.
-
-"There is no x86 SEV SNP feature(X86_FEATURE_SEV_SNP) flag
-support so far and hardware provides MSR_AMD64_SEV register
-to check SEV-SNP capability with MSR_AMD64_SEV_ENABLED bit
-ALTERNATIVE can't work without SEV-SNP x86 feature flag."
-There is no cpuid leaf bit to check AMD SEV-SNP feature.
-
-After some Hyper-V doesn't provides SEV and SEV-ES guest before and so
-may reuse X86_FEATURE_SEV and X86_FEATURE_SEV_ES flag as alternative
-feature check for Hyper-V SEV-SNP guest. Will refresh patch.
-
-
-
+Rob
