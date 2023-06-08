@@ -2,98 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 782EE727A86
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 10:54:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BA8F727A85
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 10:54:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235460AbjFHIyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 04:54:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47438 "EHLO
+        id S234409AbjFHIx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 04:53:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230499AbjFHIyB (ORCPT
+        with ESMTP id S234447AbjFHIxy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 04:54:01 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D892D47
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 01:53:58 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id d75a77b69052e-3f6c6320d4eso111241cf.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 01:53:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686214438; x=1688806438;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=p3S8C+P+RZ3F6jzMdu/JeV141/1ahGxg12LTpyZNIHw=;
-        b=OXHv1owDPqb0g834/kg0UzU5qhenGwGzZ4KXOZIuJ5a1wRja9eTUaEZeb/loknQfG/
-         Jn10n+89cl69FALW+acvv/z3rRetvqzPegeOexMiqIvbduhyZE2fKfSTZQ+Yte8OOwKj
-         LkVCTJltjF4edV9Hio2Ln+UipXOlqlhT8DD5WlolKnXh8LaJaZSrwNWG03iIcL9U/r6H
-         xRhFf5fHNaCuTBRCn8bUlPXlvvlbWCeKMR8cuJazvfDSUdum8ScIN1/mUQeJIOURmBt2
-         F12FNi47v9+NFgO8mb0c0Ufe3bFA7kUacyPPDq0zJmgh56Yqf9xFDnoqsAamO1EY6rkb
-         HsmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686214438; x=1688806438;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=p3S8C+P+RZ3F6jzMdu/JeV141/1ahGxg12LTpyZNIHw=;
-        b=MZhXFo5kNB09yaQXpYANan6fNOSHJjKdoqQsWnfU+AFWPRXsGqvDcQp4Roy2F04Aa6
-         Yga6FsLJ8ach49S0LDlXRmaLtQOrlTK+GlU5ljIZuAnkTyTawxrGYlBtlYQ1LU20xWVM
-         aYIeclQR0PJIw4DOCT2XAiwOZdbh9Rz0jEzRGwv9pUJZrLwauZCYlLhAd8IYvTMPbOaY
-         Rp6yy/Q9CHexFx2BMNVIa552saA/jeoBhVvMtM+G+yt2le0kl54Mh1k1VLZfYhh3LZhC
-         klkmkokv/DCe/O1+pdjmkjv8jN8wU9O84zIjmTMupiHL2GosmLiZpVmhQ6GnYbcHbM9d
-         x4oQ==
-X-Gm-Message-State: AC+VfDxYY/9Xcy+1I0HShRdP2gCQHWe2CXC2536G3QrZnfF4uP0TFIP0
-        lLDX4nx/p3bLkmiPlfOZS9X6SirFLulNKDN7bfCdZA==
-X-Google-Smtp-Source: ACHHUZ45IzPGwJunoTfox5YB1GSDNlPeAsXonirICmxLPz9P3JztasM+Mpti07xFNBCfwaOrMJklH4GSPnbVrZUhFSs=
-X-Received: by 2002:a05:622a:250:b0:3ef:3361:75d5 with SMTP id
- c16-20020a05622a025000b003ef336175d5mr166643qtx.11.1686214437738; Thu, 08 Jun
- 2023 01:53:57 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230525180209.19497-1-james.morse@arm.com> <20230525180209.19497-13-james.morse@arm.com>
-In-Reply-To: <20230525180209.19497-13-james.morse@arm.com>
-From:   Peter Newman <peternewman@google.com>
+        Thu, 8 Jun 2023 04:53:54 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D71EF2729;
+        Thu,  8 Jun 2023 01:53:52 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9C8D66606F17;
+        Thu,  8 Jun 2023 09:53:50 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686214431;
+        bh=96X6k5oqBvIX1dBppWoB2S5z/C5qU+MMBXm3vBPWtl0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=U3ly+JKpH51mwz8/4HmOI/6l6O91KLGeLtbNFx5lDpKMqv7TQ1mITadLrC40Su0BQ
+         QeRZtJIOhqTf/qwTJm/cqhT5+Cs1sp0y/uUMpZqu0LsaPGIDH0oVMkYtrTQ0THqqWS
+         8/31HkQESvhMEK2XMNloIwjBBUbQzCgQa1fvDLhbn32ipbD0dqkUJM6HsEuAteAkib
+         WYfcG5cleEOcK2/o+RH6gjQqsF0Qjo4AfOZPwUgeWGsX/7LccV0RiClCGDyabE/rd2
+         VzzDqxDow1OjcBisJ9WaIL7Pvhpi33MgY5E+SdEhBPyilu9EIz8kimWqBEhVTMnaIg
+         kYcYMRlXm2qDw==
+Message-ID: <38e5ffa2-93bd-ce70-ec00-6d61bad969c7@collabora.com>
 Date:   Thu, 8 Jun 2023 10:53:47 +0200
-Message-ID: <CALPaoCj3h=ELzRwUB2FcPAFAMD7G_nq1-r=PUGOuLq38bUMr0g@mail.gmail.com>
-Subject: Re: [PATCH v4 12/24] x86/resctrl: Make resctrl_arch_rmid_read() retry
- when it is interrupted
-To:     James Morse <james.morse@arm.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        H Peter Anvin <hpa@zytor.com>,
-        Babu Moger <Babu.Moger@amd.com>,
-        shameerali.kolothum.thodi@huawei.com,
-        D Scott Phillips OS <scott@os.amperecomputing.com>,
-        carl@os.amperecomputing.com, lcherian@marvell.com,
-        bobo.shaobowang@huawei.com, tan.shaopeng@fujitsu.com,
-        xingxin.hx@openanolis.org, baolin.wang@linux.alibaba.com,
-        Jamie Iles <quic_jiles@quicinc.com>,
-        Xin Hao <xhao@linux.alibaba.com>, dfustini@baylibre.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v2 4/5] clk: mediatek: mt8183: Add CLK_VDEC_ACTIVE to vdec
+Content-Language: en-US
+To:     Chen-Yu Tsai <wenst@chromium.org>,
+        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>, kernel@collabora.com,
+        Conor Dooley <conor+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Miles Chen <miles.chen@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
+References: <20230607205714.510012-1-nfraprado@collabora.com>
+ <20230607205714.510012-5-nfraprado@collabora.com>
+ <CAGXv+5EgP+0fTDhdpnYDCVQAWtWqwKp=Xxh-pHc1137wHoywRQ@mail.gmail.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <CAGXv+5EgP+0fTDhdpnYDCVQAWtWqwKp=Xxh-pHc1137wHoywRQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi James,
+Il 08/06/23 09:43, Chen-Yu Tsai ha scritto:
+> On Thu, Jun 8, 2023 at 4:57 AM Nícolas F. R. A. Prado
+> <nfraprado@collabora.com> wrote:
+>>
+>> Add the CLK_VDEC_ACTIVE clock to the vdec clock driver. This clock is
+>> enabled by the VPU once it starts decoding.
+>>
+>> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+>>
+>> ---
+>>
+>> Changes in v2:
+>> - Added CLK_IGNORE_UNUSED flag
+>>
+>>   drivers/clk/mediatek/clk-mt8183-vdec.c | 5 +++++
+>>   include/dt-bindings/clock/mt8183-clk.h | 3 ++-
+>>   2 files changed, 7 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/clk/mediatek/clk-mt8183-vdec.c b/drivers/clk/mediatek/clk-mt8183-vdec.c
+>> index 513b7956cbea..03c4f1acfdb8 100644
+>> --- a/drivers/clk/mediatek/clk-mt8183-vdec.c
+>> +++ b/drivers/clk/mediatek/clk-mt8183-vdec.c
+>> @@ -27,6 +27,10 @@ static const struct mtk_gate_regs vdec1_cg_regs = {
+>>          GATE_MTK(_id, _name, _parent, &vdec0_cg_regs, _shift,   \
+>>                  &mtk_clk_gate_ops_setclr_inv)
+>>
+>> +#define GATE_VDEC0(_id, _name, _parent, _shift)                \
+>> +       GATE_MTK_FLAGS(_id, _name, _parent, &vdec0_cg_regs, _shift,     \
+>> +               &mtk_clk_gate_ops_setclr, CLK_IGNORE_UNUSED)
+> 
+> I think what you want is a read-only gate clock only used for reading back
+> the status. The ops would only have .is_enabled.
 
-On Thu, May 25, 2023 at 8:03=E2=80=AFPM James Morse <james.morse@arm.com> w=
-rote:
->
-> resctrl_arch_rmid_read() could be called by resctrl in process context,
-> and then called by the PMU driver from irq context on the same CPU.
+Technically, you're right... but I would delay the introduction of a RO GATE_MTK
+clock for later, as it's not worth adding that for just one clock driver usage.
 
-Will there be x86 PMU changes to do this or is this only ARM? I just
-want to make sure the x86 resctrl_arch_rmid_read() changes are
-actually needed.
+We're checking if the same can be applied to other SoCs as well - if it can,
+then it would make sense to do that (small, yes), work... the point here is to
+enable MT8183 decoders ASAP to enable decoder tests in KernelCI, along with
+all of the other MediaTek Chromebooks.
 
-Thanks!
--Peter
+Though, if you think that it is a good idea to add a RO gate right now, I don't
+have any strong opinions against that.
+
+Cheers,
+Angelo
