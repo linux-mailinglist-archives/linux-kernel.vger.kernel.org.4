@@ -2,297 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3E967274AF
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 03:59:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB58A7274B7
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 04:04:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229499AbjFHB7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Jun 2023 21:59:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32946 "EHLO
+        id S232152AbjFHCEP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Jun 2023 22:04:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbjFHB7R (ORCPT
+        with ESMTP id S229454AbjFHCEN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Jun 2023 21:59:17 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C55D26A8
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Jun 2023 18:59:16 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5693861875fso1280057b3.1
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Jun 2023 18:59:16 -0700 (PDT)
+        Wed, 7 Jun 2023 22:04:13 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE64B269E;
+        Wed,  7 Jun 2023 19:04:11 -0700 (PDT)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 357Ndk2m017995;
+        Thu, 8 Jun 2023 02:04:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : content-type :
+ mime-version; s=corp-2023-03-30;
+ bh=zPFRecVpMssJ846Gt6GnRpdKavHQQrE5NoVEL4mEcaA=;
+ b=eAd+fosaa4FaPHRDSKbjdrY4D/2UP37/KW3C7HAUnKBi5bxJ3MX3Xy25FWx++TLn5pa8
+ 8iaPTFV6retkCvIvliMm8aASSJBCI5u3GLCT0kak3b1hmSBi8fB13/ZzJoktXivB7vQW
+ j7+uWA1dzXl2zCqr8Tgf8Iy3AU78fF7MngPzjcFJsiMyE1Wm4Ta5GUa5ErIe5zV26oOw
+ AqaUSTm2IIrlaSTT3OrzbqZ2rTC+O+Wx8aPUyBTACkLY1JQTJoZ2h2v9b3LT66kKIZu2
+ 9wyDe1WPzVcJLINwJOATj9CZrDPXltzHSHLURVJllV3by5FJYQ1Nm0OxxdFkFOeRPJHn TA== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3r2a6ub46t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 08 Jun 2023 02:04:00 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 357Ni37n015818;
+        Thu, 8 Jun 2023 02:03:46 GMT
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2103.outbound.protection.outlook.com [104.47.55.103])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3r2a6mgp0j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 08 Jun 2023 02:03:46 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ohkw1cUv0SvCW3j9d6z9VcAtLrms9bxcmXVxqZRJv9TixmJHZAWbHF8xGKQG6SBM3WN/n3aO2aJzecc8W92bBbHafDEzdc9tD04+e/FMoMWJ6KptU8MxuYejk4RPubDVUSDEMpzWBnZVk5P2bSSBME8pz8J7mFALaXO1ROSgwUVLk0bLMvHgmScOPpOTIv/rl3ztb22P5NjYwK5ViPnSS9hZQmNApULAzowXEWHYFFlK6ufQhg/SF06MOQO64xCVULVruFsg/hr9IpiodP+tOBR3BtkLtoiG2x/ev5+UESUGC+nQ6DTUfXcnkt2KUTveyn6Bq2iVhoFVnAJqGpp/FA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zPFRecVpMssJ846Gt6GnRpdKavHQQrE5NoVEL4mEcaA=;
+ b=FhEJY1hlMBH9qfabMKjFPIxp68C+dDEzzlWNPT26uLOqbbpq5Zgui1HMdyoJTFAGJpemu+cL3zV6uxt6gRP9YbH3ytUQ7iCMlFBGf9411LW+JC4xwVcuz74JVOca3FCBk4djSUfUE8DabHXrVd0vSCT0yMdqH/+ElwhR0P/xcJNnALSUpUqo+0uR9SMFYIxxZkZwRR5de2n4D7LJ11iMCvuBQceNuApI9ArVwJt/MjRCGECKFhBmqcouJn20t7CJ53t3I8Vb5c6QCt0qRrhPyV4f0cWTL7lVVnt6/xOzBA12PTNh1wgl9tkEPMqe7plyo+1yictFO0Xg8ux2+PTVXg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1686189555; x=1688781555;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=9MdW2ilDra+PEQ8cwF5fy8XBSC127csHw3pgdyF8PZ4=;
-        b=A+987Bmw2V0OlAgZ3MZTbbjY2DLevU4UhghaGTepNfT+qqOWUsPz3o0aWHMWNUYg4m
-         Y+5mO6NHkRunObsE5eaOjmYNKRlDNwn00I0zJnuwyL1uQg2/xHjiQMZL5WBLPWUveOcp
-         YhlC48fxbntDayjg1TojSwlLn6RE0YHmL1YkSEQFx/muay1arRf0y4coYDy8p9gkyadH
-         DVVDsy3+sENCyzLp39+az3eQkocaUgZhNqJ9HlPu6pL479iCJc5DnbPM08VxunGRHkWo
-         n+XUYkk1jPH3q9mX9/KghodmeO/ZfOG7NSmULCJ6ichFkSiHf8j48g7r1a93j9eImDDo
-         xKkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686189555; x=1688781555;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9MdW2ilDra+PEQ8cwF5fy8XBSC127csHw3pgdyF8PZ4=;
-        b=F6NL6556GW2cVutd0r47+Elmg8mY9oyiIeA0IFEjNsRA+xHXtklq4qw1ULSb0RJN7k
-         K+zdWPydWru1xZZcDMpMuMo+dEdKAejosPP5fHOTfYnfUfiHFVxN8zSXP/X+tbIVk9X+
-         jPzJUvHbtizwAvZqisCC/ec01CT4UUd+Qpw7ZIT4uRTinlDQHt1Wv9RqvzjyzGnyUQjZ
-         U4K5gl/7xrcvS8AqRc+cdtP+bNlh3xVlP9DHhaJf8mqhoWm1Eh+sUD8rBspzYbr1qr8l
-         D9lLJIO147z3UuPRpU02+AXomqT5qQYRgZCpVh3RPO4Kjc/j1BmplWxIE6T+hdAbeQjK
-         qeEw==
-X-Gm-Message-State: AC+VfDw2HXl62g4JHZkhkRoWFBCryqgfIU0ye23MxBEf5TiE1yJMSEas
-        JdQv6xisbmefLGnEC1O7+7V/RaLPTWU=
-X-Google-Smtp-Source: ACHHUZ7p4cbqrZwQ6dMPsf0Wuzi+Ki65gCggpIraOcoX7pW9s/l9FnC+gC04k8r1VhfVvgTzNsKPao1DoH4=
-X-Received: from royluo-cloudtop0.c.googlers.com ([fda3:e722:ac3:cc00:14:4d90:c0a8:bb8])
- (user=royluo job=sendgmr) by 2002:a81:4112:0:b0:54f:93c0:4ba8 with SMTP id
- o18-20020a814112000000b0054f93c04ba8mr3935245ywa.2.1686189555334; Wed, 07 Jun
- 2023 18:59:15 -0700 (PDT)
-Date:   Thu,  8 Jun 2023 01:59:12 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.41.0.rc0.172.g3f132b7071-goog
-Message-ID: <20230608015913.1679984-1-royluo@google.com>
-Subject: [PATCH v4] usb: core: add sysfs entry for usb device state
-From:   Roy Luo <royluo@google.com>
-To:     raychi@google.com, badhri@google.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Bastien Nocera <hadess@hadess.net>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Flavio Suligoi <f.suligoi@asem.it>,
-        Douglas Anderson <dianders@chromium.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Roy Luo <royluo@google.com>,
-        kernel test robot <oliver.sang@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zPFRecVpMssJ846Gt6GnRpdKavHQQrE5NoVEL4mEcaA=;
+ b=yHSi7CJpUhQcXAjhHf8aAk136X8kCtkT5nEAv1m3HkudhJKqcq8QzuFm+VOZHDEz7RAY0AHQP7o+F9SEHSFTOFT0oTEEMB6VO+oVcyrb17R3tFXL51PRcKc6vLUjV/9lKMs2t/3pQY4g7md0Vs97wiz+Mt9MJmdnql7mg+lfnD4=
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
+ by CH3PR10MB7413.namprd10.prod.outlook.com (2603:10b6:610:154::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23; Thu, 8 Jun
+ 2023 02:03:43 +0000
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::b77c:5f48:7b34:39c0]) by PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::b77c:5f48:7b34:39c0%6]) with mapi id 15.20.6455.030; Thu, 8 Jun 2023
+ 02:03:43 +0000
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     Sarthak Kukreti <sarthakkukreti@chromium.org>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Joe Thornber <thornber@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Theodore Ts'o <tytso@mit.edu>, dm-devel@redhat.com,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Brian Foster <bfoster@redhat.com>,
+        Bart Van Assche <bvanassche@google.com>,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        Joe Thornber <ejt@redhat.com>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        Jason Wang <jasowang@redhat.com>,
+        Alasdair Kergon <agk@redhat.com>
+Subject: Re: [PATCH v7 0/5] Introduce provisioning primitives
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq1sfb21zsa.fsf@ca-mkp.ca.oracle.com>
+References: <ZG1dAtHmbQ53aOhA@dread.disaster.area> <ZG+KoxDMeyogq4J0@bfoster>
+        <ZHB954zGG1ag0E/t@dread.disaster.area>
+        <CAJ0trDbspRaDKzTzTjFdPHdB9n0Q9unfu1cEk8giTWoNu3jP8g@mail.gmail.com>
+        <ZHFEfngPyUOqlthr@dread.disaster.area>
+        <CAJ0trDZJQwvAzngZLBJ1hB0XkQ1HRHQOdNQNTw9nK-U5i-0bLA@mail.gmail.com>
+        <ZHYB/6l5Wi+xwkbQ@redhat.com>
+        <CAJ0trDaUOevfiEpXasOESrLHTCcr=oz28ywJU+s+YOiuh7iWow@mail.gmail.com>
+        <ZHYWAGmKhwwmTjW/@redhat.com>
+        <CAG9=OMMnDfN++-bJP3jLmUD6O=Q_ApV5Dr392_5GqsPAi_dDkg@mail.gmail.com>
+        <ZHqOvq3ORETQB31m@dread.disaster.area>
+Date:   Wed, 07 Jun 2023 22:03:40 -0400
+In-Reply-To: <ZHqOvq3ORETQB31m@dread.disaster.area> (Dave Chinner's message of
+        "Sat, 3 Jun 2023 10:52:14 +1000")
+Content-Type: text/plain
+X-ClientProxiedBy: DM6PR03CA0094.namprd03.prod.outlook.com
+ (2603:10b6:5:333::27) To PH0PR10MB4759.namprd10.prod.outlook.com
+ (2603:10b6:510:3d::12)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR10MB4759:EE_|CH3PR10MB7413:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9e4959a4-414e-4f70-6701-08db67c4964d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 0u9PtSuEdA5DTQf+Uog0aC92BF2nw1I9yPelJUi4tNa0C4b4h60whrxjbvZ8fwIcpgZxJwbKcMEHhcmktLh1ALm543E5jb9/wDq1WCkCsaV1H6Q+CYwmjYDl75Gwi2pisSdumGbUKd1kE6+FWf4lBEfc+v35kEK0ZihRTfYkyow9G76MwTaZyOiu1ihkjNvNH16WF9tz1sn+voweNtRFok5ojpNP1t3nbA+xUkW1rJb0AAqzk0isA8JTyOKq9eCpzy0Vmfgh8Aihvbxw0b/WUUD/TKbDeuY6ZgX9M4+MINgjRnJ4E4SgUC0DUb5fs5jDTfLZOV+AqdLW7IXM11u4mcgzifcsr2FK5q69Y6Z3be95EUJFULJ7ekiGH5dG0x5eRauIIky+UOOOCfWzYO5MTjLDJ5Hs4f3cvHwhJuEu9Qo4/vdTdQ0n/Ty+XMcI1Zsu1vCrnwlda86dze0UdkKNCYF26loOU3bid6gOXvm7FC9tB3bq3PDaoAUM74n/z6T0nMEVcvoodXGCfhpPZN9gqkeOV+YtRSpRv3tVFGVq9oYuh5likXNYXyCUOar4UyX/
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(136003)(366004)(376002)(346002)(396003)(451199021)(5660300002)(83380400001)(7416002)(8936002)(86362001)(66946007)(41300700001)(6486002)(26005)(38100700002)(316002)(4326008)(6512007)(66476007)(36916002)(6916009)(54906003)(66556008)(478600001)(8676002)(186003)(6506007)(2906002)(4744005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?2P2wXqnA1AIc+D1BMU8uGjZFtmjmVBgm+uzTNY2UXFI4k3//fzxa32DulGK6?=
+ =?us-ascii?Q?RyeIb5dgob2K1xb3q14j25kfG4KB68ZqRFkVUo6PHbY95z0ExbI/jHkTCwu5?=
+ =?us-ascii?Q?TENUBrfsn0uuDXpqtUhdgOT+b2rxHNO+p11ppgvjBM+e+Lvo9Kktg50zcMee?=
+ =?us-ascii?Q?T8L6ccUA9vMAGwLB6krsBq/VvtCA65bgebEXKLmS4UBgv4+TW1AobsYbeZAT?=
+ =?us-ascii?Q?jA3W85woTaeUXWaHKqBP8fXU/VaDcFCqiPhpaYWLOaKT5a/qBPWHGzBUl/F0?=
+ =?us-ascii?Q?JwzZoYaOAdQNayt4j4JqJprhZtBiyHAFdwHebpxhWqlbJaMfbqFwXr1LxG2u?=
+ =?us-ascii?Q?972IMbI8jUi5I8EzTBWjBSI1w+bl6rdgLJm1kTHRhA5CPtUN1oANM8jaHuup?=
+ =?us-ascii?Q?LIVjD+D2GEzjSVhFqp/cFkaBvpTO4IPSnLhvbTm6oRwT0fHzaGvPHIbyryDN?=
+ =?us-ascii?Q?xLF88MY353cJ1jUC6AFz6MA/b02bAefwtyp6a5P9OoBTqZrob+7p63rlFLR3?=
+ =?us-ascii?Q?nGs9y8w/GoOBVHSb6jFUhDa5UI5Jdpk1A7F6HobGXzdYnzo+vXR94wHmGNF+?=
+ =?us-ascii?Q?9Dr+wmYpjw57ngOsBjmszLhNeyrdAe9mMDfS6jx/W6rT9RG6MvXCg3R/VUgj?=
+ =?us-ascii?Q?TxLNeeObsmcArKG4nFz8I2/mon6cOtisPykA7/9ZdzSoBjJ/Sj6+Ycvyo/ly?=
+ =?us-ascii?Q?/gdul+DpfXRAEVdn8VntVxUI1YK9Eqx7ViWNuHDFoQHaA04GXT8GzImPDCpz?=
+ =?us-ascii?Q?37dD4a03rWm7P0bv7eNvbRtLM5qBtUtpsm8m7uBscQcH88QXov+JGLBKtEeb?=
+ =?us-ascii?Q?upbEnsbkXwbNVudDWSQY7rnT1kxjHOySD2SdZrYDw0Pw4ABYptCXrj3zKk+S?=
+ =?us-ascii?Q?gU4wEH8z2vb5kCIR5EIgkr6+AcqioopctUDSyyvV6rlcTdIzd0r4d6pJCS0Z?=
+ =?us-ascii?Q?l6avi6CbycP3etAhUNokb0GyZvyfkMq3EVYB7S8J/1Fj4m80ZZmfVXy5N2IZ?=
+ =?us-ascii?Q?8xIYM/jeIzYmdB36rQmmBihlGL24ckJaViK4m8+/FGOIam5sT+0RiCUrzuHm?=
+ =?us-ascii?Q?hi1y304olneOZJbrKw3ahXsZq2b/2yCFpsmq+reoncOa6Yz6iBdahF82XkB2?=
+ =?us-ascii?Q?n1mbZ8JDVSrR7jnf5wukWsj2fGJpUIMhY3jfD0yz40uf0WKi9OFYjOuSnoxf?=
+ =?us-ascii?Q?/kPSzqKR8wCNNp2hYoyVOEGmyo35mo1Y/XaIORTFH8n73v6dS66h7YeJ6X5W?=
+ =?us-ascii?Q?yPEXduOaoXSFuk+kMH4XGaycVJ/Shh3xgu8gmDN8LvtNC5EnnYnm9QEcq4Lm?=
+ =?us-ascii?Q?ywDr88GPSP1iJmQkqf7vd2TvBtqwqgMacbumM7+TEDfAGJAglrexNF8sy/QM?=
+ =?us-ascii?Q?eUHK6OQIlbz5N6Rd51/8C5sRNkqYuGRhQqWu/EgvkmBkX3HOTIWpfXFkCS0z?=
+ =?us-ascii?Q?LUwpXFX0Gqi1KGN6Pm3W3Q8irIHVnJ6mYGwkq0Pti9xt+HmDVj1fZ39JXK07?=
+ =?us-ascii?Q?3HzhtXew2/tvtZZfb00zuCogh7cSXhFvDD8FqfEmB/EHQVY1v1MgKhfMHSuP?=
+ =?us-ascii?Q?c1BKfCLKr8EoNqpgQNAVNUlwakZ70Sn1OZskYbt9zjrjqWWfnQcpilwUAuyc?=
+ =?us-ascii?Q?Xg=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?IJlyDKGi1CSg5yvJc155/f0vdpShExEqnLUfXV4dkiJuVDs3FsBKZcGQI5p8?=
+ =?us-ascii?Q?o8jlErEap2Bnaq7OWKmmm7BIwBcoU6QIfJ1+7AMYVjEnD91J9PbV100SiQs9?=
+ =?us-ascii?Q?B9aneBbNIpfvzWenotLOTUkx9PJjC4lola3M8Bz9xfHWMZ04o3cJPb7Ic2C0?=
+ =?us-ascii?Q?6hj9vHQR73FkMbvV/ygTkz32ZJehz2kkxd8/LumCo45vGr5m6bfLMEBa7Qyg?=
+ =?us-ascii?Q?KNKZvOt7bxA0+1pOczzAUVJ1Q8caCSiegV8mK7Zm7S4ATHMrwEbVwzks9u68?=
+ =?us-ascii?Q?gDcZK1m/7z1BenK00FloxuSjmZpDm16/vbb7IJOyas5ZCNB0ECkhtkdq6Rpj?=
+ =?us-ascii?Q?O4E23Rkm5EwvF/NW2bwBKqNypgxnwEJaCqeRl3megMtKZD+Zy4PeaomKA4Q2?=
+ =?us-ascii?Q?xyVY4i2jn5zKLuozLRcCzLRoj+yTanWHuU13GNkV6xASH+dcF1VJATWe6LPo?=
+ =?us-ascii?Q?W+lhug4x852qajI4tWWAyQcgoE+PB5hN7ak7/yYjoYVJpQzWiMA4XZrhbo8w?=
+ =?us-ascii?Q?iqSXCqtmq1EzOFoOhUVHarT+eDuHi+DMQTEj3WeRAm/0LUBXgD8p2H1+4G2L?=
+ =?us-ascii?Q?V0l6DEw3iECDP23mGsWW5TYyy1Plmf1reIfEoDHdtIq9H4ZMmvtPohNE++Wc?=
+ =?us-ascii?Q?m9pIyiW2T0VYd5w6Db7YsPvRy3QH/MQ0/ENI7+zq90OzT0GO9C8Rz6K+NY7U?=
+ =?us-ascii?Q?EnVxWxkFugJpBpYlvWtHlorfnXUpHTwtvZ1DBHtnGLb5YQp1GxC3JE4vrvV9?=
+ =?us-ascii?Q?fhYJRPycIWQo8vlLziTx3niJD6LlP1MbJZ9znaObLWA1HrhDSw4BIyCFLIbv?=
+ =?us-ascii?Q?hmhPmjrQNnrUIQW85sKxLM5IscQ9WNC2dn61j88CNRmrjic5IqJQBqs7oUzw?=
+ =?us-ascii?Q?6dYvd9bzgPH/Tres8XCr7iyqF8oMJTLeBPbwniXTPXY2qs95SB5CXh71rkuN?=
+ =?us-ascii?Q?RKiM0hB8JH0tgnhtOutqFEtm+3ZipAE+2NG+c07l7Imv6ldYBcYkrijYPB8d?=
+ =?us-ascii?Q?wjdw+C45ITg53lfMLm+WOFKWYg=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9e4959a4-414e-4f70-6701-08db67c4964d
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jun 2023 02:03:43.7095
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: LDdyRby7cgI6L/SS63kqFxXOoQtDCgWdBK6byT6iAJ2hlgOuF/5wu3Bvu0JnAOxyGsymUOhcL6l6tMMq63vBR4/s3LHXUfJxxx/oRKoMdH8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR10MB7413
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-07_13,2023-06-07_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 suspectscore=0 bulkscore=0
+ spamscore=0 mlxlogscore=880 adultscore=0 phishscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306080015
+X-Proofpoint-GUID: qvEDSeu3ZiYVHl31NCVuM1rmGCKDqo6X
+X-Proofpoint-ORIG-GUID: qvEDSeu3ZiYVHl31NCVuM1rmGCKDqo6X
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Expose usb device state to userland as the information is useful in
-detecting non-compliant setups and diagnosing enumeration failures.
-For example:
-- End-to-end signal integrity issues: the device would fail port reset
-  repeatedly and thus be stuck in POWERED state.
-- Charge-only cables (missing D+/D- lines): the device would never enter
-  POWERED state as the HC would not see any pullup.
 
-What's the status quo?
-We do have error logs such as "Cannot enable. Maybe the USB cable is bad?"
-to flag potential setup issues, but there's no good way to expose them to
-userspace.
+Dave,
 
-Why add a sysfs entry in struct usb_port instead of struct usb_device?
-The struct usb_device is not device_add() to the system until it's in
-ADDRESS state hence we would miss the first two states. The struct
-usb_port is a better place to keep the information because its life
-cycle is longer than the struct usb_device that is attached to the port.
+> Possibly unintentionally, I didn't call it REQ_OP_PROVISION but that's
+> what I intended - the operation does not contain data at all. It's an
+> operation like REQ_OP_DISCARD or REQ_OP_WRITE_ZEROS - it contains a
+> range of sectors that need to be provisioned (or discarded), and
+> nothing else.
 
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Closes: https://lore.kernel.org/oe-lkp/202306042228.e532af6e-oliver.sang@intel.com
-Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Roy Luo <royluo@google.com>
----
-This patch comes directly from RFC v2 after being reviewed by Alan Stern
-Link: https://lore.kernel.org/all/20230531010134.1092942-1-royluo@google.com/
-More discussion about implementation options is in RFC v1
-Link: https://lore.kernel.org/all/20230525173818.219633-1-royluo@google.com/
+Yep. That's also how SCSI defines it. The act of provisioning a block
+range is done through an UNMAP command using a special flag. All it does
+is pin down those LBAs so future writes to them won't result in ENOSPC.
 
-Changes since v1:
-* Address Alan Stern's comment: remove redundant NULL initializers in
-  update_port_device_state().
-
-Changes since v2:
-* Fix "BUG: sleeping function called from invalid context" caught by
-  kernel test robot. Move sleeping function sysfs_get_dirent to port
-  initialization and keep the kernfs_node for future reference.
-  (Reviewed-by tag is reset as this patch involves more code changes)
-
-Changes since v3:
-* Add Alan Stern's Reviewed-by tag.
-* Update ABI documentation: update date, comply to char limit per
-  line and specify the attribute is pollable.
-* Address Greg Kroah-Hartman's comment: use sysfs_emit() instead of
-  sprintf().
----
- Documentation/ABI/testing/sysfs-bus-usb | 10 ++++++++
- drivers/usb/core/hub.c                  | 15 ++++++++++++
- drivers/usb/core/hub.h                  |  4 ++++
- drivers/usb/core/port.c                 | 32 +++++++++++++++++++++----
- 4 files changed, 57 insertions(+), 4 deletions(-)
-
-diff --git a/Documentation/ABI/testing/sysfs-bus-usb b/Documentation/ABI/testing/sysfs-bus-usb
-index cb172db41b34..be663258b9b7 100644
---- a/Documentation/ABI/testing/sysfs-bus-usb
-+++ b/Documentation/ABI/testing/sysfs-bus-usb
-@@ -292,6 +292,16 @@ Description:
- 		which is marked with early_stop has failed to initialize, it will ignore
- 		all future connections until this attribute is clear.
- 
-+What:		/sys/bus/usb/devices/.../<hub_interface>/port<X>/state
-+Date:		June 2023
-+Contact:	Roy Luo <royluo@google.com>
-+Description:
-+		Indicates current state of the USB device attached to the port.
-+		Valid states are: 'not-attached', 'attached', 'powered',
-+		'reconnecting', 'unauthenticated', 'default', 'addressed',
-+		'configured', and 'suspended'. This file supports poll() to
-+		monitor the state change from user space.
-+
- What:		/sys/bus/usb/devices/.../power/usb2_lpm_l1_timeout
- Date:		May 2013
- Contact:	Mathias Nyman <mathias.nyman@linux.intel.com>
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 97a0f8faea6e..a739403a9e45 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -2018,6 +2018,19 @@ bool usb_device_is_owned(struct usb_device *udev)
- 	return !!hub->ports[udev->portnum - 1]->port_owner;
- }
- 
-+static void update_port_device_state(struct usb_device *udev)
-+{
-+	struct usb_hub *hub;
-+	struct usb_port *port_dev;
-+
-+	if (udev->parent) {
-+		hub = usb_hub_to_struct_hub(udev->parent);
-+		port_dev = hub->ports[udev->portnum - 1];
-+		WRITE_ONCE(port_dev->state, udev->state);
-+		sysfs_notify_dirent(port_dev->state_kn);
-+	}
-+}
-+
- static void recursively_mark_NOTATTACHED(struct usb_device *udev)
- {
- 	struct usb_hub *hub = usb_hub_to_struct_hub(udev);
-@@ -2030,6 +2043,7 @@ static void recursively_mark_NOTATTACHED(struct usb_device *udev)
- 	if (udev->state == USB_STATE_SUSPENDED)
- 		udev->active_duration -= jiffies;
- 	udev->state = USB_STATE_NOTATTACHED;
-+	update_port_device_state(udev);
- }
- 
- /**
-@@ -2086,6 +2100,7 @@ void usb_set_device_state(struct usb_device *udev,
- 				udev->state != USB_STATE_SUSPENDED)
- 			udev->active_duration += jiffies;
- 		udev->state = new_state;
-+		update_port_device_state(udev);
- 	} else
- 		recursively_mark_NOTATTACHED(udev);
- 	spin_unlock_irqrestore(&device_state_lock, flags);
-diff --git a/drivers/usb/core/hub.h b/drivers/usb/core/hub.h
-index e23833562e4f..37897afd1b64 100644
---- a/drivers/usb/core/hub.h
-+++ b/drivers/usb/core/hub.h
-@@ -84,6 +84,8 @@ struct usb_hub {
-  * @peer: related usb2 and usb3 ports (share the same connector)
-  * @req: default pm qos request for hubs without port power control
-  * @connect_type: port's connect type
-+ * @state: device state of the usb device attached to the port
-+ * @state_kn: kernfs_node of the sysfs attribute that accesses @state
-  * @location: opaque representation of platform connector location
-  * @status_lock: synchronize port_event() vs usb_port_{suspend|resume}
-  * @portnum: port index num based one
-@@ -100,6 +102,8 @@ struct usb_port {
- 	struct usb_port *peer;
- 	struct dev_pm_qos_request *req;
- 	enum usb_port_connect_type connect_type;
-+	enum usb_device_state state;
-+	struct kernfs_node *state_kn;
- 	usb_port_location_t location;
- 	struct mutex status_lock;
- 	u32 over_current_count;
-diff --git a/drivers/usb/core/port.c b/drivers/usb/core/port.c
-index 06a8f1f84f6f..77be0dc28da9 100644
---- a/drivers/usb/core/port.c
-+++ b/drivers/usb/core/port.c
-@@ -160,6 +160,16 @@ static ssize_t connect_type_show(struct device *dev,
- }
- static DEVICE_ATTR_RO(connect_type);
- 
-+static ssize_t state_show(struct device *dev,
-+			  struct device_attribute *attr, char *buf)
-+{
-+	struct usb_port *port_dev = to_usb_port(dev);
-+	enum usb_device_state state = READ_ONCE(port_dev->state);
-+
-+	return sysfs_emit(buf, "%s\n", usb_state_string(state));
-+}
-+static DEVICE_ATTR_RO(state);
-+
- static ssize_t over_current_count_show(struct device *dev,
- 				       struct device_attribute *attr, char *buf)
- {
-@@ -259,6 +269,7 @@ static DEVICE_ATTR_RW(usb3_lpm_permit);
- 
- static struct attribute *port_dev_attrs[] = {
- 	&dev_attr_connect_type.attr,
-+	&dev_attr_state.attr,
- 	&dev_attr_location.attr,
- 	&dev_attr_quirks.attr,
- 	&dev_attr_over_current_count.attr,
-@@ -705,19 +716,24 @@ int usb_hub_create_port_device(struct usb_hub *hub, int port1)
- 		return retval;
- 	}
- 
-+	port_dev->state_kn = sysfs_get_dirent(port_dev->dev.kobj.sd, "state");
-+	if (!port_dev->state_kn) {
-+		dev_err(&port_dev->dev, "failed to sysfs_get_dirent 'state'\n");
-+		retval = -ENODEV;
-+		goto err_unregister;
-+	}
-+
- 	/* Set default policy of port-poweroff disabled. */
- 	retval = dev_pm_qos_add_request(&port_dev->dev, port_dev->req,
- 			DEV_PM_QOS_FLAGS, PM_QOS_FLAG_NO_POWER_OFF);
- 	if (retval < 0) {
--		device_unregister(&port_dev->dev);
--		return retval;
-+		goto err_put_kn;
- 	}
- 
- 	retval = component_add(&port_dev->dev, &connector_ops);
- 	if (retval) {
- 		dev_warn(&port_dev->dev, "failed to add component\n");
--		device_unregister(&port_dev->dev);
--		return retval;
-+		goto err_put_kn;
- 	}
- 
- 	find_and_link_peer(hub, port1);
-@@ -754,6 +770,13 @@ int usb_hub_create_port_device(struct usb_hub *hub, int port1)
- 		port_dev->req = NULL;
- 	}
- 	return 0;
-+
-+err_put_kn:
-+	sysfs_put(port_dev->state_kn);
-+err_unregister:
-+	device_unregister(&port_dev->dev);
-+
-+	return retval;
- }
- 
- void usb_hub_remove_port_device(struct usb_hub *hub, int port1)
-@@ -765,5 +788,6 @@ void usb_hub_remove_port_device(struct usb_hub *hub, int port1)
- 	if (peer)
- 		unlink_peers(port_dev, peer);
- 	component_del(&port_dev->dev, &connector_ops);
-+	sysfs_put(port_dev->state_kn);
- 	device_unregister(&port_dev->dev);
- }
-
-base-commit: 933174ae28ba72ab8de5b35cb7c98fc211235096
 -- 
-2.41.0.rc0.172.g3f132b7071-goog
-
+Martin K. Petersen	Oracle Linux Engineering
