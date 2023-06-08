@@ -2,116 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 662C0727FFF
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 14:28:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBC7D728005
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 14:30:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236369AbjFHM2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 08:28:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49504 "EHLO
+        id S229802AbjFHMa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 08:30:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232984AbjFHM2r (ORCPT
+        with ESMTP id S236164AbjFHMaY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 08:28:47 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2C2F26B0;
-        Thu,  8 Jun 2023 05:28:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1686227322; x=1717763322;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=D3eGuNa1+BoSZIrVhFPmuw0PAOKIN8uK8gmRTqHfLG4=;
-  b=esVpqYHHgx5kpOfYhZ9Mf2DbbVPU0TwLUQaqB68pCrEYa5aj9NJUppYj
-   SoR4pMDc989qcqcbvuJu20j+1kLMIVdOw867bP8VIIbMJpTuT3icTOf3w
-   Xk6kJdL9M19yZKrcEX7NwAZtECza5asr1sRg015OKO7YtGioZS4niq4jV
-   q1SZFOgu6MQPuO0hBvO24/2OqhOoqhH93ZqHg2a/ZWYP+EQeLA1ztZeAi
-   9hkByaA/KTt4sKrRyhe+91c4+D1kvo2usJCU9CXoPJWKazFenisEbmY1/
-   2OxWpn9hpdEUc7dnFUGqTXNuAXZYmN3GK4JivOEgeHYroA3qQocyxwZ3f
-   A==;
-X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
-   d="asc'?scan'208";a="219411820"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Jun 2023 05:28:40 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 8 Jun 2023 05:28:33 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Thu, 8 Jun 2023 05:28:30 -0700
-Date:   Thu, 8 Jun 2023 13:28:06 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-CC:     <linux-riscv@lists.infradead.org>, <conor@kernel.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, <rust-for-linux@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <llvm@lists.linux.dev>
-Subject: Re: [PATCH v1 0/2] RISC-V: enable rust
-Message-ID: <20230608-spiritism-gonad-5f5aff4c3a24@wendy>
-References: <20230307102441.94417-1-conor.dooley@microchip.com>
- <20230608-dispatch-sneer-aa09bd7b2eb8@wendy>
- <CANiq72nnph7LS1fLRtHz8NJ91PWXPaUnm0EuoV3wrbvK398AnA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="HEkduUF7a/Zaoz5V"
+        Thu, 8 Jun 2023 08:30:24 -0400
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2096.outbound.protection.outlook.com [40.107.101.96])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1E99E62;
+        Thu,  8 Jun 2023 05:30:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=H61fSCKrJ9UvQR+jEWFPZby/83Z89uOTC+JMO/mR38rzICnmLhu4iV1Ov5Ijd1cS0lF/yEnilga4E0rxH3cKI8PiMJ2Ci+3liIv1xE9Z4Fh3ik3TR5fiE8f5mZgLsDOjt+KQ8CYpWq77bQnDUd0jz2SCmNPOZyCFg1zmbIATpImmtn08GU5rquCFfMa4dODslLAiKrt64P1RWNGSz8N47JrF/0/z8zh/0A6C/1Y1pWwtRRxNBrlyeIrVRFBNVhEBY07n45OHbMQZDj1k1r8KQ81ksNB71XZQMvAyQK7QvuGq/anLKq23SVc0PiVymxkCfh5pfGrGQ5AfaI6Lj+fdBA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=43FwK1BCdDBrNv1SgOsKy96ExJFo+k+52Wzn8S5Pyqk=;
+ b=cwN3Nq0kvsIR4XeWug8z8IGOML6n21UgBbTmeg1pa/sbEVSx6+vVJqvevNVf0CxnlBVxPzzJ978sOHfPuU6AyuyIQsey/TCgiut6uRXJpXdy78/REQJIeVX32+6thJeTBsW2Amgxolewt7C2xI6rp2xEvqmNOVkvOjxCeYmiwWi4orVZljzcOBncUGAypIL5kFqsDF0TaKmb6vS9N3DLKY1PBG++NGG9sMFB48afnoHjOuRlQBvgD+fey6dtAq/mSIynD3xI3CB+/idwJsUChJQldbGxr/PGb/UrMx90yjTokp/6NCO7UDJw2/4hO4+u4NnivAMtNRmOtMvCLd/hOw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=43FwK1BCdDBrNv1SgOsKy96ExJFo+k+52Wzn8S5Pyqk=;
+ b=dKaYuF/uFbkI3ZMTN8QAXKWHHnbiuetg+oHSqVL4iU1MlrBq8DvkXAWz/0V6fJpm7Hf1ElZBeCPmwqZoRp6MFzyuGJkjiEq468dANA1SYtdzphBQJ/zL/EGzh8pHW6ZnqSxUUi+BeqFADrVY2qgNl4EKOVUWv4TDMSuzKNpN8Wg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by BL3PR13MB5209.namprd13.prod.outlook.com (2603:10b6:208:340::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Thu, 8 Jun
+ 2023 12:30:17 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb8f:e482:76e0:fe6e]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb8f:e482:76e0:fe6e%4]) with mapi id 15.20.6455.030; Thu, 8 Jun 2023
+ 12:30:17 +0000
+Date:   Thu, 8 Jun 2023 14:30:10 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Yang Li <yang.lee@linux.alibaba.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, kys@microsoft.com, haiyangz@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com,
+        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH -next] net: hv_netvsc: Remove duplicated include in
+ rndis_filter.c
+Message-ID: <ZIHJ0pxnv63jGkuW@corigine.com>
+References: <20230608080316.84203-1-yang.lee@linux.alibaba.com>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CANiq72nnph7LS1fLRtHz8NJ91PWXPaUnm0EuoV3wrbvK398AnA@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230608080316.84203-1-yang.lee@linux.alibaba.com>
+X-ClientProxiedBy: AS4P191CA0024.EURP191.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5d9::18) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|BL3PR13MB5209:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1231e974-f3ec-47e1-2881-08db681c1db1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 1LyqXVzU3K21tlvbe+/CXRXtwGm/NDC0r4nURT5kmD0BWtwy/uQirpFX0MxdPaLQRIzuNNazo0ABpSqfp8NTjyT+8HOX95hCoUE/WVn5CoccoQU43PmNi+q8JT1r7R8gUDrapD3LtNOs/3U48tXLHNLer2OygTYDK1Ud3l2UQLX6C26QbYAsAnU7+G+evNW76k3xOHj84L0POYw1sgV8nsRDTGhKkWF27pYA7MScOcJa/MwN6hBJs85sE99hdV3C1aCXNfk4yqjFLg1hr2VeD7F0fSgUYK6X6oVTYjtmR+FCckx/+jdTd3Aubub81s9uzku9o5YsxC4KDOWYYelWV1rbNXLjta870FogJ/E9TuMBcH2uR0+Sgbs+5c+zPZlTo7jdftWDsg0a9l8ds7f0u9YhQfqIfUYaoXSMPMgv/vhl1o5MLCD6p2ZDSzXHMbj4OcOM+FjCnsJrYUnTq9XFlyE15EvuVhGyFVScBs/hGy5yYtC/1vbWb5ew1lGvM5jE97Fafg7y/Ca32BOuIkOLoYEWTysHd3WyVdcw3OkQJdQ=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(366004)(39840400004)(346002)(376002)(451199021)(966005)(6512007)(2616005)(6666004)(6506007)(478600001)(186003)(6486002)(83380400001)(66476007)(66946007)(4326008)(6916009)(66556008)(316002)(38100700002)(8676002)(8936002)(44832011)(5660300002)(7416002)(2906002)(41300700001)(36756003)(86362001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?sw4tA6th8gdGxLho9BhMA8w+IgbZ6eoAUbqA49YrLxfO3//2+wpwNO1nRmaM?=
+ =?us-ascii?Q?taagZI76IVcecTPTfKr6zVh0+SghBhengHfzTcMvpPlOgtgMsjwcS441Oo8b?=
+ =?us-ascii?Q?5xGZ7vv6kVIXukmq+dOCUewB86tv5EeeRCR/N+BmR7IwMb9C7PKdYhTA5C9M?=
+ =?us-ascii?Q?88sHHV6jt0h4llUte8/LLtyGlvqNKqQRfeSvb9y+8+dFbhNrCzUF4Ot52jJA?=
+ =?us-ascii?Q?yUTP381/xhH1A6Ygyktt6+BixFvr3xAGqy14h6fzcjNyLMoyGh8RR1WhM8ny?=
+ =?us-ascii?Q?UOuxJo1nwsRnIlqG5MH1YvXi4MwylOqv9esbU6iBUlmz+j+Ph+LF1iwGq702?=
+ =?us-ascii?Q?wTBuQVwgagHXcdUZQnSfB9DF5Oe93dWXQ+NUkGfMjbAJ3fXWBAWdcm6UD7Jq?=
+ =?us-ascii?Q?InPekm0ljX+ks9touPh9cbPGG4ZVSPiFqBCHZX52oDwYSJ/SckMVpFNqXgm5?=
+ =?us-ascii?Q?+gIFeaoxTnFVsSq4MqfwhLLH/4BSU9Io0iATHB/e+5yAqMLyt1vH84UspThz?=
+ =?us-ascii?Q?Z7VnIMdaqdLOk+yzYkIlaYIoORjlLlgKatvnzGePaa1HtYkFZCkAhP+6g+XX?=
+ =?us-ascii?Q?R4N90Kma1ufaiQfMiHtYRnwYh0X2F3z6MV9P4aH50kEZeSFddMxmcuXhkogm?=
+ =?us-ascii?Q?uW2cpLrxlfvDUrJmkdfTCv2ocN41mdrH+pPo9ENI6NrQ0sDcdAuZ/9r0ClmY?=
+ =?us-ascii?Q?nnWIwVHUPxDwmT6gk2rsUjP5ccc2PTggcauC79m7jYF9R9x7Il5Wy7xG2Zn7?=
+ =?us-ascii?Q?gZQBtGOuATmpz554Vk5xuOVEKk8VbuvSy57xmNmlS67SSTFQt4WjFHLg3tqt?=
+ =?us-ascii?Q?pZ8cjiUuFbo4A6p9pqgPBrCqvY1G1XsPeQ/f5QGgj12fJQBhbiTMlWL4kjTL?=
+ =?us-ascii?Q?+Y6c155cGtyfbxFN1/wzAgExsSRZyQwb/CiprfWSTgpu4HDR4RI4q09Xn36B?=
+ =?us-ascii?Q?7KvroHGpPzssy8l7mTCzz/xbDoOxrg1wO+aQLPkT+3SVFGfvN7MnDdi2G0vs?=
+ =?us-ascii?Q?VXV2DjXDMX5eUyDwc1Ai1JoF2duK0bbU9vc6Ug3KS5rY6UG4rW1eKIOtTxcb?=
+ =?us-ascii?Q?aQrYFcNtFLsWDXmOoJ1XYjWNFNelU+moYZDGC+BcLTXgo4q+pr0W3i1oW6lq?=
+ =?us-ascii?Q?UjSVs3PzLDRAvI+8S8T8jns9zzoFeunqCm/K4KyH5qZkQ6i0R0fhFFuw0JLS?=
+ =?us-ascii?Q?ZM1cLz1xZYYPLhzSgIWZtnWb8v+hiCQyak0ggpnosDVwpLBGbslbGA0HssR0?=
+ =?us-ascii?Q?9yp6Vo7ny0AeW6QOuMo1DhUTvRWGokJEj4OZ0lRvh7dml3KcUeDmiQtprroS?=
+ =?us-ascii?Q?FHZMcfCFZgBwXQ19Bbr8+8/y2eejEHEspR1GNLMKQVNtdb7Vn5MTwcZ9UUmz?=
+ =?us-ascii?Q?xgoKS3UByRHOuAKIRK2vsYiQ+3rPS4rEob5Elye4zsZ+slqru8xrZhHRFRVD?=
+ =?us-ascii?Q?egJRsgyo6kPBbFqC4Anm7lZdqoQIL4bWTNTqWA9KB0dsyf5Dnieuk8uT5ER3?=
+ =?us-ascii?Q?o7o+59KDdbzVbVLY18RvcTYs6qJ3bbr54DQdiCcDhGORtt7x3Xf0qw1EAkoA?=
+ =?us-ascii?Q?TQ96HPb5XPORh/gsem5s8TiTIcZiHoufDqnt1fnpwTwSSuMl1BjJ3q87VQRz?=
+ =?us-ascii?Q?KraM7y9/3nsfvKkrxNT9uyfVdmnZ4KuNDeN+738AjUq06DLfhq05W5Tssib5?=
+ =?us-ascii?Q?VQcZeQ=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1231e974-f3ec-47e1-2881-08db681c1db1
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jun 2023 12:30:17.1154
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: EgLW48DTnoOA9U40tG8ze3MBJlrKhLrUwnYJ1a8DeZazhzUz8PJIdp2AEytW8HQ0oWGXXt1rUxYUHzgKy15aXqw7oMrnZlFiAGjPP1dXXNc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR13MB5209
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---HEkduUF7a/Zaoz5V
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Thu, Jun 08, 2023 at 04:03:16PM +0800, Yang Li wrote:
+> ./drivers/net/hyperv/rndis_filter.c: linux/slab.h is included more than once.
+> 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Closes: https://bugzilla.openanolis.cn/show_bug.cgi?id=5462
+> Fixes: 4cab498f33f7 ("hv_netvsc: Allocate rx indirection table size dynamically")
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 
-On Thu, Jun 08, 2023 at 01:52:47PM +0200, Miguel Ojeda wrote:
-> On Thu, Jun 8, 2023 at 9:01=E2=80=AFAM Conor Dooley <conor.dooley@microch=
-ip.com> wrote:
-> >
-> > I do intend revisting this, probably after the min. version for rust
-> > gets bumped, I've just been really busy with other work the last weeks.
->=20
-> Thanks Conor! That would be great. We are increasing the minimum
-> version after the merge window to Rust 1.70.0 (assuming no unexpected
-> issues).
+Hi Yang Li,
 
-Right, so probably I won't resubmit anything until after v6.6 then,
-as it won't be in the RISC-V tree until then, by the sounds of your
-timeline.
-Gives me plenty of time to try and unravel the mess of libclang versions
-and what extensions are supported by each tool. Not like I am devoid of
-other things that need to be done!
+A few nits from my side;
+
+1. The subject should include the target tree, in this case net-next.
+
+	[PATCH net-next] ...
+
+2. I don't think this needs a fixes tag: nothing was broken
+
+I'm not sure this warrants a v2.
+If you do decide to post a v2, please allow for 24h since
+v1 was posted.
+
+Link: https://kernel.org/doc/html/v6.3/process/maintainer-netdev.html
+
+Lastly, I think at least one other similar change has been posted recently.
+Please consider batching up such changes, say in groups of 10 patches,
+and posting them as a patch-set.
 
 
---HEkduUF7a/Zaoz5V
-Content-Type: application/pgp-signature; name="signature.asc"
+The change itself seems fine to me.
 
------BEGIN PGP SIGNATURE-----
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIHJVgAKCRB4tDGHoIJi
-0ikSAP9vwx3IhwT2YQBx4VTPuAhBIV9NLradoYYCFXuEPhuj0QD/TlPI2RbulZ9K
-uWEHPxTMU46fCeYmbOUy5I7dtUUEwgg=
-=ram8
------END PGP SIGNATURE-----
-
---HEkduUF7a/Zaoz5V--
+> ---
+>  drivers/net/hyperv/rndis_filter.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/net/hyperv/rndis_filter.c b/drivers/net/hyperv/rndis_filter.c
+> index af95947a87c5..ecc2128ca9b7 100644
+> --- a/drivers/net/hyperv/rndis_filter.c
+> +++ b/drivers/net/hyperv/rndis_filter.c
+> @@ -21,7 +21,6 @@
+>  #include <linux/rtnetlink.h>
+>  #include <linux/ucs2_string.h>
+>  #include <linux/string.h>
+> -#include <linux/slab.h>
+>  
+>  #include "hyperv_net.h"
+>  #include "netvsc_trace.h"
+> -- 
+> 2.20.1.7.g153144c
+> 
+> 
