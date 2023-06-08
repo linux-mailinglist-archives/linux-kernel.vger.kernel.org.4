@@ -2,141 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B8577285A9
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 18:46:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84F3F7285A5
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 18:45:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234120AbjFHQqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 12:46:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55086 "EHLO
+        id S234717AbjFHQpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 12:45:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230418AbjFHQp7 (ORCPT
+        with ESMTP id S237262AbjFHQpM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 12:45:59 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D184125
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 09:45:33 -0700 (PDT)
-Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 358GbIQs000372;
-        Thu, 8 Jun 2023 16:45:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=X36n1Ub6Wok83kfuRc6al1XAx2kj5zm7pu2n9i67kZ4=;
- b=lKZiZYkTxg5c3AWJjwnyxA/5x4edN0ylH+4OlrjTysWhBl0eWuc5g6REXdRdrPKe7Q5c
- YtRby9zahcqvnCY8eWXYU64JlqaBqyvIzFPRaF4rACOUUMcL/F/5ufzOGHN4cwkANJQZ
- MhK6t90DhKRrICl/wfIeyhEJ5h30qC26ApwThSEfqU7HXIFd9oBBNdMjZ9tXjOyMIF4s
- H0E1EaZziUjGjsBX5Z0839ZgNcBvPYRADO5FxKDCY9u6NJdG79gSFuD6bpZalkeXzg6+
- sbSpKidtzgpGWMPbbFxKG5hab3Gf0/C0Jm2c7+ucKkULNuDESFBOWIPjqcIhouqHBTXZ 1Q== 
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3r3jnrrj88-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 08 Jun 2023 16:45:19 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 358D4L8r022067;
-        Thu, 8 Jun 2023 16:44:20 GMT
-Received: from smtprelay07.dal12v.mail.ibm.com ([9.208.130.99])
-        by ppma02wdc.us.ibm.com (PPS) with ESMTPS id 3r2a781n6b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 08 Jun 2023 16:44:20 +0000
-Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
-        by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 358GiJbA38928934
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 8 Jun 2023 16:44:19 GMT
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6E2CB5805A;
-        Thu,  8 Jun 2023 16:44:19 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3BB2458063;
-        Thu,  8 Jun 2023 16:44:19 +0000 (GMT)
-Received: from [9.61.102.249] (unknown [9.61.102.249])
-        by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Thu,  8 Jun 2023 16:44:19 +0000 (GMT)
-Message-ID: <c494b420-21de-eb96-aa29-859c9418e887@linux.ibm.com>
-Date:   Thu, 8 Jun 2023 11:44:19 -0500
+        Thu, 8 Jun 2023 12:45:12 -0400
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 001861988;
+        Thu,  8 Jun 2023 09:44:46 -0700 (PDT)
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1b0201d9a9eso6522305ad.0;
+        Thu, 08 Jun 2023 09:44:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686242668; x=1688834668;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oN2uOH0xhwYXRY/SUrWmPeIn7QoShRPlGWgaIgQS6r4=;
+        b=ddvoep2otUmoMhogBYdCG5Kfe2y4gZpVEqDCsbfB5Q9T8FYEnVWNHhfUTpVhwh4PTc
+         z607KGeX5d1ekzjK7uv3TlSE/fXlAzd8r+8J9psoK4JwqPARaG/8bgr1QR3sbkn3zQfD
+         1D+wuTZiW3nKDywRoDmIHl72l2xU+Znl3Q62U9ULRSYXdEUlI3OpGMDnpcrbgocU0l9t
+         fXA5spECkNI2U6zrH3ZlMBnjRwuNyfoLMSEK7xgtDqLMNpbRo2vBkf0L3PozqtqRx98m
+         JpS5b1qeNC2TDJOlec6KHcdU7sMngWwe+Lj5WnRzTQRRzYZj6A53VljIBowA2x5qiZBC
+         yS3Q==
+X-Gm-Message-State: AC+VfDx+MCIrVIODC+SxhJmz3JU0oaZVqzY2p2hOA6uiLo7Iwga+94gi
+        PVKvVDQ1+SiAjLiui/4SzVs=
+X-Google-Smtp-Source: ACHHUZ5YgRX5F9XBcpzjZARPQoDBlDS2FlIk8uTpKvyOLhBm9cLOX9pyVA2SlyP8GyTPa/QFqW0iDQ==
+X-Received: by 2002:a17:903:64f:b0:1b1:bcea:c8f7 with SMTP id kh15-20020a170903064f00b001b1bceac8f7mr2616299plb.15.1686242667710;
+        Thu, 08 Jun 2023 09:44:27 -0700 (PDT)
+Received: from [192.168.51.14] ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id jk14-20020a170903330e00b001b050df0a93sm1659550plb.93.2023.06.08.09.44.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Jun 2023 09:44:27 -0700 (PDT)
+Message-ID: <7c13f4f8-0921-5a15-70bc-248550f1efa4@acm.org>
+Date:   Thu, 8 Jun 2023 09:44:26 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] fsi: core: Fix legacy minor numbering
-To:     Joel Stanley <joel@jms.id.au>
-Cc:     linux-fsi@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        jk@ozlabs.org, alistair@popple.id.au
-References: <20230413162440.3313036-1-eajames@linux.ibm.com>
- <CACPK8Xdzjh3YATzuA+JB_PpzE-uJsbD+vL2Q3tUf83xYbto8vw@mail.gmail.com>
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] scsi: ufs: wb: Add explicit flush_threshold sysfs
+ attribute
 Content-Language: en-US
-From:   Eddie James <eajames@linux.ibm.com>
-In-Reply-To: <CACPK8Xdzjh3YATzuA+JB_PpzE-uJsbD+vL2Q3tUf83xYbto8vw@mail.gmail.com>
+To:     Lu Hongfei <luhongfei@vivo.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Jinyoung Choi <j-young.choi@samsung.com>,
+        Peter Wang <peter.wang@mediatek.com>,
+        Daniil Lunev <dlunev@chromium.org>,
+        "open list:UNIVERSAL FLASH STORAGE HOST CONTROLLER DRIVER" 
+        <linux-scsi@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Cc:     opensource.kernel@vivo.com
+References: <20230608101642.40086-1-luhongfei@vivo.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20230608101642.40086-1-luhongfei@vivo.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Xz4FzYr_w0392fTnNeEQ6L3VcIxMDDzV
-X-Proofpoint-ORIG-GUID: Xz4FzYr_w0392fTnNeEQ6L3VcIxMDDzV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-08_12,2023-06-08_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
- priorityscore=1501 impostorscore=0 bulkscore=0 mlxscore=0 mlxlogscore=999
- suspectscore=0 spamscore=0 lowpriorityscore=0 clxscore=1011 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
- definitions=main-2306080145
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 6/8/23 03:16, Lu Hongfei wrote:
+> +static ssize_t wb_flush_threshold_show(struct device *dev,
+> +					 struct device_attribute *attr,
+> +					 char *buf)
+> +{
+> +	struct ufs_hba *hba = dev_get_drvdata(dev);
+> +
+> +	return sysfs_emit(buf, "%d\n", hba->vps->wb_flush_threshold);
+> +}
 
-On 5/30/23 20:54, Joel Stanley wrote:
-> On Thu, 13 Apr 2023 at 16:24, Eddie James <eajames@linux.ibm.com> wrote:
->> FSI reserves the first 64 minor numbers for the legacy numbering
->> based on the chip id. However the legacy number shifts the chip
->> id too much, resulting in overlap between legacy and non-legacy
->> numbers. Reduce the chip id bit shift since the type field only
->> takes 2 bits.
-> I don't know much about the legacy numbering. Was that something we
-> used before the device tree descriptions were in place? Do we still
-> need it if we have updated device trees?
+Since wb_flush_threshold is unsigned, please change %d into %u.
 
+> +	if (!ufshcd_is_wb_allowed(hba)) {
+> +		dev_warn(dev, "It is not allowed to configure WB buf flush threshold!\n");
+> +		return -EOPNOTSUPP;
+> +	}
 
-Its a way to number the devices based on the "chip id", which came from 
-the device tree anyway. Now with the aliasing patch we could do away 
-with it I believe, but we would need to update older system device trees 
-(and scom devices on p10) to not break stuff.
+The above check prevents configuring the flush threshold before enabling 
+the write booster mechanism. I don't think users will like this. Please 
+leave out the above check.
 
->
->> Signed-off-by: Eddie James <eajames@linux.ibm.com>
->> ---
->>   drivers/fsi/fsi-core.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/fsi/fsi-core.c b/drivers/fsi/fsi-core.c
->> index 0b927c9f4267..b9f410170655 100644
->> --- a/drivers/fsi/fsi-core.c
->> +++ b/drivers/fsi/fsi-core.c
->> @@ -950,7 +950,7 @@ static int __fsi_get_new_minor(struct fsi_slave *slave, enum fsi_dev_type type,
->>          /* Check if we qualify for legacy numbering */
->>          if (cid >= 0 && cid < 16 && type < 4) {
->>                  /* Try reserving the legacy number */
-> Would it help to put some of your commit message info in this comment,
-> so we know what the magic shift is doing?
+> +	if (kstrtouint(buf, 0, &wb_flush_threshold))
+> +		return -EINVAL;
+> +
+> +	/* The range of values for wb_flush_threshold is (0,10] */
+> +	if (wb_flush_threshold <= 0 || wb_flush_threshold > 10) {
+> +		dev_err(dev, "The value of wb_flush_threshold is invalid!\n");
+> +		return -EINVAL;
+> +	}
 
-
-Sure thing.
+Please change '10' in the above code into UFS_WB_BUF_REMAIN_PERCENT(100) 
+to make the above code easier to read.
 
 Thanks,
 
-Eddie
-
-
->
->> -               id = (cid << 4) | type;
->> +               id = (cid << 2) | type;
->>                  id = ida_simple_get(&fsi_minor_ida, id, id + 1, GFP_KERNEL);
->>                  if (id >= 0) {
->>                          *out_index = fsi_adjust_index(cid);
->> --
->> 2.31.1
->>
+Bart.
