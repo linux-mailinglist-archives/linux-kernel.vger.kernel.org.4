@@ -2,73 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7EE4728258
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 16:09:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71E937281A0
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 15:44:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236814AbjFHOJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 10:09:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47498 "EHLO
+        id S234536AbjFHNoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 09:44:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233743AbjFHOJj (ORCPT
+        with ESMTP id S229848AbjFHNoX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 10:09:39 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82FCB2726;
-        Thu,  8 Jun 2023 07:09:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686233358; x=1717769358;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=7gNlb5Ws7TsWLFBW0xpUZk48cAEveB9ZFyNwMafwQuE=;
-  b=SycFZnTZ4mxi/S3quOWmg4hYG97BeqDiWcnRqbIwH9HP0cZYwD/uS1Js
-   w6xqBBcgwpOI/FlKHwkkw6thFTUiEFSf7XT5vWLdRHdU6WN4s0EGvyLUX
-   GMqbFEFDQ9c0YJy2ulvm2hZAwJma1euGDqB2rXgy/YjvKLfC558hNKsGm
-   Tcn0bmZ7W0qK6AByrV54Uo2kfXjyKMSuOqhUDF6j7BdTdJlFgVmatJ5sO
-   lqy3BjmYacmZwFESRbXmXzjCEAEA7Ivl+QOB+TySfCbpQTkb21d20sxNz
-   jhi7R3Aa5OaWw0wtXj3dnJv+IbjCirxDSiUd8q+XOcHeIi2/xGbJZN5bj
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="423177066"
-X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
-   d="scan'208";a="423177066"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 06:41:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="687383705"
-X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
-   d="scan'208";a="687383705"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 06:41:45 -0700
-Received: from kekkonen.localdomain (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id 9F674120BF8;
-        Thu,  8 Jun 2023 16:41:42 +0300 (EEST)
-Date:   Thu, 8 Jun 2023 13:41:42 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Michael Riesch <michael.riesch@wolfvision.net>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        libcamera-devel@lists.libcamera.org,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Matthias Fend <Matthias.Fend@wolfvision.net>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC v2 2/6] media: v4l2-ctrls: clarify documentation of
- V4L2_CID_FOCUS_RELATIVE
-Message-ID: <ZIHalhJgLNCU+Mbt@kekkonen.localdomain>
-References: <20230406-feature-controls-lens-v2-0-faa8ad2bc404@wolfvision.net>
- <20230406-feature-controls-lens-v2-2-faa8ad2bc404@wolfvision.net>
- <20230606103618.GB25774@pendragon.ideasonboard.com>
- <46e0aac3-e238-1f32-264c-eed8a849d156@wolfvision.net>
- <20230607064207.GG14101@pendragon.ideasonboard.com>
- <20230607065520.GB4663@pendragon.ideasonboard.com>
+        Thu, 8 Jun 2023 09:44:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FB1026AB
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 06:43:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1686231815;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FwwjX0DTQ9pDyVotNAjxvKXjO/18HyPagdYutCSy84o=;
+        b=ZvprYIZc8zRiK54DTtOzxsIG5AnbhGf9KMzeuyUWAaNxrKJUMv43PdtGvaWrb+3R19lpqx
+        XBlHEMcOi2ig+F3Im1mYJbSZ4RPALzByvjcFf28kHBNqb5siHFC6Wjn9CBXqCpmZMMOtof
+        nB9NCmyDgymXFAsf8cZ/B1Ys/txcPf0=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-218-wLBAmECgMoW7h-h-F7Is2Q-1; Thu, 08 Jun 2023 09:43:34 -0400
+X-MC-Unique: wLBAmECgMoW7h-h-F7Is2Q-1
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3f5ec8aac77so3943125e9.3
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 06:43:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686231813; x=1688823813;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FwwjX0DTQ9pDyVotNAjxvKXjO/18HyPagdYutCSy84o=;
+        b=YPIzt/6blIc7MhqLsFqD+UA2M+oIeg1eaZLPsspoMwWIx3C611PsZBFLu9V12Qr82T
+         HPlbfOJ4wLNE0SqWeEaoPjNmr0d90DDMPuum0qmoDJstGmSMPMce/99XJE/p3s02gAlt
+         wm7roJZKySM/O5PsOUg7YMe4V33uJ8HyyNJ1RIzXhOjgTt0aq4enJbAdYDqOU49bYkm6
+         wWk8seoXe491+6nDqFqe6iC/0RREOhTHWmtM4KS+FPeyjmVYfV5lvZOIfS7dkE+SUpXU
+         j4kGV2PJU6SW5ELHVnzKNBbCD0MVcYQDSbSlbsEjslhkB9l1uhcvf+H6iNkeiMs+YIC/
+         GYxg==
+X-Gm-Message-State: AC+VfDyMS8k+tJ1WyN+95SPUgtC6nQeVLC+XtJ70UGQM00B0iaerpIiI
+        bsKWpmnDEx1Te/+JoF5kr+xBKrhCBVh4mQnxn6ybfwjIBhuYVNwCVJsDEwg51tenZlvWBi5fLgs
+        QVdbzw7l1JbF7ZQStH11oRDQEuqJlFlzn
+X-Received: by 2002:adf:f810:0:b0:309:54b6:33b0 with SMTP id s16-20020adff810000000b0030954b633b0mr6902335wrp.44.1686231813107;
+        Thu, 08 Jun 2023 06:43:33 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6l2wxPHxygUqAgwJKdM3ILKyed0BQuYFWwdxlh0hmTm1xDo/3dzFUkr6JPg6f2+5qx75i6Ug==
+X-Received: by 2002:adf:f810:0:b0:309:54b6:33b0 with SMTP id s16-20020adff810000000b0030954b633b0mr6902313wrp.44.1686231812720;
+        Thu, 08 Jun 2023 06:43:32 -0700 (PDT)
+Received: from redhat.com ([2.55.41.2])
+        by smtp.gmail.com with ESMTPSA id l15-20020a1c790f000000b003f7ec54d900sm2054972wme.9.2023.06.08.06.43.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 06:43:32 -0700 (PDT)
+Date:   Thu, 8 Jun 2023 09:43:26 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     Stefano Garzarella <sgarzare@redhat.com>,
+        Shannon Nelson <shannon.nelson@amd.com>,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
+        Tiwei Bie <tiwei.bie@intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] vhost-vdpa: filter VIRTIO_F_RING_PACKED feature
+Message-ID: <20230608094202-mutt-send-email-mst@kernel.org>
+References: <gi2hngx3ndsgz5d2rpqjywdmou5vxhd7xgi5z2lbachr7yoos4@kpifz37oz2et>
+ <20230605095404-mutt-send-email-mst@kernel.org>
+ <32ejjuvhvcicv7wjuetkv34qtlpa657n4zlow4eq3fsi2twozk@iqnd2t5tw2an>
+ <CACGkMEu3PqQ99UoKF5NHgVADD3q=BF6jhLiyumeT4S1QCqN1tw@mail.gmail.com>
+ <20230606085643-mutt-send-email-mst@kernel.org>
+ <CAGxU2F7fkgL-HpZdj=5ZEGNWcESCHQpgRAYQA3W2sPZaoEpNyQ@mail.gmail.com>
+ <20230607054246-mutt-send-email-mst@kernel.org>
+ <CACGkMEuUapKvUYiJiLwtsN+x941jafDKS9tuSkiNrvkrrSmQkg@mail.gmail.com>
+ <20230608020111-mutt-send-email-mst@kernel.org>
+ <CACGkMEt4=3BRVNX38AD+mJU8v3bmqO-CdNj5NkFP-SSvsuy2Hg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230607065520.GB4663@pendragon.ideasonboard.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <CACGkMEt4=3BRVNX38AD+mJU8v3bmqO-CdNj5NkFP-SSvsuy2Hg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,99 +93,178 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Laurent,
+On Thu, Jun 08, 2023 at 03:46:00PM +0800, Jason Wang wrote:
+> On Thu, Jun 8, 2023 at 2:03 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> >
+> > On Thu, Jun 08, 2023 at 08:42:15AM +0800, Jason Wang wrote:
+> > > On Wed, Jun 7, 2023 at 5:43 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > > >
+> > > > On Wed, Jun 07, 2023 at 10:39:15AM +0200, Stefano Garzarella wrote:
+> > > > > On Tue, Jun 6, 2023 at 2:58 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > > > > >
+> > > > > > On Tue, Jun 06, 2023 at 09:29:22AM +0800, Jason Wang wrote:
+> > > > > > > On Mon, Jun 5, 2023 at 10:58 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
+> > > > > > > >
+> > > > > > > > On Mon, Jun 05, 2023 at 09:54:57AM -0400, Michael S. Tsirkin wrote:
+> > > > > > > > >On Mon, Jun 05, 2023 at 03:30:35PM +0200, Stefano Garzarella wrote:
+> > > > > > > > >> On Mon, Jun 05, 2023 at 09:00:25AM -0400, Michael S. Tsirkin wrote:
+> > > > > > > > >> > On Mon, Jun 05, 2023 at 02:54:20PM +0200, Stefano Garzarella wrote:
+> > > > > > > > >> > > On Mon, Jun 05, 2023 at 08:41:54AM -0400, Michael S. Tsirkin wrote:
+> > > > > > > > >> > > > On Mon, Jun 05, 2023 at 01:06:44PM +0200, Stefano Garzarella wrote:
+> > > > > > > > >> > > > > vhost-vdpa IOCTLs (eg. VHOST_GET_VRING_BASE, VHOST_SET_VRING_BASE)
+> > > > > > > > >> > > > > don't support packed virtqueue well yet, so let's filter the
+> > > > > > > > >> > > > > VIRTIO_F_RING_PACKED feature for now in vhost_vdpa_get_features().
+> > > > > > > > >> > > > >
+> > > > > > > > >> > > > > This way, even if the device supports it, we don't risk it being
+> > > > > > > > >> > > > > negotiated, then the VMM is unable to set the vring state properly.
+> > > > > > > > >> > > > >
+> > > > > > > > >> > > > > Fixes: 4c8cf31885f6 ("vhost: introduce vDPA-based backend")
+> > > > > > > > >> > > > > Cc: stable@vger.kernel.org
+> > > > > > > > >> > > > > Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+> > > > > > > > >> > > > > ---
+> > > > > > > > >> > > > >
+> > > > > > > > >> > > > > Notes:
+> > > > > > > > >> > > > >     This patch should be applied before the "[PATCH v2 0/3] vhost_vdpa:
+> > > > > > > > >> > > > >     better PACKED support" series [1] and backported in stable branches.
+> > > > > > > > >> > > > >
+> > > > > > > > >> > > > >     We can revert it when we are sure that everything is working with
+> > > > > > > > >> > > > >     packed virtqueues.
+> > > > > > > > >> > > > >
+> > > > > > > > >> > > > >     Thanks,
+> > > > > > > > >> > > > >     Stefano
+> > > > > > > > >> > > > >
+> > > > > > > > >> > > > >     [1] https://lore.kernel.org/virtualization/20230424225031.18947-1-shannon.nelson@amd.com/
+> > > > > > > > >> > > >
+> > > > > > > > >> > > > I'm a bit lost here. So why am I merging "better PACKED support" then?
+> > > > > > > > >> > >
+> > > > > > > > >> > > To really support packed virtqueue with vhost-vdpa, at that point we would
+> > > > > > > > >> > > also have to revert this patch.
+> > > > > > > > >> > >
+> > > > > > > > >> > > I wasn't sure if you wanted to queue the series for this merge window.
+> > > > > > > > >> > > In that case do you think it is better to send this patch only for stable
+> > > > > > > > >> > > branches?
+> > > > > > > > >> > > > Does this patch make them a NOP?
+> > > > > > > > >> > >
+> > > > > > > > >> > > Yep, after applying the "better PACKED support" series and being
+> > > > > > > > >> > > sure that
+> > > > > > > > >> > > the IOCTLs of vhost-vdpa support packed virtqueue, we should revert this
+> > > > > > > > >> > > patch.
+> > > > > > > > >> > >
+> > > > > > > > >> > > Let me know if you prefer a different approach.
+> > > > > > > > >> > >
+> > > > > > > > >> > > I'm concerned that QEMU uses vhost-vdpa IOCTLs thinking that the kernel
+> > > > > > > > >> > > interprets them the right way, when it does not.
+> > > > > > > > >> > >
+> > > > > > > > >> > > Thanks,
+> > > > > > > > >> > > Stefano
+> > > > > > > > >> > >
+> > > > > > > > >> >
+> > > > > > > > >> > If this fixes a bug can you add Fixes tags to each of them? Then it's ok
+> > > > > > > > >> > to merge in this window. Probably easier than the elaborate
+> > > > > > > > >> > mask/unmask dance.
+> > > > > > > > >>
+> > > > > > > > >> CCing Shannon (the original author of the "better PACKED support"
+> > > > > > > > >> series).
+> > > > > > > > >>
+> > > > > > > > >> IIUC Shannon is going to send a v3 of that series to fix the
+> > > > > > > > >> documentation, so Shannon can you also add the Fixes tags?
+> > > > > > > > >>
+> > > > > > > > >> Thanks,
+> > > > > > > > >> Stefano
+> > > > > > > > >
+> > > > > > > > >Well this is in my tree already. Just reply with
+> > > > > > > > >Fixes: <>
+> > > > > > > > >to each and I will add these tags.
+> > > > > > > >
+> > > > > > > > I tried, but it is not easy since we added the support for packed
+> > > > > > > > virtqueue in vdpa and vhost incrementally.
+> > > > > > > >
+> > > > > > > > Initially I was thinking of adding the same tag used here:
+> > > > > > > >
+> > > > > > > > Fixes: 4c8cf31885f6 ("vhost: introduce vDPA-based backend")
+> > > > > > > >
+> > > > > > > > Then I discovered that vq_state wasn't there, so I was thinking of
+> > > > > > > >
+> > > > > > > > Fixes: 530a5678bc00 ("vdpa: support packed virtqueue for set/get_vq_state()")
+> > > > > > > >
+> > > > > > > > So we would have to backport quite a few patches into the stable branches.
+> > > > > > > > I don't know if it's worth it...
+> > > > > > > >
+> > > > > > > > I still think it is better to disable packed in the stable branches,
+> > > > > > > > otherwise I have to make a list of all the patches we need.
+> > > > > > > >
+> > > > > > > > Any other ideas?
+> > > > > > >
+> > > > > > > AFAIK, except for vp_vdpa, pds seems to be the first parent that
+> > > > > > > supports packed virtqueue. Users should not notice anything wrong if
+> > > > > > > they don't use packed virtqueue. And the problem of vp_vdpa + packed
+> > > > > > > virtqueue came since the day0 of vp_vdpa. It seems fine to do nothing
+> > > > > > > I guess.
+> > > > > > >
+> > > > > > > Thanks
+> > > > > >
+> > > > > >
+> > > > > > I have a question though, what if down the road there
+> > > > > > is a new feature that needs more changes? It will be
+> > > > > > broken too just like PACKED no?
+> > > > > > Shouldn't vdpa have an allowlist of features it knows how
+> > > > > > to support?
+> > > > >
+> > > > > It looks like we had it, but we took it out (by the way, we were
+> > > > > enabling packed even though we didn't support it):
+> > > > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6234f80574d7569444d8718355fa2838e92b158b
+> > > > >
+> > > > > The only problem I see is that for each new feature we have to modify
+> > > > > the kernel.
+> > > > > Could we have new features that don't require handling by vhost-vdpa?
+> > > > >
+> > > > > Thanks,
+> > > > > Stefano
+> > > >
+> > > > Jason what do you say to reverting this?
+> > >
+> > > I may miss something but I don't see any problem with vDPA core.
+> > >
+> > > It's the duty of the parents to advertise the features it has. For example,
+> > >
+> > > 1) If some kernel version that is packed is not supported via
+> > > set_vq_state, parents should not advertise PACKED features in this
+> > > case.
+> > > 2) If the kernel has support packed set_vq_state(), but it's emulated
+> > > cvq doesn't support, parents should not advertise PACKED as well
+> > >
+> > > If a parent violates the above 2, it looks like a bug of the parents.
+> > >
+> > > Thanks
+> >
+> > Yes but what about vhost_vdpa? Talking about that not the core.
+> 
+> Not sure it's a good idea to workaround parent bugs via vhost-vDPA.
 
-On Wed, Jun 07, 2023 at 09:55:20AM +0300, Laurent Pinchart wrote:
-> On Wed, Jun 07, 2023 at 09:42:07AM +0300, Laurent Pinchart wrote:
-> > On Tue, Jun 06, 2023 at 03:15:33PM +0200, Michael Riesch wrote:
-> > > On 6/6/23 12:36, Laurent Pinchart wrote:
-> > > > On Tue, Apr 25, 2023 at 11:45:12AM +0200, Michael Riesch wrote:
-> > > >> The control V4L2_CID_FOCUS_RELATIVE only makes sense if the device cannot
-> > > >> handle absolute focal point positioning with V4L2_CID_FOCUS_ABSOLUTE.
-> > > >> Clarify this in the documentation.
-> > > >>
-> > > >> Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
-> > > >> ---
-> > > >>  Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst | 4 +++-
-> > > >>  1 file changed, 3 insertions(+), 1 deletion(-)
-> > > >>
-> > > >> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
-> > > >> index df29150dce7b..42cf4c3cda0c 100644
-> > > >> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
-> > > >> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-camera.rst
-> > > >> @@ -147,7 +147,9 @@ enum v4l2_exposure_metering -
-> > > >>      This control moves the focal point of the camera by the specified
-> > > >>      amount. The unit is undefined. Positive values move the focus closer
-> > > >>      to the camera, negative values towards infinity. This is a
-> > > >> -    write-only control.
-> > > >> +    write-only control. It should be implemented only if the device cannot
-> > > >> +    handle absolute values.
-> > > >> +
-> > > > 
-> > > > Extra blank line.
-> > > 
-> > > Will fix that.
-> > > 
-> > > > I don't think this is right. The control was added for the UVC driver,
-> > > > and there are devices that implement both absolute and relative focus.
-> > > 
-> > > I am by no means an expert here and just following Sakari's suggestion
-> > > here (see [0]). I can drop the patch, leave it as-is, or modify it.
-> > > Whatever makes sense to you guys. But maybe I should leave this to
-> > > someone more knowledgeable in this area and drop the patch from my
-> > > series. The changes above are completely orthogonal to my work.
-> > 
-> > V4L2_CID_FOCUS_RELATIVE is an annoying control. It was introduced for
-> > UVC, and to my surprise, it turns out it has never been implemented in
-> > the uvcvideo driver. The 3 devices I know of that implement the UVC
-> > relative focus control also implement the UVC absolute focus control.
-> > 
-> > I'm tempted to deprecate this control completely. Sakari, any opinion ?
-> 
-> This is how the UVC relative focus control is defined.
-> 
->   4.2.2.1.7 Focus (Relative) Control
-> 
->   The Focus (Relative) Control is used to move the focus lens group to
->   specify the distance to the optimally focused target.
-> 
->   The bFocusRelative field indicates whether the focus lens group is
->   stopped or is moving for near or for infinity direction. A value of 1
->   indicates that the focus lens group is moved for near direction. A
->   value of 0 indicates that the focus lens group is stopped. And a value
->   of 0xFF indicates that the lens group is moved for infinity direction.
->   The GET_MIN, GET_MAX, GET_RES and GET_DEF requests will return zero
->   for this field.
-> 
->   The bSpeed field indicates the speed of the lens group movement. A low
->   number indicates a slow speed and a high number indicates a high
->   speed. The GET_MIN, GET_MAX and GET_RES requests are used to retrieve
->   the range and resolution for this field. The GET_DEF request is used
->   to retrieve the default value for this field. If the control does not
->   support speed control, it will return the value 1 in this field for
->   all these requests.
-> 
->   If both Relative and Absolute Controls are supported, a SET_CUR to the
->   Relative Control with a value other than 0x00 shall result in a
->   Control Change interrupt for the Absolute Control at the end of the
->   movement (see section 2.4.2.2, “Status Interrupt Endpoint”). The end
->   of movement can be due to physical device limits, or due to an
->   explicit request by the host to stop the movement. If the end of
->   movement is due to physical device limits (such as a limit in range of
->   motion), a Control Change interrupt shall be generated for this
->   Relative Control. If there is no limit in range of motion, a Control
->   Change interrupt is not required.
-> 
-> It seems there's no way we can just map this to V4L2_CID_FOCUS_RELATIVE,
-> making the V4L2 relative focus control quite useless.
+these are not parent bugs. vhost-vdpa did not pass ioctl data
+correctly to parent, right?
 
-I'd deprecate this control as it doesn't have any use.
+> > Should that not have a whitelist of features
+> > since it interprets ioctls differently depending on this?
+> 
+> If there's a bug, it might only matter the following setup:
+> 
+> SET_VRING_BASE/GET_VRING_BASE + VDUSE.
 
-The control documentation + other references in V4L2 control framework
-could be even removed but the control ID definition needs to stay as user
-space may refer to it.
+Why does it not apply to any parent?
 
--- 
-Regards,
+> This seems to be broken since VDUSE was introduced. If we really want
+> to backport something, it could be a fix to filter out PACKED in
+> VDUSE?
+> 
+> Thanks
 
-Sakari Ailus
+what prevents VDUSE from supporting packed?
+
+> >
+> > > >
+> > > > --
+> > > > MST
+> > > >
+> >
+
