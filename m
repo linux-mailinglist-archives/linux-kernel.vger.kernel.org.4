@@ -2,420 +2,272 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A9BF7286A2
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 19:51:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94C627286A4
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 19:52:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235828AbjFHRvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 13:51:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60220 "EHLO
+        id S235670AbjFHRwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 13:52:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231580AbjFHRvr (ORCPT
+        with ESMTP id S231580AbjFHRwR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 13:51:47 -0400
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A0602D52
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 10:51:45 -0700 (PDT)
-Received: by mail-qv1-xf33.google.com with SMTP id 6a1803df08f44-6260b578097so7109206d6.3
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 10:51:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686246704; x=1688838704;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RJEs83/HazzxZ3tGxgQ/SYu3azpSRI6recMD0zhZQxc=;
-        b=FroF/C53tcVwV1IsQTZ7UAURuMvsfcAqWcoCpq/WW+Ie36s3XxlvAJa09ez0vZBIWZ
-         gtzEMDKlWzljLTS3MrVsH3zjTzj4Cj6m6nGZmri9lajRW7mQW01AXMUv+INHarXDWEjb
-         Oljgh8nuUF0ZqZXR9o4ztjgIER5FIfouxzuOQWdLfFIbHdYKny9M8V8xJZxESpdCcx2a
-         wqzsHF16PrssQ41VfJpt/IlKvz7jexcfbAhwo73F/UB2pd7+tvOvXGkeHRpfQtxZJVwS
-         1NRIhA+MYpDdLTPdKrG7GCBbGCCChH262tvS8y9/lqr7wBi6A1BqRpgjJI6z7fi00AUW
-         JbAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686246704; x=1688838704;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RJEs83/HazzxZ3tGxgQ/SYu3azpSRI6recMD0zhZQxc=;
-        b=Te7nGbQOH4KIbuebnV7COephv2Ir5Xi5aAuuEsd55AEqjLdjTA5zQqHRIRx75ZKEJu
-         0n55lH0ZJ0UqR/OUyadwXRJB5tAk6x+YnAN74zVrR1TtyTpUckKIL98Z5HZ4vTu6a0O6
-         Ar3H1lE+A8emgcPsDvb/nS2z2Pw3NFeYNkG9uzOx1s2P+5UMEyuxidaPqFmkqpyFRFP1
-         sY+7P7xUc1xg8jLwlddsgjLhmfI25EH/t4mO1NaxgTQEnGlOYeykLM6M5zRsxVxA4Wi4
-         AykQ863MvXJTf83H6XRifnXnpEd9qYEh/U4JJRO56+ROwCja9Nlw8/eBLm3s+u586Gt7
-         sz2w==
-X-Gm-Message-State: AC+VfDwW7W/ujK+/CJiMg5eV2XQDTda6MiGH0QXe0VE+POKoJ24McE4r
-        RoUKDzllV0VuiYuXwAEAslbS5SQvN4baUiEyMU0=
-X-Google-Smtp-Source: ACHHUZ54F3OMtx02+WqBGogvo1r/GggPvBrI9fHQ8o0stXDhd+gLAT7hrVi0zKIx2sUibWNBWD8FOcN4K+tELvx+b90=
-X-Received: by 2002:a05:6214:f2f:b0:625:aa48:e62f with SMTP id
- iw15-20020a0562140f2f00b00625aa48e62fmr2668295qvb.63.1686246704168; Thu, 08
- Jun 2023 10:51:44 -0700 (PDT)
+        Thu, 8 Jun 2023 13:52:17 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B651FDC;
+        Thu,  8 Jun 2023 10:52:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686246736; x=1717782736;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=qspOuCwDOG5t1Z7/eoYucrs29L7VpDUE+O7pSzdj97A=;
+  b=a3F7i1NQ+fsjKM+uCsh335eEXOaWB69YehoP/B9hZfXqfFcheYvombYj
+   8eQZeI7+Ewu41JwXeirOx21cpCMZEmKcuTx/2YTMPYwk45j3UaMO1YTca
+   L03+A5VBTd/w9Sa4aAxGj3kxtECThoh8zfNDQCmeaEsIkyWhvPxawb8GX
+   A/dvqqw4gGvWsx7LRO5duBaXPC/Gl4h7A4TrRH/VpXlIEy8c6DzcTZXdT
+   LyGYERc+wCVx/IlyxmKKAtUaeReCxMeGynKdKsYHuFydOYfAoHghcCQvY
+   gynBoPa9Lzr3V7RQn5HCNwdmH4GGs64V51T0y1cMG1JAbwJ5g4P9GXqk7
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="420967746"
+X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
+   d="scan'208";a="420967746"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jun 2023 10:52:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10735"; a="704222551"
+X-IronPort-AV: E=Sophos;i="6.00,227,1681196400"; 
+   d="scan'208";a="704222551"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga007.jf.intel.com with ESMTP; 08 Jun 2023 10:52:15 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 8 Jun 2023 10:52:15 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 8 Jun 2023 10:52:14 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Thu, 8 Jun 2023 10:52:14 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.101)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Thu, 8 Jun 2023 10:52:14 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZOz+CGvWL0cJDLiu6sI6drWoKjY5YzBfuwXjisfF+ibxnDtMeYrUvPShtrWWp4GQWAXz7IwYWKAV9yTxcs4xmgdi8l5F1Qv5MUeJIdDtEmjxboJm1Fcdm3KJf8FI4+Am4sGhRNX+UuUcMXKALJxfKvVvBQ64qiEBTVDyeFVoamEaOcboWb7B0LM0MWaFt/05u9tlpggV/Oq8v96k5sS7NX2r88m8mpx4YJZBYIrLsuA6D8xv90LcSjw7MYVUEJj4dgG8owqEB1UEtWxGxjrXLXITIyAercRx7q8J4nZmD2jYHAdSw81hw6L+bCh5ZUtWJVLl2sGFEz/pXErAVKbmfQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tyGF3/+/QqJ8gG2BJCozuFx7vAP3AXHoL1/m6tiOn3s=;
+ b=bZwFxQxz/wqN0dEPLGKChNpTPuEdXk8EhVaqWucpDCkQbijt3yfLmG4vtEBvqxHtgcN9uO+Qkx9k0TjGCghIS24QvHKU/JJ5I6BCXan6sj39wM24j96NZE1R7G++Bkd+icJO/KMlGxzednCN0HfODvgnDzDXxEvQrcdU0x26Ew7/fWvEXcBvO3WthSWpu5BCrlVyXitT30MZmx6So90EdObRjgtQOWRWgTpSJ+f9nq+pZl7OYbfoiUqwXkNPZ77yCGb/z3A0pXpJQWSGDCHzZjSRbXatTL1lg9kxWpIMjPbDNi2xVfK2VPFLun25Noqr4srOirZg4LvkKLj8wUE/qQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SJ1PR11MB6201.namprd11.prod.outlook.com (2603:10b6:a03:45c::14)
+ by CH3PR11MB8139.namprd11.prod.outlook.com (2603:10b6:610:157::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.32; Thu, 8 Jun
+ 2023 17:52:14 +0000
+Received: from SJ1PR11MB6201.namprd11.prod.outlook.com
+ ([fe80::6ccc:155b:3b7b:754f]) by SJ1PR11MB6201.namprd11.prod.outlook.com
+ ([fe80::6ccc:155b:3b7b:754f%3]) with mapi id 15.20.6455.037; Thu, 8 Jun 2023
+ 17:52:13 +0000
+Date:   Thu, 8 Jun 2023 10:52:07 -0700
+From:   Ashok Raj <ashok.raj@intel.com>
+To:     Alexander Duyck <alexander.duyck@gmail.com>
+CC:     Ashok Raj <ashok_raj@linux.intel.com>,
+        Baolu Lu <baolu.lu@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>, <iommu@lists.linux.dev>,
+        Ashok Raj <ashok.raj@intel.com>
+Subject: Re: Question about reserved_regions w/ Intel IOMMU
+Message-ID: <ZIIVR2+rGemC7wlF@a4bf019067fa.jf.intel.com>
+References: <CAKgT0UezciLjHacOx372+v8MZkDf22D5Thn82n-07xxKy_0FTQ@mail.gmail.com>
+ <CAKgT0UfMeVOz6AOqSvVvzpsedGDiXCNQrjM+4KDv7qJJ1orpsw@mail.gmail.com>
+ <a1cff65b-b390-3872-25b5-dd6bbfb3524c@linux.intel.com>
+ <CAKgT0UcE5bUe7ChytSyUWEkyqdwnNR1k_rcfyykPPWJ=ZzsdRg@mail.gmail.com>
+ <ZIH1/e2OcCuD7DEi@araj-dh-work>
+ <CAKgT0UfTzExYZGNCEXCJaS7huWDxwoC3Z_2JCzJHAgr9Qyxmsg@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKgT0UfTzExYZGNCEXCJaS7huWDxwoC3Z_2JCzJHAgr9Qyxmsg@mail.gmail.com>
+X-ClientProxiedBy: SJ0PR05CA0170.namprd05.prod.outlook.com
+ (2603:10b6:a03:339::25) To SJ1PR11MB6201.namprd11.prod.outlook.com
+ (2603:10b6:a03:45c::14)
 MIME-Version: 1.0
-References: <20230606145611.704392-1-cerasuolodomenico@gmail.com> <20230606145611.704392-6-cerasuolodomenico@gmail.com>
-In-Reply-To: <20230606145611.704392-6-cerasuolodomenico@gmail.com>
-From:   Nhat Pham <nphamcs@gmail.com>
-Date:   Thu, 8 Jun 2023 10:51:33 -0700
-Message-ID: <CAKEwX=ORH2B3Xv0+oZptFi2Oz_tr5-=PSqNCvFfEcOt0KgWL8A@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 5/7] mm: zswap: remove shrink from zpool interface
-To:     Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-Cc:     vitaly.wool@konsulko.com, minchan@kernel.org,
-        senozhatsky@chromium.org, yosryahmed@google.com,
-        linux-mm@kvack.org, ddstreet@ieee.org, sjenning@redhat.com,
-        hannes@cmpxchg.org, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ1PR11MB6201:EE_|CH3PR11MB8139:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6a1dbab3-55d0-4ca0-6913-08db6849175b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SPp5s/715sdZTVd7xQt54F9sKmUemLym3BLsb/nHmBLcnP6JYSZPs5kMaZW+EwXjOV/zMgAxEZ5KPLkmvry6ddtWECaU1oTrtmPcN+TYnUM2XGgf15ZtjypFqQP+2xVnrVgvKFkbxBmYJva/W+cPeNFUngn+t6vMwgcPfBDyQHkdzazTZ2lR1raJIpWgV4vBW4z3AEqFMhcqewaqyWpVkv/mn/MnAYr+MvXP0UFhzXDIxovMpboJZwA/3EUvGlA+fn27rUReDzNgeRwDHxZ+/oLqBB3dTiF15hWmjnwbsyIaaMKBK6v3S2CIupf9sHGs6KzxWPpFTWpSMIHaSkkXXyxHseq4G0u/M3WeJCtCcgOCX6WdReDIdrc7HPh3RNS7CpDK/LNcK4HyHQpF9JtVV79Ar5rJjpEgIrtZ4upLbsV8AfE2RGj2PE6m+0lCLzkWzcq97DkDw9h9cpvEWYj0+Ktth8kWEZasdqa+lW5O8owVSrLAlRswVxoi5y47P633sGs/cvHr7S0ugDmmf77CdfpGJIgSv+0TrVsrCUAwsbBh5+8ffjdx6XbgwBtjLTjWDFmuJNxiKXGQwGHqbzPS8YFhZmyHm+j46xH585pnhuk=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6201.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(346002)(396003)(39860400002)(376002)(366004)(451199021)(6512007)(6506007)(26005)(53546011)(83380400001)(86362001)(186003)(82960400001)(38100700002)(44832011)(41300700001)(316002)(2906002)(4326008)(6916009)(54906003)(478600001)(66476007)(66946007)(8936002)(8676002)(6486002)(5660300002)(66556008)(6666004)(67856001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aXpVUkI2ZFJ4WU5RbFZBdFA0TlpJWnpsSStubTVtenI5dmFiTFg5QWVNaFhP?=
+ =?utf-8?B?YkdVeGRZSUhDQmNFb3FFcHlCMFhwcnF6SnVTWmpRaHdjUCt5VzJCejF5ZlZK?=
+ =?utf-8?B?OVhsNjdJT2d5ZHRrVVRwOWJxaHBjTjFBREEyeEozL3FpaUNLMTJPMUVDbnVS?=
+ =?utf-8?B?ek5nZ3pVSmFkT3RWTmdVNUFIc2U0MWZDTFo3WVdRcmJXVXQvZENUVzNFWUhi?=
+ =?utf-8?B?bUpRVFdsK0U4LytKdTcrVVRLNlQ2Q2FDVXdaK3Evd0wwSThlRjlhNGVxZGFG?=
+ =?utf-8?B?Ymx3SnIvM240b0JtdzFzVzJlaEZPVklva05VeDl4aksvdTJHelJ5aDd5TnZT?=
+ =?utf-8?B?Sy9iZk5UdW1XdGZhVTFENURDR1BrMXZpM3pXN0tWa1ZLMUZmeDUwT0M4RFVr?=
+ =?utf-8?B?UUJnV25rU05wMml0eml3ZHZqT29pdFVVa2s4amVwZ25IKzh5a0F4WVVoU1U2?=
+ =?utf-8?B?T0hiTHZHY1hGQnc0eXRYbytJWVVRUDhzMEVvUml5Ty9LNWk3Y3hsNUN3S1dx?=
+ =?utf-8?B?c3F1cjhiZVFaNzY3c3dVdEhSWnBTUHlHRmdzemxkVWd5VFpFdWpWR1BDOW9a?=
+ =?utf-8?B?bkZMVG1QWU1SOXJJNkVIcWlQeGpBazJIQ1AzNUNGVVUrSld4dzByY3MyV29q?=
+ =?utf-8?B?V1pUcFV5WlVXdXVvYlp6dWNiajY5dlNhQ2pKSldFR0t1OXJkQ0dUSUVGRHVk?=
+ =?utf-8?B?TktHbTJtSWxRSWVmYUV4Z2drSjVsMTJFNmppNitZd2hwNDAwaVA4RG1CTkRQ?=
+ =?utf-8?B?Q1dxUURTWmZQS25BSmx1VmxsNjNiME5nNDNmdCtFTnI4S2I1NFM2QWdTRzF1?=
+ =?utf-8?B?MHlMZ0Q3RFMwSktPOFlBV0ZzOFVwcDlGamhSL1hYVVluQXl3dWw5MTVpd2xL?=
+ =?utf-8?B?Q3F6NTBEOEt0NmZDYWx0ZlpkbFJORlVVSWNsUFlVbjZ2WUxiUEVoYzV4ZGFm?=
+ =?utf-8?B?NFgxdEdFYzFPUW4rQTFrOHFBay8zRDFFVXdYN2xqYnE0MzlBTU9LenM5OUdQ?=
+ =?utf-8?B?cElqWFdRcU1DS0lFcW5XUmJrZkJoYnpuWDdScC9LVkt2dVVaOEI2SXE5SXN5?=
+ =?utf-8?B?RXdGTGFvdFduenJ6Vy9lUVBodS95U1duTFEweTlFcitUTHdSbVZpUFZETkli?=
+ =?utf-8?B?T0VJQ2RSejlVb3RheTBHZW9LcFZuZ0pkcCs1L09kd0VFUy9DZTk1U2JYSHV5?=
+ =?utf-8?B?bDMxQ2Uwd3BsKzJPWTlEelo4YlNqWGlqdVZpZnA5bDZNNnZ0cHByTlhXRHBE?=
+ =?utf-8?B?dUwyRHN5TTR0K3ZYMkh5eGlXd044TStWTzlQVzIxZkNac0lETDFiNzhQRWta?=
+ =?utf-8?B?ZEowdGcrMVNtUHVsdEg5cTUyU1JFa2dMRU5mT1JNUThJY3k5dlhPTks3SVVP?=
+ =?utf-8?B?QWZDZDBMUW5FWnNQRURiRFdBZUtnOXQweW51OGRmcllTdzJ1T1ZmWGdMdldv?=
+ =?utf-8?B?cVE0THlROFZvYVRObklDaXcrYXFjYlRDeWQyNEtOeno5SlZhMmc5ejFOK1g2?=
+ =?utf-8?B?cCtZK0lCTzRXNFY3QkJHb3NvMWZ2VGdHU3BneDBuQkl6VmE0QklUeFBTVEl4?=
+ =?utf-8?B?SnFmaHo5dWhUbnRicmtBeVVFbENqaXdCWjU0N2tWSzRrZzhheVJyWEZPUTc4?=
+ =?utf-8?B?K2pEYnU4NmFCQW9CRnJId3MvVXdZVkg5L0IxSUJ5T25iZjZyb0RmUXprNVVQ?=
+ =?utf-8?B?R2drbmc4VGg1NHM5NVY4dmtXZC85NjJUSE1WRXJxY0loSVNSRXVmMlN2YnBk?=
+ =?utf-8?B?L1NiNHFqRjVHN1dGN3dKM1RoeGxPQk92di9DLytCOTNhdS9uRHhXTm5ETU1Q?=
+ =?utf-8?B?THRxRldheHA0eW0zK0s2OUovYU1IMnBoc1NpQmxrNmpLNWdpRThBaTBjTUVy?=
+ =?utf-8?B?MVZnRENSemRiQVJOVUEyaFlJVkFlNEFYSHcybWZENFd3UXhwU1NNU016aFJL?=
+ =?utf-8?B?SUJ1SlhOck9nbVpHSHROUTUxVzZaNVVKSlF3RXhHZEVYY2NXNTVRNmdRWjV2?=
+ =?utf-8?B?d1JBZ1FUWHdibnovMXl6OUhzVVZxeUMzZFNReHRweUhOOFFFSVNDRUdJeExF?=
+ =?utf-8?B?QmN5L0JJWkZTd3piYVdUZDdSY0poZ2ZVZ1J5SmM5RlFLc0RtU0U4eGNJVlR1?=
+ =?utf-8?B?K3hncGMvRVVLb0ZXZUhBY25sbktwK1RYNDN1eUhxcnQrUzhXQkdMcFplbTN3?=
+ =?utf-8?B?QVE9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6a1dbab3-55d0-4ca0-6913-08db6849175b
+X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6201.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jun 2023 17:52:13.8195
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: CQyoLUeYnj/WcARd08JftBiZmSxSOM4uEvkGv7J78anP9sYSBWZMCOo/lfZnk1BG/IjT8cv2ugS8g3YyT/xyag==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR11MB8139
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 6, 2023 at 7:56=E2=80=AFAM Domenico Cerasuolo
-<cerasuolodomenico@gmail.com> wrote:
->
-> Now that all three zswap backends have removed their shrink code, it is
-> no longer necessary for the zpool interface to include shrink/writeback
-> endpoints.
->
-> Signed-off-by: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-> ---
->  include/linux/zpool.h | 19 ++---------------
->  mm/z3fold.c           |  5 +----
->  mm/zbud.c             |  5 +----
->  mm/zpool.c            | 48 ++-----------------------------------------
->  mm/zsmalloc.c         |  5 +----
->  mm/zswap.c            | 27 +++++++-----------------
->  6 files changed, 14 insertions(+), 95 deletions(-)
->
-> diff --git a/include/linux/zpool.h b/include/linux/zpool.h
-> index e8997010612a..6b15a4213de5 100644
-> --- a/include/linux/zpool.h
-> +++ b/include/linux/zpool.h
-> @@ -14,10 +14,6 @@
->
->  struct zpool;
->
-> -struct zpool_ops {
-> -       int (*evict)(struct zpool *pool, unsigned long handle);
-> -};
-> -
->  /*
->   * Control how a handle is mapped.  It will be ignored if the
->   * implementation does not support it.  Its use is optional.
-> @@ -40,7 +36,7 @@ enum zpool_mapmode {
->  bool zpool_has_pool(char *type);
->
->  struct zpool *zpool_create_pool(const char *type, const char *name,
-> -                       gfp_t gfp, const struct zpool_ops *ops);
-> +                       gfp_t gfp);
->
->  const char *zpool_get_type(struct zpool *pool);
->
-> @@ -53,9 +49,6 @@ int zpool_malloc(struct zpool *pool, size_t size, gfp_t=
- gfp,
->
->  void zpool_free(struct zpool *pool, unsigned long handle);
->
-> -int zpool_shrink(struct zpool *pool, unsigned int pages,
-> -                       unsigned int *reclaimed);
-> -
->  void *zpool_map_handle(struct zpool *pool, unsigned long handle,
->                         enum zpool_mapmode mm);
->
-> @@ -72,7 +65,6 @@ u64 zpool_get_total_size(struct zpool *pool);
->   * @destroy:   destroy a pool.
->   * @malloc:    allocate mem from a pool.
->   * @free:      free mem from a pool.
-> - * @shrink:    shrink the pool.
->   * @sleep_mapped: whether zpool driver can sleep during map.
->   * @map:       map a handle.
->   * @unmap:     unmap a handle.
-> @@ -87,10 +79,7 @@ struct zpool_driver {
->         atomic_t refcount;
->         struct list_head list;
->
-> -       void *(*create)(const char *name,
-> -                       gfp_t gfp,
-> -                       const struct zpool_ops *ops,
-> -                       struct zpool *zpool);
-> +       void *(*create)(const char *name, gfp_t gfp);
->         void (*destroy)(void *pool);
->
->         bool malloc_support_movable;
-> @@ -98,9 +87,6 @@ struct zpool_driver {
->                                 unsigned long *handle);
->         void (*free)(void *pool, unsigned long handle);
->
-> -       int (*shrink)(void *pool, unsigned int pages,
-> -                               unsigned int *reclaimed);
-> -
->         bool sleep_mapped;
->         void *(*map)(void *pool, unsigned long handle,
->                                 enum zpool_mapmode mm);
-> @@ -113,7 +99,6 @@ void zpool_register_driver(struct zpool_driver *driver=
-);
->
->  int zpool_unregister_driver(struct zpool_driver *driver);
->
-> -bool zpool_evictable(struct zpool *pool);
->  bool zpool_can_sleep_mapped(struct zpool *pool);
->
->  #endif
-> diff --git a/mm/z3fold.c b/mm/z3fold.c
-> index 4af8741553ac..e84de91ecccb 100644
-> --- a/mm/z3fold.c
-> +++ b/mm/z3fold.c
-> @@ -1364,9 +1364,7 @@ static const struct movable_operations z3fold_mops =
-=3D {
->   * zpool
->   ****************/
->
-> -static void *z3fold_zpool_create(const char *name, gfp_t gfp,
-> -                              const struct zpool_ops *zpool_ops,
-> -                              struct zpool *zpool)
-> +static void *z3fold_zpool_create(const char *name, gfp_t gfp)
->  {
->         return z3fold_create_pool(name, gfp);
->  }
-> @@ -1409,7 +1407,6 @@ static struct zpool_driver z3fold_zpool_driver =3D =
-{
->         .destroy =3D      z3fold_zpool_destroy,
->         .malloc =3D       z3fold_zpool_malloc,
->         .free =3D         z3fold_zpool_free,
-> -       .shrink =3D       NULL,
->         .map =3D          z3fold_zpool_map,
->         .unmap =3D        z3fold_zpool_unmap,
->         .total_size =3D   z3fold_zpool_total_size,
-> diff --git a/mm/zbud.c b/mm/zbud.c
-> index 19bc662ef5e9..2190cc1f37b3 100644
-> --- a/mm/zbud.c
-> +++ b/mm/zbud.c
-> @@ -380,9 +380,7 @@ static u64 zbud_get_pool_size(struct zbud_pool *pool)
->   * zpool
->   ****************/
->
-> -static void *zbud_zpool_create(const char *name, gfp_t gfp,
-> -                              const struct zpool_ops *zpool_ops,
-> -                              struct zpool *zpool)
-> +static void *zbud_zpool_create(const char *name, gfp_t gfp)
->  {
->         return zbud_create_pool(gfp);
->  }
-> @@ -425,7 +423,6 @@ static struct zpool_driver zbud_zpool_driver =3D {
->         .destroy =3D      zbud_zpool_destroy,
->         .malloc =3D       zbud_zpool_malloc,
->         .free =3D         zbud_zpool_free,
-> -       .shrink =3D       NULL,
->         .map =3D          zbud_zpool_map,
->         .unmap =3D        zbud_zpool_unmap,
->         .total_size =3D   zbud_zpool_total_size,
-> diff --git a/mm/zpool.c b/mm/zpool.c
-> index 6a19c4a58f77..846410479c2f 100644
-> --- a/mm/zpool.c
-> +++ b/mm/zpool.c
-> @@ -133,7 +133,6 @@ EXPORT_SYMBOL(zpool_has_pool);
->   * @type:      The type of the zpool to create (e.g. zbud, zsmalloc)
->   * @name:      The name of the zpool (e.g. zram0, zswap)
->   * @gfp:       The GFP flags to use when allocating the pool.
-> - * @ops:       The optional ops callback.
->   *
->   * This creates a new zpool of the specified type.  The gfp flags will b=
-e
->   * used when allocating memory, if the implementation supports it.  If t=
-he
-> @@ -145,8 +144,7 @@ EXPORT_SYMBOL(zpool_has_pool);
->   *
->   * Returns: New zpool on success, NULL on failure.
->   */
-> -struct zpool *zpool_create_pool(const char *type, const char *name, gfp_=
-t gfp,
-> -               const struct zpool_ops *ops)
-> +struct zpool *zpool_create_pool(const char *type, const char *name, gfp_=
-t gfp)
->  {
->         struct zpool_driver *driver;
->         struct zpool *zpool;
-> @@ -173,7 +171,7 @@ struct zpool *zpool_create_pool(const char *type, con=
-st char *name, gfp_t gfp,
->         }
->
->         zpool->driver =3D driver;
-> -       zpool->pool =3D driver->create(name, gfp, ops, zpool);
-> +       zpool->pool =3D driver->create(name, gfp);
->
->         if (!zpool->pool) {
->                 pr_err("couldn't create %s pool\n", type);
-> @@ -279,30 +277,6 @@ void zpool_free(struct zpool *zpool, unsigned long h=
-andle)
->         zpool->driver->free(zpool->pool, handle);
->  }
->
-> -/**
-> - * zpool_shrink() - Shrink the pool size
-> - * @zpool:     The zpool to shrink.
-> - * @pages:     The number of pages to shrink the pool.
-> - * @reclaimed: The number of pages successfully evicted.
-> - *
-> - * This attempts to shrink the actual memory size of the pool
-> - * by evicting currently used handle(s).  If the pool was
-> - * created with no zpool_ops, or the evict call fails for any
-> - * of the handles, this will fail.  If non-NULL, the @reclaimed
-> - * parameter will be set to the number of pages reclaimed,
-> - * which may be more than the number of pages requested.
-> - *
-> - * Implementations must guarantee this to be thread-safe.
-> - *
-> - * Returns: 0 on success, negative value on error/failure.
-> - */
-> -int zpool_shrink(struct zpool *zpool, unsigned int pages,
-> -                       unsigned int *reclaimed)
-> -{
-> -       return zpool->driver->shrink ?
-> -              zpool->driver->shrink(zpool->pool, pages, reclaimed) : -EI=
-NVAL;
-> -}
-> -
->  /**
->   * zpool_map_handle() - Map a previously allocated handle into memory
->   * @zpool:     The zpool that the handle was allocated from
-> @@ -359,24 +333,6 @@ u64 zpool_get_total_size(struct zpool *zpool)
->         return zpool->driver->total_size(zpool->pool);
->  }
->
-> -/**
-> - * zpool_evictable() - Test if zpool is potentially evictable
-> - * @zpool:     The zpool to test
-> - *
-> - * Zpool is only potentially evictable when it's created with struct
-> - * zpool_ops.evict and its driver implements struct zpool_driver.shrink.
-> - *
-> - * However, it doesn't necessarily mean driver will use zpool_ops.evict
-> - * in its implementation of zpool_driver.shrink. It could do internal
-> - * defragmentation instead.
-> - *
-> - * Returns: true if potentially evictable; false otherwise.
-> - */
-> -bool zpool_evictable(struct zpool *zpool)
-> -{
-> -       return zpool->driver->shrink;
-> -}
-> -
->  /**
->   * zpool_can_sleep_mapped - Test if zpool can sleep when do mapped.
->   * @zpool:     The zpool to test
-> diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
-> index 75386283dba0..634daa19b6c2 100644
-> --- a/mm/zsmalloc.c
-> +++ b/mm/zsmalloc.c
-> @@ -351,9 +351,7 @@ static void record_obj(unsigned long handle, unsigned=
- long obj)
->
->  #ifdef CONFIG_ZPOOL
->
-> -static void *zs_zpool_create(const char *name, gfp_t gfp,
-> -                            const struct zpool_ops *zpool_ops,
-> -                            struct zpool *zpool)
-> +static void *zs_zpool_create(const char *name, gfp_t gfp)
->  {
->         /*
->          * Ignore global gfp flags: zs_malloc() may be invoked from
-> @@ -420,7 +418,6 @@ static struct zpool_driver zs_zpool_driver =3D {
->         .malloc_support_movable =3D true,
->         .malloc =3D                 zs_zpool_malloc,
->         .free =3D                   zs_zpool_free,
-> -       .shrink =3D                 NULL,
->         .map =3D                    zs_zpool_map,
->         .unmap =3D                  zs_zpool_unmap,
->         .total_size =3D             zs_zpool_total_size,
-> diff --git a/mm/zswap.c b/mm/zswap.c
-> index c99bafcefecf..2831bf56b168 100644
-> --- a/mm/zswap.c
-> +++ b/mm/zswap.c
-> @@ -254,10 +254,6 @@ static int zswap_writeback_entry(struct zpool *pool,=
- unsigned long handle);
->  static int zswap_pool_get(struct zswap_pool *pool);
->  static void zswap_pool_put(struct zswap_pool *pool);
->
-> -static const struct zpool_ops zswap_zpool_ops =3D {
-> -       .evict =3D zswap_writeback_entry
-> -};
-> -
->  static bool zswap_is_full(void)
->  {
->         return totalram_pages() * zswap_max_pool_percent / 100 <
-> @@ -375,12 +371,9 @@ static void zswap_free_entry(struct zswap_entry *ent=
-ry)
->         if (!entry->length)
->                 atomic_dec(&zswap_same_filled_pages);
->         else {
-> -       /* zpool_evictable will be removed once all 3 backends have migra=
-ted */
-> -               if (!zpool_evictable(entry->pool->zpool)) {
-> -                       spin_lock(&entry->pool->lru_lock);
-> -                       list_del(&entry->lru);
-> -                       spin_unlock(&entry->pool->lru_lock);
-> -               }
-> +               spin_lock(&entry->pool->lru_lock);
-> +               list_del(&entry->lru);
-> +               spin_unlock(&entry->pool->lru_lock);
->                 zpool_free(entry->pool->zpool, entry->handle);
->                 zswap_pool_put(entry->pool);
->         }
-> @@ -659,12 +652,8 @@ static void shrink_worker(struct work_struct *w)
->                                                 shrink_work);
->         int ret, failures =3D 0;
->
-> -       /* zpool_evictable will be removed once all 3 backends have migra=
-ted */
->         do {
-> -               if (zpool_evictable(pool->zpool))
-> -                       ret =3D zpool_shrink(pool->zpool, 1, NULL);
-> -               else
-> -                       ret =3D zswap_shrink(pool);
-> +               ret =3D zswap_shrink(pool);
->                 if (ret) {
->                         zswap_reject_reclaim_fail++;
->                         if (ret !=3D -EAGAIN)
-> @@ -702,7 +691,7 @@ static struct zswap_pool *zswap_pool_create(char *typ=
-e, char *compressor)
->         /* unique name for each pool specifically required by zsmalloc */
->         snprintf(name, 38, "zswap%x", atomic_inc_return(&zswap_pools_coun=
-t));
->
-> -       pool->zpool =3D zpool_create_pool(type, name, gfp, &zswap_zpool_o=
-ps);
-> +       pool->zpool =3D zpool_create_pool(type, name, gfp);
->         if (!pool->zpool) {
->                 pr_err("%s zpool not available\n", type);
->                 goto error;
-> @@ -1388,8 +1377,7 @@ static int zswap_frontswap_store(unsigned type, pgo=
-ff_t offset,
->                         zswap_entry_put(tree, dupentry);
->                 }
->         } while (ret =3D=3D -EEXIST);
-> -       /* zpool_evictable will be removed once all 3 backends have migra=
-ted */
-> -       if (entry->length && !zpool_evictable(entry->pool->zpool)) {
-> +       if (entry->length) {
->                 spin_lock(&entry->pool->lru_lock);
->                 list_add(&entry->lru, &entry->pool->lru);
->                 spin_unlock(&entry->pool->lru_lock);
-> @@ -1495,8 +1483,7 @@ static int zswap_frontswap_load(unsigned type, pgof=
-f_t offset,
->  freeentry:
->         spin_lock(&tree->lock);
->         zswap_entry_put(tree, entry);
-> -       /* zpool_evictable will be removed once all 3 backends have migra=
-ted */
-> -       if (entry->length && !zpool_evictable(entry->pool->zpool)) {
-> +       if (entry->length) {
->                 spin_lock(&entry->pool->lru_lock);
->                 list_move(&entry->lru, &entry->pool->lru);
->                 spin_unlock(&entry->pool->lru_lock);
-> --
-> 2.34.1
->
-zsmalloc's shrink removal looks good to me.
-Acked-by: Nhat Pham <nphamcs@gmail.com>
+On Thu, Jun 08, 2023 at 10:10:54AM -0700, Alexander Duyck wrote:
+> On Thu, Jun 8, 2023 at 8:40 AM Ashok Raj <ashok_raj@linux.intel.com> wrote:
+> >
+> > On Thu, Jun 08, 2023 at 07:33:31AM -0700, Alexander Duyck wrote:
+> > > On Wed, Jun 7, 2023 at 8:05 PM Baolu Lu <baolu.lu@linux.intel.com> wrote:
+> > > >
+> > > > On 6/8/23 7:03 AM, Alexander Duyck wrote:
+> > > > > On Wed, Jun 7, 2023 at 3:40 PM Alexander Duyck
+> > > > > <alexander.duyck@gmail.com> wrote:
+> > > > >>
+> > > > >> I am running into a DMA issue that appears to be a conflict between
+> > > > >> ACS and IOMMU. As per the documentation I can find, the IOMMU is
+> > > > >> supposed to create reserved regions for MSI and the memory window
+> > > > >> behind the root port. However looking at reserved_regions I am not
+> > > > >> seeing that. I only see the reservation for the MSI.
+> > > > >>
+> > > > >> So for example with an enabled NIC and iommu enabled w/o passthru I am seeing:
+> > > > >> # cat /sys/bus/pci/devices/0000\:83\:00.0/iommu_group/reserved_regions
+> > > > >> 0x00000000fee00000 0x00000000feefffff msi
+> > > > >>
+> > > > >> Shouldn't there also be a memory window for the region behind the root
+> > > > >> port to prevent any possible peer-to-peer access?
+> > > > >
+> > > > > Since the iommu portion of the email bounced I figured I would fix
+> > > > > that and provide some additional info.
+> > > > >
+> > > > > I added some instrumentation to the kernel to dump the resources found
+> > > > > in iova_reserve_pci_windows. From what I can tell it is finding the
+> > > > > correct resources for the Memory and Prefetchable regions behind the
+> > > > > root port. It seems to be calling reserve_iova which is successfully
+> > > > > allocating an iova to reserve the region.
+> > > > >
+> > > > > However still no luck on why it isn't showing up in reserved_regions.
+> > > >
+> > > > Perhaps I can ask the opposite question, why it should show up in
+> > > > reserve_regions? Why does the iommu subsystem block any possible peer-
+> > > > to-peer DMA access? Isn't that a decision of the device driver.
+> > > >
+> > > > The iova_reserve_pci_windows() you've seen is for kernel DMA interfaces
+> > > > which is not related to peer-to-peer accesses.
+> > >
+> > > The problem is if the IOVA overlaps with the physical addresses of
+> > > other devices that can be routed to via ACS redirect. As such if ACS
+> > > redirect is enabled a host IOVA could be directed to another device on
+> > > the switch instead. To prevent that we need to reserve those addresses
+> > > to avoid address space collisions.
+> 
+> Our test case is just to perform DMA to/from the host on one device on
+> a switch and what we are seeing is that when we hit an IOVA that
+> matches up with the physical address of the neighboring devices BAR0
+> then we are seeing an AER followed by a hot reset.
+
+ACS is always confusing.. Does your NIC have a DTLB?
+
+If request redirect is set, and the Egress is enabled, then all
+transactions should go upstream to the root-port->IOMMU before being
+served.
+
+In my 6.0 spec its in 6.12.3 ACS Peer-to-Peer Control Interactions?
+
+And maybe lspci would show how things are setup in the switch?
+
+> 
+> > Any untranslated address from a device must be forwarded to the IOMMU when
+> > ACS is enabled correct?I guess if you want true p2p, then you would need
+> > to map so that the hpa turns into the peer address.. but its always a round
+> > trip to IOMMU.
+> 
+> This assumes all parts are doing the Request Redirect "correctly". In
+> our case there is a PCIe switch we are trying to debug and we have a
+> few working theories. One concern I have is that the switch may be
+> throwing an ACS violation for us using an address that matches a
+> neighboring device instead of redirecting it to the upstream port. If
+> we pull the switch and just run on the root complex the issue seems to
+> be resolved so I started poking into the code which led me to the
+> documentation pointing out what is supposed to be reserved based on
+> the root complex and MSI regions.
+> 
+> As a part of going down that rabbit hole I realized that the
+> reserved_regions seems to only list the MSI reservation. However after
+> digging a bit deeper it seems like there is code to reserve the memory
+> behind the root complex in the IOVA but it doesn't look like that is
+> visible anywhere and is the piece I am currently trying to sort out.
+> What I am working on is trying to figure out if the system that is
+> failing is actually reserving that memory region in the IOVA, or if
+> that is somehow not happening in our test setup.
+
+I suspect with IOMMU, there is no need to pluck holes like we do for the
+MSI. In very early code in IOMMU i vaguely recall we did that, but our
+knowledge on ACS was weak. (not that has improved :-)). 
+
+Knowing how the switch and root ports are setup with forwarding may help
+with some clues.  The easy option is maybe forcibly adding to the reserved
+range may help to see if you don't see the ACS violation. 
+
+Baolu might have some better ideas. 
+
+-- 
+Cheers,
+Ashok
+
+Bike Shedding: (a.k.a Parkinson's Law of Triviality)
+- When the discussion on a topic is inversely proportionate to the gravity of
+  the topic.
