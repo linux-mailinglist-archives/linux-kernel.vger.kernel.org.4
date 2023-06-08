@@ -2,251 +2,341 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F8FF728126
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 15:21:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48CB172812B
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Jun 2023 15:21:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236043AbjFHNVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Jun 2023 09:21:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49322 "EHLO
+        id S236314AbjFHNVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Jun 2023 09:21:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236211AbjFHNVT (ORCPT
+        with ESMTP id S236402AbjFHNVV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Jun 2023 09:21:19 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 339852717
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 06:21:16 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3f732d37d7cso5277215e9.2
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Jun 2023 06:21:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1686230474; x=1688822474;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5dgkaWGIfYIbjljhSSlh7Bmui4uwpN0SWAU+QRT80As=;
-        b=qVAR2ecucVW+p4KXptaFvsaVrHzHixMpWlKsxEGJts241bm/oGRDCL1YLdMk7NZlka
-         c16QlEhOhb8Xok7xMrxaLudpRz5AioYlJqP6RKZtwORKwyqWuRO6ydKSGlSQ+0Hrw13F
-         iE855DdN7YYdoEtLEHn0GSSjAq+NTa1uVvWAocNBhMojymEbsxj3zjmUfhSM8CI8L3M7
-         UHttyyevHVgcUnAPGH3o6YvlrqMIiIj/PRX02FESZJqggOR3gU01o5+Nzqjat3GISqjL
-         t9yo+J7RIiSAI16EgWM7bpAeEQDhPbcPWP/eUrzXdgvJGsWP2Iwsk8aAflxOTEPGaOjB
-         pjSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686230474; x=1688822474;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5dgkaWGIfYIbjljhSSlh7Bmui4uwpN0SWAU+QRT80As=;
-        b=WzStJaeBPZlhKX8JzjRrj5+2mwLMQg1mM/7Dxq+dF29kuMpmNJ+i5z64R494VaErDE
-         53fFoCsc8nwo6/hG9DQQ8oZoEhkKcLCUYikH8ksEQGf3r9xKQu63QJvVHNkLMPYciRkj
-         XRbOrJLvkRoQhXYK9qxOBYPplurgbbJwbDaI8vRHb86AyQQaQl5faS8g+pU7vzG60tcw
-         6Eevfpf/1rgq1u1Zddg0VIhExAmjkTTPJqhRfLXDQo+eL2kdnYFo7R2p0kRNzK0Acel2
-         64sOxF0yt441P4N15m/DxvWCKIwBI0Yohyov09R4+JIUFdW+AWtOfEQlyVEtKB2z7O5L
-         Tolw==
-X-Gm-Message-State: AC+VfDyoJMJ5UQ/bHqRBsmB1xtaNreslTFmLAiRMbBCGtDZHy8IZSnkG
-        DAPkSK453f7lLG69gSAY1se5lw==
-X-Google-Smtp-Source: ACHHUZ7GKhT4PGtrRwd2EjBY7POS6tiFhG/vYnfkIR8eZzcVxZVyeRyLRmYaK/m2Lo+UOWjBhvqiBA==
-X-Received: by 2002:a7b:c019:0:b0:3f7:f884:7be4 with SMTP id c25-20020a7bc019000000b003f7f8847be4mr1412169wmb.21.1686230474701;
-        Thu, 08 Jun 2023 06:21:14 -0700 (PDT)
-Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
-        by smtp.gmail.com with ESMTPSA id 16-20020a05600c021000b003f7f1b3aff1sm5001100wmi.26.2023.06.08.06.21.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 06:21:14 -0700 (PDT)
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-Date:   Thu, 08 Jun 2023 15:20:52 +0200
-Subject: [PATCH net-next 4/4] mptcp: unify pm set_flags interfaces
+        Thu, 8 Jun 2023 09:21:21 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F02071BD6
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Jun 2023 06:21:18 -0700 (PDT)
+X-GND-Sasl: miquel.raynal@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1686230477;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9Lo1sqW665OmQu1ENY3kkmv19RpKne/RRcU8PBoQrig=;
+        b=TqAp1+S/CkTMibHiSxtGThtl3IQmfO6Tgset4bbWurxsfM4WVmnONx50sA3oty7hPI23s2
+        5t12zUJue4WQkw95/FJ7R9t7KHDNdE3GSKcPWV51UbciU+u7thGnjMkxlQZ8A6PD6+67rN
+        g1Sll4okQxtHkCpmjiMsJBlne69H6MAxVfbWSqseVviCQTGIM0eHhAttIW6Yda+rBqmIm5
+        QhOxJo72F3MoHyTQXKKmCtJXgra/vXeUqArKEg6kTttslYkVhKbJMFOOzftVIUx/7jsVRF
+        88rAv8dLWnU65Aki+BfC9HXq2MM2lyWnKc90l8k4STovPhGMjs3RD4i+KyWKHw==
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 64410E000C;
+        Thu,  8 Jun 2023 13:21:15 +0000 (UTC)
+Date:   Thu, 8 Jun 2023 15:21:14 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Liang Yang <liang.yang@amlogic.com>
+Cc:     Arseniy Krasnov <avkrasnov@sberdevices.ru>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        oxffffaa@gmail.com, kernel@sberdevices.ru,
+        linux-mtd@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] mtd: rawnand: meson: check buffer length
+Message-ID: <20230608152114.3a1d82ac@xps-13>
+In-Reply-To: <a6a20b50-02b0-53c0-1e65-75035bc59c87@amlogic.com>
+References: <20230606101644.3297859-1-AVKrasnov@sberdevices.ru>
+        <9adef6da-5930-dcaa-f148-e4a398d39f2d@sberdevices.ru>
+        <3a9470ed-d7ad-6cae-0d58-732399590272@sberdevices.ru>
+        <7903580d-685c-14e6-5572-81a4cb31cced@amlogic.com>
+        <20230608085458.449a24c0@xps-13>
+        <4e6cd8a8-f618-4bc3-5fa9-eab2b501dd89@amlogic.com>
+        <a6a20b50-02b0-53c0-1e65-75035bc59c87@amlogic.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230608-upstream-net-next-20230608-mptcp-unify-pm-interfaces-v1-4-b301717c9ff5@tessares.net>
-References: <20230608-upstream-net-next-20230608-mptcp-unify-pm-interfaces-v1-0-b301717c9ff5@tessares.net>
-In-Reply-To: <20230608-upstream-net-next-20230608-mptcp-unify-pm-interfaces-v1-0-b301717c9ff5@tessares.net>
-To:     mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Geliang Tang <geliang.tang@suse.com>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5515;
- i=matthieu.baerts@tessares.net; h=from:subject:message-id;
- bh=nAiGoxd4O08hlaui72f0yC95azIdQnaelnxY4OLX1JU=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBkgdXFAQhBRtbu0GqjM4u9CPn+H7ZdGkwZJFZpk
- Fge/YuAqXCJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZIHVxQAKCRD2t4JPQmmg
- czUoD/48REKp6Kc18uG+cTTanHAy8TD8YOPHfsBVfzp8iXOdGJrzHrvKaRllLEOIKNk9XMLEtBF
- hu5b+Fz5MftBaMTRX1WRjRF/zwZ+XcB74rSt0vvm6GxwXTqdD0XN9jBPAHyNmMl55mFXCPnma4c
- O1PhcLJ4fbuivb5JdIw6D8XLDovfPrB4tKqxPK5hSi2q63uEFSnRU4pdgs3Z7djtxHPNcl6WNyF
- 3Hy7SQHDnmEhIxgA3MKDMQhoM4dsWl+XDUdwETLHVmxHhneIc5jZRpL71h3yV5WNH2VNAqjo3R6
- erxFonYMx1LsV2sisNO05Z9oG2BmJYFdFiMk3+NqQpdFaTHBK9gaCMUp3MpqlHazQFjDobUGy0o
- 22SjA3QugvXcorEBskWRvfaHLj/PvSjf31GXoSIY+PifxXDH13Dt56YeGLmwuaA4ZJrFYZ23C0C
- B16P3w193SPyZRaYvpggSr6XARWYhFw0szX2wNCWY/ZTBnc9UriVeeaNeBa4jEO+0wWdmeREnPi
- AE+lc8/MQIsFkIOBH6mg9cXciLLQRXJF3U6R9f2Y+HAHrMrGqkcGYxwRde+Nc2E00VV681sj77l
- FCX0QW8EOlPvgCdZ3ke5W46s1tbkdjnNsRueVKA1nSLLQxAvMjX4GNdfCjJqd0rH0YoHNZfUo7i
- 5HguWofxWARmYNw==
-X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Geliang Tang <geliang.tang@suse.com>
+Hi Liang,
 
-This patch unifies the three PM set_flags() interfaces:
+liang.yang@amlogic.com wrote on Thu, 8 Jun 2023 20:37:14 +0800:
 
-mptcp_pm_nl_set_flags() in mptcp/pm_netlink.c for the in-kernel PM and
-mptcp_userspace_pm_set_flags() in mptcp/pm_userspace.c for the
-userspace PM.
+> Hi Arseniy and Miquel,
+>=20
+> On 2023/6/8 15:12, Liang Yang wrote:
+> > Hi Miquel,
+> >=20
+> > On 2023/6/8 14:54, Miquel Raynal wrote: =20
+> >> [ EXTERNAL EMAIL ]
+> >>
+> >> Hi Liang,
+> >>
+> >> liang.yang@amlogic.com wrote on Thu, 8 Jun 2023 14:42:53 +0800:
+> >> =20
+> >>> Hi Arseniy,
+> >>>
+> >>> On 2023/6/8 5:17, Arseniy Krasnov wrote: =20
+> >>>> [ EXTERNAL EMAIL ]
+> >>>>
+> >>>> Hi again Miquel, Liang!
+> >>>>
+> >>>> What do You think about this patch?
+> >>>>
+> >>>> Thanks, Arseniy
+> >>>>
+> >>>> On 06.06.2023 19:29, Arseniy Krasnov wrote: =20
+> >>>>> Sorry, here is changelog:
+> >>>>> v1 -> v2:
+> >>>>> * Move checks from 'switch/case' which executes commands in >>>>> '=
+meson_nfc_exec_op()' to a special
+> >>>>> =C2=A0=C2=A0=C2=A0 separated function 'meson_nfc_check_op()' which =
+is called >>>>> before commands processing.
+> >>>>>
+> >>>>> On 06.06.2023 13:16, Arseniy Krasnov wrote: =20
+> >>>>>> Meson NAND controller has limited buffer length, so check it before
+> >>>>>> command execution to avoid length trim. Also check MTD write size =
+on
+> >>>>>> chip attach.
+> >>>>>>
+> >>>>>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+> >>>>>> ---
+> >>>>>> =C2=A0=C2=A0 drivers/mtd/nand/raw/meson_nand.c | 47 >>>>>> +++++++=
+++++++++++++++++++++----
+> >>>>>> =C2=A0=C2=A0 1 file changed, 42 insertions(+), 5 deletions(-)
+> >>>>>>
+> >>>>>> diff --git a/drivers/mtd/nand/raw/meson_nand.c >>>>>> b/drivers/mt=
+d/nand/raw/meson_nand.c
+> >>>>>> index 23a73268421b..db6b18753071 100644
+> >>>>>> --- a/drivers/mtd/nand/raw/meson_nand.c
+> >>>>>> +++ b/drivers/mtd/nand/raw/meson_nand.c
+> >>>>>> @@ -111,6 +111,8 @@
+> >>>>>>
+> >>>>>> =C2=A0=C2=A0 #define PER_INFO_BYTE=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 8
+> >>>>>>
+> >>>>>> +#define NFC_CMD_RAW_LEN=C2=A0=C2=A0=C2=A0=C2=A0 GENMASK(13, 0)
+> >>>>>> +
+> >>>>>> =C2=A0=C2=A0 struct meson_nfc_nand_chip {
+> >>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct list_head node;
+> >>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct nand_chip nand;
+> >>>>>> @@ -284,7 +286,7 @@ static void meson_nfc_cmd_access(struct >>>>>>=
+ nand_chip *nand, int raw, bool dir,
+> >>>>>>
+> >>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (raw) {
+> >>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 len =3D mtd->writesize + mtd->oobsize;
+> >>>>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 cmd =3D (len & GENMASK(13, 0)) | scrambler | DMA_DIR(dir);
+> >>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 cmd =3D len | scrambler | DMA_DIR(dir);
+> >>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 writel(cmd, nfc->reg_base + NFC_REG_CMD); =20
+> >>>
+> >>> I think we could keep "& GENMASK(13, 0)". it is better here to >>> in=
+dicate how many bits of length in this command and don't destory >>> the co=
+mmand once we don't check the "len" outside of this function. >>> or the co=
+de "if (len >=C2=A0 NFC_CMD_RAW_LEN)" is better to put inside >>> this func=
+tion nearly. Thanks. =20
+> >>
+> >> It depends who calls this helper. If only used inside >> exec_op,write=
+_page_raw() and read_page_raw() also call >> meson_nfc_cmd_access(), > but =
+i don't find where constrain the "len". =20
+>=20
+> Is the helper "meson_nfc_check_op()" needed by exec_op() after the constr=
+aint in attach_chip()? the length passed in exec_op() seems smaller than "m=
+td->writesize + mtd->oobsize" now.
 
-They'll be switched in the common PM infterface mptcp_pm_set_flags() in
-mptcp/pm.c based on whether token is NULL or not.
+exec_op() is primarily dedicated to performing side commands than page
+accesses, typically the parameter page is X bytes, you might want to
+read it 3 times, depending on the capabilities of the controller, you
+might need to split the operation or not, so the core checks what are
+the controller capabilities before doing the operation. So yes, the
+check_op() thing is necessary.
 
-Signed-off-by: Geliang Tang <geliang.tang@suse.com>
-Reviewed-by: Matthieu Baerts <matthieu.baerts@tessares.net>
-Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
----
- net/mptcp/pm.c         |  9 +++++++
- net/mptcp/pm_netlink.c | 70 +++++++++++++++++++++++++++-----------------------
- net/mptcp/protocol.h   |  4 +++
- 3 files changed, 51 insertions(+), 32 deletions(-)
+>=20
+> @Arseniy if it does need, I think the same constraint is needed by
+> "meson_nfc_cmd_access()"
+>=20
+> >  =20
+> >> it's not useful. If used outside, then if you want to clarify
+> >> things you may want to use:
+> >>
+> >> #define NFC_CMD_OP_LEN(cmd) FIELD_PREP(GENMASK(13, 0), (cmd))
+> >>
+> >> This is by far my favorite construction. Could apply to many other
+> >> fields, like DMA_DIR, scrambler, etc. =20
+>=20
+> @Miquel, FIELD_PREP() is better, but i have no idea whether we should add=
+ FIELD_PREP() in this patch, or keep the previous code.
+>=20
+> >> =20
+> >>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 return;
+> >>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+> >>>>>> @@ -573,7 +575,7 @@ static int meson_nfc_read_buf(struct nand_chip=
+ >>>>>> *nand, u8 *buf, int len)
+> >>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (ret)
+> >>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 goto out;
+> >>>>>>
+> >>>>>> -=C2=A0=C2=A0=C2=A0 cmd =3D NFC_CMD_N2M | (len & GENMASK(13, 0));
+> >>>>>> +=C2=A0=C2=A0=C2=A0 cmd =3D NFC_CMD_N2M | len;
+> >>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 writel(cmd, nfc->reg_base + N=
+FC_REG_CMD);
+> >>>>>>
+> >>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 meson_nfc_drain_cmd(nfc);
+> >>>>>> @@ -597,7 +599,7 @@ static int meson_nfc_write_buf(struct >>>>>> n=
+and_chip *nand, u8 *buf, int len)
+> >>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (ret)
+> >>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 return ret;
+> >>>>>>
+> >>>>>> -=C2=A0=C2=A0=C2=A0 cmd =3D NFC_CMD_M2N | (len & GENMASK(13, 0));
+> >>>>>> +=C2=A0=C2=A0=C2=A0 cmd =3D NFC_CMD_M2N | len;
+> >>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 writel(cmd, nfc->reg_base + N=
+FC_REG_CMD);
+> >>>>>>
+> >>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 meson_nfc_drain_cmd(nfc);
+> >>>>>> @@ -1007,6 +1009,31 @@ meson_nand_op_put_dma_safe_output_buf(const=
+ >>>>>> struct nand_op_instr *instr,
+> >>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 kfree(buf);
+> >>>>>> =C2=A0=C2=A0 }
+> >>>>>>
+> >>>>>> +static int meson_nfc_check_op(struct nand_chip *chip,
+> >>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 const struct nand_operation *op)
+> >>>>>> +{
+> >>>>>> +=C2=A0=C2=A0=C2=A0 int op_id;
+> >>>>>> +
+> >>>>>> +=C2=A0=C2=A0=C2=A0 for (op_id =3D 0; op_id < op->ninstrs; op_id++=
+) {
+> >>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 const struct nand_op_instr *instr;
+> >>>>>> +
+> >>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 instr =3D &op->instrs[op_id];
+> >>>>>> +
+> >>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 switch (instr->type) {
+> >>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 case NAND_OP_DATA_IN_INSTR:
+> >>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 case NAND_OP_DATA_OUT_INSTR:
+> >>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (instr->ctx.data.len=
+ > NFC_CMD_RAW_LEN)
+> >>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 return -ENOTSUPP;
+> >>>>>> +
+> >>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
+> >>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 default:
+> >>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
+> >>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 }
+> >>>>>> +=C2=A0=C2=A0=C2=A0 }
+> >>>>>> +
+> >>>>>> +=C2=A0=C2=A0=C2=A0 return 0;
+> >>>>>> +}
+> >>>>>> +
+> >>>>>> =C2=A0=C2=A0 static int meson_nfc_exec_op(struct nand_chip *nand,
+> >>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 const struct nand_operation *op, bool >>>>>> check_on=
+ly)
+> >>>>>> =C2=A0=C2=A0 {
+> >>>>>> @@ -1015,10 +1042,12 @@ static int meson_nfc_exec_op(struct >>>>>>=
+ nand_chip *nand,
+> >>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 const struct nand_op_instr *i=
+nstr =3D NULL;
+> >>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 void *buf;
+> >>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u32 op_id, delay_idle, cmd;
+> >>>>>> +=C2=A0=C2=A0=C2=A0 int err;
+> >>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int i;
+> >>>>>>
+> >>>>>> -=C2=A0=C2=A0=C2=A0 if (check_only)
+> >>>>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 return 0;
+> >>>>>> +=C2=A0=C2=A0=C2=A0 err =3D meson_nfc_check_op(nand, op);
+> >>>>>> +=C2=A0=C2=A0=C2=A0 if (err || check_only)
+> >>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 return err;
+> >>>>>>
+> >>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 meson_nfc_select_chip(nand, o=
+p->cs);
+> >>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 for (op_id =3D 0; op_id < op-=
+>ninstrs; op_id++) {
+> >>>>>> @@ -1293,6 +1322,7 @@ static int meson_nand_attach_chip(struct >>>=
+>>> nand_chip *nand)
+> >>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct meson_nfc_nand_chip *m=
+eson_chip =3D to_meson_nand(nand);
+> >>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct mtd_info *mtd =3D nand=
+_to_mtd(nand);
+> >>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int nsectors =3D mtd->writesi=
+ze / 1024;
+> >>>>>> +=C2=A0=C2=A0=C2=A0 int raw_writesize;
+> >>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int ret;
+> >>>>>>
+> >>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!mtd->name) {
+> >>>>>> @@ -1304,6 +1334,13 @@ static int meson_nand_attach_chip(struct >>=
+>>>> nand_chip *nand)
+> >>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return -=
+ENOMEM;
+> >>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+> >>>>>>
+> >>>>>> +=C2=A0=C2=A0=C2=A0 raw_writesize =3D mtd->writesize + mtd->oobsiz=
+e;
+> >>>>>> +=C2=A0=C2=A0=C2=A0 if (raw_writesize > NFC_CMD_RAW_LEN) {
+> >>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 dev_err(nfc->dev, "too big write size in raw mode: %d >>>>>> > %ld\n",
+> >>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 raw_writesize, NFC_CMD_=
+RAW_LEN);
+> >>>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 return -EINVAL;
+> >>>>>> +=C2=A0=C2=A0=C2=A0 }
+> >>>>>> +
+> >>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (nand->bbt_options & NAND_=
+BBT_USE_FLASH)
+> >>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 nand->bbt_options |=3D NAND_BBT_NO_OOB;
+> >>>>>> =20
+> >>
+> >>
+> >> Thanks,
+> >> Miqu=C3=A8l =20
 
-diff --git a/net/mptcp/pm.c b/net/mptcp/pm.c
-index 2d04598dde05..36bf9196168b 100644
---- a/net/mptcp/pm.c
-+++ b/net/mptcp/pm.c
-@@ -433,6 +433,15 @@ int mptcp_pm_get_flags_and_ifindex_by_id(struct mptcp_sock *msk, unsigned int id
- 	return mptcp_pm_nl_get_flags_and_ifindex_by_id(msk, id, flags, ifindex);
- }
- 
-+int mptcp_pm_set_flags(struct net *net, struct nlattr *token,
-+		       struct mptcp_pm_addr_entry *loc,
-+		       struct mptcp_pm_addr_entry *rem, u8 bkup)
-+{
-+	if (token)
-+		return mptcp_userspace_pm_set_flags(net, token, loc, rem, bkup);
-+	return mptcp_pm_nl_set_flags(net, loc, bkup);
-+}
-+
- void mptcp_pm_subflow_chk_stale(const struct mptcp_sock *msk, struct sock *ssk)
- {
- 	struct mptcp_subflow_context *subflow = mptcp_subflow_ctx(ssk);
-diff --git a/net/mptcp/pm_netlink.c b/net/mptcp/pm_netlink.c
-index e8b32d369f11..13be9205d36d 100644
---- a/net/mptcp/pm_netlink.c
-+++ b/net/mptcp/pm_netlink.c
-@@ -1864,18 +1864,50 @@ static int mptcp_nl_set_flags(struct net *net,
- 	return ret;
- }
- 
-+int mptcp_pm_nl_set_flags(struct net *net, struct mptcp_pm_addr_entry *addr, u8 bkup)
-+{
-+	struct pm_nl_pernet *pernet = pm_nl_get_pernet(net);
-+	u8 changed, mask = MPTCP_PM_ADDR_FLAG_BACKUP |
-+			   MPTCP_PM_ADDR_FLAG_FULLMESH;
-+	struct mptcp_pm_addr_entry *entry;
-+	u8 lookup_by_id = 0;
-+
-+	if (addr->addr.family == AF_UNSPEC) {
-+		lookup_by_id = 1;
-+		if (!addr->addr.id)
-+			return -EOPNOTSUPP;
-+	}
-+
-+	spin_lock_bh(&pernet->lock);
-+	entry = __lookup_addr(pernet, &addr->addr, lookup_by_id);
-+	if (!entry) {
-+		spin_unlock_bh(&pernet->lock);
-+		return -EINVAL;
-+	}
-+	if ((addr->flags & MPTCP_PM_ADDR_FLAG_FULLMESH) &&
-+	    (entry->flags & MPTCP_PM_ADDR_FLAG_SIGNAL)) {
-+		spin_unlock_bh(&pernet->lock);
-+		return -EINVAL;
-+	}
-+
-+	changed = (addr->flags ^ entry->flags) & mask;
-+	entry->flags = (entry->flags & ~mask) | (addr->flags & mask);
-+	*addr = *entry;
-+	spin_unlock_bh(&pernet->lock);
-+
-+	mptcp_nl_set_flags(net, &addr->addr, bkup, changed);
-+	return 0;
-+}
-+
- static int mptcp_nl_cmd_set_flags(struct sk_buff *skb, struct genl_info *info)
- {
--	struct mptcp_pm_addr_entry addr = { .addr = { .family = AF_UNSPEC }, }, *entry;
- 	struct mptcp_pm_addr_entry remote = { .addr = { .family = AF_UNSPEC }, };
-+	struct mptcp_pm_addr_entry addr = { .addr = { .family = AF_UNSPEC }, };
- 	struct nlattr *attr_rem = info->attrs[MPTCP_PM_ATTR_ADDR_REMOTE];
- 	struct nlattr *token = info->attrs[MPTCP_PM_ATTR_TOKEN];
- 	struct nlattr *attr = info->attrs[MPTCP_PM_ATTR_ADDR];
--	struct pm_nl_pernet *pernet = genl_info_pm_nl(info);
--	u8 changed, mask = MPTCP_PM_ADDR_FLAG_BACKUP |
--			   MPTCP_PM_ADDR_FLAG_FULLMESH;
- 	struct net *net = sock_net(skb->sk);
--	u8 bkup = 0, lookup_by_id = 0;
-+	u8 bkup = 0;
- 	int ret;
- 
- 	ret = mptcp_pm_parse_entry(attr, info, false, &addr);
-@@ -1890,34 +1922,8 @@ static int mptcp_nl_cmd_set_flags(struct sk_buff *skb, struct genl_info *info)
- 
- 	if (addr.flags & MPTCP_PM_ADDR_FLAG_BACKUP)
- 		bkup = 1;
--	if (addr.addr.family == AF_UNSPEC) {
--		lookup_by_id = 1;
--		if (!addr.addr.id)
--			return -EOPNOTSUPP;
--	}
- 
--	if (token)
--		return mptcp_userspace_pm_set_flags(net, token, &addr, &remote, bkup);
--
--	spin_lock_bh(&pernet->lock);
--	entry = __lookup_addr(pernet, &addr.addr, lookup_by_id);
--	if (!entry) {
--		spin_unlock_bh(&pernet->lock);
--		return -EINVAL;
--	}
--	if ((addr.flags & MPTCP_PM_ADDR_FLAG_FULLMESH) &&
--	    (entry->flags & MPTCP_PM_ADDR_FLAG_SIGNAL)) {
--		spin_unlock_bh(&pernet->lock);
--		return -EINVAL;
--	}
--
--	changed = (addr.flags ^ entry->flags) & mask;
--	entry->flags = (entry->flags & ~mask) | (addr.flags & mask);
--	addr = *entry;
--	spin_unlock_bh(&pernet->lock);
--
--	mptcp_nl_set_flags(net, &addr.addr, bkup, changed);
--	return 0;
-+	return mptcp_pm_set_flags(net, token, &addr, &remote, bkup);
- }
- 
- static void mptcp_nl_mcast_send(struct net *net, struct sk_buff *nlskb, gfp_t gfp)
-diff --git a/net/mptcp/protocol.h b/net/mptcp/protocol.h
-index 607cbd2ccb98..1e7465bb66d5 100644
---- a/net/mptcp/protocol.h
-+++ b/net/mptcp/protocol.h
-@@ -827,6 +827,10 @@ int mptcp_pm_nl_get_flags_and_ifindex_by_id(struct mptcp_sock *msk, unsigned int
- int mptcp_userspace_pm_get_flags_and_ifindex_by_id(struct mptcp_sock *msk,
- 						   unsigned int id,
- 						   u8 *flags, int *ifindex);
-+int mptcp_pm_set_flags(struct net *net, struct nlattr *token,
-+		       struct mptcp_pm_addr_entry *loc,
-+		       struct mptcp_pm_addr_entry *rem, u8 bkup);
-+int mptcp_pm_nl_set_flags(struct net *net, struct mptcp_pm_addr_entry *addr, u8 bkup);
- int mptcp_userspace_pm_set_flags(struct net *net, struct nlattr *token,
- 				 struct mptcp_pm_addr_entry *loc,
- 				 struct mptcp_pm_addr_entry *rem, u8 bkup);
 
--- 
-2.40.1
-
+Thanks,
+Miqu=C3=A8l
